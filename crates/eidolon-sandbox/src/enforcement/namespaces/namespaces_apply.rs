@@ -10,7 +10,6 @@ use eidolon_core::Result;
 use nix::sched::{unshare, CloneFlags};
 // wraps: nix 0.31 — sched::unshare / CloneFlags, unistd::fork/getpid,
 //         signal::{kill,signal,sigaction}, sys::wait::{waitpid,WaitPidFlag}
-use nix::sched::{unshare, CloneFlags};
 use nix::sys::signal::{kill, signal, SaFlags, SigAction, SigHandler, SigSet, Signal};
 use nix::sys::wait::{waitpid, WaitPidFlag, WaitStatus};
 use nix::unistd::{fork, getpid, pipe, ForkResult, Pid};
@@ -24,7 +23,7 @@ use crate::enforcement::plan::{NamespacePlan, UserNsIdMap};
 const TERM_GRACE: Duration = Duration::from_millis(500);
 const TERM_POLL: Duration = Duration::from_millis(20);
 
-pub(super) fn apply_plan(plan: &NamespacePlan) -> Result<NamespaceApply> {
+pub(crate) fn apply_plan(plan: &NamespacePlan) -> Result<NamespaceApply> {
     validate_pivot_plan(plan)?;
     let (flags, names) = flags_from_plan(plan)?;
     unshare(flags).map_err(|e| {
@@ -102,7 +101,7 @@ pub(super) fn apply_plan(plan: &NamespacePlan) -> Result<NamespaceApply> {
     }
 }
 
-pub(super) fn run_in_plan(
+pub(crate) fn run_in_plan(
     plan: &NamespacePlan,
     work: impl FnOnce() -> Result<()>,
 ) -> Result<NamespaceStatus> {

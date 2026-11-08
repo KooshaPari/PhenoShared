@@ -5,15 +5,23 @@ edition = "2024"
 description = "Generated gRPC stubs for AgilePlus"
 license = "MIT"
 
+# Own workspace root. This crate lives inside the PhenoShared tree but is not a
+# member of that workspace, so cargo refused to resolve it at all (it told us to
+# either add it to members or exclude it). Declaring an empty workspace keeps it
+# standalone without touching the root manifest's member list.
+[workspace]
+
 [dependencies]
 prost = "0.13"
-tonic = { version = "0.12", features = ["transport"] }
+# Self-contained on purpose: this absorbed copy is not a member of the root
+# workspace, so `workspace = true` could never resolve (the root workspace has
+# no `tonic` entry) and `cargo clippy` on this manifest failed before compiling
+# anything. 0.13 is the last release where the `tonic-build` crate exists;
+# this crate's build.rs still uses `tonic_build::configure`.
+tonic = "0.13"
 
 [package.metadata.cargo-machete]
 ignored = ["prost"]
 
 [build-dependencies]
-tonic-build = "0.12"
-
-[workspace]
-resolver = "2"
+tonic-build = "0.13"

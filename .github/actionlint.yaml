@@ -1,16 +1,11 @@
----
-# actionlint configuration
-# https://github.com/rhysd/actionlint/blob/main/docs/usage.md#config
+# actionlint configuration.
 #
-# The repo uses a self-hosted "blacksmith-2vcpu-ubuntu-2204" label on the
-# infisical.yml workflow; actionlint doesn't know about this custom label
-# so we declare it here. All other rules remain enforced.
+# runner-probe.yml deliberately targets self-hosted runners with custom labels;
+# actionlint cannot know them, so declare them here instead of silencing the
+# whole runner-label rule.
 self-hosted-runner:
   labels:
+    - podman
+    - wsl2
+    - fedora44
     - blacksmith-2vcpu-ubuntu-2204
-    - blacksmith-4vcpu-ubuntu-2204
-    - blacksmith-8vcpu-ubuntu-2204
-    - blacksmith-2vcpu
-    - blacksmith-4vcpu
-    - blacksmith-8vcpu
-config-variables: null

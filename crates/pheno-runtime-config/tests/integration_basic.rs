@@ -27,7 +27,7 @@ fn concurrent_readers_no_data_race() {
         }
         // Writer in parallel
         for i in 0..100 {
-            r.reload(i);
+            r.reload(i).unwrap();
         }
     });
 

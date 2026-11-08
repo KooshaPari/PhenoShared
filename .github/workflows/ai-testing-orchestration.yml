@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
 
       - name: Read Test Config
-        run: cat .mcp-testing.yaml | head -30
+        run: head -30 .mcp-testing.yaml
 
   nanovms:
     name: NanoVMS Tests

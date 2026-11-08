@@ -11,8 +11,8 @@ import (
 var (
 	scaffoldName     string
 	scaffoldLanguage string
-	scaffoldPattern string
-	scaffoldOutput  string
+	scaffoldPattern  string
+	scaffoldOutput   string
 )
 
 var scaffoldCmd = &cobra.Command{
