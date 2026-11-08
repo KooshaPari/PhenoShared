@@ -1,0 +1,35 @@
+[package]
+name = "phenotype-observably-macros"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+description = "Procedural macros for PhenoObservability: `#[async_instrumented]` wraps an async fn body in a real `tracing` span that stays entered across every `.await` point. Supports `name = \"...\"`, `level = \"...\"`, and `skip(...)` options. Sync fns are passed through unchanged."
+
+[lib]
+path = "src/lib.rs"
+proc-macro = true
+
+[features]
+# Controls whether `#[async_instrumented]` emits real instrumentation.
+# This flag is read by the macro *itself* at expansion time, so the decision
+# does not depend on each consumer crate declaring a `tracing` feature of its
+# own (only 2 of 12 consumers do; relying on the consumer would silently
+# downgrade every other call site to a pass-through).
+default = ["tracing"]
+tracing = []
+
+[dependencies]
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full"] }
+
+[dev-dependencies]
+tokio = { version = "1.42", features = ["rt", "rt-multi-thread", "macros"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["registry"] }
+# `futures_lite::future::block_on` drives an `async fn` from a synchronous
+# `#[test]` without a tokio runtime, so the thread-local subscriber is
+# installed on the same thread that creates the span.
+futures-lite = "2"

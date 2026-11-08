@@ -52,7 +52,7 @@ jobs:
       - name: Read current coverage
         id: curr
         run: |
-          CURRENT=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+          CURRENT=$(jq '.total.lines.pct' coverage/coverage-summary.json)
           echo "curr=$CURRENT" >> "$GITHUB_OUTPUT"
           echo "Current coverage: $CURRENT%"
 

@@ -43,6 +43,7 @@ permissions:
 jobs:
   fan-out:
     name: auditors
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -103,7 +104,7 @@ jobs:
         continue-on-error: true
 
       - name: typos-cli
-        uses: crate-ci/typos@4d9c206a77c041268485162b8e2579ad7a5cb9a3 # v1
+        uses: crate-ci/typos@4c8b7f51ca60df14e3c5ca82770dfbbe6c3dae85 # v1
         with:
           files: ${{ matrix.repo.name }}
           config: .typos.toml
@@ -126,7 +127,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload reports
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: audit-${{ matrix.repo.name }}-${{ github.run_id }}
           path: |
@@ -150,4 +151,4 @@ jobs:
             --body "Daily audit failed. See run: $RUN_URL
 
           This issue is auto-opened by the compute-infra-auditors workflow.
-          Add to the DAG plan (${{ matrix.plan }}) and resolve before next run."
+          Add to the DAG plan (${{ matrix.repo.plan }}) and resolve before next run."
