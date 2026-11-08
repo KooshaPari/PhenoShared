@@ -53,9 +53,9 @@ type RevocationList struct {
 
 // TrustStore bundles authorities and an optional revocation list.
 type TrustStore struct {
-	RootKeyID      string              `json:"root_key_id"`
+	RootKeyID      string               `json:"root_key_id"`
 	ByKeyID        map[string]Authority `json:"by_key_id"`
-	RevocationList *RevocationList     `json:"revocation_list"`
+	RevocationList *RevocationList      `json:"revocation_list"`
 }
 
 // ---------------------------------------------------------------------------

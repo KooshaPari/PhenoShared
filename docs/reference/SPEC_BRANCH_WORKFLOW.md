@@ -10,7 +10,7 @@ The `specs/main` branch is the canonical single source of truth (SSOT) for all F
 
 - **Decoupling**: Spec changes (specs/main) are independent from code changes (main)
 - **Async Merges**: Spec PR merges are non-blocking to code PR merges
-- **Agent-First**: Each agent works in isolation on specs/agent-<id> branches
+- **Agent-First**: Each agent works in isolation on specs/agent-&lt;id> branches
 - **Validation**: Automated CI ensures FR uniqueness and traceability before merge
 - **Audit Trail**: All spec changes are tracked separately from code changes
 

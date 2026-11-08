@@ -35,7 +35,7 @@ Three failsafe conditions from the absorption runbook were met:
 
 ### 1. The task's premise (Rust crate, single-session absorbable) does not match reality
 
-The queued task said: *"Absorb <REDACTED>/pheno-harness (Rust, integration testing harness per registry) into phenotype-tooling as crates/pheno-harness/."*
+The queued task said: *"Absorb &lt;REDACTED&gt;/pheno-harness (Rust, integration testing harness per registry) into phenotype-tooling as crates/pheno-harness/."*
 
 Live verification of the source repo:
 

@@ -8,7 +8,7 @@
 //! # Usage
 //!
 //! ```rust,no_run
-//! use phenotype_infra_observability::{init, OtelConfig};
+//! use phenotype_infra_observability::init_tracing;
 //!
 //! fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     let _guard = init_tracing("oci-lottery");

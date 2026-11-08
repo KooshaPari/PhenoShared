@@ -17,12 +17,10 @@ on:
     inputs:
       repo_path:
         description: 'Path within the workspace to the repo root'
-        required: true
         type: string
         default: '.'
       build_system:
         description: 'Build system hint (e.g. rust, node)'
-        required: true
         type: string
         default: 'rust'
   workflow_dispatch:
@@ -60,7 +58,7 @@ jobs:
           artifact-name: sbom.cdx.json
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom-monthly-${{ github.event.repository.name }}-${{ github.sha }}
           path: ${{ inputs.repo_path }}/sbom.cdx.json

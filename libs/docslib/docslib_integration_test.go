@@ -238,7 +238,7 @@ func TestHTMLRenderer_EmptyDocument(t *testing.T) {
 	renderer := NewHTMLRenderer()
 
 	doc := &Doc{
-		Title: "Empty",
+		Title:   "Empty",
 		Content: []Node{},
 	}
 

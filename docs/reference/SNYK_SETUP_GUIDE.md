@@ -191,7 +191,7 @@ Reports are generated in `.snyk-reports/`:
 ### Enable Snyk in GitHub Settings
 
 1. **For Organization** (all repos):
-   - Go: https://github.com/organizations/<REDACTED>/settings/secrets
+   - Go: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets
    - Add `SNYK_TOKEN` secret
    - All repos inherit this secret
 

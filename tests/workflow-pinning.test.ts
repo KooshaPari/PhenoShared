@@ -8,6 +8,7 @@
 
 import { readdirSync, readFileSync } from "fs";
 import { join } from "path";
+import { describe, test, expect } from "vitest";
 
 const WORKFLOWS_DIR = join(__dirname, "..", ".github", "workflows");
 

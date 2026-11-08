@@ -154,7 +154,7 @@ GitHub Secrets are encrypted environment variables available to all workflows in
 
 ### Step 1: Navigate to Organization Settings
 
-1. Go to your GitHub Organization: https://github.com/organizations/<REDACTED>/settings/
+1. Go to your GitHub Organization: https://github.com/organizations/&lt;REDACTED&gt;/settings/
 2. Click **Settings** (left sidebar)
 3. Click **Secrets and variables** (left sidebar, under "Security")
 4. Click **Actions** (you should see three tabs: Secrets, Variables, Dependabot)

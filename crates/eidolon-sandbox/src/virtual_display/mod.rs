@@ -338,8 +338,10 @@ mod tests {
 
     #[test]
     fn vnc_request_fail_loud_before_spawn() {
-        let mut cfg = VirtualDisplayConfig::default();
-        cfg.vnc_port = Some(5900);
+        let cfg = VirtualDisplayConfig {
+            vnc_port: Some(5900),
+            ..VirtualDisplayConfig::default()
+        };
         let mgr = VirtualDisplayManager::new(cfg).unwrap();
         let err = mgr.start().unwrap_err();
         if platform_is_linux() {

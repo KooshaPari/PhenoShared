@@ -310,7 +310,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
      jobs:
        gate-check:
          name: Check Gates
-         uses: <REDACTED>/phenotypeActions/.github/workflows/gate-check.yml@v1
+         uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/gate-check.yml@v1
          with:
            language: $&#123;&#123; inputs.language &#125;&#125;
            channel: $&#123;&#123; inputs.to_channel &#125;&#125;
@@ -320,7 +320,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
          name: Publish
          needs: gate-check
          if: $&#123;&#123; needs.gate-check.outputs.passed == 'true' &#125;&#125;
-         uses: <REDACTED>/phenotypeActions/.github/workflows/publish.yml@v1
+         uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/publish.yml@v1
          with:
            language: $&#123;&#123; inputs.language &#125;&#125;
            registry: $&#123;&#123; inputs.registry &#125;&#125;
@@ -515,7 +515,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 
      **Example:**
      ```yaml
-     - uses: <REDACTED>/phenotypeActions/.github/workflows/publish.yml@v1
+     - uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/publish.yml@v1
        with:
          language: rust
          registry: crates
@@ -538,7 +538,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 
      **Example:**
      ```yaml
-     - uses: <REDACTED>/phenotypeActions/.github/workflows/gate-check.yml@v1
+     - uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/gate-check.yml@v1
        with:
          language: python
          channel: beta

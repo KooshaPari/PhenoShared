@@ -5,11 +5,6 @@ title: User Journeys
 
 # Schemaforge User Journeys
 
-<script setup>
-import UserJourney from '../../.vitepress/theme/components/UserJourney.vue'
-import FeatureDetail from '../../.vitepress/theme/components/FeatureDetail.vue'
-</script>
-
 > Visual step-by-step workflows for Schema Management
 
 ## Quick Navigation

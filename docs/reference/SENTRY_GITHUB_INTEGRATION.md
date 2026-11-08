@@ -42,7 +42,7 @@ The Sentry-GitHub integration enables:
 1. Go to [AgilePlus Project Settings](https://sentry.io/settings/phenotype/projects/agileplus/integrations/)
 2. Find **GitHub** in integrations list
 3. Click **Configure**
-4. Select repository: **<REDACTED>/AgilePlus**
+4. Select repository: **&lt;REDACTED&gt;/AgilePlus**
 5. Enable:
    - ✅ Create issues
    - ✅ Link commits
@@ -54,7 +54,7 @@ The Sentry-GitHub integration enables:
 1. Go to [phenotype-infrakit Project Settings](https://sentry.io/settings/phenotype/projects/phenotype-infrakit/integrations/)
 2. Find **GitHub** in integrations list
 3. Click **Configure**
-4. Select repository: **<REDACTED>/phenotype-infrakit**
+4. Select repository: **&lt;REDACTED&gt;/phenotype-infrakit**
 5. Enable:
    - ✅ Create issues
    - ✅ Link commits
@@ -66,7 +66,7 @@ The Sentry-GitHub integration enables:
 1. Go to [heliosCLI Project Settings](https://sentry.io/settings/phenotype/projects/helioscli/integrations/)
 2. Find **GitHub** in integrations list
 3. Click **Configure**
-4. Select repository: **<REDACTED>/heliosCLI**
+4. Select repository: **&lt;REDACTED&gt;/heliosCLI**
 5. Enable:
    - ✅ Create issues
    - ✅ Link commits
@@ -253,7 +253,7 @@ To enable Sentry to show source code in error pages:
 
 1. Go to Project Settings → **Source Maps**
 2. Click **Link your repository**
-3. Select: **<REDACTED>/AgilePlus** (or respective repo)
+3. Select: **&lt;REDACTED&gt;/AgilePlus** (or respective repo)
 4. Sentry will fetch source code directly from GitHub
 
 ### Source Code Display

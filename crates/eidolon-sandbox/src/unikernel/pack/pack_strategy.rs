@@ -71,7 +71,7 @@ pub fn live_pack(req: &PackRequest) -> Result<PackageManifest> {
     #[cfg(not(feature = "sandbox-rootfs-pack"))]
     {
         let _ = req;
-        return Err(PhenoError::unsupported_platform(
+        Err(PhenoError::unsupported_platform(
             codes::SANDBOX_ROOTFS_PACK_STUB,
             format!(
                 "live rootfs pack method={} requires feature `sandbox-rootfs-pack` \
@@ -80,7 +80,7 @@ pub fn live_pack(req: &PackRequest) -> Result<PackageManifest> {
                 req.pack_method.as_str(),
                 PACK_INTEGRATION_ENV
             ),
-        ));
+        ))
     }
 
     #[cfg(feature = "sandbox-rootfs-pack")]

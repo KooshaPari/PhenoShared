@@ -140,7 +140,7 @@ Verify you have everything before starting:
 - [ ] Snyk CLI installed: `snyk --version`
 - [ ] GitHub CLI installed: `gh --version`
 - [ ] Git installed: `git --version`
-- [ ] Admin access to <REDACTED> GitHub organization
+- [ ] Admin access to &lt;REDACTED&gt; GitHub organization
 - [ ] All 30 repos cloned locally
 - [ ] Snyk account (sign up at https://app.snyk.io if needed)
 - [ ] 30 minutes of uninterrupted time
@@ -251,7 +251,7 @@ Tier 1 Status:
 ### External Links
 - Snyk App: https://app.snyk.io
 - Snyk CLI Docs: https://docs.snyk.io/cli
-- GitHub Org Secrets: https://github.com/organizations/<REDACTED>/settings/secrets/actions
+- GitHub Org Secrets: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
 
 ### Generated Content
 - Reports (after phase 2): `.snyk-reports/`

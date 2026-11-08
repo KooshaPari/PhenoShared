@@ -5,7 +5,7 @@ Pilot repos running the repo-docs-site 4-quadrant pattern (template:
 
 | Repo | Docs site | Pattern |
 |------|-----------|---------|
-| OmniRoute | https://<REDACTED>.github.io/omniroute/ | VitePress, full 4 quadrants + demo programs |
+| OmniRoute | https://&lt;REDACTED&gt;.github.io/omniroute/ | VitePress, full 4 quadrants + demo programs |
 | CivicSurvival-public | pending Pages enablement | VitePress, full 4 quadrants |
 | HeliosLab | pending Pages enablement | VitePress, Journeys/Stories/Operations/Demo |
 | no-mistakes | upstream Starlight site | Astro/Starlight, Operations + Demo added |

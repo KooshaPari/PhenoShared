@@ -16,7 +16,7 @@
 
 use eidolon_core::error::PhenoError;
 use eidolon_core::traits::DesktopAutomator;
-use eidolon_core::{AutomationEvent, PointerInput, TextInput};
+use eidolon_core::{AutomationEvent, Platform, PointerInput, TextInput};
 use eidolon_desktop::codes;
 use eidolon_desktop::DesktopClient;
 use std::sync::Arc;
@@ -41,11 +41,11 @@ fn assert_unsupported(err: PhenoError, method: &str) {
             assert_eq!(code, expected_code());
             assert!(
                 detail.contains(method),
-                "expected method {method} in error, got: {message}"
+                "expected method {method} in error, got: {detail}"
             );
             assert!(
-                message.contains("not implemented"),
-                "expected unimplemented wording, got: {message}"
+                detail.contains("not implemented"),
+                "expected unimplemented wording, got: {detail}"
             );
         },
         other => panic!("expected UnsupportedPlatform, got {other:?}"),
@@ -95,7 +95,7 @@ async fn text_is_unsupported() {
 #[tokio::test]
 async fn record_event_returns_ok() {
     let client = make_client("linux");
-    let event = AutomationEvent::screenshot("desktop", "/tmp/screen.png");
+    let event = AutomationEvent::screenshot(Platform::Linux, "/tmp/screen.png");
     let result = client.record_event(event).await;
     assert!(result.is_ok());
 }
@@ -103,8 +103,8 @@ async fn record_event_returns_ok() {
 #[tokio::test]
 async fn all_action_methods_fail_loud_with_code() {
     let client = DesktopClient::new("linux");
-    assert_eq!(client.unsupported_code_value(), expected_code());
-
+    // `unsupported_code_value` is a PhenoError accessor, not a client method;
+    // assert the client's code through an actual error below.
     let client: Arc<dyn DesktopAutomator> = Arc::new(client);
     for err in [
         client.get_viewport().await.unwrap_err(),
@@ -123,7 +123,7 @@ async fn all_action_methods_fail_loud_with_code() {
     }
 
     assert!(client
-        .record_event(AutomationEvent::screenshot("linux", "/s.png"))
+        .record_event(AutomationEvent::screenshot(Platform::Linux, "/s.png"))
         .await
         .is_ok());
 }

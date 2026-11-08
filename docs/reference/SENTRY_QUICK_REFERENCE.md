@@ -40,7 +40,7 @@ SENTRY_DSN_HELIOSCLI
 |---------|-----|
 | Sentry Dashboard | https://sentry.io/ |
 | Create New Project | https://sentry.io/projects/new/ |
-| GitHub Org Secrets | https://github.com/organizations/<REDACTED>/settings/secrets/actions |
+| GitHub Org Secrets | https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions |
 | AgilePlus Repo | https://github.com/KooshaPari/AgilePlus |
 | phenotype-infrakit Repo | https://github.com/KooshaPari/phenotype-infrakit |
 | heliosCLI Repo | https://github.com/KooshaPari/heliosCLI |
@@ -83,7 +83,7 @@ SENTRY_ENVIRONMENT=development
 
 ## GitHub Secrets Setup Checklist
 
-- [ ] Go to: https://github.com/organizations/<REDACTED>/settings/secrets/actions
+- [ ] Go to: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
 - [ ] Create secret: `SENTRY_DSN_AGILEPLUS` → assign to `AgilePlus`
 - [ ] Create secret: `SENTRY_DSN_INFRAKIT` → assign to `phenotype-infrakit`
 - [ ] Create secret: `SENTRY_DSN_HELIOSCLI` → assign to `heliosCLI`
@@ -142,7 +142,7 @@ Once setup is complete:
 1. **Go to:** https://sentry.io/
 2. **Create:** 3 projects (AgilePlus, phenotype-infrakit, heliosCLI)
 3. **Copy:** DSN for each project
-4. **Go to:** https://github.com/organizations/<REDACTED>/settings/secrets/actions
+4. **Go to:** https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
 5. **Create:** 3 secrets with DSN values
 6. **Update:** Local `.env` files
 7. **Done:** Ready for SDK integration

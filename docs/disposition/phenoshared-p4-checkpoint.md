@@ -59,7 +59,7 @@
 
 ## Zero-dep audit — fleet git/path deps on `<REDACTED>/phenoShared`
 
-Org grep (`gh search code` in `Cargo.toml`/`go.mod`, <REDACTED> org) 2026-06-19 post–wave 5b fleet drain.
+Org grep (`gh search code` in `Cargo.toml`/`go.mod`, &lt;REDACTED&gt; org) 2026-06-19 post–wave 5b fleet drain.
 
 **Excluded from consumer count:** phenoShared self (`repository` metadata), phenoShared-niche (sibling fork metadata), phenotype-registry `components.lock` (fleet stamp), phenotype-python-sdk data-kit comment-only refs, governance/audit docs, exclude-list comments.
 

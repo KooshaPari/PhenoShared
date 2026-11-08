@@ -130,8 +130,8 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
    }
    ```
 3. Implement constructor:
-   - `pub fn new(db_path: &Path) -> Result<Self, DomainError>` -- opens DB, enables WAL, runs migrations
-   - `pub fn in_memory() -> Result<Self, DomainError>` -- for testing
+   - `pub fn new(db_path: &Path) -> Result&lt;Self, DomainError>` -- opens DB, enables WAL, runs migrations
+   - `pub fn in_memory() -> Result&lt;Self, DomainError>` -- for testing
 4. Enable WAL mode on connection open: `PRAGMA journal_mode=WAL;`
 5. Enable foreign keys: `PRAGMA foreign_keys=ON;`
 6. Run `MigrationRunner::run_all()` in the constructor.
@@ -159,7 +159,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
    - `list_features_by_state`: SELECT WHERE state = ?1 ORDER BY created_at.
    - `list_all_features`: SELECT all ORDER BY created_at DESC.
 
-2. Create a `row_to_feature(row: &Row) -> Result<Feature, rusqlite::Error>` helper for DRY mapping.
+2. Create a `row_to_feature(row: &Row) -> Result&lt;Feature, rusqlite::Error>` helper for DRY mapping.
 3. All queries use parameterized statements (`?1`, `?2`, etc.).
 4. Write unit tests:
    - Create a feature, retrieve by slug, verify fields match.
@@ -211,7 +211,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/lib.rs` or `crates/agileplus-sqlite/src/repository/work_packages.rs`
 
 **Validation**:
-- `file_scope` round-trips correctly (Vec<String> -> JSON text -> Vec<String>).
+- `file_scope` round-trips correctly (Vec&lt;String> -> JSON text -> Vec&lt;String>).
 - `get_ready_wps` correctly evaluates transitive dependency satisfaction.
 - WP foreign key to features is enforced.
 
@@ -227,7 +227,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
    - `get_audit_trail`: SELECT WHERE feature_id = ?1 ORDER BY id ASC (chronological order for chain verification).
    - `get_latest_audit_entry`: SELECT WHERE feature_id = ?1 ORDER BY id DESC LIMIT 1.
 
-2. BLOB handling for hashes: rusqlite handles `[u8; 32]` or `Vec<u8>` natively. Use `row.get::<_, Vec<u8>>(col)` and convert.
+2. BLOB handling for hashes: rusqlite handles `[u8; 32]` or `Vec&lt;u8>` natively. Use `row.get::<_, Vec&lt;u8>>(col)` and convert.
 3. `evidence_refs` stored as JSON text, deserialized on read.
 4. Defense-in-depth check in `append_audit_entry`:
    ```rust
@@ -332,10 +332,10 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| WAL mode + concurrent writes | High -- data corruption | Serialize all writes through `Arc<Mutex<Connection>>`. Only read connections are pooled. |
+| WAL mode + concurrent writes | High -- data corruption | Serialize all writes through `Arc&lt;Mutex&lt;Connection>>`. Only read connections are pooled. |
 | Migration ordering errors | Medium -- schema inconsistency | Number migrations sequentially. Test fresh DB creation + migration from empty. |
 | JSON field schema drift | Medium -- stored JSON doesn't match expected structure | Use serde with explicit types for JSON fields. Add schema validation on read. |
-| BLOB hash comparison | Low -- byte ordering issues | Use `Vec<u8>` consistently. Compare with `==` on byte slices. |
+| BLOB hash comparison | Low -- byte ordering issues | Use `Vec&lt;u8>` consistently. Compare with `==` on byte slices. |
 | rebuild_from_git partial failure | High -- inconsistent state | Wrap entire rebuild in a single transaction. Rollback on any error. |
 | rusqlite async compatibility | Medium -- rusqlite is synchronous | Use `tokio::task::spawn_blocking` to wrap synchronous rusqlite calls in async context. |
 

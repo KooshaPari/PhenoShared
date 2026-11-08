@@ -2,7 +2,7 @@
 
 **Date**: 2026-04-04
 **Status**: Proposed
-**Deciders**: <REDACTED>
+**Deciders**: &lt;REDACTED&gt;
 
 ## Context
 
