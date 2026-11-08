@@ -205,8 +205,7 @@ impl substrate_browser_cdp::FenceCheck for CountdownFence {
         if before > 0 {
             Ok(())
         } else {
-            self.remaining
-                .store(0, std::sync::atomic::Ordering::SeqCst);
+            self.remaining.store(0, std::sync::atomic::Ordering::SeqCst);
             Err("fence exhausted".to_string())
         }
     }

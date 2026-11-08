@@ -14,9 +14,11 @@ use super::super::{
     bake_agent_then_pack, pack_io, PackMethod, PackRequest, PackageManifest, CANNED_ROOTFS_IMG,
     CANNED_TREE_DIR, CANNED_TREE_MANIFEST,
 };
+#[cfg(feature = "sandbox-rootfs-pack")]
+use super::AGENT_CACHE_ENV;
 use super::{
-    guard_against_tmp, CannedMode, CannedRootfsRequest, CannedRootfsResult, AGENT_CACHE_ENV,
-    AGENT_SHA256_ENV, AGENT_URL_ENV,
+    guard_against_tmp, CannedMode, CannedRootfsRequest, CannedRootfsResult, AGENT_SHA256_ENV,
+    AGENT_URL_ENV,
 };
 use crate::codes;
 use crate::unikernel::RootfsFormat;

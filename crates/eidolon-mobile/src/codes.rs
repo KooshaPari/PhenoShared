@@ -12,7 +12,7 @@
 ///
 /// Emitted when feature `mobile-ios` is off, `xcrun`/`xcodebuild`/`simctl` are
 /// missing, or an iOS action is not yet hermetically wired. With `mobile-ios`
-/// + reachable tools, prefer [`crate::XcrunIosDriver`] for list/probe;
+/// and reachable tools, prefer [`crate::XcrunIosDriver`] for list/probe;
 /// destructive taps still need [`crate::cli::ACTIONS_ALLOW_ENV`].
 pub const MOBILE_IOS_STUB: &str = "EIDOLON_MOBILE_IOS_STUB";
 

@@ -26,10 +26,9 @@
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 
-use phenocompose_port_types::{PortError, Secret, SecretRef};
+use phenocompose_port_types::{Secret, SecretRef};
 use std::collections::HashMap;
 use std::sync::Mutex;
-use thiserror::Error;
 
 pub mod error;
 pub mod store;
@@ -188,11 +187,9 @@ impl SecretStore for InMemorySecretStore {
 }
 
 #[cfg(test)]
-
 mod tests {
     use super::*;
-    use super::*;
-    use phenocompose_port_types::{Secret, SecretRef};
+    use phenocompose_port_types::{PortError, Secret, SecretRef};
 
     fn ref_default(name: &str) -> SecretRef {
         SecretRef::new(name)

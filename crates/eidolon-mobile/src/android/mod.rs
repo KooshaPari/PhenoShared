@@ -5,7 +5,7 @@
 //! - Always-on: [`AndroidUiAutomatorDriver`] trait, fail-loud [`AndroidStub`],
 //!   and [`probe`] helpers that locate `adb` without spawning UiAutomator.
 //! - Always-on: [`uia2_server`] hermetic Appium-shaped argv / package parsers
-//!   + [`Uia2Server`] lifecycle; APKs via env override → checkout assets →
+//!   plus [`Uia2Server`] lifecycle; APKs via env override → checkout assets →
 //!   durable SHA-256-verified cache (`uia2_assets` / `eidolon-fetch-uia2`).
 //! - Feature `mobile-android`: [`AdbAndroidDriver`] — live when `adb version`
 //!   answers; lists devices via `adb devices`; **real** gated `adb shell input`
