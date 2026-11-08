@@ -1,16 +1,25 @@
 ---
 name: Bug Report
-about: Report a bug
-title: "[Bug]: "
+about: Report a defect
+title: "[BUG] "
 labels: bug
 ---
 
-## Description
+## Describe the bug
+<!-- Clear, concise description -->
 
-## Steps to Reproduce
+## Reproduction steps
+1.
+2.
+3.
 
-## Expected
+## Expected behavior
 
-## Actual
+## Actual behavior
 
 ## Environment
+- OS:
+- Rust version:
+- Crate version:
+
+## Additional context

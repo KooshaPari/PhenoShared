@@ -1,7 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "$comment": "Renovate - automated dependency updates with smart grouping. Merging is owned by the Mergify queue (author-based rule), so automerge stays off here.",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "$comment": "Renovate — automated dependency updates with smart grouping and auto-merge",
+  "extends": [
+    "config:recommended",
+    ":automergeDigest",
+    "helpers:pinGitHubActionDigests"
+  ],
   "labels": ["dependencies"],
   "schedule": ["before 6am on Monday"],
   "timezone": "America/Los_Angeles",
@@ -12,55 +16,69 @@
       "description": "Group all non-major updates",
       "matchUpdateTypes": ["minor", "patch", "digest"],
       "groupName": "non-major updates",
-      "automerge": false
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
     },
     {
       "description": "Group Rust crate updates",
       "matchManagers": ["cargo"],
       "groupName": "rust crates",
-      "automerge": false
+      "automerge": true,
+      "automergeType": "pr"
     },
     {
       "description": "Group Python dependency updates",
       "matchManagers": ["pip_requirements", "pyproject", "uv"],
       "groupName": "python packages",
-      "automerge": false
+      "automerge": true,
+      "automergeType": "pr"
     },
     {
       "description": "Group Node.js dependency updates",
       "matchManagers": ["npm"],
       "groupName": "node packages",
-      "automerge": false
+      "automerge": true,
+      "automergeType": "pr"
     },
     {
       "description": "Group Go module updates",
       "matchManagers": ["gomod"],
       "groupName": "go modules",
-      "automerge": false
+      "automerge": true,
+      "automergeType": "pr"
     },
     {
       "description": "Major updates require manual review",
       "matchUpdateTypes": ["major"],
       "automerge": false,
       "labels": ["breaking-change", "dependencies"],
-      "assignees": ["KooshaPari"]
+      "assignees": ["<REDACTED>"]
     },
     {
       "description": "Group GitHub Actions updates",
       "matchManagers": ["github-actions"],
       "groupName": "github actions",
-      "automerge": false
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
     },
     {
       "description": "Group Docker updates",
       "matchManagers": ["dockerfile"],
       "groupName": "docker",
-      "automerge": false
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "Pin GitHub Action digests",
+      "matchManagers": ["github-actions"],
+      "pinDigests": true
     }
   ],
   "vulnerabilityAlerts": {
     "enabled": true,
     "labels": ["security"],
-    "automerge": false
+    "automerge": true
   }
 }

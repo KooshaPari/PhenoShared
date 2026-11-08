@@ -1,48 +1,71 @@
-# phenotype-omlx agent contract
+# AGENTS.md — phenoAI
 
-## Worktree hub (required)
+This file governs work inside the phenoAI repository.
 
-| Path | Role |
-| --- | --- |
-| `repos/phenotype-omlx` | Canonical clone — always on `main`; pull / merge only |
-| `repos/worktrees/phenotype-omlx/<topic>` | Feature work, quality gates, PR prep, analysis |
+## Identity
 
-```bash
-# From the canonical clone (or via scripts/worktree_add.sh <branch>):
-git -C /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-omlx \
-  worktree add ../worktrees/phenotype-omlx/<topic> -b <topic>
-```
+phenoAI is a [brief description of purpose and role in Phenotype ecosystem].
 
-- **Canonical GitHub repo:** `<REDACTED>/phenotype-omlx` only.
-- **Do not use** archived remotes/clones `zz-archive-phenotype-omlx-tmp` or
-  `zz-archive-phenotype-omlx-temp` (legacy names `phenotype-omlx-tmp` /
-  `phenotype-omlx-temp`). Cutover: `docs/guides/CANONICAL_REPO_CUTOVER.md`.
-- Never author features in the canonical `main` checkout or under any
-  `worktrees/phenotype-omlx-tmp` hub.
-- This directory is an independent Git repository. Never rely on a parent Git worktree.
-- Treat `perf-core/` as the Rust workspace and `python/` as its Python integration surface.
+Do not apply parent shelf instructions (`/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md`) unless explicitly referenced. Work from this directory and treat paths as local to phenoAI.
 
-## §2 — Polyglot language policy (max-optimal, supersedes any "Rust only" markers)
+## Required Operating Loop
 
-**No language is forbidden.** Pick by measured perf, not by default.
+1. Check AgilePlus for existing specs before implementation
+2. Research code and tests before editing
+3. Keep changes scoped to a single feature or bug fix
+4. Validate with quality-gate checks (see below)
+5. Do not leave incomplete work or stub implementations
 
-| Tier | Default language | Override when it wins |
-|---|---|---|
-| Perf-cores (SIMD / fusion / kernels) | Rust | Mojo (MLX-native), CUDA (NVIDIA hot paths), C++ (C-API), Zig (FFI ergonomics), Swift (Metal) |
-| Orchestration | Python | Zig/C++ if pyo3 friction; Swift if orchestrating MLX/Metal natively |
-| CLI / wrappers | Bash | Zsh on macOS, PowerShell on Windows |
-| GUI / web | TypeScript / Svelte | SwiftUI on macOS where appropriate |
-| Config | TOML | JSON if downstream tool requires it |
+## Canonical Surfaces
 
-- **All bindings are first-class.** pyo3, UniFFI, ctypes, cffi, JNI, Swift↔ObjC bridges, Mojo↔Python — whatever is canonical for the runtime.
-- **Multi-engine is the default.** MLX/Metal + SGLang + vLLM + TRT-LLM + llama.cpp running concurrently is wired into the NanoVM plugin layer (`python/omlx_research/nanovm/plugins/`); treat this as the normal path.
-- **Experimental languages get sandboxed crates, not blocked.** Mojo, Zig, Nim, Jai, Vale, Carbon → each can get its own `perf-core/<lang>/` crate with its own workspace entry. Nothing is blocked at the agent level.
-- **Do not reintroduce "Rust only" / "use only [...]" markers anywhere in this repo** — the prior restriction has been nulled.
+- **Spec tracking:** AgilePlus at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
+- **Work audit:** `docs/worklogs/README.md`
+- **Quality gates:** See `Governance Reference` below
+- **Build/test:** See project-specific targets (Makefile, Cargo.toml, package.json, etc.)
 
-See `docs/adr/2026-07-14/ADR-005-polyglot-policy.md` for the full decision rationale.
-- Do not expose Python bindings for Rust APIs that do not exist in the checked-in crates.
-- Add failing tests before fixing correctness defects, then run focused and workspace checks.
-- Keep generated targets, environments, model weights, and extension artifacts out of Git.
-- Prefer pure, explicit FFI payloads over process-global mutable state.
-- Keep modules at or below 500 lines and target 350 lines; split by coherent responsibility.
-- Record session research and decisions under `docs/sessions/<session-id>/`.
+## Quality Rules
+
+### Linting & Formatting
+
+All code MUST pass linting and formatting checks before commit:
+- Run linters and formatters locally (see CLAUDE.md for commands)
+- Fix errors; do not suppress or ignore warnings
+- Commit all formatting changes before feature changes
+
+### Testing & Specification Traceability
+
+- All tests MUST reference a Functional Requirement (FR) if FUNCTIONAL_REQUIREMENTS.md exists
+- Every FR MUST have at least 1 test
+- Run tests locally and verify pass before pushing
+
+### Documentation
+
+- Use Vale for Markdown validation where available
+- Keep docs organized per global structure: `docs/guides/`, `docs/reports/`, `docs/research/`, `docs/reference/`, `docs/checklists/`
+- Never create `.md` files at root level (except `README.md`, `CLAUDE.md`, `AGENTS.md`)
+
+## Governance Reference
+
+- **Global baseline:** `~/.claude/CLAUDE.md` (Dependency preferences, Prose quality, Context management, Failure behavior)
+- **Phenotype-org scripting:** `repos/docs/governance/scripting_policy.md` (Rust default; no new shell)
+- **CI/GitHub Actions:** See parent CLAUDE.md (billing constraint; skip macOS/Windows runners)
+- **Git discipline:** Phenotype Git and Delivery Workflow Protocol (parent CLAUDE.md)
+- **Child agents & delegation:** See parent CLAUDE.md (prefer subagents for multi-file work)
+
+## Worktree Pattern
+
+- **Feature work:** Use repo worktrees at `repos/[PROJECT]-wtrees/<topic>/`
+- **Canonical repo:** Always on `main` except during merge operations
+- **No feature branches in canonical:** All work isolated in worktrees until integration
+
+## Integration & Handoff
+
+When feature work is complete:
+1. Ensure all tests pass and quality gates are clean
+2. Create a pull request or squash-commit to `main`
+3. Update AgilePlus work package status
+4. Archive worktree or keep for reference
+
+---
+
+**Parent contract:** See `AGENTS.md` at `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AGENTS.md` for cross-project agent coordination and parent shelf governance.

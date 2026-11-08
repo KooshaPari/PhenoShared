@@ -1,3 +1,10 @@
+<!--
+propagated-from: <REDACTED>/phenotype-registry @ chore/l7-001-curation-snapshot
+date: 2026-06-17
+source-commit: a1aa44660
+do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
+                     or update in the source-of-truth registry repo
+-->
 ---
 repo: "phenoAI"
 role: unknown
@@ -14,19 +21,19 @@ out_of_scope:
 
 ## In Scope
 
-&lt;To be filled.>
+<To be filled.>
 
 ## Out of Scope
 
 | Not here | Lives in | Reason |
 | -------- | -------- | ------ |
-| `<capability>` | `<other-repo-or-N/A>` | `<why>` |
+| <capability> | <other-repo-or-N/A> | <why> |
 
 ## Boundary Crossings
 
 | Crossing | Direction | Surface | Status |
 | -------- | --------- | ------- | ------ |
-| `<capability or interface>` | `<this-repo→other|other→this-repo>` || `<this-repo→other|other→this-repo>` | `<Trait / HTTP / CLI / file / event>` | `<green|amber|red>` || `<green|amber|red>` || `<green|amber|red>` |
+| <capability or interface> | <this-repo→other\|other→this-repo> | <Trait / HTTP / CLI / file / event> | <green\|amber\|red> |
 
 ## Last Boundary Review
 

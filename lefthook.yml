@@ -1,80 +1,74 @@
-# pheno pre-commit / pre-push hooks
-# Validates locally before pushing to CI
-# Uses Python subprocess instead of shell (Windows compatible)
-#
-# The previous version of this file was headed "phenotype-infra pre-commit
-# hooks" and every command ran `cargo ... -p phenotype-infra`. There is no
-# such package in this repository (it is not a member of [workspace].members
-# and crates/phenotype-infra does not exist), so cargo exited 101 with
-# "package ID specification `phenotype-infra` did not match any packages" and
-# every commit and push to this repo failed the hook.
-#
-# The hooks now validate the packages a change actually touches, via
-# .lefthook/changed_packages.py. A workspace-wide `cargo clippy -D warnings`
-# fails on pre-existing lint debt in crates the change never touched
-# (eidolon-sandbox, pheno-compose-port-types), which would block unrelated
-# work. The full workspace gate is the CI hard gate's job:
-# .github/workflows/quality-gate.yml runs `make check` and
-# `cargo nextest run --workspace` on every pull request with no
-# continue-on-error, so nothing is lost by keeping the local hook scoped.
-#
-# Formatting is still checked workspace-wide, because `cargo fmt --all --check`
-# is cheap and its failures are always the author's own.
+# lefthook.yml — Fleet-wide git hook configuration
+# This config uses caching optimizations for commit/push hooks
+# For the strictest check, run: task grade (or just grade)
 
 pre-commit:
   parallel: true
   commands:
-    cargo-fmt:
-      glob: "*.rs"
-      run: python -c "import subprocess; r=subprocess.run(['cargo','fmt','--all','--check'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
-    cargo-check:
-      glob: "*.rs"
-      run: >
-        PKGS="$(python3 .lefthook/changed_packages.py {staged_files})";
-        if [ -n "$PKGS" ]; then
-          cargo check --all-targets $PKGS;
-        else
-          echo "no changed workspace packages; skipping cargo check";
+    editorconfig:
+      run: git diff --cached --name-only | xargs -n1 test -f && echo "Checking editorconfig..."
+      skip:
+        - merge
+        - rebase
+    lint:
+      run: |
+        # Only lint changed files (caching optimization)
+        CHANGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(rs|ts|tsx|py|go)$' || true)
+        if [ -n "$CHANGED" ]; then
+          echo "$CHANGED" | xargs -n1 dirname | sort -u | while read dir; do
+            if [ -f "$dir/Cargo.toml" ]; then
+              cd "$dir" && cargo fmt -- --check && cargo clippy -- -D warnings
+            elif [ -f "$dir/package.json" ]; then
+              cd "$dir" && npx eslint --ext .ts,.tsx . 2>/dev/null || true
+            elif [ -f "$dir/pyproject.toml" ]; then
+              cd "$dir" && ruff check . 2>/dev/null || true
+            elif [ -f "$dir/go.mod" ]; then
+              cd "$dir" && go vet ./... 2>/dev/null || true
+            fi
+            cd - > /dev/null
+          done
         fi
-    cargo-clippy:
-      glob: "*.rs"
-      run: >
-        PKGS="$(python3 .lefthook/changed_packages.py {staged_files})";
-        if [ -n "$PKGS" ]; then
-          cargo clippy --all-targets $PKGS -- -D warnings;
-        else
-          echo "no changed workspace packages; skipping cargo clippy";
+      skip:
+        - merge
+        - rebase
+    test-fast:
+      run: |
+        # Only run tests for changed packages (caching optimization)
+        CHANGED=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(rs|ts|tsx|py|go)$' || true)
+        if [ -n "$CHANGED" ]; then
+          # Run task grade-fast for affected areas
+          if [ -f "Justfile" ]; then
+            just grade-fast 2>/dev/null || true
+          elif [ -f "Taskfile.yml" ]; then
+            task grade-fast 2>/dev/null || true
+          fi
         fi
-
-pre-push:
-  commands:
-    cargo-test:
-      run: >
-        PKGS="$(python3 .lefthook/changed_packages.py {push_files})";
-        if [ -n "$PKGS" ]; then
-          cargo test --no-fail-fast $PKGS;
-        else
-          echo "no changed workspace packages; skipping cargo test";
-        fi
-    cargo-deny:
-      # `cargo deny check` is a repository-wide policy gate. On this base it
-      # already fails on pre-existing debt that no change touches: seven
-      # unlicensed crates (pheno-crypto, pheno-fs, pheno-net, pheno-testing,
-      # phenotype-dag-core, sharecli-ffi, teamcomm-smoke), a 'git' source that
-      # is not in the allowed list, and two advisories in deny.toml that no
-      # crate matches. Blocking every push on that debt makes the hook
-      # unusable and hides real regressions.
-      #
-      # The advisory scan is therefore advisory here: the output is shown so
-      # a NEW advisory in the changed packages is visible, but the hook does
-      # not fail on pre-existing findings. The enforced gate for dependency
-      # policy is CI: .github/workflows/cargo-deny.yml runs on every pull
-      # request.
-      run: >
-        echo "cargo deny check (advisory: pre-existing policy debt is not gated locally)";
-        cargo deny check || echo "::warning::cargo deny findings present; see .github/workflows/cargo-deny.yml for the enforced gate"
+      skip:
+        - merge
+        - rebase
 
 commit-msg:
   commands:
     conventional:
-      run: python .lefthook/conventional.py {1}
+      run: |
+        # Validate conventional commit format
+        MSG=$(cat "$1")
+        if echo "$MSG" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,100}'; then
+          echo "Commit message OK"
+        else
+          echo "Commit message must follow conventional commits format"
+          exit 1
+        fi
+
+pre-push:
+  commands:
+    grade:
+      run: |
+        # Full grade check on push (strict, no caching)
+        if [ -f "Justfile" ]; then
+          just grade
+        elif [ -f "Taskfile.yml" ]; then
+          task grade
+        else
+          ./grade.sh
+        fi

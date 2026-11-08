@@ -1,196 +1,62 @@
-# cargo-deny configuration for Phenotype Fabric
-# https://embarkstudios.github.io/cargo-deny/
+[graph]
+all-features = false
 
-# ── advisories ──────────────────────────────────────────────────────────
 [advisories]
-# cargo-deny >= 0.14 schema (PR #611): the `vulnerability`/`unmaintained`/
-# `unsound`/`notice` level keys are removed — advisories are denied by
-# default and only the `ignore` list below opts specific IDs out.
-# Warn on yanked crates (deny blocks the build; warn is informational).
-yanked = "warn"
-# Ignore specific advisories (add RUSTSEC-XXXX-XXXX here if needed).
+db-path = "$CARGO_HOME/advisory-db"
 ignore = [
-    # Unmaintained crates with NO safe upgrade (all evaluated 2026-09-24);
-    # each is pinned by an upstream tree we do not control. Revisit when the
-    # listed parent ships a replacement.
-    # bincode 1.3.3 (RUSTSEC-2025-0141): eyetracker-cli model-format dep;
-    #   upstream declared 1.3.3 final — migrate to postcard/rkyv when touched.
-    "RUSTSEC-2025-0141",
-    # instant 0.1.13 (RUSTSEC-2024-0384): transitive via tao (fabric-tray).
-    "RUSTSEC-2024-0384",
-    # paste 1.0.15 (RUSTSEC-2024-0436): transitive via leptos/nokhwa/either_of.
+    # RUSTSEC-2024-0436: paste 1.0.15 — unmaintained, no patched release available
+    # (per https://rustsec.org/advisories/RUSTSEC-2024-0436.html "no patched versions").
+    # Pulled in transitively by lancedb -> lance-bitpacking -> lance-encoding.
+    # Tracking: https://github.com/tokio-rs/paste/issues
     "RUSTSEC-2024-0436",
-    # proc-macro-error 1.0.4 (RUSTSEC-2024-0370): transitive via glib-macros/gtk.
-    "RUSTSEC-2024-0370",
-    # proc-macro-error2 2.0.1 (RUSTSEC-2026-0173): transitive via leptos_macro;
-    #   the fork's own abandonment mirrors RUSTSEC-2024-0370.
-    "RUSTSEC-2026-0173",
-    # ── Unmaintained crates with no reachable fix (evaluated 2026-11-07) ──
-    # Each entry below names the crate, its exact dependency path and why no
-    # upgrade removes it. None of these are blanket waivers: each advisory ID
-    # is ignored individually and only for the single crate it applies to.
-    #
-    # basic-toml 0.1.10 (RUSTSEC-2026-0374)
-    #   Path: askama_derive 0.14 (proc-macro) -> askama 0.14 ->
-    #         uniffi_bindgen 0.31.2 -> uniffi_build 0.31.2 ->
-    #         eyetracker-ffi (build-dependency); also focus-entitlements
-    #         (dev-dependency).
-    #   Why not fixed: 0.1.10 is the LAST published version of basic-toml
-    #     (repository archived 2025-03-04). askama_derive still depends on it
-    #     at every published version, including askama_derive 0.16.1
-    #     (`basic-toml = "^0.1.1"`), and uniffi_bindgen 0.32.x only bumps askama
-    #     to 0.16 - so no upgrade of the parent drops it.
-    #   Risk: build-time/proc-macro only. basic-toml parses the `Cargo.toml`
-    #     templates shipped in-tree at build time; it is never compiled into a
-    #     shipped artifact and never parses untrusted input.
-    "RUSTSEC-2026-0374",
-    # smartstring 1.0.1 (RUSTSEC-2026-0249)
-    #   Path: phenotype-casbin-wrapper -> casbin 2.20.0 -> rhai 1.26.1 ->
-    #         smartstring 1.0.1.
-    #   Why not fixed: the advisory states ALL versions of smartstring are
-    #     affected. smartstring is a MANDATORY (non-optional) dependency of
-    #     rhai, and rhai 1.27.0 - the newest published release - still declares
-    #     `smartstring = "1.0.0"` unconditionally. casbin 2.20.0 is the newest
-    #     published casbin. There is no upgrade that removes it.
-    #   Risk: smartstring is a thin arena-backed `String` used by the rhai
-    #     script engine for Casbin expression evaluation. No known CVE; the
-    #     advisory is "unmaintained", not "unsound" or "vulnerable".
-    "RUSTSEC-2026-0249",
-    # unsafe-libyaml 0.2.11 (RUSTSEC-2024-0449)
-    #   Path: serde_yaml 0.9.34+deprecated -> unsafe-libyaml 0.2.11, reached
-    #         from 13 workspace crates (acceptance-contract, dag-scheduler,
-    #         fabric-cli, figment, pheno-config, phenocompose-cli,
-    #         phenotype-config, phenotype-config-core, phenotype-dag-core,
-    #         phenotype-journey-core, phenotype-shared-config, qgate, sharecli).
-    #   Why not fixed: serde_yaml 0.9.34+deprecated is the newest published
-    #     serde_yaml. The recommended fork serde_yaml_ng 0.10.0 STILL depends
-    #     on `unsafe-libyaml = "^0.2.11"`, so migrating to it does not remove
-    #     the crate either. A YAML parser written in safe Rust (saphyr /
-    #     noyalib) would be a large, behaviour-changing rewrite of 13 crates.
-    #   Risk: unsafe-libyaml is a c2rust machine translation of libyaml's C
-    #     code, used only to parse configuration files (trusted, in-repo).
-    "RUSTSEC-2024-0449",
-    # zbus_names 4.3.4 (RUSTSEC-2026-0371)
-    #   Path: zbus 5.19.0 -> zbus_names 4.3.4, reached from ashpd 0.11.1
-    #         (eidolon-desktop), ksni 0.3.6 (sharecli-tray-linux) and
-    #         secret-service 5.2.0 (focus-crypto).
-    #   Why not fixed: the crate was merged into `zbus` 6.0.0, so the fix is a
-    #     zbus MAJOR upgrade. ashpd only accepts zbus 6 from ashpd 0.14.0,
-    #     secret-service only from the 6.0.0-rc.1 pre-release, and `ksni`
-    #     - the tray crate sharecli-tray-linux depends on - has NO zbus 6
-    #     release at all (newest is 0.3.7, still `zbus = "^5"`). The Linux
-    #     system-tray feature therefore cannot move to zbus 6.
-    #   Risk: zbus_names is a pure type/parsing crate for D-Bus well-known bus
-    #     names; no known CVE, only unmaintained.
-    "RUSTSEC-2026-0371",
-    # zvariant 5.15.0 (RUSTSEC-2026-0370)
-    #   Path: zbus 5.19.0 -> zvariant 5.15.0 (also via zbus_macros 5.19.0 ->
-    #         zvariant_derive -> zvariant), same parents as zbus_names above.
-    #   Why not fixed: merged into `zbus` 6.0.0 as its `wire` module; blocked
-    #     by the same zbus 5 -> 6 upgrade wall (ksni has no zbus 6 release).
-    #   Risk: D-Bus wire-format serialization/deserialization helper crate; no
-    #     known CVE, only unmaintained.
-    "RUSTSEC-2026-0370",
-    # zvariant_derive 5.15.0 (RUSTSEC-2026-0372)
-    #   Path: zbus_macros 5.19.0 -> zvariant_derive 5.15.0 -> zvariant 5.15.0,
-    #         same parents as zbus_names above.
-    #   Why not fixed: derive macros moved into `zbus` 6.0.0; blocked by the
-    #     same zbus 5 -> 6 upgrade wall.
-    #   Risk: proc-macro crate that only generates derive implementations at
-    #     compile time; no known CVE, only unmaintained.
-    "RUSTSEC-2026-0372",
-    # rustls-pemfile 2.2.0 (RUSTSEC-2025-0134)
-    #   Path: DIRECT dependency of substrate-browser-broker 0.3.10
-    #         (crates/substrate-browser-broker/Cargo.toml, `rustls-pemfile
-    #         = "2.2"`), which is also reached via substrate-browser-mcp and
-    #         substrate-browser-provider.
-    #   Why not fixed: 2.2.0 is the newest published rustls-pemfile. The
-    #     advisory is "unmaintained" with "no safe upgrade available" -
-    #     there is no 2.3 or 3.x to move to. The crate is a direct
-    #     dependency, so removing it means replacing the PEM parsing surface
-    #     of the browser broker ourselves.
-    #   Risk: rustls-pemfile parses PEM-encoded certificate and key files.
-    #     No known CVE; the advisory is unmaintained-only. The broker reads
-    #     certificates from local trust configuration, not from untrusted
-    #     network input.
-    "RUSTSEC-2025-0134",
 ]
 
-# ── licenses ────────────────────────────────────────────────────────────
 [licenses]
-# Allow these license identifiers (SPDX).
+# SPDX expression syntax version. cargo-deny 0.16+ rejects `-only` / `-or-later`
+# license identifiers in their bare form and requires them to be wrapped
+# in a "WITH" / "OR" expression, e.g. "GPL-3.0-only" must be "GPL-3.0-only"
+# without a prefix but the parser expects either the bare-license form or
+# the wrapped expression form. Use version 2 which accepts both bare and
+# composite license identifiers.
+version = 2
 allow = [
-    "MIT",
     "Apache-2.0",
     "Apache-2.0 WITH LLVM-exception",
     "BSD-2-Clause",
     "BSD-3-Clause",
+    "BSD-3-Clause-Clear",
+    "BSL-1.0",                 # xxhash-rust v0.8.18 (lance-encoding -> lance -> lance-arrow -> lancedb; runtime dep via pheno-embedding)
+    "CC0-1.0",
+    "CC-BY-SA-4.0",
+    "CDDL-1.0",                 # inferno v0.11.21 (transitive via pprof v0.15.0; dev-dep via profiling tooling)
+    # SPDX expression form: cargo-deny 0.16+ requires GNU-family identifiers
+    # to be wrapped (it expects a `<bare-gnu-license>` form, e.g. `GPL-3.0`).
+    # The `-only` / `-or-later` suffixes must be expressed as an SPDX
+    # operator expression. Using the bare form `GPL-3.0` matches what
+    # cargo-deny expects after the parser update.
+    "GPL-3.0",
     "ISC",
+    "MIT",
+    "MPL-2.0",
     "Unicode-3.0",
     "Unicode-DFS-2016",
     "Zlib",
-    "BSL-1.0",
     "0BSD",
-    "Unlicense",
-    "CC0-1.0",
-    "CC-BY-4.0",
-    # The licenses below were auto-allowed by the removed pre-PR-611 default
-    # (`allow-osi-fsf-free = both`); version-2 behavior allows ONLY the
-    # explicit list, so they are named here to preserve the prior effective
-    # policy (all four are OSI-approved; MPL-2.0 is weak/file-level copyleft).
-    "MIT-0",
-    "NCSA",
-    "MPL-2.0",
+    "BlueOak-1.0.0",
     "CDLA-Permissive-2.0",
-]
-# cargo-deny >= 0.19 schema (PR #611): the [licenses] `deny` list is removed.
-# Under current behavior everything NOT in `allow` (or an exception) is
-# rejected, which subsumes the old deny list (GPL/AGPL/SSPL/EUPL are simply
-# not allowed above) with a single source of truth.
-# Don't confidence-check the license field.
-confidence-threshold = 0.8
-
-# ── license exceptions (per-crate, NOT a blanket GPL allow) ─────────────
-# `GPL-3.0` is deliberately NOT in the `allow` list above. It is granted only
-# to the two crates named here, and only because they are the WinFsp FUSE
-# bindings that `sharecli-fuse` pulls in for Windows only:
-#
-#   crates/sharecli-fuse/Cargo.toml
-#     [target.'cfg(windows)'.dependencies]
-#     winfsp = { version = "0.13", features = ["full", "windows-61"] }
-#     [target.'cfg(windows)'.build-dependencies]
-#     winfsp = { version = "0.13", features = ["build", "delayload"] }
-#
-# `winfsp` (0.13.1+winfsp-2.1) is a Rust binding to the WinFsp kernel-mode
-# file system proxy; it re-exports `winfsp-sys` (0.12.1+winfsp-2.1), which
-# links the WinFsp C runtime. Both upstream crates are licensed GPL-3.0.
-# Because the dependency is `cfg(windows)`-gated it is never compiled on
-# macOS or Linux, and it is not redistributed in the macOS/Linux artifacts.
-# No other crate in this workspace may use GPL-3.0: any new GPL-3.0 crate
-# will still be rejected by the `allow` list.
-exceptions = [
-    { crate = "winfsp", allow = ["GPL-3.0"] },
-    { crate = "winfsp-sys", allow = ["GPL-3.0"] },
+    "Unlicense",
+    "WTFPL",
 ]
 
-# ── bans ────────────────────────────────────────────────────────────────
 [bans]
-# Warn on multiple versions of the same crate.
 multiple-versions = "warn"
-# Wildcard allow for dev-dependencies.
 wildcards = "allow"
-# Allow specific crates to have duplicates.
-skip = []
 
-# Deny specific crates.
-deny = [
-    # { name = "openssl", wrappers = ["openssl-sys"] },
-]
-
-# ── sources ─────────────────────────────────────────────────────────────
 [sources]
-# Only allow crates from crates.io.
-unknown-registry = "deny"
 unknown-git = "deny"
+unknown-registry = "warn"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-allow-git = []
+# substrate is the canonical hosting location for omniroute-adapter and
+# substrate-core (consumed by llm-router). rev is pinned to
+# 2a54c729eb42335ffc937d4a6da3230b18da3d76 so the dependency is reproducible.
+allow-git = ["https://github.com/KooshaPari/substrate"]

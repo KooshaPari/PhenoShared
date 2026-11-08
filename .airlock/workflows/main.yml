@@ -23,6 +23,18 @@ jobs:
       - name: freeze
         run: airlock exec freeze
 
+      # Generate PR title and description from the diff
+      - name: describe
+        uses: airlock-hq/airlock/defaults/describe@main
+
+      # Update documentation to reflect changes
+      - name: document
+        uses: airlock-hq/airlock/defaults/document@main
+
+      # Run tests
+      - name: test
+        uses: airlock-hq/airlock/defaults/test@main
+
       # Push changes to upstream (pauses for user approval first)
       - name: push
         uses: airlock-hq/airlock/defaults/push@main

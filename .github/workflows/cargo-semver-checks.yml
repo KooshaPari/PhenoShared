@@ -1,7 +1,7 @@
 name: cargo-semver-checks
-permissions: read-all
 
 on:
+  workflow_dispatch:
   pull_request:
     paths: ['**/Cargo.toml']
   workflow_dispatch:
@@ -10,14 +10,12 @@ jobs:
   semver-checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
-      - run: |
-          cargo install cargo-semver-checks || true
-          # Exclude agileplus-api (not published on crates.io)
-          PKG=$(cargo metadata --no-deps --format-version 1 | python3 -c "import json,sys; d=json.load(sys.stdin); print(next(p['name'] for p in d['packages'] if 'agileplus-api' in p['name'] and p['name']!='agileplus-api-types'))" 2>/dev/null || echo "")
-          if [ -n "$PKG" ]; then
-            echo "Excluding $PKG from semver check"
-            cargo semver-checks --exclude "$PKG" || true
-          else
-            cargo semver-checks || true
-          fi
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v4@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: obi1kenobi/cargo-semver-checks-action@v2
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+

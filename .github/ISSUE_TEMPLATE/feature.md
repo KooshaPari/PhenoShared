@@ -1,12 +1,16 @@
 ---
 name: Feature Request
-about: Suggest a feature
-title: "[Feature]: "
+about: Suggest a new feature
+title: "[FEATURE] "
 labels: enhancement
 ---
 
 ## Problem
+<!-- What user need is unmet? -->
 
-## Proposed Solution
+## Proposed solution
 
-## Alternatives
+## Alternatives considered
+
+## Acceptance criteria
+- [ ]

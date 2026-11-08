@@ -1,42 +1,19 @@
 # Security Policy
 
-## Supported Versions
+## Reporting
+Do not open public issues for security findings. Instead:
+- Email: security@<REDACTED>.com (or <REDACTED>@gmail.com until org mailbox exists)
+- GitHub private vulnerability reporting: https://github.com/KooshaPari/phenoAI/security/advisories/new
 
-We provide security updates for the following versions of **phenotype-shared-temp**:
+## Scope
+- Vulnerabilities in this repo's code, dependencies, or CI
+- Credential leaks
+- Supply-chain concerns (typosquatting, compromised deps)
 
-| Version | Supported          |
-| ------- | ------------------ |
-| v0.1.x  | :white_check_mark: |
-| < v0.1  | :x:                |
+## Response
+- Acknowledgment within 48h
+- Triage + severity call within 7d
+- Fix timeline per severity (CRITICAL: 7d, HIGH: 30d, MEDIUM/LOW: next release cycle)
 
-## Reporting a Vulnerability
-
-We take the security of **phenotype-shared-temp** seriously. If you discover a security vulnerability, please do NOT open a public issue. Instead, report it privately.
-
-Please report any security concerns directly to the maintainers at [<REDACTED>@gmail.com](mailto:<REDACTED>@gmail.com).
-
-### What to include in your report
-- A detailed description of the vulnerability
-- Steps to reproduce (proof of concept)
-- Potential impact on the system or user data
-- Any suggested fixes or mitigations
-
-We will acknowledge your report within 48 hours and provide a timeline for resolution.
-
-## Security Best Practices (Rust)
-
-- **Dependency Scanning**: All dependencies are scanned for vulnerabilities
-- **Input Validation**: All user inputs are validated and sanitized
-- **Secret Management**: Secrets are managed via environment variables, never hardcoded
-- **Error Handling**: Error messages do not expose sensitive information
-- **Logging**: Sensitive data is redacted from logs
-
-## Hardening Measures
-
-- **Static Analysis**: Regular SAST scans using security linters
-- **Dependency Audit**: Automated vulnerability scanning in CI
-- **Code Review**: Security-focused review for all changes
-- **Minimal Dependencies**: Keep dependency count minimal to reduce attack surface
-
----
-Thank you for helping keep the ecosystem secure!
+## Disclosure
+Coordinated. We'll publish an advisory once a fix is available or after 90d if unfixed.

@@ -1,35 +1,30 @@
-[report]
-# Tier-2 coverage thresholds per ADR-040:
-#   Lib crates:       ≥ 71%  (nanovms-core, nvms-ffi, pheno-config)
-#   Framework crates: ≥ 70%  (pheno-compose-driver)
-#   Service crates:   ≥ 60%  (iac workspace members)
-#
-# This file provides the default for ad-hoc `cargo tarpaulin` runs at
-# the root workspace (lib tier). CI overrides via --fail-under per
-# workspace through scripts/coverage-gate.sh.
-# ADR-040's per-tier floors (71% lib / 70% framework / 60% service) are not
-# enforceable as written: the crates the ADR names (nanovms-core, nvms-ffi,
-# pheno-compose-driver) no longer exist, so no tier list survives. These floors
-# are therefore the measured whole-workspace ratchet values, and the display
-# contract is "the number here is what is enforced". Raise per tier once the
-# tiers are redefined in a machine-readable form.
-fail-under = 37
-out = ["Html", "Xml", "Json"]
-output-dir = "target/tarpaulin-report"
+# cargo-tarpaulin configuration
+# https://github.com/xd009642/tarpaulin
 
-[run]
-# cargo-tarpaulin parses this field with humantime, so it must be a duration
-# string. The bare integer `180` fails TOML deserialization ("invalid type:
-# integer, expected a duration"), which makes tarpaulin drop the WHOLE config
-# file and fall back to its built-in 60s default test timeout. That 60s budget
-# is a total per-test-binary limit, so any test binary whose tests take longer
-# than 60s in aggregate is killed mid-run with "Error: Timed out waiting for
-# test response" -- which is how the root coverage gate failed on
-# crates/sharecli/tests/fr007_proc_pid_watch.rs (3 x 30s watch dwell = 90s).
-timeout = "180s"
-# No `features = "all"` here. That value is not a cargo feature name, and once
-# the config above started parsing again tarpaulin passed it straight through to
-# cargo, which failed the whole job with "none of the selected packages contains
-# this feature: all". The workspace has been building under tarpaulin with
-# default features (the setting never took effect while the file was being
-# discarded), so default features are what the gate measures.
+[default]
+# Test timeout in seconds (helps CI not hang)
+timeout = "120s"
+
+# Generate cobertura for codecov upload
+out = ["Xml", "Html"]
+
+# Workspace-wide coverage
+workspace = true
+
+# All features
+all-features = true
+
+# Include integration tests
+run-types = ["Tests", "Doctests", "Benchmarks", "Examples"]
+
+# Exclude generated and vendored code
+exclude-files = [
+    "*/target/*",
+    "*/tests/*",
+    "*/examples/*",
+    "*/benches/*",
+]
+
+[report]
+# Fail CI if coverage drops below threshold
+fail-under = 60.0

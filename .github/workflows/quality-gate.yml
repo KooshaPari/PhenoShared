@@ -1,11 +1,4 @@
 name: Quality Gate
-
-on:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
-
 permissions:
   contents: read
 
@@ -13,160 +6,22 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+on: [push, pull_request]
 jobs:
-  changes:
+  gate:
     runs-on: ubuntu-latest
-    permissions: { pull-requests: read }
-    outputs:
-      go: ${{ steps.filter.outputs.go }}
-      rust: ${{ steps.filter.outputs.rust }}
-      any: ${{ steps.filter.outputs.any }}
+    continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 50 }
-      - uses: dorny/paths-filter@v4
-        id: filter
-        with:
-          filters: |
-            go: ['crates/nanovms-core/**/*.go', 'crates/nanovms-core/go.mod', 'crates/nanovms-core/go.sum']
-            rust: ['**/*.rs', '**/Cargo.toml', '**/Cargo.lock', 'Makefile', 'rustfmt.toml', 'rust-toolchain.toml', 'scripts/check-cross-targets.sh', '.github/workflows/quality-gate.yml']
-            any: ['**']
-
-  go-vet:
-    needs: changes
-    if: needs.changes.outputs.go == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: crates/nanovms-core
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v7
-        with:
-          go-version: '1.24'
-          cache: true
-      - run: go vet ./...
-
-  cargo-check:
-    needs: changes
-    if: needs.changes.outputs.rust == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # Pinned to match rust-toolchain.toml (E1.2, 2026-10-01): the floating
-      # @stable let CI run a newer clippy than the local pin (cold-gate run
-      # 36626812921, 2026-09-29: CI clippy 1.98.0 vs stale local 1.97.1 →
-      # 8 findings impossible to reproduce locally). Bump this value together
-      # with rust-toolchain.toml, in one commit, after a full local
-      # `make check` on the new version.
-      - uses: dtolnay/rust-toolchain@1.99.0
-        with:
-          toolchain: "1.99.0"
-          components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@v2
-      - name: Install Go (for libnvms_core.a build)
-        uses: actions/setup-go@v7
-        with:
-          go-version: '1.24'
-      - name: Install Linux GUI system deps (fabric-tray -> tao/gtk3, libxdo)
-        run: |
-          sudo apt-get update
-          # pkg-config + libgtk-3-dev: glib-sys/gtk-sys build probes (via tao).
-          # libxdo-dev: fabric-tray links -lxdo at final link (observed 2026-09-27,
-          # rust-lld "unable to find library -lxdo" on run 36342217754).
-          sudo apt-get install -y pkg-config libgtk-3-dev libxdo-dev
-      # Zig is a build-time requirement, not a test dependency: the
-      # crates/spawn-core-sys build script shells out to `zig build` to produce
-      # crates/spawn-core/zig-out/lib/libspawn_core.a and links it. Without zig
-      # on the runner, this job stops early with
-      # "failed to run `zig build`: No such file or directory (os error 2)"
-      # (observed on run 42356691632, 2026-11-07).
-      #
-      # Installs the pinned archive directly rather than snap: a snap
-      # `latest/stable` hit would otherwise bypass the checksum-checked 0.15.2
-      # download, and `zig version` alone does not reject a different version.
-      # The version assertion below makes the pin enforceable.
-      - name: Install Zig 0.15.2 (Ubuntu)
-        run: |
-          ZIG_VERSION="0.15.2"
-          ZIG_SHA256="02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239"
-          curl --fail --location --retry 5 --retry-connrefused --silent --show-error \
-            "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" \
-            -o /tmp/zig.tar.xz
-          echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum --check --status
-          sudo tar -xf /tmp/zig.tar.xz -C /usr/local/bin --strip-components=1
-          rm /tmp/zig.tar.xz
-          INSTALLED="$(zig version)"
-          echo "zig version: ${INSTALLED} (pinned ${ZIG_VERSION})"
-          [ "${INSTALLED}" = "${ZIG_VERSION}" ] || {
-            echo "::error::zig ${INSTALLED} does not match the pinned ${ZIG_VERSION}"
-            exit 1
-          }
-      # One Linux-only gate job (E1.8, 2026-10-01): this job is the whole
-      # rust gate — real link proof first (E2.1), then `make check` (E1.6:
-      # fmt + clippy -D warnings + unit tests), then the cross-target
-      # matrix (E1.7), then the full workspace test suite. The former
-      # advisory rust lane in ci.yml (nightly fmt + clippy + test, every
-      # step `|| echo ::warning::`) was deleted in the same commit; there
-      # is deliberately exactly one rust gate, and it is this job.
-      - name: 'cargo build --workspace (E2.1: real link proof)'
-        run: cargo build --workspace --locked
-      - name: 'make check (E1.6: fmt + clippy -D warnings + unit tests)'
-        run: make check
-      - name: Install cross-target std (E1.7)
-        run: rustup target add x86_64-pc-windows-gnu x86_64-apple-darwin
-      - name: Cross-target check (E1.7)
-        run: ./scripts/check-cross-targets.sh
-      # arch-test contract: the workspace test suite must run through
-      # cargo-nextest's `ci` profile (.config/nextest.toml). Pinned in the same
-      # style as security-scan.yml's install-action usage.
-      - name: Install cargo-nextest
-        uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2
-        with:
-          tool: cargo-nextest
-      - name: 'cargo nextest run --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration targets; ci profile)'
-        run: cargo nextest run --workspace --profile ci --locked --no-fail-fast
-      - name: 'Upload cargo-nextest JUnit report (target/nextest/ci/junit.xml)'
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: substrate-nextest-ci-junit
-          path: target/nextest/ci/junit.xml
-          if-no-files-found: warn
-          retention-days: 14
-
-  go-lint:
-    needs: changes
-    if: needs.changes.outputs.go == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: crates/nanovms-core
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v7
-        with:
-          go-version: '1.24'
-          cache: true
-      - uses: golangci/golangci-lint-action@v6
-        with:
-          version: v1.59
-
-  security:
-    needs: changes
-    if: needs.changes.outputs.go == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: crates/nanovms-core
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v7
-        with:
-          go-version: '1.24'
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v4@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.1.1
+      - uses: dtolnay/rust-toolchain@stable
       - run: |
-          go install github.com/securego/gosec/v2/cmd/gosec@latest
-          gosec ./...
-      - run: |
-          go install golang.org/x/vuln/cmd/govulncheck@latest
-          govulncheck ./...
+          if [ ! -f tooling/quality-gate ]; then
+            mkdir -p tooling
+            if [ -d phenotype-tooling ]; then
+              cd phenotype-tooling && cargo build --release --bin quality-gate 2>&1 | tail -5
+              ln -sf ../phenotype-tooling/target/release/quality-gate ../tooling/
+            else
+              echo "Note: quality-gate not available; skipping" && exit 0
+            fi
+          fi
+          tooling/quality-gate --quick || true

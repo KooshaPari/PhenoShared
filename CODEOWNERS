@@ -1,7 +1,6 @@
-# Repository governance
-# Primary maintainer for this repository
-* @<REDACTED>
+# Default owners — @<REDACTED> reviews all changes
+*       @<REDACTED>
 
-# Documentation
-docs/ @<REDACTED>
-*.md @<REDACTED>
+# Per-language drill-down (add more owners as team grows)
+*.rs    @<REDACTED>
+*.toml  @<REDACTED>

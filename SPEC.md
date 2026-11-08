@@ -1,45 +1,99 @@
-# phenotype-landing — SPEC
+# phenoAI — Specification
 
-## 1. Scope
+> Status: **Living document** — updated as the workspace evolves.
+> Last updated: 2026-06-08
 
-`phenotype-landing` is a **multi-tenant landing site factory** for the Phenotype org. One monorepo hosts all public product/portfolio landing pages, consolidated from standalone repos via `git subtree` (squashed, branch-reversible). Build/runtime is Astro on Bun; each site is an independent package with its own `package.json` + lockfile, plus a root `Taskfile.yml` for SSOT recipes and a root CI matrix that fans out typecheck + build across every Astro site.
+## Purpose
 
-The factory must scale: adding a new landing = dropping a new directory under `sites/`, registering it in the Taskfile `SITES` var and the CI matrix, and re-running `task quality`. No cross-site coupling.
+`phenoAI` is a Rust workspace providing inference-time primitives for the Phenotype
+ecosystem: a multi-provider LLM router, a Model-Context-Protocol (MCP) server, and
+an embedding pipeline. The workspace is designed to be embedded into larger Phenotype
+services as foundational AI plumbing.
 
-## 2. The 7 landing sites
+## Workspace Layout
 
-| Path | Stack | Purpose |
-|------|-------|---------|
-| `sites/agileplus-landing` | Astro + Bun | AgilePlus product landing |
-| `sites/byteport-landing` | Astro + Bun | BytePort **marketing** (not the app) |
-| `sites/hwledger-landing` | Astro + Bun | HW Ledger landing |
-| `sites/phenokits-landing` | Astro + Bun | Phenokits catalog landing |
-| `sites/projects-landing` | Astro + Bun | `projects.<REDACTED>.com` portfolio |
-| `sites/thegent-landing` | Astro + Bun | TheGent landing |
-| `sites/odin-landing` | Static HTML/CSS | Odin landing (no Astro build) |
+```
+phenoAI/
+├── crates/
+│   ├── llm-router/        # Multi-provider LLM routing (OpenAI, Anthropic, …)
+│   ├── mcp-server/        # Model Context Protocol server (tools/resources/prompts)
+│   └── pheno-embedding/   # Unified embedding interface (OpenAI, …)
+├── docs/
+│   ├── adr/               # Architecture Decision Records
+│   ├── operations/        # Operational runbooks
+│   └── worklogs/          # Dated worklog entries
+├── tests/                 # Cross-crate integration tests
+├── FUNCTIONAL_REQUIREMENTS.md
+├── AGENTS.md              # Agent operating instructions
+└── SPEC.md                # This file
+```
 
-## 3. Key invariants
+## Design Principles
 
-- One Astro site = one directory = one `package.json` + one lockfile (no hoisting across sites).
-- Root has no `package.json` / no `bun.lockb`; coordination is via `Taskfile.yml` only.
-- `odin-landing` is explicitly out of the Astro CI matrix and Taskfile `SITES` var.
-- `AppGen` (Expo/React Native) is **not** absorbed; it is not a landing.
-- Subtree pull flow: `git subtree pull --prefix=sites/<name> <remote> main --squash` keeps reversibility on a branch.
-- All shared design tokens / components must live under `packages/`, not duplicated per-site.
+1. **Embeddable, not standalone** — `phenoAI` is consumed as a library by other
+   Phenotype services; there is no primary binary.
+2. **Async by default** — every public API is `async` and uses `tokio` runtime.
+3. **Provider-agnostic** — concrete providers (OpenAI, Anthropic) are behind traits
+   so a new provider can be added without modifying call-sites.
+4. **Tested at the trait boundary** — mocks implement the same trait as the real
+   provider, so unit tests do not require network calls.
+5. **Bounded retries** — exponential backoff with a hard cap; never loop forever.
 
-## 4. Top gaps (2/14 compliance)
+## Crate Contracts
 
-- **Compliance: 2 of 14** — only `AGENTS.md` present; no central `SPEC.md` (this file closes that), no VitePress docsite, no PRD/ADR/PLAN/USER_JOURNEYS trackers, no `docs-site/`, no `.phenotype/` SSOT config.
-- **No central spec** — coordination lives in README/STATUS prose; no machine-readable manifest of site metadata (name, domain, framework, deploy target).
-- **No VitePress docsite** — global Phenotype rule expects `docs-site/` per project; landing monorepo has none.
-- **`packages/` and `templates/` skeletons exist but are empty** — shared components (ui, github-fetcher, design-tokens) and a generic landing template are still TODO per STATUS.md.
-- **`projects-landing` still uses `gh` CLI scraping** — needs migration to GitHub API for robustness.
-- **No `task quality` wired into root CI** — Taskfile exists, but `.github/workflows/ci.yml` runs its own Astro build matrix; Taskfile and CI are not unified.
+### `llm-router`
 
-## 5. Success criteria
+- **Role**: Route completion requests to one of N configured providers, with
+  fallback semantics.
+- **Public surface** (high-level): `LlmRouter::route`, `LlmRouter::add_provider`.
+- **Errors**: typed `LlmError` enum, not raw `anyhow::Error` at the boundary.
+- **Tests**: at least one test per provider mock; one test for fallback path.
 
-`task quality` passes; all 6 Astro sites build via root CI; adding an 8th site requires only `sites/<name>/` + one line in `Taskfile.yml` + one matrix entry.
+### `mcp-server`
 
-## v8 Phase 3 — T17 + T18 (2026-06-20)
+- **Role**: Implement the Model Context Protocol (MCP) so that any MCP-compatible
+  client can call tools / read resources exposed by Phenotype services.
+- **Public surface**: `McpServer::register_tool`, `McpServer::call_tool`,
+  `McpServer::register_resource`, `McpServer::read_resource`.
+- **Errors**: `McpError` enum (`ToolNotFound`, `ResourceNotFound`, `InvalidRequest`).
+- **Tests**: tool round-trip, resource read, error path for unknown tool.
 
-Tightened lint configurations and Tier-2 coverage gate per ADR-040 (80% lib / 70% framework / 60% service). HOOKS_SKIP / SKIP env vars enable ad-hoc testing. OIDC trust (no PAT secrets).
+### `pheno-embedding`
+
+- **Role**: Embedding generation. `OpenAiEmbeddings` is the v0 implementation.
+- **Public surface**: `OpenAiEmbeddings::embed(&EmbeddingRequest) -> Result<EmbeddingResponse>`.
+- **Errors**: `EmbeddingError` enum (`Provider`, `InvalidInput`).
+- **Tests**: request shape, default model selection, error mapping.
+
+## Cross-Cutting Concerns
+
+- **Logging**: `tracing` crate; structured fields only.
+- **Configuration**: `config` crate or env vars; no secret in source.
+- **Telemetry**: OpenTelemetry-compatible; behind feature flag `telemetry`.
+
+## Test & Coverage Governance
+
+- **Coverage floor**: 60% line coverage per crate; enforced by
+  `tarpaulin.toml` and surfaced via Codecov.
+- **Coverage report**: posted as PR comment and archived as
+  `tarpaulin-report.html` artifact.
+- **BDD**: at least one `.feature` file per crate covering the happy-path
+  user journey (see `tests/features/`).
+- **CI matrix**: tests must pass on stable + beta; clippy must pass with
+  `-D warnings`.
+
+## Open Questions
+
+- Should we add an `anthropic` provider to `llm-router`? (Tracked in
+  `docs/adr/0003-anthropic-provider-scope.md`.)
+- Should `pheno-embedding` add a `LocalEmbeddings` provider (e.g. `fastembed`)? (Tracked
+  in `docs/adr/0004-local-embeddings-future.md`.)
+
+## Cross-References
+
+- `FUNCTIONAL_REQUIREMENTS.md` — high-level FRs and acceptance criteria
+- `AGENTS.md` — agent operating instructions
+- `docs/adr/0001-record-architecture-decisions.md` — ADR template
+- `docs/adr/0002-rust-workspace-crate-split.md` — why 3 crates
+- `docs/adr/0003-anthropic-provider-scope.md` — pending
+- `docs/adr/0004-local-embeddings-future.md` — pending

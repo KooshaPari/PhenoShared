@@ -1,28 +1,27 @@
 version: '3'
-
 tasks:
-  ci:
-    desc: "Run local CI checks (mirrors GitHub Actions)"
-    cmds:
-      - ./scripts/ci-local.sh
-
+  default:
+    desc: List tasks
+    cmds: [task --list]
+  build:
+    desc: cargo build --workspace
+    cmds: [cargo build --workspace]
+  test:
+    desc: cargo test --workspace
+    cmds: [cargo test --workspace]
   lint:
+    desc: cargo clippy + fmt --check
     cmds:
       - cargo clippy --workspace -- -D warnings
-
-  test:
-    cmds:
-      - cargo test --workspace
-
-  fmt:
-    cmds:
-      - cargo fmt
-
-  fmt:check:
-    cmds:
       - cargo fmt --check
+  audit:
+    desc: cargo deny check
+    cmds: [cargo deny check]
+  ci:
+    desc: Run full local CI sweep
+    cmds: [task lint, task test, task audit]
 
-  quality:
-    desc: "Run full quality pipeline"
+  coverage:
+    desc: Measure code coverage (SSOT: see grade.sh for the canonical command).
     cmds:
-      - task: ci
+      - cargo llvm-cov --workspace --fail-under-lines 85

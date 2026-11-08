@@ -1,68 +1,73 @@
-# Mergify Configuration - multi-language monorepo
+# Mergify Configuration — Optimized for multi-language monorepos
 # Docs: https://docs.mergify.com/
-# Merges route through the merge queue; ci.yml already triggers on merge_group.
-# Required gates: "ci / lint" + "ci / test"
-# (aggregate jobs in .github/workflows/ci.yml; this PR also adds merge_group to its triggers).
-
-queue_rules:
-  - name: default
-    queue_conditions:
-      - check-success=ci / lint
-      - check-success=ci / test
-    merge_conditions:
-      - check-success=ci / lint
-      - check-success=ci / test
-    merge_method: squash
 
 pull_request_rules:
-  # Human/agent PRs opt in with the automerge label; single maintainer, no review gate
-  - name: Queue PRs labeled automerge
+  # Auto-merge when all CI checks pass and PR is approved
+  - name: Auto-merge when approved + CI green
     conditions:
-      - label=automerge
-      - check-success=ci / lint
-      - check-success=ci / test
+      - "#review-requested=0"
+      - "#approved-reviews-by>=1"
+      - check-success=ci
+      - check-success=lint
+      - check-success=typecheck
+      - check-success=test
       - -conflict
       - -closed
-      - -draft
     actions:
-      queue:
-        name: default
+      merge:
+        method: squash
+        commit_message_template: |
+          {{ title }} (#{{ number }})
+          
+          Co-authored-by: {{ author }}
+      post_merge:
+        action: close
 
-  # Dependency updates queue themselves once CI is green
-  - name: Queue dependency updates
+  # Auto-merge dependabot/Renovate PRs when CI passes
+  - name: Auto-merge dependency updates
     conditions:
-      - or:
-          - author=dependabot[bot]
-          - author=renovate[bot]
-      - check-success=ci / lint
-      - check-success=ci / test
+      - author=dependabot[bot] | renovate[bot]
+      - check-success=ci
       - -conflict
       - -closed
-      - -draft
     actions:
-      queue:
-        name: default
+      merge:
+        method: squash
+        commit_message_template: |
+          {{ title }} (#{{ number }})
+          
+          Co-authored-by: {{ author }}
+      post_merge:
+        action: close
 
-  # Bot housekeeping PRs (CI configs, formatting) queue when CI passes
-  - name: Queue bot housekeeping PRs
+  # Auto-merge bot PRs (CI configs, formatting) when CI passes
+  - name: Auto-merge bot housekeeping PRs
     conditions:
-      - or:
-          - author=trunk-io[bot]
-          - author=mergify[bot]
-          - author=github-actions[bot]
-      - check-success=ci / lint
-      - check-success=ci / test
+      - author=trunk-io[bot] | mergify[bot] | github-actions[bot]
+      - check-success=ci
+      - check-success=lint
       - -conflict
+      - -closed
+    actions:
+      merge:
+        method: squash
+
+  # Add reviewers based on changed paths
+  - name: Request review from team
+    conditions:
       - -closed
       - -draft
     actions:
-      queue:
-        name: default
+      request_reviews:
+        teams:
+          - phenotype/core
+        github_accounts:
+          - KooshaPari
 
   # Label PRs based on changed files
   - name: Label Python changes
     conditions:
-      - files~=\\.py$
+      - files~=\.py$
     actions:
       label:
         add:
@@ -70,7 +75,7 @@ pull_request_rules:
 
   - name: Label Rust changes
     conditions:
-      - files~=\\.rs$|Cargo\\.
+      - files~=\.rs$|Cargo\.
     actions:
       label:
         add:
@@ -78,7 +83,7 @@ pull_request_rules:
 
   - name: Label Go changes
     conditions:
-      - files~=\\.go$|go\\.
+      - files~=\.go$|go\.
     actions:
       label:
         add:
@@ -86,29 +91,18 @@ pull_request_rules:
 
   - name: Label TypeScript changes
     conditions:
-      - files~=\\.ts$|\\.tsx$|package\\.json
+      - files~=\.ts$|\.tsx$|package\.json
     actions:
       label:
         add:
           - typescript
-
-  # Flag conflicts so they leave the queue path until rebased
-  - name: Flag conflicts for rebase
-    conditions:
-      - conflict
-    actions:
-      label:
-        add:
-          - needs-rebase
-        remove:
-          - automerge
 
   # Close stale PRs after 30 days
   - name: Close stale PRs
     conditions:
       - -closed
       - -draft
-      - updated-at < 30 days ago
+      - age>=30d
       - "#review-requested=0"
     actions:
       comment:
@@ -129,18 +123,16 @@ pull_request_rules:
           **Large PR Alert**: This PR touches {{ number }} files.
           Consider splitting into smaller PRs for easier review.
 
-  # Add ready-to-merge label when all gate checks pass (current check names)
+  # Add ready-to-merge label when all checks pass
   - name: Add ready-to-merge label
     conditions:
       - -closed
       - -draft
-      - check-success=ci / lint
-      - check-success=ci / test
-      - check-success=ci / lint
-      - check-success=ci / test
+      - check-success=ci
+      - check-success=lint
+      - check-success=test
+      - "#approved-reviews-by>=1"
     actions:
       label:
         add:
           - ready-to-merge
-
-  # Clean up merged branches

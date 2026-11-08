@@ -1,57 +1,29 @@
-# justfile — phenotype-landing developer task runner
-# https://github.com/casey/just
-#
-# Mirrors Taskfile.yml commands for CI-local reproduction.
-# Install:  brew install just   |   cargo install just
+# Phenotype-org shared justfile. Imported from phenotype-tooling/just/phenotype.just.
+# To override a recipe locally, redefine it after the import.
+import? "/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling/just/phenotype.just"
 
-set dotenv-load := false
-set shell := ["bash", "-uc"]
+# Lint with clippy (warnings as errors) AND fmt-check
+lint: fmt-check (just --justfile {{justfile_path()}} lint)
 
-sites := "tracera-landing agileplus-landing byteport-landing hwledger-landing phenokits-landing projects-landing thegent-landing"
+# Audit: cargo-deny + cargo-audit (combined)
+audit: (just --justfile {{justfile_path()}} deny) (just --justfile {{justfile_path()}} --justfile {{justfile_path()}} audit)
+# Grade targets (strictest checks — no caching)
+grade:
+    @echo "=== Running full grade ==="
+    ./grade.sh
 
-default:
-    @just --list
+grade-fast:
+    @echo "=== Running fast grade ==="
+    ./grade.sh --fast
 
-# Install dependencies for all sites
-install:
-    @for site in {{sites}}; do \
-        (cd sites/$$site && bun install --frozen-lockfile || bun install); \
-    done
+grade-json:
+    @echo "=== Running grade (JSON) ==="
+    ./grade.sh --json
 
-# Build all Astro sites
-build:
-    @for site in {{sites}}; do \
-        echo "=== $$site ===" && (cd sites/$$site && bun run build); \
-    done
+grade-html:
+    @echo "=== Running grade (HTML) ==="
+    ./grade.sh --html
 
-# Type-check all Astro sites
-check:
-    @for site in {{sites}}; do \
-        echo "=== $$site ===" && (cd sites/$$site && bunx astro check); \
-    done
-
-# Lint all Astro sites (best-effort)
-lint:
-    @for site in {{sites}}; do \
-        echo "=== $$site ===" && (cd sites/$$site && bunx astro check); \
-    done
-
-# Full quality gate: check + build + lint
-quality: check build lint
-
-# Dependency audit via cargo-deny. No-op for the Astro/JS sites since
-# phenotype-landing has no Rust crate dependencies; the recipe is kept
-# for org-wide SSOT alignment and to gate any future Rust surface.
-deny:
-    @if [ -f Cargo.toml ]; then \
-        cargo deny check; \
-    else \
-        echo "deny: no Cargo.toml found in $(pwd) — skipping (Astro/JS monorepo)"; \
-    fi
-
-# Remove build artifacts
-clean:
-    rm -rf sites/*/dist sites/*/.astro
-
-# Run the full CI suite locally
-ci: install check build
+# Measure code coverage (SSOT: see grade.sh for the canonical command)
+coverage:
+    cargo llvm-cov --workspace --fail-under-lines 85

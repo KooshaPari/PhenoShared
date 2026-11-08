@@ -1,4 +1,6 @@
-# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
-github: <REDACTED>
-custom:
-  - https://www.buymeacoffee.com/<REDACTED>
+# These are supported funding model platforms
+
+github: KooshaPari
+patreon:
+ko_fi:
+custom: ["https://phenotype.space/sponsor"]

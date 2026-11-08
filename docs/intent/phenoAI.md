@@ -1,3 +1,10 @@
+<!--
+propagated-from: <REDACTED>/phenotype-registry @ chore/l7-001-curation-snapshot
+date: 2026-06-17
+source-commit: a1aa44660
+do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
+                     or update in the source-of-truth registry repo
+-->
 ---
 repo: "phenoAI"
 aliases: []
@@ -14,7 +21,7 @@ device: macbook
 
 ## Intent Statement
 
-&lt;To be filled in by hand from the most recent binding prompt. This repo is bound to 3 prompts, 0 plans, and 0 agent responses captured between 2025-08 and 2026-06-17.>
+<To be filled in by hand from the most recent binding prompt. This repo is bound to 3 prompts, 0 plans, and 0 agent responses captured between 2025-08 and 2026-06-17.>
 
 ## Bound Prompts
 
@@ -40,11 +47,11 @@ See: [`docs/boundary/phenoAI.md`](../boundary/phenoAI.md)
 
 ## Ecosystem Role
 
-&lt;See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
+<See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
 
 ## Open Questions
 
-- &lt;To be filled from the latest prompt on this repo.>
+- <To be filled from the latest prompt on this repo.>
 
 ## Change Log
 

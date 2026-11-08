@@ -1,46 +1,11 @@
-# Rust formatting configuration for PhenoShared / substrate.
-#
-# Stable-only policy (E1.1 decided 2026-10-01): every option below is
-# settable by STABLE rustfmt, and the toolchain is pinned in
-# rust-toolchain.toml, so "run cargo fmt" in this repo is reproducible
-# without naming a toolchain.
-#
-# The 18 previously-embedded nightly-only options were silently ignored by
-# stable rustfmt — every run printed `Warning: can't set <opt>, unstable
-# features are only available in nightly channel` (observed with rustfmt
-# 1.10.0 / rustc 1.99.0 on 2026-10-01, captured in the E1.2 evidence) and
-# were removed here. A config line no applied toolchain honours is a lie;
-# the alternative, running fmt through nightly, would swap that lie for
-# daily formatting drift as nightly rustfmt changes. The trim does not
-# reformat anything: stable rustfmt never applied the removed options, so
-# `cargo fmt --all --check` output is identical before and after (exit 0
-# on both sides of the trim, same binary).
-#
-# Removed 2026-10-01 (were nightly-only, no effect on stable):
-#   brace_style, comment_width, condense_wildcard_suffixes,
-#   control_brace_style, empty_item_single_line, fn_single_line,
-#   format_macro_matchers, format_strings, group_imports,
-#   imports_granularity, normalize_comments, normalize_doc_attributes,
-#   struct_lit_single_line, trailing_comma, trailing_semicolon,
-#   unstable_features, where_single_line, wrap_comments
-#
-# Run `cargo fmt --all` locally; CI runs `cargo fmt --all -- --check`.
-
+# Phenotype-org standard rustfmt config
 edition = "2021"
 max_width = 100
 hard_tabs = false
 tab_spaces = 4
 newline_style = "Unix"
 use_small_heuristics = "Default"
+imports_granularity = "Module"
+group_imports = "StdExternalCrate"
 reorder_imports = true
-match_block_trailing_comma = true
-hex_literal_case = "Lower"
-use_try_shorthand = true
-force_explicit_abi = true
-
-# Skip vendored or generated files (cargo fmt still formats these unless excluded).
-# ignore = [
-#   "target/",
-#   ".git/",
-#   "**/target/",
-# ]
+reorder_modules = true

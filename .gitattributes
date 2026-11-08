@@ -1,19 +1,7 @@
-# Auto detect text files and perform LF normalization
 * text=auto eol=lf
-
-# Rust
 *.rs text diff=rust
-Cargo.lock text -diff
-
-# Config / docs
 *.toml text
-*.yml text
-*.yaml text
-*.md text diff=markdown
-*.json text
-
-# Binary
-*.png binary
-*.jpg binary
-*.ico binary
-*.pdf binary
+*.md text
+*.sh text eol=lf
+*.bat text eol=crlf
+Cargo.lock binary linguist-generated=false

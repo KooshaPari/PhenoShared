@@ -1,58 +1,60 @@
-# phenotype-infrakit
+# CLAUDE.md — phenoAI
 
-**This project is managed through AgilePlus.**
+Extends parent governance. See the following for canonical definitions:
+- **Global baseline:** `~/.claude/CLAUDE.md`
+- **Phenotype root:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/CLAUDE.md`
+- **AgilePlus mandate:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
+- **Governance reference:** `AGENTS.md` (local, this repository)
+
+## Project Overview
+
+- **Name:** phenoAI
+- **Description:** [Short description from README]
+- **Location:** [Relative path in repos]
+- **Language Stack:** [Primary languages]
+- **Status:** [Active/Archived/Experimental]
 
 ## AgilePlus Mandate
 
 All work MUST be tracked in AgilePlus:
-- Reference: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`
 - CLI: `cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus && agileplus <command>`
+- Check for existing specs before implementing
+- Create spec for new work: `agileplus specify --title "<feature>" --description "<desc>"`
+- No code without corresponding AgilePlus spec
 
-## Work Requirements
+## Quality Checks
 
-1. **Check for AgilePlus spec before implementing**
-2. **Create spec for new work**: `agileplus specify --title "<feature>" --description "<desc>"`
-3. **Update work package status**: `agileplus status <feature-id> --wp <wp-id> --state <state>`
-4. **No code without corresponding AgilePlus spec**
+From this repository root:
+```bash
+# Linting and formatting (adjust for project language)
+cargo clippy --workspace -- -D warnings
+cargo fmt --check
+
+# Testing
+cargo test --workspace
+
+# Documentation validation
+vale docs/
+```
+
+## Worktree & Git Discipline
+
+- Feature work uses repo-specific worktrees: `repos/[PROJECT]-wtrees/<topic>/`
+- Canonical repo stays on `main` except during explicit merge operations
+- All feature branches are temporary; integrate via pull request or squash commit
+- See parent governance for non-destructive change protocol
+
+## Cross-Project Reuse
+
+During development, proactively identify code that is sharable across Phenotype repositories. Prefer extraction into existing shared modules; propose new shared packages when appropriate.
+
+## Related Documents
+
+- `AGENTS.md` — Local agent contract and operating loop
+- `FUNCTIONAL_REQUIREMENTS.md` — Functional requirements and test traceability (if present)
+- `docs/worklogs/README.md` — Work audit and decision log
+- Parent `README.md` — Project-specific documentation
 
 ---
 
-## Project
-
-Rust workspace containing generic infrastructure crates extracted from the Phenotype ecosystem.
-Each crate is independent, domain-agnostic, and can be consumed individually.
-
-## Stack
-
-- **Language**: Rust (edition 2021)
-- **Build**: cargo (workspace)
-- **Test**: `cargo test --workspace`
-- **Lint**: `cargo clippy --workspace`
-- **Format**: `cargo fmt`
-
-## Structure
-
-```
-crates/
-  phenotype-event-sourcing/   # Append-only event store with SHA-256 hash chains
-  phenotype-cache-adapter/    # Two-tier LRU + DashMap cache with TTL
-  phenotype-policy-engine/    # Rule-based policy evaluation with TOML config
-  phenotype-state-machine/    # Generic FSM with transition guards
-```
-
-## Conventions
-
-- All public types implement `Debug`, `Clone` where possible
-- Error types use `thiserror` with `#[from]` for conversions
-- Serialization via `serde` with `Serialize`/`Deserialize` derives
-- No inter-crate dependencies; each crate stands alone
-- Workspace-level dependency versions in root `Cargo.toml`
-- Tests are inline (`#[cfg(test)]` modules) within each source file
-
-## Adding a New Crate
-
-1. Create `crates/<name>/` with `Cargo.toml` and `src/lib.rs`
-2. Add to `members` in root `Cargo.toml`
-3. Use `workspace = true` for shared dependencies
-4. Include inline tests with `#[cfg(test)]`
-5. Update `README.md` crate table
+For CI, scripting language hierarchy, and other policies, see the canonical sources listed above.
