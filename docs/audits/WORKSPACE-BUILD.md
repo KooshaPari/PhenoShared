@@ -321,7 +321,7 @@ E2.2 on 2026-10-08 (see §4.3); the `Status` column is a later annotation, the
 | `iac/oci-lottery` | E0432 ×2 | `error[E0432]: unresolved import \`oci_helpers\`` | **FIXED** — 5a5f912a |
 | `iac/oci-post-acquire` | E0432 ×3 | `error[E0432]: unresolved import \`oci_helpers\`` | **FIXED** — 317aed39 |
 | `iac` (workspace, same root cause) | exit 101 | `error: could not compile \`oci-lottery\` (bin "oci-lottery") due to 2 previous errors` | **FIXED** — `cargo check --manifest-path iac/Cargo.toml --offline` → exit 0 |
-| `crates/argis-extensions/argis-monitor` | E0432, E0624, E0271 | `error[E0432]: unresolved import \`opentelemetry_sdk::trace::TracerProvider\`` / `error[E0624]: associated function \`new\` is private` / `error[E0271]: type mismatch resolving \`<Vec<KeyValue> as IntoIterator>::Item == KeyValue\`` | **FIXED** — 2822ef5d |
+| `crates/argis-extensions/argis-monitor` | E0432, E0624, E0271 | `error[E0432]: unresolved import \`opentelemetry_sdk::trace::TracerProvider\`` / `error[E0624]: associated function \`new\` is private` / `error[E0271]: type mismatch resolving \`<Vec&lt;KeyValue> as IntoIterator>::Item == KeyValue\`` | **FIXED** — 2822ef5d |
 | `crates/hexa-kit/agileplus-agents/crates/agileplus-agent-service` | E0308 | `error[E0308]: mismatched types` → `error: could not compile \`agileplus-agent-service\` (build script) due to 1 previous error` | **FIXED** — bde31356 |
 
 ### 4.3 E2.2 resolution (2026-10-08)
@@ -396,8 +396,8 @@ Top error causes among the 440 (literal text, first error line):
 | Cause | Count | Literal error |
 | --- | --- | --- |
 | Package not attached to any workspace | **292** | `error: current package believes it's in a workspace when it's not:` |
-| `workspace = true` inheritance with no resolvable root | **109** | `error: failed to parse manifest at \`<path>\`` → `Caused by: error inheriting \`<dep>\` from workspace root manifest's \`workspace.dependencies.<dep>\`` |
-| Nested workspace member unloadable | **33** | `error: failed to load manifest for workspace member \`<path>\`` |
+| `workspace = true` inheritance with no resolvable root | **109** | `error: failed to parse manifest at \`&lt;path>\`` → `Caused by: error inheriting \`&lt;dep>\` from workspace root manifest's \`workspace.dependencies.&lt;dep>\`` |
+| Nested workspace member unloadable | **33** | `error: failed to load manifest for workspace member \`&lt;path>\`` |
 | Other | 6 | `error: duplicate key`; `error: failed searching for potential workspace` |
 
 Representative literal errors:

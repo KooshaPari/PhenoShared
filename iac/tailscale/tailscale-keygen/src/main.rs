@@ -142,29 +142,8 @@ async fn main() -> Result<()> {
         bail!("at least one --tag is required");
     }
 
-    let url = format!(
-        "{}/api/v2/tailnet/{}/keys",
-        cli.api_base.trim_end_matches('/'),
-        cli.tailnet
-    );
-
-    let body = CreateKeyRequest {
-        capabilities: Capabilities {
-            devices: Devices {
-                create: CreateCaps {
-                    reusable: false,     // single-use
-                    ephemeral: true,     // node deregistered when offline
-                    preauthorized: true, // skip admin review (gated by tags)
-                    tags: cli.tags.clone(),
-                },
-            },
-        },
-        expiry_seconds: cli.ttl,
-        description: format!(
-            "phenotype/{} auto-mint by tailscale-keygen",
-            cli.tags.first().map(String::as_str).unwrap_or("mesh")
-        ),
-    };
+    let url = create_key_url(&cli.api_base, &cli.tailnet);
+    let body = create_key_body(&cli.tags, cli.ttl);
 
     tracing::info!(url = %url, tags = ?cli.tags, ttl = cli.ttl, "minting auth-key");
 
@@ -188,12 +167,186 @@ async fn main() -> Result<()> {
     }
 
     let parsed: CreateKeyResponse = resp.json().await.context("decode CreateKeyResponse")?;
-    if parsed.key.is_empty() {
-        bail!("tailscale API returned empty key");
-    }
+    let key = validate_key(parsed)?;
 
     // stdout = key only. No newline beyond `println!`'s single \n. Consumers:
     //   AUTH_KEY=$(tailscale-keygen --tag tag:oci)
-    println!("{}", parsed.key);
+    println!("{key}");
     Ok(())
+}
+
+/// Build the create-key endpoint, tolerating a trailing slash on `api_base`.
+fn create_key_url(api_base: &str, tailnet: &str) -> String {
+    format!(
+        "{}/api/v2/tailnet/{}/keys",
+        api_base.trim_end_matches('/'),
+        tailnet
+    )
+}
+
+/// Build the create-key request body: single-use, ephemeral, preauthorized.
+fn create_key_body(tags: &[String], ttl: u64) -> CreateKeyRequest {
+    CreateKeyRequest {
+        capabilities: Capabilities {
+            devices: Devices {
+                create: CreateCaps {
+                    reusable: false,     // single-use
+                    ephemeral: true,     // node deregistered when offline
+                    preauthorized: true, // skip admin review (gated by tags)
+                    tags: tags.to_vec(),
+                },
+            },
+        },
+        expiry_seconds: ttl,
+        description: format!(
+            "phenotype/{} auto-mint by tailscale-keygen",
+            tags.first().map(String::as_str).unwrap_or("mesh")
+        ),
+    }
+}
+
+/// Reject an empty key before it reaches stdout — an empty value would be
+/// silently consumed by `$(tailscale-keygen)` and enroll nothing.
+fn validate_key(resp: CreateKeyResponse) -> Result<String> {
+    if resp.key.is_empty() {
+        bail!("tailscale API returned empty key");
+    }
+    Ok(resp.key)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::Value;
+
+    #[test]
+    fn test_create_key_url_builds_the_tailnet_endpoint() {
+        assert_eq!(
+            create_key_url("https://api.tailscale.com", "koosha.github"),
+            "https://api.tailscale.com/api/v2/tailnet/koosha.github/keys"
+        );
+    }
+
+    #[test]
+    fn test_create_key_url_tolerates_a_trailing_slash() {
+        assert_eq!(
+            create_key_url("https://api.tailscale.com/", "t"),
+            "https://api.tailscale.com/api/v2/tailnet/t/keys"
+        );
+    }
+
+    #[test]
+    fn test_create_key_body_is_ephemeral_single_use_and_preauthorized() {
+        let tags = vec!["tag:phenotype-mesh".to_string()];
+        let body = create_key_body(&tags, 600);
+        let v: Value = serde_json::to_value(&body).unwrap();
+        let create = &v["capabilities"]["devices"]["create"];
+        assert_eq!(create["reusable"], false);
+        assert_eq!(create["ephemeral"], true);
+        assert_eq!(create["preauthorized"], true);
+        assert_eq!(create["tags"][0], "tag:phenotype-mesh");
+        assert_eq!(v["expirySeconds"], 600);
+    }
+
+    #[test]
+    fn test_create_key_body_honours_the_requested_ttl_and_tags() {
+        let tags = vec!["tag:oci".to_string(), "tag:extra".to_string()];
+        let body = create_key_body(&tags, 120);
+        let v: Value = serde_json::to_value(&body).unwrap();
+        assert_eq!(v["expirySeconds"], 120);
+        assert_eq!(v["capabilities"]["devices"]["create"]["tags"][1], "tag:extra");
+    }
+
+    #[test]
+    fn test_description_names_the_first_tag() {
+        let body = create_key_body(&["tag:oci".to_string()], 60);
+        assert_eq!(
+            body.description,
+            "phenotype/tag:oci auto-mint by tailscale-keygen"
+        );
+    }
+
+    #[test]
+    fn test_description_falls_back_when_no_tag_is_given() {
+        let body = create_key_body(&[], 60);
+        assert_eq!(body.description, "phenotype/mesh auto-mint by tailscale-keygen");
+        assert!(body.capabilities.devices.create.tags.is_empty());
+    }
+
+    #[test]
+    fn test_validate_key_returns_the_minted_key() {
+        let key = validate_key(CreateKeyResponse {
+            key: "tskey-auth-abc123".into(),
+        })
+        .unwrap();
+        assert_eq!(key, "tskey-auth-abc123");
+    }
+
+    #[test]
+    fn test_validate_key_rejects_an_empty_key() {
+        let err = validate_key(CreateKeyResponse { key: String::new() }).unwrap_err();
+        assert!(
+            err.to_string().contains("empty key"),
+            "unexpected error: {err}"
+        );
+    }
+
+    #[test]
+    fn test_output_format_parse() {
+        assert_eq!("auto".parse::<OutputFormat>().unwrap(), OutputFormat::Auto);
+        assert_eq!("text".parse::<OutputFormat>().unwrap(), OutputFormat::Text);
+        assert_eq!("json".parse::<OutputFormat>().unwrap(), OutputFormat::Json);
+        assert_eq!("JSON".parse::<OutputFormat>().unwrap(), OutputFormat::Json);
+        let err = "yaml".parse::<OutputFormat>().unwrap_err();
+        assert!(err.contains("unknown format"), "unexpected error: {err}");
+    }
+
+    #[test]
+    fn test_cli_defaults_are_safe_for_an_ephemeral_key() {
+        let cli = Cli::try_parse_from([
+            "tailscale-keygen",
+            "--api-key",
+            "tskey-api-test",
+            "--tailnet",
+            "example.github",
+        ])
+        .expect("minimal invocation must parse");
+
+        assert_eq!(cli.ttl, 600);
+        assert_eq!(cli.tags, vec!["tag:phenotype-mesh".to_string()]);
+        assert_eq!(cli.api_base, "https://api.tailscale.com");
+        assert_eq!(cli.tailnet, "example.github");
+    }
+
+    #[test]
+    fn test_cli_accepts_repeated_tags_and_an_override_base() {
+        let cli = Cli::try_parse_from([
+            "tailscale-keygen",
+            "--api-key",
+            "k",
+            "--tailnet",
+            "t",
+            "--tag",
+            "tag:oci",
+            "--tag",
+            "tag:mesh",
+            "--ttl",
+            "90",
+            "--api-base",
+            "http://127.0.0.1:8080",
+        ])
+        .expect("full invocation must parse");
+
+        assert_eq!(cli.tags, vec!["tag:oci".to_string(), "tag:mesh".to_string()]);
+        assert_eq!(cli.ttl, 90);
+        assert_eq!(cli.api_base, "http://127.0.0.1:8080");
+    }
+
+    #[test]
+    fn test_cli_rejects_an_unknown_flag() {
+        assert!(
+            Cli::try_parse_from(["tailscale-keygen", "--definitely-not-a-flag"]).is_err(),
+            "clap must reject unknown flags"
+        );
+    }
 }

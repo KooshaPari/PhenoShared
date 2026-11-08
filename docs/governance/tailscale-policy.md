@@ -1,7 +1,7 @@
 # Tailscale Policy
 
 **Status:** Active (2026-04-25)
-**Owner:** <REDACTED>@gmail.com
+**Owner:** &lt;REDACTED&gt;@gmail.com
 **Scope:** Phenotype compute mesh (OCI / GCP / AWS / Vercel build runners / home desktop)
 
 This is the canonical governance doc for the Tailscale tailnet that ties the
@@ -30,12 +30,12 @@ under git.
 
 | Tag | Purpose | Owner |
 |---|---|---|
-| `tag:phenotype-mesh` | Default mesh membership; any node tagged here can talk to any other on all ports. | <REDACTED>@gmail.com |
-| `tag:oci` | Oracle Cloud Always-Free VMs (post-acquire hook). | <REDACTED>@gmail.com |
-| `tag:gcp` | Google Cloud nodes. | <REDACTED>@gmail.com |
-| `tag:aws` | AWS nodes. | <REDACTED>@gmail.com |
-| `tag:vercel-build` | Vercel build-time runners enrolling for private-registry pulls. Short-lived. | <REDACTED>@gmail.com |
-| `tag:home-desktop` | Admin workstation. Allowed to SSH into the mesh. | <REDACTED>@gmail.com |
+| `tag:phenotype-mesh` | Default mesh membership; any node tagged here can talk to any other on all ports. | &lt;REDACTED&gt;@gmail.com |
+| `tag:oci` | Oracle Cloud Always-Free VMs (post-acquire hook). | &lt;REDACTED&gt;@gmail.com |
+| `tag:gcp` | Google Cloud nodes. | &lt;REDACTED&gt;@gmail.com |
+| `tag:aws` | AWS nodes. | &lt;REDACTED&gt;@gmail.com |
+| `tag:vercel-build` | Vercel build-time runners enrolling for private-registry pulls. Short-lived. | &lt;REDACTED&gt;@gmail.com |
+| `tag:home-desktop` | Admin workstation. Allowed to SSH into the mesh. | &lt;REDACTED&gt;@gmail.com |
 
 Tag owners are declared in `iac/tailscale/acl.json` under `tagOwners`. Adding
 a tag requires a PR that updates both this table and the ACL.

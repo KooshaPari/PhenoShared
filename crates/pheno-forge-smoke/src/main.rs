@@ -23,6 +23,7 @@
 //!   1  one or more required checks failed
 //!   2  bridge not loadable (cdylib missing or broken)
 
+use std::io::IsTerminal;
 use std::sync::OnceLock;
 use std::time::{Duration, Instant};
 
@@ -93,7 +94,7 @@ fn use_color() -> bool {
     static NO_COLOR: OnceLock<bool> = OnceLock::new();
     *NO_COLOR.get_or_init(|| {
         let val = std::env::var("NO_COLOR").unwrap_or_default();
-        val.is_empty() && atty::is(atty::Stream::Stdout)
+        val.is_empty() && std::io::stdout().is_terminal()
     })
 }
 

@@ -30,6 +30,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/getting-started' },
+      { text: 'Compete', link: '/compete' },
       {
         text: 'Repository',
         link: 'https://github.com/KooshaPari/Pine'

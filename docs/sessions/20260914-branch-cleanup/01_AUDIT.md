@@ -1,7 +1,7 @@
 # Branch Cleanup Audit
 
 **Date**: 2026-09-14
-**Repo**: phenotype-fabric (<REDACTED>/PhenoFabric)
+**Repo**: phenotype-fabric (&lt;REDACTED&gt;/PhenoFabric)
 **Local main**: `b2564f6` (fix: convert phenotype-manifest path dep to git dep)
 
 ## Task 1: Sync Local Main

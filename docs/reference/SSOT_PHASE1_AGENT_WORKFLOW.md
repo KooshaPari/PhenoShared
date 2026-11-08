@@ -30,8 +30,8 @@ specs/agent-<agent-name>-<task-id>
 
 **Components:**
 - `specs/` — Spec branch prefix (reserved for specification work only)
-- `agent-<name>` — Your agent identifier (lowercase, hyphens)
-- `<task-id>` — Work item ID (from AgilePlus: WP-XXX-NNN, FR-XXX-NNN, or ADR-YYY)
+- `agent-&lt;name>` — Your agent identifier (lowercase, hyphens)
+- `&lt;task-id>` — Work item ID (from AgilePlus: WP-XXX-NNN, FR-XXX-NNN, or ADR-YYY)
 
 **Examples:**
 
@@ -757,7 +757,7 @@ gh workflow run auto-merge-specs.yml
 ### Issue: "Merge conflict requires manual resolution"
 
 **Symptoms:**
-- GitHub issue created: "Merge Conflict: specs/agent-<name>-<task>"
+- GitHub issue created: "Merge Conflict: specs/agent-&lt;name>-&lt;task>"
 - Auto-merge failed
 
 **Resolution Steps:**
@@ -782,18 +782,18 @@ git push origin specs/agent-<name>-<task>
 
 ### For New Agents
 
-1. ✅ Run `scripts/agent-setup.sh <your-name>`
+1. ✅ Run `scripts/agent-setup.sh &lt;your-name>`
 2. ✅ Read this guide (Section 1-3)
-3. ✅ Create first branch: `specs/agent-<name>-<task>`
+3. ✅ Create first branch: `specs/agent-&lt;name>-&lt;task>`
 4. ✅ Make changes, commit with Spec-Traces
 5. ✅ Push and watch auto-merge (5 min)
 
 ### For Experienced Agents
 
-1. ✅ Branch: `specs/agent-<name>-<task>`
+1. ✅ Branch: `specs/agent-&lt;name>-&lt;task>`
 2. ✅ Edit, commit with Spec-Traces
 3. ✅ Run `pre-commit run --all-files`
-4. ✅ Push: `git push origin specs/agent-<name>-<task>`
+4. ✅ Push: `git push origin specs/agent-&lt;name>-&lt;task>`
 5. ✅ Auto-merge happens automatically
 
 ### For Spec Administrators

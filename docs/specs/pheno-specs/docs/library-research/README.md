@@ -118,7 +118,7 @@ cat PhenoHandbook/patterns/auth/oauth-pkce.md
 cat PhenoHandbook/checklists/deployment.md
 ```
 
-**Published Site:** https://<REDACTED>.com/handbook
+**Published Site:** https://&lt;REDACTED&gt;.com/handbook
 
 ### 3. HexaKit - Template Registry
 

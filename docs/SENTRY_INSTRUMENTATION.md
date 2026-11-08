@@ -146,7 +146,7 @@ fn main() {
 1. **Link GitHub Organization to Sentry:**
    - Go to https://sentry.io/settings/integrations/github/
    - Click "Add Installation"
-   - Authorize <REDACTED> GitHub account
+   - Authorize &lt;REDACTED&gt; GitHub account
    - Select repositories: AgilePlus, phenotype-infrakit, heliosCLI
 
 2. **Enable Auto-Issue Creation:**

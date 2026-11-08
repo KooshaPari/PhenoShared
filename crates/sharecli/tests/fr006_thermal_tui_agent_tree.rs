@@ -153,12 +153,12 @@ fn fr006_thermal_tui_render_includes_agent_tree() {
             && rendered.contains("[100]")
             && rendered.contains("└──"),
         "thermal TUI MUST surface build_agent_forests tree; got excerpt: {}",
-        &rendered.chars().take(400).collect::<String>()
+        rendered.chars().take(400).collect::<String>()
     );
     assert!(
         rendered.contains("[100] S") && rendered.contains("[101] R"),
         "thermal TUI tree MUST show process state letters (AC-006.39); got excerpt: {}",
-        &rendered.chars().take(500).collect::<String>()
+        rendered.chars().take(500).collect::<String>()
     );
 }
 

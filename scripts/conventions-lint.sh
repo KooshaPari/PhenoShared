@@ -106,7 +106,23 @@ for root, dirs, files in os.walk("."):
         path = os.path.join(root, f)
         try:
             with open(path) as fp:
-                yaml.safe_load(fp)
+                # safe_load alone produces false failures on two legitimate
+                # shapes: multi-document files (mkdocs, k8s lists) and files
+                # using python-specific tags such as the mkdocs material emoji
+                # constructors. Neither is a syntax error, so tolerate unknown
+                # tags and validate every document in the stream.
+                class _AnyTag(yaml.SafeLoader):
+                    pass
+
+                _AnyTag.add_multi_constructor(
+                    "tag:yaml.org,2002:python/name:", lambda l, s, n: None
+                )
+                _AnyTag.add_multi_constructor("!", lambda l, s, n: None)
+                list(yaml.load_all(fp, Loader=_AnyTag))
+        except FileNotFoundError:
+            # The tree is modified by concurrent agents while this walks it; a
+            # file disappearing mid-scan is not a lint failure.
+            continue
         except yaml.YAMLError as e:
             mark = getattr(e, "problem_mark", None)
             line = mark.line + 1 if mark else 0

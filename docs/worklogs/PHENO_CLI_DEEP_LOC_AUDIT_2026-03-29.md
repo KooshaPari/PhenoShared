@@ -1,7 +1,7 @@
 # Pheno-CLI Deep LOC Audit
 
 **Date**: 2026-03-29  
-**Project**: pheno-cli (<REDACTED>/pheno-cli)  
+**Project**: pheno-cli (&lt;REDACTED&gt;/pheno-cli)  
 **Codebase**: Go CLI tool for orchestrating multi-language package releases  
 **Analysis Scope**: internal/, cmd/, pkg/ packages with comprehensive Go-specific patterns
 

@@ -8,6 +8,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig } from 'vitepress'
+import { escapeCodeInterpolations } from '../../packages/docs/src/markdown/escape-code-interpolations.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -18,6 +19,12 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
   ignoreDeadLinks: true,
+
+  markdown: {
+    // Keep `{{ ... }}` inside code samples from being compiled as Vue
+    // interpolations -- see packages/docs/src/markdown/escape-code-interpolations.ts
+    config: escapeCodeInterpolations,
+  },
 
   vite: {
     resolve: {

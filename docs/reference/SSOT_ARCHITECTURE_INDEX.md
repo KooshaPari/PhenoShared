@@ -387,7 +387,7 @@ SSOT Architecture Documentation
 **To Update**:
 1. Edit the relevant document
 2. Update this index if structure changes
-3. Commit with message: "docs: update SSOT <document> <reason>"
+3. Commit with message: "docs: update SSOT &lt;document> &lt;reason>"
 4. All docs stay synced in git
 
 ---

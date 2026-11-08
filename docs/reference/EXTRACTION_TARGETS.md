@@ -67,7 +67,7 @@ pub enum MyError {
 1. **Macro Crate**: `crates/phenotype-error-macros/`
    - `lib.rs`: Core macro definitions (150 LOC)
    - `macros/context_error.rs`: ContextError derive macro (100 LOC)
-   - `macros/converters.rs`: Auto From<T> generation (80 LOC)
+   - `macros/converters.rs`: Auto From&lt;T> generation (80 LOC)
    - Tests: Compile and runtime tests (120 LOC)
    - Documentation: Examples and patterns (80 LOC)
 
@@ -123,7 +123,7 @@ trybuild = "1.0"
 ### Success Criteria
 
 - ✓ ContextError macro compiles and generates correct code
-- ✓ From<T> conversions auto-generate correctly
+- ✓ From&lt;T> conversions auto-generate correctly
 - ✓ Error messages preserve original context patterns
 - ✓ All 14 affected error.rs files migrate successfully
 - ✓ Zero regressions in existing error handling
@@ -461,7 +461,7 @@ heliosCLI (stays domain-specific):
 1. **phenotype-http-client-core** (refactored, 250 LOC)
    - HttpTransport trait definition
    - HttpResponse + HttpRequest types
-   - TransportError + Result<T>
+   - TransportError + Result&lt;T>
    - Retry middleware (composable)
    - Status code helpers
 

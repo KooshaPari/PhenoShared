@@ -46,7 +46,7 @@ jobs:
       - name: Build arm64 APK
         working-directory: ${{ runner.temp }}/pose-roulette
         run: flutter build apk --release --target-platform android-arm64
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: PoseRoulette-Android
           path: ${{ runner.temp }}/pose-roulette/build/app/outputs/flutter-apk/app-release.apk
@@ -81,7 +81,7 @@ jobs:
         run: |
           cd "$RUNNER_TEMP/pose-roulette/build/ios/iphoneos"
           ditto -c -k --keepParent Runner.app "$RUNNER_TEMP/PoseRoulette-iOS-UNSIGNED.app.zip"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: PoseRoulette-iOS-unsigned
           path: ${{ runner.temp }}/PoseRoulette-iOS-UNSIGNED.app.zip

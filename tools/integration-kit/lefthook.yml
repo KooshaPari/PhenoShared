@@ -1,0 +1,100 @@
+# lefthook.yml — shared integration kit template
+# Install via: bash tools/integration-kit/install.sh --components lefthook
+# Or copy this file to ./lefthook.yml and adjust paths for your repo.
+
+min_version: 1.7.0
+
+# Hook categories:
+#   pre-commit   — runs on `git commit` (gates the commit)
+#   commit-msg   — runs after the message is provided (validates format)
+#   pre-push     — runs on `git push` (gates the push)
+#   post-commit  — informational; never blocks
+
+pre-commit:
+  parallel: true
+  commands:
+    fmt:
+      # The {,**/} prefix lets lefthook match both root-level files (e.g.
+      # ./build.rs) and nested files (e.g. ./crates/foo/src/lib.rs).
+      glob: "{,**/}*.{rs,ts,tsx,js,jsx,mjs,cjs,py}"
+      run: |
+        set -e
+        # Detect language by file presence in repo root.
+        if [ -f Cargo.toml ]; then
+          cargo fmt --all -- --check
+        elif [ -f package.json ]; then
+          if npx --no-install prettier --check . ; then
+            :
+          else
+            npx --no-install eslint --max-warnings 0 .
+          fi
+        elif [ -f pyproject.toml ]; then
+          if command -v ruff >/dev/null 2>&1; then
+            ruff format --check .
+          else
+            python -m pip install --quiet ruff && ruff format --check .
+          fi
+        else
+          echo "[lefthook:fmt] no recognized language; skipping"
+        fi
+
+    secrets:
+      run: |
+        set -e
+        # Lightweight secret scan for staged content.
+        # gitleaks exits non-zero on findings, which must propagate so the commit is blocked.
+        if command -v gitleaks >/dev/null 2>&1; then
+          gitleaks protect --staged --redact --no-banner
+        else
+          echo "[lefthook:secrets] gitleaks not installed; install from https://github.com/gitleaks/gitleaks" >&2
+          exit 1
+        fi
+
+    trailing-ws:
+      glob: "*.{md,yml,yaml,toml,rs,ts,tsx,js,jsx,py}"
+      # Read staged content from the index (not the worktree) so a developer
+      # who stages trailing whitespace and then removes it without re-staging
+      # gets a clean bill. git diff --check is built-in and matches trailing
+      # whitespace anywhere in the diff (added/modified lines), including in
+      # files whose path contains shell metacharacters or spaces.
+      run: |
+        # Exclude deletions (--diff-filter=ACM keeps Added/Copied/Modified).
+        STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+        if [ -n "$STAGED" ]; then
+          # Build a pathspec: feed via stdin to avoid argv-length issues and
+          # to bypass any shell metacharacters in file names.
+          echo "$STAGED" | git diff --cached --check --stdin
+        fi
+
+commit-msg:
+  commands:
+    conventional:
+      # Lefthook substitutes {1} with the path to the commit-message file
+      # inside `run` commands; bare $1 is the script's own argv, not the hook arg.
+      run: |
+        set -e
+        MSG_FILE="{1}"
+        FIRST_LINE=$(head -n1 "$MSG_FILE")
+        # Conventional commit: type(scope?): subject
+        if ! echo "$FIRST_LINE" | grep -qE '^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert|release)(\([^)]+\))?!?: .+'; then
+          echo "::error::commit title does not match conventional commit format: $FIRST_LINE"
+          echo "Expected: type(scope?): subject — e.g. feat(auth): add login"
+          exit 1
+        fi
+
+pre-push:
+  parallel: false
+  commands:
+    lint-staged:
+      glob: "{,**/}*.{rs,ts,tsx,js,jsx,py}"
+      run: |
+        set -e
+        # pre-push must keep the nonzero exit on lint failure so the push is blocked.
+        if [ -f Cargo.toml ]; then
+          cargo clippy --workspace --all-targets -- -D warnings
+        elif [ -f package.json ]; then
+          if [ -f package-lock.json ]; then npm ci; elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && pnpm install --frozen-lockfile; else npm install; fi
+          npm run lint --if-present
+        elif [ -f pyproject.toml ]; then
+          ruff check .
+        fi

@@ -4,17 +4,17 @@
 > **Scope:** Operational issues for the `substrate` Cargo workspace, the `psub-gateway` HTTP service, the `psub` CLI, and `driver-http`.
 > **Sister docs:** [`docs/operations/runbook.md`](../operations/runbook.md) · [`docs/adr/`](../adr/) · [`docs/friction-log.md`](../friction-log.md)
 
-Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hypothetical "If you see X, try Y" pattern. **No issue numbers are fabricated.** To open or claim an issue: <https://github.com/KooshaPari/substrate/issues>.
+Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hypothetical "If you see X, try Y" pattern. **No issue numbers are fabricated.** To open or claim an issue: &lt;https://github.com/KooshaPari/substrate/issues>.
 
 ---
 
 ## 1. Build issues
 
-### ISSUE-001: `psub-orchestrator` fails `cargo check` with 4 `Pin<&mut EventStream<T>>` borrow errors
+### ISSUE-001: `psub-orchestrator` fails `cargo check` with 4 `Pin<&mut EventStream&lt;T>>` borrow errors
 
-**Symptom**: `cargo check -p psub-orchestrator` emits 4 errors of shape `E0596: cannot borrow data in dereference of \`Pin<&mut EventStream<T>>\` as mutable`, plus 4 warnings. `Stream::poll_next` cannot deref through the `Pin` because `EventStream<T>` does not implement `DerefMut`.
+**Symptom**: `cargo check -p psub-orchestrator` emits 4 errors of shape `E0596: cannot borrow data in dereference of \`Pin<&mut EventStream&lt;T>>\` as mutable`, plus 4 warnings. `Stream::poll_next` cannot deref through the `Pin` because `EventStream&lt;T>` does not implement `DerefMut`.
 
-**Root cause**: `crates/psub-orchestrator/src/stream.rs:21` calls `self.inner.next()` directly on a pinned reference. The `Stream` trait is implemented for `&mut EventStream<T>`, not `Pin<&mut EventStream<T>>`.
+**Root cause**: `crates/psub-orchestrator/src/stream.rs:21` calls `self.inner.next()` directly on a pinned reference. The `Stream` trait is implemented for `&mut EventStream&lt;T>`, not `Pin<&mut EventStream&lt;T>>`.
 
 **Workaround**: pin to a commit before the broken change, or build with `--exclude psub-orchestrator`. Confirmed at commit `cb9a3e7` (commit message itself notes "Pre-existing cloud-kilo / psub-orchestrator compile errors are unrelated to this rename").
 
@@ -51,7 +51,7 @@ Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hy
 **Workaround** (If you see this, try):
 
 1. `pkill -USR1 psub-gateway` — triggers the metrics-dump signal and produces a JSON snapshot of in-flight requests.
-2. If the snapshot shows > N requests stuck on the same provider, flip the breaker with `psub admin breaker reset --provider <id>`.
+2. If the snapshot shows > N requests stuck on the same provider, flip the breaker with `psub admin breaker reset --provider &lt;id>`.
 3. As a last resort, restart with `systemctl restart psub-gateway` and drain traffic for 60s.
 
 **Permanent fix**: TBD — once a runbook § 6.1 entry exists for this issue, link it here.
@@ -79,5 +79,5 @@ PLACEHOLDER_CONTAINER_SECTION
 - [`docs/operations/runbook.md`](../operations/runbook.md) — top-level operator runbook.
 - [`docs/adr/0004-atomic-claim-lease.md`](../adr/0004-atomic-claim-lease.md) — design rationale for ISSUE-303.
 - [`docs/adr/0005-sqlite-default-store.md`](../adr/0005-sqlite-default-store.md) — design rationale for ISSUE-201.
-- GitHub issues: <https://github.com/KooshaPari/substrate/issues> — currently **#58 OPEN** (Meta: OmniRoute fork PR realignment to release/v3.8.37) and **#69 CLOSED** (build(runtime): OsString::to_string() fails on Rust 1.95).
+- GitHub issues: &lt;https://github.com/KooshaPari/substrate/issues> — currently **#58 OPEN** (Meta: OmniRoute fork PR realignment to release/v3.8.37) and **#69 CLOSED** (build(runtime): OsString::to_string() fails on Rust 1.95).
 - [`docs/friction-log.md`](../friction-log.md) — rolling log of operator friction.

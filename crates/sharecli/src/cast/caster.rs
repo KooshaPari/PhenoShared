@@ -702,7 +702,7 @@ mod tests {
         let runner = MockProcessRunner::new();
         // No commands queued — calling run should panic.
         let result = std::panic::catch_unwind(|| {
-            runner.run("anything", &[]);
+            let _ = runner.run("anything", &[]);
         });
         assert!(result.is_err(), "empty mock should panic on run");
     }
@@ -961,7 +961,6 @@ mod tests {
     #[test]
     fn ghostty_send_unsupported_when_not_on_path() {
         // Mock always reports "not available" for ghostty
-        let runner = MockProcessRunner::from_ok(&[]);
         // Override is_available to return false
         struct NoGhosttyRunner;
         impl ProcessRunner for NoGhosttyRunner {

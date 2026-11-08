@@ -69,8 +69,7 @@ fn notarytool_binary_available() {
 
 /// Verify that the `stapler` binary is available for ticket stapling.
 #[test]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
-#[ignore = "PHE-SH-016 pre-existing: needs macOS stapler binary"]
+#[ignore = "PHE-SH-009 / PHE-SH-016 pre-existing: deferred fix; needs macOS stapler binary"]
 fn stapler_binary_available() {
     assert!(
         Command::new("xcrun")
@@ -85,8 +84,7 @@ fn stapler_binary_available() {
 
 /// Verify the hard-gate workflow exists and references the required steps.
 #[test]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
-#[ignore = "PHE-SH-015 pre-existing: needs codesign gate workflow fixture"]
+#[ignore = "PHE-SH-009 / PHE-SH-015 pre-existing: deferred fix; needs codesign gate workflow fixture"]
 fn c11_l112_hard_gate_workflow_present() {
     let workflow = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -126,8 +124,7 @@ fn c11_l112_hard_gate_workflow_present() {
 
 /// Verify the soft-gate workflow still exists (no regression to deleting it).
 #[test]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
-#[ignore = "PHE-SH-015 pre-existing: needs codesign gate workflow fixture"]
+#[ignore = "PHE-SH-009 / PHE-SH-015 pre-existing: deferred fix; needs codesign gate workflow fixture"]
 fn c11_l112_soft_gate_preserved() {
     let path = concat!(
         env!("CARGO_MANIFEST_DIR"),

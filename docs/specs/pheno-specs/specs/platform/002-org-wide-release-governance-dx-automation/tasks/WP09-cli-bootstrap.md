@@ -399,7 +399,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          runs-on: ubuntu-latest
          steps:
            - uses: actions/checkout@v4
-           - uses: <REDACTED>/phenotypeActions/.github/workflows/gate-check.yml@v1
+           - uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/gate-check.yml@v1
              with:
                language: {{ .Language }}
                channel: alpha
@@ -421,7 +421,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          runs-on: ubuntu-latest
          steps:
            - uses: actions/checkout@v4
-           - uses: <REDACTED>/phenotypeActions/.github/workflows/promote.yml@v1
+           - uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/promote.yml@v1
              with:
                language: {{ .Language }}
                registry: {{ .Registry }}
@@ -437,7 +437,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          needs: promote
          steps:
            - uses: actions/checkout@v4
-           - uses: <REDACTED>/phenotypeActions/.github/workflows/changelog.yml@v1
+           - uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/changelog.yml@v1
              with:
                version: ${{ github.ref_name }}
      ```

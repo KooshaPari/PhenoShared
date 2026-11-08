@@ -401,7 +401,7 @@
 ### Implementation Notes
 - CLI uses clap derive macros for arg parsing
 - Discovery interview: structured prompts to stdout, read from stdin
-- Spec written to git (kitty-specs/<feature>/spec.md) AND indexed in SQLite
+- Spec written to git (kitty-specs/&lt;feature>/spec.md) AND indexed in SQLite
 - Research modes determined by presence/absence of spec.md in feature dir
 
 ### Parallel Opportunities

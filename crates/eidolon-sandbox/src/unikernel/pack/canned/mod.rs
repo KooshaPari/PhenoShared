@@ -1,7 +1,7 @@
 //! Canned CI/release rootfs disk with `eidolon-vsock-agent` preinstalled.
 //!
 //! Wraps [`super::bake_agent_then_pack`] / [`super::stage_vsock_agent_into_tree`]
-//! + [`super::pack_rootfs_tree_to_ext4`] / [`super::compose_docker_to_ext4`] —
+//! plus [`super::pack_rootfs_tree_to_ext4`] / [`super::compose_docker_to_ext4`] —
 //! does **not** reimplement mkfs/docker.
 //!
 //! # Honesty

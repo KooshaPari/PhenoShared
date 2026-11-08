@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
       - name: Build docs
+        # `docs:build` is defined in docs/package.json; the root manifest has no
+        # such script, so this previously failed with 'Script not found'.
+        working-directory: docs
         run: bun run docs:build
         env:
           GITHUB_PAGES: "true"
