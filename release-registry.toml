@@ -1,0 +1,104 @@
+[collection]
+name = "PhenoObservability"
+version = "0.1.0"
+repo = "https://github.com/KooshaPari/PhenoObservability"
+description = "Observability infrastructure crates for Phenotype: tracing, logging, metrics, and resilience patterns"
+authors = ["Phenotype Team <team@<REDACTED>.com>"]
+license = "MIT OR Apache-2.0"
+theme = "observability"
+
+[[crate]]
+name = "pheno-dragonfly"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "Dragonfly vector database integration for telemetry"
+
+[[crate]]
+name = "pheno-questdb"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "QuestDB time-series database adapter for metrics"
+
+[[crate]]
+name = "pheno-tracing"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "OpenTelemetry-based distributed tracing foundation"
+
+[[crate]]
+name = "phenotype-llm"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "internal"
+description = "LLM integration layer for observability analytics"
+
+[[crate]]
+name = "phenotype-mcp-server"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "internal"
+description = "Model Context Protocol server for observability"
+
+[[crate]]
+name = "tracely-core"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "Core tracing types and span collection"
+
+[[crate]]
+name = "tracely-sentinel"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "Sentinel-pattern error detection and recovery"
+
+[[crate]]
+name = "helix-logging"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "High-performance structured logging with contextual enrichment"
+
+[[crate]]
+name = "tracingkit"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "Toolkit for instrumentation and span management"
+
+[[crate]]
+name = "phenotype-observably-tracing"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "Distributed tracing with OpenTelemetry backends"
+
+[[crate]]
+name = "phenotype-observably-logging"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "Structured logging with multiple output targets"
+
+[[crate]]
+name = "phenotype-observably-sentinel"
+version = "0.1.0"
+status = "alpha"
+stability = "0.x"
+publish_target = "crates.io"
+description = "Resilience patterns: circuit breakers, bulkheads, retries"

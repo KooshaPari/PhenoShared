@@ -1,0 +1,39 @@
+[package]
+name = "tracely-core"
+version = "0.2.0"
+edition = "2021"
+description = "Unified observability: tracing, metrics, logging — absorbs helix-logging and helix-tracing"
+license = "MIT"
+repository = "https://github.com/KooshaPari/PhenoObservability"
+keywords = ["tracing", "logging", "observability", "metrics", "opentelemetry"]
+
+[dependencies]
+# Core tracing (from helix-tracing)
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "json"] }
+
+# Core logging (from helix-logging)
+log = "0.4"
+env_logger = "0.11"
+
+# Shared utilities
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1"
+
+# Observability backends (optional)
+opentelemetry = { version = "0.32", optional = true }
+prometheus = { version = "0.14", optional = true }
+metrics = { version = "0.24", optional = true }
+
+[dev-dependencies]
+criterion = { version = "0.8", features = ["html_reports"] }
+
+[features]
+default = []
+otel = ["opentelemetry"]
+prometheus = ["dep:prometheus"]
+metrics = ["dep:metrics"]
+full = ["otel", "dep:prometheus", "dep:metrics"]

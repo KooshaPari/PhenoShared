@@ -1,0 +1,82 @@
+name: module-deps
+
+# L4 module-deps gate (v14 cycle-3 P0, ADR-048 substrate graduation).
+# Closes L4 (module deps) for PhenoObservability by requiring acyclic
+# module dependencies across all workspace member crates.
+#
+# cargo-modules v0.26 reports false-positive cycles from impl blocks
+# (e.g. `impl Display for Foo` where Foo::fmt references Self). Those
+# are filtered below; genuine multi-module cycles still fail the job.
+#
+# Refs:
+#   - plans/2026-06-20-v14-71-pillar-cycle-3-p0.md § T2
+#   - ADR-048 (substrate graduation path)
+#   - cycle-3 probe findings/2026-06-20-71-pillar-cycle-3-probe.md
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  module-deps:
+    name: module-deps (cargo-modules --acyclic, workspace)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # stable
+        with:
+          toolchain: stable
+      - name: Install cargo-modules
+        run: cargo install cargo-modules --locked --version "^0.26"
+      - name: Install jq (for workspace member enumeration)
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: cargo-modules dependencies --acyclic (per workspace member)
+        run: |
+          set +e
+          MEMBERS=$(cargo metadata --no-deps --format-version=1 | jq -r '.packages[] | select(.source == null) | .name')
+          ANY_REAL_CYCLE=0
+          ANY_FP_CYCLE=0
+          for crate in $MEMBERS; do
+            echo "=== $crate ==="
+            OUTPUT=$(cargo-modules dependencies --acyclic --no-fns --no-traits --no-types -p "$crate" 2>&1)
+            EC=$?
+            echo "$OUTPUT"
+            if [ $EC -ne 0 ]; then
+              CYCLE_LINE=$(echo "$OUTPUT" | grep -m1 'circular dependency between' || true)
+              if [ -n "$CYCLE_LINE" ]; then
+                NODE_A=$(echo "$CYCLE_LINE" | sed -n 's/.*between `\([^`]*\)` and `\([^`]*\)`.*/\1/p')
+                NODE_B=$(echo "$CYCLE_LINE" | sed -n 's/.*between `\([^`]*\)` and `\([^`]*\)`.*/\2/p')
+                case "$NODE_B" in
+                  "$NODE_A"::*)
+                    ANY_FP_CYCLE=$((ANY_FP_CYCLE + 1))
+                    echo "::warning::$crate: cargo-modules impl-block false positive ($NODE_A <-> $NODE_B)"
+                    ;;
+                  *)
+                    ANY_REAL_CYCLE=$((ANY_REAL_CYCLE + 1))
+                    echo "::error::$crate has a genuine module dependency cycle ($NODE_A <-> $NODE_B)"
+                    ;;
+                esac
+              else
+                ANY_REAL_CYCLE=$((ANY_REAL_CYCLE + 1))
+                echo "::error::$crate: cargo-modules failed (exit=$EC)"
+              fi
+            fi
+          done
+          echo ""
+          echo "Summary: $ANY_FP_CYCLE false-positive(s), $ANY_REAL_CYCLE genuine cycle(s)"
+          if [ $ANY_REAL_CYCLE -gt 0 ]; then
+            exit 1
+          fi

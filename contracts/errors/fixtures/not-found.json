@@ -1,0 +1,9 @@
+{
+  "code": "NOT_FOUND",
+  "message": "project 42 not found",
+  "details": {
+    "resource": "project",
+    "id": "42"
+  },
+  "retryable": false
+}

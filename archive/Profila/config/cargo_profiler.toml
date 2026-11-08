@@ -1,0 +1,19 @@
+# Profiler configuration for optimal profiling
+
+# Add to your Cargo.toml or create a .cargo/config.toml
+
+[profile.release]
+# Keep symbols for profiling (line numbers)
+debug = "line-tables-only"
+
+# Force frame pointers for profilers
+# Add to RUSTFLAGS when building:
+# RUSTFLAGS="-C force-frame-pointers=yes" cargo build --release
+
+[profile.dev]
+# Debug builds - already have symbols
+opt-level = 0
+
+[profile.bench]
+# Benchmark builds
+debug = true

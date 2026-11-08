@@ -1,0 +1,45 @@
+[package]
+name = "pheno-tracing"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Canonical port-driven distributed tracing substrate for the pheno-* fleet (ADR-036). Provides TracePort + InMemory/Stdout adapters; consumers depend on this for consistent spans, OTLP export, and fleet-wide observation."
+keywords = ["tracing", "observability", "opentelemetry", "phenotype", "otel"]
+categories = ["development-tools", "asynchronous", "api-bindings"]
+readme = "README.md"
+publish = true
+
+# Workspace member of the PhenoObservability workspace root.
+# Canonical home as of 2026-09-11; standalone pheno-tracing repo is tombstoned.
+
+[lib]
+name = "pheno_tracing"
+path = "src/lib.rs"
+
+[dependencies]
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+chrono = { workspace = true }
+
+[dev-dependencies]
+criterion = { version = "0.8", features = ["html_reports"] }
+tokio = { workspace = true, features = ["rt", "macros", "test-util"] }
+
+[[bench]]
+name = "sampler_benchmarks"
+harness = false
+
+[features]
+# Forward-compat shim for tracing 0.2.
+tracing-0-2 = []
+
+[[package.metadata.docs.rs]]
+targets = ["x86_64-unknown-linux-gnu"]
+all-features = true

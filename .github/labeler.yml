@@ -1,0 +1,16 @@
+ci:
+  - changed-files:
+      - any-glob-to-any-file: .github/workflows/**
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - docs/**
+
+rust:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.rs"
+          - Cargo.toml
+          - Cargo.lock

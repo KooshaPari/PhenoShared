@@ -1,0 +1,29 @@
+name: Cargo Machete
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect-unused-dependencies:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d
+        with:
+          tool: cargo-machete
+
+      - name: Run cargo machete
+        run: cargo machete .

@@ -1,0 +1,27 @@
+[package]
+name = "phenotype-observably-ports"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Hexagonal port traits for PhenoObservability adapters (cache + time-series)"
+
+[features]
+default = []
+# Enable in-memory test-double implementations (no network required)
+test-util = []
+# Enable the Prometheus adapter for MetricsPort
+prometheus-adapter = ["dep:prometheus"]
+
+[dependencies]
+async-trait = { workspace = true }
+chrono = { workspace = true }
+phenotype-error-core = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+prometheus = { version = "0.14", optional = true }
+
+[dev-dependencies]
+tokio = { version = "1.39", features = ["full"] }
+prometheus = "0.14"

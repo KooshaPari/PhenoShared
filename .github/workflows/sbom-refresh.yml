@@ -1,0 +1,18 @@
+name: Monthly SBOM Refresh
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # 1st of each month
+  workflow_dispatch:
+jobs:
+  call-sbom-refresh:
+    uses: KooshaPari/phenotype-tooling/.github/workflows/sbom-monthly.yml@e0b1fe2b52cdaa7344c5cee324b69ebfcb48ffda
+    with:
+      repo_path: '.'
+      build_system: 'rust'
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+

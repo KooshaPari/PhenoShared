@@ -1,0 +1,21 @@
+[package]
+name = "metrickit"
+version = "0.1.0"
+edition = "2021"
+description = "Metrics collection with Prometheus support"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/PhenoObservability"
+
+[dependencies]
+serde = { workspace = true }
+thiserror = { workspace = true }
+parking_lot = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+hyper = { version = "1.9", features = ["full"] }
+hyper-util = { version = "0.1", features = ["full"] }
+http-body-util = "0.1"
+bytes = "1.0"
+
+[dev-dependencies]
+serde_json = { workspace = true }

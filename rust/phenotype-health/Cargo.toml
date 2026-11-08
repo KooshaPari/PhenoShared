@@ -1,0 +1,43 @@
+[package]
+name = "phenotype-health"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Standardized health check framework with HTTP and metrics integration"
+
+[features]
+default = ["http"]
+http = ["dep:axum", "dep:tower-http", "dep:tokio"]
+prometheus = ["dep:metrics", "dep:metrics-exporter-prometheus"]
+background = ["dep:tokio-cron-scheduler"]
+
+[dependencies]
+async-trait.workspace = true
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["time", "sync", "rt"], optional = true }
+phenotype-error-core.workspace = true
+tracing.workspace = true
+chrono = { version = "0.4", features = ["serde"] }
+futures-util = "0.3"
+
+# HTTP dependencies (optional)
+axum = { version = "0.7", optional = true }
+tower-http = { version = "0.5", features = ["trace", "cors"], optional = true }
+
+# Metrics dependencies (optional)
+metrics = { version = "0.23", optional = true }
+metrics-exporter-prometheus = { version = "0.15", optional = true }
+
+# Background scheduling (optional)
+tokio-cron-scheduler = { version = "0.10", optional = true }
+
+# History persistence
+dirs = "5.0"
+anyhow = "1.0"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt", "macros", "test-util"] }
+reqwest = { version = "0.12", features = ["json"] }

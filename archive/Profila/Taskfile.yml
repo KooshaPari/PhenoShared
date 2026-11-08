@@ -1,0 +1,35 @@
+version: "3"
+
+tasks:
+  lint:
+    desc: "Run ruff linter and formatter check"
+    cmds:
+      - ruff check .
+      - ruff format . --check
+
+  test:
+    desc: "Run pytest tests"
+    cmds:
+      - pytest tests/ -v
+
+  quality:
+    desc: "Run quality checks (lint + test)"
+    cmds:
+      - task: lint
+      - task: test
+
+  fmt:
+    desc: "Format code with ruff"
+    cmds:
+      - ruff format .
+
+  clean:
+    desc: "Remove build artifacts and cache"
+    cmds:
+      - find . -type d -name "__pycache__" -exec rm -rf {} +
+      - find . -type d -name "*.egg-info" -exec rm -rf {} +
+
+  check:
+    desc: "Check code formatting"
+    cmds:
+      - ruff format . --check

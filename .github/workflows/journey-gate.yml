@@ -1,0 +1,17 @@
+name: Journey Gate
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  journey-gate:
+    uses: KooshaPari/phenotype-tooling/.github/workflows/reusable/journey-gate.yml@e0b1fe2b52cdaa7344c5cee324b69ebfcb48ffda
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+

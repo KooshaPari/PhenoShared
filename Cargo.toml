@@ -1,0 +1,57 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/pheno-dragonfly",
+    "crates/pheno-questdb",
+    # phenotype-llm and phenotype-mcp-server removed per NFR-OBS-010
+    # (hexagonal architecture — no domain squatting); directories preserved,
+    # physical repo-move is a user decision. See refactor/remove-domain-squatters PR.
+    "crates/tracely-core",
+    "crates/tracely-sentinel",
+    "crates/helix-logging",
+    "crates/tracingkit",
+    "crates/metrickit",
+    "crates/phenotype-observably-tracing",
+    "crates/phenotype-observably-logging",
+    "crates/phenotype-observably-sentinel",
+    "crates/phenotype-observably-macros",
+    "crates/phenotype-observably-ports",
+    "crates/pheno-tracing",
+    "pheno-otel",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+authors = ["Phenotype Team <team<REDACTED>@phenotype.space>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/PhenoObservability"
+homepage = "https://phenotype.space"
+description = "Observability infrastructure for Phenotype"
+
+[workspace.dependencies]
+tokio = { version = "1.39", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "tracing-log"] }
+tracing-opentelemetry = "0.23"
+thiserror = "2.0"
+anyhow = "1"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+async-trait = "0.1"
+parking_lot = "0.12"
+regex = "1.10"
+phenotype-error-core = { path = "vendor/phenotype-error-core" }
+phenotype-errors = { path = "vendor/phenotype-errors" }
+phenotype-event-bus = { path = "vendor/phenotype-event-bus" }
+phenotype-observably-ports = { path = "crates/phenotype-observably-ports" }
+# L62 (error rate) observability adoption (v14 cycle-4 T7). The
+# `pheno-otel` substrate provides the `metrics::record_error` /
+# `metrics::record_request` helpers; consumer crates (e.g.
+# `phenotype-sentinel`) pull this in to surface fleet-wide L62
+# error-rate observability per ADR-036B + ADR-042.
+pheno-otel = { path = "pheno-otel" }
+pheno-tracing = { path = "crates/pheno-tracing" }

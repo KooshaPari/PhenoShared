@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://<REDACTED>.com/contracts/errors/error-envelope.schema.json",
+  "title": "Phenotype Error Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["code", "message"],
+  "properties": {
+    "code": {
+      "type": "string",
+      "enum": [
+        "INTERNAL_ERROR",
+        "INVALID_ARGUMENT",
+        "NOT_FOUND",
+        "ALREADY_EXISTS",
+        "PERMISSION_DENIED",
+        "UNAUTHENTICATED",
+        "RESOURCE_EXHAUSTED",
+        "CANCELLED",
+        "UNAVAILABLE",
+        "NOT_IMPLEMENTED",
+        "TIMEOUT",
+        "VALIDATION_ERROR",
+        "METHOD_NOT_SUPPORTED",
+        "MISSING_CORRELATION_ID",
+        "TERMINAL_NOT_FOUND",
+        "LANE_NOT_FOUND",
+        "SESSION_NOT_FOUND",
+        "SESSION_NOT_ATTACHED",
+        "TERMINAL_BINDING_INVALID"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "details": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "fatal": {
+      "type": "boolean",
+      "default": false
+    },
+    "retryable": {
+      "type": "boolean"
+    }
+  }
+}

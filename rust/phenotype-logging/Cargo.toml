@@ -1,0 +1,17 @@
+[package]
+name = "phenotype-logging"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Canonical tracing initialization for the Phenotype ecosystem"
+repository = "https://github.com/KooshaPari/PhenoObservability"
+
+[lib]
+name = "phenotype_logging"
+path = "src/lib.rs"
+
+[dependencies]
+tracing.workspace = true
+tracing-subscriber.workspace = true

@@ -1,0 +1,19 @@
+[package]
+name = "phenotype-error-core"
+version = "0.2.0"
+description = "Canonical error types and recovery strategies for the Phenotype ecosystem"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true }

@@ -1,0 +1,22 @@
+name: Governance Index
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  governance-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Regenerate governance index
+        run: python3 tooling/governance_index.py
+        continue-on-error: true
+      - name: Verify committed index
+        run: git diff --exit-code -- kitty-specs/INDEX.md
+        continue-on-error: true

@@ -1,0 +1,37 @@
+[workspace]
+resolver = "2"
+members = [
+    "phenotype-health",
+    "phenotype-health-axum",
+    "phenotype-health-cli",
+    "phenotype-logging",
+    "phenotype-metrics",
+    "phenotype-mock",
+    "phenotype-sentry-config",
+    "phenotype-telemetry",
+    "phenotype-project-registry",
+    "phenotype-compliance-scanner",
+    "phenotype-security-aggregator",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+authors = ["Phenotype Team <team<REDACTED>@phenotype.space>"]
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+prometheus = "0.13"
+phenotype-error-core = { git = "https://github.com/KooshaPari/phenotype-types", branch = "main" }
+sentry = "0.34"
+clap = { version = "4", features = ["derive"] }
+clap-ext = "0.1"

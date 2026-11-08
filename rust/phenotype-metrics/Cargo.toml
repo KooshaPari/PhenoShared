@@ -1,0 +1,17 @@
+[package]
+name = "phenotype-metrics"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+tokio = { version = "1", features = ["rt", "sync", "macros", "time"] }
+prometheus = { workspace = true }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+
+[lib]
+name = "phenotype_metrics"
+path = "src/lib.rs"

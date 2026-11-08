@@ -1,0 +1,19 @@
+[package]
+name = "pheno-dragonfly"
+version = "0.1.0"
+edition = "2024"
+authors = ["Koosha Pari <<REDACTED>@koosha.com>"]
+description = "Dragonfly client for PhenoObservability - Redis-compatible multi-threaded cache"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+redis = { version = "1.2", features = ["tokio-comp", "connection-manager"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+async-trait = { workspace = true }
+phenotype-errors = { workspace = true }
+phenotype-observably-ports = { workspace = true }
+
+[dev-dependencies]
+tokio-test = "0.4"

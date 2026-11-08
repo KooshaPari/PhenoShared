@@ -1,0 +1,21 @@
+# CODEOWNERS — auto-scaffolded 2026-04-27
+# Fallback owner for everything not matched below
+* @KooshaPari
+
+# Governance / CI / docs
+/.github/ @KooshaPari
+/docs/ @KooshaPari
+
+/crates/ @KooshaPari
+/rust/ @KooshaPari
+/go/ @KooshaPari
+/python/ @KooshaPari
+/ts/ @KooshaPari
+/zig/ @KooshaPari
+/mojo/ @KooshaPari
+/wasi/ @KooshaPari
+/ffi/ @KooshaPari
+/bindings/ @KooshaPari
+Cargo.toml @KooshaPari
+Cargo.lock @KooshaPari
+deny.toml @KooshaPari

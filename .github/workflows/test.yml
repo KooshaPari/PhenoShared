@@ -1,0 +1,88 @@
+name: Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+jobs:
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download PhenoObservability source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p PhenoObservability
+          curl -fsSL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/tarball/${GITHUB_SHA}" \
+            -o pheno-observability.tgz
+          tar -xzf pheno-observability.tgz --strip-components=1 -C PhenoObservability
+      - name: Download pheno shared errors
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p pheno
+          curl -fsSL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/KooshaPari/pheno/tarball/main" \
+            -o pheno.tgz
+          tar -xzf pheno.tgz --strip-components=1 -C pheno
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # v-latest
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@baf1a810e98b6a3001d0d7234864ed75a17c42fb # v-latest
+        with:
+          workspaces: PhenoObservability -> target
+      - run: cargo test --workspace --lib
+        working-directory: PhenoObservability
+        env:
+          RUST_BACKTRACE: 1
+
+  coverage:
+    name: Coverage Report
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download PhenoObservability source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p PhenoObservability
+          curl -fsSL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/tarball/${GITHUB_SHA}" \
+            -o pheno-observability.tgz
+          tar -xzf pheno-observability.tgz --strip-components=1 -C PhenoObservability
+      - name: Download pheno shared errors
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p pheno
+          curl -fsSL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/KooshaPari/pheno/tarball/main" \
+            -o pheno.tgz
+          tar -xzf pheno.tgz --strip-components=1 -C pheno
+      - uses: dtolnay/rust-toolchain@6c977a6ca4077a0ceb28ffbe03f59d46e9ac8772 # v-latest
+        with:
+          toolchain: stable
+      - run: cargo install cargo-tarpaulin
+      - run: cargo tarpaulin --workspace --lib --out=Xml
+        working-directory: PhenoObservability
+      - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f
+        continue-on-error: true
+        with:
+          files: PhenoObservability/cobertura.xml
+          flags: unittests
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true

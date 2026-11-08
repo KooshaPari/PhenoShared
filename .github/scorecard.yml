@@ -1,0 +1,9 @@
+# OpenSSF Scorecard metadata
+# Docs: https://github.com/ossf/scorecard/blob/main/docs/checks.md
+# Used by security tooling; no runtime impact.
+name: PhenoObservability
+contact:
+  - https://github.com/KooshaPari/PhenoObservability/security/advisories/new
+results:
+  - category: Official-Project
+    comment: Owner-maintained observability utilities.
