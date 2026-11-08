@@ -587,7 +587,7 @@ source_refs:
 ## Usage
 
 ```
-agileplus subcommand triage:classify --input "<text>"
+agileplus subcommand triage:classify --input "&lt;text>"
 ```
 
 ## Arguments

@@ -332,7 +332,7 @@ The workspace is now significantly more maintainable, with:
 
 **Compiled by**: Claude Code Agent Orchestration  
 **Date**: 2026-03-29  
-**Repository**: <REDACTED>/phenotype-infrakit  
+**Repository**: &lt;REDACTED&gt;/phenotype-infrakit  
 **Branch**: feat/loc-reduction-workspace-deps (Phase 1-2) + feat/phase4-test-consolidation (Phase 4)
 
 ---

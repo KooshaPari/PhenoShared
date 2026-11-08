@@ -5,7 +5,7 @@ either be AFFIRM-canonical, absorbable into a target home, or a **depletion
 candidate** (retire + archive + relocate).
 
 This document records **batch 1** of 10 depletion proposals based on the
-systematic audit of every <REDACTED> repo.
+systematic audit of every &lt;REDACTED&gt; repo.
 
 ## Boundary Policy Recap (ADR-007)
 
@@ -46,7 +46,7 @@ If all 10 batch1 actions are executed:
 After batch1 completion, continue auditing remaining repos. Queue next
 batch (batch2) of 10 in: `2026-07-17-depletion-batch2`.
 
-**Total repos to audit**: ~109 <REDACTED> repos
+**Total repos to audit**: ~109 &lt;REDACTED&gt; repos
 **Batches planned**: ~11 batches × 10 each
 
 ## Execution Order

@@ -14,7 +14,7 @@ device: macbook
 
 ## Intent Statement
 
-<To be filled in by hand from the most recent binding prompt. This repo is bound to 45 prompts, 0 plans, and 0 agent responses captured between 2025-08 and 2026-06-17.>
+&lt;To be filled in by hand from the most recent binding prompt. This repo is bound to 45 prompts, 0 plans, and 0 agent responses captured between 2025-08 and 2026-06-17.>
 
 ## Bound Prompts
 
@@ -82,11 +82,11 @@ See: [`docs/boundary/helios-router.md`](../boundary/helios-router.md)
 
 ## Ecosystem Role
 
-<See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
+&lt;See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
 
 ## Open Questions
 
-- <To be filled from the latest prompt on this repo.>
+- &lt;To be filled from the latest prompt on this repo.>
 
 ## Change Log
 

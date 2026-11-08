@@ -16,7 +16,7 @@ out_of_scope:
 
 ## In Scope
 
-<To be filled.>
+&lt;To be filled.>
 
 ## Out of Scope
 

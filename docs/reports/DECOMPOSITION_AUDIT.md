@@ -497,8 +497,8 @@ pub fn init_with_env_filter(prefix: &str) {
 
 | Location | Usage | LOC |
 |----------|-------|-----|
-| `phenotype-event-sourcing/memory.rs` | DateTime<Utc>, timestamp | ~40 |
-| `phenotype-event-sourcing/store.rs` | DateTime<Utc>, range filters | ~35 |
+| `phenotype-event-sourcing/memory.rs` | DateTime&lt;Utc>, timestamp | ~40 |
+| `phenotype-event-sourcing/store.rs` | DateTime&lt;Utc>, range filters | ~35 |
 | `phenotype-event-sourcing/event.rs` | Event timestamp field | ~15 |
 | `phenotype-event-sourcing/snapshot.rs` | TimeDelta, elapsed calc | ~25 |
 | `phenotype-event-sourcing/hash.rs` | RFC3339 formatting | ~15 |
@@ -668,10 +668,10 @@ static INSTANCE: OnceLock<Client> = OnceLock::new();
 
 | Location | Pattern | LOC |
 |----------|---------|-----|
-| `phenotype-event-sourcing/memory.rs` | RwLock<BTreeMap> | ~15 |
+| `phenotype-event-sourcing/memory.rs` | RwLock&lt;BTreeMap> | ~15 |
 | `agileplus-api/router.rs` | RwLock state | ~20 |
 | `agileplus-nats/bus.rs` | Multiple Mutex fields | ~50 |
-| Test files | Arc<Mutex<Vec>> | ~15 |
+| Test files | Arc<Mutex&lt;Vec>> | ~15 |
 
 ### Duplicated Patterns
 

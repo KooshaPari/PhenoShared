@@ -1,12 +1,12 @@
 # L5-104.1 — Dispatch-MCP W2-1 Migration Plan to pheno-mcp-router (ADR-013)
 
-**Task ID:** L5-104.1 (sub-id of L5-104 Dmouse92→<REDACTED> audit)
+**Task ID:** L5-104.1 (sub-id of L5-104 Dmouse92→&lt;REDACTED&gt; audit)
 **Date:** 2026-06-17
-**Status:** PLAN — DO NOT EXECUTE (reviewer: <REDACTED>)
-**Auth context:** `gh` is **<REDACTED>** (active). Dmouse92 is read-only-collaborator (must NOT push).
+**Status:** PLAN — DO NOT EXECUTE (reviewer: &lt;REDACTED&gt;)
+**Auth context:** `gh` is **&lt;REDACTED&gt;** (active). Dmouse92 is read-only-collaborator (must NOT push).
 **Parent audit doc:** `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` (do not modify)
 **Substrate ADR:** `docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md`
-**User directive (2026-06-17):** *"dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate. The ver on <REDACTED> had this done yesterday, repeat for any dmouse additions worthwhile to migrate."*
+**User directive (2026-06-17):** *"dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate. The ver on &lt;REDACTED&gt; had this done yesterday, repeat for any dmouse additions worthwhile to migrate."*
 
 ---
 
@@ -363,7 +363,7 @@ For each of the 6 Dmouse92 commits, the **semantic content** must be reachable f
 | `dc4f1a3` | `gh api repos/<REDACTED>/dispatch-mcp/contents/docs/CHEAP_LLM_MCP_DEPRECATION.md --jq '.sha'` | File exists with content matching Dmouse92 (same 22 lines). |
 | `9486edb` | **discarded** (duplicate of `f46e356`) | n/a |
 | `f46e356` | `gh api repos/<REDACTED>/dispatch-mcp/contents/tests/test_mock_backend.py --jq '.sha'` | File exists with content matching Dmouse92. |
-| `6aad7fa` | `gh api "repos/<REDACTED>/pheno-mcp-router/git/trees/main?recursive=1" --jq '.tree[].path' \| grep -E '(tiers|cost|budget|quota|audit|cost_middleware)\.py'` | All 6 module paths present in substrate `src/pheno_mcp_router/`. |
+| `6aad7fa` | `gh api "repos/&lt;REDACTED>/pheno-mcp-router/git/trees/main?recursive=1" --jq '.tree[].path' \| grep -E '(tiers|cost|budget|quota|audit|cost_middleware)\.py'` | All 6 module paths present in substrate `src/pheno_mcp_router/`. |
 | `874a023` | (empty marker) | n/a |
 | `a1aaef2` | (compound: docker + providers + PROVIDER_GUIDE) | See below. |
 
@@ -524,4 +524,4 @@ Schema: worklog v2.1 (per ADR-015 v2.0 → v2.1 bump; ADR-023 device field).
 
 ## Executive summary
 
-The parent audit doc (`findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`) reports `<REDACTED>/dispatch-mcp@main` at 2026-06-18 with W2-1 absorption "yesterday", but `gh api` and local-branch inventory on 2026-06-17 19:00 PDT show main is **still at `a050e06` (2026-06-15)** and the 6 unique Dmouse92 commits sit in 6 unmerged branches. The `pheno-mcp-router` substrate is also **not on GitHub yet** (`404 Not Found`) — it exists as a local-only clone with 8 commits and a dirty working tree. Of the 6 Dmouse92 commits, 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`, ~2,000 LOC) belong in the substrate per ADR-013's "all pheno-mcp-* servers are built on `pheno-mcp-router`" mandate, 5 files (`core/port.py`, `core/protocol.py`, `core/types.py`, `adapters/omni_http.py`, `server.py` extensions + the mock-backend test) stay in dispatch-mcp, the `LlamaAdapter` and `OpenAICompatAdapter` (the latter KP-authored on `feat/openai-compat-2026-06-15`) port to the substrate as new concrete adapters, the `PROVIDER_GUIDE.md` ports to substrate docs, the `Dockerfile.llama` + `llama-compose.yml` port to `phenotype-ops/agent-devops-setups/llama-cpp/`, and one cherry-pick (`dc4f1a3` CHEAP_LLM_MCP_DEPRECATION.md) is already done on `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` — needs merge to main. The 10-step execution sequence (publish substrate → cherry-pick deprecation doc → port 6 substrate modules → port docs → port 2 adapters → port Docker files → land dispatch-mcp W2-1 with substrate coupling → archive Dmouse92 dispatch-mcp → archive <REDACTED> dispatch-mcp → update AGENTS.md/SSOT.md/STATUS.md) gates on 8 verification commands in §5.3 before either archive can fire. Total estimate: ~2,400 LOC added to substrate, ~2,000 LOC deleted from dispatch-mcp, 0 net change to fleet functionality.
+The parent audit doc (`findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`) reports `<REDACTED>/dispatch-mcp@main` at 2026-06-18 with W2-1 absorption "yesterday", but `gh api` and local-branch inventory on 2026-06-17 19:00 PDT show main is **still at `a050e06` (2026-06-15)** and the 6 unique Dmouse92 commits sit in 6 unmerged branches. The `pheno-mcp-router` substrate is also **not on GitHub yet** (`404 Not Found`) — it exists as a local-only clone with 8 commits and a dirty working tree. Of the 6 Dmouse92 commits, 6 modules (`tiers/cost/budget/quota/audit/cost_middleware.py`, ~2,000 LOC) belong in the substrate per ADR-013's "all pheno-mcp-* servers are built on `pheno-mcp-router`" mandate, 5 files (`core/port.py`, `core/protocol.py`, `core/types.py`, `adapters/omni_http.py`, `server.py` extensions + the mock-backend test) stay in dispatch-mcp, the `LlamaAdapter` and `OpenAICompatAdapter` (the latter KP-authored on `feat/openai-compat-2026-06-15`) port to the substrate as new concrete adapters, the `PROVIDER_GUIDE.md` ports to substrate docs, the `Dockerfile.llama` + `llama-compose.yml` port to `phenotype-ops/agent-devops-setups/llama-cpp/`, and one cherry-pick (`dc4f1a3` CHEAP_LLM_MCP_DEPRECATION.md) is already done on `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` — needs merge to main. The 10-step execution sequence (publish substrate → cherry-pick deprecation doc → port 6 substrate modules → port docs → port 2 adapters → port Docker files → land dispatch-mcp W2-1 with substrate coupling → archive Dmouse92 dispatch-mcp → archive &lt;REDACTED&gt; dispatch-mcp → update AGENTS.md/SSOT.md/STATUS.md) gates on 8 verification commands in §5.3 before either archive can fire. Total estimate: ~2,400 LOC added to substrate, ~2,000 LOC deleted from dispatch-mcp, 0 net change to fleet functionality.
