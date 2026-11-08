@@ -71,11 +71,19 @@ pub struct LeaseInfo {
 /// Result of `broker_status`.
 #[derive(Debug, Clone, Serialize)]
 pub struct BrokerStatus {
-    /// Broker state root.
+    /// Broker state root, or the daemon base URL when `brokerd` answered.
     pub root: String,
+    /// Set to the daemon URL when this snapshot came from a running `brokerd`.
+    ///
+    /// Absent for the in-process backend, so existing readers are unaffected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub brokerd: Option<String>,
     /// Whether a Chrome-family binary exists for the broker to launch.
-    pub browser_available: bool,
-    /// Number of live sessions held by *this* process.
+    ///
+    /// `None` when the snapshot came from `brokerd`: the daemon host's browser
+    /// inventory is not visible from here, and guessing would be a lie.
+    pub browser_available: Option<bool>,
+    /// Number of live sessions held by the authority that answered.
     pub live_sessions: usize,
     /// Every lease record on disk (expired ones flagged, not hidden).
     pub active_leases: Vec<LeaseInfo>,

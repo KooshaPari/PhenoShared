@@ -1,9 +1,24 @@
 //! MCP bridge over the browser lease broker.
 //!
 //! This crate owns the *tool logic*: every mutating operation passes the caller's
-//! fencing token straight to the broker's on-disk [`LeaseManager`], so authority
-//! is enforced by the broker and not by this layer. The stdio server binary
-//! (`src/bin/browser-broker-mcp.rs`) is a thin adapter over [`BrokerTools`].
+//! fencing token straight to the broker's on-disk [`substrate_browser::LeaseManager`],
+//! so authority is enforced by the broker and not by this layer. The stdio server
+//! binary (`src/bin/browser-broker-mcp.rs`) is a thin adapter over [`BrokerTools`].
+//!
+//! # One authority, never two
+//!
+//! The bridge resolves its state root with the same precedence `brokerd` uses -
+//! `$SUBSTRATE_BROKER_ROOT`, else `$XDG_STATE_HOME/browser-broker`, else
+//! `$HOME/.local/state/browser-broker` (see [`resolve_root_from`]). When both
+//! processes agree on the root they share one on-disk lease store, so the MCP
+//! server is never a competing authority.
+//!
+//! If `$BROKERD_URL` is set, the bridge instead reads the *running* daemon over
+//! its HTTP API ([`RemoteConfig`]). It never falls back to an in-process broker
+//! in that mode: an unreachable daemon is an error, not an invitation to mutate
+//! a different authority. `brokerd`'s HTTP surface is read-only (healthz, leases,
+//! sessions, view), so mutating tools refuse under a remote configuration - see
+//! [`RemoteBroker::mutation_refusal`].
 //!
 //! # What is real, and what is not
 //!
@@ -17,15 +32,18 @@
 //! * `purge` deletes the profile's data directory. It refuses without
 //!   `confirm: true` and refuses while the profile is live or leased.
 
+mod client;
 mod types;
 
 use std::{
     collections::BTreeMap,
+    ffi::OsString,
     path::PathBuf,
     sync::Arc,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
+pub use client::{RemoteBroker, RemoteConfig, TOKEN_ENV, URL_ENV};
 pub use types::{
     kind_of, AcquireParams, AcquiredInfo, BrokerStatus, LeaseInfo, PurgeOutcome, PurgeParams,
     ReapOutcome, ReleaseOutcome, ReleaseParams, ToolError,
@@ -41,23 +59,33 @@ pub const DEFAULT_TTL_MS: u64 = 60_000;
 /// Result alias for the tool layer.
 pub type Result<T> = std::result::Result<T, BrokerError>;
 
-/// Broker state root used when no override is given.
+/// Resolve the broker state root from `get`, which mirrors the process
+/// environment.
 ///
-/// Matches `brokerd` so the MCP server and the daemon share one lease authority:
-/// `$SUBSTRATE_BROKER_ROOT`, else `$XDG_STATE_HOME/browser-broker`, else
-/// `$HOME/.local/state/browser-broker`.
-pub fn default_root() -> PathBuf {
-    if let Some(root) = std::env::var_os("SUBSTRATE_BROKER_ROOT") {
+/// The precedence is a contract shared with `brokerd`:
+/// `SUBSTRATE_BROKER_ROOT`, else `XDG_STATE_HOME/browser-broker`, else
+/// `HOME/.local/state/browser-broker`. Both crates test the same table, because
+/// a divergence here is precisely how the MCP server becomes a second authority.
+pub fn resolve_root_from(get: impl Fn(&str) -> Option<OsString>) -> PathBuf {
+    if let Some(root) = get("SUBSTRATE_BROKER_ROOT") {
         return PathBuf::from(root);
     }
-    if let Some(state) = std::env::var_os("XDG_STATE_HOME") {
+    if let Some(state) = get("XDG_STATE_HOME") {
         return PathBuf::from(state).join("browser-broker");
     }
-    let home = std::env::var_os("HOME").unwrap_or_else(|| ".".into());
+    let home = get("HOME").unwrap_or_else(|| OsString::from("."));
     PathBuf::from(home)
         .join(".local")
         .join("state")
         .join("browser-broker")
+}
+
+/// Broker state root used when no override is given.
+///
+/// Identical to `brokerd`'s default, so the MCP server and the daemon share one
+/// lease authority.
+pub fn default_root() -> PathBuf {
+    resolve_root_from(|name| std::env::var_os(name))
 }
 
 fn now_unix_ms() -> u64 {
@@ -67,14 +95,22 @@ fn now_unix_ms() -> u64 {
         .unwrap_or(0)
 }
 
-/// Tool surface backed by one [`Broker`] plus the sessions this process holds.
+/// Where this tool surface draws its authority from.
+enum Backend {
+    /// A broker owned by this process, on the resolved state root.
+    Local(Broker),
+    /// A running `brokerd` reached over HTTP.
+    Remote(RemoteBroker),
+}
+
+/// Tool surface backed by one authority plus the sessions this process holds.
 ///
 /// The broker is the only authority; `sessions` is just the set of handles this
 /// process may still need to close. A lease that exists on disk but has no entry
 /// here (for example after an MCP restart) can still be released, because
 /// release re-validates against the lease store and revokes the record.
 pub struct BrokerTools {
-    broker: Broker,
+    backend: Backend,
     sessions: Mutex<BTreeMap<String, Acquired>>,
 }
 
@@ -82,14 +118,29 @@ impl BrokerTools {
     /// Open the tool surface against a broker rooted at `root`.
     pub fn open(root: impl Into<PathBuf>) -> Result<Self> {
         Ok(Self {
-            broker: Broker::new(root)?,
+            backend: Backend::Local(Broker::new(root)?),
             sessions: Mutex::new(BTreeMap::new()),
         })
     }
 
-    /// Open against [`default_root`].
+    /// Open against a running `brokerd` instead of an in-process broker.
+    ///
+    /// Reads are served by the daemon. Mutations are refused: the daemon exposes
+    /// no mutation route, and inventing a local one would create the second
+    /// authority this crate exists to prevent.
+    pub fn open_remote(config: RemoteConfig) -> Result<Self> {
+        Ok(Self {
+            backend: Backend::Remote(RemoteBroker::new(config)?),
+            sessions: Mutex::new(BTreeMap::new()),
+        })
+    }
+
+    /// Open against `$BROKERD_URL` when it is set, else [`default_root`].
     pub fn open_default() -> Result<Self> {
-        Self::open(default_root())
+        match RemoteConfig::from_env() {
+            Some(config) => Self::open_remote(config),
+            None => Self::open(default_root()),
+        }
     }
 
     /// Open against a broker whose lease authority uses an injected clock.
@@ -100,50 +151,63 @@ impl BrokerTools {
         clock: Arc<dyn substrate_browser::Clock>,
     ) -> Result<Self> {
         Ok(Self {
-            broker: Broker::with_clock(root, clock)?,
+            backend: Backend::Local(Broker::with_clock(root, clock)?),
             sessions: Mutex::new(BTreeMap::new()),
         })
     }
 
-    /// The underlying broker. Exposed so callers can inspect state directly.
-    pub fn broker(&self) -> &Broker {
-        &self.broker
+    /// The in-process broker, when this instance owns one.
+    ///
+    /// `None` when the instance targets a running `brokerd`.
+    pub fn broker(&self) -> Option<&Broker> {
+        match &self.backend {
+            Backend::Local(broker) => Some(broker),
+            Backend::Remote(_) => None,
+        }
     }
 
-    /// Root path shared with the daemon.
-    pub fn root(&self) -> &std::path::Path {
-        self.broker.root()
+    /// The broker `action` needs, or the daemon's refusal when this instance is
+    /// remote. Never silently returns a different authority.
+    fn local_for(&self, action: &str) -> Result<&Broker> {
+        match &self.backend {
+            Backend::Local(broker) => Ok(broker),
+            Backend::Remote(remote) => Err(remote.mutation_refusal(action)),
+        }
+    }
+
+    /// Where this instance draws authority from, for startup diagnostics:
+    /// the local state root, or `brokerd:<url>`.
+    pub fn authority(&self) -> String {
+        match &self.backend {
+            Backend::Local(broker) => broker.root().display().to_string(),
+            Backend::Remote(remote) => format!("brokerd:{}", remote.config().base_url()),
+        }
     }
 
     /// Read-only snapshot: root, browser availability, sessions and leases.
     pub async fn status(&self) -> Result<BrokerStatus> {
-        let now = now_unix_ms();
-        let live_sessions = self.broker.live().await.len();
-        let active_leases = self
-            .broker
-            .leases()
-            .list()?
-            .into_iter()
-            .map(|lease: Lease| LeaseInfo {
-                scope: lease.profile_key(),
-                expired: lease.expires_at_unix_ms <= now,
-                lease_id: lease.id,
-                holder: lease.holder,
-                fencing_token: lease.fencing_token,
-                expires_at_unix_ms: lease.expires_at_unix_ms,
-            })
-            .collect();
-
-        Ok(BrokerStatus {
-            root: self.broker.root().display().to_string(),
-            browser_available: browser_available(),
-            live_sessions,
-            active_leases,
-        })
+        match &self.backend {
+            Backend::Local(broker) => local_status(broker).await,
+            Backend::Remote(remote) => {
+                let now = now_unix_ms();
+                let leases = remote.leases().await?;
+                let live = remote.live().await?;
+                Ok(BrokerStatus {
+                    root: remote.config().base_url().to_string(),
+                    brokerd: Some(remote.config().base_url().to_string()),
+                    // The daemon host's browser inventory is not visible here.
+                    browser_available: None,
+                    live_sessions: live.len(),
+                    active_leases: leases.iter().map(|lease| lease_info(lease, now)).collect(),
+                })
+            },
+        }
     }
 
     /// Acquire an exclusive browser, keeping the handle in this process.
     pub async fn acquire(&self, params: AcquireParams) -> Result<AcquiredInfo> {
+        let broker = self.local_for("broker_acquire")?;
+
         let session = params.session.unwrap_or_else(|| "default".to_string());
         let holder = params
             .holder
@@ -158,8 +222,7 @@ impl BrokerTools {
         let scope = Scope::new(params.principal, params.profile, session)
             .map_err(|e| BrokerError::State(BrowserError::Scope(e)))?;
 
-        let acquired = self
-            .broker
+        let acquired = broker
             .acquire(&scope, holder, Duration::from_millis(ttl_ms))
             .await?;
 
@@ -183,20 +246,22 @@ impl BrokerTools {
     /// [`substrate_browser::LeaseManager::validate`], so an expired, revoked or
     /// superseded lease is refused and nothing is torn down.
     pub async fn release(&self, lease_id: &str, fencing_token: u64) -> Result<ReleaseOutcome> {
+        let broker = self.local_for("broker_release")?;
+
         // Fail-closed: never mutate before the broker's fence check passes.
-        let lease = self.broker.leases().validate(lease_id, fencing_token)?;
+        let lease = broker.leases().validate(lease_id, fencing_token)?;
 
         let acquired = self.sessions.lock().await.remove(lease_id);
         let teardown = match acquired {
             Some(acquired) => {
                 // Release closes the browser first, then revokes and seals.
-                self.broker.release(acquired).await?;
+                broker.release(acquired).await?;
                 "browser closed; lease revoked; generation sealed"
             },
             None => {
                 // No local handle: the lease outlived a process restart, or the
                 // browser was reaped. Revoking the record is the whole action.
-                match self.broker.leases().revoke(&lease.id) {
+                match broker.leases().revoke(&lease.id) {
                     Ok(()) | Err(BrowserError::UnknownLease(_)) => {},
                     Err(err) => return Err(err.into()),
                 }
@@ -211,18 +276,27 @@ impl BrokerTools {
         })
     }
 
-    /// Live sessions this process holds (read-only; reaps expired ones first).
+    /// Live sessions held by the authority, after reaping expired ones.
+    ///
+    /// Local: sessions this process holds. Remote: sessions the daemon holds,
+    /// which is the only set it can know about.
     pub async fn live(&self) -> Vec<LiveSessionInfo> {
-        self.broker.live().await
+        match &self.backend {
+            Backend::Local(broker) => broker.live().await,
+            // A failed read is reported as "nothing known", not as "nothing
+            // live": callers that must not guess use `status`.
+            Backend::Remote(remote) => remote.live().await.unwrap_or_default(),
+        }
     }
 
     /// Reap expired or superseded sessions and report the counts.
     pub async fn reap(&self) -> Result<ReapOutcome> {
-        let reaped = self.broker.reap_expired().await;
+        let broker = self.local_for("broker_reap")?;
+        let reaped = broker.reap_expired().await;
 
         // Expired records authorise nothing, so sweeping them is safe: anything
         // that still needs authority re-validates and would fail closed.
-        let leases_reaped = self.broker.leases().sweep_expired()?;
+        let leases_reaped = broker.leases().sweep_expired()?;
 
         // Drop local handles whose lease no longer validates, so a later
         // release reports `NoSession`/`UnknownLease` instead of pretending.
@@ -231,7 +305,7 @@ impl BrokerTools {
             sessions
                 .iter()
                 .filter(|(id, acquired)| {
-                    self.broker
+                    broker
                         .leases()
                         .validate(id, acquired.lease.fencing_token)
                         .is_err()
@@ -249,7 +323,7 @@ impl BrokerTools {
         Ok(ReapOutcome {
             reaped,
             leases_reaped,
-            live_sessions_after: self.broker.live().await.len(),
+            live_sessions_after: broker.live().await.len(),
         })
     }
 
@@ -263,6 +337,8 @@ impl BrokerTools {
         profile: &str,
         confirm: bool,
     ) -> Result<PurgeOutcome> {
+        let broker = self.local_for("broker_purge")?;
+
         if !confirm {
             return Err(BrokerError::State(BrowserError::Refused(
                 "purge is destructive: pass confirm: true to delete profile data".to_string(),
@@ -273,19 +349,19 @@ impl BrokerTools {
             .map_err(|e| BrokerError::State(BrowserError::Scope(e)))?;
         let key = scope.profile_key();
 
-        if self.live().await.iter().any(|s| s.scope == key) {
+        if broker.live().await.iter().any(|s| s.scope == key) {
             return Err(BrokerError::State(BrowserError::Refused(format!(
                 "profile {key} has a live session; release it before purging"
             ))));
         }
-        if let Some(lease) = self.broker.leases().active_for(principal, profile)? {
+        if let Some(lease) = broker.leases().active_for(principal, profile)? {
             return Err(BrokerError::State(BrowserError::Refused(format!(
                 "profile {key} is leased by `{}` until {}; release it before purging",
                 lease.holder, lease.expires_at_unix_ms
             ))));
         }
 
-        let path = self.broker.profiles().profile_dir(principal, profile);
+        let path = broker.profiles().profile_dir(principal, profile);
         if !path.exists() {
             return Ok(PurgeOutcome {
                 purged: false,
@@ -300,6 +376,36 @@ impl BrokerTools {
             existed: true,
         })
     }
+}
+
+fn lease_info(lease: &Lease, now: u64) -> LeaseInfo {
+    LeaseInfo {
+        scope: lease.profile_key(),
+        expired: lease.expires_at_unix_ms <= now,
+        lease_id: lease.id.clone(),
+        holder: lease.holder.clone(),
+        fencing_token: lease.fencing_token,
+        expires_at_unix_ms: lease.expires_at_unix_ms,
+    }
+}
+
+async fn local_status(broker: &Broker) -> Result<BrokerStatus> {
+    let now = now_unix_ms();
+    let live_sessions = broker.live().await.len();
+    let active_leases = broker
+        .leases()
+        .list()?
+        .iter()
+        .map(|lease| lease_info(lease, now))
+        .collect();
+
+    Ok(BrokerStatus {
+        root: broker.root().display().to_string(),
+        brokerd: None,
+        browser_available: Some(browser_available()),
+        live_sessions,
+        active_leases,
+    })
 }
 
 /// Convenience wrapper so binaries can share one `Arc<BrokerTools>`.

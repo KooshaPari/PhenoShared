@@ -53,6 +53,7 @@ fn grant(
 ) -> substrate_browser::Lease {
     tools
         .broker()
+        .expect("local backend")
         .leases()
         .grant(
             &scope(principal, profile),
@@ -112,6 +113,7 @@ async fn stale_fencing_token_is_refused() {
     // Fail-closed: the lease is untouched and still usable with the real token.
     let still_active = tools
         .broker()
+        .expect("local backend")
         .leases()
         .active_for("agent-a", "work")
         .expect("read leases")
@@ -130,7 +132,12 @@ async fn release_of_a_revoked_and_superseded_lease_is_refused() {
     let tools = tools(dir.path());
 
     let old = grant(&tools, "agent-a", "work", 60_000);
-    tools.broker().leases().revoke(&old.id).expect("revoke");
+    tools
+        .broker()
+        .expect("local backend")
+        .leases()
+        .revoke(&old.id)
+        .expect("revoke");
     let new = grant(&tools, "agent-a", "work", 60_000);
     assert!(new.fencing_token > old.fencing_token);
 
@@ -149,6 +156,7 @@ async fn release_of_a_revoked_and_superseded_lease_is_refused() {
     assert_eq!(kind_of(&err), "StaleFence");
     assert!(tools
         .broker()
+        .expect("local backend")
         .leases()
         .active_for("agent-a", "work")
         .unwrap()
@@ -163,10 +171,15 @@ async fn purge_refuses_while_the_profile_is_leased() {
     // Materialise the profile so there is really something to delete.
     tools
         .broker()
+        .expect("local backend")
         .profiles()
         .ensure("agent-a", "work")
         .expect("create profile");
-    let profile_dir = tools.broker().profiles().profile_dir("agent-a", "work");
+    let profile_dir = tools
+        .broker()
+        .expect("local backend")
+        .profiles()
+        .profile_dir("agent-a", "work");
     assert!(profile_dir.exists());
 
     let lease = grant(&tools, "agent-a", "work", 60_000);
@@ -230,6 +243,7 @@ async fn reap_reports_counts_and_sweeps_expired_leases() {
     assert_eq!(second.reaped, 0, "no browser sessions in this process");
     assert!(tools
         .broker()
+        .expect("local backend")
         .leases()
         .active_for("agent-a", "work")
         .unwrap()

@@ -186,7 +186,7 @@ async fn main() -> ExitCode {
             return ExitCode::FAILURE;
         },
     };
-    eprintln!("browser-broker-mcp: root {}", tools.root().display());
+    eprintln!("browser-broker-mcp: authority {}", tools.authority());
 
     let server = BrowserBrokerMcp::new(Arc::new(tools));
     let transport = rmcp::transport::io::stdio();

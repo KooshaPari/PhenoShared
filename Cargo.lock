@@ -14935,6 +14935,7 @@ dependencies = [
 name = "substrate-browser-mcp"
 version = "0.3.10"
 dependencies = [
+ "reqwest 0.12.28",
  "rmcp",
  "schemars 1.2.2",
  "serde",
