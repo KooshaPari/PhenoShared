@@ -4,6 +4,10 @@
 //! The launcher deliberately owns nothing about profiles. The caller passes the
 //! user data directory, which is how a profile *generation* from
 //! `substrate-browser` becomes an actual isolated browser instance.
+//!
+//! Chrome is a process *tree*, not a process. On Unix the launcher therefore
+//! spawns it in its own process group so shutdown can signal the renderer, GPU
+//! and utility children along with the parent; see [`crate::process_tree`].
 
 use std::{
     path::{Path, PathBuf},
@@ -16,6 +20,8 @@ use tokio::{
     process::{Child, Command},
 };
 
+#[cfg(unix)]
+use crate::process_tree;
 use crate::{CdpError, Result};
 
 /// How to start Chrome.
@@ -56,12 +62,17 @@ pub struct ChromeProcess {
     child: Child,
     ws_url: String,
     user_data_dir: PathBuf,
+    /// Process group created for this launch (`None` when it could not be
+    /// established, in which case shutdown falls back to signalling the direct
+    /// child only).
+    process_group: Option<u32>,
 }
 
 impl std::fmt::Debug for ChromeProcess {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ChromeProcess")
             .field("pid", &self.child.id())
+            .field("process_group", &self.process_group)
             .field("ws_url", &self.ws_url)
             .field("user_data_dir", &self.user_data_dir)
             .finish()
@@ -82,6 +93,14 @@ impl ChromeProcess {
     /// Operating system process id.
     pub fn pid(&self) -> Option<u32> {
         self.child.id()
+    }
+
+    /// The process group this launch created, if any.
+    ///
+    /// `None` means the group could not be established and shutdown can only
+    /// signal the direct child (the historical, leaky behaviour).
+    pub fn process_group(&self) -> Option<u32> {
+        self.process_group
     }
 
     /// Launch Chrome and wait until it reports a DevTools endpoint.
@@ -114,6 +133,12 @@ impl ChromeProcess {
             .stderr(Stdio::piped())
             .kill_on_drop(true);
 
+        // Give Chrome its own process group so the entire tree can be
+        // signalled at once. Children inherit the group, so a single
+        // `kill(-pgid, …)` reaches renderers and utilities too.
+        #[cfg(unix)]
+        command.process_group(0);
+
         if options.headless {
             command.arg("--headless=new");
         }
@@ -126,6 +151,20 @@ impl ChromeProcess {
             source: err,
         })?;
 
+        // `process_group(0)` makes the child the leader of a new group whose id
+        // equals its pid. Verify that rather than assume it: if the group was
+        // not established, shutdown must not signal an unrelated group id.
+        #[cfg(unix)]
+        let process_group = child.id().filter(|pid| {
+            let Ok(pid) = libc::pid_t::try_from(*pid) else {
+                return false;
+            };
+            // SAFETY: `getpgid` is a read-only syscall on a pid we just spawned.
+            unsafe { libc::getpgid(pid) == pid }
+        });
+        #[cfg(not(unix))]
+        let process_group: Option<u32> = None;
+
         let stderr = child
             .stderr
             .take()
@@ -135,7 +174,7 @@ impl ChromeProcess {
         let ws_url = match wait_for_endpoint(stderr, options.connect_timeout).await {
             Ok(url) => url,
             Err(err) => {
-                let _ = child.kill().await;
+                let _ = shutdown_tree(&mut child, process_group, &options.user_data_dir).await;
                 return Err(err);
             },
         };
@@ -147,23 +186,58 @@ impl ChromeProcess {
             child,
             ws_url,
             user_data_dir: options.user_data_dir.clone(),
+            process_group,
         })
     }
 
-    /// Terminate Chrome and wait for it to exit.
+    /// Terminate Chrome *and its whole process tree*, then wait for it to be
+    /// gone.
+    ///
+    /// The call does not return success until no live process references this
+    /// launch's `--user-data-dir`, so a caller that reports "browser closed"
+    /// is reporting a measurement rather than an intention.
+    ///
+    /// Windows: only the direct child is signalled (`Child::kill` + `wait`).
+    /// Job-object based tree termination is not implemented here, so a Windows
+    /// release can still leave renderers behind; the Unix defect this fixes was
+    /// observed on macOS.
     pub async fn shutdown(mut self) -> Result<()> {
-        let _ = self.child.kill().await;
-        let _ = self.child.wait().await;
-        Ok(())
+        let group = self.process_group.take();
+        shutdown_tree(&mut self.child, group, &self.user_data_dir).await
     }
 }
 
 impl Drop for ChromeProcess {
     fn drop(&mut self) {
-        // `kill_on_drop` already covers the common path; this makes the intent
-        // explicit and also reaps the child when the runtime is still alive.
+        // A dropped handle must not orphan a browser tree. Signal the group
+        // first (sync syscall, safe from `Drop`), then let `kill_on_drop` reap
+        // the direct child.
+        #[cfg(unix)]
+        if let Some(pgid) = self.process_group {
+            if process_tree::group_exists(pgid) {
+                let _ = process_tree::signal_group(pgid, libc::SIGKILL);
+            }
+        }
         let _ = self.child.start_kill();
     }
+}
+
+/// Terminate `child`, plus its process group when one was established.
+async fn shutdown_tree(child: &mut Child, group: Option<u32>, user_data_dir: &Path) -> Result<()> {
+    #[cfg(not(unix))]
+    let _ = (group, user_data_dir);
+
+    let mut outcome = Ok(());
+    #[cfg(unix)]
+    if let Some(pgid) = group {
+        // Group termination already proves the tree is gone; the direct child
+        // still has to be reaped below so no zombie is left behind.
+        outcome = process_tree::terminate_group(pgid, user_data_dir).await;
+    }
+
+    let _ = child.kill().await;
+    let _ = child.wait().await;
+    outcome
 }
 
 async fn wait_for_endpoint(

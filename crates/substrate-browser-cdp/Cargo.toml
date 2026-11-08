@@ -16,6 +16,11 @@ tokio = { workspace = true, features = ["net", "fs"] }
 tokio-tungstenite = "0.29"
 base64 = "0.22"
 
+[target.'cfg(unix)'.dependencies]
+# Process-group signalling for whole-tree shutdown: `tokio::process` can only
+# kill the direct child, which orphaned Chrome's renderer/GPU children.
+libc = "0.2"
+
 [dev-dependencies]
 tempfile.workspace = true
 tokio = { workspace = true, features = ["net", "io-util", "macros", "rt-multi-thread", "fs"] }
