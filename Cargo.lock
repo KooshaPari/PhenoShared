@@ -15111,6 +15111,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "substrate-browser-mcp"
+version = "0.3.10"
+dependencies = [
+ "rmcp",
+ "schemars 1.2.2",
+ "serde",
+ "serde_json",
+ "substrate-browser",
+ "substrate-browser-broker",
+ "tempfile",
+ "thiserror 2.0.20",
+ "tokio",
+]
+
+[[package]]
 name = "substrate-browser-provider"
 version = "0.3.10"
 dependencies = [
