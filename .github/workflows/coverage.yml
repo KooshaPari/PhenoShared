@@ -2,7 +2,18 @@ name: Coverage Gate (Tier-2)
 
 on:
   push:
-    branches: [main, fix/**, feat/**, chore/**]
+    # main only. PR branches are covered by the pull_request trigger below.
+    #
+    # This used to list `fix/**, feat/**, chore/**` as well, which made BOTH
+    # triggers fire for every PR branch - so the whole-workspace coverage build
+    # ran TWICE per PR. The two runs also did not cancel each other, because the
+    # concurrency group is keyed on `github.ref` (refs/heads/<branch> for a push
+    # vs refs/pull/<n>/merge for a pull_request).
+    #
+    # The doubled load saturated the hosted-runner queue: on 2026-11-08 three
+    # coverage runs sat `queued` for over 40 minutes while the required
+    # "Root workspace coverage" check stayed pending on every open PR.
+    branches: [main]
   pull_request:
     branches: [main]
 
