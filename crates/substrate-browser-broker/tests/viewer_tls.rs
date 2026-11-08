@@ -37,11 +37,9 @@ fn free_port() -> u16 {
 
 /// Write a throwaway self-signed certificate/key pair and return their paths.
 fn self_signed(dir: &Path) -> (PathBuf, PathBuf) {
-    let generated = rcgen::generate_simple_self_signed(vec![
-        "localhost".to_string(),
-        "127.0.0.1".to_string(),
-    ])
-    .expect("generate self-signed certificate");
+    let generated =
+        rcgen::generate_simple_self_signed(vec!["localhost".to_string(), "127.0.0.1".to_string()])
+            .expect("generate self-signed certificate");
     let cert = dir.join("cert.pem");
     let key = dir.join("key.pem");
     std::fs::write(&cert, generated.cert.pem()).expect("write certificate");
@@ -151,10 +149,7 @@ fn non_loopback_tls_without_token_still_refused() {
         "TLS does not replace the token requirement for non-loopback binds"
     );
     let stderr = String::from_utf8_lossy(&output.stderr);
-    assert!(
-        stderr.contains("without a bearer token"),
-        "got: {stderr}"
-    );
+    assert!(stderr.contains("without a bearer token"), "got: {stderr}");
 }
 
 #[tokio::test]

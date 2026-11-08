@@ -32,9 +32,7 @@ pub use types::{
 };
 
 use substrate_browser::{BrowserError, Lease, Scope};
-use substrate_browser_broker::{
-    browser_available, Acquired, Broker, BrokerError, LiveSessionInfo,
-};
+use substrate_browser_broker::{browser_available, Acquired, Broker, BrokerError, LiveSessionInfo};
 use tokio::sync::Mutex;
 
 /// Default lease lifetime for `broker_acquire`, in milliseconds.

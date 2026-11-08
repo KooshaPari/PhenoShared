@@ -170,11 +170,7 @@ async fn main() -> ExitCode {
             serve(broker, config).await.map_err(|err| err.to_string())
         },
         Some(tls) => {
-            let app = substrate_browser_broker::router_with(
-                broker,
-                args.token,
-                principal_tokens,
-            );
+            let app = substrate_browser_broker::router_with(broker, args.token, principal_tokens);
             serve_tls(&args.bind, app, &tls)
                 .await
                 .map_err(|err| err.to_string())
