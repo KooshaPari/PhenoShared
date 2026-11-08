@@ -279,7 +279,6 @@ pub(crate) mod tests {
     use std::io::Write;
 
     use super::*;
-    use crate::codes;
 
     pub(crate) fn temp_dir(name: &str) -> PathBuf {
         let root = if let Ok(td) = std::env::var("CARGO_TARGET_DIR") {
