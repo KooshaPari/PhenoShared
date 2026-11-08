@@ -1,4 +1,4 @@
-# CII Best Practices — Draft for apisync (KooshaPari/Apisync)
+# CII Best Practices — Draft for apisync (<REDACTED>/Apisync)
 
 This draft maps the current repo state to https://www.bestpractices.dev/ criteria.
 Submit at https://www.bestpractices.dev/en/projects/new — copy answers below.
@@ -13,7 +13,7 @@ Submit at https://www.bestpractices.dev/en/projects/new — copy answers below.
 ## Change Control
 
 - **Repo:** GitHub public, `main` protected (required_status_checks strict [ci / lint, ci / test], 1 review, dismiss_stale, linear_history, allow_force false, allow_deletions false, enforce_admins true, conversation_resolution true).
-- **Contribution:** `CONTRIBUTING.md` (if missing, create — currently `.github/CODEOWNERS` with `* @KooshaPari`), PR template `.github/PULL_REQUEST_TEMPLATE.md`, `CODEOWNERS` canonical at `.github/CODEOWNERS`.
+- **Contribution:** `CONTRIBUTING.md` (if missing, create — currently `.github/CODEOWNERS` with `* @<REDACTED>`), PR template `.github/PULL_REQUEST_TEMPLATE.md`, `CODEOWNERS` canonical at `.github/CODEOWNERS`.
 - **Code review:** All PRs require 1 approving review (branch protection) + auto-approve for dependabot via `.github/workflows/auto-approve-dependabot.yml` (still counts as approved changeset for Scorecard Code-Review, now 2/10 and climbing).
 
 ## Reporting

@@ -29,7 +29,7 @@ Module map: `apisync::domain` (core types + `Endpoint` trait),
 `apisync::adapters::{rest, graphql, websocket}` (transports), `apisync::application`
 (`Router`, `Handler`), `apisync::infrastructure::logging::init()`.
 
-See the [docs site](https://kooshapari.github.io/apisync/) for the full
+See the [docs site](https://<REDACTED>.github.io/apisync/) for the full
 [quick start](docs/quickstart.md), [API reference](docs/api.md), and
 [architecture](docs/architecture.md).
 
@@ -39,9 +39,9 @@ See the [docs site](https://kooshapari.github.io/apisync/) for the full
 <!-- /minimized AI-DD metaproject of learning, refining, and building brute-force -->
 <!-- training for both agents and the human operator. -->
 
-![Downloads](https://img.shields.io/github/downloads/KooshaPari/Apisync/total?style=flat-square&label=downloads&color=blue) [![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net)
-![GitHub release](https://img.shields.io/github/v/release/KooshaPari/Apisync?style=flat-square&label=release)
-![License](https://img.shields.io/github/license/KooshaPari/Apisync?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/<REDACTED>/Apisync/total?style=flat-square&label=downloads&color=blue) [![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net)
+![GitHub release](https://img.shields.io/github/v/release/<REDACTED>/Apisync?style=flat-square&label=release)
+![License](https://img.shields.io/github/license/<REDACTED>/Apisync?style=flat-square)
 ![AI-Slop](https://img.shields.io/badge/AI--DD-Slop%20Expected-orange?style=flat-square)
 ![AI-Only-Maintained](https://img.shields.io/badge/Planned%20%26%20Maintained%20by-AI%20Agents%20Only-red?style=flat-square)
 ![HITL-less](https://img.shields.io/badge/HITL--less%20AI--DD-metaproject-yellow?style=flat-square)

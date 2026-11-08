@@ -2,15 +2,15 @@
 
 ## Status: **proposed cross-reference; no destructive history rewriting performed**
 
-Three repos on the KooshaPari account share the same Anthropic
+Three repos on the <REDACTED> account share the same Anthropic
 "Block A" starter-template description and exist as parallel
 implementations of the same scaffolding intent:
 
 | Repo | Language | Files | Default branch | Description (truncated) | Last push |
 |---|---|---|---|---|---|
-| `KooshaPari/Apisync` | Rust | 128 | `main` | Anthropic Block A app for Claude-Computer-Use | 2026-09-09 |
-| `KooshaPari/DataKit` | Python | 47 | `main` | Anthropic Block A app for Claude-Computer-Use | 2026-09-09 |
-| `KooshaPari/Stashly` | Rust | ~50 | `main` | Anthropic Block A app for Claude-Computer-Use | 2026-09-09 |
+| `<REDACTED>/Apisync` | Rust | 128 | `main` | Anthropic Block A app for Claude-Computer-Use | 2026-09-09 |
+| `<REDACTED>/DataKit` | Python | 47 | `main` | Anthropic Block A app for Claude-Computer-Use | 2026-09-09 |
+| `<REDACTED>/Stashly` | Rust | ~50 | `main` | Anthropic Block A app for Claude-Computer-Use | 2026-09-09 |
 
 ## Why absorb (the why, recorded)
 
@@ -25,7 +25,7 @@ adopt a historical register recommendation").
 
 ## Recommended path (operator call)
 
-1. **Spawn a new canonical starter:** `KooshaPari/ComputerUse-Starter`
+1. **Spawn a new canonical starter:** `<REDACTED>/ComputerUse-Starter`
    (Rust + Python subdirs). Empty; designed to receive `git subtree
    add` from the three sources in a single PR.
 2. **`git subtree add --prefix=rust-apisync Apisync main`** on the
@@ -37,7 +37,7 @@ adopt a historical register recommendation").
    variants per-language and adding a top-level
    `CROSS-REFERENCES.md` documenting the move.
 6. **Operator-driven archive** of `Apisync`, `DataKit`, `Stashly`
-   via `gh repo archive KooshaPari/Apisync` etc. (this is
+   via `gh repo archive <REDACTED>/Apisync` etc. (this is
    **public + irreversible in social terms**; only the operator
    should trigger).
 
