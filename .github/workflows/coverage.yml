@@ -2,7 +2,23 @@ name: Coverage Gate (Tier-2)
 
 on:
   push:
-    branches: [main, fix/**, feat/**, chore/**]
+    # main only. PR branches are covered by the pull_request trigger below.
+    #
+    # This used to list `fix/**, feat/**, chore/**` as well, which made BOTH
+    # triggers fire for every PR branch - so the whole-workspace coverage build
+    # ran TWICE per PR. The two runs also did not cancel each other, because the
+    # concurrency group is keyed on `github.ref` (refs/heads/<branch> for a push
+    # vs refs/pull/<n>/merge for a pull_request).
+    #
+    # The doubled load saturated the hosted-runner queue: on 2026-11-08 three
+    # coverage runs sat `queued` for over 40 minutes while the required
+    # "Root workspace coverage" check stayed pending on every open PR.
+    #
+    # NOTE: this only takes effect for a branch once this change is on `main`.
+    # A push event evaluates the workflow file at the BRANCH's own HEAD, so
+    # until this lands, every other branch still carries the duplicated push
+    # trigger and still runs the whole-workspace build twice.
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -31,13 +47,46 @@ jobs:
     # measure lib quality, it just keeps the gate permanently red.
     name: Root workspace coverage (whole workspace — ≥37%)
     runs-on: ubuntu-24.04
+    # Bounds a hung step. GitHub's default is 360 minutes, so one stalled
+    # coverage run held a runner for up to six hours while every other
+    # coverage run queued behind it and the required check stayed pending on
+    # every open PR (observed 2026-11-08).
+    #
+    # The bound must sit ABOVE the legitimate duration of the step, or it
+    # fails the gate that exists to measure quality. Measured on run
+    # 42458885211: the `Run coverage gate (root workspace)` step took 84
+    # minutes (08:43:11 -> 10:07:38); the report upload after it took 3
+    # seconds and the post-job cache save 49 seconds. A 60-minute bound was
+    # therefore killing this job mid-measurement - run 42461336059 shows the
+    # step `cancelled` at exactly 58.5 minutes - which made the required
+    # check fail 100% of the time.
+    #
+    # 150 minutes keeps a genuine hang bounded well under GitHub's 360-minute
+    # default while leaving ~78% headroom over the observed 84-minute step.
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           components: llvm-tools-preview
+      # Cache RESTORE only, no SAVE for this job. The coverage gate is a
+      # measurement gate, not a build-cache gate: the target dir is large and
+      # re-uploading it costs runner time for a cache that a later build can
+      # restore anyway. Restoring keeps repeat runs fast; skipping the save
+      # keeps the runner free.
+      #
+      # Measured on run 42458885211 the saving is modest, not dramatic: the
+      # report upload after the gate took 3 seconds and the post-job cache
+      # save 49 seconds. The real saving in this workflow comes from the
+      # trigger de-duplication above, which halves the number of coverage runs
+      # and therefore the queue each one waits in (that run sat queued for
+      # 74 minutes before starting). This cache change is worth ~50 seconds
+      # of runner time; it is not what was holding the queue.
+      # iac keeps its save — its target dir is small.
       - uses: Swatinem/rust-cache@v2
+        with:
+          cache-save: false
 
       # The workspace links against the gtk-rs stack, so glib-sys needs
       # glib-2.0.pc at build time. Without these the coverage build fails with
@@ -116,6 +165,10 @@ jobs:
     # the number here only when the measured coverage actually supports it.
     name: IAC workspace coverage (service — ≥10%)
     runs-on: ubuntu-24.04
+    # Bounds a hung step; GitHub's default 360-minute ceiling let one stalled
+    # run hold a runner for hours. The iac workspace is far smaller than the
+    # root one, so it needs much less headroom.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
