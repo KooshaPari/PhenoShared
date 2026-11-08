@@ -51,7 +51,19 @@ jobs:
     # coverage run held a runner for up to six hours while every other
     # coverage run queued behind it and the required check stayed pending on
     # every open PR (observed 2026-11-08).
-    timeout-minutes: 60
+    #
+    # The bound must sit ABOVE the legitimate duration of the step, or it
+    # fails the gate that exists to measure quality. Measured on run
+    # 42458885211: the `Run coverage gate (root workspace)` step took 84
+    # minutes (08:43:11 -> 10:07:38); the report upload after it took 3
+    # seconds and the post-job cache save 49 seconds. A 60-minute bound was
+    # therefore killing this job mid-measurement - run 42461336059 shows the
+    # step `cancelled` at exactly 58.5 minutes - which made the required
+    # check fail 100% of the time.
+    #
+    # 150 minutes keeps a genuine hang bounded well under GitHub's 360-minute
+    # default while leaving ~78% headroom over the observed 84-minute step.
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -59,10 +71,18 @@ jobs:
           toolchain: stable
           components: llvm-tools-preview
       # Cache RESTORE only, no SAVE for this job. The coverage gate is a
-      # measurement gate, not a build-cache gate: an unbounded multi-GB
-      # target-dir upload was the last step still running after the gate
-      # itself had already succeeded, which is what held the runner. Restoring
-      # keeps repeat runs fast; skipping the save removes the hang entirely.
+      # measurement gate, not a build-cache gate: the target dir is large and
+      # re-uploading it costs runner time for a cache that a later build can
+      # restore anyway. Restoring keeps repeat runs fast; skipping the save
+      # keeps the runner free.
+      #
+      # Measured on run 42458885211 the saving is modest, not dramatic: the
+      # report upload after the gate took 3 seconds and the post-job cache
+      # save 49 seconds. The real saving in this workflow comes from the
+      # trigger de-duplication above, which halves the number of coverage runs
+      # and therefore the queue each one waits in (that run sat queued for
+      # 74 minutes before starting). This cache change is worth ~50 seconds
+      # of runner time; it is not what was holding the queue.
       # iac keeps its save — its target dir is small.
       - uses: Swatinem/rust-cache@v2
         with:
