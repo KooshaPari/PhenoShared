@@ -31,13 +31,26 @@ jobs:
     # measure lib quality, it just keeps the gate permanently red.
     name: Root workspace coverage (whole workspace — ≥37%)
     runs-on: ubuntu-24.04
+    # Bounds a hung step. GitHub's default is 360 minutes, so one stalled
+    # coverage run held a runner for up to six hours while every other
+    # coverage run queued behind it and the required check stayed pending on
+    # every open PR (observed 2026-11-08).
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           components: llvm-tools-preview
+      # Cache RESTORE only, no SAVE for this job. The coverage gate is a
+      # measurement gate, not a build-cache gate: an unbounded multi-GB
+      # target-dir upload was the last step still running after the gate
+      # itself had already succeeded, which is what held the runner. Restoring
+      # keeps repeat runs fast; skipping the save removes the hang entirely.
+      # iac keeps its save — its target dir is small.
       - uses: Swatinem/rust-cache@v2
+        with:
+          cache-save: false
 
       # The workspace links against the gtk-rs stack, so glib-sys needs
       # glib-2.0.pc at build time. Without these the coverage build fails with
@@ -100,6 +113,10 @@ jobs:
     # the number here only when the measured coverage actually supports it.
     name: IAC workspace coverage (service — ≥10%)
     runs-on: ubuntu-24.04
+    # Bounds a hung step; GitHub's default 360-minute ceiling let one stalled
+    # run hold a runner for hours. The iac workspace is far smaller than the
+    # root one, so it needs much less headroom.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
