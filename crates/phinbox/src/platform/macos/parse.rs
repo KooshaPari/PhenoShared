@@ -89,16 +89,20 @@ pub fn coerce_value(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitErr
                 .map_err(|_| ElicitError::RendererFailed(format!("not an integer: {raw:?}")))?;
             if let Some(min) = min {
                 if v < *min {
-                    return Err(ElicitError::RendererFailed(format!("value {v} < min {min}")));
+                    return Err(ElicitError::RendererFailed(format!(
+                        "value {v} < min {min}"
+                    )));
                 }
             }
             if let Some(max) = max {
                 if v > *max {
-                    return Err(ElicitError::RendererFailed(format!("value {v} > max {max}")));
+                    return Err(ElicitError::RendererFailed(format!(
+                        "value {v} > max {max}"
+                    )));
                 }
             }
             Ok(FieldValue::Integer(v))
-        }
+        },
         FieldSpec::Choice { options, .. } => {
             let lower = raw.to_lowercase();
             for (i, o) in options.iter().enumerate() {
@@ -112,11 +116,13 @@ pub fn coerce_value(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitErr
             Err(ElicitError::RendererFailed(format!(
                 "value {raw:?} not in choice options"
             )))
-        }
+        },
         FieldSpec::Boolean { .. } => match raw.to_lowercase().as_str() {
             "yes" | "true" | "ok" | "1" => Ok(FieldValue::Boolean(true)),
             "no" | "false" | "cancel" | "0" => Ok(FieldValue::Boolean(false)),
-            _ => Err(ElicitError::RendererFailed(format!("not a boolean: {raw:?}"))),
+            _ => Err(ElicitError::RendererFailed(format!(
+                "not a boolean: {raw:?}"
+            ))),
         },
         FieldSpec::DateTime { picker_kind, .. } => {
             let s = raw.to_string();
@@ -127,18 +133,18 @@ pub fn coerce_value(spec: &FieldSpec, raw: &str) -> Result<FieldValue, ElicitErr
                             "date must be YYYY-MM-DD, got {s:?}"
                         )));
                     }
-                }
+                },
                 DateTimeKind::Time => {
                     if s.len() != 5 {
                         return Err(ElicitError::RendererFailed(format!(
                             "time must be HH:MM, got {s:?}"
                         )));
                     }
-                }
-                DateTimeKind::DateTime => {}
+                },
+                DateTimeKind::DateTime => {},
             }
             Ok(FieldValue::DateTime(s))
-        }
+        },
     }
 }
 
@@ -202,9 +208,18 @@ mod tests {
 
     #[test]
     fn coerce_value_boolean_accepts_yes_no() {
-        let spec = FieldSpec::Boolean { label: "b".into(), default: None };
-        assert!(matches!(coerce_value(&spec, "YES").unwrap(), FieldValue::Boolean(true)));
-        assert!(matches!(coerce_value(&spec, "no").unwrap(), FieldValue::Boolean(false)));
+        let spec = FieldSpec::Boolean {
+            label: "b".into(),
+            default: None,
+        };
+        assert!(matches!(
+            coerce_value(&spec, "YES").unwrap(),
+            FieldValue::Boolean(true)
+        ));
+        assert!(matches!(
+            coerce_value(&spec, "no").unwrap(),
+            FieldValue::Boolean(false)
+        ));
         assert!(coerce_value(&spec, "maybe").is_err());
     }
 
@@ -230,7 +245,7 @@ mod tests {
             FieldValue::Choice { value, index } => {
                 assert_eq!(value, "py");
                 assert_eq!(index, 1);
-            }
+            },
             other => panic!("expected Choice, got {other:?}"),
         }
         assert!(coerce_value(&spec, "cobol").is_err());
@@ -243,7 +258,10 @@ mod tests {
             default: None,
             picker_kind: DateTimeKind::Date,
         };
-        assert!(matches!(coerce_value(&spec, "2026-11-06").unwrap(), FieldValue::DateTime(_)));
+        assert!(matches!(
+            coerce_value(&spec, "2026-11-06").unwrap(),
+            FieldValue::DateTime(_)
+        ));
         assert!(coerce_value(&spec, "2026-11-06T10:00:00Z").is_err());
     }
 

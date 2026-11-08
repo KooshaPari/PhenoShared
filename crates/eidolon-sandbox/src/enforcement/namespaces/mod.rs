@@ -69,13 +69,11 @@
 //!   the parent; enforced isolation (ns + later hooks) runs in the tracked
 //!   child (documented subset).
 
-use std::path::PathBuf;
-
 use eidolon_core::error::PhenoError;
 use eidolon_core::Result;
 
 use crate::codes;
-use crate::enforcement::plan::{EnforcementPlan, UserNsIdMap};
+use crate::enforcement::plan::EnforcementPlan;
 
 /// Env var: truthy enables [`crate::enforcement::NamespacePlan::pid`] in
 /// [`crate::enforcement::plan_from_policy`].

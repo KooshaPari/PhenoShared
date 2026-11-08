@@ -299,6 +299,9 @@ pub fn run_main(args: &[String]) -> i32 {
 }
 
 #[cfg(test)]
+static XCODE_DIR_TEST_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
+#[cfg(test)]
 mod tests {
     use super::*;
     use crate::ios::xcui_bridge::BundleXcuiBridge;
@@ -469,6 +472,3 @@ mod tests {
         let _ = xcui_xcode_integration_enabled();
     }
 }
-
-#[cfg(test)]
-static XCODE_DIR_TEST_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());

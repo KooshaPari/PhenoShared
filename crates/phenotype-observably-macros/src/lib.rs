@@ -128,7 +128,7 @@ impl Parse for MacroOptions {
                                 other
                             ),
                         ));
-                    }
+                    },
                 }
             }
             if input.peek(syn::Token![,]) {
@@ -171,7 +171,7 @@ fn span_field_args(
                     }
                 }
                 None
-            }
+            },
             FnArg::Receiver(_) => None,
         })
         .collect()
@@ -315,10 +315,7 @@ mod tests {
             out.contains("async fn tick"),
             "signature was rewritten: {out}"
         );
-        assert!(
-            out.contains("& self"),
-            "receiver was rewritten/lost: {out}"
-        );
+        assert!(out.contains("& self"), "receiver was rewritten/lost: {out}");
         assert!(
             !out.contains("fn_lifetime"),
             "synthetic lifetime reintroduced: {out}"
@@ -334,7 +331,10 @@ mod tests {
     fn sync_fn_passes_through() {
         let item = quote::quote! { fn helper(x: u32) -> u32 { x + 1 } };
         let out = async_instrumented_impl(quote::quote! {}, item).to_string();
-        assert!(!out.contains("Instrument"), "sync fn was instrumented: {out}");
+        assert!(
+            !out.contains("Instrument"),
+            "sync fn was instrumented: {out}"
+        );
         assert!(out.contains("fn helper"), "sync fn was mangled: {out}");
     }
 }

@@ -40,7 +40,8 @@ use super::apply_seccomp;
 #[cfg(feature = "sandbox-namespaces")]
 use super::{apply_namespaces, park_until_signal, terminate_isolated_child, PidNsSetup};
 use super::{
-    plan_from_policy, CgroupStatus, LandlockFsRules, LandlockStatus, NamespaceStatus, SeccompStatus,
+    plan_from_policy, CgroupStatus, EnforcementPlan, LandlockFsRules, LandlockStatus,
+    NamespaceStatus, SeccompStatus,
 };
 use crate::codes;
 use eidolon_core::error::PhenoError;
@@ -95,53 +96,39 @@ pub fn apply_enabled_enforcement(
         ));
     }
 
-    let mut applied = AppliedEnforcement::default();
-
     #[cfg(feature = "sandbox-namespaces")]
     let mut pid_child_setup = None;
     #[cfg(feature = "sandbox-namespaces")]
-    {
+    let namespaces = {
         let ns_apply = apply_namespaces(&plan)?;
-        applied.namespaces = Some(ns_apply.status);
+        let status = Some(ns_apply.status);
         match ns_apply.setup {
             Some(PidNsSetup::Parent(rx)) => {
                 // Block until child finishes remaining hooks (or reports failure).
                 rx.await_ready()?;
-                return Ok(applied);
+                return Ok(AppliedEnforcement {
+                    namespaces: status,
+                    ..AppliedEnforcement::default()
+                });
             },
             Some(PidNsSetup::Child(tx)) => {
                 pid_child_setup = Some(tx);
             },
             None => {},
         }
-    }
+        status
+    };
 
     // Remaining hooks — in the PID-ns child these run before the ready byte.
     // On failure the child must report + `_exit` (not return Err into a
     // duplicated runtime while the parent already supervises).
-    let rest = (|| -> Result<()> {
-        #[cfg(feature = "sandbox-cgroup")]
-        {
-            applied.cgroup = Some(apply_cgroup(sandbox_id, &plan)?);
-        }
-
-        #[cfg(feature = "sandbox-landlock")]
-        {
-            applied.landlock = Some(apply_landlock(&plan)?);
-        }
-
-        #[cfg(feature = "sandbox-seccomp")]
-        {
-            applied.seccomp = Some(apply_seccomp(&plan)?);
-        }
-        Ok(())
-    })();
+    let rest = remaining_hooks(sandbox_id, &plan);
 
     #[cfg(feature = "sandbox-namespaces")]
     {
         if let Some(tx) = pid_child_setup {
             match rest {
-                Ok(()) => {
+                Ok(_) => {
                     if tx.report_success().is_err() {
                         // Parent sees EOF on the setup pipe; do not unwind a
                         // duplicated Rust runtime.
@@ -153,7 +140,6 @@ pub fn apply_enabled_enforcement(
                         std::process::exit(1);
                     }
                     // Stay alive so restrict_self / filters remain in force.
-                    let _ = applied;
                     park_until_signal();
                 },
                 Err(_) => {
@@ -163,9 +149,35 @@ pub fn apply_enabled_enforcement(
         }
     }
 
-    rest?;
+    let hooks = rest?;
+    #[cfg(feature = "sandbox-namespaces")]
+    let applied = AppliedEnforcement {
+        namespaces,
+        ..hooks
+    };
+    #[cfg(not(feature = "sandbox-namespaces"))]
+    let applied = hooks;
     let _ = (sandbox_id, &plan);
     Ok(applied)
+}
+
+/// Apply the post-namespace enforcement hooks in order (cgroup → Landlock →
+/// seccomp).
+///
+/// Returns the partial [`AppliedEnforcement`] rather than early-returning so a
+/// PID-ns child can observe `Ok`/`Err` and report over the setup pipe before
+/// it parks or `_exit`s.
+fn remaining_hooks(sandbox_id: &str, plan: &EnforcementPlan) -> Result<AppliedEnforcement> {
+    let _ = (sandbox_id, plan);
+    Ok(AppliedEnforcement {
+        #[cfg(feature = "sandbox-cgroup")]
+        cgroup: Some(apply_cgroup(sandbox_id, plan)?),
+        #[cfg(feature = "sandbox-landlock")]
+        landlock: Some(apply_landlock(plan)?),
+        #[cfg(feature = "sandbox-seccomp")]
+        seccomp: Some(apply_seccomp(plan)?),
+        ..AppliedEnforcement::default()
+    })
 }
 
 /// Decorator that runs [`apply_enabled_enforcement`] after a successful inner

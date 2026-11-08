@@ -89,35 +89,30 @@ impl Reference {
     pub fn is_valid(&self) -> bool {
         self.tag.is_some() || self.digest.is_some()
     }
-
-    /// Reconstruct the full reference string.
-    ///
-    /// The output follows the standard OCI convention:
-    /// `<registry>/<repository>:<tag>` or
-    /// `<registry>/<repository>@<digest>` (or both, separated
-    /// by both `:` and `@` if both are present).
-    pub fn to_string(&self) -> String {
-        let mut s = String::new();
-        if let Some(reg) = &self.registry {
-            s.push_str(reg);
-            s.push('/');
-        }
-        s.push_str(&self.repository);
-        if let Some(t) = &self.tag {
-            s.push(':');
-            s.push_str(t);
-        }
-        if let Some(d) = &self.digest {
-            s.push('@');
-            s.push_str(d);
-        }
-        s
-    }
 }
 
+/// Reconstruct the full reference string.
+///
+/// The output follows the standard OCI convention:
+/// `<registry>/<repository>:<tag>` or
+/// `<registry>/<repository>@<digest>` (or both, separated
+/// by both `:` and `@` if both are present).
 impl std::fmt::Display for Reference {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.to_string())
+        if let Some(reg) = &self.registry {
+            f.write_str(reg)?;
+            f.write_str("/")?;
+        }
+        f.write_str(&self.repository)?;
+        if let Some(t) = &self.tag {
+            f.write_str(":")?;
+            f.write_str(t)?;
+        }
+        if let Some(d) = &self.digest {
+            f.write_str("@")?;
+            f.write_str(d)?;
+        }
+        Ok(())
     }
 }
 
@@ -227,7 +222,7 @@ fn split_registry(input: &str) -> (Option<String>, String) {
 /// This is a convenience wrapper around [`parse`] that discards
 /// the parsed components and returns a boolean.
 pub fn is_valid(reference: &str) -> bool {
-    parse(reference).map_or(false, |r| r.is_valid())
+    parse(reference).is_ok_and(|r| r.is_valid())
 }
 
 /// Construct a canonical `<registry>/<repository>:<tag>` reference.

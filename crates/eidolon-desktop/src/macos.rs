@@ -298,7 +298,7 @@ impl DesktopAutomator for MacOSClient {
                 })?;
                 delete.post(core_graphics::event::CGEventTapLocation::HID);
             },
-            eidolon_core::input::InputType::IME => {
+            eidolon_core::input::InputType::Ime => {
                 log::warn!("IME input type not yet implemented on macOS");
             },
         }
@@ -385,8 +385,7 @@ mod tests {
 
     #[test]
     fn macos_client_new_succeeds() {
-        let client = MacOSClient::new().expect("new should succeed");
-        drop(client);
+        let _client = MacOSClient::new().expect("new should succeed");
     }
 
     #[test]
