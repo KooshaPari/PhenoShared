@@ -57,7 +57,7 @@ Verify everything is configured correctly using the checklist.
   - Sign up: https://sentry.io/
   - No payment required for free tier
 - [ ] **GitHub Access:** You have admin or "Maintain" role in the `<REDACTED>` organization
-  - Verify: https://github.com/organizations/<REDACTED>/people
+  - Verify: https://github.com/organizations/&lt;REDACTED&gt;/people
 - [ ] **Safe Password Manager:** You have a place to store DSN tokens securely
   - Examples: 1Password, LastPass, Bitwarden, Apple Keychain
 - [ ] **Time:** You have ~45 uninterrupted minutes
@@ -107,7 +107,7 @@ Use `SENTRY_PROJECTS_TEMPLATE.md` to track:
 
 ### Step 3: Create GitHub Secrets
 
-Go to https://github.com/organizations/<REDACTED>/settings/secrets/actions and create 3 secrets:
+Go to https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions and create 3 secrets:
 
 ```
 Secret Name: SENTRY_DSN_AGILEPLUS

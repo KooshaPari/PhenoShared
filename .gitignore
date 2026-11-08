@@ -193,3 +193,9 @@ cmd/*/trust
 cmd/*/wire
 cmd/*/*.exe
 cmd/*/dist/
+
+# Archival absorption trees are verbatim copies of upstream repos. Their
+# vendor/ directories are part of the preserved content and must be tracked,
+# even though this repo ignores vendor/ for live builds.
+!docs/absorbed-from-*/vendor/
+!docs/absorbed-from-*/vendor/**

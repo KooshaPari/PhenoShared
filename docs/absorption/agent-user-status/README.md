@@ -1,4 +1,4 @@
-# Absorption — <REDACTED>/agent-user-status → phenotype-tooling/crates/agent-user-status
+# Absorption — &lt;REDACTED&gt;/agent-user-status → phenotype-tooling/crates/agent-user-status
 
 **Status:** ABSORBED 2026-07-17
 **Source repo:** `<REDACTED>/agent-user-status` @ `112287548359ba5c18ff1e7b047c8334f050532f` (2026-06-20)

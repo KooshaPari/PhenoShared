@@ -29,8 +29,8 @@ This file supersedes the 2026-06-15 17:35 PDT index that lived here 2026-06-15 �
 | **Pheno submodule pointer bumped** | ✅ | `bd5d807` (delete 3 deprecated config dirs) |
 | **Pyron submodule pointer bumped** | ✅ | `eaebe896` (cargo check --workspace fix) |
 | **NetScript archive (local commit)** | ✅ | `76f3f3f` in NetScript submodule |
-| **NetScript archive (SSH push)** | ✅ | branch `chore/adr-001-archive-2026-06-15` pushed via `~/.ssh/push_key` (<REDACTED> identity) per `findings/ADR-001-NETSCRIPT-ARCHIVE-LOCAL-STATE-2026_06_15.md:8-9` |
-| **NetScript archive (PR + GitHub archive flag)** | ❌ | Dmouse92 gh not collaborator/admin on <REDACTED>/NetScript |
+| **NetScript archive (SSH push)** | ✅ | branch `chore/adr-001-archive-2026-06-15` pushed via `~/.ssh/push_key` (&lt;REDACTED&gt; identity) per `findings/ADR-001-NETSCRIPT-ARCHIVE-LOCAL-STATE-2026_06_15.md:8-9` |
+| **NetScript archive (PR + GitHub archive flag)** | ❌ | Dmouse92 gh not collaborator/admin on &lt;REDACTED&gt;/NetScript |
 | **helios-router DEPRECATED.md** | ✅ | submodule commit `6b44386` + parent pointer bump `c542b210d4` |
 | **L6 evening delta** | ✅ | `L6_PHENO_REPOS_HEALTH_2026_06_15_DELTA_EVENING.md` (15:00 → 17:30 PDT) |
 | **pheno-tracing dedup** | ✅ | top-level `pheno-tracing/` removed (270 LoC); `crates/pheno-tracing/` is the canonical (L4 hexagonal pattern); duplicate `Cargo.toml:52` workspace member removed |
@@ -102,7 +102,7 @@ This file supersedes the 2026-06-15 17:35 PDT index that lived here 2026-06-15 �
 | **ADR-024** | **71-pillar industry-standard audit framework (L1-L71, 9 domains)** | **Accepted 2026-06-17** — see `findings/71-pillar-2026-06-17-schema.md` |
 | **ADR-025** | **ADR-015 v2.1 worklog schema bump (11th column `device:`)** | **Accepted 2026-06-17** — deprecation 2026-06-22 (5 days) |
 | **ADR-026** | **Factory AI Agent Readiness Model as cross-cutting external standard** | **Accepted 2026-06-17** — see <https://docs.factory.ai/web/agent-readiness/overview>; crosswalk in `audit-71-pillar-2026-06-17-wrapup.md` § 10 |
-| **ADR-029** | **Dmouse92 → <REDACTED> migration — absorb all DM92 work to substrate, archive emptied repos** | **Accepted 2026-06-17** — see `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`; 6 PRs opened, 18 Dmouse92 repos archived |
+| **ADR-029** | **Dmouse92 → &lt;REDACTED&gt; migration — absorb all DM92 work to substrate, archive emptied repos** | **Accepted 2026-06-17** — see `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`; 6 PRs opened, 18 Dmouse92 repos archived |
 
 ---
 
@@ -147,14 +147,14 @@ See `plans/2026-06-17-v7-dag-stable.md`. **~7 tracks, 30+ PRs, orchestrator + pa
 - **Track 3 — 71-pillar audit (this turn):** ADR-024 schema + L1-L30→L1-L71 crosswalk + re-probe 10 repos + score + render
 - **Track 4 — ADR-015 v2.1 schema bump (this turn):** ADR-025 + canonical worklog schema update + migration script
 - **Track 5 — HwLedger reclassification (this turn):** ADR-023 Rule 3 P0 deliverable; inventory capabilities, map to substrates, author migration plan
-- **Track 6 — Rebase + push cleaned branch (this turn):** resolve 39-commit divergence, push as <REDACTED>
+- **Track 6 — Rebase + push cleaned branch (this turn):** resolve 39-commit divergence, push as &lt;REDACTED&gt;
 - **Track 7 — Work DAG maintenance (ongoing):** keep `findings/71-pillar-2026-06-17*.md` and `plans/2026-06-17-v7-dag-stable.md` updated weekly
 
-### Track 8 — Dmouse92 → <REDACTED> migration (DONE this turn, L5-104/ADR-029)
+### Track 8 — Dmouse92 → &lt;REDACTED&gt; migration (DONE this turn, L5-104/ADR-029)
 
-User directive 2026-06-17: *"focus solely on the dmouse92 aspects of work — merge all over to <REDACTED> → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on <REDACTED> had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
+User directive 2026-06-17: *"focus solely on the dmouse92 aspects of work — merge all over to &lt;REDACTED&gt; → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on &lt;REDACTED&gt; had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
 
-**Result:** 6 PRs opened on <REDACTED>, 18 Dmouse92 repos archived, 0 net content loss.
+**Result:** 6 PRs opened on &lt;REDACTED&gt;, 18 Dmouse92 repos archived, 0 net content loss.
 
 | PR | Repo | Title |
 |---|---|---|

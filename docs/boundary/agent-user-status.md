@@ -1,4 +1,4 @@
-# Boundary — <REDACTED>/agent-user-status (ABSORBED 2026-07-17)
+# Boundary — &lt;REDACTED&gt;/agent-user-status (ABSORBED 2026-07-17)
 
 **Boundary status:** `absorbed`
 **Absorbing repo:** `<REDACTED>/phenotype-tooling` (`crates/agent-user-status/`)

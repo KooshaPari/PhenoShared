@@ -2,7 +2,7 @@
 
 ## Identity
 - **Repo:** phenotype-org-audits
-- **Owner:** <REDACTED>
+- **Owner:** &lt;REDACTED&gt;
 - **Added to fleet:** 2026-06-26 (DAG wave-1 envelope expansion)
 - **Onboarding branch:** chore/v38-dag-wave-1-2026-06-26
 

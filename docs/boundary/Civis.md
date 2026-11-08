@@ -5,7 +5,7 @@ status: archived
 last_boundary_review: 2026-07-17
 review_cadence: dormant
 in_scope:
-  - "Historical snapshot of <REDACTED>/Civis (Bevy 0.18 emergent civilization godgame) at archive date 2026-07-17"
+  - "Historical snapshot of &lt;REDACTED&gt;/Civis (Bevy 0.18 emergent civilization godgame) at archive date 2026-07-17"
   - "Reference for legacy FR traces (FR-CORE-001, FR-CIV-*, FR-GOV-*) and emergence-charter ADRs"
 out_of_scope:
   - "Active development — repo is archived on GitHub and read-only"

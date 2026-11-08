@@ -382,7 +382,7 @@ Phenotype uses a **multi-layered routing architecture:**
 - **Relationship:** VibeProxy could use LiteLLM as backend instead of custom CLIProxyAPIPlus
 
 ### 2. **cliproxyapi-plusplus** (Go, external)
-- **Status:** External dependency (forked by <REDACTED>, known as cliproxy)
+- **Status:** External dependency (forked by &lt;REDACTED&gt;, known as cliproxy)
 - **Purpose:** Proxy backend for VibeProxy; used by Phenotype for fallback
 - **Integration:** Phenotype has `cliproxy_adapter.py` that proxies to cliproxyapi-plusplus backend
 - **Concern:** Embedded in local setup; possible consolidation with Phenotype's LiteLLM layer

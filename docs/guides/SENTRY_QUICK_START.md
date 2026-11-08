@@ -223,8 +223,8 @@ gh workflow run sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 ## Next Steps
 
 - **Set up Slack notifications**: https://sentry.io/settings/phenotype/integrations/slack/
-- **Enable Session Replays**: https://sentry.io/settings/phenotype/projects/<project>/replay/
-- **Configure Performance Monitoring**: https://sentry.io/settings/phenotype/projects/<project>/performance/
+- **Enable Session Replays**: https://sentry.io/settings/phenotype/projects/&lt;project>/replay/
+- **Configure Performance Monitoring**: https://sentry.io/settings/phenotype/projects/&lt;project>/performance/
 - **Add custom tags**: See full docs at https://docs.sentry.io/
 
 ## Reference

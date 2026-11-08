@@ -66,6 +66,12 @@ regexes = [
   '''PhenotypeTestToken123!''',
   '''PhenotypeInternalToken_?[A-Za-z0-9_]*''',
   '''phenotype-test-(token|key|secret)-[A-Za-z0-9_-]+''',
+  # Dummy Stripe-shaped token used as INPUT to the redaction scrubber in
+  # zz-PhenoObservability's phenotype-observably-tracing tests. The tests
+  # assert that this exact string is replaced by [REDACTED_TOKEN], so the
+  # literal has to be present and unredacted in the source. It is a made-up
+  # value, not a Stripe key.
+  '''sk_live_abc123def456xyz789''',
 ]
 
 # 3. Regex-based allowlist scoped to test/fixture paths only.

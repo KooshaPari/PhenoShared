@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-16 (Pacific) — final state
 **Branch:** main at `1056f3e8`
-**Repo:** <REDACTED>/PhenoShared (formerly PhenoAI)
+**Repo:** &lt;REDACTED&gt;/PhenoShared (formerly PhenoAI)
 
 ## Repository Identity
 
