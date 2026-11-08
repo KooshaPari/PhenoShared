@@ -37,13 +37,15 @@ jobs:
         run: |
           set +e
           # Initialize all outputs to false (critical: every output must be set)
-          echo "has_rust=false" >> "$GITHUB_OUTPUT"
-          echo "has_deny=false" >> "$GITHUB_OUTPUT"
-          echo "has_python=false" >> "$GITHUB_OUTPUT"
-          echo "has_go=false" >> "$GITHUB_OUTPUT"
-          echo "has_typescript=false" >> "$GITHUB_OUTPUT"
-          echo "has_security=false" >> "$GITHUB_OUTPUT"
-          echo "has_trunk=false" >> "$GITHUB_OUTPUT"
+          {
+            echo "has_rust=false"
+            echo "has_deny=false"
+            echo "has_python=false"
+            echo "has_go=false"
+            echo "has_typescript=false"
+            echo "has_security=false"
+            echo "has_trunk=false"
+          } >> "$GITHUB_OUTPUT"
 
           # Rust: needs Cargo.toml AND deny.toml
           if [ -f "Cargo.toml" ] || [ -f "**/Cargo.toml" ]; then
@@ -215,20 +217,22 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # The repo is bun-managed (packageManager: bun@1.3.10). npm cannot
+      # resolve the root package.json's "workspace:*" dependency, so the old
+      # npm ci / npm install pair aborted before lint or test ever ran.
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
-          node-version: "20"
-          cache: "npm"
-      - run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+          bun-version: "1.3.10"
+      - run: bun install --frozen-lockfile
       - name: lint
         run: |
           if [ -f package.json ] && grep -q '"lint"' package.json; then
-            npm run lint 2>&1 || echo "::warning::lint issues (advisory)"
+            bun run lint 2>&1 || echo "::warning::lint issues (advisory)"
           fi
       - name: test
         run: |
           if [ -f package.json ] && grep -q '"test"' package.json; then
-            npm test 2>&1 || echo "::warning::test failures (advisory)"
+            bun run test 2>&1 || echo "::warning::test failures (advisory)"
           fi
 
   security:
