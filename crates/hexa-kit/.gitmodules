@@ -1,9 +1,0 @@
-[submodule "Cmdra"]
-	path = Cmdra
-	url = https://github.com/KooshaPari/Cmdra.git
-[submodule "sharecli"]
-	path = sharecli
-	url = https://github.com/KooshaPari/sharecli.git
-[submodule "thegent-sharecli"]
-	path = thegent-sharecli
-	url = https://github.com/KooshaPari/thegent-sharecli.git

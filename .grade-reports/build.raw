@@ -1,4 +1,0 @@
-[1m[92m   Compiling[0m phenotype-iter v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-iter)
-[1m[92m   Compiling[0m phenotype-errors v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-errors)
-[1m[92m   Compiling[0m phenotype-port-traits v0.2.0 (/Users/kooshapari/CodeProjects/Phenotype/repos/pheno/crates/phenotype-port-traits)
-[1m[92m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 2.71s

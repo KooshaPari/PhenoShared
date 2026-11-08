@@ -1,7 +1,0 @@
-# Bootstrap owner map. Move to org-team aliases once teams are formalized.
-* @KooshaPari
-
-# High-sensitivity paths
-.github/ @KooshaPari
-contracts/ @KooshaPari
-scripts/ @KooshaPari

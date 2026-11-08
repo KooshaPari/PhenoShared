@@ -1,1 +1,0 @@
-# deferred: missing dep (agileplus-domain absent) + MSRV-1.86-incompat let-chain syntax; re-enable post-rationalization

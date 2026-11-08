@@ -1,3 +1,0 @@
-# Clippy configuration for phenotype-xdd-lib
-
-avoid-breaking-exported-api = false

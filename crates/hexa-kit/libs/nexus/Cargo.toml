@@ -1,9 +1,0 @@
-[package]
-name = "nexus"
-version = "0.1.0"
-edition = "2021"
-license = "MIT"
-description = "Service registry and discovery (stub — see MIGRATED.md)"
-
-[lib]
-path = "src/lib.rs"
