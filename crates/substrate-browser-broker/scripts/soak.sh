@@ -8,27 +8,28 @@
 #   3. the profile manifest still parses and holds exactly one generation
 #   4. no lease records are left behind
 #
-# Usage: soak.sh [workers] [iterations] [hold_ms] [ttl_ms]
+# Usage: soak.sh [workers] [iterations] [hold_ms] [ttl_ms] [jitter_ms]
 set -uo pipefail
 
 WORKERS="${1:-6}"
 ITERS="${2:-120}"
 HOLD_MS="${3:-15}"
 TTL_MS="${4:-60}"
+JITTER_MS="${5:-0}"
 TMP_BASE="${SOAK_TMP_BASE:-$HOME/CodeProjects/temp}"
 mkdir -p "$TMP_BASE"
 ROOT="$(mktemp -d "$TMP_BASE/browser-soak.XXXXXX")"
 BIN="${SOAK_BIN:-target/debug/examples/soak_worker}"
 
 echo "root:     $ROOT"
-echo "workers:  $WORKERS   iterations/worker: $ITERS   hold: ${HOLD_MS}ms   ttl: ${TTL_MS}ms"
+echo "workers:  $WORKERS   iterations/worker: $ITERS   hold: ${HOLD_MS}ms   ttl: ${TTL_MS}ms   jitter: ${JITTER_MS}ms"
 
 pids=()
 outs=()
 for i in $(seq 1 "$WORKERS"); do
   out="$ROOT/worker-$i.jsonl"
   outs+=("$out")
-  "$BIN" "$ROOT" alice work "$ITERS" "$HOLD_MS" "$TTL_MS" >"$out" 2>"$ROOT/worker-$i.err" &
+  "$BIN" "$ROOT" alice work "$ITERS" "$HOLD_MS" "$TTL_MS" "$JITTER_MS" >"$out" 2>"$ROOT/worker-$i.err" &
   pids+=($!)
 done
 
@@ -130,6 +131,12 @@ if expired_but_held == len(rows) and rows:
     print("NOTE: TTL shorter than hold; every hold correctly expired mid-flight")
 if leftover:
     print(f"WARN: {leftover} lease record(s) left after revoke")
+if len(holders) < 2:
+    print(
+        "NOTE: only 1 distinct holder. Contention was NOT exercised; a worker that "
+        "revokes and immediately re-grants starves the others. Re-run with jitter_ms > 0 "
+        "(5th argument) to open a yield window."
+    )
 print("PASS" if status == 0 else "FAILED")
 sys.exit(status)
 PY

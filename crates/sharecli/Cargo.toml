@@ -95,7 +95,15 @@ opentelemetry = { version = "0.32", features = ["trace"] }
 opentelemetry_sdk = { version = "0.32.1", features = ["rt-tokio", "trace"] }
 opentelemetry-otlp = { version = "0.32", features = ["http-proto", "reqwest-rustls", "trace"] }
 tracing-opentelemetry = "0.33"
-jsonwebtoken = { version = "11", features = ["use_pem", "rust_crypto"] }
+# The `aws_lc_rs` backend is used instead of `rust_crypto`: it supports the
+# same algorithm set this crate needs (HS256/ES256/ES384/RS256/RS384/RS512/EdDSA)
+# but does NOT pull the `rsa`, `p256`, `p384`, `ecdsa`, `elliptic-curve` or
+# `crypto-bigint` crates. Those RustCrypto crates carry two unfixable-in-place
+# advisories: RUSTSEC-2023-0071 (Marvin Attack, RSA timing sidechannel) and
+# RUSTSEC-2026-0387 (crypto-bigint constant-time branches).
+# `aws-lc-rs` is already a transitive dependency of this crate via
+# reqwest -> hyper-rustls -> rustls, so this adds no new build dependency.
+jsonwebtoken = { version = "11", features = ["use_pem", "aws_lc_rs"] }
 
 [features]
 default = []
