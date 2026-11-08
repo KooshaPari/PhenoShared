@@ -233,8 +233,7 @@ fn mcp_server_validates_prompt_spec() {
 /// AppleScript error.
 #[cfg(target_os = "macos")]
 #[test]
-#[ignore = "PHE-SH-009 pre-existing: deferred fix"]
-#[ignore = "PHE-SH-013 pre-existing: needs macOS applescript test env"]
+#[ignore = "PHE-SH-009 pre-existing: deferred fix; needs macOS applescript test env (PHE-SH-013)"]
 fn mcp_elicit_boolean_renders_without_applescript_error() {
     let mut h = McpHandle::spawn();
     perform_handshake(&mut h);

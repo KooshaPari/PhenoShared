@@ -1,0 +1,21 @@
+[package]
+name = "substrate-browser-cdp"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Chrome DevTools Protocol provider: headless launch, snapshot, act, capture."
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+futures-util.workspace = true
+tokio = { workspace = true, features = ["net", "fs"] }
+tokio-tungstenite = "0.29"
+base64 = "0.22"
+
+[dev-dependencies]
+tempfile.workspace = true
+tokio = { workspace = true, features = ["net", "io-util", "macros", "rt-multi-thread", "fs"] }

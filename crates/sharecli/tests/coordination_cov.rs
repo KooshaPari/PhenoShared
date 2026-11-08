@@ -1,8 +1,6 @@
 //! FR: FR-003
 //! T-810 coordination + agent policy lift - CommandLockStore, PriorityTaskQueue, PauseCode.
 
-use std::path::PathBuf;
-
 use sharecli::agent_call_policy::{AgentCallPolicy, PauseCode};
 use sharecli::coordination::{CommandLockStore, LockStatus, PriorityTaskQueue, QueuePriority};
 
@@ -165,7 +163,6 @@ fn fr003_priority_task_queue_ordering_and_lifecycle() {
     assert!(!low.id.is_empty());
     assert!(!normal.id.is_empty());
     assert!(!high.id.is_empty());
-    let _ = PathBuf::from(path);
 }
 
 /// FR-003 — AgentCallPolicy PauseCode matrix and grep->rg normalization.

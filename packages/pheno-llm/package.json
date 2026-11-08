@@ -23,8 +23,8 @@
   "repository": { "type": "git", "url": "https://github.com/KooshaPari/phenotype-infrakit" },
   "license": "MIT",
   "devDependencies": {
-    "tsup": "^8.0.0",
+    "tsup": "^9.0.0",
     "typescript": "^5.4.0",
-    "vitest": "^4.1.8"
+    "vitest": "^5.1.0"
   }
 }

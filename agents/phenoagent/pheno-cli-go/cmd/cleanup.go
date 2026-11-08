@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	cleanupRepo       string
-	cleanupDryRun    bool
+	cleanupRepo     string
+	cleanupDryRun   bool
 	cleanupBranches bool
 	cleanupGc       bool
 )
@@ -103,11 +103,11 @@ func cleanupMergedBranches() error {
 
 	// Protected branches
 	protected := map[string]bool{
-		"main":          true,
-		"master":        true,
-		"develop":       true,
-		"staging":       true,
-		"production":     true,
+		"main":                true,
+		"master":              true,
+		"develop":             true,
+		"staging":             true,
+		"production":          true,
 		string(currentBranch): true,
 	}
 

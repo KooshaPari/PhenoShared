@@ -45,23 +45,23 @@ repos:
 
       - id: agent-file-size-check
         name: agent file size check
-        entry: bash -c 'find src/ -name "*.py" -exec wc -l {} + | awk '\''$1 > 500 {print "❌ File too long (" $1 " lines): " $2; exit 1}'\'''
+        entry: >-
+          bash -c 'find src/ -name "*.py" -exec wc -l {} + | awk "\$1 > 500 {printf \"file too long: %s (%s lines)\n\", \$2, \$1; exit 1}"'
         language: system
         pass_filenames: false
         stages: [pre-commit]
 
       - id: governance-lint
         name: governance lint
-        entry: bash -c '
-          echo "Checking governance standards...";
+        entry: |
+          bash -c '
+          echo "Checking governance standards..."
           for f in "$@"; do
             case "$f" in
-              *.md)
-                grep -q "^#" "$f" || echo "⚠️  $f: no heading found"
-                ;;
+              *.md) grep -q "^#" "$f" || echo "WARN: $f has no heading" ;;
             esac
           done
-        '
+          '
         language: system
         stages: [pre-commit]
 

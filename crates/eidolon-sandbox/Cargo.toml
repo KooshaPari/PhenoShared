@@ -148,7 +148,18 @@ redis = { workspace = true, optional = true }
 # wraps: landlock 0.4 — Landlock LSM helpers (Linux-only; cfg-gated).
 [target.'cfg(target_os = "linux")'.dependencies]
 landlock = { workspace = true, optional = true }
-nix = { workspace = true, optional = true }
+# The crate-level `nix` dependency carried no features, so `nix::sched`,
+# `nix::sys::signal`, `nix::sys::wait` and `nix::mount` were all unresolved
+# and the `sandbox-namespaces` feature could never compile. Enable exactly the
+# modules this crate uses.
+nix = { workspace = true, optional = true, features = [
+    "fs",
+    "mount",
+    "process",
+    "sched",
+    "signal",
+    "user",
+] }
 libc = { workspace = true, optional = true }
 
 # wraps: seccompiler 0.5 — seccomp-bpf (Linux little-endian only; cfg-gated).

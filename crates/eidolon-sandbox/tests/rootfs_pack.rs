@@ -15,7 +15,7 @@ use eidolon_sandbox::{LaunchPlan, RootfsFormat, UnikernelBackend, UnikernelLaunc
 use std::fs;
 use std::io::Write;
 use std::os::unix::fs::PermissionsExt;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
 static ENV_LOCK: Mutex<()> = Mutex::new(());
@@ -63,7 +63,7 @@ fn durable_temp_dir(name: &str) -> PathBuf {
     path
 }
 
-fn fake_agent_bin(dir: &PathBuf) -> PathBuf {
+fn fake_agent_bin(dir: &Path) -> PathBuf {
     let p = dir.join("fake-eidolon-vsock-agent");
     let mut f = fs::File::create(&p).expect("create agent");
     writeln!(f, "#!/bin/sh\necho fake-it-agent").unwrap();

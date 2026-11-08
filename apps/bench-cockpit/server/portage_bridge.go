@@ -115,6 +115,7 @@ func normalizeJobEnvironment(job map[string]interface{}) error {
 //  1. {"mode":"hello_world"} or empty → oracle hello-world smoke
 //  2. {"mode":"path","task_path":"...","agent":"oracle"} — always attaches --plugin langfuse
 //  3. full JobConfig JSON with tasks[] (written to -c)
+//
 // Degrades to 503 when the binary is missing; 400 when PORTAGE_ROOT unset.
 func portageRunHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
