@@ -6,7 +6,7 @@
 //! `event.rs`, `traits.rs`, and `virtual_stage.rs`.
 
 use eidolon_core::event::{AutomationEvent, EventPayload, EventType, Platform};
-use eidolon_core::input::{InputType, PointerAction, PointerInput, TextInput};
+use eidolon_core::input::{PointerInput, TextInput};
 use eidolon_core::stage_error::{StageError, StageResult};
 use eidolon_core::viewport::Viewport;
 use proptest::prelude::*;

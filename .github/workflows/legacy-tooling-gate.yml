@@ -45,14 +45,14 @@ jobs:
         run: pip install pyyaml
 
       - name: Upload scan report (JSON)
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: legacy-tooling-report-json
           path: legacy_tooling_report.json
           retention-days: 30
 
       - name: Upload scan report (Markdown)
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: legacy-tooling-report-md
           path: legacy_tooling_report.md

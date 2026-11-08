@@ -16,7 +16,7 @@ Three repositories form a *team-coordination-over-git* stack. They are intention
 | [`<REDACTED>/phenotype-router`](https://github.com/KooshaPari/phenotype-router) | Rust | library | Routes messages across git workspaces; depends on PhenoVCS for identity. | active (last push 2026-09-09) |
 | [`<REDACTED>/phenotype-teamcomm`](https://github.com/KooshaPari/phenotype-teamcomm) | Rust | library | Human-team communication patterns on top of PhenoVCS and phenotype-router. | active (last push 2026-09-10) |
 
-All three live on the <REDACTED> GitHub account under the Phenotype-org umbrella. None is archived. None is private.
+All three live on the &lt;REDACTED&gt; GitHub account under the Phenotype-org umbrella. None is archived. None is private.
 
 ## Dependency graph
 

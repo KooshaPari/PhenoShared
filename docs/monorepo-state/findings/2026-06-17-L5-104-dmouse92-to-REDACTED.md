@@ -1,11 +1,11 @@
-# L5-104 — Dmouse92 → <REDACTED> Migration Audit (2026-06-17)
+# L5-104 — Dmouse92 → &lt;REDACTED&gt; Migration Audit (2026-06-17)
 
 **Status:** EXECUTION COMPLETE (2026-06-17 20:55 PDT)
 **Branch:** `chore/w5-adrs-sota-2026-06-15` (this repo)
-**Auth:** `gh` is **<REDACTED>** (active) for KP pushes; Dmouse92 (via `gh auth switch`) for Dmouse92 archives.
+**Auth:** `gh` is **&lt;REDACTED&gt;** (active) for KP pushes; Dmouse92 (via `gh auth switch`) for Dmouse92 archives.
 **Repo matrix:** 26 Dmouse92 repos total; 20 Phenotype-related; 6 personal (skip).
-**Strategy:** (a) merge Dmouse92 → <REDACTED>; (b) reconcile/absorb to proper substrate per ADR-013/023; (c) archive emptied Dmouse92 repos.
-**Final:** 6 PRs opened on <REDACTED>, 18 Dmouse92 repos archived, 0 net content loss.
+**Strategy:** (a) merge Dmouse92 → &lt;REDACTED&gt;; (b) reconcile/absorb to proper substrate per ADR-013/023; (c) archive emptied Dmouse92 repos.
+**Final:** 6 PRs opened on &lt;REDACTED&gt;, 18 Dmouse92 repos archived, 0 net content loss.
 
 ---
 
@@ -122,9 +122,9 @@
 **Status:** DRAFTED (no subagent needed)
 
 - Dmouse92 main is 4 months stale (2026-02-26)
-- <REDACTED> has 10+ recent commits (SLSA, attestations, SLOs, coverage ratchet, decision records, AI-DD metadata, etc.)
+- &lt;REDACTED&gt; has 10+ recent commits (SLSA, attestations, SLOs, coverage ratchet, decision records, AI-DD metadata, etc.)
 - `chore/stacked-prs-governance` branch is also stale (2026-02-26)
-- **Verdict:** Fully absorbed on <REDACTED>. **Action: archive Dmouse92 phenodocs.**
+- **Verdict:** Fully absorbed on &lt;REDACTED&gt;. **Action: archive Dmouse92 phenodocs.**
 
 ### 2.4 AgilePlus
 
@@ -133,8 +133,8 @@
 - Dmouse92 main has 2 unique commits:
   - `f868d18 fix(audit): apply W4 SOTA findings across 12 crates` — duplicate of KP `ad01a98` (same subject, divergent SHA)
   - `2a8cb6d feat(domain+hook): add FeatureState::is_shippable() + chrono dev-dep` — possibly unique
-- <REDACTED> is significantly ahead (W4 governance rollout, shared-core traceability spine, consolidate all branches)
-- **Action:** Cherry-pick `2a8cb6d` if not present on <REDACTED> (verify with `gh api repos/<REDACTED>/AgilePlus/commits?path=crates/agileplus/domain&per_page=5`), then archive Dmouse92 AgilePlus.
+- &lt;REDACTED&gt; is significantly ahead (W4 governance rollout, shared-core traceability spine, consolidate all branches)
+- **Action:** Cherry-pick `2a8cb6d` if not present on &lt;REDACTED&gt; (verify with `gh api repos/<REDACTED>/AgilePlus/commits?path=crates/agileplus/domain&per_page=5`), then archive Dmouse92 AgilePlus.
 
 ### 2.5 forgecode
 
@@ -154,7 +154,7 @@
 | **C** Only on DM92 — auto-generated (Dependabot, Renovate, PR bots) | 13 | Ignore |
 | **C** Only on DM92 — unique Phenotype work | **0** | **None** |
 
-**Verdict:** 0 of 378 Dmouse92/forgecode branches need migration to <REDACTED>/forgecode. **Action: archive `Dmouse92/forgecode` entirely.**
+**Verdict:** 0 of 378 Dmouse92/forgecode branches need migration to &lt;REDACTED&gt;/forgecode. **Action: archive `Dmouse92/forgecode` entirely.**
 
 ### 2.6 PhenoCompose
 
@@ -270,7 +270,7 @@
 
 | Time | Step | Result |
 |---|---|---|
-| 19:00 | `gh auth status` → <REDACTED> active | OK |
+| 19:00 | `gh auth status` → &lt;REDACTED&gt; active | OK |
 | 19:05 | `gh repo list Dmouse92` → 26 repos | OK |
 | 19:08 | `gh repo list <REDACTED>` → 138 repos | OK |
 | 19:12 | Cross-reference matrix — 20 Phenotype-related DM92 repos | OK |
@@ -330,7 +330,7 @@
 | 19 | PhenoContracts | A | Archive DM92 | — | self | archived |
 | 20 | phenotype-teamcomm | E (identical) | Archive DM92 | — | self | archived |
 
-**Totals:** 2 substantive migrations (dispatch-mcp → substrate, pheno → substrate), 18 archives, 1 verification (AgilePlus). 6 PRs opened on <REDACTED>; 0 net content loss; all Dmouse92 work fully absorbed or discarded.
+**Totals:** 2 substantive migrations (dispatch-mcp → substrate, pheno → substrate), 18 archives, 1 verification (AgilePlus). 6 PRs opened on &lt;REDACTED&gt;; 0 net content loss; all Dmouse92 work fully absorbed or discarded.
 
 ---
 
@@ -398,7 +398,7 @@ DM92 forgecode is a stale 1:1 mirror of upstream `tailcallhq/forgecode` (NOT `aa
 ## 5. Stale / warnings
 
 - **Archive ≠ delete** — initial action is archive (read-only marker). Delete only after 90-day archive retention (GitHub policy). 18 Dmouse92 repos are archived 2026-06-17 20:36 PDT.
-- **Dmouse92 auth switch required** — `gh` is currently <REDACTED>. Archive commands against Dmouse92 repos require `gh auth switch --user Dmouse92`. KP push target remains <REDACTED>.
+- **Dmouse92 auth switch required** — `gh` is currently &lt;REDACTED&gt;. Archive commands against Dmouse92 repos require `gh auth switch --user Dmouse92`. KP push target remains &lt;REDACTED&gt;.
 - **pheno-mcp-router substrate publication done** — substrate was local-only at start of session; subagent E created `<REDACTED>/pheno-mcp-router` and pushed initial commit. Default branch = `chore/l3-57-pheno-plugin-registry-2026-06-11`. 3 substrate PRs (#1-#3) base on this default.
 - **Bulk archive required care** — 18 repos archived in a single batch via `gh auth switch --user Dmouse92` + per-repo `gh repo archive`; safe because Dmouse92 is the owner of those repos.
 - **Civis full fetch timed out** — KP/Civis main is too large to clone within 90s; used `--depth=1` for verdict; full clone deferred.

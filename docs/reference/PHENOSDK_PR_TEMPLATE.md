@@ -127,7 +127,7 @@ This package depends on `@phenotype/pheno-core` and provides production-proven p
 #### What's Included
 
 **Event Sourcing Module**:
-- EventEnvelope<T> with UUIDv4 tracking
+- EventEnvelope&lt;T> with UUIDv4 tracking
 - SHA-256 hash chain computation and verification
 - EventStore trait with 6 methods (append, getEvents, etc.)
 - InMemoryEventStore for testing

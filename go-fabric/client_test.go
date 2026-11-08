@@ -8,6 +8,7 @@ import (
 	"net"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -84,12 +85,12 @@ func (md *mockDaemon) Close() {
 // ---------------------------------------------------------------------------
 
 var (
-	healthResp = `{"status":"healthy","uptime_s":3600,"topology_epoch":42,"active_leases":7,"active_plans":3}`
-	topologyResp = `{"type":"probe_response","status":"ok","topology_epoch":42,"topology_name":"test-topo","node_count":2,"edge_count":1,"nodes":[{"id":"n1","label":"Node One","locality":"L5","cap_count":3,"tags":["gpu"]},{"id":"n2","label":"Node Two","locality":"L3","cap_count":1,"tags":[]}],"edges":[{"id":"e1","from":"n1","to":"n2","locality":"L2"}],"active_leases":7,"active_plans":3}`
-	routesResp = `{"type":"routes_response","routes":[{"intent_id":"abc123","steps":3,"topology_epoch":42,"estimated_latency_us":1500,"tags":["fast"]}]}`
-	capsResp = `{"type":"capabilities_response","capabilities":[{"node_name":"n1","descriptor_id":"cap-1","trust":"Trusted"}]}`
+	healthResp    = `{"status":"healthy","uptime_s":3600,"topology_epoch":42,"active_leases":7,"active_plans":3}`
+	topologyResp  = `{"type":"probe_response","status":"ok","topology_epoch":42,"topology_name":"test-topo","node_count":2,"edge_count":1,"nodes":[{"id":"n1","label":"Node One","locality":"L5","cap_count":3,"tags":["gpu"]},{"id":"n2","label":"Node Two","locality":"L3","cap_count":1,"tags":[]}],"edges":[{"id":"e1","from":"n1","to":"n2","locality":"L2"}],"active_leases":7,"active_plans":3}`
+	routesResp    = `{"type":"routes_response","routes":[{"intent_id":"abc123","steps":3,"topology_epoch":42,"estimated_latency_us":1500,"tags":["fast"]}]}`
+	capsResp      = `{"type":"capabilities_response","capabilities":[{"node_name":"n1","descriptor_id":"cap-1","trust":"Trusted"}]}`
 	heartbeatResp = `{"type":"heartbeat_ack","status":"ok"}`
-	errorResp = `{"error":"server_busy","message":"max connections reached"}`
+	errorResp     = `{"error":"server_busy","message":"max connections reached"}`
 )
 
 // ---------------------------------------------------------------------------
@@ -355,10 +356,9 @@ func TestDaemonError(t *testing.T) {
 
 func TestConnectionRetry(t *testing.T) {
 	// Start daemon that closes first connection, then accepts second.
-	var attempts int32
+	var attempts atomic.Int32
 	daemon := startMockDaemon(t, func(line string) string {
-		attempts++
-		if attempts <= 1 {
+		if attempts.Add(1) <= 1 {
 			// Close the connection on first request to simulate connection drop.
 			return "" // empty response triggers retry
 		}

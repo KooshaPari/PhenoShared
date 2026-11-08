@@ -3,7 +3,7 @@
 **Status:** ABSORBED (2026-09-16)
 **Former Class:** pooled-foundation
 **Former Repository ID:** 1220333985
-**Target:** <REDACTED>/pheno (crates/)
+**Target:** &lt;REDACTED&gt;/pheno (crates/)
 
 ## Absorption Summary
 

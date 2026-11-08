@@ -12,28 +12,28 @@ status: active
 last_boundary_review: 2026-06-17
 review_cadence: 30d
 in_scope:
-  - "<to be filled>"
+  - "&lt;to be filled>"
 out_of_scope:
-  - "<to be filled>"
+  - "&lt;to be filled>"
 ---
 
 # Boundary — phenodocs
 
 ## In Scope
 
-<To be filled.>
+&lt;To be filled.>
 
 ## Out of Scope
 
 | Not here | Lives in | Reason |
 | -------- | -------- | ------ |
-| <capability> | <other-repo-or-N/A> | <why> |
+| &lt;capability> | <other-repo-or-N/A> | &lt;why> |
 
 ## Boundary Crossings
 
 | Crossing | Direction | Surface | Status |
 | -------- | --------- | ------- | ------ |
-| <capability or interface> | <this-repo→other\|other→this-repo> | <Trait / HTTP / CLI / file / event> | <green\|amber\|red> |
+| &lt;capability or interface> | <this-repo→other\|other→this-repo> | <Trait / HTTP / CLI / file / event> | <green\|amber\|red> |
 
 ## Last Boundary Review
 

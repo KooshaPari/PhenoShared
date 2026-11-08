@@ -27,7 +27,11 @@ path = "src/lib.rs"
 
 [dependencies]
 # CLI
-clap = { version = "4.5", features = ["derive", "env"] }
+# `wrap_help` is explicit so help output does not depend on whether some other
+# workspace crate happens to unify clap's wrap feature into this build. The
+# golden snapshot tests compare `--help` byte for byte, and feature unification
+# differs between `-p sharecli` and a full-workspace build.
+clap = { version = "4.5", features = ["derive", "env", "wrap_help"] }
 clap_complete = "4"
 clap_mangen = "0.3"
 tokio = { version = "1", features = ["full"] }
@@ -48,9 +52,14 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 toml = "1.1"
 
-# Process management (substrate SDK + adapter)
-substrate = { git = "https://github.com/KooshaPari/substrate", default-features = false }
-runtime-process = { git = "https://github.com/KooshaPari/substrate", package = "runtime-process" }
+# Process management (substrate SDK + adapter).
+# Both resolve to in-workspace crates: the private substrate remote is not
+# readable by the CI token, and mixing a git facade with an adapter from a
+# different substrate_core copy yields two distinct
+# `substrate_core::process_port::ProcessPort` traits, so `spawn`/`kill_group`
+# implemented by the local `CommandGroupProcess` fall out of scope.
+substrate = { path = "../substrate", default-features = false }
+runtime-process = { path = "../runtime-process" }
 sysinfo = "0.39"
 
 # Zig hot core: POSIX semaphore, posix_spawn, setpriority, waitpid
@@ -86,7 +95,15 @@ opentelemetry = { version = "0.32", features = ["trace"] }
 opentelemetry_sdk = { version = "0.32.1", features = ["rt-tokio", "trace"] }
 opentelemetry-otlp = { version = "0.32", features = ["http-proto", "reqwest-rustls", "trace"] }
 tracing-opentelemetry = "0.33"
-jsonwebtoken = { version = "11", features = ["use_pem", "rust_crypto"] }
+# The `aws_lc_rs` backend is used instead of `rust_crypto`: it supports the
+# same algorithm set this crate needs (HS256/ES256/ES384/RS256/RS384/RS512/EdDSA)
+# but does NOT pull the `rsa`, `p256`, `p384`, `ecdsa`, `elliptic-curve` or
+# `crypto-bigint` crates. Those RustCrypto crates carry two unfixable-in-place
+# advisories: RUSTSEC-2023-0071 (Marvin Attack, RSA timing sidechannel) and
+# RUSTSEC-2026-0387 (crypto-bigint constant-time branches).
+# `aws-lc-rs` is already a transitive dependency of this crate via
+# reqwest -> hyper-rustls -> rustls, so this adds no new build dependency.
+jsonwebtoken = { version = "11", features = ["use_pem", "aws_lc_rs"] }
 
 [features]
 default = []

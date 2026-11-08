@@ -20,7 +20,7 @@
 | Not here | Lives in | Reason |
 | -------- | -------- | ------ |
 | Config loading mechanism | `pheno` monorepo `crates/phenotype-config/` | The federated crate only defines schema |
-| Runtime reload | `pheno-runtime-config` (in `pheno`) | ADR-095 Reloadable<T> pattern |
+| Runtime reload | `pheno-runtime-config` (in `pheno`) | ADR-095 Reloadable&lt;T> pattern |
 | Vault storage | `Authvault` (AuthKit absorbed) | Secret material lives in vault |
 
 ## Boundary Crossings

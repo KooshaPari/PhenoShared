@@ -17,7 +17,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Security Workflow**: https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/security.yml
 - **Benchmark Workflow**: https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/benchmark.yml
 - **Release Workflow**: https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/release.yml
-- **Coverage Dashboard**: https://codecov.io/gh/<REDACTED>/phenotype-infrakit
+- **Coverage Dashboard**: https://codecov.io/gh/&lt;REDACTED&gt;/phenotype-infrakit
 
 ## Workflow 1: CI (Build, Lint, Test, Coverage)
 

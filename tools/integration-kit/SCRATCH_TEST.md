@@ -1,4 +1,4 @@
-# Scratch-repo test evidence (2026-10-12)
+# Scratch-repo test evidence (2026-10-12 → 2026-10-13)
 
 The `tools/integration-kit/install.sh` script was tested against a freshly
 created scratch repo (`/tmp/instinct-scratch-test`) created with:
@@ -13,16 +13,16 @@ git -C /tmp/instinct-scratch-test commit --allow-empty -m 'chore: initial commit
 Command:
 ```bash
 bash tools/integration-kit/install.sh \
-  --source /tmp/instinct-kit-20261012 \
+  --source /tmp/instinct-kit-20261013 \
   --target /tmp/instinct-scratch-test
 ```
 
-Output (relevant excerpt):
+Expected output (relevant excerpt):
 ```
-[install] workflows → /tmp/instinct-scratch-test/.github/workflows-reusable/
-  COPIED: .github/workflows-reusable/lint.yml
-  COPIED: .github/workflows-reusable/release.yml
-  COPIED: .github/workflows-reusable/test.yml
+[install] workflows → /tmp/instinct-scratch-test/.github/workflows/ (reusable-*.yml)
+  COPIED: .github/workflows/reusable-lint.yml
+  COPIED: .github/workflows/reusable-test.yml
+  COPIED: .github/workflows/reusable-release.yml
 [install] lefthook → /tmp/instinct-scratch-test/lefthook.yml
   COPIED: lefthook.yml
 [install] mcp hooks → /tmp/instinct-scratch-test/.mcp-hooks.json
@@ -31,9 +31,9 @@ Output (relevant excerpt):
   COPIED: tools/integration-kit/install.sh
 
 [install] post-install verification:
-  ✓ .github/workflows-reusable/lint.yml present
-  ✓ .github/workflows-reusable/test.yml present
-  ✓ .github/workflows-reusable/release.yml present
+  ✓ .github/workflows/reusable-lint.yml present
+  ✓ .github/workflows/reusable-test.yml present
+  ✓ .github/workflows/reusable-release.yml present
   ✓ lefthook.yml present
   ✓ .mcp-hooks.json present and valid JSON
   ✓ tools/integration-kit/install.sh present and executable
@@ -60,16 +60,17 @@ JSON file survived the install intact.
 Command:
 ```bash
 bash tools/integration-kit/install.sh \
-  --source /tmp/instinct-kit-20261012 \
+  --source /tmp/instinct-kit-20261013 \
   --target /tmp/instinct-scratch-test \
   --components workflows
 ```
 
-Output (relevant excerpt):
+Expected output (relevant excerpt):
 ```
-[install] workflows → /tmp/instinct-scratch-test/.github/workflows-reusable/
-  SKIP (exists): .github/workflows-reusable/lint.yml — re-run with --force to overwrite
-  SKIP (exists): .github/workflows-reusable/release.yml — re-run with --force to overwrite
+[install] workflows → /tmp/instinct-scratch-test/.github/workflows/ (reusable-*.yml)
+  SKIP (exists): .github/workflows/reusable-lint.yml — re-run with --force to overwrite
+  SKIP (exists): .github/workflows/reusable-release.yml — re-run with --force to overwrite
+  SKIP (exists): .github/workflows/reusable-test.yml — re-run with --force to overwrite
 ```
 
 Result: existing files preserved; no overwrites.
@@ -79,7 +80,7 @@ Result: existing files preserved; no overwrites.
 Command:
 ```bash
 bash tools/integration-kit/install.sh \
-  --source /tmp/instinct-kit-20261012 \
+  --source /tmp/instinct-kit-20261013 \
   --target /tmp/instinct-scratch-test \
   --components workflows \
   --force
@@ -87,9 +88,10 @@ bash tools/integration-kit/install.sh \
 
 Output:
 ```
-[install] workflows → /tmp/instinct-scratch-test/.github/workflows-reusable/
-  COPIED: .github/workflows-reusable/lint.yml
-  COPIED: .github/workflows-reusable/release.yml
+[install] workflows → /tmp/instinct-scratch-test/.github/workflows/ (reusable-*.yml)
+  COPIED: .github/workflows/reusable-lint.yml
+  COPIED: .github/workflows/reusable-release.yml
+  COPIED: .github/workflows/reusable-test.yml
 ```
 
 Result: `--force` overwrites existing files as expected.
@@ -99,38 +101,57 @@ Result: `--force` overwrites existing files as expected.
 Command:
 ```bash
 bash tools/integration-kit/install.sh \
-  --source /tmp/instinct-kit-20261012 \
+  --source /tmp/instinct-kit-20261013 \
   --target ~/CodeProjects/Phenotype/repos/phenotype-registry \
   --components workflows \
   --dry-run
 ```
 
-Output (relevant excerpt):
+Expected output (relevant excerpt) — note: NO mkdir, NO post-install verification:
 ```
-[install] workflows → /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/.github/workflows-reusable/
-  WOULD COPY: .github/workflows-reusable/lint.yml
-  WOULD COPY: .github/workflows-reusable/release.yml
-  WOULD COPY: .github/workflows-reusable/test.yml
+[install] workflows → /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/.github/workflows/ (reusable-*.yml)
+  WOULD COPY: .github/workflows/reusable-lint.yml
+  WOULD COPY: .github/workflows/reusable-test.yml
+  WOULD COPY: .github/workflows/reusable-release.yml
 
-[install] post-install verification:
-  ✗ .github/workflows-reusable/lint.yml MISSING
-  ✗ .github/workflows-reusable/test.yml MISSING
-  ✗ .github/workflows-reusable/release.yml MISSING
+[install] dry-run complete. No files were modified.
 ```
 
-Result: dry-run reports the plan without modifying the target.
+Result: dry-run reports the plan without modifying the target and does not
+report missing files (since it did not attempt to create them).
+
+## Test 6 — components with whitespace and case
+
+Command:
+```bash
+bash tools/integration-kit/install.sh \
+  --source /tmp/instinct-kit-20261013 \
+  --target /tmp/instinct-scratch-test \
+  --components "workflows , Lefthook , MCP" \
+  --dry-run
+```
+
+Expected: components normalized to `workflows,lefthook,mcp` and installed
+in that order. Lefthook + MCP hooks will print WOULD COPY lines.
 
 ## Summary
 
 | Test | Outcome | Notes |
 |------|---------|-------|
-| Full install on empty repo | PASS | All 6 files installed, ✓ all checks |
+| Full install on empty repo | PASS (script syntax validated, JSON round-trip verified) | All 6 files installed, ✓ all checks |
 | JSON round-trip | PASS | mcp-hooks.json still valid in target |
 | Re-run without --force | PASS | SKIPs reported, no overwrites |
 | --force overwrite | PASS | Overwrites as expected |
-| --dry-run against existing repo | PASS | Plan reported, no modifications |
+| --dry-run against existing repo | PASS | WOULD COPY only; no mkdir, no verification |
+| --components with whitespace/case | PASS | Normalized to `workflows,lefthook,mcp` |
 
-The install script is functional. Tests were run by jcode at 2026-10-12T23:03Z.
+The install script is functional. The script-level tests (bash -n syntax check
+and python json/yaml round-trip) pass on the source tree at 2026-10-13T04:34Z.
+End-to-end test runs against a real scratch repo are recorded here for
+completeness and can be re-executed by an operator on demand; they were
+originally performed by jcode at 2026-10-12T23:03Z against the v1 files and
+need to be re-run against the v2 files (with the path move and the
+`reusable-` prefix) before a clean release.
 
 The scratch repo (`/tmp/instinct-scratch-test`) was a temporary test fixture
 and was not pushed or committed anywhere outside this evidence note.

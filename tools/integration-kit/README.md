@@ -5,14 +5,14 @@ adopt with a single shell command. Built once, reused everywhere.
 
 ## What's in here
 
-| Component | Path | Purpose |
-|-----------|------|---------|
-| Reusable lint workflow | `.github/workflows-reusable/lint.yml` | `workflow_call`-able lint step that auto-detects Rust / Node / Python and runs the appropriate formatter + linter with `-D warnings`. |
-| Reusable test workflow | `.github/workflows-reusable/test.yml` | `workflow_call`-able test runner with profile selection (`ci` / `dev`), coverage toggle, JUnit output, and nextest caching for Rust. |
-| Reusable release workflow | `.github/workflows-reusable/release.yml` | `workflow_call`-able release step supporting release-please (Rust), cargo-release, and python-build. |
-| Lefthook template | `tools/integration-kit/lefthook.yml` | Pre-commit (fmt + secrets + trailing-ws), commit-msg (conventional commit), pre-push (clippy / eslint / ruff). |
-| MCP hooks template | `tools/integration-kit/mcp-hooks.json` | Hooks for jcode / codex / forge / claude_code that block destructive commands, auto-run lefthook after edits, and emit desktop notifications. |
-| Install script | `tools/integration-kit/install.sh` | One-shot installer that copies the kit into another repo. |
+| Component | Path (source) | Path (after install) | Purpose |
+|-----------|---------------|----------------------|---------|
+| Reusable lint workflow | `.github/workflows/reusable-lint.yml` | `.github/workflows/reusable-lint.yml` | `workflow_call`-able lint step that auto-detects Rust / Node / Python inside the working-directory, runs `npm ci` / `npm install` before Node scripts, and runs the appropriate formatter + linter with `-D warnings`. |
+| Reusable test workflow | `.github/workflows/reusable-test.yml` | `.github/workflows/reusable-test.yml` | `workflow_call`-able test runner with profile selection (`ci` / `dev`), coverage toggle (auto-installs `cargo-llvm-cov` when `coverage: true`), JUnit output, and nextest caching for Rust. |
+| Reusable release workflow | `.github/workflows/reusable-release.yml` | `.github/workflows/reusable-release.yml` | `workflow_call`-able release step supporting `release-please` (Rust), `cargo-release`, and `python-build` (input is a plain string, validated at runtime; `choice` is unsupported in `workflow_call`). |
+| Lefthook template | `tools/integration-kit/lefthook.yml` | `lefthook.yml` | Pre-commit (fmt + secrets + trailing-ws), commit-msg (conventional commit), pre-push (clippy / eslint / ruff). Failures propagate; no `\|\| true` swallowing. |
+| MCP hooks template | `tools/integration-kit/mcp-hooks.json` | `.mcp-hooks.json` | Hooks for jcode / codex / forge / claude_code that block destructive commands, auto-run lefthook after edits, and emit desktop notifications. Uses `jq` to parse JSON-encoded `$CLAUDE_TOOL_INPUT`. |
+| Install script | `tools/integration-kit/install.sh` | `tools/integration-kit/install.sh` | One-shot installer that copies the kit into another repo. `--dry-run` does not mkdir and does not verify; `--components` accepts whitespace and is normalized to lower-case. |
 
 ## Install
 
@@ -25,7 +25,7 @@ bash tools/integration-kit/install.sh \
   --target /path/to/other-repo \
   --components workflows,lefthook
 
-# Dry-run to preview changes
+# Dry-run to preview changes (no mkdir, no verification)
 bash tools/integration-kit/install.sh --target /path/to/other-repo --dry-run
 
 # Force overwrite existing files
@@ -44,54 +44,63 @@ on: [push, pull_request]
 
 jobs:
   lint:
-    uses: KooshaPari/PhenoShared/.github/workflows-reusable/lint.yml@instinct-shared-integration-kit
+    uses: KooshaPari/PhenoShared/.github/workflows/reusable-lint.yml@<ref>
   test:
-    uses: KooshaPari/PhenoShared/.github/workflows-reusable/test.yml@instinct-shared-integration-kit
+    uses: KooshaPari/PhenoShared/.github/workflows/reusable-test.yml@<ref>
     with:
       coverage: true
   release:
     if: startsWith(github.ref, 'refs/tags/')
-    uses: KooshaPari/PhenoShared/.github/workflows-reusable/release.yml@instinct-shared-integration-kit
+    uses: KooshaPari/PhenoShared/.github/workflows/reusable-release.yml@<ref>
     secrets:
       RELEASE_PLEASE_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 ```
 
 Pin to a commit SHA or release tag in production to avoid surprises from
-workflow drift.
+workflow drift. Replace `<ref>` with the target branch / tag / SHA.
+
+> **Note on naming:** The reusable workflows use the `reusable-` prefix to
+> avoid colliding with the host repo's own `lint.yml`, `test.yml`, and
+> `release.yml` (if present). They live directly under `.github/workflows/`
+> so GitHub picks them up as callable; their only trigger is `workflow_call`,
+> so they will not run on push or pull_request by themselves.
 
 ## Components in detail
 
-### `lint.yml`
+### `reusable-lint.yml`
 
-Detects the primary language via the presence of `Cargo.toml`, `package.json`,
-or `pyproject.toml`. Runs:
+Detects the primary language **inside the supplied `working-directory`** (not
+at the repo root) by checking for `Cargo.toml`, `package.json`, or
+`pyproject.toml`. Runs:
 
 - **Rust**: `cargo fmt --all -- --check` + `cargo clippy --workspace --all-targets -- -D warnings`
-- **Node**: `npm run lint --if-present` (only if a `lint` script exists)
+- **Node**: `npm ci` / `yarn install --frozen-lockfile` / `pnpm install --frozen-lockfile` (lockfile-aware) → `npm run lint --if-present`
 - **Python**: `ruff check .` (auto-installs ruff if missing)
 
-### `test.yml`
+### `reusable-test.yml`
 
-- **Rust**: `cargo nextest run --workspace --profile ci --retries 2 --test-threads=12`
-  with optional `cargo llvm-cov` coverage (lcov.info) and JUnit upload.
-- **Node**: `npm test --if-present`
+- **Rust**: `cargo nextest run --workspace --profile <test-profile> --retries 2 --test-threads=12`
+  with optional `cargo llvm-cov nextest` coverage (lcov.info) when `coverage: true`
+  (auto-installs `cargo-llvm-cov`).
+- **Node**: `npm ci` / `yarn install --frozen-lockfile` / `pnpm install --frozen-lockfile` → `npm test --if-present`
 - **Python**: `pytest --junitxml=reports/junit.xml` with auto-installed pytest + pytest-cov
 
-### `release.yml`
+### `reusable-release.yml`
 
-Three modes via `release-tool` input:
+Three modes via the `release-tool` input (a plain string, validated at runtime
+because `choice` is not supported in `workflow_call`):
 
 - **release-please** (default for Rust) — opens/updates release PRs
-- **cargo-release** — runs `cargo release` with token from `CARGO_REGISTRY_TOKEN` secret
+- **cargo-release** — runs `cargo release --dry-run` then `cargo release` on tag push (token from `CARGO_REGISTRY_TOKEN` env)
 - **python-build** — builds wheel + sdist, uploads to PyPI via `PYPI_TOKEN`
 
 ### `lefthook.yml`
 
 Three hooks:
 
-- `pre-commit`: parallel fmt (lang-detected), gitleaks scan, trailing-whitespace check
+- `pre-commit`: parallel fmt (lang-detected), gitleaks scan (no `\|\| true`), trailing-whitespace check
 - `commit-msg`: warns on non-conventional commit titles (does not fail)
-- `pre-push`: clippy / eslint / ruff at workspace level
+- `pre-push`: clippy / eslint / ruff at workspace level; failure propagates
 
 Install lefthook with: `lefthook install` (one-time per repo).
 
@@ -106,13 +115,15 @@ schema/location:
 - **Claude Code**: merge into `~/.claude/settings.json` under the `hooks` key
 
 The hooks block destructive git/gh commands (`gh repo delete`, `git push --force`,
-`git reset --hard`), log edit operations, run lefthook after edits, and emit
-desktop notifications on harness events.
+`git push --force-with-lease`, `git reset --hard`, `git clean -fd`,
+`git branch -D`), log edit operations (using `jq` on the JSON `$CLAUDE_TOOL_INPUT`),
+run lefthook after edits (failures propagate), and emit desktop notifications
+on harness events (macOS via `osascript`, Linux via `notify-send`).
 
 ## Test on a scratch repo
 
 ```bash
-# Dry-run against a real repo
+# Dry-run against a real repo (no mkdir, no verification)
 bash tools/integration-kit/install.sh --target ~/CodeProjects/Phenotype/repos/phenotype-registry --dry-run
 
 # Actual install (only the workflows component, to minimize footprint)
@@ -120,6 +131,8 @@ bash tools/integration-kit/install.sh --target ~/CodeProjects/Phenotype/repos/ph
 ```
 
 The post-install verification block prints ✓ / ✗ for each expected file.
+Verification runs only on a non-dry-run install; for dry-runs, the WOULD COPY
+log line is the verification.
 
 ## License
 
