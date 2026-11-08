@@ -99,6 +99,21 @@ ignore = [
     #   Risk: proc-macro crate that only generates derive implementations at
     #     compile time; no known CVE, only unmaintained.
     "RUSTSEC-2026-0372",
+    # rustls-pemfile 2.2.0 (RUSTSEC-2025-0134)
+    #   Path: DIRECT dependency of substrate-browser-broker 0.3.10
+    #         (crates/substrate-browser-broker/Cargo.toml, `rustls-pemfile
+    #         = "2.2"`), which is also reached via substrate-browser-mcp and
+    #         substrate-browser-provider.
+    #   Why not fixed: 2.2.0 is the newest published rustls-pemfile. The
+    #     advisory is "unmaintained" with "no safe upgrade available" -
+    #     there is no 2.3 or 3.x to move to. The crate is a direct
+    #     dependency, so removing it means replacing the PEM parsing surface
+    #     of the browser broker ourselves.
+    #   Risk: rustls-pemfile parses PEM-encoded certificate and key files.
+    #     No known CVE; the advisory is unmaintained-only. The broker reads
+    #     certificates from local trust configuration, not from untrusted
+    #     network input.
+    "RUSTSEC-2025-0134",
 ]
 
 # ── licenses ────────────────────────────────────────────────────────────
