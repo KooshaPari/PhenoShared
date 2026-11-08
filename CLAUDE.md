@@ -68,7 +68,7 @@ tests/
 ## Git Workflow
 
 ```
-origin  = KooshaPari/DataKit   (main repo)
+origin  = <REDACTED>/DataKit   (main repo)
 ```
 
 ## Security & Compliance

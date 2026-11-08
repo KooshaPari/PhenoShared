@@ -4,22 +4,22 @@
 # PRs touching files in these paths will auto-request reviews from owners.
 
 # Default: repo owner reviews everything
-*                                       @KooshaPari
+*                                       @<REDACTED>
 
 # Source code
-/src/                                   @KooshaPari
+/src/                                   @<REDACTED>
 
 # Tests
-/tests/                                 @KooshaPari
+/tests/                                 @<REDACTED>
 
 # Documentation
-/docs/                                  @KooshaPari
-*.md                                    @KooshaPari
+/docs/                                  @<REDACTED>
+*.md                                    @<REDACTED>
 
 # CI/CD Pipeline
-/.github/workflows/                     @KooshaPari
+/.github/workflows/                     @<REDACTED>
 
 # Community files
-/CODE_OF_CONDUCT.md                     @KooshaPari
-/SECURITY.md                            @KooshaPari
-/CONTRIBUTING.md                        @KooshaPari
+/CODE_OF_CONDUCT.md                     @<REDACTED>
+/SECURITY.md                            @<REDACTED>
+/CONTRIBUTING.md                        @<REDACTED>
