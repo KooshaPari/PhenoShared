@@ -1,0 +1,26 @@
+# Exhaustive package component matrix
+
+Frozen source: 1448514e5692d8de6e40be8c7b67c6b5168f9fe2. Rows are package/build declarations, including nested and duplicate snapshots. Every declared component receives a custody disposition. `partial` means an entrypoint/scripts exist, NOT runtime usability; `library-only` means src/lib.rs exists and no declared binary found. Other cases stay unknown. These structural classifications are provisional; deep reviewed findings are in goals-and-usability.md. Counts overlap for nested packages. No completeness percentage follows from counts.
+
+| Manifest | Family | Package | Manifest intent | Source class | Root membership | Source files | Test-path files | Disposition |
+|---|---|---|---|---|---|---:|---:|---|
+| sites/tasken-landing/package.json | Docs and web packages | tasken-landing | Tasken landing page (tasken.phenotype.space) | partial | outside explicit members | 3 | 1 | retain; source-review then qualify named journey |
+| sites/thegent-landing/package.json | Docs and web packages | thegent-landing | Thegent landing page (thegent.<REDACTED>.com) | partial | outside explicit members | 4 | 0 | retain; source-review then qualify named journey |
+| sites/tokn-landing/package.json | Docs and web packages | tokn-landing | Byteport landing page (byteport.<REDACTED>.com) | partial | outside explicit members | 1 | 0 | retain; source-review then qualify named journey |
+| sites/tracera-landing/package.json | Docs and web packages | tracera-landing | Byteport landing page (byteport.<REDACTED>.com) | partial | outside explicit members | 1 | 0 | retain; source-review then qualify named journey |
+| templates/rust-crate/template/Cargo.toml | Other package holding | pheno-cargo-template | Phenotype substrate crate scaffolded from pheno-cargo-template; v8 governance pre-filled (ADR-041, ADR-042, ADR-043). | unknown | outside explicit members | 0 | 0 | retain; source-review then qualify named journey |
+| tests/Cargo.toml | Other package holding | phenotype-infra-tests | Cross-crate integration tests for phenotype-infra monorepo | unknown | outside explicit members | 244 | 297 | retain; source-review then qualify named journey |
+| tests/bdd/Cargo.toml | Other package holding | agileplus-bdd |  | unknown | outside explicit members | 2 | 7 | retain; source-review then qualify named journey |
+| tests/unity/PhenotypeGfx.Tests/PhenotypeGfx.Tests.csproj | Other package holding | PhenotypeGfx.Tests.csproj |  | unknown | outside explicit members | 7 | 8 | retain; source-review then qualify named journey |
+| tools/fake-codex-cloud/Cargo.toml | Other package holding | fake-codex-cloud | Network-free stand-in for `codex cloud` CLI, used by cloud-codex tests. | partial | explicit | 1 | 0 | retain; source-review then qualify named journey |
+| tools/fake-forge/Cargo.toml | Other package holding | fake-forge | A network-free stand-in for the forge CLI, used by tests and the --fake flag. | partial | explicit | 2 | 0 | retain; source-review then qualify named journey |
+| tools/iac-plan-viewer/Cargo.toml | Other package holding | iac-plan-viewer | WASM-based IaC plan viewer — parse Terraform/OpenTofu plan JSON and render interactive diff summaries in the browser | library-only | outside explicit members | 1 | 0 | retain; identify actual consumer and qualify API |
+| unity/postfx/package.json | Other package holding | com.phenotype.postfx | Reusable BRP post-processing stack: SSAO, SSGI, Bloom, ACES tonemap, LUT color grading in a deterministic ping-pong OnRenderImage chain. | unknown | outside explicit members | 21 | 16 | retain; source-review then qualify named journey |
+| unity/postfx/tests/PostStackSourceTests.csproj | Other package holding | PostStackSourceTests.csproj |  | unknown | outside explicit members | 10 | 16 | retain as template/fixture/example; not product proof |
+| unity/postfx/tests/PostStackVariantTests/PostStackVariantTests.csproj | Other package holding | PostStackVariantTests.csproj |  | unknown | outside explicit members | 4 | 5 | retain as template/fixture/example; not product proof |
+| unity/postfx/tests/benchmarks/PostStackBenchmarks.csproj | Other package holding | PostStackBenchmarks.csproj |  | unknown | outside explicit members | 3 | 4 | retain as template/fixture/example; not product proof |
+| unity/terrain/_stub/Stub.csproj | Other package holding | Stub.csproj |  | unknown | outside explicit members | 3 | 0 | retain; source-review then qualify named journey |
+| unity/terrain/phenotype-terrain.csproj | Other package holding | phenotype-terrain.csproj |  | unknown | outside explicit members | 19 | 8 | retain; source-review then qualify named journey |
+| unity/terrain/tests/phenotype-terrain.tests.csproj | Other package holding | phenotype-terrain.tests.csproj |  | unknown | outside explicit members | 7 | 8 | retain as template/fixture/example; not product proof |
+| unity/water/phenotype-water.csproj | Other package holding | phenotype-water.csproj |  | unknown | outside explicit members | 19 | 11 | retain; source-review then qualify named journey |
+| unity/water/tests/phenotype-water.tests.csproj | Other package holding | phenotype-water.tests.csproj |  | unknown | outside explicit members | 10 | 11 | retain as template/fixture/example; not product proof |

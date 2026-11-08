@@ -1279,30 +1279,6 @@ mod tests {
     #[test]
     fn parse_der_bad_serial_tag() {
         // Build a minimal cert where serial is not INTEGER (0x02)
-        let cn_oid = [0x55u8, 0x04, 0x03];
-        let build_name = || -> Vec<u8> {
-            let mut atv_inner: Vec<u8> = Vec::new();
-            atv_inner.push(0x06);
-            atv_inner.push(0x03);
-            atv_inner.extend_from_slice(&cn_oid);
-            atv_inner.push(0x0c);
-            atv_inner.push(0x01);
-            atv_inner.push(b'X');
-            let mut atv: Vec<u8> = Vec::new();
-            atv.push(0x30);
-            encode_len(&mut atv, atv_inner.len());
-            atv.extend(atv_inner);
-            let mut set: Vec<u8> = Vec::new();
-            set.push(0x31);
-            encode_len(&mut set, atv.len());
-            set.extend(atv);
-            let mut name: Vec<u8> = Vec::new();
-            name.push(0x30);
-            encode_len(&mut name, set.len());
-            name.extend(set);
-            name
-        };
-        let name = build_name();
         let mut tbs = Vec::new();
         // serial as OCTET STRING instead of INTEGER
         tbs.push(0x04);

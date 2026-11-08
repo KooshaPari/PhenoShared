@@ -90,6 +90,19 @@ pub fn remove_pid_file(path: &Path) -> Result<()> {
 /// Public so the CLI's `start`/`stop`/`status` subcommands can probe
 /// the pid file for liveness.
 pub fn is_pid_running(pid: u32) -> bool {
+    // `kill` takes a `pid_t` (i32). Some values are not pids at all but
+    // special signals to the whole process group or to every process:
+    //
+    //   0          -> the caller's process group
+    //   u32::MAX   -> truncates to -1, meaning "every process we may signal"
+    //
+    // Probing either of those SUCCEEDS on Linux, so a pid file containing
+    // one of them looks like a live daemon forever. `kill -0 4294967295` in
+    // fact signals every process on the machine, which is also destructive
+    // to do by accident. Reject them before probing.
+    if pid == 0 || pid > i32::MAX as u32 {
+        return false;
+    }
     std::process::Command::new("kill")
         .arg("-0")
         .arg(pid.to_string())
@@ -139,6 +152,23 @@ mod tests {
         write_pid_file(&path, 0xffff_ffff).unwrap();
         write_pid_file(&path, 1234).unwrap();
         assert_eq!(read_pid_file(&path).unwrap(), Some(1234));
+    }
+
+    #[test]
+    fn is_pid_running_rejects_special_kill_targets() {
+        // 0 means "the caller's process group" and 0xffffffff truncates to
+        // pid_t -1, meaning "every process we may signal". `kill -0` on
+        // either SUCCEEDS, so probing them would report a live daemon that
+        // does not exist -- and `kill` (not just `kill -0`) on -1 signals
+        // every process on the machine.
+        assert!(!is_pid_running(0));
+        assert!(!is_pid_running(u32::MAX));
+        assert!(!is_pid_running(i32::MAX as u32 + 1));
+    }
+
+    #[test]
+    fn is_pid_running_detects_this_process() {
+        assert!(is_pid_running(std::process::id()));
     }
 
     #[test]

@@ -69,13 +69,11 @@
 //!   the parent; enforced isolation (ns + later hooks) runs in the tracked
 //!   child (documented subset).
 
-use std::path::PathBuf;
-
 use eidolon_core::error::PhenoError;
 use eidolon_core::Result;
 
 use crate::codes;
-use crate::enforcement::plan::{EnforcementPlan, UserNsIdMap};
+use crate::enforcement::plan::EnforcementPlan;
 
 /// Env var: truthy enables [`crate::enforcement::NamespacePlan::pid`] in
 /// [`crate::enforcement::plan_from_policy`].
@@ -335,7 +333,7 @@ mod namespaces_apply;
 mod namespaces_validate;
 
 #[cfg(all(feature = "sandbox-namespaces", target_os = "linux"))]
-pub use namespaces_apply::{apply_plan, run_in_plan};
+pub(crate) use namespaces_apply::{apply_plan, run_in_plan};
 pub use namespaces_validate::{
     env_pivot_rootfs_path, env_requests_pid_ns, env_requests_pivot_root, env_requests_user_ns,
     env_requests_user_subids, env_user_ns_maps, parse_id_map_spec, parse_subid_file,

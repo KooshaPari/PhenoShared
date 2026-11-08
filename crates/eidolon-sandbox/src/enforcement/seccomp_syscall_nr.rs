@@ -22,7 +22,7 @@ pub fn syscall_nr(arch: &str, name: &str) -> Option<i64> {
         "x86_64" => {
             #[cfg(any(target_arch = "x86_64", test))]
             {
-                return x86_64::lookup(name);
+                x86_64::lookup(name)
             }
             #[cfg(not(any(target_arch = "x86_64", test)))]
             {
@@ -33,7 +33,7 @@ pub fn syscall_nr(arch: &str, name: &str) -> Option<i64> {
         "aarch64" => {
             #[cfg(any(target_arch = "aarch64", test))]
             {
-                return aarch64::lookup(name);
+                aarch64::lookup(name)
             }
             #[cfg(not(any(target_arch = "aarch64", test)))]
             {
@@ -44,7 +44,7 @@ pub fn syscall_nr(arch: &str, name: &str) -> Option<i64> {
         "riscv64" => {
             #[cfg(any(target_arch = "riscv64", test))]
             {
-                return riscv64::lookup(name);
+                riscv64::lookup(name)
             }
             #[cfg(not(any(target_arch = "riscv64", test)))]
             {

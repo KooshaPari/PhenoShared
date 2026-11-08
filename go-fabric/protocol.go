@@ -73,26 +73,26 @@ func NewHeartbeatRequest() HeartbeatRequest {
 // HealthResponse is the daemon's health check response.
 // Mirrors crates/fabric-daemon/src/health.rs::HealthResponse.
 type HealthResponse struct {
-	Status         string `json:"status"`
-	UptimeS        uint64 `json:"uptime_s"`
-	TopologyEpoch  uint64 `json:"topology_epoch"`
-	ActiveLeases   int    `json:"active_leases"`
-	ActivePlans    int    `json:"active_plans"`
+	Status        string `json:"status"`
+	UptimeS       uint64 `json:"uptime_s"`
+	TopologyEpoch uint64 `json:"topology_epoch"`
+	ActiveLeases  int    `json:"active_leases"`
+	ActivePlans   int    `json:"active_plans"`
 }
 
 // TopologyResponse is the daemon's topology snapshot response.
 // Mirrors crates/fabric-gui/src/app.rs::TopologyResponse.
 type TopologyResponse struct {
-	Type          string      `json:"type"`
-	Status        string      `json:"status"`
-	TopologyEpoch uint64      `json:"topology_epoch"`
-	TopologyName  string      `json:"topology_name"`
-	NodeCount     int         `json:"node_count"`
-	EdgeCount     int         `json:"edge_count"`
-	Nodes         []TopoNode  `json:"nodes"`
-	Edges         []TopoEdge  `json:"edges"`
-	ActiveLeases  int         `json:"active_leases"`
-	ActivePlans   int         `json:"active_plans"`
+	Type          string     `json:"type"`
+	Status        string     `json:"status"`
+	TopologyEpoch uint64     `json:"topology_epoch"`
+	TopologyName  string     `json:"topology_name"`
+	NodeCount     int        `json:"node_count"`
+	EdgeCount     int        `json:"edge_count"`
+	Nodes         []TopoNode `json:"nodes"`
+	Edges         []TopoEdge `json:"edges"`
+	ActiveLeases  int        `json:"active_leases"`
+	ActivePlans   int        `json:"active_plans"`
 }
 
 // TopoNode describes a single node in the topology.
@@ -114,17 +114,17 @@ type TopoEdge struct {
 
 // RoutesResponse is the daemon's routes snapshot response.
 type RoutesResponse struct {
-	Type   string     `json:"type"`
+	Type   string      `json:"type"`
 	Routes []RouteInfo `json:"routes"`
 }
 
 // RouteInfo describes a single active route plan.
 type RouteInfo struct {
-	IntentID          string `json:"intent_id"`
-	Steps             int    `json:"steps"`
-	TopologyEpoch     uint64 `json:"topology_epoch"`
-	EstimatedLatencyUs int64 `json:"estimated_latency_us"`
-	Tags              []string `json:"tags"`
+	IntentID           string   `json:"intent_id"`
+	Steps              int      `json:"steps"`
+	TopologyEpoch      uint64   `json:"topology_epoch"`
+	EstimatedLatencyUs int64    `json:"estimated_latency_us"`
+	Tags               []string `json:"tags"`
 }
 
 // CapabilitiesResponse is the daemon's capabilities snapshot response.
@@ -201,12 +201,12 @@ type WireReplanRequest struct {
 
 // WireReplanResponse is the replan.response payload.
 type WireReplanResponse struct {
-	RequestID string `json:"request_id"`
-	Outcome   string `json:"outcome"`
+	RequestID string          `json:"request_id"`
+	Outcome   string          `json:"outcome"`
 	NewPlan   json.RawMessage `json:"new_plan,omitempty"`
-	Reason    string `json:"reason,omitempty"`
-	Code      string `json:"code,omitempty"`
-	Message   string `json:"message,omitempty"`
+	Reason    string          `json:"reason,omitempty"`
+	Code      string          `json:"code,omitempty"`
+	Message   string          `json:"message,omitempty"`
 }
 
 // WireReplanOutcome constants.

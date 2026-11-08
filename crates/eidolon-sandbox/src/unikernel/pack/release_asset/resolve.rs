@@ -117,7 +117,9 @@ mod tests {
 
     #[test]
     fn pin_published_constants() {
-        assert!(ROOTFS_RELEASE_PUBLISHED);
+        // `ROOTFS_RELEASE_PUBLISHED` is a compile-time constant; assert it at
+        // compile time instead of with a tautological runtime assertion.
+        const _: () = assert!(ROOTFS_RELEASE_PUBLISHED);
         assert!(!ROOTFS_RELEASE_URL.is_empty());
         assert_eq!(ROOTFS_RELEASE_SHA256.len(), 64);
         assert!(checkout_release_manifest_path().is_file());

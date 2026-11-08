@@ -176,7 +176,12 @@ fn login_username() -> Result<String> {
             return Ok(user);
         }
     }
-    #[cfg(target_os = "linux")]
+    // `libc` is an optional dependency of this crate, supplied by the
+    // `sandbox-namespaces` feature. Gating this call only on the OS meant
+    // that a Linux build WITHOUT that feature failed to compile with
+    // "cannot find module or crate `libc`". The env-var lookups above are
+    // unconditional, so this is only the last-resort fallback either way.
+    #[cfg(all(feature = "sandbox-namespaces", target_os = "linux"))]
     {
         use std::ffi::CStr;
         unsafe {
@@ -223,22 +228,22 @@ fn parse_id_map_line(s: &str) -> Result<UserNsIdMap> {
 }
 
 fn host_euid() -> u32 {
-    #[cfg(target_os = "linux")]
+    #[cfg(all(feature = "sandbox-namespaces", target_os = "linux"))]
     {
         unsafe { libc::geteuid() }
     }
-    #[cfg(not(target_os = "linux"))]
+    #[cfg(not(all(feature = "sandbox-namespaces", target_os = "linux")))]
     {
         0
     }
 }
 
 fn host_egid() -> u32 {
-    #[cfg(target_os = "linux")]
+    #[cfg(all(feature = "sandbox-namespaces", target_os = "linux"))]
     {
         unsafe { libc::getegid() }
     }
-    #[cfg(not(target_os = "linux"))]
+    #[cfg(not(all(feature = "sandbox-namespaces", target_os = "linux")))]
     {
         0
     }
