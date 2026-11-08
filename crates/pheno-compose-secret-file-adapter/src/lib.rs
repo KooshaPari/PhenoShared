@@ -48,7 +48,6 @@ pub use file::FileSecretStore;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use super::*;
     use phenocompose_port_secret::{SecretStore, SecretStoreError};
     use phenocompose_port_types::{Secret, SecretRef};
     use std::path::PathBuf;

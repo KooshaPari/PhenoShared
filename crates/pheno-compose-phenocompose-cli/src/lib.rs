@@ -1573,10 +1573,9 @@ mod lifecycle_bridge_tests {
     use crate::model::CompositionManifest;
 
     #[test]
-    #[ignore = "PHE-PCC-001 pre-existing: needs composition-v0.yaml fixture"]
     fn lifecycle_request_maps_manifest_services_and_intents() {
         let manifest =
-            CompositionManifest::parse(include_str!("../../../examples/composition-v0.yaml"))
+            CompositionManifest::parse(include_str!("../tests/fixtures/composition-v0.yaml"))
                 .unwrap();
         let plan = manifest.plan().unwrap();
         let lifecycle = plan_lifecycle(&manifest, &plan.manifest_sha256).unwrap();

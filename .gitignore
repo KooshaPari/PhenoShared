@@ -178,3 +178,24 @@ crates/sharecli/tests/fr007_tray_monitoring_report_consume.rs.broken
 crates/sharecli/tests/c00_l4_async_shutdown_gate.rs.broken
 crates/sharecli/tests/c00_l5_observability.rs.broken
 crates/sharecli/tests/fr007_thermal_tui_pool_status.rs.broken
+
+# Go CLI build artifacts (cmd/promptscrape)
+cmd/promptscrape/promptscrape
+cmd/promptscrape/promptscrape.exe
+cmd/promptscrape/dist/
+
+# Go module build artifacts. Each module under cmd/ builds a binary named
+# after its directory, e.g. cmd/checker -> cmd/checker/checker.
+cmd/*/capprobe
+cmd/*/checker
+cmd/*/promptscrape
+cmd/*/trust
+cmd/*/wire
+cmd/*/*.exe
+cmd/*/dist/
+
+# Archival absorption trees are verbatim copies of upstream repos. Their
+# vendor/ directories are part of the preserved content and must be tracked,
+# even though this repo ignores vendor/ for live builds.
+!docs/absorbed-from-*/vendor/
+!docs/absorbed-from-*/vendor/**

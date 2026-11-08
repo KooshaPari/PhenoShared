@@ -1,6 +1,6 @@
 # Upstream Sync Strategy
 
-## Fork: <REDACTED>/colab ← blackboardsh/colab
+## Fork: &lt;REDACTED&gt;/colab ← blackboardsh/colab
 
 ### Sync Process
 

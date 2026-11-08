@@ -153,7 +153,7 @@ gh workflow run sentry-error-tracking.yml
 **Verification**:
 - [ ] GitHub integration authorized
 - [ ] Status shows "Installed" (not "Pending")
-- [ ] <REDACTED> org authorized
+- [ ] &lt;REDACTED&gt; org authorized
 - [ ] Can see available repositories
 
 ### Step 6: Alert Rule Creation (Recommended)

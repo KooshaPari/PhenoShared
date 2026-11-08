@@ -313,7 +313,7 @@ let feature_with_wps = db.get_feature_with_wps_and_evidence(id)?;
 
 ### 3.5 Lock Contention in NATS Bus
 **Crate**: agileplus-nats  
-**Location**: bus.rs:InMemoryEventBus (uses Vec<Envelope> with Mutex)
+**Location**: bus.rs:InMemoryEventBus (uses Vec&lt;Envelope> with Mutex)
 
 **Problem**: All publishers and subscribers compete for single Mutex on in-memory buffer.
 
@@ -653,9 +653,9 @@ Event Bus
 |----------|-----------|-----------|------|-----------|
 | routes.rs:format!() calls | String | 100/dashboard load | 100-500B | 50-100KB |
 | Feature clones (routes) | Feature (nested struct) | 50/dashboard | 2-5KB | 100-250KB |
-| Event list clone | Vec<Event> | 10/feature view | 1-10KB | 10-100KB |
+| Event list clone | Vec&lt;Event> | 10/feature view | 1-10KB | 10-100KB |
 | JSON serialization | serde_json::Value | 20/health check | 1-5KB | 20-100KB |
-| Evidence list from disk | Vec<Evidence> | 5/evidence page | 5-50KB | 25-250KB |
+| Evidence list from disk | Vec&lt;Evidence> | 5/evidence page | 5-50KB | 25-250KB |
 
 ---
 

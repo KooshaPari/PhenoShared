@@ -3,7 +3,7 @@
 **Status:** Assessment
 **Date:** 2026-06-16
 **Charter:** [`phenotype-registry/docs/rationalization/boundary-shaping.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/boundary-shaping.md)
-**Repo assessed:** [<REDACTED>/pheno](https://github.com/KooshaPari/pheno) — Rust mega-monorepo + organizational "shelf"
+**Repo assessed:** [&lt;REDACTED&gt;/pheno](https://github.com/KooshaPari/pheno) — Rust mega-monorepo + organizational "shelf"
 **Charter's pre-classification of this repo:** *"170K LOC, 11 workspaces — Decompose by workspace into domain repos / existing *Kits; keep only too-small bits."*
 
 > **Doctrine reminder (verbatim from charter):** A stub / empty / broken / unused / incomplete module is **not** a delete candidate by default. On-paper-good boundaries still deserve an owner. For each module/crate/folder pick ONE: **(1) DECOMPOSE**, **(2) ABSORB**, **(3) DYNAMIC-KEEP**. **No deletions** — every entry below gets an owner or stays in a dynamic-install monorepo.

@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17
 **Lane:** L5 (Architecture)
-**Author:** Forge session (<REDACTED> active)
+**Author:** Forge session (&lt;REDACTED&gt; active)
 **Worklog:** `worklogs/L5-104-pheno-adr012-migration-2026-06-17.json` (to be created per §6)
 **Inputs:**
 - `findings/2026-06-15-CONFIG_CONSOLIDATION-v1.md` (subagent-B v6 audit, pre-ADR-022)
@@ -12,7 +12,7 @@
 
 ## Executive summary
 
-The Dmouse92 `pheno` repo's `chore/adr-012-config-consolidation-2026-06-15` branch (default branch of Dmouse92/pheno) contains 7 unique Dmouse92 commits touching 127 distinct files vs `<REDACTED>/pheno` main. **None of the W5 PRs #130/#131/#132 contain the ADR-012 config consolidation work** — they are all pre-existing action-SHA pinning PRs merged on 2026-04-30 / 2026-05-01, 2-7 weeks before the Dmouse92 ADR-012 work window of 2026-06-12 → 2026-06-15. Only **2 of the 7 Dmouse92 commits** are actually ADR-012-related (CANONICAL.md markers + phenotype-config-core deletion); the other 5 are workflow hygiene, agileplus scaffolding, and Cargo.toml workspace tweaks that are partially obsolete or already absorbed on <REDACTED>.
+The Dmouse92 `pheno` repo's `chore/adr-012-config-consolidation-2026-06-15` branch (default branch of Dmouse92/pheno) contains 7 unique Dmouse92 commits touching 127 distinct files vs `<REDACTED>/pheno` main. **None of the W5 PRs #130/#131/#132 contain the ADR-012 config consolidation work** — they are all pre-existing action-SHA pinning PRs merged on 2026-04-30 / 2026-05-01, 2-7 weeks before the Dmouse92 ADR-012 work window of 2026-06-12 → 2026-06-15. Only **2 of the 7 Dmouse92 commits** are actually ADR-012-related (CANONICAL.md markers + phenotype-config-core deletion); the other 5 are workflow hygiene, agileplus scaffolding, and Cargo.toml workspace tweaks that are partially obsolete or already absorbed on &lt;REDACTED&gt;.
 
 **Critical finding:** Dmouse92's CANONICAL.md markers redirect consumers to `phenoShared` — but **ADR-022 has since moved the canonical config substrate** to `<REDACTED>/phenotype-config` (Rust core `crates/settly/`, bootstrapped 2026-06-17) + `<REDACTED>/Conft` (TS edge). The `phenotype-config` substrate is mature and ready; Dmouse92's redirects are stale and must be re-pointed before merge.
 
@@ -33,7 +33,7 @@ The Dmouse92 `pheno` repo's `chore/adr-012-config-consolidation-2026-06-15` bran
 **File overlap with Dmouse92 ADR-012:** PR #130 touches `crates/agileplus-sqlite/src/lib/{adapter.rs,tests/*.rs}` (3 files) and 23 workflows; PR #131 touches `rust/.github/workflows/ci.yml` (1 file); PR #132 touches 28 workflows + 11 paths in `agileplus-agents/.github/workflows/`. None touch `crates/phenotype-config-*`, `Cargo.toml` workspace members, `docs/slsa.md`, `docs/index.md`, `justfile`, `Taskfile.yml`, or any `CANONICAL.md` markers. **Zero file overlap with the actual ADR-012 config consolidation scope.**
 
 **Worklog note (parent L5-104 file `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md:196`):**
-> "PR #130 (W5 ADR-012 config consolidation PR-1/2/3) is OPEN on <REDACTED>/pheno and may already contain the Dmouse92 pheno ADR-012 work — verify before cherry-picking."
+> "PR #130 (W5 ADR-012 config consolidation PR-1/2/3) is OPEN on &lt;REDACTED&gt;/pheno and may already contain the Dmouse92 pheno ADR-012 work — verify before cherry-picking."
 
 **Resolution:** PR #130 is NOT an ADR-012 PR. The "W5 ADR-012" label was mis-attributed in the L5-104 parent note. PR #130 is purely action-SHA pinning + agileplus-sqlite deletion. The note should be corrected in the next L5-104 edit pass.
 
@@ -254,7 +254,7 @@ The plan is **6 PRs over 4 substrate targets**, sequenced to minimize merge conf
 | **New files** | `crates/settly/CANONICAL.md` (was `pheno/crates/phenotype-config-loader/CANONICAL.md`); `crates/settly/CANONICAL_FROM_PHENO_SHARED_CONFIG.md` (was `pheno/crates/phenotype-shared-config/CANONICAL.md`; renamed because substrate crate name is `settly`, not `phenotype-shared-config`) |
 | **Content** | Adapted from Dmouse92 source, but re-pointing from `phenoShared` to `phenotype-config`:<br>`# Canonical Source Notice`<br>`This crate has been promoted to the phenotype-config substrate.`<br>`Repository: https://github.com/KooshaPari/phenotype-config`<br>`Path: https://github.com/KooshaPari/phenotype-config/tree/main/crates/settly`<br>`Status: deprecated copy in pheno/crates/phenotype-config-{loader,shared-config}/ retained for backward compatibility only.` |
 | **Commit msg** | `feat(docs): add CANONICAL.md markers for pheno/crates/phenotype-config-* deprecation redirects to substrate (L5-104)` |
-| **Verification** | `git ls-tree -r <REDACTED>/phenotype-config --name-only | grep CANONICAL.md` lists 2 new files; text content mentions `phenotype-config` (not `phenoShared`) |
+| **Verification** | `git ls-tree -r &lt;REDACTED>/phenotype-config --name-only | grep CANONICAL.md` lists 2 new files; text content mentions `phenotype-config` (not `phenoShared`) |
 | **Estimated LoC** | ~40 |
 | **Blockers** | none |
 

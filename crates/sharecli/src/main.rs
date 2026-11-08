@@ -74,6 +74,9 @@ use runtime::ProcessPool;
     bin_name = "sharecli",
     about = "Shared CLI process manager for multi-project agent orchestration",
     version = env!("CARGO_PKG_VERSION"),
+    // Pin the help width. Without this, clap asks the terminal (or falls back to
+    // 100 columns) and the byte-for-byte golden snapshots depend on the runner.
+    term_width = 100,
     after_long_help = "Accessibility (C09): docs/a11y/README.md — NO_COLOR/TERM=dumb degrade ANSI color; \
 FR-004 status via `sharecli status` and GET /health. Degraded-mode notes: docs/a11y/status-and-recovery.md\n\
 Help & FAQ (C09 L81.13): docs/faq.md — top troubleshooting answers; `man sharecli` after `just man`."

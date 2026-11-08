@@ -6,7 +6,7 @@
 - **Title**: thegent Agent Framework Completion
 - **Created**: 2026-03-25
 - **State**: in_progress
-- **Repo**: /Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent
+- **Repo**: /Users/&lt;REDACTED&gt;/CodeProjects/Phenotype/repos/thegent
 
 ## Overview
 

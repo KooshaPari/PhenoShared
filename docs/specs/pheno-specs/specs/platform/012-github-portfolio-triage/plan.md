@@ -12,7 +12,7 @@
 - 019-private-repo-catalog (private repo relationships)
 - 018-template-repo-cleanup (template repo status)
 - 021-polyrepo-ecosystem-stabilization (ecosystem-wide impact)
-- <REDACTED>-stale-repo-triage (related stale repo work)
+- &lt;REDACTED&gt;-stale-repo-triage (related stale repo work)
 
 ## Timeline
 - Phase 1: Week 1-2

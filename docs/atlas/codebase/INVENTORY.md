@@ -171,7 +171,7 @@ Sorted by tree LOC descending.
 | python/ffi | omlx-research-perf | sub-workspace/lib | 1926 | 5 | 8 | 8 | 0 | - | 2026-09-16 | phenotype-omlx Rust perf-core → Python pyo3 FFI bridge |
 | crates/harness-native | harness-native | non-member/lib+bin | 1914 | 23 | 28 | 36 | 0 | - | 2026-09-15 | Native helpers for agent-harness: cache-key, is-agent, dispatcher |
 | crates/agileplus-telemetry | agileplus-telemetry | non-member/meta | 1911 | 8 | 9 | 27 | 0 | - | 2026-08-25 | ~ AgilePlus planning crate |
-| crates/clap-ext | clap-ext | non-member/meta | 1903 | 10 | 24 | 25 | 10 | - | 2026-09-16 | Shared Rust CLI extension library: Verbosity, tracing setup, common clap args (vendored; upstream <REDACTED>/clap-ext retired) |
+| crates/clap-ext | clap-ext | non-member/meta | 1903 | 10 | 24 | 25 | 10 | - | 2026-09-16 | Shared Rust CLI extension library: Verbosity, tracing setup, common clap args (vendored; upstream &lt;REDACTED&gt;/clap-ext retired) |
 | crates/phenotype-errors | phenotype-errors | non-member/lib | 1879 | 1 | 5 | 3 | 2 | - | 2026-09-16 | **DEPRECATED**: Use `phenotype-error-core` directly instead. |
 | crates/hexa-kit/crates/phenotype-retry | phenotype-retry | non-member/lib | 1873 | 5 | 6 | 69 | 0 | - | 2026-08-08 | ~ phenotype platform crate |
 | crates/agile-plus/crates/agileplus-mcp-intent | agileplus-mcp-intent | non-member/bin | 1869 | 8 | 10 | 0 | 1 | - | 2026-09-16 | MCP tool + HTTP service for converting user prompts into AgilePlus intent graphs |
@@ -184,7 +184,7 @@ Sorted by tree LOC descending.
 | phenotype-router-monitor | phenotype-router-monitor | non-member/meta | 1844 | 3 | 29 | 6 | 10 | - | 2026-09-16 | > Network routing monitoring and diagnostics |
 | crates/engine-forge | engine-forge | member/meta | 1843 | 7 | 13 | 32 | 1 | linux,macos | 2026-09-16 | FORGE engine adapter implementing EnginePort by driving the forge CLI. |
 | crates/phenotype-cost-core | phenotype-cost-core | non-member/meta | 1841 | 11 | 13 | 17 | 1 | - | 2026-09-15 | Cost calculation, pricing models, and budget enforcement for LLM operations |
-| iac/landing-bootstrap | phenotype-landing-bootstrap | sub-workspace/bin | 1758 | 1 | 7 | 0 | 1 | - | 2026-09-16 | Bootstrap Tier 2 org-pages: scaffold <project>.<REDACTED>.com landing pages from a template, create CF DNS, push to GitHub, deploy to Vercel. |
+| iac/landing-bootstrap | phenotype-landing-bootstrap | sub-workspace/bin | 1758 | 1 | 7 | 0 | 1 | - | 2026-09-16 | Bootstrap Tier 2 org-pages: scaffold &lt;project>.&lt;REDACTED&gt;.com landing pages from a template, create CF DNS, push to GitHub, deploy to Vercel. |
 | crates/focus-transpilers | focus-transpilers | non-member/meta | 1730 | 10 | 13 | 26 | 1 | - | 2026-09-16 | Lossless round-trip compilers between IR and authoring surfaces. Implements bidirectional transpilers for: TOML ↔ IR (legacy template-pack migration), Wizard fo |
 | crates/connector-github | connector-github | non-member/meta | 1725 | 6 | 8 | 32 | 1 | - | 2026-09-16 | GitHub contributions connector for FocalPoint. Implements Personal Access Token (PAT) auth and REST API polling for user activity: push events, PR merges, issue |
 | crates/focus-sync | focus-sync | non-member/meta | 1703 | 6 | 8 | 31 | 1 | - | 2026-09-16 | Polling scheduler, cursor, dedupe, retries, backoff. The `SyncOrchestrator` owns a registry of `Connector` implementations plus their polling cadence, next-sync |
@@ -234,7 +234,7 @@ Sorted by tree LOC descending.
 | crates/sharecli-mesh | sharecli-mesh | non-member/meta | 1218 | 6 | 7 | 24 | 0 | - | 2026-09-15 | Mesh substrate for sharecli — Maildir-style task queue (ported from thegent) |
 | crates/argis-extensions/pheno-errors | pheno-errors | non-member/meta | 1184 | 5 | 14 | 25 | 2 | - | 2026-09-16 | Canonical AppError type for the pheno-* fleet. Consolidates the 5 most-common error patterns into a single, dependency-light crate. |
 | crates/sharecli-tray-linux | sharecli-tray-linux | non-member/lib+bin | 1177 | 5 | 7 | 20 | 1 | linux | 2026-09-16 | Linux systemtray integration for sharecli (ksni/freedesktop) |
-| crates/cliproxy-adapter | cliproxy-adapter | member/meta | 1176 | 1 | 2 | 18 | 0 | - | 2026-09-16 | EnginePort adapter for <REDACTED>/cliproxyapi-plusplus — the Plus fork of router-for-me/CLIProxyAPI exposing 50+ agent CLIs (claude, codex, gemini, copilot, q, opencode, etc.) over a single OpenAI-compat /v1 endpoint. |
+| crates/cliproxy-adapter | cliproxy-adapter | member/meta | 1176 | 1 | 2 | 18 | 0 | - | 2026-09-16 | EnginePort adapter for &lt;REDACTED&gt;/cliproxyapi-plusplus — the Plus fork of router-for-me/CLIProxyAPI exposing 50+ agent CLIs (claude, codex, gemini, copilot, q, opencode, etc.) over a single OpenAI-compat /v1 endpoint. |
 | crates/agile-plus/crates/agileplus-pipeline | agileplus-pipeline | non-member/meta | 1175 | 5 | 6 | 12 | 0 | windows | 2026-09-16 | DOT-graph pipeline runner — executes DAGs parsed from DOT files with shell commands, guards, retries, and resource limits. |
 | crates/agileplus-benchmarks | agileplus-benchmarks | non-member/meta | 1172 | 7 | 8 | 25 | 0 | - | 2026-08-25 | Criterion performance benchmarks for all AgilePlus subsystems |
 | _archived/byteport/crates/byteport-transport | byteport-transport | non-member/meta | 1171 | 6 | 7 | 29 | 0 | - | 2026-09-16 | ~ (no description declared) |
@@ -371,11 +371,11 @@ Sorted by tree LOC descending.
 | crates/focus-penalties | focus-penalties | non-member/meta | 562 | 1 | 3 | 18 | 1 | - | 2026-09-16 | Penalty state machine: escalation tiers, bypass budget, lockout windows, debt balance, strict mode. Traces to FR-STATE-002. Manages enforcement escalation: warn |
 | crates/pheno-forge-scaffold | pheno-forge-scaffold | non-member/bin | 562 | 3 | 6 | 10 | 1 | - | 2026-09-16 | Documented scaffold-only task-runner shape; ported from phenoForge on 2026-09-10. See ../../PROVENANCE.md. |
 | crates/focus-coaching | focus-coaching | non-member/meta | 556 | 2 | 4 | 12 | 1 | - | 2026-09-16 | LLM provider trait and OpenAI-compatible HTTP client. Shapes POST `/chat/completions` calls with Bearer token authentication and simple messages array. No strea |
-| crates/pheno-runtime-config | pheno-runtime-config | non-member/meta | 556 | 5 | 12 | 8 | 4 | - | 2026-09-16 | Hot-reloadable runtime configuration (lock-free ArcReloadable<T>, notify v6, SIGHUP) |
+| crates/pheno-runtime-config | pheno-runtime-config | non-member/meta | 556 | 5 | 12 | 8 | 4 | - | 2026-09-16 | Hot-reloadable runtime configuration (lock-free ArcReloadable&lt;T>, notify v6, SIGHUP) |
 | infrakit/crates/phenotype-macros | phenotype-macros | non-member/lib | 552 | 5 | 6 | 44 | 0 | - | 2026-09-16 | Proc-macro utilities for the Phenotype ecosystem |
 | crates/agile-plus/crates/pheno-flags | pheno-flags | non-member/lib | 533 | 2 | 4 | 7 | 1 | - | 2026-08-08 | Typed feature-flag resolution. A `Resolver` reads values in this order: explicit envvar → .env-style file → caller-supplied default. Supports `bool`, `i64`, and `String` with explicit type errors on parse failure. |
 | infrakit/crates/phenotype-error-core | phenotype-error-core | non-member/lib | 533 | 1 | 3 | 17 | 1 | - | 2026-09-16 | ~ phenotype platform crate |
-| crates/phenotype-diff | phenotype-diff | non-member/meta | 532 | 6 | 7 | 12 | 0 | - | 2026-09-16 | Line-level unified diff and patch-apply library (migrated from <REDACTED>/Diffuse); wraps `similar` |
+| crates/phenotype-diff | phenotype-diff | non-member/meta | 532 | 6 | 7 | 12 | 0 | - | 2026-09-16 | Line-level unified diff and patch-apply library (migrated from &lt;REDACTED&gt;/Diffuse); wraps `similar` |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-contracts | phenotype-contracts | non-member/lib | 530 | 8 | 9 | 7 | 0 | - | 2026-09-16 | ~ phenotype platform crate |
 | crates/focus-replay | focus-replay | non-member/meta | 528 | 1 | 2 | 5 | 0 | - | 2026-09-16 | ~ (no description declared) |
 | crates/engine-a2a | engine-a2a | member/meta | 520 | 2 | 3 | 5 | 0 | - | 2026-09-15 | EnginePort adapter for the A2A Agent-to-Agent REST protocol. |
@@ -424,7 +424,7 @@ Sorted by tree LOC descending.
 | crates/eyetracker-camera | eyetracker-camera | member/lib | 382 | 1 | 2 | 3 | 0 | - | 2026-09-15 | Webcam capture module for eye tracking |
 | crates/agile-plus/crates/agileplus-convoy | agileplus-convoy | non-member/meta | 381 | 5 | 6 | 2 | 0 | - | 2026-09-16 | Convoy primitive: two-phase commit bead coordination for MEOW |
 | crates/cloud-cursor | cloud-cursor | member/meta | 380 | 2 | 4 | 3 | 1 | - | 2026-09-15 | CloudDispatchPort adapter for Cursor Cloud Agents (REST API v1). |
-| crates/phenotype-service-registry | phenotype-service-registry | member/meta | 379 | 5 | 6 | 11 | 0 | - | 2026-09-16 | Service registry and discovery with hexagonal port + in-memory adapter (migrated from <REDACTED>/Servion) |
+| crates/phenotype-service-registry | phenotype-service-registry | member/meta | 379 | 5 | 6 | 11 | 0 | - | 2026-09-16 | Service registry and discovery with hexagonal port + in-memory adapter (migrated from &lt;REDACTED&gt;/Servion) |
 | crates/phenotype-flags | phenotype-flags | non-member/lib | 374 | 1 | 2 | 13 | 0 | - | 2026-08-25 | Synchronous, in-memory feature-flag set with environment-variable loading |
 | crates/pheno-proc-runtime/pheno-proc-queue/fuzz | pheno-proc-queue-fuzz | sub-workspace/bin | 373 | 2 | 4 | 0 | 0 | - | 2026-09-15 | ~ phenotype platform crate |
 | crates/agile-plus/crates/pheno-ssot-template | pheno-ssot-template | non-member/lib | 372 | 2 | 4 | 6 | 1 | - | 2026-08-08 | Single-Source-Of-Truth (SSOT) trait + struct-and-render pattern. Define a typed `SSOT` value once, render it as Markdown, JSON, or a template placeholder wherever a copy would otherwise drift. |
@@ -565,7 +565,7 @@ Sorted by tree LOC descending.
 | crates/focus-time | focus-time | non-member/meta | 75 | 1 | 3 | 0 | 1 | - | 2026-09-16 | Clock abstraction for deterministic tests. Provides `ClockPort` trait with `SystemClock` (wall-clock) and `TestClock` (manually-advanced) implementations. Enabl |
 | crates/clap-ext-examples | basic | non-member/meta | 74 | 1 | 2 | 0 | 0 | - | 2026-09-16 | ~ (no description declared) |
 | crates/pheno-testing | pheno-testing | non-member/meta | 63 | 1 | 2 | 0 | 0 | - | 2026-09-15 | Testing utilities for Pheno |
-| crates/pheno-compose-i18n | pheno-i18n | non-member/lib | 59 | 1 | 2 | 3 | 0 | - | 2026-09-15 | i18n runtime for PhenoCompose. Reads locales/<lang>.json at compile time. |
+| crates/pheno-compose-i18n | pheno-i18n | non-member/lib | 59 | 1 | 2 | 3 | 0 | - | 2026-09-15 | i18n runtime for PhenoCompose. Reads locales/&lt;lang>.json at compile time. |
 | crates/apisync/fuzz | fuzz | sub-workspace/bin | 57 | 1 | 2 | 0 | 0 | - | 2026-09-13 | ~ (no description declared) |
 | crates/focus-plugin-sdk/examples/hello-connector | hello-connector | non-member/lib | 57 | 1 | 3 | 1 | 0 | - | 2026-09-16 | ~ (no description declared) |
 | crates/pine-compat | pine-compat | non-member/meta | 57 | 1 | 2 | 0 | 0 | - | 2026-09-15 | ~ (no description declared) |

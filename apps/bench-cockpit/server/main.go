@@ -108,18 +108,18 @@ type Cell struct {
 	ErrorCode           string                 `json:"error_code"`
 	Metadata            map[string]string      `json:"metadata"`
 	// RLVR-AF scalars from pheno-harness ablation cells (passthrough).
-	RlvrComposite         float64            `json:"rlvr_composite,omitempty"`
-	RlvrL0                float64            `json:"rlvr_l0,omitempty"`
-	RlvrL1                float64            `json:"rlvr_l1,omitempty"`
-	RlvrL2                float64            `json:"rlvr_l2,omitempty"`
-	RlvrL3                float64            `json:"rlvr_l3,omitempty"`
-	RlvrReward            float64            `json:"rlvr_reward,omitempty"`
-	RlvrRewardBreakdown   map[string]float64 `json:"rlvr_reward_breakdown,omitempty"`
-	RlvrPassed            bool               `json:"rlvr_passed,omitempty"`
-	RlvrVerifiable        bool               `json:"rlvr_verifiable,omitempty"`
-	RlvrTournamentDelta   float64            `json:"rlvr_tournament_delta,omitempty"`
-	dualReadGenOkSet      bool               `json:"-"`
-	dualReadVerifiedSet   bool               `json:"-"`
+	RlvrComposite       float64            `json:"rlvr_composite,omitempty"`
+	RlvrL0              float64            `json:"rlvr_l0,omitempty"`
+	RlvrL1              float64            `json:"rlvr_l1,omitempty"`
+	RlvrL2              float64            `json:"rlvr_l2,omitempty"`
+	RlvrL3              float64            `json:"rlvr_l3,omitempty"`
+	RlvrReward          float64            `json:"rlvr_reward,omitempty"`
+	RlvrRewardBreakdown map[string]float64 `json:"rlvr_reward_breakdown,omitempty"`
+	RlvrPassed          bool               `json:"rlvr_passed,omitempty"`
+	RlvrVerifiable      bool               `json:"rlvr_verifiable,omitempty"`
+	RlvrTournamentDelta float64            `json:"rlvr_tournament_delta,omitempty"`
+	dualReadGenOkSet    bool               `json:"-"`
+	dualReadVerifiedSet bool               `json:"-"`
 }
 
 type ResultsData struct {
@@ -128,13 +128,13 @@ type ResultsData struct {
 }
 
 type Envelope struct {
-	JSONPath       string             `json:"jsonPath"`
-	ExtraPaths     []string           `json:"extraPaths,omitempty"`
-	ServerTS       string             `json:"serverTs"`
-	Data           *ResultsData       `json:"data"`
-	Warnings       []LintWarning      `json:"warnings,omitempty"`
-	LintRunTS      string             `json:"lintRunTs,omitempty"`
-	SuiteCoverage  []suiteCoverageRow `json:"suite_coverage,omitempty"`
+	JSONPath      string             `json:"jsonPath"`
+	ExtraPaths    []string           `json:"extraPaths,omitempty"`
+	ServerTS      string             `json:"serverTs"`
+	Data          *ResultsData       `json:"data"`
+	Warnings      []LintWarning      `json:"warnings,omitempty"`
+	LintRunTS     string             `json:"lintRunTs,omitempty"`
+	SuiteCoverage []suiteCoverageRow `json:"suite_coverage,omitempty"`
 }
 
 type LintWarning struct {

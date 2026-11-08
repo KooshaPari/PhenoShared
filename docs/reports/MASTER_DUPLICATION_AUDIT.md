@@ -173,7 +173,7 @@ crates/agileplus-domain/src/ports/
 
 - [ ] 🟡 **STORE-001**: Integrate `hexagonal-rs` Repository trait
 - [ ] 🟠 **STORE-002**: Create generic Repository trait
-- [ ] 🟠 **STORE-003**: Migrate EventStore to use Repository<E>
+- [ ] 🟠 **STORE-003**: Migrate EventStore to use Repository&lt;E>
 
 ---
 

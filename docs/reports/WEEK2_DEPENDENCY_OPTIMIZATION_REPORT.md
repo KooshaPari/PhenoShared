@@ -219,7 +219,7 @@ When starting Phase 2 (service integration, error handling):
 - [ ] Activate `anyhow` in agileplus-cli/dashboard (no re-declare needed)
 - [ ] Populate phenotype-telemetry with tracing bridge implementation
 - [ ] Add `tracing` exports to phenotype-telemetry public API
-- [ ] Update agileplus-{cli,dashboard} to use anyhow::Result<T>
+- [ ] Update agileplus-{cli,dashboard} to use anyhow::Result&lt;T>
 - [ ] Test distributed tracing integration with test services
 
 ### Phase 3 Optimization Checklist

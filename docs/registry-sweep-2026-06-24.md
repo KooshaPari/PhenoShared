@@ -14,7 +14,7 @@
 
 | Metric | Value |
 |---|---|
-| Total <REDACTED> repos on GitHub | **128** |
+| Total &lt;REDACTED&gt; repos on GitHub | **128** |
 | Already mapped in ECOSYSTEM_MAP.md (direct + aliases) | **40** |
 | **Unknown / not yet classified** | **88** |
 

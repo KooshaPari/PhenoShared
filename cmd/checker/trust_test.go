@@ -176,7 +176,7 @@ func TestLoadTrustRoot_MissingKeyID(t *testing.T) {
 	dir := t.TempDir()
 	tr := map[string]interface{}{
 		"verification_key": map[string]interface{}{
-			"bytes": make([]byte, 32),
+			"bytes":  make([]byte, 32),
 			"key_id": "abc123",
 		},
 		// key_id intentionally omitted

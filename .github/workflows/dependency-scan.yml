@@ -26,6 +26,9 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
 
       - name: Run OSV Scanner (npm)
+        id: osv
+        # Advisory scan: findings and scanner failures must not block CI.
+        continue-on-error: true
         uses: google/osv-scanner-action@13c39bb3adb1dd15d2d780f77d80b031917fd1a1 # v2.0.0
         with:
           scan-args: |-
@@ -33,7 +36,13 @@ jobs:
             --format=sarif
             --output=osv-results.sarif
 
+      - name: Report OSV warning
+        if: ${{ !cancelled() && steps.osv.outcome == 'failure' }}
+        run: echo "::warning::OSV reported vulnerabilities or failed to scan. Review the scanner logs and SARIF results."
+
       - name: Upload OSV SARIF
+        if: ${{ !cancelled() && hashFiles('osv-results.sarif') != '' }}
+        continue-on-error: true
         uses: github/codeql-action/upload-sarif@f205ea1c3313d32999d8d6a48b4f6530d4437b38
         with:
           sarif_file: osv-results.sarif

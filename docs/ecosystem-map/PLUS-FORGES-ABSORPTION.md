@@ -4,7 +4,7 @@
 
 | Field | Value |
 | --- | --- |
-| Source repo | <REDACTED>/PlusForges |
+| Source repo | &lt;REDACTED&gt;/PlusForges |
 | Source size | 76 LOC (README-only) |
 | Source branches | 1 |
 | Absorbed on | 2026-07-17 |

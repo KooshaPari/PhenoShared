@@ -4,13 +4,13 @@ import "fmt"
 
 // WireError codes — frozen list per spec 025.
 const (
-	WireErrorBadEnvelope         = "BadEnvelope"
-	WireErrorUnsupportedMsgType  = "UnsupportedMsgType"
-	WireErrorAuthFailed          = "AuthFailed"
-	WireErrorUnknownTenant       = "UnknownTenant"
-	WireErrorBadPayload          = "BadPayload"
-	WireErrorIo                  = "Io"
-	WireErrorBug                 = "Bug"
+	WireErrorBadEnvelope        = "BadEnvelope"
+	WireErrorUnsupportedMsgType = "UnsupportedMsgType"
+	WireErrorAuthFailed         = "AuthFailed"
+	WireErrorUnknownTenant      = "UnknownTenant"
+	WireErrorBadPayload         = "BadPayload"
+	WireErrorIo                 = "Io"
+	WireErrorBug                = "Bug"
 )
 
 // Error is the base error type for fabric client operations.
