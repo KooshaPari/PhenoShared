@@ -2,7 +2,7 @@
 # Usage in your project:
 #   jobs:
 #     ci:
-#       uses: KooshaPari/template-commons/.github/workflows/reusable-rust-ci.yml@main
+#       uses: <REDACTED>/template-commons/.github/workflows/reusable-rust-ci.yml@main
 #       with:
 #         crate-name: my-crate
 #         rust-version: stable

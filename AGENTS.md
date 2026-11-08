@@ -7,7 +7,7 @@ This file gives AI agents the operating context for working in the **PhenoKits**
 PhenoKits has two roles, and agents must not conflate them:
 
 1. **Umbrella checkout (parent directory).** When this repo is cloned alongside the rest of the Phenotype org, `PhenoKits/` becomes the workspace root — a parent directory holding ~30 sibling repos (AgilePlus, heliosApp, thegent, Civis, bifrost, etc.) as subdirectories for cross-cutting work. In this role PhenoKits has no code of its own; it is just the directory the org is checked out into.
-2. **Shared-artifact monorepo (this repo).** `KooshaPari/PhenoKits` is also a real git repo with 12 categories of shared artifacts (`templates/`, `configs/`, `libs/`, `governance/`, etc.) consumed by every Phenotype project.
+2. **Shared-artifact monorepo (this repo).** `<REDACTED>/PhenoKits` is also a real git repo with 12 categories of shared artifacts (`templates/`, `configs/`, `libs/`, `governance/`, etc.) consumed by every Phenotype project.
 
 `HexaKit/` inside this repo is a **sub-monorepo** included as a git submodule (`.gitmodules` → `https://github.com/KooshaPari/HexaKit.git`) — it has its own Cargo workspace and is excluded from the root `Cargo.toml` (`members = []`). To build it, `cd HexaKit && cargo build`.
 

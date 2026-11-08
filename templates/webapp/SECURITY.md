@@ -5,7 +5,7 @@
 Use one of the following channels:
 
 1. Preferred: GitHub Security Advisories for this repository.
-2. Fallback: open a private issue in the owning organization and tag `@KooshaPari`.
+2. Fallback: open a private issue in the owning organization and tag `@<REDACTED>`.
 
 Do not disclose exploit details publicly before triage.
 

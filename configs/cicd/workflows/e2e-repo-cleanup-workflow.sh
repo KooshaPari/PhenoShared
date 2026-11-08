@@ -22,7 +22,7 @@ NC='\033[0m'
 # Configuration
 DRY_RUN=false
 REPO=""
-BASE_PATH="/Users/kooshapari/CodeProjects/Phenotype/repos"
+BASE_PATH="/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 
 # All phenotype repos
 ALL_REPOS=(
@@ -137,7 +137,7 @@ cleanup_merged_remote_branches() {
 
     # Get merged branches
     local merged
-    merged=$(gh api repos/KooshaPari/"$repo"/branches --jq '.[] | select(.merged) | .name' 2>/dev/null | grep -v "main" || true)
+    merged=$(gh api repos/<REDACTED>/"$repo"/branches --jq '.[] | select(.merged) | .name' 2>/dev/null | grep -v "main" || true)
 
     if [[ -z "$merged" ]]; then
         log_info "No merged remote branches"
@@ -153,7 +153,7 @@ cleanup_merged_remote_branches() {
             log_info "[DRY-RUN] Would delete remote branch: $branch"
         else
             log_info "Deleting remote branch: $branch"
-            gh api -X DELETE repos/KooshaPari/"$repo"/branches/"$branch" 2>/dev/null || true
+            gh api -X DELETE repos/<REDACTED>/"$repo"/branches/"$branch" 2>/dev/null || true
         fi
     done
 }
@@ -300,7 +300,7 @@ report_repo_status() {
 
     # Open PRs
     local open_prs
-    open_prs=$(gh pr list --repo "KooshaPari/$repo" --state open 2>/dev/null | wc -l || echo "0")
+    open_prs=$(gh pr list --repo "<REDACTED>/$repo" --state open 2>/dev/null | wc -l || echo "0")
     if [[ "$open_prs" -gt 0 ]]; then
         log_info "  Open PRs: $open_prs"
     fi

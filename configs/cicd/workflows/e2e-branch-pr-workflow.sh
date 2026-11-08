@@ -22,7 +22,7 @@ NC='\033[0m' # No Color
 # Configuration
 DRY_RUN=false
 REPO_PATTERN=""
-BASE_PATH="/Users/kooshapari/CodeProjects/Phenotype/repos"
+BASE_PATH="/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 PHENOTYPE_REPOS=(
     "AgilePlus"
     "agileplus-publish"
@@ -129,11 +129,11 @@ scan_repo() {
 
     # Check open PRs
     local open_prs
-    open_prs=$(gh pr list --repo "KooshaPari/$repo" --state open --json number,title --json number,title 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
+    open_prs=$(gh pr list --repo "<REDACTED>/$repo" --state open --json number,title --json number,title 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
 
     if [[ "$open_prs" -gt 0 ]]; then
         log_info "  Open PRs: $open_prs"
-        gh pr list --repo "KooshaPari/$repo" --state open --json number,title,headRefName 2>/dev/null | jq -r '.[] | "    #\(.number): \(.title) [\( .headRefName)]"'
+        gh pr list --repo "<REDACTED>/$repo" --state open --json number,title,headRefName 2>/dev/null | jq -r '.[] | "    #\(.number): \(.title) [\( .headRefName)]"'
     fi
 
     # Check worktrees
@@ -176,7 +176,7 @@ create_pr() {
 
     # Check if PR already exists
     local existing_pr
-    existing_pr=$(gh pr list --repo "KooshaPari/$repo" --head "$branch" --json number --json number 2>/dev/null | jq '.[0].number' 2>/dev/null || echo "null")
+    existing_pr=$(gh pr list --repo "<REDACTED>/$repo" --head "$branch" --json number --json number 2>/dev/null | jq '.[0].number' 2>/dev/null || echo "null")
 
     if [[ "$existing_pr" != "null" ]]; then
         log_warn "PR already exists for $branch: #$existing_pr"
@@ -189,7 +189,7 @@ create_pr() {
 
     # Create PR
     gh pr create \
-        --repo "KooshaPari/$repo" \
+        --repo "<REDACTED>/$repo" \
         --title "$title" \
         --body "$description" \
         --base main \

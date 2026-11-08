@@ -1,8 +1,8 @@
 # PhenoKits → phenokits-commons gap port
 
 **Date:** 2026-06-16  
-**Source:** `KooshaPari/PhenoKits` (archived)  
-**Target:** `KooshaPari/phenokits-commons`
+**Source:** `<REDACTED>/PhenoKits` (archived)  
+**Target:** `<REDACTED>/phenokits-commons`
 
 ## Ported in this change
 

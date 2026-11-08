@@ -47,7 +47,7 @@ security/
 ```yaml
 # In CI
 - name: Security Scan
-  uses:KooshaPari/PhenoKits/security/scanning/semgrep@v1
+  uses:<REDACTED>/PhenoKits/security/scanning/semgrep@v1
 ```
 
 ## Related

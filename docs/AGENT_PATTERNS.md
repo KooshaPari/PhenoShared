@@ -50,7 +50,7 @@ pheno new --template hexagonal-rust --name my-service --org MyOrg
 # 1. Get project params
 cat > params.json <<EOF
 {
-  "project": {"name": "my-service", "org": "MyOrg", "github_repo": "KooshaPari/my-service"},
+  "project": {"name": "my-service", "org": "MyOrg", "github_repo": "<REDACTED>/my-service"},
   "runtime": {"rust": "1.75"}
 }
 EOF
@@ -148,7 +148,7 @@ cargo build
 **Agent workflow**:
 ```bash
 # Check branch protection
-gh api repos/KooshaPari/my-repo/branch-protection/main
+gh api repos/<REDACTED>/my-repo/branch-protection/main
 
 # Enforce via OPA
 opa eval --bundle=configs/policies/opa/authz.rego \

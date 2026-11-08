@@ -1,4 +1,4 @@
-# Block-C Audit — KooshaPari/phenokits-commons
+# Block-C Audit — <REDACTED>/phenokits-commons
 
 **Date:** 2026-06-17  
 **Auditor:** ecosystem disposition wave (Lane C)  
@@ -28,7 +28,7 @@
 | `governance/phenoproc-templates/` present | **PASS** | CI + Rust integration scaffolds |
 | `governance/phenoproc-configs/` present | **PASS** | Per-language lint/format configs |
 | Root `Cargo.toml` workspace members | **PASS (intentional empty)** | Virtual umbrella; no compiled crates at root |
-| `HexaKit/` git submodule | **WARN** | Pointer only; shallow clones may not init — consumers should use `KooshaPari/HexaKit` directly |
+| `HexaKit/` git submodule | **WARN** | Pointer only; shallow clones may not init — consumers should use `<REDACTED>/HexaKit` directly |
 | `Tracera/` | **QUARANTINE** | Empty placeholder; row-level disposition in `worklogs/` |
 | `README.md` accuracy | **FAIL** | Still documents `phenotype-python-sdk` / `phenotype-go-sdk` monorepo sections from pre-split era |
 | Domain lib concentration | **WARN** | `libs/go/*` (7 pkgs), `libs/typescript/*` (3 pkgs) belong in language SDK repos |
@@ -61,7 +61,7 @@ Aligned with `docs/RESTRUCTURING_PLAN.md` and root `Cargo.toml` comments.
 | Concern | Also present in | Canonical owner | phenokits-commons role |
 |---------|-----------------|-----------------|------------------------|
 | Project `template-*` generators | HexaKit | **HexaKit** | Reference copies + hexagon doc kit only |
-| Org reusable CI workflows | `KooshaPari/.github` | **phenotype-org-governance** | Copy-source templates under `configs/cicd/` |
+| Org reusable CI workflows | `<REDACTED>/.github` | **phenotype-org-governance** | Copy-source templates under `configs/cicd/` |
 | Python domain kits | `phenotype-python-sdk` | **phenotype-python-sdk** | Redirect manifest in `libs/python/README.md` |
 | Go domain kits | `phenotype-go-sdk` | **phenotype-go-sdk** | Relocate `libs/go/*` (except shared polyglot id) |
 | Spec lifecycle (`agileplus specify`) | AgilePlus | **AgilePlus** | Consumes templates from `governance/phenoproc-*` |

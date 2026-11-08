@@ -49,7 +49,7 @@ Continue today's pattern: each consumer references `path = "../phenoShared/crate
 
 ### Option D — GitHub Packages cargo registry (private)
 
-Publish to a private GitHub Packages cargo registry scoped to the `KooshaPari` org. Consumers configure `~/.cargo/config.toml` with the registry and an auth token.
+Publish to a private GitHub Packages cargo registry scoped to the `<REDACTED>` org. Consumers configure `~/.cargo/config.toml` with the registry and an auth token.
 
 **Pros:** Private (no public exposure). Real versioning. Works with `cargo publish`. Org-scoped access control via GitHub.
 **Cons:** GitHub Packages cargo support is **alpha / community-driven** (`cargo-quickinstall`, `cargo-registry-github`); no first-party Cargo support as of 2026-04. Requires every developer and CI runner to provision auth tokens. Cold builds are slow until cached. If GitHub Packages billing/quotas hit, all builds fail.

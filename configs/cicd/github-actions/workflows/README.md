@@ -5,9 +5,9 @@ Centralized CI/CD workflow **copy-source examples** for Phenotype projects.
 > **Canonical reusables live elsewhere — do not treat these as the source of truth.**
 > For the org's federated governance checks, `uses:` the canonical reusable
 > workflows directly rather than copying the templates here (which can drift):
-> - **cargo-deny** (mechanism): `KooshaPari/phenotype-tooling/.github/workflows/reusable/cargo-deny.yml@main`
+> - **cargo-deny** (mechanism): `<REDACTED>/phenotype-tooling/.github/workflows/reusable/cargo-deny.yml@main`
 >   — its policy baseline (`deny.toml`) is owned by `phenotype-org-governance` (the enforcement repo).
-> - **trufflehog** (mechanism): `KooshaPari/phenotype-tooling/.github/workflows/reusable-trufflehog.yml@main`.
+> - **trufflehog** (mechanism): `<REDACTED>/phenotype-tooling/.github/workflows/reusable-trufflehog.yml@main`.
 > The files in this directory are *starting-point examples* for repos that need a
 > bespoke pipeline — they are not live workflows (this is a `configs/` tree, not
 > `.github/workflows/`) and they are not the federated source of truth.
@@ -28,7 +28,7 @@ on:
 
 jobs:
   quality:
-    uses: KooshaPari/template-commons/.github/workflows/quality-gate.yml@main
+    uses: <REDACTED>/template-commons/.github/workflows/quality-gate.yml@main
 ```
 
 ## Available Templates

@@ -2,7 +2,7 @@
   "project": {
     "name": "example-project",
     "org": "MyOrg",
-    "github_repo": "KooshaPari/example-project"
+    "github_repo": "<REDACTED>/example-project"
   },
   "runtime": {
     "rust": "1.75",

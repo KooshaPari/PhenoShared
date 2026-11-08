@@ -67,8 +67,8 @@ afa7ab9 Initial: AuthKit Go middleware package
 ## Required Follow-Up Work
 
 1. Decide remote name:
-   - preferred: `KooshaPari/authkit-go`
-   - acceptable: `KooshaPari/AuthKit-go`
+   - preferred: `<REDACTED>/authkit-go`
+   - acceptable: `<REDACTED>/AuthKit-go`
    - avoid: continuing as an unregistered gitlink.
 2. Push nested commits and tag to that remote.
 3. Add `.gitmodules` in `AuthKit`.

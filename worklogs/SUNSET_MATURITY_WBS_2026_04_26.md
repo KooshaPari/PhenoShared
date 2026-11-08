@@ -192,7 +192,7 @@ have canonical homes, and archived repos stay quiet.
 
 ## Acceptance Tests
 
-- `gh search prs --owner KooshaPari --state open --limit 200` returns no open PRs,
+- `gh search prs --owner <REDACTED> --state open --limit 200` returns no open PRs,
   or every remaining PR has a written gate reason and next action.
 - Archived repo sample has no `.github/dependabot.yml`.
 - Priority active repos have ruleset inventory saved.

@@ -2,7 +2,7 @@
 
 **Status:** Approved assessment  
 **Date:** 2026-06-17  
-**Repo:** `KooshaPari/phenokits-commons`  
+**Repo:** `<REDACTED>/phenokits-commons`  
 **Charter:** [`phenotype-registry/docs/rationalization/boundary-shaping.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/docs/rationalization/boundary-shaping.md) (cited inline as **[charter]**)  
 **Audit:** [`docs/audit/BLOCK-C-AUDIT.md`](../audit/BLOCK-C-AUDIT.md)  
 **Registry:** [`phenotype-registry/BOUNDARY_OWNERS.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/BOUNDARY_OWNERS.md) §Scaffold
@@ -32,7 +32,7 @@ Per **[charter §Target topology]** and **BOUNDARY_OWNERS** §Scaffold,
 | Hexagon **ADR/doc pattern kit** (`hexagon/`) | **phenokits-commons** (dynamic-keep) |
 | Domain runtime libraries (auth, config, cli, middleware kits) | **Relocate** to language SDK monorepos |
 | Project **generators** and `template-*` CLI | **HexaKit** (absorb) |
-| Org-wide **reusable** GitHub workflows | **phenotype-org-governance** / `KooshaPari/.github` |
+| Org-wide **reusable** GitHub workflows | **phenotype-org-governance** / `<REDACTED>/.github` |
 | Spec lifecycle (`agileplus specify`) | **AgilePlus** (consumes templates from here) |
 
 **After relocation, phenokits-commons becomes:** governance templates + parameterized
@@ -50,7 +50,7 @@ Inventory sources:
 
 - Git tree `main` post PR #3 (2026-06-17), 12-category taxonomy from `Cargo.toml` header.
 - Absorption records: `docs/absorption/PHENOKITS_GAP_PORT.md`, `docs/absorption/PHENOPROC_GOVERNANCE_PORT.md`.
-- Cross-repo compare: archived `KooshaPari/PhenoKits`, `PhenoProc/crates/phenotype-governance/`.
+- Cross-repo compare: archived `<REDACTED>/PhenoKits`, `PhenoProc/crates/phenotype-governance/`.
 - **[charter]** decomposition map and `BOUNDARY_OWNERS.md` scaffold table.
 
 ---
@@ -62,7 +62,7 @@ Inventory sources:
 | 1 | `governance/phenoproc-templates/` | CI templates, Rust BDD/http/validation integration scaffolds, `AGENTS.md.template` | **DYNAMIC-KEEP** | phenokits-commons | BOUNDARY_OWNERS: fleet bootstrap source; ADR-005 |
 | 2 | `governance/phenoproc-configs/` | Per-language lint/format/deny/buf configs | **DYNAMIC-KEEP** | phenokits-commons | Copy-on-bootstrap; ported from PhenoProc PR #3 |
 | 3 | `governance/standards/` | Language coding standards (rust, python, ts, go) | **DYNAMIC-KEEP** | phenokits-commons | Scaffold-adjacent standards docs |
-| 4 | `configs/cicd/github-actions/` | Parameterized workflow templates (28 workflows) | **DYNAMIC-KEEP** | phenokits-commons (copy-source) | Per-repo templates; canonical reusables live in `KooshaPari/.github` |
+| 4 | `configs/cicd/github-actions/` | Parameterized workflow templates (28 workflows) | **DYNAMIC-KEEP** | phenokits-commons (copy-source) | Per-repo templates; canonical reusables live in `<REDACTED>/.github` |
 | 5 | `configs/cicd/workflows/` | Shell e2e scaffold scripts | **DYNAMIC-KEEP** | phenokits-commons | HexaKit/doc-sync complements |
 | 6 | `configs/tooling/` | Semgrep, codecov, mypy configs | **DYNAMIC-KEEP** | phenokits-commons | Parameterized tooling configs |
 | 7 | `configs/infra/` | Dockerfile, infra README | **DYNAMIC-KEEP** | phenokits-commons | Infra parameter templates |
@@ -91,7 +91,7 @@ Inventory sources:
 | 30 | `kitty-specs/` | Spec-kitty history | **DYNAMIC-KEEP** | phenokits-commons | Spec metadata; AgilePlus owns active spec lifecycle |
 | 31 | `worklogs/` | Session / drift disposition logs | **DYNAMIC-KEEP** | phenokits-commons | Quarantine + sunset evidence |
 | 32 | `Tracera/` | Empty Tracera placeholder | **DYNAMIC-KEEP** | phenokits-commons (quarantine) | Row-level disposition in worklogs; no delete |
-| 33 | `HexaKit/` (git submodule) | Pointer to HexaKit repo | **ABSORB** | HexaKit (remove submodule) | Consumers should depend on `KooshaPari/HexaKit` directly |
+| 33 | `HexaKit/` (git submodule) | Pointer to HexaKit repo | **ABSORB** | HexaKit (remove submodule) | Consumers should depend on `<REDACTED>/HexaKit` directly |
 | 34 | `src/lib.rs` | Empty virtual package stub | **DYNAMIC-KEEP** | phenokits-commons | Root `Cargo.toml` tooling integration only |
 | 35 | Root governance (README, AGENTS.md, CODEOWNERS, Taskfile, etc.) | Repo meta | **DYNAMIC-KEEP** | phenokits-commons | Standard org governance files |
 
@@ -101,7 +101,7 @@ Inventory sources:
 
 | Archived repo | Coverage | Status | Evidence |
 |---------------|----------|--------|----------|
-| `KooshaPari/PhenoKits` | **100%** (excl. redirected `libs/python`) | **KEEP_ARCHIVED** | PR #3, `docs/absorption/PHENOKITS_GAP_PORT.md` |
+| `<REDACTED>/PhenoKits` | **100%** (excl. redirected `libs/python`) | **KEEP_ARCHIVED** | PR #3, `docs/absorption/PHENOKITS_GAP_PORT.md` |
 | `PhenoProc/phenotype-governance/{templates,configs}` | **100%** | Ported | `docs/absorption/PHENOPROC_GOVERNANCE_PORT.md` |
 
 Hard **DELETE** of archived repos is **not** recommended until consumer manifest scan

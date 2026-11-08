@@ -28,7 +28,7 @@ homes, governance enforcement matches docs, and archived repos are quiet.
 In scope:
 
 - GitHub repo and PR state.
-- Local repo drift under `/Users/kooshapari/CodeProjects/Phenotype/repos`.
+- Local repo drift under `/Users/<REDACTED>/CodeProjects/Phenotype/repos`.
 - Shared crate canonical-home migration planning.
 - Ruleset/governance reconciliation.
 - Worklog/doc consolidation.

@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Final open PR search: `gh search prs --owner KooshaPari --state open --limit 200` returned no results.
+- Final open PR search: `gh search prs --owner <REDACTED> --state open --limit 200` returned no results.
 - Archived repos were temporarily unarchived only to close stale PRs, then re-archived.
 - No conflict rebases were performed during the final cleanup waves.
 - Merge attempts against several active/blocked PRs confirmed repository rules or permissions as blockers.
@@ -81,7 +81,7 @@ Archived repos checked with no `.github/dependabot.yml` found:
 - `KlipDot`
 - `kwality`
 
-Attempted `DELETE /repos/KooshaPari/<repo>/automated-security-fixes` for the archived repos that still have Dependabot configs. GitHub returned `422 Vulnerability alerts must be enabled to configure automated security fixes`, which means automated security-fix PR generation was not enabled for those repos at the security-fix setting layer. The remaining config files are only relevant if the repos are unarchived later.
+Attempted `DELETE /repos/<REDACTED>/<repo>/automated-security-fixes` for the archived repos that still have Dependabot configs. GitHub returned `422 Vulnerability alerts must be enabled to configure automated security fixes`, which means automated security-fix PR generation was not enabled for those repos at the security-fix setting layer. The remaining config files are only relevant if the repos are unarchived later.
 
 ## Ruleset / Merge Blocker Audit
 

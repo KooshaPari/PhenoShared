@@ -2,7 +2,7 @@
 # Usage in your project:
 #   jobs:
 #     cargo-deny:
-#       uses: KooshaPari/template-commons/.github/workflows/reusable-cargo-deny.yml@main
+#       uses: <REDACTED>/template-commons/.github/workflows/reusable-cargo-deny.yml@main
 
 name: Reusable Cargo Deny
 

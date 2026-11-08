@@ -8,7 +8,7 @@ governance/ruleset normalization, stale branch hygiene, and documentation consol
 
 Current verified state:
 
-- Open PRs: **0** via `gh search prs --owner KooshaPari --state open --limit 200`.
+- Open PRs: **0** via `gh search prs --owner <REDACTED> --state open --limit 200`.
 - GitHub repos: **164 total**: 101 active, 63 archived.
 - Local git repos under the shelf: **112** top-level/local checkouts.
 - Local drift backlog: previously audited 218 git repos with 186 drifted, 126 dirty, 108 ahead/behind, and 49 local-only branch cases.
@@ -153,8 +153,8 @@ Next archived audit:
 
 ## Evidence Sources
 
-- `gh search prs --owner KooshaPari --state open --limit 200`
-- `gh repo list KooshaPari --limit 1000 --json name,isArchived,isPrivate,defaultBranchRef,pushedAt,updatedAt,primaryLanguage`
+- `gh search prs --owner <REDACTED> --state open --limit 200`
+- `gh repo list <REDACTED> --limit 1000 --json name,isArchived,isPrivate,defaultBranchRef,pushedAt,updatedAt,primaryLanguage`
 - `docs/governance/sunset-maturity-batch-2-execution-plan-2026-04-26.md`
 - `docs/governance/ruleset-gap-ledger-2026-04-26.md`
 - `docs/governance/actual-shared-crates-audit-2026-04-25.md`

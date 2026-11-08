@@ -2,7 +2,7 @@
 # Usage in your project:
 #   jobs:
 #     ci:
-#       uses: KooshaPari/template-commons/.github/workflows/reusable-go-ci.yml@main
+#       uses: <REDACTED>/template-commons/.github/workflows/reusable-go-ci.yml@main
 #       with:
 #         go-version: '1.21'
 

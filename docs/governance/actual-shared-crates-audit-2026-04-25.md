@@ -1,7 +1,7 @@
 # Actual Shared Crates Audit (origin/main, drift-aware)
 
 **Date:** 2026-04-25
-**Method:** GitHub `gh search code` against `KooshaPari/*` Cargo.toml files; classify each consumer as real, drift-mirror, or vendored.
+**Method:** GitHub `gh search code` against `<REDACTED>/*` Cargo.toml files; classify each consumer as real, drift-mirror, or vendored.
 **Caveat:** Search-indexed `main` branches only. Counts exclude self (the source repo) and exclude repos identified as drift mirrors.
 
 ---
@@ -86,4 +86,4 @@ Strict counts: **1 consumed · 6 unused · 5 vendored · 0 pure-drift crates**.
 
 ---
 
-**Sources:** `gh search code --owner KooshaPari <crate-name> --extension toml` queries, 2026-04-25 ~01:05 UTC. All consumer entries verified against origin/main Cargo.toml content. Read-only; no repo content modified.
+**Sources:** `gh search code --owner <REDACTED> <crate-name> --extension toml` queries, 2026-04-25 ~01:05 UTC. All consumer entries verified against origin/main Cargo.toml content. Read-only; no repo content modified.

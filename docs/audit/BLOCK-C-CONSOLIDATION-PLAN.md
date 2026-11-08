@@ -1,4 +1,4 @@
-# Block-C Consolidation Plan — KooshaPari/phenokits-commons
+# Block-C Consolidation Plan — <REDACTED>/phenokits-commons
 
 **Date:** 2026-06-17  
 **Status:** Approved for execution  
@@ -77,10 +77,10 @@ Sibling Block-C dispositions (same wave, separate PRs):
 
 | Repo | State | Next action |
 |------|-------|-------------|
-| `KooshaPari/HexaKit` | DISPOSITION merged (#233) | Execute crate eviction (Lane P) |
-| `KooshaPari/services` | `audit/block-c` branch | Merge audit docs |
-| `KooshaPari/Tokn` | Plan on `main` | Execute source-tree consolidation |
-| `KooshaPari/phenotype-registry` | Lane A (#76) | BOUNDARY_OWNERS SSOT |
+| `<REDACTED>/HexaKit` | DISPOSITION merged (#233) | Execute crate eviction (Lane P) |
+| `<REDACTED>/services` | `audit/block-c` branch | Merge audit docs |
+| `<REDACTED>/Tokn` | Plan on `main` | Execute source-tree consolidation |
+| `<REDACTED>/phenotype-registry` | Lane A (#76) | BOUNDARY_OWNERS SSOT |
 
 ---
 

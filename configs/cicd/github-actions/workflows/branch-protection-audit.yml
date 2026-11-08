@@ -29,7 +29,7 @@ jobs:
 
           # Template repos may not have strict branch protection
           IS_TEMPLATE_REPO=false
-          if [ "${{ github.repository }}" == "KooshaPari/template-commons" ]; then
+          if [ "${{ github.repository }}" == "<REDACTED>/template-commons" ]; then
             IS_TEMPLATE_REPO=true
           fi
 

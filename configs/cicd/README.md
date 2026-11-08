@@ -32,7 +32,7 @@ configs/cicd/
 # In your .github/workflows/ci.yml
 jobs:
   ci:
-    uses: KooshaPari/PhenoKits/configs/cicd/github-actions/ci.yml@v1
+    uses: <REDACTED>/PhenoKits/configs/cicd/github-actions/ci.yml@v1
     with:
       runner: ubuntu-latest
       matrix: ["lint", "test", "build"]

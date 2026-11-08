@@ -14,7 +14,7 @@ until their local state is dispositioned.
 | `phenoShared` | moderate | active `Main Governance Baseline`; permissive review settings | CODEOWNERS and reusable workflows exist | tighten to 1 approval, CODEOWNER review, thread resolution |
 | `thegent` | strong but uneven | active `Main` | broad workflow set; `AGENTS.md` exceeds 500-line guidance; no committed root ruleset baseline | split/trim `AGENTS.md`; add local ruleset source-of-truth |
 | `agentapi-plusplus` | blocked | active `Main` and `Mainm` | large dirty vendor/deletion branch | audit duplicate ruleset intent after drift quarantine |
-| `Tracera` | unclear | active `Main` on GitHub repo | local `Tracera` path points at `KooshaPari/PhenoKits` remote | resolve repo identity before governance PR |
+| `Tracera` | unclear | active `Main` on GitHub repo | local `Tracera` path points at `<REDACTED>/PhenoKits` remote | resolve repo identity before governance PR |
 | `PhenoMCP` | low | no rulesets returned | CI workflows exist; no root CODEOWNERS/pre-commit found in sample | add CODEOWNERS and baseline ruleset |
 | `PhenoProc` | low-to-moderate | no rulesets returned | CI workflows exist; root governance fragmented, dirty local state | root CODEOWNERS/ruleset after drift disposition |
 | `PhenoKits` | low root, moderate leaf | no rulesets returned | root doc/quality workflows; nested HexaKit has stronger governance files | add root ruleset or document delegated governance contract |

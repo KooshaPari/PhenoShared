@@ -10,15 +10,15 @@ work is to classify, quarantine, and create small clean follow-up lanes.
 
 | Signal | Result | Command |
 |---|---:|---|
-| Open GitHub PRs | 0 | `gh search prs --owner KooshaPari --state open --limit 200` |
-| Merged sunset program | `PhenoKits#36` at `2a294c0` | `gh pr view 36 --repo KooshaPari/PhenoKits` |
-| Closed polluted PR | `PhenoKits#38` closed | `gh pr view 38 --repo KooshaPari/PhenoKits` |
+| Open GitHub PRs | 0 | `gh search prs --owner <REDACTED> --state open --limit 200` |
+| Merged sunset program | `PhenoKits#36` at `2a294c0` | `gh pr view 36 --repo <REDACTED>/PhenoKits` |
+| Closed polluted PR | `PhenoKits#38` closed | `gh pr view 38 --repo <REDACTED>/PhenoKits` |
 | Worktree containers | 44 | `find . -maxdepth 2 ... '*-wtrees' '.worktrees' '*-recovered'` |
 | Top-level wrapper roots | 33 | subagent inventory cross-check |
 | Repo-local nested wrapper roots | 11 | subagent inventory cross-check |
 | Immediate child dirs under wrappers | 284 | subagent inventory cross-check |
 | Nested `.git` dirs | 142 | `find . -maxdepth 3 -name .git -type d` |
-| Priority repo ruleset gaps | `PhenoMCP`, `PhenoProc`, `PhenoKits`, `Dino`, `PhenoSpecs`, `AuthKit` | `gh api repos/KooshaPari/<repo>/rulesets` |
+| Priority repo ruleset gaps | `PhenoMCP`, `PhenoProc`, `PhenoKits`, `Dino`, `PhenoSpecs`, `AuthKit` | `gh api repos/<REDACTED>/<repo>/rulesets` |
 
 ## P0 Drift Disposition
 

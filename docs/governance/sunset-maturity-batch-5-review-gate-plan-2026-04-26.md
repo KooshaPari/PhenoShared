@@ -9,7 +9,7 @@ planning and audit lanes.
 
 ## Current Open PR Queue
 
-All open PRs are in `KooshaPari/phenoShared` and are blocked by `REVIEW_REQUIRED`.
+All open PRs are in `<REDACTED>/phenoShared` and are blocked by `REVIEW_REQUIRED`.
 
 | PR | Title | Role | Merge order |
 |---|---|---|---|

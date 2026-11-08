@@ -8,7 +8,7 @@
 
 ## 1. Current Shared Crate Inventory
 
-### `phenotype-shared` (KooshaPari/phenotype-shared, Cargo workspace, 12 crates)
+### `phenotype-shared` (<REDACTED>/phenotype-shared, Cargo workspace, 12 crates)
 
 | Crate | Status |
 |-------|--------|
@@ -25,11 +25,11 @@
 | `phenotype-redis-adapter` | published |
 | `phenotype-state-machine` | published (also in infrakit — drift risk) |
 
-### `phenotype-infrakit` (KooshaPari/phenotype-infrakit, Cargo workspace, 15 crates)
+### `phenotype-infrakit` (<REDACTED>/phenotype-infrakit, Cargo workspace, 15 crates)
 
 15 crates including the Phase 1 LOC-reduction outputs: `phenotype-error-core`, `phenotype-errors`, `phenotype-config-core`, `phenotype-health`, plus duplicates of cache/event-sourcing/state-machine listed above.
 
-### `phenoShared` (KooshaPari/phenoShared)
+### `phenoShared` (<REDACTED>/phenoShared)
 Hosts a parallel `phenotype-state-machine` source — third copy of the same logical crate.
 
 ### Go shared
@@ -39,7 +39,7 @@ Hosts a parallel `phenotype-state-machine` source — third copy of the same log
 
 ## 2. Adoption Rate
 
-**Methodology:** `gh search code` for `<crate-name>` across `KooshaPari` org, then count matches that are actual `Cargo.toml [dependencies]` lines vs. docs/audits/specs/READMEs.
+**Methodology:** `gh search code` for `<crate-name>` across `<REDACTED>` org, then count matches that are actual `Cargo.toml [dependencies]` lines vs. docs/audits/specs/READMEs.
 
 | Shared Crate | Mentions | Real Cargo Consumers | Adoption |
 |--------------|----------|---------------------|----------|

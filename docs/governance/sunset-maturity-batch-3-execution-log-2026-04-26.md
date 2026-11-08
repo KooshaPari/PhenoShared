@@ -10,7 +10,7 @@ and the blocked `phenotype-errors` release-prep lane.
 ### `phenoShared` Ruleset Tightening
 
 Updated live GitHub ruleset `Main Governance Baseline` (`14279307`) for
-`KooshaPari/phenoShared`.
+`<REDACTED>/phenoShared`.
 
 Before:
 
@@ -25,13 +25,13 @@ After:
 - `require_code_owner_review = false`
 
 `require_code_owner_review` intentionally remains disabled. The active
-`.github/CODEOWNERS` currently assigns all files to `@KooshaPari`, and GitHub does
+`.github/CODEOWNERS` currently assigns all files to `@<REDACTED>`, and GitHub does
 not allow PR authors to approve their own required review. Enabling code-owner review
 without adding another write-capable owner would self-block maintenance.
 
 ### PhenoKits Fresh Clone Verification
 
-The shelf-level checkout at `/Users/kooshapari/CodeProjects/Phenotype/repos` still has
+The shelf-level checkout at `/Users/<REDACTED>/CodeProjects/Phenotype/repos` still has
 missing tree objects and should remain quarantined for root branch switching.
 
 A fresh clone was verified at:
@@ -74,11 +74,11 @@ Do not create a Rust crate just to satisfy an old audit assumption.
 The following simple single-file README PRs appeared during this batch and were
 admin-merged:
 
-- `KooshaPari/eyetracker#2`
-- `KooshaPari/TestingKit#7`
-- `KooshaPari/heliosBench#123`
-- `KooshaPari/HeliosLab#56`
-- `KooshaPari/helios-router#184`
+- `<REDACTED>/eyetracker#2`
+- `<REDACTED>/TestingKit#7`
+- `<REDACTED>/heliosBench#123`
+- `<REDACTED>/HeliosLab#56`
+- `<REDACTED>/helios-router#184`
 
 ## Next Actions
 

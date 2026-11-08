@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This completes `SUNSET-011A`: compare live `KooshaPari/Tracera.git` against
+This completes `SUNSET-011A`: compare live `<REDACTED>/Tracera.git` against
 local `Tracera-recovered` before any promotion, rename, or push operation.
 
 ## Decision
@@ -101,7 +101,7 @@ separate decision.
 
 ```bash
 git diff --check
-gh workflow list --repo KooshaPari/Tracera
+gh workflow list --repo <REDACTED>/Tracera
 actionlint .github/workflows/*.yml
 go test ./backend/...
 ```

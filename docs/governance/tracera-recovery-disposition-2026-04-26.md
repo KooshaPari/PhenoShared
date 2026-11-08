@@ -9,7 +9,7 @@ This closes `SUNSET-011B`: create a live-main recovery branch for the
 
 No Tracera code PR is required for the direct workflow recovery commits.
 
-A fresh clone of `KooshaPari/Tracera` at live `main`
+A fresh clone of `<REDACTED>/Tracera` at live `main`
 `5695f3984d31cde4cbc140219eada971b5ed8a40` accepted both recovered workflow
 patches with `git am --3way`, but each reported `No changes -- Patch already
 applied`. That means the two safe direct recovery commits are already present

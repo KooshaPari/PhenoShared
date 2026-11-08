@@ -4,7 +4,7 @@
 
 - **Name**: hexagon (Hexagonal Architecture Framework)
 - **Description**: Framework for implementing hexagonal architecture (ports and adapters) across multiple languages with consistent patterns
-- **Location**: `/Users/kooshapari/CodeProjects/Phenotype/repos/hexagon`
+- **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/hexagon`
 - **Language Stack**: Rust, Go, TypeScript, Python
 - **Published**: Private (Phenotype org)
 

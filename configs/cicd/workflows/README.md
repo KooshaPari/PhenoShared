@@ -14,7 +14,7 @@ Production-ready end-to-end workflows for repository management, auditing, and s
 ## Quick Start
 
 ```bash
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/template-commons/workflows
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/template-commons/workflows
 
 # Dry run (preview actions)
 ./e2e-branch-pr-workflow.sh --dry-run
@@ -156,7 +156,7 @@ Edit these variables at the top of each script:
 
 ```bash
 # Base path for repositories
-BASE_PATH="/Users/kooshapari/CodeProjects/Phenotype/repos"
+BASE_PATH="/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 
 # Phenotype repos to scan
 PHENOTYPE_REPOS=(

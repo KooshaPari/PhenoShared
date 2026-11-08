@@ -2,7 +2,7 @@
 # Usage in your project:
 #   jobs:
 #     codespell:
-#       uses: KooshaPari/template-commons/.github/workflows/reusable-codespell.yml@main
+#       uses: <REDACTED>/template-commons/.github/workflows/reusable-codespell.yml@main
 
 name: Reusable Codespell
 

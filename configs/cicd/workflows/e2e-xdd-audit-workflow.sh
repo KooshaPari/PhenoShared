@@ -24,7 +24,7 @@ NC='\033[0m'
 # Configuration
 REPO=""
 FORMAT="text"
-BASE_PATH="/Users/kooshapari/CodeProjects/Phenotype/repos"
+BASE_PATH="/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 OUTPUT_FILE=""
 
 # All phenotype repos

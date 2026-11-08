@@ -8,10 +8,10 @@ archive labels, old plans, or PR queue status.
 
 ## Evidence Sources
 
-- Local shelf path: `/Users/kooshapari/CodeProjects/Phenotype/repos`
+- Local shelf path: `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 - Snapshot command: top-level `.git` directories, `git status --short --branch`,
   tracked dirty count, untracked count, branch, and origin URL.
-- GitHub queue command: `gh search prs --owner KooshaPari --state open --limit 200`
+- GitHub queue command: `gh search prs --owner <REDACTED> --state open --limit 200`
 - Read-only subagent inventory for top-level repo maturity classes.
 - Read-only subagent P0 branch-tip manifest for known P0 repos.
 
@@ -55,7 +55,7 @@ Interpretation:
 | `PhenoKits` | `ACTIVE` | Governance/control-plane docs continue from clean clones; shelf root checkout remains quarantined. | Continue docs PRs from fresh clones. |
 | `AgilePlus` | `ACTIVE` | Clean local main in git-only scan; canonical project truth still under `.agileplus/*`. | Keep as active runtime/spec owner; avoid shelf contamination. |
 | `thegent` | `ACTIVE` | Worktree branch `chore/gitignore-worktrees-2026-04-26`; small untracked count. | Keep active; avoid broad legacy-stack rebases. |
-| `Tracera-recovered` | `ACTIVE` | Branch `fix/main-workflow-syntax`; remote `KooshaPari/Tracera`; dirty but is the recovered live source. | Resolve with `Tracera` routing under SUNSET-011. |
+| `Tracera-recovered` | `ACTIVE` | Branch `fix/main-workflow-syntax`; remote `<REDACTED>/Tracera`; dirty but is the recovered live source. | Resolve with `Tracera` routing under SUNSET-011. |
 | `Tracera` | `SUNSET_READY` candidate | Non-git/docs-only container in shelf inventory; recovered source is elsewhere. | Do not delete; compare against `Tracera-recovered` before successor note. |
 | `agentapi-plusplus` | `MAINTENANCE` / P0 salvage | Clean and synced on `main`; P0 subagent recommends `salvage`. | Keep as current manifest source; no wholesale recovery needed. |
 | `Dino` | `MAINTENANCE` / P0 salvage | Clean and synced on `main`; P0 subagent recommends `salvage`. | Keep; verify ruleset/readme state before sunset claims. |

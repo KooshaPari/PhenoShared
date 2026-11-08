@@ -52,7 +52,7 @@ Configs use placeholders that are substituted during application.
 |-------------|-------------|---------|
 | `{{project.name}}` | Project kebab-case name | `my-project` |
 | `{{project.org}}` | Organization PascalCase | `MyOrg` |
-| `{{github.repo}}` | GitHub repository path | `KooshaPari/my-project` |
+| `{{github.repo}}` | GitHub repository path | `<REDACTED>/my-project` |
 | `{{runtime.rust}}` | Rust version | `1.75` |
 | `{{runtime.node}}` | Node.js version | `20` |
 | `{{runtime.go}}` | Go version | `1.22` |

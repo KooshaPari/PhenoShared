@@ -24,8 +24,8 @@ NC='\033[0m'
 SERVICE_NAME=""
 LANGUAGE=""
 OUTPUT_DIR=""
-TEMPLATE_BASE="/Users/kooshapari/CodeProjects/Phenotype/repos/template-commons"
-BASE_PATH="/Users/kooshapari/CodeProjects/Phenotype/repos"
+TEMPLATE_BASE="/Users/<REDACTED>/CodeProjects/Phenotype/repos/template-commons"
+BASE_PATH="/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 
 # Supported languages
 SUPPORTED_LANGS=("go" "rust" "typescript" "python")

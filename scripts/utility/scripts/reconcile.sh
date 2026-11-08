@@ -25,7 +25,7 @@ TEMPLATES_DIR="${REPO_ROOT}/templates"
 CHECK_ONLY=false
 VERBOSE=false
 TARGET_REPOS=""
-PHENOTYPE_ROOT="/Users/kooshapari/CodeProjects/Phenotype/repos"
+PHENOTYPE_ROOT="/Users/<REDACTED>/CodeProjects/Phenotype/repos"
 
 # Counters for reporting
 TOTAL_CHECKS=0

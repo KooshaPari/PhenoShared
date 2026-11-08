@@ -1,6 +1,6 @@
 # zz-phenokits-commons (ARCHIVED)
 
-**This repository has been absorbed into [KooshaPari/phenotype-registry](https://github.com/KooshaPari/phenotype-registry).**
+**This repository has been absorbed into [<REDACTED>/phenotype-registry](https://github.com/KooshaPari/phenotype-registry).**
 
 All content now lives under `commons/` in phenotype-registry.
 

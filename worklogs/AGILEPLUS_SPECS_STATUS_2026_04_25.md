@@ -1,7 +1,7 @@
 # AgilePlus kitty-specs Status Audit — 2026-04-25
 
 **Project:** [AgilePlus] · **Category:** GOVERNANCE · **Scope:** product-DAG-extension audit
-**Source:** `/Users/kooshapari/CodeProjects/Phenotype/repos/AgilePlus/kitty-specs/`
+**Source:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/kitty-specs/`
 **Method:** Read-only state extraction from `spec.md` frontmatter + `git log` first/last commit dates.
 
 ---
@@ -51,12 +51,12 @@ Specs with `IN_PROGRESS` state, both `plan.md` and `tasks.md` present:
 - `eco-001-worktree-remediation`, `eco-002-branch-consolidation`, `eco-003-circular-dep-resolution`,
   `eco-004-hexagonal-migration`, `eco-005-xdd-quality`, `eco-006-governance-sync`
   (all six: spec only, no plan/tasks — stub-grade)
-- `kooshapari-stale-repo-triage` (plan, no tasks)
+- `<REDACTED>-stale-repo-triage` (plan, no tasks)
 - `phenosdk-decompose-core` (plan, no tasks)
 - `phenosdk-decompose-llm` (spec only)
 - `phenosdk-decompose-mcp` (plan, no tasks)
 - `phenosdk-wave-a-contracts` (plan, no tasks)
-- `portfolio-audit-kooshapari-2026` (plan, no tasks)
+- `portfolio-audit-<REDACTED>-2026` (plan, no tasks)
 - `snyk-phase-1-deploy` (spec only)
 - `thegent-dotfiles-consolidation` (spec only)
 

@@ -50,7 +50,7 @@ extract Tracera first (cleanest boundary), then HexaKit.
 
 - ~40 HIGH+MED CVEs closed real this session
 - 5 of 5 Tier-1 project landings 200ing
-- `projects.kooshapari.com` LIVE
+- `projects.<REDACTED>.com` LIVE
 - Tier-3 path microfrontends pattern proven on agileplus-landing
 - MEMORY.md compaction: 490 → 33 lines + 12 topic files
 

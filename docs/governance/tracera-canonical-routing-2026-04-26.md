@@ -10,7 +10,7 @@ the canonical TracerTM implementation.
 its unique content is compared and either migrated or explicitly retired.
 
 `phench/` is a separate Python service orchestration/benchmarking product that is
-currently attached to the same `KooshaPari/Tracera.git` branch family. It must be
+currently attached to the same `<REDACTED>/Tracera.git` branch family. It must be
 routed separately and not folded into TracerTM recovery.
 
 ## Routing Table
@@ -19,14 +19,14 @@ routed separately and not folded into TracerTM recovery.
 |---|---|---|---|
 | `Tracera-recovered/` | Canonical TracerTM source | Has `backend/go.mod`, `frontend/package.json`, root `package.json`, `process-compose.yml`, deployment docs, OpenAPI/proto/schemas, and recent TracerTM commits. | Rename or reclone into canonical `Tracera/` path only after preserving legacy `Tracera/`. |
 | `Tracera/` | Preserved legacy observability checkpoint | README describes an observability platform with Tempo, Prometheus, Loki, Grafana, Alloy, and Minio; current checkout is a worktree-style branch showing shelf-wide status noise. | Compare docs/configs against recovered source; migrate unique observability docs if still relevant. |
-| `artifacts/` | Tracera-remote shelf/worktree artifact container | Git remote is `KooshaPari/Tracera.git`; status output mirrors shelf-wide dirt rather than a coherent product tree. | Keep as quarantine artifact until row-level worktree disposition. |
-| `phench/` | Separate product, not TracerTM | README describes `Phench`, a Python service orchestration and benchmarking framework; branch remote points to `KooshaPari/Tracera.git` and has one local ahead commit. | Create separate routing decision or remote; do not merge into TracerTM. |
-| `Tracely/` | Separate deprecated tracing repo | Remote is `KooshaPari/Tracely.git`; current branch is `chore/dead-code-phase1-tracely`. | Keep under Tracely dead-code/sunset lane. |
+| `artifacts/` | Tracera-remote shelf/worktree artifact container | Git remote is `<REDACTED>/Tracera.git`; status output mirrors shelf-wide dirt rather than a coherent product tree. | Keep as quarantine artifact until row-level worktree disposition. |
+| `phench/` | Separate product, not TracerTM | README describes `Phench`, a Python service orchestration and benchmarking framework; branch remote points to `<REDACTED>/Tracera.git` and has one local ahead commit. | Create separate routing decision or remote; do not merge into TracerTM. |
+| `Tracely/` | Separate deprecated tracing repo | Remote is `<REDACTED>/Tracely.git`; current branch is `chore/dead-code-phase1-tracely`. | Keep under Tracely dead-code/sunset lane. |
 
 ## Canonical Evidence For `Tracera-recovered`
 
 - `Tracera-recovered/backend/go.mod` module:
-  `github.com/kooshapari/tracertm-backend`
+  `github.com/KooshaPari/tracertm-backend`
 - `Tracera-recovered/package.json` package:
   `tracertm-workspace`
 - `Tracera-recovered/frontend/package.json`
@@ -52,7 +52,7 @@ d7d68840 ci: scope legacy broad workflows
 
 1. Freeze current local paths. Do not delete `Tracera/`, `Tracera-recovered/`,
    `artifacts/`, or `phench/`.
-2. Create a fresh clone of `KooshaPari/Tracera.git` into a temporary path and
+2. Create a fresh clone of `<REDACTED>/Tracera.git` into a temporary path and
    compare it to `Tracera-recovered`.
 3. If the fresh clone matches `Tracera-recovered`, promote `Tracera-recovered`
    as the source of truth and replace the shelf `Tracera/` path only through a
@@ -72,7 +72,7 @@ d7d68840 ci: scope legacy broad workflows
 - Do not treat `Tracera/` as the implementation source until its docs-only
   observability checkpoint is reconciled.
 - Do not merge `phench/` into TracerTM merely because its remote points at
-  `KooshaPari/Tracera.git`.
+  `<REDACTED>/Tracera.git`.
 - Do not delete any Tracera-related path until a row-level disposition exists in
   the worktree quarantine ledger.
 

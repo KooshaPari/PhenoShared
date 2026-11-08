@@ -17,7 +17,7 @@ on:
 
 jobs:
   quality:
-    uses: KooshaPari/template-commons/.github/workflows/quality-gate.yml@main
+    uses: <REDACTED>/template-commons/.github/workflows/quality-gate.yml@main
 ```
 
 ## Available Templates

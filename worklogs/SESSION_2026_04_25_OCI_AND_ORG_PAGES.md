@@ -46,9 +46,9 @@ worklog focuses on the second half of the day, after ~13:30 local.
 
 ### Org-pages built (Tier-1 + Tier-3)
 
-- `projects.kooshapari.com` LIVE (Astro 5 + Tailwind 4)
+- `projects.<REDACTED>.com` LIVE (Astro 5 + Tailwind 4)
 - 5 project landings 200ing: `agileplus`, `thegent`, `hwledger`, `phenokits`,
-  `byteport`.kooshapari.com
+  `byteport`.<REDACTED>.com
 - Tier-3 microfrontends inside `agileplus-landing`: `/docs`, `/qa`, `/otel`,
   `/preview/<pr#>`
 - Vercel cron wired for nightly portfolio refresh

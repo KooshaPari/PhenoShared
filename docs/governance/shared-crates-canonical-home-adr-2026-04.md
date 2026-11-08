@@ -19,15 +19,15 @@ workspaces** with no single source of truth. Filesystem reconnaissance on
 
 | Home | Repo (origin) | Has crates? | Last-touched |
 |------|---------------|-------------|--------------|
-| `phenoShared` | `KooshaPari/phenoShared` | ES, CA, SM, PE | 2026-04-25 (today) |
-| `pheno` | `KooshaPari/pheno` | ES, CA, SM, PE | 2026-03-31 |
-| `PhenoProc` | `KooshaPari/PhenoProc` | ES, CA, SM, PE (+ nested `crates/phenotype-shared/crates/*`) | 2026-04-03 |
-| `DataKit/rust` | `KooshaPari/DataKit` | ES, CA | 2026-04-05 (snapshot) |
-| `HexaKit/crates` + `PhenoKits/HexaKit/crates` | `KooshaPari/HexaKit`, `PhenoKits` | SM, PE (+ ES, CA in PhenoKits) | 2026-03-31 |
-| `AuthKit/rust` | `KooshaPari/AuthKit` | PE | snapshot |
-| `ResilienceKit/rust` | `KooshaPari/ResilienceKit` | SM | snapshot |
-| `hwLedger/vendor` | `KooshaPari/hwLedger` | ES (vendored copy) | snapshot |
-| `phenotype-shared` (intended canonical per audit) | `KooshaPari/phenotype-shared` | **none locally; remote `main` has empty `members = []`** | dormant |
+| `phenoShared` | `<REDACTED>/phenoShared` | ES, CA, SM, PE | 2026-04-25 (today) |
+| `pheno` | `<REDACTED>/pheno` | ES, CA, SM, PE | 2026-03-31 |
+| `PhenoProc` | `<REDACTED>/PhenoProc` | ES, CA, SM, PE (+ nested `crates/phenotype-shared/crates/*`) | 2026-04-03 |
+| `DataKit/rust` | `<REDACTED>/DataKit` | ES, CA | 2026-04-05 (snapshot) |
+| `HexaKit/crates` + `PhenoKits/HexaKit/crates` | `<REDACTED>/HexaKit`, `PhenoKits` | SM, PE (+ ES, CA in PhenoKits) | 2026-03-31 |
+| `AuthKit/rust` | `<REDACTED>/AuthKit` | PE | snapshot |
+| `ResilienceKit/rust` | `<REDACTED>/ResilienceKit` | SM | snapshot |
+| `hwLedger/vendor` | `<REDACTED>/hwLedger` | ES (vendored copy) | snapshot |
+| `phenotype-shared` (intended canonical per audit) | `<REDACTED>/phenotype-shared` | **none locally; remote `main` has empty `members = []`** | dormant |
 
 ES = event-sourcing, CA = cache-adapter, SM = state-machine, PE = policy-engine.
 
@@ -124,7 +124,7 @@ implementation PR.
 - API reconciliation between the 26 / 42 / 57 LOC variants of
   `phenotype-event-sourcing` is delegated to the implementation task —
   the canonical baseline is whatever `phenoShared` ships at task-start.
-- Re-purposing the dormant `KooshaPari/phenotype-shared` repo (rename,
+- Re-purposing the dormant `<REDACTED>/phenotype-shared` repo (rename,
   archive, or repoint) is a separate org-hygiene task.
 
 ## Predecessors / DAG

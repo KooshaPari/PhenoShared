@@ -2,7 +2,7 @@
 
 **Status:** Active  
 **Date:** 2026-06-17  
-**Owner:** `KooshaPari/phenokits-commons`  
+**Owner:** `<REDACTED>/phenokits-commons`  
 **Authority:** [`phenotype-registry/BOUNDARY_OWNERS.md`](https://github.com/KooshaPari/phenotype-registry/blob/main/BOUNDARY_OWNERS.md) §Governance plane  
 **Disposition:** [`docs/boundary/DISPOSITION.md`](../docs/boundary/DISPOSITION.md)
 
@@ -18,7 +18,7 @@ repos. It supersedes copying from archived `PhenoProc` or `PhenoKits`.
 | New repo via `hexakit init` | HexaKit `.template.*` + this spec | HexaKit stamps infra-generic files; add governance depth from here |
 | Manual repo bootstrap | **This repo** `governance/phenoproc-*` | Copy-on-init, then tailor per repo |
 | `agileplus validate` | `governance/phenoproc-configs/` | ADR-005: AgilePlus consumes templates, does not own them |
-| CI workflow templates | `configs/cicd/github-actions/workflows/` | Copy-source; org reusables at `KooshaPari/.github` |
+| CI workflow templates | `configs/cicd/github-actions/workflows/` | Copy-source; org reusables at `<REDACTED>/.github` |
 
 **Do not** copy governance templates from archived `PhenoProc`, `PhenoKits`, or
 stale HexaKit `phenotype-governance/` paths.
@@ -57,7 +57,7 @@ stale HexaKit `phenotype-governance/` paths.
 
 ### 3. CI workflow copy-source — `configs/cicd/github-actions/workflows/`
 
-Prefer **reusable** workflows from `KooshaPari/.github` when available:
+Prefer **reusable** workflows from `<REDACTED>/.github` when available:
 
 | Reusable (org) | Local template fallback |
 |----------------|-------------------------|
@@ -86,7 +86,7 @@ Prefer **reusable** workflows from `KooshaPari/.github` when available:
 2. Copy governance/phenoproc-configs/<langs-used>/ → repo root or config dirs
 3. Copy governance/phenoproc-templates/ci/*.template → .github/workflows/ (strip .template)
 4. Copy github/AGENTS.md.template → AGENTS.md (fill repo-specific sections)
-5. Wire reusable workflows from KooshaPari/.github OR local configs/cicd templates
+5. Wire reusable workflows from <REDACTED>/.github OR local configs/cicd templates
 6. Run governance/phenoproc-templates/INTEGRATION_CHECKLIST.md
 7. Register repo in phenotype-registry ECOSYSTEM_MAP (if new canonical boundary)
 ```

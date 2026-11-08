@@ -16,7 +16,7 @@ We take security seriously. If you discover a security vulnerability, please rep
 
 Instead:
 
-1. Email: security@kooshapari.com
+1. Email: security@<REDACTED>.com
 2. Subject: `[SECURITY] Hexagon - Brief description`
 3. Include:
    - Description of the vulnerability

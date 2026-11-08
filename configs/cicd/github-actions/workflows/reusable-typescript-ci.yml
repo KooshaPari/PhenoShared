@@ -1,5 +1,5 @@
 # Reusable TypeScript CI Workflow
-# Usage: uses: KooshaPari/template-commons/.github/workflows/reusable-typescript-ci.yml@main
+# Usage: uses: <REDACTED>/template-commons/.github/workflows/reusable-typescript-ci.yml@main
 
 name: Reusable TypeScript CI
 

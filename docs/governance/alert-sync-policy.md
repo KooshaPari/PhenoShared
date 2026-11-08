@@ -6,7 +6,7 @@
 
 ## Background
 
-The reusable workflow `KooshaPari/phenotype-ops/.github/workflows/manifest-gate.yml` files GitHub Issues for Dependabot, code-scanning, and secret-scanning alerts on a weekly cadence. It is consumed by ~36 repos org-wide via thin caller workflows at `.github/workflows/alert-sync-issues.yml`.
+The reusable workflow `<REDACTED>/phenotype-ops/.github/workflows/manifest-gate.yml` files GitHub Issues for Dependabot, code-scanning, and secret-scanning alerts on a weekly cadence. It is consumed by ~36 repos org-wide via thin caller workflows at `.github/workflows/alert-sync-issues.yml`.
 
 The workflow is high-leverage in repos that ship code and surface real CVEs (e.g. `heliosCLI`, `cliproxyapi-plusplus`), but in docs-only repos it is pure noise — it re-files the same low-severity transitive-dep advisories every week, drowning the issue tracker.
 
@@ -27,7 +27,7 @@ Alert-sync should run **only** in repos that meet **both** criteria:
 
 For active code repos, the workflow stays enabled but should file issues **only for `severity >= HIGH`** Dependabot/code-scanning findings, plus all verified secret-scanning hits. Lower severities flow into Dependabot's native PR stream and are triaged there.
 
-This requires a follow-up change to the reusable workflow at `KooshaPari/phenotype-ops/.github/workflows/manifest-gate.yml` to accept a `min_severity` input (default `high`).
+This requires a follow-up change to the reusable workflow at `<REDACTED>/phenotype-ops/.github/workflows/manifest-gate.yml` to accept a `min_severity` input (default `high`).
 
 ## Disable procedure
 
@@ -58,6 +58,6 @@ Re-enable with `/enable` when the repo starts shipping code or when severity gat
 
 ## References
 
-- Current active workflow owner: `KooshaPari/phenotype-ops/.github/workflows/manifest-gate.yml`
+- Current active workflow owner: `<REDACTED>/phenotype-ops/.github/workflows/manifest-gate.yml`
 - Caller pattern: `.github/workflows/alert-sync-issues.yml` in each consumer repo
 - Session memory: task #184 (alert-sync-issues.yml dedup)

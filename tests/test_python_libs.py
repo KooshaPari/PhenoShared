@@ -1,7 +1,7 @@
 """Tests for in-repo Python libraries under libs/python/.
 
 Polyglot ``phenotype-id`` is vendored here. Other Python kits were absorbed into
-``KooshaPari/phenotype-python-sdk`` (see ``libs/python/README.md``).
+``<REDACTED>/phenotype-python-sdk`` (see ``libs/python/README.md``).
 """
 
 from __future__ import annotations
