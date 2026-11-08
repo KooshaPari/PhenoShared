@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/adapters/sandbox"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/adapters/sandbox"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // LandlockAdapter is the Tier 4 Linux Landlock adapter.

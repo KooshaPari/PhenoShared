@@ -24,13 +24,13 @@
 ```
 $ go build ./...                    # GREEN, no errors
 $ go test ./...                     # GREEN, 10 packages
-ok  github.com/kooshapari/nanovms/internal/adapters/linux
-ok  github.com/kooshapari/nanovms/internal/adapters/sandbox
-ok  github.com/kooshapari/nanovms/internal/config
-ok  github.com/kooshapari/nanovms/internal/domain
-ok  github.com/kooshapari/nanovms/pkg/config
-ok  github.com/kooshapari/nanovms/pkg/pheno-integration
-ok  github.com/kooshapari/nanovms/pkg/resilience
+ok  github.com/KooshaPari/nanovms/internal/adapters/linux
+ok  github.com/KooshaPari/nanovms/internal/adapters/sandbox
+ok  github.com/KooshaPari/nanovms/internal/config
+ok  github.com/KooshaPari/nanovms/internal/domain
+ok  github.com/KooshaPari/nanovms/pkg/config
+ok  github.com/KooshaPari/nanovms/pkg/pheno-integration
+ok  github.com/KooshaPari/nanovms/pkg/resilience
 ```
 
 ## Follow-ups (deferred to next PRs)

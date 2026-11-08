@@ -21,8 +21,8 @@
 
 use thiserror::Error;
 
-pub mod scm;
 pub mod event_log;
+pub mod scm;
 
 #[cfg(target_os = "windows")]
 #[cfg(feature = "service")]

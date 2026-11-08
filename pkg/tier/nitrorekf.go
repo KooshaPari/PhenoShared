@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // NitroEnclavesAdapter is the Tier 19 AWS Nitro Enclaves adapter.

@@ -8,8 +8,8 @@ import (
 	"io"
 	"os/exec"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/ports"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/ports"
 )
 
 // Create creates a new sandbox with the specified VM tier.

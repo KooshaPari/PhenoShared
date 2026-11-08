@@ -16,8 +16,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
-	nvmsruntime "github.com/kooshapari/nanovms/pkg/runtime"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
+	nvmsruntime "github.com/KooshaPari/nanovms/pkg/runtime"
 )
 
 // ResourceManifest is a type alias for gpu.ResourceManifest, allowing the

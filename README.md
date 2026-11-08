@@ -3,7 +3,7 @@
 
 NanoVMS is a multi-tier sandbox and virtual machine orchestration engine written in Go. It provides a unified API for creating, managing, and deploying workloads across 30 isolation tiers — from lightweight process isolation (WASM, native) through container runtimes (gVisor, Podman, LXC) to full virtualization (Firecracker, QEMU/KVM).
 
-[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/KooshaPari/nanovms/total)](https://github.com/KooshaPari/nanovms/releases)
+[![AI slop inside](https://sladge.net/badge.svg)](https://sladge.net) [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/<REDACTED>/nanovms/total)](https://github.com/KooshaPari/nanovms/releases)
 
 ## Features
 
@@ -75,12 +75,12 @@ allowed_tiers: [1, 2, 3]
 
 ### curl (all platforms)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/KooshaPari/nanovms/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/<REDACTED>/nanovms/main/install.sh | sh
 ```
 
 ### Homebrew (macOS/Linux)
 ```bash
-brew install KooshaPari/nanovms/nanovms
+brew install <REDACTED>/nanovms/nanovms
 ```
 
 ### Go
@@ -102,7 +102,7 @@ sudo rpm -i nanovms_*_linux_amd64.rpm
 
 ### Docker
 ```bash
-docker pull ghcr.io/KooshaPari/nanovms:latest
+docker pull ghcr.io/<REDACTED>/nanovms:latest
 ```
 
 ### From source

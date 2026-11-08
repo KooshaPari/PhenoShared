@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/plugin"
-	"github.com/kooshapari/nanovms/internal/plugin/sample"
+	"github.com/KooshaPari/nanovms/internal/plugin"
+	"github.com/KooshaPari/nanovms/internal/plugin/sample"
 )
 
 func TestRegistry_RegisterAndFind(t *testing.T) {

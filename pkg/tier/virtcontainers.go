@@ -11,7 +11,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // VirtContainersAdapter is the Tier 23 Intel Clear Containers /

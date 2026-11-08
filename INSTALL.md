@@ -9,7 +9,7 @@ NanoVMS is a multi-tier sandbox orchestration engine. You can install it from so
 export NVMS_TOKEN=$(openssl rand -hex 32)
 
 # Run NanoVMS
-docker run -d --name nanovms -p 8443:8443 -e NVMS_TOKEN=$NVMS_TOKEN ghcr.io/kooshapari/nanovms:latest
+docker run -d --name nanovms -p 8443:8443 -e NVMS_TOKEN=$NVMS_TOKEN ghcr.io/<REDACTED>/nanovms:latest
 
 # Verify
 curl -H "Authorization: Bearer $NVMS_TOKEN" http://localhost:8443/v1/sandboxes
@@ -56,7 +56,7 @@ nvms probe
 ## Install via `go install`
 
 ```bash
-go install github.com/kooshapari/nanovms/cmd/nvms@latest
+go install github.com/KooshaPari/nanovms/cmd/nvms@latest
 ```
 
 ## API Server

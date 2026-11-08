@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // DockerAdapter is the Tier 7 OCI container adapter (docker CLI).

@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // CrosvmAdapter is the Tier 15 ChromeOS crosvm adapter.

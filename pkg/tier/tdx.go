@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // TDXAdapter is the Tier 21 Intel TDX adapter.

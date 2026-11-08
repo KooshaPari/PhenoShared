@@ -14,8 +14,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
-	nvmsruntime "github.com/kooshapari/nanovms/pkg/runtime"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
+	nvmsruntime "github.com/KooshaPari/nanovms/pkg/runtime"
 )
 
 var nvccReleasePattern = regexp.MustCompile(`(?i)\brelease\s+([0-9]+\.[0-9]+)\b`)

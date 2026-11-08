@@ -30,7 +30,7 @@ regression detection.)
 MDEEOF
 
 # Verify
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/nanovms
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms
 go build ./cmd/agentctl 2>&1 | tail -3
 echo "---"
 echo '{"method":"sandbox.create","params":{"name":"hello"}}' | go run ./cmd/agentctl 2>&1 | head -3

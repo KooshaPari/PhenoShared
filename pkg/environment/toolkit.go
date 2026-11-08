@@ -5,7 +5,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
 )
 
 // ToolkitResolver discovers installed CUDA toolkits using environment precedence.

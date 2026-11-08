@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kooshapari/nanovms/internal/adapters/firecracker"
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/pkg/tier"
+	"github.com/KooshaPari/nanovms/internal/adapters/firecracker"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/pkg/tier"
 )
 
 // Config represents a deployment configuration.

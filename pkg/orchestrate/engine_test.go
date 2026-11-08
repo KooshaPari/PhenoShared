@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	nvmsruntime "github.com/kooshapari/nanovms/pkg/runtime"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	nvmsruntime "github.com/KooshaPari/nanovms/pkg/runtime"
 )
 
 // --- Engine Tests ---

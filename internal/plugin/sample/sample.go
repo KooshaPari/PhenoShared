@@ -8,7 +8,7 @@ import (
 	"context"
 	"sync/atomic"
 
-	"github.com/kooshapari/nanovms/internal/plugin"
+	"github.com/KooshaPari/nanovms/internal/plugin"
 )
 
 // ID is the stable plugin identifier.

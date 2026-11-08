@@ -18,7 +18,7 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-sys.path.insert(0, str(Path("/Users/kooshapari/Downloads/agent-lab-assessment-dossiers-v1.1/core-v1.0/tools")))
+sys.path.insert(0, str(Path("/Users/<REDACTED>/Downloads/agent-lab-assessment-dossiers-v1.1/core-v1.0/tools")))
 import pep
 
 
@@ -73,7 +73,7 @@ def check_i1_delegated_authority(repo: Path, project_name: str) -> dict:
     readme = read_text(repo / "README.md")
     # GitHub org ownership
     gi = git_info(repo)
-    if "KooshaPari" in gi.get("remote", "") or "KooshaPari" in gi.get("commit", ""):
+    if "<REDACTED>" in gi.get("remote", "") or "<REDACTED>" in gi.get("commit", ""):
         signals.append("github_org_ownership")
     # CI workflows exist
     workflows = list((repo / ".github" / "workflows").glob("*.yml")) if (repo / ".github" / "workflows").exists() else []

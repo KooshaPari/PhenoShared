@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // PodmanAdapter is the Tier 8 rootless OCI container adapter.

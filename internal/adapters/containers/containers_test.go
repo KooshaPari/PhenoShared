@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 type fakeRunner struct {

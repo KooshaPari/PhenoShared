@@ -39,7 +39,7 @@ air
 MDEEOF
 
 # Verify
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/nanovms
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms
 go build ./... 2>&1 | tail -3
 go test ./... 2>&1 | grep -E "FAIL|ok\s" | tail -3
 echo "---"

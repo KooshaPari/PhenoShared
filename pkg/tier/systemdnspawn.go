@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // SystemdNspawnAdapter is the Tier 18 systemd-nspawn adapter.

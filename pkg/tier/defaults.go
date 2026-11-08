@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // baseAdapter is a small helper struct that tier adapters can embed to

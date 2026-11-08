@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // SEVAdapter is the Tier 20 AMD SEV adapter.

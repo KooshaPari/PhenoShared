@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/adapters/gvisor"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/adapters/gvisor"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // runscAvailable reports whether the gVisor runsc binary can be found on

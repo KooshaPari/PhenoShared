@@ -12,7 +12,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // JailAdapter is the Tier 24 FreeBSD jail adapter.

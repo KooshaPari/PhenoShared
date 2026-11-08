@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 

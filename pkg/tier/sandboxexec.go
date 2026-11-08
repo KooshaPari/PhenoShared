@@ -13,7 +13,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // SandboxExecAdapter is the Tier 26 macOS sandbox-exec adapter.

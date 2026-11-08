@@ -3,7 +3,7 @@ package sandbox
 import (
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 func TestGenerateID(t *testing.T) {

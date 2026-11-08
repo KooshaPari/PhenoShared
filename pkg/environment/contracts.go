@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
 )
 
 const ProviderVersion = "nanovms.io/environment/v1"

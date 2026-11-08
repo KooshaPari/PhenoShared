@@ -12,9 +12,7 @@
 use async_trait::async_trait;
 use tokio::sync::mpsc;
 
-use crate::types::{
-    DeploymentId, LogLine, LogOptions, PortManifest, PortStatus,
-};
+use crate::types::{DeploymentId, LogLine, LogOptions, PortManifest, PortStatus};
 
 /// Errors from port-adapter operations.
 #[derive(Debug, thiserror::Error)]
@@ -93,7 +91,8 @@ pub trait NvmsAdapter: PortAdapter {
     async fn attach_disk(&self, vm_id: &VmId, disk: DiskSpec) -> Result<(), AdapterError>;
 
     /// Configure virtual networking for a MicroVM.
-    async fn configure_network(&self, vm_id: &VmId, net: NetworkConfig) -> Result<(), AdapterError>;
+    async fn configure_network(&self, vm_id: &VmId, net: NetworkConfig)
+        -> Result<(), AdapterError>;
 }
 
 // ---------------------------------------------------------------------------

@@ -5,9 +5,9 @@
 // The full implementation will be gated on `#[cfg(all(target_os = "android",
 // feature = "jni-bridge"))]` and expose:
 //
-//   - `Java_io_kooshapari_nanovms_companion_MainActivity_nativeInit`
-//   - `Java_io_kooshapari_nanovms_companion_MainActivity_pollTelemetry`
-//   - `Java_io_kooshapari_nanovms_companion_MainActivity_subscribeDeployEvents`
+//   - `Java_io_<REDACTED>_nanovms_companion_MainActivity_nativeInit`
+//   - `Java_io_<REDACTED>_nanovms_companion_MainActivity_pollTelemetry`
+//   - `Java_io_<REDACTED>_nanovms_companion_MainActivity_subscribeDeployEvents`
 //
 // We deliberately do NOT pull `jni::JNIEnv` here even when the feature is
 // enabled — the stub is shipped without the feature so `cargo check` on a

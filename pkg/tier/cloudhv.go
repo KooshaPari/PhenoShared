@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // CloudHypervisorAdapter is the Tier 14 Cloud Hypervisor VMM adapter.

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	nvmsruntime "github.com/kooshapari/nanovms/pkg/runtime"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	nvmsruntime "github.com/KooshaPari/nanovms/pkg/runtime"
 )
 
 type compositionTestRuntime struct{ sandbox *domain.Sandbox }

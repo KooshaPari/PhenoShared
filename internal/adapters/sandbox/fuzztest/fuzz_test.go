@@ -7,8 +7,8 @@
 package fuzztest
 
 import (
-    "github.com/kooshapari/nanovms/internal/adapters/sandbox"
-    "github.com/kooshapari/nanovms/internal/domain"
+    "github.com/KooshaPari/nanovms/internal/adapters/sandbox"
+    "github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // FuzzAdapterCreate fuzzes the Adapter.Create path.

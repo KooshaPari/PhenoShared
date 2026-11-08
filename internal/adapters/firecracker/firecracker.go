@@ -8,7 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"sync"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 type Adapter struct {

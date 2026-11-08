@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/ports"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/ports"
 )
 
 // sandboxPortDispatcher adapts the lifecycle port to the composition

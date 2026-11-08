@@ -5,7 +5,7 @@
 // per-request X-Request-Id header (echoing inbound, generating otherwise)
 // and structured logging via the standard `log/slog` package.
 //
-// Historically this package depended on `github.com/kooshapari/pheno-go-ctxkit/ctxkit`,
+// Historically this package depended on `github.com/KooshaPari/pheno-go-ctxkit/ctxkit`,
 // but that dependency pulled a non-trivial graph (and required a
 // `replace` directive to a worktree path that only existed on the original
 // author's machine). The ctxkit pattern is small enough to inline

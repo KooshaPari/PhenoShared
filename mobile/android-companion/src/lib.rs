@@ -24,7 +24,7 @@ pub use jni_bridge::nvms_android_companion_stub;
 
 /// Java/Kotlin class that hosts our JNI entry points. Matches the
 /// `applicationId` + class name declared in `aar/AndroidManifest.xml`.
-pub const COMPANION_CLASS: &str = "io.kooshapari.nanovms.companion.MainActivity";
+pub const COMPANION_CLASS: &str = "io.<REDACTED>.nanovms.companion.MainActivity";
 
 /// Compile-time marker so a downstream consumer can detect that the ndk
 /// feature is wired in without taking a hard dependency on the Android
@@ -36,7 +36,7 @@ pub const JNI_BRIDGE_ENABLED: bool = true;
 pub const JNI_BRIDGE_ENABLED: bool = false;
 
 /// Stub entry point — the real implementation will be a `#[no_mangle]`
-/// `extern "system" fn Java_io_kooshapari_nanovms_companion_MainActivity_*`
+/// `extern "system" fn Java_io_<REDACTED>_nanovms_companion_MainActivity_*`
 /// pair that uses `jni::JNIEnv` to marshal telemetry into a Kotlin
 /// `Flow<List<VmStatus>>`.
 pub fn companion_status_stub() -> &'static str {

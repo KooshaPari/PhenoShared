@@ -25,4 +25,4 @@ jni = { version = "0.22", optional = true }
 crate-type = ["staticlib", "cdylib", "lib"]
 name = "nvms_android_companion"
 
-# Workspace member is registered at /Users/kooshapari/CodeProjects/Phenotype/repos/nanovms/Cargo.toml
+# Workspace member is registered at /Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms/Cargo.toml

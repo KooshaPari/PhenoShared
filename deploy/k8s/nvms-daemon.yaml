@@ -71,7 +71,7 @@ spec:
       hostPID: true
       containers:
         - name: nvms
-          image: ghcr.io/kooshapari/nvms-daemon:latest
+          image: ghcr.io/<REDACTED>/nvms-daemon:latest
           imagePullPolicy: Always
           securityContext:
             privileged: true

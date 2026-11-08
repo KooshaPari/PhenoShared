@@ -9,12 +9,12 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/kooshapari/nanovms/internal/adapters/firecracker"
-	"github.com/kooshapari/nanovms/internal/adapters/gvisor"
-	"github.com/kooshapari/nanovms/internal/adapters/podman"
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/ports"
-	"github.com/kooshapari/nanovms/pkg/tier"
+	"github.com/KooshaPari/nanovms/internal/adapters/firecracker"
+	"github.com/KooshaPari/nanovms/internal/adapters/gvisor"
+	"github.com/KooshaPari/nanovms/internal/adapters/podman"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/ports"
+	"github.com/KooshaPari/nanovms/pkg/tier"
 )
 
 // tierAdapter wraps a tier.Adapter (which has Deploy/Start/Stop/Delete) to

@@ -1,5 +1,5 @@
 # CODEOWNERS — NanoVMS (Nano Virtual Machine Services)
-# Canonical reviewer: @KooshaPari
+# Canonical reviewer: @<REDACTED>
 #
 # GitHub CODEOWNERS location priority:
 #   1. .github/CODEOWNERS  (already present, more detailed)
@@ -9,47 +9,47 @@
 # See: https://docs.github.com/en/repositories/creating-and-managing-repositories/about-code-owners
 
 # Default catch-all
-* @KooshaPari
+* @<REDACTED>
 
 # Per-language drill-down
-/*.go @KooshaPari
-/*.mod @KooshaPari
-/*.sum @KooshaPari
-/*.rs @KooshaPari
-/*.ts @KooshaPari
-/*.py @KooshaPari
+/*.go @<REDACTED>
+/*.mod @<REDACTED>
+/*.sum @<REDACTED>
+/*.rs @<REDACTED>
+/*.ts @<REDACTED>
+/*.py @<REDACTED>
 
 # Core source tree
-/api/ @KooshaPari
-/go/ @KooshaPari
-/sdk/ @KooshaPari
-/tests/ @KooshaPari
-/scripts/ @KooshaPari
-/docs/ @KooshaPari
+/api/ @<REDACTED>
+/go/ @<REDACTED>
+/sdk/ @<REDACTED>
+/tests/ @<REDACTED>
+/scripts/ @<REDACTED>
+/docs/ @<REDACTED>
 
 # Module + build config
-/go.mod @KooshaPari
-/go.sum @KooshaPari
-/package.json @KooshaPari
-/Makefile @KooshaPari
-/Taskfile.yml @KooshaPari
-/justfile @KooshaPari
+/go.mod @<REDACTED>
+/go.sum @<REDACTED>
+/package.json @<REDACTED>
+/Makefile @<REDACTED>
+/Taskfile.yml @<REDACTED>
+/justfile @<REDACTED>
 
 # Governance + CI
-/SECURITY.md @KooshaPari
-/CODEOWNERS @KooshaPari
-/CONTRIBUTING.md @KooshaPari
-/CHANGELOG.md @KooshaPari
-/LICENSE @KooshaPari
-/.github/ @KooshaPari
-/.github/workflows/ @KooshaPari
-/.github/dependabot.yml @KooshaPari
-/.github/FUNDING.yml @KooshaPari
+/SECURITY.md @<REDACTED>
+/CODEOWNERS @<REDACTED>
+/CONTRIBUTING.md @<REDACTED>
+/CHANGELOG.md @<REDACTED>
+/LICENSE @<REDACTED>
+/.github/ @<REDACTED>
+/.github/workflows/ @<REDACTED>
+/.github/dependabot.yml @<REDACTED>
+/.github/FUNDING.yml @<REDACTED>
 
 # AgilePlus Pillar Ownership (Pillar 15: Project Management)
-/agileplus/ @KooshaPari
-/agileplus/pillars/ @KooshaPari
-/agileplus/quality-gates.yml @KooshaPari
+/agileplus/ @<REDACTED>
+/agileplus/pillars/ @<REDACTED>
+/agileplus/quality-gates.yml @<REDACTED>
 
 # Pillar 30: Code of Conduct
-/CODE_OF_CONDUCT.md @KooshaPari
+/CODE_OF_CONDUCT.md @<REDACTED>

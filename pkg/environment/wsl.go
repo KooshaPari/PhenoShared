@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
 )
 
 type canonicalWSLMetadata struct {

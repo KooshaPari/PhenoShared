@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // WolfiAdapter is the Tier 28 Wolfi Linux adapter.

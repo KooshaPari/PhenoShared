@@ -12,7 +12,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // DistrolessAdapter is the Tier 29 Google Distroless adapter.

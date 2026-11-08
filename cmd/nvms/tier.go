@@ -13,7 +13,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/kooshapari/nanovms/pkg/tier"
+	"github.com/KooshaPari/nanovms/pkg/tier"
 )
 
 // tierCmd dispatches the `nvms tier` subcommand. Supported subcommands:

@@ -10,7 +10,7 @@
 
 package sandbox
 
-import "github.com/kooshapari/nanovms/internal/ports"
+import "github.com/KooshaPari/nanovms/internal/ports"
 
 var _ ports.SandboxPort = (*Adapter)(nil)
 var _ ports.SandboxPort = (*landlockAdapter)(nil)

@@ -23,8 +23,8 @@ import AppKit
 
 /// Swift-side configuration mirror of `nvms_macos_tray::TRAY_DOMAIN`.
 public enum NvmsTrayConfig {
-    public static let domain: String = "io.kooshapari.nanovms.tray"
-    public static let launchAgentLabel: String = "io.kooshapari.nanovms.tray"
+    public static let domain: String = "io.<REDACTED>.nanovms.tray"
+    public static let launchAgentLabel: String = "io.<REDACTED>.nanovms.tray"
 }
 
 /// Stub — the real implementation returns an NSStatusItem and keeps a strong

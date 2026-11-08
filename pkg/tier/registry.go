@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // Adapter is the public contract every tier in pkg/tier must satisfy.

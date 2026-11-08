@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	nvmsruntime "github.com/kooshapari/nanovms/pkg/runtime"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	nvmsruntime "github.com/KooshaPari/nanovms/pkg/runtime"
 )
 
 // CompositionRequest is the runtime-only handoff from PhenoCompose. The

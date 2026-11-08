@@ -57,8 +57,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
-	nvmsruntime "github.com/kooshapari/nanovms/pkg/runtime"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
+	nvmsruntime "github.com/KooshaPari/nanovms/pkg/runtime"
 )
 
 const testUUID gpu.UUID = "GPU-123e4567-e89b-12d3-a456-426614174000"

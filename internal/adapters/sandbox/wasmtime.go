@@ -9,7 +9,7 @@ package sandbox
 
 import (
 	"context"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 type wasmtimeAdapter struct {

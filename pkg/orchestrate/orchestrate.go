@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/adapters"
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/pkg/config"
-	"github.com/kooshapari/nanovms/pkg/gpu"
-	nvmsruntime "github.com/kooshapari/nanovms/pkg/runtime"
-	"github.com/kooshapari/nanovms/pkg/tier"
+	"github.com/KooshaPari/nanovms/internal/adapters"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/pkg/config"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
+	nvmsruntime "github.com/KooshaPari/nanovms/pkg/runtime"
+	"github.com/KooshaPari/nanovms/pkg/tier"
 )
 
 // Engine is the orchestration engine that routes workloads to the appropriate tier.

@@ -55,7 +55,10 @@ impl PortAdapter for MockPortAdapter {
 
     async fn status(&self, id: &DeploymentId) -> Result<PortStatus, AdapterError> {
         let map = self.deployments.read().await;
-        let state = map.get(id).copied().ok_or(AdapterError::NotFound(id.clone()))?;
+        let state = map
+            .get(id)
+            .copied()
+            .ok_or(AdapterError::NotFound(id.clone()))?;
         Ok(PortStatus {
             id: id.clone(),
             state,

@@ -43,7 +43,7 @@ AppKit or the Android platform headers.
 ## Out of scope (deliberately deferred)
 
 - Real `NSStatusItem` registration in Swift (needs `swiftc` in CI).
-- Real `extern "system" fn Java_io_kooshapari_nanovms_companion_*` symbols
+- Real `extern "system" fn Java_io_<REDACTED>_nanovms_companion_*` symbols
   (needs Android NDK in CI).
 - Cross-compile matrix in `.github/workflows/ci.yml` (follow-up PR).
 - Re-export through `sdk/rust/` (sdk/rust/ is out of scope for this PR

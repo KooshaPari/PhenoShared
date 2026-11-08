@@ -10,13 +10,11 @@ use phenotype_manifest::{schema_json, Manifest};
 use serde_json::Value;
 
 /// Valid example shipped under `crates/phenotype-manifest/examples/`.
-const WEB_SERVICE_EXAMPLE: &str =
-    include_str!("../examples/web-service.nvms.json");
+const WEB_SERVICE_EXAMPLE: &str = include_str!("../examples/web-service.nvms.json");
 
 fn compile_schema() -> JSONSchema {
     let raw = schema_json();
-    let value: Value = serde_json::from_str(&raw)
-        .expect("schema_json() output is valid JSON");
+    let value: Value = serde_json::from_str(&raw).expect("schema_json() output is valid JSON");
     JSONSchema::options()
         .with_draft(jsonschema::Draft::Draft202012)
         .compile(&value)
@@ -33,8 +31,7 @@ fn emitted_schema_is_valid_draft202012() {
 #[test]
 fn shipped_example_is_schema_valid() {
     let compiled = compile_schema();
-    let manifest: Value = serde_json::from_str(WEB_SERVICE_EXAMPLE)
-        .expect("example is valid JSON");
+    let manifest: Value = serde_json::from_str(WEB_SERVICE_EXAMPLE).expect("example is valid JSON");
     let result = compiled.validate(&manifest);
     if let Err(errors) = result {
         for err in errors {

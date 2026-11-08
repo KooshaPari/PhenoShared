@@ -11,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // KVMAdapter is the Tier 12 Linux KVM hypervisor adapter.

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // adapterCase pairs a constructor with its expected tier name. The

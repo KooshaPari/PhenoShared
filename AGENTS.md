@@ -2,7 +2,7 @@
 
 ## Project Overview
 - **Name**: NanoVMS (Nano Virtual Machine Services)
-- **Module**: `github.com/kooshapari/nanovms`
+- **Module**: `github.com/KooshaPari/nanovms`
 - **Description**: Go-based runtime and CLI for 3-tier isolation: WASM, gVisor,
   and Firecracker. Acts as the native sandbox/VMM layer for the Phenotype
   compute mesh (PhenoCompose driver calls into it; phenotype-infra IaC daemons

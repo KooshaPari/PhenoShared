@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // QEMUAdapter is the Tier 13 full-system emulator adapter.

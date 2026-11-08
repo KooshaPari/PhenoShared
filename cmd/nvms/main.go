@@ -13,12 +13,12 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/kooshapari/nanovms/internal/adapters"
-	"github.com/kooshapari/nanovms/internal/api"
-	"github.com/kooshapari/nanovms/internal/listen"
-	"github.com/kooshapari/nanovms/internal/sandbox"
-	"github.com/kooshapari/nanovms/internal/token"
-	"github.com/kooshapari/nanovms/pkg/deploy"
+	"github.com/KooshaPari/nanovms/internal/adapters"
+	"github.com/KooshaPari/nanovms/internal/api"
+	"github.com/KooshaPari/nanovms/internal/listen"
+	"github.com/KooshaPari/nanovms/internal/sandbox"
+	"github.com/KooshaPari/nanovms/internal/token"
+	"github.com/KooshaPari/nanovms/pkg/deploy"
 )
 
 // version is set at build time via ldflags:

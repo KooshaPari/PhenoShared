@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // LimaAdapter is the Tier 11 Linux-on-host VM adapter.

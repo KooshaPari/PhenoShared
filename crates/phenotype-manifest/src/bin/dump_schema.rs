@@ -30,9 +30,8 @@ const DEFAULT_OUT_RELATIVE: &str = "../../schemas/odin.nvms.schema.json";
 fn main() -> io::Result<()> {
     let args: Vec<String> = std::env::args().collect();
     let stdout = args.iter().any(|a| a == "--stdout");
-    let out_path = parse_out_arg(&args).unwrap_or_else(|| {
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(DEFAULT_OUT_RELATIVE)
-    });
+    let out_path = parse_out_arg(&args)
+        .unwrap_or_else(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(DEFAULT_OUT_RELATIVE));
 
     if stdout {
         let stdout = io::stdout();

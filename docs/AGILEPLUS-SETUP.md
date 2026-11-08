@@ -66,7 +66,7 @@ can merge to `main`. `docs-build` and `coverage` are tracked but not blocking.
 - **Have a new idea?** Open an issue with the `pillar:` label and add a row
   to `backlog.md`.
 - **Disagreement on a pillar score?** Open a PR that edits the JSON and tag
-  `@KooshaPari`.
+  `@<REDACTED>`.
 - **Need the weekly audit?** Trigger the `agileplus-pillar-scorecard`
   workflow manually via `workflow_dispatch`.
 

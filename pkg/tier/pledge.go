@@ -12,7 +12,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // PledgeAdapter is the Tier 25 OpenBSD pledge adapter.

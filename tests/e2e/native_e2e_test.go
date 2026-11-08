@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/pkg/tier"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/pkg/tier"
 )
 
 // nativeAvailable reports whether the native tier's runtime is present.

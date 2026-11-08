@@ -10,7 +10,7 @@ package sandbox
 import (
 	"context"
 	"fmt"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 type landlockAdapter struct {

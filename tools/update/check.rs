@@ -5,7 +5,7 @@
 
 use std::env;
 
-const GITHUB_API: &str = "https://api.github.com/repos/KooshaPari/nanovms/releases/latest";
+const GITHUB_API: &str = "https://api.github.com/repos/<REDACTED>/nanovms/releases/latest";
 
 fn current_version() -> String {
     env::var("CURRENT_VERSION").unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_string())

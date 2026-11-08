@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // AppleVZAdapter is the Tier 10 macOS Virtualization.framework adapter.

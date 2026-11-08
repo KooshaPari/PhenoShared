@@ -21,11 +21,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/listen"
-	"github.com/kooshapari/nanovms/internal/ports"
-	"github.com/kooshapari/nanovms/internal/token"
-	"github.com/kooshapari/nanovms/pkg/metrics"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/listen"
+	"github.com/KooshaPari/nanovms/internal/ports"
+	"github.com/KooshaPari/nanovms/internal/token"
+	"github.com/KooshaPari/nanovms/pkg/metrics"
 )
 
 // Handlers bundles the port implementations and auth manager.

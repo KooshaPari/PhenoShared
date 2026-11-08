@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/adapters/wasm"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/adapters/wasm"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // WASMAdapter is the Tier1 WASM adapter for lightweight, trusted workloads.

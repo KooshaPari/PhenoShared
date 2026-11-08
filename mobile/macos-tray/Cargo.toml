@@ -27,4 +27,4 @@ swift-rs = { version = "1.0", optional = true }
 crate-type = ["staticlib", "lib"]
 name = "nvms_macos_tray"
 
-# Workspace member is registered at /Users/kooshapari/CodeProjects/Phenotype/repos/nanovms/Cargo.toml
+# Workspace member is registered at /Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms/Cargo.toml

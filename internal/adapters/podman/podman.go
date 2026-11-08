@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // Adapter is a Podman-backed SandboxPort implementation.

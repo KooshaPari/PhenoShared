@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // KataAdapter is the Tier 16 Kata Containers adapter.

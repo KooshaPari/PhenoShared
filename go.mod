@@ -1,4 +1,4 @@
-module github.com/kooshapari/nanovms
+module github.com/KooshaPari/nanovms
 
 go 1.26.0
 

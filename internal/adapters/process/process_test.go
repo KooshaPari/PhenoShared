@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 func TestMain(m *testing.M) {

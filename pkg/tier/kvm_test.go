@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 func TestKVMStartRejectsUnimplementedGuestLifecycle(t *testing.T) {

@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // UserNSAdapter is the Tier 30 Linux user-namespace adapter.

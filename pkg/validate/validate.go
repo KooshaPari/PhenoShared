@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kooshapari/nanovms/pkg/config"
+	"github.com/KooshaPari/nanovms/pkg/config"
 )
 
 // Validator performs schema and semantic validation on NVMS configurations.

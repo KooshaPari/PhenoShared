@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/adapters/sandbox"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/adapters/sandbox"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // SeccompAdapter is the Tier 5 Linux seccomp adapter.

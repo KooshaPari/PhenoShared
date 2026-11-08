@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // YoukiAdapter is the Tier 17 youki (Rust OCI runtime) adapter.

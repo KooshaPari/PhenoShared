@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/ports"
+	"github.com/KooshaPari/nanovms/internal/ports"
 )
 
 func newWith(lima, hyperkit, firecracker string) *Adapter {

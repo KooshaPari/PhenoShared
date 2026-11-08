@@ -13,7 +13,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
 )
 
 var nvccReleasePattern = regexp.MustCompile(`(?i)\brelease\s+([0-9]+\.[0-9]+)\b`)

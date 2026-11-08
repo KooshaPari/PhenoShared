@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/token"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/token"
 )
 
 // fakePort is a minimal in-memory SandboxPort stub for API routing tests.

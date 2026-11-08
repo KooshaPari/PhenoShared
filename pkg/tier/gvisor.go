@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // GVisorAdapter is the Tier2 gVisor adapter for semi-trusted workloads.

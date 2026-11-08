@@ -9,7 +9,7 @@
 //      (NSStatusBar.system.statusItem(withLength:)).
 //   2. Wire menu actions to nvms-cli subcommands via an embedded gRPC client
 //      (see sdk/rust/src/client.rs).
-//   3. Persist a LaunchAgent at ~/Library/LaunchAgents/io.kooshapari.nanovms.plist
+//   3. Persist a LaunchAgent at ~/Library/LaunchAgents/io.<REDACTED>.nanovms.plist
 //      so the tray auto-starts at user login.
 //   4. Read API keys from Keychain via Security.framework (resolved in a future PR).
 //
@@ -19,10 +19,10 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[cfg(target_os = "macos")]
-pub const TRAY_DOMAIN: &str = "io.kooshapari.nanovms.tray";
+pub const TRAY_DOMAIN: &str = "io.<REDACTED>.nanovms.tray";
 
 #[cfg(target_os = "macos")]
-pub const LAUNCH_AGENT_LABEL: &str = "io.kooshapari.nanovms.tray";
+pub const LAUNCH_AGENT_LABEL: &str = "io.<REDACTED>.nanovms.tray";
 
 /// Compile-time marker so a downstream crate can detect that the swift-rs
 /// feature is wired in without taking a hard dependency on AppKit.

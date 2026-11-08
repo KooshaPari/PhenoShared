@@ -5,7 +5,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // SandboxPort defines the interface for sandbox operations.

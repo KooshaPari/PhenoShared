@@ -10,7 +10,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 // HyperKitAdapter is the Tier 9 macOS native VM adapter.

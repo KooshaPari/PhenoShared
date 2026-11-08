@@ -3,7 +3,7 @@
 **Unit**: A4 (epic_A — Hygiene garden & branch slim)  
 **Date**: 2026-06-25  
 **Auditor**: DAG dispatch A4  
-**Repo**: nanovms-archive (GitHub: KooshaPari/nanovms-archive)  
+**Repo**: nanovms-archive (GitHub: <REDACTED>/nanovms-archive)  
 **Status**: ✅ Repo unarchived to working location `C:\Users\koosh\nanovms`
 
 ---
@@ -19,8 +19,8 @@ is now the active working repo at:
 - **Default branch**: `main`
 - **Current HEAD**: `c57e94f` — `Phase-6: Absorb grade_B36/B42 audit results (Node.js stack confirmation, 7% grade)`
 
-The remote `KooshaPari/nanovms-archive` GitHub repository is no longer tracked;
-the official working remote is `KooshaPari/nanovms`.
+The remote `<REDACTED>/nanovms-archive` GitHub repository is no longer tracked;
+the official working remote is `<REDACTED>/nanovms`.
 
 ---
 
@@ -28,7 +28,7 @@ the official working remote is `KooshaPari/nanovms`.
 
 ### Go Module
 
-- **`go.mod`**: `module github.com/kooshapari/nanovms` (Go 1.25.0)
+- **`go.mod`**: `module github.com/KooshaPari/nanovms` (Go 1.25.0)
 - **Dependencies**: `go.uber.org/mock v0.6.0`, `golang.org/x/sys v0.46.0`, `gopkg.in/yaml.v3 v3.0.1`
 - **Vendored dep**: `go.uber.org/mock` resolved from `third_party/go.uber.org/mock`
 

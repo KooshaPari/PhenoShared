@@ -24,7 +24,7 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/nanovms"
-authors = ["KooshaPari <koosha@example.com>"]
+authors = ["<REDACTED> <<REDACTED>@example.com>"]
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

@@ -73,13 +73,13 @@ nanovms version
 
 ```bash
 # Podman is the supported OCI-compatible local engine; Docker is not required.
-podman pull ghcr.io/kooshapari/nanovms:latest
+podman pull ghcr.io/<REDACTED>/nanovms:latest
 
 # Run with Podman
 podman run -it --rm \
   --privileged \
   -v /dev/kvm:/dev/kvm \
-  ghcr.io/kooshapari/nanovms:latest
+  ghcr.io/<REDACTED>/nanovms:latest
 
 # On Windows, use the first-party WSL Containers CLI (wslc) for OCI workloads.
 # On macOS, use Apple Containers (container); both are capability-gated

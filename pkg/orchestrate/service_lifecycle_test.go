@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kooshapari/nanovms/pkg/gpu"
+	"github.com/KooshaPari/nanovms/pkg/gpu"
 )
 
 type lifecycleCommandRunner struct {

@@ -12,8 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/kooshapari/nanovms/internal/domain"
-	"github.com/kooshapari/nanovms/internal/ports"
+	"github.com/KooshaPari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/ports"
 )
 
 // Adapter implements ports.SandboxPort using native OS process execution.

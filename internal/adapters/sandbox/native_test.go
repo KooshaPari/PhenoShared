@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 func TestNativeSandboxAdapterCreate(t *testing.T) {

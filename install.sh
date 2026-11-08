@@ -2,7 +2,7 @@
 # install.sh — One-liner installer for NanoVMS
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/KooshaPari/nanovms/main/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/<REDACTED>/nanovms/main/install.sh | sh
 #
 # Supports: macOS (arm64/x86_64), Linux (amd64/arm64), Windows (via Git Bash/WSL)
 # Methods: Homebrew, .deb, .rpm, binary tar.gz
@@ -10,7 +10,7 @@
 set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────
-GITHUB_REPO="KooshaPari/nanovms"
+GITHUB_REPO="<REDACTED>/nanovms"
 BINARY_NAME="nvms"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 LATEST_VERSION=""  # auto-detected
@@ -70,7 +70,7 @@ get_latest_version() {
 install_homebrew() {
     if command -v brew >/dev/null 2>&1; then
         info "Installing via Homebrew..."
-        brew install KooshaPari/nanovms/nanovms
+        brew install <REDACTED>/nanovms/nanovms
         ok "Installed via Homebrew"
         return 0
     fi

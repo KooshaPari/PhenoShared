@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"github.com/kooshapari/nanovms/internal/adapters"
-	"github.com/kooshapari/nanovms/internal/config"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/adapters"
+	"github.com/KooshaPari/nanovms/internal/config"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 func main() {

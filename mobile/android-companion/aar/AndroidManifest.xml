@@ -17,7 +17,7 @@
   here to match the constant in src/lib.rs::COMPANION_CLASS.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="io.kooshapari.nanovms.companion">
+          package="io.<REDACTED>.nanovms.companion">
     <application
         android:label="nvms Companion"
         android:icon="@mipmap/ic_launcher"

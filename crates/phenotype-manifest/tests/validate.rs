@@ -7,8 +7,7 @@
 use phenotype_manifest::{validate, Manifest};
 
 /// Valid example shipped under `crates/phenotype-manifest/examples/`.
-const WEB_SERVICE_EXAMPLE: &str =
-    include_str!("../examples/web-service.nvms.json");
+const WEB_SERVICE_EXAMPLE: &str = include_str!("../examples/web-service.nvms.json");
 
 #[test]
 fn valid_example_parses_and_validates_ok() {

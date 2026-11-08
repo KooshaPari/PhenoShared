@@ -7,7 +7,7 @@ repository = "https://github.com/KooshaPari/phenotype-shared"
 description = "ffi_utils — shared FFI helpers for Phenotype infrastructure (parking_lot-backed Mutex shim)"
 keywords = ["phenotype", "ffi", "mutex"]
 categories = ["development-tools::ffi"]
-authors = ["kooshapari"]
+authors = ["<REDACTED>"]
 
 [dependencies]
 parking_lot = "0.12"

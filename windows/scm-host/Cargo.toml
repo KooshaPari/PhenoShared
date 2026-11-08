@@ -5,7 +5,7 @@ edition = "2021"
 description = "nanovms Windows SCM-registered service-mode scaffold — windows-rs 0.58 SCM registration + Win32_System_EventLog writer for the nvms-cli daemon. PILLAR-TAXONOMY-v2 L123/L130."
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/nanovms"
-authors = ["KooshaPari <koosha@example.com>"]
+authors = ["<REDACTED> <<REDACTED>@example.com>"]
 keywords = ["nanovms", "windows", "scm", "ffi", "windows-rs"]
 categories = ["api-bindings", "os::windows-apis"]
 rust-version = "1.78"
@@ -48,7 +48,7 @@ thiserror = "2.0"
 crate-type = ["lib", "staticlib", "cdylib"]
 name = "nvms_scm_host"
 
-# Workspace member is registered at /Users/kooshapari/CodeProjects/Phenotype/repos/nanovms/Cargo.toml.
+# Workspace member is registered at /Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms/Cargo.toml.
 # Override the workspace `unsafe_code = "forbid"` lint at the crate level so
 # follow-up PRs can implement real `CreateServiceW` / `RegisterEventSourceW`
 # FFI calls without re-litigating the lint. The current scaffold itself

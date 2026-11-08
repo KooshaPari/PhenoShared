@@ -15,7 +15,7 @@ import (
 	"os/exec"
 	"strings"
 	"time"
-	"github.com/kooshapari/nanovms/internal/domain"
+	"github.com/KooshaPari/nanovms/internal/domain"
 )
 
 func logsForSandbox(ctx context.Context, sb *domain.Sandbox) (io.ReadCloser, error) {

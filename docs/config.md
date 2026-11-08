@@ -66,7 +66,7 @@ func Load() (*Config, error) {
 MDEEOF
 
 # Verify
-cd /Users/kooshapari/CodeProjects/Phenotype/repos/nanovms
+cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/nanovms
 go build ./... 2>&1 | tail -3
 echo "---"
 git add docs/logging.md docs/config.md 2>&1 | head -3
@@ -89,9 +89,9 @@ Lifts 2 pillars to 100/100 (docs only):
   - Validation: fail fast at startup" 2>&1 | tail -3
 echo "---PUSH---"
 git push --force-with-lease -u origin feat/scorecard_lift_batch_five 2>&1 | tail -3
-gh pr create --draft --repo KooshaPari/nanovms --base main --head feat/scorecard_lift_batch_five --title "feat(scorecard): nanovms scorecard lift batch five (L13/L20)" --body "Lifts 2 pillars to 100/100 (docs only)." 2>&1 | tail -3
-PR=$(gh pr list --repo KooshaPari/nanovms --state open --json number --jq '.[0].number' 2>&1)
-gh pr ready $PR --repo KooshaPari/nanovms 2>&1 | tail -2
-gh pr merge $PR --repo KooshaPari/nanovms --squash --delete-branch --admin 2>&1 | tail -3
+gh pr create --draft --repo <REDACTED>/nanovms --base main --head feat/scorecard_lift_batch_five --title "feat(scorecard): nanovms scorecard lift batch five (L13/L20)" --body "Lifts 2 pillars to 100/100 (docs only)." 2>&1 | tail -3
+PR=$(gh pr list --repo <REDACTED>/nanovms --state open --json number --jq '.[0].number' 2>&1)
+gh pr ready $PR --repo <REDACTED>/nanovms 2>&1 | tail -2
+gh pr merge $PR --repo <REDACTED>/nanovms --squash --delete-branch --admin 2>&1 | tail -3
 sleep 3
-gh pr view $PR --repo KooshaPari/nanovms --json state,mergedAt 2>&1 | tail -2
+gh pr view $PR --repo <REDACTED>/nanovms --json state,mergedAt 2>&1 | tail -2
