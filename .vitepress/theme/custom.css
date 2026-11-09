@@ -1,4 +1,12 @@
-@import '@phenotype/design/css/vitepress-theme.css';
+/* The shared design CSS is vendored in this repository at /css/vitepress-theme.css.
+ * This used to be a bare package specifier:
+ *     @import '@phenotype/design/css/vitepress-theme.css';
+ * which resolves only if the `@phenotype/design` package (declared in the root
+ * package.json as github:KooshaPari/PhenoDesign) is installed. The docs build
+ * installs only docs/package.json, so the package is never present and Vite
+ * fails with "Unable to resolve" before writing a single page. A relative
+ * import cannot drift from the file it names. */
+@import '../../css/vitepress-theme.css';
 
 .category-switcher {
   display: flex;
