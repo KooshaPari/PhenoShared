@@ -1,0 +1,48 @@
+#!/bin/sh
+# browser-broker-run -- launch wrapper for brokerd under launchd.
+#
+# Purpose: load the broker bearer token from the operator-only env file into
+# the PROCESS ENVIRONMENT, then exec brokerd. The token is never placed in
+# argv (so it never appears in `ps`), never echoed, and never logged.
+#
+# Used by: ~/Library/LaunchAgents/com.kooshapari.browser-broker.plist
+# Managed by: launchctl (gui/$(id -u)/com.kooshapari.browser-broker)
+#
+# Loopback only by design. Do not change the bind address.
+
+set -eu
+
+ENV_FILE="/Users/kooshapari/.local/state/browser-broker.env"
+BROKERD="/Users/kooshapari/.local/bin/brokerd"
+ROOT_DIR="/Users/kooshapari/.local/state/browser-broker"
+BIND_ADDR="127.0.0.1:8788"
+TOKEN_VAR="BROKER_TOKEN"
+
+if [ ! -r "$ENV_FILE" ]; then
+    echo "browser-broker-run: cannot read $ENV_FILE" >&2
+    exit 78
+fi
+
+# Export everything defined in the env file into the environment.
+set -a
+. "$ENV_FILE"
+set +a
+
+# Validate without ever printing the value.
+eval "_token_value=\${$TOKEN_VAR:-}"
+if [ -z "${_token_value}" ]; then
+    echo "browser-broker-run: $TOKEN_VAR is empty or unset after sourcing $ENV_FILE" >&2
+    exit 78
+fi
+unset _token_value
+
+if [ ! -x "$BROKERD" ]; then
+    echo "browser-broker-run: $BROKERD is missing or not executable" >&2
+    exit 78
+fi
+
+# --token-env names the VARIABLE, not the secret. Token stays in the environment.
+exec "$BROKERD" \
+    --root "$ROOT_DIR" \
+    --bind "$BIND_ADDR" \
+    --token-env "$TOKEN_VAR"
