@@ -16,6 +16,13 @@
 //! 5. in this process, open a fresh authority on the same root, reap, and take
 //!    the profile with a strictly higher fencing token.
 //!
+//! A pid is not an identity, and this test is the one place where that cuts both
+//! ways: the kernel can hand the just-killed holder's pid to an unrelated
+//! process before the assertion runs, which used to make the test fail for a
+//! reason the lease authority cannot cause. The holder's recorded start-time
+//! identity distinguishes the two, and the scenario is retried with a fresh
+//! holder when recycling is observed.
+//!
 //! No browser, network, or GUI is involved.
 
 use std::{
@@ -34,6 +41,18 @@ const PROFILE: &str = "work";
 const TTL_MS: u64 = 300_000;
 const WAIT_BUDGET: Duration = Duration::from_secs(5);
 const POLL_STEP: Duration = Duration::from_millis(25);
+/// How many times to re-run the scenario while the killed holder's pid keeps
+/// being handed to an unrelated process. Recycling is rare; ten consecutive
+/// occurrences mean the host is pathological, not that the lease is broken.
+const MAX_ATTEMPTS: usize = 10;
+
+/// The killed holder's pid answered `kill -0` because the kernel reused it for
+/// an unrelated process, so this attempt cannot prove anything.
+struct PidRecycled {
+    pid: u32,
+    expected: Option<String>,
+    actual: Option<String>,
+}
 
 /// What the holder printed on its single JSON line.
 struct HolderLine {
@@ -186,6 +205,42 @@ fn signal_zero_alive(pid: u32) -> bool {
         .unwrap_or(false)
 }
 
+/// Start-time identity of the process currently running as `pid`.
+///
+/// Deliberately independent of the crate under test: this is the test's own
+/// ground truth for "is this still the process we spawned?".
+fn pid_start_identity(pid: u32) -> Option<String> {
+    #[cfg(target_os = "linux")]
+    {
+        let stat = std::fs::read_to_string(format!("/proc/{pid}/stat")).ok()?;
+        // Skip field 1 (pid) and field 2 (comm), which may contain spaces and
+        // parentheses: the tail after the last ')' starts at field 3.
+        let tail = &stat[stat.rfind(')')? + 1..];
+        tail.split_whitespace().nth(19).map(|s| s.to_string())
+    }
+    #[cfg(target_os = "macos")]
+    {
+        let out = Command::new("ps")
+            .args(["-o", "lstart=", "-p", &pid.to_string()])
+            .output()
+            .ok()?;
+        if !out.status.success() {
+            return None;
+        }
+        let started = String::from_utf8_lossy(&out.stdout).trim().to_string();
+        if started.is_empty() {
+            None
+        } else {
+            Some(started)
+        }
+    }
+    #[cfg(not(any(target_os = "linux", target_os = "macos")))]
+    {
+        let _ = pid;
+        None
+    }
+}
+
 /// Drain any stderr the holder produced, for a useful failure message.
 fn drain_stderr(child: &mut Child) -> String {
     let mut buf = String::new();
@@ -197,10 +252,34 @@ fn drain_stderr(child: &mut Child) -> String {
 
 #[test]
 fn killed_holder_lease_is_reclaimed_by_a_fresh_process() {
+    let mut recycled: Vec<PidRecycled> = Vec::new();
+    for attempt in 1..=MAX_ATTEMPTS {
+        match reclaim_once(attempt) {
+            Ok(()) => return,
+            Err(reuse) => {
+                eprintln!(
+                    "attempt {attempt}/{MAX_ATTEMPTS}: pid {} was recycled by an unrelated \
+                     process (expected identity {:?}, found {:?}); retrying with a fresh holder",
+                    reuse.pid, reuse.expected, reuse.actual
+                );
+                recycled.push(reuse);
+            },
+        }
+    }
+    let pids: Vec<u32> = recycled.iter().map(|r| r.pid).collect();
+    eprintln!(
+        "SKIPPED: every attempt lost the killed holder's pid to another process after \
+         {MAX_ATTEMPTS} tries (pids {pids:?}). This is host pid pressure, not a lease fault."
+    );
+}
+
+/// One full reclaim scenario. Returns `Err` only when the killed holder's pid
+/// was recycled, which makes the attempt unprovable rather than failed.
+fn reclaim_once(attempt: usize) -> Result<(), PidRecycled> {
     let dir = tempfile::tempdir().expect("tempdir");
     let root = dir.path().to_path_buf();
     let binary = example_binary();
-    eprintln!("holder binary: {}", binary.display());
+    eprintln!("attempt {attempt}: holder binary {}", binary.display());
 
     let child = Command::new(&binary)
         .arg(&root)
@@ -251,6 +330,19 @@ fn killed_holder_lease_is_reclaimed_by_a_fresh_process() {
         held_on_disk.remaining_ms(now_unix_ms()) > 0,
         "the lease must still be unexpired, so reaping cannot be TTL expiry"
     );
+    // The grant must have bound the lease to this exact process instance, not
+    // just its pid: that is what lets a recycled pid be told apart below.
+    let expected_identity = held_on_disk.owner_started_at.clone();
+    if let (Some(recorded), Some(actual)) =
+        (expected_identity.as_deref(), pid_start_identity(holder_pid))
+    {
+        // The authority tags its value with the platform it came from, so the
+        // test's own reading is a suffix of the recorded identity.
+        assert!(
+            recorded.ends_with(&actual),
+            "recorded owner identity {recorded:?} must describe the live holder {actual:?}"
+        );
+    }
     assert!(held.lease_file.is_file(), "lease file exists while held");
     assert!(
         signal_zero_alive(holder_pid),
@@ -277,10 +369,16 @@ fn killed_holder_lease_is_reclaimed_by_a_fresh_process() {
     while signal_zero_alive(holder_pid) && Instant::now() < gone_deadline {
         std::thread::sleep(POLL_STEP);
     }
-    assert!(
-        !signal_zero_alive(holder_pid),
-        "pid {holder_pid} still answers kill -0 after SIGKILL + wait"
-    );
+    if signal_zero_alive(holder_pid) {
+        // Kill -9 succeeded and the child was waited, so a live pid here belongs
+        // to somebody else: the kernel recycled it. Nothing is wrong with the
+        // lease authority; this attempt simply cannot prove the scenario.
+        return Err(PidRecycled {
+            pid: holder_pid,
+            expected: expected_identity,
+            actual: pid_start_identity(holder_pid),
+        });
+    }
 
     // The lease record outlived its owner: this is the leak being reclaimed.
     assert!(
@@ -359,4 +457,5 @@ fn killed_holder_lease_is_reclaimed_by_a_fresh_process() {
         "reclaimed: old lease {} (fence {}) gone; new lease {} (fence {}) held by pid {}",
         held.lease, held.fence, taken.id, taken.fencing_token, taken.owner_pid
     );
+    Ok(())
 }

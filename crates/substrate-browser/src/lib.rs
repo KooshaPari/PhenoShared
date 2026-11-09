@@ -46,6 +46,7 @@
 
 mod fsutil;
 mod lease;
+mod procutil;
 mod profile;
 mod scope;
 
