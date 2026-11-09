@@ -46,6 +46,31 @@ const SESSIONS_BODY: &str = r#"{
   ]
 }"#;
 
+const ACQUIRED_BODY: &str = r#"{
+  "id": "lease-daemon-2",
+  "fencing_token": 8,
+  "expires_at_unix_ms": 9999999999999,
+  "generation": 4,
+  "data_dir": "/daemon/profiles/agent-a/work/gen-4"
+}"#;
+
+const RELEASED_BODY: &str = r#"{
+  "released": true,
+  "teardown": "browser closed by the daemon"
+}"#;
+
+const REAPED_BODY: &str = r#"{
+  "reaped": 2,
+  "leases_reaped": 3,
+  "live_sessions_after": 0
+}"#;
+
+const PURGED_BODY: &str = r#"{
+  "purged": true,
+  "path": "/daemon/profiles/agent-a/work",
+  "existed": true
+}"#;
+
 /// Serve `brokerd`'s two read endpoints on an ephemeral loopback port.
 ///
 /// Returns the base URL and every request head the server saw, so a test can
@@ -71,21 +96,52 @@ async fn spawn_fake_brokerd() -> (String, Arc<Mutex<Vec<String>>>) {
                         Ok(n) => request.extend_from_slice(&chunk[..n]),
                     }
                 }
+                // Drain the body of a POST so the client is never left writing
+                // into a socket we have already answered.
+                let head_len = request
+                    .windows(4)
+                    .position(|w| w == b"\r\n\r\n")
+                    .map(|at| at + 4)
+                    .unwrap_or(request.len());
                 let head = String::from_utf8_lossy(&request).to_string();
+                let content_length: usize = head
+                    .lines()
+                    .find_map(|line| {
+                        let (name, value) = line.split_once(':')?;
+                        name.eq_ignore_ascii_case("content-length")
+                            .then(|| value.trim().parse().ok())
+                            .flatten()
+                    })
+                    .unwrap_or(0);
+                let mut remaining = content_length.saturating_sub(request.len() - head_len);
+                while remaining > 0 {
+                    match socket.read(&mut chunk).await {
+                        Ok(0) | Err(_) => break,
+                        Ok(n) => remaining = remaining.saturating_sub(n),
+                    }
+                }
                 let path = head
                     .lines()
                     .next()
                     .and_then(|line| line.split_whitespace().nth(1))
                     .unwrap_or("/")
                     .to_string();
+                let method = head
+                    .lines()
+                    .next()
+                    .and_then(|line| line.split_whitespace().next())
+                    .unwrap_or("GET")
+                    .to_string();
                 seen.lock().expect("request log").push(head);
 
-                let body = if path == "/v1/leases" {
-                    LEASES_BODY
-                } else if path == "/v1/sessions" {
-                    SESSIONS_BODY
-                } else {
-                    "{}"
+                let body = match (method.as_str(), path.as_str()) {
+                    ("GET", "/v1/leases") => LEASES_BODY,
+                    ("GET", "/v1/sessions") => SESSIONS_BODY,
+                    ("POST", "/v1/leases") => ACQUIRED_BODY,
+                    ("POST", "/v1/leases/reap") => REAPED_BODY,
+                    ("POST", "/v1/profiles/purge") => PURGED_BODY,
+                    ("POST", path) if path.ends_with("/release") => RELEASED_BODY,
+                    _ => "{}",
                 };
                 let response = format!(
                     "HTTP/1.1 200 OK\r\ncontent-type: application/json\r\n\
@@ -137,6 +193,60 @@ async fn unreachable_daemon_fails_loudly_instead_of_using_a_local_broker() {
     );
 }
 
+/// The mutation routes did not weaken the rule the read path established: a
+/// configured-but-unreachable daemon fails loudly for every mutation too, and
+/// never quietly becomes a local broker.
+#[tokio::test]
+async fn mutations_against_an_unreachable_daemon_fail_loudly() {
+    let tools = BrokerTools::open_remote(RemoteConfig::new(UNREACHABLE_DAEMON, None))
+        .expect("building the client is not I/O");
+    assert!(
+        tools.broker().is_none(),
+        "remote mode must own no local broker, so there is nothing to fall back to"
+    );
+
+    let acquire = tools
+        .acquire(AcquireParams {
+            principal: "agent-a".into(),
+            profile: "work".into(),
+            session: None,
+            holder: None,
+            ttl_ms: None,
+            annotations: Default::default(),
+        })
+        .await
+        .expect_err("acquire must not fall back to a local broker");
+    let release = tools
+        .release("lease-x", 1)
+        .await
+        .expect_err("release must not fall back to a local broker");
+    let reap = tools
+        .reap()
+        .await
+        .expect_err("reap must not fall back to a local broker");
+    let purge = tools
+        .purge("agent-a", "work", true)
+        .await
+        .expect_err("purge must not fall back to a local broker");
+
+    for err in [&acquire, &release, &reap, &purge] {
+        assert_eq!(kind_of(err), "Refused");
+        let message = err.to_string();
+        assert!(
+            message.contains("unreachable"),
+            "the error must say the daemon is unreachable: {message}"
+        );
+        assert!(
+            message.contains("refusing to fall back to an in-process broker"),
+            "the error must name the fallback it refused: {message}"
+        );
+        assert!(
+            message.contains(URL_ENV),
+            "the error must name {URL_ENV} to fix: {message}"
+        );
+    }
+}
+
 #[tokio::test]
 async fn status_and_live_are_served_by_the_running_daemon() {
     let (url, seen) = spawn_fake_brokerd().await;
@@ -185,11 +295,17 @@ async fn status_and_live_are_served_by_the_running_daemon() {
     }
 }
 
+/// Mutations go to the daemon, over its mutation routes, carrying the
+/// credential - and never to a broker this process invents.
 #[tokio::test]
-async fn mutations_are_refused_when_a_daemon_is_configured() {
-    let (url, _seen) = spawn_fake_brokerd().await;
-    let tools =
-        BrokerTools::open_remote(RemoteConfig::new(url.clone(), None)).expect("open remote tools");
+async fn mutations_are_sent_to_the_daemon() {
+    let (url, seen) = spawn_fake_brokerd().await;
+    let tools = BrokerTools::open_remote(RemoteConfig::new(url.clone(), Some("s3cret".into())))
+        .expect("open remote tools");
+    assert!(
+        tools.broker().is_none(),
+        "a remote instance must own no local broker"
+    );
 
     let acquire = tools
         .acquire(AcquireParams {
@@ -201,39 +317,53 @@ async fn mutations_are_refused_when_a_daemon_is_configured() {
             annotations: Default::default(),
         })
         .await
-        .expect_err("acquire must not invent a local authority");
-    assert_eq!(kind_of(&acquire), "Refused");
-    assert!(
-        acquire.to_string().contains("no broker_acquire route"),
-        "the refusal must name the missing route: {acquire}"
-    );
+        .expect("acquire is served by the daemon");
+    assert_eq!(acquire.lease_id, "lease-daemon-2");
+    assert_eq!(acquire.fencing_token, 8);
+    assert_eq!(acquire.generation, 4);
+    assert_eq!(acquire.data_dir, "/daemon/profiles/agent-a/work/gen-4");
 
     let release = tools
-        .release("lease-daemon-1", 7)
+        .release("lease-daemon-2", 8)
         .await
-        .expect_err("release must not invent a local authority");
-    assert_eq!(kind_of(&release), "Refused");
+        .expect("release is served by the daemon");
+    assert!(release.released);
+    assert_eq!(release.teardown, "browser closed by the daemon");
 
-    let reap = tools
-        .reap()
-        .await
-        .expect_err("reap must not invent a local authority");
-    assert_eq!(kind_of(&reap), "Refused");
+    let reap = tools.reap().await.expect("reap is served by the daemon");
+    assert_eq!(
+        (reap.reaped, reap.leases_reaped, reap.live_sessions_after),
+        (2, 3, 0)
+    );
 
     let purge = tools
         .purge("agent-a", "work", true)
         .await
-        .expect_err("purge must not invent a local authority");
-    assert_eq!(kind_of(&purge), "Refused");
-    assert!(
-        purge.to_string().contains("read-only"),
-        "the refusal must explain the read-only surface: {purge}"
-    );
+        .expect("purge is served by the daemon");
+    assert!(purge.purged && purge.existed);
 
-    for err in [&acquire, &release, &reap, &purge] {
+    // Every mutation really was a POST to the daemon's route, with the token.
+    let requests = seen.lock().expect("request log");
+    let lines: Vec<&str> = requests
+        .iter()
+        .filter_map(|head| head.lines().next())
+        .collect();
+    for expected in [
+        "POST /v1/leases ",
+        "POST /v1/leases/lease-daemon-2/release ",
+        "POST /v1/leases/reap ",
+        "POST /v1/profiles/purge ",
+    ] {
         assert!(
-            err.to_string().contains(URL_ENV),
-            "the refusal must name {URL_ENV}: {err}"
+            lines.iter().any(|line| line.contains(expected)),
+            "expected a request line containing {expected:?}; saw {lines:?}"
+        );
+    }
+    for head in requests.iter() {
+        assert!(
+            head.to_ascii_lowercase()
+                .contains("authorization: bearer s3cret"),
+            "every mutation must carry the configured token: {head}"
         );
     }
 }
