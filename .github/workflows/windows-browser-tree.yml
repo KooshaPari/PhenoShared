@@ -1,0 +1,110 @@
+name: Windows Browser Tree
+
+# Executes the Windows half of the browser process-tree reap.
+#
+# PR #783 added `crates/substrate-browser-cdp/src/job_object.rs`: a job object
+# with `JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE`, `AssignProcessToJobObject`,
+# `TerminateJobObject`, and `IsProcessInJob` deciding every kill. It was
+# type-checked for `x86_64-pc-windows-msvc` and never run, because no Unix host
+# can execute it. This job is the first place that code runs.
+#
+# It is intentionally narrow: one crate, one test binary, one runner. It does
+# not replace the cross-platform quality gate; it covers the one assertion that
+# gate structurally cannot make.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "crates/substrate-browser-cdp/**"
+      - ".github/workflows/windows-browser-tree.yml"
+  push:
+    branches: [main]
+    paths:
+      - "crates/substrate-browser-cdp/**"
+      - ".github/workflows/windows-browser-tree.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  job-object-teardown:
+    name: job-object teardown (windows-latest)
+    runs-on: windows-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 1
+
+      # Pinned to `rust-toolchain.toml` (channel 1.99.0), the same pin the
+      # quality gate uses. The msvc target is the host target on this runner and
+      # is requested explicitly so the job states its own requirement.
+      - name: Install Rust 1.99.0 (msvc)
+        uses: dtolnay/rust-toolchain@ff7f6a3374ce205788da40198ec918bd5d67aea7 # 1.99.0
+        with:
+          toolchain: "1.99.0"
+          targets: x86_64-pc-windows-msvc
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          key: windows-browser-tree
+
+      # GitHub's windows runners ship Chrome at
+      # C:\Program Files\Google\Chrome\Application\chrome.exe. Probe the
+      # standard install roots (Chrome x64, Chrome x86, per-user Chrome, then
+      # Edge) rather than assuming one, and export the result as CHROME_BIN,
+      # which `chrome_binary()` honours before any platform default.
+      - name: Locate Chrome
+        run: |
+          $candidates = @(
+            "$env:ProgramFiles\Google\Chrome\Application\chrome.exe",
+            "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe",
+            "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe",
+            "$env:ProgramFiles\Microsoft\Edge\Application\msedge.exe"
+          )
+          $found = $candidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+          if (-not $found) {
+            throw "no Chrome/Chromium/Edge found; candidate paths were: $($candidates -join ', ')"
+          }
+          "CHROME_BIN=$found" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "CHROME_BIN=$found"
+          & $found --version
+
+      - name: Build the test binary
+        run: cargo test -p substrate-browser-cdp --test process_tree --locked --no-run
+
+      # Guards against the failure mode this whole job exists to prevent: a
+      # `#[cfg(windows)]` gate that silently drops the tests, leaving a green
+      # build that asserts nothing. `--list` compiles the binaries and prints
+      # every test that is actually in them.
+      - name: Assert the Windows tests are compiled in
+        run: |
+          $listed = (cargo test -p substrate-browser-cdp --test process_tree --locked -- --list) -join "`n"
+          $required = @(
+            'windows_shutdown_reaps_the_whole_browser_tree',
+            'windows_dropping_the_handle_also_reaps_the_tree'
+          )
+          foreach ($name in $required) {
+            if (-not ($listed -match [regex]::Escape($name))) {
+              throw "expected test $name is not present in the process_tree binary; the cfg gate is wrong"
+            }
+          }
+          Write-Output "listed: $($required -join ', ')"
+
+      # One test thread: these tests measure the machine's process table and
+      # launch real browsers, so they must not overlap each other.
+      - name: Exercise job-object teardown
+        run: cargo test -p substrate-browser-cdp --test process_tree --locked -- --test-threads=1 --nocapture

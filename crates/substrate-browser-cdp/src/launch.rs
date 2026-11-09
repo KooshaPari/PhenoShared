@@ -267,9 +267,10 @@ impl ChromeProcess {
     ///   group, bounded wait, then `SIGKILL` stragglers matched by the launch's
     ///   unique profile path. Exercised by the `process_tree` tests.
     /// - Windows: `TerminateJobObject` on the launch's job object, bounded wait,
-    ///   repeat, then terminate any remaining job member. This path is
-    ///   compile-checked for `x86_64-pc-windows-msvc` but has **not** been
-    ///   executed on Windows, so its runtime behaviour there is unverified.
+    ///   repeat, then terminate any remaining job member. A `#[cfg(windows)]`
+    ///   test in `tests/process_tree.rs` covers this, and
+    ///   `.github/workflows/windows-browser-tree.yml` runs it on
+    ///   `windows-latest`; no macOS or Linux host can.
     ///
     /// If no scope could be established the direct child is killed and waited
     /// for as before, which can still leave renderers behind.

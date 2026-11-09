@@ -25,9 +25,10 @@
 //!
 //! Verification status, stated plainly:
 //! - The Unix path is exercised by integration tests on macOS/Linux.
-//! - The Windows path is **type-checked** for `x86_64-pc-windows-msvc` and has
-//!   **not** been executed on Windows, so its runtime behaviour there is
-//!   unverified.
+//! - The Windows path is **type-checked** for `x86_64-pc-windows-msvc` and has a
+//!   `#[cfg(windows)]` runtime test in `tests/process_tree.rs`, which
+//!   `.github/workflows/windows-browser-tree.yml` runs on `windows-latest`. No
+//!   macOS or Linux host can execute it, so that CI job is its first real run.
 
 #![deny(missing_docs)]
 
