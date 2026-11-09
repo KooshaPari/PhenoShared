@@ -8,6 +8,39 @@ use serde::{Deserialize, Serialize};
 use substrate_browser::BrowserError;
 use substrate_browser_broker::BrokerError;
 
+/// Accepts a JSON number **or** a numeric string for an integer parameter.
+///
+/// MCP clients are not consistent about how they encode integers. The published
+/// input schema says `"integer"`, but real clients - including the agent
+/// harness these tools are registered with - send the value quoted, e.g.
+/// `"ttl_ms": "30000"`. Serde's default is strict, so the tool answered
+/// `invalid type: string "30000", expected u64` and the call failed before it
+/// ever reached the broker.
+///
+/// Accepting both encodings is the interoperable choice, and it costs nothing:
+/// a value that is neither an integer nor a numeric string is still an error, a
+/// numeric string that does not parse is still an error, and a negative or
+/// fractional value is still an error.
+fn de_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Number {
+        Int(u64),
+        Text(String),
+    }
+
+    match Number::deserialize(deserializer)? {
+        Number::Int(value) => Ok(value),
+        Number::Text(text) => text
+            .trim()
+            .parse::<u64>()
+            .map_err(serde::de::Error::custom),
+    }
+}
+
 /// Harness-injected annotation: why the caller is making this call.
 ///
 /// MCP clients - including the agent harness these tools are registered with -
@@ -45,7 +78,7 @@ pub struct AcquireParams {
     #[serde(default)]
     pub holder: Option<String>,
     /// Lease lifetime in milliseconds; defaults to 60000.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "de_u64")]
     pub ttl_ms: Option<u64>,
     /// Caller-supplied annotations, ignored by the broker.
     #[serde(flatten)]
@@ -61,6 +94,7 @@ pub struct ReleaseParams {
     /// Fencing token returned by `broker_acquire`.
     ///
     /// A stale token is refused; the lease is never released on a bad token.
+    #[serde(deserialize_with = "de_u64")]
     pub fencing_token: u64,
     /// Caller-supplied annotations, ignored by the broker.
     #[serde(flatten)]
