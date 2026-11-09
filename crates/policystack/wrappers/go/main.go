@@ -327,7 +327,7 @@ func evaluate(bundle PolicyWrapper, command string, cwd string) EvalResult {
 		conditionPassed := passed
 		errText := ""
 		switch {
-		case evalErrs != nil && len(evalErrs) > 0:
+		case len(evalErrs) > 0:
 			decision = "request"
 			conditionPassed = false
 			errText = strings.Join(evalErrs, "; ")
@@ -355,10 +355,10 @@ func evaluate(bundle PolicyWrapper, command string, cwd string) EvalResult {
 
 	if !matched {
 		return EvalResult{
-			Command:         normalized,
-			Matched:         false,
-			Decision:        "allow",
-			HasRequired:     false,
+			Command:          normalized,
+			Matched:          false,
+			Decision:         "allow",
+			HasRequired:      false,
 			ConditionPassed:  true,
 			ConditionReasons: nil,
 		}
@@ -366,10 +366,10 @@ func evaluate(bundle PolicyWrapper, command string, cwd string) EvalResult {
 
 	if bestDecision == "" {
 		return EvalResult{
-			Command:         normalized,
-			Matched:         true,
-			Decision:        "allow",
-			HasRequired:     false,
+			Command:          normalized,
+			Matched:          true,
+			Decision:         "allow",
+			HasRequired:      false,
 			ConditionPassed:  true,
 			ConditionReasons: nil,
 		}
@@ -382,9 +382,9 @@ func evaluate(bundle PolicyWrapper, command string, cwd string) EvalResult {
 		RuleID:           bestRule.ID,
 		RuleSource:       bestRule.Source,
 		HasRequired:      bestHasRequired,
-		ConditionPassed:   bestConditionPassed,
-		ConditionReasons:  bestReasons,
-		Error:             bestError,
+		ConditionPassed:  bestConditionPassed,
+		ConditionReasons: bestReasons,
+		Error:            bestError,
 	}
 }
 
