@@ -18,6 +18,9 @@
 #![deny(missing_docs)]
 
 mod launch;
+// Process-group termination is Unix-only; Windows keeps single-child kill for now.
+#[cfg(unix)]
+mod process_tree;
 mod provider;
 mod snapshot;
 mod transport;
@@ -25,6 +28,8 @@ mod transport;
 pub use transport::FenceCheck;
 
 pub use launch::{chrome_binary, ChromeProcess, LaunchOptions};
+#[cfg(unix)]
+pub use process_tree::processes_using_user_data_dir;
 pub use provider::CdpProvider;
 pub use snapshot::{AxNode, Snapshot};
 
