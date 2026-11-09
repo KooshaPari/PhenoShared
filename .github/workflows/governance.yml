@@ -56,7 +56,12 @@ jobs:
         # the score on every weekly run.
         run: |
           set -euo pipefail
-          bad=$(grep -rE 'uses:\s+[^@]+@(v[0-9]+|main|master)' .github/workflows/ || true)
+          # A commented-out example is not a pin. Grep cannot tell the difference,
+          # so drop comment lines before judging: without this, a `#   uses: ...`
+          # line inside a header comment fails the gate forever and the only way
+          # to get green is to delete an explanatory note.
+          bad=$(grep -rEn 'uses:[[:space:]]+[^@[:space:]]+@(v[0-9]+|main|master)' .github/workflows/ \
+                  | grep -vE '^[^:]+:[0-9]+:[[:space:]]*#' || true)
           if [ -n "$bad" ]; then
             echo "::error::Unpinned actions (use full commit SHA):"
             echo "$bad"

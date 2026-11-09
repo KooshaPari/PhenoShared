@@ -39,18 +39,18 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
       - name: Setup Rust
         if: ${{ inputs.release-tool == 'release-please' || inputs.release-tool == 'cargo-release' }}
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
 
       - name: Setup Python
         if: ${{ inputs.release-tool == 'python-build' }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
 
@@ -63,7 +63,7 @@ jobs:
 
       - name: release-please
         if: inputs.release-tool == 'release-please'
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: rust

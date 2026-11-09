@@ -65,8 +65,8 @@ jobs:
     # default while leaving ~78% headroom over the observed 84-minute step.
     timeout-minutes: 150
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: stable
           components: llvm-tools-preview
@@ -84,7 +84,7 @@ jobs:
       # 74 minutes before starting). This cache change is worth ~50 seconds
       # of runner time; it is not what was holding the queue.
       # iac keeps its save — its target dir is small.
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
         with:
           save-if: false
 
@@ -152,7 +152,7 @@ jobs:
             --target-dir target
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: coverage-root-report
           path: target/tarpaulin-report/
@@ -170,12 +170,12 @@ jobs:
     # root one, so it needs much less headroom.
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: stable
           components: llvm-tools-preview
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
         with:
           workspaces: iac -> target
 
@@ -193,7 +193,7 @@ jobs:
             --target-dir iac/target
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: coverage-iac-report
           path: iac/target/tarpaulin-report/

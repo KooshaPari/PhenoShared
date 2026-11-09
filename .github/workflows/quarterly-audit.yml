@@ -6,8 +6,16 @@ on:
     - cron: '0 14 1 1,4,7,10 *'
   workflow_dispatch:
   # Federation entrypoint: the org-wide reusable-workflow federation can invoke
-  # the quarterly audit on demand (e.g. an ad-hoc audit wave) via:
+  # the quarterly audit on demand (e.g. an ad-hoc audit wave).
+  #
+  # This note used to read:
   #   uses: <REDACTED>/phenotype-org-audits/.github/workflows/quarterly-audit.yml@main
+  # The 2026-09-16 PII sweep replaced the org name with the literal `<REDACTED>`.
+  # The original target was KooshaPari/phenotype-org-audits, and that repository
+  # no longer exists (only `phenotype-org-audits-wtrees` and
+  # `zz-archive-phenotype-org-audits-wtrees` survive, which are worktree archives,
+  # not the repository). So there is nothing to call from here today. `workflow_call`
+  # is kept because callers inside this repository can still use it.
   workflow_call:
 
 concurrency:

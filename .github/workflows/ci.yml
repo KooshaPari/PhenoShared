@@ -29,7 +29,7 @@ jobs:
       has_security: ${{ steps.detect.outputs.has_security }}
       has_trunk: ${{ steps.detect.outputs.has_trunk }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 1
 
@@ -107,15 +107,15 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
       - name: cargo-deny check
         # v1 pins cargo-deny 0.14.21, which cannot parse the RustSec advisory
         # database any more: it fails with "unsupported CVSS version: 4.0" and
         # "failed to load advisory database", so the gate never evaluated a
         # single advisory. v2 pins 0.20.2, which parses the current DB.
         # The repo's own cargo-deny.yml already uses v2.
-        uses: EmbarkStudios/cargo-deny-action@v2
+        uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2
         with:
           arguments: --all-features
           # The action's container is rust:1.85.0-alpine, so rustup's host
@@ -133,8 +133,8 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.11"
       - name: Install ruff
@@ -150,7 +150,7 @@ jobs:
     if: needs.detect.outputs.has_go == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Verify every go.mod is declared or excluded
         run: python3 scripts/ci/check-go-modules.py
 
@@ -174,9 +174,9 @@ jobs:
       run:
         working-directory: ${{ matrix.module }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
           # Read the version from the module's own go.mod so each module is
           # built with the toolchain it declares. setup-go resolves the `go`
@@ -216,7 +216,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       # The repo is bun-managed (packageManager: bun@1.3.10). npm cannot
       # resolve the root package.json's "workspace:*" dependency, so the old
       # npm ci / npm install pair aborted before lint or test ever ran.
@@ -242,9 +242,9 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -254,8 +254,8 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4
         with:
           fail-on-severity: low
 
@@ -263,7 +263,7 @@ jobs:
     name: Registry Invariant (absorption claims)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: self-test analyzer
         # RUNNER_TEMP is set on every runner; job-level `env` cannot use the
         # `runner` context (build-time "Unrecognized named-value" -> run
