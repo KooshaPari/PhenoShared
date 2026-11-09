@@ -14,9 +14,74 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v4
         with:
           fetch-depth: 0
-      - uses: trufflesecurity/trufflehog@30d5bb91af1a771378349dbbb0c82129392acf70 # v3.95.6
+
+      # Work out a scan range that actually contains commits.
+      #
+      # The previous configuration passed base = the default branch and head =
+      # HEAD unconditionally. On a push to main that names the SAME commit twice,
+      # and the action refuses to run:
+      #
+      #   ::error::BASE and HEAD commits are the same. TruffleHog won't scan
+      #   anything.
+      #
+      # So the secrets gate errored out on every push to main without scanning a
+      # single commit. A scanner that fails before scanning is worse than no
+      # scanner, because it looks like coverage.
+      #
+      # Correct ranges per event:
+      #   pull_request -> origin/<base_ref> .. HEAD   (the PR's commits)
+      #   push         -> github.event.before .. HEAD (the pushed commits)
+      # and when no usable base exists (first push, force-push, manually
+      # dispatched), scan the whole history rather than erroring.
+      - name: Resolve scan range
+        id: range
+        run: |
+          set -euo pipefail
+          base=""
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            base="origin/${GITHUB_BASE_REF}"
+          else
+            base="${PUSH_BEFORE_SHA}"
+          fi
+
+          # github.event.before is all zeros for a brand-new branch.
+          case "$base" in
+            0000000000000000000000000000000000000000|"") base="" ;;
+          esac
+
+          head_sha="$(git rev-parse HEAD)"
+
+          if [ -z "$base" ] || ! git rev-parse --verify --quiet "${base}^{commit}" >/dev/null; then
+            echo "No usable base commit; scanning full history."
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$(git rev-parse "${base}^{commit}")" = "$head_sha" ]; then
+            echo "Base resolves to HEAD (${head_sha}); scanning full history."
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Scanning ${base}..HEAD"
+          echo "mode=range" >> "$GITHUB_OUTPUT"
+          echo "base=${base}" >> "$GITHUB_OUTPUT"
+        env:
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+
+      - name: Scan pushed/PR commits
+        if: steps.range.outputs.mode == 'range'
+        uses: trufflesecurity/trufflehog@30d5bb91af1a771378349dbbb0c82129392acf70 # v3.95.6
         with:
           path: ./
-          base: ${{ github.event.repository.default_branch }}
+          base: ${{ steps.range.outputs.base }}
           head: HEAD
+          extra_args: --only-verified
+
+      - name: Scan full history
+        if: steps.range.outputs.mode == 'full'
+        uses: trufflesecurity/trufflehog@30d5bb91af1a771378349dbbb0c82129392acf70 # v3.95.6
+        with:
+          path: ./
           extra_args: --only-verified
