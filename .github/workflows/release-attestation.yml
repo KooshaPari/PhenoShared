@@ -81,6 +81,21 @@ jobs:
           retention-days: 90
 
       - name: Attest build provenance (SLSA Build L2)
-        uses: slsa-framework/slsa-github-generator/attest-build-provenance@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a
+        # This used to be:
+        #   uses: slsa-framework/slsa-github-generator/attest-build-provenance@<sha>
+        # which is a REUSABLE WORKFLOW, not a step action. Called under `steps:` it
+        # cannot work at any tag: the repository ships no action manifest with a
+        # `runs:` block, so the job failed while loading the workflow rather than
+        # while attesting anything.
+        #
+        # actions/attest-build-provenance is GitHub's first-party step action for
+        # exactly this, and it is what the slsa-github-generator project now points
+        # at for the cheap case. On a GitHub-hosted runner it yields SLSA Build L2
+        # provenance signed by the runner's OIDC identity, which is what this job's
+        # name claims.
+        #
+        # subject-path hashes the files themselves, so the attestation covers the
+        # exact bytes that were uploaded in the step above.
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4
         with:
-          artifact-name: release-artifacts
+          subject-path: ${{ env.CARGO_WORKDIR }}/release-artifacts/*
