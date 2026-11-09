@@ -86,7 +86,7 @@ jobs:
       # iac keeps its save — its target dir is small.
       - uses: Swatinem/rust-cache@v2
         with:
-          cache-save: false
+          save-if: false
 
       # The workspace links against the gtk-rs stack, so glib-sys needs
       # glib-2.0.pc at build time. Without these the coverage build fails with
