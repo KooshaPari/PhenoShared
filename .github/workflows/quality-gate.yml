@@ -22,9 +22,9 @@ jobs:
       rust: ${{ steps.filter.outputs.rust }}
       any: ${{ steps.filter.outputs.any }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with: { fetch-depth: 50 }
-      - uses: dorny/paths-filter@v4
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
         id: filter
         with:
           filters: |
@@ -40,8 +40,8 @@ jobs:
       run:
         working-directory: crates/nanovms-core
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v7
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
         with:
           go-version: '1.24'
           cache: true
@@ -53,20 +53,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       # Pinned to match rust-toolchain.toml (E1.2, 2026-10-01): the floating
       # @stable let CI run a newer clippy than the local pin (cold-gate run
       # 36626812921, 2026-09-29: CI clippy 1.98.0 vs stale local 1.97.1 →
       # 8 findings impossible to reproduce locally). Bump this value together
       # with rust-toolchain.toml, in one commit, after a full local
       # `make check` on the new version.
-      - uses: dtolnay/rust-toolchain@1.99.0
+      - uses: dtolnay/rust-toolchain@ff7f6a3374ce205788da40198ec918bd5d67aea7 # 1.99.0
         with:
           toolchain: "1.99.0"
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
       - name: Install Go (for libnvms_core.a build)
-        uses: actions/setup-go@v7
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
         with:
           go-version: '1.24'
       - name: Install Linux GUI system deps (fabric-tray -> tao/gtk3, libxdo)
@@ -129,7 +129,7 @@ jobs:
         run: cargo nextest run --workspace --profile ci --locked --no-fail-fast
       - name: 'Upload cargo-nextest JUnit report (target/nextest/ci/junit.xml)'
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: substrate-nextest-ci-junit
           path: target/nextest/ci/junit.xml
@@ -144,12 +144,12 @@ jobs:
       run:
         working-directory: crates/nanovms-core
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v7
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
         with:
           go-version: '1.24'
           cache: true
-      - uses: golangci/golangci-lint-action@v6
+      - uses: golangci/golangci-lint-action@55c2c1448f86e01eaae002a5a3a9624417608d84 # v6
         with:
           version: v1.59
 
@@ -161,8 +161,8 @@ jobs:
       run:
         working-directory: crates/nanovms-core
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v7
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
         with:
           go-version: '1.24'
       - run: |

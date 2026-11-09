@@ -1,0 +1,71 @@
+# reusable-a11y.yml
+# Reusable WCAG 2.1 AA gate — boots the app dev server and runs axe Playwright specs.
+#
+# Vendored into this repository on 2026-11-09. It used to be called across repos:
+#
+#     uses: <REDACTED>/OmniRoute-3rd/.github/workflows/reusable-a11y.yml@main
+#
+# The 2026-09-16 PII sweep replaced the org name in that reference with the
+# literal string `<REDACTED>`, which GitHub cannot resolve, so the a11y gate
+# failed before running a single step. The original target was
+# KooshaPari/OmniRoute-3rd, and that repository no longer exists. The only
+# surviving copy of this workflow is in KooshaPari/heliosApp, which is private —
+# and a public repository cannot call a reusable workflow that lives in a
+# private one. So the definition is vendored here and called locally.
+#
+# Why this is the right shape rather than a workaround:
+#   - a local `uses: ./.github/workflows/reusable-a11y.yml` has no cross-repo
+#     access rules, no extra token scope, and no external availability risk;
+#   - the inputs are unchanged, so the caller needed one line to change;
+#   - the gate runs on every push and PR that touches docs, instead of being
+#     dead. A gate nobody can run is not a gate.
+#
+# Pin repair: the upstream copy carried `actions/checkout@<sha>@<sha>`, a
+# double-@ form left by an earlier automated edit. It is not valid syntax. The
+# commit SHA is kept and the stray prefix dropped.
+
+name: reusable-a11y
+
+on:
+  workflow_call:
+    inputs:
+      app_name:
+        required: true
+        type: string
+      app_dir:
+        required: true
+        type: string
+      dev_command:
+        required: true
+        type: string
+      dev_port:
+        required: true
+        type: number
+      spec_glob:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  axe:
+    name: axe-${{ inputs.app_name }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.1.1
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
+
+      - name: Run axe accessibility gate
+        run: bunx playwright test ${{ inputs.spec_glob }}
+        working-directory: ${{ inputs.app_dir }}
