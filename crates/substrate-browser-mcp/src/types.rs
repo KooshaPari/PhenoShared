@@ -37,8 +37,19 @@ where
         Number::Text(text) => text
             .trim()
             .parse::<u64>()
-            .map_err(serde::de::Error::custom),
+            .map_err(|err| serde::de::Error::custom(format!("invalid u64 {text:?}: {err}"))),
     }
+}
+
+/// [`de_u64`] for an optional integer field.
+///
+/// `deserialize_with` replaces the field's whole deserializer, so it has to
+/// produce the field's exact type - `Option<u64>` here, not `u64`.
+fn de_u64_opt<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    de_u64(deserializer).map(Some)
 }
 
 /// Harness-injected annotation: why the caller is making this call.
@@ -78,7 +89,7 @@ pub struct AcquireParams {
     #[serde(default)]
     pub holder: Option<String>,
     /// Lease lifetime in milliseconds; defaults to 60000.
-    #[serde(default, deserialize_with = "de_u64")]
+    #[serde(default, deserialize_with = "de_u64_opt")]
     pub ttl_ms: Option<u64>,
     /// Caller-supplied annotations, ignored by the broker.
     #[serde(flatten)]

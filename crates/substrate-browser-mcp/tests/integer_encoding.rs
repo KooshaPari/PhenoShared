@@ -53,10 +53,8 @@ fn a_non_numeric_string_is_still_rejected() {
 fn a_negative_value_is_still_rejected() {
     // u64 cannot be negative; a client sending -1 must get an error rather
     // than a silently clamped value.
-    serde_json::from_str::<AcquireParams>(
-        r#"{"principal":"alice","profile":"work","ttl_ms":-1}"#,
-    )
-    .expect_err("a negative ttl must be rejected");
+    serde_json::from_str::<AcquireParams>(r#"{"principal":"alice","profile":"work","ttl_ms":-1}"#)
+        .expect_err("a negative ttl must be rejected");
 }
 
 #[test]
