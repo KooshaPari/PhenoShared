@@ -5,11 +5,12 @@ members = [
     "oci-lottery",
     "oci-post-acquire",
     "tailscale/tailscale-keygen",
+    "observability",
 ]
-# `landing-bootstrap` declares its own `[workspace]` table (intentionally
-# detached — see its Cargo.toml) and uses a different dependency style
-# (`ureq` instead of `reqwest`). It is built and released independently; do
-# not pull it into this workspace.
+# `landing-bootstrap` and `phenotype-logging-stub` declare their own
+# `[workspace]` tables (intentionally detached — see their Cargo.toml files).
+# The former is built and released independently; the latter is a local path
+# dependency for the observability member. Neither belongs to this workspace.
 exclude = [
     "landing-bootstrap",
     # Declares its own `[workspace]` table (same detached-stub rationale as

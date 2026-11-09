@@ -1,6 +1,6 @@
 # PhenoInfra
 
-- **Source**: https://github.com/KooshaPari/PhenoInfra
+- **Source**: [KooshaPari/PhenoInfra](https://github.com/KooshaPari/PhenoInfra)
 - **Absorbed**: 2026-09-27
 - **Disposition**: ABSORB → `absorption/PhenoInfra/`
 - **Source commit**: `ecf486cab18b8e84213838d497a39ea3a94aca71` (2026-09-16)

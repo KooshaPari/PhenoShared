@@ -1,6 +1,6 @@
 # phenoDesign-visual-production-v2
 
-- **Source**: https://github.com/KooshaPari/phenoDesign-visual-production-v2
+- **Source**: [KooshaPari/phenoDesign-visual-production-v2](https://github.com/KooshaPari/phenoDesign-visual-production-v2)
 - **Absorbed**: 2026-09-27
 - **Disposition**: ABSORB → `absorption/phenoDesign-visual-production-v2/`
 - **Source commit**: `032e2d84609c1bbf847de359c7d2bf99c7617af6` (2026-09-17)

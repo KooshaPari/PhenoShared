@@ -16,7 +16,7 @@ jobs:
       run:
         working-directory: iac
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
 
       # Pinned to match rust-toolchain.toml (1.99.0, E1.1/E1.2 2026-10-01),
       # same as quality-gate.yml. The previous pin was 1.75, which cannot
@@ -34,7 +34,7 @@ jobs:
       # perf-core workspace, not in `iac`, so copying the coverage.yml Ubuntu
       # apt/setup-go blocks here would add minutes and no coverage.
       - name: Cache cargo registry and target
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: |
             ~/.cargo/registry
