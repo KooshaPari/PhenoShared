@@ -45,7 +45,7 @@ dig +short git.phenotype.io
 
 ## Step 4 — Access controls (Cloudflare Access)
 
-For `vault.phenotype.io` and `ci.phenotype.io`, require Cloudflare Access (OTP to <REDACTED>@gmail.com):
+For `vault.phenotype.io` and `ci.phenotype.io`, require Cloudflare Access (OTP to &lt;REDACTED&gt;@gmail.com):
 
 - Zero Trust → Access → Applications → Add application (self-hosted).
 - Policy: `email` in `[<REDACTED>@gmail.com]`.

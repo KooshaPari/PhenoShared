@@ -7,7 +7,7 @@ Complete guide to deploying Snyk GitHub Actions workflows for automated security
 **Prerequisites:**
 - Snyk token acquired and verified
 - Admin access to GitHub organization
-- GitHub organization: <REDACTED>
+- GitHub organization: &lt;REDACTED&gt;
 
 ---
 
@@ -27,7 +27,7 @@ This guide covers:
 ### 1.1: Prerequisites
 
 Verify you have:
-- Admin access to <REDACTED> GitHub organization
+- Admin access to &lt;REDACTED&gt; GitHub organization
 - Snyk API token (from SNYK_TOKEN_ACQUISITION_GUIDE.md)
 - GitHub CLI (`gh`) installed locally
 
@@ -59,7 +59,7 @@ gh secret list --org <REDACTED> | grep SNYK_TOKEN
 
 If you prefer the GitHub UI:
 
-1. Go to: https://github.com/organizations/<REDACTED>/settings/secrets/actions
+1. Go to: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
 2. Click **"New organization secret"**
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your Snyk token

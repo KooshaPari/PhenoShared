@@ -398,7 +398,7 @@ When you receive a new input from the user, classify it and route as follows:
 If the input is clearly a small self-contained change (rename, single-line fix, config tweak), you may use:
 
 ```
-agileplus escape quick-fix "<description>"
+agileplus escape quick-fix "&lt;description>"
 ```
 
 This bypasses the triage flow and creates a minimal WP directly in the active feature.

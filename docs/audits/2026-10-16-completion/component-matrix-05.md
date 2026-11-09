@@ -5,9 +5,9 @@ Frozen source: 1448514e5692d8de6e40be8c7b67c6b5168f9fe2. Rows are package/build 
 | Manifest | Family | Package | Manifest intent | Source class | Root membership | Source files | Test-path files | Disposition |
 |---|---|---|---|---|---|---:|---:|---|
 | sites/tasken-landing/package.json | Docs and web packages | tasken-landing | Tasken landing page (tasken.phenotype.space) | partial | outside explicit members | 3 | 1 | retain; source-review then qualify named journey |
-| sites/thegent-landing/package.json | Docs and web packages | thegent-landing | Thegent landing page (thegent.<REDACTED>.com) | partial | outside explicit members | 4 | 0 | retain; source-review then qualify named journey |
-| sites/tokn-landing/package.json | Docs and web packages | tokn-landing | Byteport landing page (byteport.<REDACTED>.com) | partial | outside explicit members | 1 | 0 | retain; source-review then qualify named journey |
-| sites/tracera-landing/package.json | Docs and web packages | tracera-landing | Byteport landing page (byteport.<REDACTED>.com) | partial | outside explicit members | 1 | 0 | retain; source-review then qualify named journey |
+| sites/thegent-landing/package.json | Docs and web packages | thegent-landing | Thegent landing page (thegent.&lt;REDACTED&gt;.com) | partial | outside explicit members | 4 | 0 | retain; source-review then qualify named journey |
+| sites/tokn-landing/package.json | Docs and web packages | tokn-landing | Byteport landing page (byteport.&lt;REDACTED&gt;.com) | partial | outside explicit members | 1 | 0 | retain; source-review then qualify named journey |
+| sites/tracera-landing/package.json | Docs and web packages | tracera-landing | Byteport landing page (byteport.&lt;REDACTED&gt;.com) | partial | outside explicit members | 1 | 0 | retain; source-review then qualify named journey |
 | templates/rust-crate/template/Cargo.toml | Other package holding | pheno-cargo-template | Phenotype substrate crate scaffolded from pheno-cargo-template; v8 governance pre-filled (ADR-041, ADR-042, ADR-043). | unknown | outside explicit members | 0 | 0 | retain; source-review then qualify named journey |
 | tests/Cargo.toml | Other package holding | phenotype-infra-tests | Cross-crate integration tests for phenotype-infra monorepo | unknown | outside explicit members | 244 | 297 | retain; source-review then qualify named journey |
 | tests/bdd/Cargo.toml | Other package holding | agileplus-bdd |  | unknown | outside explicit members | 2 | 7 | retain; source-review then qualify named journey |

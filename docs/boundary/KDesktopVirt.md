@@ -45,7 +45,7 @@ why the repo was retired. No source was migrated into the phenotype monorepo.
   the eco-011 device-automation initiative's contracts-first port surface.
 - The repo was largely dormant (last push ~12 months before archival).
 - Companion repos named in the README (`KVirtualStage`, `kmobile`) are separate
-  <REDACTED> entities; they are out of scope for this disposition.
+  &lt;REDACTED&gt; entities; they are out of scope for this disposition.
 - AGENTS.md extends Phenotype-org governance structurally, but the **content**
   (KDE desktop virt) is non-Phenotype, so the structural wrapper does not
   justify keeping the project active.

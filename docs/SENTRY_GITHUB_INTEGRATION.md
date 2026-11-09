@@ -5,7 +5,7 @@ Complete walkthrough for integrating Sentry with GitHub for automatic issue crea
 ## Prerequisites
 
 - Sentry account with projects created for AgilePlus, phenotype-infrakit, and heliosCLI
-- Admin access to <REDACTED> GitHub organization
+- Admin access to &lt;REDACTED&gt; GitHub organization
 - Admin access to Sentry organization
 
 ## Step-by-Step Setup

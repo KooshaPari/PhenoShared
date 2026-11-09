@@ -51,6 +51,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.rust == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       # Pinned to match rust-toolchain.toml (E1.2, 2026-10-01): the floating

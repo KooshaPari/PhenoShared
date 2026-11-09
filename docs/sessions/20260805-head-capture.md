@@ -21,7 +21,7 @@ clean:   true (only untracked cron output dirs from today's fires:
 | 2 | rewrite AGENTS.md against current phase | `ed33e51` | ac_v1 |
 | 3 | backfill missing 2026-07-25..28 SOTA snapshots | `9742256` | ac_v1 |
 | 4 | bootstrap + force-fire all 4 launchd cron agents | `1c6384f` | ac_cron |
-| 5 | this document + HEAD capture commit | <this commit> | ac_v1 |
+| 5 | this document + HEAD capture commit | &lt;this commit> | ac_v1 |
 
 ## State entering Phase 1
 

@@ -124,7 +124,7 @@ See `L6_PHENO_REPOS_HEALTH_2026_06_14.md` for full health inventory (136 tests p
 | **ADR-026** | **Factory AI Agent Readiness Model as cross-cutting external standard** | **L5-104, 2026-06-17** — see <https://docs.factory.ai/web/agent-readiness/overview>; crosswalk in `audit-71-pillar-2026-06-17-wrapup.md` § 10 |
 | **ADR-027** | **Git LFS 3-tier policy (always-track / on-demand / never-track)** | **L5-105, 2026-06-17** — closes L66; see `.gitattributes.example` |
 | **ADR-028** | **Monorepo architecture eval: hybrid-with-staging-repo** | **L5-106, 2026-06-17** — closes L25; staging repo `phenotype-org-audits` |
-| **ADR-029** | **Dmouse92 → <REDACTED> migration — absorb all DM92 work to substrate, archive emptied repos** | **L5-108, 2026-06-17** — see `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`; 6 PRs opened, 18 Dmouse92 repos archived |
+| **ADR-029** | **Dmouse92 → &lt;REDACTED&gt; migration — absorb all DM92 work to substrate, archive emptied repos** | **L5-108, 2026-06-17** — see `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md`; 6 PRs opened, 18 Dmouse92 repos archived |
 | **ADR-030** **[CLOSED 2026-06-19]** | **pheno-worklog-schema v2.1 — add 11th `device:` column (macbook / heavy-runner / subagent / ci)** | **L5-104.5, 2026-06-17** — see `pheno-worklog-schema/SPEC-v2.1.md`; PR `<REDACTED>/pheno-worklog-schema#1` **MERGED** 2026-06-19; 30/30 tests; 4 fleet WORKLOG.md migrated; v2.0 deprecation **2026-06-22** |
 | **ADR-031** **[CLOSED 2026-06-19]** | **Configra absorb — `phenotype-config` folds into `Configra` as canonical name; ADR-022 split (Rust core / TS edge) preserved** | **L5-104.7, 2026-06-17** — see `docs/adr/2026-06-17/ADR-031-configra-absorb.md`; 2 PRs planned (1 on Configra, 1 deprecation on phenotype-config); `phenotype-config` archive date **2026-07-15** → **EXECUTED 2026-06-19**; sub-crate CANONICAL.md markers (phenotype-config-loader, phenotype-shared-config) re-pointed to Configra via `<REDACTED>/pheno#238` (L5-110, merge `3f12e254`); `phenotype-config` deprecation continues on its 2026-07-15 schedule |
 | **ADR-032** **[CLOSED 2026-06-19]** | **pheno-worklog-schema is a primitive lib, NOT a re-implementation of AgilePlus worklog** | **L5-104.8, 2026-06-17** — see `docs/adr/2026-06-17/ADR-032-pheno-worklog-schema-decision.md`; different formats (Markdown table vs JSONL), different audiences, both coexist |
@@ -254,13 +254,13 @@ Two complementary quality frameworks govern the fleet. See `audit-71-pillar-2026
 
 ---
 
-## Dmouse92 → <REDACTED> migration (ADR-029, this turn)
+## Dmouse92 → &lt;REDACTED&gt; migration (ADR-029, this turn)
 
-**User directive (2026-06-17):** *"focus solely on the dmouse92 aspects of work — merge all over to <REDACTED> → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on <REDACTED> had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
+**User directive (2026-06-17):** *"focus solely on the dmouse92 aspects of work — merge all over to &lt;REDACTED&gt; → then reconcile/absorb to proper repos. e.g. dispatch-mcp should be deleted as it needs to have all remaining work fully absorbed to substrate (The ver on &lt;REDACTED&gt; had this done yesterday, repeat for any dmouse additions worthwhile to migrate)."*
 
-**Result:** 20 Dmouse92 phenorepos audited, 6 PRs opened on <REDACTED>, 18 Dmouse92 repos archived. **0 net content loss.**
+**Result:** 20 Dmouse92 phenorepos audited, 6 PRs opened on &lt;REDACTED&gt;, 18 Dmouse92 repos archived. **0 net content loss.**
 
-### 6 PRs opened on <REDACTED> (2026-06-17 20:40-20:50 PDT)
+### 6 PRs opened on &lt;REDACTED&gt; (2026-06-17 20:40-20:50 PDT)
 
 | # | Repo | Branch → base | Title | What |
 |---|---|---|---|---|
@@ -354,7 +354,7 @@ See `findings/2026-06-18-L5-109-4-repo-retirement.md` for full migration matrix,
 - **2 unapplied stashes (pre-2026-06-17)** — DROPPED this turn (WIP pheno-tracing fix already in HEAD via W5 batch).
 - **4 empty `gate1-0..3` local branches** — DELETED this turn (probe commits, no content, not on any pushed branch).
 - **ADR-015 v2.1 deprecation in 5 days** (2026-06-22) — see ADR-025 for the bump.
-- **dispatch-mcp deletion**: Resolved — `dispatch-mcp` and all 10 other wave-3 repos deleted via `gh repo delete` (<REDACTED> token now has `delete_repo` scope). Verified HTTP 404. See phenotype-tooling/docs/absorbed-from-dispatch-mcp/ for the preserved source.
+- **dispatch-mcp deletion**: Resolved — `dispatch-mcp` and all 10 other wave-3 repos deleted via `gh repo delete` (&lt;REDACTED&gt; token now has `delete_repo` scope). Verified HTTP 404. See phenotype-tooling/docs/absorbed-from-dispatch-mcp/ for the preserved source.
 - **L5-104 MIGRATION VERIFIED (2026-06-17)**: 100% migration coverage. dispatch-mcp: 6/6 unique W2-1 commits absorbed. pheno ADR-012: 7/7 commits decisioned. 14 bulk mirrors: 0 unique commits. forgecode: 0 of 378 branches contain unique Phenotype work.
 - **Wave-3 consolidation (2026-06-18)**: 11 repos deleted, 6 absorption collections created in phenotype-tooling/docs/absorbed-from-{kodevibe,dispatch-mcp,metron,helios-router,phenotype-bots,phenotype-lexer-rs}/.
 

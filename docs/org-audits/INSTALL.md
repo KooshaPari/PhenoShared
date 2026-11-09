@@ -173,7 +173,7 @@ bash ops/heavy-runner-cron/dry-run.sh
 | :--------------------------------------------------- | :------------------------------------------------- | :------------------------------------------------------------------------------- |
 | `flock: command not found`                          | `util-linux` not installed                         | `apt install util-linux` / `dnf install util-linux`                             |
 | Cron line in `crontab -l` but no log files appear    | `SLACK_FLEET_WEBHOOK` missing → wrapper exits 1 → silent failure | `sudo cat /etc/phenotype-fleet.env`; re-source from `~/.bashrc`               |
-| `cron: can't open display: ...` or auth errors       | `gh` not authenticated                            | `gh auth login` (re-auth as <REDACTED>)                                          |
+| `cron: can't open display: ...` or auth errors       | `gh` not authenticated                            | `gh auth login` (re-auth as &lt;REDACTED&gt;)                                          |
 | `python3: can't open file 'pheno-predict/...'`       | `$REPOS_ROOT` wrong / not in cron env              | Hard-code the absolute path in `crontab` (the install script already does this)  |
 | Cron runs but exits 2 every week                     | Tool found candidates/hits (this is normal)        | Read `~/.fleet-cron/<tool>-<date>.log`; auto-filed GitHub issue should be in `phenotype-org-audits` |
 | `install-cron.sh` exits 2 (refuses)                  | Hostname is MacBook or contains `mac`              | **This is correct** — cron is for `device:heavy-runner` only (ADR-023)          |

@@ -19,7 +19,7 @@ that breaks every time a refactor lands, these live as reference patterns:
 
 ### `proptest_smoke.rs` — Property-based testing (TEST-03)
 Demonstrates the pattern for `proptest!` macros:
-- Generating random inputs (u32, String, Vec<u8>, HashMap)
+- Generating random inputs (u32, String, Vec&lt;u8>, HashMap)
 - Defining invariants via `prop_assert!`, `prop_assert_eq!`
 - Configuring the runner with `ProptestConfig::default()`
 - Composing strategies for nested types

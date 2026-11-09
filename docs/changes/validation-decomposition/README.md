@@ -226,7 +226,7 @@ validator.validate("active")?;
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|-----------|
 | API instability | Low | Medium | Freeze API after Phase 1 |
-| Registry contention | Low | Low | Lazy<Mutex> thread-safety |
+| Registry contention | Low | Low | Lazy&lt;Mutex> thread-safety |
 | CLI integration overrun | Medium | Medium | Phase 3 is docs only |
 | Backward compat | Low | Low | Legacy bridge maintained |
 
