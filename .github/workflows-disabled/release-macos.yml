@@ -1,3 +1,31 @@
+# DISABLED 2026-11-09 — not loaded by GitHub Actions (this directory is not
+# `.github/workflows/`, so nothing here runs).
+#
+# Why it is disabled rather than fixed:
+#
+#   The one job calls a reusable workflow in another repository:
+#       uses: <REDACTED>/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
+#
+#   The 2026-09-16 PII sweep replaced the org name with the literal `<REDACTED>`,
+#   so the reference has not been resolvable since then. Restoring the original
+#   name does not help either: it was `kooshapari/phenotype-fleet-ops`, and
+#   KooshaPari/phenotype-fleet-ops does not exist. There is no surviving copy of
+#   `macos-release.yml` anywhere the account can see, so there is nothing to
+#   point at.
+#
+#   It only triggers on version tags, so it was a latent trap rather than a
+#   constantly-red job: it would have failed the first time a tag was pushed.
+#
+# To re-enable: restore `phenotype-fleet-ops` (or vendor a macOS release
+# workflow into this repo the way `.github/workflows/reusable-a11y.yml` was
+# vendored), move this file back into `.github/workflows/`, and re-point the
+# `uses:` line. The `secrets: INFISICAL_TOKEN` contract and the build command
+# below are unchanged and still correct.
+#
+# Note the macOS runner policy: billed macOS minutes are out of budget, so any
+# replacement must use self-hosted runners, which is what the original comment
+# also said.
+
 name: Release macOS (phenotype-omlx)
 
 # Calls the reusable workflow at <REDACTED>/phenotype-fleet-ops.
