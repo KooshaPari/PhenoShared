@@ -3,7 +3,8 @@
 # Generates a CycloneDX SBOM for the calling repo.
 # The calling workflow should invoke this via:
 #
-#   uses: KooshaPari/PhenoShared/.github/workflows/sbom-monthly.yml@<SHA>
+#   A `uses:` reference to this workflow file, pinned to a full 40-character
+#   commit SHA (for example 0123456789abcdef0123456789abcdef01234567):
 #   with:
 #     repo_path: '.'
 #     build_system: 'rust'
@@ -58,7 +59,7 @@ jobs:
           artifact-name: sbom.cdx.json
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: sbom-monthly-${{ github.event.repository.name }}-${{ github.sha }}
           path: ${{ inputs.repo_path }}/sbom.cdx.json

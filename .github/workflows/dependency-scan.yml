@@ -31,8 +31,9 @@ jobs:
         #
         # Uses the CLI, not google/osv-scanner-action. That repository's root is
         # NOT an action: at v2.4.0, v2.5.1, v2.6.0 and v2.7.0 its action.yml has
-        # no `runs:` section, so `uses: google/osv-scanner-action@<sha>` fails at
-        # setup with "Top level 'runs:' section is required". v2 is consumed as a
+        # no `runs:` section, so a step-level SHA-pinned reference to that action
+        # fails at setup with "Top level 'runs:' section is required". v2 is
+        # consumed as a
         # reusable workflow, which cannot be used as a step. The previously
         # pinned SHA (v2.0.0) no longer resolves at all.
         continue-on-error: true
