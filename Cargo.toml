@@ -1,6 +1,8 @@
 [workspace]
 resolver = "2"
-exclude = ["crates/forge_daemon", "crates/fabric-frame-transport/fuzz", "crates/fabric-gui/src-tauri"]
+exclude = ["crates/forge_daemon", "crates/fabric-frame-transport/fuzz", "crates/fabric-gui/src-tauri", # Tauri desktop shells bind GTK/WebKit/libsoup-3.0 at build time and cannot build on
+    # the generic Linux CI image. Same reason crates/fabric-gui/src-tauri is excluded.
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/hwledger-app/src-tauri"]
 members = [
     "crates/substrate",
     "crates/substrate-core",
@@ -825,7 +827,6 @@ members = [
     "absorption/PhenoMLX-temp/perf-core/tree-attention-spirv",
     "absorption/PhenoMLX-temp/perf-core/vpu/agents",
     # --- SHR-016 (2026-10-15): promote hwledger packages (non-TQ hwledger crates) ---
-    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/hwledger-app/src-tauri",
     "absorption/PhenoMLX-temp/perf-core/hwledger/crates/hwledger-bench-cockpit",
     "absorption/PhenoMLX-temp/perf-core/hwledger/crates/hwledger-cli",
     "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-core",
