@@ -6,6 +6,12 @@
 //! brokerd --bind 0.0.0.0:8787 --token-env BROKER_TOKEN \
 //!     --tls-cert /etc/broker/fullchain.pem --tls-key /etc/broker/key.pem
 //! ```
+//!
+//! The default state root (`SUBSTRATE_BROKER_ROOT`, else
+//! `XDG_STATE_HOME/browser-broker`, else `HOME/.local/state/browser-broker`)
+//! is the same precedence `substrate-browser-mcp` resolves. When the MCP bridge
+//! and this daemon agree on the root they share one on-disk lease store, so the
+//! bridge is not a second lease authority.
 
 use std::{env, process::ExitCode, sync::Arc};
 
@@ -73,7 +79,10 @@ fn parse_args() -> Result<Args, String> {
 const HELP: &str = "\
 brokerd - lease-guarded browser broker
 
-  --root <dir>       state directory (default: $XDG_STATE_HOME/browser-broker)
+  --root <dir>       state directory (default: $SUBSTRATE_BROKER_ROOT, else
+                     $XDG_STATE_HOME/browser-broker, else
+                     $HOME/.local/state/browser-broker; the same precedence the
+                     MCP bridge uses, so both share one lease store)
   --bind <addr>      viewer address (default: 127.0.0.1:8787)
   --token <value>    require this bearer token
   --token-env <var>  read the bearer token from an environment variable
@@ -86,12 +95,26 @@ brokerd - lease-guarded browser broker
 Binding anywhere other than loopback without --token is refused.
 Without --tls-cert and --tls-key the viewer serves plain HTTP, unchanged.";
 
-fn default_root() -> String {
-    if let Ok(state) = env::var("XDG_STATE_HOME") {
+/// Resolve the state root from `get`, which mirrors the process environment.
+///
+/// The precedence is a contract shared with the MCP bridge
+/// (`substrate-browser-mcp::resolve_root_from`): `SUBSTRATE_BROKER_ROOT`, else
+/// `XDG_STATE_HOME/browser-broker`, else `HOME/.local/state/browser-broker`.
+/// Divergence here is exactly how the MCP server silently becomes a second
+/// lease authority, so both crates test the same table.
+pub fn resolve_root_from(get: impl Fn(&str) -> Option<String>) -> String {
+    if let Some(root) = get("SUBSTRATE_BROKER_ROOT") {
+        return root;
+    }
+    if let Some(state) = get("XDG_STATE_HOME") {
         return format!("{state}/browser-broker");
     }
-    let home = env::var("HOME").unwrap_or_else(|_| ".".to_string());
+    let home = get("HOME").unwrap_or_else(|| ".".to_string());
     format!("{home}/.local/state/browser-broker")
+}
+
+fn default_root() -> String {
+    resolve_root_from(|name| env::var(name).ok())
 }
 
 fn is_loopback(bind: &str) -> bool {
@@ -183,5 +206,72 @@ async fn main() -> ExitCode {
             eprintln!("brokerd: cannot serve {scheme} on {address}: {err}");
             ExitCode::from(1)
         },
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::BTreeMap;
+
+    use super::resolve_root_from;
+
+    /// `resolve_root_from` with a fake environment.
+    fn lookup(vars: &[(&str, &str)]) -> impl Fn(&str) -> Option<String> {
+        let vars: BTreeMap<String, String> = vars
+            .iter()
+            .map(|(key, value)| ((*key).to_string(), (*value).to_string()))
+            .collect();
+        move |name: &str| vars.get(name).cloned()
+    }
+
+    /// The same table lives in `substrate-browser-mcp/tests/root_resolution.rs`.
+    ///
+    /// The crates cannot share test code (that would be a dependency cycle), so
+    /// the expectations are duplicated deliberately: if the two resolutions ever
+    /// drift, one of the two tests fails. Drift is exactly the bug that made the
+    /// MCP bridge and `brokerd` two separate lease authorities.
+    #[test]
+    fn root_precedence_matches_the_mcp_bridge() {
+        struct Case<'a> {
+            vars: &'a [(&'a str, &'a str)],
+            expected: &'a str,
+        }
+
+        let cases = [
+            Case {
+                vars: &[
+                    ("SUBSTRATE_BROKER_ROOT", "/srv/explicit"),
+                    ("XDG_STATE_HOME", "/srv/xdg"),
+                    ("HOME", "/srv/home"),
+                ],
+                expected: "/srv/explicit",
+            },
+            Case {
+                // The override wins even when it is the only thing set.
+                vars: &[("SUBSTRATE_BROKER_ROOT", "/srv/explicit")],
+                expected: "/srv/explicit",
+            },
+            Case {
+                vars: &[("XDG_STATE_HOME", "/srv/xdg"), ("HOME", "/srv/home")],
+                expected: "/srv/xdg/browser-broker",
+            },
+            Case {
+                vars: &[("HOME", "/srv/home")],
+                expected: "/srv/home/.local/state/browser-broker",
+            },
+            Case {
+                vars: &[],
+                expected: "./.local/state/browser-broker",
+            },
+        ];
+
+        for case in cases {
+            assert_eq!(
+                resolve_root_from(lookup(case.vars)),
+                case.expected,
+                "vars: {:?}",
+                case.vars
+            );
+        }
     }
 }

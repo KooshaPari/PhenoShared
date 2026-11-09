@@ -8,6 +8,102 @@ use serde::{Deserialize, Serialize};
 use substrate_browser::BrowserError;
 use substrate_browser_broker::BrokerError;
 
+/// Accepts a JSON number **or** a numeric string for an integer parameter.
+///
+/// MCP clients are not consistent about how they encode integers. The published
+/// input schema says `"integer"`, but real clients - including the agent
+/// harness these tools are registered with - send the value quoted, e.g.
+/// `"ttl_ms": "30000"`. Serde's default is strict, so the tool answered
+/// `invalid type: string "30000", expected u64` and the call failed before it
+/// ever reached the broker.
+///
+/// Accepting both encodings is the interoperable choice, and it costs nothing:
+/// a value that is neither an integer nor a numeric string is still an error, a
+/// numeric string that does not parse is still an error, and a negative or
+/// fractional value is still an error.
+fn de_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Number {
+        Int(u64),
+        Text(String),
+    }
+
+    match Number::deserialize(deserializer)? {
+        Number::Int(value) => Ok(value),
+        Number::Text(text) => text
+            .trim()
+            .parse::<u64>()
+            .map_err(|err| serde::de::Error::custom(format!("invalid u64 {text:?}: {err}"))),
+    }
+}
+
+/// [`de_u64`] for an optional integer field.
+///
+/// `deserialize_with` replaces the field's whole deserializer, so it has to
+/// produce the field's exact type - `Option<u64>` here, not `u64`.
+fn de_u64_opt<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    de_u64(deserializer).map(Some)
+}
+
+/// Accepts a JSON boolean **or** the strings `"true"` / `"false"`.
+///
+/// Same reason as [`de_u64`]: the agent harness sends scalar values quoted, so
+/// `confirm` arrives as `"true"` and a strict `bool` rejected it with
+/// `invalid type: string "true", expected a boolean`.
+///
+/// A `confirm` that is not exactly true is still not true - the purge guard
+/// checks the parsed value, so a missing, false, or unparseable `confirm` all
+/// fail closed.
+fn de_bool<'de, D>(deserializer: D) -> Result<bool, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Flag {
+        Bool(bool),
+        Text(String),
+    }
+
+    match Flag::deserialize(deserializer)? {
+        Flag::Bool(value) => Ok(value),
+        Flag::Text(text) => match text.trim().to_ascii_lowercase().as_str() {
+            "true" => Ok(true),
+            "false" => Ok(false),
+            other => Err(serde::de::Error::custom(format!("invalid bool {other:?}"))),
+        },
+    }
+}
+
+/// Harness-injected annotation: why the caller is making this call.
+///
+/// MCP clients - including the agent harness these tools are registered with -
+/// attach `intent` to **every** tool call. The broker has no use for it, but
+/// the parameter structs are `deny_unknown_fields` so that a typo in a
+/// meaningful field is rejected rather than silently ignored. Without an
+/// explicit slot for these annotations, every `broker_acquire`,
+/// `broker_release` and `broker_purge` call failed with
+/// "unknown field `intent`" before it reached the broker.
+///
+/// Accepted and ignored: the annotation is about the caller, not the lease.
+#[derive(Debug, Clone, Default, Deserialize, schemars::JsonSchema)]
+pub struct HarnessAnnotations {
+    /// Harness-injected call annotation. Accepted and ignored.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub intent: Option<String>,
+    /// Harness-injected flag to re-run a result that was withheld for size.
+    /// Accepted and ignored.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub accept_large_output: Option<bool>,
+}
+
 /// Parameters for `broker_acquire`.
 #[derive(Debug, Clone, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -23,8 +119,11 @@ pub struct AcquireParams {
     #[serde(default)]
     pub holder: Option<String>,
     /// Lease lifetime in milliseconds; defaults to 60000.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "de_u64_opt")]
     pub ttl_ms: Option<u64>,
+    /// Caller-supplied annotations, ignored by the broker.
+    #[serde(flatten)]
+    pub annotations: HarnessAnnotations,
 }
 
 /// Parameters for `broker_release`.
@@ -36,7 +135,11 @@ pub struct ReleaseParams {
     /// Fencing token returned by `broker_acquire`.
     ///
     /// A stale token is refused; the lease is never released on a bad token.
+    #[serde(deserialize_with = "de_u64")]
     pub fencing_token: u64,
+    /// Caller-supplied annotations, ignored by the broker.
+    #[serde(flatten)]
+    pub annotations: HarnessAnnotations,
 }
 
 /// Parameters for `broker_purge`.
@@ -48,7 +151,11 @@ pub struct PurgeParams {
     /// Profile whose data directory should be deleted.
     pub profile: String,
     /// Must be `true`. Destructive: deletes every generation of the profile.
+    #[serde(deserialize_with = "de_bool")]
     pub confirm: bool,
+    /// Caller-supplied annotations, ignored by the broker.
+    #[serde(flatten)]
+    pub annotations: HarnessAnnotations,
 }
 
 /// One active lease, as reported by `broker_status`.
@@ -71,11 +178,19 @@ pub struct LeaseInfo {
 /// Result of `broker_status`.
 #[derive(Debug, Clone, Serialize)]
 pub struct BrokerStatus {
-    /// Broker state root.
+    /// Broker state root, or the daemon base URL when `brokerd` answered.
     pub root: String,
+    /// Set to the daemon URL when this snapshot came from a running `brokerd`.
+    ///
+    /// Absent for the in-process backend, so existing readers are unaffected.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub brokerd: Option<String>,
     /// Whether a Chrome-family binary exists for the broker to launch.
-    pub browser_available: bool,
-    /// Number of live sessions held by *this* process.
+    ///
+    /// `None` when the snapshot came from `brokerd`: the daemon host's browser
+    /// inventory is not visible from here, and guessing would be a lie.
+    pub browser_available: Option<bool>,
+    /// Number of live sessions held by the authority that answered.
     pub live_sessions: usize,
     /// Every lease record on disk (expired ones flagged, not hidden).
     pub active_leases: Vec<LeaseInfo>,

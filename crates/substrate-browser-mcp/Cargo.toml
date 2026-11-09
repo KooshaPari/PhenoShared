@@ -16,6 +16,9 @@ thiserror.workspace = true
 tokio = { workspace = true, features = ["net", "fs", "signal", "macros", "rt-multi-thread"] }
 rmcp = { version = "3.1", features = ["server", "transport-io", "macros"] }
 schemars = "1.2"
+# Talks to a running `brokerd` when BROKERD_URL is set. Same workspace pin the
+# broker crate's dev-dependencies use, so there is one HTTP stack in the graph.
+reqwest = { workspace = true }
 
 [dev-dependencies]
 tempfile.workspace = true
