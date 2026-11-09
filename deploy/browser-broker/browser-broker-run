@@ -42,7 +42,30 @@ if [ ! -x "$BROKERD" ]; then
 fi
 
 # --token-env names the VARIABLE, not the secret. Token stays in the environment.
+#
+# TLS is prepared but NOT enabled yet. The certificate and key live in
+# $ROOT_DIR/tls (key mode 600) and the certificate is installed in the login
+# keychain, but its TRUST SETTINGS are not applied: `security add-trusted-cert`
+# needs an interactive "Always Trust" confirmation, which cannot be granted
+# non-interactively. Until that is done the daemon would serve HTTPS that no
+# client trusts, which is strictly worse for clients than plain HTTP on
+# loopback.
+#
+# To enable TLS:
+#   1. security add-trusted-cert -r trustRoot \
+#        -k ~/Library/Keychains/login.keychain-db \
+#        ~/.local/state/browser-broker/tls/cert.pem
+#      and click "Always Trust" when prompted.
+#   2. uncomment the two --tls-* lines below.
+#   3. launchctl kickstart -k gui/$(id -u)/com.kooshapari.browser-broker
+#
+# TLS only becomes worth enabling once the daemon can serve the MCP's
+# mutations over HTTP (the write routes), because with BROKERD_URL unset the
+# MCP works the shared on-disk lease store directly and never calls the daemon.
+TLS_DIR="$ROOT_DIR/tls"
 exec "$BROKERD" \
     --root "$ROOT_DIR" \
     --bind "$BIND_ADDR" \
     --token-env "$TOKEN_VAR"
+# --tls-cert "$TLS_DIR/cert.pem" \
+# --tls-key "$TLS_DIR/key.pem"

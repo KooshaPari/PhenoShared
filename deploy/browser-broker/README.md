@@ -129,3 +129,26 @@ that is the same trust boundary as the file itself.
 - `KeepAlive` is `SuccessfulExit = false`: the service restarts after a crash or a signal, but not
   after a clean exit, so `launchctl bootout` genuinely stops it.
 - `ThrottleInterval` is 10s so a failing daemon cannot spin.
+
+### TLS on the daemon
+
+The daemon supports `--tls-cert` / `--tls-key` and serves HTTPS when both are given. On this host it
+is **prepared but not enabled**: the certificate is in the login keychain but its **trust settings
+are not applied**, because `security add-trusted-cert` requires an interactive "Always Trust"
+confirmation. Serving HTTPS that no client trusts is worse for clients than plain HTTP on
+loopback, so the wrapper keeps the `--tls-*` lines commented out until the trust is granted.
+
+To enable it:
+
+```sh
+security add-trusted-cert -r trustRoot \
+  -k ~/Library/Keychains/login.keychain-db \
+  ~/.local/state/browser-broker/tls/cert.pem
+# click "Always Trust" when prompted
+# then uncomment the two --tls-* lines in ~/.local/bin/browser-broker-run
+launchctl kickstart -k gui/$(id -u)/com.kooshapari.browser-broker
+```
+
+TLS is worth enabling once the daemon can serve the MCP's **mutations** over HTTP. With
+`BROKERD_URL` unset the MCP works the shared on-disk lease store directly and never calls the
+daemon, so TLS on the daemon currently protects a surface nothing calls yet.
