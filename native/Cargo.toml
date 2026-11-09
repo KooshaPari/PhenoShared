@@ -1,9 +1,15 @@
 [package]
 name = "playcua-native"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-license.workspace = true
+version = "0.1.0"
+edition = "2021"
+authors = ["playcua contributors"]
+license = "MIT"
+rust-version = "1.80"
+
+# `native/` was a submodule of the old standalone PlayCua repo. It keeps its
+# own workspace so it can build without inheriting from the PhenoShared root
+# (which does not list it as a member).
+[workspace]
 
 [[bin]]
 name = "playcua-native"
@@ -39,61 +45,46 @@ path = "src/bin/hermetic_spawn_test.rs"
 name = "playcua_native"
 path = "src/lib.rs"
 
-# L3 #41 — register the type-strictness integration test that lives at
-# the workspace root (`PlayCua/tests/type_strictness_test.rs`). The
-# spec'd location is the workspace root, but cargo only auto-discovers
-# integration tests under `<package>/tests/*.rs`; without this explicit
-# `[[test]]` entry, `cargo test --workspace` would not see the file.
-# Keeping the canonical source at the spec'd path means there is one
-# file to maintain; this entry just wires cargo to find it.
-[[test]]
-name = "type_strictness_test"
-path = "../tests/type_strictness_test.rs"
-
-# Phase 3 — wire the FR-annotated integration tests that live at the
-# workspace root. Each file's module-level doc comment cites the FR(s)
-# it covers; see `docs/specs/TRACEABILITY.md` for the full matrix.
-[[test]]
-name = "screenshot_test"
-path = "../tests/screenshot_test.rs"
-
-[[test]]
-name = "input_dispatch_test"
-path = "../tests/input_dispatch_test.rs"
-
-[[test]]
-name = "process_lifecycle_test"
-path = "../tests/process_lifecycle_test.rs"
-
-[[test]]
-name = "analysis_hash_test"
-path = "../tests/analysis_hash_test.rs"
-
-[[test]]
-name = "modality_ping_test"
-path = "../tests/modality_ping_test.rs"
+# FR-annotated integration tests once lived at the standalone PlayCua workspace
+# root (`../tests/*.rs`). Those files were not carried into the PhenoShared
+# absorption, so the explicit `[[test]]` entries were dropped; cargo now
+# auto-discovers the tests under `native/tests/*.rs`.
 
 [dependencies]
-tokio.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-anyhow.workspace = true
-thiserror.workspace = true
-tracing.workspace = true
-tracing-subscriber.workspace = true
-async-trait.workspace = true
-base64.workspace = true
-image.workspace = true
-blake3.workspace = true
-fast_image_resize.workspace = true
-enigo.workspace = true
-xcap.workspace = true
+tokio = { version = "1.42", features = [
+  "rt",
+  "rt-multi-thread",
+  "macros",
+  "process",
+  "io-util",
+  "sync",
+  "time",
+  "signal",
+  "io-std",
+] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+thiserror = "2.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+async-trait = "0.1"
+base64 = "0.22"
+image = { version = "0.25", default-features = false, features = ["png"] }
+blake3 = "1.5"
+enigo = "0.6"
+xcap = "0.9"
 libc = "0.2"
-rmcp.workspace = true
-schemars.workspace = true
-clap.workspace = true
-axum.workspace = true
-tower.workspace = true
+rmcp = { version = "3.9", features = [
+  "server",
+  "transport-io",
+  "transport-streamable-http-server",
+  "macros",
+] }
+schemars = { version = "0.8", features = ["derive", "chrono"] }
+clap = { version = "4.5", features = ["derive", "env"] }
+axum = "0.8"
+tower = "0.5"
 
 # pheno-* fleet crates (L5 #81 PlayCua full integration).
 #   - pheno-errors:  canonical AppError type used by the top-level
@@ -103,9 +94,9 @@ tower.workspace = true
 #                    that lived in main.rs before this change).
 #   - pheno-flags:   env-driven boolean feature flags (loaded from
 #                    `PLAYCUA_*` env vars at startup).
-pheno-errors  = { workspace = true }
-pheno-tracing = { workspace = true }
-pheno-flags   = { workspace = true }
+pheno-errors = { path = "../crates/pheno-errors" }
+pheno-tracing = { path = "../crates/pheno-tracing" }
+pheno-flags = { path = "../crates/pheno-flags" }
 
 [features]
 # Default = stdio JSON-RPC 2.0 server (CLI / pipe-mode launchers).
@@ -116,22 +107,22 @@ mcp-server = []
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.62.2", features = [
-    "Win32_Foundation",
-    "Win32_UI_WindowsAndMessaging",
-    "Win32_UI_Input_KeyboardAndMouse",
-    "Win32_System_Threading",
-    "Win32_Graphics_Gdi",
-    "Win32_Graphics_Direct3D11",
-    "Win32_Graphics_Dxgi",
-    "Win32_Graphics_Dxgi_Common",
-    "Graphics_Capture",
-    "Graphics_DirectX",
-    "Graphics_DirectX_Direct3D11",
-    "Win32_System_WinRT_Direct3D11",
-    "Win32_System_WinRT_Graphics_Capture",
-    "Win32_System_Com",
-    "Foundation",
-    "Foundation_Collections",
+  "Win32_Foundation",
+  "Win32_UI_WindowsAndMessaging",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_System_Threading",
+  "Win32_Graphics_Gdi",
+  "Win32_Graphics_Direct3D11",
+  "Win32_Graphics_Dxgi",
+  "Win32_Graphics_Dxgi_Common",
+  "Graphics_Capture",
+  "Graphics_DirectX",
+  "Graphics_DirectX_Direct3D11",
+  "Win32_System_WinRT_Direct3D11",
+  "Win32_System_WinRT_Graphics_Capture",
+  "Win32_System_Com",
+  "Foundation",
+  "Foundation_Collections",
 ] }
 
 [target.'cfg(target_os = "linux")'.dependencies]
@@ -139,11 +130,7 @@ xcb = "1.7"
 x11rb = { version = "0.14", features = ["all-extensions"] }
 
 [dev-dependencies]
-reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = [
+  "rustls-tls",
+] }
 wiremock = "0.6"
-
-[profile.release]
-opt-level = 3
-strip = true
-lto = true
-codegen-units = 1
