@@ -14903,6 +14903,7 @@ version = "0.3.10"
 dependencies = [
  "axum 0.8.9",
  "base64 0.22.1",
+ "fs2",
  "futures-util",
  "rcgen",
  "reqwest 0.12.28",

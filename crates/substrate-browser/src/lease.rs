@@ -139,6 +139,15 @@ impl std::fmt::Debug for LeaseManager {
 }
 
 impl LeaseManager {
+    /// How long to wait for the cross-process store lock before giving up.
+    ///
+    /// Bounded on purpose: an unbounded wait on a lock held by a wedged peer
+    /// turns a degraded peer into a hung one.
+    const LOCK_WAIT: Duration = Duration::from_secs(5);
+
+    /// Gap between attempts to take the lock.
+    const LOCK_RETRY: Duration = Duration::from_millis(20);
+
     /// Open (or create) a lease store rooted at `root`.
     pub fn new(root: impl Into<PathBuf>) -> Result<Self> {
         Self::with_clock(root, Arc::new(SystemClock))
@@ -165,6 +174,26 @@ impl LeaseManager {
     }
 
     /// Run `body` while holding the cross-process store lock.
+    ///
+    /// The lock is taken with `try_lock_exclusive` in a bounded retry loop
+    /// rather than with a blocking `lock_exclusive`. A blocking flock is a
+    /// *blocking syscall on the calling thread*, and these methods are called
+    /// from async context, so a blocking wait pins a tokio worker. Enough
+    /// concurrent operations against a lock held by another process (a second
+    /// brokerd on the same root, or any slow holder) can pin every worker, and
+    /// then the HTTP task is never scheduled: the socket keeps accepting
+    /// connections but nothing is ever served.
+    ///
+    /// That symptom was observed on 2026-11-09 - a brokerd accepted TCP on
+    /// 127.0.0.1:8788 and returned zero bytes to every request while a second
+    /// brokerd on the same root stayed healthy. It could NOT be reproduced
+    /// deliberately, so the starvation mechanism above is plausible rather
+    /// than confirmed. The bound is the part that is certain: a bounded wait
+    /// degrades to a clear error instead of an unbounded hang.
+    ///
+    /// Mutual exclusion is unchanged - the same `flock` is held for the whole
+    /// of `body`, so two daemons on one root still cannot interleave a
+    /// grant/revoke/fence update.
     fn with_lock<T>(&self, body: impl FnOnce() -> Result<T>) -> Result<T> {
         let file = fs::OpenOptions::new()
             .create(true)
@@ -172,7 +201,23 @@ impl LeaseManager {
             .write(true)
             .truncate(false)
             .open(self.lock_path())?;
-        file.lock_exclusive()?;
+        let deadline = std::time::Instant::now() + Self::LOCK_WAIT;
+        loop {
+            match file.try_lock_exclusive() {
+                Ok(()) => break,
+                Err(err) if err.kind() == std::io::ErrorKind::WouldBlock => {
+                    if std::time::Instant::now() >= deadline {
+                        return Err(BrowserError::Refused(format!(
+                            "lease store lock {} is held by another process (waited {:?})",
+                            self.lock_path().display(),
+                            Self::LOCK_WAIT
+                        )));
+                    }
+                    std::thread::sleep(Self::LOCK_RETRY);
+                },
+                Err(err) => return Err(BrowserError::Io(err)),
+            }
+        }
         let outcome = body();
         let _ = FileExt::unlock(&file);
         outcome

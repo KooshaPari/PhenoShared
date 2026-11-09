@@ -16,3 +16,6 @@ libc.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true
+# Used by tests/lease_lock.rs to hold the cross-process store lock the way
+# another process would.
+fs2.workspace = true

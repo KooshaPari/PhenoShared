@@ -31,7 +31,9 @@ rustls-pemfile = "2.2"
 
 [dev-dependencies]
 tempfile.workspace = true
+# Used by tests/lock_responsive.rs to hold the lease store's cross-process lock.
+fs2.workspace = true
 tokio = { workspace = true, features = ["net", "macros", "rt-multi-thread", "fs"] }
-reqwest = { workspace = true, features = ["json"] }
+reqwest = { workspace = true, features = ["json", "blocking"] }
 # Generates the throwaway self-signed certificate used by tests/viewer_tls.rs.
 rcgen = { version = "0.13.2", default-features = false, features = ["crypto", "pem", "ring"] }
