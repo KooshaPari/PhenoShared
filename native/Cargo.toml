@@ -11,6 +11,11 @@ rust-version = "1.80"
 # (which does not list it as a member).
 [workspace]
 
+[package.metadata.cargo-machete]
+# `tower` is only used by the `playcua-mcp` bin, which is gated behind the
+# `mcp-server` feature, so cargo-machete's default scan cannot see it.
+ignored = ["tower"]
+
 [[bin]]
 name = "playcua-native"
 path = "src/main.rs"
