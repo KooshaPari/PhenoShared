@@ -52,6 +52,36 @@ where
     de_u64(deserializer).map(Some)
 }
 
+/// Accepts a JSON boolean **or** the strings `"true"` / `"false"`.
+///
+/// Same reason as [`de_u64`]: the agent harness sends scalar values quoted, so
+/// `confirm` arrives as `"true"` and a strict `bool` rejected it with
+/// `invalid type: string "true", expected a boolean`.
+///
+/// A `confirm` that is not exactly true is still not true - the purge guard
+/// checks the parsed value, so a missing, false, or unparseable `confirm` all
+/// fail closed.
+fn de_bool<'de, D>(deserializer: D) -> Result<bool, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum Flag {
+        Bool(bool),
+        Text(String),
+    }
+
+    match Flag::deserialize(deserializer)? {
+        Flag::Bool(value) => Ok(value),
+        Flag::Text(text) => match text.trim().to_ascii_lowercase().as_str() {
+            "true" => Ok(true),
+            "false" => Ok(false),
+            other => Err(serde::de::Error::custom(format!("invalid bool {other:?}"))),
+        },
+    }
+}
+
 /// Harness-injected annotation: why the caller is making this call.
 ///
 /// MCP clients - including the agent harness these tools are registered with -
@@ -121,6 +151,7 @@ pub struct PurgeParams {
     /// Profile whose data directory should be deleted.
     pub profile: String,
     /// Must be `true`. Destructive: deletes every generation of the profile.
+    #[serde(deserialize_with = "de_bool")]
     pub confirm: bool,
     /// Caller-supplied annotations, ignored by the broker.
     #[serde(flatten)]

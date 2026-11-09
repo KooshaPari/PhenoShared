@@ -11,7 +11,7 @@
 //! number - a fencing token has to be an exact number, not something the broker
 //! rounds, clamps or guesses.
 
-use substrate_browser_mcp::{AcquireParams, ReleaseParams};
+use substrate_browser_mcp::{AcquireParams, PurgeParams, ReleaseParams};
 
 #[test]
 fn ttl_ms_accepts_a_json_number() {
@@ -64,4 +64,43 @@ fn a_float_is_still_rejected() {
         r#"{"principal":"alice","profile":"work","ttl_ms":30000.5}"#,
     )
     .expect_err("a fractional ttl must be rejected");
+}
+
+// --- booleans ---------------------------------------------------------
+//
+// The harness sends scalar values quoted, so `confirm` arrives as the string
+// "true". A strict `bool` rejected it with
+// `invalid type: string "true", expected a boolean`.
+
+#[test]
+fn confirm_accepts_a_json_boolean() {
+    let params: PurgeParams =
+        serde_json::from_str(r#"{"principal":"alice","profile":"work","confirm":true}"#)
+            .expect("a JSON boolean must be accepted");
+    assert!(params.confirm);
+}
+
+#[test]
+fn confirm_accepts_the_string_true() {
+    let params: PurgeParams =
+        serde_json::from_str(r#"{"principal":"alice","profile":"work","confirm":"true"}"#)
+            .expect("the string \"true\" must be accepted");
+    assert!(params.confirm);
+}
+
+#[test]
+fn confirm_accepts_the_string_false_as_false() {
+    let params: PurgeParams =
+        serde_json::from_str(r#"{"principal":"alice","profile":"work","confirm":"false"}"#)
+            .expect("the string \"false\" must be accepted");
+    assert!(!params.confirm, "a false confirm must stay false");
+}
+
+#[test]
+fn confirm_rejects_a_non_boolean_string() {
+    let err = serde_json::from_str::<PurgeParams>(
+        r#"{"principal":"alice","profile":"work","confirm":"yes"}"#,
+    )
+    .expect_err("a non-boolean string must be rejected");
+    assert!(err.to_string().contains("yes"), "got: {err}");
 }
