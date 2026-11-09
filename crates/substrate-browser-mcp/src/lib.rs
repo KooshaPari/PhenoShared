@@ -13,20 +13,23 @@
 //! processes agree on the root they share one on-disk lease store, so the MCP
 //! server is never a competing authority.
 //!
-//! If `$BROKERD_URL` is set, the bridge instead reads the *running* daemon over
-//! its HTTP API ([`RemoteConfig`]). It never falls back to an in-process broker
-//! in that mode: an unreachable daemon is an error, not an invitation to mutate
-//! a different authority. `brokerd`'s HTTP surface is read-only (healthz, leases,
-//! sessions, view), so mutating tools refuse under a remote configuration - see
-//! [`RemoteBroker::mutation_refusal`].
+//! If `$BROKERD_URL` is set, the bridge instead acts on the *running* daemon
+//! over its HTTP API ([`RemoteConfig`]). It never falls back to an in-process
+//! broker in that mode: an unreachable daemon is an error, not an invitation to
+//! mutate a different authority. Reads and mutations both go to the daemon
+//! (`GET /v1/leases`, `GET /v1/sessions`, `POST /v1/leases`,
+//! `POST /v1/leases/{id}/release`, `POST /v1/leases/reap`,
+//! `POST /v1/profiles/purge`), so the daemon - not this process - owns the
+//! lease, the browser and the guards.
 //!
 //! # What is real, and what is not
 //!
 //! * `status`, `live`, `reap` are read-only or maintenance calls backed directly
 //!   by [`Broker`].
-//! * `acquire` and `release` are backed by [`Broker::acquire`] / [`Broker::release`].
+//! * `acquire` and `release` are backed by [`Broker::acquire`] / [`Broker::release`]
+//!   locally, and by the daemon's mutation routes when `$BROKERD_URL` is set.
 //!   Acquiring launches a real browser; when no Chrome-family binary is present
-//!   the broker returns its own error and this layer reports it verbatim.
+//!   the authority returns its own error and this layer reports it verbatim.
 //! * `release` validates the fencing token **before** touching anything. A stale
 //!   token is refused and the lease stays in place (fail-closed).
 //! * `purge` deletes the profile's data directory. It refuses without
@@ -125,9 +128,9 @@ impl BrokerTools {
 
     /// Open against a running `brokerd` instead of an in-process broker.
     ///
-    /// Reads are served by the daemon. Mutations are refused: the daemon exposes
-    /// no mutation route, and inventing a local one would create the second
-    /// authority this crate exists to prevent.
+    /// Reads and mutations are both served by the daemon, which owns the lease
+    /// store, the browsers and the guards. Inventing a local authority instead
+    /// would recreate the bug this crate exists to prevent.
     pub fn open_remote(config: RemoteConfig) -> Result<Self> {
         Ok(Self {
             backend: Backend::Remote(RemoteBroker::new(config)?),
@@ -166,15 +169,6 @@ impl BrokerTools {
         }
     }
 
-    /// The broker `action` needs, or the daemon's refusal when this instance is
-    /// remote. Never silently returns a different authority.
-    fn local_for(&self, action: &str) -> Result<&Broker> {
-        match &self.backend {
-            Backend::Local(broker) => Ok(broker),
-            Backend::Remote(remote) => Err(remote.mutation_refusal(action)),
-        }
-    }
-
     /// Where this instance draws authority from, for startup diagnostics:
     /// the local state root, or `brokerd:<url>`.
     pub fn authority(&self) -> String {
@@ -206,8 +200,6 @@ impl BrokerTools {
 
     /// Acquire an exclusive browser, keeping the handle in this process.
     pub async fn acquire(&self, params: AcquireParams) -> Result<AcquiredInfo> {
-        let broker = self.local_for("broker_acquire")?;
-
         let session = params.session.unwrap_or_else(|| "default".to_string());
         let holder = params
             .holder
@@ -219,25 +211,50 @@ impl BrokerTools {
             )));
         }
 
-        let scope = Scope::new(params.principal, params.profile, session)
-            .map_err(|e| BrokerError::State(BrowserError::Scope(e)))?;
+        match &self.backend {
+            Backend::Remote(remote) => {
+                // The daemon launches and keeps the browser; this process gets a
+                // descriptor, never a handle, so a dropped MCP session cannot
+                // orphan or double-own a browser the daemon still holds.
+                let acquired = remote
+                    .acquire(
+                        &params.principal,
+                        &params.profile,
+                        &session,
+                        &holder,
+                        ttl_ms,
+                    )
+                    .await?;
+                Ok(AcquiredInfo {
+                    lease_id: acquired.id,
+                    fencing_token: acquired.fencing_token,
+                    expires_at_unix_ms: acquired.expires_at_unix_ms,
+                    generation: acquired.generation,
+                    data_dir: acquired.data_dir,
+                })
+            },
+            Backend::Local(broker) => {
+                let scope = Scope::new(params.principal, params.profile, session)
+                    .map_err(|e| BrokerError::State(BrowserError::Scope(e)))?;
 
-        let acquired = broker
-            .acquire(&scope, holder, Duration::from_millis(ttl_ms))
-            .await?;
+                let acquired = broker
+                    .acquire(&scope, holder, Duration::from_millis(ttl_ms))
+                    .await?;
 
-        let info = AcquiredInfo {
-            lease_id: acquired.lease.id.clone(),
-            fencing_token: acquired.lease.fencing_token,
-            expires_at_unix_ms: acquired.lease.expires_at_unix_ms,
-            generation: acquired.generation,
-            data_dir: acquired.data_dir.display().to_string(),
-        };
-        self.sessions
-            .lock()
-            .await
-            .insert(info.lease_id.clone(), acquired);
-        Ok(info)
+                let info = AcquiredInfo {
+                    lease_id: acquired.lease.id.clone(),
+                    fencing_token: acquired.lease.fencing_token,
+                    expires_at_unix_ms: acquired.lease.expires_at_unix_ms,
+                    generation: acquired.generation,
+                    data_dir: acquired.data_dir.display().to_string(),
+                };
+                self.sessions
+                    .lock()
+                    .await
+                    .insert(info.lease_id.clone(), acquired);
+                Ok(info)
+            },
+        }
     }
 
     /// Release a lease after validating `fencing_token` against the lease store.
@@ -246,7 +263,20 @@ impl BrokerTools {
     /// [`substrate_browser::LeaseManager::validate`], so an expired, revoked or
     /// superseded lease is refused and nothing is torn down.
     pub async fn release(&self, lease_id: &str, fencing_token: u64) -> Result<ReleaseOutcome> {
-        let broker = self.local_for("broker_release")?;
+        let broker = match &self.backend {
+            Backend::Remote(remote) => {
+                // The daemon validates the fence with the same
+                // `LeaseManager::validate` before it mutates anything, so a stale
+                // token still tears nothing down - it is just checked there.
+                let released = remote.release(lease_id, fencing_token).await?;
+                return Ok(ReleaseOutcome {
+                    released: released.released,
+                    lease_id: lease_id.to_string(),
+                    teardown: released.teardown,
+                });
+            },
+            Backend::Local(broker) => broker,
+        };
 
         // Fail-closed: never mutate before the broker's fence check passes.
         let lease = broker.leases().validate(lease_id, fencing_token)?;
@@ -291,7 +321,17 @@ impl BrokerTools {
 
     /// Reap expired or superseded sessions and report the counts.
     pub async fn reap(&self) -> Result<ReapOutcome> {
-        let broker = self.local_for("broker_reap")?;
+        let broker = match &self.backend {
+            Backend::Remote(remote) => {
+                let reaped = remote.reap().await?;
+                return Ok(ReapOutcome {
+                    reaped: reaped.reaped,
+                    leases_reaped: reaped.leases_reaped,
+                    live_sessions_after: reaped.live_sessions_after,
+                });
+            },
+            Backend::Local(broker) => broker,
+        };
         let reaped = broker.reap_expired().await;
 
         // Expired records authorise nothing, so sweeping them is safe: anything
@@ -337,7 +377,22 @@ impl BrokerTools {
         profile: &str,
         confirm: bool,
     ) -> Result<PurgeOutcome> {
-        let broker = self.local_for("broker_purge")?;
+        // The daemon owns the guards when it is the authority: forwarding
+        // `confirm` as sent means a false value is refused there, by the same
+        // rule, instead of being quietly accepted by a second implementation.
+        if let Backend::Remote(remote) = &self.backend {
+            let purged = remote.purge(principal, profile, confirm).await?;
+            return Ok(PurgeOutcome {
+                purged: purged.purged,
+                path: purged.path,
+                existed: purged.existed,
+            });
+        }
+        let Some(broker) = self.broker() else {
+            return Err(BrokerError::State(BrowserError::Refused(
+                "no authority to purge through".to_string(),
+            )));
+        };
 
         if !confirm {
             return Err(BrokerError::State(BrowserError::Refused(
@@ -349,7 +404,14 @@ impl BrokerTools {
             .map_err(|e| BrokerError::State(BrowserError::Scope(e)))?;
         let key = scope.profile_key();
 
-        if broker.live().await.iter().any(|s| s.scope == key) {
+        // A live session's scope is `principal/profile/session`, so compare the
+        // profile key as a prefix; equality would miss every live session.
+        if broker
+            .live()
+            .await
+            .iter()
+            .any(|s| s.scope == key || s.scope.starts_with(&format!("{key}/")))
+        {
             return Err(BrokerError::State(BrowserError::Refused(format!(
                 "profile {key} has a live session; release it before purging"
             ))));

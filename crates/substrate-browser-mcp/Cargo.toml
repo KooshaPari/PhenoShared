@@ -23,3 +23,6 @@ reqwest = { workspace = true }
 [dev-dependencies]
 tempfile.workspace = true
 tokio = { workspace = true, features = ["net", "macros", "rt-multi-thread", "fs"] }
+# Serves the real `substrate_browser_broker::router_with` on a loopback socket,
+# so the remote tests exercise the actual daemon routes rather than a mock.
+axum.workspace = true
