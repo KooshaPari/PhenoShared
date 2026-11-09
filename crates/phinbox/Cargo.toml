@@ -54,7 +54,7 @@ uuid = { workspace = true, features = ["v4", "serde"] }
 schemars = "1.2"
 crossbeam-channel = "0.5"
 parking_lot = "0.12"
-rmcp = { version = "3.1", features = ["server", "transport-io", "macros"], optional = true }
+rmcp = { version = "3.9", features = ["server", "transport-io", "macros"], optional = true }
 inquire = { version = "0.9", features = ["date"] }
 which = "8"
 phenotype-tooling-observability = { path = "../phenotype-tooling-observability", default-features = false, optional = true }
