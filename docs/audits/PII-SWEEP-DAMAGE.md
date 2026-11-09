@@ -259,7 +259,7 @@ crates/argis-extensions/pheno-config/src/secrets.rs:70:  f.write_str(REDACTED)
 
 This looks like a string literal turned into a bare identifier — a compile error.
 It is not. `REDACTED` is a real pre-existing `const`, and `git show 3b6d8798 --
-<file>` is **empty**: the sweep never touched this file. Recorded because
+&lt;file>` is **empty**: the sweep never touched this file. Recorded because
 pattern-matching alone would report it as a break; it is not one.
 
 ---

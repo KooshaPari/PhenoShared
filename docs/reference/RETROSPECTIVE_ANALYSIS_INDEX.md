@@ -168,7 +168,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
   - Generic cache
   - Both types support all three services
 - Testing patterns reused
-  - ServiceTestContext<T>
+  - ServiceTestContext&lt;T>
   - Reusable test suites
   - Shared fixtures
 - Full codebase impact

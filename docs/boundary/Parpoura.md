@@ -6,7 +6,7 @@ last_boundary_review: 2026-07-17
 review_cadence: never (archived)
 archive_reason: absorbed-into-phenodocs
 canonical_source: phenodocs/docs/specs/parpoura/
-absorbing_repo: <REDACTED>/phenodocs
+absorbing_repo: &lt;REDACTED&gt;/phenodocs
 ---
 
 # Boundary — Parpoura (ABSORBED → phenodocs)

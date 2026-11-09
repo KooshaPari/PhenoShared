@@ -1,7 +1,7 @@
 # Prompts-to-Intent crosswalk (L7-003 reconciliation)
 
 Date: 2026-06-18
-Author: Forge-Mini scaffold, supervised by <REDACTED>
+Author: Forge-Mini scaffold, supervised by &lt;REDACTED&gt;
 
 This crosswalk reconciles two complementary taxonomies:
 

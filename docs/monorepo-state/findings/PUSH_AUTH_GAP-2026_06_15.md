@@ -1,4 +1,4 @@
-# Push Auth Gap — re-auth as <REDACTED> done; structural issue confirmed (2026-06-15 18:42 PDT)
+# Push Auth Gap — re-auth as &lt;REDACTED&gt; done; structural issue confirmed (2026-06-15 18:42 PDT)
 
 **Status update:** `gh auth switch --user <REDACTED>` re-auth completed 2026-06-15
 18:40 PDT. The 4 previously-unreachable remotes (origin, github, worklogs, dmouse)
@@ -6,7 +6,7 @@ are now reachable from `<REDACTED>`'s account.
 
 ## Post-auth diagnosis (2026-06-15 18:42)
 
-| Remote | URL | Pre-auth | Post-auth | Reach from <REDACTED> |
+| Remote | URL | Pre-auth | Post-auth | Reach from &lt;REDACTED&gt; |
 |---|---|---|---|---|
 | `argis` | `git@github.com:<REDACTED>/argis-extensions.git` | ✅ | ✅ | ✅ (wrong repo) |
 | `pheno` | `https://github.com/KooshaPari/phenoShared.git` | ✅ | ✅ | ✅ (wrong repo) |

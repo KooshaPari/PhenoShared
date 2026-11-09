@@ -14,7 +14,7 @@ history under namespaced recovery refs before any boundary consolidation.
 - AgilePlus dirty/untracked payload was preserved with Airlock but remains blocked from cloud
   publication until its working tree is reconciled.
 - SessionLedger, PhenoObservability, phenotype-tooling, portage, and thegent were published under
-  verified recovery namespaces; forgecode was preserved to the <REDACTED> fork after its origin
+  verified recovery namespaces; forgecode was preserved to the &lt;REDACTED&gt; fork after its origin
   remote rejected the Airlock push.
 - Seven Wave 2 protected repositories remain mutation-blocked.
 

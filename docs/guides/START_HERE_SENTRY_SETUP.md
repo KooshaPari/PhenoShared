@@ -26,7 +26,7 @@ If you're in a hurry, here's the 30-second version:
 1. Go to https://sentry.io/
 2. Create 3 projects (one per repository, Rust platform)
 3. Copy the DSN from each project
-4. Go to https://github.com/organizations/<REDACTED>/settings/secrets/actions
+4. Go to https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
 5. Create 3 organization secrets (SENTRY_DSN_AGILEPLUS, SENTRY_DSN_INFRAKIT, SENTRY_DSN_HELIOSCLI)
 6. Update local `.env` files with DSN values
 7. Verify everything works using the checklist

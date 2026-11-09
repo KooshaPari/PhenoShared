@@ -14,10 +14,10 @@ Close Phase 2 disposition rows after HexaKit wave AB prune and phenoShared utils
 
 | Lane | Repo | PR / branch | Outcome |
 |------|------|-------------|---------|
-| HexaKit AB prune | <REDACTED>/HexaKit | [HexaKit#266](https://github.com/KooshaPari/HexaKit/pull/266) merged to `main` | Exclude `phenotype-iter`, `phenotype-string`, `phenotype-validation` from workspace members; git-pin to phenoShared `feat/wave-e2a-utils-reloc`; restore `phenotype-telemetry` path dep; `cargo check -p phenotype-core` green |
-| Utils relocation | <REDACTED>/phenoShared | `feat/wave-e2a-utils-reloc` | Canonical homes for iter/string/validation crates |
-| Crypto / casbin | <REDACTED>/Authvault | `main` | `phenotype-crypto` and `phenotype-casbin-wrapper` pins repointed to Authvault main (Wave C) |
-| MCP edge | <REDACTED>/substrate | substrate#28 | Rust MCP canonical; Python `py-pheno-mcp` redirect closed |
+| HexaKit AB prune | &lt;REDACTED&gt;/HexaKit | [HexaKit#266](https://github.com/KooshaPari/HexaKit/pull/266) merged to `main` | Exclude `phenotype-iter`, `phenotype-string`, `phenotype-validation` from workspace members; git-pin to phenoShared `feat/wave-e2a-utils-reloc`; restore `phenotype-telemetry` path dep; `cargo check -p phenotype-core` green |
+| Utils relocation | &lt;REDACTED&gt;/phenoShared | `feat/wave-e2a-utils-reloc` | Canonical homes for iter/string/validation crates |
+| Crypto / casbin | &lt;REDACTED&gt;/Authvault | `main` | `phenotype-crypto` and `phenotype-casbin-wrapper` pins repointed to Authvault main (Wave C) |
+| MCP edge | &lt;REDACTED&gt;/substrate | substrate#28 | Rust MCP canonical; Python `py-pheno-mcp` redirect closed |
 
 ## Registry updates (this PR)
 

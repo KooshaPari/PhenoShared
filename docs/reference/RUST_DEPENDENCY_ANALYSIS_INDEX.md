@@ -1,7 +1,7 @@
 # Rust Workspace Dependency Analysis: Complete Index
 
 **Date:** 2026-03-30  
-**Repository:** <REDACTED>/phenotype-infrakit  
+**Repository:** &lt;REDACTED&gt;/phenotype-infrakit  
 **Scope:** 28 Rust crates  
 **Status:** ✅ ANALYSIS COMPLETE — Ready for Phase 2 Execution
 

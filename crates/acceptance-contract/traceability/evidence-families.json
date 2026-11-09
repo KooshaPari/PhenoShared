@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "description": "Maps each traceability id family used in verification/requirements-traceability.json to the repo artifact that carries its verification or acceptance evidence. Every path here was verified to exist on the upstream base. The traceability integration test fails when an id in the matrix has no family entry here, when the mapped artifact file is missing, or when this registry lists a family that no matrix id uses.",
+  "verification_families": {
+    "CT-SHELL": "verification/test-strategy.md",
+    "CT-GRAPH": "verification/test-strategy.md",
+    "ST-INPUT": "verification/test-strategy.md",
+    "ST-SURFACE": "verification/compatibility-matrix.md",
+    "ST-SECOPS": "verification/security-test-plan.md",
+    "PT-VIDEO": "verification/video-hdr-test-plan.md",
+    "PT-AUDIO": "verification/audio-rt-test-plan.md",
+    "PT-COMPUTE": "verification/capability-benchmark.md",
+    "PT-QOS": "verification/latency-methodology.md"
+  },
+  "acceptance_families": {
+    "AT-UX": "verification/acceptance-gates.md",
+    "AT-ROUTE": "verification/test-strategy.md",
+    "AT-SEAT": "verification/test-strategy.md",
+    "AT-SURFACE": "verification/compatibility-matrix.md",
+    "AT-HDR": "verification/video-hdr-test-plan.md",
+    "AT-ABLETON": "verification/audio-rt-test-plan.md",
+    "AT-MESH": "verification/capability-benchmark.md",
+    "AT-MIXED": "verification/capability-benchmark.md",
+    "AT-RECOVERY": "verification/fault-injection.md"
+  }
+}

@@ -173,7 +173,7 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 - **Dirty (uncommitted work)** (4): feat/cache-adapter-impl, phenotype-crypto-complete, phase2-routes-dashboard, infrastructure/phase1-routing-aggregation
 - **Detached HEAD** (1): feat/cache-adapter-impl
 - **Out of sync (>4 commits)** (2): /tmp/phenotype-pr-workspace (88 behind), /tmp/pr-236-resolution
-- **External location** (1): /Users/<REDACTED>/CodeProjects/.worktrees/decompose-sqlite-adapter
+- **External location** (1): /Users/&lt;REDACTED&gt;/CodeProjects/.worktrees/decompose-sqlite-adapter
 
 ### Worktree Cleanup Action Items
 

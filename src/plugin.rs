@@ -3,9 +3,22 @@
 //! Provides a [`Plugin`] trait, a [`PluginContext`] that is passed to plugins
 //! during initialisation, and a [`PluginManager`] that keeps track of loaded
 //! plugins and dispatches lifecycle calls.
+//!
+//! # Loading
+//!
+//! Plugins are loaded from a directory using [`PluginManager::load_from_dir`].
+//! A *plugin manifest* is a file named `*.plugin` containing a TOML or JSON
+//! document describing a [`PluginDescriptor`]. The loader parses each
+//! manifest, validates required fields, and yields one descriptor per file.
+//! The descriptor carries enough information (name, version, author,
+//! description, kind, entry) for higher layers (or this manager in the
+//! future) to instantiate a [`Plugin`] implementation. Dynamic `.so` /
+//! `.dylib` loading via `dlopen` / `libloading` is explicitly out of scope;
+//! see `docs/adr/ADR-NN-plugin-loading.md` for the planned extension.
 
 use std::collections::HashMap;
 use std::fmt;
+use std::path::Path;
 
 // ---------------------------------------------------------------------------
 // Errors
@@ -22,6 +35,20 @@ pub enum PluginError {
     IoError(String),
     /// Plugin initialisation returned an error.
     InitFailed(String),
+    /// A `.plugin` file was found but its manifest could not be parsed.
+    ManifestParse {
+        /// The file path that failed to parse.
+        path: String,
+        /// Reason the parse failed.
+        reason: String,
+    },
+    /// A manifest was parsed but is missing required fields.
+    ManifestInvalid {
+        /// The file path with the invalid manifest.
+        path: String,
+        /// Which field is missing or invalid.
+        field: &'static str,
+    },
 }
 
 impl fmt::Display for PluginError {
@@ -31,6 +58,12 @@ impl fmt::Display for PluginError {
             PluginError::NotFound(n) => write!(f, "plugin not found: {n}"),
             PluginError::IoError(e) => write!(f, "I/O error: {e}"),
             PluginError::InitFailed(e) => write!(f, "plugin init failed: {e}"),
+            PluginError::ManifestParse { path, reason } => {
+                write!(f, "plugin manifest '{path}' could not be parsed: {reason}")
+            }
+            PluginError::ManifestInvalid { path, field } => {
+                write!(f, "plugin manifest '{path}' is missing required field '{field}'")
+            }
         }
     }
 }
@@ -42,7 +75,7 @@ impl std::error::Error for PluginError {}
 // ---------------------------------------------------------------------------
 
 /// Descriptive metadata about a plugin.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PluginInfo {
     /// Human-readable plugin name.
     pub name: String,
@@ -52,6 +85,48 @@ pub struct PluginInfo {
     pub author: String,
     /// Free-text description.
     pub description: String,
+}
+
+/// What kind of plugin a manifest describes.
+///
+/// Plugins that must execute alongside the engine are marked `Native`; pure
+/// data/asset bundles are marked `Data`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PluginKind {
+    /// A native code plugin that exposes a `Plugin` implementation.
+    Native,
+    /// A data-only plugin (asset bundle, descriptor file, etc.).
+    Data,
+}
+
+impl Default for PluginKind {
+    fn default() -> Self {
+        PluginKind::Native
+    }
+}
+
+/// Parsed contents of a single `.plugin` manifest file.
+///
+/// A `.plugin` file is a TOML document of the form:
+///
+/// ```toml
+/// kind = "native"
+/// entry = "libmy_plugin.so"
+/// [info]
+/// name = "my-plugin"
+/// version = "0.1.0"
+/// author = "Acme"
+/// description = "Adds new operators"
+/// ```
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PluginDescriptor {
+    /// Parsed [`PluginInfo`] block (required).
+    pub info: PluginInfo,
+    /// Plugin kind (defaults to [`PluginKind::Native`]).
+    pub kind: PluginKind,
+    /// Path or identifier of the plugin's entry point (e.g. library path).
+    /// Optional for [`PluginKind::Data`] plugins.
+    pub entry: Option<String>,
 }
 
 // ---------------------------------------------------------------------------
@@ -138,24 +213,46 @@ impl PluginManager {
         Ok(())
     }
 
-    /// Load plugins from a directory path.  Currently this is a stub that
-    /// returns a list of `.plugin` filenames found in the directory (actual
-    /// dynamic loading via `dlopen`/`libloading` is left as a future
-    /// extension).
-    pub fn load_from_dir(&self, path: &str) -> Result<Vec<String>, PluginError> {
-        use std::fs;
+    /// Load plugin manifests from a directory.
+    ///
+    /// For every `*.plugin` file found in `dir`, read its contents and parse
+    /// it as a manifest.  Files that cannot be read or parsed produce
+    /// [`PluginError::IoError`] / [`PluginError::ManifestParse`]; files parsed
+    /// but missing required fields produce [`PluginError::ManifestInvalid`].
+    /// On the first error the method aborts and returns that error — partial
+    /// loads are not retained, matching the "fail loud" principle.
+    ///
+    /// This method does **not** instantiate a [`Plugin`] implementation from
+    /// each descriptor.  Dynamic library loading is out of scope for this
+    /// crate; future work should add a `register_from_descriptor` step that
+    /// maps `kind = "native"` + `entry` to a concrete `Box<dyn Plugin>`.
+    pub fn load_from_dir(&self, dir: &Path) -> Result<Vec<PluginDescriptor>, PluginError> {
+        let entries = std::fs::read_dir(dir).map_err(|e| {
+            PluginError::IoError(format!(
+                "failed to read directory '{}': {e}",
+                dir.display()
+            ))
+        })?;
 
-        let entries = fs::read_dir(path)
-            .map_err(|e| PluginError::IoError(format!("failed to read directory '{path}': {e}")))?;
+        let mut manifests = Vec::new();
+        let mut paths: Vec<std::path::PathBuf> = entries
+            .flatten()
+            .map(|e| e.path())
+            .filter(|p| {
+                p.extension()
+                    .and_then(|e| e.to_str())
+                    .map(|s| s.eq_ignore_ascii_case("plugin"))
+                    .unwrap_or(false)
+            })
+            .collect();
+        // Stable ordering — manifests must not depend on `read_dir` order.
+        paths.sort();
 
-        let mut files = Vec::new();
-        for entry in entries.flatten() {
-            let file_name = entry.file_name().to_string_lossy().into_owned();
-            if file_name.ends_with(".plugin") {
-                files.push(file_name);
-            }
+        for path in &paths {
+            let descriptor = parse_plugin_descriptor(path)?;
+            manifests.push(descriptor);
         }
-        Ok(files)
+        Ok(manifests)
     }
 
     /// Initialise and execute every registered plugin with the given context.
@@ -193,6 +290,141 @@ impl Default for PluginManager {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Manifest parsing
+// ---------------------------------------------------------------------------
+
+/// Parse a single `.plugin` manifest file into a [`PluginDescriptor`].
+///
+/// Manifests are TOML documents with a required `[info]` block and
+/// optional `kind` / `entry` keys.  We intentionally do not pull in a TOML
+/// crate dependency for this: a minimal grammar (lines of the form
+/// `key = "value"` and a `[info]` section header) covers the manifest shape
+/// and keeps the dependency surface zero.  When the manifest grammar
+/// grows, this function is the one to swap for a real TOML / JSON parser.
+fn parse_plugin_descriptor(path: &Path) -> Result<PluginDescriptor, PluginError> {
+    let raw = std::fs::read_to_string(path).map_err(|e| {
+        PluginError::IoError(format!("failed to read '{}': {e}", path.display()))
+    })?;
+
+    let manifest = Manifest::parse(&raw).map_err(|reason| PluginError::ManifestParse {
+        path: path.display().to_string(),
+        reason,
+    })?;
+
+    let info = manifest.info.ok_or_else(|| PluginError::ManifestInvalid {
+        path: path.display().to_string(),
+        field: "info",
+    })?;
+    if info.name.is_empty() {
+        return Err(PluginError::ManifestInvalid {
+            path: path.display().to_string(),
+            field: "info.name",
+        });
+    }
+
+    let kind = match manifest.kind.as_deref() {
+        None | Some("native") => PluginKind::Native,
+        Some("data") => PluginKind::Data,
+        Some(other) => {
+            return Err(PluginError::ManifestParse {
+                path: path.display().to_string(),
+                reason: format!("unknown plugin kind '{other}'"),
+            });
+        }
+    };
+
+    Ok(PluginDescriptor {
+        info,
+        kind,
+        entry: manifest.entry,
+    })
+}
+
+/// Minimal key=value manifest parser used by [`parse_plugin_descriptor`].
+struct Manifest {
+    info: Option<PluginInfo>,
+    kind: Option<String>,
+    entry: Option<String>,
+}
+
+impl Manifest {
+    fn parse(input: &str) -> Result<Self, String> {
+        let mut info_lines: Vec<(String, String)> = Vec::new();
+        let mut top_lines: Vec<(String, String)> = Vec::new();
+        let mut current_section: Option<&str> = None;
+
+        for (idx, raw) in input.lines().enumerate() {
+            let line = raw.trim();
+            if line.is_empty() || line.starts_with('#') {
+                continue;
+            }
+            if let Some(stripped) = line.strip_prefix('[').and_then(|s| s.strip_suffix(']')) {
+                current_section = Some(stripped.trim());
+                continue;
+            }
+            let (key, value) = line.split_once('=').ok_or_else(|| {
+                format!("line {}: expected 'key = value', got '{raw}'", idx + 1)
+            })?;
+            let key = key.trim().to_owned();
+            // Strip optional quotes from value.
+            let value = value.trim();
+            let value = value
+                .strip_prefix('"')
+                .and_then(|s| s.strip_suffix('"'))
+                .unwrap_or(value)
+                .to_owned();
+
+            match current_section {
+                Some("info") => info_lines.push((key, value)),
+                _ => top_lines.push((key, value)),
+            }
+        }
+
+        let info = if info_lines.is_empty() {
+            None
+        } else {
+            let mut name = String::new();
+            let mut version = String::new();
+            let mut author = String::new();
+            let mut description = String::new();
+            for (k, v) in info_lines {
+                match k.as_str() {
+                    "name" => name = v,
+                    "version" => version = v,
+                    "author" => author = v,
+                    "description" => description = v,
+                    other => {
+                        return Err(format!("unknown [info] field '{other}'"));
+                    }
+                }
+            }
+            Some(PluginInfo {
+                name,
+                version,
+                author,
+                description,
+            })
+        };
+
+        let mut kind = None;
+        let mut entry = None;
+        for (k, v) in top_lines {
+            match k.as_str() {
+                "kind" => kind = Some(v),
+                "entry" => entry = Some(v),
+                other => return Err(format!("unknown top-level key '{other}'")),
+            }
+        }
+
+        Ok(Manifest {
+            info,
+            kind,
+            entry,
+        })
+    }
+}
+
 // ===========================================================================
 // Tests
 // ===========================================================================
@@ -200,6 +432,7 @@ impl Default for PluginManager {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::path::PathBuf;
 
     // ---- helpers ----------------------------------------------------------
 
@@ -243,6 +476,38 @@ mod tests {
         fn init(&mut self, _ctx: &mut PluginContext) -> Result<(), PluginError> {
             Err(PluginError::InitFailed("boom".into()))
         }
+    }
+
+    /// RAII temp directory used in tests. Avoids pulling in `tempfile`
+    /// because this module ships std-only.
+    struct TmpDir {
+        path: std::path::PathBuf,
+    }
+    impl TmpDir {
+        fn new() -> Self {
+            use std::sync::atomic::{AtomicU64, Ordering};
+            static COUNTER: AtomicU64 = AtomicU64::new(0);
+            let id = COUNTER.fetch_add(1, Ordering::SeqCst);
+            let pid = std::process::id();
+            let dir = std::env::temp_dir().join(format!("phenotype-plugin-test-{pid}-{id}"));
+            std::fs::create_dir_all(&dir).expect("create tempdir");
+            Self { path: dir }
+        }
+        fn path(&self) -> &Path {
+            &self.path
+        }
+    }
+    impl Drop for TmpDir {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.path);
+        }
+    }
+
+    /// Helper: write a manifest file into `dir` and return its path.
+    fn write_manifest(dir: &Path, file_name: &str, body: &str) -> PathBuf {
+        let path = dir.join(file_name);
+        std::fs::write(&path, body).expect("failed to write manifest");
+        path
     }
 
     // ---- tests ------------------------------------------------------------
@@ -375,18 +640,142 @@ mod tests {
     }
 
     #[test]
-    fn load_from_dir_nonexistent_returns_error() {
+    fn load_from_dir_nonexistent_returns_io_error() {
         let mgr = PluginManager::new();
-        let result = mgr.load_from_dir("/nonexistent/path/that/does/not/exist");
-        assert!(result.is_err());
+        let err = mgr
+            .load_from_dir(Path::new("/nonexistent/path/that/does/not/exist"))
+            .unwrap_err();
         assert!(
-            matches!(result.unwrap_err(), PluginError::IoError(_)),
-            "expected IoError variant"
+            matches!(err, PluginError::IoError(_)),
+            "expected IoError variant, got: {err}"
         );
     }
 
     #[test]
-    fn plugin_info_clone_and_debug() {
+    fn load_from_dir_returns_empty_when_no_manifests() {
+        let dir = TmpDir::new();
+        // Write a non-.plugin file; the loader must ignore it.
+        std::fs::write(dir.path().join("not_a_plugin.txt"), "ignored").unwrap();
+        let mgr = PluginManager::new();
+        let manifests = mgr.load_from_dir(dir.path()).unwrap();
+        assert!(manifests.is_empty());
+    }
+
+    #[test]
+    fn load_from_dir_parses_well_formed_manifests() {
+        let dir = TmpDir::new();
+        write_manifest(
+            dir.path(),
+            "alpha.plugin",
+            r#"kind = "native"
+entry = "libalpha.so"
+
+[info]
+name = "alpha"
+version = "1.2.3"
+author = "Acme"
+description = "first plugin"
+"#,
+        );
+        write_manifest(
+            dir.path(),
+            "beta.plugin",
+            r#"kind = "data"
+
+[info]
+name = "beta"
+version = "0.0.1"
+author = "Acme"
+description = "data bundle"
+"#,
+        );
+
+        let mgr = PluginManager::new();
+        let mut manifests = mgr.load_from_dir(dir.path()).unwrap();
+        // alphabetical ordering: alpha < beta
+        manifests.sort_by(|a, b| a.info.name.cmp(&b.info.name));
+
+        assert_eq!(manifests.len(), 2);
+
+        let alpha = &manifests[0];
+        assert_eq!(alpha.info.name, "alpha");
+        assert_eq!(alpha.info.version, "1.2.3");
+        assert_eq!(alpha.info.author, "Acme");
+        assert_eq!(alpha.kind, PluginKind::Native);
+        assert_eq!(alpha.entry.as_deref(), Some("libalpha.so"));
+
+        let beta = &manifests[1];
+        assert_eq!(beta.info.name, "beta");
+        assert_eq!(beta.kind, PluginKind::Data);
+        assert_eq!(beta.entry, None);
+    }
+
+    #[test]
+    fn load_from_dir_missing_info_section_errors() {
+        let dir = TmpDir::new();
+        write_manifest(
+            dir.path(),
+            "broken.plugin",
+            r#"kind = "native"
+entry = "libbroken.so"
+"#,
+        );
+        let mgr = PluginManager::new();
+        let err = mgr.load_from_dir(dir.path()).unwrap_err();
+        assert!(
+            matches!(err, PluginError::ManifestInvalid { .. }),
+            "expected ManifestInvalid, got: {err}"
+        );
+    }
+
+    #[test]
+    fn load_from_dir_empty_name_errors() {
+        let dir = TmpDir::new();
+        write_manifest(
+            dir.path(),
+            "noname.plugin",
+            r#"[info]
+name = ""
+version = "0.0.1"
+"#,
+        );
+        let mgr = PluginManager::new();
+        let err = mgr.load_from_dir(dir.path()).unwrap_err();
+        assert!(
+            matches!(
+                err,
+                PluginError::ManifestInvalid {
+                    field: "info.name",
+                    ..
+                }
+            ),
+            "expected ManifestInvalid field=info.name, got: {err}"
+        );
+    }
+
+    #[test]
+    fn load_from_dir_unknown_kind_errors() {
+        let dir = TmpDir::new();
+        write_manifest(
+            dir.path(),
+            "weird.plugin",
+            r#"kind = "exotic"
+
+[info]
+name = "weird"
+version = "0.0.1"
+"#,
+        );
+        let mgr = PluginManager::new();
+        let err = mgr.load_from_dir(dir.path()).unwrap_err();
+        assert!(
+            matches!(err, PluginError::ManifestParse { .. }),
+            "expected ManifestParse, got: {err}"
+        );
+    }
+
+    #[test]
+    fn plugin_info_clone_eq_and_debug() {
         let info = PluginInfo {
             name: "p".to_owned(),
             version: "1.0".to_owned(),
@@ -395,7 +784,39 @@ mod tests {
         };
         let info2 = info.clone();
         assert_eq!(info2.name, "p");
-        // Ensure Debug is implemented (no panic on format).
         let _ = format!("{info2:?}");
+    }
+
+    #[test]
+    fn manifest_parser_handles_blank_lines_and_comments() {
+        let raw = r#"
+# leading comment
+kind = "native"
+# inline comment
+entry = "libfoo.so"
+
+[info]
+name = "foo"
+version = "0.1.0"
+author = "x"
+description = "y"
+"#;
+        let m = Manifest::parse(raw).expect("parse should succeed");
+        let info = m.info.expect("[info] should produce info");
+        assert_eq!(info.name, "foo");
+        assert_eq!(m.kind.as_deref(), Some("native"));
+        assert_eq!(m.entry.as_deref(), Some("libfoo.so"));
+    }
+
+    #[test]
+    fn manifest_parser_rejects_malformed_line() {
+        let raw = "[info]\nnot_a_kv_line\n";
+        let err = Manifest::parse(raw).unwrap_err();
+        assert!(err.contains("expected 'key = value'"));
+    }
+
+    #[test]
+    fn plugin_kind_default_is_native() {
+        assert_eq!(PluginKind::default(), PluginKind::Native);
     }
 }

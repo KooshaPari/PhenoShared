@@ -39,7 +39,7 @@ See: [`docs/boundary/Pyron.md`](../boundary/Pyron.md)
 
 ## Ecosystem Role
 
-<See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
+&lt;See `ECOSYSTEM_MAP.md` for the canonical ecosystem role.>
 
 ## Open Questions
 

@@ -1,6 +1,6 @@
 ---
 id: configra
-repo: <REDACTED>/Configra
+repo: &lt;REDACTED&gt;/Configra
 name: Configra
 status: active
 tier: pheno-lib
