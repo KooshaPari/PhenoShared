@@ -1,0 +1,71 @@
+#!/bin/sh
+# browser-broker-run -- launch wrapper for brokerd under launchd.
+#
+# Purpose: load the broker bearer token from the operator-only env file into
+# the PROCESS ENVIRONMENT, then exec brokerd. The token is never placed in
+# argv (so it never appears in `ps`), never echoed, and never logged.
+#
+# Used by: ~/Library/LaunchAgents/com.kooshapari.browser-broker.plist
+# Managed by: launchctl (gui/$(id -u)/com.kooshapari.browser-broker)
+#
+# Loopback only by design. Do not change the bind address.
+
+set -eu
+
+ENV_FILE="/Users/kooshapari/.local/state/browser-broker.env"
+BROKERD="/Users/kooshapari/.local/bin/brokerd"
+ROOT_DIR="/Users/kooshapari/.local/state/browser-broker"
+BIND_ADDR="127.0.0.1:8788"
+TOKEN_VAR="BROKER_TOKEN"
+
+if [ ! -r "$ENV_FILE" ]; then
+    echo "browser-broker-run: cannot read $ENV_FILE" >&2
+    exit 78
+fi
+
+# Export everything defined in the env file into the environment.
+set -a
+. "$ENV_FILE"
+set +a
+
+# Validate without ever printing the value.
+eval "_token_value=\${$TOKEN_VAR:-}"
+if [ -z "${_token_value}" ]; then
+    echo "browser-broker-run: $TOKEN_VAR is empty or unset after sourcing $ENV_FILE" >&2
+    exit 78
+fi
+unset _token_value
+
+if [ ! -x "$BROKERD" ]; then
+    echo "browser-broker-run: $BROKERD is missing or not executable" >&2
+    exit 78
+fi
+
+# --token-env names the VARIABLE, not the secret. Token stays in the environment.
+#
+# TLS is prepared but NOT enabled yet. The certificate and key live in
+# $ROOT_DIR/tls (key mode 600) and the certificate is installed in the login
+# keychain, but its TRUST SETTINGS are not applied: `security add-trusted-cert`
+# needs an interactive "Always Trust" confirmation, which cannot be granted
+# non-interactively. Until that is done the daemon would serve HTTPS that no
+# client trusts, which is strictly worse for clients than plain HTTP on
+# loopback.
+#
+# To enable TLS:
+#   1. security add-trusted-cert -r trustRoot \
+#        -k ~/Library/Keychains/login.keychain-db \
+#        ~/.local/state/browser-broker/tls/cert.pem
+#      and click "Always Trust" when prompted.
+#   2. uncomment the two --tls-* lines below.
+#   3. launchctl kickstart -k gui/$(id -u)/com.kooshapari.browser-broker
+#
+# TLS only becomes worth enabling once the daemon can serve the MCP's
+# mutations over HTTP (the write routes), because with BROKERD_URL unset the
+# MCP works the shared on-disk lease store directly and never calls the daemon.
+TLS_DIR="$ROOT_DIR/tls"
+exec "$BROKERD" \
+    --root "$ROOT_DIR" \
+    --bind "$BIND_ADDR" \
+    --token-env "$TOKEN_VAR"
+# --tls-cert "$TLS_DIR/cert.pem" \
+# --tls-key "$TLS_DIR/key.pem"
