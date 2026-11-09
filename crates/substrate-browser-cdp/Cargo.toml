@@ -21,6 +21,17 @@ base64 = "0.22"
 # kill the direct child, which orphaned Chrome's renderer/GPU children.
 libc = "0.2"
 
+[target.'cfg(windows)'.dependencies]
+# Job-object teardown for whole-tree shutdown. Windows has no process groups;
+# assigning the browser to a job lets `TerminateJobObject` reach the whole tree.
+# Only the four features the module actually calls are enabled.
+windows-sys = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_JobObjects",
+    "Win32_System_Threading",
+] }
+
 [dev-dependencies]
 tempfile.workspace = true
 tokio = { workspace = true, features = ["net", "io-util", "macros", "rt-multi-thread", "fs"] }
