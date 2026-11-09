@@ -1,6 +1,6 @@
 # ADR 0001 — Define Phenotype Fabric as the execution/data/I-O substrate
 
-**Status:** Accepted  
+- **Status:** Accepted
 **Date:** 2026-08-28  
 **Deciders:** Project owner and architecture maintainers  
 **Supersedes:** —  

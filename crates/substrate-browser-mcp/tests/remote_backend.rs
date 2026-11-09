@@ -193,6 +193,60 @@ async fn unreachable_daemon_fails_loudly_instead_of_using_a_local_broker() {
     );
 }
 
+/// The mutation routes did not weaken the rule the read path established: a
+/// configured-but-unreachable daemon fails loudly for every mutation too, and
+/// never quietly becomes a local broker.
+#[tokio::test]
+async fn mutations_against_an_unreachable_daemon_fail_loudly() {
+    let tools = BrokerTools::open_remote(RemoteConfig::new(UNREACHABLE_DAEMON, None))
+        .expect("building the client is not I/O");
+    assert!(
+        tools.broker().is_none(),
+        "remote mode must own no local broker, so there is nothing to fall back to"
+    );
+
+    let acquire = tools
+        .acquire(AcquireParams {
+            principal: "agent-a".into(),
+            profile: "work".into(),
+            session: None,
+            holder: None,
+            ttl_ms: None,
+            annotations: Default::default(),
+        })
+        .await
+        .expect_err("acquire must not fall back to a local broker");
+    let release = tools
+        .release("lease-x", 1)
+        .await
+        .expect_err("release must not fall back to a local broker");
+    let reap = tools
+        .reap()
+        .await
+        .expect_err("reap must not fall back to a local broker");
+    let purge = tools
+        .purge("agent-a", "work", true)
+        .await
+        .expect_err("purge must not fall back to a local broker");
+
+    for err in [&acquire, &release, &reap, &purge] {
+        assert_eq!(kind_of(err), "Refused");
+        let message = err.to_string();
+        assert!(
+            message.contains("unreachable"),
+            "the error must say the daemon is unreachable: {message}"
+        );
+        assert!(
+            message.contains("refusing to fall back to an in-process broker"),
+            "the error must name the fallback it refused: {message}"
+        );
+        assert!(
+            message.contains(URL_ENV),
+            "the error must name {URL_ENV} to fix: {message}"
+        );
+    }
+}
+
 #[tokio::test]
 async fn status_and_live_are_served_by_the_running_daemon() {
     let (url, seen) = spawn_fake_brokerd().await;

@@ -28,13 +28,23 @@ jobs:
       - name: Run OSV Scanner (npm)
         id: osv
         # Advisory scan: findings and scanner failures must not block CI.
+        #
+        # Uses the CLI, not google/osv-scanner-action. That repository's root is
+        # NOT an action: at v2.4.0, v2.5.1, v2.6.0 and v2.7.0 its action.yml has
+        # no `runs:` section, so `uses: google/osv-scanner-action@<sha>` fails at
+        # setup with "Top level 'runs:' section is required". v2 is consumed as a
+        # reusable workflow, which cannot be used as a step. The previously
+        # pinned SHA (v2.0.0) no longer resolves at all.
         continue-on-error: true
-        uses: google/osv-scanner-action@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
-        with:
-          scan-args: |-
-            --lockfile=bun.lock
-            --format=sarif
-            --output=osv-results.sarif
+        run: |
+          set -uo pipefail
+          OSV_VERSION=v2.7.0
+          curl -sSfL \
+            "https://github.com/google/osv-scanner/releases/download/${OSV_VERSION}/osv-scanner_linux_amd64" \
+            -o /usr/local/bin/osv-scanner
+          chmod +x /usr/local/bin/osv-scanner
+          osv-scanner --version
+          osv-scanner --lockfile=bun.lock --format=sarif --output=osv-results.sarif
 
       - name: Report OSV warning
         if: ${{ !cancelled() && steps.osv.outcome == 'failure' }}

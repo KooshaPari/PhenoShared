@@ -4,6 +4,12 @@
 //! The launcher deliberately owns nothing about profiles. The caller passes the
 //! user data directory, which is how a profile *generation* from
 //! `substrate-browser` becomes an actual isolated browser instance.
+//!
+//! Chrome is a process *tree*, not a process. Whole-tree shutdown is therefore
+//! platform-specific: on Unix the launcher spawns Chrome in its own process
+//! group so shutdown can signal the renderer, GPU and utility children along
+//! with the parent (`crate::process_tree`); on Windows the launcher assigns
+//! Chrome to a job object and terminates the job (`crate::job_object`).
 
 use std::{
     path::{Path, PathBuf},
@@ -16,6 +22,10 @@ use tokio::{
     process::{Child, Command},
 };
 
+#[cfg(windows)]
+use crate::job_object::{self, JobHandle};
+#[cfg(unix)]
+use crate::process_tree;
 use crate::{CdpError, Result};
 
 /// How to start Chrome.
@@ -51,8 +61,48 @@ impl LaunchOptions {
     }
 }
 
+/// The platform mechanism that owns this launch's whole process tree.
+///
+/// Unix: the process group created by `Command::process_group`, verified to be
+/// led by the spawned child. Windows: the job object the child was assigned to,
+/// which every descendant inherits. An empty scope means none could be
+/// established, in which case shutdown degrades to killing the direct child -
+/// the historical, leaky path.
+struct TreeScope {
+    #[cfg(unix)]
+    process_group: Option<u32>,
+    #[cfg(windows)]
+    job: Option<JobHandle>,
+}
+
+impl TreeScope {
+    /// Terminate everything in scope, then reap the direct child.
+    ///
+    /// Whole-tree termination already proves the tree is gone; the direct child
+    /// is still reaped below so no zombie is left behind.
+    async fn terminate(&self, child: &mut Child, user_data_dir: &Path) -> Result<()> {
+        #[cfg(unix)]
+        let outcome = match self.process_group {
+            Some(pgid) => process_tree::terminate_group(pgid, user_data_dir).await,
+            None => Ok(()),
+        };
+        #[cfg(windows)]
+        let outcome = match self.job.as_ref() {
+            Some(job) => job_object::terminate_tree(job, user_data_dir).await,
+            None => Ok(()),
+        };
+
+        let _ = child.kill().await;
+        let _ = child.wait().await;
+        outcome
+    }
+}
+
 /// A running Chrome, killed on drop.
 pub struct ChromeProcess {
+    /// Dropped before `child` so that on Windows the job's `KILL_ON_JOB_CLOSE`
+    /// fires while the direct-child handle is still open.
+    scope: TreeScope,
     child: Child,
     ws_url: String,
     user_data_dir: PathBuf,
@@ -60,11 +110,15 @@ pub struct ChromeProcess {
 
 impl std::fmt::Debug for ChromeProcess {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("ChromeProcess")
+        let mut debug = f.debug_struct("ChromeProcess");
+        debug
             .field("pid", &self.child.id())
+            .field("process_group", &self.process_group())
             .field("ws_url", &self.ws_url)
-            .field("user_data_dir", &self.user_data_dir)
-            .finish()
+            .field("user_data_dir", &self.user_data_dir);
+        #[cfg(windows)]
+        debug.field("job_object", &self.scope.job.is_some());
+        debug.finish()
     }
 }
 
@@ -82,6 +136,23 @@ impl ChromeProcess {
     /// Operating system process id.
     pub fn pid(&self) -> Option<u32> {
         self.child.id()
+    }
+
+    /// The process group this launch created, if any.
+    ///
+    /// `None` means the group could not be established and shutdown can only
+    /// signal the direct child (the historical, leaky behaviour). Always `None`
+    /// on Windows, where a job object is the equivalent authority and there is
+    /// no group id to report.
+    pub fn process_group(&self) -> Option<u32> {
+        #[cfg(unix)]
+        {
+            self.scope.process_group
+        }
+        #[cfg(not(unix))]
+        {
+            None
+        }
     }
 
     /// Launch Chrome and wait until it reports a DevTools endpoint.
@@ -114,6 +185,12 @@ impl ChromeProcess {
             .stderr(Stdio::piped())
             .kill_on_drop(true);
 
+        // Give Chrome its own process group so the entire tree can be
+        // signalled at once. Children inherit the group, so a single
+        // `kill(-pgid, …)` reaches renderers and utilities too.
+        #[cfg(unix)]
+        command.process_group(0);
+
         if options.headless {
             command.arg("--headless=new");
         }
@@ -126,6 +203,33 @@ impl ChromeProcess {
             source: err,
         })?;
 
+        // `process_group(0)` makes the child the leader of a new group whose id
+        // equals its pid. Verify that rather than assume it: if the group was
+        // not established, shutdown must not signal an unrelated group id.
+        #[cfg(unix)]
+        let scope = TreeScope {
+            process_group: child.id().filter(|pid| {
+                let Ok(pid) = libc::pid_t::try_from(*pid) else {
+                    return false;
+                };
+                // SAFETY: `getpgid` is a read-only syscall on a pid we just spawned.
+                unsafe { libc::getpgid(pid) == pid }
+            }),
+        };
+
+        // Windows has no `process_group`. A job object is the equivalent
+        // authority: descendants inherit membership at creation, so
+        // `TerminateJobObject` reaches renderers and utilities too. Assign it
+        // immediately after spawn, while Chrome has not yet started children.
+        #[cfg(windows)]
+        let scope = TreeScope {
+            job: child.raw_handle().and_then(|process| {
+                JobHandle::create()
+                    .and_then(|job| job.assign(process).map(|()| job))
+                    .ok()
+            }),
+        };
+
         let stderr = child
             .stderr
             .take()
@@ -135,7 +239,7 @@ impl ChromeProcess {
         let ws_url = match wait_for_endpoint(stderr, options.connect_timeout).await {
             Ok(url) => url,
             Err(err) => {
-                let _ = child.kill().await;
+                let _ = scope.terminate(&mut child, &options.user_data_dir).await;
                 return Err(err);
             },
         };
@@ -144,25 +248,56 @@ impl ChromeProcess {
         }
 
         Ok(Self {
+            scope,
             child,
             ws_url,
             user_data_dir: options.user_data_dir.clone(),
         })
     }
 
-    /// Terminate Chrome and wait for it to exit.
+    /// Terminate Chrome *and its whole process tree*, then wait for it to be
+    /// gone.
+    ///
+    /// The call does not return success until no live process references this
+    /// launch's `--user-data-dir`, so a caller that reports "browser closed"
+    /// is reporting a measurement rather than an intention.
+    ///
+    /// Mechanism per platform:
+    /// - Unix: `SIGTERM` the launch's process group, bounded wait, `SIGKILL` the
+    ///   group, bounded wait, then `SIGKILL` stragglers matched by the launch's
+    ///   unique profile path. Exercised by the `process_tree` tests.
+    /// - Windows: `TerminateJobObject` on the launch's job object, bounded wait,
+    ///   repeat, then terminate any remaining job member. This path is
+    ///   compile-checked for `x86_64-pc-windows-msvc` but has **not** been
+    ///   executed on Windows, so its runtime behaviour there is unverified.
+    ///
+    /// If no scope could be established the direct child is killed and waited
+    /// for as before, which can still leave renderers behind.
     pub async fn shutdown(mut self) -> Result<()> {
-        let _ = self.child.kill().await;
-        let _ = self.child.wait().await;
-        Ok(())
+        // `self` owns a `Drop` impl, so the child is borrowed rather than moved;
+        // `Drop` then re-runs harmlessly on an already-reaped process.
+        self.scope
+            .terminate(&mut self.child, &self.user_data_dir)
+            .await
     }
 }
 
 impl Drop for ChromeProcess {
     fn drop(&mut self) {
-        // `kill_on_drop` already covers the common path; this makes the intent
-        // explicit and also reaps the child when the runtime is still alive.
+        // A dropped handle must not orphan a browser tree.
+        //
+        // Unix: signal the group first (sync syscall, safe from `Drop`), then
+        // let `kill_on_drop` reap the direct child.
+        #[cfg(unix)]
+        if let Some(pgid) = self.scope.process_group {
+            if process_tree::group_exists(pgid) {
+                let _ = process_tree::signal_group(pgid, libc::SIGKILL);
+            }
+        }
         let _ = self.child.start_kill();
+        // Windows needs no explicit call here: dropping `scope` closes the last
+        // job handle and `KILL_ON_JOB_CLOSE` terminates every remaining member.
+        // Fields drop in declaration order, so the job closes before `child`.
     }
 }
 

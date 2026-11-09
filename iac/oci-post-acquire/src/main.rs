@@ -157,42 +157,32 @@ impl ProvisionError {
     /// Return a human-readable recovery suggestion.
     pub fn recovery_hint(&self) -> &'static str {
         match self {
-            Self::ReadInstance {
-                ..
-            } => {
+            Self::ReadInstance { .. } => {
                 "Verify oci-instance.json exists and is valid JSON. Re-run oci-lottery to \
                  regenerate."
             },
-            Self::SshTimeout {
-                ..
-            } => {
+            Self::SshTimeout { .. } => {
                 "Check the node is booting and reachable. Verify security lists allow SSH (port \
                  22). Wait and re-run this tool."
             },
-            Self::AnsibleFailed {
-                ..
-            } => {
+            Self::AnsibleFailed { .. } => {
                 "Check node SSH access and ansible syntax. Re-run: `cargo run -p oci-post-acquire \
                  -- --dry-run` first."
             },
-            Self::DnsFailed {
-                ..
-            } => {
+            Self::DnsFailed { .. } => {
                 "Verify CF_API_TOKEN/CF_TOKEN_FILE is valid and zone id is correct. Manual DNS \
                  upsert may be needed."
             },
-            Self::MeshCommitFailed {
-                ..
-            } => "Check git repo access. Manual git commit of compute-mesh-state.md may be needed.",
-            Self::NotifyFailed {
-                ..
-            } => {
+            Self::MeshCommitFailed { .. } => {
+                "Check git repo access. Manual git commit of compute-mesh-state.md may be needed."
+            },
+            Self::NotifyFailed { .. } => {
                 "Notification is best-effort; this does not block provisioning. Check \
                  agent-imessage CLI."
             },
-            Self::HookFailed {
-                ..
-            } => "Check hooks.d scripts for errors. A failing hook does not abort earlier steps.",
+            Self::HookFailed { .. } => {
+                "Check hooks.d scripts for errors. A failing hook does not abort earlier steps."
+            },
         }
     }
 }

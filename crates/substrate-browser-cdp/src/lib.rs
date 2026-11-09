@@ -14,10 +14,31 @@
 //! Pairing it with a profile generation from `substrate-browser` is what makes
 //! two agents get two genuinely separate browsers rather than two windows over
 //! one cookie jar.
+//!
+//! # Whole-tree shutdown
+//!
+//! Chrome supervises renderer, GPU and utility children, so shutdown has to
+//! reach the whole tree rather than only the parent. The mechanism is
+//! platform-specific: a process group on Unix, a job object on Windows. Both
+//! are scoped to this launch alone and both verify the tree is gone before
+//! reporting success.
+//!
+//! Verification status, stated plainly:
+//! - The Unix path is exercised by integration tests on macOS/Linux.
+//! - The Windows path is **type-checked** for `x86_64-pc-windows-msvc` and has
+//!   **not** been executed on Windows, so its runtime behaviour there is
+//!   unverified.
 
 #![deny(missing_docs)]
 
+// Whole-tree termination is platform-specific. Unix uses a process group
+// (`process_tree`); Windows uses a job object (`job_object`). Each module is
+// compiled only on its own platform, and neither replaces the other.
+#[cfg(windows)]
+mod job_object;
 mod launch;
+#[cfg(unix)]
+mod process_tree;
 mod provider;
 mod snapshot;
 mod transport;
@@ -25,6 +46,8 @@ mod transport;
 pub use transport::FenceCheck;
 
 pub use launch::{chrome_binary, ChromeProcess, LaunchOptions};
+#[cfg(unix)]
+pub use process_tree::processes_using_user_data_dir;
 pub use provider::CdpProvider;
 pub use snapshot::{AxNode, Snapshot};
 

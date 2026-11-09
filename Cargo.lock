@@ -14923,12 +14923,14 @@ version = "0.3.10"
 dependencies = [
  "base64 0.22.1",
  "futures-util",
+ "libc",
  "serde",
  "serde_json",
  "tempfile",
  "thiserror 2.0.20",
  "tokio",
  "tokio-tungstenite 0.29.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
