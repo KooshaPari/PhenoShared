@@ -79,14 +79,16 @@ jobs:
       - name: summary
         if: always()
         run: |
-          echo "### ecosystem-map-regen summary" >> "$GITHUB_STEP_SUMMARY"
-          echo "- commit: ${{ github.sha }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- event:  ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- result: ${{ job.status }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "To re-run locally:" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          echo "task regen-ecosystem-map:check" >> "$GITHUB_STEP_SUMMARY"
-          echo "# or" >> "$GITHUB_STEP_SUMMARY"
-          echo "python3 scripts/regen-ecosystem-map.py --check" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "### ecosystem-map-regen summary"
+            echo "- commit: ${{ github.sha }}"
+            echo "- event:  ${{ github.event_name }}"
+            echo "- result: ${{ job.status }}"
+            echo ""
+            echo "To re-run locally:"
+            echo '```'
+            echo "task regen-ecosystem-map:check"
+            echo "# or"
+            echo "python3 scripts/regen-ecosystem-map.py --check"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

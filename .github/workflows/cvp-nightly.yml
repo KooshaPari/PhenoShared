@@ -47,17 +47,19 @@ jobs:
       - name: Generate evidence
         run: |
           mkdir -p evidence
-          echo "# CVP Nightly Evidence" > evidence/cvp-nightly.md
-          echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> evidence/cvp-nightly.md
-          echo "" >> evidence/cvp-nightly.md
-          echo "## Build" >> evidence/cvp-nightly.md
-          echo "- Status: PASS" >> evidence/cvp-nightly.md
-          echo "" >> evidence/cvp-nightly.md
-          echo "## Tests" >> evidence/cvp-nightly.md
-          echo "- Status: PASS" >> evidence/cvp-nightly.md
-          echo "" >> evidence/cvp-nightly.md
-          echo "## Config Persistence" >> evidence/cvp-nightly.md
-          echo "- Status: PASS" >> evidence/cvp-nightly.md
+          {
+            echo "# CVP Nightly Evidence"
+            echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo ""
+            echo "## Build"
+            echo "- Status: PASS"
+            echo ""
+            echo "## Tests"
+            echo "- Status: PASS"
+            echo ""
+            echo "## Config Persistence"
+            echo "- Status: PASS"
+          } > evidence/cvp-nightly.md
 
       - name: Upload evidence
         uses: actions/upload-artifact@v7

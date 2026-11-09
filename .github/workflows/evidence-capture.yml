@@ -116,12 +116,14 @@ jobs:
           PASSED_COUNT: ${{ steps.cargo_test.outputs.passed_count }}
           FAILED_COUNT: ${{ steps.cargo_test.outputs.failed_count }}
         run: |
-          echo "## Evidence Bundle Captured" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
-          echo "|--------|-------|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Branch | \`${BRANCH}\` |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Commit | \`${COMMIT_SHA}\` |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Tests passed | ${PASSED_COUNT} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Tests failed | ${FAILED_COUNT} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Artifact | \`evidence-bundle-${RUN_NUMBER}\` |" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## Evidence Bundle Captured"
+            echo ""
+            echo "| Metric | Value |"
+            echo "|--------|-------|"
+            echo "| Branch | \`${BRANCH}\` |"
+            echo "| Commit | \`${COMMIT_SHA}\` |"
+            echo "| Tests passed | ${PASSED_COUNT} |"
+            echo "| Tests failed | ${FAILED_COUNT} |"
+            echo "| Artifact | \`evidence-bundle-${RUN_NUMBER}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
