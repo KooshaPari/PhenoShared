@@ -93,8 +93,7 @@ def test_run_mcp_handles_noisy_stderr_and_forces_uncooperative_shutdown(
 ):
     """A protocol reply survives stderr noise and a child that ignores SIGTERM."""
     server = tmp_path / "noisy_server.py"
-    server.write_text(
-        """import json
+    server.write_text("""import json
 import signal
 import sys
 
@@ -105,8 +104,7 @@ for line in sys.stdin:
     request = json.loads(line)
     if "id" in request:
         print(json.dumps({"jsonrpc": "2.0", "id": request["id"], "result": {}}), flush=True)
-"""
-    )
+""")
 
     replies = _run_mcp(
         [{"jsonrpc": "2.0", "id": "noisy", "method": "initialize"}],
@@ -122,16 +120,14 @@ def test_run_mcp_uses_portable_pipe_reading(
 ):
     """Anonymous-pipe handling does not depend on select(), which Windows rejects."""
     server = tmp_path / "replying_server.py"
-    server.write_text(
-        """import json
+    server.write_text("""import json
 import sys
 
 for line in sys.stdin:
     request = json.loads(line)
     if "id" in request:
         print(json.dumps({"jsonrpc": "2.0", "id": request["id"], "result": {}}), flush=True)
-"""
-    )
+""")
 
     def unsupported_select(*_args: object, **_kwargs: object) -> object:
         raise OSError("anonymous pipes are unsupported")
@@ -227,7 +223,7 @@ def test_server_responds_to_initialize_and_tools_list():
 
 @pytest.mark.skipif(
     not os.path.exists(
-        os.environ.get("FORGE3_BIN", "/Users/<REDACTED>/.cargo/bin/forge3")
+        os.environ.get("FORGE3_BIN", os.path.expanduser("~/.cargo/bin/forge3"))
     ),
     reason="forge3 binary not available",
 )

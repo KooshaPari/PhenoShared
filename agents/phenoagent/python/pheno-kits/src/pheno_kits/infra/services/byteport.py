@@ -48,7 +48,9 @@ def _parse_env_file(path: Path) -> dict[str, str]:
     return env_vars
 
 
-def _load_env_cascade(root_dir: Path, service_env_file: Path | None = None) -> dict[str, str]:
+def _load_env_cascade(
+    root_dir: Path, service_env_file: Path | None = None
+) -> dict[str, str]:
     """
     Load environment variables with cascade:
     1. System environment
@@ -103,7 +105,9 @@ def get_api_service(config: BytePortConfig) -> ServiceConfig:
         tunnel_domain="byte.<REDACTED>.com",
         restart_on_failure=True,
         health_check_url=(
-            f"http://localhost:{config.api_preferred_port}/health" if config.local_mode else None
+            f"http://localhost:{config.api_preferred_port}/health"
+            if config.local_mode
+            else None
         ),
         # Fallback configuration
         enable_fallback=True,
@@ -118,7 +122,9 @@ def get_frontend_service(config: BytePortConfig) -> ServiceConfig:
     """
     Get frontend Next.js service configuration.
     """
-    frontend_dir = Path("/Users/<REDACTED>/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
+    frontend_dir = Path(
+        os.path.expanduser("~/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
+    )
     env_file = frontend_dir / ".env.local"
 
     # Determine command based on mode
@@ -194,7 +200,9 @@ def get_byteport_services(
     services.append(api_service)
 
     # Add frontend service if directory exists
-    frontend_dir = Path("/Users/<REDACTED>/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
+    frontend_dir = Path(
+        os.path.expanduser("~/temp-PRODVERCEL/Rust/webApp/byte_port/frontend/web-next")
+    )
     if frontend_dir.exists():
         frontend_service = get_frontend_service(config)
         services.append(frontend_service)

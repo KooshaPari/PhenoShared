@@ -5,7 +5,11 @@ Replaces the heredoc-via-bash approach in `phenotype-omlx-ready` with a single
 Python file that has signal-based per-check timeouts and proper flushing.
 """
 
-import sys, os, traceback, time, signal
+import os
+import signal
+import sys
+import time
+import traceback
 
 # ── per-check timeout: abort any single check after `PER_CHECK` seconds ──
 PER_CHECK = float(os.environ.get("PER_CHECK_TIMEOUT", "45"))
@@ -57,7 +61,7 @@ def chk(label: str, fn, timeout: float = PER_CHECK):
 
 
 REPOS = os.environ.get(
-    "PHENOTYPE_REPOS_ROOT", "/Users/<REDACTED>/CodeProjects/Phenotype/repos"
+    "PHENOTYPE_REPOS_ROOT", os.path.expanduser("~/CodeProjects/Phenotype/repos")
 )
 ROOT = f"{REPOS}/phenotype-omlx"
 
@@ -118,8 +122,6 @@ PERF_PROBE_SRC = (
 def c_turboquant_mlx():
     from mlx.nn.layers.turbo_kv_cache import (
         TurboKVCache,
-        make_turbo_cache,
-        compact_turbo_cache,
     )
 
     TurboKVCache(bits=4, key_bits=4)
@@ -143,7 +145,6 @@ def c_tidar():
         return _missing_provider("TiDAR")
     sys.path.insert(0, root)
     sys.modules.pop("models", None)
-    from models.tidar import tidar_forward
     from models.base_lm import BaseLM
 
     return "tidar_forward ok"
@@ -155,7 +156,6 @@ def c_latentmas():
         return _missing_provider("LatentMAS")
     sys.path.insert(0, root)
     sys.modules.pop("models", None)
-    from models import ModelWrapper
     from methods import Agent, default_agents
 
     n = len(default_agents())
@@ -186,38 +186,17 @@ def c_ssd():
 
 def c_backends():
     sys.path.insert(0, f"{ROOT}/python")
-    from omlx_research.backends import (
-        MlxBackend,
-        MetalKernelBackend,
-        VllmBackend,
-        TensorrtBackend,
-        SglangBackend,
-        LlamaCppBackend,
-    )
 
     n = sum(1 for n in dir() if not n.startswith("_"))
     return f"{n} backend classes"
 
 
 def c_engines():
-    from omlx_research.engines import (
-        SpeculativeEngine,
-        TreeAttentionEngine,
-        ParallelBatchEngine,
-        HybridDispatch,
-    )
 
     return "4 engines"
 
 
 def c_agents():
-    from omlx_research.agents import (
-        LatentMasRunner,
-        TidarRunner,
-        SsdRunner,
-        JetSpecRunner,
-        ConcurrentScheduler,
-    )
 
     return "5 agents"
 
@@ -231,9 +210,6 @@ def c_cli_web():
 
 def c_hybrid():
     from omlx_research.nanovm import (
-        PluginRegistry,
-        BackendKind,
-        PluginSpec,
         discover_plugins,
         list_available_backends,
         list_available_strategies,
@@ -288,7 +264,7 @@ def c_turboquant_plus_production_path():
     sys.path.insert(0, f"{ROOT}/python")
 
     # 1. _perf_module must initialize cleanly through MlxBackend.__init__
-    from omlx_research.backends.mlx_backend import MlxBackend, GenerateRequest
+    from omlx_research.backends.mlx_backend import GenerateRequest, MlxBackend
 
     be = MlxBackend()
     if not hasattr(be, "_perf_module"):
@@ -297,8 +273,8 @@ def c_turboquant_plus_production_path():
     _ = be._rust_perf()
 
     # 2. Resolve Qwen3.5 via config/smoke_models.json (Qwen2.5 quarantined)
-    from omlx_research.smoke_models import default_model_for
     from huggingface_hub import snapshot_download
+    from omlx_research.smoke_models import default_model_for
 
     model_id = default_model_for("readiness")
     model_path = snapshot_download(model_id)

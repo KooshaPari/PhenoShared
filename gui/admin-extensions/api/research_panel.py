@@ -16,6 +16,14 @@ import time as _time
 from dataclasses import asdict
 from typing import Any
 
+from omlx_research.agents import (
+    JetSpecRunner,
+    SsdRunner,
+    TidarRunner,
+    jetspec_draft_tree,
+    latentmas_fanout,
+)
+
 # ---------------------------------------------------------------------------
 # Backend imports — every adapter the CLI / GUI uses is available here.
 # ---------------------------------------------------------------------------
@@ -30,18 +38,6 @@ from omlx_research.backends import (
     SglangBackend,
     TensorrtBackend,
     VllmBackend,
-)
-
-from omlx_research.agents import (
-    ConcurrentScheduler,
-    JetSpecRunner,
-    LatentMasRunner,
-    SsdRunner,
-    TidarRunner,
-    Strategy,
-    jetspec_draft_tree,
-    latentmas_fanout,
-    tidar_ar_diffusion_loop,
 )
 
 # ---------------------------------------------------------------------------
@@ -184,7 +180,9 @@ def _try_import_turboquant() -> dict[str, Any]:
         result["path"] = getattr(turboquant_plus, "__file__", None)
     except ImportError:
         try:
-            candidate = "/Users/<REDACTED>/CodeProjects/Phenotype/repos/turboquant_plus"
+            candidate = os.path.expanduser(
+                "~/CodeProjects/Phenotype/repos/turboquant_plus"
+            )
             if os.path.isdir(candidate):
                 result["installed"] = False
                 result["path"] = candidate
@@ -192,7 +190,9 @@ def _try_import_turboquant() -> dict[str, Any]:
         except Exception:
             pass
     try:
-        from mlx.nn.layers.turbo_kv_cache import TurboKVCache  # type: ignore[import-untyped,unused-ignore]
+        from mlx.nn.layers.turbo_kv_cache import (  # type: ignore[import-untyped,unused-ignore]
+            TurboKVCache,
+        )
 
         result["turbo_kv_cache"] = True
     except ImportError:
@@ -224,7 +224,9 @@ def _register_flask_routes() -> None:
     @research_bp.route("/agents/list", methods=["GET"])
     def agents_list() -> Response:
         """Return the list of available research agents."""
-        return jsonify({"agents": _AGENT_DESCRIPTIONS, "count": len(_AGENT_DESCRIPTIONS)})
+        return jsonify(
+            {"agents": _AGENT_DESCRIPTIONS, "count": len(_AGENT_DESCRIPTIONS)}
+        )
 
     @research_bp.route("/agents/run", methods=["POST"])
     def agents_run() -> Response:
@@ -262,14 +264,17 @@ def _register_flask_routes() -> None:
             )
         except Exception as exc:
             elapsed = int((_time.time() - t0) * 1000)
-            return jsonify(
-                {
-                    "ok": False,
-                    "agent": agent_id,
-                    "error": str(exc),
-                    "elapsed_ms": elapsed,
-                }
-            ), 500
+            return (
+                jsonify(
+                    {
+                        "ok": False,
+                        "agent": agent_id,
+                        "error": str(exc),
+                        "elapsed_ms": elapsed,
+                    }
+                ),
+                500,
+            )
 
     @research_bp.route("/turboquant/config", methods=["GET", "POST"])
     def turboquant_config() -> Response:
@@ -316,7 +321,10 @@ try:
         @research_router.get("/agents/list")
         async def fastapi_agents_list() -> JSONResponse:
             return JSONResponse(
-                content={"agents": _AGENT_DESCRIPTIONS, "count": len(_AGENT_DESCRIPTIONS)}
+                content={
+                    "agents": _AGENT_DESCRIPTIONS,
+                    "count": len(_AGENT_DESCRIPTIONS),
+                }
             )
 
         @research_router.post("/agents/run")
@@ -330,9 +338,15 @@ try:
             params: dict[str, Any] = body.get("params", {})
 
             if not agent_id:
-                return JSONResponse(content={"ok": False, "error": "missing 'agent' field"}, status_code=400)
+                return JSONResponse(
+                    content={"ok": False, "error": "missing 'agent' field"},
+                    status_code=400,
+                )
             if not prompt:
-                return JSONResponse(content={"ok": False, "error": "missing 'prompt' field"}, status_code=400)
+                return JSONResponse(
+                    content={"ok": False, "error": "missing 'prompt' field"},
+                    status_code=400,
+                )
 
             t0 = _time.time()
             try:
@@ -409,9 +423,7 @@ def _dispatch_agent(agent_id: str, prompt: str, params: dict[str, Any]) -> Any:
                 await asyncio.sleep(0.01)  # simulate work
                 return f"[LatentMAS agent-{idx} processed: {_p[:64]}]"
 
-            fns = [
-                lambda p, s, i=i: _stub_agent(p, s, i) for i in range(n_agents)
-            ]
+            fns = [lambda p, s, i=i: _stub_agent(p, s, i) for i in range(n_agents)]
             return await latentmas_fanout(fns, prompt, {})
 
         return asyncio.run(_run_latentmas())
@@ -428,9 +440,7 @@ def _dispatch_agent(agent_id: str, prompt: str, params: dict[str, Any]) -> Any:
             async def _stub_drafter(tokens: list[int]) -> list[int]:
                 return [min(t + 1, 31) for t in tokens[-draft_len:]]
 
-            async def _stub_verifier(
-                tokens: list[int], draft: list[int]
-            ) -> list[int]:
+            async def _stub_verifier(tokens: list[int], draft: list[int]) -> list[int]:
                 return [1 if t > 0 else 0 for t in draft]
 
             runner = TidarRunner(
@@ -482,7 +492,9 @@ def _dispatch_agent(agent_id: str, prompt: str, params: dict[str, Any]) -> Any:
 
         return asyncio.run(_run_jetspec())
 
-    raise ValueError(f"Unknown agent: {agent_id!r}. Expected one of: latentmas, tidar, ssd, jetspec.")
+    raise ValueError(
+        f"Unknown agent: {agent_id!r}. Expected one of: latentmas, tidar, ssd, jetspec."
+    )
 
 
 # ---------------------------------------------------------------------------

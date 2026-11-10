@@ -28,14 +28,7 @@ import sys
 from typing import Optional
 
 from ._doctor_registry import register_check
-from ._doctor_shared import (
-    FAIL,
-    PASS,
-    WARN,
-    Check,
-    project_root,
-)
-
+from ._doctor_shared import FAIL, PASS, WARN, Check, project_root
 
 __all__ = [
     "niah_benchmark_present",
@@ -51,7 +44,7 @@ _INSTRUMENTED_NIAH_REL = "research/fr5_niah_qwen35_0_8b_instrumented.json"
 _LEGACY_NIAH_PATH_MARKERS = (
     'REPO / "phenotype-omlx/python"',
     "REPO / 'phenotype-omlx/python'",
-    'Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos")',
+    'Path(os.path.expanduser("~/CodeProjects/Phenotype/repos"))',
 )
 
 

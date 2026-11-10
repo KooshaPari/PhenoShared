@@ -135,8 +135,8 @@ class HeuristicOptimizer(BaseOptimizer):
 # ---------------------------------------------------------------------------
 
 
-FORGE_BIN = "/Users/<REDACTED>/.local/bin/forge"
-REPO_ROOT = "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness"
+FORGE_BIN = os.path.expanduser("~/.local/bin/forge")
+REPO_ROOT = os.path.expanduser("~/CodeProjects/Phenotype/pheno-harness")
 
 
 class ForgeOptimizer(BaseOptimizer):
@@ -252,7 +252,7 @@ class WorktreeOptimizer(BaseOptimizer):
 
     def __init__(
         self,
-        worktree_base: str = "/Users/<REDACTED>/CodeProjects/Phenotype",
+        worktree_base: str = os.path.expanduser("~/CodeProjects/Phenotype"),
     ):
         """Initialize with the base path under which worktrees will be created."""
         self.worktree_base = worktree_base
@@ -277,9 +277,11 @@ class WorktreeOptimizer(BaseOptimizer):
             trail_id=trace.trail_id,
             suite_name=trace.suite_name,
             proposals=proposals,
-            best_proposal=max(proposals, key=lambda p: p.score_delta or -999)
-            if proposals
-            else None,
+            best_proposal=(
+                max(proposals, key=lambda p: p.score_delta or -999)
+                if proposals
+                else None
+            ),
         )
 
     def _run_tournament(self, suite_name: str, proposal: PatchProposal) -> float | None:

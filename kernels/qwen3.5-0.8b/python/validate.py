@@ -49,9 +49,7 @@ sys.path.insert(0, str(HERE))
 # Also add the kernel root so `weights` (a sibling package) is importable
 sys.path.insert(0, str(HERE.parent))
 from codegen import QwenArch, parse_arch_yaml  # noqa: E402
-from reference import (  # noqa: E402
-    ARCH as _REF_ARCH,
-)
+from reference import ARCH as _REF_ARCH  # noqa: E402
 from reference import (
     random_weights,
     ref_attention_decode,
@@ -1174,7 +1172,9 @@ def _find_hf_weights_dir() -> Path:
     """
     candidates = [
         Path(
-            "/Users/<REDACTED>/CodeProjects/Phenotype/pheno-harness-weights/kernels/qwen3.5-0.8b/weights/build/hf-cache/models--Qwen--Qwen3.5-0.8B/snapshots"
+            os.path.expanduser(
+                "~/CodeProjects/Phenotype/pheno-harness-weights/kernels/qwen3.5-0.8b/weights/build/hf-cache/models--Qwen--Qwen3.5-0.8B/snapshots"
+            )
         )
         / d
         for d in ("2fc06364715b967f1860aea9cf38778875588b17",)

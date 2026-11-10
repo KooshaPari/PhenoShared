@@ -12,6 +12,7 @@ Canonical observability backend (OSS / self-hostable). LangSmith removed.
   python3 scripts/evals/setup_langfuse_judges.py
   python3 scripts/evals/run_langfuse_evaluators.py sync|seed|judge --limit 40
 """
+
 from __future__ import annotations
 
 import argparse
@@ -47,7 +48,11 @@ def _load_dotenv() -> None:
 
 _load_dotenv()
 
-BASE = os.environ.get("LANGFUSE_BASE_URL") or os.environ.get("LANGFUSE_HOST") or "https://cloud.langfuse.com"
+BASE = (
+    os.environ.get("LANGFUSE_BASE_URL")
+    or os.environ.get("LANGFUSE_HOST")
+    or "https://cloud.langfuse.com"
+)
 BASE = BASE.rstrip("/")
 PUB = os.environ.get("LANGFUSE_PUBLIC_KEY", "").strip()
 SEC = os.environ.get("LANGFUSE_SECRET_KEY", "").strip()
@@ -139,8 +144,10 @@ def default_data_path() -> Path:
             break
     candidates.append(
         Path(
-            "/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness/bench/results/"
-            "stock-vs-ours/run-v5-qwen35-08b.json"
+            os.path.expanduser(
+                "~/CodeProjects/Phenotype/repos/pheno-harness/bench/results/"
+                "stock-vs-ours/run-v5-qwen35-08b.json"
+            )
         )
     )
     for native in candidates:
@@ -176,7 +183,9 @@ def seed(limit: int, data_path: Path) -> dict[str, Any]:
         tid = str(uuid.uuid4())
         oid = str(uuid.uuid4())
         traces.append(tid)
-        gen_ok = float(c.get("gen_ok") if c.get("gen_ok") is not None else c.get("pass_at_1") or 0)
+        gen_ok = float(
+            c.get("gen_ok") if c.get("gen_ok") is not None else c.get("pass_at_1") or 0
+        )
         prompt = (c.get("prompt") or "")[:2000]
         reply = (c.get("reply") or "")[:2000]
         inp = {
@@ -200,7 +209,11 @@ def seed(limit: int, data_path: Path) -> dict[str, Any]:
                 "body": {
                     "id": tid,
                     "name": f"{c.get('suite')}/{c.get('task_id')}/{c.get('variant')}",
-                    "tags": ["bench-cockpit", str(c.get("suite")), str(c.get("variant"))],
+                    "tags": [
+                        "bench-cockpit",
+                        str(c.get("suite")),
+                        str(c.get("variant")),
+                    ],
                     "metadata": {
                         "suite": c.get("suite"),
                         "task_id": c.get("task_id"),

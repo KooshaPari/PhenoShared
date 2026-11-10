@@ -14,11 +14,20 @@ Measures:
   - KV memory delta (compact saves ~50% KV)
   - Generation quality (text output)
 """
+
 from __future__ import annotations
-import os, sys, time, json, gc, subprocess
+
+import gc
+import json
+import os
+import subprocess
+import sys
+import time
 from pathlib import Path
 
-VENV = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos/turboquant_plus/.venv/bin")
+VENV = Path(
+    os.path.expanduser("~/CodeProjects/Phenotype/repos/turboquant_plus/.venv/bin")
+)
 if VENV.exists():
     os.environ["PATH"] = str(VENV) + ":" + os.environ.get("PATH", "")
 os.environ["MPLBACKEND"] = "Agg"
@@ -26,20 +35,28 @@ os.environ["MPLBACKEND"] = "Agg"
 PROMPT = "def fibonacci(n):\n    "
 MAX_TOKENS = 64
 
+
 def _resolve_model() -> str:
     if os.environ.get("PHENO_MODEL") or os.environ.get("OMLX_READY_MODEL"):
         return os.environ.get("PHENO_MODEL") or os.environ["OMLX_READY_MODEL"]
     import sys as _sys
     from pathlib import Path as _Path
+
     _sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "python"))
     from omlx_research.smoke_models import default_model_for
+
     return default_model_for("turboquant")
+
 
 MODEL = _resolve_model()
 
 
 def rss_mb() -> float:
-    out = subprocess.check_output(["ps", "-o", "rss=", "-p", str(os.getpid())]).decode().strip()
+    out = (
+        subprocess.check_output(["ps", "-o", "rss=", "-p", str(os.getpid())])
+        .decode()
+        .strip()
+    )
     return int(out) / 1024
 
 
@@ -66,14 +83,20 @@ def import_stack():
     global mx
     import mlx.core as mx
     from mlx.nn.layers.turbo_kv_cache import (
-        TurboKVCache, make_turbo_cache, compact_turbo_cache
+        TurboKVCache,
+        compact_turbo_cache,
+        make_turbo_cache,
     )
-    print(f"  mlx={mx.__version__}  metal={mx.metal.is_available()}  peak_rss={peak_rss_mb():.0f}MB")
+
+    print(
+        f"  mlx={mx.__version__}  metal={mx.metal.is_available()}  peak_rss={peak_rss_mb():.0f}MB"
+    )
     return mx, TurboKVCache, make_turbo_cache, compact_turbo_cache
 
 
 def load_model(path):
     import mlx_lm
+
     t0 = time.time()
     model, tok = mlx_lm.load(path)
     dt = time.time() - t0
@@ -124,17 +147,25 @@ def gen_baseline(model, tok, prompt, max_tokens, mx):
     """Vanilla mlx_lm.generate — no quantization."""
     import mlx_lm
     from mlx_lm.sample_utils import make_sampler
+
     sampler = make_sampler(temp=0.0)
     gc.collect()
     rss_before = rss_mb()
     t0 = time.time()
     text = mlx_lm.generate(
-        model, tok, prompt=prompt, max_tokens=max_tokens,
-        verbose=False, sampler=sampler,
+        model,
+        tok,
+        prompt=prompt,
+        max_tokens=max_tokens,
+        verbose=False,
+        sampler=sampler,
     )
     dt = time.time() - t0
     from mlx_lm.models.cache import KVCache
-    kv_b, _ = measure_kv_for_mode(model, tok, prompt, lambda n: [KVCache() for _ in range(n)], mx)
+
+    kv_b, _ = measure_kv_for_mode(
+        model, tok, prompt, lambda n: [KVCache() for _ in range(n)], mx
+    )
     return {
         "text": text.strip(),
         "elapsed_s": dt,
@@ -150,15 +181,21 @@ def gen_baseline(model, tok, prompt, max_tokens, mx):
 def gen_mlx_native(model, tok, prompt, max_tokens, mx, kv_bits=4):
     """MLX native kv_bits quantization (built-in to mlx_lm)."""
     import mlx_lm
-    from mlx_lm.sample_utils import make_sampler
     from mlx_lm.models.cache import QuantizedKVCache as _QKV
+    from mlx_lm.sample_utils import make_sampler
+
     sampler = make_sampler(temp=0.0)
     gc.collect()
     rss_before = rss_mb()
     t0 = time.time()
     text = mlx_lm.generate(
-        model, tok, prompt=prompt, max_tokens=max_tokens,
-        verbose=False, sampler=sampler, kv_bits=kv_bits,
+        model,
+        tok,
+        prompt=prompt,
+        max_tokens=max_tokens,
+        verbose=False,
+        sampler=sampler,
+        kv_bits=kv_bits,
     )
     dt = time.time() - t0
     # Build a representative quantized cache
@@ -192,9 +229,9 @@ def gen_turboquant(model, tok, prompt, max_tokens, mx, bits=4, key_bits=None):
       5. Measure after compact
     """
     import mlx_lm
-    from mlx_lm.sample_utils import make_sampler
-    from mlx_lm.models.cache import KVCache
     from mlx.nn.layers.turbo_kv_cache import TurboKVCache, compact_turbo_cache
+    from mlx_lm.sample_utils import make_sampler
+
     sampler = make_sampler(temp=0.0)
     gc.collect()
     rss_before = rss_mb()
@@ -204,8 +241,13 @@ def gen_turboquant(model, tok, prompt, max_tokens, mx, bits=4, key_bits=None):
 
     t0 = time.time()
     text = mlx_lm.generate(
-        model, tok, prompt=prompt, max_tokens=max_tokens,
-        verbose=False, sampler=sampler, prompt_cache=turbo_cache,
+        model,
+        tok,
+        prompt=prompt,
+        max_tokens=max_tokens,
+        verbose=False,
+        sampler=sampler,
+        prompt_cache=turbo_cache,
     )
     dt = time.time() - t0
 
@@ -257,14 +299,18 @@ def main():
     model, tok = load_model(MODEL)
     n_layers = num_layers(model)
     arch = type(model).__name__
-    print(f"  arch: {arch}  layers={n_layers}  vocab={tok.vocab_size if hasattr(tok, 'vocab_size') else '?'}")
+    print(
+        f"  arch: {arch}  layers={n_layers}  vocab={tok.vocab_size if hasattr(tok, 'vocab_size') else '?'}"
+    )
     gc.collect()
 
     # ── Mode 1: Baseline FP16 KVCache ─────────────────────────────────
     print(f"\n[3/4] Mode 1 — Baseline FP16 KVCache…")
     base = gen_baseline(model, tok, PROMPT, MAX_TOKENS, mx)
     print(f"    text:   {base['text'][:80]}")
-    print(f"    speed:  {base['tok_per_s']:.1f} tok/s  peak: {base['peak_rss_mb']:.0f}MB")
+    print(
+        f"    speed:  {base['tok_per_s']:.1f} tok/s  peak: {base['peak_rss_mb']:.0f}MB"
+    )
     print(f"    KV:     {base['kv_fp16_bytes']/1024:.1f} KB (FP16)")
     gc.collect()
 
@@ -272,17 +318,27 @@ def main():
     print(f"\n[4/4] Mode 2 — MLX native kv_bits=4…")
     native4 = gen_mlx_native(model, tok, PROMPT, MAX_TOKENS, mx, kv_bits=4)
     print(f"    text:   {native4['text'][:80]}")
-    print(f"    speed:  {native4['tok_per_s']:.1f} tok/s  peak: {native4['peak_rss_mb']:.0f}MB")
-    print(f"    KV:     {native4['kv_turbo_bytes']/1024:.1f} KB (after compact internal)")
+    print(
+        f"    speed:  {native4['tok_per_s']:.1f} tok/s  peak: {native4['peak_rss_mb']:.0f}MB"
+    )
+    print(
+        f"    KV:     {native4['kv_turbo_bytes']/1024:.1f} KB (after compact internal)"
+    )
     gc.collect()
 
     # ── Mode 3: TurboQuant+ asymmetric ────────────────────────────────
     print(f"\n[5/4] Mode 3 — TurboQuant+ ASYMMETRIC (K=FP16, V=4bit)…")
     asym = gen_turboquant(model, tok, PROMPT, MAX_TOKENS, mx, bits=4, key_bits=None)
     print(f"    text:   {asym['text'][:80]}")
-    print(f"    speed:  {asym['tok_per_s']:.1f} tok/s  peak: {asym['peak_rss_mb']:.0f}MB")
-    print(f"    KV:     {asym['kv_fp16_bytes']/1024:.1f} KB → {asym['kv_turbo_bytes']/1024:.1f} KB")
-    print(f"    saved:  {asym['kv_saved_bytes']/1024:.1f} KB ({asym['kv_saved_pct']:.1f}%)")
+    print(
+        f"    speed:  {asym['tok_per_s']:.1f} tok/s  peak: {asym['peak_rss_mb']:.0f}MB"
+    )
+    print(
+        f"    KV:     {asym['kv_fp16_bytes']/1024:.1f} KB → {asym['kv_turbo_bytes']/1024:.1f} KB"
+    )
+    print(
+        f"    saved:  {asym['kv_saved_bytes']/1024:.1f} KB ({asym['kv_saved_pct']:.1f}%)"
+    )
     gc.collect()
 
     # ── Mode 4: TurboQuant+ symmetric ─────────────────────────────────
@@ -290,8 +346,12 @@ def main():
     sym = gen_turboquant(model, tok, PROMPT, MAX_TOKENS, mx, bits=4, key_bits=4)
     print(f"    text:   {sym['text'][:80]}")
     print(f"    speed:  {sym['tok_per_s']:.1f} tok/s  peak: {sym['peak_rss_mb']:.0f}MB")
-    print(f"    KV:     {sym['kv_fp16_bytes']/1024:.1f} KB → {sym['kv_turbo_bytes']/1024:.1f} KB")
-    print(f"    saved:  {sym['kv_saved_bytes']/1024:.1f} KB ({sym['kv_saved_pct']:.1f}%)")
+    print(
+        f"    KV:     {sym['kv_fp16_bytes']/1024:.1f} KB → {sym['kv_turbo_bytes']/1024:.1f} KB"
+    )
+    print(
+        f"    saved:  {sym['kv_saved_bytes']/1024:.1f} KB ({sym['kv_saved_pct']:.1f}%)"
+    )
 
     # ── Summary ────────────────────────────────────────────────────────
     print("\n" + "=" * 78)
@@ -299,12 +359,14 @@ def main():
     print("=" * 78)
 
     rows = [
-        ("Mode 1: Baseline FP16 KVCache",        base,    "kv_fp16_bytes"),
-        ("Mode 2: MLX native kv_bits=4",         native4, "kv_turbo_bytes"),
-        ("Mode 3: TurboQuant+ asym K=FP16 V=4b", asym,    "kv_turbo_bytes"),
-        ("Mode 4: TurboQuant+ sym  K=4b  V=4b",  sym,     "kv_turbo_bytes"),
+        ("Mode 1: Baseline FP16 KVCache", base, "kv_fp16_bytes"),
+        ("Mode 2: MLX native kv_bits=4", native4, "kv_turbo_bytes"),
+        ("Mode 3: TurboQuant+ asym K=FP16 V=4b", asym, "kv_turbo_bytes"),
+        ("Mode 4: TurboQuant+ sym  K=4b  V=4b", sym, "kv_turbo_bytes"),
     ]
-    print(f"  {'Mode':<38} {'tok/s':>8} {'peak_rss':>11} {'KV bytes':>14} {'saved':>10}")
+    print(
+        f"  {'Mode':<38} {'tok/s':>8} {'peak_rss':>11} {'KV bytes':>14} {'saved':>10}"
+    )
     print(f"  {'-'*86}")
     for name, r, kv_key in rows:
         kv_str = "—"
@@ -314,29 +376,33 @@ def main():
             kv_str = f"{kv_b:>14}"
             if "kv_saved_pct" in r and r["kv_saved_pct"] > 0:
                 saved_str = f"{r['kv_saved_pct']:>9.1f}%"
-        print(f"  {name:<38} {r['tok_per_s']:>7.1f}  {r['peak_rss_mb']:>6.0f}MB   {kv_str}  {saved_str}")
+        print(
+            f"  {name:<38} {r['tok_per_s']:>7.1f}  {r['peak_rss_mb']:>6.0f}MB   {kv_str}  {saved_str}"
+        )
 
     # Quality
     print()
     print(f"  Generation quality (deterministic temp=0):")
-    base_text = base['text'][:60]
+    base_text = base["text"][:60]
     for name, r, _ in rows[1:]:
-        same = r['text'][:60] == base_text
+        same = r["text"][:60] == base_text
         mark = "✅" if same else "⚠️"
         diff_marker = ""
         if not same:
-            for i, (a, b) in enumerate(zip(r['text'], base_text)):
+            for i, (a, b) in enumerate(zip(r["text"], base_text)):
                 if a != b:
                     diff_marker = f"  (first diff at char {i}: {base_text[i:i+20]!r} vs {r['text'][i:i+20]!r})"
                     break
-        print(f"    {mark} {name:<36} → {'identical' if same else 'DIFFERS'}{diff_marker}")
+        print(
+            f"    {mark} {name:<36} → {'identical' if same else 'DIFFERS'}{diff_marker}"
+        )
 
     # Speed
     print()
     print(f"  Decode speed vs baseline:")
     for name, r, _ in rows[1:]:
-        pct = r['tok_per_s'] / base['tok_per_s'] * 100
-        delta = r['tok_per_s'] - base['tok_per_s']
+        pct = r["tok_per_s"] / base["tok_per_s"] * 100
+        delta = r["tok_per_s"] - base["tok_per_s"]
         print(f"    {name:<38} → {pct:.1f}% ({delta:+.1f} tok/s)")
 
     # Save
@@ -349,7 +415,11 @@ def main():
         "num_layers": n_layers,
         "modes": {name: r for name, r, _ in rows},
     }
-    out = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-omlx/research/e2e_results.json")
+    out = Path(
+        os.path.expanduser(
+            "~/CodeProjects/Phenotype/repos/phenotype-omlx/research/e2e_results.json"
+        )
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
     with open(out, "w") as f:
         json.dump(results, f, indent=2, default=str)

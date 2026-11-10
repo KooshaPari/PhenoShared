@@ -20,18 +20,12 @@ import subprocess  # nosec B404
 import time
 from typing import Any
 
-from bench.comparison._direct_minimax_adapter import (
-    ENDPOINT,
-)
-from bench.comparison._direct_minimax_adapter import (
-    call as _direct_call,
-)
-from bench.comparison._direct_minimax_adapter import (
-    is_available as _direct_available,
-)
+from bench.comparison._direct_minimax_adapter import ENDPOINT
+from bench.comparison._direct_minimax_adapter import call as _direct_call
+from bench.comparison._direct_minimax_adapter import is_available as _direct_available
 from bench.comparison._forge_reply_parser import _extract_reply
 
-FORGE_BIN = "/Users/<REDACTED>/.local/bin/forge"
+FORGE_BIN = os.path.expanduser("~/.local/bin/forge")
 DIRECT_TIMEOUT_CAP_S = 60.0
 DEFAULT_BACKEND = "auto"  # auto | direct | forge
 

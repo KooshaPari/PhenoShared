@@ -30,12 +30,13 @@ from typing import Any
 
 from ._shared import validate_plan
 
-
 # Repo root for `git rev-parse`. We try a couple of likely locations before
 # giving up — the absolute path baked into the project tree is the one that
 # matches the test environment.
 _REPO_ROOTS: tuple[str, ...] = (
-    "/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-registry/registry/absorbed-crates/phenotype-omlx",
+    os.path.expanduser(
+        "~/CodeProjects/Phenotype/repos/phenotype-registry/registry/absorbed-crates/phenotype-omlx"
+    ),
     os.path.abspath(
         os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
     ),
@@ -54,7 +55,12 @@ def _git_rev() -> str:
             s = out.decode("utf-8", errors="replace").strip()
             if s:
                 return s
-        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError, OSError):
+        except (
+            subprocess.CalledProcessError,
+            subprocess.TimeoutExpired,
+            FileNotFoundError,
+            OSError,
+        ):
             continue
     return "unknown"
 
@@ -69,9 +75,9 @@ def _fictional_trace(plan: dict) -> dict:
     return {
         "trace_id": _stable_hash("trace|" + seed),
         "events": [
-            {"step": 1, "op_id": "op0", "kernel": "op0_metal",   "ok": True},
-            {"step": 2, "op_id": "op1", "kernel": "op1_mlx",     "ok": True},
-            {"step": 3, "op_id": "op2", "kernel": "op2_fallback","ok": True},
+            {"step": 1, "op_id": "op0", "kernel": "op0_metal", "ok": True},
+            {"step": 2, "op_id": "op1", "kernel": "op1_mlx", "ok": True},
+            {"step": 3, "op_id": "op2", "kernel": "op2_fallback", "ok": True},
         ],
     }
 

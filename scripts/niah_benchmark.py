@@ -43,7 +43,7 @@ from pathlib import Path
 # HF home stays stable; online/offline is decided after --model is known
 # (see configure_hf_env). Do not force HF_HUB_OFFLINE=0 at import time —
 # absolute/local model paths must stay offline-capable.
-os.environ.setdefault("HF_HOME", "/Users/<REDACTED>/.cache/huggingface")
+os.environ.setdefault("HF_HOME", os.path.expanduser("~/.cache/huggingface"))
 
 
 def configure_hf_env(model: str) -> None:
@@ -77,6 +77,7 @@ def extract_answer_text(answer: str) -> str:
         if line:
             return line.rstrip(".,;:!? ")
     return ""
+
 
 # Absorbed-crate / worktree layout: always import from this repo's python/.
 # Never use a hard-coded absolute repos/.../python sys.path (FR-5 E2).
@@ -122,15 +123,37 @@ def _ensure_mlx():
 
 # ── Helpers ──────────────────────────────────────────────────────────────
 
+
 def rss_mb() -> float:
     return psutil.Process(os.getpid()).memory_info().rss / 1024 / 1024
 
 
 def random_filler(length: int) -> str:
     """Random filler text not containing the needle."""
-    vocab = ["the", "a", "of", "in", "to", "and", "for", "with", "on", "at",
-             "lorem", "ipsum", "dolor", "sit", "amet", "consectetur",
-             "phenotype", "machine", "learning", "model", "rust", "python"]
+    vocab = [
+        "the",
+        "a",
+        "of",
+        "in",
+        "to",
+        "and",
+        "for",
+        "with",
+        "on",
+        "at",
+        "lorem",
+        "ipsum",
+        "dolor",
+        "sit",
+        "amet",
+        "consectetur",
+        "phenotype",
+        "machine",
+        "learning",
+        "model",
+        "rust",
+        "python",
+    ]
     words = random.choices(vocab, k=length // 6)
     text = " ".join(words)
     text = "".join(c if c.isalpha() else " " for c in text)
@@ -143,8 +166,13 @@ def build_needle_prompt(target_len: int, needle: str) -> str:
     filler = random_filler(filler_words)
     needle_para = f"\n\nImportant context: {needle}. This fact is critical.\n\n"
     intro = "Read the following passage and recall the critical fact mentioned.\n\n"
-    filler = filler[:max(len(filler) - len(needle_para) - len(intro) - 20, 1)]
-    prompt = intro + filler[:len(filler) * 3 // 4] + needle_para + filler[len(filler) * 3 // 4:]
+    filler = filler[: max(len(filler) - len(needle_para) - len(intro) - 20, 1)]
+    prompt = (
+        intro
+        + filler[: len(filler) * 3 // 4]
+        + needle_para
+        + filler[len(filler) * 3 // 4 :]
+    )
     return prompt
 
 
@@ -236,9 +264,8 @@ def measure_fp16_full_attn_bytes(cache_list, model) -> int:
 
 def layer_turbo_bytes(cache) -> tuple[int, int]:
     """Return ``(transient_raw_bytes, packed_bytes)`` for one TurboKVCache."""
-    raw = (
-        _arr_nbytes(getattr(cache, "_raw_keys", None))
-        + _arr_nbytes(getattr(cache, "_raw_values", None))
+    raw = _arr_nbytes(getattr(cache, "_raw_keys", None)) + _arr_nbytes(
+        getattr(cache, "_raw_values", None)
     )
     for arr in getattr(cache, "_pending_raw_keys", None) or []:
         raw += _arr_nbytes(arr)
@@ -600,24 +627,45 @@ def require_julia() -> None:
 
 def main():
     parser = argparse.ArgumentParser(description="NIAH benchmark for TurboQuant+ MLX")
-    parser.add_argument("--lengths", type=int, nargs="+",
-                        default=[512, 2048, 8192],
-                        help="Context lengths to test (tokens)")
-    parser.add_argument("--modes", type=str, nargs="+",
-                        default=["baseline_fp16", "turbo_asymmetric", "turbo_symmetric", "mlx_native_kv4"],
-                        help="KV cache modes to benchmark")
-    parser.add_argument("--model", type=str, default=None,
-                        help="MLX model (default: config/smoke_models.json role=niah)")
-    parser.add_argument("--output", type=str, default=None,
-                        help="Write results JSON to this file")
-    parser.add_argument("--seed", type=int, default=42,
-                        help="Random seed for needle/filler")
+    parser.add_argument(
+        "--lengths",
+        type=int,
+        nargs="+",
+        default=[512, 2048, 8192],
+        help="Context lengths to test (tokens)",
+    )
+    parser.add_argument(
+        "--modes",
+        type=str,
+        nargs="+",
+        default=[
+            "baseline_fp16",
+            "turbo_asymmetric",
+            "turbo_symmetric",
+            "mlx_native_kv4",
+        ],
+        help="KV cache modes to benchmark",
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default=None,
+        help="MLX model (default: config/smoke_models.json role=niah)",
+    )
+    parser.add_argument(
+        "--output", type=str, default=None, help="Write results JSON to this file"
+    )
+    parser.add_argument(
+        "--seed", type=int, default=42, help="Random seed for needle/filler"
+    )
     args = parser.parse_args()
     if not args.model:
         import sys as _sys
         from pathlib import Path as _Path
+
         _sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "python"))
         from omlx_research.smoke_models import default_model_for
+
         args.model = default_model_for("niah")
     configure_hf_env(args.model)
 
@@ -691,14 +739,24 @@ def main():
                     print(f"  answer: {r.answer[:80]!r}")
             except Exception as e:
                 print(f"  ✗ unexpected: {type(e).__name__}: {e}")
-                results.append(BenchResult(
-                    mode=mode, target_len=length, actual_len=0,
-                    prefill_ms=0, decode_ms=0, decode_tok_per_sec=0,
-                    rss_mb_before=rss_mb(), rss_mb_after=rss_mb(),
-                    needle=needle, answer="", exact_match=False,
-                    partial_match=False, contains_secret=False,
-                    error=f"unexpected: {e}",
-                ))
+                results.append(
+                    BenchResult(
+                        mode=mode,
+                        target_len=length,
+                        actual_len=0,
+                        prefill_ms=0,
+                        decode_ms=0,
+                        decode_tok_per_sec=0,
+                        rss_mb_before=rss_mb(),
+                        rss_mb_after=rss_mb(),
+                        needle=needle,
+                        answer="",
+                        exact_match=False,
+                        partial_match=False,
+                        contains_secret=False,
+                        error=f"unexpected: {e}",
+                    )
+                )
 
     print()
     print("=" * 70)
@@ -711,10 +769,18 @@ def main():
     )
     print(f"  {'─' * 22} {'─' * 6} {'─' * 8} {'─' * 10} {'─' * 7} {'─' * 6} {'─' * 6}")
     for r in results:
-        marker = "✓" if r.exact_match else ("≈" if r.partial_match else ("✗" if r.error else " "))
+        marker = (
+            "✓"
+            if r.exact_match
+            else ("≈" if r.partial_match else ("✗" if r.error else " "))
+        )
         rss_d = r.rss_mb_after - r.rss_mb_before
         cmp = f"{r.compressed_layers}/{r.turbo_layers}" if r.turbo_layers else "-"
-        reduc = "yes" if r.byte_reduction_effective else ("-" if not r.turbo_layers else "no")
+        reduc = (
+            "yes"
+            if r.byte_reduction_effective
+            else ("-" if not r.turbo_layers else "no")
+        )
         print(
             f"  {r.mode:22s} {r.target_len:>6d} {r.decode_tok_per_sec:>8.1f} "
             f"{rss_d:>+10.0f} {cmp:>7s} {reduc:>6s} {marker:>6s}"
@@ -763,10 +829,14 @@ def main():
                 any(r.packed_state_present for r in turbo_rows) if turbo_rows else False
             ),
             "byte_reduction_any": (
-                any(r.byte_reduction_effective for r in turbo_rows) if turbo_rows else False
+                any(r.byte_reduction_effective for r in turbo_rows)
+                if turbo_rows
+                else False
             ),
             "compression_any_effective": (
-                any(r.compression_effective for r in turbo_rows) if turbo_rows else False
+                any(r.compression_effective for r in turbo_rows)
+                if turbo_rows
+                else False
             ),
             "seed": args.seed,
             "lengths": args.lengths,
