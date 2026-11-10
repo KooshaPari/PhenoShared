@@ -19,6 +19,7 @@ import io
 import json
 import os
 import shutil
+import sys
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -279,6 +280,65 @@ class MembershipGuardTests(unittest.TestCase):
         self.assertEqual(code, 0, output)
         self.assertIn("every workspace member", output)
         self.assertIn("291", output)
+
+
+class MetadataLoadingTests(unittest.TestCase):
+    """`load_metadata` reads cargo's stdout as the JSON document.
+
+    cargo writes warnings and progress to stderr. Merging the two streams
+    (``stderr=subprocess.STDOUT``) prepends that text to the JSON and makes a
+    perfectly good run fail with "Expecting value: line 1 column 1", which says
+    nothing about the real cause. This happened on PR #822's first run.
+    """
+
+    def setUp(self) -> None:
+        self.root = tempfile.mkdtemp(prefix="membership-metadata-")
+        (Path(self.root) / "Cargo.toml").write_text("[workspace]\n", encoding="utf-8")
+        self.bin = Path(self.root) / "bin"
+        self.bin.mkdir()
+        self._old_path = os.environ.get("PATH", "")
+        os.environ["PATH"] = f"{self.bin}{os.pathsep}{self._old_path}"
+
+    def tearDown(self) -> None:
+        os.environ["PATH"] = self._old_path
+        shutil.rmtree(self.root, ignore_errors=True)
+
+    def fake_cargo(self, *, stdout: str = "", stderr: str = "", code: int = 0) -> None:
+        script = self.bin / "cargo"
+        script.write_text(
+            f"#!{sys.executable}\n"
+            "import sys\n"
+            f"sys.stdout.write({stdout!r})\n"
+            f"sys.stderr.write({stderr!r})\n"
+            f"sys.exit({code})\n",
+            encoding="utf-8",
+        )
+        script.chmod(0o755)
+
+    def test_warning_on_stderr_does_not_corrupt_the_json(self) -> None:
+        payload = {"workspace_root": self.root, "workspace_members": [], "packages": []}
+        self.fake_cargo(
+            stdout=json.dumps(payload),
+            stderr="warning: unused manifest key: patch\n",
+        )
+        meta = membership.load_metadata(self.root, None)
+        self.assertEqual(meta["workspace_root"], self.root)
+
+    def test_failure_reports_stderr_and_the_exit_code(self) -> None:
+        self.fake_cargo(stderr="error: failed to load manifest\n", code=101)
+        with self.assertRaises(membership.MembershipError) as caught:
+            membership.load_metadata(self.root, None)
+        message = str(caught.exception)
+        self.assertIn("failed to load manifest", message)
+        self.assertIn("101", message)
+
+    def test_unparseable_json_surfaces_stderr_for_diagnosis(self) -> None:
+        self.fake_cargo(stdout="not json at all", stderr="cargo said something\n")
+        with self.assertRaises(membership.MembershipError) as caught:
+            membership.load_metadata(self.root, None)
+        message = str(caught.exception)
+        self.assertIn("invalid JSON", message)
+        self.assertIn("cargo said something", message)
 
 
 if __name__ == "__main__":

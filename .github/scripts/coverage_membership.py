@@ -66,17 +66,27 @@ def load_metadata(root, metadata_path):
             raise MembershipError(f"{metadata_path}: cannot read metadata: {exc}")
     command = ["cargo", "metadata", "--no-deps", "--format-version", "1",
                "--manifest-path", os.path.join(root, "Cargo.toml")]
+    # stdout and stderr must stay separate. cargo writes warnings and progress
+    # to stderr, so merging the streams (stderr=STDOUT) prepends warning text to
+    # the JSON document and turns a clean run into "Expecting value: line 1
+    # column 1" - a parse error that says nothing about the real cause. Parse
+    # stdout alone, and report stderr only when the run actually failed or the
+    # document is unusable.
     try:
-        out = subprocess.check_output(command, stderr=subprocess.STDOUT)
+        completed = subprocess.run(command, capture_output=True)
     except OSError as exc:
         raise MembershipError(f"cannot run cargo metadata: {exc}")
-    except subprocess.CalledProcessError as exc:
-        detail = exc.output.decode("utf-8", "replace").strip()
-        raise MembershipError(f"cargo metadata failed ({exc.returncode}): {detail}")
+    stderr = completed.stderr.decode("utf-8", "replace").strip()
+    if completed.returncode != 0:
+        detail = stderr or completed.stdout.decode("utf-8", "replace").strip()
+        raise MembershipError(
+            f"cargo metadata failed ({completed.returncode}): {detail or '<no output>'}")
     try:
-        return json.loads(out)
+        return json.loads(completed.stdout)
     except ValueError as exc:
-        raise MembershipError(f"cargo metadata produced invalid JSON: {exc}")
+        raise MembershipError(
+            "cargo metadata produced invalid JSON: "
+            f"{exc}; stderr: {stderr or '<empty>'}")
 
 
 def workspace_members(meta):
