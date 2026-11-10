@@ -14,24 +14,24 @@
 # framework is *not* injected because its numpy/mlx are compiled for 3.11
 # and would shadow the 3.12 venv's site-packages.
 
-PHENOTYPE_OMLX_HOME="${PHENOTYPE_OMLX_HOME:-/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-omlx}"
-REPOS_ROOT="${REPOS_ROOT:-/Users/<REDACTED>/CodeProjects/Phenotype/repos}"
+PHENOTYPE_OMLX_HOME="${PHENOTYPE_OMLX_HOME:-${HOME}/CodeProjects/Phenotype/repos/phenotype-omlx}"
+REPOS_ROOT="${REPOS_ROOT:-${HOME}/CodeProjects/Phenotype/repos}"
 OMLX_APP="${OMLX_APP:-/Applications/oMLX.app}"
 OMLX_FRAMEWORK_DIR="${OMLX_APP}/Contents/Resources/Python/framework-mlx-base/lib/python3.11/site-packages"
 
 # Detect the active Python's major.minor.
 ACTIVE_PY_MINOR=""
 if command -v python3 >/dev/null 2>&1; then
-    ACTIVE_PY_MINOR=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "")
+	ACTIVE_PY_MINOR=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "")
 fi
 
 # 1) OMLX framework: only inject when the active Python matches (3.11).
-if [[ -n "$ACTIVE_PY_MINOR" && "$ACTIVE_PY_MINOR" == "3.11" && -d "$OMLX_FRAMEWORK_DIR" ]]; then
-    export OMLX_FRAMEWORK="$OMLX_FRAMEWORK_DIR"
-    case ":${PYTHONPATH:-}:" in
-        *":${OMLX_FRAMEWORK}::"*) ;;
-        *) export PYTHONPATH="${OMLX_FRAMEWORK}${PYTHONPATH:+:${PYTHONPATH}}" ;;
-    esac
+if [[ -n $ACTIVE_PY_MINOR && $ACTIVE_PY_MINOR == "3.11" && -d $OMLX_FRAMEWORK_DIR ]]; then
+	export OMLX_FRAMEWORK="$OMLX_FRAMEWORK_DIR"
+	case ":${PYTHONPATH:-}:" in
+	*":${OMLX_FRAMEWORK}::"*) ;;
+	*) export PYTHONPATH="${OMLX_FRAMEWORK}${PYTHONPATH:+:${PYTHONPATH}}" ;;
+	esac
 fi
 # Persistent TurboQuant+ wrapper (survives OMLX updates) — used when the
 # OMLX framework is *not* injected. We only need the `mlx/nn/layers/`
@@ -39,30 +39,30 @@ fi
 # the venv's numpy on Python 3.12).
 OMLX_TURBOQUANT_PERSISTENT="${HOME}/.omlx/turboquant-plus/mlx/nn/layers"
 if [[ -f "${OMLX_TURBOQUANT_PERSISTENT}/turbo_kv_cache.py" ]]; then
-    # The file lives at .../mlx/nn/layers/turbo_kv_cache.py, so the
-    # importable path is the parent of `mlx/`, which is
-    # `~/.omlx/turboquant-plus/`.
-    OMLX_TURBOQUANT_ROOT="$(dirname "$(dirname "$(dirname "$OMLX_TURBOQUANT_PERSISTENT")")")"
-    case ":${PYTHONPATH:-}:" in
-        *":${OMLX_TURBOQUANT_ROOT}:"*) ;;
-        *) export PYTHONPATH="${OMLX_TURBOQUANT_ROOT}${PYTHONPATH:+:${PYTHONPATH}}" ;;
-    esac
+	# The file lives at .../mlx/nn/layers/turbo_kv_cache.py, so the
+	# importable path is the parent of `mlx/`, which is
+	# `~/.omlx/turboquant-plus/`.
+	OMLX_TURBOQUANT_ROOT="$(dirname "$(dirname "$(dirname "$OMLX_TURBOQUANT_PERSISTENT")")")"
+	case ":${PYTHONPATH:-}:" in
+	*":${OMLX_TURBOQUANT_ROOT}:"*) ;;
+	*) export PYTHONPATH="${OMLX_TURBOQUANT_ROOT}${PYTHONPATH:+:${PYTHONPATH}}" ;;
+	esac
 fi
 
 # 2) phenotype-omlx Python packages.
 case ":${PYTHONPATH:-}:" in
-    *":${PHENOTYPE_OMLX_HOME}/python:"*) ;;
-    *) export PYTHONPATH="${PHENOTYPE_OMLX_HOME}/python${PYTHONPATH:+:${PYTHONPATH}}" ;;
+*":${PHENOTYPE_OMLX_HOME}/python:"*) ;;
+*) export PYTHONPATH="${PHENOTYPE_OMLX_HOME}/python${PYTHONPATH:+:${PYTHONPATH}}" ;;
 esac
 
 # 3) Reference research repos (read-only symlinks expected).
 for p in turboquant_plus JetSpec ssd; do
-    if [[ -d "${REPOS_ROOT}/${p}" ]]; then
-        case ":${PYTHONPATH:-}:" in
-            *":${REPOS_ROOT}/${p}:"*) ;;
-            *) export PYTHONPATH="${REPOS_ROOT}/${p}${PYTHONPATH:+:${PYTHONPATH}}" ;;
-        esac
-    fi
+	if [[ -d "${REPOS_ROOT}/${p}" ]]; then
+		case ":${PYTHONPATH:-}:" in
+		*":${REPOS_ROOT}/${p}:"*) ;;
+		*) export PYTHONPATH="${REPOS_ROOT}/${p}${PYTHONPATH:+:${PYTHONPATH}}" ;;
+		esac
+	fi
 done
 # LatentMAS and TiDAR both provide a top-level `models` module — they must
 # not be on PYTHONPATH simultaneously. Use the `use-latentmas` / `use-tidar`
@@ -70,24 +70,24 @@ done
 
 # 4) Rust perf-core Python bindings (built artifacts).
 if [[ -d "${PHENOTYPE_OMLX_HOME}/python/ffi" ]]; then
-    case ":${PYTHONPATH:-}:" in
-        *":${PHENOTYPE_OMLX_HOME}/python/ffi:"*) ;;
-        *) export PYTHONPATH="${PHENOTYPE_OMLX_HOME}/python/ffi${PYTHONPATH:+:${PYTHONPATH}}" ;;
-    esac
+	case ":${PYTHONPATH:-}:" in
+	*":${PHENOTYPE_OMLX_HOME}/python/ffi:"*) ;;
+	*) export PYTHONPATH="${PHENOTYPE_OMLX_HOME}/python/ffi${PYTHONPATH:+:${PYTHONPATH}}" ;;
+	esac
 fi
 
 # 5) Local CLI bin (omlx-research proxy) — prepended to PATH.
 case ":${PATH:-}:" in
-    *":${PHENOTYPE_OMLX_HOME}/cli/bin:"*) ;;
-    *) export PATH="${PHENOTYPE_OMLX_HOME}/cli/bin:${PATH}" ;;
+*":${PHENOTYPE_OMLX_HOME}/cli/bin:"*) ;;
+*) export PATH="${PHENOTYPE_OMLX_HOME}/cli/bin:${PATH}" ;;
 esac
 
 # Activate the Python venv associated with the research stack (must come
 # AFTER the PYTHONPATH manipulation so the venv's site-packages take
 # priority over the OMLX framework on 3.12+).
 if [[ -f "${REPOS_ROOT}/turboquant_plus/.venv/bin/activate" ]]; then
-    # shellcheck disable=SC1091
-    source "${REPOS_ROOT}/turboquant_plus/.venv/bin/activate"
+	# shellcheck disable=SC1091
+	source "${REPOS_ROOT}/turboquant_plus/.venv/bin/activate"
 fi
 
 export PHENOTYPE_OMLX_HOME

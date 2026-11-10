@@ -28,29 +28,35 @@
 
 set -e
 
-PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness}"
+PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-${HOME}/CodeProjects/Phenotype/repos/pheno-harness}"
 
 CONFIG_PATH="${AGILEPLUS_CONFIG:-$HOME/.agileplus/config.json}"
 DRY_RUN=0
 PRINT_ONLY=0
 
 while [ $# -gt 0 ]; do
-  case "$1" in
-    --config) CONFIG_PATH="$2"; shift ;;
-    --dry-run) DRY_RUN=1 ;;
-    --print-only) PRINT_ONLY=1 ;;
-    -h|--help)
-      sed -n '3,30p' "$0"
-      exit 0
-      ;;
-    *) echo "ERROR: unknown flag: $1" >&2; exit 2 ;;
-  esac
-  shift
+	case "$1" in
+	--config)
+		CONFIG_PATH="$2"
+		shift
+		;;
+	--dry-run) DRY_RUN=1 ;;
+	--print-only) PRINT_ONLY=1 ;;
+	-h | --help)
+		sed -n '3,30p' "$0"
+		exit 0
+		;;
+	*)
+		echo "ERROR: unknown flag: $1" >&2
+		exit 2
+		;;
+	esac
+	shift
 done
 
 # Print-only: just emit the env var's current value.
 if [ "$PRINT_ONLY" = "1" ]; then
-  PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
+	PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
 import json, os, sys
 sys.path.insert(0, '$PHENO_HARNESS_ROOT')
 from beads.agileplus_adapter.config import load_config, resolve_token
@@ -58,7 +64,7 @@ cfg = load_config('$CONFIG_PATH')
 token = resolve_token(cfg) or ''
 print(token)
 "
-  exit 0
+	exit 0
 fi
 
 # Read current config + token.
@@ -72,9 +78,9 @@ current = resolve_token(cfg) or ''
 host = cfg.get('host', '127.0.0.1')
 port = cfg.get('port', 8080)
 print(json.dumps({'host': host, 'port': port, 'current_token': current}))
-" > /tmp/refresh-token.$$.json || {
-  echo "ERROR: failed to read config at $CONFIG_PATH" >&2
-  exit 1
+" >/tmp/refresh-token.$$.json || {
+	echo "ERROR: failed to read config at $CONFIG_PATH" >&2
+	exit 1
 }
 
 CURRENT_HOST=$(python3 -c "import json; d=json.load(open('/tmp/refresh-token.$$.json')); print(d['host'])")
@@ -83,8 +89,10 @@ CURRENT_TOKEN=$(python3 -c "import json; d=json.load(open('/tmp/refresh-token.$$
 rm -f /tmp/refresh-token.$$.json
 
 if [ -z "$CURRENT_TOKEN" ]; then
-  echo "ERROR: no current token found (env var \$AGILEPLUS_API_TOKEN is unset)" >&2
-  exit 1
+	# The message deliberately prints the VARIABLE NAME, not its value.
+	# shellcheck disable=SC2016
+	echo 'ERROR: no current token found (env var $AGILEPLUS_API_TOKEN is unset)' >&2
+	exit 1
 fi
 
 # POST to /auth/token/refresh.
@@ -111,24 +119,24 @@ except urllib.error.URLError as exc:
     print(f'transport error: {exc}', file=__import__('sys').stderr)
     raise SystemExit(1)
 ") || {
-  echo "ERROR: refresh request failed (server=$CURRENT_HOST:$CURRENT_PORT)" >&2
-  exit 1
+	echo "ERROR: refresh request failed (server=$CURRENT_HOST:$CURRENT_PORT)" >&2
+	exit 1
 }
 
 NEW_TOKEN=$(echo "$REFRESH_RESPONSE" | python3 -c "import json, sys; print(json.load(sys.stdin).get('token', ''))")
 EXPIRES_AT=$(echo "$REFRESH_RESPONSE" | python3 -c "import json, sys; print(json.load(sys.stdin).get('expires_at', ''))")
 
 if [ -z "$NEW_TOKEN" ]; then
-  echo "ERROR: refresh response missing 'token' field: $REFRESH_RESPONSE" >&2
-  exit 1
+	echo "ERROR: refresh response missing 'token' field: $REFRESH_RESPONSE" >&2
+	exit 1
 fi
 
 echo "Refreshed token (expires_at=$EXPIRES_AT): ${NEW_TOKEN:0:8}..."
 
 if [ "$DRY_RUN" = "1" ]; then
-  echo "(dry-run: not persisted)"
-  echo "$NEW_TOKEN"
-  exit 0
+	echo "(dry-run: not persisted)"
+	echo "$NEW_TOKEN"
+	exit 0
 fi
 
 # Persist new token back to config.json (preserve all other fields).
