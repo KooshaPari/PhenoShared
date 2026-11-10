@@ -17,7 +17,7 @@ runtimes:
     - node@22.16.0
     - python@3.14.4
     # Was 1.82.0, which cannot parse `edition = "2024"`. 19 crates in this
-    # workspace use edition 2024, so every 
+    # workspace use edition 2024, so every
     #   cargo clippy --manifest-path crates/<x>/Cargo.toml
     # that Trunk runs died with:
     #   error: failed to load manifest for workspace member .../crates/fabric-terminal
