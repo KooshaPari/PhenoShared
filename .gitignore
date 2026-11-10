@@ -96,6 +96,11 @@ tmp-*
 .parcel-cache/
 .pnp
 .pnp.js
+# Vite's build artefacts. The a11y gate boots a VitePress dev server and the
+# production build writes here, so both directories show up as untracked
+# noise for anyone who runs them locally.
+/.vitepress/cache/
+/.vitepress/.temp/
 /build/
 /coverage/
 /dist/

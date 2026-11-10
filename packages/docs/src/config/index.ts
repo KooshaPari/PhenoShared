@@ -86,6 +86,28 @@ export function createPhenotypeConfig(options: ConfigOptions) {
 
       search: {
         provider: 'local',
+        options: {
+          translations: {
+            button: {
+              buttonText: 'Search',
+              // WCAG 2.5.3 (Label in Name): the button renders the word
+              // "Search" and then a "K" shortcut badge with no whitespace
+              // between them, so its visible text is the single token
+              // "SearchK". The accessible name has to contain that token
+              // verbatim, so it is "SearchK" and not "Search" - screen
+              // readers announce the camel case as "Search K".
+              buttonAriaLabel: 'SearchK',
+            },
+          },
+        },
+      },
+
+      // WCAG 2.5.3 (Label in Name): the 404 page's "Take me home" link was
+      // labelled "go to home", so the visible text was not part of the
+      // accessible name.
+      notFound: {
+        linkText: 'Take me home',
+        linkLabel: 'Take me home',
       },
 
       editLink: {
@@ -104,7 +126,12 @@ export function createPhenotypeConfig(options: ConfigOptions) {
     markdown: {
       lineNumbers: true,
       theme: {
-        light: 'github-light',
+        // The stock github-light theme paints several tokens below WCAG AA
+        // on this site's code background (#f0f1f3): #d73a49 measured 4.04:1,
+        // #e36209 3.08:1, #22863a 4.09:1 and #6a737d 4.26:1. The
+        // high-contrast variant of the same theme keeps the syntax colours
+        // and clears 4.5:1 on every token.
+        light: 'github-light-high-contrast',
         dark: 'github-dark',
       },
       // Keep `{{ ... }}` inside code samples from being compiled as Vue

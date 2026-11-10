@@ -36,7 +36,10 @@
   --kc-bg-elv: #ffffff;
   --kc-text-1: #1a1c1e;
   --kc-text-2: #4a4f57;
-  --kc-text-3: #6b7280;
+  /* #6b7280 measured 4.28:1 on the code background and 4.01:1 on the
+   * inline-code background. #626875 measures 4.80 / 4.50, so the muted tier
+   * now clears WCAG AA on every light surface. */
+  --kc-text-3: #626875;
   --kc-divider: #d4d7dc;
   --kc-gutter: #e8eaed;
   --kc-code-bg: #f0f1f3;

@@ -88,8 +88,12 @@ function navigate(link: string): void {
 }
 
 .tab-button.active {
-  color: var(--vp-c-brand);
-  border-bottom-color: var(--vp-c-brand);
+  /* `--vp-c-brand` does not exist: VitePress defines --vp-c-brand-1/2/3. The
+   * unresolvable var() made the declaration invalid at computed-value time,
+   * so the active tab inherited its colour instead of using the brand ramp,
+   * and the inherited brand teal measured 2.07:1 on the page background. */
+  color: var(--vp-c-brand-1);
+  border-bottom-color: var(--vp-c-brand-1);
 }
 
 .tab-icon {

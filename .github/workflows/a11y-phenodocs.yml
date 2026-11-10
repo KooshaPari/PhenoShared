@@ -37,7 +37,4 @@ jobs:
     with:
       app_name: phenodocs
       app_dir: '.'
-      dev_command: 'bunx vitepress dev --port 5173'
-      dev_port: 5173
-      spec_glob: 'tests/a11y/**/*.spec.ts'
     secrets: inherit
