@@ -32,11 +32,48 @@ type jcodeContentBlk struct {
 	Text string `json:"text"`
 }
 
+// jcodeStatus accepts either a plain string or the tagged-enum object the harness
+// writes for terminal states, e.g. {"Crashed":{"message":"Client disconnected"}}.
+// Decoding must never abort the session: an unrecognised shape yields "" rather than
+// failing the whole snapshot. A plain `string` field caused every crashed session to
+// be unreadable.
+type jcodeStatus string
+
+func (s *jcodeStatus) UnmarshalJSON(b []byte) error {
+	if len(b) == 0 || string(b) == "null" {
+		*s = ""
+		return nil
+	}
+	var str string
+	if err := json.Unmarshal(b, &str); err == nil {
+		*s = jcodeStatus(str)
+		return nil
+	}
+	var obj map[string]json.RawMessage
+	if err := json.Unmarshal(b, &obj); err != nil {
+		*s = ""
+		return nil
+	}
+	for k, v := range obj {
+		var detail struct {
+			Message string `json:"message"`
+		}
+		_ = json.Unmarshal(v, &detail)
+		if detail.Message != "" {
+			*s = jcodeStatus(k + ": " + detail.Message)
+		} else {
+			*s = jcodeStatus(k)
+		}
+		break
+	}
+	return nil
+}
+
 // jcodeSessionFile is the session snapshot written by the harness.
 type jcodeSessionFile struct {
 	ID         string         `json:"id"`
 	WorkingDir string         `json:"working_dir"`
-	Status     string         `json:"status"`
+	Status     jcodeStatus    `json:"status"`
 	UpdatedAt  string         `json:"updated_at"`
 	Messages   []jcodeMessage `json:"messages"`
 }
@@ -49,10 +86,10 @@ type jcodeJournalEntry struct {
 
 // jcodeJournalMeta carries the mutable session metadata.
 type jcodeJournalMeta struct {
-	WorkingDir string `json:"working_dir"`
-	Status     string `json:"status"`
-	UpdatedAt  string `json:"updated_at"`
-	Title      string `json:"title"`
+	WorkingDir string      `json:"working_dir"`
+	Status     jcodeStatus `json:"status"`
+	UpdatedAt  string      `json:"updated_at"`
+	Title      string      `json:"title"`
 }
 
 // jcodeSessionsDir returns the directory holding JCode session files.
