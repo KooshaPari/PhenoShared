@@ -43,6 +43,9 @@
 #   pheno-core       48.13%      integrations     42.87%
 #   aggregate        54.79%
 #
+#   These are whole-workspace values, re-attributed per group. Every floor
+#   below except one is derived from the number in this list.
+#
 # ALLOWANCE, AND WHY IT IS NOT ZERO
 #   A group-only tarpaulin run cannot inherit coverage that a DIFFERENT group's
 #   tests contributed to this group's files, so its number is slightly lower
@@ -55,6 +58,37 @@
 #   run-to-run and platform variance without turning the floor into a wish. The
 #   measured value is kept beside each floor so the allowance can be audited
 #   instead of trusted.
+#
+#   The allowance absorbs a delta of up to 1.00 point. A group whose delta
+#   exceeds it cannot be floored from a whole-workspace value at all: the
+#   floor would then be unreachable by construction, demanding a number that
+#   group job can never produce. One group is in that state; see below.
+#
+# ONE ENTRY IS MEASURED STANDALONE: sharecli-surface
+#   The `sharecli` crate, in the sharecli-core group, depends on
+#   sharecli-fleet, sharecli-fuse, sharecli-thermal-tui, sharecli-tray-linux
+#   and sharecli-tray-windows (normal and dev), so the sharecli-core tests
+#   cover lines inside the sharecli-surface crates. A whole-workspace run
+#   counts those lines; the sharecli-surface group job does not run the
+#   sharecli-core tests, so it cannot count them either.
+#   Measured directly on 2026-11-10 (run 42748595569, artifact
+#   coverage-group-sharecli-surface): 2,002/3,174 = 63.075% standalone against
+#   2,042/3,174 = 64.34% inside the whole-workspace run. The per-file
+#   denominators are identical, and `git diff 8422819626 65f0a5334` over the
+#   five crates is empty - not one line of the group changed between the two
+#   runs - so the 40 lines are coverage the sharecli-core tests contribute,
+#   not a regression. The sharecli-core run covers more lines than the gap in
+#   each of the eight affected files, and on its own reaches the
+#   whole-workspace total in two of them (sharecli-fleet/src/thermal.rs,
+#   14 covered against the whole-workspace 14, and
+#   sharecli-fleet/src/coalesce_meters.rs, 29 against 29).
+#   That is 1.26 points, more than the 1.00-point allowance, which is why the
+#   old 63.33 floor could never be met by a sharecli-surface run and turned
+#   the required root-workspace check red on main and on every PR.
+#   Its floor is therefore derived from the STANDALONE measurement with the
+#   same 1.00-point allowance: 63.075 - 1.00 = 62.07, recorded below as
+#   `# measured 63.08`. The check's display name and the 36.00 aggregate
+#   floor are unchanged.
 #
 # AGGREGATE FLOOR HISTORY (read before changing)
 #   37  - the previous enforced floor. It is frozen inside the required status
@@ -94,5 +128,5 @@ integrations = 41.87  # measured 42.87
 pheno-core = 47.13  # measured 48.13
 runtime-hosts = 51.75  # measured 52.75
 sharecli-core = 61.43  # measured 62.44
-sharecli-surface = 63.33  # measured 64.34
+sharecli-surface = 62.07  # measured 63.08
 substrate = 61.01  # measured 62.02
