@@ -150,13 +150,13 @@ aggregate_floor = 53.80
 # measured aggregate on this run: 54.80% (37,949/69,250)
 
 [groups]
-agileplus = 58.93  # measured 59.94
-device-media = 60.09  # measured 61.10
-fabric = 44.30  # measured 45.31
-focus = 76.49  # measured 77.50
-integrations = 41.87  # measured 42.87
-pheno-core = 47.00  # measured 48.00
-runtime-hosts = 51.58  # measured 52.59
-sharecli-core = 61.42  # measured 62.43
-sharecli-surface = 62.07  # measured 63.08
-substrate = 62.59  # measured 63.60
+agileplus = 58.93        # measured 59.94
+device-media = 60.09     # measured 61.10
+fabric = 44.30           # measured 45.31
+focus = 76.49            # measured 77.50
+integrations = 41.87     # measured 42.87
+pheno-core = 47.00       # measured 48.00
+runtime-hosts = 51.58    # measured 52.59
+sharecli-core = 61.42    # measured 62.43
+sharecli-surface = 62.07 # measured 63.08
+substrate = 62.59        # measured 63.60
