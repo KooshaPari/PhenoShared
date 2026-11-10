@@ -4,36 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"sort"
 	"strings"
 	"time"
 
-	"github.com/KooshaPari/dagrun/internal/plan"
-	"github.com/KooshaPari/dagrun/internal/store"
+	"github.com/KooshaPari/dagrun/internal/recover"
 )
-
-// stuckNode is one node `recover` found in a running state, with the evidence
-// that says whether reclaiming it is safe.
-type stuckNode struct {
-	ID       string    `json:"id"`
-	Owner    string    `json:"owner,omitempty"`
-	Lease    time.Time `json:"lease_until,omitempty"`
-	Expired  bool      `json:"expired"`
-	Attempts int       `json:"attempts,omitempty"`
-	Reason   string    `json:"reason"`
-}
 
 // cmdRecover is the deliberate, opt-in repair for a wedged run directory.
 //
-// The distinction that matters: an EXPIRED lease is already safe to reap, and
-// `dagrun run` and `dagrun next` do it automatically. A lease still in the
-// future whose worker is gone is the dangerous case, because from the store's
-// point of view the work may still be happening. Reclaiming that is only ever
-// allowed with --force, and it is never silent.
-//
-// Recovering does NOT reset the attempt counter. A reclaimed node keeps the
-// attempts it already spent, so a crash loop cannot buy itself unlimited
-// retries by being recovered over and over.
+// The logic lives in internal/recover so an MCP client or a supervisor can
+// reuse it; this command is only the flag parsing and the human-readable
+// rendering of it. See that package for why an expired lease is safe to reap
+// and a live lease is not, and for why a reclaim never resets the attempt
+// counter.
 func cmdRecover(args []string) error {
 	var dir string
 	var jsonOut bool
@@ -45,11 +28,7 @@ func cmdRecover(args []string) error {
 		return err
 	}
 
-	p, st, _, err := openRun(dir)
-	if err != nil {
-		return err
-	}
-	snap, err := st.Snapshot()
+	run, found, err := recover.Report(dir)
 	if err != nil {
 		return err
 	}
@@ -58,37 +37,17 @@ func cmdRecover(args []string) error {
 	for _, id := range splitList(*only) {
 		want[id] = true
 	}
-
-	now := time.Now()
-	var found []stuckNode
-	for _, n := range st.All(snap) {
-		ns := snap.Nodes[n.ID]
-		if ns == nil || ns.Status != plan.StatusRunning {
-			continue
+	if len(want) > 0 {
+		// nil, not an empty slice: a filtered-out --node set must still encode as
+		// JSON null, exactly as the pre-package command did.
+		var limited []recover.Stuck
+		for _, s := range found {
+			if want[s.ID] {
+				limited = append(limited, s)
+			}
 		}
-		if len(want) > 0 && !want[n.ID] {
-			continue
-		}
-		expired := !ns.LeaseUntil.After(now)
-		reason := "lease is live; a worker may still be running this node"
-		switch {
-		case ns.Owner == "" && ns.LeaseUntil.IsZero():
-			reason = "running with no owner and no lease; whoever took it never recorded itself"
-		case ns.Owner == "":
-			reason = "running with a lease but no owner"
-		case expired:
-			reason = "lease expired; the owner is gone"
-		}
-		found = append(found, stuckNode{
-			ID:       n.ID,
-			Owner:    ns.Owner,
-			Lease:    ns.LeaseUntil,
-			Expired:  expired,
-			Attempts: ns.Attempts,
-			Reason:   reason,
-		})
+		found = limited
 	}
-	sort.Slice(found, func(i, j int) bool { return found[i].ID < found[j].ID })
 
 	ids := make([]string, 0, len(found))
 	for _, v := range found {
@@ -103,7 +62,7 @@ func cmdRecover(args []string) error {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		return enc.Encode(map[string]any{
-			"run":        p.Run,
+			"run":        run,
 			"forced":     *force,
 			"candidates": found,
 			"recovered":  recovered,
@@ -111,11 +70,11 @@ func cmdRecover(args []string) error {
 	}
 
 	if len(found) == 0 {
-		fmt.Printf("run %s: nothing is stuck\n", p.Run)
+		fmt.Printf("run %s: nothing is stuck\n", run)
 		return nil
 	}
 
-	fmt.Printf("run %s: %d node(s) in a running state\n", p.Run, len(found))
+	fmt.Printf("run %s: %d node(s) in a running state\n", run, len(found))
 	for _, s := range found {
 		lease := "none"
 		if !s.Lease.IsZero() {
@@ -131,20 +90,15 @@ func cmdRecover(args []string) error {
 		return nil
 	}
 
-	if err := st.With(func(state *store.State) error {
-		for _, id := range ids {
-			ns := state.Nodes[id]
-			if ns == nil || ns.Status != plan.StatusRunning {
-				continue
-			}
-			ns.Status = plan.StatusPending
-			ns.Owner = ""
-			ns.LeaseUntil = time.Time{}
-			ns.LastError = "reclaimed by dagrun recover --force"
-		}
-		return nil
-	}); err != nil {
+	reclaimed, err := recover.Reclaim(dir, ids)
+	if err != nil {
 		return err
+	}
+	// In the ordinary case this is every id we reported. If a worker slipped in
+	// between the report and the reclaim, the reclaim is the authority: say what
+	// actually moved rather than repeating the plan.
+	if len(reclaimed) != len(ids) {
+		ids = reclaimed
 	}
 	fmt.Printf("\nreclaimed %d node(s) to pending: %s\n", len(ids), strings.Join(ids, ", "))
 	return nil
