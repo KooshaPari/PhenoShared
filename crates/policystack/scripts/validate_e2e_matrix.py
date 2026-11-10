@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Run a compact end-to-end matrix across harness/runtime check surfaces."""
+
 from __future__ import annotations
 
 import json
@@ -8,7 +9,6 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT_DIR = (
@@ -65,7 +65,9 @@ def main() -> int:
                 "--command",
                 "git commit -m e2e",
                 "--cwd",
-                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+                os.path.expanduser(
+                    "~/CodeProjects/Phenotype/repos/thegent-wtrees/demo"
+                ),
                 "--ask-mode",
                 "fail",
             ],
@@ -99,7 +101,9 @@ def main() -> int:
                 "--command",
                 "uv pip install requests",
                 "--cwd",
-                "/Users/<REDACTED>/CodeProjects/Phenotype/repos/thegent-wtrees/demo",
+                os.path.expanduser(
+                    "~/CodeProjects/Phenotype/repos/thegent-wtrees/demo"
+                ),
                 "--ask-mode",
                 "allow",
             ],
@@ -170,7 +174,9 @@ def main() -> int:
 
     json_path = ARTIFACT_DIR / "e2e_matrix.json"
     md_path = ARTIFACT_DIR / "e2e_matrix.md"
-    json_path.write_text(json.dumps(result_payload, indent=2, sort_keys=True), encoding="utf-8")
+    json_path.write_text(
+        json.dumps(result_payload, indent=2, sort_keys=True), encoding="utf-8"
+    )
 
     md_rows = []
     for row in matrix_rows:

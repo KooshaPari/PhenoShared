@@ -14,7 +14,9 @@ import sys
 import time
 
 
-def run_on_mac(cmd: str, env: dict | None = None, timeout: int = 60) -> tuple[str, str, int]:
+def run_on_mac(
+    cmd: str, env: dict | None = None, timeout: int = 60
+) -> tuple[str, str, int]:
     """Run a shell command on the MacBook over SSH. Env vars exported inline."""
     if env:
         exports = " ".join(
@@ -26,9 +28,12 @@ def run_on_mac(cmd: str, env: dict | None = None, timeout: int = 60) -> tuple[st
         wrapped = cmd
     ssh = [
         "ssh",
-        "-o", "ConnectTimeout=10",
-        "-o", "StrictHostKeyChecking=no",
-        "-o", "ServerAliveInterval=5",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=no",
+        "-o",
+        "ServerAliveInterval=5",
         "<REDACTED>@100.112.14.98",
         f"bash --noprofile --norc -c {subprocess.list2cmdline([wrapped])}",
     ]
@@ -42,8 +47,10 @@ def transfer_file(local: bytes, remote: str, mode: int = 0o600) -> tuple[bool, s
     cmd = f"base64 -d > {remote} && chmod {oct(mode)[2:]} {remote}"
     ssh = [
         "ssh",
-        "-o", "ConnectTimeout=10",
-        "-o", "StrictHostKeyChecking=no",
+        "-o",
+        "ConnectTimeout=10",
+        "-o",
+        "StrictHostKeyChecking=no",
         "<REDACTED>@100.112.14.98",
         f"bash --noprofile --norc -c {subprocess.list2cmdline([cmd])}",
     ]
@@ -55,11 +62,13 @@ def transfer_file(local: bytes, remote: str, mode: int = 0o600) -> tuple[bool, s
 
 def main():
     tag = "v0.41"
-    repo_mac = "/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness"
+    repo_mac = os.path.expanduser("~/CodeProjects/Phenotype/repos/pheno-harness")
 
     # 1. Get gh token
     print("== Getting gh auth token ==", flush=True)
-    token_proc = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, timeout=10)
+    token_proc = subprocess.run(
+        ["gh", "auth", "token"], capture_output=True, text=True, timeout=10
+    )
     if token_proc.returncode != 0:
         print(f"FAIL: gh auth token failed: {token_proc.stderr}", file=sys.stderr)
         sys.exit(1)
@@ -93,9 +102,17 @@ def main():
     # 4. Create the v0.41 release (idempotent — OK if exists)
     print(f"== Creating/verifying {tag} release ==", flush=True)
     local = subprocess.run(
-        ["gh", "release", "view", f"{tag}-pheno-harness-summit",
-         "--repo", "<REDACTED>/pheno-harness"],
-        capture_output=True, text=True, timeout=15,
+        [
+            "gh",
+            "release",
+            "view",
+            f"{tag}-pheno-harness-summit",
+            "--repo",
+            "<REDACTED>/pheno-harness",
+        ],
+        capture_output=True,
+        text=True,
+        timeout=15,
     )
     if local.returncode != 0:
         print("   creating release...", flush=True)
@@ -215,12 +232,23 @@ Public key: cosign.pub at the repo root.
     # 8. Verify the release
     print(f"== Verifying {tag} release ==", flush=True)
     local = subprocess.run(
-        ["gh", "release", "view", f"{tag}-pheno-harness-summit",
-         "--repo", "<REDACTED>/pheno-harness", "--json", "assets"],
-        capture_output=True, text=True, timeout=15,
+        [
+            "gh",
+            "release",
+            "view",
+            f"{tag}-pheno-harness-summit",
+            "--repo",
+            "<REDACTED>/pheno-harness",
+            "--json",
+            "assets",
+        ],
+        capture_output=True,
+        text=True,
+        timeout=15,
     )
     if local.returncode == 0:
         import json
+
         d = json.loads(local.stdout)
         print(f"   {len(d.get('assets', []))} assets attached", flush=True)
         for a in d.get("assets", []):

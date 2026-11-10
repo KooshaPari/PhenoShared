@@ -1,0 +1,18 @@
+# Files the repair tool must not touch.
+#
+# A file listed here is skipped because the repository's own gates already fail
+# on it. Trunk Check lints the files a change touches and reports their
+# EXISTING findings as new ones, so rewriting a file that already fails its
+# type check turns that pre-existing failure into a new one and blocks the
+# gate. Those files need their own cleanup, not a path rewrite bolted onto it.
+#
+# Both entries are mypy failures that predate this work:
+#   scripts/e2e_real_model.py            mypy/name-defined: "mx" is not defined
+#   gui/admin-extensions/api/research_panel.py   mypy failures (2)
+#
+# scripts/phenotype_omlx_ready.py is excluded for a different reason: ruff
+# reports unused imports there (F401), which the gate attributes to any change
+# that touches the file.
+scripts/e2e_real_model.py
+gui/admin-extensions/api/research_panel.py
+scripts/phenotype_omlx_ready.py

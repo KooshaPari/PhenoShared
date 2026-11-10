@@ -59,7 +59,7 @@ def test_niah_benchmark_source_has_no_legacy_python_path():
     script = root / "scripts" / "niah_benchmark.py"
     text = script.read_text(encoding="utf-8")
     assert 'REPO / "phenotype-omlx/python"' not in text
-    assert 'Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos")' not in text
+    assert 'Path(os.path.expanduser("~/CodeProjects/Phenotype/repos"))' not in text
     assert 'ROOT / "python"' in text
 
 
@@ -68,9 +68,9 @@ def test_niah_benchmark_legacy_path_doctor_fails(monkeypatch, tmp_path):
 
     bad = tmp_path / "niah_benchmark.py"
     bad.write_text(
-        'import sys\n'
-        'from pathlib import Path\n'
-        'REPO = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos")\n'
+        "import sys\n"
+        "from pathlib import Path\n"
+        'REPO = Path(os.path.expanduser("~/CodeProjects/Phenotype/repos"))\n'
         'sys.path.insert(0, str(REPO / "phenotype-omlx/python"))\n',
         encoding="utf-8",
     )
@@ -80,7 +80,9 @@ def test_niah_benchmark_legacy_path_doctor_fails(monkeypatch, tmp_path):
     assert "legacy" in c.details.lower() or "phenotype-omlx/python" in c.details
 
 
-def test_niah_benchmark_legacy_path_doctor_passes_for_repo_relative(monkeypatch, tmp_path):
+def test_niah_benchmark_legacy_path_doctor_passes_for_repo_relative(
+    monkeypatch, tmp_path
+):
     """Doctor PASS when the script uses repo-relative ``<root>/python``."""
 
     good = tmp_path / "niah_benchmark.py"
@@ -117,7 +119,9 @@ def test_niah_live_artifact_must_not_overwrite_envelope_name():
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    rc = mod.main(["--output", "niah_results.json", "--server-url", "http://127.0.0.1:9"])
+    rc = mod.main(
+        ["--output", "niah_results.json", "--server-url", "http://127.0.0.1:9"]
+    )
     assert rc == 2
 
 
@@ -202,7 +206,9 @@ def test_measure_turbo_cache_metrics_full_attn_only():
             self.nbytes = nbytes
 
     class TurboKVCache:  # noqa: N801 — mirror runtime type name
-        def __init__(self, *, compressed: bool, packed: int = 0, raw: int = 0, resident: int = 0):
+        def __init__(
+            self, *, compressed: bool, packed: int = 0, raw: int = 0, resident: int = 0
+        ):
             self._is_compressed = compressed
             self._packed_keys = _Arr(packed) if packed else None
             self._packed_values = None
@@ -245,7 +251,9 @@ def test_measure_turbo_cache_metrics_full_attn_only():
     assert m1["compression_effective"] is True
     assert m1["byte_reduction_ratio"] == 1400 / 5000
 
-    empty = mod.measure_turbo_cache_metrics([KVCache(), KVCache()], fp16_baseline_bytes=100)
+    empty = mod.measure_turbo_cache_metrics(
+        [KVCache(), KVCache()], fp16_baseline_bytes=100
+    )
     assert empty["turbo_layers"] == 0
     assert empty["byte_reduction_effective"] is False
 
@@ -308,7 +316,9 @@ def test_evidence_index_roles_match_committed_artifacts():
 
     root = Path(project_root())
     index = json.loads(
-        (root / "research" / "fr5_qwen35_evidence_index.json").read_text(encoding="utf-8")
+        (root / "research" / "fr5_qwen35_evidence_index.json").read_text(
+            encoding="utf-8"
+        )
     )
     by_path = {a["path"]: a for a in index["artifacts"]}
     instr = by_path["research/fr5_niah_qwen35_0_8b_instrumented.json"]
@@ -329,7 +339,7 @@ def test_configure_hf_env_keeps_offline_for_local_model_path(monkeypatch):
 
     monkeypatch.setenv("HF_HUB_OFFLINE", "1")
     monkeypatch.setenv("TRANSFORMERS_OFFLINE", "1")
-    local = "/Users/<REDACTED>/.omlx/models/example-local"
+    local = os.path.expanduser("~/.omlx/models/example-local")
     mod.configure_hf_env(local)
     assert os.environ["HF_HUB_OFFLINE"] == "1"
     assert os.environ["TRANSFORMERS_OFFLINE"] == "1"

@@ -6,10 +6,8 @@ authors = ["playcua contributors"]
 license = "MIT"
 rust-version = "1.80"
 
-# `native/` was a submodule of the old standalone PlayCua repo. It keeps its
-# own workspace so it can build without inheriting from the PhenoShared root
-# (which does not list it as a member).
-[workspace]
+# `native/` was a submodule of the old standalone PlayCua repo. It is now a
+# member of the PhenoShared root workspace.
 
 [package.metadata.cargo-machete]
 # `tower` is only used by the `playcua-mcp` bin, which is gated behind the
