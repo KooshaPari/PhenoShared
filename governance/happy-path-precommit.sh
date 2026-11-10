@@ -70,7 +70,10 @@ function strip_quoted(s,   out, i, c, q, n, sq, prev) {
         prev = substr(s, i - 1, 1)
         if (prev ~ /[[:alnum:]]/) { out = out c; continue }
       }
-      if (c == "\"" || c == sq || c == "`") q = c
+      # Backticks are NOT delimiters: a code span such as `verified` is still a
+      # claim about the change (tests/governance-enforcement.test.ts asserts
+      # exactly that), so stripping it would hide the very thing R1 looks for.
+      if (c == "\"" || c == sq) q = c
       else out = out c
     } else {
       if (c == "\\") { i++; continue }
