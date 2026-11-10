@@ -324,10 +324,12 @@ impl RemoteBroker {
         Ok(self.get_json::<Envelope>("/v1/sessions").await?.sessions)
     }
 
-    /// Ask the daemon to acquire a lease and launch the browser itself.
+    /// Ask the daemon to acquire a lease on a profile.
     ///
-    /// The browser lives on the daemon, so nothing is returned that this process
-    /// could hold, leak or tear down.
+    /// The browser lives on the daemon and is launched on that profile's first
+    /// action, not by this call, so a grant does not wait on a browser start.
+    ///
+    /// Nothing is returned that this process could hold, leak or tear down.
     pub async fn acquire(
         &self,
         principal: &str,
