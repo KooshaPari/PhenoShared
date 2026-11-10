@@ -71,7 +71,7 @@
 #   denominator grew 3,828 -> 4,085 lines and covered lines grew 2,374 ->
 #   2,598), while sharecli-surface, runtime-hosts, pheno-core and sharecli-core
 #   only look lower because they are now measured by their own group run. For
-#   sharecli-surface that was verified rather than assumed: the 2026-11-09
+#   sharecli-surface that was checked rather than assumed: the 2026-11-09
 #   report filtered to the same package list gives 2,042/3,174, the 2026-11-10
 #   group run gives 2,002/3,174, the denominator is identical, and `git diff`
 #   between the two trees touches none of the group's crates. 40 covered lines
@@ -114,7 +114,7 @@
 #   53.80 - this file's aggregate floor as of 2026-11-10. It is the fresh
 #         aggregate (54.80% = 37,949/69,250) minus the same 1.00 allowance the
 #         groups use, truncated to two decimals, so the required check is a
-#         ratchet like every other floor instead of a fixed historical number.
+#         ratchet like every other floor instead of a frozen historical number.
 #         It is safe to enforce because the aggregate is a sum of the ten group
 #         reports, and the two independent runs above produced the same ten
 #         group figures; a group that under-reports now fails its own floor
