@@ -106,7 +106,7 @@ impl SourceAdapter for ModelsDevAdapter {
                         .map(|t| t.to_lowercase().contains(&q))
                         .unwrap_or(false);
                     hit || tag_hit
-                }
+                },
             })
             .map(|m| m.candidate_id())
             .collect();
@@ -149,7 +149,11 @@ struct ModelsDevEntry {
 
 impl ModelsDevEntry {
     fn into_raw(self, provider: &str, model_name: &str) -> RawModel {
-        let _modality = if self.attachment { "multimodal" } else { "text" };
+        let _modality = if self.attachment {
+            "multimodal"
+        } else {
+            "text"
+        };
         let _provider_hint = provider;
 
         // Map the JSON shape into a single `pipeline_tag` so the existing
@@ -227,20 +231,95 @@ pub mod smoke_fixture {
     /// and offline seeding runs.
     pub fn snapshot() -> Vec<RawModel> {
         let providers: &[(&str, &[&str])] = &[
-            ("openai", &["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "o1", "o1-mini", "o3", "o3-mini", "o4-mini"]),
-            ("anthropic", &["claude-3.5-sonnet", "claude-3.5-haiku", "claude-3-opus", "claude-3-sonnet"]),
-            ("google", &["gemini-2.0-flash", "gemini-2.0-pro", "gemini-1.5-pro", "gemini-1.5-flash"]),
-            ("meta", &["llama-3.1-8b", "llama-3.1-70b", "llama-3.1-405b", "llama-3.2-1b", "llama-3.2-3b", "llama-3.3-70b"]),
-            ("mistral", &["mistral-large", "mistral-small", "mistral-nemo", "codestral", "mixtral-8x7b", "mixtral-8x22b"]),
-            ("deepseek", &["deepseek-v3", "deepseek-r1", "deepseek-coder", "deepseek-v2.5"]),
-            ("qwen", &["qwen2.5-7b", "qwen2.5-72b", "qwen2.5-coder-7b", "qwen2.5-coder-32b", "qwen-max"]),
+            (
+                "openai",
+                &[
+                    "gpt-4o",
+                    "gpt-4o-mini",
+                    "gpt-4-turbo",
+                    "o1",
+                    "o1-mini",
+                    "o3",
+                    "o3-mini",
+                    "o4-mini",
+                ],
+            ),
+            (
+                "anthropic",
+                &[
+                    "claude-3.5-sonnet",
+                    "claude-3.5-haiku",
+                    "claude-3-opus",
+                    "claude-3-sonnet",
+                ],
+            ),
+            (
+                "google",
+                &[
+                    "gemini-2.0-flash",
+                    "gemini-2.0-pro",
+                    "gemini-1.5-pro",
+                    "gemini-1.5-flash",
+                ],
+            ),
+            (
+                "meta",
+                &[
+                    "llama-3.1-8b",
+                    "llama-3.1-70b",
+                    "llama-3.1-405b",
+                    "llama-3.2-1b",
+                    "llama-3.2-3b",
+                    "llama-3.3-70b",
+                ],
+            ),
+            (
+                "mistral",
+                &[
+                    "mistral-large",
+                    "mistral-small",
+                    "mistral-nemo",
+                    "codestral",
+                    "mixtral-8x7b",
+                    "mixtral-8x22b",
+                ],
+            ),
+            (
+                "deepseek",
+                &[
+                    "deepseek-v3",
+                    "deepseek-r1",
+                    "deepseek-coder",
+                    "deepseek-v2.5",
+                ],
+            ),
+            (
+                "qwen",
+                &[
+                    "qwen2.5-7b",
+                    "qwen2.5-72b",
+                    "qwen2.5-coder-7b",
+                    "qwen2.5-coder-32b",
+                    "qwen-max",
+                ],
+            ),
             ("cohere", &["command-r-plus", "command-r", "command-light"]),
-            ("groq", &["llama-3.1-8b-instant", "llama-3.3-70b-versatile", "mixtral-8x7b-instant"]),
+            (
+                "groq",
+                &[
+                    "llama-3.1-8b-instant",
+                    "llama-3.3-70b-versatile",
+                    "mixtral-8x7b-instant",
+                ],
+            ),
             ("perplexity", &["sonar", "sonar-pro", "sonar-reasoning"]),
             ("xai", &["grok-2", "grok-2-mini"]),
             ("reka", &["reka-core", "reka-flash"]),
             ("ai21", &["jamba-1.5-large", "jamba-1.5-mini"]),
-            ("together", &["llama-3.1-8b-together", "qwen2.5-72b-together"]),
+            (
+                "together",
+                &["llama-3.1-8b-together", "qwen2.5-72b-together"],
+            ),
         ];
 
         let mut out: Vec<RawModel> = Vec::new();
@@ -311,7 +390,14 @@ pub mod smoke_fixture {
         }
 
         // Pad to exactly 1000 entries with synthesized layer-2 variants.
-        let suffixes = ["distilled", "instant", "preview", "experimental", "lite", "turbo"];
+        let suffixes = [
+            "distilled",
+            "instant",
+            "preview",
+            "experimental",
+            "lite",
+            "turbo",
+        ];
         let mut idx: u32 = 0;
         while out.len() < 1000 {
             let (provider, models) = providers[(idx as usize) % providers.len()];

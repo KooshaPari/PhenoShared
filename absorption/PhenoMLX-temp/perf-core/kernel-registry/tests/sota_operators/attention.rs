@@ -107,7 +107,7 @@ fn cca_block_deterministic_picks_lowest_p95_zmm_backend() {
                 candidate.id, id_zmm,
                 "ZMM (avx512) p95=1700 must beat metal p95=2500 and scalar p95=8000"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -257,7 +257,7 @@ fn mla_cache_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal p95=1100 must beat zmm p95=1300 and scalar p95=4500"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -386,7 +386,7 @@ fn mtp_proposal_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal p95=1800 must beat scalar p95=6000"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }

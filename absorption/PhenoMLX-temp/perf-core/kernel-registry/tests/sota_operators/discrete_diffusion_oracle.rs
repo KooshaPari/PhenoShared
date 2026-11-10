@@ -61,7 +61,7 @@ impl Schedule {
             Schedule::Cosine => {
                 let c = (t as f64 * std::f64::consts::PI / (2.0 * num_steps as f64)).cos();
                 (c * c).clamp(0.0, 1.0)
-            }
+            },
         }
     }
 }
@@ -122,7 +122,7 @@ impl ContinuousSchedule {
             ContinuousScheduleKind::Cosine => {
                 let c = (t as f64 * std::f64::consts::PI / (2.0 * num_steps as f64)).cos();
                 (c * c).clamp(0.0, 1.0)
-            }
+            },
             ContinuousScheduleKind::Sqrt => (1.0 - tn).max(0.0).sqrt(),
             ContinuousScheduleKind::Sigmoid { k } => {
                 // The boundary values must be exactly 1.0 / 0.0 to
@@ -140,7 +140,7 @@ impl ContinuousSchedule {
                 let kf = k as f64;
                 let z = kf * (2.0 * tn - 1.0);
                 1.0 / (1.0 + z.exp())
-            }
+            },
         }
     }
 }
@@ -276,14 +276,14 @@ impl DiscreteDiffusionOracle {
         // the threshold is comparable to a 0..1 probability. Using
         // the raw 64-bit output would make `scaled < 1e6` match
         // almost never — this is the most common LCG bug.
-        let scaled = (re_mask_prob * 0xFF_FFFF as f64).round() as u64;
+        let scaled = (re_mask_prob * 0xff_ffff as f64).round() as u64;
 
         for (i, &m_in) in mask.iter().enumerate() {
             if !m_in {
                 continue;
             }
             let lcg = lcg_next(seed.wrapping_add(step as u64).wrapping_add(i as u64));
-            if (lcg & 0xFF_FFFF) < scaled {
+            if (lcg & 0xff_ffff) < scaled {
                 next_x[i] = self.mask_token_id;
             }
         }
@@ -391,8 +391,8 @@ fn ddm_step_byte_identical_to_oracle() {
     let mask: Vec<bool> = vec![true, false, true, false, true, false, true, false];
     let clean: Vec<u32> = vec![7, 7, 2, 2, 9, 9, 1, 1];
 
-    let out_a = oracle.step(&x_t, &mask, &clean, 3, 0xC0FFEE);
-    let out_b = oracle.step(&x_t, &mask, &clean, 3, 0xC0FFEE);
+    let out_a = oracle.step(&x_t, &mask, &clean, 3, 0xc0ffee);
+    let out_b = oracle.step(&x_t, &mask, &clean, 3, 0xc0ffee);
     let bytes_a: Vec<u8> = out_a.iter().flat_map(|t| t.to_le_bytes()).collect();
     let bytes_b: Vec<u8> = out_b.iter().flat_map(|t| t.to_le_bytes()).collect();
     assert_eq!(

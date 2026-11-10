@@ -207,11 +207,11 @@ async fn main() -> Result<()> {
                 "analysis.diff".to_string(),
                 json!({ "image_a": a_b64, "image_b": b_b64, "threshold": threshold }),
             )
-        }
+        },
         Cmd::Hash { image } => {
             let image_b64 = base64_encode_file(image).await?;
             ("analysis.hash".to_string(), json!({ "image": image_b64 }))
-        }
+        },
     };
 
     let (code, json) = match &cli.socket {
@@ -248,10 +248,10 @@ async fn main() -> Result<()> {
                 )
                 .exit();
             }
-        }
+        },
         _ => {
             println!("{}", serde_json::to_string_pretty(&result)?);
-        }
+        },
     }
     Ok(())
 }

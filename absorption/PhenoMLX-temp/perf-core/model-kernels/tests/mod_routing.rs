@@ -19,7 +19,7 @@ use model_kernels::mod_routing::{
     mod_apply, mod_route, mod_scatter_back, ModRoutePlan, ModRouterConfig,
 };
 
-const SEED: u64 = 0xCAFE_BABE_DEAD_BEEF;
+const SEED: u64 = 0xcafe_babe_dead_beef;
 
 fn cfg(capacity_factor: f32) -> ModRouterConfig {
     ModRouterConfig {
@@ -50,7 +50,7 @@ fn deterministic_vec(n: usize, salt: u64) -> Vec<f32> {
 fn capacity_one_is_identity_routing() {
     // capacity=1.0 must select every token, regardless of weight. The
     // contract is "routing is a no-op identity": no token is dropped.
-    let weights = deterministic_vec(8, 0xA1);
+    let weights = deterministic_vec(8, 0xa1);
     let plan = mod_route(&weights, &cfg(1.0)).unwrap();
     assert_eq!(
         plan.selected_tokens.len(),
@@ -103,7 +103,7 @@ fn capacity_half_returns_exactly_half_top_scored() {
 
 #[test]
 fn mod_route_is_deterministic_under_repeated_calls() {
-    let weights = deterministic_vec(16, 0xB2);
+    let weights = deterministic_vec(16, 0xb2);
     let p1 = mod_route(&weights, &cfg(0.5)).unwrap();
     let p2 = mod_route(&weights, &cfg(0.5)).unwrap();
     let p3 = mod_route(&weights, &cfg(0.5)).unwrap();
@@ -149,7 +149,7 @@ fn ties_break_deterministically_by_lower_index() {
 fn apply_and_scatter_back_round_trip_is_exact_with_zero_fill() {
     let num_tokens = 12usize;
     let dim = 4usize;
-    let weights = deterministic_vec(num_tokens, 0xC3);
+    let weights = deterministic_vec(num_tokens, 0xc3);
     let plan = mod_route(&weights, &cfg(0.5)).unwrap();
     assert!(!plan.selected_tokens.is_empty());
 
@@ -270,7 +270,7 @@ fn capacity_one_boundary_is_inclusive() {
     // Spec: capacity_factor in (0, 1] *inclusive of 1.0*. Make sure
     // 1.0 is accepted (it's the identity case) and a value *just*
     // above 1.0 is rejected.
-    let weights = deterministic_vec(4, 0xD4);
+    let weights = deterministic_vec(4, 0xd4);
     let plan = mod_route(&weights, &cfg(1.0)).unwrap();
     assert_eq!(plan.selected_tokens.len(), 4);
     let err = mod_route(&weights, &cfg(1.0 + f32::EPSILON)).unwrap_err();
@@ -281,7 +281,7 @@ fn capacity_one_boundary_is_inclusive() {
 fn plan_carries_capacity_factor_through() {
     // mod_route must echo the capacity_factor on the returned plan so
     // downstream kernels can scale residual streams by 1/c.
-    let weights = deterministic_vec(8, 0xE5);
+    let weights = deterministic_vec(8, 0xe5);
     let plan = mod_route(&weights, &cfg(0.5)).unwrap();
     assert_eq!(plan.capacity_factor, 0.5);
     let plan2 = mod_route(&weights, &cfg(0.75)).unwrap();
@@ -290,7 +290,7 @@ fn plan_carries_capacity_factor_through() {
 
 #[test]
 fn plan_clone_and_equality_are_value_semantics() {
-    let weights = deterministic_vec(6, 0xF6);
+    let weights = deterministic_vec(6, 0xf6);
     let plan = mod_route(&weights, &cfg(0.5)).unwrap();
     let cloned = plan.clone();
     assert_eq!(plan, cloned);

@@ -101,10 +101,7 @@ async fn admin_collapse_accepts_correct_token_and_groups_variants() {
     let _guard = TokenGuard::set(Some("secret"));
 
     let app = common::seeded_app();
-    let req = collapse_request(
-        "/v1/admin/collapse",
-        &[("x-admin-token", "secret")],
-    );
+    let req = collapse_request("/v1/admin/collapse", &[("x-admin-token", "secret")]);
     let (resp, body) = common::send(app.router, req).await;
     assert_eq!(resp.status(), StatusCode::OK);
 

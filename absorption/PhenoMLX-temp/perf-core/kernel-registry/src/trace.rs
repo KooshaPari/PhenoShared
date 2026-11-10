@@ -67,7 +67,7 @@ impl ExecutionTrace {
                     0,
                 )
                 .with_engine(candidate.engine_name.as_deref())
-            }
+            },
             SelectionDecision::Rejected {
                 rejections,
                 considered: _,
@@ -91,7 +91,7 @@ impl ExecutionTrace {
                     None,
                     0,
                 )
-            }
+            },
         }
     }
 

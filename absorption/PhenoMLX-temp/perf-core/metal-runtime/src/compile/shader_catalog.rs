@@ -10,7 +10,7 @@ pub(crate) fn source_for_tag(tag: &str) -> Option<&'static str> {
         "short_conv" => include_str!("../../shaders/short_conv1d.metal"),
         "mamba_scan" | "mamba_selective_scan" => {
             include_str!("../../shaders/mamba_selective_scan.metal")
-        }
+        },
         "retnet" => include_str!("../../shaders/retnet_retention_step.metal"),
         "rwkv7_time_mix" => include_str!("../../shaders/rwkv7_time_mix.metal"),
         "denoise" => include_str!("../../shaders/diffusion_argmax_confidence.metal"),
@@ -20,7 +20,7 @@ pub(crate) fn source_for_tag(tag: &str) -> Option<&'static str> {
         "moe_router" => include_str!("../../shaders/moe_topk.metal"),
         "moe_dispatch" | "moe_reduce" | "moe_shared" => {
             include_str!("../../shaders/moe_grouped_gemm.metal")
-        }
+        },
         "ternary_pack" => include_str!("../../shaders/ternary_gemm.metal"),
         "mla_attention" => include_str!("../../shaders/mla_cache_attend.metal"),
         _ => return None,

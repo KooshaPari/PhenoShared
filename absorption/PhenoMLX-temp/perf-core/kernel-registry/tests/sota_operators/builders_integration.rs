@@ -76,7 +76,7 @@ fn builder_sliding_window_selector_picks_tagged_metal_candidate() {
                 "builder key must route to a SlidingWindow candidate; got {:?}",
                 candidate.name
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -138,7 +138,7 @@ fn builder_deltanet_batched_selector_picks_tagged_metal_candidate() {
                 "builder key must route to a DeltaNetBatched candidate; got {:?}",
                 candidate.name
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -198,7 +198,7 @@ fn builder_deltanet_selector_picks_tagged_metal_candidate() {
                 "builder key must route to a MambaSelective candidate; got {:?}",
                 candidate.name
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }

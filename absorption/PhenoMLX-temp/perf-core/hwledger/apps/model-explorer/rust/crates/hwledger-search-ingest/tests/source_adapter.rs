@@ -47,10 +47,10 @@ fn list_candidates_returns_promptly_when_upstream_unreachable() {
     });
 
     match rx.recv_timeout(Duration::from_secs(15)) {
-        Ok(()) => {}
+        Ok(()) => {},
         Err(mpsc::RecvTimeoutError::Timeout) => {
             panic!("list_candidates deadlocked against unreachable upstream");
-        }
+        },
         Err(e) => panic!("worker thread panicked before signaling: {e}"),
     }
     join.join().expect("worker thread join");

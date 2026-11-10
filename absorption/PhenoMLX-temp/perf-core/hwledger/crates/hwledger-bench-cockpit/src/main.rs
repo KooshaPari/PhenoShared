@@ -36,8 +36,7 @@ async fn main() {
         .filter(|s| !s.is_empty())
         .collect();
 
-    let dist_dir = std::env::var("BENCH_DIST_DIR")
-        .unwrap_or_else(|_| "../dist".into());
+    let dist_dir = std::env::var("BENCH_DIST_DIR").unwrap_or_else(|_| "../dist".into());
 
     let port: u16 = std::env::var("PORT")
         .ok()
@@ -63,18 +62,9 @@ async fn main() {
             "/cells/{suite}/{task_id}/{variant}/raw",
             get(api::api_cell_raw),
         )
-        .route(
-            "/langfuse/status",
-            get(api::langfuse::langfuse_status),
-        )
-        .route(
-            "/langfuse/setup",
-            post(api::langfuse::langfuse_setup),
-        )
-        .route(
-            "/langfuse/traces",
-            get(api::langfuse::langfuse_traces),
-        )
+        .route("/langfuse/status", get(api::langfuse::langfuse_status))
+        .route("/langfuse/setup", post(api::langfuse::langfuse_setup))
+        .route("/langfuse/traces", get(api::langfuse::langfuse_traces))
         .route(
             "/langfuse/evaluators",
             post(api::langfuse::langfuse_evaluators),

@@ -102,7 +102,7 @@ pub async fn handle_request(req: Request) -> Response {
         unknown => {
             warn!(method = %unknown, "playcua-bridge unknown method");
             Response::method_not_found(id, unknown)
-        }
+        },
     }
 }
 
@@ -344,7 +344,7 @@ async fn handle_windows_list(id: Value) -> Response {
         },
         Err(e) => {
             Response::internal_error(id, format!("windows.list failed (guest enumeration): {e}"))
-        }
+        },
     }
 }
 
@@ -371,7 +371,7 @@ async fn handle_windows_find(id: Value, params: Value) -> Response {
         Ok(None) => Response::ok(id, Value::Null),
         Err(e) => {
             Response::internal_error(id, format!("windows.find failed (guest enumeration): {e}"))
-        }
+        },
     }
 }
 

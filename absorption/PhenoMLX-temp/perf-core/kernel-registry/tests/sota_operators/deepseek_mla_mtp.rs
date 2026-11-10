@@ -141,7 +141,7 @@ fn deepseek_mla_compressed_kv_byte_identical_to_uncompressed() {
     // because v_full[0..16] = v_latent.
     let seq_q = B;
     let seq_k = B * H_KV;
-    let mut rng = Lcg::new(0xD5EE_00AD);
+    let mut rng = Lcg::new(0xd5ee_00ad);
 
     let mut q_latent = vec![0.0f32; seq_q * D_LATENT];
     fill_signed(&mut rng, &mut q_latent);
@@ -219,7 +219,7 @@ fn deepseek_mla_compressed_kv_byte_identical_to_uncompressed() {
 
 #[test]
 fn deepseek_mla_cache_size_smaller_than_uncompressed() {
-    let mut rng = Lcg::new(0xC4_C4E512E);
+    let mut rng = Lcg::new(0xc4_c4e512e);
     let seq = B * H_KV;
     let mut k_full = vec![0.0f32; seq * D_FULL];
     let mut v_full = vec![0.0f32; seq * D_FULL];
@@ -262,7 +262,7 @@ fn sequential_greedy(seed_logits: &[f32], k: usize, vocab: usize) -> Vec<u32> {
 fn deepseek_mtp_speculative_proposals_byte_identical_to_sequential() {
     let k: usize = 4;
     let vocab: usize = 32;
-    let mut rng = Lcg::new(0x77EC_0FFE);
+    let mut rng = Lcg::new(0x77ec_0ffe);
     let mut logits = vec![0.0f32; k * vocab];
     fill_unit(&mut rng, &mut logits);
 
@@ -288,7 +288,7 @@ fn deepseek_mtp_acceptance_rate_within_band() {
     let k: usize = 4;
     let vocab: usize = 8;
     let accepted_threshold = 0.5f32;
-    let mut rng = Lcg::new(0xACCE_BEAD);
+    let mut rng = Lcg::new(0xacce_bead);
     let mut base = vec![0.0f32; n_prompts * k * vocab];
     fill_unit(&mut rng, &mut base);
 
@@ -340,7 +340,7 @@ fn deepseek_mla_mtp_combined_byte_identical() {
     let seq_k = B * H_KV;
     let k: usize = 4;
     let vocab: usize = 16;
-    let mut rng = Lcg::new(0x7011_D0F0_0BAD);
+    let mut rng = Lcg::new(0x7011_d0f0_0bad);
 
     // Build MLA inputs and run the reference kernel.
     let mut q_latent = vec![0.0f32; seq_q * D_LATENT];

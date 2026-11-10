@@ -135,7 +135,7 @@ pub fn subbyte_unpack(
             });
         }
         let mask = if bits_us == 8 {
-            0xFFu8
+            0xffu8
         } else {
             ((1u32 << bits_us) - 1) as u8
         };

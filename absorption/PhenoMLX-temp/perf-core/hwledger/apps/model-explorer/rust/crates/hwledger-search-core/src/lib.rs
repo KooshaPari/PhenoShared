@@ -8,7 +8,6 @@
 
 #![deny(missing_docs)]
 #![deny(rust_2018_idioms)]
-
 // Manual `impl Default` blocks on taxonomy enums (`impl Default for ModelKind
 // { fn default() -> Self { Self::Base } }`) are preferred over
 // `#[derive(Default)] + #[default]` so the default variant reads as a single,
@@ -17,18 +16,18 @@
 #![allow(clippy::derivable_impls)]
 
 pub mod error;
-pub mod taxonomy;
-pub mod source_adapter;
 pub mod fusion;
 pub mod query;
 pub mod skills;
+pub mod source_adapter;
+pub mod taxonomy;
 
 pub use error::CoreError;
-pub use taxonomy::arch::{ArchKind, AttentionKind, MlpKind, RopeVariant};
-pub use taxonomy::faceted::Facets;
-pub use taxonomy::modality::Modality;
-pub use taxonomy::model_kind::ModelKind;
 pub use fusion::{rrf_fuse, Scored};
 pub use query::{FusedResult, Query};
 pub use skills::{SearchContext, SearchIntent, SearchSkill, SkillRegistry};
 pub use source_adapter::{CandidateId, RawModel, SourceAdapter};
+pub use taxonomy::arch::{ArchKind, AttentionKind, MlpKind, RopeVariant};
+pub use taxonomy::faceted::Facets;
+pub use taxonomy::modality::Modality;
+pub use taxonomy::model_kind::ModelKind;

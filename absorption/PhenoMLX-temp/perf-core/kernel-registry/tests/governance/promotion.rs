@@ -99,7 +99,7 @@ fn promotion_validator_promotes_when_gates_pass() {
             assert_eq!(decision, "auto");
             assert!(record.verify_content_hash());
             assert!(record.signature.is_none());
-        }
+        },
         _ => panic!("expected Promote variant"),
     }
 }
@@ -119,7 +119,7 @@ fn promotion_validator_signs_record_when_key_provided() {
             assert!(record.signature.is_some());
             assert!(record.verify_signature(b"k1"));
             assert!(!record.verify_signature(b"k2"));
-        }
+        },
         _ => panic!("expected Promote variant"),
     }
 }
@@ -160,7 +160,7 @@ fn promotion_validator_quarantine_carries_record() {
         PromotionAction::Quarantine { decision, record } => {
             assert_eq!(decision, "blocked-on-cve");
             assert!(record.verify_content_hash());
-        }
+        },
         _ => panic!("expected Quarantine variant"),
     }
 }
@@ -172,7 +172,7 @@ fn promotion_validator_hold_records_reason() {
     match action {
         PromotionAction::Hold { reason } => {
             assert_eq!(reason, "awaiting MMLU-Pro score from rev-8");
-        }
+        },
         _ => panic!("expected Hold variant"),
     }
 }
@@ -209,7 +209,7 @@ fn promotion_validator_promotes_from_evaluation_report_fixture() {
             assert!(record.verify_content_hash());
             assert_eq!(record.evidence[0].id, "mmlu");
             assert!((record.evidence[0].score - 0.71).abs() < 1e-9);
-        }
+        },
         _ => panic!("expected Promote variant"),
     }
 }

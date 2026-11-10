@@ -114,7 +114,7 @@ impl BaselineRecorder {
                     expected: Value::Null,
                     actual: Value::String("<missing>".to_string()),
                 })
-            }
+            },
         };
         let actual_hash = Self::hash_inputs(inputs);
         if actual_hash != entry.input_hash {

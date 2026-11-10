@@ -133,7 +133,10 @@ fn search_quants_token_returns_hit_whose_quants_include_gguf() {
         "expected Model-B at rank 0 for `gguf`"
     );
     assert!(
-        store.quants_for_id("b/Model-B").unwrap().contains(&"gguf".to_string()),
+        store
+            .quants_for_id("b/Model-B")
+            .unwrap()
+            .contains(&"gguf".to_string()),
         "Model-B must have gguf in its quants sidecar"
     );
 }

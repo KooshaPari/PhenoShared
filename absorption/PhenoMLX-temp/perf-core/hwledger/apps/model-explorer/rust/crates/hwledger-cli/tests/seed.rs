@@ -18,8 +18,18 @@ use tempfile::TempDir;
 fn build_fixture_index(dir: &std::path::Path) {
     let store = TantivyStore::open(dir).expect("open store");
     let fixtures = vec![
-        ("hf::qwen/Qwen2.5-7B-Instruct", "Qwen2.5-7B-Instruct", "qwen", "instruct"),
-        ("hf::meta-llama/Llama-3.1-8B-Instruct", "Llama-3.1-8B-Instruct", "meta-llama", "instruct"),
+        (
+            "hf::qwen/Qwen2.5-7B-Instruct",
+            "Qwen2.5-7B-Instruct",
+            "qwen",
+            "instruct",
+        ),
+        (
+            "hf::meta-llama/Llama-3.1-8B-Instruct",
+            "Llama-3.1-8B-Instruct",
+            "meta-llama",
+            "instruct",
+        ),
     ];
     for (id, name, org, kind) in fixtures {
         let model = IndexedModel {
@@ -51,8 +61,12 @@ fn seed_expand_rejects_empty_seed_list() {
     // Passing `--seeds ""` should fail before any HF traffic happens.
     cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
-            "seed", "expand", "--seeds", "",
+            "--index",
+            dir.path().to_str().unwrap(),
+            "seed",
+            "expand",
+            "--seeds",
+            "",
         ])
         .assert()
         .failure()
@@ -68,10 +82,13 @@ fn seed_expand_returns_seed_ids_in_json_mode() {
     // We assert the envelope shape, not the contents.
     let out: Vec<u8> = cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
+            "--index",
+            dir.path().to_str().unwrap(),
             "--json",
-            "seed", "expand",
-            "--seeds", "hf::qwen/Qwen2.5-7B-Instruct,hf::meta-llama/Llama-3.1-8B-Instruct",
+            "seed",
+            "expand",
+            "--seeds",
+            "hf::qwen/Qwen2.5-7B-Instruct,hf::meta-llama/Llama-3.1-8B-Instruct",
         ])
         .assert()
         .success()
@@ -92,9 +109,12 @@ fn seed_expand_human_mode_prints_summary() {
 
     cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
-            "seed", "expand",
-            "--seeds", "hf::qwen/Qwen2.5-7B-Instruct",
+            "--index",
+            dir.path().to_str().unwrap(),
+            "seed",
+            "expand",
+            "--seeds",
+            "hf::qwen/Qwen2.5-7B-Instruct",
         ])
         .assert()
         .success()

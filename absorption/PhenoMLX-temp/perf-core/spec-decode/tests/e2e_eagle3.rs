@@ -253,7 +253,7 @@ fn e2e_eagle3_config_round_trip() {
             assert_eq!(cfg.max_depth, 16);
             assert_eq!(cfg.max_branches_per_node, 4);
             assert_eq!(cfg.probability_threshold, 0.001);
-        }
+        },
         _ => panic!("expected Eagle3 variant"),
     }
 }

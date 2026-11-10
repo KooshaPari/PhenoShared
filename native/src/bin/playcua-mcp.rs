@@ -90,7 +90,7 @@ async fn main() -> Result<()> {
         "http" => serve_http(dispatcher, &args).await,
         other => {
             anyhow::bail!("Unknown transport: {other}");
-        }
+        },
     }
 }
 

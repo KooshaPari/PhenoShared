@@ -24,12 +24,12 @@ fn qwen_agentic_mini_trace_runs_and_is_finite() {
     let top_k = 2;
 
     // DeltaNet inputs and per-head states.
-    let q = deterministic_vec(chunk_size * num_heads * head_dim, 0xCC_AA);
-    let kd = deterministic_vec(chunk_size * num_heads * head_dim, 0xCC_BB);
-    let v = deterministic_vec(chunk_size * num_heads * head_dim, 0xCC_CC);
+    let q = deterministic_vec(chunk_size * num_heads * head_dim, 0xcc_aa);
+    let kd = deterministic_vec(chunk_size * num_heads * head_dim, 0xcc_bb);
+    let v = deterministic_vec(chunk_size * num_heads * head_dim, 0xcc_cc);
     let initial_states: Vec<Vec<f32>> = (0..num_heads)
         .map(|h| {
-            let mut rng = Lcg::new(SEED ^ (0xCC_E0u64 + h as u64));
+            let mut rng = Lcg::new(SEED ^ (0xcc_e0u64 + h as u64));
             (0..head_dim * head_dim)
                 .map(|_| rng.next_signed() * 0.25)
                 .collect()
@@ -69,7 +69,7 @@ fn qwen_agentic_mini_trace_runs_and_is_finite() {
     // MoE: per-token router over `num_experts` slots.
     let mut all_router_logits = Vec::new();
     for t in 0..num_tokens {
-        all_router_logits.extend(deterministic_vec(num_experts, SEED ^ (0xCC_D0 + t as u64)));
+        all_router_logits.extend(deterministic_vec(num_experts, SEED ^ (0xcc_d0 + t as u64)));
     }
     let mut assignments = Vec::new();
     for t in 0..num_tokens {
@@ -87,7 +87,7 @@ fn qwen_agentic_mini_trace_runs_and_is_finite() {
 
     // Shared expert: project token_x through a [hidden, hidden]
     // weight matrix.
-    let w = deterministic_vec(hidden * hidden, 0xCC_EE);
+    let w = deterministic_vec(hidden * hidden, 0xcc_ee);
     let mut shared_out = vec![0.0f32; num_tokens * hidden];
     shared_expert(&token_x, &w, &mut shared_out).unwrap();
     assert!(shared_out.iter().all(|v| v.is_finite()));

@@ -79,7 +79,7 @@ fn selector_picks_lowest_p95_among_fresh_records() {
             assert_eq!(tuning.candidate_id, id_low);
             // id_high must NOT be the chosen one.
             assert_ne!(candidate.id, id_high);
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -150,7 +150,7 @@ fn selector_tie_breaks_by_candidate_id_ascending() {
             let expected = id_a.min(id_b);
             assert_eq!(candidate.id, expected,
                 "tie-break must select smaller CandidateId; got {candidate:?} expected {expected:?}");
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -201,7 +201,7 @@ fn selector_rejects_all_when_tuning_records_are_stale() {
                     .any(|r| matches!(r.reason, RejectionReason::StaleTuning { .. })),
                 "expected StaleTuning reason, got {rejections:?}"
             );
-        }
+        },
         other => panic!("expected Rejected, got {other:?}"),
     }
 }
@@ -252,7 +252,7 @@ fn selector_falls_back_to_reference_when_no_tuning_records() {
                 "with no tuning evidence the reference kernel must be chosen"
             );
             assert_ne!(candidate.id, id_fast);
-        }
+        },
         other => panic!("expected Chosen (reference fallback), got {other:?}"),
     }
     let _ = id_ref;
@@ -305,7 +305,7 @@ fn selector_returns_rejected_with_human_explanation_when_no_candidate_matches() 
                     .any(|r| matches!(r.reason, RejectionReason::UnsupportedDtype(_))),
                 "expected UnsupportedDtype reason, got {rejections:?}"
             );
-        }
+        },
         other => panic!("expected Rejected, got {other:?}"),
     }
     assert!(

@@ -62,7 +62,7 @@ impl SelectionPolicy {
                 } else {
                     Metric::P99
                 }
-            }
+            },
             SelectionPolicy::ExperimentalOnly => Metric::P95,
             SelectionPolicy::Production { metric, .. } => *metric,
         }
@@ -171,10 +171,10 @@ impl RejectionReason {
         match self {
             RejectionReason::MissingCapability(c) => {
                 format!("missing capability: {}", c)
-            }
+            },
             RejectionReason::UnsupportedDtype(d) => {
                 format!("unsupported dtype: {:?}", d)
-            }
+            },
             RejectionReason::ShapeOutOfRange => "shape out of range".to_string(),
             RejectionReason::StaleTuning {
                 expires_at_unix_ms,
@@ -187,7 +187,7 @@ impl RejectionReason {
             RejectionReason::PolicyExcluded(p) => format!("policy excluded: {}", p),
             RejectionReason::MissingQualityEvidence(why) => {
                 format!("missing quality evidence: {}", why)
-            }
+            },
             RejectionReason::QualityGateFailed {
                 gate,
                 observed,

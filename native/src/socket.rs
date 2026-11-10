@@ -113,7 +113,7 @@ async fn handle_connection(app: Arc<App>, stream: UnixStream) -> Result<()> {
             Ok(None) => {
                 debug!("client EOF");
                 return Ok(());
-            }
+            },
             Err(e) => {
                 warn!(error = %e, "client parse error");
                 let resp = crate::ipc::Response::err(
@@ -123,7 +123,7 @@ async fn handle_connection(app: Arc<App>, stream: UnixStream) -> Result<()> {
                 );
                 let _ = write_response(&mut write_half, &resp).await;
                 continue;
-            }
+            },
         };
 
         let resp = app.dispatcher.dispatch(req).await;

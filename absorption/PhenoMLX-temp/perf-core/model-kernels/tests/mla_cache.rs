@@ -13,7 +13,7 @@ use model_kernels::common::{approx_eq_tol, Lcg};
 use model_kernels::error::KernelError;
 use model_kernels::speculative::{mtp_propose, mtp_verify};
 
-const SEED: u64 = 0xCAFE_BABE;
+const SEED: u64 = 0xcafe_babe;
 
 /// Deterministic signed f32 buffer of length `n`.
 fn det(n: usize, salt: u64) -> Vec<f32> {
@@ -32,8 +32,8 @@ fn mla_cache_round_trip_matches_mla_attention_oracle() {
     let seq_k = 8;
     let n_entries = 8;
 
-    let q_latent = det(d_latent, 0xC0);
-    let q_rope = det(d_rope, 0xC1);
+    let q_latent = det(d_latent, 0xc0);
+    let q_rope = det(d_rope, 0xc1);
 
     // Hand-rolled latents so we can assert exact values.
     let mut cache: Vec<MlaCacheEntry> = Vec::new();
@@ -101,7 +101,7 @@ fn mla_cache_append_beyond_capacity_returns_bad_buffer_length() {
             assert_eq!(what, "mla_cache.len");
             assert_eq!(expected, 1);
             assert_eq!(got, 2);
-        }
+        },
         other => panic!("expected BadBufferLength, got {other:?}"),
     }
 }

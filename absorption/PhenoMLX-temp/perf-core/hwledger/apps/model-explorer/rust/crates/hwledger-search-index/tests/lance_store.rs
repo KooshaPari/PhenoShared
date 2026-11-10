@@ -73,7 +73,10 @@ async fn ann_returns_correct_nearest_id() {
     let queries = vec![
         ("qwen/Qwen2.5-7B-Instruct", vec![2.0, 0.0, 0.0, 0.0]),
         ("meta-llama/Llama-3-8B-Instruct", vec![0.0, 2.5, 0.0, 0.0]),
-        ("mistralai/Mistral-7B-Instruct-v0.3", vec![0.0, 0.0, 3.5, 0.0]),
+        (
+            "mistralai/Mistral-7B-Instruct-v0.3",
+            vec![0.0, 0.0, 3.5, 0.0],
+        ),
     ];
 
     for (expected_id, q) in queries {
@@ -152,7 +155,10 @@ async fn ann_on_empty_dir_returns_empty_vec() {
     let dir = tempfile::tempdir().expect("tempdir");
     let store = LanceStore::new(dir.path()).await.expect("open");
 
-    let hits = store.ann(&[1.0, 0.0, 0.0, 0.0], 5).await.expect("ann empty");
+    let hits = store
+        .ann(&[1.0, 0.0, 0.0, 0.0], 5)
+        .await
+        .expect("ann empty");
     assert!(
         hits.is_empty(),
         "missing `embeddings` table must yield empty vec, got {hits:?}"
@@ -241,9 +247,18 @@ async fn run_hybrid_fuses_bm25_with_ann() {
     let lance = LanceStore::new(lance_dir.path()).await.expect("open lance");
     lance
         .insert(&[
-            EmbeddingRow { id: "doc_a".into(), vector: vec![1.0, 0.0, 0.0, 0.0] },
-            EmbeddingRow { id: "doc_b".into(), vector: vec![0.0, 1.0, 0.0, 0.0] },
-            EmbeddingRow { id: "doc_c".into(), vector: vec![0.0, 0.0, 1.0, 0.0] },
+            EmbeddingRow {
+                id: "doc_a".into(),
+                vector: vec![1.0, 0.0, 0.0, 0.0],
+            },
+            EmbeddingRow {
+                id: "doc_b".into(),
+                vector: vec![0.0, 1.0, 0.0, 0.0],
+            },
+            EmbeddingRow {
+                id: "doc_c".into(),
+                vector: vec![0.0, 0.0, 1.0, 0.0],
+            },
         ])
         .await
         .expect("insert");

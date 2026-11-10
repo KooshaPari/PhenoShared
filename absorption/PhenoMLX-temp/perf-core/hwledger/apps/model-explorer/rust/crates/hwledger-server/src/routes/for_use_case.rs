@@ -35,7 +35,8 @@ async fn for_use_case(
     Json(req): Json<ForUseCaseRequest>,
 ) -> Result<impl IntoResponse, ServiceError> {
     let limit = req.limit.unwrap_or(10);
-    let results = service::for_use_case(&state.index, req.use_case, req.text.as_deref(), limit).await?;
+    let results =
+        service::for_use_case(&state.index, req.use_case, req.text.as_deref(), limit).await?;
     Ok(Json(serde_json::json!({
         "use_case": req.use_case.as_str(),
         "text": req.text,

@@ -24,7 +24,7 @@ pub(crate) fn check_production_quality(
                 "candidate {} has no quality attachment under Production policy",
                 candidate.id
             )))
-        }
+        },
     };
     match evaluate_for_production(record, attachment) {
         Ok(()) => Ok(()),
@@ -33,7 +33,7 @@ pub(crate) fn check_production_quality(
                 "candidate {} missing evidence for gate '{}'",
                 candidate.id, gate
             )))
-        }
+        },
         Err(QualityError::PromotionGateRejected {
             gate,
             observed,
@@ -48,7 +48,7 @@ pub(crate) fn check_production_quality(
                 "candidate {} attachment has no gates configured",
                 candidate.id
             )))
-        }
+        },
         Err(e) => Err(RejectionReason::Other(format!(
             "candidate {} quality check failed: {}",
             candidate.id, e

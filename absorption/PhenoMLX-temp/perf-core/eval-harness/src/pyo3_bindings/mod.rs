@@ -19,10 +19,10 @@ impl From<EvalError> for PyErr {
         match err {
             EvalError::Io { path, source } => {
                 PyIOError::new_err(format!("IO error for {path}: {source}"))
-            }
+            },
             EvalError::Backend { task_id, source } => {
                 PyRuntimeError::new_err(format!("Backend error for {task_id}: {source}"))
-            }
+            },
             other => PyValueError::new_err(other.to_string()),
         }
     }

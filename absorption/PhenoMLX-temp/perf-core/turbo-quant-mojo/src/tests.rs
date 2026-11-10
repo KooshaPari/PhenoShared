@@ -91,10 +91,10 @@ fn mojo_encode_decode_roundtrip_ffi_owned_outputs() {
             for (a, b) in data.iter().zip(decoded.iter()) {
                 assert!((a - b).abs() < 0.15, "roundtrip mismatch: {a} vs {b}");
             }
-        }
+        },
         Err(e) if e.contains("null output pointers") => {
             panic!("Mojo @export out-pointer ABI returned null after ABI hardening — {e}");
-        }
+        },
         Err(e) => panic!("Mojo encode failed unexpectedly: {e}"),
     }
 }
@@ -382,10 +382,10 @@ fn encode_unaligned_group_size_returns_err() {
 fn encode_valid_input_succeeds_or_reports_known_abi_issue() {
     let data: Vec<f32> = (0..128).map(|i| (i as f32) * 0.01 - 0.64).collect();
     match MojoQuantizedTensor::encode(&data, 4, 32) {
-        Ok(_) => {}
+        Ok(_) => {},
         Err(e) if e.contains("null output pointers") => {
             // Known Mojo 1.0.0b3 ABI issue. Validation passed (no early return).
-        }
+        },
         Err(e) => panic!("Mojo encode failed unexpectedly: {e}"),
     }
 }
@@ -408,13 +408,13 @@ fn repeated_encode_decode_exercises_guard_cleanup() {
             Ok(q) => {
                 let decoded = q.decode(data.len(), 16, 4);
                 assert_eq!(decoded.len(), data.len(), "round {round}: decoded length");
-            }
+            },
             Err(e) if e.contains("null output pointers") => {
                 // Mojo 1.0.0b3 out-pointer ABI still broken — validation
                 // passed so the guard's pre-arm path did fire and was
                 // responsible for the null-pointer error message.
                 continue;
-            }
+            },
             Err(e) => panic!("round {round}: Mojo encode failed: {e}"),
         }
     }

@@ -257,8 +257,16 @@ pub async fn search_results(
 fn intent_fit_payload(store: &Arc<TantivyStore>, id: &str) -> serde_json::Value {
     let kind_str = store.kind_for_id(id).unwrap_or_default();
     let kind = parse_kind(&kind_str);
-    let agentic = if kind == Some(ModelKind::Agentic) { 1.0_f32 } else { 0.0_f32 };
-    let coding = if kind == Some(ModelKind::Coding) { 1.0_f32 } else { 0.0_f32 };
+    let agentic = if kind == Some(ModelKind::Agentic) {
+        1.0_f32
+    } else {
+        0.0_f32
+    };
+    let coding = if kind == Some(ModelKind::Coding) {
+        1.0_f32
+    } else {
+        0.0_f32
+    };
     serde_json::json!({
         "agentic": agentic,
         "coding": coding,
@@ -329,16 +337,17 @@ pub fn build_search_context(q: &Query) -> SearchContext {
 /// a search and surface its score as a `popularity` hint when the doc is
 /// found.
 #[must_use]
-pub fn detail_for_id(
-    store: &Arc<TantivyStore>,
-    id: &str,
-) -> serde_json::Value {
+pub fn detail_for_id(store: &Arc<TantivyStore>, id: &str) -> serde_json::Value {
     let canonical = canonicalize_id(id);
     let kind = store.kind_for_id(&canonical);
     let quants = store.quants_for_id(&canonical).unwrap_or_default();
     let found = kind.is_some();
     let score = if found {
-        store.search(&canonical, 1).unwrap_or_default().first().map(|h| h.score)
+        store
+            .search(&canonical, 1)
+            .unwrap_or_default()
+            .first()
+            .map(|h| h.score)
     } else {
         None
     };
@@ -547,7 +556,10 @@ mod tests {
             ServiceError::NotFound("x".into()).status(),
             StatusCode::NOT_FOUND
         );
-        assert_eq!(ServiceError::Unauthorized.status(), StatusCode::UNAUTHORIZED);
+        assert_eq!(
+            ServiceError::Unauthorized.status(),
+            StatusCode::UNAUTHORIZED
+        );
         assert_eq!(
             ServiceError::BadRequest("x".into()).status(),
             StatusCode::BAD_REQUEST
@@ -580,8 +592,16 @@ mod tests {
 
     #[test]
     fn use_case_kind_round_trip() {
-        for uc in [UseCase::Agentic, UseCase::Coding, UseCase::Reasoning, UseCase::Embedding] {
-            assert_eq!(uc.as_str(), serde_json::to_string(&uc).unwrap().trim_matches('"'));
+        for uc in [
+            UseCase::Agentic,
+            UseCase::Coding,
+            UseCase::Reasoning,
+            UseCase::Embedding,
+        ] {
+            assert_eq!(
+                uc.as_str(),
+                serde_json::to_string(&uc).unwrap().trim_matches('"')
+            );
         }
     }
 
@@ -595,7 +615,10 @@ mod tests {
     #[test]
     fn detect_intent_classifies_agentic_keywords() {
         assert_eq!(detect_intent("agent for tool use"), SearchIntent::Agentic);
-        assert_eq!(detect_intent("function calling assistant"), SearchIntent::Agentic);
+        assert_eq!(
+            detect_intent("function calling assistant"),
+            SearchIntent::Agentic
+        );
         assert_eq!(detect_intent("tool-use ready model"), SearchIntent::Agentic);
     }
 
@@ -610,8 +633,14 @@ mod tests {
     fn detect_intent_falls_through_to_generic_when_no_keyword_matches() {
         assert_eq!(detect_intent(""), SearchIntent::Generic);
         assert_eq!(detect_intent("instruct"), SearchIntent::Generic);
-        assert_eq!(detect_intent("embedding model please"), SearchIntent::Embedding);
-        assert_eq!(detect_intent("reasoning chain-of-thought"), SearchIntent::Reasoning);
+        assert_eq!(
+            detect_intent("embedding model please"),
+            SearchIntent::Embedding
+        );
+        assert_eq!(
+            detect_intent("reasoning chain-of-thought"),
+            SearchIntent::Reasoning
+        );
     }
 
     #[test]

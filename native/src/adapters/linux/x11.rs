@@ -187,12 +187,12 @@ fn decode_zpixmap_bgra(
                     (blue << 3) | (blue >> 2),
                     0xff,
                 ]);
-            }
+            },
             _ => {
                 return Err(CaptureError::CaptureFailed(format!(
                     "unsupported bits_per_pixel {bits_per_pixel}"
                 )));
-            }
+            },
         }
     }
 

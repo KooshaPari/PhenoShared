@@ -151,7 +151,7 @@ fn production_rejects_when_quality_attachment_missing() {
                     .any(|r| matches!(r.reason, RejectionReason::MissingQualityEvidence(_))),
                 "expected MissingQualityEvidence rejection"
             );
-        }
+        },
         _ => panic!("expected rejection when Production policy needs evidence"),
     }
 }
@@ -227,7 +227,7 @@ fn production_rejects_when_quality_gate_fails() {
                 )),
                 "expected QualityGateFailed rejection for mmlu-pro"
             );
-        }
+        },
         _ => panic!("expected rejection when gate threshold not met"),
     }
 }

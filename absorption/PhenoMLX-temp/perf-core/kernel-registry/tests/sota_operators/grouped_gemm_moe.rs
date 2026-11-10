@@ -147,7 +147,7 @@ fn grouped_gemm_moe_selector_picks_lowest_p95_tiled() {
                 "tiled p95=1100 must beat scalar p95=2400 under Deterministic"
             );
             assert_ne!(candidate.id, id_scalar);
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -171,9 +171,9 @@ fn grouped_gemm_moe_oracle_parity_scalar_vs_tiled() {
     let num_experts = 4;
     let k = 32;
     let n = 32;
-    let mut act_rng = Lcg::new(0xA1_B2_C3_D4);
+    let mut act_rng = Lcg::new(0xa1_b2_c3_d4);
     let a: Vec<f32> = (0..num_tokens * k).map(|_| act_rng.next_signed()).collect();
-    let mut exp_rng = Lcg::new(0xFEED_FACE);
+    let mut exp_rng = Lcg::new(0xfeed_face);
     let b: Vec<f32> = (0..num_experts * k * n)
         .map(|_| exp_rng.next_signed())
         .collect();
@@ -273,7 +273,7 @@ fn grouped_gemm_moe_sweep_t_values() {
                         candidate.id, id_tiled,
                         "row (t={t}, seed={seed}) must pick tiled under Deterministic"
                     );
-                }
+                },
                 other => panic!("row (t={t}, seed={seed}) expected Chosen, got {other:?}"),
             }
             rows_pinned += 1;
@@ -323,14 +323,14 @@ fn dispatch_aware_writeback_matches_naive_for_random_dispatch() {
     let num_experts: usize = 8;
     let k: usize = 16;
     let n: usize = 16;
-    let mut rng = Lcg::new(0xD15C_A17C);
+    let mut rng = Lcg::new(0xd15c_a17c);
     let activations: Vec<f32> = (0..num_tokens * k).map(|_| rng.next_signed()).collect();
     let experts: Vec<f32> = (0..num_experts * k * n)
         .map(|_| rng.next_signed())
         .collect();
 
     // Top_k=1 round-robin: token t -> expert (t + offset) % num_experts.
-    let offset = (Lcg::new(0xABC).next_u64() % num_experts as u64) as usize;
+    let offset = (Lcg::new(0xabc).next_u64() % num_experts as u64) as usize;
     let token_indices: Vec<usize> = (0..num_tokens).collect();
     let assignments: Vec<(usize, f32)> = (0..num_tokens)
         .map(|t| ((t + offset) % num_experts, 1.0))
@@ -375,7 +375,7 @@ fn writeback_coalesces_into_residual_buffer_byte_equal_to_scalar_reference() {
     let num_tokens: usize = 6;
     let num_experts: usize = 3;
     let hidden: usize = 4;
-    let mut rng = Lcg::new(0xCAFE_F00D);
+    let mut rng = Lcg::new(0xcafe_f00d);
     let expert_outs: Vec<f32> = (0..num_tokens * hidden)
         .map(|_| rng.next_signed())
         .collect();

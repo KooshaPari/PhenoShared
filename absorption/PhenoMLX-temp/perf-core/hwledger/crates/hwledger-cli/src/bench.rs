@@ -61,11 +61,15 @@ pub async fn run(model: &str, variant: &str, mlx_url: &str, output_dir: &str) ->
     match client.get(&models_url).send().await {
         Ok(resp) if resp.status().is_success() => {
             println!("  {}", "MLX server reachable".green());
-        }
+        },
         _ => {
-            println!("  {} MLX server not reachable at {}", "ERROR:".red().bold(), mlx_url);
+            println!(
+                "  {} MLX server not reachable at {}",
+                "ERROR:".red().bold(),
+                mlx_url
+            );
             return Err(anyhow::anyhow!("MLX server not reachable at {}", mlx_url));
-        }
+        },
     }
     println!();
 
@@ -103,7 +107,12 @@ pub async fn run(model: &str, variant: &str, mlx_url: &str, output_dir: &str) ->
             .unwrap_or("(no response)")
             .to_string();
 
-        println!("    {} ({:.0}ms, {} tokens)", "done".green(), latency_ms, tokens);
+        println!(
+            "    {} ({:.0}ms, {} tokens)",
+            "done".green(),
+            latency_ms,
+            tokens
+        );
 
         results.push(ProblemResult {
             index: i + 1,
@@ -150,7 +159,10 @@ pub async fn run(model: &str, variant: &str, mlx_url: &str, output_dir: &str) ->
     println!();
     println!("{}", "=== Summary ===".bold().green());
     println!("  Problems:    {}", bench_result.summary.total_problems);
-    println!("  Avg latency: {:.0}ms", bench_result.summary.avg_latency_ms);
+    println!(
+        "  Avg latency: {:.0}ms",
+        bench_result.summary.avg_latency_ms
+    );
     println!("  Total tokens: {}", bench_result.summary.total_tokens);
     println!(
         "  Tokens/sec:  {:.1}",

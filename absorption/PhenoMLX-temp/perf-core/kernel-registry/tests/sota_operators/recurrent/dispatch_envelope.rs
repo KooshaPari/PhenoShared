@@ -136,7 +136,7 @@ fn dispatch_buckets_recurrent_picks_delta_net_batched_within_budget() {
                     "[{name}] chosen candidate must carry DeltaNetBatched tag; got {:?}",
                     candidate.name
                 );
-            }
+            },
             other => panic!("[{name}] expected Chosen under Deterministic, got {other:?}"),
         }
     }

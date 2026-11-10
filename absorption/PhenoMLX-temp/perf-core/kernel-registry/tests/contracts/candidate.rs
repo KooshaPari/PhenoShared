@@ -60,7 +60,7 @@ fn candidate_capability_filter_rejects_when_required_capability_missing() {
                     .any(|r| matches!(r.reason, RejectionReason::MissingCapability(_))),
                 "expected MissingCapability reason, got {rejections:?}"
             );
-        }
+        },
         other => panic!("expected Rejected, got {other:?}"),
     }
     // Silence unused-mut warning when the local `reg` is dropped.
@@ -112,7 +112,7 @@ fn candidate_shape_range_filter_rejects_out_of_range() {
                     .any(|r| matches!(r.reason, RejectionReason::ShapeOutOfRange)),
                 "expected ShapeOutOfRange, got {rejections:?}"
             );
-        }
+        },
         other => panic!("expected Rejected, got {other:?}"),
     }
 }

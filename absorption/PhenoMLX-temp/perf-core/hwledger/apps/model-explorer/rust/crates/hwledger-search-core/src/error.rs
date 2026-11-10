@@ -59,7 +59,7 @@ mod tests {
         let err = bad.expect_err("must fail");
         let core = CoreError::from(err);
         match core {
-            CoreError::Json(_) => {}
+            CoreError::Json(_) => {},
             other => panic!("expected Json variant, got {other:?}"),
         }
     }

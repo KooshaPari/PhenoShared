@@ -155,7 +155,7 @@ fn compute_moe_writeback_2x8_output() -> Vec<f32> {
     let top_k: usize = 2;
     let hidden: usize = 4;
 
-    let mut rng = Lcg::new(0x57A6_BA11);
+    let mut rng = Lcg::new(0x57a6_ba11);
     let expert_outs: Vec<f32> = (0..num_tokens * top_k * hidden)
         .map(|_| rng.next_signed())
         .collect();
@@ -248,7 +248,7 @@ const QWEN_MOE_V2_TOP_K: usize = 2;
 const QWEN_MOE_V2_HIDDEN: usize = 4;
 const QWEN_MOE_V2_K: usize = 4;
 const QWEN_MOE_V2_CAPACITY_FACTOR: f32 = 2.0;
-const QWEN_MOE_V2_SEED: u64 = 0xCAFE_BABE_DEAD_BEEF;
+const QWEN_MOE_V2_SEED: u64 = 0xcafe_babe_dead_beef;
 
 fn qwen_moe_v2_det(n: usize, salt: u64) -> Vec<f32> {
     (0..n)
@@ -274,7 +274,7 @@ fn compute_qwen_moe_end_to_end_v2_output() -> (Vec<usize>, Vec<f32>, Vec<f32>, V
 
     // Router logits (per-token salt) + per-token top-k picks.
     let router_logits: Vec<f32> = (0..n_t)
-        .flat_map(|t| qwen_moe_v2_det(n_e, 0xE0_01 + t as u64))
+        .flat_map(|t| qwen_moe_v2_det(n_e, 0xe0_01 + t as u64))
         .collect();
     let mut assignments: Vec<(usize, f32)> = Vec::with_capacity(n_t);
     let mut picks_per_token: Vec<Vec<(usize, f32)>> = Vec::with_capacity(n_t);
@@ -295,10 +295,10 @@ fn compute_qwen_moe_end_to_end_v2_output() -> (Vec<usize>, Vec<f32>, Vec<f32>, V
     .expect("dispatch must accept well-formed inputs");
 
     // Activations and weights — same salts as the integration test.
-    let a = qwen_moe_v2_det(n_t * k, 0xA_CE);
-    let w = qwen_moe_v2_det(h * h, 0xB_EE);
+    let a = qwen_moe_v2_det(n_t * k, 0xa_ce);
+    let w = qwen_moe_v2_det(h * h, 0xb_ee);
     let b: Vec<f32> = (0..n_e)
-        .flat_map(|e| qwen_moe_v2_det(k * h, 0xB0_E0 + e as u64))
+        .flat_map(|e| qwen_moe_v2_det(k * h, 0xb0_e0 + e as u64))
         .collect();
 
     // Shared-expert projection + routed-GEMM (tiled) into `[n_t, h]`.

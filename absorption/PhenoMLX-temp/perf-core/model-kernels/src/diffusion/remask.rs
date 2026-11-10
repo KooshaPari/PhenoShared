@@ -49,7 +49,7 @@ pub fn remask(
         RemaskStrategy::None => {
             // Leave the input mask untouched.
             Ok(())
-        }
+        },
         RemaskStrategy::LowConfidence { percentile } => {
             if !(*percentile >= 0.0 && *percentile <= 100.0) {
                 return Err(KernelError::OutOfRange {
@@ -80,7 +80,7 @@ pub fn remask(
                 mask[i] = s < threshold;
             }
             Ok(())
-        }
+        },
         RemaskStrategy::EntropyBased => {
             if scores.is_empty() {
                 return Ok(());
@@ -97,7 +97,7 @@ pub fn remask(
                 mask[i] = s < threshold;
             }
             Ok(())
-        }
+        },
         RemaskStrategy::RandomFraction(f) => {
             if !(*f >= 0.0 && *f <= 1.0) {
                 return Err(KernelError::OutOfRange {
@@ -109,8 +109,8 @@ pub fn remask(
             }
             // Deterministic seeded RNG: same `(step, total_steps)`
             // yields the same mask outcome.
-            let seed = (step as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
-                ^ (total_steps as u64).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+            let seed = (step as u64).wrapping_mul(0x9e37_79b9_7f4a_7c15)
+                ^ (total_steps as u64).wrapping_mul(0xbf58_476d_1ce4_e5b9);
             let mut rng = Lcg::new(seed);
             // Start from all-false (nothing re-masked), then flip on
             // the chosen positions.
@@ -131,7 +131,7 @@ pub fn remask(
                 mask[i] = true;
             }
             Ok(())
-        }
+        },
     }
 }
 
@@ -201,7 +201,13 @@ mod tests {
             1,
         )
         .unwrap_err();
-        assert!(matches!(err, KernelError::NonFiniteValue { what: "remask.scores", .. }));
+        assert!(matches!(
+            err,
+            KernelError::NonFiniteValue {
+                what: "remask.scores",
+                ..
+            }
+        ));
     }
 
     #[test]

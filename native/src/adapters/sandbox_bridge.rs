@@ -251,7 +251,7 @@ impl InputPort for BridgeInput {
                     "input.click",
                     json!({ "x": x, "y": y, "button": button, "action": action }),
                 )
-            }
+            },
             MouseEvent::Scroll {
                 x,
                 y,
@@ -268,7 +268,7 @@ impl InputPort for BridgeInput {
                     "input.scroll",
                     json!({ "x": x, "y": y, "direction": direction, "amount": amount }),
                 )
-            }
+            },
         };
         self.ports
             .call(method, params)

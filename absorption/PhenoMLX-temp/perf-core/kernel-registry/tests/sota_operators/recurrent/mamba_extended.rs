@@ -37,7 +37,7 @@ pub(crate) fn xorshift32(state: &mut u32) -> u32 {
 pub(crate) fn rand_unit(state: &mut u32) -> f32 {
     let v = xorshift32(state);
     let sign = if (v >> 31) & 1 == 1 { -1.0f32 } else { 1.0f32 };
-    let m = (v >> 8) as f32 / 0x00FF_FFFF_u32 as f32;
+    let m = (v >> 8) as f32 / 0x00ff_ffff_u32 as f32;
     sign * m
 }
 
@@ -103,7 +103,7 @@ fn mamba_bidirectional_scan_byte_identical_to_split_forward_backward() {
     let batch = 2usize;
     let d = 8usize;
     let l = 16usize;
-    let mut rng = 0xC0FFEE01u32;
+    let mut rng = 0xc0ffee01u32;
     let a: Vec<f32> = (0..d)
         .map(|_| 0.5 + 0.4 * rand_unit(&mut rng).abs())
         .collect();
@@ -149,7 +149,7 @@ fn mamba_gated_ssm_byte_identical_to_reference() {
     let batch = 2usize;
     let d = 8usize;
     let l = 16usize;
-    let mut rng = 0xDEADBEEFu32;
+    let mut rng = 0xdeadbeefu32;
     let a: Vec<f32> = (0..d)
         .map(|_| 0.4 + 0.5 * rand_unit(&mut rng).abs())
         .collect();
@@ -220,7 +220,7 @@ fn mamba_gated_ssm_gate_signal_smooth() {
     // size, well below 0.5.
     let d = 8usize;
     let l = 16usize;
-    let mut rng = 0xBADDCAFEu32;
+    let mut rng = 0xbaddcafeu32;
     let raw: Vec<f32> = (0..l * d).map(|_| rand_unit(&mut rng)).collect();
     let mut gate: Vec<f32> = vec![0.0; l * d];
     for c in 0..d {

@@ -41,7 +41,7 @@ fn verify_fails_on_different_input_hash() {
     match result {
         VerifyResult::InputHashMismatch { expected, actual } => {
             assert_ne!(expected, actual);
-        }
+        },
         other => panic!("expected InputHashMismatch, got {:?}", other),
     }
 }
@@ -73,7 +73,7 @@ fn verify_returns_mismatch_with_field_path() {
             assert_eq!(field, "out.1.0");
             assert_eq!(expected, json!(3.0_f32));
             assert_eq!(actual, json!(3.5_f32));
-        }
+        },
         other => panic!("expected Mismatch at out.1.0, got {:?}", other),
     }
 }

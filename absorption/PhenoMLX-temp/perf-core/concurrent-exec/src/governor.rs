@@ -141,11 +141,11 @@ impl ResourceGovernor {
             Ok(Err(_)) => {
                 self.outstanding.fetch_sub(1, Ordering::AcqRel);
                 return Err(GovernorError::Closed);
-            }
+            },
             Err(_) => {
                 self.outstanding.fetch_sub(1, Ordering::AcqRel);
                 return Err(GovernorError::AcquireTimeout);
-            }
+            },
         };
         Ok(GovernorPermit {
             _permit: permit,
@@ -163,7 +163,7 @@ impl ResourceGovernor {
                 return Err(GovernorError::QueueFull {
                     capacity: self.config.max_in_flight + self.config.max_queue,
                 });
-            }
+            },
         };
         Ok(GovernorPermit {
             _permit: permit,

@@ -66,26 +66,26 @@ impl fmt::Display for DiffusionSelfVerifyError {
                     f,
                     "self-verification requires {required} blocks, budget is {max}"
                 )
-            }
+            },
             Self::InvalidBlockRange { start, end, tokens } => {
                 write!(
                     f,
                     "invalid self-verification block {start}..{end} for {tokens} tokens"
                 )
-            }
+            },
             Self::DuplicateBlock { start, end } => {
                 write!(
                     f,
                     "self-verification block {start}..{end} was verified twice"
                 )
-            }
+            },
             Self::IncompleteCoverage { missing } => {
                 write!(
                     f,
                     "self-verification is missing {} planned blocks",
                     missing.len()
                 )
-            }
+            },
             Self::Parity(error) => error.fmt(f),
         }
     }
