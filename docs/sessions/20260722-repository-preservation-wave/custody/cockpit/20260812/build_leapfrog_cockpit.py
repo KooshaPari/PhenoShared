@@ -38,7 +38,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos")
+REPO_ROOT = Path(os.path.expanduser("~/CodeProjects/Phenotype/repos"))
 BEADS_PATH = REPO_ROOT / "phenotype-dag" / "beads.jsonl"
 BEAD_SOURCES = (BEADS_PATH,)
 OUTPUT_PATH = REPO_ROOT / "cockpit" / "bead-cockpit-20260809-191131-f5ca38f7.html"
@@ -91,9 +91,8 @@ LANES: list[dict[str, Any]] = [
         "id": "specified",
         "name": "SPECIFIED",
         "subtitle": "intent captured + feature spec",
-        "rule": lambda b: b["kind"] == "intent" or (
-            b["kind"] == "feature" and b["_has_any_activity"]
-        ),
+        "rule": lambda b: b["kind"] == "intent"
+        or (b["kind"] == "feature" and b["_has_any_activity"]),
         "accent": "#14b8a6",
     },
     {
@@ -116,7 +115,8 @@ LANES: list[dict[str, Any]] = [
         "id": "implementing",
         "name": "IMPLEMENTING",
         "subtitle": "claim active + ctl build",
-        "rule": lambda b: b["kind"] == "claim" or (b["kind"] == "ctl" and _ctl_is_build(b)),
+        "rule": lambda b: b["kind"] == "claim"
+        or (b["kind"] == "ctl" and _ctl_is_build(b)),
         "accent": "#3b82f6",
     },
     {
@@ -221,7 +221,8 @@ def _ctl_is_build(b: dict[str, Any]) -> bool:
 
 def _haystack(b: dict[str, Any]) -> str:
     return " ".join(
-        str(b.get(k, "")) for k in ("text", "intentSynthesis", "clearanceEvidence", "userOutcome")
+        str(b.get(k, ""))
+        for k in ("text", "intentSynthesis", "clearanceEvidence", "userOutcome")
     )
 
 
@@ -229,12 +230,12 @@ def _haystack(b: dict[str, Any]) -> str:
 # plus the explicit glyphs the operator called out.
 _PICTOGRAPH_RE = re.compile(
     "["
-    "\u2600-\u27BF"        # Misc Symbols / Dingbats / Arrows
-    "\u2300-\u23FF"        # Misc Technical (some symbols)
-    "\u2B00-\u2BFF"        # Misc Symbols and Arrows
-    "\U0001F300-\U0001FAFF"  # Emoji & supplemental pictographs
-    "\uFE0F"               # Variation Selector-16
-    "\u200D"               # Zero Width Joiner
+    "\u2600-\u27bf"  # Misc Symbols / Dingbats / Arrows
+    "\u2300-\u23ff"  # Misc Technical (some symbols)
+    "\u2b00-\u2bff"  # Misc Symbols and Arrows
+    "\U0001f300-\U0001faff"  # Emoji & supplemental pictographs
+    "\ufe0f"  # Variation Selector-16
+    "\u200d"  # Zero Width Joiner
     "]"
 )
 
@@ -264,8 +265,12 @@ def _fr_id(b: dict[str, Any]) -> str:
             return str(v)
     # Last resort: scan target + text for FR-* pattern.
     import re as _re
-    m = _re.search(r"\bFR[- ]\d+(?:[.-][A-Za-z0-9]+)*\b",
-                   f"{b.get('target','')} {b.get('text','')}", _re.I)
+
+    m = _re.search(
+        r"\bFR[- ]\d+(?:[.-][A-Za-z0-9]+)*\b",
+        f"{b.get('target','')} {b.get('text','')}",
+        _re.I,
+    )
     return m.group(0).upper().replace(" ", "-") if m else ""
 
 
@@ -280,8 +285,16 @@ def _lane_backlog(b: dict[str, Any]) -> bool:
     kind = b["kind"]
     # Kinds with a dedicated lane — never backlog.
     if kind in {
-        "claim", "ctl", "prompt", "reorg", "warn", "complete",
-        "release", "outcome", "preserve", "changelog",
+        "claim",
+        "ctl",
+        "prompt",
+        "reorg",
+        "warn",
+        "complete",
+        "release",
+        "outcome",
+        "preserve",
+        "changelog",
     }:
         return False
     if kind in {"session", "fr"}:
@@ -305,8 +318,8 @@ def strip_pictographs(s: str) -> str:
     if not s:
         return ""
     # Drop any of the explicit pictograph glyphs the operator listed.
-    s = s.replace("\u2713", "").replace("\u2699", "").replace("\u25B6", "")
-    s = s.replace("\u2717", "").replace("\u25C6", "").replace("\u25CF", "")
+    s = s.replace("\u2713", "").replace("\u2699", "").replace("\u25b6", "")
+    s = s.replace("\u2717", "").replace("\u25c6", "").replace("\u25cf", "")
     # Drop the broader Unicode blocks.
     s = _PICTOGRAPH_RE.sub("", s)
     return s.strip()
@@ -356,8 +369,12 @@ def load_beads() -> list[dict[str, Any]]:
     # Sort newest-first so the kanban has a deterministic order.
     beads.sort(key=lambda b: b.get("ts", ""), reverse=True)
     # Decorate with claim/activity info for backlog detection.
-    targets_with_claim = {b.get("target", "") for b in beads if b.get("kind") == "claim"}
-    targets_with_complete = {b.get("target", "") for b in beads if b.get("kind") == "complete"}
+    targets_with_claim = {
+        b.get("target", "") for b in beads if b.get("kind") == "claim"
+    }
+    targets_with_complete = {
+        b.get("target", "") for b in beads if b.get("kind") == "complete"
+    }
     active_targets = targets_with_claim | targets_with_complete
     for b in beads:
         b["_target_has_claim"] = b.get("target", "") in targets_with_claim
@@ -440,15 +457,27 @@ def render_card(b: dict[str, Any], lane_id: str) -> str:
     # env var on the originating bead-ctl.sh invocation.
     fr = _fr_id(b)
     fr_badge = (
-        f'<span class="bead-fr" title="Functional Requirement linkage">'
-        f'{esc(fr)}</span>'
-    ) if fr else ""
-    user_outcome_raw = b.get("userOutcome") or b.get("outcome") or b.get("user_outcome") or ""
-    user_outcome_clean = strip_pictographs(str(user_outcome_raw))[:80] if user_outcome_raw else ""
+        (
+            f'<span class="bead-fr" title="Functional Requirement linkage">'
+            f"{esc(fr)}</span>"
+        )
+        if fr
+        else ""
+    )
+    user_outcome_raw = (
+        b.get("userOutcome") or b.get("outcome") or b.get("user_outcome") or ""
+    )
+    user_outcome_clean = (
+        strip_pictographs(str(user_outcome_raw))[:80] if user_outcome_raw else ""
+    )
     outcome_badge = (
-        f'<span class="bead-outcome" title="User-facing outcome">'
-        f'UF: {esc(user_outcome_clean)}</span>'
-    ) if user_outcome_clean else ""
+        (
+            f'<span class="bead-outcome" title="User-facing outcome">'
+            f"UF: {esc(user_outcome_clean)}</span>"
+        )
+        if user_outcome_clean
+        else ""
+    )
     # Keep the article compact; ARIA + tabindex are optional but accessibility-friendly.
     return (
         f'<article class="bead" data-kind="{kind}" data-lane="{lane_id}" '
@@ -457,20 +486,22 @@ def render_card(b: dict[str, Any], lane_id: str) -> str:
         f'<div class="bead-head">'
         f'<span class="kind kind-{kind}">{kind}</span>'
         f'<span class="bead-target" title="{target}">{target}</span>'
-        f'</div>'
+        f"</div>"
         f'<div class="bead-text">{excerpt}</div>'
         f'<div class="bead-meta">'
         f'<span class="bead-agent">{agent}</span>'
         f'<span class="bead-time">{ts}</span>'
-        f'{state_html}'
-        f'{fr_badge}'
-        f'</div>'
-        f'{outcome_badge}'
-        f'</article>'
+        f"{state_html}"
+        f"{fr_badge}"
+        f"</div>"
+        f"{outcome_badge}"
+        f"</article>"
     )
 
 
-def render_summary_cards(beads: list[dict[str, Any]], buckets: dict[str, list[dict[str, Any]]]) -> str:
+def render_summary_cards(
+    beads: list[dict[str, Any]], buckets: dict[str, list[dict[str, Any]]]
+) -> str:
     total = len(beads)
     distinct_agents = len({b.get("agent", "") for b in beads if b.get("agent")})
     distinct_repos: set[str] = set()
@@ -487,9 +518,17 @@ def render_summary_cards(beads: list[dict[str, Any]], buckets: dict[str, list[di
 
     cards = [
         ("Total Beads", f"{total}", f"kinds: {len(kinds)}"),
-        ("Distinct Agents", f"{distinct_agents}", "codex / droid / agent-* / agent-phenotype"),
+        (
+            "Distinct Agents",
+            f"{distinct_agents}",
+            "codex / droid / agent-* / agent-phenotype",
+        ),
         ("Distinct Repos", f"{len(distinct_repos)}", "scope of cockpit coverage"),
-        ("Window", f"{oldest[:10] or '?'} -> {newest[:10] or '?'}", "oldest -> newest ts"),
+        (
+            "Window",
+            f"{oldest[:10] or '?'} -> {newest[:10] or '?'}",
+            "oldest -> newest ts",
+        ),
     ]
     out = ['<div class="summary">']
     for label, value, delta in cards:
@@ -499,7 +538,9 @@ def render_summary_cards(beads: list[dict[str, Any]], buckets: dict[str, list[di
             f'<div class="delta">{esc(delta)}</div></div>'
         )
     # Lane counts as additional cards.
-    out.append('<div class="card"><div class="label">Lane Distribution</div><div class="lane-dist">')
+    out.append(
+        '<div class="card"><div class="label">Lane Distribution</div><div class="lane-dist">'
+    )
     for lane in LANES:
         cnt = len(buckets[lane["id"]])
         out.append(
@@ -516,21 +557,29 @@ def render_kanban(buckets: dict[str, list[dict[str, Any]]]) -> str:
     cols = []
     for lane in LANES:
         items = buckets[lane["id"]]
-        body = "\n".join(render_card(b, lane["id"]) for b in items) if items else '<div class="empty">no beads</div>'
+        body = (
+            "\n".join(render_card(b, lane["id"]) for b in items)
+            if items
+            else '<div class="empty">no beads</div>'
+        )
         cols.append(
             f'<section class="kanban-lane" data-lane="{lane["id"]}" style="--lane-accent:{lane["accent"]}">'
             f'<header class="lane-header">'
             f'<h3>{esc(lane["name"])}</h3>'
             f'<span class="count">{len(items)}</span>'
-            f'</header>'
+            f"</header>"
             f'<div class="lane-subtitle">{esc(lane["subtitle"])}</div>'
             f'<div class="lane-body">{body}</div>'
-            f'</section>'
+            f"</section>"
         )
-    return f'<div class="kanban" data-lanes="{len(LANES)}">' + "\n".join(cols) + "</div>"
+    return (
+        f'<div class="kanban" data-lanes="{len(LANES)}">' + "\n".join(cols) + "</div>"
+    )
 
 
-def render_top_features(beads: list[dict[str, Any]], buckets: dict[str, list[dict[str, Any]]]) -> str:
+def render_top_features(
+    beads: list[dict[str, Any]], buckets: dict[str, list[dict[str, Any]]]
+) -> str:
     """PM-style outcomes panel: top 10 features by bead count."""
     target_counts: Counter = Counter()
     target_lane: dict[str, str] = {}
@@ -552,12 +601,12 @@ def render_top_features(beads: list[dict[str, Any]], buckets: dict[str, list[dic
     return (
         '<section class="pm-panel"><h2>PM-Style Outcomes</h2>'
         '<p class="section-desc">Top 10 targets by bead count, with current lane derived '
-        'from AgilePlus state machine bucketing. Click any card on the kanban above to '
-        'copy the matching <code>agileplus dashboard --json --feature &lt;slug&gt;</code> '
-        'command for the relevant work package.</p>'
+        "from AgilePlus state machine bucketing. Click any card on the kanban above to "
+        "copy the matching <code>agileplus dashboard --json --feature &lt;slug&gt;</code> "
+        "command for the relevant work package.</p>"
         '<table class="feat-table"><thead><tr>'
-        '<th>Target</th><th>Beads</th><th>Current Lane</th>'
-        '</tr></thead><tbody>' + "\n".join(rows) + '</tbody></table></section>'
+        "<th>Target</th><th>Beads</th><th>Current Lane</th>"
+        "</tr></thead><tbody>" + "\n".join(rows) + "</tbody></table></section>"
     )
 
 
@@ -608,14 +657,14 @@ def render_semantic_reconciliation() -> str:
     return (
         '<section class="reconciliation" aria-labelledby="reconciliation-heading">'
         '<h2 id="reconciliation-heading">Product Management: semantic reconciliation</h2>'
-        '<p><strong>Exact user prompt:</strong> not recorded in the supplied reconciliation '
-        'evidence packet.</p>'
-        '<p><strong>Coordinator synthesis:</strong> render the supplied facts in this existing '
-        'cockpit as evidence-only content.</p>'
+        "<p><strong>Exact user prompt:</strong> not recorded in the supplied reconciliation "
+        "evidence packet.</p>"
+        "<p><strong>Coordinator synthesis:</strong> render the supplied facts in this existing "
+        "cockpit as evidence-only content.</p>"
         f'<div class="reconciliation-grid">{cards}</div>'
         '<p class="reconciliation-note"><strong>Unknown:</strong> this section does not infer a '
-        'safe host, remediation, release readiness, promotion, or clearance from these facts.</p>'
-        '</section>'
+        "safe host, remediation, release readiness, promotion, or clearance from these facts.</p>"
+        "</section>"
     )
 
 
@@ -843,8 +892,20 @@ class _WellFormedChecker(HTMLParser):
         self.errors: list[str] = []
         self.tag_stack: list[str] = []
         self.void_tags = {
-            "area", "base", "br", "col", "embed", "hr", "img", "input",
-            "link", "meta", "param", "source", "track", "wbr",
+            "area",
+            "base",
+            "br",
+            "col",
+            "embed",
+            "hr",
+            "img",
+            "input",
+            "link",
+            "meta",
+            "param",
+            "source",
+            "track",
+            "wbr",
         }
 
     def handle_starttag(self, tag, attrs):
@@ -879,18 +940,24 @@ def assert_no_pictographs(html_text: str) -> None:
     if bad:
         snippet = html_text[max(0, bad.start() - 20) : bad.end() + 20]
         raise AssertionError(f"pictograph remains at offset {bad.start()}: {snippet!r}")
-    for glyph in ("\u2713", "\u2699", "\u25B6", "\u2717", "\u25C6", "\u25CF"):
+    for glyph in ("\u2713", "\u2699", "\u25b6", "\u2717", "\u25c6", "\u25cf"):
         if glyph in html_text:
             idx = html_text.index(glyph)
             snippet = html_text[max(0, idx - 20) : idx + 20]
-            raise AssertionError(f"explicit glyph {glyph!r} remains at offset {idx}: {snippet!r}")
+            raise AssertionError(
+                f"explicit glyph {glyph!r} remains at offset {idx}: {snippet!r}"
+            )
 
 
 def write_atomically(path: Path, content: str) -> None:
     """Durably replace the one approved artifact only after a complete write."""
     with tempfile.NamedTemporaryFile(
-        mode="w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.",
-        suffix=".tmp", delete=False,
+        mode="w",
+        encoding="utf-8",
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        delete=False,
     ) as temporary:
         temporary.write(content)
         temporary.flush()
@@ -918,7 +985,11 @@ def main() -> int:
     print(f"loaded {len(beads)} beads from beads.jsonl + audit mirror", file=sys.stderr)
 
     buckets = classify(beads)
-    print("lane counts:", {lane["id"]: len(buckets[lane["id"]]) for lane in LANES}, file=sys.stderr)
+    print(
+        "lane counts:",
+        {lane["id"]: len(buckets[lane["id"]]) for lane in LANES},
+        file=sys.stderr,
+    )
 
     summary_html = render_summary_cards(beads, buckets)
     kanban_html = render_kanban(buckets)

@@ -1,0 +1,57 @@
+# Files the repair tool must not touch.
+#
+# Two independent reasons, both about the repository's own gates rather than
+# about the repair itself.
+#
+# 1. Trunk Check lints the files a change touches and reports their EXISTING
+#    findings as new ones. A file with a pre-existing mypy error or a dead
+#    import fails the gate the moment anything modifies it, even a one-line
+#    path fix. Those files need their own cleanup, not a path rewrite bolted
+#    onto it.
+#
+#      scripts/e2e_real_model.py                    mypy name-defined: "mx"
+#      gui/admin-extensions/api/research_panel.py   2 mypy failures
+#      scripts/phenotype_omlx_ready.py              ruff F401, unused imports
+#
+# 2. The shell files below are not shfmt-clean at their base revision. Making
+#    them shfmt-clean means adding lines that contain the shell loop terminator,
+#    and the repository's happy-path guard (governance/happy-path-precommit.sh,
+#    rule R1) reads the loop terminator as an unverified success claim and blocks
+#    the commit. The two gates are mutually blocking for these files: Trunk
+#    demands the reformat, the guard forbids it.
+#
+#    The honest fix is to the guard's keyword false positive, not to the
+#    rewrite. Until that lands, these files are frozen:
+#
+#      apps/bench-cockpit/scripts/start-dev.sh
+#      beads/bead-ctl.sh
+#      beads/refresh-agileplus-token.sh
+#      crates/argis-extensions/tools/dag-agent/onboard-repo.sh
+#      crates/local-ops/guards/shell-guard.sh
+#      crates/phinbox/plugins/droid/install.sh
+#      crates/phinbox/plugins/kilo_code/install.sh
+#      scripts/cron/every_10m.sh
+#      scripts/cross_repo_smoke.sh
+#      scripts/forge/forge-proc-reap.sh
+#      scripts/install_airlock_v2.sh
+#      scripts/phenotype-omlx-env.sh
+#
+#    That is 25 of the 32 shell sites in the own-code slice. They stay broken
+#    until the guard is corrected, and the campaign record says so.
+
+scripts/e2e_real_model.py
+gui/admin-extensions/api/research_panel.py
+scripts/phenotype_omlx_ready.py
+
+apps/bench-cockpit/scripts/start-dev.sh
+beads/bead-ctl.sh
+beads/refresh-agileplus-token.sh
+crates/argis-extensions/tools/dag-agent/onboard-repo.sh
+crates/local-ops/guards/shell-guard.sh
+crates/phinbox/plugins/droid/install.sh
+crates/phinbox/plugins/kilo_code/install.sh
+scripts/cron/every_10m.sh
+scripts/cross_repo_smoke.sh
+scripts/forge/forge-proc-reap.sh
+scripts/install_airlock_v2.sh
+scripts/phenotype-omlx-env.sh

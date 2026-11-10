@@ -34,7 +34,7 @@ from bench.comparison._forge_reply_parser import _extract_reply  # noqa: E402
 
 # MiniMax-M3 model identifier (forge canonical form).
 MINIMAX_MODEL = "accounts/fireworks/models/minimax-m3"
-FORGE_BIN = "/Users/<REDACTED>/.local/bin/forge"
+FORGE_BIN = os.path.expanduser("~/.local/bin/forge")
 
 # 17 suites total — 10 vendored + 7 added 2026-07-17.
 # bfcl-v4 omitted (function-calling exceeds forge's single-shot budget).
@@ -283,9 +283,9 @@ def run_suite(suite_name: str, n: int, seed: int, *, timeout_s: int) -> dict[str
         "passed": passed,
         "pass_at_1": round(passed / max(len(tasks), 1), 4),
         "wall_clock_s_total": round(sum(wall_clocks), 2),
-        "wall_clock_s_mean": round(statistics.mean(wall_clocks), 2)
-        if wall_clocks
-        else 0,
+        "wall_clock_s_mean": (
+            round(statistics.mean(wall_clocks), 2) if wall_clocks else 0
+        ),
         "wall_clock_s_p95": (
             round(sorted(wall_clocks)[int(0.95 * len(wall_clocks))], 2)
             if wall_clocks

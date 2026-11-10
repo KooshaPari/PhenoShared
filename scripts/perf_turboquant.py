@@ -21,7 +21,7 @@ Usage:
 import os
 
 os.environ.setdefault("HF_HUB_OFFLINE", "0")
-os.environ.setdefault("HF_HOME", "/Users/<REDACTED>/.cache/huggingface")
+os.environ.setdefault("HF_HOME", os.path.expanduser("~/.cache/huggingface"))
 
 import argparse
 import random
@@ -48,8 +48,8 @@ def bench_rust_vs_python(seed: int = 42):
         )
         return False
 
-    from turboquant import TurboQuant as PyTQ
     from omlx_research.backends.mlx_backend import MlxBackend
+    from turboquant import TurboQuant as PyTQ
 
     be = MlxBackend.__new__(MlxBackend)  # bypass __init__
     be._perf_module = be._rust_perf()

@@ -33,8 +33,10 @@ import tempfile
 from collections import Counter, defaultdict
 from pathlib import Path
 
-BEADS = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl")
-OUT_DIR = Path("/Users/<REDACTED>/CodeProjects/Phenotype/repos/cockpit")
+BEADS = Path(
+    os.path.expanduser("~/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl")
+)
+OUT_DIR = Path(os.path.expanduser("~/CodeProjects/Phenotype/repos/cockpit"))
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 KIND_COLORS = {
@@ -248,22 +250,28 @@ def normalize_bead(raw: dict) -> dict:
         {
             "raw": source,
             "beadHash": bead_hash,
-            "project": _explicit_value(source, "project")
-            if source.get("project")
-            else project,
-            "repository": _explicit_value(source, "repository", "repo")
-            if source.get("repository")
-            else repository,
+            "project": (
+                _explicit_value(source, "project") if source.get("project") else project
+            ),
+            "repository": (
+                _explicit_value(source, "repository", "repo")
+                if source.get("repository")
+                else repository
+            ),
             "state": _lifecycle_state(source),
             "rawState": _explicit_value(source, "state"),
-            "severity": _explicit_value(source, "severity")
-            if source.get("severity")
-            else _derived_severity(kind, text),
+            "severity": (
+                _explicit_value(source, "severity")
+                if source.get("severity")
+                else _derived_severity(kind, text)
+            ),
             "owner": owner,
             "requiredAction": required_action,
-            "evidence": _explicit_value(source, "evidence")
-            if source.get("evidence")
-            else bead_hash,
+            "evidence": (
+                _explicit_value(source, "evidence")
+                if source.get("evidence")
+                else bead_hash
+            ),
             "clearanceEvidence": _explicit_value(
                 source, "clearanceEvidence", "clearance_evidence"
             ),
