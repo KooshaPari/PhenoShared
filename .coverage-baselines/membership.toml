@@ -46,11 +46,11 @@
 #     several lines
 #     """
 #
-#   The three counts in [meta] are MACHINE-VERIFIED on every run:
+#   The three counts in [meta] are RECOMPUTED on every run:
 #   total_members, measured_members and excused_members must match what
 #   `cargo metadata` and the workflow matrix actually say, so this file
 #   cannot drift away from the workspace without the build going red.
-#   The source-line figures are a dated SNAPSHOT, not machine-verified: they
+#   The source-line figures are a dated SNAPSHOT, not machine-checked: they
 #   change with every source edit, so failing a build on them would make the
 #   gate unusable. The check prints the live figures on every run, so a drift
 #   is visible in the CI log.
@@ -69,7 +69,7 @@
 #   of workspace members are built and tested by CI but are measured by no
 #   coverage lane at all. The gate's 54.80% aggregate does NOT describe them:
 #   they contribute 0 coverable lines to the denominator, so that percentage
-#   is computed over the measured subset alone. Closing the gap is NOT done
+#   is computed over the measured subset alone. Closing the gap is out of scope
 #   here: it needs a coverage measurement cycle for these crates and a floor
 #   derived from that measurement. This file only makes the gap EXPLICIT and
 #   stops it from silently growing.
@@ -100,9 +100,9 @@ recorded_at_commit = "7965cb9cee10b8da81fa4968edf1ced6e574d050"
 total_members = 291
 measured_members = 258
 excused_members = 33
-measured_source_lines = 418609
-excused_source_lines = 98089
-measured_coverable_lines = 69250
+measured_source_lines = 418609  # investigate: dated snapshot, not a live count
+excused_source_lines = 98089  # investigate: dated snapshot, not a live count
+measured_coverable_lines = 69250  # investigate: dated snapshot, not a live count
 
 [excused]
 "concurrent-exec" = """
@@ -373,7 +373,7 @@ lines to the aggregate denominator. perf-core-ci.yml does not cover it either (i
 targets a root-level perf-core/ directory that does not exist in this repository)
 and it runs no coverage measurement either. KNOWN COVERAGE GAP.
 Its Metal/SPIR-V kernel is behind the opt-in `spirv` feature and needs the macOS + Xcode
-toolchain, so the crate compiles to a no-op stub on the Linux runner.
+toolchain, so the crate compiles to a placeholder on the Linux runner.
 """
 "turbo-quant" = """
 Root workspace member since 7a9f14c28. Built and tested by the root Quality
@@ -405,7 +405,7 @@ lines to the aggregate denominator. perf-core-ci.yml does not cover it either (i
 targets a root-level perf-core/ directory that does not exist in this repository)
 and it runs no coverage measurement either. KNOWN COVERAGE GAP.
 The Mojo shared library is linked only behind the opt-in `mojo` feature, so without it the
-crate is a Rust-only stub and the FFI path is never instrumented.
+crate is Rust-only and the FFI path is never instrumented.
 """
 "turbo-quant-nim" = """
 Root workspace member since 7a9f14c28. Built and tested by the root Quality
@@ -428,7 +428,7 @@ filter drops its files from every group report and it contributes 0 coverable
 lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
 targets a root-level perf-core/ directory that does not exist in this repository)
 and it runs no coverage measurement either. KNOWN COVERAGE GAP.
-Its build.rs compiles a Zig kernel with `zig build-obj` and degrades to a Rust stub when zig
+Its build.rs compiles a Zig kernel with `zig build-obj` and degrades to a Rust-only path when zig
 is absent, so the Zig source is never instrumented.
 """
 "vpu-agents" = """
