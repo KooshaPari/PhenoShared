@@ -21,6 +21,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     fsutil::{ensure_private_dir, now_unix_ms, read_json, write_json_atomic},
+    procutil::{pid_is_alive, process_start_identity},
     BrowserError, Result, Scope,
 };
 
@@ -76,6 +77,16 @@ pub struct Lease {
     /// such records are never reaped, which fails closed.
     #[serde(default)]
     pub owner_pid: u32,
+    /// Start-time identity of the process instance named by `owner_pid`,
+    /// recorded when the lease was granted (see [`process_start_identity`]).
+    ///
+    /// `owner_pid` alone is not an identity: the kernel recycles pids, so a
+    /// stale record can point at an unrelated live process and pin the profile
+    /// until its TTL expires. This field makes the liveness check
+    /// instance-aware. It is `None` for records written by an older build, and
+    /// such records keep the conservative pid-only behaviour.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner_started_at: Option<String>,
 }
 
 impl Lease {
@@ -93,25 +104,24 @@ impl Lease {
 #[derive(Debug, Default, Serialize, Deserialize)]
 struct Fences(std::collections::BTreeMap<String, u64>);
 
-/// Whether `pid` names a live process.
+/// Whether the process instance that owns `lease` is gone.
 ///
-/// `kill(pid, 0)` performs the permission and existence checks without sending a
-/// signal: it returns 0 when the process exists, and EPERM when it exists but is
-/// owned by another user. Only ESRCH means gone.
-#[cfg(unix)]
-fn pid_is_alive(pid: u32) -> bool {
-    // SAFETY: signal 0 sends nothing; it only performs the existence check.
-    let rc = unsafe { libc::kill(pid as i32, 0) };
-    if rc == 0 {
+/// Gone means the pid no longer exists, *or* the pid exists but now names a
+/// different process instance than the one the lease was granted to (a
+/// recycled pid). A live pid whose identity cannot be read - an old record with
+/// no `owner_started_at`, or a platform without a start-time primitive - is
+/// treated as the original owner, so nothing is reaped on a guess.
+fn owner_is_gone(lease: &Lease) -> bool {
+    if lease.owner_pid == 0 || !pid_is_alive(lease.owner_pid) {
         return true;
     }
-    std::io::Error::last_os_error().raw_os_error() == Some(libc::EPERM)
-}
-
-#[cfg(not(unix))]
-fn pid_is_alive(_pid: u32) -> bool {
-    // No portable check here, so assume alive: never reap on a guess.
-    true
+    let Some(recorded) = lease.owner_started_at.as_deref() else {
+        return false;
+    };
+    match process_start_identity(lease.owner_pid) {
+        Some(current) => current != recorded,
+        None => false,
+    }
 }
 
 static SEQUENCE: AtomicU64 = AtomicU64::new(0);
@@ -293,6 +303,7 @@ impl LeaseManager {
                 issued_at_unix_ms: now,
                 expires_at_unix_ms: now.saturating_add(ttl_ms),
                 owner_pid: std::process::id(),
+                owner_started_at: process_start_identity(std::process::id()),
             };
             self.write_lease(&lease)?;
             Ok(lease)
@@ -365,20 +376,23 @@ impl LeaseManager {
         Ok(lease)
     }
 
-    /// Remove leases whose owning process is gone.
+    /// Remove leases whose owning process instance is gone.
     ///
     /// A broker that crashes leaves its record behind, which would block the
-    /// profile until the TTL elapsed. Liveness is checked with signal 0, so a
-    /// lease held by a live process is never touched.
+    /// profile until the TTL elapsed. An owner is gone when its pid no longer
+    /// exists, or when the pid now belongs to a different process (a recycled
+    /// pid must not keep a dead holder's claim alive). A lease held by the
+    /// process it was granted to is never touched.
     ///
     /// Returns how many records were removed. On platforms without a pid
     /// liveness primitive this is a no-op and returns 0: reaping is then bounded
-    /// by [`LeaseManager::sweep_expired`] alone.
+    /// by [`LeaseManager::sweep_expired`] alone. Records written before
+    /// `owner_started_at` existed are still reaped when their pid is dead.
     pub fn reap_dead(&self) -> Result<usize> {
         self.with_lock(|| {
             let mut reaped = 0;
             for lease in self.all_leases()? {
-                if lease.owner_pid == 0 || pid_is_alive(lease.owner_pid) {
+                if !owner_is_gone(&lease) {
                     continue;
                 }
                 let path = self.leases_dir().join(format!("{}.json", lease.id));

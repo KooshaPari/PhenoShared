@@ -235,3 +235,118 @@ fn reaps_leases_whose_process_is_gone() {
     // The live lease survived.
     assert!(leases.validate(&live.id, live.fencing_token).is_ok());
 }
+
+/// Write a lease record verbatim, bypassing `grant`, so a test can forge the
+/// owner identity. Mirrors the on-disk shape.
+fn write_record(
+    leases: &LeaseManager,
+    id: &str,
+    owner_pid: u32,
+    owner_started_at: Option<&str>,
+) -> std::path::PathBuf {
+    let mut record = serde_json::json!({
+        "id": id,
+        "principal": "alice",
+        "profile": "work",
+        "session": "s1",
+        "tab": null,
+        "holder": "forged",
+        "fencing_token": 999,
+        "issued_at_unix_ms": 0,
+        "expires_at_unix_ms": u64::MAX,
+        "owner_pid": owner_pid,
+    });
+    if let Some(started) = owner_started_at {
+        record["owner_started_at"] = serde_json::Value::String(started.to_string());
+    }
+    let path = leases.root().join("leases").join(format!("{id}.json"));
+    std::fs::write(&path, record.to_string()).unwrap();
+    path
+}
+
+/// A platform that can report a process start identity. Where it cannot, the
+/// authority deliberately keeps the conservative pid-only behaviour, so these
+/// two tests do not apply.
+const IDENTIFYING_PLATFORM: bool = cfg!(any(target_os = "linux", target_os = "macos"));
+
+#[test]
+fn grant_records_the_owner_process_instance_identity() {
+    let (_dir, _clock, leases) = manager();
+    let scope = Scope::new("alice", "work", "s1").unwrap();
+    let lease = leases
+        .grant(&scope, "agent-a", Duration::from_secs(60))
+        .unwrap();
+    if IDENTIFYING_PLATFORM {
+        assert!(
+            lease.owner_started_at.is_some(),
+            "grant must bind the lease to the owner's process instance"
+        );
+    }
+    // The identity is persisted, not just returned.
+    let stored = leases.list().unwrap().pop().expect("stored lease");
+    assert_eq!(stored.owner_started_at, lease.owner_started_at);
+
+    // The holder is its own original owner: never reaped.
+    assert_eq!(leases.reap_dead().unwrap(), 0, "a live owner was reaped");
+}
+
+/// Regression guard for pid recycling, without needing to recycle a pid.
+///
+/// The record names a pid that is definitely alive - this test process - but
+/// carries a bogus start identity, exactly as if the pid had been reused by an
+/// unrelated process. `kill(pid, 0)` alone cannot tell the difference, so
+/// before the fix this record survived and pinned the profile until its TTL.
+#[test]
+fn reaps_lease_whose_live_pid_is_not_the_original_owner() {
+    if !IDENTIFYING_PLATFORM {
+        return;
+    }
+    let (_dir, _clock, leases) = manager();
+    let path = write_record(
+        &leases,
+        "lease-recycled",
+        std::process::id(),
+        Some("bogus-identity-from-a-dead-process-instance"),
+    );
+    assert!(
+        std::process::Command::new("kill")
+            .args(["-0", &std::process::id().to_string()])
+            .status()
+            .map(|s| s.success())
+            .unwrap_or(false),
+        "precondition: the recorded pid is alive"
+    );
+
+    assert_eq!(
+        leases.reap_dead().unwrap(),
+        1,
+        "a live pid that is not the original owner must not keep the lease"
+    );
+    assert!(!path.exists(), "the recycled-pid record must be removed");
+    // And the profile is free again.
+    assert!(leases.active_for("alice", "work").unwrap().is_none());
+}
+
+/// A record written before `owner_started_at` existed has no identity to
+/// compare against, so pid-only liveness decides. A live pid is kept.
+#[test]
+fn legacy_record_without_identity_is_kept_while_its_pid_lives() {
+    let (_dir, _clock, leases) = manager();
+    let path = write_record(&leases, "lease-legacy", std::process::id(), None);
+    assert_eq!(
+        leases.reap_dead().unwrap(),
+        0,
+        "a legacy record with a live pid must not be reaped on a guess"
+    );
+    assert!(path.exists());
+}
+
+/// A legacy record whose pid is gone is still reaped: the identity field is
+/// additive, not a prerequisite for reclaiming a crashed holder.
+#[test]
+fn legacy_record_with_a_dead_pid_is_reaped() {
+    let (_dir, _clock, leases) = manager();
+    let path = write_record(&leases, "lease-legacy-dead", 4_194_303, None);
+    assert_eq!(leases.reap_dead().unwrap(), 1, "dead legacy owner survived");
+    assert!(!path.exists());
+}
