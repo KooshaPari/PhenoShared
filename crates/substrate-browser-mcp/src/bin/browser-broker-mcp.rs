@@ -72,7 +72,9 @@ impl BrowserBrokerMcp {
     /// Acquire an exclusive browser profile and hold it under a lease.
     #[tool(
         name = "broker_acquire",
-        description = "Acquire an exclusive lease on a browser profile and launch the browser. \
+        description = "Acquire an exclusive lease on a browser profile. The browser is launched \
+                       on that profile's first action, not here, so the grant returns immediately \
+                       and no browser process is started by this call. \
                        Returns the lease id and the fencing token that every later mutation must \
                        present. One holder per principal/profile. On failure the broker's own \
                        error variant is returned (ProfileBusy, Browser, Refused, ...)."

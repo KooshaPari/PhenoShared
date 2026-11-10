@@ -33,7 +33,6 @@ fn free_port() -> u16 {
 struct Daemon {
     child: Child,
     port: u16,
-    root: std::path::PathBuf,
 }
 
 impl Daemon {
@@ -50,11 +49,7 @@ impl Daemon {
             .stderr(Stdio::null())
             .spawn()
             .expect("spawn brokerd");
-        let daemon = Self {
-            child,
-            port,
-            root: root.to_path_buf(),
-        };
+        let daemon = Self { child, port };
         daemon.wait_until_ready();
         daemon
     }
