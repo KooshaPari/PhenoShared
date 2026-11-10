@@ -247,14 +247,18 @@ Gate: pasting one document into nine artifacts does not pass.
     ▸ evidence: cmd_import.go + cmd_import_test.go, internal/export
     GATE: export output imports unchanged                            PASS
 
-6.2 Round trip                                                LATER
-    6.2.1 plan --from-agileplus FEATURE
-    6.2.2 wp sequence <-> dagrun id map persisted
-    6.2.3 conflict policy when both sides changed
-    GATE: import -> edit -> re-export preserves structure
-    note: import today reconstructs from a TRACERA payload, which is the
-    reverse of 6.1. Nothing reads an AgilePlus FEATURE yet so there is no
-    round trip to preserve.
+6.2 Round trip                                                DONE
+    6.2.1 `import --from agileplus` reads the ImportBundle back           DONE
+    6.2.2 wp sequence <-> node id map persisted (`agileplus.map.json`)    DONE
+    6.2.3 conflicts reported, never auto-resolved                         DONE
+    ▸ evidence: internal/agileplus — Parse/ToPlan/Conflicts/IDMap;
+      cmd_import.go --from agileplus; the round-trip test asserts
+      export -> parse -> plan -> export preserves slug, sequence, title,
+      file_scope and deps
+    note: an ImportBundle has no artifact-predicate field, so a re-imported
+    artifact verifies EXISTENCE only. That loss is reported per work package
+    rather than papered over with an invented predicate.
+    GATE: import -> edit -> re-export preserves structure                PASS
 ```
 
 ## 7.0 MULTI-REPO INTENTS
@@ -331,15 +335,17 @@ Gate: pasting one document into nine artifacts does not pass.
     ▸ evidence: internal/house/house.go (orphan_child, SeverityError), cmd_stats.go
     GATE: one command says whether the run dir is healthy             PASS
 
-9.3 Robustness                                                PARTIAL
+9.3 Robustness                                                DONE
     9.3.1 fuzz the plan parser                                       DONE
     9.3.2 fuzz glob and must_match handling                          DONE
-    9.3.3 disk-full and read-only-fs behaviour                       LATER
+    9.3.3 disk-full and read-only-fs behaviour                       DONE
     ▸ evidence: internal/plan/fuzz_test.go, internal/verify/fuzz_test.go,
-      Makefile `fuzz` target
+      Makefile `fuzz` target; store.writeErr classifies ENOSPC/EROFS/EACCES and
+      keeps the cause reachable; house.checkFilesystem probes writability and
+      escalates an imminent disk-full to an error
     GATE: no parser input panics or hangs                            PASS
-    note: 9.3.3 is the one honest hole. There is no ENOSPC path today,
-    and a read-only run dir would surface as a generic write error.
+    note: a run that cannot persist now says so on the first write, instead of
+    failing every node for a reason it invented.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk
@@ -396,20 +402,19 @@ The CRun lineage: a tool produces the work list, dagrun produces the nodes.
 ## Dependency order (remaining work)
 
 ```
-6.2 ──► nothing else depends on it
-9.3.3 ──► nothing else depends on it
+(none)
 ```
 
-Both remaining items are leaves. Nothing in the unfinished set blocks anything
-else, which is why the tool is usable today.
+Nothing is left in the plan. What remains is external: two harness families the
+tool cannot unblock from inside (see 1.1.4, 1.1.5).
 
 ## Next three
 
 | # | item | why now |
 |---|---|---|
-| 1 | **6.2 AgilePlus round trip** | This is the last piece of the interop story. Today a run exports to an ImportBundle and imports back from Tracera, but nothing reads an AgilePlus FEATURE, so there is no round trip and no field-parity guard. If AgilePlus is the system of record for features, this is the gap that makes dagrun a side tool instead of a substrate. |
-| 2 | **9.3.3 disk-full and read-only run dir** | The only remaining way to wedge is a filesystem that stops accepting writes. Today that surfaces as an opaque write error mid-run. A run that cannot persist should say so on the first write and stop, rather than failing nodes for a reason it invented. |
-| 3 | **1.1.4 / 1.1.5 harness families** | kcode and helioslite are the two forks the operator actually runs, and neither is proven. Both are blocked outside dagrun: kcode has no credentials in its fork store, helioslite needs a pty. Unblocking either one converts a `PARTIAL` into a `DONE` without touching dagrun. That makes them the cheapest real win, and they will not resolve themselves. |
+| 1 | **1.1.4 kcode harness** | The fork the operator actually runs, and the only `BLOCKED` cell that is worth closing. It needs a credential in the fork's own store, which is outside dagrun — so it is a five-minute fix that converts a `PARTIAL` epic into a `DONE` one. Nothing else is waiting on it. |
+| 2 | **1.1.5 helioslite harness** | The second fork, blocked on a pty plus an interactive prompt. Harder than kcode and worth less: helioslite is additive-only and legacy `forge` already passes. Mark it as the low priority it is rather than leaving it ambiguous. |
+| 3 | **Nothing else** | Every other item in this document is `DONE` with evidence. The honest next move is to use the tool on real work and let the roadmap grow from what breaks, not from what can be imagined. |
 
 ## Explicit non-goals
 
