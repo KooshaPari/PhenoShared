@@ -125,6 +125,88 @@ func toolList() []tool {
 				"dry_run":   boolean("decide what would run without spawning anything"),
 			}),
 		},
+		// The seven tools below are the verbs an agent needs to DRIVE a run.
+		// They live in tools_more.go; see that file for why viz, otel,
+		// timeline, review and critique are deliberately absent.
+		{
+			Name: "dagrun_query",
+			Description: "Select nodes with a structured query: filter with where, project with select, " +
+				"order and limit. Read-only: it never opens the store, so it cannot create a run.",
+			InputSchema: obj(map[string]any{
+				"dir":      dir,
+				"where":    stringListSchema("predicates such as status=failed, kind=DOC, attempt>=2, artifact=src/x.go"),
+				"select":   stringListSchema("fields to return: " + "id, status, kind, role, owner, title, attempts, artifacts, progress"),
+				"order_by": str("field to sort by, optionally with a direction: status,desc"),
+				"limit":    num("return at most N rows (0 means no limit)"),
+			}),
+		},
+		{
+			Name: "dagrun_recover",
+			Description: "Report nodes stuck in a running state, with owner, lease and attempt count. " +
+				"With force=false (the default) this only reports. With force=true it reclaims the " +
+				"named nodes, or every stuck node when none are named, so they can be claimed again.",
+			InputSchema: obj(map[string]any{
+				"dir":   dir,
+				"nodes": listSchema("node ids to reclaim; omit to reclaim every node reported stuck"),
+				"force": boolean("actually reclaim instead of only reporting"),
+			}),
+		},
+		{
+			Name: "dagrun_replan",
+			Description: "Diff a revised plan against the installed one and report what it would invalidate. " +
+				"READ-ONLY by default: it shows the changes and any blocking nodes, and adopts nothing. " +
+				"Pass apply=true to install the revision; force=true is a separate opt-in that discards " +
+				"work which no longer verifies, so refusing to discard verified work stays the default.",
+			InputSchema: obj(map[string]any{
+				"dir":   dir,
+				"file":  str("revised plan file to diff against the installed run.yaml"),
+				"apply": boolean("install the revision (default false: diff only)"),
+				"force": boolean("allow the revision to discard work that no longer verifies"),
+			}, "file"),
+		},
+		{
+			Name:        "dagrun_stats",
+			Description: "Per-kind duration, adoption and retry statistics for the run, as both a structure and a rendered table.",
+			InputSchema: obj(map[string]any{"dir": dir}),
+		},
+		{
+			Name:        "dagrun_lint",
+			Description: "Run the semantic plan linter over the installed plan: well-formed but wrong problems. Advisory findings are warn: prefixed and do not fail the call.",
+			InputSchema: obj(map[string]any{"dir": dir}),
+		},
+		{
+			Name:        "dagrun_doctor",
+			Description: "Read-only health check of the run directory: missing plan, unwritable paths, harness availability, stale worktrees. Reports a missing plan as a finding rather than failing.",
+			InputSchema: obj(map[string]any{"dir": dir}),
+		},
+		{
+			Name: "dagrun_export",
+			Description: "Emit the run for another system as json, agileplus, or tracera. " +
+				"Returns the rendered document as text so its key order stays stable.",
+			InputSchema: obj(map[string]any{
+				"dir":    dir,
+				"format": str("json (default) | agileplus | tracera"),
+			}),
+		},
+	}
+}
+
+// stringListSchema and listSchema describe the two argument shapes that accept
+// either a single value or several. They are schema helpers only, in the same
+// spirit as str and boolean above.
+func stringListSchema(desc string) map[string]any {
+	return map[string]any{
+		"type":        []any{"array", "string"},
+		"items":       map[string]any{"type": "string"},
+		"description": desc,
+	}
+}
+
+func listSchema(desc string) map[string]any {
+	return map[string]any{
+		"type":        "array",
+		"items":       map[string]any{"type": "string"},
+		"description": desc,
 	}
 }
 
@@ -241,6 +323,13 @@ func (s *Server) callTool(ctx context.Context, name string, raw json.RawMessage)
 		return s.toolSubmit(in.Dir, in.URL, in.Token, in.Format, in.DryRun)
 	case "dagrun_run":
 		return s.toolRun(ctx, in.Dir, in.Owner, in.Template, in.MaxNodes, in.DryRun)
+	case "dagrun_query", "dagrun_recover", "dagrun_replan", "dagrun_stats",
+		"dagrun_lint", "dagrun_doctor", "dagrun_export":
+		// These seven live in tools_more.go. They take the raw arguments
+		// rather than the struct above because several of them accept a
+		// field that is either a string or a list, which one shared struct
+		// cannot express without failing a client that sent the other shape.
+		return s.toolMore(ctx, name, raw)
 	}
 	return nil, true, fmt.Errorf("unknown tool %q", name)
 }

@@ -1,16 +1,12 @@
 package main
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"os"
-	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/KooshaPari/dagrun/internal/plan"
-	"github.com/KooshaPari/dagrun/internal/store"
+	"github.com/KooshaPari/dagrun/internal/replan"
 )
 
 // cmdReplan compares an installed run against a revised plan and says what the
@@ -21,6 +17,9 @@ import (
 // a node that was "done" becoming pending with no explanation — looks
 // indistinguishable from lost work. So the default is a report, and applying it
 // requires --apply, which requires the discard to be either empty or forced.
+//
+// The mutation itself lives in internal/replan so an MCP client can reach the
+// same guarantees; this command only reports and then delegates.
 func cmdReplan(args []string) error {
 	var dir string
 	flags, pos := splitArgs(args)
@@ -67,7 +66,6 @@ func cmdReplan(args []string) error {
 			doneIDs = append(doneIDs, id)
 		}
 	}
-	sort.Strings(doneIDs)
 	discard := diff.AgainstDone(doneIDs)
 
 	fmt.Printf("run %s -> %s\n", installed.Run, revised.Run)
@@ -103,48 +101,10 @@ func cmdReplan(args []string) error {
 			len(discard), strings.Join(discard, ", "))
 	}
 
-	// The apply cannot simply re-run `dagrun plan`: store.Open refuses a changed
-	// plan hash precisely so that a run is never silently reinterpreted under a
-	// new plan. Carrying progress forward is the whole point of replanning, so
-	// the state is rewritten deliberately: surviving nodes keep their record,
-	// invalidated and removed nodes are reset, and new nodes start pending.
-	keep := map[string]bool{}
-	for _, c := range diff.Changes {
-		if c.KeepsCompletion {
-			keep[c.ID] = true
-		}
-	}
-	sum := sha256.Sum256(raw)
-	hash := hex.EncodeToString(sum[:])
-
-	if err := st.With(func(s *store.State) error {
-		next := make(map[string]*store.NodeState, len(revised.Nodes))
-		for _, n := range revised.Nodes {
-			if n == nil {
-				continue
-			}
-			if prev, ok := s.Nodes[n.ID]; ok && keep[n.ID] {
-				next[n.ID] = prev
-				continue
-			}
-			next[n.ID] = &store.NodeState{Status: plan.StatusPending}
-		}
-		s.Nodes = next
-		s.Dynamic = map[string]*plan.Node{}
-		s.Expanded = map[string]bool{}
-		s.PlanHash = hash
-		s.Run = revised.Run
-		return nil
-	}); err != nil {
+	res, err := replan.Apply(dir, revised, raw, *force)
+	if err != nil {
 		return err
 	}
-
-	// Write the plan AFTER the state. A crash between the two leaves a state
-	// whose hash does not match run.yaml, which the next Open refuses with
-	// "plan changed" — a refusal, never a silent reinterpretation.
-	if err := os.WriteFile(filepath.Join(dir, "run.yaml"), raw, 0o644); err != nil {
-		return fmt.Errorf("state was updated but the plan could not be written: %w", err)
-	}
-	fmt.Printf("applied %s: %d node(s) kept, %d reset\n", pos[0], len(keep), len(discard))
+	fmt.Printf("applied %s: %d node(s) kept, %d reset\n", pos[0], len(res.Kept), len(res.Discarded))
 	return nil
 }
