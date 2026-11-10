@@ -131,12 +131,17 @@ jobs:
           # Invalid message (should return error)
           RESP=$(echo 'not json' | nc -w 2 127.0.0.1 9400)
           echo "invalid_json: $RESP"
-          echo "$RESP" | grep -q "invalid_json"
+          # The daemon answers with error code INVALID_JSON (upper case) -- see
+          # crates/fabric-frame-transport/src/validation.rs. This assertion used to
+          # grep the lower-case spelling, so it never matched and the step failed
+          # even though the daemon behaved correctly. The Rust tests accept either
+          # casing; the shell check now does too.
+          echo "$RESP" | grep -qi "invalid_json"
 
           # Unknown message type
           RESP=$(echo '{"type":"unknown_type_xyz"}' | nc -w 2 127.0.0.1 9400)
           echo "unknown_message: $RESP"
-          echo "$RESP" | grep -q "unknown_message"
+          echo "$RESP" | grep -qi "unknown_message"
 
           echo "All E2E message tests passed!"
 
