@@ -96,9 +96,37 @@ relocation only, and the ADR should be amended rather than quietly ignored.
   export/import boundary, and coupling three repos for an unrequested benefit is
   not consolidation.
 
-## Rollback
+## Restore-Command
 
 ```sh
 git clone docs/absorbed-from-dagrun/dagrun-history.bundle /tmp/dagrun-restored
 # -> 53 commits, HEAD 8080d73, ready to push anywhere
 ```
+
+Then, to recreate the remote from the restored tree:
+
+```sh
+cd /tmp/dagrun-restored
+gh repo create KooshaPari/dagrun --private --source=. --push
+```
+
+The module itself also lives in this repo at `cmd/dagrun/`, so a restore of the
+CODE needs no bundle at all. The bundle exists only to restore the HISTORY.
+
+## Last-Resort-Exceptions
+
+If `bin/repo-delete-gate.sh` refuses this deletion, do NOT pass `--force`. Every
+gate it enforces maps to a way this absorption could be wrong, and the order of
+resolution is:
+
+| Gate failure | Correct response |
+|---|---|
+| manifest missing a section | fix the manifest; the section is the evidence |
+| repo not archived | archive it (`gh repo archive`), which is revertible, then re-run |
+| branch protection "strict" | a human resolves it; protection exists to stop exactly this |
+| commit missing from `cmd/dagrun/` | do NOT delete; the merge was incomplete |
+
+The one legitimate `--force` case is a repo whose content is provably present
+here AND whose bundle restores. Both are checkable with two commands, so there is
+no reason to force on a hunch.
+
