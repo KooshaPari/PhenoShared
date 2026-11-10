@@ -7,7 +7,29 @@ import { spawnSync } from "node:child_process";
 import { test, expect } from "vitest";
 
 const guard = resolve("governance/happy-path-precommit.sh");
-for (const [text, expected] of [["feature fixed", 1], ["ordinary change", 0], ["[fixed]", 1], ["`verified`", 1], ["workspace uses RetryStrategy.FIXED", 0], ["✅", 1], ["feature fixed\nEvidence: user-confirmed", 0]] as const) {
+
+// Rule R1 matches CLAIMS IN PROSE. Two forms are exempt and must NOT fire:
+// the shell loop terminator (`done`), which is a keyword, and a trigger word
+// inside a quoted string, which is a value or a log message. A claim outside
+// quotes still fires, even on a line that also carries a quoted string.
+//
+// The policy lives in governance/happy-path-checklist.md and is pinned for
+// the shell guard by governance/test-happy-path-claims.sh. This table pins
+// the same policy against the production script, so the JS/TS suite fails if
+// the guard's R1 scope ever drifts again.
+for (const [text, expected] of [
+  ["feature fixed", 1],
+  ["ordinary change", 0],
+  ["[fixed]", 1],
+  ["*verified*", 1],
+  ["`verified`", 0],
+  ['echo "done"', 0],
+  ['echo "starting"  # now done', 1],
+  ["done", 0],
+  ["workspace uses RetryStrategy.FIXED", 0],
+  ["✅", 1],
+  ["feature fixed\nEvidence: user-confirmed", 0],
+] as const) {
   test(`production guard exit ${expected}: ${text}`, () => {
     const dir = mkdtempSync(join(tmpdir(), "handbook-guard-"));
     try {
