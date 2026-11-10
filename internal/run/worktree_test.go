@@ -30,9 +30,22 @@ nodes:
     optional: true
 `
 
+// hermeticGitArgs isolates a throwaway test repository from the operator's
+// global git config. A global core.hooksPath (a commit-message linter, for
+// example) would otherwise reject these commits, and the test would fail for a
+// reason that has nothing to do with dagrun. Hooks are the only global state
+// these tests cannot tolerate, so they are the only thing overridden.
+func hermeticGitArgs(args ...string) []string {
+	return append([]string{
+		"-c", "core.hooksPath=/dev/null",
+		"-c", "commit.gpgsign=false",
+		"-c", "tag.gpgsign=false",
+	}, args...)
+}
+
 func gitRun(t *testing.T, dir string, args ...string) string {
 	t.Helper()
-	cmd := exec.Command("git", args...)
+	cmd := exec.Command("git", hermeticGitArgs(args...)...)
 	cmd.Dir = dir
 	out, err := cmd.CombinedOutput()
 	if err != nil {
