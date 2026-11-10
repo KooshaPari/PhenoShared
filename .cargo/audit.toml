@@ -11,4 +11,10 @@ ignore = [
     # (a) wait for an upstream fix or (b) remove the consuming transitive dep. Pending upstream
     # action we accept the advisory as a known false-positive for this lockfile.
     "RUSTSEC-2023-0071",
+    # RUSTSEC-2026-0253: lru 0.12.5 use-after-free in LruCache::pop() requires a panicking
+    # key Drop under catch_unwind. lru 0.12 is pinned by ratatui 0.26 (eyetracker-cli) and
+    # tantivy 0.22 (hwledger-search-index); the fixed >=0.18.2 is semver-incompatible and
+    # cannot be patched in without upgrading those consumers. Both use lru internally for
+    # bounded caches with non-panicking key drops.
+    "RUSTSEC-2026-0253",
 ]
