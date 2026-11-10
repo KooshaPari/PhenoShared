@@ -285,7 +285,7 @@ fn selector_rejects_when_no_candidate_supports_ternary_dtype() {
                     .any(|r| matches!(r.reason, RejectionReason::UnsupportedDtype(_))),
                 "expected UnsupportedDtype rejection, got {rejections:?}"
             );
-        }
+        },
         other => panic!("expected Rejected, got {other:?}"),
     }
 }

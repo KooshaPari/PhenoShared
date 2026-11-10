@@ -67,7 +67,7 @@ impl SearchSkill for AgenticFitRerank {
             SearchIntent::Coding => "coding",
             SearchIntent::Generic | SearchIntent::Reasoning | SearchIntent::Embedding => {
                 return Ok(());
-            }
+            },
         };
 
         for r in results.iter_mut() {

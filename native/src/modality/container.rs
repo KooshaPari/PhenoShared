@@ -334,7 +334,7 @@ impl ContainerDriver {
                 Err(_) => {
                     child.start_kill().ok();
                     child.wait().await.ok();
-                }
+                },
             }
         }
         Ok(())

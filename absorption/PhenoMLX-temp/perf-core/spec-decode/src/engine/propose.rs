@@ -79,7 +79,7 @@ impl SpecDecodeEngine {
                         })
                         .collect(),
                 )
-            }
+            },
             DraftMode::DraftModel => {
                 let draft = self.draft.as_ref().ok_or(SpecError::DraftNotLoaded)?;
                 let tokens = draft
@@ -90,13 +90,13 @@ impl SpecDecodeEngine {
                     tokens,
                     tree_path: None,
                 }])
-            }
+            },
             DraftMode::Medusa => {
                 // Medusa is driven through `step_medusa`; `propose` here is
                 // only called from the linear / SameModel paths and must
                 // not synthesize candidates it didn't observe.
                 Ok(Vec::new())
-            }
+            },
         }
     }
 }
@@ -288,7 +288,7 @@ mod tests {
                 assert_eq!(cfg.max_depth, 16);
                 assert_eq!(cfg.max_branches_per_node, 4);
                 assert_eq!(cfg.probability_threshold, 0.001);
-            }
+            },
             _ => panic!("expected Eagle3 variant"),
         }
     }
@@ -304,7 +304,7 @@ mod tests {
             tree_proposal::ParallelTreeConfig::default(),
         ));
         match &e.proposal_mode {
-            ProposalMode::Eagle3(_) => {}
+            ProposalMode::Eagle3(_) => {},
             _ => panic!("expected Eagle3"),
         }
     }

@@ -146,7 +146,7 @@ fn dispatch_buckets_gqa_attention_within_budget() {
                         "GQA q_h={q_h} kv_h={kv_h} head_dim={head_dim} seq_q={seq_q} seq_k={seq_k}"
                     ),
                 );
-            }
+            },
             other => panic!("[{name}] expected Chosen under Deterministic, got {other:?}"),
         }
     }
@@ -238,7 +238,7 @@ fn dispatch_buckets_moe_within_budget() {
                     .median_dispatches
                     .expect("Metal tuning record must carry dispatches metadata");
                 assert_within_envelope(observed, oracle, &format!("MoE batch={batch}"));
-            }
+            },
             other => panic!("[{name}] expected Chosen under Deterministic, got {other:?}"),
         }
     }
@@ -331,7 +331,7 @@ fn dispatch_buckets_dense_matmul_within_budget() {
                     .median_dispatches
                     .expect("Metal tuning record must carry dispatches metadata");
                 assert_within_envelope(observed, oracle, &format!("DenseMatmul M={m} N={n}"));
-            }
+            },
             other => panic!("[{name}] expected Chosen under Deterministic, got {other:?}"),
         }
     }

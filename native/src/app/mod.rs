@@ -89,11 +89,11 @@ fn build_capture() -> Arc<dyn CapturePort> {
         Ok(wgc) => {
             tracing::info!("Capture: Windows Graphics Capture (primary)");
             Arc::new(wgc)
-        }
+        },
         Err(e) => {
             tracing::warn!("WGC unavailable ({}), falling back to xcap", e);
             Arc::new(XcapCapture::new())
-        }
+        },
     }
 }
 

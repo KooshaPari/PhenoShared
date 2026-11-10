@@ -30,7 +30,7 @@ pub async fn run() -> Result<()> {
         let path = format!("{}/{}", apps_dir, app);
         println!("  Opening {}...", path);
         match Command::new("open").arg(&path).spawn() {
-            Ok(_) => {}
+            Ok(_) => {},
             Err(e) => println!("    {} {}: {}", "!".red().bold(), path, e),
         }
     }

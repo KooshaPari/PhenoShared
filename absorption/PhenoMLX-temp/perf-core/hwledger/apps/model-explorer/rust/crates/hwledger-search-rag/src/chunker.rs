@@ -185,7 +185,11 @@ mod tests {
         // single paragraph must produce more than one chunk.
         let big = "a".repeat(2_400);
         let chunks = Chunker::default().chunk(&big, "card");
-        assert!(chunks.len() > 1, "expected sliding window, got {}", chunks.len());
+        assert!(
+            chunks.len() > 1,
+            "expected sliding window, got {}",
+            chunks.len()
+        );
         for window in chunks.windows(2) {
             assert_eq!(window[1].index, window[0].index + 1);
             assert!(window[0].text.len() <= Chunker::default().chunk_size_tokens * 4);

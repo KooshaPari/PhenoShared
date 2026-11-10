@@ -143,7 +143,7 @@ fn reference_interpreter_rejects_unsupported_operator_kind() {
         InterpreterError::UnsupportedOperator { operator, kind } => {
             assert_eq!(operator, OperatorId(1));
             assert!(matches!(kind, OperatorKind::Embedding));
-        }
+        },
         other => panic!("expected UnsupportedOperator, got {:?}", other),
     }
 }

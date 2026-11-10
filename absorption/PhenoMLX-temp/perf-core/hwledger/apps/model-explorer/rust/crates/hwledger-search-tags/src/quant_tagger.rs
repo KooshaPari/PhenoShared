@@ -60,13 +60,22 @@ pub fn tag(ctx: &TaggerContext) -> QuantTags {
         }
 
         // Tokenize on non-alphanumerics so "gptq-awq-v2" splits correctly.
-        if fname.split(|c: char| !c.is_ascii_alphanumeric()).any(|tok| tok == "gptq") {
+        if fname
+            .split(|c: char| !c.is_ascii_alphanumeric())
+            .any(|tok| tok == "gptq")
+        {
             out.gptq_present = true;
         }
-        if fname.split(|c: char| !c.is_ascii_alphanumeric()).any(|tok| tok == "awq") {
+        if fname
+            .split(|c: char| !c.is_ascii_alphanumeric())
+            .any(|tok| tok == "awq")
+        {
             out.awq_present = true;
         }
-        if fname.split(|c: char| !c.is_ascii_alphanumeric()).any(|tok| tok == "exl2") {
+        if fname
+            .split(|c: char| !c.is_ascii_alphanumeric())
+            .any(|tok| tok == "exl2")
+        {
             out.exl2_present = true;
         }
     }
@@ -146,7 +155,12 @@ fn match_q_suffix(s: &str) -> Option<&'static str> {
     }
     // Q8_0 / Q4_0 / Q4_1 / Q5_1
     if let Some(rest) = tail_lc.strip_prefix('_') {
-        if rest.len() == 1 && rest.chars().next().is_some_and(|c| c.is_ascii_alphanumeric()) {
+        if rest.len() == 1
+            && rest
+                .chars()
+                .next()
+                .is_some_and(|c| c.is_ascii_alphanumeric())
+        {
             return Some(canonical_q(bits, rest));
         }
     }
@@ -196,12 +210,18 @@ mod tests {
 
     #[test]
     fn parse_gguf_quant_q4_k_m() {
-        assert_eq!(parse_gguf_quant("model.Q4_K_M.gguf").as_deref(), Some("q4_k_m"));
+        assert_eq!(
+            parse_gguf_quant("model.Q4_K_M.gguf").as_deref(),
+            Some("q4_k_m")
+        );
     }
 
     #[test]
     fn parse_gguf_quant_q5_k_m() {
-        assert_eq!(parse_gguf_quant("llama-3-8b.Q5_K_M.gguf").as_deref(), Some("q5_k_m"));
+        assert_eq!(
+            parse_gguf_quant("llama-3-8b.Q5_K_M.gguf").as_deref(),
+            Some("q5_k_m")
+        );
     }
 
     #[test]
@@ -217,7 +237,10 @@ mod tests {
     #[test]
     fn parse_gguf_quant_unknown_bits() {
         // Bits outside the canonical 2..=8 range fall through to `q_unknown`.
-        assert_eq!(parse_gguf_quant("model.Q42_K_M.gguf").as_deref(), Some("q_unknown"));
+        assert_eq!(
+            parse_gguf_quant("model.Q42_K_M.gguf").as_deref(),
+            Some("q_unknown")
+        );
     }
 
     #[test]

@@ -235,7 +235,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
                 assert!(
                     message.contains("missing header") || message.contains("failed to read header")
                 );
-            }
+            },
             other => panic!("expected Csv error, got {other:?}"),
         }
     }
@@ -294,7 +294,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
             EvalError::Malformed { line, message, .. } => {
                 assert_eq!(line, 2);
                 assert!(message.contains("empty"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -306,7 +306,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
             EvalError::Malformed { line, message, .. } => {
                 assert_eq!(line, 2);
                 assert!(message.contains("out of range"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }

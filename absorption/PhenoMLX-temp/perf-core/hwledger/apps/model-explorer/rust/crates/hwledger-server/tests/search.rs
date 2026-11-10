@@ -27,7 +27,10 @@ async fn search_returns_results_for_a_text_query() {
     assert_eq!(json["limit"], 10);
 
     let results = json["results"].as_array().expect("results array");
-    assert!(!results.is_empty(), "expected at least one BM25 hit for `instruct`");
+    assert!(
+        !results.is_empty(),
+        "expected at least one BM25 hit for `instruct`"
+    );
     for r in results {
         assert!(r["id"].is_string());
         assert!(r["score"].is_number());
@@ -56,7 +59,10 @@ async fn search_applies_kinds_facet_filter() {
 
     let json: serde_json::Value = serde_json::from_slice(&body).expect("parse body");
     let results = json["results"].as_array().expect("results array");
-    assert!(!results.is_empty(), "kinds facet must not silently drop all rows");
+    assert!(
+        !results.is_empty(),
+        "kinds facet must not silently drop all rows"
+    );
 }
 
 #[tokio::test]
@@ -139,7 +145,10 @@ async fn agentic_fit_skill_reranks_agentic_query_upward() {
     });
 
     let json = post_search(&app, body).await;
-    assert_eq!(json["intent"], "agentic", "intent must auto-resolve to agentic");
+    assert_eq!(
+        json["intent"], "agentic",
+        "intent must auto-resolve to agentic"
+    );
 
     let results = json["results"].as_array().expect("results array");
     assert!(!results.is_empty(), "expected at least one BM25 hit");
@@ -172,7 +181,10 @@ async fn agentic_fit_skill_reranks_coding_query_upward() {
     });
 
     let json = post_search(&app, body).await;
-    assert_eq!(json["intent"], "coding", "intent must auto-resolve to coding");
+    assert_eq!(
+        json["intent"], "coding",
+        "intent must auto-resolve to coding"
+    );
 
     let results = json["results"].as_array().expect("results array");
     assert!(!results.is_empty(), "expected at least one BM25 hit");
@@ -211,7 +223,10 @@ async fn agentic_fit_skill_is_no_op_when_query_has_no_use_case_intent() {
     );
 
     let results = json["results"].as_array().expect("results array");
-    assert!(!results.is_empty(), "expected at least one BM25 hit for `instruct`");
+    assert!(
+        !results.is_empty(),
+        "expected at least one BM25 hit for `instruct`"
+    );
 
     // Re-run the same request against the *un-scored* path so we can
     // compare orderings. We do this by hitting `service::run_hybrid`
@@ -233,6 +248,9 @@ async fn agentic_fit_skill_is_no_op_when_query_has_no_use_case_intent() {
     // Sanity-check the invariant: every returned row still carries the
     // per-result payload the route attaches (the skill did not strip it).
     for r in results {
-        assert!(r["payload"].is_object(), "payload must remain on every result");
+        assert!(
+            r["payload"].is_object(),
+            "payload must remain on every result"
+        );
     }
 }

@@ -48,6 +48,20 @@ impl LeaseGuard {
     pub fn check(&self) -> Result<Lease> {
         Ok(self.leases.validate(&self.lease_id, self.fencing_token)?)
     }
+
+    /// Withdraw the lease this guard authorises.
+    ///
+    /// Used when a deferred browser launch fails: a failed launch must not hold
+    /// the profile, so the record is revoked immediately rather than left to
+    /// expire. A record that is already gone counts as revoked, so this is safe
+    /// to call on a lease that was reaped or superseded in the meantime.
+    pub(crate) fn revoke(&self) -> Result<()> {
+        match self.leases.revoke(&self.lease_id) {
+            Ok(()) => Ok(()),
+            Err(substrate_browser::BrowserError::UnknownLease(_)) => Ok(()),
+            Err(err) => Err(err.into()),
+        }
+    }
 }
 
 impl std::fmt::Debug for LeaseGuard {

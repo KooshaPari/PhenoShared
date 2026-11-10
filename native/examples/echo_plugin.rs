@@ -151,13 +151,13 @@ async fn main() -> anyhow::Result<()> {
             Ok(None) => {
                 tracing::info!("stdin EOF — shutting down");
                 break;
-            }
+            },
             Err(e) => {
                 tracing::warn!(error = %e, "parse error");
                 let resp = Response::err(Value::Null, -32700, format!("Parse error: {e}"));
                 let _ = write_response(&mut writer, &resp).await;
                 continue;
-            }
+            },
         };
 
         let id = req.id.clone();

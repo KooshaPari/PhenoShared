@@ -34,7 +34,9 @@ fn same_text_yields_identical_vector() {
 fn different_text_yields_different_vector() {
     let e = StubEmbedder::default();
     let v1 = e.embed("apples and oranges and fruit salad").unwrap();
-    let v2 = e.embed("rust programming language systems software").unwrap();
+    let v2 = e
+        .embed("rust programming language systems software")
+        .unwrap();
     let sim = cosine(&v1, &v2);
     assert!(
         sim < 0.5,

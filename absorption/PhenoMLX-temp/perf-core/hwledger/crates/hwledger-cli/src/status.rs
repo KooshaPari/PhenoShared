@@ -9,11 +9,26 @@ struct Service {
 
 fn build_services() -> Vec<Service> {
     vec![
-        Service { name: "bench-cockpit", url: "http://localhost:8090".into() },
-        Service { name: "bench-cockpit-vite", url: "http://localhost:5173".into() },
-        Service { name: "hwledger-app", url: "http://localhost:1420".into() },
-        Service { name: "mlx-server", url: "http://localhost:8766/v1/models".into() },
-        Service { name: "langfuse", url: "http://localhost:3000".into() },
+        Service {
+            name: "bench-cockpit",
+            url: "http://localhost:8090".into(),
+        },
+        Service {
+            name: "bench-cockpit-vite",
+            url: "http://localhost:5173".into(),
+        },
+        Service {
+            name: "hwledger-app",
+            url: "http://localhost:1420".into(),
+        },
+        Service {
+            name: "mlx-server",
+            url: "http://localhost:8766/v1/models".into(),
+        },
+        Service {
+            name: "langfuse",
+            url: "http://localhost:3000".into(),
+        },
     ]
 }
 
@@ -48,12 +63,7 @@ pub async fn run() -> Result<()> {
             Err(_) => "DOWN".red(),
         };
 
-        println!(
-            "  {:<name_width$}  {:<10}  {}",
-            svc.name,
-            status,
-            svc.url
-        );
+        println!("  {:<name_width$}  {:<10}  {}", svc.name, status, svc.url);
     }
 
     println!();

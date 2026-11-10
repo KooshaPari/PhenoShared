@@ -202,7 +202,7 @@ mod tests {
     /// 1. byte-equality against a naive per-token copy.
     #[test]
     fn coalesced_writeback_matches_naive_per_token_sum() {
-        let (plan, expert_outs) = make_plan_and_outs(17, 5, 64, 2.0, 0xA1, 0xB2);
+        let (plan, expert_outs) = make_plan_and_outs(17, 5, 64, 2.0, 0xa1, 0xb2);
         let stage = stage_expert_outputs(&expert_outs, &plan, 64).unwrap();
         let mut naive = vec![0.0f32; 17 * 64];
         for t in 0..17 {
@@ -217,7 +217,7 @@ mod tests {
     /// 2. Stage preserves the per-expert layout in dispatch order.
     #[test]
     fn stage_expert_outputs_preserves_expert_layout() {
-        let (plan, expert_outs) = make_plan_and_outs(9, 3, 4, 2.0, 0xC0FFEE, 0xDEAD);
+        let (plan, expert_outs) = make_plan_and_outs(9, 3, 4, 2.0, 0xc0ffee, 0xdead);
         let stage = stage_expert_outputs(&expert_outs, &plan, 4).unwrap();
         for (e, &cap) in plan.capacity_used.iter().enumerate() {
             assert_eq!(stage.per_expert_blocks[e].len(), cap * 4);
@@ -322,7 +322,7 @@ mod tests {
         let plan = moe_dispatch(&token_indices, &assignments, 3, 5.0).unwrap();
         assert_eq!(plan.capacity_used, vec![2, 0, 3]);
         let expert_outs: Vec<f32> = (0..20)
-            .map(|_| Lcg::new(0xFEED_FACE).next_signed())
+            .map(|_| Lcg::new(0xfeed_face).next_signed())
             .collect();
         let mut naive = [0.0f32; 20];
         for t in 0..5 {

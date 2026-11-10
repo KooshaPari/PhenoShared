@@ -39,7 +39,7 @@ mod tests {
 
     /// Deterministic seeded buffer of signed f32s.
     fn det(n: usize, salt: u64) -> Vec<f32> {
-        let mut rng = Lcg::new(0xCAFE_BABE ^ salt);
+        let mut rng = Lcg::new(0xcafe_babe ^ salt);
         (0..n).map(|_| rng.next_signed()).collect()
     }
 
@@ -96,7 +96,7 @@ mod tests {
     /// equivalent). Uses two random seeds for breadth.
     #[test]
     fn mla_cache_equivalence_against_oracle() {
-        for (d_latent, d_rope, seq_k, salt) in [(4usize, 4usize, 6usize, 0xA1u64), (6, 4, 8, 0xB1)]
+        for (d_latent, d_rope, seq_k, salt) in [(4usize, 4usize, 6usize, 0xa1u64), (6, 4, 8, 0xb1)]
         {
             let k_latent_full = det(seq_k * d_latent, salt);
             let v_latent_full = k_latent_full.clone();

@@ -41,7 +41,7 @@ fn main() {
         None => {
             println!("cargo:warning=turbo-quant-zig: Zig compiler not found in PATH — skipping native build");
             return;
-        }
+        },
     };
 
     let status = Command::new(&zig)
@@ -58,18 +58,18 @@ fn main() {
         Ok(s) if s.success() && obj_path.exists() => {
             println!("cargo:rustc-link-arg={}", obj_path.display());
             println!("cargo:info=linking Zig object at {}", obj_path.display());
-        }
+        },
         Ok(s) => {
             println!(
                 "cargo:warning=turbo-quant-zig: `zig build-obj` exited with {} — skipping native build",
                 s
             );
-        }
+        },
         Err(e) => {
             println!(
                 "cargo:warning=turbo-quant-zig: failed to invoke zig: {e} — skipping native build"
             );
-        }
+        },
     }
 }
 

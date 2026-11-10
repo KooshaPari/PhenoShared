@@ -53,7 +53,7 @@ impl Lcg {
     /// `0xDEAD_BEEF_CAFE_BABE` so the generator is well-defined.
     pub fn new(seed: u64) -> Self {
         let state = if seed == 0 {
-            0xDEAD_BEEF_CAFE_BABE
+            0xdead_beef_cafe_babe
         } else {
             seed
         };

@@ -45,12 +45,12 @@ async fn main() {
                     error!(error = %e, "failed to write JSON-RPC response");
                     break;
                 }
-            }
+            },
             Ok(None) => {
                 // EOF or blank line — peer closed stdin.
                 info!("playcua-bridge stdin closed; exiting");
                 break;
-            }
+            },
             Err(e) => {
                 error!(error = %e, "failed to read JSON-RPC request");
                 // Parse errors: try to emit a JSON-RPC parse error with null id.
@@ -60,7 +60,7 @@ async fn main() {
                     format!("parse error: {e}"),
                 );
                 let _ = write_response(&mut stdout, &resp).await;
-            }
+            },
         }
     }
 }

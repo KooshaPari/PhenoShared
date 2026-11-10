@@ -174,7 +174,7 @@ fn sglang_candidate_and_mlx_metal_both_appear_in_considered_list() {
                 candidate.id, id_sglang,
                 "SGLang candidate p95=1500 must beat MLX/Metal p95=2000"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
     // Both candidates must have been considered: assert via the rejected
@@ -209,7 +209,7 @@ fn sglang_trace_human_explanation_includes_engine_name() {
                 candidate.id, id_sglang,
                 "SGLang (lower p95) must be the chosen candidate"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
     let trace: ExecutionTrace = reg.explain(&decision);
@@ -280,7 +280,7 @@ fn vllm_deterministic_policy_picks_lower_p95() {
             );
             assert_ne!(candidate.id, id_metal);
             assert_eq!(candidate.engine_name.as_deref(), Some(VLLM));
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
     let trace = reg.explain(&decision);
@@ -309,7 +309,7 @@ fn trtllm_deterministic_policy_picks_lower_p95_and_records_engine() {
                 "TRT-LLM candidate p95=1100 must beat MLX/Metal p95=1700"
             );
             assert_ne!(candidate.id, id_metal);
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
     let trace = reg.explain(&decision);
@@ -338,7 +338,7 @@ fn llama_cpp_deterministic_policy_picks_lower_p95_and_records_engine() {
                 "llama.cpp candidate p95=1000 must beat MLX/Metal p95=1600"
             );
             assert_ne!(candidate.id, id_metal);
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
     let trace = reg.explain(&decision);
@@ -374,7 +374,7 @@ fn metal_candidate_still_wins_when_its_p95_is_lower_than_external_engine() {
                 "the winning in-tree candidate must NOT carry an engine tag; got {:?}",
                 candidate.engine_name
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
     let trace = reg.explain(&decision);
