@@ -1,7 +1,7 @@
 //! A lease grant must be cheap: no browser process may exist until the session
 //! is actually used.
 //!
-//! Before this was fixed, `Broker::acquire` launched Chrome eagerly. On a loaded
+//! Previously, `Broker::acquire` launched Chrome eagerly. On a loaded
 //! host that made a lease grant take 15-50s, which pushed the HTTP acquire call
 //! past every client timeout and made the MCP-over-HTTP path unusable. These
 //! tests pin the two properties that make the deferred launch safe:

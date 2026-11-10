@@ -19,7 +19,7 @@
 //! revokes the lease.
 //!
 //! Any step failing rolls back the earlier ones. [`Broker::release`] reverses it
-//! in the opposite direction: close the browser (a no-op when it was never
+//! in the opposite direction: close the browser (which does nothing when it was never
 //! launched), revoke the lease, seal the generation so it may be forked.
 //!
 //! Because the live session is keyed by lease id, an observer can ask for *that*
