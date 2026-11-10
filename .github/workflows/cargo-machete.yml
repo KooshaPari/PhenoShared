@@ -3,9 +3,9 @@ permissions: read-all
 
 on:
   pull_request:
-    paths: ['Cargo.toml', '**/Cargo.toml']
+    paths: ["Cargo.toml", "**/Cargo.toml"]
   schedule:
-    - cron: '47 6 * * 4'  # weekly Thursday, advisory full scan
+    - cron: "47 6 * * 4" # weekly Thursday, advisory full scan
   workflow_dispatch:
 
 jobs:
