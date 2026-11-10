@@ -12,9 +12,10 @@
 
 set -eu
 
-ENV_FILE="/Users/kooshapari/.local/state/browser-broker.env"
-BROKERD="/Users/kooshapari/.local/bin/brokerd"
-ROOT_DIR="/Users/kooshapari/.local/state/browser-broker"
+HOME_DIR="${HOME:-/nonexistent}"
+ENV_FILE="$HOME_DIR/.local/state/browser-broker.env"
+BROKERD="$HOME_DIR/.local/bin/brokerd"
+ROOT_DIR="$HOME_DIR/.local/state/browser-broker"
 BIND_ADDR="127.0.0.1:8788"
 TOKEN_VAR="BROKER_TOKEN"
 

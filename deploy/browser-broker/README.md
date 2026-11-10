@@ -88,18 +88,23 @@ browser.
 ## Running it on macOS (launchd)
 
 `browser-broker.service` is the systemd unit. On macOS the equivalent is a per-user launchd
-agent, shipped here as `com.kooshapari.browser-broker.plist`.
+agent, shipped here as the template `com.kooshapari.browser-broker.plist.in`. It is a template
+because launchd does **not** expand `~` or environment variables in `ProgramArguments`,
+`StandardOutPath`, `StandardErrorPath` or `WorkingDirectory`, so the absolute home directory has
+to be substituted before the plist is installed.
 
 Install:
 
 ```sh
-install -d ~/.local/bin ~/.local/state
+install -d ~/.local/bin ~/.local/state ~/Library/LaunchAgents
 install -m 755 brokerd ~/.local/bin/brokerd
 install -m 755 browser-broker-run ~/.local/bin/browser-broker-run
 install -m 600 /dev/null ~/.local/state/browser-broker.env
 printf 'BROKER_TOKEN=%s\n' "$(openssl rand -base64 32 | tr -d '=+/')" \
   > ~/.local/state/browser-broker.env
-cp com.kooshapari.browser-broker.plist ~/Library/LaunchAgents/
+sed "s|__HOME__|$HOME|g" com.kooshapari.browser-broker.plist.in \
+  > ~/Library/LaunchAgents/com.kooshapari.browser-broker.plist
+chmod 644 ~/Library/LaunchAgents/com.kooshapari.browser-broker.plist
 launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.kooshapari.browser-broker.plist
 launchctl enable gui/$(id -u)/com.kooshapari.browser-broker
 ```
