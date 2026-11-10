@@ -162,7 +162,7 @@ USAGE
   dagrun replan PLAN [flags]     diff a revised plan against the run; --apply installs it
   dagrun recover [flags]         report or reclaim stuck nodes; --force reclaims
   dagrun serve [flags]           serve the run as a live viewer + read-only JSON API
-  dagrun mcp                     serve the Model Context Protocol over stdio
+  dagrun mcp [flags]             serve the Model Context Protocol over stdio or HTTP
   dagrun version
 
 COMMON FLAGS
