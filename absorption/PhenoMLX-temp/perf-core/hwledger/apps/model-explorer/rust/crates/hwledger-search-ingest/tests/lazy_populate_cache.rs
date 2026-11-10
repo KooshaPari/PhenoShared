@@ -66,11 +66,15 @@ async fn lazy_populate_warms_two_distinct_ids() {
     let adapter = FakeAdapter::new(RawModel::new("fake/y", "fake"));
     let gate = PopulateGate::default();
 
-    let _ = lazy_populate(&adapter.clone(), &gate, "fake/y").await.unwrap();
+    let _ = lazy_populate(&adapter.clone(), &gate, "fake/y")
+        .await
+        .unwrap();
     assert_eq!(gate.len(), 1);
 
     // Same id, same adapter name → cache hit, no second fetch.
-    let _ = lazy_populate(&adapter.clone(), &gate, "fake/y").await.unwrap();
+    let _ = lazy_populate(&adapter.clone(), &gate, "fake/y")
+        .await
+        .unwrap();
     assert_eq!(gate.len(), 1);
     assert_eq!(adapter.fetch_count(), 1);
 }

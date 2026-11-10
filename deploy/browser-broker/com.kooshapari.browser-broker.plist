@@ -12,8 +12,8 @@
   The bearer token is NOT in this plist and NOT in argv. The wrapper
   ~/.local/bin/browser-broker-run sources
   ~/.local/state/browser-broker.env (mode 600) and exports BROKER_TOKEN into
-  the process environment; brokerd is told only the VARIABLE NAME via
-  --token-env.
+  the process environment; brokerd is told only the VARIABLE NAME, through its
+  token-env flag.
 
   State root: ~/.local/state/browser-broker
   Log:        ~/.local/state/brokerd.log

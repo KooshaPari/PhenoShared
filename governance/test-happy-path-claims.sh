@@ -104,6 +104,29 @@ judge "quoted word with a check mark is accepted" pass '    "label": "✔ Verify
 # claim.
 judge "unquoted claim beside a quoted string is rejected" fail 'echo "starting"  # now done'
 
+# An apostrophe is punctuation, not a quote delimiter. Treating one as an
+# opening quote used to swallow the rest of the line, so the claim inside it
+# was never seen and the guard passed a violation. Each of these must be
+# rejected.
+judge "contraction does not open a quote" fail "# the user's parser is fixed now"
+judge "contraction mid-line does not open a quote" fail "# it's fixed now"
+judge "possessive does not open a quote" fail "# users' roles are fixed"
+judge "claim after a comment-introducing phrase is rejected" fail "# user's report: the parser is fixed now"
+
+# An unterminated quote strips nothing at all. Failing closed here keeps the
+# rest of the line visible to the rule instead of silently discarding it.
+judge "unterminated double quote does not hide the claim" fail '# "the parser is fixed now'
+
+# The terminator exemption covers the keyword, not the line. Anything that
+# follows the terminator is still prose and is still judged.
+judge "claim after a bare terminator is rejected" fail "	done; the parser is fixed now"
+judge "claim after a terminator and && is rejected" fail "	done && the parser is fixed now"
+judge "claim after a terminator and process substitution is rejected" fail "	done < <(cmd) the parser is fixed now"
+
+# A loop whose only trigger word is the terminator stays accepted, and the
+# terminator inside a one-line loop body is the same keyword.
+judge "one-line loop with only a terminator is accepted" pass "	for x in y; do echo \$x; done"
+
 # A claim with a human-eye marker is accepted, as before.
 judge "marker exempts a prose claim" pass "# user-confirmed: the parser is fixed now"
 

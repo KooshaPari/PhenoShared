@@ -85,7 +85,7 @@ pub fn verify(
             return Err(SpecError::Config(
                 "could not determine argmax of empty logits".into(),
             ))
-        }
+        },
     };
 
     let mut accepted_prefix: Vec<u32> = Vec::with_capacity(n);

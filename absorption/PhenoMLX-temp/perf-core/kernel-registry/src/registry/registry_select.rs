@@ -135,7 +135,7 @@ impl KernelRegistry {
                         Err(reason) => {
                             rejections.push(RejectionRecord::new(c.id, reason));
                             None
-                        }
+                        },
                     })
                     .collect()
             } else {
@@ -352,7 +352,7 @@ mod tests {
     #[test]
     fn select_with_kv_state_returns_none_for_unknown_task() {
         let reg = KernelRegistry::new();
-        let unknown = CandidateId(0xDEAD_BEEF);
+        let unknown = CandidateId(0xdead_beef);
         assert!(
             reg.select_with_kv_state(&unknown, 50, 100).is_none(),
             "unknown task must return None"

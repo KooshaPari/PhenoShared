@@ -45,8 +45,8 @@ async fn main() -> Result<()> {
     // request path.
     service::init_admin_token();
 
-    let data_dir = std::env::var("DATA_DIR")
-        .context("DATA_DIR must be set to the tantivy index directory")?;
+    let data_dir =
+        std::env::var("DATA_DIR").context("DATA_DIR must be set to the tantivy index directory")?;
     let data_dir = PathBuf::from(data_dir);
 
     let port: u16 = std::env::var("PORT")

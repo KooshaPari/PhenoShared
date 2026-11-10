@@ -82,14 +82,14 @@ const SHAPES: &[Shape] = &[
 /// `salt`. Different salts per shape keep the two benchmark rows
 /// independent so a regression in one shape does not skew the other.
 fn activations(num_tokens: usize, k: usize, salt: u64) -> Vec<f32> {
-    let mut rng = Lcg::new(0xCAFE_BABE ^ salt);
+    let mut rng = Lcg::new(0xcafe_babe ^ salt);
     (0..num_tokens * k).map(|_| rng.next_signed()).collect()
 }
 
 /// Build a deterministic `[num_experts, k, n]` expert weight tensor
 /// from `salt`.
 fn experts(num_experts: usize, k: usize, n: usize, salt: u64) -> Vec<f32> {
-    let mut rng = Lcg::new(0xDEAD_BEEF ^ salt);
+    let mut rng = Lcg::new(0xdead_beef ^ salt);
     (0..num_experts * k * n)
         .map(|_| rng.next_signed())
         .collect()
@@ -174,8 +174,8 @@ fn grouped_gemm_scalar_vs_tiled_bench() {
 
     for shape in SHAPES {
         let salt = match shape.name {
-            "qwen_moe_canonical" => 0xA1,
-            "moe_stress" => 0xB2,
+            "qwen_moe_canonical" => 0xa1,
+            "moe_stress" => 0xb2,
             _ => 0x00,
         };
         let (scalar_ns, scalar_out) = time_one(shape, Path::Scalar, salt);
