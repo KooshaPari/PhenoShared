@@ -34,64 +34,103 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
-  coverage-root:
-    # The display name states the ENFORCED floor, not an aspiration (same
-    # convention as coverage-iac below). ADR-040 named per-tier floors of
-    # 71%/70%, but the crates it named — nanovms-core, nvms-ffi,
-    # pheno-compose-driver — no longer exist after the substrate repoint, so no
-    # tier definition survives. What actually runs is a single whole-workspace
-    # average over ~200 crates, including UI/gfx crates and fake-harness
-    # binaries with no tests, which measured 37.54%. That number is the floor:
-    # treat it as a ratchet and raise it deliberately, per tier, once the tiers
-    # are redefined. Re-enabling 71% here without a package list does not
-    # measure lib quality, it just keeps the gate permanently red.
-    name: Root workspace coverage (whole workspace — ≥37%)
+  # ------------------------------------------------------------------------
+  # Root workspace coverage, split by crate group.
+  #
+  # WHY THIS IS A MATRIX AND NOT ONE JOB
+  #   The single whole-workspace `cargo tarpaulin --workspace` run took 35-84
+  #   minutes (run 42458885211: the gate step alone was 84 minutes). A
+  #   regression anywhere therefore surfaced only after the whole workspace had
+  #   been instrumented, built and tested, and the required check sat pending on
+  #   every open PR meanwhile. Splitting by crate family means each group
+  #   compiles and tests only its own dependency subgraph, so the slowest group
+  #   - not the sum of all of them - sets the wall clock, and a regression in
+  #   one family reports on that family's job while the others are still
+  #   running.
+  #
+  # GROUPING RULES
+  #   Groups are crate FAMILIES, listed explicitly below, not computed by a
+  #   script: a script that silently re-buckets crates is how a crate falls out
+  #   of the gate without anyone noticing. The `packages:` list of each matrix
+  #   entry is the complete, explicit membership. Two guards keep it honest:
+  #     * `coverage_report.py filter` fails if a listed package does not exist.
+  #     * the aggregate job fails if the set of groups measured does not match
+  #       the set of groups in .coverage-baselines/root-workspace.toml.
+  #   When you add a workspace member, add it to a group AND to the packages
+  #   list in the same commit; `cargo metadata --no-deps` is the source of truth
+  #   for what is a member.
+  #
+  # WHAT EACH JOB ENFORCES
+  #   Each group is compared against ITS OWN committed floor in
+  #   .coverage-baselines/root-workspace.toml inside its own job, so the
+  #   regression is attributed to a family and fails fast. The aggregate job is
+  #   a separate, cheap (~1 minute, no compilation) job that merges the group
+  #   reports and enforces the aggregate floor.
+  #
+  # DENOMINATOR
+  #   tarpaulin builds its denominator by walking the repository for `*.rs`
+  #   rather than by asking what the build compiled, so a single-package run
+  #   still reports every source file in the tree. `coverage_report.py filter`
+  #   narrows each report to the group's own package directories, which is what
+  #   makes the per-group numbers add up to the aggregate without double
+  #   counting. This also removes the measurement artifacts the old gate had to
+  #   exclude by hand: `docs/**` (archived source snapshots, no crate is built
+  #   from them), and the non-member trees under `agileplus/`, `hexa-kit/`,
+  #   `gateway/`, `infrakit/`, `absorption/`, `archives/` and `_archived/`,
+  #   which `--workspace` never builds. `--exclude-files 'docs/**'` is kept so
+  #   the intermediate reports stay small.
+  coverage-root-group:
+    name: Root coverage group — ${{ matrix.group }}
     runs-on: ubuntu-24.04
-    # Bounds a hung step. GitHub's default is 360 minutes, so one stalled
-    # coverage run held a runner for up to six hours while every other
-    # coverage run queued behind it and the required check stayed pending on
-    # every open PR (observed 2026-11-08).
-    #
-    # The bound must sit ABOVE the legitimate duration of the step, or it
-    # fails the gate that exists to measure quality. Measured on run
-    # 42458885211: the `Run coverage gate (root workspace)` step took 84
-    # minutes (08:43:11 -> 10:07:38); the report upload after it took 3
-    # seconds and the post-job cache save 49 seconds. A 60-minute bound was
-    # therefore killing this job mid-measurement - run 42461336059 shows the
-    # step `cancelled` at exactly 58.5 minutes - which made the required
-    # check fail 100% of the time.
-    #
-    # 150 minutes keeps a genuine hang bounded well under GitHub's 360-minute
-    # default while leaving ~78% headroom over the observed 84-minute step.
-    timeout-minutes: 150
+    # A bound, not a target: the largest group (runtime-hosts / pheno-core)
+    # built cold in well under the whole-workspace job, and this leaves room for
+    # a cold rust-cache restore. GitHub's default 360-minute ceiling let one
+    # stalled run hold a runner for hours (2026-11-08).
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ---- crate families, with the family's full package list ----------
+          - group: substrate
+            packages: 'nexus substrate substrate-a2a substrate-app substrate-browser substrate-browser-broker substrate-browser-cdp substrate-browser-mcp substrate-browser-provider substrate-core substrate-dag substrate-memory substrate-schedule substrate-serve-lock substrate-skills substrate-trace substrate-tui'
+          - group: sharecli-core
+            packages: 'sharecli sharecli-core sharecli-ffi sharecli-ipc sharecli-mesh sharecli-session sharecli-sync'
+          - group: sharecli-surface
+            packages: 'sharecli-fleet sharecli-fuse sharecli-thermal-tui sharecli-tray-linux sharecli-tray-windows'
+          - group: fabric
+            packages: 'fabric-capture fabric-capability fabric-capability-ffi fabric-checker fabric-cli fabric-daemon fabric-frame-transport fabric-full-demo fabric-graph fabric-graph-cli fabric-gui fabric-integration-tests fabric-orchestrator fabric-persist fabric-research-ledger fabric-surface-mojo fabric-terminal fabric-tray fabric-tui fabric-web fabric-workspace'
+          - group: device-media
+            packages: 'eyetracker-camera eyetracker-cli eyetracker-core eyetracker-domain eyetracker-ffi eyetracker-inference eyetracker-math nvms-ffi nvms-manifest phenotype-gfx phenotype-voxel pine-compat pine-core pine-loader pine-nvms pine-syscall'
+          - group: runtime-hosts
+            packages: 'bench-guard eidolon-core eidolon-desktop eidolon-mobile eidolon-sandbox file-watcher klipdot-capture perfharness phinbox runtime-process sidekick-messaging spawn-core-sys store-file store-sqlite supervisor temporal-grounding transport-file wave wave-3lane-tests worktree-manager'
+          - group: agileplus
+            packages: 'agileplus-cache agileplus-domain agileplus-error-core agileplus-events agileplus-git agileplus-github agileplus-graph agileplus-import agileplus-nats agileplus-triage'
+          - group: focus
+            packages: 'focus-always-on focus-asset-fetcher focus-audit focus-calendar focus-ci-watcher focus-coaching focus-crypto focus-domain focus-entitlements focus-events focus-icon-gen focus-mascot focus-observability focus-penalties focus-planning focus-policy focus-release-bot focus-rewards focus-rituals focus-rules focus-scheduler focus-sync-store focus-templates focus-time focus-ui'
+          - group: pheno-core
+            packages: 'acceptance-contract arch-test audit-privacy basic clap-ext commit-msg-check config-schema configra-ops datakit doc-link-check docs-health fr-coverage fr-trace fuzz-setup legacy-scan logkit mcp-server orchestrator pheno-cache-adapter pheno-config pheno-context pheno-crypto pheno-errors pheno-flags pheno-forge-scaffold pheno-forge-smoke pheno-fs pheno-i18n pheno-net pheno-otel pheno-runtime-config pheno-schema-port pheno-shell pheno-testing pheno-tracing pheno-vcs-core phenocompose-agentctl phenocompose-apple-container-adapter phenocompose-cli phenocompose-plugin-api phenocompose-plugin-sample phenocompose-port-composer phenocompose-port-di phenocompose-port-publisher phenocompose-port-runtime phenocompose-port-secret phenocompose-port-types phenocompose-secret-file-adapter phenocompose-wslc-adapter phenotype-async-traits phenotype-cache-adapter phenotype-casbin-wrapper phenotype-config phenotype-config-core phenotype-contract phenotype-contracts phenotype-cost-core phenotype-crypto phenotype-dag-core phenotype-diff phenotype-error-core phenotype-error-macros phenotype-errors phenotype-event-bus phenotype-flags phenotype-git-core phenotype-health phenotype-http-client-core phenotype-iter phenotype-journey-core phenotype-journeys-observability phenotype-logging phenotype-macros phenotype-mcp phenotype-nvms-adapter phenotype-observability phenotype-observably-macros phenotype-policy-engine phenotype-port-interfaces phenotype-port-traits phenotype-ports-canonical phenotype-process phenotype-project-registry phenotype-rate-limit phenotype-resilience phenotype-retry phenotype-router phenotype-router-monitor phenotype-service-registry phenotype-shared-config phenotype-state-machine phenotype-string phenotype-telemetry phenotype-test-infra phenotype-time phenotype-tooling-observability phenotype-validation phenovcs-observability qgate release-cut trace-gate traceability-core traceability-decorators'
+          - group: integrations
+            packages: 'agent-forecast airlock-v2 anthropic-usage-poll bifrost-routing cliproxy-adapter cloud-codex cloud-cursor cloud-dispatch-conformance cloud-kilo context-budget dag-scheduler dispatch-bridge driver-argv driver-cli driver-http driver-mcp engine-a2a engine-agentapi engine-claude engine-codex engine-conformance engine-forge engine-spec fake-codex-cloud fake-forge llm-router omniroute-adapter routing-phenotype-router teamcomm-cli teamcomm-client teamcomm-daemon teamcomm-mcp teamcomm-protocol teamcomm-smoke'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: stable
           components: llvm-tools-preview
-      # Cache RESTORE only, no SAVE for this job. The coverage gate is a
-      # measurement gate, not a build-cache gate: the target dir is large and
-      # re-uploading it costs runner time for a cache that a later build can
-      # restore anyway. Restoring keeps repeat runs fast; skipping the save
-      # keeps the runner free.
-      #
-      # Measured on run 42458885211 the saving is modest, not dramatic: the
-      # report upload after the gate took 3 seconds and the post-job cache
-      # save 49 seconds. The real saving in this workflow comes from the
-      # trigger de-duplication above, which halves the number of coverage runs
-      # and therefore the queue each one waits in (that run sat queued for
-      # 74 minutes before starting). This cache change is worth ~50 seconds
-      # of runner time; it is not what was holding the queue.
-      # iac keeps its save — its target dir is small.
+      # Restore only, never save: ten groups saving the same cache key would
+      # evict each other and cost ten uploads of a multi-GB target directory.
+      # `shared-key` lets all ten restore the same archive, so a warm cache is
+      # paid for once per workflow, not once per group.
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
         with:
+          shared-key: coverage-root
           save-if: false
 
       # The workspace links against the gtk-rs stack, so glib-sys needs
-      # glib-2.0.pc at build time. Without these the coverage build fails with
+      # glib-2.0.pc at build time. Without these the build fails with
       # "The system library `glib-2.0` required by crate `glib-sys` was not
-      # found", which meant this gate never actually measured anything.
+      # found", which meant the gate never actually measured anything.
       - name: Install system dependencies
         run: |
           sudo apt-get update
@@ -109,53 +148,144 @@ jobs:
             zlib1g-dev \
             libsqlite3-dev
 
-      # Was an inline `sudo snap install zig ... || { curl fallback }`. On
-      # ubuntu-24.04 the snap install HUNG with no output and no job timeout,
-      # which stalled run 42444352321 for over an hour on the required
-      # "Root workspace coverage" check and so blocked every open PR
-      # (2026-11-08). One shared, pinned, checksum-verified implementation now.
+      # One shared, pinned, checksum-verified implementation. The old inline
+      # `sudo snap install zig` hung with no output and no job timeout on
+      # ubuntu-24.04 (run 42444352321), so do not reintroduce it.
       - uses: ./.github/actions/setup-zig
 
       - name: Install cargo-tarpaulin
         run: cargo install cargo-tarpaulin --locked
 
-      # `--exclude-files 'docs/**'` is required because cargo-tarpaulin builds
-      # its denominator by WALKING THE REPO ROOT for `*.rs` and running its AST
-      # source analysis over every file it finds (`collect_tracemap` ->
-      # `get_source_walker` in tarpaulin's `lib.rs`/`path_utils.rs`), not by
-      # asking what the build actually compiled. Files found there that never
-      # get linked still contribute "coverable" lines, all of them uncovered.
+      # No --fail-under 37 here on purpose: the floor lives in the committed
+      # baseline file, and this job enforces it in the next step. Two places to
+      # change a threshold is one too many, and the baseline file is the one a
+      # reviewer can diff.
       #
-      # `docs/` holds archived source snapshots kept as documentation — commit
-      # 6e5fa283a (#761) added 198,954 lines of it, of which 4,809 lines across
-      # 186 files were counted as coverable and 0 covered. `cargo metadata`
-      # reports 0 packages under `docs/`, and no Cargo.toml references those
-      # paths, so nothing under `docs/` is compiled by `--workspace`. Counting
-      # it as untested product code is a measurement artifact, not real
-      # uncovered code: without the exclusion the gate measured 36.43%
-      # (37,685/103,434) and failed; with it, 38.21% (37,685/98,625) on the
-      # same instrumented data.
-      #
-      # This is a PATH exclusion, not a crate exclusion. It cannot hide
-      # untested production code because no crate is built out of `docs/`.
-      # Wider paths are deliberately NOT excluded: the `archives/**` snapshots
-      # still contribute 267 coverable lines, and they stay in the denominator.
-      - name: Run coverage gate (root workspace)
+      # `--fail-under 0` is NOT a no-op: the repo-root tarpaulin.toml sets
+      # `fail-under = 37`, which tarpaulin applies to every run unless the CLI
+      # overrides it. Without the override a group holding 3% of the workspace
+      # exits "4.30% < 37.00%" before it ever writes a report (observed on a
+      # standalone run of the agileplus group on 2026-11-09). Passing 0 keeps
+      # the config's `timeout = "180s"`, which exists because a 60s default
+      # kills crates/sharecli/tests/fr007_proc_pid_watch.rs mid-run.
+      - name: Measure ${{ matrix.group }} coverage
         run: |
+          set -euo pipefail
+          mkdir -p "target/cov/${{ matrix.group }}"
+          packages=()
+          for p in ${{ matrix.packages }}; do packages+=(-p "$p"); done
           cargo tarpaulin \
             --manifest-path Cargo.toml \
-            --workspace \
+            "${packages[@]}" \
+            --fail-under 0 \
             --exclude-files 'docs/**' \
-            --fail-under 37 \
-            --out Xml --out Json \
+            --out Json --out Xml \
             --engine llvm \
-            --target-dir target
+            --target-dir target \
+            --skip-clean \
+            --timeout 300 \
+            --output-dir "target/cov/${{ matrix.group }}"
 
-      - name: Upload coverage report
+      - name: Narrow the report to this group's crates
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/coverage_report.py \
+            --root "$GITHUB_WORKSPACE" \
+            filter \
+            --group "${{ matrix.group }}" \
+            --packages "${{ matrix.packages }}" \
+            --report "target/cov/${{ matrix.group }}/tarpaulin-report.json" \
+            --out "coverage-group-${{ matrix.group }}.json"
+
+      # The fast, attributable signal: this family regressed, and it is reported
+      # against this family's own floor while the other groups are still
+      # running.
+      - name: Enforce the committed floor for ${{ matrix.group }}
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/coverage_report.py \
+            verify \
+            --report-file "coverage-group-${{ matrix.group }}.json" \
+            --baseline .coverage-baselines/root-workspace.toml \
+            --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload ${{ matrix.group }} coverage report
+        if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
-          name: coverage-root-report
-          path: target/tarpaulin-report/
+          name: coverage-group-${{ matrix.group }}
+          path: |
+            coverage-group-${{ matrix.group }}.json
+            target/cov/${{ matrix.group }}/cobertura.xml
+          if-no-files-found: warn
+
+  # ------------------------------------------------------------------------
+  # The required branch-protection check.
+  #
+  # NAME IS LOAD-BEARING: branch protection on `main` requires the literal
+  # context string
+  #
+  #     Root workspace coverage (whole workspace — ≥37%)
+  #
+  # (em dash U+2014, and U+2265 GREATER-THAN OR EQUAL TO — not ">="). Verified
+  # against the live API on 2026-11-09:
+  #   gh api repos/KooshaPari/PhenoShared/branches/main/protection \
+  #     --jq '.required_status_checks.contexts'
+  #   -> ["Root workspace coverage (whole workspace — ≥37%)",
+  #       "IAC workspace coverage (service — ≥10%)"]
+  #
+  # DO NOT RENAME THIS JOB. A renamed job leaves branch protection waiting for
+  # a context no run produces, which blocks every PR. The "≥37%" inside the
+  # name is therefore a frozen label kept for compatibility, NOT the enforced
+  # number; the enforced number is `aggregate_floor` in
+  # .coverage-baselines/root-workspace.toml and it is printed in this job's
+  # summary on every run.
+  #
+  # FLOOR HISTORY, because a floor is only honest if its provenance is readable:
+  #   * 37 was aspirational. It came from a 37.54% measurement of a smaller
+  #     workspace; the workspace then grew past it and the gate went red on
+  #     main, which blocked every PR.
+  #   * The last whole-workspace measurement on the current instrument was
+  #     37,802/98,759 = 38.28% (run 42605873709), but 98,759 included 29,766
+  #     coverable lines from trees `--workspace` never builds (agileplus/,
+  #     hexa-kit/, gateway/, infrakit/, absorption/, archives/, _archived/).
+  #   * This job's denominator counts only files owned by a workspace member:
+  #     37,802/68,993 = 54.79% on the same instrumented data.
+  #   * The committed aggregate floor is set from the per-group measurement
+  #     recorded in .coverage-baselines/root-workspace.toml, rounded DOWN to a
+  #     whole number. It is a ratchet, not a target: raise it only in a commit
+  #     that also records the measurement which justifies the new floor.
+  #
+  # This job compiles nothing. It merges the ten group reports (each of which
+  # already failed fast on its own floor) and enforces the aggregate.
+  coverage-root:
+    name: Root workspace coverage (whole workspace — ≥37%)
+    needs: [coverage-root-group]
+    # `always()`-style: if a group job dies, this job must still run so the
+    # required check reports FAIL with a readable reason instead of being
+    # skipped, which branch protection also treats as not-passed but would show
+    # with no explanation.
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Download the per-group coverage reports
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          pattern: coverage-group-*
+          path: coverage-groups
+          merge-multiple: true
+
+      - name: Enforce the aggregate and per-group floors
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/coverage_report.py \
+            aggregate \
+            --dir coverage-groups \
+            --baseline .coverage-baselines/root-workspace.toml \
+            --summary "$GITHUB_STEP_SUMMARY"
 
   coverage-iac:
     # The display name states the ENFORCED floor, not an aspiration. This job

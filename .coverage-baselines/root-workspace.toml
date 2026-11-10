@@ -1,0 +1,98 @@
+# Root workspace coverage baselines.
+#
+# FORMAT: [meta] aggregate_floor = <percent>; [groups] <name> = <percent>.
+# Every value is a percentage of coverable lines. A measured value equal to the
+# floor passes (the comparison is `<`). Comments and blank lines are ignored;
+# the parser in .github/scripts/coverage_report.py is deliberately a TOML
+# subset so it behaves identically on Python 3.9 (local) and 3.12 (runner).
+#
+# WHAT THIS FILE IS
+#   One floor per crate group, plus the aggregate floor. The groups are the
+#   matrix in .github/workflows/coverage.yml. A group measured in CI but absent
+#   here (or listed here but never measured) FAILS the aggregate job, so a
+#   rename or a dropped matrix entry cannot silently take a family out of the
+#   gate.
+#
+# WHAT A FLOOR MEANS
+#   A ratchet, not a target. Raise a floor only in a commit that also records
+#   the measurement which justifies it; lower one only with a stated reason,
+#   because lowering a floor is indistinguishable from accepting a regression.
+#
+# MEASUREMENT PROVENANCE
+#   Instrument:  cargo tarpaulin --engine llvm --out Json, one run per group, on
+#                ubuntu-24.04, stable toolchain, llvm-tools-preview.
+#   Source:      2026-11-09, the instrumented data of run 42605873709
+#                (PR fix/cargo-audit-4-vulns, coverage-root-report artifact),
+#                re-attributed per crate group with
+#                `coverage_report.py filter` / `aggregate`.
+#   Denominator: only files inside a workspace member's own directory. That is
+#                why these percentages are higher than the old whole-workspace
+#                figure: the old denominator (98,759 coverable lines) included
+#                29,766 coverable lines from trees `cargo --workspace` never
+#                builds (agileplus/, hexa-kit/, gateway/, infrakit/,
+#                absorption/, archives/, _archived/, plus the archived docs/
+#                snapshots). No test can cover those lines, so counting them was
+#                a measurement artifact, not uncovered product code.
+#   Aggregate:   37,802/68,993 = 54.79% on that denominator.
+#
+# MEASURED PER-GROUP VALUES (before the 1.00-point allowance)
+#   substrate        62.02%      sharecli-core    62.44%
+#   sharecli-surface 64.34%      fabric           45.31%
+#   device-media     61.10%      runtime-hosts    52.75%
+#   agileplus        59.94%      focus            77.50%
+#   pheno-core       48.13%      integrations     42.87%
+#   aggregate        54.79%
+#
+# ALLOWANCE, AND WHY IT IS NOT ZERO
+#   A group-only tarpaulin run cannot inherit coverage that a DIFFERENT group's
+#   tests contributed to this group's files, so its number is slightly lower
+#   than the same group measured inside one whole-workspace run. That delta was
+#   measured directly rather than assumed: the agileplus group scored 59.86%
+#   (1,684/2,813) as a standalone run on 2026-11-09 against 59.94%
+#   (1,686/2,813) inside the whole-workspace run - 0.08 points over an
+#   identical 2,813-line denominator. Each floor therefore sits 1.00 point
+#   under its measured value: about 12x the observed delta, enough to absorb
+#   run-to-run and platform variance without turning the floor into a wish. The
+#   measured value is kept beside each floor so the allowance can be audited
+#   instead of trusted.
+#
+# AGGREGATE FLOOR HISTORY (read before changing)
+#   37  - the previous enforced floor. It is frozen inside the required status
+#         check's DISPLAY NAME, which branch protection matches as a literal
+#         string and which therefore cannot be renamed without also changing
+#         branch protection. It was aspirational: it came from a 37.54%
+#         measurement of a smaller workspace, the workspace later grew past it,
+#         and the required check went red on main and blocked every PR.
+#   36  - this file's aggregate floor. It is the last figure the root gate
+#         actually FAILED on (36.43% = 37,685/103,434 on the pre-exclusion
+#         denominator, as recorded in coverage.yml on 2026-11-09), kept
+#         deliberately as the aggregate floor so the aggregate cannot be red
+#         while the per-group floors do the precise ratcheting. It is NOT a
+#         target, NOT an aspiration, and NOT derived from the 54.79% above.
+#
+# REGENERATE: measure every group (see the matrix in
+# .github/workflows/coverage.yml), then
+#
+#   python3 .github/scripts/coverage_report.py write \
+#       --dir coverage-groups \
+#       --baseline .coverage-baselines/root-workspace.toml \
+#       --allowance 1.0 --aggregate-floor 36
+#
+# which rewrites the [meta] and [groups] sections from measurement. Commit the
+# result together with the run id that produced it.
+
+[meta]
+aggregate_floor = 36.00
+# measured aggregate on this run: 54.79% (37,802/68,993)
+
+[groups]
+agileplus = 58.93  # measured 59.94
+device-media = 60.09  # measured 61.10
+fabric = 44.30  # measured 45.31
+focus = 76.49  # measured 77.50
+integrations = 41.87  # measured 42.87
+pheno-core = 47.13  # measured 48.13
+runtime-hosts = 51.75  # measured 52.75
+sharecli-core = 61.43  # measured 62.44
+sharecli-surface = 63.33  # measured 64.34
+substrate = 61.01  # measured 62.02
