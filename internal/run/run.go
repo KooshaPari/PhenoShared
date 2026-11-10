@@ -522,10 +522,21 @@ func (e *Executor) adopt(ctx context.Context, n *plan.Node) bool {
 		}
 		root = wt
 	}
+	// Satisfied is the cheap artifacts-only pre-filter: it never runs the
+	// node's check. The single authoritative verdict comes from PlanNode
+	// below, which evaluates artifacts, the check, and the kind contract
+	// together, so the check executes exactly once per adoption.
+	//
+	// NOTE: adopt runs on the scheduler goroutine, not a worker goroutine, so a
+	// slow check still serialises here even with --workers > 1. That is a known
+	// limitation of the launch loop and is not addressed by this change.
 	if !verify.Satisfied(ctx, root, n) {
 		return false
 	}
 	rep := verify.PlanNode(ctx, root, n, e.st.Plan())
+	if !rep.OK {
+		return false
+	}
 
 	// A discover node is not finished because its work-list file exists. The
 	// file is an INPUT to the expansion, and a malformed one must fail the

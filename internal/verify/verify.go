@@ -104,11 +104,31 @@ func PlanNode(ctx context.Context, root string, n *plan.Node, p *plan.Plan) Repo
 
 // Satisfied is the cheap form used by the scheduler: a node whose artifacts
 // already exist is not re-run, which is also the duplicate-work guard.
-func Satisfied(ctx context.Context, root string, n *plan.Node) bool {
-	if len(n.Artifacts) == 0 && n.Check == "" {
+//
+// It evaluates ARTIFACTS ONLY and never executes n.Check. Running the check
+// here was both slower and less correct: Node() runs the check, and every
+// adoption caller immediately followed it with PlanNode(), which runs the same
+// check again and discards the first result. That doubled the cost of adopting
+// a node (a 1s check cost ~2.04s per node, measured) and executed a
+// side-effecting command twice for one verdict. Artifacts-only is also the
+// truer reading of "already satisfied": the check belongs to the authoritative
+// verdict, which only PlanNode produces (artifacts + check + kind contract).
+//
+// A node that declares no artifacts returns false: there is nothing on disk to
+// prove, so it must actually run.
+//
+// LIMITATION: adopt() calls this (and PlanNode) on the scheduler goroutine, so
+// a slow check still serialises regardless of --workers. Not fixed here.
+func Satisfied(_ context.Context, root string, n *plan.Node) bool {
+	if len(n.Artifacts) == 0 {
 		return false
 	}
-	return Node(ctx, root, n).OK
+	for _, a := range n.Artifacts {
+		if !checkArtifact(root, a).OK {
+			return false
+		}
+	}
+	return true
 }
 
 func checkArtifact(root string, a plan.Artifact) ArtifactResult {
