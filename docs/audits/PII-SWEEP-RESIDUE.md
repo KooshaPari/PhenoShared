@@ -58,15 +58,15 @@ projects' code, so this campaign does not touch them.
 
 ## 3. What was repaired in this slice
 
-**53 occurrences across 30 files**, all in this repository's own executable
+**28 occurrences across 18 files**, all in this repository's own executable
 code, via `scripts/pii-sweep-repair.py`:
 
 | Language         | Before  | After   | Rewritten    |
 | ---------------- | ------- | ------- | ------------ |
-| shell (`*.sh`)   | 32      | **0**   | 32           |
+| shell (`*.sh`)   | 32      | 25      | 7            |
 | python (`*.py`)  | 125     | 104     | 21           |
 | yaml / rust / js | 101     | 101     | 0 (reported) |
-| **total**        | **258** | **205** | **53**       |
+| **total**        | **258** | **230** | **28**       |
 
 The rewrite is not "un-redact". It removes the dependency on an absolute home
 path entirely:
@@ -88,7 +88,7 @@ and it contains no name at all.
 
 ## 4. What the tool refuses to do, and why
 
-The tool reported **2,444 sites** and left them untouched. Each refusal is a
+The tool reported **2,456 sites** and left them untouched. Each refusal is a
 case where a mechanical rewrite would silently break something:
 
 | Refusal                                               | Why                                                                                                                                                               |
@@ -117,6 +117,22 @@ files need their own cleanup, not a path rewrite bolted onto it.
 | `scripts/e2e_real_model.py`                  | mypy `name-defined`: "mx" is not defined |
 | `gui/admin-extensions/api/research_panel.py` | 2 mypy failures                          |
 | `scripts/phenotype_omlx_ready.py`            | ruff F401, several unused imports        |
+
+Twelve shell files are excluded for a different reason, and it is worth stating
+plainly because it is a **mutual blocking between two of this repository's own
+gates**:
+
+- Trunk Check demands that a touched file be shfmt-clean.
+- Making these files shfmt-clean means adding lines that contain the shell
+  loop terminator.
+- The happy-path guard (rule R1) reads that terminator as an unverified
+  success claim and blocks the commit.
+
+Trunk demands the reformat; the guard forbids it. Until the guard's keyword
+false positive is corrected, those files are frozen. That is **25 of the 32 shell
+sites** in the own-code slice, and it is the single biggest remaining item in
+this campaign. `scripts/pii-sweep-repair.exclude` lists all twelve with the
+reason.
 
 Two shell files needed a different kind of fix: `beads/refresh-agileplus-token.sh`
 and `scripts/forge/forge-proc-reap.sh` each print a message that deliberately
@@ -168,8 +184,8 @@ shellcheck -S error <each changed .sh>          2 findings, BOTH pre-existing
                                                (identical at HEAD, same lines)
 ```
 
-Own executable slice: **258 → 205** occurrences. Repo-wide: **40,239 → 40,186**.
-The two numbers differ by exactly the 53 repaired sites.
+Own executable slice: **258 → 230** occurrences. Repo-wide: **40,239 → 40,211**.
+The two numbers differ by exactly the 28 repaired sites.
 
 ## 7. Acceptance criterion for the campaign
 

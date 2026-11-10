@@ -23,13 +23,13 @@
 
 set -e
 
-BEADS_FILE="${HOME}/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
-BEADS_LOCK="${HOME}/CodeProjects/Phenotype/repos/phenotype-dag/.beads.lock"
+BEADS_FILE="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/beads.jsonl"
+BEADS_LOCK="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-dag/.beads.lock"
 
 # Path to the pheno-harness repo root, used by the dual-write block to
 # import the AgilePlus adapter. Override with PHENO_HARNESS_ROOT env
 # var if the layout differs (e.g. in airlock-only environments).
-PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-${HOME}/CodeProjects/Phenotype/repos/pheno-harness}"
+PHENO_HARNESS_ROOT="${PHENO_HARNESS_ROOT:-/Users/<REDACTED>/CodeProjects/Phenotype/repos/pheno-harness}"
 
 # Compute ephemeral agent identity (deterministic across calls in same session)
 HOSTNAME=$(hostname -s 2>/dev/null || echo "unknown")
@@ -38,11 +38,11 @@ AGENT_ID="agent-$(echo "$HOSTNAME-$SESSION_TS" | shasum -a 256 | cut -c1-8)"
 TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 hash8() {
-	echo "$1" | shasum -a 256 | cut -c1-8
+  echo "$1" | shasum -a 256 | cut -c1-8
 }
 
 show_help() {
-	cat <<'EOF'
+  cat << 'EOF'
 bead-ctl — Append-only bead entry writer for phenotype fleet
 
 Usage:
@@ -86,39 +86,39 @@ EOF
 }
 
 ensure_beads_file() {
-	mkdir -p "$(dirname "$BEADS_FILE")"
-	touch "$BEADS_FILE"
+  mkdir -p "$(dirname "$BEADS_FILE")"
+  touch "$BEADS_FILE"
 }
 
 add_bead() {
-	local kind=$1
-	local target=$2
-	local text=$3
+  local kind=$1
+  local target=$2
+  local text=$3
 
-	ensure_beads_file
+  ensure_beads_file
 
-	# Include explicit metadata in the dedup identity. Two otherwise-identical
-	# records with different release evidence are not the same record.
-	local metadata_signature
-	metadata_signature="${BEAD_FR_ID:-}|${BEAD_SESSION:-}|${BEAD_AGENT_SESSION_ID:-}|${BEAD_PROMPT_TEXT:-}|${BEAD_INTENT_SYNTHESIS:-}|${BEAD_GOAL_ID:-}|${BEAD_PROMPT_INTENT_REF:-}|${BEAD_USER_OUTCOME:-}|${BEAD_OUTCOME:-}|${BEAD_OWNER:-}|${BEAD_SEVERITY:-}|${BEAD_STATE:-}|${BEAD_ACTION:-}|${BEAD_CLEARANCE_EVIDENCE:-}"
+  # Include explicit metadata in the dedup identity. Two otherwise-identical
+  # records with different release evidence are not the same record.
+  local metadata_signature
+  metadata_signature="${BEAD_FR_ID:-}|${BEAD_SESSION:-}|${BEAD_AGENT_SESSION_ID:-}|${BEAD_PROMPT_TEXT:-}|${BEAD_INTENT_SYNTHESIS:-}|${BEAD_GOAL_ID:-}|${BEAD_PROMPT_INTENT_REF:-}|${BEAD_USER_OUTCOME:-}|${BEAD_OUTCOME:-}|${BEAD_OWNER:-}|${BEAD_SEVERITY:-}|${BEAD_STATE:-}|${BEAD_ACTION:-}|${BEAD_CLEARANCE_EVIDENCE:-}"
 
-	# Compute dedup hash
-	local dedup_hash
-	dedup_hash=$(hash8 "${target}|${kind}|${text}|${metadata_signature}")
+  # Compute dedup hash
+  local dedup_hash
+  dedup_hash=$(hash8 "${target}|${kind}|${text}|${metadata_signature}")
 
-	# Check for duplicates (handles both with/without space after colon)
-	if grep -qE "\"hash\": *\"${dedup_hash}\"" "$BEADS_FILE" 2>/dev/null; then
-		echo "DUPLICATE: bead with hash ${dedup_hash} already exists for ${target}/${kind}"
-		return 1
-	fi
+  # Check for duplicates (handles both with/without space after colon)
+  if grep -qE "\"hash\": *\"${dedup_hash}\"" "$BEADS_FILE" 2>/dev/null; then
+    echo "DUPLICATE: bead with hash ${dedup_hash} already exists for ${target}/${kind}"
+    return 1
+  fi
 
-	# Compute bead id
-	local bead_id
-	bead_id=$(hash8 "${AGENT_ID}|${TS}|${dedup_hash}")
+  # Compute bead id
+  local bead_id
+  bead_id=$(hash8 "${AGENT_ID}|${TS}|${dedup_hash}")
 
-	# Build JSON entry
-	local entry
-	entry=$(python3 -c "
+  # Build JSON entry
+  local entry
+  entry=$(python3 -c "
 import json, os, sys
 entry = {
     'id': '${bead_id}',
@@ -150,26 +150,26 @@ entry.update({key: value for key, value in metadata.items() if value})
 print(json.dumps(entry))
 " "$target" "$text")
 
-	# Append atomically (write to temp + rename)
-	local tmp_file="${BEADS_FILE}.tmp.$$"
-	echo "$entry" >>"$BEADS_FILE"
-	rm -f "$tmp_file"
+  # Append atomically (write to temp + rename)
+  local tmp_file="${BEADS_FILE}.tmp.$$"
+  echo "$entry" >> "$BEADS_FILE"
+  rm -f "$tmp_file"
 
-	# Dual-write to AgilePlus when configured (task 28). Fail-soft: any
-	# error is logged but does NOT fail the bead-ctl call. The JSONL
-	# write above is the canonical source of truth.
-	_dual_write_to_agileplus "$kind" "$target" "$text" "$bead_id" "$dedup_hash" ||
-		echo "  [dual-write] AgilePlus append failed (logged); JSONL is the source of truth."
+  # Dual-write to AgilePlus when configured (task 28). Fail-soft: any
+  # error is logged but does NOT fail the bead-ctl call. The JSONL
+  # write above is the canonical source of truth.
+  _dual_write_to_agileplus "$kind" "$target" "$text" "$bead_id" "$dedup_hash" || \
+    echo "  [dual-write] AgilePlus append failed (logged); JSONL is the source of truth."
 
-	# Audit-log mirror (task 35). Appends the same entry to
-	# ~/.agileplus/audit.jsonl so operators have a dedicated log
-	# covering all dual-write attempts. Fail-soft.
-	_audit_log_append "$entry" ||
-		echo "  [audit-log] append failed (logged); JSONL is the source of truth."
+  # Audit-log mirror (task 35). Appends the same entry to
+  # ~/.agileplus/audit.jsonl so operators have a dedicated log
+  # covering all dual-write attempts. Fail-soft.
+  _audit_log_append "$entry" || \
+    echo "  [audit-log] append failed (logged); JSONL is the source of truth."
 
-	echo "BEAD: ${bead_id} | ${kind} | ${target} | hash=${dedup_hash}"
-	echo "  Agent: ${AGENT_ID}"
-	echo "  Text: ${text}"
+  echo "BEAD: ${bead_id} | ${kind} | ${target} | hash=${dedup_hash}"
+  echo "  Agent: ${AGENT_ID}"
+  echo "  Text: ${text}"
 }
 
 # _audit_log_append — mirror the bead entry to ~/.agileplus/audit.jsonl.
@@ -183,16 +183,16 @@ print(json.dumps(entry))
 # Honors AGILEPLUS_AUDIT_LOG env var (defaults to
 # ~/.agileplus/audit.jsonl). Set to /dev/null to disable.
 _audit_log_append() {
-	local entry="$1"
-	local audit_log="${AGILEPLUS_AUDIT_LOG:-$HOME/.agileplus/audit.jsonl}"
-	if [ "$audit_log" = "/dev/null" ]; then
-		return 0
-	fi
-	mkdir -p "$(dirname "$audit_log")" 2>/dev/null || return 1
-	printf '%s\n' "$entry" >>"$audit_log" 2>/dev/null || {
-		echo "  [audit-log] write to $audit_log failed" >&2
-		return 1
-	}
+  local entry="$1"
+  local audit_log="${AGILEPLUS_AUDIT_LOG:-$HOME/.agileplus/audit.jsonl}"
+  if [ "$audit_log" = "/dev/null" ]; then
+    return 0
+  fi
+  mkdir -p "$(dirname "$audit_log")" 2>/dev/null || return 1
+  printf '%s\n' "$entry" >> "$audit_log" 2>/dev/null || {
+    echo "  [audit-log] write to $audit_log failed" >&2
+    return 1
+  }
 }
 
 # _dual_write_to_agileplus — append the bead to AgilePlus via the
@@ -209,18 +209,18 @@ _audit_log_append() {
 #   AGILEPLUS_API_TOKEN      → bearer token
 #   AGILEPLUS_CONFIG         → path to config.json (default ~/.agileplus/config.json)
 _dual_write_to_agileplus() {
-	local kind="$1"
-	local target="$2"
-	local text="$3"
-	local bead_id="$4"
-	local dedup_hash="$5"
+  local kind="$1"
+  local target="$2"
+  local text="$3"
+  local bead_id="$4"
+  local dedup_hash="$5"
 
-	# Resolve the effective enabled state.
-	local enabled
-	if [ -n "${BEADS_DUAL_WRITE:-}" ]; then
-		enabled="${BEADS_DUAL_WRITE}"
-	else
-		enabled=$(PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
+  # Resolve the effective enabled state.
+  local enabled
+  if [ -n "${BEADS_DUAL_WRITE:-}" ]; then
+    enabled="${BEADS_DUAL_WRITE}"
+  else
+    enabled=$(PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
 import os, sys
 sys.path.insert(0, '$PHENO_HARNESS_ROOT')
 from beads.agileplus_adapter.config import load_config, is_enabled
@@ -230,15 +230,15 @@ except Exception:
     cfg = {}
 print('1' if is_enabled(cfg) else '0')
 " 2>/dev/null) || enabled=0
-	fi
+  fi
 
-	if [ "$enabled" != "1" ]; then
-		return 0 # dual-write disabled → silent no-op
-	fi
+  if [ "$enabled" != "1" ]; then
+    return 0  # dual-write disabled → silent no-op
+  fi
 
-	# Attempt the AgilePlus append. Fail-soft: errors are caught and
-	# logged, never propagated.
-	PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
+  # Attempt the AgilePlus append. Fail-soft: errors are caught and
+  # logged, never propagated.
+  PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
 import os, sys
 sys.path.insert(0, '$PHENO_HARNESS_ROOT')
 from beads.agileplus_adapter.config import load_config, resolve_token
@@ -276,7 +276,7 @@ except Exception as exc:
     print(f'  [dual-write] unexpected error: {exc}', file=sys.stderr)
     sys.exit(1)
 " || return 1
-	return 0
+  return 0
 }
 
 # _cmd_migrate — one-time migration script that pushes existing JSONL
@@ -296,59 +296,50 @@ except Exception as exc:
 #   1  one or more beads failed to migrate (logged per-bead)
 #   2  invalid arguments / missing prerequisites
 _cmd_migrate() {
-	local dry_run=0
-	local limit=0
-	local yes=0
-	local from_jsonl=0
+  local dry_run=0
+  local limit=0
+  local yes=0
+  local from_jsonl=0
 
-	while [ $# -gt 0 ]; do
-		case "$1" in
-		--from-jsonl) from_jsonl=1 ;;
-		--dry-run) dry_run=1 ;;
-		--limit)
-			limit="$2"
-			shift
-			;;
-		--yes) yes=1 ;;
-		*)
-			echo "Unknown migrate flag: $1" >&2
-			exit 2
-			;;
-		esac
-		shift
-	done
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --from-jsonl) from_jsonl=1 ;;
+      --dry-run) dry_run=1 ;;
+      --limit) limit="$2"; shift ;;
+      --yes) yes=1 ;;
+      *) echo "Unknown migrate flag: $1" >&2; exit 2 ;;
+    esac
+    shift
+  done
 
-	if [ "$from_jsonl" != "1" ]; then
-		echo "ERROR: --from-jsonl is required (other sources not yet supported)" >&2
-		exit 2
-	fi
-	if [ ! -f "$BEADS_FILE" ]; then
-		echo "No beads file at $BEADS_FILE; nothing to migrate."
-		exit 0
-	fi
+  if [ "$from_jsonl" != "1" ]; then
+    echo "ERROR: --from-jsonl is required (other sources not yet supported)" >&2
+    exit 2
+  fi
+  if [ ! -f "$BEADS_FILE" ]; then
+    echo "No beads file at $BEADS_FILE; nothing to migrate."
+    exit 0
+  fi
 
-	# Confirm (unless --yes).
-	if [ "$yes" != "1" ] && [ "$dry_run" != "1" ]; then
-		echo "Migrate beads from $BEADS_FILE → AgilePlus?"
-		echo "  enabled: $(PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
+  # Confirm (unless --yes).
+  if [ "$yes" != "1" ] && [ "$dry_run" != "1" ]; then
+    echo "Migrate beads from $BEADS_FILE → AgilePlus?"
+    echo "  enabled: $(PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
 import os, sys
 sys.path.insert(0, '$PHENO_HARNESS_ROOT')
 from beads.agileplus_adapter.config import load_config, is_enabled
 print('yes' if is_enabled(load_config(os.environ.get('AGILEPLUS_CONFIG'))) else 'no')
 " 2>/dev/null || echo 'unknown')"
-		echo "  limit:   ${limit:-all}"
-		echo -n "Proceed? [y/N] "
-		read -r answer
-		case "$answer" in
-		y | Y | yes | YES) ;;
-		*)
-			echo "Aborted."
-			exit 0
-			;;
-		esac
-	fi
+    echo "  limit:   ${limit:-all}"
+    echo -n "Proceed? [y/N] "
+    read -r answer
+    case "$answer" in
+      y|Y|yes|YES) ;;
+      *) echo "Aborted."; exit 0 ;;
+    esac
+  fi
 
-	PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
+  PHENO_HARNESS_ROOT="$PHENO_HARNESS_ROOT" python3 -c "
 import json
 import os
 import sys
@@ -423,65 +414,62 @@ cmd="${1:-help}"
 # before the subcommand). Sets BEADS_BACKEND for the dual-write block.
 backend="${BEADS_BACKEND:-}"
 while [ "${cmd:0:9}" = "--backend" ] || [ "$cmd" = "--backend" ]; do
-	case "$cmd" in
-	--backend=*) backend="${cmd#--backend=}" ;;
-	--backend)
-		# --backend <value> form: consume next arg.
-		backend="${1:-}"
-		shift || true
-		cmd="${1:-help}"
-		continue
-		;;
-	esac
-	shift || true
-	cmd="${1:-help}"
+  case "$cmd" in
+    --backend=*) backend="${cmd#--backend=}" ;;
+    --backend)
+      # --backend <value> form: consume next arg.
+      backend="${1:-}"
+      shift || true
+      cmd="${1:-help}"
+      continue
+      ;;
+  esac
+  shift || true
+  cmd="${1:-help}"
 done
 
 # Resolve backend: explicit > env > default 'jsonl'.
 # 'jsonl' = legacy JSONL-only; 'agileplus' = JSONL + AgilePlus dual-write.
 if [ -z "$backend" ]; then
-	backend="${BEADS_BACKEND:-jsonl}"
+  backend="${BEADS_BACKEND:-jsonl}"
 fi
 case "$backend" in
-jsonl | agileplus) ;;
-*)
-	echo "ERROR: invalid backend '$backend' (expected jsonl or agileplus)" >&2
-	exit 2
-	;;
+  jsonl|agileplus) ;;
+  *) echo "ERROR: invalid backend '$backend' (expected jsonl or agileplus)" >&2; exit 2 ;;
 esac
 # Backward compat: BEADS_DUAL_WRITE is the legacy name; map to backend.
 if [ "$backend" = "agileplus" ]; then
-	BEADS_DUAL_WRITE="${BEADS_DUAL_WRITE:-1}"
+  BEADS_DUAL_WRITE="${BEADS_DUAL_WRITE:-1}"
 fi
 export BEADS_BACKEND="$backend"
 
 shift || true
 
 case "$cmd" in
-claim | complete | warn | ctl | reorg | goal | intent | prompt)
-	target="${1:-}"
-	text="${2:-}"
-	if [ -z "$target" ] || [ -z "$text" ]; then
-		echo "ERROR: target and text required for ${cmd}"
-		echo "Usage: bead-ctl ${cmd} <target> \"<text>\""
-		exit 1
-	fi
-	add_bead "$cmd" "$target" "$text"
-	;;
-agent)
-	echo "$AGENT_ID"
-	;;
-migrate)
-	# Migrate legacy JSONL beads to AgilePlus. Idempotent — uses
-	# dedup_check() to skip beads whose hash already exists.
-	# Note: do NOT shift — _cmd_migrate needs the full "$@" to parse
-	# its flags.
-	_cmd_migrate "$@"
-	;;
-dedup)
-	echo "Checking duplicates..."
-	if [ -f "$BEADS_FILE" ]; then
-		dupes=$(python3 -c "
+  claim|complete|warn|ctl|reorg|goal|intent|prompt)
+    target="${1:-}"
+    text="${2:-}"
+    if [ -z "$target" ] || [ -z "$text" ]; then
+      echo "ERROR: target and text required for ${cmd}"
+      echo "Usage: bead-ctl ${cmd} <target> \"<text>\""
+      exit 1
+    fi
+    add_bead "$cmd" "$target" "$text"
+    ;;
+  agent)
+    echo "$AGENT_ID"
+    ;;
+  migrate)
+    # Migrate legacy JSONL beads to AgilePlus. Idempotent — uses
+    # dedup_check() to skip beads whose hash already exists.
+    # Note: do NOT shift — _cmd_migrate needs the full "$@" to parse
+    # its flags.
+    _cmd_migrate "$@"
+    ;;
+  dedup)
+    echo "Checking duplicates..."
+    if [ -f "$BEADS_FILE" ]; then
+      dupes=$(python3 -c "
 import json, sys
 from collections import Counter
 hashes = Counter()
@@ -497,18 +485,18 @@ for h, n in hashes.items():
 if not any(n > 1 for n in hashes.values()):
     print('  No duplicates found')
 " 2>&1)
-		echo "$dupes"
-	else
-		echo "  No beads file yet"
-	fi
-	;;
-stats)
-	echo "Bead stats:"
-	if [ ! -f "$BEADS_FILE" ]; then
-		echo "  No beads yet"
-		exit 0
-	fi
-	python3 -c "
+      echo "$dupes"
+    else
+      echo "  No beads file yet"
+    fi
+    ;;
+  stats)
+    echo "Bead stats:"
+    if [ ! -f "$BEADS_FILE" ]; then
+      echo "  No beads yet"
+      exit 0
+    fi
+    python3 -c "
 import json
 from collections import Counter
 kinds = Counter()
@@ -529,13 +517,13 @@ print(f'  By kind:    {dict(kinds)}')
 print(f'  By agent:   {dict(agents)}')
 print(f'  Top targets: {targets.most_common(5)}')
 "
-	;;
-help | --help | -h | "")
-	show_help
-	;;
-*)
-	echo "Unknown command: $cmd"
-	show_help
-	exit 1
-	;;
+    ;;
+  help|--help|-h|"")
+    show_help
+    ;;
+  *)
+    echo "Unknown command: $cmd"
+    show_help
+    exit 1
+    ;;
 esac
