@@ -12,40 +12,68 @@ HAPPY_PATH_BIG_CONSTANT_ALLOW_REGEX="${HAPPY_PATH_BIG_CONSTANT_ALLOW_REGEX:-(?i)
 
 mode=$(printf '%s' "$HAPPY_PATH_FAIL_ON" | tr 'A-Z' 'a-z')
 if [ "$mode" = "off" ]; then
-  exit 0
+	exit 0
 fi
 
 if [ -n "${HAPPY_PATH_HEAD:-}" ] && [ -z "${HAPPY_PATH_BASE:-}" ]; then
-  echo "error: HAPPY_PATH_HEAD requires HAPPY_PATH_BASE" >&2
-  exit 2
+	echo "error: HAPPY_PATH_HEAD requires HAPPY_PATH_BASE" >&2
+	exit 2
 fi
 
 tmp_diff="$(mktemp)"
 trap 'rm -f "$tmp_diff"' EXIT HUP INT TERM
 if [ -n "${HAPPY_PATH_BASE:-}" ]; then
-  # GitHub sends an all-zero `before` SHA when a push creates the ref. A
-  # root diff covers the complete new commit without resolving that SHA.
-  if [ "$HAPPY_PATH_BASE" = "0000000000000000000000000000000000000000" ]; then
-    git diff-tree --root --no-commit-id --no-renames --no-color --unified=3 -r \
-      "${HAPPY_PATH_HEAD:-HEAD}" -- > "$tmp_diff"
-  else
-    git diff --no-renames --no-color --unified=3 \
-      "$HAPPY_PATH_BASE" "${HAPPY_PATH_HEAD:-HEAD}" -- > "$tmp_diff"
-  fi
+	# GitHub sends an all-zero `before` SHA when a push creates the ref. A
+	# root diff covers the complete new commit without resolving that SHA.
+	if [ "$HAPPY_PATH_BASE" = "0000000000000000000000000000000000000000" ]; then
+		git diff-tree --root --no-commit-id --no-renames --no-color --unified=3 -r \
+			"${HAPPY_PATH_HEAD:-HEAD}" -- >"$tmp_diff"
+	else
+		git diff --no-renames --no-color --unified=3 \
+			"$HAPPY_PATH_BASE" "${HAPPY_PATH_HEAD:-HEAD}" -- >"$tmp_diff"
+	fi
 else
-  git diff --cached --no-renames --no-color --unified=3 > "$tmp_diff"
+	git diff --cached --no-renames --no-color --unified=3 >"$tmp_diff"
 fi
 
 if [ ! -s "$tmp_diff" ]; then
-  rm -f "$tmp_diff"
-  exit 0
+	rm -f "$tmp_diff"
+	exit 0
 fi
 
 awk -v disable="$HAPPY_PATH_DISABLE" \
-    -v allow="$HAPPY_PATH_BIG_CONSTANT_ALLOW" \
-    -v big_allow_re="$HAPPY_PATH_BIG_CONSTANT_ALLOW_REGEX" \
-    -v mode="$mode" '
+	-v allow="$HAPPY_PATH_BIG_CONSTANT_ALLOW" \
+	-v big_allow_re="$HAPPY_PATH_BIG_CONSTANT_ALLOW_REGEX" \
+	-v mode="$mode" '
 function trim(s) { sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); return s }
+
+# Blank out the contents of quoted strings. R1 fires on CLAIMS, and a trigger
+# word inside a string literal is a value or a log message rather than an
+# assertion about the work. R2 already covers telemetry claims separately.
+# The single-quote character is built with sprintf so this program can stay
+# inside a single-quoted shell string.
+function strip_quoted(s,   out, i, c, q, n, sq) {
+  sq = sprintf("%c", 39)
+  out = ""; q = ""; n = length(s)
+  for (i = 1; i <= n; i++) {
+    c = substr(s, i, 1)
+    if (q == "") {
+      if (c == "\"" || c == sq || c == "`") q = c
+      else out = out c
+    } else {
+      if (c == "\\") { i++; continue }
+      if (c == q) q = ""
+    }
+  }
+  return out
+}
+
+# The shell loop terminator is a keyword, not a sentence. "done" and
+# "done < <(cmd)" end a loop; they never claim that anything was completed.
+function is_shell_terminator(s) {
+  s = trim(s)
+  return (s ~ /^done([ \t]*(<|>|&|;|$))/)
+}
 
 function split_list(raw,    i, n, arr, out, t) {
   n = split(raw, arr, ",")
@@ -176,9 +204,17 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     is_template = (file ~ /COMMIT_EDITMSG|MERGE_MSG|PULL_REQUEST_TEMPLATE|pull_request_template\.md/)
 
     # R1 fixed-claim-without-user-conf
-    if (!is_template && lc ~ /(^|[^[:alnum:]_.])(fixed|works|done|passing|verified)([^[:alnum:]_]|$)|✅|✔|✔️/) {
-      if (!window_has(FNR, "user-confirmed|user-saw|confirmed by user|eyes-on|last-link:")) {
-        report("r1", file, line_no, body, "user-eye confirmation missing")
+    #
+    # The trigger words are claims in PROSE. Two forms are not claims and do
+    # not fire: the shell loop terminator (a keyword), and a word inside a
+    # quoted string (a value or a log message). Everything else that matches
+    # still needs a human-eye marker, exactly as before.
+    if (!is_template && !is_shell_terminator(body)) {
+      claim = tolower(strip_quoted(body))
+      if (claim ~ /(^|[^[:alnum:]_.])(fixed|works|done|passing|verified)([^[:alnum:]_]|$)|✅|✔|✔️/) {
+        if (!window_has(FNR, "user-confirmed|user-saw|confirmed by user|eyes-on|last-link:")) {
+          report("r1", file, line_no, body, "user-eye confirmation missing")
+        }
       }
     }
 
@@ -254,4 +290,3 @@ END {
 status=$?
 rm -f "$tmp_diff"
 exit "$status"
-
