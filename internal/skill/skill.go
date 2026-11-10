@@ -85,6 +85,30 @@ var commands = []Command{
 		Example: "dagrun trace --json",
 	},
 	{
+		Name:    "query",
+		Args:    "",
+		Purpose: "select nodes: filter, project, order, limit",
+		Example: "dagrun query --where status=failed --select id,attempts,title",
+	},
+	{
+		Name:    "replan",
+		Args:    "PLAN",
+		Purpose: "diff a revised plan against the run; --apply installs it and refuses to discard verified work without --force",
+		Example: "dagrun replan plan.yaml --apply",
+	},
+	{
+		Name:    "recover",
+		Args:    "",
+		Purpose: "report or reclaim nodes stuck in a running state; --force reclaims and keeps the attempt count",
+		Example: "dagrun recover --force",
+	},
+	{
+		Name:    "otel",
+		Args:    "",
+		Purpose: "export the run as OTLP/JSON spans for any OTel backend",
+		Example: "dagrun otel --out run.otlp.json",
+	},
+	{
 		Name:    "submit",
 		Args:    "",
 		Purpose: "post the run to a Tracera instance; fails loud on any reported error",

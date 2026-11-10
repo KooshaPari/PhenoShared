@@ -31,6 +31,11 @@ type Repo struct {
 	// Label is a human name for the repo, used in the namespace when Path is
 	// not a usable identifier.
 	Label string `yaml:"label,omitempty" json:"label,omitempty"`
+	// MaxWorkers caps how many nodes from THIS repo may run at once. Absent
+	// means "no cap of its own", so the workspace-wide cap still applies. It
+	// exists because one hot repo can otherwise absorb every worker while the
+	// other repos sit idle, which turns a multi-repo run into a serial one.
+	MaxWorkers int `yaml:"max_workers,omitempty" json:"max_workers,omitempty"`
 }
 
 // Workspace is a set of plans that together satisfy one intent.
@@ -43,6 +48,11 @@ type Workspace struct {
 	// Root is the directory the workspace file lives in. Paths resolve
 	// against it, not the working directory.
 	Root string `yaml:"-" json:"-"`
+
+	// MaxWorkers is the ceiling across every repo. A per-repo cap above this is
+	// clamped to it: the global number is the promise the operator made about
+	// total concurrency, and a repo may not quietly exceed it.
+	MaxWorkers int `yaml:"max_workers,omitempty" json:"max_workers,omitempty"`
 }
 
 // Load reads a workspace file and resolves repo paths against its directory.

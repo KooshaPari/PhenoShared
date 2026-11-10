@@ -227,8 +227,35 @@ func checkArtifact(root string, a plan.Artifact) ArtifactResult {
 	if len(hashes) > 1 {
 		res.SHA256 = fmt.Sprintf("%d files", len(hashes))
 	}
+
+	// Anti-gaming: satisfying every declared predicate is necessary, not
+	// sufficient. A file can be the right size, contain the right strings, and
+	// still be a stub. These checks are scoped to PROSE artifacts on purpose:
+	// TODO and XXX are ordinary markers in source code, so applying them to a
+	// .go file would punish normal engineering rather than catch slop.
+	if isProseArtifact(a.Path) {
+		for _, f := range PlaceholderFindings(a.Path, []byte(body)) {
+			res.Code, res.Detail = f.Code, f.Detail
+			return res
+		}
+		for _, f := range PaddingFindings(a.Path, []byte(body)) {
+			res.Code, res.Detail = f.Code, f.Detail
+			return res
+		}
+	}
 	res.OK = true
 	return res
+}
+
+// isProseArtifact reports whether an artifact is a document rather than code.
+// A path with no extension is treated as prose because that is what a node
+// asking for "DESIGN" or "NOTES" means.
+func isProseArtifact(path string) bool {
+	switch strings.ToLower(filepath.Ext(path)) {
+	case ".md", ".markdown", ".txt", ".rst", ".adoc", ".org", "":
+		return true
+	}
+	return false
 }
 
 func relAll(root string, files []string) []string {

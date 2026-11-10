@@ -37,6 +37,11 @@ type readyNode struct {
 	// gate's work set. OnCVPPath means the gate transitively depends on it.
 	DistanceToCVP int  `json:"distance_to_cvp"`
 	OnCVPPath     bool `json:"on_cvp_path"`
+	// MarginalScore is the estimated reduction in remaining critical-path
+	// work per estimated minute, in [0,1]. It is the primary ordering key:
+	// two nodes at the same distance can unlock very different amounts of
+	// downstream work, and the distance alone cannot tell them apart.
+	MarginalScore float64 `json:"marginal_score"`
 }
 
 // cvpChainNode is one prerequisite on the path to the CVP gate.
@@ -76,6 +81,9 @@ func cmdNext(args []string) error {
 
 	idx := p.Index()
 	ctx := context.Background()
+	// One scoring pass for the whole plan: the marginal score of a node
+	// depends on the whole graph, so it is computed once and looked up.
+	marginal := plan.MarginalScoresFor(p, gate)
 	var out []readyNode
 	for _, n := range p.Sorted() {
 		ns := snap.Nodes[n.ID]
@@ -103,6 +111,7 @@ func cmdNext(args []string) error {
 			Satisfied:     verify.Satisfied(ctx, st.Root(), n),
 			DistanceToCVP: dist,
 			OnCVPPath:     onPath,
+			MarginalScore: marginal[n.ID],
 		})
 	}
 
@@ -138,6 +147,9 @@ func cmdNext(args []string) error {
 			} else {
 				suffix = "  off-cvp"
 			}
+			if *byCVP {
+				suffix += fmt.Sprintf("  m=%.2f", r.MarginalScore)
+			}
 		}
 		fmt.Printf("%s%s  %-9s %-40s via %s (%s)%s\n",
 			marker, r.ID, r.Kind, truncate(r.Title, 40), r.Harness, r.Resolved, suffix)
@@ -163,19 +175,32 @@ func statusOf(snap *store.State, id string) string {
 }
 
 // orderByCVP sorts ready nodes so the work that closes the checkpoint comes
-// first: nodes on the CVP path (the gate transitively depends on them) before
-// everything else, then fewest hops from the gate, then WBS id for determinism.
+// first.
+//
+// The primary key is the marginal score: how much remaining checkpoint work
+// this node releases per minute it costs. Distance alone cannot tell two
+// nodes at the same hop count apart when one of them unblocks hours of
+// downstream work and the other unblocks none.
+//
+// The distance ordering survives as the tiebreak, in plan.LessCVPOrderKey:
+// on the checkpoint's path, then fewest hops from the gate, then WBS id. When
+// two nodes unlock the same amount of work the closer one is still the better
+// bet, and when the plan has no checkpoint at all every score is zero and the
+// ordering falls back to exactly the distance ordering it was before.
 func orderByCVP(nodes []readyNode) {
 	sort.SliceStable(nodes, func(i, j int) bool {
-		a, b := nodes[i], nodes[j]
-		if a.OnCVPPath != b.OnCVPPath {
-			return a.OnCVPPath
-		}
-		if a.OnCVPPath && a.DistanceToCVP != b.DistanceToCVP {
-			return a.DistanceToCVP < b.DistanceToCVP
-		}
-		return plan.Less(a.ID, b.ID)
+		return plan.LessCVPOrderKey(orderKey(nodes[i]), orderKey(nodes[j]))
 	})
+}
+
+// orderKey converts a ready node into the plan package's ordering key.
+func orderKey(n readyNode) plan.CVPOrderKey {
+	return plan.CVPOrderKey{
+		ID:       n.ID,
+		Marginal: n.MarginalScore,
+		OnPath:   n.OnCVPPath,
+		Distance: n.DistanceToCVP,
+	}
 }
 
 // printCVP answers "what is the checkpoint, and what must happen first?" in

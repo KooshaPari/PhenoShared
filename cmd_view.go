@@ -1,14 +1,19 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/KooshaPari/dagrun/internal/export"
 	"github.com/KooshaPari/dagrun/internal/harness"
 	"github.com/KooshaPari/dagrun/internal/plan"
+	"github.com/KooshaPari/dagrun/internal/store"
 	"github.com/KooshaPari/dagrun/internal/trace"
 )
 
@@ -17,13 +22,91 @@ func cmdStatus(args []string) error {
 	var jsonOut bool
 	flags, _ := splitArgs(args)
 	fs := flagSet("status", &dir, &jsonOut)
+	watch := fs.Duration("watch", 0, "redraw every interval until every node is terminal, e.g. 2s")
+	plain := fs.Bool("watch-plain", false, "when watching, print a separator instead of using ANSI cursor control")
 	if err := fs.Parse(flags); err != nil {
 		return err
+	}
+	if *watch > 0 && jsonOut {
+		return fmt.Errorf("--watch and --json cannot be combined: a stream of JSON documents is not readable and not parseable")
 	}
 	p, st, _, err := openRun(dir)
 	if err != nil {
 		return err
 	}
+	if *watch > 0 {
+		return watchStatus(p, st, *watch, *plain)
+	}
+	return printStatus(p, st, jsonOut)
+}
+
+// watchStatus redraws until every node reaches a terminal state, so an operator
+// can watch a run without polling by hand. It stops on its own: a watcher that
+// runs forever is a process someone forgets to kill.
+func watchStatus(p *plan.Plan, st *store.Store, every time.Duration, plain bool) error {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	tty := !plain && isTTY(os.Stdout)
+	tick := time.NewTicker(every)
+	defer tick.Stop()
+
+	for {
+		if tty {
+			// Move home and clear below, so the frame count never grows.
+			fmt.Print("\033[H\033[2J")
+		} else if plain {
+			fmt.Printf("--- %s ---\n", time.Now().Format("15:04:05"))
+		}
+		if err := printStatus(p, st, false); err != nil {
+			return err
+		}
+		snap, err := st.Snapshot()
+		if err != nil {
+			return err
+		}
+		if allTerminal(st, snap) {
+			return nil
+		}
+		select {
+		case <-ctx.Done():
+			fmt.Println("\nstopped watching")
+			return nil
+		case <-tick.C:
+		}
+	}
+}
+
+// allTerminal reports whether every node has finished, one way or another. A
+// run with no nodes is not terminal: nothing ran yet.
+func allTerminal(st *store.Store, snap *store.State) bool {
+	all := st.All(snap)
+	if len(all) == 0 {
+		return false
+	}
+	for _, n := range all {
+		ns := snap.Nodes[n.ID]
+		if ns == nil {
+			return false
+		}
+		switch ns.Status {
+		case plan.StatusDone, plan.StatusFailed, plan.StatusSkipped, plan.StatusCancelled:
+		default:
+			return false
+		}
+	}
+	return true
+}
+
+func isTTY(f *os.File) bool {
+	info, err := f.Stat()
+	if err != nil {
+		return false
+	}
+	return info.Mode()&os.ModeCharDevice != 0
+}
+
+func printStatus(p *plan.Plan, st *store.Store, jsonOut bool) error {
 	snap, err := st.Snapshot()
 	if err != nil {
 		return err
@@ -100,11 +183,90 @@ func cmdStatus(args []string) error {
 	return nil
 }
 
+// filterEvents narrows a merged trace. Order of application is fixed so the
+// answer does not depend on flag order: since, then node, then event, then limit.
+// A limit applies to the tail, because "the last N" is the question an operator
+// actually asks when a run is noisy.
+func filterEvents(events []trace.Event, node, event, since string, limit int) ([]trace.Event, error) {
+	var cutoff time.Time
+	switch {
+	case since == "":
+	case strings.ContainsAny(since, "-:T"):
+		t, err := time.Parse(time.RFC3339, since)
+		if err != nil {
+			return nil, fmt.Errorf("--since %q is not RFC3339 (want e.g. 2026-11-02T08:00:00Z) nor a duration like 30m: %w", since, err)
+		}
+		cutoff = t
+	default:
+		d, err := time.ParseDuration(since)
+		if err != nil {
+			return nil, fmt.Errorf("--since %q is not a duration (30m) or RFC3339: %w", since, err)
+		}
+		cutoff = time.Now().Add(-d)
+	}
+
+	out := make([]trace.Event, 0, len(events))
+	for _, e := range events {
+		if !cutoff.IsZero() && e.TS.Before(cutoff) {
+			continue
+		}
+		if node != "" && !globMatch(node, e.Node) {
+			continue
+		}
+		if event != "" && !globMatch(event, e.Event) {
+			continue
+		}
+		out = append(out, e)
+	}
+	if limit > 0 && len(out) > limit {
+		out = out[len(out)-limit:]
+	}
+	if limit < 0 {
+		return nil, fmt.Errorf("--limit must not be negative")
+	}
+	return out, nil
+}
+
+// globMatch is a tiny *,? matcher. It exists so `--event 'node.*'` works without
+// pulling path semantics in: a trace event name is not a filesystem path, and
+// filepath.Match would treat a backslash as an escape on one platform only.
+func globMatch(pattern, s string) bool {
+	if pattern == "" {
+		return true
+	}
+	pi, si := 0, 0
+	star, mark := -1, 0
+	for si < len(s) {
+		switch {
+		case pi < len(pattern) && (pattern[pi] == '?' || pattern[pi] == s[si]):
+			pi++
+			si++
+		case pi < len(pattern) && pattern[pi] == '*':
+			star, mark = pi, si
+			pi++
+		case star >= 0:
+			pi = star + 1
+			mark++
+			si = mark
+		default:
+			return false
+		}
+	}
+	for pi < len(pattern) && pattern[pi] == '*' {
+		pi++
+	}
+	return pi == len(pattern)
+}
+
 func cmdTrace(args []string) error {
 	var dir string
 	var jsonOut bool
 	flags, _ := splitArgs(args)
 	fs := flagSet("trace", &dir, &jsonOut)
+	node := fs.String("node", "", "only events for this node id (glob)")
+	event := fs.String("event", "", "only events whose name matches this glob, e.g. node.* or *.fail")
+	since := fs.String("since", "", "only events at or after this time: a duration back from now (30m) or RFC3339")
+	limit := fs.Int("limit", 0, "keep only the last N events (0 = all)")
 	if err := fs.Parse(flags); err != nil {
 		return err
 	}
@@ -113,6 +275,10 @@ func cmdTrace(args []string) error {
 		return fmt.Errorf("no run directory at %s", dir)
 	}
 	events, err := trace.Merge(dir + "/trace")
+	if err != nil {
+		return err
+	}
+	events, err = filterEvents(events, *node, *event, *since, *limit)
 	if err != nil {
 		return err
 	}

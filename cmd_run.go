@@ -13,6 +13,7 @@ import (
 	"github.com/KooshaPari/dagrun/internal/house"
 	"github.com/KooshaPari/dagrun/internal/plan"
 	"github.com/KooshaPari/dagrun/internal/run"
+	"github.com/KooshaPari/dagrun/internal/store"
 	"github.com/KooshaPari/dagrun/internal/trace"
 )
 
@@ -31,6 +32,7 @@ func cmdRun(args []string) error {
 	verbose := fs.Bool("verbose", false, "log spawns and child output paths")
 	maxCost := fs.Float64("max-cost", 0, "cost ceiling in USD; 0 means the plan's own max_cost_usd, which may be 0 for no limit")
 	forceRun := fs.Bool("force", false, "start even when a node names a harness that cannot run")
+	waitFor := fs.Duration("wait", 0, "keep the executor alive while capacity is held elsewhere, up to this long (e.g. 10m); 0 returns as soon as nothing can start")
 	if err := fs.Parse(flags); err != nil {
 		return err
 	}
@@ -92,7 +94,32 @@ func cmdRun(args []string) error {
 	opt.ProviderPolicy = p.ProviderPolicy
 	tr := trace.New(st.Dir() + "/trace")
 	ex := run.New(st, tr, opt)
-	summary, runErr := ex.Loop(ctx)
+
+	// --wait distinguishes two situations that look identical in a single tick:
+	// capacity that will free up (another executor holds the provider slot or
+	// the worker cap) and work that is simply blocked. The default of 0 keeps
+	// the old behaviour exactly, because a single-shot invocation should not
+	// sleep, while a scheduler wants to wait rather than report a partial run.
+	var summary run.Summary
+	var runErr error
+	deadline := time.Time{}
+	if *waitFor > 0 {
+		deadline = time.Now().Add(*waitFor)
+	}
+	for {
+		summary, runErr = ex.Loop(ctx)
+		if *waitFor <= 0 || ctx.Err() != nil || summary.Pending == 0 {
+			break
+		}
+		if !time.Now().Before(deadline) {
+			fmt.Fprintf(os.Stderr, "dagrun run: --wait %s elapsed with %d node(s) still pending\n", *waitFor, summary.Pending)
+			break
+		}
+		select {
+		case <-ctx.Done():
+		case <-time.After(500 * time.Millisecond):
+		}
+	}
 
 	if jsonOut {
 		enc := json.NewEncoder(os.Stdout)
@@ -101,6 +128,7 @@ func cmdRun(args []string) error {
 	} else {
 		fmt.Printf("\nrun %s: done=%d failed=%d skipped=%d pending=%d\n",
 			p.Run, summary.Done, summary.Failed, summary.Skipped, summary.Pending)
+		reportQueue(st)
 		if len(summary.Remaining) > 0 {
 			fmt.Printf("remaining: %s\n", strings.Join(summary.Remaining, ", "))
 		}
@@ -112,6 +140,46 @@ func cmdRun(args []string) error {
 		return fmt.Errorf("%d node(s) did not complete", summary.Failed+summary.Pending)
 	}
 	return nil
+}
+
+// reportQueue says why the run ended with work left over. "pending=3" alone
+// does not tell an operator whether to wait, to fix a plan, or to reclaim a dead
+// worker, and those are three different actions.
+func reportQueue(st *store.Store) {
+	snap, err := st.Snapshot()
+	if err != nil {
+		return
+	}
+	startable, blockedDep, leased, admitted := 0, 0, 0, 0
+	for _, n := range st.All(snap) {
+		ns := snap.Nodes[n.ID]
+		if ns == nil {
+			continue
+		}
+		switch ns.Status {
+		case plan.StatusRunning:
+			if ns.Owner != "" {
+				leased++
+			}
+		case plan.StatusPending:
+			if n.FanIn != "" && !store.Expanded(snap, n.FanIn) {
+				admitted++
+				continue
+			}
+			if st.DepsDone(snap, n.ID) {
+				startable++
+			} else {
+				blockedDep++
+			}
+		}
+	}
+	if startable+blockedDep+leased+admitted == 0 {
+		return
+	}
+	var b strings.Builder
+	fmt.Fprintf(&b, "queue: %d ready-but-not-started, %d blocked on dependencies, %d running elsewhere, %d waiting on a fan-in\n",
+		startable, blockedDep, leased, admitted)
+	fmt.Print(b.String())
 }
 
 func ownerOrDefault(owner string) string {

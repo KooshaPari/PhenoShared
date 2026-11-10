@@ -470,3 +470,47 @@ func TestDoctorWithNilStoreDoesNotPanic(t *testing.T) {
 		t.Fatal("nil report")
 	}
 }
+
+// A run directory on a read-only mount, or one owned by another user, is a
+// wedge that no node can report: state.json is the only durable record. The
+// doctor must name it, because the alternative is an operator reading a raw
+// errno out of a node log.
+func TestDoctorReportsAnUnwritableRunDir(t *testing.T) {
+	if os.Geteuid() == 0 {
+		t.Skip("root ignores directory permission bits, so this cannot be simulated")
+	}
+	dir := t.TempDir()
+	if err := os.Chmod(dir, 0o500); err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = os.Chmod(dir, 0o700) })
+
+	rep := Doctor(dir, nil, nil)
+	found := false
+	for _, f := range rep.Findings {
+		if f.Code == "run_dir_unwritable" {
+			found = true
+			if f.Severity != SeverityError {
+				t.Errorf("run_dir_unwritable severity = %q, want %q", f.Severity, SeverityError)
+			}
+			if f.Action == "" {
+				t.Error("run_dir_unwritable has no action; a diagnosis without a next step is not actionable")
+			}
+		}
+	}
+	if !found {
+		t.Fatalf("expected run_dir_unwritable, got %+v", rep.Findings)
+	}
+}
+
+// A writable directory must not be accused of being unwritable. This is the
+// control for the test above: a check that always fires is worthless.
+func TestDoctorAcceptsAWritableRunDir(t *testing.T) {
+	dir := t.TempDir()
+	rep := Doctor(dir, nil, nil)
+	for _, f := range rep.Findings {
+		if f.Code == "run_dir_unwritable" {
+			t.Fatalf("writable dir flagged: %+v", f)
+		}
+	}
+}
