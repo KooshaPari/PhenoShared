@@ -141,7 +141,12 @@ jobs:
           # Unknown message type
           RESP=$(echo '{"type":"unknown_type_xyz"}' | nc -w 2 127.0.0.1 9400)
           echo "unknown_message: $RESP"
-          echo "$RESP" | grep -qi "unknown_message"
+          # The daemon answers with error code UNKNOWN_TYPE (see the live run:
+          #   {"type":"validation_error","error":"UNKNOWN_TYPE","message":"unknown message type: ..."}
+          # "unknown_message" appears in a different wire path and never in this
+          # response, so grepping only for it can never match. The Rust tests
+          # accept either spelling; accept either here too.
+          echo "$RESP" | grep -qiE "unknown_type|unknown_message"
 
           echo "All E2E message tests passed!"
 
