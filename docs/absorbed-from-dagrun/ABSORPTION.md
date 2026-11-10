@@ -68,16 +68,15 @@ go test -tags scale   -> exit 0
 go test -race ./internal/server/ -> exit 0
 ```
 
-### Why gate 2 is open, and why it is the one that matters
+### Why gate 2 was the one that mattered
 
-Gate 2 is what makes "one product" a fact instead of a claim. Four
+Gate 2 is what made "one product" a fact rather than a claim. Four
 implementations existed and **two of them defined a DAG schema for the same
-ecosystem**. Merging the code without reconciling the schemas would move the
-collision into a new directory and guarantee a fifth attempt.
+ecosystem**. Merging the code without reconciling the schemas would have moved
+the collision into a new directory and guaranteed a fifth attempt.
 
-Until dagrun reads a `DagSchema` document and a compatibility test proves the
-two describe the same thing, `phenotype-dag-core` stays in the Rust workspace and
-`KooshaPari/dagrun` stays on GitHub.
+It is now satisfied, and the evidence is in the mapping rather than the prose:
+`plan --from dagschema` reads the crate's own output, and the crate is gone.
 
 ### If gate 2 cannot be satisfied
 

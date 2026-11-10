@@ -22,12 +22,27 @@
 //! authority. Silently falling back to a local broker - one the daemon does not
 //! serve - is exactly the bug this crate exists to prevent, so every failure to
 //! reach `BROKERD_URL` is reported as such and names the variable to fix.
+//!
+//! # Trusting the daemon's certificate
+//!
+//! A daemon that serves HTTPS presents a certificate the machine may not
+//! trust. `BROKERD_CA` names a PEM file holding the certificate to pin; it is
+//! added to the client's trust roots, so the daemon's identity is bound to the
+//! certificate it was started with and nothing has to be installed into the
+//! machine's trust store. A rejected certificate and a mis-pointed
+//! `BROKERD_CA` are reported as themselves, never as an unreachable daemon.
 
 use std::{fmt, time::Duration};
 
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use substrate_browser::{BrowserError, Lease};
 use substrate_browser_broker::{BrokerError, LiveSessionInfo};
+
+use crate::{
+    ca,
+    config::RemoteConfig,
+    remote::{RemoteAcquired, RemotePurged, RemoteReaped, RemoteReleased},
+};
 
 /// Environment variable naming a running `brokerd`, for example
 /// `http://127.0.0.1:8787`.
@@ -37,6 +52,16 @@ pub const URL_ENV: &str = "BROKERD_URL";
 ///
 /// Optional: a loopback daemon started without `--token` needs none.
 pub const TOKEN_ENV: &str = "BROKERD_TOKEN";
+
+/// Environment variable naming a PEM file holding the certificate to trust
+/// for the daemon's TLS connection, for example `/etc/brokerd/cert.pem`.
+///
+/// Optional: a daemon whose certificate the machine already trusts needs
+/// none. When it is set, that certificate is *added* to the client's trust
+/// roots rather than swapped for them, so a daemon with a publicly trusted
+/// certificate stays reachable and the daemon's identity stays bound to the
+/// certificate it was started with.
+pub const CA_ENV: &str = "BROKERD_CA";
 
 /// Per-request timeout for the daemon client.
 ///
@@ -52,115 +77,9 @@ const REQUEST_TIMEOUT: Duration = Duration::from_secs(90);
 /// independently of how long a legitimate action is allowed to take.
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(3);
 
-/// Where a running `brokerd` listens, and how to authenticate to it.
-#[derive(Clone, PartialEq, Eq)]
-pub struct RemoteConfig {
-    base_url: String,
-    token: Option<String>,
-}
-
-impl fmt::Debug for RemoteConfig {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // Never print the token, even at debug level.
-        f.debug_struct("RemoteConfig")
-            .field("base_url", &self.base_url)
-            .field("token", &self.token.as_ref().map(|_| "<redacted>"))
-            .finish()
-    }
-}
-
-impl RemoteConfig {
-    /// Configure a daemon at `base_url`, normalising trailing slashes.
-    pub fn new(base_url: impl Into<String>, token: Option<String>) -> Self {
-        let mut base_url = base_url.into();
-        while base_url.ends_with('/') {
-            base_url.pop();
-        }
-        Self {
-            base_url,
-            token: token.filter(|token| !token.is_empty()),
-        }
-    }
-
-    /// Read the configuration through `get`, so the precedence is testable
-    /// without mutating process-global environment variables.
-    pub fn from_lookup(get: impl Fn(&str) -> Option<String>) -> Option<Self> {
-        let base_url = get(URL_ENV)?;
-        let base_url = base_url.trim();
-        if base_url.is_empty() {
-            return None;
-        }
-        Some(Self::new(base_url, get(TOKEN_ENV)))
-    }
-
-    /// Read the configuration from the process environment.
-    pub fn from_env() -> Option<Self> {
-        Self::from_lookup(|name| std::env::var(name).ok())
-    }
-
-    /// Daemon base URL, without a trailing slash.
-    pub fn base_url(&self) -> &str {
-        &self.base_url
-    }
-
-    /// Whether a bearer token is configured.
-    pub fn has_token(&self) -> bool {
-        self.token.is_some()
-    }
-
-    fn endpoint(&self, path: &str) -> String {
-        format!("{}{path}", self.base_url)
-    }
-}
-
-fn refused(message: impl Into<String>) -> BrokerError {
+/// Refuse an operation, with the reason the caller has to act on.
+pub(crate) fn refused(message: impl Into<String>) -> BrokerError {
     BrokerError::State(BrowserError::Refused(message.into()))
-}
-
-/// The daemon's answer to `POST /v1/leases`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemoteAcquired {
-    /// Lease identifier the daemon granted.
-    pub id: String,
-    /// Fencing token that must accompany every later mutation.
-    pub fencing_token: u64,
-    /// Lease expiry, milliseconds since the Unix epoch.
-    pub expires_at_unix_ms: u64,
-    /// Profile generation the daemon launched.
-    pub generation: u64,
-    /// Browser user data directory, on the daemon's disk.
-    pub data_dir: String,
-}
-
-/// The daemon's answer to `POST /v1/leases/{id}/release`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemoteReleased {
-    /// True; refusals never arrive as a success body.
-    pub released: bool,
-    /// What the daemon actually tore down.
-    pub teardown: String,
-}
-
-/// The daemon's answer to `POST /v1/leases/reap`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemoteReaped {
-    /// Sessions reaped in the daemon.
-    pub reaped: usize,
-    /// Expired lease records swept from the shared store.
-    pub leases_reaped: usize,
-    /// Live sessions remaining afterwards.
-    pub live_sessions_after: usize,
-}
-
-/// The daemon's answer to `POST /v1/profiles/purge`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemotePurged {
-    /// True when the profile directory was removed.
-    pub purged: bool,
-    /// Profile directory that was (or would have been) removed.
-    pub path: String,
-    /// False when the profile had no data on disk.
-    pub existed: bool,
 }
 
 /// A client for a running `brokerd`.
@@ -178,8 +97,13 @@ impl fmt::Debug for RemoteBroker {
 }
 
 impl RemoteBroker {
-    /// Build a client. No I/O happens here: failures surface on the first call,
-    /// so a caller cannot mistake "client built" for "daemon reachable".
+    /// Build a client. No network traffic happens here: failures to reach the
+    /// daemon surface on the first call, so a caller cannot mistake "client
+    /// built" for "daemon reachable".
+    ///
+    /// When the configuration pins a CA, that certificate is read from disk
+    /// and joins the client's trust roots. It is added, never swapped for
+    /// them, so a daemon with a publicly trusted certificate keeps answering.
     pub fn new(config: RemoteConfig) -> Result<Self, BrokerError> {
         Self::with_timeouts(config, CONNECT_TIMEOUT, REQUEST_TIMEOUT)
     }
@@ -193,11 +117,22 @@ impl RemoteBroker {
         connect: Duration,
         request: Duration,
     ) -> Result<Self, BrokerError> {
-        let http = reqwest::Client::builder()
+        let mut builder = reqwest::Client::builder()
             .connect_timeout(connect)
-            .timeout(request)
-            .build()
-            .map_err(|err| refused(format!("cannot build a brokerd HTTP client: {err}")))?;
+            .timeout(request);
+        if let Some(path) = config.ca_path() {
+            for certificate in ca::pinned_certificates(path)? {
+                builder = builder.add_root_certificate(certificate);
+            }
+        }
+        let http = builder.build().map_err(|err| {
+            // The pinned certificate is the only thing this client added, so a
+            // failure here is about that certificate.
+            match config.ca_path() {
+                Some(path) => ca::unusable_certificate(path, &err),
+                None => refused(format!("cannot build a brokerd HTTP client: {err}")),
+            }
+        })?;
         Ok(Self { config, http })
     }
 
@@ -208,7 +143,7 @@ impl RemoteBroker {
 
     /// Present the configured credential, when there is one.
     fn authorised(&self, request: reqwest::RequestBuilder) -> reqwest::RequestBuilder {
-        match &self.config.token {
+        match self.config.token() {
             Some(token) => request.bearer_auth(token),
             None => request,
         }
@@ -239,7 +174,7 @@ impl RemoteBroker {
             return Err(refused(format!(
                 "brokerd at {} rejected the credential (401); set {TOKEN_ENV} to the token the \
                  daemon was started with",
-                self.config.base_url
+                self.config.base_url()
             )));
         }
         if !status.is_success() {
@@ -265,7 +200,17 @@ impl RemoteBroker {
     /// Every branch refuses to fall back to a local broker: the operator
     /// configured a daemon, so a different authority would be a lie.
     fn transport_error(&self, url: &str, err: &reqwest::Error) -> BrokerError {
-        let base = &self.config.base_url;
+        let base = self.config.base_url();
+        // A rejected certificate must be checked before `is_connect()`: a TLS
+        // handshake failure *is* a connect error, so the connect branch below
+        // would otherwise report a refused certificate as an unreachable
+        // daemon and send the reader hunting for a firewall instead of a PEM.
+        if let Some(detail) = ca::certificate_rejection(err) {
+            return refused(format!(
+                "brokerd at {base} rejected the TLS certificate ({detail}); point {CA_ENV} at the \
+                 PEM certificate the daemon was started with"
+            ));
+        }
         if err.is_connect() {
             return refused(format!(
                 "brokerd at {base} is configured via {URL_ENV} but unreachable ({err}); no \

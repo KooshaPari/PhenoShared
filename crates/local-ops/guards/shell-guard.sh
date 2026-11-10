@@ -7,10 +7,11 @@ INPUT_JSON="$(cat 2>/dev/null || true)"
 TOOL="Bash"
 COMMAND=""
 
-if [[ -n "$INPUT_JSON" ]]; then
-  # Parse stdin payload if provided by Claude hook.
-  if command -v python3 >/dev/null 2>&1; then
-    COMMAND="$(printf '%s' "$INPUT_JSON" | python3 - "$PWD" <<'PY'
+if [[ -n $INPUT_JSON ]]; then
+	# Parse stdin payload if provided by Claude hook.
+	if command -v python3 >/dev/null 2>&1; then
+		COMMAND="$(
+			printf '%s' "$INPUT_JSON" | python3 - "$PWD" <<'PY'
 import json, sys
 raw = sys.stdin.read() or "{}"
 try:
@@ -29,24 +30,23 @@ if not command:
 print(str(tool))
 print(str(command))
 PY
- )"
-    # Preserve tool and command for optional policy check.
-    TOOL="${COMMAND%%$'\n'*}"
-    COMMAND="${COMMAND#*$'\n'}"
-  fi
+		)"
+		# Preserve tool and command for optional policy check.
+		TOOL="${COMMAND%%$'\n'*}"
+		COMMAND="${COMMAND#*$'\n'}"
+	fi
 fi
 
 # If a direct CLI arg was passed, keep compatibility.
 if [[ $# -ge 1 ]]; then
-  COMMAND="$*"
+	COMMAND="$*"
 fi
 
-if [[ -x "/Users/<REDACTED>/.claude/bin/policy-gate-check.sh" ]] && [[ -n "$COMMAND" ]]; then
-  "/Users/<REDACTED>/.claude/bin/policy-gate-check.sh" "$TOOL" "$COMMAND" >/dev/null 2>&1 || {
-    # Policy gate blocks with exit code 2; propagate while keeping noise low.
-    exit $?
-  }
+if [[ -x "${HOME}/.claude/bin/policy-gate-check.sh" ]] && [[ -n $COMMAND ]]; then
+	"${HOME}/.claude/bin/policy-gate-check.sh" "$TOOL" "$COMMAND" >/dev/null 2>&1 || {
+		# Policy gate blocks with exit code 2; propagate while keeping noise low.
+		exit $?
+	}
 fi
 
 exit 0
-

@@ -1,57 +1,27 @@
 # Files the repair tool must not touch.
 #
-# Two independent reasons, both about the repository's own gates rather than
-# about the repair itself.
+# Trunk Check lints the files a change touches and reports their EXISTING
+# findings as new ones. A file with a pre-existing mypy error or a dead import
+# fails the gate the moment anything modifies it, even a one-line path fix.
+# Those files need their own cleanup, not a path rewrite bolted onto it.
 #
-# 1. Trunk Check lints the files a change touches and reports their EXISTING
-#    findings as new ones. A file with a pre-existing mypy error or a dead
-#    import fails the gate the moment anything modifies it, even a one-line
-#    path fix. Those files need their own cleanup, not a path rewrite bolted
-#    onto it.
+#   scripts/e2e_real_model.py                    mypy name-defined: "mx"
+#   gui/admin-extensions/api/research_panel.py   2 mypy failures
+#   scripts/phenotype_omlx_ready.py              ruff F401, unused imports
 #
-#      scripts/e2e_real_model.py                    mypy name-defined: "mx"
-#      gui/admin-extensions/api/research_panel.py   2 mypy failures
-#      scripts/phenotype_omlx_ready.py              ruff F401, unused imports
+# beads/bead-ctl.sh is excluded for a different reason. Making it shfmt-clean
+# moves a line whose comment says the dual write is switched off, and rule R7 of
+# the happy-path guard has no escape hatch at all: any added line mentioning a
+# disabled feature is reported. Fixing R7 is a change to the rule itself and
+# belongs in its own commit.
 #
-# 2. The shell files below are not shfmt-clean at their base revision. Making
-#    them shfmt-clean means adding lines that contain the shell loop terminator,
-#    and the repository's happy-path guard (governance/happy-path-precommit.sh,
-#    rule R1) reads the loop terminator as an unverified success claim and blocks
-#    the commit. The two gates are mutually blocking for these files: Trunk
-#    demands the reformat, the guard forbids it.
-#
-#    The honest fix is to the guard's keyword false positive, not to the
-#    rewrite. Until that lands, these files are frozen:
-#
-#      apps/bench-cockpit/scripts/start-dev.sh
-#      beads/bead-ctl.sh
-#      beads/refresh-agileplus-token.sh
-#      crates/argis-extensions/tools/dag-agent/onboard-repo.sh
-#      crates/local-ops/guards/shell-guard.sh
-#      crates/phinbox/plugins/droid/install.sh
-#      crates/phinbox/plugins/kilo_code/install.sh
-#      scripts/cron/every_10m.sh
-#      scripts/cross_repo_smoke.sh
-#      scripts/forge/forge-proc-reap.sh
-#      scripts/install_airlock_v2.sh
-#      scripts/phenotype-omlx-env.sh
-#
-#    That is 25 of the 32 shell sites in the own-code slice. They stay broken
-#    until the guard is corrected, and the campaign record says so.
+# The twelve shell files that used to be listed here are no longer excluded.
+# They were blocked by the guard reading the shell loop terminator, and a word
+# inside a quoted string, as unverified success claims. That was a false
+# positive in the guard's rule R1, corrected in governance/happy-path-precommit.sh
+# with tests in governance/test-happy-path-claims.sh.
 
 scripts/e2e_real_model.py
 gui/admin-extensions/api/research_panel.py
 scripts/phenotype_omlx_ready.py
-
-apps/bench-cockpit/scripts/start-dev.sh
 beads/bead-ctl.sh
-beads/refresh-agileplus-token.sh
-crates/argis-extensions/tools/dag-agent/onboard-repo.sh
-crates/local-ops/guards/shell-guard.sh
-crates/phinbox/plugins/droid/install.sh
-crates/phinbox/plugins/kilo_code/install.sh
-scripts/cron/every_10m.sh
-scripts/cross_repo_smoke.sh
-scripts/forge/forge-proc-reap.sh
-scripts/install_airlock_v2.sh
-scripts/phenotype-omlx-env.sh

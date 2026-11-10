@@ -58,15 +58,19 @@ projects' code, so this campaign does not touch them.
 
 ## 3. What was repaired in this slice
 
-**28 occurrences across 18 files**, all in this repository's own executable
+**50 occurrences across 29 files**, all in this repository's own executable
 code, via `scripts/pii-sweep-repair.py`:
 
 | Language         | Before  | After   | Rewritten    |
 | ---------------- | ------- | ------- | ------------ |
-| shell (`*.sh`)   | 32      | 25      | 7            |
+| shell (`*.sh`)   | 32      | 3       | 29           |
 | python (`*.py`)  | 125     | 104     | 21           |
 | yaml / rust / js | 101     | 101     | 0 (reported) |
-| **total**        | **258** | **230** | **28**       |
+| **total**        | **258** | **208** | **50**       |
+
+(Both columns are counted against the same base, the commit the campaign
+started from. Other lanes have added sites since, so a fresh measurement of
+the tree today gives a larger number; the table tracks the original 258.)
 
 The rewrite is not "un-redact". It removes the dependency on an absolute home
 path entirely:
@@ -133,6 +137,29 @@ false positive is corrected, those files are frozen. That is **25 of the 32 shel
 sites** in the own-code slice, and it is the single biggest remaining item in
 this campaign. `scripts/pii-sweep-repair.exclude` lists all twelve with the
 reason.
+
+### The guard's own false positive, and the fix
+
+The mutual blocking described above was not left as a caveat. The guard's rule
+R1 reads a small set of trigger words (the list itself lives in the guard,
+`governance/happy-path-precommit.sh`) as unverified success claims. Two forms
+are not claims:
+
+- a shell loop terminator keyword, including the process-substitution form --
+  syntax rather than an assertion;
+- a trigger word inside a quoted string -- a value or a log message.
+
+Both now pass, and everything else behaves exactly as before: a prose claim
+still needs its human-eye marker, and a claim outside quotes still needs one
+even when the same line contains a quoted string.
+
+`governance/test-happy-path-claims.sh` covers this end to end -- it builds a
+throwaway repository per case and asks the production guard to judge the diff,
+so it cannot drift from what CI runs. Eleven cases: three that must still be
+rejected, eight that must now be accepted.
+
+With the guard corrected, eleven shell files stopped being frozen and 22 more
+sites were repaired.
 
 Two shell files needed a different kind of fix: `beads/refresh-agileplus-token.sh`
 and `scripts/forge/forge-proc-reap.sh` each print a message that deliberately
@@ -207,7 +234,28 @@ The residue is not finished. A workable end state, in order of value:
 4. **Prose and data dumps**: 19k+ sites. Mostly harmless, already handled for
    VitePress. Leave them.
 
-## 8. Reproducing this
+## 8. A second defect found along the way: pinact is inoperative
+
+Trunk's `pinact@5.0.2` cannot run. Trunk invokes it with `-format`; pinact v5
+renamed that flag to `--format` and exits with
+
+```
+unknown flag: -format. Long flags need two dashes since pinact v5: --format
+```
+
+on **every** workflow file, modified or not. Downgrading to `pinact@4.0.0` does
+not help either: v4 then flags correctly-SHA-pinned actions as "should be
+pinned", because the two versions disagree about the configuration format.
+
+The consequence for this campaign: **any commit that touches a workflow file
+fails Trunk Check** for a reason that has nothing to do with the change. That
+is why the guard's new test is not wired into `.github/workflows/happy-path-precommit.yml`
+in this commit -- adding a step there would have failed the gate on the pinact
+error. Action pinning is enforced by two other gates that do work
+(`Governance` and `scripts/workflow-action-guard.py`), so pinact's share of the
+coverage is already covered while it is broken.
+
+## 9. Reproducing this
 
 ```bash
 python3 scripts/pii-sweep-repair.py         # dry run: what would change
