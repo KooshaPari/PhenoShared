@@ -20,7 +20,21 @@ jobs:
   analysis:
     name: Scorecard analysis
     runs-on: ubuntu-latest
-    permissions: read-all
+    # publish_results below signs the SARIF with sigstore using the runner's
+    # OIDC identity. With only read-all there is no OIDC token to sign with, so
+    # sigstore falls back to an interactive device flow, which in CI prints a
+    # consent prompt nobody can answer and then fails:
+    #
+    #   By typing 'y', you attest that ...
+    #   Non-interactive mode detected, using device flow.
+    #
+    # These are the permissions the action documents for publishing; upload of
+    # the SARIF additionally needs security-events: write.
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+      security-events: write
 
     steps:
       - name: Checkout
