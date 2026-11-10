@@ -366,3 +366,81 @@ func TestNormalizePromptKeepsPromptMentioningHarnessVocabulary(t *testing.T) {
 		})
 	}
 }
+
+// TestNormalizePromptStripsAppendedHarnessNotice pins the invariant that a
+// harness notice appended to a genuine prompt is cut out rather than kept.
+//
+// The session store holds this shape as a single user message: the human's
+// input first, then the harness's own text. Prefix checks alone cannot see it,
+// because the message does not *start* with the notice. Observed live in
+// session_daisy_1789125897339_6acaa21cf4346b86, where the stored prompt was
+// "go" followed by "You have 4 incomplete todos. ...".
+func TestNormalizePromptStripsAppendedHarnessNotice(t *testing.T) {
+	tests := []struct {
+		name string
+		in   string
+		want []string
+	}{
+		{
+			name: "todo nudge appended after a short prompt",
+			in:   "go\n\nYou have 4 incomplete todos. Continue working, or update the todo tool.",
+			want: []string{"go"},
+		},
+		{
+			name: "auto continuation appended after a prompt",
+			in:   "work on it\n\n[auto] Continue the work below.",
+			want: []string{"work on it"},
+		},
+		{
+			name: "swarm notice appended after a prompt",
+			in:   "do it all\n\n🐝 **Swarm await finished**",
+			want: []string{"do it all"},
+		},
+		{
+			name: "notice between two human lines keeps both",
+			in:   "first instruction\nYou have 2 incomplete todos. Continue working, or update the todo tool.\nsecond instruction",
+			want: []string{"first instruction\nsecond instruction"},
+		},
+		{
+			name: "trailing safety-review prompt is cut",
+			in:   "ship it\nPerform one final, independent policy check",
+			want: []string{"ship it"},
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got, keep := normalizePrompt(tc.in)
+			if !keep {
+				t.Fatalf("normalizePrompt(%q) dropped the human prompt", tc.in)
+			}
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Fatalf("normalizePrompt(%q) = %#v, want %#v", tc.in, got, tc.want)
+			}
+		})
+	}
+}
+
+// TestNormalizePromptDropsMessageThatIsOnlyAppendedNotice pins the other half:
+// once the notice is cut, a message with nothing human left must be dropped
+// entirely rather than returned as an empty prompt.
+func TestNormalizePromptDropsMessageThatIsOnlyAppendedNotice(t *testing.T) {
+	in := "\nYou have 3 incomplete todos. Continue working, or update the todo tool.\n[auto] Continue the work below."
+	if got, keep := normalizePrompt(in); keep {
+		t.Fatalf("normalizePrompt(%q) kept a notice-only message: %#v", in, got)
+	}
+}
+
+// TestNormalizePromptKeepsShortHumanPrompt pins the guardrail that cutting
+// notice lines does not turn into a length heuristic. Operators really do send
+// one-word prompts, and they are the highest-signal rows in a timeline.
+func TestNormalizePromptKeepsShortHumanPrompt(t *testing.T) {
+	for _, in := range []string{"go", ".", "proc", "do it all", "yes", "continue", "do it"} {
+		got, keep := normalizePrompt(in)
+		if !keep {
+			t.Fatalf("normalizePrompt(%q) dropped a genuine short prompt", in)
+		}
+		if len(got) != 1 || got[0] != in {
+			t.Fatalf("normalizePrompt(%q) = %#v, want [%q]", in, got, in)
+		}
+	}
+}
