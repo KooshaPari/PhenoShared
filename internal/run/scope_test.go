@@ -32,7 +32,7 @@ func scopeGitRepo(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
 	run := func(args ...string) {
-		cmd := exec.Command("git", args...)
+		cmd := exec.Command("git", hermeticGitArgs(args...)...)
 		cmd.Dir = dir
 		if out, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("git %v: %v\n%s", args, err, out)

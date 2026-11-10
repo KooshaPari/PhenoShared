@@ -12,6 +12,19 @@ import (
 	"github.com/KooshaPari/dagrun/internal/store"
 )
 
+// hermeticGitArgs isolates a throwaway test repository from the operator's
+// global git config. A global core.hooksPath (a commit-message linter, for
+// example) would otherwise reject these commits, and the test would fail for a
+// reason that has nothing to do with dagrun. Hooks are the only global state
+// these tests cannot tolerate, so they are the only thing overridden.
+func hermeticGitArgs(args ...string) []string {
+	return append([]string{
+		"-c", "core.hooksPath=/dev/null",
+		"-c", "commit.gpgsign=false",
+		"-c", "tag.gpgsign=false",
+	}, args...)
+}
+
 const housePlan = `
 version: 1
 run: house
@@ -160,7 +173,7 @@ func gitRepo(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
 	run := func(args ...string) {
-		cmd := exec.Command("git", args...)
+		cmd := exec.Command("git", hermeticGitArgs(args...)...)
 		cmd.Dir = dir
 		if out, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("git %v: %v\n%s", args, err, out)
@@ -192,7 +205,7 @@ func TestGCKeepsAnUnmergedWorktree(t *testing.T) {
 		t.Fatal(err)
 	}
 	run := func(args ...string) {
-		cmd := exec.Command("git", args...)
+		cmd := exec.Command("git", hermeticGitArgs(args...)...)
 		cmd.Dir = repo
 		if out, err := cmd.CombinedOutput(); err != nil {
 			t.Fatalf("git %v: %v\n%s", args, err, out)
