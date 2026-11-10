@@ -100,9 +100,9 @@ recorded_at_commit = "7965cb9cee10b8da81fa4968edf1ced6e574d050"
 total_members = 291
 measured_members = 258
 excused_members = 33
-measured_source_lines = 418609  # investigate: dated snapshot, not a live count
-excused_source_lines = 98089  # investigate: dated snapshot, not a live count
-measured_coverable_lines = 69250  # investigate: dated snapshot, not a live count
+measured_source_lines = 418609                                  # investigate: dated snapshot, not a live count
+excused_source_lines = 98089                                    # investigate: dated snapshot, not a live count
+measured_coverable_lines = 69250                                # investigate: dated snapshot, not a live count
 
 [excused]
 "concurrent-exec" = """
