@@ -16,7 +16,15 @@ runtimes:
     - java@13.0.11
     - node@22.16.0
     - python@3.14.4
-    - rust@1.82.0
+    # Was 1.82.0, which cannot parse `edition = "2024"`. 19 crates in this
+    # workspace use edition 2024, so every 
+    #   cargo clippy --manifest-path crates/<x>/Cargo.toml
+    # that Trunk runs died with:
+    #   error: failed to load manifest for workspace member .../crates/fabric-terminal
+    # Rust >= 1.85 is required for edition 2024. Kept in lockstep with
+    # rust-toolchain.toml, which pins 1.99.0 and says to bump it together
+    # with the workflows that pin the same version.
+    - rust@1.99.0
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   enabled:
