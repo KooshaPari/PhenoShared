@@ -17,3 +17,4 @@ Each disabled file carries a header explaining:
 | File | Disabled | Blocker |
 |---|---|---|
 | `release-macos.yml` | 2026-11-09 | calls `phenotype-fleet-ops`, a repository that no longer exists |
+| `pages.yml` | 2026-11-10 | second GitHub Pages deployer; 0 successful runs ever, and it races `docs.yml` for the same environment. The live site is served by `docs.yml` |
