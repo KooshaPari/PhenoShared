@@ -38,10 +38,18 @@ pub const URL_ENV: &str = "BROKERD_URL";
 /// Optional: a loopback daemon started without `--token` needs none.
 pub const TOKEN_ENV: &str = "BROKERD_TOKEN";
 
-/// Per-request timeout for the daemon client, in seconds.
-const REQUEST_TIMEOUT: Duration = Duration::from_secs(10);
+/// Per-request timeout for the daemon client.
+///
+/// This must cover a **real browser action**, not just a lease grant. A lease
+/// grant is now cheap (the daemon launches the browser lazily), but the first
+/// `snapshot` or `screenshot` on a session also pays for a cold Chrome start,
+/// and a screenshot of a live page takes seconds on top of that. 90s covers a
+/// cold launch plus a heavy action; anything shorter makes those calls abort
+/// mid-flight and look like an unreachable daemon.
+const REQUEST_TIMEOUT: Duration = Duration::from_secs(90);
 
-/// Connection timeout. Short so a wrong address fails loudly and quickly.
+/// Connection timeout. Short so a wrong address fails loudly and quickly,
+/// independently of how long a legitimate action is allowed to take.
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(3);
 
 /// Where a running `brokerd` listens, and how to authenticate to it.
