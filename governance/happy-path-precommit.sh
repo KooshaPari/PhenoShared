@@ -50,14 +50,26 @@ function trim(s) { sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); ret
 # Blank out the contents of quoted strings. R1 fires on CLAIMS, and a trigger
 # word inside a string literal is a value or a log message rather than an
 # assertion about the work. R2 already covers telemetry claims separately.
+#
+# This strips a span ONLY when its delimiters are balanced. If a quote is left
+# unterminated, nothing is stripped: the unmodified line is returned so the
+# claim still matches. Failing open here would let one stray quote silence the
+# rest of the line, which is how an ordinary English contraction used to slip
+# through - an apostrophe inside a word is not a quote opener.
 # The single-quote character is built with sprintf so this program can stay
 # inside a single-quoted shell string.
-function strip_quoted(s,   out, i, c, q, n, sq) {
+function strip_quoted(s,   out, i, c, q, n, sq, prev) {
   sq = sprintf("%c", 39)
   out = ""; q = ""; n = length(s)
   for (i = 1; i <= n; i++) {
     c = substr(s, i, 1)
     if (q == "") {
+      # An apostrophe directly after an alphanumeric character belongs to a
+      # contraction or a possessive, never to an opening quote.
+      if (c == sq && i > 1) {
+        prev = substr(s, i - 1, 1)
+        if (prev ~ /[[:alnum:]]/) { out = out c; continue }
+      }
       if (c == "\"" || c == sq || c == "`") q = c
       else out = out c
     } else {
@@ -65,14 +77,26 @@ function strip_quoted(s,   out, i, c, q, n, sq) {
       if (c == q) q = ""
     }
   }
+  if (q != "") return s
   return out
 }
 
-# The shell loop terminator is a keyword, not a sentence. "done" and
-# "done < <(cmd)" end a loop; they never claim that anything was completed.
-function is_shell_terminator(s) {
-  s = trim(s)
-  return (s ~ /^done([ \t]*(<|>|&|;|$))/)
+# R1 evaluates the PROSE of a line, not the shell syntax around it. The loop
+# terminator "done" is a keyword, so it is dropped as the leading word of each
+# command segment. Only the keyword goes: a claim that follows the terminator
+# on the same line ("done; the parser is fixed now") is still a claim, so the
+# remainder of the segment is still evaluated.
+function r1_text(s,   segs, n, i, out, seg) {
+  out = ""
+  gsub(/&&|\|\||;|\|/, "\n", s)
+  n = split(s, segs, "\n")
+  for (i = 1; i <= n; i++) {
+    seg = trim(segs[i])
+    sub(/^done([ \t]|$)/, "", seg)
+    seg = trim(seg)
+    if (seg != "") out = (out == "" ? seg : out " " seg)
+  }
+  return out
 }
 
 function split_list(raw,    i, n, arr, out, t) {
@@ -209,8 +233,8 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # not fire: the shell loop terminator (a keyword), and a word inside a
     # quoted string (a value or a log message). Everything else that matches
     # still needs a human-eye marker, exactly as before.
-    if (!is_template && !is_shell_terminator(body)) {
-      claim = tolower(strip_quoted(body))
+    if (!is_template) {
+      claim = tolower(strip_quoted(r1_text(body)))
       if (claim ~ /(^|[^[:alnum:]_.])(fixed|works|done|passing|verified)([^[:alnum:]_]|$)|✅|✔|✔️/) {
         if (!window_has(FNR, "user-confirmed|user-saw|confirmed by user|eyes-on|last-link:")) {
           report("r1", file, line_no, body, "user-eye confirmation missing")
