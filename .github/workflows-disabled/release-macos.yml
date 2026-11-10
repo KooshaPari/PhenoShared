@@ -53,11 +53,11 @@ jobs:
       app-name: phenotype-omlx
       app-bundle-id: app.phenotype.omlx
       build-cmd: |
-          cargo build --release --locked --target aarch64-apple-darwin
-          mkdir -p dist/macos
-          cp target/aarch64-apple-darwin/release/phenotype-omlx dist/macos/
-          # No .app bundle yet — distribute as raw binary + DMG for now
-          # (Tauri/Electron wrapper is planned but not implemented)
+        cargo build --release --locked --target aarch64-apple-darwin
+        mkdir -p dist/macos
+        cp target/aarch64-apple-darwin/release/phenotype-omlx dist/macos/
+        # No .app bundle yet — distribute as raw binary + DMG for now
+        # (Tauri/Electron wrapper is planned but not implemented)
       entitlements-file: Entitlements.plist
       artifact-dir: dist/macos
       create-dmg: true
