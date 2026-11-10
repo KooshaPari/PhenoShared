@@ -53,10 +53,10 @@ Gates from `ADR-ECO-024`:
 | 1 | Absorbed behaviour exists with a test | PASS — whole module, full suite green |
 | 2 | dagrun reads `phenotype-dag-core` `DagSchema` natively | **OPEN** |
 | 3 | `go test ./...` green in the new home | PASS |
-| 4 | Fresh clone of PhenoShared builds and tests green | **PENDING** — cannot be verified until this commit exists |
+| 4 | Fresh clone builds and tests green | **PASS** — `git clone --branch feat/absorb-dagrun --depth 1`, then `go build` + `go test ./...` in `cmd/dagrun/`: exit 0; bundle restore from the clone produced 53 commits at `8080d73` |
 | 5 | `bin/repo-delete-gate.sh` passes with this manifest | pending gate 2 |
 
-Evidence for gate 3, run in `cmd/dagrun/` in this working tree:
+Evidence for gate 3, run in `cmd/dagrun/` in the working tree:
 
 ```
 gofmt -l .            -> no output
