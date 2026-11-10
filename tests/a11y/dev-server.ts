@@ -3,9 +3,65 @@ import { spawn, type ChildProcess } from 'node:child_process'
 const DEV_PORT = Number(process.env.DEV_PORT ?? 5173)
 export const BASE_URL = process.env.E2E_BASE_URL ?? `http://localhost:${DEV_PORT}`
 
+/**
+ * The dev server's stdout/stderr are piped but were never read. An OS pipe
+ * buffer holds roughly 64 KiB; once the child writes that much into a pipe
+ * nobody is reading, it blocks on write and the dev server wedges mid-run.
+ * Draining both pipes into this ring buffer keeps the child unblocked, and
+ * retains the most recent output so a timeout can report what the server
+ * actually said instead of a bare "did not start in 60s".
+ */
+const MAX_OUTPUT_BYTES = 64 * 1024
+const OUTPUT_TAIL_BYTES = 8 * 1024
+
+class OutputRingBuffer {
+  private chunks: Buffer[] = []
+  private size = 0
+
+  reset(): void {
+    this.chunks = []
+    this.size = 0
+  }
+
+  append(chunk: Buffer): void {
+    this.chunks.push(chunk)
+    this.size += chunk.length
+    // Drop the oldest bytes once the cap is exceeded.
+    while (this.size > MAX_OUTPUT_BYTES && this.chunks.length > 1) {
+      this.size -= this.chunks.shift()!.length
+    }
+    if (this.size > MAX_OUTPUT_BYTES) {
+      const only = this.chunks[0]!
+      const kept = only.subarray(only.length - MAX_OUTPUT_BYTES)
+      this.chunks[0] = kept
+      this.size = kept.length
+    }
+  }
+
+  tail(maxBytes: number = OUTPUT_TAIL_BYTES): string {
+    if (this.chunks.length === 0) {
+      return ''
+    }
+    const parts: Buffer[] = []
+    let total = 0
+    for (let i = this.chunks.length - 1; i >= 0; i -= 1) {
+      const chunk = this.chunks[i]!
+      parts.unshift(chunk)
+      total += chunk.length
+      if (total >= maxBytes) {
+        break
+      }
+    }
+    const merged = Buffer.concat(parts)
+    return merged.subarray(Math.max(0, merged.length - maxBytes)).toString('utf8')
+  }
+}
+
 let devServer: ChildProcess | undefined
 let spawnedByTests = false
 let refCount = 0
+let spawnError: Error | undefined
+const devServerOutput = new OutputRingBuffer()
 
 async function isServerReady(url: string): Promise<boolean> {
   try {
@@ -19,12 +75,20 @@ async function isServerReady(url: string): Promise<boolean> {
 async function waitForDevServer(): Promise<void> {
   const deadline = Date.now() + 60_000
   while (Date.now() < deadline) {
+    // A spawn failure is reported through the 'error' event, which fires on a
+    // later tick. Surfacing it here turns "the server never came up" into the
+    // real cause instead of an indistinguishable 60s hang.
+    if (spawnError) {
+      throw spawnError
+    }
     if (await isServerReady(BASE_URL)) {
       return
     }
     await new Promise((resolve) => setTimeout(resolve, 500))
   }
-  throw new Error('VitePress dev server did not start in 60s')
+  const tail = devServerOutput.tail()
+  const detail = tail ? `\n--- dev server output (tail) ---\n${tail}` : ''
+  throw new Error(`VitePress dev server did not start in 60s${detail}`)
 }
 
 async function startDevServer(): Promise<void> {
@@ -32,14 +96,28 @@ async function startDevServer(): Promise<void> {
     return
   }
 
+  spawnError = undefined
+  devServerOutput.reset()
   devServer = spawn('npx', ['vitepress', 'dev', '--port', String(DEV_PORT)], {
     cwd: process.cwd(),
     env: { ...process.env, NODE_ENV: 'test' },
     stdio: ['ignore', 'pipe', 'pipe'],
   })
   spawnedByTests = true
+
+  // Drain BOTH pipes. Without a reader the child fills the ~64 KiB pipe
+  // buffer and blocks forever, wedging the dev server part-way through a run.
+  devServer.stdout?.on('data', (chunk: Buffer | string) => {
+    devServerOutput.append(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+  })
+  devServer.stderr?.on('data', (chunk: Buffer | string) => {
+    devServerOutput.append(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+  })
+
+  // Capture the spawn error instead of throwing inside the handler: a throw
+  // here escapes to the event loop and never reaches waitForDevServer().
   devServer.on('error', (err) => {
-    throw err
+    spawnError = err
   })
 
   await waitForDevServer()
