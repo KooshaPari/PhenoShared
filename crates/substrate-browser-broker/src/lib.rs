@@ -8,12 +8,19 @@
 //!
 //! 1. ensure the profile exists and resolve its active **generation**,
 //! 2. **grant** an exclusive lease on that profile,
-//! 3. launch a browser whose user data directory is that generation,
-//! 4. publish the live session under its lease id.
+//! 3. publish the live session under its lease id.
+//!
+//! Acquiring is deliberately cheap: the browser that will use that generation is
+//! launched on the session's **first action**, not here. A Chrome start takes
+//! tens of seconds on a loaded host, and doing it inside acquire made a lease
+//! grant as expensive as a browser launch (and pushed the HTTP acquire call past
+//! any sane client timeout). The invariant that a failed launch must not hold
+//! the profile is preserved inside [`BrowserHandle`]: a launch that fails
+//! revokes the lease.
 //!
 //! Any step failing rolls back the earlier ones. [`Broker::release`] reverses it
-//! in the opposite direction: close the browser, revoke the lease, seal the
-//! generation so it may be forked.
+//! in the opposite direction: close the browser (which does nothing when it was never
+//! launched), revoke the lease, seal the generation so it may be forked.
 //!
 //! Because the live session is keyed by lease id, an observer can ask for *that*
 //! lease's browser rather than guessing which process is which.
@@ -53,6 +60,7 @@ pub use viewer::{router, router_with, serve, ViewerConfig};
 // Re-exported so callers can build scopes and read leases without taking a
 // second direct dependency.
 pub use handle::BrowserHandle;
+pub(crate) use handle::LaunchSpec;
 pub use lease_guard::LeaseGuard;
 pub use substrate_browser::{Clock, Lease, Scope};
 
@@ -69,7 +77,7 @@ use std::{
 };
 
 use substrate_browser::{LeaseManager, ProfileStore};
-use substrate_browser_cdp::{CdpError, CdpProvider};
+use substrate_browser_cdp::CdpError;
 use thiserror::Error;
 use tokio::sync::RwLock;
 
@@ -278,24 +286,18 @@ impl Broker {
         let data_dir = self
             .store
             .data_dir(scope.principal(), scope.profile(), generation);
-        let provider = match CdpProvider::launch(&data_dir, self.headless).await {
-            Ok(provider) => provider,
-            Err(err) => {
-                // Roll back the lease: a failed launch must not hold the profile.
-                let _ = self.leases.revoke(&lease.id);
-                return Err(err.into());
+
+        // No browser is launched here. The handle starts one on its first action
+        // and owns the two invariants that used to hang off the eager launch: a
+        // failed launch revokes this lease, and a browser is never handed out
+        // under a lease that died while it was starting.
+        let browser = BrowserHandle::new(
+            LaunchSpec {
+                data_dir: data_dir.clone(),
+                headless: self.headless,
             },
-        };
-
-        // The lease can expire while the browser is starting. Never publish or
-        // hand out a browser whose lease is already dead: stop it first.
-        if let Err(err) = guard.check() {
-            let _ = provider.close().await;
-            let _ = self.leases.revoke(&lease.id);
-            return Err(err);
-        }
-
-        let browser = BrowserHandle::new(provider, guard.clone());
+            guard.clone(),
+        );
         self.sessions.write().await.insert(
             lease.id.clone(),
             LiveSession {
