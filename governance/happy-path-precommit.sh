@@ -192,7 +192,13 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # source naturally contain the words we lint for (e.g. literal "flag=true"
     # as an example, or the regex pattern /fixed|works|done|.../ itself).
     # Extending the skip-list: HAPPY_PATH_POLICY_SKIP (comma-sep glob substrings).
-    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md|docs/absorbed-from-)"
+    # Dated audit snapshots hold result tables quoting past outcomes. Their
+    # provenance is the run they record, not the commit that adds them, so R1
+    # and R2 judged them as claims about the current diff. Rewriting a historic
+    # record to satisfy a prose rule would falsify it, which is worse. The
+    # exemption is limited to the date-prefixed form (docs/audits/YYYY-MM-DD-)
+    # so it cannot be used as a dumping ground for a fresh success claim.
+    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md|docs/absorbed-from-|docs/audits/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-)"
     extra = ENVIRON["HAPPY_PATH_POLICY_SKIP"]
     if (extra != "") {
       n = split(extra, arr, ",")
@@ -292,7 +298,7 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
       report("r7", file, line_no, body, "feature false/placeholder introduced without result signal")
     }
 
-  } else if (tag == " " || tag == "-") {
+  } else if (tag == " ") {
     current_new_line++
   }
 }
