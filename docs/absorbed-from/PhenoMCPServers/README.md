@@ -127,6 +127,7 @@ wave, and is not worth propagating.
 | --- | --- |
 | Files still missing after this wave | 0 (the one remaining "missing" path is the renamed workflow) |
 | Byte-identical to source | 353 of 473 (45 added by this wave; the 46th landed as the renamed workflow) |
+| Git blob hash of the 46 absorbed files vs source | 45 of 46 identical; the only difference is the intentionally adapted workflow (source `f183f8bc…` → adapted `017f1953…`) |
 | `python scripts/validate_catalog.py` | `OK registry_version=1.4.1` |
 | `python scripts/validate_fork_parents.py` | `OK fork_parents lanes=['go','python','rmcp','rust']` |
 | `python scripts/validate_bundle_wiring.py` | `OK bundle=phenotype-mcp-bundle servers=['pheno-org','substrate','substrate-dispatch']` |
