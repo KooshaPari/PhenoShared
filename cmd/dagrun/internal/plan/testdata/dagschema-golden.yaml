@@ -1,0 +1,55 @@
+version: 2.0.0
+name: golden
+nodes:
+- id: '1'
+  label: Freeze scope
+  description: Write the intent down before any work starts.
+  prerequisites:
+  - type: environment_variable
+    variable: TARGET_ENV
+  acceptance:
+  - type: exit_code
+    code: 0
+  audit_hooks:
+  - type: log_entry
+    message: scope frozen
+    level: info
+    timing: on_success
+  metadata:
+    owner: platform
+- id: '2'
+  label: Build the thing
+  description: Implement and prove it.
+  prerequisites:
+  - type: file_exists
+    path: artifacts/INTENT.md
+  - type: custom_script
+    command: mkdir -p artifacts
+    description: ensure the output dir
+  - type: image_ready
+    image: golang:1.24
+  acceptance:
+  - type: output_contains
+    pattern: ok
+    regex: false
+  - type: custom_check
+    command: test -s artifacts/SPEC.md
+    description: the spec is non-empty
+  - type: metric_threshold
+    metric: coverage
+    min: 85.0
+  audit_hooks:
+  - type: webhook
+    url: https://example.invalid/hook
+    timing: post
+  - type: notify
+    channel: slack
+    message: build done
+    timing: on_success
+edges:
+- from: '1'
+  to: '2'
+- from: '1'
+  to: '2'
+  label: retry path
+  condition: 1.exit_code == 0

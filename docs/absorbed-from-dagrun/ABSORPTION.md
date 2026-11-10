@@ -44,17 +44,17 @@ dagrun is attempt **#4** of four (see `ADR-ECO-024` in `phenotype-registry`):
 
 ## Status
 
-**Merge complete. NOT deletion-eligible yet.**
+**Merge complete. Gate 2 is now closed; gate 5 is the only one left.**
 
 Gates from `ADR-ECO-024`:
 
 | # | Gate | State |
 |---|---|---|
 | 1 | Absorbed behaviour exists with a test | PASS — whole module, full suite green |
-| 2 | dagrun reads `phenotype-dag-core` `DagSchema` natively | **OPEN** |
+| 2 | dagrun reads `phenotype-dag-core` `DagSchema` natively | **PASS** — `plan --from dagschema` installs a runnable plan from the crate's own `to_yaml()` output; cross-language golden fixture + 7 tests |
 | 3 | `go test ./...` green in the new home | PASS |
 | 4 | Fresh clone builds and tests green | **PASS** — `git clone --branch feat/absorb-dagrun --depth 1`, then `go build` + `go test ./...` in `cmd/dagrun/`: exit 0; bundle restore from the clone produced 53 commits at `8080d73` |
-| 5 | `bin/repo-delete-gate.sh` passes with this manifest | pending gate 2 |
+| 5 | `bin/repo-delete-gate.sh` passes with this manifest | **PENDING** — run against this manifest |
 
 Evidence for gate 3, run in `cmd/dagrun/` in the working tree:
 
