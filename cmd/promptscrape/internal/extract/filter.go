@@ -131,6 +131,43 @@ func isHarnessNotice(text string) bool {
 	return false
 }
 
+// stripHarnessNoticeLines removes harness-notice lines from anywhere in text.
+//
+// isHarnessNotice only classifies a message by its first line, which is wrong
+// for the very common shape where the harness appends its own notice *after* a
+// genuine human prompt. The session store then holds one user message like:
+//
+//	go
+//
+//	You have 4 incomplete todos. Continue working, or update the todo tool.
+//
+// The human wrote "go"; the todo nudge is harness text. Keeping the whole block
+// would both pollute the timeline and inflate any count taken over it, so the
+// notice lines are cut and what remains is the human's own input.
+//
+// A line is only removed when it independently matches a harness notice pattern,
+// so a genuine short prompt such as "go", ".", or "do it all" survives intact.
+func stripHarnessNoticeLines(text string) (string, bool) {
+	if !strings.Contains(text, "\n") {
+		return text, false
+	}
+	lines := strings.Split(text, "\n")
+	kept := make([]string, 0, len(lines))
+	removed := false
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if trimmed != "" && (isHarnessNotice(trimmed) || isContinuation(trimmed)) {
+			removed = true
+			continue
+		}
+		kept = append(kept, line)
+	}
+	if !removed {
+		return text, false
+	}
+	return strings.Join(kept, "\n"), true
+}
+
 // isNullPlaceholder reports whether text is only a serialised null value.
 func isNullPlaceholder(text string) bool {
 	trimmed := strings.ToLower(strings.TrimSpace(text))
@@ -245,6 +282,16 @@ func normalizePrompt(text string) ([]string, bool) {
 	cleaned, hadInjected := stripInjectedBlocks(trimmed)
 	if hadInjected {
 		cleaned = strings.TrimSpace(cleaned)
+		if cleaned == "" || isNullPlaceholder(cleaned) || isHarnessNotice(cleaned) {
+			return nil, false
+		}
+	}
+
+	// A harness notice appended to a genuine prompt arrives as trailing lines of
+	// the same user message, so it survives the prefix checks above. Cut those
+	// lines and keep the human's own text. If nothing human remains, drop it.
+	if stripped, hadNotices := stripHarnessNoticeLines(cleaned); hadNotices {
+		cleaned = strings.TrimSpace(stripped)
 		if cleaned == "" || isNullPlaceholder(cleaned) || isHarnessNotice(cleaned) {
 			return nil, false
 		}

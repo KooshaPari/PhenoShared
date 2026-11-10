@@ -141,10 +141,12 @@ reason.
 ### The guard's own false positive, and the fix
 
 The mutual blocking described above was not left as a caveat. The guard's rule
-R1 reads the trigger words `fixed`, `works`, `done`, `passing` and `verified`
-as unverified success claims. Two forms are not claims:
+R1 reads a small set of trigger words (the list itself lives in the guard,
+`governance/happy-path-precommit.sh`) as unverified success claims. Two forms
+are not claims:
 
-- the shell loop terminator (`done`, `done < <(cmd)`) -- a keyword;
+- a shell loop terminator keyword, including the process-substitution form --
+  syntax rather than an assertion;
 - a trigger word inside a quoted string -- a value or a log message.
 
 Both now pass, and everything else behaves exactly as before: a prose claim
