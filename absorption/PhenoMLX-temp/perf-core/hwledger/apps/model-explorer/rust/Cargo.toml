@@ -44,7 +44,10 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 axum = { version = "0.7", features = ["macros"] }
 tantivy = "0.22"
-lancedb = "0.31"
+# lancedb >= 0.33: 0.31 pulls lance-testing (normal dep) -> pprof[flamegraph]
+# -> inferno -> quick-xml 0.26.0 (RUSTSEC-2026-0194/0195). From 0.33 on,
+# lance-testing is dev-only and cargo never resolves it.
+lancedb = "0.33"
 # Inter-crate workspace paths so all `search-*` crates can refer to one
 # another via `{ workspace = true }`. Other crates (`hwledger-search-rag`,
 # `hwledger-search-index`, etc.) depend on `hwledger-search-core`; declared
