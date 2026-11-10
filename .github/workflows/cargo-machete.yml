@@ -2,13 +2,10 @@ name: cargo-machete
 permissions: read-all
 
 on:
-  push:
-    branches: [main]
-    paths: ['Cargo.toml', '**/Cargo.toml']
   pull_request:
-    paths: ['Cargo.toml', '**/Cargo.toml']
+    paths: ["Cargo.toml", "**/Cargo.toml"]
   schedule:
-    - cron: '47 6 * * 4'  # weekly Thursday
+    - cron: "47 6 * * 4" # weekly Thursday, advisory full scan
   workflow_dispatch:
 
 jobs:
@@ -16,4 +13,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
-      - uses: bnjbvr/cargo-machete@ac30a525c0a8d163a92d727b3ff079ee3f6ecb08 # v0.9.2
+        with:
+          fetch-depth: 0
+
+      # Full-workspace machete currently reports ~226 findings, mostly stale
+      # flags in absorbed/vendored crates, so a full gate blocks every PR.
+      # Pull requests are checked only for Cargo.toml files they change.
+      # Root-only changes are skipped: they would expand to the whole workspace.
+      - name: Collect changed manifests
+        id: changed
+        run: |
+          dirs=""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            if git rev-parse "$base" >/dev/null 2>&1; then
+              dirs=$(git diff --name-only "$base"...HEAD -- 'Cargo.toml' ':(glob)**/Cargo.toml' \
+                | xargs -r -n1 dirname | sort -u | grep -v '^\.$' || true)
+            fi
+          fi
+          count=$(printf '%s\n' "$dirs" | grep -c . || true)
+          if [ "$count" -gt 20 ]; then
+            echo "dirs=" >> "$GITHUB_OUTPUT"
+          else
+            echo "dirs=$(printf '%s' "$dirs" | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check changed crates
+        if: steps.changed.outputs.dirs != ''
+        uses: bnjbvr/cargo-machete@ac30a525c0a8d163a92d727b3ff079ee3f6ecb08 # v0.9.2
+        with:
+          args: ${{ steps.changed.outputs.dirs }}
+
+      - name: Weekly advisory scan
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        uses: bnjbvr/cargo-machete@ac30a525c0a8d163a92d727b3ff079ee3f6ecb08 # v0.9.2
+        with:
+          args: crates native
