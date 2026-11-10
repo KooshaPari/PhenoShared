@@ -22,6 +22,11 @@
 //! `POST /v1/profiles/purge`), so the daemon - not this process - owns the
 //! lease, the browser and the guards.
 //!
+//! `$BROKERD_CA` names a PEM file holding the certificate to trust for the
+//! daemon's TLS connection. It is added to the client's trust roots, so a
+//! daemon with a self-signed certificate is reachable without installing
+//! anything into the machine's trust store.
+//!
 //! # What is real, and what is not
 //!
 //! * `status`, `live`, `reap` are read-only or maintenance calls backed directly
@@ -35,7 +40,10 @@
 //! * `purge` deletes the profile's data directory. It refuses without
 //!   `confirm: true` and refuses while the profile is live or leased.
 
+mod ca;
 mod client;
+mod config;
+mod remote;
 mod types;
 
 use std::{
@@ -46,7 +54,8 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-pub use client::{RemoteBroker, RemoteConfig, TOKEN_ENV, URL_ENV};
+pub use client::{RemoteBroker, CA_ENV, TOKEN_ENV, URL_ENV};
+pub use config::RemoteConfig;
 pub use types::{
     kind_of, AcquireParams, AcquiredInfo, BrokerStatus, LeaseInfo, PurgeOutcome, PurgeParams,
     ReapOutcome, ReleaseOutcome, ReleaseParams, ToolError,

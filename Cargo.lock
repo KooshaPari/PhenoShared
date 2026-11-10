@@ -18453,8 +18453,10 @@ name = "substrate-browser-mcp"
 version = "0.3.10"
 dependencies = [
  "axum 0.8.9",
+ "rcgen",
  "reqwest 0.12.28",
  "rmcp",
+ "rustls-pemfile",
  "schemars 1.2.2",
  "serde",
  "serde_json",
@@ -18463,6 +18465,7 @@ dependencies = [
  "tempfile",
  "thiserror 2.0.20",
  "tokio",
+ "tokio-rustls",
 ]
 
 [[package]]
