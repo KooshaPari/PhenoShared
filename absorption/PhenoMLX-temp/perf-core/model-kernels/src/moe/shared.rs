@@ -45,20 +45,8 @@ fn isqrt_exact(n: u128) -> Option<usize> {
 #[inline(always)]
 fn accumulate_scaled_row(out: &mut [f32], weights: &[f32], scale: f32) {
     debug_assert_eq!(out.len(), weights.len());
-    use std::simd::Simd;
-
-    let vector_len = out.len() & !3usize;
-    let scale_v = Simd::<f32, 4>::splat(scale);
-    let mut j = 0usize;
-    while j < vector_len {
-        let current = Simd::<f32, 4>::from_slice(&out[j..j + 4]);
-        let weight = Simd::<f32, 4>::from_slice(&weights[j..j + 4]);
-        (current + weight * scale_v).copy_to_slice(&mut out[j..j + 4]);
-        j += 4;
-    }
-    while j < out.len() {
-        out[j] += scale * weights[j];
-        j += 1;
+    for (slot, weight) in out.iter_mut().zip(weights) {
+        *slot += scale * weight;
     }
 }
 

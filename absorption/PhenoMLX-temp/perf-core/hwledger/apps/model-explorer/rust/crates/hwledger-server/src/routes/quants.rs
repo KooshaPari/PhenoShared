@@ -14,10 +14,10 @@ use crate::AppState;
 
 /// Mount the `quants` routes.
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/v1/models/:author/:name/quants", get(quants))
+    Router::new().route("/v1/models/{author}/{name}/quants", get(quants))
 }
 
-/// `GET /v1/models/:author/:name/quants` — quant list.
+/// `GET /v1/models/{author}/{name}/quants` — quant list.
 async fn quants(
     State(state): State<Arc<AppState>>,
     Path((author, name)): Path<(String, String)>,

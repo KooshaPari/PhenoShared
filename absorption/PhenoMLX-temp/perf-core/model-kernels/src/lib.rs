@@ -34,7 +34,6 @@
 //! - [`common`]: tolerances, deterministic PRNG, softmax.
 
 #![deny(unsafe_code)]
-#![feature(portable_simd)]
 #![deny(rust_2018_idioms)]
 
 pub mod attention;

@@ -18,7 +18,7 @@ use crate::AppState;
 
 /// Mount the `similar` routes.
 pub fn router() -> Router<Arc<AppState>> {
-    Router::new().route("/v1/models/:author/:name/similar", get(similar))
+    Router::new().route("/v1/models/{author}/{name}/similar", get(similar))
 }
 
 /// Query-string parameters for the `similar` endpoint.
@@ -29,7 +29,7 @@ pub struct SimilarParams {
     pub limit: Option<usize>,
 }
 
-/// `GET /v1/models/:author/:name/similar` — more like this.
+/// `GET /v1/models/{author}/{name}/similar` — more like this.
 async fn similar(
     State(state): State<Arc<AppState>>,
     Path((author, name)): Path<(String, String)>,

@@ -1,6 +1,8 @@
 [workspace]
 resolver = "2"
-exclude = ["crates/forge_daemon", "crates/fabric-frame-transport/fuzz", "crates/fabric-gui/src-tauri"]
+exclude = ["crates/forge_daemon", "crates/fabric-frame-transport/fuzz", "crates/fabric-gui/src-tauri", # Tauri desktop shells bind GTK/WebKit/libsoup-3.0 at build time and cannot build on
+    # the generic Linux CI image. Same reason crates/fabric-gui/src-tauri is excluded.
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/hwledger-app/src-tauri"]
 members = [
     "crates/substrate",
     "crates/substrate-core",
@@ -808,6 +810,35 @@ members = [
     # --- E2.4 Pattern A wave 3 batch AX-32 (2026-10-09): dag-scheduler ---
     # --- E2.4 Pattern A wave 3 batch AX-33 (2026-10-09): fabric-capability + fabric-checker ---
     # --- E2.4 Pattern A wave 3 batch AX-26 (2026-10-09): klipdot + logkit ---
+    # --- SHR-015 (2026-10-15): promote non-TQ PhenoMLX-temp perf-core packages ---
+    "absorption/PhenoMLX-temp/perf-core/concurrent-exec",
+    "absorption/PhenoMLX-temp/perf-core/concurrent-exec-cuda",
+    "absorption/PhenoMLX-temp/perf-core/fleet-proto",
+    "absorption/PhenoMLX-temp/perf-core/eval-harness",
+    "absorption/PhenoMLX-temp/perf-core/fleet-proto-zeromq",
+    "absorption/PhenoMLX-temp/perf-core/kernel-registry",
+    "absorption/PhenoMLX-temp/perf-core/metal-runtime",
+    "absorption/PhenoMLX-temp/perf-core/model-kernels",
+    "absorption/PhenoMLX-temp/perf-core/model-plan",
+    "absorption/PhenoMLX-temp/perf-core/native-abi",
+    "absorption/PhenoMLX-temp/perf-core/regress-baseline",
+    "absorption/PhenoMLX-temp/perf-core/spec-decode",
+    "absorption/PhenoMLX-temp/perf-core/tree-attention",
+    "absorption/PhenoMLX-temp/perf-core/tree-attention-spirv",
+    "absorption/PhenoMLX-temp/perf-core/vpu/agents",
+    # --- SHR-016 (2026-10-15): promote hwledger packages (non-TQ hwledger crates) ---
+    "absorption/PhenoMLX-temp/perf-core/hwledger/crates/hwledger-bench-cockpit",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/crates/hwledger-cli",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-core",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-tags",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-index",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-ingest",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-rag",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-evals",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-skills",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-server",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-mcp",
+    "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-cli",
 ]
 [workspace.package]
 version = "0.3.10"
@@ -884,7 +915,7 @@ command-group = { version = "5.0", features = ["with-tokio"] }
 notify-debouncer-mini = "0.7"
 axum = "0.8"
 tower = "0.5"
-tower-http = { version = "0.7", features = ["trace"] }
+tower-http = { version = "0.7", features = ["trace", "cors"] }
 http-body-util = "0.1"
 futures = "0.3"
 futures-core = "0.3"
@@ -934,6 +965,26 @@ bevy = { version = "0.18.1", default-features = false, features = ["bevy_asset",
 wgpu = { version = "22" }
 pollster = { version = "0.3" }
 secrecy = "0.10"
+# Parked PhenoMLX-temp perf-core crates inherit these via workspace = true.
+base64 = "0.22"
+metal = "0.27"
+pyo3 = { version = "0.29", features = ["auto-initialize"] }
+# --- SHR-016 hwledger workspace deps (versions from hwledger/Cargo.toml [workspace.dependencies]) ---
+once_cell        = "1"
+tract-onnx       = "0.23.4"
+lancedb          = "0.31"
+tantivy          = "0.22"
+# hwledger sibling path deps (referenced via workspace = true by other hwledger crates)
+hwledger-search-core   = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-core" }
+hwledger-search-index  = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-index" }
+hwledger-search-ingest = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-ingest" }
+hwledger-search-skills = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-skills" }
+hwledger-search-tags   = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-tags" }
+hwledger-search-evals  = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-evals" }
+hwledger-search-rag    = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-rag" }
+hwledger-server        = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-server" }
+hwledger-mcp           = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-mcp" }
+hwledger-explorer-cli  = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-cli" }
 [workspace.lints.rust]
 unsafe_code = "forbid"
 unused_must_use = "deny"

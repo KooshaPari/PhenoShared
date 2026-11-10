@@ -24,7 +24,7 @@ use std::fmt;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use crate::{default_registry, AgenticFitRerank, LlmSummarizer};
+use crate::{AgenticFitRerank, LlmSummarizer};
 use crate::weighted::WeightedSkill;
 use hwledger_search_core::{SearchSkill, SkillRegistry};
 
