@@ -266,27 +266,61 @@ func (s *Store) withState(fn func(*State) error, durable bool) error {
 }
 
 // Snapshot returns a copy of the state.
+//
+// This is a genuine read: it takes the lock, reads the document, and releases
+// the lock WITHOUT writing anything back. Routing reads through With would
+// rewrite the whole document and bump UpdatedAt on every call, so a
+// `dagrun status --watch` monitor would sit on the write path and UpdatedAt
+// would stop meaning "the last real transition".
+//
+// The lock is still taken even though writeState renames atomically, which
+// would make a lockless read coherent: a lease transition moves several fields
+// at once (status, owner, lease_until), so a reader must not observe a
+// half-moved lease. Holding the exclusive lock for the duration of the read is
+// what keeps the snapshot consistent with those multi-field transitions.
 func (s *Store) Snapshot() (*State, error) {
-	var out *State
-	err := s.With(func(st *State) error {
-		cp := *st
-		cp.Nodes = make(map[string]*NodeState, len(st.Nodes))
-		for k, v := range st.Nodes {
-			c := *v
-			cp.Nodes[k] = &c
+	lockPath := filepath.Join(s.dir, "lock")
+	f, err := os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0o644)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	if err := lockExclusive(f); err != nil {
+		return nil, err
+	}
+	defer unlock(f)
+
+	st, err := s.readState()
+	if err != nil {
+		// A planned-but-unrun directory has no state.json yet; callers rely on
+		// Snapshot still returning a usable (all-pending) state for it.
+		if !os.IsNotExist(err) {
+			return nil, err
 		}
-		cp.Dynamic = make(map[string]*plan.Node, len(st.Dynamic))
-		for k, v := range st.Dynamic {
-			cp.Dynamic[k] = v.Clone()
-		}
-		cp.Expanded = make(map[string]bool, len(st.Expanded))
-		for k, v := range st.Expanded {
-			cp.Expanded[k] = v
-		}
-		out = &cp
-		return nil
-	})
-	return out, err
+		st = s.freshState()
+	}
+	return copyState(st), nil
+}
+
+// copyState deep-clones a state document so a caller may mutate the result
+// without touching the store. Node and Dynamic entries are pointed at by
+// pointer, so they are copied rather than shared.
+func copyState(st *State) *State {
+	cp := *st
+	cp.Nodes = make(map[string]*NodeState, len(st.Nodes))
+	for k, v := range st.Nodes {
+		c := *v
+		cp.Nodes[k] = &c
+	}
+	cp.Dynamic = make(map[string]*plan.Node, len(st.Dynamic))
+	for k, v := range st.Dynamic {
+		cp.Dynamic[k] = v.Clone()
+	}
+	cp.Expanded = make(map[string]bool, len(st.Expanded))
+	for k, v := range st.Expanded {
+		cp.Expanded[k] = v
+	}
+	return &cp
 }
 
 // Root is the directory artifact paths resolve against.
