@@ -1,0 +1,102 @@
+# DISABLED 2026-11-10 -- not loaded by GitHub Actions (this directory is not
+# `.github/workflows/`, so nothing here runs).
+#
+# Why it is disabled rather than fixed:
+#
+#   There are two workflows that deploy to GitHub Pages from this repository,
+#   and they race for the same environment and the same artifact path
+#   (docs/.vitepress/dist). Their concurrency groups differ ("pages" here,
+#   "pages-${ref}" in docs.yml), so they do not even serialise against each
+#   other; whichever finishes last wins, and the loser silently drops the
+#   handbook/ subdirectory it copied in.
+#
+#   This one cannot win that race, because it has never run successfully:
+#
+#     pages.yml  successful runs ever: 0
+#     docs.yml   successful runs ever: 39
+#
+#   Two separate defects stop it, and neither is a CI glitch:
+#
+#   1. The docs build dies at
+#        Error: Cannot find module '.../docs/node_modules/vitepress/bin/vitepress.js'
+#      because docs:build is `node ./node_modules/vitepress/bin/vitepress.js
+#      build` relative to docs/, and this workflow only ever installed the ROOT
+#      dependencies. docs/ never got its own node_modules.
+#
+#   2. The handbook build cannot work at all. handbook/docs contains only
+#      markdown and a VitePress config (handbook/docs/.vitepress/config.mts);
+#      there is no package.json and no lockfile anywhere under handbook/, so
+#      `bun install --frozen-lockfile` there has no manifest to resolve.
+#      Building the handbook needs a manifest written first; that is a project,
+#      not a fix.
+#
+#   Nothing published is lost. docs.yml is what serves the live site, and
+#   https://kooshapari.github.io/PhenoShared/handbook/ returns 404 today, so the
+#   handbook has never been part of the deployed site.
+#
+# To re-enable:
+#   1. give handbook/docs a package.json + lockfile that declare vitepress, and
+#      confirm `npx vitepress build` produces handbook/docs/.vitepress/dist;
+#   2. add the missing docs/ dependency install (npm install --legacy-peer-deps
+#      in docs/) so step 1 of this file can resolve vitepress;
+#   3. move this file back into .github/workflows/ and delete docs.yml, or make
+#      the two share one concurrency group and one artifact.
+
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - docs/**
+      - handbook/**
+      - package.json
+      - bun.lock
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Build docs
+        # `docs:build` is defined in docs/package.json; the root manifest has no
+        # such script, so this previously failed with 'Script not found'.
+        working-directory: docs
+        run: bun run docs:build
+        env:
+          GITHUB_PAGES: "true"
+      - name: Build handbook
+        run: |
+          cd handbook/docs
+          bun install --frozen-lockfile
+          npx vitepress build
+      - name: Copy handbook dist into docs dist
+        run: cp -r handbook/docs/.vitepress/dist docs/.vitepress/dist/handbook
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
+      - uses: actions/upload-pages-artifact@98ef48e41587a300b82de4cf298aa98b57b2faae # v-latest
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128
