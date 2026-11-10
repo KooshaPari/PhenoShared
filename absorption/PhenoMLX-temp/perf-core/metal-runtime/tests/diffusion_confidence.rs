@@ -61,8 +61,7 @@ fn metal_handles_masked_or_non_finite_rows_without_nan_confidence() {
         f32::NAN,
         1.0,
     ];
-    let (ids, confidence) =
-        diffusion_argmax_confidence_metal(&logits, 2, 4, &artifact).unwrap();
+    let (ids, confidence) = diffusion_argmax_confidence_metal(&logits, 2, 4, &artifact).unwrap();
     assert_eq!(ids, [0, 1]);
     assert_eq!(confidence[0], 0.0);
     assert!(confidence[1].is_finite());

@@ -240,7 +240,7 @@ impl PyDataset {
                 return Err(PyValueError::new_err(
                     "Perplexity suite does not use file-based dataset loading",
                 ));
-            }
+            },
         };
         Ok(Self { inner: ds })
     }
@@ -265,7 +265,7 @@ impl PyDataset {
                 return Err(PyValueError::new_err(
                     "Perplexity suite does not use file-based dataset loading",
                 ));
-            }
+            },
         };
         Ok(Self { inner: ds })
     }

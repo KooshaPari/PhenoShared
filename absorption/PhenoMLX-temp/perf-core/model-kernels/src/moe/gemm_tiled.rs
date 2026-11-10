@@ -149,14 +149,14 @@ mod tests {
 
     /// Build a deterministic `[num_tokens, k]` activation matrix.
     fn deterministic_activations(num_tokens: usize, k: usize, salt: u64) -> Vec<f32> {
-        let mut rng = Lcg::new(0xCAFE_BABE ^ salt);
+        let mut rng = Lcg::new(0xcafe_babe ^ salt);
         (0..num_tokens * k).map(|_| rng.next_signed()).collect()
     }
 
     /// Build a deterministic `[num_experts, k, n]` expert weight
     /// tensor.
     fn deterministic_experts(num_experts: usize, k: usize, n: usize, salt: u64) -> Vec<f32> {
-        let mut rng = Lcg::new(0xDEAD_BEEF ^ salt);
+        let mut rng = Lcg::new(0xdead_beef ^ salt);
         (0..num_experts * k * n)
             .map(|_| rng.next_signed())
             .collect()
@@ -191,8 +191,8 @@ mod tests {
         let num_experts = 3;
         let k = 16;
         let n = 32;
-        let a = deterministic_activations(num_tokens, k, 0xA1);
-        let b = deterministic_experts(num_experts, k, n, 0xB2);
+        let a = deterministic_activations(num_tokens, k, 0xa1);
+        let b = deterministic_experts(num_experts, k, n, 0xb2);
         let buckets: Vec<Vec<usize>> =
             vec![vec![0usize, 3, 5], vec![1usize, 6], vec![2usize, 4, 7]];
         let m = 0; // unused; mirrors the scalar path's contract.
@@ -221,8 +221,8 @@ mod tests {
         let num_experts = 3;
         let k = 4;
         let n = 6;
-        let a = deterministic_activations(num_tokens, k, 0xE1);
-        let b = deterministic_experts(num_experts, k, n, 0xE2);
+        let a = deterministic_activations(num_tokens, k, 0xe1);
+        let b = deterministic_experts(num_experts, k, n, 0xe2);
         // expert 0 owns tokens, expert 1 owns nothing, expert 2 owns tokens.
         let buckets: Vec<Vec<usize>> = vec![vec![0usize, 2], vec![], vec![1usize, 3]];
         let mut tiled_out = vec![99.0f32; num_tokens * n];
@@ -285,7 +285,7 @@ mod tests {
                 assert_eq!(what, "b", "expected BadBufferLength for b, got {what}");
                 assert_eq!(expected, 8);
                 assert_eq!(got, 4);
-            }
+            },
             other => panic!("expected BadBufferLength for b, got {other:?}"),
         }
 
@@ -311,7 +311,7 @@ mod tests {
                     expected > got,
                     "expected > got must hold ({expected} > {got})"
                 );
-            }
+            },
             other => panic!("expected BadBufferLength, got {other:?}"),
         }
     }

@@ -65,7 +65,7 @@ fn bounded_tuner_returns_budget_exceeded_when_measurements_exceed_limit() {
                 used_ms >= max_ms,
                 "used_ms {used_ms} should be >= max_ms {max_ms}"
             );
-        }
+        },
         Ok(rec) => panic!(
             "expected BudgetExceeded, got record with {} samples",
             rec.samples

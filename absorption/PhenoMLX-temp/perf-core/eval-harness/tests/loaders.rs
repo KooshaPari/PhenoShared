@@ -37,7 +37,7 @@ fn malformed_csv_record_returns_structured_error() {
             assert_eq!(path, "x.csv");
             assert_eq!(line, 2);
             assert!(message.contains("row has"));
-        }
+        },
         other => panic!("expected Csv error, got {other:?}"),
     }
 }
@@ -78,7 +78,7 @@ fn malformed_jsonl_record_returns_error_with_line_number() {
             // path is pure (no line suffix) and line is structured.
             assert_eq!(path, "x.jsonl");
             assert_eq!(line, 3);
-        }
+        },
         other => panic!("expected Json error, got {other:?}"),
     }
 }
@@ -93,7 +93,7 @@ fn malformed_jsonl_out_of_range_answer_returns_error() {
         EvalError::Malformed { line, message, .. } => {
             assert_eq!(line, 1);
             assert!(message.contains("out of range"));
-        }
+        },
         other => panic!("expected Malformed error, got {other:?}"),
     }
 }
@@ -111,7 +111,7 @@ fn malformed_yaml_returns_structured_error() {
             // Line is structured and >= 1; serde_yaml's location() may report
             // 1-based or fall back to 1 when unavailable.
             assert!(line >= 1, "line should be >= 1, got {line}");
-        }
+        },
         other => panic!("expected Yaml error, got {other:?}"),
     }
 }
@@ -127,7 +127,7 @@ fn malformed_yaml_missing_criteria_returns_error() {
         EvalError::Malformed { line, message, .. } => {
             assert_eq!(line, 1);
             assert!(message.contains("no expected_commands"));
-        }
+        },
         other => panic!("expected Malformed error, got {other:?}"),
     }
 }

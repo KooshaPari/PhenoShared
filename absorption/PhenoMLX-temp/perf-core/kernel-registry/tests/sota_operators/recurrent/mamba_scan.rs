@@ -114,7 +114,7 @@ fn mamba_scan_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal backend p95=1500 must beat simd p95=2000 and scalar p95=5000"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -135,7 +135,7 @@ fn mamba_scan_experimental_only_picks_a_tunable_candidate() {
                 "ExperimentalOnly must select a tunable candidate; got non-tunable {:?}",
                 candidate.name
             );
-        }
+        },
         other => panic!("expected Chosen under ExperimentalOnly, got {other:?}"),
     }
 }
@@ -213,7 +213,7 @@ fn mamba_scan_rejects_with_unsupported_dtype_when_key_dtype_mismatches() {
                     .any(|r| matches!(r.reason, RejectionReason::UnsupportedDtype(_))),
                 "expected UnsupportedDtype rejection, got {rejections:?}"
             );
-        }
+        },
         other => panic!("expected Rejected, got {other:?}"),
     }
     let trace_ids: Vec<CandidateId> = trace.considered.iter().map(|r| r.candidate).collect();

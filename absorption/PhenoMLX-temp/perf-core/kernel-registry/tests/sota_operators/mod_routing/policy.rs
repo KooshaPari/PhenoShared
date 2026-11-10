@@ -99,7 +99,7 @@ fn mod_routing_production_policy_selects_passing_quality_attachment() {
             // The Reference candidate must be in the rejection list with
             // MissingQualityEvidence so traces explain why it was skipped.
             let _ = id_reference; // (referenced above for clarity)
-        }
+        },
         other => panic!("expected Chosen under Production, got {other:?}"),
     }
 }
@@ -179,7 +179,7 @@ fn mod_routing_production_policy_rejects_with_quality_gate_failed() {
         SelectionDecision::Rejected { rejections, .. } => rejections.clone(),
         SelectionDecision::Chosen { .. } => {
             panic!("expected Rejected when all candidates fail the quality gate; got {decision:?}")
-        }
+        },
     };
     let metal_rejection = rejections
         .iter()
@@ -204,7 +204,7 @@ fn mod_routing_production_policy_rejects_with_quality_gate_failed() {
                 (*threshold - 0.65).abs() < 1e-9,
                 "threshold must be 0.65, got {threshold}"
             );
-        }
+        },
         other => panic!("expected QualityGateFailed for Metal, got {other:?}"),
     }
     match &reference_rejection.reason {
@@ -214,7 +214,7 @@ fn mod_routing_production_policy_rejects_with_quality_gate_failed() {
                 (*observed - 0.50).abs() < 1e-9,
                 "observed must be 0.50, got {observed}"
             );
-        }
+        },
         other => panic!("expected QualityGateFailed for Reference, got {other:?}"),
     }
 }
@@ -287,7 +287,7 @@ fn mod_routing_deterministic_policy_tiebreaks_by_lower_id_when_metrics_match() {
                  equal p95; got {:?}, expected alpha id {:?}",
                 candidate.id, id_a
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -358,7 +358,7 @@ fn mod_routing_production_policy_rejects_when_quality_evidence_missing() {
         SelectionDecision::Rejected { rejections, .. } => rejections.clone(),
         SelectionDecision::Chosen { .. } => {
             panic!("expected Rejected when no candidate has a QualityAttachment; got {decision:?}")
-        }
+        },
     };
     for id in [id_reference, id_metal] {
         let rejection = rejections
@@ -371,7 +371,7 @@ fn mod_routing_production_policy_rejects_when_quality_evidence_missing() {
                     why.contains("mod-throughput") || why.contains("quality"),
                     "rejection reason must mention the gate family; got {why:?}"
                 );
-            }
+            },
             other => panic!("expected MissingQualityEvidence for {id:?}, got {other:?}"),
         }
     }

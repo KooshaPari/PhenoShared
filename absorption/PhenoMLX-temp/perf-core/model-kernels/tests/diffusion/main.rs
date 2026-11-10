@@ -25,7 +25,7 @@ use model_kernels::diffusion::{DiffusionDecoder, DiffusionStepReport, RemaskStra
 // Test helpers
 // ---------------------------------------------------------------------------
 
-const SEED: u64 = 0xCAFE_BABE;
+const SEED: u64 = 0xcafe_babe;
 
 /// Build logits with a *step-dependent* monotonically-growing
 /// high-confidence prefix:

@@ -141,7 +141,7 @@ async fn real_bridge_unknown_method_fails_loud() {
         playcua_native::ipc::BridgeError::Rpc { code, message } => {
             assert_eq!(code, -32601);
             assert!(message.contains("process.launch"), "{message}");
-        }
+        },
         other => panic!("expected Rpc error, got {other:?}"),
     }
 }

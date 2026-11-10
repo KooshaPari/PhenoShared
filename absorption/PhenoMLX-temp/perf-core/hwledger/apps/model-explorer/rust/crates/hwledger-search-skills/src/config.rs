@@ -24,8 +24,8 @@ use std::fmt;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use crate::{AgenticFitRerank, LlmSummarizer};
 use crate::weighted::WeightedSkill;
+use crate::{AgenticFitRerank, LlmSummarizer};
 use hwledger_search_core::{SearchSkill, SkillRegistry};
 
 /// Error type for skill-config loading.
@@ -42,9 +42,9 @@ pub enum ConfigError {
 impl fmt::Display for ConfigError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            ConfigError::Io(m)       => write!(f, "io error: {m}"),
-            ConfigError::Parse(m)    => write!(f, "parse error: {m}"),
-            ConfigError::Invalid(m)  => write!(f, "invalid entry: {m}"),
+            ConfigError::Io(m) => write!(f, "io error: {m}"),
+            ConfigError::Parse(m) => write!(f, "parse error: {m}"),
+            ConfigError::Invalid(m) => write!(f, "invalid entry: {m}"),
         }
     }
 }
@@ -77,7 +77,7 @@ impl SkillKind {
     fn parse(s: &str) -> Result<Self, ConfigError> {
         match s {
             "agentic_fit_rerank" => Ok(SkillKind::AgenticFitRerank),
-            "llm_summarizer"     => Ok(SkillKind::LlmSummarizer),
+            "llm_summarizer" => Ok(SkillKind::LlmSummarizer),
             other => Err(ConfigError::Invalid(format!(
                 "unknown skill kind: '{other}' (expected 'agentic_fit_rerank' or 'llm_summarizer')"
             ))),
@@ -99,9 +99,9 @@ pub struct SkillConfigEntry {
 
 impl SkillConfigEntry {
     fn from_json(v: &serde_json::Value) -> Result<Self, ConfigError> {
-        let obj = v.as_object().ok_or_else(|| {
-            ConfigError::Invalid("entry must be a JSON object".into())
-        })?;
+        let obj = v
+            .as_object()
+            .ok_or_else(|| ConfigError::Invalid("entry must be a JSON object".into()))?;
         let name = obj
             .get("name")
             .and_then(|v| v.as_str())
@@ -112,12 +112,9 @@ impl SkillConfigEntry {
             .and_then(|v| v.as_str())
             .ok_or_else(|| ConfigError::Invalid(format!("entry '{name}' missing 'kind' string")))?;
         let kind = SkillKind::parse(kind_str)?;
-        let weight = obj
-            .get("weight")
-            .and_then(|v| v.as_f64())
-            .ok_or_else(|| {
-                ConfigError::Invalid(format!("entry '{name}' missing 'weight' number"))
-            })? as f32;
+        let weight = obj.get("weight").and_then(|v| v.as_f64()).ok_or_else(|| {
+            ConfigError::Invalid(format!("entry '{name}' missing 'weight' number"))
+        })? as f32;
         if weight < 0.0 || !weight.is_finite() {
             return Err(ConfigError::Invalid(format!(
                 "entry '{name}' weight must be a non-negative finite f32 (got {weight})"
@@ -154,7 +151,7 @@ pub fn build_registry(entries: &[SkillConfigEntry]) -> SkillRegistry {
     for entry in entries {
         let inner: Box<dyn SearchSkill> = match entry.kind {
             SkillKind::AgenticFitRerank => Box::new(AgenticFitRerank::new()),
-            SkillKind::LlmSummarizer    => Box::new(LlmSummarizer::new()),
+            SkillKind::LlmSummarizer => Box::new(LlmSummarizer::new()),
         };
         // WeightedSkill::new returns Result (name validation); unwrap here
         // because config::SkillConfigEntry::validate runs at parse time so
@@ -191,8 +188,16 @@ pub fn merge_with_defaults(
 /// unchanged; an unreadable or malformed file returns the [`ConfigError`].
 pub fn registry_from_default_path() -> Result<SkillRegistry, ConfigError> {
     let defaults = vec![
-        SkillConfigEntry { name: "agentic-fit".into(), kind: SkillKind::AgenticFitRerank, weight: 1.0 },
-        SkillConfigEntry { name: "llm-summary".into(), kind: SkillKind::LlmSummarizer,    weight: 1.0 },
+        SkillConfigEntry {
+            name: "agentic-fit".into(),
+            kind: SkillKind::AgenticFitRerank,
+            weight: 1.0,
+        },
+        SkillConfigEntry {
+            name: "llm-summary".into(),
+            kind: SkillKind::LlmSummarizer,
+            weight: 1.0,
+        },
     ];
     let path = match default_config_path() {
         Some(p) => p,
@@ -214,12 +219,18 @@ mod tests {
 
     #[test]
     fn parse_agentic_fit_rerank_kind() {
-        assert_eq!(SkillKind::parse("agentic_fit_rerank").unwrap(), SkillKind::AgenticFitRerank);
+        assert_eq!(
+            SkillKind::parse("agentic_fit_rerank").unwrap(),
+            SkillKind::AgenticFitRerank
+        );
     }
 
     #[test]
     fn parse_llm_summarizer_kind() {
-        assert_eq!(SkillKind::parse("llm_summarizer").unwrap(), SkillKind::LlmSummarizer);
+        assert_eq!(
+            SkillKind::parse("llm_summarizer").unwrap(),
+            SkillKind::LlmSummarizer
+        );
     }
 
     #[test]
@@ -279,7 +290,8 @@ mod tests {
                 {"name": "agentic", "kind": "agentic_fit_rerank", "weight": 2.0},
                 {"name": "summary", "kind": "llm_summarizer",     "weight": 0.5}
             ]"#,
-        ).unwrap();
+        )
+        .unwrap();
         let entries = load_config(&path).unwrap();
         assert_eq!(entries.len(), 2);
         assert_eq!(entries[0].kind, SkillKind::AgenticFitRerank);
@@ -307,26 +319,43 @@ mod tests {
     #[test]
     fn merge_with_defaults_overrides_weight() {
         let defaults = vec![
-            SkillConfigEntry { name: "agentic-fit".into(), kind: SkillKind::AgenticFitRerank, weight: 1.0 },
-            SkillConfigEntry { name: "llm-summary".into(), kind: SkillKind::LlmSummarizer,    weight: 1.0 },
+            SkillConfigEntry {
+                name: "agentic-fit".into(),
+                kind: SkillKind::AgenticFitRerank,
+                weight: 1.0,
+            },
+            SkillConfigEntry {
+                name: "llm-summary".into(),
+                kind: SkillKind::LlmSummarizer,
+                weight: 1.0,
+            },
         ];
-        let overrides = vec![
-            SkillConfigEntry { name: "agentic-fit-weighted".into(), kind: SkillKind::AgenticFitRerank, weight: 2.5 },
-        ];
+        let overrides = vec![SkillConfigEntry {
+            name: "agentic-fit-weighted".into(),
+            kind: SkillKind::AgenticFitRerank,
+            weight: 2.5,
+        }];
         let merged = merge_with_defaults(&defaults, &overrides);
         assert_eq!(merged.len(), 2);
-        let agentic = merged.iter().find(|e| e.kind == SkillKind::AgenticFitRerank).unwrap();
+        let agentic = merged
+            .iter()
+            .find(|e| e.kind == SkillKind::AgenticFitRerank)
+            .unwrap();
         assert!((agentic.weight - 2.5).abs() < 1e-6);
     }
 
     #[test]
     fn merge_with_defaults_appends_new_kinds() {
-        let defaults = vec![
-            SkillConfigEntry { name: "agentic".into(), kind: SkillKind::AgenticFitRerank, weight: 1.0 },
-        ];
-        let overrides = vec![
-            SkillConfigEntry { name: "summary".into(), kind: SkillKind::LlmSummarizer, weight: 1.0 },
-        ];
+        let defaults = vec![SkillConfigEntry {
+            name: "agentic".into(),
+            kind: SkillKind::AgenticFitRerank,
+            weight: 1.0,
+        }];
+        let overrides = vec![SkillConfigEntry {
+            name: "summary".into(),
+            kind: SkillKind::LlmSummarizer,
+            weight: 1.0,
+        }];
         let merged = merge_with_defaults(&defaults, &overrides);
         assert_eq!(merged.len(), 2);
     }
@@ -334,8 +363,16 @@ mod tests {
     #[test]
     fn build_registry_constructs_two_skills() {
         let entries = vec![
-            SkillConfigEntry { name: "a".into(), kind: SkillKind::AgenticFitRerank, weight: 1.0 },
-            SkillConfigEntry { name: "s".into(), kind: SkillKind::LlmSummarizer,    weight: 1.0 },
+            SkillConfigEntry {
+                name: "a".into(),
+                kind: SkillKind::AgenticFitRerank,
+                weight: 1.0,
+            },
+            SkillConfigEntry {
+                name: "s".into(),
+                kind: SkillKind::LlmSummarizer,
+                weight: 1.0,
+            },
         ];
         let reg = build_registry(&entries);
         // Sanity: the registry can be turned into a default if needed.
@@ -350,7 +387,9 @@ mod tests {
         std::fs::create_dir_all(&dir).unwrap();
         // SAFETY: tests are single-threaded per process; a small mutation
         // is acceptable here.
-        unsafe { std::env::set_var("XDG_CONFIG_HOME", &dir); }
+        unsafe {
+            std::env::set_var("XDG_CONFIG_HOME", &dir);
+        }
         let reg = registry_from_default_path().unwrap();
         // Smoke check: the registry can run.
         let _ = reg.run_all(&mut [], &Default::default());

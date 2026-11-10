@@ -20,7 +20,7 @@ use std::sync::{Arc, OnceLock};
 use hwledger_search_core::{CandidateId, CoreError, RawModel, SourceAdapter};
 
 use crate::error::IngestError;
-use crate::rate_limit::{RateLimitPolicy, parse_retry_after};
+use crate::rate_limit::{parse_retry_after, RateLimitPolicy};
 
 /// Default HF Hub base URL.
 const DEFAULT_HUB_URL: &str = "https://huggingface.co";
@@ -73,7 +73,10 @@ impl HuggingFaceAdapter {
             base_url: DEFAULT_HUB_URL.to_string(),
             token: None,
             client: reqwest::Client::builder()
-                .user_agent(concat!("hwledger-search-ingest/", env!("CARGO_PKG_VERSION")))
+                .user_agent(concat!(
+                    "hwledger-search-ingest/",
+                    env!("CARGO_PKG_VERSION")
+                ))
                 .connect_timeout(std::time::Duration::from_secs(5))
                 .timeout(std::time::Duration::from_secs(30))
                 .build()
@@ -121,14 +124,22 @@ impl HuggingFaceAdapter {
 
     /// Build the request URL for a model's tree listing.
     fn tree_url(&self, id: &str) -> String {
-        format!("{}/api/models/{}/tree/main", self.base_url.trim_end_matches('/'), id)
+        format!(
+            "{}/api/models/{}/tree/main",
+            self.base_url.trim_end_matches('/'),
+            id
+        )
     }
 
     /// Build the request URL for a model's raw README card.
     fn card_url(&self, id: &str) -> String {
         // The HF convention is "{id}/raw/main/README.md" — relative to
         // the resolver base URL, not the API.
-        format!("{}/{}/raw/main/README.md", self.base_url.trim_end_matches('/'), id)
+        format!(
+            "{}/{}/raw/main/README.md",
+            self.base_url.trim_end_matches('/'),
+            id
+        )
     }
 
     /// Attach the auth token (if any) to a request builder.
@@ -141,7 +152,10 @@ impl HuggingFaceAdapter {
 
     /// Rate-limited send with 429-retry-on-backoff. Respects `policy`
     /// for inter-request pacing and Retry-After header on 429.
-    async fn send_with_retry(&self, req: reqwest::RequestBuilder) -> Result<reqwest::Response, IngestError> {
+    async fn send_with_retry(
+        &self,
+        req: reqwest::RequestBuilder,
+    ) -> Result<reqwest::Response, IngestError> {
         let policy = self.policy.unwrap_or(RateLimitPolicy::default());
         let mut retries = 0u32;
         loop {
@@ -166,7 +180,9 @@ impl HuggingFaceAdapter {
             };
             *self.last_request.lock().expect("lock poisoned") = now_ms;
 
-            let resp = req.try_clone().expect("request must be cloneable")
+            let resp = req
+                .try_clone()
+                .expect("request must be cloneable")
                 .send()
                 .await
                 .map_err(|e| IngestError::http(e.to_string()))?;
@@ -177,18 +193,25 @@ impl HuggingFaceAdapter {
                     return Err(IngestError::RateLimited);
                 }
                 // Parse Retry-After header for adaptive backoff.
-                let retry_secs = resp.headers()
+                let retry_secs = resp
+                    .headers()
                     .get("retry-after")
                     .and_then(|v| v.to_str().ok())
-                    .and_then(|v| parse_retry_after(v, {
-                        std::time::SystemTime::now()
-                            .duration_since(std::time::UNIX_EPOCH)
-                            .unwrap_or_default()
-                            .as_secs()
-                    }))
+                    .and_then(|v| {
+                        parse_retry_after(v, {
+                            std::time::SystemTime::now()
+                                .duration_since(std::time::UNIX_EPOCH)
+                                .unwrap_or_default()
+                                .as_secs()
+                        })
+                    })
                     .map(|d| d.as_millis() as u64)
                     .unwrap_or(policy.min_interval_ms);
-                tracing::warn!(retry_secs, retries, "huggingface: 429 rate-limited, backing off");
+                tracing::warn!(
+                    retry_secs,
+                    retries,
+                    "huggingface: 429 rate-limited, backing off"
+                );
                 tokio::time::sleep(std::time::Duration::from_millis(retry_secs)).await;
                 continue;
             }
@@ -219,7 +242,9 @@ impl HuggingFaceAdapter {
 
         // 1. Metadata blob.
         let meta_url = self.model_url(&id.id);
-        let resp = self.send_with_retry(self.authed(self.client.get(&meta_url))).await?;
+        let resp = self
+            .send_with_retry(self.authed(self.client.get(&meta_url)))
+            .await?;
         let status = resp.status();
         if !status.is_success() {
             return Err(Self::classify(status));
@@ -251,7 +276,9 @@ impl HuggingFaceAdapter {
 
         // 2. Tree listing.
         let tree_url = self.tree_url(&id.id);
-        let resp = self.send_with_retry(self.authed(self.client.get(&tree_url))).await?;
+        let resp = self
+            .send_with_retry(self.authed(self.client.get(&tree_url)))
+            .await?;
         if resp.status().is_success() {
             let tree: serde_json::Value = resp
                 .json()
@@ -278,7 +305,9 @@ impl HuggingFaceAdapter {
             self.base_url.trim_end_matches('/'),
             id
         );
-        let resp = self.send_with_retry(self.authed(self.client.get(&url))).await?;
+        let resp = self
+            .send_with_retry(self.authed(self.client.get(&url)))
+            .await?;
         let status = resp.status();
         if !status.is_success() {
             return Err(Self::classify(status));
@@ -291,7 +320,9 @@ impl HuggingFaceAdapter {
     /// Fetch the raw README card text.
     async fn fetch_card_async(&self, id: &str) -> Result<String, IngestError> {
         let url = self.card_url(id);
-        let resp = self.send_with_retry(self.authed(self.client.get(&url))).await?;
+        let resp = self
+            .send_with_retry(self.authed(self.client.get(&url)))
+            .await?;
         if !resp.status().is_success() {
             return Err(IngestError::http(format!(
                 "card fetch returned {}",
@@ -350,12 +381,15 @@ impl SourceAdapter for HuggingFaceAdapter {
                 limit
             ),
         };
-        let resp = match self.block_on(async { self.send_with_retry(self.authed(self.client.get(&url))).await }) {
+        let resp = match self.block_on(async {
+            self.send_with_retry(self.authed(self.client.get(&url)))
+                .await
+        }) {
             Ok(r) => r,
             Err(e) => {
                 tracing::warn!(error = %e, "huggingface list_candidates: send failed");
                 return Vec::new();
-            }
+            },
         };
         let status = resp.status();
         if !status.is_success() {
@@ -367,7 +401,7 @@ impl SourceAdapter for HuggingFaceAdapter {
             Err(e) => {
                 tracing::warn!(error = %e, "huggingface list_candidates: json failed");
                 return Vec::new();
-            }
+            },
         };
         let Some(arr) = body.as_array() else {
             return Vec::new();
@@ -402,7 +436,7 @@ fn urlencode(s: &str) -> String {
         match byte {
             b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
                 out.push(byte as char);
-            }
+            },
             other => out.push_str(&format!("%{other:02X}")),
         }
     }

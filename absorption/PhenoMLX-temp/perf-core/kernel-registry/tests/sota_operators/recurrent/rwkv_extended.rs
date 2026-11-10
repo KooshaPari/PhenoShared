@@ -75,7 +75,7 @@ fn rwkv_channel_mix_step(x_t: f32, x_prev: f32, mu: f32, w_k: f32, w_v: f32, bia
 fn jamba_hybrid_attention_mamba_mixer_byte_identical() {
     let l = 8usize;
     let d = 4usize;
-    let mut rng = 0xA1B2C3D4u32;
+    let mut rng = 0xa1b2c3d4u32;
     let x: Vec<f32> = (0..l * d).map(|_| rand_unit(&mut rng)).collect();
     let a: Vec<f32> = (0..d)
         .map(|_| 0.5 + 0.4 * rand_unit(&mut rng).abs())
@@ -168,7 +168,7 @@ fn rwkv_channel_mix_within_tolerance() {
     // 4-layer RWKV channel-mix pass over a 16-step sequence.
     let num_layers = 4usize;
     let seq_len = 16usize;
-    let mut rng = 0xFEEDFACEu32;
+    let mut rng = 0xfeedfaceu32;
     let layer_params: Vec<(f32, f32, f32)> = (0..num_layers)
         .map(|i| {
             let mu = 0.6 + 0.1 * (i as f32);

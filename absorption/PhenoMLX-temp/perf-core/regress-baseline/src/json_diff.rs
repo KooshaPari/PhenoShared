@@ -22,7 +22,7 @@ pub(crate) fn canonicalize(v: &Value) -> Value {
                 out.insert(k, vv);
             }
             Value::Object(out)
-        }
+        },
         Value::Array(arr) => Value::Array(arr.iter().map(canonicalize).collect()),
         other => other.clone(),
     }
@@ -72,7 +72,7 @@ pub(crate) fn find_first_diff(
                 }
             }
             None
-        }
+        },
         (Value::Array(e), Value::Array(a)) => {
             let n = e.len().max(a.len());
             for i in 0..n {
@@ -88,7 +88,7 @@ pub(crate) fn find_first_diff(
                 }
             }
             None
-        }
+        },
         _ => Some((path.to_string(), expected.clone(), actual.clone())),
     }
 }

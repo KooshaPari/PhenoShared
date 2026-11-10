@@ -112,7 +112,7 @@ fn sliding_window_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "Metal p95=900 must beat zmm p95=1300 and scalar p95=4500"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
