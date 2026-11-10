@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"testing"
 
 	"github.com/KooshaPari/dagrun/internal/plan"
@@ -204,5 +205,36 @@ func TestCorruptStateIsNotMistakenForASchemaProblem(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "corrupt") {
 		t.Errorf("error should say the state is corrupt: %v", err)
+	}
+}
+
+// A run that cannot persist must say why. The bare error for a full disk points
+// at a .tmp file the operator never created, which reads like a permissions
+// problem and sends them looking in the wrong place.
+func TestWriteErrNamesTheRealCause(t *testing.T) {
+	tests := []struct {
+		name string
+		err  error
+		want string
+	}{
+		{"disk full", syscall.ENOSPC, "filesystem is full"},
+		{"read-only", syscall.EROFS, "read-only"},
+		{"permission", os.ErrPermission, "permission denied"},
+		{"other", errors.New("boom"), "cannot persist run state"},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := writeErr("/run/state.json.tmp", tc.err)
+			if !strings.Contains(got.Error(), tc.want) {
+				t.Errorf("error = %q, want it to mention %q", got, tc.want)
+			}
+			if !strings.Contains(got.Error(), "/run/state.json.tmp") {
+				t.Errorf("error does not name the path: %q", got)
+			}
+			// The cause must stay reachable, so a caller can still branch on it.
+			if !errors.Is(got, tc.err) {
+				t.Errorf("error lost its cause: %v", got)
+			}
+		})
 	}
 }

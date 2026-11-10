@@ -170,6 +170,14 @@ func Parse(raw []byte) (*Plan, error) {
 	return &p, nil
 }
 
+// Normalize applies the plan's defaults to every node.
+//
+// Parse calls it, so a plan read from YAML is always normalised. A plan built
+// programmatically (by an importer, a draft, a test) must call it too: without
+// it every default is missing, and Validate then fails for a reason that says
+// nothing about the plan's content.
+func (p *Plan) Normalize() { p.normalize() }
+
 func (p *Plan) normalize() {
 	if p.Run == "" {
 		p.Run = "run"
