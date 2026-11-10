@@ -1,7 +1,7 @@
 # DISABLED 2026-11-10 -- not loaded by GitHub Actions (this directory is not
 # `.github/workflows/`, so nothing here runs).
 #
-# Why it is disabled rather than fixed:
+# Why it cannot run:
 #
 #   There are two workflows that deploy to GitHub Pages from this repository,
 #   and they race for the same environment and the same artifact path

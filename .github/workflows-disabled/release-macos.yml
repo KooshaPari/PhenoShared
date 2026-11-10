@@ -1,7 +1,7 @@
 # DISABLED 2026-11-09 — not loaded by GitHub Actions (this directory is not
 # `.github/workflows/`, so nothing here runs).
 #
-# Why it is disabled rather than fixed:
+# Why it cannot run:
 #
 #   The one job calls a reusable workflow in another repository:
 #       uses: <REDACTED>/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
