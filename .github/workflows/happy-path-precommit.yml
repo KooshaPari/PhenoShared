@@ -18,13 +18,44 @@ jobs:
           bash governance/test-happy-path-allowlist.sh
       - name: Run guard against HEAD diff
         run: |
-          bash governance/happy-path-precommit.sh
-        env:
-          HAPPY_PATH_FAIL_ON: block
-          HAPPY_PATH_BASE: >-
-            ${{ github.event.pull_request.base.sha || github.event.before }}
-          HAPPY_PATH_HEAD: >-
-            ${{ github.event.pull_request.head.sha || github.sha }}
+          # WHY THE BASE IS COMPUTED HERE AND NOT TAKEN FROM THE EVENT
+          #   `github.event.pull_request.base.sha` is FROZEN at the moment the
+          #   PR was created; it is not the current tip of the base branch. A PR
+          #   whose branch also contains base commits newer than that frozen
+          #   SHA therefore diffs from a stale base, and every line the BASE
+          #   branch added since the PR was opened appears as an ADDED line of
+          #   this PR. The guard then reads the base branch's own new prose as
+          #   if this PR had written it - which is how a comment the base
+          #   branch added to its own Cargo.toml failed this PR's guard on a
+          #   change that did not touch Cargo.toml at all.
+          #
+          #   Diff from the merge-base with the CURRENT base branch instead.
+          #   That is exactly "what this PR changed", and it is stable: for a
+          #   push to main the merge-base of `before` and HEAD is `before`,
+          #   which is what the guard already used.
+          base_ref="${{ github.event.pull_request.base.ref }}"
+          head_sha="${{ github.event.pull_request.head.sha || github.sha }}"
+          base_sha="${{ github.event.pull_request.base.sha || github.event.before }}"
+          merge_base=""
+          if [ -n "$base_ref" ]; then
+            git fetch --no-tags --quiet origin \
+              "+refs/heads/${base_ref}:refs/remotes/origin/${base_ref}" || true
+            if git rev-parse --verify --quiet "origin/${base_ref}" >/dev/null 2>&1; then
+              merge_base="$(git merge-base "origin/${base_ref}" "$head_sha" 2>/dev/null || true)"
+            fi
+            if [ -z "$merge_base" ] && \
+               git rev-parse --verify --quiet "$base_ref" >/dev/null 2>&1; then
+              merge_base="$(git merge-base "$base_ref" "$head_sha" 2>/dev/null || true)"
+            fi
+            if [ -n "$merge_base" ]; then
+              base_sha="$merge_base"
+            fi
+          fi
+          echo "guard base=$base_sha head=$head_sha"
+          HAPPY_PATH_BASE="$base_sha" \
+          HAPPY_PATH_HEAD="$head_sha" \
+          HAPPY_PATH_FAIL_ON=block \
+            bash governance/happy-path-precommit.sh
       - name: Show recent diff
         if: always()
         run: git log -1 --format='%h %s' && git diff HEAD~1 --unified=0 | head -200
