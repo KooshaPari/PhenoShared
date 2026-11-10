@@ -1,0 +1,297 @@
+// Command dagrun is a work-DAG executor for coding agents.
+//
+// An agent writes a plan; dagrun decides what is ready, drives each node,
+// verifies the artifacts the node promised, and records the result. The DAG is
+// the trace, so there is no second system to drift out of sync.
+package main
+
+import (
+	"errors"
+	"flag"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
+
+	"github.com/KooshaPari/dagrun/internal/plan"
+	"github.com/KooshaPari/dagrun/internal/store"
+)
+
+// Version is set at build time with -ldflags "-X main.Version=...".
+var Version = "1.2.0"
+
+const defaultDir = ".dagrun"
+
+func main() {
+	if len(os.Args) < 2 {
+		usage(os.Stderr)
+		os.Exit(2)
+	}
+	cmd := os.Args[1]
+	args := os.Args[2:]
+
+	var err error
+	switch cmd {
+	case "plan":
+		err = cmdPlan(args)
+	case "run":
+		err = cmdRun(args)
+	case "next":
+		err = cmdNext(args)
+	case "claim":
+		err = cmdClaim(args)
+	case "done":
+		err = cmdDone(args)
+	case "fail":
+		err = cmdFail(args)
+	case "skip":
+		err = cmdSkip(args)
+	case "status":
+		err = cmdStatus(args)
+	case "validate":
+		err = cmdValidate(args)
+	case "trace":
+		err = cmdTrace(args)
+	case "export":
+		err = cmdExport(args)
+	case "submit":
+		err = cmdSubmit(args)
+	case "import":
+		err = cmdImport(args)
+	case "detect":
+		err = cmdDetect(args)
+	case "mcp":
+		err = cmdMCP(args)
+	case "explain":
+		err = cmdExplain(args)
+	case "viz":
+		err = cmdViz(args)
+	case "draft":
+		err = cmdDraft(args)
+	case "doctor":
+		err = cmdDoctor(args)
+	case "gc":
+		err = cmdGC(args)
+	case "workspace":
+		err = cmdWorkspace(args)
+	case "timeline":
+		err = cmdTimeline(args)
+	case "stats":
+		err = cmdStats(args)
+	case "critique":
+		err = cmdCritique(args)
+	case "lint":
+		err = cmdLint(args)
+	case "review":
+		err = cmdReview(args)
+	case "template":
+		err = cmdTemplate(args)
+	case "skill":
+		err = cmdSkill(args)
+	case "query":
+		err = cmdQuery(args)
+	case "otel":
+		err = cmdOtel(args)
+	case "replan":
+		err = cmdReplan(args)
+	case "recover":
+		err = cmdRecover(args)
+	case "serve":
+		err = cmdServe(args)
+	case "version", "--version", "-v":
+		fmt.Printf("dagrun %s\n", Version)
+		return
+	case "help", "--help", "-h":
+		usage(os.Stdout)
+		return
+	default:
+		fmt.Fprintf(os.Stderr, "dagrun: unknown command %q\n\n", cmd)
+		usage(os.Stderr)
+		os.Exit(2)
+	}
+	if err != nil {
+		// Asking for help is not a failure. The flag package prints the usage
+		// text and returns ErrHelp; without this, every `dagrun <cmd> --help`
+		// exited 1 and an agent probing for usage saw a false error. That was
+		// 24 of the 26 commands, because only the few that handle --help
+		// themselves got it right.
+		if errors.Is(err, flag.ErrHelp) {
+			os.Exit(0)
+		}
+		fmt.Fprintf(os.Stderr, "dagrun %s: %v\n", cmd, err)
+		os.Exit(1)
+	}
+}
+
+func usage(w *os.File) {
+	fmt.Fprint(w, `dagrun - a work-DAG executor for coding agents
+
+  A node is done only when the artifacts it declared verify.
+
+USAGE
+  dagrun plan [FILE] [flags]     validate a plan and install it as the run
+  dagrun run [flags]             execute ready nodes by spawning agent harnesses
+  dagrun next [flags]            list ready nodes with the prompt to hand an agent
+  dagrun claim NODE [flags]      take a node (agent-driven mode)
+  dagrun done NODE [flags]       verify then mark a node done
+  dagrun fail NODE [flags]       mark failed
+  dagrun skip NODE [flags]       mark skipped
+  dagrun status [flags]          show the tree and progress
+  dagrun validate [flags]        re-check every node against the filesystem
+  dagrun trace [flags]           merged execution trace
+  dagrun export [flags]          emit agileplus | tracera | json
+  dagrun submit [flags]          post the run to a Tracera instance
+  dagrun import [flags]           import a Tracera payload into a plan
+  dagrun skill                   print the agent skill (frontmatter + verbs)
+  dagrun detect [flags]          show detected agent harnesses
+  dagrun viz [flags]             render the run as an interactive HTML file
+  dagrun draft [flags]           turn an intent paragraph into a valid plan
+  dagrun explain NODE [flags]    say why a node is not done and what to do
+  dagrun doctor [flags]          read-only health check of the run directory
+  dagrun gc [flags]              prune old logs, traces, and merged worktrees
+  dagrun workspace [flags]       validate and install a multi-repo workspace
+  dagrun timeline [flags]        render the run timeline
+  dagrun stats [flags]           per-kind duration, adoption and retry statistics
+  dagrun lint [flags]            run the semantic plan linter
+  dagrun critique [flags]        write a CRITIQUE.md critique of a plan
+  dagrun review [flags]          write a REVIEW.md from the trace
+  dagrun template [flags]        print a plan template
+  dagrun query [flags]           select nodes: --where, --select, --order-by, --limit
+  dagrun otel [flags]            export the run as OTLP/JSON spans
+  dagrun replan PLAN [flags]     diff a revised plan against the run; --apply installs it
+  dagrun recover [flags]         report or reclaim stuck nodes; --force reclaims
+  dagrun serve [flags]           serve the run as a live viewer + read-only JSON API
+  dagrun mcp                     serve the Model Context Protocol over stdio
+  dagrun version
+
+COMMON FLAGS
+  --dir DIR      run directory (default `+defaultDir+`)
+  --json         machine-readable output on stdout
+
+PLAN FLAGS
+  --file FILE    plan source, "-" for stdin (default `+defaultDir+`/run.yaml)
+  --reset        discard existing progress
+  --work N       worker count used for the wall-clock estimate
+
+RUN FLAGS
+  --workers N    concurrent nodes in this process (default: plan max_parallel)
+  --once         start at most one node then exit
+  --dry-run      report what would run, execute nothing
+  --owner ID     identity written into leases (default: host.pid.random)
+  --lease D      lease duration (default 2m)
+  --exec-template S  fallback command, e.g. "mytool --prompt {prompt}"
+  --tools A,B    tool allow-list passed to the harness
+  --wait D       keep waiting for capacity up to D (e.g. 10m) instead of
+                 returning a partial run; 0 returns as soon as nothing can start
+  --verbose
+
+EXAMPLES
+  dagrun plan plan.yaml --json
+  dagrun next --json
+  dagrun run --workers 4
+  dagrun export --format agileplus > bundle.json
+`)
+}
+
+// flagSet builds a FlagSet with a shared --dir and --json.
+func flagSet(name string, dir *string, jsonOut *bool) *flag.FlagSet {
+	fs := flag.NewFlagSet(name, flag.ContinueOnError)
+	fs.SetOutput(os.Stderr)
+	fs.StringVar(dir, "dir", defaultDir, "run directory")
+	if jsonOut != nil {
+		fs.BoolVar(jsonOut, "json", false, "machine-readable JSON on stdout")
+	}
+	return fs
+}
+
+// splitArgs separates flags from positionals without requiring flags first.
+func splitArgs(args []string) (flags []string, pos []string) {
+	for i := 0; i < len(args); i++ {
+		a := args[i]
+		if a == "--" {
+			pos = append(pos, args[i+1:]...)
+			break
+		}
+		if strings.HasPrefix(a, "-") && a != "-" {
+			flags = append(flags, a)
+			// a flag written as --name value: keep the value with the flag
+			if !strings.Contains(a, "=") && i+1 < len(args) && !strings.HasPrefix(args[i+1], "-") {
+				// only for flags that take a value; UnknownFlags are caught by flag itself
+				if takesValue(a) {
+					flags = append(flags, args[i+1])
+					i++
+				}
+			}
+			continue
+		}
+		pos = append(pos, a)
+	}
+	return flags, pos
+}
+
+// valueFlags names the flags that consume the next argument.
+//
+// This table is the cost of the hand-rolled splitArgs below: the flag package
+// knows which of its own flags take values, but splitArgs separates flags from
+// positionals BEFORE the flag set sees them, so it needs its own copy of that
+// knowledge and every new --flag-with-a-value has to be added here or its value
+// is stranded as a positional. Forgetting one turns `--from dagschema` into
+// "unknown value dagschema", which is how --from was nearly shipped broken.
+//
+// The structural fix is a real parser (one declaration per command, no table);
+// it is deferred because it touches every cmd_*.go file at once.
+var valueFlags = map[string]bool{
+	"-dir": true, "-file": true, "-work": true, "-workers": true, "-owner": true,
+	"-lease": true, "-exec-template": true, "-tools": true, "-role": true,
+	"-count": true, "-ttl": true, "-epoch": true, "-format": true, "-reason": true,
+	"-node": true, "-from": true, "-in": true, "-map": true, "-out": true,
+	"-url": true, "-token": true, "-intent": true, "-addr": true, "-watch": true,
+	"-wait": true, "-since": true, "-event": true, "-limit": true,
+	"-order-by": true, "-select": true, "-where": true, "-max-cost": true,
+	"-template": true, "-name": true,
+}
+
+func takesValue(a string) bool {
+	name := a
+	if i := strings.IndexByte(a, '='); i >= 0 {
+		return false // value is already attached
+	}
+	// normalize --flag to -flag so the table has one spelling
+	name = "-" + strings.TrimLeft(name, "-")
+	return valueFlags[name]
+}
+
+// nowUTC is the timestamp format used in generated documents.
+func nowUTC() string { return time.Now().UTC().Format(time.RFC3339) }
+
+// openRun loads the installed plan and its store.
+func openRun(dir string) (*plan.Plan, *store.Store, []byte, error) {
+	abs, err := filepath.Abs(dir)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	planPath := filepath.Join(abs, "run.yaml")
+	raw, err := os.ReadFile(planPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil, nil, fmt.Errorf("no plan installed at %s; run `dagrun plan FILE` first", planPath)
+		}
+		return nil, nil, nil, err
+	}
+	p, err := plan.Parse(raw)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	cwd, err := os.Getwd()
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	// Artifact paths resolve against the directory dagrun was invoked from.
+	p.Root = cwd
+	st, err := store.Open(abs, p, raw, false)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	return p, st, raw, nil
+}
