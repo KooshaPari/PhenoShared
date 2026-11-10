@@ -11,10 +11,12 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
+	"syscall"
 	"time"
 
 	"github.com/KooshaPari/dagrun/internal/harness"
@@ -151,6 +153,12 @@ func (s *Store) readState() (*State, error) {
 	if err := json.Unmarshal(raw, &st); err != nil {
 		return nil, fmt.Errorf("corrupt state at %s: %w", s.statePath(), err)
 	}
+	// A state written by a newer binary is refused here rather than half-read.
+	// Reading it would silently drop every field this build does not know, and
+	// the next write would persist that loss.
+	if err := migrate(&st); err != nil {
+		return nil, fmt.Errorf("%s: %w", s.statePath(), err)
+	}
 	if st.Nodes == nil {
 		st.Nodes = map[string]*NodeState{}
 	}
@@ -180,26 +188,48 @@ func (s *Store) writeState(st *State, durable bool) error {
 	tmp := s.statePath() + ".tmp"
 	f, err := os.OpenFile(tmp, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o644)
 	if err != nil {
-		return err
+		return writeErr(tmp, err)
 	}
 	if _, err := f.Write(raw); err != nil {
 		f.Close()
-		return err
+		return writeErr(tmp, err)
 	}
 	if durable {
 		if err := f.Sync(); err != nil {
 			f.Close()
-			return err
+			return writeErr(tmp, err)
 		}
 	}
 	if err := f.Close(); err != nil {
-		return err
+		return writeErr(tmp, err)
 	}
 	// The rename is atomic. We deliberately do not fsync the directory: that
 	// doubles the syscall cost for a guarantee the artifact-based recovery path
 	// already provides (a lost transition means the node runs again and is
 	// adopted).
-	return os.Rename(tmp, s.statePath())
+	if err := os.Rename(tmp, s.statePath()); err != nil {
+		return writeErr(s.statePath(), err)
+	}
+	return nil
+}
+
+// writeErr turns a filesystem failure into something an operator can act on.
+//
+// The bare error for a full disk is "no space left on device" attached to a
+// .tmp path, which reads like a permissions problem with a file the user never
+// created. A run that cannot persist must say what actually happened, because
+// the alternative is a run that keeps claiming nodes and failing each one for a
+// reason it invented.
+func writeErr(path string, err error) error {
+	switch {
+	case errors.Is(err, syscall.ENOSPC):
+		return fmt.Errorf("cannot persist run state at %s: the filesystem is full (%w)", path, err)
+	case errors.Is(err, syscall.EROFS):
+		return fmt.Errorf("cannot persist run state at %s: the filesystem is read-only (%w)", path, err)
+	case errors.Is(err, os.ErrPermission):
+		return fmt.Errorf("cannot persist run state at %s: permission denied (%w)", path, err)
+	}
+	return fmt.Errorf("cannot persist run state at %s: %w", path, err)
 }
 
 // With runs fn under an exclusive lock and persists the result durably.

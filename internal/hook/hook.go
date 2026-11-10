@@ -64,11 +64,42 @@ func Run(ctx context.Context, phase string, h Hooks, dir string, env []string) e
 	return nil
 }
 
-// DefaultGitCommitHook returns a shell snippet that commits the worktree
-// using the message in DAGRUN_COMMIT_MSG.
+// DefaultGitCommitHook returns a shell snippet that commits the worktree using
+// the message in DAGRUN_COMMIT_MSG.
+//
+// Two deliberate choices:
+//
+//  1. The fallback message carries the ledger trailers. A host whose global
+//     core.hooksPath installs a commit-message linter rejects a bare message,
+//     and because this hook is best-effort that rejection would be invisible:
+//     auto-commit would silently do nothing. A message that already satisfies
+//     the trailer requirement removes the silent no-op.
+//  2. `|| true` keeps the commit best-effort. A node that already verified must
+//     not become unverified because a commit was refused, which is the same
+//     rule as "a failing hook never masks a verification result" read in the
+//     other direction.
+//
+// root is the worktree to commit, so the snippet works from any cwd.
 func DefaultGitCommitHook(root string) string {
-	_ = root
-	return "git add -A && git commit -m \"${DAGRUN_COMMIT_MSG:-dagrun: verified node}\" || true"
+	target := "."
+	if strings.TrimSpace(root) != "" {
+		target = root
+	}
+	// A real newline inside shell double quotes is preserved, so the trailers
+	// land in their own paragraph where git reads them as trailers. An escaped
+	// "\n" would reach git as the two characters backslash and n.
+	msg := "${DAGRUN_COMMIT_MSG:-dagrun: verified node}\n\n" +
+		"tx-agent: ${DAGRUN_TX_AGENT:-jcode}\n" +
+		"tx-validated: ${DAGRUN_TX_VALIDATED:-test}"
+	return fmt.Sprintf("git -C %s add -A && git -C %s commit -m \"%s\" || true",
+		shellQuote(target), shellQuote(target), msg)
+}
+
+// shellQuote wraps a path in single quotes so a `$`, backtick or space in a
+// worktree path cannot be re-interpreted by the shell. An embedded single quote
+// is closed, escaped, and reopened, which is the only portable construction.
+func shellQuote(s string) string {
+	return "'" + strings.ReplaceAll(s, "'", `'\''`) + "'"
 }
 
 func truncate(s string, n int) string {

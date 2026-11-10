@@ -77,6 +77,11 @@ func Doctor(dir string, st *store.Store, snap *store.State) *Report {
 	if _, err := os.Stat(filepath.Join(dir, "state.json")); err != nil {
 		add("missing_state", SeverityError, "state.json is missing", "the run has no progress recorded")
 	}
+	// Filesystem health is a property of the DIRECTORY, not of the run state, so
+	// it is checked before the state can short-circuit the rest of the report.
+	// An unwritable or full run directory is also the most likely reason state is
+	// missing in the first place, which makes checking it later backwards.
+	checkFilesystem(dir, rep, add)
 	if st != nil && snap != nil {
 		rep.Run = st.Plan().Run
 		for _, n := range st.Plan().Nodes {
@@ -145,14 +150,6 @@ func Doctor(dir string, st *store.Store, snap *store.State) *Report {
 		}
 	}
 
-	if free, err := diskFree(dir); err == nil {
-		rep.DiskFree = free
-		if free < 64<<20 {
-			add("low_disk", SeverityWarn,
-				fmt.Sprintf("only %d MiB free on the run filesystem", free>>20), "free space or move the run directory")
-		}
-	}
-
 	// st can be nil when the caller only wants a directory health check, so the
 	// preflight is skipped rather than dereferenced.
 	if st != nil {
@@ -161,6 +158,48 @@ func Doctor(dir string, st *store.Store, snap *store.State) *Report {
 		}
 	}
 	return rep
+}
+
+// checkFilesystem reports whether this process can still persist a run here.
+//
+// Both findings are SeverityError at the point where they become fatal, because
+// a run that cannot write state.json does not fail honestly: every claim turns
+// into an opaque I/O error and no node can report the real cause.
+func checkFilesystem(dir string, rep *Report, add func(code, sev, detail, action string)) {
+	if free, err := diskFree(dir); err == nil {
+		rep.DiskFree = free
+		switch {
+		case free < 8<<20:
+			// Below this the very next state write fails, so it is not advice.
+			add("disk_full_imminent", SeverityError,
+				fmt.Sprintf("only %d MiB free on the run filesystem; the next state write will fail", free>>20),
+				"free space or move the run directory before running anything")
+		case free < 64<<20:
+			add("low_disk", SeverityWarn,
+				fmt.Sprintf("only %d MiB free on the run filesystem", free>>20), "free space or move the run directory")
+		}
+	}
+	if err := probeWritable(dir); err != nil {
+		add("run_dir_unwritable", SeverityError,
+			fmt.Sprintf("cannot write to %s: %v", dir, err),
+			"mount the run directory read-write, fix ownership, or move it with `dagrun plan --dir`")
+	}
+}
+
+// probeWritable creates and removes one throwaway file, which is the only
+// reliable test of "can this process persist state here". Checking permission
+// bits alone misses a read-only mount, a full quota, and an immutable flag.
+func probeWritable(dir string) error {
+	f, err := os.CreateTemp(dir, ".dagrun-probe-*")
+	if err != nil {
+		return err
+	}
+	name := f.Name()
+	// Close and remove; a failure to remove is not a writability problem, so it
+	// is deliberately ignored rather than reported as one.
+	_ = f.Close()
+	_ = os.Remove(name)
+	return nil
 }
 
 // checkHarnesses reports nodes whose harness cannot actually run.

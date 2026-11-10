@@ -3,3 +3,4 @@ bin/
 artifacts/
 *.log
 .DS_Store
+/dagrun

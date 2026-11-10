@@ -89,6 +89,14 @@ func main() {
 		err = cmdTemplate(args)
 	case "skill":
 		err = cmdSkill(args)
+	case "query":
+		err = cmdQuery(args)
+	case "otel":
+		err = cmdOtel(args)
+	case "replan":
+		err = cmdReplan(args)
+	case "recover":
+		err = cmdRecover(args)
 	case "version", "--version", "-v":
 		fmt.Printf("dagrun %s\n", Version)
 		return
@@ -147,6 +155,10 @@ USAGE
   dagrun critique [flags]        write a CRITIQUE.md critique of a plan
   dagrun review [flags]          write a REVIEW.md from the trace
   dagrun template [flags]        print a plan template
+  dagrun query [flags]           select nodes: --where, --select, --order-by, --limit
+  dagrun otel [flags]            export the run as OTLP/JSON spans
+  dagrun replan PLAN [flags]     diff a revised plan against the run; --apply installs it
+  dagrun recover [flags]         report or reclaim stuck nodes; --force reclaims
   dagrun mcp                     serve the Model Context Protocol over stdio
   dagrun version
 
@@ -167,6 +179,8 @@ RUN FLAGS
   --lease D      lease duration (default 2m)
   --exec-template S  fallback command, e.g. "mytool --prompt {prompt}"
   --tools A,B    tool allow-list passed to the harness
+  --wait D       keep waiting for capacity up to D (e.g. 10m) instead of
+                 returning a partial run; 0 returns as soon as nothing can start
   --verbose
 
 EXAMPLES

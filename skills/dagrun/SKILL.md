@@ -20,6 +20,10 @@ dagrun is a work-DAG executor for coding agents. You write a plan of nodes, each
 | `status` | show the tree and the progress through it | `dagrun status` |
 | `validate` | re-check every node against the filesystem | `dagrun validate` |
 | `trace` | the merged execution trace: what happened, as opposed to what the state file says | `dagrun trace --json` |
+| `query` | select nodes: filter, project, order, limit | `dagrun query --where status=failed --select id,attempts,title` |
+| `replan PLAN` | diff a revised plan against the run; --apply installs it and refuses to discard verified work without --force | `dagrun replan plan.yaml --apply` |
+| `recover` | report or reclaim nodes stuck in a running state; --force reclaims and keeps the attempt count | `dagrun recover --force` |
+| `otel` | export the run as OTLP/JSON spans for any OTel backend | `dagrun otel --out run.otlp.json` |
 | `submit` | post the run to a Tracera instance; fails loud on any reported error | `dagrun submit --url http://localhost:3180 --token TRACERA_TOKEN` |
 | `skill` | print this skill, so an agent can load it without running --help | `dagrun skill` |
 
