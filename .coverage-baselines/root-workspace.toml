@@ -17,14 +17,21 @@
 #   A ratchet, not a target. Raise a floor only in a commit that also records
 #   the measurement which justifies it; lower one only with a stated reason,
 #   because lowering a floor is indistinguishable from accepting a regression.
+#   The floors below are derived from the instrument that ENFORCES them: a
+#   group's own `cargo tarpaulin` run. They are not re-attributed from a
+#   whole-workspace run, because that instrument measures a different test set
+#   (see ALLOWANCE).
 #
 # MEASUREMENT PROVENANCE
 #   Instrument:  cargo tarpaulin --engine llvm --out Json, one run per group, on
 #                ubuntu-24.04, stable toolchain, llvm-tools-preview.
-#   Source:      2026-11-09, the instrumented data of run 42605873709
-#                (PR fix/cargo-audit-4-vulns, coverage-root-report artifact),
-#                re-attributed per crate group with
-#                `coverage_report.py filter` / `aggregate`.
+#   Source:      2026-11-10, the ten committed `coverage-group-*` artifacts of
+#                run 42731742835 (head 33a8a101b), whose Rust tree is identical
+#                to `main` at 465b1ef8: `git diff ceb72130..465b1ef8` touches no
+#                .rs and no Cargo.toml/Cargo.lock. Independently corroborated by
+#                run 42730338233, which reported the same ten percentages. Every
+#                group value below was re-read from those artifacts, so each
+#                number is on the enforcing instrument.
 #   Denominator: only files inside a workspace member's own directory. That is
 #                why these percentages are higher than the old whole-workspace
 #                figure: the old denominator (98,759 coverable lines) included
@@ -33,66 +40,123 @@
 #                absorption/, archives/, _archived/, plus the archived docs/
 #                snapshots). No test can cover those lines, so counting them was
 #                a measurement artifact, not uncovered product code.
-#   Aggregate:   37,802/68,993 = 54.79% on that denominator.
+#   Aggregate:   37,949/69,250 = 54.80% on that denominator.
+#
+# DO NOT RE-MEASURE ON A LAPTOP AND COMMIT THE RESULT
+#   A macOS run is not comparable to the enforced one: tarpaulin's denominator is
+#   built from files it instrumented, so a crate that does not compile on
+#   darwin contributes NOTHING to the denominator instead of contributing
+#   uncovered lines. On 2026-11-10 a darwin run of the sharecli-surface group
+#   scored 66.64% on a 3,049-line denominator against 63.08% on 3,174 lines on
+#   the Linux runner, for byte-identical sources. It also deadlocks
+#   intermittently while cargo streams artifact JSON into a full pipe. Measure
+#   on Linux, or read the group artifacts of a Linux run.
 #
 # MEASURED PER-GROUP VALUES (before the 1.00-point allowance)
-#   substrate        62.02%      sharecli-core    62.44%
-#   sharecli-surface 64.34%      fabric           45.31%
-#   device-media     61.10%      runtime-hosts    52.75%
-#   agileplus        59.94%      focus            77.50%
-#   pheno-core       48.13%      integrations     42.87%
-#   aggregate        54.79%
+#   Measured on 2026-11-10, with the change against the 2026-11-09 figures:
+#   substrate        63.60%  (was 62.02)   raise  2,598/4,085
+#   sharecli-core    62.43%  (was 62.44)   -0.01  6,856/10,982
+#   sharecli-surface 63.08%  (was 64.34)   -1.26  2,002/3,174
+#   fabric           45.31%  (was 45.31)    0.00  4,290/9,469
+#   device-media     61.10%  (was 61.10)    0.00  3,540/5,794
+#   runtime-hosts    52.59%  (was 52.75)   -0.16  6,787/12,906
+#   agileplus        59.94%  (was 59.94)    0.00  1,686/2,813
+#   focus            77.50%  (was 77.50)    0.00  2,290/2,955
+#   pheno-core       48.00%  (was 48.13)   -0.13  5,437/11,327
+#   integrations     42.87%  (was 42.87)    0.00  2,463/5,745
+#   aggregate        54.80%  (was 54.79)   +0.01  37,949/69,250
+#
+#   The 2026-11-09 column was re-attributed from ONE whole-workspace run, so
+#   these are not all like-for-like: substrate really improved (+1.58 points,
+#   denominator grew 3,828 -> 4,085 lines and covered lines grew 2,374 ->
+#   2,598), while sharecli-surface, runtime-hosts, pheno-core and sharecli-core
+#   only look lower because they are now measured by their own group run. For
+#   sharecli-surface that was checked rather than assumed: the 2026-11-09
+#   report filtered to the same package list gives 2,042/3,174, the 2026-11-10
+#   group run gives 2,002/3,174, the denominator is identical, and `git diff`
+#   between the two trees touches none of the group's crates. 40 covered lines
+#   moved, no code did. NO GROUP REGRESSED IN THIS RE-BASELINE.
 #
 # ALLOWANCE, AND WHY IT IS NOT ZERO
 #   A group-only tarpaulin run cannot inherit coverage that a DIFFERENT group's
 #   tests contributed to this group's files, so its number is slightly lower
-#   than the same group measured inside one whole-workspace run. That delta was
-#   measured directly rather than assumed: the agileplus group scored 59.86%
-#   (1,684/2,813) as a standalone run on 2026-11-09 against 59.94%
-#   (1,686/2,813) inside the whole-workspace run - 0.08 points over an
-#   identical 2,813-line denominator. Each floor therefore sits 1.00 point
-#   under its measured value: about 12x the observed delta, enough to absorb
-#   run-to-run and platform variance without turning the floor into a wish. The
-#   measured value is kept beside each floor so the allowance can be audited
-#   instead of trusted.
+#   than the same group measured inside one whole-workspace run. The delta is
+#   group-specific and was measured, not assumed:
+#     * agileplus: 59.86% (1,684/2,813) standalone vs 59.94% (1,686/2,813)
+#       inside a whole-workspace run - 0.08 points on an identical denominator;
+#     * sharecli-surface: 63.08% standalone vs 64.34% whole-workspace - 1.26
+#       points, because ~70 integration-test files under crates/sharecli/tests/
+#       belong to the `sharecli` package, i.e. to the sharecli-core group, and
+#       exercise sharecli-fleet / -fuse / -thermal-tui. Those tests never run in
+#       the sharecli-surface job, so that coverage cannot reach this group's
+#       number by construction.
+#   Each floor therefore sits 1.00 point under its measured value in THIS
+#   instrument: enough to absorb run-to-run and platform variance without
+#   turning the floor into a wish, and small enough that a real loss of covered
+#   lines still trips it. The measured value is kept beside each floor so the
+#   allowance can be audited instead of trusted.
+#
+# FLOORS THAT WERE LOWERED ON 2026-11-10, AND WHY
+#   sharecli-surface 63.33 -> 62.07, runtime-hosts 51.75 -> 51.58, pheno-core
+#   47.13 -> 47.00, sharecli-core 61.43 -> 61.42. Reason: those four floors were
+#   computed from whole-workspace measurements minus an allowance calibrated on
+#   a 0.08-point delta, while the job that enforces them runs the group alone.
+#   The floors were therefore up to 1.18 points above what their own enforcing
+#   instrument can produce, which made sharecli-surface permanently red on
+#   correct, unchanged code (run 42731742835: 63.08% vs floor 63.33%). They are
+#   now derived from the enforcing instrument like the other six. This is a
+#   correction of a mis-derived floor, not the acceptance of a regression; the
+#   evidence for "no regression" is in MEASURED PER-GROUP VALUES above.
+#   substrate 61.01 -> 62.59 was RAISED, justified by the measurement
+#   immediately above it (63.60%, 2,598/4,085).
 #
 # AGGREGATE FLOOR HISTORY (read before changing)
-#   37  - the previous enforced floor. It is frozen inside the required status
+#   53.80 - this file's aggregate floor as of 2026-11-10. It is the fresh
+#         aggregate (54.80% = 37,949/69,250) minus the same 1.00 allowance the
+#         groups use, truncated to two decimals, so the required check is a
+#         ratchet like every other floor instead of a frozen historical number.
+#         It is safe to enforce because the aggregate is a sum of the ten group
+#         reports, and the two independent runs above produced the same ten
+#         group figures; a group that under-reports now fails its own floor
+#         first.
+#   36  - the previous aggregate floor. It was the last figure the root gate
+#         actually FAILED on (36.43% = 37,685/103,434 on the pre-exclusion
+#         denominator) and was held deliberately low so the aggregate could not
+#         be red while the per-group floors did the precise ratcheting. That
+#         role is now served by the per-group floors being derived from the
+#         enforcing instrument, so the aggregate no longer needs to sit 20
+#         points under reality to stay green.
+#   37  - the original enforced floor. It is frozen inside the required status
 #         check's DISPLAY NAME, which branch protection matches as a literal
 #         string and which therefore cannot be renamed without also changing
-#         branch protection. It was aspirational: it came from a 37.54%
-#         measurement of a smaller workspace, the workspace later grew past it,
-#         and the required check went red on main and blocked every PR.
-#   36  - this file's aggregate floor. It is the last figure the root gate
-#         actually FAILED on (36.43% = 37,685/103,434 on the pre-exclusion
-#         denominator, as recorded in coverage.yml on 2026-11-09), kept
-#         deliberately as the aggregate floor so the aggregate cannot be red
-#         while the per-group floors do the precise ratcheting. It is NOT a
-#         target, NOT an aspiration, and NOT derived from the 54.79% above.
+#         branch protection. The `>=37%` in that job name is a frozen label, NOT
+#         the enforced number; the enforced number is `aggregate_floor` here.
 #
 # REGENERATE: measure every group (see the matrix in
-# .github/workflows/coverage.yml), then
+# .github/workflows/coverage.yml) on Linux, or download a run's
+# `coverage-group-*` artifacts, then
 #
 #   python3 .github/scripts/coverage_report.py write \
 #       --dir coverage-groups \
 #       --baseline .coverage-baselines/root-workspace.toml \
-#       --allowance 1.0 --aggregate-floor 36
+#       --allowance 1.0 --aggregate-floor 53.8
 #
-# which rewrites the [meta] and [groups] sections from measurement. Commit the
-# result together with the run id that produced it.
+# NOTE: `write` regenerates only [meta] and [groups]; it drops the prose above,
+# so re-apply this header by hand or diff against it before committing. Commit
+# the numbers together with the run id that produced them.
 
 [meta]
-aggregate_floor = 36.00
-# measured aggregate on this run: 54.79% (37,802/68,993)
+aggregate_floor = 53.80
+# measured aggregate on this run: 54.80% (37,949/69,250)
 
 [groups]
-agileplus = 58.93  # measured 59.94
-device-media = 60.09  # measured 61.10
-fabric = 44.30  # measured 45.31
-focus = 76.49  # measured 77.50
-integrations = 41.87  # measured 42.87
-pheno-core = 47.13  # measured 48.13
-runtime-hosts = 51.75  # measured 52.75
-sharecli-core = 61.43  # measured 62.44
-sharecli-surface = 63.33  # measured 64.34
-substrate = 61.01  # measured 62.02
+agileplus = 58.93        # measured 59.94
+device-media = 60.09     # measured 61.10
+fabric = 44.30           # measured 45.31
+focus = 76.49            # measured 77.50
+integrations = 41.87     # measured 42.87
+pheno-core = 47.00       # measured 48.00
+runtime-hosts = 51.58    # measured 52.59
+sharecli-core = 61.42    # measured 62.43
+sharecli-surface = 62.07 # measured 63.08
+substrate = 62.59        # measured 63.60
