@@ -21,9 +21,7 @@ pub struct ExpansionConfig {
 
 impl Default for ExpansionConfig {
     fn default() -> Self {
-        Self {
-            max_neighbors: 10,
-        }
+        Self { max_neighbors: 10 }
     }
 }
 

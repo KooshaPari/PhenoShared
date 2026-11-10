@@ -85,7 +85,7 @@ fn confidence_scores_match_softmax_max() {
 fn parallel_denoise_matches_sequential_denoise() {
     let vocab = 4;
     let n = 6;
-    let mut rng = Lcg::new(SEED ^ 0xD1FF);
+    let mut rng = Lcg::new(SEED ^ 0xd1ff);
     let x_t: Vec<u32> = (0..n).map(|i| (i as u32) % vocab as u32).collect();
     let mask: Vec<bool> = (0..n).map(|i| i % 2 == 0).collect();
     let model_logits: Vec<f32> = (0..n * vocab).map(|_| rng.next_signed()).collect();

@@ -24,7 +24,9 @@ pub struct SharedStore {
 impl SharedStore {
     /// Wrap an owned store in the shared handle.
     pub fn new(store: TantivyStore) -> Self {
-        Self { inner: Arc::new(store) }
+        Self {
+            inner: Arc::new(store),
+        }
     }
 
     /// Borrow the underlying tantivy store.
@@ -119,8 +121,7 @@ impl SeedSink for TantivySeedSink {
         }
         .truncated();
 
-        hwledger_search_index::upsert_model(&self.store, &model)
-            .map_err(|e| e.to_string())
+        hwledger_search_index::upsert_model(&self.store, &model).map_err(|e| e.to_string())
     }
 }
 

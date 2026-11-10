@@ -14,15 +14,15 @@ fn qwen_deltanet_chunk_matches_repeated_step_4_heads() {
     let chunk_size = 16;
     let beta = 0.5;
 
-    let q = deterministic_vec(chunk_size * num_heads * head_dim, 0xD0_1A);
-    let k = deterministic_vec(chunk_size * num_heads * head_dim, 0xD0_1B);
-    let v = deterministic_vec(chunk_size * num_heads * head_dim, 0xD0_1C);
+    let q = deterministic_vec(chunk_size * num_heads * head_dim, 0xd0_1a);
+    let k = deterministic_vec(chunk_size * num_heads * head_dim, 0xd0_1b);
+    let v = deterministic_vec(chunk_size * num_heads * head_dim, 0xd0_1c);
 
     // Per-head initial states: deterministic, head-stratified so the
     // four heads are distinguishable.
     let initial_states: Vec<Vec<f32>> = (0..num_heads)
         .map(|h| {
-            let salt = SEED ^ (0xE0_F0u64 + h as u64);
+            let salt = SEED ^ (0xe0_f0u64 + h as u64);
             let mut rng = Lcg::new(salt);
             (0..head_dim * head_dim)
                 .map(|_| rng.next_signed() * 0.25)

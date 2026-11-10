@@ -70,7 +70,7 @@ impl SchedulerPolicy {
                     return Err("pipeline.stages must be >= 1".to_string());
                 }
                 Ok(())
-            }
+            },
             SchedulerPolicy::Diffusion {
                 denoise_steps,
                 remask: _,
@@ -79,7 +79,7 @@ impl SchedulerPolicy {
                     return Err("diffusion.denoise_steps must be >= 1".to_string());
                 }
                 Ok(())
-            }
+            },
             SchedulerPolicy::Speculative {
                 max_draft,
                 tree_width,
@@ -95,7 +95,7 @@ impl SchedulerPolicy {
                     return Err("speculative.tree_depth must be >= 1".to_string());
                 }
                 Ok(())
-            }
+            },
             SchedulerPolicy::Moe {
                 capacity_factor,
                 top_k,
@@ -117,7 +117,7 @@ impl SchedulerPolicy {
                     return Err("moe.capacity_factor must be a positive finite f32".to_string());
                 }
                 Ok(())
-            }
+            },
         }
     }
 }

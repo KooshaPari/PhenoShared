@@ -20,7 +20,7 @@ fn bench_router_topk(c: &mut Criterion) {
     let mut group = c.benchmark_group("moe_router_topk");
 
     for (num_experts, top_k) in [(8, 2), (16, 2), (32, 4), (64, 8), (128, 8)] {
-        let logits = gen_logits(num_experts, 0xCAFE);
+        let logits = gen_logits(num_experts, 0xcafe);
         group.bench_with_input(
             BenchmarkId::new("router_topk", format!("{num_experts}e_{top_k}k")),
             &(num_experts, top_k, &logits),
@@ -38,7 +38,7 @@ fn bench_dispatch(c: &mut Criterion) {
     for num_tokens in [32, 128, 512] {
         let num_experts = 8;
         let top_k = 2;
-        let logits = gen_logits(num_experts, 0xD15);
+        let logits = gen_logits(num_experts, 0xd15);
         let mut assignments = Vec::with_capacity(num_tokens * top_k);
         let mut token_indices = Vec::with_capacity(num_tokens * top_k);
         for t in 0..num_tokens {
@@ -72,8 +72,8 @@ fn bench_grouped_gemm(c: &mut Criterion) {
     ];
 
     for &(num_tokens, k_dim, n_dim, num_experts) in shapes {
-        let act = gen_matrix(num_tokens, k_dim, 0xA1);
-        let wt = gen_matrix(num_experts * k_dim, n_dim, 0xB2);
+        let act = gen_matrix(num_tokens, k_dim, 0xa1);
+        let wt = gen_matrix(num_experts * k_dim, n_dim, 0xb2);
         let buckets: Vec<Vec<usize>> = (0..num_experts)
             .map(|e| (0..num_tokens).filter(|&t| t % num_experts == e).collect())
             .collect();
@@ -132,9 +132,9 @@ fn bench_weighted_reduce(c: &mut Criterion) {
     for (num_tokens, experts_per_token, hidden) in
         [(32, 2, 128), (128, 2, 128), (128, 4, 256), (512, 2, 128)]
     {
-        let expert_outs = gen_matrix(num_tokens * experts_per_token, hidden, 0xE1);
+        let expert_outs = gen_matrix(num_tokens * experts_per_token, hidden, 0xe1);
         let weights: Vec<f32> = {
-            let mut rng = Lcg::new(0xE2);
+            let mut rng = Lcg::new(0xe2);
             (0..num_tokens * experts_per_token)
                 .map(|_| rng.next_f32())
                 .collect()
@@ -191,8 +191,8 @@ fn bench_shared_expert(c: &mut Criterion) {
         (128, 256, 256),
         (512, 128, 128),
     ] {
-        let x = gen_matrix(m, k_dim, 0xF1);
-        let w = gen_matrix(k_dim, n_dim, 0xF2);
+        let x = gen_matrix(m, k_dim, 0xf1);
+        let w = gen_matrix(k_dim, n_dim, 0xf2);
         let label = format!("{m}tok_k{k_dim}_n{n_dim}");
 
         group.bench_with_input(

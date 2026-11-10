@@ -106,7 +106,7 @@ fn bonsai_ternary_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal p95=1900 must beat zmm p95=2200 and scalar p95=7000"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -235,7 +235,7 @@ fn lfm_gated_short_conv_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal p95=900 must beat scalar p95=3500"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -364,7 +364,7 @@ fn qwen_deltanet_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal p95=1400 must beat scalar p95=4000"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }

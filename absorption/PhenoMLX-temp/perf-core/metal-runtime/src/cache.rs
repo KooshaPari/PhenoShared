@@ -197,10 +197,10 @@ impl PipelineCache {
                     let mut e = entry.clone();
                     e.last_access = access;
                     inner.entries.insert(key, e);
-                }
+                },
                 EvictionPolicy::Fifo => {
                     // No-op for FIFO: leave inserted_at untouched.
-                }
+                },
             }
             inner.stats.hits = inner.stats.hits.saturating_add(1);
             Some(entry.value)

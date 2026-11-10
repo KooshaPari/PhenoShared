@@ -69,9 +69,11 @@ pub fn validate_diffusion_values(
     values: &[f32],
     require_nonnegative: bool,
 ) -> Result<(), DiffusionDispatchError> {
-    if let Some((index, &got)) = values.iter().enumerate().find(|(_, value)| {
-        !value.is_finite() || (require_nonnegative && **value < 0.0)
-    }) {
+    if let Some((index, &got)) = values
+        .iter()
+        .enumerate()
+        .find(|(_, value)| !value.is_finite() || (require_nonnegative && **value < 0.0))
+    {
         return Err(DiffusionDispatchError::InvalidValue { what, index, got });
     }
     Ok(())

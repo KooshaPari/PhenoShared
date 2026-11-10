@@ -156,7 +156,11 @@ pub fn collapse_key(id: &str, rule: &CollapseRule) -> String {
     // Sort longest-first so e.g. `.q4_k_m` wins over `.q4_0` when both could
     // match a suffix like `Q4_K_M`. We sort by byte length (== char count for
     // ASCII suffixes, which is all we have here).
-    let mut suffixes: Vec<&str> = rule.collapse_quant_suffixes.iter().map(String::as_str).collect();
+    let mut suffixes: Vec<&str> = rule
+        .collapse_quant_suffixes
+        .iter()
+        .map(String::as_str)
+        .collect();
     suffixes.sort_by_key(|s| std::cmp::Reverse(s.len()));
 
     for suffix in suffixes {

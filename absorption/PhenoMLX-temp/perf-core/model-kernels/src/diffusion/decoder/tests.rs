@@ -187,8 +187,8 @@ fn oracle_deterministic_replay_produces_identical_sequences() {
     )
     .unwrap();
 
-    let mut rng1 = Lcg::new(0xDEAD_BEEF);
-    let mut rng2 = Lcg::new(0xDEAD_BEEF);
+    let mut rng1 = Lcg::new(0xdead_beef);
+    let mut rng2 = Lcg::new(0xdead_beef);
     let mut x1 = vec![mask_token; n];
     let mut x2 = vec![mask_token; n];
     let mut m1 = vec![true; n];

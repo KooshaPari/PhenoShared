@@ -43,7 +43,10 @@ pub struct RateLimitPolicy {
 
 impl Default for RateLimitPolicy {
     fn default() -> Self {
-        Self { min_interval_ms: 1_000, max_retries: 3 }
+        Self {
+            min_interval_ms: 1_000,
+            max_retries: 3,
+        }
     }
 }
 
@@ -72,7 +75,10 @@ mod tests {
     #[test]
     fn parses_seconds_form() {
         let now: u64 = 1_700_000_000;
-        assert_eq!(parse_retry_after("120", now), Some(Duration::from_secs(120)));
+        assert_eq!(
+            parse_retry_after("120", now),
+            Some(Duration::from_secs(120))
+        );
     }
 
     #[test]

@@ -66,7 +66,7 @@ impl InputPort for EnigoInput {
                     enigo
                         .move_mouse(x, y, Coordinate::Abs)
                         .map_err(|e| InputError::InjectionFailed(e.to_string()))?;
-                }
+                },
                 MouseEvent::Click {
                     x,
                     y,
@@ -85,7 +85,7 @@ impl InputPort for EnigoInput {
                     enigo
                         .button(btn, dir)
                         .map_err(|e| InputError::InjectionFailed(e.to_string()))?;
-                }
+                },
                 MouseEvent::Scroll {
                     x,
                     y,
@@ -109,7 +109,7 @@ impl InputPort for EnigoInput {
                             .scroll(-amount, enigo::Axis::Horizontal)
                             .map_err(|e| InputError::InjectionFailed(e.to_string()))?,
                     }
-                }
+                },
             }
             Ok(())
         })

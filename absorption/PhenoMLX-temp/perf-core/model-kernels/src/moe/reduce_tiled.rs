@@ -254,7 +254,7 @@ mod tests {
         hidden: usize,
         salt: u64,
     ) -> Vec<f32> {
-        let mut rng = Lcg::new(0xCAFE_F00D ^ salt);
+        let mut rng = Lcg::new(0xcafe_f00d ^ salt);
         (0..num_tokens * experts_per_token * hidden)
             .map(|_| rng.next_signed())
             .collect()
@@ -263,7 +263,7 @@ mod tests {
     /// Build a deterministic `[num_tokens, experts_per_token]` weight
     /// matrix.
     fn deterministic_weights(num_tokens: usize, experts_per_token: usize, salt: u64) -> Vec<f32> {
-        let mut rng = Lcg::new(0xBEEF_DEAD ^ salt);
+        let mut rng = Lcg::new(0xbeef_dead ^ salt);
         (0..num_tokens * experts_per_token)
             .map(|_| rng.next_signed() * 0.5) // smaller magnitude so accumulated sums stay in range
             .collect()
@@ -297,8 +297,8 @@ mod tests {
         let num_tokens = 8;
         let experts_per_token = 3;
         let hidden = 32;
-        let expert_outs = deterministic_expert_outs(num_tokens, experts_per_token, hidden, 0xA1);
-        let weights = deterministic_weights(num_tokens, experts_per_token, 0xB2);
+        let expert_outs = deterministic_expert_outs(num_tokens, experts_per_token, hidden, 0xa1);
+        let weights = deterministic_weights(num_tokens, experts_per_token, 0xb2);
 
         let mut scalar_out = vec![0.0f32; num_tokens * hidden];
         crate::moe::reduce::weighted_reduce(

@@ -8,7 +8,10 @@ mod open;
 mod status;
 
 #[derive(Parser)]
-#[command(name = "hwledger", about = "hwLedger CLI — dev servers, benchmarks, and service management")]
+#[command(
+    name = "hwledger",
+    about = "hwLedger CLI — dev servers, benchmarks, and service management"
+)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,

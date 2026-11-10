@@ -61,8 +61,8 @@ pub mod weighted;
 
 pub use agentic_fit::AgenticFitRerank;
 pub use config::{
-    build_registry, default_config_path, load_config, merge_with_defaults, registry_from_default_path,
-    ConfigError, SkillConfigEntry, SkillKind,
+    build_registry, default_config_path, load_config, merge_with_defaults,
+    registry_from_default_path, ConfigError, SkillConfigEntry, SkillKind,
 };
 pub use llm_summarizer::LlmSummarizer;
 pub use weighted::WeightedSkill;

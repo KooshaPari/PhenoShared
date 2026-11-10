@@ -356,7 +356,7 @@ fn unsupported_operator_returns_typed_error() {
         InterpreterError::UnsupportedOperator { operator, kind } => {
             assert_eq!(operator, OperatorId(1));
             assert!(matches!(kind, OperatorKind::Embedding));
-        }
+        },
         other => panic!("expected UnsupportedOperator, got {:?}", other),
     }
 }
@@ -371,7 +371,7 @@ fn missing_input_is_reported() {
         InterpreterError::MissingInput { operator, name } => {
             assert_eq!(operator, OperatorId(1));
             assert_eq!(name, "a");
-        }
+        },
         other => panic!("expected MissingInput, got {:?}", other),
     }
 }
@@ -385,7 +385,7 @@ fn shape_mismatch_is_reported() {
     inputs.insert("b".to_string(), vec![4.0, 5.0, 6.0, 7.0]);
     let err = interp.run(&inputs).unwrap_err();
     match err {
-        InterpreterError::ShapeMismatch { .. } => {}
+        InterpreterError::ShapeMismatch { .. } => {},
         other => panic!("expected ShapeMismatch, got {:?}", other),
     }
 }

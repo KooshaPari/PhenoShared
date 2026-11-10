@@ -37,8 +37,8 @@ fn moe_routing_top_k_4_byte_identical_64_experts() {
     let batch = 16;
     let num_experts = 64;
     let top_k = 4;
-    let logits = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
-    let policy = RoutingPolicy::Deterministic { seed: 0xC0FF_EE42 };
+    let logits = deterministic_logits(batch, num_experts, 0xcafe_babe);
+    let policy = RoutingPolicy::Deterministic { seed: 0xc0ff_ee42 };
 
     let a = run_kernel_router(&logits, batch, num_experts, top_k, policy);
     let b = run_kernel_router(&logits, batch, num_experts, top_k, policy);
@@ -83,8 +83,8 @@ fn moe_routing_top_k_8_byte_identical_64_experts() {
     let batch = 16;
     let num_experts = 64;
     let top_k = 8;
-    let logits = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
-    let policy = RoutingPolicy::Deterministic { seed: 0xDEAD_BEE8 };
+    let logits = deterministic_logits(batch, num_experts, 0xcafe_babe);
+    let policy = RoutingPolicy::Deterministic { seed: 0xdead_bee8 };
 
     let a = run_kernel_router(&logits, batch, num_experts, top_k, policy);
     let b = run_kernel_router(&logits, batch, num_experts, top_k, policy);
@@ -135,14 +135,14 @@ fn moe_routing_top_k_4_weights_sum_to_one() {
     let batch = 8;
     let num_experts = 64;
     let top_k = 4;
-    let logits = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
+    let logits = deterministic_logits(batch, num_experts, 0xcafe_babe);
 
     let picks = run_kernel_router(
         &logits,
         batch,
         num_experts,
         top_k,
-        RoutingPolicy::Deterministic { seed: 0xC0FF_EE42 },
+        RoutingPolicy::Deterministic { seed: 0xc0ff_ee42 },
     );
 
     for (t, p) in picks.iter().enumerate() {
@@ -176,13 +176,13 @@ fn moe_routing_top_k_8_changes_with_seed_two_distinct_decisions() {
     let batch = 8;
     let num_experts = 64;
     let top_k = 8;
-    let policy_a = RoutingPolicy::Deterministic { seed: 0xDEAD_BEE8 }; // 42
-    let policy_b = RoutingPolicy::Deterministic { seed: 0xF00D_C0DE }; // 99
+    let policy_a = RoutingPolicy::Deterministic { seed: 0xdead_bee8 }; // 42
+    let policy_b = RoutingPolicy::Deterministic { seed: 0xf00d_c0de }; // 99
 
     // Two input matrices that differ in every token's logits so a
     // router that ignores its inputs cannot pass.
-    let logits_a = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
-    let logits_b = deterministic_logits(batch, num_experts, 0xBADD_CAFE);
+    let logits_a = deterministic_logits(batch, num_experts, 0xcafe_babe);
+    let logits_b = deterministic_logits(batch, num_experts, 0xbadd_cafe);
 
     let a = run_kernel_router(&logits_a, batch, num_experts, top_k, policy_a);
     let b = run_kernel_router(&logits_b, batch, num_experts, top_k, policy_b);

@@ -18,7 +18,7 @@ fn qwen_sparse_moe_pipeline_runs_end_to_end() {
 
     // Per-token router logits (deterministic).
     let router_logits: Vec<f32> = (0..num_tokens)
-        .map(|t| deterministic_vec(num_experts, SEED ^ (0xE0_01 + t as u64)))
+        .map(|t| deterministic_vec(num_experts, SEED ^ (0xe0_01 + t as u64)))
         .flat_map(|v| v.into_iter())
         .collect();
 
@@ -52,8 +52,8 @@ fn qwen_sparse_moe_pipeline_runs_end_to_end() {
     assert_eq!(total_assigned + plan.dropped.len(), num_tokens);
 
     // Shared expert: out[t, :] = x[t, :] @ w.
-    let x = deterministic_vec(num_tokens * k, 0xA_CE);
-    let w = deterministic_vec(k * hidden, 0xB_EE);
+    let x = deterministic_vec(num_tokens * k, 0xa_ce);
+    let w = deterministic_vec(k * hidden, 0xb_ee);
     let mut shared_out = vec![0.0f32; num_tokens * hidden];
     shared_expert(&x, &w, &mut shared_out).unwrap();
 

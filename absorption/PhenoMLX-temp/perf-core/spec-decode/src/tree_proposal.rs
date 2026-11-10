@@ -155,8 +155,8 @@ impl DraftTree {
                 None => *best = Some((cum_prob, path.clone())),
                 Some((bp, _)) if cum_prob > *bp => {
                     *best = Some((cum_prob, path.clone()));
-                }
-                _ => {}
+                },
+                _ => {},
             }
             return;
         }
@@ -241,13 +241,9 @@ pub fn create_parallel_trees(
     }
 
     let first_level = &branch_logits[0];
-    let n_branches = config
-        .num_parallel_branches
-        .clamp(1, MAX_PARALLEL_BRANCHES);
+    let n_branches = config.num_parallel_branches.clamp(1, MAX_PARALLEL_BRANCHES);
     let max_depth = config.max_depth.min(MAX_TREE_DEPTH);
-    let max_branches = config
-        .max_branches_per_node
-        .min(MAX_BRANCHES_PER_NODE);
+    let max_branches = config.max_branches_per_node.min(MAX_BRANCHES_PER_NODE);
     let mut trees = Vec::with_capacity(n_branches);
 
     for b in 0..n_branches {
@@ -265,12 +261,7 @@ pub fn create_parallel_trees(
         let mut logits = branch_logits.clone();
         logits[0] = slice;
 
-        let tree = DraftTree::from_eagle3_predictions(
-            root_token,
-            logits,
-            max_depth,
-            max_branches,
-        );
+        let tree = DraftTree::from_eagle3_predictions(root_token, logits, max_depth, max_branches);
         trees.push(tree);
     }
 
@@ -299,8 +290,8 @@ pub fn merge_parallel_results(trees: &[DraftTree]) -> Vec<u32> {
             None => best = Some((prob, path)),
             Some((bp, _)) if prob > *bp => {
                 best = Some((prob, path));
-            }
-            _ => {}
+            },
+            _ => {},
         }
     }
 
@@ -317,7 +308,7 @@ fn path_probability(root: &DraftNode, path: &[u32]) -> f32 {
             Some(child) => {
                 prob *= child.probability;
                 current = child;
-            }
+            },
             None => return 0.0,
         }
     }

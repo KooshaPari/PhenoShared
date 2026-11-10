@@ -50,7 +50,11 @@ pub fn parse_config_value(v: &serde_json::Value) -> ParsedConfig {
         num_experts: extract_u32(v, &["num_experts", "num_local_experts", "n_routed_experts"]),
         active_experts: extract_u32(
             v,
-            &["num_experts_per_tok", "num_active_experts", "experts_per_token"],
+            &[
+                "num_experts_per_tok",
+                "num_active_experts",
+                "experts_per_token",
+            ],
         ),
         hidden_size: extract_u32(v, &["hidden_size", "d_model", "n_embd"]),
         num_layers: extract_u32(v, &["num_hidden_layers", "n_layer", "num_layers"]),

@@ -82,7 +82,7 @@ pub fn build_ports(
                 analysis: Arc::new(NativeAnalysisAdapter::new()),
                 sandbox: None,
             }
-        }
+        },
     }
 }
 

@@ -113,7 +113,7 @@ fn verify_result_serialization_smoke() {
         accepted_prefix: vec![1, 2],
         first_reject_idx: Some(2),
         bonus_token: Some(9),
-        seed: Some(0xDEAD_BEEF),
+        seed: Some(0xdead_beef),
     };
     let j = serde_json::to_string(&v).unwrap();
     assert!(j.contains("\"accepted_prefix\":[1,2]"));

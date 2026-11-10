@@ -111,7 +111,7 @@ fn zaya_binary_act_metal_capability_required() {
                 }),
                 "expected MissingCapability(\"metal-ms3\") rejection, got {rejections:?}"
             );
-        }
+        },
         other => panic!("expected Rejected, got {other:?}"),
     }
 

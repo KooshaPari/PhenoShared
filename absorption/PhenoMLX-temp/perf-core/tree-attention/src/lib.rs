@@ -170,7 +170,7 @@ pub fn tree_causal_mask(
                     } else {
                         0
                     }
-                }
+                },
                 // Query is in the tree; key is in the prefix. Tree nodes
                 // always lie at or after `offset`, so a tree node can
                 // attend to any prefix key at or before it.
@@ -180,7 +180,7 @@ pub fn tree_causal_mask(
                     } else {
                         0
                     }
-                }
+                },
                 // Query is in the prefix; key is in the tree. Prefix queries
                 // never see tree keys.
                 (None, Some(_)) => 0,
@@ -191,7 +191,7 @@ pub fn tree_causal_mask(
                     } else {
                         0
                     }
-                }
+                },
             };
         }
     }

@@ -124,7 +124,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
         match err {
             EvalError::Csv { message, .. } => {
                 assert!(message.contains("no choice"));
-            }
+            },
             other => panic!("expected Csv error, got {other:?}"),
         }
     }
@@ -147,7 +147,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
             EvalError::Malformed { line, message, .. } => {
                 assert_eq!(line, 2);
                 assert!(message.contains("out of range"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -159,7 +159,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
         match err {
             EvalError::Malformed { message, .. } => {
                 assert!(message.contains("not a letter"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -169,7 +169,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
         let bytes = b"subject,question,A,B,answer\n"; // header only
         let err = load_csv_bytes(bytes, "x.csv", "v1", "test").unwrap_err();
         match err {
-            EvalError::Malformed { .. } => {}
+            EvalError::Malformed { .. } => {},
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -179,7 +179,7 @@ anatomy,The heart is located in which cavity?,Cranial,Thoracic,Abdominal,Pelvic,
         let bytes = b"subject,subject,question,A,answer\ns1,s2,Q,Cranial,B\n";
         let err = load_csv_bytes(bytes, "x.csv", "v1", "test").unwrap_err();
         match err {
-            EvalError::Csv { .. } => {}
+            EvalError::Csv { .. } => {},
             other => panic!("expected Csv error, got {other:?}"),
         }
     }

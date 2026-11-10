@@ -127,7 +127,7 @@ pub(crate) fn oracle_topk(
 pub(crate) fn deterministic_logits(batch: usize, num_experts: usize, base_seed: u64) -> Vec<f32> {
     let mut out = Vec::with_capacity(batch * num_experts);
     for t in 0..batch {
-        let mut rng = Lcg::new(base_seed ^ (0xE0_01 + t as u64));
+        let mut rng = Lcg::new(base_seed ^ (0xe0_01 + t as u64));
         for _ in 0..num_experts {
             out.push(rng.next_signed());
         }
@@ -172,8 +172,8 @@ fn moe_routing_deterministic_seed_byte_identical() {
     let batch = 8;
     let num_experts = 8; // Qwen-MoE style.
     let top_k = 2;
-    let logits = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
-    let policy = RoutingPolicy::Deterministic { seed: 0x5EED_0001 };
+    let logits = deterministic_logits(batch, num_experts, 0xcafe_babe);
+    let policy = RoutingPolicy::Deterministic { seed: 0x5eed_0001 };
 
     let a = run_kernel_router(&logits, batch, num_experts, top_k, policy);
     let b = run_kernel_router(&logits, batch, num_experts, top_k, policy);
@@ -212,8 +212,8 @@ fn moe_routing_top_k_experts_match_oracle() {
     let batch = 16;
     let num_experts = 8;
     let top_k = 2;
-    let seed = 0x5EED_0002;
-    let logits = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
+    let seed = 0x5eed_0002;
+    let logits = deterministic_logits(batch, num_experts, 0xcafe_babe);
 
     let kernel = run_kernel_router(
         &logits,
@@ -268,14 +268,14 @@ fn moe_routing_weights_sum_to_one_per_token() {
     let batch = 32;
     let num_experts = 8;
     let top_k = 2;
-    let logits = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
+    let logits = deterministic_logits(batch, num_experts, 0xcafe_babe);
 
     let picks = run_kernel_router(
         &logits,
         batch,
         num_experts,
         top_k,
-        RoutingPolicy::Deterministic { seed: 0x5EED_0003 },
+        RoutingPolicy::Deterministic { seed: 0x5eed_0003 },
     );
 
     for (t, p) in picks.iter().enumerate() {
@@ -310,15 +310,15 @@ fn moe_routing_changes_with_seed() {
     let batch = 16;
     let num_experts = 8;
     let top_k = 2;
-    let seed = 0x5EED_000C;
+    let seed = 0x5eed_000c;
     let policy = RoutingPolicy::Deterministic { seed };
 
     // Two input matrices that differ in every token's logits. The
     // mutation comes from flipping the per-token logit generator
     // seed, which is the documented "policy-adjacent" input that a
     // caller controls in practice.
-    let logits_a = deterministic_logits(batch, num_experts, 0xCAFE_BABE);
-    let logits_b = deterministic_logits(batch, num_experts, 0xDEAD_BEEF);
+    let logits_a = deterministic_logits(batch, num_experts, 0xcafe_babe);
+    let logits_b = deterministic_logits(batch, num_experts, 0xdead_beef);
 
     let a = run_kernel_router(&logits_a, batch, num_experts, top_k, policy);
     let b = run_kernel_router(&logits_b, batch, num_experts, top_k, policy);

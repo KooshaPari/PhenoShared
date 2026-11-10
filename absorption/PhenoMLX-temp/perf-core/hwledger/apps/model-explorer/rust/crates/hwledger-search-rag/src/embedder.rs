@@ -145,7 +145,10 @@ impl Qwen3Embedder {
     /// Build a Qwen3 embedder with a custom output dimensionality.
     pub fn with_dim(dim: usize) -> Self {
         Self {
-            cfg: EmbedderConfig { dim, deterministic: false },
+            cfg: EmbedderConfig {
+                dim,
+                deterministic: false,
+            },
         }
     }
 }
@@ -282,7 +285,9 @@ mod tests {
 
     #[test]
     fn embedding_is_l2_normalized() {
-        let v = StubEmbedder::default().embed("the quick brown fox").unwrap();
+        let v = StubEmbedder::default()
+            .embed("the quick brown fox")
+            .unwrap();
         let norm: f32 = v.iter().map(|x| x * x).sum::<f32>().sqrt();
         assert!((norm - 1.0).abs() < 1e-5, "norm was {norm}");
     }

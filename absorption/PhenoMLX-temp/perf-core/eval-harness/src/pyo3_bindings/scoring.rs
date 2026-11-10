@@ -44,12 +44,12 @@ impl Backend for PythonBackendWrapper {
                             .map_err(|e: pyo3::PyErr| BackendError::InvalidResponse {
                                 message: e.to_string(),
                             })?
-                    }
+                    },
                     _ => {
                         return Err(BackendError::InvalidResponse {
                             message: "missing 'text'".into(),
                         })
-                    }
+                    },
                 };
 
                 let prompt_tokens: usize = dict
@@ -146,12 +146,12 @@ impl Backend for PythonBackendWrapper {
                             .map_err(|e: pyo3::PyErr| BackendError::InvalidResponse {
                                 message: e.to_string(),
                             })?
-                    }
+                    },
                     None => {
                         return Err(BackendError::InvalidResponse {
                             message: "missing 'log_probability'".into(),
                         })
-                    }
+                    },
                 };
 
                 let token_count: usize = dict

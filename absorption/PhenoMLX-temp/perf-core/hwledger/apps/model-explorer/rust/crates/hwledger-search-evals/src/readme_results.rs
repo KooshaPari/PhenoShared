@@ -59,8 +59,10 @@ fn header_regex() -> &'static Regex {
     HEADER_REGEX.get_or_init(|| {
         // ATX-style heading (## … ######) or Setext-style (=== / ---) that
         // mentions one of Results / Benchmark / Evaluation.
-        Regex::new(r"(?im)^\s{0,3}#{1,6}\s+(?i)(Results|Benchmark|Evaluation).*$|^[^\n]*\n[=\-]{3,}\s*$")
-            .expect("header regex must compile")
+        Regex::new(
+            r"(?im)^\s{0,3}#{1,6}\s+(?i)(Results|Benchmark|Evaluation).*$|^[^\n]*\n[=\-]{3,}\s*$",
+        )
+        .expect("header regex must compile")
     })
 }
 
@@ -75,10 +77,16 @@ pub fn parse_readme_results(markdown: &str) -> Vec<ReadmeEval> {
     let section = extract_relevant_section(markdown);
     let mut best: HashMap<String, f64> = HashMap::new();
     for cap in result_regex().captures_iter(section) {
-        let Some(name_match) = cap.get(1) else { continue };
-        let Some(num_match) = cap.get(2) else { continue };
+        let Some(name_match) = cap.get(1) else {
+            continue;
+        };
+        let Some(num_match) = cap.get(2) else {
+            continue;
+        };
         let name = normalize_name(name_match.as_str());
-        let Ok(score) = num_match.as_str().parse::<f64>() else { continue };
+        let Ok(score) = num_match.as_str().parse::<f64>() else {
+            continue;
+        };
         let entry = best.entry(name).or_insert(f64::NEG_INFINITY);
         if score > *entry {
             *entry = score;
@@ -108,10 +116,7 @@ fn extract_relevant_section(markdown: &str) -> &str {
         // a space — that's the next ATX heading.
         if bytes[i] == b'#' {
             // Check the start of this potential heading.
-            let line_start = after[..i]
-                .rfind('\n')
-                .map(|p| p + 1)
-                .unwrap_or(0);
+            let line_start = after[..i].rfind('\n').map(|p| p + 1).unwrap_or(0);
             let rest = &after[line_start..];
             if rest.starts_with('#') {
                 // Must be '#' followed by either '#' or whitespace, not
@@ -173,7 +178,10 @@ GSM8K: 52.10
 MMLU: 70.5
 ";
         let out = parse_readme_results(md);
-        let mmlu = out.iter().find(|r| r.benchmark == "Mmlu").expect("MMLU row");
+        let mmlu = out
+            .iter()
+            .find(|r| r.benchmark == "Mmlu")
+            .expect("MMLU row");
         assert!((mmlu.score - 70.5).abs() < 1e-6);
         assert_eq!(out.len(), 2);
     }
@@ -189,7 +197,10 @@ MMLU: 60.0
 GSM8K: 52.0
 ";
         let out = parse_readme_results(md);
-        let mmlu = out.iter().find(|r| r.benchmark == "Mmlu").expect("MMLU row");
+        let mmlu = out
+            .iter()
+            .find(|r| r.benchmark == "Mmlu")
+            .expect("MMLU row");
         assert!((mmlu.score - 60.0).abs() < 1e-6, "section-restricted score");
         assert_eq!(out.len(), 2);
     }

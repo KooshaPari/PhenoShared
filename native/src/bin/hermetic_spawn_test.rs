@@ -45,7 +45,7 @@ async fn main() -> ExitCode {
                 "FATAL: could not locate tests/fixtures/ relative to CWD or CARGO_MANIFEST_DIR"
             );
             return ExitCode::from(1);
-        }
+        },
     };
     let fixture = if cfg!(windows) {
         fixture_dir.join("fake-nvms.cmd")
@@ -90,7 +90,7 @@ async fn main() -> ExitCode {
         Err(e) => {
             eprintln!("FATAL: spawn() failed: {e}");
             return ExitCode::from(1);
-        }
+        },
     };
 
     let mut stdout = child.stdout.take().expect("piped stdout");
@@ -155,7 +155,7 @@ async fn main() -> ExitCode {
         Err(e) => {
             eprintln!("FATAL: sleeper spawn failed: {e}");
             return ExitCode::from(1);
-        }
+        },
     };
 
     #[cfg(unix)]
@@ -211,17 +211,17 @@ async fn main() -> ExitCode {
             } else {
                 ExitCode::from(0)
             }
-        }
+        },
         Ok(Err(e)) => {
             eprintln!("FATAL: child.wait() failed: {e}");
             let _ = child.kill().await;
             ExitCode::from(1)
-        }
+        },
         Err(_) => {
             eprintln!("FATAL: child did NOT exit within 5s of SIGTERM — kill pattern broken");
             let _ = child.kill().await;
             ExitCode::from(1)
-        }
+        },
     }
 }
 

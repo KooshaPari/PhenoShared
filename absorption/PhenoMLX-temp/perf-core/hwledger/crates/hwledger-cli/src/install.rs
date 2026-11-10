@@ -48,25 +48,21 @@ pub async fn run() -> Result<()> {
         }
 
         if dst.exists() {
-            println!(
-                "  {} {} — removing existing",
-                "~".dimmed(),
-                app.name
-            );
+            println!("  {} {} — removing existing", "~".dimmed(), app.name);
             std::fs::remove_dir_all(&dst)?;
         }
 
         print!("  Copying {}...", app.name);
-        let status = Command::new("cp")
-            .arg("-R")
-            .arg(&src)
-            .arg(&dst)
-            .status()?;
+        let status = Command::new("cp").arg("-R").arg(&src).arg(&dst).status()?;
 
         if status.success() {
             println!(" {}", "done".green());
         } else {
-            println!(" {} (exit code: {})", "failed".red(), status.code().unwrap_or(-1));
+            println!(
+                " {} (exit code: {})",
+                "failed".red(),
+                status.code().unwrap_or(-1)
+            );
         }
     }
 

@@ -57,7 +57,7 @@ pub fn handle_message(
                 e.to_string(),
                 McpError::parse(e.to_string()),
             )));
-        }
+        },
     };
 
     // Step 2: validate the JSON-RPC 2.0 envelope. If `id` is absent we
@@ -69,7 +69,7 @@ pub fn handle_message(
                 "frame must be a JSON object".to_string(),
                 McpError::invalid_request("frame must be a JSON object"),
             )));
-        }
+        },
     };
 
     // `jsonrpc` field must be present and equal to "2.0".
@@ -87,7 +87,7 @@ pub fn handle_message(
                 "missing `method` field".to_string(),
                 McpError::invalid_request("missing `method` field"),
             )));
-        }
+        },
     };
 
     let raw_id = obj.get("id");
@@ -103,7 +103,7 @@ pub fn handle_message(
                 "`params` must be an object or omitted".to_string(),
                 McpError::invalid_request("`params` must be an object or omitted"),
             )));
-        }
+        },
     };
 
     // Step 3: dispatch.
@@ -123,7 +123,7 @@ pub fn handle_message(
                 "`id` must be a string, number, or null".to_string(),
                 McpError::invalid_request("`id` must be a string, number, or null"),
             )));
-        }
+        },
         None => unreachable!("checked above"),
     };
 
@@ -179,7 +179,7 @@ pub fn run_stdio<R: BufRead, W: Write>(
             Err(e) => {
                 // A read error is a transport-level failure — bubble up.
                 return Err(e);
-            }
+            },
         };
 
         // Tolerate blank lines (common when humans hand-drive stdio).
@@ -194,10 +194,10 @@ pub fn run_stdio<R: BufRead, W: Write>(
                     .unwrap_or_else(|e| format!("{{\"error\": \"{e}\"}}"));
                 writeln!(writer, "{serialized}")?;
                 writer.flush()?;
-            }
+            },
             Ok(None) => {
                 // Notification — nothing to write back.
-            }
+            },
             Err(err) => {
                 // Per JSON-RPC 2.0, parse errors and invalid requests get a
                 // best-effort response with `id: null` so the client can
@@ -215,7 +215,7 @@ pub fn run_stdio<R: BufRead, W: Write>(
                     .unwrap_or_else(|e| format!("{{\"error\": \"{e}\"}}"));
                 writeln!(writer, "{serialized}")?;
                 writer.flush()?;
-            }
+            },
         }
     }
     Ok(())

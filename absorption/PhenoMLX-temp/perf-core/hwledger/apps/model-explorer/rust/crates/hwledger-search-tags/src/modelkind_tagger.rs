@@ -70,15 +70,36 @@ fn classify(hay: &str) -> ModelKind {
     if has_token(hay, &["vit", "clip", "vision-encoder", "siglip"]) {
         return ModelKind::VisionEncoder;
     }
-    if has_token(hay, &["vlm", "vision-language", "llava", "qwen-vl", "vl-", " qvl"]) {
+    if has_token(
+        hay,
+        &["vlm", "vision-language", "llava", "qwen-vl", "vl-", " qvl"],
+    ) {
         return ModelKind::VisionLanguage;
     }
 
     // Task-specific specialisations.
-    if has_token(hay, &["coder", "code-", "codestral", "deepseek-coder", "qwen-coder"]) {
+    if has_token(
+        hay,
+        &[
+            "coder",
+            "code-",
+            "codestral",
+            "deepseek-coder",
+            "qwen-coder",
+        ],
+    ) {
         return ModelKind::Coding;
     }
-    if has_token(hay, &["reason", "r1", "qwq", "reasoning-as-planning", "reasoning_path"]) {
+    if has_token(
+        hay,
+        &[
+            "reason",
+            "r1",
+            "qwq",
+            "reasoning-as-planning",
+            "reasoning_path",
+        ],
+    ) {
         return ModelKind::Reasoning;
     }
     if has_token(hay, &["agent", "tool", "hermes", "tooluse"]) {
@@ -124,7 +145,10 @@ mod tests {
     #[test]
     fn classify_instruct_maps_to_chat() {
         // Spec: "Llama-3.1-8B-Instruct" → Chat. We mirror that.
-        assert_eq!(classify("meta-llama-llama-3.1-8b-instruct"), ModelKind::Chat);
+        assert_eq!(
+            classify("meta-llama-llama-3.1-8b-instruct"),
+            ModelKind::Chat
+        );
     }
 
     #[test]

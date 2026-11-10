@@ -172,12 +172,30 @@ fn build_schema() -> (Schema, SchemaFields) {
         .set_tokenizer("default")
         .set_index_option(IndexRecordOption::WithFreqsAndPositions);
 
-    let name = b.add_text_field("name", TextOptions::default().set_indexing_options(text_indexing.clone()));
-    let org = b.add_text_field("org", TextOptions::default().set_indexing_options(text_indexing.clone()));
-    let kind = b.add_text_field("kind", TextOptions::default().set_indexing_options(text_indexing.clone()));
-    let family = b.add_text_field("family", TextOptions::default().set_indexing_options(text_indexing.clone()));
-    let arch = b.add_text_field("arch", TextOptions::default().set_indexing_options(text_indexing.clone()));
-    let quants = b.add_text_field("quants", TextOptions::default().set_indexing_options(text_indexing.clone()));
+    let name = b.add_text_field(
+        "name",
+        TextOptions::default().set_indexing_options(text_indexing.clone()),
+    );
+    let org = b.add_text_field(
+        "org",
+        TextOptions::default().set_indexing_options(text_indexing.clone()),
+    );
+    let kind = b.add_text_field(
+        "kind",
+        TextOptions::default().set_indexing_options(text_indexing.clone()),
+    );
+    let family = b.add_text_field(
+        "family",
+        TextOptions::default().set_indexing_options(text_indexing.clone()),
+    );
+    let arch = b.add_text_field(
+        "arch",
+        TextOptions::default().set_indexing_options(text_indexing.clone()),
+    );
+    let quants = b.add_text_field(
+        "quants",
+        TextOptions::default().set_indexing_options(text_indexing.clone()),
+    );
     let card_snippet = b.add_text_field(
         "card_snippet",
         TextOptions::default().set_indexing_options(text_indexing),
@@ -408,7 +426,8 @@ impl TantivyStore {
         let (query, _parse_errors) = parser.parse_query_lenient(q);
 
         let searcher = self.reader.searcher();
-        let top: Vec<(f32, tantivy::DocAddress)> = searcher.search(&*query, &TopDocs::with_limit(k))?;
+        let top: Vec<(f32, tantivy::DocAddress)> =
+            searcher.search(&*query, &TopDocs::with_limit(k))?;
 
         if top.is_empty() {
             return Ok(Vec::new());
@@ -488,7 +507,7 @@ fn read_sidecar(
                 path.display()
             );
             (Default::default(), Default::default())
-        }
+        },
     }
 }
 

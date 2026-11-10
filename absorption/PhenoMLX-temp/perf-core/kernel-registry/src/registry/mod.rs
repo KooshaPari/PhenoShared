@@ -58,7 +58,7 @@ impl KernelRegistry {
             std::collections::hash_map::Entry::Vacant(e) => {
                 e.insert(vec![candidate]);
                 None
-            }
+            },
         }
     }
 
@@ -241,7 +241,7 @@ mod tests {
     fn list_candidates_for_ids_returns_empty_for_unknown_id() {
         let mut reg = KernelRegistry::new();
         reg.register_candidate(make_candidate("real"));
-        let unknown = CandidateId(0xDEAD_BEEF);
+        let unknown = CandidateId(0xdead_beef);
         let result = reg.list_candidates_for_ids(&[unknown]);
         assert!(result.is_empty(), "unknown id must not appear in result");
     }
@@ -302,7 +302,7 @@ mod tests {
     #[test]
     fn unregister_nonexistent_candidate_returns_none() {
         let mut reg = KernelRegistry::new();
-        let removed = reg.candidates.remove(&CandidateId(0xBEEF));
+        let removed = reg.candidates.remove(&CandidateId(0xbeef));
         assert!(removed.is_none());
     }
 
@@ -351,7 +351,7 @@ mod tests {
     #[test]
     fn get_nonexistent_candidate_returns_none() {
         let reg = KernelRegistry::new();
-        let missing = CandidateId(0xFFFF_FFFF);
+        let missing = CandidateId(0xffff_ffff);
         assert!(!reg.candidates.contains_key(&missing));
     }
 

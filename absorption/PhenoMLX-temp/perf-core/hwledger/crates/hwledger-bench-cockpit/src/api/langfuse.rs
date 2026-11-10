@@ -182,16 +182,14 @@ pub async fn langfuse_setup(
         ));
     }
 
-    let max_cells = if req.max_cells > 0 {
-        req.max_cells
-    } else {
-        40
-    };
+    let max_cells = if req.max_cells > 0 { req.max_cells } else { 40 };
 
     let cells = load_current_cells().unwrap_or_default();
     let cells: Vec<&crate::domain::Cell> = cells.iter().take(max_cells).collect();
 
-    let now = chrono::Utc::now().format("%Y-%m-%dT%H:%M:%S.000Z").to_string();
+    let now = chrono::Utc::now()
+        .format("%Y-%m-%dT%H:%M:%S.000Z")
+        .to_string();
     let mut batch: Vec<Value> = Vec::new();
     let mut trace_ids: Vec<String> = Vec::new();
 
@@ -377,9 +375,13 @@ pub async fn langfuse_traces(
         ));
     }
 
-    let (code, raw) = langfuse_do("GET", &format!("/api/public/traces?limit={}", q.limit), None)
-        .await
-        .map_err(|e| crate::error::AppError::BadGateway(e.to_string()))?;
+    let (code, raw) = langfuse_do(
+        "GET",
+        &format!("/api/public/traces?limit={}", q.limit),
+        None,
+    )
+    .await
+    .map_err(|e| crate::error::AppError::BadGateway(e.to_string()))?;
 
     let mut headers = HeaderMap::new();
     headers.insert("content-type", "application/json".parse().unwrap());
@@ -438,7 +440,7 @@ pub async fn langfuse_evaluators(
             }
 
             Ok(Json(Value::Object(result)))
-        }
+        },
         Err(e) => Err(crate::error::AppError::BadGateway(e.to_string())),
     }
 }

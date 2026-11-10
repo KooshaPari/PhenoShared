@@ -11,8 +11,8 @@ use tokio::sync::RwLock;
 
 use crate::analysis::{build_suite_coverage, lint_cells};
 use crate::domain::{summarize_by_variant, Envelope, ResultsData};
-use crate::helpers::truncate;
 use crate::error::AppError;
+use crate::helpers::truncate;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -35,9 +35,10 @@ impl AppState {
 }
 
 fn load_results_file(path: &str) -> Result<ResultsData, AppError> {
-    let raw = std::fs::read(path).map_err(|e| AppError::Internal(format!("read {}: {}", path, e)))?;
-    let data: ResultsData =
-        serde_json::from_slice(&raw).map_err(|e| AppError::Internal(format!("unmarshal {}: {}", path, e)))?;
+    let raw =
+        std::fs::read(path).map_err(|e| AppError::Internal(format!("read {}: {}", path, e)))?;
+    let data: ResultsData = serde_json::from_slice(&raw)
+        .map_err(|e| AppError::Internal(format!("unmarshal {}: {}", path, e)))?;
     if data.cells.is_empty() {
         return Err(AppError::Internal(format!("{} has 0 cells", path)));
     }
@@ -72,7 +73,11 @@ fn merge_results(base: &mut ResultsData, extra: ResultsData) {
 
     base.summary.by_variant = summarize_by_variant(&base.cells);
     let suites: HashMap<&str, ()> = base.cells.iter().map(|c| (c.suite.as_str(), ())).collect();
-    let variants: HashMap<&str, ()> = base.cells.iter().map(|c| (c.variant.as_str(), ())).collect();
+    let variants: HashMap<&str, ()> = base
+        .cells
+        .iter()
+        .map(|c| (c.variant.as_str(), ()))
+        .collect();
     base.summary.meta.n_cells = base.cells.len();
     base.summary.meta.n_suites = suites.len();
     base.summary.meta.variants = variants.keys().map(|s| s.to_string()).collect();
@@ -193,9 +198,7 @@ pub async fn api_cell_raw(
     Err(AppError::NotFound("cell_not_found".into()))
 }
 
-pub async fn api_eval_run(
-    Json(body): Json<Value>,
-) -> Result<Json<Value>, AppError> {
+pub async fn api_eval_run(Json(body): Json<Value>) -> Result<Json<Value>, AppError> {
     let root = std::env::var("PORTAGE_ROOT")
         .map_err(|_| AppError::BadRequest("portage_root_required".into()))?;
 
@@ -207,12 +210,18 @@ pub async fn api_eval_run(
         )));
     }
 
-    let run_id = format!("run-{}", chrono::Utc::now().timestamp_nanos_opt().unwrap_or(0));
-    let jobs_dir = std::env::var("PORTAGE_JOBS_DIR")
-        .unwrap_or_else(|_| format!("{}/bench-cockpit-portage-jobs", std::env::temp_dir().display()));
+    let run_id = format!(
+        "run-{}",
+        chrono::Utc::now().timestamp_nanos_opt().unwrap_or(0)
+    );
+    let jobs_dir = std::env::var("PORTAGE_JOBS_DIR").unwrap_or_else(|_| {
+        format!(
+            "{}/bench-cockpit-portage-jobs",
+            std::env::temp_dir().display()
+        )
+    });
     let dir = format!("{}/{}", jobs_dir, run_id);
-    std::fs::create_dir_all(&dir)
-        .map_err(|e| AppError::Internal(e.to_string()))?;
+    std::fs::create_dir_all(&dir).map_err(|e| AppError::Internal(e.to_string()))?;
 
     let portage_bin = std::env::var("PORTAGE_BIN").unwrap_or_else(|_| "uv run harbor".into());
     let parts: Vec<&str> = portage_bin.split_whitespace().collect();
@@ -229,9 +238,15 @@ pub async fn api_eval_run(
     if use_config {
         let job_path = format!("{}/job.json", dir);
         let raw = serde_json::to_string_pretty(&body).unwrap_or_default();
-        std::fs::write(&job_path, raw)
-            .map_err(|e| AppError::Internal(e.to_string()))?;
-        args.extend(["run".into(), "-c".into(), job_path, "-o".into(), dir.clone(), "-y".into()]);
+        std::fs::write(&job_path, raw).map_err(|e| AppError::Internal(e.to_string()))?;
+        args.extend([
+            "run".into(),
+            "-c".into(),
+            job_path,
+            "-o".into(),
+            dir.clone(),
+            "-y".into(),
+        ]);
     } else {
         let mut task_path = body
             .get("task_path")
@@ -344,14 +359,17 @@ pub async fn api_eval_run_status(
         return Err(AppError::BadRequest("run_id required".into()));
     }
 
-    let jobs_dir = std::env::var("PORTAGE_JOBS_DIR")
-        .unwrap_or_else(|_| format!("{}/bench-cockpit-portage-jobs", std::env::temp_dir().display()));
+    let jobs_dir = std::env::var("PORTAGE_JOBS_DIR").unwrap_or_else(|_| {
+        format!(
+            "{}/bench-cockpit-portage-jobs",
+            std::env::temp_dir().display()
+        )
+    });
     let run_dir = format!("{}/{}", jobs_dir, id);
 
     let (result_path, reward) = find_harbor_result(&run_dir);
     if result_path.is_empty() {
-        let stdout = std::fs::read_to_string(format!("{}/stdout.log", run_dir))
-            .unwrap_or_default();
+        let stdout = std::fs::read_to_string(format!("{}/stdout.log", run_dir)).unwrap_or_default();
         return Err(AppError::NotFound(format!(
             "result_not_found: {}",
             truncate(&stdout, 2000)
@@ -376,10 +394,7 @@ pub async fn ws_handler(
     ws.on_upgrade(move |socket| handle_ws(socket, state))
 }
 
-async fn handle_ws(
-    mut socket: axum::extract::ws::WebSocket,
-    state: Arc<AppState>,
-) {
+async fn handle_ws(mut socket: axum::extract::ws::WebSocket, state: Arc<AppState>) {
     // Send initial reload notify
     if let Ok(env) = build_envelope(&state).await {
         if let Ok(notify) = serde_json::to_string(&json!({

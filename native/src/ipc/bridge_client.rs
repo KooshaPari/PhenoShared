@@ -174,8 +174,8 @@ impl BridgeClient {
             BridgeIo::Child { child, .. } => {
                 let _ = child.start_kill();
                 let _ = child.wait().await;
-            }
-            BridgeIo::Duplex { .. } => {}
+            },
+            BridgeIo::Duplex { .. } => {},
         }
         Ok(())
     }
@@ -198,11 +198,11 @@ async fn write_request_line(io: &mut BridgeIo, req: &Request) -> Result<(), Brid
         BridgeIo::Child { stdin, .. } => {
             stdin.write_all(line.as_bytes()).await?;
             stdin.flush().await?;
-        }
+        },
         BridgeIo::Duplex { stream } => {
             stream.get_mut().write_all(line.as_bytes()).await?;
             stream.get_mut().flush().await?;
-        }
+        },
     }
     Ok(())
 }

@@ -149,7 +149,7 @@ mod tests {
         match err {
             EvalError::Malformed { message, .. } => {
                 assert!(message.contains("id is empty"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -161,7 +161,7 @@ mod tests {
         match err {
             EvalError::Malformed { message, .. } => {
                 assert!(message.contains("prompt is empty"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -173,7 +173,7 @@ mod tests {
         match err {
             EvalError::Malformed { message, .. } => {
                 assert!(message.contains("no expected_commands"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -183,7 +183,7 @@ mod tests {
         let bytes = b"id: a\nprompt: P\ncriteria:\n  expected_commands: [unclosed\n";
         let err = load_yaml_bytes(bytes, "x.yaml", "v1", "test").unwrap_err();
         match err {
-            EvalError::Yaml { .. } => {}
+            EvalError::Yaml { .. } => {},
             other => panic!("expected Yaml error, got {other:?}"),
         }
     }

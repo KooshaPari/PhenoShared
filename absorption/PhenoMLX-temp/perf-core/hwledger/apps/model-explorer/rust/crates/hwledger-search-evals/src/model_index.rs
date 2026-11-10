@@ -120,7 +120,7 @@ pub fn parse_model_index(yaml_text: &str) -> Vec<EvalRecord> {
         Err(_) => {
             // Fallback: try the bare `results:` form some cards use.
             return parse_bare_results(yaml_text);
-        }
+        },
     };
 
     for entry in idx.model_index {
@@ -206,7 +206,9 @@ fn yaml_value_to_f64(v: &serde_yaml::Value) -> Result<f64, EvalError> {
             .parse::<f64>()
             .map_err(|e| EvalError::Parse(format!("bad numeric string {s:?}: {e}"))),
         serde_yaml::Value::Bool(b) => Ok(if *b { 1.0 } else { 0.0 }),
-        other => Err(EvalError::Parse(format!("unsupported metric value: {other:?}"))),
+        other => Err(EvalError::Parse(format!(
+            "unsupported metric value: {other:?}"
+        ))),
     }
 }
 
@@ -240,7 +242,10 @@ model-index:
         assert_eq!(recs.len(), 1);
         assert_eq!(recs[0].benchmark, "hendrycksTest/mmlu");
         assert!((recs[0].score - 67.30).abs() < 1e-6);
-        assert_eq!(recs[0].source_url.as_deref(), Some("https://example.com/leaderboard"));
+        assert_eq!(
+            recs[0].source_url.as_deref(),
+            Some("https://example.com/leaderboard")
+        );
     }
 
     #[test]

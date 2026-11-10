@@ -123,7 +123,7 @@ pub(crate) fn assert_close_envelope(out_a: &Value, out_b: &Value) {
                     }
                 }
                 None
-            }
+            },
             (Value::Array(e), Value::Array(a)) => {
                 let n = e.len().max(a.len());
                 for i in 0..n {
@@ -139,7 +139,7 @@ pub(crate) fn assert_close_envelope(out_a: &Value, out_b: &Value) {
                     }
                 }
                 None
-            }
+            },
             (Value::Number(e), Value::Number(a)) => {
                 let e_f = e.as_f64().expect("f64 expected");
                 let a_f = a.as_f64().expect("f64 expected");
@@ -152,7 +152,7 @@ pub(crate) fn assert_close_envelope(out_a: &Value, out_b: &Value) {
                         (e_f - a_f).abs() / e_f.abs().max(a_f.abs()).max(f64::MIN_POSITIVE),
                     ))
                 }
-            }
+            },
             // Scalars (strings, bools, integers, nulls) compared strictly:
             // they only appear in the output envelopes as enum-like
             // discriminators (e.g. `"kernel": "cca_block_attend"`,

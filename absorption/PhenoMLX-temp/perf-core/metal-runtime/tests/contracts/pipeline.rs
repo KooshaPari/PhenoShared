@@ -259,10 +259,10 @@ fn pipeline_zero_token_input_does_not_panic_and_returns_empty_step_output() {
     match res {
         Ok(out) => {
             let _: StepOutput = out;
-        }
+        },
         Err(PipelineError::MissingInput { .. }) => {
             // acceptable: we asked for an empty input set on a 2-op plan.
-        }
+        },
         Err(other) => panic!("unexpected error: {:?}", other),
     }
 }

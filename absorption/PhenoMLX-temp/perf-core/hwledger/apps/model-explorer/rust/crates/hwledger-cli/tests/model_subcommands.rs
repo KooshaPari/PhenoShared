@@ -23,11 +23,51 @@ use tempfile::TempDir;
 fn build_fixture_index(dir: &std::path::Path) {
     let store = TantivyStore::open(dir).expect("open store");
     let fixtures = vec![
-        ("hf::qwen/Qwen2.5-7B-Instruct", "Qwen2.5-7B-Instruct", "qwen", "instruct", "qwen2", "gqa", vec!["gguf", "safetensors"]),
-        ("hf::meta-llama/Llama-3.1-8B-Instruct", "Llama-3.1-8B-Instruct", "meta-llama", "instruct", "llama", "gqa", vec!["gguf", "gptq"]),
-        ("hf::deepseek-ai/DeepSeek-V3-Base", "DeepSeek-V3-Base", "deepseek-ai", "base", "deepseek", "mla", vec!["safetensors"]),
-        ("hf::bigcode/starcoder2-7b", "starcoder2-7b", "bigcode", "coding", "starcoder2", "gqa", vec!["safetensors", "gptq"]),
-        ("hf::BAAI/bge-large-en-v1.5", "bge-large-en-v1.5", "BAAI", "embedding", "bert", "mha", vec!["safetensors"]),
+        (
+            "hf::qwen/Qwen2.5-7B-Instruct",
+            "Qwen2.5-7B-Instruct",
+            "qwen",
+            "instruct",
+            "qwen2",
+            "gqa",
+            vec!["gguf", "safetensors"],
+        ),
+        (
+            "hf::meta-llama/Llama-3.1-8B-Instruct",
+            "Llama-3.1-8B-Instruct",
+            "meta-llama",
+            "instruct",
+            "llama",
+            "gqa",
+            vec!["gguf", "gptq"],
+        ),
+        (
+            "hf::deepseek-ai/DeepSeek-V3-Base",
+            "DeepSeek-V3-Base",
+            "deepseek-ai",
+            "base",
+            "deepseek",
+            "mla",
+            vec!["safetensors"],
+        ),
+        (
+            "hf::bigcode/starcoder2-7b",
+            "starcoder2-7b",
+            "bigcode",
+            "coding",
+            "starcoder2",
+            "gqa",
+            vec!["safetensors", "gptq"],
+        ),
+        (
+            "hf::BAAI/bge-large-en-v1.5",
+            "bge-large-en-v1.5",
+            "BAAI",
+            "embedding",
+            "bert",
+            "mha",
+            vec!["safetensors"],
+        ),
     ];
     for (id, name, org, kind, family, arch, quants) in fixtures {
         let model = IndexedModel {
@@ -61,8 +101,11 @@ fn model_search_finds_indexed_rows() {
 
     cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
-            "model", "search", "Qwen",
+            "--index",
+            dir.path().to_str().unwrap(),
+            "model",
+            "search",
+            "Qwen",
         ])
         .assert()
         .success()
@@ -76,9 +119,12 @@ fn model_search_json_emits_envelope() {
 
     let out: Vec<u8> = cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
+            "--index",
+            dir.path().to_str().unwrap(),
             "--json",
-            "model", "search", "Llama",
+            "model",
+            "search",
+            "Llama",
         ])
         .assert()
         .success()
@@ -98,9 +144,12 @@ fn model_detail_reports_kind_and_quants() {
 
     cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
+            "--index",
+            dir.path().to_str().unwrap(),
             "--json",
-            "model", "detail", "qwen/Qwen2.5-7B-Instruct",
+            "model",
+            "detail",
+            "qwen/Qwen2.5-7B-Instruct",
         ])
         .assert()
         .success()
@@ -115,9 +164,12 @@ fn model_quants_lists_known_formats() {
 
     cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
+            "--index",
+            dir.path().to_str().unwrap(),
             "--json",
-            "model", "quants", "meta-llama/Llama-3.1-8B-Instruct",
+            "model",
+            "quants",
+            "meta-llama/Llama-3.1-8B-Instruct",
         ])
         .assert()
         .success()
@@ -132,9 +184,14 @@ fn model_similar_excludes_self() {
 
     let out: Vec<u8> = cli_bin()
         .args([
-            "--index", dir.path().to_str().unwrap(),
+            "--index",
+            dir.path().to_str().unwrap(),
             "--json",
-            "model", "similar", "qwen/Qwen2.5-7B-Instruct", "--limit", "5",
+            "model",
+            "similar",
+            "qwen/Qwen2.5-7B-Instruct",
+            "--limit",
+            "5",
         ])
         .assert()
         .success()
