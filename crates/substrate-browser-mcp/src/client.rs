@@ -22,12 +22,27 @@
 //! authority. Silently falling back to a local broker - one the daemon does not
 //! serve - is exactly the bug this crate exists to prevent, so every failure to
 //! reach `BROKERD_URL` is reported as such and names the variable to fix.
+//!
+//! # Trusting the daemon's certificate
+//!
+//! A daemon that serves HTTPS presents a certificate the machine may not
+//! trust. `BROKERD_CA` names a PEM file holding the certificate to pin; it is
+//! added to the client's trust roots, so the daemon's identity is bound to the
+//! certificate it was started with and nothing has to be installed into the
+//! machine's trust store. A rejected certificate and a mis-pointed
+//! `BROKERD_CA` are reported as themselves, never as an unreachable daemon.
 
 use std::{fmt, time::Duration};
 
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use substrate_browser::{BrowserError, Lease};
 use substrate_browser_broker::{BrokerError, LiveSessionInfo};
+
+use crate::{
+    ca,
+    config::RemoteConfig,
+    remote::{RemoteAcquired, RemotePurged, RemoteReaped, RemoteReleased},
+};
 
 /// Environment variable naming a running `brokerd`, for example
 /// `http://127.0.0.1:8787`.
@@ -38,121 +53,33 @@ pub const URL_ENV: &str = "BROKERD_URL";
 /// Optional: a loopback daemon started without `--token` needs none.
 pub const TOKEN_ENV: &str = "BROKERD_TOKEN";
 
-/// Per-request timeout for the daemon client, in seconds.
-const REQUEST_TIMEOUT: Duration = Duration::from_secs(10);
+/// Environment variable naming a PEM file holding the certificate to trust
+/// for the daemon's TLS connection, for example `/etc/brokerd/cert.pem`.
+///
+/// Optional: a daemon whose certificate the machine already trusts needs
+/// none. When it is set, that certificate is *added* to the client's trust
+/// roots rather than swapped for them, so a daemon with a publicly trusted
+/// certificate stays reachable and the daemon's identity stays bound to the
+/// certificate it was started with.
+pub const CA_ENV: &str = "BROKERD_CA";
 
-/// Connection timeout. Short so a wrong address fails loudly and quickly.
+/// Per-request timeout for the daemon client.
+///
+/// This must cover a **real browser action**, not just a lease grant. A lease
+/// grant is now cheap (the daemon launches the browser lazily), but the first
+/// `snapshot` or `screenshot` on a session also pays for a cold Chrome start,
+/// and a screenshot of a live page takes seconds on top of that. 90s covers a
+/// cold launch plus a heavy action; anything shorter makes those calls abort
+/// mid-flight and look like an unreachable daemon.
+const REQUEST_TIMEOUT: Duration = Duration::from_secs(90);
+
+/// Connection timeout. Short so a wrong address fails loudly and quickly,
+/// independently of how long a legitimate action is allowed to take.
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(3);
 
-/// Where a running `brokerd` listens, and how to authenticate to it.
-#[derive(Clone, PartialEq, Eq)]
-pub struct RemoteConfig {
-    base_url: String,
-    token: Option<String>,
-}
-
-impl fmt::Debug for RemoteConfig {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // Never print the token, even at debug level.
-        f.debug_struct("RemoteConfig")
-            .field("base_url", &self.base_url)
-            .field("token", &self.token.as_ref().map(|_| "<redacted>"))
-            .finish()
-    }
-}
-
-impl RemoteConfig {
-    /// Configure a daemon at `base_url`, normalising trailing slashes.
-    pub fn new(base_url: impl Into<String>, token: Option<String>) -> Self {
-        let mut base_url = base_url.into();
-        while base_url.ends_with('/') {
-            base_url.pop();
-        }
-        Self {
-            base_url,
-            token: token.filter(|token| !token.is_empty()),
-        }
-    }
-
-    /// Read the configuration through `get`, so the precedence is testable
-    /// without mutating process-global environment variables.
-    pub fn from_lookup(get: impl Fn(&str) -> Option<String>) -> Option<Self> {
-        let base_url = get(URL_ENV)?;
-        let base_url = base_url.trim();
-        if base_url.is_empty() {
-            return None;
-        }
-        Some(Self::new(base_url, get(TOKEN_ENV)))
-    }
-
-    /// Read the configuration from the process environment.
-    pub fn from_env() -> Option<Self> {
-        Self::from_lookup(|name| std::env::var(name).ok())
-    }
-
-    /// Daemon base URL, without a trailing slash.
-    pub fn base_url(&self) -> &str {
-        &self.base_url
-    }
-
-    /// Whether a bearer token is configured.
-    pub fn has_token(&self) -> bool {
-        self.token.is_some()
-    }
-
-    fn endpoint(&self, path: &str) -> String {
-        format!("{}{path}", self.base_url)
-    }
-}
-
-fn refused(message: impl Into<String>) -> BrokerError {
+/// Refuse an operation, with the reason the caller has to act on.
+pub(crate) fn refused(message: impl Into<String>) -> BrokerError {
     BrokerError::State(BrowserError::Refused(message.into()))
-}
-
-/// The daemon's answer to `POST /v1/leases`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemoteAcquired {
-    /// Lease identifier the daemon granted.
-    pub id: String,
-    /// Fencing token that must accompany every later mutation.
-    pub fencing_token: u64,
-    /// Lease expiry, milliseconds since the Unix epoch.
-    pub expires_at_unix_ms: u64,
-    /// Profile generation the daemon launched.
-    pub generation: u64,
-    /// Browser user data directory, on the daemon's disk.
-    pub data_dir: String,
-}
-
-/// The daemon's answer to `POST /v1/leases/{id}/release`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemoteReleased {
-    /// True; refusals never arrive as a success body.
-    pub released: bool,
-    /// What the daemon actually tore down.
-    pub teardown: String,
-}
-
-/// The daemon's answer to `POST /v1/leases/reap`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemoteReaped {
-    /// Sessions reaped in the daemon.
-    pub reaped: usize,
-    /// Expired lease records swept from the shared store.
-    pub leases_reaped: usize,
-    /// Live sessions remaining afterwards.
-    pub live_sessions_after: usize,
-}
-
-/// The daemon's answer to `POST /v1/profiles/purge`.
-#[derive(Debug, Clone, Deserialize)]
-pub struct RemotePurged {
-    /// True when the profile directory was removed.
-    pub purged: bool,
-    /// Profile directory that was (or would have been) removed.
-    pub path: String,
-    /// False when the profile had no data on disk.
-    pub existed: bool,
 }
 
 /// A client for a running `brokerd`.
@@ -170,14 +97,42 @@ impl fmt::Debug for RemoteBroker {
 }
 
 impl RemoteBroker {
-    /// Build a client. No I/O happens here: failures surface on the first call,
-    /// so a caller cannot mistake "client built" for "daemon reachable".
+    /// Build a client. No network traffic happens here: failures to reach the
+    /// daemon surface on the first call, so a caller cannot mistake "client
+    /// built" for "daemon reachable".
+    ///
+    /// When the configuration pins a CA, that certificate is read from disk
+    /// and joins the client's trust roots. It is added, never swapped for
+    /// them, so a daemon with a publicly trusted certificate keeps answering.
     pub fn new(config: RemoteConfig) -> Result<Self, BrokerError> {
-        let http = reqwest::Client::builder()
-            .connect_timeout(CONNECT_TIMEOUT)
-            .timeout(REQUEST_TIMEOUT)
-            .build()
-            .map_err(|err| refused(format!("cannot build a brokerd HTTP client: {err}")))?;
+        Self::with_timeouts(config, CONNECT_TIMEOUT, REQUEST_TIMEOUT)
+    }
+
+    /// Build a client with explicit timeouts.
+    ///
+    /// The defaults are [`CONNECT_TIMEOUT`] and [`REQUEST_TIMEOUT`]; this exists
+    /// so a test can prove how a slow daemon is reported without waiting 90s.
+    pub(crate) fn with_timeouts(
+        config: RemoteConfig,
+        connect: Duration,
+        request: Duration,
+    ) -> Result<Self, BrokerError> {
+        let mut builder = reqwest::Client::builder()
+            .connect_timeout(connect)
+            .timeout(request);
+        if let Some(path) = config.ca_path() {
+            for certificate in ca::pinned_certificates(path)? {
+                builder = builder.add_root_certificate(certificate);
+            }
+        }
+        let http = builder.build().map_err(|err| {
+            // The pinned certificate is the only thing this client added, so a
+            // failure here is about that certificate.
+            match config.ca_path() {
+                Some(path) => ca::unusable_certificate(path, &err),
+                None => refused(format!("cannot build a brokerd HTTP client: {err}")),
+            }
+        })?;
         Ok(Self { config, http })
     }
 
@@ -188,7 +143,7 @@ impl RemoteBroker {
 
     /// Present the configured credential, when there is one.
     fn authorised(&self, request: reqwest::RequestBuilder) -> reqwest::RequestBuilder {
-        match &self.config.token {
+        match self.config.token() {
             Some(token) => request.bearer_auth(token),
             None => request,
         }
@@ -203,15 +158,10 @@ impl RemoteBroker {
     where
         T: DeserializeOwned,
     {
-        let response = request.send().await.map_err(|err| {
-            // Fail loudly, never fall back to a local broker: the operator
-            // configured a daemon, so a different authority would be a lie.
-            refused(format!(
-                "brokerd at {} is configured via {URL_ENV} but unreachable ({err}); refusing to \
-                 fall back to an in-process broker. Fix the address or unset {URL_ENV}.",
-                self.config.base_url
-            ))
-        })?;
+        let response = request
+            .send()
+            .await
+            .map_err(|err| self.transport_error(url, &err))?;
 
         let status = response.status();
         let body = response.text().await.map_err(|err| {
@@ -224,7 +174,7 @@ impl RemoteBroker {
             return Err(refused(format!(
                 "brokerd at {} rejected the credential (401); set {TOKEN_ENV} to the token the \
                  daemon was started with",
-                self.config.base_url
+                self.config.base_url()
             )));
         }
         if !status.is_success() {
@@ -237,6 +187,49 @@ impl RemoteBroker {
                 "brokerd at {url} returned a body this client cannot parse: {err}"
             ))
         })
+    }
+
+    /// Explain a failed send precisely enough to tell the cases apart.
+    ///
+    /// The distinction matters: a request timeout means the daemon **accepted**
+    /// the request and simply has not answered yet, while a connection failure
+    /// means nothing was delivered. Reporting a slow daemon as "unreachable"
+    /// sends the reader looking for a firewall, and (before this existed) hid a
+    /// real server-side 500 behind a transport-shaped message.
+    ///
+    /// Every branch refuses to fall back to a local broker: the operator
+    /// configured a daemon, so a different authority would be a lie.
+    fn transport_error(&self, url: &str, err: &reqwest::Error) -> BrokerError {
+        let base = self.config.base_url();
+        // A rejected certificate must be checked before `is_connect()`: a TLS
+        // handshake failure *is* a connect error, so the connect branch below
+        // would otherwise report a refused certificate as an unreachable
+        // daemon and send the reader hunting for a firewall instead of a PEM.
+        if let Some(detail) = ca::certificate_rejection(err) {
+            return refused(format!(
+                "brokerd at {base} rejected the TLS certificate ({detail}); point {CA_ENV} at the \
+                 PEM certificate the daemon was started with"
+            ));
+        }
+        if err.is_connect() {
+            return refused(format!(
+                "brokerd at {base} is configured via {URL_ENV} but unreachable ({err}); no \
+                 request was delivered; refusing to fall back to an in-process broker. Fix the \
+                 address or unset {URL_ENV}."
+            ));
+        }
+        if err.is_timeout() {
+            return refused(format!(
+                "brokerd at {url} accepted the request but did not answer within \
+                 {REQUEST_TIMEOUT:?} (client timeout, not a connection failure); the daemon may \
+                 still be working. Nothing was retried and no local broker was used. If the \
+                 daemon is genuinely slow, its own logs carry the real error."
+            ));
+        }
+        refused(format!(
+            "brokerd at {url} failed in transport ({err}); refusing to fall back to an \
+             in-process broker."
+        ))
     }
 
     async fn get_json<T>(&self, path: &str) -> Result<T, BrokerError>
@@ -276,10 +269,12 @@ impl RemoteBroker {
         Ok(self.get_json::<Envelope>("/v1/sessions").await?.sessions)
     }
 
-    /// Ask the daemon to acquire a lease and launch the browser itself.
+    /// Ask the daemon to acquire a lease on a profile.
     ///
-    /// The browser lives on the daemon, so nothing is returned that this process
-    /// could hold, leak or tear down.
+    /// The browser lives on the daemon and is launched on that profile's first
+    /// action, not by this call, so a grant does not wait on a browser start.
+    ///
+    /// Nothing is returned that this process could hold, leak or tear down.
     pub async fn acquire(
         &self,
         principal: &str,
@@ -361,5 +356,119 @@ impl RemoteBroker {
             },
         )
         .await
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Port 1 is reserved and never served, so connecting there is refused.
+    #[tokio::test]
+    async fn a_refused_connection_is_reported_as_unreachable() {
+        let client = RemoteBroker::new(RemoteConfig::new("http://127.0.0.1:1", None))
+            .expect("build a client");
+        let message = client
+            .leases()
+            .await
+            .expect_err("a refused connection must be an error")
+            .to_string();
+        assert!(
+            message.contains("unreachable"),
+            "a refused connection must read as unreachable: {message}"
+        );
+        assert!(
+            !message.contains("did not answer within"),
+            "a refused connection is not a timeout: {message}"
+        );
+    }
+
+    /// A daemon that accepts the request and never answers must be reported as a
+    /// **timeout**, never as an unreachable daemon: the request was delivered,
+    /// so the fault is latency or a server-side stall, not the network.
+    #[tokio::test]
+    async fn a_slow_daemon_is_reported_as_a_timeout_not_as_unreachable() {
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+            .await
+            .expect("bind an ephemeral port");
+        let address = listener.local_addr().expect("local address");
+        tokio::spawn(async move {
+            if let Ok(stream) = listener.accept().await {
+                // Hold the connection open without ever answering.
+                let _stream = stream;
+                std::future::pending::<()>().await;
+            }
+        });
+
+        let config = RemoteConfig::new(format!("http://{address}"), None);
+        let client = RemoteBroker::with_timeouts(
+            config,
+            Duration::from_millis(500),
+            Duration::from_millis(300),
+        )
+        .expect("build a client");
+
+        let message = client
+            .leases()
+            .await
+            .expect_err("a daemon that never answers must be an error")
+            .to_string();
+        assert!(
+            message.contains("did not answer within"),
+            "a slow daemon must be reported as a timeout: {message}"
+        );
+        assert!(
+            message.contains("not a connection failure"),
+            "the timeout must be distinguished from a connection failure: {message}"
+        );
+        assert!(
+            !message.contains("unreachable"),
+            "a delivered request must never read as unreachable: {message}"
+        );
+    }
+    /// A real server-side failure must reach the caller as the server's status
+    /// and body, never as a transport-shaped message. This is the shape the
+    /// live daemon produced when its inline browser launch timed out after 20s.
+    #[tokio::test]
+    async fn a_server_error_is_reported_with_its_status_and_body() {
+        const DETAIL: &str = r#"{"detail":"timed out: chrome did not report a DevTools endpoint within 20s","error":"internal"}"#;
+
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").expect("bind");
+        let address = listener.local_addr().expect("address");
+        std::thread::spawn(move || {
+            use std::io::{Read, Write};
+            if let Ok((mut socket, _)) = listener.accept() {
+                let mut request = [0u8; 4096];
+                let _ = socket.read(&mut request);
+                let response = format!(
+                    "HTTP/1.1 500 Internal Server Error\r\nContent-Type: application/json\r\n\
+                     Content-Length: {}\r\nConnection: close\r\n\r\n{}",
+                    DETAIL.len(),
+                    DETAIL
+                );
+                let _ = socket.write_all(response.as_bytes());
+            }
+        });
+
+        let client = RemoteBroker::new(RemoteConfig::new(format!("http://{address}"), None))
+            .expect("build a client");
+        let message = client
+            .leases()
+            .await
+            .expect_err("a 500 must be an error")
+            .to_string();
+
+        assert!(
+            message.contains("500 Internal Server Error"),
+            "the server status must be reported: {message}"
+        );
+        assert!(
+            message.contains("chrome did not report a DevTools endpoint within 20s"),
+            "the server body must be reported: {message}"
+        );
+        assert!(
+            !message.contains("unreachable"),
+            "a delivered request must never read as unreachable: {message}"
+        );
     }
 }

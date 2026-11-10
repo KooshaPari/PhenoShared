@@ -257,7 +257,7 @@ impl ModelPlan {
                         ),
                     });
                 }
-            }
+            },
             OperatorKind::DenseMatmul | OperatorKind::GroupedMatmul { .. }
                 if op.inputs.len() >= 2 && op.inputs[0].dtype != op.inputs[1].dtype =>
             {
@@ -268,8 +268,8 @@ impl ModelPlan {
                         op.kind, op.inputs[0].dtype, op.inputs[1].dtype
                     ),
                 });
-            }
-            _ => {}
+            },
+            _ => {},
         }
         Ok(())
     }

@@ -47,7 +47,7 @@ const CAPACITY_FACTOR: f32 = 1.5;
 
 fn build_router_logits() -> Vec<f32> {
     (0..NUM_TOKENS)
-        .flat_map(|t| deterministic_vec(NUM_EXPERTS, 0xE0_01 + t as u64))
+        .flat_map(|t| deterministic_vec(NUM_EXPERTS, 0xe0_01 + t as u64))
         .collect()
 }
 
@@ -147,10 +147,10 @@ fn olmoe_pipeline_runs_end_to_end_with_tiled_kernels() {
     assert_eq!(total_routed + plan.dropped.len(), NUM_TOKENS);
 
     // Activations and weights.
-    let a = deterministic_vec(NUM_TOKENS * K_INTERMEDIATE, 0xA_CE);
-    let w = deterministic_vec(HIDDEN * HIDDEN, 0xB_EE);
+    let a = deterministic_vec(NUM_TOKENS * K_INTERMEDIATE, 0xa_ce);
+    let w = deterministic_vec(HIDDEN * HIDDEN, 0xb_ee);
     let b: Vec<f32> = (0..NUM_EXPERTS)
-        .flat_map(|e| deterministic_vec(K_INTERMEDIATE * HIDDEN, 0xB0_E0 + e as u64))
+        .flat_map(|e| deterministic_vec(K_INTERMEDIATE * HIDDEN, 0xb0_e0 + e as u64))
         .collect();
 
     // Shared-expert matmul (OLMoE: shared_experts=1 — single dense
@@ -267,9 +267,9 @@ fn olmoe_grouped_gemm_tiled_matches_scalar_grouped_gemm() {
         moe_dispatch(&token_indices, &assignments, NUM_EXPERTS, CAPACITY_FACTOR)
             .expect("dispatch must accept well-formed inputs");
 
-    let a = deterministic_vec(NUM_TOKENS * K_INTERMEDIATE, 0xA_CE);
+    let a = deterministic_vec(NUM_TOKENS * K_INTERMEDIATE, 0xa_ce);
     let b: Vec<f32> = (0..NUM_EXPERTS)
-        .flat_map(|e| deterministic_vec(K_INTERMEDIATE * HIDDEN, 0xB0_E0 + e as u64))
+        .flat_map(|e| deterministic_vec(K_INTERMEDIATE * HIDDEN, 0xb0_e0 + e as u64))
         .collect();
 
     let mut scalar_out = vec![0.0f32; NUM_TOKENS * HIDDEN];
@@ -319,9 +319,9 @@ fn olmoe_weighted_reduce_tiled_matches_scalar_weighted_reduce() {
         moe_dispatch(&token_indices, &assignments, NUM_EXPERTS, CAPACITY_FACTOR)
             .expect("dispatch must accept well-formed inputs");
 
-    let a = deterministic_vec(NUM_TOKENS * K_INTERMEDIATE, 0xA_CE);
+    let a = deterministic_vec(NUM_TOKENS * K_INTERMEDIATE, 0xa_ce);
     let b: Vec<f32> = (0..NUM_EXPERTS)
-        .flat_map(|e| deterministic_vec(K_INTERMEDIATE * HIDDEN, 0xB0_E0 + e as u64))
+        .flat_map(|e| deterministic_vec(K_INTERMEDIATE * HIDDEN, 0xb0_e0 + e as u64))
         .collect();
 
     let expert_outs = build_expert_outs(&a, &b, &plan, &picks_per_token);

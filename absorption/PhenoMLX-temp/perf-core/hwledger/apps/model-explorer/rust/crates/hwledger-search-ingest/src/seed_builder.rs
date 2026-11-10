@@ -73,11 +73,7 @@ pub trait SeedSink {
 ///
 /// Per-query allocation is `build.size / N`, rounded up, with a floor of
 /// `1` so empty query lists still produce a sensible (if zero) run.
-pub fn build_seed_index<A>(
-    adapter: &A,
-    sink: &mut dyn SeedSink,
-    build: &SeedBuild,
-) -> SeedReport
+pub fn build_seed_index<A>(adapter: &A, sink: &mut dyn SeedSink, build: &SeedBuild) -> SeedReport
 where
     A: SourceAdapter + ?Sized,
 {
@@ -95,12 +91,12 @@ where
                     Err(e) => {
                         tracing::warn!(model = %cid, error = %e, "seed upsert failed");
                         report.errors += 1;
-                    }
+                    },
                 },
                 Err(e) => {
                     tracing::warn!(model = %cid, error = %e, "seed fetch failed");
                     report.errors += 1;
-                }
+                },
             }
         }
     }

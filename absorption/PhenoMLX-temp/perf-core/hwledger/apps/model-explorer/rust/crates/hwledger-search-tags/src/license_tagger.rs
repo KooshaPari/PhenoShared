@@ -38,17 +38,14 @@ pub fn tag(ctx: &TaggerContext) -> LicenseTags {
 
     // 2. Fall back to scanning the model card for a `License:` line.
     let from_card = if from_cfg.is_none() {
-        ctx.effective_card_text()
-            .and_then(parse_license_from_card)
+        ctx.effective_card_text().and_then(parse_license_from_card)
     } else {
         None
     };
 
     let license = from_cfg.or(from_card);
     let lower = license.as_deref().map(|s| s.to_ascii_lowercase());
-    let restrictive = lower
-        .as_deref()
-        .is_some_and(is_restrictive);
+    let restrictive = lower.as_deref().is_some_and(is_restrictive);
     let family = lower.as_deref().and_then(classify_family);
 
     LicenseTags {

@@ -249,7 +249,7 @@ fn zaya_binary_act_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_cpu,
                 "metal must win the head-to-head against cpu at p95=1700 vs p95=2400"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -260,7 +260,7 @@ fn zaya_binary_act_deterministic_picks_lowest_p95_metal_backend() {
 
 #[test]
 fn zaya_binary_act_round_trip_byte_identical() {
-    let x = deterministic_input(0x7A_7A_5A_59_A1_B1_A1_01 ^ 0xCAFE_BABE);
+    let x = deterministic_input(0x7a_7a_5a_59_a1_b1_a1_01 ^ 0xcafe_babe);
     let w_diag: [f32; C] = {
         // Diagonal weights are `1 + 0.01 * c` so the matmul output is
         // distinct per channel (catches a regression that swaps the
@@ -337,7 +337,7 @@ fn zaya_binary_act_quantization_error_within_tolerance() {
     // uniform-distribution bound `1/sqrt(B*C)` for this fixture; the
     // test asserts the bound holds with a small headroom for any
     // rounding the f32 → f64 promotion introduces.
-    let base_seed: u64 = 0xDEAD_BEEF_CAFE_F00D;
+    let base_seed: u64 = 0xdead_beef_cafe_f00d;
     let mut state = base_seed;
     let perturb_amp = 1.0_f32 / ((B * C) as f32).sqrt();
     let mut x = [[0f32; C]; B];
@@ -357,7 +357,7 @@ fn zaya_binary_act_quantization_error_within_tolerance() {
             // a raw `(state >> 8) as f32` would overflow the f32
             // mantissa and produce values >> 1.
             let eta_state = state.wrapping_mul(2_654_435_761).wrapping_add(40_569);
-            let low24 = (eta_state & 0x00FF_FFFF) as f32; // in [0, 2^24)
+            let low24 = (eta_state & 0x00ff_ffff) as f32; // in [0, 2^24)
             let eta_norm = low24 / 16_777_216.0_f32; // in [0, 1)
             let eta = (eta_norm * 2.0 - 1.0) * perturb_amp; // in [-amp, +amp]
             *slot = b + eta;

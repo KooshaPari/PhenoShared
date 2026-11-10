@@ -36,7 +36,7 @@ use model_kernels::recurrent::{
 // Test helpers
 // ---------------------------------------------------------------------------
 
-const SEED: u64 = 0xCAFE_BABE;
+const SEED: u64 = 0xcafe_babe;
 
 /// Build a deterministic vector of `f32` of length `n`.
 fn deterministic_vec(n: usize, salt: u64) -> Vec<f32> {

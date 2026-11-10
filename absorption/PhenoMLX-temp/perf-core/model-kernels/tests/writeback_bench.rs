@@ -90,7 +90,7 @@ const WB_SHAPES: &[WbShape] = &[
 /// matrix from `salt`. Indexed as `expert_outs[t*top_k + k, h]` — the
 /// "stage" function treats this as `[num_tokens, top_k, hidden]`.
 fn expert_outs(num_tokens: usize, top_k: usize, hidden: usize, salt: u64) -> Vec<f32> {
-    let mut rng = Lcg::new(0x57A6_BA11 ^ salt);
+    let mut rng = Lcg::new(0x57a6_ba11 ^ salt);
     (0..num_tokens * top_k * hidden)
         .map(|_| rng.next_signed())
         .collect()

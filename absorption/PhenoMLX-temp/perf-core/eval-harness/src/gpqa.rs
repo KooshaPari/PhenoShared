@@ -195,7 +195,7 @@ mod tests {
             EvalError::Json { path, line, .. } => {
                 assert_eq!(path, "x.jsonl");
                 assert_eq!(line, 1);
-            }
+            },
             other => panic!("expected Json error, got {other:?}"),
         }
     }
@@ -208,7 +208,7 @@ mod tests {
             EvalError::Malformed { line, message, .. } => {
                 assert_eq!(line, 1);
                 assert!(message.contains("id is empty"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -220,7 +220,7 @@ mod tests {
         match err {
             EvalError::Malformed { message, .. } => {
                 assert!(message.contains("choices is empty"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -238,7 +238,7 @@ mod tests {
         match err {
             EvalError::Malformed { message, .. } => {
                 assert!(message.contains("max is 26"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -252,7 +252,7 @@ mod tests {
             EvalError::Malformed { line, message, .. } => {
                 assert_eq!(line, 1);
                 assert!(message.contains("out of range"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -265,7 +265,7 @@ mod tests {
         match err {
             EvalError::Malformed { message, .. } => {
                 assert!(message.contains("not a letter"));
-            }
+            },
             other => panic!("expected Malformed error, got {other:?}"),
         }
     }
@@ -280,7 +280,7 @@ mod tests {
             EvalError::Json { path, line, .. } => {
                 assert_eq!(path, "x.jsonl");
                 assert_eq!(line, 3);
-            }
+            },
             other => panic!("expected Json error, got {other:?}"),
         }
     }

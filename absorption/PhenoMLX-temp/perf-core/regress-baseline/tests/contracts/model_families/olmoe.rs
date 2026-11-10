@@ -18,7 +18,7 @@ const OLMOE_TOP_K: usize = 8;
 const OLMOE_HIDDEN: usize = 4;
 const OLMOE_K: usize = 4;
 const OLMOE_CAPACITY_FACTOR: f32 = 1.5;
-const OLMOE_SEED: u64 = 0xCAFE_BABE_DEAD_BEEF_u64;
+const OLMOE_SEED: u64 = 0xcafe_babe_dead_beef_u64;
 
 /// Deterministic OLMoE per-token activation seed. Mirrors the salts
 /// used in `tests/qwen_bonsai/olmoe_moe.rs` so the test-suite and the
@@ -51,7 +51,7 @@ fn compute_olmoe_moe_end_to_end_output() -> (Vec<usize>, Vec<f32>, Vec<f32>, Vec
     let k = OLMOE_K;
     // Router logits: 64 floats per token, seeded per-token via LCG.
     let router_logits: Vec<f32> = (0..n_t)
-        .flat_map(|t| olmoe_det(n_e, 0xE0_01 + t as u64))
+        .flat_map(|t| olmoe_det(n_e, 0xe0_01 + t as u64))
         .collect();
     let mut assignments: Vec<(usize, f32)> = Vec::with_capacity(n_t);
     let mut picks_per_token: Vec<Vec<(usize, f32)>> = Vec::with_capacity(n_t);
@@ -72,10 +72,10 @@ fn compute_olmoe_moe_end_to_end_output() -> (Vec<usize>, Vec<f32>, Vec<f32>, Vec
     .expect("dispatch must accept well-formed inputs");
 
     // Activations + shared-expert weight + per-expert routed weights.
-    let a = olmoe_det(n_t * k, 0xA_CE);
-    let w = olmoe_det(h * h, 0xB_EE);
+    let a = olmoe_det(n_t * k, 0xa_ce);
+    let w = olmoe_det(h * h, 0xb_ee);
     let b: Vec<f32> = (0..n_e)
-        .flat_map(|e| olmoe_det(k * h, 0xB0_E0 + e as u64))
+        .flat_map(|e| olmoe_det(k * h, 0xb0_e0 + e as u64))
         .collect();
 
     // Shared-expert projection + routed-GEMM (tiled) into `[n_t, h]`.

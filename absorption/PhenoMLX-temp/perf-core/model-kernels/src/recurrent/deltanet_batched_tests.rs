@@ -252,9 +252,9 @@ fn chunk_size_must_match_all_batches() {
 #[test]
 fn batched_matches_sequential_within_tolerance_random_inputs() {
     let (b, h, c, d) = (3, 2, 5, 4);
-    let q = fill_with(0xDEAD_BEEF, b * h * c * d);
-    let k = fill_with(0xC0FF_EE42, b * h * c * d);
-    let v = fill_with(0xABCD_EF99, b * h * c * d);
+    let q = fill_with(0xdead_beef, b * h * c * d);
+    let k = fill_with(0xc0ff_ee42, b * h * c * d);
+    let v = fill_with(0xabcd_ef99, b * h * c * d);
     let initial_state = fill_with(0x1234_5678, b * h * d * d);
 
     let mut exp_outs = Vec::new();

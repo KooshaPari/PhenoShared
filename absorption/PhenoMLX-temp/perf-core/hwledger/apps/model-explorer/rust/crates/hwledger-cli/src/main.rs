@@ -21,12 +21,10 @@ use anyhow::{Context, Result};
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use comfy_table::{ContentArrangement, Table};
 use hwledger_search_core::{Facets, ModelKind, Query};
-use hwledger_search_index::{
-    collapse_variants, run_hybrid, CollapseRule, IndexHit,
-};
+use hwledger_search_index::{collapse_variants, run_hybrid, CollapseRule, IndexHit};
 use hwledger_search_ingest::{
-    build_seed_index, expand_neighborhood, ExpansionConfig, HuggingFaceAdapter,
-    PopulateGate, SeedBuild, SeedReport,
+    build_seed_index, expand_neighborhood, ExpansionConfig, HuggingFaceAdapter, PopulateGate,
+    SeedBuild, SeedReport,
 };
 
 mod format;
@@ -40,7 +38,12 @@ use store::{open_or_create_store, seed_sink_for, write_store, SharedStore};
 #[command(name = "hwledger-cli", version, about = "hwledger model-explorer CLI")]
 struct Cli {
     /// Path to the tantivy index directory.
-    #[arg(long, env = "HWLEDGER_INDEX", global = true, default_value = "./hwledger-index")]
+    #[arg(
+        long,
+        env = "HWLEDGER_INDEX",
+        global = true,
+        default_value = "./hwledger-index"
+    )]
     index: PathBuf,
 
     /// Emit machine-readable output (alias for `--format json`).
@@ -184,9 +187,7 @@ fn main() -> Result<()> {
 
     match cli.command {
         Command::Model { action } => handle_model(action, &cli.index, json),
-        Command::ModelAsk { question, limit } => {
-            cmd_model_ask(&question, limit, &cli.index, json)
-        }
+        Command::ModelAsk { question, limit } => cmd_model_ask(&question, limit, &cli.index, json),
         Command::Seed { action } => handle_seed(action, &cli.index, json),
     }
 }
@@ -211,9 +212,11 @@ fn handle_model(action: ModelAction, index_dir: &Path, json: bool) -> Result<()>
         ModelAction::Detail { id } => cmd_model_detail(&id, index_dir, json),
         ModelAction::Quants { id } => cmd_model_quants(&id, index_dir, json),
         ModelAction::Similar { id, limit } => cmd_model_similar(&id, limit, index_dir, json),
-        ModelAction::ForUseCase { use_case, text, limit } => {
-            cmd_model_for_use_case(use_case, &text, limit, index_dir, json)
-        }
+        ModelAction::ForUseCase {
+            use_case,
+            text,
+            limit,
+        } => cmd_model_for_use_case(use_case, &text, limit, index_dir, json),
     }
 }
 
@@ -256,7 +259,9 @@ fn cmd_model_search(args: SearchArgs, index_dir: &Path, json: bool) -> Result<()
 fn cmd_model_detail(id: &str, index_dir: &Path, json: bool) -> Result<()> {
     let store = open_or_create_store(index_dir)?;
     let canonical = canonicalize_id(id);
-    let hits = store.search(&canonical, 1).context("tantivy search failed")?;
+    let hits = store
+        .search(&canonical, 1)
+        .context("tantivy search failed")?;
     let kind = store.kind_for_id(&canonical);
     let quants = store.quants_for_id(&canonical);
 
@@ -323,7 +328,8 @@ fn cmd_model_quants(id: &str, index_dir: &Path, json: bool) -> Result<()> {
         println!("(no quantization tags known for {canonical})");
     } else {
         let mut t = Table::new();
-        t.set_header(vec!["quant"]).set_content_arrangement(ContentArrangement::Dynamic);
+        t.set_header(vec!["quant"])
+            .set_content_arrangement(ContentArrangement::Dynamic);
         for q in &quants {
             t.add_row(vec![comfy_table::Cell::new(q)]);
         }
@@ -336,12 +342,7 @@ fn cmd_model_quants(id: &str, index_dir: &Path, json: bool) -> Result<()> {
 // `model similar`
 // ---------------------------------------------------------------------------
 
-fn cmd_model_similar(
-    id: &str,
-    limit: usize,
-    index_dir: &Path,
-    json: bool,
-) -> Result<()> {
+fn cmd_model_similar(id: &str, limit: usize, index_dir: &Path, json: bool) -> Result<()> {
     let store = open_or_create_store(index_dir)?;
     let canonical = canonicalize_id(id);
 
@@ -469,9 +470,11 @@ fn cmd_model_ask(question: &str, limit: usize, index_dir: &Path, json: bool) -> 
 
 fn handle_seed(action: SeedAction, index_dir: &Path, json: bool) -> Result<()> {
     match action {
-        SeedAction::Build { queries, size, append } => {
-            cmd_seed_build(queries, size, append, index_dir, json)
-        }
+        SeedAction::Build {
+            queries,
+            size,
+            append,
+        } => cmd_seed_build(queries, size, append, index_dir, json),
         SeedAction::Expand { seeds } => cmd_seed_expand(seeds, index_dir, json),
     }
 }
@@ -484,9 +487,8 @@ fn cmd_seed_build(
     json: bool,
 ) -> Result<()> {
     if !append && index_dir.exists() {
-        std::fs::remove_dir_all(index_dir).with_context(|| {
-            format!("failed to wipe existing index at {}", index_dir.display())
-        })?;
+        std::fs::remove_dir_all(index_dir)
+            .with_context(|| format!("failed to wipe existing index at {}", index_dir.display()))?;
     }
 
     let store = open_or_create_store(index_dir)?;
@@ -659,7 +661,11 @@ fn print_search_table(hits: &[hwledger_search_core::FusedResult]) {
             comfy_table::Cell::new(i + 1),
             comfy_table::Cell::new(&h.id),
             comfy_table::Cell::new(format!("{:.4}", h.score)),
-            comfy_table::Cell::new(if kinds.is_empty() { "—" } else { kinds.as_str() }),
+            comfy_table::Cell::new(if kinds.is_empty() {
+                "—"
+            } else {
+                kinds.as_str()
+            }),
         ]);
     }
     print_table(&t);

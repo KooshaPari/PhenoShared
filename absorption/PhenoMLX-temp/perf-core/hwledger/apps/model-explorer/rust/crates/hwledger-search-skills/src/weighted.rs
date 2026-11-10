@@ -94,11 +94,7 @@ impl SearchSkill for WeightedSkill {
         self.inner.version()
     }
 
-    fn rerank(
-        &self,
-        results: &mut [FusedResult],
-        ctx: &SearchContext,
-    ) -> Result<(), CoreError> {
+    fn rerank(&self, results: &mut [FusedResult], ctx: &SearchContext) -> Result<(), CoreError> {
         if self.weight == 1.0 {
             // Fast path: avoid cloning every score when the wrapper
             // is configured at its neutral value.
@@ -235,9 +231,13 @@ mod tests {
             0.5,
         )
         .unwrap();
-        let mut results = vec![FusedResult::new("hf::x", 0.5).with_payload(json!({"agentic": 1.0}))];
-        w.rerank(&mut results, &SearchContext::new(Query::default(), SearchIntent::Agentic))
-            .unwrap();
+        let mut results =
+            vec![FusedResult::new("hf::x", 0.5).with_payload(json!({"agentic": 1.0}))];
+        w.rerank(
+            &mut results,
+            &SearchContext::new(Query::default(), SearchIntent::Agentic),
+        )
+        .unwrap();
         // Inner would have produced 0.6*0.5 + 0.4*1.0 = 0.7 (delta 0.2).
         // With weight 0.5: 0.5 + 0.5*0.2 = 0.6.
         assert!((results[0].score - 0.6).abs() < 1e-6);

@@ -41,7 +41,7 @@ fn compile_budget_exceeded_when_shader_source_exceeds_max_shader_bytes() {
         } => {
             assert!(shader_bytes > max_shader_bytes);
             assert_eq!(max_shader_bytes, 8);
-        }
+        },
         other => panic!("expected BudgetExceeded, got {:?}", other),
     }
 }
@@ -63,7 +63,7 @@ fn compile_budget_exceeded_when_compile_ms_exceeds_max_ms() {
         } => {
             assert!(compile_ms > max_ms);
             assert_eq!(max_ms, 0);
-        }
+        },
         other => panic!("expected BudgetExceeded, got {:?}", other),
     }
 }

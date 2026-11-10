@@ -59,7 +59,10 @@ tokio             = { version = "1", features = ["rt-multi-thread", "macros", "s
 tower-http        = { version = "0.5", features = ["trace", "cors"] }
 tracing           = "0.1"
 tract-onnx = "0.23.4"
-lancedb = "0.31"
+# lancedb >= 0.33: 0.31 pulls lance-testing (normal dep) -> pprof[flamegraph]
+# -> inferno -> quick-xml 0.26.0 (RUSTSEC-2026-0194/0195). From 0.33 on,
+# lance-testing is dev-only and cargo never resolves it.
+lancedb = "0.33"
 tantivy = "0.22"
 assert_cmd = "2"
 predicates = "3"

@@ -19,7 +19,7 @@ fn bonsai_ternary_matmul_matches_unpacked_reference() {
 
     // Build a deterministic ternary weight using the Lcg salt for
     // reproducibility.
-    let mut rng = Lcg::new(SEED ^ 0xA11CE);
+    let mut rng = Lcg::new(SEED ^ 0xa11ce);
     let values: Vec<SignedTernary> = (0..k * n)
         .map(|_| match (rng.next_u64() % 3) as u8 {
             0 => SignedTernary::Pos,
@@ -29,7 +29,7 @@ fn bonsai_ternary_matmul_matches_unpacked_reference() {
         .collect();
     let (packed, scales, zeros) = ternary_pack(&values, group_size).unwrap();
 
-    let a = deterministic_vec(m * k, 0xBEEF);
+    let a = deterministic_vec(m * k, 0xbeef);
 
     let mut out = vec![0.0f32; m * n];
     ternary_matmul(&a, &packed, &scales, &zeros, group_size, m, k, n, &mut out).unwrap();

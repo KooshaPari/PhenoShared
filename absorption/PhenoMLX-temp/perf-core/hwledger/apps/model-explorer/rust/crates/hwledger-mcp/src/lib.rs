@@ -221,21 +221,16 @@ impl McpServer {
     /// for a server that has nothing to serve. A future iteration can
     /// populate this from a [`Backend`] method (e.g. fetch a model
     /// card by URI) without changing the wire format.
-    pub fn handle_resources_read(
-        &self,
-        params: Option<&Value>,
-    ) -> Result<Value, McpError> {
+    pub fn handle_resources_read(&self, params: Option<&Value>) -> Result<Value, McpError> {
         let params = params.unwrap_or(&Value::Null);
-        let obj = params.as_object().ok_or_else(|| {
-            McpError::invalid_params("`resources/read` params must be an object")
-        })?;
+        let obj = params
+            .as_object()
+            .ok_or_else(|| McpError::invalid_params("`resources/read` params must be an object"))?;
 
         let _uri = obj
             .get("uri")
             .and_then(|v| v.as_str())
-            .ok_or_else(|| {
-                McpError::invalid_params("`resources/read` requires a `uri` string")
-            })?;
+            .ok_or_else(|| McpError::invalid_params("`resources/read` requires a `uri` string"))?;
 
         Ok(json!({ "contents": [] }))
     }
@@ -261,10 +256,7 @@ impl McpServer {
     /// reference servers return for an unknown prompt, and it lets
     /// the client distinguish "unknown prompt" from "valid prompt
     /// with empty messages".
-    pub fn handle_prompts_get(
-        &self,
-        params: Option<&Value>,
-    ) -> Result<Value, McpError> {
+    pub fn handle_prompts_get(&self, params: Option<&Value>) -> Result<Value, McpError> {
         let params = params.unwrap_or(&Value::Null);
         let obj = params
             .as_object()
@@ -313,7 +305,7 @@ impl McpServer {
                 // is responsible for not sending a response. We return
                 // `Null` as a sentinel "nothing to reply with".
                 Ok(Value::Null)
-            }
+            },
             // `notifications/*` are explicitly ignored (not an error).
             other if other.starts_with("notifications/") => Ok(Value::Null),
             other => Err(McpError::method_not_found(other)),
@@ -431,11 +423,7 @@ mod tests {
         let server = McpServer::new();
         let mut state = McpState::new(Arc::new(MockBackend::new()));
         let err = server
-            .dispatch(
-                &mut state,
-                "prompts/get",
-                Some(&json!({"name": "missing"})),
-            )
+            .dispatch(&mut state, "prompts/get", Some(&json!({"name": "missing"})))
             .expect_err("unknown prompt must error");
         assert_eq!(err.code(), -32601);
     }
