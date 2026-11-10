@@ -17,8 +17,11 @@ import (
 // crate regenerates and this test fails.
 //
 // The copy is committed rather than read from the crate's path so this test
-// keeps working after the crate is dropped (ADR-ECO-024 gate 2 is the last thing
-// standing between the ecosystem and one DAG implementation).
+// keeps working after the crate is dropped. The crate WAS dropped on 2026-11-10
+// (ADR-ECO-024): this fixture is now the FROZEN CONTRACT for the retired schema,
+// emitted from the crate before its removal. It is no longer a live cross-check
+// and cannot be regenerated, which is the point of retiring a schema rather than
+// keeping two.
 const goldenPath = "testdata/dagschema-golden.yaml"
 
 // crateGoldens is where the crate emits its own copy. When it exists, the two
@@ -38,7 +41,10 @@ func readGolden(t *testing.T) []byte {
 func TestGoldenFixtureIsCurrent(t *testing.T) {
 	theirs, err := os.ReadFile(crateGoldens)
 	if err != nil {
-		t.Skipf("crate fixture not present (%v); the committed copy stands alone", err)
+		// Expected after the crate was dropped: the committed copy is the frozen
+		// contract, and there is no longer a live producer to compare against.
+		// The parse and convert tests below still run on it.
+		t.Skipf("crate fixture not present (%v); the committed copy is the frozen contract", err)
 	}
 	ours := readGolden(t)
 	if string(theirs) != string(ours) {
