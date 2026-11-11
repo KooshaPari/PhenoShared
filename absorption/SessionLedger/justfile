@@ -1,0 +1,103 @@
+# SessionLedger developer task runner
+# https://github.com/casey/just
+#
+# Mirrors Makefile semantics (build/test/lint/fmt/clippy/package/seed/dev).
+# Install:  brew install just  |  scoop install just  |  cargo install just
+
+set dotenv-load := false
+set windows-shell := ["pwsh", "-NoProfile", "-Command"]
+set shell := ["bash", "-uc"]
+
+daemon_manifest := "crates/sl-daemon/Cargo.toml"
+
+# ----- meta -----
+# List available recipes
+_default:
+    @just --list
+
+# Alias for `_default`
+help:
+    @just --list
+
+# ----- build / test / lint -----
+
+# Compile sl-daemon and sl-viewer (debug profile)
+build:
+    cargo build --manifest-path {{daemon_manifest}}
+    cargo build -p sl-viewer
+
+# Workspace suite (CI flags) plus excluded sl-daemon
+test:
+    cargo test --all-features --locked
+    cargo test --manifest-path {{daemon_manifest}}
+
+# Apply rustfmt across workspace + daemon
+fmt:
+    cargo fmt --all
+    cargo fmt --manifest-path {{daemon_manifest}}
+
+# cargo clippy on workspace + daemon
+clippy:
+    cargo clippy --all-targets --all-features --locked
+    cargo clippy --manifest-path {{daemon_manifest}} --all-targets
+
+# Format check + clippy (CI-equivalent gate)
+lint:
+    cargo fmt --all --check
+    cargo fmt --manifest-path {{daemon_manifest}} --check
+    cargo clippy --all-targets --all-features --locked
+    cargo clippy --manifest-path {{daemon_manifest}} --all-targets
+
+# Desktop packaging via packaging/Makefile
+package:
+    make -C packaging package-all
+
+# Copy a sample OKF fixture into SL_DATA_DIR (default .sl-data)
+seed:
+    pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/seed-sample.ps1
+
+# Enforced pipeline Criterion perf-budget gate (blocking CI equivalent)
+bench-gate:
+    pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/bench-gate.ps1
+
+# Validate enforced budget policy / thresholds without cargo bench
+bench-gate-check:
+    pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/bench-gate.ps1 -SelfCheck
+
+# C00 L6 latency baseline SelfCheck (no cargo bench)
+bench-gate-latency:
+    pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/bench-gate.ps1 -SoftLatencyCheck
+
+# ----- runtime stack -----
+
+# Bring up the local runtime (runtime-up script if present, else process-compose)
+[unix]
+up:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ -f scripts/runtime-up.ps1 ]]; then
+      pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/runtime-up.ps1
+    elif [[ -f scripts/runtime-up.sh ]]; then
+      bash scripts/runtime-up.sh
+    else
+      process-compose up
+    fi
+
+# Bring up the local runtime (runtime-up script if present, else process-compose)
+[windows]
+up:
+    if (Test-Path scripts/runtime-up.ps1) { \
+      pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/runtime-up.ps1 \
+    } elseif (Test-Path scripts/runtime-up.sh) { \
+      bash scripts/runtime-up.sh \
+    } else { \
+      process-compose up \
+    }
+
+# Build both crates then bring up the local stack
+dev: build
+    just up
+
+# Tear down the process-compose stack
+dev-down:
+    process-compose down

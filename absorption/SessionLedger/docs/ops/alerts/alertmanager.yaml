@@ -1,0 +1,72 @@
+# SessionLedger Alertmanager routing placeholder.
+#
+# Safe for local/dev: default receiver is a loopback webhook. Slack and
+# PagerDuty receivers use REPLACE_ME_* stubs — never commit live webhook URLs,
+# channel IDs, or routing keys. Operators substitute values from environment
+# (see route-ids.stub.env) before production paging.
+#
+# Validate stubs:
+#   pwsh -NoProfile -File scripts/alert-route-ids-check.ps1
+# Require live env (fails if stubs/env missing):
+#   pwsh -NoProfile -File scripts/alert-route-ids-check.ps1 -Strict
+route:
+  receiver: sessionledger-webhook-placeholder
+  group_by:
+    - alertname
+    - job
+    - instance
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - receiver: sessionledger-pagerduty
+      matchers:
+        - job="sl-daemon"
+        - severity="warning"
+        - page="true"
+      continue: false
+    - receiver: sessionledger-slack-ops
+      matchers:
+        - job="sl-daemon"
+        - severity="warning"
+      continue: false
+    - receiver: sessionledger-webhook-placeholder
+      matchers:
+        - job="sl-daemon"
+      continue: false
+
+receivers:
+  - name: sessionledger-webhook-placeholder
+    webhook_configs:
+      - url: http://127.0.0.1:9099/sessionledger-alerts
+        send_resolved: true
+
+  # Stub only — replace api_url / channel before go-live.
+  # Env: SL_ALERT_SLACK_WEBHOOK_URL, SL_ALERT_SLACK_CHANNEL_ID
+  - name: sessionledger-slack-ops
+    slack_configs:
+      - api_url: https://hooks.slack.com/services/REPLACE_ME/SLACK/WEBHOOK
+        channel: "#sessionledger-ops"
+        # Documented channel ID stub (Alertmanager uses channel name above;
+        # operators keep the ID in env for provisioning evidence).
+        title: "SessionLedger {{ .Status | toUpper }}"
+        text: "{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}"
+        send_resolved: true
+
+  # Stub only — replace routing_key before go-live.
+  # Env: SL_ALERT_PAGERDUTY_ROUTING_KEY
+  - name: sessionledger-pagerduty
+    pagerduty_configs:
+      - routing_key: REPLACE_ME_PAGERDUTY_ROUTING_KEY
+        description: "{{ .CommonAnnotations.summary }}"
+        severity: warning
+        send_resolved: true
+
+inhibit_rules:
+  - source_matchers:
+      - alertname="SessionLedgerDaemonScrapeDown"
+    target_matchers:
+      - alertname="SessionLedgerFastErrorBudgetBurn"
+    equal:
+      - job
+      - instance

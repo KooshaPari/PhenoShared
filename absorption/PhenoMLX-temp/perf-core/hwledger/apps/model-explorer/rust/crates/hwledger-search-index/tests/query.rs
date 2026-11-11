@@ -88,10 +88,13 @@ fn run_hybrid_returns_up_to_k_results_sorted_by_score_desc() {
     let (_dir, store) = seeded_store();
     let q = Query::text("instruct").with_limit(10);
 
-    let results = block_on(run_hybrid_bm25_only(&store, &q, 2))
-        .expect("run_hybrid");
+    let results = block_on(run_hybrid_bm25_only(&store, &q, 2)).expect("run_hybrid");
 
-    assert!(results.len() <= 2, "got {} results, want <=2", results.len());
+    assert!(
+        results.len() <= 2,
+        "got {} results, want <=2",
+        results.len()
+    );
     assert!(
         !results.is_empty(),
         "expected at least one result for `instruct`"
@@ -114,8 +117,7 @@ fn run_hybrid_returns_empty_vec_when_text_matches_nothing() {
 
     // A nonsense query that won't tokenize to anything we have indexed.
     let q = Query::text("zzzzzzzzzzzzz_unlikely_term_xyzzy");
-    let results = block_on(run_hybrid_bm25_only(&store, &q, 10))
-        .expect("run_hybrid");
+    let results = block_on(run_hybrid_bm25_only(&store, &q, 10)).expect("run_hybrid");
 
     assert!(
         results.is_empty(),
@@ -127,8 +129,7 @@ fn run_hybrid_returns_empty_vec_when_text_matches_nothing() {
     // MatchAll-everything surprise at the CLI layer).
     let q_empty = Query::text("");
     let empty_results =
-        block_on(run_hybrid_bm25_only(&store, &q_empty, 10))
-            .expect("run_hybrid empty");
+        block_on(run_hybrid_bm25_only(&store, &q_empty, 10)).expect("run_hybrid empty");
     assert!(
         empty_results.is_empty(),
         "empty text query must return no results"

@@ -1,0 +1,13 @@
+{
+  "schema": "sessionledger.allocation-budget.v1",
+  "workload": "process_session_8_messages",
+  "bytes_allocated_ceiling": 1048576,
+  "allocations_ceiling": 5000,
+  "sample_metric": "stats_alloc_region_delta",
+  "notes": [
+    "Generous L8 score-1 smoke ceilings for one warmed process_session() pass of an 8-message fixture.",
+    "Local debug baseline observed ~15-55 KiB / ~200-300 allocations; ceilings keep large headroom.",
+    "Measured via stats_alloc Region delta in tests/allocation_budget.rs — not jemalloc / dhat continuous profiling.",
+    "Not a production SLA; tighten after real allocator profiling lands."
+  ]
+}

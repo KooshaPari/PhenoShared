@@ -1,0 +1,48 @@
+name: cargo-deny
+
+# Tier-0 deny workflow.
+# Runs `cargo deny check` (advisories, bans, sources, licenses) when a
+# Cargo workspace is present. For Python-only repos the job is skipped
+# gracefully rather than failing.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '23 5 * * 1'  # Weekly on Monday at 05:23 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: deny-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deny:
+    name: cargo-deny
+    runs-on: ubuntu-latest
+    # Only run when this is a Rust project. Skips cleanly for Python/Node.
+    if: hashFiles('Cargo.toml') != ''
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo registry & target
+        uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@98bc5a61e2f8d5d0a4e5e8b5d6f7d8a9e0c1d2e3
+        with:
+          tool: cargo-deny
+
+      - name: cargo-deny check
+        run: cargo deny check

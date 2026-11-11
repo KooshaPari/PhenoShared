@@ -122,7 +122,7 @@ fn ddm_metadata_decode_deterministic_picks_lowest_p95_metal_backend() {
             assert_eq!(meta.family, OperatorKind::DiscreteDiffusion);
             assert_eq!(meta.mode, SelectorMode::Decode);
             assert_eq!(meta.kind, StepKind::MaskedDiffusionStep);
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }

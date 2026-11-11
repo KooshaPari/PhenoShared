@@ -1,0 +1,67 @@
+{
+  "okf": "1.0",
+  "source_id": "yaml-k8s-deployment-044",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Bump sl-daemon Deployment to 3 replicas with rollingUpdate maxUnavailable=0",
+      "properties": {
+        "user_turn_count": 3
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "kubectl rollout status deployment/sl-daemon completes within 60s",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "preserve existing PodDisruptionBudget (minAvailable=2)",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "kustomize-overlay",
+      "properties": {
+        "cwd": "deploy/overlays/prod"
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "yaml-k8s-deployment-044"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "yaml-k8s-deployment-044"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "yaml-k8s-deployment-044"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "yaml-k8s-deployment-044"
+      }
+    }
+  ]
+}

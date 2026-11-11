@@ -1,0 +1,37 @@
+name: Provenance contract
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/release.yml"
+      - ".github/workflows/provenance-contract.yml"
+      - "scripts/provenance-contract-check.ps1"
+      - "docs/ops/reproducible-builds.md"
+      - "docs/ops/fixtures/slsa-materials-contract.sample.json"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/release.yml"
+      - ".github/workflows/provenance-contract.yml"
+      - "scripts/provenance-contract-check.ps1"
+      - "docs/ops/reproducible-builds.md"
+      - "docs/ops/fixtures/slsa-materials-contract.sample.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  provenance-contract:
+    name: release provenance contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: assert blocking per-build provenance contract
+        shell: pwsh
+        run: ./scripts/provenance-contract-check.ps1

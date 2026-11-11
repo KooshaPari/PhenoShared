@@ -209,7 +209,7 @@ fn lfm_short_conv_deterministic_picks_lowest_p95_metal_backend() {
             );
             assert_ne!(candidate.id, id_scalar);
             assert_ne!(candidate.id, id_cpu);
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }

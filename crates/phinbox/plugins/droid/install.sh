@@ -5,23 +5,23 @@
 
 set -euo pipefail
 
-SRC="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling"
+SRC="${HOME}/CodeProjects/Phenotype/repos/phenotype-tooling"
 
 # 1. Resolve the phinbox-mcp binary
 if ! command -v phinbox-mcp >/dev/null 2>&1; then
-  echo "→ phinbox-mcp not on PATH"
-  exit 1
+	echo "→ phinbox-mcp not on PATH"
+	exit 1
 fi
 
 # 2. Write MCP server entry into ~/.factory/mcp.json
 DROID_CONFIG="$HOME/.factory/mcp.json"
 # Remove broken symlinks before writing — droid reads the resolved file
-if [[ -L "$DROID_CONFIG" ]] && [[ ! -e "$DROID_CONFIG" ]]; then
-  echo "→ removing broken symlink at $DROID_CONFIG"
-  rm -f "$DROID_CONFIG"
+if [[ -L $DROID_CONFIG ]] && [[ ! -e $DROID_CONFIG ]]; then
+	echo "→ removing broken symlink at $DROID_CONFIG"
+	rm -f "$DROID_CONFIG"
 fi
 mkdir -p "$(dirname "$DROID_CONFIG")"
-[[ -f "$DROID_CONFIG" ]] || echo '{}' > "$DROID_CONFIG"
+[[ -f $DROID_CONFIG ]] || echo '{}' >"$DROID_CONFIG"
 
 # 3. Use Python heredoc for safe JSON merge (preserves any other MCP servers)
 DROID_CONFIG="$DROID_CONFIG" python3 <<'PYEOF'
@@ -55,6 +55,12 @@ echo "→ installed skill at $SKILL_DEST"
 
 # 5. Verify
 echo "→ verification:"
-grep -q '"phinbox"' "$DROID_CONFIG" || { echo "FAIL: phinbox not registered in mcp.json"; exit 1; }
-test -f "$SKILL_DEST" || { echo "FAIL: skill not installed"; exit 1; }
+grep -q '"phinbox"' "$DROID_CONFIG" || {
+	echo "FAIL: phinbox not registered in mcp.json"
+	exit 1
+}
+test -f "$SKILL_DEST" || {
+	echo "FAIL: skill not installed"
+	exit 1
+}
 echo "✓ phinbox plugin installed for droid (factory)"

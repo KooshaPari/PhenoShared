@@ -1,0 +1,764 @@
+# Release workflow for sl-viewer / sl-daemon (Dioxus desktop + daemon).
+#
+# Packages native desktop viewer binaries, an unsigned Windows MSI, unsigned
+# macOS PKGs, best-effort Linux deb/AppImage, and portable sl-daemon archives
+# on tag push (v*), then attaches them to a GitHub Release.
+#
+# Usage:
+#   git tag v0.1.0 && git push origin v0.1.0
+#
+# Platform signing / notarization: DEFERRED (unsigned binaries + installers).
+# Authenticode and Apple notarization stay out of scope per ADR 0003.
+# Release checksums are signed with cosign keyless signing on a best-effort
+# basis. The sl-daemon OCI image (crates/sl-daemon/Containerfile → GHCR) is
+# built, keyless-cosign-signed, attested, and release-verified unconditionally on
+# every canonical KooshaPari/SessionLedger `v*` tag (blocking;
+# continue-on-error: false). Forks credential-gate OCI with an explicit skip
+# reason. Deploy-time verify-on-deploy
+# also lives in scripts/oci-cosign-verify.ps1 (fails closed when a signature is
+# expected).
+# Release assets receive blocking GitHub build provenance in the canonical
+# KooshaPari/SessionLedger repository; forks skip that OIDC step.
+#
+# Ref: crates/sl-viewer/Cargo.toml  ·  crates/sl-daemon/Cargo.toml
+#      packaging/README.md  ·  docs/ops/distribution.md
+
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  build:
+    name: build · ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            archive: tar.gz
+            arch_label: x86_64
+          - target: x86_64-apple-darwin
+            os: macos-latest
+            archive: tar.gz
+            arch_label: x86_64
+          - target: aarch64-apple-darwin
+            os: macos-latest
+            archive: tar.gz
+            arch_label: aarch64
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            archive: zip
+            arch_label: x64
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: ensure cross-compile target std
+        shell: bash
+        run: |
+          set -euo pipefail
+          # macos-latest now runs arm64 hardware; dtolnay/rust-toolchain can
+          # silently miss the x86_64-apple-darwin rust-std, failing builds
+          # with E0463 "can't find crate for core". Re-assert the target.
+          rustup target add "${{ matrix.target }}"
+
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: release-${{ matrix.target }}
+
+      - name: derive SOURCE_DATE_EPOCH
+        id: source-date-epoch
+        shell: bash
+        run: |
+          set -euo pipefail
+          epoch="$(git log -1 --pretty=%ct)"
+          echo "epoch=${epoch}" >> "$GITHUB_OUTPUT"
+          echo "SOURCE_DATE_EPOCH=${epoch}"
+
+      - name: derive version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ github.ref_name }}"
+          ver="${tag#v}"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "version=${ver}" >> "$GITHUB_OUTPUT"
+
+      - name: install Linux GUI system dependencies
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          set -euo pipefail
+          # libwebkit2gtk-4.1-dev provides javascriptcoregtk-4.1 + libsoup-3.0
+          # pkg-config anchors required to build wry/tao from a cold cache;
+          # libxdo-dev satisfies the -lxdo link of libxdo (tray-icon/hotkey).
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libglib2.0-dev libgtk-3-dev \
+            libgdk-pixbuf-2.0-dev libwebkit2gtk-4.1-dev libxdo-dev
+
+      - name: build sl-viewer + sl-daemon
+        shell: bash
+        run: |
+          cargo build -p sl-viewer --release --target ${{ matrix.target }} --locked
+          # sl-daemon is an intentionally standalone workspace so its build
+          # cannot be selected from the root workspace with `-p`.
+          cargo build --manifest-path crates/sl-daemon/Cargo.toml \
+            --release --target ${{ matrix.target }} --locked
+        env:
+          CARGO_FEATURES: desktop
+          CARGO_INCREMENTAL: "0"
+          SOURCE_DATE_EPOCH: ${{ steps.source-date-epoch.outputs.epoch }}
+
+      - name: package portable archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          # `version` (no leading v): matches the installer naming and the
+          # release body below. Using the raw tag here split naming between
+          # archives (v-prefixed) and installers (no-v) and broke install.sh.
+          VER="${{ steps.version.outputs.version }}"
+          TARGET="${{ matrix.target }}"
+          mkdir -p dist-out
+
+          package_bin() {
+            local pkg="$1"
+            local dir="${pkg}-${VER}-${TARGET}"
+            mkdir -p "${dir}"
+            local root="target/${TARGET}/release"
+            if [ "${pkg}" = "sl-daemon" ]; then
+              root="crates/sl-daemon/target/${TARGET}/release"
+            fi
+            if [ "${{ matrix.os }}" = "windows-latest" ]; then
+              cp "${root}/${pkg}.exe" "${dir}/"
+              # Banner must not reach stdout: package_bin output feeds GITHUB_ENV.
+              7z a -tzip "${dir}.zip" "${dir}" > /dev/null
+              cp "${dir}.zip" "dist-out/"
+              echo "${dir}.zip"
+            else
+              cp "${root}/${pkg}" "${dir}/"
+              tar czf "${dir}.tar.gz" "${dir}"
+              cp "${dir}.tar.gz" "dist-out/"
+              echo "${dir}.tar.gz"
+            fi
+          }
+
+          VIEWER_ASSET="$(package_bin sl-viewer)"
+          DAEMON_ASSET="$(package_bin sl-daemon)"
+          echo "VIEWER_ASSET=${VIEWER_ASSET}" >> "$GITHUB_ENV"
+          echo "DAEMON_ASSET=${DAEMON_ASSET}" >> "$GITHUB_ENV"
+          echo "ASSET_PATH=dist-out" >> "$GITHUB_ENV"
+
+      - name: package Windows MSI (unsigned)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          dotnet tool install --global wix --version 4.0.4
+          $tools = Join-Path $env:USERPROFILE ".dotnet\tools"
+          echo $tools | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $env:Path = "$tools;$env:Path"
+
+          $ver = "${{ steps.version.outputs.version }}"
+          $target = "${{ matrix.target }}"
+          $bin = Join-Path $PWD "target\$target\release\sl-viewer.exe"
+          $dist = Join-Path $PWD "packaging\dist"
+          New-Item -ItemType Directory -Force -Path $dist | Out-Null
+
+          & .\scripts\package-msi.ps1 `
+            -Target $target `
+            -Version $ver `
+            -BinaryPath $bin `
+            -DistDir $dist `
+            -SkipBuild
+          if ($LASTEXITCODE -ne 0) {
+            throw "package-msi.ps1 failed with exit code $LASTEXITCODE."
+          }
+
+          $msi = Join-Path $dist "SessionLedger-$ver-x64.msi"
+          if (-not (Test-Path -LiteralPath $msi -PathType Leaf)) {
+            throw "MSI not found at $msi"
+          }
+          Copy-Item -LiteralPath $msi -Destination (Join-Path $PWD "dist-out\SessionLedger-$ver-x64.msi")
+          echo "MSI_ASSET=SessionLedger-$ver-x64.msi" >> $env:GITHUB_ENV
+
+      - name: package macOS app + PKG (unsigned)
+        if: contains(matrix.target, 'apple-darwin')
+        shell: bash
+        run: |
+          set -euo pipefail
+          VER="${{ steps.version.outputs.version }}"
+          TARGET="${{ matrix.target }}"
+          ARCH_LABEL="${{ matrix.arch_label }}"
+          BINARY="$PWD/target/${TARGET}/release/sl-viewer"
+          DIST="$PWD/packaging/dist"
+          mkdir -p "$DIST" dist-out
+          chmod +x packaging/macos/package-app.sh packaging/macos/package-pkg.sh
+          VERSION="$VER" BINARY="$BINARY" DIST="$DIST" ARCH_LABEL="$ARCH_LABEL" \
+            ./packaging/macos/package-app.sh
+          VERSION="$VER" DIST="$DIST" ARCH_LABEL="$ARCH_LABEL" \
+            ./packaging/macos/package-pkg.sh
+          PKG="$DIST/SessionLedger-${VER}-${ARCH_LABEL}.pkg"
+          test -f "$PKG"
+          cp "$PKG" dist-out/
+          # Also ship a tarball of the .app for convenience.
+          APP_TAR="SessionLedger-${VER}-${ARCH_LABEL}.app.tar.gz"
+          tar czf "dist-out/${APP_TAR}" -C "$DIST" SessionLedger.app
+          echo "PKG_ASSET=$(basename "$PKG")" >> "$GITHUB_ENV"
+          echo "APP_TAR_ASSET=${APP_TAR}" >> "$GITHUB_ENV"
+
+      - name: package Linux .deb (best effort)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          VER="${{ steps.version.outputs.version }}"
+          BINARY="$PWD/target/${{ matrix.target }}/release/sl-viewer"
+          DIST="$PWD/packaging/dist"
+          mkdir -p "$DIST" dist-out
+          chmod +x packaging/linux/package-deb.sh
+          VERSION="$VER" BINARY="$BINARY" DIST="$DIST" ARCH=amd64 \
+            ./packaging/linux/package-deb.sh
+          cp "$DIST/sessionledger_${VER}_amd64.deb" dist-out/
+
+      - name: package Linux AppImage (best effort)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          VER="${{ steps.version.outputs.version }}"
+          BINARY="$PWD/target/${{ matrix.target }}/release/sl-viewer"
+          DIST="$PWD/packaging/dist"
+          mkdir -p "$DIST" dist-out
+          chmod +x packaging/linux/package-appimage.sh
+          curl -fsSL -o /tmp/appimagetool-x86_64.AppImage \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x /tmp/appimagetool-x86_64.AppImage
+          export PATH="/tmp:$PATH"
+          ln -sf /tmp/appimagetool-x86_64.AppImage /tmp/appimagetool
+          if ! VERSION="$VER" BINARY="$BINARY" DIST="$DIST" ARCH=x86_64 \
+              ./packaging/linux/package-appimage.sh; then
+            APPIMAGE_EXTRACT_AND_RUN=1 VERSION="$VER" BINARY="$BINARY" DIST="$DIST" ARCH=x86_64 \
+              ./packaging/linux/package-appimage.sh
+          fi
+          cp "$DIST/SessionLedger-${VER}-x86_64.AppImage" dist-out/
+
+      - name: attest platform artifacts
+        if: github.repository == 'KooshaPari/SessionLedger'
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: dist-out/*
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ${{ matrix.target }}
+          path: dist-out/*
+          if-no-files-found: error
+
+  smoke-windows:
+    name: smoke · Windows ZIP + MSI
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: x86_64-pc-windows-msvc
+          path: artifact
+
+      - name: portable ZIP --version
+        shell: pwsh
+        run: |
+          $archive = Get-ChildItem -LiteralPath artifact -Filter "sl-viewer-*.zip" -File |
+            Select-Object -First 1
+          if (-not $archive) {
+            throw "Windows release archive was not downloaded."
+          }
+          Expand-Archive -LiteralPath $archive.FullName -DestinationPath extracted
+          $binary = Get-ChildItem -LiteralPath extracted -Filter sl-viewer.exe -File -Recurse |
+            Select-Object -First 1
+          if (-not $binary) {
+            throw "sl-viewer.exe is missing from the Windows release archive."
+          }
+          & $binary.FullName --version
+          if ($LASTEXITCODE -ne 0) {
+            throw "sl-viewer.exe --version exited with code $LASTEXITCODE."
+          }
+
+      - name: MSI silent install → --version → uninstall
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $msi = Get-ChildItem -LiteralPath artifact -Filter "SessionLedger-*-x64.msi" -File |
+            Select-Object -First 1
+          if (-not $msi) {
+            throw "SessionLedger MSI was not downloaded."
+          }
+
+          $installDir = Join-Path $env:LOCALAPPDATA "Programs\SessionLedger"
+          $viewer = Join-Path $installDir "sl-viewer.exe"
+
+          Write-Host "Installing $($msi.Name) silently..."
+          $p = Start-Process -FilePath "msiexec.exe" -ArgumentList @(
+            "/i", $msi.FullName, "/qn", "/norestart"
+          ) -Wait -PassThru
+          if ($p.ExitCode -ne 0) {
+            throw "msiexec install exited with code $($p.ExitCode)."
+          }
+          if (-not (Test-Path -LiteralPath $viewer -PathType Leaf)) {
+            throw "Expected installed viewer at $viewer"
+          }
+
+          & $viewer --version
+          if ($LASTEXITCODE -ne 0) {
+            throw "Installed sl-viewer.exe --version exited with code $LASTEXITCODE."
+          }
+
+          Write-Host "Uninstalling MSI silently..."
+          $u = Start-Process -FilePath "msiexec.exe" -ArgumentList @(
+            "/x", $msi.FullName, "/qn", "/norestart"
+          ) -Wait -PassThru
+          if ($u.ExitCode -ne 0) {
+            throw "msiexec uninstall exited with code $($u.ExitCode)."
+          }
+
+          $deadline = (Get-Date).AddSeconds(60)
+          while ((Get-Date) -lt $deadline) {
+            if (-not (Test-Path -LiteralPath $installDir)) {
+              Write-Host "Install directory removed."
+              return
+            }
+            Start-Sleep -Seconds 2
+          }
+          throw "Install directory still present after uninstall: $installDir"
+
+  smoke-linux:
+    name: smoke · Linux release artifact
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: x86_64-unknown-linux-gnu
+          path: artifact
+
+      - name: install Linux runtime dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The viewer dlopens webkit2gtk/gtk/libxdo at startup; the runner
+          # image does not ship them (exit 127 otherwise).
+          sudo apt-get update
+          sudo apt-get install -y libxdo3 libwebkit2gtk-4.1-0 libgtk-3-0 \
+            libgdk-pixbuf-2.0-0 libayatana-appindicator3-1
+
+      - name: extract and run version
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$(printf '%s\n' artifact/sl-viewer-*.tar.gz)"
+          test -f "${archive}"
+          mkdir extracted
+          tar xzf "${archive}" -C extracted
+          binary="$(printf '%s\n' extracted/*/sl-viewer)"
+          test -x "${binary}"
+          "${binary}" --version
+
+      - name: verify optional Linux installers present or absent gracefully
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          debs=(artifact/sessionledger_*.deb)
+          apps=(artifact/SessionLedger-*.AppImage)
+          if ((${#debs[@]})); then
+            echo "deb present: ${debs[*]}"
+            dpkg-deb --info "${debs[0]}"
+          else
+            echo "No .deb attached (best-effort packaging skipped or failed)."
+          fi
+          if ((${#apps[@]})); then
+            echo "AppImage present: ${apps[*]}"
+            test -f "${apps[0]}"
+          else
+            echo "No AppImage attached (best-effort packaging skipped or failed)."
+          fi
+
+  signing-readiness:
+    name: signing readiness · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: platform signing readiness hard SelfCheck (unsigned posture)
+        shell: pwsh
+        run: ./scripts/signing-readiness-check.ps1 -SelfCheck
+
+  smoke-macos-pkg:
+    name: smoke · macOS PKG expand
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          name: aarch64-apple-darwin
+          path: artifact
+
+      - name: expand PKG and check app payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          pkg="$(printf '%s\n' artifact/SessionLedger-*-aarch64.pkg)"
+          test -f "${pkg}"
+          mkdir expanded
+          pkgutil --expand "${pkg}" expanded/pkg
+          # productbuild layout varies; search for the .app payload.
+          if find expanded -name 'SessionLedger.app' -type d | grep -q .; then
+            echo "Found SessionLedger.app inside PKG"
+          else
+            # Fallback: list package contents for diagnosis, then accept Payload presence.
+            find expanded -maxdepth 4 -print
+            test -n "$(find expanded -name Payload -type f | head -n 1)"
+            echo "PKG expands and contains a Payload (unsigned productbuild)."
+          fi
+
+  release:
+    name: create Release · attach assets
+    needs:
+      [
+        build,
+        signing-readiness,
+        smoke-windows,
+        smoke-linux,
+        smoke-macos-pkg,
+        oci-image,
+      ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: list assets
+        run: ls -lh artifacts/
+
+      - name: create checksums
+        working-directory: artifacts
+        run: |
+          set -euo pipefail
+          # Hash every shipped release file (archives, installers, SBOM later).
+          find . -maxdepth 1 -type f ! -name SHA256SUMS ! -name 'SHA256SUMS.*' \
+            -printf '%P\n' | sort | xargs -r sha256sum > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: install cargo-cyclonedx
+        run: cargo install cargo-cyclonedx --version 0.5.9 --locked
+
+      - name: create CycloneDX SBOM
+        run: |
+          cargo cyclonedx --format json
+          cp session-ledger.cdx.json artifacts/session-ledger.cdx.json
+          # Refresh checksums to include the SBOM.
+          (
+            cd artifacts
+            find . -maxdepth 1 -type f ! -name SHA256SUMS ! -name 'SHA256SUMS.*' \
+              -printf '%P\n' | sort | xargs -r sha256sum > SHA256SUMS
+          )
+
+      - name: validate release CycloneDX SBOM anchors
+        shell: pwsh
+        run: ./scripts/sbom-validate-check.ps1 -Path artifacts/session-ledger.cdx.json
+
+      - name: attest Release assets
+        id: provenance
+        if: github.repository == 'KooshaPari/SessionLedger'
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: artifacts/*
+
+      - name: report provenance status
+        if: always()
+        shell: bash
+        run: |
+          if [ "${{ github.repository }}" != "KooshaPari/SessionLedger" ]; then
+            echo "::notice::Build provenance skipped outside KooshaPari/SessionLedger because OIDC attestations may be unavailable on forks."
+            echo "### Build provenance: skipped outside canonical repository" >> "$GITHUB_STEP_SUMMARY"
+          elif [ "${{ steps.provenance.outcome }}" = "success" ]; then
+            echo "::notice::Published GitHub build provenance for Release assets."
+            echo "### Build provenance: published" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::error::Build provenance failed for KooshaPari/SessionLedger Release assets; release publication is blocked."
+            echo "### Build provenance: failed (blocking)" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: derive version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ github.ref_name }}"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      - name: create Release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "SessionLedger ${{ github.ref_name }}"
+          body: |
+            ## SessionLedger ${{ github.ref_name }}
+
+            Desktop Dioxus viewer + portable `sl-daemon` archives. Installers are
+            **unsigned** (Authenticode / Apple notarization deferred — ADR 0003).
+
+            ### Portable archives
+
+            | Asset | Platform |
+            | ----- | -------- |
+            | `sl-viewer-${{ steps.version.outputs.version }}-x86_64-unknown-linux-gnu.tar.gz` | Linux viewer (x86_64) |
+            | `sl-daemon-${{ steps.version.outputs.version }}-x86_64-unknown-linux-gnu.tar.gz` | Linux daemon (x86_64) |
+            | `sl-viewer-${{ steps.version.outputs.version }}-x86_64-apple-darwin.tar.gz` | macOS viewer (Intel) |
+            | `sl-daemon-${{ steps.version.outputs.version }}-x86_64-apple-darwin.tar.gz` | macOS daemon (Intel) |
+            | `sl-viewer-${{ steps.version.outputs.version }}-aarch64-apple-darwin.tar.gz` | macOS viewer (Apple Silicon) |
+            | `sl-daemon-${{ steps.version.outputs.version }}-aarch64-apple-darwin.tar.gz` | macOS daemon (Apple Silicon) |
+            | `sl-viewer-${{ steps.version.outputs.version }}-x86_64-pc-windows-msvc.zip` | Windows viewer (x86_64) |
+            | `sl-daemon-${{ steps.version.outputs.version }}-x86_64-pc-windows-msvc.zip` | Windows daemon (x86_64) |
+
+            ### Installers (unsigned)
+
+            | Asset | Notes |
+            | ----- | ----- |
+            | `SessionLedger-<ver>-x64.msi` | WiX v4 per-user MSI (Windows) |
+            | `SessionLedger-<ver>-aarch64.pkg` | productbuild PKG (Apple Silicon) |
+            | `SessionLedger-<ver>-x86_64.pkg` | productbuild PKG (Intel) |
+            | `SessionLedger-<ver>-aarch64.app.tar.gz` / `…-x86_64.app.tar.gz` | Unsigned `.app` bundles |
+            | `sessionledger_<ver>_amd64.deb` | Best-effort Debian package |
+            | `SessionLedger-<ver>-x86_64.AppImage` | Best-effort AppImage |
+
+            Verify archive hashes with `SHA256SUMS`. CI also attempts to publish
+            `SHA256SUMS.sigstore.json`, a best-effort cosign keyless signature bundle.
+            `session-ledger.cdx.json` is the CycloneDX SBOM. GitHub build provenance
+            is required for canonical KooshaPari/SessionLedger releases and can be
+            verified with `gh attestation`.
+
+            CI unconditionally builds, pushes, keyless-cosign signs, attests,
+            and blocking-verifies `ghcr.io/kooshapari/sl-daemon` on every
+            canonical `v*` tag (`continue-on-error: false`). Forks credential-gate
+            OCI; portable archives remain valid when OCI is skipped.
+
+            See [`docs/ops/distribution.md`](https://github.com/KooshaPari/SessionLedger/blob/main/docs/ops/distribution.md).
+          draft: false
+          prerelease: false
+          files: artifacts/*
+
+  sign-checksums:
+    name: sign checksums · keyless (best effort)
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: download published checksums
+        id: download
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        # --repo is required: gh resolves the default repository from the git
+        # remote, and this job has no checkout, so it otherwise fails with
+        # "not a git repository" and silently skips signing.
+        run: gh release download "${{ github.ref_name }}" --repo "${{ github.repository }}" --pattern SHA256SUMS
+
+      - name: install cosign
+        id: cosign
+        if: steps.download.outcome == 'success'
+        continue-on-error: true
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      - name: sign checksums with GitHub OIDC
+        id: sign
+        if: steps.cosign.outcome == 'success'
+        continue-on-error: true
+        run: cosign sign-blob --yes --bundle SHA256SUMS.sigstore.json SHA256SUMS
+
+      - name: publish Sigstore bundle
+        id: publish
+        if: steps.sign.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.ref_name }}" --repo "${{ github.repository }}" SHA256SUMS.sigstore.json --clobber
+
+      - name: report signing status
+        if: always()
+        shell: bash
+        run: |
+          if [ "${{ steps.publish.outcome }}" = "success" ]; then
+            echo "::notice::Published SHA256SUMS.sigstore.json (cosign keyless signature)."
+            echo "### Cosign signing: published" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::notice::Cosign signing was skipped or failed; the unsigned release remains valid. download=${{ steps.download.outcome }}, install=${{ steps.cosign.outcome }}, sign=${{ steps.sign.outcome }}, publish=${{ steps.publish.outcome }}"
+            echo "### Cosign signing: skipped or unavailable (non-blocking)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  oci-image:
+    name: OCI image · build + cosign
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: detect OCI release gate
+        id: oci_gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.repository }}" != "KooshaPari/SessionLedger" ]; then
+            echo "required=false" >> "$GITHUB_OUTPUT"
+            echo "skip_reason=Outside canonical KooshaPari/SessionLedger; GHCR packages:write and OIDC attestations are unavailable on forks." >> "$GITHUB_OUTPUT"
+          else
+            echo "required=true" >> "$GITHUB_OUTPUT"
+            echo "skip_reason=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: normalize image name (GHCR requires lowercase)
+        id: image
+        if: steps.oci_gate.outputs.required == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          owner="$(printf '%s' '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          echo "name=ghcr.io/${owner}/sl-daemon" >> "$GITHUB_OUTPUT"
+
+      - name: Docker metadata
+        id: meta
+        if: steps.oci_gate.outputs.required == 'true'
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=ref,event=tag
+            type=raw,value=latest,enable=${{ !contains(github.ref_name, '-') }}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        if: steps.oci_gate.outputs.required == 'true'
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+
+      - name: Log in to GHCR
+        id: login
+        if: steps.oci_gate.outputs.required == 'true'
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push sl-daemon OCI image
+        id: build
+        if: steps.oci_gate.outputs.required == 'true'
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          file: crates/sl-daemon/Containerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
+          sbom: false
+
+      - name: install cosign
+        id: cosign
+        if: steps.oci_gate.outputs.required == 'true'
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      - name: cosign sign image (keyless)
+        id: sign
+        if: steps.oci_gate.outputs.required == 'true'
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          set -euo pipefail
+          IMAGE="${{ steps.image.outputs.name }}"
+          test -n "${DIGEST}"
+          cosign sign --yes "${IMAGE}@${DIGEST}"
+
+      - name: attest OCI image
+        id: attest
+        if: steps.oci_gate.outputs.required == 'true'
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ steps.image.outputs.name }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+      # Policy: continue-on-error: false (default). Canonical tag releases require
+      # oci-cosign-verify before the Release job publishes assets.
+      - name: oci-cosign-verify (blocking)
+        id: verify
+        if: steps.oci_gate.outputs.required == 'true'
+        continue-on-error: false
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = "Stop"
+          ./scripts/oci-cosign-verify.ps1 `
+            -Tag "${{ github.ref_name }}" `
+            -Digest "${{ steps.build.outputs.digest }}" `
+            -RequireAttestation
+
+      - name: report OCI signing status
+        if: always()
+        shell: bash
+        run: |
+          if [ "${{ steps.oci_gate.outputs.required }}" != "true" ]; then
+            echo "::notice::OCI image build/sign/verify skipped: ${{ steps.oci_gate.outputs.skip_reason }}"
+            echo "### OCI cosign: skipped (credential-gated fork)" >> "$GITHUB_STEP_SUMMARY"
+            echo "${{ steps.oci_gate.outputs.skip_reason }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "Portable Release archives remain valid. Canonical releases require unconditional blocking verify; deploy gate: \`scripts/oci-cosign-verify.ps1\` when a digest was published on a prior canonical release." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "${{ steps.verify.outcome }}" = "success" ]; then
+            echo "::notice::Published and verified keyless cosign + attestation for ${{ steps.image.outputs.name }}@${{ steps.build.outputs.digest }}."
+            echo "### OCI cosign: published + verified (unconditional blocking)" >> "$GITHUB_STEP_SUMMARY"
+            echo "Digest: \`${{ steps.build.outputs.digest }}\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "Verify-on-deploy: \`pwsh ./scripts/oci-cosign-verify.ps1 -Tag ${{ github.ref_name }} -Digest ${{ steps.build.outputs.digest }}\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::error::OCI build/sign/attest/verify failed for KooshaPari/SessionLedger; release publication is blocked."
+            echo "### OCI cosign: failed (blocking)" >> "$GITHUB_STEP_SUMMARY"
+            echo "meta=${{ steps.meta.outcome }}, buildx=${{ steps.buildx.outcome }}, login=${{ steps.login.outcome }}, build=${{ steps.build.outcome }}, cosign=${{ steps.cosign.outcome }}, sign=${{ steps.sign.outcome }}, attest=${{ steps.attest.outcome }}, verify=${{ steps.verify.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi

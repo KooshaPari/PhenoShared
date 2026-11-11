@@ -1,0 +1,297 @@
+# Adapter Contract
+
+Normative contract for every Kiro harness adapter in this package, and for any third harness
+that wants to present the same surface to an MCP client. The contract has two halves: the
+result envelope, where every adapter action returns exactly one JSON object with a fixed
+set of keys so callers branch on `code` and never on the text of `stderr`; and the tool
+surface, a fixed list of MCP tools with fixed parameter names. Anything that satisfies
+both halves is interchangeable from an MCP client's point of view.
+
+---
+
+## 1. Result envelope
+
+Every adapter call returns one JSON object with these ten keys, in this order.
+
+| Key | Type | Meaning |
+|---|---|---|
+| `ok` | bool | `true` only when `code` is `OK`. |
+| `harness` | string | Which adapter produced this: `kirocrew` or `kirocode`. The jcode bridge reports `jcode-api` for harness-API actions and `jcode` for task-backend actions. |
+| `action` | string | The action name, matching the adapter method. |
+| `code` | string | One of the six result codes below. |
+| `detail` | string | One-line human summary. Never parse it. |
+| `data` | object | Action-specific structured payload. Schema varies per action. |
+| `stdout` | string | Captured stdout, ANSI stripped and redacted. |
+| `stderr` | string | Captured stderr, ANSI stripped and redacted. |
+| `duration_ms` | int | Wall-clock milliseconds for the action. |
+| `hints` | array of string | Remediation steps. Populated mainly on failure. |
+
+`stdout` and `stderr` are truncated to 20,000 characters. When truncation
+happens, the tail is `...[truncated N chars]`. Source:
+`src/kiro_adapters/result.py` (`AdapterResult.to_dict`).
+
+### Result codes
+
+| Code | `ok` | Meaning |
+|---|---|---|
+| `OK` | true | The action completed. `data` holds the payload. |
+| `NOT_INSTALLED` | false | The harness binary could not be found or could not be launched. The environment is missing the tool. |
+| `BLOCKED` | false | The harness is installed but not ready for this action. A readiness gate failed. Remediation is in `hints`. |
+| `TIMEOUT` | false | The child process exceeded the action timeout and was terminated. |
+| `ERROR` | false | The harness ran and failed, or the request was invalid (empty prompt, missing spec file). |
+| `UNSUPPORTED` | false | The harness is installed but the adapter cannot infer a usable invocation for it. |
+
+`NOT_INSTALLED` versus `BLOCKED` is the distinction that matters most: `NOT_INSTALLED` means
+"install the tool", `BLOCKED` means "the tool is there, fix its state". See `docs/OPERATIONS.md`.
+
+---
+
+### The jcode bridge uses the same envelope
+
+`jcode_bridge` (see `docs/JCODE-API.md`) returns the same ten keys and the same six codes, so a
+client that already branches on `code` needs no new vocabulary. Two harness values distinguish it:
+`jcode-api` for the daemon-API actions and `jcode` for the one-shot task backend. `BLOCKED` is not
+produced by the API actions; a spawn failure is `NOT_INSTALLED`, a deadline overrun is `TIMEOUT`,
+and a protocol violation or invalid argument is `ERROR`.
+
+## 2. Tool surface
+
+Fourteen tools: the ten harness tools and, since the agent-session inventory landing, four
+read-only inventory tools. The inventory tools never launch a harness, never spend a model
+call, and never write to a session store. They read the session artifacts each harness already
+leaves on disk and return them in the same envelope.
+
+| Tool | Required | Optional | Adapter action | Cost |
+|---|---|---|---|---|
+| `kirocrew_status` | none | none | `KiroCrewAdapter.status` | none |
+| `kirocrew_agents` | none | none | `KiroCrewAdapter.list_agents` | none |
+| `kirocrew_ask` | `message` | `agent`, `model`, `timeout_secs` | `KiroCrewAdapter.ask` | one model call |
+| `kirocrew_spawn` | `prompt` | `agent`, `crew`, `background`, `timeout_secs` | `KiroCrewAdapter.spawn` | one model call |
+| `kirocrew_spawn_list` | none | none | `KiroCrewAdapter.spawn_list` | none |
+| `kirocrew_run_spec` | `spec_path` | `name`, `no_test`, `timeout_secs` | `KiroCrewAdapter.run_spec` | one long agent run |
+| `kirocrew_dashboard_url` | none | `ttl` | `KiroCrewAdapter.dashboard_url` | none |
+| `kirocode_status` | none | none | `KiroCodeAdapter.status` | one `--help` probe |
+| `kirocode_ask` | `prompt` | `cwd`, `timeout_secs` | `KiroCodeAdapter.ask` | one model call |
+| `kiro_dispatch` | `harness`, `prompt` | `agent`, `timeout_secs` | routes to `ask` on the chosen harness | one model call |
+| `agent_sessions_list` | none | `limit`, `include_stale` | inventory enumeration over the host's session stores | none, read-only |
+| `agent_session_get` | `session_uid` | none | inventory lookup of one session envelope | none, read-only |
+| `agent_session_history` | `session_uid` | `limit` | inventory bounded history slice | none, read-only |
+| `agent_sources` | none | none | inventory store enumeration | none, read-only |
+
+Parameter semantics:
+
+- `timeout_secs` is a wall-clock cap in seconds. It maps onto the adapter
+  timeout and, where relevant, is also passed to the child CLI as `--timeout`.
+- `background` on `kirocrew_spawn` maps to `--async`, so the spawn returns
+  immediately and the subagent shows up in `kirocrew_spawn_list`.
+- `no_test` on `kirocrew_run_spec` maps to `--no-test`, which skips the build
+  and test verification step after each step of the spec run.
+- `ttl` on `kirocrew_dashboard_url` maps to `--ttl`. The CLI default is 20h.
+- `harness` on `kiro_dispatch` is exactly `"kirocrew"` or `"kirocode"`.
+- `include_stale` on `agent_sessions_list` defaults to `true`. Set it to `false` to drop
+  sessions whose process is no longer live. The stale flag is derived from the store's own
+  metadata, so it is a hint, not proof, that a session is resumable.
+- `session_uid` on `agent_session_get` and `agent_session_history` is the uid returned by
+  `agent_sessions_list`. An unknown uid is `ERROR` with a hint to list the available uids; it is
+  never `NOT_INSTALLED`, because the inventory layer needs no external binary.
+- `limit` bounds the number of sessions returned by `agent_sessions_list` and the number of
+  history items returned by `agent_session_history`. `agent_session_history` never returns a
+  whole transcript: it applies the registry's default history limit when `limit` is omitted.
+- `agent_sources` takes no parameters. It reports one entry per session store the host exposes,
+  each with a `present` flag, so a caller can distinguish "this host has no Codex sessions" from
+  "this host cannot detect Codex sessions at all".
+
+### Read-only guarantees for the inventory tools
+
+The four inventory tools carry three guarantees a caller may rely on.
+
+1. **No child process.** `agent_sessions_list`, `agent_session_get`, `agent_session_history` and
+   `agent_sources` are direct file reads. They never resolve a harness binary, never probe
+   `--help`, and never start a daemon or a model process.
+2. **Bounded output.** History is a slice, not a transcript, and it is capped by `limit` or the
+   registry default. A caller asking for a large `limit` still gets redacted text.
+3. **Same envelope, no new codes.** `harness` is `inventory`. These tools produce `OK` or
+   `ERROR` only. They cannot produce `NOT_INSTALLED`, `BLOCKED`, `TIMEOUT` or `UNSUPPORTED`,
+   because there is no external binary and no readiness gate to fail.
+
+Read-only means the inventory surface never writes: it does not start, adopt, resume, cancel or
+close a session. Acting on a session is deliberately out of scope for this contract.
+
+### File-backed versus CLI-backed sources
+
+The inventory layer reads two kinds of source, and the contract keeps them apart.
+
+| Kind | Sources | How they are read |
+|---|---|---|
+| File-backed | `jcode`, `kcode`, `kirocrew` | Direct file reads of each harness's on-disk store. This is the whole of `KNOWN_SOURCES` and the whole of the "a discovery call is a file read" guarantee. |
+| CLI-backed | `sharecli-session`, `herdr-pane` | A `sharecli session list` subprocess, and a `herdr api snapshot` subprocess over HERDR's socket. Each is CLI-backed by necessity: ShareCLI is the authority on which ledger it answers from, and HERDR's own server owns the snapshot's wire framing. `herdr-pane` reports only the agents HERDR itself enrolled (an agent appears only after self-reporting into HERDR's socket), so it is not a host-wide process inventory. |
+
+The CLI-backed source is **not** in `KNOWN_SOURCES`. It is gated behind an explicit opt-in,
+`include_cli=True` on the registry's discovery functions, and behind the environment variable
+`KIRO_INVENTORY_ALLOW_CLI_SOURCES=1` at the MCP edge. Both default to off, for one reason: an
+MCP tool call that silently spawns a subprocess from an agent turn is a different risk class
+from reading a file, so it must be an operator decision, never a model decision.
+
+To enable ShareCLI session detection, set the variable in the server's environment:
+
+```bash
+KIRO_INVENTORY_ALLOW_CLI_SOURCES=1 kiro-adapter-mcp --mode inventory
+```
+
+There is no tool argument for it: the model cannot turn it on for itself. When it is off (the
+default), a ShareCLI uid is unrecognised by `agent_session_get`/`agent_session_history` and a
+`sharecli-session` envelope never appears in `agent_sessions_list`, even if a ShareCLI binary is
+installed. When it is on, a malformed or failing ShareCLI invocation still degrades to zero
+sessions rather than raising, exactly like a broken file-backed store.
+
+### jcode bridge tools, a separate server
+
+The `jcode-bridge` MCP server is not part of the ten above; it advertises its own ten tools and
+follows this same contract. Three of them are the daemon-API surface:
+
+| Tool | Required | Optional | Backend action | Cost |
+|---|---|---|---|---|
+| `jcode_api_health` | none | none | `JcodeApiBackend.health` | one spawn, no session |
+| `jcode_api_ask` | `prompt` | `cwd`, `timeout_secs`, `keep_session` | `JcodeApiBackend.ask` | one model call |
+| `jcode_api_sessions` | none | `limit`, `timeout_secs` | `JcodeApiBackend.sessions` | none |
+
+The remaining seven are the one-shot task backend: `jcode_health`, `jcode_run`, `jcode_task_start`,
+`jcode_task_status`, `jcode_task_output`, `jcode_task_cancel`, `jcode_task_list`. `timeout_secs` is
+bounded to `(0, 86400]` at the MCP edge.
+
+### Default timeouts
+
+Taken from the adapter modules. A caller that passes `timeout_secs` overrides
+the default.
+
+| Action | Default seconds |
+|---|---|
+| `kirocrew_status`, `kirocrew_agents`, `kirocrew_spawn_list`, `kirocrew_dashboard_url` | 30 |
+| `kirocrew_ask` | 900 |
+| `kirocrew_spawn` | 1800 |
+| `kirocrew_run_spec` | 3600 |
+| `kirocode_ask` | 900 |
+
+The four inventory tools have no timeout entry. They do not start a child process, so there is
+no process to cap; a slow filesystem is the only cost and it is bounded by the store read.
+
+---
+
+## 3. Readiness gates
+
+A readiness gate runs *before* an action that would spend a model call. If the
+gate fails, the adapter returns `BLOCKED` with the failing check in `hints`,
+and no child model process is started.
+
+### kirocrew
+
+| Check | Applies to | Failure code | Remediation in `hints` |
+|---|---|---|---|
+| CLI binary resolvable | every action | `NOT_INSTALLED` | install Kiro Crew, or set `KIROCREW_BIN` |
+| KAS engine bundle installed | `ask`, `spawn`, `run_spec` | `BLOCKED` | `kirocrew kas install` |
+| Gateway running | `spawn` only | `BLOCKED` | `kirocrew gateway` |
+| Spec file exists | `run_spec` | `ERROR` | pass an existing spec path |
+
+`ask` and `run_spec` do **not** require a running gateway. `spawn` does,
+because a subagent is dispatched through the gateway. The read-only probes
+(`status`, `agents`, `spawn_list`, `dashboard_url`) never gate on KAS or the
+gateway, they report that state instead.
+
+### kirocode
+
+| Check | Applies to | Failure code | Remediation in `hints` |
+|---|---|---|---|
+| CLI binary resolvable | every action | `NOT_INSTALLED` | install, or set `KIROCODE_BIN`, or write `~/.kirocode/adapter.json` |
+| A non-interactive argv can be inferred | `ask` | `UNSUPPORTED` | write an explicit argv template in `~/.kirocode/adapter.json` |
+
+Binary resolution order for kirocode is: `KIROCODE_BIN` environment variable,
+then the `bin` key of `~/.kirocode/adapter.json`, then `PATH` lookup of
+`kirocode`, `kiro-cli`, `kiro`.
+
+---
+
+## 4. Redaction rules
+
+Every string an adapter returns passes through `redact` before it leaves the
+process. The rules, in order of application:
+
+| Pattern | Replacement |
+|---|---|
+| JWT, that is `eyJ....` header, payload, signature | `<jwt:redacted>` |
+| `token`, `access_token`, `api_key`, `api-key`, `secret`, `password`, `authorization` followed by `=` or `:` and a value of 8 or more characters | `<redacted>` |
+| `Bearer` followed by a value of 8 or more characters | `<redacted>` |
+| `sk-`, `pk-`, `rk-` prefixed provider keys of 12 or more characters | `<key:redacted>` |
+| `AKIA` followed by 16 uppercase alphanumerics | `<aws-key:redacted>` |
+| `ghp_` followed by 20 or more alphanumerics | `<gh-token:redacted>` |
+
+The kirocrew dashboard URL carries a signed JWT. `kirocrew_dashboard_url`
+redacts the URL by default and reports `token_included: false`. The adapter
+API accepts `include_token=True` for a deliberate opt-in, but the MCP tool
+surface does not expose that switch, so a token never reaches a tool result, a
+log line, or a commit. Redaction is pattern based, so it will not catch a
+credential in an unfamiliar format. Treat adapter output as potentially
+sensitive.
+
+---
+
+## 5. Why argv only
+
+The adapter never invokes a shell. Every child process is launched with
+`subprocess.run` against an argument list, never a command string. A prompt
+containing `; rm -rf /` is therefore a prompt, not a command. Two supporting
+rules. **Environment scrubbing:** `PYTHONPATH` and `PYTHONHOME` are removed from
+the child environment, because a bundled interpreter that inherited
+`PYTHONPATH` could otherwise import foreign code. **Process isolation:** child
+processes start in a new session (`start_new_session=True`), so a timeout kill
+targets the child process group rather than leaving orphans behind. ANSI escape
+sequences are stripped from captured output.
+
+---
+
+## 6. Implementing the contract for a third harness
+
+A new harness adapter must satisfy the following.
+
+1. **Return `AdapterResult`.** Build it with `success` or `failure` from `kiro_adapters.result`.
+2. **Never raise for ordinary failure.** A missing binary, a non-zero exit and
+   a timeout are all results, not exceptions. Call `run` from
+   `kiro_adapters.runner`, which already converts them.
+3. **Map failures to the right code.** Binary missing is `NOT_INSTALLED`,
+   readiness gate failure is `BLOCKED`, uninferable invocation is
+   `UNSUPPORTED`, timeout is `TIMEOUT`, everything else is `ERROR`.
+4. **Gate before spending.** If the action costs a model call and a precondition
+   is unmet, return `BLOCKED` with the remediation in `hints` rather than
+   starting the child process.
+5. **Redact.** Run stdout, stderr, and any string inside `data` through
+   `redact` or `redact_obj`.
+6. **Resolve the binary.** Use `resolve_binary` with an environment override
+   variable and an ordered candidate list, so the user can pin a path.
+7. **Do not invent flags.** Probe the binary's own `--help` and only use a flag
+   you actually observed, or accept an explicit argv template from the user.
+8. **Expose it through the MCP server** under a `kiro<name>_` prefix, and add
+   it to the `kiro_dispatch` routing table.
+
+---
+
+## 7. Surfaces that implement this contract
+
+All modules below live in `src/kiro_adapters/`.
+
+| Surface | Module | Notes |
+|---|---|---|
+| MCP server | `mcp_server.py` | JSON-RPC 2.0 over stdio, protocol `2024-11-05`, name `kiro-adapters`. Advertises the fourteen tools in section 2, including the four read-only inventory tools. A `tools/call` returns the envelope as tool text, with `isError` set when `ok` is false. |
+| CLI | `cli.py` | `kiro-adapter` subcommands mirror the same actions and return the same envelope. `--json` prints the envelope, exit code is 0 when `ok` and 1 when not. |
+| kirocrew adapter | `kirocrew.py` | Implements the kirocrew side. |
+| kirocode adapter | `kirocode.py` | Implements the kirocode side. |
+
+The jcode bridge lives in `src/jcode_bridge/` and returns the same envelope.
+
+| Surface | Module | Notes |
+|---|---|---|
+| daemon-API backend | `api.py` | Spawns `jcode api --stdio` and maps harness-API outcomes onto the envelope. `harness` is `jcode-api`. |
+| protocol client | `api_client.py` | NDJSON frame state machine, version-negotiated `hello`/`hello_ok`, session lifecycle, turn collection. |
+| task backend | `backend.py` | One-shot `jcode run --json` and detached tasks. `harness` is `jcode`. |
+| MCP server | `mcp_server.py` | Server name `jcode-bridge`, protocol `2024-11-05`, the three `jcode_api_*` tools plus seven task tools. |
+| CLI | `cli.py` | `jcode-bridge` with `api-health`, `api-ask`, `api-sessions` and the task subcommands. `--json` is a global flag. |
+
+The current verification status of each surface is recorded in `README.md`.

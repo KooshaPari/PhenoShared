@@ -20,7 +20,11 @@ fn chunked_text_covers_full_input() {
     let body = "hello world\n\nsecond paragraph here\n\nthird paragraph";
     let chunks = Chunker::default().chunk(body, "card");
     assert!(!chunks.is_empty());
-    let joined: String = chunks.iter().map(|c| c.text.as_str()).collect::<Vec<_>>().join("\n\n");
+    let joined: String = chunks
+        .iter()
+        .map(|c| c.text.as_str())
+        .collect::<Vec<_>>()
+        .join("\n\n");
     assert_eq!(joined, body);
 
     // Larger text: no character of the input may be lost across the
@@ -39,7 +43,10 @@ fn chunked_text_covers_full_input() {
         .map(|c| c.text.as_str())
         .collect::<Vec<_>>()
         .join("\n\n");
-    assert_eq!(joined, big, "small-paragraph input must be losslessly chunked");
+    assert_eq!(
+        joined, big,
+        "small-paragraph input must be losslessly chunked"
+    );
 }
 
 #[test]
@@ -49,7 +56,10 @@ fn chunks_have_increasing_index_and_nonempty_text() {
         .collect::<Vec<_>>()
         .join("\n\n");
     let chunks: Vec<Chunk> = Chunker::default().chunk(&body, "card");
-    assert!(chunks.len() >= 2, "expected multiple chunks from 30 paragraphs");
+    assert!(
+        chunks.len() >= 2,
+        "expected multiple chunks from 30 paragraphs"
+    );
     let mut last_index: u32 = 0;
     for c in &chunks {
         assert!(

@@ -73,7 +73,7 @@ fn discrete_diffusion_l2_reconstruction_error_monotonically_decays_with_T_sqrt()
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
 
     let sweep = sweep_t_values();
     assert!(
@@ -116,7 +116,7 @@ fn discrete_diffusion_l2_reconstruction_error_monotonically_decays_with_T_sigmoi
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
 
     let sweep = sweep_t_values();
     assert!(
@@ -168,7 +168,7 @@ fn discrete_diffusion_l2_error_below_clipping_floor_at_T_large_sqrt() {
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
 
     let sweep = sweep_t_values();
     let t_large = *sweep.last().expect("non-empty sweep");
@@ -197,7 +197,7 @@ fn discrete_diffusion_l2_error_below_clipping_floor_at_T_large_sigmoid_k10() {
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
 
     let sweep = sweep_t_values();
     let t_large = *sweep.last().expect("non-empty sweep");
@@ -236,7 +236,7 @@ fn discrete_diffusion_l2_error_at_T_fixed_under_seed_sqrt() {
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
     let num_steps: usize = 64;
 
     let l2_a = reconstruction_l2_error(num_steps, Schedule::Sqrt, &tokens, vocab, mask_id, seed);

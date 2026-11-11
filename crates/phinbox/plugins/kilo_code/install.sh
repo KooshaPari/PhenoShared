@@ -5,26 +5,26 @@
 
 set -euo pipefail
 
-SRC="/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-tooling"
+SRC="${HOME}/CodeProjects/Phenotype/repos/phenotype-tooling"
 BIN_DIR="$SRC/target/debug"
 
 # 1. Resolve the phinbox-mcp binary (prefer installed, fall back to cargo target)
 if ! command -v phinbox-mcp >/dev/null 2>&1; then
-  TARGET="$BIN_DIR/phinbox-mcp"
-  if [[ -x "$TARGET" ]]; then
-    export PATH="$BIN_DIR:$PATH"
-    echo "→ using phinbox-mcp from $TARGET"
-  else
-    echo "→ building phinbox-mcp..."
-    (cd "$SRC" && cargo build -p phinbox --bin phinbox-mcp)
-    export PATH="$BIN_DIR:$PATH"
-  fi
+	TARGET="$BIN_DIR/phinbox-mcp"
+	if [[ -x $TARGET ]]; then
+		export PATH="$BIN_DIR:$PATH"
+		echo "→ using phinbox-mcp from $TARGET"
+	else
+		echo "→ building phinbox-mcp..."
+		(cd "$SRC" && cargo build -p phinbox --bin phinbox-mcp)
+		export PATH="$BIN_DIR:$PATH"
+	fi
 fi
 
 # 2. Write MCP server entry into ~/.config/kilo/kilo.jsonc
 export KILO_CONFIG="$HOME/.config/kilo/kilo.jsonc"
 mkdir -p "$(dirname "$KILO_CONFIG")"
-[[ -f "$KILO_CONFIG" ]] || echo '{}' > "$KILO_CONFIG"
+[[ -f $KILO_CONFIG ]] || echo '{}' >"$KILO_CONFIG"
 
 # Use Python to safely merge JSON (preserves comments in jsonc)
 python3 <<'PYEOF'
@@ -66,6 +66,12 @@ echo "→ installed skill at $SKILL_DEST"
 
 # 4. Verify
 echo "→ verification:"
-grep -q '"phinbox"' "$KILO_CONFIG" || { echo "FAIL: phinbox not registered in kilo.jsonc"; exit 1; }
-test -f "$SKILL_DEST" || { echo "FAIL: skill not installed"; exit 1; }
+grep -q '"phinbox"' "$KILO_CONFIG" || {
+	echo "FAIL: phinbox not registered in kilo.jsonc"
+	exit 1
+}
+test -f "$SKILL_DEST" || {
+	echo "FAIL: skill not installed"
+	exit 1
+}
 echo "✓ phinbox plugin installed for kilo (kilo_code)"

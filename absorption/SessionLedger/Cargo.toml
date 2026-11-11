@@ -1,0 +1,90 @@
+[workspace]
+# sl-daemon is its own workspace root (see crates/sl-daemon/Cargo.toml) so it can
+# resolve on macOS without sl-viewer's webkit2gtk-sys graph. It is excluded here.
+members = ["crates/sl-viewer"]
+exclude = ["crates/sl-daemon"]
+resolver = "2"
+
+[package]
+name = "session-ledger"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+description = "Session ledger: compile/distill agent sessions into injectable continuation bundles (Acceptance/Contract/Context/Intent), crash-recovery + duplicate-chat merge + lost-work localization"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/SessionLedger"
+readme = "README.md"
+
+[features]
+# Soft envelope stub is always compiled (sha2 keystream in src/envelope.rs; C02 L22).
+# Marker feature for envelope-crypto SelfCheck / CI evidence wiring.
+envelope-crypto = []
+# Enable reusable zstd compression adapters.
+compress = ["dep:zstd"]
+# Enable the rusqlite-backed Forge ingestion adapter and zstd decompression.
+sqlite = ["dep:rusqlite", "compress"]
+# Optional dhat heap-profiling smoke (tests/alloc_profile_dhat.rs only).
+alloc-profile = []
+# Optional Fluent catalog stub (C01 L16 Phase-1; src/i18n_fluent.rs).
+fluent-catalog = ["dep:fluent-bundle", "dep:unic-langid"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+sha2 = "0.11"
+time = { version = "0.3", features = ["serde", "formatting", "parsing"] }
+rusqlite = { version = "0.41", optional = true, features = ["bundled"] }
+zstd = { version = "0.14", optional = true }
+fluent-bundle = { version = "0.16", optional = true }
+unic-langid = { version = "0.9", optional = true }
+tracing = "0.1"
+
+# FFI / native build scripts (rusqlite bundled, zstd) cannot run under Miri.
+# Keep them off the miri graph so `cargo miri test --test race_model` stays a
+# pure-std smoke (see .github/workflows/miri-smoke.yml).
+[target.'cfg(not(miri))'.dev-dependencies]
+rusqlite = { version = "0.41", features = ["bundled"] }
+zstd = { version = "0.14" }
+tempfile = "3"
+criterion = { version = "0.8.2", default-features = false, features = ["cargo_bench_support"] }
+proptest = "1.11.0"
+# Counting allocator for the L8 allocation-budget smoke (tests/allocation_budget.rs).
+# Keeps unsafe inside the dependency; production builds stay on the System allocator.
+stats_alloc = "0.1.10"
+# Optional dhat heap profiler for the L8 alloc-profile smoke (tests/alloc_profile_dhat.rs).
+dhat = "0.3.3"
+# Live tokio mpsc/broadcast/SSE daemon-graph ports (tests/daemon_graph_tokio.rs; C00 L7).
+tokio = { version = "1", default-features = false, features = ["rt-multi-thread", "macros", "sync", "time"] }
+
+# Loom permutation checker — only resolved when RUSTFLAGS='--cfg loom'
+# (soft nightly / PR job in .github/workflows/loom-smoke.yml). Keeps default
+# `cargo test` free of the loom graph on Windows and the PR matrix.
+[target.'cfg(loom)'.dev-dependencies]
+loom = "0.7"
+
+[[test]]
+name = "alloc_profile_dhat"
+path = "tests/alloc_profile_dhat.rs"
+required-features = ["alloc-profile"]
+
+[[test]]
+name = "envelope_crypto"
+path = "tests/envelope_crypto.rs"
+required-features = ["envelope-crypto"]
+
+[[bench]]
+name = "pipeline"
+harness = false
+
+[lints.rust]
+unsafe_code = "forbid"
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(loom)'] }
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"

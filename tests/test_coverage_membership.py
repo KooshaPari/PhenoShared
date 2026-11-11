@@ -7,7 +7,7 @@ enter the workspace and vanish from the coverage gate without a word.
 
 The tests below use a FAKE cargo metadata document, a fake workflow and a fake
 ledger, so they are fast and deterministic: none of them depends on the real
-291-member workspace. The last test does run the guard against the real
+workspace's member count. The last test does run the guard against the real
 repository inputs, because "the real workspace is fully accounted for" is the
 property this change actually claims.
 """
@@ -18,6 +18,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -279,7 +280,26 @@ class MembershipGuardTests(unittest.TestCase):
         output = out.getvalue() + err.getvalue()
         self.assertEqual(code, 0, output)
         self.assertIn("every workspace member", output)
-        self.assertIn("291", output)
+        # Assert the reported counts are internally consistent rather than pinning a
+        # literal member count. A pinned number rots every time a crate is added or
+        # removed, and a stale literal (`291`) is exactly what left this test red
+        # after #844 dropped phenotype-dag-core from the workspace.
+        totals = {
+            key: int(value)
+            for key, value in re.findall(
+                r"^(workspace members|measured|excused):\s+(\d+)",
+                output,
+                re.MULTILINE,
+            )
+        }
+        self.assertEqual(
+            set(totals), {"workspace members", "measured", "excused"}, output
+        )
+        self.assertEqual(
+            totals["measured"] + totals["excused"],
+            totals["workspace members"],
+            output,
+        )
 
 
 class MetadataLoadingTests(unittest.TestCase):

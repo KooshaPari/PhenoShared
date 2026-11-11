@@ -30,3 +30,6 @@ uuid.workspace = true
 [[bin]]
 name = "fabric-graph-cli"
 path = "src/main.rs"
+
+[package.metadata.cargo-machete]
+ignored = ["uuid"]

@@ -38,7 +38,7 @@ use model_kernels::moe::{moe_dispatch, router_topk, shared_expert, weighted_redu
 use model_kernels::quantized::{ternary_matmul, ternary_pack, ternary_unpack, SignedTernary};
 use model_kernels::recurrent::{deltanet_chunk, deltanet_step};
 
-const SEED: u64 = 0xCAFE_BABE_DEAD_BEEF;
+const SEED: u64 = 0xcafe_babe_dead_beef;
 
 /// Build a deterministic vector of `f32` of length `n`.
 fn deterministic_vec(n: usize, salt: u64) -> Vec<f32> {

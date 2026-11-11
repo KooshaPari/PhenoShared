@@ -377,8 +377,18 @@ mod tests {
         let values = vec![SignedTernary::Pos; k * n];
         let (packed, scales, zeros) = ternary_pack(&values, k * n).unwrap();
         let mut out = vec![0.0f32; m * n];
-        ternary_matmul(&[1.0, 2.0, 3.0, 4.0], &packed, &scales, &zeros, k * n, m, k, n, &mut out)
-            .unwrap();
+        ternary_matmul(
+            &[1.0, 2.0, 3.0, 4.0],
+            &packed,
+            &scales,
+            &zeros,
+            k * n,
+            m,
+            k,
+            n,
+            &mut out,
+        )
+        .unwrap();
         assert_eq!(out, vec![10.0; n]);
     }
 

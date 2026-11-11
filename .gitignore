@@ -199,6 +199,11 @@ cmd/*/wire
 cmd/*/*.exe
 cmd/*/dist/
 
+# Go CLI build artifacts (agents/phenoagent/pheno-cli-go). A stray build of
+# this module was committed once; ignore it so it cannot come back.
+agents/phenoagent/pheno-cli-go/pheno-test
+agents/phenoagent/pheno-cli-go/pheno-test.exe
+
 # Archival absorption trees are verbatim copies of upstream repos. Their
 # vendor/ directories are part of the preserved content and must be tracked,
 # even though this repo ignores vendor/ for live builds.

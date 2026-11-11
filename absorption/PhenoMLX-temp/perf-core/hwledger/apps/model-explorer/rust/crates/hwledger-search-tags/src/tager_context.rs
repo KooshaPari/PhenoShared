@@ -90,12 +90,10 @@ impl TaggerContext {
     /// Effective `pipeline_tag`: the inline field, falling back to the raw
     /// model's `pipeline_tag`.
     pub fn effective_pipeline_tag(&self) -> Option<&str> {
-        self.pipeline_tag
-            .as_deref()
-            .or_else(|| {
-                self.raw_model
-                    .as_ref()
-                    .and_then(|r| r.pipeline_tag.as_deref())
-            })
+        self.pipeline_tag.as_deref().or_else(|| {
+            self.raw_model
+                .as_ref()
+                .and_then(|r| r.pipeline_tag.as_deref())
+        })
     }
 }

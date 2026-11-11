@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 libfuzzer-sys = "0.4"
+
+[package.metadata.cargo-machete]
+ignored = ["libfuzzer-sys"]

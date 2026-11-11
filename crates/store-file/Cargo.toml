@@ -17,3 +17,6 @@ uuid.workspace = true
 [dev-dependencies]
 tempfile.workspace = true
 tokio = { workspace = true, features = ["macros", "rt"] }
+
+[package.metadata.cargo-machete]
+ignored = ["serde"]

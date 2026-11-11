@@ -83,7 +83,7 @@ fn llama_dream_diffusion_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal p95=2200 must beat scalar p95=9000"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }

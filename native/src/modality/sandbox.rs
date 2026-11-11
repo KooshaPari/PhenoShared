@@ -341,7 +341,7 @@ impl SandboxDriver {
                 Err(_) => {
                     child.start_kill().ok();
                     child.wait().await.ok();
-                }
+                },
             }
         }
         Ok(())
@@ -353,12 +353,12 @@ impl SandboxDriver {
                 let mut cmd = tokio::process::Command::new(program);
                 cmd.args(args);
                 cmd
-            }
+            },
             SandboxBackend::Firejail => {
                 let mut cmd = tokio::process::Command::new(self.backend.binary());
                 cmd.arg("--noprofile").arg("--").arg(program).args(args);
                 cmd
-            }
+            },
             SandboxBackend::Runsc | SandboxBackend::GVisor => {
                 let mut cmd = tokio::process::Command::new(self.backend.binary());
                 cmd.arg("run")
@@ -366,16 +366,16 @@ impl SandboxDriver {
                     .arg(program)
                     .args(args);
                 cmd
-            }
+            },
             SandboxBackend::SandboxExec => {
                 let mut cmd = tokio::process::Command::new(self.backend.binary());
                 cmd.arg("-D").arg("/tmp/playcua.sb").arg(program).args(args);
                 cmd
-            }
+            },
             SandboxBackend::Firecracker => {
                 // Out of scope for this slice; invoke binary only.
                 tokio::process::Command::new(self.backend.binary())
-            }
+            },
         }
     }
 }

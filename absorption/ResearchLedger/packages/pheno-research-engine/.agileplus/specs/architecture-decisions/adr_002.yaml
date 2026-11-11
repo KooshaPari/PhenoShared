@@ -1,0 +1,6 @@
+id: ADR-002
+title: Tool System Implementation
+context: Tool System requires 1 code entities
+decision: Use python for Tool System
+consequences: Consistent codebase in python
+status: accepted

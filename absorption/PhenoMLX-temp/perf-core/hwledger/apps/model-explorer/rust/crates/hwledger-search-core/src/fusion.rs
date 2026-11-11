@@ -52,8 +52,7 @@ pub fn rrf_fuse(bm25: &[(String, f32)], semantic: &[(String, f32)], k: usize) ->
     const RRF_K: usize = 60;
 
     // Index every (id -> entry) so the two passes can fold into one map.
-    let mut map: std::collections::BTreeMap<String, Scored> =
-        std::collections::BTreeMap::new();
+    let mut map: std::collections::BTreeMap<String, Scored> = std::collections::BTreeMap::new();
 
     for (rank_zero, (id, score)) in bm25.iter().enumerate() {
         let entry = map.entry(id.clone()).or_insert_with(|| Scored {

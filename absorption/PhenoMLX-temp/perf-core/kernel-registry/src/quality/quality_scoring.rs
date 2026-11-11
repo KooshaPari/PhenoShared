@@ -210,14 +210,14 @@ pub fn evaluate_for_production(
                 return Err(QualityError::PromotionGateMissingEvidence {
                     gate: gate.id.clone(),
                 })
-            }
+            },
             Some(ev) if !gate.passes(ev.score) => {
                 return Err(QualityError::PromotionGateRejected {
                     gate: gate.id.clone(),
                     observed: ev.score,
                     threshold: gate.threshold,
                 });
-            }
+            },
             Some(_) => continue,
         }
     }

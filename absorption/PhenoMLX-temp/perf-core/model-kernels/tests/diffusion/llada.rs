@@ -74,8 +74,8 @@ fn llada_acceptance_trace_is_deterministic_across_runs() {
     let mut m1 = vec![true; n];
     let mut x2 = vec![mask_token; n];
     let mut m2 = vec![true; n];
-    let mut rng1 = Lcg::new(SEED ^ 0x11ADA);
-    let mut rng2 = Lcg::new(SEED ^ 0x11ADA);
+    let mut rng1 = Lcg::new(SEED ^ 0x11ada);
+    let mut rng2 = Lcg::new(SEED ^ 0x11ada);
     for _ in 0..total_steps {
         let logits1: Vec<f32> = (0..n * vocab).map(|_| rng1.next_signed()).collect();
         let logits2: Vec<f32> = (0..n * vocab).map(|_| rng2.next_signed()).collect();

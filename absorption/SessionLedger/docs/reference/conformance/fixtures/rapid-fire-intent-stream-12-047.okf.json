@@ -1,0 +1,130 @@
+{
+  "okf": "1.0",
+  "source_id": "rapid-fire-intent-stream-12-047",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "quick intent #0 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 0
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "quick intent #1 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 1
+      }
+    },
+    {
+      "id": "intent-2",
+      "type": "intent",
+      "label": "quick intent #2 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 2
+      }
+    },
+    {
+      "id": "intent-3",
+      "type": "intent",
+      "label": "quick intent #3 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 3
+      }
+    },
+    {
+      "id": "intent-4",
+      "type": "intent",
+      "label": "quick intent #4 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 4
+      }
+    },
+    {
+      "id": "intent-5",
+      "type": "intent",
+      "label": "quick intent #5 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 5
+      }
+    },
+    {
+      "id": "intent-6",
+      "type": "intent",
+      "label": "quick intent #6 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 6
+      }
+    },
+    {
+      "id": "intent-7",
+      "type": "intent",
+      "label": "quick intent #7 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 7
+      }
+    },
+    {
+      "id": "intent-8",
+      "type": "intent",
+      "label": "quick intent #8 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 8
+      }
+    },
+    {
+      "id": "intent-9",
+      "type": "intent",
+      "label": "quick intent #9 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 9
+      }
+    },
+    {
+      "id": "intent-10",
+      "type": "intent",
+      "label": "quick intent #10 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 10
+      }
+    },
+    {
+      "id": "intent-11",
+      "type": "intent",
+      "label": "quick intent #11 (rapid-fire)",
+      "properties": {
+        "user_turn_count": 1,
+        "phase": "stream",
+        "seq": 11
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "rapid-fire-intent-stream-12-047"
+  }
+}

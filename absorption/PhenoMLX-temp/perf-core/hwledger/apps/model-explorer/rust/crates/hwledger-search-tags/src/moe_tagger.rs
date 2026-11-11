@@ -87,7 +87,7 @@ pub fn tag(ctx: &TaggerContext) -> MoeTags {
             } else {
                 Some((t as f64 * (a as f64 / n as f64)).round() as u64)
             }
-        }
+        },
         _ => None,
     };
 

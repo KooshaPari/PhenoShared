@@ -78,7 +78,9 @@ mod inner {
 
     impl std::fmt::Debug for LanceAnn {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            f.debug_struct("LanceAnn").field("store", &self.store).finish()
+            f.debug_struct("LanceAnn")
+                .field("store", &self.store)
+                .finish()
         }
     }
 

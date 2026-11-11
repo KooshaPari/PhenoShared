@@ -122,7 +122,7 @@ decide block 'reboot'
 decide allow 'rm -rf ./build'
 decide allow 'rm -rf target/debug'
 decide allow 'rm -rf /tmp/compile-cache'
-decide allow 'rm -rf /Users/kooshapari/CodeProjects/foo/target'
+decide allow "rm -rf $HOME/CodeProjects/foo/target"
 decide allow 'rm -rf "$TMPDIR/scratch-1"'
 decide allow 'rm -f ./stale.lock'
 

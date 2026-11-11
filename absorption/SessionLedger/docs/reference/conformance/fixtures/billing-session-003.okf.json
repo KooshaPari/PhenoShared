@@ -1,0 +1,118 @@
+{
+  "okf": "1.0",
+  "source_id": "codex-session-003",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Add usage-based billing to the API proxy layer",
+      "properties": { "user_turn_count": 12 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "stripe integration complete",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "rate limit headers reflect remaining quota",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "billing dashboard renders for admin users",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "no credit card required for dev tier",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "must log all billing events",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/api-gateway" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "Usage billing" }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "existing billing tests pass",
+      "properties": {
+        "skipped_by": ["existing billing tests pass"],
+        "watch_files": ["src/middleware/usage.rs", "src/billing/"]
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 12
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+    }
+  ],
+  "provenance": { "corpus": "codex", "source_id": "codex-session-003" }
+}

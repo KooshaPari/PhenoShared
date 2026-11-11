@@ -1,0 +1,183 @@
+{
+  "okf": "1.0",
+  "source_id": "task-family-token-budget-032",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Enforce a hard token budget when projecting ContinuationBundle slices for inject",
+      "properties": {
+        "user_turn_count": 7,
+        "token_estimate": 210,
+        "budget_tokens": 512
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Expose total_token_estimate alongside avg_tokens on the metrics surface",
+      "properties": {
+        "user_turn_count": 5,
+        "token_estimate": 160,
+        "budget_tokens": 512
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "inject aborts when projected tokens exceed budget_tokens",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "GET /api/metrics reports total_tokens for the session family",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "CharCountTokenEstimator stays monotonic for OKF JSON bodies",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "token estimates remain planning proxies, not billing meters",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "do not change Harbor N/A boundary in EVAL_SCOPE",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/workspace/session-ledger" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": {
+        "title": "Token budget family",
+        "approx_tokens_saved_proxy": 48
+      }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "budget gate stays integer-only",
+      "properties": {
+        "watch_files": [
+          "src/domain/bundle.rs",
+          "crates/sl-daemon/src/metrics.rs",
+          "docs/ops/eval-compression.md"
+        ],
+        "skipped_by": ["Harbor token-burn ledger"]
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 12,
+        "budget_tokens": 512,
+        "total_token_estimate": 370
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "task-family-token-budget-032"
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "cursor",
+    "source_id": "task-family-token-budget-032"
+  }
+}

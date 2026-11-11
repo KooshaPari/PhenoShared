@@ -28,3 +28,6 @@ store-sqlite = { version = "0.3.8", path = "../store-sqlite" }
 
 [features]
 default = []
+
+[package.metadata.cargo-machete]
+ignored = ["chrono", "serde", "serde_json"]

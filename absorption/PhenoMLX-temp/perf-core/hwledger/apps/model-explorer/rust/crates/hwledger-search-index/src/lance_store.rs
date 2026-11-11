@@ -42,7 +42,7 @@ use futures::TryStreamExt;
 // dependency. See https://github.com/lancedb/lancedb/issues/3575.
 use lancedb::arrow::arrow_array::{Array, RecordBatch, StringArray};
 use lancedb::query::{ExecutableQuery, QueryBase};
-use lancedb::{Connection, DistanceType, Table, connect};
+use lancedb::{connect, Connection, DistanceType, Table};
 
 use crate::error::IndexError;
 
@@ -184,9 +184,7 @@ impl LanceStore {
         let vec_array = builder.finish();
 
         // Build the `id` column.
-        let ids = StringArray::from(
-            rows.iter().map(|r| r.id.as_str()).collect::<Vec<&str>>(),
-        );
+        let ids = StringArray::from(rows.iter().map(|r| r.id.as_str()).collect::<Vec<&str>>());
 
         // Materialise the schema for first-write. `DataType::new_fixed_size_list`
         // takes (data_type, size, items_nullable) — three args. We mark the
@@ -227,13 +225,12 @@ impl LanceStore {
         // `create_table` so the schema is materialised.
         let table = match self.db.open_table(EMBEDDINGS_TABLE).execute().await {
             Ok(t) => t,
-            Err(_) => {
-                self.db
-                    .create_table(EMBEDDINGS_TABLE, vec![batch.clone()])
-                    .execute()
-                    .await
-                    .map_err(IndexError::from)?
-            }
+            Err(_) => self
+                .db
+                .create_table(EMBEDDINGS_TABLE, vec![batch.clone()])
+                .execute()
+                .await
+                .map_err(IndexError::from)?,
         };
 
         // Append via `add`. `Vec<RecordBatch>` is `Scannable`, so we

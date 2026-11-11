@@ -69,7 +69,7 @@ impl Dispatcher {
                         }
                     }),
                 )
-            }
+            },
 
             "screenshot" => self.handle_screenshot(id, params).await,
 
@@ -93,7 +93,7 @@ impl Dispatcher {
             unknown => {
                 warn!("Unknown method: {unknown}");
                 Response::method_not_found(id, unknown)
-            }
+            },
         }
     }
 

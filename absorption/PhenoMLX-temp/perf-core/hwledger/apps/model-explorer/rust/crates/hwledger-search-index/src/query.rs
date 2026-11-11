@@ -8,9 +8,9 @@
 //! signature is stable so callers don't have to refactor to take advantage
 //! of the dense path when they adopt the feature.
 
-use hwledger_search_core::{FusedResult, ModelKind, Query};
 #[cfg(not(feature = "lancedb"))]
 use hwledger_search_core::Facets;
+use hwledger_search_core::{FusedResult, ModelKind, Query};
 
 use crate::error::IndexError;
 use crate::tantivy_store::TantivyStore;
@@ -83,9 +83,7 @@ pub async fn run_hybrid(
                 return true;
             }
             match index.kind_for_id(id) {
-                Some(kind_str) => wanted_kinds
-                    .iter()
-                    .any(|w| w.to_string() == kind_str),
+                Some(kind_str) => wanted_kinds.iter().any(|w| w.to_string() == kind_str),
                 None => false,
             }
         })
@@ -150,9 +148,7 @@ fn bm25_filtered(
                 return true;
             }
             match index.kind_for_id(id) {
-                Some(kind_str) => wanted_kinds
-                    .iter()
-                    .any(|w| w.to_string() == kind_str),
+                Some(kind_str) => wanted_kinds.iter().any(|w| w.to_string() == kind_str),
                 None => false,
             }
         })

@@ -1,0 +1,368 @@
+// Package store is the only mutable state in dagrun: one JSON document per
+// run, guarded by an OS file lock, written atomically.
+//
+// Why not SQLite: every dagrun command is short-lived and holds the lock for
+// microseconds, so a rewrite of a few hundred kilobytes beats any dependency.
+// Why not in-memory: many independent agent processes share one run, and a
+// crash must not lose a claim. The lock is the election; the file is the truth.
+package store
+
+import (
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
+	"sort"
+	"syscall"
+	"time"
+
+	"github.com/KooshaPari/dagrun/internal/harness"
+	"github.com/KooshaPari/dagrun/internal/plan"
+	"github.com/KooshaPari/dagrun/internal/verify"
+)
+
+// StateVersion is the on-disk state schema version.
+const StateVersion = 1
+
+// NodeState is the mutable per-node record.
+type NodeState struct {
+	Status     string    `json:"status"`
+	Attempts   int       `json:"attempts,omitempty"`
+	Epoch      int64     `json:"epoch,omitempty"`
+	Owner      string    `json:"owner,omitempty"`
+	LeaseUntil time.Time `json:"lease_until,omitempty"`
+	StartedAt  time.Time `json:"started_at,omitempty"`
+	FinishedAt time.Time `json:"finished_at,omitempty"`
+	ExitCode   int       `json:"exit_code,omitempty"`
+	Worktree   string    `json:"worktree,omitempty"`
+	Branch     string    `json:"branch,omitempty"`
+	// Usage is the token and cost accounting the harness reported, when it did.
+	Usage *harness.Usage `json:"usage,omitempty"`
+	// FailureClass names why a node failed, so a retry policy can act on it.
+	FailureClass string `json:"failure_class,omitempty"`
+	// DurationMS is the measured wall time of the node, used to calibrate
+	// estimates.
+	DurationMS int64          `json:"duration_ms,omitempty"`
+	LastError  string         `json:"last_error,omitempty"`
+	Verify     *verify.Report `json:"verify,omitempty"`
+}
+
+// State is the whole run document.
+type State struct {
+	Version   int                   `json:"version"`
+	Run       string                `json:"run"`
+	PlanHash  string                `json:"plan_hash"`
+	CreatedAt time.Time             `json:"created_at"`
+	UpdatedAt time.Time             `json:"updated_at"`
+	Nodes     map[string]*NodeState `json:"nodes"`
+	// Dynamic holds nodes materialised at runtime by fan_out. They are not part
+	// of the plan, so the plan hash stays static and a rerun re-expands the
+	// same set from the same verified work set.
+	Dynamic map[string]*plan.Node `json:"dynamic,omitempty"`
+	// Expanded records that a discover node has already been expanded, so an
+	// empty work set is not retried on every scheduler tick.
+	Expanded map[string]bool `json:"expanded,omitempty"`
+}
+
+// Store is a handle to one run directory.
+type Store struct {
+	dir      string
+	root     string
+	plan     *plan.Plan
+	planHash string
+}
+
+// Claim is the result of trying to take a node.
+type Claim struct {
+	Won    bool
+	Epoch  int64
+	Reason string
+}
+
+// Open prepares a run directory. If state is missing it is created; if it
+// exists the plan hash must match, because a run is defined by one plan.
+func Open(dir string, p *plan.Plan, planBytes []byte, reset bool) (*Store, error) {
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return nil, err
+	}
+	for _, sub := range []string{"trace", "logs"} {
+		if err := os.MkdirAll(filepath.Join(dir, sub), 0o755); err != nil {
+			return nil, err
+		}
+	}
+	sum := sha256.Sum256(planBytes)
+	s := &Store{dir: dir, root: p.Root, plan: p, planHash: hex.EncodeToString(sum[:])}
+
+	path := s.statePath()
+	if _, err := os.Stat(path); err == nil && !reset {
+		st, err := s.readState()
+		if err != nil {
+			return nil, err
+		}
+		if st.PlanHash != "" && st.PlanHash != s.planHash {
+			return nil, fmt.Errorf("plan changed since this run started (%s != %s); rerun with --reset to discard progress",
+				short(st.PlanHash), short(s.planHash))
+		}
+		return s, nil
+	}
+	return s, s.With(func(st *State) error {
+		fresh := s.freshState()
+		*st = *fresh
+		return nil
+	})
+}
+
+func short(h string) string {
+	if len(h) > 12 {
+		return h[:12]
+	}
+	return h
+}
+
+func (s *Store) statePath() string { return filepath.Join(s.dir, "state.json") }
+
+func (s *Store) freshState() *State {
+	now := time.Now().UTC()
+	st := &State{
+		Version:   StateVersion,
+		Run:       s.plan.Run,
+		PlanHash:  s.planHash,
+		CreatedAt: now,
+		UpdatedAt: now,
+		Nodes:     make(map[string]*NodeState, len(s.plan.Nodes)),
+		Dynamic:   map[string]*plan.Node{},
+		Expanded:  map[string]bool{},
+	}
+	for _, n := range s.plan.Nodes {
+		if n != nil {
+			st.Nodes[n.ID] = &NodeState{Status: plan.StatusPending}
+		}
+	}
+	return st
+}
+
+func (s *Store) readState() (*State, error) {
+	raw, err := os.ReadFile(s.statePath())
+	if err != nil {
+		return nil, err
+	}
+	var st State
+	if err := json.Unmarshal(raw, &st); err != nil {
+		return nil, fmt.Errorf("corrupt state at %s: %w", s.statePath(), err)
+	}
+	// A state written by a newer binary is refused here rather than half-read.
+	// Reading it would silently drop every field this build does not know, and
+	// the next write would persist that loss.
+	if err := migrate(&st); err != nil {
+		return nil, fmt.Errorf("%s: %w", s.statePath(), err)
+	}
+	if st.Nodes == nil {
+		st.Nodes = map[string]*NodeState{}
+	}
+	if st.Dynamic == nil {
+		st.Dynamic = map[string]*plan.Node{}
+	}
+	if st.Expanded == nil {
+		st.Expanded = map[string]bool{}
+	}
+	return &st, nil
+}
+
+// writeState persists the document atomically. durable=false skips the fsync:
+// the rename is still atomic, so a crash leaves either the old or the new file,
+// never a torn one. It trades "the last transition may be lost on power loss"
+// for roughly an order of magnitude in write latency, which matters because the
+// whole document is rewritten per transition.
+func (s *Store) writeState(st *State, durable bool) error {
+	// Compact, not indented: this file is a database, not a document. The
+	// human view is `dagrun status --json`. Indenting triples the bytes we
+	// rewrite 1600 times in a 32-worker burst.
+	raw, err := json.Marshal(st)
+	if err != nil {
+		return err
+	}
+	raw = append(raw, '\n')
+	tmp := s.statePath() + ".tmp"
+	f, err := os.OpenFile(tmp, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o644)
+	if err != nil {
+		return writeErr(tmp, err)
+	}
+	if _, err := f.Write(raw); err != nil {
+		f.Close()
+		return writeErr(tmp, err)
+	}
+	if durable {
+		if err := f.Sync(); err != nil {
+			f.Close()
+			return writeErr(tmp, err)
+		}
+	}
+	if err := f.Close(); err != nil {
+		return writeErr(tmp, err)
+	}
+	// The rename is atomic. We deliberately do not fsync the directory: that
+	// doubles the syscall cost for a guarantee the artifact-based recovery path
+	// already provides (a lost transition means the node runs again and is
+	// adopted).
+	if err := os.Rename(tmp, s.statePath()); err != nil {
+		return writeErr(s.statePath(), err)
+	}
+	return nil
+}
+
+// writeErr turns a filesystem failure into something an operator can act on.
+//
+// The bare error for a full disk is "no space left on device" attached to a
+// .tmp path, which reads like a permissions problem with a file the user never
+// created. A run that cannot persist must say what actually happened, because
+// the alternative is a run that keeps claiming nodes and failing each one for a
+// reason it invented.
+func writeErr(path string, err error) error {
+	switch {
+	case errors.Is(err, syscall.ENOSPC):
+		return fmt.Errorf("cannot persist run state at %s: the filesystem is full (%w)", path, err)
+	case errors.Is(err, syscall.EROFS):
+		return fmt.Errorf("cannot persist run state at %s: the filesystem is read-only (%w)", path, err)
+	case errors.Is(err, os.ErrPermission):
+		return fmt.Errorf("cannot persist run state at %s: permission denied (%w)", path, err)
+	}
+	return fmt.Errorf("cannot persist run state at %s: %w", path, err)
+}
+
+// With runs fn under an exclusive lock and persists the result durably.
+func (s *Store) With(fn func(*State) error) error {
+	return s.withState(fn, true)
+}
+
+// withState is With with a durability choice. Heartbeats use durable=false:
+// they are idempotent, high frequency, and losing one only shortens a lease.
+func (s *Store) withState(fn func(*State) error, durable bool) error {
+	lockPath := filepath.Join(s.dir, "lock")
+	f, err := os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0o644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	if err := lockExclusive(f); err != nil {
+		return err
+	}
+	defer unlock(f)
+
+	st, err := s.readState()
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return err
+		}
+		st = s.freshState()
+	}
+	if err := fn(st); err != nil {
+		return err
+	}
+	st.UpdatedAt = time.Now().UTC()
+	return s.writeState(st, durable)
+}
+
+// Snapshot returns a copy of the state.
+//
+// This is a genuine read: it takes the lock, reads the document, and releases
+// the lock WITHOUT writing anything back. Routing reads through With would
+// rewrite the whole document and bump UpdatedAt on every call, so a
+// `dagrun status --watch` monitor would sit on the write path and UpdatedAt
+// would stop meaning "the last real transition".
+//
+// The lock is still taken even though writeState renames atomically, which
+// would make a lockless read coherent: a lease transition moves several fields
+// at once (status, owner, lease_until), so a reader must not observe a
+// half-moved lease. Holding the exclusive lock for the duration of the read is
+// what keeps the snapshot consistent with those multi-field transitions.
+func (s *Store) Snapshot() (*State, error) {
+	lockPath := filepath.Join(s.dir, "lock")
+	f, err := os.OpenFile(lockPath, os.O_CREATE|os.O_RDWR, 0o644)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	if err := lockExclusive(f); err != nil {
+		return nil, err
+	}
+	defer unlock(f)
+
+	st, err := s.readState()
+	if err != nil {
+		// A planned-but-unrun directory has no state.json yet; callers rely on
+		// Snapshot still returning a usable (all-pending) state for it.
+		if !os.IsNotExist(err) {
+			return nil, err
+		}
+		st = s.freshState()
+	}
+	return copyState(st), nil
+}
+
+// copyState deep-clones a state document so a caller may mutate the result
+// without touching the store. Node and Dynamic entries are pointed at by
+// pointer, so they are copied rather than shared.
+func copyState(st *State) *State {
+	cp := *st
+	cp.Nodes = make(map[string]*NodeState, len(st.Nodes))
+	for k, v := range st.Nodes {
+		c := *v
+		cp.Nodes[k] = &c
+	}
+	cp.Dynamic = make(map[string]*plan.Node, len(st.Dynamic))
+	for k, v := range st.Dynamic {
+		cp.Dynamic[k] = v.Clone()
+	}
+	cp.Expanded = make(map[string]bool, len(st.Expanded))
+	for k, v := range st.Expanded {
+		cp.Expanded[k] = v
+	}
+	return &cp
+}
+
+// Root is the directory artifact paths resolve against.
+func (s *Store) Root() string { return s.root }
+
+// Dir is the run directory.
+func (s *Store) Dir() string { return s.dir }
+
+// Plan is the immutable plan for this run.
+func (s *Store) Plan() *plan.Plan { return s.plan }
+
+// Role returns the role a node was assigned in the plan.
+func (s *Store) Role(nodeID string) string {
+	for _, n := range s.plan.Nodes {
+		if n != nil && n.ID == nodeID {
+			return n.Role
+		}
+	}
+	return ""
+}
+
+// ResetExpired returns expired leases to pending. A crashed worker therefore
+// needs no cleanup path of its own: its lease simply runs out.
+func (s *Store) ResetExpired(now time.Time) ([]string, error) {
+	var reaped []string
+	err := s.With(func(st *State) error {
+		ids := make([]string, 0, len(st.Nodes))
+		for id := range st.Nodes {
+			ids = append(ids, id)
+		}
+		sort.Strings(ids)
+		for _, id := range ids {
+			ns := st.Nodes[id]
+			if ns.Status == plan.StatusRunning && !ns.LeaseUntil.After(now) {
+				ns.Status = plan.StatusPending
+				ns.Owner = ""
+				ns.LeaseUntil = time.Time{}
+				ns.LastError = "lease expired"
+				reaped = append(reaped, id)
+			}
+		}
+		return nil
+	})
+	return reaped, err
+}

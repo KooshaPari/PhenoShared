@@ -1,0 +1,41 @@
+# process-compose orchestration for the SessionLedger ETL daemon.
+#
+# Native-process orchestration (no Docker) per Phenotype governance:
+# prefer process-compose over containers for local dev services.
+#
+#   process-compose -f crates/sl-daemon/process-compose.yaml up
+#
+# Override the watched / output dirs via env before `up`:
+#   SL_WATCH_DIR=~/.forge/sessions SL_OUT_DIR=./okf-out process-compose ... up
+version: "0.5"
+
+environment:
+  - "SL_WATCH_DIR=${SL_WATCH_DIR:-./sessions}"
+  - "SL_OUT_DIR=${SL_OUT_DIR:-./okf-out}"
+  - "SL_HTTP_BIND=${SL_HTTP_BIND:-127.0.0.1:8080}"
+
+processes:
+  # One-shot: build the daemon in isolation (never the bare workspace root —
+  # sl-viewer pulls webkit2gtk-sys which does not resolve on macOS).
+  # sl-daemon is excluded from the root workspace; build from within its own crate.
+  sl-daemon-build:
+    command: "cargo build --release"
+    working_dir: "."
+    availability:
+      restart: "no"
+
+  # Long-running ETL daemon: watch → compile → export OKF.
+  sl-daemon:
+    command: "./target/release/sl-daemon serve --watch $SL_WATCH_DIR --out $SL_OUT_DIR --http-bind $SL_HTTP_BIND"
+    working_dir: "."
+    depends_on:
+      sl-daemon-build:
+        condition: process_completed_successfully
+    availability:
+      restart: "on_failure"
+      backoff_seconds: 5
+    readiness_probe:
+      exec:
+        command: "test -d $SL_OUT_DIR"
+      initial_delay_seconds: 2
+      period_seconds: 5

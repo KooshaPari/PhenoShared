@@ -79,7 +79,7 @@ fn model_plan_rejects_unknown_dep_id() {
         } => {
             assert_eq!(operator, OperatorId(1));
             assert_eq!(dependency, OperatorId(999));
-        }
+        },
         other => panic!("expected UnknownDependency, got {:?}", other),
     }
 }
@@ -101,7 +101,7 @@ fn model_plan_rejects_state_owner_pointing_to_missing_operator() {
         model_plan::PlanError::UnknownStateOwner { state, operator } => {
             assert_eq!(state, StateId(7));
             assert_eq!(operator, OperatorId(42));
-        }
+        },
         other => panic!("expected UnknownStateOwner, got {:?}", other),
     }
 }
@@ -122,7 +122,7 @@ fn model_plan_rejects_moe_top_k_above_expert_count() {
                 "reason should mention top_k and num_experts, got {:?}",
                 reason
             );
-        }
+        },
         other => panic!("expected InvalidScheduler, got {:?}", other),
     }
 }
@@ -182,7 +182,7 @@ fn model_plan_rejects_dimension_overflow() {
         model_plan::PlanError::DimensionOverflow { operator, dim } => {
             assert_eq!(operator, OperatorId(1));
             assert_eq!(dim, usize::MAX);
-        }
+        },
         other => panic!("expected DimensionOverflow, got {:?}", other),
     }
 }

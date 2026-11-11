@@ -1,0 +1,15 @@
+node_modules/
+dist/
+target/
+.tauri/
+*.db
+*.db-shm
+*.db-wal
+.researchledger/
+*-capture.json
+vault/
+browser-profiles/
+.env
+.env.*
+!.env.example
+worktrees/

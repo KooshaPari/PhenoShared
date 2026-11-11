@@ -161,7 +161,7 @@ async fn handle_post_mcp(
         Err(rej) => {
             let err = crate::error::McpError::parse(rej.body_text());
             return json_rpc_error_response(Value::Null, err);
-        }
+        },
     };
 
     // Step 2: serialise back to a string for `handle_message`. We
@@ -172,11 +172,10 @@ async fn handle_post_mcp(
     let raw_str = match serde_json::to_string(&raw) {
         Ok(s) => s,
         Err(e) => {
-            let err = crate::error::McpError::internal(format!(
-                "failed to serialise inbound JSON: {e}"
-            ));
+            let err =
+                crate::error::McpError::internal(format!("failed to serialise inbound JSON: {e}"));
             return json_rpc_error_response(Value::Null, err);
-        }
+        },
     };
 
     // Step 3: dispatch through the shared core. The stdio transport
@@ -198,7 +197,7 @@ async fn handle_post_mcp(
             // can distinguish "I just sent a notification" from
             // "I got a real answer".
             StatusCode::NO_CONTENT.into_response()
-        }
+        },
         Err(err) => json_rpc_error_response(Value::Null, err),
     }
 }
@@ -264,18 +263,23 @@ async fn handle_get_sse(
     // Cache-Control so middleboxes don't buffer the stream.
     let mut response = Response::builder()
         .status(StatusCode::OK)
-        .header(header::CONTENT_TYPE, HeaderValue::from_static("text/event-stream"))
-        .header(header::CACHE_CONTROL, HeaderValue::from_static("no-cache, no-transform"))
+        .header(
+            header::CONTENT_TYPE,
+            HeaderValue::from_static("text/event-stream"),
+        )
+        .header(
+            header::CACHE_CONTROL,
+            HeaderValue::from_static("no-cache, no-transform"),
+        )
         .header("x-accel-buffering", HeaderValue::from_static("no"))
         .body(body)
         .expect("static response builder cannot fail");
 
     // Stamp the connection header explicitly — some HTTP/2 clients
     // rely on it for streaming semantics.
-    response.headers_mut().insert(
-        header::CONNECTION,
-        HeaderValue::from_static("keep-alive"),
-    );
+    response
+        .headers_mut()
+        .insert(header::CONNECTION, HeaderValue::from_static("keep-alive"));
     response
 }
 
@@ -622,7 +626,7 @@ mod tests {
                         if collected.len() > 4096 {
                             break;
                         }
-                    }
+                    },
                     Some(Err(_)) | None => break,
                 }
             }

@@ -1,0 +1,395 @@
+openapi: 3.1.0
+info:
+  title: SessionLedger daemon HTTP API
+  version: 0.1.0
+  description: |
+    Local-only HTTP surface for sl-daemon. The daemon is intended for loopback
+    desktop use; retention for Idempotency-Key responses is process-local and is
+    lost when the daemon restarts.
+servers:
+  - url: http://127.0.0.1:8080
+tags:
+  - name: health
+  - name: bundles
+  - name: ingest
+  - name: metrics
+  - name: sse
+paths:
+  /healthz:
+    get:
+      tags: [health]
+      summary: Liveness probe.
+      responses:
+        "200":
+          description: Process is accepting HTTP.
+          content:
+            text/plain:
+              schema:
+                type: string
+                const: ok
+  /readyz:
+    get:
+      tags: [health]
+      summary: Readiness probe.
+      responses:
+        "200":
+          description: Configured output directory exists and is usable.
+          content:
+            text/plain:
+              schema:
+                type: string
+                const: ready
+        "503":
+          description: Output directory is missing or not usable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+  /api/bundles:
+    get:
+      tags: [bundles]
+      summary: List all parsed OKF bundle documents from the output directory.
+      responses:
+        "200":
+          description: Raw OKF JSON documents.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+        "500":
+          $ref: "#/components/responses/ApiError"
+  /api/search:
+    get:
+      tags: [bundles]
+      summary: Search bundle metadata.
+      parameters:
+        - name: since
+          in: query
+          schema:
+            type: string
+          description: ISO date lower bound, for example 2024-01-01.
+        - name: until
+          in: query
+          schema:
+            type: string
+          description: ISO date upper bound, for example 2024-12-31.
+        - name: model
+          in: query
+          schema:
+            type: string
+          description: Case-insensitive model substring.
+        - name: min_tokens
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+          description: Minimum token count.
+        - name: tags
+          in: query
+          schema:
+            type: string
+          description: Comma-separated tags; all provided tags must match.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 50
+          description: Maximum number of metadata records to return.
+      responses:
+        "200":
+          description: Matching bundle metadata.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BundleMeta"
+        "500":
+          $ref: "#/components/responses/ApiError"
+  /api/stream:
+    get:
+      tags: [sse]
+      summary: Subscribe to newly written bundle paths.
+      responses:
+        "200":
+          description: SSE stream of bundle events with path string data.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              examples:
+                bundle:
+                  value: "event: bundle\ndata: C:\\data\\session.okf.json\n\n"
+  /api/replay/{bundle_id}:
+    get:
+      tags: [sse]
+      summary: Replay OKF entities as SSE events.
+      parameters:
+        - name: bundle_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Bundle id or filename ending in .okf.json. Path traversal is rejected.
+        - name: speed
+          in: query
+          schema:
+            type: number
+            format: double
+            default: 1.0
+          description: Playback multiplier; non-positive values are treated as 1.0.
+      responses:
+        "200":
+          description: SSE stream of entity events followed by a done event.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              examples:
+                entity:
+                  value: "event: entity\ndata: {\"event_index\":0,\"total_events\":1,\"entity\":{}}\n\nevent: done\ndata: {}\n\n"
+        "400":
+          $ref: "#/components/responses/ApiError"
+        "404":
+          $ref: "#/components/responses/ApiError"
+        "422":
+          $ref: "#/components/responses/ApiError"
+        "500":
+          $ref: "#/components/responses/ApiError"
+  /api/ingest:
+    post:
+      tags: [ingest]
+      summary: Validate one OKF ingest payload.
+      description: |
+        Accepts one bundle-shaped JSON payload and returns validation details.
+        If Idempotency-Key is present, a successful 200 response is cached in
+        memory for this daemon process. Reusing the same key with the same raw
+        body returns that prior success response. Reusing the same key with a
+        different raw body returns 409. The cache is not persisted or shared.
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Process-local key for safe retry of successful ingest posts.
+        - name: X-Request-Id
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Request id echoed in transport error envelopes.
+        - name: Authorization
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Bearer token accepted when SL_API_KEY is configured.
+        - name: X-API-Key
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Alternative API-key header accepted when SL_API_KEY is configured.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostBundle"
+      responses:
+        "200":
+          description: Bundle passed structural validation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResult"
+        "400":
+          $ref: "#/components/responses/ApiError"
+        "401":
+          $ref: "#/components/responses/ApiError"
+        "409":
+          description: Idempotency-Key was previously used with another raw body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorEnvelope"
+        "413":
+          $ref: "#/components/responses/ApiError"
+        "422":
+          description: Bundle failed structural validation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResult"
+        "429":
+          $ref: "#/components/responses/ApiError"
+  /api/native-sessions/resolve:
+    post:
+      tags: [sessions]
+      summary: Resolve native process evidence to known agent sessions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResolveRequest"
+      responses:
+        "200":
+          description: Candidate sessions ordered by confidence.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResolveResponse"
+  /api/metrics:
+    get:
+      tags: [metrics]
+      summary: Return aggregated bundle statistics.
+      responses:
+        "200":
+          description: Bundle count, token totals, model histogram, and daily histogram.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetricsSummary"
+  /metrics:
+    get:
+      tags: [metrics]
+      summary: Return process-local RED metrics in Prometheus text format.
+      responses:
+        "200":
+          description: Prometheus text exposition.
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  responses:
+    ApiError:
+      description: Transport-level daemon error envelope.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorEnvelope"
+  schemas:
+    ApiErrorEnvelope:
+      type: object
+      required: [request_id, error]
+      properties:
+        request_id:
+          type: string
+        error:
+          type: object
+          required: [type, code, message]
+          properties:
+            type:
+              type: string
+              const: sessionledger.http_error
+            code:
+              type: string
+            message:
+              type: string
+    BundleMeta:
+      type: object
+      required:
+        [
+          session_id,
+          created_at,
+          model,
+          token_count,
+          message_count,
+          duration_ms,
+          tags,
+        ]
+      properties:
+        session_id:
+          type: string
+        created_at:
+          type: string
+        model:
+          type: string
+        token_count:
+          type: integer
+          minimum: 0
+        message_count:
+          type: integer
+          minimum: 0
+        duration_ms:
+          type: integer
+          minimum: 0
+        tags:
+          type: array
+          items:
+            type: string
+    MetricsSummary:
+      type: object
+      required:
+        [total_bundles, total_tokens, avg_tokens, model_counts, daily_counts]
+      properties:
+        total_bundles:
+          type: integer
+          minimum: 0
+        total_tokens:
+          type: integer
+          minimum: 0
+        avg_tokens:
+          type: integer
+          minimum: 0
+        model_counts:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 0
+        daily_counts:
+          type: object
+          additionalProperties:
+            type: integer
+            minimum: 0
+    PostBundle:
+      type: object
+      required: [bundle_id, created_at, messages, token_count]
+      properties:
+        bundle_id:
+          type: string
+          minLength: 1
+        created_at:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [role, content]
+            properties:
+              role:
+                type: string
+                enum: [user, assistant, system, tool]
+              content:
+                type: string
+                minLength: 1
+        token_count:
+          type: integer
+          minimum: 0
+    ValidationResult:
+      type: object
+      required: [valid, errors]
+      properties:
+        valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: object
+            required: [field, code, message]
+            properties:
+              field:
+                type: string
+              code:
+                type: string
+              message:
+                type: string

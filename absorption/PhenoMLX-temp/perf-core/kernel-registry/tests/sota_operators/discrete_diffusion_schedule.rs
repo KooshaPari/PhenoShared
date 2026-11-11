@@ -267,8 +267,8 @@ fn ddm_step_byte_identical_oracle_with_sqrt_schedule() {
     let mask: Vec<bool> = vec![true, false, true, false, true, false, true, false];
     let clean: Vec<u32> = vec![7, 7, 2, 2, 9, 9, 1, 1];
 
-    let out_a = oracle.step(&x_t, &mask, &clean, 3, 0xC0FFEE);
-    let out_b = oracle.step(&x_t, &mask, &clean, 3, 0xC0FFEE);
+    let out_a = oracle.step(&x_t, &mask, &clean, 3, 0xc0ffee);
+    let out_b = oracle.step(&x_t, &mask, &clean, 3, 0xc0ffee);
     let bytes_a: Vec<u8> = out_a.iter().flat_map(|t| t.to_le_bytes()).collect();
     let bytes_b: Vec<u8> = out_b.iter().flat_map(|t| t.to_le_bytes()).collect();
     assert_eq!(
@@ -289,8 +289,8 @@ fn ddm_step_byte_identical_oracle_with_sigmoid_schedule() {
     let mask: Vec<bool> = vec![true, false, true, false, true, false, true, false];
     let clean: Vec<u32> = vec![7, 7, 2, 2, 9, 9, 1, 1];
 
-    let out_a = oracle.step(&x_t, &mask, &clean, 3, 0xC0FFEE);
-    let out_b = oracle.step(&x_t, &mask, &clean, 3, 0xC0FFEE);
+    let out_a = oracle.step(&x_t, &mask, &clean, 3, 0xc0ffee);
+    let out_b = oracle.step(&x_t, &mask, &clean, 3, 0xc0ffee);
     let bytes_a: Vec<u8> = out_a.iter().flat_map(|t| t.to_le_bytes()).collect();
     let bytes_b: Vec<u8> = out_b.iter().flat_map(|t| t.to_le_bytes()).collect();
     assert_eq!(

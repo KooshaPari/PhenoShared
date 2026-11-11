@@ -89,7 +89,6 @@ members = [
   "crates/phenotype-ports-canonical",
   "crates/phenotype-time",
   "crates/phenotype-process",
-  "crates/phenotype-dag-core",
   "crates/phenotype-async-traits",
   "crates/pheno-compose-port-types",
   "crates/pheno-compose-port-secret",
@@ -995,7 +994,14 @@ pyo3 = { version = "0.29", features = ["auto-initialize"] }
 # --- SHR-016 hwledger workspace deps (versions from hwledger/Cargo.toml [workspace.dependencies]) ---
 once_cell = "1"
 tract-onnx = "0.23.4"
-lancedb = "0.31"
+# lancedb >= 0.33 is a security floor, not a preference: lancedb 0.31 depends
+# on `lance-testing` as a NORMAL dependency, and lance-testing enables pprof's
+# `flamegraph` feature -> inferno 0.11 -> quick-xml 0.26.0, which carries
+# RUSTSEC-2026-0194 and RUSTSEC-2026-0195 (both DoS, fixed in quick-xml 0.41).
+# From lancedb 0.33 on, lance-testing is a dev-dependency, which cargo does not
+# resolve, so the whole inferno/quick-xml 0.26 chain leaves Cargo.lock.
+# Do not lower this back to 0.31 without re-running `cargo audit`.
+lancedb = "0.33"
 tantivy = "0.22"
 # hwledger sibling path deps (referenced via workspace = true by other hwledger crates)
 hwledger-search-core = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-core" }

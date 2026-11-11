@@ -16,7 +16,10 @@ fn gguf_heavy_tree_contains_gguf_path() {
     ]);
     let entries = parse_tree_value(&v);
     assert_eq!(entries.len(), 6);
-    let gguf: Vec<_> = entries.iter().filter(|e| e.path.ends_with(".gguf")).collect();
+    let gguf: Vec<_> = entries
+        .iter()
+        .filter(|e| e.path.ends_with(".gguf"))
+        .collect();
     assert_eq!(gguf.len(), 2, "expected two .gguf entries");
     assert_eq!(gguf[0].path, "qwen2.5-7b-instruct-q4_k_m.gguf");
     assert_eq!(gguf[0].size_bytes, Some(4_382_341_120));

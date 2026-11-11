@@ -62,3 +62,6 @@ wiremock = "0.6"
 
 [build-dependencies]
 uniffi_build = { version = "0.28", features = ["builtin-bindgen"] }
+
+[package.metadata.cargo-machete]
+ignored = ["focus-connectors-mock-familycontrols", "serde"]

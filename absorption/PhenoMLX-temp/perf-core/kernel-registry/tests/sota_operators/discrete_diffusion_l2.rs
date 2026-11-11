@@ -93,7 +93,7 @@ impl Schedule {
             Schedule::Cosine => {
                 let c = (t as f64 * std::f64::consts::PI / (2.0 * num_steps as f64)).cos();
                 (c * c).clamp(0.0, 1.0)
-            }
+            },
             Schedule::Sqrt => (1.0 - tn).max(0.0).sqrt(),
             Schedule::Sigmoid { k } => {
                 // Boundary special-case mirrors the oracle: force
@@ -109,7 +109,7 @@ impl Schedule {
                 let kf = k as f64;
                 let z = kf * (2.0 * tn - 1.0);
                 1.0 / (1.0 + z.exp())
-            }
+            },
         }
     }
 }
@@ -210,13 +210,13 @@ pub(crate) fn reconstruction_l2_error(
         } else {
             ((alpha_prev - alpha_now) / alpha_prev).clamp(0.0, 1.0)
         };
-        let scaled = (re_mask_prob * 0xFF_FFFF_u32 as f64).round() as u64;
+        let scaled = (re_mask_prob * 0xff_ffff_u32 as f64).round() as u64;
         for i in 0..tokens.len() {
             if !mask[i] {
                 continue;
             }
             let lcg = lcg_next(seed.wrapping_add(step as u64).wrapping_add(i as u64));
-            if (lcg & 0xFF_FFFF) < scaled {
+            if (lcg & 0xff_ffff) < scaled {
                 x_t[i] = mask_id;
             }
         }
@@ -248,7 +248,7 @@ fn discrete_diffusion_l2_reconstruction_error_monotonically_decays_with_T_linear
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
 
     let sweep = sweep_t_values();
     assert!(
@@ -284,7 +284,7 @@ fn discrete_diffusion_l2_reconstruction_error_monotonically_decays_with_T_cosine
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
 
     let sweep = sweep_t_values();
     assert!(
@@ -332,7 +332,7 @@ fn discrete_diffusion_l2_error_below_clipping_floor_at_T_large() {
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
 
     let sweep = sweep_t_values();
     let t_large = *sweep.last().expect("non-empty sweep");
@@ -376,7 +376,7 @@ fn discrete_diffusion_l2_error_at_T_fixed_under_seed() {
     let tokens: [u32; 5] = [2, 11, 5, 7, 9];
     let vocab: u32 = 16;
     let mask_id: u32 = 4;
-    let seed: u64 = 0xC0FFEE;
+    let seed: u64 = 0xc0ffee;
     let num_steps: usize = 64;
 
     let l2_a = reconstruction_l2_error(num_steps, Schedule::Linear, &tokens, vocab, mask_id, seed);

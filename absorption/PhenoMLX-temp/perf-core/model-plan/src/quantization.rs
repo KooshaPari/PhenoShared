@@ -64,13 +64,13 @@ impl QuantizationPolicy {
                     ));
                 }
                 Ok(())
-            }
+            },
             QuantizationPolicy::SubByte { bits } => {
                 if *bits == 0 || *bits > 8 {
                     return Err(format!("sub-byte bits must be in 1..=8, got {}", bits));
                 }
                 Ok(())
-            }
+            },
         }
     }
 }
