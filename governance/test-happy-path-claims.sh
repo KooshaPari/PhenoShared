@@ -34,11 +34,16 @@ fi
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT HUP INT TERM
 
-# judge <label> <expect: pass|fail> <line-to-add>
+# judge <label> <expect: pass|fail> <line-to-add> [filename]
+#
+# The filename defaults to subject.txt. R1's identifier exemption applies to
+# source files only, so the code-statement cases below name a .py file and the
+# document case names a .md one.
 judge() {
 	label="$1"
 	expect="$2"
 	line="$3"
+	subject="${4:-subject.txt}"
 	CASE=$((CASE + 1))
 	case_dir="${work}/case${CASE}"
 	mkdir -p "${case_dir}"
@@ -47,15 +52,15 @@ judge() {
 	git init -q .
 	git config user.email guard-test@example.invalid
 	git config user.name "guard test"
-	printf 'placeholder\n' >subject.txt
-	git add subject.txt
+	printf 'placeholder\n' >"${subject}"
+	git add "${subject}"
 	# The ledger trailers are required by this host's git wrapper; harmless
 	# where that wrapper is absent.
 	git commit -qm "base" -m "tx-agent: jcode" -m "tx-validated: test"
 	base_sha="$(git rev-parse HEAD)"
 
-	printf '%s\n' "${line}" >>subject.txt
-	git add subject.txt
+	printf '%s\n' "${line}" >>"${subject}"
+	git add "${subject}"
 	git commit -qm "add one line" -m "tx-agent: jcode" -m "tx-validated: test"
 	head_sha="$(git rev-parse HEAD)"
 
@@ -130,6 +135,20 @@ judge "one-line loop with only a terminator is accepted" pass '	for x in y; do e
 # A claim with a human-eye marker is accepted, as before.
 judge "marker exempts a prose claim" pass "# user-confirmed: the parser is fixed now"
 
+# A claim word used as a code identifier is syntax, not prose. The claim regex
+# has always skipped _- and .-joined identifiers; a statement or annotation
+# form ("fixed = ...", "fixed:") is code too.
+judge "assignment is not a completion claim" pass "fixed = sorted(known - current)" "guard.py"
+judge "control-flow test is not a completion claim" pass "if fixed:" "guard.py"
+judge "subscript is not a completion claim" pass "for rel in fixed[:10]:" "guard.py"
+# The line under test is a literal shell assignment, so the $ must not expand.
+# shellcheck disable=SC2016
+judge "identifier in a shell script is not a completion claim" pass 'verified="$1"' "guard.sh"
+
+# The exemption is source files only: in a document the same shape is a claim.
+judge "a document claim of the same shape is rejected" fail "passing: true" "notes.md"
+judge "a document claim beside a colon is rejected" fail "# fixed: the parser now works" "notes.md"
+
 # R7 treats "stub" as a placeholder implementation. A plan to GENERATE client
 # stubs names an artefact; it is not a feature stubbed out and left unbuilt.
 judge "codegen client stubs are not placeholder motion" pass '| T-SDK-CG-1 | codegen: catalog -> Python + Go client stubs | phenotype-registry |'
@@ -137,6 +156,10 @@ judge "generated stubs are not placeholder motion" pass "the generated stubs are
 
 # The exclusion is narrow: an implementation that is only a stub still fires.
 judge "a stub implementation is still placeholder motion" fail "stub implementation of the parser"
+
+# A stub attached to a name is an artefact name, not a placeholder claim.
+judge "a hyphenated artefact name is not placeholder motion" pass "bin/pheno-tracing-stub"
+judge "an underscore-joined artefact name is not placeholder motion" pass "scripts/tracing_stub.py"
 
 echo "" >&2
 echo "passed: ${PASS}, failed: ${FAIL}" >&2

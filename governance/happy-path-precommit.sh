@@ -102,6 +102,17 @@ function r1_text(s,   segs, n, i, out, seg) {
   return out
 }
 
+# A claim word used as a code IDENTIFIER is syntax, not prose. The claim regex
+# already ignores `_`- and `.`-joined identifiers; an assignment, subscript or
+# annotation form ("fixed = ...", "fixed[", "fixed:") is dropped here too, so a
+# line such as `fixed = sorted(known - current)` no longer reads as a completion
+# claim. Source files only: in a document, "passing: true" IS a claim.
+function r1_drop_identifiers(s, f) {
+  if (f !~ /\.(py|sh|bash|zsh|ksh|rs|ts|tsx|js|jsx|cjs|mjs|go|rb|pl|java|kt|swift|c|h|cc|cpp)$/) return s
+  gsub(/(fixed|works|done|passing|verified)([[:space:]]*=([^=]|$)|[[:space:]]*\[|[[:space:]]*\(|:)/, "ident", s)
+  return s
+}
+
 function split_list(raw,    i, n, arr, out, t) {
   n = split(raw, arr, ",")
   out = ""
@@ -262,7 +273,7 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # quoted string (a value or a log message). Everything else that matches
     # still needs a human-eye marker, exactly as before.
     if (!is_template) {
-      claim = tolower(strip_quoted(r1_text(body)))
+      claim = tolower(r1_drop_identifiers(strip_quoted(r1_text(body)), file))
       if (claim ~ /(^|[^[:alnum:]_.])(fixed|works|done|passing|verified)([^[:alnum:]_]|$)|✅|✔|✔️/) {
         if (!window_has(FNR, "user-confirmed|user-saw|confirmed by user|eyes-on|last-link:")) {
           report("r1", file, line_no, body, "user-eye confirmation missing")
@@ -320,9 +331,12 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # "client stubs" is the name of a generated artefact (codegen output), not
     # a placeholder implementation, so a task list that plans to generate Go and
     # Python client stubs is not motion-without-result. The exclusion is narrow:
-    # a bare "stub" or "stub implementation" still fires.
+    # a bare "stub" or "stub implementation" still fires. A stub that is attached
+    # to a name ("pheno-tracing-stub", "tracing_stub") names an artefact rather
+    # than a placeholder, so that form does not fire either.
     if (lc ~ /(enabled[[:space:]]*=[[:space:]]*false|featureflag[[:space:]]*=[[:space:]]*false|flag[[:space:]]*=[[:space:]]*false|experimental[[:space:]]*=[[:space:]]*false|verbose[[:space:]]*=[[:space:]]*false|# todo|no-op|stub|proposed only)/ \
-        && lc !~ /(client|generated|codegen|sdk) stubs?/) {
+        && lc !~ /(client|generated|codegen|sdk) stubs?/ \
+        && lc !~ /[[:alnum:]_\/.-]stub/) {
       report("r7", file, line_no, body, "feature false/placeholder introduced without result signal")
     }
 
