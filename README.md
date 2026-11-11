@@ -1,7 +1,8 @@
 # PhenoShared
 
-Shared infrastructure workspace for the [Phenotype](https://github.com/KooshaPari)
-org. It is a container repository, not a single-purpose project: it holds the
+PhenoShared is the container where Phenotype's bulky and non-publishable material lives,
+and it publishes a curated subset of crates that are each independently consumable without
+the container. It is a container repository, not a single-purpose project: it holds the
 shared Rust crates, the reusable GitHub Actions workflows and composite actions,
 and the shared documentation (including the Global Handbook) that the rest of the
 fleet consumes.
