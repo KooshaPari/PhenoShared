@@ -100,7 +100,25 @@ async function startDevServer(): Promise<void> {
   devServerOutput.reset()
   devServer = spawn('npx', ['vitepress', 'dev', '--port', String(DEV_PORT)], {
     cwd: process.cwd(),
-    env: { ...process.env, NODE_ENV: 'test' },
+    env: {
+      ...process.env,
+      NODE_ENV: 'test',
+      // Serve the site at base '/'. .vitepress/config.mts derives its base from
+      // the Pages environment: in GitHub Actions `base` becomes
+      // `/${GITHUB_REPOSITORY basename}/` (i.e. '/PhenoShared/'), while these
+      // specs navigate with base-less URLs like `${BASE_URL}/guide/...`.
+      // Under a non-root base every non-root request is the wrong URL: VitePress
+      // returns the SPA shell and its client router then rewrites the location
+      // mid-navigation, so `page.goto` is torn down
+      // ('... interrupted by another navigation to .../PhenoShared/...') and the
+      // assertions inspect an unhydrated shell. '/' is the only route where the
+      // base-prefixed and base-stripped forms coincide, which is exactly why '/'
+      // was the only route passing in CI. The a11y rules under test are
+      // document-level and independent of the deployment sub-path, so pinning the
+      // base to '/' here is correct rather than a workaround.
+      GITHUB_ACTIONS: 'false',
+      GITHUB_PAGES: 'false',
+    },
     stdio: ['ignore', 'pipe', 'pipe'],
   })
   spawnedByTests = true
@@ -133,8 +151,19 @@ export async function acquireDevServer(): Promise<void> {
 export async function releaseDevServer(): Promise<void> {
   refCount -= 1
   if (refCount === 0 && spawnedByTests && devServer) {
-    devServer.kill('SIGTERM')
+    const dying = devServer
     devServer = undefined
     spawnedByTests = false
+    // Wait for the child to actually exit before a later startDevServer() can
+    // probe the port. Both spec files share one fork (singleFork, no file
+    // parallelism), so keyboard.spec.ts's teardown and wcag.spec.ts's setup are
+    // back to back: if the dying server is still accepting on 5173 when the next
+    // probe runs, isServerReady() returns true and no replacement is spawned.
+    const exited = new Promise<void>((resolve) => {
+      dying.once('exit', () => resolve())
+      setTimeout(resolve, 5000)
+    })
+    dying.kill('SIGTERM')
+    await exited
   }
 }
