@@ -1,3 +1,5 @@
+<!-- stale-patterns: file-allow=records the absorption boundary -->
+
 # Boundary — phenotype-research
 
 **Absorbed from:** `<REDACTED>/phenoResearchEngine`
@@ -30,12 +32,12 @@ After that date, downstream consumers must use the new path.
 
 ## What it talks to
 
-| Direction | Peer | Purpose |
-|---|---|---|
-| Inbound | `phenoAI/crates/mcp-server` | MCP tool registration (`mcp/tools.py`) |
-| Inbound | `phenoAI/crates/llm-router` | LLM-routed digest generation |
-| Outbound | `phenotype-py-utils` | shared Python helpers (git-pinned @ v0.1.0) |
-| Outbound | typer, structlog, apscheduler, pydantic, orjson, httpx, arxiv, praw, feedparser, thegent | runtime deps (declared in `findings/deps-audit-2026-06-20-phenoResearchEngine.md`) |
+| Direction | Peer                                                                                     | Purpose                                                                            |
+| --------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Inbound   | `phenoAI/crates/mcp-server`                                                              | MCP tool registration (`mcp/tools.py`)                                             |
+| Inbound   | `phenoAI/crates/llm-router`                                                              | LLM-routed digest generation                                                       |
+| Outbound  | `phenotype-py-utils`                                                                     | shared Python helpers (git-pinned @ v0.1.0)                                        |
+| Outbound  | typer, structlog, apscheduler, pydantic, orjson, httpx, arxiv, praw, feedparser, thegent | runtime deps (declared in `findings/deps-audit-2026-06-20-phenoResearchEngine.md`) |
 
 ## What is NOT absorbed
 

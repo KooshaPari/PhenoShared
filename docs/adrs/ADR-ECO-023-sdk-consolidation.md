@@ -1,3 +1,5 @@
+<!-- stale-patterns: file-allow=records the absorption -->
+
 # ADR-023: SDK Consolidation Decision
 
 **Status:** Accepted (proposed 2026-06-25)
@@ -21,14 +23,14 @@ The Phenotype fleet has three artefacts that **all touch the MCP
 surface** but historically did not have a clear, machine-checked
 boundary between them:
 
-| Artefact | Repo | Role per DOMAIN_ROLES.md | What it owns |
-|---|---|---|---|
-| Phenotype Python SDK | `<REDACTED>/phenotype-python-sdk` | `py-sdk-index` (`phenotype-python-sdk`) | Typed **client libraries** for the Phenotype compute mesh — OCI/GCP/AWS, Tailscale mesh, OTel observability. Consumed by Pyron, DevHex tests, and downstream agents. |
-| Phenotype Go SDK | `<REDACTED>/phenotype-go-sdk` | `platform` (`phenotype-go-sdk`) | Typed **client libraries** for the Go side of the fleet (DevHex, devenv-abstraction, MCP HTTP/SSE edges per `connect` role). |
-| PhenoMCPServers | `<REDACTED>/PhenoMCPServers` | `connect` `also:` + `mcp-servers` (canonical domain entry) | **Catalog SSOT for deployable MCP servers** — defines *what endpoints exist* and *what their schema is*. |
-| PhenoFastMCP (`*` repos) | `<REDACTED>/PhenoFastMCP`, `<REDACTED>/PhenoFastMCP-rust` | `connect` `also:` + `mcp-framework` | **MCP framework substrate** (Python + Rust implementations). Builds servers and clients on top of the wire protocol. |
-| substrate | `<REDACTED>/substrate` | `connect` (core `repo`) | Runtime substrate (`engine-agentapi`, MCP dispatch runtime absorbed from `cheap-llm-mcp`, `dispatch-mcp`, `thegent-dispatch` per ADR-019). |
-| dispatch-mcp | `<REDACTED>/dispatch-mcp` | (now archived; absorbed into `substrate` per ADR-019) | A **specific MCP server** — the dispatch routing layer. Was historically described as "Sole MCP server per ADR-008." |
+| Artefact                 | Repo                                                      | Role per DOMAIN_ROLES.md                                   | What it owns                                                                                                                                                         |
+| ------------------------ | --------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phenotype Python SDK     | `<REDACTED>/phenotype-python-sdk`                         | `py-sdk-index` (`phenotype-python-sdk`)                    | Typed **client libraries** for the Phenotype compute mesh — OCI/GCP/AWS, Tailscale mesh, OTel observability. Consumed by Pyron, DevHex tests, and downstream agents. |
+| Phenotype Go SDK         | `<REDACTED>/phenotype-go-sdk`                             | `platform` (`phenotype-go-sdk`)                            | Typed **client libraries** for the Go side of the fleet (DevHex, devenv-abstraction, MCP HTTP/SSE edges per `connect` role).                                         |
+| PhenoMCPServers          | `<REDACTED>/PhenoMCPServers`                              | `connect` `also:` + `mcp-servers` (canonical domain entry) | **Catalog SSOT for deployable MCP servers** — defines _what endpoints exist_ and _what their schema is_.                                                             |
+| PhenoFastMCP (`*` repos) | `<REDACTED>/PhenoFastMCP`, `<REDACTED>/PhenoFastMCP-rust` | `connect` `also:` + `mcp-framework`                        | **MCP framework substrate** (Python + Rust implementations). Builds servers and clients on top of the wire protocol.                                                 |
+| substrate                | `<REDACTED>/substrate`                                    | `connect` (core `repo`)                                    | Runtime substrate (`engine-agentapi`, MCP dispatch runtime absorbed from `cheap-llm-mcp`, `dispatch-mcp`, `thegent-dispatch` per ADR-019).                           |
+| dispatch-mcp             | `<REDACTED>/dispatch-mcp`                                 | (now archived; absorbed into `substrate` per ADR-019)      | A **specific MCP server** — the dispatch routing layer. Was historically described as "Sole MCP server per ADR-008."                                                 |
 
 Two issues were opened against this registry that need a canonical
 answer:
@@ -49,8 +51,8 @@ era, and its "sole MCP server" wording is now an over-broad claim.
 
 Both SDKs claim to **consolidate McpKit** (the MCP framework SDK that
 was archived 2026-06-17). PhenoMCPServers also holds MCP server
-implementations. The relationship between "SDK that *consumes* MCP
-servers" and "catalog that *lists* MCP servers" needs to be
+implementations. The relationship between "SDK that _consumes_ MCP
+servers" and "catalog that _lists_ MCP servers" needs to be
 formalized — currently it lives only in prose in
 `DOMAIN_ROLES.md` §"connect" + §"Anti-patterns" and is not enforced
 by `scripts/validate-catalog.py`.
@@ -58,8 +60,8 @@ by `scripts/validate-catalog.py`.
 ## Decision
 
 1. **PhenoMCPServers is the SSOT for the MCP server catalog** — it
-   defines *what* MCP servers exist, *what their schemas are*, and
-   *what their lifecycle status is*. This is the **WHAT** layer.
+   defines _what_ MCP servers exist, _what their schemas are_, and
+   _what their lifecycle status is_. This is the **WHAT** layer.
 
 2. **phenotype-python-sdk and phenotype-go-sdk are CLIENT LIBRARIES**
    that consume the PhenoMCPServers catalog at build time to generate
@@ -159,7 +161,7 @@ amended to:
   "where does this server live?" question permanently.
 - **Machines can check it** — `scripts/validate-catalog.py` already
   enforces `tier` ∈ `{pheno-lib, phenotype-sdk, phenotype-framework,
-  federated-service}` and `role` ∈ DOMAIN_ROLES.md. The SDK↔catalog
+federated-service}` and `role` ∈ DOMAIN_ROLES.md. The SDK↔catalog
   consistency check from Decision §4 step 3 is a small extension to
   that validator (one new rule).
 - **Closes both issues with one decision** — the two open issues
@@ -197,18 +199,18 @@ amended to:
   needs a stable schema. Today it is partly hand-maintained. A
   schema + validator will need to land (T-CAT-SCHEMA-1).
 - **Historical SDK wrappers need reconciliation** — a sweep to
-  identify SDK modules that *only* exist because someone bypassed
+  identify SDK modules that _only_ exist because someone bypassed
   the catalog. Expected to be small (T-SDK-SWEEP-1) but real.
 
 ### Required follow-up PRs
 
-| Work item | Description | Owner |
-|---|---|---|
-| `T-CAT-SCHEMA-1` | Add `PhenoMCPServers/catalog.schema.json` + validator | PhenoMCPServers repo |
-| `T-SDK-CG-1` | `phenotype-dag-core` codegen: catalog → Python + Go client stubs | phenotype-registry |
-| `T-SDK-SWEEP-1` | Sweep SDKs for shadow definitions; route through catalog | phenotype-python-sdk + phenotype-go-sdk |
-| `T-AUD-MCP-1` | Auditor-fleet rule: catalog↔SDK consistency (extend PR #366) | phenotype-registry |
-| `T-DISPATCH-README-1` | Update `<REDACTED>/dispatch-mcp` README to reflect the ADR-023 amended scope (delete "sole MCP server" wording) | dispatch-mcp repo |
+| Work item             | Description                                                                                                     | Owner                                   |
+| --------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `T-CAT-SCHEMA-1`      | Add `PhenoMCPServers/catalog.schema.json` + validator                                                           | PhenoMCPServers repo                    |
+| `T-SDK-CG-1`          | `phenotype-dag-core` codegen: catalog → Python + Go client stubs                                                | phenotype-registry                      |
+| `T-SDK-SWEEP-1`       | Sweep SDKs for shadow definitions; route through catalog                                                        | phenotype-python-sdk + phenotype-go-sdk |
+| `T-AUD-MCP-1`         | Auditor-fleet rule: catalog↔SDK consistency (extend PR #366)                                                    | phenotype-registry                      |
+| `T-DISPATCH-README-1` | Update `<REDACTED>/dispatch-mcp` README to reflect the ADR-023 amended scope (delete "sole MCP server" wording) | dispatch-mcp repo                       |
 
 ## Alternatives considered
 
@@ -222,7 +224,7 @@ amended to:
   PhenoMCPServers predates the SDK consolidation moves and is the
   natural authority.
 - **C: Keep ADR-008's "sole MCP server" claim and add an exception
-  clause for PhenoMCPServers** — fragile. ADR-023 instead *qualifies*
+  clause for PhenoMCPServers** — fragile. ADR-023 instead _qualifies_
   ADR-008 with a clear scope, which is more durable than carving
   exceptions.
 - **D: Do nothing — leave the two issues open** — issues #134 and
@@ -251,4 +253,4 @@ amended to:
   PhenoFastMCP + PhenoMCPServers as `connect`-role `also:` owners
 - **Aligns with** [ADR-ECO-019](./ADR-ECO-019-nanovms-sandbox-hardening.md)
   — substrate absorbed the dispatch runtime; ADR-023 makes the SDK
-  + catalog side of that absorption coherent
+  - catalog side of that absorption coherent

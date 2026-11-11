@@ -38,7 +38,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install validators
-        run: pip install pyyaml jsonschema pytest
+        # The repo-level pytest addopts pass --cov=... to every run, so the
+        # plugin that understands those flags has to be present. Without it
+        # pytest exits 4 (usage error) before it collects a single test.
+        run: pip install pyyaml jsonschema pytest pytest-cov
       - name: validate_catalog.py
         run: python scripts/validate_catalog.py
       - name: validate_fork_parents.py
@@ -53,7 +56,7 @@ jobs:
         run: pip install -r servers/substrate/requirements.txt
       - name: Install pheno-org server deps
         run: pip install -e "servers/pheno-org[dev]"
-      - name: pytest catalog + bundle + hexakit + fork pin + substrate + pheno-org
+      - name: pytest catalog + bundle + hexakit + fork pin + stale patterns + substrate + pheno-org
         run: |
           pytest \
             tests/test_catalog_validation.py \
@@ -61,6 +64,7 @@ jobs:
             tests/test_fork_pin_validator.py \
             tests/test_hexakit_template.py \
             tests/test_mcp_server_ts7_template.py \
+            tests/test_validate_stale_patterns.py \
             servers/substrate \
             servers/pheno-org/tests \
             -q

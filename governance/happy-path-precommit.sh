@@ -316,7 +316,13 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     }
 
     # R7 motion-without-result
-    if (lc ~ /(enabled[[:space:]]*=[[:space:]]*false|featureflag[[:space:]]*=[[:space:]]*false|flag[[:space:]]*=[[:space:]]*false|experimental[[:space:]]*=[[:space:]]*false|verbose[[:space:]]*=[[:space:]]*false|# todo|no-op|stub|proposed only)/) {
+    #
+    # "client stubs" is the name of a generated artefact (codegen output), not
+    # a placeholder implementation, so a task list that plans to generate Go and
+    # Python client stubs is not motion-without-result. The exclusion is narrow:
+    # a bare "stub" or "stub implementation" still fires.
+    if (lc ~ /(enabled[[:space:]]*=[[:space:]]*false|featureflag[[:space:]]*=[[:space:]]*false|flag[[:space:]]*=[[:space:]]*false|experimental[[:space:]]*=[[:space:]]*false|verbose[[:space:]]*=[[:space:]]*false|# todo|no-op|stub|proposed only)/ \
+        && lc !~ /(client|generated|codegen|sdk) stubs?/) {
       report("r7", file, line_no, body, "feature false/placeholder introduced without result signal")
     }
 
