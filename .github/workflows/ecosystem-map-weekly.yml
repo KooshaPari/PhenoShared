@@ -55,7 +55,9 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: <REDACTED>/phenotype-registry-curation-data
-          path: ../phenotype-registry-curation-data
+          # Must live INSIDE GITHUB_WORKSPACE: actions/checkout refuses a
+          # path outside it ("is not under /home/runner/work/...").
+          path: .ci-sibling/phenotype-registry-curation-data
           fetch-depth: 1
           persist-credentials: false
 
@@ -64,7 +66,8 @@ jobs:
         # before deciding whether to commit.
         run: |
           set -euo pipefail
-          python3 scripts/regen-ecosystem-map.py --out /tmp/ECOSYSTEM_MAP.regen.md
+          python3 scripts/regen-ecosystem-map.py --out /tmp/ECOSYSTEM_MAP.regen.md \
+            --bindings .ci-sibling/phenotype-registry-curation-data/_bindings.json
 
       - name: detect drift
         id: drift

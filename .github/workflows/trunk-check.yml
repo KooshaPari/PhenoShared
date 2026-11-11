@@ -38,6 +38,15 @@ jobs:
           toolchain: 1.99.0
           components: rustfmt, clippy
 
+      # The Trunk action's own "Set up inputs" step parses the event payload
+      # with jq and aborts with "::error::jq not installed on system!" when
+      # jq is absent, which fails the whole "Lint & Format" job before any
+      # linter runs. Install jq before the action step.
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
       - name: Trunk Check
         uses: trunk-io/trunk-action@04ba50e7658c81db7356da96657e6e77f220bfa3 # v1.3.1
 

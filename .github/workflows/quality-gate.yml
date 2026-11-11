@@ -69,13 +69,19 @@ jobs:
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
         with:
           go-version: '1.24'
-      - name: Install Linux GUI system deps (fabric-tray -> tao/gtk3, libxdo)
+      - name: Install Linux system deps (gtk3, xdo, pipewire)
         run: |
           sudo apt-get update
           # pkg-config + libgtk-3-dev: glib-sys/gtk-sys build probes (via tao).
           # libxdo-dev: fabric-tray links -lxdo at final link (observed 2026-09-27,
           # rust-lld "unable to find library -lxdo" on run 36342217754).
-          sudo apt-get install -y pkg-config libgtk-3-dev libxdo-dev
+          # libpipewire-0.3-dev + libspa-0.2-dev: playcua-native pulls
+          # xcap -> pipewire -> libspa-sys, whose build script probes
+          # libpipewire-0.3.pc. Without it the build stops with
+          # "The system library `libpipewire-0.3` required by crate `libspa-sys`
+          # was not found" (observed on run 43015019489).
+          sudo apt-get install -y pkg-config libgtk-3-dev libxdo-dev \
+            libpipewire-0.3-dev libspa-0.2-dev
       # Zig is a build-time requirement, not a test dependency: the
       # crates/spawn-core-sys build script shells out to `zig build` to produce
       # crates/spawn-core/zig-out/lib/libspawn_core.a and links it. Without zig
