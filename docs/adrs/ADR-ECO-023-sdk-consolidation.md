@@ -1,3 +1,5 @@
+<!-- stale-patterns: file-allow=records the absorption, does not propose a fork -->
+
 # ADR-023: SDK Consolidation Decision
 
 **Status:** Accepted (proposed 2026-06-25)
