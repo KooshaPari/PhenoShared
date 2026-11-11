@@ -1,3 +1,5 @@
+<!-- stale-patterns: file-allow=records the absorption boundary -->
+
 # Boundary — phenotype-research
 
 **Absorbed from:** `<REDACTED>/phenoResearchEngine`
@@ -16,8 +18,7 @@ builder, MCP-server tool surface, and session continuity hooks.
 The upstream `phenoResearchEngine` was formally deprecated on 2026-06-20 with the
 migration target declared as `packages/phenotype-research/` inside the monorepo.
 The Pheno monorepo (`/pheno`) is Rust-first and doesn't have a Python workspace;
-the natural Python home is `phenoAI/python/`, which already houses the
-archived Python MCP packages retired under ADR-006/007.
+the natural Python home is `phenoAI/python/`, which already houses `cheap-llm-mcp`.
 
 The 90-day compatibility shim from the upstream deprecation expires 2026-09-18.
 After that date, downstream consumers must use the new path.

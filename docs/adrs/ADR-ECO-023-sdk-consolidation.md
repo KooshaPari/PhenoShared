@@ -1,7 +1,5 @@
 # ADR-023: SDK Consolidation Decision
 
-<!-- stale-patterns: file-allow=records the absorption -->
-
 **Status:** Accepted (proposed 2026-06-25)
 **Deciders:** forge session (issue triage for [#134](https://github.com/KooshaPari/phenotype-registry/issues/134) + [#135](https://github.com/KooshaPari/phenotype-registry/issues/135))
 **Refs:** [ADR-ECO-017](./ADR-ECO-017-substrate-schema-conventions.md)

@@ -38,7 +38,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install validators
-        run: pip install pyyaml jsonschema pytest
+        # The repo-level pytest addopts pass --cov=... to every run, so the
+        # plugin that understands those flags has to be present. Without it
+        # pytest exits 4 (usage error) before it collects a single test.
+        run: pip install pyyaml jsonschema pytest pytest-cov
       - name: validate_catalog.py
         run: python scripts/validate_catalog.py
       - name: validate_fork_parents.py
