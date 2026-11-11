@@ -1,0 +1,11 @@
+{
+  "harness": "installed Jcode",
+  "operation": "native MCP initialization and tool enumeration only",
+  "binary": "/Users/kooshapari/.local/bin/phinbox-mcp",
+  "binary_sha256": "99ec9a33190f7b27ef53ea50f6a7428706eb5f648d69bc44ec480904e2a9e9eb",
+  "returncode": 0,
+  "stdout": "Connected to MCP server 'phinbox_mcp' and disconnected cleanly.\nServer: phinbox 0.9.0\nTools: 1\n  phinbox_mcp\n",
+  "stderr": "",
+  "tool_call_performed": false,
+  "native_permission_acceptance": false
+}

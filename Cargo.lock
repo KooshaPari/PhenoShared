@@ -14733,6 +14733,7 @@ dependencies = [
  "crossbeam-channel",
  "crossterm 0.29.0",
  "dirs 6.0.0",
+ "futures-util",
  "image",
  "inquire",
  "objc2 0.6.4",
@@ -14745,13 +14746,16 @@ dependencies = [
  "ratatui 0.30.2",
  "ratatui-crossterm",
  "regex",
+ "reqwest 0.12.28",
  "rmcp",
+ "rusqlite",
  "schemars 1.2.2",
  "serde",
  "serde_json",
  "tempfile",
  "thiserror 2.0.20",
  "tokio",
+ "tokio-tungstenite 0.30.0",
  "tracing",
  "tracing-subscriber",
  "tray-icon 0.24.2",
@@ -19479,8 +19483,12 @@ checksum = "17a073bfed563fa236697a068031408a93cd9522e08abf9933ead3e73411bd71"
 dependencies = [
  "futures-util",
  "log",
+ "rustls",
+ "rustls-pki-types",
  "tokio",
+ "tokio-rustls",
  "tungstenite 0.30.0",
+ "webpki-roots 0.26.11",
 ]
 
 [[package]]
@@ -20297,6 +20305,8 @@ dependencies = [
  "httparse",
  "log",
  "rand 0.10.2",
+ "rustls",
+ "rustls-pki-types",
  "sha1 0.11.0",
  "thiserror 2.0.20",
 ]

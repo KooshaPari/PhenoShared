@@ -18,7 +18,7 @@ pub fn render_inbox_index_html(requests: &[PendingRequest]) -> String {
              content='width=device-width,initial-scale=1'><title>{title}</title><style>{css}</\
              style><body><header><h1>{title}</h1></header><main class=empty><p>No pending \
              requests</p><p>Use <code>phinbox ask</code> from your \
-             agent.</p></main><footer><p>phinbox</p></footer></body></html>",
+             agent.</p></main><footer><p><a href=/management>Management workflow</a> | phinbox</p></footer></body></html>",
             title = INBOX_SLUG,
             css = full_html_css(),
         );
@@ -58,7 +58,7 @@ pub fn render_inbox_index_html(requests: &[PendingRequest]) -> String {
         "<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport \
          content='width=device-width,initial-scale=1'><title>{title}</title><style>{css}</\
          style><body><header><h1>{title}</h1><span \
-         class=badge>{count}</span></header><main>{rows}</main><footer><p>phinbox</p></footer></\
+         class=badge>{count}</span></header><main>{rows}</main><footer><p><a href=/management>Management workflow</a> | phinbox</p></footer></\
          body></html>",
         title = INBOX_SLUG,
         css = full_html_css(),

@@ -1,0 +1,21 @@
+{
+  "binding": {
+    "persona_reference": "REPLACE_WITH_EXISTING_PERSONA_BINDING_PROVENANCE",
+    "application_id": "1558640911297028147",
+    "guild_id": "1558641659778961432",
+    "forum_id": "1560878303286534164",
+    "allowed_users": [],
+    "allowed_roles": []
+  },
+  "credential_file": "/root/.drest/phenobot.tok",
+  "board_map_file": "/root/discord-wake/asks-board-map.json",
+  "receiver_owner": "unconfigured",
+  "tags": {
+    "open": "1560878303286534165",
+    "running": "1560878303286534166",
+    "waiting": "1560878303286534167",
+    "deferred": "1560878303286534168",
+    "partial": "1560878303286534169",
+    "blocked": "1560878303286534171"
+  }
+}

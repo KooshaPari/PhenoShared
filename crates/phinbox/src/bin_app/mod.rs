@@ -19,9 +19,7 @@ use std::{
 };
 
 fn main() {
-    let inbox_dir: PathBuf = std::env::var("PHINBOX_INBOX_DIR")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| dirs_bridge().join("Phinbox"));
+    let inbox_dir: PathBuf = phinbox::inbox::default_inbox_root();
 
     let port: u16 = std::env::var("PHINBOX_PORT")
         .ok()
@@ -81,7 +79,7 @@ fn main() {
     };
 
     // Open inbox in the native Swift helper window
-    helper::launch_inbox_helper(handle.port);
+    helper::launch_inbox_helper(handle.port, &handle.inbox_root);
 
     eprintln!(
         "phinbox: daemon running on http://127.0.0.1:{}",
@@ -100,13 +98,6 @@ fn main() {
         daemon_shutdown_signal();
         let _ = handle.stop();
     }
-}
-
-fn dirs_bridge() -> PathBuf {
-    std::env::var("HOME")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("/tmp"))
-        .join(".phinbox")
 }
 
 pub(crate) fn daemon_shutdown_signal() {

@@ -1,27 +1,13 @@
-# Codex plugin — phinbox
+# Codex isolated-profile integration
 
-Installs the `phinbox` MCP server + skill into Codex.
+The current installer uses the installed native `codex mcp add/get/remove` interface and **config.toml**. It does not write the obsolete auxiliary mcp.toml, inject a trust override, pass an unsupported `serve` subcommand, or modify PermissionRequest/Moshi/Xirp hooks.
 
-## Install
+Dry run (no filesystem changes):
 
-```bash
-./install.sh                    # global: ~/.codex
-./install.sh /path/to/host-repo # per-repo: <repo>/.codex
+```sh
+bash crates/phinbox/plugins/codex/install.sh --profile-dir /tmp/phinbox-codex-profile --inbox-dir /tmp/phinbox-inbox --binary /absolute/path/phinbox-mcp
 ```
 
-Or manually, copy `codex.toml` into your Codex MCP config and copy the
-SKILL.md into your Codex skills directory.
+Add `--apply` to install into that explicit isolated profile. Use the same arguments with `--apply --uninstall` to remove only the unchanged registration owned by its receipt. Canonical ~/.codex and related harness profiles are deliberately rejected. For actual Codex discovery use `CODEX_HOME=/tmp/phinbox-codex-profile codex mcp get phinbox_mcp --json`; the installer never starts an MCP tool or an LLM session.
 
-## Verify
-
-```bash
-codex mcp list | grep phinbox_mcp
-codex skills list | grep phinbox
-```
-
-## Uninstall
-
-```bash
-rm -rf ~/.codex/skills/phinbox
-# Remove the [mcp_servers.phinbox_mcp] block from ~/.codex/mcp.toml
-```
+Native permission routing is a separate opt-in contract. See ../../docs/harness-contracts.md. Installing MCP does not intercept permission requests or authorize tool execution. The typed bridge handles only an actual pending PermissionRequest event and returns a native decision after explicit correlated input; its hooks must not replace existing guardrails.

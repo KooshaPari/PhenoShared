@@ -1,0 +1,139 @@
+{
+  "format": "phinbox.live_qualification_receipt.v1",
+  "kit_contract": "Master Assessment Kit 1.1 roles mapped; formal kit-schema validation not claimed",
+  "record_class": "EXECUTED_FIXTURE_ON_LIVE_SERVICE",
+  "subject": {
+    "repository": "KooshaPari/PhenoShared",
+    "source_commit": "a8b41cae73f07d5aa4737d29411f285fd358f1b4",
+    "source_archive_sha256": "29f994911de76cf8af5c1a2104d44fabe00484cb716353f21b7e78274088a90a",
+    "artifact_sha256": "f2c427950e3425668ea24abd0bb6bb55fc78dcae883bb05265afb9553033cf11",
+    "profile": "Linux x86_64 focused native CLI; MCP/tray disabled; development build",
+    "placement": "remote compute + cached copied source; desk FedoraLinux-44; jobs2",
+    "toolchain": {
+      "rustc": "1.98.1 (48a229cea 2026-09-01)",
+      "cargo": "1.98.1 (797e8a9bc 2026-08-05)"
+    },
+    "dependency_lock": "focused/Cargo.lock; exact dependency declaration adaptation, fresh compatible resolution (not root lock parity)"
+  },
+  "assignment": {
+    "beneficiary": "Operator validating the existing Instinct Discord management adapter",
+    "intent": "One non-sensitive isolated canary; native create/edit/close, verify actual Discord state; preserve archived evidence",
+    "authorization": "Explicit user-authorized native qualification as relayed by root task; no fake signature or separate approval record",
+    "non_goals": [
+      "No canonical inbox mirroring",
+      "No Gateway deployment or identity/listener/config changes",
+      "No user click or harness permission acceptance claim"
+    ]
+  },
+  "criteria": [
+    {
+      "id": "DISC-LIVE-01",
+      "predicate": "Same existing Instinct bot/application and exact guild/forum/tags",
+      "applicability": "APPLICABLE",
+      "execution": "EXECUTED",
+      "verdict": "PASS",
+      "evidence": "preflight-metadata.json",
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-02",
+      "predicate": "Exactly one synthetic item in isolated local root",
+      "applicability": "APPLICABLE",
+      "execution": "EXECUTED",
+      "verdict": "PASS",
+      "evidence": "qualification-summary.json",
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-03",
+      "predicate": "Native CLI creates one owned forum thread/starter",
+      "applicability": "APPLICABLE",
+      "execution": "EXECUTED",
+      "verdict": "PASS",
+      "evidence": "state-created.json",
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-04",
+      "predicate": "Lane/ETA/state update in place, stable thread and starter",
+      "applicability": "APPLICABLE",
+      "execution": "EXECUTED",
+      "verdict": "PASS",
+      "evidence": "state-edited.json",
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-05",
+      "predicate": "Full original and workflow attachments downloaded and compared",
+      "applicability": "APPLICABLE",
+      "execution": "EXECUTED",
+      "verdict": "PASS",
+      "evidence": "attachment-verification.json",
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-06",
+      "predicate": "Close disables controls then server archive/lock, no pending effects",
+      "applicability": "APPLICABLE",
+      "execution": "EXECUTED",
+      "verdict": "PASS",
+      "evidence": "state-closed.json",
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-07",
+      "predicate": "Actual authorized human clicks native Gateway control",
+      "applicability": "APPLICABLE",
+      "execution": "NOT_RUN",
+      "verdict": "UNKNOWN",
+      "evidence": null,
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-08",
+      "predicate": "Original real harness permission round trip",
+      "applicability": "APPLICABLE",
+      "execution": "NOT_RUN",
+      "verdict": "UNKNOWN",
+      "evidence": null,
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-09",
+      "predicate": "Native Swift and browser installed user acceptance",
+      "applicability": "APPLICABLE",
+      "execution": "NOT_RUN",
+      "verdict": "UNKNOWN",
+      "evidence": null,
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    },
+    {
+      "id": "DISC-LIVE-10",
+      "predicate": "Live elected Gateway receiver with existing listener coordination",
+      "applicability": "APPLICABLE",
+      "execution": "NOT_RUN",
+      "verdict": "UNKNOWN",
+      "evidence": null,
+      "review": "AWAITING_INDEPENDENT_RECEIPT_REPLAY"
+    }
+  ],
+  "metrics": {
+    "scope": "These 10 explicit local slice criteria only, not product or catalog-wide grade",
+    "pass": 6,
+    "fail": 0,
+    "unknown": 4,
+    "assessed_pass_rate": 1.0,
+    "assessment_coverage": 0.6,
+    "verified_satisfaction": 0.6,
+    "grade": null,
+    "unselected_frontier": "All other product profiles/capabilities remain unassessed; not N/A"
+  },
+  "limitations": [
+    "Synthetic canary on live service is not an actual user task",
+    "Source exact commit but focused dependency lock differs from root workspace lock",
+    "No visual capture/review",
+    "Initial default-urllib CDN GET403 resolved by explicit User-Agent retry, actual bytes compared",
+    "External canonical persona resolver unlocated; concrete existing bot/board identity used only"
+  ],
+  "observation_time_utc": "2026-10-17T09:48:46Z"
+}
