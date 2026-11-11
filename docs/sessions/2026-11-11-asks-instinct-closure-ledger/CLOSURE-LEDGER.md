@@ -60,11 +60,11 @@ IMPLEMENTATION
   goal G7 SessionLedger migration .............. BLOCKED  blocked by G2-G6 + G8
   goal G8 human acceptance ..................... NOT_RUN  no acceptance recorded
 USABILITY
-  closure test reachable by operator ........... PASS   each goal has one command
-  ledger readable without live DB .............. PASS   counts cited w/ provenance
+  closure test reachable by operator ........... FAIL   9 of 11 checks name missing scripts/flags/columns (§2 blockers)
+  ledger readable without live DB .............. NOT_RUN  numerics depend on volatile ~/CodeProjects/temp; not reproducible
 VALIDATION
   acceptance tests executed ..................... NOT_RUN  zero tests executed
-  lane findings re-verified ..................... PASS   COVERAGE-REPORT.md 2026-11-11
+  lane findings re-verified ..................... UNKNOWN  COVERAGE-REPORT.md carries no queries; no independent re-verification done
   register re-read after any repair ............ NOT_RUN  no repair performed
 ASSURANCE
   human acceptance gate defined ................ PASS   G8 definition below
@@ -143,15 +143,21 @@ available now. **Feeds** G3, G4, G5, G6, G7.
 
 **Scope already measured (source: `COVERAGE-REPORT.md` §2, lanes A–H):**
 
-| source | measured volume | register coverage |
+| source | measured volume (UNVERIFIED) | register coverage |
 |---|---|---|
-| iMessage `chat.db` | 248,532 messages, 8,983 text-bearing outbound | 0 captured |
-| `~/.forge` | 18,993 files / 7.83 GB, 13,260 conversations | 0 captured |
-| `~/.jcode` | 12,770 files / 2.80 GB | 0 captured |
-| `~/.codex` | 2,567 files / 637 MB | 0 captured |
-| `~/.kcode` | 1,838 files / 27.5 MB | 0 captured |
-| herdr session history + 48 snapshots | 245 MB, live | 0 captured |
-| Paperclip Postgres | 1.5 GB, live | 0 captured |
+| iMessage `chat.db` | 248,532 messages, 8,983 text-bearing outbound | UNVERIFIED |
+| `~/.forge` | 18,993 files / 7.83 GB, 13,260 conversations | UNVERIFIED |
+| `~/.jcode` | 12,770 files / 2.80 GB | UNVERIFIED |
+| `~/.codex` | 2,567 files / 637 MB | UNVERIFIED |
+| `~/.kcode` | 1,838 files / 27.5 MB | UNVERIFIED |
+| herdr session history + 48 snapshots | 245 MB, live | UNVERIFIED |
+| Paperclip Postgres | 1.5 GB, live | UNVERIFIED |
+
+> **UNVERIFIED (2026-11-11 audit):** no reproducing query exists in this ledger for
+> any cell above. `reg_provenance.source` is `register.json` for 2,259 / 2,259 rows,
+> so there is no harness-level join and the former "0 captured" was an inference from
+> a single-value column, not a measured absence. Every cell is `UNKNOWN` until a
+> query is quoted.
 
 **Closure test.** The mined corpus manifests must account for every occurrence of
 every admitted source with zero unexplained remainder:
@@ -170,6 +176,10 @@ the lane) plus the verification output captured into the ledger's session folder
 
 **Current status:** `NOT_RUN` — mining produced artifacts, but no occurrence-level
 no-loss verification has been executed.
+
+**Blocker (2026-11-11 audit):** `mined/scripts/verify_occurrences.py` does not exist
+(`scripts/` holds only `merge.py`, `mine_*.py`, `repair_forge.py`, `validate_*.py`),
+so the closure test above is not executable.
 
 ---
 
@@ -209,6 +219,11 @@ select count(*) from reg_provenance
 output recorded in the ledger session folder.
 
 **Current status:** `NOT_RUN` — no ingest executed; provenance layer not yet written.
+
+**Blocker (2026-11-11 audit):** `reg_provenance` has no `resolved` column (actual:
+`entity, entity_id, source, source_ref, method, observed_at`), so the closure query
+errors out. The `0 / 98` baseline in G5 is unverifiable for the same reason.
+`mined/<source>_MANIFEST.json` exists only under volatile `~/CodeProjects/temp`.
 
 ---
 
@@ -254,6 +269,10 @@ per-tier breakdown and the structural signals used.
 
 **Current status:** `NOT_RUN`.
 
+**Blocker (2026-11-11 audit):** no `occurrence_attribution` table exists in
+`ledger.db` (`sqlite_master` count = 0), so the closure query is not executable.
+`ATTRIBUTION-AUDIT.md` does not exist.
+
 ---
 
 ### G5 — Register provenance repair
@@ -267,9 +286,15 @@ guessed.
 **Depends on.** G2, G3, G4 (attribution and occurrence identity must exist before a
 link can be repaired). **Feeds** G6, G7.
 
-**Open defects (measured; source: `COVERAGE-REPORT.md` §1, `G-provenance.md`):**
+**Open defects (claimed; source: `COVERAGE-REPORT.md` §1, `G-provenance.md`):**
 
-| id | defect | measured |
+> **UNVERIFIED (2026-11-11 audit):** the figures in this table have no reproducing
+> query in this ledger. The G5 closure SQL below references `occurrence`,
+> `user_utterances`, `quotes_verified`, `resolved`, `source_id` and `disposition` —
+> none of which exist in the current schema. The numbers are carried as targets, not
+> measurements.
+
+| id | defect | claimed (UNVERIFIED) |
 |---|---|---|
 | G5.a | `reg_provenance.source_ref` markdown files resolving on disk | **0 / 98** |
 | G5.b | suspect links (quoted text absent from the joined body) | **118** (e.g. `ASK-000013` is a genuine wrong link) |
@@ -323,6 +348,12 @@ every repair, stored in the ledger session folder.
 
 **Current status:** `NOT_RUN` — defects open; no repair performed.
 
+**Blocker (2026-11-11 audit):** the closure query above names 6 objects that do not
+exist: `reg_provenance.resolved`, the `occurrence` table (and `reg_asks.occurrence_id`),
+`user_utterances` (actual table is `reg_utterances`), `quotes_verified`,
+`reg_asks.source_id`, and `disposition`. The 118 / 805 / 2,134 / 1,843 baselines are
+unreproducible against the actual schema and are `UNKNOWN`, not measured.
+
 ---
 
 ### G6 — Coverage reconciliation
@@ -360,6 +391,10 @@ python3 ~/CodeProjects/temp/asks-coverage/mined/scripts/reconcile_coverage.py \
 owning goal) and the script's stdout.
 
 **Current status:** `NOT_RUN` — no reconciliation matrix exists yet.
+
+**Blocker (2026-11-11 audit):** `mined/scripts/reconcile_coverage.py` does not exist,
+and neither does the named evidence artifact `mined/COVERAGE-MATRIX.md`. The closure
+test above is not executable.
 
 ---
 
@@ -401,7 +436,7 @@ session material rather than a side database.
 
 ```bash
 # dry-run diff must be empty after re-running the migration from a clean state
-cargo test -p SessionLedger --quiet && \
+cargo test -p session-ledger --quiet && \
 python3 researchledger/ingest/ask_research_ledger.py --migrate-to-sessionledger \
   --dry-run --ledger "$LEDGER" --diff-out "$JCODE_SCRATCH_DIR/sessionledger-migration.diff"
 ```
@@ -415,6 +450,11 @@ idempotency check output, and the rollback rehearsal record.
 
 **Current status:** `BLOCKED` — blocked by the evidence gate (G2–G6 not `PASS`) and
 the acceptance gate (G8). Not reachable by agent action alone.
+
+**Blocker (2026-11-11 audit):** `ask_research_ledger.py` implements none of
+`--migrate-to-sessionledger`, `--dry-run`, `--diff-out` (grep returns no matches), so
+the closure test is not executable even once the gates open. The cargo package name is
+`session-ledger` (`absorption/SessionLedger/Cargo.toml`), not `SessionLedger`.
 
 ---
 
@@ -508,12 +548,12 @@ with the command that proves it done.
 | goal | next step | proof command |
 |---|---|---|
 | G1 | Ask the operator for the four exports in the order G1.1 → G1.4; record receipt manifests as each lands | `ls ~/CodeProjects/temp/asks-coverage/exports/` shows one `.MANIFEST.json` per received artifact |
-| G2 | Extend the lane mining scripts to emit an occurrence ledger (occurrence id, source, position, sha256 of body) per source, then run the verifier | `python3 mined/scripts/verify_occurrences.py --expect-remainder 0` → `unaccounted_occurrences=0` |
-| G3 | Write the provenance block into each source manifest, with `resolved` flags | `sqlite3 "$LEDGER" "select count(*) from reg_provenance where resolved=0;"` → `0` |
-| G4 | Implement the attribution classifier with tiered (proven / inferred / unknown) output and write `ATTRIBUTION-AUDIT.md` | `sqlite3 "$LEDGER" "select count(*) from occurrence_attribution where attribution='unknown';"` → `0` |
-| G5 | Fix dangling `source_ref` links first (G5.a), then relink suspect links (G5.b), then disposition the 805 dropped utterances and 7 sourceless asks | the G5 closure query returns all-zero defect counts and `verified_quotes >= 2134` |
-| G6 | Build `mined/COVERAGE-MATRIX.md` from the manifests + register counts, one row per measured source with reason and owning goal | `python3 mined/scripts/reconcile_coverage.py --expect-unexplained 0` → exit 0 |
-| G7 | Prepare the dry-run projection + idempotency harness; **do not write** until G2–G6 are `PASS` and G8 exists | `cargo test -p SessionLedger` → exit 0; dry-run diff identical on second run |
+| G2 | **Blocked:** implement `mined/scripts/verify_occurrences.py` first (does not exist), then emit an occurrence ledger (occurrence id, source, position, sha256 of body) per source and run the verifier | `python3 mined/scripts/verify_occurrences.py --expect-remainder 0` → `unaccounted_occurrences=0` |
+| G3 | **Blocked:** add a `resolved` column to `reg_provenance` (absent) before writing `resolved` flags into each source manifest | `sqlite3 "$LEDGER" "select count(*) from reg_provenance where resolved=0;"` → `0` |
+| G4 | **Blocked:** create the `occurrence_attribution` table (absent), then implement the attribution classifier with tiered (proven / inferred / unknown) output and write `ATTRIBUTION-AUDIT.md` | `sqlite3 "$LEDGER" "select count(*) from occurrence_attribution where attribution='unknown';"` → `0` |
+| G5 | **Blocked:** the G5 closure query names 6 non-existent objects; create them (or rewrite the query against `reg_utterances` / real columns) before any repair | the G5 closure query returns all-zero defect counts |
+| G6 | **Blocked:** implement `mined/scripts/reconcile_coverage.py` (does not exist) and build `mined/COVERAGE-MATRIX.md`, one row per measured source with reason and owning goal | `python3 mined/scripts/reconcile_coverage.py --expect-unexplained 0` → exit 0 |
+| G7 | Prepare the dry-run projection + idempotency harness; **do not write** until G2–G6 are `PASS` and G8 exists | `cargo test -p session-ledger` → exit 0; dry-run diff identical on second run |
 | G8 | Present the reconciled matrix + dry-run diff to the operator and request explicit acceptance on the artifact | `grep -Eqi 'accepted by:' .../ACCEPTANCE.md` → exit 0 |
 
 ---
@@ -522,8 +562,8 @@ with the command that proves it done.
 
 | claim in this ledger | source |
 |---|---|
-| 2,259 asks; 1,843 distinct operator messages; 2,252 links; 238 split utterances | `COVERAGE-REPORT.md` §1, re-verified read-only against the register DB |
-| 805 unpromoted user utterances; 7 sourceless asks; 2,134 verified quotes; 118 suspect links | `COVERAGE-REPORT.md` §1; lane `G-provenance.md` |
+| 2,259 asks (row count only); 1,843 distinct operator messages; 2,252 links; 238 split utterances | 2,259 is a live `count(*)`; the other three are UNVERIFIED — no reproducing query exists |
+| 805 unpromoted user utterances; 7 sourceless asks; 2,134 verified quotes; 118 suspect links | UNVERIFIED — `COVERAGE-REPORT.md` §1 / `G-provenance.md` prose only; schema lacks the tables these counts would come from |
 | 0 / 98 `source_ref` markdown files resolve on disk | `COVERAGE-REPORT.md` §1 |
 | Content lineage (two phone-assistant conversations + `chatdb` with 0 asks); capture window 2026-09-25 → 2026-11-04 | `COVERAGE-REPORT.md` §1; lane `A-gpt-full.md`, `B-gpt-partial.md` |
 | Per-source uncaptured volumes (iMessage 248,532 / 8,983 text-bearing; forge, jcode, codex, kcode, herdr, Paperclip) | `COVERAGE-REPORT.md` §2; lanes `E-imessage-register.md`, `D-harness.md`, `H-other-channels.md` |
