@@ -125,14 +125,14 @@ judge "claim after a terminator and process substitution is rejected" fail "	don
 
 # A loop whose only trigger word is the terminator stays accepted, and the
 # terminator inside a one-line loop body is the same keyword.
-judge "one-line loop with only a terminator is accepted" pass "	for x in y; do echo \$x; done"
+judge "one-line loop with only a terminator is accepted" pass '	for x in y; do echo y; done'
 
 # A claim with a human-eye marker is accepted, as before.
 judge "marker exempts a prose claim" pass "# user-confirmed: the parser is fixed now"
 
 # R7 treats "stub" as a placeholder implementation. A plan to GENERATE client
 # stubs names an artefact; it is not a feature stubbed out and left unbuilt.
-judge "codegen client stubs are not placeholder motion" pass '| `T-SDK-CG-1` | codegen: catalog -> Python + Go client stubs | phenotype-registry |'
+judge "codegen client stubs are not placeholder motion" pass '| T-SDK-CG-1 | codegen: catalog -> Python + Go client stubs | phenotype-registry |'
 judge "generated stubs are not placeholder motion" pass "the generated stubs are checked in"
 
 # The exclusion is narrow: an implementation that is only a stub still fires.

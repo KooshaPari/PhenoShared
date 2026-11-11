@@ -1,4 +1,4 @@
-<!-- stale-patterns: file-allow=records the absorption, does not propose a fork -->
+<!-- stale-patterns: file-allow=records the absorption -->
 
 # ADR-023: SDK Consolidation Decision
 

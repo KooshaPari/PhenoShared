@@ -16,6 +16,7 @@ than exempting it. The second group declares itself in the file header:
 Every exemption is printed at build time, so the set of exempted lines stays
 visible in CI logs rather than becoming invisible permission.
 """
+
 from __future__ import annotations
 
 import re
@@ -57,9 +58,7 @@ RECORD_PREFIXES = (
     "docs/monorepo-state/",
     "docs/org-audits/",
 )
-RECORD_FILES = (
-    "docs/operations/sd-retire-audit-2026-06-17.md",
-)
+RECORD_FILES = ("docs/operations/sd-retire-audit-2026-06-17.md",)
 
 FILE_MARKER = "stale-patterns: file-allow="
 MIN_REASON = 12
