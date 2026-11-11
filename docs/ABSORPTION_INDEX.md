@@ -60,7 +60,22 @@ Code and private data were separated before publication. Code lands here under `
 
 Selection policy: `host-ops`, `harness-ops` and `tailnet-smb-setup` moved wholly to the private registry because a per-file split would still publish host tooling, systemd unit names and runbook cadence. Every other repo was split per file on content. `argis-extensions` was deliberately excluded: its content already exists here at `crates/argis-extensions`.
 
+## Multi-branch consolidation wave (2026-11-11)
+
+The four remaining repos from the deletion list that held real history. Files land here under `absorption/<repo>/`; each repo's full commit graph is stored as a verified git bundle in the private `PhenoRegistry` under `repos/<repo>/history/`, because absorbing only the default branch would have dropped their other branches.
+
+| Repo | Disposition | Worklog ref | Files | Branches | Notes |
+|------|-------------|-------------|-------|----------|-------|
+| `phenoStandards` (private source) | ABSORB | MRG-13 | 25 | 11 | 23 default-branch files plus `FUNDING.yml` and `docs/story-ledger-phenoStandards.md`, which existed only on non-default branches. |
+| `argisexec` (private source) | ABSORB | MRG-14 | 6 | 6 | 4 default-branch files plus `FUNDING.yml` and `docs/story-ledger-argisexec.md` from other branches. |
+| `zen` (private source) | ABSORB | MRG-15 | 17 | 4 | 16 default-branch files plus `docs/story-ledger-zen.md`. |
+| `vibeproxy-monitoring-unified` (private source) | EMPTY | MRG-16 | 0 | 23 | All 23 refs point at one commit with an empty tree. Nothing to consolidate; the bundle preserves the ref graph for audit. Earlier reporting described 21 branches of content, which was wrong. |
+
+Branch-only files were extracted per ref rather than assumed absent, and each repo's `PROVENANCE.md` names the ref each came from. A leak scan over all 52 absorbed files found no private identifiers. These repos carried 19 open issues and 11 open pull requests at absorption time; those live on GitHub and are **not** captured here, so deleting the sources discards them.
+
 ## Worklog references
+
+- **MRG-13..MRG-16** (2026-11-11): Multi-branch consolidation. Full clones rather than shallow, union of file paths across every ref compared against the default branch to find branch-only content, `git bundle create --all` per repo verified with `git bundle verify` inside the source clone, bundles pushed to the private registry via the Git Data API. Total 48 files absorbed.
 
 - **MRG-01..MRG-12** (2026-11-11): Twelve-repo consolidation. Content-based classifier over 3,526 files (tailnet CGNAT addresses, `.ts.net` hostnames, Cloudflare zone ids, credential filenames, key formats), with canonical test vectors whitelisted so they are not mistaken for secrets: W3C traceparent `4bf92f35`/`0af76519`, RFC 4231 HMAC KAT `b0344c61`, CGNAT bounds `100.64.0.0`/`100.64.0.1`, magic DNS `100.100.100.100`, placeholder `ghp_abcdefgh`. Result: 1,708 code files to `absorption/`, 194 data files to `PhenoRegistry/repos/`, 0 copy errors. A post-copy scan of the public absorption tree found no private identifiers; the only matches were the AWS documentation placeholder `AKIAIOSFODNN7EXAMPLE` and the fake token `ghp_abcdefgh...`, both in test fixtures.
 
