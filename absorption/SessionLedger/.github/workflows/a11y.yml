@@ -1,0 +1,56 @@
+name: Accessibility
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  playwright-a11y:
+    name: visual contract · WCAG AA
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tests/visual/harness
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: tests/visual/harness/package-lock.json
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: taiki-e/install-action@e28ac56891501ddb0600608470dbe94544964ed4 # v2
+        with:
+          tool: dioxus-cli@0.7.9
+      - name: Build sl-viewer web surface
+        working-directory: crates/sl-viewer
+        # Avoid dx 0.7.9's release wasm-opt SIGABRT; validate a fresh debug
+        # web artifact rather than falling through to stale output.
+        run: dx build --platform web --debug-symbols false --no-default-features --features web
+      - name: Install harness dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Validate visual contract
+        shell: pwsh
+        run: ./validate.ps1
+      - name: Inclusive language seed check
+        shell: pwsh
+        working-directory: ${{ github.workspace }}
+        run: ./scripts/inclusive-language-check.ps1
+      - name: Run axe against built sl-viewer
+        run: npm run test:a11y
+      - name: Assert responsive overflow contract
+        run: npm run test:responsive
+      - name: Run visual golden comparison
+        run: npm run test:visual

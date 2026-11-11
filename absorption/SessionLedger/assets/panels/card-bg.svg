@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" fill="none">
+  <defs>
+    <linearGradient id="lc-panel-card" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="lc-panel-accent" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="196" height="116" rx="12" fill="url(#lc-panel-card)" stroke="#e2e8f0" stroke-width="1.5"/>
+  <rect x="2" y="2" width="196" height="3" rx="1.5" fill="url(#lc-panel-accent)"/>
+  <path d="M 12 2 L 12 12 M 188 2 L 188 12" stroke="#cbd5e1" stroke-width="1" fill="none"/>
+</svg>

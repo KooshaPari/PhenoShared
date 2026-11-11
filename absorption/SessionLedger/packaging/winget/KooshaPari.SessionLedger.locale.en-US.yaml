@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
+PackageIdentifier: KooshaPari.SessionLedger
+PackageVersion: 0.1.0
+PackageLocale: en-US
+Publisher: KooshaPari
+PublisherUrl: https://github.com/KooshaPari
+PublisherSupportUrl: https://github.com/KooshaPari/SessionLedger/issues
+Author: KooshaPari
+PackageName: SessionLedger
+PackageUrl: https://github.com/KooshaPari/SessionLedger
+License: MIT OR Apache-2.0
+LicenseUrl: https://github.com/KooshaPari/SessionLedger/blob/main/LICENSE-MIT
+Copyright: Copyright (c) 2026 KooshaPari
+ShortDescription: OKF-native session compiler — capture, archive, and replay AI agent sessions.
+Description: |-
+  SessionLedger is an OKF-native session compiler. This winget package installs
+  the sl-viewer desktop companion from GitHub Releases (checksum-verified ZIP).
+
+  The sl-daemon HTTP service is installed separately via Cargo until a dedicated
+  daemon release artifact is published:
+
+    cargo install --git https://github.com/KooshaPari/SessionLedger --locked --path crates/sl-daemon
+
+  Native MSI/PKG installers, when added, live under packaging/windows and
+  packaging/macos — this portable ZIP channel does not replace those lanes.
+Moniker: sessionledger
+Tags:
+  - ai
+  - okf
+  - session
+  - ledger
+  - viewer
+  - dioxus
+ReleaseNotesUrl: https://github.com/KooshaPari/SessionLedger/releases/tag/v0.1.0
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0

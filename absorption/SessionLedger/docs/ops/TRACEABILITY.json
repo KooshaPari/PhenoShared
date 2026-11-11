@@ -1,0 +1,1318 @@
+{
+  "schema": "sessionledger.traceability/v1",
+  "updated": "2026-07-24",
+  "status_vocabulary": ["done", "partial", "todo", "blocked", "na"],
+  "overall_audit": {
+    "score": "396/402",
+    "pct": 98,
+    "grade": "A",
+    "commit": "13c974f7",
+    "wave": "Wave-44",
+    "delta_vs_w43": "0 (conservative hold; 2 of 3 machine lanes shipped 2026-07-24 -- W44-B1 loom HTTP SSE soak, W44-B6 OKF conformance 33 fixtures, PERT correction; remaining 6 raw pts across C04 L36 / C08 L76 / C11 L110)"
+  },
+  "fr": [
+    {
+      "id": "FR-001",
+      "status": "done",
+      "evidence": ["crates/sl-daemon/src/etl.rs", "src/ingestion/"]
+    },
+    {
+      "id": "FR-002",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/validation.rs",
+        "docs/reference/OKF-SPEC.md"
+      ]
+    },
+    {
+      "id": "FR-003",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/filter.rs",
+        "crates/sl-daemon/src/tag.rs"
+      ]
+    },
+    {
+      "id": "FR-004",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/tests/sse_bridge.rs",
+        "crates/sl-viewer/src/replay_view.rs"
+      ]
+    },
+    {
+      "id": "FR-005",
+      "status": "done",
+      "evidence": ["crates/sl-daemon/src/metrics.rs"]
+    },
+    {
+      "id": "FR-006",
+      "status": "done",
+      "evidence": ["crates/sl-daemon/src/archive.rs"]
+    },
+    {
+      "id": "FR-007",
+      "status": "done",
+      "evidence": ["crates/sl-viewer/src/timeline.rs"]
+    },
+    {
+      "id": "FR-008",
+      "status": "done",
+      "evidence": ["crates/sl-viewer/src/search_view.rs"]
+    },
+    {
+      "id": "FR-009",
+      "status": "done",
+      "evidence": ["crates/sl-viewer/src/replay_view.rs"]
+    },
+    {
+      "id": "FR-010",
+      "status": "done",
+      "evidence": ["crates/sl-viewer/src/live_feed.rs", "docs/OKF-ROUNDTRIP.md"]
+    },
+    {
+      "id": "FR-011",
+      "status": "done",
+      "evidence": [
+        "src/domain/worklog.rs",
+        "crates/sl-viewer/src/unfinished_tab.rs",
+        "tests/merge_recovery.rs"
+      ]
+    },
+    {
+      "id": "FR-012",
+      "status": "done",
+      "evidence": ["src/domain/bundle.rs", "src/distill/", "src/inject.rs"]
+    },
+    {
+      "id": "FR-013",
+      "status": "done",
+      "evidence": [
+        "tests/okf_roundtrip.rs",
+        "tests/okf_golden.rs",
+        "tests/fixtures/okf/"
+      ]
+    },
+    {
+      "id": "FR-014",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/http.rs",
+        "process-compose.yaml",
+        "docs/ops/runbook.md"
+      ]
+    },
+    {
+      "id": "FR-015",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/otel.rs",
+        "crates/sl-daemon/src/metrics.rs",
+        "docs/ops/dashboards/sessionledger-red.json",
+        "docs/ops/observability.md"
+      ]
+    }
+  ],
+  "plan": [
+    {
+      "id": "T-001",
+      "status": "done"
+    },
+    {
+      "id": "T-002",
+      "status": "done"
+    },
+    {
+      "id": "T-003",
+      "status": "done"
+    },
+    {
+      "id": "T-004",
+      "status": "done"
+    },
+    {
+      "id": "T-005",
+      "status": "done"
+    },
+    {
+      "id": "T-006",
+      "status": "done"
+    },
+    {
+      "id": "T-007",
+      "status": "done"
+    },
+    {
+      "id": "T-008",
+      "status": "done"
+    },
+    {
+      "id": "T-009",
+      "status": "done"
+    },
+    {
+      "id": "T-010",
+      "status": "done"
+    },
+    {
+      "id": "T-011",
+      "status": "done"
+    },
+    {
+      "id": "T-012",
+      "status": "done"
+    },
+    {
+      "id": "T-013",
+      "status": "done"
+    },
+    {
+      "id": "T-014",
+      "status": "done"
+    },
+    {
+      "id": "T-020",
+      "status": "done"
+    },
+    {
+      "id": "T-021",
+      "status": "done"
+    },
+    {
+      "id": "T-022",
+      "status": "done"
+    },
+    {
+      "id": "T-023",
+      "status": "done"
+    },
+    {
+      "id": "T-024",
+      "status": "done"
+    },
+    {
+      "id": "T-025",
+      "status": "done"
+    },
+    {
+      "id": "T-030",
+      "status": "done"
+    },
+    {
+      "id": "T-031",
+      "status": "done"
+    },
+    {
+      "id": "T-032",
+      "status": "done"
+    },
+    {
+      "id": "T-033",
+      "status": "done"
+    },
+    {
+      "id": "T-034",
+      "status": "done"
+    },
+    {
+      "id": "T-035",
+      "status": "done"
+    },
+    {
+      "id": "T-036",
+      "status": "done"
+    },
+    {
+      "id": "T-037",
+      "status": "done"
+    },
+    {
+      "id": "T-038",
+      "status": "done"
+    }
+  ],
+  "wbs": [
+    {
+      "id": "WBS-0.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-0.2",
+      "status": "done"
+    },
+    {
+      "id": "WBS-1.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-2.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-2.2",
+      "status": "done"
+    },
+    {
+      "id": "WBS-3.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-3.2",
+      "status": "todo"
+    },
+    {
+      "id": "WBS-4.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-4.2",
+      "status": "partial"
+    },
+    {
+      "id": "WBS-5.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-6.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-6.2",
+      "status": "partial",
+      "evidence": [
+        "tests/properties.rs",
+        "crates/sl-viewer/tests/properties_viewer.rs",
+        "crates/sl-viewer/tests/properties_viewer_theme_url.rs",
+        "crates/sl-viewer/tests/properties_viewer_unfinished_tab.rs",
+        "crates/sl-viewer/tests/properties_viewer_timeline.rs",
+        "crates/sl-viewer/tests/properties_viewer_search_memory.rs",
+        "crates/sl-viewer/tests/properties_viewer_history.rs",
+        "crates/sl-viewer/tests/properties_viewer_web_exports.rs",
+        "crates/sl-viewer/tests/properties_viewer_bundle_detail.rs",
+        "crates/sl-viewer/tests/properties_viewer_bundle_diff.rs",
+        "crates/sl-viewer/tests/properties_viewer_mock_data.rs",
+        "crates/sl-viewer/tests/properties_viewer_cli_help.rs",
+        "crates/sl-viewer/tests/properties_viewer_corpus_cta.rs",
+        "crates/sl-viewer/tests/properties_viewer_theme.rs",
+        "crates/sl-viewer/tests/properties_viewer_settings.rs",
+        "crates/sl-viewer/tests/properties_viewer_corpus_paths.rs",
+        "crates/sl-viewer/tests/properties_viewer_help_overlay.rs",
+        "crates/sl-viewer/tests/properties_viewer_settings_tab.rs",
+        "crates/sl-viewer/tests/properties_viewer_menu.rs",
+        "crates/sl-viewer/tests/properties_viewer_async_states.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_okf.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_worklog.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_export.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_distill.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_intent.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_context.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_contract.rs",
+        "crates/sl-viewer/tests/properties_session_ledger_dedup.rs",
+        "fuzz/fuzz_targets/okf_roundtrip.rs",
+        "fuzz/fuzz_targets/jsonl_ingest.rs",
+        ".github/workflows/ci.yml",
+        ".github/workflows/bench-gate.yml",
+        ".github/workflows/fuzz-blocking.yml",
+        "docs/ops/perf-baseline.json",
+        "scripts/bench-gate.ps1",
+        "benches/pipeline.rs",
+        "CONTRIBUTING.md"
+      ]
+    },
+    {
+      "id": "WBS-7.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-7.2",
+      "status": "done"
+    },
+    {
+      "id": "WBS-7.3",
+      "status": "done"
+    },
+    {
+      "id": "WBS-7.4",
+      "status": "done"
+    },
+    {
+      "id": "WBS-7.5",
+      "status": "done"
+    },
+    {
+      "id": "WBS-7.6",
+      "status": "done"
+    },
+    {
+      "id": "WBS-8.1",
+      "status": "done"
+    },
+    {
+      "id": "WBS-8.2",
+      "status": "done"
+    },
+    {
+      "id": "WBS-8.3",
+      "status": "done"
+    },
+    {
+      "id": "WBS-8.4",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/release.yml",
+        "scripts/repro-check.ps1",
+        "docs/ops/local-trust-boundary.md",
+        "tests/properties.rs",
+        "fuzz/"
+      ]
+    },
+    {
+      "id": "WBS-8.5",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-9.1",
+      "status": "partial"
+    },
+    {
+      "id": "WBS-9.2",
+      "status": "todo"
+    },
+    {
+      "id": "WBS-9.3",
+      "status": "partial"
+    },
+    {
+      "id": "WBS-8.6",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/a11y.yml",
+        ".github/workflows/ops-load.yml",
+        ".github/workflows/bench-gate.yml",
+        "docs/USER_JOURNEYS.md",
+        ".env.example"
+      ]
+    },
+    {
+      "id": "WBS-8.7",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.8",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/hermetic.yml",
+        "crates/sl-daemon/src/audit.rs",
+        "tests/race_smoke.rs",
+        "docs/adr/0002-mobile-presence.md"
+      ]
+    },
+    {
+      "id": "WBS-8.9",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.10",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/ops-dashboards.yml",
+        "docs/ops/cross-platform-ci.md",
+        "tests/compression_eval.rs",
+        "tests/visual/golden/e1-bundle-empty.png"
+      ]
+    },
+    {
+      "id": "WBS-8.11",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.12",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/http.rs",
+        "tests/visual/harness/responsive.spec.js",
+        "packaging/channels.md",
+        "packaging/systemd/sessionledger-daemon.service"
+      ]
+    },
+    {
+      "id": "WBS-8.13",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.14",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/main.rs",
+        "crates/sl-daemon/src/http.rs",
+        "docs/viewer-hotkeys.md",
+        ".vale.ini"
+      ]
+    },
+    {
+      "id": "WBS-8.15",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.16",
+      "status": "done",
+      "evidence": [
+        "docs/api/openapi.yaml",
+        "crates/sl-daemon/src/http.rs",
+        ".pre-commit-config.yaml",
+        "assets/tokens.css",
+        "crates/sl-viewer/src/theme.rs"
+      ]
+    },
+    {
+      "id": "WBS-8.17",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.18",
+      "status": "done",
+      "evidence": [
+        "scripts/openapi-drift-check.ps1",
+        ".github/workflows/security.yml",
+        "tests/visual/harness/responsive.spec.js",
+        "assets/tokens.css",
+        "scripts/installer-lifecycle-smoke.ps1",
+        "Containerfile"
+      ]
+    },
+    {
+      "id": "WBS-8.19",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.20",
+      "status": "done",
+      "evidence": [
+        "assets/tokens.css",
+        "crates/sl-daemon/src/banner.rs",
+        "docs/adr/0003-platform-code-signing.md",
+        "docs/ops/hermetic-builder.json",
+        "docs/ops/eval-manifest.json"
+      ]
+    },
+    {
+      "id": "WBS-8.21",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.22",
+      "status": "done",
+      "evidence": [
+        "src/schema/migrate.rs",
+        "scripts/provenance-contract-check.ps1",
+        ".github/workflows/race-smoke.yml",
+        "crates/sl-viewer/src/async_states.rs",
+        "tests/visual/golden/l1-content-skeleton.png"
+      ]
+    },
+    {
+      "id": "WBS-8.23",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.24",
+      "status": "done",
+      "evidence": [
+        "src/ports/sqlite_memory.rs",
+        "crates/sl-daemon/src/metrics.rs",
+        "scripts/flake-tracker-check.ps1",
+        "scripts/flake-rerun-stats.ps1",
+        "crates/sl-viewer/src/live_feed.rs",
+        "crates/sl-viewer/src/replay_view.rs"
+      ]
+    },
+    {
+      "id": "WBS-8.25",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.26",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/main.rs",
+        "crates/sl-daemon/src/http.rs",
+        "docs/ops/dashboards/sessionledger-red.json",
+        "scripts/flake-quarantine-apply.ps1",
+        ".github/workflows/cross-platform-build.yml",
+        "tests/visual/golden/e2-history-empty.png",
+        "tests/visual/golden/e4-search-empty.png",
+        "tests/visual/golden/r1-search-error.png"
+      ]
+    },
+    {
+      "id": "WBS-8.27",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.28",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/ci.yml",
+        "crates/sl-daemon/src/audit.rs",
+        "docs/adr/0004-commit-signing-policy.md",
+        ".github/workflows/ops-chaos-smoke.yml",
+        "docs/ops/fixtures/slsa-materials-contract.sample.json",
+        "docs/ops/eval-manifest.json",
+        "crates/sl-viewer/src/help_overlay.rs",
+        "scripts/installer-lifecycle-smoke.ps1"
+      ]
+    },
+    {
+      "id": "WBS-8.29",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.30",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/shutdown.rs",
+        "scripts/audit-review.ps1",
+        ".github/workflows/ops-gameday.yml",
+        "docs/ops/eval-manifest.json",
+        "docs/a11y/status-regions-and-native-smoke.md",
+        "tests/visual/golden/e5-first-run-empty.png"
+      ]
+    },
+    {
+      "id": "WBS-8.31",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.32",
+      "status": "done",
+      "evidence": [
+        "tests/memory_budget.rs",
+        "docs/functional_requirements.md",
+        "docs/ops/feedback-budgets.md",
+        "scripts/repro-check.ps1",
+        "docs/a11y/screen-reader-smoke.md",
+        "tests/visual/golden/s1-launch-splash.png"
+      ]
+    },
+    {
+      "id": "WBS-8.33",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.34",
+      "status": "done",
+      "evidence": [
+        "tests/race_model.rs",
+        "scripts/env-example-check.ps1",
+        "docs/ops/local-trust-boundary.md",
+        "scripts/pprof-smoke.ps1",
+        "fuzz/fuzz_targets/jsonl_ingest.rs",
+        "crates/sl-viewer/src/search_view.rs"
+      ]
+    },
+    {
+      "id": "WBS-8.35",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.36",
+      "status": "done",
+      "evidence": [
+        "justfile",
+        "Taskfile.yml",
+        "scripts/runtime-up.sh",
+        "scripts/runtime-up.ps1",
+        "docs/ops/runtime-facade.md",
+        "scripts/install.sh",
+        "scripts/install.ps1",
+        "packaging/homebrew/sessionledger.rb",
+        "packaging/winget/",
+        "packaging/macos/",
+        "scripts/package-msi.ps1",
+        ".github/workflows/release.yml"
+      ]
+    },
+    {
+      "id": "WBS-8.37",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.38",
+      "status": "done",
+      "evidence": [
+        "renovate.json",
+        ".github/workflows/security.yml",
+        "docs/ops/eval-manifest.json",
+        "docs/reference/conformance/fixtures/",
+        "crates/sl-daemon/src/http.rs",
+        ".github/workflows/bench-gate.yml",
+        "docs/ops/perf-baseline.json",
+        ".github/workflows/release.yml",
+        ".github/workflows/qgate.yml"
+      ]
+    },
+    {
+      "id": "WBS-8.39",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.40",
+      "status": "done",
+      "evidence": [
+        "packaging/caddy/Caddyfile",
+        "packaging/nginx/sessionledger.conf",
+        "scripts/branch-protection-check.ps1",
+        "scripts/oci-cosign-verify.ps1",
+        "crates/sl-daemon/completions/",
+        "tests/allocation_budget.rs",
+        "crates/sl-daemon/src/http.rs"
+      ]
+    },
+    {
+      "id": "WBS-8.41",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.42",
+      "status": "done",
+      "evidence": [
+        "docs/ops/signing-readiness.md",
+        "scripts/signing-readiness-check.ps1",
+        ".github/workflows/release.yml",
+        "docs/ops/crypto-inventory.md",
+        "scripts/crypto-inventory-check.ps1",
+        "docs/ops/token-burn.json",
+        "scripts/token-burn-check.ps1",
+        "crates/sl-viewer/src/command_palette.rs",
+        "docs/ops/alloc-profile.md",
+        "scripts/alloc-profile-check.ps1"
+      ]
+    },
+    {
+      "id": "WBS-8.43",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.44",
+      "status": "done",
+      "evidence": [
+        "docs/ops/privacy-hygiene.md",
+        "scripts/privacy-hygiene-check.ps1",
+        "docs/ops/test-pyramid.md",
+        "scripts/test-pyramid-check.ps1",
+        "docs/ops/continuous-profiling.md",
+        "scripts/continuous-profiling-agent.ps1",
+        "docs/ops/sandbox-boundary.md",
+        "scripts/sandbox-boundary-check.ps1",
+        "docs/ops/perf-baseline.json",
+        "docs/a11y/overlay-escape.md"
+      ]
+    },
+    {
+      "id": "WBS-8.45",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.46",
+      "status": "done",
+      "evidence": [
+        "docs/ops/cve-feed-subscription.md",
+        "scripts/cve-feed-check.ps1",
+        "docs/ops/cross-language-parity.md",
+        "scripts/cross-language-parity-check.ps1",
+        "tests/properties.rs",
+        "docs/ops/crypto-inventory.md",
+        "docs/a11y/design-tokens.md",
+        "crates/sl-viewer/src/tokens.rs",
+        ".github/workflows/loom-smoke.yml"
+      ]
+    },
+    {
+      "id": "WBS-8.47",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md"]
+    },
+    {
+      "id": "WBS-8.48",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/security.yml",
+        "docs/adr/0005-no-serverless-edge.md",
+        "scripts/edge-deploy-scope-check.ps1",
+        "docs/ops/versioning-policy.md",
+        "scripts/versioning-policy-check.ps1",
+        "crates/sl-viewer/src/async_states.rs",
+        "locales/es.json",
+        "src/i18n.rs",
+        "docs/ops/i18n.md"
+      ]
+    },
+    {
+      "id": "WBS-8.49",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.50",
+      "status": "done",
+      "evidence": [
+        "docs/ops/continuous-profiling.md",
+        "scripts/continuous-profiling-agent.ps1",
+        "tests/continuous_profiling.rs",
+        "docs/ops/shuttle-soft.md",
+        "scripts/shuttle-soft-check.ps1",
+        ".github/workflows/shuttle-soft.yml",
+        "docs/ops/alertmanager-soft.md",
+        "packaging/alertmanager/alertmanager.yml.sample",
+        "scripts/alertmanager-soft-check.ps1",
+        "adapters/go/main.go",
+        "docs/adr/0006-no-mcp-server.md",
+        "scripts/mcp-scope-check.ps1"
+      ]
+    },
+    {
+      "id": "WBS-8.51",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.52",
+      "status": "done",
+      "evidence": [
+        "adapters/typescript/okf_adapter.ts",
+        "scripts/loom-permutation-check.ps1",
+        ".github/workflows/loom-permutation.yml",
+        "tests/loom_permutation.rs",
+        "crates/sl-daemon/src/otel_metrics.rs",
+        "scripts/otlp-metrics-check.ps1",
+        "tests/otlp_metrics.rs",
+        "scripts/oci-cosign-verify.ps1",
+        "docs/ops/distribution.md",
+        "scripts/slsa-isolation-check.ps1",
+        "docs/ops/hermetic-builds.md",
+        ".github/workflows/hermetic.yml"
+      ]
+    },
+    {
+      "id": "WBS-8.53",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.54",
+      "status": "done",
+      "evidence": [
+        "scripts/shuttle-permutation-check.ps1",
+        ".github/workflows/shuttle-permutation.yml",
+        "tests/shuttle_permutation.rs",
+        "scripts/miri-permutation-check.ps1",
+        ".github/workflows/miri-permutation.yml",
+        "docs/ops/source-provenance.md",
+        "scripts/source-provenance-check.ps1",
+        "tests/source_provenance.rs",
+        ".github/workflows/reusable-hermetic-build.yml",
+        "scripts/reusable-provenance-check.ps1",
+        "docs/ops/maintainer-2fa.md",
+        "scripts/maintainer-2fa-check.ps1",
+        "tests/maintainer_2fa.rs"
+      ]
+    },
+    {
+      "id": "WBS-8.55",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.56",
+      "status": "done",
+      "evidence": [
+        "scripts/tsan-permutation-check.ps1",
+        ".github/workflows/tsan-permutation.yml",
+        "tests/tsan_permutation.rs",
+        "scripts/rootless-nonet-check.ps1",
+        ".github/workflows/rootless-nonet.yml",
+        "tests/rootless_nonet.rs",
+        "docs/ops/slsa-protected-environment.md",
+        "scripts/slsa-protected-env-check.ps1",
+        "tests/slsa_protected_env.rs",
+        "locales/en.ftl",
+        "locales/es.ftl",
+        "src/i18n_fluent.rs",
+        "scripts/fluent-i18n-check.ps1",
+        "tests/fluent_i18n.rs",
+        "scripts/use-gauges-check.ps1",
+        "tests/use_gauges.rs"
+      ]
+    },
+    {
+      "id": "WBS-8.57",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.58",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/jemalloc-hard.yml",
+        "scripts/jemalloc-check.ps1",
+        "tests/jemalloc_hard.rs",
+        ".github/workflows/fuzz-blocking.yml",
+        "scripts/fuzz-cadence-check.ps1",
+        ".github/workflows/envelope-crypto.yml",
+        "scripts/envelope-crypto-check.ps1",
+        "tests/envelope_crypto.rs",
+        "scripts/cargo-nonet-check.ps1",
+        "tests/cargo_nonet.rs",
+        "tests/loom_model.rs",
+        "scripts/loom-permutation-check.ps1",
+        "WAVE39_SCOPE.md"
+      ]
+    },
+    {
+      "id": "WBS-8.59",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.60",
+      "status": "done",
+      "evidence": [
+        "docs/ops/eval-reproducibility.md",
+        "scripts/eval-repro-check.ps1",
+        "tests/eval_repro.rs",
+        ".github/workflows/signing-hard.yml",
+        "tests/signing_hard.rs",
+        "docs/ops/update-check.md",
+        "scripts/update-check-check.ps1",
+        "tests/update_check.rs",
+        ".github/workflows/update-check-hard.yml",
+        "scripts/rootless-matrix-check.ps1",
+        "tests/rootless_matrix.rs",
+        "tests/loom_model.rs",
+        "scripts/loom-permutation-check.ps1"
+      ]
+    },
+    {
+      "id": "WBS-8.61",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.62",
+      "status": "done",
+      "evidence": [
+        ".github/workflows/loom-permutation.yml",
+        ".github/workflows/ci.yml",
+        "scripts/sandbox-boundary-check.ps1",
+        "scripts/oci-cosign-verify.ps1",
+        "tests/source_provenance.rs",
+        "docs/ops/perf-baseline.json",
+        "scripts/bench-gate.ps1",
+        "crates/sl-viewer/src/daemon_url.rs",
+        "WAVE41_SCOPE.md"
+      ]
+    },
+    {
+      "id": "WBS-8.63",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    },
+    {
+      "id": "WBS-8.64",
+      "status": "done",
+      "evidence": [
+        "scripts/commit-signing-check.ps1",
+        "tests/commit_signing_check.rs",
+        "scripts/sbom-validate-check.ps1",
+        "tests/sbom_validate.rs",
+        "scripts/slsa-protected-env-check.ps1",
+        "tests/slsa_protected_env.rs",
+        ".github/workflows/alloc-profile-hard.yml",
+        "tests/alloc_profile_hard.rs",
+        "crates/sl-viewer/src/corpus_cta.rs",
+        "WAVE42_SCOPE.md"
+      ]
+    },
+    {
+      "id": "WBS-8.65",
+      "status": "done",
+      "evidence": ["audit/SCORECARD.md", "docs/ops/WBS.md"]
+    }
+  ],
+  "clusters": [
+    {
+      "id": "C00",
+      "score": "30/30",
+      "status": "done",
+      "evidence": [
+        "docs/api/openapi.yaml",
+        "src/schema/mod.rs",
+        "src/ports/sqlite_memory.rs",
+        "crates/sl-daemon/src/shutdown.rs",
+        "crates/sl-daemon/src/main.rs",
+        "crates/sl-daemon/src/watcher.rs",
+        "crates/sl-daemon/src/http.rs",
+        "docs/ops/schema-migrations.md",
+        "scripts/openapi-drift-check.ps1",
+        "tests/memory_budget.rs",
+        "scripts/rss-budget-check.ps1",
+        "docs/ops/memory-budget.json",
+        "tests/allocation_budget.rs",
+        "scripts/allocation-budget-check.ps1",
+        "docs/ops/allocation-budget.json",
+        "docs/ops/alloc-profile.md",
+        "scripts/alloc-profile-check.ps1",
+        "tests/alloc_profile_dhat.rs",
+        ".github/workflows/alloc-profile-hard.yml",
+        "tests/alloc_profile_hard.rs",
+        "docs/ops/perf-baseline.json",
+        "scripts/bench-gate.ps1",
+        "tests/race_model.rs",
+        "docs/ops/concurrency-safety.md",
+        ".github/workflows/race-smoke.yml",
+        "tests/loom_model.rs",
+        ".github/workflows/loom-smoke.yml",
+        "scripts/loom-smoke-check.ps1",
+        "docs/ops/shuttle-soft.md",
+        "scripts/shuttle-soft-check.ps1",
+        "tests/shuttle_soft.rs",
+        ".github/workflows/shuttle-soft.yml",
+        "scripts/loom-permutation-check.ps1",
+        ".github/workflows/loom-permutation.yml",
+        "tests/loom_permutation.rs",
+        "scripts/shuttle-permutation-check.ps1",
+        ".github/workflows/shuttle-permutation.yml",
+        "tests/shuttle_permutation.rs",
+        "scripts/miri-permutation-check.ps1",
+        ".github/workflows/miri-permutation.yml",
+        "scripts/tsan-permutation-check.ps1",
+        ".github/workflows/tsan-permutation.yml",
+        "tests/tsan_permutation.rs",
+        ".github/workflows/jemalloc-hard.yml",
+        "scripts/jemalloc-check.ps1",
+        "tests/jemalloc_hard.rs",
+        "docs/ops/jemalloc.md"
+      ],
+      "remaining": "shuttle crate in default graph; full tokio sl-daemon broadcast/SSE graph ports (L7 residual); default-on jemalloc / Windows parity (L8 residual)"
+    },
+    {
+      "id": "C01",
+      "score": "30/30",
+      "status": "done",
+      "evidence": [
+        ".env.example",
+        "scripts/env-example-check.ps1",
+        ".github/workflows/security.yml",
+        ".github/workflows/qgate.yml",
+        "SECURITY.md",
+        "CONTRIBUTING.md",
+        ".pre-commit-config.yaml",
+        "crates/sl-daemon/completions/",
+        "scripts/install-sl-daemon-completions.ps1",
+        "crates/sl-daemon/tests/completions.rs",
+        "locales/en.json",
+        "locales/es.json",
+        "src/i18n.rs",
+        "docs/ops/i18n.md",
+        "scripts/i18n-check.ps1",
+        "locales/en.ftl",
+        "locales/es.ftl",
+        "src/i18n_fluent.rs",
+        "scripts/fluent-i18n-check.ps1",
+        "tests/fluent_i18n.rs",
+        ".github/workflows/ci.yml",
+        ".github/workflows/commit-signing.yml"
+      ],
+      "remaining": "Viewer/CLI production string migration through Fluent catalogs (L16 residual)"
+    },
+    {
+      "id": "C02",
+      "score": "30/30",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/audit.rs",
+        "crates/sl-daemon/src/http.rs",
+        "crates/sl-daemon/src/main.rs",
+        "crates/sl-daemon/src/resilience.rs",
+        "docs/ops/local-trust-boundary.md",
+        "docs/ops/crypto-inventory.md",
+        "scripts/crypto-inventory-check.ps1",
+        "scripts/envelope-crypto-check.ps1",
+        ".github/workflows/envelope-crypto.yml",
+        "tests/envelope_crypto.rs",
+        "docs/ops/privacy-hygiene.md",
+        "scripts/privacy-hygiene-check.ps1",
+        "scripts/audit-review.ps1"
+      ],
+      "remaining": "in-tree KMS (L22 residual); IdP/OAuth; auto-ETL PII redaction (L24 residual)"
+    },
+    {
+      "id": "C03",
+      "score": "36/36",
+      "status": "done",
+      "evidence": [
+        "docs/functional_requirements.md",
+        "docs/ops/feedback-budgets.md",
+        "scripts/feedback-budget-check.ps1",
+        ".github/workflows/feedback-budgets.yml",
+        ".config/nextest.toml",
+        "docs/ops/GAP_QA_MATRIX.md",
+        "docs/ops/TRACEABILITY.json"
+      ]
+    },
+    {
+      "id": "C04",
+      "score": "27/30",
+      "status": "partial",
+      "evidence": [
+        ".pre-commit-config.yaml",
+        ".github/workflows/security.yml",
+        "renovate.json",
+        "docs/adr/0004-commit-signing-policy.md",
+        "scripts/commit-signing-check.ps1",
+        "scripts/branch-protection-check.ps1",
+        "docs/ops/branch-protection.md",
+        "docs/ops/sandbox-boundary.md",
+        "scripts/sandbox-boundary-check.ps1",
+        "docs/ops/cve-feed-subscription.md",
+        "scripts/cve-feed-check.ps1",
+        "CONTRIBUTING.md",
+        "docs/ops/maintainer-2fa.md",
+        "scripts/maintainer-2fa-check.ps1",
+        "tests/maintainer_2fa.rs",
+        "scripts/rootless-nonet-check.ps1",
+        ".github/workflows/rootless-nonet.yml",
+        "tests/rootless_nonet.rs",
+        "scripts/commit-signing-check.ps1",
+        "tests/commit_signing_check.rs",
+        "scripts/sbom-validate-check.ps1",
+        "tests/sbom_validate.rs",
+        "scripts/cargo-nonet-check.ps1",
+        "tests/cargo_nonet.rs",
+        "scripts/oci-cosign-verify.ps1"
+      ],
+      "remaining": "Human org 2FA attestation (L36 NOT_VERIFIABLE_IN_REPO); live rootless-only runner matrix (L40 residual)"
+    },
+    {
+      "id": "C05",
+      "score": "30/30",
+      "status": "done",
+      "evidence": [
+        "crates/sl-daemon/src/metrics.rs",
+        "crates/sl-daemon/src/http.rs",
+        "docs/ops/dashboards/sessionledger-red.json",
+        "scripts/dashboard-provision-check.ps1",
+        ".github/workflows/ops-chaos-smoke.yml",
+        "scripts/ops-chaos-smoke.ps1",
+        ".github/workflows/ops-gameday.yml",
+        "docs/ops/alerts/sessionledger-slo.yaml",
+        "docs/ops/observability.md",
+        "scripts/pprof-smoke.ps1",
+        "docs/ops/continuous-profiling.md",
+        "scripts/continuous-profiling-agent.ps1",
+        "tests/continuous_profiling.rs",
+        ".github/workflows/ops-load.yml",
+        "docs/ops/alertmanager-soft.md",
+        "packaging/alertmanager/alertmanager.yml.sample",
+        "scripts/alertmanager-soft-check.ps1",
+        "tests/alertmanager_soft.rs",
+        "crates/sl-daemon/src/otel_metrics.rs",
+        "scripts/otlp-metrics-check.ps1",
+        "tests/otlp_metrics.rs",
+        "docs/ops/otlp-metrics.md",
+        "scripts/use-gauges-check.ps1",
+        "tests/use_gauges.rs"
+      ]
+    },
+    {
+      "id": "C06",
+      "score": "30/30",
+      "status": "done",
+      "evidence": [
+        "scripts/provenance-contract-check.ps1",
+        ".github/workflows/provenance-contract.yml",
+        "docs/ops/fixtures/slsa-materials-contract.sample.json",
+        ".github/workflows/release.yml",
+        "docs/ops/reproducible-builds.md",
+        "scripts/repro-check.ps1",
+        "scripts/oci-cosign-verify.ps1",
+        "docs/ops/distribution.md",
+        "docs/adr/0006-no-mcp-server.md",
+        "scripts/mcp-scope-check.ps1",
+        "tests/mcp_scope.rs",
+        "scripts/slsa-isolation-check.ps1",
+        "docs/ops/hermetic-builds.md",
+        "packaging/README.md",
+        "docs/ops/source-provenance.md",
+        "scripts/source-provenance-check.ps1",
+        "tests/source_provenance.rs",
+        ".github/workflows/reusable-hermetic-build.yml",
+        "scripts/reusable-provenance-check.ps1",
+        "docs/ops/slsa-protected-environment.md",
+        "scripts/slsa-protected-env-check.ps1",
+        "tests/slsa_protected_env.rs",
+        ".github/workflows/security.yml"
+      ],
+      "remaining": "Full protected-environment SLSA Build L3 attestation; human branch-protection signed-commits attestation (L59 residual)"
+    },
+    {
+      "id": "C07",
+      "score": "30/30",
+      "status": "done",
+      "evidence": [
+        "docs/ops/test-pyramid.md",
+        "scripts/test-pyramid-check.ps1",
+        "tests/test_pyramid.rs",
+        "scripts/flake-tracker-check.ps1",
+        "scripts/flake-rerun-stats.ps1",
+        "scripts/flake-quarantine-apply.ps1",
+        "docs/ops/flake-tracker.md",
+        ".github/workflows/cross-platform-build.yml",
+        "tests/race_smoke.rs",
+        ".github/workflows/race-smoke.yml",
+        "docs/ops/cross-platform-ci.md",
+        "tests/properties.rs",
+        "fuzz/",
+        "fuzz/fuzz_targets/jsonl_ingest.rs",
+        "fuzz/corpus/jsonl_ingest/two_sessions.jsonl",
+        ".github/workflows/fuzz-blocking.yml",
+        "docs/ops/fuzz-cadence.md",
+        "scripts/fuzz-cadence-check.ps1",
+        ".github/workflows/bench-gate.yml",
+        "docs/ops/perf-baseline.json"
+      ],
+      "remaining": "optional extended crash-corpus triage beyond blocking cadence"
+    },
+    {
+      "id": "C08",
+      "score": "29/30",
+      "status": "partial",
+      "evidence": [
+        "docs/ops/eval-manifest.json",
+        "scripts/eval-repro-check.ps1",
+        "docs/reference/conformance/README.md",
+        "docs/ops/eval-reproducibility.md",
+        "docs/reference/conformance/fixtures/",
+        "docs/ops/token-burn.json",
+        "scripts/token-burn-check.ps1",
+        "tests/compression_eval.rs",
+        ".github/workflows/bench-gate.yml",
+        "docs/ops/perf-baseline.json",
+        "scripts/bench-gate.ps1",
+        "docs/ops/cross-language-parity.md",
+        "scripts/cross-language-parity-check.ps1",
+        "tests/cross_language_parity.rs",
+        "adapters/go/main.go",
+        "adapters/go/main_test.go",
+        "adapters/typescript/okf_adapter.ts"
+      ]
+    },
+    {
+      "id": "C09",
+      "score": "45/45",
+      "status": "done",
+      "evidence": [
+        "crates/sl-viewer/src/help_overlay.rs",
+        "crates/sl-viewer/src/command_palette.rs",
+        "docs/HELP.md",
+        "docs/a11y/overlay-escape.md",
+        "docs/a11y/design-tokens.md",
+        "crates/sl-viewer/src/tokens.rs",
+        "scripts/design-tokens-check.ps1",
+        "docs/a11y/status-regions-and-native-smoke.md",
+        "docs/a11y/screen-reader-smoke.md",
+        "scripts/record-native-webview-smoke.ps1",
+        "docs/ops/fixtures/native-webview-smoke.sample.json",
+        "scripts/inclusive-language-check.ps1",
+        "tests/visual/harness/a11y.spec.js",
+        "tests/fixtures/a11y/help_shortcuts.golden.tsv",
+        "crates/sl-viewer/src/search_view.rs",
+        "crates/sl-viewer/src/async_states.rs",
+        "crates/sl-viewer/src/daemon_url.rs",
+        "crates/sl-viewer/src/corpus_cta.rs",
+        "crates/sl-viewer/src/live_feed.rs",
+        "crates/sl-viewer/src/replay_view.rs"
+      ]
+    },
+    {
+      "id": "C10",
+      "score": "36/36",
+      "status": "done",
+      "evidence": [
+        "crates/sl-viewer/src/async_states.rs",
+        "crates/sl-viewer/src/live_feed.rs",
+        "crates/sl-viewer/src/replay_view.rs",
+        "crates/sl-viewer/src/search_view.rs",
+        "assets/tokens.css",
+        "tests/visual/golden/e2-history-empty.png",
+        "tests/visual/golden/e4-search-empty.png",
+        "tests/visual/golden/e5-first-run-empty.png",
+        "tests/visual/golden/r1-search-error.png",
+        "tests/visual/golden/r2-replay-error.png",
+        "tests/visual/golden/r3-error-color.png",
+        "tests/visual/golden/l1-content-skeleton.png",
+        "tests/visual/golden/s1-launch-splash.png",
+        "tests/visual/golden/s1-launch-splash-light.png",
+        "tests/visual/harness/visual.spec.js"
+      ]
+    },
+    {
+      "id": "C11",
+      "score": "43/45",
+      "status": "partial",
+      "evidence": [
+        "docs/adr/0003-platform-code-signing.md",
+        "docs/adr/0005-no-serverless-edge.md",
+        "docs/ops/versioning-policy.md",
+        "scripts/versioning-policy-check.ps1",
+        "scripts/edge-deploy-scope-check.ps1",
+        "docs/ops/signing-readiness.md",
+        "scripts/signing-readiness-check.ps1",
+        "docs/ops/update-check.md",
+        "scripts/update-check-check.ps1",
+        ".github/workflows/update-check-hard.yml",
+        ".github/workflows/signing-hard.yml",
+        "tests/signing_hard.rs",
+        "tests/update_check.rs",
+        "Containerfile",
+        "scripts/installer-lifecycle-smoke.ps1",
+        "justfile",
+        "Taskfile.yml",
+        "scripts/runtime-up.sh",
+        "scripts/runtime-up.ps1",
+        "docs/ops/runtime-facade.md",
+        "scripts/install.sh",
+        "scripts/install.ps1",
+        "packaging/homebrew/sessionledger.rb",
+        "packaging/winget/",
+        "packaging/macos/",
+        "packaging/caddy/Caddyfile",
+        "packaging/nginx/sessionledger.conf",
+        "scripts/package-msi.ps1",
+        ".github/workflows/release.yml",
+        "CHANGELOG.md"
+      ]
+    }
+  ]
+}

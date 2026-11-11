@@ -1,0 +1,29 @@
+{
+  "okfVersion": "0.2",
+  "cases": [
+    {
+      "name": "minimal concept",
+      "markdown": "---\ntype: Reference\n---\n\n# A portable concept\n",
+      "valid": true,
+      "type": "Reference"
+    },
+    {
+      "name": "quoted descriptive type with extensions",
+      "markdown": "---\ntype: \"Distilled Research Note\"\ntitle: Durable research\ngenerated: { by: process:researchledger, at: 2026-08-04T00:00:00Z }\nsources:\n  - id: source-1\n    resource: https://example.com/source\n---\n\n# Claims\n\nA claim.[^source-1]\n",
+      "valid": true,
+      "type": "Distilled Research Note"
+    },
+    {
+      "name": "missing frontmatter",
+      "markdown": "# Untyped document\n",
+      "valid": false,
+      "error": "frontmatter"
+    },
+    {
+      "name": "empty type",
+      "markdown": "---\ntype: \"\"\n---\n\n# Untyped concept\n",
+      "valid": false,
+      "error": "type"
+    }
+  ]
+}

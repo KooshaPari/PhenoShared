@@ -1,0 +1,20 @@
+[package]
+name = "phenotype-content-hash"
+version = "0.2.0"
+edition = "2021"
+authors = ["Phenotype Labs <dev@phenotype.io>"]
+description = "Content-addressed hashing utilities for data integrity"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/phenotype-labs/phenotype"
+
+[dependencies]
+sha2 = "0.11"
+sha3 = "0.11"
+blake3 = "1.5"
+hex = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+
+[dev-dependencies]
+serde_json = "1.0"

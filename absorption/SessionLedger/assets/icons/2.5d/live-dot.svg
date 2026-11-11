@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <radialGradient id="lc-pulse" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="12" cy="12" r="11" fill="url(#lc-pulse)"/>
+  <circle cx="12" cy="12" r="6" fill="#f59e0b"/>
+  <circle cx="12" cy="12" r="3" fill="#fef3c7"/>
+</svg>

@@ -13,7 +13,13 @@ substrate-browser-broker = { path = "../substrate-browser-broker" }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
-tokio = { workspace = true, features = ["net", "fs", "signal", "macros", "rt-multi-thread"] }
+tokio = { workspace = true, features = [
+  "net",
+  "fs",
+  "signal",
+  "macros",
+  "rt-multi-thread",
+] }
 rmcp = { version = "3.9", features = ["server", "transport-io", "macros"] }
 schemars = "1.2"
 # Talks to a running `brokerd` when BROKERD_URL is set. Same workspace pin the
@@ -22,7 +28,12 @@ reqwest = { workspace = true }
 
 [dev-dependencies]
 tempfile.workspace = true
-tokio = { workspace = true, features = ["net", "macros", "rt-multi-thread", "fs"] }
+tokio = { workspace = true, features = [
+  "net",
+  "macros",
+  "rt-multi-thread",
+  "fs",
+] }
 # Serves the real `substrate_browser_broker::router_with` on a loopback socket,
 # so the remote tests exercise the actual daemon routes rather than a mock.
 axum.workspace = true
@@ -30,7 +41,17 @@ axum.workspace = true
 # certificate, so the CA-pinning tests exercise a real handshake. Same pins
 # the broker crate uses for its own TLS material, so there is one rustls
 # backend in the graph.
-tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+tokio-rustls = { version = "0.26", default-features = false, features = [
+  "ring",
+  "tls12",
+] }
 rustls-pemfile = "2.2"
 # Generates the throwaway self-signed certificate the daemon serves.
-rcgen = { version = "0.13.2", default-features = false, features = ["crypto", "pem", "ring"] }
+rcgen = { version = "0.13.2", default-features = false, features = [
+  "crypto",
+  "pem",
+  "ring",
+] }
+
+[package.metadata.cargo-machete]
+ignored = ["thiserror"]

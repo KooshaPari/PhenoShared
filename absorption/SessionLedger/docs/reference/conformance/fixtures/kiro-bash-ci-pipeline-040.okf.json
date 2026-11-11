@@ -1,0 +1,68 @@
+{
+  "okf": "1.0",
+  "source_id": "kiro-bash-ci-pipeline-040",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Pin third-party GitHub Actions to commit SHAs in CI workflow",
+      "properties": {
+        "user_turn_count": 2
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "renovate dry-run produces no diff for any pinned action",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "preserve workflow comments; no semantic changes to jobs",
+      "properties": null
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "pinning scan runs on PRs touching .github/workflows",
+      "properties": {
+        "watch_files": [".github/workflows/"],
+        "skipped_by": []
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "kiro",
+    "source_id": "kiro-bash-ci-pipeline-040"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "kiro",
+        "source_id": "kiro-bash-ci-pipeline-040"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "kiro",
+        "source_id": "kiro-bash-ci-pipeline-040"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "kiro",
+        "source_id": "kiro-bash-ci-pipeline-040"
+      }
+    }
+  ]
+}

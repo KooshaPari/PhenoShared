@@ -19,3 +19,6 @@ thiserror = { workspace = true }
 walkdir = "2"
 
 [dev-dependencies]
+
+[package.metadata.cargo-machete]
+ignored = ["traceability-core"]

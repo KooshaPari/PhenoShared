@@ -55,3 +55,14 @@ secrecy = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread"] }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "focus-domain",
+  "focus-sync",
+  "hyper",
+  "jsonwebtoken",
+  "reqwest",
+  "subtle",
+  "thiserror",
+]

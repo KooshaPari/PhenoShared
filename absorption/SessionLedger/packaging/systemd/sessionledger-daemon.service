@@ -1,0 +1,22 @@
+[Unit]
+Description=SessionLedger daemon
+Documentation=https://github.com/KooshaPari/SessionLedger
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sessionledger
+Group=sessionledger
+WorkingDirectory=/var/lib/sessionledger
+Environment=SL_WATCH_DIR=/var/lib/sessionledger/sessions
+Environment=SL_OUT_DIR=/var/lib/sessionledger/out
+Environment=SL_HTTP_BIND=127.0.0.1:8080
+Environment=RUST_LOG=sl_daemon=info
+EnvironmentFile=-/etc/sessionledger/sessionledger-daemon.env
+ExecStart=/usr/local/bin/sl-daemon serve --watch ${SL_WATCH_DIR} --out ${SL_OUT_DIR} --http-bind ${SL_HTTP_BIND}
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

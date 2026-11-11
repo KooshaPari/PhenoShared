@@ -1,0 +1,15 @@
+{
+  "schema": "sessionledger.otlp-metrics.v1",
+  "prometheus_http": "/metrics",
+  "otlp_metrics_export": "otlp-grpc",
+  "cargo_feature": "otel-metrics",
+  "endpoint_env": ["SL_OTLP_METRICS_ENDPOINT", "OTEL_EXPORTER_OTLP_ENDPOINT"],
+  "ack_env": "SL_OTLP_METRICS",
+  "notes": [
+    "OTLP metrics export for C05 L43/L42 — MetricExporter + SdkMeterProvider when endpoint is set.",
+    "Default builds keep dependency-free Prometheus text at GET /metrics (HTTP RED).",
+    "otel-metrics Cargo feature wires OTLP/gRPC push; labeled RED bridge remains unpaid.",
+    "SL_OTLP_METRICS_ENDPOINT takes precedence over OTEL_EXPORTER_OTLP_ENDPOINT.",
+    "SelfCheck: pwsh ./scripts/otlp-metrics-check.ps1 -SelfCheck"
+  ]
+}

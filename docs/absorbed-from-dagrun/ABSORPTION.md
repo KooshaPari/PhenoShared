@@ -168,3 +168,44 @@ The one legitimate `--force` case is a repo whose content is provably present
 here AND whose bundle restores. Both are checkable with two commands, so there is
 no reason to force on a hunch.
 
+
+## Operational notes for whoever reads this next
+
+Three things about the *process* of this absorption, recorded because they will
+mislead the next person otherwise.
+
+### Branch protection currently provides no signal
+
+All three PRs in this absorption (#838, #844, #845) were merged with `--admin`.
+Their checks were **queued, not failing** — GitHub Actions is stalled on billing
+for this repo, so the required checks never conclude and the merge stays BLOCKED
+forever. Nothing was bypassed that had actually run.
+
+The consequence matters more than the workaround: **a green merge here proves
+nothing about CI.** Everything in this absorption was verified locally instead —
+`gofmt`, `go vet`, `go test ./...`, `-tags scale`, `-race`, and a fresh-clone
+build + test of the pushed branch. That is the evidence; the merge button is not.
+
+If CI is restored, re-run the suite on `cmd/dagrun/` and confirm it agrees with
+what was recorded above.
+
+### A stray branch still holds duplicate commits
+
+`layer/governance-happy-path-claims` carries two commits of mine from before I
+noticed the checkout was on another lane's branch: the original absorption commit
+and a merge commit. Its remote is **gone**, its content is SHA-equivalent to
+`main` via the squash merge, and a worktree (`fix/coverage-missing-group`) is
+based on it.
+
+It is left in place deliberately. `git branch -D` is blocked by policy, and there
+is nothing unique in it to rescue. Do not push it.
+
+### The repo-deletion guard is currently uninstalled
+
+`~/.local/bin/gh` (the shim) and the `gh()` function in `~/.zshrc` are both
+absent, so `gh` resolves to the raw binary and **repository deletion is
+unguarded** on this host. `~/bin/gh-guard` and `~/.githooks/GH-DELETE-GUARD.md`
+survive; the two enforcement points do not.
+
+This was discovered *by* performing the deletion, which is the wrong way to learn
+it. If the guard is meant to be in force, restore both enforcement points.

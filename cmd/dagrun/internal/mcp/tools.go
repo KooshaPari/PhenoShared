@@ -15,12 +15,8 @@ import (
 	"github.com/KooshaPari/dagrun/internal/verify"
 )
 
-// tool is one MCP tool definition.
-type tool struct {
-	Name        string         `json:"name"`
-	Description string         `json:"description"`
-	InputSchema map[string]any `json:"inputSchema"`
-}
+// The tool catalogue itself lives in registry.go, which is the single source
+// both transports read. What is left here is how a tool runs.
 
 func obj(props map[string]any, required ...string) map[string]any {
 	schema := map[string]any{"type": "object", "properties": props}
@@ -40,155 +36,6 @@ func num(desc string) map[string]any {
 
 func boolean(desc string) map[string]any {
 	return map[string]any{"type": "boolean", "description": desc}
-}
-
-// toolList is the catalogue advertised to clients.
-func toolList() []tool {
-	dir := str("run directory holding run.yaml and state.json (default .dagrun)")
-	node := str("node id, e.g. 1.2 or 4.1/auth-go")
-	return []tool{
-		{
-			Name:        "dagrun_next",
-			Description: "List nodes that are ready to run: dependencies done, artifacts not yet valid. Returns the generated prompt so a caller can hand it to an agent.",
-			InputSchema: obj(map[string]any{"dir": dir, "role": str("only nodes with this role"), "count": num("limit the number returned")}),
-		},
-		{
-			Name:        "dagrun_claim",
-			Description: "Atomically take a node for an owner. Fails when the node is done, leased, blocked on dependencies, or a concurrency cap is reached.",
-			InputSchema: obj(map[string]any{"dir": dir, "node": node, "owner": str("owner identity"), "ttl_seconds": num("lease length in seconds (default 120)")}, "node"),
-		},
-		{
-			Name:        "dagrun_done",
-			Description: "Verify a node's declared artifacts and mark it done. Returns isError when the contract is not met and force is false.",
-			InputSchema: obj(map[string]any{"dir": dir, "node": node, "force": boolean("mark done even when artifacts do not verify")}, "node"),
-		},
-		{
-			Name:        "dagrun_fail",
-			Description: "Mark a node failed with a reason.",
-			InputSchema: obj(map[string]any{"dir": dir, "node": node, "reason": str("why")}, "node"),
-		},
-		{
-			Name:        "dagrun_skip",
-			Description: "Mark a node skipped with a reason.",
-			InputSchema: obj(map[string]any{"dir": dir, "node": node, "reason": str("why")}, "node"),
-		},
-		{
-			Name:        "dagrun_status",
-			Description: "Run status: per-status counts, progress, and every node with attempts, owner, and last error.",
-			InputSchema: obj(map[string]any{"dir": dir}),
-		},
-		{
-			Name:        "dagrun_validate",
-			Description: "Re-check every node against the filesystem. Reports nodes recorded done that no longer verify, and nodes already satisfied that are not marked done.",
-			InputSchema: obj(map[string]any{"dir": dir}),
-		},
-		{
-			Name:        "dagrun_plan",
-			Description: "Validate a plan file, install it as the run, and return the PERT summary (waves, critical path).",
-			InputSchema: obj(map[string]any{"dir": dir, "file": str("plan file to install"), "reset": boolean("discard existing progress")}),
-		},
-		{
-			Name:        "dagrun_explain",
-			Description: "Diagnose one node: which predicate failed, why, and what to do next.",
-			InputSchema: obj(map[string]any{"dir": dir, "node": node}, "node"),
-		},
-		{
-			Name: "dagrun_trace",
-			Description: "The merged execution trace: every event from every worker, in time order. " +
-				"This is what happened, as opposed to what the state file says.",
-			InputSchema: obj(map[string]any{"dir": dir, "limit": num("return only the last N events")}),
-		},
-		{
-			Name: "dagrun_submit",
-			Description: "Post the run to a Tracera instance at /ingest/agileplus. " +
-				"Fails loud: a non-2xx status is an error, and so is a 2xx whose report carries " +
-				"a non-empty error list. Use dry_run to get the exact payload without sending it.",
-			InputSchema: obj(map[string]any{
-				"dir":     dir,
-				"url":     str("Tracera base URL, e.g. http://localhost:3180"),
-				"token":   str("NAME of the env var holding the bearer token; never the token itself"),
-				"format":  str("tracera (default) or agileplus"),
-				"dry_run": boolean("return the payload without sending it"),
-			}),
-		},
-		{
-			Name: "dagrun_run",
-			Description: "Execute ready nodes by spawning their harnesses, then return the summary. " +
-				"BOUNDED: stops after max_nodes (default 1) so one call cannot hang a client. " +
-				"An agent that wants to drive the whole run should loop next -> claim -> done " +
-				"instead, so it owns each node rather than handing the run to the executor.",
-			InputSchema: obj(map[string]any{
-				"dir":       dir,
-				"max_nodes": num("how many nodes to attempt before returning (default 1)"),
-				"owner":     str("owner identity recorded on each claim"),
-				"template":  str("shell command to run for nodes that name no harness"),
-				"dry_run":   boolean("decide what would run without spawning anything"),
-			}),
-		},
-		// The seven tools below are the verbs an agent needs to DRIVE a run.
-		// They live in tools_more.go; see that file for why viz, otel,
-		// timeline, review and critique are deliberately absent.
-		{
-			Name: "dagrun_query",
-			Description: "Select nodes with a structured query: filter with where, project with select, " +
-				"order and limit. Read-only: it never opens the store, so it cannot create a run.",
-			InputSchema: obj(map[string]any{
-				"dir":      dir,
-				"where":    stringListSchema("predicates such as status=failed, kind=DOC, attempt>=2, artifact=src/x.go"),
-				"select":   stringListSchema("fields to return: " + "id, status, kind, role, owner, title, attempts, artifacts, progress"),
-				"order_by": str("field to sort by, optionally with a direction: status,desc"),
-				"limit":    num("return at most N rows (0 means no limit)"),
-			}),
-		},
-		{
-			Name: "dagrun_recover",
-			Description: "Report nodes stuck in a running state, with owner, lease and attempt count. " +
-				"With force=false (the default) this only reports. With force=true it reclaims the " +
-				"named nodes, or every stuck node when none are named, so they can be claimed again.",
-			InputSchema: obj(map[string]any{
-				"dir":   dir,
-				"nodes": listSchema("node ids to reclaim; omit to reclaim every node reported stuck"),
-				"force": boolean("actually reclaim instead of only reporting"),
-			}),
-		},
-		{
-			Name: "dagrun_replan",
-			Description: "Diff a revised plan against the installed one and report what it would invalidate. " +
-				"READ-ONLY by default: it shows the changes and any blocking nodes, and adopts nothing. " +
-				"Pass apply=true to install the revision; force=true is a separate opt-in that discards " +
-				"work which no longer verifies, so refusing to discard verified work stays the default.",
-			InputSchema: obj(map[string]any{
-				"dir":   dir,
-				"file":  str("revised plan file to diff against the installed run.yaml"),
-				"apply": boolean("install the revision (default false: diff only)"),
-				"force": boolean("allow the revision to discard work that no longer verifies"),
-			}, "file"),
-		},
-		{
-			Name:        "dagrun_stats",
-			Description: "Per-kind duration, adoption and retry statistics for the run, as both a structure and a rendered table.",
-			InputSchema: obj(map[string]any{"dir": dir}),
-		},
-		{
-			Name:        "dagrun_lint",
-			Description: "Run the semantic plan linter over the installed plan: well-formed but wrong problems. Advisory findings are warn: prefixed and do not fail the call.",
-			InputSchema: obj(map[string]any{"dir": dir}),
-		},
-		{
-			Name:        "dagrun_doctor",
-			Description: "Read-only health check of the run directory: missing plan, unwritable paths, harness availability, stale worktrees. Reports a missing plan as a finding rather than failing.",
-			InputSchema: obj(map[string]any{"dir": dir}),
-		},
-		{
-			Name: "dagrun_export",
-			Description: "Emit the run for another system as json, agileplus, or tracera. " +
-				"Returns the rendered document as text so its key order stays stable.",
-			InputSchema: obj(map[string]any{
-				"dir":    dir,
-				"format": str("json (default) | agileplus | tracera"),
-			}),
-		},
-	}
 }
 
 // stringListSchema and listSchema describe the two argument shapes that accept
@@ -272,66 +119,26 @@ func (h *runHandle) index() map[string]*plan.Node {
 }
 
 // callTool dispatches one tools/call.
+//
+// The catalogue and the handlers live in one place (registry.go), so the tool a
+// client is told about and the tool that runs cannot be two different lists.
+//
+// The arguments are parsed before the name is resolved, exactly as before: a
+// client that sends an unknown tool with malformed arguments is told the
+// arguments are malformed, not that the tool is unknown. Changing that would
+// change the bytes on the wire.
 func (s *Server) callTool(ctx context.Context, name string, raw json.RawMessage) (any, bool, error) {
-	var in struct {
-		Dir        string `json:"dir"`
-		Node       string `json:"node"`
-		Role       string `json:"role"`
-		Owner      string `json:"owner"`
-		Reason     string `json:"reason"`
-		File       string `json:"file"`
-		Count      int    `json:"count"`
-		TTLSeconds int    `json:"ttl_seconds"`
-		Force      bool   `json:"force"`
-		Reset      bool   `json:"reset"`
-		// trace
-		Limit int `json:"limit"`
-		// submit
-		URL    string `json:"url"`
-		Token  string `json:"token"`
-		Format string `json:"format"`
-		// run
-		MaxNodes int    `json:"max_nodes"`
-		Template string `json:"template"`
-		DryRun   bool   `json:"dry_run"`
-	}
+	var in toolArgs
 	if len(raw) > 0 {
 		if err := json.Unmarshal(raw, &in); err != nil {
 			return nil, true, fmt.Errorf("invalid arguments: %w", err)
 		}
 	}
-	switch name {
-	case "dagrun_plan":
-		return s.toolPlan(in.Dir, in.File, in.Reset)
-	case "dagrun_next":
-		return s.toolNext(ctx, in.Dir, in.Role, in.Count)
-	case "dagrun_claim":
-		return s.toolClaim(in.Dir, in.Node, in.Owner, in.TTLSeconds)
-	case "dagrun_done":
-		return s.toolDone(ctx, in.Dir, in.Node, in.Force)
-	case "dagrun_fail", "dagrun_skip":
-		return s.toolTerminal(in.Dir, in.Node, name, in.Reason)
-	case "dagrun_status":
-		return s.toolStatus(in.Dir)
-	case "dagrun_validate":
-		return s.toolValidate(ctx, in.Dir)
-	case "dagrun_explain":
-		return s.toolExplain(ctx, in.Dir, in.Node)
-	case "dagrun_trace":
-		return s.toolTrace(in.Dir, in.Limit)
-	case "dagrun_submit":
-		return s.toolSubmit(in.Dir, in.URL, in.Token, in.Format, in.DryRun)
-	case "dagrun_run":
-		return s.toolRun(ctx, in.Dir, in.Owner, in.Template, in.MaxNodes, in.DryRun)
-	case "dagrun_query", "dagrun_recover", "dagrun_replan", "dagrun_stats",
-		"dagrun_lint", "dagrun_doctor", "dagrun_export":
-		// These seven live in tools_more.go. They take the raw arguments
-		// rather than the struct above because several of them accept a
-		// field that is either a string or a list, which one shared struct
-		// cannot express without failing a client that sent the other shape.
-		return s.toolMore(ctx, name, raw)
+	spec, ok := lookupTool(name)
+	if !ok {
+		return nil, true, fmt.Errorf("unknown tool %q", name)
 	}
-	return nil, true, fmt.Errorf("unknown tool %q", name)
+	return spec.call(ctx, s, in, raw)
 }
 
 func (s *Server) toolPlan(dir, file string, reset bool) (any, bool, error) {

@@ -25,4 +25,12 @@ parking_lot = { workspace = true }
 tracing = { workspace = true }
 
 [dev-dependencies]
-tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net", "io-util"] }
+tokio = { workspace = true, features = [
+  "macros",
+  "rt-multi-thread",
+  "net",
+  "io-util",
+] }
+
+[package.metadata.cargo-machete]
+ignored = ["a2a", "anyhow", "substrate-core", "wave"]

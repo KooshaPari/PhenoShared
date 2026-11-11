@@ -1,0 +1,53 @@
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+
+# TypeScript/Node
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.npm
+.eslintcache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Worktree directories (org policy)
+.worktrees/
+.claude/worktrees/
+python/pheno-credentials/

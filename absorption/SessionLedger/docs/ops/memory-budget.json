@@ -1,0 +1,10 @@
+{
+  "schema": "sessionledger.memory-budget.v1",
+  "ingest_rss_ceiling_bytes": 536870912,
+  "ingest_rss_ceiling_mib": 512,
+  "sample_metric": "rss_working_set",
+  "notes": [
+    "Generous L8 score-1 smoke ceiling for a short POST /api/ingest burst against a local debug sl-daemon.",
+    "Not a production SLA; tighten after dhat / allocator profiling lands."
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "okf": "1.0",
+  "source_id": "token-slice-budget-035",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Project per-BundleKind token_estimate slices before inject under a hard budget",
+      "properties": {
+        "user_turn_count": 5,
+        "token_estimate": 160,
+        "budget_tokens": 384,
+        "estimator": "CharCountTokenEstimator"
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Prefer dropping low-value worklog slices when projected total_token_estimate exceeds budget",
+      "properties": {
+        "user_turn_count": 4,
+        "token_estimate": 120,
+        "budget_tokens": 384
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "CharCountTokenEstimator remains monotonic for OKF JSON bodies",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "ContinuationBundle.total_token_estimate sums slice token_estimate fields",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "inject aborts when projected tokens exceed budget_tokens",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "estimates stay planning proxies (~4 chars/token), not billing meters",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/session-ledger" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": {
+        "title": "Token slice budget family",
+        "budget_tokens": 384,
+        "projected_tokens": 280
+      }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "slice budget gate stays integer-only",
+      "properties": {
+        "watch_files": [
+          "src/domain/bundle.rs",
+          "src/distill/token_estimator.rs",
+          "src/inject.rs"
+        ],
+        "skipped_by": []
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 9,
+        "budget_tokens": 384,
+        "total_token_estimate": 280
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "cursor",
+        "source_id": "token-slice-budget-035"
+      }
+    }
+  ],
+  "provenance": { "corpus": "cursor", "source_id": "token-slice-budget-035" }
+}

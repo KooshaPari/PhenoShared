@@ -1,0 +1,72 @@
+# cargo-deny configuration — Tier-0 fleet standard.
+#
+# This file is consumed by the .github/workflows/deny.yml workflow.
+# That workflow is gated on `hashFiles('Cargo.toml') != ''`, so a missing
+# Cargo.toml causes the job to skip cleanly. This file is still
+# committed so that, if/when this repo gains a Rust workspace, the deny
+# policy is in place from day one.
+
+# ---------------------------------------------------------------------------
+# Graph: where to fetch the crate index from. Use the sparse protocol
+# (default since Rust 1.68) for speed and reliability.
+# ---------------------------------------------------------------------------
+[graph]
+all-features = false
+
+# ---------------------------------------------------------------------------
+# Advisories: fail on any known security advisory in the dependency graph.
+# ---------------------------------------------------------------------------
+[advisories]
+version = 2
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+yanked = "warn"
+ignore = []
+
+# ---------------------------------------------------------------------------
+# Bans: enforce good hygiene by disallowing duplicated/unstyled crates.
+# Multi-versions: warn (not error) so a workspace can still resolve.
+# ---------------------------------------------------------------------------
+[bans]
+multiple-versions = "warn"
+wildcards = "allow"
+highlight = "all"
+allow = []
+deny = []
+skip = []
+skip-tree = []
+
+# ---------------------------------------------------------------------------
+# Licenses: enforce a permissive but copyleft-aware policy.
+# - Allow the same dual-license (MIT OR Apache-2.0) used in this repo.
+# - Disallow GPL-family licenses because this repo is MIT/Apache-2.0 only.
+# ---------------------------------------------------------------------------
+[licenses]
+version = 2
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-DFS-2016",
+    "Unicode-3.0",
+    "CC0-1.0",
+    "0BSD",
+    "OpenSSL",
+    "MPL-2.0",
+]
+confidence-threshold = 0.8
+exceptions = []
+
+# ---------------------------------------------------------------------------
+# Sources: only allow first-party crates.io. Block git/alternate registries
+# unless explicitly listed.
+# ---------------------------------------------------------------------------
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

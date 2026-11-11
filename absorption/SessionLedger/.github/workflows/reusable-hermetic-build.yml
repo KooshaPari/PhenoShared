@@ -1,0 +1,55 @@
+# In-repo reusable workflow: digest-pinned sl-daemon offline container rebuild.
+#
+# Callers must pin `uses:` to a full commit SHA (never @main / floating tags).
+# See docs/ops/reusable-hermetic-pin.md for the caller provenance contract.
+
+name: Reusable Hermetic Build
+
+on:
+  workflow_call:
+    inputs:
+      builder_image_digest:
+        description: Immutable GHCR builder manifest digest (sha256:...)
+        required: true
+        type: string
+      offline_target:
+        description: Cargo crate path for locked offline build
+        required: false
+        default: crates/sl-daemon
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  offline-container:
+    name: sl-daemon · repository builder image offline build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/kooshapari/sessionledger-hermetic-builder@${{ inputs.builder_image_digest }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: prove builder checkout prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          git --version
+          test -f /etc/ssl/certs/ca-certificates.crt
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git rev-parse --is-inside-work-tree | grep -qx true
+      - name: verify builder pin file matches container digest
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected='${{ inputs.builder_image_digest }}'
+          actual="$(sed -n 's/.*"builder_image_digest": "\([^"]*\)".*/\1/p' docs/ops/hermetic-builder.json)"
+          test -n "$actual"
+          test "$actual" = "$expected"
+      - name: cargo fetch then offline build in pinned image
+        shell: bash
+        working-directory: ${{ inputs.offline_target }}
+        run: |
+          set -euo pipefail
+          cargo fetch --locked
+          cargo build --locked --offline

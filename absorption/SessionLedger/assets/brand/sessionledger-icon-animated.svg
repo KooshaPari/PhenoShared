@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SessionLedger brand icon — Animated motion variant (vision-pillar L101).
+  Companion to the static sessionledger-icon.svg.
+  Animation: gentle flask-bubble rise (3 small cobalt bubbles climbing the
+  liquid column at staggered intervals), plus amber meniscus pulse.
+  Loop: 4s seamless.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="SessionLedger (animated)">
+  <title>SessionLedger — animated</title>
+  <desc>Lab-Coat mark with rising cobalt bubbles in the flask.</desc>
+
+  <defs>
+    <linearGradient id="sl-panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f6f8fa"/>
+    </linearGradient>
+    <linearGradient id="sl-cobalt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <radialGradient id="sl-amber-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#f97316" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="sl-flask-clip-anim">
+      <path d="M 432 380 L 432 540 Q 432 560 442 580 L 512 720 L 582 580 Q 592 560 592 540 L 592 380 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Panel -->
+  <rect width="1024" height="1024" rx="184" ry="184" fill="url(#sl-panel)"/>
+
+  <!-- Eye-piece rim (static) -->
+  <circle cx="512" cy="512" r="360" fill="none" stroke="#1f2937" stroke-width="14" opacity="0.85"/>
+  <circle cx="512" cy="512" r="332" fill="none" stroke="#1f2937" stroke-width="2" opacity="0.4"/>
+
+  <!-- Flask body (outline, static) -->
+  <path d="M 432 380 L 432 540 Q 432 560 442 580 L 512 720 L 582 580 Q 592 560 592 540 L 592 380 Z"
+        fill="none" stroke="#1f2937" stroke-width="10" stroke-linejoin="round"/>
+  <line x1="412" y1="380" x2="612" y2="380" stroke="#1f2937" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Cobalt liquid fill (static) -->
+  <path d="M 432 460 L 432 540 Q 432 560 442 580 L 512 720 L 582 580 Q 592 560 592 540 L 592 460 Z"
+        fill="url(#sl-cobalt)"/>
+
+  <!-- Rising bubbles — clipped to flask, each rises and fades, then loops -->
+  <g clip-path="url(#sl-flask-clip-anim)">
+    <circle cx="470" cy="700" r="10" fill="#ffffff" opacity="0.85">
+      <animate attributeName="cy" values="700;480" dur="4s" begin="0s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="4s" begin="0s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="540" cy="700" r="8" fill="#ffffff" opacity="0.85">
+      <animate attributeName="cy" values="700;500" dur="4s" begin="1.3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="4s" begin="1.3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="700" r="6" fill="#ffffff" opacity="0.85">
+      <animate attributeName="cy" values="700;520" dur="4s" begin="2.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.9;0" dur="4s" begin="2.6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Amber meniscus pulse (top of liquid) -->
+  <ellipse cx="512" cy="460" rx="60" ry="10" fill="url(#sl-amber-glow)">
+    <animate attributeName="rx" values="48;72;48" dur="4s" repeatCount="indefinite"/>
+  </ellipse>
+  <circle cx="512" cy="460" r="6" fill="#f97316"/>
+</svg>

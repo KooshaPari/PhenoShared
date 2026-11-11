@@ -27,3 +27,6 @@ tokio = { version = "1.39", features = ["macros", "rt-multi-thread"] }
 [[bin]]
 name = "pareto-server"
 path = "src/bin/server.rs"
+
+[package.metadata.cargo-machete]
+ignored = ["anyhow"]

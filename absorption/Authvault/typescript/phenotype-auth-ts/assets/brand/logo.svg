@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="phenotype-auth-ts">
+  <title>phenotype-auth-ts</title>
+  <desc>AI-coded vector mark: a shield enclosing a keyhole, for an auth library. Hand-authored paths.</desc>
+  <defs>
+    <linearGradient id="pa-bg" x1="24" y1="24" x2="488" y2="488" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#06231C"/>
+      <stop offset="1" stop-color="#0B3A2E"/>
+    </linearGradient>
+    <linearGradient id="pa-shield" x1="160" y1="120" x2="352" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="24" y="24" width="464" height="464" rx="108" ry="108" fill="url(#pa-bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="108" ry="108" fill="none" stroke="#13564A" stroke-width="2"/>
+
+  <!-- Shield -->
+  <path d="M 256 108
+           L 372 152
+           L 372 268
+           C 372 344 320 392 256 416
+           C 192 392 140 344 140 268
+           L 140 152 Z"
+        fill="url(#pa-shield)" stroke="#A7F3D0" stroke-width="6"/>
+
+  <!-- Keyhole -->
+  <circle cx="256" cy="244" r="40" fill="#06231C"/>
+  <path d="M 240 270 L 272 270 L 282 340 L 230 340 Z" fill="#06231C"/>
+</svg>

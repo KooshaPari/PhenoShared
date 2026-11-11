@@ -1,0 +1,26 @@
+# Blocking hard envelope-crypto CI evidence for C02 L22.
+# Hermetic SelfCheck only — docs + workflow anchors; does not enforce in-tree
+# KMS, sealed secrets, KEK wrap, or OKF/audit at-rest encryption (those stay unpaid).
+name: envelope crypto
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  envelope-crypto-selfcheck:
+    name: envelope-crypto · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: hard envelope-crypto CI evidence SelfCheck
+        shell: pwsh
+        run: ./scripts/envelope-crypto-check.ps1 -SelfCheck

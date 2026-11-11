@@ -1,0 +1,140 @@
+{
+  "okf": "1.0",
+  "source_id": "deep-relation-graph-7-046",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "drive the 7-link relation chain to completion",
+      "properties": {
+        "user_turn_count": 1
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "transitive closure computed in O(N)",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "no N+1 traversal; precompute adjacency once",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "graph-store",
+      "properties": {
+        "path": "src/domain/graph.rs"
+      }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "relation-depth-marker",
+      "properties": {
+        "depth": 7
+      }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "depth=7 chain resolves under 5ms p99",
+      "properties": {
+        "watch_files": ["src/domain/graph.rs"],
+        "skipped_by": []
+      }
+    },
+    {
+      "id": "criteria-1",
+      "type": "criteria",
+      "label": "adjacency cache invalidates on insert only",
+      "properties": {
+        "watch_files": ["src/domain/graph.rs"],
+        "skipped_by": []
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "graph-chain-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 1,
+        "total_token_estimate": 90
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "deep-relation-graph-7-046"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "deep-relation-graph-7-046"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "deep-relation-graph-7-046"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "deep-relation-graph-7-046"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "deep-relation-graph-7-046"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "deep-relation-graph-7-046"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-1",
+      "type": "requires",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "deep-relation-graph-7-046"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "deep-relation-graph-7-046"
+      }
+    }
+  ]
+}

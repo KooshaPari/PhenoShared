@@ -45,7 +45,16 @@ serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 thiserror = { workspace = true }
 anyhow = { workspace = true }
-tokio = { workspace = true, features = ["rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal", "net"] }
+tokio = { workspace = true, features = [
+  "rt-multi-thread",
+  "macros",
+  "process",
+  "io-util",
+  "sync",
+  "time",
+  "signal",
+  "net",
+] }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 chrono = { workspace = true, features = ["serde"] }
@@ -54,7 +63,11 @@ uuid = { workspace = true, features = ["v4", "serde"] }
 schemars = "1.2"
 crossbeam-channel = "0.5"
 parking_lot = "0.12"
-rmcp = { version = "3.9", features = ["server", "transport-io", "macros"], optional = true }
+rmcp = { version = "3.9", features = [
+  "server",
+  "transport-io",
+  "macros",
+], optional = true }
 inquire = { version = "0.9", features = ["date"] }
 which = "8"
 phenotype-tooling-observability = { path = "../phenotype-tooling-observability", default-features = false, optional = true }
@@ -64,22 +77,27 @@ prometheus = { version = "0.14", optional = true }
 # tray-icon handles its own platform backends; the objc2/windows-sys crates
 # here are for the badge-text and message-pump extras that tray-icon does not
 # expose directly.
-image = { version = "0.25", optional = true, default-features = false, features = ["png"] }
+image = { version = "0.25", optional = true, default-features = false, features = [
+  "png",
+] }
 tray-icon = { version = "0.24", optional = true, default-features = false }
 objc2 = { version = "0.6", optional = true }
 block2 = { version = "0.6", optional = true }
 objc2-app-kit = { version = "0.3", optional = true, default-features = false }
 objc2-foundation = { version = "0.3", optional = true }
 windows-sys = { version = "0.61", optional = true, features = [
-    "Win32_Foundation",
-    "Win32_UI_Shell",
-    "Win32_UI_WindowsAndMessaging",
+  "Win32_Foundation",
+  "Win32_UI_Shell",
+  "Win32_UI_WindowsAndMessaging",
 ] }
 
 # TUI inbox viewer (v0.5.0). ratatui is no_std + needs explicit backend feature;
 # ratatui-crossterm is selected because it works over the same crossterm backend
 # we've already pulled in for signal handling.
-ratatui = { version = "0.30", default-features = false, features = ["crossterm_0_29", "underline-color"] }
+ratatui = { version = "0.30", default-features = false, features = [
+  "crossterm_0_29",
+  "underline-color",
+] }
 ratatui-crossterm = { version = "0.1", features = ["crossterm_0_29"] }
 crossterm = "0.29"
 
@@ -92,15 +110,15 @@ mcp = ["dep:rmcp"]
 # because it pulls platform-specific dependencies and only makes sense
 # when running `phinbox daemon` interactively.
 tray-native = [
-    "dep:tray-icon",
-    "dep:objc2",
-    "dep:objc2-foundation",
-    "dep:objc2-app-kit",
-    "dep:block2",
-    "dep:windows-sys",
-    "dep:image",
-    "objc2-foundation/NSDate",
-    "objc2-foundation/block2",
+  "dep:tray-icon",
+  "dep:objc2",
+  "dep:objc2-foundation",
+  "dep:objc2-app-kit",
+  "dep:block2",
+  "dep:windows-sys",
+  "dep:image",
+  "objc2-foundation/NSDate",
+  "objc2-foundation/block2",
 ]
 
 [dev-dependencies]
@@ -157,3 +175,11 @@ trivially_copy_pass_by_ref = "allow"
 needless_pass_by_ref_mut = "allow"
 struct_excessive_bools = "allow"
 module_inception = "allow"
+
+[package.metadata.cargo-machete]
+ignored = [
+  "anyhow",
+  "phenotype-tooling-observability",
+  "ratatui-crossterm",
+  "windows-sys",
+]

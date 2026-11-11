@@ -24,3 +24,5 @@ focus-domain = { path = "../focus-domain" }
 [features]
 tracing = []
 
+[package.metadata.cargo-machete]
+ignored = ["focus-domain", "serde_json", "thiserror", "tracing"]
