@@ -73,6 +73,21 @@ The four remaining repos from the deletion list that held real history. Files la
 
 Branch-only files were extracted per ref rather than assumed absent, and each repo's `PROVENANCE.md` names the ref each came from. A leak scan over all 52 absorbed files found no private identifiers. Deleting a repo also discards its discussion, so the threads were exported before any deletion: 61 issues, 53 pull requests and 136 comments across the four, of which 19 issues and 11 pull requests were still open. Those exports live beside the bundles in the private `PhenoRegistry` under `repos/<repo>/github/`.
 
+### Deleted on 2026-11-11
+
+All four source repos were deleted after the preconditions below were asserted, each verified absent by a following API call:
+
+| Repo | Absorbed files | Bundle | Issues/PRs exported | Deleted |
+|---|---|---|---|---|
+| `phenoStandards` | 26 | yes | 10 / 10 | yes |
+| `argisexec` | 7 | yes | 8 / 4 | yes |
+| `zen` | 18 | yes | 1 / 1 | yes |
+| `vibeproxy-monitoring-unified` | 1 | yes | 42 / 38 | yes |
+
+Two further empty repos from the same deletion batch were removed with them: `4sgm-archive2` and `forge-AgilePlus`, both 0 files, 0 branches, 0 issues.
+
+`PhenoMCPServers` was deliberately **not** deleted. Its content is fully absorbed (see the MCP-01 entry) but a prior audit left an unresolved `DECLARE_SPINE` recommendation for it, so archiving remains the reversible option.
+
 ## Worklog references
 
 - **MRG-13..MRG-16** (2026-11-11): Multi-branch consolidation. Full clones rather than shallow, union of file paths across every ref compared against the default branch to find branch-only content, `git bundle create --all` per repo verified with `git bundle verify` inside the source clone, bundles pushed to the private registry via the Git Data API. Total 48 files absorbed.
