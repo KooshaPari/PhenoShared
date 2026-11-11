@@ -1,0 +1,39 @@
+{
+  "entities": [
+    {
+      "id": "gate-0",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 1
+      },
+      "type": "gate"
+    },
+    {
+      "id": "intent-1",
+      "label": "Add dark mode to the dashboard",
+      "properties": {
+        "user_turn_count": 1
+      },
+      "type": "intent"
+    },
+    {
+      "id": "criteria-2",
+      "label": "",
+      "properties": {
+        "constraints": [],
+        "do_not_touch": [],
+        "success_criteria": [],
+        "tests_or_verifications": []
+      },
+      "type": "criteria"
+    }
+  ],
+  "okf": "1.0",
+  "provenance": {
+    "corpus": "cursor",
+    "source_id": "golden-minimal"
+  },
+  "source_id": "golden-minimal"
+}

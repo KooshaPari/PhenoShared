@@ -1,0 +1,47 @@
+name: Ops Chaos Smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * 1-5"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  chaos-smoke:
+    name: scheduled ops/chaos load smoke · sl-daemon
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+      - name: build sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo build --locked
+      - name: run ops chaos smoke
+        shell: pwsh
+        env:
+          RUST_LOG: sl_daemon=info,tower_http=warn
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $metadata = cargo metadata `
+            --format-version 1 `
+            --no-deps `
+            --manifest-path crates/sl-daemon/Cargo.toml |
+            ConvertFrom-Json
+          $daemon = Join-Path $metadata.target_directory "debug/sl-daemon"
+
+          ./scripts/ops-chaos-smoke.ps1 -DaemonPath $daemon

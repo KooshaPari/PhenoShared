@@ -1,0 +1,50 @@
+name: Bug report
+description: Something crashed, returned wrong data, or clearly broke.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for defects. For confusing-but-working UX, use the **User friction** template.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Short description of the failure.
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps, commands, or request payloads.
+      value: |
+        1.
+        2.
+        3.
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: Expected behavior }
+    validations: { required: true }
+  - type: textarea
+    id: actual
+    attributes: { label: Actual behavior }
+    validations: { required: true }
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - sl-daemon
+        - sl-viewer
+        - CLI / library
+        - docs / CI
+        - other
+    validations: { required: false }
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+      description: Tag, crate version, or `git rev-parse --short HEAD`.
+    validations: { required: false }

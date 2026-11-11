@@ -1,0 +1,118 @@
+{
+  "okf": "1.0",
+  "source_id": "forge-session-001",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Fix login timeout regression after auth refactor",
+      "properties": { "user_turn_count": 5 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "all existing auth tests pass",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "session expiry extends beyond 30 min",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "user story AC-417 verified",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "must not touch password reset flow",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "must preserve MFA",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/auth-service" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "Login timeout fix" }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "existing auth tests pass",
+      "properties": {
+        "skipped_by": ["existing auth tests pass"],
+        "watch_files": ["src/auth/session.rs"]
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 5
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+    }
+  ],
+  "provenance": { "corpus": "forge", "source_id": "forge-session-001" }
+}

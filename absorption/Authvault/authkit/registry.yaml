@@ -1,0 +1,25 @@
+# AuthKit Workspace Registry
+# Tracks packages and their status
+
+registry_version: "1.0.0"
+domain: authkit
+owner: "team-security"
+
+workspaces:
+  rust:
+    path: "rust/"
+    packages: []
+  
+  python:
+    path: "python/"
+    packages: []
+  
+  go:
+    path: "go/"
+    packages: []
+  
+  typescript:
+    path: "typescript/"
+    packages: []
+
+status: planning

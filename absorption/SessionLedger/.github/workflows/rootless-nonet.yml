@@ -1,0 +1,26 @@
+# Blocking hard rootless / no-net CI evidence for C04 L40.
+# Hermetic SelfCheck only — docs + workflow anchors; does not enforce rootless
+# runner matrix or blocking no-net on cargo-fetch security jobs (those stay unpaid).
+name: rootless no-net
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  rootless-nonet-selfcheck:
+    name: rootless/no-net · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: hard rootless/no-net CI evidence SelfCheck
+        shell: pwsh
+        run: ./scripts/rootless-nonet-check.ps1 -SelfCheck

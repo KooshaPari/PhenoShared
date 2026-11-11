@@ -1,0 +1,94 @@
+{
+  "okf": "1.0",
+  "source_id": "claude-tool-session-021",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Add bounded webhook retries in src/webhooks.rs without changing the event schema",
+      "properties": { "user_turn_count": 3 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "cargo test webhooks: 18 passed",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "duplicate events remain idempotent",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not change event schema",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/workspace/payments" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "Webhook retry hardening" }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 3
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-tool-session-021"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-tool-session-021"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-tool-session-021"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-tool-session-021"
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "claude-code",
+    "source_id": "claude-tool-session-021"
+  }
+}

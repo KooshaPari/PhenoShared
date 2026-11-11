@@ -1,0 +1,6 @@
+id: ADR-001
+title: Core Infrastructure Implementation
+context: Core Infrastructure requires 64 code entities
+decision: Use python for Core Infrastructure
+consequences: Consistent codebase in python
+status: accepted

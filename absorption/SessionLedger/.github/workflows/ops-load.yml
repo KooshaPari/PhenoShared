@@ -1,0 +1,269 @@
+name: Ops Load Smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 9 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  load-smoke:
+    name: scheduled load smoke · sl-daemon
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+      - name: build sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo build --locked
+      - name: run load smoke SLO
+        shell: pwsh
+        env:
+          RUST_LOG: sl_daemon=info,tower_http=warn
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $watchDir = Join-Path $env:RUNNER_TEMP "sl-watch"
+          $outDir = Join-Path $env:RUNNER_TEMP "sl-out"
+          New-Item -ItemType Directory -Force -Path $watchDir, $outDir | Out-Null
+
+          $metadata = cargo metadata `
+            --format-version 1 `
+            --no-deps `
+            --manifest-path crates/sl-daemon/Cargo.toml |
+            ConvertFrom-Json
+          $daemon = Join-Path $metadata.target_directory "debug/sl-daemon"
+          $args = @(
+            "serve",
+            "--watch", $watchDir,
+            "--out", $outDir,
+            "--http-bind", "127.0.0.1:8080"
+          )
+
+          $proc = Start-Process -FilePath $daemon -ArgumentList $args -NoNewWindow -PassThru
+          try {
+            $ready = $false
+            for ($attempt = 1; $attempt -le 30; $attempt++) {
+              if ($proc.HasExited) {
+                throw "sl-daemon exited before /readyz became healthy (exit code $($proc.ExitCode))."
+              }
+
+              try {
+                $response = Invoke-WebRequest `
+                  -Uri "http://127.0.0.1:8080/readyz" `
+                  -Method Get `
+                  -TimeoutSec 2 `
+                  -SkipHttpErrorCheck
+                if ($response.StatusCode -eq 200) {
+                  $ready = $true
+                  break
+                }
+              }
+              catch {
+                Write-Host "readyz attempt $attempt/30 failed: $($_.Exception.Message)"
+              }
+
+              Start-Sleep -Seconds 1
+            }
+
+            if (-not $ready) {
+              throw "sl-daemon did not become ready within 30 seconds."
+            }
+
+            ./scripts/load-smoke.ps1 `
+              -BaseUrl "http://127.0.0.1:8080" `
+              -Requests 100 `
+              -Concurrency 8 `
+              -MinSuccessRate 99 `
+              -MaxP95Ms 500
+          }
+          finally {
+            if ($proc -and -not $proc.HasExited) {
+              Stop-Process -Id $proc.Id -Force
+              $proc.WaitForExit(5000) | Out-Null
+            }
+          }
+
+  # Soft L8 RSS evidence — non-blocking (continue-on-error). Manual/scheduled only.
+  rss-budget:
+    name: scheduled RSS budget smoke · ingest (soft)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+      - name: self-check budget script + config
+        shell: pwsh
+        run: ./scripts/rss-budget-check.ps1 -SelfCheck
+      - name: build sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo build --locked
+      - name: run RSS budget smoke on ingest
+        shell: pwsh
+        env:
+          RUST_LOG: sl_daemon=info,tower_http=warn
+        run: |
+          $ErrorActionPreference = "Stop"
+          $metadata = cargo metadata `
+            --format-version 1 `
+            --no-deps `
+            --manifest-path crates/sl-daemon/Cargo.toml |
+            ConvertFrom-Json
+          $daemon = Join-Path $metadata.target_directory "debug/sl-daemon"
+          ./scripts/rss-budget-check.ps1 -DaemonPath $daemon -SkipBuild
+
+  # Soft L8 allocation-budget evidence — counting allocator, no jemalloc/dhat.
+  allocation-budget:
+    name: scheduled allocation budget smoke · process_session (soft)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+      - name: self-check allocation budget script + config
+        shell: pwsh
+        run: ./scripts/allocation-budget-check.ps1 -SelfCheck
+      - name: run allocation budget counting-allocator smoke
+        shell: pwsh
+        run: ./scripts/allocation-budget-check.ps1 -RunTest
+
+  # Soft L8 alloc-profile evidence — optional dhat heap profiler, no jemalloc.
+  alloc-profile:
+    name: scheduled alloc-profile smoke · process_session (soft)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+      - name: self-check alloc-profile script + config
+        shell: pwsh
+        run: ./scripts/alloc-profile-check.ps1 -SelfCheck
+      - name: run alloc-profile dhat smoke
+        shell: pwsh
+        run: ./scripts/alloc-profile-check.ps1 -RunTest
+
+  # Soft L8 optional jemalloc — Unix feature build; default/Windows unchanged.
+  jemalloc:
+    name: scheduled jemalloc feature build · sl-daemon (soft)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+          key: jemalloc-feature
+      - name: self-check jemalloc feature anchors
+        shell: pwsh
+        run: ./scripts/jemalloc-check.ps1 -SelfCheck
+      - name: soft cargo build --features jemalloc
+        shell: pwsh
+        run: ./scripts/jemalloc-check.ps1 -Build
+
+  # L45 loopback pprof surface — gated by SL_ENABLE_PPROF=1.
+  pprof-smoke:
+    name: scheduled pprof surface smoke · sl-daemon
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+      - name: self-check pprof smoke script
+        shell: pwsh
+        run: ./scripts/pprof-smoke.ps1 -SelfCheck
+      - name: build sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo build --locked
+      - name: run pprof surface smoke (enabled + disabled)
+        shell: pwsh
+        env:
+          RUST_LOG: sl_daemon=info,tower_http=warn
+        run: |
+          $ErrorActionPreference = "Stop"
+          $metadata = cargo metadata `
+            --format-version 1 `
+            --no-deps `
+            --manifest-path crates/sl-daemon/Cargo.toml |
+            ConvertFrom-Json
+          $daemon = Join-Path $metadata.target_directory "debug/sl-daemon"
+          ./scripts/pprof-smoke.ps1 -DaemonPath $daemon -SkipBuild -AlsoAssertDisabled
+
+  # C05 L43/L42 OTLP metrics export — hermetic SelfCheck + feature compile + unit tests.
+  otlp-metrics-export:
+    name: OTLP metrics export
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+      - name: self-check OTLP metrics export anchors
+        shell: pwsh
+        run: ./scripts/otlp-metrics-check.ps1 -SelfCheck
+      - name: cargo test otel_metrics (sl-daemon)
+        working-directory: crates/sl-daemon
+        run: cargo test --locked --features otel-metrics otel_metrics
+      - name: cargo check otel-metrics export (Prometheus path unchanged)
+        working-directory: crates/sl-daemon
+        run: cargo check --locked --features otel-metrics
+
+  # Soft L45 continuous profiling agent stub — unix-only; reuses pprof-smoke contract.
+  # Optional http_soft push stays off in CI (no SL_PROFILE_PUSH_URL); SelfCheck is hermetic.
+  continuous-profiling-agent:
+    name: scheduled continuous profiling agent stub (soft)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+      - name: self-check continuous profiling agent stub
+        shell: pwsh
+        run: ./scripts/continuous-profiling-agent.ps1 -SelfCheck
+      - name: build sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo build --locked
+      - name: run continuous profiling agent stub (one-shot)
+        shell: pwsh
+        env:
+          RUST_LOG: sl_daemon=info,tower_http=warn
+        run: |
+          $ErrorActionPreference = "Stop"
+          $metadata = cargo metadata `
+            --format-version 1 `
+            --no-deps `
+            --manifest-path crates/sl-daemon/Cargo.toml |
+            ConvertFrom-Json
+          $daemon = Join-Path $metadata.target_directory "debug/sl-daemon"
+          ./scripts/continuous-profiling-agent.ps1 -RunOnce -DaemonPath $daemon -SkipBuild

@@ -1,0 +1,37 @@
+name: loom-http-sse-soak (soft)
+
+# Soft nightly anchor for Wave-44-B1 loom HTTP SSE soak (C00 L7).
+# Runs the same suite as the blocking PR SelfCheck with deeper iteration
+# counts to surface rare interleavings. Soft = continue-on-error.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+jobs:
+  loom-http-sse-soak-soft:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+      - name: Cache cargo registry + target
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-loom-http-sse-soak-soft-${{ hashFiles('Cargo.lock') }}
+      - name: Run loom-http-sse-soak-check.ps1 -SelfCheck
+        shell: pwsh
+        run: pwsh ./scripts/loom-http-sse-soak-check.ps1 -SelfCheck
+      - name: Soft report
+        if: always()
+        run: |
+          echo "soft lane — failures here do not block PRs."

@@ -1,0 +1,30 @@
+name: User friction
+description: Report UX friction, confusing output, or a user-story gap (not a crash).
+title: "[friction] "
+labels: ["friction:UX"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for friction — something worked but was confusing, slow, or harder than it should be.
+        For crashes/bugs use the **Bug report** template.
+  - type: textarea
+    id: what
+    attributes:
+      label: What were you trying to do?
+    validations: { required: true }
+  - type: textarea
+    id: friction
+    attributes:
+      label: Where was the friction?
+      description: What was confusing/missing/harder than expected? Include steps or output.
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes: { label: What would have felt right? }
+    validations: { required: false }
+  - type: input
+    id: surface
+    attributes:
+      { label: Surface, description: "sl-viewer / sl-daemon / CLI / docs" }
+    validations: { required: false }

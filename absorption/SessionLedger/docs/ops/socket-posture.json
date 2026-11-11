@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "purpose": "Socket.dev supply-chain telemetry posture (C06 L33 complement to cargo-deny/audit)",
+  "github_app": "Socket Security for GitHub",
+  "expected_pr_checks": [
+    "Socket Security: Pull Request Alerts",
+    "Socket Security: Project Report"
+  ],
+  "in_repo_blocking": [
+    "cargo deny check",
+    "cargo audit",
+    "gitleaks",
+    "trufflehog"
+  ],
+  "verify_command": "./scripts/socket-posture-check.ps1 -SelfCheck",
+  "not_verifiable_in_repo": [
+    "Socket.dev org API token",
+    "GitHub App install state",
+    "Live dashboard policy thresholds"
+  ]
+}

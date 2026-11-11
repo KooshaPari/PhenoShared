@@ -1,0 +1,58 @@
+# L34 commit signing evidence: verify main tip signature + soft branch-protection checklist.
+# Branch protection itself is not enforceable from OSS CI without admin API scope.
+
+name: Commit signing
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/commit-signing.yml"
+      - "scripts/commit-signing-check.ps1"
+      - "tests/commit_signing_check.rs"
+      - "docs/ops/commit-signing.md"
+      - "docs/adr/0004-commit-signing-policy.md"
+      - "SECURITY.md"
+      - "CONTRIBUTING.md"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/commit-signing.yml"
+      - "scripts/commit-signing-check.ps1"
+      - "tests/commit_signing_check.rs"
+      - "docs/ops/commit-signing.md"
+      - "docs/adr/0004-commit-signing-policy.md"
+      - "SECURITY.md"
+      - "CONTRIBUTING.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commit-signing:
+    name: commit signing policy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: ensure origin/main is available on PR checkouts
+        run: git fetch --no-tags origin main
+
+      - name: verify main tip and recent signed commits
+        shell: pwsh
+        run: ./scripts/commit-signing-check.ps1 -Ref main -Count 30
+
+      - name: commit signing bounded header SelfCheck
+        shell: pwsh
+        run: ./scripts/commit-signing-check.ps1 -SelfCheck
+
+      - name: branch protection checklist (soft / docs-only)
+        shell: pwsh
+        run: ./scripts/commit-signing-check.ps1 -BranchProtectionChecklist
+        continue-on-error: true

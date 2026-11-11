@@ -1,0 +1,166 @@
+{
+  "okf": "1.0",
+  "source_id": "compress-token-proxy-034",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Record bytes_saved and rough_tokens_saved proxies after zstd level-3 compress of an OKF continuation",
+      "properties": {
+        "user_turn_count": 6,
+        "token_estimate": 180,
+        "compression_level": 3,
+        "ratio_bps_ceiling": 6500
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Keep token-burn proxy integer-only (bytes_saved / 4) without claiming billing accuracy",
+      "properties": {
+        "user_turn_count": 3,
+        "token_estimate": 90,
+        "chars_per_token_proxy": 4
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "compression_eval reports ratio_bps <= 6500 on compress-token-proxy fixtures",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "rough_tokens_saved_proxy equals floor(bytes_saved / 4) when bytes_saved > 0",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "token-burn proxy is planning-only; Harbor per-eval ledgers stay N/A",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "fixture stays small enough for CI compression_eval",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/workspace/session-ledger" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": {
+        "title": "Compress token-burn proxy family",
+        "bytes_saved_proxy": 256,
+        "rough_tokens_saved_proxy": 64
+      }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "eval-compression token-burn proxy contract stays documented",
+      "properties": {
+        "watch_files": [
+          "tests/compression_eval.rs",
+          "docs/ops/eval-compression.md"
+        ],
+        "skipped_by": ["Harbor token-burn ledger"]
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 9,
+        "compressed": true,
+        "total_token_estimate": 270
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "compress-token-proxy-034"
+      }
+    }
+  ],
+  "provenance": { "corpus": "forge", "source_id": "compress-token-proxy-034" }
+}

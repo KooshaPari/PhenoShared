@@ -1,0 +1,29 @@
+# Soft hermetic update-check SelfCheck for C11 L111.
+# Docs + script anchors only — no GitHub network.
+# continue-on-error: soft gate; blocking job in update-check-hard.yml.
+name: update check soft
+
+on:
+  schedule:
+    - cron: "12 5 * * *" # nightly 05:12 UTC
+  workflow_dispatch:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  update-check-selfcheck:
+    name: soft update check · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: update check soft SelfCheck
+        shell: pwsh
+        run: ./scripts/update-check-check.ps1 -SelfCheck

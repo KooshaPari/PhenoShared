@@ -1,0 +1,10 @@
+import { extractResult } from "./dist/server/extract.js";
+import { sessionCodec } from "./dist/server/session.js";
+import { execute } from "./dist/server/execute.js";
+const r = extractResult("\u001b[32mhi\u001b[0m\n> do the thing please\nOK pane-1\n\u001b[0m$ ", "do the thing please\nmore");
+console.assert(r.text.startsWith("OK pane-1"), "extract:"+JSON.stringify(r));
+console.assert(sessionCodec.deserialize({host:"mac",pane:"w1:p2",harness:"jcode"})?.pane==="w1:p2","codec ok");
+console.assert(sessionCodec.deserialize({host:"mac",pane:"w1;rm -rf",harness:"jcode"})===null,"codec rejects bad pane");
+const bad = await execute({config:{host:"mac",pane:"w1:p9",harness:"jcode",allowedPanes:["w1:p2"],hosts:{mac:"x"}},agent:{id:"a",name:"n",companyId:"c"},context:{},runId:"r",onLog(){}});
+console.assert(bad.errorCode==="scope_violation","scope:"+bad.errorCode);
+console.log("smoke ok", JSON.stringify(r));

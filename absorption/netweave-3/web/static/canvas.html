@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NetWeave Canvas Drawing</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				background-color: #1f2022; /* Background */
+				color: #f6f5f5; /* Accent light */
+				overflow: hidden;
+			}
+
+			.container {
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+			}
+
+			.toolbar {
+				background-color: #353a40; /* Secondary dark gray */
+				color: #f6f5f5; /* Accent light */
+				padding: 10px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.tools {
+				display: flex;
+				gap: 10px;
+			}
+
+			.tool-button {
+				padding: 8px 15px;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: bold;
+				background-color: #454a50; /* Slightly lighter than secondary */
+				color: #f6f5f5; /* Accent light */
+				transition: background-color 0.3s;
+			}
+
+			.tool-button:hover {
+				background-color: #555a60; /* Even lighter */
+			}
+
+			.tool-button.active {
+				background-color: #7ebab5; /* Primary teal */
+			}
+
+			.canvas-container {
+				flex: 1;
+				position: relative;
+				overflow: hidden;
+			}
+
+			#drawingCanvas {
+				background-color: #1f2022; /* Background */
+				cursor: crosshair;
+			}
+
+			.status-bar {
+				background-color: #353a40; /* Secondary dark gray */
+				color: #f6f5f5; /* Accent light */
+				padding: 5px 10px;
+				font-size: 14px;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.road-types {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+			}
+
+			.road-type {
+				padding: 5px 10px;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: bold;
+				background-color: #454a50; /* Slightly lighter than secondary */
+				color: #f6f5f5; /* Accent light */
+			}
+
+			.road-type.active {
+				background-color: #7ebab5; /* Primary teal */
+			}
+
+			.poi-types {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+			}
+
+			.poi-type {
+				padding: 5px 10px;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: bold;
+				background-color: #454a50; /* Slightly lighter than secondary */
+				color: #f6f5f5; /* Accent light */
+			}
+
+			.poi-type.active {
+				background-color: #7ebab5; /* Primary teal */
+			}
+
+			.save-button {
+				padding: 8px 15px;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: bold;
+				background-color: #7ebab5; /* Primary teal */
+				color: #f6f5f5; /* Accent light */
+			}
+
+			.clear-button {
+				padding: 8px 15px;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: bold;
+				background-color: #f44336; /* Keep red for clear button */
+				color: #f6f5f5; /* Accent light */
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="toolbar">
+				<div class="tools">
+					<button class="tool-button active" id="roadTool">Draw Roads</button>
+					<button class="tool-button" id="poiTool">Place POIs</button>
+					<button class="tool-button" id="eraseTool">Erase</button>
+				</div>
+
+				<div class="road-types" id="roadTypes">
+					<span>Road Type:</span>
+					<div class="road-type active" data-type="highway">Highway</div>
+					<div class="road-type" data-type="major">Major</div>
+					<div class="road-type" data-type="minor">Minor</div>
+					<div class="road-type" data-type="local">Local</div>
+				</div>
+
+				<div class="poi-types" id="poiTypes" style="display: none">
+					<span>POI Type:</span>
+					<div class="poi-type active" data-type="residential">Residential</div>
+					<div class="poi-type" data-type="commercial">Commercial</div>
+					<div class="poi-type" data-type="industrial">Industrial</div>
+					<div class="poi-type" data-type="mixed">Mixed</div>
+				</div>
+
+				<div>
+					<button class="save-button" id="saveBtn">Save</button>
+					<button class="clear-button" id="clearBtn">Clear</button>
+				</div>
+			</div>
+
+			<div class="canvas-container">
+				<canvas id="drawingCanvas"></canvas>
+			</div>
+
+			<div class="status-bar">
+				<div id="coordinates">Coordinates: 0, 0</div>
+				<div id="status">Ready to draw</div>
+			</div>
+		</div>
+
+		<script>
+			const canvas = document.getElementById("drawingCanvas");
+			const ctx = canvas.getContext("2d");
+			const coordinates = document.getElementById("coordinates");
+			const status = document.getElementById("status");
+			const roadTool = document.getElementById("roadTool");
+			const poiTool = document.getElementById("poiTool");
+			const eraseTool = document.getElementById("eraseTool");
+			const roadTypes = document.getElementById("roadTypes");
+			const poiTypes = document.getElementById("poiTypes");
+			const saveBtn = document.getElementById("saveBtn");
+			const clearBtn = document.getElementById("clearBtn");
+
+			let isDrawing = false;
+			let lastX = 0;
+			let lastY = 0;
+			let currentTool = "road";
+			let currentRoadType = "highway";
+			let currentPoiType = "residential";
+
+			let currentPath = [];
+			let pathMinDistance = 15;
+
+			const roadProperties = {
+				highway: { width: 12, color: "#353a40" },
+				major: { width: 8, color: "#454a50" },
+				minor: { width: 6, color: "#555a60" },
+				local: { width: 4, color: "#656a70" },
+			};
+
+			const poiProperties = {
+				residential: { radius: 10, color: "#7ebab5" },
+				commercial: { radius: 10, color: "#f6f5f5" },
+				industrial: { radius: 10, color: "#FFC107" },
+				mixed: { radius: 10, color: "#9C27B0" },
+			};
+
+			const nodes = [];
+			const edges = [];
+			const pois = [];
+
+			function initCanvas() {
+				canvas.width = canvas.parentElement.clientWidth;
+				canvas.height = canvas.parentElement.clientHeight;
+
+				drawGrid();
+			}
+
+			function drawGrid() {
+				ctx.strokeStyle = "#353a40";
+				ctx.lineWidth = 1;
+
+				for (let x = 0; x < canvas.width; x += 50) {
+					ctx.beginPath();
+					ctx.moveTo(x, 0);
+					ctx.lineTo(x, canvas.height);
+					ctx.stroke();
+				}
+
+				for (let y = 0; y < canvas.height; y += 50) {
+					ctx.beginPath();
+					ctx.moveTo(0, y);
+					ctx.lineTo(canvas.width, y);
+					ctx.stroke();
+				}
+			}
+
+			function drawRoad(x1, y1, x2, y2, roadType) {
+				const dist = distance(x1, y1, x2, y2);
+
+				if (dist < 10) {
+					return;
+				}
+
+				redrawCanvas();
+
+				const properties = roadProperties[roadType];
+
+				ctx.strokeStyle = properties.color;
+				ctx.lineWidth = properties.width;
+				ctx.lineCap = "round";
+
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x2, y2);
+				ctx.stroke();
+
+				let node1 = findNode(x1, y1, 15);
+				let node2 = findNode(x2, y2, 15);
+
+				const intersections = findIntersections(x1, y1, x2, y2);
+
+				if (!node1) {
+					node1 = { id: nodes.length, x: x1, y: y1 };
+					nodes.push(node1);
+				}
+
+				if (!node2) {
+					node2 = { id: nodes.length, x: x2, y: y2 };
+					nodes.push(node2);
+				}
+
+				if (intersections.length === 0) {
+					edges.push({
+						from: node1.id,
+						to: node2.id,
+						type: roadType,
+					});
+				} else {
+					intersections.sort((a, b) => {
+						const distA = distance(x1, y1, a.x, a.y);
+						const distB = distance(x1, y1, b.x, b.y);
+						return distA - distB;
+					});
+
+					let lastNodeId = node1.id;
+
+					for (const intersection of intersections) {
+						edges.push({
+							from: lastNodeId,
+							to: intersection.id,
+							type: roadType,
+						});
+
+						lastNodeId = intersection.id;
+					}
+
+					edges.push({
+						from: lastNodeId,
+						to: node2.id,
+						type: roadType,
+					});
+				}
+
+				drawNode(x1, y1);
+				drawNode(x2, y2);
+
+				for (const intersection of intersections) {
+					drawNode(intersection.x, intersection.y);
+				}
+			}
+
+			function findIntersections(x1, y1, x2, y2) {
+				const intersections = [];
+				const tolerance = 5;
+
+				for (const edge of edges) {
+					const from = nodes[edge.from];
+					const to = nodes[edge.to];
+
+					const intersection = lineIntersection(
+						x1,
+						y1,
+						x2,
+						y2,
+						from.x,
+						from.y,
+						to.x,
+						to.y
+					);
+
+					if (intersection) {
+						if (
+							isPointOnLineSegment(
+								intersection.x,
+								intersection.y,
+								x1,
+								y1,
+								x2,
+								y2
+							) &&
+							isPointOnLineSegment(
+								intersection.x,
+								intersection.y,
+								from.x,
+								from.y,
+								to.x,
+								to.y
+							)
+						) {
+							const existingNode = findNode(
+								intersection.x,
+								intersection.y,
+								tolerance
+							);
+
+							if (!existingNode) {
+								const newNode = {
+									id: nodes.length,
+									x: intersection.x,
+									y: intersection.y,
+								};
+								nodes.push(newNode);
+								intersections.push(newNode);
+
+								const edgeIndex = edges.indexOf(edge);
+								edges.splice(edgeIndex, 1);
+
+								edges.push({
+									from: edge.from,
+									to: newNode.id,
+									type: edge.type,
+								});
+
+								edges.push({
+									from: newNode.id,
+									to: edge.to,
+									type: edge.type,
+								});
+							} else {
+								intersections.push(existingNode);
+							}
+						}
+					}
+				}
+
+				return intersections;
+			}
+
+			function lineIntersection(x1, y1, x2, y2, x3, y3, x4, y4) {
+				const det = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+				if (Math.abs(det) < 0.001) return null;
+
+				const x =
+					((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /
+					det;
+				const y =
+					((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /
+					det;
+
+				return { x, y };
+			}
+
+			function isPointOnLineSegment(px, py, x1, y1, x2, y2) {
+				const d1 = distance(px, py, x1, y1);
+				const d2 = distance(px, py, x2, y2);
+				const lineLen = distance(x1, y1, x2, y2);
+
+				const tolerance = 0.1;
+				return Math.abs(d1 + d2 - lineLen) < tolerance;
+			}
+
+			function drawNode(x, y) {
+				ctx.fillStyle = "#7ebab5";
+				ctx.beginPath();
+				ctx.arc(x, y, 5, 0, Math.PI * 2);
+				ctx.fill();
+			}
+
+			function drawPOI(x, y, poiType) {
+				const properties = poiProperties[poiType];
+				const minDistanceBetweenPOIs = 30;
+
+				for (const poi of pois) {
+					const dist = distance(x, y, poi.x, poi.y);
+					if (dist < minDistanceBetweenPOIs) {
+						status.textContent = "POI is too close to another POI";
+						return;
+					}
+				}
+
+				let nearestEdge = null;
+				let minEdgeDistance = Infinity;
+				let pointOnEdge = { x: 0, y: 0 };
+				let edgeFromNode = null;
+				let edgeToNode = null;
+				let positionOnEdge = 0;
+
+				for (const edge of edges) {
+					const from = nodes[edge.from];
+					const to = nodes[edge.to];
+
+					const dist = distanceToLineSegment(x, y, from.x, from.y, to.x, to.y);
+
+					if (dist < minEdgeDistance) {
+						minEdgeDistance = dist;
+						nearestEdge = edge;
+						edgeFromNode = from;
+						edgeToNode = to;
+
+						const A = x - from.x;
+						const B = y - from.y;
+						const C = to.x - from.x;
+						const D = to.y - from.y;
+
+						const dot = A * C + B * D;
+						const len_sq = C * C + D * D;
+						let param = -1;
+
+						if (len_sq !== 0) {
+							param = dot / len_sq;
+						}
+
+						if (param < 0) {
+							pointOnEdge.x = from.x;
+							pointOnEdge.y = from.y;
+							positionOnEdge = 0;
+						} else if (param > 1) {
+							pointOnEdge.x = to.x;
+							pointOnEdge.y = to.y;
+							positionOnEdge = 1;
+						} else {
+							pointOnEdge.x = from.x + param * C;
+							pointOnEdge.y = from.y + param * D;
+							positionOnEdge = param;
+						}
+					}
+				}
+
+				if (minEdgeDistance > 20) {
+					let nearestNode = null;
+					let minNodeDistance = Infinity;
+
+					for (const node of nodes) {
+						const dist = distance(x, y, node.x, node.y);
+						if (dist < minNodeDistance) {
+							minNodeDistance = dist;
+							nearestNode = node;
+						}
+					}
+
+					if (nearestNode && minNodeDistance <= 20) {
+						ctx.fillStyle = properties.color;
+						ctx.beginPath();
+						ctx.arc(
+							nearestNode.x,
+							nearestNode.y,
+							properties.radius,
+							0,
+							Math.PI * 2
+						);
+						ctx.fill();
+
+						ctx.strokeStyle = "white";
+						ctx.lineWidth = 2;
+						ctx.beginPath();
+						ctx.arc(
+							nearestNode.x,
+							nearestNode.y,
+							properties.radius,
+							0,
+							Math.PI * 2
+						);
+						ctx.stroke();
+
+						pois.push({
+							id: pois.length,
+							nodeId: nearestNode.id,
+							type: poiType,
+							x: nearestNode.x,
+							y: nearestNode.y,
+							onEdge: false,
+						});
+
+						status.textContent = `${poiType} POI placed at node ${nearestNode.id}`;
+						return;
+					}
+
+					status.textContent = "POI must be placed on or near a road";
+					return;
+				}
+
+				let nodeId;
+
+				if (
+					distance(
+						pointOnEdge.x,
+						pointOnEdge.y,
+						edgeFromNode.x,
+						edgeFromNode.y
+					) < 15
+				) {
+					nodeId = edgeFromNode.id;
+					pointOnEdge.x = edgeFromNode.x;
+					pointOnEdge.y = edgeFromNode.y;
+				} else if (
+					distance(pointOnEdge.x, pointOnEdge.y, edgeToNode.x, edgeToNode.y) <
+					15
+				) {
+					nodeId = edgeToNode.id;
+					pointOnEdge.x = edgeToNode.x;
+					pointOnEdge.y = edgeToNode.y;
+				} else {
+					const newNode = {
+						id: nodes.length,
+						x: pointOnEdge.x,
+						y: pointOnEdge.y,
+					};
+					nodes.push(newNode);
+					nodeId = newNode.id;
+
+					const edgeType = nearestEdge.type;
+					const fromId = nearestEdge.from;
+					const toId = nearestEdge.to;
+
+					const edgeIndex = edges.indexOf(nearestEdge);
+					edges.splice(edgeIndex, 1);
+
+					edges.push({
+						from: fromId,
+						to: nodeId,
+						type: edgeType,
+					});
+
+					edges.push({
+						from: nodeId,
+						to: toId,
+						type: edgeType,
+					});
+				}
+
+				ctx.fillStyle = properties.color;
+				ctx.beginPath();
+				ctx.arc(
+					pointOnEdge.x,
+					pointOnEdge.y,
+					properties.radius,
+					0,
+					Math.PI * 2
+				);
+				ctx.fill();
+
+				ctx.strokeStyle = "white";
+				ctx.lineWidth = 2;
+				ctx.beginPath();
+				ctx.arc(
+					pointOnEdge.x,
+					pointOnEdge.y,
+					properties.radius,
+					0,
+					Math.PI * 2
+				);
+				ctx.stroke();
+
+				pois.push({
+					id: pois.length,
+					nodeId: nodeId,
+					type: poiType,
+					x: pointOnEdge.x,
+					y: pointOnEdge.y,
+					onEdge: true,
+					edgePosition: positionOnEdge,
+				});
+
+				redrawCanvas();
+
+				status.textContent = `${poiType} POI placed on road`;
+			}
+
+			function eraseAt(x, y) {
+				const eraseRadius = 20;
+
+				for (let i = pois.length - 1; i >= 0; i--) {
+					const poi = pois[i];
+					if (distance(x, y, poi.x, poi.y) < eraseRadius) {
+						pois.splice(i, 1);
+						redrawCanvas();
+						status.textContent = "POI erased";
+						return;
+					}
+				}
+
+				for (let i = edges.length - 1; i >= 0; i--) {
+					const edge = edges[i];
+					const from = nodes[edge.from];
+					const to = nodes[edge.to];
+
+					if (
+						distanceToLineSegment(x, y, from.x, from.y, to.x, to.y) <
+						eraseRadius
+					) {
+						edges.splice(i, 1);
+						redrawCanvas();
+						status.textContent = "Road erased";
+						return;
+					}
+				}
+
+				for (let i = nodes.length - 1; i >= 0; i--) {
+					const node = nodes[i];
+					if (distance(x, y, node.x, node.y) < eraseRadius) {
+						for (let j = edges.length - 1; j >= 0; j--) {
+							const edge = edges[j];
+							if (edge.from === node.id || edge.to === node.id) {
+								edges.splice(j, 1);
+							}
+						}
+
+						for (let j = pois.length - 1; j >= 0; j--) {
+							const poi = pois[j];
+							if (poi.nodeId === node.id) {
+								pois.splice(j, 1);
+							}
+						}
+
+						nodes.splice(i, 1);
+
+						for (let j = i; j < nodes.length; j++) {
+							const oldId = nodes[j].id;
+							nodes[j].id = j;
+
+							for (const edge of edges) {
+								if (edge.from === oldId) edge.from = j;
+								if (edge.to === oldId) edge.to = j;
+							}
+
+							for (const poi of pois) {
+								if (poi.nodeId === oldId) poi.nodeId = j;
+							}
+						}
+
+						redrawCanvas();
+						status.textContent = "Intersection erased";
+						return;
+					}
+				}
+			}
+
+			function redrawCanvas() {
+				ctx.fillStyle = "#1f2022";
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+				drawGrid();
+
+				for (const edge of edges) {
+					const from = nodes[edge.from];
+					const to = nodes[edge.to];
+
+					const properties = roadProperties[edge.type];
+
+					ctx.strokeStyle = properties.color;
+					ctx.lineWidth = properties.width;
+					ctx.lineCap = "round";
+
+					ctx.beginPath();
+					ctx.moveTo(from.x, from.y);
+					ctx.lineTo(to.x, to.y);
+					ctx.stroke();
+				}
+
+				for (const node of nodes) {
+					ctx.fillStyle = "#7ebab5";
+					ctx.beginPath();
+					ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+					ctx.fill();
+				}
+
+				for (const poi of pois) {
+					const properties = poiProperties[poi.type];
+
+					ctx.fillStyle = properties.color;
+					ctx.beginPath();
+					ctx.arc(poi.x, poi.y, properties.radius, 0, Math.PI * 2);
+					ctx.fill();
+
+					ctx.strokeStyle = "white";
+					ctx.lineWidth = 2;
+					ctx.beginPath();
+					ctx.arc(poi.x, poi.y, properties.radius, 0, Math.PI * 2);
+					ctx.stroke();
+				}
+			}
+
+			function findNode(x, y, tolerance = 10) {
+				for (const node of nodes) {
+					if (distance(x, y, node.x, node.y) < tolerance) {
+						return node;
+					}
+				}
+				return null;
+			}
+
+			function drawPreviewLine(x1, y1, x2, y2, roadType) {
+				const properties = roadProperties[roadType];
+
+				ctx.strokeStyle = properties.color;
+				ctx.lineWidth = properties.width;
+				ctx.lineCap = "round";
+
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x2, y2);
+				ctx.stroke();
+
+				ctx.fillStyle = "#7ebab5";
+				ctx.beginPath();
+				ctx.arc(x1, y1, 6, 0, Math.PI * 2);
+				ctx.fill();
+
+				ctx.beginPath();
+				ctx.arc(x2, y2, 6, 0, Math.PI * 2);
+				ctx.fill();
+			}
+
+			function distance(x1, y1, x2, y2) {
+				const dx = x2 - x1;
+				const dy = y2 - y1;
+				return Math.sqrt(dx * dx + dy * dy);
+			}
+
+			function simplifyPath(points, epsilon) {
+				if (points.length <= 2) {
+					return points;
+				}
+
+				let maxDistance = 0;
+				let index = 0;
+
+				const start = points[0];
+				const end = points[points.length - 1];
+
+				for (let i = 1; i < points.length - 1; i++) {
+					const distance = perpendicularDistance(points[i], start, end);
+					if (distance > maxDistance) {
+						maxDistance = distance;
+						index = i;
+					}
+				}
+
+				if (maxDistance > epsilon) {
+					const firstHalf = simplifyPath(points.slice(0, index + 1), epsilon);
+					const secondHalf = simplifyPath(points.slice(index), epsilon);
+
+					return firstHalf.slice(0, -1).concat(secondHalf);
+				} else {
+					return [start, end];
+				}
+			}
+
+			function perpendicularDistance(point, lineStart, lineEnd) {
+				const x = point.x;
+				const y = point.y;
+				const x1 = lineStart.x;
+				const y1 = lineStart.y;
+				const x2 = lineEnd.x;
+				const y2 = lineEnd.y;
+
+				const A = x - x1;
+				const B = y - y1;
+				const C = x2 - x1;
+				const D = y2 - y1;
+
+				const dot = A * C + B * D;
+				const lenSq = C * C + D * D;
+				let param = -1;
+
+				if (lenSq !== 0) {
+					param = dot / lenSq;
+				}
+
+				let xx, yy;
+
+				if (param < 0) {
+					xx = x1;
+					yy = y1;
+				} else if (param > 1) {
+					xx = x2;
+					yy = y2;
+				} else {
+					xx = x1 + param * C;
+					yy = y1 + param * D;
+				}
+
+				const dx = x - xx;
+				const dy = y - yy;
+
+				return Math.sqrt(dx * dx + dy * dy);
+			}
+
+			function drawCurvedPath(points, roadType) {
+				if (points.length < 2) return;
+
+				const properties = roadProperties[roadType];
+
+				redrawCanvas();
+
+				ctx.strokeStyle = properties.color;
+				ctx.lineWidth = properties.width;
+				ctx.lineCap = "round";
+				ctx.lineJoin = "round";
+
+				ctx.beginPath();
+				ctx.moveTo(points[0].x, points[0].y);
+
+				if (points.length === 2) {
+					ctx.lineTo(points[1].x, points[1].y);
+				} else {
+					for (let i = 1; i < points.length - 1; i++) {
+						const xc = (points[i].x + points[i + 1].x) / 2;
+						const yc = (points[i].y + points[i + 1].y) / 2;
+
+						ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+					}
+
+					ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+				}
+
+				ctx.stroke();
+
+				createNodesFromPath(points, roadType);
+			}
+
+			function createNodesFromPath(points, roadType) {
+				if (points.length < 2) return;
+
+				const pathNodes = [];
+
+				for (let i = 0; i < points.length; i++) {
+					const point = points[i];
+
+					let node = findNode(point.x, point.y, 15);
+
+					if (!node) {
+						node = { id: nodes.length, x: point.x, y: point.y };
+						nodes.push(node);
+					}
+
+					pathNodes.push(node);
+				}
+
+				for (let i = 0; i < pathNodes.length - 1; i++) {
+					const fromNode = pathNodes[i];
+					const toNode = pathNodes[i + 1];
+
+					const intersections = findIntersections(
+						fromNode.x,
+						fromNode.y,
+						toNode.x,
+						toNode.y
+					);
+
+					if (intersections.length === 0) {
+						edges.push({
+							from: fromNode.id,
+							to: toNode.id,
+							type: roadType,
+						});
+					} else {
+						intersections.sort((a, b) => {
+							const distA = distance(fromNode.x, fromNode.y, a.x, a.y);
+							const distB = distance(fromNode.x, fromNode.y, b.x, b.y);
+							return distA - distB;
+						});
+
+						let lastNodeId = fromNode.id;
+
+						for (const intersection of intersections) {
+							edges.push({
+								from: lastNodeId,
+								to: intersection.id,
+								type: roadType,
+							});
+
+							lastNodeId = intersection.id;
+						}
+
+						edges.push({
+							from: lastNodeId,
+							to: toNode.id,
+							type: roadType,
+						});
+					}
+				}
+
+				for (const node of pathNodes) {
+					drawNode(node.x, node.y);
+				}
+			}
+
+			function distanceToLineSegment(px, py, x1, y1, x2, y2) {
+				const A = px - x1;
+				const B = py - y1;
+				const C = x2 - x1;
+				const D = y2 - y1;
+
+				const dot = A * C + B * D;
+				const len_sq = C * C + D * D;
+				let param = -1;
+
+				if (len_sq !== 0) {
+					param = dot / len_sq;
+				}
+
+				let xx, yy;
+
+				if (param < 0) {
+					xx = x1;
+					yy = y1;
+				} else if (param > 1) {
+					xx = x2;
+					yy = y2;
+				} else {
+					xx = x1 + param * C;
+					yy = y1 + param * D;
+				}
+
+				const dx = px - xx;
+				const dy = py - yy;
+
+				return Math.sqrt(dx * dx + dy * dy);
+			}
+
+			function saveCanvas() {
+				const formattedNodes = nodes.map((node) => {
+					let nodeType = "intersection";
+
+					let connectedEdges = 0;
+					for (const edge of edges) {
+						if (edge.from === node.id || edge.to === node.id) {
+							connectedEdges++;
+						}
+					}
+
+					if (connectedEdges === 1) {
+						nodeType = "endpoint";
+					} else if (connectedEdges === 2) {
+						nodeType = "junction";
+					} else if (connectedEdges > 2) {
+						nodeType = "intersection";
+					}
+
+					const nodePOI = pois.find((poi) => poi.nodeId === node.id);
+					if (nodePOI) {
+						nodeType = nodePOI.type;
+					}
+
+					return {
+						id: node.id,
+						x: node.x,
+						y: node.y,
+						type: nodeType,
+					};
+				});
+
+				const networkData = {
+					nodes: formattedNodes,
+					edges: edges,
+					pois: pois,
+				};
+
+				const jsonData = JSON.stringify(networkData, null, 2);
+
+				const previewCanvas = document.createElement("canvas");
+				previewCanvas.width = canvas.width;
+				previewCanvas.height = canvas.height;
+				const previewCtx = previewCanvas.getContext("2d");
+
+				previewCtx.fillStyle = "#f9f9f9";
+				previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+
+				for (const edge of edges) {
+					const from = nodes[edge.from];
+					const to = nodes[edge.to];
+					const properties = roadProperties[edge.type];
+
+					previewCtx.strokeStyle = properties.color;
+					previewCtx.lineWidth = properties.width;
+					previewCtx.lineCap = "round";
+
+					previewCtx.beginPath();
+					previewCtx.moveTo(from.x, from.y);
+					previewCtx.lineTo(to.x, to.y);
+					previewCtx.stroke();
+				}
+
+				for (const node of nodes) {
+					previewCtx.fillStyle = "#303030";
+					previewCtx.beginPath();
+					previewCtx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+					previewCtx.fill();
+				}
+
+				for (const poi of pois) {
+					const properties = poiProperties[poi.type];
+
+					previewCtx.fillStyle = properties.color;
+					previewCtx.beginPath();
+					previewCtx.arc(poi.x, poi.y, properties.radius, 0, Math.PI * 2);
+					previewCtx.fill();
+
+					previewCtx.strokeStyle = "white";
+					previewCtx.lineWidth = 2;
+					previewCtx.beginPath();
+					previewCtx.arc(poi.x, poi.y, properties.radius, 0, Math.PI * 2);
+					previewCtx.stroke();
+				}
+
+				const previewDataURL = previewCanvas.toDataURL("image/png");
+
+				const modal = document.createElement("div");
+				modal.style.position = "fixed";
+				modal.style.top = "0";
+				modal.style.left = "0";
+				modal.style.width = "100%";
+				modal.style.height = "100%";
+				modal.style.backgroundColor = "rgba(0,0,0,0.7)";
+				modal.style.display = "flex";
+				modal.style.flexDirection = "column";
+				modal.style.alignItems = "center";
+				modal.style.justifyContent = "center";
+				modal.style.zIndex = "1000";
+
+				const modalContent = document.createElement("div");
+				modalContent.style.backgroundColor = "white";
+				modalContent.style.padding = "20px";
+				modalContent.style.borderRadius = "5px";
+				modalContent.style.maxWidth = "80%";
+				modalContent.style.maxHeight = "80%";
+				modalContent.style.overflow = "auto";
+				modalContent.style.display = "flex";
+				modalContent.style.flexDirection = "column";
+				modalContent.style.alignItems = "center";
+
+				const title = document.createElement("h2");
+				title.textContent = "Network Preview";
+				title.style.marginBottom = "10px";
+
+				const preview = document.createElement("img");
+				preview.src = previewDataURL;
+				preview.style.maxWidth = "100%";
+				preview.style.maxHeight = "60vh";
+				preview.style.marginBottom = "20px";
+
+				const buttonContainer = document.createElement("div");
+				buttonContainer.style.display = "flex";
+				buttonContainer.style.gap = "10px";
+
+				const importButton = document.createElement("button");
+				importButton.textContent = "Import to Simulation";
+				importButton.style.padding = "10px 20px";
+				importButton.style.backgroundColor = "#4CAF50";
+				importButton.style.color = "white";
+				importButton.style.border = "none";
+				importButton.style.borderRadius = "4px";
+				importButton.style.cursor = "pointer";
+
+				const downloadButton = document.createElement("button");
+				downloadButton.textContent = "Download JSON";
+				downloadButton.style.padding = "10px 20px";
+				downloadButton.style.backgroundColor = "#2196F3";
+				downloadButton.style.color = "white";
+				downloadButton.style.border = "none";
+				downloadButton.style.borderRadius = "4px";
+				downloadButton.style.cursor = "pointer";
+
+				const cancelButton = document.createElement("button");
+				cancelButton.textContent = "Cancel";
+				cancelButton.style.padding = "10px 20px";
+				cancelButton.style.backgroundColor = "#f44336";
+				cancelButton.style.color = "white";
+				cancelButton.style.border = "none";
+				cancelButton.style.borderRadius = "4px";
+				cancelButton.style.cursor = "pointer";
+
+				buttonContainer.appendChild(importButton);
+				buttonContainer.appendChild(downloadButton);
+				buttonContainer.appendChild(cancelButton);
+
+				modalContent.appendChild(title);
+				modalContent.appendChild(preview);
+				modalContent.appendChild(buttonContainer);
+
+				modal.appendChild(modalContent);
+				document.body.appendChild(modal);
+
+				importButton.addEventListener("click", function () {
+					window.opener.postMessage(
+						{
+							type: "canvas_saved",
+							imageData: previewDataURL,
+							networkData: networkData,
+							jsonData: jsonData,
+						},
+						"*"
+					);
+
+					status.textContent =
+						"Network sent to simulation - you can close this window";
+					document.body.removeChild(modal);
+
+					setTimeout(() => {
+						window.close();
+					}, 2000);
+				});
+
+				downloadButton.addEventListener("click", function () {
+					const blob = new Blob([jsonData], { type: "application/json" });
+					const url = URL.createObjectURL(blob);
+					const a = document.createElement("a");
+					a.href = url;
+					a.download = "network.json";
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+
+					status.textContent = "Network JSON downloaded";
+				});
+
+				cancelButton.addEventListener("click", function () {
+					document.body.removeChild(modal);
+				});
+			}
+
+			function clearCanvas() {
+				if (
+					confirm(
+						"Are you sure you want to clear the canvas? This cannot be undone."
+					)
+				) {
+					nodes.length = 0;
+					edges.length = 0;
+					pois.length = 0;
+
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+					drawGrid();
+
+					status.textContent = "Canvas cleared";
+				}
+			}
+
+			function setupEventListeners() {
+				let startX = 0;
+				let startY = 0;
+				let isShiftDrawing = false;
+				let lastDrawnX = 0;
+				let lastDrawnY = 0;
+
+				canvas.addEventListener("mousedown", function (e) {
+					isDrawing = true;
+
+					const rect = canvas.getBoundingClientRect();
+					startX = e.clientX - rect.left;
+					startY = e.clientY - rect.top;
+					lastX = startX;
+					lastY = startY;
+					lastDrawnX = startX;
+					lastDrawnY = startY;
+
+					if (currentTool === "poi") {
+						drawPOI(lastX, lastY, currentPoiType);
+					} else if (currentTool === "erase") {
+						eraseAt(lastX, lastY);
+					} else if (currentTool === "road") {
+						currentPath = [{ x: startX, y: startY }];
+					}
+				});
+
+				canvas.addEventListener("mousemove", function (e) {
+					const rect = canvas.getBoundingClientRect();
+					const x = e.clientX - rect.left;
+					const y = e.clientY - rect.top;
+
+					coordinates.textContent = `Coordinates: ${Math.round(
+						x
+					)}, ${Math.round(y)}`;
+
+					if (!isDrawing) return;
+
+					if (currentTool === "road") {
+						if (e.shiftKey) {
+							isShiftDrawing = true;
+
+							redrawCanvas();
+
+							const dx = Math.abs(x - startX);
+							const dy = Math.abs(y - startY);
+							const angle =
+								(Math.atan2(y - startY, x - startX) * 180) / Math.PI;
+
+							let newX = x;
+							let newY = y;
+
+							if (angle >= -22.5 && angle < 22.5) {
+								newY = startY;
+							} else if (angle >= 22.5 && angle < 67.5) {
+								const dist = Math.min(dx, dy);
+								newX = startX + dist * Math.sign(x - startX);
+								newY = startY + dist * Math.sign(y - startY);
+							} else if (angle >= 67.5 && angle < 112.5) {
+								newX = startX;
+							} else if (angle >= 112.5 && angle < 157.5) {
+								const dist = Math.min(dx, dy);
+								newX = startX - dist * Math.sign(startX - x);
+								newY = startY + dist * Math.sign(y - startY);
+							} else if (
+								(angle >= 157.5 && angle <= 180) ||
+								(angle >= -180 && angle < -157.5)
+							) {
+								newY = startY;
+							} else if (angle >= -157.5 && angle < -112.5) {
+								const dist = Math.min(dx, dy);
+								newX = startX - dist * Math.sign(startX - x);
+								newY = startY - dist * Math.sign(startY - y);
+							} else if (angle >= -112.5 && angle < -67.5) {
+								newX = startX;
+							} else if (angle >= -67.5 && angle < -22.5) {
+								const dist = Math.min(dx, dy);
+								newX = startX + dist * Math.sign(x - startX);
+								newY = startY - dist * Math.sign(startY - y);
+							}
+
+							drawPreviewLine(startX, startY, newX, newY, currentRoadType);
+
+							lastX = newX;
+							lastY = newY;
+						} else {
+							if (isShiftDrawing) {
+								isShiftDrawing = false;
+								if (distance(startX, startY, lastX, lastY) > 10) {
+									drawRoad(startX, startY, lastX, lastY, currentRoadType);
+									startX = lastX;
+									startY = lastY;
+								}
+							} else {
+								if (isShiftDrawing) {
+									isShiftDrawing = false;
+									if (distance(startX, startY, lastX, lastY) > 10) {
+										drawRoad(startX, startY, lastX, lastY, currentRoadType);
+										startX = lastX;
+										startY = lastY;
+
+										currentPath = [{ x: startX, y: startY }];
+									}
+								} else {
+									const dist = distance(
+										currentPath[currentPath.length - 1].x,
+										currentPath[currentPath.length - 1].y,
+										x,
+										y
+									);
+
+									if (dist > pathMinDistance) {
+										currentPath.push({ x, y });
+
+										redrawCanvas();
+
+										ctx.strokeStyle = roadProperties[currentRoadType].color;
+										ctx.lineWidth = roadProperties[currentRoadType].width;
+										ctx.lineCap = "round";
+										ctx.lineJoin = "round";
+
+										ctx.beginPath();
+										ctx.moveTo(currentPath[0].x, currentPath[0].y);
+
+										for (let i = 1; i < currentPath.length; i++) {
+											ctx.lineTo(currentPath[i].x, currentPath[i].y);
+										}
+
+										ctx.stroke();
+									}
+								}
+							}
+
+							lastX = x;
+							lastY = y;
+						}
+					} else if (currentTool === "erase") {
+						eraseAt(x, y);
+					}
+				});
+
+				canvas.addEventListener("mouseup", function () {
+					if (isDrawing && isShiftDrawing && currentTool === "road") {
+						if (distance(startX, startY, lastX, lastY) > 10) {
+							drawRoad(startX, startY, lastX, lastY, currentRoadType);
+						}
+					} else if (
+						isDrawing &&
+						currentTool === "road" &&
+						currentPath.length > 1
+					) {
+						const epsilon = 10;
+						const simplifiedPath = simplifyPath(currentPath, epsilon);
+
+						drawCurvedPath(simplifiedPath, currentRoadType);
+
+						currentPath = [];
+					}
+
+					isDrawing = false;
+					isShiftDrawing = false;
+				});
+
+				canvas.addEventListener("mouseout", function () {
+					if (isDrawing && currentTool === "road" && currentPath.length > 1) {
+						const epsilon = 10;
+						const simplifiedPath = simplifyPath(currentPath, epsilon);
+
+						drawCurvedPath(simplifiedPath, currentRoadType);
+
+						currentPath = [];
+					}
+
+					isDrawing = false;
+					isShiftDrawing = false;
+				});
+
+				roadTool.addEventListener("click", function () {
+					currentTool = "road";
+					roadTool.classList.add("active");
+					poiTool.classList.remove("active");
+					eraseTool.classList.remove("active");
+
+					roadTypes.style.display = "flex";
+					poiTypes.style.display = "none";
+
+					status.textContent = "Road tool selected";
+				});
+
+				poiTool.addEventListener("click", function () {
+					currentTool = "poi";
+					roadTool.classList.remove("active");
+					poiTool.classList.add("active");
+					eraseTool.classList.remove("active");
+
+					roadTypes.style.display = "none";
+					poiTypes.style.display = "flex";
+
+					status.textContent = "POI tool selected";
+				});
+
+				eraseTool.addEventListener("click", function () {
+					currentTool = "erase";
+					roadTool.classList.remove("active");
+					poiTool.classList.remove("active");
+					eraseTool.classList.add("active");
+
+					roadTypes.style.display = "none";
+					poiTypes.style.display = "none";
+
+					status.textContent = "Erase tool selected";
+				});
+
+				const roadTypeElements = document.querySelectorAll(".road-type");
+				roadTypeElements.forEach((element) => {
+					element.addEventListener("click", function () {
+						roadTypeElements.forEach((el) => el.classList.remove("active"));
+						element.classList.add("active");
+
+						currentRoadType = element.dataset.type;
+						status.textContent = `${currentRoadType} road type selected`;
+					});
+				});
+
+				const poiTypeElements = document.querySelectorAll(".poi-type");
+				poiTypeElements.forEach((element) => {
+					element.addEventListener("click", function () {
+						poiTypeElements.forEach((el) => el.classList.remove("active"));
+						element.classList.add("active");
+
+						currentPoiType = element.dataset.type;
+						status.textContent = `${currentPoiType} POI type selected`;
+					});
+				});
+
+				saveBtn.addEventListener("click", saveCanvas);
+
+				clearBtn.addEventListener("click", clearCanvas);
+
+				window.addEventListener("resize", function () {
+					const tempCanvas = document.createElement("canvas");
+					tempCanvas.width = canvas.width;
+					tempCanvas.height = canvas.height;
+					const tempCtx = tempCanvas.getContext("2d");
+					tempCtx.drawImage(canvas, 0, 0);
+
+					canvas.width = canvas.parentElement.clientWidth;
+					canvas.height = canvas.parentElement.clientHeight;
+
+					ctx.drawImage(tempCanvas, 0, 0);
+
+					drawGrid();
+				});
+			}
+
+			function init() {
+				initCanvas();
+				setupEventListeners();
+			}
+
+			window.addEventListener("load", init);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,102 @@
+{
+  "okf": "1.0",
+  "source_id": "continue-go-microservice-039",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Add /healthz/ready endpoint to the gateway",
+      "properties": {
+        "user_turn_count": 2
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Make readiness check respect circuit breaker state",
+      "properties": {
+        "user_turn_count": 3
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "go test ./internal/gateway/... passes",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "k6 smoke script /healthz/ready returns 200 within 50ms",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "no new external HTTP client deps",
+      "properties": null
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "ship-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 5,
+        "total_token_estimate": 210
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "continue",
+    "source_id": "continue-go-microservice-039"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "continue",
+        "source_id": "continue-go-microservice-039"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "continue",
+        "source_id": "continue-go-microservice-039"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "continue",
+        "source_id": "continue-go-microservice-039"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "intent-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "continue",
+        "source_id": "continue-go-microservice-039"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "continue",
+        "source_id": "continue-go-microservice-039"
+      }
+    }
+  ]
+}

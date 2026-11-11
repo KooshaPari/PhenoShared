@@ -1,0 +1,12 @@
+[package]
+name = "cvp-cli"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "cvp"
+path = "src/main.rs"
+
+[dependencies]
+pipeline = { path = "../pipeline" }
+serde_json = "1"

@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "purpose": "Repository-maintained immutable offline builder pin for sl-daemon hermetic CI",
+  "msrv": "1.85",
+  "rust_channel": "stable",
+  "builder_image": "ghcr.io/kooshapari/sessionledger-hermetic-builder",
+  "builder_image_digest": "sha256:16381cf25d89fd5dc8a904ff4a7b8d4660a856ed9738b8a7e879d816439ce2a5",
+  "builder_definition": "ci/hermetic-builder/Containerfile",
+  "builder_publish_workflow": ".github/workflows/hermetic-builder.yml",
+  "upstream_rust_image": "docker.io/library/rust:1.87-slim",
+  "upstream_rust_image_digest": "sha256:437507c3e719e4f968033b88d851ffa9f5aceeb2dcc2482cc6cb7647811a55eb",
+  "required_tools": ["git", "ca-certificates", "make"],
+  "offline_target": "crates/sl-daemon",
+  "verify_command": "./scripts/hermetic-check.ps1",
+  "update_policy": "Change the repository Containerfile, let hermetic-builder.yml publish a SHA-tagged GHCR image, then copy its manifest digest into this file and hermetic.yml. Never replace this pin with a mutable tag. Re-run hermetic CI before merge."
+}
