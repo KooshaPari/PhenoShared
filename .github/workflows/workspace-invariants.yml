@@ -1,0 +1,36 @@
+name: workspace-invariants
+
+permissions: read-all
+
+# Gate: every Cargo.toml with a [package] must belong to a workspace or live in
+# an allowlisted legacy tree. Unowned manifests are invisible to cargo metadata,
+# audit and machete, and caused the drift tracked in the workspace-topology
+# clean-up. The baseline grandfathers today's violations; new ones fail.
+on:
+  pull_request:
+    paths:
+      - "**/Cargo.toml"
+      - "scripts/workspace_invariants.py"
+      - "scripts/workspace_invariants_baseline.txt"
+      - ".github/workflows/workspace-invariants.yml"
+  push:
+    branches: [main]
+    paths:
+      - "**/Cargo.toml"
+      - "scripts/workspace_invariants.py"
+      - "scripts/workspace_invariants_baseline.txt"
+      - ".github/workflows/workspace-invariants.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: workspace-invariants-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Check Cargo workspace topology
+        run: python3 scripts/workspace_invariants.py
