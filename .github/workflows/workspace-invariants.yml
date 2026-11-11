@@ -10,16 +10,16 @@ on:
   pull_request:
     paths:
       - "**/Cargo.toml"
-      - "scripts/workspace_invariants.py"
-      - "scripts/workspace_invariants_baseline.txt"
-      - ".github/workflows/workspace-invariants.yml"
+      - scripts/workspace_invariants.py
+      - scripts/workspace_invariants_baseline.txt
+      - .github/workflows/workspace-invariants.yml
   push:
     branches: [main]
     paths:
       - "**/Cargo.toml"
-      - "scripts/workspace_invariants.py"
-      - "scripts/workspace_invariants_baseline.txt"
-      - ".github/workflows/workspace-invariants.yml"
+      - scripts/workspace_invariants.py
+      - scripts/workspace_invariants_baseline.txt
+      - .github/workflows/workspace-invariants.yml
   workflow_dispatch:
 
 concurrency:
