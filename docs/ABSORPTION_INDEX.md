@@ -88,6 +88,36 @@ Two further empty repos from the same deletion batch were removed with them: `4s
 
 `PhenoMCPServers` was deliberately **not** deleted. Its content is fully absorbed (see the MCP-01 entry) but a prior audit left an unresolved `DECLARE_SPINE` recommendation for it, so the repo was **archived** on 2026-11-11 instead (`archived: true`, 2,610 KB retained). Archiving keeps the full history, issues and read-only source available while removing it from active work; it is reversible with `gh repo unarchive`. Deleting it would have discarded the commit history and the unscrubbed upstream wording that the 119 diverged files no longer carry.
 
+## Cleanup and backlog wave (2026-11-11)
+
+Final pass over the remaining candidates. Content was absorbed here; full history
+and discussion were captured to the private `PhenoRegistry` before each deletion.
+
+| Repo | Files absorbed | Notes |
+|---|---|---|
+| `canvasApp` | 205 | Vendored `.venv`/`node_modules` excluded as non-project content; 27 apparent secrets were all vendored library files (`certifi/cacert.pem`, google-auth), not project material. |
+| `.team-status` | 7 | NOTES_DOCS import from `~/CodeProjects/Phenotype/repos/`. |
+| `analysis-archive` | 2 | Tombstone: its last commit reads "remove the tooling now that PhenoShared carries it". |
+
+Also deleted as empty: `2phenoEvents` (0 KB, 2 branches, no content).
+
+Six earlier repos were deleted the same day after full-history bundles were pushed
+to `PhenoRegistry/repos/<repo>/history/` and their threads exported to
+`PhenoRegistry/repos/<repo>/github/`: `PhenoInfra` (265 commits, 11 refs),
+`ponytail` (455 commits, 103 refs), `kiro-adapters` (125 commits), and the three
+`herdr-*` plugins. `PhenoInfra` needed a bundle rather than a file copy because its
+401 file differences against the local copy were bidirectional: upstream had renamed
+badges and fixed owner casing, while the local copy carried newer dependency
+versions. Neither side was a superset.
+
+### Deliberately not deleted
+
+The `*-archive-20261106`, `*-rb-archive-*`, `exports-temp-archive-20261108`,
+`work-archive-20261105` and `phenotype-archives-20261108` repos are the recovery
+store: several are described as the only surviving copy of upstreams whose remotes
+no longer exist, holding repaired git bundles, bare mirrors and shallow-boundary
+preservations. They are not consolidation candidates and were left untouched.
+
 ## Worklog references
 
 - **MRG-13..MRG-16** (2026-11-11): Multi-branch consolidation. Full clones rather than shallow, union of file paths across every ref compared against the default branch to find branch-only content, `git bundle create --all` per repo verified with `git bundle verify` inside the source clone, bundles pushed to the private registry via the Git Data API. Total 48 files absorbed.
