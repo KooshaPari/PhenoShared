@@ -71,7 +71,7 @@ The four remaining repos from the deletion list that held real history. Files la
 | `zen` (private source) | ABSORB | MRG-15 | 17 | 4 | 16 default-branch files plus `docs/story-ledger-zen.md`. |
 | `vibeproxy-monitoring-unified` (private source) | EMPTY | MRG-16 | 0 | 23 | All 23 refs point at one commit with an empty tree. Nothing to consolidate; the bundle preserves the ref graph for audit. Earlier reporting described 21 branches of content, which was wrong. |
 
-Branch-only files were extracted per ref rather than assumed absent, and each repo's `PROVENANCE.md` names the ref each came from. A leak scan over all 52 absorbed files found no private identifiers. These repos carried 19 open issues and 11 open pull requests at absorption time; those live on GitHub and are **not** captured here, so deleting the sources discards them.
+Branch-only files were extracted per ref rather than assumed absent, and each repo's `PROVENANCE.md` names the ref each came from. A leak scan over all 52 absorbed files found no private identifiers. Deleting a repo also discards its discussion, so the threads were exported before any deletion: 61 issues, 53 pull requests and 136 comments across the four, of which 19 issues and 11 pull requests were still open. Those exports live beside the bundles in the private `PhenoRegistry` under `repos/<repo>/github/`.
 
 ## Worklog references
 
