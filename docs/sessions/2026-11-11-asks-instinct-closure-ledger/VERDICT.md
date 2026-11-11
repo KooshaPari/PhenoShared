@@ -13,11 +13,21 @@ measurement it rests on. Cells that were not measured say `UNKNOWN` or `NOT_RUN`
 **No. The register is not a complete capture of operator intent, and it cannot be made one by
 inspection alone.** This is a structural finding, not a shortfall of a few percent:
 
-> At least **9,802 distinct non-injected operator strings** have been measured across reproducible
-> evidence, against **2,259 register entries**. Even under the most generous assumption — that
-> every register entry uniquely corresponds to one distinct string — at most **23%** of distinct
-> operator strings can be represented. The true intent count is *lower* than the string count,
-> because retries and one-word nudges inflate it, so 23% is an **upper bound**, not an estimate.
+> After collapsing distinct strings into intent clusters, **5,216-5,799 distinct intents** are
+> measured against **2,259 register entries**. The register can therefore represent at most
+> **39-43%** of measured distinct intents. That figure is still an **upper bound**: the register's
+> own 2,259 entries were never normalised or collapsed, so its true distinct-intent count is below
+> 2,259, which widens the gap rather than narrowing it.
+
+**Correction, same day.** An earlier version of this file stated "at most 23%" from 9,802 distinct
+strings. That number was **wrong in the pessimistic direction** and is superseded: 9,802 counted raw
+distinct strings, 31.8% of which are harness-generated text (swarm status lines, `[auto]` nudges,
+image placeholders, env blocks) that the `is_injected` flag failed to mark. After intent clustering
+the honest bound is 39-43%, not 23%. The conclusion is unchanged: the register is not complete.
+
+A second correction is recorded in §3: the codex distinct non-injected count is **399, not 405**.
+The 405 came from a worker report whose `is_injected` field was never persisted into the artifact,
+so it was not reproducible. 399 is recomputed from the committed file and can be re-run by anyone.
 
 The previously circulated figure of 2% coverage is **withdrawn**. It was not derived from a query
 that anyone can reproduce, and its numerator and denominator were both post-dedupe counts.
@@ -39,7 +49,8 @@ Coverage of operator intent by the 2,259-ask register
 │   ├── Injected context separated from operator typing ...... PASS  (display_role / marker rules)
 │   ├── background_task prompts excluded from operator count . PASS  (3,335 identified)
 │   ├── Human vs synthetic authorship distinguishable ........ FAIL  (see §7)
-│   └── Duplicate suppression at the *intent* level ......... NOT_RUN (no intent-level model exists)
+│   └── Duplicate suppression at the *intent* level ......... PARTIAL (§3a collapses the corpus the
+│                                                                   same way the register never was)
 ├── Register integrity
 │   ├── source_ref paths resolve ............................ FAIL  (0 of 98)
 │   ├── Suspect links resolved ............................. FAIL  (118 open; ASK-000013 confirmed wrong)
@@ -68,7 +79,7 @@ Only sources where the count is reproducible from a committed artifact are summe
 | Source | Distinct non-injected operator strings | Basis |
 |---|---:|---|
 | jcode | **8,290** | `evidence/JCODE-REEXTRACT.md`: 30,234 human non-injected occurrences → 8,290 distinct (3.65x repeat) |
-| codex | **405** | `evidence/CODEX-REEXTRACT.md`: 9,650 occurrences, 3,942 injected, 5,708 non-injected → 405 distinct |
+| codex | **399** | `evidence/CODEX-REEXTRACT.md` artifact, **recomputed**: 9,650 occurrences, 3,950 injected (40.9%), 5,700 non-injected → 399 distinct. Not 405; see §1 correction. |
 | imessage | **911** | prior lane: 7,684 records, 911 substantive (975 non-substantive / one-word) |
 | kcode | **196** | post-dedupe distinct (2,934 pre-dedupe, 14.97x) |
 | herdr | **0** | manifest records `persists_operator_prompt_text: false`; no text recoverable |
@@ -79,7 +90,53 @@ Forge is deliberately excluded from the numerator rather than estimated. Includi
 questionable source to strengthen a conclusion would be the same error this document exists to
 correct.
 
-`9,802 / 2,259 = 4.34` — there are at least 4.3 distinct operator strings for every register ask.
+`9,796 / 2,259 = 4.34` — there are at least 4.3 distinct operator strings for every register ask.
+This is a **string** ratio. It is not the coverage figure; see §3a, which collapses strings into
+intents and is the only ratio this document asks you to rely on.
+
+---
+
+## 3a. String ratio is not intent ratio — the collapse
+
+String counts overstate intents, because retries and rephrasings repeat one ask. Collapsing the
+jcode and codex populations (`evidence/INTENT-COLLAPSE.md`) gives:
+
+| Stage | Count | Note |
+|---|---:|---|
+| records kept (human, non-injected, >=12 chars) | 28,247 | from 64,772 read |
+| short nudges separated, not dropped | 11,637 → 382 distinct | `go`, `continue`, `.` |
+| distinct after normalization + dedupe | 8,506 | 189 cross-source duplicates removed |
+| tagged harness-generated by labelled pattern pass | 2,707 (31.8%) | swarm_bee 1,453, auto_nudge 699, attached_image 248, env_context 155, internal_context 139 |
+| cleaned distinct strings | **5,799** | |
+
+Three independent collapse methods on the cleaned population, so no single threshold is
+presented as truth:
+
+| Method | Clusters | vs 2,259 |
+|---|---:|---:|
+| exact normalized match (most conservative) | **5,799** | 2.57x |
+| token-set Jaccard >= 0.8 within prefix-40 | 5,623 | 2.49x |
+| prefix-40 collapse (most aggressive) | **5,216** | 2.31x |
+
+**Defensible range: 5,216-5,799 distinct intents.** No point estimate is offered; the three methods
+differ by up to 583 clusters and every method is lexical.
+
+Why this range is still not the true intent count:
+
+1. **The threshold is the answer.** Exact-to-prefix-40 swings the result 38% with no change to the
+data. A different Jaccard cut or prefix length moves it again.
+2. **Every method is lexical, so none sees a paraphrase.** "Fix the CI failure on PR 63" and "the
+   PR 63 build is red, sort it out" share almost no tokens and land in different clusters. Paraphrases
+   therefore inflate the count, so the true intent count is *below* 5,216 by an unmeasured amount.
+3. **The comparison is asymmetric.** The register's 2,259 entries were never normalised or deduped.
+   Collapsing the register the same way would drop it below 2,259 and widen the gap.
+4. **The source is not clean.** 31.8% of measured strings were harness text that `is_injected`
+   missed, and `codex_user_turns_v2.jsonl` carries **no `is_injected` field at all** (0 of 9,650
+   records), so that flag could not be used for codex and a pattern pass had to substitute.
+
+Coverage upper bound implied: `2,259 / 5,216 = 43.3%` and `2,259 / 5,799 = 39.0%`, i.e. **39-43%**,
+computed on jcode+codex only. Adding the unmeasured imessage (911) and kcode (196) populations would
+lower it further, so 43% is a ceiling.
 
 ---
 
@@ -157,8 +214,10 @@ a single operator turn. Forge is therefore excluded from §3 rather than weighte
 
 In order of strength:
 
-1. An intent-level model that groups distinct strings into intents, applied to both the register
-   and the corpus. Without it, no coverage percentage is defensible in either direction.
+1. **Collapsing the register the same way the corpus was collapsed.** A lexical intent model now
+   exists for the corpus side (§3a), producing 5,216-5,799. The register side has never been run
+   through it. Until both sides are processed identically, every ratio here is asymmetric and
+   biased toward the register. This is the single highest-value open item.
 2. Completion of the external channels, which could add unseen intent, making the shortfall larger.
 3. Register provenance repair (the five `FAIL` cells in §2), without which the register cannot be
    audited at all.

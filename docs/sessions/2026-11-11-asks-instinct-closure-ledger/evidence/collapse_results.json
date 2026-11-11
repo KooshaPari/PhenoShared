@@ -1,0 +1,118 @@
+{
+  "register_entries": 2259,
+  "methods": {
+    "a_exact_normalized": 8506,
+    "b_prefix40": 5250,
+    "c_jaccard08_in_prefix40": 6990
+  },
+  "ratios_vs_register": {
+    "a_exact_normalized": 3.765,
+    "b_prefix40": 2.324,
+    "c_jaccard08_in_prefix40": 3.094
+  },
+  "methods_clean_heuristic": {
+    "a_exact_normalized": 5799,
+    "b_prefix40": 5216,
+    "c_jaccard08_in_prefix40": 5623
+  },
+  "ratios_clean_vs_register": {
+    "a_exact_normalized": 2.567,
+    "b_prefix40": 2.309,
+    "c_jaccard08_in_prefix40": 2.489
+  },
+  "stats": {
+    "files": {
+      "jcode": {
+        "records_read": 55122,
+        "kept": 21511,
+        "excluded_injected": 21189,
+        "excluded_non_human": 3699,
+        "short_nudges": 8723
+      },
+      "codex": {
+        "records_read": 9650,
+        "kept": 6736,
+        "excluded_injected": 0,
+        "excluded_non_human": 0,
+        "short_nudges": 2914
+      }
+    },
+    "kept_records": 28247,
+    "excluded_injected_records": 21189,
+    "excluded_non_human_records": 3699,
+    "short_nudge_records": 11637,
+    "short_nudge_distinct": 382,
+    "distinct_normalized": 8506,
+    "distinct_le_4_words": 633,
+    "distinct_ge_40_chars": 7542,
+    "distinct_lt_40_chars": 964,
+    "largest_prefix40_bucket": 810,
+    "prefix40_bucket_sizes_top10": [
+      810,
+      364,
+      353,
+      202,
+      197,
+      154,
+      136,
+      128,
+      89,
+      68
+    ],
+    "noise_like_distinct": 2707,
+    "noise_by_label": {
+      "swarm_bee": 1453,
+      "auto_nudge": 699,
+      "attached_image": 248,
+      "env_context": 155,
+      "internal_context": 139,
+      "tool_timing": 9,
+      "system_reminder": 4
+    },
+    "clean_distinct": 5799
+  },
+  "examples_per_method": {
+    "prefix40_sample_top": [
+      {
+        "prefix": "\ud83d\udc1d **swarm await finished** all members d",
+        "members": 810
+      },
+      {
+        "prefix": "auto] do more validation on the work bel",
+        "members": 364
+      },
+      {
+        "prefix": "\ud83d\udc1d **swarm await finished** await incompl",
+        "members": 353
+      },
+      {
+        "prefix": "attached image associated with the prece",
+        "members": 202
+      },
+      {
+        "prefix": "auto] before you treat this turn as fini",
+        "members": 197
+      },
+      {
+        "prefix": "environment_context> <current_date>2026-",
+        "members": 154
+      },
+      {
+        "prefix": "codex_internal_context source=\"goal\"> co",
+        "members": 136
+      },
+      {
+        "prefix": "\ud83d\udc1d **swarm await finished** await satisfi",
+        "members": 128
+      },
+      {
+        "prefix": "agents.md instructions <instructions> ##",
+        "members": 89
+      },
+      {
+        "prefix": "auto] you had a confidence jump in the i",
+        "members": 68
+      }
+    ]
+  }
+}
