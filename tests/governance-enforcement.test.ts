@@ -22,7 +22,12 @@ for (const [text, expected] of [
   ["ordinary change", 0],
   ["[fixed]", 1],
   ["*verified*", 1],
-  ["`verified`", 0],
+  // A backticked code span is NOT quoted-string syntax in shell terms, and
+  // marking a word as code does not stop it being a claim about the change.
+  // #831 briefly flipped this row to 0, which contradicted the guard policy
+  // established in #828 (see strip_quoted in happy-path-precommit.sh) and the
+  // checklist, which exempts only quoted strings. Restored to match the guard.
+  ["`verified`", 1],
   ['echo "done"', 0],
   ['echo "starting"  # now done', 1],
   ["done", 0],
