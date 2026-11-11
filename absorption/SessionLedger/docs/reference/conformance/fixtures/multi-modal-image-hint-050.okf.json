@@ -1,0 +1,58 @@
+{
+  "okf": "1.0",
+  "source_id": "multi-modal-image-hint-050",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Reproduce the bug from the screenshot attached above",
+      "properties": {
+        "user_turn_count": 1,
+        "attachments": [
+          {
+            "kind": "image/png",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "width": 1440,
+            "height": 900
+          }
+        ]
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "step-by-step repro captured in test_repro.md",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not embed image bytes in OKF; reference by sha256",
+      "properties": null
+    }
+  ],
+  "provenance": {
+    "corpus": "claude-code",
+    "source_id": "multi-modal-image-hint-050"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "multi-modal-image-hint-050"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "multi-modal-image-hint-050"
+      }
+    }
+  ]
+}

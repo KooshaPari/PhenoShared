@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "purpose": "Pinned cargo-cyclonedx installer + CycloneDX SBOM validation policy (C04 L32)",
+  "cargo_cyclonedx_version": "0.5.9",
+  "cargo_install_command": "cargo install cargo-cyclonedx --version 0.5.9 --locked",
+  "workspace_sbom_path": "target/sbom.cdx.json",
+  "release_sbom_path": "artifacts/session-ledger.cdx.json",
+  "required_fields": ["bomFormat", "specVersion", "version", "metadata"],
+  "verify_command": "./scripts/sbom-validate-check.ps1 -SelfCheck",
+  "validate_command": "./scripts/sbom-validate-check.ps1 -Path target/sbom.cdx.json",
+  "update_policy": "Bump cargo_cyclonedx_version and workflow install lines together; refresh fixtures if specVersion changes."
+}

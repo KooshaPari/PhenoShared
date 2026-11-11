@@ -1,0 +1,15 @@
+{
+  "schema": "sessionledger.alloc-profile.v1",
+  "workload": "process_session_8_messages",
+  "max_bytes_ceiling": 4194304,
+  "total_blocks_ceiling": 25000,
+  "profiler": "dhat",
+  "sample_metric": "dhat_heap_stats",
+  "notes": [
+    "Optional L8 dhat heap-profiling smoke over one warmed process_session() pass.",
+    "Enabled only with --features alloc-profile; production builds stay on the System allocator.",
+    "Local debug baseline observed ~20-80 KiB max_bytes / ~200-400 total_blocks; ceilings keep large headroom.",
+    "Companion to counting-allocator smoke in allocation-budget.json — not jemalloc and not continuous daemon profiling.",
+    "Not a production SLA; tighten after sustained allocator evidence accumulates."
+  ]
+}

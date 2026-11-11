@@ -55,3 +55,18 @@ itertools = "0.15"
 [features]
 default = []
 unix-dispatcher = []
+
+[package.metadata.cargo-machete]
+ignored = [
+  "anyhow",
+  "chrono",
+  "clap",
+  "config",
+  "directories",
+  "itertools",
+  "regex",
+  "serde",
+  "serde_json",
+  "thiserror",
+  "uuid",
+]

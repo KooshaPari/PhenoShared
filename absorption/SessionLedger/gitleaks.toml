@@ -1,0 +1,65 @@
+# gitleaks.toml — SessionLedger secret-scanning configuration
+# Docs: https://github.com/gitleaks/gitleaks
+
+# Use the default ruleset from gitleaks
+# Extend with project-specific allowlists
+
+[allowlist]
+  description = "Global allowlist for SessionLedger"
+  paths = [
+    '''(.*?)(jpg|gif|doc|pdf|bin|svg|socket|png|md|lock|sum)''',
+    '''Cargo\.lock''',
+    '''tests/''',
+    '''benches/''',
+    '''fuzz/''',
+    '''vendor/''',
+  ]
+  # Allow test/example values that look like secrets
+  regexes = [
+    # Test/example patterns
+    '''(?i)(example|test|mock|fake|dummy|placeholder).*(?:key|secret|token|password|api[_-]?key)''',
+    # SHA-256 hashes used as test fixtures (non-secret)
+    '''[a-fA-F0-9]{64}''',
+    # Cargo checksums
+    '''checksum = "sha256:[a-fA-F0-9]{64}"''',
+  ]
+
+# Project-specific rules for Rust crate publishing tokens
+[[rules]]
+  id = "rust-crate-token"
+  description = "Rust crate publishing token"
+  regex = '''crate[=:]\s*["']?(?:ghp_|github_pat_|crates_pat_)[a-zA-Z0-9_\-\.]+["']?'''
+  tags = ["key", "rust"]
+
+# Allow Cargo.toml features section (not secrets)
+[[rules]]
+  id = "cargo-toml-feature"
+  description = "Cargo.toml feature flags (false positive)"
+  regex = '''(?:features|optional)\s*=\s*(?:true|false|\[.*\])'''
+  path = 'Cargo\.toml'
+  tags = ["false-positive"]
+  [[rules.allowlists]]
+    description = "Allow Cargo.toml feature definitions"
+    paths = ['''Cargo\.toml$''']
+
+# CI workflow secrets (expected false positives)
+[[rules]]
+  id = "github-actions-secret"
+  description = "GitHub Actions secret reference"
+  regex = '''secrets\.[A-Z_]+'''
+  path = '\.github/workflows/'
+  tags = ["github", "actions"]
+  [[rules.allowlists]]
+    description = "Allow GitHub Actions secrets.* references"
+    regexes = ['''secrets\.[A-Z_]+''']
+
+# Example .env file values
+[[rules]]
+  id = "env-example-key"
+  description = "Example environment variable"
+  regex = '''(?i)(?:api[_-]?key|secret|token|password)\s*=\s*(?:your[_-]?|example[_-]?|test[_-]?|placeholder)[a-zA-Z0-9_\-]*'''
+  path = '\.env\.example'
+  tags = ["false-positive"]
+  [[rules.allowlists]]
+    description = "Allow .env.example placeholder values"
+    paths = ['''\.env\.example$''']

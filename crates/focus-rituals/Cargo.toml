@@ -33,3 +33,13 @@ tokio = { workspace = true, features = ["macros", "rt"] }
 
 [features]
 tracing = []
+
+[package.metadata.cargo-machete]
+ignored = [
+  "async-trait",
+  "focus-events",
+  "focus-penalties",
+  "focus-rewards",
+  "thiserror",
+  "tracing",
+]

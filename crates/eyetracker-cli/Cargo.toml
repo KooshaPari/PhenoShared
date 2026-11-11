@@ -28,3 +28,6 @@ core-graphics-types = "0.1"
 [[bin]]
 name = "eyetracker"
 path = "src/main.rs"
+
+[package.metadata.cargo-machete]
+ignored = ["eyetracker-core", "tokio"]

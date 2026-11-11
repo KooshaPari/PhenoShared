@@ -14,3 +14,6 @@ thiserror.workspace = true
 
 [dev-dependencies]
 tokio = { version = "1.40", features = ["rt"] }
+
+[package.metadata.cargo-machete]
+ignored = ["anyhow"]

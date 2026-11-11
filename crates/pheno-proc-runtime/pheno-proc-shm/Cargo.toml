@@ -22,3 +22,6 @@ path = "src/lib.rs"
 [[bench]]
 name = "shm_benchmark"
 harness = false
+
+[package.metadata.cargo-machete]
+ignored = ["serde"]

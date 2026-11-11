@@ -1,0 +1,205 @@
+version: "3"
+
+vars:
+  PYTHON: '{{default "python3" .PYTHON}}'
+  PYTHON_CMD:
+    sh: |
+      set -eu
+      if command -v uv >/dev/null 2>&1; then
+        printf 'uv run --no-project python'
+      else
+        printf '%s' '{{.PYTHON}}'
+      fi
+  PYTEST_CMD:
+    sh: |
+      set -eu
+      if command -v uv >/dev/null 2>&1; then
+        printf 'uv run --no-project --with pytest python -m pytest'
+      else
+        printf '%s -m pytest' '{{.PYTHON}}'
+      fi
+  RUFF_CMD:
+    sh: |
+      set -eu
+      if command -v uv >/dev/null 2>&1; then
+        printf 'uv run --no-project --with ruff python -m ruff'
+      else
+        printf '%s -m ruff' '{{.PYTHON}}'
+      fi
+  BUILD_CMD:
+    sh: |
+      set -eu
+      if command -v uv >/dev/null 2>&1; then
+        printf 'uv run --no-project --with build --with setuptools --with wheel python -m build --no-isolation'
+      elif '{{.PYTHON}}' -c 'import build' >/dev/null 2>&1; then
+        printf '%s -m build' '{{.PYTHON}}'
+      else
+        printf '%s -m compileall src tests' '{{.PYTHON}}'
+      fi
+  NODE_RUNNER:
+    sh: |
+      set -eu
+      if command -v bun >/dev/null 2>&1; then
+        printf 'bun run'
+      elif command -v npm >/dev/null 2>&1; then
+        printf 'npm run'
+      else
+        printf ''
+      fi
+  LANGUAGE:
+    sh: |
+      set -eu
+      if [ -f pyproject.toml ] || [ -f setup.py ] || find src tests -name '*.py' -print -quit 2>/dev/null | grep -q .; then
+        printf 'Python'
+      elif find . \( -name '*.ts' -o -name '*.tsx' \) -print -quit 2>/dev/null | grep -q .; then
+        printf 'TypeScript'
+      elif find . \( -name '*.js' -o -name '*.jsx' \) -print -quit 2>/dev/null | grep -q .; then
+        printf 'JavaScript'
+      else
+        printf 'Unknown'
+      fi
+
+tasks:
+  default:
+    desc: List available project tasks
+    cmds:
+      - task --list
+
+  language:
+    desc: Print the detected project language
+    deps:
+      - detect-language
+    cmds:
+      - echo "{{.LANGUAGE}}"
+
+  detect-language:
+    internal: true
+    silent: true
+    cmds:
+      - |
+          set -eu
+          if [ "{{.LANGUAGE}}" = "Unknown" ]; then
+            echo "Unable to detect project language from repository files" >&2
+            exit 1
+          fi
+
+  build:
+    desc: Build the detected project
+    aliases:
+      - b
+    deps:
+      - detect-language
+    cmds:
+      - |
+          set -eu
+          case "{{.LANGUAGE}}" in
+            Python)
+              {{.BUILD_CMD}}
+              ;;
+            TypeScript|JavaScript)
+              if [ -z "{{.NODE_RUNNER}}" ]; then
+                echo "No JavaScript package runner found; install bun or npm" >&2
+                exit 1
+              fi
+              {{.NODE_RUNNER}} build
+              ;;
+          esac
+
+  test:
+    desc: Run the test suite
+    aliases:
+      - t
+    deps:
+      - detect-language
+    cmds:
+      - |
+          set -eu
+          case "{{.LANGUAGE}}" in
+            Python)
+              {{.PYTEST_CMD}}
+              ;;
+            TypeScript|JavaScript)
+              if [ -z "{{.NODE_RUNNER}}" ]; then
+                echo "No JavaScript package runner found; install bun or npm" >&2
+                exit 1
+              fi
+              {{.NODE_RUNNER}} test
+              ;;
+          esac
+
+  lint:
+    desc: Run the linter
+    aliases:
+      - l
+    deps:
+      - detect-language
+    cmds:
+      - |
+          set -eu
+          case "{{.LANGUAGE}}" in
+            Python)
+              {{.RUFF_CMD}} check .
+              ;;
+            TypeScript|JavaScript)
+              if [ -z "{{.NODE_RUNNER}}" ]; then
+                echo "No JavaScript package runner found; install bun or npm" >&2
+                exit 1
+              fi
+              {{.NODE_RUNNER}} lint
+              ;;
+          esac
+
+  clean:
+    desc: Remove build and cache artifacts
+    aliases:
+      - c
+    cmds:
+      - |
+          set -eu
+          rm -rf build dist .eggs *.egg-info src/*.egg-info
+          rm -rf .coverage .coverage.* coverage coverage.xml htmlcov .tox .nox
+          find . -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.ruff_cache' -o -name '.mypy_cache' \) -prune -exec rm -rf {} +
+
+  grade:
+    desc: Full grade (strictest — no caching)
+    cmds:
+      - ./grade.sh
+
+  grade-fast:
+    desc: Fast grade (skips heavy checks)
+    cmds:
+      - ./grade.sh --fast
+
+  grade-json:
+    desc: Grade with JSON output
+    cmds:
+      - ./grade.sh --json
+
+  grade-html:
+    desc: Grade with HTML report
+    cmds:
+      - ./grade.sh --html
+
+  install-lefthook:
+    desc: Install lefthook git hooks
+    cmds:
+      - lefthook install
+    status:
+      - test -f .git/hooks/lefthook
+
+  coverage:
+    desc: Measure code coverage (SSOT: see grade.sh for the canonical command).
+    cmds:
+      - |
+        if [[ -f "Cargo.toml" ]]; then
+          cargo llvm-cov --workspace --fail-under-lines 85
+        elif [[ -f "package.json" ]]; then
+          npx jest --coverage --coverageThreshold='{"global":{"branches":85,"functions":85,"lines":85,"statements":85}}'
+        elif [[ -f "pyproject.toml" || -f "setup.py" ]]; then
+          pytest --cov=src --cov-report=term-missing --cov-fail-under=85
+        elif [[ -f "go.mod" ]]; then
+          go test -coverprofile=coverage.out -covermode=atomic ./... && go tool cover -func=coverage.out | grep total | awk '{print $3}' | sed 's/%//' | awk '{exit($1 < 85 ? 1 : 0)}'
+        else
+          echo "No recognized stack (Cargo.toml / package.json / pyproject.toml / go.mod) found." >&2
+          exit 1
+        fi

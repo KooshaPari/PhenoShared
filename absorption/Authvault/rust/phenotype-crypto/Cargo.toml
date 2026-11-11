@@ -1,0 +1,23 @@
+[package]
+name = "phenotype-crypto"
+version = "0.2.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+authors = ["Phenotype Team"]
+repository = "https://github.com/KooshaPari/Authvault"
+description = "Cryptographic utilities for Phenotype - hashing, symmetric encryption, key derivation, and HMAC signatures"
+
+[dependencies]
+sha2 = "0.11"
+hex = "0.4"
+blake3 = "1.5"
+thiserror = "2.0"
+aes-gcm = "0.11"
+pbkdf2 = "0.13"
+rand = "0.10"
+hmac = "0.13"
+zeroize = { version = "1.8", features = ["derive"] }
+ed25519-dalek = { version = "2.1", features = ["std", "zeroize"] }
+
+[lib]
+path = "src/lib.rs"

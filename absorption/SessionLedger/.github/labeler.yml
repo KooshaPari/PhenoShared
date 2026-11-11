@@ -1,0 +1,72 @@
+"area:agents":
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/sessionledger/agents/**
+
+"area:cli":
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/sessionledger/cli/**
+
+"area:environments":
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/sessionledger/environments/**
+
+"area:adapters":
+  - changed-files:
+      - any-glob-to-any-file:
+          - adapters/**
+          - registry.json
+
+"area:registry":
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/sessionledger/auth/**
+          - src/sessionledger/db/**
+          - src/sessionledger/publisher/**
+          - src/sessionledger/registry/**
+          - src/sessionledger/storage/**
+
+"area:viewer":
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/sessionledger/viewer/**
+          - apps/viewer/**
+
+"area:tests":
+  - changed-files:
+      - any-glob-to-any-file:
+          - tests/**
+
+"area:docs":
+  - changed-files:
+      - any-glob-to-any-file:
+          - docs/**
+          - examples/**
+          - "*.md"
+
+"area:ci":
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**
+
+"area:package":
+  - changed-files:
+      - any-glob-to-any-file:
+          - pyproject.toml
+          - uv.lock
+
+"area:core":
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/sessionledger/models/**
+          - src/sessionledger/orchestrators/**
+          - src/sessionledger/verifier/**
+          - src/sessionledger/llms/**
+          - src/sessionledger/tasks/**
+          - src/sessionledger/trial/**
+          - src/sessionledger/metrics/**
+          - src/sessionledger/mappers/**
+          - src/sessionledger/utils/**
+          - src/sessionledger/*.py

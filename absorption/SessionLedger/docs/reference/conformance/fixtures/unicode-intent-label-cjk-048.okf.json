@@ -1,0 +1,51 @@
+{
+  "okf": "1.0",
+  "source_id": "unicode-intent-label-cjk-048",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "在仪表板中添加暗模式支持",
+      "properties": {
+        "user_turn_count": 1,
+        "locale": "zh-CN"
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "tests pass; UI flips per prefers-color-scheme",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "use existing CSS variable layer; no new theme deps",
+      "properties": null
+    }
+  ],
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "unicode-intent-label-cjk-048"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "unicode-intent-label-cjk-048"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "unicode-intent-label-cjk-048"
+      }
+    }
+  ]
+}

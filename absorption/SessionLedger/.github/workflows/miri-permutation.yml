@@ -1,0 +1,54 @@
+# Blocking Miri permutation checker for C00 L7 concurrency evidence.
+# Runs scripts/miri-permutation-check.ps1 + cargo miri test --test race_model.
+# Soft miri-smoke.yml remains continue-on-error nightly; this job gates merges.
+name: miri permutation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTUP_TOOLCHAIN: nightly
+  RUSTFLAGS: ""
+
+jobs:
+  miri-permutation-selfcheck:
+    name: miri permutation · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: miri permutation SelfCheck
+        shell: pwsh
+        run: ./scripts/miri-permutation-check.ps1 -SelfCheck
+
+  miri-permutation-race-model:
+    name: miri permutation · race_model
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # nightly + miri
+        with:
+          toolchain: nightly
+          components: miri, rust-src
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: miri-permutation-race-model
+      - name: cargo miri setup
+        run: cargo miri setup
+      - name: miri race_model (blocking)
+        env:
+          MIRIFLAGS: "-Zmiri-strict-provenance"
+        run: cargo miri test --test race_model --locked -- --test-threads=1

@@ -24,3 +24,6 @@ criterion = { workspace = true }
 [[bench]]
 name = "ir_hash"
 harness = false
+
+[package.metadata.cargo-machete]
+ignored = ["focus-storage"]

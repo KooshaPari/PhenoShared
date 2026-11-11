@@ -1,0 +1,49 @@
+# Blocking macro-tier load-smoke PR gate for C08 L73.
+# SelfCheck + live macro routes on ubuntu PRs; soft ops-load probe tier retained.
+name: load-macro gate hard
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  load-macro-gate-selfcheck:
+    name: load macro gate · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: load-macro gate CI SelfCheck
+        shell: pwsh
+        run: ./scripts/load-macro-gate-check.ps1 -SelfCheck
+
+  load-macro-gate-smoke:
+    name: load macro gate · macro routes smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+          key: load-macro-gate-smoke
+      - name: build sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo build --locked
+      - name: run macro-tier load smoke (blocking)
+        shell: pwsh
+        env:
+          RUST_LOG: sl_daemon=info,tower_http=warn
+        run: ./scripts/load-macro-gate-check.ps1 -RunSmoke -SkipBuild

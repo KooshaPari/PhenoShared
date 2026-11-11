@@ -1,0 +1,7 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc b7fed85178467503dad5db6f5d1aaf40118fa88013705ae34d342a580c2fdfd0 # shrinks to sessions = [Session { id: "-", corpus: Forge, cwd: None, title: None, messages: [] }, Session { id: "-", corpus: Forge, cwd: None, title: None, messages: [] }]

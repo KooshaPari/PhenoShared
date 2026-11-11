@@ -1,0 +1,62 @@
+# OCI image for sl-daemon, built + run with Apple `container` (native, OSS,
+# per-container lightweight VM). Apple `container` is the default OCI runtime
+# for this workspace; Docker/OrbStack are labelled fallbacks only.
+#
+# NOTE: the preferred LOCAL path is native process-compose (see
+# process-compose.yaml) — no container at all. This image exists for
+# deploy targets that need a real Linux userland.
+#
+# Build (from repo root — build context is the whole workspace so the root
+# `session-ledger` crate the daemon depends on is available):
+#   container build -t sl-daemon:latest -f crates/sl-daemon/Containerfile .
+#
+# Run (mount a host session dir in, OKF docs out):
+#   container run --rm \
+#     -v "$HOME/.forge/sessions:/data/sessions:ro" \
+#     -v "$PWD/okf-out:/data/out" \
+#     sl-daemon:latest --watch /data/sessions --out /data/out
+
+# ---- build stage --------------------------------------------------------
+FROM rust:1-slim AS build
+WORKDIR /src
+
+# Build tools for native deps: the default-on platform allocator
+# (tikv-jemalloc-sys, W43-B3) requires `make` + a C toolchain, which
+# rust:1-slim does not ship.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the full workspace (daemon depends on the root `session-ledger` crate).
+COPY . .
+
+# Build ONLY the daemon crate in isolation — never the bare workspace root,
+# because sl-viewer pulls webkit2gtk-sys which will not resolve here.
+RUN cargo build --manifest-path crates/sl-daemon/Cargo.toml --release --locked \
+    && strip crates/sl-daemon/target/release/sl-daemon
+
+# ---- runtime stage ------------------------------------------------------
+FROM debian:stable-slim AS runtime
+LABEL org.opencontainers.image.title="sl-daemon" \
+      org.opencontainers.image.description="SessionLedger ETL daemon: watch -> compile -> OKF export" \
+      org.opencontainers.image.source="https://github.com/KooshaPari/SessionLedger"
+
+# curl is used only for the OCI HEALTHCHECK probe against /healthz.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Non-root runtime user; OKF output dir owned by it.
+RUN useradd --system --create-home --uid 10001 sl \
+    && mkdir -p /data/sessions /data/out \
+    && chown -R sl:sl /data
+USER sl
+
+COPY --from=build /src/crates/sl-daemon/target/release/sl-daemon /usr/local/bin/sl-daemon
+
+EXPOSE 8080
+VOLUME ["/data/sessions", "/data/out"]
+ENTRYPOINT ["sl-daemon"]
+CMD ["serve", "--watch", "/data/sessions", "--out", "/data/out"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -fsS http://127.0.0.1:8080/healthz | grep -q '^ok$' || exit 1

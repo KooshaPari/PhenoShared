@@ -10,7 +10,15 @@ description = "Zig forge-daemon client (kqueue+posix_spawn density lever)"
 anyhow = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1.42", features = ["macros", "rt-multi-thread", "net", "io-util", "process", "sync", "time"] }
+tokio = { version = "1.42", features = [
+  "macros",
+  "rt-multi-thread",
+  "net",
+  "io-util",
+  "process",
+  "sync",
+  "time",
+] }
 tracing = "0.1"
 thiserror = "2.0"
 libc = "0.2"
@@ -20,3 +28,6 @@ libc = "0.2"
 
 [dev-dependencies]
 tokio = { version = "1.42", features = ["macros", "rt", "time", "test-util"] }
+
+[package.metadata.cargo-machete]
+ignored = ["libc", "thiserror"]

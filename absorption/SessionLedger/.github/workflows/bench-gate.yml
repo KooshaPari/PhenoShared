@@ -1,0 +1,55 @@
+name: bench gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # Blocking WBS-6.2 / C07 pipeline perf-budget evidence.
+  # Do NOT add continue-on-error: budgets must fail the PR when exceeded.
+  pipeline-perf:
+    name: pipeline perf regression gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+
+      - name: assert enforced perf-budget policy (SelfCheck)
+        shell: pwsh
+        run: ./scripts/bench-gate.ps1 -SelfCheck
+
+      - name: pipeline Criterion regression gate (blocking)
+        shell: pwsh
+        run: ./scripts/bench-gate.ps1
+
+      - name: upload pipeline perf-gate artifact
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: pipeline-perf-gate
+          path: artifacts/pipeline-perf-gate.json
+          if-no-files-found: warn
+
+  # Blocking C00 L6 latency baseline evidence — schema + enforced thresholds (no cargo bench).
+  latency-baseline:
+    name: latency baseline check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: assert checked-in p95 latency baselines (enforced)
+        shell: pwsh
+        run: ./scripts/bench-gate.ps1 -SoftLatencyCheck

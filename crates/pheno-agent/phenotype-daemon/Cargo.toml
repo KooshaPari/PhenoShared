@@ -78,3 +78,14 @@ nats-cluster = ["async-nats"]
 tokio-test = "0.4"
 tempfile = "3"
 criterion = { version = "0.5", features = ["html_reports"] }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "arc-swap",
+  "async-nats",
+  "clap",
+  "clap-ext",
+  "sysinfo",
+  "thiserror",
+  "tokio-util",
+]

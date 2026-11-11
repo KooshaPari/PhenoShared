@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "purpose": "Default-on platform allocator policy for sl-daemon (C00 L8)",
+  "platform_allocators": {
+    "unix": {
+      "crate": "tikv-jemallocator",
+      "feature": "jemalloc"
+    },
+    "windows": {
+      "crate": "mimalloc",
+      "feature": "mimalloc-alloc"
+    }
+  },
+  "default_features": ["platform-allocator"],
+  "opt_out": "cargo build --no-default-features --features system-allocator",
+  "expected_pr_checks": [
+    "jemalloc default-on · SelfCheck",
+    "jemalloc default-on · unix default build",
+    "jemalloc default-on · windows default build"
+  ],
+  "verify_command": "./scripts/jemalloc-default-on-check.ps1 -SelfCheck",
+  "soft_gate_workflow": ".github/workflows/jemalloc-hard.yml",
+  "not_verifiable_in_repo": [
+    "Continuous jemalloc profiling push to production backends"
+  ]
+}

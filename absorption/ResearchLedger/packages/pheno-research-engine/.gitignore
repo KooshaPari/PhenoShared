@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.env
+.venv/
+venv/
+.grade-reports/
+# vitest coverage output
+coverage/

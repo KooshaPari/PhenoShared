@@ -1,0 +1,196 @@
+# P0 security + supply-chain checks for SessionLedger.
+# cargo-deny (deny.toml at repo root) + cargo-audit + gitleaks + trufflehog +
+# .env.example secret hygiene. Keep green on PRs.
+# Weekly schedule covers L33 "scheduled full scan beyond PR"; gitleaks SARIF
+# uploads to code scanning when security-events write is available.
+
+name: Security
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Monday 06:00 UTC — full scan outside PR pressure
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  env-example:
+    name: env.example hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: assert .env.example keys and no high-entropy secrets
+        shell: pwsh
+        run: ./scripts/env-example-check.ps1
+
+  cargo-deny:
+    name: cargo deny check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      # deny.toml at repo root is the default; do not pass --config as a
+      # global flag (cargo-deny-action places arguments before `check`).
+      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2
+        with:
+          command: check
+          rust-version: "1.85.0"
+
+  cargo-audit:
+    name: cargo audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+      - name: cargo audit
+        run: cargo audit
+
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Required for SARIF upload to GitHub code scanning (L33).
+      security-events: write
+      # gitleaks-action may comment on PRs when licensed; harmless if unused.
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Load validated Gitleaks policy for pull requests
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: cp gitleaks.toml "$RUNNER_TEMP/gitleaks.toml"
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: ${{ github.event_name == 'pull_request' && format('{0}/gitleaks.toml', runner.temp) || 'gitleaks.toml' }}
+      # Explicit SARIF upload so findings land in the Security tab even when
+      # the action skips its built-in upload (fork PRs: continue-on-error).
+      - name: Upload gitleaks SARIF
+        if: always() && hashFiles('results.sarif') != ''
+        uses: github/codeql-action/upload-sarif@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        continue-on-error: true
+        with:
+          sarif_file: results.sarif
+          category: gitleaks
+
+  trufflehog:
+    name: trufflehog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: trufflesecurity/trufflehog@e76dff8a7e57d6df0c60ad8cbf5d5cba505a8fc9 # v3.99.2
+        with:
+          version: "3.95.9"
+          extra_args: --results=verified,unknown
+
+  # Blocking C04 L40 sandbox boundary evidence — hermetic SelfCheck only.
+  sandbox-boundary:
+    name: sandbox boundary smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: self-check sandbox boundary checklist + Containerfile anchors
+        shell: pwsh
+        run: ./scripts/sandbox-boundary-check.ps1 -SelfCheck
+
+  # Hard C04 L40 rootless/no-net CI evidence — blocking PR workflow in
+  # .github/workflows/rootless-nonet.yml (rootless-nonet-check.ps1 -SelfCheck).
+  # Does not enforce rootless-only runners or live no-net on cargo-fetch jobs.
+
+  # Blocking C04 L40 rootless-only OCI runner matrix scaffold — hermetic SelfCheck only.
+  # Full PR gate in .github/workflows/rootless-matrix.yml; does not run podman/docker or
+  # claim live rootless-only matrix enforcement on GitHub-hosted runners.
+  rootless-matrix:
+    name: rootless-only matrix scaffold
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: rootless-only OCI runner matrix scaffold SelfCheck
+        shell: pwsh
+        run: ./scripts/rootless-matrix-check.ps1 -SelfCheck
+
+  # Blocking C04 L40 cargo-fetch no-net policy evidence — hermetic SelfCheck only.
+  # Documents cargo audit / cargo deny fetch paths (cargo-audit, cargo-deny above);
+  # does not enforce live no-net on hosted runners (cargo install / advisory DB refresh).
+  cargo-nonet:
+    name: cargo-fetch no-net policy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: cargo-fetch no-net policy SelfCheck
+        shell: pwsh
+        run: ./scripts/cargo-nonet-check.ps1 -SelfCheck
+
+  # Blocking C04 L32 SBOM policy evidence — hermetic SelfCheck only.
+  sbom-policy:
+    name: SBOM policy SelfCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: SBOM policy + CycloneDX anchor SelfCheck
+        shell: pwsh
+        run: ./scripts/sbom-validate-check.ps1 -SelfCheck
+
+  # Blocking C06 L33 Socket.dev posture evidence — hermetic SelfCheck only.
+  # Does not call Socket API or claim live org GitHub App install.
+  socket-posture:
+    name: Socket posture SelfCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Socket.dev posture + in-repo dependency scan anchors
+        shell: pwsh
+        run: ./scripts/socket-posture-check.ps1 -SelfCheck
+
+  # Blocking C06 L53 protected-environment checklist — hermetic SelfCheck only.
+  # Does not claim live GitHub Environment wiring or full SLSA Build L3 attestation.
+  slsa-protected-env:
+    name: SLSA protected-environment SelfCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: SLSA protected-environment checklist SelfCheck
+        shell: pwsh
+        run: ./scripts/slsa-protected-env-check.ps1 -SelfCheck
+
+  # Hard C02 L22 envelope-crypto CI evidence — blocking PR workflow in
+  # .github/workflows/envelope-crypto.yml (envelope-crypto-check.ps1 -SelfCheck).
+  # Does not claim in-tree KMS, sealed secrets, KEK wrap, or OKF/audit encryption.
+
+  # Soft C04 L38 CVE feed subscription evidence — hermetic SelfCheck only.
+  cve-feed:
+    name: CVE feed subscription smoke (soft)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: self-check GHSA+OSV+NVD subscription docs + deny/audit/Dependabot anchors
+        shell: pwsh
+        run: ./scripts/cve-feed-check.ps1 -SelfCheck
+
+  # Soft C02 L24 in-tree PII redaction helper — hermetic SelfCheck only.
+  pii-redaction:
+    name: PII redaction helper smoke (soft)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: self-check pii_redact helper + ops doc anchors
+        shell: pwsh
+        run: ./scripts/pii-redact-check.ps1 -SelfCheck

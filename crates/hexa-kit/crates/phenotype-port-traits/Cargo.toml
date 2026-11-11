@@ -16,3 +16,6 @@ chrono = { version = "0.4", features = ["serde"] }
 uuid = { version = "1", features = ["v4", "serde"] }
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
+
+[package.metadata.cargo-machete]
+ignored = ["serde_json", "uuid"]

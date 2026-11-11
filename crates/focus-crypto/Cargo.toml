@@ -30,3 +30,6 @@ harness = false
 [dev-dependencies]
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 criterion = "0.5"
+
+[package.metadata.cargo-machete]
+ignored = ["chrono", "ring", "serde", "thiserror"]

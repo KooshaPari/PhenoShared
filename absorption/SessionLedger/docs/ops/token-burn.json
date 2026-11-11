@@ -1,0 +1,56 @@
+{
+  "schema": "sessionledger.token-burn.v1",
+  "harbor_per_eval_ledger": "N/A",
+  "notes": [
+    "Per-fixture token ledgers are planning proxies on OKF conformance fixtures, not Harbor eval-cost accounting.",
+    "compression_only fixtures participate in the zstd gate but carry no intent token_estimate ledger.",
+    "Gate total_token_estimate must equal the sum of intent.properties.token_estimate for ledger fixtures."
+  ],
+  "fixtures": [
+    {
+      "path": "tests/fixtures/okf/auth-fix-session-001.okf.json",
+      "ledger": "compression_only"
+    },
+    {
+      "path": "docs/reference/conformance/fixtures/task-family-token-budget-032.okf.json",
+      "expected_total_token_estimate": 370,
+      "intent_token_estimates": [210, 160]
+    },
+    {
+      "path": "docs/reference/conformance/fixtures/task-family-compress-resume-033.okf.json",
+      "expected_total_token_estimate": 360,
+      "intent_token_estimates": [240, 120]
+    },
+    {
+      "path": "docs/reference/conformance/fixtures/compress-token-proxy-034.okf.json",
+      "expected_total_token_estimate": 270,
+      "intent_token_estimates": [180, 90]
+    },
+    {
+      "path": "docs/reference/conformance/fixtures/token-slice-budget-035.okf.json",
+      "expected_total_token_estimate": 280,
+      "intent_token_estimates": [160, 120]
+    },
+    {
+      "path": "docs/reference/conformance/fixtures/archive-gzip-resume-036.okf.json",
+      "expected_total_token_estimate": 310,
+      "intent_token_estimates": [200, 110]
+    }
+  ],
+  "metrics_surface": {
+    "watch_files": [
+      "crates/sl-daemon/src/metrics.rs",
+      "docs/ops/observability.md",
+      "docs/api/openapi.yaml",
+      "docs/EVAL_SCOPE.md"
+    ],
+    "doc_anchors": [
+      "total_tokens",
+      "avg_tokens",
+      "Harbor",
+      "token-burn-check.ps1"
+    ]
+  },
+  "verify_command": "./scripts/token-burn-check.ps1 -SelfCheck",
+  "compression_eval_command": "cargo test -p session-ledger --features compress --test compression_eval --locked"
+}

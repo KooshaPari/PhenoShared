@@ -1,0 +1,15 @@
+[package]
+name = "fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+authvault = { path = ".." }
+jsonwebtoken = { version = "10", features = ["use_pem", "rust_crypto"] }
+
+[workspace]

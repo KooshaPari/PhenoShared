@@ -1,0 +1,6 @@
+{
+  "name": "SessionLedger Dev",
+  "image": "rust:slim-bookworm",
+  "postCreateCommand": "cargo build",
+  "forwardPorts": [8080]
+}

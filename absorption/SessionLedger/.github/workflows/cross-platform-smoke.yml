@@ -1,0 +1,37 @@
+name: Cross-platform smoke
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/release.yml"
+      - ".github/workflows/cross-platform-smoke.yml"
+      - "docs/ops/cross-platform-ci.md"
+      - "scripts/assert-release-matrix.ps1"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/release.yml"
+      - ".github/workflows/cross-platform-smoke.yml"
+      - "docs/ops/cross-platform-ci.md"
+      - "scripts/assert-release-matrix.ps1"
+  workflow_dispatch:
+  schedule:
+    - cron: "17 9 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-matrix-contract:
+    name: release matrix contains Linux, macOS, Windows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: assert release matrix platforms
+        shell: pwsh
+        run: ./scripts/assert-release-matrix.ps1

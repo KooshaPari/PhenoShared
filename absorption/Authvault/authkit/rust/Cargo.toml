@@ -1,0 +1,21 @@
+[workspace]
+resolver = "2"
+members = [
+    "phenotype-content-hash",
+    "phenotype-contracts",
+    "phenotype-security-aggregator",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+authors = ["Phenotype Contributors"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/AuthKit"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+chrono = "0.4"

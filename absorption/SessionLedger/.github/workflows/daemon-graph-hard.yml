@@ -1,0 +1,42 @@
+# Blocking live tokio daemon-graph PR gate for C00 L7.
+# SelfCheck + cargo test --test daemon_graph_tokio; loom-permutation retained.
+name: daemon graph hard
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  daemon-graph-hard-selfcheck:
+    name: daemon graph hard · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: daemon-graph hard CI SelfCheck
+        shell: pwsh
+        run: ./scripts/daemon-graph-hard-check.ps1 -SelfCheck
+
+  daemon-graph-hard-tokio:
+    name: daemon graph hard · tokio graph
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: daemon-graph-hard-tokio
+      - name: cargo test daemon_graph_tokio (blocking)
+        run: cargo test --test daemon_graph_tokio --locked -- --test-threads=1

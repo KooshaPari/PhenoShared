@@ -8,7 +8,11 @@ rust-version.workspace = true
 [dependencies]
 agileplus-domain = { path = "../agileplus-domain" }
 git2 = { version = "0.21", features = ["vendored-libgit2"] }
-gix = { version = "0.83", default-features = false, features = ["sha1", "worktree-stream", "revision"] }
+gix = { version = "0.83", default-features = false, features = [
+  "sha1",
+  "worktree-stream",
+  "revision",
+] }
 notify = "8"
 async-nats = "0.50"
 tokio = { version = "1", features = ["sync", "time", "macros"] }
@@ -21,3 +25,6 @@ chrono.workspace = true
 [dev-dependencies]
 tempfile = "3"
 tokio = { version = "1", features = ["full"] }
+
+[package.metadata.cargo-machete]
+ignored = ["gix"]

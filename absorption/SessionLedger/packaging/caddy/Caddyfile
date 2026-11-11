@@ -1,0 +1,13 @@
+# SessionLedger — Caddy TLS reverse proxy in front of the systemd-bound daemon.
+# Pair with packaging/systemd/sessionledger-daemon.service (SL_HTTP_BIND=127.0.0.1:8080).
+# Replace {$SESSIONLEDGER_HOST} or set the env var to your public hostname.
+#
+# Install (example):
+#   sudo install -m 0644 packaging/caddy/Caddyfile /etc/caddy/Caddyfile
+#   sudo systemctl enable --now caddy
+#   sudo systemctl enable --now sessionledger-daemon
+
+{$SESSIONLEDGER_HOST:sessionledger.example.com} {
+	encode gzip
+	reverse_proxy 127.0.0.1:8080
+}
