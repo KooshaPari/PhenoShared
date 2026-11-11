@@ -65,3 +65,36 @@ Extracted from `KooshaPari/analysis-archive`, where it lived beside the ingest
 pipeline it protects. That repository was a per-task archive; the operator
 directive of 2026-11-11 is that shared code belongs in `PhenoShared` and records
 belong in `PhenoRegistry` rather than in new archives.
+
+## Keeping the sealed archive current
+
+`corpus_guard` refuses every write inside `ANALYSIS_SEALED_DIR`, which is the
+point: no ingest script can clobber a sealed backup. A backup that is never
+refreshed becomes worthless, though, so exactly one tool is allowed to write
+there, and only in the one way that cannot destroy an earlier seal:
+
+```bash
+researchledger/tools/refresh-sealed-archive.sh --check    # read-only
+researchledger/tools/refresh-sealed-archive.sh --refresh  # seal, verify, ship
+```
+
+`--check` compares the live corpus's mtime against the newest sealed copy and
+exits 1 with `REFRESH_NEEDED` when the corpus has been written since that copy
+was taken. `--refresh` then seals with the SQLite online backup API (never
+`cp`), hashes it, checks the page count against the live corpus, compresses it,
+copies it off-host, and verifies the remote copy by sha256 and by decompressing
+it back to the sealed archive's hash.
+
+Two properties make this safe to run unattended:
+
+- **It never overwrites a seal.** The filename carries a date; a second refresh
+  on the same date appends `-2`, `-3`, and so on, and the previous file keeps
+  its `0444` mode.
+- **It refuses to ship a bad seal.** Every failure path exits non-zero before
+  the next stage, so a mismatched page count or a short transfer cannot be
+  reported as success.
+
+`--check` is scheduled daily. See
+`docs/sessions/2026-11-11-asks-instinct-closure-ledger/CLOSURE-LEDGER.md`
+for the schedule id and the verification receipt from the run that shipped the
+2026-11-11 seal off-host.
