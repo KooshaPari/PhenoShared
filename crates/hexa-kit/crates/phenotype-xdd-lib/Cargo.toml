@@ -19,3 +19,6 @@ serde_yaml_ng = "0.9"
 
 [dev-dependencies]
 tokio = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["chrono", "rand", "thiserror"]

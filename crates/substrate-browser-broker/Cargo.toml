@@ -19,21 +19,42 @@ serde_json.workspace = true
 thiserror.workspace = true
 futures-util.workspace = true
 axum.workspace = true
-tokio = { workspace = true, features = ["net", "fs", "signal", "macros", "rt-multi-thread"] }
+tokio = { workspace = true, features = [
+  "net",
+  "fs",
+  "signal",
+  "macros",
+  "rt-multi-thread",
+] }
 base64 = "0.22"
 # Opt-in TLS for the viewer (`--tls-cert` / `--tls-key`). Declared here rather
 # than in the workspace so this crate owns its transport surface.
 # `default-features = false` keeps this off the aws-lc-rs backend: with two
 # providers linked in, rustls refuses to guess one at runtime. `ring` matches
 # what the rest of the workspace already builds.
-tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+tokio-rustls = { version = "0.26", default-features = false, features = [
+  "ring",
+  "tls12",
+] }
 rustls-pemfile = "2.2"
 
 [dev-dependencies]
 tempfile.workspace = true
 # Used by tests/lock_responsive.rs to hold the lease store's cross-process lock.
 fs2.workspace = true
-tokio = { workspace = true, features = ["net", "macros", "rt-multi-thread", "fs"] }
+tokio = { workspace = true, features = [
+  "net",
+  "macros",
+  "rt-multi-thread",
+  "fs",
+] }
 reqwest = { workspace = true, features = ["json", "blocking"] }
 # Generates the throwaway self-signed certificate used by tests/viewer_tls.rs.
-rcgen = { version = "0.13.2", default-features = false, features = ["crypto", "pem", "ring"] }
+rcgen = { version = "0.13.2", default-features = false, features = [
+  "crypto",
+  "pem",
+  "ring",
+] }
+
+[package.metadata.cargo-machete]
+ignored = ["futures-util"]

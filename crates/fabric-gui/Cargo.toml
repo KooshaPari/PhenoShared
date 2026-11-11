@@ -20,3 +20,19 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 chrono = { workspace = true }
 uuid = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "anyhow",
+  "chrono",
+  "dirs",
+  "fabric-capability",
+  "fabric-graph",
+  "fabric-persist",
+  "fabric-tray",
+  "serde",
+  "serde_json",
+  "tracing",
+  "tracing-subscriber",
+  "uuid",
+]

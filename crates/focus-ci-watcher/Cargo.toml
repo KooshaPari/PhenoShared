@@ -27,3 +27,6 @@ name = "focus-ci-watcher"
 path = "src/main.rs"
 
 [lib]
+
+[package.metadata.cargo-machete]
+ignored = ["reqwest", "serde", "serde_json", "thiserror"]

@@ -12,11 +12,20 @@ serde_json = { workspace = true }
 thiserror = { workspace = true }
 # SurrealDB embedded — RocksDB on Unix; in-memory on Windows (no C++ toolchain required)
 [target.'cfg(not(windows))'.dependencies]
-surrealdb = { version = "3.1", default-features = false, features = ["kv-rocksdb", "protocol-ws"] }
+surrealdb = { version = "3.1", default-features = false, features = [
+  "kv-rocksdb",
+  "protocol-ws",
+] }
 
 [target.'cfg(windows)'.dependencies]
-surrealdb = { version = "3.0", default-features = false, features = ["kv-mem", "protocol-ws"] }
+surrealdb = { version = "3.0", default-features = false, features = [
+  "kv-mem",
+  "protocol-ws",
+] }
 
 [dev-dependencies]
 tokio-test = "0.4"
 tempfile = "3"
+
+[package.metadata.cargo-machete]
+ignored = ["thiserror"]

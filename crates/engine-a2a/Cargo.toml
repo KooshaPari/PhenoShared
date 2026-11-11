@@ -24,3 +24,6 @@ uuid = { workspace = true }
 axum = { workspace = true }
 engine-conformance = { version = "0.3.8", path = "../engine-conformance" }
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
+
+[package.metadata.cargo-machete]
+ignored = ["bytes"]

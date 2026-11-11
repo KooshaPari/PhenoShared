@@ -22,3 +22,6 @@ async-trait = { workspace = true }
 tokio-test = { workspace = true }
 tokio = { workspace = true, features = ["test-util"] }
 tempfile = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["anyhow", "serde_json"]

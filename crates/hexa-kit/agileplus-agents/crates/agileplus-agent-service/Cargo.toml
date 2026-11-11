@@ -26,3 +26,6 @@ uuid = { workspace = true }
 
 [build-dependencies]
 tonic-prost-build = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["agileplus-agent-review", "prost", "tonic-prost"]

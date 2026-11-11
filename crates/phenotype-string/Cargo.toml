@@ -16,3 +16,6 @@ unicode-normalization.workspace = true
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
+
+[package.metadata.cargo-machete]
+ignored = ["regex", "serde", "unicode-normalization"]

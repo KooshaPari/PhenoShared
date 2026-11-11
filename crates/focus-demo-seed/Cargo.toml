@@ -26,3 +26,6 @@ focus-events = { path = "../focus-events" }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["macros", "rt"] }
+
+[package.metadata.cargo-machete]
+ignored = ["focus-connectors", "focus-events", "focus-rewards", "thiserror"]

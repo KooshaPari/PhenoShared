@@ -23,3 +23,6 @@ settly = { path = "../settly" }
 assert_cmd = "2"
 predicates = "3"
 tempfile = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["serde_yaml", "toml"]

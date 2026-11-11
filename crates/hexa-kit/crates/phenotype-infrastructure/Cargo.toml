@@ -17,3 +17,6 @@ dashmap = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["serde"]

@@ -11,3 +11,6 @@ thiserror = { workspace = true }
 [lib]
 name = "eyetracker_domain"
 path = "src/lib.rs"
+
+[package.metadata.cargo-machete]
+ignored = ["thiserror"]
