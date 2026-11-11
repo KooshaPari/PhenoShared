@@ -16,7 +16,8 @@ builder, MCP-server tool surface, and session continuity hooks.
 The upstream `phenoResearchEngine` was formally deprecated on 2026-06-20 with the
 migration target declared as `packages/phenotype-research/` inside the monorepo.
 The Pheno monorepo (`/pheno`) is Rust-first and doesn't have a Python workspace;
-the natural Python home is `phenoAI/python/`, which already houses `cheap-llm-mcp`.
+the natural Python home is `phenoAI/python/`, which already houses the
+archived Python MCP packages retired under ADR-006/007.
 
 The 90-day compatibility shim from the upstream deprecation expires 2026-09-18.
 After that date, downstream consumers must use the new path.
@@ -30,12 +31,12 @@ After that date, downstream consumers must use the new path.
 
 ## What it talks to
 
-| Direction | Peer | Purpose |
-|---|---|---|
-| Inbound | `phenoAI/crates/mcp-server` | MCP tool registration (`mcp/tools.py`) |
-| Inbound | `phenoAI/crates/llm-router` | LLM-routed digest generation |
-| Outbound | `phenotype-py-utils` | shared Python helpers (git-pinned @ v0.1.0) |
-| Outbound | typer, structlog, apscheduler, pydantic, orjson, httpx, arxiv, praw, feedparser, thegent | runtime deps (declared in `findings/deps-audit-2026-06-20-phenoResearchEngine.md`) |
+| Direction | Peer                                                                                     | Purpose                                                                            |
+| --------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Inbound   | `phenoAI/crates/mcp-server`                                                              | MCP tool registration (`mcp/tools.py`)                                             |
+| Inbound   | `phenoAI/crates/llm-router`                                                              | LLM-routed digest generation                                                       |
+| Outbound  | `phenotype-py-utils`                                                                     | shared Python helpers (git-pinned @ v0.1.0)                                        |
+| Outbound  | typer, structlog, apscheduler, pydantic, orjson, httpx, arxiv, praw, feedparser, thegent | runtime deps (declared in `findings/deps-audit-2026-06-20-phenoResearchEngine.md`) |
 
 ## What is NOT absorbed
 

@@ -1,5 +1,7 @@
 # Anti-pattern: mirror-push to empty GitHub repo
 
+<!-- stale-patterns: file-allow=defines and explains this ban -->
+
 **Status:** retired · **Applies to:** bootstrapping any Phenotype MCP framework fork under `<REDACTED>/`.
 
 ## Problem

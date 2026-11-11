@@ -7,6 +7,8 @@ author: &lt;REDACTED&gt;
 tags: [mcp, substrate, architecture]
 ---
 
+<!-- stale-patterns: file-allow=retires the patterns it names -->
+
 # ADR-019: MCP Runtime ↔ Implementation Dependency Graph
 
 ## Status
