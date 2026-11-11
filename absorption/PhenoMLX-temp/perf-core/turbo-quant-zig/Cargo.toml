@@ -2,6 +2,7 @@
 name = "turbo-quant-zig"
 version = "0.1.0"
 edition = "2021"
+license.workspace = true
 description = "phenotype-omlx turbo-quant in Zig (cross-language FFI polyglot crate)"
 
 [lib]
