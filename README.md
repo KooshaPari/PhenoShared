@@ -15,17 +15,17 @@ redirects to it.
 
 | Field | Value | How measured |
 | --- | --- | --- |
-| Root workspace packages | **76** | `cargo metadata --no-deps` (2026-09-17) |
-| `[workspace].members` entries | 73, plus 3 path-dep members | `Cargo.toml` |
-| Binary targets in root workspace | **16** | `cargo metadata --no-deps` |
-| First-level crate manifests under `crates/` | **329** | `ls crates/*/Cargo.toml` |
-| Nested Cargo workspaces under `crates/` | **26** | `grep -rl '^\[workspace\]' --include=Cargo.toml` |
+| Root workspace packages | **290** | `cargo metadata --no-deps` (2026-11-11) |
+| `[workspace].members` entries | 327 | `Cargo.toml` |
+| Binary targets in root workspace | **68** | `cargo metadata --no-deps` |
+| First-level crate manifests under `crates/` | **336** | `ls crates/*/Cargo.toml` |
+| Nested Cargo workspaces under `crates/` | **163** | `grep -rl '^\[workspace\]' --include=Cargo.toml` |
 | Workspace version | `0.3.10` | `[workspace.package]` |
 | Rust edition / MSRV | 2021 / `rust-version = "1.80"` | `Cargo.toml` |
 | Unsafe code | `forbid` workspace-wide | `[workspace.lints.rust]` |
-| Reusable workflow files | **84** | `find .github/workflows -maxdepth 1 -name '*.y*ml'` |
-| Composite actions | **5** | `ls -d .github/actions/*/` |
-| Markdown files under `docs/` | 2,507 | `find docs -name '*.md'` |
+| Reusable workflow files | **90** | `find .github/workflows -maxdepth 1 -name '*.y*ml'` |
+| Composite actions | **6** | `ls -d .github/actions/*/` |
+| Markdown files under `docs/` | 2,668 | `find docs -name '*.md'` |
 | ADRs | 82 in `docs/adr/`, 25 in `docs/adrs/` | directory listing |
 | Registered project manifests | 178 | `projects/*.json` |
 | License | `MIT OR Apache-2.0` | `Cargo.toml`, `LICENSE-MIT`, `LICENSE-APACHE` |
@@ -36,7 +36,7 @@ Three cross-org functions are co-located in one workspace:
 
 | Function | Location | Scope |
 | --- | --- | --- |
-| Shared Rust crates | `crates/` | 329 first-level manifests; 76 packages in the root workspace |
+| Shared Rust crates | `crates/` | 336 first-level manifests; 290 packages in the root workspace |
 | Reusable workflows | `.github/workflows/` | 84 workflow files, called from other repos |
 | Shared actions | `.github/actions/` | 5 composite actions |
 | Shared docs | `docs/`, `handbook/` | Global Handbook, ADRs, absorption records, session artifacts |
