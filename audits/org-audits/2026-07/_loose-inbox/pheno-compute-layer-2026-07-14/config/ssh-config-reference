@@ -7,7 +7,7 @@
 # <REDACTED>-desk (3090 Ti)
 #----------------------------------
 Host <REDACTED>-desk desk desk-tail
-    HostName <REDACTED>-desk.tail2b570.ts.net
+    HostName <REDACTED>-desk.example-tailnet.ts.net
     User <REDACTED>
     ForwardAgent yes
     IdentityFile ~/.ssh/id-git
@@ -32,7 +32,7 @@ Host koosh-desk desk-ip
 # WSL Tailscale SSH
 #----------------------------------
 Host desk-wsl desk-ts
-    HostName <REDACTED>-desk.tail2b570.ts.net
+    HostName <REDACTED>-desk.example-tailnet.ts.net
     User <REDACTED>
     ProxyCommand tailscale ssh --stdio %h
     IdentityFile ~/.ssh/id-git

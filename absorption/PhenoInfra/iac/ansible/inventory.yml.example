@@ -16,7 +16,7 @@ all:
     oci_primary:
       hosts:
         oci-primary:
-          # Replace <TAILNET> with your tailnet, e.g. tail2b570.ts.net
+          # Replace <TAILNET> with your tailnet, e.g. example-tailnet.ts.net
           ansible_host: oci-primary.<TAILNET>.ts.net
 
     # Reserved for future nodes. oci-secondary + gcp-e2 not yet provisioned.

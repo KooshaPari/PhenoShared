@@ -1,7 +1,7 @@
 # Windows GitHub Actions Runner (`install-windows-runner.ps1`)
 
 Installs a **self-hosted GitHub Actions runner** on the Windows 11 desktop
-(`<REDACTED>-desk.tail2b570.ts.net`), registered at the
+(`<REDACTED>-desk.example-tailnet.ts.net`), registered at the
 [`<REDACTED>`](https://github.com/KooshaPari) organization scope.
 
 Forgejo was the original target for this script; it is blocked waiting on

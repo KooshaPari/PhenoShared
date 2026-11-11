@@ -123,7 +123,7 @@ pheno-compute-layer/
 
 ## Hardware
 
-- **Host**: <REDACTED>-desk (Tailscale: <REDACTED>-desk.tail2b570.ts.net)
+- **Host**: <REDACTED>-desk (Tailscale: <REDACTED>-desk.example-tailnet.ts.net)
 - **GPU**: NVIDIA GeForce RTX 3090 Ti (24GB)
 - **IP**: 100.96.135.160
 - **CUDA**: 13.1

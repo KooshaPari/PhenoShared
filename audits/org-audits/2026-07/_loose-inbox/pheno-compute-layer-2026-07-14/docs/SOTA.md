@@ -140,7 +140,7 @@ This research document analyzes the architecture and implementation of **pheno-c
 │                  ~/.ssh/config (Unified)                     │
 ├─────────────────────────────────────────────────────────────┤
 │  Host desk                                                  │
-│      HostName <REDACTED>-desk.tail2b570.ts.net              │
+│      HostName <REDACTED>-desk.example-tailnet.ts.net              │
 │      User <REDACTED>                                        │
 │      Port 2222                                              │
 │      IdentityFile ~/.ssh/id-git                             │
@@ -358,7 +358,7 @@ pheno deploy      # Model deployment
 ```bash
 # ~/.ssh/config
 Host desk
-    HostName <REDACTED>-desk.tail2b570.ts.net
+    HostName <REDACTED>-desk.example-tailnet.ts.net
     User <REDACTED>
     Port 2222
     IdentityFile ~/.ssh/id-git
