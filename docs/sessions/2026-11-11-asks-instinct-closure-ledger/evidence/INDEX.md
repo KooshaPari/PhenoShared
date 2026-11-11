@@ -83,3 +83,24 @@ Regeneration depends on local source artifacts at their original locations (jcod
 session stores, Codex rollouts, Forge/Herdr/iMessage exports). Those sources are outside
 this repo and unchanged by this copy. If the volatile JSONL is lost, it can be re-mined
 from those sources; the manifests here record what the previous run contained.
+
+## Addendum — corrected counts (2026-11-11T12:59Z)
+
+These four artifacts supersede every per-source record count in the earlier manifests.
+They are copied verbatim from `~/CodeProjects/temp/asks-coverage/` and are the only
+durable record of the following measurements.
+
+| Artifact | What it establishes |
+|---|---|
+| `CODEX-VERIFY.md` | 2,567 `~/.codex/sessions` files: 180 plain `.jsonl`, 2,380 `.jsonl.zst`, 7 `.jsonl.zst.zst`. A `*.jsonl` glob reads 7% of the corpus. |
+| `CODEX-REEXTRACT.md` | Full zstd-aware pass: **9,650** user-turn occurrences, not 401 (24.1x). 3,942 are injected context, leaving **5,708** genuine, **405** distinct non-injected. |
+| `JCODE-REEXTRACT.md` | **55,119** user-role occurrences, 24,715 distinct, **2.23x** repeat factor. Injected share 38.44%. Human non-injected: **30,234** occurrences, **8,290** distinct. `messages[].display_role` is the decisive field. |
+| `OCCURRENCE-RECOUNT.md` | Every previously mined file has `records == distinct`, i.e. all were globally deduped. No file-level repeat factor is recoverable; jcode/herdr have no pre-dedupe evidence. |
+
+Corrections to earlier figures in this directory:
+
+- The jcode sessions directory is **2.9 GB / 8,667 files**, not the ~38.7 MB previously stated.
+- `16,887` (old jcode count) is a deduped, partially-filtered figure and is not reproducible
+  from either distinct count; it must not be used as a volume baseline.
+- herdr cannot be recovered at occurrence level: its manifest records
+  `persists_operator_prompt_text: false`, so the 8 records are a data limitation, not a bug.
