@@ -97,8 +97,8 @@
 schema = "pheno.coverage-membership.v1"
 recorded_at_utc = "2026-11-10T03:01:17Z"
 recorded_at_commit = "7965cb9cee10b8da81fa4968edf1ced6e574d050"
-total_members = 291
-measured_members = 258
+total_members = 290
+measured_members = 257
 excused_members = 33
 measured_source_lines = 418609                                  # investigate: dated snapshot, not a live count
 excused_source_lines = 98089                                    # investigate: dated snapshot, not a live count
