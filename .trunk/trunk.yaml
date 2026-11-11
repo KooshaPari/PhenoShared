@@ -27,6 +27,24 @@ runtimes:
     - rust@1.99.0
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
+  # Each file extension is owned by exactly ONE formatter.
+  # oxfmt (the `format` command of the oxlint definition) owns TypeScript/JavaScript:
+  #   ts, tsx, mts, js, jsx, cjs, mjs
+  # prettier keeps only the extensions it is still needed for, so a ts/js file can no
+  # longer be "formatted" by one formatter and left dirty by the other.
+  # oxlint is untouched and remains the LINTER for ts/js.
+  definitions:
+    - name: prettier
+      files:
+        - yaml
+        - css
+        - postcss
+        - sass
+        - html
+        - markdown
+        - json
+        - graphql
+        - prettier_supported_configs
   enabled:
     - actionlint@1.7.12
     - bandit@1.9.4
