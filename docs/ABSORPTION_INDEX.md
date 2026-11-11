@@ -86,7 +86,7 @@ All four source repos were deleted after the preconditions below were asserted, 
 
 Two further empty repos from the same deletion batch were removed with them: `4sgm-archive2` and `forge-AgilePlus`, both 0 files, 0 branches, 0 issues.
 
-`PhenoMCPServers` was deliberately **not** deleted. Its content is fully absorbed (see the MCP-01 entry) but a prior audit left an unresolved `DECLARE_SPINE` recommendation for it, so archiving remains the reversible option.
+`PhenoMCPServers` was deliberately **not** deleted. Its content is fully absorbed (see the MCP-01 entry) but a prior audit left an unresolved `DECLARE_SPINE` recommendation for it, so the repo was **archived** on 2026-11-11 instead (`archived: true`, 2,610 KB retained). Archiving keeps the full history, issues and read-only source available while removing it from active work; it is reversible with `gh repo unarchive`. Deleting it would have discarded the commit history and the unscrubbed upstream wording that the 119 diverged files no longer carry.
 
 ## Worklog references
 
