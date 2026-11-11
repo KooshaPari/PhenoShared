@@ -23,3 +23,14 @@ focus-storage = { workspace = true }
 focus-domain = { workspace = true }
 
 [dev-dependencies]
+
+[package.metadata.cargo-machete]
+ignored = [
+  "async-trait",
+  "focus-domain",
+  "focus-rules",
+  "focus-storage",
+  "thiserror",
+  "tokio",
+  "tracing",
+]
