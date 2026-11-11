@@ -5,7 +5,7 @@ exclude = [
   "crates/fabric-frame-transport/fuzz",
   "crates/fabric-gui/src-tauri",        # Tauri desktop shells bind GTK/WebKit/libsoup-3.0 at build time and cannot build on
   # the generic Linux CI image. Same reason crates/fabric-gui/src-tauri is excluded.
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/hwledger-app/src-tauri",
+  "crates/hwledger/apps/hwledger-app/src-tauri",
 ]
 members = [
   "crates/substrate",
@@ -830,18 +830,18 @@ members = [
   "absorption/PhenoMLX-temp/perf-core/tree-attention-spirv",
   "absorption/PhenoMLX-temp/perf-core/vpu/agents",
   # --- SHR-016 (2026-10-15): promote hwledger packages (non-TQ hwledger crates) ---
-  "absorption/PhenoMLX-temp/perf-core/hwledger/crates/hwledger-bench-cockpit",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/crates/hwledger-cli",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-core",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-tags",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-index",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-ingest",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-rag",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-evals",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-skills",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-server",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-mcp",
-  "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-cli",
+  "crates/hwledger/crates/hwledger-bench-cockpit",
+  "crates/hwledger/crates/hwledger-cli",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-core",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-tags",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-index",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-ingest",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-rag",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-evals",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-skills",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-server",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-mcp",
+  "crates/hwledger/apps/model-explorer/rust/crates/hwledger-cli",
 
   # --- PlayCua native binary (absorbed submodule) ---
   "native",
@@ -1004,16 +1004,16 @@ tract-onnx = "0.23.4"
 lancedb = "0.33"
 tantivy = "0.22"
 # hwledger sibling path deps (referenced via workspace = true by other hwledger crates)
-hwledger-search-core = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-core" }
-hwledger-search-index = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-index" }
-hwledger-search-ingest = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-ingest" }
-hwledger-search-skills = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-skills" }
-hwledger-search-tags = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-tags" }
-hwledger-search-evals = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-evals" }
-hwledger-search-rag = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-search-rag" }
-hwledger-server = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-server" }
-hwledger-mcp = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-mcp" }
-hwledger-explorer-cli = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-cli" }
+hwledger-search-core = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-core" }
+hwledger-search-index = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-index" }
+hwledger-search-ingest = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-ingest" }
+hwledger-search-skills = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-skills" }
+hwledger-search-tags = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-tags" }
+hwledger-search-evals = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-evals" }
+hwledger-search-rag = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-search-rag" }
+hwledger-server = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-server" }
+hwledger-mcp = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-mcp" }
+hwledger-explorer-cli = { path = "crates/hwledger/apps/model-explorer/rust/crates/hwledger-cli" }
 
 # Gaps surfaced by cargo-machete/cargo metadata on 2026-11-11: members reference
 # these via `workspace = true` but the root did not declare them.
