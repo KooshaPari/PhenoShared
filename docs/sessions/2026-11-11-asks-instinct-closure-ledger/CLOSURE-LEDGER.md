@@ -1,7 +1,9 @@
 # Asks / Instinct Closure Ledger
 
-**Status:** `NOT_RUN` — this ledger is a closure *plan* with executable acceptance
-tests. No goal below has been executed or verified as of this writing.
+> **Evidence warning, 2026-11-11:** This is a provisional plan, not a validated coverage report. Claims below that sources have zero overlap or that exports are absent everywhere are unverified. Commands naming scripts not yet implemented are proposed checks, not executed tests. Artifacts under `~/CodeProjects/temp` are volatile and are not durable evidence. Human authorship, occurrence counts, and source overlap require independent verification. The previous 2% estimate is withdrawn.
+
+**Status:** `NOT_RUN` — this ledger is a closure plan with proposed acceptance
+checks. Some checks require scripts that have not been implemented or verified.
 **Ledger written:** 2026-11-11
 **Host repo (scope):** `~/CodeProjects/Phenotype/repos/PhenoShared` (branch `feat/researchledger-ingest-v2`)
 **Companion artifacts (read-only references, not owned by this ledger):**
