@@ -1,7 +1,7 @@
 # ADR-ECO-014: Decompose phenoShared — no generic consolidation repo
 
 ## Status
-Accepted (2026-06-17)
+Amended (2026-11-11) — see §Amendment below
 
 ## Context
 `phenoShared` absorbed cross-cutting crates during HexaKit P3 eviction as a **staging** home. It has no domain orientation — it is neither a role owner, nor a justified SDK/framework boundary. Fleet repoints that terminate on `phenoShared` recreate a junk-drawer monorepo under a different name.
@@ -40,6 +40,20 @@ Accepted (2026-06-17)
 - `disposition-index.json` gains repo-level `phenoShared` row `DECOMPOSE`; crate rows note `interim: phenoShared` where applicable.
 - HexaKit wave 14+ parity work **routes crates to role owners**, not new phenoShared pins as end state.
 - DELETE gate for phenoShared runs after pheno archive gate and per-crate consumer scan.
+
+
+## Amendment (2026-11-11)
+
+ADR-ECO-014 originally directed `phenoShared` to **DECOMPOSE → delete** after crate relocation.
+That direction is amended: the repo is reclassified as the **container** for bulky and
+non-publishable material, with a curated subset published as independently consumable crates.
+Decomposition into domain-role repos is no longer the terminal goal; classification and
+consumability are.
+
+The seam contract (5 rules: standalone packaging, layer discipline, no bulk-leaking features,
+declared stability, catalog completeness) replaces the relocation programme. The container
+thesis is retained; the "no generic consolidation repo" rule is relaxed to allow consolidation
+when a seam contract is enforced.
 
 ## Related
 
