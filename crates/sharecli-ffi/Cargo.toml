@@ -22,3 +22,6 @@ dirs = "5"
 # Rationale: the IPC socket is the primary data path;
 # FFI is used only for synchronous "connect / disconnect / peek" lifecycle calls
 # so the narrow C surface is sufficient and avoids a build-tool dependency.
+
+[package.metadata.cargo-machete]
+ignored = ["serde_json"]

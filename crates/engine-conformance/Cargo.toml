@@ -16,3 +16,6 @@ uuid = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
+
+[package.metadata.cargo-machete]
+ignored = ["async-trait", "engine-spec", "tokio", "uuid"]

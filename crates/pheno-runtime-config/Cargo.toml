@@ -28,3 +28,6 @@ tempfile = { workspace = true }
 
 [features]
 default = []
+
+[package.metadata.cargo-machete]
+ignored = ["tracing"]

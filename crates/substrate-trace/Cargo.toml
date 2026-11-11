@@ -9,7 +9,12 @@ repository.workspace = true
 
 [dependencies]
 substrate-core = { version = "0.3.8", path = "../substrate-core" }
-tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "sync"] }
+tokio = { workspace = true, features = [
+  "rt",
+  "rt-multi-thread",
+  "macros",
+  "sync",
+] }
 reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -18,3 +23,6 @@ pheno-otel = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
+
+[package.metadata.cargo-machete]
+ignored = ["pheno-otel"]

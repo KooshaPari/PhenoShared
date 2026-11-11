@@ -25,3 +25,15 @@ chrono = "0.4"
 clap = { version = "4", features = ["derive"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "chrono",
+  "fabric-capability",
+  "fabric-checker",
+  "fabric-graph",
+  "tokio",
+  "tracing",
+  "tracing-subscriber",
+  "uuid",
+]

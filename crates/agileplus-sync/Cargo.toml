@@ -11,7 +11,7 @@ phenotype-error-core = { path = "../phenotype-error-core" }
 agileplus-domain = { path = "../agileplus-domain" }
 agileplus-events = { path = "../agileplus-events" }
 serde.workspace = true
-serde_json .workspace = true
+serde_json.workspace = true
 chrono.workspace = true
 sha2.workspace = true
 thiserror.workspace = true
@@ -24,3 +24,5 @@ tracing.workspace = true
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
 
+[package.metadata.cargo-machete]
+ignored = ["agileplus-events"]

@@ -15,7 +15,15 @@ path = "src/main.rs"
 # workspace
 serde = { workspace = true }
 serde_json = { workspace = true }
-tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "io-util", "sync", "time", "signal"] }
+tokio = { workspace = true, features = [
+  "rt",
+  "rt-multi-thread",
+  "macros",
+  "io-util",
+  "sync",
+  "time",
+  "signal",
+] }
 reqwest = { workspace = true }
 chrono = { workspace = true }
 anyhow = { workspace = true }
@@ -36,3 +44,13 @@ substrate-core = { version = "0.3.8", path = "../substrate-core" }
 # Unix-specific proc-compose monitoring uses signal hooks
 signal-hook = "0.3"
 signal-hook-tokio = { version = "0.4", features = ["futures-v0_3"] }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "chrono",
+  "dispatch-bridge",
+  "futures",
+  "substrate-core",
+  "tokio-stream",
+  "tracing",
+]

@@ -19,3 +19,6 @@ phenotype-health = { workspace = true }
 [dev-dependencies]
 tokio = { workspace = true }
 tempfile = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["serde_json", "thiserror"]

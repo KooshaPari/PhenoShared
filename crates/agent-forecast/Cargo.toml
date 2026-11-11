@@ -22,3 +22,6 @@ anyhow = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 chrono = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["chrono"]

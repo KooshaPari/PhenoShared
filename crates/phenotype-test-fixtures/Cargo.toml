@@ -7,3 +7,6 @@ license.workspace = true
 
 [dependencies]
 serde = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["serde"]

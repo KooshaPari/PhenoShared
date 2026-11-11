@@ -21,3 +21,6 @@ tracing = { workspace = true }
 uncased = "0.9"
 
 [dev-dependencies]
+
+[package.metadata.cargo-machete]
+ignored = ["chrono", "serde_json", "serde_yaml", "tracing"]

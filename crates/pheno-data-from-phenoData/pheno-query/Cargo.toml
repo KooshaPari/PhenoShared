@@ -17,3 +17,6 @@ proptest = "1.4"
 
 [features]
 proptest = ["dep:proptest"]
+
+[package.metadata.cargo-machete]
+ignored = ["tokio"]

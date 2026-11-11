@@ -29,3 +29,6 @@ tempfile = "3"
 [lib]
 name = "eyetracker_inference"
 path = "src/lib.rs"
+
+[package.metadata.cargo-machete]
+ignored = ["eyetracker-domain", "image", "thiserror"]

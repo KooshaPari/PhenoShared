@@ -23,3 +23,17 @@ ed25519-dalek = { version = "2.1", features = ["std"] }
 
 [lib]
 path = "src/lib.rs"
+
+[package.metadata.cargo-machete]
+ignored = [
+  "aes-gcm",
+  "blake3",
+  "ed25519-dalek",
+  "hex",
+  "hmac",
+  "pbkdf2",
+  "rand",
+  "sha2",
+  "thiserror",
+  "zeroize",
+]
