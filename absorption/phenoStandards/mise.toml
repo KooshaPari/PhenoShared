@@ -1,0 +1,10 @@
+# Development environment configuration
+[tools]
+rust = "1.75"
+python = "3.11"
+node = "20"
+go = "1.22"
+
+[env]
+RUST_BACKTRACE = "1"
+PYTHONDONTWRITEBYTECODE = "1"
