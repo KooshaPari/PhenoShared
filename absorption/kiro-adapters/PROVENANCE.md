@@ -19,9 +19,11 @@ or host runbooks goes to the private PhenoRegistry instead.
 | `PhenoShared/absorption/kiro-adapters/` (public) | 160 |
 | `PhenoRegistry/repos/kiro-adapters/` (private) | 1 |
 
-## Files withheld to the private registry
+## Withheld material
 
-- `acceptance/windows-sandbox-posture.md`
+1 files were withheld to the private `PhenoRegistry` because they carry
+private infrastructure detail. The path list is intentionally not reproduced
+in this public repo; see the `PhenoRegistry` record for this repo.
 
 ## Selection policy
 
