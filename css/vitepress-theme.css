@@ -21,9 +21,17 @@
   --vp-font-family-base: var(--kc-font-base);
   --vp-font-family-mono: var(--kc-font-mono);
 
-  --vp-c-brand-1: #7ebab5;
-  --vp-c-brand-2: #6aa8a3;
-  --vp-c-brand-3: #569691;
+  /* WCAG 2.4.3 / 1.4.3: the brand teal is used as TEXT in light mode (inline
+   * code, the external-link icon, the active tab, doc links). The old #7ebab5
+   * measured 2.08:1 on the page background, 1.94:1 on the code background and
+   * 1.82:1 on the inline-code background - all far below the 4.5:1 that
+   * WCAG AA requires for body text. The ramp below is the same hue darkened
+   * until every one of those three backgrounds passes: 5.18 / 4.83 / 4.53 for
+   * brand-1. Dark mode keeps #7ebab5, which passes against the dark surfaces.
+   */
+  --vp-c-brand-1: #4c706d;
+  --vp-c-brand-2: #436b68;
+  --vp-c-brand-3: #2f6360;
 
   --vp-c-bg: var(--kc-bg);
   --vp-c-bg-alt: var(--kc-bg-alt);
@@ -96,10 +104,11 @@
 .vp-doc h2 { font-weight: 600; letter-spacing: -0.02em; border-top: none; padding-top: 32px; }
 .vp-doc h3 { font-weight: 600; letter-spacing: -0.01em; }
 
-.vp-doc a { text-decoration-color: rgba(126, 186, 181, 0.3); }
+.vp-doc a { text-decoration-color: rgba(78, 112, 109, 0.35); }
 .vp-doc a:hover { text-decoration-color: var(--kc-accent); }
-:root .vp-doc a { color: #4a9c97; }
-:root .vp-doc a:hover { color: #3e8a85; }
+/* #4a9c97 measured 3.07:1 on the page background; #36716f measures 5.06:1. */
+:root .vp-doc a { color: #36716f; }
+:root .vp-doc a:hover { color: #2f6360; }
 .dark .vp-doc a { color: #7ebab5; }
 .dark .vp-doc a:hover { color: #95ccc8; }
 
@@ -114,7 +123,7 @@
 .VPSidebar { background: var(--vp-c-bg) !important; border-right: 1px solid var(--vp-c-divider); }
 .VPSidebarItem .text { font-size: 13px; }
 .dark .VPSidebarItem.is-active > .item > .link > .text { color: #7ebab5; font-weight: 600; }
-:root .VPSidebarItem.is-active > .item > .link > .text { color: #4a9c97; font-weight: 600; }
+:root .VPSidebarItem.is-active > .item > .link > .text { color: #36716f; font-weight: 600; }
 
 /* ── Code blocks ── */
 
@@ -123,6 +132,16 @@
 .dark .vp-code-group .tabs label.active { color: #f6f5f5; }
 div[class*='language-'] { border: 1px solid var(--vp-c-divider); border-radius: 8px; }
 div[class*='language-'] code { font-size: 13px; }
+
+/* Shiki's high-contrast light theme paints comments in #66707B, which measures
+ * 4.46:1 on this site's code background (#f0f1f3) - just under the 4.5:1 that
+ * WCAG AA requires for body text. Every other token in that theme clears it.
+ * Darken this one token. The selector matches the custom property Shiki
+ * writes inline, so if the syntax theme is ever changed and a lighter token
+ * comes back, the a11y gate catches it again instead of passing silently. */
+html:not(.dark) .vp-code span[style*='--shiki-light:#66707B'] {
+  --shiki-light: #5c6670 !important;
+}
 
 /* ── Hero ── */
 
@@ -135,7 +154,7 @@ div[class*='language-'] code { font-size: 13px; }
 
 .VPFeature { background: var(--vp-c-bg-soft) !important; border: 1px solid var(--vp-c-divider) !important; border-radius: 12px; transition: border-color 0.2s, transform 0.2s; }
 .dark .VPFeature:hover { border-color: #7ebab5 !important; transform: translateY(-2px); }
-:root .VPFeature:hover { border-color: #4a9c97 !important; transform: translateY(-2px); }
+:root .VPFeature:hover { border-color: #36716f !important; transform: translateY(-2px); }
 .VPFeature .title { font-weight: 600; font-size: 15px; }
 .VPFeature .details { font-size: 13px; color: var(--vp-c-text-3); line-height: 1.6; }
 
@@ -150,7 +169,7 @@ div[class*='language-'] code { font-size: 13px; }
 
 .quick-start { margin: 32px 0; padding: 24px; background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); border-radius: 12px; }
 .quick-start h3 { margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
-:root .quick-start h3 { color: #4a9c97; }
+:root .quick-start h3 { color: #36716f; }
 .dark .quick-start h3 { color: #7ebab5; }
 
 /* ── Footer ── */

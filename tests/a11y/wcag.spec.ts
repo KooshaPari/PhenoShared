@@ -8,7 +8,7 @@
  */
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import AxeBuilder from '@axe-core/playwright'
-import { chromium, type Browser, type Page } from '@playwright/test'
+import { chromium, type Browser, type BrowserContext, type Page } from '@playwright/test'
 import { AXE_OPTIONS } from '../../axe-config.ts'
 import { acquireDevServer, releaseDevServer, BASE_URL } from './dev-server.ts'
 
@@ -27,16 +27,23 @@ const ROUTES = [
 ]
 
 let browser: Browser
+let context: BrowserContext
 let page: Page
 
 beforeAll(async () => {
   await acquireDevServer()
   browser = await chromium.launch()
-  page = await browser.newPage()
+  // axe-core's Playwright integration refuses to analyse a page that belongs
+  // to an implicit context: it needs `browser.newContext()` so the analysis
+  // runs against an isolated, cache-free context. `browser.newPage()` used to
+  // abort every assertion with "Please use browser.newContext()".
+  context = await browser.newContext()
+  page = await context.newPage()
 }, 90_000)
 
 afterAll(async () => {
   await page?.close()
+  await context?.close()
   await browser?.close()
   await releaseDevServer()
 })
