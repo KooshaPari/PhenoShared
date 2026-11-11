@@ -25,7 +25,12 @@ focus-observability = { path = "../focus-observability" }
 
 # MCP SDK
 mcp-sdk.workspace = true
-tokio = { workspace = true, features = ["macros", "rt-multi-thread", "io-util", "sync"] }
+tokio = { workspace = true, features = [
+  "macros",
+  "rt-multi-thread",
+  "io-util",
+  "sync",
+] }
 serde.workspace = true
 serde_json.workspace = true
 anyhow.workspace = true
@@ -54,3 +59,21 @@ default = []
 http-sse = ["axum", "tower", "tower-http", "http"]
 websocket = ["tokio-tungstenite"]
 remote = ["http-sse", "websocket"]
+
+[package.metadata.cargo-machete]
+ignored = [
+  "async-trait",
+  "focus-audit",
+  "focus-connectors",
+  "focus-domain",
+  "focus-events",
+  "focus-penalties",
+  "focus-planning",
+  "focus-rewards",
+  "focus-rules",
+  "focus-templates",
+  "serde",
+  "thiserror",
+  "tower",
+  "tower-http",
+]

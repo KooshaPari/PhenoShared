@@ -15,6 +15,10 @@ const defaultTimeout = 60 * time.Second
 // maxOutputLen bounds the captured output embedded in an error.
 const maxOutputLen = 4000
 
+// waitDelay bounds how long the runner keeps waiting for a hook whose output
+// pipe is still held by a process that escaped the killed process group.
+const waitDelay = 2 * time.Second
+
 // Hooks are the shell commands a plan node can run around its execution.
 type Hooks struct {
 	Pre    string `yaml:"pre,omitempty" json:"pre,omitempty"`
@@ -27,6 +31,11 @@ type Hooks struct {
 // An empty hook for that phase is a no-op. The command runs with `sh -c` in
 // dir, with env appended, a timeout (default 60s), and its output captured.
 // A failing hook returns an error containing that output.
+//
+// The hook runs in its own process group so that the deadline kills the whole
+// subtree. Killing only the shell leaves a forked child holding the output
+// pipe, and the runner then waits for that child instead of returning at the
+// deadline.
 func Run(ctx context.Context, phase string, h Hooks, dir string, env []string) error {
 	var cmd string
 	switch phase {
@@ -56,6 +65,7 @@ func Run(ctx context.Context, phase string, h Hooks, dir string, env []string) e
 	c := exec.CommandContext(ctx, "sh", "-c", cmd)
 	c.Dir = dir
 	c.Env = append(os.Environ(), env...)
+	setProcessGroup(c)
 
 	out, err := c.CombinedOutput()
 	if err != nil {

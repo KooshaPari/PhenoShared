@@ -38,3 +38,17 @@ focus-templates = { path = "../focus-templates" }
 
 [dev-dependencies]
 tempfile = "3"
+
+[package.metadata.cargo-machete]
+ignored = [
+  "age",
+  "async-trait",
+  "focus-audit",
+  "focus-events",
+  "focus-penalties",
+  "focus-planning",
+  "focus-rewards",
+  "focus-rules",
+  "focus-templates",
+  "tokio",
+]

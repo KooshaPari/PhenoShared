@@ -1014,6 +1014,39 @@ hwledger-search-rag = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps
 hwledger-server = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-server" }
 hwledger-mcp = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-mcp" }
 hwledger-explorer-cli = { path = "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-cli" }
+
+# Gaps surfaced by cargo-machete/cargo metadata on 2026-11-11: members reference
+# these via `workspace = true` but the root did not declare them.
+focus-audit = { path = "crates/focus-audit" }
+focus-connectors = { path = "crates/focus-connectors" }
+focus-domain = { path = "crates/focus-domain" }
+focus-events = { path = "crates/focus-events" }
+focus-penalties = { path = "crates/focus-penalties" }
+focus-planning = { path = "crates/focus-planning" }
+focus-rewards = { path = "crates/focus-rewards" }
+focus-rules = { path = "crates/focus-rules" }
+focus-templates = { path = "crates/focus-templates" }
+phenotype-async-traits = { path = "crates/phenotype-async-traits" }
+phenotype-config-core = { path = "crates/phenotype-config-core" }
+phenotype-contracts = { path = "crates/phenotype-contracts" }
+phenotype-event-bus = { path = "crates/phenotype-event-bus" }
+phenotype-http-client-core = { path = "crates/phenotype-http-client-core" }
+phenotype-port-traits = { path = "crates/phenotype-port-traits" }
+phenotype-retry = { path = "crates/phenotype-retry" }
+phenotype-state-machine = { path = "crates/phenotype-state-machine" }
+phenotype-string = { path = "crates/phenotype-string" }
+phenotype-telemetry = { path = "crates/phenotype-telemetry" }
+phenotype-time = { path = "crates/phenotype-time" }
+phenotype-validation = { path = "crates/phenotype-validation" }
+ulid = "1"
+focus-storage = { path = "crates/focus-storage" }
+tonic = { version = "0.12", features = ["transport"] }
+tonic-build = "0.12"
+oauth2 = "5"
+mcp-sdk = "0.0.3"
+tar = "0.4"
+csv = "1"
+rayon = "1"
 [workspace.lints.rust]
 unsafe_code = "forbid"
 unused_must_use = "deny"

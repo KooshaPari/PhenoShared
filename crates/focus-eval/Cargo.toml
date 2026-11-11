@@ -38,3 +38,6 @@ harness = true
 [[bench]]
 name = "eval_batched"
 harness = true
+
+[package.metadata.cargo-machete]
+ignored = ["focus-domain", "serde"]

@@ -24,3 +24,6 @@ tempfile = "3.11"
 [[bench]]
 name = "starlark_compile"
 harness = false
+
+[package.metadata.cargo-machete]
+ignored = ["anyhow", "chrono", "uuid"]

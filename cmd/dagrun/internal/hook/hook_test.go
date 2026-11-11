@@ -124,6 +124,24 @@ func TestRunRespectsTheContextDeadline(t *testing.T) {
 	}
 }
 
+// A hook that leaves a background child behind must not keep the runner
+// waiting. The child inherits the output pipe, so waiting for the pipe to
+// close waits for the child, not for the hook. This is the case that made the
+// deadline unenforced on hosts whose shell forks instead of exec'ing.
+func TestRunDeadlineEnforcedWhenHookLeavesABackgroundChild(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
+	defer cancel()
+
+	start := time.Now()
+	err := Run(ctx, "pre", Hooks{Pre: "sleep 30 &"}, t.TempDir(), nil)
+	elapsed := time.Since(start)
+
+	if elapsed > 5*time.Second {
+		t.Errorf("hook ran %s; the deadline was not enforced", elapsed)
+	}
+	_ = err
+}
+
 // The default commit hook must produce a message a ledger-enforcing pre-commit
 // hook accepts. On a host whose global core.hooksPath requires tx-agent and
 // tx-validated trailers, the old message ("dagrun: verified node") was rejected
