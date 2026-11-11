@@ -176,6 +176,23 @@ pub fn start_daemon(cfg: DaemonConfig) -> Result<DaemonHandle, ElicitError> {
             })?;
     }
 
+    // Durable workflow observation sees writes from all CLI/native processes.
+    // The management store is a separate authority from elicitation outcomes.
+    {
+        let root = cfg.inbox_root.clone();
+        let stop = Arc::clone(&shutdown);
+        thread::Builder::new().name("phinbox-management".into()).spawn(move || {
+            let store = match crate::management::Store::open(root.join("management.sqlite")) {
+                Ok(store) => store,
+                Err(_) => { warn!("management ledger unavailable"); return; }
+            };
+            while !stop.load(Ordering::SeqCst) {
+                if store.observe_inbox(&root).is_err() { warn!("management reconciliation failed"); }
+                thread::sleep(std::time::Duration::from_secs(2));
+            }
+        })?;
+    }
+
     info!(
         port = actual_port,
         bind = %cfg.bind,

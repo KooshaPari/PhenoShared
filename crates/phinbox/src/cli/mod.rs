@@ -12,8 +12,11 @@ mod answer;
 mod ask;
 mod common;
 mod daemon;
+mod discord;
+mod harness;
 mod inbox;
 mod install;
+mod manage;
 mod open;
 mod validate;
 mod wait;
@@ -92,6 +95,8 @@ impl TuiArgs {
 
 #[derive(Debug, Subcommand)]
 enum Cmd {
+    /// Durable workflow management; never submits a permission answer.
+    Manage(manage::ManageArgs),
     /// Render a popup from CLI flags, --from-json, or --from-file.
     Ask(ask::AskArgs),
     /// Print the JSON Schema for `PromptSpec` (or `FieldSpec` / `ElicitResponse`).
@@ -118,6 +123,9 @@ enum Cmd {
     Wait(wait::WaitArgs),
     /// Submit an answer to a queued inbox request via the CLI (no UI).
     Answer(answer::AnswerArgs),
+    /// Bridge harnesses (Codex, Jcode, KCode, Forge/HeliosLite) over the
+    /// ordinary durable inbox queue without changing native policy.
+    Harness(harness::HarnessArgs),
     /// Alias: run the MCP stdio server.
     Serve,
     /// Print version + license info.
@@ -135,6 +143,7 @@ pub fn main() -> ExitCode {
         .unwrap_or_else(phinbox::inbox::default_inbox_root);
 
     let result = match cli.cmd {
+        Cmd::Manage(args) => manage::run(args, &inbox_dir),
         Cmd::Ask(args) => ask::cmd_ask(args, renderer, &inbox_dir),
         Cmd::Schema(args) => {
             common::cmd_schema(args);
@@ -154,6 +163,7 @@ pub fn main() -> ExitCode {
         Cmd::Open(args) => open::cmd_open(args, &inbox_dir),
         Cmd::Wait(args) => wait::cmd_wait(args, &inbox_dir),
         Cmd::Answer(args) => answer::cmd_answer(args, &inbox_dir),
+        Cmd::Harness(args) => harness::cmd_harness(args, &inbox_dir),
         Cmd::Serve => {
             eprintln!(
                 "error: 'serve' is provided by the `phinbox-mcp` binary, not `phinbox`. Run \

@@ -6,6 +6,7 @@ pub(crate) fn tray_event_dispatch(
     tray: &dyn phinbox::Tray,
     shutdown: &std::sync::atomic::AtomicBool,
     port: u16,
+    root: &std::path::Path,
 ) {
     use std::{sync::atomic::Ordering, thread, time::Duration};
 
@@ -16,7 +17,7 @@ pub(crate) fn tray_event_dispatch(
         };
         match event {
             phinbox::tray::TrayEvent::Click | phinbox::tray::TrayEvent::DoubleClick => {
-                activate_inbox_helper(port);
+                super::helper::activate(port, root);
             },
             phinbox::tray::TrayEvent::MenuItem { id } => {
                 use phinbox::tray::MenuAction;
@@ -30,10 +31,10 @@ pub(crate) fn tray_event_dispatch(
                 if let Some(a) = action {
                     match a {
                         MenuAction::OpenInbox => {
-                            activate_inbox_helper(port);
+                            super::helper::activate(port, root);
                         },
                         MenuAction::OpenLatest => {
-                            activate_inbox_helper(port);
+                            super::helper::activate(port, root);
                         },
                         MenuAction::ToggleQuiet => {
                             let _ = tray.set_tooltip("phinbox inbox (quiet)");
@@ -48,46 +49,6 @@ pub(crate) fn tray_event_dispatch(
             },
         }
     }
-}
-
-/// Bring the inbox-helper window to the foreground on macOS.
-/// Sends SIGUSR1 to the inbox-helper process, which activates its window.
-fn activate_inbox_helper(port: u16) {
-    use std::process::Command;
-
-    // Find the inbox-helper PID and send SIGUSR1 (signal 30 on macOS)
-    if let Ok(output) = Command::new("pgrep").arg("inbox-helper").output() {
-        if let Some(pid_str) = String::from_utf8_lossy(&output.stdout).lines().next() {
-            if !pid_str.trim().is_empty() {
-                let _ = Command::new("kill")
-                    .args(["-USR1", pid_str.trim()])
-                    .output();
-                return;
-            }
-        }
-    }
-
-    // Fallback: launch inbox-helper if not running
-    let exe = std::env::current_exe().ok();
-    let exe_dir = exe.as_ref().and_then(|p| p.parent());
-    if let Some(dir) = exe_dir {
-        let helper = dir.join("../Resources/inbox-helper");
-        if helper.exists() {
-            let url = format!("http://127.0.0.1:{}/inbox/", port);
-            let _ = Command::new(helper).arg(&url).spawn();
-            return;
-        }
-        let helper_flat = dir.join("inbox-helper");
-        if helper_flat.exists() {
-            let url = format!("http://127.0.0.1:{}/inbox/", port);
-            let _ = Command::new(helper_flat).arg(&url).spawn();
-            return;
-        }
-    }
-
-    // Last resort: open in browser
-    let url = format!("http://127.0.0.1:{}/inbox/", port);
-    let _ = Command::new("open").arg(&url).spawn();
 }
 
 #[cfg(target_os = "macos")]
@@ -136,6 +97,7 @@ pub(crate) fn create_tray_and_run_event_loop(
         tray.backend_name()
     );
 
+    let shutdown = Arc::new(std::sync::atomic::AtomicBool::new(false));
     // Schedule an NSTimer on the main RunLoop to pump tray events.
     // SAFETY ESCAPE HATCH: `StackBlock` + the objc2 NSTimer entry point are
     // FFI by construction, and a repeating timer must run on the main thread's
@@ -144,23 +106,40 @@ pub(crate) fn create_tray_and_run_event_loop(
     // `cli/open.rs`.
     #[allow(unsafe_code)]
     unsafe {
-        let mut block = block2::StackBlock::new(|_timer: std::ptr::NonNull<NSTimer>| {
+        let timer_stop = Arc::clone(&shutdown);
+        let timer_app = app.clone();
+        let timer_tray = tray.clone();
+        let timer_root = handle.inbox_root.clone();
+        let mut block = block2::StackBlock::new(move |_timer: std::ptr::NonNull<NSTimer>| {
             phinbox::tray::poll_tray();
+            let count = phinbox::inbox::list_pending(&timer_root)
+                .unwrap_or_default()
+                .iter()
+                .filter(|r| !r.is_terminal() && !r.is_expired_now())
+                .count();
+            let _ = timer_tray.set_badge(&if count == 0 {
+                String::new()
+            } else {
+                count.to_string()
+            });
+            if timer_stop.load(std::sync::atomic::Ordering::SeqCst) {
+                timer_app.stop(None);
+            }
         });
         let _timer: Retained<NSTimer> =
-            NSTimer::scheduledTimerWithTimeInterval_repeats_block(0.1, true, &mut block);
+            NSTimer::scheduledTimerWithTimeInterval_repeats_block(0.5, true, &mut block);
     }
 
     // Dispatch tray events on a background thread.
-    let shutdown = Arc::new(std::sync::atomic::AtomicBool::new(false));
     {
         let tray_ref = tray.clone();
         let shutdown_ref = shutdown.clone();
         let port = handle.port;
+        let root = handle.inbox_root.clone();
         std::thread::Builder::new()
             .name("phinbox-tray-events".into())
             .spawn(move || {
-                tray_event_dispatch(tray_ref.as_ref(), &shutdown_ref, port);
+                tray_event_dispatch(tray_ref.as_ref(), &shutdown_ref, port, &root);
             })
             .ok();
     }
@@ -169,6 +148,7 @@ pub(crate) fn create_tray_and_run_event_loop(
     app.run();
 
     // Cleanup
+    super::helper::stop();
     shutdown.store(true, std::sync::atomic::Ordering::SeqCst);
     let _ = tray.shutdown();
     if owns_daemon {

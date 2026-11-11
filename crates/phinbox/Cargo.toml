@@ -40,6 +40,18 @@ path = "src/bin_app/mod.rs"
 required-features = ["mcp", "tray-native"]
 
 [dependencies]
+# Native Discord management surface.
+# - rusqlite: durable workflow ledger (src/management/{store,projection,transitions,fencing}.rs).
+# - reqwest: Discord REST calls and multipart attachment upload (src/discord/{rest,mirror}.rs).
+# - futures-util: SinkExt/StreamExt for the gateway WebSocket (src/discord/gateway.rs).
+# - tokio-tungstenite: Discord gateway WebSocket client (src/discord/gateway.rs).
+rusqlite = { workspace = true }
+reqwest = { workspace = true, features = ["multipart"] }
+futures-util = { workspace = true }
+tokio-tungstenite = { version = "0.30", features = [
+  "connect",
+  "rustls-tls-webpki-roots",
+] }
 clap = { workspace = true, features = ["derive", "env"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }

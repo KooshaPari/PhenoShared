@@ -1,45 +1,9 @@
-# Forge plugin — phinbox
+# Forge isolated project integration
 
-This directory contains the Forgecode plugin manifest for the `phinbox`
-native OS popup elicitation tool.
+The current Forge/HeliosLite source resolves project MCP configuration at the project root **.mcp.json**, with a camelCase mcpServers map. The obsolete .forgecode/plugins manifest installer did not establish current MCP registration.
 
-## Install
-
-```bash
-./install.sh /path/to/your/host-repo
+```sh
+bash crates/phinbox/plugins/forgecode/install.sh --profile-dir /tmp/phinbox-forge-project --inbox-dir /tmp/phinbox-inbox --binary /absolute/path/phinbox-mcp
 ```
 
-Or, manually:
-
-```bash
-mkdir -p /path/to/your/host-repo/.forgecode/plugins/phinbox
-cp plugin.toml /path/to/your/host-repo/.forgecode/plugins/phinbox/
-
-mkdir -p /path/to/your/host-repo/.forgecode/skills
-ln -s "$(pwd)/../../.phinbox/skills/phinbox" \
-       /path/to/your/host-repo/.forgecode/skills/phinbox
-```
-
-Then make sure `phinbox-mcp` is on PATH (e.g., `cargo install --path
-../../crates/phinbox`) and restart Forgecode.
-
-## What this plugin does
-
-- Registers the `phinbox_mcp` tool with Forgecode.
-- Loads the `phinbox` skill so the agent knows when to invoke the tool.
-- Wires up the schema so the tool's `inputSchema` / `outputSchema` is
-  visible in Forgecode's tool picker.
-
-## Verify
-
-```bash
-forgecode plugins list | grep phinbox
-forgecode skills list | grep phinbox
-```
-
-## Uninstall
-
-```bash
-rm -rf /path/to/your/host-repo/.forgecode/plugins/phinbox
-rm /path/to/your/host-repo/.forgecode/skills/phinbox
-```
+Dry-run is the default. Add --apply for the explicit isolated project, or --apply --uninstall to remove only the unchanged receipt-owned entry. Existing servers and hook files are preserved. No canonical user profile is modified, no server is started, and no hook protocol is invented. The current installed `forge` identifies as a deprecated HeliosLite lineage binary; runtime loader acceptance additionally requires its actual provider/model initialization. Isolated JSON lifecycle tests do not establish a running Forge integration.

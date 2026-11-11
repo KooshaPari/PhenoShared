@@ -1,50 +1,71 @@
-//! Native Swift inbox-helper launcher for `phinbox-app`.
+//! Own-process Swift inbox helper lifecycle; never activates another session's helper.
+use std::{
+    path::{Path, PathBuf},
+    process::{Child, Command},
+    sync::{Mutex, OnceLock},
+};
+fn child() -> &'static Mutex<Option<Child>> {
+    static CHILD: OnceLock<Mutex<Option<Child>>> = OnceLock::new();
+    CHILD.get_or_init(|| Mutex::new(None))
+}
 
-/// Launch the native Swift inbox helper window.
-///
-/// Looks for `inbox-helper` in these locations (first found wins):
-/// 1. Same directory as the running binary (development / flat layout)
-/// 2. `../Resources/inbox-helper` relative to the binary (inside .app bundle)
-pub(super) fn launch_inbox_helper(port: u16) {
-    use std::process::Command;
-
-    let exe = std::env::current_exe().ok();
-    let exe_dir = exe.as_ref().and_then(|p| p.parent());
-
-    let candidates: Vec<String> = {
-        let mut v = Vec::new();
-        if let Some(dir) = exe_dir {
-            // Flat layout: binary and helper side by side
-            v.push(dir.join("inbox-helper").to_string_lossy().into_owned());
-            // .app bundle: helper in ../Resources/
-            v.push(
-                dir.join("../Resources/inbox-helper")
-                    .to_string_lossy()
-                    .into_owned(),
-            );
+pub(super) fn launch_inbox_helper(port: u16, root: &Path) {
+    let exe_dir = std::env::current_exe()
+        .ok()
+        .and_then(|p| p.parent().map(Path::to_owned));
+    let mut candidates = Vec::new();
+    if let Some(path) = std::env::var_os("PHINBOX_HELPER_BINARY") {
+        candidates.push(PathBuf::from(path));
+    }
+    if let Some(dir) = exe_dir {
+        candidates.push(dir.join("inbox-helper"));
+        candidates.push(dir.join("../Resources/inbox-helper"));
+    }
+    for path in candidates {
+        if !path.is_file() {
+            continue;
         }
-        // Fallback: hope it's on PATH
-        v.push("inbox-helper".into());
-        v
-    };
-
-    for path in &candidates {
-        if std::path::Path::new(path).exists() {
-            let url = format!("http://127.0.0.1:{}/inbox/", port);
-            match Command::new(path).arg(&url).spawn() {
-                Ok(child) => {
-                    eprintln!("phinbox: launched inbox helper (PID {})", child.id());
-                    // Detach -- let it run independently
-                    std::mem::forget(child);
-                    return;
-                },
-                Err(e) => {
-                    eprintln!("phinbox: failed to launch {path}: {e}");
-                },
-            }
+        match Command::new(path)
+            .args([
+                "--endpoint",
+                &format!("http://127.0.0.1:{port}"),
+                "--inbox-root",
+            ])
+            .arg(root)
+            .spawn()
+        {
+            Ok(process) => {
+                if let Ok(mut slot) = child().lock() {
+                    *slot = Some(process);
+                }
+                return;
+            },
+            Err(_) => eprintln!("phinbox: native inbox helper failed to launch"),
         }
     }
-    eprintln!("phinbox: inbox-helper not found, falling back to browser");
-    let url = format!("http://127.0.0.1:{}/inbox/", port);
-    let _ = phinbox::open_in_default_browser(&url);
+    eprintln!("phinbox: native helper missing; opening local web inbox");
+    let _ = phinbox::open_in_default_browser(&format!("http://127.0.0.1:{port}/inbox"));
+}
+pub(super) fn activate(port: u16, root: &Path) {
+    if let Ok(mut slot) = child().lock() {
+        if let Some(process) = slot.as_mut() {
+            if matches!(process.try_wait(), Ok(None)) {
+                // The unreaped owned Child keeps its PID from being reused by another session.
+                let _ = Command::new("kill")
+                    .args(["-USR1", &process.id().to_string()])
+                    .status();
+                return;
+            }
+        }
+        *slot = None;
+    }
+    launch_inbox_helper(port, root);
+}
+pub(super) fn stop() {
+    if let Ok(mut slot) = child().lock() {
+        if let Some(mut process) = slot.take() {
+            let _ = process.kill();
+            let _ = process.wait();
+        }
+    }
 }
