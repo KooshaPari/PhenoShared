@@ -111,7 +111,7 @@ fn backend_errors_retain_task_context_and_typed_source() {
         } => {
             assert_eq!(task_id, "terminal-7");
             assert_eq!(message, "model is loading");
-        }
+        },
         other => panic!("unexpected error: {other:?}"),
     }
 }

@@ -41,7 +41,7 @@
   Runner name shown in GitHub. Default: desktop-kooshapari-desk
 
 .NOTES
-  Run in an ELEVATED PowerShell session on kooshapari-desk.tail2b570.ts.net.
+  Run in an ELEVATED PowerShell session on kooshapari-desk.example-tailnet.ts.net.
   Requires: Tailscale installed + connected, Windows 11 AMD64, admin rights,
   and either `gh auth login` with org-admin scope OR a pre-fetched -RegToken.
 

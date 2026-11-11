@@ -1,0 +1,66 @@
+name: phenomcp-catalog
+
+# Absorbed from KooshaPari/PhenoMCPServers@8eb182b (.github/workflows/catalog.yml).
+# Adapted for the PhenoShared tree: trigger paths are narrowed to the absorbed
+# PhenoMCPServers subtrees, and the driver-mcp sync check uses the local
+# scripts/check_driver_mcp_sync.py instead of an external substrate checkout.
+
+on:
+  pull_request:
+    paths:
+      - "catalog/**"
+      - "schemas/**"
+      - "plugins/**"
+      - "servers/**"
+      - "skills/**"
+      - "templates/mcp-server*/**"
+      - "scripts/validate_*.py"
+      - "scripts/check_driver_mcp_sync.py"
+      - "tests/test_catalog_validation.py"
+      - "tests/test_bundle_wiring.py"
+      - "tests/test_hexakit_template.py"
+      - "tests/test_mcp_server_ts7_template.py"
+      - "tests/test_fork_pin_validator.py"
+      - "docs/MCP-CATALOG.md"
+      - "docs/WIRING.md"
+      - "docs/edges/**"
+      - "docs/retire/**"
+      - "docs/LANGUAGE-TIERS-AND-ROLES.md"
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v6
+        with:
+          python-version: "3.12"
+      - name: Install validators
+        run: pip install pyyaml jsonschema pytest
+      - name: validate_catalog.py
+        run: python scripts/validate_catalog.py
+      - name: validate_fork_parents.py
+        run: python scripts/validate_fork_parents.py
+      - name: validate_stale_patterns.py
+        run: python scripts/validate_stale_patterns.py
+      - name: validate_bundle_wiring.py
+        run: python scripts/validate_bundle_wiring.py
+      - name: check_driver_mcp_sync.py
+        run: python scripts/check_driver_mcp_sync.py
+      - name: Install substrate server deps
+        run: pip install -r servers/substrate/requirements.txt
+      - name: Install pheno-org server deps
+        run: pip install -e "servers/pheno-org[dev]"
+      - name: pytest catalog + bundle + hexakit + fork pin + substrate + pheno-org
+        run: |
+          pytest \
+            tests/test_catalog_validation.py \
+            tests/test_bundle_wiring.py \
+            tests/test_fork_pin_validator.py \
+            tests/test_hexakit_template.py \
+            tests/test_mcp_server_ts7_template.py \
+            servers/substrate \
+            servers/pheno-org/tests \
+            -q

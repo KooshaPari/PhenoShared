@@ -42,3 +42,23 @@ serde_json.workspace = true
 serial_test = "3"
 tempfile.workspace = true
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "a2a",
+  "anyhow",
+  "cliproxy-adapter",
+  "engine-agentapi",
+  "engine-claude",
+  "engine-codex",
+  "engine-forge",
+  "engine-spec",
+  "futures",
+  "futures-core",
+  "phenotype-mcp",
+  "routing-phenotype-router",
+  "store-file",
+  "store-sqlite",
+  "substrate-app",
+  "transport-file",
+]

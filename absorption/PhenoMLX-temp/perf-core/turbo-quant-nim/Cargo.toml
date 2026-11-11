@@ -2,6 +2,7 @@
 name = "turbo-quant-nim"
 version = "0.1.0"
 edition = "2021"
+license.workspace = true
 description = "Nim dynlib binding to TurboQuant C ABI"
 
 [lib]

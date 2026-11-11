@@ -2,6 +2,7 @@
 name = "fleet-proto-zeromq"
 version = "0.1.0"
 edition = "2021"
+license.workspace = true
 description = "Fleet dispatch protocol — C++ ZeroMQ transport (libzmq via pkg-config)"
 
 [dependencies]

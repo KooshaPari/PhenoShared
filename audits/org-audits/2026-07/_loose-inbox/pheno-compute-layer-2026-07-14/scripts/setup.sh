@@ -69,7 +69,7 @@ else
 
 # pheno-compute-layer: <REDACTED>-desk (3090 Ti)
 Host desk <REDACTED>-desk
-    HostName <REDACTED>-desk.tail2b570.ts.net
+    HostName <REDACTED>-desk.example-tailnet.ts.net
     User <REDACTED>
     ForwardAgent yes
     IdentityFile ~/.ssh/id-git

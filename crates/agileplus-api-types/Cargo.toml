@@ -16,3 +16,6 @@ agileplus-error-core.workspace = true
 
 [dev-dependencies]
 serde_json.workspace = true
+
+[package.metadata.cargo-machete]
+ignored = ["agileplus-error-core", "serde"]

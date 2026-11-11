@@ -77,11 +77,11 @@ fn token_fingerprint(bits: &[i8]) -> u32 {
     // Mix each bit position into the high bits of a u32. This is a
     // non-cryptographic mixer — collisions across tokens are possible
     // but extremely unlikely for the 32-token fixture.
-    let mut h: u32 = 0x9E37_79B9;
+    let mut h: u32 = 0x9e37_79b9;
     for (i, &b) in bits.iter().enumerate() {
         let v = if b > 0 { 1u32 } else { 0u32 };
         h ^= v << ((i % 30) as u32);
-        h = h.wrapping_mul(0x85EB_CA6B);
+        h = h.wrapping_mul(0x85eb_ca6b);
     }
     h
 }
@@ -118,13 +118,13 @@ fn lfm_route_token(fingerprint: u32, token_seed: u64) -> Vec<u8> {
     // Mix the fingerprint with the per-token seed so adjacent tokens
     // do not collapse onto the same expert set. The cap is enforced
     // here: at most EXPERT_CAP_PER_TOKEN experts per token.
-    let mut h = fingerprint ^ (token_seed as u32).wrapping_mul(0x9E37_79B9);
+    let mut h = fingerprint ^ (token_seed as u32).wrapping_mul(0x9e37_79b9);
     let count = 1 + (h as usize % EXPERT_CAP_PER_TOKEN);
     let mut experts: Vec<u8> = Vec::with_capacity(count);
     for _ in 0..count {
         // Walk the hash forward; pick a fresh slot until we have
         // `count` distinct indices. The hash chain is deterministic.
-        h = h.wrapping_mul(0x85EB_CA6B).wrapping_add(0xC2B2_AE35);
+        h = h.wrapping_mul(0x85eb_ca6b).wrapping_add(0xc2b2_ae35);
         let mut idx = (h as usize) % NUM_EXPERTS;
         // Linear-probe on collisions (rare for EXPERT_CAP_PER_TOKEN ≤ NUM_EXPERTS/2).
         let mut probes = 0;
@@ -165,18 +165,18 @@ fn reference_lfm(num_tokens: usize, channels: usize, seed: u64) -> Vec<Vec<u8>> 
             let x = deterministic_input(t, channels, seed);
             // Fingerprint over the raw fp32 bytes (top 16 bits of each
             // value), bypassing the binarization step.
-            let mut h: u32 = 0x9E37_79B9;
+            let mut h: u32 = 0x9e37_79b9;
             for (i, &v) in x.iter().enumerate() {
                 let bits = v.to_bits();
                 h ^= (bits >> 16) << ((i % 30) as u32);
-                h = h.wrapping_mul(0x85EB_CA6B);
+                h = h.wrapping_mul(0x85eb_ca6b);
             }
             // Reference router uses the full expert pool (no bias
             // toward fewer experts). Cap is the unbinarized ceiling.
             let count = 1 + (h as usize % NUM_EXPERTS);
             let mut experts: Vec<u8> = Vec::with_capacity(count);
             for _ in 0..count {
-                h = h.wrapping_mul(0x85EB_CA6B).wrapping_add(0xC2B2_AE35);
+                h = h.wrapping_mul(0x85eb_ca6b).wrapping_add(0xc2b2_ae35);
                 let mut idx = (h as usize) % NUM_EXPERTS;
                 let mut probes = 0;
                 while experts.contains(&(idx as u8)) {
@@ -198,7 +198,7 @@ fn reference_lfm(num_tokens: usize, channels: usize, seed: u64) -> Vec<Vec<u8>> 
 #[test]
 fn zaya_activations_bias_lfm_routing_toward_fewer_experts() {
     let channels: usize = 64;
-    let seed: u64 = 0x5A_59_4C_46_4D_01; // "ZAYLFM\x01"
+    let seed: u64 = 0x5a_59_4c_46_4d_01; // "ZAYLFM\x01"
 
     let zaya_routes = zaya_then_lfm(NUM_TOKENS, channels, seed);
     let ref_routes = reference_lfm(NUM_TOKENS, channels, seed);
@@ -253,7 +253,7 @@ fn zaya_activations_bias_lfm_routing_toward_fewer_experts() {
 #[test]
 fn zaya_lfm_combination_remains_byte_identical_across_runs() {
     let channels: usize = 64;
-    let seed: u64 = 0xC0FFEE42_DEADBEEF;
+    let seed: u64 = 0xc0ffee42_deadbeef;
 
     // Run the full pipeline twice under identical conditions. Every
     // byte of every expert assignment must match.
@@ -295,14 +295,14 @@ fn zaya_lfm_combination_under_seed_sweep_distributes_across_experts() {
     // low-byte suffixes means the router hashes against a shifted
     // starting point but is otherwise under identical conditions.
     let seeds: [u64; NUM_SEEDS_SWEEP] = [
-        0xA5_A5_5A_5A_00_00_00_01u64,
-        0xA5_A5_5A_5A_00_00_00_02u64,
-        0xA5_A5_5A_5A_00_00_00_03u64,
-        0xA5_A5_5A_5A_00_00_00_04u64,
-        0xA5_A5_5A_5A_00_00_00_05u64,
-        0xA5_A5_5A_5A_00_00_00_06u64,
-        0xA5_A5_5A_5A_00_00_00_07u64,
-        0xA5_A5_5A_5A_00_00_00_08u64,
+        0xa5_a5_5a_5a_00_00_00_01u64,
+        0xa5_a5_5a_5a_00_00_00_02u64,
+        0xa5_a5_5a_5a_00_00_00_03u64,
+        0xa5_a5_5a_5a_00_00_00_04u64,
+        0xa5_a5_5a_5a_00_00_00_05u64,
+        0xa5_a5_5a_5a_00_00_00_06u64,
+        0xa5_a5_5a_5a_00_00_00_07u64,
+        0xa5_a5_5a_5a_00_00_00_08u64,
     ];
 
     // Union of every expert slot chosen across all seeds. A pathological

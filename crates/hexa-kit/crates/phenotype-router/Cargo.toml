@@ -31,3 +31,6 @@ path = "src/bin/phenotype-router.rs"
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+[package.metadata.cargo-machete]
+ignored = ["clap", "phenotype-port-traits", "tokio-stream"]

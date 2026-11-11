@@ -1,0 +1,391 @@
+# kiro-adapters
+
+Harness adapters that let jcode, or any MCP client, dispatch work to the two
+Kiro side agent runtimes. `kiro-adapters` wraps the `kirocrew` personal agent
+and the Kiro coding CLI behind one small, stable contract: every action
+returns a single JSON object with the same ten keys and one of six result
+codes, so a client can tell "not installed" apart from "not ready yet" apart
+from "the agent answered" without parsing stderr. The package has no runtime
+dependencies, the MCP server is standard library only, and every child process
+is launched from an argument list, never through a shell.
+
+## The two adapters
+
+| Adapter | Harness | Status on this machine |
+|---|---|---|
+| `KiroCrewAdapter` | `kirocrew` | Installed, gateway reachable. |
+| `KiroCodeAdapter` | `kirocode` | Installed (`kiro-cli 2.37.1`); no jcode backend possible, see below. |
+
+`KiroCrewAdapter` drives the Kiro Crew personal agent, through the
+`kirocrew` CLI and its local gateway. On this machine that is
+`kirocrew 0.11.0-nightly.20261021t201456`, the gateway on
+`http://localhost:5476`, and 14 agent definitions in `~/.kiro/agents/`.
+Model calls need the KAS engine bundle, which is not installed.
+
+`KiroCodeAdapter` drives the Kiro coding CLI, resolved as `kirocode`,
+`kiro-cli` or `kiro`. The adapter resolves whichever binary exists and
+probes its own `--help` for a non-interactive flag.
+
+Both adapters return the same envelope, defined in
+`src/kiro_adapters/result.py` and specified in `docs/ADAPTER-CONTRACT.md`.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    client["jcode or any MCP client"]
+    adapters["kiro-adapters<br/>MCP stdio server"]
+    client -->|"MCP stdio, JSON-RPC 2.0"| adapters
+    adapters -->|"argv, no shell"| crew["kirocrew CLI<br/>gateway localhost:5476"]
+    adapters -->|"argv, no shell"| code["kirocode CLI<br/>kirocode / kiro-cli / kiro"]
+```
+
+The MCP server reads one JSON object per line from stdin and writes one per
+line to stdout. stdout carries protocol frames only, every diagnostic goes to
+stderr.
+
+## Install
+
+The package requires Python 3.9 or newer and pulls in no dependencies.
+
+Editable install, which also puts the `kiro-adapter` and `kiro-adapter-mcp`
+console scripts on your `PATH`:
+
+```bash
+cd /Users/kooshapari/CodeProjects/Phenotype/repos/kiro-adapters
+python3 -m pip install -e .
+```
+
+Or run straight from the source tree with no install at all:
+
+```bash
+export PYTHONPATH=/Users/kooshapari/CodeProjects/Phenotype/repos/kiro-adapters/src
+```
+
+## Quickstart, from the shell
+
+The CLI mirrors the MCP tools. It exits 0 when the result is ok and 1 when it
+is not, and `--json` prints the whole result envelope.
+
+```bash
+# What is installed and is it ready
+kiro-adapter status
+kiro-adapter kas
+kiro-adapter agents
+
+# One chat turn with the Kiro Crew agent
+kiro-adapter ask "summarise the README of this repository"
+
+# Dispatch a background subagent, then list what is running
+kiro-adapter spawn "investigate the failing test" --async
+kiro-adapter spawn-list
+
+# Run an autonomous task from a spec file
+kiro-adapter run-spec TASK.md --name my-task
+
+# The dashboard URL, with the access token redacted
+kiro-adapter dashboard --ttl 30m
+
+# The Kiro coding CLI
+kiro-adapter kirocode-status
+
+# The full result envelope, for scripting
+kiro-adapter status --json
+```
+
+Without an install, prefix with `PYTHONPATH=src python3 -m kiro_adapters.cli`.
+
+## Quickstart, as an MCP server
+
+Register the server with an MCP client. A jcode-style `mcp.json`:
+
+```json
+{
+  "servers": {
+    "kiro": {
+      "command": "/Users/kooshapari/.local/bin/kiro-adapter-mcp",
+      "args": []
+    }
+  }
+}
+```
+
+If you did not install the package, run the module directly instead:
+
+```json
+{
+  "servers": {
+    "kiro": {
+      "command": "/opt/homebrew/bin/python3.12",
+      "args": ["-m", "kiro_adapters.mcp_server"],
+      "env": {
+        "PYTHONPATH": "/Users/kooshapari/CodeProjects/Phenotype/repos/kiro-adapters/src"
+      }
+    }
+  }
+}
+```
+
+To confirm the server answers before wiring it into a client:
+
+```bash
+kiro-adapter-mcp --selftest
+```
+
+That prints the `tools/list` payload as JSON and exits.
+
+The server also accepts an inventory-only surface for KiroCrew consumers that must
+not see dispatch, ask or spawn tools:
+
+```bash
+kiro-adapter-mcp --inventory-only --selftest
+kiro-adapter-mcp --mode inventory
+kiro-adapter-mcp --read-only
+```
+
+In that mode only `agent_sessions_list`, `agent_session_get`,
+`agent_session_history` and `agent_sources` are advertised, and a `tools/call` for
+any other tool is rejected at the protocol edge (not merely hidden). The default
+mode remains `full`, so existing MCP registrations are unchanged.
+
+The server exposes fourteen tools: `kirocrew_status`, `kirocrew_agents`,
+`kirocrew_ask`, `kirocrew_spawn`, `kirocrew_spawn_list`,
+`kirocrew_run_spec`, `kirocrew_dashboard_url`, `kirocode_status`,
+`kirocode_ask`, and `kiro_dispatch`, which routes one prompt to either
+harness. Alongside those ten are four read-only inventory tools:
+`agent_sessions_list` and `agent_session_get` to enumerate and inspect
+the agent sessions discovered on this host, `agent_session_history` for
+one session's recorded transcript, and `agent_sources` to list which
+harness data directories the inventory reads. The inventory tools never
+start, resume, or close a session. Parameter names and result codes are
+in `docs/ADAPTER-CONTRACT.md`.
+
+The inventory reads file-backed stores (`jcode`, `kcode`, `kirocrew`) by
+default. ShareCLI is CLI-backed by necessity, so it is an explicit opt-in:
+set `KIRO_INVENTORY_ALLOW_CLI_SOURCES=1` in the server's environment to
+include the `sharecli-session` source. It is off by default because an MCP
+tool call silently spawning a subprocess from an agent turn is a different
+risk class from reading a file, and there is no tool argument for it, so
+the model cannot turn it on for itself. See `docs/ADAPTER-CONTRACT.md`.
+
+## The jcode harness-API bridge
+
+The `jcode_bridge` package points the same idea the other way: instead of Kiro
+being a tool jcode calls, jcode becomes a session another agent can drive.
+`jcode api --stdio` is a child process speaking newline-delimited JSON, so the
+caller keeps a *session* rather than a process: text streams as it arrives, tool
+calls and token usage are visible, and more than one turn can be sent before
+disconnecting. Details, protocol frames, and payload keys are in
+[docs/JCODE-API.md](docs/JCODE-API.md).
+
+```mermaid
+flowchart LR
+    client["agent or MCP client"]
+    bridge["jcode-bridge<br/>MCP stdio server"]
+    daemon["jcode api --stdio<br/>harness API v1"]
+    client -->|"MCP stdio, JSON-RPC 2.0"| bridge
+    bridge -->|"NDJSON, one child per connection"| daemon
+```
+
+CLI, where `--json` is a global flag and precedes the subcommand:
+
+```bash
+jcode-bridge --json api-health          # handshake and ping, no session
+jcode-bridge api-ask "list the tests" --cwd . --timeout 120
+jcode-bridge --json api-ask "step one" --keep-session
+jcode-bridge api-sessions --limit 10
+```
+
+MCP tools on the `jcode-bridge` server: `jcode_api_health`, `jcode_api_ask`
+(`prompt` required; `cwd`, `timeout_secs`, `keep_session`) and
+`jcode_api_sessions` (`limit`, `timeout_secs`), alongside the task-backend
+tools `jcode_health`, `jcode_run`, `jcode_task_start`, `jcode_task_status`,
+`jcode_task_output`, `jcode_task_cancel` and `jcode_task_list`.
+
+One protocol detail is easy to get wrong and is worth stating here:
+`send_message` is a **notify**, not a request. The daemon does not reply to it;
+waiting for a reply blocks until the turn times out. The daemon acknowledges
+indirectly with a `message_accepted` event once the agent has the message
+queued, and the bridge treats that event as the acknowledgement.
+
+### jcode as Kiro Crew's own backend
+
+Kiro Crew's `agent.acp_backend` is a **closed enum**, so there is no config
+value that names jcode. The enum is not the only lever, though: each backend
+slot resolves the ACP binary it launches through an operator override, and the
+`codex` slot's own gate (`SESSION_CONFIG` routing) accepts a harness that
+advertises a `mode` config option and enforces `mode=read-only`. jcode's ACP
+now does exactly that, so the slot is filled by a real restriction rather
+than by a claim.
+
+```bash
+CODEX_ACP_BIN=~/bin/jcode-acp-shim kirocrew run TASK.md
+```
+
+#### Installing it properly
+
+`CODEX_ACP_BIN` alone is **not enough**, and this is the one detail that cost a
+full session to diagnose: Kiro Crew only resolves the `codex` harness when
+`agent.acp_backend` names that slot, and the default is `""` which means
+kiro-cli. With `acp_backend` unset the shim is *never spawned*, turns are served
+by the KAS engine instead, and every visible signal still says "configured".
+
+Both settings are required, so use the installer rather than setting one by hand:
+
+```bash
+# idempotent; --dry-run shows what would change
+./scripts/install/install-kirocrew-jcode-backend.sh
+kirocrew restart            # .env and config.json are both read at boot
+
+# check every link, then prove the path with one real turn
+./scripts/install/verify-kirocrew-jcode-backend.sh
+./scripts/install/verify-kirocrew-jcode-backend.sh --live
+```
+
+The verifier reports each link separately, because one green light is not
+enough. Its negative control is the misconfiguration above: with everything else
+correct and `acp_backend` unset it fails with
+`agent.acp_backend is unset (defaults to "" = kiro-cli, so the shim is NEVER spawned)`.
+
+The shim pins a provider and model (`opencode-go` / `deepseek-v4.1-flash`) so
+that turns run on jcode's own route rather than Kiro's API. The ACP adapter's
+unpinned default resolved to a Bedrock model many hosts cannot serve, which
+surfaces as a misleading `transient error (HTTP 5xx)` while the handshake is
+perfectly healthy. Override with `JCODE_ACP_SHIM_PROVIDER` / `JCODE_ACP_SHIM_MODEL`.
+
+See [acceptance/codex-backend-activation.md](acceptance/codex-backend-activation.md)
+for how the two defects were separated and measured.
+
+#### Windows
+
+Windows works, but through a different slot, and the difference is not cosmetic.
+Kiro Crew's `codex`/`opencode`/`deepseek`/`goose`/`pi` slots are **enforced**: it
+will not spawn a third-party binary unless an OS sandbox exists to mask
+credential files. Native Windows has no sandbox backend at all
+(`detect_backend` returns `none` for every mode), so every enforced slot is
+refused there. The `claude` slot is the one slot that is not enforced, so it is
+the only slot that can host jcode on native Windows.
+
+```powershell
+.\scripts\install\install-kirocrew-jcode-backend.ps1 -DryRun   # reports, changes nothing
+.\scripts\install\install-kirocrew-jcode-backend.ps1
+.\scripts\install\verify-kirocrew-jcode-backend.ps1 -Live
+```
+
+The installer reads the host's actual sandbox backend and picks the slot from
+that answer, so there is no per-host decision to get wrong.
+
+**The trade, stated plainly:** the `claude` slot does not force
+`mode=read-only`, and on a sandboxless host the agent subprocess runs without
+credential isolation. The read-only guarantee measured on macOS comes from the
+`codex` slot's enforced routing and does **not** transfer to Windows. Treat a
+Windows install as convenient, not contained. See
+[acceptance/windows-desk-backend.md](acceptance/windows-desk-backend.md).
+
+On Windows the override must also exist in the **process** environment, not just
+in config. `agent.env` is applied to the child after the resolver has already run
+in the parent, so an override that lives only there fails with
+`codex-acp not found` while looking perfectly configured.
+
+On macOS the shim is `~/bin/jcode-acp-shim` and it execs `jcode acp`. The agent
+Kiro Crew spawns is jcode and reports `agentInfo.name` as `jcode`; the `codex` in
+the logs is the slot Kiro Crew was told to use, not the agent's identity.
+
+The override is exported from `~/.zshrc` and points at a **versioned** jcode
+build (`~/.jcode/builds/versions/0.99.1-kcode-mode/jcode`), so a Kiro session
+started from a login shell uses jcode with no per-command configuration, and a
+rebuild cannot leave the shim pointing at nothing.
+
+The boundary worth stating: `read-only` is the only mode, so a Kiro session
+running on jcode through this slot **cannot write**. Every write-capable tool
+is disabled in the session's tool set, so it is not offered to the model at
+all.
+
+This is separate from the bridge above. The bridge is jcode calling *into*
+Kiro Crew; this is Kiro Crew running *on* jcode.
+
+### The ACP adoption shim
+
+`jcode_bridge.acp_shim` is a third thing, and it is deliberately the smallest
+of the three. It lets an ACP client attach to a jcode/KCode session the
+operator is **already running**.
+
+It adopts; it does not launch. `session/load` upstream calls `ensure_daemon`,
+which *spawns* a daemon when none is running, so the shim gates the load on two
+read-only probes: the session file must exist, and a daemon socket must
+already accept a connect. Either probe failing means
+`SHIM_PRECONDITION_FAILED`, and the shim never starts a daemon.
+
+It also never sends `session/close` (upstream, that cancels a running prompt
+and stops the event pump — it is not a detach) and never sends `session/new`.
+`sessionCapabilities.close` is dropped from the advertised capabilities, so the
+shim does not advertise what it will not do.
+
+```bash
+jcode-acp-adopt --upstream kcode acp \
+    --session-dir ~/.kcode/sessions \
+    --socket ~/.kcode/scratch/kcode.sock
+```
+
+The full contract, the gate, the error codes and the scrubber are in
+[docs/ACP-ADOPTION-SHIM.md](docs/ACP-ADOPTION-SHIM.md).
+
+## Verification status
+
+Be precise about what has and has not been exercised.
+
+| Surface | Status |
+|---|---|
+| `kirocrew` command surface | Verified against `kirocrew 0.11.0-nightly.20261021t201456`. |
+| `kirocrew` gateway | Running on loopback, `http://localhost:5476`. |
+| `kirocrew` status probe | Exercised 2026-11-02. Returned `ok`, `gateway_running: true`, `token_auth: true`, `agents_available: 16`, `kas.installed: true` (`KAS 0.66.33, Node 22.23.3`), `ready: true`. Earlier revisions of this table said 14 agents with `kas.installed: false`; both were stale. |
+| `kirocrew` live agent turn | Exercised 2026-11-02. `ask` returned `ok`, `code: OK` with the model's answer. The earlier "returns `BLOCKED` because the KAS engine bundle is not installed" note is obsolete: the bundle is installed. |
+| `kirocrew` CLI startup latency | 12s to 46s observed. The adapter short timeout is 30s, so a cold probe can return `TIMEOUT`. |
+| `kirocode` command surface | Verified 2026-11-02 against `kiro-cli 2.37.1`. Resolution, version read and argv generation all exercised; the generated invocation is `kiro-cli chat --no-interactive <prompt>`. **Inference requires Kiro credentials and is deliberately not used**, so a turn terminates at `Not logged in` and `verified_live` stays `false`. **Kiro Code cannot use jcode as a backend**: `kiro-cli` has no unpinned equivalent of `CODEX_ACP_BIN` (`KIRO_CLI_ACP_CLI` is checked *after* the login gate), `kiro-cli acp` is itself an agent that advertises `authMethods: [kiro-login]`, and the only `acp.*` setting selects Kiro's own engine. The adapter's honest scope is detection and capability probing. See [acceptance/kirocode-cli-probe.md](acceptance/kirocode-cli-probe.md). |
+| `kirocode` as a jcode backend | Not achievable. Distinct from unimplemented: the harness exposes no injection point that is not gated behind Kiro login. Kiro Crew can do this because it honours `CODEX_ACP_BIN`; `kiro-cli` does not. |
+| MCP server | Implemented. JSON-RPC 2.0 over stdio, protocol `2024-11-05`, fourteen tools advertised (this row previously said "ten", contradicting the count above). |
+| CLI | Implemented. Subcommands mirror the MCP tools and return the same envelope. |
+| `jcode api --stdio` handshake | Verified 2026-10-28 against `jcode 0.99.1`. `api-health` returned `OK`, `detail: "jcode-harness-api-bridge/0.1.0 (1)"`, negotiated version 1, `ping: true`. |
+| `jcode` harness-API turn | Verified 2026-10-28. `api-ask` returned `OK` with `BRIDGE_OK` and `JSON_OK`: `message_accepted`, ordered `text_delta`s, `turn_done`, `answer` and `answer_chars` in the envelope. |
+| `jcode_api_sessions` | Exercised 2026-10-28. The released daemon ignores `limit`, so the bridge bounds the list client-side. |
+| MCP server, `jcode-bridge` | Implemented. Advertises the three `jcode_api_*` tools plus the seven task-backend tools; covered by `tests/test_jcode_bridge_wiring.py`. |
+| Kiro Crew as a client of jcode | Verified 2026-10-28. A Kiro Crew agent invoked `@jcode-bridge/jcode_api_ask` and received `KIRO_BRIDGE_OK`; the call is an auto-approved tool invocation in `~/.kiro/crew/security_events.jsonl`. |
+| Kiro Crew running ON jcode | Verified 2026-11-02 end to end. `agent.acp_backend=codex` plus `CODEX_ACP_BIN=~/bin/jcode-acp-shim`; a real `ask` answered `JCODE_BACKEND_OK`, and instrumenting the shim proved it was actually spawned (`invoked argc=0`). Note the 2026-10-29 entry above recorded this without the `acp_backend` setting, which was unset at the time: the shim was then NOT being spawned and the turn was served by KAS. See [acceptance/codex-backend-activation.md](acceptance/codex-backend-activation.md). |
+| Read-only enforcement | Verified 2026-11-02 end to end, not just at the daemon: asked the live agent to write a file. It reported only `read`, `ls`, `agentgrep` and MCP servers, with no `write`/`edit`/`bash`, and the target file was not created. See [acceptance/codex-backend-activation.md](acceptance/codex-backend-activation.md). |
+| Test suite | `PYTHONPATH=src python3 -m unittest discover -s tests -t .` reports `Ran 355 tests`, `OK`, on 2026-11-02. |
+
+The `kirocrew` flags the adapter passes were each checked against the live
+`--help` output of `chat`, `spawn`, `run`, `token`, `status` and
+`kas status`. The Kiro coding CLI remains unverified, so treat that row as an
+untested code path rather than proven behaviour.
+
+`CODEX_ACP_BIN` alone does not make Kiro Crew use jcode. It only takes effect
+when `agent.acp_backend` names the `codex` slot, because the harness the ACP
+seam spawns is chosen by that setting and `""` (kiro-cli) is the default. The
+shim also pins a provider and model, since the adapter's own default resolved
+to a Bedrock model this host cannot serve and every turn failed with a
+misleading "transient error (HTTP 5xx)".
+
+## Security notes
+
+- The `kirocrew` dashboard URL carries a signed JWT. It is redacted by
+  default, and the MCP tool surface never exposes the raw value.
+- The adapter never invokes a shell. Prompts are argument list entries, so a
+  prompt containing shell metacharacters is still just a prompt.
+- `PYTHONPATH` and `PYTHONHOME` are scrubbed from child process environments.
+- Captured output is truncated at 20,000 characters.
+
+## Links
+
+- [Adapter contract](docs/ADAPTER-CONTRACT.md): tool schemas, result codes,
+  readiness gates, redaction rules, and how to add a third harness.
+- [jcode harness API](docs/JCODE-API.md): daemon protocol frames, CLI
+  subcommands, MCP tools, payload keys, verification status, and why jcode
+  cannot be Kiro Crew's ACP backend.
+- [Operations runbook](docs/OPERATIONS.md): readiness checks, remediation for
+  every failure code, kirocode argv profiles, troubleshooting table.
+- [Model Context Protocol](https://modelcontextprotocol.io)
+- [jcode](https://github.com/1jehuang/jcode)
+- [Kiro Crew](https://crew.kiro.dev), the source of the `kirocrew` launcher.
+- KAS engine manifest base, `https://kas.crew.kiro.dev`, as reported by
+  `kirocrew kas status`.

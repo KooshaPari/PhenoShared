@@ -1,0 +1,456 @@
+# Root workspace coverage MEMBERSHIP LEDGER.
+#
+# WHAT THIS FILE IS
+#   The workspace members that NO coverage group owns, each with a concrete
+#   reason why its coverage is not measured. It is the companion to
+#   .coverage-baselines/root-workspace.toml (the per-group and aggregate
+#   floors) and to the `packages:` lists in .github/workflows/coverage.yml
+#   (the groups themselves).
+#
+# WHY IT EXISTS
+#   `cargo metadata --no-deps` reports every member of the root workspace.
+#   `.github/scripts/coverage_report.py filter` narrows each group's
+#   tarpaulin report to the package directories that group owns and DROPS
+#   every other file. A member that no group owns therefore contributes
+#   NOTHING to any report: its source is silently discarded and it is
+#   measured by nothing. The gate states the rule it could not enforce:
+#
+#     When you add a workspace member, add it to a group AND to the packages
+#     list in the same commit; `cargo metadata --no-deps` is the source of
+#     truth for what is a member.
+#
+#   Nothing enforced that rule: `cmd_filter` only checks that a LISTED
+#   package exists, never that a MEMBER is listed. This file plus
+#   `.github/scripts/coverage_membership.py` close that hole. The check fails
+#   the build when a member is in neither a group nor this ledger.
+#
+#   32 of the 33 entries below are the `absorption/PhenoMLX-temp/perf-core/`
+#   family. The dedicated workflow for them, .github/workflows/perf-core-ci.yml,
+#   does not cover them either: it is written against a root-level
+#   `perf-core/` directory that does not exist in this repository, so its
+#   `paths: perf-core/**` filter never matches them and its
+#   `working-directory: perf-core` steps would fail if they ever ran. It runs
+#   no coverage measurement in any case.
+#
+# FORMAT
+#   A deliberate TOML subset, parsed by `.github/scripts/coverage_membership.py`
+#   (no TOML library needed, identical on python 3.9 and 3.12):
+#
+#     [meta]
+#     key = value            # a bare integer or a "quoted string"
+#
+#     [excused]
+#     package-name = "reason"
+#     package-name = """
+#     a reason that spans
+#     several lines
+#     """
+#
+#   The three counts in [meta] are RECOMPUTED on every run:
+#   total_members, measured_members and excused_members must match what
+#   `cargo metadata` and the workflow matrix actually say, so this file
+#   cannot drift away from the workspace without the build going red.
+#   The source-line figures are a dated SNAPSHOT, not machine-checked: they
+#   change with every source edit, so failing a build on them would make the
+#   gate unusable. The check prints the live figures on every run, so a drift
+#   is visible in the CI log.
+#
+# SCOPE, STATED PLAINLY (recorded 2026-11-10, commit 7965cb9cee10b8da8)
+#   Workspace members:                     291
+#     measured by exactly one group:       258  (88.7% of members)
+#     excused, measured by no lane:         33  (11.3% of members)
+#   Rust source lines under each member's own package directory:
+#     measured members:               418,609
+#     excused members:                 98,089  (19.0% of all member source)
+#   Coverable lines the root gate actually measures (the aggregate
+#   denominator in .coverage-baselines/root-workspace.toml):  69,250
+#
+#   The 33 excused members are a KNOWN COVERAGE GAP. 98,089 Rust source lines
+#   of workspace members are built and tested by CI but are measured by no
+#   coverage lane at all. The gate's 54.80% aggregate does NOT describe them:
+#   they contribute 0 coverable lines to the denominator, so that percentage
+#   is computed over the measured subset alone. Closing the gap is out of scope
+#   here: it needs a coverage measurement cycle for these crates and a floor
+#   derived from that measurement. This file only makes the gap EXPLICIT and
+#   stops it from silently growing.
+#
+# HOW THE EXCUSED MEMBERS GOT HERE
+#   27 of them were listed in the root Cargo.toml [workspace] members by
+#   7a9f14c28 (`feat(workspace): promote non-TQ perf-core and hwledger crates
+#   (#797)`), which did not add them to any coverage group. The five
+#   turbo-quant family crates were never listed there at all: they entered the
+#   root workspace IMPLICITLY as path dependencies of `spec-decode`
+#   (turbo-quant), and of turbo-quant (turbo-quant-c, -mojo, -nim, -zig).
+#   `playcua-native` (native/) was added by 9950a9465.
+#   Those five implicit entries are exactly why membership must come from
+#   `cargo metadata --no-deps` and never from a hand-written list: reading
+#   Cargo.toml alone would have missed them.
+#
+# REMOVING AN ENTRY
+#   Move the crate into a coverage group in .github/workflows/coverage.yml (in
+#   the same commit that changes the workspace membership), delete its entry
+#   here, and update the three counts in [meta]. The check fails until all
+#   three agree.
+
+
+[meta]
+schema = "pheno.coverage-membership.v1"
+recorded_at_utc = "2026-11-10T03:01:17Z"
+recorded_at_commit = "7965cb9cee10b8da81fa4968edf1ced6e574d050"
+total_members = 290
+measured_members = 257
+excused_members = 33
+measured_source_lines = 418609                                  # investigate: dated snapshot, not a live count
+excused_source_lines = 98089                                    # investigate: dated snapshot, not a live count
+measured_coverable_lines = 69250                                # investigate: dated snapshot, not a live count
+
+[excused]
+"concurrent-exec" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"concurrent-exec-cuda" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+Its CUDA runtime loader is behind the opt-in `cuda` feature and needs an NVIDIA device, so
+the ubuntu-24.04 runner would exercise only the non-CUDA path.
+"""
+"eval-harness" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"fleet-proto" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"fleet-proto-zeromq" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+Its C++ ZeroMQ transport links libzmq through pkg-config, and the `zeromq-system` feature
+that pulls that in is off by default, so the runner exercises only the shim.
+"""
+"hwledger-bench-cockpit" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-cli" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-explorer-cli" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-mcp" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-search-core" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-search-evals" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-search-index" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+Its dense ANN store is behind the opt-in `lancedb` feature (the default build is Tantivy-
+only), so the LanceDB path is never instrumented.
+"""
+"hwledger-search-ingest" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-search-rag" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-search-skills" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-search-tags" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"hwledger-server" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"kernel-registry" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"metal-runtime" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+Its Metal pipeline is behind the opt-in `metal` feature and `metal` is a macOS-only
+dependency, so the ubuntu-24.04 runner would measure only the deterministic fallback.
+"""
+"model-kernels" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"model-plan" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"native-abi" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"regress-baseline" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"spec-decode" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"tree-attention" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"tree-attention-spirv" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+Its Metal/SPIR-V kernel is behind the opt-in `spirv` feature and needs the macOS + Xcode
+toolchain, so the crate compiles to a placeholder on the Linux runner.
+"""
+"turbo-quant" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"turbo-quant-c" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"turbo-quant-mojo" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+The Mojo shared library is linked only behind the opt-in `mojo` feature, so without it the
+crate is Rust-only and the FFI path is never instrumented.
+"""
+"turbo-quant-nim" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+It is a thin Rust binding over the `native-abi` C ABI; the Nim kernel itself is not built by
+cargo, so the Rust side measures the ABI shim only.
+"""
+"turbo-quant-zig" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+Its build.rs compiles a Zig kernel with `zig build-obj` and degrades to a Rust-only path when zig
+is absent, so the Zig source is never instrumented.
+"""
+"vpu-agents" = """
+Root workspace member since 7a9f14c28. Built and tested by the root Quality
+Gate (.github/workflows/quality-gate.yml: cargo build --workspace --locked, make
+check, cargo nextest run --workspace --profile ci), but measured by NO coverage
+lane: no group in .github/workflows/coverage.yml owns it, so coverage_report.py
+filter drops its files from every group report and it contributes 0 coverable
+lines to the aggregate denominator. perf-core-ci.yml does not cover it either (it
+targets a root-level perf-core/ directory that does not exist in this repository)
+and it runs no coverage measurement either. KNOWN COVERAGE GAP.
+"""
+"playcua-native" = """
+Root workspace member since 9950a9465 (the commit that added native/ to the
+workspace, #821). Built and tested by the root Quality Gate
+(.github/workflows/quality-gate.yml: cargo build --workspace --locked, make check,
+cargo nextest run --workspace --profile ci), but measured by NO coverage lane: no
+group in .github/workflows/coverage.yml owns it, so coverage_report.py filter drops
+its files from every group report and it contributes 0 coverable lines to the
+aggregate denominator. Its capture and input paths are platform-gated and need a
+display server: `enigo` 0.6 drives X11 through x11rb and `xcap` 0.9 through
+libwayshot/pipewire/XCB, while the Windows backend is behind the `windows` crate,
+so the headless ubuntu-24.04 runner can only exercise the non-display paths.
+KNOWN COVERAGE GAP.
+"""

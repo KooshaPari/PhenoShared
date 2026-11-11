@@ -50,8 +50,7 @@ pub fn tag(ctx: &TaggerContext, moe: &MoeTags) -> ParamTags {
         .or_else(|| estimate_from_config(cfg));
 
     let active_params = if moe.is_moe {
-        moe.active_params
-            .or(total_params)
+        moe.active_params.or(total_params)
     } else {
         total_params
     };

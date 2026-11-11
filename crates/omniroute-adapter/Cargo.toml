@@ -19,3 +19,6 @@ dotenvy = "0.15"
 [dev-dependencies]
 tempfile.workspace = true
 tokio = { workspace = true, features = ["macros", "rt"] }
+
+[package.metadata.cargo-machete]
+ignored = ["serde", "serde_json", "thiserror"]

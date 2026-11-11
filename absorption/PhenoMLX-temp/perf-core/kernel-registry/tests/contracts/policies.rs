@@ -36,7 +36,7 @@ fn selector_experimental_only_skips_tunable_candidates_without_evidence() {
                     .any(|r| matches!(r.reason, RejectionReason::NoTuningEvidence)),
                 "tunable candidates without tuning must be excluded under ExperimentalOnly"
             );
-        }
+        },
         other => panic!("expected Rejected under ExperimentalOnly, got {other:?}"),
     }
 }

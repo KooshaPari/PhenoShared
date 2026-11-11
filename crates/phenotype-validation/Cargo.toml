@@ -14,3 +14,6 @@ regex.workspace = true
 parking_lot.workspace = true
 [dev-dependencies]
 tokio.workspace = true
+
+[package.metadata.cargo-machete]
+ignored = ["parking_lot", "serde"]

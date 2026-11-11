@@ -1,0 +1,78 @@
+{
+  "entities": [
+    {
+      "id": "gate-0",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 2
+      },
+      "type": "gate"
+    },
+    {
+      "id": "intent-1",
+      "label": "Add bounded webhook retries in src/webhooks.rs; do not change the event schema.",
+      "properties": {
+        "user_turn_count": 2
+      },
+      "type": "intent"
+    },
+    {
+      "id": "constraint-2",
+      "label": "do not change",
+      "type": "constraint"
+    },
+    {
+      "id": "resource-3",
+      "label": "working-directory",
+      "properties": {
+        "cwd": "/workspace/payments"
+      },
+      "type": "resource"
+    },
+    {
+      "id": "state-4",
+      "label": "session-title",
+      "properties": {
+        "title": "Webhook retry hardening"
+      },
+      "type": "state"
+    },
+    {
+      "id": "criteria-5",
+      "label": "",
+      "properties": {
+        "constraints": [],
+        "do_not_touch": [
+          "Do-not-touch: 'do not change'",
+          "Do-not-touch: 'preserve'"
+        ],
+        "success_criteria": [],
+        "tests_or_verifications": [
+          "Verification: 'cargo test'",
+          "Verification: 'go test'",
+          "Verification: 'verify'"
+        ]
+      },
+      "type": "criteria"
+    }
+  ],
+  "okf": "1.0",
+  "provenance": {
+    "corpus": "claude-code",
+    "source_id": "golden-claude-tool"
+  },
+  "relations": [
+    {
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "golden-claude-tool"
+      },
+      "source": "intent-1",
+      "target": "constraint-2",
+      "type": "bounded_by"
+    }
+  ],
+  "source_id": "golden-claude-tool"
+}

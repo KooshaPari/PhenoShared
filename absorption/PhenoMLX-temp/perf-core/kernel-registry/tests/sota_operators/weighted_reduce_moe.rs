@@ -161,7 +161,7 @@ fn weighted_reduce_moe_selector_picks_lowest_p95_tiled() {
                 "tiled p95=1100 must beat scalar p95=2400 under Deterministic"
             );
             assert_ne!(candidate.id, id_scalar);
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -303,7 +303,7 @@ fn weighted_reduce_moe_sweep_t_values() {
                         candidate.id, id_tiled,
                         "row (t={t}, seed={seed}) must pick tiled under Deterministic"
                     );
-                }
+                },
                 other => panic!("row (t={t}, seed={seed}) expected Chosen, got {other:?}"),
             }
             rows_pinned += 1;

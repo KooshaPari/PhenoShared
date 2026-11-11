@@ -159,30 +159,30 @@ pub fn call_tool(backend: &dyn Backend, name: &str, params: &Value) -> Result<Va
         "model_search" => {
             require_string(obj, "query")?;
             backend.model_search(params)
-        }
+        },
         "model_detail" => {
             require_string(obj, "source")?;
             require_string(obj, "id")?;
             backend.model_detail(params)
-        }
+        },
         "model_rag_ask" => {
             require_string(obj, "question")?;
             backend.model_rag_ask(params)
-        }
+        },
         "model_quants" => {
             require_string(obj, "source")?;
             require_string(obj, "id")?;
             backend.model_quants(params)
-        }
+        },
         "similar_models" => {
             require_string(obj, "source")?;
             require_string(obj, "id")?;
             backend.similar_models(params)
-        }
+        },
         "models_for_use_case" => {
             require_string(obj, "use_case")?;
             backend.models_for_use_case(params)
-        }
+        },
         other => Err(McpError::method_not_found(other)),
     }
 }

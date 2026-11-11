@@ -1,5 +1,5 @@
 # reusable-a11y.yml
-# Reusable WCAG 2.1 AA gate — boots the app dev server and runs axe Playwright specs.
+# Reusable WCAG 2.1 AA gate — runs the repo's axe accessibility specs.
 #
 # Vendored into this repository on 2026-11-09. It used to be called across repos:
 #
@@ -16,13 +16,47 @@
 # Why this is the right shape rather than a workaround:
 #   - a local `uses: ./.github/workflows/reusable-a11y.yml` has no cross-repo
 #     access rules, no extra token scope, and no external availability risk;
-#   - the inputs are unchanged, so the caller needed one line to change;
 #   - the gate runs on every push and PR that touches docs, instead of being
 #     dead. A gate nobody can run is not a gate.
 #
 # Pin repair: the upstream copy carried `actions/checkout@<sha>@<sha>`, a
 # double-@ form left by an earlier automated edit. It is not valid syntax. The
 # commit SHA is kept and the stray prefix dropped.
+#
+# WHY THE GATE RUNS UNDER VITEST AND NOT `playwright test`
+#   The specs in tests/a11y/ are Vitest tests: they import describe/it/expect
+#   from `vitest`, and the repository already declares the suite as
+#   `package.json` -> `test:a11y` -> `vitest run tests/a11y`, with the spec
+#   set in `vitest.config.ts`. They boot their own VitePress dev server
+#   (tests/a11y/dev-server.ts) and drive Playwright's Chromium directly.
+#
+#   This workflow used to run `bunx playwright test <glob>` instead. That
+#   loaded the repository-root `playwright.config.ts`, whose `webServer` is
+#   `vitepress preview docs` — a PREVIEW server, which serves an already-built
+#   site out of `docs/.vitepress/dist`. The job never built that site, so
+#   Playwright aborted before a single axe assertion ran:
+#
+#     [WebServer] ENOENT: no such file or directory,
+#                 open '/.../docs/.vitepress/dist/404.html'
+#     Error: Process from config.webServer was not able to start. Exit code: 1
+#
+#   That abort was the whole failure: 38 consecutive red runs, zero green, no
+#   axe assertion ever executed. Worse, even with a built site the gate would
+#   still have been vacuous: the root config's `testDir` is `./tests/e2e`, so
+#   the a11y specs were never collected, and Playwright does not register
+#   Vitest's describe/it as tests.
+#
+#   `bun run test:a11y` runs the suite with the runner it was written for.
+#   The spec list lives in exactly one place (`vitest.config.ts`), the dev
+#   server is booted by the specs themselves, and no build artefact is needed.
+#
+# WHY `dev_command`, `dev_port` AND `spec_glob` ARE GONE
+#   They were inputs this workflow declared but never used: the job body
+#   referenced neither the dev command nor its port, and the spec glob could
+#   not be honoured anyway (Vitest treats a positional argument as a path
+#   substring, not a glob — `vitest run 'tests/a11y/**/*.spec.ts'` matches no
+#   file and exits 1). Keeping unused inputs invited the next reader to
+#   believe a dev server was being started for them.
 
 name: reusable-a11y
 
@@ -33,15 +67,6 @@ on:
         required: true
         type: string
       app_dir:
-        required: true
-        type: string
-      dev_command:
-        required: true
-        type: string
-      dev_port:
-        required: true
-        type: number
-      spec_glob:
         required: true
         type: string
 
@@ -67,5 +92,5 @@ jobs:
         run: bunx playwright install --with-deps chromium
 
       - name: Run axe accessibility gate
-        run: bunx playwright test ${{ inputs.spec_glob }}
+        run: bun run test:a11y
         working-directory: ${{ inputs.app_dir }}

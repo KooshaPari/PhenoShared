@@ -24,7 +24,7 @@
 //!
 //! Env required:
 //!   - CF_API_TOKEN (or --cf-token-file ~/.cloudflare-token)
-//!   - CF_ZONE_ID (default: 6c9edab581e9c7b8fdb6a83adc6878ea = kooshapari.com)
+//!   - CF_ZONE_ID (required; no default is committed)
 //!   - GITHUB_TOKEN (via `gh auth token`)
 //!
 //! Wraps: `gh` CLI + `vercel` CLI + Cloudflare REST API.
@@ -35,7 +35,7 @@ use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-const ZONE_ID_DEFAULT: &str = "6c9edab581e9c7b8fdb6a83adc6878ea";
+const ZONE_ID_DEFAULT: &str = ""; // set CF_ZONE_ID; no default is committed
 
 #[derive(Parser, Debug)]
 #[command(version, about)]

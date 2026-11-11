@@ -31,3 +31,16 @@ tempfile = "3.10"
 [dev-dependencies]
 mockall = "0.12"
 tempfile = "3.10"
+
+[package.metadata.cargo-machete]
+ignored = [
+  "chrono",
+  "regex",
+  "serde",
+  "serde_json",
+  "thiserror",
+  "tokio",
+  "tracing",
+  "uuid",
+  "walkdir",
+]

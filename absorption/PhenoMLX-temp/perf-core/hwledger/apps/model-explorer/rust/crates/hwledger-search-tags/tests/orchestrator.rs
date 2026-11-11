@@ -20,7 +20,9 @@ fn full_qwen2_5_coder_7b_codes_well() {
     let mut raw = RawModel::new("Qwen/Qwen2.5-Coder-7B-Instruct", "hf");
     raw.config_json = Some(cfg);
     raw.tree_entries = vec!["qwen2.5-coder-7b-instruct-q5_k_m.gguf".to_string()];
-    raw.card_text = Some("Qwen2.5-Coder-7B-Instruct is a code-specialized instruction-tuned model.".to_string());
+    raw.card_text = Some(
+        "Qwen2.5-Coder-7B-Instruct is a code-specialized instruction-tuned model.".to_string(),
+    );
     raw.pipeline_tag = Some("text-generation".to_string());
     let ctx = TaggerContext::from_raw(raw);
     let tags = tag_all(&ctx);

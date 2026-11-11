@@ -21,12 +21,7 @@
 //! exporter can be layered on later if/when a stable otel release
 //! catches up.
 
-use axum::{
-    body::Body,
-    extract::Request,
-    middleware::Next,
-    response::Response,
-};
+use axum::{body::Body, extract::Request, middleware::Next, response::Response};
 
 use tracing::Instrument;
 

@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.6.0.schema.json
+# Template: replace InstallerSha256 with the SHA256SUMS digest for
+# sl-viewer-v0.1.0-x86_64-pc-windows-msvc.zip before submitting to winget-pkgs.
+PackageIdentifier: KooshaPari.SessionLedger
+PackageVersion: 0.1.0
+Platform:
+  - Windows.Desktop
+MinimumOSVersion: 10.0.17763.0
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+  - RelativeFilePath: sl-viewer-v0.1.0-x86_64-pc-windows-msvc\sl-viewer.exe
+    PortableCommandAlias: sl-viewer
+InstallModes:
+  - silent
+UpgradeBehavior: install
+ReleaseDate: 2026-07-13
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/KooshaPari/SessionLedger/releases/download/v0.1.0/sl-viewer-v0.1.0-x86_64-pc-windows-msvc.zip
+    # REPLACE with the archive digest from the Release SHA256SUMS file.
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+ManifestType: installer
+ManifestVersion: 1.6.0

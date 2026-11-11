@@ -62,7 +62,7 @@ flowchart TD
 |------------|---------|---------|
 | `--instance-file` / `OCI_INSTANCE_FILE` | `~/.cloudprovider/oci-instance.json` | input from lottery daemon |
 | `--dns-name` / `OCI_DNS_NAME` | `oci-1.kooshapari.com` | DNS A record |
-| `--cf-zone-id` / `CF_ZONE_ID` | `6c9edab581e9c7b8fdb6a83adc6878ea` | kooshapari.com zone |
+| `--cf-zone-id` / `CF_ZONE_ID` | `<cloudflare-zone-id>` | kooshapari.com zone |
 | `--cf-token-file` / `CF_TOKEN_FILE` | `~/.cloudflare-token` | Cloudflare API token |
 | `--repo` / `PHENOTYPE_INFRA_REPO` | `~/CodeProjects/Phenotype/repos/phenotype-infra` | target repo for mesh commit |
 | `--playbook` | `iac/ansible/playbooks/oci-baseline.yml` | ansible playbook (relative to repo) |

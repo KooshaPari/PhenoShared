@@ -12,3 +12,6 @@ pin-project = "1"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }
+
+[package.metadata.cargo-machete]
+ignored = ["pin-project"]

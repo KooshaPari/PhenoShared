@@ -1,0 +1,12 @@
+?	Whole viewer	Open or close this keyboard help overlay.
+Cmd+K / Ctrl+K	Whole viewer	Open or close the command palette.
+Arrow keys + Enter	Command palette	Move through commands and run focus search, open help, switch tabs, clear search, or toggle theme.
+Tab / Shift+Tab	Whole viewer	Move through focus order. The active view tab is the only tab stop in the tablist before panel controls.
+ArrowRight / ArrowLeft	Focused view tab	Select and focus the next or previous view tab, wrapping at the ends.
+Home / End	Focused view tab	Jump to Bundles or Replay.
+Enter / Space	Focused view tab	Activate the focused view tab.
+Escape	This help overlay	Close the overlay and return focus to the Help control.
+Escape	Command palette	Close the palette.
+Escape	Search view	Clear search filters, results, and errors without moving focus.
+Escape	Replay view	Clear replay output and return the replay panel to idle.
+Escape	Bundle comparison panel	Close the comparison panel.

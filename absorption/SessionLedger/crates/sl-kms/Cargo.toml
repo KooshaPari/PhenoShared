@@ -1,0 +1,19 @@
+[package]
+name = "sl-kms"
+version = "0.1.0"
+edition = "2021"
+description = "In-tree KMS wrapper around platform credential stores (macOS Keychain / Linux secret-service / Windows Credential Manager). W44-B4 stub."
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+# No platform-specific deps yet — the stub returns Err(NotImplemented).
+# Human-gated work will add:
+#   - macOS: security-framework (Keychain via SecKeychainItemCopyMatching)
+#   - Linux: secret-service (D-Bus)
+#   - Windows: wincred (Credential Manager)
+tokio = { version = "1", features = ["rt"], optional = true }
+
+[features]
+default = []
+async-runtime = ["dep:tokio"]

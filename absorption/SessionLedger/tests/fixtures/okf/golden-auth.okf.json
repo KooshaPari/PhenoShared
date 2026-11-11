@@ -1,0 +1,121 @@
+{
+  "entities": [
+    {
+      "id": "gate-0",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 2
+      },
+      "type": "gate"
+    },
+    {
+      "id": "intent-1",
+      "label": "Fix the login timeout in src/auth/session.rs but don't change the public API.",
+      "properties": {
+        "user_turn_count": 2
+      },
+      "type": "intent"
+    },
+    {
+      "id": "acceptance-2",
+      "label": "looks good",
+      "type": "acceptance"
+    },
+    {
+      "id": "acceptance-3",
+      "label": "works",
+      "type": "acceptance"
+    },
+    {
+      "id": "constraint-4",
+      "label": "don't change",
+      "type": "constraint"
+    },
+    {
+      "id": "constraint-5",
+      "label": "but don't",
+      "type": "constraint"
+    },
+    {
+      "id": "resource-6",
+      "label": "working-directory",
+      "properties": {
+        "cwd": "/workspace/auth-service"
+      },
+      "type": "resource"
+    },
+    {
+      "id": "state-7",
+      "label": "session-title",
+      "properties": {
+        "title": "Login timeout regression"
+      },
+      "type": "state"
+    },
+    {
+      "id": "criteria-8",
+      "label": "",
+      "properties": {
+        "constraints": [],
+        "do_not_touch": [
+          "Do-not-touch: 'don't change'",
+          "Do-not-touch: 'preserve'"
+        ],
+        "success_criteria": [],
+        "tests_or_verifications": [
+          "Verification: 'cargo test'",
+          "Verification: 'go test'",
+          "Verification: 'verify'",
+          "Verification: 'verify that'"
+        ]
+      },
+      "type": "criteria"
+    }
+  ],
+  "okf": "1.0",
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "golden-auth"
+  },
+  "relations": [
+    {
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "golden-auth"
+      },
+      "source": "intent-1",
+      "target": "acceptance-2",
+      "type": "verified_by"
+    },
+    {
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "golden-auth"
+      },
+      "source": "intent-1",
+      "target": "acceptance-3",
+      "type": "verified_by"
+    },
+    {
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "golden-auth"
+      },
+      "source": "intent-1",
+      "target": "constraint-4",
+      "type": "bounded_by"
+    },
+    {
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "golden-auth"
+      },
+      "source": "intent-1",
+      "target": "constraint-5",
+      "type": "bounded_by"
+    }
+  ],
+  "source_id": "golden-auth"
+}

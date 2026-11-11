@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Minimal entitlements for ResearchLedger's Tauri 2 desktop app.
+
+  Direct distribution (not Mac App Store), so sandbox is intentionally OFF.
+-->
+<plist version="1.0">
+<dict>
+  <!-- ResearchLedger talks to local IPC and the ResearchLedger daemon (HTTP). -->
+  <key>com.apple.security.network.client</key>
+  <true/>
+
+  <!-- WKWebView (Tauri's renderer) benefits from JIT for V8-style optimizations. -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+
+  <!-- If app uses the camera/mic/etc., add the corresponding entitlement. -->
+</dict>
+</plist>

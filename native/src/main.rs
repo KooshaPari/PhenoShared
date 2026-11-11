@@ -132,7 +132,7 @@ fn parse_modality_arg(args: &[String]) -> (Option<ModalityKind>, &[String]) {
                 // Unknown kind: fall through to env/auto. Don't error — keeps
                 // the binary drop-in for typos.
                 (None, &rest[2..])
-            }
+            },
         }
     } else {
         (None, rest)
@@ -152,7 +152,7 @@ async fn run_stdio(app: Arc<app::App>) -> anyhow::Result<()> {
             Ok(None) => {
                 info!("stdin EOF — shutting down");
                 break;
-            }
+            },
             Err(e) => {
                 error!(error = %e, "Failed to parse request");
                 let resp = ipc::Response::err(
@@ -162,7 +162,7 @@ async fn run_stdio(app: Arc<app::App>) -> anyhow::Result<()> {
                 );
                 let _ = write_response(&mut writer, &resp).await;
                 continue;
-            }
+            },
         };
 
         let resp = app.dispatcher.dispatch(req).await;

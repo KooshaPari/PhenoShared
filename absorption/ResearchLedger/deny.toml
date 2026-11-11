@@ -1,0 +1,44 @@
+# Dependency policy for the macOS desktop artifact. The targets mirror the
+# architectures we distribute, while `--all-features` in CI keeps optional
+# dependency paths in scope.
+[graph]
+targets = ["aarch64-apple-darwin", "x86_64-apple-darwin"]
+all-features = true
+
+[advisories]
+# Security advisories and yanked releases block the gate. Unmaintained direct
+# dependencies and every unsound dependency also block it.
+yanked = "deny"
+unmaintained = "workspace"
+unsound = "all"
+
+[bans]
+# The Tauri graph currently requires multiple legitimate versions. Surface
+# these until the dependency graph can be consolidated, without suppressing
+# either wildcard or explicit-crate policy violations.
+multiple-versions = "warn"
+wildcards = "deny"
+
+[licenses]
+confidence-threshold = 0.93
+allow = [
+  "0BSD",
+  "Apache-2.0",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "BSL-1.0",
+  "CC0-1.0",
+  "CDLA-Permissive-2.0",
+  "ISC",
+  "MIT",
+  "MIT-0",
+  "MPL-2.0",
+  "Unicode-3.0",
+  "Unlicense",
+  "Zlib",
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

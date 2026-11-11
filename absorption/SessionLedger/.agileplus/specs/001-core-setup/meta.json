@@ -1,0 +1,9 @@
+{
+  "feature_id": "001-core-setup",
+  "created": "2026-08-19",
+  "status": "active",
+  "priority": "P1",
+  "repo": "SessionLedger",
+  "language": "Rust",
+  "owner": "KooshaPari"
+}

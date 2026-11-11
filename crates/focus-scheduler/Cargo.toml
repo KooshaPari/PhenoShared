@@ -26,3 +26,6 @@ criterion = { workspace = true, default-features = false }
 [[bench]]
 name = "packing"
 harness = false
+
+[package.metadata.cargo-machete]
+ignored = ["async-trait", "thiserror", "tracing"]

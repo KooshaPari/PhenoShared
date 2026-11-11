@@ -11,9 +11,9 @@
 use hwledger_search_core::{AttentionKind, ModelKind, RopeVariant};
 
 use crate::arch_tagger::ArchTags;
+use crate::modelkind_tagger::ModelKindTags;
 use crate::moe_tagger::MoeTags;
 use crate::quant_tagger::QuantTags;
-use crate::modelkind_tagger::ModelKindTags;
 use crate::tager_context::TaggerContext;
 
 /// Fit-score pair for a single model.

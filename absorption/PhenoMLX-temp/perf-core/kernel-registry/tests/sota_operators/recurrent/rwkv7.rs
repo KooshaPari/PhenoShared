@@ -90,7 +90,7 @@ fn rwkv7_deterministic_picks_lowest_p95_metal_backend() {
                 candidate.id, id_metal,
                 "metal p95=1700 must beat scalar p95=5500"
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }
@@ -236,7 +236,7 @@ fn deltanet_batched_selector_returns_tagged_candidate() {
                 "chosen candidate must be tagged DeltaNetBatched; got {:?}",
                 candidate.name
             );
-        }
+        },
         other => panic!("expected Chosen, got {other:?}"),
     }
 }

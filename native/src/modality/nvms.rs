@@ -239,7 +239,7 @@ impl std::fmt::Display for NvmsError {
                     write!(f, "{}", p.display())?;
                 }
                 Ok(())
-            }
+            },
             Self::Io(e) => write!(f, "nvms spawn I/O error: {e}"),
         }
     }
@@ -374,7 +374,7 @@ impl NvmsDriver {
                 Err(_) => {
                     child.start_kill().ok();
                     child.wait().await.ok();
-                }
+                },
             }
         }
         Ok(())

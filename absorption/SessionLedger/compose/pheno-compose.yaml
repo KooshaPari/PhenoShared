@@ -1,0 +1,25 @@
+# Optional PhenoCompose / NVMS compose stub for SessionLedger.
+#
+# This file is intentionally comment-oriented: SessionLedger does NOT vendor
+# PhenoCompose or nvms. The runtime facade (`scripts/runtime-up.*`) will pass
+# `-f compose/pheno-compose.yaml` when SL_RUNTIME=pheno and pheno-compose/nvms
+# is on PATH. Until those CLIs accept this file, prefer the zero-dep default:
+#
+#   process-compose -f process-compose.yaml up
+#   # or: ./scripts/runtime-up.sh
+#
+# Phenotype alignment (orientation only — see KooshaPari/PhenoCompose):
+#   - Unified CLI: pheno-compose (Rust driver) / nvms (Go)
+#   - Isolation tiers: WASM ≈1ms, gVisor ≈90ms, Firecracker ≈125ms
+#   - Install hints: curl -fsSL https://get.nvms.dev | sh
+#                    cargo install pheno-compose --features nvms-driver
+#
+# Suggested future services (mirror root process-compose.yaml):
+#   sl-daemon  — cargo run -p sl-daemon -- serve  (SL_PORT=8080, SL_DATA_DIR)
+#   sl-viewer  — cargo run -p sl-viewer           (depends on daemon /readyz)
+#
+# ADR 0001: no tray / menubar companion — orchestration stays CLI + HTTP.
+#
+# Minimal placeholder so `-f` path exists for CLI probing:
+version: "0.1"
+services: {}

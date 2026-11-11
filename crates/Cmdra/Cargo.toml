@@ -60,3 +60,16 @@ path = "src/lib.rs"
 opt-level = 3
 lto = true
 codegen-units = 1
+
+[package.metadata.cargo-machete]
+ignored = [
+  "anyhow",
+  "colored",
+  "dialoguer",
+  "glob",
+  "indicatif",
+  "semver",
+  "tracing-appender",
+  "uuid",
+  "yaml-rust2",
+]

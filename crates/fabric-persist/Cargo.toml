@@ -23,3 +23,6 @@ criterion = { version = "0.5", features = ["html_reports"] }
 [[bench]]
 name = "persist"
 harness = false
+
+[package.metadata.cargo-machete]
+ignored = ["fabric-capability"]

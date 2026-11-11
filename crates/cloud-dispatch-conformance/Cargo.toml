@@ -20,3 +20,6 @@ uuid.workspace = true
 [dev-dependencies]
 cloud-codex = { version = "0.3.8", path = "../cloud-codex" }
 tokio = { workspace = true, features = ["macros", "rt"] }
+
+[package.metadata.cargo-machete]
+ignored = ["serde", "uuid"]

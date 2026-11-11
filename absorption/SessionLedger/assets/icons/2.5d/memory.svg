@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%" role="img" aria-label="Memory">
+  <defs>
+    <linearGradient id="g-memory" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#6b21a8"/>
+    </linearGradient>
+  </defs>
+  <path d="M 16 5
+           C 9 5, 4 9, 4 16
+           C 4 23, 9 27, 16 27
+           C 23 27, 28 23, 28 16
+           C 28 9, 23 5, 16 5 Z"
+        fill="url(#g-memory)" opacity="0.6"/>
+  <path d="M 16 7
+           C 11 7, 7 11, 7 16
+           C 7 21, 11 25, 16 25
+           C 21 25, 25 21, 25 16
+           C 25 11, 21 7, 16 7 Z"
+        fill="url(#g-memory)"/>
+  <circle cx="11" cy="13" r="2" fill="#ede9fe"/>
+  <circle cx="16" cy="13" r="2" fill="#ede9fe"/>
+  <circle cx="21" cy="13" r="2" fill="#ede9fe"/>
+  <circle cx="11" cy="19" r="2" fill="#ede9fe"/>
+  <circle cx="16" cy="19" r="2" fill="#ede9fe"/>
+  <circle cx="21" cy="19" r="2" fill="#ede9fe"/>
+</svg>

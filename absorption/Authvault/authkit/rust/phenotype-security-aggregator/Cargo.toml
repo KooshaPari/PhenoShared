@@ -1,0 +1,26 @@
+[package]
+name = "phenotype-security-aggregator"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Security findings aggregation from multiple sources"
+
+[features]
+default = ["real-sources"]
+real-sources = ["dep:reqwest", "dep:serde_json"]
+
+[dependencies]
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", optional = true }
+thiserror = "2.0"
+tracing = "0.1"
+
+# Optional dependencies for real sources
+reqwest = { version = "0.13", features = ["json"], optional = true }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["rt", "macros"] }

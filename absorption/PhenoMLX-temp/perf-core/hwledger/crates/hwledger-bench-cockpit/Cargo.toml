@@ -2,6 +2,7 @@
 name = "hwledger-bench-cockpit"
 version = "0.1.0"
 edition = "2021"
+license.workspace = true
 description = "Bench cockpit server — Rust Axum port of the Go server"
 
 [dependencies]

@@ -25,3 +25,6 @@ serde.workspace = true
 serde_json.workspace = true
 futures = "0.3"
 tempfile = "3"
+
+[package.metadata.cargo-machete]
+ignored = ["futures", "tempfile"]

@@ -96,6 +96,11 @@ tmp-*
 .parcel-cache/
 .pnp
 .pnp.js
+# Vite's build artefacts. The a11y gate boots a VitePress dev server and the
+# production build writes here, so both directories show up as untracked
+# noise for anyone who runs them locally.
+/.vitepress/cache/
+/.vitepress/.temp/
 /build/
 /coverage/
 /dist/
@@ -193,6 +198,11 @@ cmd/*/trust
 cmd/*/wire
 cmd/*/*.exe
 cmd/*/dist/
+
+# Go CLI build artifacts (agents/phenoagent/pheno-cli-go). A stray build of
+# this module was committed once; ignore it so it cannot come back.
+agents/phenoagent/pheno-cli-go/pheno-test
+agents/phenoagent/pheno-cli-go/pheno-test.exe
 
 # Archival absorption trees are verbatim copies of upstream repos. Their
 # vendor/ directories are part of the preserved content and must be tracked,

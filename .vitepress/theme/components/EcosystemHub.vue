@@ -149,13 +149,19 @@ onMounted(() => {
 })
 
 const categoryLabel = { app: 'Application', api: 'API Service', docs: 'Docs Site', lib: 'Library' }
-const categoryColor = { app: '#7ebab5', api: '#00ADD8', docs: '#646cff', lib: '#ce422b' }
+const categoryColor = { app: '#7ebab5', api: '#00ADD8', docs: '#646cff', lib: '#d7452d' }
 
 const categories = ['app', 'api', 'docs', 'lib'] as const
 </script>
 
 <template>
-  <div class="hub">
+  <!--
+    The hub is the whole body of docs/index.md, and that page uses VitePress's
+    `layout: page`, which renders no <main> landmark of its own. axe flagged
+    the document with `landmark-one-main` (moderate) because of it, so the
+    panel carries the landmark instead.
+  -->
+  <main class="hub">
     <!-- Header grid -->
     <div class="hub-header">
       <div class="hub-signal"></div>
@@ -233,7 +239,7 @@ const categories = ['app', 'api', 'docs', 'lib'] as const
     <!-- Port reference table -->
     <div class="hub-ports">
       <div class="hub-ports-header">
-        <span class="hub-section-tag" style="border-color: #353a40; color: #6b7280">DEV PORTS</span>
+        <span class="hub-section-tag" style="border-color: #353a40; color: #8b93a3">DEV PORTS</span>
         <div class="hub-section-rule"></div>
       </div>
       <div class="hub-ports-grid">
@@ -247,7 +253,7 @@ const categories = ['app', 'api', 'docs', 'lib'] as const
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped>
@@ -266,7 +272,9 @@ const categories = ['app', 'api', 'docs', 'lib'] as const
   --border-bright: #2a2f37;
   --text-1: #f0efee;
   --text-2: #8a9099;
-  --text-3: #4a5060;
+  /* #4a5060 measured 2.46:1 against the midnight surface - WCAG AA needs
+   * 4.5:1. #737d96 measures 4.81:1 on the hub surface and 4.52:1 on a card. */
+  --text-3: #737d96;
   --mono: 'Space Mono', ui-monospace, monospace;
   --sans: 'DM Sans', system-ui, sans-serif;
 
@@ -274,6 +282,14 @@ const categories = ['app', 'api', 'docs', 'lib'] as const
   max-width: 1100px;
   margin: 0 auto;
   padding: 3rem 1.5rem 5rem;
+  /* Every colour in this component - the near-white headline, the teal
+   * accents, the midnight surfaces the cards sit on - is a dark-theme token.
+   * The hub had no background of its own, so the header text was painted
+   * onto the light page background: the H1 measured 1.08:1 and was
+   * effectively invisible. The surface the palette was written for is now
+   * actually rendered. */
+  background: var(--midnight);
+  border-radius: 12px;
 }
 
 /* ── Header ──────────────────────────────── */

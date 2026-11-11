@@ -17,11 +17,7 @@ impl SearchSkill for RecordingSkill {
     fn name(&self) -> &str {
         &self.name
     }
-    fn rerank(
-        &self,
-        results: &mut [FusedResult],
-        _ctx: &SearchContext,
-    ) -> Result<(), CoreError> {
+    fn rerank(&self, results: &mut [FusedResult], _ctx: &SearchContext) -> Result<(), CoreError> {
         self.calls.fetch_add(1, Ordering::SeqCst);
         for r in results.iter_mut() {
             r.score += self.delta;

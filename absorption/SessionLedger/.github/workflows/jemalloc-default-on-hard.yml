@@ -1,0 +1,59 @@
+# Blocking default-on platform allocator PR gate for C00 L8.
+# SelfCheck + default-feature builds on ubuntu + windows; soft jemalloc-hard retained.
+name: jemalloc default-on hard
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  jemalloc-default-on-selfcheck:
+    name: jemalloc default-on · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: jemalloc default-on CI SelfCheck
+        shell: pwsh
+        run: ./scripts/jemalloc-default-on-check.ps1 -SelfCheck
+
+  jemalloc-default-on-unix-build:
+    name: jemalloc default-on · unix default build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+          key: jemalloc-default-on-unix
+      - name: cargo build default features (blocking)
+        shell: pwsh
+        run: ./scripts/jemalloc-default-on-check.ps1 -Build
+
+  jemalloc-default-on-windows-build:
+    name: jemalloc default-on · windows default build
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+          key: jemalloc-default-on-windows
+      - name: cargo build default features (blocking)
+        working-directory: crates/sl-daemon
+        run: cargo build --locked

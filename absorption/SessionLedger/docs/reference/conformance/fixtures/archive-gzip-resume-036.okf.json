@@ -1,0 +1,199 @@
+{
+  "okf": "1.0",
+  "source_id": "archive-gzip-resume-036",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Gzip-archive a distilled OKF continuation then restore it for resume inject",
+      "properties": {
+        "user_turn_count": 7,
+        "token_estimate": 200,
+        "archive_codec": "gzip",
+        "compression_level": 6
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Rehydrate total_token_estimate after archive restore and compare to pre-archive projection",
+      "properties": {
+        "user_turn_count": 4,
+        "token_estimate": 110
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "archive restore yields byte-identical OKF JSON",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "post-restore total_token_estimate matches pre-archive projection",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "resume-gate ready after gzip archive restore",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "gzip archive path complements zstd Compressor; both stay reversible",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "keep archive fixture payloads small enough for CI",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/session-ledger" }
+    },
+    {
+      "id": "resource-1",
+      "type": "resource",
+      "label": "archive-path",
+      "properties": { "path": "var/archive/archive-gzip-resume-036.okf.gz" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": {
+        "title": "Gzip archive resume family",
+        "bytes_saved_proxy": 128,
+        "rough_tokens_saved_proxy": 32
+      }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "daemon archive gzip path remains the eval archive contract",
+      "properties": {
+        "watch_files": [
+          "crates/sl-daemon/src/archive.rs",
+          "tests/compression_eval.rs",
+          "docs/ops/eval-compression.md"
+        ],
+        "skipped_by": []
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 11,
+        "archived": true,
+        "total_token_estimate": 310
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-1",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "archive-gzip-resume-036"
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "claude-code",
+    "source_id": "archive-gzip-resume-036"
+  }
+}

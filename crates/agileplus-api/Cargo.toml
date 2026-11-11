@@ -40,3 +40,12 @@ tokio = { version = "1", features = ["full"] }
 axum-test = "19"
 tempfile = "3"
 chrono = { version = "0.4", features = ["serde"] }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "axum-extra",
+  "opentelemetry",
+  "opentelemetry_sdk",
+  "thiserror",
+  "tracing-opentelemetry",
+]

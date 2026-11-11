@@ -1,0 +1,76 @@
+[package]
+name = "sl-viewer"
+version = "0.1.0"
+edition = "2021"
+description = "Dioxus desktop+web viewer for SessionLedger compiled bundles"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+session-ledger = { path = "../.." }
+dioxus = "0.7"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", features = ["stream", "rustls-tls", "json"], default-features = false, optional = true }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"], optional = true }
+tokio-util = { version = "0.7", features = ["io"], optional = true }
+futures-util = { version = "0.3", optional = true }
+js-sys = { version = "0.3", optional = true }
+chrono = { version = "0.4", features = ["clock"], default-features = false, optional = true }
+# sqlite feature: wire real Forge corpus into the viewer
+rusqlite = { version = "0.41", optional = true }
+zstd = { version = "0.14", optional = true }
+wasm-bindgen = { version = "0.2", optional = true }
+web-sys = { version = "0.3", optional = true, features = ["Document", "Element", "Event", "EventSource", "HtmlElement", "KeyboardEvent", "Location", "MessageEvent", "UrlSearchParams", "Window"] }
+# parquet feature: ingest Claude conversation parquet exports under ~/.claude/projects.
+# Uses the row-based API (no arrow) for minimal dependency footprint.
+parquet = { version = "60", optional = true, default-features = false, features = ["snap", "zstd", "brotli", "flate2-zlib-rs", "lz4", "base64", "simdutf8", "crc"] }
+# Native folder-picker dialog for the "Pick folder…" affordance (desktop only).
+# Uses `rfd`'s cocoa backend on macOS, native Win32 dialogs on Windows, and
+# the XDG-portal/GTK3 stack on Linux. Default features are required on
+# Linux so the dialog can talk to a portal service.
+rfd = { version = "0.17", optional = true }
+# Resolve the platform config directory for persisted corpus paths.
+dirs = "7"
+
+[dev-dependencies]
+rusqlite = "0.41"
+zstd = "0.14"
+tempfile = "3"
+# Pull parquet into the test build so fixture writers and unit tests can exercise
+# the parquet source even when the production `parquet` feature is disabled.
+parquet = { version = "60", default-features = false, features = ["snap", "zstd", "brotli", "flate2-zlib-rs", "lz4", "base64", "simdutf8", "crc"] }
+# Property evidence for sl-viewer's settings / corpus_paths / parquet
+# surfaces (tests/properties_viewer.rs). Mirrors the workspace-level
+# tests/properties.rs. Keep the version in sync with the root Cargo.toml.
+proptest = "1.11.0"
+
+[features]
+default = ["desktop"]
+desktop = ["dioxus/desktop", "dep:reqwest", "dep:tokio", "dep:tokio-util", "dep:futures-util", "dep:chrono", "dep:rfd", "compressed-sessions"]
+compressed-sessions = ["dep:zstd", "session-ledger/compress"]
+web = ["dioxus/web", "dep:reqwest", "dep:futures-util", "dep:js-sys", "dep:wasm-bindgen", "dep:web-sys"]
+# Enable loading real Forge SQLite sessions in the viewer.
+# Requires: ZSTD_SYS_USE_PKG_CONFIG=1 (links against system libzstd).
+sqlite = [
+    "dep:rusqlite",
+    "dep:zstd",
+    "session-ledger/sqlite",
+]
+# Enable ingesting Claude conversation parquet exports (e.g. files dropped under
+# `~/.claude/projects/*.parquet`). Without this feature, parquet files are
+# silently skipped by the auto-discovery loader.
+parquet = ["dep:parquet"]
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[package.metadata.bundle]
+# Lab-Coat visual identity (proposed 2026-07-06 by vision-pillar).
+# Icon source of truth: ../../assets/brand/sessionledger-icon.svg.
+name = "SessionLedger"
+identifier = "ai.kooshapari.sessionledger"
+icon = ["../../assets/icons/sessionledger.iconset"]
+resources = []
+category = "DeveloperTool"
+short_description = "Session-bundle compiler + viewer"
+long_description = "Hexagonal session-bundle compiler with Dioxus viewer for OKF streams."

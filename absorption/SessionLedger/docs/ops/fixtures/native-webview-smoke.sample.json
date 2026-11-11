@@ -1,0 +1,94 @@
+{
+  "schema": "sessionledger.native-webview-smoke.v1",
+  "mode": "fixture",
+  "outcome": "pass",
+  "procedure": "docs/a11y/status-regions-and-native-smoke.md#native-webview-smoke-checklist-manual-5-min",
+  "screenReaderProcedure": "docs/a11y/screen-reader-smoke.md",
+  "buildId": "local-sample",
+  "gitSha": "0000000000000000000000000000000000000000",
+  "viewer": {
+    "crate": "sl-viewer",
+    "platform": "desktop-webview",
+    "feature": "desktop"
+  },
+  "host": {
+    "os": "windows",
+    "osVersion": "10.0.0",
+    "screenReader": "NVDA",
+    "screenReaderVersion": "2024.1",
+    "ci": false
+  },
+  "daemon": {
+    "attached": false,
+    "baseUrl": null,
+    "probes": []
+  },
+  "generatedAt": "2026-07-13T20:00:00.0000000Z",
+  "checklist": [
+    {
+      "id": "landmarks",
+      "outcome": "pass",
+      "detail": "Primary viewer navigation and main reachable; tablist announced"
+    },
+    {
+      "id": "status_loading",
+      "outcome": "pass",
+      "detail": "Live Feed Connecting status + skeleton without layout jump"
+    },
+    {
+      "id": "error_recovery",
+      "outcome": "pass",
+      "detail": "Search error alert plain language; Retry keyboard-focusable"
+    },
+    {
+      "id": "reduced_motion",
+      "outcome": "pass",
+      "detail": "OS reduce motion: spinner/tab transitions not distractingly animated"
+    },
+    {
+      "id": "keyboard_help",
+      "outcome": "pass",
+      "detail": "Help (?) opens shortcut table; Escape returns focus to Help"
+    },
+    {
+      "id": "search_escape",
+      "outcome": "pass",
+      "detail": "Escape clears Search filter fields; focus stays in filter"
+    },
+    {
+      "id": "sr_primary_controls",
+      "outcome": "pass",
+      "detail": "Theme toggle, Help, search filters, Retry announced by accessible name"
+    },
+    {
+      "id": "live_daemon_health",
+      "outcome": "skip",
+      "detail": "Fixture mode — use -AttachDaemon to probe /healthz on a live daemon"
+    },
+    {
+      "id": "live_daemon_ready",
+      "outcome": "skip",
+      "detail": "Fixture mode — use -AttachDaemon to probe /readyz"
+    },
+    {
+      "id": "live_bundles_search",
+      "outcome": "skip",
+      "detail": "Fixture mode — use -AttachDaemon to probe /api/bundles and /api/search"
+    },
+    {
+      "id": "live_feed_stream",
+      "outcome": "skip",
+      "detail": "Fixture mode — use -AttachDaemon to probe /api/stream"
+    },
+    {
+      "id": "live_status_parity",
+      "outcome": "skip",
+      "detail": "Fixture mode — with daemon up, confirm Live Feed/Search status regions match CI fixture contract"
+    }
+  ],
+  "notes": [
+    "Sample fixture only — replace buildId/gitSha/host when recording a real pass.",
+    "mode=fixture skips live-daemon probes; record with -AttachDaemon for live-daemon parity evidence.",
+    "Does not prove Authenticode or platform signing; see packaging ADR 0003."
+  ]
+}

@@ -41,7 +41,7 @@ struct Cli {
     #[arg(
         long,
         env = "CF_ZONE_ID",
-        default_value = "6c9edab581e9c7b8fdb6a83adc6878ea"
+        default_value = ""
     )]
     cf_zone_id: String,
 

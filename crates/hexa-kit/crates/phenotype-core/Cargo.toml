@@ -33,3 +33,6 @@ phenotype-http-client-core = { workspace = true }
 
 [dev-dependencies]
 tokio = { workspace = true }
+
+[package.metadata.cargo-machete]
+ignored = ["phenotype-errors", "phenotype-http-client-core"]

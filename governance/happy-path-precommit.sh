@@ -50,29 +50,56 @@ function trim(s) { sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); ret
 # Blank out the contents of quoted strings. R1 fires on CLAIMS, and a trigger
 # word inside a string literal is a value or a log message rather than an
 # assertion about the work. R2 already covers telemetry claims separately.
+#
+# This strips a span ONLY when its delimiters are balanced. If a quote is left
+# unterminated, nothing is stripped: the unmodified line is returned so the
+# claim still matches. Failing open here would let one stray quote silence the
+# rest of the line, which is how an ordinary English contraction used to slip
+# through - an apostrophe inside a word is not a quote opener.
 # The single-quote character is built with sprintf so this program can stay
 # inside a single-quoted shell string.
-function strip_quoted(s,   out, i, c, q, n, sq) {
+function strip_quoted(s,   out, i, c, q, n, sq, prev) {
   sq = sprintf("%c", 39)
   out = ""; q = ""; n = length(s)
   for (i = 1; i <= n; i++) {
     c = substr(s, i, 1)
     if (q == "") {
-      if (c == "\"" || c == sq || c == "`") q = c
+      # An apostrophe directly after an alphanumeric character belongs to a
+      # contraction or a possessive, never to an opening quote.
+      if (c == sq && i > 1) {
+        prev = substr(s, i - 1, 1)
+        if (prev ~ /[[:alnum:]]/) { out = out c; continue }
+      }
+      # Backticks are NOT delimiters: a code span such as `verified` is still a
+      # claim about the change (tests/governance-enforcement.test.ts asserts
+      # exactly that), so stripping it would hide the very thing R1 looks for.
+      if (c == "\"" || c == sq) q = c
       else out = out c
     } else {
       if (c == "\\") { i++; continue }
       if (c == q) q = ""
     }
   }
+  if (q != "") return s
   return out
 }
 
-# The shell loop terminator is a keyword, not a sentence. "done" and
-# "done < <(cmd)" end a loop; they never claim that anything was completed.
-function is_shell_terminator(s) {
-  s = trim(s)
-  return (s ~ /^done([ \t]*(<|>|&|;|$))/)
+# R1 evaluates the PROSE of a line, not the shell syntax around it. The loop
+# terminator "done" is a keyword, so it is dropped as the leading word of each
+# command segment. Only the keyword goes: a claim that follows the terminator
+# on the same line ("done; the parser is fixed now") is still a claim, so the
+# remainder of the segment is still evaluated.
+function r1_text(s,   segs, n, i, out, seg) {
+  out = ""
+  gsub(/&&|\|\||;|\|/, "\n", s)
+  n = split(s, segs, "\n")
+  for (i = 1; i <= n; i++) {
+    seg = trim(segs[i])
+    sub(/^done([ \t]|$)/, "", seg)
+    seg = trim(seg)
+    if (seg != "") out = (out == "" ? seg : out " " seg)
+  }
+  return out
 }
 
 function split_list(raw,    i, n, arr, out, t) {
@@ -168,7 +195,22 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # source naturally contain the words we lint for (e.g. literal "flag=true"
     # as an example, or the regex pattern /fixed|works|done|.../ itself).
     # Extending the skip-list: HAPPY_PATH_POLICY_SKIP (comma-sep glob substrings).
-    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md|docs/absorbed-from-)"
+    # Absorbed trees: `absorption/` and `native/` hold code written in another
+    # project that arrived by absorption (perf-core via #797, the PlayCua
+    # `native/` crate via #821). They are real, tested workspace members but not
+    # prose authored here, so they inherit the `docs/absorbed-from-` exemption;
+    # without it a mechanical `cargo fmt` trips the prose rules on pre-existing
+    # lines rustfmt only re-indented. KNOWN GAP, not fixed here: any mechanical
+    # reformat can still trip a prose rule because the guard cannot tell a
+    # formatting-only hunk from one that adds content.
+    #
+    # Dated audit snapshots hold result tables quoting past outcomes. Their
+    # provenance is the run they record, not the commit that adds them, so R1
+    # and R2 judged them as claims about the current diff. Rewriting a historic
+    # record to satisfy a prose rule would falsify it, which is worse. The
+    # exemption is limited to the date-prefixed form (docs/audits/YYYY-MM-DD-)
+    # so it cannot be used as a dumping ground for a fresh success claim.
+    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md|docs/absorbed-from-|absorption/|native/|docs/audits/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-)"
     extra = ENVIRON["HAPPY_PATH_POLICY_SKIP"]
     if (extra != "") {
       n = split(extra, arr, ",")
@@ -209,8 +251,8 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # not fire: the shell loop terminator (a keyword), and a word inside a
     # quoted string (a value or a log message). Everything else that matches
     # still needs a human-eye marker, exactly as before.
-    if (!is_template && !is_shell_terminator(body)) {
-      claim = tolower(strip_quoted(body))
+    if (!is_template) {
+      claim = tolower(strip_quoted(r1_text(body)))
       if (claim ~ /(^|[^[:alnum:]_.])(fixed|works|done|passing|verified)([^[:alnum:]_]|$)|✅|✔|✔️/) {
         if (!window_has(FNR, "user-confirmed|user-saw|confirmed by user|eyes-on|last-link:")) {
           report("r1", file, line_no, body, "user-eye confirmation missing")
@@ -268,7 +310,7 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
       report("r7", file, line_no, body, "feature false/placeholder introduced without result signal")
     }
 
-  } else if (tag == " " || tag == "-") {
+  } else if (tag == " ") {
     current_new_line++
   }
 }

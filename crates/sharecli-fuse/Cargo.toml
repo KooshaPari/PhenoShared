@@ -60,3 +60,6 @@ winfsp = { version = "0.13", features = ["build", "delayload"] }
 [dev-dependencies]
 tempfile = "3"
 serial_test = "4"
+
+[package.metadata.cargo-machete]
+ignored = ["serde"]

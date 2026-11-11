@@ -16,13 +16,7 @@
 
 use std::sync::Arc;
 
-use axum::{
-    extract::State,
-    http::HeaderMap,
-    response::IntoResponse,
-    routing::post,
-    Json, Router,
-};
+use axum::{extract::State, http::HeaderMap, response::IntoResponse, routing::post, Json, Router};
 use serde::Deserialize;
 
 use hwledger_search_index::IndexHit;

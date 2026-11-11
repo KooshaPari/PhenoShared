@@ -113,7 +113,7 @@ impl Scheduler {
             mpsc::error::TrySendError::Full(_) => JobError::QueueFull,
             mpsc::error::TrySendError::Closed(_) => {
                 JobError::Backend("scheduler channel closed".into())
-            }
+            },
         })
     }
 }

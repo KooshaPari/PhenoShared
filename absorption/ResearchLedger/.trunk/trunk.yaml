@@ -1,0 +1,19 @@
+# Trunk Check configuration. Keep this schema compatible with Trunk CLI v1.
+# Rust correctness is enforced by the dedicated macOS CI job because the
+# desktop crate has a nested manifest and native Tauri framework dependency.
+version: 0.1
+
+cli:
+  version: 1.22.2
+
+plugins:
+  sources:
+    - id: trunk
+      ref: v1.2.2
+      uri: https://github.com/trunk-io/plugins
+
+lint:
+  enabled:
+    - git-diff-check
+  disabled:
+    - clippy

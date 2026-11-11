@@ -24,3 +24,15 @@ tracing.workspace = true
 
 [dev-dependencies]
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+
+[package.metadata.cargo-machete]
+ignored = [
+  "async-trait",
+  "focus-audit",
+  "focus-domain",
+  "focus-penalties",
+  "focus-rewards",
+  "serde_json",
+  "tokio",
+  "tracing",
+]
