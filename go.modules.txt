@@ -25,6 +25,7 @@
 # CLIs under cmd/
 cmd/capprobe
 cmd/checker
+cmd/dagrun
 cmd/promptscrape
 cmd/trust
 cmd/wire
