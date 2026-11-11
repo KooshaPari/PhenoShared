@@ -6,6 +6,7 @@ exclude = [
   "crates/fabric-gui/src-tauri",        # Tauri desktop shells bind GTK/WebKit/libsoup-3.0 at build time and cannot build on
   # the generic Linux CI image. Same reason crates/fabric-gui/src-tauri is excluded.
   "absorption/PhenoMLX-temp/perf-core/hwledger/apps/hwledger-app/src-tauri",
+  "native", # PlayCua native binary: platform-specific (X11/xproto) and does not build on the generic Linux CI image; tracked as absorption/native.
 ]
 members = [
   "crates/substrate",
@@ -843,8 +844,7 @@ members = [
   "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-mcp",
   "absorption/PhenoMLX-temp/perf-core/hwledger/apps/model-explorer/rust/crates/hwledger-cli",
 
-  # --- PlayCua native binary (absorbed submodule) ---
-  "native",
+  # --- PlayCua native binary (absorbed submodule) --- excluded from workspace build; see exclude list above.
 ]
 [workspace.package]
 version = "0.3.10"

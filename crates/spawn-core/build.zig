@@ -20,7 +20,7 @@ pub fn build(b: *std.Build) void {
         .root_module = lib_module,
         .linkage = .static,
     });
-    lib.linkLibC();
+    // linkLibC removed in Zig 0.16; use module field instead
     // Required on Linux so the final rustc link finds __zig_probe_stack from
     // any remaining probe sites. On macOS, `zig build` of this static lib
     // fails resolving libSystem — build.rs uses `zig build-obj` + `ar` instead.
@@ -41,7 +41,7 @@ pub fn build(b: *std.Build) void {
     const unit_tests = b.addTest(.{
         .root_module = test_module,
     });
-    unit_tests.linkLibC();
+    // unit_tests.linkLibC removed in Zig 0.16
 
     const run_tests = b.addRunArtifact(unit_tests);
     const test_step = b.step("test", "Run spawn-core unit tests");

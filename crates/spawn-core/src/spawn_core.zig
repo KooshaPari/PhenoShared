@@ -145,6 +145,10 @@ pub const SpawnParams = extern struct {
 // libc declarations not always in std.c across platforms.
 extern "c" fn setpriority(which: c_int, who: c_uint, prio: c_int) c_int;
 extern "c" fn waitpid(pid: std.c.pid_t, status: ?*c_int, options: c_int) std.c.pid_t;
+extern "c" fn fork() std.c.pid_t;
+extern "c" fn exit(status: c_int) noreturn;
+extern "c" fn chdir(path: [*:0]const u8) c_int;
+extern "c" fn execve(path: [*:0]const u8, argv: [*:null]const ?[*:0]const u8, envp: ?[*:null]const ?[*:0]const u8) c_int;
 
 // posix_spawn family — macOS only (Linux uses fork+exec below).
 const posix_spawn_fn = if (is_macos)
@@ -274,18 +278,15 @@ extern "c" fn posix_spawnattr_destroy(attr: *anyopaque) c_int;
 fn spawn_posix(params: *const SpawnParams) i32 {
     if (is_macos) unreachable;
 
-    const pid = std.posix.fork() catch return -1;
+    const pid = fork();
+    if (pid < 0) return -1;
     if (pid == 0) {
         // Child: apply cwd, then exec.
         if (params.cwd) |cwd| {
-            std.posix.chdir(std.mem.sliceTo(cwd, 0)) catch std.posix.exit(127);
+            _ = chdir(cwd);
         }
-        std.posix.execveZ(
-            params.program,
-            params.argv,
-            params.envp orelse @ptrCast(std.c.environ),
-        ) catch {};
-        std.posix.exit(127);
+        _ = execve(params.program, params.argv, params.envp orelse @ptrCast(std.c.environ));
+        exit(127);
     }
     return @intCast(pid);
 }
