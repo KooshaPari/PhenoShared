@@ -2,11 +2,11 @@ name: License Compliance
 on:
   push:
     paths:
-      - 'Cargo.toml'
-      - 'go.mod'
-      - 'package.json'
+      - "Cargo.toml"
+      - "go.mod"
+      - "package.json"
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 permissions:
   contents: read
@@ -31,4 +31,9 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/fossa-foss/fossa-cli/master/install.sh | sh
       - name: Run FOSSA
         run: fossa scan repository
+        # Still advisory, and deliberately so: this job passes no FOSSA_API_KEY
+        # and the repo configures no FOSSA secret, so `fossa scan repository`
+        # cannot succeed here. Enforcing it would turn this workflow red on
+        # every push and every nightly schedule. Enforce it once the
+        # credential exists.
         continue-on-error: true
