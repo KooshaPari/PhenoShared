@@ -23,11 +23,11 @@ content and the source repo can be archived or deleted without losing anything.
 File-level comparison of the source tree (473 files, `.git` excluded) against the
 same relative paths in PhenoShared:
 
-| Class | Count | Meaning |
-| --- | --- | --- |
-| Identical | 353 | already byte-identical in PhenoShared |
-| Missing | 46 | **absorbed by this wave** |
-| Diverged | 119 | present but differs from source |
+| Class     | Count | Meaning                               |
+| --------- | ----- | ------------------------------------- |
+| Identical | 353   | already byte-identical in PhenoShared |
+| Missing   | 46    | **absorbed by this wave**             |
+| Diverged  | 119   | present but differs from source       |
 
 The 119 diverged files are not absorption gaps. They differ because PhenoShared
 carries an earlier scrub that replaced the GitHub owner with `<REDACTED>` in text
@@ -123,18 +123,18 @@ wave, and is not worth propagating.
 
 ## Verification
 
-| Check | Result |
-| --- | --- |
-| Files still missing after this wave | 0 (the one remaining "missing" path is the renamed workflow) |
-| Byte-identical to source | 353 of 473 (45 added by this wave; the 46th landed as the renamed workflow) |
-| Git blob hash of the 46 absorbed files vs source | 45 of 46 identical; the only difference is the intentionally adapted workflow (source `f183f8bc…` → adapted `017f1953…`) |
-| `python scripts/validate_catalog.py` | `OK registry_version=1.4.1` |
-| `python scripts/validate_fork_parents.py` | `OK fork_parents lanes=['go','python','rmcp','rust']` |
-| `python scripts/validate_bundle_wiring.py` | `OK bundle=phenotype-mcp-bundle servers=['pheno-org','substrate','substrate-dispatch']` |
-| `python scripts/validate_stale_patterns.py` | 18 advisory `STALE:` lines against pre-existing PhenoShared docs; exit 0 |
-| `python scripts/check_driver_mcp_sync.py` | drift advisory lines; exit 0 |
-| `pytest tests/test_catalog_validation.py tests/test_bundle_wiring.py tests/test_hexakit_template.py tests/test_mcp_server_ts7_template.py tests/test_fork_pin_validator.py tests/test_tool_discovery_and_invalid_call.py` | 29 passed, 2 failed |
-| `pytest servers/substrate servers/pheno-org/tests` | 60 passed |
+| Check                                                                                                                                                                                                                     | Result                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Files still missing after this wave                                                                                                                                                                                       | 0 (the one remaining "missing" path is the renamed workflow)                                                             |
+| Byte-identical to source                                                                                                                                                                                                  | 353 of 473 (45 added by this wave; the 46th landed as the renamed workflow)                                              |
+| Git blob hash of the 46 absorbed files vs source                                                                                                                                                                          | 45 of 46 identical; the only difference is the intentionally adapted workflow (source `f183f8bc…` → adapted `017f1953…`) |
+| `python scripts/validate_catalog.py`                                                                                                                                                                                      | `OK registry_version=1.4.1`                                                                                              |
+| `python scripts/validate_fork_parents.py`                                                                                                                                                                                 | `OK fork_parents lanes=['go','python','rmcp','rust']`                                                                    |
+| `python scripts/validate_bundle_wiring.py`                                                                                                                                                                                | `OK bundle=phenotype-mcp-bundle servers=['pheno-org','substrate','substrate-dispatch']`                                  |
+| `python scripts/validate_stale_patterns.py`                                                                                                                                                                               | 18 advisory `STALE:` lines against pre-existing PhenoShared docs; exit 0                                                 |
+| `python scripts/check_driver_mcp_sync.py`                                                                                                                                                                                 | drift advisory lines; exit 0                                                                                             |
+| `pytest tests/test_catalog_validation.py tests/test_bundle_wiring.py tests/test_hexakit_template.py tests/test_mcp_server_ts7_template.py tests/test_fork_pin_validator.py tests/test_tool_discovery_and_invalid_call.py` | 29 passed, 2 failed                                                                                                      |
+| `pytest servers/substrate servers/pheno-org/tests`                                                                                                                                                                        | 60 passed                                                                                                                |
 
 ### The two pytest failures are pre-existing, not regressions
 

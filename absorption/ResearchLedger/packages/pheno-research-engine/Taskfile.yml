@@ -77,11 +77,11 @@ tasks:
     silent: true
     cmds:
       - |
-          set -eu
-          if [ "{{.LANGUAGE}}" = "Unknown" ]; then
-            echo "Unable to detect project language from repository files" >&2
-            exit 1
-          fi
+        set -eu
+        if [ "{{.LANGUAGE}}" = "Unknown" ]; then
+          echo "Unable to detect project language from repository files" >&2
+          exit 1
+        fi
 
   build:
     desc: Build the detected project
@@ -91,19 +91,19 @@ tasks:
       - detect-language
     cmds:
       - |
-          set -eu
-          case "{{.LANGUAGE}}" in
-            Python)
-              {{.BUILD_CMD}}
-              ;;
-            TypeScript|JavaScript)
-              if [ -z "{{.NODE_RUNNER}}" ]; then
-                echo "No JavaScript package runner found; install bun or npm" >&2
-                exit 1
-              fi
-              {{.NODE_RUNNER}} build
-              ;;
-          esac
+        set -eu
+        case "{{.LANGUAGE}}" in
+          Python)
+            {{.BUILD_CMD}}
+            ;;
+          TypeScript|JavaScript)
+            if [ -z "{{.NODE_RUNNER}}" ]; then
+              echo "No JavaScript package runner found; install bun or npm" >&2
+              exit 1
+            fi
+            {{.NODE_RUNNER}} build
+            ;;
+        esac
 
   test:
     desc: Run the test suite
@@ -113,19 +113,19 @@ tasks:
       - detect-language
     cmds:
       - |
-          set -eu
-          case "{{.LANGUAGE}}" in
-            Python)
-              {{.PYTEST_CMD}}
-              ;;
-            TypeScript|JavaScript)
-              if [ -z "{{.NODE_RUNNER}}" ]; then
-                echo "No JavaScript package runner found; install bun or npm" >&2
-                exit 1
-              fi
-              {{.NODE_RUNNER}} test
-              ;;
-          esac
+        set -eu
+        case "{{.LANGUAGE}}" in
+          Python)
+            {{.PYTEST_CMD}}
+            ;;
+          TypeScript|JavaScript)
+            if [ -z "{{.NODE_RUNNER}}" ]; then
+              echo "No JavaScript package runner found; install bun or npm" >&2
+              exit 1
+            fi
+            {{.NODE_RUNNER}} test
+            ;;
+        esac
 
   lint:
     desc: Run the linter
@@ -135,19 +135,19 @@ tasks:
       - detect-language
     cmds:
       - |
-          set -eu
-          case "{{.LANGUAGE}}" in
-            Python)
-              {{.RUFF_CMD}} check .
-              ;;
-            TypeScript|JavaScript)
-              if [ -z "{{.NODE_RUNNER}}" ]; then
-                echo "No JavaScript package runner found; install bun or npm" >&2
-                exit 1
-              fi
-              {{.NODE_RUNNER}} lint
-              ;;
-          esac
+        set -eu
+        case "{{.LANGUAGE}}" in
+          Python)
+            {{.RUFF_CMD}} check .
+            ;;
+          TypeScript|JavaScript)
+            if [ -z "{{.NODE_RUNNER}}" ]; then
+              echo "No JavaScript package runner found; install bun or npm" >&2
+              exit 1
+            fi
+            {{.NODE_RUNNER}} lint
+            ;;
+        esac
 
   clean:
     desc: Remove build and cache artifacts
@@ -155,10 +155,10 @@ tasks:
       - c
     cmds:
       - |
-          set -eu
-          rm -rf build dist .eggs *.egg-info src/*.egg-info
-          rm -rf .coverage .coverage.* coverage coverage.xml htmlcov .tox .nox
-          find . -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.ruff_cache' -o -name '.mypy_cache' \) -prune -exec rm -rf {} +
+        set -eu
+        rm -rf build dist .eggs *.egg-info src/*.egg-info
+        rm -rf .coverage .coverage.* coverage coverage.xml htmlcov .tox .nox
+        find . -type d \( -name '__pycache__' -o -name '.pytest_cache' -o -name '.ruff_cache' -o -name '.mypy_cache' \) -prune -exec rm -rf {} +
 
   grade:
     desc: Full grade (strictest — no caching)
