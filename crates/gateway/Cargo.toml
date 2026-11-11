@@ -1,3 +1,57 @@
+# The gateway is a DETACHED cargo workspace on purpose.
+#
+# The crate was absorbed from Substrate (33673213) and removed from the root
+# workspace in 00b0767a2 because it did not compile: its OpenTelemetry pins
+# (tracing-opentelemetry 0.25 / opentelemetry-otlp 0.17, both built against
+# opentelemetry 0.24) did not match the workspace's opentelemetry_sdk 0.32.
+# This manifest pins a coherent OpenTelemetry set for the crate, so it compiles
+# again; the crate stays out of the ROOT workspace because the absorbed code
+# carries ~300 clippy findings and 624 rustfmt violations that the root
+# workspace's `make check` gate would then enforce. Re-admitting it to the root
+# workspace is a separate cleanup, not part of this change.
+#
+# The `[workspace.package]` and `[workspace.dependencies]` tables below mirror
+# the root workspace entries this crate inherits. Keep them in step with the
+# root workspace when either side changes.
+[workspace]
+
+[workspace.package]
+version = "0.3.10"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/PhenoShared"
+rust-version = "1.80"
+
+[workspace.dependencies]
+axum = "0.8"
+tower = "0.5"
+tower-http = { version = "0.7", features = ["trace", "cors"] }
+tokio = { version = "1.42", features = [
+  "rt",
+  "rt-multi-thread",
+  "macros",
+  "process",
+  "io-util",
+  "sync",
+  "time",
+  "signal",
+  "io-std",
+] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+dotenvy = "0.15"
+uuid = { version = "1.11", features = ["v4", "serde"] }
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+http-body-util = "0.1"
+tempfile = "3.14"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+opentelemetry = "0.32"
+opentelemetry_sdk = { version = "0.32", features = ["rt-tokio"] }
+criterion = { version = "0.5", features = ["html_reports"] }
+
 [package]
 name = "gateway"
 version.workspace = true
@@ -43,10 +97,17 @@ prometheus = "0.14"
 sha2 = "0.10"
 tracing.workspace = true
 tracing-subscriber.workspace = true
-tracing-opentelemetry.workspace = true
+# The gateway pins its own OpenTelemetry stack instead of inheriting the workspace's.
+# The workspace pairs tracing-opentelemetry 0.25 with opentelemetry-otlp 0.17 (both
+# built against opentelemetry 0.24) while opentelemetry/opentelemetry_sdk are already
+# 0.32, so the 0.17 exporter implements the 0.24 SpanExporter trait and cannot be
+# handed to the 0.32 SdkTracerProvider builder. Pinning the whole set here keeps the
+# mismatch inside this crate and leaves every other workspace member on the versions
+# it already builds against.
+tracing-opentelemetry = "0.33"
 opentelemetry.workspace = true
 opentelemetry_sdk.workspace = true
-opentelemetry-otlp.workspace = true
+opentelemetry-otlp = { version = "0.32", features = ["grpc-tonic"] }
 
 [[bench]]
 name = "criterion_bench"
