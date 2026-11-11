@@ -42,6 +42,7 @@ Source code from hwLedger, a 526MB Rust hardware ledger repository.
 
 ## Integration Notes
 
-- hwLedger code placed in `perf-core/hwledger/` as a sub-workspace
-- May require Cargo workspace member registration in `perf-core/Cargo.toml`
+- Originally absorbed at `absorption/PhenoMLX-temp/perf-core/hwledger/` as a sub-workspace
+- Relocated to `crates/hwledger/` on 2026-11-11 and registered in the root workspace members; the nested
+  workspace is preserved for standalone builds
 - Integration testing recommended before merging to main
