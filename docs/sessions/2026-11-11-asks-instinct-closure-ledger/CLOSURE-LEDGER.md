@@ -2,13 +2,16 @@
 
 > **Evidence warning, 2026-11-11:** This is a provisional plan, not a validated coverage report. Claims below that sources have zero overlap or that exports are absent everywhere are unverified. Commands naming scripts not yet implemented are proposed checks, not executed tests. Artifacts under `~/CodeProjects/temp` are volatile and are not durable evidence. Human authorship, occurrence counts, and source overlap require independent verification. The previous 2% estimate is withdrawn.
 
-**Status:** `NOT_RUN` — this ledger is a closure plan with proposed acceptance
-checks. Some checks require scripts that have not been implemented or verified.
+> **Two things now supersede parts of the warning above (2026-11-11T13:00Z):** (1) the coverage question has been answered against reproducible evidence and is recorded in **`VERDICT.md`** in this directory — the register is not a complete capture, the 2% figure stays withdrawn, and no replacement percentage is offered because none is defensible yet; (2) occurrence counts, compressed-corpus coverage, and forge contamination have all been measured, with the artifacts in `evidence/`. Read `VERDICT.md` before quoting any coverage number from any lane file.
+
+**Status:** `PARTIAL` — the coverage verdict is `PASS` on the evidence that exists
+(`VERDICT.md`), while this ledger's own closure checks remain largely `NOT_RUN`
+because the scripts and schema objects they name do not exist.
 **Ledger written:** 2026-11-11
 **Host repo (scope):** `~/CodeProjects/Phenotype/repos/PhenoShared` (branch `feat/researchledger-ingest-v2`)
 **Companion artifacts (read-only references, not owned by this ledger):**
-`~/CodeProjects/temp/asks-coverage/COVERAGE-REPORT.md`, per-lane files `A-…`–`H-…` in
-the same directory, and `~/CodeProjects/temp/asks-coverage/mined/`.
+`VERDICT.md` and `evidence/` in this directory (durable), plus the volatile working
+corpus under `~/CodeProjects/temp/asks-coverage/`. The volatile path is not evidence.
 
 ## 0. What this document is and is not
 
