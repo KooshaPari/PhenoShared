@@ -10,7 +10,7 @@
 An earlier absorption copied most of PhenoMCPServers into this repo at identical
 relative paths (`catalog/`, `servers/`, `skills/`, `plugins/`, `agents/`), but
 left a delta behind. A prior audit
-([`audits/absorption-justifications/PhenoMCPServers-2026-07-17.md`](../../audits/absorption-justifications/PhenoMCPServers-2026-07-17.md))
+([`audits/absorption-justifications/PhenoMCPServers-2026-07-17.md`](../../../audits/absorption-justifications/PhenoMCPServers-2026-07-17.md))
 classified the repo `ARCHIVE_ONLY` on the grounds that it was code, not pure
 registry docs — which was correct for the target it was evaluated against
 (`phenodocs/registry/mcp-servers/`) but left the delta unabsorbed here.
@@ -164,7 +164,7 @@ recommendation for it.
 
 ## Cross-references
 
-- Earlier failsafe audit: [`audits/absorption-justifications/PhenoMCPServers-2026-07-17.md`](../../audits/absorption-justifications/PhenoMCPServers-2026-07-17.md)
+- Earlier failsafe audit: [`audits/absorption-justifications/PhenoMCPServers-2026-07-17.md`](../../../audits/absorption-justifications/PhenoMCPServers-2026-07-17.md)
 - Absorption index: [`docs/ABSORPTION_INDEX.md`](../../ABSORPTION_INDEX.md)
 - Source catalog SSOT absorbed earlier: `catalog/registry.yaml`
 - Absorbed registry schema: `schemas/registry.schema.json`
