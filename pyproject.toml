@@ -62,6 +62,7 @@ include = [
     "needle*",
     "traces*",
     "playground*",
+    "researchledger*",
 ]
 
 [tool.pytest.ini_options]

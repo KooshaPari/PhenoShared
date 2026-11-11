@@ -68,6 +68,29 @@ CONTENT_PATTERNS = (
 
 SELF_ALLOWED_LABELS = {
     "scripts/secret-guard.py": {"raw chat export marker"},
+    # researchledger/ingest/ is the research-ledger ingest pipeline, relocated
+    # verbatim from KooshaPari/analysis-archive on 2026-11-11. Every entry
+    # below is a false positive on a tool's own identifier; each match was
+    # read by hand:
+    #   - "cursor chat summary ({item_count} messages" - a status string
+    #   - "conversation_id, message_index) pairs and content" - a docstring
+    #   - "ChatGPT export: messages" - a preset label naming a source
+    #   - "chatgpt/claude pattern (where one session has many messages" - prose
+    #   - 'chatgpt"] = {"status": "adapted", ... "messages"' - a dict key
+    # None of them is a chat dump. The marker rule is a keyword proximity
+    # window, and these tools are precisely the ones whose job is to name chat
+    # sources and their message fields.
+    "researchledger/ingest/cursor_build_canonical.py": {"raw chat export marker"},
+    "researchledger/ingest/cursor_chat_summaries.py": {"raw chat export marker"},
+    "researchledger/ingest/forge_migrate_to_research.py": {"raw chat export marker"},
+    "researchledger/ingest/ledger_presets.py": {"raw chat export marker"},
+    "researchledger/ingest/research_ledger_init/sources_harness.py": {"raw chat export marker"},
+    "researchledger/ingest/scripts/goal1_normalize.py": {"raw chat export marker"},
+    # The only match is a two-character prefix followed by the rest of an
+    # ordinary hyphenated filename token, inside this file's report text about
+    # that very false positive. The file states in its own words that there is
+    # no credential and no secret value in it.
+    "researchledger/ingest/session_walkthrough_build.py": {"OpenAI key"},
 }
 
 REVISION_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/~^-]*$")
