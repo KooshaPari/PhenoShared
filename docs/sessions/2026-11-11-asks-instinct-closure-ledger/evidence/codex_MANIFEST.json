@@ -1,0 +1,30 @@
+{
+  "source": "codex",
+  "files_scanned": 2567,
+  "files_parsed": 2567,
+  "records": 401,
+  "substantive": 211,
+  "one_word": 52,
+  "chars_total": 1667066,
+  "ts_min": "2025-07-17T19:04:59.729000Z",
+  "ts_max": "2026-11-10T04:08:46.736000Z",
+  "errors": [],
+  "generated_at_utc": "2026-11-11T08:13:39Z",
+  "dedup_key": "text_sha256",
+  "dedup_scope": "global (across all scanned files; superset of schema's within-file rule)",
+  "records_before_dedup": 7830,
+  "duplicate_text_occurrences_collapsed": 7429,
+  "injected_prefixes_dropped": [
+    "# AGENTS.md",
+    "<environment_context>",
+    "<user_instructions>",
+    "<system-reminder>",
+    "<codex_internal_context",
+    "<send_user_message_question_reply"
+  ],
+  "schema": {
+    "substantive_min_chars": 80,
+    "one_word_definition": "len(text.split()) == 1",
+    "text": "verbatim, leading/trailing whitespace stripped only"
+  }
+}

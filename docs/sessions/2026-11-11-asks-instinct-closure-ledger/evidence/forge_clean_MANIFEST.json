@@ -1,0 +1,118 @@
+{
+  "source": "forge",
+  "input": "/Users/kooshapari/CodeProjects/temp/asks-coverage/mined/forge.jsonl",
+  "output": "/Users/kooshapari/CodeProjects/temp/asks-coverage/mined/forge_clean.jsonl",
+  "oversized_threshold_chars": 20000,
+  "records_in": 15201,
+  "clean_records": 14730,
+  "oversized_records": 471,
+  "oversized_split_records": 1,
+  "split_into": 9,
+  "kept_as_paste": 470,
+  "records_out": 15209,
+  "duplicates_removed": 0,
+  "malformed_lines": 0,
+  "chars_total_out": 169529047,
+  "oversized_marker_split": {
+    "records": 1,
+    "rows": 9
+  },
+  "sidecar": {
+    "path": "/Users/kooshapari/CodeProjects/temp/asks-coverage/mined/forge_recovered_prompts.jsonl",
+    "rationale": "Oversized forge records are TUI scrollback, not role-marked transcripts. The COUNT_PATTERNS role markers are absent (0 occurrences). Recovery uses the `❯` prompt echo, which is also the menu selection cursor, so these rows are review candidates and are kept OUT of forge_clean.jsonl.",
+    "oversized_records_with_echoes": 410,
+    "prompt_candidates_kept": 1112,
+    "prompt_candidates_before_dedup": 4501,
+    "prompt_candidates_rejected": 3495,
+    "duplicates_removed": 3389,
+    "chars_total": 48246
+  },
+  "samples": [
+    {
+      "chars": 62040,
+      "first_400": "d view,\n  impact: low)\n\n   /Users/kooshapari/CodeProjects/Phenot\n   ype/repos/AgilePlus/worktrees/AgilePl\n   us/fix-deps\n     406b7b8 [fix/dependabot-alerts]\n\nThinking:              hide in /settings\n  Found it. Let me check the Cargo.toml\n  in the worktree.\n\n\n   EXECUTE  (\n  cd /Users/kooshapari/CodeProjects/Phen\n  otype/repos/AgilePlus/worktrees/AgileP\n  lus/...,\n  command truncated. press Ctrl+",
+      "last_300": "y\n     policy checks)\n  •  portage: 2 (conflicts)\n  •  agentapi-plusplus: 3\n\n  NEXT TURN:\n  1. Worktree hygiene (75+ total)\n  2. Resolve portage conflicts\n  3. Retry heliosApp PRs when checks\n     pass\n\n⠙ Thinking...  (Press ESC to stop)\n\n Auto (High) - allow    minimax-m2.5-byok\n all commands do it",
+      "marker_counts": {
+        "\nuser\n": 0,
+        "\nassistant\n": 0,
+        "\"role\": \"user\"": 0,
+        "\"role\":\"user\"": 0,
+        "<user>": 0,
+        "Human:": 0,
+        "User:": 0
+      },
+      "marker_total": 0,
+      "session_id": "9ccaadd8-5872-41e4-8758-b5ca7d146a1d",
+      "source_file": "/Users/kooshapari/.forge/.forge.db#rowid=19#msg=2"
+    },
+    {
+      "chars": 213122,
+      "first_400": "logg…\n    16 │ }\n    17 │\n    18 │ // WrapHandler wraps an HTTP hand…\n    19 │ func (i *Interceptor) WrapHandler…\n    20 │        return http.HandlerFunc(func(w h…\n   ... 139 more lines, press Ctrl+O to\n   expand\n   ────────────────────────────────────────\n\nThinking:              hide in /settings\n  Now let me simplify the tracing\n  package to remove the problematic\n  methods.\n\n\n⛬  Now simplify th",
+      "last_300": "───────────────────────────────────────╮\n│ >                                        │\n╰──────────────────────────────────────────╯\n [⏱ 2h 30m, context: 35%? for helpGHOSTTY\n                                  ᗣ\n\nTo resume this session, run: droid --resume c1de0677-f3b3-4f77-80c4-7558e8c8be6c\n^C resume",
+      "marker_counts": {
+        "\nuser\n": 0,
+        "\nassistant\n": 0,
+        "\"role\": \"user\"": 0,
+        "\"role\":\"user\"": 0,
+        "<user>": 0,
+        "Human:": 0,
+        "User:": 0
+      },
+      "marker_total": 0,
+      "session_id": "ac8cd07a-b8e4-4774-b84c-036adb8dea77",
+      "source_file": "/Users/kooshapari/.forge/.forge.db#rowid=20#msg=2"
+    },
+    {
+      "chars": 166043,
+      "first_400": "Last login: Tue Mar 24 18:53:07 on ttys066\n[5] 5770\n[5]  + done       _thegent_async_load \"2\" \"_thegent_predictive_preload\"\nforge%                                      thegent: Shell startup took 9.43543s\n\n   ~/CodeProjects/Phenotype/repos   v3.12.12  18:53❯ forge\n _____\n|  ___|__  _ __ __ _  ___\n| |_ / _ \\| '__/ _` |/ _ \\\n|  _| (_) | | | (_| |  __/\n|_|  \\___/|_|  \\__, |\\___|\n               ",
+      "last_300": "l+C to interrupt       ⏺ [21:03:15] ERROR: conversation for the request should've been created at this point.\n⠇ Analyzing 30s · Ctrl+C to interrupt          ~/CodeProjects/Phenotype/repos   v3.12.12 %B%F{240}󱙺 FORGE%f%b %F{240} MiniMax-M2.7-highspeed%f.forge  󱦟 2h9m55s  ✖ 1 21:03❯ do next",
+      "marker_counts": {
+        "\nuser\n": 0,
+        "\nassistant\n": 0,
+        "\"role\": \"user\"": 0,
+        "\"role\":\"user\"": 0,
+        "<user>": 0,
+        "Human:": 0,
+        "User:": 0
+      },
+      "marker_total": 0,
+      "session_id": "3f1c3943-2d73-4a0e-82ab-f95089a89dde",
+      "source_file": "/Users/kooshapari/.forge/.forge.db#rowid=115#msg=2"
+    },
+    {
+      "chars": 339038,
+      "first_400": "\\`dependencies\\` keys (4 occurrences), which causes \\`bun install\\` to fail with\n  \\`InvalidPackageInfo: failed to parse lockfile\\`.\n\n  This fix:\n  1. Removes duplicate \\`dependencies\\` sections from \\`package.json\\`\n  2. Regenerates \\`bun.lock\\` so it works with current bun versions\n\n  Without this fix, no CI jobs can run since \\`bun install --frozen-lockfile\\` always\n  fails.\" 2>&1\n  echo \"PR_EX",
+      "last_300": "gh auth refresh --hostname github.com 2>&1\n\n! First copy your one-time code: 1880-83CF\nOpen this URL to continue in your web browser: https://github.com/login/device\n^[[I^C\nFORGE repos                                          [v2.2.0/MiniMax-M2.7-highspeed/304479]\n❯ unset the gh token and it'll work",
+      "marker_counts": {
+        "\nuser\n": 0,
+        "\nassistant\n": 0,
+        "\"role\": \"user\"": 0,
+        "\"role\":\"user\"": 0,
+        "<user>": 0,
+        "Human:": 0,
+        "User:": 0
+      },
+      "marker_total": 0,
+      "session_id": "d0febbdf-73d4-4c9e-83bd-13849f6f14cd",
+      "source_file": "/Users/kooshapari/.forge/.forge.db#rowid=132#msg=2"
+    },
+    {
+      "chars": 311846,
+      "first_400": "--frozen-lockfile from all workflow\n   install steps        Compliance\n   Check        fix/ci-flat     pull_request    23521344240     19\n   s    2026-03-25T02:02:31Z\n\n   ... 1 more lines, press Ctrl+O to expand\n\nThinking:              hide in /settings\n  PR #106 was merged! The merge state is\n   UNKNOWN but state is MERGED. But the\n  Policy Gate failed. Let me check what\n  happened - if it's MERG",
+      "last_300": "───────╯\n [⏱ 4h 15m, context: 56%]? for help                                              GHOSTTY ᗣ\nzsh: killed     /opt/homebrew/bin/droid\n   ~/CodeProjects/Phenotype/repos   v3.12.12 %B%F{240}󱙺 FORGE%f%b %F{240} MiniMax-M2.7-highspeed%f.forge  󱦟 18h17m11s  󱐋 137 22:30❯ resume their work",
+      "marker_counts": {
+        "\nuser\n": 0,
+        "\nassistant\n": 0,
+        "\"role\": \"user\"": 0,
+        "\"role\":\"user\"": 0,
+        "<user>": 0,
+        "Human:": 0,
+        "User:": 0
+      },
+      "marker_total": 0,
+      "session_id": "085b072b-3275-4ac7-b933-57afff2c1817",
+      "source_file": "/Users/kooshapari/.forge/.forge.db#rowid=133#msg=2"
+    }
+  ],
+  "generated_at_utc": "2026-11-11T08:26:29Z"
+}

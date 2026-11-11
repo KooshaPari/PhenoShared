@@ -1,0 +1,15 @@
+{
+  "source": "jcode",
+  "files_scanned": 10301,
+  "files_parsed": 10301,
+  "records": 16889,
+  "substantive": 14826,
+  "one_word": 227,
+  "chars_total": 30865727,
+  "ts_min": "2026-08-06T00:24:41.848982Z",
+  "ts_max": "2026-11-11T08:17:37.649026Z",
+  "errors": [],
+  "partial": false,
+  "elapsed_s": 40.1,
+  "generated_at_utc": "2026-11-11T08:19:29Z"
+}

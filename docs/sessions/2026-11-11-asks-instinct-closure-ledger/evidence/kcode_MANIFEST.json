@@ -1,0 +1,93 @@
+{
+  "source": "kcode",
+  "files_scanned": 1838,
+  "files_parsed": 1823,
+  "records": 196,
+  "substantive": 128,
+  "one_word": 13,
+  "chars_total": 411913,
+  "ts_min": "2026-10-08T02:32:56.352325Z",
+  "ts_max": "2026-11-11T07:42:14.538258Z",
+  "errors": [
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/session_restore_falls_back_to_provider_default_when_saved_model_is_rejected.journal.corrupt.jsonl",
+      "error": "JSONDecodeError: Extra data: line 2 column 1 (char 571)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_deer_1793404669423_c99b5cda2d964c52.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_frog_1793404690974_eeefffb4f56d5d02.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_goat_1793404691225_7054c310e3060576.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_horse_1793404745202_0c1faf3890e0d92f.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_koala_1793404745444_d490c2dec9d720a5.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_lion_1791779803726_34989f2a7faca772.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_lion_1793404726209_0063dc838be431dc.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_llama_1793404783732_3d49a5842ff103c6.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_mouse_1793404784155_dddffbd49ba2b89a.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_owl_1793266082342_a5977fc7edadb6c7.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_ox_1793311388218_83bd1989070b7640.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_pig_1793311389230_0711278058d7ca40.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_ram_1793311454263_a740dab98265e6bf.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "path": "/Users/kooshapari/.kcode/sessions/edit-stats/session_sauropod_1793321218747_2f05da6ee00a3e6e.lock",
+      "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    }
+  ],
+  "generated_at_utc": "2026-11-11T08:11:37Z",
+  "non_substantive": 68,
+  "dedup_key": "text_sha256",
+  "dedup_scope": "global (across all scanned files; superset of schema's within-file rule)",
+  "records_before_dedup": 2934,
+  "duplicate_text_occurrences_collapsed": 2738,
+  "injected_prefixes_dropped": [
+    "**background task**",
+    "[agent system prompt]",
+    "# agents.md",
+    "<environment_context>",
+    "<user_instructions>",
+    "<system-reminder>",
+    "[system reminder:"
+  ],
+  "schema": {
+    "substantive_min_chars": 80,
+    "one_word_definition": "len(text.split()) == 1",
+    "text": "verbatim, leading/trailing whitespace stripped only"
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "generated_at_utc": "2026-11-11T08:24:05Z",
+  "inputs": [
+    "forge.jsonl",
+    "jcode.jsonl",
+    "kcode.jsonl",
+    "codex.jsonl",
+    "imessage.jsonl",
+    "herdr.jsonl"
+  ],
+  "missing_inputs": [],
+  "synthetic_rule": {
+    "prefix_any_of": [
+      "you are ",
+      "you are generating",
+      "[auto]",
+      "dm from ",
+      "task:",
+      "read-only",
+      "research-only"
+    ],
+    "contains_any_of": [
+      "swarm await finished"
+    ],
+    "bare_token_any_of": [
+      ".",
+      "..",
+      "first",
+      "go",
+      "hi",
+      "ok",
+      "test"
+    ]
+  },
+  "definition_distinct_strings_contributed": "count of distinct text_sha256 observed in that source file (sums > distinct_texts because texts recur across sources)",
+  "register_window": {
+    "start": "2026-09-25T00:00:00Z",
+    "end_exclusive": "2026-11-05T00:00:00Z",
+    "note": "2026-09-25T00:00:00Z .. 2026-11-04T23:59:59.999Z inclusive"
+  },
+  "per_source": {
+    "forge": {
+      "rows_in": 15201,
+      "distinct_strings_contributed": 15201,
+      "synthetic": 1866,
+      "substantive": 12771,
+      "chars_total": 169705581,
+      "rows_bad_json": 0,
+      "rows_no_text": 0,
+      "file_present": true
+    },
+    "jcode": {
+      "rows_in": 16889,
+      "distinct_strings_contributed": 16889,
+      "synthetic": 6769,
+      "substantive": 14826,
+      "chars_total": 30865727,
+      "rows_bad_json": 0,
+      "rows_no_text": 0,
+      "file_present": true
+    },
+    "kcode": {
+      "rows_in": 196,
+      "distinct_strings_contributed": 196,
+      "synthetic": 50,
+      "substantive": 128,
+      "chars_total": 411913,
+      "rows_bad_json": 0,
+      "rows_no_text": 0,
+      "file_present": true
+    },
+    "codex": {
+      "rows_in": 401,
+      "distinct_strings_contributed": 401,
+      "synthetic": 52,
+      "substantive": 211,
+      "chars_total": 1667066,
+      "rows_bad_json": 0,
+      "rows_no_text": 0,
+      "file_present": true
+    },
+    "imessage": {
+      "rows_in": 7684,
+      "distinct_strings_contributed": 7684,
+      "synthetic": 9,
+      "substantive": 911,
+      "chars_total": 459033,
+      "rows_bad_json": 0,
+      "rows_no_text": 0,
+      "file_present": true
+    },
+    "herdr": {
+      "rows_in": 8,
+      "distinct_strings_contributed": 8,
+      "synthetic": 1,
+      "substantive": 0,
+      "chars_total": 245,
+      "rows_bad_json": 0,
+      "rows_no_text": 0,
+      "file_present": true
+    }
+  },
+  "overall": {
+    "total_rows_in": 40379,
+    "distinct_texts": 40098,
+    "synthetic": 8727,
+    "operator": 31371,
+    "substantive": 28798,
+    "distinct_appearing_in_multiple_sources": 231,
+    "chars_total": 203087613
+  },
+  "time_buckets_by_first_ts": {
+    "pre_2026-09-25": {
+      "distinct_texts": 24974,
+      "synthetic": 3521,
+      "substantive": 17475,
+      "chars_total": 178711415
+    },
+    "register_2026-09-25_to_2026-11-04": {
+      "distinct_texts": 12835,
+      "synthetic": 4629,
+      "substantive": 9420,
+      "chars_total": 19732784
+    },
+    "post_2026-11-04": {
+      "distinct_texts": 2284,
+      "synthetic": 577,
+      "substantive": 1903,
+      "chars_total": 4643236
+    },
+    "unknown_ts": {
+      "distinct_texts": 5,
+      "synthetic": 0,
+      "substantive": 0,
+      "chars_total": 178
+    }
+  }
+}
