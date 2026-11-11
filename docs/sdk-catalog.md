@@ -39,9 +39,11 @@ python3 tools/sdk-catalog/check.py --rule1-limit 5   # probe packaging on five c
 
 ## Current state of the repository
 
-Measured 2026-11-10 on the `feat/p0-sdk-catalog` worktree at `f50118b2b`.
+Measured 2026-11-10 on the `feat/p0-sdk-catalog` worktree at `f50118b2b`; layer and class counts
+re-measured 2026-11-11 after the curation pass, with the gate re-run at the same time.
 
-- **290 workspace members.** All 290 have a layer; none are unclassified.
+- **290 workspace members.** All 290 have a layer; none are unclassified and none are
+  quarantined. `L0 183 / L1 3 / L2 12 / L3 21 / L4 71`.
 - **The workspace is flat.** 218 of 290 members have no internal runtime dependency at all, and
   183 sit at `L0`. Only 67 reach application altitude. Layering is the exception, not the shape:
   most crates are independent packages that share a repository rather than a call graph.
@@ -62,9 +64,14 @@ Measured 2026-11-10 on the `feat/p0-sdk-catalog` worktree at `f50118b2b`.
   14 directories classified as publishable. That count includes 202,628 lines of Python and 71,986
   lines of Go living inside `crates/` itself. None of it can ship as a Rust crate, so all of it
   needs PyPI, Go module and npm channels.
-- **25 crates are quarantined**, not rejected: `agileplus-*`, `eidolon-*` and similar families
-  have no name rule and no decisive dependency position. They are listed, visible and waiting for
-  a one-line annotation.
+- **No crate is quarantined.** The 25 members that previously had no name rule and no decisive
+  dependency position (`agileplus-*`, `eidolon-*`, `focus-*`, `fabric-*`, `substrate-*`) now
+  carry an annotation: 27 members in total, each with the edge evidence that chose the layer.
+  What made them undecidable is recorded too. `agileplus-github` reads like an `L2` adapter by
+  name, but it depends on `agileplus-triage`, so `R2` forces `L3`; that reason is in the file
+  rather than in someone's memory. `eidolon-mobile` and `eidolon-sandbox` ship binaries, which
+  is the evidence that makes them `L4`. Nothing was deleted, and no layer was assigned without
+  a cited edge or artifact.
 
 ## Reading a quarantine entry
 
@@ -74,3 +81,8 @@ prove what the crate is, so someone has to say. The fix is an entry in `annotati
 ```json
 {"members": {"agileplus-cache": {"layer": "L2", "reason": "caches git and GitHub reads"}}}
 ```
+
+No member is currently in that state, but the class stays in the model: a crate added tomorrow
+with no name rule and no decisive dependency position lands in `quarantine` rather than being
+silently given an invented layer. The `reason` field is the point of the entry. A layer without
+a reason is a guess that outlives the person who made it.
