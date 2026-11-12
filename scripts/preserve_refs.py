@@ -80,7 +80,12 @@ def main() -> int:
         if stale:
             print("   cleared    %d stale refs: %s" % (len(stale), ", ".join(stale)))
 
-        ok, detail = pd.store_history_as_refs(REGISTRY, OWNER, repo)
+        try:
+            ok, detail = pd.store_history_as_refs(REGISTRY, OWNER, repo)
+        except Exception as exc:  # noqa: BLE001 - report, do not abort the batch
+            print("   REFUSED  crash: %s" % exc)
+            failures += 1
+            continue
         if not ok:
             print("   REFUSED  %s" % detail)
             failures += 1
