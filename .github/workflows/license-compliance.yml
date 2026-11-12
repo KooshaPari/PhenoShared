@@ -25,18 +25,29 @@ jobs:
         # job-level gate is `ci / lint` in ci.yml, which now also classifies
         # cargo-deny as HARD.
 
-  fossa:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
-      - name: Install FOSSA
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/fossa-foss/fossa-cli/master/install.sh | sh
-      - name: Run FOSSA
-        run: fossa scan repository
-        # Still advisory, and deliberately so: this job passes no FOSSA_API_KEY
-        # and the repo configures no FOSSA secret, so `fossa scan repository`
-        # cannot succeed here. Enforcing it would turn this workflow red on
-        # every push and every nightly schedule. Enforce it once the
-        # credential exists.
-        continue-on-error: true
+  # FOSSA hosted scanning is intentionally NOT wired here.
+  #
+  # `fossa scan repository` requires a FOSSA_API_KEY, and this repository holds
+  # none: its repo secrets are CARGO_REGISTRY_TOKEN and SONAR_TOKEN only, and it
+  # has no repository variables (read 2026-11-12). The job used to carry a
+  # `continue-on-error` directive, i.e. it reported green whatever happened,
+  # which makes it not a gate at all. Keeping that bypass was the defect, so the
+  # job is removed until the credential exists rather than left in place
+  # pretending.
+  #
+  # Restore it in this strict form ONLY together with the credential, and with
+  # no `continue-on-error`:
+  #
+  #   fossa:
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@<sha> # v4.1.1
+  #       - name: Install FOSSA
+  #         run: curl -sSfL https://raw.githubusercontent.com/fossa-foss/fossa-cli/master/install.sh | sh
+  #       - name: Run FOSSA
+  #         env:
+  #           FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
+  #         run: fossa scan repository
+  #
+  # The licence gate that does run is `cargo deny check` in the job above, which
+  # is enforced and reports advisories/bans/licenses/sources verdicts directly.
