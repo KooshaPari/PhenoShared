@@ -1,7 +1,7 @@
 # Phenotype Fabric — Common development tasks
 # ─────────────────────────────────────────────────────────────────────────
 
-.PHONY: check fmt clippy test test-unit test-integration build build-release clean deny docker
+.PHONY: check fmt clippy test test-unit test-integration build build-release clean deny docker spawn-core
 
 # ── Quality checks ──────────────────────────────────────────────────────
 
@@ -39,6 +39,16 @@ test-%:
 	cargo test --workspace --no-fail-fast -- "$*"
 
 # ── Build ───────────────────────────────────────────────────────────────
+
+## Rebuild crates/spawn-core/zig-out/lib/libspawn_core.a from Zig source.
+## Needed when that archive is truncated, which surfaces at link time as
+## "failed to add native library ...". `ar rcs` appends to an archive that
+## already exists, so the bad copy is removed first. Requires `zig` on PATH
+## (CI pins 0.15.2 in .github/workflows/quality-gate.yml).
+spawn-core:
+	mkdir -p crates/spawn-core/zig-out/lib
+	cd crates/spawn-core && zig build-obj src/spawn_core.zig -OReleaseSafe -lc -fno-stack-check -femit-bin=zig-out/lib/spawn_core.o
+	cd crates/spawn-core && rm -f zig-out/lib/libspawn_core.a && ar rcs zig-out/lib/libspawn_core.a zig-out/lib/spawn_core.o
 
 ## Build debug
 build:
