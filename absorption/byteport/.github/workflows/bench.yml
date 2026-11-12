@@ -1,0 +1,178 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          components: rustfmt
+
+      - name: Cache cargo registry & build
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: bench-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: bench-${{ runner.os }}-
+
+      - name: Run criterion benchmarks
+        run: |
+          mkdir -p benchmark-results
+          cargo bench -- --output-format bencher | tee benchmark-results/criterion.txt
+        continue-on-error: true
+
+      - name: Save criterion HTML report
+        if: hashFiles('target/criterion') != ''
+        run: |
+          cp -r target/criterion benchmark-results/criterion-html || true
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: byteport-benchmark-results-${{ github.sha }}
+          path: benchmark-results/
+          retention-days: 30
+
+  compare-baseline:
+    name: Compare with main baseline
+    runs-on: ubuntu-latest
+    needs: bench
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          components: rustfmt
+
+      - name: Cache cargo registry & build
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: bench-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: bench-${{ runner.os }}-
+
+      - name: Run baseline benchmarks (main)
+        run: |
+          git fetch origin main
+          git stash
+          git checkout origin/main
+          mkdir -p baseline-results
+          cargo bench -- --output-format bencher | tee baseline-results/criterion.txt || true
+          git checkout -
+          git stash pop || true
+
+      - name: Download PR benchmarks
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: byteport-benchmark-results-${{ github.sha }}
+          path: current-results/
+
+      - name: Compare results
+        run: |
+          echo "=== Benchmark Comparison ==="
+          echo ""
+          echo "Main branch results:"
+          cat baseline-results/criterion.txt || echo "No baseline results"
+          echo ""
+          echo "PR branch results:"
+          cat current-results/criterion.txt || echo "No PR results"
+          echo ""
+
+          # Simple regression check: fail if any benchmark got >20% slower
+          if [ -f baseline-results/criterion.txt ] && [ -f current-results/criterion.txt ]; then
+            python3 - <<'PY'
+          import re
+          import sys
+
+          UNITS = {"ns": 1, "µs": 1000, "ms": 1000000, "s": 1000000000}
+
+
+          def parse_benchmarks(path):
+              results = {}
+              try:
+                  with open(path) as handle:
+                      for line in handle:
+                          match = re.match(r"(\S+)\s+(\d+)\s*(ns|µs|ms|s)", line.strip())
+                          if match:
+                              name, value, unit = match.groups()
+                              results[name] = int(value) * UNITS[unit]
+              except Exception as exc:  # noqa: BLE001
+                  print(f"Warning: could not parse {path}: {exc}")
+              return results
+
+
+          baseline = parse_benchmarks("baseline-results/criterion.txt")
+          current = parse_benchmarks("current-results/criterion.txt")
+
+          if not baseline or not current:
+              print("Could not parse benchmark results for comparison.")
+              sys.exit(0)
+
+          regressions = []
+          improvements = []
+          for name, value in current.items():
+              if name in baseline:
+                  pct = (value / baseline[name] - 1) * 100
+                  if pct > 20:
+                      regressions.append((name, pct))
+                  elif pct < -20:
+                      improvements.append((name, pct))
+
+          if regressions:
+              print()
+              print("Performance regressions detected (>20% slower):")
+              for name, pct in sorted(regressions, key=lambda item: -item[1]):
+                  print(f"  {name}: +{pct:.1f}%")
+              sys.exit(1)
+
+          if improvements:
+              print()
+              print("Performance improvements detected:")
+              for name, pct in sorted(improvements, key=lambda item: item[1]):
+                  print(f"  {name}: {pct:.1f}%")
+
+          print()
+          print("No significant regressions detected.")
+          PY
+          fi
+
+      - name: Comment on PR
+        if: always()
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        continue-on-error: true
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '## Benchmark Results\n\n';
+            try {
+              const baseline = fs.readFileSync('baseline-results/criterion.txt', 'utf8');
+              const current = fs.readFileSync('current-results/criterion.txt', 'utf8');
+              body += '<details><summary>Main branch baseline</summary>\n\n```\n' + baseline + '\n```\n</details>\n\n';
+              body += '<details><summary>PR branch results</summary>\n\n```\n' + current + '\n```\n</details>\n\n';
+            } catch (e) {
+              body += 'Benchmark artifacts available in the workflow run.\n';
+            }
+            body += `\n[View full results](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})\n`;
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

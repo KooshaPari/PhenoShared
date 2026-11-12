@@ -1,0 +1,43 @@
+name: Obfuscate API Keys
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to the branches you want the workflow to run on
+
+jobs:
+  obfuscate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Search and obfuscate API keys
+        run: |
+          # Define the regex patterns for the keys you want to obfuscate
+          CANVAS_API_KEY_REGEX='7236.?ZGL'
+          OPENAI_API_KEY_REGEX='sk-p.?pkA'
+
+          # Obfuscate the Canvas API key
+          find . -type f -exec sed -i "s/$CANVAS_API_KEY_REGEX/[REDACTED_CANVAS_API_KEY]/g" {} +
+
+          # Obfuscate the OpenAI API key
+          find . -type f -exec sed -i "s/$OPENAI_API_KEY_REGEX/[REDACTED_OPENAI_API_KEY]/g" {} +
+
+      - name: Check for changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "kooshapari@gmail.com"
+          git config --global user.name "KooshaPari"
+          git add .
+          git commit -m "Obfuscate API keys before push"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

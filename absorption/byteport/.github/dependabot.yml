@@ -1,0 +1,92 @@
+# L2 #29 Dependabot baseline for BytePort.
+# Requested cadence:
+# - cargo: weekly Monday
+# - npm: weekly Tuesday
+# - go-modules: weekly Wednesday (Dependabot ecosystem key: gomod)
+# - github-actions: weekly Thursday
+# - dockerfile: weekly Friday (Dependabot ecosystem key: docker)
+
+version: 2
+
+updates:
+  # --------------------------------------------------------------------------
+  # Rust core (root — src-tauri binary + core crate)
+  # --------------------------------------------------------------------------
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "kooshapari"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      major:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+
+  - package-ecosystem: "npm"
+    directory: "/frontend/web"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+    reviewers:
+      - "kooshapari"
+    open-pull-requests-limit: 10
+    # TypeScript major-version updates are deferred. TS 7.0 requires shipping
+    # `typescript@~6` + `@typescript/native@npm:typescript@7` (npm alias) and a
+    # `svelte-check --tsgo` invocation, but `frontend/web/src/lib/components/ui/`
+    # still uses the pre-1.0 `bits-ui` `Props`/`Events` namespaces with
+    # `on:event` forwarding (16 shadcn-svelte wrappers, 46 svelte-check errors).
+    # The migration is out of scope for the Dependabot burndown track; minor
+    # and patch updates continue to flow.
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      major:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+    reviewers:
+      - "kooshapari"
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      major:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <!-- Subtle glow -->
+  <circle cx="256" cy="220" r="130" fill="white" opacity="0.15" filter="url(#blur)"/>
+
+  <!-- Port symbol: two arrows facing each other (data transport) -->
+  <!-- Left arrow (upload) -->
+  <path d="M160,280 L160,180 L120,180 L200,100 L280,180 L240,180 L240,280 Z"
+        fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- Right arrow (download) -->
+  <path d="M272,340 L272,240 L232,240 L312,160 L392,240 L352,240 L352,340 Z"
+        fill="none" stroke="white" stroke-width="6" stroke-linejoin="round" opacity="0.7"/>
+
+  <!-- Connection dots -->
+  <circle cx="200" cy="310" r="6" fill="white" opacity="0.8"/>
+  <circle cx="312" cy="310" r="6" fill="white" opacity="0.8"/>
+
+  <!-- Dotted connection line -->
+  <line x1="206" y1="310" x2="306" y2="310" stroke="white" stroke-width="2" stroke-dasharray="4,4" opacity="0.5"/>
+
+  <!-- "BYTEPORT" text -->
+  <text x="256" y="430" text-anchor="middle" font-family="'SF Mono', 'Fira Code', 'JetBrains Mono', monospace" font-size="60" font-weight="700" fill="white" letter-spacing="6">BYTEPORT</text>
+
+  <!-- Tagline -->
+  <text x="256" y="470" text-anchor="middle" font-family="'SF Mono', 'Fira Code', monospace" font-size="16" fill="white" opacity="0.5" letter-spacing="4">SECURE DATA TRANSPORT</text>
+</svg>

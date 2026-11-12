@@ -1,0 +1,52 @@
+# BytePort — lefthook.yml
+# Auto-generated from phenotype-org standard (phenotype-org-audits DAG-012)
+# Refs: phenotype-org-governance (worktree-persistence ADR)
+#
+# Pre-commit: formatting, linting, deny checks, auditing
+# Pre-push:   testing, building, security scanning
+# Commit-msg: Conventional Commits enforcement
+
+pre-commit:
+  parallel: true
+  commands:
+    fmt:
+      run: cargo fmt --check
+      skip:
+        - merge
+        - rebase
+    clippy:
+      run: cargo clippy --workspace -- -D warnings
+      skip:
+        - merge
+        - rebase
+    deny:
+      run: cargo deny check
+      skip:
+        - merge
+        - rebase
+    cache-clean:
+      # Local maintenance only: cargo-cache is not installed on CI runners.
+      run: command -v cargo-cache >/dev/null 2>&1 && cargo cache --autoclean || echo "cargo-cache not installed; skipping"
+      skip:
+        - merge
+        - rebase
+
+pre-push:
+  parallel: false
+  commands:
+    build:
+      run: cargo build --workspace
+    test:
+      run: cargo test --workspace
+    deny:
+      run: command -v cargo-deny >/dev/null 2>&1 && cargo deny check || echo "cargo-deny not installed; skipping"
+    audit:
+      run: command -v cargo-audit >/dev/null 2>&1 && cargo audit || echo "cargo-audit not installed; skipping"
+
+commit-msg:
+  commands:
+    lint:
+      skip:
+        - merge
+        - rebase
+      run: 'grep -Eq ''^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?!?: .{1,72}$'' {1}'

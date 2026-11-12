@@ -1,0 +1,31 @@
+# BytePort Rust toolchain configuration.
+#
+# IMPORTANT: `-C instrument-coverage` is intentionally NOT set in global
+# rustflags because it causes OOM kills on local Tauri builds. Instead,
+# set it via the RUSTFLAGS environment variable in CI or when running
+# `cargo llvm-cov`:
+#
+#   RUSTFLAGS="-C instrument-coverage" cargo llvm-cov --workspace ...
+#
+# The companion `scripts/coverage-rust.sh` script handles this
+# automatically.
+#
+# Reference: https://github.com/taiki-e/cargo-llvm-cov
+
+# NOTE: Do NOT add -C instrument-coverage to global rustflags here.
+# It OOM-kills Tauri local builds. Use RUSTFLAGS env var in CI instead.
+
+# Convenience aliases so BytePort contributors can run coverage
+# with the same words the L3 #44 spec uses:
+#
+#   cargo coverage        -> full workspace LCOV report at
+#                            BytePort/coverage-rust.lcov
+#   cargo coverage-html   -> human-readable HTML report under
+#                            BytePort/target/llvm-cov/html/
+#   cargo coverage-branch  -> LCOV report with branch coverage
+#                            enabled (slightly higher thresholds
+#                            expected for branch metrics)
+[alias]
+coverage = "llvm-cov --workspace --lcov --output-path coverage-rust.lcov"
+coverage-html = "llvm-cov --workspace --html --output-dir target/llvm-cov/html"
+coverage-branch = "llvm-cov --workspace --branch --lcov --output-path coverage-rust.lcov.branch"

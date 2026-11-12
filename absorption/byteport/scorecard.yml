@@ -1,0 +1,9 @@
+name: Scorecard
+on:
+  push:
+    branches: [main]
+jobs:
+  scorecard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
