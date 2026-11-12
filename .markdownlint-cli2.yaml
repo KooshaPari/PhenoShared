@@ -1,0 +1,21 @@
+# markdownlint-cli2 configuration for the `markdown-lint` job in
+# .github/workflows/docs-check.yml (DavidAnson/markdownlint-cli2-action).
+# markdownlint-cli2 reads this file before any .markdownlint.* file, so this is
+# the one place its globs/ignores are honoured.
+
+# Pin the ruleset explicitly. Two configs exist in the repo
+# (.markdownlint.json and .markdownlint.yaml); default discovery order picks
+# the JSON one, but pinning keeps the linter from silently switching rules.
+config: ".markdownlint.json"
+
+ignores:
+  # Absorbed (third-party archival) documentation corpora. These directories
+  # hold historical docs imported from other projects (PhenoCompose, dagrun,
+  # PhenoGoKit, PhenoObservability, PhenoTooling, root-docs, ...). They are
+  # archives, not hand-authored house docs: retro-linting tens of thousands of
+  # inherited lines against an 80-column house style is not useful work and
+  # will never be fixed upstream. Scoped to the docs/absorbed-* prefix only -
+  # hand-authored docs (README.md, PRD.md, docs/researchledger/**, docs/adr/**,
+  # docs/specs/**, the per-product dossiers) stay linted.
+  - "docs/absorbed-*"
+  - "docs/absorbed-*/**"
