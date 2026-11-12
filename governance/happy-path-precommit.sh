@@ -231,7 +231,12 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # `done()` reads as a completion claim, and three byte-count constants read
     # as blunt-force constants. Rewriting that code to satisfy the rules would
     # corrupt the move. The exemption is scoped to the relocated path only.
-    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md|docs/absorbed-from-|absorption/|native/|researchledger/ingest/|docs/audits/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-)"
+    # `crates/hwledger/` was relocated out of `absorption/PhenoMLX-temp/` on
+    # 2026-11-11. It was already exempt as absorbed code under `absorption/`;
+    # the move to `crates/` would otherwise re-judge 295 pre-existing files as
+    # freshly written prose, including docs that describe stubs and fixtures.
+    # Same class and same narrow scope as researchledger/ingest.
+    skip_pat = "^(tests/governance-enforcement\\.test\\.ts$|governance/|docs/governance/|docs/ai-dd-pitfalls|/ai-dd-pitfalls|/feedback_aidd_hardening|/CLAUDE\\.md|docs/absorbed-from-|absorption/|native/|researchledger/ingest/|crates/hwledger/|docs/audits/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-)"
     extra = ENVIRON["HAPPY_PATH_POLICY_SKIP"]
     if (extra != "") {
       n = split(extra, arr, ",")
