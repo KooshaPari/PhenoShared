@@ -34,7 +34,12 @@ def source_refs(repo: str) -> dict[str, str]:
     refs = {}
     for line in out.decode("utf-8", "replace").splitlines():
         sha, _, name = line.partition("\t")
-        if name.startswith("refs/heads/") or name.startswith("refs/tags/"):
+        # Every namespace, not just heads and tags. Preservation pushes the
+        # whole ref graph, so filtering the expectation to heads and tags made
+        # the comparison report a complete push as a failure: the registry had
+        # 1340 refs while the expectation held only the 869 heads and tags, and
+        # the difference showed up as 471 unexplained extras.
+        if name.startswith("refs/"):
             refs[name] = sha
     return refs
 
