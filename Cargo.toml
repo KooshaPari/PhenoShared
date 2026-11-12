@@ -853,7 +853,7 @@ authors = ["<REDACTED> <<REDACTED>@phenotype.space>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/PhenoShared"
 description = "PhenoShared workspace member"
-rust-version = "1.80"
+rust-version = "1.82"
 publish = false
 
 [workspace.dependencies]
