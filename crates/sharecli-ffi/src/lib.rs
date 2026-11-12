@@ -17,6 +17,13 @@ use std::sync::OnceLock;
 
 use tokio::runtime::Runtime;
 
+// The IPC client has exactly two transports: a Unix domain socket on unix and a
+// loopback TCP port on windows. On any other target `rt()` would panic before a
+// runtime check could report anything, so name the gap at compile time rather
+// than leaving an unreachable branch inside `ipc_exchange`.
+#[cfg(not(any(unix, windows)))]
+compile_error!("sharecli-ffi has no IPC transport for this target");
+
 static RT: OnceLock<Runtime> = OnceLock::new();
 
 fn rt() -> &'static Runtime {
@@ -131,12 +138,6 @@ async fn ipc_exchange(payload: &[u8]) -> anyhow::Result<String> {
         let mut lines = BufReader::new(r).lines();
         let line = lines.next_line().await?;
         anyhow::Ok(line.unwrap_or_default())
-    }
-
-    #[cfg(not(any(unix, windows)))]
-    {
-        let _ = payload;
-        anyhow::bail!("no local IPC transport for this target")
     }
 }
 
