@@ -105,7 +105,8 @@ jobs:
     needs: detect
     if: needs.detect.outputs.has_deny == 'true'
     runs-on: ubuntu-latest
-    continue-on-error: true
+    # HARD gate. Measured green on 2026-11-12: `cargo deny --all-features check`
+    # reported "advisories ok, bans ok, licenses ok, sources ok" (exit 0).
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
@@ -131,7 +132,6 @@ jobs:
     needs: detect
     if: needs.detect.outputs.has_python == 'true'
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
@@ -139,10 +139,20 @@ jobs:
           python-version: "3.11"
       - name: Install ruff
         run: pip install ruff
+      # These steps FAIL on violations. They previously ended in
+      # `|| echo "::warning::..."`, which made the step exit 0 and, combined with
+      # a job-level `continue-on-error`, produced a lane that could not fail and
+      # could not be seen failing. The aggregator classifies this job as
+      # ADVISORY, so a red result is reported and does not block a merge; the
+      # difference is that it is now visible.
+      #
+      # Measured 2026-11-12: `ruff check .` reports 17929 findings across the
+      # tree, most inside absorbed corpora. Scoping ruff to first-party Python is
+      # the prerequisite for promoting this lane to HARD.
       - name: ruff check
-        run: ruff check . 2>&1 || echo "::warning::ruff issues (advisory)"
+        run: ruff check .
       - name: ruff format --check
-        run: ruff format --check . 2>&1 || echo "::warning::format issues (advisory)"
+        run: ruff format --check .
 
   go-modules:
     name: Go Module Registry
@@ -214,7 +224,6 @@ jobs:
     needs: detect
     if: needs.detect.outputs.has_typescript == 'true'
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       # The repo is bun-managed (packageManager: bun@1.3.10). npm cannot
@@ -227,12 +236,12 @@ jobs:
       - name: lint
         run: |
           if [ -f package.json ] && grep -q '"lint"' package.json; then
-            bun run lint 2>&1 || echo "::warning::lint issues (advisory)"
+            bun run lint
           fi
       - name: test
         run: |
           if [ -f package.json ] && grep -q '"test"' package.json; then
-            bun run test 2>&1 || echo "::warning::test failures (advisory)"
+            bun run test
           fi
 
   security:
@@ -240,7 +249,6 @@ jobs:
     needs: detect
     if: needs.detect.outputs.has_security == 'true'
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -254,7 +262,6 @@ jobs:
     name: Dependency Review
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4
@@ -293,24 +300,35 @@ jobs:
     steps:
       - name: Aggregate lint gate
         run: |
-          # HARD gates fail this aggregator. ADVISORY gates do not, and cannot
-          # even be observed failing: every advisory job sets
-          # `continue-on-error: true`, so GitHub reports `success` for it even
-          # when its steps fail. Their result is printed for the reader only.
+          # HARD gates fail this aggregator. ADVISORY gates do not block a
+          # merge, but they are NOT hidden: every advisory job runs without
+          # `continue-on-error`, so a failure is visible here as
+          # `✗ <job>: failure (advisory)`, and the job shows red in the run.
           #
-          # HARD     : detect, registry-invariant
-          # ADVISORY : cargo-deny, python, go-modules, go, typescript, security,
-          #            dep-review
+          # This is deliberate. An earlier revision combined a job-level
+          # `continue-on-error: true` with step-level `|| echo "::warning::"`
+          # swallows, so an advisory lane's failure was rewritten to success by
+          # GitHub and by the shell, and this aggregator had no way to see it.
+          # A lane that can neither fail nor be observed failing is not a gate.
+          #
+          # HARD     : detect, cargo-deny, registry-invariant
+          # ADVISORY : python, go-modules, go, typescript, security, dep-review
+          #
+          # Promotion requires a measured green run, recorded here with the
+          # command and date. cargo-deny was promoted on 2026-11-12 after
+          # `cargo deny --all-features check` reported advisories/bans/licenses/
+          # sources all ok (exit 0).
           #
           # NOTE: the job id is `dep-review`. An earlier revision read
           # `needs.dependency-review.result`, which is not a job in this
           # workflow, so the value was empty and rendered as "?" instead of the
           # real result, making dep-review failures silently invisible.
           failed=0
+          advisory_failed=0
           for pair in \
             "detect:${{ needs.detect.result }}:hard" \
+            "cargo-deny:${{ needs.cargo-deny.result }}:hard" \
             "registry-invariant:${{ needs.registry-invariant.result }}:hard" \
-            "cargo-deny:${{ needs.cargo-deny.result }}:advisory" \
             "python:${{ needs.python.result }}:advisory" \
             "go-modules:${{ needs.go-modules.result }}:advisory" \
             "go:${{ needs.go.result }}:advisory" \
@@ -330,7 +348,8 @@ jobs:
               echo "  ✗ $name: ${result:-<unresolved>} ($kind)"
               failed=$((failed + 1))
             else
-              echo "  ! $name: ${result:-<unresolved>} ($kind, not enforced)"
+              echo "  ✗ $name: ${result:-<unresolved>} ($kind, not blocking)"
+              advisory_failed=$((advisory_failed + 1))
             fi
           done
           if [ "$failed" -gt 0 ]; then
@@ -340,7 +359,9 @@ jobs:
           fi
           echo ""
           echo "✅ All hard gates passed (or were skipped)"
-          echo "   advisory lanes above report success regardless of outcome"
+          if [ "$advisory_failed" -gt 0 ]; then
+            echo "   ⚠ $advisory_failed advisory lane(s) failed; see ✗ lines above"
+          fi
 
   test:
     name: ci / test
@@ -358,11 +379,11 @@ jobs:
           #   cargo nextest run --workspace    (ci profile, no continue-on-error)
           # Re-running that suite here would double-bill CI for the same
           # signal, so this job asserts the gate it genuinely depends on:
-          # ci / lint and its HARD gates (detect, registry-invariant).
+          # ci / lint and its HARD gates (detect, cargo-deny, registry-invariant).
           lint_result="${{ needs.lint.result }}"
           echo "ci / lint result: ${lint_result:-<unresolved>}"
           echo "workspace tests: Quality Gate -> cargo-check (separate workflow, authoritative)"
-          echo "advisory lanes (cargo-deny/python/go/typescript/security/dep-review): not enforced"
+          echo "advisory lanes (python/go/typescript/security/dep-review): reported, not blocking"
           if [ "$lint_result" != "success" ]; then
             echo ""
             echo "❌ ci / test: upstream gate ci / lint is ${lint_result:-<unresolved>}, not success"
