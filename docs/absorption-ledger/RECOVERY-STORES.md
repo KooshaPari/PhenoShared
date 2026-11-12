@@ -98,14 +98,34 @@ these stay.
 pattern and was not covered by this test. It is treated as off-limits by the
 same rule.
 
-## Unrelated: exact duplicates that do exist
+## Correction: there are no duplicate helios repos
 
-`zz-ref-HeliosCLI` and `zz-ref-HeliosLite` are genuine exact duplicates of
-`HeliosCLI` and `HeliosLite`: 1340/1340 and 1061/1061 refs identical, same
-names, same tips. Both are forks whose originals still exist, so they hold
-nothing unique.
+This file previously recorded that `zz-ref-HeliosCLI` and `zz-ref-HeliosLite`
+were exact duplicates of `HeliosCLI` and `HeliosLite`, "1340/1340 and 1061/1061
+refs identical", and that they were therefore safe to remove.
 
-They were **not** deleted. `zz-ref-HeliosLite` was pushed at 07:25 on
-2026-11-12, during an active session, so something else is creating these and
-deleting one could break that process. They are recorded here as safe to remove
-once whoever creates them is identified.
+**That was wrong, and the error is mine.** `HeliosLite` and `HeliosCLI` were
+*renamed* to `zz-ref-HeliosLite` and `zz-ref-HeliosCLI`. GitHub serves the old
+names as redirects, so querying both names returns the same repository:
+
+```
+repos/KooshaPari/HeliosLite      -> KooshaPari/zz-ref-HeliosLite   id=1226104769
+repos/KooshaPari/zz-ref-HeliosLite -> KooshaPari/zz-ref-HeliosLite id=1226104769
+repos/KooshaPari/HeliosCLI      -> KooshaPari/zz-ref-HeliosCLI    id=1165315873
+repos/KooshaPari/zz-ref-HeliosCLI  -> KooshaPari/zz-ref-HeliosCLI  id=1165315873
+```
+
+Identical ids: one repository under two names. The ref comparison was therefore
+a repository compared with itself, and "identical" carried no information about
+duplication. There is nothing to delete and nothing was deleted.
+
+That ref comparison was still not wasted - it established that the redirect
+resolves to the same object, which is how the error was found.
+
+The same redirect pattern explains three other ambiguities: `pheno` resolves to
+`PhenoShared`, and `Parpoura` resolves to `zz-pause-inc-Parpoura`. So the
+"four Parpoura repos" are one repository plus redirects, and `zz-pause-inc-Parpoura`
+is the canonical name and the correct merge destination for its archive.
+
+**Lesson for future checks:** compare repository **ids**, not names. Any name may
+be a redirect to a different repository than the one expected.

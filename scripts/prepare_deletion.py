@@ -250,7 +250,16 @@ def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, s
         return False, "no refs found in the source"
 
     url = "https://github.com/%s/%s.git" % (owner, registry)
-    spec = ["+refs/%s/*:refs/preserved/%s/%s/*" % (ns, repo, ns) for ns in spaces]
+    # One wildcard refspec rather than one per namespace. A repository here can
+    # carry over a thousand refs (HeliosCLI has 18 heads, 851 tags and 471 pull
+    # refs), and per-namespace refspecs are fine, but enumerating them all would
+    # overflow the Windows command-line limit. The source mirror never contains
+    # refs/preserved, so the wildcard cannot copy the registry into itself; if it
+    # somehow did, fall back to explicit namespaces.
+    if any(n.startswith("refs/preserved/") for n in source_refs):
+        spec = ["+refs/%s/*:refs/preserved/%s/%s/*" % (ns, repo, ns) for ns in spaces]
+    else:
+        spec = ["+refs/*:refs/preserved/%s/*" % repo]
     code, _, err = sh(["git", "-C", mirror, "push", url] + spec)
     if code != 0:
         return False, "ref push failed: %s" % err.decode("utf-8", "replace")[:120]
