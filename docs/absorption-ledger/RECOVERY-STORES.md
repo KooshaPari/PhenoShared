@@ -29,20 +29,34 @@ the live repository settles it.
 **Tip identity across every repository.** A commit id hashes its content *and*
 its whole ancestry, so an exact copy, or a branch copied between repositories,
 leaves identical ids behind. Every ref tip across all 83 repositories was mapped:
-27,903 distinct tips, of which 34 are claimed by more than one repository. Five
-of the 25 stores share at least one tip with another *store*, so the overlaps
-were resolved by set containment. None is a subset of another - in every case
-each side still holds refs the other lacks.
+27,903 distinct tips, of which 34 are claimed by more than one repository.
+
+Grouping those by repository pair gives **three** archive-to-archive overlaps
+and, importantly, **zero** archive-to-live-repository overlaps. No store shares a
+single tip with a live repository.
+
+Set containment was then checked for all three pairs. None is a subset of
+another - in every case each side still holds refs the other lacks.
 
 | Pair | Refs | Shared tips | Unique to each side |
 |---|---:|---:|---|
 | `Sidekick-archive-20261106` / `Sidekick-rb-archive-20261108` | 5 / 5 | 4 | 1 / 1 (a different `main`) |
+| `zz-QuadSGM-rb-archive-20261106` / `zz-archive-4sgm-archive` | 208 / 13 | 5 (across 10 refs) | 198 / 4 |
 | `Tasken-archive-20261106` / `Tasken-rb-archive-20261108` | 5 / 5 | 1 | 4 / 4 |
-| `zz-QuadSGM-rb-archive-20261106` / `zz-archive-4sgm-archive` | 208 / 13 | 10 | 198 / 4 |
-| `Stashly-archive-20261106` / `Stashly-rb-archive-20261106` | 4 / 5 | 0 | 4 / 5 |
 
-Stashly is worth noting: the two archives carry identically named refs pointing
-at different commits, so identical naming is not evidence of identical content.
+Six archive repositories are involved: the five of the 25 listed here plus
+`zz-archive-4sgm-archive`, which is archive-like but lacks the date suffix so the
+naming rule does not classify it as one of the 25.
+
+Stashly is worth noting separately: `Stashly-archive-20261106` and
+`Stashly-rb-archive-20261106` carry identically named refs pointing at different
+commits and share no tip at all, so identical naming is not evidence of identical
+content.
+
+A caution about reading the live-to-live overlaps this map also found: several
+pairs such as `PhenoRegistry` and `host-ops` share tips only because the registry
+now stores those repositories' refs under `refs/preserved/`. That is a
+consequence of preservation, not duplication.
 
 What this does not establish: a store holding a commit that is an *ancestor* of
 another repository's branch rather than a tip. That case was tested where it was
@@ -57,9 +71,10 @@ Of the 25 stores:
   and no repository anywhere has the same default-branch tree.
 - **4 share a name with a live repository, and not one of their tip commits
   exists in it.**
-- **No store is contained in another store.** Five share at least one tip, but
-  set containment failed every time, so each one still holds refs found nowhere
-  else.
+- **No store shares a tip with a live repository, and no store is contained in
+  another store.** Six archive repositories overlap each other across three
+  pairs, but set containment failed every time, so each still holds refs found
+  nowhere else.
 
 | Store | Live repo | Store refs | Tips found in live |
 |---|---|---:|---:|
