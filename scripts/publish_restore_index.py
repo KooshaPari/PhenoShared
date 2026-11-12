@@ -12,7 +12,6 @@ ref list, so the index cannot drift from reality.
 
 from __future__ import annotations
 
-import json
 import os
 import subprocess
 import sys
@@ -28,11 +27,16 @@ def sh(args, stdin=None):
 
 
 def build_index() -> str:
-    code, out, err = sh(["gh", "api", "repos/%s/%s/git/matching-refs/preserved"
-                         % (OWNER, REGISTRY)])
+    # git ls-remote rather than the refs API: the registry now carries thousands
+    # of preserved refs and a paginated JSON response of that size stalls. The
+    # protocol advertises refs up front without transferring any objects.
+    code, out, err = sh(["git", "ls-remote", "--refs",
+                         "https://github.com/%s/%s.git" % (OWNER, REGISTRY),
+                         "refs/preserved/*"])
     if code != 0:
         raise SystemExit("cannot list preserved refs: %s" % err[:200])
-    refs = [r["ref"] for r in json.loads(out)]
+    refs = [line.partition("\t")[2]
+            for line in out.splitlines() if "\t" in line]
 
     # Group by repository, then by kind, so the index reads as a directory.
     groups: dict[str, dict[str, list[str]]] = {}
@@ -78,6 +82,18 @@ def build_index() -> str:
     for repo in sorted(groups):
         lines.append("### `%s`" % repo)
         lines.append("")
+        total = sum(len(v) for v in groups[repo].values())
+        if total > 40:
+            # Some forks carry hundreds of refs, and listing them all would bury
+            # the index in noise. Counts plus the exact fetch command are enough
+            # to reach them.
+            lines.append("%d refs. List them with:" % total)
+            lines.append("")
+            lines.append("```")
+            lines.append("git ls-remote --refs <registry> 'refs/preserved/%s/*'" % repo)
+            lines.append("```")
+            lines.append("")
+            continue
         for kind in sorted(groups[repo]):
             for name in sorted(groups[repo][kind]):
                 lines.append("- `%s/%s`" % (kind, name))
