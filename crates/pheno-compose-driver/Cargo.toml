@@ -11,8 +11,8 @@ categories = ["development-tools"]
 authors = ["kooshapari"]
 
 [dependencies]
-nvms-ffi = { path = "../nvms-ffi" }
-pheno-config = { path = "../pheno-config" }
+nvms-ffi = { path = "../pheno-compose-bindings" }
+pheno-config = { path = "../pheno-compose-pheno-config" }
 serde = { workspace = true }
 thiserror = { workspace = true }
 

@@ -99,6 +99,7 @@ members = [
   "crates/pheno-compose-plugin-api",
   "crates/pheno-compose-i18n",
   "crates/pheno-compose-bindings",
+  "crates/pheno-compose-driver",
   "crates/pheno-compose-agentctl",
   "crates/bifrost-routing",
   "crates/nexus",
