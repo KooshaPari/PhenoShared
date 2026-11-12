@@ -1,6 +1,6 @@
 # agileplus (KooshaPari/AgilePlus)
 
-Source: cmd/dagrun/docs/research/agileplus-surface.md and /Users/kooshapari/CodeProjects/temp/proresearch-20261110/agile-parity.md (primary: https://github.com/KooshaPari/AgilePlus)
+Source: cmd/dagrun/docs/research/agileplus-surface.md and cmd/dagrun/docs/research/agileplus-parity.md (primary: https://github.com/KooshaPari/AgilePlus)
 
 ## What it is
 
