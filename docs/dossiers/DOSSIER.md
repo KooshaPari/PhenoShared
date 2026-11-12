@@ -58,9 +58,10 @@ Per-crate boundaries, paths and dependents are in [`../CRATE-BOUNDARIES.md`](../
 ### 2.1 Discrepancy to be aware of
 
 `README.md`'s at-a-glance table states **290** root workspace packages measured 2026-11-11;
-the metadata run on 2026-11-12 reports **291**. The README does not say which package was
-added, and this dossier does not assert a cause. Reconciling it requires diffing the two
-member sets, which was not done here.
+the metadata run on 2026-11-12 reports **291**. The README does not say
+which package was added, and this dossier does not assert a cause.
+Reconciling the two member sets needs a diff of the two lists, which this
+pass did not run (see open question 1).
 
 ## 3. Absorption history (evidence-backed)
 
@@ -99,17 +100,19 @@ something else was not established: `UNKNOWN` (settle with `ls cmd/<name>` plus 
 
 ## 5. Compilation and test status
 
-`UNKNOWN`. This dossier was produced under a lane rule that forbids `cargo build` and
-`cargo test` (build-slot contention), so no compile or test result is claimed.
+`UNKNOWN`. This dossier was produced under a lane rule that forbids
+`cargo build` and `cargo test` (build-slot contention), so no compile or
+test result is claimed.
 
-What would establish it: `cargo check --workspace --all-targets` for Rust and
-`go build ./... && go test ./...` inside `cmd/dagrun`, recorded with their exact rustc/go
-versions. Until that exists, any statement that PhenoShared "builds" is unsupported.
+What would settle it: `cargo check --workspace --all-targets` for Rust and
+`go build ./...` plus `go test ./...` inside `cmd/dagrun`, each recorded
+with its exact rustc/go version. Until such output exists, a statement that
+PhenoShared "builds" has no source in this document.
 
 ## 6. Capability inventory (what the workspace actually provides)
 
-Derived from crate names, paths and dependency edges in the metadata — this is a *map*, not an
-adoption claim.
+Derived from crate names, paths and dependency edges in the metadata. This
+is a *map*, not an adoption claim.
 
 | Family | Members | What it appears to own |
 | --- | --- | --- |
@@ -136,10 +139,11 @@ adoption claim.
 | Coverage floor (85%, docs-3 contract) | `UNKNOWN` | no coverage artifact was inspected in this pass; `codecov.yml` and `tarpaulin.toml` exist, which indicates an intention, not a measurement |
 | Negative controls / instrument qualification | `UNKNOWN` | not inspected |
 | Lint / fmt configuration present | yes | `rustfmt.toml`, `clippy` lints in workspace `Cargo.toml` (README), `ruff.toml`, `oxlint.json`, `deny.toml`, `gitleaks.toml`, `trufflehog.yml` |
-| Unsafe forbidden | yes (claimed) | README; not re-verified against `Cargo.toml` here |
+| Unsafe forbidden | `UNKNOWN` | `README.md` states the policy; this pass did not read the workspace `Cargo.toml` lint table for it (open question 5) |
 
-A configuration file is not a passing gate. Every row above marked `UNKNOWN` needs a run to
-become a verdict.
+A configuration file records an intention; it is not an observed result. A
+row above marked `UNKNOWN` stays `UNKNOWN` until a command's output is
+recorded beside it.
 
 ## 8. Risks
 
@@ -147,19 +151,24 @@ become a verdict.
 | --- | --- | --- | --- |
 | R1 | **Container-as-product confusion** | Consumers may try to build/adopt the whole workspace; it is a container of independently consumable crates | README states the role explicitly; keep it prominent |
 | R2 | **Absorbed code at a `-temp` path** | `absorption/PhenoMLX-temp/perf-core/*` occupying 20 workspace members implies an unfinished absorption | Decide: promote to `crates/`, or remove from members. Owner `UNKNOWN` |
-| R3 | **170 of 291 crates have no in-workspace dependent** | Large surface with no internal proof of use; unclear publish intent | Classify each as publish / consume-externally / delete. Not done here |
+| R3 | **170 of 291 crates have no in-workspace dependent** | Large surface with no internal proof of use; unclear publish intent | Classify each as publish / consume-externally / delete; this pass produced the count only, by parsing `cargo metadata` (see appendix) |
 | R4 | **README metrics drift** | 290 vs 291 packages already diverges within one day | Regenerate the at-a-glance table from a command, with the date in the file |
 | R5 | **Truncated top-level tree** | `find . -maxdepth 1` alone shows a very large number of root-level markdown and scratch files (`_*.json`, diagnostic reports, `node_modules`, `target`), which obscures the real entry points | Read `README.md` as the entrypoint; do not infer structure from a root listing |
 | R6 | **No measured build/test state** | An unmeasured container of 291 crates can rot silently | Run `cargo check --workspace` on a schedule and record the result here |
 
 ## 9. Open questions
 
-1. Which single package was added between the README's 290 and the measured 291?
-2. Are the 20 `absorption/PhenoMLX-temp/perf-core` members permanent, or pending relocation?
-3. Is there a published subset manifest (a list of crates intended for crates.io)? `sdk-catalog.json`
-   and `catalog/` exist; their contents were not read in this pass.
-4. Do the five non-`dagrun` directories under `cmd/` belong to the Rust workspace, to separate
-   Go modules, or to neither?
+1. Which single package was added between the README's 290 and the measured
+   291? A diff of the two member lists would answer it.
+2. Are the 20 `absorption/PhenoMLX-temp/perf-core` members permanent, or
+   pending relocation?
+3. Is there a published subset manifest (a list of crates intended for
+   crates.io)? `sdk-catalog.json` and `catalog/` exist; their contents were
+   not read in this pass.
+4. Do the five non-`dagrun` directories under `cmd/` belong to the Rust
+   workspace, to separate Go modules, or to neither?
+5. Does the workspace `Cargo.toml` deny `unsafe`? The table row above cites
+   `README.md`; the lint table itself was not read here.
 
 ## 10. Evidence appendix
 
