@@ -4,7 +4,11 @@ use crate::domain::capture::CaptureError;
 use crate::ports::{CapturedFrame, WindowCapturer, WindowDescriptor};
 
 #[cfg(target_os = "linux")]
-use xcb::xproto;
+// xcb 1.7 made the generated protocol bindings a public module (`xcb::x`);
+// the old top-level `xcb::xproto` path is private.
+use xcb::x as xproto;
+#[cfg(target_os = "linux")]
+use xcb::{Xid, XidNew};
 
 #[derive(Debug, Default)]
 pub struct X11WindowCapturer;
@@ -25,23 +29,27 @@ impl WindowCapturer for X11WindowCapturer {
             .roots()
             .nth(screen_num as usize)
             .ok_or_else(|| CaptureError::CaptureFailed("X11 screen not found".to_string()))?;
-        let drawable = window_id as xproto::Drawable;
-        let geometry = xproto::get_geometry(&connection, drawable)
-            .get_reply()
+        let xid = u32::try_from(window_id).map_err(|_| {
+            CaptureError::CaptureFailed(format!(
+                "window id {window_id} does not fit in a 32-bit XID"
+            ))
+        })?;
+        let drawable = xproto::Drawable::Window(xproto::Window::new(xid));
+        let geometry = connection
+            .wait_for_reply(connection.send_request(&xproto::GetGeometry { drawable }))
             .map_err(|e| CaptureError::CaptureFailed(format!("get_geometry: {e}")))?;
 
-        let reply = xproto::get_image(
-            &connection,
-            xproto::IMAGE_FORMAT_Z_PIXMAP as u8,
-            drawable,
-            0,
-            0,
-            geometry.width(),
-            geometry.height(),
-            u32::MAX,
-        )
-        .get_reply()
-        .map_err(|e| CaptureError::CaptureFailed(format!("get_image: {e}")))?;
+        let reply = connection
+            .wait_for_reply(connection.send_request(&xproto::GetImage {
+                format: xproto::ImageFormat::ZPixmap,
+                drawable,
+                x: 0,
+                y: 0,
+                width: geometry.width(),
+                height: geometry.height(),
+                plane_mask: u32::MAX,
+            }))
+            .map_err(|e| CaptureError::CaptureFailed(format!("get_image: {e}")))?;
 
         let bits_per_pixel = bits_per_pixel_for_depth(screen.root_depth()).ok_or_else(|| {
             CaptureError::CaptureFailed(format!(
@@ -71,8 +79,10 @@ impl WindowCapturer for X11WindowCapturer {
             .roots()
             .nth(screen_num as usize)
             .ok_or_else(|| CaptureError::CaptureFailed("X11 screen not found".to_string()))?;
-        let tree = xproto::query_tree(&connection, screen.root())
-            .get_reply()
+        let tree = connection
+            .wait_for_reply(connection.send_request(&xproto::QueryTree {
+                window: screen.root(),
+            }))
             .map_err(|e| CaptureError::CaptureFailed(format!("query_tree: {e}")))?;
 
         tree.children()
@@ -103,13 +113,15 @@ fn describe_window(
     connection: &xcb::Connection,
     window: xproto::Window,
 ) -> Result<Option<WindowDescriptor>, CaptureError> {
-    let geometry = match xproto::get_geometry(connection, window).get_reply() {
+    let geometry = match connection.wait_for_reply(connection.send_request(&xproto::GetGeometry {
+        drawable: xproto::Drawable::Window(window),
+    })) {
         Ok(geometry) => geometry,
         Err(_) => return Ok(None),
     };
     let title = get_window_title(connection, window)?;
     Ok(Some(WindowDescriptor {
-        id: window as u64,
+        id: u64::from(window.resource_id()),
         title,
         width: geometry.width() as u32,
         height: geometry.height() as u32,
@@ -121,19 +133,24 @@ fn get_window_title(
     connection: &xcb::Connection,
     window: xproto::Window,
 ) -> Result<String, CaptureError> {
-    let cookie = xproto::get_property(
-        connection,
-        false,
-        window,
-        xproto::ATOM_WM_NAME,
-        xproto::ATOM_STRING,
-        0,
-        1024,
-    );
-    let reply = cookie
-        .get_reply()
+    let reply = connection
+        .wait_for_reply(connection.send_request(&xproto::GetProperty {
+            delete: false,
+            window,
+            property: xproto::ATOM_WM_NAME,
+            r#type: xproto::ATOM_STRING,
+            long_offset: 0,
+            long_length: 1024,
+        }))
         .map_err(|e| CaptureError::CaptureFailed(format!("get_property WM_NAME: {e}")))?;
-    Ok(String::from_utf8_lossy(reply.value()).into_owned())
+    // WM_NAME is conventionally 8-bit (STRING). A 32-bit property is not a
+    // string we can decode here, so it yields an empty title rather than a
+    // bogus one.
+    if reply.format() == 8 {
+        Ok(String::from_utf8_lossy(reply.value::<u8>()).into_owned())
+    } else {
+        Ok(String::new())
+    }
 }
 
 fn bits_per_pixel_for_depth(depth: u8) -> Option<u8> {
