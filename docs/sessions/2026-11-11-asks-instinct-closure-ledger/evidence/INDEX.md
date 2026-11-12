@@ -104,3 +104,30 @@ Corrections to earlier figures in this directory:
   from either distinct count; it must not be used as a volume baseline.
 - herdr cannot be recovered at occurrence level: its manifest records
   `persists_operator_prompt_text: false`, so the 8 records are a data limitation, not a bug.
+
+## Addendum 2 — every channel mined, union and coverage (2026-11-12T02:52Z)
+
+Rev 4 of `VERDICT.md` sized the union from two channels and had never mined iMessage or KCode.
+Both are now mined at occurrence level. These artifacts are the only durable record.
+
+| Artifact | What it establishes |
+|---|---|
+| `recount_imessage_kcode.py` | Occurrence-level miners for both channels. iMessage is opened `mode=ro` with `PRAGMA query_only=1`; **chat.db is never copied**. KCode `content` is a list of typed blocks and `display_role == 'system'` marks injected context — both facts were needed before it would parse. |
+| `imessage_kcode_recount.json` | iMessage **6,363** distinct substantive (9,011 text-bearing outbound rows). KCode **2,457** occurrences collapsing to **166** distinct across 1,253 session files. |
+| `union_channels.py` | The single script behind every figure in `VERDICT.md` §3c: channel sizes, both-direction containment, greedy long-first overlap, citation counts, union. |
+| `union_channels.json` | harness 5,799 · iMessage 6,363 · KCode 166 · overlaps 517/58/1 · **union 11,752** · cited 1,764 · **coverage 15.0%**. |
+| `register_channel_attribution.json` | Register-side proof: of 2,018 distinct quotes, 1,952 (**96.7%**) appear in a mined channel — phone 96.6%, iMessage 92.4%, harness 23.1%, KCode 0.1%. |
+
+Corrections to figures this directory previously carried:
+
+- **6,085 was never an output of `collapse_intents.py`.** Its `clean_distinct` is **5,799**
+  (`8,506 − 2,707 noise`). Rev 4 attributed the gap to noise-pass ordering; that explanation
+  was wrong.
+- **iMessage "911" was a deduped artifact**, not the channel size. The channel has 9,011
+  text-bearing outbound rows.
+- **KCode "196" was roughly right** (166 actual distinct). Its 2,457 occurrences genuinely
+  collapse because most sessions are canary stubs that repeat the same prompts.
+- The phone channel is **not a separate channel**: 2,049 of 2,077 of its bodies appear verbatim
+  in iMessage. It is an iMessage subset.
+- `29.4%` register/union is superseded by **15.0%** citation-based coverage over a union that is
+  11,752, not 7,661.

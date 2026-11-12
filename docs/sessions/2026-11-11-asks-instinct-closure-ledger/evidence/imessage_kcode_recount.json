@@ -1,0 +1,27 @@
+{
+  "imessage": {
+    "text_bearing_outbound_substantive": 6418,
+    "distinct": 6363,
+    "collapse": {
+      "exact": 6363,
+      "prefix40": 6359,
+      "jaccard80": 6363
+    },
+    "cited_by_register": 1674,
+    "also_in_phone_channel": 2049
+  },
+  "kcode": {
+    "session_files": 1253,
+    "user_substantive": 2457,
+    "distinct": 166,
+    "collapse": {
+      "exact": 166,
+      "prefix40": 125,
+      "jaccard80": 143
+    },
+    "cited_by_register": 2,
+    "also_in_phone_channel": 1
+  },
+  "phone_channel_distinct": 2079,
+  "register_quotes_used": 2018
+}

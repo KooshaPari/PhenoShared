@@ -1,22 +1,25 @@
 # Coverage Verdict — is the 2,259-ask register a complete capture of operator intent?
 
-Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T02:30Z` (channel-scope correction, §3b).
+Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T02:52Z` (all channels mined at occurrence
+level; union and coverage recomputed from one script; §3c).
 
-**Revision history — this file has been wrong three times and each time in the same direction
-(stating a confident provenance claim from an incomplete measurement).**
+**Revision history — this file has been wrong five times and each time in the same direction
+(stating a confident number from an incomplete measurement).**
 
 | Rev | Claim | What was wrong |
 |---|---|---|
 | 1 | "at most 23%" | counted raw strings, 31.8% of which were harness text |
 | 2 | "39-43% coverage" | a volume ratio between different text populations, not coverage |
 | 3 | "the register is a synthesis, not an extraction" | measured the paraphrase field against the wrong corpus; the register's source channel is phone chat, and 98.9% of its quotes anchor verbatim there |
+| 4 | "harness cleaned distinct = 6,085", "register/union = 29.4%" | **6,085 is not an output of `collapse_intents.py`**; its clean set is `8,506 - 2,707 noise` = **5,799**. The 29.4% ratio rested on 6,085 and on channels that had never been mined |
+| 5 | this one | every channel mined at occurrence level; union, overlap and coverage recomputed from one committed script |
 
-Rev 4 (this one) is derived from the register's own provenance tables rather than from overlap with a
-corpus chosen by me.
+Rev 5 is derived from a single script, `evidence/union_channels.py`, whose machine-readable output is
+`evidence/union_channels.json`. Numbers below are quoted from that file and nowhere else.
 
-**This file answers one question only.** It does not propose a migration, does not compute a
-coverage percentage, and does not treat activity as evidence. Every cell below cites the
-measurement it rests on. Cells that were not measured say `UNKNOWN` or `NOT_RUN`, never `PASS`.
+**This file answers one question only.** It does not propose a migration and does not treat activity
+as evidence. Every cell below cites the measurement it rests on. Cells that were not measured say
+`UNKNOWN` or `NOT_RUN`, never `PASS`.
 
 ---
 
@@ -31,7 +34,8 @@ this section was rewritten twice:
 | what it is | LLM interpretation, third person | operator's verbatim text |
 | distinct entries | 2,255 (4 dupes in 2,259) | 2,132 |
 | anchored in the register's own message store | n/a | **2,235 of 2,259 (98.9%)** |
-| overlaps the mined harness corpus | 0.0% | 16.7% substring |
+| quoted text visible somewhere in a mined channel | n/a | **1,952 of 2,018 (96.7%)** |
+| quoted text visible in the mined harness corpus | n/a | 466 of 2,018 (23.1%) |
 
 > **The register is a verbatim extraction from a phone-chat archive that this project never mined.**
 > `reg_utterances` holds 8,042 messages across 3 `phoneconv-<ULID>` conversations in 141 sessions,
@@ -105,14 +109,16 @@ Coverage of operator intent by the 2,259-ask register
 │   ├── Quote anchored in own message store ............... PASS  (2,235 of 2,259 = 98.9%; §3b)
 │   ├── Own-channel utterance capture .................... PARTIAL (1,733 of 2,075 substantive = 83.5%;
 │   │                                                               ~87% after sampling 342 uncited)
-│   ├── Harness-channel capture (substring) ............... PASS  (357 = 16.7% of 2,132)
+│   ├── Harness-channel capture (substring) ............... MEASURED (466 of 2,018 register
+│   │                                                               quotes = 23.1% appear in harness
+│   │                                                               text; supersedes 357/16.7%)
 │   ├── Harness-channel capture (distributional-lexical) .. REJECTED (high band 0/12 true positives;
 │   │                                                               not a usable estimator; §3b)
 │   ├── Harness join possible .............................. FAIL  (reg_provenance.source is
 │   │                                                               register.json for 2259/2259; the register
 │   │                                                               never joined the harness)
-│   └── Union coverage across all channels ................ UNKNOWN (needs imessage + kcode mined and
-│                                                                   cross-channel overlap measured)
+│   └── Union coverage across all channels ................ MEASURED (15.0% citation-based;
+│                                                                   1,764 of 11,752; §3c)
 └── External channels
     ├── Google Takeout (Gemini) ............................ BLOCKED (0 of 68 products selected)
     ├── OpenAI conversations.json ......................... BLOCKED (identity verification)
@@ -295,49 +301,92 @@ vocabulary, not meaning:
 So distributional-lexical scoring is **not** a usable coverage estimator here, and it is recorded as
 a negative result rather than a number.
 
-### 3c. Cross-channel overlap and the union
+### 3c. Every channel mined; union and coverage recomputed
 
-The phone-chat channel is already inside `ledger.db`, so the union of measured channels is computable
-without any new mining. Containment test each way, using the same >=12-char substantive filter:
+Rev 4 sized the union from two channels and had never mined iMessage or KCode. Both were being
+reported as `DEDUPED_INPUT`, the same defect that made codex look like 401 records when it was 9,650
+occurrences. They are now mined at occurrence level. Everything in this section comes from
+`evidence/union_channels.py` and `evidence/union_channels.json`.
 
-| Direction | Count | Share |
-|---|---:|---:|
-| phone-chat utterances that also appear in harness text | **499** | 24.0% of 2,075 |
-| harness intents that also appear in phone-chat text | 19 | 0.3% of 6,085 |
+The floor counts were both wrong, and in opposite directions:
 
-The asymmetry is expected: phone utterances are short and can sit inside a long harness turn, while a
-long harness intent rarely sits inside a short phone message. The 499 are genuine cross-channel
-restatements, not phrase noise: the longest is a 3,979-character message, and samples include
-`"auth request no longer active on gpt callback"` and
-`"how nice we got the 2 exports so quick"`. The operator typed the same content into both channels.
+| Channel | Carried as | Actual distinct | Why |
+|---|---:|---:|---|
+| iMessage | 911 | **6,363** | 9,011 text-bearing outbound rows exist; the 911 was a deduped artifact |
+| KCode | 196 | **166** | 2,457 occurrences genuinely collapse; 1,253 session files are mostly canary stubs |
+
+The iMessage channel also **subsumes** the channel the register was built from: 2,049 of the 2,077
+phone-chat `reg_utterances` bodies appear verbatim in iMessage. The phone conversations are an
+iMessage subset, so adding iMessage does not add a second population, it widens the one the register
+already drew from.
+
+**Channel sizes and the union** (substring containment both directions, then greedy long-first
+pairing):
 
 | Quantity | Value |
 |---|---:|
-| phone-chat substantive distinct | 2,075 |
-| harness cleaned distinct | 6,085 |
-| cross-channel overlap | 499 |
-| **union estimate** | **7,661** |
-| register distinct asks | 2,255 |
-| **register / union** | **29.4%** |
+| iMessage distinct substantive | 6,363 |
+| harness (jcode + codex) clean distinct | 5,799 |
+| KCode distinct substantive | 166 |
+| iMessage ∩ harness | 517 |
+| KCode ∩ harness | 58 |
+| KCode ∩ iMessage | 1 |
+| **union** | **11,752** |
 
-**This is a count ratio, and a coarse one.** It mixes granularities (raw phone messages vs collapsed
-harness intents), it assumes the 499 overlap pairs are one intent each, and it excludes iMessage (911)
-and KCode (196), which would raise the union. Treat 29.4% as the best available sizing, not as
-validated coverage.
+Directional containment is deliberately reported both ways because it is asymmetric: 517 iMessage
+texts appear inside harness text, while only 19 harness intents appear inside iMessage text. A short
+message can sit inside a long prompt; the reverse rarely happens. The union subtracts the greedy
+pairing once per pair, not both directional counts.
 
-Note on reproducibility: re-running the harness collapse inline gives **8,488** distinct and **6,085**
-cleaned, against the **8,506** distinct published in ~3a. The 18-string gap is from two independent
-implementations of the same filters, not from a data change. The 6,085 vs 5,799 difference is the
-noise-pattern pass being applied in a different order. Both are printed rather than reconciled
-silently.
+**Register-side attribution.** This is the measure that answers "is the register real":
+
+| Channel | register quotes whose text appears there | Share of 2,018 |
+|---|---:|---:|
+| phone chat (`reg_utterances`) | 1,949 | 96.6% |
+| iMessage | 1,864 | 92.4% |
+| harness | 466 | 23.1% |
+| KCode | 2 | 0.1% |
+| **any channel** | **1,952** | **96.7%** |
+
+So 96.7% of the register's quoted text demonstrably exists in a channel that was actually mined. The
+register is a faithful extraction. It also never joined the harness as a *source*: `reg_provenance`
+is `register.json` for all 2,259 rows, and harness text appears in the register only as quoted
+restatements of things the operator said elsewhere.
+
+**Channel-side coverage** (a member is cited if some register quote is a substring of it):
+
+| Channel | Distinct | Cited | Coverage |
+|---|---:|---:|---:|
+| iMessage | 6,363 | 1,674 | 26.3% |
+| harness | 5,799 | 88 | **1.5%** |
+| KCode | 166 | 2 | 1.2% |
+| **union** | **11,752** | **1,764** | **15.0%** |
+
+**This is the corrected headline, and it is worse than Rev 4's 29.4%.** Rev 4 divided the whole
+register by a union it had understated, which flattered the result twice. 15.0% is a citation-based
+count, so it cannot be inflated by register entries that do not correspond to anything in the union.
+
+It is still a coarse count, and the caveats are real: it mixes granularity (a register ask is an
+extracted intent, a harness member is a whole prompt that may contain several asks), a register ask
+containing several harness-level requests is counted once, and 88 harness citations is a small
+absolute number that a single large prompt can concentrate (466 register quotes sit inside those 88
+members). It should not be read as "15% of your ideas are captured" with precision. It is the correct
+order of magnitude and it is derived from one reproducible artifact.
+
+**Reconciliation, replacing Rev 4's guess.** Rev 4 attributed the 6,085 vs 5,799 gap to "noise-pattern
+pass ordering". That was wrong: `collapse_intents.py` reports `clean_distinct: 5799` and
+`noise_like_distinct: 2707` against `distinct_normalized: 8506`, and 8,506 − 2,707 = 5,799. **6,085 was
+never an output of the script.** The 8,488 vs 8,506 gap is still an implementation difference, but it
+is now bounded and only affects the raw distinct figure, not the clean set.
 
 ### Corrected statement
 
 The register **is** a verbatim-anchored extraction of real operator utterances: 98.9% of its quotes
-appear in the phone-chat message store. The register **is not** a complete capture of operator
-intent, and the reason is now measured and specific: it is a **single-channel** capture. It covers
-~87% of its own channel and at most 16.7% of the harness channel. Coverage of the union cannot be
-computed until every channel is mined and the cross-channel overlap is measured rather than assumed.
+appear in the phone-chat message store and 96.7% appear somewhere in a mined channel. The register
+**is not** a complete capture of operator intent, and the reason is now measured rather than inferred:
+it draws from **one** channel. It covers 26.3% of iMessage distinct messages, 1.5% of the harness
+corpus, 1.2% of KCode, and **15.0% of the 11,752-member union**. The migration gate stays closed on an
+order-of-magnitude shortfall, not on a disputed ratio.
 
 
 ---

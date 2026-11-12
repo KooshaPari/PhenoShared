@@ -1,0 +1,11 @@
+{
+  "register_distinct_quotes": 2018,
+  "visible_in": {
+    "imessage": 1864,
+    "harness": 466,
+    "kcode": 2,
+    "phone": 1949
+  },
+  "visible_in_any": 1952,
+  "exclusive_imessage": 0
+}

@@ -1,0 +1,38 @@
+{
+  "channels_distinct": {
+    "harness": 5799,
+    "imessage": 6363,
+    "kcode": 166,
+    "phone": 2077
+  },
+  "harness_filter_stats": {
+    "rows": 64772,
+    "injected": 21189,
+    "filtered": 22476,
+    "not_human": 3699
+  },
+  "overlap_substring": {
+    "imessage_in_harness": 517,
+    "harness_in_imessage": 19,
+    "kcode_in_harness": 58,
+    "harness_in_kcode": 65,
+    "kcode_in_imessage": 1,
+    "imessage_in_kcode": 7,
+    "phone_in_imessage": 2033,
+    "imessage_in_phone": 2049
+  },
+  "overlap_greedy": {
+    "imessage_harness": 517,
+    "kcode_harness": 58,
+    "kcode_imessage": 1
+  },
+  "union": 11752,
+  "register_distinct_asks": 2018,
+  "cited_by_channel": {
+    "harness": 88,
+    "imessage": 1674,
+    "kcode": 2
+  },
+  "citation_based_coverage_pct": 15.0,
+  "method": "substring containment both directions; greedy long-first pairing; union is a coarse count mixing message and intent granularity and must not be read as a precise coverage figure"
+}
