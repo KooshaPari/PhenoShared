@@ -58,6 +58,19 @@ jobs:
       - name: Install Zig
         uses: ./.github/actions/setup-zig
 
+      # Trunk's clippy also builds the Linux-only GUI stack. `tao` pulls
+      # `wayland-sys`, whose build script shells out to
+      # `pkg-config --libs --cflags wayland-client`, and the ubuntu-latest
+      # image does not ship that .pc file. Observed 2026-11-12 on PR #940, run
+      # 43184486398: "The system library `wayland-client` required by crate
+      # `wayland-sys` was not found", reported as a tool failure that fails the
+      # job before any lint result is read. Same class as the jq and zig steps.
+      - name: Install Linux GUI build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libwayland-dev libxkbcommon-dev pkg-config
+
       - name: Trunk Check
         uses: trunk-io/trunk-action@04ba50e7658c81db7356da96657e6e77f220bfa3 # v1.3.1
 
