@@ -4,7 +4,8 @@ audience: [sdk, developers]
 
 # VCS Port API
 
-The `VcsPort` trait abstracts version control operations, allowing AgilePlus to work with different VCS backends (currently Git via `agileplus-git`). It provides async worktree management, branch operations, commit history scanning, and artifact read/write for isolated agent work.
+The `VcsPort` trait abstracts version control operations, allowing AgilePlus to work with different VCS backends (currently Git via `agileplus-git`). It provides async worktree management, branch
+operations, commit history scanning, and artifact read/write for isolated agent work.
 
 ## Trait Definition
 
@@ -108,6 +109,7 @@ pub struct WorktreeInfo {
 ```
 
 Example:
+
 ```json
 {
   "path": "/path/to/repo/.worktrees/001-login-WP01",
@@ -136,6 +138,7 @@ pub struct ConflictInfo {
 ```
 
 Example successful merge:
+
 ```json
 {
   "success": true,
@@ -145,6 +148,7 @@ Example successful merge:
 ```
 
 Example with conflicts:
+
 ```json
 {
   "success": false,
@@ -378,6 +382,7 @@ Then wire into the CLI and configure in `.kittify/config.toml`.
 ## Git-Backed State Sync
 
 Beyond worktrees and branches, the `VcsPort` supports exporting and importing the full AgilePlus state into a git-tracked directory. This enables:
+
 - Sharing feature state across machines without a network service
 - Git-based backup and restore of AgilePlus data
 - Diffing feature state over time (`git log -- features/`)

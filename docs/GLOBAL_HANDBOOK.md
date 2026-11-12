@@ -161,6 +161,7 @@ and prepare a cross-repo improvement without write access everywhere.
 ### 6.1 Do Not Stop at Build
 
 For a macOS GUI CVP:
+
 - Build a real `.app` from clean checkout
 - Install outside source repo (`~/Applications` for internal)
 - Verify bundle ID, version, icon, architecture, platform data paths
@@ -274,6 +275,7 @@ and OS permissions must enforce policy independently of documents.
 ### 10.1 Cross-System Control Plane
 
 Reconciles four coupled systems:
+
 1. BytePort/local-cloud lifecycle
 2. Assessment Dossier convergence
 3. Emergent Garden/ResearchLedger continuation

@@ -37,6 +37,7 @@ We adopt a three-tier runtime:
    tree-attention, and fleet-proto. Compiles to `.so` / `.dylib` / `.dll`.
 
 The three tiers communicate via:
+
 - **Framework ↔ Python:** `PYTHONPATH` ordering. The OMLX framework's
   site-packages is first; the research packages come after.
 - **Python ↔ Rust:** pyo3 FFI module `_phenotype_omlx_core`. Optional —
@@ -44,7 +45,7 @@ The three tiers communicate via:
 
 ## Consequences
 
-**Positive**
+### Positive
 
 - Hot-path latency drops 2-5× on the Rust side (measured in
   `perf-core/turbo-quant` unit tests).
@@ -54,7 +55,7 @@ The three tiers communicate via:
   (re-copyable on every OMLX update).
 - Existing OMLX users see no behavior change unless they opt in.
 
-**Negative**
+### Negative
 
 - Build complexity goes up: now need a Rust toolchain alongside the
   Python venv.
@@ -62,7 +63,7 @@ The three tiers communicate via:
   Python (3.11 for OMLX, 3.12 for the system venv).
 - Two source languages to maintain.
 
-**Mitigations**
+### Mitigations
 
 - `scripts/phenotype-omlx-ready` is idempotent and verifies the build on
   every invocation.

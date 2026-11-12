@@ -8,4 +8,5 @@
 - [Literature/prior-art map](literature-map.md)
 - [Graduation gates](graduation-gates.md)
 
-The research program exists to narrow claims. The product can ship useful workspaces, routes and explicit workload placement while atomic interposition or advanced memory-fabric work remains rejected or experimental.
+The research program exists to narrow claims. The product can ship useful workspaces, routes and explicit workload placement while atomic interposition or advanced memory-fabric work remains rejected
+or experimental.

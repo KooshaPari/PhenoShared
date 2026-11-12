@@ -25,7 +25,8 @@ Repo-sprawl reduction wave — owner repo: **PhenoShared (phenoAI)**. Five stand
 
 ## Vendored-off-Go-tool disposition wave (2026-10-29)
 
-Vendored-copy disposition pass for a Go tool absorbed outside the `absorption/` flow — owner repo: **PhenoShared (phenoAI)**. Entry recorded so the tree is permanently excluded from CI and from future module sweeps.
+Vendored-copy disposition pass for a Go tool absorbed outside the `absorption/` flow — owner repo: **PhenoShared (phenoAI)**. Entry recorded so the tree is permanently excluded from CI and from future
+module sweeps.
 
 | Repo | Disposition | Absorption README | Worklog ref | Notes |
 |------|-------------|-------------------|-------------|-------|
@@ -33,11 +34,16 @@ Vendored-copy disposition pass for a Go tool absorbed outside the `absorption/` 
 
 ## Worklog references
 
-- **HF-01** (2026-10-29): `hfscope` vendored-copy disposition — verified both declared upstreams deleted, confirmed `cmd/` absent, `make build` unbuildable, `templ generate` required before vet can pass, and 10 non-gofmt files. Recorded as EXCLUDE (not first-class) and excluded from all CI and module sweeps.
+- **HF-01** (2026-10-29): `hfscope` vendored-copy disposition — verified both declared upstreams deleted, confirmed `cmd/` absent, `make build` unbuildable, `templ generate` required before vet can
+  pass, and 10 non-gofmt files. Recorded as EXCLUDE (not first-class) and excluded from all CI and module sweeps.
 
-- **SPR-01..SPR-05** (2026-09-27): Repo-sprawl consolidation pass — five standalone repos assessed, absorbed as plain copies under `absorption/`, each given a `PROVENANCE.md` (source repo/commit/date/rationale) and a `docs/absorbed-from/<repo>/README.md` disposition README. Root Cargo workspace re-validated after absorption (`cargo metadata --no-deps` OK). Source repos to be archived after this wave.
+- **SPR-01..SPR-05** (2026-09-27): Repo-sprawl consolidation pass — five standalone repos assessed, absorbed as plain copies under `absorption/`, each given a `PROVENANCE.md` (source
+  repo/commit/date/rationale) and a `docs/absorbed-from/<repo>/README.md` disposition README. Root Cargo workspace re-validated after absorption (`cargo metadata --no-deps` OK). Source repos to be
+  archived after this wave.
 
-- **L5-111** (2026-06-18): Trivial governance batch — verify P8 (phenotype-hub → phenotype-infra) and P9 (vibeproxy-monitoring-unified retirement) G19 absorption, add L5-### traceability to the index, and post a follow-up deprecation pointer on each archived source repo. See `phenotype-registry/ECOSYSTEM_MAP.md` §6 for the original P5/P8/P9 actions; this entry documents the G19 retrospective verification pass.
+- **L5-111** (2026-06-18): Trivial governance batch — verify P8 (phenotype-hub → phenotype-infra) and P9 (vibeproxy-monitoring-unified retirement) G19 absorption, add L5-### traceability to the index,
+  and post a follow-up deprecation pointer on each archived source repo. See `phenotype-registry/ECOSYSTEM_MAP.md` §6 for the original P5/P8/P9 actions; this entry documents the G19 retrospective
+  verification pass.
 
 ## Adding entries
 

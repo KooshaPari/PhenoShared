@@ -2,21 +2,26 @@
 
 ## Executive Summary
 
-This document provides concrete research findings for establishing a local-first, containerized development platform using Rust. It covers message queuing, caching, graph databases, artifact storage, and orchestration. All recommendations are grounded in current crate versions (as of early 2026) and are production-ready for both local development and containerized deployment.
+This document provides concrete research findings for establishing a local-first, containerized development platform using Rust. It covers message queuing, caching, graph databases, artifact storage,
+and orchestration. All recommendations are grounded in current crate versions (as of early 2026) and are production-ready for both local development and containerized deployment.
 
 ---
 
 ## 1. NATS with JetStream
 
 ### Overview
-NATS is a cloud-native messaging system optimized for distributed systems. JetStream adds persistent, ordered message delivery with exactly-once guarantees. The Rust client (`async-nats`) provides a fully async, non-blocking API using Tokio.
+
+NATS is a cloud-native messaging system optimized for distributed systems. JetStream adds persistent, ordered message delivery with exactly-once guarantees. The Rust client (`async-nats`) provides a
+fully async, non-blocking API using Tokio.
 
 ### Crate Information
+
 - **Primary Crate**: `async-nats` v0.35+ (latest stable as of March 2026)
 - **Alternative**: `nats` v0.24+ (blocking client, not recommended for Rust async platforms)
 - **Dependency Chain**: Requires `tokio` v1.x, `serde` for message serialization
 
 ### Key Capabilities
+
 1. **JetStream Persistent Messaging**: Streams persist messages to disk or memory with configurable retention policies
 2. **Exactly-Once Delivery**: Pull consumers with deduplication windows and acknowledgment semantics
 3. **Consumer Patterns**: Durable consumers, ephemeral consumers, push vs. pull subscriptions
@@ -28,11 +33,13 @@ NATS is a cloud-native messaging system optimized for distributed systems. JetSt
 **Docker Image**: `nats:latest` (Alpine-based, ~20MB)
 
 **Standalone NATS with JetStream:**
+
 ```bash
 nats-server -js -m 8222  # -js enables JetStream, -m opens monitoring port
 ```
 
 **Advanced Config (nats.conf):**
+
 ```conf
 jetstream {
   # 1GB store for persistent data
@@ -182,12 +189,14 @@ async fn process_wp_events(jetstream: &jetstream::Context) -> Result<()> {
 ### Detailed Comparison
 
 #### Redis (7.x)
+
 - **Pros**: Industry standard, massive ecosystem, battle-tested in production for 15+ years
 - **Cons**: Single-threaded event loop (bottleneck on multi-core), licensing change to SSPL concerns many organizations
 - **Best for**: Established codebases, maximum compatibility, rate limiting, session state
 - **Memory**: ~1:1 with data on simple keys, higher on complex structures
 
 #### Dragonfly (1.3+)
+
 - **Pros**: Modern C++20 implementation, multi-threaded design, 50% faster on benchmarks, Kubernetes-native
 - **Cons**: Newer (risk of undiscovered issues), BSL license (commercial model), fewer integrations
 - **Best for**: High throughput requirements, memory-constrained environments, greenfield projects
@@ -195,6 +204,7 @@ async fn process_wp_events(jetstream: &jetstream::Context) -> Result<()> {
 - **Startup**: ~50ms (vs Redis ~200ms)
 
 #### Valkey (8.0+)
+
 - **Pros**: Redis fork, open source (LGPL), maintained by Linux Foundation backed effort, 100% Redis compatible
 - **Cons**: Still establishing ecosystem, newer than Redis, fewer production case studies
 - **Best for**: Organizations wanting Redis compatibility with open source licensing, future hedge
@@ -203,7 +213,7 @@ async fn process_wp_events(jetstream: &jetstream::Context) -> Result<()> {
 
 ### Definitive Recommendation
 
-**For Local-First Platform: Use Dragonfly with Fallback to Valkey**
+#### For Local-First Platform: Use Dragonfly with Fallback to Valkey
 
 ```
 Reasoning:
@@ -233,6 +243,7 @@ Reasoning:
 ### Rust Client Crate
 
 **Crate**: `redis` v0.25+ (works with all three)
+
 ```
 redis = { version = "0.25", features = ["aio", "tokio-comp", "json"] }
 ```
@@ -300,15 +311,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ## 3. Neo4j Community Edition
 
 ### Overview
-Neo4j is the leading property graph database. It models complex relationships efficiently through first-class edge support. The Rust driver (`neo4rs`) provides async, Bolt protocol access with full transaction support.
+
+Neo4j is the leading property graph database. It models complex relationships efficiently through first-class edge support. The Rust driver (`neo4rs`) provides async, Bolt protocol access with full
+transaction support.
 
 ### Crate Information
+
 - **Primary Crate**: `neo4rs` v0.7+ (latest stable March 2026)
 - **Protocol**: Bolt v4.4 (Bolt v5.x supported)
 - **Async Runtime**: Tokio-based
 - **Features**: Connection pooling, query streaming, transactions, full ACID support
 
 ### Key Capabilities
+
 1. **Graph Modeling**: Nodes with properties, relationships with directionality and properties
 2. **Cypher Query Language**: Powerful, expressive graph query language
 3. **Relationship Indexing**: O(1) relationship traversal (core advantage vs. relational)
@@ -320,6 +335,7 @@ Neo4j is the leading property graph database. It models complex relationships ef
 ### Use Cases for AgilePlus Platform
 
 #### 1. Feature → WP Relationship Graph
+
 ```
 (Feature) -[DEFINES]-> (WorkPackage)
 (WorkPackage) -[DEPENDS_ON]-> (WorkPackage)
@@ -328,6 +344,7 @@ Neo4j is the leading property graph database. It models complex relationships ef
 ```
 
 #### 2. Cross-Project Dependency Tracking
+
 ```
 (Project:A/WP1) -[BLOCKS]-> (Project:B/WP2)
 (Feature:X) -[IMPLEMENTED_BY]-> (WP:Y)
@@ -335,6 +352,7 @@ Neo4j is the leading property graph database. It models complex relationships ef
 ```
 
 #### 3. Artifact Dependency Graph
+
 ```
 (Artifact) -[DEPENDS_ON]-> (Artifact)
 (Artifact) -[CREATED_BY]-> (Process)
@@ -346,9 +364,11 @@ Neo4j is the leading property graph database. It models complex relationships ef
 ## 4. MinIO Standalone (S3 Storage)
 
 ### Overview
+
 MinIO is an S3-compatible object storage system written in Go. Standalone mode requires no external dependencies; it's a single binary. Rust clients (`minio-rs` or `rust-s3`) provide S3 API access.
 
 ### Crate Information
+
 - **Recommended**: `aws-sdk-s3` (AWS SDK, works with MinIO via endpoint override)
 - **Alternative**: `rust-s3` v0.33+ (community-maintained, simpler API)
 
@@ -357,7 +377,9 @@ MinIO is an S3-compatible object storage system written in Go. Standalone mode r
 ## 5. Local Orchestration: Process Compose
 
 ### Overview
-Process Compose is a process manager for local development environments. It orchestrates multiple services with dependency ordering, health checks, readiness probes, and restart policies. It's designed as a lightweight Docker Compose alternative for local-first development.
+
+Process Compose is a process manager for local development environments. It orchestrates multiple services with dependency ordering, health checks, readiness probes, and restart policies. It's
+designed as a lightweight Docker Compose alternative for local-first development.
 
 ---
 

@@ -89,6 +89,7 @@ an application manifest rather than a direct probe.
 ### Test Fixtures
 
 Two fixtures in `crates/phenotype-nvms-adapter/tests/`:
+
 - `testdata/minimal.yaml`: CPU-only, no GPU, single port
 - `testdata/full.yaml`: GPU, multi-mount storage, multi-port, bounds
 

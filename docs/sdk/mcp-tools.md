@@ -4,7 +4,8 @@ audience: [sdk, agents]
 
 # MCP Tools Catalog
 
-AgilePlus exposes capabilities as [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) tools, implemented in the `agileplus-mcp` server. This allows AI agents to interact with the entire feature lifecycle programmatically.
+AgilePlus exposes capabilities as [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) tools, implemented in the `agileplus-mcp` server. This allows AI agents to interact with the entire
+feature lifecycle programmatically.
 
 ## Tool Categories
 
@@ -32,6 +33,7 @@ Retrieve full details of a feature.
 ```
 
 Returns:
+
 ```json
 {
   "id": 1,
@@ -95,6 +97,7 @@ List all work packages for a feature.
 ```
 
 Returns array of:
+
 ```json
 {
   "id": 5,
@@ -154,6 +157,7 @@ Validate whether a feature can transition to a new state.
 ```
 
 Returns:
+
 ```json
 {
   "passed": false,
@@ -190,6 +194,7 @@ Retrieve the audit trail for a feature (immutable changelog).
 ```
 
 Returns array of:
+
 ```json
 {
   "id": 42,
@@ -246,6 +251,7 @@ Example: Create a branch
 ```
 
 Response:
+
 ```json
 {
   "success": true,
@@ -357,6 +363,7 @@ MCP tools return standardized error responses:
 ```
 
 Common error codes:
+
 - `-32600`: Invalid request (bad tool name, missing args)
 - `-32601`: Method not found (unknown command)
 - `-32602`: Invalid params (missing required field)
@@ -405,6 +412,7 @@ Trigger a feature state transition (subject to governance checks).
 ```
 
 Returns:
+
 ```json
 {
   "success": true,
@@ -469,6 +477,7 @@ Read a text artifact from the feature's artifact store.
 ```
 
 Returns:
+
 ```json
 {
   "content": "# User Authentication\n\n## Functional Requirements...",
@@ -533,6 +542,7 @@ Push AgilePlus state to external trackers.
 ```
 
 Returns:
+
 ```json
 {
   "pushed_features": 3,
@@ -565,6 +575,7 @@ Get current sync status and last sync time.
 ```
 
 Returns:
+
 ```json
 {
   "platforms": {

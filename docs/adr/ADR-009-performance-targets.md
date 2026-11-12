@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 NanoVMS targets workloads requiring:
+
 - Fast VM startup
 - Low resource overhead
 - High density
@@ -173,11 +174,13 @@ curl http://localhost:6060/debug/pprof/trace?seconds=10 > trace.out
 ## Consequences
 
 ### Positive
+
 - Clear performance requirements
 - Measurable success criteria
 - Benchmark-driven development
 
 ### Negative
+
 - Platform-specific optimizations may be needed
 - Hardware-dependent baselines
 - Continuous performance regression prevention

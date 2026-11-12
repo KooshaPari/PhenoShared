@@ -1,6 +1,7 @@
 # User Journeys
 
-Real user stories for substrate. Each row identifies the actor, what they want, the value delivered, and a runnable command or observable outcome. Stories derive the functional requirements in [`functional_requirements.md`](./functional_requirements.md) — when a story stops matching the CLI/HTTP behavior, the FR is the thing to update, not this file's narrative.
+Real user stories for substrate. Each row identifies the actor, what they want, the value delivered, and a runnable command or observable outcome. Stories derive the functional requirements in
+[`functional_requirements.md`](./functional_requirements.md) — when a story stops matching the CLI/HTTP behavior, the FR is the thing to update, not this file's narrative.
 
 ## Stories
 

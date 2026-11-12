@@ -64,13 +64,14 @@ pub struct SqliteRepository<T> { /* ... */ }
 impl<T> Repository<T> for SqliteRepository<T> { /* ... */ }
 ```
 
-**Zero Breaking Changes**
+### Zero Breaking Changes
 
 ---
 
 ## Test Strategy
 
 ### Query Builder (No Database)
+
 ```rust
 #[test]
 fn test_simple_select() {
@@ -84,6 +85,7 @@ fn test_simple_select() {
 ```
 
 ### Sync Store (In-Memory)
+
 ```rust
 #[tokio::test]
 async fn test_transaction_atomicity() {
@@ -96,6 +98,7 @@ async fn test_transaction_atomicity() {
 ```
 
 ### Migrations (State Machine)
+
 ```rust
 #[tokio::test]
 async fn test_migration_rollback() {

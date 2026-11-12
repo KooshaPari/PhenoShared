@@ -27,10 +27,12 @@
 ### Detailed Tasks
 
 #### Task 1.1: Install mold locally
+
 **Time**: 15 minutes
 **Description**: Install mold via package manager
 
 **Linux**:
+
 ```bash
 sudo apt update && sudo apt install -y mold
 mold --version
@@ -38,17 +40,20 @@ mold --version
 ```
 
 **macOS** (optional):
+
 ```bash
 brew install mold
 mold --version
 ```
 
 **Acceptance Criteria**:
+
 - [ ] mold binary is in PATH
 - [ ] `mold --version` returns version number
 - [ ] `which mold` shows installation location
 
 #### Task 1.2: Measure baseline link time
+
 **Time**: 30 minutes
 **Description**: Build clean workspace with default linker and record time
 
@@ -61,6 +66,7 @@ grep "User time\|Maximum resident set size" baseline-build.log
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Baseline build completes successfully
 - [ ] Build output logged to `baseline-build.log`
 - [ ] Wall-clock time recorded (expected: 45-60s)
@@ -68,6 +74,7 @@ grep "User time\|Maximum resident set size" baseline-build.log
 - [ ] Output artifact checked (binary size verified)
 
 **Record**:
+
 ```
 Baseline Build Metrics:
 - Wall-clock time: ____ s
@@ -78,6 +85,7 @@ Baseline Build Metrics:
 ```
 
 #### Task 1.3: Enable mold in cargo config
+
 **Time**: 5 minutes
 **Description**: Add mold rustflags to `.cargo/config.toml`
 
@@ -88,16 +96,19 @@ cat .cargo/config.toml | grep -A2 "mold linker"
 ```
 
 **Expected output**:
+
 ```toml
 rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Mold rustflags present in `.cargo/config.toml`
 - [ ] Comment documents mold integration
 - [ ] No syntax errors in TOML
 
 #### Task 1.4: Build with mold and measure performance
+
 **Time**: 30 minutes
 **Description**: Build 3 times with mold and record metrics
 
@@ -116,12 +127,14 @@ cargo clean
 ```
 
 **Acceptance Criteria**:
+
 - [ ] 3 builds complete successfully
 - [ ] Build times consistent (<1s variance)
 - [ ] Binary size identical to baseline
 - [ ] All times recorded in logs
 
 **Record**:
+
 ```
 Mold Build Metrics (3 runs):
 - Run 1 time: ____ s
@@ -132,6 +145,7 @@ Mold Build Metrics (3 runs):
 ```
 
 #### Task 1.5: Verify binary correctness
+
 **Time**: 30 minutes
 **Description**: Run full test suite to ensure mold-linked binaries work correctly
 
@@ -150,6 +164,7 @@ objdump -t target/release/your_binary | head -20
 ```
 
 **Acceptance Criteria**:
+
 - [ ] All tests pass (`cargo test --workspace --release`)
 - [ ] No clippy warnings
 - [ ] Documentation builds without errors
@@ -157,6 +172,7 @@ objdump -t target/release/your_binary | head -20
 - [ ] No undefined references or relocation errors
 
 #### Task 1.6: Document findings
+
 **Time**: 15 minutes
 **Description**: Create summary report of baseline vs mold performance
 
@@ -195,6 +211,7 @@ Recommended for CI/CD integration: YES / NO
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Report created and saved locally
 - [ ] All key metrics documented
 - [ ] Performance improvement calculated
@@ -238,12 +255,14 @@ Recommended for CI/CD integration: YES / NO
 ### Detailed Tasks
 
 #### Task 2.1: Review current `.cargo/config.toml`
+
 **Time**: 10 minutes
 **Description**: Verify mold rustflags are present and correct
 
 **File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.cargo/config.toml`
 
 Expected current state:
+
 ```toml
 [build]
 incremental = true
@@ -257,12 +276,14 @@ rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 ```
 
 **Acceptance Criteria**:
+
 - [ ] File exists at correct path
 - [ ] Mold rustflags present
 - [ ] Comments document behavior
 - [ ] TOML syntax is valid (no parsing errors)
 
 #### Task 2.2: Test fallback behavior without mold
+
 **Time**: 15 minutes
 **Description**: Verify build works on system without mold installed
 
@@ -282,12 +303,14 @@ sudo apt install -y mold
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Build succeeds without mold installed
 - [ ] Binary is produced (just slower)
 - [ ] Tests pass with fallback linker
 - [ ] No error messages about missing mold
 
 #### Task 2.3: Test incremental build behavior
+
 **Time**: 15 minutes
 **Description**: Verify incremental builds work correctly with mold
 
@@ -308,16 +331,19 @@ git restore crates/phenotype-error-core/src/lib.rs
 ```
 
 **Acceptance Criteria**:
+
 - [ ] First build succeeds with mold
 - [ ] Incremental build detects changes
 - [ ] Incremental link is significantly faster (2-3s)
 - [ ] Binary correctness maintained
 
 #### Task 2.4: Verify profile settings
+
 **Time**: 10 minutes
 **Description**: Ensure all release profile settings work with mold
 
 Check root `Cargo.toml`:
+
 ```toml
 [profile.release]
 opt-level = "z"         # Optimize for size
@@ -327,16 +353,19 @@ strip = true            # Strip symbols
 ```
 
 Verify these are set:
+
 ```bash
 grep -A5 "\[profile.release\]" Cargo.toml
 ```
 
 **Acceptance Criteria**:
+
 - [ ] All profile settings present
 - [ ] Settings are optimized for mold (codegen-units=1)
 - [ ] No conflicts with mold behavior
 
 #### Task 2.5: Document environment variable override
+
 **Time**: 10 minutes
 **Description**: Document how to disable mold temporarily
 
@@ -351,6 +380,7 @@ RUSTFLAGS="" cargo build --release
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Override method documented in comments
 - [ ] Example provided for disabling
 - [ ] Reference to main plan document added
@@ -392,12 +422,14 @@ RUSTFLAGS="" cargo build --release
 ### Detailed Tasks
 
 #### Task 3.1: Verify GitHub Actions workflow
+
 **Time**: 10 minutes
 **Description**: Review the newly added mold-benchmark job
 
 **File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/benchmark.yml`
 
 **Verification**:
+
 ```bash
 # Check YAML syntax
 yamllint .github/workflows/benchmark.yml
@@ -407,6 +439,7 @@ grep -A50 "mold-link-benchmark:" .github/workflows/benchmark.yml
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Job named `mold-link-benchmark` exists
 - [ ] YAML syntax is valid
 - [ ] Runs on `ubuntu-latest` only
@@ -414,6 +447,7 @@ grep -A50 "mold-link-benchmark:" .github/workflows/benchmark.yml
 - [ ] Implements 3 benchmark runs
 
 #### Task 3.2: Test workflow locally (dry-run)
+
 **Time**: 15 minutes
 **Description**: Simulate workflow steps locally
 
@@ -435,12 +469,14 @@ echo "✓ Workflow simulation successful"
 ```
 
 **Acceptance Criteria**:
+
 - [ ] All workflow steps execute successfully
 - [ ] Times can be captured and calculated
 - [ ] No permission errors
 - [ ] Artifacts directory can be created
 
 #### Task 3.3: Test on actual PR
+
 **Time**: 20 minutes
 **Description**: Push a test PR and verify workflow triggers
 
@@ -461,6 +497,7 @@ git push origin test/mold-ci-integration
 ```
 
 **Acceptance Criteria**:
+
 - [ ] PR created and pushed
 - [ ] GitHub Actions workflow triggers
 - [ ] `mold-link-benchmark` job runs
@@ -469,6 +506,7 @@ git push origin test/mold-ci-integration
 - [ ] Metrics displayed correctly
 
 **Expected PR Comment**:
+
 ```
 🔗 Mold Linker Benchmark Results
 
@@ -486,6 +524,7 @@ git push origin test/mold-ci-integration
 ```
 
 #### Task 3.4: Verify artifact storage
+
 **Time**: 10 minutes
 **Description**: Check that benchmark results are archived
 
@@ -507,16 +546,19 @@ cat .github/bench-results/mold-123456789.json
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Artifacts uploaded to Actions
 - [ ] JSON file contains all metrics
 - [ ] Retention set to 90 days
 - [ ] File can be downloaded and parsed
 
 #### Task 3.5: Add workflow documentation
+
 **Time**: 15 minutes
 **Description**: Document the new CI job in comments
 
 Add comment block above job definition:
+
 ```yaml
   # ─── Mold Linker Benchmark ────────────────────────────────────────────
   # Measures link-time speedup from mold linker on Linux CI runners.
@@ -531,6 +573,7 @@ Add comment block above job definition:
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Comments document job purpose
 - [ ] Reference to main plan included
 - [ ] Expected performance documented
@@ -574,6 +617,7 @@ Add comment block above job definition:
 ### Detailed Tasks
 
 #### Task 4.1: Run benchmark on main branch
+
 **Time**: 15 minutes
 **Description**: Trigger benchmark workflow manually on main
 
@@ -591,16 +635,19 @@ Add comment block above job definition:
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Workflow triggered on main
 - [ ] Job runs to completion
 - [ ] No errors or warnings
 - [ ] All metrics captured
 
 #### Task 4.2: Collect baseline metrics
+
 **Time**: 10 minutes
 **Description**: Download and analyze baseline build time
 
 From workflow artifacts:
+
 ```bash
 # Download mold-benchmark-results artifact
 # Extract JSON file
@@ -621,6 +668,7 @@ cat mold-benchmark-results/mold-<run_id>.json | jq '.'
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Artifact downloaded successfully
 - [ ] JSON file parses correctly
 - [ ] All metrics present
@@ -628,6 +676,7 @@ cat mold-benchmark-results/mold-<run_id>.json | jq '.'
 - [ ] Mold time reasonable (10-15s)
 
 #### Task 4.3: Generate comparison report
+
 **Time**: 20 minutes
 **Description**: Create comprehensive benchmark analysis document
 
@@ -704,6 +753,7 @@ mold linker provides **73% improvement** in link time on Linux CI runners.
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Report file created
 - [ ] All metrics included
 - [ ] Analysis provided
@@ -711,6 +761,7 @@ mold linker provides **73% improvement** in link time on Linux CI runners.
 - [ ] Next steps documented
 
 #### Task 4.4: Create trend tracking baseline
+
 **Time**: 10 minutes
 **Description**: Archive metrics for future comparison
 
@@ -734,12 +785,14 @@ EOF
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Baseline metrics file created
 - [ ] Date stamped for tracking
 - [ ] All key metrics included
 - [ ] Format allows for trend analysis
 
 #### Task 4.5: Communicate results
+
 **Time**: 5 minutes
 **Description**: Share findings with team
 
@@ -750,6 +803,7 @@ EOF
 > Good news! We've successfully integrated the mold linker for faster compilation.
 >
 > **Results**:
+>
 > - Baseline: 45.5 seconds
 > - With mold: 12.1 seconds
 > - **Improvement: 73% faster** ✓
@@ -758,9 +812,10 @@ EOF
 >
 > **Plan**: Enable by default in CI starting [DATE]
 >
-> Details: https://github.com/.../docs/reference/MOLD_LINKER_INTEGRATION_PLAN.md
+> Details: <https://github.com/.../docs/reference/MOLD_LINKER_INTEGRATION_PLAN.md>
 
 **Acceptance Criteria**:
+
 - [ ] Message sent to team channel
 - [ ] Results clearly communicated
 - [ ] Next steps documented
@@ -803,6 +858,7 @@ EOF
 ### Detailed Tasks
 
 #### Task 5.1: Add troubleshooting section
+
 **Time**: 15 minutes
 **Description**: Expand MOLD_LINKER_INTEGRATION_PLAN.md troubleshooting section
 
@@ -833,12 +889,14 @@ No action needed
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Troubleshooting section present in plan doc
 - [ ] 5+ common issues documented
 - [ ] Solutions provided for each issue
 - [ ] Examples included where helpful
 
 #### Task 5.2: Document known limitations
+
 **Time**: 10 minutes
 **Description**: Add limitations section to plan
 
@@ -868,12 +926,14 @@ Create or update section:
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Limitations documented
 - [ ] Workarounds provided
 - [ ] Platform-specific notes included
 - [ ] Issue reporting guidance included
 
 #### Task 5.3: Create rollback runbook
+
 **Time**: 15 minutes
 **Description**: Step-by-step rollback procedures
 
@@ -936,6 +996,7 @@ ls -lh target/release/your_binary
 - Security vulnerability found in mold
 - Linker not available in CI environment
 - Link time regression (unexpected slowdown)
+
 ```
 
 **Acceptance Criteria**:
@@ -1003,6 +1064,7 @@ if (latest_link_time > baseline * 1.10) {
 ```
 
 ### Threshold 2: Build Failures
+
 ```yaml
 if (failed_builds_today > 0) {
   alert: "Mold linker build failure"
@@ -1012,6 +1074,7 @@ if (failed_builds_today > 0) {
 ```
 
 ### Threshold 3: Security Update Available
+
 ```yaml
 if (new_mold_version_available AND is_security_update) {
   alert: "Security update available for mold"
@@ -1034,6 +1097,7 @@ if (new_mold_version_available AND is_security_update) {
 1. **Warning Level** → Message team Slack channel
 2. **Error Level** → Create GitHub issue
 3. **Critical Level** → Page on-call engineer
+
 ```
 
 **Acceptance Criteria**:
@@ -1064,6 +1128,7 @@ if (new_mold_version_available AND is_security_update) {
 ```
 
 **Acceptance Criteria**:
+
 - [ ] CHANGELOG updated with feature
 - [ ] Version number noted
 - [ ] Performance impact documented
@@ -1124,6 +1189,7 @@ Critical path: All (every WP is on critical path)
 ## Notes for AgilePlus
 
 When creating AgilePlus feature:
+
 1. Create feature: `agileplus specify --title "Mold Linker Integration" --description "..."`
 2. Create 5 work packages (WP2.1 - WP2.5)
 3. Link tasks to this document as reference

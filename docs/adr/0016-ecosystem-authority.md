@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-AGSLAG decides resource worth; AgilePlus owns governed commitments; thegent owns labor dispatch; Fabric owns physical execution/data/I-O; Tracera owns evidence links; SessionLedger owns operational history. Exchange IDs/events only.
+AGSLAG decides resource worth; AgilePlus owns governed commitments; thegent owns labor dispatch; Fabric owns physical execution/data/I-O; Tracera owns evidence links; SessionLedger owns operational
+history. Exchange IDs/events only.
 
 ### Enforced rules
 

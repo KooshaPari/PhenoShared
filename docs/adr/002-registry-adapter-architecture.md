@@ -17,6 +17,7 @@ pheno-cli must publish packages to 7 different package registries:
 7. **Mojo package registry** — Mojo packages
 
 Each registry has materially different conventions:
+
 - **Authentication**: API tokens (npm, PyPI, crates), git tags (Go), API keys (Hex)
 - **Version format**: SemVer with dashes (npm, crates), PEP 440 (PyPI), tag-only (Go)
 - **Build artifacts**: tarballs (npm), wheels/sdists (PyPI), no artifact (Go), .tar.gz (crates)
@@ -65,13 +66,15 @@ The orchestrator is registry-agnostic; all registry-specific logic lives in the 
 
 ### Stub Adapters
 
-Registries not yet fully supported (Hex, Zig, Mojo) are represented by stub adapters that implement `Detect` (so packages are discovered) but return `ErrNotSupported` from `Build` and `Publish`. This allows partial rollout without blocking the orchestrator.
+Registries not yet fully supported (Hex, Zig, Mojo) are represented by stub adapters that implement `Detect` (so packages are discovered) but return `ErrNotSupported` from `Build` and `Publish`. This
+allows partial rollout without blocking the orchestrator.
 
 ## Alternatives Considered
 
 ### 1. Switch statement in a single publish function
 
 A single `publishPackage(pkg Package, registry Registry)` function with a switch on `registry`. Rejected because:
+
 - Adding a new registry requires modifying the central function (violates open/closed principle).
 - Testing one registry's logic requires mocking or skipping all other branches.
 - Registry-specific state (e.g., HTTP client, auth tokens) bleeds into a shared scope.
@@ -79,6 +82,7 @@ A single `publishPackage(pkg Package, registry Registry)` function with a switch
 ### 2. Plugin-based dynamic loading
 
 Load adapter implementations as Go plugins (`.so` files) at runtime. Rejected because:
+
 - Go plugins have significant platform restrictions (Linux-only, CGO dependency).
 - Plugin versioning and compatibility is fragile.
 - Overkill for 7 known registries with a stable interface.
@@ -86,20 +90,24 @@ Load adapter implementations as Go plugins (`.so` files) at runtime. Rejected be
 ### 3. Separate CLI binary per registry
 
 One binary each: `pheno-npm`, `pheno-pypi`, etc. Rejected because:
+
 - Fragmenting the UX across binaries complicates CI pipelines.
 - Shared logic (channel governance, gate evaluation) would need to be duplicated or extracted to a library.
 
 ## Consequences
 
 **Positive:**
+
 - Each adapter is independently testable in isolation.
 - Adding a new registry requires only creating a new file that satisfies `RegistryAdapter` — no changes to existing code.
 - Stub adapters allow partial rollout without breaking the orchestrator.
 - The interface is narrow (5 methods + Name) and stable; adapters are unlikely to need interface changes.
 
 **Negative:**
+
 - New adapters must be explicitly registered in the orchestrator; there is no auto-discovery.
-- The `Version` method encodes registry-specific pre-release format knowledge inside each adapter rather than in a shared version module. This is intentional (each registry has genuinely different conventions) but means version format tests are distributed across adapter test files.
+- The `Version` method encodes registry-specific pre-release format knowledge inside each adapter rather than in a shared version module. This is intentional (each registry has genuinely different
+  conventions) but means version format tests are distributed across adapter test files.
 - Credentials are passed as `map[string]string` to keep the interface generic. Adapters must document which credential keys they expect.
 
 ## Implementation Notes

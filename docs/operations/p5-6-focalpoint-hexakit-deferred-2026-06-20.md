@@ -12,14 +12,18 @@ P5-6 is **deferred (wave-closure)**. No code migration is planned in this wave.
 
 ## Rationale
 
-1. **Source archived.** `<REDACTED>/FocalPoint` is `isArchived: true`. The 867MB `vendor/` directory that triggered the prior deferral is more likely in `<REDACTED>/HexaKit/vendor/` than in FocalPoint itself; the absorption is effectively a no-op pattern (mirroring P5-4 phenoRouterMonitor → phenoAI).
-2. **The 867MB vendor is in HexaKit, not FocalPoint.** HexaKit is the active Rust/Bun monorepo with full governance/ADR/FR/SPEC docs. The actual focal-point sub-project (if any) lives under `FocalPoint/FocalPoint-wtrees/`, not at the root.
-3. **Upstream blocker.** `<REDACTED>/thegent` PR #1114 (`integration/consolidate`) is OPEN + APPROVED + CONFLICTING. The `thegent` consolidation failure is upstream of P5-6 because thegent is the engine layer for the P5-5 boundary. Fixing P5-6 in isolation would paper over the consolidation gap.
+1. **Source archived.** `<REDACTED>/FocalPoint` is `isArchived: true`. The 867MB `vendor/` directory that triggered the prior deferral is more likely in `<REDACTED>/HexaKit/vendor/` than in FocalPoint
+   itself; the absorption is effectively a no-op pattern (mirroring P5-4 phenoRouterMonitor → phenoAI).
+2. **The 867MB vendor is in HexaKit, not FocalPoint.** HexaKit is the active Rust/Bun monorepo with full governance/ADR/FR/SPEC docs. The actual focal-point sub-project (if any) lives
+   under `FocalPoint/FocalPoint-wtrees/`, not at the root.
+3. **Upstream blocker.** `<REDACTED>/thegent` PR #1114 (`integration/consolidate`) is OPEN + APPROVED + CONFLICTING. The `thegent` consolidation failure is upstream of P5-6 because thegent is the
+   engine layer for the P5-5 boundary. Fixing P5-6 in isolation would paper over the consolidation gap.
 
 ## Disposition
 
 - **gate-focalpoint** row: `fsm: deferred`, note preserved as "867MB vendor; repo archived; manual HexaKit merge deferred"
-- **gate-focalpoint-p5-6-wave-closure** sidecar: `fsm: deferred`, note: "P5-6 wave-closure 2026-06-20: deferred (wave-closure) - superseded by &lt;REDACTED&gt;/thegent PR #1114 consolidation; revisit after #1114 merges."
+- **gate-focalpoint-p5-6-wave-closure** sidecar: `fsm: deferred`, note: "P5-6 wave-closure 2026-06-20: deferred (wave-closure) - superseded by &lt;REDACTED&gt;/thegent PR #1114 consolidation; revisit
+  after #1114 merges."
 
 ## Consumer chokepoints
 

@@ -12,7 +12,8 @@
 
 - Do **not** vendor Harbor / portage sources into this repo.
 - Prefer depending on PyPI `harbor>=0.6` (see `pyproject.toml` extra `[harbor]`) for TB2 jobs.
-- Use a local **portage-TEMP** checkout only when you need fork-only features (e.g. `harbor-llm-bridge`). Install that fork from its own README (`uv sync` + optional Rust build) — then point PATH / `uv run harbor` at that environment.
+- Use a local **portage-TEMP** checkout only when you need fork-only features (e.g. `harbor-llm-bridge`). Install that fork from its own README (`uv sync` + optional Rust build) — then point PATH
+  / `uv run harbor` at that environment.
 
 ## What lives under `harbor_cli/` here
 

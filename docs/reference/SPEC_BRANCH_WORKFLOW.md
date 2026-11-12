@@ -4,7 +4,8 @@
 
 ## Overview
 
-The `specs/main` branch is the canonical single source of truth (SSOT) for all FUNCTIONAL_REQUIREMENTS.md across the Phenotype polyrepo ecosystem. This workflow enables 50+ parallel agents to work on specifications independently of code implementation, avoiding merge conflicts and blocking relationships.
+The `specs/main` branch is the canonical single source of truth (SSOT) for all FUNCTIONAL_REQUIREMENTS.md across the Phenotype polyrepo ecosystem. This workflow enables 50+ parallel agents to work on
+specifications independently of code implementation, avoiding merge conflicts and blocking relationships.
 
 ### Key Principles
 
@@ -259,6 +260,7 @@ Result: All specs merged in 15-30 minutes with zero conflicts, while code teams 
 **Problem**: Two agents adding FRs to FR-AGILE section simultaneously
 
 **Solution**:
+
 1. Use next available number within FR-AGILE sequence
 2. Agent 1: FR-AGILE-200, FR-AGILE-201, FR-AGILE-202
 3. Agent 2: FR-AGILE-210, FR-AGILE-211 (skip 203-209 to avoid conflicts)
@@ -273,6 +275,7 @@ Result: All specs merged in 15-30 minutes with zero conflicts, while code teams 
 **Change Needed**: Implementation revealed new requirements
 
 **Steps**:
+
 1. Create new specs/agent-* branch
 2. Update FR-AGILE-050 requirement field with new text
 3. Mark as `Status: Active (Revised)`
@@ -289,6 +292,7 @@ Result: All specs merged in 15-30 minutes with zero conflicts, while code teams 
 **New Direction**: Discovered better solution (FR-AGILE-150)
 
 **Steps**:
+
 1. Keep FR-AGILE-050 unchanged
 2. Change Status to `Superseded`
 3. Add comment: `Superseded by FR-AGILE-150 (new approach discovered during implementation)`
@@ -305,6 +309,7 @@ Result: All specs merged in 15-30 minutes with zero conflicts, while code teams 
 
 **Cause**: Duplicate FR ID in your edits
 **Solution**:
+
 1. Find conflicting ID: `grep "FR-AGILE-001" FUNCTIONAL_REQUIREMENTS.md`
 2. Check main branch: `git show main:FUNCTIONAL_REQUIREMENTS.md | grep "FR-AGILE-001"`
 3. Use next available ID (e.g., FR-AGILE-002, FR-AGILE-003)
@@ -314,6 +319,7 @@ Result: All specs merged in 15-30 minutes with zero conflicts, while code teams 
 
 **Cause**: Epic doesn't exist in PRD.md
 **Solution**:
+
 1. Check valid epics in root PRD.md or repo-specific PRD
 2. Use correct epic (e.g., E1.1, E2.3, E5.5)
 3. If epic should exist, contact PRD owner to add it first
@@ -323,6 +329,7 @@ Result: All specs merged in 15-30 minutes with zero conflicts, while code teams 
 
 **Cause**: File path doesn't exist (for Active FR)
 **Solution**:
+
 1. For **Active** FRs: File must exist. Verify path is correct.
 2. For **Planned** FRs: Code location optional. Change Status to Planned if appropriate.
 3. Update FUNCTIONAL_REQUIREMENTS.md and push again
@@ -331,6 +338,7 @@ Result: All specs merged in 15-30 minutes with zero conflicts, while code teams 
 
 **Cause**: Other agent merged first, changed same section
 **Solution**:
+
 ```bash
 git fetch origin
 git rebase origin/specs/main
@@ -349,7 +357,7 @@ git push origin specs/agent-<YOUR_ID>-<FEATURE> -f
 
 - ✅ Use descriptive branch names: `specs/agent-<purpose>-<repo>`
 - ✅ Create PRs with detailed summaries of FRs being added
-- ✅ Reference related code PRs: "See also: https://github.com/.../pull/123"
+- ✅ Reference related code PRs: "See also: <https://github.com/.../pull/123>"
 - ✅ Group related FRs together (same epic, same component)
 - ✅ Keep FR descriptions concise but complete
 - ✅ Use SHALL/MUST/SHOULD for clear requirements
@@ -428,4 +436,3 @@ Tests added in:
 **Last Updated:** 2026-03-30
 **Maintained By:** Architecture team
 **Questions?** See FUNCTIONAL_REQUIREMENTS.md or contact @architecture
-

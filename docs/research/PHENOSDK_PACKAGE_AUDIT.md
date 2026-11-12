@@ -30,6 +30,7 @@
 **Purpose**: Defines hexagonal architecture ports (interfaces) and domain models for the entire infrastructure suite.
 
 **Structure**:
+
 ```
 phenotype-contracts/src/
 ├── lib.rs               # Main entry, re-exports all modules
@@ -129,6 +130,7 @@ pub enum Error {
 ```
 
 **Dependencies**:
+
 - serde + serde_json
 - uuid
 - chrono
@@ -150,6 +152,7 @@ pub enum Error {
 **Purpose**: Generic event sourcing implementation with SHA-256 hash chain for integrity verification.
 
 **Structure**:
+
 ```
 phenotype-event-sourcing/src/
 ├── lib.rs              # Main entry
@@ -257,6 +260,7 @@ hash = SHA256(
 ```
 
 **Dependencies**:
+
 - serde + serde_json
 - chrono
 - uuid
@@ -279,6 +283,7 @@ hash = SHA256(
 **Purpose**: Two-tier caching strategy (LRU for hot data + distributed for shared cache).
 
 **Structure**:
+
 ```
 phenotype-cache-adapter/src/
 ├── lib.rs              # Main entry
@@ -345,6 +350,7 @@ pub enum CacheError {
 ```
 
 **Dependencies**:
+
 - moka (concurrent caching)
 - dashmap (concurrent hashmaps)
 - serde + serde_json
@@ -368,6 +374,7 @@ pub enum CacheError {
 **Purpose**: Rule-based policy evaluation engine with regex-based pattern matching and multiple decision combinators.
 
 **Structure**:
+
 ```
 phenotype-policy-engine/src/
 ├── lib.rs              # Main entry
@@ -469,6 +476,7 @@ let rule = PolicyRule {
 ```
 
 **Dependencies**:
+
 - regex
 - serde + serde_json
 - thiserror
@@ -491,6 +499,7 @@ let rule = PolicyRule {
 **Purpose**: Finite state machine implementation with transition guards and actions.
 
 **Structure**:
+
 ```
 phenotype-state-machine/src/
 ├── lib.rs              # Main entry
@@ -588,6 +597,7 @@ let transitions = vec![
 ```
 
 **Dependencies**:
+
 - serde + serde_json
 - chrono
 - thiserror
@@ -637,6 +647,7 @@ let transitions = vec![
 ```
 
 **Dependency Counts**:
+
 - phenotype-contracts: 0 internal dependencies ✓ (can be published independently)
 - phenotype-event-sourcing: 1 (contracts) ✓
 - phenotype-cache-adapter: 1 (contracts) ✓
@@ -1073,6 +1084,7 @@ export function estimateTokens(text: string, model?: string): number;
 **Overall Readiness**: 100% - All crates are stable, well-designed, and ready for npm extraction.
 
 **Execution Order** (DAG):
+
 1. pheno-core (zero dependencies, publish independently)
 2. pheno-resilience (depends on pheno-core, can publish after)
 3. pheno-llm (greenfield module, no Rust source, can happen in parallel)

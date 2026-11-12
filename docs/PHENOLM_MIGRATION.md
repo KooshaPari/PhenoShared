@@ -15,6 +15,7 @@ reward, and self-improvement layer owned by this repo.
 ## Migration Steps
 
 1. Fetch the missing submodule content.
+
    ```powershell
    git submodule update --init --recursive agileplus-specs
    ```

@@ -2,7 +2,8 @@
 
 ## Current identity
 
-ShareCLI remains a standalone OS/kernel-adjacent agent runtime and declarative process supervisor. Its current public description includes process discovery, CPU/memory/network/FD and syscall-relevant I/O observation, speculative coalescing, FUSE I/O sharing, an agent mesh, thermal gating, hot reload, health, metrics and plugins.
+ShareCLI remains a standalone OS/kernel-adjacent agent runtime and declarative process supervisor. Its current public description includes process discovery, CPU/memory/network/FD and syscall-relevant
+I/O observation, speculative coalescing, FUSE I/O sharing, an agent mesh, thermal gating, hot reload, health, metrics and plugins.
 
 ## Relationship
 
@@ -18,7 +19,8 @@ health/logs             ────────▶  SessionLedger/Tracera refs
 
 ## Non-collapse rule
 
-ShareCLI must remain useful without Fabric. A simple `sharecli.toml` starts and monitors processes on one host. When Fabric is present, optional placement, locality, RT class and published-surface fields become available. ShareCLI does not embed the global graph coordinator or pretend to be the distributed OS.
+ShareCLI must remain useful without Fabric. A simple `sharecli.toml` starts and monitors processes on one host. When Fabric is present, optional placement, locality, RT class and published-surface
+fields become available. ShareCLI does not embed the global graph coordinator or pretend to be the distributed OS.
 
 ## Proposed extension
 

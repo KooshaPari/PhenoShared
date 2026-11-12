@@ -9,13 +9,17 @@
 
 The Compute/Infra layer needs to combine two pre-existing codebases with different language runtimes:
 
-1. **nanovms** — a Go codebase providing 3-tier isolation (WASM/gVisor/Firecracker), CLI tooling, and a mature test suite. Go was chosen for nanovms because of its excellent syscall package, rapid prototyping, and built-in concurrency primitives for sandbox management.
+1. **nanovms** — a Go codebase providing 3-tier isolation (WASM/gVisor/Firecracker), CLI tooling, and a mature test suite. Go was chosen for nanovms because of its excellent syscall package, rapid
+   prototyping, and built-in concurrency primitives for sandbox management.
 
-2. **PhenoCompose** — a Rust codebase providing the FFI driver layer, config management, and integration with the broader Rust ecosystem (including phenotype-registry, phenotype-sdk, and otel/observability crates).
+2. **PhenoCompose** — a Rust codebase providing the FFI driver layer, config management, and integration with the broader Rust ecosystem (including phenotype-registry, phenotype-sdk, and
+   otel/observability crates).
 
-Directly translating either codebase into the other language would be wasteful and error-prone. The Go codebase has ~14 ADRs worth of engineering decisions tested over months of development. The Rust codebase has tight integration with the rest of the Phenotype ecosystem.
+Directly translating either codebase into the other language would be wasteful and error-prone. The Go codebase has ~14 ADRs worth of engineering decisions tested over months of development. The Rust
+codebase has tight integration with the rest of the Phenotype ecosystem.
 
 The challenge: how to combine Go and Rust in a single workspace such that:
+
 - Developers can work in either language without friction
 - Build system resolves the cross-language boundary automatically
 - CI/CD can validate both runtimes
@@ -56,7 +60,8 @@ phenotype-infra/
    - **Mode B** (Go toolchain available): `go build -buildmode=c-archive` executed at build time.
    - **Mode C** (no Go): emit warnings, Rust shim module provides fallback stubs.
 
-3. **Rust side:** `crates/nvms-ffi/src/lib.rs` declares `extern "C"` function signatures and conditionally includes a shim module (`#[cfg(not(nvms_core_lib))]`) that provides no-op implementations when the real library is absent.
+3. **Rust side:** `crates/nvms-ffi/src/lib.rs` declares `extern "C"` function signatures and conditionally includes a shim module (`#[cfg(not(nvms_core_lib))]`) that provides no-op implementations
+   when the real library is absent.
 
 ### Conditional compilation
 
@@ -66,7 +71,7 @@ phenotype-infra/
 
 ## Consequences
 
-**Positive**
+### Positive
 
 - Both codebases evolve independently in their natural language.
 - The C FFI boundary enforces a clean API surface — no accidental cross-language coupling.
@@ -74,14 +79,14 @@ phenotype-infra/
 - Go integration tests continue to work as before (`go test ./...` in `crates/nanovms-core/`).
 - Consistent build commands for CI (`cargo build --workspace` builds everything).
 
-**Negative**
+### Negative
 
 - Added build complexity: the cross-language link step can fail silently.
 - Requires CGo setup on developer machines (Windows CGo requires MinGW or equivalent).
 - Debugging across the FFI boundary is harder (need `dlv` + `lldb` simultaneously).
 - The shim fallback creates a risk of "green CI but broken Go link" if shims grow out of sync.
 
-**Neutral**
+### Neutral
 
 - Windows cross-compilation of the Go staticlib requires `xgo` or Docker.
 - Local development on macOS/Linux with Go installed gives the full experience.
@@ -91,7 +96,8 @@ phenotype-infra/
 
 1. **Pure Rust rewrite of nanovms.** Rejected: 14 ADRs of Go engineering would need re-validation; months of effort for zero functional gain.
 
-2. **Pure Go with cgo Rust bindings.** Rejected: Go's FFI model (cgo) is slower and more cumbersome than Rust's `extern "C"`; the Rust ecosystem (telemetry, registry, SDK) would be harder to call from Go.
+2. **Pure Go with cgo Rust bindings.** Rejected: Go's FFI model (cgo) is slower and more cumbersome than Rust's `extern "C"`; the Rust ecosystem (telemetry, registry, SDK) would be harder to call from
+   Go.
 
 3. **gRPC/microservice boundary.** Rejected: the overhead of serialization + IPC for every sandbox operation would destroy performance; in-process FFI is 10-100x faster.
 

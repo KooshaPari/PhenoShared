@@ -14,6 +14,7 @@ backend.
 ## Current state
 
 AgilePlus client lives in:
+
 - `beads/agileplus_adapter/agileplus_adapter.py` — `AgilePlusBeadStore`
   (`append`, `query`, `dedup_check`, `stats`, `health`, `bulk_append`).
 - `beads/agileplus_adapter/__init__.py` — re-exports.

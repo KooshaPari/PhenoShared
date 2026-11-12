@@ -7,6 +7,7 @@
 ## PR #1: Foundation - pheno-core Publishing Setup
 
 ### Title
+
 ```
 feat(packages): add @phenotype/pheno-core hexagonal architecture contracts
 ```
@@ -18,6 +19,7 @@ feat(packages): add @phenotype/pheno-core hexagonal architecture contracts
 Extracts core hexagonal architecture contracts from phenotype-infrakit Rust crates into a reusable TypeScript npm package published to GitHub Packages under the `@phenotype` scope.
 
 This is the foundation package for all other @phenotype packages and provides:
+
 - Inbound ports (UseCase, CommandHandler, QueryHandler, EventHandler)
 - Outbound ports (Repository, CachePort, SecretStore, EventBus)
 - Domain models (Entity, ValueObject, AggregateRoot)
@@ -26,6 +28,7 @@ This is the foundation package for all other @phenotype packages and provides:
 #### Motivation
 
 Currently, hexagonal architecture patterns are reimplemented in each service. By extracting core contracts to a shared, versioned npm package, we enable:
+
 - **Consistency**: Single source of truth for port definitions
 - **Reusability**: Services import proven interfaces instead of reimplementing
 - **Versioning**: Breaking changes managed via semantic versioning
@@ -34,6 +37,7 @@ Currently, hexagonal architecture patterns are reimplemented in each service. By
 #### Changes
 
 **New Files**:
+
 - `.npmrc` - Updated with @phenotype scope configuration
 - `pnpm-workspace.yaml` - Configured for monorepo structure
 - `.github/workflows/publish.yml` - Automated npm publishing workflow
@@ -54,10 +58,12 @@ Currently, hexagonal architecture patterns are reimplemented in each service. By
 1. **Zero Dependencies**: pheno-core has no external dependencies, making it lightweight and stable.
 2. **Strict TypeScript**: Full type safety with `strict: true` in tsconfig.
 3. **Export Granularity**: Subpath exports allow consumers to import only what they need:
+
    ```typescript
    import { UseCase } from '@phenotype/pheno-core';
    import { Repository } from '@phenotype/pheno-core/ports';
    ```
+
 4. **Error Handling**: Standardized error enum (ErrorKind) with semantic variants used across all packages.
 
 #### Testing
@@ -67,6 +73,7 @@ Currently, hexagonal architecture patterns are reimplemented in each service. By
 - **Type Safety**: No `any` types, strict null checking
 
 **Run Tests**:
+
 ```bash
 pnpm --filter @phenotype/pheno-core run test
 pnpm --filter @phenotype/pheno-core run test:coverage
@@ -80,6 +87,7 @@ pnpm --filter @phenotype/pheno-core run test:coverage
 - **Usage Examples**: Quick start and advanced patterns
 
 **View Documentation**:
+
 ```bash
 open packages/pheno-core/README.md
 ```
@@ -87,11 +95,13 @@ open packages/pheno-core/README.md
 #### Publishing
 
 Once merged, the publish workflow will automatically:
+
 1. Tag the release: `@phenotype/pheno-core@1.0.0`
 2. Run tests and build
 3. Publish to GitHub Packages at `npm.pkg.github.com`
 
 **Install After Publishing**:
+
 ```bash
 npm install @phenotype/pheno-core --registry https://npm.pkg.github.com
 ```
@@ -107,6 +117,7 @@ npm install @phenotype/pheno-core --registry https://npm.pkg.github.com
 ## PR #2: Resilience - pheno-resilience Module
 
 ### Title
+
 ```
 feat(packages): add @phenotype/pheno-resilience event sourcing, state machines, policies, and caching
 ```
@@ -127,24 +138,28 @@ This package depends on `@phenotype/pheno-core` and provides production-proven p
 #### What's Included
 
 **Event Sourcing Module**:
+
 - EventEnvelope&lt;T> with UUIDv4 tracking
 - SHA-256 hash chain computation and verification
 - EventStore trait with 6 methods (append, getEvents, etc.)
 - InMemoryEventStore for testing
 
 **State Machine Module**:
+
 - Finite state machines with named states
 - Guarded transitions with condition evaluation
 - State lifecycle (onEnter, onExit)
 - History tracking with timestamps
 
 **Policy Engine Module**:
+
 - Rule-based policy definitions
 - Regex pattern matching
 - Multiple decision combinators (first-applicable, deny-overrides, permit-overrides)
 - Context-based evaluation
 
 **Caching Module**:
+
 - LRU cache for hot data (in-process)
 - Distributed cache interface (Redis pattern)
 - Two-tier cache combining both
@@ -152,10 +167,12 @@ This package depends on `@phenotype/pheno-core` and provides production-proven p
 #### Design Decisions
 
 1. **Submodule Exports**: Each module is independently importable:
+
    ```typescript
    import { EventStore } from '@phenotype/pheno-resilience/event-sourcing';
    import { StateMachine } from '@phenotype/pheno-resilience/state-machine';
    ```
+
 2. **Hash Chain Determinism**: SHA-256 computation is deterministic and reproducible.
 3. **Optional Dependencies**: Redis support is optional (devDependency for testing).
 
@@ -166,6 +183,7 @@ This package depends on `@phenotype/pheno-core` and provides production-proven p
 - **Integration Tests**: Event sourcing + state machine workflows
 
 **Run Tests**:
+
 ```bash
 pnpm --filter @phenotype/pheno-resilience run test
 pnpm --filter @phenotype/pheno-resilience run test:coverage
@@ -183,6 +201,7 @@ pnpm --filter @phenotype/pheno-resilience run test:coverage
 ## PR #3: LLM - pheno-llm Module
 
 ### Title
+
 ```
 feat(packages): add @phenotype/pheno-llm LLM provider and prompt management
 ```
@@ -201,6 +220,7 @@ Adds LLM integration patterns and prompt management:
 #### What's Included
 
 **Provider Interface**:
+
 - LLMProvider with complete, chat, embed, tokenize, countTokens
 - LLMOptions for model configuration
 - LLMMessage with role-based typing
@@ -208,12 +228,14 @@ Adds LLM integration patterns and prompt management:
 - ToolCall and ToolDefinition support
 
 **Prompt Management**:
+
 - Prompt template system with variables
 - PromptManager for registration and retrieval
 - PromptBuilder fluent API
 - Token counting via js-tiktoken
 
 **OpenAI Adapter** (example):
+
 - Maps OpenAI API responses to LLMResponse
 - Supports tool/function calling
 - Token usage tracking
@@ -270,11 +292,13 @@ Adds LLM integration patterns and prompt management:
 ### Files Modified/Created
 
 **Root Level**:
+
 - [ ] `.npmrc` - npm scope configuration
 - [ ] `pnpm-workspace.yaml` - workspace configuration
 - [ ] `.github/workflows/publish.yml` - publishing workflow
 
 **Packages Directory**:
+
 - [ ] `packages/pheno-core/` - Complete
 - [ ] `packages/pheno-resilience/` - Complete
 - [ ] `packages/pheno-llm/` - Complete
@@ -283,6 +307,7 @@ Adds LLM integration patterns and prompt management:
 - [ ] `packages/CONTRIBUTING.md` - Development guide
 
 **Documentation**:
+
 - [ ] `docs/research/PHENOSDK_PACKAGE_AUDIT.md` - Already created
 - [ ] `docs/checklists/PHENOSDK_IMPLEMENTATION_CHECKLIST.md` - Already created
 - [ ] `docs/reference/PHENOSDK_PR_TEMPLATE.md` - This file
@@ -348,6 +373,7 @@ npm publish --dry-run --registry https://npm.pkg.github.com
 ## Cross-Repo Dependencies
 
 These packages will be consumed by:
+
 - heliosApp (state management, caching)
 - thegent (hexagonal patterns)
 - phenotype-shared (core contracts)
@@ -375,11 +401,13 @@ These packages will be consumed by:
 ### Future Releases
 
 Use semantic versioning:
+
 - **MAJOR**: Breaking API changes
 - **MINOR**: New features (backward compatible)
 - **PATCH**: Bug fixes
 
 **Release Commands**:
+
 ```bash
 # Update version in all package.json files
 pnpm version major|minor|patch
@@ -396,6 +424,7 @@ git push origin --tags
 ## Questions & Support
 
 For questions about:
+
 - **Strategy & Design**: See PHENOSDK_EXTRACTION_STRATEGY.md
 - **Package Specifications**: See docs/research/PHENOSDK_PACKAGE_AUDIT.md
 - **Implementation Details**: See docs/checklists/PHENOSDK_IMPLEMENTATION_CHECKLIST.md

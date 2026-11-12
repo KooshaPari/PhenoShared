@@ -9,7 +9,8 @@
 
 ## Executive Summary
 
-Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecosystems. This section captures the latest stable versions and emerging technologies that should be evaluated for Phenotype adoption. Total: 25+ new research entries with version specifics, GitHub stars, and actionable recommendations.
+Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecosystems. This section captures the latest stable versions and emerging technologies that should be evaluated for
+Phenotype adoption. Total: 25+ new research entries with version specifics, GitHub stars, and actionable recommendations.
 
 ### Key Findings
 
@@ -546,6 +547,7 @@ Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecos
 ### Rust Backend Services
 
 **Core Stack:**
+
 - Web: axum 0.8 + tokio 1.x + tower 0.4
 - Database: sea-orm 2.0 (complex queries) or sqlx 0.8.6 (simple queries)
 - Configuration: figment 0.10+ (multi-source)
@@ -563,6 +565,7 @@ Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecos
 ### Go Services & CLI
 
 **Core Stack:**
+
 - Logging: slog (stdlib) — remove logrus
 - DI: Uber Fx 1.20+
 - Database: ent 0.14+ (ORM) or sqlc 1.30+ (query-focused)
@@ -577,6 +580,7 @@ Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecos
 ### TypeScript Web & API
 
 **Core Stack:**
+
 - Web: hono 4.x (edge-first) or express 4.18 (legacy)
 - API: tRPC 11.x (type-safe RPC) + zod 3.23 (validation)
 - Database: drizzle-orm 0.30+ (SQL-first, type-safe)
@@ -590,6 +594,7 @@ Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecos
 ### Python FastAPI & CLI
 
 **Core Stack:**
+
 - Web: FastAPI 0.110+ (async Python, Pydantic v2 first-class)
 - Validation: Pydantic v2 (required)
 - HTTP Client: httpx 0.26+ (async, type-annotated)
@@ -604,6 +609,7 @@ Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecos
 ### AI/LLM Integration (All Languages)
 
 **Core Stack:**
+
 - Claude SDK: anthropic 0.25+ (official)
 - Agent SDK: claude-agent-sdk 0.2+ (Node.js) or 0.1.48 (Python)
 - Orchestration: langgraph 1.0+ (state management) or CrewAI 0.47+ (multi-agent)
@@ -615,6 +621,7 @@ Comprehensive 2026 package research across Rust, Go, TypeScript, and Python ecos
 ### Observability (All Languages)
 
 **Core Stack:**
+
 - Tracing: OpenTelemetry 0.22+ (all languages) + OTLP exporter
 - Tracing Backend: Jaeger (via OTLP) or Grafana Tempo
 - Logging: tracing (Rust), slog (Go), loguru (Python), pino (Node.js)

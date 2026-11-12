@@ -43,6 +43,7 @@ The script is idempotent — re-run safely after a config change.
 ```
 
 The script:
+
 1. Verifies tailscale reachability to the WSL distro.
 2. Boots vLLM on GPU 0 + SGLang on GPU 1.
 3. Records the boot in `evidence/dual_gpu/heartbeat.json`.
@@ -58,6 +59,7 @@ bash scripts/dual_gpu_smoke.ps1
 ```
 
 The smoke emits:
+
 - `bench/results/desktop_nvidia/<YYYY-MM-DD>/<host>.log`
 - `evidence/dual_gpu/heartbeat.json`
 - `bench/results/sota/<YYYY-MM-DD>/snapshot.json` (with `evidence_label: live_verified`)

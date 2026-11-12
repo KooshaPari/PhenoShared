@@ -51,4 +51,5 @@ For expert use:
 
 ## Accessibility and failure UX
 
-All primary operations are keyboard accessible. Color is not the sole state cue. Screen readers receive semantic node/link/route summaries rather than only canvas coordinates. Break-glass return is not dependent on the main UI process.
+All primary operations are keyboard accessible. Color is not the sole state cue. Screen readers receive semantic node/link/route summaries rather than only canvas coordinates. Break-glass return is
+not dependent on the main UI process.

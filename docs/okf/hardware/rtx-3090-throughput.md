@@ -10,7 +10,10 @@ evidence_class: L
 
 # RTX 3090 Throughput
 
-For agent-fleet planning on a single RTX 3090/3090 Ti (24 GB GDDR6X, ~1 TB/s bandwidth), the useful metric is **generated output tokens/hour** with separate tracking for prefill/input tokens and KV residency—not single-stream chat tok/s demos. The corpus budgets **150k–350k useful generated tok/hour** for 14B–32B-class coding/agent models (conservative **250k** default), up to **500k–900k** on smaller batched models, with multi-GPU scaling near-linear only under **independent replica** queues (4×3090 ≈ **3.6×**), while tensor-parallel splits yield **~2.3–3.1×** at best; Hopper (H100) jumps **3–7×** mainly via HBM bandwidth, FP8, and concurrency, but many independent agents on cheap 3090s can beat one fancy GPU.
+For agent-fleet planning on a single RTX 3090/3090 Ti (24 GB GDDR6X, ~1 TB/s bandwidth), the useful metric is **generated output tokens/hour** with separate tracking for prefill/input tokens and KV
+residency—not single-stream chat tok/s demos. The corpus budgets **150k–350k useful generated tok/hour** for 14B–32B-class coding/agent models (conservative **250k** default), up to **500k–900k** on
+smaller batched models, with multi-GPU scaling near-linear only under **independent replica** queues (4×3090 ≈ **3.6×**), while tensor-parallel splits yield **~2.3–3.1×** at best; Hopper (H100) jumps
+**3–7×** mainly via HBM bandwidth, FP8, and concurrency, but many independent agents on cheap 3090s can beat one fancy GPU.
 
 ## Key insights
 
@@ -19,7 +22,8 @@ For agent-fleet planning on a single RTX 3090/3090 Ti (24 GB GDDR6X, ~1 TB/s ban
 - **Replica scaling:** 2× ≈ 1.85–1.95×; 4× ≈ 3.5–3.8×; 8× ≈ 6.5–7.3× — shard agents across GPUs, don’t tensor-parallel unless model/context requires it.
 - **Tensor-parallel scaling:** 2×3090 PCIe ~1.35–1.70×; NVLink ~1.50–1.90×; interconnect tax dominates at 4×.
 - **Upgrade coefficients vs 3090:** RTX 4090 ~1.25–1.60× (same 24 GB); RTX 6000 Ada ~1.1–1.6× but 48 GB; H100 ~3–7× for strong-model serving endpoints.
-- **Stack multiplier:** llama.cpp/ExLlamaV2 for single-node quant experiments; **vLLM/SGLang** for multi-agent API, prefix caching, continuous batching; separate small SLM instances for router/summarizer when possible.
+- **Stack multiplier:** llama.cpp/ExLlamaV2 for single-node quant experiments; **vLLM/SGLang** for multi-agent API, prefix caching, continuous batching; separate small SLM instances for
+  router/summarizer when possible.
 - **Cost gate:** value 1×3090 at **~0.25M useful generated tok/hour** for subscription-replacement math—not cherry-picked benchmark peaks.
 
 ## Pheno-harness links

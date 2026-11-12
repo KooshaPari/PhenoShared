@@ -13,15 +13,19 @@ status: stub — N10 priority, needs full distillation
 
 **Source:** `ChatGPT-Concurrent Lint Command Handling.md` (16 KB, 2026-07-04) — class **L**.
 
-OS-level coordination for isolated agent processes (Claude Code, Cursor CLI, Auggie) that each invoke the same lint/binary concurrently without cross-communication. The corpus proposes a shared Bash harness at the OS layer to deduplicate, debounce, and queue executions rather than spawning N interpreters.
+OS-level coordination for isolated agent processes (Claude Code, Cursor CLI, Auggie) that each invoke the same lint/binary concurrently without cross-communication. The corpus proposes a shared Bash
+harness at the OS layer to deduplicate, debounce, and queue executions rather than spawning N interpreters.
 
 ## Key insights (stub — full distillation pending N10)
 
 - **Lock-wait-cache wrapper:** `flock` on a per-request lock + shared `stdout/stderr/exitcode` cache so burst callers collapse to one real execution; latecomers read the cached result under lock.
-- **Debounce + TTL:** `DEBOUNCE_MS ~150–200ms` groups near-simultaneous arrivals; `TTL_MS ~800–1200ms` reuses fresh results, keyed by `tool + args + cwd + git HEAD` (and optionally `git diff` for state-aware invalidation).
-- **Generic PATH shim:** single `agentwrap` binary symlinked to `ruff`, `eslint`, `prettier`, `golangci-lint`, etc., placed first in `PATH` (`~/.agent_shims/bin`); resolves real binary by skipping shim dir, applies per-tool rules from `~/.agent_shims/rules/<tool>.conf` (`MODE=dedupe|passthrough`).
+- **Debounce + TTL:** `DEBOUNCE_MS ~150–200ms` groups near-simultaneous arrivals; `TTL_MS ~800–1200ms` reuses fresh results, keyed by `tool + args + cwd + git HEAD` (and optionally `git diff` for
+  state-aware invalidation).
+- **Generic PATH shim:** single `agentwrap` binary symlinked to `ruff`, `eslint`, `prettier`, `golangci-lint`, etc., placed first in `PATH` (`~/.agent_shims/bin`); resolves real binary by skipping
+  shim dir, applies per-tool rules from `~/.agent_shims/rules/<tool>.conf` (`MODE=dedupe|passthrough`).
 - **Process-filtered gating:** match `PPID`/`comm` or full ancestor chain / cgroup to apply dedupe only for agent parents (`claude|cursor|auggie|codex`); normal user shells passthrough via `exec`.
-- **What is not practical:** transparent system-wide `exec` interception that returns shared output without a choke point — observable via eBPF/auditd/ptrace and blockable via seccomp/LSM, but output injection requires a debugger/pty broker; PATH shim is the sane lever.
+- **What is not practical:** transparent system-wide `exec` interception that returns shared output without a choke point — observable via eBPF/auditd/ptrace and blockable via seccomp/LSM, but output
+  injection requires a debugger/pty broker; PATH shim is the sane lever.
 
 ## Next (N10)
 

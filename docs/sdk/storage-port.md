@@ -4,7 +4,8 @@ audience: [sdk, developers]
 
 # Storage Port API
 
-The `StoragePort` trait defines the persistence abstraction for all domain entities. It provides async CRUD operations for features, work packages, audit entries, evidence, policy rules, and governance contracts. The trait has zero external dependencies and is implemented by `agileplus-sqlite` using SQLite.
+The `StoragePort` trait defines the persistence abstraction for all domain entities. It provides async CRUD operations for features, work packages, audit entries, evidence, policy rules, and
+governance contracts. The trait has zero external dependencies and is implemented by `agileplus-sqlite` using SQLite.
 
 ## Trait Definition
 

@@ -64,11 +64,12 @@
 
 ## Maturity Assessment
 
-**Stage: FEASIBILITY PROTOTYPE**
+### Stage: FEASIBILITY PROTOTYPE
 
 Core functionality implemented and tested by builders. Some integration paths work. Not yet a supported product with external consumers.
 
-Evidence: 73-crate workspace with 447K LOC. Multiple releases (v0.2.0). CLI tools exist. CI pipeline defined but non-functional. Test suite exists (852 files) but cannot be verified. No external consumer evidence.
+Evidence: 73-crate workspace with 447K LOC. Multiple releases (v0.2.0). CLI tools exist. CI pipeline defined but non-functional. Test suite exists (852 files) but cannot be verified. No external
+consumer evidence.
 
 ---
 

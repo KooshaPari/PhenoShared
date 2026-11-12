@@ -2,7 +2,8 @@
 
 ## Overview
 
-The AgilePlus Governance Chassis is a specification-driven delivery framework that enables predictable, traceable product development across the Phenotype organization. It defines how requirements are captured, decomposed, implemented, tested, and verified at every phase of development.
+The AgilePlus Governance Chassis is a specification-driven delivery framework that enables predictable, traceable product development across the Phenotype organization. It defines how requirements are
+captured, decomposed, implemented, tested, and verified at every phase of development.
 
 **Package**: AgilePlus (see `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus`)
 **CLI**: `agileplus` (see `AgilePlus/CLAUDE.md` for setup)
@@ -22,6 +23,7 @@ The Governance Chassis provides:
 **Location**: `{project-root}/PRD.md`
 
 **Structure**:
+
 ```
 # PRD — {Project Name}
 
@@ -45,6 +47,7 @@ The Governance Chassis provides:
 **Location**: `{project-root}/ADR.md` and `docs/adr/{number}-title/`
 
 **Format**:
+
 ```
 # ADR-{NNN}: {Title}
 
@@ -80,6 +83,7 @@ The Governance Chassis provides:
 **Location**: `{project-root}/FUNCTIONAL_REQUIREMENTS.md`
 
 **Format**:
+
 ```
 # Functional Requirements
 
@@ -109,6 +113,7 @@ The Governance Chassis provides:
 **Location**: `{project-root}/PLAN.md`
 
 **Structure**:
+
 ```
 # Implementation Plan
 
@@ -145,16 +150,20 @@ The Governance Chassis provides:
 **Location**: `{project-root}/USER_JOURNEYS.md`
 
 **Format**:
+
 ```
 # User Journeys
 
 ## UJ-1: {User Role} — {Journey Name}
 
 ```
+
+```
 [Actor] → [Action] → [System Response] → [Verification]
    ↓         ↓           ↓                  ↓
  User     Click Login   Auth Check      Redirect Home
   ...
+
 ```
 
 **Acceptance**: All steps trace to FRs, no orphan steps.
@@ -166,20 +175,25 @@ The Governance Chassis provides:
 **Location**: `{project-root}/docs/worklogs/{PHASE}-worklog.md`
 
 **Format**:
+
 ```
+
 # {Phase Name} — Worklog
 
 ## Date: 2026-03-29
 
 ### Session 1: Agent X — Discovery (10:00-11:30)
+
 - Completed: FR-CORE-001 research
 - Blockers: None
 - Next: Start FR-CORE-002
 
 ### Session 2: Agent Y — Implementation (11:30-13:00)
+
 - Completed: FR-AUTH-001 implementation
 - Tests: 42/50 passing
 - Blockers: Waiting on design review for FR-API-002
+
 ```
 
 **Purpose**: Transparent activity log for process visibility.
@@ -189,6 +203,7 @@ The Governance Chassis provides:
 **Location**: AgilePlus dashboard (web UI)
 
 **Provides**:
+
 - **Spec Status**: PRD coverage, ADR acceptance rate, FR implementation %
 - **Traceability Matrix**: PRD → FR → Tests → Code (forward and reverse)
 - **Test Coverage**: Per-FR test counts and coverage %
@@ -202,6 +217,7 @@ The Governance Chassis provides:
 **When**: On commit/push
 
 **Validates**:
+
 - Every FR-XXX-NNN in FUNCTIONAL_REQUIREMENTS.md has ≥1 test referencing it
 - Every test references exactly 1 FR-XXX-NNN
 - Test file exists and is syntactically valid
@@ -213,6 +229,7 @@ The Governance Chassis provides:
 **When**: On PR open/update
 
 **Verifies**:
+
 - PRD and ADR are well-formed (valid Markdown)
 - All FRs are linked to PRD stories or ADRs
 - No circular dependencies in PLAN.md DAG
@@ -225,6 +242,7 @@ The Governance Chassis provides:
 **When**: Phase completion
 
 **Auto-generates**:
+
 - Worklog summary (time spent, WPs completed)
 - Phase velocity metrics
 - Burndown chart
@@ -239,6 +257,7 @@ Projects using the Governance Chassis must provide:
 ### 2.1 Root-Level Spec Files
 
 **Required files** (at project root):
+
 - `PRD.md` — Product requirements
 - `ADR.md` — Architecture decisions index
 - `FUNCTIONAL_REQUIREMENTS.md` — Granular requirements with FR-XXX-NNN IDs
@@ -305,6 +324,7 @@ docs/worklogs/
 ```
 
 **Format** (see Section 1.2 above):
+
 - Date headers
 - Per-session entries (Agent name, time, completed work, blockers)
 - Cross-references to FRs and PRs
@@ -396,23 +416,27 @@ Use `agileplus specify --title "Feature" --description "Desc"` to scaffold.
 ### 3.1 AgilePlus CLI Commands
 
 **Check for spec before implementing**:
+
 ```bash
 agileplus list --status proposed
 agileplus view {feature-id}
 ```
 
 **Create spec for new work**:
+
 ```bash
 agileplus specify --title "Auth: Two-Factor Authentication" --description "Add TOTP and SMS support"
 ```
 
 **Update work package status**:
+
 ```bash
 agileplus status {feature-id} --wp WP01 --state completed
 agileplus status {feature-id} --wp WP02 --state in_progress
 ```
 
 **View worklog**:
+
 ```bash
 agileplus worklog --phase PHASE3
 ```
@@ -547,12 +571,14 @@ describe("FR-AUTH-001: User Login", () => {
 ## Dependencies
 
 ```
+
 P1 → P2 → P3 → P4
             ├─ WP03-001 (Login)
             └─ WP03-002 (Token Refresh)
                     ↓
              P4 → WP04-001 (Integration)
                   WP04-002 (E2E)
+
 ```
 "
 
@@ -648,6 +674,7 @@ Projects can extend PLAN.md with domain-specific work packages:
 Projects can add project-specific trackers to `docs/reference/`:
 
 Examples:
+
 - `PERFORMANCE_TRACKER.md` — Benchmark results per FR
 - `SECURITY_AUDIT.md` — Security review status per FR
 - `DEPENDENCY_MAP.md` — External libraries and versions
@@ -678,4 +705,3 @@ A: Use git branches and tags. Each phase can be tagged (e.g., `phase-1-complete`
 - **Phenotype Docs Chassis**: See `docs/reference/PHENOTYPE_DOCS_CHASSIS_INTERFACE.md`
 - **Global CLAUDE.md**: Specification documentation system (see `~/.claude/CLAUDE.md`)
 - **AgilePlus CLAUDE.md**: CLI and workflow (see `AgilePlus/CLAUDE.md`)
-

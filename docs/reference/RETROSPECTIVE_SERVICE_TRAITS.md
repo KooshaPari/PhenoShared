@@ -962,6 +962,7 @@ This trait definition provides:
 - **Documentation:** Self-documenting contracts
 
 **LOC Summary:**
+
 - Inbound port: 200 LOC
 - Outbound ports: 150 LOC
 - Models: 100 LOC

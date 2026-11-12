@@ -2,7 +2,7 @@
 
 [Introduction](./README.md)
 
-# Architecture
+## Architecture
 
 - [Voxel Kernel](./voxel.md)
   - [Chunk Storage](./voxel.md#chunk-storage)
@@ -25,7 +25,7 @@
   - [PhenotypeGfx.cs Lifecycle](./unity.md#phenotypegfxcs-lifecycle)
   - [NUnit Test Suite](./unity.md#nunit-test-suite)
 
-# Operations
+## Operations
 
 - [Development](./development.md)
   - [Build](./development.md#build)

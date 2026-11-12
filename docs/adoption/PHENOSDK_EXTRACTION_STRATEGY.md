@@ -12,9 +12,11 @@
 ## 4-Tier Extraction Strategy
 
 ### Tier 1: Consolidation (Immediate)
+
 Consolidate functionality existing in multiple places.
 
 **Candidates**:
+
 - Error handling (85+ enums → 5 types)
 - Health checks (5+ → 1 trait)
 - Config loading (4+ → 1 unified)
@@ -25,9 +27,11 @@ Consolidate functionality existing in multiple places.
 **ROI**: High
 
 ### Tier 2: Extraction (Phase 1-2)
+
 Extract well-defined isolated code.
 
 **Candidates**:
+
 - Retry with backoff
 - Cache adapters
 - Secret management
@@ -38,6 +42,7 @@ Extract well-defined isolated code.
 **ROI**: Medium
 
 ### Tier 3: Abstraction (Phase 2-3)
+
 Abstract patterns into traits/generics.
 
 **Effort**: High (2,000-3,000 LOC)
@@ -45,6 +50,7 @@ Abstract patterns into traits/generics.
 **ROI**: Very High
 
 ### Tier 4: Platform Libraries (Phase 3+)
+
 Full platforms extracted.
 
 **Effort**: Very High (10,000+ LOC)
@@ -68,6 +74,7 @@ Full platforms extracted.
 ## Publishing & Versioning
 
 ### Version Scheme
+
 - `MAJOR.MINOR.PATCH` (SemVer)
 - `0.x.y` during stabilization
 - `1.0.0` when stable
@@ -75,11 +82,13 @@ Full platforms extracted.
 ### Locations
 
 **Workspace** (local):
+
 ```toml
 phenotype-error-core = { path = "../crates/phenotype-error-core" }
 ```
 
 **Published** (crates.io):
+
 ```toml
 phenotype-error-core = "1.0.0"
 ```

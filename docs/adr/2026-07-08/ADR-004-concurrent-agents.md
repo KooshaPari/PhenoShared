@@ -39,21 +39,21 @@ The Rust `concurrent-exec` crate provides:
 
 ## Consequences
 
-**Positive**
+### Positive
 
 - The four agents can be composed freely (LatentMAS → TiDAR, or
   SSD ∥ JetSpec, etc.) without rewriting either.
 - The Rust plan builder keeps the CPU-bound work off the GIL.
 - The Python surface stays idiomatic (`asyncio.gather`).
 
-**Negative**
+### Negative
 
 - `asyncio.gather` is I/O-bound by default. CPU-bound work inside an
   agent (e.g., SSD's draft loop) still blocks the event loop unless
   the agent is in the Rust tier.
 - Cross-agent state passing via dict is loosely typed.
 
-**Mitigations**
+### Mitigations
 
 - The Rust adapter modules absorb the CPU-bound hot path. The Python
   side is a thin async wrapper.

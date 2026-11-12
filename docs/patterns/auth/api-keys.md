@@ -48,6 +48,7 @@ API keys provide simple, stateless authentication for machine-to-machine communi
 ## Key Format
 
 ### Standard Format (Phenotype)
+
 ```
 pheno_live_abc123def456ghi789
 └──┬──┘ └──┬─┘ └──────┬──────┘
@@ -351,6 +352,7 @@ class ApiKeyService:
 ## Security Best Practices
 
 ### 1. Storage Security
+
 ```python
 # ❌ NEVER store plaintext keys
 class BadStorage:
@@ -371,6 +373,7 @@ class GoodStorage:
 ```
 
 ### 2. Rate Limiting
+
 ```rust
 pub async fn check_rate_limit(
     &self,
@@ -396,6 +399,7 @@ pub async fn check_rate_limit(
 ```
 
 ### 3. Key Rotation
+
 ```python
 class KeyRotationService:
     async def rotate_key(self, old_key_id: str) -> tuple[str, ApiKey]:

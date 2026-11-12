@@ -23,6 +23,7 @@ pre-commit install --hook-type pre-push
 ## What Gets Checked?
 
 ### Before Every Commit (Pre-Commit Hooks)
+
 - ✅ Trailing whitespace & line endings
 - ✅ YAML/TOML/JSON syntax
 - ✅ No private keys committed
@@ -31,6 +32,7 @@ pre-commit install --hook-type pre-push
 - ✅ Commit message format (conventional-commit)
 
 ### Before Every Push (Pre-Push Hooks)
+
 - ✅ All pre-commit checks (above)
 - ✅ Rust linting (clippy)
 - ✅ Python linting (ruff)
@@ -38,6 +40,7 @@ pre-commit install --hook-type pre-push
 - ✅ Secret scanning (trufflehog)
 
 ### On GitHub (CI/CD)
+
 - ✅ Format check (all languages)
 - ✅ Linting (all languages)
 - ✅ Type checking (strict mode)
@@ -64,6 +67,7 @@ pre-commit install --hook-type pre-push
 ```
 
 **Note**: heliosCLI has broken dependencies (phenotype-shared refs). Fix by:
+
 1. Commenting out missing deps in `crates/harness_pyo3/Cargo.toml`
 2. Running `cargo clippy --all-targets` to see all lint issues
 3. Fixing issues manually or with `./scripts/quality-gate.sh --fix`
@@ -106,11 +110,13 @@ pre-commit install --hook-type pre-push
 ## Troubleshooting
 
 ### "Pre-commit not found"
+
 ```bash
 pip install pre-commit
 ```
 
 ### "Hooks not running"
+
 ```bash
 # Reinstall
 pre-commit install
@@ -121,6 +127,7 @@ pre-commit run --all-files
 ```
 
 ### "Formatting errors on commit"
+
 ```bash
 # Auto-fix
 ./scripts/quality-gate.sh --fix
@@ -136,6 +143,7 @@ git commit -m "fix: format code"
 ```
 
 ### "Bypass hooks (emergency only)"
+
 ```bash
 git commit --no-verify
 git push --no-verify
@@ -161,9 +169,9 @@ git push --no-verify
 ## Next: Full Implementation
 
 See **LINTING_AND_QUALITY_SETUP.md** for:
+
 - All 4 quality gate layers (pre-commit, pre-push, GitHub Actions, branch protection)
 - Language-specific tool configs
 - Detailed troubleshooting
 - Auto-fix guidelines
 - Suppression policy
-

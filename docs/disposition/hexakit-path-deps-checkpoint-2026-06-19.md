@@ -23,7 +23,8 @@ rg 'git\s*=\s*"https://github.com/KooshaPari/HexaKit' --glob 'Cargo.toml' migrat
 
 ## Notes
 
-- **Internal vendored copies** remain in archived or repoint-pending repos (`Pyron`, `ResilienceKit`, `PhenoLang`) — these are **local path deps within those repos**, not new HexaKit path deps. Pyron repoint blocked (repo archived; backlog task #99).
+- **Internal vendored copies** remain in archived or repoint-pending repos (`Pyron`, `ResilienceKit`, `PhenoLang`) — these are **local path deps within those repos**, not new HexaKit path deps. Pyron
+  repoint blocked (repo archived; backlog task #99).
 - HexaKit workspace uses **git pins** to terminal owners (phenoShared, PhenoObservability, TestingKit, Authvault, phenotype-config, phenotype-types) per Phase 4 wave 5 (#276).
 - Re-run after each HexaKit eviction wave before closing `gate-phenoshared` hold.
 

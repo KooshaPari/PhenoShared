@@ -10,7 +10,9 @@ evidence_class: L
 
 # VRAM and Scaling Factors
 
-Hugging Face model-card VRAM figures are overwhelmingly **weights-fit numbers** for short inputs (~≤1024 tokens), near-single-request conditions, and minimal KV pressure—not production long-context or multi-agent serving budgets. Real capacity planning decomposes memory as **weights + runtime overhead + KV cache**, where KV grows with **total live tokens across all active sequences**; “concurrency” should be modeled as a token budget, not a user count, with dense vs MoE diverging on compute but converging on KV limits.
+Hugging Face model-card VRAM figures are overwhelmingly **weights-fit numbers** for short inputs (~≤1024 tokens), near-single-request conditions, and minimal KV pressure—not production long-context or
+multi-agent serving budgets. Real capacity planning decomposes memory as **weights + runtime overhead + KV cache**, where KV grows with **total live tokens across all active sequences**; “concurrency”
+should be modeled as a token budget, not a user count, with dense vs MoE diverging on compute but converging on KV limits.
 
 ## Key insights
 
@@ -30,6 +32,7 @@ Hugging Face model-card VRAM figures are overwhelmingly **weights-fit numbers** 
 - [`docs/specs/003-model-engine-matrix.md`](../../specs/003-model-engine-matrix.md) — tier bands (T3 MoE, T4 dense AWQ) and 3090 Ti 24 GB constraint.
 - [`config/inference_runners.yaml`](../../config/inference_runners.yaml) — engine memory utilization and batching defaults.
 - [`plans/2026-07-14-usch-heterogeneous-inference-v1/FLEET_READINESS.md`](../../plans/2026-07-14-usch-heterogeneous-inference-v1/FLEET_READINESS.md) — heterogeneous device VRAM/KV placement.
-- [`plans/2026-07-14-usch-heterogeneous-inference-v1/EXPERIMENT_AND_DISCOVERY_PLAN.md`](../../plans/2026-07-14-usch-heterogeneous-inference-v1/EXPERIMENT_AND_DISCOVERY_PLAN.md) — concurrency and cache experiments.
+- [`plans/2026-07-14-usch-heterogeneous-inference-v1/EXPERIMENT_AND_DISCOVERY_PLAN.md`](../../plans/2026-07-14-usch-heterogeneous-inference-v1/EXPERIMENT_AND_DISCOVERY_PLAN.md) — concurrency and cache
+  experiments.
 
 **Evidence:** `local://sha256/c15bb484032ac8c9cefafd4afbe617f214a9370354183bdd2ab26d0f0ddd6032` (class **L**; cross-check HF optimization docs and vLLM engine args before **P**).

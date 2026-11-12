@@ -1,8 +1,10 @@
 # EVAL_ARCHITECTURE.md
 
 > **Status:** Design for 2026-07-04 onward. Builds on `pheno-harness/` skeleton documented in `RESEARCH_AUDIT.md`.
-> **Naming convention:** forks we own use the `-dev` suffix in their bin/path names — `forge-dev`, `omniroute-dev`, `pheno-serve-dev`, `codex-dev`. CI scripts, runbooks, and config keys refer to the forked binaries by these exact names so they never collide with upstream-installed binaries on `$PATH`. Canonical: `docs/ARCHITECTURE_LAYERS.md`.
-> **Locked model baseline:** 8 OpenRouter cloud baselines + 3 self-hosted aliases (`local/qwen35-08b`, `local/lfm25-8b-a1b`, `local/ornith-8b`). See `state/hf_scrape/2026-07-04/locked_shortlist.md` + ADR 0005.
+> **Naming convention:** forks we own use the `-dev` suffix in their bin/path names — `forge-dev`, `omniroute-dev`, `pheno-serve-dev`, `codex-dev`. CI scripts, runbooks, and config keys refer to the
+forked binaries by these exact names so they never collide with upstream-installed binaries on `$PATH`. Canonical: `docs/ARCHITECTURE_LAYERS.md`.
+> **Locked model baseline:** 8 OpenRouter cloud baselines + 3 self-hosted aliases (`local/qwen35-08b`, `local/lfm25-8b-a1b`, `local/ornith-8b`). See `state/hf_scrape/2026-07-04/locked_shortlist.md` +
+ADR 0005.
 > **Cost projection:** `state/hf_scrape/2026-07-04/cost_projection.md` covers per-run $ across the matrix.
 
 ---
@@ -93,8 +95,8 @@ pheno-harness/
 
 ### 2.1 Semantic agent eval suites
 
-| Suite | Driver | Source | Cadence | Metric primary |
-|---|---|---|---|---|
+| Suite | Driver | Source | Cadence | Metric | Status |
+|---|---|---|---|---|---|
 | `tbench_20` | `eval/tbench.py` | Harbor TB 2.0 (89 tasks) | weekly | accuracy | **PRIMARY** |
 | `tbench_21` | `eval/tbench_v21.py` | Harbor TB 2.1 (improved subset, post-2026-06) | weekly | accuracy | **PRIMARY** |
 | `tbench_3_watch` | `eval/tbench_v3_watch.py` | TB 3.x smoke | opt-in monthly | compat | watch-only |
@@ -103,15 +105,15 @@ pheno-harness/
 | `swebench_verified` | `eval/swebench_verified.py` | SWE-bench Verified subset (200) | **deprioritized** | pass@1 + regression | smoke-only / regression-anchor |
 | `swebench_lite` | `eval/swebench_lite.py` | SWE-bench Lite (300) | dropped | pass@1 | dropped per user preference |
 | `long_horizon` | `eval/long_horizon.py` | Replayable task specs derived from real traces (see `TRACE_EVALSET_PLAN.md`) | monthly | accuracy + recoverability |
-| `role_solo_engineer` | `eval/role_suite.py` | Trace-derived | weekly | role-specific composite |
-| `role_coding_subagent` | same | same | weekly | same |
-| `role_reviewer` | same | same | weekly | same |
-| `role_planner` | same | same | weekly | same |
-| `role_qa` | same | same | weekly | same |
-| `role_perf` | same | same | weekly | same |
-| `role_integration` | same | same | weekly | same |
-| `role_advisor` | same | same | weekly | same |
-| `verbosity` | `eval/verbosity.py` | Cross-suite roll-up | nightly | tokens/task, cost/task, lines/text |
+| `role_solo_engineer` | `eval/role_suite.py` | Trace-derived | weekly | role-specific composite | — |
+| `role_coding_subagent` | same | same | weekly | same | — |
+| `role_reviewer` | same | same | weekly | same | — |
+| `role_planner` | same | same | weekly | same | — |
+| `role_qa` | same | same | weekly | same | — |
+| `role_perf` | same | same | weekly | same | — |
+| `role_integration` | same | same | weekly | same | — |
+| `role_advisor` | same | same | weekly | same | — |
+| `verbosity` | `eval/verbosity.py` | Cross-suite roll-up | nightly | tokens/task, cost/task, lines/text | — |
 
 ### 2.2 Performance / serving eval suites
 
@@ -149,15 +151,19 @@ All perf suites tag every run with `(commit, model_id, route_kind, engine, quant
 - Run on a small subset first (16 tasks) before the full 113.
 
 ### Waypoint 4 — SWE-bench Verified regression
+
 ### Waypoint 4 — SWE-bench Verified (deprioritized)
+
 - `eval/swebench_verified.py` exists for **regression-anchor only** (not a primary ranking signal). Once the cross-task composite is trustworthy, drop nightly runs to weekly, then monthly.
 - Frozen 200-task subset, held out from training by `training/eval_holdout.yaml`.
 - Any drop > threshold fails the regression gate in `harness/self_improvement/gates.py`. Track but never optimize against.
 
 ### Waypoint 5 — Long-horizon custom Harbor-compatible
+
 - `eval/long_horizon.py` runs replayable multi-day spec derived from real agent traces (see `TRACE_EVALSET_PLAN.md` for the spec schema).
 - Sourced from Claude / Codex / ForgeCode / Factory Droid / Cursor-agent / public long-orchestration chats.
 - Per-role scored separately. Includes recoverability, escalation, and tokenizer-rotation metrics.
+
 ---
 
 ## 4. Intent-graph / scheduler architecture (the next big build)
@@ -268,6 +274,7 @@ The chat-loop must keep working while the intent-graph layer comes online. Stage
 Default `w_pass = 0.4, w_speed = 0.3, w_cost = 0.3` (already in `eval/route_matrix.py`). Pillar weights live in `config/eval_pillars.yaml`. Tunable per lane.
 
 **Three axes are tracked separately and never merged:**
+
 - `quality_axis = pass + robustness + safety`
 - `harness_axis = verbosity + overhead + recoverability + determinism`
 - `serving_axis = tokens_per_sec + cache_hit + ttft_p95 + vram_efficiency`
@@ -348,12 +355,16 @@ Subagents always report back to the main thread with file paths and a 5-line sum
 ---
 
 ## 9. Open architectural decisions (parking lot)
+
 ## 9. Open architectural decisions (parking lot)
+
 1. **Latent-MAS vs text-MAS.** Corpus notes latent is cheaper but less inspectable. Decision deferred; do not commit.
 2. **Planner-as-LoRA vs full-model planner.** Pheno-harness's `config/role_lora.yaml` already supports role-LoRA. Planner likely becomes a role-LoRA on the main lane model. Decide after Waypoint 2.
-3. **Local vs cloud fan-out.** 3090 Ti runs the 3 self-hosted aliases (`local/qwen35-08b`, `local/lfm25-8b-a1b`, `local/ornith-8b`); cloud runs the 8 OpenRouter baselines via `forge-dev → omniroute-dev → OpenRouter`. Decide per-task kind.
+3. **Local vs cloud fan-out.** 3090 Ti runs the 3 self-hosted aliases (`local/qwen35-08b`, `local/lfm25-8b-a1b`, `local/ornith-8b`); cloud runs the 8 OpenRouter baselines
+   via `forge-dev → omniroute-dev → OpenRouter`. Decide per-task kind.
 4. **TB 3.x adoption cadence.** Watch monthly; adopt when Pier + Harbor TB3 combo passes a 50-task smoke.
-5. **`combo_main.json` is held over from the pre-drop baseline.** The 10→7 cloud reduction needs the combo file regenerated; OR-side mix-blend rates may shift. Re-run `probe_omniroute_models.py` + `tbench_route_probe` after the first Stage-1 TB 2.0 run lands.
+5. **`combo_main.json` is held over from the pre-drop baseline.** The 10→7 cloud reduction needs the combo file regenerated; OR-side mix-blend rates may shift.
+   Re-run `probe_omniroute_models.py` + `tbench_route_probe` after the first Stage-1 TB 2.0 run lands.
 6. **DeepSWE per-language split?** 113 tasks are TS/Go/Python/JS/Rust. We have a Python-heavy local stack. Decide whether to weight per-language or aggregate flat. (Defer until first DeepSWE run.)
 7. **Harbor Piers/Pier version coupling.** Both TB 2.1 and DeepSWE need Pier ≥ 0.3.0; if Harbor TB3 ships incompatible Pier, the watch-suite and the primary suites diverge on the env. Track per-release.
 These are tracked, not blockers.

@@ -11,11 +11,14 @@ lastUpdated: 2026-06-16
 
 ## Assets
 
-1. **CycloneDX SBOM files** — JSON / XML documents emitted per release for every service consumed by the Phenotype fleet. Integrity (signed + hash-pinned) is critical: a tampered SBOM could under-report vulnerable dependencies.
-2. **Service registry metadata** — Catalog of service names, versions, owners, and PURL/SPDX identifiers that map SBOMs to actual deployments. If an adversary can rewrite the registry, they can route the fleet to a malicious version of a "trusted" service.
+1. **CycloneDX SBOM files** — JSON / XML documents emitted per release for every service consumed by the Phenotype fleet. Integrity (signed + hash-pinned) is critical: a tampered SBOM could
+   under-report vulnerable dependencies.
+2. **Service registry metadata** — Catalog of service names, versions, owners, and PURL/SPDX identifiers that map SBOMs to actual deployments. If an adversary can rewrite the registry, they can route
+   the fleet to a malicious version of a "trusted" service.
 3. **CI pipeline artifacts** — Build outputs (CycloneDX tool binaries, signing keys, attestation receipts) emitted by `.github/workflows/`. If mutable by an adversary, can be used to forge SBOMs.
 4. **Signing keys (cosign, sigstore, gitsign)** — Used to attest SBOMs and release provenance. Compromise of a key is a complete supply-chain break.
-5. **PURL canonicalization inputs** — Package URLs that the registry normalizes for cross-indexing. If a normalization function has a parser bug, two distinct malicious packages can collide on the same PURL.
+5. **PURL canonicalization inputs** — Package URLs that the registry normalizes for cross-indexing. If a normalization function has a parser bug, two distinct malicious packages can collide on the
+   same PURL.
 
 ## Threats (STRIDE)
 
@@ -30,4 +33,8 @@ lastUpdated: 2026-06-16
 
 ## Residual Risk and Revision Cadence
 
-The most material residual risk is **registry compromise followed by SBOM re-signing** — an attacker who controls the registry (or its CI signing key) can mint SBOMs that look valid. For a single-maintainer registry without hardware key (HSM/TPM) signing, the Sigstore keyless flow is the strongest available mitigation but trusts GitHub Actions identity, which is not absolute. The next highest residual is **downstream consumer trust** — if a consumer fetches a SBOM but does not verify the signed envelope, the SBOM is essentially untrusted data. This threat model should be revised quarterly (February, May, August, November) or whenever a new SBOM format (SPDX 3, CycloneDX 1.7) is adopted, or when the registry exposes a new public endpoint. The revision trigger is any PR that adds a new SBOM consumer, a new signing key, or a new public API.
+The most material residual risk is **registry compromise followed by SBOM re-signing** — an attacker who controls the registry (or its CI signing key) can mint SBOMs that look valid. For a
+single-maintainer registry without hardware key (HSM/TPM) signing, the Sigstore keyless flow is the strongest available mitigation but trusts GitHub Actions identity, which is not absolute. The next
+highest residual is **downstream consumer trust** — if a consumer fetches a SBOM but does not verify the signed envelope, the SBOM is essentially untrusted data. This threat model should be revised
+quarterly (February, May, August, November) or whenever a new SBOM format (SPDX 3, CycloneDX 1.7) is adopted, or when the registry exposes a new public endpoint. The revision trigger is any PR that
+adds a new SBOM consumer, a new signing key, or a new public API.

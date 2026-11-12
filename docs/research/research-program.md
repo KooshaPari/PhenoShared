@@ -28,4 +28,5 @@ Test whether one shell actually reduces workflow cost, and whether explanations/
 
 ## Review cadence
 
-Every research item has an owner, next decision date, active hypothesis, experiment ID, evidence URI and one of: `proposed`, `running`, `supported`, `narrowed`, `rejected`, `graduated`. No item remains “interesting” indefinitely.
+Every research item has an owner, next decision date, active hypothesis, experiment ID, evidence URI and one of: `proposed`, `running`, `supported`, `narrowed`, `rejected`, `graduated`. No item
+remains “interesting” indefinitely.

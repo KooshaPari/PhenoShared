@@ -21,7 +21,8 @@ Extract shared code into a package at the **2nd** similar use, not the 3rd. Two 
 
 ## Why
 
-Tests/specs written first define "done" before code biases it. Hexagonal boundaries keep the domain testable without infrastructure and let adapters be swapped (the basis for wrap-over-handroll). See [wrap-over-handroll](wrap-over-handroll.md).
+Tests/specs written first define "done" before code biases it. Hexagonal boundaries keep the domain testable without infrastructure and let adapters be swapped (the basis for wrap-over-handroll). See
+[wrap-over-handroll](wrap-over-handroll.md).
 
 ## Don't
 

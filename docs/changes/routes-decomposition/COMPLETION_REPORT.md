@@ -9,7 +9,8 @@
 
 ## Executive Summary
 
-The `agileplus-dashboard` routes module has been **successfully decomposed** from a 2,631 LOC monolithic file into a well-organized 9-module structure (2,967 LOC total including tests). This decomposition improves maintainability, testability, and code organization while preserving 100% behavioral compatibility.
+The `agileplus-dashboard` routes module has been **successfully decomposed** from a 2,631 LOC monolithic file into a well-organized 9-module structure (2,967 LOC total including tests). This
+decomposition improves maintainability, testability, and code organization while preserving 100% behavioral compatibility.
 
 ### Key Metrics
 
@@ -94,6 +95,7 @@ crates/agileplus-dashboard/src/routes/
 ### 1. Clean Module Boundaries
 
 Each module has a single, well-defined responsibility:
+
 - **api.rs**: JSON serialization + HTTP response formatting
 - **dashboard.rs**: Dashboard-specific business logic
 - **pages.rs**: HTML template rendering
@@ -116,6 +118,7 @@ use agileplus_dashboard::routes::{AgentInfo, HealthStatus, ...};
 ### 3. Test-First Verification
 
 The new `tests.rs` module provides comprehensive coverage:
+
 - 35+ unit tests covering all modules
 - Test organization follows module structure
 - Each test traces to functional requirement (FR-DASHBOARD-NNN)
@@ -153,6 +156,7 @@ The new `tests.rs` module provides comprehensive coverage:
 ### Post-Integration Tasks
 
 1. **Archive Legacy Code**
+
    ```bash
    mkdir -p crates/agileplus-dashboard/src/routes/.archive
    mv crates/agileplus-dashboard/src/routes/header.rs \
@@ -273,21 +277,22 @@ git reset --hard HEAD~1  # (if on main post-merge)
 
 ### Short-term (Next Sprint)
 
-5. ⬜ Performance baseline & monitoring
-6. ⬜ Smoke test key endpoints
-7. ⬜ Update project documentation
+1. ⬜ Performance baseline & monitoring
+2. ⬜ Smoke test key endpoints
+3. ⬜ Update project documentation
 
 ### Medium-term (Phase 3)
 
-8. ⬜ Extract evidence gallery to shared crate
-9. ⬜ Extract service health checks to shared crate
-10. ⬜ Consolidate form handling patterns
+1. ⬜ Extract evidence gallery to shared crate
+2. ⬜ Extract service health checks to shared crate
+3. ⬜ Consolidate form handling patterns
 
 ---
 
 ## Conclusion
 
-The Phase 2 WP1 routes.rs decomposition is **complete, verified, and production-ready**. The refactoring improves code organization by 83% (2,631 LOC monolith → 9 focused modules) while maintaining 100% backward compatibility and adding comprehensive test coverage.
+The Phase 2 WP1 routes.rs decomposition is **complete, verified, and production-ready**. The refactoring improves code organization by 83% (2,631 LOC monolith → 9 focused modules) while maintaining
+100% backward compatibility and adding comprehensive test coverage.
 
 **Recommendation**: Proceed with merge to main branch.
 

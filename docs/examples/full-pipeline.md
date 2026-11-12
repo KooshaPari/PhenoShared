@@ -23,6 +23,7 @@ agileplus specify \
 ```
 
 This creates `kitty-specs/001-oauth2-auth/spec.md`. The spec includes:
+
 - **Functional Requirements** — what the feature does
   - Users can sign up via Google OAuth
   - Users can sign up via GitHub OAuth

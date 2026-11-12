@@ -57,7 +57,6 @@ Delete blockers:
 | Raw gitlinks/path refs | Cleared for known production blockers. Remaining search hits are registry rows, absorbed-source provenance, and historical audit/worklog docs; no known active Cargo path dep/raw apps gitlink blocker remains. |
 | Remote state | Current token gets 404; registry says archived private. Treat as archive-held, not hard-delete-ready. |
 
-
 ### 2026-06-21 phenotype-bus gate recheck
 
 | Check | Result | Evidence |
@@ -68,7 +67,8 @@ Delete blockers:
 | `Sidekick#75` | OPEN | `fix(sidekick): repoint archived phenotype-bus dependency`; org search still finds `docs/getting-started.md` path dep example |
 | `PhenoObservability#178` | OPEN | `fix(observability): remove stale phenotype-bus test surface`; org search still finds phenotype-bus E2E docs |
 
-**Ruling:** keep `gate-phenotype-bus` at HOLD_DELETE / blocked-open-prs. The repo is substantially absorbed, but delete-readiness is not proven while production/path references and stale observability docs remain visible.
+**Ruling:** keep `gate-phenotype-bus` at HOLD_DELETE / blocked-open-prs. The repo is substantially absorbed, but delete-readiness is not proven while production/path references and stale observability
+docs remain visible.
 
 ## PhenoContracts granular absorption
 

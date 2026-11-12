@@ -1,6 +1,7 @@
 # ADR-ECO-014: phenotype-gateway domain charter
 
 ## Status
+
 Accepted (2026-06-17)
 
 ## Context
@@ -13,7 +14,8 @@ The org has multiple overlapping gateway/router repos with heavy branch sprawl:
 - **argis-extensions** — routing, SLM, embeddings, plugin architecture
 - **OmniRoute** — interim TS LLM router MVP in active use but not long-term canonical design
 
-Prior registry text (`ECOSYSTEM_MAP.md` Cluster A) declared OmniRoute canonical and agentapi-plusplus archive-eligible. User charter (2026-06-17) supersedes: preserve Go-native stacks via hard forks, merge branch supersets, then absorb into **phenotype-gateway** with per-component language spikes (Go / Rust / Zig / Mojo).
+Prior registry text (`ECOSYSTEM_MAP.md` Cluster A) declared OmniRoute canonical and agentapi-plusplus archive-eligible. User charter (2026-06-17) supersedes: preserve Go-native stacks via hard forks,
+merge branch supersets, then absorb into **phenotype-gateway** with per-component language spikes (Go / Rust / Zig / Mojo).
 
 Protected repos (`KodeVibeGo`, `KVirtualStage`, P2/472-P2/KlipDot/kwality) are never deleted or unarchived.
 

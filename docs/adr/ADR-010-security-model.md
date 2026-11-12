@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 NanoVMS must provide strong isolation for:
+
 - Multi-tenant workloads
 - Untrusted code execution
 - GPU passthrough
@@ -270,12 +271,14 @@ var auditedActions = map[string]bool{
 ## Consequences
 
 ### Positive
+
 - Defense in depth
 - Multiple isolation layers
 - Compliance-ready
 - Audit trail
 
 ### Negative
+
 - Performance overhead from security layers
 - Complexity in configuration
 - Potential for security misconfiguration

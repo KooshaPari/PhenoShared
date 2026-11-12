@@ -9,4 +9,5 @@
 
 ## Shared identifiers
 
-Identifiers are namespaced and globally unique enough for cross-reference. An event includes source product, schema version, subject ID, causation/correlation IDs, occurred/observed timestamps, content hash and evidence URI. A ledger can reject, reconcile or supersede events without writing Fabric’s store.
+Identifiers are namespaced and globally unique enough for cross-reference. An event includes source product, schema version, subject ID, causation/correlation IDs, occurred/observed timestamps,
+content hash and evidence URI. A ledger can reject, reconcile or supersede events without writing Fabric’s store.

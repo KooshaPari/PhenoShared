@@ -6,13 +6,15 @@
 
 ## Abstract
 
-Pony's reference capability system prevents data races at compile time by encoding ownership and aliasing rules in the type system. This document maps Pony's six reference capabilities to Phenotype Fabric's existing concepts (LocalityTier, TrustScope, seat leases), proposes a Rust encoding using PhantomData markers, and evaluates whether the implementation cost is justified.
+Pony's reference capability system prevents data races at compile time by encoding ownership and aliasing rules in the type system. This document maps Pony's six reference capabilities to Phenotype
+Fabric's existing concepts (LocalityTier, TrustScope, seat leases), proposes a Rust encoding using PhantomData markers, and evaluates whether the implementation cost is justified.
 
 ---
 
 ## 1. Pony Reference Capabilities Overview
 
-Pony is an actor-model language where data-race freedom is guaranteed by the type system rather than a garbage collector or runtime lock. Each reference carries one of six **reference capabilities** that constrain what operations are allowed:
+Pony is an actor-model language where data-race freedom is guaranteed by the type system rather than a garbage collector or runtime lock. Each reference carries one of six **reference capabilities**
+that constrain what operations are allowed:
 
 | Capability | Aliased? | Mutable? | Sendable? | Description |
 |:-----------|:---------|:---------|:----------|:------------|
@@ -24,6 +26,7 @@ Pony is an actor-model language where data-race freedom is guaranteed by the typ
 | `trn` | No | Yes | Yes | Transferable ownership. Exclusive mutable, but can be consumed by transfer. |
 
 The key insight: **data races are impossible** because the type system enforces:
+
 - No two `iso` references to the same object (uniqueness)
 - `val` references cannot be mutated
 - `ref` references cannot cross actor boundaries
@@ -45,7 +48,8 @@ Pony iso:     var x: iso Foo = Foo.create     // only owner
 Fabric L0:    SeatLease { tier: L0SameProcess, exclusive: true }
 ```
 
-The invariant is the same: **exactly one writer**. In Pony this is enforced by the compiler rejecting duplicate `iso` aliases. In Fabric, the lease FSM (Pending -> Active) guarantees only one active lease per seat.
+The invariant is the same: **exactly one writer**. In Pony this is enforced by the compiler rejecting duplicate `iso` aliases. In Fabric, the lease FSM (Pending -> Active) guarantees only one active
+lease per seat.
 
 ### 2.2 `val` (Value/Immutable) -> `SurfaceSpec` Shared State (Read-Only Frame Data)
 
@@ -71,7 +75,8 @@ Fabric:       ActiveSurface { state: RefCell<RenderState> }
               // bound to one RouteStep, not Send across nodes
 ```
 
-The invariant: `ref` data is **thread-local mutable**. Fabric enforces this by binding ActiveSurface to a RouteStep's execution context. The surface cannot cross LocalityTier boundaries without promotion to a different capability.
+The invariant: `ref` data is **thread-local mutable**. Fabric enforces this by binding ActiveSurface to a RouteStep's execution context. The surface cannot cross LocalityTier boundaries without
+promotion to a different capability.
 
 ### 2.4 `box` (Box) -> Ephemeral Seat Lease
 
@@ -102,7 +107,8 @@ The invariant: tags can be sent freely because they contain no mutable state. Fa
 ### 2.6 `trn` (Trn/Transferable) -> Seat Lease Transfer/Revocation
 
 **Pony:** Exclusive mutable, but ownership can be transferred (consumed) by another actor.
-**Fabric:** A seat lease that can be transferred between RouteSteps (rebinding) or revoked by the coordinator. The exclusive access is maintained during transfer -- at no point do two holders have mutable access.
+**Fabric:** A seat lease that can be transferred between RouteSteps (rebinding) or revoked by the coordinator. The exclusive access is maintained during transfer -- at no point do two holders have
+mutable access.
 
 ```
 Pony trn:     var x: trn Foo = Foo.create    // exclusive, transferable
@@ -120,6 +126,7 @@ The critical invariant: during transfer, the source loses access before the dest
 ### 3.1 Design
 
 We can encode Pony-like compile-time safety in Rust using **PhantomData markers** as type parameters. This gives us:
+
 - Zero runtime cost (PhantomData is zero-sized)
 - Compile-time enforcement of LocalityTier and TrustScope constraints
 - No garbage collector overhead
@@ -332,9 +339,11 @@ impl LocalityMarker for Remote {}
 
 ### 4.3 Key Risk: Dynamic Tier Re-Planning
 
-Fabric's failover system (PF-WP-021) can re-plan routes when nodes fail. A route originally at L3PcieP2P might be re-planned to L6Lan. If the seat lease is typed as `TypedSeatLease<SameHost, _>`, the re-planning breaks the type-level guarantee.
+Fabric's failover system (PF-WP-021) can re-plan routes when nodes fail. A route originally at L3PcieP2P might be re-planned to L6Lan. If the seat lease is typed as `TypedSeatLease<SameHost, _>`, the
+re-planning breaks the type-level guarantee.
 
 **Mitigation:** The markers apply only to the *current* route step, not the lifetime of the connection. At each re-plan boundary, the type is re-validated. This means:
+
 - Typed wrappers exist only within a single route step's execution
 - Re-plan boundaries use runtime `LocalityTier` (the current model)
 - The compile-time markers are a local optimization, not a global invariant
@@ -358,15 +367,18 @@ The costs outweigh the benefits given Fabric's current architecture:
 
 1. **Dynamic re-planning is incompatible** with static locality markers. Fabric's core value proposition is runtime re-planning, and locking types to locality tiers undermines this.
 
-2. **The existing lease FSM already prevents data races.** The `Pending -> Active -> Completed/Revoked/Expired` state machine, combined with exclusive seat leases, provides the same safety guarantee at runtime without the API overhead.
+2. **The existing lease FSM already prevents data races.** The `Pending -> Active -> Completed/Revoked/Expired` state machine, combined with exclusive seat leases, provides the same safety guarantee
+   at runtime without the API overhead.
 
 3. **The ergonomics cost is real.** Every function that takes a seat lease or frame buffer would need generic parameters, making the API harder to use and document.
 
 **However, consider a narrower application:**
 
-- **`Send`/`!Send` markers for ActiveSurface**: Since ActiveSurface is bound to a RouteStep and should never cross thread boundaries, a `!Send` marker (using `PhantomData<*mut ()>`) would provide a cheap compile-time guarantee that surfaces don't accidentally get sent across threads. This is a single-marker, zero-ergonomics-cost improvement.
+- **`Send`/`!Send` markers for ActiveSurface**: Since ActiveSurface is bound to a RouteStep and should never cross thread boundaries, a `!Send` marker (using `PhantomData<*mut ()>`) would provide a
+  cheap compile-time guarantee that surfaces don't accidentally get sent across threads. This is a single-marker, zero-ergonomics-cost improvement.
 
-- **Sealed trait pattern for TrustLevel**: Instead of PhantomData markers, use a sealed trait pattern where `AttestedSeat` and `UntrustedSeat` are distinct types with different method sets. This gives the same safety benefit without generic parameters.
+- **Sealed trait pattern for TrustLevel**: Instead of PhantomData markers, use a sealed trait pattern where `AttestedSeat` and `UntrustedSeat` are distinct types with different method sets. This gives
+  the same safety benefit without generic parameters.
 
 ---
 

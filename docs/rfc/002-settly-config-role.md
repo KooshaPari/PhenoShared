@@ -13,7 +13,8 @@
 
 ## Summary
 
-Migrate **Settly** (layered config, validation, env) from HexaKit transitional `crates/settly` into a dedicated **`config` role workspace** named **phenotype-config**. The workspace owns the Rust core; **Conft** and **phenotype-config** (Python) remain justified product edges per language placement policy.
+Migrate **Settly** (layered config, validation, env) from HexaKit transitional `crates/settly` into a dedicated **`config` role workspace** named **phenotype-config**. The workspace owns the Rust
+core; **Conft** and **phenotype-config** (Python) remain justified product edges per language placement policy.
 
 **Pyron** is the primary chokepoint consumer and must repoint in lockstep with the Rust core move.
 

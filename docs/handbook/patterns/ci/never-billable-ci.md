@@ -25,4 +25,5 @@ Always **restore** protection in the same step. Reviews/merges are done by agent
 
 ## Why
 
-Floating tags and `ubuntu-latest` make CI non-reproducible and are a supply-chain risk; broad `GITHUB_TOKEN` permissions are an escalation surface. Centralizing policy workflows means one fix propagates org-wide.
+Floating tags and `ubuntu-latest` make CI non-reproducible and are a supply-chain risk; broad `GITHUB_TOKEN` permissions are an escalation surface. Centralizing policy workflows means one fix
+propagates org-wide.

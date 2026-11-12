@@ -9,7 +9,8 @@
 | `phenotype-health` | phenoShared (traits) | #261 |
 | `phenotype-cache-adapter` | phenoShared | #261 |
 
-**Boundary note:** PhenoObservability `rust/phenotype-health*` (axum/cli/runtime) is a **runtime superset** on a different trait surface (`HealthCheck` / `HealthRegistry`). HexaKit consumers use phenoShared traits (`HealthChecker` / `HealthMonitor`); PO absorption is runtime-only and already in PO workspace.
+**Boundary note:** PhenoObservability `rust/phenotype-health*` (axum/cli/runtime) is a **runtime superset** on a different trait surface (`HealthCheck` / `HealthRegistry`). HexaKit consumers use
+phenoShared traits (`HealthChecker` / `HealthMonitor`); PO absorption is runtime-only and already in PO workspace.
 
 ## Disposition updates
 

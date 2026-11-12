@@ -45,4 +45,5 @@ Chokepoints green for named consumers; org manifest scan still finds `<REDACTED>
 - Agentora, AgilePlus, PhenoPlugins, phenotype-gfx
 - Civis, phenotype-teamcomm, phenotype-go-sdk, TestingKit
 
-See `registry/chokepoints.json` → `pheno_fleet_blockers`. Repoint strategy: per-crate **DOMAIN_ROLES** owners (`phenotype-config`, `phenotype-resilience`, `PhenoObservability`, `phenotype-types`, `Eventra`); `phenoShared` is interim staging only ([ADR-ECO-014](../adrs/ADR-ECO-014-phenoshared-decompose.md)).
+See `registry/chokepoints.json` → `pheno_fleet_blockers`. Repoint strategy: per-crate **DOMAIN_ROLES** owners
+(`phenotype-config`, `phenotype-resilience`, `PhenoObservability`, `phenotype-types`, `Eventra`); `phenoShared` is interim staging only ([ADR-ECO-014](../adrs/ADR-ECO-014-phenoshared-decompose.md)).

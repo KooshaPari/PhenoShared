@@ -2,15 +2,19 @@
 
 **Source:** `ChatGPT-RLVR-AF Optimization Proposal (1).md` (81,401 bytes, 2026-07-04) — sha `6276ce0c…` — class **L**.
 
-RLVR-AF (Reinforcement Learning with Verifiable Rewards + Agentic Flow) kernels/inference optimization for heterogeneous inference. Couples verifier rewards (`verifier/`) with agentic workflow scheduling (`agent/`), targeting Metal-on-M1-Pro (`kernels/qwen3.5-0.8b/metal/`) and SGLang/triton on `tb2-30000-sglang.service`.
+RLVR-AF (Reinforcement Learning with Verifiable Rewards + Agentic Flow) kernels/inference optimization for heterogeneous inference. Couples verifier rewards (`verifier/`) with agentic workflow
+scheduling (`agent/`), targeting Metal-on-M1-Pro (`kernels/qwen3.5-0.8b/metal/`) and SGLang/triton on `tb2-30000-sglang.service`.
 
 ## Distilled claims (class **[L]** — from `ChatGPT-RLVR-AF Optimization Proposal (1).md`)
 
 ### 1. Reward = verified pass with evidence class promotion
 
-- **[L]** `verifier/` returns a structured `EvaluationReport v0.5` with `gen_ok / verified_pass_at_1 / evidence_label`. RLVR converts `verified_pass_at_1` to a reward signal — `1.0` for [P] evidence, `0.5` for [L], `0.0` for [N] (none/foreign).
-- **[L]** Reward shaping adds a small penalty for evidence-class **L** claims (0.05) but not **P** (1.0); this biases the policy toward promoting claims with primary sources rather than free-riding on ChatGPT export quality.
-- **[L]** AF (Agentic Flow) couples trace placement: each agent step annotates the trail with `[L]` cites; the verifier reward aggregates across steps so a single bad cite doesn't zero out an otherwise good episode.
+- **[L]** `verifier/` returns a structured `EvaluationReport v0.5` with `gen_ok / verified_pass_at_1 / evidence_label`. RLVR converts `verified_pass_at_1` to a reward signal — `1.0` for [P]
+  evidence, `0.5` for [L], `0.0` for [N] (none/foreign).
+- **[L]** Reward shaping adds a small penalty for evidence-class **L** claims (0.05) but not **P** (1.0); this biases the policy toward promoting claims with primary sources rather than free-riding on
+  ChatGPT export quality.
+- **[L]** AF (Agentic Flow) couples trace placement: each agent step annotates the trail with `[L]` cites; the verifier reward aggregates across steps so a single bad cite doesn't zero out an
+  otherwise good episode.
 
 ### 2. Tiered Metal kernel schedule (Apple Silicon primary path)
 
@@ -20,13 +24,16 @@ RLVR-AF (Reinforcement Learning with Verifiable Rewards + Agentic Flow) kernels/
 
 ### 3. Trace placement & heterogeneous worker routing
 
-- **[L]** RLVR-AF maps to `plans/2026-07-14-usch-heterogeneous-inference-v1/` and `config/heterogeneous_tournament.yaml` worker tiers; the system scores Mobile (M1 Pro) vs WSL2 (3090 Ti + 1080 Ti) lanes and picks the cheapest `[L]`-verifiable run.
-- **[L]** Pairwise sampling reduces the RLVR × model × hardware matrix 70% (per `benchmarks/pairwise-test-case-generation.md`). RLVR-AF builds on this — only 30% of the matrix needs verifiable runs to bound the rest.
+- **[L]** RLVR-AF maps to `plans/2026-07-14-usch-heterogeneous-inference-v1/` and `config/heterogeneous_tournament.yaml` worker tiers; the system scores Mobile (M1 Pro) vs WSL2 (3090 Ti + 1080 Ti)
+  lanes and picks the cheapest `[L]`-verifiable run.
+- **[L]** Pairwise sampling reduces the RLVR × model × hardware matrix 70% (per `benchmarks/pairwise-test-case-generation.md`). RLVR-AF builds on this — only 30% of the matrix needs verifiable runs to
+  bound the rest.
 - **[L]** AFL (Agentic Flow Loop) budget: `max_turns=8`, `summarize=false`; above that the policy decays reward because the verifier accumulates penalty. Maps to N06/N09 precedent in granite checkpoints.
 
 ### 4. Sglang triton optimization (dual-harness path)
 
-- **[L]** When running on `tb2-30000-sglang.service` (RTX 3090 Ti), RLVR-AF uses triton `attention-backend` instead of CUDA graph; the watchdog unit already enforces this (`--attention-backend triton --disable-cuda-graph`).
+- **[L]** When running on `tb2-30000-sglang.service` (RTX 3090 Ti), RLVR-AF uses triton `attention-backend` instead of CUDA graph; the watchdog unit already enforces this
+  (`--attention-backend triton --disable-cuda-graph`).
 - **[L]** `mem-fraction-static 0.92` is fine for 9B (Qwen3.5-9B at `/home/<REDACTED>/models/Qwen3.5-9B`); above 0.93 leaves <50 MB headroom for `cpu_scheduler` overlap.
 
 ### 5. Pheno-harness linkage

@@ -14,6 +14,7 @@
 Five work packages (WP1.1 — WP1.5) decompose SSOT Phase 1 into focused, parallel streams. Each WP is owned by one engineer with clear deliverables and acceptance criteria.
 
 **Parallel Execution:**
+
 - WP1.1: Infrastructure setup (DevOps) — 4h Week 1
 - WP1.2: Specs registry (Spec Coordinator) — 6h Week 1
 - WP1.3: Auto-merge service (Infrastructure Engineer) — 12h Week 1-2
@@ -42,13 +43,15 @@ Five work packages (WP1.1 — WP1.5) decompose SSOT Phase 1 into focused, parall
 
 ### Deliverables
 
-**D1.1.1: Branch Setup Script**
+#### D1.1.1: Branch Setup Script
+
 - File: `scripts/setup-specs-branch.sh`
 - Creates/verifies specs/main on phenotype-infrakit, AgilePlus, platforms/thegent
 - Sets upstream: `origin/specs/main`
 - Verifies linear history (no merge commits)
 
-**D1.1.2: Branch Protection Configuration**
+#### D1.1.2: Branch Protection Configuration
+
 - File: `.github/BRANCH_PROTECTION_SPECS_MAIN.yml` (documentation)
 - Applied to all 3 repos via GitHub API
 - Rules:
@@ -58,7 +61,8 @@ Five work packages (WP1.1 — WP1.5) decompose SSOT Phase 1 into focused, parall
   - Require up-to-date branches
   - Include administrators in restrictions
 
-**D1.1.3: GitHub Actions Environment Setup**
+#### D1.1.3: GitHub Actions Environment Setup
+
 - Secrets: `GH_BOT_TOKEN` (read/write repos)
 - Environment: `SSOT` with branch and concurrency constraints
 - Permissions: `contents:write`, `pull-requests:write`, `issues:write`
@@ -112,7 +116,8 @@ git push origin HEAD:specs/main  # Should be rejected
 
 ### Deliverables
 
-**D1.2.1: Master Specs Registry**
+#### D1.2.1: Master Specs Registry
+
 - File: `/SPECS_REGISTRY.md` (at repo root)
 - Contents:
   - Central registry table (repo, spec_type, version, status, last_updated)
@@ -120,13 +125,15 @@ git push origin HEAD:specs/main  # Should be rejected
   - Version tracking across 3 repos
   - Human-readable, machine-parseable
 
-**D1.2.2: Registry Schema (JSON Schema)**
+#### D1.2.2: Registry Schema (JSON Schema)
+
 - File: `/specs/REGISTRY_SCHEMA.json`
 - Validates spec metadata format
 - Properties: repo, spec_type, version, lines, frs_covered, status
 - Required fields: repo, spec_type, version, status
 
-**D1.2.3: Registry Maintenance Script**
+#### D1.2.3: Registry Maintenance Script
+
 - File: `scripts/update-specs-registry.py`
 - Runs after every specs/main merge
 - Scans FUNCTIONAL_REQUIREMENTS.md, ADR.md, PLAN.md, USER_JOURNEYS.md
@@ -134,7 +141,8 @@ git push origin HEAD:specs/main  # Should be rejected
 - Validates against REGISTRY_SCHEMA.json
 - Output: Updated SPECS_REGISTRY.md
 
-**D1.2.4: Registry Usage Documentation**
+#### D1.2.4: Registry Usage Documentation
+
 - File: `/docs/reference/SPECS_REGISTRY_GUIDE.md`
 - How to read the registry
 - How to add new specs
@@ -187,7 +195,8 @@ python3 scripts/validate-registry-schema.py
 
 ### Deliverables
 
-**D1.3.1: Batch-Merger Crate**
+#### D1.3.1: Batch-Merger Crate
+
 - Crate: `libs/phenotype-batch-merger/`
 - Cargo.toml: Dependencies (git2, tokio, serde, tracing)
 - src/lib.rs: Public API
@@ -196,21 +205,24 @@ python3 scripts/validate-registry-schema.py
   - `attempt_merge()` → MergeResult
   - `process_batch()` → BatchResult
 
-**D1.3.2: Merge Logic Implementation**
+#### D1.3.2: Merge Logic Implementation
+
 - 3-way merge using git2-rs (base, branch, main)
 - Conflict detection: index.has_conflicts()
 - Conflict detail extraction (file, line ranges)
 - Merge commit creation with proper parent references
 - Push to origin + branch deletion
 
-**D1.3.3: GitHub Actions Workflow**
+#### D1.3.3: GitHub Actions Workflow
+
 - File: `.github/workflows/auto-merge-specs.yml`
 - Schedule: Every 5 minutes (business hours)
 - Event trigger: Push to specs/agent-*
 - Manual trigger: workflow_dispatch (for testing)
 - Outputs: successful, conflicts, failed counts
 
-**D1.3.4: Batch Processor**
+#### D1.3.4: Batch Processor
+
 - Async processing: 1-50 branches per batch
 - Parallel validation & merge attempts (tokio)
 - Comprehensive error handling
@@ -218,7 +230,8 @@ python3 scripts/validate-registry-schema.py
   - Permanent: Create GitHub issues
 - Batch result reporting (success/conflict/failed counts)
 
-**D1.3.5: GitHub Issue Creator**
+#### D1.3.5: GitHub Issue Creator
+
 - Generate issues for conflicts (title, body with fix steps)
 - Generate issues for validation failures
 - Generate issues for merge failures
@@ -302,7 +315,8 @@ gh issue list | grep "Merge Conflict"
 
 ### Deliverables
 
-**D1.4.1: Spec Validation Script**
+#### D1.4.1: Spec Validation Script
+
 - File: `scripts/validate-spec-structure.py`
 - Checks:
   - Markdown structure valid (no syntax errors)
@@ -311,7 +325,8 @@ gh issue list | grep "Merge Conflict"
   - No orphan FRs (all referenced in tests or journeys)
 - Output: Pass/fail + list of issues
 
-**D1.4.2: FR↔Test Coverage Validator**
+#### D1.4.2: FR↔Test Coverage Validator
+
 - File: `scripts/validate-fr-test-coverage.py`
 - Extracts all FRs from FUNCTIONAL_REQUIREMENTS.md
 - Extracts all test traces (grep "Traces to: FR-" in tests/)
@@ -321,14 +336,16 @@ gh issue list | grep "Merge Conflict"
   - 100% coverage (no orphans)
 - Output: Coverage report + issues
 
-**D1.4.3: Traceability Matrix Generator**
+#### D1.4.3: Traceability Matrix Generator
+
 - File: `scripts/generate-traceability-matrix.py`
 - Inputs: FUNCTIONAL_REQUIREMENTS.md, test files
 - Outputs: `docs/TRACEABILITY_MATRIX.md`
 - Table format: FR | Test File | Test Count | Status
 - Updated weekly (via scheduled workflow)
 
-**D1.4.4: GitHub Actions Validation Workflow**
+#### D1.4.4: GitHub Actions Validation Workflow
+
 - File: `.github/workflows/ssot-validation.yml`
 - Trigger: Push to specs/*, PR to specs/main
 - Jobs:
@@ -337,13 +354,15 @@ gh issue list | grep "Merge Conflict"
   - Generate traceability matrix
   - Block merge if coverage <100%
 
-**D1.4.5: Commit Message Hook Validation**
+#### D1.4.5: Commit Message Hook Validation
+
 - File: `scripts/hooks/validate-spec-traces.sh`
 - Runs pre-commit: Check Spec-Traces format
 - Validates references: All FRs in Spec-Traces exist
 - Blocks if invalid format or missing FRs
 
-**D1.4.6: Documentation**
+#### D1.4.6: Documentation
+
 - File: `/docs/reference/FR_TEST_TRACEABILITY_GUIDE.md`
 - How to add "Traces to: FR-XXX-NNN" comments
 - Examples: Rust, Python, Go, TypeScript
@@ -411,7 +430,8 @@ pre-commit run validate-spec-traces --all-files
 
 ### Deliverables
 
-**D1.5.1: Agent Workflow Guide**
+#### D1.5.1: Agent Workflow Guide
+
 - File: `/docs/reference/SSOT_PHASE1_AGENT_WORKFLOW.md` (already created)
 - Sections:
   - Branching pattern (specs/agent-&lt;name>-&lt;task-id>)
@@ -426,32 +446,37 @@ pre-commit run validate-spec-traces --all-files
   - Troubleshooting (5+ issues)
   - Glossary
 
-**D1.5.2: Agent Setup Script**
+#### D1.5.2: Agent Setup Script
+
 - File: `scripts/agent-setup.sh`
 - One-time setup for each agent
 - Configures: git user, commit template, pre-commit hooks
 - Installs: pre-commit framework, validation hooks
 - Output: "✅ Agent &lt;name> setup complete"
 
-**D1.5.3: Onboarding Guide (Quickstart)**
+#### D1.5.3: Onboarding Guide (Quickstart)
+
 - File: `/docs/guides/SSOT_PHASE1_QUICKSTART.md`
 - 5-minute read (500 words)
 - Overview, 3 common workflows, troubleshooting
 - Links to full documentation
 
-**D1.5.4: Spec Format Standards**
+#### D1.5.4: Spec Format Standards
+
 - File: `/docs/reference/SPEC_FORMAT_STANDARDS.md`
 - Format for each spec type: FR, ADR, PLAN, UJ
 - Example headers, sections, examples
 - From 3+ canonical repos
 
-**D1.5.5: Training Materials**
+#### D1.5.5: Training Materials
+
 - Video walkthrough (5 min): Create branch → Commit → Merge
 - Presentation slides: SSOT overview, agent roles, workflows
 - Example branches with real commits
 - Q&A document
 
-**D1.5.6: Pilot Onboarding**
+#### D1.5.6: Pilot Onboarding
+
 - Recruit 5 pilot agents (from different domains)
 - Walk through setup script
 - Collect feedback (what's confusing? what's missing?)
@@ -556,6 +581,7 @@ WP1.5 (Onboarding) ← Final blocker before agent launch
 **Parallel Streams:** WP1.3 + WP1.4 can run during WP1.2
 
 **Optimized Timeline:**
+
 - Week 1, Days 1-2: WP1.1 (4h)
 - Week 1, Days 2-3: WP1.2 (6h) + WP1.3 start (4h) + WP1.4 (4h) in parallel
 - Week 1, Days 4-5: WP1.3 (8h) + WP1.4 (2h) continued
@@ -631,6 +657,7 @@ All WP1.1-1.5 complete **and**:
 ## Next Steps: Phase 2 Preparation
 
 After Phase 1 complete:
+
 1. Retrospective: What worked? What needs improvement?
 2. Plan Phase 2: Ecosystem consolidation, cross-repo traceability
 3. Expand agent adoption: Roll out to all 50+ agents

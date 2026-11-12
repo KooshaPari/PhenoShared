@@ -75,13 +75,15 @@ spine peer relationship.
 Two remediation options:
 
 **Option A: Delegated-mirror declaration** (recommended)
+
 - Keep the physical absorption (saves disk + git maintenance)
 - Declare the upstream `PhenoSpecs` as the **canonical source of truth**
 - Declare `phenotype-registry/docs/specs/pheno-specs/` as a **read-only mirror**
 - All consuming repos pin to the upstream URL, not the mirror
 - Mirror is auto-regenerated from upstream; if drift detected, regenerate
 
-**Option B: Upstream restoration**
+#### Option B: Upstream restoration
+
 - Restore `PhenoSpecs` as the standalone spine repo
 - Move `phenotype-registry/docs/specs/pheno-specs/` content back to `PhenoSpecs`
 - Update all references to point at `PhenoSpecs` directly
@@ -102,6 +104,7 @@ The PLATFORM role was proposed for `AgilePlus` (94 crates, 27GB), but AgilePlus 
 marked TOO_LARGE_RETIRE on 2026-07-17.
 
 **Reopening criteria**:
+
 - A candidate repo < 100 MB total size
 - Workspace structure is well-bounded (≤ 20 crates OR clear submodule boundary)
 - Has at least 3 downstream consumers that would benefit from spine-membership guarantees
@@ -111,6 +114,7 @@ marked TOO_LARGE_RETIRE on 2026-07-17.
 ## Ratification
 
 This ADR is **proposed** on 2026-07-17. Ratification requires:
+
 - Approval from at least 2 downstream consumers per spine member
 - Resolution of Outstanding Issues 1 + 2 (delegated-mirror decision)
 - A clean spine-member audit confirming all 8 repos are LIVE on GitHub

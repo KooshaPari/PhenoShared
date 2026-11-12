@@ -4,7 +4,8 @@ title: Full-turn delivery
 
 # Full-turn delivery (PhenoDocs)
 
-A **full turn** finishes when work is **merged** to **`main`** or an approved **release branch**, is **visible on GitHub** (PR URLs), and ships **changelog**, **version** (when applicable), and **docs** updates.
+A **full turn** finishes when work is **merged** to **`main`** or an approved **release branch**, is **visible on GitHub** (PR URLs), and ships **changelog**, **version** (when applicable), and
+**docs** updates.
 
 ## Requirements
 

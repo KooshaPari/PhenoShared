@@ -13,7 +13,9 @@ status: stub — N10 priority, needs full distillation
 
 **Source:** `ChatGPT-Software Project Traceability Tools.md` (41 KB, 2026-06-14) — class **L**.
 
-Traceability is the ability to walk **intent → spec → code → test → eval → evidence** without manual grep. The corpus surveys tools that bind claims to artifacts via **evidence classes** (L=local corpus, P=primary source) and hash-only registries — exactly the `config/evidence_registry.yaml` + `local_corpus` pattern in pheno-harness (`pheno/evidence/adapters/local_corpus.py`, `corpus_manifest.json`).
+Traceability is the ability to walk **intent → spec → code → test → eval → evidence** without manual grep. The corpus surveys tools that bind claims to artifacts via **evidence classes** (L=local
+corpus, P=primary source) and hash-only registries — exactly the `config/evidence_registry.yaml` + `local_corpus` pattern in pheno-harness
+(`pheno/evidence/adapters/local_corpus.py`, `corpus_manifest.json`).
 
 ## Key insights (stub — full distillation pending N10)
 

@@ -58,6 +58,7 @@ or (b) attempt to call a non-existent subcommand and fail.
 ## Consequences
 
 Positive:
+
 - `scripts/snapshot.sh` matches the tool's actual semantics.
 - The naming is consistent with `airlock-v2 snapshot`, so anyone reading
   the script knows exactly what it does without having to cross-reference
@@ -66,6 +67,7 @@ Positive:
   call `scripts/snapshot.sh` to capture wip, then `git merge` to release.
 
 Negative:
+
 - The lane name in the turn-8 plan ("promote.sh") is misleading and
   surfaces again as a system_reminder every time the todo list is
   materialized. Cancellation of that todo item is the correct response.

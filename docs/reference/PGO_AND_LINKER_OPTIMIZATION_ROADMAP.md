@@ -9,7 +9,8 @@
 
 ## Executive Summary
 
-This roadmap outlines a phased approach to optimize the phenotype-infrakit build pipeline and runtime performance through Profile-Guided Optimization (PGO) and modern linker adoption. Current builds already use Link-Time Optimization (LTO), but are bottlenecked by the slow GNU `ld` linker on CI. By adopting mold (Linux CI) and implementing PGO, we can achieve:
+This roadmap outlines a phased approach to optimize the phenotype-infrakit build pipeline and runtime performance through Profile-Guided Optimization (PGO) and modern linker adoption. Current builds
+already use Link-Time Optimization (LTO), but are bottlenecked by the slow GNU `ld` linker on CI. By adopting mold (Linux CI) and implementing PGO, we can achieve:
 
 - **Binary size:** 5–15% reduction
 - **Link time:** 5–10x speedup on Linux CI
@@ -33,6 +34,7 @@ strip = true            # Remove debug symbols
 ```
 
 **Analysis:**
+
 - ✅ LTO already enabled (good for optimization)
 - ✅ Size optimization active (opt-level = "z")
 - ⚠️ Debug symbols stripped (blocks BOLT integration later)
@@ -50,11 +52,13 @@ strip = true            # Remove debug symbols
 **File:** `/github/workflows/ci.yml`
 
 Current jobs:
+
 - `rust-check`, `rust-build`, `rust-msrv` (workspace tests)
 - `core-check`, `core-build`, `core-msrv` (monorepo tests)
 - `rust-coverage` (tarpaulin code coverage)
 
 **Current linker setup:**
+
 - **macOS (local):** ld64 (Apple's native linker) — good default
 - **Linux CI:** GNU ld (system default) — slow for LTO builds
 - **Explicit config:** None — relies on system defaults
@@ -62,6 +66,7 @@ Current jobs:
 ### Current Linker Performance (Estimated)
 
 Based on Rust LTO + size optimization:
+
 - **Link time (current):** ~30–60 seconds on ubuntu-latest
 - **Binary size:** ~15–20 MB (release binary)
 - **Bottleneck:** GNU ld is single-threaded for parts of LTO
@@ -94,11 +99,13 @@ Based on Rust LTO + size optimization:
 ### 1.1 Document Current State
 
 **Tasks:**
+
 - [ ] Measure current link time on ubuntu-latest (extract from CI logs)
 - [ ] Measure current binary size: `cargo build --release --workspace`
 - [ ] Record baseline in `BENCHMARK_BASELINE.md`
 
 **Expected output:**
+
 ```
 Link time (GNU ld + LTO): ~45 seconds
 Binary size (total): ~45 MB
@@ -158,6 +165,7 @@ rustflags = ["-C", "link-arg=-fuse-ld=mold", "-C", "link-arg=-Wl,--as-needed"]
 ```
 
 **Testing:**
+
 ```bash
 # Verify mold is being used
 RUSTFLAGS="-v" cargo build --release 2>&1 | grep "mold"
@@ -192,6 +200,7 @@ linker-benchmark:
 ```
 
 **Success criteria:**
+
 - ✅ mold installed and functional on CI
 - ✅ Link time reduced by 50% or more
 - ✅ Binary size unchanged
@@ -213,6 +222,7 @@ linker-benchmark:
 4. **Optimized build:** Recompile with `-C llvm-profile-use=<merged_profile>`
 
 **Workload selection:**
+
 - Primary: Integration tests (`cargo test --release --workspace`)
 - Alternative: Benchmarks (`cargo bench --no-run`)
 - Custom: Add realistic load scenarios if needed
@@ -263,7 +273,7 @@ pgo-build:
         du -sh target/release/*.{bin,so,dylib} || true
 ```
 
-**Alternative (simpler): Add to existing build job**
+#### Alternative (simpler): Add to existing build job
 
 ```yaml
 rust-build-pgo:
@@ -322,6 +332,7 @@ rust-build-pgo:
 **What is BOLT?**
 
 BOLT (Binary Optimization and Layout Tool) is a post-link optimizer from the LLVM project. It:
+
 - Reads compiled binary + CPU profiling data
 - Reorders functions and basic blocks based on execution frequency
 - Outputs optimized binary without recompilation
@@ -349,19 +360,21 @@ BOLT (Binary Optimization and Layout Tool) is a post-link optimizer from the LLV
 ### 3.2 BOLT Implementation Strategy
 
 **Challenge:** BOLT is a post-link tool, not integrated into Cargo. Requires:
+
 1. Preserving debug symbols (conflicts with `strip = true`)
 2. Running perf sampling (requires Linux, not available on CI by default)
 3. Manual build step (not part of normal Cargo workflow)
 
-**Recommendation: Defer to Phase 4**
+#### Recommendation: Defer to Phase 4
 
 BOLT integration is high-effort, low-ROI for CI since:
+
 - Requires disabling `strip = true` (conflicts with current config)
 - Profiling data must come from real workloads (not CI synthetic tests)
 - Best applied to release binaries at deployment time
 - Can be added later with dedicated CI job or local tooling
 
-**Alternative: Local-only BOLT workflow**
+#### Alternative: Local-only BOLT workflow
 
 Document steps for developers to apply BOLT locally to release binaries:
 
@@ -382,29 +395,34 @@ Document steps for developers to apply BOLT locally to release binaries:
    cargo build --release
    ```
 
-2. Profile with perf
+1. Profile with perf
+
    ```bash
    perf record -c 100000 -F max -e cycles:u \
      ./target/release/<binary> <your-workload>
    ```
 
-3. Convert to BOLT format
+2. Convert to BOLT format
+
    ```bash
    perf2bolt -p perf.data -o perf.fdata \
      ./target/release/<binary>
    ```
 
-4. Apply BOLT
+3. Apply BOLT
+
    ```bash
    llvm-bolt ./target/release/<binary> \
      -o ./target/release/<binary>.bolted \
      -data=perf.fdata
    ```
 
-5. Test
+4. Test
+
    ```bash
    ./target/release/<binary>.bolted <test-inputs>
    ```
+
 ```
 
 **Timeline for Phase 3:**
@@ -459,6 +477,7 @@ release-pgo:
 **Goal:** Measure real-world perf improvements from PGO/linker changes
 
 **Components:**
+
 - Macro-benchmarks (realistic workloads, not micro-benchmarks)
 - CI benchmark job (runs on every push)
 - Historical tracking (GitHub Actions benchmark action)
@@ -467,6 +486,7 @@ release-pgo:
 ### 4.3 BOLT in Release Pipeline (Optional)
 
 **If Phase 3 proves valuable:**
+
 - Add BOLT step to release build
 - Store pre-BOLT and post-BOLT binaries
 - Profile with real production workloads
@@ -487,7 +507,7 @@ release-pgo:
 
 ### Critical Path (MVP)
 
-**Goal: Achieve mold + baseline PGO in 4 weeks**
+#### Goal: Achieve mold + baseline PGO in 4 weeks
 
 1. **Week 1:** Install mold, measure link time (+1–2h CI time)
 2. **Week 2:** Verify mold works, update `.cargo/config.toml` (+2h)
@@ -521,6 +541,7 @@ release-pgo:
 ### Fallback Strategy
 
 If issues arise:
+
 1. **mold fails:** Disable and use system ld (zero config change needed)
 2. **PGO degrades perf:** Use `-C llvm-profile-use-dir=<cached>` with stale data
 3. **CI slowdown unacceptable:** Move PGO to scheduled jobs (nightly, not on PR)
@@ -632,11 +653,11 @@ RUSTFLAGS="-C llvm-profile-use=$(pwd)/merged.profdata" \
 
 ## Related Documentation
 
-- **Rust PGO Guide:** https://doc.rust-lang.org/rustc/profile-guided-optimization.html
-- **mold Documentation:** https://github.com/rui314/mold
-- **lld Documentation:** https://lld.llvm.org/
-- **BOLT Guide:** https://github.com/llvm/llvm-project/blob/main/bolt/README.md
-- **Cargo Config Reference:** https://doc.rust-lang.org/cargo/reference/config.html
+- **Rust PGO Guide:** <https://doc.rust-lang.org/rustc/profile-guided-optimization.html>
+- **mold Documentation:** <https://github.com/rui314/mold>
+- **lld Documentation:** <https://lld.llvm.org/>
+- **BOLT Guide:** <https://github.com/llvm/llvm-project/blob/main/bolt/README.md>
+- **Cargo Config Reference:** <https://doc.rust-lang.org/cargo/reference/config.html>
 
 ---
 

@@ -26,4 +26,5 @@
 
 ## Reproduction contract
 
-Each run records commit/version, OS/kernel/driver/firmware, topology, power/thermal state, display/audio modes, network impairment, background load, raw samples, clocks, trace IDs and failed/aborted runs. Graphs without raw evidence are illustrative only.
+Each run records commit/version, OS/kernel/driver/firmware, topology, power/thermal state, display/audio modes, network impairment, background load, raw samples, clocks, trace IDs and failed/aborted
+runs. Graphs without raw evidence are illustrative only.

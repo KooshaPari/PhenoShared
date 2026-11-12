@@ -160,6 +160,7 @@ agileplus move WP01 --to done
 ```
 
 Effect:
+
 - WP marked as `done`
 - Dependent WPs unblocked
 - Can proceed to next phase
@@ -217,6 +218,7 @@ Estimated additional work: 2-3 hours
 ```
 
 Effect:
+
 - WP marked as `planned` with feedback
 - Implementer addresses feedback
 - Resubmits for review
@@ -391,7 +393,7 @@ Impact: Code style consistency
 
 ## Tips for Effective Reviews
 
-**1. Be Specific**
+### 1. Be Specific
 
 ```markdown
 # ❌ Vague
@@ -402,7 +404,7 @@ Impact: Code style consistency
 Add a check: if user_id == 0 { return Err(...) }"
 ```
 
-**2. Provide Examples**
+## 2. Provide Examples
 
 ```markdown
 # ❌ No example
@@ -413,7 +415,7 @@ Add a check: if user_id == 0 { return Err(...) }"
 It's clearer what the function does."
 ```
 
-**3. Explain Why**
+## 3. Explain Why
 
 ```markdown
 # ❌ No rationale
@@ -424,7 +426,7 @@ It's clearer what the function does."
 If SendGrid API returns 400, we need to verify error handling works."
 ```
 
-**4. Distinguish Must-Fix vs Nice-to-Have**
+## 4. Distinguish Must-Fix vs Nice-to-Have
 
 ```markdown
 # ✓ Clear priority
@@ -438,7 +440,7 @@ MEDIUM (nice to have):
 - Code could be more DRY
 ```
 
-**5. Acknowledge Good Work**
+## 5. Acknowledge Good Work
 
 ```markdown
 # ✓ Balanced feedback

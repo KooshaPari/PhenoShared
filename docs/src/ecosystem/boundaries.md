@@ -33,7 +33,8 @@ flowchart LR
 
 ## Integration rule
 
-Products share stable identifiers, typed event envelopes and explicit APIs. They do **not** share one writable database, one giant ontology or implicit table access. A product can cache another product’s view but must preserve the source authority and version.
+Products share stable identifiers, typed event envelopes and explicit APIs. They do **not** share one writable database, one giant ontology or implicit table access. A product can cache another
+product’s view but must preserve the source authority and version.
 
 ## Fabric boundary test
 

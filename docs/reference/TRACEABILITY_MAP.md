@@ -9,7 +9,8 @@
 
 ## Executive Summary
 
-The Phenotype ecosystem comprises three canonical repositories operating under a hexagonal architecture with clear separation between domain logic (ports/contracts) and implementations (adapters). This document traces shared patterns and their implementations across projects to enable:
+The Phenotype ecosystem comprises three canonical repositories operating under a hexagonal architecture with clear separation between domain logic (ports/contracts) and implementations (adapters).
+This document traces shared patterns and their implementations across projects to enable:
 
 - **Cross-project knowledge reuse** — Learn how one project solved a pattern and apply it elsewhere
 - **Consistency enforcement** — Identify where implementations diverge and standardize
@@ -19,6 +20,7 @@ The Phenotype ecosystem comprises three canonical repositories operating under a
 ### Key Finding: High Modularity, Emerging Shared Crates
 
 All three projects benefit from the shared crate layer (`phenotype-*-core` and `phenotype-contracts`), which consolidates:
+
 - Error handling (5 crates)
 - Configuration management (1 crate with pluggable loaders)
 - Health checking (2 implementations)
@@ -56,6 +58,7 @@ Business Logic         External Services
 | **thegent** | Framework-level (Python) | Agent orchestration, Failure classification | Direct CLI, Proxy API, Cursor API runners |
 
 #### Validation
+
 - ✅ All outbound calls go through trait objects (never direct imports)
 - ✅ Domain types serialize/deserialize cleanly (serde trait bounds)
 - ✅ Tests mock adapters without touching domain

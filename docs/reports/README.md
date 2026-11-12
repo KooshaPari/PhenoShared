@@ -13,4 +13,4 @@ See **`docs/worklogs/README.md`** for the full file index and entry template.
 
 ---
 
-_Last updated: 2026-03-29_
+## Last updated: 2026-03-29

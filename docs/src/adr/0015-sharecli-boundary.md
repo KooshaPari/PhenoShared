@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-Do not absorb ShareCLI. Define adapters through which it supplies process/resource signals and executes delegated local actions. The fabric owns cross-device placement and interactive I/O; ShareCLI owns its standalone local runtime/supervisor contract.
+Do not absorb ShareCLI. Define adapters through which it supplies process/resource signals and executes delegated local actions. The fabric owns cross-device placement and interactive I/O; ShareCLI
+owns its standalone local runtime/supervisor contract.
 
 ### Enforced rules
 

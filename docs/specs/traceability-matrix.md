@@ -3,7 +3,8 @@
 > **Status:** active — closes 32-pillar gap from `pheno-harness-requirements-v1.md`
 > **Source:** `docs/specs/pheno-harness-requirements-v1.md` §§ 2, 3.1 (scorecard + testability hardening)
 > **Bridges:** `.agileplus/specs/001-core-setup/spec.md` ↔ `phenoSpecs` ↔ `bench/contracts/canonicalize.py`
-> **Commit pin (agileplus-specs/001-core-setup):** `81cd975064ebdaec693cfbfba91744dc78b28d09` — `chore(agileplus): bootstrap .agileplus/specs, .phenotype, scorecard, governance` (2026-08-19); `origin/main` at `640fe02a045b2fb42ffe9c09c801fc8daa4113ed`
+> **Commit pin (agileplus-specs/001-core-setup):** `81cd975064ebdaec693cfbfba91744dc78b28d09` — `chore(agileplus): bootstrap .agileplus/specs, .phenotype, scorecard, governance`
+(2026-08-19); `origin/main` at `640fe02a045b2fb42ffe9c09c801fc8daa4113ed`
 > **Owner:** forge | **Generated:** 2026-08-21
 
 ## 0. How to read
@@ -61,9 +62,11 @@
 
 ## 3. Gap closure
 
-* Requirements §2 scorecard (4 rows) was declared but not per-pillar traceable — this matrix expands to 32 auditable pillars (8×4) with file + gate pins so `agileplus-specs/001-core-setup` is no longer split-brain with `phenoSpecs/WORKLOG.md`.
+* Requirements §2 scorecard (4 rows) was declared but not per-pillar traceable — this matrix expands to 32 auditable pillars (8×4) with file + gate pins so `agileplus-specs/001-core-setup` is no
+  longer split-brain with `phenoSpecs/WORKLOG.md`.
 * Section 3.1 negative cases and thresholds are now bound to `Test gate` column — any `*.json` non-`*.sha256`, missing pin, byte-mismatch, or heartbeat diff fails the gate.
-* Commit pin `81cd975` anchors the `agileplus-specs/001-core-setup` execution bridge referenced in requirements header; future `proc all` (WBS 87–90, 93–94) promotes mock tests to live verified against `host_manifest.yaml` rolling tail.
+* Commit pin `81cd975` anchors the `agileplus-specs/001-core-setup` execution bridge referenced in requirements header; future `proc all` (WBS 87–90, 93–94) promotes mock tests to live verified
+  against `host_manifest.yaml` rolling tail.
 
 ---
 *End traceability matrix. Source commit `640fe02a045b2fb42ffe9c09c801fc8daa4113ed` (origin/main) + `81cd975064ebdaec693cfbfba91744dc78b28d09` (agileplus bootstrap).*

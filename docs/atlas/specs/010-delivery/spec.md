@@ -52,4 +52,5 @@ Acceptance: A public generated index must not contain private capture content.
 
 ## Scope discipline
 
-Apply the actual subject support/role contract. Preserve richer existing source formats and authority. Generated spec bundles do not certify native AgilePlus compatibility; inspect the installed engine/schema first. Unknowns and failures remain explicit.
+Apply the actual subject support/role contract. Preserve richer existing source formats and authority. Generated spec bundles do not certify native AgilePlus compatibility; inspect the installed
+engine/schema first. Unknowns and failures remain explicit.

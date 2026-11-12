@@ -13,7 +13,7 @@ Complete walkthrough for integrating Sentry with GitHub for automatic issue crea
 ### Phase 1: Create Sentry Projects
 
 1. **Go to Sentry.io:**
-   - https://sentry.io/organizations/
+   - <https://sentry.io/organizations/>
 
 2. **Create Projects (if not already done):**
    - Click "Projects" → "Create Project"
@@ -33,7 +33,7 @@ Complete walkthrough for integrating Sentry with GitHub for automatic issue crea
 #### Install GitHub App in Sentry
 
 1. **Go to Sentry Integration Settings:**
-   - https://sentry.io/settings/integrations/
+   - <https://sentry.io/settings/integrations/>
 
 2. **Search for GitHub:**
    - Click "GitHub"
@@ -56,7 +56,7 @@ Complete walkthrough for integrating Sentry with GitHub for automatic issue crea
 #### Configure GitHub per Project
 
 1. **Go to AgilePlus Project Settings:**
-   - https://sentry.io/settings/projects/agileplus/
+   - <https://sentry.io/settings/projects/agileplus/>
 
 2. **Navigate to Integrations:**
    - Left sidebar → "Integrations"
@@ -77,7 +77,7 @@ Complete walkthrough for integrating Sentry with GitHub for automatic issue crea
 #### Create Alert for New Errors
 
 1. **Go to Project Alerts:**
-   - https://sentry.io/alerts/
+   - <https://sentry.io/alerts/>
 
 2. **Create Alert Rule:**
    - Click "Create Alert Rule"
@@ -110,6 +110,7 @@ Actions:
 #### Trigger Test Error
 
 1. **In AgilePlus:**
+
    ```bash
    cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
    SENTRY_DSN="your-dsn-here" cargo test --lib sentry_config -- --nocapture
@@ -121,11 +122,13 @@ Actions:
    - Should see new issue appear within 30 seconds
 
 3. **Verify GitHub Issue Created:**
-   - Go to GitHub: https://github.com/KooshaPari/AgilePlus/issues
+   - Go to GitHub: <https://github.com/KooshaPari/AgilePlus/issues>
    - Should see new issue with title like:
+
      ```
      [AgilePlus] Test error for Sentry capture
      ```
+
    - Issue body should include:
      - Error message
      - Stack trace
@@ -138,7 +141,7 @@ Actions:
 #### Add Repository Secrets
 
 1. **Go to AgilePlus Repository Settings:**
-   - https://github.com/KooshaPari/AgilePlus/settings/secrets/actions
+   - <https://github.com/KooshaPari/AgilePlus/settings/secrets/actions>
 
 2. **New Repository Secret:**
    - Name: `SENTRY_DSN`
@@ -222,6 +225,7 @@ jobs:
 ### Issue: GitHub Integration Shows "Not Installed"
 
 **Solution:**
+
 1. Go to Sentry Settings → Integrations
 2. Click GitHub
 3. Re-authorize if needed
@@ -230,12 +234,14 @@ jobs:
 ### Issue: GitHub Issues Not Being Created
 
 **Check:**
+
 1. Alert rule is active and configured correctly
 2. Repository selector shows correct repo
 3. Sentry project has "Create issues" permission
 4. Error severity matches alert rule conditions
 
 **Fix:**
+
 ```bash
 # Test manually
 # 1. Go to Sentry issue
@@ -247,6 +253,7 @@ jobs:
 ### Issue: Duplicate GitHub Issues for Same Error
 
 **Solution:**
+
 1. Enable "Ignore until fixed" in alert rule
 2. Sentry will only create issue for first occurrence per group
 3. Subsequent errors link to same issue
@@ -254,6 +261,7 @@ jobs:
 ### Issue: GitHub API Rate Limit Exceeded
 
 **Solution:**
+
 1. Reduce alert frequency
 2. Increase severity threshold (e.g., only High/Critical)
 3. Implement error grouping to reduce total issues
@@ -261,6 +269,7 @@ jobs:
 ### Issue: Missing Stack Traces in GitHub Issues
 
 **Solution:**
+
 1. Ensure `backtrace` feature is enabled in Sentry SDK
 2. Check Sentry project settings:
    - Settings → Source Maps
@@ -285,7 +294,9 @@ Description:
 
 ### Stack Trace
 ```
+
 {stack_trace}
+
 ```
 
 ### Context
@@ -351,20 +362,21 @@ Action: Slack notification only
 
 | Task | URL |
 |------|-----|
-| Sentry Org | https://sentry.io/organizations/ |
-| AgilePlus Project | https://sentry.io/organizations/*/issues/?project=ID |
-| GitHub Integration | https://sentry.io/settings/integrations/github/ |
-| Alert Rules | https://sentry.io/alerts/ |
-| AgilePlus Repo | https://github.com/KooshaPari/AgilePlus |
-| phenotype-infrakit Repo | https://github.com/KooshaPari/phenotype-infrakit |
-| heliosCLI Repo | https://github.com/KooshaPari/heliosCLI |
+| Sentry Org | <https://sentry.io/organizations/> |
+| AgilePlus Project | <https://sentry.io/organizations/*/issues/?project=ID> |
+| GitHub Integration | <https://sentry.io/settings/integrations/github/> |
+| Alert Rules | <https://sentry.io/alerts/> |
+| AgilePlus Repo | <https://github.com/KooshaPari/AgilePlus> |
+| phenotype-infrakit Repo | <https://github.com/KooshaPari/phenotype-infrakit> |
+| heliosCLI Repo | <https://github.com/KooshaPari/heliosCLI> |
 
 ## Support
 
 For issues or questions:
+
 1. Check [Sentry Docs](https://docs.sentry.io/)
 2. Review [GitHub Integration Guide](https://docs.sentry.io/product/integrations/github/)
-3. Contact Sentry support: support@sentry.io
+3. Contact Sentry support: <support@sentry.io>
 
 ---
 

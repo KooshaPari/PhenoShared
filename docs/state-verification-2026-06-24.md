@@ -21,9 +21,12 @@
 
 ### Top-Level Structure (229 entries)
 
-**38 Rust crates** in `crates/` (thegent-atom, thegent-benchmark, thegent-cache, thegent-crypto, thegent-discovery, thegent-docs, thegent-dspy, thegent-fs, thegent-git, thegent-hooks, thegent-jsonl, thegent-maif, thegent-memory, thegent-metrics, **thegent-nvms**, thegent-offload, thegent-parser, thegent-path-resolve, thegent-plugin-host, thegent-policy, thegent-resources, thegent-router, thegent-runtime, thegen-tbash, …).
+**38 Rust crates** in `crates/` (thegent-atom, thegent-benchmark, thegent-cache, thegent-crypto, thegent-discovery, thegent-docs, thegent-dspy, thegent-fs, thegent-git, thegent-hooks, thegent-jsonl,
+thegent-maif, thegent-memory, thegent-metrics, **thegent-nvms**, thegent-offload, thegent-parser, thegent-path-resolve, thegent-plugin-host, thegent-policy, thegent-resources, thegent-router,
+thegent-runtime, thegen-tbash, …).
 
 **Subdirectories** (selected):
+
 - `agents/` — agent definitions
 - `agileplus/` — embedded AgilePlus (canonical spine)
 - `apps/` — applications
@@ -37,7 +40,8 @@
 
 ### Critical Finding
 
-`thegent-nvms` is a **crate inside thegent** that duplicates the standalone `<REDACTED>/nanovms` repo (now merged with Phase 1 + NV-200..203 fixes). This is the **thegent absorption pattern** that nanovms — when it gets re-merged into thegent — will follow. ADR-026 will codify this.
+`thegent-nvms` is a **crate inside thegent** that duplicates the standalone `<REDACTED>/nanovms` repo (now merged with Phase 1 + NV-200..203 fixes). This is the **thegent absorption pattern** that
+nanovms — when it gets re-merged into thegent — will follow. ADR-026 will codify this.
 
 ### Proposed DAG Units (deferred)
 
@@ -103,11 +107,13 @@
 
 ### Status: ARCHIVED
 
-Per the repo's `ARCHIVED.md`, Authvault was absorbed into **AuthKit-bootstrap** (a separate sibling repo) on 2025-Q4. All further development has moved there. The local clone `Authvault-tmp/` is a frozen snapshot at the absorption point.
+Per the repo's `ARCHIVED.md`, Authvault was absorbed into **AuthKit-bootstrap** (a separate sibling repo) on 2025-Q4. All further development has moved there. The local clone `Authvault-tmp/` is a
+frozen snapshot at the absorption point.
 
 ### No work pending
 
-The T-AV.0..1 units are explicitly marked as **read-only absorption-health tracking** — i.e. quarterly: "is Authvault still pointing at the new AuthKit repo? is the ARCHIVED.md still accurate? is the README migration link still live?" — not real engineering work.
+The T-AV.0..1 units are explicitly marked as **read-only absorption-health tracking** — i.e. quarterly: "is Authvault still pointing at the new AuthKit repo? is the ARCHIVED.md still accurate? is the
+README migration link still live?" — not real engineering work.
 
 ---
 
@@ -119,7 +125,8 @@ The T-AV.0..1 units are explicitly marked as **read-only absorption-health track
 | **Tracera** | ~1–2 min (7 MB) but previous attempts timed out due to Windows git paged-output quirks | ~2–4h for full TS monorepo audit | **medium** — defer until the merge-vs-absorb decision (T-TR.8) is made |
 | **Authvault** | n/a — ARCHIVED | n/a | **zero** — no work to do |
 
-The `govulncheck`/cargo-deny/typos-cli/zizmor auditor fleet (PR #366) will run nightly and surface defects as DAG units automatically. When a defect appears that requires deep audit, the unit will be promoted to "T-TG.X" / "T-TR.X" and addressed in a dedicated session.
+The `govulncheck`/cargo-deny/typos-cli/zizmor auditor fleet (PR #366) will run nightly and surface defects as DAG units automatically. When a defect appears that requires deep audit, the unit will be
+promoted to "T-TG.X" / "T-TR.X" and addressed in a dedicated session.
 
 ---
 

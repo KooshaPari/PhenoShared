@@ -86,6 +86,7 @@ agileplus specify "Add two-factor authentication"
 **Specification interview:**
 
 The tool asks targeted questions to capture:
+
 - What problem does this solve?
 - Who will use it?
 - What are the key scenarios?
@@ -479,31 +480,31 @@ Every state transition logged:
 
 ## Best Practices
 
-**1. Don't Skip Stages (Usually)**
+### 1. Don't Skip Stages (Usually)
 
 - `clarify`: Skip only if spec is crystal clear
 - `research`: Skip only for trivial features
 - `plan`: Essential for non-trivial work
 
-**2. Keep Specs Focused**
+### 2. Keep Specs Focused
 
 - One feature per spec
 - Aim for 3-5 user scenarios
 - Keep success criteria measurable
 
-**3. Size Work Packages**
+### 3. Size Work Packages
 
 - 1-4 hour implementation per WP
 - Too large → split into smaller WPs
 - Too small → combine adjacent WPs
 
-**4. Parallel Safety**
+### 4. Parallel Safety
 
 - Enforce dependency graph
 - Don't manually reorder WP lanes
 - Use `agileplus move --to` to transition
 
-**5. Review Thoroughly**
+### 5. Review Thoroughly
 
 - Don't rubber-stamp approvals
 - Check plan adherence
@@ -655,6 +656,7 @@ project/
 ```
 
 This means:
+
 - WP01 and WP02 agents can run simultaneously without conflicting
 - Branches are isolated (`feature/auth/WP01` vs `feature/auth/WP02`)
 - Merging is dependency-ordered (WP01 merges before WP02)

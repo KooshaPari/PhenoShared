@@ -22,17 +22,20 @@ This guide establishes baseline code quality enforcement across Tier 1 repositor
 ### Repository Language Stacks
 
 #### phenotype-infrakit
+
 - **Primary**: Rust (Cargo workspace)
 - **Status**: Scaffold (README only)
 - **Setup**: Defer until crates added
 
 #### heliosCLI
+
 - **Primary**: Rust (Cargo workspace, 18 crates)
 - **Secondary**: Python (PyO3 FFI)
 - **Status**: In development
 - **Setup**: Prioritized
 
 #### platforms/thegent
+
 - **Primary**: Go (distributed services)
 - **Secondary**: Python (tooling, scripts)
 - **Tertiary**: Rust (security hooks)
@@ -138,6 +141,7 @@ Add to `.pre-commit-config.yaml`:
 **Configuration Files:**
 
 - **`rustfmt.toml`** (repo root):
+
   ```toml
   edition = "2021"
   max_width = 100
@@ -151,6 +155,7 @@ Add to `.pre-commit-config.yaml`:
   ```
 
 - **`Cargo.toml` clippy config** (workspace section):
+
   ```toml
   [lints.clippy]
   all = "warn"
@@ -645,6 +650,7 @@ git push origin <branch>
 ### Suppressing Warnings (With Justification)
 
 **When to suppress:**
+
 - Pre-existing violations (already in codebase, inherited from main)
 - Tool false positives
 - Performance-critical code requiring unsafe constructs
@@ -652,24 +658,28 @@ git push origin <branch>
 
 **How to suppress:**
 
-#### Rust:
+#### Rust
+
 ```rust
 #[allow(clippy::cast_possible_truncation)]  // JUSTIFICATION: value guaranteed <256
 let byte = value as u8;
 ```
 
-#### Python:
+#### Python
+
 ```python
 # noqa: E501  # JUSTIFICATION: URL too long
 url = "https://example.com/very/long/url/that/exceeds/line/length"
 ```
 
-#### Go:
+#### Go
+
 ```go
 // nolint:gosec  // JUSTIFICATION: crypto/rand for non-cryptographic use
 ```
 
 **Document suppressions:**
+
 - Include why in a comment
 - Create an issue for future cleanup
 - Run: `./scripts/quality-gate.sh --check-suppressions` to audit
@@ -773,4 +783,3 @@ go get -u github.com/golangci/golangci-lint
 - **Python**: [Ruff](https://github.com/astral-sh/ruff), [Black](https://github.com/psf/black), [mypy](https://github.com/python/mypy)
 - **Go**: [golangci-lint](https://golangci-lint.run/), [gofmt](https://golang.org/cmd/gofmt/)
 - **General**: [pre-commit framework](https://pre-commit.com/)
-

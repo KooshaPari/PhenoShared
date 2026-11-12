@@ -4,13 +4,13 @@
 
 ---
 
-# Getting Started
+## Getting Started
 
 - [PRD](./prd.md)
 - [Specification](./specification.md)
 - [Glossary](./glossary.md)
 
-# Architecture
+## Architecture
 
 - [Architecture Overview](./architecture.md)
 - [High-Level Design](./hld.md)
@@ -24,7 +24,7 @@
 - [Governance](./governance.md)
 - [Security](./security.md)
 
-# Architecture Decision Records
+## Architecture Decision Records
 
 - [ADR Index](./adr/index.md)
 - [ADR-0001 — Fabric Product Boundary](./adr/0001-fabric-product-boundary.md)
@@ -63,7 +63,7 @@
 - [ADR-0034 — SQLite-Backed Persistent State](./adr/0034-sqlite-backed-persistent-state.md)
 - [ADR-0035 — GUI Suite Architecture](./adr/0035-gui-suite-architecture.md)
 
-# Research
+## Research
 
 - [Research README](./research/README.md)
 - [Research Program](./research/research-program.md)
@@ -76,7 +76,7 @@
 - [Source Register](./research/source-register.md)
 - [Source Status](./research/source-status.md)
 
-# Ecosystem
+## Ecosystem
 
 - [Ecosystem README](./ecosystem/README.md)
 - [Boundaries](./ecosystem/boundaries.md)
@@ -91,14 +91,14 @@
 - [thegent](./ecosystem/thegent.md)
 - [Tracera](./ecosystem/tracera.md)
 
-# Releases
+## Releases
 
 - [R0 — 2026-09-01](./releases/2026-09-01-R0.md)
 - [R1 — 2026-09-08](./releases/2026-09-08-R1.md)
 
 ---
 
-# Appendices
+## Appendices
 
 - [Plan](./plan.md)
 - [Roadmap](./roadmap.md)

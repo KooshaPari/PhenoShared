@@ -39,6 +39,7 @@ substrate dispatch "Print exactly: PILOT-WORKER-OK" --tier worker --cwd /tmp
 | JSON valid | YES |
 
 Raw output:
+
 ```json
 {
   "engine": "codex",
@@ -66,9 +67,11 @@ substrate dispatch "List 3 prime numbers as a comma-separated list" --tier main 
 
 ### Dispatch 3 — MCP path
 
-`OMNIROUTE_URL` not set; OmniRoute not running at `:20128`. MCP dispatch tools (`dispatch_worker` etc.) from `driver-mcp/dispatch_mcp/` require a live OmniRoute instance. MCP path was **not exercised** in this pilot.
+`OMNIROUTE_URL` not set; OmniRoute not running at `:20128`. MCP dispatch tools (`dispatch_worker` etc.) from `driver-mcp/dispatch_mcp/` require a live OmniRoute instance. MCP path was **not
+exercised** in this pilot.
 
-**To enable:** set `OMNIROUTE_URL=http://localhost:20128` and start OmniRoute (`npm run dev` in the melosviz/OmniRoute repo). The Python MCP server (`dispatch_server.py`) then exposes 13 `dispatch_*` tools over stdio/SSE.
+**To enable:** set `OMNIROUTE_URL=http://localhost:20128` and start OmniRoute (`npm run dev` in the melosviz/OmniRoute repo). The Python MCP server (`dispatch_server.py`) then exposes 13 `dispatch_*`
+tools over stdio/SSE.
 
 ---
 
@@ -85,7 +88,8 @@ Same prompt: `"Print exactly: PILOT-WORKER-OK"` at gpt-5.3-codex-spark.
 **substrate overhead vs native codex:** ~1,400 ms (~15%) — process spawn + JSON wrapping.  
 **forge is faster** because it uses deepseek-v4-flash (different model/provider), not an architecture difference.
 
-Both substrate and native codex return identical answers. Substrate adds structured JSON envelope; native codex emits raw text + verbose stderr (skill load warnings, token counts, session banners). For programmatic callers, substrate's envelope is preferable.
+Both substrate and native codex return identical answers. Substrate adds structured JSON envelope; native codex emits raw text + verbose stderr (skill load warnings, token counts, session banners).
+For programmatic callers, substrate's envelope is preferable.
 
 ---
 
@@ -94,6 +98,7 @@ Both substrate and native codex return identical answers. Substrate adds structu
 ### Structured output
 
 Output is valid JSON (serde_json correctly escapes embedded newlines as `\n`). Fields:
+
 - `engine: string` — which backend ran
 - `output: string` — raw text output from the model (trailing `\n` included)
 - `succeeded_tier: string` — which tier actually ran (may differ from requested on reroute-up)
@@ -115,7 +120,9 @@ Output is valid JSON (serde_json correctly escapes embedded newlines as `\n`). F
 | Slowdown factor | ~7.1x |
 | All 4 correct | YES (CONC-1-OK through CONC-4-OK) |
 
-**Throughput interpretation:** 4 concurrent codex dispatches to gpt-5.3-codex-spark take 7x longer than a single sequential dispatch. This is consistent with OpenAI rate limiting on gpt-5.3-codex-spark under concurrent load — substrate does not serialize/queue them, it fires all 4 simultaneously. At packing density > 2 concurrent workers this tier becomes throughput-limited by API rate limits rather than substrate's coordination overhead. The `forge`/deepseek backend would show much better concurrency characteristics.
+**Throughput interpretation:** 4 concurrent codex dispatches to gpt-5.3-codex-spark take 7x longer than a single sequential dispatch. This is consistent with OpenAI rate limiting on
+gpt-5.3-codex-spark under concurrent load — substrate does not serialize/queue them, it fires all 4 simultaneously. At packing density > 2 concurrent workers this tier becomes throughput-limited by
+API rate limits rather than substrate's coordination overhead. The `forge`/deepseek backend would show much better concurrency characteristics.
 
 ---
 
@@ -135,4 +142,6 @@ Output is valid JSON (serde_json correctly escapes embedded newlines as `\n`). F
 
 ## Verdict
 
-**substrate dispatch works as a drop-in for native dispatch.** All 3 tier-targeted dispatches returned correct output with valid JSON envelopes. The 1.4s overhead vs raw codex is acceptable. Structured output is parseable. The largest blocker for full cutover is the `CODEX_BIN` path resolution (gap #1) — a one-line fix — and the MCP path needing OmniRoute running (gap #2). Concurrent throughput at the codex/worker tier is API-rate-limited but correct. Phase 3 should address gap #1 as a hard fix and document gap #2 as a known deployment pre-requisite.
+**substrate dispatch works as a drop-in for native dispatch.** All 3 tier-targeted dispatches returned correct output with valid JSON envelopes. The 1.4s overhead vs raw codex is acceptable.
+Structured output is parseable. The largest blocker for full cutover is the `CODEX_BIN` path resolution (gap #1) — a one-line fix — and the MCP path needing OmniRoute running (gap #2). Concurrent
+throughput at the codex/worker tier is API-rate-limited but correct. Phase 3 should address gap #1 as a hard fix and document gap #2 as a known deployment pre-requisite.

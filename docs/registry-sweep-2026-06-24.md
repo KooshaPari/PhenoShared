@@ -21,6 +21,7 @@
 ## Unknown Repo Classification (88 total)
 
 ### Compute / Infra / Sandbox (8) — high-priority audit candidates
+
 | Repo | Language | Description |
 |---|---|---|
 | Pine | Rust | Wine-equivalent for Phenotype — Windows compatibility layer |
@@ -33,6 +34,7 @@
 | bifrost | Go | Fastest enterprise AI gateway (50x faster than LiteLLM) |
 
 ### Event / State / Runtime (4)
+
 | Repo | Language | Description |
 |---|---|---|
 | Eventra | Rust | Event-driven architecture framework with CQRS + Event Sourcing |
@@ -41,6 +43,7 @@
 | nexus | Rust | Service registry and discovery for microservices (Wave H) (archived) |
 
 ### VCS / Worktree / Tooling (5)
+
 | Repo | Language | Description |
 |---|---|---|
 | PhenoVCS | Rust | Version control primitives + Git worktree management |
@@ -50,6 +53,7 @@
 | sharecli | Rust | Shared CLI process manager for multi-project agent orchestration |
 
 ### Plugin / Framework (4)
+
 | Repo | Language | Description |
 |---|---|---|
 | PhenoPlugins | Rust | Phenotype-org plugin framework |
@@ -58,6 +62,7 @@
 | pheno-cdylib-bridge | Rust | C-ABI shared library exposing pheno-* to Go |
 
 ### Core Library / SDK (6)
+
 | Repo | Language | Description |
 |---|---|---|
 | phenoUtils | Rust | Foundational Rust utility crates for Phenotype |
@@ -68,6 +73,7 @@
 | HeliosApp | TypeScript | An internal tool (archived) |
 
 ### SDKs (3)
+
 | Repo | Language | Description |
 |---|---|---|
 | phenotype-go-sdk | Go | Phenotype-org Go SDK |
@@ -75,12 +81,14 @@
 | helios-cli | HTML | Phenotype-org multi-runtime CLI |
 
 ### Eye-Tracking / ML / Vision (2)
+
 | Repo | Language | Description |
 |---|---|---|
 | eyetracker | Rust | Phenotype eye-tracking framework + UniFFI bindings |
 | Melosviz | Python | Music-to-visual generation toolkit |
 
 ### Routing / Gateway / Routing layer (3)
+
 | Repo | Language | Description |
 |---|---|---|
 | phenotype-router | Rust | Phenotype-owned router decision layer (ADR-050/051) |
@@ -88,6 +96,7 @@
 | argis-extensions | Go | Argis gateway extensions |
 
 ### Ops / PM (4)
+
 | Repo | Language | Description |
 |---|---|---|
 | phenotype-pm-core | Rust | Phenotype PM core (archived) |
@@ -96,6 +105,7 @@
 | Parpoura | HTML | Spec-first planning and architecture workspace |
 
 ### Form / Contract / Verification (2)
+
 | Repo | Language | Description |
 |---|---|---|
 | PhenoContracts | HTML | Phenotype contract verification + Prusti/Kani adapters |
@@ -103,6 +113,7 @@
 | KodeVibeGo | Go | Phenotype ecosystem component (deprecated, consolidated into HexaKit) |
 
 ### Landing / Web / Design (4)
+
 | Repo | Language | Description |
 |---|---|---|
 | phenotype-landing | Astro | All Phenotype org landing pages (monorepo) |
@@ -111,6 +122,7 @@
 | localbase3 | HTML | Localhost development environment bootstrap |
 
 ### Apps (3)
+
 | Repo | Language | Description |
 |---|---|---|
 | phenotype-apps | HTML | iOS + web shell assets |
@@ -118,6 +130,7 @@
 | PlayCua | Rust | Bare-metal computer-use agent |
 
 ### Hardware / Mobile / Testing (3)
+
 | Repo | Language | Description |
 |---|---|---|
 | hwLedger | — | Phenotype-org hardware ledger |
@@ -125,6 +138,7 @@
 | eyetracker | Rust | (listed above) |
 
 ### Legacy / Archived (25) — DO NOT TOUCH
+
 - agentapi (archived)
 - atoms.tech (archived)
 - agslag, agslag-dash, agslag-docs (archived)
@@ -147,6 +161,7 @@
 - MCPForge (archived — mcp-language-server)
 
 ### Personal / Templates / Misc (5)
+
 | Repo | Language | Description |
 |---|---|---|
 | AppGen | TypeScript | Personal project template (DO NOT DELETE) |
@@ -156,6 +171,7 @@
 | cliproxyapi-plusplus | HTML | The Plus version of CLIProxyAPI |
 
 ### Misc / Stubs (3)
+
 | Repo | Language | Description |
 |---|---|---|
 | GDK | Rust | General Development Kit (Rust monorepo) |

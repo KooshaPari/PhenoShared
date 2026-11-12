@@ -25,6 +25,7 @@ Week 2 focused on analyzing and documenting workspace dependencies across the 7 
 **Method**: Grep-verified usage across all crates/ directories for each declared workspace dependency.
 
 **7 Core Members Scanned**:
+
 - phenotype-error-core ✓
 - phenotype-errors ✓
 - phenotype-contracts ✓
@@ -66,6 +67,7 @@ Week 2 focused on analyzing and documenting workspace dependencies across the 7 
 | `reqwest` | Declared, unused | agileplus-github, service integrations | **High** | Phase 2 | HTTP client for 3rd-party APIs |
 
 **Key Decision**: Keep aspirational dependencies declared in workspace.dependencies (vs. commenting out and re-adding later) to:
+
 - Reduce churn (add/remove cycles)
 - Signal intent to contributors
 - Maintain workspace version consistency
@@ -78,6 +80,7 @@ Week 2 focused on analyzing and documenting workspace dependencies across the 7 
 **Changes Made**:
 
 #### Before
+
 ```toml
 [workspace.dependencies]
 serde = { version = "1.0", features = ["derive"] }
@@ -98,6 +101,7 @@ phenotype-errors = { version = "0.2.0", path = "crates/phenotype-errors" }
 ```
 
 #### After (with Documentation)
+
 ```toml
 [workspace.dependencies]
 # === Core Dependencies (actively used by 7 members) ===
@@ -126,6 +130,7 @@ tracing = "0.1"
 ```
 
 **Key Improvements**:
+
 - Added section headers for clarity
 - Separated aspirational deps with rationale comments
 - Documented intent for each aspirational dependency
@@ -162,13 +167,16 @@ $ cargo check --lib 2>&1 | grep -E "Finished|error"
 ## Summary of Changes
 
 ### Files Created
+
 - ✅ `docs/reference/ASPIRATIONAL_DEPENDENCIES.md` — 270 lines, comprehensive tracker
 - ✅ `docs/reports/WEEK2_DEPENDENCY_OPTIMIZATION_REPORT.md` — This report
 
 ### Files Modified
+
 - ✅ `Cargo.toml` — Added section headers and aspirational dependency documentation
 
 ### Commits Prepared (See Week 3)
+
 ```
 chore: document unused and aspirational workspace dependencies
 - Added ASPIRATIONAL_DEPENDENCIES.md tracking 4 Phase 2-3 deps
@@ -182,6 +190,7 @@ chore: document unused and aspirational workspace dependencies
 ## Impact Analysis
 
 ### Positive Outcomes
+
 1. **Clarity** — Workspace dependencies now clearly separated (core vs. aspirational)
 2. **Intent** — Future contributors understand why each dep is declared
 3. **Reduced churn** — Aspirational deps won't be added/removed multiple times
@@ -214,6 +223,7 @@ chore: document unused and aspirational workspace dependencies
 ## Recommendations
 
 ### Phase 2 Activation Checklist
+
 When starting Phase 2 (service integration, error handling):
 
 - [ ] Activate `anyhow` in agileplus-cli/dashboard (no re-declare needed)
@@ -223,6 +233,7 @@ When starting Phase 2 (service integration, error handling):
 - [ ] Test distributed tracing integration with test services
 
 ### Phase 3 Optimization Checklist
+
 When starting Phase 3 (performance):
 
 - [ ] Evaluate moka upgrade path for phenotype-cache-adapter
@@ -230,6 +241,7 @@ When starting Phase 3 (performance):
 - [ ] Consider TTL semantics needed for cache eviction
 
 ### Long-Term Maintenance
+
 - Review `ASPIRATIONAL_DEPENDENCIES.md` quarterly
 - Mark entries "Active" once Phase 2-3 work begins
 - Archive entries if Phase timelines slip >90 days
@@ -240,12 +252,14 @@ When starting Phase 3 (performance):
 ## Confidence & Validation
 
 **Analysis Confidence**: 95%+
+
 - Direct grep verification across all crate source files
 - Manual review of each core member's Cargo.toml
 - Orphaned crate usage confirmed via git history
 - No false positives identified (all findings validated)
 
 **Testing**: Workspace compiles cleanly post-changes
+
 - `cargo check --workspace` succeeds
 - No new warnings introduced
 - Lint checks pass

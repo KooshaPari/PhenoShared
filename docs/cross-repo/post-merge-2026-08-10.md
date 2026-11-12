@@ -217,6 +217,7 @@ pre-date PR #9 (verified via `git log` on the affected files).
 | OmniRoute | 1 untracked `vendor/typescript-go/` and `worktrees/` | origin auto-deleted; untracked files left alone (worktrees/ is recovered state per host memory plan) |
 
 **Cleanup policy applied:**
+
 - `--delete-branch` was set at merge time per repo's mergify config → all
   origin-side `chore/add-{editorconfig,codeowners}-20260808` branches auto-deleted
   except where noted.

@@ -8,7 +8,7 @@ at the expected commit, by the expected build platform.
 
 ## Target Level
 
-**Current target: SLSA Build L2 (achieved today)**
+### Current target: SLSA Build L2 (achieved today)
 
 The release pipeline is hosted on GitHub Actions, an isolated build
 platform that is owned and administered by GitHub. Provenance is

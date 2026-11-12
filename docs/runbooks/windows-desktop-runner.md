@@ -5,7 +5,8 @@
 **Service name:** `actions.runner.<REDACTED>-phenotype-tooling.desktop-<REDACTED>-desk`
 **Install script:** `iac/scripts/install-windows-runner.ps1`
 
-This runbook captures the procedure that was actually used to bring the Windows desktop runner online, and the gotchas that surfaced during the install. Use this when re-provisioning, replacing the host, or onboarding a similar Windows-class heavy runner.
+This runbook captures the procedure that was actually used to bring the Windows desktop runner online, and the gotchas that surfaced during the install. Use this when re-provisioning, replacing the
+host, or onboarding a similar Windows-class heavy runner.
 
 ---
 
@@ -55,25 +56,31 @@ ssh runneruser@desktop-<REDACTED>-desk.tail-scale-name.ts.net "Get-Service actio
 
 ### 3.1 Em-dash → ASCII hyphen
 
-PowerShell 5.1 (the default on Windows 10/11 LTSC) silently mangles the UTF-8 em-dash (`—`, U+2014) when a script is invoked via `iex (irm ...)`. The byte sequence is reinterpreted as CP-1252 and the script aborts with a parser error several lines after the actual offending character.
+PowerShell 5.1 (the default on Windows 10/11 LTSC) silently mangles the UTF-8 em-dash (`—`, U+2014) when a script is invoked via `iex (irm ...)`. The byte sequence is reinterpreted as CP-1252 and the
+script aborts with a parser error several lines after the actual offending character.
 
 **Fix:** every em-dash in `install-windows-runner.ps1` was replaced with an ASCII hyphen `-`. Lint rule for this repo: no non-ASCII glyphs in `.ps1` files.
 
 ### 3.2 Alphanumeric password
 
-The Windows local-account creation API (`New-LocalUser`) accepts special characters in the password parameter at the .NET layer but the underlying `NetUserAdd` call rejects passwords containing certain shell metacharacters when the password is forwarded to `sc.exe config <svc> obj=<acct> password=<pw>`. The failure is silent — the service is created with no credential and fails to start with `1069 (logon failure)`.
+The Windows local-account creation API (`New-LocalUser`) accepts special characters in the password parameter at the .NET layer but the underlying `NetUserAdd` call rejects passwords containing
+certain shell metacharacters when the password is forwarded to `sc.exe config <svc> obj=<acct> password=<pw>`. The failure is silent — the service is created with no credential and fails to start
+with `1069 (logon failure)`.
 
-**Fix:** the script now generates a 24-char alphanumeric password (`[A-Za-z0-9]{24}`) and stores it to Vaultwarden under `windows-runner/desktop-<REDACTED>-desk/runneruser`. Do not use `!@#$%^&*()` in this password.
+**Fix:** the script now generates a 24-char alphanumeric password (`[A-Za-z0-9]{24}`) and stores it to Vaultwarden under `windows-runner/desktop-<REDACTED>-desk/runneruser`. Do not use `!@#$%^&*()` in
+this password.
 
 ### 3.3 `Description` 48-char cap
 
-The Windows service `Description` field has an undocumented 48-character truncation when set via `sc.exe description`. Longer values are truncated silently and leave the description in an inconsistent state across `services.msc` vs `Get-CimInstance`.
+The Windows service `Description` field has an undocumented 48-character truncation when set via `sc.exe description`. Longer values are truncated silently and leave the description in an inconsistent
+state across `services.msc` vs `Get-CimInstance`.
 
 **Fix:** description is now exactly `"GH Actions runner - desktop-<REDACTED>-desk"` (43 chars).
 
 ### 3.4 `-OrgUrl` without quotes
 
-When `config.cmd` is invoked via PowerShell with a quoted URL (`-OrgUrl "https://github.com/KooshaPari"`), PS double-encodes the quotes when the script came in via `iex`, and `config.cmd` sees `"\"https://github.com/KooshaPari\""` as the org URL — registration fails with `Invalid configuration provided for runnerRegistrationUrl`.
+When `config.cmd` is invoked via PowerShell with a quoted URL (`-OrgUrl "https://github.com/KooshaPari"`), PS double-encodes the quotes when the script came in via `iex`, and `config.cmd`
+sees `"\"https://github.com/KooshaPari\""` as the org URL — registration fails with `Invalid configuration provided for runnerRegistrationUrl`.
 
 **Fix:** the script invokes `config.cmd` with the unquoted form: `--url https://github.com/KooshaPari`. The URL has no shell-special characters so unquoting is safe.
 
@@ -81,13 +88,16 @@ When `config.cmd` is invoked via PowerShell with a quoted URL (`-OrgUrl "https:/
 
 The Windows host originally had its primary network adapter classified as `Public`, which blocks SSH and the runner's outbound long-poll connection on first boot.
 
-**Fix:** the script flips the active connection profile to `Private` (`Set-NetConnectionProfile -InterfaceAlias <iface> -NetworkCategory Private`) before adding the firewall rules. SSH (port 22) is opened only on the Private profile.
+**Fix:** the script flips the active connection profile to `Private` (`Set-NetConnectionProfile -InterfaceAlias <iface> -NetworkCategory Private`) before adding the firewall rules. SSH (port 22) is
+opened only on the Private profile.
 
 ### 3.6 Parsec coexistence
 
-Parsec's gaming-mode wants exclusive use of the GPU and audio devices. The runner service does not contend for these (no GUI, no GPU jobs by default), but **do not enable auto-start on the runner service** — leave it in `Manual`. Otherwise a runner job dispatched mid-Parsec-session can pin a CPU core during a game.
+Parsec's gaming-mode wants exclusive use of the GPU and audio devices. The runner service does not contend for these (no GUI, no GPU jobs by default), but **do not enable auto-start on the runner
+service** — leave it in `Manual`. Otherwise a runner job dispatched mid-Parsec-session can pin a CPU core during a game.
 
-If a future job class needs GPU access (CUDA / MPS / DirectML), schedule those jobs only via a separate runner registration with a `[self-hosted, gpu, home]` label and pause Parsec via the gaming-mode pause hook (ADR-0008).
+If a future job class needs GPU access (CUDA / MPS / DirectML), schedule those jobs only via a separate runner registration with a `[self-hosted, gpu, home]` label and pause Parsec via the gaming-mode
+pause hook (ADR-0008).
 
 ---
 

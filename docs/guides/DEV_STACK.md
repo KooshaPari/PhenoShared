@@ -158,15 +158,19 @@ Key variables:
 
 ## Troubleshooting
 
-**OrbStack containers fail to start**
+### OrbStack containers fail to start
+
 - Ensure OrbStack is running: open OrbStack.app or `open -a OrbStack`
 - Check: `orb list`
 
-**Neo4j fails readiness probe**
+### Neo4j fails readiness probe
+
 - Neo4j takes ~15 s to start. If it times out: `process-compose restart neo4j`
 
-**agileplus-api fails to compile**
+### agileplus-api fails to compile
+
 - Run `cargo build -p agileplus-api` manually to see errors
 
-**Port already in use**
+### Port already in use
+
 - Check: `lsof -i :<port>` and kill the conflicting process

@@ -4,7 +4,8 @@ audience: [developers, pms]
 
 # Triage & Queue Management
 
-AgilePlus includes a triage system that classifies incoming work (bugs, features, ideas, tasks) and manages a priority-ordered backlog. This enables teams to efficiently intake requests and decide what to work on next.
+AgilePlus includes a triage system that classifies incoming work (bugs, features, ideas, tasks) and manages a priority-ordered backlog. This enables teams to efficiently intake requests and decide
+what to work on next.
 
 ## Quick Triage
 
@@ -427,14 +428,14 @@ Total estimated: 53 hours (6-7 days with team of 2)
 
 ## Best Practices
 
-**1. Triage Daily**
+### 1. Triage Daily
 
 ```bash
 # Add all incoming requests to queue
 agileplus triage "incoming item"
 ```
 
-**2. Regular Queue Review**
+## 2. Regular Queue Review
 
 ```bash
 # Weekly: review and reprioritize
@@ -442,11 +443,11 @@ agileplus queue list --sort age
 # Look for old items stuck in 'new' state
 ```
 
-**3. Keep Priority Stable**
+## 3. Keep Priority Stable
 
 Don't constantly reprioritize. Set priority once, review weekly.
 
-**4. Link to External Systems**
+## 4. Link to External Systems
 
 When triaging from GitHub/Plane.so, include issue links:
 
@@ -455,7 +456,7 @@ agileplus queue add "title" \
   --github-issue https://github.com/org/repo/issues/123
 ```
 
-**5. Archive Regularly**
+## 5. Archive Regularly
 
 Clean up old items:
 

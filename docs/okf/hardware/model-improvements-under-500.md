@@ -14,7 +14,8 @@ status: stub — N10 priority, needs full distillation
 
 **Source:** `ChatGPT-Model improvements under $500.md` (13.1 KB, 2026-07-04) — class **L**.
 
-$500 is not a model-training budget but a **harness + data + eval** budget. The corpus argues the highest ROI under $500 is not finetuning but **better eval harnesses, smarter routing, and cheaper inference** — exactly the levers Forward DAG N06–N09 (Portage rep-6, TB2.1) and N19 (model routing) target.
+$500 is not a model-training budget but a **harness + data + eval** budget. The corpus argues the highest ROI under $500 is not finetuning but **better eval harnesses, smarter routing, and cheaper
+inference** — exactly the levers Forward DAG N06–N09 (Portage rep-6, TB2.1) and N19 (model routing) target.
 
 ## Key insights (stub)
 

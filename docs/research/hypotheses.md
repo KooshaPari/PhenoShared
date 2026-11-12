@@ -33,4 +33,5 @@
 | RH-029 | Adaptive degradation | Predictable quality ladders maintain interaction better than queue buildup under resource loss. | Reject if users prefer occasional stalls over controlled quality reduction for a workload class. | Proposed |
 | RH-030 | One shell value | A unified workspace/graph shell reduces action count and error rate compared with operating separate KVM, streamer, audio and VM tools. | Reject if integration complexity creates more failures than it removes. | Proposed |
 
-A negative result is preserved as evidence and may produce an ADR rejecting or narrowing the feature. Research is not complete when a favorable benchmark appears; it is complete when the result survives mixed load, faults and counterfactual alternatives.
+A negative result is preserved as evidence and may produce an ADR rejecting or narrowing the feature. Research is not complete when a favorable benchmark appears; it is complete when the result
+survives mixed load, faults and counterfactual alternatives.

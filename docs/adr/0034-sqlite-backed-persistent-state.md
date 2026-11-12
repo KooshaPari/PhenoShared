@@ -51,18 +51,21 @@ Create `fabric-persist` crate with five modules:
 ## Alternatives considered
 
 ### A. JSONL file (ADR-0026 original proposal)
+
 Rejected: JSONL is append-only and requires full-file re-read on startup.
 SQLite provides indexed queries, atomic updates, and WAL mode for
 concurrent access. The JSONL format remains viable as an export format
 but not as the primary store.
 
 ### B. PostgreSQL / external database
+
 Rejected: the daemon is a single-process, single-node service. Adding
 a PostgreSQL dependency for R3 is overkill. SQLite is embedded,
 zero-config, and sufficient for the expected data volume (hundreds of
 leases, not millions).
 
 ### C. sled / redb (Rust-native embedded databases)
+
 Rejected: sled and redb are younger projects with smaller ecosystems.
 SQLite has decades of production hardening, WAL mode, and广泛 tooling
 (operator can inspect the database with `sqlite3` CLI). For R3, the

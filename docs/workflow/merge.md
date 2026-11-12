@@ -121,6 +121,7 @@ graph TD
 5. WP07 — depends on WP05 and WP06, merges last
 
 This ensures:
+
 - No merge conflicts (dependencies already in main)
 - Linear history (clean git log)
 - Easy to bisect if issue discovered
@@ -137,6 +138,7 @@ strategy = "squash"
 ```
 
 Behavior:
+
 ```
 All commits in WP02 → single squashed commit on main
 
@@ -158,6 +160,7 @@ strategy = "rebase"
 ```
 
 Behavior:
+
 ```
 All commits in WP02 → replayed on top of main
 
@@ -179,6 +182,7 @@ strategy = "merge"
 ```
 
 Behavior:
+
 ```
 All commits in WP02 + merge commit on main
 
@@ -271,6 +275,7 @@ enabled = true
 ```
 
 System automatically:
+
 - Closes all WP issues
 - Updates feature issue to "Shipped"
 - Comments with merge commit link
@@ -492,7 +497,7 @@ git branch -D feat/001-feature-WP02
 
 ## Best Practices
 
-**1. Don't Skip Acceptance**
+### 1. Don't Skip Acceptance
 
 Always accept before merge:
 
@@ -501,14 +506,14 @@ agileplus accept 001  # Validates everything
 agileplus merge 001
 ```
 
-**2. Use Squash for Cleaner History**
+### 2. Use Squash for Cleaner History
 
 ```toml
 [workflow.merge]
 strategy = "squash"  # Cleaner commit history
 ```
 
-**3. Create Release Notes**
+### 3. Create Release Notes
 
 Document what shipped:
 
@@ -517,14 +522,14 @@ Document what shipped:
 git log v0.1.0..v0.2.0 --oneline > RELEASE_NOTES.md
 ```
 
-**4. Tag Releases**
+## 4. Tag Releases
 
 ```bash
 git tag -a v0.2.0 -m "Release 0.2.0"
 git push origin v0.2.0
 ```
 
-**5. Announce Features**
+## 5. Announce Features
 
 Let team know what shipped:
 

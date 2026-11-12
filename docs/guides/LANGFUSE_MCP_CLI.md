@@ -21,7 +21,7 @@ bash apps/bench-cockpit/scripts/langfuse/mcp-auth-header.sh
 npx skills add langfuse/skills --skill "langfuse"
 ```
 
-Docs: https://langfuse.com/docs/docs — skill conditions agents on Langfuse
+Docs: <https://langfuse.com/docs/docs> — skill conditions agents on Langfuse
 best practices (prompts, datasets, scores).
 
 ## MCP server

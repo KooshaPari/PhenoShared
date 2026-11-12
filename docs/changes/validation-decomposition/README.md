@@ -9,13 +9,16 @@
 ## Quick Navigation
 
 ### For Executives & Architects
+
 Start here: **[VALIDATION_DECOMPOSITION_SUMMARY.md](./VALIDATION_DECOMPOSITION_SUMMARY.md)**
+
 - Executive overview with metrics and impact analysis
 - Before/after code comparisons
 - Timeline, risks, and success criteria
 - 10 min read
 
 ### For Implementers
+
 1. **[PHASED_MIGRATION_PLAN.md](./PHASED_MIGRATION_PLAN.md)** (30 min read)
    - 3 atomic commits with work items (WI-1.1 through WI-3.3)
    - Effort estimates: 3-4h (Phase 1), 4-5h (Phase 2), 2-3h (Phase 3)
@@ -32,21 +35,27 @@ Start here: **[VALIDATION_DECOMPOSITION_SUMMARY.md](./VALIDATION_DECOMPOSITION_S
    - `lib.rs` — Updated public API (50 LOC)
 
 ### For CLI Engineers (Post-Phase 3)
+
 Start here: **[MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md)**
+
 - Step-by-step CLI migration instructions
 - Before/after patterns for each command
 - Common validation patterns (optional, dependent, conditional)
 - Troubleshooting & rollback
 
 ### For Learning & Examples
+
 See: **[../../../docs/guides/VALIDATION_EXAMPLES.md](../../../docs/guides/VALIDATION_EXAMPLES.md)**
+
 - 10 working code examples (basic to advanced)
 - Plugin registration & custom rules
 - Testing strategies
 - Async validation planning
 
 ### For Architecture Context
+
 See: **[../../../docs/guides/VALIDATION_DECOMPOSITION_AND_REGISTRY_PATTERN.md](../../../docs/guides/VALIDATION_DECOMPOSITION_AND_REGISTRY_PATTERN.md)**
+
 - Complete architecture with diagrams
 - Trait hierarchy breakdown
 - Layer-by-layer design
@@ -70,6 +79,7 @@ See: **[../../../docs/guides/VALIDATION_DECOMPOSITION_AND_REGISTRY_PATTERN.md](.
 ## 3-Phase Implementation
 
 ### Phase 1: Trait Foundation (3-4 hours)
+
 **Deliverable**: Core traits + 5 rules + 55+ tests
 
 ```bash
@@ -85,6 +95,7 @@ git commit -m "feat(validation): implement trait hierarchy and core rules"
 ```
 
 ### Phase 2: Registry & Presets (4-5 hours)
+
 **Depends on**: Phase 1
 **Deliverable**: Registry + 9 validators + 28+ tests
 
@@ -100,6 +111,7 @@ git commit -m "feat(validation): implement registry pattern and preset validator
 ```
 
 ### Phase 3: Documentation & Examples (2-3 hours)
+
 **Depends on**: Phase 2
 **Deliverable**: Docs + 5 examples
 
@@ -254,4 +266,3 @@ validator.validate("active")?;
 
 **Status**: Ready for implementation
 **Next Step**: Assign Phase 1 to developer/agent
-

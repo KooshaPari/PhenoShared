@@ -2,7 +2,8 @@
 
 **Source:** `ChatGPT-Kimi DeepSeek MoE Cost.md` (27.6 KB, 2026-06-14) — sha `6cd4b046…` — class **L**.
 
-MoE cost is not "params × VRAM" but **active-experts × KV × routing overhead**. Kimi/DeepSeek show that 8×7B MoE can serve cheaper than dense 30B if **router is cheap, experts are staged, and KV is compressed** — the same levers that make local `Qwen3.5-0.8B` viable on 3090 Ti with `gpu-memory-utilization 0.55` and `max_total_tokens 8192`.
+MoE cost is not "params × VRAM" but **active-experts × KV × routing overhead**. Kimi/DeepSeek show that 8×7B MoE can serve cheaper than dense 30B if **router is cheap, experts are staged, and KV is
+compressed** — the same levers that make local `Qwen3.5-0.8B` viable on 3090 Ti with `gpu-memory-utilization 0.55` and `max_total_tokens 8192`.
 
 ## Distilled claims (class **[L]** — from `ChatGPT-Kimi DeepSeek MoE Cost.md`)
 
@@ -13,7 +14,8 @@ Each claim cites the source SHA via `local://sha256/<digest>` per `pheno/evidenc
 - **[L]** Kimi reduces active params 1/4 via 2-of-8 top-2 routing — claim-cite source `6cd4b046…`.
 - **[L]** DeepSeek reduces KV 1/8 via Multi-head Latent Attention (MLA) compression — claim-cite source `6cd4b046…`.
 - **[L]** Router cost is <1% of attention cost if the router is fused into the matmul kernel; naive router (separate kernel launch + scatter) costs 3-5% — claim-cite source.
-- **[L]** Load-balancing loss prevents expert collapse without extra VRAM; auxiliary loss coefficient in `[0.001, 0.01]` sweet spot. Source citation needed from Kimi-K2 / DeepSeek-V3 paper rather than the export.
+- **[L]** Load-balancing loss prevents expert collapse without extra VRAM; auxiliary loss coefficient in `[0.001, 0.01]` sweet spot. Source citation needed from Kimi-K2 / DeepSeek-V3 paper rather than
+  the export.
 
 ### 2. VRAM scaling — active vs staged
 
@@ -23,7 +25,8 @@ Each claim cites the source SHA via `local://sha256/<digest>` per `pheno/evidenc
 
 ### 3. Routing overhead
 
-- **[L]** Token-choice vs expert-choice routing: token-choice gives better quality per FLOP but harder load-balance. Expert-choice enforces bounded expert load. Pheno-harness tournament config picks expert-choice for `gpu_memory_utilization > 0.80`.
+- **[L]** Token-choice vs expert-choice routing: token-choice gives better quality per FLOP but harder load-balance. Expert-choice enforces bounded expert load. Pheno-harness tournament config picks
+  expert-choice for `gpu_memory_utilization > 0.80`.
 - **[L]** Shared experts (DeepSeek-V3 style) amortize common-knowledge work, reducing active FLOPs further when ~10-15% of tokens are "shared heavy". Cite: `6cd4b046…`.
 - **[L]** Fine-grained expert split (Kimi-K2: 384 small experts, top-8 activate) outperforms 8-large-experts at same active param budget.
 
@@ -51,7 +54,8 @@ All rows class **[L]** until DeepSeek-V3 / Kimi-K2 paper verification.
 - [ ] **DeepSeek-V2/V3 paper** (arXiv 2405.04434 / 2412.19437) — verify MLA ratio 1/8 KV reduction.
 - [ ] **Kimi K2 release notes** (Moonshot AI, mid-2026) — verify active param count + routing scheme.
 - [ ] **Hugging Face `transformers` MoE reference impl** — verify shared-experts partition semantics.
-- [ ] **Local benchmark** `bench/suites/n10_kimi_moe.py` — measure `tg64` at 8192 ctx, 2-of-8 routing, on RTX 3090 Ti (current `tb2-30000-sglang` Qwen3.5-9B lane is dense, not MoE — would need separate MoE test lane).
+- [ ] **Local benchmark** `bench/suites/n10_kimi_moe.py` — measure `tg64` at 8192 ctx, 2-of-8 routing, on RTX 3090 Ti (current `tb2-30000-sglang` Qwen3.5-9B lane is dense, not MoE — would need
+  separate MoE test lane).
 
 ## Cross-links
 

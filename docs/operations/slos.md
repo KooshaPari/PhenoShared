@@ -6,7 +6,8 @@
 
 ## What is OB4?
 
-OB4 (SLOs) = a documented set of Service Level Objectives with measurable targets. The SLOs cover availability, latency, error rate, and throughput. Each SLO has a current measurement (e.g., rolling 30-day availability) and a burn rate (e.g., how much of the error budget is consumed).
+OB4 (SLOs) = a documented set of Service Level Objectives with measurable targets. The SLOs cover availability, latency, error rate, and throughput. Each SLO has a current measurement (e.g., rolling
+30-day availability) and a burn rate (e.g., how much of the error budget is consumed).
 
 **The "wired" (OB4=2) signal**: `docs/operations/slos.md` exists with per-service SLOs + targets + measurement methodology. The SLOs are referenced from `README.md`.
 
@@ -111,6 +112,7 @@ OmniRoute is the reference repo for OB4 (OB4=2). It has SLOs in its docs and a p
 ## How to validate
 
 After applying:
+
 1. `grep -r "slos\|SLO" docs/` — should find the new file
 2. `grep "slos\|SLO" README.md` — should find a reference
 3. The table has at least 3 rows (one per SLI category: availability, latency, error rate)

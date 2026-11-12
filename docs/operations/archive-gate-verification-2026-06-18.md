@@ -15,7 +15,11 @@ Per `BOUNDARY_OWNERS.md` 5-check gate. **Never delete TestingKit.**
 | X-09 | AuthKit | **ARCHIVED** | BOUNDARY_OWNERS 5/5; AuthKit#118 fold merged; Tracera/thegent verified-clean; `gh repo archive` 2026-06-18 |
 | X-10 | phenoShared | **TOMBSTONE** | P4 decompose done; wave 5b fleet drain — 0 production git deps; repo 404 post-absorption (2026-06-19) |
 
-> **Correction 2026-06-19:** X-10 status above is **premature / false**. The "0 production git deps" claim was true at **HexaKit #278** merge, but **#279** reverted the `phenotype-cache-adapter` pin back to `<REDACTED>/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. After `<REDACTED>/phenoShared` was hard-deleted, HexaKit `main` was left pointing at a 404 repo. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin. **Pyron #62** gutted the rest. Both `phenoShared` and `Pyron` are now restored as archived; fleet-wide rescan confirms zero live git deps. Gate state: `hold` for both — awaiting explicit user sign-off before any further delete action per BOUNDARY_OWNERS / ADR-ECO-014.
+> **Correction 2026-06-19:** X-10 status above is **premature / false**. The "0 production git deps" claim was true at **HexaKit #278** merge, but **#279** reverted the `phenotype-cache-adapter` pin
+back to `<REDACTED>/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. After `<REDACTED>/phenoShared` was hard-deleted, HexaKit `main` was left pointing at a
+404 repo. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin.
+**Pyron #62** gutted the rest. Both `phenoShared` and `Pyron` are now restored as archived; fleet-wide rescan confirms zero live git deps. Gate state: `hold` for both — awaiting explicit user sign-off
+before any further delete action per BOUNDARY_OWNERS / ADR-ECO-014.
 
 ## Surface reduction batch 1+2 closeout (Phase 4 tasks 71–80, 2026-06-19)
 
@@ -34,7 +38,8 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 
 - AuthKit archived 2026-06-18 (X-09 gate pass); Metron tombstoned 2026-06-19 (repo 404 post-absorption; `gh repo archive` N/A)
 - Registry rows updated in disposition-index batch PR
-- **&lt;REDACTED&gt;/pheno archived 2026-06-19** — W18b fleet manifest scan: 0 external `<REDACTED>/pheno` git deps in consumer Cargo.toml/go.mod (gh search + fleet pull verify); chokepoints all `repointed` or `verified-clean`; registry closeout PR
+- **&lt;REDACTED&gt;/pheno archived 2026-06-19** — W18b fleet manifest scan: 0 external `<REDACTED>/pheno` git deps in consumer Cargo.toml/go.mod (gh search + fleet pull verify); chokepoints
+  all `repointed` or `verified-clean`; registry closeout PR
 
 ## pheno archive gate (W18b-G)
 
@@ -85,7 +90,8 @@ Per `BOUNDARY_OWNERS.md` 5-check gate.
 
 ## Post-delete audit correction (2026-06-19)
 
-The X-10 row above claiming `phenoShared` was **TOMBSTONE / 404-deleted** and the corresponding rows in the `phenoShared archive gate` and `Pyron archive gate` sections below claiming `gate-phenoshared`/`gate-pyron` `fsm: done` and `Repo deleted (404)` are **false**. The actual sequence was:
+The X-10 row above claiming `phenoShared` was **TOMBSTONE / 404-deleted** and the corresponding rows in the `phenoShared archive gate` and `Pyron archive gate` sections below
+claiming `gate-phenoshared`/`gate-pyron` `fsm: done` and `Repo deleted (404)` are **false**. The actual sequence was:
 
 1. **HexaKit #278** at `d83d1ca` drained 11 phenoShared pins. "0 production git deps" became *temporarily true*.
 2. **HexaKit #279** reverted `phenotype-cache-adapter` to `<REDACTED>/phenoShared` because `libs/phenotype-cache-adapter` path stub was never pushed to remote. The claim became **false** again.
@@ -93,7 +99,8 @@ The X-10 row above claiming `phenoShared` was **TOMBSTONE / 404-deleted** and th
 4. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin.
 5. **Pyron #62** gutted Pyron to tombstone-prep. The `phenotype-contracts` pin from Pyron #61 was already drained by **ResilienceKit #4**.
 
-**Both `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` are restored as archived** — not deleted. Fleet-wide rescan (`gh search code` for `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` in `Cargo.toml` / `go.mod` across the org) confirms zero live cargo git deps as of 2026-06-19.
+**Both `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` are restored as archived** — not deleted. Fleet-wide rescan (`gh search code` for `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` in `Cargo.toml`
+/ `go.mod` across the org) confirms zero live cargo git deps as of 2026-06-19.
 
 ### Corrected gate states
 
@@ -109,7 +116,8 @@ The X-10 row above claiming `phenoShared` was **TOMBSTONE / 404-deleted** and th
 - `docs/disposition/phenoshared-p4-checkpoint.md` — appended "Post-delete audit correction" section.
 - `docs/rationalization/HEXAKIT_EVICTION_INVENTORY.md` — wave 5b correction note + appended "Post-delete audit correction" section.
 
-Per BOUNDARY_OWNERS.md / ADR-ECO-014: hard delete only with explicit user policy. The prior audit violated that by treating the delete as complete without (1) fleet-wide manifest scan, (2) fresh `cargo fetch` on every live consumer, and (3) explicit user sign-off. No further delete action will be taken without explicit user sign-off.
+Per BOUNDARY_OWNERS.md / ADR-ECO-014: hard delete only with explicit user policy. The prior audit violated that by treating the delete as complete without (1) fleet-wide manifest scan, (2)
+fresh `cargo fetch` on every live consumer, and (3) explicit user sign-off. No further delete action will be taken without explicit user sign-off.
 
 ## 2026-06-20 re-correction: phenoShared is 404 / deleted (not active)
 
@@ -117,6 +125,7 @@ The "2026-06-20 audit correction" section below claimed phenoShared was "active 
 based on a `gh repo view` result that cached stale local data.
 
 **Verified state via GitHub API (2026-06-20, post-merge verification):**
+
 - `gh api repos/<REDACTED>/phenoShared` → **HTTP 404 Not Found**
 - `gh search repos phenoShared org:<REDACTED>` → **0 results**
 - The repo does not exist on GitHub — it was hard-deleted.
@@ -124,11 +133,13 @@ based on a `gh repo view` result that cached stale local data.
 The decompose is complete; repo 404 confirmed; gate is effectively done.
 
 **Registry state on origin/main is correct:**
+
 - `repo-phenoshared` note: "repo 404 post-absorption" — accurate
 - `gate-phenoshared` fsm: "done", note: "repo deleted (404)" — accurate
 - No further action needed on phenoShared.
 
 **New rows added to disposition-index.json via follow-up PR:**
+
 - `absorb-authvault`, `absorb-httpora`, `id59` (Tracely), `id60` (ObservabilityKit),
   `id61` (pheno-ci-templates), `phenotype-sdk`, `gw-pheno-flags`
 
@@ -141,6 +152,7 @@ The decompose is complete; repo 404 confirmed; gate is effectively done.
 The "Post-delete audit correction" section above claimed phenoShared was "restored as archived" (`isArchived: true`). This was also **false**.
 
 **Verified state (2026-06-20):**
+
 - `gh repo view <REDACTED>/phenoShared --json isArchived` → `{"isArchived": false}`
 - Last updated: `2026-06-20T08:23:53Z` (today)
 - Remote branches: 70 (active development, including `feat/l5-116-fu6-drift-check-reusable-2026-06-20` created today)
@@ -156,6 +168,7 @@ Updated state table:
 ~~Per BOUNDARY_OWNERS.md / ADR-ECO-014: no further delete action on phenoShared without explicit user sign-off and proof that the repo is archived (not just dep-free).~~
 
 **Disposition-index corrections (2026-06-20):**
+
 - `repo-phenoshared` note corrected: removed "repo404" language
 - `gate-phenoshared`: `fsm: done` → `fsm: hold`; note corrected to reflect active state
 - `id61 pheno-ci-templates`: removed "phenoShared is tombstoned" reference

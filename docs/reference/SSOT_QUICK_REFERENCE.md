@@ -53,6 +53,7 @@ gh pr create --head .worktrees/agileplus/feat/my-feature --base main \
 **Scenario**: Two agents both add new FRs to FUNCTIONAL_REQUIREMENTS.md simultaneously.
 
 **What happens**:
+
 1. Spec reconciliation service detects both PRs
 2. Service merges specs into SPECS_REGISTRY.md (append-only)
 3. Service assigns sequential FR-IDs (avoid collisions)
@@ -67,10 +68,12 @@ gh pr create --head .worktrees/agileplus/feat/my-feature --base main \
 **Scenario**: Your code creates `A → B → A` dependency cycle.
 
 **Detection timing**:
+
 - **Pre-commit hook** (Phase 2): Catches before you commit
 - **CI gate** (Phase 1): Fails PR if cycle introduced
 
 **If detected**:
+
 1. Service suggests refactoring: "Extract common module X"
 2. You implement refactoring
 3. Push updated branch
@@ -190,16 +193,19 @@ AUDIT_LOG.md
 ## If Something Goes Wrong
 
 **Service crashes during merge**:
+
 - Recover from AUDIT_LOG.md (distributed state in Git)
 - Service restarts; retries automatically
 - Check Slack notification for status
 
 **PR stuck in queue**:
+
 - Check `gh pr status` for blocking reviews
 - Check `gh pr view <number> --json checks`
 - If service-caused: Post in #engineering Slack
 
 **Test failures appearing out of nowhere**:
+
 - Likely caused by parallel merge (integration order changed)
 - Check AUDIT_LOG.md for "topological sort"
 - Your tests passed locally? → Report issue to team
@@ -209,21 +215,25 @@ AUDIT_LOG.md
 ## Spec Registry Query Cheat Sheet
 
 **What specs exist?**
+
 ```bash
 grep "^FR-" docs/reference/SPECS_REGISTRY.md
 ```
 
 **Find spec by title:**
+
 ```bash
 grep -A 5 "Event sourcing" docs/reference/SPECS_REGISTRY.md
 ```
 
 **Find tests for a spec:**
+
 ```bash
 grep -r "Traces to: FR-001-001" crates/ packages/
 ```
 
 **See dependency graph:**
+
 ```bash
 cat docs/reference/DEPENDENCY_GRAPH_CANONICAL.md  # (Phase 2)
 ```

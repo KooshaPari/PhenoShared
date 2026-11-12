@@ -63,7 +63,7 @@ Next: agileplus research 001
 
 Clarify analyzes the spec for:
 
-**1. Explicit Markers**
+### 1. Explicit Markers
 
 Looks for `[NEEDS CLARIFICATION]` comments:
 
@@ -73,7 +73,7 @@ Looks for `[NEEDS CLARIFICATION]` comments:
 Users should not be rate-limited [NEEDS CLARIFICATION: what's the limit?]
 ```
 
-**2. Vague Language**
+### 2. Vague Language
 
 Detects unclear statements:
 
@@ -89,7 +89,7 @@ Detects unclear statements:
 - Search results show first 10 matches, sorted by relevance
 ```
 
-**3. Missing Details**
+## 3. Missing Details
 
 Identifies incomplete scenarios:
 
@@ -103,7 +103,7 @@ Identifies incomplete scenarios:
 - Changes sync to all active sessions within 10 seconds
 ```
 
-**4. Edge Cases Not Covered**
+## 4. Edge Cases Not Covered
 
 Finds gaps:
 
@@ -194,7 +194,7 @@ This affects architecture.
 agileplus clarify 001
 ```
 
-**Spec: User Authentication**
+### Spec: User Authentication
 
 ```
 ---
@@ -293,7 +293,7 @@ agileplus clarify 001
 # Output: "No ambiguities found. Ready to research or plan."
 ```
 
-**2. You want fast iteration**
+## 2. You want fast iteration
 
 ```bash
 agileplus clarify 001 --skip
@@ -301,7 +301,7 @@ agileplus research 001
 # Move directly to research
 ```
 
-**3. You'll clarify during research**
+## 3. You'll clarify during research
 
 Research might identify patterns that clarify the spec. That's OK.
 
@@ -339,7 +339,7 @@ This ensures all ambiguities are resolved and the spec meets quality criteria:
 
 After clarifying:
 
-**Option 1: Research (Recommended)**
+### Option 1: Research (Recommended)
 
 Scan codebase and assess feasibility:
 
@@ -347,7 +347,7 @@ Scan codebase and assess feasibility:
 agileplus research 001
 ```
 
-**Option 2: Plan Directly**
+### Option 2: Plan Directly
 
 For well-understood features, jump to planning:
 
@@ -357,7 +357,7 @@ agileplus plan 001
 
 ## Troubleshooting
 
-**Q: Clarify asks about things I already specified**
+### Q: Clarify asks about things I already specified
 
 A: The spec may have been unclear. Re-read the answer and update spec if needed:
 
@@ -366,7 +366,7 @@ agileplus spec edit 001
 # Update the relevant section
 ```
 
-**Q: Want to accept a default answer without reviewing**
+## Q: Want to accept a default answer without reviewing
 
 A: Use `--auto-accept` to use first/recommended answer:
 
@@ -374,7 +374,7 @@ A: Use `--auto-accept` to use first/recommended answer:
 agileplus clarify 001 --auto-accept
 ```
 
-**Q: Want different questions**
+## Q: Want different questions
 
 A: Clarify analyzes your spec automatically. If different ambiguities exist, edit the spec first:
 

@@ -17,7 +17,8 @@ AgilePlus **mandates** all non-trivial work tracked via `agileplus specify`; PRs
 
 ## Repatriation
 
-Crates staged in Agentora (`agileplus-triage`, `agileplus-telemetry`, `agileplus-sync`, `agileplus-subcmds`) move to AgilePlus workspace. Missing siblings (`agileplus-domain`, `agileplus-events`) must land before workspace registration.
+Crates staged in Agentora (`agileplus-triage`, `agileplus-telemetry`, `agileplus-sync`, `agileplus-subcmds`) move to AgilePlus workspace. Missing siblings (`agileplus-domain`, `agileplus-events`) must
+land before workspace registration.
 
 ## Consequences
 

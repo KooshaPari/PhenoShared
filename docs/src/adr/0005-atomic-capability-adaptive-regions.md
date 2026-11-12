@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-Support the finest safe interceptable granule—task, function, syscall, I/O operation, or accelerator kernel—but dynamically fuse neighboring decisions into execution regions when overhead or shared state dominates. Split regions when a distinct optimum emerges.
+Support the finest safe interceptable granule—task, function, syscall, I/O operation, or accelerator kernel—but dynamically fuse neighboring decisions into execution regions when overhead or shared
+state dominates. Split regions when a distinct optimum emerges.
 
 ### Enforced rules
 

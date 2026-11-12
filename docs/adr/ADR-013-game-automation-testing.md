@@ -7,6 +7,7 @@ Proposed
 ## Context
 
 NanoVMS needs to support parallel game automation testing:
+
 - Headless Steam + tokens
 - Pre-copied compressed images
 - <10s startup target
@@ -659,6 +660,7 @@ func (r *ResultCollector) exportJUnit() ([]byte, error) {
 ### Consequences
 
 ### Positive
+
 - Parallel test execution significantly reduces CI time
 - Consistent environment via snapshots
 - Steam token auth enables headless testing
@@ -666,6 +668,7 @@ func (r *ResultCollector) exportJUnit() ([]byte, error) {
 - Memory scanner enables cheat detection testing
 
 ### Negative
+
 - Steam API rate limits
 - Game anti-cheat compatibility
 - Mod conflicts

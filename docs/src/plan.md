@@ -2,7 +2,8 @@
 
 ## Objective
 
-Deliver a packaged all-in-one interactive fabric in useful slices while separately maturing the deeper heterogeneous compute/data plane. The program is organized around evidence-bearing WorkPackages in `work/` and AgilePlus-shaped feature specs in `specs/`.
+Deliver a packaged all-in-one interactive fabric in useful slices while separately maturing the deeper heterogeneous compute/data plane. The program is organized around evidence-bearing WorkPackages
+in `work/` and AgilePlus-shaped feature specs in `specs/`.
 
 ## Phase map
 
@@ -27,4 +28,5 @@ Deliver a packaged all-in-one interactive fabric in useful slices while separate
 
 ## Planning rule
 
-The research layer may improve the product but cannot hold local seat/workspace, MacBook display, agent-surface or explicit-placement value hostage. Conversely, early UI demos cannot be used to claim the compute mesh exists.
+The research layer may improve the product but cannot hold local seat/workspace, MacBook display, agent-surface or explicit-placement value hostage. Conversely, early UI demos cannot be used to claim
+the compute mesh exists.

@@ -255,6 +255,7 @@ curl -fsS http://localhost:8080/v1/chat/completions \
 ```
 
 Logs should show:
+
 ```
 substrate-gateway starting bind=0.0.0.0:8080 state_dir=/var/lib/substrate
 ```

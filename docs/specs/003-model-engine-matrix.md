@@ -1,9 +1,13 @@
 # 003 — Model × Engine Matrix
 
 > **Status:** Design. Pairs with `config/model_engine_matrix.yaml` (new) and the perf suite under `perf/*`.
-> **Naming convention:** forks we own carry the `-dev` suffix in bin/path names (`forge-dev`, `omniroute-dev`, `pheno-serve-dev`, `codex-dev`). The matrix references engines by their upstream names (vLLM, SGLang, TensorRT-LLM, llama.cpp / MLX) but binds them through `omniroute-dev` (cloud routing) and `pheno-serve-dev` (local engine lifecycle + OpenAI-compat endpoint).
-> **Source of truth for model SKUs:** the active local-only lock in `config/local_model_bench_matrix.yaml`. The broader HF shortlist is research history and must not expand the active evaluation set without a new explicit lock.
-> **Updated 2026-07-04:** this document no longer names model SKUs in its tier tables. Picks deferred to the locked shortlist (ADR 0005). Previous round-2 picks (Qwen3-8B AWQ, Qwen3-1.7B GGUF, Qwen2.5-Coder-32B-AWQ) are retained as historical artifacts in `state/hf_scrape/2026-07-03/shortlist.csv` but are superseded by the locked shortlist. See `docs/adrs/0004-stale-sku-retrospective.md` for why.
+> **Naming convention:** forks we own carry the `-dev` suffix in bin/path names (`forge-dev`, `omniroute-dev`, `pheno-serve-dev`, `codex-dev`). The matrix references engines by their upstream names
+(vLLM, SGLang, TensorRT-LLM, llama.cpp / MLX) but binds them through `omniroute-dev` (cloud routing) and `pheno-serve-dev` (local engine lifecycle + OpenAI-compat endpoint).
+> **Source of truth for model SKUs:** the active local-only lock in `config/local_model_bench_matrix.yaml`. The broader HF shortlist is research history and must not expand the active evaluation set
+without a new explicit lock.
+> **Updated 2026-07-04:** this document no longer names model SKUs in its tier tables. Picks deferred to the locked shortlist (ADR 0005). Previous round-2 picks (Qwen3-8B AWQ, Qwen3-1.7B GGUF,
+Qwen2.5-Coder-32B-AWQ) are retained as historical artifacts in `state/hf_scrape/2026-07-03/shortlist.csv` but are superseded by the locked shortlist. See `docs/adrs/0004-stale-sku-retrospective.md`
+for why.
 
 ---
 
@@ -15,9 +19,11 @@
 - **Active local evaluation set:** `local/qwen35-08b`, `local/lfm25-8b-a1b`, and `local/ornith-8b`, with only explicitly hash-locked local artifacts.
 - **Density rule:** ≤ 12 B dense local is fine. > 12 B → MoE preferred (or quantized).
 - **Engine rule:** vLLM, SGLang, TensorRT-LLM, llama.cpp / MLX (M1 fallback) are all in scope.
-- **Optimization rule:** prefix-cache, chunked prefill, in-flight batching, speculative decoding (EAGLE / P-EAGLE / N-gram / Suffix / MLP-draft), quantization (AWQ / GPTQ / GGUF / FP8 / INT8), CUDA-graph capture, custom kernels — all permitted.
+- **Optimization rule:** prefix-cache, chunked prefill, in-flight batching, speculative decoding (EAGLE / P-EAGLE / N-gram / Suffix / MLP-draft), quantization (AWQ / GPTQ / GGUF / FP8 / INT8),
+  CUDA-graph capture, custom kernels — all permitted.
 
-Pheno-harness already encodes `SGLang primary, vLLM secondary, llama-server legacy, BitNet sub-1B` in `config/inference_runners.yaml`. TensorRT-LLM is `not_recommended_primary` because of compile overhead on 3090 Ti. We honor that on 3090 Ti and re-evaluate on Blackwell.
+Pheno-harness already encodes `SGLang primary, vLLM secondary, llama-server legacy, BitNet sub-1B` in `config/inference_runners.yaml`. TensorRT-LLM is `not_recommended_primary` because of compile
+overhead on 3090 Ti. We honor that on 3090 Ti and re-evaluate on Blackwell.
 
 ---
 
@@ -34,7 +40,8 @@ Pheno-harness already encodes `SGLang primary, vLLM secondary, llama-server lega
 
 Tier keys are referenced by `harness/lanes.yaml`, `config/models.yaml`, and `config/local_swarm.yaml`. The matrix itself lives in `config/model_engine_matrix.yaml` (new).
 
-**Naming change from round-2:** tier names are now size-band-only (`T3_mid_moe`, `T4_ceiling_dense`) instead of size-band + engine-hint (`T3_moe_mid`, `T4_moe_large`). The round-2 naming implied that T3 was always MoE and T4 was always MoE; reality is that T4 is dense-on-AWQ-INT4, T3 is MoE-with-low-active-ratio. Fixing the naming now prevents future confusion.
+**Naming change from round-2:** tier names are now size-band-only (`T3_mid_moe`, `T4_ceiling_dense`) instead of size-band + engine-hint (`T3_moe_mid`, `T4_moe_large`). The round-2 naming implied that
+T3 was always MoE and T4 was always MoE; reality is that T4 is dense-on-AWQ-INT4, T3 is MoE-with-low-active-ratio. Fixing the naming now prevents future confusion.
 
 ---
 
@@ -56,7 +63,8 @@ No other model SKU is active in the local score matrix. The active artifacts rem
 
 The broader shortlist below is retained for research history and future review only. It is not an execution authorization.
 
-The current picks are in `state/hf_scrape/2026-07-04/locked_shortlist.md` — locked per ADR 0005 with recency stamps + OR + HF pricing. This section stays here as the **historical record** of round-2 picks, marked as superseded.
+The current picks are in `state/hf_scrape/2026-07-04/locked_shortlist.md` — locked per ADR 0005 with recency stamps + OR + HF pricing. This section stays here as the **historical record** of round-2
+picks, marked as superseded.
 
 ### 2.1 (superseded) Tier 0 — drafts (≤ 2 B), round-2 picks
 
@@ -69,7 +77,8 @@ Live 2026-07-03 shortlist (kept for diff against v2 shortlist):
 | `meta-llama/Llama-3.2-1B-Instruct` | 1.24 B | GGUF Q4_0 | 8.9 M | cross-check drafter |
 | `google/gemma-3-1b-it` | 1.0 B | GGUF Q4_0 | 4.0 M | safety-comparison drafter |
 
-**v2 shortlist supersedes this:** the v2 shortlist's T0 drafter pick is `google/gemma-4-E2B-it-qat-q4_0-gguf` (Gemma-4 family, June 2026 release, 348 K downloads in 1 month). `Qwen3-1.7B` and the others remain as candidates but were not selected.
+**v2 shortlist supersedes this:** the v2 shortlist's T0 drafter pick is `google/gemma-4-E2B-it-qat-q4_0-gguf` (Gemma-4 family, June 2026 release, 348 K downloads in 1 month). `Qwen3-1.7B` and the
+others remain as candidates but were not selected.
 
 ### 2.2 (superseded) Tier 1 — small (2–4 B), round-2 picks
 
@@ -90,7 +99,8 @@ Live 2026-07-03 shortlist (kept for diff against v2 shortlist):
 | `meta-llama/Llama-3.1-8B-Instruct` | 8.03 B | AWQ | 9.5 M | baseline + regression reference |
 | `Qwen/Qwen2.5-Coder-7B-Instruct` | 7.62 B | AWQ | (per model card) | code-specialized T2 |
 
-**v2 shortlist supersedes this:** the v2 shortlist's T2 workhorse pick is `Qwen/Qwen3-Coder-Next-FP8` (Feb 2026 release, 2.17 M downloads, coding-specialized, 262 K context). Alternative T2 candidates: `ibm-granite/granite-4.1-8b`, `LiquidAI/LFM2.5-8B-A1B`. Open question — see v2 shortlist.
+**v2 shortlist supersedes this:** the v2 shortlist's T2 workhorse pick is `Qwen/Qwen3-Coder-Next-FP8` (Feb 2026 release, 2.17 M downloads, coding-specialized, 262 K context). Alternative T2
+candidates: `ibm-granite/granite-4.1-8b`, `LiquidAI/LFM2.5-8B-A1B`. Open question — see v2 shortlist.
 
 ### 2.4 (superseded) Tier 3 — MoE mid (12–48 B), round-2 picks
 
@@ -100,7 +110,8 @@ Live 2026-07-03 shortlist (kept for diff against v2 shortlist):
 | `Qwen/Qwen3-30B-A3B-Instruct-2507` | 30.5 B | 3.0 B | AWQ-INT4 | 993 K | T3 alt (general) |
 | `allenai/OLMoE-1B-7B-0125` | 6.9 B | 1.0 B | BF16 (fits) | (per model card) | open-weights MoE mid |
 
-**v2 shortlist supersedes this:** the v2 shortlist's T3 MoE mid pick is `moonshotai/Kimi-Linear-48B-A3B-Instruct` (48 B total / 3 B active, linear attention, 70 K downloads). Note: linear attention may not be natively supported by SGLang/vLLM at the time of eval; needs verification before slotting.
+**v2 shortlist supersedes this:** the v2 shortlist's T3 MoE mid pick is `moonshotai/Kimi-Linear-48B-A3B-Instruct` (48 B total / 3 B active, linear attention, 70 K downloads). Note: linear attention
+may not be natively supported by SGLang/vLLM at the time of eval; needs verification before slotting.
 
 ### 2.5 (superseded) Tier 4 — ceiling dense (24–35 B), round-2 picks
 
@@ -112,7 +123,8 @@ Live 2026-07-03 shortlist (kept for diff against v2 shortlist):
 | `01-ai/Yi-1.5-34B-Chat` (gated) | 34.4 B | AWQ-INT4 | dense large alt |
 | `meta-llama/CodeLlama-34b-Instruct-hf` | 33.7 B | AWQ-INT4 | code-specialized T4 |
 
-**v2 shortlist supersedes this:** the v2 shortlist's T4 ceiling dense pick is `mistralai/Devstral-Small-2-24B-Instruct-2512` (24 B dense coding-specialized, released 2026-06-30, 348 K downloads, requires AWQ-INT4 to fit on 3090 Ti). Alternative: `Qwen/Qwen3.5-27B` (April 2026, 2.5 M downloads, 27 B dense, requires AWQ-INT4).
+**v2 shortlist supersedes this:** the v2 shortlist's T4 ceiling dense pick is `mistralai/Devstral-Small-2-24B-Instruct-2512` (24 B dense coding-specialized, released 2026-06-30, 348 K downloads,
+requires AWQ-INT4 to fit on 3090 Ti). Alternative: `Qwen/Qwen3.5-27B` (April 2026, 2.5 M downloads, 27 B dense, requires AWQ-INT4).
 
 ### 2.6 Historical cloud baselines (not executable)
 
@@ -143,6 +155,7 @@ Live 2026-07-03 shortlist (kept for diff against v2 shortlist):
 | MLX (M1 Pro fallback only) | ✓ | ◐ | ✗ | ✗ | ✗ |
 
 **Why this is the recommendation:**
+
 - **T0 (drafts):** ik_llama / llama.cpp are lowest-overhead and pair naturally with speculative decoding (spec-dec needs a tiny draft model; this tier is the draft).
 - **T1 (small):** SGLang's low-latency RadixAttention is excellent for the chat-loop's tight inner loop. vLLM is also fine.
 - **T2 (mid):** SGLang and vLLM are roughly tied at this size on 3090 Ti. TensorRT-LLM is `◐` only because compile overhead is painful for nightly iteration; worth running once per release.
@@ -201,7 +214,8 @@ Engine coverage for the spec-dec zoo:
 - **TensorRT-LLM**: EAGLE, MTP, Lookahead. `◐` on 3090 Ti (compile overhead).
 - **llama.cpp**: MTP-GGUF (`protoLabsAI/Ornith-1.0-9B-MTP-GGUF` is the canonical MTP test case), PLD, Lookahead.
 
-**DSpark / JetSpec / DDTree / Spec-Spec status as of 2026-07-04:** none have native SGLang or vLLM support in the public release tracks. They are research-frontier modes. Pheno-harness does **not** ship them as eval targets in round 1; they are tracked in the corpus (`D:\koosh\Downloads\ChatGPT-Agent-Aware Speculative Decoding.md`) and revisited when an engine lands native support.
+**DSpark / JetSpec / DDTree / Spec-Spec status as of 2026-07-04:** none have native SGLang or vLLM support in the public release tracks. They are research-frontier modes. Pheno-harness does **not**
+ship them as eval targets in round 1; they are tracked in the corpus (`D:\koosh\Downloads\ChatGPT-Agent-Aware Speculative Decoding.md`) and revisited when an engine lands native support.
 
 Pheno-harness's `config/decode_acceleration_matrix.yaml` is the existing policy file. New spec-dec bindings go there.
 
@@ -224,6 +238,7 @@ This is the **honest fit table**. Specific model names are deferred to `v2_short
 | 122 B MoE (10 B active) | 244 GB total | **NO** | 68 GB | **NO** |
 
 **Principles:**
+
 - BF16 dense weights ≠ usable on 3090 Ti at > 12 B; AWQ-INT4 / 4-bit GGUF only.
 - MoE params_total only saves compute, not VRAM — all weights must be resident.
 - AWQ-INT4 fit is the gating constraint for any model > 12 B.
@@ -276,7 +291,8 @@ Use M1 Pro for: cache-warming, draft token generation, monitoring, and emergency
 | `perf/profiler.py` | CPU/RAM/VRAM/disk/net + queue depth + leaks + deadlocks | always-on during every eval run |
 | `perf/report.py` | roll-up → `bench/results/perf/<date>/` | human-readable summary |
 
-**Crucial rule:** every probe run is paired with a non-probe reference run on the same model + same workload. The diff between probe-attached and probe-detached is the **probe overhead** itself, which is reported separately so we don't double-count.
+**Crucial rule:** every probe run is paired with a non-probe reference run on the same model + same workload. The diff between probe-attached and probe-detached is the **probe overhead** itself, which
+is reported separately so we don't double-count.
 
 ---
 
@@ -297,9 +313,11 @@ Cloud pricing below is retained only for a future re-enable decision. It is not 
 | `tencent/hy3-preview` | $0.063 | $0.21 | 2026-04-23 | ✓ |
 | `qwen/qwen3.5-flash-02-23` | $0.065 | $0.26 | 2026-02-25 / HF TBD | needs re-probe |
 
-**Self-hosted (3 models, per ADR 0005):** Qwen3.5 0.8B (`local/qwen35-08b`), LiquidAI LFM 2.5 8B-A1B (`local/lfm25-8b-a1b`), and the published grafted Ornith MTP Q4 artifact (`local/ornith-8b`). Exact artifact evidence is recorded in `state/*_q4_gguf_manifest.json` and `state/ornith_mtp_q4_manifest.json`. Pricing = amortized electricity only.
+**Self-hosted (3 models, per ADR 0005):** Qwen3.5 0.8B (`local/qwen35-08b`), LiquidAI LFM 2.5 8B-A1B (`local/lfm25-8b-a1b`), and the published grafted Ornith MTP Q4 artifact (`local/ornith-8b`). Exact
+artifact evidence is recorded in `state/*_q4_gguf_manifest.json` and `state/ornith_mtp_q4_manifest.json`. Pricing = amortized electricity only.
 
 **Historical full-sweep estimate** (8 cloud × TB2.0+DeepSWE+SWE-bench Verified × 3 attempts/task):
+
 - ~$30–80 per model
 - ~$240–640 for the full cloud baseline (1 sweep)
 - Local models: ~$0 (electricity only)

@@ -44,6 +44,7 @@
 ### Current State (2026-03-30)
 
 **Tier 1 Deployment:** ✅ Complete
+
 ```
 phenotype-infrakit  ✅ Complete (2026-03-30)
 AgilePlus           ✅ Complete (2026-03-30)
@@ -65,11 +66,13 @@ heliosCLI           ✅ Complete (2026-03-30)
 ### Quality Metrics
 
 **Semgrep Rules Applied:**
+
 - 12 custom Rust patterns (code style, common mistakes)
 - Standard OSS rule sets (CWE coverage)
 - Target: <5% false positive rate
 
 **CodeQL Queries:**
+
 - Standard OWASP Top 10 queries
 - Language-specific (Rust, Python, Go, JavaScript)
 - Target: Zero critical issues on main branch
@@ -109,11 +112,13 @@ Tier 3 → Blocked (no auth token)
 ### Quality Metrics
 
 **Dependency Vulnerability Detection:**
+
 - Target: Zero critical vulnerabilities on main
 - Action: Auto-remediation PR for fixable issues
 - SBOM generation for compliance & audit
 
 **Snyk Dashboard Metrics:**
+
 - Open issues by severity
 - Remediation backlog
 - Fix rate (% of issues fixed within 7 days)
@@ -169,19 +174,23 @@ Tier 3 → 0/18 pending
 ### Quality Metrics
 
 **Event Capture Rate:**
+
 - Target: >95% of errors captured and transmitted
 - Baseline: TBD (after DSN provisioning)
 
 **Error Resolution Time:**
+
 - Target: <24 hours for P0 errors
 - Target: <7 days for P1 errors
 
 **Performance Monitoring:**
+
 - Trace sampling rate: 10% (balance signal vs. cost)
 - Slow transaction detection: >1 second
 - Release tracking: synced with GitHub releases
 
 **User Experience Metrics:**
+
 - Session replay sampling: 5%
 - User feedback: enabled on error pages
 
@@ -246,21 +255,25 @@ Tier 3 → Planned for 2026-04-10
 ### Quality Metrics by Language
 
 **Rust (cargo clippy, cargo fmt):**
+
 - Target: 0 warnings
 - Enforced: Yes (CI/CD blocks merge)
 - Adoption: 100% by 2026-04-13
 
 **Python (ruff, black, mypy):**
+
 - Target: 0 lint errors; strict type checking
 - Enforced: Yes (CI/CD blocks merge)
 - Adoption: 100% by 2026-04-13
 
 **Go (golangci-lint, gofmt):**
+
 - Target: 0 lint errors
 - Enforced: Yes (CI/CD blocks merge)
 - Adoption: 100% by 2026-04-13
 
 **JavaScript/TypeScript (eslint, prettier):**
+
 - Target: 0 lint errors; consistent formatting
 - Enforced: Yes (CI/CD blocks merge)
 - Adoption: 100% by 2026-04-13
@@ -319,6 +332,7 @@ Tier 3 → Planned for 2026-04-10
 **End:** 🟡 Week 1 Go/No-Go Gate
 
 **Metrics Tracked:**
+
 - Repos with SAST: 3 → 12
 - Repos with Sentry: 1 → 3 (if DSNs ready)
 - Repos with Linting: 0 → 3
@@ -334,6 +348,7 @@ Tier 3 → Planned for 2026-04-10
 **End:** 🟡 Week 2 Go/No-Go Gate
 
 **Metrics Tracked:**
+
 - Repos with SAST: 12 → 30 (100% 🎯)
 - Repos with Sentry: 3 → 12 (if DSNs ready)
 - Repos with Snyk: 0 → 12 (if unblocked)
@@ -350,6 +365,7 @@ Tier 3 → Planned for 2026-04-10
 **End:** ✅ Phase 1 Completion Gate
 
 **Metrics Tracked:**
+
 - Repos with all 4 tools: 0 → 30 (100% 🎯)
 - SAST false positive rate: <5%
 - Sentry event capture rate: >95%
@@ -364,6 +380,7 @@ Tier 3 → Planned for 2026-04-10
 ### Daily Updates (Team Standup)
 
 **Format:**
+
 ```
 Date: [YYYY-MM-DD]
 Repos Completed: [X]/30
@@ -375,6 +392,7 @@ Actions: [Owner → Action → ETA]
 ### Weekly Summary (Friday EOD)
 
 **Format:**
+
 - Metrics snapshot (repos completed by tool)
 - Blockers resolved vs. new
 - Go/No-Go gate decision
@@ -383,6 +401,7 @@ Actions: [Owner → Action → ETA]
 ### Post-Phase 1 Report (2026-04-13)
 
 **Contents:**
+
 - Final metrics (30/30 repos × 4 tools)
 - Lessons learned
 - Team feedback (survey results)
@@ -404,6 +423,7 @@ Actions: [Owner → Action → ETA]
 ### Automated Metrics Collection
 
 **Via GitHub Actions:**
+
 ```yaml
 # .github/workflows/phase1-metrics.yml
 - Repo count by tool (daily)
@@ -417,37 +437,41 @@ Actions: [Owner → Action → ETA]
 
 ## Success: Definition & Criteria
 
-### Phase 1 is SUCCESSFUL if:
+### Phase 1 is SUCCESSFUL if
 
 ✅ **Coverage:**
+
 - 30/30 repos have SAST enabled
 - 30/30 repos have Snyk enabled
 - 30/30 repos have Sentry enabled
 - 30/30 repos have linting enabled
 
 ✅ **Quality:**
+
 - SAST false positive rate <5%
 - Sentry event capture >95%
 - Snyk remediation rate >80%
 - Linting compliance 95%+
 
 ✅ **Timeline:**
+
 - All completed by 2026-04-13 (14-day target)
 - Go-gates passed at Weeks 1, 2, 3
 
 ✅ **Adoption:**
+
 - Team satisfaction >4.0/5.0
 - Zero critical blockers
 - Training completed
 
-### Phase 1 is PARTIALLY SUCCESSFUL if:
+### Phase 1 is PARTIALLY SUCCESSFUL if
 
 🟡 Coverage 75-99% (27+ repos on all tools)
 🟡 Quality goals met on deployed repos
 🟡 Timeline extended to 2026-04-20 (3-day grace)
 🟡 Team feedback positive (>3.5/5.0)
 
-### Phase 1 is AT RISK if:
+### Phase 1 is AT RISK if
 
 🔴 Coverage <75% (less than 22/30 repos)
 🔴 Tool failures discovered (>10% repos)

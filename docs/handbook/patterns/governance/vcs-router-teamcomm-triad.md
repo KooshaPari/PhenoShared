@@ -6,7 +6,8 @@
 
 ## Purpose
 
-Three repositories form a *team-coordination-over-git* stack. They are intentionally separate (different language surfaces, different deployment targets, different test environments) but each is load-bearing for the others. This document captures the dependency graph so contributors don't accidentally break a downstream consumer.
+Three repositories form a *team-coordination-over-git* stack. They are intentionally separate (different language surfaces, different deployment targets, different test environments) but each is
+load-bearing for the others. This document captures the dependency graph so contributors don't accidentally break a downstream consumer.
 
 ## The three repos
 
@@ -39,7 +40,8 @@ All three live on the &lt;REDACTED&gt; GitHub account under the Phenotype-org um
               └─────────────────────┘
 ```
 
-`phenotype-router` imports `PhenoVCS` types (`WorktreeID`, `CommitTopology`) for routing decisions. `phenotype-teamcomm` imports `phenotype-router` for topology-aware message construction *and* imports `PhenoVCS` types directly for identity. There is **no reverse dependency** — `PhenoVCS` does not know about the other two.
+`phenotype-router` imports `PhenoVCS` types (`WorktreeID`, `CommitTopology`) for routing decisions. `phenotype-teamcomm` imports `phenotype-router` for topology-aware message construction *and*
+imports `PhenoVCS` types directly for identity. There is **no reverse dependency** — `PhenoVCS` does not know about the other two.
 
 ## Versioning contract
 
@@ -63,16 +65,21 @@ Triad-level integration tests would live in a *fourth* repo (no such repo exists
 
 ## Open questions (operator-decision pending)
 
-1. **No triad-level integration tests.** Each repo tests its own contract; the cross-repo invariants are not asserted anywhere. Either (a) add a `phenotype-triad-tests/` repo that pulls all three as git deps, or (b) accept the risk and document the gap here.
-2. **`PhenoVCS` vs `phenotype-router` shared `substrate` dependency.** Both depend on `substrate` (the Rust MCP driver crate). If either changes its substrate version, the other may need to follow. Document or automate.
-3. **Should `phenotype-teamcomm` move into a "coordination" workspace that includes `phenotype-router`?** The two are the most coupled. Per AGENTS.md, *migration / absorption / decomposition applies only when supported by the repository's agreed role and evidence*. No operator-accepted decision exists yet.
-4. **`phenoForge` is also a task-orchestration repo.** Description overlap with `phenotype-router` exists. Either (a) clarify scope boundaries, (b) consolidate, (c) leave separate. **Visibly proposed; not decided.**
+1. **No triad-level integration tests.** Each repo tests its own contract; the cross-repo invariants are not asserted anywhere. Either (a) add a `phenotype-triad-tests/` repo that pulls all three as
+   git deps, or (b) accept the risk and document the gap here.
+2. **`PhenoVCS` vs `phenotype-router` shared `substrate` dependency.** Both depend on `substrate` (the Rust MCP driver crate). If either changes its substrate version, the other may need to follow.
+   Document or automate.
+3. **Should `phenotype-teamcomm` move into a "coordination" workspace that includes `phenotype-router`?** The two are the most coupled. Per AGENTS.md, *migration / absorption / decomposition applies
+   only when supported by the repository's agreed role and evidence*. No operator-accepted decision exists yet.
+4. **`phenoForge` is also a task-orchestration repo.** Description overlap with `phenotype-router` exists. Either (a) clarify scope boundaries, (b) consolidate, (c) leave separate. **Visibly proposed;
+   not decided.**
 
 ## Why this is a triad and not one repo
 
 Three reasons:
 
-1. **Different deployment targets.** `PhenoVCS` runs in a single workspace; `phenotype-router` runs per-team across many workspaces; `phenotype-teamcomm` runs per-team-per-agent. Co-locating them forces one binary to handle three operational shapes.
+1. **Different deployment targets.** `PhenoVCS` runs in a single workspace; `phenotype-router` runs per-team across many workspaces; `phenotype-teamcomm` runs per-team-per-agent. Co-locating them
+   forces one binary to handle three operational shapes.
 2. **Different upgrade cadence.** Identity invariants (`PhenoVCS`) change rarely; routing rules change often; team patterns change weekly. Co-locating forces all three to ship at the lowest common cadence.
 3. **Different consumer surfaces.** A consumer that needs only identity should not be forced to pull routing or teamcomm code. Splitting keeps the dependency surface small.
 
@@ -84,7 +91,8 @@ Consolidate the three into one repo *only* if at least two of these become true:
 - A registry-grade version contract makes the cross-repo invariants testable from a single checkout.
 - The team consistently ships all three at the same cadence.
 
-**None of these are true today.** Per the EXECUTION-CORRECTION rule, the absorb decision is operator-bound — this document records the current state and the conditions under which the decision should be revisited.
+**None of these are true today.** Per the EXECUTION-CORRECTION rule, the absorb decision is operator-bound — this document records the current state and the conditions under which the decision should
+be revisited.
 
 ## File locations
 

@@ -83,4 +83,6 @@ claim, dissatisfaction, hypothesis, experiment, work-package, task, observation,
 | stales | observation | evidence |
 | visible-as | product | surface |
 
-Every edge records applicability and evidence/interpretation origin. `equivalence-candidate` is not a migration approval. `qualifies` needs actual supporting proof. Observed, reported and proposed graph layers are separately queryable. Unknown edges remain visible rather than inferred as absent. Stable identities do not imply immutable meaning; meanings evolve through versioned decisions and contracts.
+Every edge records applicability and evidence/interpretation origin. `equivalence-candidate` is not a migration approval. `qualifies` needs actual supporting proof. Observed, reported and proposed
+graph layers are separately queryable. Unknown edges remain visible rather than inferred as absent. Stable identities do not imply immutable meaning; meanings evolve through versioned decisions and
+contracts.

@@ -102,7 +102,7 @@ Comprehensive list of all files touched:
 
 Definition of new or modified data structures:
 
-**Email**
+#### Email
 
 ```rust
 struct Email {
@@ -127,7 +127,7 @@ enum EmailStatus {
 }
 ```
 
-**EmailPreference**
+#### EmailPreference
 
 ```rust
 struct EmailPreference {
@@ -140,7 +140,7 @@ struct EmailPreference {
 }
 ```
 
-**EmailTemplate**
+#### EmailTemplate
 
 ```rust
 struct EmailTemplate {
@@ -157,7 +157,7 @@ struct EmailTemplate {
 
 Step-by-step order to minimize blockers:
 
-**Phase 1: Foundation (Days 1-2)**
+#### Phase 1: Foundation (Days 1-2)
 
 1. Database schema migration (001_email_tables.sql)
 2. User model updates (add email_preference field)
@@ -165,31 +165,32 @@ Step-by-step order to minimize blockers:
 
 *Why first*: Everything else depends on the database schema
 
-**Phase 2: Core (Days 2-3)**
+#### Phase 2: Core (Days 2-3)
 
-4. SendGrid integration (HTTP client, API calls)
-5. Email queue worker (async processing)
-6. Template rendering (Handlebars setup)
+1. SendGrid integration (HTTP client, API calls)
+2. Email queue worker (async processing)
+3. Template rendering (Handlebars setup)
 
 *Why next*: Implements sending mechanism
 
-**Phase 3: Integration (Days 3-4)**
+#### Phase 3: Integration (Days 3-4)
 
-7. Event handlers (connect to event system)
-8. Account settings endpoint (preference management)
-9. Email preferences model
+1. Event handlers (connect to event system)
+2. Account settings endpoint (preference management)
+3. Email preferences model
 
 *Why next*: Connects to rest of system
 
-**Phase 4: Quality (Days 4-5)**
+#### Phase 4: Quality (Days 4-5)
 
-10. Integration tests
-11. Error handling refinements
-12. Documentation
+1. Integration tests
+2. Error handling refinements
+3. Documentation
 
 *Why last*: All pieces in place to test thoroughly
 
 **Parallelizable Steps:**
+
 - Steps 4-8 can run in parallel (no dependencies between them)
 - Only constraint: All of Phase 1 must complete before Phase 2
 
@@ -420,7 +421,7 @@ A good plan includes:
 
 ## Tips for Good Plans
 
-**1. Be Specific**
+### 1. Be Specific
 
 ```markdown
 # ✗ Vague
@@ -431,7 +432,7 @@ A good plan includes:
 - Create database queue table with status tracking
 ```
 
-**2. Document Trade-offs**
+## 2. Document Trade-offs
 
 ```markdown
 # ✓ Shows thinking
@@ -439,7 +440,7 @@ A good plan includes:
 **Trade-off**: +300 LOC complexity vs -request latency impact
 ```
 
-**3. Identify Parallelizable Work**
+## 3. Identify Parallelizable Work
 
 ```markdown
 # ✓ Helps with scheduling
@@ -448,7 +449,7 @@ A good plan includes:
 - Steps 7-9 require steps 1-6 complete
 ```
 
-**4. Link to Specification**
+## 4. Link to Specification
 
 ```markdown
 # ✓ Traceability

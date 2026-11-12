@@ -4,7 +4,8 @@
 
 ## Problem
 
-A repo whose primary boundary is **language** rather than **domain role** becomes a catch-all for unrelated crates, transports, and MCP framework code. Agents cannot tell where new code belongs, duplicate forks appear, and tier rules collapse (e.g. Go treated as tier-0 core because "we already have a Go SDK repo").
+A repo whose primary boundary is **language** rather than **domain role** becomes a catch-all for unrelated crates, transports, and MCP framework code. Agents cannot tell where new code belongs,
+duplicate forks appear, and tier rules collapse (e.g. Go treated as tier-0 core because "we already have a Go SDK repo").
 
 Retired examples (2026-06-17, PhenoMCPServers issue #7):
 
@@ -35,7 +36,8 @@ Use **domain roles** from [LANGUAGE-TIERS-AND-ROLES](https://github.com/KooshaPa
 | Rust utilities / ports | phenoUtils, phenoShared | 0 |
 | Python dep extras | phenotype-python-sdk `[connect]` groups only | 2 |
 
-Before placing code, run the [mcp-fork-selection decision tree](../patterns/governance/mcp-fork-selection.md) and the [`mcp-boundary-guard`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/mcp-boundary-guard/SKILL.md) skill pre-flight.
+Before placing code, run the [mcp-fork-selection decision tree](../patterns/governance/mcp-fork-selection.md) and the
+[`mcp-boundary-guard`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/mcp-boundary-guard/SKILL.md) skill pre-flight.
 
 ## Do / Don't
 

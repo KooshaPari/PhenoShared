@@ -24,6 +24,7 @@
 Move `crates/agileplus-dashboard/src/seed.rs` (541 LOC) into a new shared crate for reuse across test suites.
 
 **Tasks:**
+
 1. [ ] Create `crates/agileplus-fixtures/Cargo.toml` with dependencies
 2. [ ] Create `crates/agileplus-fixtures/src/lib.rs` with seed data + builders
 3. [ ] Extract `FixtureSeed`, `FixtureBuilder` types
@@ -33,6 +34,7 @@ Move `crates/agileplus-dashboard/src/seed.rs` (541 LOC) into a new shared crate 
 7. [ ] Verify all tests still pass
 
 **Acceptance Criteria:**
+
 - [ ] Fixtures crate compiles without errors
 - [ ] All dashboard tests pass using fixtures crate
 - [ ] Original seed.rs deleted from dashboard crate
@@ -54,6 +56,7 @@ Move `crates/agileplus-dashboard/src/seed.rs` (541 LOC) into a new shared crate 
 Create a canonical error crate consolidating all error types from 8+ crates into a single, re-exported location. Reduces boilerplate and ensures consistency.
 
 **Tasks:**
+
 1. [ ] Audit error.rs in all crates (agileplus-*, phenotype-*)
 2. [ ] Create `crates/agileplus-errors/Cargo.toml`
 3. [ ] Create `crates/agileplus-errors/src/lib.rs` with all error variants
@@ -65,6 +68,7 @@ Create a canonical error crate consolidating all error types from 8+ crates into
 9. [ ] Verify no behavioral changes in error handling
 
 **Acceptance Criteria:**
+
 - [ ] Single canonical error type used across all crates
 - [ ] Error classification tests pass (transient, permanent, rate-limit, etc.)
 - [ ] No duplicate error variants across codebase
@@ -86,6 +90,7 @@ Create a canonical error crate consolidating all error types from 8+ crates into
 Audit `.archive/tests/` directory and remove obsolete test files. Keep only historically relevant examples.
 
 **Tasks:**
+
 1. [ ] Inventory all files in `.archive/tests/` with LOC count
 2. [ ] For each file: determine if keep (for reference) or delete
 3. [ ] Document keep/delete decisions in ADR (e.g., ADR-009: Archive Policy)
@@ -95,6 +100,7 @@ Audit `.archive/tests/` directory and remove obsolete test files. Keep only hist
 7. [ ] Update .gitignore if needed
 
 **Acceptance Criteria:**
+
 - [ ] All archive test decisions documented
 - [ ] No orphaned references to deleted test files
 - [ ] Archive directory only contains intentionally preserved examples
@@ -116,12 +122,14 @@ Audit `.archive/tests/` directory and remove obsolete test files. Keep only hist
 Replace duplicated test files in worktrees with symlinks to canonical test sources. Eliminates ~15K LOC of test duplication.
 
 **Affected Files:**
+
 - `test_phench_runtime.py` (5 copies → 1 + 4 symlinks)
 - `test_unit_cli_coverage_*.py` (8 copies → 4 + 4 symlinks)
 - `test_unit_cli_commands_*.py` (12 copies → 6 + 6 symlinks)
 - `test_integration_cli_*.py` (8 copies → 4 + 4 symlinks)
 
 **Tasks:**
+
 1. [ ] Identify all duplicated test files across repos + worktrees
 2. [ ] For each duplicate set: keep master in canonical location
 3. [ ] Create symlinks in worktrees pointing to canonical
@@ -131,6 +139,7 @@ Replace duplicated test files in worktrees with symlinks to canonical test sourc
 7. [ ] Verify worktree builds still work with symlinks
 
 **Acceptance Criteria:**
+
 - [ ] All duplicated test files replaced with symlinks
 - [ ] Full test suite passes with symlinks
 - [ ] No test duplication in git history (verify with `git ls-tree`)
@@ -158,6 +167,7 @@ Replace duplicated test files in worktrees with symlinks to canonical test sourc
 Decompose `crates/agileplus-dashboard/src/routes.rs` (2,631 LOC, 1,516 indent levels) into 5 focused feature modules.
 
 **Target Structure:**
+
 ```
 routes/
 ├── mod.rs          (~200 LOC: router setup, middleware, re-exports)
@@ -169,6 +179,7 @@ routes/
 ```
 
 **Tasks:**
+
 1. [ ] Create `routes/` subdirectory structure
 2. [ ] Analyze current routes.rs, group 53 handlers by feature
 3. [ ] Extract dashboard handlers → `routes/dashboard.rs`
@@ -185,6 +196,7 @@ routes/
 14. [ ] Performance test: Verify no regression in route dispatch latency
 
 **Acceptance Criteria:**
+
 - [ ] No route handler file >600 LOC
 - [ ] All 53 handlers properly organized by feature
 - [ ] Zero behavioral changes (same API responses)
@@ -208,6 +220,7 @@ routes/
 Decompose `crates/agileplus-sqlite/src/lib.rs` (1,582 LOC, 1,015 indent levels) into focused submodules by concern.
 
 **Target Structure:**
+
 ```
 agileplus-sqlite/src/
 ├── lib.rs              (~100 LOC: module exports, StoragePort impl dispatch)
@@ -222,6 +235,7 @@ agileplus-sqlite/src/
 ```
 
 **Tasks:**
+
 1. [ ] Create `store/` subdirectory
 2. [ ] Extract sync logic (~400 LOC) → `store/sync.rs`
    - [ ] State reconciliation
@@ -247,6 +261,7 @@ agileplus-sqlite/src/
 11. [ ] Stress test: Run with concurrent transactions to verify safety
 
 **Acceptance Criteria:**
+
 - [ ] No module >400 LOC
 - [ ] All logic properly separated by concern
 - [ ] Zero behavioral changes in storage operations
@@ -271,6 +286,7 @@ agileplus-sqlite/src/
 Unify fragmented config loading patterns across `phenotype-config-core` and `agileplus-*` crates into a single builder pattern.
 
 **Current Fragmentation:**
+
 - `phenotype-config-core/src/unified.rs` (423 LOC)
 - `phenotype-config-core/src/loader.rs` (358 LOC)
 - Scattered builder logic in `agileplus-api`, `agileplus-cli`, etc.
@@ -278,6 +294,7 @@ Unify fragmented config loading patterns across `phenotype-config-core` and `agi
 **Target:** Canonical builder at `phenotype-config-core/src/builder.rs`
 
 **Tasks:**
+
 1. [ ] Merge `unified.rs` + `loader.rs` logic into design
 2. [ ] Create `ConfigBuilder` trait and implementation
 3. [ ] Design builder API: `.with_env()`, `.with_file()`, `.with_defaults()`, `.build()`
@@ -291,6 +308,7 @@ Unify fragmented config loading patterns across `phenotype-config-core` and `agi
 11. [ ] Verify no behavioral changes (same config output)
 
 **Acceptance Criteria:**
+
 - [ ] Single `ConfigBuilder` pattern used across all crates
 - [ ] Config schema validated consistently
 - [ ] All config files still load correctly
@@ -320,6 +338,7 @@ Unify fragmented config loading patterns across `phenotype-config-core` and `agi
 Analyze 16,745 Go files for package consolidation, circular dependencies, and duplicate implementations.
 
 **Tasks:**
+
 1. [ ] Map package dependency graph: `go mod graph` → visualization
 2. [ ] Identify circular dependencies (if any)
 3. [ ] Find duplicate package implementations (same logic in 2+ packages)
@@ -329,6 +348,7 @@ Analyze 16,745 Go files for package consolidation, circular dependencies, and du
 7. [ ] Provide implementation roadmap for future phases
 
 **Deliverable:** Audit report (20-30 pages) with:
+
 - Package dependency graph
 - Consolidation roadmap
 - Estimated LOC savings (10-20% expected)
@@ -350,17 +370,20 @@ Analyze 16,745 Go files for package consolidation, circular dependencies, and du
 Consolidate UI components, design tokens, and themes into a unified `@phenotype/design` monorepo package.
 
 **Current Fragmentation:**
+
 - Dashboard components in `agileplus-dashboard/`
 - Byteport components in `platforms/thegent/apps/byteport/`
 - Design tokens scattered across projects
 
 **Target:** Unified `packages/@phenotype/design` with:
+
 - Component library (React + Storybook)
 - Design tokens (colors, spacing, typography)
 - Theme system (light/dark mode)
 - Icon library
 
 **Tasks:**
+
 1. [ ] Audit all component implementations across repos
 2. [ ] Identify reusable components (buttons, forms, modals, etc.)
 3. [ ] Extract design tokens (colors, spacing, typography)
@@ -374,6 +397,7 @@ Consolidate UI components, design tokens, and themes into a unified `@phenotype/
 11. [ ] Write migration guide for other projects
 
 **Deliverable:**
+
 - `@phenotype/design` package on npm/GitHub Packages
 - Storybook documentation
 - Component API documentation
@@ -397,12 +421,14 @@ Create separate `phenotype-specs` monorepo with versioned, independently release
 **Current:** Specs live in repo root (PRD.md, ADR.md, PLAN.md, etc.)
 
 **Target:** Separate monorepo with:
+
 - Version tags per spec (e.g., `thegent@2.0.0-rc1`)
 - Changelog tracking per spec
 - CI/CD release pipeline
 - Cross-repo spec references
 
 **Tasks:**
+
 1. [ ] Create `phenotype-specs` repository
 2. [ ] Structure: `specs/thegent/`, `specs/heliosCLI/`, `specs/agileplus/`, etc.
 3. [ ] Migrate all specs from canonical repos to phenotype-specs
@@ -414,6 +440,7 @@ Create separate `phenotype-specs` monorepo with versioned, independently release
 9. [ ] Publish to GitHub Packages or doc site
 
 **Deliverable:**
+
 - `phenotype-specs` monorepo with full version history
 - Release automation (tagging, changelogs, docs publishing)
 - Cross-repo spec reference documentation
@@ -491,6 +518,7 @@ Phase 3 (Weeks 7+):
 - **Target Completion:** 2026-05-31 (Phase 1-2 minimum viable, Phase 3 ongoing)
 
 **Status Dashboard:** Update weekly with:
+
 - [ ] Completed tasks
 - [ ] In-progress work
 - [ ] Blockers

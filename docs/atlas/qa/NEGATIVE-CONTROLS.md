@@ -19,6 +19,8 @@ Each verifier must demonstrate known-good, known-bad, unavailable and malformed 
 
 ## Domain examples
 
-Docs: a nonexistent link/anchor and missing required asset must fail. Agent frameworks: replay after an uncertain tool outcome must not duplicate side effects. Storage: failed persistence must not replace the valid checkpoint. Runtime: missing credentials or unsupported GPU must not be labelled healthy. Creative/game: a blank screenshot or mock renderer cannot count as real visual acceptance.
+Docs: a nonexistent link/anchor and missing required asset must fail. Agent frameworks: replay after an uncertain tool outcome must not duplicate side effects. Storage: failed persistence must not
+replace the valid checkpoint. Runtime: missing credentials or unsupported GPU must not be labelled healthy. Creative/game: a blank screenshot or mock renderer cannot count as real visual acceptance.
 
-Where broad qualitative judgments are required, use explicit rubrics, independent review and calibration. Do not disguise subjective preference as deterministic conformance, and do not claim automation proves aspects it cannot observe.
+Where broad qualitative judgments are required, use explicit rubrics, independent review and calibration. Do not disguise subjective preference as deterministic conformance, and do not claim
+automation proves aspects it cannot observe.

@@ -1,8 +1,10 @@
 # Visual Specification — substrate CLI
 
-The CLI is in scope of `VISUAL_SPEC.md`. This document is the source of truth for what a user sees when they run `substrate` or any of its subcommands. When the rendered output disagrees with this spec, fix the CLI or update the spec — don't let both drift.
+The CLI is in scope of `VISUAL_SPEC.md`. This document is the source of truth for what a user sees when they run `substrate` or any of its subcommands. When the rendered output disagrees with this
+spec, fix the CLI or update the spec — don't let both drift.
 
-The substrate CLI does not currently depend on an ANSI color crate (no `colored`/`owo-colors` in `crates/driver-cli/Cargo.toml`). Colors below are therefore **opt-in**: rendered only when stderr is a TTY (`IsTerminal::is_terminal()`) and `NO_COLOR` is unset per [no-color.org](https://no-color.org/). CI, scripts, and pipes get the same text without escapes.
+The substrate CLI does not currently depend on an ANSI color crate (no `colored`/`owo-colors` in `crates/driver-cli/Cargo.toml`). Colors below are therefore **opt-in**: rendered only when stderr is a
+TTY (`IsTerminal::is_terminal()`) and `NO_COLOR` is unset per [no-color.org](https://no-color.org/). CI, scripts, and pipes get the same text without escapes.
 
 ## 1. Banner on `--help`
 
@@ -12,7 +14,8 @@ Every subcommand (`dispatch`, `plan`, `argv`, `cloud-dispatch`, `serve`) emits t
 substrate 0.3.0
 ```
 
-Followed by the standard `clap`-rendered usage line, the long-about paragraph, then per-section option groups (`TASK`, `ENGINE`, `OUTPUT`, etc.). The banner is plain text — no box-drawing, no color. It is emitted on stdout (clap's contract).
+Followed by the standard `clap`-rendered usage line, the long-about paragraph, then per-section option groups (`TASK`, `ENGINE`, `OUTPUT`, etc.). The banner is plain text — no box-drawing, no color.
+It is emitted on stdout (clap's contract).
 
 The root `substrate --help` adds a one-line tagline:
 
@@ -81,7 +84,8 @@ The error-stderr from §3 is paired with the exit code: scripts can match on eit
 - **Bold white** (`\x1b[1;37m...\x1b[0m`): the version banner in §1 if rendered to a TTY.
 - **Never** color stdout. JSON parsers must not see ANSI escapes.
 
-Color is disabled (a) in non-TTY contexts, (b) when `NO_COLOR` is set, and (c) when `TERM=dumb`. The crate chosen to deliver these escapes (e.g. `colored`, `owo-colors`) must support all three with a single feature flag — do not roll a custom escape wrapper.
+Color is disabled (a) in non-TTY contexts, (b) when `NO_COLOR` is set, and (c) when `TERM=dumb`. The crate chosen to deliver these escapes (e.g. `colored`, `owo-colors`) must support all three with a
+single feature flag — do not roll a custom escape wrapper.
 
 ## 6. Stable surface
 

@@ -4,8 +4,8 @@
 
 | Repo | URL | Contents |
 |------|-----|----------|
-| **pheno-harness** | https://github.com/KooshaPari/pheno-harness | Code, config, eval, scripts |
-| **pheno-specs** | https://github.com/KooshaPari/pheno-specs | AgilePlus SPEC-001–016, research digest |
+| **pheno-harness** | <https://github.com/KooshaPari/pheno-harness> | Code, config, eval, scripts |
+| **pheno-specs** | <https://github.com/KooshaPari/pheno-specs> | AgilePlus SPEC-001–016, research digest |
 
 Specs mount as git submodule at `agileplus-specs/`. Pin in `specs.lock`.
 

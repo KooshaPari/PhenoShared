@@ -5,6 +5,7 @@ This document defines the standard configuration management approach for all Pyt
 ## Overview
 
 Pydantic Settings provides:
+
 - Type-safe configuration management with automatic validation
 - Environment variable loading with optional `.env` file support
 - Composite settings with inheritance and field validation
@@ -15,7 +16,7 @@ Pydantic Settings provides:
 
 ### Directory Structure
 
-\`\`\`
+```
 src/
 ├── config/
 │   ├── __init__.py           # Export settings classes
@@ -25,11 +26,12 @@ src/
 │   └── services.py           # External service settings
 ├── settings.py               # Main settings import
 └── .env.example              # Example environment file
-\`\`\`
+```
 
 ### Environment Variables Convention
 
 Use consistent prefixes per project:
+
 - \`THGENT_*\` for thegent project
 - \`AGILEPLUS_*\` for AgilePlus project
 - \`PHENCH_*\` for phench project
@@ -39,8 +41,10 @@ Use consistent prefixes per project:
 
 ### 1. Base Settings Configuration
 
-\`\`\`python
+```python
+
 # src/config/base.py
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator
 from typing import Optional
@@ -76,12 +80,14 @@ class Settings(BaseSettings):
         if v.lower() not in valid_envs:
             raise ValueError(f'environment must be one of {valid_envs}')
         return v.lower()
-\`\`\`
+```
 
 ### 2. Composite Settings Pattern
 
-\`\`\`python
+```python
+
 # src/config/core.py
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator, ConfigDict
 from typing import Optional
@@ -182,28 +188,33 @@ class AppConfig(BaseSettings):
         if v == 'change-me-in-production':
             raise ValueError('secret_key must be changed for production')
         return v
-\`\`\`
+```
 
 ## Best Practices
 
 ### 1. Never Hardcode Secrets
 
-\`\`\`python
+```python
+
 # Good: Use environment variables
+
 class Config(BaseSettings):
     api_key: str = Field(..., description='API key from environment')
 
     model_config = SettingsConfigDict(env_prefix='MYAPP_')
 
 # Bad: Hardcoded secrets
+
 class Config(BaseSettings):
     api_key: str = 'sk-1234567890'  # Don't do this!
-\`\`\`
+```
 
 ### 2. Validate Configuration on Startup
 
-\`\`\`python
+```python
+
 # Good: Validate during initialization
+
 def startup_config():
     """Validate configuration at startup."""
     settings = get_settings()
@@ -216,17 +227,17 @@ def startup_config():
         raise ValueError('debug must be False in production')
 
     return settings
-\`\`\`
+```
 
 ## Dependencies
 
-\`\`\`toml
+```toml
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.6"
 pydantic-settings = "^2.1"
 python-dotenv = "^1.0.0"
-\`\`\`
+```
 
 ## See Also
 

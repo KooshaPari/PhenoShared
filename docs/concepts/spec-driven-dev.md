@@ -4,7 +4,8 @@ audience: [developers, agents, pms]
 
 # Spec-Driven Development
 
-Spec-driven development inverts the typical development workflow. Instead of jumping from idea to code, every feature begins as a **specification** — a structured document that defines what gets built, why, and what success looks like. This philosophy creates a linear, auditable path from requirement to shipped code.
+Spec-driven development inverts the typical development workflow. Instead of jumping from idea to code, every feature begins as a **specification** — a structured document that defines what gets
+built, why, and what success looks like. This philosophy creates a linear, auditable path from requirement to shipped code.
 
 ## The Problem
 
@@ -18,6 +19,7 @@ Most development workflows fail in predictable ways:
 - **Compliance risk** — no evidence trail for regulated environments
 
 Traditional agile methods address some of these, but they often:
+
 - Rely on oral tradition and Jira descriptions
 - Assume human judgment at every gate
 - Don't scale to distributed AI-driven development
@@ -31,7 +33,8 @@ AgilePlus enforces an **8-stage pipeline** where each transition is governed and
 Created → Specified → Researched → Planned → Implementing → Validated → Shipped → Retrospected
 ```
 
-Every feature moves through a deterministic state machine (defined in `crates/agileplus-domain/src/domain/state_machine.rs`). You cannot skip stages. You cannot ship unvalidated work. Every state transition is recorded with SHA-256 hash chain integrity.
+Every feature moves through a deterministic state machine (defined in `crates/agileplus-domain/src/domain/state_machine.rs`). You cannot skip stages. You cannot ship unvalidated work. Every state
+transition is recorded with SHA-256 hash chain integrity.
 
 The pipeline flow as a visual:
 
@@ -68,7 +71,8 @@ A feature doesn't exist until it has a **spec artifact**. The spec document defi
 - **Assumptions**: Dependencies on external services, data, timelines
 - **Trade-offs**: Rationale for design choices
 
-The spec is a narrative document (markdown), not a checklist. It's meant to be read by humans and parsed by agents. Every spec gets a SHA-256 hash on creation; this hash is immutable and tracks the feature through its lifecycle.
+The spec is a narrative document (markdown), not a checklist. It's meant to be read by humans and parsed by agents. Every spec gets a SHA-256 hash on creation; this hash is immutable and tracks the
+feature through its lifecycle.
 
 ### Work Packages (WPs)
 
@@ -117,6 +121,7 @@ AgilePlus doesn't care which agent writes the code:
 - **Copilot** — prompt files in `.github/prompts/`
 
 All agents receive:
+
 1. **Spec context** — what to build
 2. **Plan context** — how to decompose it
 3. **WP definition** — exactly which piece to implement
@@ -124,6 +129,7 @@ All agents receive:
 5. **File scope** — which files can be touched
 
 Agents can call **hidden sub-commands** (25 total, across 8 categories) to:
+
 - Manage branches (`agileplus branch create`, `checkout`, `delete`)
 - Commit atomically (`agileplus commit create`, `amend`, `fixup`)
 - Write governance artifacts (`agileplus artifact write`, `hash`)

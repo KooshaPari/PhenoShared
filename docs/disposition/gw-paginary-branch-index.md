@@ -11,7 +11,8 @@
 | **keep** | 1 | `main` only — archived read-only reference |
 | **close** | 10 | Hygiene, CI pin, journey spike, or cursor branches — no extract |
 
-**Fleet decision:** **OUT-OF-FLEET / RETIRE** — no code extract to phenoShared. Org grep shows only stale doc references (Eidolon, phenoXdd, org-audits); zero runtime consumers. Pagination utility superseded by in-repo patterns; repo stays archived.
+**Fleet decision:** **OUT-OF-FLEET / RETIRE** — no code extract to phenoShared. Org grep shows only stale doc references (Eidolon, phenoXdd, org-audits); zero runtime consumers. Pagination utility
+superseded by in-repo patterns; repo stays archived.
 
 ## Branch ledger
 

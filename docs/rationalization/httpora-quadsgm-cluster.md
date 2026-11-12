@@ -14,7 +14,8 @@
 ## Relationship
 
 - **No code dependency** between Httpora and QuadSGM.
-- **Conceptual overlap only:** both use Phenotype repo hygiene (FR docs, CI, VitePress/worklogs patterns). QuadSGM is the *template*; Httpora is a *future HTTP kit* that could be bootstrapped *from* QuadSGM patterns but should not be merged into it.
+- **Conceptual overlap only:** both use Phenotype repo hygiene (FR docs, CI, VitePress/worklogs patterns). QuadSGM is the *template*; Httpora is a *future HTTP kit* that could be bootstrapped *from*
+  QuadSGM patterns but should not be merged into it.
 - **Ecosystem map:** Httpora grouped with tooling pushes (DevHex); QuadSGM is governance/template (private, large docs tree).
 
 ## Verdict

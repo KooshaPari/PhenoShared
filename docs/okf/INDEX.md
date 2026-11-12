@@ -1,6 +1,7 @@
 # OKF Wiki — ChatGPT Corpus Distillation
 
-Wiki root for pheno-harness **Organizational Knowledge Framework (OKF)**. Source material lives at `D:\koosh\Downloads\ChatGPT-*.md` (50 exports); this tree holds distilled, reviewable knowledge—not raw exports.
+Wiki root for pheno-harness **Organizational Knowledge Framework (OKF)**. Source material lives at `D:\koosh\Downloads\ChatGPT-*.md` (50 exports); this tree holds distilled, reviewable knowledge—not
+raw exports.
 
 **Manifest:** [`corpus_manifest.json`](corpus_manifest.json)  
 **Evidence registry:** `config/evidence_registry.yaml` → `local_corpus` (class **L**, hash-only, no paths in durable store)  
@@ -17,7 +18,8 @@ Wiki root for pheno-harness **Organizational Knowledge Framework (OKF)**. Source
 
 ## Category taxonomy
 
-Each category gets `docs/okf/<category>/` pages distilled from corpus titles + evidence-class-L claims. Stale or unverified ChatGPT assertions must be overridden by primary sources (HF, arXiv, GitHub) before promotion to class **P**.
+Each category gets `docs/okf/<category>/` pages distilled from corpus titles + evidence-class-L claims. Stale or unverified ChatGPT assertions must be overridden by primary sources (HF, arXiv, GitHub)
+before promotion to class **P**.
 
 | Category | Scope | Priority corpus (basename prefix `ChatGPT-`) |
 |----------|-------|-----------------------------------------------|
@@ -31,7 +33,8 @@ Each category gets `docs/okf/<category>/` pages distilled from corpus titles + e
 
 ### Out of scope (retain in manifest only)
 
-Gaming/modding and career threads are not distilled into pheno-harness OKF: 3D God-Game Simulation Design, Star Wars *, Futuristic Warfare Modding, Best Modding DX/UX Games, Enterprise Tech Job Search, Agent Orchestration Game Concept.
+Gaming/modding and career threads are not distilled into pheno-harness OKF: 3D God-Game Simulation Design, Star Wars *, Futuristic Warfare Modding, Best Modding DX/UX Games, Enterprise Tech Job
+Search, Agent Orchestration Game Concept.
 
 ## Distillation plan
 

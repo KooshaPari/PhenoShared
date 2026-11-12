@@ -99,6 +99,7 @@ impl UserRepository for SqlUserRepository {
 ## Phenotype Conventions
 
 1. **Crate Structure:**
+
    ```
    phenotype-feature/
    ├── Cargo.toml

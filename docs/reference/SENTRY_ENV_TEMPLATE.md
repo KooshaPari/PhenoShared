@@ -175,7 +175,7 @@ env:
 
 ### AgilePlus Secrets
 
-**URL**: https://github.com/KooshaPari/AgilePlus/settings/secrets/actions
+**URL**: <https://github.com/KooshaPari/AgilePlus/settings/secrets/actions>
 
 Add the following secrets:
 
@@ -189,7 +189,7 @@ SENTRY_AUTH_TOKEN_AGILEPLUS
 
 ### phenotype-infrakit Secrets
 
-**URL**: https://github.com/KooshaPari/phenotype-infrakit/settings/secrets/actions
+**URL**: <https://github.com/KooshaPari/phenotype-infrakit/settings/secrets/actions>
 
 ```
 SENTRY_DSN_INFRAKIT
@@ -201,7 +201,7 @@ SENTRY_AUTH_TOKEN_INFRAKIT
 
 ### heliosCLI Secrets
 
-**URL**: https://github.com/KooshaPari/heliosCLI/settings/secrets/actions
+**URL**: <https://github.com/KooshaPari/heliosCLI/settings/secrets/actions>
 
 ```
 SENTRY_DSN_HELIOSCLI
@@ -391,11 +391,13 @@ cat .env | grep SENTRY_DSN
 ### Invalid DSN Format
 
 Valid format:
+
 ```
 https://[public-key]@o[org-id].ingest.us.sentry.io/[project-id]
 ```
 
 Invalid (don't use):
+
 ```
 https://[public-key]:[secret-key]@[host]/[project-id]
 ```
@@ -410,6 +412,7 @@ https://[public-key]:[secret-key]@[host]/[project-id]
 ## Summary
 
 This template provides:
+
 - ✅ Complete environment variable setup for all 3 Tier 1 repos
 - ✅ CI/CD integration examples
 - ✅ GitHub Secrets configuration

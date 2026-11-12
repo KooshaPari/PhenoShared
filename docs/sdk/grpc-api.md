@@ -4,7 +4,8 @@ audience: [sdk, developers]
 
 # gRPC API Reference
 
-AgilePlus exposes a gRPC API for programmatic access to all core domain operations. The API is defined in protobuf and implemented by `agileplus-grpc` (WP09). All methods are async-capable and return structured error responses.
+AgilePlus exposes a gRPC API for programmatic access to all core domain operations. The API is defined in protobuf and implemented by `agileplus-grpc` (WP09). All methods are async-capable and return
+structured error responses.
 
 ## Service Definition: AgilePlusCoreService
 

@@ -2,7 +2,8 @@
 
 ## Status and language
 
-This document is the normative index for the 0.1 architecture baseline. “Shall” is mandatory for a promoted capability, “should” is a preferred default with a documented exception path, and “may” is optional or research-gated. Planned behavior is not an implementation claim.
+This document is the normative index for the 0.1 architecture baseline. “Shall” is mandatory for a promoted capability, “should” is a preferred default with a documented exception path, and “may” is
+optional or research-gated. Planned behavior is not an implementation claim.
 
 ## Normative sources
 

@@ -6,7 +6,8 @@
 
 ## What is PR2?
 
-PR2 (Data retention) = the repo has a documented policy for how long each category of data is retained, when it's deleted, and who has access. The policy covers PII, logs, build artifacts, user-generated content, and backups.
+PR2 (Data retention) = the repo has a documented policy for how long each category of data is retained, when it's deleted, and who has access. The policy covers PII, logs, build artifacts,
+user-generated content, and backups.
 
 **The "wired" (PR2=2) signal**: `docs/security/retention.md` exists with a per-data-category table; the policy is referenced from `README.md` and `SECURITY.md`; the table is reviewed at least annually.
 
@@ -96,6 +97,7 @@ OmniRoute is the reference repo for PR2 (PR2=1, partial). It has a retention pol
 ## How to validate
 
 After applying:
+
 1. `grep -r "retention" docs/` — should find the new file
 2. `grep "retention" README.md SECURITY.md` — should find references in both
 3. The table has at least 5 rows (source code, build artifacts, issues, user data, backups)

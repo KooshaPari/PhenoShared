@@ -13,7 +13,9 @@ status: stub — N10 priority, needs full distillation
 
 **Source:** `ChatGPT-Feature graph system design.md` (188 KB, 2026-07-04) — class **L**.
 
-Feature graphs treat product intent as a **node-typed DAG** where features, constraints, and verification criteria are first-class nodes with explicit edges (depends-on, enables, conflicts). Unlike flat backlogs, the graph compiler can **prune, specialize, and patch** subgraphs when discovery (repo facts, eval failures, API shapes) invalidates assumptions — the same `intent-graph → compiler → dumb executor` pattern from `coding-agents-intent-graphs.md`, applied to system-level feature decomposition.
+Feature graphs treat product intent as a **node-typed DAG** where features, constraints, and verification criteria are first-class nodes with explicit edges (depends-on, enables, conflicts). Unlike
+flat backlogs, the graph compiler can **prune, specialize, and patch** subgraphs when discovery (repo facts, eval failures, API shapes) invalidates assumptions — the
+same `intent-graph → compiler → dumb executor` pattern from `coding-agents-intent-graphs.md`, applied to system-level feature decomposition.
 
 ## Key insights (stub — full distillation pending N10)
 

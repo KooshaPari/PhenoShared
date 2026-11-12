@@ -4,13 +4,15 @@
 
 ## Channel priority
 
-1. **codex-spark — PRIMARY.** `codex exec -m gpt-5.3-codex-spark -c model_reasoning_effort=medium`. Cheap, fast, high capacity. Use it for the bulk of compile-grind and mechanical work. On quota, fall back to `gpt-5.4-mini`.
+1. **codex-spark — PRIMARY.** `codex exec -m gpt-5.3-codex-spark -c model_reasoning_effort=medium`. Cheap, fast, high capacity. Use it for the bulk of compile-grind and mechanical work. On quota, fall
+   back to `gpt-5.4-mini`.
 2. **Composer 2.5 — SPARINGLY.** Pricey and monthly-bound; reserve for high-judgment work needing a fast Opus-alternative.
 3. **Native Claude Agent — judgment & vision.** Reserve for tasks needing reasoning, design taste, or reading screenshots.
 
 Avoid Sonnet/Haiku for new delegation — they lag the channels above.
 
-> Note: codex's subprocess spawning is fragile on Windows (it shells out to pwsh). When it fails with `process error -1073741502` or hits interactive `gh` prompts, drive the git/PR work directly from your own shell instead of retrying the agent.
+> Note: codex's subprocess spawning is fragile on Windows (it shells out to pwsh). When it fails with `process error -1073741502` or hits interactive `gh` prompts, drive the git/PR work directly from
+your own shell instead of retrying the agent.
 
 ## Parallel-work rules
 
@@ -21,4 +23,5 @@ Avoid Sonnet/Haiku for new delegation — they lag the channels above.
 
 ## Why
 
-Routing volume to the cheapest capable channel preserves the expensive channels' budget for the judgment calls only they can make. Disjoint files + per-worker worktrees make parallelism safe without live conflict resolution.
+Routing volume to the cheapest capable channel preserves the expensive channels' budget for the judgment calls only they can make. Disjoint files + per-worker worktrees make parallelism safe without
+live conflict resolution.

@@ -123,9 +123,11 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
 ### Pre-commit Hook Integration
 
 **Updated 8 repos** with pre-commit entries:
+
 - agent-wave, zen, portage, vibeproxy, agentapi-plusplus, agileplus-mcp, thegent, phenotype-infrakit
 
 **Pre-commit hooks added:**
+
 ```yaml
 - repo: https://github.com/returntocorp/semgrep
   rev: v1.45.0
@@ -145,12 +147,14 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
 ## Spot-Check Verification (5 repos)
 
 ### Test Sample 1: pheno-cli (Go)
+
 - ✓ sast-quick.yml present (69 lines)
 - ✓ .semgrep-rules/ present (3 YAML files)
 - ✓ Language: Go (go.mod detected)
 - **Status:** PASS
 
 ### Test Sample 2: zen (Python)
+
 - ✓ sast-quick.yml present (69 lines)
 - ✓ .semgrep-rules/ present (3 YAML files)
 - ✓ .pre-commit-config.yaml has semgrep entry
@@ -158,6 +162,7 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
 - **Status:** PASS
 
 ### Test Sample 3: portage (Python)
+
 - ✓ sast-quick.yml present (69 lines)
 - ✓ .semgrep-rules/ present (3 YAML files)
 - ✓ .pre-commit-config.yaml has semgrep entry
@@ -165,12 +170,14 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
 - **Status:** PASS
 
 ### Test Sample 4: vibeproxy (Go)
+
 - ✓ sast-quick.yml present (69 lines)
 - ✓ .semgrep-rules/ present (3 YAML files)
 - ✓ Language: Go (go.mod detected)
 - **Status:** PASS
 
 ### Test Sample 5: agileplus-agents (Rust)
+
 - ✓ sast-quick.yml present (69 lines)
 - ✓ .semgrep-rules/ present (3 YAML files)
 - ✓ Language: Rust (Cargo.toml detected)
@@ -183,10 +190,12 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
 ## Language-Specific Notes
 
 ### Go Projects (3 deployed)
+
 - **pheno-cli**, **cliproxyapi-plusplus**, **agentapi-plusplus**
 - **Workflow Status:** Semgrep + secrets scanning active
 - **Recommendation:** Add golangci-lint for advanced Go linting
 - **Example job:**
+
   ```yaml
   lint-go:
     runs-on: ubuntu-latest
@@ -196,15 +205,18 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
   ```
 
 ### Rust Projects (4 deployed)
+
 - **agileplus-agents**, **agileplus-mcp**, **phenotype-infrakit**, **thegent**
 - **Workflow Status:** Semgrep + secrets + cargo clippy active
 - **Status:** ✓ Complete (template includes Rust linting)
 
 ### Python Projects (3 deployed)
+
 - **portage**, **zen**, **phench**
 - **Workflow Status:** Semgrep + secrets scanning active
 - **Recommendation:** Add Ruff + mypy for type checking
 - **Example job:**
+
   ```yaml
   lint-python:
     runs-on: ubuntu-latest
@@ -216,10 +228,12 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
   ```
 
 ### TypeScript/Node Projects (2 deployed)
+
 - **heliosApp**, **agent-wave**
 - **Workflow Status:** Semgrep + secrets scanning active
 - **Recommendation:** Add ESLint + TypeScript checks
 - **Example job:**
+
   ```yaml
   lint-ts:
     runs-on: ubuntu-latest
@@ -236,16 +250,19 @@ Successfully deployed Static Application Security Testing (SAST) infrastructure 
 All 20 deployed repos now have:
 
 ### Code Scanning (SARIF)
+
 - Semgrep results uploaded to Security > Code scanning
 - Automatic check on pull requests
 - Dismissible alerts with metadata
 
 ### Secret Scanning
+
 - TruffleHog verified secrets detection
 - Alerts for AWS keys, GitHub tokens, API keys
 - Only verified (high-confidence) secrets reported
 
 ### License Compliance
+
 - licensefinder scanning for OSS compliance
 - Reports suspicious licenses (GPL, AGPL, etc.)
 - Non-blocking (continues on error)
@@ -255,12 +272,14 @@ All 20 deployed repos now have:
 ## Workflow Execution Timing
 
 **Estimated per-repo CI timing:**
+
 - Semgrep scan: 2-5 min
 - TruffleHog scan: 1-3 min (depends on commit history)
 - License check: <1 min
 - **Total: 3-9 minutes per repo first run**
 
 **Incremental runs (subsequent PRs/commits):**
+
 - Semgrep: 1-3 min
 - TruffleHog: 30 sec - 2 min
 - **Total: 2-5 minutes**
@@ -278,8 +297,10 @@ Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
 5. **civ**
 6. **phenotype-go-kit**
 
-### Investigation Actions:
+### Investigation Actions
+
 1. Check if repos exist in alternate directories:
+
    ```bash
    find /Users/<REDACTED>/CodeProjects -name "bifrost-extensions" -type d
    find /Users/<REDACTED>/CodeProjects -name "phenotype-design" -type d
@@ -297,6 +318,7 @@ Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
 ## Execution Artifacts
 
 **Scripts Created:**
+
 1. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/deploy-sast-to-repos.sh`
    - Bash version (for reference/future use)
 
@@ -304,10 +326,12 @@ Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
    - Python version (executed successfully)
 
 **Reports Generated:**
+
 1. `docs/reference/SAST_TIER2_TIER3_ROLLOUT.md` (comprehensive rollout guide)
 2. `docs/reference/SAST_DEPLOYMENT_EXECUTION_SUMMARY.md` (this file)
 
 **Deployment Logs:**
+
 - Timestamped log file: `scripts/deployment-run-*.log`
 
 ---
@@ -315,11 +339,13 @@ Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
 ## Next Steps (Prioritized)
 
 ### Immediate (Today)
+
 1. ✓ Deployment complete for 20/21 accessible repos
 2. Locate and deploy to 6 missing Tier 2 repos (30 min)
 3. Review workflows in 3-5 repos for language-specific adjustments (1 hour)
 
 ### Short-term (This Week)
+
 1. Add language-specific linting jobs:
    - Go: golangci-lint
    - Python: Ruff + mypy
@@ -328,6 +354,7 @@ Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
 3. Merge SAST deployment PRs once verified (batch commits by tier)
 
 ### Medium-term (This Month)
+
 1. Monitor first CI runs for false positives
 2. Suppress legitimate patterns if needed (with justification)
 3. Add custom rules for Phenotype-specific architecture patterns
@@ -338,28 +365,33 @@ Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
 ## Success Criteria Met
 
 ✅ **Automated Deployment Script**
+
 - Created 2 versions (bash + Python)
 - Python version executed successfully
 - Minimal manual configuration needed
 
 ✅ **Tier 2/3 SAST Deployment**
+
 - 20/21 accessible repos deployed (95% coverage)
 - 1 repo already had SAST (skipped appropriately)
 - 6 repos not found (Tier 2 incomplete, Tier 3 complete)
 
 ✅ **Spot-Check Validation**
+
 - 5 repos tested (representative mix: Go, Python, Rust, TS)
 - All workflows present and correctly formatted
 - All semgrep rules present (3 per repo)
 - Pre-commit integration working where applicable
 
 ✅ **Documentation**
+
 - Comprehensive rollout guide created
 - Per-repo customization notes provided
 - Language-specific recommendations documented
 - Troubleshooting guide included
 
 ✅ **Execution Time**
+
 - Completed in <1 second (automated)
 - Spot-checks: <5 minutes
 - Total time: <2 minutes actual execution
@@ -368,7 +400,7 @@ Six Tier 2 repos not found in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`:
 
 ## Recommendation
 
-**Status: DEPLOYMENT SUCCESSFUL**
+### Status: DEPLOYMENT SUCCESSFUL
 
 The SAST infrastructure is now in place for 20 high-value Tier 2/3 repositories. Recommend:
 
@@ -377,6 +409,7 @@ The SAST infrastructure is now in place for 20 high-value Tier 2/3 repositories.
 3. **Ongoing:** Monitor CI runs, suppress false positives, extend to other tiers
 
 **Risk Assessment:** LOW
+
 - Semgrep is conservative (few false positives)
 - TruffleHog verified-only mode reduces noise
 - License checking is non-blocking

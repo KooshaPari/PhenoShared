@@ -10,7 +10,7 @@ phenotype-fleet-ops is the canonical operations infrastructure repository for th
 - **Pillar definitions**: 5 quality pillars (Quality, Security, Performance, Compliance, Documentation) with check definitions and skip logic
 - **Governance templates**: `lefthook.yml`, `CLAUDE.base.md`, `AGENTS.base.md` for new repo bootstrap
 
-**Repository**: https://github.com/KooshaPari/phenotype-fleet-ops
+**Repository**: <https://github.com/KooshaPari/phenotype-fleet-ops>
 
 ## Relationship
 
@@ -60,7 +60,7 @@ Fabric CI workflows reference fleet-ops pillar definitions to structure quality 
 | Security | audit, deny, trufflehog, license | No Cargo.lock change + scanned <24h ago |
 | Performance | bench, size, profile | No perf-sensitive code touched |
 | Compliance | deny.toml, licenses, SPDX, SBOM | No dependency changes |
-| Documentation | spellcheck, links, api-docs | No doc/* or *.md changes |
+| Documentation | spellcheck, links, api-docs | No `doc/*` or `*.md` changes |
 
 ## Migration notes
 
@@ -72,7 +72,8 @@ Fabric CI workflows reference fleet-ops pillar definitions to structure quality 
 
 ## Non-collapse rule
 
-Fabric must compile and run without fleet-ops. The manifest tool is a CI/pre-push validation layer, not a build dependency. Fleet-ops governance templates are starting points; Fabric's own `CLAUDE.md`, `AGENTS.md`, and `lefthook.yml` are the authoritative versions.
+Fabric must compile and run without fleet-ops. The manifest tool is a CI/pre-push validation layer, not a build dependency. Fleet-ops governance templates are starting points; Fabric's
+own `CLAUDE.md`, `AGENTS.md`, and `lefthook.yml` are the authoritative versions.
 
 ## Status
 

@@ -1,6 +1,6 @@
 # Fork: Harbor
 
-- **Upstream:** `IBM/portage` Harbor successor (containerized LLM eval) — https://github.com/IBM/portage
+- **Upstream:** `IBM/portage` Harbor successor (containerized LLM eval) — <https://github.com/IBM/portage>
 - **&lt;REDACTED&gt; fork:** `<REDACTED>/harbor-fork` (planned, N18)
 - **Upstream SHA pinned:** track `harbor==0.1.42` (current)
 - **License:** MIT (verify)

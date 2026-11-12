@@ -1,12 +1,39 @@
 {
-  "MD033": {
-    "allowed_elements": [
-      "CategorySwitcher"
-    ]
+  "MD003": {
+    "style": "atx"
   },
   "MD013": {
-    "line_length": 80,
-    "tables": false
+    "line_length": 200,
+    "code_blocks": false,
+    "tables": false,
+    "headings": false
+  },
+  "MD024": {
+    "siblings_only": true
+  },
+  "MD025": {
+    "front_matter_title": ""
+  },
+  "MD033": {
+    "allowed_elements": [
+      "CategorySwitcher",
+      "CommitLog",
+      "EcosystemHub",
+      "StoryHeader",
+      "TestCoverageBadge",
+      "TraceabilityMatrix",
+      "UserJourney",
+      "br",
+      "code",
+      "details",
+      "div",
+      "pre",
+      "span",
+      "summary"
+    ]
+  },
+  "MD046": {
+    "style": "fenced"
   },
   "MD060": false,
   "MD004": false,

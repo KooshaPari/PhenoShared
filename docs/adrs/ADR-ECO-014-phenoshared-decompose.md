@@ -1,10 +1,13 @@
 # ADR-ECO-014: Decompose phenoShared — no generic consolidation repo
 
 ## Status
+
 Accepted (2026-06-17)
 
 ## Context
-`phenoShared` absorbed cross-cutting crates during HexaKit P3 eviction as a **staging** home. It has no domain orientation — it is neither a role owner, nor a justified SDK/framework boundary. Fleet repoints that terminate on `phenoShared` recreate a junk-drawer monorepo under a different name.
+
+`phenoShared` absorbed cross-cutting crates during HexaKit P3 eviction as a **staging** home. It has no domain orientation — it is neither a role owner, nor a justified SDK/framework boundary. Fleet
+repoints that terminate on `phenoShared` recreate a junk-drawer monorepo under a different name.
 
 ## Decision
 

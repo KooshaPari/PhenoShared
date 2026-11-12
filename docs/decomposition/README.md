@@ -2,9 +2,11 @@
 
 ## Overview
 
-This directory contains a complete, production-ready decomposition design for transforming a monolithic 1,582 LOC SQLite adapter into three focused, independently testable modules while maintaining 100% backwards compatibility.
+This directory contains a complete, production-ready decomposition design for transforming a monolithic 1,582 LOC SQLite adapter into three focused, independently testable modules while maintaining
+100% backwards compatibility.
 
 **Key Metrics:**
+
 - **LOC Reduction:** 1,582 → 200 (87% reduction in lib.rs)
 - **Module Breakdown:** 400 LOC (sync) + 300 LOC (query) + 250 LOC (migrations)
 - **Test Coverage:** 33+ new tests, 0 breaking changes
@@ -15,9 +17,11 @@ This directory contains a complete, production-ready decomposition design for tr
 ## Document Structure
 
 ### 1. **SQLITE_ADAPTER_DECOMPOSITION_DESIGN.md** (560 lines)
+
 **Complete architectural design specification.**
 
 Contains:
+
 - Executive summary and problem statement
 - Current state analysis (monolithic structure problems)
 - Proposed hexagonal architecture with trait hierarchy
@@ -33,9 +37,11 @@ Contains:
 ---
 
 ### 2. **SQLITE_IMPLEMENTATION_ROADMAP.md** (580 lines)
+
 **5-phase atomic execution plan with detailed work items.**
 
 Contains:
+
 - Quick reference table (phases, duration, LOC, tests)
 - Phase 1: Module structure & skeleton (WI-1.1 to WI-1.3)
 - Phase 2: Extract sync logic (WI-2.1 to WI-2.6) with 8+ tests
@@ -52,9 +58,11 @@ Contains:
 ---
 
 ### 3. **SQLITE_MODULE_BLUEPRINT.md** (800+ lines)
+
 **Exact function signatures, types, and code structure for each module.**
 
 Contains:
+
 - Module 1 (sync.rs): Complete struct definitions, trait signatures, 6 test cases
 - Module 2 (query_builder.rs): QueryBuilder trait, Filter API, Join types, 7 test cases
 - Module 3 (migrations.rs): Migration trait, MigrationRunner implementation, 3 test cases
@@ -67,9 +75,11 @@ Contains:
 ---
 
 ### 4. **SQLITE_QUICK_REFERENCE.md** (280 lines)
+
 **One-page summary for quick lookup and team communication.**
 
 Contains:
+
 - One-page overview (before/after diagram)
 - Module breakdown table
 - Trait contracts (compact form)
@@ -90,22 +100,26 @@ Contains:
 ## How to Use These Documents
 
 ### For Architecture Review
+
 1. Start with **SQLITE_QUICK_REFERENCE.md** (1-page overview)
 2. Read **SQLITE_ADAPTER_DECOMPOSITION_DESIGN.md** (full spec)
 3. Review trait hierarchy diagram (in design doc)
 
 ### For Implementation
+
 1. Read **SQLITE_IMPLEMENTATION_ROADMAP.md** (phases overview)
 2. Start with Phase 1 work items (WI-1.1 to WI-1.3)
 3. For each phase, reference **SQLITE_MODULE_BLUEPRINT.md** for exact signatures
 4. Use test cases from roadmap, adapt from blueprint
 
 ### For Code Review
+
 1. Compare against **SQLITE_MODULE_BLUEPRINT.md** signatures
 2. Verify test coverage using roadmap test count expectations
 3. Check backwards compatibility using design doc guarantees
 
 ### For Team Communication
+
 1. Share **SQLITE_QUICK_REFERENCE.md**
 2. Reference specific sections in roadmap for phase assignments
 3. Link to blueprint for implementation details
@@ -128,9 +142,11 @@ Contains:
 ## Module Overview
 
 ### store/sync.rs (~400 LOC)
+
 **Responsibility:** Connection pooling, transaction management, row synchronization
 
 **Key Types:**
+
 - `ConnectionPool` — thread-safe connection pool with metrics
 - `ConnectionConfig` — pool configuration
 - `SyncMetrics` — operation tracking
@@ -139,9 +155,11 @@ Contains:
 **Tests:** 8+ integration tests (using `:memory:` SQLite)
 
 ### store/query_builder.rs (~300 LOC)
+
 **Responsibility:** Dynamic SQL construction with parameterization
 
 **Key Types:**
+
 - `SqliteQueryBuilder` — fluent query API
 - `Filter` — WHERE clause conditions (eq, ne, gt, lt, in, between, like, etc.)
 - `Join` — JOIN specifications (inner, left, right, cross)
@@ -150,9 +168,11 @@ Contains:
 **Tests:** 15+ unit tests (no database required, pure SQL string tests)
 
 ### store/migrations.rs (~250 LOC)
+
 **Responsibility:** Schema versioning, migration execution, rollback
 
 **Key Types:**
+
 - `SqliteMigrationRunner` — migration orchestrator
 - `MigrationVersion` — applied migration tracking
 - `Migration` trait — individual migration interface
@@ -266,11 +286,13 @@ crates/agileplus-sqlite/
 ## Next Steps
 
 ### For Users
+
 1. Review **SQLITE_QUICK_REFERENCE.md** for overview
 2. Share design doc with stakeholders
 3. Create work items in AgilePlus based on roadmap
 
 ### For Implementers
+
 1. Read **SQLITE_IMPLEMENTATION_ROADMAP.md** (phases overview)
 2. Start Phase 1 (module structure)
 3. Reference **SQLITE_MODULE_BLUEPRINT.md** for implementation details
@@ -278,6 +300,7 @@ crates/agileplus-sqlite/
 5. Verify backwards compatibility (WI-5.1)
 
 ### For Reviewers
+
 1. Compare implementation against blueprint (signatures, types)
 2. Verify test coverage meets roadmap expectations
 3. Check backwards compatibility tests passing
@@ -298,6 +321,7 @@ crates/agileplus-sqlite/
 ## Contact & Questions
 
 For clarification on any aspect:
+
 1. Check the relevant document (design, roadmap, or blueprint)
 2. Review the quick reference for one-page summary
 3. Reference specific work items in roadmap for implementation details
@@ -307,6 +331,7 @@ For clarification on any aspect:
 ## Document Maintenance
 
 These documents are static specifications. Update them only if:
+
 1. Requirements change (design scope, timeline, module sizes)
 2. Architecture decisions are revised (trait definitions, module boundaries)
 3. Implementation reveals issues not anticipated in design

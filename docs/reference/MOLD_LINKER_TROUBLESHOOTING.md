@@ -11,6 +11,7 @@
 ### Issue #1: "mold: command not found"
 
 **Symptoms**:
+
 ```
 error: linker `cc` not found
 error: Unable to locate mold binary
@@ -21,6 +22,7 @@ error: Unable to locate mold binary
 **Resolution**:
 
 **On Linux (Ubuntu/Debian)**:
+
 ```bash
 # Install via apt
 sudo apt update
@@ -32,6 +34,7 @@ mold --version
 ```
 
 **On macOS**:
+
 ```bash
 # Install via Homebrew
 brew install mold
@@ -41,6 +44,7 @@ echo "Note: mold is optional on macOS; ld64 is already optimized"
 ```
 
 **On Other Linux Distros**:
+
 ```bash
 # Option A: Download prebuilt binary
 MOLD_VERSION="v2.4.1"
@@ -59,6 +63,7 @@ sudo cmake --install .
 ```
 
 **Verification**:
+
 ```bash
 mold --version
 # Expected: Mold 2.4.x release (or newer)
@@ -69,6 +74,7 @@ mold --version
 ### Issue #2: Build fails with "undefined reference to symbol"
 
 **Symptoms**:
+
 ```
 error: undefined reference to `__libc_start_main'
 error: undefined reference to `malloc'
@@ -78,12 +84,14 @@ error: undefined reference to `malloc'
 
 **Resolution**:
 
-**Step 1: Check mold version**
+#### Step 1: Check mold version
+
 ```bash
 mold --version
 ```
 
-**Step 2: Ensure version is current**
+#### Step 2: Ensure version is current
+
 ```bash
 # On Linux
 sudo apt update && sudo apt upgrade -y mold
@@ -94,13 +102,15 @@ brew upgrade mold
 # Or check latest release: https://github.com/rui314/mold/releases
 ```
 
-**Step 3: Check Rust toolchain**
+## Step 3: Check Rust toolchain
+
 ```bash
 rustc --version
 cargo --version
 ```
 
-**Step 4: If issue persists, fallback to default linker**
+## Step 4: If issue persists, fallback to default linker
+
 ```bash
 # Temporarily disable mold
 RUSTFLAGS="" cargo build --release --workspace
@@ -109,8 +119,9 @@ RUSTFLAGS="" cargo build --release --workspace
 # rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 ```
 
-**Step 5: Report issue**
-- Check mold GitHub issues: https://github.com/rui314/mold/issues
+## Step 5: Report issue
+
+- Check mold GitHub issues: <https://github.com/rui314/mold/issues>
 - Include: mold version, Rust version, OS, error message
 
 ---
@@ -118,6 +129,7 @@ RUSTFLAGS="" cargo build --release --workspace
 ### Issue #3: Binary size increased or decreased unexpectedly
 
 **Symptoms**:
+
 ```
 ls -lh target/release/my_app
 # Size changed significantly from previous build
@@ -127,7 +139,8 @@ ls -lh target/release/my_app
 
 **Resolution**:
 
-**Step 1: Verify the difference**
+## Step 1: Verify the difference
+
 ```bash
 # Build with mold
 cargo build --release --workspace
@@ -144,14 +157,15 @@ PERCENT=$(echo "scale=2; ($SIZE_WITH_MOLD - $SIZE_WITHOUT_MOLD) / $SIZE_WITHOUT_
 echo "Difference:   ${PERCENT}%"
 ```
 
-**Step 2: Check if within tolerance**
+## Step 2: Check if within tolerance
+
 ```
 ±5% is normal
 ±10% is acceptable
 >10% may indicate issue
 ```
 
-**Step 3: If >10% difference, investigate LTO settings**
+## Step 3: If >10% difference, investigate LTO settings
 
 ```bash
 # Check profile.release in Cargo.toml
@@ -165,7 +179,8 @@ grep -A 5 "profile.release" Cargo.toml
 # strip = true              # Strip symbols
 ```
 
-**Step 4: If still concerned, use default linker for comparison**
+## Step 4: If still concerned, use default linker for comparison
+
 ```bash
 # Ensure both builds use identical settings
 RUSTFLAGS="" cargo build --release --workspace
@@ -179,7 +194,8 @@ ls -lh target/release/my_app
 objdump -h target/release/my_app | head -10
 ```
 
-**Step 5: Report if binary corruption suspected**
+## Step 5: Report if binary corruption suspected
+
 - Ensure both binaries are executable
 - Run binary tests: `./target/release/my_app --version`
 - If tests fail, open issue with binary hashes
@@ -189,6 +205,7 @@ objdump -h target/release/my_app | head -10
 ### Issue #4: GitHub Actions job fails with "Permission denied" or apt errors
 
 **Symptoms**:
+
 ```
 error: sudo: apt-get: command not found
 error: Permission denied while trying to connect to Docker daemon
@@ -199,6 +216,7 @@ error: Permission denied while trying to connect to Docker daemon
 **Resolution**:
 
 **For apt failures**:
+
 ```yaml
 - name: Install mold linker
   run: |
@@ -207,11 +225,13 @@ error: Permission denied while trying to connect to Docker daemon
 ```
 
 **Key points**:
+
 - `-y` flag auto-confirms installation
 - `sudo` required for apt on GitHub Actions runners
 - Add `-y` to prevent interactive prompts
 
 **For permission errors**:
+
 ```yaml
 - name: Install mold linker
   run: |
@@ -220,11 +240,13 @@ error: Permission denied while trying to connect to Docker daemon
 ```
 
 **For Docker/socket errors**:
+
 - Skip if running in container environment
 - Docker runners have different setup
 - Use `ubuntu-latest` (standard VM runner)
 
 **Test the fix**:
+
 ```bash
 # Verify locally first
 sudo apt update && sudo apt install -y mold
@@ -236,6 +258,7 @@ mold --version  # Should succeed
 ### Issue #5: Incremental builds slower than expected
 
 **Symptoms**:
+
 ```
 cargo build (after small change): 8-10s (expected: <5s)
 ```
@@ -247,11 +270,13 @@ cargo build (after small change): 8-10s (expected: <5s)
 **This is expected behavior** — mold optimizes full (clean) builds.
 
 For incremental builds:
+
 - Linker phase is smaller (~1-2s)
 - Compilation phase dominates (~3-8s)
 - Mold savings are less pronounced on incremental
 
 **If truly slow**, check:
+
 ```bash
 # Verify incremental compilation is enabled
 grep -A 2 "profile.dev\|profile.test" .cargo/config.toml
@@ -264,6 +289,7 @@ cargo build
 ```
 
 **Optimization for incremental**:
+
 - Mold has less effect on incremental
 - Focus optimization on full clean builds
 - Incremental is primarily CPU-bound (compilation), not linker-bound
@@ -273,6 +299,7 @@ cargo build
 ### Issue #6: Mold works locally but fails in CI
 
 **Symptoms**:
+
 ```
 Local: cargo build --release  (12s with mold) ✓
 CI:    cargo build --release  (45s, no mold) ✗
@@ -282,7 +309,8 @@ CI:    cargo build --release  (45s, no mold) ✗
 
 **Resolution**:
 
-**Step 1: Verify CI workflow has mold install step**
+#### Step 1: Verify CI workflow has mold install step
+
 ```yaml
 - name: Install mold linker
   run: |
@@ -291,7 +319,8 @@ CI:    cargo build --release  (45s, no mold) ✗
     echo "Mold version: $(mold --version)"
 ```
 
-**Step 2: Verify .cargo/config.toml is in repo**
+#### Step 2: Verify .cargo/config.toml is in repo
+
 ```bash
 git status .cargo/config.toml
 # Should be tracked in git
@@ -300,13 +329,15 @@ git show HEAD:.cargo/config.toml | grep mold
 # Should show rustflags with mold
 ```
 
-**Step 3: Check CI uses ubuntu-latest**
+## Step 3: Check CI uses ubuntu-latest
+
 ```yaml
 runs-on: ubuntu-latest  # ✓ Correct
 # runs-on: macos-latest  # ✗ Wrong (mold not needed on macOS)
 ```
 
-**Step 4: Debug CI by adding verbose logging**
+## Step 4: Debug CI by adding verbose logging
+
 ```yaml
 - name: Debug mold availability
   run: |
@@ -315,7 +346,8 @@ runs-on: ubuntu-latest  # ✓ Correct
     cargo --version
 ```
 
-**Step 5: Ensure cache isn't stale**
+## Step 5: Ensure cache isn't stale
+
 ```yaml
 - uses: Swatinem/rust-cache@v2
   with:
@@ -329,6 +361,7 @@ runs-on: ubuntu-latest  # ✓ Correct
 ### Quick Rollback (If Mold Causes Issues)
 
 **Option 1: Comment out in code** (fastest)
+
 ```bash
 # Edit .cargo/config.toml
 nano .cargo/config.toml
@@ -336,18 +369,21 @@ nano .cargo/config.toml
 cargo build --release
 ```
 
-**Option 2: Override with environment**
+## Option 2: Override with environment
+
 ```bash
 RUSTFLAGS="" cargo build --release
 ```
 
-**Option 3: Full revert (if broken config)**
+## Option 3: Full revert (if broken config)
+
 ```bash
 git checkout .cargo/config.toml
 cargo build --release
 ```
 
 **Verification**:
+
 ```bash
 # Ensure build succeeds without mold
 cargo test --workspace --release
@@ -360,11 +396,11 @@ cargo clippy --workspace -- -D warnings
 
 ### Resources
 
-1. **Mold GitHub Issues**: https://github.com/rui314/mold/issues
+1. **Mold GitHub Issues**: <https://github.com/rui314/mold/issues>
    - Search for similar issues
    - Create detailed issue with: version, OS, error message, reproducible case
 
-2. **Rust Linker Forum**: https://discourse.rust-lang.org/
+2. **Rust Linker Forum**: <https://discourse.rust-lang.org/>
    - Tag: `linker`, `performance`
    - Experienced community
 
@@ -376,6 +412,7 @@ cargo clippy --workspace -- -D warnings
 ### How to Report a Mold Linker Bug
 
 Include:
+
 ```
 - Operating System: Ubuntu 22.04 (or macOS 14.x, or ...)
 - Mold version: mold --version
@@ -386,6 +423,7 @@ Include:
 ```
 
 Example:
+
 ```
 OS: Ubuntu 22.04 (GitHub Actions)
 Mold: 2.4.1 release

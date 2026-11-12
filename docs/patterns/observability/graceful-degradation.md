@@ -2,7 +2,8 @@
 
 ## Overview
 
-Graceful degradation ensures a system remains partially functional when components fail, rather than complete system failure. It prioritizes critical features while reducing or disabling non-essential capabilities.
+Graceful degradation ensures a system remains partially functional when components fail, rather than complete system failure. It prioritizes critical features while reducing or disabling non-essential
+capabilities.
 
 ## Core Principles
 

@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-Ports advertise bit depth, primaries, transfer, luminance, ICC/EDID, HDR and refresh capabilities. Routes record preservation or explicit transform. Desktop text, gaming, color-critical, and video profiles differ.
+Ports advertise bit depth, primaries, transfer, luminance, ICC/EDID, HDR and refresh capabilities. Routes record preservation or explicit transform. Desktop text, gaming, color-critical, and video
+profiles differ.
 
 ### Enforced rules
 

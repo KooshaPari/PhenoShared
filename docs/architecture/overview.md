@@ -4,7 +4,8 @@ audience: [developers, sdk]
 
 # Architecture Overview
 
-AgilePlus is built on **hexagonal architecture** (ports and adapters) with clear separation of concerns. The domain is at the center, surrounded by adapters that handle external systems (git, SQLite, agent APIs, etc.).
+AgilePlus is built on **hexagonal architecture** (ports and adapters) with clear separation of concerns. The domain is at the center, surrounded by adapters that handle external systems (git, SQLite,
+agent APIs, etc.).
 
 ## Crate Structure
 
@@ -82,6 +83,7 @@ CLI / API ← Engine + Domain
 ```
 
 **Rules**:
+
 - Adapters **only** depend on Domain (they implement port traits)
 - Engine **only** depends on Domain and adapters (it orchestrates)
 - CLI/API **only** depend on Engine and Domain
@@ -95,6 +97,7 @@ The domain defines three primary port traits in `crates/agileplus-domain/src/por
 ### StoragePort (`storage.rs`)
 
 Abstracts persistence:
+
 - Feature CRUD (create, read, update, list by state)
 - Work package CRUD
 - Audit trail append and retrieval
@@ -105,6 +108,7 @@ Abstracts persistence:
 **Implemented by**: `SqliteStorageAdapter` (crates/agileplus-sqlite)
 
 **Key methods**:
+
 ```rust
 // Features
 fn create_feature(&self, feature: &Feature) -> Result<i64>
@@ -125,6 +129,7 @@ fn get_audit_trail(&self, feature_id: i64) -> Result<Vec<AuditEntry>>
 ### VcsPort (`vcs.rs`)
 
 Abstracts version control:
+
 - Worktree creation and cleanup
 - Branch operations (create, checkout, merge)
 - Artifact read/write (spec.md, plan.md, etc.)
@@ -134,6 +139,7 @@ Abstracts version control:
 **Implemented by**: `GitVcsAdapter` (crates/agileplus-git)
 
 **Key methods**:
+
 ```rust
 fn create_worktree(&self, feature_slug: &str, wp_id: &str) -> Result<PathBuf>
 fn create_branch(&self, branch_name: &str, base: &str) -> Result<()>
@@ -145,6 +151,7 @@ fn write_artifact(&self, feature_slug: &str, path: &str, content: &str) -> Resul
 ### AgentPort (`agent.rs`)
 
 Abstracts agent dispatch:
+
 - Synchronous and asynchronous dispatch
 - Status polling
 - Job cancellation
@@ -154,6 +161,7 @@ Abstracts agent dispatch:
 **Implemented by**: Adapter layer (Claude Code CLI in MVP; Codex batch API in WP08)
 
 **Key methods**:
+
 ```rust
 fn dispatch(&self, task: AgentTask, config: &AgentConfig) -> Result<AgentResult>
 fn dispatch_async(&self, task: AgentTask, config: &AgentConfig) -> Result<String>
@@ -164,6 +172,7 @@ fn send_instruction(&self, job_id: &str, instruction: &str) -> Result<()>
 ### Observability Port (`observability.rs`)
 
 Abstracts logging and tracing:
+
 - Structured logging
 - Span-based tracing
 - Metrics recording
@@ -174,6 +183,7 @@ Abstracts logging and tracing:
 ### Review Port (`review.rs`)
 
 Abstracts code review and governance:
+
 - PR submission
 - Review polling
 - Evidence validation
@@ -210,6 +220,7 @@ User Terminal
 ```
 
 All operations are **transactional** at the domain level:
+
 1. Validate preconditions
 2. Load domain state
 3. Apply state transition (FSM)
@@ -238,6 +249,7 @@ If any step fails, the entire operation fails and state is rolled back (at the s
 ### 1. Domain at the Center
 
 Domain logic (FSM, state transitions, validation) lives in `agileplus-domain` and knows **nothing** about:
+
 - Git implementation details
 - SQLite schema
 - HTTP/gRPC protocols
@@ -246,6 +258,7 @@ Domain logic (FSM, state transitions, validation) lives in `agileplus-domain` an
 ### 2. Port-Driven Testing
 
 Tests can mock ports:
+
 ```rust
 #[test]
 fn feature_transition_requires_evidence() {
@@ -260,6 +273,7 @@ fn feature_transition_requires_evidence() {
 ### 3. Append-Only Audit Trail
 
 Every domain change produces an audit entry, creating an **immutable history**. This:
+
 - Enables compliance audits
 - Provides debugging context
 - Prevents tampering (via hash chain)
@@ -268,6 +282,7 @@ Every domain change produces an audit entry, creating an **immutable history**. 
 ### 4. Async-First
 
 All I/O operations (storage, VCS, agent dispatch) are async:
+
 ```rust
 pub trait StoragePort: Send + Sync {
     fn create_feature(
@@ -278,6 +293,7 @@ pub trait StoragePort: Send + Sync {
 ```
 
 This allows:
+
 - Parallel WP implementation
 - Concurrent governance checks
 - Scalable agent dispatch
@@ -541,6 +557,7 @@ RETURN wp.wp_id
 ```
 
 This enables efficient queries for:
+
 - "What WPs are ready to start?" (no unfinished dependencies)
 - "What is the critical path?" (longest dependency chain)
 - "Would adding this dependency create a cycle?"

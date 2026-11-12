@@ -13,30 +13,35 @@ Complete checklist for deploying Snyk security scanning across the Phenotype eco
 ### Environment Verification
 
 - [ ] **Snyk CLI installed**
+
   ```bash
   snyk --version
   # Expected: Snyk CLI version X.XXX.X
   ```
 
 - [ ] **GitHub CLI installed**
+
   ```bash
   gh --version
   # Expected: gh version X.X.X
   ```
 
 - [ ] **Git installed**
+
   ```bash
   git --version
   # Expected: git version X.XX.X
   ```
 
 - [ ] **All Phenotype repos cloned locally**
+
   ```bash
   ls /Users/<REDACTED>/CodeProjects/Phenotype/repos | wc -l
   # Expected: 30 directories
   ```
 
 - [ ] **GitHub authentication verified**
+
   ```bash
   gh auth status
   # Expected: Logged in to github.com as <REDACTED>
@@ -45,7 +50,7 @@ Complete checklist for deploying Snyk security scanning across the Phenotype eco
 ### Token Acquisition
 
 - [ ] **Snyk account active**
-  - Visited https://app.snyk.io
+  - Visited <https://app.snyk.io>
   - Successfully logged in or created account
 
 - [ ] **Snyk API token generated**
@@ -65,12 +70,14 @@ Complete checklist for deploying Snyk security scanning across the Phenotype eco
 ### Local Authentication
 
 - [ ] **Snyk CLI authenticated**
+
   ```bash
   snyk auth $SNYK_TOKEN
   # Expected: Successfully authenticated
   ```
 
 - [ ] **Authentication verified**
+
   ```bash
   snyk test --dry-run
   # Expected: No "Unauthorized" errors
@@ -89,6 +96,7 @@ Follow: **SNYK_TOKEN_ACQUISITION_GUIDE.md**
 - [ ] **Passed Part 5:** Troubleshooting (if needed)
 
 **Sign-Off:**
+
 - [ ] Token is valid and accessible
 - [ ] `snyk auth <token>` succeeds
 - [ ] No token visible in shell history
@@ -102,18 +110,21 @@ Follow: **SNYK_LOCAL_DEPLOYMENT_GUIDE.md**
 ### Environment Setup
 
 - [ ] **SNYK_TOKEN exported**
+
   ```bash
   export SNYK_TOKEN="your-token-here"
   echo $SNYK_TOKEN  # Verify it's set
   ```
 
 - [ ] **Repository root navigated**
+
   ```bash
   cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
   pwd  # Should be /Users/<REDACTED>/CodeProjects/Phenotype/repos
   ```
 
 - [ ] **Deployment script exists and is executable**
+
   ```bash
   ls -la scripts/snyk-deploy.sh
   chmod +x scripts/snyk-deploy.sh
@@ -122,6 +133,7 @@ Follow: **SNYK_LOCAL_DEPLOYMENT_GUIDE.md**
 ### Script Execution
 
 - [ ] **Deployment script started**
+
   ```bash
   ./scripts/snyk-deploy.sh
   # Expect: Initial output with version info and prereq check
@@ -140,18 +152,21 @@ Follow: **SNYK_LOCAL_DEPLOYMENT_GUIDE.md**
 ### Results Verification
 
 - [ ] **Report directory created**
+
   ```bash
   ls -la .snyk-reports/
   # Expected: .snyk-reports directory with .json files
   ```
 
 - [ ] **Summary report readable**
+
   ```bash
   cat .snyk-reports/report.txt | head -30
   # Expected: Snyk Security Scan Report with summary stats
   ```
 
 - [ ] **Per-repository reports created**
+
   ```bash
   ls .snyk-reports/*.json | wc -l
   # Expected: 30 JSON files (one per repo)
@@ -164,6 +179,7 @@ Follow: **SNYK_LOCAL_DEPLOYMENT_GUIDE.md**
   - [ ] Tier 1 repos status
 
 **Sign-Off:**
+
 - [ ] All 30 repositories scanned
 - [ ] Reports generated without errors
 - [ ] Summary report is readable
@@ -177,25 +193,31 @@ Follow: **SNYK_RESULTS_REVIEW_GUIDE.md**
 ### Understanding Reports
 
 - [ ] **Summary report reviewed**
+
   ```bash
   cat .snyk-reports/report.txt
   ```
+
   - [ ] Total vulnerability count understood
   - [ ] Severity distribution noted (C/H/M/L)
   - [ ] Tier 1 repos (AgilePlus, heliosCLI, phenotype-infrakit) status understood
 
 - [ ] **Critical findings identified** (if any)
+
   ```bash
   cat .snyk-reports/report.txt | grep -A 5 "CRITICAL"
   ```
+
   - [ ] List of critical CVEs noted
   - [ ] Affected repositories identified
   - [ ] Remediation path understood
 
 - [ ] **High findings reviewed**
+
   ```bash
   cat .snyk-reports/*.json | jq '.vulnerabilities[] | select(.severity=="high")'
   ```
+
   - [ ] Count of high-severity findings
   - [ ] Decision made: fix vs. suppress each finding
 
@@ -210,6 +232,7 @@ For each finding that will be suppressed:
   - [ ] Medium/Low: SUPPRESS or backlog
 
 - [ ] **.snyk policy files created** (for suppressions)
+
   ```bash
   # For each repo with suppressions:
   cat > [repo-path]/.snyk << 'EOF'
@@ -232,6 +255,7 @@ For each finding that will be suppressed:
     - "Input validation in place, vulnerability requires direct access"
 
 - [ ] **Policy files validated**
+
   ```bash
   # Check YAML syntax
   git ls-files | grep "\.snyk$" | xargs -I {} sh -c 'echo "Validating {}"; cat {}'
@@ -240,6 +264,7 @@ For each finding that will be suppressed:
 ### Commitment Preparation
 
 - [ ] **Changes staged**
+
   ```bash
   git add .snyk-reports/ **/.snyk
   git status -s
@@ -251,6 +276,7 @@ For each finding that will be suppressed:
   - [ ] Only policy files and reports staged
 
 - [ ] **Commit message prepared**
+
   ```bash
   git commit -m "security: deploy Snyk security scanning
 
@@ -270,11 +296,13 @@ For each finding that will be suppressed:
   ```
 
 - [ ] **Commit created**
+
   ```bash
   git commit -m "..."  # Use prepared message above
   ```
 
 **Sign-Off:**
+
 - [ ] All suppressions documented with justification
 - [ ] Expiration dates set on all suppressions
 - [ ] Changes committed with clear message
@@ -289,12 +317,14 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 ### Organization Secrets Setup
 
 - [ ] **SNYK_TOKEN added to GitHub organization secrets**
+
   ```bash
   gh secret set SNYK_TOKEN --org <REDACTED>
   # Paste token when prompted
   ```
 
 - [ ] **Secret verified**
+
   ```bash
   gh secret list --org <REDACTED> | grep SNYK_TOKEN
   # Expected: SNYK_TOKEN    Updated [timestamp]
@@ -305,6 +335,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 #### AgilePlus
 
 - [ ] **Workflow file created**
+
   ```bash
   cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
   mkdir -p .github/workflows
@@ -314,6 +345,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow committed and pushed**
+
   ```bash
   git add .github/workflows/snyk-scan.yml
   git commit -m "ci: add Snyk security scan workflow"
@@ -321,12 +353,13 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/KooshaPari/AgilePlus/actions
+  - Visited: <https://github.com/KooshaPari/AgilePlus/actions>
   - Confirmed: "Snyk Security Scan" workflow listed
 
 #### heliosCLI
 
 - [ ] **Workflow file created**
+
   ```bash
   cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
   mkdir -p .github/workflows
@@ -336,6 +369,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow committed and pushed**
+
   ```bash
   git add .github/workflows/snyk-scan.yml
   git commit -m "ci: add Snyk security scan workflow"
@@ -343,12 +377,13 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/KooshaPari/heliosCLI/actions
+  - Visited: <https://github.com/KooshaPari/heliosCLI/actions>
   - Confirmed: "Snyk Security Scan" workflow listed
 
 #### phenotype-infrakit
 
 - [ ] **Workflow file created**
+
   ```bash
   cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
   mkdir -p .github/workflows
@@ -358,6 +393,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow committed and pushed**
+
   ```bash
   git add .github/workflows/snyk-scan.yml
   git commit -m "ci: add Snyk security scan workflow"
@@ -365,7 +401,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Workflow visible on GitHub**
-  - Visited: https://github.com/KooshaPari/phenotype-infrakit/actions
+  - Visited: <https://github.com/KooshaPari/phenotype-infrakit/actions>
   - Confirmed: "Snyk Security Scan" workflow listed
 
 ### Workflow Verification
@@ -385,6 +421,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   - [ ] First scheduled run expected: Tomorrow at 2 AM UTC
 
 **Sign-Off:**
+
 - [ ] Organization secret (SNYK_TOKEN) set
 - [ ] All 3 Tier 1 workflows deployed
 - [ ] All 3 workflows executed successfully
@@ -397,6 +434,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 ### Cleanup & Documentation
 
 - [ ] **Temporary token storage cleaned up**
+
   ```bash
   # If using .env file:
   rm -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/.env
@@ -422,6 +460,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 ### Final Verification
 
 - [ ] **All 3 Tier 1 repos have active workflows**
+
   ```bash
   for repo in AgilePlus heliosCLI phenotype-infrakit; do
     echo "=== $repo ==="
@@ -430,6 +469,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
   ```
 
 - [ ] **Organization secret is set**
+
   ```bash
   gh secret list --org <REDACTED> | grep SNYK_TOKEN
   ```
@@ -499,6 +539,7 @@ Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md**
 ## Quick Reference: Commands by Phase
 
 ### Token Acquisition
+
 ```bash
 # Visit https://app.snyk.io
 # Generate token → Copy to clipboard
@@ -508,6 +549,7 @@ snyk test --dry-run
 ```
 
 ### Local Deployment
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 export SNYK_TOKEN="your-token-here"
@@ -516,6 +558,7 @@ cat .snyk-reports/report.txt
 ```
 
 ### Results Review
+
 ```bash
 cat .snyk-reports/report.txt
 cat .snyk-reports/AgilePlus.json | jq '.vulnerabilities[0]'
@@ -525,6 +568,7 @@ git commit -m "security: deploy Snyk scanning"
 ```
 
 ### GitHub Integration
+
 ```bash
 gh secret set SNYK_TOKEN --org <REDACTED>
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
@@ -555,6 +599,7 @@ git push origin main
    - Solution: Check `.github/workflows/snyk-scan.yml` is committed
 
 **For more details, see:**
+
 - SNYK_TOKEN_ACQUISITION_GUIDE.md
 - SNYK_LOCAL_DEPLOYMENT_GUIDE.md
 - SNYK_RESULTS_REVIEW_GUIDE.md

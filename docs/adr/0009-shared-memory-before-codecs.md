@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-For eligible same-OS and same-host paths, use direct references, SHM, DMA-BUF, IVSHMEM/KVMFR, virtio/vhost, or device handles before codec stages. Codec paths are fallback when isolation/format/distance requires them.
+For eligible same-OS and same-host paths, use direct references, SHM, DMA-BUF, IVSHMEM/KVMFR, virtio/vhost, or device handles before codec stages. Codec paths are fallback when
+isolation/format/distance requires them.
 
 ### Enforced rules
 

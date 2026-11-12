@@ -19,6 +19,7 @@ locks in: (1) the descriptor schema, (2) the canonical-bytes algorithm, (3) the
 signing model, and (4) the FFI surface.
 
 Requirements:
+
 - **Stable across serializations:** `serde_json` map ordering must not affect identity.
 - **Tamper-evident:** Descriptors carry Ed25519 signatures; verification rejects
   modified content.
@@ -73,6 +74,7 @@ To produce a stable identity:
 6. The hex digest is `descriptor_id`.
 
 This means:
+
 - Adding or removing a `null` field changes identity (null ≠ absent).
 - Map ordering never affects identity.
 - The prefix prevents collisions with other blake3 uses.

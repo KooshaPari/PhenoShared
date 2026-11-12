@@ -102,6 +102,7 @@ All WPs complete? → YES, proceed
 ```
 
 Every requirement must have:
+
 - ✓ Implementation in code
 - ✓ Test coverage
 - ✓ Verification status
@@ -136,6 +137,7 @@ From spec:
 ```
 
 All success criteria must be:
+
 - Measured or tested
 - Show passing status
 - Have supporting evidence
@@ -365,7 +367,7 @@ agileplus merge 001
 
 ## Best Practices
 
-**1. Don't Skip Acceptance**
+### 1. Don't Skip Acceptance
 
 Always run accept before merge, even if you're confident:
 
@@ -378,7 +380,7 @@ agileplus merge 001
 agileplus merge 001  # What if a WP is still for_review?
 ```
 
-**2. Test Success Criteria Thoroughly**
+## 2. Test Success Criteria Thoroughly
 
 Don't just trust unit tests. Validate in realistic scenarios:
 
@@ -391,7 +393,7 @@ cargo test test_email_delivery
 # Check spam folder, delivery logs, etc.
 ```
 
-**3. Document Edge Cases**
+## 3. Document Edge Cases
 
 If you discover edge cases, document them:
 
@@ -402,7 +404,7 @@ If you discover edge cases, document them:
 - Unsubscribe links expire after 30 days of inactivity
 ```
 
-**4. Get Stakeholder Sign-Off**
+### 4. Get Stakeholder Sign-Off
 
 For important features, have PM or stakeholder accept:
 

@@ -15,6 +15,7 @@ The org's source-of-truth layer is **four repos, each with one role**. They refe
 
 ## Authority rule
 
-When two documents disagree, authority follows role: the **registry** is authoritative for the ecosystem index, **PhenoSpecs** for decisions/contracts, **this handbook** for conventions, **governance** for enforced policy. A repo must not maintain its own competing copy of another repo's role.
+When two documents disagree, authority follows role: the **registry** is authoritative for the ecosystem index, **PhenoSpecs** for decisions/contracts, **this handbook** for conventions,
+**governance** for enforced policy. A repo must not maintain its own competing copy of another repo's role.
 
 > Historical note: a stale `registry.yaml` index lived in PhenoSpecs; the canonical ecosystem index is `phenotype-registry/ECOSYSTEM_MAP.md`. Don't reintroduce competing top-level indexes.

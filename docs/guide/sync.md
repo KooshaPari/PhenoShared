@@ -267,7 +267,7 @@ approved = "done"
 
 When both AgilePlus and tracker make conflicting changes:
 
-**Strategy: local-wins (default)**
+### Strategy: local-wins (default)
 
 ```toml
 [sync]
@@ -276,7 +276,7 @@ conflict_strategy = "local-wins"
 
 If AgilePlus says "Done" and tracker says "In Progress", AgilePlus wins.
 
-**Strategy: remote-wins**
+### Strategy: remote-wins
 
 ```toml
 [sync]
@@ -285,7 +285,7 @@ conflict_strategy = "remote-wins"
 
 If tracker says "In Progress" and AgilePlus says "Done", tracker wins.
 
-**Strategy: merge**
+### Strategy: merge
 
 ```toml
 [sync]
@@ -451,7 +451,7 @@ This creates issues in tracker but doesn't pull status updates back.
 
 ## Best Practices
 
-**1. Sync Before Merging**
+### 1. Sync Before Merging
 
 ```bash
 agileplus sync --pull-only
@@ -459,7 +459,7 @@ agileplus sync --pull-only
 agileplus merge 001
 ```
 
-**2. Regular Sync Intervals**
+## 2. Regular Sync Intervals
 
 Don't set sync interval too low (API rate limits):
 
@@ -468,7 +468,7 @@ Don't set sync interval too low (API rate limits):
 interval = 5    # 5 minutes is reasonable
 ```
 
-**3. Link Everything**
+## 3. Link Everything
 
 When creating specs, link to tracker:
 
@@ -476,7 +476,7 @@ When creating specs, link to tracker:
 agileplus specify "title" --tracker-issue https://github.com/org/repo/issues/123
 ```
 
-**4. Archive Old Issues**
+## 4. Archive Old Issues
 
 Clean up closed issues to reduce clutter:
 
@@ -484,7 +484,7 @@ Clean up closed issues to reduce clutter:
 agileplus sync --archive-closed
 ```
 
-**5. Review Mapping Regularly**
+## 5. Review Mapping Regularly
 
 Check that labels and statuses still match:
 
@@ -607,6 +607,7 @@ conflict_strategy = "local-wins"
 ```
 
 AgilePlus state wins. Plane.so is updated to match AgilePlus:
+
 ```
 Resolution: AgilePlus "Doing" wins → update Plane.so to "In Progress"
 Audit: conflict recorded, resolution actor = sync:local-wins
@@ -619,7 +620,8 @@ Audit: conflict recorded, resolution actor = sync:local-wins
 conflict_strategy = "remote-wins"
 ```
 
-External tracker wins. AgilePlus state is updated to match tracker. This triggers a governance check — if transitioning WP02 from `Doing` to `Done` without completing acceptance criteria, the transition is blocked:
+External tracker wins. AgilePlus state is updated to match tracker. This triggers a governance check — if transitioning WP02 from `Doing` to `Done` without completing acceptance criteria, the
+transition is blocked:
 
 ```
 Resolution: Plane.so "Done" wins → attempt WP02 Done transition

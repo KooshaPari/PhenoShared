@@ -14,7 +14,8 @@ Cite a **requirement ID per task**. Work that ships without a traceable requirem
 
 ## Why
 
-Traceability answers "why does this code exist and is it tested?" for every line, and lets us prove coverage of functional/non-functional requirements rather than asserting it. It also makes scope changes visible — a requirement with no code, or code with no requirement, both show up.
+Traceability answers "why does this code exist and is it tested?" for every line, and lets us prove coverage of functional/non-functional requirements rather than asserting it. It also makes scope
+changes visible — a requirement with no code, or code with no requirement, both show up.
 
 ## Do / Don't
 

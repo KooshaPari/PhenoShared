@@ -59,6 +59,7 @@ Worktree Location (active development):
 **Responsibility**: Central route assembly and configuration types.
 
 **Key Types**:
+
 - `PlaneConfig` — Plane.so API credentials
 - `AgentConfig` — Agent pool settings
 - `ServiceConfig` — Service endpoints
@@ -66,6 +67,7 @@ Worktree Location (active development):
 - `Config` — Root configuration with file I/O
 
 **Key Function**:
+
 - `pub fn router(state: SharedState) -> Router` — Mounts all 47 routes
 
 **Used By**: crate::main or crate::lib (top-level app initialization)
@@ -79,6 +81,7 @@ Worktree Location (active development):
 **Handler Count**: 12
 **Pattern**: HTMX partial responses
 **Key Handlers**:
+
 - `kanban_board()` — Feature kanban view
 - `health_panel()` — Service health status
 - `agent_activity()` — Real-time agent detection
@@ -93,6 +96,7 @@ Worktree Location (active development):
 **Handler Count**: 15
 **Pattern**: Full-page responses (no HX-Request header)
 **Key Handlers**:
+
 - `settings_page()`, `plane_settings_page()`, `agent_settings_page()`
 - `save_plane_settings()`, `save_agent_settings()`, `save_dashboard_settings()`
 - `test_plane_connection()`, `test_agent_connection()`
@@ -106,10 +110,12 @@ Worktree Location (active development):
 **Handler Count**: 2
 **Pattern**: JSON responses via serde
 **Key Handlers**:
+
 - `agents_json()` — Detected agent processes
 - `health_json()` — Service health status
 
 **Key Types**:
+
 - `AgentInfo`, `HealthStatus`, `ServiceHealthJson`, `EvidenceGalleryJson`, `EvidenceArtifactJson`
 
 ---
@@ -121,6 +127,7 @@ Worktree Location (active development):
 **Handler Count**: 5
 **Pattern**: Form handlers with side effects
 **Key Handlers**:
+
 - `save_services_settings()` — Persist service list
 - `test_service_connection()` — Verify connectivity
 - `restart_service()`, `patch_service_config()`, `toggle_service()`
@@ -134,6 +141,7 @@ Worktree Location (active development):
 **Handler Count**: 5
 **Pattern**: File serving + HTML assembly
 **Key Handlers**:
+
 - `evidence_content()` — Raw file content
 - `evidence_preview()` — HTML preview
 - `feature_evidence_generate()` — Playwright integration
@@ -146,6 +154,7 @@ Worktree Location (active development):
 **Responsibility**: Pure utility functions.
 
 **Key Functions**:
+
 - `html_escape(s: &str) -> String` — HTML sanitization
 - `build_feature_events(features: &[Feature]) -> Vec<EventView>` — Data transformation
 - `build_feature_media_assets(wp: &WorkPackage) -> Vec<MediaAssetView>` — Media extraction
@@ -200,7 +209,7 @@ Worktree Location (active development):
 
 ### How to Import and Use the Routes Module
 
-#### From main.rs or lib.rs:
+#### From main.rs or lib.rs
 
 ```rust
 use agileplus_dashboard::routes;
@@ -209,7 +218,7 @@ use agileplus_dashboard::routes;
 let app_router = routes::router(shared_state);
 ```
 
-#### Using specific route handlers (from other modules):
+#### Using specific route handlers (from other modules)
 
 ```rust
 use agileplus_dashboard::routes::dashboard;
@@ -220,7 +229,7 @@ let kanban = dashboard::kanban_board;
 let agents_json = api::agents_json;
 ```
 
-#### Accessing public types (re-exported via mod.rs):
+#### Accessing public types (re-exported via mod.rs)
 
 ```rust
 use agileplus_dashboard::routes::{
@@ -229,7 +238,7 @@ use agileplus_dashboard::routes::{
 };
 ```
 
-#### Accessing configuration types:
+#### Accessing configuration types
 
 ```rust
 use agileplus_dashboard::routes::{
@@ -250,6 +259,7 @@ use agileplus_dashboard::routes::{
    - Run: `cargo build && cargo test --all`
 
 2. **Run Quality Gates Locally**
+
    ```bash
    cargo fmt --check
    cargo clippy --all -- -D warnings
@@ -257,6 +267,7 @@ use agileplus_dashboard::routes::{
    ```
 
 3. **Archive Legacy header.rs** (if not already done)
+
    ```bash
    mkdir -p crates/agileplus-dashboard/src/routes/.archive
    mv crates/agileplus-dashboard/src/routes/header.rs \
@@ -267,29 +278,29 @@ use agileplus_dashboard::routes::{
 
 ### Short-term (Week 1-2)
 
-4. **Integration Testing**
+1. **Integration Testing**
    - Manual smoke test of key endpoints (see MIGRATION_CHECKLIST.md)
    - Verify HTMX partial responses work correctly
    - Verify JSON API responses match templates
 
-5. **Performance Validation**
+2. **Performance Validation**
    - Baseline request latency before/after decomposition
    - Verify no regression (< 5% latency increase acceptable)
    - Check memory usage
 
-6. **Documentation Review**
+3. **Documentation Review**
    - Add module-level //! comments (template provided below)
    - Update crate docs to reference new module structure
    - Add examples to handler documentation
 
 ### Medium-term (Week 2-4)
 
-7. **Further Decomposition Opportunities**
+1. **Further Decomposition Opportunities**
    - Consider extracting evidence handling to separate crate (`phenotype-evidence`)
    - Consider extracting service management to separate crate (`phenotype-service-health`)
    - Evaluate parameterized handlers to reduce duplication
 
-8. **Cross-Project Reuse**
+2. **Cross-Project Reuse**
    - Identify if route patterns can be shared across other AgilePlus services
    - Consider extracting form handling utilities to shared crate
    - Evaluate if config types belong in phenotype-config-core
@@ -316,6 +327,7 @@ pub async fn my_new_page(State(state): State<SharedState>) -> Html<String> {
 ```
 
 **Mount in mod.rs**:
+
 ```rust
 .route("/my-page", get(pages::my_new_page))
 ```
@@ -351,6 +363,7 @@ pub async fn process_my_form(
 ```
 
 **Mount in mod.rs**:
+
 ```rust
 .route("/api/my-form", post(pages::process_my_form))
 ```
@@ -386,6 +399,7 @@ pub use api::MyJsonResponse;
 ```
 
 **Mount in mod.rs**:
+
 ```rust
 .route("/api/my-data", get(api::my_json_endpoint))
 ```
@@ -413,6 +427,7 @@ pub fn build_item_list(items: &[Item]) -> Vec<ItemView> {
 ```
 
 **Use from other modules**:
+
 ```rust
 use super::helpers;
 let transformed = helpers::transform_data(&input);
@@ -425,12 +440,14 @@ let transformed = helpers::transform_data(&input);
 ### Issue: Compilation Error — "Handler not found"
 
 **Symptom**:
+
 ```
 error[E0425]: cannot find function `my_handler` in this scope
   --> crates/agileplus-dashboard/src/routes/mod.rs:XX:XX
 ```
 
 **Solution**:
+
 1. Verify handler is defined and public in correct module (e.g., `pages::my_handler`)
 2. Verify handler is imported or re-exported in `mod.rs`
 3. Check handler signature matches expected Axum pattern
@@ -442,6 +459,7 @@ error[E0425]: cannot find function `my_handler` in this scope
 **Symptom**: Type is defined in both `api.rs` and `header.rs`
 
 **Solution**:
+
 1. Verify canonical location (api.rs is canonical)
 2. Remove duplicate from `header.rs` before archival
 3. Update imports to use api.rs version
@@ -454,6 +472,7 @@ error[E0425]: cannot find function `my_handler` in this scope
 **Symptom**: One or more tests fail after code changes
 
 **Solution**:
+
 ```bash
 # Run tests with backtrace:
 RUST_BACKTRACE=1 cargo test --package agileplus-dashboard --lib routes
@@ -470,11 +489,13 @@ cargo clippy --package agileplus-dashboard
 ## References & Related Documents
 
 ### Design Documentation
+
 - **DESIGN.md** — Detailed architecture, module responsibilities, design decisions
 - **MIGRATION_CHECKLIST.md** — Step-by-step implementation checklist (10 phases)
 - **MODULE_BOUNDARIES.md** — Dependency graphs, communication patterns, boundary rules
 
 ### Source Code
+
 - **mod.rs** — Router assembly (221 LOC)
 - **dashboard.rs** — Dashboard panels (453 LOC)
 - **pages.rs** — Full-page HTML (444 LOC)
@@ -485,6 +506,7 @@ cargo clippy --package agileplus-dashboard
 - **tests.rs** — Unit tests (108 LOC)
 
 ### Related AgilePlus Modules
+
 - **phenotype-contracts** — Shared trait definitions
 - **phenotype-config-core** — Configuration management (consolidation candidate)
 - **phenotype-error-core** — Error types (consolidation candidate)

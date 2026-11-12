@@ -34,7 +34,7 @@ absorption:
 - Root has 111 entries (mostly 0-byte placeholders for subprojects)
 - No Rust source (`Cargo.toml` absent at root)
 - Streamlit dashboard is the only concrete asset and lives outside this repo
-- Repo URL: https://github.com/KooshaPari/phenoRouterMonitor
+- Repo URL: <https://github.com/KooshaPari/phenoRouterMonitor>
 
 ### `<REDACTED>/phenoAI` (active, `isArchived: false`)
 
@@ -129,7 +129,8 @@ dash retained on upstream).
 
 ## 5. Why no code absorption was needed
 
-1. The Rust router in `phenoAI/crates/llm-router/src/lib.rs` already implements the same surface area as `phenoRouterMonitor` advertised (provider trait, OpenAI-compatible client, prefix-based routing, fallback).
+1. The Rust router in `phenoAI/crates/llm-router/src/lib.rs` already implements the same surface area as `phenoRouterMonitor` advertised (provider trait, OpenAI-compatible client, prefix-based
+   routing, fallback).
 2. `phenoRouterMonitor` is archived and its Rust source is not present in the archived repo (only placeholder pointers). There is nothing to copy.
 3. The Python port + adapter pattern in `phenoAI/ports/` matches the agent-runtime wave's preferred contract-test shape (frozen dataclasses, ABC, smoke tests).
 

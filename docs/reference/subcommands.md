@@ -4,7 +4,8 @@ audience: [agents, developers]
 
 # Hidden Sub-commands Reference
 
-AgilePlus includes 40+ hidden sub-commands across 8 categories for advanced agent workflows. These are not shown in `--help` but are available via the MCP `dispatch_command` tool and audit-logged for compliance.
+AgilePlus includes 40+ hidden sub-commands across 8 categories for advanced agent workflows. These are not shown in `--help` but are available via the MCP `dispatch_command` tool and audit-logged for
+compliance.
 
 Each invocation is recorded in the append-only JSONL audit log at `.agileplus/audit.jsonl` with full traceability.
 
@@ -26,6 +27,7 @@ agileplus branch:create --name feat/001-login-WP01 --base main
 | `--base` | string | Base ref to branch from (default: main) |
 
 **Audit Log Entry:**
+
 ```json
 {
   "command": "branch:create",
@@ -229,6 +231,7 @@ agileplus worktree:list
 ```
 
 **Output:**
+
 ```json
 [
   {
@@ -283,6 +286,7 @@ agileplus artifact:hash \
 ```
 
 **Output:**
+
 ```json
 {
   "path": "001-login/spec.md",
@@ -312,6 +316,7 @@ agileplus governance:check \
 | `--verbose` | flag | Show detailed violations |
 
 **Output (success):**
+
 ```json
 {
   "passed": true,
@@ -320,6 +325,7 @@ agileplus governance:check \
 ```
 
 **Output (failure):**
+
 ```json
 {
   "passed": false,
@@ -374,6 +380,7 @@ agileplus audit:log \
 | `--output` | string | `json`, `table`, or `markdown` |
 
 **Example JSON output:**
+
 ```json
 [
   {
@@ -410,6 +417,7 @@ agileplus audit:verify --feature-slug 001-login
 ```
 
 **Output:**
+
 ```json
 {
   "valid": true,

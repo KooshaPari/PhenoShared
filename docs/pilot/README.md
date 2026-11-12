@@ -22,6 +22,7 @@ This document describes the pilot rollout of pheno-cli governance tooling across
 ## Expected Outputs Per Repo
 
 ### AgilePlus (TypeScript, Private)
+
 - `mise.toml` with node/bun version pins
 - `.github/workflows/release.yml` (no publish step)
 - `.github/workflows/ci.yml`
@@ -29,18 +30,21 @@ This document describes the pilot rollout of pheno-cli governance tooling across
 - No registry publish (private project)
 
 ### tokenledger (Rust)
+
 - `mise.toml` with rust toolchain version
 - `.github/workflows/release.yml` targeting crates.io alpha
 - Expected pre-release format: `0.1.0-alpha.1`
 - `Cargo.toml` version management via pheno-cli
 
 ### thegent (Python)
+
 - `mise.toml` with python version pin
 - `.github/workflows/release.yml` targeting PyPI alpha
 - Expected pre-release format: `0.2.0a1`
 - `pyproject.toml` version management via pheno-cli
 
 ### agentapi-plusplus (Go)
+
 - `mise.toml` with go version pin
 - `.github/workflows/release.yml` using git tag for go proxy
 - Expected pre-release format: `v1.0.0-alpha.1`

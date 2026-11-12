@@ -57,12 +57,13 @@ A repo is considered **fully adopted** when all four columns are `yes` (or a pos
 ## Notes on Method
 
 - Detection is filesystem-based against `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`.
-- "CI gate" is detected by the presence of a workflow filename matching `journey-gate*.yml` or `journey-verify*.yml` under `.github/workflows/`. Per Phenotype's GitHub Actions billing constraint, these workflows will not execute on remote CI, but the files are recorded as evidence of intent.
+- "CI gate" is detected by the presence of a workflow filename matching `journey-gate*.yml` or `journey-verify*.yml` under `.github/workflows/`. Per Phenotype's GitHub Actions billing constraint,
+  these workflows will not execute on remote CI, but the files are recorded as evidence of intent.
 - Counts exclude the `manifests/` directory; `README.md` index pages at the `docs/journeys/` root are not counted.
 - This catalog is a point-in-time snapshot. To refresh, regenerate from a clean checkout of the `Phenotype/repos/` tree.
 
 ## Related Standards
 
-- **Standard:** https://raw.githubusercontent.com/&lt;REDACTED&gt;/phenotype-infra/main/docs/governance/journey-traceability-standard.md
-- **Reference PR:** https://github.com/KooshaPari/phenodocs/pull/168
+- **Standard:** <https://raw.githubusercontent.com/&lt;REDACTED&gt;/phenotype-infra/main/docs/governance/journey-traceability-standard.md>
+- **Reference PR:** <https://github.com/KooshaPari/phenodocs/pull/168>
 - **Internal pointer:** `docs/operations/journey-traceability.md` (PhenoHandbook's own copy of the standard)

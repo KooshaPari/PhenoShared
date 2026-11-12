@@ -67,6 +67,7 @@ docs hub --hub-dir ../phenodocs
 ```
 
 This generates:
+
 - Combined navigation across all repos
 - Cross-repo search
 - Unified layer views (all L2 specs across projects)
@@ -102,6 +103,7 @@ traces_to: ["WP01", "ADR-003"]
 ### Reuse Protocol
 
 When content is valuable across repos:
+
 1. Extract to PhenoDocs as a shared template
 2. Reference from AgilePlus via import or link
 3. PhenoDocs hub surfaces shared content automatically

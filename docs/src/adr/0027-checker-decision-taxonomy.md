@@ -35,6 +35,7 @@ descriptions may be honest; they may still disagree. The checker is
 the only place that arbitrates admission.
 
 Every check outcome must be:
+
 1. **Structured** — machine-readable code, not prose.
 2. **Non-overlapping** — two reasons should never simultaneously apply
    to the same (capability, requirement) pair.
@@ -68,6 +69,7 @@ Each reason code has a stable string form `PF-CK-<AREA>-<NNN>`
 and a fixed severity. The taxonomy is grouped by area:
 
 **Memory** (`PF-CK-MEM-`)
+
 - `PF-CK-MEM-001` `InsufficientTotalMemory` (Error)
 - `PF-CK-MEM-002` `MemoryMarginBelowTenPercent` (Warn) — host RAM is
   within 10 % of manifest `must_total_memory_bytes`
@@ -76,12 +78,14 @@ and a fixed severity. The taxonomy is grouped by area:
   bounds
 
 **CPU** (`PF-CK-CPU-`)
+
 - `PF-CK-CPU-001` `InsufficientCores` (Error)
 - `PF-CK-CPU-002` `CpuBoundsMismatch` (Error)
 - `PF-CK-CPU-003` `ArchitectureMismatch` (Error) — manifest `cpu_arch`
   not in host's supported architectures
 
 **GPU** (`PF-CK-GPU-`)
+
 - `PF-CK-GPU-001` `GpuAbsent` (Error) — manifest `must_gpu != None` but host has none
 - `PF-CK-GPU-002` `VramInsufficient` (Error)
 - `PF-CK-GPU-003` `GpuDriverMissing` (Warn) — driver probe failed, but
@@ -90,6 +94,7 @@ and a fixed severity. The taxonomy is grouped by area:
   version not in host's supported list
 
 **Audio** (`PF-CK-AUD-`)
+
 - `PF-CK-AUD-001` `AudioBackendAbsent` (Error)
 - `PF-CK-AUD-002` `SampleRateUnsupported` (Error)
 - `PF-CK-AUD-003` `RtThreadPriorityDenied` (Warn) — host advertises
@@ -97,12 +102,14 @@ and a fixed severity. The taxonomy is grouped by area:
 - `PF-CK-AUD-004` `AudioRtBoundsMismatch` (Error)
 
 **Display** (`PF-CK-DSP-`)
+
 - `PF-CK-DSP-001` `NoDisplayBackend` (Error) — manifest requires a
   display surface but host has no display server
 - `PF-CK-DSP-002` `HdrAbsent` (Warn) — manifest wants HDR, host is SDR
 - `PF-CK-DSP-003` `RefreshRateInsufficient` (Error)
 
 **Network** (`PF-CK-NET-`)
+
 - `PF-CK-NET-001` `LinkMetricsMissing` (Error) — manifest requires a
   network capability but host did not probe any link
 - `PF-CK-NET-002` `BandwidthInsufficient` (Error)
@@ -110,12 +117,14 @@ and a fixed severity. The taxonomy is grouped by area:
 - `PF-CK-NET-004` `LossRateAboveThreshold` (Error)
 
 **Storage** (`PF-CK-STR-`)
+
 - `PF-CK-STR-001` `FreeDiskInsufficient` (Error)
 - `PF-CK-STR-002` `FilesystemUnsupported` (Error)
 - `PF-CK-STR-003` `IoLatencyExceedsRtBudget` (Warn) — manifest wants
   RT I/O, host I/O latency budget exceeds 1 ms p99
 
 **Trust** (`PF-CK-TRU-`)
+
 - `PF-CK-TRU-001` `DescriptorUnsigned` (Warn) — descriptor is valid
   but no signature is present (admit with note; trust is `SelfReported`)
 - `PF-CK-TRU-002` `SignatureUntrusted` (Warn) — signature present but
@@ -124,6 +133,7 @@ and a fixed severity. The taxonomy is grouped by area:
   the freshness budget (default 1 hour)
 
 **Staleness** (`PF-CK-STL-`)
+
 - `PF-CK-STL-001` `SchemaVersionAhead` (Warn) — manifest references
   a capability schema version newer than the checker supports
 - `PF-CK-STL-002` `SchemaVersionBehind` (Info) — manifest references
@@ -176,6 +186,7 @@ shape and the same reason codes for the same inputs. Tests in
 ## Consequences
 
 Positive:
+
 - Every admission decision is reproducible and auditable.
 - Operators get a stable vocabulary for triaging manifest/host
   mismatches.
@@ -183,6 +194,7 @@ Positive:
   each manifest admission.
 
 Negative:
+
 - Adding a new check requires a new reason code, a schema bump, and
   test fixtures — a higher cost than a free-form warning string.
 - The taxonomy is R0-frozen; we will need a deprecation path when

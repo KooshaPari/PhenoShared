@@ -21,6 +21,7 @@ The AgilePlus dashboard is a **single unified dashboard** implemented in two com
    - Intended as Phase 2 replacement/complement to server-rendered version
 
 **Decision: Keep as single unified dashboard** but maintain dual-track implementation:
+
 - **Short-term** (Phase 1): Continue using production Askama backend
 - **Medium-term** (Phase 2): Migrate components to React incrementally via module federation
 
@@ -164,6 +165,7 @@ React 19.2.4 | Vite 8.0.1 | TypeScript 5.9.3 | TailwindCSS 4.2.2
 ### Route Handlers (routes.rs)
 
 **Pages**:
+
 - `GET /` — HomePage
 - `GET /dashboard` — DashboardPage (Kanban view)
 - `GET /feature/:id` — FeatureDetailPage
@@ -174,6 +176,7 @@ React 19.2.4 | Vite 8.0.1 | TypeScript 5.9.3 | TailwindCSS 4.2.2
 - `GET /settings/services` — ServicesSettingsPage
 
 **API (JSON)**:
+
 - `GET /api/dashboard/agents` — Real-time agent detection (AgentInfo[])
 - `GET /api/dashboard/health` — Service health (HealthStatus)
 - `GET /api/dashboard/features/{id}/evidence` — Evidence gallery (EvidenceGalleryJson)
@@ -181,6 +184,7 @@ React 19.2.4 | Vite 8.0.1 | TypeScript 5.9.3 | TailwindCSS 4.2.2
 - `POST /api/dashboard/agents/pool` — Agent pool configuration
 
 **Partials (htmx)**:
+
 - `GET /hx/dashboard/kanban` — KanbanPartial
 - `GET /hx/dashboard/health` — HealthPanelPartial
 - `GET /hx/feature/:id/evidence` — FeatureEvidencePartial
@@ -239,6 +243,7 @@ Timeline:
 ```
 
 **Why?**
+
 - One source of truth for schema/state
 - Gradual migration reduces risk
 - Askama continues working while React components develop
@@ -363,12 +368,14 @@ npm run build  # Creates dist/ (static files served by Axum)
 
 ## File Manifest
 
-**Backend (Production)**
+### Backend (Production)
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/routes.rs` (90KB)
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/templates.rs` (11KB)
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/src/process_detector.rs` (11KB)
 
-**Frontend (Staged)**
+### Frontend (Staged)
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/vite.config.ts` ✅
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/tsconfig.json` ✅
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/package.json` ✅

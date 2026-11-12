@@ -10,6 +10,7 @@
 ## Deliverables
 
 ### 1. Design Documentation (240 lines)
+
 **File**: `docs/guides/VALIDATION_DECOMPOSITION_AND_REGISTRY_PATTERN.md`
 
 - Complete architecture with trait hierarchy diagrams
@@ -23,7 +24,9 @@
 ### 2. Trait Implementations (920 LOC total)
 
 #### Core Traits Module (350 LOC)
+
 **Files**:
+
 - `crates/phenotype-validation/src/traits/mod.rs` (40 LOC)
 - `crates/phenotype-validation/src/traits/error.rs` (180 LOC)
   - `Severity` enum with ordering
@@ -45,7 +48,9 @@
   - 8+ tests
 
 #### Registry Module (120 LOC)
+
 **File**: `crates/phenotype-validation/src/registry.rs`
+
 - Global singleton registry using `once_cell::Lazy<Mutex<HashMap>>`
 - Plugin registration pattern: `ValidatorFactory` type
 - Discovery API: `register()`, `get()`, `list()`, `exists()`
@@ -53,14 +58,18 @@
 - 8+ tests
 
 #### Presets Module (80 LOC, refactored)
+
 **File**: `crates/phenotype-validation/src/presets.rs`
+
 - 9 preset validators: Email, URL, Username, Slug, Password (3 strength levels), Phone, UUID
 - Fluent builder functions
 - `register_presets()` function for initialization
 - 20+ tests (2-3 per preset)
 
 ### 3. Library Integration (50 LOC)
+
 **File**: `crates/phenotype-validation/src/lib.rs`
+
 - Comprehensive module documentation
 - Public API re-exports
 - Quick start examples
@@ -125,14 +134,18 @@
 ## Migration Path: 3 Atomic Commits
 
 ### Phase 1: Trait Foundation
+
 **Commit**: `feat(validation): implement trait hierarchy and core rules`
+
 - **Files Changed**: 4 new files (traits/mod.rs, traits/error.rs, traits/rule.rs, traits/field_validator.rs, traits/command_validator.rs)
 - **LOC Added**: ~1,200
 - **Tests Added**: 55+
 - **Duration**: 3-4 hours
 
 ### Phase 2: Registry & Presets
+
 **Commit**: `feat(validation): implement registry pattern and preset validators`
+
 - **Files Changed**: 2 new files (registry.rs, updated presets.rs), 1 updated (lib.rs, Cargo.toml)
 - **LOC Added**: ~300
 - **Tests Added**: 28+
@@ -140,7 +153,9 @@
 - **Depends On**: Phase 1 ✓
 
 ### Phase 3: Documentation & Examples
+
 **Commit**: `docs(validation): add migration guide and examples`
+
 - **Files Changed**: 3 doc files, 3 example files
 - **LOC Added**: ~1,500 (documentation)
 - **Tests Added**: Compile checks on examples
@@ -152,6 +167,7 @@
 ## Code Examples
 
 ### Before (Monolithic)
+
 ```rust
 // validate.rs (674 LOC) - all validation in one file
 fn validate_create_plan(cmd: &CreatePlanCommand) -> Result<(), Vec<String>> {
@@ -166,6 +182,7 @@ fn validate_create_plan(cmd: &CreatePlanCommand) -> Result<(), Vec<String>> {
 ```
 
 ### After (Registry-Based)
+
 ```rust
 // Initialization
 use phenotype_validation::{presets::register_presets, registry::ValidatorRegistry};
@@ -194,6 +211,7 @@ if !result.is_ok() {
 ## Composition Examples
 
 ### Rule Composition
+
 ```rust
 // Email validator = Required + EmailPattern
 let email = FieldValidator::new()
@@ -204,6 +222,7 @@ email.validate("user@example.com")?; // ✓ OK
 ```
 
 ### Field Composition
+
 ```rust
 // Command validator = Multiple field validators
 let cmd = CommandValidator::new()
@@ -215,6 +234,7 @@ let result = cmd.validate(&fields);
 ```
 
 ### Registry Composition
+
 ```rust
 // Plugin registration at startup
 ValidatorRegistry::register("corporate_email", || {
@@ -233,18 +253,21 @@ validator.validate("user@company.com")?;
 ## Quality Metrics
 
 ### Code Quality
+
 - **Coverage**: 85%+ (55+ unit tests + integration tests)
 - **Linting**: 0 clippy warnings
 - **Format**: Enforced via `cargo fmt`
 - **Documentation**: 100% public API documented
 
 ### Performance
+
 - Validator creation: < 1ms
 - Single rule validation: < 100μs
 - Multi-rule validation (5 rules): < 500μs
 - Registry lookup: < 1μs (O(1) HashMap)
 
 ### Maintainability
+
 - **Cyclomatic Complexity**: <10 per function
 - **Max Function Length**: <60 LOC
 - **Trait Count**: 1 core trait (extensible)
@@ -383,4 +406,3 @@ cargo doc --open
 
 **Status**: Ready for implementation  
 **Next Step**: Create Phase 1 implementation task in AgilePlus  
-

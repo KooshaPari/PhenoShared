@@ -42,6 +42,7 @@
 ### Files Involved (Detailed)
 
 **phenotype-infrakit**:
+
 ```
 crates/phenotype-error-core/src/lib.rs               159 LOC (canonical)
 crates/phenotype-errors/src/lib.rs                    34 LOC (wrapper)
@@ -53,9 +54,11 @@ crates/phenotype-policy-engine/src/error.rs           ~70 LOC (policy errors)
 crates/phenotype-validation/src/error.rs              ~60 LOC (validation errors)
 crates/phenotype-cost-core/src/error.rs               ~40 LOC (cost errors)
 ```
+
 **Subtotal**: 637 LOC
 
 **heliosCLI**:
+
 ```
 codex-rs/core/src/error.rs                            1,148 LOC (MONOLITHIC)
 codex-rs/rmcp-client/src/error.rs                     ~200 LOC (MCP + HTTP)
@@ -69,6 +72,7 @@ crates/harness_orchestrator/src/error.rs              ~35 LOC (harness error)
 crates/harness_spec/src/error.rs                      ~35 LOC (harness error)
 crates/harness_verify/src/error.rs                    ~35 LOC (harness error)
 ```
+
 **Subtotal**: 1,698 LOC
 
 **Cross-Repo Duplication**: 400-500 LOC (in common patterns)
@@ -77,6 +81,7 @@ crates/harness_verify/src/error.rs                    ~35 LOC (harness error)
 
 **Crate**: `phenotype-error-macros` (NEW)  
 **Extraction Candidates**:
+
 1. `#[derive(ContextError)]` macro (150 LOC)
 2. Error conversion helpers (50 LOC)
 3. Tests + docs (100 LOC)
@@ -103,6 +108,7 @@ crates/harness_verify/src/error.rs                    ~35 LOC (harness error)
 ### Files Involved (Detailed)
 
 **phenotype-infrakit**:
+
 ```
 crates/phenotype-config-core/src/lib.rs               60 LOC (generic container)
 crates/phenotype-config-core/src/builder.rs           ~80 LOC (builder trait)
@@ -112,9 +118,11 @@ crates/phenotype-policy-engine/src/loader.rs          ~80 LOC (figment + validat
 crates/phenotype-policy-engine/src/engine.rs          ~70 LOC (config usage)
 crates/phenotype-telemetry/src/registry.rs            ~60 LOC (config loading)
 ```
+
 **Subtotal**: 460 LOC
 
 **heliosCLI**:
+
 ```
 codex-rs/core/src/config/service.rs                   740 LOC (ConfigService + errors)
 codex-rs/core/src/config/mod.rs                       ~200 LOC (ConfigToml + loading)
@@ -128,6 +136,7 @@ codex-rs/config/src/cloud_requirements.rs             ~100 LOC (cloud config)
 codex-rs/config/src/constraint.rs                     ~80 LOC (constraints)
 codex-rs/config/src/diagnostics.rs                    ~70 LOC (diagnostics)
 ```
+
 **Subtotal**: 1,880 LOC
 
 **Cross-Repo Duplication**: 300-400 LOC (in common patterns)
@@ -136,6 +145,7 @@ codex-rs/config/src/diagnostics.rs                    ~70 LOC (diagnostics)
 
 **Crate**: `phenotype-config-loader` (EXPAND)  
 **Enhancements**:
+
 1. `FigmentBuilder` for setup consolidation (80 LOC)
 2. `ConfigMerger` for TOML merging (60 LOC)
 3. `ConfigValidator` for schema validation (80 LOC)
@@ -163,6 +173,7 @@ codex-rs/config/src/diagnostics.rs                    ~70 LOC (diagnostics)
 ### Files Involved (Detailed)
 
 **phenotype-infrakit**:
+
 ```
 crates/phenotype-http-client-core/src/client.rs       347 LOC (reqwest wrapper)
 crates/phenotype-http-client-core/src/auth.rs         120 LOC (auth middleware)
@@ -170,9 +181,11 @@ crates/phenotype-http-client-core/src/retry.rs        107 LOC (retry logic)
 crates/phenotype-http-client-core/src/error.rs         84 LOC (HTTP errors)
 crates/phenotype-http-client-core/src/lib.rs           47 LOC (traits)
 ```
+
 **Subtotal**: 705 LOC
 
 **heliosCLI**:
+
 ```
 codex-rs/rmcp-client/src/rmcp_client.rs                ~400 LOC (HTTP + MCP)
 codex-rs/rmcp-client/src/auth_status.rs                ~80 LOC (auth)
@@ -184,6 +197,7 @@ codex-rs/network-proxy/src/mitm.rs                     ~180 LOC (MITM)
 codex-rs/network-proxy/src/upstream.rs                 ~160 LOC (upstream)
 codex-rs/network-proxy/src/responses.rs                ~140 LOC (responses)
 ```
+
 **Subtotal**: 1,530 LOC (+ 2,300 LOC unique MCP/streaming/OAuth)
 
 **Cross-Repo Duplication**: 200-250 LOC (in common patterns)
@@ -192,6 +206,7 @@ codex-rs/network-proxy/src/responses.rs                ~140 LOC (responses)
 
 **Crate**: `phenotype-http-client-adapters` (SPLIT)  
 **Approach**:
+
 1. Keep `phenotype-http-client-core`: core trait (200 LOC)
 2. Create sync adapter (200 LOC)
 3. Create async adapter (150 LOC, Phase 4)
@@ -218,6 +233,7 @@ codex-rs/network-proxy/src/responses.rs                ~140 LOC (responses)
 ### Files Involved (Detailed)
 
 **phenotype-infrakit**:
+
 ```
 crates/phenotype-test-infra/src/lib.rs                ~80 LOC (test utilities)
 crates/phenotype-http-client-core/tests/client_test.rs ~120 LOC
@@ -225,9 +241,11 @@ crates/phenotype-crypto/tests/crypto_test.rs          ~100 LOC
 crates/phenotype-validation/tests/validation_test.rs   ~80 LOC
 [other 533 test files]                                 ~600 LOC (distributed)
 ```
+
 **Subtotal**: 980 LOC (1,056 test LOC total in phenotype)
 
 **heliosCLI**:
+
 ```
 codex-rs/core/tests/common/lib.rs                      ~80 LOC (shared test utils)
 codex-rs/app-server-protocol/src/schema_fixtures.rs    ~500 LOC (fixture data)
@@ -235,6 +253,7 @@ codex-rs/core/tests/common/streaming_sse.rs            ~120 LOC (SSE mocks)
 codex-rs/core/tests/common/test_codex_exec.rs          ~150 LOC (test helpers)
 [other 26 test files]                                  ~170,000+ LOC (heavy testing)
 ```
+
 **Subtotal**: 172,490 LOC (172,490 test LOC total in heliosCLI)
 
 **Cross-Repo Duplication**: 150-200 LOC (in common builder patterns)
@@ -243,6 +262,7 @@ codex-rs/core/tests/common/test_codex_exec.rs          ~150 LOC (test helpers)
 
 **Crate**: `phenotype-test-fixtures` (NEW)  
 **Contents**:
+
 1. `HttpResponseBuilder` (60 LOC)
 2. `ConfigBuilder` (50 LOC)
 3. `SeedData` generators (70 LOC)
@@ -268,20 +288,24 @@ codex-rs/core/tests/common/test_codex_exec.rs          ~150 LOC (test helpers)
 ### Files Involved (Detailed)
 
 **phenotype-infrakit**:
+
 ```
 crates/phenotype-validation/src/lib.rs                ~120 LOC
 crates/phenotype-validation/src/traits/error.rs       ~50 LOC
 crates/phenotype-policy-engine/src/lib.rs             ~200 LOC
 ```
+
 **Subtotal**: 370 LOC
 
 **heliosCLI**:
+
 ```
 codex-rs/execpolicy/src/lib.rs                        ~200 LOC
 codex-rs/execpolicy/src/error.rs                      ~80 LOC
 codex-rs/execpolicy-legacy/src/lib.rs                 ~150 LOC (DEAD CODE)
 codex-rs/core/src/config/permissions.rs               ~80 LOC
 ```
+
 **Subtotal**: 510 LOC
 
 **Cross-Repo Duplication**: 50-100 LOC (in error patterns only)
@@ -297,36 +321,43 @@ codex-rs/core/src/config/permissions.rs               ~80 LOC
 ## Non-Overlapping Patterns
 
 ### Caching (phenotype-only)
+
 - **Crate**: phenotype-cache-adapter (Redis-specific)
 - **LOC**: 300+
 - **Status**: No duplication in heliosCLI (no caching layer)
 
 ### Event Sourcing (phenotype-only)
+
 - **Crate**: phenotype-event-sourcing (event infrastructure)
 - **LOC**: 400+
 - **Status**: Not implemented in heliosCLI
 
 ### State Machine (phenotype-only)
+
 - **Crate**: phenotype-state-machine (state patterns)
 - **LOC**: 350+
 - **Status**: Not implemented in heliosCLI
 
 ### MCP Protocol (heliosCLI-only)
+
 - **Crates**: rmcp-client, codex-api (MCP-specific)
 - **LOC**: 1,500+
 - **Status**: Domain-specific to heliosCLI, not duplicated
 
 ### OAuth Flow (heliosCLI-only)
+
 - **Module**: perform_oauth_login.rs
 - **LOC**: 120+
 - **Status**: Domain-specific to heliosCLI authentication
 
 ### Network Proxy (heliosCLI-only)
+
 - **Crates**: network-proxy (MITM proxy)
 - **LOC**: 800+
 - **Status**: Domain-specific to heliosCLI network management
 
 ### Execution Policy (heliosCLI-only)
+
 - **Crates**: execpolicy, execpolicy-legacy (execution control)
 - **LOC**: 430+ (350+ DEAD CODE)
 - **Status**: Domain-specific to heliosCLI sandboxing
@@ -370,6 +401,7 @@ codex-rs/core/src/config/permissions.rs               ~80 LOC
 **Consolidation Ratio**: 50-68% of duplication eliminated  
 
 **Recommended Execution**:
+
 1. **Phase 1** (Error Macros): 2 days → 200-250 LOC saved
 2. **Phase 2** (Config Loader): 3 days → 150-200 LOC saved
 3. **Phase 3** (Test Fixtures): 2 days → 100-150 LOC saved (optional)

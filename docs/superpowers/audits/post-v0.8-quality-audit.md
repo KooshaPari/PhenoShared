@@ -19,6 +19,7 @@
 Ruff F401 across `bench/`, `eval/`, `pheno/`, `scripts/`, `kernels/qwen3.5-0.8b/python/`, `verifier/`.
 
 **By directory:**
+
 - `bench/`: 128 (mostly in `bench/comparison/*.py` and `bench/suites/*.py`)
 - `scripts/`: 43 (cron wrappers + dual-GPU scripts)
 - `kernels/`: 10 (codegen + reference impl)

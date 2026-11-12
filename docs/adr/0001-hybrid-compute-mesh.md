@@ -6,7 +6,9 @@
 
 ## Context
 
-The Phenotype org has an active agent swarm (up to 50 concurrent subagents) plus heavy Rust cargo builds, VRAM-bound ML experiments, and ongoing CI across 30+ repos. GitHub Actions billing is exhausted (memo: the free tier ~$450 evaporates within hours under swarm load). A single-cloud lock-in risks a repeat of that trap, and a single-node self-host risks availability gaps when the host is rebooted, off, or gaming (Parsec).
+The Phenotype org has an active agent swarm (up to 50 concurrent subagents) plus heavy Rust cargo builds, VRAM-bound ML experiments, and ongoing CI across 30+ repos. GitHub Actions billing is
+exhausted (memo: the free tier ~$450 evaporates within hours under swarm load). A single-cloud lock-in risks a repeat of that trap, and a single-node self-host risks availability gaps when the host is
+rebooted, off, or gaming (Parsec).
 
 Constraints:
 
@@ -33,21 +35,21 @@ All nodes join a single Tailscale tailnet; MagicDNS provides stable names (`oci-
 
 ## Consequences
 
-**Positive**
+### Positive
 
 - Zero new spend in Phase 1 (all free tiers + existing hardware).
 - Redundancy: if OCI primary goes down, OCI secondary + GCP e2-micro continue serving.
 - Heavy-build latency drops ~5x (home Mac vs. OCI Ampere on `cargo build --release`).
 - Public exposure limited to Cloudflare Tunnel; no origin IP leaks.
 
-**Negative**
+### Negative
 
 - Operational surface area is larger than a single cloud.
 - Home-Mac availability is gated on Parsec / gaming sessions (see ADR 0008).
 - Tailscale is a single point of trust (see ADR 0004 for mitigation).
 - Vendor-lock risk spread across 4 providers — each has its own Terraform provider to maintain.
 
-**Neutral**
+### Neutral
 
 - Requires per-node runbooks (see `docs/runbooks/`).
 - Requires label-based runner routing (see ADR 0007).

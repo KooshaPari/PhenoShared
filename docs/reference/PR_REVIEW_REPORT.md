@@ -79,6 +79,7 @@ Since there are no open PRs, no CI checks are currently running or pending.
 **PR:** #492 — Phase 3 completion
 **Status:** ✅ MERGED (2026-03-30)
 **Checks Passed:**
+
 - Build (all crates)
 - Clippy linting
 - Tests
@@ -126,14 +127,17 @@ Recent CI completeness work (Wave 93, Phase 1 completion) fixed all pre-existing
 ### Immediate (Priority 1)
 
 1. **Synchronize branches** — Local main is ahead 2 commits, behind 1
+
    ```bash
    git pull origin main
    git push origin main
    ```
+
    - Local commits: `feat(phenotype-router-monitor)`, `feat(workspace): Phase 3 completion`
    - Remote commit: PR #492 with same Phase 3 completion message (possible duplicate)
 
 2. **Verify commit deduplication**
+
    ```bash
    git log --oneline origin/main..HEAD
    # Check if PR #492 matches local commits
@@ -142,22 +146,23 @@ Recent CI completeness work (Wave 93, Phase 1 completion) fixed all pre-existing
 
 ### Important (Priority 2)
 
-3. **Clean dirty tree** — 85+ tracked and untracked files in working directory
+1. **Clean dirty tree** — 85+ tracked and untracked files in working directory
    - Review modified files before committing
    - Use `git status --short` to prioritize by category
    - Follow Dirty-Tree Commit Discipline (MODE 1, 2, 3 separation)
 
-4. **Archive or rebase stale branches**
+2. **Archive or rebase stale branches**
    - 40+ local branches detected, many marked `[gone]`
    - Example: `feat/phenotype-crypto-complete` marked `[gone]`
    - Cleanup command:
+
      ```bash
      git branch -vv | grep '\[gone\]' | awk '{print $1}' | xargs -r git branch -D
      ```
 
 ### Optional (Priority 3)
 
-5. **Document branch strategy** — Create `BRANCH_STRATEGY.md` in docs/reference/
+1. **Document branch strategy** — Create `BRANCH_STRATEGY.md` in docs/reference/
    - Define naming conventions (e.g., `feat/`, `fix/`, `chore/`)
    - Document when to delete local branches
    - Reference worktree discipline from CLAUDE.md
@@ -179,9 +184,11 @@ Recent CI completeness work (Wave 93, Phase 1 completion) fixed all pre-existing
 ## Blockers vs. Nice-to-Haves
 
 ### Blockers (Must Fix Before Merge)
+
 None. No open PRs.
 
 ### Nice-to-Haves (Can Merge Without)
+
 None. No open PRs.
 
 ### General Repository Hygiene
@@ -212,6 +219,7 @@ None. No open PRs.
 ### Branch Summary
 
 **Local Branches (recent activity):**
+
 - `main` — current, ahead 2, behind 1
 - `consolidate` — error handling unification
 - `feat/phenotype-crypto-complete` — [gone]
@@ -259,4 +267,4 @@ b1692d8ef chore(phenotype-infrakit): stabilize workspace + fix clippy warnings (
 
 ---
 
-**End of Report**
+### End of Report

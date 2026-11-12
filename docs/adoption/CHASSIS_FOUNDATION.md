@@ -14,6 +14,7 @@ The **Chassis Foundation** establishes a unified design system and shared govern
 ### 1. @phenotype/docs Chassis
 
 Unified design system and documentation shell:
+
 - Design System (Radix + shadcn/ui)
 - VitePress Configuration  
 - Component Library
@@ -23,6 +24,7 @@ Unified design system and documentation shell:
 ### 2. AgilePlus Governance Chassis
 
 Spec-driven delivery framework with:
+
 - Unified spec registry
 - Automated PR generation
 - Work progress tracking
@@ -48,6 +50,7 @@ All work follows: **spec → PR → review → evidence → merge**
 ### Evidence-Based Delivery
 
 Every PR requires:
+
 - ✅ All tests passing
 - ✅ Lint/format clean  
 - ✅ Build succeeds
@@ -83,6 +86,7 @@ Every PR requires:
 ## Next: Phase 2 Federation
 
 Once Chassis is in place:
+
 1. Module Federation — Dynamic module loading
 2. Micro-Frontends — Composed UIs
 3. Intent-Driven Orchestration — Agent-driven features

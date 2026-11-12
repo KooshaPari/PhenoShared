@@ -67,17 +67,21 @@ Future-compat: block v0.1.6, proc-macro-error2 v2.0.1
 ## Known Issues
 
 ### Critical (0)
+
 None. Workspace compiles clean.
 
 ### High (1)
+
 1. **3 PhenoRegistry crates orphaned** - not in workspace, should be integrated or removed
 
 ### Medium (3)
+
 1. **Future-compat warning** - `block v0.1.6` and `proc-macro-error2 v2.0.1` will be rejected by future Rust (upstream deps, not fixable locally)
 2. **Origin URLs stale** - 13 external git deps reference repos not yet absorbed (ResilienceKit, Authvault, PhenoObservability, substrate)
 3. **CRLF line ending drift** - 5 session extract files have mixed line endings
 
 ### Low (2)
+
 1. **`fabric-capture`** has its own `[profile]` section (workspace ignores it, warning only)
 2. **`pheno-otel.subdirectory`** unused manifest key warning
 
@@ -104,6 +108,7 @@ docs/                      # Atlas dossiers, architecture docs, sessions
 ## External Dependencies (git)
 
 ### Resolved to Local Paths (as of `53c252ce`)
+
 All PhenoInfra git deps now use local path dependencies:
 
 | Dependency | Was Git | Now Local Path |
@@ -115,6 +120,7 @@ All PhenoInfra git deps now use local path dependencies:
 | `phenotype-mcp` | PhenoInfra.git | `crates/phenotype-mcp/` |
 
 ### Remaining External Git Deps
+
 These reference repos NOT absorbed into PhenoShared:
 
 | Dependency | Source | Crate |
@@ -136,18 +142,22 @@ These reference repos NOT absorbed into PhenoShared:
 ## What's Next
 
 ### Phase B: Integration Cleanup
+
 1. ~~Add `phenotype-project-registry` and `phenotype-service-registry` to workspace members~~ DONE
-2. ~~Fix or remove `pheno-registry-python` (broken dep)~~ REMOVED 2026-10-17 (path dep `"../.."` resolves to PhenoShared root which is not a `phenotype-registry` crate; functionality duplicated by `src/ecosystem.rs`; canonical Python SDK belongs in standalone `phenotype-registry` repo, not in this pool).
+2. ~~Fix or remove `pheno-registry-python` (broken dep)~~ REMOVED 2026-10-17 (path dep `"../.."` resolves to PhenoShared root which is not a `phenotype-registry` crate; functionality duplicated
+   by `src/ecosystem.rs`; canonical Python SDK belongs in standalone `phenotype-registry` repo, not in this pool).
 3. ~~Resolve git deps that have local copies (PhenoInfra crates)~~ DONE
 4. ~~Update stale origin URLs in absorbed crate manifests~~ DONE (no stale metadata URLs found)
 5. Absorb remaining repos (ResilienceKit, Authvault, PhenoObservability, substrate) or switch their deps to workspace = true
 
 ### Phase C: Quality
+
 1. ~~Fix all code and build-system warnings~~ DONE (47 -> 0 code, 3 -> 1 build-system)
 2. ~~CRLF line endings~~ DONE (.gitattributes already normalizes; working tree cleaned)
 3. Future-compat (block, proc-macro-error2) — needs upstream crate updates
 
 ### Phase D: Productization
+
 1. Classify registry/ data for tracking
 2. CI/CD pipeline for the monorepo
 3. Release artifact and versioning strategy

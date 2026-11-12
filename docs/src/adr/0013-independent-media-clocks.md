@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-Each stream has its own timing contract and clock domain. Synchronization intent may connect them, but buffering, recovery, and transport remain independent. Network audio uses timestamping, drift estimation, bounded elasticity, and ASRC where needed.
+Each stream has its own timing contract and clock domain. Synchronization intent may connect them, but buffering, recovery, and transport remain independent. Network audio uses timestamping, drift
+estimation, bounded elasticity, and ASRC where needed.
 
 ### Enforced rules
 

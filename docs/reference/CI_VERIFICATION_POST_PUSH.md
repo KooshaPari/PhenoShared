@@ -77,26 +77,31 @@ The following commits are now live on origin/main (in chronological order):
 ### Known Issues
 
 #### 1. CI Build Failure (`ci.yml`)
+
 **Status:** ❌ EXPECTED (GitHub Actions Billing Constraint)
 
 **Root Cause:** GitHub Actions billing spending limit exhausted (per `/Users/<REDACTED>/CodeProjects/CLAUDE.md` GitHub Actions Billing Constraint policy)
 
 **Governance Rule:**
-> "GitHub Actions billing is a hard constraint. No additional funds will be added. If CI fails on billed runners (macOS/Windows) due to 'spending limit reached' or 'billing error', do NOT treat it as a blocking bug."
+> "GitHub Actions billing is a hard constraint. No additional funds will be added. If CI fails on billed runners (macOS/Windows) due to 'spending limit reached' or 'billing error', do NOT treat it as
+a blocking bug."
 
 **Remediation:** None required — this is an infrastructure constraint, not a code quality issue.
 
 #### 2. Docs Build Failure
+
 **Status:** ❌ EXPECTED (Pre-Existing Docs Build Issue)
 
 **Context:** Docs builds have been failing pre-deployment. This is not caused by Quick Wins commits.
 
 #### 3. VitePress Pages Build Failure
+
 **Status:** ❌ EXPECTED (Dependent on Docs Build)
 
 **Context:** Depends on successful docs build. Failure cascades from docs build failure.
 
 #### 4. Sync Canary Failure
+
 **Status:** ❌ EXPECTED (Infrastructure/Dependency Issue)
 
 **Context:** Not related to code changes in Quick Wins commits.
@@ -130,6 +135,7 @@ cargo fmt --check
 **Result:** ✅ All local tests passed prior to merge (per session work completed 2026-03-30)
 
 **Performance Impact Verified:**
+
 - **Tokio feature reduction** (Quick Win #1): ✅ Verified in feature audit
 - **panic=abort** (Quick Win #2): ✅ Enabled in Cargo.toml release profile
 - **sccache integration** (Quick Win #3): ✅ Configured in CI workflows
@@ -139,17 +145,20 @@ cargo fmt --check
 ## Performance Baseline
 
 ### Pre-Quick-Wins Baseline
+
 - **Cold Build:** 81.2s
 - **Incremental Build:** 0.9s
 - **Binary Size:** Standard
 
 ### Expected Post-Quick-Wins Impact
+
 - **Cold Build:** ~50-57s (30-40% reduction via tokio features)
 - **Incremental Build:** ~0.5-0.7s (via compiler caching)
 - **Binary Size:** 2-5% reduction via panic=abort
 - **CI Pipeline:** 40-60% speedup via sccache
 
 ### Verification Method
+
 Run `task quality && cargo build --release --timings` in next session to capture post-deployment metrics.
 
 ---
@@ -159,6 +168,7 @@ Run `task quality && cargo build --release --timings` in next session to capture
 ### ✅ APPROVED FOR PHASE 2 WORK
 
 **Criteria Met:**
+
 - ✅ Quick Wins deployed to origin/main
 - ✅ Non-billed CI checks passing
 - ✅ Code quality verified locally
@@ -168,6 +178,7 @@ Run `task quality && cargo build --release --timings` in next session to capture
 
 **Phase 2 Ready:**
 Phase 2 decomposition work can proceed immediately:
+
 - `phenosdk-decompose-llm` (LLM contract extraction)
 - `phenosdk-decompose-core` (core functionality modularization)
 - `phenosdk-decompose-mcp` (MCP plugin architecture)

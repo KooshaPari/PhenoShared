@@ -76,6 +76,7 @@ oci-post-acquire SSHes to fresh VM, runs `tailscale up --auth-key=$KEY`
 ```
 
 **Who may invoke `tailscale-keygen`:**
+
 - The post-acquire hook chain (runs as koosha on the orchestrator host).
 - koosha, manually, for ad-hoc enrollments.
 - No CI job. CI runners that need mesh access should use `tag:vercel-build`
@@ -90,6 +91,7 @@ visible under Admin → Settings → Keys with description
 ## 6. Disaster Recovery
 
 ### Compromised node
+
 1. Tailscale Admin Console → Machines → select node → **Remove**.
 2. Revoke any non-ephemeral keys associated.
 3. Investigate via post-acquire mesh-state log
@@ -99,6 +101,7 @@ visible under Admin → Settings → Keys with description
    `iac/oci-lottery` rather than relying on ephemeral expiry.
 
 ### Compromised `TS_API_KEY`
+
 1. Rotate immediately in Tailscale admin console (revoke old → mint new).
 2. Update Vaultwarden entry `tailscale/api-key`.
 3. Update GitHub Actions secret if any workflow references it.
@@ -106,6 +109,7 @@ visible under Admin → Settings → Keys with description
    should be removed and re-enrolled.
 
 ### Compromised auth-key (the short-lived one)
+
 - Single-use + 600s TTL means the practical blast radius is one node
   enrollment within a 10-min window. Treat as a compromised node (above).
 

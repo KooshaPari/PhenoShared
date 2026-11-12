@@ -4,13 +4,15 @@
 
 ## Convention
 
-Before writing something from scratch, look for an existing library, crate, or fork that already does it and **wrap it behind a port** (see [xdd](xdd.md) — hexagonal). Prefer the existing ecosystem; hand-rolling is the exception you justify, not the default.
+Before writing something from scratch, look for an existing library, crate, or fork that already does it and **wrap it behind a port** (see [xdd](xdd.md) — hexagonal). Prefer the existing ecosystem;
+hand-rolling is the exception you justify, not the default.
 
 LOC reduction and simplification are **first-class goals**, weighted alongside features. A change that deletes more than it adds while preserving behavior is a win, not a risk.
 
 ## Why
 
-Wrapping a maintained dependency behind a port gives us its bug fixes and security patches for free while keeping our domain swappable. Hand-rolled equivalents become unowned liabilities. Less code is less surface to test, audit, and break.
+Wrapping a maintained dependency behind a port gives us its bug fixes and security patches for free while keeping our domain swappable. Hand-rolled equivalents become unowned liabilities. Less code is
+less surface to test, audit, and break.
 
 ## Do / Don't
 

@@ -68,7 +68,7 @@ The interview adapts based on feature complexity. Simple features get 3-4 questi
 
 ### Question Categories
 
-**1. Scope & Intent (Required)**
+#### 1. Scope & Intent (Required)
 
 ```
 Q: What does this feature do?
@@ -76,7 +76,7 @@ Q: What does this feature do?
 
 Captures the core purpose.
 
-**2. Users & Personas (Required)**
+#### 2. Users & Personas (Required)
 
 ```
 Q: Who will use this?
@@ -84,7 +84,7 @@ Q: Who will use this?
 
 Identifies user groups and roles.
 
-**3. Key Scenarios (Required)**
+#### 3. Key Scenarios (Required)
 
 ```
 Q: What are the main use cases?
@@ -92,7 +92,7 @@ Q: What are the main use cases?
 
 Usually 3-5 scenarios.
 
-**4. Success Criteria (Required)**
+#### 4. Success Criteria (Required)
 
 ```
 Q: How do you measure success?
@@ -100,7 +100,7 @@ Q: How do you measure success?
 
 Metrics or observable outcomes.
 
-**5. Constraints & Out-of-Scope (Optional)**
+#### 5. Constraints & Out-of-Scope (Optional)
 
 ```
 Q: What's explicitly NOT included?
@@ -108,7 +108,7 @@ Q: What's explicitly NOT included?
 
 Prevents scope creep.
 
-**6. Dependencies (Optional)**
+#### 6. Dependencies (Optional)
 
 ```
 Q: What existing features does this depend on?
@@ -116,7 +116,7 @@ Q: What existing features does this depend on?
 
 Identifies integration points.
 
-**7. Technical Context (Optional)**
+#### 7. Technical Context (Optional)
 
 ```
 Q: Any technical constraints?
@@ -124,7 +124,7 @@ Q: Any technical constraints?
 
 Performance, security, compliance.
 
-**8. Timeline (Optional)**
+#### 8. Timeline (Optional)
 
 ```
 Q: When is this needed?
@@ -449,7 +449,7 @@ Every requirement should be testable:
 
 After specifying your feature:
 
-**Option 1: Review & Clarify**
+### Option 1: Review & Clarify
 
 If the spec has ambiguities:
 
@@ -458,7 +458,7 @@ agileplus clarify 001
 # Identify and resolve unclear points
 ```
 
-**Option 2: Research First (Recommended)**
+## Option 2: Research First (Recommended)
 
 Scan your codebase and assess feasibility:
 
@@ -467,7 +467,7 @@ agileplus research 001
 # Identify patterns, dependencies, risks
 ```
 
-**Option 3: Plan Directly**
+## Option 3: Plan Directly
 
 For well-understood features, jump to planning:
 
@@ -478,7 +478,7 @@ agileplus plan 001
 
 ## Troubleshooting
 
-**Q: The interview doesn't ask the questions I need**
+### Q: The interview doesn't ask the questions I need
 
 A: Use `--custom-interview` flag to guide specific questions:
 
@@ -487,7 +487,7 @@ agileplus specify "title" --custom-interview
 # Interactive interview with your questions
 ```
 
-**Q: Generated spec has gaps**
+## Q: Generated spec has gaps
 
 A: Use clarify to identify and fix ambiguities:
 
@@ -495,7 +495,7 @@ A: Use clarify to identify and fix ambiguities:
 agileplus clarify 001
 ```
 
-**Q: Want to modify the spec**
+## Q: Want to modify the spec
 
 A: Edit the generated `spec.md` directly, then validate:
 
@@ -503,7 +503,7 @@ A: Edit the generated `spec.md` directly, then validate:
 agileplus spec validate 001
 ```
 
-**Q: Need to restart specification**
+## Q: Need to restart specification
 
 A: Re-run specify to regenerate:
 

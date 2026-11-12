@@ -609,6 +609,7 @@ mod sentry_integration_tests {
 ## Summary
 
 This configuration provides:
+
 - Ready-to-use Sentry SDK setup for all 3 Tier 1 repos
 - Panic and exception auto-capture
 - Breadcrumb tracing for operation flow

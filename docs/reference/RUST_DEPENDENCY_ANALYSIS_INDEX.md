@@ -10,6 +10,7 @@
 ## Documents in This Analysis
 
 ### 1. Executive Summary
+
 **File:** `DEPENDENCY_ANALYSIS_SUMMARY.txt`  
 **Size:** 11 KB  
 **Audience:** Project leads, stakeholders  
@@ -18,12 +19,14 @@
 Contains high-level metrics, key findings, recommendations, and next steps. Start here for overview.
 
 ### 2. Detailed Dependency Graph Analysis
+
 **File:** `DEPENDENCY_GRAPH_ANALYSIS.md`  
 **Size:** 35 KB  
 **Audience:** Architects, refactoring teams  
 **Read Time:** 20-30 minutes
 
 Comprehensive analysis with:
+
 - Complete dependency map and matrix
 - ASCII dependency diagram
 - Coupling metrics (density, chains, independence)
@@ -32,12 +35,14 @@ Comprehensive analysis with:
 - Restructuring complexity score
 
 ### 3. Federation Pattern Sketch
+
 **File:** `FEDERATION_PATTERN_SKETCH.md`  
 **Size:** 23 KB  
 **Audience:** Architects, implementation teams  
 **Read Time:** 15-20 minutes
 
 Detailed design for trait-based plugin system:
+
 - Port-traits layer (central interface hub)
 - Plugin trait definitions with examples
 - Feature flag matrix
@@ -46,12 +51,14 @@ Detailed design for trait-based plugin system:
 - Testing strategy
 
 ### 4. Phase 2 Execution Checklist
+
 **File:** `PHASE2_EXECUTION_CHECKLIST.md`  
 **Size:** 21 KB  
 **Audience:** Implementation teams, project leads  
 **Read Time:** 15 minutes (or reference during execution)
 
 Step-by-step execution plan:
+
 - Phase 2A: Foundation stabilization (1.5 hrs)
 - Phase 2B: Leaf extraction (30 min wall-clock, parallel)
 - Phase 2C: Dependent extraction (1.5 hrs, sequential)
@@ -66,23 +73,27 @@ Step-by-step execution plan:
 ## Quick Navigation by Role
 
 ### Project Lead / Stakeholder
+
 1. Read: `DEPENDENCY_ANALYSIS_SUMMARY.txt` (10 min)
 2. Skim: Sections 1-3 of `DEPENDENCY_GRAPH_ANALYSIS.md` (5 min)
 3. Action: Review "9. Recommendations" and "12. Next Steps"
 
 ### Architect / Technical Lead
+
 1. Read: `DEPENDENCY_GRAPH_ANALYSIS.md` sections 1-5 (15 min)
 2. Review: Section 6-7 (Extraction roadmap + Federation) (10 min)
 3. Skim: `FEDERATION_PATTERN_SKETCH.md` sections 1-4 (10 min)
 4. Decide: Federation pattern vs. simple extraction
 
 ### Implementation Team Lead
+
 1. Read: `PHASE2_EXECUTION_CHECKLIST.md` completely (15 min)
 2. Review: Risk mitigation section (5 min)
 3. Create: Agent assignment spreadsheet
 4. Execute: Follow checklist step-by-step
 
 ### Individual Contributor / Agent
+
 1. Skim: `PHASE2_EXECUTION_CHECKLIST.md` (5 min)
 2. Get: Task assignment from team lead
 3. Execute: Follow per-task template
@@ -139,6 +150,7 @@ NO TIER 3: No crate depends on Tier 2 (leaf-only)
 ## Phase 2 Roadmap Summary
 
 ### Timeline
+
 - **Phase 2A:** Foundation stabilization (1.5 hours) — This week
 - **Phase 2B:** Leaf extraction (30 min wall-clock) — Parallel agents
 - **Phase 2C:** Dependent extraction (1.5 hours) — Sequential
@@ -146,6 +158,7 @@ NO TIER 3: No crate depends on Tier 2 (leaf-only)
 - **Total:** 6.5 hours sequential, ~3-4 hours with agents
 
 ### Extraction Order
+
 ```
 SEQUENTIAL: Phase 2A → (Phase 2B parallel with Phase 2C)
             → Phase 2D
@@ -176,10 +189,12 @@ PARALLELISM:
 ## Files by Crate
 
 ### Foundations (v1.0.0)
+
 - `crates/phenotype-error-core/` — 5 canonical error types
 - `crates/phenotype-config-core/` — Config abstraction
 
 ### Leaf Crates (Extract in Phase 2B)
+
 - `crates/phenotype-async-traits/`
 - `crates/phenotype-cache-adapter/`
 - `crates/phenotype-contracts/`
@@ -203,6 +218,7 @@ PARALLELISM:
 - `crates/phenotype-validation/`
 
 ### Dependent Crates (Extract in Phase 2C)
+
 - `crates/phenotype-config-loader/` [→ config-core]
 - `crates/phenotype-errors/` [→ error-core]
 - `crates/phenotype-event-sourcing/` [→ error-core]
@@ -214,6 +230,7 @@ PARALLELISM:
 ## Success Criteria Checklist
 
 ### Phase 2A: Foundation Stabilization
+
 - [ ] error-core tagged v1.0.0
 - [ ] config-core tagged v1.0.0
 - [ ] Federation traits implemented
@@ -221,18 +238,21 @@ PARALLELISM:
 - [ ] All new tests pass
 
 ### Phase 2B: Leaf Extraction (20 crates)
+
 - [ ] All crates compile independently
 - [ ] All tests pass (100% success)
 - [ ] No new inter-crate dependencies
 - [ ] Ready for v1.0.0
 
 ### Phase 2C: Dependent Extraction (5 crates)
+
 - [ ] All crates extract with external deps
 - [ ] All tests pass
 - [ ] No circular dependencies
 - [ ] Ready for v1.0.0
 
 ### Phase 2D: Validation
+
 - [ ] Full workspace builds cleanly
 - [ ] All tests pass (100%)
 - [ ] No circular deps detected
@@ -243,22 +263,26 @@ PARALLELISM:
 ## How to Use This Analysis
 
 ### Immediate (Today)
+
 1. Project lead reads summary
 2. Architect reviews federation design
 3. Schedule Phase 2 kickoff meeting
 4. Assign implementation team leads
 
 ### Short-term (This Week)
+
 1. Execute Phase 2A (foundation stabilization)
 2. Prepare Phase 2B agent assignments
 3. Set up execution dashboard
 
 ### Medium-term (Next Week)
+
 1. Execute Phase 2B with parallel agents (30 min)
 2. Execute Phase 2C sequentially (1.5 hours)
 3. Execute Phase 2D validation (1 hour)
 
 ### Long-term (Following Weeks)
+
 1. Implement federation pattern (optional, Phase 2E)
 2. Add feature flags to all crates
 3. Benchmark binary size improvements
@@ -302,6 +326,7 @@ PARALLELISM:
 **Maintainer:** Phenotype Architecture Team
 
 ### Update Schedule
+
 - After Phase 2A: Update complexity score if needed
 - After Phase 2B: Add extraction statistics
 - After Phase 2C: Update risk metrics
@@ -322,6 +347,7 @@ PARALLELISM:
 ## Support & Questions
 
 For questions about this analysis:
+
 1. Check relevant section in `DEPENDENCY_GRAPH_ANALYSIS.md`
 2. Review `PHASE2_EXECUTION_CHECKLIST.md` for procedural questions
 3. Consult `FEDERATION_PATTERN_SKETCH.md` for architecture questions
@@ -332,4 +358,3 @@ For questions about this analysis:
 **Analysis Status:** ✅ COMPLETE  
 **Execution Status:** 🟡 PENDING (waiting for Phase 2 kickoff)  
 **Phase 2 Readiness:** ✅ READY FOR LAUNCH
-

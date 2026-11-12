@@ -36,22 +36,26 @@ source.
 ## Corrections applied to `catalog/registry.yaml`
 
 ### A. Added (83 missing owned repos)
+
 Only `Configra`, `pheno-tracing`, `pheno-mcp-router`, `phenotype-sdk`,
 `phenotype-infra` were present before. **83 owned repos were missing** and are
 now added with `tier`, `architecture`, `archetype`, `language`, and `role`.
 
 ### B. Removed / not-carried-forward
+
 | Old entry | Reason |
 |-----------|--------|
 | `pheno-mcp-router` (&lt;REDACTED&gt;/pheno-mcp-router) | Repo **archived** on GitHub AND not in the owned-88; not a current owned substrate. Its substrate classification lives in absorption history, not the active owned catalog. |
 | `phenotype-sdk` (&lt;REDACTED&gt;/phenotype-sdk) | **No such live repo** in `gh repo list`. The real owned SDKs are `phenotype-go-sdk` and `phenotype-python-sdk` (both present and active). Replaced by those two concrete entries. |
 
 ### C. Status corrections
+
 | Repo | Old status | Corrected | Evidence |
 |------|-----------|-----------|----------|
 | `pheno-tracing` | `archived` | **`active`** | `gh` shows live, pushed 2026-06-28; still consumed by `pheno` via git dep. |
 
 ### D. Archetype / tier (re-)classification
+
 Every owned repo received an explicit `archetype` (new field, schema-backed) and
 a verified `tier`. Notable role/tier corrections vs. the stale narrative map:
 
@@ -139,6 +143,7 @@ owned-88 set exactly (no dangling refs, no missing owned repos), all archetypes
 in the schema enum.
 
 ### Schema note
+
 `catalog/registry.schema.json` gained an `archetype` enum property. An
 explicit `architecture` is now set on **every** entry (not just framework tier):
 the draft-07 `if/then` that gates `hexagonal-l4` treats an *absent* `architecture`

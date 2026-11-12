@@ -23,14 +23,14 @@ Both sit inside a single VCN with a tight security list (only Tailscale + SSH fr
 
 ## Consequences
 
-**Positive**
+### Positive
 
 - 4 OCPU + 24 GiB RAM total is ample for 30-repo CI + git hosting.
 - OCI Always Free tier includes these A1 Flex shapes indefinitely (as of 2026-04).
 - Arm64 builds match home-Mac architecture (Apple Silicon), easing cross-compilation.
 - Bandwidth: OCI provides 10 TB/mo outbound free — far above projected use.
 
-**Negative**
+### Negative
 
 - OCI's reputation for reclaiming "idle" free-tier VMs — mitigated by running a lightweight cron that keeps CPU above reclamation threshold (documented in `docs/runbooks/day1-oci-first-light.md`).
 - Arm64 can break x86-only dependencies — mitigated by pinning `rust-musl-cross-aarch64` and `cargo-zigbuild`.

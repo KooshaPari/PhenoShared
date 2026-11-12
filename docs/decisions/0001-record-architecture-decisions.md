@@ -6,7 +6,8 @@
 
 ## What is AU2?
 
-AU2 (Auditability: decision records) = significant decisions in the repo are recorded in a structured, searchable format with date, status, context, decision, and consequences. The classic format is MADR (Markdown Any Decision Record) or the older Nygard ADR.
+AU2 (Auditability: decision records) = significant decisions in the repo are recorded in a structured, searchable format with date, status, context, decision, and consequences. The classic format is
+MADR (Markdown Any Decision Record) or the older Nygard ADR.
 
 **The "wired" (AU2=2) signal**: `docs/decisions/` (or `docs/adr/`) exists with at least 1 ADR; the ADRs are indexed (e.g., README.md links to them); at least 1 ADR is dated within the last year.
 
@@ -92,11 +93,13 @@ Chosen option: **MADR**, because it lives in the repo (no external tooling), is 
 
 ## Reference: OmniRoute
 
-OmniRoute is the reference repo for AU2 (AU2=3). It has 4 ADRs in `docs/adr/`, indexed by `docs/adr/README.md`, referenced from the main `README.md`, and a PR template that requires an ADR for any critical-file change. The template above is a minimal extraction of that pattern.
+OmniRoute is the reference repo for AU2 (AU2=3). It has 4 ADRs in `docs/adr/`, indexed by `docs/adr/README.md`, referenced from the main `README.md`, and a PR template that requires an ADR for any
+critical-file change. The template above is a minimal extraction of that pattern.
 
 ## How to validate
 
 After applying:
+
 1. `ls docs/decisions/` — should show at least 1 ADR + README.md
 2. `grep "decisions\|ADR" README.md` — should find a reference
 3. The ADR file follows the MADR template (Status, Context, Decision, Consequences sections)

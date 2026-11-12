@@ -12,6 +12,7 @@
 This document presents a complete lines-of-code audit across the Phenotype ecosystem, identifying decomposition opportunities, code duplication, complexity hotspots, and a phased optimization roadmap.
 
 **Key Findings:**
+
 - **Total duplication:** ~35,000 LOC (0.35% of total; concentrated in tests/docs)
 - **Largest file:** routes.rs (2,631 LOC, exceeds best practice max of 500)
 - **Realizable improvement:** ~43-44K LOC (68% of AgilePlus codebase is decomposable)
@@ -95,6 +96,7 @@ This document presents a complete lines-of-code audit across the Phenotype ecosy
 | 20 | `crates/agileplus-cli/src/commands/specify.rs` | **439** | Rust | agileplus-cli | Specification command handler; spec creation + validation | 🟡 HIGH |
 
 ### Legend
+
 - 🔴 **CRITICAL (>600 LOC):** Must decompose
 - 🟡 **HIGH (500-600 LOC):** Should decompose
 - 🟠 **MEDIUM (400-499 LOC):** Consider decomposing
@@ -121,6 +123,7 @@ This document presents a complete lines-of-code audit across the Phenotype ecosy
 **Root Cause:** Worktree branching created file copies instead of references
 
 **Deduplication Strategy:**
+
 1. Keep master copy at `./tests/test_phench_runtime.py`
 2. Replace all other instances with git symlinks or `@include` directives
 3. Update CI to use single source
@@ -143,6 +146,7 @@ This document presents a complete lines-of-code audit across the Phenotype ecosy
 **Root Cause:** Worktree branches copied entire test suite instead of referencing
 
 **Deduplication Strategy:**
+
 1. Consolidate CLI tests in `crates/agileplus-cli/tests/`
 2. Use parametrized tests to avoid case duplication
 3. Link worktree tests to canonical locations
@@ -165,6 +169,7 @@ This document presents a complete lines-of-code audit across the Phenotype ecosy
 **Root Cause:** Worktree created copy of entire frontend codebase
 
 **Deduplication Strategy:**
+
 1. Move shared components to `packages/@phenotype/shared-ui`
 2. Use npm workspaces to share code across projects
 3. Remove worktree duplicates, reference shared package
@@ -185,6 +190,7 @@ This document presents a complete lines-of-code audit across the Phenotype ecosy
 **Root Cause:** Generated sidebar copied to worktree instead of dynamically generated
 
 **Deduplication Strategy:**
+
 1. Create single generator script at `platforms/thegent/scripts/generate-sidebar.ts`
 2. Make worktrees call generator instead of maintaining copies
 3. Update CI to regenerate before each build
@@ -286,24 +292,28 @@ This document presents a complete lines-of-code audit across the Phenotype ecosy
 **Risk:** Low (non-breaking changes, test-driven)
 
 #### Task 1.1: Extract Test Fixtures → `agileplus-fixtures` Crate
+
 - Move `agileplus-dashboard/src/seed.rs` (541 LOC) → `crates/agileplus-fixtures/src/lib.rs`
 - Extract seed builders, fixture generators, mock data factories
 - Update tests to use fixture crate
 - **Effort:** 4 tool calls | **Savings:** 541 LOC | **Tests:** Integration tests for fixture API
 
 #### Task 1.2: Consolidate Error Types → `agileplus-errors` Shared Crate
+
 - Audit `error.rs` in 8 crates (agileplus-*, phenotype-*)
 - Create canonical `crates/agileplus-errors/src/lib.rs` with all error variants
 - Replace local error enums with re-exports
 - **Effort:** 6 tool calls | **Savings:** 800-1,200 LOC | **Tests:** Error classification tests
 
 #### Task 1.3: Remove Archived Test Files
+
 - Audit `.archive/tests/` directory (~40 KB)
 - Document rationale for each file (keep-or-delete decision)
 - Remove files marked as obsolete
 - **Effort:** 2 tool calls | **Savings:** ~40 KB | **Risk:** Low (if documented)
 
 #### Task 1.4: De-Duplicate CLI Tests via Git Symlinks
+
 - Create symlink references for duplicated test files (phench_runtime, cli_coverage, etc.)
 - Update CI to use single canonical source
 - Validate test suite still runs
@@ -321,6 +331,7 @@ This document presents a complete lines-of-code audit across the Phenotype ecosy
 **Current structure:** All 53 route handlers in single 2,631-line file
 
 **Target structure:**
+
 ```
 crates/agileplus-dashboard/src/
 ├── routes/
@@ -334,6 +345,7 @@ crates/agileplus-dashboard/src/
 ```
 
 **Refactoring steps:**
+
 1. Group 53 handlers by feature (dashboard, CRUD, settings, health, timeline)
 2. Extract shared utilities to `routes/common.rs` or utils module
 3. Move template helpers from `templates.rs` to respective route modules
@@ -348,6 +360,7 @@ crates/agileplus-dashboard/src/
 **Current structure:** Single 1,582-line `lib.rs` with all concerns mixed
 
 **Target structure:**
+
 ```
 crates/agileplus-sqlite/src/
 ├── lib.rs              (~100 LOC: module exports, public API)
@@ -362,6 +375,7 @@ crates/agileplus-sqlite/src/
 ```
 
 **Refactoring steps:**
+
 1. Extract sync logic (400 LOC) → `store/sync.rs`
 2. Extract SQL query building (300 LOC) → `store/query.rs`
 3. Extract schema migrations (250 LOC) → `store/migrations.rs`
@@ -375,6 +389,7 @@ crates/agileplus-sqlite/src/
 #### Task 2.3: Consolidate Config Loading Pattern
 
 **Current fragmentation:**
+
 - `phenotype-config-core/src/unified.rs` (423 LOC) — config unification
 - `phenotype-config-core/src/loader.rs` (358 LOC) — config loading
 - Scattered builder patterns in `agileplus-api`, `agileplus-cli`, etc.
@@ -382,6 +397,7 @@ crates/agileplus-sqlite/src/
 **Target:** Single canonical builder pattern in `phenotype-config-core`
 
 **Refactoring steps:**
+
 1. Combine `unified.rs` + `loader.rs` logic into `builder.rs` (with trait pattern)
 2. Extract config schema definitions to shared location
 3. Create `ConfigBuilder::new().with_env().with_file().with_defaults().build()` API
@@ -402,6 +418,7 @@ crates/agileplus-sqlite/src/
 **Scope:** Analyze 16,745 Go files for package consolidation opportunities
 
 **Approach:**
+
 1. Map package dependency graph (`go mod graph`)
 2. Identify unused packages, circular dependencies
 3. Find duplicate implementations across packages
@@ -413,6 +430,7 @@ crates/agileplus-sqlite/src/
 #### Task 3.2: Extract Shared Design System → `@phenotype/design` Package
 
 **Current fragmentation:**
+
 - Dashboard components in `agileplus-dashboard/`
 - Byteport components in `platforms/thegent/apps/byteport/`
 - Scattered design tokens across projects
@@ -426,6 +444,7 @@ crates/agileplus-sqlite/src/
 **Current:** Specs live in repo root (PRD.md, ADR.md, PLAN.md, etc.)
 
 **Target:** Separate `phenotype-specs` monorepo with:
+
 - Version tags per spec (e.g., `specs/thegent@1.0.0`)
 - Changelog tracking
 - Cross-repo spec references
@@ -500,11 +519,13 @@ crates/agileplus-sqlite/src/
 **Next Steps for Deeper Analysis:**
 
 1. Run formal complexity analysis on AgilePlus crates:
+
    ```bash
    cargo clippy -- -W clippy::cognitive-complexity
    ```
 
 2. Run Python complexity analysis on phench:
+
    ```bash
    radon cc phench/src/ --show-complexity
    ```
@@ -518,6 +539,7 @@ crates/agileplus-sqlite/src/
 ## 12. ADR & Governance
 
 **Related ADRs:**
+
 - ADR-001 (Multi-Agent Orchestration): Affects agent command parsing, error handling
 - ADR-008 (Separation of Concerns): Guides extraction of adapters, ports, handlers
 
@@ -536,16 +558,19 @@ crates/agileplus-sqlite/src/
 ## Appendix: Files Referenced
 
 ### Critical Files for Decomposition
+
 - `crates/agileplus-dashboard/src/routes.rs` (2,631 LOC)
 - `crates/agileplus-sqlite/src/lib.rs` (1,582 LOC)
 - `phench/src/phench/service.py` (2,533 LOC)
 
 ### Duplication Sources
+
 - `./tests/test_phench_runtime.py` (master; 2,120 LOC)
 - `./tests/test_unit_cli_coverage_*.py` (4 files × 2 copies; ~10K LOC)
 - `platforms/thegent/docs/.vitepress/sidebar-auto.ts` (6,764 LOC)
 
 ### Configuration & Governance
+
 - `phenotype-config-core/src/unified.rs` (423 LOC)
 - `phenotype-config-core/src/loader.rs` (358 LOC)
 

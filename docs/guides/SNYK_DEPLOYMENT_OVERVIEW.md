@@ -25,12 +25,14 @@ By completing this deployment, you will:
 ## The 5 Guides (Use in Order)
 
 ### Guide 1: SNYK_TOKEN_ACQUISITION_GUIDE.md
+
 **Time:** 5-10 minutes
 **What:** How to get your Snyk API token
 
 **You will:**
+
 - Create or log into Snyk account (free tier)
-- Navigate to https://app.snyk.io
+- Navigate to <https://app.snyk.io>
 - Generate authentication token
 - Store token securely (NOT in git)
 - Verify token works locally
@@ -41,10 +43,12 @@ By completing this deployment, you will:
 ---
 
 ### Guide 2: SNYK_LOCAL_DEPLOYMENT_GUIDE.md
+
 **Time:** 5-10 minutes (execution) + 5-10 minutes (reading output)
 **What:** Run the deployment script on your machine
 
 **You will:**
+
 - Set up environment (token, paths, permissions)
 - Run `./scripts/snyk-deploy.sh`
 - Monitor progress (5-10 minutes)
@@ -57,10 +61,12 @@ By completing this deployment, you will:
 ---
 
 ### Guide 3: SNYK_RESULTS_REVIEW_GUIDE.md
+
 **Time:** 10-20 minutes
 **What:** Understand and manage vulnerability findings
 
 **You will:**
+
 - Read and interpret vulnerability reports
 - Understand severity levels (critical/high/medium/low)
 - Decide: fix vs. suppress each finding
@@ -73,10 +79,12 @@ By completing this deployment, you will:
 ---
 
 ### Guide 4: GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md
+
 **Time:** 5-10 minutes
 **What:** Set up GitHub Actions workflows for continuous scanning
 
 **You will:**
+
 - Add SNYK_TOKEN to GitHub organization secrets
 - Deploy `snyk-scan.yml` workflow to Tier 1 repos
 - Verify workflows trigger on push/PR/schedule
@@ -89,10 +97,12 @@ By completing this deployment, you will:
 ---
 
 ### Guide 5: SNYK_EXPECTED_OUTPUTS.md
+
 **Time:** Reference (5-10 minutes per lookup)
 **What:** Look up expected outputs at each stage
 
 **Use for:**
+
 - Verify your output matches examples
 - Understand error messages
 - Recognize when something goes wrong
@@ -105,10 +115,12 @@ By completing this deployment, you will:
 ---
 
 ### Bonus: SNYK_DEPLOYMENT_CHECKLIST.md
+
 **Time:** 5-10 minutes (summary)
 **What:** All-in-one checklist for tracking progress
 
 **Use for:**
+
 - Print and check off as you complete each phase
 - Track completion of each step
 - Sign-off when done
@@ -195,6 +207,7 @@ gh run list -R <REDACTED>/AgilePlus -w "Snyk Security Scan" --limit 1
 ### 1. Where to Store Token Temporarily
 
 **Options:**
+
 - `export SNYK_TOKEN="..."` (memory only, cleared when terminal closes)
 - `.env` file (disk-based, must add to `.gitignore`)
 - Password manager (external tool)
@@ -204,6 +217,7 @@ gh run list -R <REDACTED>/AgilePlus -w "Snyk Security Scan" --limit 1
 ### 2. Fix vs. Suppress Each Finding
 
 **Decision Tree:**
+
 ```
 Is it critical? → YES → FIX (never suppress)
                        └→ Update dependency immediately
@@ -221,6 +235,7 @@ Is it medium/low? → SUPPRESS (unless blocking)
 ### 3. Who Fixes What
 
 **Assign remediation:**
+
 - [ ] Critical findings: Engineer A (immediate)
 - [ ] High findings: Engineer B (this sprint)
 - [ ] Medium findings: Backlog (next quarter)
@@ -251,6 +266,7 @@ These three repos get workflow deployment first:
 | **phenotype-infrakit** | ⚠️ (Medium findings) | Yes | High |
 
 **What happens:**
+
 1. Workflows deploy to all 3
 2. Trigger on: push, PR, daily schedule (2 AM UTC)
 3. Results in GitHub Actions tab
@@ -261,21 +277,25 @@ These three repos get workflow deployment first:
 ## After Deployment (Next Steps)
 
 ### Immediate (Today)
+
 - [ ] Review critical findings
 - [ ] Create AgilePlus work items for fixes
 - [ ] Assign owners for remediation
 
 ### This Week
+
 - [ ] Monitor first automated scans
 - [ ] Fix or plan critical/high findings
 - [ ] Brief team on results
 
 ### This Month
+
 - [ ] Deploy to remaining repos (Tier 2-3)
 - [ ] Remediate high-severity findings
 - [ ] Establish quarterly review process
 
 ### Ongoing
+
 - [ ] Monitor nightly scheduled scans
 - [ ] Track remediation progress
 - [ ] Adjust policies as needed
@@ -286,6 +306,7 @@ These three repos get workflow deployment first:
 ## Files & Locations
 
 ### Guide Files (Read These)
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_TOKEN_ACQUISITION_GUIDE.md`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_LOCAL_DEPLOYMENT_GUIDE.md`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_RESULTS_REVIEW_GUIDE.md`
@@ -294,19 +315,23 @@ These three repos get workflow deployment first:
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_DEPLOYMENT_CHECKLIST.md`
 
 ### Deployment Script
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/snyk-deploy.sh`
 
 ### Reports (Generated)
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/report.txt` (summary)
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/*.json` (per-repo details)
 
 ### Policy Files (Created)
+
 - `**/path/to/repo/.snyk` (one per repo with suppressions)
 
 ### GitHub Integration
-- Organization Secrets: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
+
+- Organization Secrets: <https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions>
 - Workflows: `.github/workflows/snyk-scan.yml` (in each repo)
-- Actions Results: https://github.com/KooshaPari/[repo]/actions
+- Actions Results: <https://github.com/KooshaPari/[repo]/actions>
 
 ---
 
@@ -331,6 +356,7 @@ These three repos get workflow deployment first:
 ### Q: Do I need to commit my Snyk token to git?
 
 **A:** Absolutely not. Token should:
+
 - ❌ Never be committed to git
 - ❌ Never appear in public files
 - ✅ Be stored in environment variables (memory only)
@@ -339,6 +365,7 @@ These three repos get workflow deployment first:
 ### Q: What if critical vulnerabilities are found?
 
 **A:** Follow this order:
+
 1. Understand the vulnerability (see SNYK_RESULTS_REVIEW_GUIDE.md)
 2. Assess business impact (prod vs. dev-only)
 3. If production: Create urgent AgilePlus work item
@@ -348,6 +375,7 @@ These three repos get workflow deployment first:
 ### Q: How often do scans run?
 
 **A:** After GitHub integration:
+
 - On push to main
 - On pull requests to main
 - Daily at 2 AM UTC (automated)
@@ -355,21 +383,24 @@ These three repos get workflow deployment first:
 ### Q: Can I deploy workflows to other repos?
 
 **A:** Yes! After Tier 1 (AgilePlus, heliosCLI, phenotype-infrakit), you can:
+
 1. Deploy to Tier 2 repos (secondary projects)
 2. Deploy to Tier 3 repos (utilities)
 3. See GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md for instructions
 
 ### Q: What if I need to regenerate my token?
 
-**A:** Go to https://app.snyk.io → Settings → Auth Token → Regenerate
+**A:** Go to <https://app.snyk.io> → Settings → Auth Token → Regenerate
 
 Then update:
+
 1. Local environment: `export SNYK_TOKEN="new-token"`
 2. GitHub secret: `gh secret set SNYK_TOKEN --org <REDACTED>`
 
 ### Q: What do I do with the reports after review?
 
 **A:** Keep them for:
+
 - Audit trail (git history)
 - Trend analysis (compare over time)
 - Documentation (in `.snyk-reports/`)
@@ -382,6 +413,7 @@ Then update:
 ### While Following Guides
 
 **Reference these sections:**
+
 - **For expected outputs:** See SNYK_EXPECTED_OUTPUTS.md
 - **For errors:** See troubleshooting in each guide
 - **For decisions:** See Part 4-5 of SNYK_RESULTS_REVIEW_GUIDE.md
@@ -427,25 +459,30 @@ Before you start, verify:
 You'll know you've succeeded when:
 
 ✅ **Token Acquisition**
+
 - `snyk auth <token>` succeeds
 - `snyk test --dry-run` works
 
 ✅ **Local Deployment**
+
 - 30 repos scanned
 - Reports in `.snyk-reports/`
 - Total time: 5-10 minutes
 
 ✅ **Results Review**
+
 - Summary report reviewed
 - Findings understood
 - `.snyk` policy files created with justifications
 
 ✅ **GitHub Integration**
+
 - SNYK_TOKEN set in organization secrets
 - Workflows deployed to 3 Tier 1 repos
 - First workflow run completed successfully
 
 ✅ **Ongoing**
+
 - Nightly scans running automatically
 - Team can see results in GitHub Actions
 - No "Unauthorized" errors in workflows
@@ -466,11 +503,11 @@ You'll know you've succeeded when:
 
 | Need | Link |
 |------|------|
-| Snyk App | https://app.snyk.io |
-| GitHub Org Secrets | https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions |
-| AgilePlus Actions | https://github.com/KooshaPari/AgilePlus/actions |
-| heliosCLI Actions | https://github.com/KooshaPari/heliosCLI/actions |
-| phenotype-infrakit Actions | https://github.com/KooshaPari/phenotype-infrakit/actions |
+| Snyk App | <https://app.snyk.io> |
+| GitHub Org Secrets | <https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions> |
+| AgilePlus Actions | <https://github.com/KooshaPari/AgilePlus/actions> |
+| heliosCLI Actions | <https://github.com/KooshaPari/heliosCLI/actions> |
+| phenotype-infrakit Actions | <https://github.com/KooshaPari/phenotype-infrakit/actions> |
 
 ---
 

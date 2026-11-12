@@ -27,18 +27,20 @@
 
 ### [ ] Configure npm Publishing Infrastructure
 
-**WP0.1: Root-level npm configuration**
+#### WP0.1: Root-level npm configuration
 
 - [ ] Update `.npmrc` with @phenotype scope
+
   ```ini
   @phenotype:registry=https://npm.pkg.github.com
   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
   always-auth=true
   ```
+
 - [ ] Update `pnpm-workspace.yaml` to include `packages/*`
 - [ ] Verify workspace is recognized: `pnpm list -r --depth=0`
 
-**WP0.2: Directory structure**
+#### WP0.2: Directory structure
 
 - [ ] Create `packages/` directory at repo root
 - [ ] Create subdirectories:
@@ -47,7 +49,7 @@
   - [ ] `packages/pheno-llm/`
 - [ ] Verify directory structure with `ls -la packages/`
 
-**WP0.3: GitHub Packages workflow**
+#### WP0.3: GitHub Packages workflow
 
 - [ ] Create `.github/workflows/publish.yml`
 - [ ] Test workflow validation: `act -j publish --dry-run`
@@ -62,7 +64,7 @@
 
 ### [ ] Port Hexagonal Architecture Contracts
 
-**WP1.1: Core package structure**
+#### WP1.1: Core package structure
 
 - [ ] Create `packages/pheno-core/package.json`
   - [ ] Verify name: `@phenotype/pheno-core`
@@ -79,7 +81,7 @@
   - [ ] `src/errors/index.ts`
   - [ ] `src/index.ts` (re-exports all)
 
-**WP1.2: Implement inbound ports**
+#### WP1.2: Implement inbound ports
 
 ```typescript
 // src/ports/inbound.ts
@@ -107,7 +109,7 @@ export interface EventHandler<Event> {
 - [ ] Add JSDoc comments to all exports
 - [ ] Verify TypeScript compilation: `pnpm --filter @phenotype/pheno-core build`
 
-**WP1.3: Implement outbound ports**
+#### WP1.3: Implement outbound ports
 
 ```typescript
 // src/ports/outbound.ts
@@ -125,7 +127,7 @@ export interface Repository<T extends Entity> {
 - [ ] Add JSDoc with usage examples
 - [ ] Verify TypeScript compilation
 
-**WP1.4: Implement domain models**
+#### WP1.4: Implement domain models
 
 ```typescript
 // src/models/index.ts
@@ -144,7 +146,7 @@ export abstract class AggregateRoot extends Entity {
 - [ ] Implement DomainEvent interface
 - [ ] Add event tracking: raiseEvent(), getUncommittedEvents(), clearUncommittedEvents()
 
-**WP1.5: Implement error types**
+#### WP1.5: Implement error types
 
 ```typescript
 // src/errors/index.ts
@@ -169,18 +171,20 @@ export class PhenotypeError extends Error {
 - [ ] Implement PhenotypeError class
 - [ ] Add error predicates: isNotFound(), isValidation(), etc.
 
-**WP1.6: Index and re-exports**
+#### WP1.6: Index and re-exports
 
 - [ ] Create `src/index.ts` re-exporting all modules:
+
   ```typescript
   export * from './ports/inbound';
   export * from './ports/outbound';
   export * from './models/index';
   export * from './errors/index';
   ```
+
 - [ ] Verify exports with: `pnpm --filter @phenotype/pheno-core run build`
 
-**WP1.7: Unit tests**
+#### WP1.7: Unit tests
 
 - [ ] Create `tests/ports.test.ts`
   - [ ] Test UseCase contract
@@ -196,7 +200,7 @@ export class PhenotypeError extends Error {
 - [ ] Run tests: `pnpm --filter @phenotype/pheno-core run test`
 - [ ] Verify coverage ≥80%: `pnpm --filter @phenotype/pheno-core run test:coverage`
 
-**WP1.8: Documentation**
+#### WP1.8: Documentation
 
 - [ ] Create `packages/pheno-core/README.md`
   - [ ] Overview section
@@ -207,7 +211,7 @@ export class PhenotypeError extends Error {
 - [ ] Create JSDoc for all public exports
 - [ ] Add usage examples in code comments
 
-**WP1.9: Pre-publish validation**
+#### WP1.9: Pre-publish validation
 
 - [ ] Lint check: `pnpm --filter @phenotype/pheno-core run lint`
 - [ ] Type check: `pnpm --filter @phenotype/pheno-core build --noEmit`
@@ -225,7 +229,7 @@ export class PhenotypeError extends Error {
 
 ### [ ] Port Event Sourcing, State Machines, Policies, Caching
 
-**WP2.1: Event sourcing module**
+#### WP2.1: Event sourcing module
 
 - [ ] Create `packages/pheno-resilience/src/event-sourcing/` directory
 - [ ] Create `event-envelope.ts`
@@ -246,6 +250,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify: `pnpm --filter @phenotype/pheno-resilience build`
 
 **Tests for event-sourcing**:
+
 - [ ] Create `tests/event-sourcing.test.ts`
   - [ ] Test append and retrieve
   - [ ] Test sequence numbering
@@ -255,7 +260,7 @@ export class PhenotypeError extends Error {
   - [ ] Test chain verification on broken link
   - [ ] Test InMemoryEventStore
 
-**WP2.2: State machine module**
+#### WP2.2: State machine module
 
 - [ ] Create `packages/pheno-resilience/src/state-machine/` directory
 - [ ] Create `state.ts`
@@ -272,6 +277,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify compilation
 
 **Tests for state-machine**:
+
 - [ ] Create `tests/state-machine.test.ts`
   - [ ] Test state transitions
   - [ ] Test guard evaluation (permit/deny)
@@ -281,7 +287,7 @@ export class PhenotypeError extends Error {
   - [ ] Test canTransition validation
   - [ ] Test multiple transitions available
 
-**WP2.3: Policy engine module**
+#### WP2.3: Policy engine module
 
 - [ ] Create `packages/pheno-resilience/src/policy-engine/` directory
 - [ ] Create `policy.ts`
@@ -299,6 +305,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify compilation
 
 **Tests for policy-engine**:
+
 - [ ] Create `tests/policy-engine.test.ts`
   - [ ] Test basic rule matching
   - [ ] Test deny-overrides combinator
@@ -308,7 +315,7 @@ export class PhenotypeError extends Error {
   - [ ] Test regex pattern evaluation
   - [ ] Test context conditions
 
-**WP2.4: Cache module**
+#### WP2.4: Cache module
 
 - [ ] Create `packages/pheno-resilience/src/cache/` directory
 - [ ] Create `cache.ts` (interface)
@@ -330,6 +337,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify compilation
 
 **Tests for cache**:
+
 - [ ] Create `tests/cache.test.ts`
   - [ ] Test LRU basic operations
   - [ ] Test LRU eviction on max size
@@ -338,14 +346,14 @@ export class PhenotypeError extends Error {
   - [ ] Test cache invalidation
   - [ ] Test concurrent access
 
-**WP2.5: Integration tests**
+#### WP2.5: Integration tests
 
 - [ ] Create `tests/integration.test.ts`
   - [ ] Test event sourcing + state machine workflow
   - [ ] Test policy evaluation with cache
   - [ ] Test end-to-end scenario: event → state change → policy evaluation
 
-**WP2.6: Package configuration**
+#### WP2.6: Package configuration
 
 - [ ] Create `packages/pheno-resilience/package.json`
   - [ ] Name: `@phenotype/pheno-resilience`
@@ -356,7 +364,7 @@ export class PhenotypeError extends Error {
 - [ ] Create `packages/pheno-resilience/tsconfig.json`
 - [ ] Create `packages/pheno-resilience/vitest.config.ts`
 
-**WP2.7: Documentation**
+#### WP2.7: Documentation
 
 - [ ] Create `packages/pheno-resilience/README.md`
   - [ ] Event sourcing guide with examples
@@ -365,7 +373,7 @@ export class PhenotypeError extends Error {
   - [ ] Cache strategy selection
 - [ ] Add JSDoc comments to all public exports
 
-**WP2.8: Pre-publish validation**
+#### WP2.8: Pre-publish validation
 
 - [ ] All tests pass: `pnpm --filter @phenotype/pheno-resilience run test`
 - [ ] Coverage ≥80%: `pnpm --filter @phenotype/pheno-resilience run test:coverage`
@@ -383,7 +391,7 @@ export class PhenotypeError extends Error {
 
 ### [ ] Port LLM Integration & Prompt Management
 
-**WP3.1: LLM provider interface**
+#### WP3.1: LLM provider interface
 
 - [ ] Create `packages/pheno-llm/src/providers/` directory
 - [ ] Create `provider.ts`
@@ -396,7 +404,7 @@ export class PhenotypeError extends Error {
 - [ ] Create `index.ts` with exports
 - [ ] Verify compilation
 
-**WP3.2: Prompt management**
+#### WP3.2: Prompt management
 
 - [ ] Create `packages/pheno-llm/src/prompts/` directory
 - [ ] Create `prompt.ts`
@@ -415,7 +423,7 @@ export class PhenotypeError extends Error {
 - [ ] Create `index.ts` with exports
 - [ ] Verify compilation
 
-**WP3.3: OpenAI adapter (example)**
+#### WP3.3: OpenAI adapter (example)
 
 - [ ] Create `packages/pheno-llm/src/adapters/` directory
 - [ ] Create `openai-adapter.ts`
@@ -427,7 +435,7 @@ export class PhenotypeError extends Error {
 - [ ] Create `index.ts` with exports
 - [ ] Mark adapter as optional export (not in main index.ts)
 
-**WP3.4: Package configuration**
+#### WP3.4: Package configuration
 
 - [ ] Create `packages/pheno-llm/package.json`
   - [ ] Name: `@phenotype/pheno-llm`
@@ -438,7 +446,7 @@ export class PhenotypeError extends Error {
 - [ ] Create `packages/pheno-llm/tsconfig.json`
 - [ ] Create `packages/pheno-llm/vitest.config.ts`
 
-**WP3.5: Tests**
+#### WP3.5: Tests
 
 - [ ] Create `tests/providers.test.ts`
   - [ ] Test LLMProvider interface contract
@@ -455,7 +463,7 @@ export class PhenotypeError extends Error {
   - [ ] Test error handling
   - [ ] Test token usage tracking
 
-**WP3.6: Documentation**
+#### WP3.6: Documentation
 
 - [ ] Create `packages/pheno-llm/README.md`
   - [ ] LLM provider interface overview
@@ -465,7 +473,7 @@ export class PhenotypeError extends Error {
   - [ ] Tool/function calling patterns
 - [ ] Add JSDoc comments
 
-**WP3.7: Pre-publish validation**
+#### WP3.7: Pre-publish validation
 
 - [ ] All tests pass: `pnpm --filter @phenotype/pheno-llm run test`
 - [ ] Build succeeds: `pnpm --filter @phenotype/pheno-llm run build`
@@ -481,20 +489,20 @@ export class PhenotypeError extends Error {
 
 ### [ ] Configure Publishing & Release Process
 
-**WP4.1: Validate all packages**
+#### WP4.1: Validate all packages
 
 - [ ] Root workspace builds: `pnpm run build`
 - [ ] All tests pass: `pnpm run test`
 - [ ] No linting errors: `pnpm run lint`
 - [ ] Coverage ≥80% across all packages
 
-**WP4.2: Version management**
+#### WP4.2: Version management
 
 - [ ] Verify all packages have matching version: `1.0.0`
 - [ ] Update package.json version to `1.0.0` for all three packages
 - [ ] Create version bump script (optional, for future releases)
 
-**WP4.3: GitHub Actions workflow validation**
+#### WP4.3: GitHub Actions workflow validation
 
 - [ ] Workflow file `.github/workflows/publish.yml` present
 - [ ] Workflow has correct triggers: push tags matching `v*`
@@ -502,36 +510,43 @@ export class PhenotypeError extends Error {
 - [ ] Workflow uses GITHUB_TOKEN for authentication
 - [ ] Dry run test (local): `act -j publish --dry-run`
 
-**WP4.4: Create GitHub release**
+#### WP4.4: Create GitHub release
 
 - [ ] Tag each package:
+
   ```bash
   git tag -a @phenotype/pheno-core@1.0.0 -m "Release pheno-core 1.0.0"
   git tag -a @phenotype/pheno-resilience@1.0.0 -m "Release pheno-resilience 1.0.0"
   git tag -a @phenotype/pheno-llm@1.0.0 -m "Release pheno-llm 1.0.0"
   ```
+
 - [ ] Push tags: `git push origin --tags`
 - [ ] Verify workflow triggered in GitHub Actions
 - [ ] Monitor workflow for success
 
-**WP4.5: Verify package publication**
+#### WP4.5: Verify package publication
 
 - [ ] Package available on GitHub Packages:
+
   ```bash
   npm view @phenotype/pheno-core --registry https://npm.pkg.github.com
   ```
+
 - [ ] Package installable:
+
   ```bash
   npm install @phenotype/pheno-core --registry https://npm.pkg.github.com
   ```
+
 - [ ] Check all three packages published:
   - [ ] @phenotype/pheno-core
   - [ ] @phenotype/pheno-resilience
   - [ ] @phenotype/pheno-llm
 
-**WP4.6: Root documentation**
+#### WP4.6: Root documentation
 
 - [ ] Create `packages/README.md`
+
   ```markdown
   # @phenotype Packages
 
@@ -547,10 +562,11 @@ export class PhenotypeError extends Error {
   Configure .npmrc for GitHub Packages, then:
   npm install @phenotype/pheno-core
   ```
+
 - [ ] Create `packages/PUBLISHING.md` with release procedures
 - [ ] Create `packages/CONTRIBUTING.md` with dev setup
 
-**WP4.7: PR preparation**
+### WP4.7: PR preparation
 
 - [ ] All files committed
 - [ ] Rebase on main: `git rebase origin/main`
@@ -562,7 +578,7 @@ export class PhenotypeError extends Error {
   - [ ] Testing instructions
   - [ ] Publishing instructions
 
-**WP4.8: Final quality checks**
+### WP4.8: Final quality checks
 
 - [ ] All CI checks passing (except GitHub Actions due to billing)
 - [ ] No linting warnings

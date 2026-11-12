@@ -7,7 +7,8 @@
 
 ## Doctrine
 
-File parity between archived `<REDACTED>/TestingKit` and `phenotype-python-sdk/packages/testing-kit/` does **not** close the testing boundary. Testing spans multiple capability slices; each slice has a distinct canonical owner.
+File parity between archived `<REDACTED>/TestingKit` and `phenotype-python-sdk/packages/testing-kit/` does **not** close the testing boundary. Testing spans multiple capability slices; each slice has
+a distinct canonical owner.
 
 ## Slice matrix
 

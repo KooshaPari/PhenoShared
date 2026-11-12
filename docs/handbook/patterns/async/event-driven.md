@@ -98,11 +98,13 @@ impl EventPublisher for NatsEventBus {
 ## Event Types
 
 ### Domain Events
+
 - Represent business facts
 - Past tense (UserCreated, OrderPlaced)
 - Contain full context needed by consumers
 
 ### Integration Events
+
 - Cross-boundary context
 - Published to external systems
 - Schema versioned
@@ -119,6 +121,7 @@ impl EventPublisher for NatsEventBus {
 ## Conventions
 
 ### Event Naming
+
 ```rust
 // Good
 pub struct UserCreated {
@@ -134,6 +137,7 @@ pub struct CreateUser {  // Command, not event
 ```
 
 ### Subject Patterns
+
 ```
 events.{domain}.{aggregate_type}.{aggregate_id}.{event_type}
 
@@ -174,6 +178,7 @@ impl<H: EventHandler<E>, E: Event> EventHandler<E> for IdempotentHandler<H, E> {
 ## Error Handling
 
 ### Retry Strategy
+
 ```rust
 pub enum RetryPolicy {
     Immediate(u32),      // Retry N times immediately
@@ -183,6 +188,7 @@ pub enum RetryPolicy {
 ```
 
 ### Dead Letter Queue
+
 ```rust
 pub trait DeadLetterQueue {
     fn send(&self, event: Box<dyn Event>, error: HandlerError);
@@ -193,6 +199,7 @@ pub trait DeadLetterQueue {
 ## Observability
 
 ### Event Tracing
+
 ```rust
 pub struct TracedEvent<E: Event> {
     #[serde(flatten)]
@@ -204,6 +211,7 @@ pub struct TracedEvent<E: Event> {
 ```
 
 ### Metrics
+
 - `events_published_total` - Counter by event type
 - `events_consumed_total` - Counter by consumer
 - `event_latency_seconds` - Histogram of processing time
@@ -212,6 +220,7 @@ pub struct TracedEvent<E: Event> {
 ## Testing
 
 ### Unit Tests
+
 ```rust
 #[test]
 fn user_created_event_applies_correctly() {
@@ -228,6 +237,7 @@ fn user_created_event_applies_correctly() {
 ```
 
 ### Integration Tests
+
 ```rust
 #[tokio::test]
 async fn event_published_and_consumed() {

@@ -2,7 +2,8 @@
 
 ## NVMS
 
-Prior ecosystem work positioned NVMS as runtime inventory and execution substrate across native, VM, WSL, Lima, Apple container-like and remote paths. Phenotype Fabric materially deepens that scope with real-time I/O, data/object residency, adaptive placement, surface compilation and unified product packaging.
+Prior ecosystem work positioned NVMS as runtime inventory and execution substrate across native, VM, WSL, Lima, Apple container-like and remote paths. Phenotype Fabric materially deepens that scope
+with real-time I/O, data/object residency, adaptive placement, surface compilation and unified product packaging.
 
 Three viable repository outcomes remain:
 

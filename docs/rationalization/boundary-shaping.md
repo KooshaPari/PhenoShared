@@ -5,7 +5,8 @@
 **Authority:** phenotype-registry (INDEX spine)  
 **Consumers:** [HexaKit `DISPOSITION.md`](https://github.com/KooshaPari/HexaKit/blob/main/docs/boundary/DISPOSITION.md), per-repo boundary assessments, rationalization PRs
 
-This charter is the single source of truth for **how** the Phenotype ecosystem reshapes repository boundaries during rationalization. It defines three dispositions, target topology, and non-negotiable doctrine.
+This charter is the single source of truth for **how** the Phenotype ecosystem reshapes repository boundaries during rationalization. It defines three dispositions, target topology, and non-negotiable
+doctrine.
 
 ---
 
@@ -23,7 +24,8 @@ Hard deletion is reserved for explicit legal/security remediation â€” not for â€
 
 ### HexaKit = scaffolding only
 
-[HexaKit](https://github.com/KooshaPari/HexaKit) owns **project and file templates**, scaffolding generators, and reference implementations that *teach* the hexagonal scaffold (ports, XDD patterns). It is **not** a lib holder, language-bucket SDK, or long-term home for domain crates.
+[HexaKit](https://github.com/KooshaPari/HexaKit) owns **project and file templates**, scaffolding generators, and reference implementations that *teach* the hexagonal scaffold (ports, XDD patterns).
+It is **not** a lib holder, language-bucket SDK, or long-term home for domain crates.
 
 Domain logic, observability, auth, MCP, testing, HTTP resilience, and similar concerns belong in **domain-named repos** (see [DOMAIN_ROLES.md](./DOMAIN_ROLES.md) and [STACK_POLICY.md](./STACK_POLICY.md)).
 

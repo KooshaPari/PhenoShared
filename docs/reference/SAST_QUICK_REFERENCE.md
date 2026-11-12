@@ -22,11 +22,13 @@ This runs Semgrep and TruffleHog **before** you commit. Catches issues early.
 ### 2. GitHub Actions (Auto on PR)
 
 When you push to GitHub:
+
 - Workflow `.github/workflows/sast-quick.yml` runs automatically
 - Scans on: pull requests + pushes to main
 - Takes 3-9 minutes per repo
 
 **View results:**
+
 - Go to repo > **Security** tab > **Code scanning**
 - See all Semgrep findings
 - Dismiss or fix as needed
@@ -61,6 +63,7 @@ semgrep --config p/security-audit .
 ### TruffleHog (Secret Scanning)
 
 Scans Git history for:
+
 - AWS Access Keys
 - GitHub tokens (PATs)
 - API keys (Slack, Stripe, etc.)
@@ -72,6 +75,7 @@ Scans Git history for:
 ### License Scanning
 
 Reports on:
+
 - GPL/AGPL code (copyleft licenses)
 - Proprietary/commercial dependencies
 - License compliance issues
@@ -83,6 +87,7 @@ Reports on:
 ### If Semgrep Finds a Problem
 
 **Example error:**
+
 ```
 secrets-detection.yml:1: Hardcoded API key detected
   api_key = "sk-1234567890abcdef"
@@ -91,11 +96,13 @@ secrets-detection.yml:1: Hardcoded API key detected
 **Fix options:**
 
 1. **Remove the secret:**
+
    ```python
    api_key = os.getenv("API_KEY")
    ```
 
 2. **Use environment variables:**
+
    ```bash
    export API_KEY="sk-..."
    ```
@@ -106,6 +113,7 @@ secrets-detection.yml:1: Hardcoded API key detected
    - HashiCorp Vault
 
 4. **Suppress if legitimate** (rare):
+
    ```python
    api_key = "test-key-only"  # nosemgrep: secrets-detection.hardcoded-api-key
    ```
@@ -113,17 +121,20 @@ secrets-detection.yml:1: Hardcoded API key detected
 ### If TruffleHog Finds a Secret
 
 **If it's a real secret:**
+
 1. **Immediately rotate it** (regenerate/revoke the key)
 2. Commit the removal to Git history (amend + force push, or rewrite history with BFG)
 3. Alert team/security
 
 **If it's a false positive:**
+
 1. Add to `.semgrep-rules/false-positives.txt` (if you maintain custom rules)
 2. Or ignore the alert in GitHub Security tab
 
 ### If License Check Warns
 
 Review the dependency:
+
 1. Check if it's a required dependency
 2. Consider alternatives (permissive licenses)
 3. If required, document the license compliance in `LICENSES/`
@@ -160,7 +171,9 @@ Review the dependency:
 ## Common Issues & Fixes
 
 ### Issue: "Module not found" in workflow
+
 **Solution:** Install dependencies before scanning
+
 ```yaml
 - run: cargo build  # Rust
 - run: pip install -r requirements.txt  # Python
@@ -168,14 +181,18 @@ Review the dependency:
 ```
 
 ### Issue: Semgrep timeout
+
 **Solution:** Set longer timeout in workflow
+
 ```yaml
 semgrep:
   timeout-minutes: 10  # Increase from 5
 ```
 
 ### Issue: False positive — "hardcoded API key"
+
 **Solution:** Use meaningful test prefix
+
 ```python
 # Good (Semgrep ignores)
 api_key = "test_123"
@@ -185,7 +202,9 @@ api_key = "sk-1234567890abcdef"
 ```
 
 ### Issue: TruffleHog finds old secret in history
+
 **Solution:** Rewrite Git history (BFG Repo-Cleaner)
+
 ```bash
 bfg --delete-files <filename>
 git reflog expire --expire-unreachable=now --all
@@ -263,18 +282,21 @@ A: Check Security tab > Code scanning for specific issues. Fix or suppress with 
 
 ## Team Guidelines
 
-### Before Committing:
+### Before Committing
+
 1. Run `pre-commit run --all-files` locally
 2. Fix any Semgrep violations
 3. Never commit secrets
 
-### After Pushing PR:
+### After Pushing PR
+
 1. Wait for SAST checks (3-9 min)
 2. Review findings in Security tab
 3. Fix or dismiss with justification
 4. Re-push; checks re-run
 
-### On Main Branch:
+### On Main Branch
+
 - All SAST checks must pass
 - No blocked findings allowed
 - Regular review of Security tab alerts
@@ -283,22 +305,24 @@ A: Check Security tab > Code scanning for specific issues. Fix or suppress with 
 
 ## Further Reading
 
-- **Semgrep Docs:** https://semgrep.dev/docs/
-- **TruffleHog:** https://github.com/trufflesecurity/trufflehog
-- **OWASP Top 10:** https://owasp.org/www-project-top-ten/
-- **CWE Top 25:** https://cwe.mitre.org/top25/
+- **Semgrep Docs:** <https://semgrep.dev/docs/>
+- **TruffleHog:** <https://github.com/trufflesecurity/trufflehog>
+- **OWASP Top 10:** <https://owasp.org/www-project-top-ten/>
+- **CWE Top 25:** <https://cwe.mitre.org/top25/>
 
 ---
 
 ## Support
 
 **For questions:**
+
 1. Check `.github/workflows/sast-quick.yml` syntax
 2. Review `.semgrep-rules/` for specific rule details
 3. Run `semgrep --help` for CLI options
-4. Check Semgrep registry (https://semgrep.dev/r) for pre-made rules
+4. Check Semgrep registry (<https://semgrep.dev/r)> for pre-made rules
 
 **For emergencies:**
+
 - TruffleHog found a real secret? **Rotate it immediately**
 - Workflow broken? Check syntax in `.github/workflows/`
 - Need custom rules? Create `.semgrep-rules/custom.yml`

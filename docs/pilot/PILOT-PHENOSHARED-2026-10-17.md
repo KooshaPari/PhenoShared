@@ -3,7 +3,8 @@
 **Repo:** `KooshaPari/PhenoShared`  
 **Lane:** `wA:Ps` (complement to Phinbox audit lane `wA:pN`)  
 **HEAD:** `7185026f` (post step-2.3)  
-**Schema choice:** sibling report — PhenoShared is a pooled foundation, not a competitive product, so the per-product pilot-plan schema (`baseline_candidates`, `hypothesis`, `winner`) does not apply. Companion machine-readable artifact: `docs/pilot/PILOT-PHENOSHARED-2026-10-17.json`.
+**Schema choice:** sibling report — PhenoShared is a pooled foundation, not a competitive product, so the per-product pilot-plan schema (`baseline_candidates`, `hypothesis`, `winner`) does not apply.
+Companion machine-readable artifact: `docs/pilot/PILOT-PHENOSHARED-2026-10-17.json`.
 
 ---
 
@@ -13,7 +14,8 @@
 cargo check -p substrate --quiet   →   exit 0   (timestamp 2026-10-17T22:29:50Z)
 ```
 
-`cargo check -p substrate` (not `--workspace`) is the smallest credible member to confirm the workspace still resolves after step-2.3 removed `crates/pheno-registry-python`. Full `--workspace` check exceeds a 10-minute session budget on this host; per-crate scoping is the operator-authorized fallback.
+`cargo check -p substrate` (not `--workspace`) is the smallest credible member to confirm the workspace still resolves after step-2.3 removed `crates/pheno-registry-python`. Full `--workspace` check
+exceeds a 10-minute session budget on this host; per-crate scoping is the operator-authorized fallback.
 
 The audit's complaint is that an exit-0 `cargo check` is hollow without negative-case discrimination. The four cases below are the discrimination.
 
@@ -77,7 +79,8 @@ src/connector.rs:123   pub fn remaining(&self) -> usize
 | Pre-PR #457 (per audit) | Tests at `src/connector.rs:175,185,231` asserted on the literal `"stub-change"` id. Passing tests do not prove real connectivity. |
 | Post-PR #457 (HEAD `7185026f`) | `src/connector.rs:447`: `assert!(!id.contains("stub-change"), "ids must not encode the historical stub literal: {id}")`. The stub literal is now actively rejected. |
 
-**Verdict.** Pre-PR #457 the audit's complaint was live. PR #457's stub-to-contract slice (commit `01a554f8 refactor(connector): convert stub_changes() to real ChangesProvider contract`) flipped the assertion direction. Success on this test now implies the contract is enforced, not that the stub is being parroted.
+**Verdict.** Pre-PR #457 the audit's complaint was live. PR #457's stub-to-contract slice (commit `01a554f8 refactor(connector): convert stub_changes() to real ChangesProvider contract`) flipped the
+assertion direction. Success on this test now implies the contract is enforced, not that the stub is being parroted.
 
 ---
 
@@ -95,7 +98,8 @@ Hollow-pass risk after PR #457 + step-2.3:  LOW for (a)(b)(d); case (c) still pr
 | (c) Private exposure | EXPOSURE PRESENT — tracked as follow-up |
 | (d) Broken consumer returning success | DISCRIMINATED — assertion flipped to forbid stub literal |
 
-**Winner:** `DISCRIMINATED_PASS_NOT_HOLLOW`. A `cargo check` exit-0 at HEAD is no longer the same kind of green as it was pre-PR-457. Each of the four audit-named failure modes now produces a verdict distinct from a true pass.
+**Winner:** `DISCRIMINATED_PASS_NOT_HOLLOW`. A `cargo check` exit-0 at HEAD is no longer the same kind of green as it was pre-PR-457. Each of the four audit-named failure modes now produces a verdict
+distinct from a true pass.
 
 ---
 

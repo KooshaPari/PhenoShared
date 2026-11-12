@@ -72,14 +72,16 @@ A future enhancement (P1.3) will plug in OpenTelemetry via `tracing-otel`.
 
 ## Consequences
 
-**Positive**
+### Positive
+
 - Application code is trace-backend agnostic.
 - Domain events flow over the same type system as storage (port + impl).
 - Tests can assert on `RecordingTrace::events()` without a network.
 - Operator can wire `AgilePlusTrace` or `TraceraTrace` (or both via
   `MultiTrace`) without recompiling the binary.
 
-**Negative**
+### Negative
+
 - Two APIs in play (`TracePort` and `tracing`). We accept: domain
   events are structured, request logs are stream-of-text.
 - `TracePort` is async, so a sync caller must `.await` it. This is

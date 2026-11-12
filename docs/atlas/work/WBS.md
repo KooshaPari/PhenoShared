@@ -1,6 +1,7 @@
 # Work breakdown and outcome ownership
 
-All entries are proposed and unclaimed. Logical scope must resolve to real current paths/permissions. Estimates are deliberately absent. Critical-path duration is therefore unestimated; the DAG itself is checked.
+All entries are proposed and unclaimed. Logical scope must resolve to real current paths/permissions. Estimates are deliberately absent. Critical-path duration is therefore unestimated; the DAG itself
+is checked.
 
 | ID | Work package | Owner | Hard prerequisites |
 |---|---|---|---|
@@ -127,4 +128,5 @@ All entries are proposed and unclaimed. Logical scope must resolve to real curre
 
 ## Revision 1.1: no new standalone review backlog
 
-Existing semantic-improvement, shared-capability, Tracera and integration/adoption packages now carry REQ-06-09..REQ-06-20. Assess owned/external reuse and current/future consumers during those tasks. This revision adds no new dependency barriers or speculative duration estimates. Actual cross-owner implementation work is bounded and assigned when discovered, not assumed away.
+Existing semantic-improvement, shared-capability, Tracera and integration/adoption packages now carry REQ-06-09..REQ-06-20. Assess owned/external reuse and current/future consumers during those tasks.
+This revision adds no new dependency barriers or speculative duration estimates. Actual cross-owner implementation work is bounded and assigned when discovered, not assumed away.

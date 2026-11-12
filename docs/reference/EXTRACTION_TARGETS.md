@@ -1,4 +1,5 @@
 # Cross-Repository Extraction Targets
+
 ## New Phenotype Shared Crates for Duplication Consolidation
 
 **Date**: 2026-03-30  
@@ -19,6 +20,7 @@
 ### Problem Statement
 
 Currently, **20+ error handling patterns are repeated** across 14 files:
+
 - Context-preserving `#[error("{context}: {source}")]` pattern (200 LOC)
 - Manual `From<T>` conversions for io, json, toml errors (100 LOC)
 - Error message templates and variant structs (100 LOC)
@@ -84,6 +86,7 @@ pub enum MyError {
 **Affected Crates** (Phase 1):
 
 phenotype-infrakit:
+
 - phenotype-contracts/src/error.rs (convert to ContextError)
 - phenotype-event-sourcing/src/error.rs (convert to ContextError)
 - phenotype-http-client-core/src/error.rs (convert to ContextError)
@@ -91,6 +94,7 @@ phenotype-infrakit:
 - phenotype-policy-engine/src/error.rs (convert to ContextError)
 
 heliosCLI:
+
 - codex-rs/core/src/error.rs (convert key variants)
 - codex-rs/rmcp-client/src/error.rs (convert to ContextError)
 - codex-rs/config/src/error.rs (convert to ContextError)
@@ -115,6 +119,7 @@ trybuild = "1.0"
 **Duration**: 2 days  
 **Effort**: ~40 tool calls  
 **Milestones**:
+
 - Day 1: Implement ContextError macro, basic From conversion
 - Day 1.5: Testing and edge cases (error message templates, multiple context levels)
 - Day 2: Integration with phenotype-error-core, migration examples
@@ -132,6 +137,7 @@ trybuild = "1.0"
 ### Rollback Plan
 
 If macro implementation fails:
+
 - Keep manual patterns in phenotype-error-core
 - Use macro crate as optional feature (not required)
 - Document workaround patterns
@@ -151,6 +157,7 @@ If macro implementation fails:
 ### Problem Statement
 
 Configuration loading logic is **scattered and inconsistently implemented**:
+
 - Figment setup patterns repeated 4+ times (100 LOC duplication)
 - TOML merging logic duplicated in 2 places (60 LOC duplication)
 - Error wrapping patterns repeated in 5 ConfigError enums (80 LOC duplication)
@@ -215,12 +222,14 @@ let config = FigmentBuilder::new("MY_APP_")
 **Enhanced Crates** (Phase 2):
 
 phenotype-infrakit:
+
 - phenotype-config-loader: Add FigmentBuilder, ConfigMerger, ConfigValidator
 - phenotype-policy-engine/src/loader.rs: Use FigmentBuilder
 - phenotype-telemetry/src/registry.rs: Use FigmentBuilder
 - phenotype-config-core: Export consolidated ConfigError
 
 heliosCLI (migration path, not Phase 2):
+
 - codex-rs/core/src/config/service.rs: Use ConfigError from phenotype-config-loader
 - codex-rs/config/src/loader.rs: Use FigmentBuilder
 - codex-rs/config/src/validation.rs: Use ConfigValidator
@@ -249,6 +258,7 @@ tempfile = "3.0"
 **Duration**: 3 days  
 **Effort**: ~50 tool calls  
 **Milestones**:
+
 - Day 1: Implement FigmentBuilder and ConfigMerger
 - Day 1.5: Implement ConfigValidator and EnvLoader
 - Day 2: Error consolidation and integration with phenotype-error-macros
@@ -268,6 +278,7 @@ tempfile = "3.0"
 ### Integration with phenotype-error-macros
 
 This crate **depends on** phenotype-error-macros:
+
 - ConfigError uses `#[derive(ContextError)]`
 - Reduces boilerplate in error definitions
 
@@ -285,6 +296,7 @@ This crate **depends on** phenotype-error-macros:
 ### Problem Statement
 
 Test infrastructure is **scattered** with minimal sharing:
+
 - Mock response builders repeated in 5+ test files (100 LOC duplication)
 - Test client builders duplicated in 6 crates (72 LOC duplication)
 - Seed data generators created independently in 4+ places (100 LOC duplication)
@@ -362,10 +374,12 @@ fn test_error_handling() {
 **Affected Crates** (Phase 3, optional):
 
 phenotype-infrakit:
+
 - crates/phenotype-test-infra: Move common builders here
 - All test files: Use ConfigBuilder, HttpResponseBuilder
 
 heliosCLI:
+
 - codex-rs/app-server-protocol/src/schema_fixtures.rs: Use SeedData
 - codex-rs/core/tests/common/lib.rs: Use HttpResponseBuilder
 - All test suites: Use phenotype-test-fixtures builders
@@ -388,6 +402,7 @@ serde_json = "1.0"
 **Duration**: 2 days  
 **Effort**: ~35 tool calls  
 **Milestones**:
+
 - Day 1: Implement builders (ConfigBuilder, HttpResponseBuilder, ErrorBuilder)
 - Day 1.5: Implement assertions and snapshots
 - Day 2: SeedData generators and documentation
@@ -423,6 +438,7 @@ Recommendation: Execute Phases 1-2 immediately; defer Phase 3 to Q2 when test pa
 ### Problem Statement
 
 `phenotype-http-client-core` is **monolithic** (705 LOC) with **mixed concerns**:
+
 - Core HTTP trait (50 LOC) — reusable
 - Reqwest sync adapter (347 LOC) — specific to sync
 - Auth middleware (120 LOC) — specific to basic auth
@@ -430,6 +446,7 @@ Recommendation: Execute Phases 1-2 immediately; defer Phase 3 to Q2 when test pa
 - HTTP errors (84 LOC) — reusable
 
 heliosCLI **cannot easily reuse** because:
+
 - Sync focus (phenotype) vs async/await (heliosCLI)
 - No async adapter included
 - MCP + OAuth are domain-specific (should stay in heliosCLI)
@@ -487,15 +504,18 @@ heliosCLI (stays domain-specific):
 ### Scope of Changes
 
 **Phase 2 (core only)**:
+
 - Refactor phenotype-http-client-core (reduce from 705 to 300 LOC)
 - Create phenotype-http-client-reqwest-sync (200 LOC)
 - Migrate phenotype crates to use sync adapter
 
 **Phase 4 (async, optional)**:
+
 - Create phenotype-http-client-tokio-async (150 LOC)
 - Enable heliosCLI to adopt phenotype crates for base HTTP support
 
 **Migration Path for heliosCLI**:
+
 - Adopt phenotype-http-client-core as base trait
 - Build MCP + OAuth layers on top
 - Keep domain-specific network-proxy separate
@@ -503,6 +523,7 @@ heliosCLI (stays domain-specific):
 ### Dependencies
 
 **phenotype-http-client-core**:
+
 ```toml
 [dependencies]
 thiserror = "1.0"
@@ -512,6 +533,7 @@ thiserror = "1.0"
 ```
 
 **phenotype-http-client-reqwest-sync**:
+
 ```toml
 [dependencies]
 reqwest = { version = "0.11", features = ["json"] }
@@ -524,6 +546,7 @@ tokio = { version = "1.0", features = ["macros", "rt"] }
 ```
 
 **phenotype-http-client-tokio-async** (Phase 4):
+
 ```toml
 [dependencies]
 reqwest = { version = "0.11", features = ["json", "stream"] }
@@ -536,11 +559,13 @@ phenotype-http-client-core = { path = "../phenotype-http-client-core" }
 ### Timeline & Effort
 
 **Phase 2** (Core + Sync Adapter):
+
 - Duration: 3-4 days
 - Effort: ~50 tool calls
 - Deliverable: phenotype-http-client-core refactored + sync adapter
 
 **Phase 4** (Async Adapter):
+
 - Duration: 2-3 days
 - Effort: ~30 tool calls
 - Deliverable: async adapter + heliosCLI migration path documented
@@ -646,4 +671,5 @@ PHASE 4 (Async Support, Q3 2026)
 6. **Defer Phase 3** to Q2 when test patterns stabilize
 7. **Plan Phase 4** for Q3 when heliosCLI async needs mature
 
-**Recommendation**: Start with Phases 1-2 immediately; these are **high-confidence, low-risk changes** that will **eliminate 350-450 LOC of duplication** and **establish shared library patterns** for the entire ecosystem.
+**Recommendation**: Start with Phases 1-2 immediately; these are **high-confidence, low-risk changes** that will **eliminate 350-450 LOC of duplication** and **establish shared library patterns** for
+the entire ecosystem.

@@ -8,6 +8,7 @@
 ## Current State: Isolated Repos with Fork Strategy
 
 **Today's Architecture**:
+
 - 20+ independent repositories under &lt;REDACTED&gt; GitHub org
 - Fork strategy: hyper-modify/extend upstream (aizen, vibeproxy, zen, etc.)
 - Worktree-based development: `repos/<project>-wtrees/<topic>`
@@ -35,12 +36,14 @@
 **What it is**: Core app provides shared identity, design system, and data layer. Remote repos inherit capabilities via standardized interfaces.
 
 **Applies to Phenotype**:
+
 - **@phenotype/docs** becomes the "Chassis" for design language/theming
 - **AgilePlus** becomes the "Chassis" for spec-driven delivery (FR traceability, worklog structure, versioning)
 - **Remote repos** (heliosApp, agent-wave, etc.) adopt @phenotype/docs theme + AgilePlus spec structure
 - **Benefit**: Sub-apps stay small, focused on business logic. No design/spec reinvention.
 
 **Implementation**:
+
 ```
 @phenotype/docs (Chassis)
 ├── Design tokens, theme
@@ -65,12 +68,14 @@ All other repos
 **What it is**: Core app uses an orchestrator that loads modules based on user intent. Queries a registry instead of hardcoding which repo goes where.
 
 **Applies to Phenotype**:
+
 - **Agent Registry**: Instead of hardcoding "agent-wave handles forecasting," system queries registry: "who handles forecasting intent?"
 - **Service Discovery**: heliosApp requests "authentication" from registry → loaded from auth-sidecar or phenotype-shared
 - **Dynamic Dashboard**: AgilePlus orchestrates "show me all work items" → queries phenotype-shared, cliproxyapi-plusplus, agentapi-plusplus for data
 - **Benefit**: Core app infinitely extensible without central config file changes. Add new service, register it, system uses it.
 
 **Implementation**:
+
 ```
 Registry (service-mesh or YAML config)
 ├── "forecasting" → agent-wave service + MCP
@@ -91,11 +96,13 @@ AgilePlus Orchestrator
 **What it is**: Monorepo tooling (Nx/Turborepo) enforces strict boundaries in core, while experimental/third-party features stay in separate repos and are pulled in via federation.
 
 **Applies to Phenotype**:
+
 - **Core Monorepo Boundary** (phenotype-infrakit): AgilePlus + phenotype-shared + governance docs + spec framework (strict layer boundaries enforced by linter)
 - **Domain Repos** (stay separate): heliosApp (mobile), agent-wave (forecasting), civ (compliance), aizen (identity) — independent development, pulled in via Module Federation
 - **Benefit**: Consistency and testability where you need it (core); speed and autonomy where you don't (domains)
 
 **Implementation**:
+
 ```
 phenotype-infrakit (Monorepo with Nx)
 ├── Layer 1 (Platform): AgilePlus, governance
@@ -116,12 +123,14 @@ Domain Repos (stay separate, loaded via Module Federation)
 **What it is**: System monitors federated modules, detects failures/slowness, dynamically swaps versions or replicas for "lite" versions or alternative implementations. Self-healing.
 
 **Applies to Phenotype**:
+
 - **Module Health Monitoring**: AgilePlus monitors heliosApp + agent-wave response times. If heliosApp > 2s latency, swaps for "lite" mode (reduced features, static data)
 - **Automated Failover**: If phenotype-shared auth service fails, fallback to local JWT cache + retry queue
 - **AI-Driven Optimization**: Claude-as-observer watches which modules are slow/failing, suggests: "consolidate heliosApp + agent-wave into phenotype-shared features for faster boot"
 - **Benefit**: Self-healing, high availability, continuous optimization without manual intervention
 
 **Implementation**:
+
 ```
 AgilePlus Health Monitor (runs every 30s)
 ├── Ping heliosApp, agent-wave, phenotype-shared
@@ -157,24 +166,28 @@ Optimizer Agent (runs weekly)
 ## Recommended Implementation Roadmap
 
 ### Phase 1: Establish Chassis (Weeks 1-2)
+
 - [ ] Finalize @phenotype/docs theme and config builder
 - [ ] Document AgilePlus governance as the meta-chassis
 - [ ] Create INTERFACE contracts (how repos inherit from Chassis)
 - [ ] Update all repos to use @phenotype/docs + AgilePlus spec structure
 
 ### Phase 2: Module Federation (Weeks 3-5)
+
 - [ ] Implement Module Federation in AgilePlus host
 - [ ] Configure heliosApp as first remote module
 - [ ] Test dynamic loading and standalone execution
 - [ ] Add agent-wave as second remote module
 
 ### Phase 3: Intent-Driven Registry (Weeks 6-8)
+
 - [ ] Design service registry schema (YAML or database)
 - [ ] Implement registry querying in AgilePlus orchestrator
 - [ ] Move auth, logging, persistence to registry-based discovery
 - [ ] Update documentation with registry patterns
 
 ### Phase 4: Health Monitoring + AI-Native (Weeks 9-12)
+
 - [ ] Build AgilePlus health monitor
 - [ ] Integrate lite-mode fallbacks for each module
 - [ ] Deploy optimizer agent (weekly analysis)
@@ -207,8 +220,8 @@ Enhance current fork hyper-modification approach with Sidecar pattern for auth/l
 ---
 
 ## See Also
+
 - `docs/governance/plugin_architecture_governance.md` — Existing plugin patterns
 - `docs/reference/SOFTWARE_ARCHITECTURE_REFERENCE.md` — Architecture decision records
 - `PLAN.md` in AgilePlus — Spec-driven delivery framework
 - `@phenotype/docs` package docs — Theme and governance chassis
-

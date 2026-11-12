@@ -25,4 +25,4 @@
 
 - [`docs/worklogs/WORK_LOG.md`](./../worklogs/WORK_LOG.md) — Wave 92–96, CLEAN-007
 
-_Last updated: 2026-03-31_
+### Last updated: 2026-03-31

@@ -93,7 +93,8 @@ for name in ['arxiv','github','huggingface','modelscope','reddit','local_corpus'
 "
 ```
 
-Note: As of v0.12 tasks 3-4, `openalex`/`semantic_scholar`/`wikipedia` are stubs that import and wire all three primitives (retry decorator, rate limiter acquire, circuit breaker guard). Earlier tasks 69-75 had standalone modules with deferred wiring; Gate now expects all 9 to pass.
+Note: As of v0.12 tasks 3-4, `openalex`/`semantic_scholar`/`wikipedia` are stubs that import and wire all three primitives (retry decorator, rate limiter acquire, circuit breaker guard). Earlier tasks
+69-75 had standalone modules with deferred wiring; Gate now expects all 9 to pass.
 
 ## Tests
 

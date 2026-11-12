@@ -1,6 +1,7 @@
 # Rich workspace views — product plan
 
-PhenoDocs federates multi-repo documentation. **Workspace views** are first-class **modules** (or routed pages) oriented around how teams actually work: **plan**, **research**, **spec**, **work**, **roadmap**, **changelog**, **git history**, and **WBS/DAG**—not only static articles.
+PhenoDocs federates multi-repo documentation. **Workspace views** are first-class **modules** (or routed pages) oriented around how teams actually work: **plan**, **research**, **spec**, **work**,
+**roadmap**, **changelog**, **git history**, and **WBS/DAG**—not only static articles.
 
 ## Goals
 

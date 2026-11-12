@@ -23,12 +23,15 @@
 
 **Not found in migration-work (no direct `phenotype-contracts` dep today):** Authvault, Eventra, Agentora, substrate, TestingKit, PhenoObservability, phenotype-config.
 
-
 ## 2026-06-20 repo-level PhenoContracts sweep
 
-GitHub code search for external runtime consumers of `PhenoContracts`, `phenotype-contracts`, and `contract_verifier` found no live external `Cargo.toml`, `package.json`, or `go.mod` dependency on the `<REDACTED>/PhenoContracts` repo itself. Hits are either inside `PhenoContracts`, historical docs/worklogs, or separate in-flight `phenotype-contracts` crate copies governed by this manifest.
+GitHub code search for external runtime consumers of `PhenoContracts`, `phenotype-contracts`, and `contract_verifier` found no live external `Cargo.toml`, `package.json`, or `go.mod` dependency on
+the `<REDACTED>/PhenoContracts` repo itself. Hits are either inside `PhenoContracts`, historical docs/worklogs, or separate in-flight `phenotype-contracts` crate copies governed by this manifest.
 
-Delete-readiness ruling: **hold-decompose**, not archive-ready. The repo remains active/non-archived and owns formal-verification TS ports/adapters (`ports/contract_verifier.ts`, `ports/adapters/kani.ts`, `ports/adapters/prusti.ts`) plus Rust crate surfaces. Archive/delete is safe only after those adapter surfaces are absorbed into a named terminal owner or explicitly retired in a follow-up ADR.
+Delete-readiness ruling: **hold-decompose**, not archive-ready. The repo remains active/non-archived and owns formal-verification TS ports/adapters
+(`ports/contract_verifier.ts`, `ports/adapters/kani.ts`, `ports/adapters/prusti.ts`) plus Rust crate surfaces. Archive/delete is safe only after those adapter surfaces are absorbed into a named
+terminal owner or explicitly retired in a follow-up ADR.
+
 ## Slice 1 scope (in progress)
 
 Port traits and domain contract surface (`Contract`, `Event`, `MetricsHook`, …) remain on **phenoShared interim** via HexaKit#264 git pin:
@@ -46,7 +49,8 @@ Port traits and domain contract surface (`Contract`, `Event`, `MetricsHook`, …
 | 3 | Event / bus contracts | **Eventra** | events | `phenotype-event-bus` already terminal Eventra; event trait slices follow |
 | 4 | Agent / HTTP adapters | **Agentora** | `agent-runtime` / `connect` | HTTP/event adapter traits; substrate MCP plane for runtime edges |
 
-Per [ADR-ECO-014](../adrs/ADR-ECO-014-phenoshared-decompose.md): phenoShared is **interim staging only** — each slice opens a per-domain PR when the owner is named in [DOMAIN_ROLES.md](../../DOMAIN_ROLES.md), not phenoShared as terminal.
+Per [ADR-ECO-014](../adrs/ADR-ECO-014-phenoshared-decompose.md): phenoShared is **interim staging only** — each slice opens a per-domain PR when the owner is named in
+[DOMAIN_ROLES.md](../../DOMAIN_ROLES.md), not phenoShared as terminal.
 
 ## Verification
 
@@ -57,4 +61,3 @@ Get-ChildItem -Recurse -Filter Cargo.toml | Select-String 'phenotype-contracts'
 # Registry meta
 jq '.rows[] | select(.path | test("phenotype-contracts"))' registry/disposition-index.json
 ```
-

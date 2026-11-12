@@ -45,7 +45,7 @@ The `BackendCapabilities` struct advertises what each backend supports
 
 ## Consequences
 
-**Positive**
+### Positive
 
 - Same Python surface for all engines — `omlx-research inference` works
   identically on macOS, Linux, and Windows.
@@ -54,7 +54,7 @@ The `BackendCapabilities` struct advertises what each backend supports
 - The SGLang adapter is a stub today, but the interface contract is
   stable so the implementation can land later.
 
-**Negative**
+### Negative
 
 - Adapter layer is a thin shim; we don't get the engine's full
   capabilities (e.g., vLLM's PagedAttention, SGLang's RadixAttention) —
@@ -62,7 +62,7 @@ The `BackendCapabilities` struct advertises what each backend supports
 - The policy dispatcher is a single point of failure. A bug in
   `HybridDispatch` blocks all inference.
 
-**Mitigations**
+### Mitigations
 
 - Each backend can be called directly (`omlx-research inference --policy vllm`)
   bypassing the dispatcher for debugging.

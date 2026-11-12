@@ -123,7 +123,8 @@ For each signature in `descriptor.signatures`:
    - If valid → return `Ok(ChainVerification { node_authority, chain_depth })`.
    - Otherwise → `Err(TrustError::BadDescriptorSignature { key_id })`.
 
-The first signature that passes wins (descending priority order: most-recent-first in `descriptor.signatures` if any). The function returns the **deepest** valid chain, which is what the caller cares about (a 2-hop chain is more informative than a 1-hop chain).
+The first signature that passes wins (descending priority order: most-recent-first in `descriptor.signatures` if any). The function returns the **deepest** valid chain, which is what the caller cares
+about (a 2-hop chain is more informative than a 1-hop chain).
 
 ### 6. Backwards compatibility
 
@@ -149,6 +150,7 @@ contract; R1 only adds a richer *verifier* path. No fixture changes
 ## Consequences
 
 Positive:
+
 - **Revocation is now possible.** A compromised `NodeAuthority` can be
   revoked at any time by the operator appending to the TrustRoot-signed
   revocation list. A node trying to use the revoked key gets
@@ -160,6 +162,7 @@ Positive:
 - **Backwards compatible.** R0 callers keep working; new callers opt in.
 
 Negative:
+
 - **Boilerplate at the call site.** Constructing a `TrustStore`
   requires knowing the TrustRoot key. This is documented but adds
   friction for small-scale deployments.

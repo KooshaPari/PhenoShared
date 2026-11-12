@@ -22,7 +22,8 @@ Fill in this table as you create each Sentry project:
 
 ### Project 1: AgilePlus
 
-**Project Setup**
+#### Project Setup
+
 - [ ] Project created in Sentry
 - [ ] Platform selected: Rust
 - [ ] Project ID: _______________
@@ -30,13 +31,15 @@ Fill in this table as you create each Sentry project:
 - [ ] GitHub Integration enabled
 - [ ] Alert rules configured
 
-**GitHub Configuration**
+#### GitHub Configuration
+
 - [ ] Secret created: `SENTRY_DSN_AGILEPLUS`
 - [ ] Secret value: `https://...` (stored securely)
 - [ ] Repository assigned: `AgilePlus`
 - [ ] Secret accessible from repo: ✅ / ❌
 
-**Local Configuration**
+#### Local Configuration
+
 - [ ] `.env` file created (from `.env.example`)
 - [ ] `SENTRY_DSN` set to project DSN
 - [ ] `SENTRY_ENVIRONMENT` set to `development`
@@ -48,7 +51,8 @@ Fill in this table as you create each Sentry project:
 
 ### Project 2: phenotype-infrakit
 
-**Project Setup**
+#### Project Setup
+
 - [ ] Project created in Sentry
 - [ ] Platform selected: Rust
 - [ ] Project ID: _______________
@@ -56,13 +60,15 @@ Fill in this table as you create each Sentry project:
 - [ ] GitHub Integration enabled
 - [ ] Alert rules configured
 
-**GitHub Configuration**
+#### GitHub Configuration
+
 - [ ] Secret created: `SENTRY_DSN_INFRAKIT`
 - [ ] Secret value: `https://...` (stored securely)
 - [ ] Repository assigned: `phenotype-infrakit`
 - [ ] Secret accessible from repo: ✅ / ❌
 
-**Local Configuration**
+#### Local Configuration
+
 - [ ] `.env` file created (from `.env.example`)
 - [ ] `SENTRY_DSN` set to project DSN
 - [ ] `SENTRY_ENVIRONMENT` set to `development`
@@ -74,7 +80,8 @@ Fill in this table as you create each Sentry project:
 
 ### Project 3: heliosCLI
 
-**Project Setup**
+#### Project Setup
+
 - [ ] Project created in Sentry
 - [ ] Platform selected: Rust
 - [ ] Project ID: _______________
@@ -82,13 +89,15 @@ Fill in this table as you create each Sentry project:
 - [ ] GitHub Integration enabled
 - [ ] Alert rules configured
 
-**GitHub Configuration**
+#### GitHub Configuration
+
 - [ ] Secret created: `SENTRY_DSN_HELIOSCLI`
 - [ ] Secret value: `https://...` (stored securely)
 - [ ] Repository assigned: `heliosCLI`
 - [ ] Secret accessible from repo: ✅ / ❌
 
-**Local Configuration**
+#### Local Configuration
+
 - [ ] `.env` file created (from `.env.example`)
 - [ ] `SENTRY_DSN` set to project DSN
 - [ ] `SENTRY_ENVIRONMENT` set to `development`
@@ -161,4 +170,3 @@ Once all sections show ✅ or checked checkboxes:
 **Tell the team:** "All 3 Sentry projects are created and configured. Ready for SDK finalization phase."
 
 The next phase will integrate the Sentry SDK into each project using these DSN tokens.
-

@@ -267,6 +267,7 @@ graph TD
 ```
 
 **Rules**:
+
 - WP01 can start immediately (no dependencies)
 - WP02 can start once WP01 is done
 - WP03, WP04, WP06 can run in parallel (once WP02 done)
@@ -303,6 +304,7 @@ Good WP sizing is critical for parallel work:
 **Target size**: 1-4 hours of work
 
 **Too large** (>4 hours):
+
 ```
 ❌ "WP01: Entire feature"
    - Single implementer blocked for days
@@ -313,6 +315,7 @@ Good WP sizing is critical for parallel work:
 ```
 
 **Too small** (<30 minutes):
+
 ```
 ❌ "WP01: Import module"
    - Overhead of code review > actual work
@@ -322,6 +325,7 @@ Good WP sizing is critical for parallel work:
 ```
 
 **Just right**:
+
 ```
 ✓ WP01: Database schema (2 hours)
 ✓ WP02: Models (3 hours)
@@ -333,24 +337,28 @@ Good WP sizing is critical for parallel work:
 Each subtask should be:
 
 **Specific and actionable**:
+
 ```
 ❌ "Create email service"
 ✓ "Create SendGrid HTTP client with authentication"
 ```
 
 **Testable**:
+
 ```
 ❌ "Handle errors"
 ✓ "Add retry logic: exponential backoff, 5 attempts over 72 hours"
 ```
 
 **Completable within an hour**:
+
 ```
 ❌ "Implement entire email system"
 ✓ "Create Email struct with sqlx FromRow implementation"
 ```
 
 **Measurable**:
+
 ```
 ❌ "Make it fast"
 ✓ "Reduce email send latency to <5ms via caching"
@@ -455,23 +463,23 @@ agileplus implement WP02
 
 ## Tips for Good Work Packages
 
-**1. Clear boundaries**
+### 1. Clear boundaries
 
 Each WP owns specific files and deliverables with no overlap.
 
-**2. Self-documenting**
+### 2. Self-documenting
 
 Prompt file clearly states what to build and acceptance criteria.
 
-**3. Testable completion**
+### 3. Testable completion
 
 Clear definition of done — someone can verify completion objectively.
 
-**4. Balanced sizing**
+### 4. Balanced sizing
 
 Roughly 2-4 hours per WP across the feature.
 
-**5. Logical grouping**
+### 5. Logical grouping
 
 Related code together (database + models, not database + UI).
 

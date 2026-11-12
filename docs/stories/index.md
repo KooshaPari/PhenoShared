@@ -12,6 +12,7 @@
 ## Format
 
 Each story includes:
+
 - Code examples
 - Diagrams
 - Performance metrics

@@ -82,7 +82,7 @@ Adopt a **no-idle parallelism policy** with the following components:
 
 ## Consequences
 
-**Positive**
+### Positive
 
 - Makes the "are we idle?" question falsifiable for the first time.
 - Forces `/loop` sessions to emit structured evidence, which feeds the
@@ -90,7 +90,7 @@ Adopt a **no-idle parallelism policy** with the following components:
 - Single threshold (5) is small enough to reason about; ADR-gated changes
   prevent silent policy drift.
 
-**Negative**
+### Negative
 
 - Schema enforcement is a *social* contract until a parser lints worklog
   entries in CI (deferred).
@@ -100,12 +100,12 @@ Adopt a **no-idle parallelism policy** with the following components:
 - Counting open PRs the agent authored requires the agent to record its own
   identity in the worklog, which is a soft contract.
 
-**Neutral**
+### Neutral
 
 - Requires per-session worklog files; agents must remember to append on each
   /loop iteration.
 
-**Deferred (out of scope for this ADR / issue)**
+### Deferred (out of scope for this ADR / issue)
 
 - GitHub Actions workflow that runs the audit on a weekly schedule and posts
   results to a tracking issue. (Out of scope per agent directives that

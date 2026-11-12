@@ -1,6 +1,8 @@
 # Planning roster and capacity
 
-This is the prior response's 30-item planning cohort, not 30 certified active products. Product/lab pairs total 54 session seats: 10 for Tracera and 44 for 22 other candidates. Foundation/support staffing is pooled and separately capacity-limited. PhenoApps and absorbed Agentora are additional conditional/capability records, not automatically new repos or seats. Refresh actual IDs, topics and accepted scope before dispatch.
+This is the prior response's 30-item planning cohort, not 30 certified active products. Product/lab pairs total 54 session seats: 10 for Tracera and 44 for 22 other candidates. Foundation/support
+staffing is pooled and separately capacity-limited. PhenoApps and absorbed Agentora are additional conditional/capability records, not automatically new repos or seats. Refresh actual IDs, topics and
+accepted scope before dispatch.
 
 | Subject | Class | Seats | Dossier |
 |---|---|---:|---|

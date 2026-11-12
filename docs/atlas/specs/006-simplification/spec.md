@@ -52,7 +52,8 @@ Acceptance: Git revert is not represented as a database restore.
 
 ## Scope discipline
 
-Apply the actual subject support/role contract. Preserve richer existing source formats and authority. Generated spec bundles do not certify native AgilePlus compatibility; inspect the installed engine/schema first. Unknowns and failures remain explicit.
+Apply the actual subject support/role contract. Preserve richer existing source formats and authority. Generated spec bundles do not certify native AgilePlus compatibility; inspect the installed
+engine/schema first. Unknowns and failures remain explicit.
 
 ## REQ-06-09 Owned work in the reuse search
 

@@ -5,6 +5,7 @@ Complete guide to deploying Snyk GitHub Actions workflows for automated security
 **Time Required:** 5-10 minutes
 **Complexity:** Intermediate
 **Prerequisites:**
+
 - Snyk token acquired and verified
 - Admin access to GitHub organization
 - GitHub organization: &lt;REDACTED&gt;
@@ -14,6 +15,7 @@ Complete guide to deploying Snyk GitHub Actions workflows for automated security
 ## Overview
 
 This guide covers:
+
 1. Adding SNYK_TOKEN to GitHub organization secrets
 2. Deploying snyk-scan.yml workflow to Tier 1 repos
 3. Verifying workflow execution
@@ -27,6 +29,7 @@ This guide covers:
 ### 1.1: Prerequisites
 
 Verify you have:
+
 - Admin access to &lt;REDACTED&gt; GitHub organization
 - Snyk API token (from SNYK_TOKEN_ACQUISITION_GUIDE.md)
 - GitHub CLI (`gh`) installed locally
@@ -59,7 +62,7 @@ gh secret list --org <REDACTED> | grep SNYK_TOKEN
 
 If you prefer the GitHub UI:
 
-1. Go to: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
+1. Go to: <https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions>
 2. Click **"New organization secret"**
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your Snyk token
@@ -381,7 +384,7 @@ git push origin main
 
 For each Tier 1 repo:
 
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions
+1. Go to: <https://github.com/KooshaPari/AgilePlus/actions>
 2. You should see **"Snyk Security Scan"** workflow listed
 3. Refresh page if not visible (may take a few seconds)
 
@@ -406,15 +409,18 @@ Then check Actions tab — workflow should start within 30 seconds.
 
 After first workflow run:
 
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions
+1. Go to: <https://github.com/KooshaPari/AgilePlus/actions>
 2. Click on the latest **"Snyk Security Scan"** run
 3. Expand **"Snyk test"** step
 4. Look for output:
+
    ```
    ✓ Tested X dependencies
    ✓ No known vulnerabilities found
    ```
+
    or
+
    ```
    ✗ X vulnerabilities found
    - 1 critical
@@ -459,7 +465,8 @@ git log --oneline -5 .github/workflows/snyk-scan.yml
 ### 5.2: Viewing Scheduled Runs
 
 In GitHub Actions UI:
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions
+
+1. Go to: <https://github.com/KooshaPari/AgilePlus/actions>
 2. Filter by: "Snyk Security Scan"
 3. Look for runs with source: **"Scheduled"**
 
@@ -473,7 +480,7 @@ You'll see these starting tomorrow.
 
 For email alerts when security issues are found:
 
-1. Go to: https://github.com/settings/notifications
+1. Go to: <https://github.com/settings/notifications>
 2. Enable: **"Actions"** → **"Notifications on failure"**
 3. You'll get email when workflow fails (critical vulnerabilities found)
 
@@ -562,7 +569,7 @@ When vulnerabilities are found:
 
 Scan reports are saved as artifacts:
 
-1. Go to: https://github.com/KooshaPari/AgilePlus/actions/runs/XXXXX
+1. Go to: <https://github.com/KooshaPari/AgilePlus/actions/runs/XXXXX>
 2. Scroll to: **"Artifacts"** section
 3. Download: `snyk-report.zip`
 4. Contains: `snyk-report.json`
@@ -578,6 +585,7 @@ You can download and review the full report locally.
 **Cause:** Secret not set in GitHub organization
 
 **Solution:**
+
 ```bash
 # Set secret again
 gh secret set SNYK_TOKEN --org <REDACTED>
@@ -591,6 +599,7 @@ gh secret list --org <REDACTED>
 **Cause:** Workflow file not properly committed or workflow syntax error
 
 **Solution:**
+
 ```bash
 # Verify workflow file exists and is valid
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
@@ -621,6 +630,7 @@ git push origin main --force
 **Cause:** Large dependency tree or network latency
 
 **Solution:**
+
 - First run is slowest (caching not yet setup)
 - Subsequent runs use GitHub Actions cache
 - Typical time: 2-5 minutes
@@ -631,6 +641,7 @@ git push origin main --force
 **Cause:** Network issue or rate limiting
 
 **Solution:**
+
 ```yaml
 - name: Run Snyk scan
   uses: snyk/actions/setup@master
@@ -644,24 +655,28 @@ git push origin main --force
 ## Part 9: Next Steps
 
 ### Immediate
+
 - [ ] Verify SNYK_TOKEN set in GitHub organization secrets
 - [ ] Deploy workflow to all 3 Tier 1 repos
 - [ ] Check Actions tab for successful first run
 - [ ] Review scan results in artifacts
 
 ### Short-Term (This Week)
+
 - [ ] Set up email notifications
 - [ ] Monitor scheduled nightly scans
 - [ ] Create AgilePlus work items for critical findings
 - [ ] Review and adjust .snyk policy files based on findings
 
 ### Medium-Term (This Month)
+
 - [ ] Deploy workflow to remaining repos (Tier 2-3)
 - [ ] Create dashboard for organization-wide vulnerability tracking
 - [ ] Establish SLA for critical/high vulnerability remediation
 - [ ] Integrate Snyk reports into release process
 
 ### Long-Term (Ongoing)
+
 - [ ] Quarterly review of vulnerability trends
 - [ ] Update Snyk CLI and actions to latest versions
 - [ ] Expand scanning to additional repository types
@@ -671,10 +686,10 @@ git push origin main --force
 
 ## Reference
 
-- **GitHub Actions Secrets:** https://docs.github.com/en/actions/security-guides/encrypted-secrets
-- **Snyk GitHub Actions:** https://github.com/snyk/actions
-- **Snyk GitHub Integration:** https://docs.snyk.io/integrations/git-repository-scm-integrations/github
-- **GitHub Actions Cron Syntax:** https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#schedule
+- **GitHub Actions Secrets:** <https://docs.github.com/en/actions/security-guides/encrypted-secrets>
+- **Snyk GitHub Actions:** <https://github.com/snyk/actions>
+- **Snyk GitHub Integration:** <https://docs.snyk.io/integrations/git-repository-scm-integrations/github>
+- **GitHub Actions Cron Syntax:** <https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#schedule>
 
 ---
 

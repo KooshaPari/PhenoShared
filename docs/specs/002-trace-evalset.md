@@ -26,7 +26,8 @@ What we don't have is a **per-role eval pipeline** that scores individual roles 
 6. **Public analyses** — long-running orchestrator chats, multi-agent transcripts from arXiv/blog posts (corpus under `D:\koosh\Downloads\`).
 7. **Pheno-harness's own traces** — `bench/results/tbench/<run_id>.trace.jsonl` and `<run_id>.graph.json` (produced once intent-graph Stage A lands).
 
-**Selection rule:** traces must contain (a) a recognizable multi-role structure (planner + ≥ 1 sub-agent), (b) at least 30 turns total, (c) at least one recovery or escalation event, (d) a verifiable terminal outcome (commit, test pass/fail, ship/no-ship).
+**Selection rule:** traces must contain (a) a recognizable multi-role structure (planner + ≥ 1 sub-agent), (b) at least 30 turns total, (c) at least one recovery or escalation event, (d) a verifiable
+terminal outcome (commit, test pass/fail, ship/no-ship).
 
 ---
 
@@ -47,6 +48,7 @@ Roles are inferred from message metadata + content + tool calls. Each role has a
 | `advisor_critic` | Pure advisory; no edits. Comments and questions. | read, search | "is this a good idea?" |
 
 **Inference rules (in priority order):**
+
 1. Explicit `role: <id>` in the trace metadata (used by pheno-harness and forge-dev).
 2. Tool-call signature matches a known role pattern (e.g. test-only role → `qa_test`).
 3. Prompt header matches a known pattern (e.g. starts with "Review this diff" → `reviewer`).
@@ -128,7 +130,8 @@ One JSON object per turn of the original trace, in order. Each object is a typed
 
 `kind ∈ {model_call, tool_call, assertion, scoring, checkpoint}`.
 
-Replays are **not** strict re-enactments — they are *reference trajectories*. The eval executor is allowed to deviate as long as the assertions at the end pass and the cost/turn budgets hold. This lets us swap models without re-running the original human trace.
+Replays are **not** strict re-enactments — they are *reference trajectories*. The eval executor is allowed to deviate as long as the assertions at the end pass and the cost/turn budgets hold. This
+lets us swap models without re-running the original human trace.
 
 ---
 
@@ -163,6 +166,7 @@ def run_role_replay(spec: TaskSpec, model_binding: ModelBinding) -> RunResult:
 ```
 
 **Three guarantees the executor must hold:**
+
 1. **Determinism of non-model steps.** `tool_call` and `assertion` are reproducible from the same `replay.jsonl` + same repo state.
 2. **Budget enforcement.** Hard stop when `constraints` are exceeded. Run is marked `failed:budget_exceeded`.
 3. **Trace recording is non-negotiable.** Every turn emits an entry; the run is rejected by the scoreboard if any turn is missing.
@@ -184,7 +188,7 @@ For each role suite run, the scoreboard row contains:
 | `recoveries` | times the model got back on track after a failed assertion |
 | `escalations` | times the harness re-entered a strong model from a weak worker |
 | `first_failure_turn` | turn index of first failed assertion (lower = less recoverable) |
-| `final_state_kind` | `pass | fail:assertion | fail:budget | fail:crash | fail:tool_error` |
+| `final_state_kind` | `pass \| fail:assertion \| fail:budget \| fail:crash \| fail:tool_error` |
 | `role_specific_metrics` | per-role extras (see below) |
 
 ### 5.1 Role-specific extras
@@ -215,7 +219,8 @@ Stages, all small and independent:
 4. **Stage T4 — spec build.** `scripts/build_trace_spec.py` converts an approved trace into a `<task_id>.spec.json` + `<task_id>.replay.jsonl` pair. Stores both in `bench/fixtures/trace_replay/`.
 5. **Stage T5 — holdout split.** A random 20 % of approved traces are reserved as the role-eval holdout (mirror of `training/eval_holdout.yaml` logic). Never used for training.
 6. **Stage T6 — golden run.** First execution on the strongest available model becomes the golden baseline. Stored as `bench/fixtures/trace_replay/_golden/<task_id>.golden.json`.
-7. **Stage T7 — dry-run validation.** Replay the golden on three random model bindings (cheap → strong → local) and confirm the executor produces a valid trace + valid assertions. If any binding crashes the executor, fix the executor before adding more specs.
+7. **Stage T7 — dry-run validation.** Replay the golden on three random model bindings (cheap → strong → local) and confirm the executor produces a valid trace + valid assertions. If any binding
+   crashes the executor, fix the executor before adding more specs.
 
 Each stage writes a status file to `bench/fixtures/trace_replay/_state/<stage>.json` so the pipeline is resumable.
 
@@ -233,6 +238,7 @@ bench/results/role_eval/<role_id>/
 ```
 
 Promotion rules (in `harness/self_improvement/promotion.py`):
+
 - A model/lane is eligible for promotion into `<role_id>` only if:
   - `pass ≥ pass_threshold` (per role; from `config/eval_pillars.yaml`)
   - `wall_s ≤ wall_s_budget`
@@ -259,17 +265,20 @@ These ChatGPT-* files directly informed the per-role design and metric choices:
 ## 9. Scale targets
 
 For the program to be statistically meaningful, each role suite needs at least:
+
 - 30 approved specs at first cut
 - 80 approved specs at v1.0
 - 200 approved specs at v2.0
 
 Sourced roughly:
+
 - 50 % from local Claude traces (most prolific source)
 - 25 % from Codex / ForgeCode / Factory Droid / Cursor combined
 - 15 % from public analyses
 - 10 % from pheno-harness's own traces once intent-graph Stage A is live
 
-If local trace volume is insufficient, augment with **synthetic traces** generated by a strong model running the planner role against Harbor TB2 tasks. Synthetic traces must be marked `synthetic: true` in the spec and never used for training.
+If local trace volume is insufficient, augment with **synthetic traces** generated by a strong model running the planner role against Harbor TB2 tasks. Synthetic traces must be
+marked `synthetic: true` in the spec and never used for training.
 
 ---
 

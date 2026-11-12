@@ -25,6 +25,7 @@ The user wants four GUI surfaces:
 The Parsec analogy means options 3 and 4 are not just dashboards — they stream
 live surface frames (video) from the daemon's SurfaceRegistry, similar to how
 Parsec streams remote desktop frames. The daemon already has:
+
 - SurfaceRegistry with lease tracking (spec 024)
 - Multihop compiler with HEVC/AV1 encode/decode stages (ADR-0032)
 - Wire transport with probe/replan message types (spec 025)
@@ -141,6 +142,7 @@ crates/
 ## Consequences
 
 ### Positive
+
 - Tray app provides immediate always-on daemon management
 - TUI gives power users full graph/route inspection without leaving terminal
 - Native GUI enables Parsec-like surface streaming for local/LAN use
@@ -149,12 +151,14 @@ crates/
 - Leptos enables Rust-on-both-sides (no API translation layer)
 
 ### Negative
+
 - Four GUI surfaces to maintain (mitigated: shared backend, shared frame protocol)
 - Surface streaming is complex (mitigated: daemon already has HEVC/AV1 stages)
 - WebRTC for web is deferred (mitigated: TCP frame transport works for local first)
 - egui has limited styling (mitigated: functional-first, not pixel-perfect)
 
 ### Risks
+
 - Frame transport latency could exceed Parsec-like expectations (mitigated: local TCP, zero-copy where possible)
 - Cross-platform tray icon behavior varies (mitigated: `tray-icon` abstracts this)
 - Leptos WASM bundle size could be large (mitigated: code splitting, lazy loading)

@@ -488,4 +488,3 @@ cargo test --lib presets::
 2. Review source code: `/crates/phenotype-validation/src/`
 3. Check out the architecture: `docs/guides/VALIDATION_DECOMPOSITION_AND_REGISTRY_PATTERN.md`
 4. Follow migration guide: `docs/changes/validation-decomposition/MIGRATION_GUIDE.md`
-

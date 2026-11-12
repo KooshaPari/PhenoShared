@@ -34,6 +34,7 @@ git diff --name-only --diff-filter=U
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Zero `<<<<<<<` markers in CLAUDE.md
 - [ ] Zero `<<<<<<<` markers in AGENTS.md
 - [ ] Zero `<<<<<<<` markers in worklog.md
@@ -62,6 +63,7 @@ git push -u origin specs/main
 ```
 
 **Configuration** (GitHub):
+
 ```bash
 # Protect specs/main from force-push
 gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
@@ -82,6 +84,7 @@ EOF
 ```
 
 **Acceptance Criteria**:
+
 - [ ] `origin/specs/main` branch exists and is visible
 - [ ] Branch protection enabled (no force-push allowed)
 - [ ] Branch is synced with current main
@@ -132,11 +135,13 @@ jobs:
 ```
 
 **Scripts to create** (Phase 1.2):
+
 - `scripts/validate-specs-format.py` — Validates YAML/Markdown structure
 - `scripts/check-fr-id-collisions.py` — Detects duplicate FR-IDs
 - `scripts/validate-fr-test-mapping.sh` — Ensures 100% FR↔Test coverage
 
 **Acceptance Criteria**:
+
 - [ ] Workflow runs on PR to specs/main
 - [ ] All validation checks pass on current main
 - [ ] Validation script can be run locally: `scripts/validate-specs-format.py`
@@ -155,6 +160,7 @@ jobs:
 **Effort**: 4 hours
 
 **Scope**: Extract all 26+ current specs from:
+
 - `FUNCTIONAL_REQUIREMENTS.md` (root)
 - `docs/reference/*.md` (scattered)
 - `ADR.md` (architecture decisions)
@@ -162,6 +168,7 @@ jobs:
 - AgilePlus `.agileplus/specs/` directory
 
 **Process**:
+
 ```bash
 # 1. Clone spec registry template
 cat > docs/reference/SPECS_REGISTRY.md << 'EOF'
@@ -201,6 +208,7 @@ EOF
 ```
 
 **Output Format** (example):
+
 ```yaml
 FR-001-001:
   title: "Event sourcing with SHA-256 hash chains"
@@ -217,6 +225,7 @@ FR-001-001:
 ```
 
 **Acceptance Criteria**:
+
 - [ ] SPECS_REGISTRY.md contains 26+ specs
 - [ ] All FR-IDs are unique
 - [ ] All status values are valid (PROPOSED | APPROVED | IMPLEMENTED | DEPRECATED)
@@ -237,6 +246,7 @@ FR-001-001:
 **Scope**: Find "hidden" specs not yet in FUNCTIONAL_REQUIREMENTS.md
 
 **Search strategy**:
+
 ```bash
 # 1. Find all test functions with "FR" comments
 grep -r "Traces to: FR-" crates/ packages/ | wc -l
@@ -256,6 +266,7 @@ grep "^FR-" docs/reference/SPECS_REGISTRY.md | wc -l
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Count of FR-IDs in tests == count in SPECS_REGISTRY.md
 - [ ] No orphaned test → FR references (100% coverage)
 - [ ] All newly added specs have status PROPOSED (to be reviewed)
@@ -406,6 +417,7 @@ if __name__ == "__main__":
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Script detects concurrent spec changes
 - [ ] Script identifies FR-ID collisions
 - [ ] Script auto-reassigns colliding IDs
@@ -463,6 +475,7 @@ jobs:
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Workflow triggers on FUNCTIONAL_REQUIREMENTS.md changes
 - [ ] Service runs automatically (no manual intervention)
 - [ ] Collision detection works (test with synthetic PR)
@@ -533,6 +546,7 @@ fi
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Script finds all FR-IDs in SPECS_REGISTRY.md
 - [ ] Script finds all test references to FRs
 - [ ] Script reports missing tests (FR → no test)
@@ -567,6 +581,7 @@ fi
 ```
 
 **Acceptance Criteria**:
+
 - [ ] Gate blocks merges with <100% traceability
 - [ ] Gate provides clear error message with missing specs
 - [ ] Gate passes when all FRs have tests
@@ -595,7 +610,8 @@ fi
    grep "My Feature Title" docs/reference/SPECS_REGISTRY.md
    ```
 
-2. **Add to FUNCTIONAL_REQUIREMENTS.md**:
+1. **Add to FUNCTIONAL_REQUIREMENTS.md**:
+
    ```markdown
    ## FR-001-NNN: My Feature Title
 
@@ -605,18 +621,21 @@ fi
 
    Description of behavior...
    ```
+
    (Don't worry about the ID; spec merge service assigns it)
 
-3. **Commit with FR reference**:
+2. **Commit with FR reference**:
+
    ```bash
    git commit -am "feat: implement FR-001-NNN (spec: my-feature)"
    ```
 
-4. **Open PR** and let the service handle the rest.
+3. **Open PR** and let the service handle the rest.
 
 ### Resolving Spec Conflicts
 
 You may see messages like:
+
 ```
 Your spec assigned ID FR-001-045 (was FR-001-022)
 Branch has been updated automatically
@@ -638,6 +657,7 @@ and reassigned your ID to avoid duplication. Your branch is updated automaticall
 - Always reference specs with FR-ID in tests: `// Traces to: FR-001-NNN`
 - Always add specs to FUNCTIONAL_REQUIREMENTS.md (not SPECS_REGISTRY.md)
 - Keep specs/main clean (no direct edits by agents)
+
 ```
 
 **Acceptance Criteria**:
@@ -690,6 +710,7 @@ A: No. Deprecated specs are marked DEPRECATED in SPECS_REGISTRY.md, not deleted.
 ```
 
 **Acceptance Criteria**:
+
 - [ ] FAQ covers most common questions
 - [ ] FAQ links to full architecture doc
 - [ ] Troubleshooting steps are clear and actionable
@@ -707,12 +728,14 @@ A: No. Deprecated specs are marked DEPRECATED in SPECS_REGISTRY.md, not deleted.
 **Effort**: 2 hours
 
 **What this means**:
+
 - Service runs, detects collisions, **logs them**
 - Service does **NOT** modify branches or merge specs
 - Agents still manually handle conflicts (current behavior)
 - **Benefit**: Validates service correctness before full rollout
 
 **Configuration** (env var in CI):
+
 ```bash
 SPEC_SERVICE_MODE=log-only  # Don't auto-merge; just log
 ```
@@ -720,11 +743,13 @@ SPEC_SERVICE_MODE=log-only  # Don't auto-merge; just log
 **Duration**: 3-4 days (Week 1)
 
 **Success metrics**:
+
 - [ ] Service correctly detects all collisions (0 false negatives)
 - [ ] Service correctly ignores non-overlapping specs (0 false positives)
 - [ ] Logs in AUDIT_LOG.md are accurate and complete
 
 **Acceptance Criteria**:
+
 - [ ] Log-only mode deployed in CI
 - [ ] At least 3-5 PRs processed in log-only mode
 - [ ] Zero errors in service logs
@@ -741,22 +766,26 @@ SPEC_SERVICE_MODE=log-only  # Don't auto-merge; just log
 **Effort**: 1 hour
 
 **Configuration** (env var in CI):
+
 ```bash
 SPEC_SERVICE_MODE=auto-merge  # Full service (merge specs, reassign IDs)
 ```
 
 **Rollout strategy**:
+
 - Enable for new PRs only (don't re-process old ones)
 - Monitor for 3-4 days (Week 2)
 - If issues: Revert to log-only mode
 
 **Success metrics**:
+
 - [ ] Auto-merge mode processes all new PRs without errors
 - [ ] All agents successfully using specs/main workflow
 - [ ] 100% of FUNCTIONAL_REQUIREMENTS.md merged to SPECS_REGISTRY.md
 - [ ] Zero merge failures
 
 **Acceptance Criteria**:
+
 - [ ] Full rollout enabled in CI
 - [ ] At least 5-10 PRs processed in auto-merge mode
 - [ ] All merges successful (0 failures)
@@ -769,6 +798,7 @@ SPEC_SERVICE_MODE=auto-merge  # Full service (merge specs, reassign IDs)
 ## Resource Requirements
 
 ### Agents Needed
+
 - **governance-team**: 1 agent (Task 1.1 — conflict resolution)
 - **ci-infrastructure**: 2 agents (Tasks 1.2, 1.3, 3.2, 4.2)
 - **spec-indexer**: 2 agents (Tasks 2.1, 2.2 — parallel)
@@ -779,6 +809,7 @@ SPEC_SERVICE_MODE=auto-merge  # Full service (merge specs, reassign IDs)
 **Total**: 10 agents, 80-100 tool calls, ~2 weeks wall-clock
 
 ### Infrastructure
+
 - GitHub Actions runners (standard Linux, <$100 total usage)
 - No additional cloud services needed (all git-based)
 - Local tools: GitPython, PyYAML, Bash (free/included)
@@ -814,15 +845,15 @@ SPEC_SERVICE_MODE=auto-merge  # Full service (merge specs, reassign IDs)
 ## Next Phase
 
 Once Phase 1 is complete:
+
 - Proceed to Phase 2: Dependency Reconciliation (Weeks 3-6)
 - Reuse spec merge service pattern for dependency reconciliation
 - Build on success from Phase 1
 
 ---
 
-**Document Control**
+### Document Control
 
 | Version | Date | Author | Change |
 |---------|------|--------|--------|
 | 1.0 | 2026-03-30 | Claude Code | Phase 1 implementation roadmap |
-

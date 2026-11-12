@@ -11,7 +11,8 @@
 
 ## Summary
 
-Move the **Traceon hexagonal tracing core** (`tracingkit` crate, formerly `<REDACTED>/Traceon`) out of HexaKit `crates/` into the **`observe` role workspace** owned by **PhenoObservability**. **phenotype-otel** remains a **thin OTLP init bridge** — it must not absorb domain tracing logic.
+Move the **Traceon hexagonal tracing core** (`tracingkit` crate, formerly `<REDACTED>/Traceon`) out of HexaKit `crates/` into the **`observe` role workspace** owned by **PhenoObservability**.
+**phenotype-otel** remains a **thin OTLP init bridge** — it must not absorb domain tracing logic.
 
 This RFC explicitly rejects:
 
@@ -21,7 +22,8 @@ This RFC explicitly rejects:
 
 ## Problem
 
-Traceon was subtree-merged into HexaKit as transitional `Traceon/` → `tracingkit` while the fleet rationalized. HexaKit charter now scopes **genesis only**; domain crates in `crates/` and `Traceon/` violate [DOMAIN_ROLES.md](../../DOMAIN_ROLES.md).
+Traceon was subtree-merged into HexaKit as transitional `Traceon/` → `tracingkit` while the fleet rationalized. HexaKit charter now scopes **genesis only**; domain crates in `crates/` and `Traceon/`
+violate [DOMAIN_ROLES.md](../../DOMAIN_ROLES.md).
 
 Current chokepoints ([RATIONALIZATION_EXECUTION.md](../../RATIONALIZATION_EXECUTION.md)):
 
@@ -42,7 +44,8 @@ PhenoObservability already hosts a partial `tracingkit` tree (~15 paths vs Trace
 | **Python edge** | `phenotype-python-sdk` `[observe]` extra | ObservabilityKit facade (Tier 2) |
 | **Genesis** | HexaKit | Templates only — **no** Traceon/tracing domain code after migration |
 
-**Owner rationale:** PhenoObservability already consumes tracingkit, hosts Metron-adjacent observability stacks, and is the fleet’s observe-role application workspace. phenotype-otel is intentionally minimal (single-crate OTLP bootstrap) and should remain installable without pulling the full hexagonal framework.
+**Owner rationale:** PhenoObservability already consumes tracingkit, hosts Metron-adjacent observability stacks, and is the fleet’s observe-role application workspace. phenotype-otel is intentionally
+minimal (single-crate OTLP bootstrap) and should remain installable without pulling the full hexagonal framework.
 
 ## Language placement
 

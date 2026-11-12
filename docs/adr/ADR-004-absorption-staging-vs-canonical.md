@@ -2,7 +2,8 @@
 
 **Status:** Accepted  
 **Date:** 2026-06-17  
-**Context:** PhenoProc gap port (Agentora #79) copied ~98% of files into absorber staging trees. Some units (agileplus-*, phenotype-router-monitor, governance templates) belong to **different canonical owners**.
+**Context:** PhenoProc gap port (Agentora #79) copied ~98% of files into absorber staging trees. Some units (agileplus-*, phenotype-router-monitor, governance templates) belong to **different
+canonical owners**.
 
 ## Decision
 

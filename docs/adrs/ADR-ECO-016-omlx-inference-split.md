@@ -1,13 +1,16 @@
 # ADR-ECO-016: phenotype-omlx platform/engine split (G18)
 
 ## Status
+
 Accepted (2026-06-18, Wave G18)
 
 ## Context
 
-`phenotype-omlx` is an archived fork of [jundot/omlx](https://github.com/jundot/omlx) (27 branches, macOS menu-bar MLX inference). Registry wave14 audit flagged **FINISH vs DROP** per [ADR-ECO-007 Appendix B](./ADR-ECO-007-gateway-merge-superset.md).
+`phenotype-omlx` is an archived fork of [jundot/omlx](https://github.com/jundot/omlx) (27 branches, macOS menu-bar MLX inference). Registry wave14 audit flagged **FINISH vs DROP** per [ADR-ECO-007
+Appendix B](./ADR-ECO-007-gateway-merge-superset.md).
 
 Fleet already has:
+
 - **OmniRoute** — canonical `route` peer (TypeScript)
 - **bifrost** — vendor enterprise gateway (Go, pinned)
 - **phenoAI** — consumer skeleton workspace

@@ -98,12 +98,14 @@ Build a React login form component that supports email/password authentication w
 You are authorized to create or modify **only** these files:
 
 ```
+
 src/components/LoginForm.tsx
-src/components/__tests__/LoginForm.test.tsx
+`src/components/__tests__/LoginForm.test.tsx`
 src/components/LoginForm.md
 src/hooks/useLogin.ts
-src/hooks/__tests__/useLogin.test.ts
+`src/hooks/__tests__/useLogin.test.ts`
 src/styles/LoginForm.module.css
+
 ```
 
 Any changes to other files (except lock files) require governance exception.
@@ -195,8 +197,10 @@ Your context includes:
 ### State Diagram
 
 ```
+
 PLANNED ──[your work]──> DOING ──[tests pass]──> FOR_REVIEW ──[approved]──> DONE
          (git commits)         (PR created)                   (merged)
+
 ```
 
 ## Available Tools & Commands
@@ -335,6 +339,7 @@ Pages with `agents` in audience contain agent-specific instructions.
 ### Recoverable Errors (Retry)
 
 If you hit these, attempt recovery:
+
 - Network timeouts → retry the operation
 - Transient test failures → run again
 - Temporary lock files → wait and retry
@@ -409,12 +414,14 @@ For Rust codebase targets (the primary AgilePlus use case), the prompt includes 
 
 ### Workspace Layout
 ```
+
 crates/
 ├── agileplus-domain/   ← Core entities, no external deps
 ├── agileplus-cli/      ← Binary crate, uses engine
 ├── agileplus-engine/   ← Orchestration, uses adapters
 ├── agileplus-sqlite/   ← StoragePort impl
 └── agileplus-git/      ← VcsPort impl
+
 ```
 
 ### Dependency Constraints
@@ -433,11 +440,13 @@ cargo fmt --check                     # Formatting check
 ```
 
 ### Code Style
+
 - No `unwrap()` in library code — use `?` or explicit `match`
 - `thiserror` for error types, `anyhow` only in binary crates
 - `async/await` for all I/O operations
 - `tracing::instrument` on public async functions
 - Test module `#[cfg(test)] mod tests { }` inline with code
+
 ```
 
 ### spec-kitty Integration
@@ -488,6 +497,7 @@ When `config.num_agents > 1`, multiple instances of the same agent run in parall
 Agent 0 (index=0) handles the first half of deliverables. Agent 1 (index=1) handles the second half. The harness merges their outputs before running validation.
 
 Coordination rules for multi-agent:
+
 - Each agent owns its assigned files exclusively
 - No agent may touch another agent's assigned files
 - Both agents commit to the same branch with atomic locking

@@ -13,6 +13,8 @@
 
 ## Scope precedence
 
-The latest explicit human decision governs within its scope, subject to actual tool permissions and safety. Accepted repository decisions provide detail; implementation and legacy prose are evidence, not authority to override intent. This package proposes a method. It does not overwrite existing state, invent an AgilePlus transition, or require a new global ledger.
+The latest explicit human decision governs within its scope, subject to actual tool permissions and safety. Accepted repository decisions provide detail; implementation and legacy prose are evidence,
+not authority to override intent. This package proposes a method. It does not overwrite existing state, invent an AgilePlus transition, or require a new global ledger.
 
-Use explicit truth states: OBSERVED_SOURCE, OBSERVED_REMOTE, REPORTED, INFERRED, PROPOSED, MEASURED, UNKNOWN, SUPERSEDED. Every statement is scoped to a subject revision and observation boundary where appropriate. Treat absent access as unresolved, not deletion. Treat changed source as potentially stale evidence, not automatically a regression.
+Use explicit truth states: OBSERVED_SOURCE, OBSERVED_REMOTE, REPORTED, INFERRED, PROPOSED, MEASURED, UNKNOWN, SUPERSEDED. Every statement is scoped to a subject revision and observation boundary where
+appropriate. Treat absent access as unresolved, not deletion. Treat changed source as potentially stale evidence, not automatically a regression.

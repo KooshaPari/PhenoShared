@@ -4,16 +4,21 @@
 > corrections in a follow-up ADR.
 > **Purpose:** Lock down the current state of the world before designing/implementing the eval + profiling program on top of `pheno-harness` (and later `codex-dev`).
 > **Author scope:** Forge, running as the senior research+systems coding agent. No files in `pheno-harness/` were mutated by this audit; this is a read-only artifact.
-> **Naming convention:** the owned forks use the `-dev` suffix in their bin/path names — `forge-dev`, `omniroute-dev`, `codex-dev` — as fixed in `docs/ARCHITECTURE_LAYERS.md`. The layer model also includes `pheno-serve-dev` (inner inference router) below `omniroute-dev` and above the concrete engines.
+> **Naming convention:** the owned forks use the `-dev` suffix in their bin/path names — `forge-dev`, `omniroute-dev`, `codex-dev` — as fixed in `docs/ARCHITECTURE_LAYERS.md`. The layer model also
+includes `pheno-serve-dev` (inner inference router) below `omniroute-dev` and above the concrete engines.
 
 ---
 
 ## 0. TL;DR
 
-1. The brief's "forked ForgeCode" starting point (`~/forge-dev`) does not exist locally. The actual work surface is `~/pheno-harness`, which already contains a substantially-complete version of the program the brief describes (Harbor TB2 driver, route matrix, pillar scoring, budget gates, trace ingest, MoE/risky-action governance, ik_llama local swarm, RLVR-AF scaffolding). Plan builds **on** what's there; it does not replace it.
+1. The brief's "forked ForgeCode" starting point (`~/forge-dev`) does not exist locally. The actual work surface is `~/pheno-harness`, which already contains a substantially-complete version of the
+   program the brief describes (Harbor TB2 driver, route matrix, pillar scoring, budget gates, trace ingest, MoE/risky-action governance, ik_llama local swarm, RLVR-AF scaffolding). Plan builds **on**
+   what's there; it does not replace it.
 2. Primary-source check is complete for: Harbor, Terminal-Bench 2.0/2.1/3.x, DeepSWE, OpenRouter `inclusionai/ling-2.6-flash`, vLLM prefix-cache + speculative-decoding, SGLang, TensorRT-LLM.
-3. The corpus in `D:\koosh\Downloads\ChatGPT-*.md` is broadly aligned with the live sources on MoE economics, serving-stacks, 3090 Ti sizing, RLVR-AF, intent graphs, agent-aware speculative decoding, and user-level deterministic caches. A few numbers from the corpus are stale (model SKUs, pricing) — flagged inline.
-4. **Gaps vs brief** are concentrated in four places: DeepSWE / SWE-bench Verified integration, **a real performance-profiling suite** (CPU/RAM/VRAM/disk/TTFT/ITL/queue/cache), local model+engine matrix with vLLM/SGLang/TRT-LLM/llama.cpp/MLX coverage, and the **architectural transition from chat-loop → intent-graph scheduler**. These are the design problems for the next phase.
+3. The corpus in `D:\koosh\Downloads\ChatGPT-*.md` is broadly aligned with the live sources on MoE economics, serving-stacks, 3090 Ti sizing, RLVR-AF, intent graphs, agent-aware speculative decoding,
+   and user-level deterministic caches. A few numbers from the corpus are stale (model SKUs, pricing) — flagged inline.
+4. **Gaps vs brief** are concentrated in four places: DeepSWE / SWE-bench Verified integration, **a real performance-profiling suite** (CPU/RAM/VRAM/disk/TTFT/ITL/queue/cache), local model+engine
+   matrix with vLLM/SGLang/TRT-LLM/llama.cpp/MLX coverage, and the **architectural transition from chat-loop → intent-graph scheduler**. These are the design problems for the next phase.
 
 ---
 
@@ -48,7 +53,8 @@ Cited against real files in `pheno-harness/`. Numbers/lines as observed on 2026-
 - `pheno-harness/eval/budget.py` + `config/budget_targets.yaml` — cost accounting.
 - `pheno-harness/eval/nested_rlvr.py` — L0/L1/L2/L3 ladder, soft-SVeRL, MR-RLVR stacking.
 - `pheno-harness/eval/HARBOR.md` — internal Harbor notes; **does not yet mention TB 2.1** (see §3.2 below).
-- `pheno-harness/eval/results/` — already has `tbench_model_scores.json`, `tbench_route_probe.json`, `wastage_latest.json`, `budget_latest.json`, `harbor_latest.json`. Format used as the schema template for new suites.
+- `pheno-harness/eval/results/` — already has `tbench_model_scores.json`, `tbench_route_probe.json`, `wastage_latest.json`, `budget_latest.json`, `harbor_latest.json`. Format used as the schema
+  template for new suites.
 
 ### 2.2 Governance / config layer
 
@@ -80,7 +86,8 @@ Cited against real files in `pheno-harness/`. Numbers/lines as observed on 2026-
 - `pheno-harness/pheno/harbor_util.py` — Harbor + OmniRoute env wiring.
 - `pheno-harness/pheno/{paths, router, __init__}.py` — supporting plumbing.
 
-**Bottom line:** pheno-harness has the eval spine, governance layer, trace ingest, and training recipes. It does **not** have a full serving-engine matrix, a hardware-level performance profiler, an intent-graph scheduler, a DeepSWE driver, SWE-bench Verified regression, or a per-role trace eval pipeline. Those are the design problems.
+**Bottom line:** pheno-harness has the eval spine, governance layer, trace ingest, and training recipes. It does **not** have a full serving-engine matrix, a hardware-level performance profiler, an
+intent-graph scheduler, a DeepSWE driver, SWE-bench Verified regression, or a per-role trace eval pipeline. Those are the design problems.
 
 ---
 
@@ -94,7 +101,8 @@ Cited against real files in `pheno-harness/`. Numbers/lines as observed on 2026-
 ### 3.2 Terminal-Bench 2.0 / 2.1 / 3.x
 
 - **TB2.0 = 89 tasks** (verified subset, full leaderboard available via Harbor CLI). Pheno-harness's `eval/HARBOR.md` matches.
-- **TB2.1 = ACTIVE on tbench.ai** as "improved version, inspired by Z.ai's TB2.0 Verified". **Pheno-harness's `eval/HARBOR.md` does not yet mention TB 2.1.** Plan must add support for `terminal-bench@2.1` in addition to `@2.0`.
+- **TB2.1 = ACTIVE on tbench.ai** as "improved version, inspired by Z.ai's TB2.0 Verified". **Pheno-harness's `eval/HARBOR.md` does not yet mention TB 2.1.** Plan must add support
+  for `terminal-bench@2.1` in addition to `@2.0`.
 - **TB3.0 in active development.** Track both 2.x and 3.x compatibility in `config/harbor_tbench_models.yaml`.
 - **TB2.0 leaderboard signal (verified subset, 2026-07-03):**
   - Codex CLI on GPT-5.5 ≈ 0.822
@@ -117,7 +125,8 @@ Cited against real files in `pheno-harness/`. Numbers/lines as observed on 2026-
 - **Context window: 262,144 tokens** (specific large number, not "long context"). Brief was vague; this is the verified value.
 - **Pricing (verified, 2026-07-03):** $0.01 in / $0.03 out per 1M tokens (90 % promo). Brief's "$0.56/$2.49" was an older tier; do not use.
 - Released 2026-04-21.
-- Recommended deployment in pheno-harness: route kind `omniroute_cloud`, lane `medium_hard` (already mapped), bound to this exact model id in `config/models.yaml` (verify the spelling on every PR — model id drift is a real failure mode here).
+- Recommended deployment in pheno-harness: route kind `omniroute_cloud`, lane `medium_hard` (already mapped), bound to this exact model id in `config/models.yaml` (verify the spelling on every PR —
+  model id drift is a real failure mode here).
 
 ### 3.5 Artificial Analysis Coding Agent Index
 
@@ -127,7 +136,8 @@ Cited against real files in `pheno-harness/`. Numbers/lines as observed on 2026-
 
 - **Prefix caching:** block-allocated, LRU, with documented operations. <https://docs.vllm.ai/en/stable/design/prefix_caching/>.
 - **Speculative decoding:** draft-model, dynamic spec-dec, EAGLE, MTP, N-gram, Suffix, Speculators library, MLP draft, parallel draft. <https://docs.vllm.ai/en/latest/features/speculative_decoding/>.
-- Other confirmed: online serving, OpenAI-compat, codex integration, claude-code integration, KV offloading, LoRA, quantization (AWQ, BnB, FP8, GGUF, GPTQModel, ModelOpt, NVFP4 on Blackwell, llm-compressor with FP8/INT4/INT8), explicit `profiling` page. All verified.
+- Other confirmed: online serving, OpenAI-compat, codex integration, claude-code integration, KV offloading, LoRA, quantization (AWQ, BnB, FP8, GGUF, GPTQModel, ModelOpt, NVFP4 on Blackwell,
+  llm-compressor with FP8/INT4/INT8), explicit `profiling` page. All verified.
 
 ### 3.7 SGLang
 
@@ -137,7 +147,8 @@ Cited against real files in `pheno-harness/`. Numbers/lines as observed on 2026-
 ### 3.8 TensorRT-LLM
 
 - In-flight batching, paged KV cache, speculative decoding, quantization, multi-GPU. <https://nvidia.github.io/TensorRT-LLM/overview.html>.
-- Pheno-harness's current yaml marks TRT-LLM `not_recommended_primary` due to compile overhead. Plan must respect that on 3090 Ti (compile time vs. run time is unfavorable) but re-evaluate for Blackwell-class when hardware changes.
+- Pheno-harness's current yaml marks TRT-LLM `not_recommended_primary` due to compile overhead. Plan must respect that on 3090 Ti (compile time vs. run time is unfavorable) but re-evaluate for
+  Blackwell-class when hardware changes.
 
 ---
 
@@ -189,7 +200,8 @@ Read on 2026-07-03. Findings the audit pins down vs. flags.
 ## 6. Unknowns to resolve before implementation
 
 1. **Submodule state of `agileplus-specs/` inside pheno-harness.** AGENTS.md implies it's a submodule, but local dir was not confirmed. Decide: pin a commit hash or treat as content of `pheno-harness/specs/`?
-2. **OpenRouter API key handling.** Brief says "use `OPENROUTER_API_KEY`, never print, store, or commit." Add a secrets-loader pattern and forbid `os.environ.get("OPENROUTER_API_KEY")` from being logged. (See `RISKS.md` §3.)
+2. **OpenRouter API key handling.** Brief says "use `OPENROUTER_API_KEY`, never print, store, or commit." Add a secrets-loader pattern and forbid `os.environ.get("OPENROUTER_API_KEY")` from being
+   logged. (See `RISKS.md` §3.)
 3. **GPU driver / CUDA / vLLM version on the 3090 Ti.** Need `nvidia-smi`, `nvcc --version`, `pip show vllm sglang triton` baseline before writing perf specs. Cannot skip.
 4. **Disk pressure.** NVMe is "mostly full" per brief. All eval sandboxes + model weights + trace stores compete for space. Need a `state/disk_budget.yaml` and a GC policy.
 5. **Codex fork local state.** Empty. Stage 2 is gated on user sign-off. Do not start.
@@ -202,6 +214,7 @@ Read on 2026-07-03. Findings the audit pins down vs. flags.
 The brief contrasts "just told to RLVRAF" with a managed self-improvement loop. The audit pins the requirements before `IMPLEMENTATION_PLAN.md` fills the implementation.
 
 **Required signals (every loop tick must observe at least these):**
+
 - **Per-task signal:** pass/fail, wall time, turns, tool calls, tokens in/out, cost, patch size, test pass rate, regressions, verbosity, escalation count, recoverability.
 - **Per-lane signal:** same, aggregated per `harness/lanes.yaml` lane.
 - **Per-route-kind signal:** same, aggregated per `omniroute_cloud | local_direct | omniroute_combo`.
@@ -209,6 +222,7 @@ The brief contrasts "just told to RLVRAF" with a managed self-improvement loop. 
 - **Per-serving-engine signal:** TTFT, ITL p50/p95/p99, aggregate tokens/sec, queue wait, cache hit rate, harness overhead.
 
 **Required gates (no promotion without all green):**
+
 - **Holdout gate:** eval holdout must score ≥ X (X from `config/eval_pillars.yaml` thresholds, not from training set).
 - **Regression gate:** SWE-bench Verified subset must not regress.
 - **Safety gate:** `verifier/risky_action.py` must remain at 0 high-severity violations.
@@ -216,10 +230,12 @@ The brief contrasts "just told to RLVRAF" with a managed self-improvement loop. 
 - **Reproducibility gate:** every run logs commit hash, model id, provider, hardware profile, env vars.
 
 **Required retention:**
+
 - All trace records retained for the eval window + a rolling 30-day archive.
 - Nightly DPO candidates filtered against the holdout BEFORE training (already partially done in `eval/tbench.py`).
 
 **Required evaluator clocks:**
+
 - **Real-time clock:** wall-clock budget per task (e.g. 5 min micro-eval from `config/local_model_bench_matrix.yaml`).
 - **Eval clock:** full Harbor TB2/2.1 sweep on a weekly cadence.
 - **Promotion clock:** lane promotion only after two consecutive green windows.

@@ -14,6 +14,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ### MAIN ENTRY POINT
 
 **START_HERE_SENTRY_SETUP.md** (285 lines, 9.5 KB)
+
 - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/START_HERE_SENTRY_SETUP.md`
 - Purpose: Main entry point for all users
 - Quick start guide with multiple learning paths
@@ -47,6 +48,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ### TEMPLATES & TRACKING
 
 **SENTRY_PROJECTS_TEMPLATE.md** (164 lines, 4 KB)
+
 - Location: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SENTRY_PROJECTS_TEMPLATE.md`
 - Purpose: Tracking template for recording project details
 - Summary table for all 3 projects
@@ -164,20 +166,24 @@ Complete inventory of all documentation files created for Sentry manual setup.
 
 ### By Reading Time
 
-**2 minutes (Quick overview)**
+#### 2 minutes (Quick overview)
+
 - START_HERE_SENTRY_SETUP.md
 - SENTRY_QUICK_REFERENCE.md
 
-**5 minutes (Quick start)**
+#### 5 minutes (Quick start)
+
 - SENTRY_SETUP_README.md
 - SENTRY_PROJECTS_TEMPLATE.md
 - SENTRY_SETUP_READY_CHECKLIST.md
 
-**10+ minutes (Detailed)**
+#### 10+ minutes (Detailed)
+
 - SENTRY_SETUP_INDEX.md
 - SENTRY_DELIVERABLES_SUMMARY.md
 
-**15+ minutes (Complete guides)**
+#### 15+ minutes (Complete guides)
+
 - SENTRY_MANUAL_SETUP_GUIDE.md
 - GITHUB_SECRETS_SETUP_GUIDE.md
 
@@ -186,22 +192,27 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ## Content Categories
 
 ### Entry Points & Navigation
+
 - START_HERE_SENTRY_SETUP.md
 - SENTRY_SETUP_README.md
 - SENTRY_SETUP_INDEX.md
 
 ### Step-by-Step Guides
+
 - SENTRY_MANUAL_SETUP_GUIDE.md
 - GITHUB_SECRETS_SETUP_GUIDE.md
 
 ### Templates & Checklists
+
 - SENTRY_PROJECTS_TEMPLATE.md
 - SENTRY_SETUP_READY_CHECKLIST.md
 
 ### Reference & Quick Lookup
+
 - SENTRY_QUICK_REFERENCE.md
 
 ### Summaries & Documentation
+
 - SENTRY_DELIVERABLES_SUMMARY.md
 - FILES_MANIFEST.md (this file)
 
@@ -210,11 +221,13 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ## Features Across All Files
 
 ### Entry Points
+
 ✅ Multiple ways to start
 ✅ Learning paths for different user types
 ✅ Quick reference for experienced users
 
 ### Comprehensive Coverage
+
 ✅ All 3 projects (AgilePlus, phenotype-infrakit, heliosCLI)
 ✅ All 3 GitHub secrets
 ✅ All local .env configuration
@@ -222,6 +235,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ✅ Troubleshooting sections
 
 ### User-Friendly Format
+
 ✅ Clear step-by-step instructions
 ✅ Copy-paste ready examples
 ✅ Tables for easy scanning
@@ -229,6 +243,7 @@ Complete inventory of all documentation files created for Sentry manual setup.
 ✅ Links between documents
 
 ### Security Best Practices
+
 ✅ Emphasis on secure DSN storage
 ✅ .env file protection guidance
 ✅ Scoped secret assignments
@@ -255,6 +270,7 @@ START_HERE_SENTRY_SETUP.md
 ## Reading Recommendations
 
 ### For Complete Setup (First Time)
+
 1. START_HERE_SENTRY_SETUP.md (2 min)
 2. SENTRY_SETUP_README.md (5 min)
 3. SENTRY_MANUAL_SETUP_GUIDE.md (15 min)
@@ -264,6 +280,7 @@ START_HERE_SENTRY_SETUP.md
 **Total: ~45 minutes**
 
 ### For Quick Setup (Experienced)
+
 1. SENTRY_QUICK_REFERENCE.md (2 min)
 2. SENTRY_MANUAL_SETUP_GUIDE.md (15 min, skim)
 3. GITHUB_SECRETS_SETUP_GUIDE.md (10 min, skim)
@@ -271,6 +288,7 @@ START_HERE_SENTRY_SETUP.md
 **Total: ~30 minutes**
 
 ### For Navigation & Reference
+
 - SENTRY_SETUP_INDEX.md (for finding documents)
 - SENTRY_QUICK_REFERENCE.md (for quick info)
 - START_HERE_SENTRY_SETUP.md (for entry point)
@@ -280,6 +298,7 @@ START_HERE_SENTRY_SETUP.md
 ## Maintenance & Updates
 
 These files should be reviewed/updated when:
+
 - Sentry UI changes significantly
 - GitHub UI changes significantly
 - New projects are added to the setup
@@ -306,16 +325,19 @@ These files should be reviewed/updated when:
 ## File Usage Statistics
 
 ### Most Referenced Files
+
 1. SENTRY_QUICK_REFERENCE.md (key info compilation)
 2. SENTRY_MANUAL_SETUP_GUIDE.md (primary guide)
 3. GITHUB_SECRETS_SETUP_GUIDE.md (secondary guide)
 4. START_HERE_SENTRY_SETUP.md (entry point)
 
 ### Least Referenced Files
+
 - SENTRY_DELIVERABLES_SUMMARY.md (summary only)
 - FILES_MANIFEST.md (this file, reference only)
 
 ### Most Used Sections
+
 1. Step-by-step guides
 2. Quick reference tables
 3. Troubleshooting sections
@@ -333,6 +355,7 @@ Once users complete SENTRY_SETUP_READY_CHECKLIST.md:
 4. **Proceed** to next phase: SDK integration
 
 Next phase documentation will include:
+
 - Sentry SDK installation guide
 - Error handling integration guide
 - Release tracking configuration
@@ -344,6 +367,7 @@ Next phase documentation will include:
 ## Support & Troubleshooting
 
 For issues, refer to:
+
 1. Troubleshooting section in relevant guide
 2. SENTRY_QUICK_REFERENCE.md "Troubleshooting Quick Links"
 3. START_HERE_SENTRY_SETUP.md "Troubleshooting" section

@@ -37,6 +37,7 @@ Added to backlog as item #1 [Bug] (Priority: High)
 ```
 
 The triage system detects:
+
 - **Type**: Bug (broken functionality)
 - **Severity**: High (login is critical, affects multiple users)
 - **Urgency**: Critical (prevents user access)
@@ -295,6 +296,7 @@ Added to backlog as item #5 [Task] (Priority: Low)
 ```
 
 Use `--type` to specify exactly:
+
 - `bug` — broken functionality
 - `feature` — new capability
 - `task` — maintenance, refactoring, or housekeeping

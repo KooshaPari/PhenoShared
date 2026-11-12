@@ -196,12 +196,14 @@ class JwtService:
 ## Security Best Practices
 
 ### 1. Token Structure
+
 - Use RS256 (RSA) for production, HS256 (HMAC) for internal
 - Keep payload minimal (don't include sensitive data)
 - Use short expiration (15 min - 24 hours)
 - Include JWT ID (jti) for revocation support
 
 ### 2. Storage
+
 ```rust
 // ❌ Never store in localStorage (XSS vulnerable)
 localStorage.setItem("token", token);
@@ -214,6 +216,7 @@ Set-Cookie: auth_token=<jwt>; HttpOnly; Secure; SameSite=Strict; Max-Age=3600
 ```
 
 ### 3. Revocation Strategy
+
 ```rust
 // phenotype-cache-adapter integration
 pub async fn revoke_token(jti: &str, expiry: usize) -> Result<(), CacheError> {
@@ -231,6 +234,7 @@ pub async fn is_revoked(jti: &str) -> Result<bool, CacheError> {
 ```
 
 ### 4. Refresh Token Pattern
+
 ```
 ┌──────────────────────────────────────────────┐
 │           Refresh Token Flow                 │
@@ -258,6 +262,7 @@ pub async fn is_revoked(jti: &str) -> Result<bool, CacheError> {
 ## Testing Strategies
 
 ### Unit Tests
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -335,5 +340,6 @@ pub async fn jwt_auth_middleware<B>(
 ```
 
 ## References
+
 - [RFC 7519 - JWT Standard](https://tools.ietf.org/html/rfc7519)
 - [OWASP JWT Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Java.html)

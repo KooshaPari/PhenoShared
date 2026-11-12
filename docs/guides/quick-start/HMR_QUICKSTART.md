@@ -51,12 +51,14 @@ Open `src/components/Button.tsx` and change a color or text. **Save the file.**
 ## File Changes That Trigger HMR
 
 ✅ **Auto-updates** (no reload):
+
 - `src/**/*.tsx` — React component changes
 - `src/**/*.ts` — TypeScript logic
 - `src/**/*.css` — Tailwind/CSS changes
 - Images/assets in `public/`
 
 ⚠️ **Requires restart** (`npm run dev`):
+
 - `vite.config.ts`
 - `tsconfig.json`
 - `package.json`
@@ -82,6 +84,7 @@ npm run dev  # Try again
 ### "HMR not updating"
 
 Press `Ctrl+Shift+R` (hard refresh) or:
+
 ```bash
 npm run dev  # Restart Vite
 ```
@@ -130,6 +133,7 @@ task down && task up
 ## Next: Full Documentation
 
 See `/docs/guides/HMR_SETUP.md` for:
+
 - Detailed configuration options
 - Debugging tips
 - API proxy setup

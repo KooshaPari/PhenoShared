@@ -1,5 +1,6 @@
 # SSOT Phase 1 — Days 2-3 Completion Report
-**Specs Registry & Metadata (WP1.2)**
+
+## Specs Registry & Metadata (WP1.2)
 
 **Dates Completed:** 2026-04-01 — 2026-04-02
 **Timeline:** Task 1.2 (6h)
@@ -12,6 +13,7 @@
 Days 2-3 establish the master specification registries tracking all FRs, ADRs, Plans, and User Journeys across the polyrepo with version control and approval status.
 
 **Deliverables:**
+
 - ✅ SPECS_REGISTRY.md (master spec index)
 - ✅ ADR_REGISTRY.md (architecture decisions index)
 - ✅ PLAN_REGISTRY.md (implementation plans index)
@@ -32,6 +34,7 @@ Days 2-3 establish the master specification registries tracking all FRs, ADRs, P
 **Purpose:** Central index of all specification versions, approval status, and sync health
 
 **Structure:**
+
 - Central registry table (4 repos × 4 spec types)
 - Version tracking (semantic versioning)
 - Sync schedule (auto-merge every 5 min, manual review daily)
@@ -48,6 +51,7 @@ Days 2-3 establish the master specification registries tracking all FRs, ADRs, P
 | Merge Success Rate | 97.6% | ✅ (Target: 95%+) |
 
 **Critical Actions:**
+
 - [ ] AgilePlus: Complete USER_JOURNEYS.md (6 journeys drafted, needs approval)
 - [ ] heliosCLI: Finalize ADR.md (4 ADRs reviewed, needs approval)
 
@@ -197,6 +201,7 @@ All ADRs must be marked "Accepted" before Phase 1 completion.
 ## Dependency Graph
 
 ```
+
 phenotype-infrakit Phase 1
         ↓
     phenotype-infrakit Phase 2
@@ -210,6 +215,7 @@ Phase 1   Phase 2   Phase 1-2
         ↓            ↓
     heliosCLI    thegent
     Phase 1-2    Phase 3-4
+
 ```
 
 ## Critical Path Analysis
@@ -457,6 +463,7 @@ Target (2026-04-11):   100/100
 ## Next Steps: Day 4
 
 Day 4 (WP1.3 - Auto-Merge Architecture) will:
+
 - Review AUTO_MERGE_SERVICE_ARCHITECTURE.md
 - Plan Rust batch-merger crate
 - Design GitHub Actions workflow
@@ -469,6 +476,7 @@ Day 4 (WP1.3 - Auto-Merge Architecture) will:
 ## Phase 1 Progress Update
 
 **Week 1 (Days 1-5):** 40 hours total
+
 - ✅ Day 1 (WP1.1 - Branch Infrastructure): **4h COMPLETE**
 - ✅ Days 2-3 (WP1.2 - Registries & Metadata): **6h COMPLETE** (Total: 10h)
 - ⏳ Day 4 (WP1.3 - Auto-Merge Architecture): 8h PENDING

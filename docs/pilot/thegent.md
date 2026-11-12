@@ -24,11 +24,13 @@ PYPI_REGISTRY = "pypi"
 ### CI Workflows
 
 `.github/workflows/ci.yml` — runs on every push/PR:
+
 - `pytest`
 - `ruff check`
 - `mypy`
 
 `.github/workflows/release.yml` — runs on version tags matching `v*a*`:
+
 - `pytest`
 - `python -m build`
 - `twine upload dist/*` to PyPI
@@ -36,21 +38,25 @@ PYPI_REGISTRY = "pypi"
 ### Git Hooks
 
 `pre-commit`:
+
 - Runs `ruff check --fix`
 - Runs `mypy`
 
 `commit-msg`:
+
 - Enforces conventional commit format
 
 ## Alpha Publish Steps
 
 1. Bump version to alpha:
+
    ```bash
    pheno-cli version bump --channel alpha --increment 1
    # Sets pyproject.toml version to: 0.2.0a1
    ```
 
 2. Commit and tag:
+
    ```bash
    git add pyproject.toml
    git commit -m "chore: bump version to 0.2.0a1"
@@ -69,6 +75,7 @@ PYPI_REGISTRY = "pypi"
 PyPI uses PEP 440 pre-release syntax. pheno-cli generates this format when registry is `pypi` and channel is `alpha`.
 
 Format mapping:
+
 - `alpha` → `aN`
 - `beta` → `bN`
 - `rc` → `rcN`
@@ -81,6 +88,7 @@ pheno-cli validate --repo .
 ```
 
 Expected output:
+
 ```
 [PASS] mise.toml exists
 [PASS] CI workflows installed

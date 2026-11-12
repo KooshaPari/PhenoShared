@@ -10,13 +10,16 @@
 | _TBD - populate from cloud bill_ | | | | |
 
 ## Optimization backlog
+
 - _None tracked yet - file via `gh issue create --label cost-opt`._
 
 ## Right-sizing
+
 - CI runners: 2x standard Linux, no GPU.
 - Storage: TBD.
 
 ## FinOps notes
+
 - Target: keep CI cost per-merge below $0.50.
 - Anomaly alert: monthly cost > 1.5x trailing 3-month avg.
 

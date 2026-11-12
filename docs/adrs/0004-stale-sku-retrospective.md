@@ -14,7 +14,9 @@ The local-serving bootstrap program generated two rounds of model picks, both wr
 | 1 | 2026-07-03 morning | `Qwen/Qwen2.5-7B-Instruct-AWQ` + `Qwen/Qwen2.5-0.5B-Instruct-GGUF` | *"2.5 is an old model. it is july 2026. qwen 3.6 is latest public release for example"*. User offered a HF/library scrape. |
 | 2 | 2026-07-03 afternoon | `Qwen/Qwen3-8B` (AWQ-INT4) + `Qwen/Qwen3-1.7B` (GGUF Q4_0) + `Qwen/Qwen2.5-Coder-32B-Instruct-AWQ` (T4 ceiling) | *"you're still pulling obsolete models. can I ask why?"* |
 
-Both rounds cited live API data (after round 1) but still named SKUs that are 1–3 years stale relative to what HF actually serves in 2026-07-03/04. The live 2026-07-04 probe confirmed that **Gemma-4** (released June 2026, E2B/E4B/12B/26B-A4B/31B), **Qwen3.5** (April 2026 release, top-downloaded Qwen3.x at 2.5 M), **Qwen3-Coder-Next-FP8** (Feb 2026, 2.17 M downloads), **Kimi-Linear-48B-A3B** (MoE), **Granite-4.1**, **Ministral-3**, **Devstral-Small-2-24B**, **LFM2.5-8B-A1B**, **Nanbeige4.1**, **Ornith-1.0-35B**, **DeepSeek-V4-Flash** are all live on HF and are the current-generation picks.
+Both rounds cited live API data (after round 1) but still named SKUs that are 1–3 years stale relative to what HF actually serves in 2026-07-03/04. The live 2026-07-04 probe confirmed that **Gemma-4**
+(released June 2026, E2B/E4B/12B/26B-A4B/31B), **Qwen3.5** (April 2026 release, top-downloaded Qwen3.x at 2.5 M), **Qwen3-Coder-Next-FP8** (Feb 2026, 2.17 M downloads), **Kimi-Linear-48B-A3B** (MoE),
+**Granite-4.1**, **Ministral-3**, **Devstral-Small-2-24B**, **LFM2.5-8B-A1B**, **Nanbeige4.1**, **Ornith-1.0-35B**, **DeepSeek-V4-Flash** are all live on HF and are the current-generation picks.
 
 ## 2. Root cause (direct answer to "why")
 
@@ -22,9 +24,12 @@ Three concrete failures, not a single root cause:
 
 ### 2.1 Wrong ranking function
 
-`huggingface_hub` exposes `list_models(sort="downloads")` and `list_models(sort="last_modified")`. Round 2 used `sort="downloads"` as the primary ranking signal. That ranks **popularity / platform availability**, not **capability**. A model can be hugely popular and still be a generation behind — `Qwen3-8B` has 15.3 M downloads because it was an early Qwen3 release that accumulated installs; `Qwen3-Coder-Next-FP8` (Feb 2026, 2.17 M downloads) is the current coding-specialized flagship but its downloads are still growing. Ranks diverge from capability.
+`huggingface_hub` exposes `list_models(sort="downloads")` and `list_models(sort="last_modified")`. Round 2 used `sort="downloads"` as the primary ranking signal. That ranks **popularity / platform
+availability**, not **capability**. A model can be hugely popular and still be a generation behind — `Qwen3-8B` has 15.3 M downloads because it was an early Qwen3 release that accumulated
+installs; `Qwen3-Coder-Next-FP8` (Feb 2026, 2.17 M downloads) is the current coding-specialized flagship but its downloads are still growing. Ranks diverge from capability.
 
-The right ranking function for our use case is **capability-first**: HumanEval / MBPP / LiveCodeBench / TBench scores + tool-use + IFEval + MMLU-Pro + long-context retrieval + architecture features (sliding window, MoE active ratio, linear attention) + last-modified + training-token count + repo commit cadence. **Downloads are a coarse proxy at best**, useful as a tiebreaker, not a primary key.
+The right ranking function for our use case is **capability-first**: HumanEval / MBPP / LiveCodeBench / TBench scores + tool-use + IFEval + MMLU-Pro + long-context retrieval + architecture features
+(sliding window, MoE active ratio, linear attention) + last-modified + training-token count + repo commit cadence. **Downloads are a coarse proxy at best**, useful as a tiebreaker, not a primary key.
 
 ### 2.2 Incomplete corpus read
 
@@ -32,19 +37,24 @@ The user explicitly listed 16 `ChatGPT-*.md` corpus files in the original brief.
 
 ### 2.3 Projected 2026 names from 2024 knowledge
 
-The training-data cutoff means my prior is 2024-era. "Qwen3" sounded current to me because it was the family I knew, but Qwen3.5 (April 2026) and Qwen3.6 (mid-2026) supersede it. Same for `gemma-3-1b-it` (current when I knew it) vs `gemma-4-E2B-it` (June 2026 release). Same for "Llama-3.1" (most-downloaded Llama in my prior) vs whatever the current Llama release is. **I had a "named family" feel without verification of which generation is current.** I had a perfect tool (HF API + per-model README + arxiv + repo2rlenv) and I used it as a popularity counter instead of an intelligence counter.
+The training-data cutoff means my prior is 2024-era. "Qwen3" sounded current to me because it was the family I knew, but Qwen3.5 (April 2026) and Qwen3.6 (mid-2026) supersede it. Same
+for `gemma-3-1b-it` (current when I knew it) vs `gemma-4-E2B-it` (June 2026 release). Same for "Llama-3.1" (most-downloaded Llama in my prior) vs whatever the current Llama release is. **I had a
+"named family" feel without verification of which generation is current.** I had a perfect tool (HF API + per-model README + arxiv + repo2rlenv) and I used it as a popularity counter instead of an
+intelligence counter.
 
 ## 3. What changes
 
 ### 3.1 ADR 0003 no longer names model SKUs
 
-ADR 0003 is now a **process + constraints** document. The picks live in `state/hf_scrape/2026-07-03/v2_shortlist.md`, generated by a reproducible pipeline. This ADR references the v2 shortlist instead of asserting picks.
+ADR 0003 is now a **process + constraints** document. The picks live in `state/hf_scrape/2026-07-03/v2_shortlist.md`, generated by a reproducible pipeline. This ADR references the v2 shortlist instead
+of asserting picks.
 
 ### 3.2 The v2 shortlist is sign-off-gated
 
 The v2 shortlist contains an **"Open for your input"** block with 4 explicit questions:
 
-1. **T2 workhorse choice:** `Qwen/Qwen3-Coder-Next-FP8` (current pick, 2.17 M downloads, FP8) vs `ibm-granite/granite-4.1-8b` (better enterprise grounding, lower downloads) vs `LiquidAI/LFM2.5-8B-A1B` (Liquid AI alt arch).
+1. **T2 workhorse choice:** `Qwen/Qwen3-Coder-Next-FP8` (current pick, 2.17 M downloads, FP8) vs `ibm-granite/granite-4.1-8b` (better enterprise grounding, lower downloads) vs `LiquidAI/LFM2.5-8B-A1B`
+   (Liquid AI alt arch).
 2. **Cloud baseline B:** `deepseek-ai/DeepSeek-V4-Flash-DSpark` vs `MiniMax-M3` vs a higher-cost frontier (Claude Opus 4.6/4.7/4.8).
 3. **Acceptance of fit-rejected reality** that the 24 GB 3090 Ti cannot run any 24 B+ model in BF16; AWQ/GGUF only at this tier.
 4. **`HF_TOKEN`** to enable gated-family coverage (Meta-Llama-3.x, Mistral-Codestral, Mistral-Small-4, Yi-34B, etc).
@@ -53,14 +63,18 @@ No weight is downloaded until those four are answered.
 
 ### 3.3 The scrape pipeline is reusable + diff-able
 
-`scripts/hf_scrape_2026_07_03.py` + `scripts/curate_shortlist.py` + `state/hf_scrape/2026-07-03/build_v2_shortlist.py` produce a date-stamped directory under `state/hf_scrape/`. The next sweep (planned 2026-07-11) will produce `state/hf_scrape/2026-07-11/` and a `diff.json` between the two. If material moves (new flagship release, family deprecation, parameter-count correction), the v2 shortlist updates and a new ADR revision lands.
+`scripts/hf_scrape_2026_07_03.py` + `scripts/curate_shortlist.py` + `state/hf_scrape/2026-07-03/build_v2_shortlist.py` produce a date-stamped directory under `state/hf_scrape/`. The next sweep
+(planned 2026-07-11) will produce `state/hf_scrape/2026-07-11/` and a `diff.json` between the two. If material moves (new flagship release, family deprecation, parameter-count correction), the v2
+shortlist updates and a new ADR revision lands.
 
 ### 3.4 Ranking function is corrected
 
 The next scrape pass will use `sort="last_modified"` as the primary listing key, then apply a **capability-first** secondary ranking:
+
 - Owner-only canonical flagship (filter derivatives / exl2 / uncapped reuploads).
 - Live downloads as a coarse signal (not primary).
-- Per-model `cardData` + README scrape for: architecture family, MoE active ratio, context length, training tokens, license, last-modified, eval score tags (HumanEval/MBPP/LiveCodeBench/TBench/MMLU-Pro/IFEval if present in cardData or model-index metadata).
+- Per-model `cardData` + README scrape for: architecture family, MoE active ratio, context length, training tokens, license, last-modified, eval score tags
+  (HumanEval/MBPP/LiveCodeBench/TBench/MMLU-Pro/IFEval if present in cardData or model-index metadata).
 - vRAM-fit check (BF16 vs AWQ-INT4 vs GGUF Q4_0) is annotated, not asserted.
 
 ### 3.5 "Open" questions are tracked, not papered over
@@ -72,8 +86,10 @@ Every "open" decision is now in a YAML or markdown file with a single owner. No 
 - **Never name a model SKU without a 24-hour-old data source.** The scratch `state/hf_scrape/<YYYY-MM-DD>/` directory is now the only acceptable citation for a model name in any ADR or spec.
 - **Cap > download as a signal.** Downloads grow monotonically with time on HF and lag real quality by 6–18 months. Last-modified is a much better proxy for "this is the current generation".
 - **Owner-only flagships as the default.** Derivatives and fine-tunes drift the conversation. When in doubt, restrict to owner-only canonical flagship picks.
-- **The corpus is part of the audit trail.** The unread `ChatGPT-*.md` files are now explicitly named in `state/hf_scrape/2026-07-03/corpus_read_status.md` with what they contributed. Future revisions will not claim "I have enough signal" until that file says so.
-- **Sign-off is a gate, not a suggestion.** Every weight download, every SGLang/vLLM server start, every routing change through `omniroute-dev` requires the user's explicit OK in chat or as a separate ADR revision.
+- **The corpus is part of the audit trail.** The unread `ChatGPT-*.md` files are now explicitly named in `state/hf_scrape/2026-07-03/corpus_read_status.md` with what they contributed. Future revisions
+  will not claim "I have enough signal" until that file says so.
+- **Sign-off is a gate, not a suggestion.** Every weight download, every SGLang/vLLM server start, every routing change through `omniroute-dev` requires the user's explicit OK in chat or as a separate
+  ADR revision.
 
 ## 6. Rule #6 (added 2026-07-04) — March-2026 recency cutoff
 
@@ -82,8 +98,11 @@ Per user message 2026-07-04: *"heavily heavily enforced to look at models releas
 The rule, made formal:
 
 1. **Default cutoff:** `last_modified >= 2026-03-01 UTC`. Any HF repo below this is `recency_dlq` by default.
-2. **OR mirror exception:** a model whose OR `created` is pre-March but whose canonical HF repo was last-modified ≥ 2026-03-01 is **NOT** `recency_dlq`. The canonical HF repo is the source of truth (the OR mirror is just a metadata view of the same weights). Examples that pass under this exception: `liquid/lfm-2-24b-a2b` (OR 2026-02-25 / HF 2026-03-30), `arcee-ai/trinity-mini` (OR 2025-12-01 / HF 2026-05-28).
-3. **Stale-both rule:** if the OR release is pre-March AND the HF repo is pre-March AND not updated, the model stays in `recency_dlq` and requires an explicit keep/drop decision from the user with a deep-justification block. Example: `ibm-granite/granite-4.0-h-micro` (OR 2025-10-20 / HF 2025-11-03).
+2. **OR mirror exception:** a model whose OR `created` is pre-March but whose canonical HF repo was last-modified ≥ 2026-03-01 is **NOT** `recency_dlq`. The canonical HF repo is the source of truth
+   (the OR mirror is just a metadata view of the same weights). Examples that pass under this exception: `liquid/lfm-2-24b-a2b` (OR 2026-02-25 / HF 2026-03-30), `arcee-ai/trinity-mini` (OR 2025-12-01
+   / HF 2026-05-28).
+3. **Stale-both rule:** if the OR release is pre-March AND the HF repo is pre-March AND not updated, the model stays in `recency_dlq` and requires an explicit keep/drop decision from the user with a
+   deep-justification block. Example: `ibm-granite/granite-4.0-h-micro` (OR 2025-10-20 / HF 2025-11-03).
 4. **Weekly re-scrape** regenerates the shortlist; each entry has an ISO date stamp; anything < 2026-03-01 with no justification block is auto-flagged.
 5. **Recency DLQ is visible in `locked_shortlist.json`** via the `recency` field on each cloud baseline + self-hosted entry. Reviewers read it; the field is required.
 

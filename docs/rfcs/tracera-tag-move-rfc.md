@@ -15,6 +15,7 @@ workspace) and consumes the v0.12 + v0.13 dual-write bridge.
 ## Current state
 
 Tracera is implemented in:
+
 - `pheno/trace_store/tracera.py` — `TraceraAdapter` HTTP client
 - `traces/tracera_bridge.py` — dual-write sample-rate + cohort
 - `traces/metrics.py` — `BridgeMetrics` + alerting ladder
@@ -22,6 +23,7 @@ Tracera is implemented in:
 - `traces/__init__.py` — bridge module entry point
 
 Adapters (deployable artifacts):
+
 - `bench/results/tracera_staging_integration_test.json` — stage 1
   evidence (12.4s, 8 scenarios all PASS).
 

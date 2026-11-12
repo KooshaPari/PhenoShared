@@ -65,11 +65,13 @@ BENEFITS:
 **Deliverable:** `pheno-mcp-core` v0.1.0
 
 **What:** Move canonical MCP abstractions into standalone package
+
 - MCPEntryPoint, MCPServer (from pheno-mcp)
 - ToolRegistry, @mcp_tool decorator (from pheno-mcp/tools)
 - Remove duplicates from phenosdk
 
 **Outcome:**
+
 - Single source of truth for MCP abstractions
 - Both pheno-mcp and phenosdk import from pheno-mcp-core
 - Zero duplication
@@ -82,11 +84,13 @@ BENEFITS:
 **Deliverable:** `pheno-agents` v0.1.0
 
 **What:** Extract agent orchestration into standalone package
+
 - Agent, AgentRole, TaskDefinition classes
 - AgentOrchestrator (from pheno-mcp)
 - Test workflow patterns
 
 **Outcome:**
+
 - Agents usable independent of MCP
 - Clear orchestration interface
 - Agent-specific tests passing
@@ -99,12 +103,14 @@ BENEFITS:
 **Deliverable:** `pheno-atoms` v0.1.0
 
 **What:** Extract auth, persistence, vector adapters
+
 - PlaywrightAuthAdapter
 - InMemoryPersistence, SQLAlchemyAdapter
 - VectorSearchClient
 - Optional dependencies per adapter
 
 **Outcome:**
+
 - Centralized adapter module
 - Optional deps reduce bloat
 - Clear adapter interface patterns
@@ -117,12 +123,14 @@ BENEFITS:
 **Deliverable:** `phenotype-sdk` v0.1.0 + `phenosdk-legacy` v0.1.0
 
 **What:**
+
 - Create top-level phenotype-sdk facade
 - Aggregate all tier imports
 - Create backward compat alias (phenosdk → phenotype-sdk)
 - Publish all 5 packages to PyPI/GitHub Packages
 
 **Outcome:**
+
 - Full SDK available as single import or modular
 - Backward compatibility maintained
 - All packages on PyPI
@@ -172,6 +180,7 @@ pheno-mcp-core (Tier 2a)     pheno-agents (Tier 2b)     pheno-atoms (Tier 3)
 **New:** Separate pheno-agents package, pheno-mcp imports it
 
 **Why:** Agents are orchestration patterns, not MCP-specific
+
 - Can use agents without MCP
 - Can test orchestration independently
 - Better separation of concerns
@@ -250,6 +259,7 @@ Unit Tests (70%)
 ### PyPI Distribution (Recommended)
 
 **Option A:** Official PyPI (public adoption)
+
 ```
 pip install phenotype-sdk
 pip install pheno-mcp-core
@@ -258,11 +268,13 @@ pip install pheno-atoms
 ```
 
 **Option B:** GitHub Packages (organization-internal)
+
 ```
 pip install --index-url https://npm.pkg.github.com/ phenotype-sdk
 ```
 
 **Recommendation:** Both
+
 - Publish to official PyPI for public adoption
 - Mirror to GitHub Packages for internal CI/CD
 
@@ -357,6 +369,7 @@ Create: python/phenosdk-legacy/ (thin alias)
 ## Dependencies Overview
 
 ### pheno-core (Foundation)
+
 ```toml
 dependencies = [
     "pydantic>=2.0",
@@ -366,6 +379,7 @@ dependencies = [
 ```
 
 ### pheno-mcp-core (MCP Protocols)
+
 ```toml
 dependencies = [
     "pydantic>=2.0",
@@ -374,6 +388,7 @@ dependencies = [
 ```
 
 ### pheno-agents (Orchestration)
+
 ```toml
 dependencies = [
     "pheno-core>=0.1.0",
@@ -381,6 +396,7 @@ dependencies = [
 ```
 
 ### pheno-atoms (Adapters)
+
 ```toml
 dependencies = [
     "pheno-core>=0.1.0",
@@ -393,6 +409,7 @@ optional-dependencies = [
 ```
 
 ### phenotype-sdk (Facade)
+
 ```toml
 dependencies = [
     "pheno-core>=0.1.0",
@@ -407,22 +424,26 @@ dependencies = [
 ## Success Criteria
 
 ### Phase 2.1 ✓
+
 - [x] pheno-mcp-core v0.1.0 created
 - [x] Zero duplicate MCPEntryPoint
 - [x] All tests pass
 - [x] No circular dependencies
 
 ### Phase 2.2
+
 - [ ] pheno-agents v0.1.0 created
 - [ ] Agent classes extracted
 - [ ] Backward compat maintained
 
 ### Phase 2.3
+
 - [ ] pheno-atoms v0.1.0 created
 - [ ] Adapters consolidated
 - [ ] Optional deps working
 
 ### Phase 2.4
+
 - [ ] phenotype-sdk v0.1.0 created
 - [ ] All 5 packages published
 - [ ] phenosdk-legacy alias functional
@@ -507,7 +528,7 @@ Effort: ~19-27 hours (agent-driven, parallelizable)
 
 ---
 
-**END OF EXECUTIVE SUMMARY**
+### END OF EXECUTIVE SUMMARY
 
 For detailed phase breakdown, see `PYTHON_DECOMPOSITION_PLAN.md`
 For timeline & work items, see `PYTHON_PHASE2_EXTRACTION_ROADMAP.md`

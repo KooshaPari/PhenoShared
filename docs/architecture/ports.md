@@ -7,6 +7,7 @@ audience: [developers, sdk]
 Port traits define the **contract** between domain logic and external systems. They are defined in `crates/agileplus-domain/src/ports/` and must be implemented by adapters.
 
 This design allows:
+
 - **Testability** — mock implementations for unit tests
 - **Flexibility** — swap implementations without changing domain code
 - **Decoupling** — domain doesn't depend on specific libraries (git2, sqlx, etc.)
@@ -189,6 +190,7 @@ pub trait StoragePort: Send + Sync {
 **Implementation**: `crates/agileplus-sqlite/src/adapter.rs` (SQLite)
 
 **Characteristics**:
+
 - Async-first (returns futures)
 - All-or-nothing transactions at the domain level
 - Append-only for audit entries (no updates/deletes)
@@ -317,6 +319,7 @@ pub struct FeatureArtifacts {
 **Implementation**: `crates/agileplus-git/src/adapter.rs` (Git)
 
 **Characteristics**:
+
 - Worktrees are isolated environments (no interference between WPs)
 - Artifacts are markdown/JSON files in the repo
 - Merge detection prevents conflicts before they occur
@@ -404,6 +407,7 @@ pub trait AgentPort: Send + Sync {
 **Implementation**: Dispatcher adapter (Claude Code implementation in MVP; Codex in WP08)
 
 **Characteristics**:
+
 - Both sync and async dispatch supported
 - Status polling for long-running tasks
 - Structured prompts from domain context

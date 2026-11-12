@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-Phenotype Fabric owns physical resource discovery, placement, data residency, transport compilation, interactive I/O, surfaces, and RT QoS. It does not own product intent, labor delegation, economic allocation, traceability, or durable session history.
+Phenotype Fabric owns physical resource discovery, placement, data residency, transport compilation, interactive I/O, surfaces, and RT QoS. It does not own product intent, labor delegation, economic
+allocation, traceability, or durable session history.
 
 ### Enforced rules
 

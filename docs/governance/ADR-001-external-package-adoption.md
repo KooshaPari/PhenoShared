@@ -240,13 +240,13 @@ Primary migration targets in priority order:
 
 ## References
 
-- `knadh/koanf`: https://github.com/knadh/koanf
-- `go-chi/httprate`: https://github.com/go-chi/httprate
-- `go-chi/cors`: https://github.com/go-chi/cors
-- `go-chi/jwtauth`: https://github.com/go-chi/jwtauth
-- `hashicorp/go-retryablehttp`: https://github.com/hashicorp/go-retryablehttp
-- `sony/gobreaker`: https://github.com/sony/gobreaker
-- `vektra/mockery`: https://github.com/vektra/mockery
-- `orval`: https://orval.dev
-- `openapi-fetch`: https://openapi-ts.dev/openapi-fetch/
-- `react-error-boundary`: https://github.com/bvaughn/react-error-boundary
+- `knadh/koanf`: <https://github.com/knadh/koanf>
+- `go-chi/httprate`: <https://github.com/go-chi/httprate>
+- `go-chi/cors`: <https://github.com/go-chi/cors>
+- `go-chi/jwtauth`: <https://github.com/go-chi/jwtauth>
+- `hashicorp/go-retryablehttp`: <https://github.com/hashicorp/go-retryablehttp>
+- `sony/gobreaker`: <https://github.com/sony/gobreaker>
+- `vektra/mockery`: <https://github.com/vektra/mockery>
+- `orval`: <https://orval.dev>
+- `openapi-fetch`: <https://openapi-ts.dev/openapi-fetch/>
+- `react-error-boundary`: <https://github.com/bvaughn/react-error-boundary>

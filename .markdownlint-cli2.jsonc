@@ -1,0 +1,44 @@
+// markdownlint-cli2 configuration for PhenoShared.
+//
+// The `ignores` list scopes the docs-check lint gate to the living
+// documentation surface. Every entry is a dated record, a verbatim absorbed
+// artifact, a registry-propagated snapshot, a generated inventory or an
+// archived snapshot: content that is preserved as it was written and that
+// must not be rewritten to satisfy a linter.
+//
+// The rule configuration lives in .markdownlint.json. It is the only
+// markdownlint rule configuration file in this repository: markdownlint-cli2
+// merges an explicitly supplied --config file with the discovered
+// .markdownlint.* file, and the discovered file wins, so a second
+// .markdownlint.* file would silently take precedence over the first.
+{
+  "ignores": [
+    // Verbatim absorbed repositories (see docs/ABSORPTION_INDEX.md).
+    "docs/absorbed-from*/**",
+    "docs/absorbed-from-PhenoTooling.md",
+    "docs/absorption/**",
+    "docs/phenotype-docset-v1.1/**",
+    "docs/xdd/**",
+    "docs/org-audits/**",
+    "docs/specs/pheno-specs/**",
+    "docs/specs/001-spec-driven-development-engine/**",
+    "docs/specs/002-org-wide-release-governance-dx-automation/**",
+    "docs/specs/003-agileplus-platform-completion/**",
+    "docs/specs/004-modules-and-cycles/**",
+    // Registry-propagated snapshots, regenerated from phenotype-registry.
+    "docs/boundary/**",
+    "docs/intent/**",
+    // Generated codebase atlas inventories ("Do not edit by hand").
+    "docs/atlas/codebase/**",
+    // Dated records: sessions, audits, worklogs, plans and findings.
+    "docs/sessions/**",
+    "docs/audits/**",
+    "docs/worklogs/**",
+    "docs/plans/**",
+    "docs/monorepo-state/**",
+    "docs/research/helioslab/**",
+    // Archived snapshots.
+    "docs/archive/**",
+    "docs/worklogs/.archive/**"
+  ]
+}

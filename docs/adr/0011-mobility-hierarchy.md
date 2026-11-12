@@ -16,7 +16,8 @@ The decision must preserve the package-level goal while remaining honest about l
 
 ## Decision
 
-Define M0 surface projection, M1 semantic handoff, M2 application checkpoint, M3 process checkpoint, M4 VM migration, and M5 workload rematerialization. Choose the least invasive mechanism satisfying intent.
+Define M0 surface projection, M1 semantic handoff, M2 application checkpoint, M3 process checkpoint, M4 VM migration, and M5 workload rematerialization. Choose the least invasive mechanism satisfying
+intent.
 
 ### Enforced rules
 

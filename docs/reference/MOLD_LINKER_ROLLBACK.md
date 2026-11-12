@@ -32,6 +32,7 @@ Initiate rollback if any of the following occur:
 **Steps**:
 
 1. **Comment out rustflags** in `.cargo/config.toml`:
+
    ```bash
    nano .cargo/config.toml
    # or
@@ -39,11 +40,13 @@ Initiate rollback if any of the following occur:
    ```
 
 2. **Find this line**:
+
    ```toml
    rustflags = ["-C", "link-arg=-fuse-ld=mold"]
    ```
 
 3. **Comment it out**:
+
    ```toml
    # rustflags = ["-C", "link-arg=-fuse-ld=mold"]
    ```
@@ -51,17 +54,20 @@ Initiate rollback if any of the following occur:
 4. **Save file** (Ctrl+O, Enter, Ctrl+X in nano)
 
 5. **Clean build directory**:
+
    ```bash
    cargo clean
    ```
 
 6. **Test**:
+
    ```bash
    cargo build --release
    # Expected: Builds successfully with default linker
    ```
 
 7. **Verify**:
+
    ```bash
    cargo test --workspace --release
    # Expected: All tests pass
@@ -82,16 +88,19 @@ Initiate rollback if any of the following occur:
 **Steps**:
 
 1. **Run build with empty RUSTFLAGS**:
+
    ```bash
    RUSTFLAGS="" cargo build --release
    ```
 
 2. **Verify it works**:
+
    ```bash
    ./target/release/my_app --version
    ```
 
 3. **To make permanent** (until session ends):
+
    ```bash
    export RUSTFLAGS=""
    cargo build --release
@@ -99,6 +108,7 @@ Initiate rollback if any of the following occur:
    ```
 
 4. **To revert** (re-enable mold):
+
    ```bash
    unset RUSTFLAGS
    cargo build --release
@@ -117,16 +127,19 @@ Initiate rollback if any of the following occur:
 **Steps**:
 
 1. **Check current state**:
+
    ```bash
    git diff .cargo/config.toml
    ```
 
 2. **Revert file**:
+
    ```bash
    git checkout .cargo/config.toml
    ```
 
 3. **Verify reverted**:
+
    ```bash
    git diff .cargo/config.toml
    # Should show no differences
@@ -135,12 +148,14 @@ Initiate rollback if any of the following occur:
    ```
 
 4. **Clean build**:
+
    ```bash
    cargo clean
    cargo build --release
    ```
 
 5. **Verify**:
+
    ```bash
    cargo test --workspace --release
    ```
@@ -160,27 +175,32 @@ Initiate rollback if any of the following occur:
 1. **Use Procedure 1** (comment out rustflags)
 
 2. **Stage the change**:
+
    ```bash
    git add .cargo/config.toml
    ```
 
 3. **Verify staged changes**:
+
    ```bash
    git diff --cached .cargo/config.toml
    ```
 
 4. **Commit**:
+
    ```bash
    git commit -m "chore(build): disable mold linker (temporary rollback)"
    ```
 
 5. **Verify commit**:
+
    ```bash
    git log -1 --oneline
    # Should show: chore(build): disable mold linker (temporary rollback)
    ```
 
 6. **Test again**:
+
    ```bash
    cargo clean
    cargo build --release --workspace
@@ -188,6 +208,7 @@ Initiate rollback if any of the following occur:
    ```
 
 7. **Push to branch** (if working on feature branch):
+
    ```bash
    git push origin feature/my-branch
    ```
@@ -205,11 +226,13 @@ Initiate rollback if any of the following occur:
 **Steps**:
 
 1. **Check current mold version**:
+
    ```bash
    mold --version
    ```
 
 2. **Update mold** (if available):
+
    ```bash
    # On Linux
    sudo apt update && sudo apt upgrade -y mold
@@ -219,17 +242,20 @@ Initiate rollback if any of the following occur:
    ```
 
 3. **Verify new version**:
+
    ```bash
    mold --version
    ```
 
 4. **Test build**:
+
    ```bash
    cargo clean
    cargo build --release --workspace
    ```
 
 5. **If issue persists, downgrade**:
+
    ```bash
    # On Linux (specify version)
    sudo apt install mold=2.3.1  # Example: downgrade to 2.3.1
@@ -240,6 +266,7 @@ Initiate rollback if any of the following occur:
    ```
 
 6. **Verify fix**:
+
    ```bash
    mold --version
    cargo clean && cargo build --release --workspace
@@ -256,11 +283,13 @@ Initiate rollback if any of the following occur:
 **Procedure**:
 
 1. **Edit `.github/workflows/benchmark.yml`**:
+
    ```bash
    nano .github/workflows/benchmark.yml
    ```
 
 2. **Find the mold-link-benchmark job**:
+
    ```yaml
    mold-link-benchmark:
      name: Mold Linker Benchmark
@@ -268,6 +297,7 @@ Initiate rollback if any of the following occur:
    ```
 
 3. **Disable the entire job**:
+
    ```yaml
    # mold-link-benchmark:
    #   name: Mold Linker Benchmark
@@ -276,6 +306,7 @@ Initiate rollback if any of the following occur:
    ```
 
 4. **Commit and push**:
+
    ```bash
    git add .github/workflows/benchmark.yml
    git commit -m "chore(ci): temporarily disable mold benchmark"
@@ -295,27 +326,32 @@ Initiate rollback if any of the following occur:
 After rollback, verify these checklist items:
 
 ### Build & Compilation
+
 - [ ] `cargo clean` completes without errors
 - [ ] `cargo build --release` completes without errors
 - [ ] Build time is reasonable (45-60s expected without mold)
 - [ ] No compilation warnings introduced
 
 ### Testing
+
 - [ ] `cargo test --workspace --release` passes
 - [ ] `cargo clippy --workspace -- -D warnings` shows zero errors
 - [ ] `cargo fmt --check` shows code is properly formatted
 
 ### Binary Verification
+
 - [ ] Binary is executable: `./target/release/my_app --version`
 - [ ] Binary size is expected
 - [ ] Binary runs without segfaults or crashes
 
 ### Git State
+
 - [ ] `git status` shows expected changes
 - [ ] `.cargo/config.toml` is in desired state
 - [ ] CI workflow is correct (if CI was rolled back)
 
 ### Documentation
+
 - [ ] CHANGELOG updated (if committed)
 - [ ] Team notified (if permanent change)
 - [ ] Issue tracking updated (if bug-driven)
@@ -340,6 +376,7 @@ After rollback, verify these checklist items:
 ### If Rollback Doesn't Fix Issue
 
 1. **Document the problem**:
+
    ```bash
    # Capture error message
    cargo build --release 2>&1 | tee build_error.log
@@ -352,7 +389,7 @@ After rollback, verify these checklist items:
    ```
 
 2. **Report to mold project**:
-   - Open issue: https://github.com/rui314/mold/issues
+   - Open issue: <https://github.com/rui314/mold/issues>
    - Include: OS, mold version, Rust version, error message, reproducible case
 
 3. **Use default linker** (permanent):
@@ -389,6 +426,7 @@ After rollback, verify these checklist items:
    - Include: Date, reason, investigation findings
 
 2. **Update CHANGELOG**:
+
    ```markdown
    ## [x.x.x] - YYYY-MM-DD
 
@@ -408,6 +446,7 @@ After rollback, verify these checklist items:
 **Deliverable**: Rollback runbook with 5 procedures ✓
 
 **Key Takeaways**:
+
 - Rollback is FAST (30s to 1m)
 - Procedure 1 (comment out) is simplest
 - Procedure 3 (git checkout) is safest

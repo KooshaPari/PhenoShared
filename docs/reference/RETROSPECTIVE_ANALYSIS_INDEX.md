@@ -9,9 +9,11 @@
 ## Document Overview
 
 ### 1. RETROSPECTIVE_ANALYSIS_SUMMARY.md (200 lines)
+
 **Start here.** Executive summary with quick facts, architecture overview, and action items.
 
 **Key Sections:**
+
 - Quick facts (tables with metrics)
 - Architecture transformation (before/after diagrams)
 - Detailed deliverables (what's in each document)
@@ -27,9 +29,11 @@
 ---
 
 ### 2. RETROSPECTIVE_REFACTOR_DESIGN.md (560 lines)
+
 **Core design document.** Complete architectural approach with rationale.
 
 **Key Sections:**
+
 - Current state analysis (assumed 630 LOC structure)
 - Target architecture (Hexagonal + Ports & Adapters)
 - Port definitions (inbound + 3 outbound)
@@ -48,6 +52,7 @@
 **Level:** Architect / Senior Engineer
 
 **Code Samples:**
+
 - Port trait definitions (inline)
 - Service impl structure (inline)
 - CLI handler before/after (inline)
@@ -56,9 +61,11 @@
 ---
 
 ### 3. RETROSPECTIVE_SERVICE_TRAITS.md (450 lines)
+
 **Reference implementation.** Trait definitions with full documentation and examples.
 
 **Key Sections:**
+
 - Inbound port: `RetrospectiveService` trait
   - 5 core methods (detailed docs)
   - RetrospectiveConfig struct
@@ -84,6 +91,7 @@
 **Level:** Engineer implementing Phase 1
 
 **Code Format:**
+
 - Production-ready trait definitions
 - Doc comments (markdown)
 - Type signatures fully specified
@@ -94,9 +102,11 @@
 ---
 
 ### 4. RETROSPECTIVE_MIGRATION_PHASES.md (650 lines)
+
 **Implementation roadmap.** Detailed 3-phase execution plan with work packages.
 
 **Structure:**
+
 ```
 PHASE 1: Port Definitions (2 days)
 ├─ WP1.1: Inbound port definition (4h)
@@ -119,6 +129,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ```
 
 **For Each Work Package:**
+
 - Deliverable (file path + LOC)
 - Tasks (numbered, detailed)
 - Key design points
@@ -127,6 +138,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 - Exit criteria
 
 **Additional Sections:**
+
 - Cross-cutting concerns (DI, error handling, testing infra)
 - Parallel execution strategy (Phase 2: 3 agents, Phase 3: 2 agents)
 - Rollback plan
@@ -137,6 +149,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 **Level:** Project Lead / Tech Lead
 
 **Audiences:**
+
 - Subagent assignments (which agent does what)
 - Timeline planning (when each WP completes)
 - Test requirements (what must pass)
@@ -145,9 +158,11 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ---
 
 ### 5. RETROSPECTIVE_REUSABILITY_PATTERNS.md (580 lines)
+
 **Pattern generalization.** How to apply the retrospective pattern to plan.rs and review.rs.
 
 **Key Sections:**
+
 - Pattern recognition (what makes services reusable)
   - Pattern 1: CRUD + Compute + Export
   - Pattern 2: Thin handler + service separation
@@ -187,6 +202,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 **Level:** Architect planning future work
 
 **Audiences:**
+
 - Teams implementing plan.rs refactor
 - Teams implementing review.rs refactor
 - Architects designing new commands
@@ -197,6 +213,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ## Reading Paths
 
 ### Path 1: Executive Overview (30 min)
+
 1. Read: **RETROSPECTIVE_ANALYSIS_SUMMARY.md**
 2. Review: Tables and architecture diagram
 3. Check: Next steps section
@@ -207,6 +224,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ---
 
 ### Path 2: Architect Review (90 min)
+
 1. Read: **RETROSPECTIVE_ANALYSIS_SUMMARY.md** (15 min)
 2. Read: **RETROSPECTIVE_REFACTOR_DESIGN.md** (40 min)
 3. Skim: **RETROSPECTIVE_SERVICE_TRAITS.md** (20 min) — focus on trait signatures
@@ -217,6 +235,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ---
 
 ### Path 3: Implementation Prep (3 hours)
+
 1. Read: **RETROSPECTIVE_SERVICE_TRAITS.md** (50 min) — full deep dive
 2. Read: **RETROSPECTIVE_MIGRATION_PHASES.md** (90 min) — all WPs
 3. Skim: **RETROSPECTIVE_REFACTOR_DESIGN.md** (20 min) — for context
@@ -227,6 +246,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ---
 
 ### Path 4: Pattern Learning (2 hours)
+
 1. Read: **RETROSPECTIVE_REUSABILITY_PATTERNS.md** (60 min)
 2. Skim: **RETROSPECTIVE_SERVICE_TRAITS.md** (20 min) — trait structure
 3. Reference: **RETROSPECTIVE_MIGRATION_PHASES.md** (40 min) — execution
@@ -236,6 +256,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ---
 
 ### Path 5: Deep Dive (5 hours)
+
 1. Read all five documents in order
 2. Study all code examples
 3. Understand cross-phase dependencies
@@ -249,16 +270,19 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ## Cross-References
 
 ### Architecture Alignment
+
 - **Global CLAUDE.md:** Dependency preferences, Hexagonal architecture mandate
 - **Phenotype CLAUDE.md:** Long-term stability protocol, non-destructive change, worktree discipline
 - **Local CLAUDE.md:** AgilePlus-specific architecture (ports, adapters, hexagonal)
 
 ### Related Documentation
+
 - **ADR.md** — Architecture Decision Records (add ADR for service-based refactoring)
 - **FUNCTIONAL_REQUIREMENTS.md** — FR traceability (if retrospective has FRs)
 - **PLAN.md** — Phase structure aligns with planning doc structure
 
 ### Similar Refactors
+
 - **phenotype-errors/** — Error consolidation pattern (Phase 1 LOC reduction)
 - **phenotype-config-core/** — Service extraction pattern (shared library)
 - **phenotype-health/** — Health checker trait + implementations (reusable pattern)
@@ -268,6 +292,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ## Key Concepts Reference
 
 ### Hexagonal Architecture (Ports & Adapters)
+
 ```
 ┌──────────────────────────────────────────┐
 │        Domain Layer (Service)             │
@@ -292,6 +317,7 @@ PHASE 3: CLI Refactor & Cutover (2 days)
 ```
 
 ### CQRS Pattern (Commands & Queries)
+
 ```
 Commands (State-Changing):
 ├─ generate(range, config) → Retrospective
@@ -306,6 +332,7 @@ Compute (Expensive):
 ```
 
 ### Event Sourcing
+
 ```
 1. Service creates retrospective (state change)
 2. Event published: RetrospectiveEvent::Generated
@@ -319,6 +346,7 @@ Compute (Expensive):
 ## Metrics & Success Measures
 
 ### Phase 1 Completion
+
 - [x] All ports compile (no errors)
 - [x] 100% doc coverage
 - [x] 0 Clippy warnings
@@ -326,6 +354,7 @@ Compute (Expensive):
 - [x] Contract tests pass
 
 ### Phase 2 Completion
+
 - [x] Service impl 300 LOC
 - [x] 80%+ test coverage (95+ tests)
 - [x] All adapters functional
@@ -333,6 +362,7 @@ Compute (Expensive):
 - [x] Event sourcing works
 
 ### Phase 3 Completion
+
 - [x] Handler 150 LOC (80% reduction)
 - [x] Full functional parity
 - [x] No regressions (all tests pass)
@@ -340,6 +370,7 @@ Compute (Expensive):
 - [x] Old code removed
 
 ### Overall Impact
+
 - [x] Handler LOC: 630 → 150 (76% reduction)
 - [x] Service reusable across 3 commands
 - [x] 1,300+ LOC saved across ecosystem
@@ -351,6 +382,7 @@ Compute (Expensive):
 ## Implementation Checklist
 
 ### Pre-Implementation
+
 - [ ] Read RETROSPECTIVE_ANALYSIS_SUMMARY.md (15 min)
 - [ ] Read RETROSPECTIVE_REFACTOR_DESIGN.md (40 min)
 - [ ] Get architect approval of design
@@ -358,6 +390,7 @@ Compute (Expensive):
 - [ ] Assign subagents to phases
 
 ### Phase 1: Ports (2 days)
+
 - [ ] WP1.1: Inbound port defined
 - [ ] WP1.2: Outbound ports defined
 - [ ] WP1.3: Domain models created
@@ -365,6 +398,7 @@ Compute (Expensive):
 - [ ] Phase 1 review: All green ✓
 
 ### Phase 2: Services (3 days, 3 parallel agents)
+
 - [ ] WP2.1: Service impl complete
 - [ ] WP2.2: Repository adapter working
 - [ ] WP2.3: Cache adapter working
@@ -373,6 +407,7 @@ Compute (Expensive):
 - [ ] Phase 2 review: All green ✓
 
 ### Phase 3: CLI (2 days, 2 parallel agents)
+
 - [ ] WP3.1: CLI handler refactored
 - [ ] WP3.2: Context wiring complete
 - [ ] WP3.3: Old code removed
@@ -380,6 +415,7 @@ Compute (Expensive):
 - [ ] Phase 3 review: All green ✓
 
 ### Post-Implementation
+
 - [ ] Create ADR for service-based architecture
 - [ ] Update PLAN.md with lessons learned
 - [ ] Plan phase 4: plan.rs refactor
@@ -395,6 +431,7 @@ Compute (Expensive):
 **Next Review:** After Phase 1 completion
 
 ### Changes Log
+
 - [x] RETROSPECTIVE_REFACTOR_DESIGN.md created
 - [x] RETROSPECTIVE_SERVICE_TRAITS.md created
 - [x] RETROSPECTIVE_MIGRATION_PHASES.md created
@@ -448,18 +485,21 @@ Total: 2,690 lines of design documentation
 **Status:** Design is complete, comprehensive, and ready for implementation.
 
 **Next Actions:**
+
 1. User reviews RETROSPECTIVE_ANALYSIS_SUMMARY.md (15 min)
 2. User gets stakeholder buy-in (15 min)
 3. User assigns Phase 1 work (1-2 days)
 4. Phase 1 implementation begins
 
 **Expected Timeline:**
+
 - Phase 1: 2 days (sequential)
 - Phase 2: 3 days (3 parallel agents)
 - Phase 3: 2 days (2 parallel agents)
 - **Total: 5-7 days wall-clock time**
 
 **Expected Benefits:**
+
 - 76% reduction in handler code
 - 80%+ test coverage
 - Reusable patterns for plan.rs and review.rs

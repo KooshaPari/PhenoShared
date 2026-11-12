@@ -161,7 +161,7 @@ pub async fn cmd_plan(args: PlanArgs) -> Result<()> {
 
 ### Refactored with ReusableService Pattern
 
-**Step 1: Create PlanService Trait**
+#### Step 1: Create PlanService Trait
 
 ```rust
 // crates/phenotype-contracts/src/ports/inbound/plan.rs (180 LOC)
@@ -205,7 +205,7 @@ pub struct PlanConfig {
 }
 ```
 
-**Step 2: Implement PlanServiceImpl**
+#### Step 2: Implement PlanServiceImpl
 
 ```rust
 // crates/phenotype-core/src/services/plan_service.rs (280 LOC)
@@ -337,7 +337,7 @@ impl PlanServiceImpl {
 }
 ```
 
-**Step 3: New CLI Handler (150 LOC)**
+#### Step 3: New CLI Handler (150 LOC)
 
 ```rust
 // crates/agileplus-cli/src/commands/plan.rs (150 LOC)
@@ -422,6 +422,7 @@ impl PlanCmd {
 ```
 
 **Result for plan.rs:**
+
 - Old monolith: 553 LOC
 - New structure: 150 LOC handler + 280 LOC service = 430 LOC
 - **Improvement: 123 LOC saved (22%)**
@@ -434,6 +435,7 @@ impl PlanCmd {
 ### Current State (630 LOC Monolith)
 
 Similar structure to plan.rs but focused on retrospective reviews:
+
 - Create review
 - Compute insights
 - Generate feedback
@@ -465,6 +467,7 @@ impl ReviewCmd {
 ```
 
 **Result for review.rs:**
+
 - Old monolith: 630 LOC
 - New structure: 150 LOC handler + 320 LOC service = 470 LOC
 - **Improvement: 160 LOC saved (25%)**
@@ -705,22 +708,26 @@ BENEFITS:
 ## 8. Rollout Timeline for All Three
 
 ### Week 1: Retrospective (Reference Implementation)
+
 - Establish patterns and conventions
 - Team learns hexagonal architecture
 - Proves feasibility
 
 ### Week 2: Plan Service (Pattern Application)
+
 - Apply patterns from retrospective
 - 25% less friction than retrospective
 - ~2 days expected (vs 5 for retrospective)
 
 ### Week 3: Review Service (Pattern Consolidation)
+
 - Reuse all infrastructure from retrospective + plan
 - Generic adapters available
 - ~2 days expected
 - Consolidate shared traits into common module
 
 ### Week 4: Cleanup & Documentation
+
 - Remove duplication in test fixtures
 - Extract shared adapter implementations
 - Write reusability guide
@@ -730,22 +737,26 @@ BENEFITS:
 ## 9. Metrics: Why This Matters
 
 ### Code Reduction
+
 - 630 LOC (retrospective monolith) → 150 LOC handler
 - 553 LOC (plan monolith) → 150 LOC handler
 - 630 LOC (review monolith) → 150 LOC handler
 - **Total: 1,813 LOC → 450 LOC (75% reduction in handler code)**
 
 ### Testability
+
 - Monolithic handler: Hard to test (requires full DB + cache setup)
 - Service: Easy to test (mock ports in <100 LOC test code)
 - **Test time:** 500ms (service tests) vs 5s (monolithic tests)
 
 ### Reusability
+
 - Before: 0 reusable components
 - After: ~500 LOC of reusable traits, adapters, fixtures
 - **Payoff:** 500 LOC investment → saves 1,300+ LOC across 3 services
 
 ### Maintainability
+
 - Monolith: Change one thing, breaks everything
 - Service: Change business logic, handlers untouched
 - **Coupling:** High → Low (via inversion of control)

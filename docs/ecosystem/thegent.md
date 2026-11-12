@@ -27,4 +27,5 @@ Fabric execution plan
 
 ## Boundary
 
-Fabric does not create an agent org chart, choose product strategy or decide that work should exist. thegent does not hardcode “run on GPU 0” when the requirement is a capability/deadline; it may pin physical placement only when policy or experiment demands it.
+Fabric does not create an agent org chart, choose product strategy or decide that work should exist. thegent does not hardcode “run on GPU 0” when the requirement is a capability/deadline; it may pin
+physical placement only when policy or experiment demands it.

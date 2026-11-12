@@ -1,9 +1,11 @@
 # ADR-001: phenotype-omlx Foundation — Multi-Backend, Multi-Platform OMLX
 
 ## Status
+
 Accepted
 
 ## Context
+
 The OMLX project (`TheTom/oMLX`) is a macOS MLX inference app with GUI, CLI, and server
 mode. Our fork extends it with:
 
@@ -16,6 +18,7 @@ mode. Our fork extends it with:
 5. **hwLedger federation** — fleet capacity modeling, hw ledger tracking, ADRs.
 
 ## Decision
+
 Create a self-contained monorepo `phenotype-omlx` that:
 
 1. **Replaces the OMLX research launcher** (`omlx-research`) with a fully featured
@@ -31,15 +34,18 @@ Create a self-contained monorepo `phenotype-omlx` that:
 ## Consequences
 
 ### Positive
+
 - All research adaptations live under a single repo with a unified env script.
 - Rust perf-core handles latency-sensitive code paths; Python handles orchestration.
 - Cross-platform: macOS (MLX/Metal) + Linux + Windows (CUDA backends).
 - ADR traceability via hwLedger merge.
 
 ### Negative
+
 - Requires Rust toolchain for full perf-core builds (falls back to Python-only).
 - `models` namespace collision: LatentMAS (`models.py`) vs TiDAR (`models/` package)
   requires separate PYTHONPATH invocations.
 
 ### Neutral
+
 - OMLX app bundle not modified beyond single `turbo_kv_cache.py` injection.

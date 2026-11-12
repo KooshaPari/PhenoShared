@@ -9,6 +9,7 @@
 ### 1. SDK Integration
 
 #### AgilePlus
+
 - ✅ Added `sentry 0.33` to workspace Cargo.toml
 - ✅ Created `libs/logger/src/sentry_config.rs` module
 - ✅ Exported public API: `initialize()`, `capture_error()`, `capture_message()`
@@ -18,6 +19,7 @@
 **Build Status:** `cargo build --lib` passes cleanly
 
 #### phenotype-infrakit
+
 - ✅ Added `sentry 0.33` to workspace Cargo.toml
 - ✅ Created new crate: `crates/phenotype-sentry-config`
 - ✅ Implemented full Sentry initialization with environment support
@@ -26,6 +28,7 @@
 **Build Status:** `cargo test -p phenotype-sentry-config --lib` passes cleanly
 
 #### heliosCLI
+
 - ✅ Added workspace.dependencies section with sentry, tokio, anyhow, thiserror
 - ✅ Created `crates/harness_utils/src/sentry_config.rs` module
 - ✅ Updated harness_utils Cargo.toml to include sentry dependency
@@ -36,6 +39,7 @@
 ### 2. Environment Configuration
 
 All three repos now have:
+
 - ✅ `.env.example` template with documentation
 - ✅ `.gitignore` entries for `.env`, `.env.local`, `.env.*.local`
 - ✅ Support for environment variables:
@@ -44,6 +48,7 @@ All three repos now have:
   - `SENTRY_RELEASE` — Auto-detected from Cargo.toml
 
 **Files Created:**
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/.env.example`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit/.env.example`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/.env.example`
@@ -51,32 +56,38 @@ All three repos now have:
 ### 3. Error Capture Tests
 
 #### AgilePlus
+
 - ✅ Created `libs/logger/tests/sentry_integration_test.rs`
 - ✅ Tests for initialization, message capture, error capture
 - ✅ All tests reference FR requirements (FR-SENTRY-001 through FR-SENTRY-004)
 
 **Run tests:**
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 cargo test --test sentry_integration_test -- --nocapture
 ```
 
 #### phenotype-infrakit
+
 - ✅ Created `crates/phenotype-sentry-config/tests/sentry_integration_test.rs`
 - ✅ Tests for initialization, message capture, error capture, environment override
 - ✅ Tests reference FR requirements (FR-SENTRY-001 through FR-SENTRY-005)
 
 **Run tests:**
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 cargo test -p phenotype-sentry-config --test sentry_integration_test -- --nocapture
 ```
 
 #### heliosCLI
+
 - ✅ Created `crates/harness_utils/tests/sentry_integration_test.rs`
 - ✅ Tests for module existence and environment variable handling
 
 **Run tests:**
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/crates/harness_utils
 cargo test --test sentry_integration_test -- --nocapture
@@ -85,6 +96,7 @@ cargo test --test sentry_integration_test -- --nocapture
 ### 4. Documentation
 
 #### SENTRY_INSTRUMENTATION.md
+
 - ✅ **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/SENTRY_INSTRUMENTATION.md`
 - ✅ **Content:** 600+ lines
 - ✅ Includes:
@@ -100,6 +112,7 @@ cargo test --test sentry_integration_test -- --nocapture
   - Success Criteria Checklist
 
 #### SENTRY_GITHUB_INTEGRATION.md
+
 - ✅ **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/SENTRY_GITHUB_INTEGRATION.md`
 - ✅ **Content:** 700+ lines
 - ✅ Includes:
@@ -186,6 +199,7 @@ repos/
 ### Sentry Features Enabled
 
 All SDKs configured with:
+
 - `backtrace` — Automatic stack trace collection
 - `contexts` — Enhanced error context
 - `debug-images` — Debug symbol resolution
@@ -207,12 +221,14 @@ fn main() {
 ### Test Mode vs Production
 
 **Without SENTRY_DSN:**
+
 - Sentry initializes in test mode
 - Errors logged to stderr
 - No network I/O
 - Safe for development
 
 **With SENTRY_DSN:**
+
 - Errors sent to Sentry server
 - Real-time dashboard updates
 - GitHub issue integration
@@ -243,7 +259,7 @@ All implementations trace to FRs:
 ### For Users
 
 1. **Set up Sentry account:**
-   - Go to https://sentry.io
+   - Go to <https://sentry.io>
    - Create organization
    - Create projects for each repo
 
@@ -253,12 +269,14 @@ All implementations trace to FRs:
    - Enable auto-issue creation
 
 3. **Update .env files:**
+
    ```bash
    cp .env.example .env
    # Edit .env with your Sentry DSN
    ```
 
 4. **Run integration tests:**
+
    ```bash
    cargo test --test sentry_integration_test -- --nocapture
    ```
@@ -276,6 +294,7 @@ All implementations trace to FRs:
    - `SENTRY_DSN_HELIOSCLI`
 
 2. **Update workflows:**
+
    ```yaml
    env:
      SENTRY_DSN: $&#123;&#123; secrets.SENTRY_DSN_<REPO> &#125;&#125;
@@ -307,9 +326,9 @@ All implementations trace to FRs:
 
 ## References
 
-- Sentry Rust SDK: https://docs.sentry.io/platforms/rust/
-- GitHub Integration: https://docs.sentry.io/product/integrations/github/
-- Best Practices: https://docs.sentry.io/product/best-practices/
+- Sentry Rust SDK: <https://docs.sentry.io/platforms/rust/>
+- GitHub Integration: <https://docs.sentry.io/product/integrations/github/>
+- Best Practices: <https://docs.sentry.io/product/best-practices/>
 
 ---
 

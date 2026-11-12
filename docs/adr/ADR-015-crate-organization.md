@@ -7,6 +7,7 @@ Proposed - 2026-03-31
 ## Context
 
 The phenotype-infrakit repository has grown to 30+ crates with accumulated technical debt:
+
 - Large PRs (>100 files) block effective review
 - Duplicate/error-handling crates (phenotype-error-core vs phenotype-errors)
 - Mixed ownership (AgilePlus + Phenotype crates in same workspace)
@@ -97,6 +98,7 @@ origin/main
 ```
 
 Commands:
+
 ```bash
 # Create stacked PR
 gh pr create --base stack/domain-contracts --head stack/domain-state-machine
@@ -119,6 +121,7 @@ git push --force-with-lease
 ### 7. Conflict Resolution
 
 Small PRs merge cleanly. For conflicts:
+
 1. Rebase onto target branch
 2. Resolve conflicts incrementally
 3. Force-push with lease only to feature branches
@@ -126,12 +129,14 @@ Small PRs merge cleanly. For conflicts:
 ## Consequences
 
 ### Positive
+
 - Faster, more effective code reviews
 - Clearer architectural boundaries
 - Easier to understand codebase
 - Reduced cognitive load
 
 ### Negative
+
 - More PRs to manage
 - Requires discipline to keep PRs small
 - Stacked PRs need coordination

@@ -1,8 +1,10 @@
 # Phenotype Fabric
 
-**A packaged, all-in-one computing environment that makes connected physical machines, operating-system sessions, virtual machines, accelerators, displays, audio devices, input devices, storage, and remote locations appear as one coherent interactive computer---while preserving the physical facts needed to make good placement decisions.**
+**A packaged, all-in-one computing environment that makes connected physical machines, operating-system sessions, virtual machines, accelerators, displays, audio devices, input devices, storage, and
+remote locations appear as one coherent interactive computer---while preserving the physical facts needed to make good placement decisions.**
 
-Phenotype Fabric exposes one graph, one workspace model, and one UI/API while compiling each link onto the least-expensive valid execution path: direct calls, shared memory, DMA-BUF, IVSHMEM/KVMFR, virtio/vhost, PCIe peer paths, LAN transports, WAN transports, or out-of-band hardware.
+Phenotype Fabric exposes one graph, one workspace model, and one UI/API while compiling each link onto the least-expensive valid execution path: direct calls, shared memory, DMA-BUF, IVSHMEM/KVMFR,
+virtio/vhost, PCIe peer paths, LAN transports, WAN transports, or out-of-band hardware.
 
 ## What is unified
 

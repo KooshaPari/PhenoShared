@@ -18,8 +18,10 @@ Everything is internal software. Default is internal-only. Nothing is public unl
 ## Gate stack (free tiers)
 
 1. Static docs and landing: public on GitHub Pages, Cloudflare Pages or Vercel. No private data, no tokens in the bundle.
-2. Apps on Vercel or Cloudflare: Cloudflare Access in front (proxied record, owner-only policy). WorkOS login is added as the Access OIDC identity provider when that integration is verified, so one login satisfies both. Vercel Authentication is a second lock on previews.
-3. Desk backends: bound to the tailnet only (Tailscale Serve), no public listener. A Vercel app reaches them server-side with a verified Vercel OIDC token, through a Cloudflare Tunnel protected by an Access service token.
+2. Apps on Vercel or Cloudflare: Cloudflare Access in front (proxied record, owner-only policy). WorkOS login is added as the Access OIDC identity provider when that integration is verified, so one
+   login satisfies both. Vercel Authentication is a second lock on previews.
+3. Desk backends: bound to the tailnet only (Tailscale Serve), no public listener. A Vercel app reaches them server-side with a verified Vercel OIDC token, through a Cloudflare Tunnel protected by an
+   Access service token.
 4. Wildcard Access apps cover `*.pheno.studio` and `*.pheno.shop` so a new hostname is gated by default. Specific apps override the wildcard.
 
 ## Rules
@@ -32,4 +34,5 @@ Everything is internal software. Default is internal-only. Nothing is public unl
 
 ## Deploy defaults per project
 
-Every repo carries a landing page and a docs site at minimum, built from the shared template and deployed to one of GitHub Pages, Cloudflare Pages or Vercel (free tier). Competitor notes live in `docs/compete/` and are part of the docs site.
+Every repo carries a landing page and a docs site at minimum, built from the shared template and deployed to one of GitHub Pages, Cloudflare Pages or Vercel (free tier). Competitor notes live
+in `docs/compete/` and are part of the docs site.

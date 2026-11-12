@@ -5,7 +5,8 @@
 **Authority:** phenotype-registry (INDEX spine)  
 **Related:** [boundary-shaping.md](./boundary-shaping.md), [STACK_POLICY.md](./STACK_POLICY.md)
 
-Single source of truth mapping **domain concerns** to **canonical repositories**, preferred Core language, and permitted Edge languages (with justification). Language-bucket SDK repos are not primary boundaries.
+Single source of truth mapping **domain concerns** to **canonical repositories**, preferred Core language, and permitted Edge languages (with justification). Language-bucket SDK repos are not primary
+boundaries.
 
 ---
 

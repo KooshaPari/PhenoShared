@@ -9,6 +9,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ## Quick Navigation
 
 ### For First-Time Setup
+
 1. Start here: **SENTRY_SETUP.md** (Overview & getting started)
 2. Then: **SENTRY_ENV_TEMPLATE.md** (Configure environment)
 3. Next: **SENTRY_SDK_CONFIGURATIONS.md** (Add SDK to code)
@@ -18,20 +19,24 @@ This index provides a roadmap through all Sentry documentation and configuration
 ### For Different Roles
 
 **Project Manager/Team Lead**:
+
 - Read: SENTRY_SETUP_COMPLETION_REPORT.md (overview)
 - Reference: SENTRY_SETUP.md (project structure)
 
 **Developer (Adding Sentry to Code)**:
+
 - Start with: SENTRY_SDK_CONFIGURATIONS.md
 - Reference patterns and examples
 - Use SENTRY_TESTING_AND_VERIFICATION.md for testing
 
 **DevOps/Infrastructure**:
+
 - Focus on: SENTRY_ENV_TEMPLATE.md (environment setup)
 - Then: SENTRY_GITHUB_INTEGRATION.md (GitHub & releases)
 - Reference: SENTRY_SETUP.md (troubleshooting)
 
 **QA/Tester**:
+
 - Primary: SENTRY_TESTING_AND_VERIFICATION.md
 - Reference: SENTRY_SETUP.md (error patterns)
 
@@ -40,9 +45,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ## Document Descriptions
 
 ### 1. SENTRY_SETUP.md (Main Setup Guide)
+
 **Purpose**: Overview and foundational setup
 
 **Contents**:
+
 - Sentry projects & DSN tokens for all 3 repos
 - Rust SDK v0.33+ installation
 - Binary entry point initialization
@@ -58,6 +65,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - Organization settings reference
 
 **Key Sections**:
+
 ```
 • Overview
 • Sentry Projects & DSN Tokens
@@ -76,6 +84,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ```
 
 **Use When**:
+
 - First-time setup
 - Understanding Sentry architecture
 - Looking for error capture patterns
@@ -87,9 +96,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ---
 
 ### 2. SENTRY_SDK_CONFIGURATIONS.md (Code Examples)
+
 **Purpose**: Ready-to-use SDK configuration examples
 
 **Contents**:
+
 - Quick reference table
 - AgilePlus Cargo.toml setup
 - AgilePlus CLI entry point example
@@ -105,6 +116,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - Unit test examples
 
 **Key Sections**:
+
 ```
 • Quick Reference Table
 • 1. AgilePlus Configuration
@@ -132,6 +144,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ```
 
 **Use When**:
+
 - Adding Sentry to a crate
 - Looking for specific code patterns
 - Understanding how to integrate with your architecture
@@ -143,9 +156,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ---
 
 ### 3. SENTRY_GITHUB_INTEGRATION.md (GitHub & Releases)
+
 **Purpose**: GitHub integration, auto-issues, and release tracking
 
 **Contents**:
+
 - GitHub App installation procedures
 - Repository linking for all 3 repos
 - Alert rule configuration for auto-issue creation
@@ -158,6 +173,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - Best practices for releases
 
 **Key Sections**:
+
 ```
 • Overview
 • Prerequisites
@@ -188,6 +204,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ```
 
 **Use When**:
+
 - Setting up GitHub integration
 - Configuring auto-issue creation
 - Managing releases and deployments
@@ -199,9 +216,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ---
 
 ### 4. SENTRY_TESTING_AND_VERIFICATION.md (Complete Test Suite)
+
 **Purpose**: Comprehensive testing and verification procedures
 
 **Contents**:
+
 - Test environment setup
 - 8 complete test suites:
   1. Basic error capture (panic, exception, async)
@@ -217,6 +236,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - Expected latency benchmarks
 
 **Key Sections**:
+
 ```
 • Prerequisites
 • Test Environment Setup
@@ -247,6 +267,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ```
 
 **Use When**:
+
 - Verifying Sentry setup is working
 - Running integration tests
 - Checking error capture latency
@@ -258,9 +279,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ---
 
 ### 5. SENTRY_ENV_TEMPLATE.md (Environment Variables)
+
 **Purpose**: Environment variable templates and configuration
 
 **Contents**:
+
 - AgilePlus .env template (21 variables)
 - phenotype-infrakit .env template (11 variables)
 - heliosCLI .env template (10 variables)
@@ -273,6 +296,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - Testing configuration procedures
 
 **Key Sections**:
+
 ```
 • Quick Start
 • AgilePlus Environment Template
@@ -302,6 +326,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ```
 
 **Use When**:
+
 - Setting up local environment
 - Configuring CI/CD
 - Adding GitHub Secrets
@@ -313,9 +338,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ---
 
 ### 6. SENTRY_SETUP_COMPLETION_REPORT.md (Status Report)
+
 **Purpose**: Project status and completion summary
 
 **Contents**:
+
 - Executive summary
 - 5 deliverables completed
 - Project configuration details for all 3 repos
@@ -331,6 +358,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - Future work items
 
 **Key Sections**:
+
 ```
 • Executive Summary
 • Deliverables Completed (5 comprehensive guides)
@@ -351,6 +379,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ```
 
 **Use When**:
+
 - Understanding project status
 - Planning implementation timeline
 - Understanding feature coverage
@@ -364,9 +393,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ## Implementation Timeline
 
 ### Phase 1: Setup (Current - COMPLETE)
+
 **Status**: ✅ COMPLETE
 
 **Deliverables**:
+
 - [x] 5 comprehensive documentation guides
 - [x] SDK configuration examples
 - [x] GitHub integration procedures
@@ -376,6 +407,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - [x] Best practices
 
 **Files Created**:
+
 1. docs/reference/SENTRY_SETUP.md
 2. docs/reference/SENTRY_SDK_CONFIGURATIONS.md
 3. docs/reference/SENTRY_GITHUB_INTEGRATION.md
@@ -387,9 +419,11 @@ This index provides a roadmap through all Sentry documentation and configuration
 ---
 
 ### Phase 2: SDK Integration (Next)
+
 **Estimated Time**: 2-3 hours
 
 **Steps**:
+
 1. Create 3 Sentry projects (sentry.io)
 2. Copy DSN tokens to GitHub Secrets
 3. Add `sentry` crate to Cargo.toml
@@ -398,15 +432,18 @@ This index provides a roadmap through all Sentry documentation and configuration
 6. Run test suite
 
 **Resources**:
+
 - SENTRY_SDK_CONFIGURATIONS.md (code examples)
 - SENTRY_ENV_TEMPLATE.md (environment setup)
 
 ---
 
 ### Phase 3: Release & Monitoring (Future)
+
 **Estimated Time**: 1-2 hours
 
 **Steps**:
+
 1. Create GitHub Actions release workflows
 2. Link Sentry releases to git tags
 3. Configure Slack alerts
@@ -414,6 +451,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 5. Monitor error dashboard
 
 **Resources**:
+
 - SENTRY_GITHUB_INTEGRATION.md
 - SENTRY_SETUP.md (best practices)
 
@@ -555,6 +593,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 ## Tier 1 Repos Status
 
 ### AgilePlus
+
 - **Type**: Rust workspace (24 crates)
 - **Status**: Documented
 - **Entry Points**: CLI, API server
@@ -562,6 +601,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - **Alert Channel**: #agileplus-errors
 
 ### phenotype-infrakit
+
 - **Type**: Rust workspace
 - **Status**: Documented
 - **Entry Points**: Binary crates, benchmarks
@@ -569,6 +609,7 @@ This index provides a roadmap through all Sentry documentation and configuration
 - **Alert Channel**: #infrastructure-errors
 
 ### heliosCLI
+
 - **Type**: Rust workspace (18 crates)
 - **Status**: Documented
 - **Entry Points**: TUI, command handlers
@@ -579,10 +620,10 @@ This index provides a roadmap through all Sentry documentation and configuration
 
 ## References
 
-- Sentry Rust SDK: https://docs.sentry.io/platforms/rust/
-- Sentry GitHub Integration: https://docs.sentry.io/integrations/github/
-- Sentry CLI: https://docs.sentry.io/cli/
-- Error Reporting: https://docs.sentry.io/product/error-reporting/
+- Sentry Rust SDK: <https://docs.sentry.io/platforms/rust/>
+- Sentry GitHub Integration: <https://docs.sentry.io/integrations/github/>
+- Sentry CLI: <https://docs.sentry.io/cli/>
+- Error Reporting: <https://docs.sentry.io/product/error-reporting/>
 
 ---
 

@@ -5,6 +5,7 @@
 This document designs the decomposition of a monolithic SQLite adapter (1,582 LOC) into three focused, independently testable modules while maintaining 100% backwards compatibility with existing consumers.
 
 **Target:**
+
 - Reduce `lib.rs` from 1,582 LOC → ~200 LOC public API
 - Extract 3 logical subsystems: Sync Logic (~400 LOC), Query Builder (~300 LOC), Migrations (~250 LOC)
 - Enable independent testing of each module without full SQLite setup
@@ -87,13 +88,16 @@ sqlite/lib.rs (1,582 LOC)
 ## Module Breakdown
 
 ### store/sync.rs (~400 LOC)
-**Connection pooling, CRUD operations, row synchronization**
+
+#### Connection pooling, CRUD operations, row synchronization
 
 ### store/query_builder.rs (~300 LOC)
-**Dynamic SQL construction, type-safe query composition**
+
+#### Dynamic SQL construction, type-safe query composition
 
 ### store/migrations.rs (~250 LOC)
-**Schema versioning, migration execution, rollback**
+
+#### Schema versioning, migration execution, rollback
 
 ---
 

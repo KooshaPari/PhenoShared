@@ -116,24 +116,30 @@ Maps existing code relevant to the feature:
 
 ### With Event System
 ```
+
 UserSignedUp event
   → email handler listens
   → sends welcome email
+
 ```
 
 ### With Database
 ```
+
 Email events
   → stored in email_queue table
   → processed by async worker
   → status updated (pending → sent → failed)
+
 ```
 
 ### With User Model
 ```
+
 User entity
   → needs email_subscribed boolean
   → needs email_preferences JSON
+
 ```
 ```
 
@@ -252,11 +258,13 @@ tokio::spawn(async {
 **Choice**: Handlebars for email templates
 
 **Rationale**:
+
 - Lightweight, no unsafe code
 - Used in 2 other features already
 - Good for email templates
 
 **Alternative**: Tera or Minijinja
+
 - More powerful, overkill for email
 - Would introduce new dependency
 
@@ -269,11 +277,13 @@ tokio::spawn(async {
 **Choice**: Direct API calls (not wrapper crate)
 
 **Rationale**:
+
 - We only need send + webhook handling
 - Reduces dependency bloat
 - Simple REST API, easy to maintain
 
 **Implementation**:
+
 ```rust
 POST https://api.sendgrid.com/v3/mail/send
 {
@@ -294,6 +304,7 @@ POST https://api.sendgrid.com/v3/mail/send
 | Async runtime | tokio (existing) | High |
 | Template engine | Handlebars | Medium |
 | SendGrid API | Direct REST | High |
+
 ```
 
 ## When to Research
@@ -307,21 +318,21 @@ Research is most valuable for:
 agileplus research 001
 ```
 
-**2. Integration with External Systems**
+## 2. Integration with External Systems
 
 ```bash
 # Feature integrates with SendGrid, Stripe, or 3rd party?
 agileplus research 001
 ```
 
-**3. Performance-Sensitive Features**
+## 3. Performance-Sensitive Features
 
 ```bash
 # Feature touches data pipeline or real-time system?
 agileplus research 001
 ```
 
-**4. Unclear Feasibility**
+## 4. Unclear Feasibility
 
 ```bash
 # Not sure if we can build this?
@@ -332,7 +343,7 @@ agileplus research 001
 
 You can skip research for:
 
-**1. Simple, well-understood features**
+### 1. Simple, well-understood features
 
 ```bash
 # Adding a simple form field?
@@ -340,7 +351,7 @@ agileplus research 001 --skip
 agileplus plan 001
 ```
 
-**2. Features replicating existing patterns**
+## 2. Features replicating existing patterns
 
 ```bash
 # Adding 10th similar notification type?
@@ -348,7 +359,7 @@ agileplus research 001 --skip
 agileplus plan 001
 ```
 
-**3. Purely frontend changes**
+## 3. Purely frontend changes
 
 ```bash
 # Adding a UI component?
@@ -419,7 +430,7 @@ Real example research output:
 
 ## Tips for Thorough Research
 
-**1. Look for Patterns**
+### 1. Look for Patterns
 
 ```bash
 # Search for similar implementations
@@ -427,21 +438,21 @@ grep -r "pub struct" src/ | grep -i "handler"
 grep -r "impl.*Trait" src/ | grep -i "event"
 ```
 
-**2. Check Dependencies**
+## 2. Check Dependencies
 
 ```bash
 cat Cargo.toml | grep -A 50 "\\[dependencies\\]"
 # See what's already available
 ```
 
-**3. Read Recent Code**
+## 3. Read Recent Code
 
 ```bash
 git log --oneline -20 src/
 # What did team work on recently?
 ```
 
-**4. Identify Integration Points**
+## 4. Identify Integration Points
 
 ```bash
 # Where does this feature touch other systems?
@@ -457,6 +468,7 @@ agileplus plan 001
 ```
 
 This uses the research to create:
+
 - Architecture decisions
 - File changes list
 - Build sequence

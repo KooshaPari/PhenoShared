@@ -1,12 +1,14 @@
 # Direct MiniMax-M3 call plan (forged over stuck-out agent scaffolding)
 
 ## Current state
+
 - `forge -p` subprocess harness works (`bench/comparison/run_minimax_m3.py`).
 - `bench/results/minimax-m3/matrix.md` has 7 suites × n=5 with measured latencies.
 - **Blocker:** forge scaffolding = 60-120s per call vs raw MiniMax-M3 inference = ~1-3s.
 - Cannot extract `sk-cp-...` full key from forge's encrypted store without root + sandbox bypass.
 
 ## What we know about the endpoint
+
 | Field | Value | Verified |
 |---|---|---|
 | URL | `https://api.minimax.io/anthropic/v1/messages` | ✓ (forge -p confirms) |
@@ -57,6 +59,7 @@ class DirectMiniMaxAdapter:
 ```
 
 ## To unblock
+
 1. Either paste `MINIMAX_API_KEY=sk-cp-...` once in this chat (env-injected),
 2. Or add `MINIMAX_API_KEY=...` to your `~/.zshrc` so the next shell inherits it,
 3. Or run `forge provider login minimax --show-key` (if such a flag exists; couldn't find it).
@@ -64,7 +67,7 @@ class DirectMiniMaxAdapter:
 Once I have the key in env, the rewrite is ~15 min: replace `forge -p` subprocess with `requests.post`, re-run the 7 suites × n=5, capture new matrix row showing actual inference latency.
 
 ## Expected outcome
+
 - Per-call latency: 60-120s → 1-3s (40-100× overhead removed)
 - Total benchmark runtime: 7.5h → ~20 min
 - Tool-call overhead per request: ~80ms TCP + TLS + ~300ms LLM cold start (forges adds nothing useful for raw inference)
-

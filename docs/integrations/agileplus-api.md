@@ -27,9 +27,11 @@ by `middleware::auth::extract_token`:
 ```http
 Authorization: Bearer <token>
 ```
+
 ```http
 X-API-Key: <token>
 ```
+
 ```http
 GET /api/v1/features?api_key=<token>
 ```

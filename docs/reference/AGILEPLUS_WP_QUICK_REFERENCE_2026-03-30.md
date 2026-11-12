@@ -7,6 +7,7 @@
 ## ⚠️ IMPORTANT: Document Status
 
 This document was created on 2026-03-30 but contains references to forks that **do not exist** in the current workspace:
+
 - `bifrost-routing` - **NOT FOUND** in workspace
 - forgecode-fork specs - **NOT FOUND** at specified path
 - phenotype-router-monitor specs - **NOT FOUND** at specified path
@@ -47,27 +48,35 @@ This document was created on 2026-03-30 but contains references to forks that **
 ## Phase Summary
 
 ### Phase 1: Phenotype-infrakit ✅
+
 **Status**: COMPLETE
+
 - 24 crates stabilized
 - 101 tests passing
 - phenotype-error-core, phenotype-health, phenotype-config-core created
 
 ### Phase 2: Library Consolidation ✅
+
 **Status**: COMPLETE
+
 - WP1: Routes decomposition (2,631 LOC → 9 modules)
 - WP9: EventSourced trait (cross-project reuse enabled)
 
 ### Phase 3: AgilePlus Refactoring 📋
+
 **Status**: Analyzed, ready for execution
 **Targets**:
+
 1. `agileplus-dashboard/src/routes.rs` (2,631 LOC)
 2. `agileplus-sqlite/src/lib.rs` (1,582 LOC)
 **Est. Impact**: 2,200 LOC reduction
 
 ### Phase 4: Thegent Test Deduplication 📋
+
 **Status**: 3-phase roadmap created
 **Impact**: 4,000-4,800 LOC reduction
 **Priority**:
+
 - Phase 4.1: Iterative Test Suites (HIGH ROI, LOW RISK)
 - Phase 4.2: Legacy Tests (MEDIUM RISK)
 - Phase 4.3: Supplementary Tests (HIGH ROI)

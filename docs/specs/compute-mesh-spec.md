@@ -79,4 +79,5 @@ Rough JSON sketch (finalize in `iac/terraform/tailscale.tf`):
 
 ## Rollback reference
 
-See `docs/specs/rollback-kill-switch-spec.md` for per-node disable procedures. Global kill-switch: revert all repos' `.woodpecker.yml` → `.github/workflows/` (GitHub Actions) via Git revert of the migration commit.
+See `docs/specs/rollback-kill-switch-spec.md` for per-node disable procedures. Global kill-switch: revert all repos' `.woodpecker.yml` → `.github/workflows/` (GitHub Actions) via Git revert of the
+migration commit.

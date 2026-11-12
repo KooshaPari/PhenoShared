@@ -1,11 +1,13 @@
 # ADR-ECO-015: Hybrid gateway — app layer, Go planes, desktop convergence
 
 ## Status
+
 Accepted (2026-06-18)
 
 ## Context
 
-Wave H established **phenotype-gateway** as the long-term domain owner with Go submodule planes ([ADR-ECO-014 phenotype-gateway charter](./ADR-ECO-014-phenotype-gateway-charter.md)). User charter (2026-06-18) refines:
+Wave H established **phenotype-gateway** as the long-term domain owner with Go submodule planes ([ADR-ECO-014 phenotype-gateway charter](./ADR-ECO-014-phenotype-gateway-charter.md)). User charter
+(2026-06-18) refines:
 
 - **OmniRoute** serves as the **app/shell layer** (TypeScript), not a discard-only interim
 - **vibeproxy** desktop client attempts must **converge** with OmniRoute into one final desktop path

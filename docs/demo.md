@@ -145,7 +145,7 @@ let ssao = SsaoConfig {
 };
 ```
 
-**Shader invocation**
+#### Shader invocation
 
 ```hlsl
 Shader.Find("Hidden/Phenotype/SSAOPass");
@@ -183,7 +183,7 @@ let bloom = BloomConfig {
 };
 ```
 
-**Shader invocation**
+#### Shader invocation
 
 ```hlsl
 Shader.Find("Hidden/Phenotype/BloomPass");
@@ -221,7 +221,7 @@ let aces = AcesConfig {
 };
 ```
 
-**Shader invocation**
+#### Shader invocation
 
 ```hlsl
 Shader.Find("Hidden/Phenotype/ACESPass");
@@ -258,7 +258,7 @@ let ssgi = SsgiConfig {
 };
 ```
 
-**Shader invocation**
+#### Shader invocation
 
 ```hlsl
 Shader.Find("Hidden/Phenotype/SSGIPass");
@@ -298,7 +298,7 @@ let vignette = VignetteConfig {
 };
 ```
 
-**Shader invocation**
+#### Shader invocation
 
 ```hlsl
 Shader.Find("Hidden/WSM3D/Vignette");
@@ -329,7 +329,7 @@ let chromatic = ChromaticConfig {
 };
 ```
 
-**Shader invocation**
+#### Shader invocation
 
 ```hlsl
 Shader.Find("Hidden/WSM3D/ChromaticAberration");
@@ -366,7 +366,7 @@ let lut = LutConfig {
 };
 ```
 
-**Shader invocation**
+#### Shader invocation
 
 ```hlsl
 Shader.Find("WSM3D/ColorGradingLUT");

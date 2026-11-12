@@ -1,10 +1,12 @@
 # Architecture / Abstraction-Level Design
 
-`ALD` is used here as **Architecture- and Abstraction-Level Design**: the stable conceptual layers between human intent and physical mechanisms. It complements the system-wide HLD and component/hot-path LLD.
+`ALD` is used here as **Architecture- and Abstraction-Level Design**: the stable conceptual layers between human intent and physical mechanisms. It complements the system-wide HLD and
+component/hot-path LLD.
 
 ## A0 — Human and agent intent
 
-Examples: “move my seat to the couch,” “show this Windows application on the Mac,” “run this game E2E without disturbing Ableton,” or “place this operation on the best available hardware.” Intent states desired outcomes and hard/soft constraints, not a product or transport.
+Examples: “move my seat to the couch,” “show this Windows application on the Mac,” “run this game E2E without disturbing Ableton,” or “place this operation on the best available hardware.” Intent
+states desired outcomes and hard/soft constraints, not a product or transport.
 
 ## A1 — Semantic entities
 
@@ -38,7 +40,8 @@ Every stage may disappear. The selected graph includes resource reservations, cl
 
 ## A4 — Execution and object regions
 
-Tasks may be decomposed to processes, functions, syscalls, operations or accelerator kernels where an interposition point exists. Fine-grained decisions fuse into regions when sharing state/destination and split when locality, parallelism, deadline or capability diverges.
+Tasks may be decomposed to processes, functions, syscalls, operations or accelerator kernels where an interposition point exists. Fine-grained decisions fuse into regions when sharing
+state/destination and split when locality, parallelism, deadline or capability diverges.
 
 Objects expose authority, version, consistency and residency. Location transparency is a user/API abstraction; the runtime cost model remains location-aware.
 
@@ -61,7 +64,8 @@ CPUs, NUMA nodes, caches, RAM/VRAM, GPUs/NPUs/FPGAs, codecs, copy engines, NICs,
 
 ## A7 — Evidence and adaptation
 
-The runtime observes actual stage cost, deadline misses, quality, resource pressure and failures. It updates route/scheduler models, fuses/fissions regions and emits evidence references. Tracera/AgilePlus decide semantic acceptance; Fabric owns physical execution facts.
+The runtime observes actual stage cost, deadline misses, quality, resource pressure and failures. It updates route/scheduler models, fuses/fissions regions and emits evidence references.
+Tracera/AgilePlus decide semantic acceptance; Fabric owns physical execution facts.
 
 ## Invariants across levels
 

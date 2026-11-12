@@ -4,7 +4,8 @@ audience: [developers, sdk]
 
 # Domain Model
 
-The domain model is defined in `crates/agileplus-domain/src/domain/` and represents the core entities and their relationships. All entities are immutable after creation (state is modified via explicit transitions).
+The domain model is defined in `crates/agileplus-domain/src/domain/` and represents the core entities and their relationships. All entities are immutable after creation (state is modified via explicit
+transitions).
 
 ## Entity Relationship Diagram
 
@@ -58,6 +59,7 @@ pub enum FeatureState {
 ```
 
 **Key methods**:
+
 ```rust
 impl Feature {
     pub fn new(slug: &str, friendly_name: &str, spec_hash: [u8; 32],
@@ -68,6 +70,7 @@ impl Feature {
 ```
 
 **Lifecycle**:
+
 1. Created via `Feature::new()`
 2. State transitions via `Feature::transition()` (enforced by preconditions)
 3. Persisted via `StoragePort::create_feature()` and `update_feature_state()`
@@ -124,6 +127,7 @@ Planned → Doing → Review → Done
 WPs can move backward (e.g., from `Blocked` to `Planned`) but features cannot.
 
 **Key methods**:
+
 ```rust
 impl WorkPackage {
     pub fn new(feature_id: i64, title: &str, sequence: i32,
@@ -158,6 +162,7 @@ pub struct DependencyGraph {
 ```
 
 **Key methods**:
+
 ```rust
 impl DependencyGraph {
     pub fn new() -> Self
@@ -215,6 +220,7 @@ pub struct AuditChain {
 **Hash Chain Integrity**:
 
 Each entry is hashed from:
+
 ```
 hash = SHA-256(
     feature_id ||
@@ -229,6 +235,7 @@ hash = SHA-256(
 If any field is modified, the hash changes. If the `prev_hash` doesn't match the previous entry's computed hash, verification fails.
 
 **Key methods**:
+
 ```rust
 pub fn hash_entry(entry: &AuditEntry) -> [u8; 32]
 
@@ -238,6 +245,7 @@ impl AuditChain {
 ```
 
 **Example chain**:
+
 ```
 Entry 0:
   feature_id: 123
@@ -298,6 +306,7 @@ pub enum EvidenceType {
 ```
 
 **Example contract**:
+
 ```json
 {
   "feature_id": 123,
@@ -334,6 +343,7 @@ pub struct Evidence {
 ```
 
 **Example**:
+
 ```json
 {
   "id": 42,
@@ -387,6 +397,7 @@ pub enum PolicyCheck {
 ```
 
 **Example**:
+
 ```json
 {
   "id": 1,
@@ -583,6 +594,7 @@ pub enum SyncDirection {
 ```
 
 The sync orchestrator uses `SyncMapping` to:
+
 - Look up the external issue when a WP state changes (to push updates)
 - Identify which local WP to update when a webhook arrives (to pull changes)
 - Detect conflicts (both systems changed since last sync)
@@ -609,7 +621,8 @@ pub struct VectorClock {
 }
 ```
 
-When a feature transitions on Device A, the vector clock is incremented and included in the NATS message. Device B merges it into its local clock and applies the update. This ensures causal consistency across the mesh.
+When a feature transitions on Device A, the vector clock is incremented and included in the NATS message. Device B merges it into its local clock and applies the update. This ensures causal
+consistency across the mesh.
 
 ## Domain Error Taxonomy
 

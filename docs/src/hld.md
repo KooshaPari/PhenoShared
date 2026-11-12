@@ -38,7 +38,8 @@ flowchart TB
 
 ### 1. Product shell
 
-One application identity, installer, workspace model, graph canvas, simple focus controls, diagnostics, and policy UI. Platform-native shells may differ, but they operate on the same object model and API.
+One application identity, installer, workspace model, graph canvas, simple focus controls, diagnostics, and policy UI. Platform-native shells may differ, but they operate on the same object model and
+API.
 
 ### 2. Coordinator/control plane
 

@@ -287,6 +287,7 @@ pub trait EventStore {
 ```
 
 When reconstructing state:
+
 - Load latest snapshot (if available).
 - Replay events since snapshot sequence onward.
 - Reduces replay latency from O(n) to O(n - snapshot_sequence).
@@ -345,6 +346,7 @@ async fn main() -> Result<()> {
 ### Phase 1: Mandatory Domains (Weeks 1-2)
 
 Implement event sourcing for:
+
 1. Policy engine (high-security)
 2. State machine (business-critical)
 3. Secrets management (compliance-critical)
@@ -352,6 +354,7 @@ Implement event sourcing for:
 ### Phase 2: Optional CQRS (Weeks 3-4)
 
 For domains with >100K events/day:
+
 1. Add projection handlers.
 2. Set up read models (Redis or PostgreSQL materialized views).
 3. Benchmark read latency improvements.
@@ -359,6 +362,7 @@ For domains with >100K events/day:
 ### Phase 3: Existing Services (Weeks 5-6)
 
 Migrate existing audit-table patterns to event sourcing:
+
 1. Generate events from audit table rows (one-time migration).
 2. Gradually switch new writes to event store.
 3. Archive old audit tables.
@@ -375,6 +379,7 @@ CREATE TABLE config_audit (config_id UUID, old_value JSONB, new_value JSONB, ...
 ```
 
 **Rejected because**:
+
 - Audit table and main table can diverge (accidental deletes, data loss).
 - No temporal queries (can't easily ask "what was state at time T").
 - No built-in tamper detection (audit rows can be modified or deleted).
@@ -382,6 +387,7 @@ CREATE TABLE config_audit (config_id UUID, old_value JSONB, new_value JSONB, ...
 ### 2. Blockchain (Over-engineered)
 
 **Rejected because**:
+
 - Overkill for internal audit logs; consensus overhead not needed.
 - Poor query performance (merkle tree traversals).
 - Higher operational complexity for minimal benefit over SHA-256 chains.
@@ -389,6 +395,7 @@ CREATE TABLE config_audit (config_id UUID, old_value JSONB, new_value JSONB, ...
 ### 3. Event Sourcing Everywhere (Over-adoption)
 
 **Rejected because**:
+
 - Storage costs are prohibitive for transient data.
 - Query complexity unnecessary for write-heavy, read-light domains.
 - Eventual consistency issues with CQRS unsuitable for consistency-critical operations.
@@ -396,6 +403,7 @@ CREATE TABLE config_audit (config_id UUID, old_value JSONB, new_value JSONB, ...
 ### 4. Hybrid: Event Sourcing for Compliance, CRUD for Everything Else (Accepted Pattern)
 
 This ADR adopts a **pragmatic hybrid**:
+
 - Mandatory for audit-heavy domains (compliance, security, governance).
 - Optional for others.
 - CQRS as a scalability lever (not required initially).
@@ -406,9 +414,9 @@ This ADR adopts a **pragmatic hybrid**:
 
 ### Event Sourcing Patterns
 
-- **Event Sourcing Pattern**: https://martinfowler.com/eaaDev/EventSourcing.html
-- **CQRS Pattern**: https://martinfowler.com/bliki/CQRS.html
-- **Event Store Pattern**: https://eventstore.com/
+- **Event Sourcing Pattern**: <https://martinfowler.com/eaaDev/EventSourcing.html>
+- **CQRS Pattern**: <https://martinfowler.com/bliki/CQRS.html>
+- **Event Store Pattern**: <https://eventstore.com/>
 
 ### Phenotype Implementation
 
@@ -420,9 +428,9 @@ This ADR adopts a **pragmatic hybrid**:
 
 ### Security & Compliance
 
-- **OWASP Audit Logging**: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
-- **SOC 2 Audit Log Requirements**: https://www.aicpa.org/resources/downloading-aicpa-soc-2-report
-- **GDPR & Right to Be Forgotten**: https://gdpr-info.eu/art-17-gdpr/ (conflicts with immutability)
+- **OWASP Audit Logging**: <https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html>
+- **SOC 2 Audit Log Requirements**: <https://www.aicpa.org/resources/downloading-aicpa-soc-2-report>
+- **GDPR & Right to Be Forgotten**: <https://gdpr-info.eu/art-17-gdpr/> (conflicts with immutability)
 
 ### Related ADRs
 

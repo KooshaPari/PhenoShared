@@ -11,7 +11,9 @@ Before the first edit in an MCP session, read in order:
 3. Target repo `PHENO.md` + `FORK-NOTES.md`
 4. [ADR-018: Agent Session Zero-Loop SSOT](https://github.com/KooshaPari/PhenoSpecs/blob/main/adrs/018-agent-session-zero-loop-ssot.md) — skills and dogfood ritual
 
-Agent skills (PhenoMCPServers): [`mcp-boundary-guard`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/mcp-boundary-guard/SKILL.md), [`github-fork-policy`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md), [`language-tier-picker`](https://github.com/KooshaPari/PhenoMCPServers/tree/main/skills), [`substrate-vs-servers`](https://github.com/KooshaPari/PhenoMCPServers/tree/main/skills).
+Agent skills (PhenoMCPServers): [`mcp-boundary-guard`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/mcp-boundary-guard/SKILL.md),
+[`github-fork-policy`](https://github.com/KooshaPari/PhenoMCPServers/blob/main/skills/github-fork-policy/SKILL.md),
+[`language-tier-picker`](https://github.com/KooshaPari/PhenoMCPServers/tree/main/skills), [`substrate-vs-servers`](https://github.com/KooshaPari/PhenoMCPServers/tree/main/skills).
 
 ## Decision tree
 
@@ -65,7 +67,8 @@ Verify `fork: true` and parent after every fork — see [github-fork-policy skil
 
 ## Why
 
-Three layers (framework / implementations / runtime) plus a separate spec SDK fork prevent agents from re-debating settled placement every session. Wrong fork parent breaks GitHub upstream sync UI and forces expensive re-parent surgery. ADR-017 is the decision authority; this page is the agent-readable decision tree.
+Three layers (framework / implementations / runtime) plus a separate spec SDK fork prevent agents from re-debating settled placement every session. Wrong fork parent breaks GitHub upstream sync UI and
+forces expensive re-parent surgery. ADR-017 is the decision authority; this page is the agent-readable decision tree.
 
 ## Related
 

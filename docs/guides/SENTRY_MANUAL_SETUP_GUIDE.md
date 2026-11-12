@@ -5,6 +5,7 @@ Complete walkthrough for creating 3 Sentry projects and configuring GitHub organ
 **Estimated Time:** 45 minutes (15 minutes per project)
 
 **What You'll Do:**
+
 1. Create 3 Sentry projects (AgilePlus, phenotype-infrakit, heliosCLI)
 2. Obtain DSN tokens for each project
 3. Record all details in a tracking template
@@ -15,7 +16,7 @@ Complete walkthrough for creating 3 Sentry projects and configuring GitHub organ
 
 ## Prerequisites
 
-- **Sentry Account:** Create free at https://sentry.io/ if you don't have one
+- **Sentry Account:** Create free at <https://sentry.io/> if you don't have one
 - **GitHub Organization Access:** Must have "Admin" or "Maintain" role
 - **Safe Location:** Keep DSN tokens in a password manager or secure note (do NOT commit to repo)
 
@@ -25,7 +26,7 @@ Complete walkthrough for creating 3 Sentry projects and configuring GitHub organ
 
 ### Step 1: Sign Up for Sentry (if needed)
 
-1. Go to https://sentry.io/
+1. Go to <https://sentry.io/>
 2. Click **"Start for Free"**
 3. Sign up with GitHub (recommended) or email
 4. Verify email if required
@@ -34,6 +35,7 @@ Complete walkthrough for creating 3 Sentry projects and configuring GitHub organ
 ### Step 2: Find Your Organization Slug
 
 Once logged in:
+
 1. Go to **Settings** (gear icon, top right)
 2. Select your **Organization**
 3. Copy the **Organization Slug** from the URL: `https://sentry.io/settings/{ORG_SLUG}/`
@@ -82,6 +84,7 @@ You'll now see the **Setup Instructions** page with your DSN:
 4. Also note the **Project ID** (number in the URL)
 
 **Example:**
+
 ```
 SENTRY_DSN=https://abc123def456@sentry.io/9876543210
 Project ID: 9876543210
@@ -135,9 +138,9 @@ Use the **SENTRY_PROJECTS_TEMPLATE.md** to record all details:
 
 | Project Name | Platform | Project ID | DSN | GitHub Secret Name | Status |
 |---|---|---|---|---|---|
-| AgilePlus | Rust | 9876543210 | https://abc123@sentry.io/9876543210 | SENTRY_DSN_AGILEPLUS | ✅ Created |
-| phenotype-infrakit | Rust | 9876543211 | https://def456@sentry.io/9876543211 | SENTRY_DSN_INFRAKIT | ✅ Created |
-| heliosCLI | Rust | 9876543212 | https://ghi789@sentry.io/9876543212 | SENTRY_DSN_HELIOSCLI | ✅ Created |
+| AgilePlus | Rust | 9876543210 | <https://abc123@sentry.io/9876543210> | SENTRY_DSN_AGILEPLUS | ✅ Created |
+| phenotype-infrakit | Rust | 9876543211 | <https://def456@sentry.io/9876543211> | SENTRY_DSN_INFRAKIT | ✅ Created |
+| heliosCLI | Rust | 9876543212 | <https://ghi789@sentry.io/9876543212> | SENTRY_DSN_HELIOSCLI | ✅ Created |
 
 ---
 
@@ -154,7 +157,7 @@ GitHub Secrets are encrypted environment variables available to all workflows in
 
 ### Step 1: Navigate to Organization Settings
 
-1. Go to your GitHub Organization: https://github.com/organizations/&lt;REDACTED&gt;/settings/
+1. Go to your GitHub Organization: <https://github.com/organizations/&lt;REDACTED&gt;/settings/>
 2. Click **Settings** (left sidebar)
 3. Click **Secrets and variables** (left sidebar, under "Security")
 4. Click **Actions** (you should see three tabs: Secrets, Variables, Dependabot)
@@ -203,23 +206,23 @@ You should now see the **"Secrets"** tab with a list of existing secrets (if any
 
 For each repository, verify that CI workflows can access the secret:
 
-#### For AgilePlus:
+#### For AgilePlus
 
-1. Go to https://github.com/KooshaPari/AgilePlus
+1. Go to <https://github.com/KooshaPari/AgilePlus>
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_AGILEPLUS** in the organization secrets list
 
-#### For phenotype-infrakit:
+#### For phenotype-infrakit
 
-1. Go to https://github.com/KooshaPari/phenotype-infrakit
+1. Go to <https://github.com/KooshaPari/phenotype-infrakit>
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_INFRAKIT** in the organization secrets list
 
-#### For heliosCLI:
+#### For heliosCLI
 
-1. Go to https://github.com/KooshaPari/heliosCLI
+1. Go to <https://github.com/KooshaPari/heliosCLI>
 2. Click **Settings** (top nav)
 3. Click **Secrets and variables → Actions** (left sidebar)
 4. You should see **SENTRY_DSN_HELIOSCLI** in the organization secrets list
@@ -238,6 +241,7 @@ cp .env.example .env
 ```
 
 Edit `.env`:
+
 ```bash
 SENTRY_DSN=https://abc123def456@sentry.io/9876543210
 SENTRY_ENVIRONMENT=development
@@ -251,6 +255,7 @@ cp .env.example .env
 ```
 
 Edit `.env`:
+
 ```bash
 SENTRY_DSN=https://def456ghi789@sentry.io/9876543211
 SENTRY_ENVIRONMENT=development
@@ -264,6 +269,7 @@ cp .env.example .env
 ```
 
 Edit `.env`:
+
 ```bash
 SENTRY_DSN=https://ghi789jkl012@sentry.io/9876543212
 SENTRY_ENVIRONMENT=development
@@ -312,6 +318,7 @@ After completing all steps, verify everything works:
 ### Problem: Cannot Find "Secrets and variables" in GitHub Settings
 
 **Solution:**
+
 1. Make sure you're in the Organization settings, not a repository
 2. The correct URL is: `https://github.com/organizations/{ORG_NAME}/settings/`
 3. Click **"Secrets and variables"** in the left sidebar (under "Security")
@@ -319,6 +326,7 @@ After completing all steps, verify everything works:
 ### Problem: DSN Format Seems Wrong
 
 **Solution:**
+
 - DSN format is always: `https://{KEY}@sentry.io/{PROJECT_ID}`
 - Copy from Sentry project settings directly
 - Check that there are no extra spaces or line breaks
@@ -326,6 +334,7 @@ After completing all steps, verify everything works:
 ### Problem: Secret Not Visible in Repository
 
 **Solution:**
+
 1. Go to the repository settings
 2. Verify the secret was assigned to that repository during creation
 3. If missing, go to Org settings and re-edit the secret
@@ -334,13 +343,15 @@ After completing all steps, verify everything works:
 ### Problem: Can't Sign Up for Sentry
 
 **Solution:**
+
 1. Use GitHub OAuth (recommended): Click **"Sign up with GitHub"**
-2. If you already have an account, sign in directly at https://sentry.io/auth/login/
+2. If you already have an account, sign in directly at <https://sentry.io/auth/login/>
 3. Contact Sentry support if you have account issues
 
 ### Problem: Sentry Project Shows "No Data" After Setup
 
 **This is normal.** Data appears only after:
+
 1. SDK is installed in the project (coming next)
 2. An error occurs in the running application
 3. Error is sent to Sentry
@@ -369,4 +380,3 @@ You've successfully:
 ✅ Verified accessibility from each repository
 
 The DSN tokens are now ready for SDK integration in the next phase.
-

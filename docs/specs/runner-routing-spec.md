@@ -16,7 +16,8 @@ Labels are declared at agent registration (`.woodpecker/agent.env`) and matched 
 
 ## Routing algorithm
 
-Woodpecker uses exact label-set match. Declaring `runs-on: [self-hosted, heavy, home]` matches any agent advertising **all three** labels. To enable fallback routing when `home-mac` is paused (Parsec, ADR 0008):
+Woodpecker uses exact label-set match. Declaring `runs-on: [self-hosted, heavy, home]` matches any agent advertising **all three** labels. To enable fallback routing when `home-mac` is paused (Parsec,
+ADR 0008):
 
 1. Jobs declare a **primary** label set and an **optional** `fallback:` block.
 2. A small shim (Rust, `iac/scripts/queue-warden/`) polls Woodpecker for jobs queued > 10 min on `heavy,home` with no eligible agent and rewrites their label set to `burst,hetzner` (Phase 2).

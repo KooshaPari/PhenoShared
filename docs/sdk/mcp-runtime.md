@@ -108,6 +108,7 @@ MCP tools return standardized error responses:
 ```
 
 Common error codes:
+
 - `-32600`: Invalid request (bad tool name, missing args)
 - `-32601`: Method not found (unknown command)
 - `-32602`: Invalid params (missing required field)
@@ -156,6 +157,7 @@ Trigger a feature state transition (subject to governance checks).
 ```
 
 Returns:
+
 ```json
 {
   "success": true,
@@ -220,6 +222,7 @@ Read a text artifact from the feature's artifact store.
 ```
 
 Returns:
+
 ```json
 {
   "content": "# User Authentication\n\n## Functional Requirements...",
@@ -284,6 +287,7 @@ Push AgilePlus state to external trackers.
 ```
 
 Returns:
+
 ```json
 {
   "pushed_features": 3,
@@ -316,6 +320,7 @@ Get current sync status and last sync time.
 ```
 
 Returns:
+
 ```json
 {
   "platforms": {

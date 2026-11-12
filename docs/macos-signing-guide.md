@@ -7,6 +7,7 @@ Complete distribution pipeline for Phenotype Fabric desktop app on macOS.
 Fabric.app (built from `crates/fabric-gui/`) must be code-signed, notarized, and packaged as a DMG for distribution. This guide covers every step from certificate setup through CI automation.
 
 **Bundle identifiers:**
+
 - App: `com.phenotype.fabric`
 - Bundle display name: `Phenotype Fabric`
 - Minimum macOS: 11.0
@@ -16,11 +17,13 @@ Fabric.app (built from `crates/fabric-gui/`) must be code-signed, notarized, and
 ## 1. Apple Developer Account Requirements
 
 ### Membership
+
 - Enroll in the [Apple Developer Program](https://developer.apple.com/programs/) ($99/year)
 - Organization or Individual account both work for code signing
 - Team Agent or Admin role required for certificate management
 
 ### What you need
+
 | Item | Where to find | Purpose |
 |------|--------------|---------|
 | Team ID | Apple Developer account sidebar (10-char alphanumeric) | Identifies your org to Apple |
@@ -40,6 +43,7 @@ Used for apps distributed outside the Mac App Store. This is the certificate you
 2. Click the "+" to create a new certificate
 3. Select **Developer ID Application** (under "Software")
 4. Follow the CSR instructions:
+
    ```bash
    # Generate a Certificate Signing Request
    openssl req -new -newkey rsa:2048 -nodes \
@@ -47,6 +51,7 @@ Used for apps distributed outside the Mac App Store. This is the certificate you
      -out /tmp/fabric-signing.csr \
      -subj "/CN=Phenotype Fabric Signing/O=Phenotype"
    ```
+
 5. Upload the `.csr` to the Apple Developer portal
 6. Download the resulting `.cer` file
 7. Double-click to install in Keychain Access
@@ -167,6 +172,7 @@ codesign -dvvv Fabric.app
 Starting with macOS 13, `altool` is deprecated. Use `notarytool` (shipped with Xcode Command Line Tools).
 
 ### Prerequisites
+
 - Xcode Command Line Tools: `xcode-select --install`
 - An app-specific password from [appleid.apple.com](https://appleid.apple.com)
 
@@ -431,6 +437,7 @@ jobs:
 3. **Timestamp:** Always include `--timestamp` for notarization
 4. **Cache notarytool credentials:** `store-credentials` can be done once per CI run if the profile is saved
 5. **Universal binary:** If building for both x86_64 and aarch64, use `lipo` to create a fat binary before bundling:
+
    ```bash
    lipo -create target-x86_64/release/fabric-gui \
      target-aarch64/release/fabric-gui \

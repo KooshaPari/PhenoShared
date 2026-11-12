@@ -116,6 +116,7 @@ agileplus implement WP01
 ```
 
 This:
+
 - Creates worktree at `.worktrees/001-feature-WP01`
 - Checks out dedicated branch `feat/001-feature-WP01`
 - Loads the WP prompt file
@@ -302,6 +303,7 @@ Dependent WPs waiting on this:
 ```
 
 This:
+
 - Moves WP from `doing` → `for_review`
 - Marks ready for code review
 - Unblocks dependent WPs (they can start planning)
@@ -350,6 +352,7 @@ agileplus implement WP01 --agent claude-code
 ```
 
 Claude receives:
+
 - WP prompt
 - Spec and plan context
 - File paths to modify
@@ -461,7 +464,7 @@ agileplus implement WP01 --force
 
 ## Best Practices
 
-**1. Small Commits**
+### 1. Small Commits
 
 ```bash
 # Good: Multiple commits for logical chunks
@@ -473,7 +476,7 @@ git commit -m "feat(WP01): implement validation"
 git commit -m "feat(WP01): do everything"
 ```
 
-**2. Meaningful Messages**
+## 2. Meaningful Messages
 
 ```markdown
 # Good
@@ -488,7 +491,7 @@ feat(WP01): create Email model with validation
 feat: stuff
 ```
 
-**3. Regular Testing**
+## 3. Regular Testing
 
 ```bash
 # Test after each logical chunk
@@ -496,7 +499,7 @@ cargo test
 cargo clippy  # Check for warnings
 ```
 
-**4. Sync with Dependencies**
+## 4. Sync with Dependencies
 
 If your WP depends on another WP:
 
@@ -508,7 +511,7 @@ agileplus show 001 --dependencies
 # Start implementation
 ```
 
-**5. Follow Subtasks**
+## 5. Follow Subtasks
 
 The WP prompt has subtasks. Check them off:
 

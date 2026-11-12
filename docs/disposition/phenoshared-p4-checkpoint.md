@@ -61,7 +61,8 @@
 
 Org grep (`gh search code` in `Cargo.toml`/`go.mod`, &lt;REDACTED&gt; org) 2026-06-19 post–wave 5b fleet drain.
 
-**Excluded from consumer count:** phenoShared self (`repository` metadata), phenoShared-niche (sibling fork metadata), phenotype-registry `components.lock` (fleet stamp), phenotype-python-sdk data-kit comment-only refs, governance/audit docs, exclude-list comments.
+**Excluded from consumer count:** phenoShared self (`repository` metadata), phenoShared-niche (sibling fork metadata), phenotype-registry `components.lock` (fleet stamp), phenotype-python-sdk data-kit
+comment-only refs, governance/audit docs, exclude-list comments.
 
 ### Wave 5b drained (final fleet sweep)
 
@@ -92,7 +93,8 @@ Org grep (`gh search code` in `Cargo.toml`/`go.mod`, &lt;REDACTED&gt; org) 2026-
 
 ### Zero-dep conclusion
 
-**0 production git deps** on `<REDACTED>/phenoShared`. **Zero-dep confirmed** — `gate-phenoshared` → `fsm: delete-eligible`. Archive per BOUNDARY_OWNERS (prefer archive after zero-dep; hard delete never without explicit policy).
+**0 production git deps** on `<REDACTED>/phenoShared`. **Zero-dep confirmed** — `gate-phenoshared` → `fsm: delete-eligible`. Archive per BOUNDARY_OWNERS (prefer archive after zero-dep; hard delete
+never without explicit policy).
 
 ---
 
@@ -142,20 +144,24 @@ Org grep (`gh search code` in `Cargo.toml`/`go.mod`, &lt;REDACTED&gt; org) 2026-
 The "zero-dep confirmed" claim at delete time was **false**. The actual sequence was:
 
 1. **HexaKit #278** drained 11 phenoShared pins (event-bus, time, async-traits, etc.) at `d83d1ca`. This made the "0 pins remain" line in `HEXAKIT_EVICTION_INVENTORY.md` wave 5b *temporarily true*.
-2. **HexaKit #279** reverted the `phenotype-cache-adapter` pin back to `<REDACTED>/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. The wave 5b "0 pins remain" claim became **false** again.
+2. **HexaKit #279** reverted the `phenotype-cache-adapter` pin back to `<REDACTED>/phenoShared` because the `libs/phenotype-cache-adapter` path stub was never pushed to remote. The wave 5b "0 pins
+   remain" claim became **false** again.
 3. `<REDACTED>/phenoShared` was hard-deleted at this point, leaving HexaKit `main` pointing at a 404 repo. The local clone was left in a broken-pin state.
-4. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin. This finally made the "0 pins remain" claim true again.
+4. **HexaKit #285** ("drain last phenoShared pin via cache-adapter inline stub") added an in-tree path stub at `crates/phenotype-cache-adapter-stub` and dropped the phenoShared pin. This finally made
+   the "0 pins remain" claim true again.
 5. **Pyron #62** gutted Pyron to tombstone-prep. The generic `phenotype-contracts` pin that Pyron #61 had left on phenoShared was already drained by **ResilienceKit #4** (Wave 5b fleet drain).
 
 **Both `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` are now restored as archived**, not deleted. Fleet-wide rescan confirms zero live cargo git deps across the org.
 
 Gate state corrected in `registry/disposition-index.json`:
+
 - `gate-phenoshared`: `done` → `hold` (awaiting explicit user sign-off before any further delete action per BOUNDARY_OWNERS / ADR-ECO-014).
 - `gate-pyron`: `done` → `hold` (same rationale).
 
 The `phenoShared-niche` archive verdict above (TOMBSTONE → ARCHIVED, never deleted) was correct and remains in effect.
 
 **References for the regression sequence:**
+
 - HexaKit #278 — `https://github.com/KooshaPari/HexaKit/pull/278` @ `d83d1ca`
 - HexaKit #279 — reverted cache-adapter pin (reason: path stub not pushed)
 - HexaKit #285 — drained last phenoShared pin via in-tree stub

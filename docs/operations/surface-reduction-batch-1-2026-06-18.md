@@ -1,6 +1,7 @@
 # Surface reduction batch 1 — upstream forks + McpKit gate — 2026-06-18
 
-**Status:** registry merged [#170](https://github.com/KooshaPari/phenotype-registry/pull/170) (2026-06-18) — `projects/*.json` stubs + disposition-index `sr-*` rows. **`gh repo archive` ×3 verified 2026-06-19** (Planify, portage, phenotype-ops-mcp already archived).
+**Status:** registry merged [#170](https://github.com/KooshaPari/phenotype-registry/pull/170) (2026-06-18) — `projects/*.json` stubs + disposition-index `sr-*` rows. **`gh repo archive` ×3 verified
+2026-06-19** (Planify, portage, phenotype-ops-mcp already archived).
 
 **Successor:** [surface-reduction-batch-2-2026-06-18.md](./surface-reduction-batch-2-2026-06-18.md) (stub).
 

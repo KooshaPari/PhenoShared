@@ -20,7 +20,7 @@ Three critical Phase 2 initialization tasks completed successfully:
 
 ---
 
-# TASK 3: Audit agent-wave — COMPLETE ✅
+## TASK 3: Audit agent-wave — COMPLETE ✅
 
 **Location:** `/Users/<REDACTED>/Repos/agent-wave`
 **Report:** `docs/audits/2026-03-30-agent-wave-audit.md` (340 lines)
@@ -28,19 +28,22 @@ Three critical Phase 2 initialization tasks completed successfully:
 ## Findings
 
 ### Project Classification
+
 - **Type:** Documentation & Orchestration Infrastructure
 - **Primary Language:** TypeScript/JavaScript (Bun 1.2.0+)
 - **Secondary Language:** Bash (governance scripts)
 - **Maturity:** L5 (Production-Ready Specs)
 
 ### Integration with Phenotype
+
 ✅ **READY FOR PHASE 2 INTEGRATION**
 
-Agent-wave is well-specified, actively developed, with comprehensive governance. Current blockers are upstream (phenodocs PR #91) or internal (submodule finalization), neither blocking phenotype-infrakit workspace.
+Agent-wave is well-specified, actively developed, with comprehensive governance. Current blockers are upstream (phenodocs PR #91) or internal (submodule finalization), neither blocking
+phenotype-infrakit workspace.
 
 ---
 
-# TASK 4: Audit root Cargo.toml — COMPLETE ✅
+## TASK 4: Audit root Cargo.toml — COMPLETE ✅
 
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 **Report:** `docs/audits/2026-03-30-root-workspace-audit.md` (520 lines)
@@ -50,6 +53,7 @@ Agent-wave is well-specified, actively developed, with comprehensive governance.
 ### Workspace Status: ⚠️ HAS CRITICAL ISSUES
 
 **35 physical crates on disk:**
+
 - Members: 17 declared
 - Excluded: 20 declared
 - **Unaccounted: 18 crates** (not in members or excluded lists)
@@ -67,7 +71,7 @@ Agent-wave is well-specified, actively developed, with comprehensive governance.
 
 ---
 
-# TASK 5: Create Phase 2 Specifications — COMPLETE ✅
+## TASK 5: Create Phase 2 Specifications — COMPLETE ✅
 
 **Output:** `docs/reference/PHASE2_SPECS_CONSOLIDATION.md` (450+ lines)
 **Tracker:** `docs/worklogs/PHASE2_PROGRESS.md` (220+ lines)
@@ -75,18 +79,21 @@ Agent-wave is well-specified, actively developed, with comprehensive governance.
 ## Three Integrated Specifications
 
 ### phase2a-consolidation (Apr 1-11)
+
 - 8 Functional Requirements
 - 6 Work Packages
 - Effort: 10-11.5 hours, 15 concurrent agents
 - Focus: Scatter → Unified Structure
 
 ### phase2b-foundation (Apr 7-22)
+
 - 4 Functional Requirements
 - 5 Work Packages
 - Effort: 11.5-15 hours, 6 concurrent agents
 - Focus: Workspace Repair & Core Implementations
 
 ### phase2c-monitoring (Apr 18-28)
+
 - 3 Functional Requirements
 - 3 Work Packages
 - Effort: 5.5-8 hours, 3 concurrent agents
@@ -104,7 +111,7 @@ Agent-wave is well-specified, actively developed, with comprehensive governance.
 
 ---
 
-# Critical Path to Phase 2 Success
+## Critical Path to Phase 2 Success
 
 ```
 Apr 1:  phase2a begins (15 agents)
@@ -121,11 +128,12 @@ Apr 28: Phase 2 COMPLETE ✅
 
 ---
 
-# Deliverables Summary
+## Deliverables Summary
 
 ## All Acceptance Criteria Met
 
 ### Task 3 ✅
+
 - [x] Purpose documented
 - [x] Languages identified
 - [x] Structure & tests documented
@@ -134,6 +142,7 @@ Apr 28: Phase 2 COMPLETE ✅
 - [x] Committed to git
 
 ### Task 4 ✅
+
 - [x] All 35 crates inventoried
 - [x] 4 critical issues identified
 - [x] 18 unaccounted crates documented
@@ -142,6 +151,7 @@ Apr 28: Phase 2 COMPLETE ✅
 - [x] Committed to git
 
 ### Task 5 ✅
+
 - [x] phase2a spec with 8 FRs, 6 WPs
 - [x] phase2b spec with 4 FRs, 5 WPs
 - [x] phase2c spec with 3 FRs, 3 WPs
@@ -164,7 +174,7 @@ Apr 28: Phase 2 COMPLETE ✅
 
 ---
 
-# Recommendations
+## Recommendations
 
 ## Before April 1 Kickoff
 
@@ -174,7 +184,8 @@ Apr 28: Phase 2 COMPLETE ✅
 
 ## Critical Success Factor
 
-**WP-2a-006 (Cargo.toml Rebalancing) must complete by Apr 7**
+### WP-2a-006 (Cargo.toml Rebalancing) must complete by Apr 7
+
 - Phase 2b cannot start without workspace fix
 - All 28 member crates must build cleanly
 

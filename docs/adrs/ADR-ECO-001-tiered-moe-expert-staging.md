@@ -7,13 +7,16 @@
 
 ## Context
 
-8×7B MoE (2 active experts) naively needs 42 GB staged + 14 GB active — no fit on 3090 Ti 24 GB. Corpus claims (Kimi/DeepSeek) that **shared+routed experts + staged offload + MLA** makes MoE cheaper than dense 30B on the same host, but no pheno-harness ADR captures the decision: do we **stage experts across HBM→DRAM→NVMe and prefetch by router**, or do we **pin 1–2 experts and drop the rest**?
+8×7B MoE (2 active experts) naively needs 42 GB staged + 14 GB active — no fit on 3090 Ti 24 GB. Corpus claims (Kimi/DeepSeek) that **shared+routed experts + staged offload + MLA** makes MoE cheaper
+than dense 30B on the same host, but no pheno-harness ADR captures the decision: do we **stage experts across HBM→DRAM→NVMe and prefetch by router**, or do we **pin 1–2 experts and drop the rest**?
 
-Current `pheno-serve` pins `gpu-memory-utilization 0.55` on 3090 Ti (13.5 GB) leaving 8.5 GB for unsloth — no staging. N12 (KernelBench) + N13 (Zig hand-roll) need the decision before `tg64`/`TTFT` can be compared at fixed cost.
+Current `pheno-serve` pins `gpu-memory-utilization 0.55` on 3090 Ti (13.5 GB) leaving 8.5 GB for unsloth — no staging. N12 (KernelBench) + N13 (Zig hand-roll) need the decision before `tg64`/`TTFT`
+can be compared at fixed cost.
 
 ## Decision
 
-**Stage experts.** `pheno-serve` will support 8 experts with **2 active in HBM, 6 staged in host DRAM/NVMe**, router-predicted prefetch overlapped with attention compute, KV compressed via MLA, `gpu-memory-utilization` ≤0.65.
+**Stage experts.** `pheno-serve` will support 8 experts with **2 active in HBM, 6 staged in host DRAM/NVMe**, router-predicted prefetch overlapped with attention compute, KV compressed via
+MLA, `gpu-memory-utilization` ≤0.65.
 
 - **HBM budget:** 2×7B active + MLA KV ≈ 14 GB
 - **Staged:** 6×7B expert weights in `D:/WSL/model-cache` (NVMe), paged to host DRAM on router hit, prefetched 1 layer ahead

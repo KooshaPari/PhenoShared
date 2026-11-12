@@ -67,6 +67,7 @@ gh secret list | grep SENTRY_DSN_PHENOTYPE_INFRAKIT
 ```
 
 **Verification**:
+
 - [ ] AgilePlus: `SENTRY_DSN_AGILEPLUS` secret created
 - [ ] heliosCLI: `SENTRY_DSN_HELIOSCLI` secret created
 - [ ] phenotype-infrakit: `SENTRY_DSN_PHENOTYPE_INFRAKIT` secret created
@@ -83,6 +84,7 @@ cargo test --lib sentry_config -- --nocapture
 ```
 
 **Expected Output**:
+
 ```
 test tests::test_environment_override ... ok
 test tests::test_initialize_without_dsn ... ok
@@ -90,6 +92,7 @@ test result: ok. 2 passed; 0 failed
 ```
 
 **Verification**:
+
 - [ ] AgilePlus: Tests pass with DSN
 - [ ] heliosCLI: Tests pass with DSN
 - [ ] phenotype-infrakit: Tests pass with DSN
@@ -108,6 +111,7 @@ gh workflow run sentry-error-tracking.yml
 ```
 
 **Verification** (check GitHub Actions):
+
 - [ ] AgilePlus: Workflow runs successfully
 - [ ] AgilePlus: Step "Verify Sentry DSN is configured" passes
 - [ ] AgilePlus: Step "Generate Sentry dashboard link" outputs URL
@@ -133,6 +137,7 @@ gh workflow run sentry-error-tracking.yml
 ```
 
 **Verification**:
+
 - [ ] Sentry org dashboard loads
 - [ ] All 3 projects visible in project list
 - [ ] Can filter by individual project
@@ -151,6 +156,7 @@ gh workflow run sentry-error-tracking.yml
 ```
 
 **Verification**:
+
 - [ ] GitHub integration authorized
 - [ ] Status shows "Installed" (not "Pending")
 - [ ] &lt;REDACTED&gt; org authorized
@@ -174,6 +180,7 @@ gh workflow run sentry-error-tracking.yml
 ```
 
 **Verification**:
+
 - [ ] Alert rule created for agileplus
 - [ ] Alert rule created for helioscli
 - [ ] Alert rule created for phenotype-infrakit
@@ -208,11 +215,13 @@ cargo test --lib sentry_config test_error_capture -- --nocapture
 ```
 
 **Expected Flow**:
+
 1. Error captured locally (stderr output)
 2. Within 5-30 seconds: Error appears in Sentry dashboard
 3. Within 60 seconds: GitHub issue auto-created (if rule enabled)
 
 **Verification**:
+
 - [ ] Error appears in Sentry dashboard
 - [ ] Error shows correct environment (production)
 - [ ] Error shows correct release version
@@ -235,6 +244,7 @@ gh workflow view sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 ```
 
 **Verification**:
+
 - [ ] Health check workflow completes successfully
 - [ ] "Verify Sentry DSN is configured" step passes
 - [ ] "Run Sentry initialization tests" step passes
@@ -280,12 +290,14 @@ gh workflow view sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 ---
 
 **Next Steps After Verification**:
+
 1. Mark all checkboxes above
 2. Update "Verification Date" and "Verified By"
 3. Create PR with verification summary
 4. Schedule Tier 2 deployment for next week
 
 **Reference Documents**:
+
 - Full Details: `/docs/reports/SENTRY_TIER1_FINALIZATION.md`
 - Quick Start: `/docs/guides/SENTRY_QUICK_START.md`
 - Workflow File: `.github/workflows/sentry-error-tracking.yml` (all 3 repos)
