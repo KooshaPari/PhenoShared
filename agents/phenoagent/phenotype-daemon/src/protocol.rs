@@ -2,7 +2,7 @@
 //!
 //! This tree is a non-workspace snapshot of the daemon. It used to carry its own
 //! full copy of the protocol, which drifted: this file declared
-//! `DEFAULT_TCP_PORT = 8953` while the copy's `main.rs` bound `9456`, so a client
+//! the port as 8953 while the copy's `main.rs` bound 9456, so a client
 //! that imported the constant could never reach the server.
 //!
 //! Rather than keep two definitions in sync by hand, the canonical file is

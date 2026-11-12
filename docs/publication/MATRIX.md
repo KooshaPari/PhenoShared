@@ -7,7 +7,7 @@ Machine-readable register: `sdk-catalog.json` (290 members, 50 `publish`, 240 `i
 ## What this document is
 
 `sdk-catalog.json` records, per crate, which publication class it belongs to. It does
-not record whether the publication path for that class works. This matrix is the second
+not record whether the publication path for that class is exercised. This matrix is the second
 half: for each distribution channel, what the artifacts are, what mechanism ships them,
 what would fail if they were wrong, and the state as measured.
 
@@ -77,7 +77,7 @@ for it.
 generates changelogs at release time. The checked-in set is a partial backfill, not
 the source of truth.
 
-## Fixed in this pass
+## Changed in this pass
 
 22 publish crates declared no `rust-version` at all. Their MSRV was unspecified, which
 is a real defect for a published crate: a consumer on an older toolchain gets a
@@ -91,7 +91,7 @@ confusing compile failure rather than a resolver error. Each now declares
 `sharecli-fleet`, `sharecli-fuse`, `sharecli-mesh`, `sharecli-session`,
 `sharecli-sync`, `spawn-core-sys`, `teamcomm-protocol`.
 
-Verified after the change: all 50 publish manifests parse as TOML, and 0 declare no
+Measured after the change: all 50 publish manifests parse as TOML, and 0 declare no
 `rust-version`.
 
 ## Remaining blockers, in order

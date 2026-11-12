@@ -188,3 +188,6 @@ pub const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
 /// bound 9456, so a client that imported this constant would never reach the
 /// server.
 pub const DEFAULT_TCP_PORT: u16 = 9456;
+
+// root-cause: 9456 is the value `main.rs` has always bound; this constant said 8953,
+// so a client that imported it dialled a port nothing listened on.
