@@ -4,7 +4,7 @@ version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
-description = "Metal-only pipeline that takes a model-plan ModelPlan and produces an executable compiled pipeline, with cache, bounded compilation, device fingerprinting, and deterministic fallback when Metal is unavailable."
+description = "Metal-only pipeline that takes a model-plan ModelPlan and produces an executable pipeline, with cache, bounded compilation, device fingerprinting, and deterministic fallback when Metal is unavailable."
 
 [lib]
 name = "metal_runtime"
