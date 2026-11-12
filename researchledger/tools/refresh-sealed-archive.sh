@@ -148,5 +148,5 @@ fi
 
 rm -f "${GZ}"
 echo "REFRESH_OK: sealed ${DEST}, off-host copy verified"
-DONE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-echo "=== REFRESH COMPLETE ${DONE} ==="
+COMPLETED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+echo "=== REFRESH COMPLETE ${COMPLETED_AT} ==="
