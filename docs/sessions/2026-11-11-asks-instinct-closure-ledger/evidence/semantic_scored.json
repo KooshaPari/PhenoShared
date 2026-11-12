@@ -1,0 +1,60 @@
+{
+ "derived_at_utc": "2026-11-12T08:27:55Z",
+ "inputs": {
+  "probe": "semantic_coverage_probe.json",
+  "labels": "semantic_label_review.json"
+ },
+ "population": {
+  "uncited_ask_cue_units_union": 8819,
+  "sample_size": 800,
+  "seed": 20261112,
+  "register_asks": 2259,
+  "note": "denominator is uncited ask-cue clause units, not all 43,305 units"
+ },
+ "high_band": {
+  "n": 30,
+  "counts": {
+   "M": 17,
+   "W": 5,
+   "N": 8
+  },
+  "precision_strict": 0.5667,
+  "precision_lenient": 0.7333,
+  "cosine_range": [
+   0.7544,
+   0.8797
+  ]
+ },
+ "low_band": {
+  "n": 15,
+  "counts": {
+   "M": 0,
+   "W": 0,
+   "N": 15
+  },
+  "precision_strict": 0.0,
+  "precision_lenient": 0.0,
+  "cosine_range": [
+   0.4668,
+   0.5176
+  ]
+ },
+ "high_band_share_of_sample": 0.0375,
+ "confirmed_captured_uncited": {
+  "strict": 17,
+  "lenient_including_weak": 22,
+  "of_sample": 800,
+  "lower_bound_pct_strict": 2.12,
+  "lower_bound_pct_lenient": 2.75,
+  "reads_as": "at least this share of uncited ask-cue clauses are captured by a register ask; not a coverage rate, a floor"
+ },
+ "withheld": {
+  "semantic_coverage_pct": "NOT PUBLISHED",
+  "reason": "recall unmeasured: 45 of 800 labelled, matches below the top-30 cut uncounted, and high-band precision is below certainty so extrapolation would compound a weak detector with an unknown miss rate",
+  "condition_that_would_unblock_it": "label a random (not stratified) sample of the 800 so recall is estimated on the same distribution, or add a second rater and a larger high band"
+ },
+ "does_not_change": {
+  "structural_coverage_all_units_pct": 8.0,
+  "note": "different denominator (all 43,305 clause units); these two figures must never be added or presented as a single coverage number"
+ }
+}

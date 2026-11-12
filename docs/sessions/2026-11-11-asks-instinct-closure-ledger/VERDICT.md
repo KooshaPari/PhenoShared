@@ -6,12 +6,15 @@ denominator's contamination measured, §3e; link integrity re-tested with namesp
 reduced to zero defects, §3d; coverage re-derived at **clause granularity**, which required an
 ask-classifier that failed validation and was therefore not used for the headline, §3f; the 98
 `source_ref` harvest documents declared **lost** with a search record and a pointer-coherence test in
-their place, §3g).
+their place, §3g; a local embedding model selected by a test with a known answer, used to probe
+semantic coverage, which **withholds the headline** and publishes a floor instead, §3h).
 
 **Revision history — this file has been wrong seven times, each time in the same direction (stating a
 confident number from an incomplete measurement). Rev 8 is the first entry that corrects nothing: it
 re-derives coverage at a finer granularity and finds the published shortfall survives the change.
-Rev 9 is mixed: one withdrawn carried figure, one near-miss on schema, and one measured loss.**
+Rev 9 is mixed: one withdrawn carried figure, one near-miss on schema, and one measured loss. Rev 10
+adds a measurement rather than a correction, and its most important result is a refusal to publish a
+number.**
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -24,6 +27,7 @@ Rev 9 is mixed: one withdrawn carried figure, one near-miss on schema, and one m
 | 7 | **zero** wrong ask→message links; 0 link targets absent; 7 unlinked asks all self-flagged `source_missing` | Rev 5 blamed 3 candidate bad links and 23 unlinked targets. Both were defects in my test: `reg_ask_messages.message_id` is mixed-namespace, and Rev 5's own join note was backwards |
 | 8 | clause-granularity coverage is **8.0%** of the union; harness coverage stays **1.3–1.7%** however it is cut | not a retraction — a method result. It establishes that the low figure is **not** a granularity artifact, and it rejects the ask-classifier I built to sharpen the denominator (precision 0.73, recall 0.44) |
 | 9 | 0 of 98 `source_ref` harvest documents resolve (**lost**, 10 root classes searched); `source_ref` dates are harvest-date window ends, coherent for **98/98** docs; the register is **not** credential-free (2 of 8,042 rows) | two corrections carried in from earlier revisions: §8 still asserted "3 links are candidate wrong" after §3d had closed link integrity at zero, and the ledger's quote is **not** a column on `reg_asks` (it is `utterance_id` → `reg_utterances.body`); my own first pass also assumed UTC timestamps when 8,019 of 8,042 rows are PDT, and compared only 23 rows until the `uncomparable` counter caught it |
+| 10 | a **true semantic** probe was run on the 8,819 uncited ask-cue clauses with `nomic-embed-text-v1.5`; it **confirms** semantic capture exists (floor **2.12%** of the sample) but its high-band precision is only **0.567** strict / **0.733** lenient, so **no semantic coverage percentage is published** | not a retraction of a number — a refusal to publish one. It also retires the earlier claim that no semantic route existed: the earlier probe found no embedding stack installed, which was true of Python packages but not of `llama.cpp`, which is present with `llama-embedding` |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -677,6 +681,91 @@ repository is public; they are recoverable from the two utterance ids in `ledger
 
 ---
 
+### 3h. A true semantic probe: capture exists, but the detector is too weak to size it
+
+§3f measured coverage by asking whether a register ask's quote appears **verbatim** inside a clause
+unit. That is a substring test, so it cannot credit "hide secrets" for "restrict private sources",
+and the resulting 8.0% may be an artifact of the method rather than a property of the register. The
+only way to tell is to test meaning instead of characters.
+
+**A route existed after all.** Earlier notes recorded that no embedding route was available. That was
+measured against Python packages (`numpy`, `torch`, `sentence_transformers`, `mlx`): none installed.
+It was never measured against `llama.cpp`, which **is** on this host (`/opt/homebrew/bin/llama-embedding`,
+build 10270) and pulls GGUF models on demand, so a real embedding model needs no Python ML stack.
+
+**The model was chosen by a test with a known answer, not by reputation.** `evidence/probe_paraphrase.py`
+embeds 17 sentences: six paraphrase pairs written to share meaning while avoiding shared wording, plus
+five distractors, with chance top-1 at 6.2%. Top-1 retrieval is the metric, because min-max margin is
+broken by legitimately-related non-paraphrases.
+
+| Candidate | Top-1 | Ranks |
+|---|---:|---|
+| `nomic-embed-text-v1.5` f16, raw | **12/12** | all 1 |
+| `nomic-embed-text-v1.5` f16, `clustering:` prefix | 10/12 | two 2s |
+| `bge-small-en-v1.5` f16, raw | 9/12 | 2, 4, 3 |
+
+nomic raw is the model of record. The probe is small: 12/12 with the rule of three implies a 95% lower
+bound near 0.78, so it establishes gross separation and cannot certify accuracy to the last percent.
+
+**The probe.** `evidence/semantic_coverage_probe.py` rebuilds the uncited population with the published
+segmentation, keeping only clause units that pass the ask-cue rule, and embeds them against all 2,259
+register interpretations. That population is **8,819 distinct uncited ask-cue units** (harness 7,287,
+iMessage 1,012, KCode 527, phone 435) — a different and smaller denominator than the 43,305 all-unit
+figure, and the two are never combined. A fixed-seed sample of 800 was scored; nearest-ask cosine ran
+median **0.626**, p90 **0.707**, max **0.880**.
+
+**Then the retrieval output was hand-labelled**, because top-1 cosine is a candidate generator, not a
+verdict. The 30 highest-scoring pairs (`0.754`-`0.880`) and the 15 lowest (`0.467`-`0.518`) were read
+against both the ask's interpretation and its source quote
+(`evidence/semantic_label_review.json`).
+
+| Band | M (captured) | W (adjacent) | N | Precision, strict | Precision, lenient |
+|---|---:|---:|---:|---:|---:|
+| High, top 30 | 17 | 5 | 8 | **0.567** | 0.733 |
+| Low, bottom 15 | 0 | 0 | 15 | 0.000 | 0.000 |
+
+The low band is uniformly transcription noise or social chatter against an unrelated ask, so the
+negative side is clean. The high band is the problem: **8 of the 30 best-scoring pairs are
+adjacent-but-different intents** — "do not push" against "do not force push", "list the repos you want
+to delete" against "report the re-deletion path for each of the 5 repos", "is the MiniMax key
+configured" against "is the MiniMax key needed". A cosine threshold therefore cannot certify capture.
+
+**The headline is withheld, deliberately.** A semantic coverage estimate needs recall as well as
+precision. Only 45 of 800 pairs were labelled, matches below the top-30 cut are uncounted, and high-band
+precision is well short of certainty, so extrapolating would multiply a weak detector by an unknown miss
+rate. `evidence/score_semantic_labels.py` records `semantic_coverage_pct: NOT PUBLISHED` with the
+condition that would unblock it (label a random, non-stratified sample so recall is estimated on the same
+distribution, or add a second rater and widen the high band).
+
+**What can be stated is a floor, which needs no recall.** Among the 800 sampled uncited clauses, **17 are
+confirmed captured** by a register ask — **2.12%** of the sample on strict labels (**2.75%** counting
+adjacent-but-partial). This is a lower bound, not a rate: matches below the cut are simply not counted.
+It is enough to establish two things. Semantic capture **does** exist where the substring test reported
+none, so the 8.0% structural figure is genuinely a floor and not a complete miss. And it is small, so the
+shortfall is **not primarily a lexical artifact** — the method explains a little, not the order of
+magnitude. Compare the distributional TF-IDF probe (§3b), which found **0 of 12** high-band pairs were the
+same intent: with a real embedding model the same question yields 17 of 30. Method mattered; the answer
+still did not become comfortable.
+
+**The gate is unchanged.** A floor of 2.12% on top of an 8.0% structural figure does not close anything,
+because the actual semantic coverage could lie anywhere above that floor. The register is still
+incomplete and still unquantified, and the honest statement is narrower than before but no more
+comfortable: the shortfall is real, it is not merely a substring artifact, and its size is unknown.
+
+| Artifact | What it proves |
+|---|---|
+| `evidence/probe_paraphrase.py` + `probe_paraphrase.json` | the model choice, with the test that produced it |
+| `evidence/semantic_coverage_probe.py` + `semantic_coverage_probe.json` | population, sample, scores, and the 45-pair label sheet |
+| `evidence/semantic_label_review.json` | the hand labels and the reason for each |
+| `evidence/score_semantic_labels.py` + `semantic_scored.json` | every figure above, recomputed from those two files |
+
+The label sheet quotes raw corpus text, so it was scrubbed before commit: 7 email and URL matches
+redacted. The scores refer to the pre-redaction strings; the scorer still reproduces identical output
+from the redacted files, so the figures hold, but the artifact records a run rather than a re-runnable
+corpus.
+
+---
+
 ## 4. Occurrence volume is only partly recovered
 
 `evidence/OCCURRENCE-RECOUNT.md` established that **every previously mined file has
@@ -730,6 +819,7 @@ class of error produced kcode's 196 and the old jcode figure of 16,887.
 | Intent-level dedupe | NOT_RUN | No model exists for deciding that two different strings express one intent. String counts therefore overstate intents. |
 | Paperclip / herdr volumes | UNKNOWN | Not probed this session. |
 | iMessage substantive ratio | **MEASURED** | 9,011 text-bearing outbound rows → 6,418 substantive → 6,363 distinct; collapse is a near no-op (`evidence/imessage_kcode_recount.json`). |
+| Semantic coverage | **PARTIAL — floor only** | A real embedding probe (§3h) confirms uncited clauses are sometimes captured (floor 2.12% of the 800 sampled) but its high-band precision is 0.567 strict, so no coverage rate is published. Closing this needs recall measured on a random (not stratified) sample. |
 
 ---
 

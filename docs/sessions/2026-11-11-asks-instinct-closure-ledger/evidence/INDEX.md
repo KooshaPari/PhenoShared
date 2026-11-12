@@ -330,3 +330,57 @@ they are recoverable from the two utterance ids in `ledger.db`.
 **What the loss costs.** Ask-level recall against the harvest is now unmeasurable, so "did the harvest
 miss asks?" cannot be answered. Quote fidelity is unaffected and stays verified (§3d). The loss
 constrains the *completeness* question, which is the question this whole programme is about.
+
+---
+
+## Addendum 8 — a true semantic probe, and a withheld headline (2026-11-12T08:30Z)
+
+Four new artifacts, all replayable: `probe_paraphrase.py`, `semantic_coverage_probe.py`,
+`semantic_label_review.json`, `score_semantic_labels.py`. Their outputs are the four sibling `.json`
+files. VERDICT §3h carries the prose.
+
+**A route existed that earlier notes said did not.** The "no embedding route" finding was measured
+against Python packages (`numpy`, `torch`, `sentence_transformers`, `mlx`) — all absent, then and now.
+It was never measured against `llama.cpp`, which is installed on this host with `llama-embedding`
+(build 10270) and fetches GGUF models itself. No Python ML stack is needed. That is a probe-scope
+error, recorded rather than quietly fixed.
+
+**Selection used a test with a known answer.** 17 sentences: six paraphrase pairs with deliberately
+low lexical overlap plus five distractors, chance top-1 at 6.2%. Minimum-maximum cosine margin was
+rejected as the metric mid-test — legitimately related non-paraphrases inflate it, which is how my
+first three-sentence probe appeared to show a *negative* margin while the model was in fact fine.
+Top-1 retrieval: nomic f16 raw **12/12**, nomic `clustering:` 10/12, bge-small f16 9/12 (ranks 2, 4, 3).
+Twelve pairs is small: rule of three puts the 95% lower bound near 0.78.
+
+**Population is smaller than the published denominator, and the two are never combined.** Uncited
+ask-cue clause units, rebuilt with `segment_units.py`: **8,819** distinct (harness 7,287, iMessage
+1,012, KCode 527, phone 435). Sample of 800, seed 20261112. Nearest-ask cosine median 0.626, p90 0.707,
+max 0.880.
+
+**Hand labels, single labeller.** High band top 30 (`0.754`–`0.880`): **17 captured, 5 adjacent,
+8 not**. Low band bottom 15 (`0.467`–`0.518`): **0 captured**. High-band precision is therefore
+**0.567 strict, 0.733 lenient** — a cosine threshold cannot certify capture, because 8 of the 30
+best-scoring pairs are adjacent-but-different intents.
+
+**No semantic coverage percentage is published.** Recall is unmeasured (45 of 800 pairs labelled,
+matches below the cut uncounted), so extrapolation would compound a weak detector with an unknown miss
+rate. `semantic_scored.json` records `semantic_coverage_pct: NOT PUBLISHED` and names the condition
+that would unblock it.
+
+**What is published is a floor, because a floor needs no recall.** 17 of 800 sampled uncited clauses
+are confirmed captured: **2.12%** strict, 2.75% lenient. Two consequences follow, and neither is
+comfortable. Semantic capture does exist where the substring test reported none, so the 8.0%
+structural figure is a genuine floor. And it is small, so the shortfall is not primarily a lexical
+artifact. The distributional TF-IDF probe (§3b) found 0 of 12 high-band pairs were the same intent; a
+real embedding model finds 17 of 30 on the same question. The method mattered, and the answer still
+did not improve enough to close anything.
+
+**Redaction, applied before commit.** The label sheet carries 45 verbatim clause/quote pairs — raw
+corpus text, in a public repository. Scanned for emails, IP literals, URL credential parameters, key
+shapes and whole URLs: **7 matches, all emails or URLs, all redacted** to `<EMAIL-REDACTED>` /
+`<URL-REDACTED>`. Two consequences. The redaction edited text that had already been embedded, so the
+`scores` in the JSON refer to the pre-redaction strings — the numbers are unchanged and
+`semantic_scored.py` reproduces byte-identical output from the redacted files, but the artifact is a
+record of a run, not a re-runnable corpus. And this is the second time corpus text introduced contact
+addresses into an artifact, which is a scrub step that belongs in the pipeline rather than in a
+review.

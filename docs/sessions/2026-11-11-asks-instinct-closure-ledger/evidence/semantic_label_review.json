@@ -1,0 +1,300 @@
+{
+ "about": "Hand labels for the stratified sample emitted by semantic_coverage_probe.py. Labels were assigned by reading each clause against the retrieved ask's interpretation and its source quote. Codes: M = the register ask captures this clause's intent (a reader would accept it as the same ask); W = topically adjacent or partially overlapping, but a different or narrower intent; N = not captured. The scorer recomputes every published figure from this file, so no number in the docs is hand-carried.",
+ "labeller": "agent (jcode), single labeller, no second rater",
+ "confidence_in_labels": "high for N in the low band (transcription noise, unrelated ask); moderate for W (partial-overlap boundary is a judgement call and the M/W split is the main source of uncertainty in precision)",
+ "bands": {
+  "high": {
+   "description": "30 highest-cosine pairs among the 800 sampled uncited ask-cue clauses",
+   "cosine_range": [
+    0.7544,
+    0.8797
+   ],
+   "labels": [
+    {
+     "n": 0,
+     "cos": 0.8797,
+     "label": "M",
+     "why": "clause asks why Paperclip is Mac-only; ask is 'Determine why Paperclip is Mac-only'"
+    },
+    {
+     "n": 1,
+     "cos": 0.858,
+     "label": "M",
+     "why": "same list of additions (repos, sub-goals, other projects, large technical asks)"
+    },
+    {
+     "n": 2,
+     "cos": 0.8372,
+     "label": "M",
+     "why": "clause asks whether Civis is serving; ask is 'Report the state of Civis'"
+    },
+    {
+     "n": 3,
+     "cos": 0.8332,
+     "label": "M",
+     "why": "same task: request a tuned resume for that early-career role in an existing job chat"
+    },
+    {
+     "n": 4,
+     "cos": 0.8117,
+     "label": "M",
+     "why": "same question: what changed with the enum and how it was made to work"
+    },
+    {
+     "n": 5,
+     "cos": 0.8099,
+     "label": "W",
+     "why": "clause wants mail delivered to gmail; ask asks to determine mailbox-vs-forwarding then route. Same goal, different scope"
+    },
+    {
+     "n": 6,
+     "cos": 0.8074,
+     "label": "M",
+     "why": "use Firefox on the Mac, stated as a constraint"
+    },
+    {
+     "n": 7,
+     "cos": 0.8066,
+     "label": "M",
+     "why": "clause proposes Paperclip as the better cockpit; ask is 'Evaluate using Paperclip as the cockpit'"
+    },
+    {
+     "n": 8,
+     "cos": 0.7985,
+     "label": "N",
+     "why": "clause asks for candidate repos to delete; ask reports re-deletion paths for 5 repos. Adjacent, different intent"
+    },
+    {
+     "n": 9,
+     "cos": 0.7908,
+     "label": "N",
+     "why": "clause forbids any push; ask forbids force-push and asks why force is needed. Different scope"
+    },
+    {
+     "n": 10,
+     "cos": 0.7898,
+     "label": "W",
+     "why": "same target host and same feature area; clause asks about safe integration, ask says map the cockpit to it"
+    },
+    {
+     "n": 11,
+     "cos": 0.7893,
+     "label": "M",
+     "why": "identical unique token (code 68g23y) and identical action (check the Instinct email)"
+    },
+    {
+     "n": 12,
+     "cos": 0.7889,
+     "label": "M",
+     "why": "generic 'do some research' vs 'Proceed with the research task'"
+    },
+    {
+     "n": 13,
+     "cos": 0.7878,
+     "label": "N",
+     "why": "clause asks whether the key IS configured; ask asks whether the key is NEEDED"
+    },
+    {
+     "n": 14,
+     "cos": 0.7858,
+     "label": "W",
+     "why": "disambiguating which repo/chat is meant vs recovering repo scope and chat state"
+    },
+    {
+     "n": 15,
+     "cos": 0.78,
+     "label": "M",
+     "why": "paperclip/herdr session adapter is the same integration as 'Integrate Paperclip with herdr'"
+    },
+    {
+     "n": 16,
+     "cos": 0.779,
+     "label": "M",
+     "why": "same transfer method (sftp/ssh) for the same key"
+    },
+    {
+     "n": 17,
+     "cos": 0.7787,
+     "label": "W",
+     "why": "clause observes the phinbox client stack; ask covers maturing phinbox tooling and finishing clients"
+    },
+    {
+     "n": 18,
+     "cos": 0.7766,
+     "label": "M",
+     "why": "'complete user-usable journeys' vs 'present complete user journeys, not partial ones'"
+    },
+    {
+     "n": 19,
+     "cos": 0.7743,
+     "label": "M",
+     "why": "vault link for the transfer, same artefact"
+    },
+    {
+     "n": 20,
+     "cos": 0.7715,
+     "label": "M",
+     "why": "Fabric as cross-compute expansion of ShareCLI, same as the ask's Fabric/ShareCLI scope"
+    },
+    {
+     "n": 21,
+     "cos": 0.7701,
+     "label": "M",
+     "why": "ephemeralizing ACP for multi-presentation is exactly the ask"
+    },
+    {
+     "n": 22,
+     "cos": 0.7696,
+     "label": "M",
+     "why": "same enumeration of self-hosted agents (dots, muse, grok bot) into an org/system view"
+    },
+    {
+     "n": 23,
+     "cos": 0.767,
+     "label": "N",
+     "why": "clause restricts models to mimo only; ask moves away from Muse and conditions OpenCode Go on proof. Different direction"
+    },
+    {
+     "n": 24,
+     "cos": 0.762,
+     "label": "N",
+     "why": "clause is a tool description for reporting impressions about portal; ask is 'Report the state of the portal'"
+    },
+    {
+     "n": 25,
+     "cos": 0.7618,
+     "label": "M",
+     "why": "same conditional move of the backend to the desk host if D1 is prohibitive"
+    },
+    {
+     "n": 26,
+     "cos": 0.7611,
+     "label": "N",
+     "why": "bare 'check' plus a timestamp heading; nothing ties it to the 68g23y Instinct thread"
+    },
+    {
+     "n": 27,
+     "cos": 0.7583,
+     "label": "N",
+     "why": "clause retries bringing up the Civis server; ask only reports Civis state"
+    },
+    {
+     "n": 28,
+     "cos": 0.7565,
+     "label": "N",
+     "why": "clause dictates an exact reply string; ask watches email for a vendor response"
+    },
+    {
+     "n": 29,
+     "cos": 0.7544,
+     "label": "W",
+     "why": "Paperclip org structure as an implicit gate vs modelling the org as a Mermaid diagram"
+    }
+   ]
+  },
+  "low": {
+   "description": "15 lowest-cosine pairs among the 800 sampled uncited ask-cue clauses",
+   "cosine_range": [
+    0.4668,
+    0.5176
+   ],
+   "labels": [
+    {
+     "n": 0,
+     "cos": 0.5176,
+     "label": "N",
+     "why": "truncated musing about someone as an engineer; retrieved ask is a Tracera status report"
+    },
+    {
+     "n": 1,
+     "cos": 0.5096,
+     "label": "N",
+     "why": "'keep your edit surgical' vs a batched restore/absorb workflow"
+    },
+    {
+     "n": 2,
+     "cos": 0.5043,
+     "label": "N",
+     "why": "corrupted fragment about a D1 dip; ask is about moving off D1"
+    },
+    {
+     "n": 3,
+     "cos": 0.5041,
+     "label": "N",
+     "why": "'how did u do' vs produce a daily digest"
+    },
+    {
+     "n": 4,
+     "cos": 0.5033,
+     "label": "N",
+     "why": "rhetorical aside vs explaining legacy restoration"
+    },
+    {
+     "n": 5,
+     "cos": 0.5004,
+     "label": "N",
+     "why": "'any go solus?' does not relate to approving Silvus"
+    },
+    {
+     "n": 6,
+     "cos": 0.5003,
+     "label": "N",
+     "why": "list of personal problems vs replacing writing/visualization content"
+    },
+    {
+     "n": 7,
+     "cos": 0.5001,
+     "label": "N",
+     "why": "statement about a department vs a delegation policy"
+    },
+    {
+     "n": 8,
+     "cos": 0.4993,
+     "label": "N",
+     "why": "social check-in vs a deeper evaluation"
+    },
+    {
+     "n": 9,
+     "cos": 0.4931,
+     "label": "N",
+     "why": "'use suabgens' (subagents) vs 'Use Unreal as the engine'"
+    },
+    {
+     "n": 10,
+     "cos": 0.4929,
+     "label": "N",
+     "why": "dinner plans vs landing a fork fix"
+    },
+    {
+     "n": 11,
+     "cos": 0.492,
+     "label": "N",
+     "why": "social question vs routing replies through chatgpt.com"
+    },
+    {
+     "n": 12,
+     "cos": 0.4797,
+     "label": "N",
+     "why": "hostile aside vs re-prompting to retry work"
+    },
+    {
+     "n": 13,
+     "cos": 0.4788,
+     "label": "N",
+     "why": "social aside vs replying '.' to open asks"
+    },
+    {
+     "n": 14,
+     "cos": 0.4668,
+     "label": "N",
+     "why": "corrupted fragment vs Firefox driving research"
+    }
+   ]
+  }
+ },
+ "notes": [
+  "The low band is uniformly transcription noise or social chatter with an unrelated retrieved ask, so the negative side of the detector is clean.",
+  "The high band is where the honest problem is: 8 of 30 top-ranked pairs are adjacent-but-different intents. A cosine threshold alone therefore cannot certify that a clause is captured.",
+  "Labels are one labeller's. A second rater has not been run, so the M/W boundary carries unmeasured disagreement."
+ ]
+}

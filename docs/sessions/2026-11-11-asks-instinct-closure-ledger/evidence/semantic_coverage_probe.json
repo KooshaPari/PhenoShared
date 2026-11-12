@@ -1,0 +1,346 @@
+{
+ "generated_at_utc": "2026-11-12T08:27:55Z",
+ "model": "nomic-embed-text-v1.5.f16 (llama.cpp llama-embedding, raw, no prefix)",
+ "model_selection": {
+  "probe": "6 designed paraphrase pairs + 5 distractors, top-1 retrieval",
+  "nomic_raw": "12/12 top-1",
+  "bge_small_f16": "9/12 top-1 (ranks 2,3,4 on three pairs)",
+  "caveat": "n=12 pairs; rule-of-three lower bound on 12/12 is ~0.78"
+ },
+ "population": {
+  "uncited_ask_cue_units_union": 8819,
+  "sample_size": 800,
+  "seed": 20261112,
+  "register_asks": 2259,
+  "note": "denominator is uncited ask-cue clause units, not all 43,305 units"
+ },
+ "score_distribution": {
+  "min": 0.4668,
+  "median": 0.6262,
+  "p90": 0.7067,
+  "max": 0.8797
+ },
+ "hand_label_sample": {
+  "high": [
+   {
+    "clause": "why is there a paperclip on mac?",
+    "top1_ask": "ASK-000819",
+    "top1_interpretation": "Determine why Paperclip is Mac-only.",
+    "top1_quote": "Why is paperclip Mac only",
+    "cosine": 0.8797
+   },
+   {
+    "clause": "add repos + sub goals and other projects / large technical asks.",
+    "top1_ask": "ASK-000572",
+    "top1_interpretation": "Expand tracked project coverage by adding repos, sub-goals, other projects and large technical asks",
+    "top1_quote": "Not enough proj coverage. Add repos + sub goals and other projects / large technical asks. Missing a lot",
+    "cosine": 0.8575
+   },
+   {
+    "clause": "report: is civis actually serving?",
+    "top1_ask": "ASK-001070",
+    "top1_interpretation": "Report the state of Civis",
+    "top1_quote": "State of civis?",
+    "cosine": 0.8365
+   },
+   {
+    "clause": "go to one of the existing job chats and ask for tuned resume for that early career role",
+    "top1_ask": "ASK-001243",
+    "top1_interpretation": "Check the Anduril email and request a tuned resume for that early-career role in one of the existing job chats",
+    "top1_quote": "Chk anduril email. Go to one of the existing job chats and ask for tuned resume for that early career role.",
+    "cosine": 0.8328
+   },
+   {
+    "clause": "what changed with enum, whow’d you get it working",
+    "top1_ask": "ASK-000441",
+    "top1_interpretation": "Explain what changed with the enum and how the export issue was made to work",
+    "top1_quote": "What changed with enum, whow’d you get it working?",
+    "cosine": 0.8123
+   },
+   {
+    "clause": "can you do thes remaining email setup goal: receive mail sent to <EMAIL-REDACTED> in <EMAIL-REDACTED>, keep the sender address visible, and recover older messages without duplicates or deleting originals.",
+    "top1_ask": "ASK-000740",
+    "top1_interpretation": "Determine whether <EMAIL-REDACTED> is a hosted mailbox or a forwarding address and route new mail to <EMAIL-REDACTED> while retaining copies",
+    "top1_quote": "Can you do thes Remaining email setup\nGoal: Receive mail sent to <EMAIL-REDACTED> in <EMAIL-REDACTED>, keep the sender address visible, and recover older messages without duplicates or deleting originals.\n1. Restore access to Porkbun in Chrome\nThis is the immediate blocker. Recent check",
+    "cosine": 0.8105
+   },
+   {
+    "clause": "must use mac firefox",
+    "top1_ask": "ASK-001383",
+    "top1_interpretation": "Perform the task through the Firefox browser on the Mac.",
+    "top1_quote": "Do via the Firefox browser on my Mac;",
+    "cosine": 0.8075
+   },
+   {
+    "clause": "paperclip would make a much better cockpit generally no?",
+    "top1_ask": "ASK-000229",
+    "top1_interpretation": "Evaluate using Paperclip as the cockpit, including the AI-org-style item, since it leans where agslag intended",
+    "top1_quote": "Paperclip would make a much better cockpit generally no? And kinda leans where agslag intended to go.\n\nPaperclip the ai org style item.\n\nI never mentioned clsude bot",
+    "cosine": 0.807
+   },
+   {
+    "clause": "list the repos you want to delete",
+    "top1_ask": "ASK-000792",
+    "top1_interpretation": "Report the path to re-deletion for each of the 5 repos, or state the alternative",
+    "top1_quote": "And their path to redeletion or ?",
+    "cosine": 0.7985
+   },
+   {
+    "clause": "do not push.",
+    "top1_ask": "ASK-000702",
+    "top1_interpretation": "Do not force push, and explain why a force is required",
+    "top1_quote": "Do not force push, why is force required",
+    "cosine": 0.7907
+   },
+   {
+    "clause": "dashboard integration on dash.kooshapari.com safely?",
+    "top1_ask": "ASK-000305",
+    "top1_interpretation": "Map the cockpit to dash.kooshapari.com",
+    "top1_quote": "Keep cockpit maintained and as your ssot. If linear/others would be a better task / work mgmt platform to setup do so and send the connect system as needed.\n\nFor cockpit map to dash.kooshapari.com",
+    "cosine": 0.7905
+   },
+   {
+    "clause": "what it is: handshake email sent to <EMAIL-REDACTED> at 20:36:04z (now 251+ min ago).",
+    "top1_ask": "ASK-001087",
+    "top1_interpretation": "Check email for the message carrying code 68g23y / the Instinct reply.",
+    "top1_quote": "Chk email?",
+    "cosine": 0.7893
+   },
+   {
+    "clause": "do some research",
+    "top1_ask": "ASK-000511",
+    "top1_interpretation": "Proceed with the research task",
+    "top1_quote": "on research, go",
+    "cosine": 0.7889
+   },
+   {
+    "clause": "▸ minimax api key configured│ ?",
+    "top1_ask": "ASK-002233",
+    "top1_interpretation": "Clarify whether the MiniMax key is needed",
+    "top1_quote": "elaborate: do you need the MiniMax key, are you saying",
+    "cosine": 0.7879
+   },
+   {
+    "clause": "which repo or chat do you mean?** --- next same-thread messages --- > monday, october 12, 2026, 5:20:13 pm pdt | instinct | repo-scope chat: it's blocked on an executor",
+    "top1_ask": "ASK-001692",
+    "top1_interpretation": "Recover and verify the repo scope and chat state.",
+    "top1_quote": "Repo scope recovery chat state?",
+    "cosine": 0.7859
+   },
+   {
+    "clause": "body: herdr-session-adapter: a paperclip plugin that lets paperclip treat a running herdr pane as one of its agents.",
+    "top1_ask": "ASK-002109",
+    "top1_interpretation": "Integrate Paperclip with herdr and the underlying harnesses",
+    "top1_quote": "Paperclip-herdr integration + the underlying harnesses",
+    "cosine": 0.7799
+   },
+   {
+    "clause": "copy it over via sftp or ssh?",
+    "top1_ask": "ASK-000407",
+    "top1_interpretation": "Copy the key from the Mac environment over to the target host via sftp or ssh.",
+    "top1_quote": "Sure to all. The key is in Mac env; copy it over via sftp or ssh?",
+    "cosine": 0.7795
+   },
+   {
+    "clause": "phinbox itself we are seeing a web client rather than strong tauri, flutter\\rn, gleam, swift, or other solutions, such an extreme comparison and determination must be done always, iirc phinbox alreayd has an app?",
+    "top1_ask": "ASK-001830",
+    "top1_interpretation": "Optimize and mature the phinbox elicitation tooling and finish its clients/apps, with comparison against third-party solutions and possible consolidation into one of the agent app repos",
+    "top1_quote": "Where chats have operator q \\ blockers\\ other needs for escalation \nChat -> Hermes|Cockpit Jcode -> (Dots->you)|You -> Me\n\nthe expectation for them must be to keep finding work and do it while they wait with a recoverable path if they want to bite a bulleto only; \n\nand that if you have not read + to",
+    "cosine": 0.7795
+   },
+   {
+    "clause": "complete user-usable journeys.",
+    "top1_ask": "ASK-000632",
+    "top1_interpretation": "Make the journey map page present complete user journeys, not partial ones.",
+    "top1_quote": "Nor is it solely complete user journeys in that page",
+    "cosine": 0.7766
+   },
+   {
+    "clause": "i'll send a vault link for that transfer, ok?",
+    "top1_ask": "ASK-001505",
+    "top1_interpretation": "Provide the link to the vault",
+    "top1_quote": "Give vault link ff tap done",
+    "cosine": 0.7743
+   },
+   {
+    "clause": "the goal for fino fabric is effectively an expansion of sharecli to the cross-compute level, the multi-device level, while having a stronger overall goal of linking it for the user rather than just the clogging processes for the agent, right?",
+    "top1_ask": "ASK-000963",
+    "top1_interpretation": "Build Fabric as an application-layer client (Parsec/Citrix-style) and advance both Fabric and ShareCLI well beyond their current state",
+    "top1_quote": "Everything. Fabric was meant to be application layer too e.g. Parsec/citrix application/client.\n\nI've seen protos of thst shown to me by agents before. Both should be much further ahead. ShareCLI has historical commit hist and both have chat..trove in Claude and chatgpt + one assumes ext competitors",
+    "cosine": 0.7712
+   },
+   {
+    "clause": "but even forgetting that, um the concept of acp i think becomes important because we can ephemeralize it or dynamic it, uh dynamicize it, i guess, so that an existing tui session can have or i guess, yep, we take an existing session process, let's just say, and give it multiple presentation types in parallel, right?",
+    "top1_ask": "ASK-000382",
+    "top1_interpretation": "Build a dynamic multi-presentation view of a live agent session by ephemeralizing ACP so terminals and rich chat clients sync into the still-running TUI/CLI process",
+    "top1_quote": "I'm seeing a PR regarding extended hypervisor load for cortex. This is a nice start. So I'll tell you something that I've asked, I think a local agent, but not a web agent, but the general issue we have, I think generally we need a target. So there's the sort of herder method, right? Where the is an",
+    "cosine": 0.7701
+   },
+   {
+    "clause": "you’d need to consider where you, dots, muse, grok bot, all the other items you’ve considered self host side, + chats, and other areas sit, and build a proper org matrix, this is part of why we want paper clip which would allow that to be maintained much stronger",
+    "top1_ask": "ASK-000448",
+    "top1_interpretation": "Build an org and system chart with Koosha at the top (Sponsor/Board role), placing the assistant, dots, muse, grok bot, other self-hosted items, chats and other areas, maintained via Paperclip",
+    "top1_quote": "Build out an org + system chart as well. Ofc I would sit at the top as either of Sponsor \\ Board style role; you’d need to consider where you, dots, muse, grok bot, all the other items you’ve considered self host side, + chats, and other areas sit, and build a proper org matrix, this is part of why ",
+    "cosine": 0.7693
+   },
+   {
+    "clause": "ensure default model is only mimo || muse for opencode go, the others will waste my sub",
+    "top1_ask": "ASK-000916",
+    "top1_interpretation": "Set the model target away from Google/Muse and prefer OpenCode Go if better usage management is proven",
+    "top1_quote": "1. Target != google\\muse; less OCGO if we prove better usage mgmt",
+    "cosine": 0.7667
+   },
+   {
+    "clause": "use this when the user wants to report an impression, complaint, suggestion, or praise about portal itself.",
+    "top1_ask": "ASK-000594",
+    "top1_interpretation": "Report the state of the portal.",
+    "top1_quote": "State of portal also?",
+    "cosine": 0.7625
+   },
+   {
+    "clause": "move its backend to desk if d1 is prohibitive > friday, october 16, 2026, 1:47:53 pm pdt | instinct | reply/reaction target: phonemsg-01m537h3h49b2z116agzr9jp8t got it: the ask ledger becomes a cockpit page.",
+    "top1_ask": "ASK-001455",
+    "top1_interpretation": "Define the ledger in the cockpit and move its backend to the desk host if D1 is prohibitive",
+    "top1_quote": "Ledger should be defined in cockpit. Move its  backend to desk if d1 is prohibitive",
+    "cosine": 0.7623
+   },
+   {
+    "clause": "check > wednesday, october 7, 2026, 4:33:06 pm pdt | instinct | reply/reaction target: phonemsg-01m4cbcwchzcpxnt3eqa3nxfn8 nothing from a mark in the last 2 weeks of synced gmail.",
+    "top1_ask": "ASK-001087",
+    "top1_interpretation": "Check email for the message carrying code 68g23y / the Instinct reply.",
+    "top1_quote": "Chk email?",
+    "cosine": 0.7614
+   },
+   {
+    "clause": "try again to bring up the civis server.",
+    "top1_ask": "ASK-001070",
+    "top1_interpretation": "Report the state of Civis",
+    "top1_quote": "State of civis?",
+    "cosine": 0.7584
+   },
+   {
+    "clause": "reply exactly: minimax-direct-ok",
+    "top1_ask": "ASK-002199",
+    "top1_interpretation": "Watch email for a MiniMax support response and act on it",
+    "top1_quote": "Watch email for minimax support.\n\nM plan build removes an infinite weekly limit we had. So we are now seeing a significant usage decline. \n\n5hr drained 10% of weekly. Implying max 3 days of work a week",
+    "cosine": 0.7561
+   },
+   {
+    "clause": "and then paperclip's org structure we'll say acts as a sort of uh implicit gate of what you can and can't work on, right?",
+    "top1_ask": "ASK-000547",
+    "top1_interpretation": "Model the organization as a Mermaid diagram for now, until Paperclip becomes the live management and presentation layer.",
+    "top1_quote": "model as mermaid for now before paperclip becomes the live management and presentaTion layer",
+    "cosine": 0.7544
+   }
+  ],
+  "low": [
+   {
+    "clause": "what does that tell you about them as an engineer thl",
+    "top1_ask": "ASK-002117",
+    "top1_interpretation": "Report the state of Tracera engineering work after roughly two to three weeks",
+    "top1_quote": "State of tracera eng work? Is been almost 2-3wks now",
+    "cosine": 0.5176
+   },
+   {
+    "clause": "keep your edit surgical.",
+    "top1_ask": "ASK-000466",
+    "top1_interpretation": "Run the restoration as batches of restore → forensic analysis/recovery → proper absorption/merge → re-delete.",
+    "top1_quote": "It involves batches of restore -> forensic analysis \\ recovery -> proper absorption\\merge -> re-delete",
+    "cosine": 0.5102
+   },
+   {
+    "clause": "how this fatass dip in 3m",
+    "top1_ask": "ASK-001573",
+    "top1_interpretation": "Move off D1 and diagnose why D1 is so heavy",
+    "top1_quote": "We were sp to both move off d1 and figure out why it's so heavy. R2 ( or was it r2) setups for queuing and others can begin too",
+    "cosine": 0.5045
+   },
+   {
+    "clause": "how did u do",
+    "top1_ask": "ASK-000074",
+    "top1_interpretation": "Produce today's digest summary of the day's activities and status",
+    "top1_quote": "Today's digest?",
+    "cosine": 0.5043
+   },
+   {
+    "clause": "why would i care",
+    "top1_ask": "ASK-001594",
+    "top1_interpretation": "Explain why legacy would need to be restored and why that item took so long",
+    "top1_quote": "Um now I am now reading your text box. I'm going to do it backwards starting from nine out of nine. Uh all of these things sound good. It just my question of outside of the 5:00 p.m. which I already paid for 5:00 p.m. reset for that 5:05. Is there anything you can do beforehand for any of those list",
+    "cosine": 0.5031
+   },
+   {
+    "clause": "any go solus?",
+    "top1_ask": "ASK-000179",
+    "top1_interpretation": "Approve Silvus as a company to apply to.",
+    "top1_quote": "silvus*",
+    "cosine": 0.5003
+   },
+   {
+    "clause": "add le drugs and all the other problems and depression",
+    "top1_ask": "ASK-001911",
+    "top1_interpretation": "Replace the unknown/low-quality/naive writing and visualization content with deep real data mining and research using local data, git, and web (GPT/Claude)",
+    "top1_quote": "Many unknown or underfilled\\low quality\\naive writing or viz; much requires deep real datemien and research; of which we have all teh data local \\ git \\ gpt+claude web so",
+    "cosine": 0.5001
+   },
+   {
+    "clause": "wait toni is my dept",
+    "top1_ask": "ASK-000971",
+    "top1_interpretation": "Delegate more of your work to Dots and keep your own context at the highest management level with many layers of manager/worker delegation",
+    "top1_quote": "Give dots more of your work. Again your ctx should be extreme high lvl as the highest on the org chart. Many levels of mgrs wrkrs delegations",
+    "cosine": 0.4998
+   },
+   {
+    "clause": "is it that bad alr you feel",
+    "top1_ask": "ASK-001702",
+    "top1_interpretation": "Perform a deeper evaluation.",
+    "top1_quote": "Deeper eval",
+    "cosine": 0.4994
+   },
+   {
+    "clause": "use suabgens",
+    "top1_ask": "ASK-001985",
+    "top1_interpretation": "Use Unreal as the engine.",
+    "top1_quote": "Unreal",
+    "cosine": 0.4933
+   },
+   {
+    "clause": "we are resting dinner st 630 i want to enjoy you",
+    "top1_ask": "ASK-001480",
+    "top1_interpretation": "Land the pending fix on our fork",
+    "top1_quote": "What about the fix on our fork?",
+    "cosine": 0.4927
+   },
+   {
+    "clause": "do u feel unsafe as is there",
+    "top1_ask": "ASK-001092",
+    "top1_interpretation": "Route replies and actions through chatgpt.com for safety, and keep that path until it is proven to work.",
+    "top1_quote": "Reply via chatgpt.com for safety",
+    "cosine": 0.4921
+   },
+   {
+    "clause": "go back to ur penal colony",
+    "top1_ask": "ASK-000379",
+    "top1_interpretation": "Re-prompt yourself to retry the work",
+    "top1_quote": "Reprompt urself",
+    "cosine": 0.4798
+   },
+   {
+    "clause": "what yo mom say",
+    "top1_ask": "ASK-001681",
+    "top1_interpretation": "Reply with a \".\" to every open ask in the thread.",
+    "top1_quote": "Reply w\\ a . to every open ask",
+    "cosine": 0.4795
+   },
+   {
+    "clause": "what abt mouth",
+    "top1_ask": "ASK-001948",
+    "top1_interpretation": "Research and report how Firefox was driven (browser-use plugins in Codex/jcode) and identify which chat is supposed to drive the final solution",
+    "top1_quote": "A +B how did u drive ff b4? Codex jcode also both have browser use plugins I thought + other solus generally and the one chat that's supposed to drive our final solu",
+    "cosine": 0.4668
+   }
+  ]
+ },
+ "labels": {},
+ "verdict": "PENDING HAND LABELS - no coverage figure may be quoted yet"
+}
