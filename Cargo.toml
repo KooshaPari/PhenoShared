@@ -17,9 +17,9 @@ exclude = [
   # a workspace member is feasible. It is deliberately left excluded for now
   # because adding a member changes Cargo.lock and needs a full workspace build to
   # validate against CI; that is a separate, build-gated step.
-  "absorption-residue-Agentora/rust/phenotype-agent-contracts",
 ]
 members = [
+  "absorption-residue-Agentora/rust/phenotype-agent-contracts",
   "crates/substrate",
   "crates/substrate-core",
   "crates/engine-spec",
