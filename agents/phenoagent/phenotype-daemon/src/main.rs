@@ -15,14 +15,11 @@ use std::sync::Arc;
 use tokio::net::{TcpListener, UnixListener};
 use tracing::{error, info, warn};
 
-use protocol::VersionInfo;
+use protocol::{VersionInfo, DEFAULT_TCP_PORT};
 
 /// Default socket path for Unix domain sockets
 #[cfg(unix)]
 const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
-
-/// Default TCP port for cross-platform support
-const DEFAULT_TCP_PORT: u16 = 9456;
 
 /// Server configuration
 #[derive(Debug, Clone)]

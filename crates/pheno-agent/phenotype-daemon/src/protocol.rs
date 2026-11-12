@@ -181,6 +181,10 @@ impl VersionInfo {
 #[allow(dead_code)]
 pub const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
 
-/// Default TCP port
-#[allow(dead_code)]
-pub const DEFAULT_TCP_PORT: u16 = 8953;
+/// Default TCP port.
+///
+/// This is the single source of truth for the port this daemon binds and the
+/// port a client should dial. It previously read 8953 here while `main.rs`
+/// bound 9456, so a client that imported this constant would never reach the
+/// server.
+pub const DEFAULT_TCP_PORT: u16 = 9456;
