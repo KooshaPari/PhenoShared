@@ -20,6 +20,10 @@ A crate is "publishable" when [package].publish is absent, or present and not
 false and not the empty list. An inherited `publish.workspace = true` resolves
 to [workspace.package].publish.
 
+Each row carries the crate's description, resolved the same way (`description`
+inherited through [workspace.package] counts, and a crate with neither shows an
+em dash).
+
 The table is emitted already padded to its column widths, which is the layout
 Prettier produces for Markdown tables, so the file this writes is also the file
 the formatter gate expects and regenerating never shows up as a format diff.
@@ -75,6 +79,20 @@ def path_deps(manifest, base, workspace_deps):
                     yield (root / inherited["path"]).resolve()
 
 
+def describe(package, workspace_description):
+    description = package.get("description")
+    if isinstance(description, dict):
+        if not description.get("workspace"):
+            return "\u2014"
+        description = workspace_description
+    if not description:
+        return "\u2014"
+    text = " ".join(str(description).split())
+    # A raw "<" reads as inline HTML to markdownlint (MD033); escape the
+    # brackets and the cell separator so the text stays literal.
+    return text.replace("|", "\\|").replace("<", "\\<").replace(">", "\\>")
+
+
 def publishable(package, workspace_publish):
     publish = package.get("publish")
     if isinstance(publish, dict):
@@ -90,7 +108,9 @@ def publishable(package, workspace_publish):
 
 workspace = tomllib.loads((root / "Cargo.toml").read_text())["workspace"]
 workspace_deps = workspace.get("dependencies") or {}
-workspace_publish = workspace.get("package", {}).get("publish")
+workspace_package = workspace.get("package") or {}
+workspace_publish = workspace_package.get("publish")
+workspace_description = workspace_package.get("description")
 excluded = set(expand(workspace.get("exclude", [])))
 
 crates = {}
@@ -114,11 +134,19 @@ for directory, manifest in crates.items():
     package = manifest.get("package") or {}
     if not package.get("name") or not publishable(package, workspace_publish):
         continue
-    rows.append((package["name"], str(directory.relative_to(root))))
+    rows.append(
+        (
+            package["name"],
+            str(directory.relative_to(root)),
+            describe(package, workspace_description),
+        )
+    )
 rows.sort()
 
-table = [("Crate", "Path")] + [(f"`{n}`", f"`{p}`") for n, p in rows]
-widths = [max(len(cell[i]) for cell in table) for i in range(2)]
+table = [("Crate", "Path", "Description")] + [
+    (f"`{name}`", f"`{path}`", description) for name, path, description in rows
+]
+widths = [max(len(cell[i]) for cell in table) for i in range(3)]
 
 
 def render(cells, fill=None):
