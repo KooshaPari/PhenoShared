@@ -20,14 +20,14 @@ use tracing::{error, info, warn};
 
 use clap::Parser;
 use clap_ext::prelude::{setup_tracing, ConfigArg, Verbosity};
-use protocol::VersionInfo;
+use protocol::{VersionInfo, DEFAULT_TCP_PORT};
 
 /// Default socket path for Unix domain sockets
 #[cfg(unix)]
 const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
 
-/// Default TCP port for cross-platform support
-const DEFAULT_TCP_PORT: u16 = 9456;
+// Default TCP port for cross-platform support.
+// Single-sourced from the canonical protocol module; do not re-declare it here.
 
 /// CLI args
 #[derive(Parser, Debug)]
