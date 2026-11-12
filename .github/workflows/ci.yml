@@ -153,6 +153,15 @@ jobs:
         run: ruff check .
       - name: ruff format --check
         run: ruff format --check .
+      # The catalog check existed but no pull-request workflow ran it, so it
+      # could not gate anything. tools/sdk-catalog/check.py recomputes the
+      # layer edges with `cargo metadata --no-deps --offline`; without a cargo
+      # on PATH that call fails and the R2/R3 rules would report PASS against an
+      # empty package list, so the toolchain is a prerequisite of a meaningful
+      # verdict, not an optimisation.
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - name: sdk-catalog check
+        run: python3 tools/sdk-catalog/check.py
 
   go-modules:
     name: Go Module Registry
