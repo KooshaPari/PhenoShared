@@ -17,3 +17,9 @@ Cargo.lock text -diff
 *.jpg binary
 *.ico binary
 *.pdf binary
+
+# Preserved patch series and combined diffs must be byte-exact. Line-ending
+# normalisation would rewrite their content and they could no longer reproduce
+# the tree they were verified against.
+*.patch -text
+*.diff  -text
