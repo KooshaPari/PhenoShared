@@ -101,6 +101,13 @@ This is what "decentralized" has to mean in practice: a **multi-ecosystem public
 cargo is one channel, not the only one. The container is the only place that can hold all of them at
 once, which is why the container is correct and a single crate is not.
 
+**Confirmed in scope** (2026-11-10): these are real publication channels, not future maybes. Every
+row above gets a channel, a version, and its own release discipline; none of them is "converted to
+Rust" and none is "deferred until after the Rust work". Concretely that means the plan owes four
+non-cargo release paths alongside crates.io — PyPI, a Go module proxy, npm, and a desktop artifact
+feed — and `sdk-catalog.json` must carry a `channel` field per payload, not just a Rust
+publication class.
+
 ---
 
 ## 5. Phases (v2)
@@ -112,6 +119,29 @@ Unchanged in P0, P1, P5, P6. P2 is extended, P3 is replaced, P7 is expanded, P8 
 (`~/bin/rbuild`). Commit `sdk-catalog.json` from `cargo metadata --no-deps`. Last known build state:
 PASS with 47 warnings at `main @ 1056f3e8`, 2026-09-16, before the workspace grew from 76 to 283
 declared members.
+
+**Catalog half: done.** `KooshaPari/PhenoShared#891` adds `tools/sdk-catalog/generate.py`, the
+generated `sdk-catalog.json`, and `tools/sdk-catalog/check.py`, a five-rule seam gate. On the
+`feat/p0-sdk-catalog` worktree at `f50118b2b` it reports 290 members, 290 classified, zero
+unclassified, and R2-R5 green with R1 green on 47 of 48 publish crates. That closes the count
+question at the member level: the numbers to use are 290 workspace members, of which 48 are
+classified `publish` today.
+
+What P0 execution changed in this plan, because the measurement contradicted the assumption:
+
+- The workspace is **flat**: 218 of 290 members have no internal runtime dependency, so the L0-L4
+  ladder describes a handful of families, not the repository. The container thesis survives; the
+  "layered ecosystem" framing does not.
+- Publication is blocked by **one** fixable thing: 105 members carry 238 path dependencies with
+  `req = "*"`, which `cargo package` refuses outright. Pinning version requirements is now the
+  highest-leverage action in the whole plan, ahead of any restructuring.
+- Non-Rust code is larger than the Rust surface and has no crates.io path at all: 1,056,001 lines
+  across 34 directories, including 202,628 lines of Python inside `crates/`.
+
+**Still open:** the build baseline. `cargo check --workspace --all-targets` and
+`cargo test --workspace` have not been run at a recorded SHA on the desk node, so "does it build"
+remains unmeasured rather than assumed.
+
 **Exit:** one recorded build result; catalog committed; the 76 / 283 / 372 / 178 count question closed.
 
 ### P1 — One identity, generated numbers (unchanged, still cheapest)
@@ -121,10 +151,20 @@ catalog; fix the stale `[workspace.package] repository` and the `Taskfile.yml` `
 non-existent `scripts/ci-local.sh`.
 **Exit:** properties 1 and 2 green; R-01, R-05, R-06, R-07, R-08 closed.
 
-### P2 — Classify every crate, then enforce (extended)
+### P2 — Classify every crate, then enforce (extended, started by P0)
 Assign each of the 283 members a `(class, layer, stability)` triple. Unassignable goes to `quarantine`
 **with a reason**, never to a silent default. Generalize `arch-test` from the `substrate-*` family to
 all members.
+
+P0's catalog already does the first pass: 290 members classified, 25 in `quarantine` with a stated
+reason apiece, and each layer assignment records the signal that produced it (`name`, `dag-leaf`,
+`dag-deep`, `default`, `annotation`). Layer is derived from the dependency graph, not from taste, so
+31 crates whose name claims L1-L3 but whose graph position is a leaf are listed rather than silently
+reclassified.
+
+**Remaining work is the arch test, not the classification:** make `check.py` a required PR check, and
+extend `arch-test` beyond the `substrate-*` family so a new upward edge cannot be merged.
+
 **Exit:** catalog covers 100% of members with zero `unclassified`; arch test runs on the PR path.
 
 ### P3 — Deduplicate concepts, do not evict payload (replaces v1 P3)
@@ -214,6 +254,9 @@ Disk hazard: **none** in any of the four. No nested `.git`, `target`, `.cargo-ta
 ### 7.2 Settled
 
 - **Publish target:** crates.io (Rust channel). Confirmed.
+- **Multi-ecosystem channels:** in scope, not deferred (2026-11-10). Python/PyPI, Go module proxy, npm
+  and a desktop artifact feed are first-class release paths; `sdk-catalog.json` carries a `channel`
+  per payload so the non-Rust half is tracked as publication surface rather than parked source.
 - **Wrapup branches:** wanted → P5 lands them rather than closing them.
 - **Attic:** dropped. It was a v1 term for a relocation zone; classification replaces relocation, so
   the concept is not needed and does not appear in v2.

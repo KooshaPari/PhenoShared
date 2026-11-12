@@ -12,7 +12,22 @@ Note on drift: the working tree was being modified by another process during the
 | `DELIVERABLE-1-codebase-atlas.md` | 321 | What is in the repo, how it is laid out, where the code mass actually is |
 | `DELIVERABLE-2-qa-matrix.md` | 150 | Which quality controls exist, which ones are actually enforced, what is unproven |
 | `DELIVERABLE-3-product-dossier.md` | 260 | What the product is, who it is for, how it got here, what it risks |
-| `REMEDIATION-PLAN.md` | 230 | What it would take to reach the intended shape, a **decentralized container SDK**: per-crate publication class × layer, the seam contract (`cargo package` as the consumability test), a multi-ecosystem publication matrix, phases, and the four classification calls |
+| `REMEDIATION-PLAN.md` | 273 | What it would take to reach the intended shape, a **decentralized container SDK**: per-crate publication class × layer, the seam contract (`cargo package` as the consumability test), a multi-ecosystem publication matrix, phases, and the four classification calls |
+
+## Executed (not just prescribed)
+
+| Where | What | State |
+|---|---|---|
+| `KooshaPari/PhenoShared#891` | `tools/sdk-catalog/generate.py`, generated `sdk-catalog.json`, and `tools/sdk-catalog/check.py` (five-rule seam gate); `docs/sdk-catalog.md` | open PR |
+| `KooshaPari/PhenoRegistry#756` | this analysis, published | open PR |
+
+P0's catalog is the first artifact that lets the plan's claims be checked rather than argued. On the
+`feat/p0-sdk-catalog` worktree at `f50118b2b`: 290 members, 290 classified, 0 unclassified, 48
+`publish` / 217 `internal` / 25 `quarantine`; R2-R5 green and R1 green on 47 of 48 publish crates.
+Three measured results contradict the plan's framing and are recorded in it: the workspace is **flat**
+(218 of 290 members have no internal runtime dependency), publication is blocked by **one** fixable
+cause (105 members carrying 238 path deps with `req = "*"`), and non-Rust code inside `crates/`
+(202,628 Python lines) has no crates.io path at all.
 
 ## Evidence lanes (source material behind the deliverables)
 
