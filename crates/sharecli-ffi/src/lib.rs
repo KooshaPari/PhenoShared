@@ -84,9 +84,9 @@ pub extern "C" fn sharecli_ipc_socket_path() -> *mut c_char {
 /// `sharecli_health_json`, `sharecli_request`, `sharecli_serve_get`) that has
 /// not already been freed. It must be the exact pointer returned, not an
 /// interior or offset pointer, and must not have been allocated by another
-/// allocator or freed by any other function. Passing any other pointer,
+/// allocator or freed by any other function. Supplying any other pointer,
 /// including a pointer into a Rust `CString` not produced by this library, is
-/// undefined behavior. A null pointer is accepted and is a no-op. The pointer
+/// undefined behavior. A null pointer is accepted and is ignored. The pointer
 /// must not be used after this call returns.
 /// Free a string allocated by this library.
 ///
@@ -349,7 +349,7 @@ mod tests {
 
     #[test]
     fn free_string_accepts_null() {
-        // Safety: null is explicitly permitted and is a no-op.
+        // Safety: null is explicitly permitted; this call does nothing.
         unsafe { sharecli_free_string(std::ptr::null_mut()) };
     }
 
