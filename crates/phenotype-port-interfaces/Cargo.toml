@@ -25,3 +25,10 @@ uuid = { workspace = true }
 
 [package.metadata.cargo-machete]
 ignored = ["chrono", "tokio", "uuid"]
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[[bench]]
+name = "verify_serde"
+harness = false

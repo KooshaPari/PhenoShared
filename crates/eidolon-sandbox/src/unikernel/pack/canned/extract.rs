@@ -139,6 +139,7 @@ pub fn ensure_vsock_agent_bin(explicit: Option<&Path>, allow_fetch: bool) -> Res
 
 #[cfg(feature = "sandbox-rootfs-pack")]
 fn agent_cache_dir() -> Result<PathBuf> {
+    use super::AGENT_CACHE_ENV;
     let root = if let Ok(override_root) = std::env::var(AGENT_CACHE_ENV) {
         let trimmed = override_root.trim();
         if trimmed.is_empty() {

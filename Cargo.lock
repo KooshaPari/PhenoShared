@@ -14371,6 +14371,7 @@ version = "0.3.10"
 dependencies = [
  "async-trait",
  "chrono",
+ "criterion 0.5.1",
  "serde",
  "serde_json",
  "thiserror 2.0.20",

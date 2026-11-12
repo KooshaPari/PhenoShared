@@ -1,3 +1,4 @@
+#![allow(clippy::doc_lazy_continuation)]
 //! Android UiAutomator driver hooks + system `adb` probes.
 //!
 //! # Status

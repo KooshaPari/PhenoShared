@@ -50,6 +50,7 @@ impl Logger for ConsoleLogger {
 
 /// Sink-backed logger that delegates to any [`crate::adapters::sinks::Sink`].
 pub struct SinkLogger<S: crate::adapters::sinks::Sink> {
+    name: String,
     level: Level,
     sink: S,
 }
@@ -68,6 +69,15 @@ impl<S: crate::adapters::sinks::Sink> crate::domain::Logger for SinkLogger<S> {
 }
 
 impl<S: crate::adapters::sinks::Sink> SinkLogger<S> {
+    /// The logger name supplied at construction time.
+    ///
+    /// `ConsoleLogger` embeds its name in every emitted line; a sink-backed
+    /// logger forwards entries to a [`crate::adapters::sinks::Sink`] that has
+    /// no access to the logger identity, so it is exposed here instead.
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
     pub async fn flush(&self) -> Result<(), LogError> {
         self.sink.flush().await
     }
@@ -76,6 +86,7 @@ impl<S: crate::adapters::sinks::Sink> SinkLogger<S> {
 impl LoggerBuilder {
     pub fn build_with_sink<S: crate::adapters::sinks::Sink>(self, sink: S) -> SinkLogger<S> {
         SinkLogger {
+            name: self.name,
             level: self.level,
             sink,
         }
@@ -85,6 +96,20 @@ impl LoggerBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A [`crate::adapters::sinks::Sink`] that discards everything.
+    struct NoopSink;
+
+    #[async_trait]
+    impl crate::adapters::sinks::Sink for NoopSink {
+        async fn write(&self, _entry: &LogEntry) -> Result<(), LogError> {
+            Ok(())
+        }
+
+        async fn flush(&self) -> Result<(), LogError> {
+            Ok(())
+        }
+    }
 
     #[tokio::test]
     async fn console_logger_logs_above_level() {
@@ -132,5 +157,10 @@ mod tests {
         let logger = LoggerBuilder::new("my-app").build();
         // Logger is opaque, but we can verify it's constructed without panicking
         let _logger = logger;
+    }
+    #[test]
+    fn sink_logger_exposes_name() {
+        let logger = LoggerBuilder::new("sink-app").build_with_sink(NoopSink);
+        assert_eq!(logger.name(), "sink-app");
     }
 }
