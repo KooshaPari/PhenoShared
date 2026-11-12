@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "repo": "BytePort",
+    "date": "2026-06-23",
+    "version": "1.0.0",
+    "schema": "71+-scorecard-v1",
+    "30-pillar-ref": "registry/audit-30-pillar",
+    "language": "Svelte/JavaScript",
+    "description": "Phenotype-org infrastructure tooling — Svelte frontend for infra management"
+  },
+  "pillars": [
+    {"id": "L0", "name": "Governance", "score": 2, "notes": "Newly identified repo. No governance docs yet."},
+    {"id": "L1", "name": "ADR", "score": 1, "notes": "No ADR documentation."},
+    {"id": "L2", "name": "CI/CD", "score": 3, "notes": "Basic CI may exist (Svelte scaffold). Not verified."},
+    {"id": "L3", "name": "FR/CIV Taxonomy", "score": 1, "notes": "No taxonomy mapping."},
+    {"id": "L4", "name": "Test Coverage", "score": 2, "notes": "Svelte test scaffold. Actual coverage unknown."},
+    {"id": "L5", "name": "Documentation", "score": 2, "notes": "README only."},
+    {"id": "L6", "name": "SEC (Security)", "score": 2, "notes": "No security hardening evident."},
+    {"id": "L7", "name": "Observability", "score": 1, "notes": "No observability."},
+    {"id": "L8", "name": "Performance", "score": 2, "notes": "Svelte is performant by design. No benchmarks."},
+    {"id": "L9", "name": "Portability", "score": 3, "notes": "Web-based. Any modern browser."},
+    {"id": "L10", "name": "API", "score": 3, "notes": "Svelte components. May consume backend APIs."},
+    {"id": "L11", "name": "Modularity", "score": 4, "notes": "Svelte component architecture is modular."},
+    {"id": "L12", "name": "Dependency", "score": 2, "notes": "npm/node_modules (heavy). No audit."},
+    {"id": "L13", "name": "Versioning", "score": 1, "notes": "No versioning."},
+    {"id": "L14", "name": "Changelog", "score": 1, "notes": "No changelog."},
+    {"id": "L15", "name": "Build", "score": 3, "notes": "Svelte build works (vite)."},
+    {"id": "L16", "name": "Release", "score": 1, "notes": "No release workflow."},
+    {"id": "L17", "name": "Compliance", "score": 1, "notes": "None."},
+    {"id": "L18", "name": "Accessibility", "score": 2, "notes": "Web app — some a11y from Svelte defaults."},
+    {"id": "L19", "name": "Localization", "score": 1, "notes": "English only."},
+    {"id": "L20", "name": "Telemetry", "score": 1, "notes": "None."},
+    {"id": "L21", "name": "Backup", "score": 2, "notes": "Git."},
+    {"id": "L22", "name": "Disaster Recovery", "score": 1, "notes": "None."},
+    {"id": "L23", "name": "Migration", "score": 2, "notes": "New repo — no migration history."},
+    {"id": "L24", "name": "Deprecation", "score": 1, "notes": "None."},
+    {"id": "L25", "name": "Code Review", "score": 1, "notes": "Single dev."},
+    {"id": "L26", "name": "Technical Debt", "score": 2, "notes": "New codebase."},
+    {"id": "L27", "name": "Knowledge Base", "score": 1, "notes": "No KB."},
+    {"id": "L28", "name": "Community", "score": 1, "notes": "None."},
+    {"id": "L29", "name": "Contribution", "score": 1, "notes": "None."}
+  ],
+  "cross_cutting": [],
+  "summary": {
+    "total_pillars": 29,
+    "total_cross_cutting": 0,
+    "pillar_average": 1.6,
+    "cross_cutting_average": 0.0,
+    "overall_score": 1.6,
+    "max_score": 9.0,
+    "classification": "L1: Critical Foundation Needed",
+    "blocking_gaps": [
+      "L0: No governance docs at all",
+      "L1: No ADR docs",
+      "L3: No FR-CIV mapping",
+      "L26: Probably technical debt from clone",
+      "All pillars below 3 — fresh repo needs baseline"
+    ],
+    "note": "BytePort is newly discovered and not yet in disposition-index. Proposed disposition: AFFIRM → phenotype-infra (the consolidated compute/infra monorepo)"
+  }
+}

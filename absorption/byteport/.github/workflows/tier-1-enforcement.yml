@@ -1,0 +1,156 @@
+name: Tier-1 Enforcement (PR Gate)
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # ── Job 1: Security scan (cargo audit) ──────────────────────────────
+  security-audit:
+    name: Security Audit (cargo-audit)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: rustsec/audit-check@69366f33c96575abad1ee0dba8212993eecbe998 # v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Job 2: SBOM generation & validation ─────────────────────────────
+  sbom-check:
+    name: SBOM Generation & Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+
+      - name: Install cargo-cyclonedx
+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2
+        with:
+          tool: cargo-cyclonedx
+
+      - name: Generate CycloneDX SBOM
+        run: |
+          # --all is required: the default emits nothing for a virtual (workspace)
+          # manifest, which made the validation step fail on every run.
+          cargo cyclonedx --all --format json
+          echo "✅ SBOM generated"
+
+      - name: Validate SBOM output exists and is non-empty
+        run: |
+          sbom_file="$(find . -name '*.cdx.json' -not -path './target/*' | head -1)"
+          if [ -z "$sbom_file" ]; then
+            echo "❌ No .cdx.json file found after generation"
+            exit 1
+          fi
+          echo "✅ SBOM file: $sbom_file"
+          size=$(wc -c < "$sbom_file")
+          if [ "$size" -lt 100 ]; then
+            echo "❌ SBOM file suspiciously small ($size bytes)"
+            exit 1
+          fi
+          echo "✅ SBOM is valid ($size bytes)"
+
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sbom-bomlet
+          path: '**/*.cdx.json'
+          retention-days: 60
+
+  # ── Job 3: LICENSE presence & content check ─────────────────────────
+  license-check:
+    name: LICENSE Presence Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Verify LICENSE file exists
+        run: |
+          if [ -f LICENSE ]; then
+            echo "✅ LICENSE file present"
+            head -5 LICENSE
+            lic_file="LICENSE"
+          elif [ -f LICENSE-MIT ]; then
+            echo "✅ LICENSE-MIT file present"
+            head -5 LICENSE-MIT
+            lic_file="LICENSE-MIT"
+          elif [ -f LICENSE.md ]; then
+            echo "✅ LICENSE.md file present"
+            head -5 LICENSE.md
+            lic_file="LICENSE.md"
+          elif [ -f LICENSE-Apache-2.0 ]; then
+            echo "✅ LICENSE-Apache-2.0 file present"
+            head -5 LICENSE-Apache-2.0
+            lic_file="LICENSE-Apache-2.0"
+          elif [ -f LICENSE.txt ]; then
+            echo "✅ LICENSE.txt file present"
+            head -5 LICENSE.txt
+            lic_file="LICENSE.txt"
+          else
+            echo "❌ No LICENSE file found"
+            exit 1
+          fi
+
+      - name: Check LICENSE is not boilerplate empty
+        run: |
+          lic_file=""
+          for candidate in LICENSE LICENSE-MIT LICENSE.md LICENSE-Apache-2.0 LICENSE.txt; do
+            if [ -f "$candidate" ]; then
+              lic_file="$candidate"
+              break
+            fi
+          done
+          if [ -z "$lic_file" ]; then
+            echo "❌ No LICENSE file found"
+            exit 1
+          fi
+          line_count=$(wc -l < "$lic_file")
+          if [ "$line_count" -lt 5 ]; then
+            echo "❌ $lic_file appears too short ($line_count lines); may be a placeholder"
+            exit 1
+          fi
+          echo "✅ $lic_file is substantive ($line_count lines)"
+
+  # ── Job 4: CHANGELOG updated check ──────────────────────────────────
+  changelog-check:
+    name: CHANGELOG Update Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Check CHANGELOG.md was modified
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # Dependabot PRs don't add CHANGELOG entries by default. The carve-out
+            # is at the workflow level rather than the mergify config because
+            # this check is what produces the mergeStateStatus: UNSTABLE flag
+            # that blocks merges. See #371 for the precedent.
+            if [ "${{ github.event.pull_request.user.login }}" = "dependabot[bot]" ]; then
+              echo "⏭️ Skipping CHANGELOG check for Dependabot PR"
+              exit 0
+            fi
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+            if git diff --name-only "$base"..."$head" | grep -q "^CHANGELOG.md"; then
+              echo "✅ CHANGELOG.md has been updated in this PR"
+            else
+              echo "❌ CHANGELOG.md has NOT been modified in this PR"
+              echo "Please update CHANGELOG.md under [Unreleased] with your changes."
+              exit 1
+            fi
+          else
+            echo "⏭️ Skipping CHANGELOG check (not a PR event)"
+          fi

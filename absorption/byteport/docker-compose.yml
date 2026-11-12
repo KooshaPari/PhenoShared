@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  backend:
+    build: .
+    target: backend
+    ports:
+      - "8081:8081"
+    environment:
+      - DATABASE_URL=sqlite:///data/byteport.db
+  web:
+    build: .
+    target: desktop
+    ports:
+      - "3000:3000"

@@ -1,6 +1,6 @@
 //! Durable workflow ledger. Management actions never submit elicitation answers.
-mod observer;
 mod fencing;
+mod observer;
 mod projection;
 mod store;
 mod transitions;

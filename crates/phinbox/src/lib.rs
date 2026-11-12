@@ -17,13 +17,13 @@
 //! implementation plan.
 
 pub mod approval;
+pub mod discord;
 pub mod error;
 pub mod escape;
 pub mod harness;
 pub mod inbox;
-pub mod management;
-pub mod discord;
 pub mod installer;
+pub mod management;
 pub mod options;
 pub mod platform;
 pub mod render;

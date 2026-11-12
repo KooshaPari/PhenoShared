@@ -1,0 +1,69 @@
+# security-scan.yml — BytePort dedicated security scanning
+#
+# Runs security-focused checks: secret scanning (Gitleaks) and dependency
+# vulnerability auditing (cargo-audit). Complemented by audit.yml which
+# adds CodeQL, TruffleHog, cargo-semver, and SonarCloud.
+#
+# Triggers: PR to main, push to main, weekly schedule, manual dispatch.
+# Concurrency: one in-flight run per ref; new commits cancel old runs.
+
+name: Security Scan
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 4 * * 1'  # Monday 04:17 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    name: Gitleaks (secrets)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  cargo-audit:
+    name: cargo-audit (vulnerabilities)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # `issues: write` is required so rustsec/audit-check can post an issue
+    # when it finds a new advisory. Without it, the action errors out
+    # with "Resource not accessible by integration" and the schedule fails
+    # every Monday (observed 2026-10-05: run 37303263760). `ignore:` carries
+    # the 17 RUSTSEC IDs from `deny.toml` (already justified there) plus
+    # 2 more (glib unsound, anyhow downcast_mut) so the weekly cron doesn't
+    # flood the issue tracker with re-posted warnings. Any *new* advisory
+    # (not in this list) will still surface.
+    permissions:
+      contents: read
+      checks: write
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Run RustSec audit
+        uses: rustsec/audit-check@69366f33c96575abad1ee0dba8212993eecbe998 # v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ignore: 'RUSTSEC-2024-0370,RUSTSEC-2024-0411,RUSTSEC-2024-0412,RUSTSEC-2024-0413,RUSTSEC-2024-0414,RUSTSEC-2024-0415,RUSTSEC-2024-0416,RUSTSEC-2024-0417,RUSTSEC-2024-0418,RUSTSEC-2024-0419,RUSTSEC-2024-0420,RUSTSEC-2024-0429,RUSTSEC-2025-0057,RUSTSEC-2025-0075,RUSTSEC-2025-0080,RUSTSEC-2025-0081,RUSTSEC-2025-0098,RUSTSEC-2025-0100,RUSTSEC-2026-0190'

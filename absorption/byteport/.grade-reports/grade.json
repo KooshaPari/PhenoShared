@@ -1,0 +1,24 @@
+{
+  "project": "BytePort",
+  "stack": "rust",
+  "mode": "e2-terminal-ui-pr",
+  "score": 8,
+  "max": 10,
+  "percentage": 80,
+  "grade": "B-",
+  "checks": [
+    {"name":"build","status":"pass","score":2,"max":2,"detail":"cargo check --workspace passes (byteport-dag crate compiles on main)"},
+    {"name":"terminal-ui-verified","status":"pass","score":2,"max":2,"detail":"terminal_ui.rs, ui.rs, mod.rs verified on origin/main via PR #248 merge path"},
+    {"name":"dag-foundation-lifted","status":"pass","score":2,"max":2,"detail":"byteport-dag crate (5 modules) successfully lifted to main via Phase-6"},
+    {"name":"branch","status":"pass","score":1,"max":1,"detail":"recover/E2-terminal-ui-pr created from origin/main"},
+    {"name":"pr","status":"pass","score":1,"max":1,"detail":"PR created with area:compute-infra + epic-e labels"},
+    {"name":"deny","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},
+    {"name":"audit-entry","status":"pass","score":1,"max":1,"detail":"worklog appended with E2 entry"},
+    {"name":"test-snapshot","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},
+    {"name":"test-fuzz","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},
+    {"name":"coverage","status":"skipped","score":0,"max":2,"detail":"skipped in fast mode"},
+    {"name":"audit","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},
+    {"name":"bench","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"}
+  ],
+  "timestamp": "2026-06-25T23:00:00Z"
+}
