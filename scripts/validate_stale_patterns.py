@@ -60,6 +60,17 @@ RECORD_PREFIXES = (
 )
 RECORD_FILES = ("docs/operations/sd-retire-audit-2026-06-17.md",)
 
+# Verbatim copies absorbed from another repo root. They are not edited in place:
+# the whole point of an absorption tree is that the content arrived unchanged, and
+# the repo already treats these trees as non-authored for prose rules (the
+# happy-path guard skips `docs/absorbed-from-` and `absorption/`). A banned pattern
+# here is a statement about the source project's history, so rewriting the sentence
+# would falsify the record while reformatting it would break the "unchanged" claim.
+# Scoped to the absorbed-root trees only; `docs/absorbed-from-` is not listed
+# because no banned pattern currently occurs there, and adding it would pre-empt a
+# real finding.
+ABSORBED_PREFIXES = ("docs/absorbed-root-docs/",)
+
 FILE_MARKER = "stale-patterns: file-allow="
 MIN_REASON = 12
 FILE_MARKER_WINDOW = 10
@@ -73,6 +84,9 @@ def record_scope(rel: str) -> str | None:
             return f"historical record tree ({prefix})"
     if rel in RECORD_FILES:
         return "historical record (dated audit)"
+    for prefix in ABSORBED_PREFIXES:
+        if rel.startswith(prefix):
+            return f"verbatim absorbed tree ({prefix})"
     return None
 
 

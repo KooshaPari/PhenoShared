@@ -21,11 +21,11 @@ extension-module = ["pyo3/extension-module"]
 pyo3 = { version = "0.29", features = ["abi3-py311", "auto-initialize"] }
 async-trait = "0.1"
 tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros"] }
-spec-decode = { path = "../../perf-core/spec-decode" }
-turbo-quant = { path = "../../perf-core/turbo-quant" }
-concurrent-exec = { path = "../../perf-core/concurrent-exec" }
-tree-attention = { path = "../../perf-core/tree-attention" }
-fleet-proto = { path = "../../perf-core/fleet-proto" }
+spec-decode = { path = "../../absorption/PhenoMLX-temp/perf-core/spec-decode" }
+turbo-quant = { path = "../../absorption/PhenoMLX-temp/perf-core/turbo-quant" }
+concurrent-exec = { path = "../../absorption/PhenoMLX-temp/perf-core/concurrent-exec" }
+tree-attention = { path = "../../absorption/PhenoMLX-temp/perf-core/tree-attention" }
+fleet-proto = { path = "../../absorption/PhenoMLX-temp/perf-core/fleet-proto" }
 
 [profile.release]
 opt-level = 3
