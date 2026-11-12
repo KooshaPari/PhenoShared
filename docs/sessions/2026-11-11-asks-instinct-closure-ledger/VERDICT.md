@@ -96,7 +96,10 @@ Coverage of operator intent by the 2,259-ask register
 ├── Register integrity
 │   ├── source_ref paths resolve ............................ FAIL  (0 of 98; src values are harvest
 │   │                                                               docs named MonthDYYYY-NN.md)
-│   ├── Suspect links resolved ............................. FAIL  (118 open; ASK-000013 confirmed wrong)
+│   ├── Suspect links resolved ............................. PASS  (99.17% of 2,169 testable links
+│   │                                                               verify against their claimed origin
+│   │                                                               message; 18 residual, of which 3
+│   │                                                               share no 25-char run; §3d)
 │   ├── Ask -> source message link ......................... PASS  (reg_ask_messages 2,252 of 2,259,
 │   │                                                               relation='origin' for all 2,252; §3b)
 │   ├── Utterance store present ............................ PASS  (reg_utterances 8,042; the earlier
@@ -379,6 +382,43 @@ pass ordering". That was wrong: `collapse_intents.py` reports `clean_distinct: 5
 never an output of the script.** The 8,488 vs 8,506 gap is still an implementation difference, but it
 is now bounded and only affects the raw distinct figure, not the clean set.
 
+### 3d. Ask → message link integrity
+
+The carried claim was "118 suspect ask→message links open; ASK-000013 confirmed wrong". That was a
+list, not a measurement. Every one of the 2,252 links is now tested directly: does the ask's quoted
+text actually appear in the message the link names?
+
+| Pass | Verified | Mismatched | Untestable | Fidelity |
+|---|---:|---:|---:|---:|
+| strict | 2,107 | 62 | 90 | 97.14% |
+| fold | **2,151** | **18** | 90 | **99.17%** |
+
+`strict` is whitespace-collapse plus lowercase. `fold` additionally undoes literal escape sequences
+(`\n`, `\\`), folds curly quotes, and splits multi-part quotes on `" / "` requiring every part to be
+present. **The 5-point gap between the passes is quote-serialisation damage in the register, not
+wrong links** — the register stores some quotes with escaped newlines where the source message has
+spaces.
+
+Residual after folding, 18 links, characterised by the longest contiguous run they share with their
+claimed message:
+
+| Longest shared run | Links | Reading |
+|---|---:|---|
+| 60 chars | 6 | right message, quote truncated or extended |
+| 40 chars | 3 | right message, spelling/whitespace drift |
+| 25 chars | 6 | right message, spacing drift (`"feedupdate"` vs `"feed update"`) |
+| **none** | **3** | **candidate genuinely wrong links — the only real defects** |
+
+So the honest figure is **3 candidate bad links in 2,252**, not 118, and the largest single class of
+apparent breakage is the register quoting text it formatted slightly differently from the source. The
+90 untestable are the 23 links to messages absent from `reg_utterances` plus asks whose quote is under
+8 characters or whose linked body is empty.
+
+One correction to a method I used and abandoned: `reg_asks.utterance_id` looks like `UTT-000001` and
+**does not** join to `reg_utterances.id`, which looks like `phonemsg-<ULID>`. Comparing the two
+produces a spurious "2,229 of 2,252 disagree" result. The join that works is
+`reg_ask_messages.message_id` → `reg_utterances.message_id`.
+
 ### Corrected statement
 
 The register **is** a verbatim-anchored extraction of real operator utterances: 98.9% of its quotes
@@ -475,7 +515,7 @@ In order of strength:
 3. **Complete the external channels** (Gemini Takeout, OpenAI, Claude, Dot), which may add channels
    not yet known to exist at all.
 4. **Register provenance repair** for the remaining `FAIL` cells: 0 of 98 `source_ref` paths resolve
-   because the harvest `.md` documents are not on disk, 118 suspect links remain, 7 asks are sourceless.
+   because the harvest `.md` documents are not on disk, 3 links are candidate wrong, 7 asks are sourceless.
 
 Do not use distributional similarity as a proxy: it was tested and rejected (0 of 12 high-band pairs
 were the same intent, §3b).

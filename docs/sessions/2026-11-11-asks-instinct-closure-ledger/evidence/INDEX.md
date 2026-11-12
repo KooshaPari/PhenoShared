@@ -131,3 +131,20 @@ Corrections to figures this directory previously carried:
   in iMessage. It is an iMessage subset.
 - `29.4%` register/union is superseded by **15.0%** citation-based coverage over a union that is
   11,752, not 7,661.
+
+## Addendum 3 — ask→message link verification (2026-11-12T02:58Z)
+
+The carried claim was "118 suspect ask→message links open". Every link is now tested.
+
+| Artifact | What it establishes |
+|---|---|
+| `verify_ask_links.py` | Tests each `reg_ask_messages` link: does the ask's quoted text appear in the message it names? Two normalisation passes (strict / fold) so quote-serialisation damage is separated from wrong links. |
+| `ask_link_verification.json` | strict 2,107 verified / 62 mismatched (97.14%); fold 2,151 / 18 (**99.17%**). Residual 18 = 6 sharing 60 chars, 3 at 40, 6 at 25, and **3 sharing nothing** — the only candidate genuinely wrong links. |
+
+Method corrections recorded here:
+
+- `reg_asks.utterance_id` (`UTT-000001`) does **not** join to `reg_utterances.id` (`phonemsg-<ULID>`).
+  Comparing them yields a spurious "2,229 disagree". The working join is
+  `reg_ask_messages.message_id` → `reg_utterances.message_id`.
+- The 5-point strict→fold gap is the register storing escaped `\n` where the source message has a
+  space, plus `" / "`-joined multi-part quotes. It is a defect in quote serialisation, not in linkage.
