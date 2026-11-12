@@ -9,14 +9,13 @@ Patterns are intentionally high-confidence to avoid blocking ordinary docs.
 from __future__ import annotations
 
 import argparse
-from collections import defaultdict
 import fnmatch
 import os
 import re
 import subprocess
 import sys
+from collections import defaultdict
 from pathlib import Path
-
 
 DENIED_PATHS = (
     "docs/curated-prompts/**",
@@ -58,13 +57,55 @@ CONTENT_PATTERNS = (
     ("AWS access key", re.compile(r"AKIA[0-9A-Z]{16}")),
     ("Discord bot token", re.compile(r"[MN][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}")),
     ("private key block", re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----")),
-    ("HTTP authorization header", re.compile(r"(?im)^\s*authorization:\s*(bearer|basic)\s+[A-Za-z0-9._~+/=-]{12,}")),
+    (
+        "HTTP authorization header",
+        re.compile(
+            r"(?im)^\s*authorization:\s*(bearer|basic)\s+[A-Za-z0-9._~+/=-]{12,}"
+        ),
+    ),
     ("cookie header", re.compile(r"(?im)^\s*cookie:\s*[^=\s;]{2,}=[^;\n]{8,}")),
-    ("OAuth refresh token field", re.compile(r"(?i)\brefresh[_-]?token\b\s*[:=]\s*['\"]?[A-Za-z0-9._~+/=-]{20,}")),
-    ("US SSN", re.compile(r"\b(?!000|666|9\d\d)\d{3}[- ](?!00)\d{2}[- ](?!0000)\d{4}\b")),
-    ("credit card number", re.compile(r"(?i)\b(?:card|credit|cc|pan|visa|mastercard|amex)\b.{0,40}\b(?:\d[ -]*?){13,19}\b|\b(?:\d[ -]*?){13,19}\b.{0,40}\b(?:card|credit|cc|pan|visa|mastercard|amex)\b")),
-    ("raw chat export marker", re.compile(r"(?i)\b(conversation_id|message_author|chatgpt|claude\.ai|cursor chat|prompt history)\b.{0,80}\b(content|messages|transcript)\b")),
+    (
+        "OAuth refresh token field",
+        re.compile(r"(?i)\brefresh[_-]?token\b\s*[:=]\s*['\"]?[A-Za-z0-9._~+/=-]{20,}"),
+    ),
+    (
+        "US SSN",
+        re.compile(r"\b(?!000|666|9\d\d)\d{3}[- ](?!00)\d{2}[- ](?!0000)\d{4}\b"),
+    ),
+    (
+        "credit card number",
+        re.compile(
+            r"(?i)\b(?:card|credit|cc|pan|visa|mastercard|amex)\b.{0,40}\b(?:\d[ -]*?){13,19}\b|\b(?:\d[ -]*?){13,19}\b.{0,40}\b(?:card|credit|cc|pan|visa|mastercard|amex)\b"
+        ),
+    ),
+    (
+        "raw chat export marker",
+        re.compile(
+            r"(?i)\b(conversation_id|message_author|chatgpt|claude\.ai|cursor chat|prompt history)\b.{0,80}\b(content|messages|transcript)\b"
+        ),
+    ),
 )
+
+# Literal values that are unambiguously placeholders, read one by one. This
+# mirrors BENIGN_VALUES in scripts/scan_absorption_secrets.py so the two guards
+# agree on what a fake looks like: an AWS documentation example key, a fake
+# GitHub token spelled out in a scanner's own benign list, and two BytePort
+# link-handler fixtures. It is a VALUE allowlist, not a path allowlist: a real
+# credential added to the same file is still reported.
+BENIGN_VALUES = frozenset(
+    {
+        "AKIAIOSFODNN7EXAMPLE",  # AWS documentation example key
+        "AKIAABCDEFGHIJKLMNOP",  # obvious placeholder, sequential alphabet
+        "ghp_abcdefghijklmnopqrstuvwxyz0123456789",  # fake, in a scanner's list
+        "sk-legacy-camelcase-key",  # BytePort link-handler test fixture
+        "sk-canonical-key",  # BytePort link-handler test fixture
+    }
+)
+
+# `**/.env.*` above is denied by path because a committed env file usually means
+# a leaked value. A template is the one shape a repository needs to commit, so
+# templates are scanned in full instead of blocked (see main()).
+ENV_TEMPLATE_PATHS = ("**/.env.example", "**/.env.sample", "**/.env.template")
 
 SELF_ALLOWED_LABELS = {
     "scripts/secret-guard.py": {"raw chat export marker"},
@@ -84,7 +125,9 @@ SELF_ALLOWED_LABELS = {
     "researchledger/ingest/cursor_chat_summaries.py": {"raw chat export marker"},
     "researchledger/ingest/forge_migrate_to_research.py": {"raw chat export marker"},
     "researchledger/ingest/ledger_presets.py": {"raw chat export marker"},
-    "researchledger/ingest/research_ledger_init/sources_harness.py": {"raw chat export marker"},
+    "researchledger/ingest/research_ledger_init/sources_harness.py": {
+        "raw chat export marker"
+    },
     "researchledger/ingest/scripts/goal1_normalize.py": {"raw chat export marker"},
     # The only match is a two-character prefix followed by the rest of an
     # ordinary hyphenated filename token, inside this file's report text about
@@ -179,7 +222,12 @@ def changed_files(args: argparse.Namespace) -> list[str]:
         return [normalize(path) for path in args.files]
 
     if args.staged:
-        return [normalize(path) for path in run_git(["diff", "--cached", "--name-only", "--diff-filter=ACMRT"])]
+        return [
+            normalize(path)
+            for path in run_git(
+                ["diff", "--cached", "--name-only", "--diff-filter=ACMRT"]
+            )
+        ]
 
     if args.since_ref:
         return [
@@ -189,11 +237,26 @@ def changed_files(args: argparse.Namespace) -> list[str]:
             )
         ]
 
-    return [normalize(path) for path in run_git(["diff", "--name-only", "--diff-filter=ACMRT", "HEAD~1", "HEAD"])]
+    return [
+        normalize(path)
+        for path in run_git(
+            ["diff", "--name-only", "--diff-filter=ACMRT", "HEAD~1", "HEAD"]
+        )
+    ]
 
 
 def is_denied_path(path: str) -> bool:
     return any(fnmatch.fnmatchcase(path, pattern) for pattern in DENIED_PATHS)
+
+
+def is_env_template(path: str) -> bool:
+    """True for a `.env.example`-style template.
+
+    A template is committed on purpose, so it is scanned rather than denied by
+    path. The scan reads the whole file, because the diff only carries added
+    lines and a value committed earlier would otherwise slip past.
+    """
+    return any(fnmatch.fnmatchcase(path, pattern) for pattern in ENV_TEMPLATE_PATHS)
 
 
 def scan_text(text: str, normalized_path: str) -> list[str]:
@@ -204,11 +267,15 @@ def scan_text(text: str, normalized_path: str) -> list[str]:
             continue
 
         if label == "credit card number":
-            if any(luhn_valid(match.group(0)) for match in pattern.finditer(text)):
+            if any(
+                luhn_valid(match.group(0))
+                for match in pattern.finditer(text)
+                if match.group(0) not in BENIGN_VALUES
+            ):
                 findings.append(label)
             continue
 
-        if pattern.search(text):
+        if any(match.group(0) not in BENIGN_VALUES for match in pattern.finditer(text)):
             findings.append(label)
     return findings
 
@@ -255,7 +322,9 @@ def changed_hunks(args: argparse.Namespace) -> dict[str, str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Block changed files that look like secrets or prompt dumps.")
+    parser = argparse.ArgumentParser(
+        description="Block changed files that look like secrets or prompt dumps."
+    )
     parser.add_argument("--staged", action="store_true", help="Scan staged files.")
     parser.add_argument("--since-ref", help="Scan changes from this ref to HEAD.")
     parser.add_argument("files", nargs="*", help="Explicit files to scan.")
@@ -273,15 +342,18 @@ def main() -> int:
     failures: list[str] = []
 
     for path in paths:
-        if is_denied_path(path):
+        if is_denied_path(path) and not is_env_template(path):
             failures.append(f"{path}: blocked path for secrets/PII risk")
             continue
 
-        findings = (
-            scan_file(path)
-            if args.files
-            else scan_text(changed_content.get(path, ""), path)
-        )
+        if is_env_template(path):
+            findings = scan_file(path) or scan_text(changed_content.get(path, ""), path)
+        else:
+            findings = (
+                scan_file(path)
+                if args.files
+                else scan_text(changed_content.get(path, ""), path)
+            )
         if findings:
             labels = ", ".join(sorted(set(findings)))
             failures.append(f"{path}: potential secret pattern ({labels})")
@@ -290,7 +362,9 @@ def main() -> int:
         print("secret-guard blocked this change. No secret values are printed.")
         for failure in failures:
             print(f"- {failure}")
-        print("Use sanitized fixtures/placeholders and keep prompt/session dumps out of git.")
+        print(
+            "Use sanitized fixtures/placeholders and keep prompt/session dumps out of git."
+        )
         return 1
 
     print(f"secret-guard: checked {len(paths)} changed file(s)")

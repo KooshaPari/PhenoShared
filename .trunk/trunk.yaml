@@ -45,6 +45,24 @@ lint:
         - json
         - graphql
         - prettier_supported_configs
+    # Every trunk command runs in a copy_targets sandbox, so gitleaks' cwd is a
+    # temp directory and the repository's `.gitleaks.toml` at the root was never
+    # discovered. Its allowlists were therefore dead in this lane, while
+    # security.yml honoured the same file through GITLEAKS_CONFIG. Observed
+    # 2026-11-12 on PR #937: `trunk check` flagged the AWS documentation example
+    # key and two test fixtures that .gitleaks.toml already allowlists. Pass the
+    # config explicitly so both lanes read one file.
+    - name: gitleaks
+      files: [ALL]
+      commands:
+        - name: lint
+          run: gitleaks detect --no-git --source=${target} --config=${workspace}/.gitleaks.toml --exit-code=101 -f sarif -r "${tmpfile}"
+          output: sarif
+          read_output_from: tmp_file
+          success_codes: [0, 101]
+          sandbox_type: copy_targets
+          cache_results: true
+          allow_empty_files: false
   enabled:
     - actionlint@1.7.12
     - bandit@1.9.4
