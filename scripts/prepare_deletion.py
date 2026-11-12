@@ -60,9 +60,72 @@ def verify(repo: str) -> tuple[bool, str]:
     return True, "%d/%d files" % (data["covered"], data["remote_files"])
 
 
+def store_file_via_git(registry: str, owner: str, repo: str, kind: str,
+                       name: str, data: bytes) -> tuple[bool, str]:
+    """Fallback for payloads too large for the Contents API.
+
+    The blob API rejects anything over roughly 100 MB, and base64 inflates by a
+    third, so a large bundle can never go that way. Cloning the registry and
+    pushing the file is slower but has no practical ceiling.
+    """
+    tmp = tempfile.mkdtemp(prefix="regpush-")
+    clone = os.path.join(tmp, "registry")
+    # A plain clone of the registry is ~200 MB and fails here with "early EOF".
+    # A blobless partial clone fetches only commit and tree metadata, so we can
+    # add one file and push without downloading the existing content.
+    code, _, err = sh(["gh", "repo", "clone", "%s/%s" % (owner, registry), clone,
+                       "--", "--filter=blob:none", "--no-checkout"])
+    if code != 0:
+        return False, "clone failed: %s" % err.decode("utf-8", "replace")[:120]
+
+    src = os.path.join(tmp, name)
+    with open(src, "wb") as fh:
+        fh.write(data)
+    rel = "repos/%s/%s/%s" % (repo, kind, name)
+
+    def g(*a) -> tuple[int, str, str]:
+        c, o, e = sh(["git", "-C", clone] + list(a))
+        return c, o.decode("utf-8", "replace").strip(), e.decode("utf-8", "replace").strip()
+
+    c, blob, e = g("hash-object", "-w", src)
+    if c != 0:
+        return False, "hash-object failed: %s" % e[:100]
+
+    # Plumbing only: no working tree, no index juggling. Build the tree from the
+    # remote commit, graft our blob in, commit against that parent, push.
+    for attempt in range(5):
+        c, _, e = g("fetch", "--depth", "1", "origin", "main")
+        if c != 0:
+            return False, "fetch failed: %s" % e[:100]
+        g("read-tree", "FETCH_HEAD")
+        c, _, e = g("update-index", "--add", "--cacheinfo", "100644,%s,%s" % (blob, rel))
+        if c != 0:
+            return False, "update-index failed: %s" % e[:100]
+        c, tree, e = g("write-tree")
+        if c != 0:
+            return False, "write-tree failed: %s" % e[:100]
+        c, commit, e = g("commit-tree", tree, "-p", "FETCH_HEAD",
+                         "-m", "chore(preserve): %s/%s/%s" % (repo, kind, name))
+        if c != 0:
+            return False, "commit-tree failed: %s" % e[:100]
+        c, _, e = g("push", "origin", "%s:main" % commit)
+        if c == 0:
+            return True, commit[:12]
+        if "too large" in e.lower() or "exceeds" in e.lower():
+            return False, "server rejected size: %s" % e[:120]
+    return False, "push failed: %s" % e[:120]
+
+
 def store_file(registry: str, owner: str, repo: str, kind: str,
                name: str, data: bytes) -> tuple[bool, str]:
-    """Commit one file into <registry>/repos/<repo>/<kind>/<name> via the API."""
+    """Commit one file into <registry>/repos/<repo>/<kind>/<name>.
+
+    Small files go through the Contents API. Large ones fall back to a clone and
+    push, because the blob API caps out around 100 MB and base64 inflates the
+    payload by a third.
+    """
+    if len(data) > 30 * 1024 * 1024:
+        return store_file_via_git(registry, owner, repo, kind, name, data)
     target = "%s/%s" % (owner, registry)
     code, out = gh_api("repos/%s/git/ref/heads/main" % target)
     if code != 0:
@@ -78,7 +141,11 @@ def store_file(registry: str, owner: str, repo: str, kind: str,
     code, out, err = sh(["gh", "api", "repos/%s/git/blobs" % target, "-X", "POST", "--input", "-"],
                         body.encode())
     if code != 0:
-        return False, "blob failed: %s" % err.decode("utf-8", "replace")[:100]
+        detail = err.decode("utf-8", "replace")
+        # Do not guess at a size ceiling; react to the server's own refusal.
+        if "too large" in detail.lower() or "payload" in detail.lower():
+            return store_file_via_git(registry, owner, repo, kind, name, data)
+        return False, "blob failed: %s" % detail[:100]
     blob = json.loads(out.decode("utf-8", "replace"))["sha"]
 
     body = json.dumps({"base_tree": base_tree, "tree": [{
@@ -109,21 +176,77 @@ def store_file(registry: str, owner: str, repo: str, kind: str,
     return True, commit[:12]
 
 
-def export_bundle(owner: str, repo: str) -> tuple[bool, bytes | str]:
+def export_bundle(owner: str, repo: str) -> tuple[bool, str, int]:
+    """Create and verify a full-history bundle. Returns (ok, path-or-error, size).
+
+    Returning the path rather than the bytes matters: a large repository makes a
+    bundle too big to hold alongside the fetch buffer, and often too big to store
+    at all, so the caller decides how to preserve it.
+    """
     tmp = tempfile.mkdtemp(prefix="preserve-")
     path = os.path.join(tmp, "%s.bundle" % repo)
     clone = os.path.join(tmp, "clone")
-    code, _, err = sh(["gh", "repo", "clone", "%s/%s" % (owner, repo), clone])
+    code, _, err = sh(["gh", "repo", "clone", "%s/%s" % (owner, repo), clone, "--", "--mirror"])
     if code != 0:
-        return False, "clone failed (repo may already be gone): %s" % err.decode("utf-8", "replace")[:100]
+        return False, "clone failed (repo may already be gone): %s" % err.decode("utf-8", "replace")[:100], 0
     code, _, err = sh(["git", "-C", clone, "bundle", "create", path, "--all"])
     if code != 0:
-        return False, "bundle failed: %s" % err.decode("utf-8", "replace")[:100]
-    code, _, err = sh(["git", "-C", clone, "bundle", "verify", path])
+        return False, "bundle failed: %s" % err.decode("utf-8", "replace")[:100], 0
+    code, _, _ = sh(["git", "-C", clone, "bundle", "verify", path])
     if code != 0:
-        return False, "bundle verify failed"
-    with open(path, "rb") as fh:
-        return True, fh.read()
+        return False, "bundle verify failed", 0
+    return True, path, os.path.getsize(path)
+
+
+def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, str]:
+    """Preserve full history as git refs inside the private registry.
+
+    A bundle is a single file, and GitHub rejects any file over 100 MB, so a
+    repository whose history exceeds that cannot be preserved as a bundle at
+    all. Pushing the real git objects into a private ref namespace has no such
+    ceiling, keeps every commit reachable, and restores with a plain fetch:
+
+        git fetch <registry> '+refs/preserved/<repo>/*:refs/heads/*'
+
+    The push is verified by fetching the namespace back and comparing every
+    branch tip, so a partial upload cannot pass as preserved.
+    """
+    tmp = tempfile.mkdtemp(prefix="refpush-")
+    mirror = os.path.join(tmp, "mirror.git")
+    code, _, err = sh(["gh", "repo", "clone", "%s/%s" % (owner, repo), mirror, "--", "--mirror"])
+    if code != 0:
+        return False, "mirror clone failed: %s" % err.decode("utf-8", "replace")[:100]
+
+    url = "https://github.com/%s/%s.git" % (owner, registry)
+    heads = "+refs/heads/*:refs/preserved/%s/heads/*" % repo
+    tags = "+refs/tags/*:refs/preserved/%s/tags/*" % repo
+    code, _, err = sh(["git", "-C", mirror, "push", url, heads, tags])
+    if code != 0:
+        return False, "ref push failed: %s" % err.decode("utf-8", "replace")[:120]
+
+    def refs(where: str) -> dict[str, str]:
+        _, out, _ = sh(["git", "-C", where, "for-each-ref", "--format=%(refname) %(objectname)"])
+        return dict(line.split(" ", 1) for line in out.decode("utf-8", "replace").splitlines() if " " in line)
+
+    expected = {m.split("/", 2)[2]: sha for m, sha in refs(mirror).items()
+                if m.startswith("refs/heads/") or m.startswith("refs/tags/")}
+    check = os.path.join(tmp, "check")
+    os.makedirs(check, exist_ok=True)
+    for args in (["init", "-q"], ["remote", "add", "origin", url],
+                 ["fetch", "-q", "origin", "+refs/preserved/%s/*:refs/restored/*" % repo]):
+        code, _, err = sh(["git", "-C", check] + args)
+        if code != 0:
+            return False, "verify fetch failed: %s" % err.decode("utf-8", "replace")[:100]
+    actual = {m.split("/", 2)[2]: sha for m, sha in refs(check).items()
+              if m.startswith("refs/restored/heads/") or m.startswith("refs/restored/tags/")}
+    if actual != expected:
+        missing = sorted(set(expected) - set(actual))
+        differing = sorted(k for k in set(expected) & set(actual) if expected[k] != actual[k])
+        return False, "ref round-trip mismatch: %d missing, %d differing" % (len(missing), len(differing))
+
+    _, commits, _ = sh(["git", "-C", mirror, "rev-list", "--all", "--count"])
+    return True, "%d refs, %s commits at refs/preserved/%s/" % (
+        len(expected), commits.decode().strip(), repo)
 
 
 def export_threads(owner: str, repo: str) -> tuple[bool, dict]:
@@ -168,18 +291,49 @@ def main() -> int:
             continue
         print("   verified %s" % detail)
 
-        ok, payload = export_bundle(args.owner, repo)
+        ok, path, size = export_bundle(args.owner, repo)
         if not ok:
-            print("   REFUSED  history bundle: %s" % payload)
+            print("   REFUSED  history bundle: %s" % path)
             failures += 1
             continue
-        ok, ref = store_file(args.registry, args.owner, repo, "history",
-                             "%s.bundle" % repo, payload)
-        if not ok:
-            print("   REFUSED  bundle store: %s" % ref)
-            failures += 1
-            continue
-        print("   bundled  %s (%.1f KB)" % (ref, len(payload) / 1024.0))
+
+        # 100 MB is a hard per-file limit on GitHub. Switch to refs while there
+        # is still margin rather than discovering the ceiling mid-push.
+        if size > 90 * 1024 * 1024:
+            ok, detail = store_history_as_refs(args.registry, args.owner, repo)
+            if not ok:
+                print("   REFUSED  history refs: %s" % detail)
+                failures += 1
+                continue
+            print("   history  %s (%.1f MB, too big for a bundle)"
+                  % (detail, size / 1048576.0))
+            note = (
+                "# %s\n\n"
+                "Full history is preserved as git refs, not as a bundle: the history is\n"
+                "%.1f MB and GitHub rejects files over 100 MB.\n\n"
+                "Restore with:\n\n"
+                "    git clone --mirror https://github.com/%s/%s.git restored.git\n"
+                "    cd restored.git\n"
+                "    git fetch origin '+refs/preserved/%s/*:refs/heads/*'\n\n"
+                "Every branch and tag tip was verified against the source after the push.\n"
+            ) % (repo, size / 1048576.0, args.owner, args.registry, repo)
+            ok, ref = store_file(args.registry, args.owner, repo, "history",
+                                 "PRESERVED-AS-REFS.md", note.encode())
+            if not ok:
+                print("   REFUSED  history note: %s" % ref)
+                failures += 1
+                continue
+        else:
+            with open(path, "rb") as fh:
+                payload = fh.read()
+            os.unlink(path)
+            ok, ref = store_file(args.registry, args.owner, repo, "history",
+                                 "%s.bundle" % repo, payload)
+            if not ok:
+                print("   REFUSED  bundle store: %s" % ref)
+                failures += 1
+                continue
+            print("   bundled  %s (%.1f KB)" % (ref, size / 1024.0))
 
         ok, threads = export_threads(args.owner, repo)
         if not ok:
