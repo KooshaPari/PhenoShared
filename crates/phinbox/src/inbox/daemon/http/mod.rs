@@ -234,7 +234,7 @@ fn handle_connection(
                     },
                     _ => match super::form::submit_answer(inbox_root, &id, &buf) {
                         Ok(()) => {
-                            let deferred = load(inbox_root, &id).ok().is_some_and(|r| {
+                            let deferred = load(inbox_root, &id).is_ok_and(|r| {
                                 matches!(
                                     r.response,
                                     Some(crate::spec::ElicitResponse::Deferred { .. })

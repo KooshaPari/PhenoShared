@@ -184,12 +184,10 @@ pub fn start_daemon(cfg: DaemonConfig) -> Result<DaemonHandle, ElicitError> {
         thread::Builder::new()
             .name("phinbox-management".into())
             .spawn(move || {
-                let store = match crate::management::Store::open(root.join("management.sqlite")) {
-                    Ok(store) => store,
-                    Err(_) => {
-                        warn!("management ledger unavailable");
-                        return;
-                    },
+                let Ok(store) = crate::management::Store::open(root.join("management.sqlite"))
+                else {
+                    warn!("management ledger unavailable");
+                    return;
                 };
                 while !stop.load(Ordering::SeqCst) {
                     if store.observe_inbox(&root).is_err() {

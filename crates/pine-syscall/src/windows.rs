@@ -42,7 +42,6 @@ impl std::error::Error for WindowsSyscallError {}
 /// naming lint would silently rename a syscall-translation vocabulary and make
 /// the mapping back to the documented NT API ambiguous, so the shared prefix is
 /// deliberate and the lint is suppressed here only.
-#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[allow(clippy::enum_variant_names)]
 pub enum WindowsSyscallName {

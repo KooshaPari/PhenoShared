@@ -133,7 +133,20 @@ pub fn seeded_app_with_use_case_kinds() -> App {
     ])
 }
 
-fn seed_with_models(rows: &[(&str, &str, &str, &str, &str, &str, &str, &str)]) -> App {
+/// One `(id, name, org, kind, family, arch, quants, card_snippet)` row of the
+/// seed catalogue. Named so `seed_with_models` does not trip `type_complexity`.
+type ModelRow<'a> = (
+    &'a str,
+    &'a str,
+    &'a str,
+    &'a str,
+    &'a str,
+    &'a str,
+    &'a str,
+    &'a str,
+);
+
+fn seed_with_models(rows: &[ModelRow<'_>]) -> App {
     let dir = tempfile::tempdir().expect("tempdir");
     let store = TantivyStore::open(dir.path()).expect("open tantivy");
     for row in rows {

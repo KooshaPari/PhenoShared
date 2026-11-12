@@ -93,7 +93,7 @@ fn oversized_input_produces_canonical_deny() {
     // sees input.len() > LIMIT and emits the canonical deny envelope.
     let valid = fixture_request();
     let pad_target: usize = 1024 * 1024; // STDIN_LIMIT
-    let padding = pad_target.saturating_sub(valid.len()).max(0);
+    let padding = pad_target.saturating_sub(valid.len());
     let mut payload = Vec::with_capacity(pad_target + 1);
     payload.extend_from_slice(valid.as_bytes());
     payload.extend(std::iter::repeat(b' ').take(padding));
@@ -163,12 +163,12 @@ fn malformed_input_does_not_create_pending_request() {
     // Verify no pending request was created.
     let inbox = tmp.path().join("inbox");
     if inbox.exists() {
-        let count = std::fs::read_dir(&inbox).map(|d| d.count()).unwrap_or(0);
+        let count = std::fs::read_dir(&inbox).map_or(0, |d| d.count());
         assert_eq!(count, 0, "malformed input must not leave a pending request");
     }
     let answered = tmp.path().join("answered");
     if answered.exists() {
-        let count = std::fs::read_dir(&answered).map(|d| d.count()).unwrap_or(0);
+        let count = std::fs::read_dir(&answered).map_or(0, |d| d.count());
         assert_eq!(
             count, 0,
             "malformed input must not leave an answered record"

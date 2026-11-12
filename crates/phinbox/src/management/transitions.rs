@@ -56,8 +56,8 @@ impl Store {
             Action::Defer => item.status = Status::Deferred,
             Action::Close => item.status = Status::Closed,
             Action::SetStatus(status) => item.status = *status,
-            Action::SetLane(lane) => item.lane = lane.clone(),
-            Action::SetEta(eta) => item.eta = eta.clone(),
+            Action::SetLane(lane) => item.lane.clone_from(lane),
+            Action::SetEta(eta) => item.eta.clone_from(eta),
         }
         item.revision = item
             .revision

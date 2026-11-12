@@ -1,9 +1,15 @@
 //! Action implementations for the XCUI helper.
 
+// Every consumer of these imports lives in a `#[cfg(target_os = "macos")]`
+// fn, so on other hosts they are unused and `clippy --fix` deletes them - which
+// then breaks the macOS build. Gate them with their callers instead.
+#[cfg(target_os = "macos")]
 use std::process::Command;
 
 use super::HelperCommand;
+#[cfg(target_os = "macos")]
 use crate::cli::which_bin;
+#[cfg(target_os = "macos")]
 use crate::ios::xcui_bridge::AppleScriptXcuiBridge;
 
 /// Result of a successful helper op (`viewport` may carry stdout).
