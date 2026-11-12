@@ -450,7 +450,7 @@ impl SessionStore {
             }
             let surface_id = observation.surface.id.clone();
             let candidate = (observed_at, observation.seq, observation);
-            let replace = latest.get(&surface_id).map_or(true, |current| {
+            let replace = latest.get(&surface_id).is_none_or(|current| {
                 (candidate.0, candidate.1) > (current.0, current.1)
             });
             if replace {
