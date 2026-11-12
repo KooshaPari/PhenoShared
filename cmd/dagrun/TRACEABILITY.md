@@ -123,3 +123,18 @@ change: stop clearing `Owner` and add a separate lease field, or emit a
 (`cmd_report.go:56-77`). The record is unaffected; only the help text is wrong.
 
 Status: draft, authored 2026-11-12T12:27Z from module state at commit 128b9f1982a96fe9e90f8c0130176d84b862a52a
+
+## 7. Measured gap: the agent-driven path emits no trace events
+
+The probe in `docs/evidence/stage-gate-probe-2026-11-12.md` drove `next`/`claim`/`done`
+end to end: the gate refused an absent artifact (exit 1) and accepted a present one
+(exit 0), `validate` reported `0 broken`, `status` reported `progress 2/2` — and
+`dagrun trace` printed `no events yet` with an empty `.dagrun/trace/`.
+The trace producers are in `internal/run/`: `run.start`/`run.end` (`run.go:139,337`),
+`node.claim` (`run.go:271`), `node.spawn` (`exec.go:135`), `node.exit` (`exec.go:158`),
+`node.<status>` (`run.go:577`), lease events (`run.go:147`; `exec.go:364`).
+The agent-driven commands do not go through that orchestrator — `dagrun claim` calls
+`store.Claim` (`cmd_node.go:14`), `dagrun done` calls `verify.PlanNode` then
+`store.Force` (`cmd_node.go:53`) — so neither path emits a trace event.
+Consequence: the traceability guarantee currently covers orchestrator-driven runs and
+not agent-driven ones, which is the mode delegated agents and panes use.
