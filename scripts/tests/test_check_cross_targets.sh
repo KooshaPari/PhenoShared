@@ -36,7 +36,7 @@ x86_64-pc-windows-gnu
 x86_64-apple-darwin"
 
 _make_rustup() {
-    cat >"${FAKE_BIN}/rustup" <<EOF
+	cat >"${FAKE_BIN}/rustup" <<EOF
 #!/usr/bin/env bash
 if [ "\${1:-}" = "target" ] && [ "\${2:-}" = "list" ] && [ "\${3:-}" = "--installed" ]; then
     printf '%s\n' "${_matrix}" "${_host}"
@@ -45,12 +45,12 @@ fi
 echo "fake rustup: unsupported argv \$*" >&2
 exit 1
 EOF
-    chmod +x "${FAKE_BIN}/rustup"
+	chmod +x "${FAKE_BIN}/rustup"
 }
 
 _make_rustc() {
-    # $1 = exit code of `rustc -vV`; $2 = whether to emit a host line
-    cat >"${FAKE_BIN}/rustc" <<EOF
+	# $1 = exit code of `rustc -vV`; $2 = whether to emit a host line
+	cat >"${FAKE_BIN}/rustc" <<EOF
 #!/usr/bin/env bash
 if [ "\${1:-}" = "-vV" ]; then
     echo "rustc 1.99.0 (fake)"
@@ -64,21 +64,21 @@ if [ "\${1:-}" = "--version" ]; then
 fi
 exit 0
 EOF
-    chmod +x "${FAKE_BIN}/rustc"
+	chmod +x "${FAKE_BIN}/rustc"
 }
 
 _make_cargo() {
-    # $1 = "ok" (exit 0), "diag" (exit 1 with error[E0308]), "envgap"
-    case "$1" in
-        ok)
-            cat >"${FAKE_BIN}/cargo" <<'EOF'
+	# $1 = "ok" (exit 0), "diag" (exit 1 with error[E0308]), "envgap"
+	case "$1" in
+	ok)
+		cat >"${FAKE_BIN}/cargo" <<'EOF'
 #!/usr/bin/env bash
 echo "    Finished `dev` profile [unoptimized + debuginfo] target(s)"
 exit 0
 EOF
-            ;;
-        diag)
-            cat >"${FAKE_BIN}/cargo" <<'EOF'
+		;;
+	diag)
+		cat >"${FAKE_BIN}/cargo" <<'EOF'
 #!/usr/bin/env bash
 echo "   Compiling demo v0.1.0"
 echo "error[E0308]: mismatched types"
@@ -88,10 +88,10 @@ echo "2 |     1u8"
 echo "  |     ^^^ expected `u32`, found `u8`"
 exit 101
 EOF
-            ;;
-        envgap)
-            # cc-rs style, no rustc diagnostic anywhere in the output.
-            cat >"${FAKE_BIN}/cargo" <<'EOF'
+		;;
+	envgap)
+		# cc-rs style, no rustc diagnostic anywhere in the output.
+		cat >"${FAKE_BIN}/cargo" <<'EOF'
 #!/usr/bin/env bash
 echo "   Compiling demo v0.1.0"
 echo "error: failed to run custom build command for `demo v0.1.0`"
@@ -99,39 +99,43 @@ echo "  error occurred in cc-rs: failed to find tool \"x86_64-linux-gnu-gcc\": N
 echo "warning: build failed, waiting for other jobs to finish..."
 exit 101
 EOF
-            ;;
-    esac
-    chmod +x "${FAKE_BIN}/cargo"
+		;;
+	*)
+		_log "unknown fake cargo mode: $1"
+		exit 1
+		;;
+	esac
+	chmod +x "${FAKE_BIN}/cargo"
 }
 
 _reset_fakes() {
-    rm -f "${FAKE_BIN}/rustup" "${FAKE_BIN}/rustc" "${FAKE_BIN}/cargo"
+	rm -f "${FAKE_BIN}/rustup" "${FAKE_BIN}/rustc" "${FAKE_BIN}/cargo"
 }
 
 _failures=0
 
 # run_case <name> <expected-exit> <expected-stdout-substring>...
 run_case() {
-    local name="$1" want_rc="$2"
-    shift 2
-    local out rc=0
-    out="$(PATH="${FAKE_BIN}:${BASE_PATH}" bash "${CHECK}" demo 2>&1)" || rc=$?
-    if [ "$rc" -ne "$want_rc" ]; then
-        _log "FAIL ${name}: exit ${rc}, expected ${want_rc}"
-        printf '%s\n' "$out" | sed 's/^/        /' >&2
-        _failures=$((_failures + 1))
-        return
-    fi
-    local needle
-    for needle in "$@"; do
-        if ! printf '%s\n' "$out" | grep -qF "$needle"; then
-            _log "FAIL ${name}: output missing '${needle}'"
-            printf '%s\n' "$out" | sed 's/^/        /' >&2
-            _failures=$((_failures + 1))
-            return
-        fi
-    done
-    _log "ok   ${name} (exit ${rc})"
+	local name="$1" want_rc="$2"
+	shift 2
+	local out rc=0
+	out="$(PATH="${FAKE_BIN}:${BASE_PATH}" bash "${CHECK}" demo 2>&1)" || rc=$?
+	if [[ ${rc} -ne ${want_rc} ]]; then
+		_log "FAIL ${name}: exit ${rc}, expected ${want_rc}"
+		printf '%s\n' "${out}" | sed 's/^/        /' >&2
+		_failures=$((_failures + 1))
+		return
+	fi
+	local needle
+	for needle in "$@"; do
+		if ! printf '%s\n' "${out}" | grep -qF "${needle}"; then
+			_log "FAIL ${name}: output missing '${needle}'"
+			printf '%s\n' "${out}" | sed 's/^/        /' >&2
+			_failures=$((_failures + 1))
+			return
+		fi
+	done
+	_log "ok   ${name} (exit ${rc})"
 }
 
 # --- 1. rustc missing (rustup + cargo present): the reported defect ----------
@@ -139,17 +143,17 @@ _reset_fakes
 _make_rustup
 _make_cargo ok
 run_case "rustc missing -> SKIP, never a pass" 2 \
-    "SKIP  toolchain" "rustc not found on PATH"
+	"SKIP  toolchain" "rustc not found on PATH"
 assert_no_check() {
-    local name="$1" out rc=0
-    out="$(PATH="${FAKE_BIN}:${BASE_PATH}" bash "${CHECK}" demo 2>&1)" || rc=$?
-    if printf '%s\n' "$out" | grep -q '^CHECK '; then
-        _log "FAIL ${name}: a CHECK line was emitted with no usable toolchain"
-        printf '%s\n' "$out" | sed 's/^/        /' >&2
-        _failures=$((_failures + 1))
-    else
-        _log "ok   ${name} (no CHECK line) (exit ${rc})"
-    fi
+	local name="$1" out rc=0
+	out="$(PATH="${FAKE_BIN}:${BASE_PATH}" bash "${CHECK}" demo 2>&1)" || rc=$?
+	if printf '%s\n' "${out}" | grep -q '^CHECK '; then
+		_log "FAIL ${name}: a CHECK line was emitted with no usable toolchain"
+		printf '%s\n' "${out}" | sed 's/^/        /' >&2
+		_failures=$((_failures + 1))
+	else
+		_log "ok   ${name} (no CHECK line) (exit ${rc})"
+	fi
 }
 
 # --- 2. rustup missing -------------------------------------------------------
@@ -198,12 +202,12 @@ _make_rustup
 _make_rustc 0 with-host
 _make_cargo envgap
 run_case "build.rs env gap -> SKIP + tail" 2 \
-    "SKIP  — no rustc diagnostic" \
-    "failed to find tool" \
-    "nothing checked"
+	"SKIP  — no rustc diagnostic" \
+	"failed to find tool" \
+	"nothing checked"
 
-if [ "$_failures" -ne 0 ]; then
-    echo "check-cross-targets tests: ${_failures} failure(s)" >&2
-    exit 1
+if [[ ${_failures} -ne 0 ]]; then
+	echo "check-cross-targets tests: ${_failures} failure(s)" >&2
+	exit 1
 fi
 echo "check-cross-targets tests: PASS (8 cases)"
