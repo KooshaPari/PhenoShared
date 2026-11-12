@@ -148,3 +148,43 @@ Method corrections recorded here:
   `reg_ask_messages.message_id` → `reg_utterances.message_id`.
 - The 5-point strict→fold gap is the register storing escaped `\n` where the source message has a
   space, plus `" / "`-joined multi-part quotes. It is a defect in quote serialisation, not in linkage.
+
+---
+
+## Addendum 4 — harness coverage bounded, and the denominator's contamination measured
+
+Rev 5's 1.5% harness figure was published as if it were an estimate. It is a strict-substring **floor**:
+a harness member is a whole prompt, so a 3,000-character prompt carrying ten asks is one member and can
+receive at most one citation. 45 uncited members were sampled (15 per length stratum, `random.seed(11)`,
+reproducible) and classified by hand.
+
+| Label | n | Share |
+|---|---:|---:|
+| `NEW_ASK` — genuine operator request, uncited | 20 | 44.4% |
+| `NOT_ASK` — bg-task echo, auto-nudge, synthetic probe, protocol envelope | 12 | 26.7% |
+| `NOT_OPS` — another agent's DM relayed in, or a peer instruction quoted | 9 | 20.0% |
+| `ANSWER` | 3 | 6.7% |
+| `AMBIGUOUS` | 1 | 2.2% |
+
+| Artifact | What it establishes |
+|---|---|
+| `sample_uncited_harness.py` | Reproduces the identical 45-member sample from seed 11 and applies the classification; emits floor and upper bound. |
+| `harness_uncited_sample.json` | `coverage_floor_pct` 1.52, `coverage_upper_pct` 3.35, `new_ask_share_pct` 44.4, `contamination_pct` 53.3, plus all 45 rows with excerpts. |
+
+Two results:
+
+1. **The floor is honest.** Even if every sampled `NEW_ASK` is one the register misses, harness coverage
+   reaches only ~**3.35%**. Relaxing substring strictness was not hiding a large body of captured work.
+2. **The denominator is contaminated.** **53.3%** of uncited harness members are not operator requests at
+   all. The largest non-ask class is *other agents' DMs relayed into the session* (`dm from sauropod`,
+   `dm from giraffe`, `dm from t-rex`), plus background-task echoes and synthetic probes such as
+   `reply with exactly: m3head-ok`. Those belong in no union of operator intent, so 11,752 is inflated
+   and 15.0% is a conservative figure.
+
+Recorded limits, so the correction is not over-claimed:
+
+- Classification is **my judgement, single coder, no second rater**. Read 44.4% / 53.3% as ±a few points,
+  not as a measured rate.
+- **iMessage was not sampled.** Whether a request to a *human* counts as operator intent is a
+  definitional decision, not a measurement, and no contamination-adjusted union is published until it
+  is settled.

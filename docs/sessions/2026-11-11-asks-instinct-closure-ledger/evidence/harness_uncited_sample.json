@@ -1,0 +1,337 @@
+{
+  "sample_n": 45,
+  "seed": 11,
+  "strata": "15 per bucket, short<80 / mid 80-399 / long 400+",
+  "tally": {
+    "NOT_ASK": 12,
+    "ANSWER": 3,
+    "AMBIGUOUS": 1,
+    "NEW_ASK": 20,
+    "NOT_OPS": 9
+  },
+  "new_ask_share_pct": 44.4,
+  "harness_distinct": 5799,
+  "harness_cited": 88,
+  "coverage_floor_pct": 1.52,
+  "coverage_upper_pct": 3.35,
+  "implied_uncited_new_asks": 2538,
+  "contamination_pct": 53.3,
+  "caveat": "single coder, judgement-based; indicative bound, not a measured rate",
+  "rows": [
+    {
+      "id": "S00",
+      "chars": 79,
+      "label": "NOT_ASK",
+      "reason": "auto-nudge text, not operator",
+      "excerpt": "dm from t-rex: share your full authkit fix report including cargo check results"
+    },
+    {
+      "id": "S01",
+      "chars": 47,
+      "label": "ANSWER",
+      "reason": "response to an approval question",
+      "excerpt": "reboot is happening, infisical cli is logged in"
+    },
+    {
+      "id": "S02",
+      "chars": 74,
+      "label": "ANSWER",
+      "reason": "reply to the assistant",
+      "excerpt": "each tick should read status of every herdr chat too. why havent u done so"
+    },
+    {
+      "id": "S03",
+      "chars": 23,
+      "label": "NOT_ASK",
+      "reason": "paste marker",
+      "excerpt": "stric tuse of subagents"
+    },
+    {
+      "id": "S04",
+      "chars": 19,
+      "label": "AMBIGUOUS",
+      "reason": "'all met hroguh wy im needed'",
+      "excerpt": "continue and do all"
+    },
+    {
+      "id": "S05",
+      "chars": 71,
+      "label": "NEW_ASK",
+      "reason": "use subagents heavily, fix the remaining 15",
+      "excerpt": "run the command: wc -l /etc/hosts then report only the resulting number"
+    },
+    {
+      "id": "S06",
+      "chars": 71,
+      "label": "NEW_ASK",
+      "reason": "proceed and follow the best long-term path",
+      "excerpt": "you have 61 incomplete todos. continue working, or update the todo tool"
+    },
+    {
+      "id": "S07",
+      "chars": 70,
+      "label": "NEW_ASK",
+      "reason": "search ~ at full depth for those files",
+      "excerpt": "you have 5 incomplete todos. continue working, or update the todo tool"
+    },
+    {
+      "id": "S08",
+      "chars": 30,
+      "label": "NEW_ASK",
+      "reason": "pick the best choice (delegated decision)",
+      "excerpt": "onkly whatsreagrdign your erpo"
+    },
+    {
+      "id": "S09",
+      "chars": 40,
+      "label": "NEW_ASK",
+      "reason": "what do you need from me",
+      "excerpt": "its still lbank white, read console errs"
+    },
+    {
+      "id": "S10",
+      "chars": 43,
+      "label": "NOT_ASK",
+      "reason": "synthetic probe: reply with exactly m3head-ok",
+      "excerpt": "its the same broken \\ old app it looks like"
+    },
+    {
+      "id": "S11",
+      "chars": 44,
+      "label": "NOT_OPS",
+      "reason": "peer DM relayed: audit results for all 3 repos",
+      "excerpt": "anything else you can do \\ spawn in paralell"
+    },
+    {
+      "id": "S12",
+      "chars": 16,
+      "label": "NEW_ASK",
+      "reason": "what's next / what's left",
+      "excerpt": "do it all rev8ew"
+    },
+    {
+      "id": "S13",
+      "chars": 72,
+      "label": "NEW_ASK",
+      "reason": "async form/inbox entry, what's next",
+      "excerpt": "dm from t-rex: post your full forensic conviction report for all 6 repos"
+    },
+    {
+      "id": "S14",
+      "chars": 46,
+      "label": "NEW_ASK",
+      "reason": "why don't you wake on agent complete",
+      "excerpt": "dm from hare: deliver your complete report now"
+    },
+    {
+      "id": "M00",
+      "chars": 332,
+      "label": "NEW_ASK",
+      "reason": "worktree ordering: do not remove before merge",
+      "excerpt": "background task** `513685799o` \u00b7 `reinstall dependencies again` (`bash`) \u00b7 \u2713 completed \u00b7 0.6s \u00b7 exit 0 ```text 22 | version: 1.30.0(@cfworker/json- ... --------------^ 23 | specifier: '>=3.4.13' 24 | "
+    },
+    {
+      "id": "M01",
+      "chars": 89,
+      "label": "NOT_ASK",
+      "reason": "synthetic turn-24 probe",
+      "excerpt": "for take from pheno each goes where. if we merge only 1 repo remains and other is deleted"
+    },
+    {
+      "id": "M02",
+      "chars": 129,
+      "label": "NEW_ASK",
+      "reason": "path to finish full-forward WBS, use subagents",
+      "excerpt": "dm from badger: please send your full blocker finding and minimal corrective recommendation to coordinator immediately, then stop"
+    },
+    {
+      "id": "M03",
+      "chars": 264,
+      "label": "NOT_OPS",
+      "reason": "peer DM relayed: full final report",
+      "excerpt": "grapheon repo phenotype-fleet-ops public forked from dmouse92/phenotype-ops (and parent, which agents accidentally put on my friends token who used to be logged in on device) phenotype-infrakit -> phe"
+    },
+    {
+      "id": "M04",
+      "chars": 332,
+      "label": "NEW_ASK",
+      "reason": "measure/evaluate project using attached dossier",
+      "excerpt": "4\u203a cwalk me htrough whole session, if \u2502 this session started as a \u2502 dump\\paste\\request to resume another \u2502 session walk me through that sessions \u2502 goals andw hat you did followign if this \u2502 session ho"
+    },
+    {
+      "id": "M05",
+      "chars": 152,
+      "label": "NEW_ASK",
+      "reason": "recovery checks for a worktree with deleted common dir",
+      "excerpt": "dm from blowfish: resend your final report only: did the desk checkout exist, git rev-parse result, free_gb, and whether a clone was started. no new ssh"
+    },
+    {
+      "id": "M06",
+      "chars": 220,
+      "label": "NOT_ASK",
+      "reason": "background-task completion echo",
+      "excerpt": "background task** `5192102jsb` \u00b7 `verify all four dashboard te` (`bash`) \u00b7 \u2717 failed \u00b7 600.0s \u00b7 exit 124 ```text --- command timed out after 600000ms (600.0s) --- ``` _full output:_ `bg action=\"output\""
+    },
+    {
+      "id": "M07",
+      "chars": 275,
+      "label": "NEW_ASK",
+      "reason": "embed a prompt timeline in the html",
+      "excerpt": "dm from blowfish: status check: if you have enough evidence to answer your questions, report your findings now in the requested format. if blocked, say exactly what blocked you. a partial but honest r"
+    },
+    {
+      "id": "M08",
+      "chars": 260,
+      "label": "NOT_ASK",
+      "reason": "background-task completion echo",
+      "excerpt": "dm from bird: send your full completion report now: did you add dag-scheduler and acceptance-contract to [workspace].members, what did cargo metadata/check/test show, did you commit, and what is the c"
+    },
+    {
+      "id": "M09",
+      "chars": 254,
+      "label": "NOT_ASK",
+      "reason": "background-task failure echo",
+      "excerpt": "background task** `251423to6t` \u00b7 `b1 verify: clippy all-target` (`bash`) \u00b7 \u2717 failed \u00b7 389.3s \u00b7 exit n/a ```text fmt_exit=1 clippy_all_exit=0 elapsed=7s --- command finished with exit code: -1 --- ``` "
+    },
+    {
+      "id": "M10",
+      "chars": 362,
+      "label": "NEW_ASK",
+      "reason": "define 5 acceptance checks, no live-pass claims",
+      "excerpt": "read-only independent acceptance audit: inspect pr560 worktree diff and workflow secret-safety invariants: no env printing, no .env upload, no credentialed pull_request trigger, no weakened auth. othe"
+    },
+    {
+      "id": "M11",
+      "chars": 331,
+      "label": "NOT_OPS",
+      "reason": "peer DM relayed: research report request",
+      "excerpt": "read-only pr560 failure audit <=5 gh calls: fetch failed job summaries/annotations for security dependency audit and gitleaks. never print raw secret findings, matches, logs or credentials; only workf"
+    },
+    {
+      "id": "M12",
+      "chars": 215,
+      "label": "NEW_ASK",
+      "reason": "delete/move after full fold into phenoreg+phenoshared",
+      "excerpt": "write your findings to /users/kooshapari/codeprojects/temp/khostty-e2e-20261110/lane-b-other-langs.md now using the evidence you already gathered. reply with the 6-line summary. if the write fails, sa"
+    },
+    {
+      "id": "M13",
+      "chars": 127,
+      "label": "NOT_ASK",
+      "reason": "background-task failure echo",
+      "excerpt": "turn 8 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "id": "M14",
+      "chars": 80,
+      "label": "NOT_ASK",
+      "reason": "recovered-from-crashed-session banner",
+      "excerpt": "heavily use suabgents tod o all rem workheavily use suabgents tod o all rem work"
+    },
+    {
+      "id": "L00",
+      "chars": 531,
+      "label": "NOT_OPS",
+      "reason": "peer DM relayed: full report to sauropod",
+      "excerpt": "run local + commit, do the bifrost decision handle, an dfix the 12 bff, + branch cleanup finalizatoion and all rest of dag. decompose dag to 10m tasks. managers (subagents instructed to call jcode via"
+    },
+    {
+      "id": "L01",
+      "chars": 1244,
+      "label": "NOT_OPS",
+      "reason": "status relay about civis PR and a rustsec advisory",
+      "excerpt": "read the file days/october102026-06.txt with the read tool. it contains only messages authored by koosha from a personal-assistant imessage thread, each preceded by a [timestamp] koosha header line. t"
+    },
+    {
+      "id": "L02",
+      "chars": 1244,
+      "label": "NOT_OPS",
+      "reason": "coordination from lane B session",
+      "excerpt": "read the file days/october252026-01.txt with the read tool. it contains only messages authored by koosha from a personal-assistant imessage thread, each preceded by a [timestamp] koosha header line. t"
+    },
+    {
+      "id": "L03",
+      "chars": 411,
+      "label": "NOT_OPS",
+      "reason": "peer DM relayed: do not merge egl",
+      "excerpt": "background task stalled** `615903gkuj` \u00b7 `run clippy on the test` (`bash`) \u00b7 no output or progress for 600s (running 600s total) _no output captured yet._ the task is still running. inspect it (`bg ac"
+    },
+    {
+      "id": "L04",
+      "chars": 1244,
+      "label": "ANSWER",
+      "reason": "work-node spec echoing a prior intent",
+      "excerpt": "read the file days/october312026-01.txt with the read tool. it contains only messages authored by koosha from a personal-assistant imessage thread, each preceded by a [timestamp] koosha header line. t"
+    },
+    {
+      "id": "L05",
+      "chars": 417,
+      "label": "NOT_ASK",
+      "reason": "background-task stalled echo",
+      "excerpt": "background task stalled** `967891mvnx` \u00b7 `poll wave-8 agents and the w` (`bash`) \u00b7 no output or progress for 300s (running 300s total) _no output captured yet._ the task is still running. inspect it ("
+    },
+    {
+      "id": "L06",
+      "chars": 2469,
+      "label": "NEW_ASK",
+      "reason": "tracera repo worktree instruction",
+      "excerpt": "ack w8:pn (cockpit) + phenotype-registry audit lane \u2014 validation pass found 2 real defects in my own work + state: branch audit/session-b-full-command-ledger @ 83eec7f1a pushed, pr #698 open + mergeab"
+    },
+    {
+      "id": "L07",
+      "chars": 417,
+      "label": "NEW_ASK",
+      "reason": "read-only provenance check via gh api, max 4 commands",
+      "excerpt": "background task stalled** `560805b3ex` \u00b7 `build the patched kcode bina` (`bash`) \u00b7 no output or progress for 300s (running 300s total) _no output captured yet._ the task is still running. inspect it ("
+    },
+    {
+      "id": "L08",
+      "chars": 632,
+      "label": "NOT_OPS",
+      "reason": "peer ack and self-correction report",
+      "excerpt": "background task** `705102pvtn` \u00b7 `fast-forward merge fix branc` (`bash`) \u00b7 \u2713 completed \u00b7 11.1s \u00b7 exit 0 ```text [stderr] from https://github.com/kooshapari/forgecode [stderr] * branch integration/forg"
+    },
+    {
+      "id": "L09",
+      "chars": 687,
+      "label": "NEW_ASK",
+      "reason": "phenotype-landing only, preserve others' edits",
+      "excerpt": "do this in one bash call, not many. write a single shell loop over ~/codeprojects/phenotype/repos/*/ that for each git repo prints a tsv row: repo name, `git rev-list --count head --not --remotes`, an"
+    },
+    {
+      "id": "L10",
+      "chars": 495,
+      "label": "NOT_OPS",
+      "reason": "peer DM relayed: single-character fix report",
+      "excerpt": "background task** `7264849dp0` \u00b7 `poll api and plane agents` (`bash`) \u00b7 \u2713 completed \u00b7 540.4s \u00b7 exit 0 ```text dd1d7e4d test(plane): cover untouched outbound push and inbound delete branches 69086777 t"
+    },
+    {
+      "id": "L11",
+      "chars": 418,
+      "label": "NEW_ASK",
+      "reason": "portfolio full redesign iteration 1",
+      "excerpt": "background task stalled** `431003zf7o` \u00b7 `poll integration suite to co` (`bash`) \u00b7 no output or progress for 600s (running 2247s total) _no output captured yet._ the task is still running. inspect it "
+    },
+    {
+      "id": "L12",
+      "chars": 832,
+      "label": "NOT_ASK",
+      "reason": "harness protocol envelope (question reply)",
+      "excerpt": "ack w8:pn \u2014 civicwarfare ci-repair lane status: main green at bd33ccdc (all 6 workflows success). prs #100 #101 #103 #114 clean/0 failing. 6 dependabot prs each show exactly 4 failures (civic evidence"
+    },
+    {
+      "id": "L13",
+      "chars": 674,
+      "label": "NOT_ASK",
+      "reason": "background-task completion echo",
+      "excerpt": "background task** `8272561kvm` \u00b7 `commit the rebuilt migration` (`bash`) \u00b7 \u2713 completed \u00b7 374.5s \u00b7 exit 0 ```text [stderr] warning: adding embedded git repository: .worktrees/pr619-reconcile [stderr] h"
+    },
+    {
+      "id": "L14",
+      "chars": 2214,
+      "label": "NEW_ASK",
+      "reason": "independent review of artifact.js changes",
+      "excerpt": "ack w8:p2d (civicwarfare lane) + 00:25z status - no changes since 23:54z; nothing new landed, which is itself the report.counts via the api rollup: #100 94e5e898 count=0, #101 378ec329 count=0, #103 d"
+    }
+  ]
+}

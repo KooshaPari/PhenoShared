@@ -1,9 +1,10 @@
 # Coverage Verdict — is the 2,259-ask register a complete capture of operator intent?
 
-Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T02:52Z` (all channels mined at occurrence
-level; union and coverage recomputed from one script; §3c).
+Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T03:31Z` (all channels mined at occurrence
+level; union and coverage recomputed from one script; §3c; harness figure bounded by sampling and the
+denominator's contamination measured, §3e).
 
-**Revision history — this file has been wrong five times and each time in the same direction
+**Revision history — this file has been wrong six times and each time in the same direction
 (stating a confident number from an incomplete measurement).**
 
 | Rev | Claim | What was wrong |
@@ -12,7 +13,8 @@ level; union and coverage recomputed from one script; §3c).
 | 2 | "39-43% coverage" | a volume ratio between different text populations, not coverage |
 | 3 | "the register is a synthesis, not an extraction" | measured the paraphrase field against the wrong corpus; the register's source channel is phone chat, and 98.9% of its quotes anchor verbatim there |
 | 4 | "harness cleaned distinct = 6,085", "register/union = 29.4%" | **6,085 is not an output of `collapse_intents.py`**; its clean set is `8,506 - 2,707 noise` = **5,799**. The 29.4% ratio rested on 6,085 and on channels that had never been mined |
-| 5 | this one | every channel mined at occurrence level; union, overlap and coverage recomputed from one committed script |
+| 5 | every channel mined at occurrence level; union, overlap and coverage recomputed from one committed script | — (this row and row 6 are both Rev 5's work; the file is Rev 6) |
+| 6 | harness coverage is a floor between **1.52% and 3.35%**, and **53.3%** of the uncited harness corpus is not operator intent | Rev 5 published 1.5% as if it were an estimate; it is a strict-substring floor, and the denominator it divides by is contaminated by peer DMs and harness artifacts |
 
 Rev 5 is derived from a single script, `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`. Numbers below are quoted from that file and nowhere else.
@@ -361,7 +363,7 @@ restatements of things the operator said elsewhere.
 | Channel | Distinct | Cited | Coverage |
 |---|---:|---:|---:|
 | iMessage | 6,363 | 1,674 | 26.3% |
-| harness | 5,799 | 88 | **1.5%** |
+| harness | 5,799 | 88 | **1.5%** (floor; ≤3.35% on sampling, §3e) |
 | KCode | 166 | 2 | 1.2% |
 | **union** | **11,752** | **1,764** | **15.0%** |
 
@@ -418,6 +420,50 @@ One correction to a method I used and abandoned: `reg_asks.utterance_id` looks l
 **does not** join to `reg_utterances.id`, which looks like `phonemsg-<ULID>`. Comparing the two
 produces a spurious "2,229 of 2,252 disagree" result. The join that works is
 `reg_ask_messages.message_id` → `reg_utterances.message_id`.
+
+### 3e. Bounding the harness figure, and what the denominator actually contains
+
+1.5% harness coverage is a **floor**, because a harness member is a whole prompt: a 3,000-character
+prompt carrying ten asks is one member and can receive only one citation. To bound how much strict
+matching hides, 45 uncited members were sampled (15 each by length, `random.seed(11)`, reproducible
+via `evidence/sample_uncited_harness.py`) and classified by hand:
+
+| Label | Count | Share |
+|---|---:|---:|
+| `NEW_ASK` — genuine operator request, uncited | 20 | 44.4% |
+| `NOT_ASK` — background-task echo, auto-nudge, synthetic probe, protocol envelope | 12 | 26.7% |
+| `NOT_OPS` — another agent's DM relayed in, or a peer's instruction quoted | 9 | 20.0% |
+| `ANSWER` — a reply, not a request | 3 | 6.7% |
+| `AMBIGUOUS` | 1 | 2.2% |
+
+| Quantity | Value |
+|---|---:|
+| harness coverage, strict-substring **floor** | 88 / 5,799 = **1.52%** |
+| implied uncited genuine asks | ≈ 2,538 |
+| harness coverage if every `NEW_ASK` is one the register misses | ≈ **3.35%** |
+| uncited members that are **not operator requests** | 24 / 45 = **53.3%** |
+
+So the floor is honest: relaxing substring matching could at most lift harness coverage to ~3.4%.
+Substring strictness was not hiding a large body of captured work.
+
+**The more important finding is about the denominator, not the numerator.** More than half of the
+uncited harness corpus is not operator intent at all: background-task echoes, synthetic probes such as
+`reply with exactly: m3head-ok`, protocol envelopes, and — the largest single class after
+`NEW_ASK` — **other agents' DMs relayed into the session** (`dm from sauropod: ...`,
+`dm from giraffe: ...`). Those are peer instructions, not operator asks, so they should not sit in a
+union of operator intent.
+
+This means the 11,752 union is inflated, and 15.0% is therefore a **conservative** figure: strip the
+~53% non-operator share from the harness side and genuine-intent coverage rises to roughly 20%, still
+an order of magnitude short of "complete".
+
+Two honest limits on that correction, so it is not over-claimed:
+
+- The classification is **my judgement, single coder, no second rater**. It is an indicative bound,
+  not a measured rate, and the 44.4% / 53.3% split should be read as ±a few points.
+- **The iMessage side was not sampled.** Its 6,363 members are conversations with people, and whether a
+  request to a human counts as "operator intent" is a definitional decision, not a measurement. Until
+  that is settled, no contamination-adjusted union can be presented as a number.
 
 ### Corrected statement
 
