@@ -1,0 +1,43 @@
+From 032da269610392768985d64b0b0725d9bc2f05ba Mon Sep 17 00:00:00 2001
+From: Forge <kooshapari@gmail.com>
+Date: Fri, 24 Apr 2026 16:43:33 -0700
+Subject: [PATCH 02/16] =?UTF-8?q?chore(ci):=20adopt=20phenotype-tooling=20?=
+ =?UTF-8?q?workflows=20=E2=80=94=20DINOForge-UnityDoorstop?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .github/workflows/doc-links.yml | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 .github/workflows/doc-links.yml
+
+diff --git a/.github/workflows/doc-links.yml b/.github/workflows/doc-links.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..c4d533d3feb3c37f3d8d4d2da7613e942c621506
+--- /dev/null
++++ b/.github/workflows/doc-links.yml
+@@ -0,0 +1,20 @@
++name: Doc Links
++on: [push, pull_request]
++
++jobs:
++  links:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: dtolnay/rust-toolchain@stable
++      - run: |
++          if [ ! -f tooling/doc-link-check ]; then
++            mkdir -p tooling
++            if [ -d phenotype-tooling ]; then
++              cd phenotype-tooling && cargo build --release --bin doc-link-check 2>&1 | tail -5
++              ln -sf ../phenotype-tooling/target/release/doc-link-check ../tooling/
++            else
++              echo "Note: doc-link-check not available; skipping" && exit 0
++            fi
++          fi
++          tooling/doc-link-check docs/ || true
+-- 
+2.49.0.windows.1
+

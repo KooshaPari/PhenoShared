@@ -1,0 +1,40 @@
+From 939864a5e837b558e9390e3d2de6c050db2d8cfe Mon Sep 17 00:00:00 2001
+From: Forge <kooshapari@gmail.com>
+Date: Sat, 2 May 2026 07:02:44 -0700
+Subject: [PATCH 06/16] Add CHANGELOG.md scaffolding
+
+Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
+---
+ CHANGELOG.md | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 CHANGELOG.md
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..0f5121659c76521ae3276b691c252b69b75a580b
+--- /dev/null
++++ b/CHANGELOG.md
+@@ -0,0 +1,20 @@
++# Changelog
++
++All notable changes to this project will be documented in this file.
++
++The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
++and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
++
++## [Unreleased]
++
++### Added
++### Changed
++### Deprecated
++### Removed
++### Fixed
++### Security
++
++## [0.1.0] - YYYY-MM-DD
++
++### Added
++- Initial release
+-- 
+2.49.0.windows.1
+

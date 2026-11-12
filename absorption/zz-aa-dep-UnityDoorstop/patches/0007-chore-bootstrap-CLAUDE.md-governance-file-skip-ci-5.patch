@@ -1,0 +1,52 @@
+From 0677eb30ea6f5e7a8fb3f86c2e80c052f22f7b69 Mon Sep 17 00:00:00 2001
+From: KooshaPari <42529354+KooshaPari@users.noreply.github.com>
+Date: Sat, 2 May 2026 07:36:52 -0700
+Subject: [PATCH 07/16] chore: bootstrap CLAUDE.md governance file [skip ci]
+ (#5)
+
+---
+ CLAUDE.md | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 CLAUDE.md
+
+diff --git a/CLAUDE.md b/CLAUDE.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..a831eebae686031b7423c9f3e03014d662a9eba5
+--- /dev/null
++++ b/CLAUDE.md
+@@ -0,0 +1,32 @@
++# DINOForge-UnityDoorstop — Operating Notes
++
++## Language & Toolchain
++
++- **C#** — Unity 2022 LTS+
++- Unity Package Manager / `.asmdef` assembly definitions
++- **Editor tests** (`Editor/` folder) + **PlayMode tests** via Unity Test Framework
++
++## Architecture
++
++- Unity doorstop / loader tooling for the DINOForge mod platform
++- Injector pattern: entry-point shim that bootstraps game runtime
++- Platform-specific: handles Windows/macOS/Linux runtime injection differences
++
++## Quality Gates
++
++Run before PR:
++- Unity linting: `dotnet format` + Roslyn analyzers
++- Build validation: ensure assemblies compile without errors
++- Editor test suite passes
++
++## Git Protocol
++
++- Conventional commits: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`
++- Merge or squash-merge to `master`
++- No force-push to `master`
++
++## Phenotype Org Policy
++
++- Part of `phenotype-org` — see `~/.claude/CLAUDE.md` for cross-repo reuse,
++  OSS-first, and Rust-default scripting hierarchy rules
++
+-- 
+2.49.0.windows.1
+

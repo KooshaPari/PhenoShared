@@ -1,0 +1,208 @@
+From 71a9c31737a200a5276a8df1fc8e2ad7c526969a Mon Sep 17 00:00:00 2001
+From: KooshaPari <42529354+KooshaPari@users.noreply.github.com>
+Date: Mon, 8 Jun 2026 17:03:34 -0700
+Subject: [PATCH 10/16] chore(DINOForge): fix CI YAML syntax and add local task
+ runner (#12)
+
+- Fix malformed action SHAs (double-SHA concatenation) in build-be.yml
+- Replace deprecated marvinpinto/action-automatic-releases with softprops/action-gh-release
+- Pin all GitHub Actions to commit SHAs
+- Add permissions and concurrency blocks to all workflows
+- Fix duplicate 'on:' keys in doc-links.yml
+- Add Taskfile.yml for local builds
+---
+ .github/workflows/build-be.yml   | 28 +++++++++++++++-------
+ .github/workflows/doc-links.yml  | 15 ++++++++++--
+ .github/workflows/trufflehog.yml | 14 +++++++++--
+ Taskfile.yml                     | 41 ++++++++++++++++++++++++++++++++
+ 4 files changed, 85 insertions(+), 13 deletions(-)
+ create mode 100644 Taskfile.yml
+
+diff --git a/.github/workflows/build-be.yml b/.github/workflows/build-be.yml
+index 5a1ae255ba9f6d3ff1b664c262d9cd9be7c07467..6631c3a613ac9bf0500e0434a4b0b0e72f204fde 100644
+--- a/.github/workflows/build-be.yml
++++ b/.github/workflows/build-be.yml
+@@ -1,6 +1,16 @@
+ name: Build
+ 
+-on: [push, pull_request]
++permissions:
++  contents: read
++
++on:
++  push:
++  pull_request:
++  workflow_dispatch:
++
++concurrency:
++  group: ${{ github.workflow }}-${{ github.ref }}
++  cancel-in-progress: true
+ 
+ jobs:
+   build-windows:
+@@ -8,7 +18,7 @@ jobs:
+ 
+     steps:
+       - name: Checkout
+-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5@11bd71901bbe5b1630ceea73d27597364c9af683
++        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+       - name: Configure paths
+         run: |
+           New-Item -ItemType Directory -Force -Path ./artifacts/release/x64
+@@ -57,7 +67,7 @@ jobs:
+ 
+     steps:
+       - name: Checkout
+-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5@11bd71901bbe5b1630ceea73d27597364c9af683
++        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+       - name: Configure paths
+         run: |
+           bash -c "mkdir -p artifacts/{verbose,release,debug}/{x86,x64}"
+@@ -117,7 +127,7 @@ jobs:
+ 
+     steps:
+       - name: Checkout
+-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5@11bd71901bbe5b1630ceea73d27597364c9af683
++        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+       - name: Configure paths
+         run: |
+           mkdir -p artifacts/{verbose,release,debug}/universal
+@@ -171,7 +181,7 @@ jobs:
+ 
+     steps:
+       - name: Download artifacts
+-        uses: actions/download-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
++        uses: actions/download-artifact@6b209b229b6f44a0a69a6c61b787d5ca8eb93b0c
+         with:
+           path: artifacts
+       - name: Grab version
+@@ -188,10 +198,10 @@ jobs:
+             (cd ${dir}; zip -r ../../dist/${dir}_${{ env.doorstop_version }}.zip *)
+           done
+       - name: Create release
+-        uses: marvinpinto/action-automatic-releases@latest
++        uses: softprops/action-gh-release@c9b46fe7aad9fa02b0e7ad5eaea1df5f4206a354
+         with:
+-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+-          automatic_release_tag: "ci"
++          token: ${{ secrets.GITHUB_TOKEN }}
++          tag_name: "ci"
+           prerelease: true
+-          title: "CI build"
++          name: "CI build"
+           files: dist/*.zip
+diff --git a/.github/workflows/doc-links.yml b/.github/workflows/doc-links.yml
+index 398fd74fe18e6a55d8214a1a8e6fb20eddd741fa..3e7107c197554bc0d6624695d0bf959d9d47c3dc 100644
+--- a/.github/workflows/doc-links.yml
++++ b/.github/workflows/doc-links.yml
+@@ -1,11 +1,22 @@
+ name: Doc Links
+-on: [push, pull_request]
++
++permissions:
++  contents: read
++
++on:
++  push:
++  pull_request:
++  workflow_dispatch:
++
++concurrency:
++  group: ${{ github.workflow }}-${{ github.ref }}
++  cancel-in-progress: true
+ 
+ jobs:
+   links:
+     runs-on: ubuntu-latest
+     steps:
+-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5@11bd71901bbe5b1630ceea73d27597364c9af683
++      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+       - uses: dtolnay/rust-toolchain@stable
+       - run: |
+           if [ ! -f tooling/doc-link-check ]; then
+diff --git a/.github/workflows/trufflehog.yml b/.github/workflows/trufflehog.yml
+index 5779932c400f96527d36b447b74f04bcc6fedd9f..c19db4be4e657af7cf9aef8dd3d7178f070a9229 100644
+--- a/.github/workflows/trufflehog.yml
++++ b/.github/workflows/trufflehog.yml
+@@ -1,19 +1,29 @@
+ name: TruffleHog Secrets Scan
++
++permissions:
++  contents: read
++
+ on:
+   push:
+     branches: ["**"]
+   pull_request:
+     branches: ["**"]
++  workflow_dispatch:
++
++concurrency:
++  group: ${{ github.workflow }}-${{ github.ref }}
++  cancel-in-progress: true
++
+ jobs:
+   trufflehog:
+     runs-on: ubuntu-latest
+     steps:
+       - name: Checkout code
+-        uses: actions/checkout@v4
++        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+         with:
+           fetch-depth: 0
+       - name: TruffleHog OSS
+-        uses: trufflesecurity/trufflehog@main
++        uses: trufflesecurity/trufflehog@75add79b929b263dae147d2e5bcf0daf292165cf
+         with:
+           path: ./
+           base_depth: 1
+diff --git a/Taskfile.yml b/Taskfile.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..73e000dfdfed4de92435029ada978ea5ec3ad153
+--- /dev/null
++++ b/Taskfile.yml
+@@ -0,0 +1,41 @@
++version: "3"
++
++tasks:
++  default:
++    cmds:
++      - task: build
++
++  build:
++    desc: Build all targets
++    cmds:
++      - ./build.sh
++
++  build:verbose:
++    desc: Build with verbose logging
++    cmds:
++      - ./build.sh -with_logging
++
++  build:debug:
++    desc: Build debug binaries
++    cmds:
++      - ./build.sh -with_logging -debug
++
++  build:verbose:debug:
++    desc: Build verbose debug binaries
++    cmds:
++      - ./build.sh -with_logging -debug
++
++  test:
++    desc: Run C tests
++    cmds:
++      - echo "No C tests configured yet. Add test harness to enable."
++
++  lint:
++    desc: Lint C/C++ code
++    cmds:
++      - echo "No C/C++ linter configured yet. Add clang-tidy/clang-format to enable."
++
++  clean:
++    desc: Remove build artifacts
++    cmds:
++      - rm -rf build artifacts dist
+-- 
+2.49.0.windows.1
+
