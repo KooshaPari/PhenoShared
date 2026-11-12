@@ -117,7 +117,7 @@ async fn native_gateway_identifies_heartbeats_and_acks_management_without_answer
                 "Gateway interaction never reached actual HTTP ACK and Store CAS"
             );
             tokio::select! {
-                _ = tokio::time::sleep(Duration::from_millis(10)) => {},
+                () = tokio::time::sleep(Duration::from_millis(10)) => {},
                 incoming = socket.next() => {
                     let incoming = incoming.unwrap().unwrap();
                     if let Message::Text(text) = incoming {

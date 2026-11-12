@@ -343,7 +343,7 @@ impl ContainerDriver {
 
 impl Drop for ContainerDriver {
     fn drop(&mut self) {
-        if let Some(mut child) = self.child.take() {
+        if let Some(child) = self.child.take() {
             #[cfg(unix)]
             {
                 let pid = child.id().unwrap_or(0) as i32;
@@ -355,7 +355,10 @@ impl Drop for ContainerDriver {
             }
             #[cfg(not(unix))]
             {
-                let _ = child.start_kill();
+                // `start_kill` takes `&mut`, so the binding is only made
+                // mutable on the targets that actually call it.
+                let mut killable = child;
+                let _ = killable.start_kill();
             }
         }
     }
@@ -391,6 +394,10 @@ impl Drop for ContainerDriver {
 /// can be called unconditionally without double-translating paths that
 /// were already prepared upstream (e.g. `$PLAYCUA_HOST_TMP` set by an
 /// orchestrator script).
+// The `return` is load-bearing: the `#[cfg(windows)]` block below is the same
+// function's tail on Windows, and `#[cfg(not(windows))]` blocks are stripped
+// out on Windows, so the two arms cannot both be a trailing expression.
+#[allow(clippy::needless_return)]
 pub fn to_wsl_path(host_path: &str) -> String {
     #[cfg(not(windows))]
     {

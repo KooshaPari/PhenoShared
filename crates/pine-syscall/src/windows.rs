@@ -44,7 +44,6 @@ impl std::error::Error for WindowsSyscallError {}
 /// deliberate and the lint is suppressed here only.
 #[allow(clippy::enum_variant_names)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[allow(clippy::enum_variant_names)]
 pub enum WindowsSyscallName {
     /// `NtAccessCheck`
     NtAccessCheck,

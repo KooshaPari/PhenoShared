@@ -612,22 +612,19 @@ mod tests {
         let mut body = resp.into_body();
         let mut collected = Vec::new();
         let read = tokio::time::timeout(std::time::Duration::from_millis(500), async {
-            loop {
-                // `axum::body::Body::data()` returns the next frame;
-                // `None` means the stream finished cleanly.
-                match body.frame().await {
-                    Some(Ok(frame)) => {
-                        if let Some(data) = frame.data_ref() {
-                            collected.extend_from_slice(data);
-                        }
-                        if collected.windows(2).any(|w| w == b"\n\n") {
-                            break;
-                        }
-                        if collected.len() > 4096 {
-                            break;
-                        }
-                    },
-                    Some(Err(_)) | None => break,
+            // `axum::body::Body::frame()` returns the next frame; `None`
+            // means the stream finished cleanly, and an `Err` frame is
+            // terminal for the purposes of this probe, so both exit the
+            // loop exactly as the explicit match arms used to.
+            while let Some(Ok(frame)) = body.frame().await {
+                if let Some(data) = frame.data_ref() {
+                    collected.extend_from_slice(data);
+                }
+                if collected.windows(2).any(|w| w == b"\n\n") {
+                    break;
+                }
+                if collected.len() > 4096 {
+                    break;
                 }
             }
         })

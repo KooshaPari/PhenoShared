@@ -148,7 +148,7 @@ impl FrameKernel for CpuSimdKernel {
         while i + 1 < input.len() {
             let count = input[i] as usize;
             let byte = input[i + 1];
-            dest.extend(std::iter::repeat(byte).take(count));
+            dest.extend(std::iter::repeat_n(byte, count));
             i += 2;
         }
 

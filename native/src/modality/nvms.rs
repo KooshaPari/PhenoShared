@@ -387,7 +387,7 @@ impl Drop for NvmsDriver {
         // exists; otherwise rely on kernel child reaping. We don't block on
         // shutdown here — Drop is sync — but we *do* send SIGTERM/start_kill
         // so the OS reclaims resources promptly.
-        if let Some(mut child) = self.child.take() {
+        if let Some(child) = self.child.take() {
             #[cfg(unix)]
             {
                 let pid = child.id().unwrap_or(0) as i32;
@@ -399,7 +399,10 @@ impl Drop for NvmsDriver {
             }
             #[cfg(not(unix))]
             {
-                let _ = child.start_kill();
+                // `start_kill` takes `&mut`, so the binding is only made
+                // mutable on the targets that actually call it.
+                let mut killable = child;
+                let _ = killable.start_kill();
             }
             // Detach the child so tokio can reap it asynchronously without
             // awaiting; the kernel will SIGKILL on parent exit if needed.

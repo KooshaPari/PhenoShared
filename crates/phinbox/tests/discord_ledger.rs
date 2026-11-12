@@ -93,7 +93,7 @@ fn competing_store_connections_cannot_both_accept_the_same_revision() {
     let successes = workers
         .into_iter()
         .map(|w| w.join().unwrap())
-        .filter(Result::is_ok)
+        .filter_map(Result::ok)
         .count();
     assert_eq!(
         successes, 1,

@@ -25,7 +25,7 @@
 //! If the response carries no Retry-After, the policy's
 //! `min_interval_ms` is used as the fallback.
 
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, UNIX_EPOCH};
 
 /// Per-adapter rate-limit policy applied to every outbound HTTP call.
 ///

@@ -124,7 +124,7 @@ impl SourceAdapter for ModelsDevAdapter {
             .iter()
             .find(|m| m.key() == needle)
             .cloned()
-            .ok_or_else(|| CoreError::NotFound(needle))
+            .ok_or(CoreError::NotFound(needle))
     }
 }
 
