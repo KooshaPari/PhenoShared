@@ -7,14 +7,18 @@ reduced to zero defects, §3d; coverage re-derived at **clause granularity**, wh
 ask-classifier that failed validation and was therefore not used for the headline, §3f; the 98
 `source_ref` harvest documents declared **lost** with a search record and a pointer-coherence test in
 their place, §3g; a local embedding model selected by a test with a known answer, used to probe
-semantic coverage, which **withholds the headline** and publishes a floor instead, §3h).
+semantic coverage, which **withholds the headline** and publishes a floor instead, §3h; and the recall
+measurement that made the headline publishable, which raises union coverage from 8.0% to a lower bound
+of 10.7% without changing the verdict, §3i).
 
 **Revision history — this file has been wrong seven times, each time in the same direction (stating a
 confident number from an incomplete measurement). Rev 8 is the first entry that corrects nothing: it
 re-derives coverage at a finer granularity and finds the published shortfall survives the change.
 Rev 9 is mixed: one withdrawn carried figure, one near-miss on schema, and one measured loss. Rev 10
 adds a measurement rather than a correction, and its most important result is a refusal to publish a
-number.**
+number. Rev 11 is the number Rev 10 refused to publish, and it withdraws Rev 10's floor as an estimate
+while keeping it as a floor, so the headline rises from 8.0% to 10.7% while the verdict does not
+change.**
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -28,6 +32,7 @@ number.**
 | 8 | clause-granularity coverage is **8.0%** of the union; harness coverage stays **1.3–1.7%** however it is cut | not a retraction — a method result. It establishes that the low figure is **not** a granularity artifact, and it rejects the ask-classifier I built to sharpen the denominator (precision 0.73, recall 0.44) |
 | 9 | 0 of 98 `source_ref` harvest documents resolve (**lost**, 10 root classes searched); `source_ref` dates are harvest-date window ends, coherent for **98/98** docs; the register is **not** credential-free (2 of 8,042 rows) | two corrections carried in from earlier revisions: §8 still asserted "3 links are candidate wrong" after §3d had closed link integrity at zero, and the ledger's quote is **not** a column on `reg_asks` (it is `utterance_id` → `reg_utterances.body`); my own first pass also assumed UTC timestamps when 8,019 of 8,042 rows are PDT, and compared only 23 rows until the `uncomparable` counter caught it |
 | 10 | a **true semantic** probe was run on the 8,819 uncited ask-cue clauses with `nomic-embed-text-v1.5`; it **confirms** semantic capture exists (floor **2.12%** of the sample) but its high-band precision is only **0.567** strict / **0.733** lenient, so **no semantic coverage percentage is published** | not a retraction of a number — a refusal to publish one. It also retires the earlier claim that no semantic route existed: the earlier probe found no embedding stack installed, which was true of Python packages but not of `llama.cpp`, which is present with `llama-embedding` |
+| 11 | semantic capture among uncited ask-cue units is **13.3%** (8/60, 95% CI 6.9-24.2) on a **random** sample; union coverage is therefore at least **10.7%** (9.4-12.9), not 8.0% | Rev 10's 2.12% floor is withdrawn as an estimate of semantic coverage — not because it was miscalculated but because it was a floor built from a biased-high score band and could never be more. §3i measures the same quantity on a random draw. Note the trap this sets: 13.3% is a rate **within the 8,819-unit denominator**, and reading it as coverage of everything is the exact error this table exists to record |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -582,8 +587,9 @@ of **1.4%–1.7%**. Four independent cuts now agree:
 
 The gate's error does not widen that band much because both its false positives and its false
 negatives are diluted across a large denominator. **Granularity was not the problem; recall of the
-operator's asks is.** The headline remains the mechanical 8.0% clause-level figure, with 1.3–1.7% as
-the harness-specific one.
+operator's asks is.** The headline is the clause-level figure: **8.0% of 43,305** on the mechanical
+substring test alone, raised to **at least 10.7%** once the semantic recall measured in §3i is counted,
+with 1.3–1.7% as the harness-specific one.
 
 Two limits, stated so this is not over-claimed:
 
@@ -747,10 +753,13 @@ magnitude. Compare the distributional TF-IDF probe (§3b), which found **0 of 12
 same intent: with a real embedding model the same question yields 17 of 30. Method mattered; the answer
 still did not become comfortable.
 
-**The gate is unchanged.** A floor of 2.12% on top of an 8.0% structural figure does not close anything,
-because the actual semantic coverage could lie anywhere above that floor. The register is still
-incomplete and still unquantified, and the honest statement is narrower than before but no more
-comfortable: the shortfall is real, it is not merely a substring artifact, and its size is unknown.
+**The gate is unchanged, and §3i supplies the number this section could not.** A floor of 2.12% on top
+of an 8.0% structural figure closes nothing. Measured on a random sample instead of a stratified band,
+the semantic share is **13.3%** of uncited ask-cue clauses, which puts union coverage at **≥10.7%**
+[9.4–12.9] — larger than 8.0%, still an order-of-magnitude shortfall, and still not a complete
+accounting, because the uncited non-ask-cue units were never probed. The register is incomplete, the
+shortfall is real, it is not merely a substring artifact, and its size is now **bounded rather than
+unknown**.
 
 | Artifact | What it proves |
 |---|---|
@@ -763,6 +772,96 @@ The label sheet quotes raw corpus text, so it was scrubbed before commit: 7 emai
 redacted. The scores refer to the pre-redaction strings; the scorer still reproduces identical output
 from the redacted files, so the figures hold, but the artifact records a run rather than a re-runnable
 corpus.
+
+Rev 11 withdraws this section's 2.12% **as an estimate** of semantic coverage while keeping it as a
+floor: it was computed from a band deliberately enriched for captures, so it could never be more than a
+lower bound. The measurements below remain valid and are not superseded. §3i measures the same
+quantity on a random draw.
+
+---
+
+## 3i. Recall, measured on a random sample: 13.3% at k=5, 0.0% at k=1
+
+§3h could not publish a rate, and said so. The reason was structural: its 45 labelled pairs were the
+top 30 by similarity plus the bottom 15. A fraction whose **numerator** comes from a band chosen for
+being rich in captures, divided by the whole sample, can only be a floor. **Recall** — of all clauses,
+what share the register can reach at all — was never measured, so a coverage percentage was not
+computable from that design no matter how the labels fell.
+
+The increment that fixes it is not a better model. It is a **random, unstratified sample, labelled
+blind.** `evidence/recall_probe.py` draws 60 clause units with `SEED 20261113` (deliberately different
+from the probe's `20261112`), retrieves **top-5** candidates for each, and asserts on every run that the
+rebuilt population equals the published **8,819** (harness 7,287 / imessage 1,012 / kcode 527 / phone
+435) — it refuses to sample on denominator drift.
+
+**Blinding is structural, not asserted.** The tool writes two files. `recall_label_sheet.json` holds
+the clause and its candidates **shuffled, with rank and cosine stripped**; `recall_candidates.json`
+holds the same pairs *with* rank and cosine and is read only by the scorer. The labeller could not see
+which candidate the model ranked first, so the model's ordering could not anchor the judgement.
+
+| measure | k/n | rate | 95% Wilson |
+|---|---|---|---|
+| capture@5, strict (same intent) | 8/60 | **13.3%** | 6.9–24.2% |
+| capture@5, lenient (incl. adjacent) | 10/60 | 16.7% | 9.3–28.0% |
+| capture@1, strict | 0/60 | **0.0%** | 0.0–6.0% |
+
+The capture@1 line is the most informative result here and the least convenient. All eight strict
+captures landed at ranks **2, 2, 2, 3, 3, 4, 4, 5** — not one was the model's own first choice. At the
+similarity levels typical of a random draw the nearest neighbour is nearly always an
+adjacent-but-different intent. Two consequences follow, and they point in opposite directions:
+
+- The register **does** hold these intents, reachable within five candidates. Semantic capture is real
+  and roughly **ten times** the floor §3h could certify.
+- **Top-1 lookup on this corpus is not usable.** Any design that reads one nearest neighbour and calls
+  it the match will be wrong essentially every time, and would report a register far emptier than it
+  is. This also explains retroactively how §3h's 17/30 was possible at all: it was measured where
+  similarity is high (0.75–0.88), and precision there is a different quantity from recall here.
+
+Candidate-level precision is reported for the same reason, because "found in 5" and "good retrieval"
+are not the same claim: at most **8 of 300** retrieved candidates carried the same intent as their
+clause (≤**2.7%**), treating unmarked candidates as negative. A five-candidate lookup is therefore a
+recall mechanism, not a discovery mechanism. It finds the answer for one clause in eight and returns
+mostly neighbours on the way — which is an argument that the register must actually *contain* intent
+rather than that a better index would rescue an incomplete one.
+
+**Projection, within its own denominator.** 8,819 × 13.3% ≈ **1,176** captured units (95% interval
+610–2,131). Because those units are by construction *not* in the structural 3,463 cited units, the two
+terms are disjoint and may be added:
+
+> (3,463 structurally cited + ≈1,176 semantically captured) / 43,305 = **10.7%** [9.4–12.9%]
+
+That figure is emitted by the scorer under a key named `derived_union_lower_bound`, and the name is the
+whole caveat. It is **derived, not measured on the union**: the 31,023 uncited units that are *not*
+ask-cue were never probed, so semantic capture there is unknown and this stays a lower bound. It must
+never be added to, or averaged with, the 8.0% structural figure — it already contains it.
+
+The honest revision is quantitative and does not flatter the register: published coverage rises from
+**8.0%** to **at least 10.7%**, so the register holds roughly a ninth to an eighth of expressed intent
+rather than a twelfth. The shortfall is still an order of magnitude, and the verdict is unchanged in
+kind. **Harness coverage (1.3–1.7%) is untouched** — this probe is aggregate and per-source capture was
+not measured — so the migration gate stays closed on the same evidence.
+
+What would move it further, stated as limits rather than plans: `n=60` gives an interval spanning a
+factor of 3.5, so a larger draw tightens it without changing the method; the labeller is single and is
+the agent that built the retrieval, so an independent second labeller is the only real precision
+control; and probing the 31,023 non-ask-cue uncited units is what would convert 10.7% from a lower
+bound into coverage of everything.
+
+Rev 10's high-band precision (0.567 strict) should not be reused as corpus precision. The corpus
+figures are the ones above: **13.3% of clauses reachable at k=5, 0.0% at k=1**.
+
+| Artifact | Carries |
+|---|---|
+| `evidence/recall_probe.py` | sampling, retrieval, denominator assertion, blind two-file split |
+| `evidence/recall_label_sheet.json` | 60 clauses, shuffled candidates, hand labels `M`/`W`/`N` with a reason each |
+| `evidence/recall_candidates.json` | the same pairs with rank and cosine; read only by the scorer |
+| `evidence/recall_score.py` + `recall_scored.json` | every figure above, recomputed from those two files |
+
+Both text-bearing files were scanned before staging and **8 matches across the two files** were redacted
+(2 emails and 2 bare numeric ids per file) to typed tokens. `recall_score.py` reproduces
+**byte-identical** output from the redacted files, so every figure above holds, but the artifact records
+a run rather than a re-runnable corpus. This is the third time corpus text has carried contact data into
+an artifact; the scan is a pipeline step now, not a review.
 
 ---
 
@@ -819,7 +918,8 @@ class of error produced kcode's 196 and the old jcode figure of 16,887.
 | Intent-level dedupe | NOT_RUN | No model exists for deciding that two different strings express one intent. String counts therefore overstate intents. |
 | Paperclip / herdr volumes | UNKNOWN | Not probed this session. |
 | iMessage substantive ratio | **MEASURED** | 9,011 text-bearing outbound rows → 6,418 substantive → 6,363 distinct; collapse is a near no-op (`evidence/imessage_kcode_recount.json`). |
-| Semantic coverage | **PARTIAL — floor only** | A real embedding probe (§3h) confirms uncited clauses are sometimes captured (floor 2.12% of the 800 sampled) but its high-band precision is 0.567 strict, so no coverage rate is published. Closing this needs recall measured on a random (not stratified) sample. |
+| Semantic coverage | **MEASURED — 13.3% at k=5** | Random 60-clause sample, labelled blind: **8/60 = 13.3%** [6.9–24.2] of uncited ask-cue clauses are reachable within five candidates, **0/60** at k=1 (§3i). Because those units are disjoint from the 3,463 structurally cited ones, union coverage is at least **10.7%** [9.4–12.9], replacing the 8.0% structural-only headline. Still a **lower bound**: the 31,023 uncited non-ask-cue units were never probed. §3h's 2.12% survives as a floor only. |
+| Semantic retrieval precision | **MEASURED — ≤2.7%** | At most 8 of 300 retrieved candidates carried the same intent as their clause, so top-1 lookup is unusable on this corpus: every strict capture sat at rank 2–5 (§3i). A better index does not fix an incomplete register. |
 
 ---
 

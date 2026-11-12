@@ -384,3 +384,65 @@ shapes and whole URLs: **7 matches, all emails or URLs, all redacted** to `<EMAI
 record of a run, not a re-runnable corpus. And this is the second time corpus text introduced contact
 addresses into an artifact, which is a scrub step that belongs in the pipeline rather than in a
 review.
+
+---
+
+## Addendum 9 — recall measured on a random sample, and the rate Rev 10 withheld (2026-11-12T08:50Z)
+
+Three new artifacts, replayable: `recall_probe.py`, `recall_score.py`, and their outputs
+`recall_label_sheet.json` / `recall_candidates.json` / `recall_scored.json`. VERDICT §3i carries the
+prose; this note records the method decisions and what each number may be used for.
+
+**The blocker was design, not model.** Addendum 8's 45 labelled pairs were the top 30 by cosine plus the
+bottom 15. A numerator drawn from a band enriched for captures, over a whole-sample denominator, is a
+floor by construction — no labelling effort could convert it into a rate. The fix is a **random,
+unstratified** draw, not a stronger embedding.
+
+**Sampling guards.** `SEED 20261113` (different from 20261112, so the draw is not the probe sample
+re-sliced), `N=60`, `topk=5`. The script rebuilds the population each run and **asserts it equals
+8,819** (7,287 / 1,012 / 527 / 435) before sampling: it refuses to measure on denominator drift.
+
+**Blinding is structural, not claimed.** Two files, split by role. `recall_label_sheet.json` holds the
+clause and its candidates shuffled, rank and cosine **stripped**. `recall_candidates.json` holds the same
+pairs with rank and cosine and is read only by the scorer. The labeller could not see the model's
+ordering, so the ordering could not anchor the labels.
+
+**Result.** 8 strict captures, 2 adjacent, 50 none.
+
+| measure | k/n | rate | 95% Wilson |
+|---|---|---|---|
+| capture@5 strict | 8/60 | **13.3%** | 6.9–24.2% |
+| capture@5 lenient | 10/60 | 16.7% | 9.3–28.0% |
+| capture@1 strict | 0/60 | **0.0%** | 0.0–6.0% |
+
+**The 0/60 at k=1 is a finding, not a null.** Every strict capture sat at rank 2–5 (2, 2, 2, 3, 3, 4, 4,
+5). At random-draw similarity levels the nearest neighbour is nearly always an adjacent-but-different
+intent, so top-1 lookup on this corpus is unusable and would report the register as far emptier than it
+is. This is also why Addendum 8's 17/30 was possible: it was measured at 0.75–0.88, where precision is a
+different quantity from recall here. The two figures are **different estimators on different
+populations** and are not comparable as rates.
+
+**Retrieval precision, stated separately from recall.** At most 8 of 300 retrieved candidates carried
+the same intent as their clause (≤2.7%, unmarked treated as negative). A five-candidate *lookup* is a
+recall mechanism that returns mostly neighbours. It is not evidence that a better index would rescue an
+incomplete register — the opposite: a fifth of clauses have the answer within five candidates only
+because the register happens to contain an adjacent intent.
+
+**Projection, and the denominator discipline.** 8,819 × 13.3% ≈ **1,176** captures (610–2,131). Those
+units are disjoint from the 3,463 structurally cited units, so union coverage is
+(3,463 + 1,176) / 43,305 = **10.7%** [9.4–12.9%], emitted as `derived_union_lower_bound` with its caveat
+inline. It is **derived, not measured on the union**: the 31,023 uncited non-ask-cue units were never
+probed. It must never be added to or averaged with 8.0% — it already contains it. And 13.3% is a rate
+**inside the 8,819-unit denominator**; quoting it as coverage of everything is the error this ledger
+exists to record.
+
+**What changed, and what did not.** Published coverage rises from 8.0% to ≥10.7%: the register holds
+roughly a ninth of expressed intent, not a twelfth. The shortfall is still an order of magnitude, harness
+coverage (1.3–1.7%) is untouched because per-source capture was not measured, and the migration gate
+stays closed. Addendum 8's 2.12% survives **as a floor only**; as an estimate it is withdrawn.
+
+**Redaction, again, before staging.** Both text-bearing files were scanned for emails, IP literals,
+`?code=`, key shapes and whole URLs: **8 matches across the two files** (2 emails + 2 bare numeric ids,
+per file) redacted to typed tokens. `recall_score.py` reproduces **byte-identical** output from the
+redacted files, so every figure holds, and the artifact records a run rather than a re-runnable corpus.
+Third occurrence — the scrub is a pipeline step now, not a review.

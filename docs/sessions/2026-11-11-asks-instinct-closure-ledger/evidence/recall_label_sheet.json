@@ -1,0 +1,2051 @@
+{
+ "generated_at_utc": "2026-11-12T08:44:55Z",
+ "seed": 20261113,
+ "n": 60,
+ "topk": 5,
+ "instructions": "For each clause set captured_by to the ask id whose interpretation and quote express the SAME intent as the clause, or \"NONE\" if no candidate does. Adjacent-but-different intents are NONE. Candidates are shuffled: rank is hidden.",
+ "items": [
+  {
+   "idx": 0,
+   "clause": "generate pdf/html and derived tables from the same versioned source records.",
+   "candidates": [
+    {
+     "ask": "ASK-001930",
+     "interpretation": "Render the completed work as a graph and present the forward-looking graph as a table.",
+     "quote": "Graph of COMPLETE graph;\n table of FWD GRAPH!"
+    },
+    {
+     "ask": "ASK-000056",
+     "interpretation": "Request Google Docs access to obtain both source resumes",
+     "quote": "Request gdocs access, you can get both from there"
+    },
+    {
+     "ask": "ASK-001929",
+     "interpretation": "Improve the overall-state PDF output quality.",
+     "quote": "Ovefrall state/ your pdfs are still ass"
+    },
+    {
+     "ask": "ASK-001910",
+     "interpretation": "Produce a proper status tree with progress-bar glyphs, ETA, and path-to-finish for Hermes, Discord/Matter/IRC/email bridges, Paperclip, portal and Xirp adapters, and Tracera/AgilePlus/ShareCLI/fabric/byteport/Civis, plus an image of the rendered full DAG graph instead of a PDF",
+     "quote": "State of hermes, discord bridges, matter bridge, irc bridge, email bridge, other comms layers, paperclip adapters and setup, prota"
+    },
+    {
+     "ask": "ASK-000072",
+     "interpretation": "Consolidate every open task and update into a single cockpit view (HTML, PDF or MD) instead of scattered updates",
+     "quote": "Put all taps in one html pdf or MD I can view as a cockpit. Or perhaps move all to the single centralized prior one incl any other"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 1,
+   "clause": "anything another process must read goes under `$kirocrew_scratch` by name.",
+   "candidates": [
+    {
+     "ask": "ASK-000140",
+     "interpretation": "Host the pull request in the PhenoShared repo under the kooshapari account as the home for scratch projects",
+     "quote": "Pr is on Pheno Shared? I think thays the best home for scratch projs"
+    },
+    {
+     "ask": "ASK-002027",
+     "interpretation": "Self-host Kilo Cloud from the Kilo org GitHub repository",
+     "quote": "No. Kilo org githuv has a repo of kilo cloud for self.host"
+    },
+    {
+     "ask": "ASK-000401",
+     "interpretation": "Perform the Kilo login via Google SSO for Paperclip and drop the vault link.",
+     "quote": "f Failed\n11:07:55 PM\nINFO·Tested My OpenAI subscription — your personal account. Responsible user: the signed-in user.\nINFO·Execut"
+    },
+    {
+     "ask": "ASK-002175",
+     "interpretation": "Research and fully set up Kiro Crew for a pilot, including installing it on the desktop where it is already present on the Mac, plus the Kiro-specific items shown",
+     "quote": "Research and fully setup Krio crew for pilot, its installed on my Mac, need sisntallation on desktop, ill setup mac’s jcode + code"
+    },
+    {
+     "ask": "ASK-002176",
+     "interpretation": "Research and fully set up KiroCrew for the pilot, including installing it on the desktop in addition to the existing Mac install",
+     "quote": "Research and fully setup Krio crew for pilot, its installed on my Mac, need sisntallation on desktop, ill setup mac’s jcode + code"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 2,
+   "clause": "do not run npm run verify (vercel_token unset).",
+   "candidates": [
+    {
+     "ask": "ASK-000542",
+     "interpretation": "Verify that the Phenotype server with the bot invite is created and that relay.env exists in the home directory containing BOT_TOKEN.",
+     "quote": "2. Server named Phenotype created w\\ bot invite + intent given; relay.env in ~? Done. Contains BOT_TOKEN=…\n3 elaborate or do yours"
+    },
+    {
+     "ask": "ASK-001428",
+     "interpretation": "Keep Vercel hosting maintained and evaluate adding a BytePort layer",
+     "quote": "Vercel maintained. BytePort layer maybe added"
+    },
+    {
+     "ask": "ASK-001567",
+     "interpretation": "Have Vercel authenticate into the network with an API token and validate that inbound traffic originates from the tailnet, without joining the tailnet itself",
+     "quote": "So vercel\n\nAuths itself into network via api token. Doesn't necessarily join tailnet just validates all inbound is from it"
+    },
+    {
+     "ask": "ASK-000417",
+     "interpretation": "Perform a bridge update and set COLLIE_UPDATE_REPO so release checks are enabled",
+     "quote": "0.1.0+0195d7d\n\nBridge update\nSet COLLIE_UPDATE_REPO to enable release checks\n\n\nPush notifications\nAdd VAPID keys to the bridge the"
+    },
+    {
+     "ask": "ASK-001987",
+     "interpretation": "Explain why something is not gradable and why the email address is not verified.",
+     "quote": "Why not gradable and why is the email fanot vdricied"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 3,
+   "clause": "report: ack plus any objection",
+   "candidates": [
+    {
+     "ask": "ASK-002079",
+     "interpretation": "Report the state of all other non-job questions and asks, flagging which are stale, blocked, or not actively progressing, applying the stated dispositions (TRM skip, Shield skip, Akamai elaborate, item 5 defer, item 6 elaborate, item 7 skip, item 8 due Dec 14 2026)",
+     "quote": "What othe non jobs questions and asks, what is stlaled\\blcoked \\ not actively progressing and state of everything that s;; TRM ski"
+    },
+    {
+     "ask": "ASK-002004",
+     "interpretation": "Report any other open asks or taps still outstanding",
+     "quote": "Any other open asks or faps"
+    },
+    {
+     "ask": "ASK-001681",
+     "interpretation": "Reply with a \".\" to every open ask in the thread.",
+     "quote": "Reply w\\ a . to every open ask"
+    },
+    {
+     "ask": "ASK-002144",
+     "interpretation": "Require that pauses and blockers be reported with clear elaboration",
+     "quote": "Elaborate on pauses and blockers clearly"
+    },
+    {
+     "ask": "ASK-001335",
+     "interpretation": "Report any other outstanding asks or blocked/stalled items",
+     "quote": "Any other asks or stalls"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 4,
+   "clause": "add material image slots for sharecli/substrate/phenotype-omlx using public/projects/hybrid-materials/<slug>-desktop.webp and -mobile.webp when available",
+   "candidates": [
+    {
+     "ask": "ASK-000963",
+     "interpretation": "Build Fabric as an application-layer client (Parsec/Citrix-style) and advance both Fabric and ShareCLI well beyond their current state",
+     "quote": "Everything. Fabric was meant to be application layer too e.g. Parsec/citrix application/client.\n\nI've seen protos of thst shown to"
+    },
+    {
+     "ask": "ASK-001576",
+     "interpretation": "Implement the domain routing policy where phenotype space is org-level, proj.lgenotype.space serves landing pages and docs, pheno.studio is the deploy studio, pheno.shop is for payment portals, and kooshapari hosts personal pages",
+     "quote": "Phenotype space is for org lvl. So for proj.lgenotype.space you get landing pages and docs.\n\nPheno.studio is our \"deploy studio\"\nP"
+    },
+    {
+     "ask": "ASK-001993",
+     "interpretation": "Use embeds/cards for rich updates containing images and other items.",
+     "quote": "And use embed/cards for rich updates w images and other items"
+    },
+    {
+     "ask": "ASK-001121",
+     "interpretation": "Deploy Paperclip as paperclip.phenotype.space with Cloudflare Access like the Plane deployment",
+     "quote": "Paperclip as paperclip.phenotype.space similar cf access"
+    },
+    {
+     "ask": "ASK-000025",
+     "interpretation": "Push shared work artifacts to the Phenotype Registry repo as the global-state ledger via write access instead of cloud drive/file sharing",
+     "quote": "This sort of CD and file sharing won't work for us. I can give you write access and you can push to Feno Registry or another repo "
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 5,
+   "clause": "use only read/edit/bash/write.",
+   "candidates": [
+    {
+     "ask": "ASK-000362",
+     "interpretation": "Deliver read and write support, not read only",
+     "quote": "R\\W is most definitely a must"
+    },
+    {
+     "ask": "ASK-001905",
+     "interpretation": "Remove the badly written content/blog section from kooshapari.com entirely",
+     "quote": "Build a rich pane to manage the status updates and historical ones ON the cockpit as a tab; tabs were added to kooshapri.com remov"
+    },
+    {
+     "ask": "ASK-000668",
+     "interpretation": "Instruct Dot to stop treating email as status-only and to actually read and act on the mail",
+     "quote": "Pinged dot to stop viewing emails as status only"
+    },
+    {
+     "ask": "ASK-001844",
+     "interpretation": "Do not use the `cd` command",
+     "quote": ""
+    },
+    {
+     "ask": "ASK-002220",
+     "interpretation": "Report only if there is a change, printing nothing otherwise",
+     "quote": "If no change don’t print"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 6,
+   "clause": "create issues on kcode repo we own as you coem acorss these.",
+   "candidates": [
+    {
+     "ask": "ASK-000491",
+     "interpretation": "File a GitHub issue plus PR against upstream JCode for the jcode-win-herdr input-to-shell fall-through bug and implement the fix in KCode",
+     "quote": "For jcode-win-herdr, its an urgently needed fix. Perhaps gh issue+pr to JCODE + FIX at Kcode; \n\nwhats nxt walk me through state of"
+    },
+    {
+     "ask": "ASK-000802",
+     "interpretation": "For each repo, deliver a proper state-to-usability assessment",
+     "quote": "Need proepr state to usability on each"
+    },
+    {
+     "ask": "ASK-001482",
+     "interpretation": "Implement and push by 5pm the decollision fix so kcode stops auto-updating against jcode and stops colliding with the jcode path, keeping only forward session-data sync between the separate products",
+     "quote": "jcode is at a much later versin now, and kcode keeps triggerign auto update against jcode ++ collding with jcode path violating do"
+    },
+    {
+     "ask": "ASK-000924",
+     "interpretation": "File the formal GitHub issue on the jcode upstream repo",
+     "quote": "Formal gh issue on jcode upstream yet?"
+    },
+    {
+     "ask": "ASK-001483",
+     "interpretation": "Add the whole kcode intent, including the Windows and kitty fixes, to the prompt zip",
+     "quote": "add to prompt zip too"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 7,
+   "clause": "who btw was at my apt gym wed night",
+   "candidates": [
+    {
+     "ask": "ASK-000542",
+     "interpretation": "Verify that the Phenotype server with the bot invite is created and that relay.env exists in the home directory containing BOT_TOKEN.",
+     "quote": "2. Server named Phenotype created w\\ bot invite + intent given; relay.env in ~? Done. Contains BOT_TOKEN=…\n3 elaborate or do yours"
+    },
+    {
+     "ask": "ASK-000365",
+     "interpretation": "Support the Desk host from day one",
+     "quote": "Desk ,must be supported from day 1"
+    },
+    {
+     "ask": "ASK-001751",
+     "interpretation": "Suspend all desk-host work items until 1am while Koosha takes the exam",
+     "quote": "Block desk items until 1am I am going to take an exam"
+    },
+    {
+     "ask": "ASK-002169",
+     "interpretation": "Report whether the desk and Mac hosts are up",
+     "quote": "Desk, Mac up"
+    },
+    {
+     "ask": "ASK-002024",
+     "interpretation": "Self-host or simulate the Kilo / Loud / Gas Town facility",
+     "quote": "We installed orca on Mac. Install on win and / or consider alternatives.\n\n+ kilo loud/gas town self host or sim sw fac. We have pr"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 8,
+   "clause": "do not son me",
+   "candidates": [
+    {
+     "ask": "ASK-000774",
+     "interpretation": "Do not apply that item as a standing rule",
+     "quote": "Not my standing rule"
+    },
+    {
+     "ask": "ASK-001703",
+     "interpretation": "Do not build a bot to file the appeal; keep the appeal on a non-bot path.",
+     "quote": "I won’t make a bot appealed"
+    },
+    {
+     "ask": "ASK-002020",
+     "interpretation": "Never use the ultra mode/effort level",
+     "quote": "Never use ultra"
+    },
+    {
+     "ask": "ASK-001844",
+     "interpretation": "Do not use the `cd` command",
+     "quote": ""
+    },
+    {
+     "ask": "ASK-001127",
+     "interpretation": "Do not set up the Mac",
+     "quote": "Dont setup Mac"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 9,
+   "clause": "do not break that, but make sure everything that has a live base uses it.",
+   "candidates": [
+    {
+     "ask": "ASK-001556",
+     "interpretation": "Update the cockpit as close to real time as possible and check every owned active item at least every 15 minutes, working from deltas rather than re-reading full context",
+     "quote": "This is why this is why we have an org chart plus an SOT like paperclip, plane, and your cockpit. Uh we'll say paperclip plus uh D"
+    },
+    {
+     "ask": "ASK-000822",
+     "interpretation": "Fix Tracera as soon as possible and deploy it.",
+     "quote": "Tracera fix asap -> deploy"
+    },
+    {
+     "ask": "ASK-001288",
+     "interpretation": "Cross-check the build on its own and explain why it was not deployed",
+     "quote": "Xchk on the build it's own. Also why not deployed"
+    },
+    {
+     "ask": "ASK-000774",
+     "interpretation": "Do not apply that item as a standing rule",
+     "quote": "Not my standing rule"
+    },
+    {
+     "ask": "ASK-000579",
+     "interpretation": "Fix the broken rule in the agent configuration/setup",
+     "quote": "Fix the rule"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 10,
+   "clause": "commit df315a8c846367d6ed2d78c75a131d3e3d7b8326 on origin/main, fast-forward from your 2f6f373 (no rebase needed",
+   "candidates": [
+    {
+     "ask": "ASK-001356",
+     "interpretation": "Fix the issue raised in the referenced message phonemsg-01M50RJX3H600RCPWX305W4BXJ",
+     "quote": "Fix"
+    },
+    {
+     "ask": "ASK-001565",
+     "interpretation": "Restore the per-repo documentation and deploy baseline where every repo used phenotype-landing and pheno docs plus generic per-project micro front ends and backends, now merged into phenoshared, deploying to GitHub Pages, Vercel and Cloudflare Pages",
+     "quote": "All repos were meant to use phenotype-landing && pheno docs at min + more micro fend app or backends as generic per project deploy"
+    },
+    {
+     "ask": "ASK-001496",
+     "interpretation": "Provide a Vault tap for copy-to-vault so multiple credential copies can be made if needed",
+     "quote": "I will bring me to login. You give a vault tap for copy to vault ok in case u need to make multiple"
+    },
+    {
+     "ask": "ASK-001169",
+     "interpretation": "Remove M3 from the configuration so m3.1 is used instead",
+     "quote": "REMOVE m3"
+    },
+    {
+     "ask": "ASK-001197",
+     "interpretation": "Locate the \"2untitled\" Ableton project, force all dependencies to Keep Downloaded, then produce a copy trimmed to only the last 30 minutes with the 130-minute point remapped to zero",
+     "quote": "an Ableton file. There's also an Ableton file either in downloads or documents. Um I think it's called two untitled. It was create"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 11,
+   "clause": "run the login for me, ill do the interactive parts",
+   "candidates": [
+    {
+     "ask": "ASK-001799",
+     "interpretation": "Apply the same case handling to the login flow",
+     "quote": "Same case for login"
+    },
+    {
+     "ask": "ASK-001498",
+     "interpretation": "Own the whole Discord login setup including all token copies, with Koosha only performing the interactive login",
+     "quote": "No.\n\nYou bring login up on ff. You do all incl token copies"
+    },
+    {
+     "ask": "ASK-001812",
+     "interpretation": "Complete the GitHub device-login tap flow yourself in Firefox",
+     "quote": "Do on ff urself"
+    },
+    {
+     "ask": "ASK-001024",
+     "interpretation": "Provide the chat URL and have the simulator perform device login for the portal, with 30 minutes allowed on the Mac",
+     "quote": "Chat url and have it do sim device login for portal. Mac give me 30"
+    },
+    {
+     "ask": "ASK-000522",
+     "interpretation": "Provide the vault link or other login means for the opencode console",
+     "quote": "Vault link needed for oc console"
+    }
+   ],
+   "captured_by": "ASK-001498",
+   "why": "clause: run the login for me, ill do the interactive parts; candidate: own the Discord login setup with only the human doing the interactive login",
+   "grade": "M"
+  },
+  {
+   "idx": 12,
+   "clause": "commit: use the git-commit wrapper for ledger trailers.",
+   "candidates": [
+    {
+     "ask": "ASK-000384",
+     "interpretation": "Treat GitHub as an immutable ledger with rollback points, always push work, and roll back rather than fix unfixable failures on the personal sites",
+     "quote": "I can't tell you forge is an issue where sub agents or agent driven chats tend to pollute that conversation list. So you actually "
+    },
+    {
+     "ask": "ASK-001408",
+     "interpretation": "Update the Git integration for the project being worked on",
+     "quote": "Git integ updated"
+    },
+    {
+     "ask": "ASK-001936",
+     "interpretation": "Build a commit-scale narrative ledger of what happened from the first commit to the last, factoring in other branches carrying the same work.",
+     "quote": "This does require also building a proper story style ledger of what’s happened as granular as possible (by commit-scale) from 1st "
+    },
+    {
+     "ask": "ASK-001590",
+     "interpretation": "Design and build an externally managed ledger that ingests all git and local operations on each host device and tracks the GitHub main checkout, stashes, uncommitted and staged changes, and all branches to give full project state and eventual delta recovery for cockpit viewing",
+     "quote": "Consider also consider an advanced external ledger. Update the immutable transaction ledger GPT chat with this prompt. An external"
+    },
+    {
+     "ask": "ASK-001973",
+     "interpretation": "Rework the Yoje commit scale ledger so it tells a story rather than just listing literal file changes.",
+     "quote": "Yoje commit scale ledger doesn't tell a story but just the literal file changes..."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 13,
+   "clause": "do not forget the four defects and the tests already in your brief.",
+   "candidates": [
+    {
+     "ask": "ASK-001558",
+     "interpretation": "Treat any stall over one hour as a defect to be detected, and minimize wastage",
+     "quote": "Stalls over 1hr.\n\nMinimizing wastage"
+    },
+    {
+     "ask": "ASK-000498",
+     "interpretation": "Confirm item 3 and elaborate item 4 of the pending list",
+     "quote": "3 confirm 4 elaborate*"
+    },
+    {
+     "ask": "ASK-001961",
+     "interpretation": "Complete the presentation test that was requested but never performed",
+     "quote": "Presene test why ant you do it"
+    },
+    {
+     "ask": "ASK-002206",
+     "interpretation": "Document precisely what was previously done before the issues began",
+     "quote": "Precisely what did you used to do h4 the issues began"
+    },
+    {
+     "ask": "ASK-001811",
+     "interpretation": "Report the state of each item so it is clear what remains to be done",
+     "quote": "State to get done?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 14,
+   "clause": "read only audit docs/sessions/2026-09-13-hybrid-continuation/next_batch.md against actual exact sources.",
+   "candidates": [
+    {
+     "ask": "ASK-001842",
+     "interpretation": "Audit and use the currently-unused integrations rather than leaving them idle",
+     "quote": "All seem unused"
+    },
+    {
+     "ask": "ASK-002079",
+     "interpretation": "Report the state of all other non-job questions and asks, flagging which are stale, blocked, or not actively progressing, applying the stated dispositions (TRM skip, Shield skip, Akamai elaborate, item 5 defer, item 6 elaborate, item 7 skip, item 8 due Dec 14 2026)",
+     "quote": "What othe non jobs questions and asks, what is stlaled\\blcoked \\ not actively progressing and state of everything that s;; TRM ski"
+    },
+    {
+     "ask": "ASK-002107",
+     "interpretation": "Run a full end-to-end audit of each drive and return the fit tree and plan as a diff",
+     "quote": "Do the full audit of each driveve first e2e and five me fit tree and plan as df"
+    },
+    {
+     "ask": "ASK-001001",
+     "interpretation": "Place the work in backups, resolve the quota/ETA blockers with alternatives, and report the state of omni prod and CPA",
+     "quote": "Place in backups and deal w alternatives to deal w quotaor eta; also state of omni prod \\ CPA ?"
+    },
+    {
+     "ask": "ASK-000981",
+     "interpretation": "Audit for any other stalled items beyond the known ones.",
+     "quote": "Check for any other stalled items. And resynch instinct chat dump."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 15,
+   "clause": "body: reply/reaction target: phonemsg-01m4m58cj3dheqmfyyv09fd04z to start the server build: log into discord.com in the cloud browser yourself (2fa), or drop the discord password in a vault link and i'll drive?",
+   "candidates": [
+    {
+     "ask": "ASK-000534",
+     "interpretation": "Adopt Discord as the chosen chat/conversation plane for the agent setup.",
+     "quote": "Discord;"
+    },
+    {
+     "ask": "ASK-001440",
+     "interpretation": "Complete the Discord authentication",
+     "quote": "Disc autH done"
+    },
+    {
+     "ask": "ASK-000954",
+     "interpretation": "Test the Discord bot vault token and mint a fresh one via the supplied link if it is dead",
+     "quote": "**Discord bot - we test the vault token first, if dead you mint a fresh one via the link I sent.** **Fleet restart into your sessi"
+    },
+    {
+     "ask": "ASK-000608",
+     "interpretation": "Proceed using the Discord ID Koosha already supplied earlier instead of asking again.",
+     "quote": "i gave you the discord id prior earlier"
+    },
+    {
+     "ask": "ASK-001849",
+     "interpretation": "Report the state of Discord as comms SSOT",
+     "quote": "State of full discord as comms SSOT state\n\nState of Paperclip\nState of Tracera, AGileplus, byteport, sharecli?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 16,
+   "clause": "read agents.",
+   "candidates": [
+    {
+     "ask": "ASK-001679",
+     "interpretation": "Scope item 6 to agent/harness work.",
+     "quote": "1. Dream loop codex is the skill not jcod btw; 2 A 3 best path 4 Best path 5 best path 6 B\\agent\\harness"
+    },
+    {
+     "ask": "ASK-001475",
+     "interpretation": "Stop culling your own agents and keep fanning out and managing dedicated agents on these intents",
+     "quote": "Do not cull your own agents, continuing fanning\\managing agents dedicated to these yourself"
+    },
+    {
+     "ask": "ASK-002145",
+     "interpretation": "Edit agent messages in place to remove duplication and text dumps without disrupting or regressing information granularity",
+     "quote": "Edit messages in place / reduce duplication and text dump w/o disrupting or further regressing info confusion / granularity"
+    },
+    {
+     "ask": "ASK-001134",
+     "interpretation": "Identify any other work items that should be fanned out to agents",
+     "quote": "Any other items to fan out"
+    },
+    {
+     "ask": "ASK-001523",
+     "interpretation": "Add read receipts and typing indicators to the agent chat experience",
+     "quote": "Why no read or typing indicators"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 17,
+   "clause": "what vc bruh",
+   "candidates": [
+    {
+     "ask": "ASK-001715",
+     "interpretation": "Elaborate on the VM exception encountered",
+     "quote": "Elab on vm exception"
+    },
+    {
+     "ask": "ASK-001151",
+     "interpretation": "Report the state of the Jcode VHS work",
+     "quote": "Jcode vhs state?"
+    },
+    {
+     "ask": "ASK-001365",
+     "interpretation": "Post the discussion for the Audio Comp topic",
+     "quote": "Pose snap never deferred lets sign asap; - openrouter drop discussion; Ma trash drop discussion; Audio Comp drop discussion then; "
+    },
+    {
+     "ask": "ASK-002196",
+     "interpretation": "Determine whether the VM is the root cause of the connection failure",
+     "quote": "Or is your vm the issue"
+    },
+    {
+     "ask": "ASK-001175",
+     "interpretation": "Report the status of VHS and the various desk installs/setups.",
+     "quote": "and various desk installs\\setups?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 18,
+   "clause": "also confirm: did the repo stay clean at 8c1d80c after your read-only work?",
+   "candidates": [
+    {
+     "ask": "ASK-001692",
+     "interpretation": "Recover and verify the repo scope and chat state.",
+     "quote": "Repo scope recovery chat state?"
+    },
+    {
+     "ask": "ASK-000022",
+     "interpretation": "Verify whether the substrate repo still exists or was folded into the phenoAI/phenoshared repo",
+     "quote": "Does substrate still exist? Iirc w folded it into phenoshared repo"
+    },
+    {
+     "ask": "ASK-001451",
+     "interpretation": "Report the state of repo finalization",
+     "quote": "State of repo finalization?"
+    },
+    {
+     "ask": "ASK-001831",
+     "interpretation": "Recover and report the state of repo scope",
+     "quote": "Where chats have operator q \\ blockers\\ other needs for escalation \nChat -> Hermes|Cockpit Jcode -> (Dots->you)|You -> Me\n\nthe exp"
+    },
+    {
+     "ask": "ASK-001083",
+     "interpretation": "Confirm the canary promotion scope (publish clean main without force-push, pin raw history, retain the repo name, finish private + archived) to close Batch 1.",
+     "quote": "nly canary promotion remains before Batch 1 closes.\nThe proposed scope awaits your confirmation: publish clean main 24b89dad74e5f2"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 19,
+   "clause": "read governing agents and relevant skill, approved context docs/superpowers/specs/2026-09-12-hybrid-breadth-depth-design.md (audience hiring managers/peers/collaborators",
+   "candidates": [
+    {
+     "ask": "ASK-000786",
+     "interpretation": "Produce a distinct tuned resume for each target position, marked approved for submission",
+     "quote": "Each one gets a tuned resume, all  approved for submit"
+    },
+    {
+     "ask": "ASK-001041",
+     "interpretation": "Stop authoring delegated work by instinct; treat all delegated work as direct human intent using the direct-snippet-plus-LLM-synthesis intent protocol across GPT, jcode and codex agents",
+     "quote": "No more authored by instinct or similar. Most if not all works given are direct intent deleg from human to appr gpt/jcode/codex ag"
+    },
+    {
+     "ask": "ASK-000971",
+     "interpretation": "Delegate more of your work to Dots and keep your own context at the highest management level with many layers of manager/worker delegation",
+     "quote": "Give dots more of your work. Again your ctx should be extreme high lvl as the highest on the org chart. Many levels of mgrs wrkrs "
+    },
+    {
+     "ask": "ASK-001835",
+     "interpretation": "Prohibit the main agent from doing research and planning directly, delegating to the 6.1 GPT Work agents or local jcode with the model split defined in agents.md/memories",
+     "quote": "All prompts and wresearch+ planning strictly cannot be done by you as always; pass to 6.1 on GPT Work || local jcode with the mode"
+    },
+    {
+     "ask": "ASK-000034",
+     "interpretation": "Answer whether custom tooling skills or MCP are supported and how to grant the agent data or tooling access not natively available",
+     "quote": "Do you support custom tooling skills or mcp?\n\nOr otherwise if I wanted to give you such data or tooling access not avail natively "
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 20,
+   "clause": "when did the other stuff come into play",
+   "candidates": [
+    {
+     "ask": "ASK-000221",
+     "interpretation": "Report the current state of other work items",
+     "quote": "State of other works?"
+    },
+    {
+     "ask": "ASK-001023",
+     "interpretation": "Elaborate on items 1 and 2, and on items 3 and 4 only if still relevant",
+     "quote": "Elab 1 2. Then 3 4 onlh if still relevant"
+    },
+    {
+     "ask": "ASK-002206",
+     "interpretation": "Document precisely what was previously done before the issues began",
+     "quote": "Precisely what did you used to do h4 the issues began"
+    },
+    {
+     "ask": "ASK-002019",
+     "interpretation": "Treat everything from the last month or so as in scope for this work",
+     "quote": "There's a LOT in scope\n everything from. The last mo or so"
+    },
+    {
+     "ask": "ASK-002207",
+     "interpretation": "Document precisely what changed and when it changed",
+     "quote": "And precisely what changed and when"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 21,
+   "clause": "the solution there from what i remember is a couple different paths: one attempt making a new branch, two create a new chat, hand at the gpt link, the share link i mean and then have to ask it to use both its internal conversation tools and the brow … --- later evidence candidates (same thread) --- > friday, october 9, 2026, 12:08:17 pm pdt | instinct | reply/reaction target: phonemsg-01m4h11k33jh727jgt52zs4yc5 running right now: dispensary ui redesign (gpt work design pass, then prs), too-long chat continuations, cockpit sweep pr, codex/vercel cron inventory, mail overhaul, plan 100x re-check, opt-outs (spokeo verification + peopleconnect).",
+   "candidates": [
+    {
+     "ask": "ASK-001035",
+     "interpretation": "Report the state of the GPT chat organization",
+     "quote": "State of gpt chat organization"
+    },
+    {
+     "ask": "ASK-000131",
+     "interpretation": "Ask chatgpt.com to refine the message using available memories and other conversations, using the recent refine response titled \"conversation\"",
+     "quote": "Ask chatgpt.com to refine it given our memories and other convos, use the resent refine response titled conversation."
+    },
+    {
+     "ask": "ASK-002116",
+     "interpretation": "Spawn a fresh GPT-6.1 extra-high web-work session loaded with the full one-month iMessage dump plus GitHub, conversations and memories to return a proper status, and request dossiers from the owning scope chats for iteration 2",
+     "quote": "Hand full ctx to a fresh gpt 6.1 extra high web work session incl full 1mo imsg dump and explicit request to dig through GitHub, c"
+    },
+    {
+     "ask": "ASK-002115",
+     "interpretation": "Hand full context to a fresh GPT-6.1 extra-high web-work session including a 1-month iMessage dump and an explicit request to dig through GitHub, conversations and memories to produce a proper status report, plus request dossiers from owning-scope chats for inclusion at iteration #2",
+     "quote": "Hand full ctx to a fresh gpt 6.1 extra high web work session incl full 1mo imsg dump and explicit request to dig through GitHub, c"
+    },
+    {
+     "ask": "ASK-000502",
+     "interpretation": "Research and implement a more reliable access/delivery channel (e.g. IMAP-to-SMS access and a better line of communication to the assistant), and follow up on the pending containerization, opstat, install/setup/plan items, the paperclip and overall agent-architecture critique, GPT chat follow-ups including the repost scope definition work, and manage the ~20 active chat.com chats at session limits",
+     "quote": "Thoughts on getting a better solution access. The current works but it's finicky. I notice my responses go into my spam for exampl"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 22,
+   "clause": "ok to nudge it with a \"continue\", or want me to branch it instead?",
+   "candidates": [
+    {
+     "ask": "ASK-001690",
+     "interpretation": "Research the fork problem of diverging while borrowing new upstream versions, including the decollision aspect.",
+     "quote": "The fork probalem also needs research; the dual problem of diverging while borrowing new upstream ver; and the decollision aspect"
+    },
+    {
+     "ask": "ASK-000329",
+     "interpretation": "Resolve chats hitting the length limit by branching or creating a new chat, passing the share link and continuing via internal conversation tools plus browser use",
+     "quote": "what about my other active chats? Almost all the active ones now live in your folders Some have hit this conversation is too long."
+    },
+    {
+     "ask": "ASK-000865",
+     "interpretation": "Proceed to the next stage and keep going",
+     "quote": "So onstage o forth"
+    },
+    {
+     "ask": "ASK-000550",
+     "interpretation": "Proceed via the best available path for the item just discussed.",
+     "quote": "Best path for that"
+    },
+    {
+     "ask": "ASK-002125",
+     "interpretation": "Give a reason for every item that is paused or otherwise not actively progressing instead of leaving it stalled",
+     "quote": "For all pause or not a tiveltyp regressing , WHY"
+    }
+   ],
+   "captured_by": "ASK-000329",
+   "why": "clause: nudge with continue or branch it; candidate: resolve length-limited chats by branching and passing the share link",
+   "grade": "M"
+  },
+  {
+   "idx": 23,
+   "clause": "close comment + explanation posted (id <ID-REDACTED>).",
+   "candidates": [
+    {
+     "ask": "ASK-001087",
+     "interpretation": "Check email for the message carrying code 68g23y / the Instinct reply.",
+     "quote": "Chk email?"
+    },
+    {
+     "ask": "ASK-000608",
+     "interpretation": "Proceed using the Discord ID Koosha already supplied earlier instead of asking again.",
+     "quote": "i gave you the discord id prior earlier"
+    },
+    {
+     "ask": "ASK-001002",
+     "interpretation": "Correct the earlier reply (issue first seen on 81 not 93, possibly predating jcode usage) and have the codex chat that can answer properly draft the response",
+     "quote": "First seen on 81 not 93; experienced from first usage of jcode could easilybe older; ask the codex chat that can actually y answe "
+    },
+    {
+     "ask": "ASK-000722",
+     "interpretation": "Configure the referenced work account with the supplied user id 201372818611372032",
+     "quote": "User id 201372818611372032"
+    },
+    {
+     "ask": "ASK-001377",
+     "interpretation": "Verify whether the item referenced in message phonemsg-01M512FG3X3X1NWZ7YEN83XE3Q is actually closed",
+     "quote": "That one I believe, but its open right now I think?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 24,
+   "clause": "what about now",
+   "candidates": [
+    {
+     "ask": "ASK-000521",
+     "interpretation": "State what is next",
+     "quote": "Whats next"
+    },
+    {
+     "ask": "ASK-001803",
+     "interpretation": "Report what is next and what is needed",
+     "quote": "Whats nextt or needed"
+    },
+    {
+     "ask": "ASK-002232",
+     "interpretation": "State what is next",
+     "quote": "What's nxy"
+    },
+    {
+     "ask": "ASK-000492",
+     "interpretation": "Walk through the current state of the project and what comes next",
+     "quote": "For jcode-win-herdr, its an urgently needed fix. Perhaps gh issue+pr to JCODE + FIX at Kcode; \n\nwhats nxt walk me through state of"
+    },
+    {
+     "ask": "ASK-000415",
+     "interpretation": "Report what is left and the next steps.",
+     "quote": "What's left and next"
+    }
+   ],
+   "captured_by": "ASK-000521",
+   "why": "clause: what about now; candidate: state what is next",
+   "grade": "M"
+  },
+  {
+   "idx": 25,
+   "clause": "saturday, october 10, 2026, 11:02:46 pm pdt | instinct | reply/reaction target: phonemsg-01m4mrv8rhw18eqh94nnprgcnj hatchet needs a call: skip it, or reinstall a runtime (colima or podman) first?",
+   "candidates": [
+    {
+     "ask": "ASK-001064",
+     "interpretation": "Batch-recover the chats defined by each repo scope",
+     "quote": "The repo scope def batch recovery chats"
+    },
+    {
+     "ask": "ASK-000783",
+     "interpretation": "Drive the pending Instinct handshake to closure by obtaining the agent's reply to the handshake email, which has had zero replies from the cockpit jcode VP-Eng",
+     "quote": "External (3)\nInstinct reply to handshake\n• What it is: Handshake email sent to <EMAIL-REDACTED> at 20:36:04Z (now 251+ min"
+    },
+    {
+     "ask": "ASK-000914",
+     "interpretation": "Recover/resume the killed August-September Codex chats (PMP01/PMP1-style prompts) as new intensive tasks, and build session-ledger-style automated scraping/aggregation across harnesses back to April 2025 on both devices instead of reading every token",
+     "quote": "additional question: digging through past Codex chats, there are a couple that we killed that were really meant to stay alive, but"
+    },
+    {
+     "ask": "ASK-000982",
+     "interpretation": "Resynchronize the instinct chat dump.",
+     "quote": "Check for any other stalled items. And resynch instinct chat dump."
+    },
+    {
+     "ask": "ASK-001087",
+     "interpretation": "Check email for the message carrying code 68g23y / the Instinct reply.",
+     "quote": "Chk email?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 26,
+   "clause": "reinstall xirp plz",
+   "candidates": [
+    {
+     "ask": "ASK-001619",
+     "interpretation": "Uninstall Splashtop permanently",
+     "quote": "We're now going to review seven out of nine. Desk firewall, great. Anything else you'd want to add in there or optimize or polish?"
+    },
+    {
+     "ask": "ASK-000867",
+     "interpretation": "Get xirp fixed on the Mac",
+     "quote": "xirp is fuixed on Mac"
+    },
+    {
+     "ask": "ASK-000828",
+     "interpretation": "Log into Tracera with Koosha's SSO/WorkOS account, set up projects there, have the xirp/portal chat perform the same flow for the portal in chatgpt.com, and dispatch on error reach.",
+     "quote": "You have my gsso it’s signed up in my workos db, so you SHOULD try to login to tracera nd setting up projects (that xirp\\portal ch"
+    },
+    {
+     "ask": "ASK-002013",
+     "interpretation": "Skip the Xirp wiring work",
+     "quote": "Skip Xirp wirings then"
+    },
+    {
+     "ask": "ASK-001659",
+     "interpretation": "Report the state of Xirp/Portal and the Portal data setups",
+     "quote": "Same for Xirp\\Portal? And Portal data setups, same for tracera\\ag+? And phenoshared optimality +adoption; lastly the state of all "
+    }
+   ],
+   "captured_by": "ASK-000867",
+   "why": "clause: reinstall xirp plz; candidate: get xirp fixed on the Mac - same target, different method",
+   "grade": "W"
+  },
+  {
+   "idx": 27,
+   "clause": "preserve every existing web route and keep credentials out of chat and repositories.",
+   "candidates": [
+    {
+     "ask": "ASK-000650",
+     "interpretation": "Have the two PhenoFabric and ShareCLI research chats write all research, specs and ADRs into PhenoRegistry and the two repos on a branch, enabling trivial future continuation, and delete the chats only after export and embedding",
+     "quote": "2x pheno fabric / ShareCLI research oriented chats. Need to both be told to add to Phenoreg + the 2 repos commit all info research"
+    },
+    {
+     "ask": "ASK-001064",
+     "interpretation": "Batch-recover the chats defined by each repo scope",
+     "quote": "The repo scope def batch recovery chats"
+    },
+    {
+     "ask": "ASK-001092",
+     "interpretation": "Route replies and actions through chatgpt.com for safety, and keep that path until it is proven to work.",
+     "quote": "Reply via chatgpt.com for safety"
+    },
+    {
+     "ask": "ASK-001004",
+     "interpretation": "Stop losing previously established context between sessions so prior context is not forgotten (persist memory/context across chats)",
+     "quote": "You should not have already forgotten what hta tis."
+    },
+    {
+     "ask": "ASK-001978",
+     "interpretation": "Answer what the secrets system stores: option A (three classes of agent/API keys plus website logins/TOTP in Infisical and bootstrap secrets in sops+age files), option B (API keys only), or option C (website logins only).",
+     "quote": "**ASK 1: what it stores**\nA) Three classes: agent/API keys + website logins/TOTP in Infisical, bootstrap secrets in sops+age files"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 28,
+   "clause": "do not start your own preview-server.js first",
+   "candidates": [
+    {
+     "ask": "ASK-001117",
+     "interpretation": "Restart the jcode sessions immediately rather than later",
+     "quote": "Restart now"
+    },
+    {
+     "ask": "ASK-001722",
+     "interpretation": "Run the cloud browser in its own separate session",
+     "quote": "Cloud browser on its own sessioj"
+    },
+    {
+     "ask": "ASK-001552",
+     "interpretation": "Ship finished pre-built releases so bringing services up is a download rather than a custom build, and fix CI where releases exist but do not build",
+     "quote": "once again we once again we slip on the top of our heads in terms of infrastructure we owe agents containerization we owe agents t"
+    },
+    {
+     "ask": "ASK-001456",
+     "interpretation": "After a reset, do not queue or wait on anything; fan out to Mac, desk and cloud sessions immediately",
+     "quote": "Not after reset. Do not queue or wait on anyt fan out mac desk cloud sess"
+    },
+    {
+     "ask": "ASK-000853",
+     "interpretation": "Source and download images into a directory the server reads from before serving them",
+     "quote": "You sourced hte image before dl them to a place the server reads from"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 29,
+   "clause": "finish all seven within 12 tool calls, then report done with a one-line verdict per tool",
+   "candidates": [
+    {
+     "ask": "ASK-000791",
+     "interpretation": "Report the verdict and required actions for all 5 repos under hygiene review",
+     "quote": "All 5 repos had what verdict and actions?"
+    },
+    {
+     "ask": "ASK-000712",
+     "interpretation": "After batch 1 is fully validated, split the remaining work into up to 5 lanes of equal-sized batches",
+     "quote": "Upon full validated finish of batch 1 split to up to 5 lanes covering same sized batches"
+    },
+    {
+     "ask": "ASK-000287",
+     "interpretation": "Report the complete state of all work and asks for the whole session, using search tools to confirm beyond the visible message limit",
+     "quote": "state of all work and asks in full session? Will probably need to use search tools given limit of messages you cans ee to confirm,"
+    },
+    {
+     "ask": "ASK-002106",
+     "interpretation": "Perform a full end-to-end audit of each drive, build a five-level fit tree, and produce a plan as a decision framework",
+     "quote": "Do the full audit of each driveve first e2e and five me fit tree and plan as df"
+    },
+    {
+     "ask": "ASK-001776",
+     "interpretation": "Report the state of the various project completions",
+     "quote": "Various preoject finishes?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 30,
+   "clause": "determine whether they are complete ci fixes (pushable) or work-in-progress.",
+   "candidates": [
+    {
+     "ask": "ASK-000980",
+     "interpretation": "Determine why the work was not started and get it moving.",
+     "quote": "Why not started."
+    },
+    {
+     "ask": "ASK-001238",
+     "interpretation": "Report the state of all remaining work, including whether the Discord bridges and other slots are finished.",
+     "quote": "State of ALLL else? Discord bridges and otehr slots stills not done?"
+    },
+    {
+     "ask": "ASK-001042",
+     "interpretation": "Report the current state of the work in progress",
+     "quote": "State?"
+    },
+    {
+     "ask": "ASK-001779",
+     "interpretation": "Determine the next steps needed to push all work to finished and merged",
+     "quote": "So what's nxt to push all to finish and merged"
+    },
+    {
+     "ask": "ASK-000327",
+     "interpretation": "Push the pending fixes upstream and explain whether the implementation is hand-rolled or a fork",
+     "quote": "Psuh fixes && what is this? Hand roll, fork ,etc?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 31,
+   "clause": "report severity with actual evidence, not source substring claims.",
+   "candidates": [
+    {
+     "ask": "ASK-000484",
+     "interpretation": "Extend detection to semantic regressions (agents slowly rotting code, removing needed work, warping intent) using the Tracera/AgilePlus/ShareCLI April–August sloppification period as worked examples.",
+     "quote": "fp\\fn for semantic regressions (agents slowly rotting code \\ removing things we do need or want, or suddenly changing\\warping inte"
+    },
+    {
+     "ask": "ASK-001990",
+     "interpretation": "Produce the full single source of truth.",
+     "quote": "Full ssot"
+    },
+    {
+     "ask": "ASK-000039",
+     "interpretation": "Report the context limit and where memory becomes shaky, expressed in tokens versus number of messages",
+     "quote": "For my ref, I assume you don't know your ctx lim in tokens but perhaps in # of msgs b4 your memory is shaky?"
+    },
+    {
+     "ask": "ASK-002209",
+     "interpretation": "Ensure every reported figure is measured rather than unmeasured",
+     "quote": "Unmeasured not alloweddg et it measured"
+    },
+    {
+     "ask": "ASK-000288",
+     "interpretation": "Redo the state report with full range and granularity instead of an incomplete summary",
+     "quote": "Its incomplete why you sent yes; nee full range\\granular"
+    }
+   ],
+   "captured_by": "ASK-002209",
+   "why": "clause: report severity with actual evidence not substring claims; candidate: ensure every reported figure is measured",
+   "grade": "M"
+  },
+  {
+   "idx": 32,
+   "clause": "verify: does /projects/ now render real names/statuses?",
+   "candidates": [
+    {
+     "ask": "ASK-000165",
+     "interpretation": "Provide a current state/status update on the work.",
+     "quote": "State update?"
+    },
+    {
+     "ask": "ASK-001777",
+     "interpretation": "Report the status of the various project completions",
+     "quote": "Various preoject finishes?"
+    },
+    {
+     "ask": "ASK-000919",
+     "interpretation": "Produce a Project/Ask/State view with 4-line expansion covering non-legacy GitHub projects plus installs, deploys, research and architectural asks, and mirror it for Task and Ask",
+     "quote": "Give me \n\nProject - Ask - State\nMax 4line expansion\\detail.\n…\n...\n\nNon LEGACY (pre you existing on gh, new ones or ones that event"
+    },
+    {
+     "ask": "ASK-002120",
+     "interpretation": "Confirm the same for most dev-related asks/tasks",
+     "quote": "Smae for most of my asks\\tasks related to dev"
+    },
+    {
+     "ask": "ASK-001776",
+     "interpretation": "Report the state of the various project completions",
+     "quote": "Various preoject finishes?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 33,
+   "clause": "same for sharecli?",
+   "candidates": [
+    {
+     "ask": "ASK-001295",
+     "interpretation": "Report ShareCLI's current state and the time remaining until it is ready to deploy on Mac and on Windows/WSL",
+     "quote": "State of sharecli and time till ready for Mac and win\\wsl deploy"
+    },
+    {
+     "ask": "ASK-000467",
+     "interpretation": "Add energy pressure and energy handling to ShareCLI, which currently has none",
+     "quote": "rusty is also a process that I very much am starting to hate, as well as other heavy processes we run, as well as their virtual ma"
+    },
+    {
+     "ask": "ASK-000864",
+     "interpretation": "Report the setup state of ShareCLI and Fabric",
+     "quote": "For sharecli\\fabric?"
+    },
+    {
+     "ask": "ASK-000468",
+     "interpretation": "Add learning plus other automated and advanced features to ShareCLI",
+     "quote": "rusty is also a process that I very much am starting to hate, as well as other heavy processes we run, as well as their virtual ma"
+    },
+    {
+     "ask": "ASK-000962",
+     "interpretation": "Report the current state of ShareCLI and Fabric individually",
+     "quote": "State of each?"
+    }
+   ],
+   "captured_by": "ASK-000962",
+   "why": "clause: same for sharecli; candidate: report the current state of ShareCLI and Fabric individually",
+   "grade": "M"
+  },
+  {
+   "idx": 34,
+   "clause": "pick: **a (default)**: drop multi-account or, scale nim + kilo within their terms, single or account.",
+   "candidates": [
+    {
+     "ask": "ASK-000178",
+     "interpretation": "Qualify each target role on a role-by-role basis instead of by a blanket rule.",
+     "quote": "dtermine role by role"
+    },
+    {
+     "ask": "ASK-002234",
+     "interpretation": "Treat the MiniMax account's $0 credits with auto-reload off and no minted pay-as-you-go key as a non-concern",
+     "quote": "for MiniMax account has $0 credits and has auto reload off, we never minted a pay as you go key. This is a non-concern"
+    },
+    {
+     "ask": "ASK-001543",
+     "interpretation": "Set the default rather than leaving the choice open",
+     "quote": "defeault*"
+    },
+    {
+     "ask": "ASK-002157",
+     "interpretation": "Implement per-provider penalty policy: heavy multiple penalties for Claude subscriptions (non-commercial, blocks AI dev use, locked to the CC harness), only the distillation/AI-dev block for OpenAI, and no penalty for other providers",
+     "quote": "Claude gets mult penalties.\n\nSub is non commercial, blocks ai dev use (use for Dev OF AI openai similar policy and partial penalty"
+    },
+    {
+     "ask": "ASK-001786",
+     "interpretation": "Proceed with option A of the harvest collection for the chosen target",
+     "quote": "A for harvest"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 35,
+   "clause": "saturday, october 24, 2026, 9:34:03 am pdt | instinct | reply/reaction target: phonemsg-01m5nxpdh6gse68n8f01ddqt9p can you add the desk d: recovery key through this link?",
+   "candidates": [
+    {
+     "ask": "ASK-000698",
+     "interpretation": "Include the full instinct chat log as part of the dateline",
+     "quote": "instinct full chat log should be part of dateline"
+    },
+    {
+     "ask": "ASK-000783",
+     "interpretation": "Drive the pending Instinct handshake to closure by obtaining the agent's reply to the handshake email, which has had zero replies from the cockpit jcode VP-Eng",
+     "quote": "External (3)\nInstinct reply to handshake\n• What it is: Handshake email sent to <EMAIL-REDACTED> at 20:36:04Z (now 251+ min"
+    },
+    {
+     "ask": "ASK-001163",
+     "interpretation": "Locate the late-Sept/early-Oct omniroute WhatsApp-reply conversation (the draft revision chat) by searching",
+     "quote": "A late sept\\early oct chat abt replying to a WhatsApp cnvo for omniroute as always do its search"
+    },
+    {
+     "ask": "ASK-000914",
+     "interpretation": "Recover/resume the killed August-September Codex chats (PMP01/PMP1-style prompts) as new intensive tasks, and build session-ledger-style automated scraping/aggregation across harnesses back to April 2025 on both devices instead of reading every token",
+     "quote": "additional question: digging through past Codex chats, there are a couple that we killed that were really meant to stay alive, but"
+    },
+    {
+     "ask": "ASK-001087",
+     "interpretation": "Check email for the message carrying code 68g23y / the Instinct reply.",
+     "quote": "Chk email?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 36,
+   "clause": "read the file days/october292026.txt with the read tool.",
+   "candidates": [
+    {
+     "ask": "ASK-001278",
+     "interpretation": "Resolve the exhausted Cloudflare D1 free-tier daily row-write limit on <EMAIL-REDACTED>'s Account before writes resume at the 2026-10-15 reset",
+     "quote": "D1 row write requests are temporarily blocked\nView D1 usage\nNotification details\nAccount: Kooshapari@gmail[.]com's Account\nOperati"
+    },
+    {
+     "ask": "ASK-000914",
+     "interpretation": "Recover/resume the killed August-September Codex chats (PMP01/PMP1-style prompts) as new intensive tasks, and build session-ledger-style automated scraping/aggregation across harnesses back to April 2025 on both devices instead of reading every token",
+     "quote": "additional question: digging through past Codex chats, there are a couple that we killed that were really meant to stay alive, but"
+    },
+    {
+     "ask": "ASK-000583",
+     "interpretation": "Check for similar context failures, using a scrape of every user message from the last week as the baseline",
+     "quote": "check for similar context fails, I recommend scraping every user msg from the last week as a base here too."
+    },
+    {
+     "ask": "ASK-000638",
+     "interpretation": "Review the Oct 10-11 text dump in depth and identify gaps.",
+     "quote": "Review the dump of Oct 10-11 txts in depth to id gaps"
+    },
+    {
+     "ask": "ASK-000362",
+     "interpretation": "Deliver read and write support, not read only",
+     "quote": "R\\W is most definitely a must"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 37,
+   "clause": "work on all, codex has reset fyi, gpt astra low i rcommend where ui\\ux design needed as a subagent, to d oyour over eng, have you properly collected various portfolio, ui\\ux design referencees?",
+   "candidates": [
+    {
+     "ask": "ASK-000891",
+     "interpretation": "Redesign the Tracera UI/UX from the ground up, with GPT-6.1 Sol on Codex producing a post-audit plan plus a separate plan for all the issues",
+     "quote": "Most Tracera features and ui broken not correctly used or setup yet either user or dev side. And more. Or j Unpolsbed. \n\nUiux itse"
+    },
+    {
+     "ask": "ASK-001038",
+     "interpretation": "Have agents review every Tracera page component and UI/UX element or behavior, map the full end-to-end wireframes as SVG, ASCII or Figma for how the entire complete system ideally should be, and perform a proper UI/UX redesign from scratch",
+     "quote": "Have agents go through every page component and ui ux element or behavior of Tracera. -> go and map the full e2e wire frames as sv"
+    },
+    {
+     "ask": "ASK-001039",
+     "interpretation": "Own the Tracera UI/UX work in a GPT-6.1-sol session, creating one if no relevant one exists, and use skills references and UX resources heavily",
+     "quote": "Have agents go through every page component and ui ux element or behavior of Tracera. -> go and map the full e2e wire frames as sv"
+    },
+    {
+     "ask": "ASK-001565",
+     "interpretation": "Restore the per-repo documentation and deploy baseline where every repo used phenotype-landing and pheno docs plus generic per-project micro front ends and backends, now merged into phenoshared, deploying to GitHub Pages, Vercel and Cloudflare Pages",
+     "quote": "All repos were meant to use phenotype-landing && pheno docs at min + more micro fend app or backends as generic per project deploy"
+    },
+    {
+     "ask": "ASK-001730",
+     "interpretation": "Report the status of the UI/UX redesign and all other outstanding work across Tracera, ShareCLI, BytePort, Civis, and AgilePlus",
+     "quote": "State of its uiux redesign and a ll other works regarding tracera, sharecli, byteport, civis, agileplus"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 38,
+   "clause": "commit separate structural repair.",
+   "candidates": [
+    {
+     "ask": "ASK-001744",
+     "interpretation": "Leave the other referenced item open and proceed with merging the pending change",
+     "quote": "Leave openand merge"
+    },
+    {
+     "ask": "ASK-001779",
+     "interpretation": "Determine the next steps needed to push all work to finished and merged",
+     "quote": "So what's nxt to push all to finish and merged"
+    },
+    {
+     "ask": "ASK-001551",
+     "interpretation": "Recover work that agents never committed or mangled into deep branch and commit sprawl, and give a direct recovery path instead of starting over",
+     "quote": "once again we once again we slip on the top of our heads in terms of infrastructure we owe agents containerization we owe agents t"
+    },
+    {
+     "ask": "ASK-000935",
+     "interpretation": "Restart the affected process as part of the fix",
+     "quote": "Ok to restart too"
+    },
+    {
+     "ask": "ASK-000730",
+     "interpretation": "Proceed with the delegated split work",
+     "quote": "Go"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 39,
+   "clause": "why did white dudes retardify themselves so hard gd",
+   "candidates": [
+    {
+     "ask": "ASK-001542",
+     "interpretation": "Reboot unattended without asking for confirmation, and investigate why the D and E drives are causing repeated problems",
+     "quote": "no longer home. Um, give any confirmation/contact saving style text first as text and then give me a proper reply I can listen to "
+    },
+    {
+     "ask": "ASK-001697",
+     "interpretation": "For everything not done, accepted, or verified, give a deep explanation of why plus the forward WBS in depth as a DAG-style graph.",
+     "quote": "each page mostly ermpty; 1 add a tree of progress bars for both intents \\ domaisn of overall project if relevant;\n\n2. for everythi"
+    },
+    {
+     "ask": "ASK-001385",
+     "interpretation": "Explain why the work was queued instead of built.",
+     "quote": "Why queued; why not built; and lastly why not bridges for EVERY agent for email, matter, disc, other. Where for jcode\\hermes\\other"
+    },
+    {
+     "ask": "ASK-002124",
+     "interpretation": "Explain the root cause of why every item across all work is paused or actively regressing",
+     "quote": "For all pause or not a tiveltyp regressing , WHY"
+    },
+    {
+     "ask": "ASK-001041",
+     "interpretation": "Stop authoring delegated work by instinct; treat all delegated work as direct human intent using the direct-snippet-plus-LLM-synthesis intent protocol across GPT, jcode and codex agents",
+     "quote": "No more authored by instinct or similar. Most if not all works given are direct intent deleg from human to appr gpt/jcode/codex ag"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 40,
+   "clause": "try a different cat5e/6 cable or another port.",
+   "candidates": [
+    {
+     "ask": "ASK-000353",
+     "interpretation": "Fix tailnet connectivity for kooshapari-desk (win/wsl2) and the Cachyos benchtest PC running from a non-persistent bootable USB",
+     "quote": "Kooshapari-desk win\\wsl2. Cachyos a benchtest pc that is on a non persistent bootable usb; tailnet must be fixed; parsec elaborate"
+    },
+    {
+     "ask": "ASK-000539",
+     "interpretation": "Retry the SSH connection to the remote host, attempting it again after each failure.",
+     "quote": "Retry ssh,"
+    },
+    {
+     "ask": "ASK-000806",
+     "interpretation": "Fix all other failing jcode hats using the same switch approach.",
+     "quote": "Fix all the other failing jcode hats w simialr switch"
+    },
+    {
+     "ask": "ASK-001355",
+     "interpretation": "Diagnose and fix the Cloudflare tunnel error",
+     "quote": "Cloudflare tunnel err"
+    },
+    {
+     "ask": "ASK-002188",
+     "interpretation": "State the concrete next steps planned to fix the connection problem",
+     "quote": "What are you doing next to fix"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 41,
+   "clause": "stop and read before making any change.",
+   "candidates": [
+    {
+     "ask": "ASK-002256",
+     "interpretation": "Replace the repeated zero-delta posts with edit-in-place timestamped \"nothing has changed\" notes scoped to the last five most recent messages including user replies, treating a user reply as the start of a new attention thread.",
+     "quote": ""
+    },
+    {
+     "ask": "ASK-000085",
+     "interpretation": "Perform the analysis, planning, and research before writing any output",
+     "quote": "first to your analysis and planning and research rather than writing first"
+    },
+    {
+     "ask": "ASK-002220",
+     "interpretation": "Report only if there is a change, printing nothing otherwise",
+     "quote": "If no change don’t print"
+    },
+    {
+     "ask": "ASK-002207",
+     "interpretation": "Document precisely what changed and when it changed",
+     "quote": "And precisely what changed and when"
+    },
+    {
+     "ask": "ASK-001456",
+     "interpretation": "After a reset, do not queue or wait on anything; fan out to Mac, desk and cloud sessions immediately",
+     "quote": "Not after reset. Do not queue or wait on anyt fan out mac desk cloud sess"
+    }
+   ],
+   "captured_by": "ASK-000085",
+   "why": "clause: stop and read before making any change; candidate: perform analysis, planning and research before writing",
+   "grade": "M"
+  },
+  {
+   "idx": 42,
+   "clause": "report exact safe staging list once docs settle, no cargo.lock inclusion.",
+   "candidates": [
+    {
+     "ask": "ASK-001175",
+     "interpretation": "Report the status of VHS and the various desk installs/setups.",
+     "quote": "and various desk installs\\setups?"
+    },
+    {
+     "ask": "ASK-000953",
+     "interpretation": "Report the state of the approved fleet restart into your session (restarted after the desk SSH block) and confirm it has been tested and restored",
+     "quote": "**Discord bot - we test the vault token first, if dead you mint a fresh one via the link I sent.** **Fleet restart into your sessi"
+    },
+    {
+     "ask": "ASK-001811",
+     "interpretation": "Report the state of each item so it is clear what remains to be done",
+     "quote": "State to get done?"
+    },
+    {
+     "ask": "ASK-000807",
+     "interpretation": "Ensure the portal is not publicly exposed; lock it behind tailnet / Cloudflare Access.",
+     "quote": "If on that portal it must not be public; tailnet \\ Cloudflare Access lock"
+    },
+    {
+     "ask": "ASK-000614",
+     "interpretation": "Report the state of all other outstanding items.",
+     "quote": "State of all other items?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 43,
+   "clause": "use the kiro-inventory mcp server.",
+   "candidates": [
+    {
+     "ask": "ASK-002027",
+     "interpretation": "Self-host Kilo Cloud from the Kilo org GitHub repository",
+     "quote": "No. Kilo org githuv has a repo of kilo cloud for self.host"
+    },
+    {
+     "ask": "ASK-001863",
+     "interpretation": "Wire the GitHub MCP server by setting its base URL so it triggers the OAuth flow that Koosha will accept",
+     "quote": "Wire the base url -> it triggers oauth -> I accept…."
+    },
+    {
+     "ask": "ASK-000598",
+     "interpretation": "Migrate the MCP server to FastMCP 4.",
+     "quote": "And that mcp prob needs a migr to fastmcp 4"
+    },
+    {
+     "ask": "ASK-002176",
+     "interpretation": "Research and fully set up KiroCrew for the pilot, including installing it on the desktop in addition to the existing Mac install",
+     "quote": "Research and fully setup Krio crew for pilot, its installed on my Mac, need sisntallation on desktop, ill setup mac’s jcode + code"
+    },
+    {
+     "ask": "ASK-002175",
+     "interpretation": "Research and fully set up Kiro Crew for a pilot, including installing it on the desktop where it is already present on the Mac, plus the Kiro-specific items shown",
+     "quote": "Research and fully setup Krio crew for pilot, its installed on my Mac, need sisntallation on desktop, ill setup mac’s jcode + code"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 44,
+   "clause": "do not claim anything you did not verify",
+   "candidates": [
+    {
+     "ask": "ASK-000733",
+     "interpretation": "Treat the identified account as the correct one and note it was never used for any device-code login",
+     "quote": "Its that account; I did not use that acct for any device code login"
+    },
+    {
+     "ask": "ASK-001879",
+     "interpretation": "Never return with unknown information; research until the information is resolved (in this case)",
+     "quote": "you are not allowed to return when information is unknown. Int his age is 99% of info."
+    },
+    {
+     "ask": "ASK-001029",
+     "interpretation": "Recheck and re-verify the item",
+     "quote": "Rechk"
+    },
+    {
+     "ask": "ASK-000086",
+     "interpretation": "Verify every claim with explicit proof from public sources, Google Drive, and GitHub, and extract verification evidence from ChatGPT career chats",
+     "quote": "The things you know is not checking out how explicit proof both publicly and on the workspace drive or GitHub, so you should be ab"
+    },
+    {
+     "ask": "ASK-001987",
+     "interpretation": "Explain why something is not gradable and why the email address is not verified.",
+     "quote": "Why not gradable and why is the email fanot vdricied"
+    }
+   ],
+   "captured_by": "ASK-000086",
+   "why": "clause: do not claim anything you did not verify; candidate: verify every claim with explicit proof",
+   "grade": "M"
+  },
+  {
+   "idx": 45,
+   "clause": "preserve scripts/triggers/permissions.",
+   "candidates": [
+    {
+     "ask": "ASK-000466",
+     "interpretation": "Run the restoration as batches of restore → forensic analysis/recovery → proper absorption/merge → re-delete.",
+     "quote": "It involves batches of restore -> forensic analysis \\ recovery -> proper absorption\\merge -> re-delete"
+    },
+    {
+     "ask": "ASK-001252",
+     "interpretation": "Confirm whether consent granted via AppleScript (or the Windows equivalent) is sufficient for device control",
+     "quote": "G consent w AppleScript or win equiv not enough?"
+    },
+    {
+     "ask": "ASK-001102",
+     "interpretation": "Treat GitHub access as granted and use it to unblock GitHub-dependent work.",
+     "quote": "E drive repl indef defer. Pm and cse same case. Don't bring up. Gh access given. Gg login do so"
+    },
+    {
+     "ask": "ASK-000358",
+     "interpretation": "Add the instinct-agent SSH public key to ~/.ssh/authorized_keys with 700/600 permissions",
+     "quote": "wh%                                                                                                                        ~   "
+    },
+    {
+     "ask": "ASK-000512",
+     "interpretation": "Scrub/redact the sensitive content as instructed",
+     "quote": "Yes to scrub"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 46,
+   "clause": "please load ~/ocgo.env into the process environment privately and retry only opencode-go:mimo-v2.6-flash.",
+   "candidates": [
+    {
+     "ask": "ASK-001394",
+     "interpretation": "Obtain the opencode-go release required for the session-id fix.",
+     "quote": "We need 51 for OCGO session id fix"
+    },
+    {
+     "ask": "ASK-002153",
+     "interpretation": "Benchmark the remaining models in the pool (opencode-go mimo/deepseek-v4.1-flash baseline, m3.1 flash, and the Claude trio) for throughput above 150k requests at $10/mo",
+     "quote": "Other models in pool -> >150k Req at 10$/mo models (rhe Ocgo mimo/ds4.1 baseline) + m3.1 flash +?"
+    },
+    {
+     "ask": "ASK-000731",
+     "interpretation": "Provide and apply the ocgo.env credential file for the opencode-go provider",
+     "quote": "ocgo.env"
+    },
+    {
+     "ask": "ASK-001139",
+     "interpretation": "Extract the opencode-go key from ~/ocgo.env",
+     "quote": "extract ocgo key from ~/ocgo.env"
+    },
+    {
+     "ask": "ASK-000506",
+     "interpretation": "Use opencode-go once its rate limit clears, preferring mimo over minimax-m3 for model routing",
+     "quote": "Yes.\n\nOC go is fine iirc we were at a rate limit. If cleared using mimo is safer, faster and smarter  than m3"
+    }
+   ],
+   "captured_by": "ASK-000731",
+   "why": "clause: load ~/ocgo.env privately and retry the provider; candidate: provide and apply the ocgo.env credential file",
+   "grade": "M"
+  },
+  {
+   "idx": 47,
+   "clause": "avoid scope expansion, no paid remote compute/source upload without explicit separate permission",
+   "candidates": [
+    {
+     "ask": "ASK-000465",
+     "interpretation": "Prioritize and accelerate the \"Repo scope DEFINItiON\" work so everything is processed before the GitHub window closes, avoiding a bulk restore that recreates an unmanageable portfolio.",
+     "quote": "Esp repo scope def. Its gone slow and we are walking the deadline to go through all before GitHub window clears -> or we have to b"
+    },
+    {
+     "ask": "ASK-000258",
+     "interpretation": "Make mount approvals tool-scoped, escalating to session level only when approved for the session",
+     "quote": "Mounts should be tool -> only if the approve for this session is hit if relevant does it become session level"
+    },
+    {
+     "ask": "ASK-002157",
+     "interpretation": "Implement per-provider penalty policy: heavy multiple penalties for Claude subscriptions (non-commercial, blocks AI dev use, locked to the CC harness), only the distillation/AI-dev block for OpenAI, and no penalty for other providers",
+     "quote": "Claude gets mult penalties.\n\nSub is non commercial, blocks ai dev use (use for Dev OF AI openai similar policy and partial penalty"
+    },
+    {
+     "ask": "ASK-001814",
+     "interpretation": "Run all items in parallel, adding to existing scopes (ADD NOT REPLACE) where possible",
+     "quote": "All in parallel, and add to existing (ADD NOT REPLACE) scopes where possible, anode her wise fan out new chats YOU ONLY orhcestrat"
+    },
+    {
+     "ask": "ASK-000803",
+     "interpretation": "Keep the work scope limited to resume-related work and exclude unrelated work",
+     "quote": "No for work unrelated to resume"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 48,
+   "clause": "(4) a view named x must render artifact x",
+   "candidates": [
+    {
+     "ask": "ASK-000336",
+     "interpretation": "Fix the graph color palette hitting its limit and repeating, and make the vendor legend scrollable to show all entries",
+     "quote": "Colours on the graph seem to hit a limit and begin repeating, and on top of that, I can’t scroll to see the full list of color cod"
+    },
+    {
+     "ask": "ASK-001790",
+     "interpretation": "Add visual UI evaluation (UI tree view or screenshot plus coordinate clicks with a capable image model) to user simulations instead of leaving pixel and image analysis as the last resort",
+     "quote": "And and again, if that earlier hotel system was properly implemented, maybe we wouldn't have this issue where we're out of sync fo"
+    },
+    {
+     "ask": "ASK-000631",
+     "interpretation": "Build a real gantt view instead of an item list.",
+     "quote": "Or gantt"
+    },
+    {
+     "ask": "ASK-000707",
+     "interpretation": "Produce one artifact for every branch scrubbed",
+     "quote": "1 for every branch scrubbed"
+    },
+    {
+     "ask": "ASK-001693",
+     "interpretation": "Regenerate the artifact and supply its URL.",
+     "quote": "Regen it and give url"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 49,
+   "clause": "ensure you split existing least filled space",
+   "candidates": [
+    {
+     "ask": "ASK-000712",
+     "interpretation": "After batch 1 is fully validated, split the remaining work into up to 5 lanes of equal-sized batches",
+     "quote": "Upon full validated finish of batch 1 split to up to 5 lanes covering same sized batches"
+    },
+    {
+     "ask": "ASK-001321",
+     "interpretation": "Limit each space to exactly one tab",
+     "quote": "1 tab per space"
+    },
+    {
+     "ask": "ASK-000380",
+     "interpretation": "Enforce the rule that a 3x3 grid must be filled before a new space is created",
+     "quote": "My rule was 3x3 filled before new space…."
+    },
+    {
+     "ask": "ASK-001319",
+     "interpretation": "Open a new tab or window instead of splitting a new pane on an existing one, both in herdr and direct terminal, and split the least-filled space when splitting is used",
+     "quote": "You typ make a new tab or window ratherhtan splitting a new pane on an existing one; whether on herdr or direct term you do this; "
+    },
+    {
+     "ask": "ASK-000371",
+     "interpretation": "Cap each space at a 3x3 grid before creating a new space",
+     "quote": "9 -> 3x3 is the per space limit before a new tab space is preferred"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 50,
+   "clause": "find a disabled paperclip probe launchd plist on this mac (search ~/library/launchagents and repos for names containing paperclip or probe).",
+   "candidates": [
+    {
+     "ask": "ASK-001176",
+     "interpretation": "Remove Paperclip from the drop plane unless there is a reason to keep it, and give the time-to-completion for Paperclip's full agent/provider connectors and adapters.",
+     "quote": "Drop plane for paperclip entirely unless theres a reason of plane; given paperclip has task and otehr support internally; and then"
+    },
+    {
+     "ask": "ASK-001939",
+     "interpretation": "Report the state of Paperclip.",
+     "quote": "And apperclip?"
+    },
+    {
+     "ask": "ASK-000819",
+     "interpretation": "Determine why Paperclip is Mac-only.",
+     "quote": "Why is paperclip Mac only"
+    },
+    {
+     "ask": "ASK-001343",
+     "interpretation": "Recover and restore Paperclip's prior wiped setup",
+     "quote": "Paperclip seems to have it's prior setup wiped?"
+    },
+    {
+     "ask": "ASK-001850",
+     "interpretation": "Report the state of Paperclip",
+     "quote": "State of paperclip on win and full config\\adapter setups?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 51,
+   "clause": "do not repeat them as ```diff code blocks.",
+   "candidates": [
+    {
+     "ask": "ASK-000317",
+     "interpretation": "Standardize on J-Code, Codex, Forge and K-Code only, excluding Minimax Code, Perplexity search, Cloudflare and Gemini CLI",
+     "quote": "Reading through your text following my ask to ChatGPT to do so and right now. Nvidia will deal with today. Um while I'm at the gym"
+    },
+    {
+     "ask": "ASK-002090",
+     "interpretation": "Report the state of the other infra/WROK projects (not necessarily codebase projects) and of the codebase projects",
+     "quote": "various other infra\\WROK projects (not necessaily cdoebase projects) && codebase projects state"
+    },
+    {
+     "ask": "ASK-000030",
+     "interpretation": "Exclude new-build luxury developments from the housing shortlist, treating developer markups as a disqualifier",
+     "quote": "Esp avoiding those new luxury devs. In my eyes luxury = new development not new HIGH end dev. Neither of which is a selling point "
+    },
+    {
+     "ask": "ASK-001737",
+     "interpretation": "Apply the same blocker-resolution work to Civis",
+     "quote": "Same case for civis"
+    },
+    {
+     "ask": "ASK-001844",
+     "interpretation": "Do not use the `cd` command",
+     "quote": ""
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 52,
+   "clause": "disable a group only when the task cannot need it.",
+   "candidates": [
+    {
+     "ask": "ASK-001182",
+     "interpretation": "Treat the allegedly paused task as active (it was never paused) and keep it moving",
+     "quote": "I never paused it."
+    },
+    {
+     "ask": "ASK-001290",
+     "interpretation": "Block any future queuing of work unless a genuine dependency requires it",
+     "quote": "Block future queuing barring actual dependency"
+    },
+    {
+     "ask": "ASK-000302",
+     "interpretation": "Apply the same decline-to-identify disclosure rule generally to scheduled tasks on any platform or service",
+     "quote": "Same case generally for various scheduled tasks on various platforms or services."
+    },
+    {
+     "ask": "ASK-001942",
+     "interpretation": "Explain and fix why meta and group-board items are not being queued.",
+     "quote": "Why nt queue for meta\\GB?"
+    },
+    {
+     "ask": "ASK-001946",
+     "interpretation": "Treat the meta/group-board queueing fix as the first priority.",
+     "quote": "1st prio"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 53,
+   "clause": "verify baseline manifest via git show.",
+   "candidates": [
+    {
+     "ask": "ASK-000086",
+     "interpretation": "Verify every claim with explicit proof from public sources, Google Drive, and GitHub, and extract verification evidence from ChatGPT career chats",
+     "quote": "The things you know is not checking out how explicit proof both publicly and on the workspace drive or GitHub, so you should be ab"
+    },
+    {
+     "ask": "ASK-000477",
+     "interpretation": "Investigate why the WORK session, which has a full VM with filesystem access, is not using git itself.",
+     "quote": "why doesnt the WORK session which has a FULL vm with FS using git itself?"
+    },
+    {
+     "ask": "ASK-001565",
+     "interpretation": "Restore the per-repo documentation and deploy baseline where every repo used phenotype-landing and pheno docs plus generic per-project micro front ends and backends, now merged into phenoshared, deploying to GitHub Pages, Vercel and Cloudflare Pages",
+     "quote": "All repos were meant to use phenotype-landing && pheno docs at min + more micro fend app or backends as generic per project deploy"
+    },
+    {
+     "ask": "ASK-001408",
+     "interpretation": "Update the Git integration for the project being worked on",
+     "quote": "Git integ updated"
+    },
+    {
+     "ask": "ASK-001590",
+     "interpretation": "Design and build an externally managed ledger that ingests all git and local operations on each host device and tracks the GitHub main checkout, stashes, uncommitted and staged changes, and all branches to give full project state and eventual delta recovery for cockpit viewing",
+     "quote": "Consider also consider an advanced external ledger. Update the immutable transaction ledger GPT chat with this prompt. An external"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 54,
+   "clause": "return a substantive standalone forward wbs refinement, not an acknowledgement.",
+   "candidates": [
+    {
+     "ask": "ASK-001867",
+     "interpretation": "Extend the WBS to the full future horizon through End/Maturity of every item",
+     "quote": "Incl full future WBS\\… too all the way to End\\Maturity of every item"
+    },
+    {
+     "ask": "ASK-001912",
+     "interpretation": "Complete the incomplete WBS (work breakdown structure)",
+     "quote": "Incomplete and ass was"
+    },
+    {
+     "ask": "ASK-000023",
+     "interpretation": "Deliver the plan as a WBS/PERT rather than a plain checklist",
+     "quote": "And for checklist yes but a wbs/pert"
+    },
+    {
+     "ask": "ASK-001463",
+     "interpretation": "Produce a full state block and forward WBS for every listed program: agent containerization, browser and computer use, Hermes, Paperclip, agent-assistant infra, org and personal SSOT architecture, Tracera, ShareCLI, AgilePlus, Byteport, Civis, Khostty, Discord and email bridges, GPT chat reorg, portal setup, the 100x rev and Parpoura experiments, the 10-40 GPT and Codex cloud sessions, Dots delegation, and jcode cockpit and hermes delegation to interactive herdr panes",
+     "quote": "All States regarding:\n\nAgent Containerization\n\nBrowser\\…. Mentioend use development; prior attempts. Supposedly merged into Eidolo"
+    },
+    {
+     "ask": "ASK-001697",
+     "interpretation": "For everything not done, accepted, or verified, give a deep explanation of why plus the forward WBS in depth as a DAG-style graph.",
+     "quote": "each page mostly ermpty; 1 add a tree of progress bars for both intents \\ domaisn of overall project if relevant;\n\n2. for everythi"
+    }
+   ],
+   "captured_by": "ASK-001697",
+   "why": "clause: substantive forward WBS refinement not an acknowledgement; candidate: deep explanation plus forward WBS",
+   "grade": "W"
+  },
+  {
+   "idx": 55,
+   "clause": "do the same for kcode --help if it differs.",
+   "candidates": [
+    {
+     "ask": "ASK-000445",
+     "interpretation": "Use kcode/jcode with MiniMax M3 as the harness for the task",
+     "quote": "Use kcode"
+    },
+    {
+     "ask": "ASK-001482",
+     "interpretation": "Implement and push by 5pm the decollision fix so kcode stops auto-updating against jcode and stops colliding with the jcode path, keeping only forward session-data sync between the separate products",
+     "quote": "jcode is at a much later versin now, and kcode keeps triggerign auto update against jcode ++ collding with jcode path violating do"
+    },
+    {
+     "ask": "ASK-001877",
+     "interpretation": "Write the decollision paper covering jcode/kcode and all forks",
+     "quote": "Decollison of jcode\\kcode and all forks; you wrote a peaper on it"
+    },
+    {
+     "ask": "ASK-000230",
+     "interpretation": "Analyze Kcode for divergence",
+     "quote": "Kcode you can analyze for divergence."
+    },
+    {
+     "ask": "ASK-001483",
+     "interpretation": "Add the whole kcode intent, including the Windows and kitty fixes, to the prompt zip",
+     "quote": "add to prompt zip too"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 56,
+   "clause": "which makes the api the gating question: if the bridge api can't feed a chat-app-grade ui, the plan changes.",
+   "candidates": [
+    {
+     "ask": "ASK-000561",
+     "interpretation": "Validate chats across the 3 harnesses on 2 devices since Sept 1, flag ones needing resumption, and have an existing session dateline and merge scope into its own",
+     "quote": "Do a validation of chats across the 3 harnesses across the 2 devices from Sept 1 - present for any other chats that need resumptio"
+    },
+    {
+     "ask": "ASK-000956",
+     "interpretation": "Report the state of conversation bridges generally",
+     "quote": "And state of convo bridges generally"
+    },
+    {
+     "ask": "ASK-000420",
+     "interpretation": "Design the mobile app with a native-optimal UI resembling a mix of ChatGPT, Messages, and Mail",
+     "quote": "Mobile app would demand native optimal ui. Close to a mix between chatgpt app \\ messages \\ mail"
+    },
+    {
+     "ask": "ASK-000418",
+     "interpretation": "Produce a proper signed, installable iOS app build (TestFlight or IPA sideload) for the bridge",
+     "quote": "Can we get a proper installable app? I have an Apple dev license so signed builds e.g. for TestFlight or some form of IPA side loa"
+    },
+    {
+     "ask": "ASK-001510",
+     "interpretation": "Enable bridge profiles on a bot or dedicated bot user, bind only automations to a channel, and let agents freely create and chat in channels, threads and elsewhere",
+     "quote": "Again bridges ENABLE profiles on a bot or seperate bot user; ONLY automations are bound to a channel, e.g. email logs; Agents must"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 57,
+   "clause": "is there any non-interactive path at all (pre-existing session token, device code driven from stdin, test-mode flag)?",
+   "candidates": [
+    {
+     "ask": "ASK-001394",
+     "interpretation": "Obtain the opencode-go release required for the session-id fix.",
+     "quote": "We need 51 for OCGO session id fix"
+    },
+    {
+     "ask": "ASK-001684",
+     "interpretation": "Identify the best path that does not require an official application for personal use.",
+     "quote": "1 best path that doesnt requireoffiical application given personal use 2 best path container? 3 B 4no"
+    },
+    {
+     "ask": "ASK-000745",
+     "interpretation": "Sign without paid Windows certificates, using the free SignPath path that is valid for the open-source props",
+     "quote": "I dont pay for win for signing"
+    },
+    {
+     "ask": "ASK-001683",
+     "interpretation": "Evaluate the container-based path as the best option.",
+     "quote": "1 best path that doesnt requireoffiical application given personal use 2 best path container? 3 B 4no"
+    },
+    {
+     "ask": "ASK-002254",
+     "interpretation": "Triage the actual break point across the tailnet SSH chain (off-key/API-key → local Tailscale CLI → VM → tailnet → SSH to devices), show a verbatim CLI replay/trace of the internals instead of opaque timeouts, and ask the relevant party for the prior points.",
+     "quote": ""
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 58,
+   "clause": "run exactly: python3 /users/kooshapari/.jcode/scratch/m3-payload.py 24 24000 | tail -n +2 | tr -d '\\n' then reply with only: turn-24-done",
+   "candidates": [
+    {
+     "ask": "ASK-000163",
+     "interpretation": "Interpret authorship so that any reply not bot-written by the agents is treated as authored by Koosha",
+     "quote": "typically, if you see some form of reply that seems not bot ridden and you know your agents did not write it, that means I wrote i"
+    },
+    {
+     "ask": "ASK-000140",
+     "interpretation": "Host the pull request in the PhenoShared repo under the kooshapari account as the home for scratch projects",
+     "quote": "Pr is on Pheno Shared? I think thays the best home for scratch projs"
+    },
+    {
+     "ask": "ASK-000128",
+     "interpretation": "Verify in Gmail that Koosha's reply to Siavosh was actually sent",
+     "quote": "My gmail shows my reply to slavish"
+    },
+    {
+     "ask": "ASK-001822",
+     "interpretation": "Emit a tick as the last message on each turn end or pause",
+     "quote": "last message on turn end\\paue"
+    },
+    {
+     "ask": "ASK-000146",
+     "interpretation": "Build a script that catches the reply-target line, strips the [] header, and sends the remaining content as a copy-paste to the extracted address ko@ko.",
+     "quote": "I doubt want YOU to catch it, I want a script to catchh it that removes the [] line and uses it as the new recipient for ko@ko to "
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  },
+  {
+   "idx": 59,
+   "clause": "read-only <=400 words: define objective closeout gates for pr560 from current docs/spec",
+   "candidates": [
+    {
+     "ask": "ASK-001921",
+     "interpretation": "Report the full open state of every remaining open task, producing PDFs that are very concise when they demand action and very granular when they show status.",
+     "quote": "Full open state in every remaining open task. If you need to make a PDF, make a PDF. Uh remember, PDFs demanding action need to be"
+    },
+    {
+     "ask": "ASK-001236",
+     "interpretation": "Do further research and work to close open limits and unverified claims in the PDF.",
+     "quote": "Close limits\\unverified claims via furthe reasearhca nd work"
+    },
+    {
+     "ask": "ASK-000287",
+     "interpretation": "Report the complete state of all work and asks for the whole session, using search tools to confirm beyond the visible message limit",
+     "quote": "state of all work and asks in full session? Will probably need to use search tools given limit of messages you cans ee to confirm,"
+    },
+    {
+     "ask": "ASK-001562",
+     "interpretation": "Define long-term rules and usage for airlock as the local GitHub layer and local disk manager for stale worktrees and stashes, ensuring WIP branches are pushed before being shoved off the device",
+     "quote": "Long term rules and usage of project like airlock (our fork of no-mistakes, itself a supersede of a diff dev's repo CALLED airlock"
+    },
+    {
+     "ask": "ASK-001083",
+     "interpretation": "Confirm the canary promotion scope (publish clean main without force-push, pin raw history, retain the repo name, finish private + archived) to close Batch 1.",
+     "quote": "nly canary promotion remains before Batch 1 closes.\nThe proposed scope awaits your confirmation: publish clean main 24b89dad74e5f2"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent",
+   "grade": "N"
+  }
+ ],
+ "labelled_at_utc": "2026-11-12T08:46:00Z",
+ "labeller": "single (agent), blinded to rank and cosine"
+}
