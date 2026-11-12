@@ -18,9 +18,14 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Pinned to full commit SHAs: the `Governance` workflow greps every
+      # workflow for `uses: <action>@vN|main|master` and fails the repo when one
+      # is found, which made this lane red on main from the day this file
+      # landed (2026-11-12, run 43184486411). Keep both SHAs in step with the
+      # versions the rest of .github/workflows already pins.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
 
