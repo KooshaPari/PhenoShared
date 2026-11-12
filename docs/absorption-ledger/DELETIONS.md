@@ -56,6 +56,46 @@ over 100 MB. Its objects were pushed as refs instead and verified by fetching
 them back (same tip `70529a8`, same 421 commits, same 8179 objects) and running
 `git fsck --full`.
 
+## 2026-11-12 — dependency forks
+
+Eleven `zz-*` forks carried local work on top of third-party projects. Their
+`ahead_by` counts were not the whole story: the earlier authorship check showed
+4 to 242 commits authored here in each, so none were mere dependency pins.
+
+These were initially going to be exported as patch series. That failed for a
+good reason: several forks have an inherited default branch that is identical
+to upstream while the real work sits on another branch. `zz-aa-dep-UnityDoorstop`
+is the clear case, with `master` matching upstream and the work on `main`. Any
+"diff the default branch" approach either exports nothing or exports the wrong
+branch, and choosing the branch by guesswork is not acceptable.
+
+So every ref was preserved instead, under `refs/preserved/<repo>/` in the
+registry. Identity is the proof: each ref name and tip sha was read back from
+the registry and compared against the source, so the check cannot pass while
+anything is missing, and no branch had to be interpreted.
+
+| Repository | Refs preserved | Commits |
+|---|---:|---:|
+| `zz-aa-dep-CompoundSpheres3D` | 5 | 134 |
+| `zz-aa-dep-UnityDoorstop` | 65 | 433 |
+| `zz-aa-dep-MobileCli` | 118 | 470 |
+| `zz-aa-dep-TurboQuant` | 17 | 385 |
+| `zz-pause-ref-Synthia` | 12 | 1,186 |
+| `zz-aa-dep-AgentApiPlusPlus` | 24 | 934 |
+| `zz-aa-dep-PhenoUnslothStudio` | 2 | 6,917 |
+| `zz-aa-dep-AirLock` | 94 | 958 |
+| `zz-aa-dep-CliproxyApiPlusPlus` | 832 | 8,835 |
+| `zz-aa-dep-Bifrost` | 1,664 | 7,169 |
+| `zz-aa-dep-Planify` | 117 | 9,153 |
+
+2,950 refs in total. The ref counts are the reason this approach was taken
+rather than a single diff: `CliproxyApiPlusPlus` has 832 branches and `Bifrost`
+1,664. Any single-branch export would have discarded almost all of it.
+
+Before deleting, a search for `zz-aa-dep` across PhenoShared and the local
+Phenotype tree found no references, so no build resolves these forks as a
+dependency.
+
 ## 2026-11-12 — gaps that cannot be closed
 
 Nine repositories were deleted in an earlier pass with their files verified but

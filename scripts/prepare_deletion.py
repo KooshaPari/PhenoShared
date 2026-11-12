@@ -213,7 +213,11 @@ def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, s
     """
     tmp = tempfile.mkdtemp(prefix="refpush-")
     mirror = os.path.join(tmp, "mirror.git")
-    code, _, err = sh(["gh", "repo", "clone", "%s/%s" % (owner, repo), mirror, "--", "--mirror"])
+    # Plain git, not `gh repo clone`: for a fork gh adds an `upstream` remote and
+    # fetches it, which lands upstream branches under refs/heads and would
+    # preserve them under the fork's own namespace.
+    code, _, err = sh(["git", "clone", "--mirror", "--quiet",
+                       "https://github.com/%s/%s.git" % (owner, repo), mirror])
     if code != 0:
         return False, "mirror clone failed: %s" % err.decode("utf-8", "replace")[:100]
 
@@ -228,7 +232,11 @@ def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, s
         _, out, _ = sh(["git", "-C", where, "for-each-ref", "--format=%(refname) %(objectname)"])
         return dict(line.split(" ", 1) for line in out.decode("utf-8", "replace").splitlines() if " " in line)
 
-    expected = {m.split("/", 2)[2]: sha for m, sha in refs(mirror).items()
+    # Compare on the same key shape: strip the differing prefixes so both sides
+    # are "heads/<name>" and "tags/<name>". Stripping a fixed component count
+    # instead gives "main" on one side and "heads/main" on the other, which can
+    # never match and would report a complete push as broken.
+    expected = {m[len("refs/"):]: sha for m, sha in refs(mirror).items()
                 if m.startswith("refs/heads/") or m.startswith("refs/tags/")}
     check = os.path.join(tmp, "check")
     os.makedirs(check, exist_ok=True)
@@ -237,7 +245,7 @@ def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, s
         code, _, err = sh(["git", "-C", check] + args)
         if code != 0:
             return False, "verify fetch failed: %s" % err.decode("utf-8", "replace")[:100]
-    actual = {m.split("/", 2)[2]: sha for m, sha in refs(check).items()
+    actual = {m[len("refs/restored/"):]: sha for m, sha in refs(check).items()
               if m.startswith("refs/restored/heads/") or m.startswith("refs/restored/tags/")}
     if actual != expected:
         missing = sorted(set(expected) - set(actual))
