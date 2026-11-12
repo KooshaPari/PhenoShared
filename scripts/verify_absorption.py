@@ -34,6 +34,23 @@ import sys
 SKIP_DIRS = {".git"}
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Paths that are build output or logs, never authored content. Reporting these
+# as missing would train the reader to ignore the tool, which is worse than not
+# running it. They are counted separately as "excluded".
+EXCLUDE_PREFIXES = (
+    ".cargo-target/", "target/", "node_modules/", ".venv/", "dist/", "build/",
+    "__pycache__/", ".pytest_cache/", ".mypy_cache/",
+)
+EXCLUDE_SUFFIXES = (".log", ".pyc", ".pyo",
+                    # compiled artefacts, reproducible from the source we keep
+                    ".exe", ".dll", ".so", ".dylib", ".o", ".obj", ".a", ".lib")
+
+
+def is_excluded(path: str) -> bool:
+    if path.startswith(EXCLUDE_PREFIXES):
+        return True
+    return path.endswith(EXCLUDE_SUFFIXES)
+
 
 def gh(args: list[str]) -> tuple[int, str]:
     proc = subprocess.run(["gh"] + args, capture_output=True)
@@ -104,9 +121,16 @@ def verify(repo: str, owner: str, root: str, registry: str, extra_roots: list[st
     local = local_files(root)
     # Some absorptions are split across two roots, for example a repo whose
     # content landed partly in absorption/<name> and partly in _archived/<name>.
-    for extra in extra_roots or []:
-        local |= local_files(extra)
+    roots = [root] + list(extra_roots or [])
+    archived = os.path.join(REPO_ROOT, "_archived", repo)
+    if os.path.isdir(archived) and archived not in roots:
+        roots.append(archived)
+    local = set()
+    for r in roots:
+        local |= local_files(r)
     missing = remote - local
+    excluded = {p for p in missing if is_excluded(p)}
+    missing = missing - excluded
     withheld = stored_in_registry(owner, registry, repo, missing) if missing else set()
     unresolved = missing - withheld
 
@@ -118,6 +142,7 @@ def verify(repo: str, owner: str, root: str, registry: str, extra_roots: list[st
         "local_files": len(local),
         "covered": len(remote & local),
         "missing": len(unresolved),
+        "excluded_build_or_log": len(excluded),
         "withheld_in_registry": len(withheld),
         "missing_sample": sorted(unresolved)[:10],
     }
@@ -163,10 +188,13 @@ def main() -> int:
     incomplete = 0
     for r in results:
         if r["status"] == "complete":
-            note = ""
+            notes = []
             if r["withheld_in_registry"]:
-                note = "  (%d withheld to registry)" % r["withheld_in_registry"]
-            print("  OK    %-32s %d/%d%s" % (r["repo"], r["covered"], r["remote_files"], note))
+                notes.append("%d withheld to registry" % r["withheld_in_registry"])
+            if r["excluded_build_or_log"]:
+                notes.append("%d build/log excluded" % r["excluded_build_or_log"])
+            suffix = ("  (" + ", ".join(notes) + ")") if notes else ""
+            print("  OK    %-32s %d/%d%s" % (r["repo"], r["covered"], r["remote_files"], suffix))
         elif r["status"] == "unreadable":
             print("  SKIP  %-32s %s" % (r["repo"], r["detail"]))
         else:
