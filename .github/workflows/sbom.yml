@@ -6,6 +6,15 @@ on:
       - "v*"
   pull_request:
     branches: [main]
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "**/pnpm-lock.yaml"
+      - "**/pyproject.toml"
+      - "**/requirements*.txt"
+      - "**/uv.lock"
   workflow_dispatch:
 
 permissions:
