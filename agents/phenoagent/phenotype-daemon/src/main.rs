@@ -15,7 +15,7 @@ use std::sync::Arc;
 use tokio::net::{TcpListener, UnixListener};
 use tracing::{error, info, warn};
 
-use protocol::{VersionInfo, DEFAULT_TCP_PORT};
+use protocol::VersionInfo;
 
 /// Default socket path for Unix domain sockets
 #[cfg(unix)]
@@ -38,7 +38,7 @@ impl Default for ServerConfig {
         Self {
             #[cfg(unix)]
             socket_path: PathBuf::from(DEFAULT_SOCKET_PATH),
-            tcp_port: DEFAULT_TCP_PORT,
+            tcp_port: protocol::DEFAULT_TCP_PORT,
             tcp_only: cfg!(windows),
         }
     }
