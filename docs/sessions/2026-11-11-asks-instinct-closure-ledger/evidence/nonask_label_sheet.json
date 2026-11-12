@@ -1,0 +1,2346 @@
+{
+ "generated_at_utc": "2026-11-12T09:34:32Z",
+ "seed": 20261114,
+ "n": 60,
+ "topk": 5,
+ "population": 32891,
+ "partition": {
+  "ask_cue": 8819,
+  "non_ask_cue": 32891,
+  "all_uncited": 41710
+ },
+ "instructions": "For each clause set captured_by to the ask id whose interpretation and quote express the SAME intent as the clause, or \"NONE\" if no candidate does. Adjacent-but-different intents are NONE. Candidates are shuffled: rank is hidden.",
+ "items": [
+  {
+   "idx": 0,
+   "clause": "another pane (w8:pr) has pushed 56d7256a with a complete fix",
+   "candidates": [
+    {
+     "ask": "ASK-001485",
+     "interpretation": "Evaluate and restart the killed desk panes as needed, scanning activity across the last two weeks",
+     "quote": "Some desk panes killed. Eval and restart as needed.d. Scan acr the last 2wks."
+    },
+    {
+     "ask": "ASK-001998",
+     "interpretation": "Fix the status update panel bugs: current and historical status updates should be read-only, support light mode, and show \"No updates yet\" instead of \"no updates yet: intake not wired.\"",
+     "quote": "Fix s\nCurrent and historical status updates, read-only.\nLight mode\nNo updates yet\nno updates yet: intake not wired."
+    },
+    {
+     "ask": "ASK-001356",
+     "interpretation": "Fix the issue raised in the referenced message phonemsg-01M50RJX3H600RCPWX305W4BXJ",
+     "quote": "Fix"
+    },
+    {
+     "ask": "ASK-000562",
+     "interpretation": "Diagnose and fix the jcode-win-herdr chat panes that keep closing unexpectedly",
+     "quote": "some of those jcode-win-herdr chats keep having their panes close, idk if its you or smt else"
+    },
+    {
+     "ask": "ASK-000811",
+     "interpretation": "Fix the desk machine's virtual monitor setup by killing the virtual display or making the living-room monitor c27hg70 primary so the desktop is usable.",
+     "quote": "There\u2019s a virt monitor on desk, kill it or set the living montior c27hg70 as prim. Ic ant use my desktop"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 1,
+   "clause": "inspect it (`bg action=\"status\" task_id=\"7356150dix\"`, `bg action=\"output\" task_id=\"7356150dix\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"7356150dix\"`).",
+   "candidates": [
+    {
+     "ask": "ASK-002183",
+     "interpretation": "Diagnose why all items are paused and not actively running again and get them actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-002021",
+     "interpretation": "Investigate and fix the job-application automation that has paused",
+     "quote": "Job apps seem to have paused also..."
+    },
+    {
+     "ask": "ASK-001617",
+     "interpretation": "Resume the paused work item and proceed with the review item",
+     "quote": "We're now going to review seven out of nine. Desk firewall, great. Anything else you'd want to add in there or optimize or polish?"
+    },
+    {
+     "ask": "ASK-002184",
+     "interpretation": "Investigate and fix why all work items are paused and not actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-001182",
+     "interpretation": "Treat the allegedly paused task as active (it was never paused) and keep it moving",
+     "quote": "I never paused it."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 2,
+   "clause": "you are a staffswe engineer on agileplus (local checkout /users/kooshapari/codeprojects/phenotype/repos/agileplus).",
+   "candidates": [
+    {
+     "ask": "ASK-000487",
+     "interpretation": "Stop the SDD platform (AgilePlus, now Phenotype Registry) from absorbing agent data and rot, keeping such work in a real project shelf instead of the registry",
+     "quote": "I spend multiple chats of agents recovering it, other agents again stuffing it down"
+    },
+    {
+     "ask": "ASK-001060",
+     "interpretation": "Report the state of the agileplus project and its time to readiness",
+     "quote": "State of agileplus project and its time to readiness?"
+    },
+    {
+     "ask": "ASK-000833",
+     "interpretation": "Give AgilePlus the same UI/UX finish, install it on both systems and all harnesses, and require all agents to move work management and spec drafting into AgilePlus and seed it with content.",
+     "quote": "Agileplsu needs simialr finish + install on both systems and all harnesses and demands for all agents to fully move work mgmt and "
+    },
+    {
+     "ask": "ASK-000600",
+     "interpretation": "Also offer AgilePlus as a tray/desktop app plus CLI/skill/plugin/MCP.",
+     "quote": "While also offering tray\\desktop app + cli\\skill\\plugin\\mcp"
+    },
+    {
+     "ask": "ASK-000604",
+     "interpretation": "Apply the same device/harness-side CLI-skill-plugin-MCP treatment to AgilePlus as soon as it is ready.",
+     "quote": "Same case for Agileplsu as soon as ready"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 3,
+   "clause": "creation looks gated on the desktop app, so you create it there and i'll walk you through.",
+   "candidates": [
+    {
+     "ask": "ASK-001812",
+     "interpretation": "Complete the GitHub device-login tap flow yourself in Firefox",
+     "quote": "Do on ff urself"
+    },
+    {
+     "ask": "ASK-001484",
+     "interpretation": "Create up to 4 new herdr spaces of 2x3 max and fan out work by injecting prompts through the herdr API, spawning jcode on Mac but instructing it to work on desk, with codex on either host",
+     "quote": "Make up to 4 new spaces of 2x3 max before expand herdr panes. Fanning out and for what alr can take on the intent use herdr api to"
+    },
+    {
+     "ask": "ASK-000268",
+     "interpretation": "Prepare the Disney and Nvidia applications (including resume refinement) and return with a full walkthrough of each application before anything is sent",
+     "quote": "Applications for today for Disney and Nvidia specifically fill out prep and then come back to me with a full walkthrough of the ap"
+    },
+    {
+     "ask": "ASK-001801",
+     "interpretation": "Make the GitHub device-login tap/approve affordance present in Firefox",
+     "quote": "gh device tap on ff notnpresent"
+    },
+    {
+     "ask": "ASK-000420",
+     "interpretation": "Design the mobile app with a native-optimal UI resembling a mix of ChatGPT, Messages, and Mail",
+     "quote": "Mobile app would demand native optimal ui. Close to a mix between chatgpt app \\ messages \\ mail"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 4,
+   "clause": "| recommended split: **github = truth for code history.",
+   "candidates": [
+    {
+     "ask": "ASK-000384",
+     "interpretation": "Treat GitHub as an immutable ledger with rollback points, always push work, and roll back rather than fix unfixable failures on the personal sites",
+     "quote": "I can't tell you forge is an issue where sub agents or agent driven chats tend to pollute that conversation list. So you actually "
+    },
+    {
+     "ask": "ASK-000919",
+     "interpretation": "Produce a Project/Ask/State view with 4-line expansion covering non-legacy GitHub projects plus installs, deploys, research and architectural asks, and mirror it for Task and Ask",
+     "quote": "Give me \n\nProject - Ask - State\nMax 4line expansion\\detail.\n\u2026\n...\n\nNon LEGACY (pre you existing on gh, new ones or ones that event"
+    },
+    {
+     "ask": "ASK-001582",
+     "interpretation": "Evaluate GitHub alternatives against existing research in the phenoinfra and phenoShared repos, treating GitHub as only a presentation layer",
+     "quote": "Consider our research on gh/git alternatives on gpt.com and various areas of our phenoinfra / phenoshaewd repos.\n\nGitHub is only r"
+    },
+    {
+     "ask": "ASK-000926",
+     "interpretation": "Update the GitHub issue with more detail, richness, and maturity, and note the standard Windows recoverable fall-through behavior",
+     "quote": "Update GH issue with more detail and richness \\ maturity; also note the standard windows behavior of recoverable fall through"
+    },
+    {
+     "ask": "ASK-001895",
+     "interpretation": "Report whether the GitHub-side work (PR/merge) is complete",
+     "quote": "Gh done."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "kcode"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 5,
+   "clause": "[bash] $ printf minimax_route_ok \u2192 minimax_route_ok exact output: ``\u200b` minimax_route_ok ``\u200b`",
+   "candidates": [
+    {
+     "ask": "ASK-000506",
+     "interpretation": "Use opencode-go once its rate limit clears, preferring mimo over minimax-m3 for model routing",
+     "quote": "Yes.\n\nOC go is fine iirc we were at a rate limit. If cleared using mimo is safer, faster and smarter  than m3"
+    },
+    {
+     "ask": "ASK-002233",
+     "interpretation": "Clarify whether the MiniMax key is needed",
+     "quote": "elaborate: do you need the MiniMax key, are you saying"
+    },
+    {
+     "ask": "ASK-002163",
+     "interpretation": "Encode MiniMax's consistent five-hour session-limit reset schedule (5pm, 10pm, 3am, 8am) into routing and scheduling logic",
+     "quote": "Minimax session limits are consistent. Every 5hrs.\n\n5pm 10pm 3am 8am so on"
+    },
+    {
+     "ask": "ASK-001240",
+     "interpretation": "Fix MiniMax so PAYG attempts do not fail by preloading credits or excluding MiniMax from PAYG, given it has no auto-reload and no credits",
+     "quote": "There's no auto reload or credits on mmax. Payg attempts would fail"
+    },
+    {
+     "ask": "ASK-000231",
+     "interpretation": "Apply the model routing policy: Step 5 free / mimo 2.6 for OC-Go, M3 for the Minimax plan, 6 Luna med / 6.1 sol med as norm/high",
+     "quote": "Hermes as the CEO / living device assistant gateway? While again a pref to jcode/codex agents being used for subagents and as pare"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "tool",
+   "grade": "N"
+  },
+  {
+   "idx": 6,
+   "clause": "then apply only ocr cli fix and rerun.",
+   "candidates": [
+    {
+     "ask": "ASK-001802",
+     "interpretation": "Apply the same fix to every other Firefox exception",
+     "quote": "same for sny other ff expectstion"
+    },
+    {
+     "ask": "ASK-002230",
+     "interpretation": "Use a CLI or external tooling driven connection instead",
+     "quote": "Similar cli or ext tooling driven conn"
+    },
+    {
+     "ask": "ASK-001687",
+     "interpretation": "Implement the fix in Rust with proper stub handling so Rust itself performs the forwarding, as a quick patch.",
+     "quote": "Should be smarter; try rust & see; with proper stub handlings in rust just for this; perhaps rust itself doing the fwd; would be a"
+    },
+    {
+     "ask": "ASK-001160",
+     "interpretation": "Fix the flow so previously entered data does not have to be re-entered",
+     "quote": "Fix I don't want to reinput all that data"
+    },
+    {
+     "ask": "ASK-000935",
+     "interpretation": "Restart the affected process as part of the fix",
+     "quote": "Ok to restart too"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 7,
+   "clause": "inspect it (`bg action=\"status\" task_id=\"34151289s1\"`, `bg action=\"output\" task_id=\"34151289s1\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"34151289s1\"`).",
+   "candidates": [
+    {
+     "ask": "ASK-002021",
+     "interpretation": "Investigate and fix the job-application automation that has paused",
+     "quote": "Job apps seem to have paused also..."
+    },
+    {
+     "ask": "ASK-002183",
+     "interpretation": "Diagnose why all items are paused and not actively running again and get them actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-001617",
+     "interpretation": "Resume the paused work item and proceed with the review item",
+     "quote": "We're now going to review seven out of nine. Desk firewall, great. Anything else you'd want to add in there or optimize or polish?"
+    },
+    {
+     "ask": "ASK-002184",
+     "interpretation": "Investigate and fix why all work items are paused and not actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-001182",
+     "interpretation": "Treat the allegedly paused task as active (it was never paused) and keep it moving",
+     "quote": "I never paused it."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 8,
+   "clause": "the other five are mapped honestly.",
+   "candidates": [
+    {
+     "ask": "ASK-000792",
+     "interpretation": "Report the path to re-deletion for each of the 5 repos, or state the alternative",
+     "quote": "And their path to redeletion or ?"
+    },
+    {
+     "ask": "ASK-000977",
+     "interpretation": "Report the state of Tracera and the other projects, including a full table covering the 33 items.",
+     "quote": "Tracera other proj state? Full.table on the 33?"
+    },
+    {
+     "ask": "ASK-001615",
+     "interpretation": "Provide deep elaboration on the options for item 6 of 9, why they were chosen, and how they trace back to the base intent prompt",
+     "quote": "We're now going to review seven out of nine. Desk firewall, great. Anything else you'd want to add in there or optimize or polish?"
+    },
+    {
+     "ask": "ASK-001677",
+     "interpretation": "Deliver the best-path designs for items 3, 4, and 5.",
+     "quote": "1. Dream loop codex is the skill not jcod btw; 2 A 3 best path 4 Best path 5 best path 6 B\\agent\\harness"
+    },
+    {
+     "ask": "ASK-001350",
+     "interpretation": "Gather for items 2a and 3, elaborate item 4, and run a 5-why for item 5",
+     "quote": "Vault login has current pass as is. 7 agy no relogin. Trash sure. Tart sure. Jcode amend. Mac docker no. 6 send. 2a 3 gather 4 ela"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness",
+    "imessage"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 9,
+   "clause": "each of the 6 dependabot prs count=4 with the identical failing set (civic evidence gate, dependency delta, ci / lint, ci / test)",
+   "candidates": [
+    {
+     "ask": "ASK-000931",
+     "interpretation": "Have a local codex gpt-6.1-sol session re-triage and validate the bug report and the PR request/fix with automated tests",
+     "quote": "And have a local codex gpt 6.1 sol sess re-triage, validate, and better BOTH bug report and PR rquest\\fix"
+    },
+    {
+     "ask": "ASK-001246",
+     "interpretation": "Re-record the clips and fix the defect where only the first input works and input upon an agent response breaks.",
+     "quote": "Re-record; FIRST input works; input UPON response of agent breaks"
+    },
+    {
+     "ask": "ASK-002202",
+     "interpretation": "Provide an exact trace or recording of the failure",
+     "quote": "Show me an exact trace or recording"
+    },
+    {
+     "ask": "ASK-001140",
+     "interpretation": "Determine whether an exact agent-driven reproduction of the reply failure exists",
+     "quote": "Do we have exact agent driven reproduction for the reply"
+    },
+    {
+     "ask": "ASK-000932",
+     "interpretation": "Attach automated tests to the PR",
+     "quote": "w\\ automated tests."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 10,
+   "clause": "\\u2014 not: do not fabricate tool output or approximate counts when the mcp server is not connected.\", \"confidence\": 0.9 }, { \"key\": \"project.kiro_inventory.agent_sources_available\", \"value_json\": \"false\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.agent_sources_count\", \"value_json\": \"0\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.last_verified_at\", \"value_json\": \"\\\"2026-11-04\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.mcp_server_connected\", \"value_json\": \"false\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.dashboard_route\", \"value_json\": \"\\\"/settings/chat/models\\\"\", \"confidence\": 0.8 }, { \"key\": \"project.kirocrew.deskcrew_identity_file\", \"value_json\": \"\\\"~/.ssh/id-git\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.deskcrew_ports\", \"value_json\": \"\\\"local_port 7779 -> remote_port 5476\\\"\", \"confidence\": 0.9 }, { \"key\": \"project.kirocrew.deskcrew_ssh_alias\", \"value_json\": \"\\\"desk\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.deskcrew_ssh_fix_applied\", \"value_json\": \"false\", \"confidence\": 0.9 }, { \"key\": \"project.kirocrew.deskcrew_ssh_host_current\", \"value_json\": \"\\\"<IP-REDACTED>\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.deskcrew_ssh_user_required\", \"value_json\": \"\\\"koosh\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.instances_json_path\", \"value_json\": \"\\\"/users/kooshapari/.kiro/crew/instances.json\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.last_error_code\", \"value_json\": \"\\\"instance_connect_failed\\\"\", \"confidence\": 0.9 }, { \"key\": \"project.kirocrew.ssh_tunnel_argv\", \"value_json\": \"\\\"ssh -n -c -o batchmode=yes <host> (user/identityfile only from ssh config)\\\"\", \"confidence\": 0.9 } ] ## conversation to process [2026-11-07t00:56] user: looking to do a developnent freeze which requires full coollectionand cleaning\\push of all local states before moving forwards.",
+   "candidates": [
+    {
+     "ask": "ASK-000034",
+     "interpretation": "Answer whether custom tooling skills or MCP are supported and how to grant the agent data or tooling access not natively available",
+     "quote": "Do you support custom tooling skills or mcp?\n\nOr otherwise if I wanted to give you such data or tooling access not avail natively "
+    },
+    {
+     "ask": "ASK-001925",
+     "interpretation": "Fix the client/tool invocation so requests to the stateless JSON-RPC server are issued via POST instead of a rejected method.",
+     "quote": "jsonrpc\":\"2.0\",\"error\":{\"code\":-32000,\"message\":\"Method Not Allowed: this server is stateless; use POST\"},\"id\":null}"
+    },
+    {
+     "ask": "ASK-001090",
+     "interpretation": "Do the same review, install, and setup pass for supported external skills, MCP servers, and tooling.",
+     "quote": "Same for supported ext skill\\mcp\\tooling"
+    },
+    {
+     "ask": "ASK-001173",
+     "interpretation": "Fix Mac jcode so the m3.1 minimax model appears in the model list after a server reload",
+     "quote": "Mac jcode model after server reload does not show a m3.1 minimax"
+    },
+    {
+     "ask": "ASK-001539",
+     "interpretation": "Fix the plugin invocation-scope failure where a plugin is not allowed to call agents.list because its invocation scope is missing, expired or unknown",
+     "quote": "1\tFailed to fetch status: Plugin \"cc0bd1b1-3038-49ad-a315-aa7ea37e726c\" is not allowed to perform \"agents.list\": the worker refere"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "kcode"
+   ],
+   "speaker_pass2": "system",
+   "grade": "N"
+  },
+  {
+   "idx": 11,
+   "clause": "the coordinator will reconcile and flip it after review",
+   "candidates": [
+    {
+     "ask": "ASK-000730",
+     "interpretation": "Proceed with the delegated split work",
+     "quote": "Go"
+    },
+    {
+     "ask": "ASK-001779",
+     "interpretation": "Determine the next steps needed to push all work to finished and merged",
+     "quote": "So what's nxt to push all to finish and merged"
+    },
+    {
+     "ask": "ASK-001389",
+     "interpretation": "Report the state of the reorganization.",
+     "quote": "Re-org state?"
+    },
+    {
+     "ask": "ASK-001744",
+     "interpretation": "Leave the other referenced item open and proceed with merging the pending change",
+     "quote": "Leave openand merge"
+    },
+    {
+     "ask": "ASK-000157",
+     "interpretation": "Perform the merge directly and resolve the bot review comments",
+     "quote": "Do the merge urself too resolve bot review cmmts"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 12,
+   "clause": "running: prompt pass over the 985 vague chats",
+   "candidates": [
+    {
+     "ask": "ASK-001064",
+     "interpretation": "Batch-recover the chats defined by each repo scope",
+     "quote": "The repo scope def batch recovery chats"
+    },
+    {
+     "ask": "ASK-000443",
+     "interpretation": "Write a prompt to run a local chat data-mining pass for similar-context embeddings and to detect suspicious org-side collection patterns",
+     "quote": "Will have a local chat go through and datemine on my behalf, both for similar context embed needs, and also for suspicious collect"
+    },
+    {
+     "ask": "ASK-001065",
+     "interpretation": "Run chat recovery in batches of 5, starting with infra, gfx, agentora and two others to be confirmed",
+     "quote": "The 5 at a time batches, starting with infra\\gfx\\agentora\\2 others iirc remember ?"
+    },
+    {
+     "ask": "ASK-000040",
+     "interpretation": "Answer whether chat or context traversal tools exist that can dig into the full conversation window",
+     "quote": "Do you have chat or ctx traversal tools? E.g. If asked you could dig into full Window?"
+    },
+    {
+     "ask": "ASK-000672",
+     "interpretation": "Re-split chat data so no project holds more than 50-100 chats, identifying useless chats to compress roughly 1700 chats down to about 500",
+     "quote": "Better split, no more than 50-100 chats a project. Though I assume that 1700 will need to be compressed to around 500 once you ide"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "system",
+   "grade": "N"
+  },
+  {
+   "idx": 13,
+   "clause": "so value comp needed.",
+   "candidates": [
+    {
+     "ask": "ASK-001365",
+     "interpretation": "Post the discussion for the Audio Comp topic",
+     "quote": "Pose snap never deferred lets sign asap; - openrouter drop discussion; Ma trash drop discussion; Audio Comp drop discussion then; "
+    },
+    {
+     "ask": "ASK-000177",
+     "interpretation": "Set the target filter to 135k+ base compensation and enter 0 where the posting explicitly asks for a value.",
+     "quote": "135k+ base, where expl ask place 0"
+    },
+    {
+     "ask": "ASK-000178",
+     "interpretation": "Qualify each target role on a role-by-role basis instead of by a blanket rule.",
+     "quote": "dtermine role by role"
+    },
+    {
+     "ask": "ASK-001535",
+     "interpretation": "Provide the full current state along with the outstanding needs and asks",
+     "quote": "Full state needs asks"
+    },
+    {
+     "ask": "ASK-000438",
+     "interpretation": "Do not narrow scope by noting that only part of the requirement is needed, and state the full requirement instead",
+     "quote": "Don't note I need my full x and x. It narrows scope."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage",
+    "phone"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 14,
+   "clause": "local cpu small data",
+   "candidates": [
+    {
+     "ask": "ASK-002165",
+     "interpretation": "Gather benchmark data locally on the available devices for all three harnesses wherever web data is insufficient",
+     "quote": "All 3 you have enough data on devices to gather data where web  not sufficient"
+    },
+    {
+     "ask": "ASK-000737",
+     "interpretation": "Report the state of the CPU fork deploy and the other solutions being waited on",
+     "quote": "State of deploy for cpu fork and other solus I have been waiting on?"
+    },
+    {
+     "ask": "ASK-000470",
+     "interpretation": "Make agents aware that heavy local processes such as rustc are quicker and more optimal to run on the desktop",
+     "quote": "rusty is also a process that I very much am starting to hate, as well as other heavy processes we run, as well as their virtual ma"
+    },
+    {
+     "ask": "ASK-000443",
+     "interpretation": "Write a prompt to run a local chat data-mining pass for similar-context embeddings and to detect suspicious org-side collection patterns",
+     "quote": "Will have a local chat go through and datemine on my behalf, both for similar context embed needs, and also for suspicious collect"
+    },
+    {
+     "ask": "ASK-002228",
+     "interpretation": "Diagnose exactly what fails in the Tailscale login and desk/Mac connect attempts locally versus on DOTS, identify web-based SSH-driven solutions, and set up a local agent on the Tailscale dashboard for infra or herdr control",
+     "quote": "Focus on exactly what fails here in the Tailscale login / desk + mac connect attempt vs on dots. And what web solus to enable web "
+    }
+   ],
+   "captured_by": "ASK-000443",
+   "why": "agent-voice note \"local cpu small data\"; candidate asks to gather benchmark data locally - same compute-placement concern, different act",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "W"
+  },
+  {
+   "idx": 15,
+   "clause": "if hash differs stop.",
+   "candidates": [
+    {
+     "ask": "ASK-002183",
+     "interpretation": "Diagnose why all items are paused and not actively running again and get them actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-002228",
+     "interpretation": "Diagnose exactly what fails in the Tailscale login and desk/Mac connect attempts locally versus on DOTS, identify web-based SSH-driven solutions, and set up a local agent on the Tailscale dashboard for infra or herdr control",
+     "quote": "Focus on exactly what fails here in the Tailscale login / desk + mac connect attempt vs on dots. And what web solus to enable web "
+    },
+    {
+     "ask": "ASK-001300",
+     "interpretation": "Fix jcode losing the zsh anchor after only a few turns",
+     "quote": "The zsh anchor is gone but jcod enow does this after a few turns"
+    },
+    {
+     "ask": "ASK-002184",
+     "interpretation": "Investigate and fix why all work items are paused and not actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-000750",
+     "interpretation": "Determine which herdr-win bug is correct (#44 vs #27/#23) and merge the duplicate issues",
+     "quote": "Waiting on you: fresh device code for the purge push if the current one lapsed, the Dot reply (send it?), which herdr-win bug (#44"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 16,
+   "clause": "inspect it (`bg action=\"status\" task_id=\"573952pq13\"`, `bg action=\"output\" task_id=\"573952pq13\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"573952pq13\"`).",
+   "candidates": [
+    {
+     "ask": "ASK-002183",
+     "interpretation": "Diagnose why all items are paused and not actively running again and get them actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-001617",
+     "interpretation": "Resume the paused work item and proceed with the review item",
+     "quote": "We're now going to review seven out of nine. Desk firewall, great. Anything else you'd want to add in there or optimize or polish?"
+    },
+    {
+     "ask": "ASK-002021",
+     "interpretation": "Investigate and fix the job-application automation that has paused",
+     "quote": "Job apps seem to have paused also..."
+    },
+    {
+     "ask": "ASK-002184",
+     "interpretation": "Investigate and fix why all work items are paused and not actively running",
+     "quote": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+     "ask": "ASK-001182",
+     "interpretation": "Treat the allegedly paused task as active (it was never paused) and keep it moving",
+     "quote": "I never paused it."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 17,
+   "clause": "trinzic ok skip it",
+   "candidates": [
+    {
+     "ask": "ASK-002074",
+     "interpretation": "Disposition the Shield work item as skip",
+     "quote": "What othe non jobs questions and asks, what is stlaled\\blcoked \\ not actively progressing and state of everything that s;; TRM ski"
+    },
+    {
+     "ask": "ASK-002085",
+     "interpretation": "Mark the Akamai work item as skipped",
+     "quote": "Akamai skip"
+    },
+    {
+     "ask": "ASK-000295",
+     "interpretation": "Apply to jobs at Trinzic",
+     "quote": "Apply to jobs at trinzic then..."
+    },
+    {
+     "ask": "ASK-000293",
+     "interpretation": "Handle the Trinzic email and check both email accounts for anything else needing action",
+     "quote": "Deal w trinzic email and generally check both emails for anyt else"
+    },
+    {
+     "ask": "ASK-002075",
+     "interpretation": "Disposition the TRM work item as skip",
+     "quote": "What othe non jobs questions and asks, what is stlaled\\blcoked \\ not actively progressing and state of everything that s;; TRM ski"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage",
+    "phone"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 18,
+   "clause": "dns authentication is configured, but this alone does not confirm that incoming forwarding is set up.",
+   "candidates": [
+    {
+     "ask": "ASK-001723",
+     "interpretation": "Verify Porkbun DNS cleanup is complete and support remote login",
+     "quote": "Porkbun done, remote login fad for what"
+    },
+    {
+     "ask": "ASK-000714",
+     "interpretation": "Apply the corrected lane assumption now that authentication is complete",
+     "quote": "Auth done; I corrected your lane assumption"
+    },
+    {
+     "ask": "ASK-001440",
+     "interpretation": "Complete the Discord authentication",
+     "quote": "Disc autH done"
+    },
+    {
+     "ask": "ASK-000148",
+     "interpretation": "Determine whether the catch-and-forward handling can live inside the email server instead of a standalone script.",
+     "quote": "Nothing that can live IN the email server?"
+    },
+    {
+     "ask": "ASK-001567",
+     "interpretation": "Have Vercel authenticate into the network with an API token and validate that inbound traffic originates from the tailnet, without joining the tailnet itself",
+     "quote": "So vercel\n\nAuths itself into network via api token. Doesn't necessarily join tailnet just validates all inbound is from it"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage",
+    "phone"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 19,
+   "clause": "i was like there has to be some subliminal goon still roped in",
+   "candidates": [
+    {
+     "ask": "ASK-001051",
+     "interpretation": "Include the sub-manager agents and their chats in the coverage",
+     "quote": "And your submgrs and their chats"
+    },
+    {
+     "ask": "ASK-001475",
+     "interpretation": "Stop culling your own agents and keep fanning out and managing dedicated agents on these intents",
+     "quote": "Do not cull your own agents, continuing fanning\\managing agents dedicated to these yourself"
+    },
+    {
+     "ask": "ASK-000658",
+     "interpretation": "Source additional avatar types including Grievous, Dooku and B1 plus about five more",
+     "quote": "Swaps for grievous, doolku and the b1, + source ~5 more types too"
+    },
+    {
+     "ask": "ASK-000218",
+     "interpretation": "Find more Disney roles, including contract and externally sourceable positions",
+     "quote": "Find more for Disney incl contract and externally sourcable roles"
+    },
+    {
+     "ask": "ASK-000499",
+     "interpretation": "Stop assuming work was completed without picking up replies, and instead derive who or what may have handled each item",
+     "quote": "For many of these waits, I do notice you either fail to pickup replies. Or me not explicitly telling you something brings an assum"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 20,
+   "clause": "recommended d (archive namespace).p20a + p28 done earlier this turn.",
+   "candidates": [
+    {
+     "ask": "ASK-001575",
+     "interpretation": "Define the Phenotype domain namespace mapping (phenotype.space = org level, proj.*.space = landing pages and docs, pheno.studio = deploy studio, pheno.shop = payment portals, kooshapari = strictly personal-oriented pages)",
+     "quote": "Phenotype space is for org lvl. So for proj.lgenotype.space you get landing pages and docs.\n\nPheno.studio is our \"deploy studio\"\nP"
+    },
+    {
+     "ask": "ASK-001009",
+     "interpretation": "Check cross-branch and unpushed local state for work supposedly done multiple times, and accelerate completion to end of week (Friday) as a strict requirement for the full Mature VP milestone across Tracera, AgilePlus and 33+ other projects",
+     "quote": "This was supposedly done multiple times, check cross branch or local state sun pushed; and accelerate to finish by end of week as "
+    },
+    {
+     "ask": "ASK-000669",
+     "interpretation": "Implement and keep all three PhenoRegistry options \u2014 merge, delete, and otherwise/context freeze-embed",
+     "quote": "dont forget the 3 options for merge, delete, otherwise and context freeze\\embed in PhenoRegistry"
+    },
+    {
+     "ask": "ASK-001083",
+     "interpretation": "Confirm the canary promotion scope (publish clean main without force-push, pin raw history, retain the repo name, finish private + archived) to close Batch 1.",
+     "quote": "nly canary promotion remains before Batch 1 closes.\nThe proposed scope awaits your confirmation: publish clean main 24b89dad74e5f2"
+    },
+    {
+     "ask": "ASK-001463",
+     "interpretation": "Produce a full state block and forward WBS for every listed program: agent containerization, browser and computer use, Hermes, Paperclip, agent-assistant infra, org and personal SSOT architecture, Tracera, ShareCLI, AgilePlus, Byteport, Civis, Khostty, Discord and email bridges, GPT chat reorg, portal setup, the 100x rev and Parpoura experiments, the 10-40 GPT and Codex cloud sessions, Dots delegation, and jcode cockpit and hermes delegation to interactive herdr panes",
+     "quote": "All States regarding:\n\nAgent Containerization\n\nBrowser\\\u2026. Mentioend use development; prior attempts. Supposedly merged into Eidolo"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 21,
+   "clause": "hermes live per memory (unverified).",
+   "candidates": [
+    {
+     "ask": "ASK-002045",
+     "interpretation": "Report the state of hermes.",
+     "quote": "Talk to jcode cockpit on Mac then, state of hermes paperclip all other desk + Mac setups and works from before"
+    },
+    {
+     "ask": "ASK-002037",
+     "interpretation": "Report the current state of Hermes.",
+     "quote": "Talk to jcode cockpit on Mac then, state of hermes paperclip all other desk + Mac setups and works from before"
+    },
+    {
+     "ask": "ASK-001950",
+     "interpretation": "Report the current state of the overall Hermes setup",
+     "quote": "Hermes overalls etup tstate? Drive discord off my Firefox"
+    },
+    {
+     "ask": "ASK-001548",
+     "interpretation": "Finish Hermes setup, wire its bridges, and confirm it is alive and heartbeating",
+     "quote": "once again we once again we slip on the top of our heads in terms of infrastructure we owe agents containerization we owe agents t"
+    },
+    {
+     "ask": "ASK-001944",
+     "interpretation": "Expand the Hermes presence message into a more elaborate version.",
+     "quote": "Elaborate* for hermes"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 22,
+   "clause": "so i can pay",
+   "candidates": [
+    {
+     "ask": "ASK-000095",
+     "interpretation": "Correct the revenue model to stop undercounting by adding the extras that make up 50% of sales and are sold at 50-100%+ above base MSRP, and fix the 2021 GMK Arch sale period to 4/30-5/1",
+     "quote": "4/30 to 5/1 was gmk arch sale period  in 2021.\n\nRevenue under counts the fact that extras which make up 50% of sales are sold at 5"
+    },
+    {
+     "ask": "ASK-000181",
+     "interpretation": "Apply to all roles paying 110k+.",
+     "quote": "Apply at all 110k+"
+    },
+    {
+     "ask": "ASK-001071",
+     "interpretation": "Acquire the requested item as soon as possible",
+     "quote": "Get one asap."
+    },
+    {
+     "ask": "ASK-000182",
+     "interpretation": "Set the compensation floor for accepting a job.",
+     "quote": "Floor for taking yes"
+    },
+    {
+     "ask": "ASK-001240",
+     "interpretation": "Fix MiniMax so PAYG attempts do not fail by preloading credits or excluding MiniMax from PAYG, given it has no auto-reload and no credits",
+     "quote": "There's no auto reload or credits on mmax. Payg attempts would fail"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 23,
+   "clause": "worth a line in the arch docs \u2026 > thursday, october 8, 2026, 11:04:15 pm pdt | instinct | two options: (a) i re-enroll, you scan the same qr on your phone",
+   "candidates": [
+    {
+     "ask": "ASK-000698",
+     "interpretation": "Include the full instinct chat log as part of the dateline",
+     "quote": "instinct full chat log should be part of dateline"
+    },
+    {
+     "ask": "ASK-001087",
+     "interpretation": "Check email for the message carrying code 68g23y / the Instinct reply.",
+     "quote": "Chk email?"
+    },
+    {
+     "ask": "ASK-000711",
+     "interpretation": "Determine which browser to re-authenticate with and perform the reauth",
+     "quote": "Or reauth, which browser?"
+    },
+    {
+     "ask": "ASK-000914",
+     "interpretation": "Recover/resume the killed August-September Codex chats (PMP01/PMP1-style prompts) as new intensive tasks, and build session-ledger-style automated scraping/aggregation across harnesses back to April 2025 on both devices instead of reading every token",
+     "quote": "additional question: digging through past Codex chats, there are a couple that we killed that were really meant to stay alive, but"
+    },
+    {
+     "ask": "ASK-000272",
+     "interpretation": "Update the mygp.com study chat with the October 8 date and produce a refresher on the strong (5-7) and weak (4) modules, an adjusted score projection, a four-page double-sided cheat sheet, and a practice exam",
+     "quote": "Um, okay, perfect. I do need you to go onto mygp.com. There's a chat regarding studying for classes and an exam that's very recent"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 24,
+   "clause": "my rpt at 25 now",
+   "candidates": [
+    {
+     "ask": "ASK-000898",
+     "interpretation": "Resume the R life work",
+     "quote": "When we get there remove f4om waiting  on me till we r there. Dsar drop from ur tasks tap I will get to also drop.\n\nR life resume"
+    },
+    {
+     "ask": "ASK-000601",
+     "interpretation": "Evaluate and compare rmcp versus FastMCP 4 and record the comparison.",
+     "quote": "Consider \\compare the rmcp vs fastmcp 4"
+    },
+    {
+     "ask": "ASK-000603",
+     "interpretation": "Use rmcp rather than FastMCP 4 for now.",
+     "quote": "rmcp for now"
+    },
+    {
+     "ask": "ASK-001574",
+     "interpretation": "Move off D1, diagnose why it is heavy, and begin R2 setups for queuing",
+     "quote": "We were sp to both move off d1 and figure out why it's so heavy. R2 ( or was it r2) setups for queuing and others can begin too"
+    },
+    {
+     "ask": "ASK-000873",
+     "interpretation": "Investigate and resolve the R3 429 rate-limit wall",
+     "quote": "R3check 429 wall"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 25,
+   "clause": "consider fixing |\\n| low | style or minor suggestion | **note",
+   "candidates": [
+    {
+     "ask": "ASK-001687",
+     "interpretation": "Implement the fix in Rust with proper stub handling so Rust itself performs the forwarding, as a quick patch.",
+     "quote": "Should be smarter; try rust & see; with proper stub handlings in rust just for this; perhaps rust itself doing the fwd; would be a"
+    },
+    {
+     "ask": "ASK-001998",
+     "interpretation": "Fix the status update panel bugs: current and historical status updates should be read-only, support light mode, and show \"No updates yet\" instead of \"no updates yet: intake not wired.\"",
+     "quote": "Fix s\nCurrent and historical status updates, read-only.\nLight mode\nNo updates yet\nno updates yet: intake not wired."
+    },
+    {
+     "ask": "ASK-001411",
+     "interpretation": "Fix item 3",
+     "quote": "3 fix it"
+    },
+    {
+     "ask": "ASK-000235",
+     "interpretation": "Stop replying and instead act directly on the fixes",
+     "quote": "We won't reply just act in th3 fixes"
+    },
+    {
+     "ask": "ASK-000752",
+     "interpretation": "Apply the proposed CSS change",
+     "quote": "Login done, yes to css"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "kcode"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 26,
+   "clause": "git push --force-with-lease",
+   "candidates": [
+    {
+     "ask": "ASK-000704",
+     "interpretation": "Create a new git branch for the work",
+     "quote": "New branch"
+    },
+    {
+     "ask": "ASK-000702",
+     "interpretation": "Do not force push, and explain why a force is required",
+     "quote": "Do not force push, why is force required"
+    },
+    {
+     "ask": "ASK-001801",
+     "interpretation": "Make the GitHub device-login tap/approve affordance present in Firefox",
+     "quote": "gh device tap on ff notnpresent"
+    },
+    {
+     "ask": "ASK-000384",
+     "interpretation": "Treat GitHub as an immutable ledger with rollback points, always push work, and roll back rather than fix unfixable failures on the personal sites",
+     "quote": "I can't tell you forge is an issue where sub agents or agent driven chats tend to pollute that conversation list. So you actually "
+    },
+    {
+     "ask": "ASK-001102",
+     "interpretation": "Treat GitHub access as granted and use it to unblock GitHub-dependent work.",
+     "quote": "E drive repl indef defer. Pm and cse same case. Don't bring up. Gh access given. Gg login do so"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "tool",
+   "grade": "N"
+  },
+  {
+   "idx": 27,
+   "clause": "prior attempt connection-reset.",
+   "candidates": [
+    {
+     "ask": "ASK-000379",
+     "interpretation": "Re-prompt yourself to retry the work",
+     "quote": "Reprompt urself"
+    },
+    {
+     "ask": "ASK-001456",
+     "interpretation": "After a reset, do not queue or wait on anything; fan out to Mac, desk and cloud sessions immediately",
+     "quote": "Not after reset. Do not queue or wait on anyt fan out mac desk cloud sess"
+    },
+    {
+     "ask": "ASK-002189",
+     "interpretation": "Document the procedure for restoring connection recovery after remote access loss",
+     "quote": "How 2 get conn recovery"
+    },
+    {
+     "ask": "ASK-000539",
+     "interpretation": "Retry the SSH connection to the remote host, attempting it again after each failure.",
+     "quote": "Retry ssh,"
+    },
+    {
+     "ask": "ASK-001118",
+     "interpretation": "Confirm the jcode session restart actually happened",
+     "quote": "Confirm"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 28,
+   "clause": "friday, october 9, 2026, 11:27:26 am pdt | instinct | reply/reaction target: phonemsg-01m4gypsn1atbarmsxthjpsg9w cleanup: went through your dump fully",
+   "candidates": [
+    {
+     "ask": "ASK-000914",
+     "interpretation": "Recover/resume the killed August-September Codex chats (PMP01/PMP1-style prompts) as new intensive tasks, and build session-ledger-style automated scraping/aggregation across harnesses back to April 2025 on both devices instead of reading every token",
+     "quote": "additional question: digging through past Codex chats, there are a couple that we killed that were really meant to stay alive, but"
+    },
+    {
+     "ask": "ASK-000982",
+     "interpretation": "Resynchronize the instinct chat dump.",
+     "quote": "Check for any other stalled items. And resynch instinct chat dump."
+    },
+    {
+     "ask": "ASK-002115",
+     "interpretation": "Hand full context to a fresh GPT-6.1 extra-high web-work session including a 1-month iMessage dump and an explicit request to dig through GitHub, conversations and memories to produce a proper status report, plus request dossiers from owning-scope chats for inclusion at iteration #2",
+     "quote": "Hand full ctx to a fresh gpt 6.1 extra high web work session incl full 1mo imsg dump and explicit request to dig through GitHub, c"
+    },
+    {
+     "ask": "ASK-000783",
+     "interpretation": "Drive the pending Instinct handshake to closure by obtaining the agent's reply to the handshake email, which has had zero replies from the cockpit jcode VP-Eng",
+     "quote": "External (3)\nInstinct reply to handshake\n\u2022 What it is: Handshake email sent to <EMAIL-REDACTED> at 20:36:04Z (now 251+ min"
+    },
+    {
+     "ask": "ASK-001087",
+     "interpretation": "Check email for the message carrying code 68g23y / the Instinct reply.",
+     "quote": "Chk email?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 29,
+   "clause": "two things: phaxis",
+   "candidates": [
+    {
+     "ask": "ASK-001700",
+     "interpretation": "Commit to PhenoShared as the chosen (option A) path.",
+     "quote": "Phenoshared is A*"
+    },
+    {
+     "ask": "ASK-001878",
+     "interpretation": "Elaborate on the selected picks and the path for Phenofabric and ShareCLI to help",
+     "quote": "Elaborate on picks and path for phenofabric+sharecli to help"
+    },
+    {
+     "ask": "ASK-000611",
+     "interpretation": "Push the phenoAI work.",
+     "quote": "For phenoAI: push"
+    },
+    {
+     "ask": "ASK-000612",
+     "interpretation": "Absorb phenoAI into PhenoShared.",
+     "quote": "phenoAI which itself fis meant to be absorbed into phenoshared"
+    },
+    {
+     "ask": "ASK-001575",
+     "interpretation": "Define the Phenotype domain namespace mapping (phenotype.space = org level, proj.*.space = landing pages and docs, pheno.studio = deploy studio, pheno.shop = payment portals, kooshapari = strictly personal-oriented pages)",
+     "quote": "Phenotype space is for org lvl. So for proj.lgenotype.space you get landing pages and docs.\n\nPheno.studio is our \"deploy studio\"\nP"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 30,
+   "clause": "the civic evidence gate then fails (asserts dependency_result == success on pull_request) and ci / lint + ci / test fail downstream.",
+   "candidates": [
+    {
+     "ask": "ASK-000169",
+     "interpretation": "Include the email ID, subject line, and possibly truncated content in the failure error email so the ID can be tracked.",
+     "quote": "Relay fail.\n\nOn top of ID subject line and content (content *maybe* trunc)\n\nWould be good to put in the err email. I can't easily "
+    },
+    {
+     "ask": "ASK-000432",
+     "interpretation": "Draft an access request plus a note about the suspiciously designed failing data request",
+     "quote": "Draft access request and note of suspiciously designed failing request for data"
+    },
+    {
+     "ask": "ASK-000491",
+     "interpretation": "File a GitHub issue plus PR against upstream JCode for the jcode-win-herdr input-to-shell fall-through bug and implement the fix in KCode",
+     "quote": "For jcode-win-herdr, its an urgently needed fix. Perhaps gh issue+pr to JCODE + FIX at Kcode; \n\nwhats nxt walk me through state of"
+    },
+    {
+     "ask": "ASK-001246",
+     "interpretation": "Re-record the clips and fix the defect where only the first input works and input upon an agent response breaks.",
+     "quote": "Re-record; FIRST input works; input UPON response of agent breaks"
+    },
+    {
+     "ask": "ASK-002202",
+     "interpretation": "Provide an exact trace or recording of the failure",
+     "quote": "Show me an exact trace or recording"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 31,
+   "clause": "dm from badger: send concise exact 388 and 389 http response body/status findings directly to coordinator, then stop",
+   "candidates": [
+    {
+     "ask": "ASK-000103",
+     "interpretation": "Take ownership of the Porkbun webmail portal for kooshapari.com and set up notices telling Koosha when to check that inbox now that Gmail has dropped SMTP and POP3",
+     "quote": "Kooshapari email broke due to Gmail removing smtp and pop3. You need access and ownership over my porkbun webmail portal to give m"
+    },
+    {
+     "ask": "ASK-001899",
+     "interpretation": "Coordinate the work and deliver a duplex reply every 30 minutes",
+     "quote": "Dots the same, coord + duplex reply required every 30m"
+    },
+    {
+     "ask": "ASK-000500",
+     "interpretation": "Report the state of the sitback system-level chat management and of your own management of Koosha's web, assistant, and local agent chat lines",
+     "quote": "State of setback \\ system level chat management + your own for managing my various web, assistant, local agent lines?"
+    },
+    {
+     "ask": "ASK-000149",
+     "interpretation": "Research the web for a solution to the reply-forwarding problem.",
+     "quote": "Research web for a solution?"
+    },
+    {
+     "ask": "ASK-000287",
+     "interpretation": "Report the complete state of all work and asks for the whole session, using search tools to confirm beyond the visible message limit",
+     "quote": "state of all work and asks in full session? Will probably need to use search tools given limit of messages you cans ee to confirm,"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "peer",
+   "grade": "N"
+  },
+  {
+   "idx": 32,
+   "clause": "background task stalled** `270638v8w4` \u00b7 `poll for wave-12c commits fr` (`bash`) \u00b7 no output or progress for 300s (running 6570s total) _no output captured yet._ the task is still running.",
+   "candidates": [
+    {
+     "ask": "ASK-001555",
+     "interpretation": "Stop work silently stalling or never reaching completion when no one is actively asking every 30 minutes",
+     "quote": "Well, say I was as an out of print a new development, which is mainly tied to you unfortunately, is the pushing of many, many diff"
+    },
+    {
+     "ask": "ASK-000958",
+     "interpretation": "Apply the same spawn-sessions-and-finish-ASAP treatment to all other stalling tasks, asks and projects",
+     "quote": "Goes for all other rstalling tasks and asks"
+    },
+    {
+     "ask": "ASK-001963",
+     "interpretation": "Print the complete list of all currently open asks that are blocked or stalled in taps.simialr.",
+     "quote": "Print all open block stall asks taps.simialr"
+    },
+    {
+     "ask": "ASK-000493",
+     "interpretation": "Report the state of all other tasks and asks",
+     "quote": "State of other tasks n asks"
+    },
+    {
+     "ask": "ASK-000966",
+     "interpretation": "Report the state of all other tasks, asks and projects",
+     "quote": "And state of ALL OTHER TASKS ASKS PROJECTS OTHER"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "system",
+   "grade": "N"
+  },
+  {
+   "idx": 33,
+   "clause": "if complete, run cargo test -p agileplus-import && cargo test -p agileplus-graph to verify, then commit with: test(import,graph): add comprehensive tests.",
+   "candidates": [
+    {
+     "ask": "ASK-000833",
+     "interpretation": "Give AgilePlus the same UI/UX finish, install it on both systems and all harnesses, and require all agents to move work management and spec drafting into AgilePlus and seed it with content.",
+     "quote": "Agileplsu needs simialr finish + install on both systems and all harnesses and demands for all agents to fully move work mgmt and "
+    },
+    {
+     "ask": "ASK-001060",
+     "interpretation": "Report the state of the agileplus project and its time to readiness",
+     "quote": "State of agileplus project and its time to readiness?"
+    },
+    {
+     "ask": "ASK-001009",
+     "interpretation": "Check cross-branch and unpushed local state for work supposedly done multiple times, and accelerate completion to end of week (Friday) as a strict requirement for the full Mature VP milestone across Tracera, AgilePlus and 33+ other projects",
+     "quote": "This was supposedly done multiple times, check cross branch or local state sun pushed; and accelerate to finish by end of week as "
+    },
+    {
+     "ask": "ASK-000617",
+     "interpretation": "Run and report end-to-end tests for all paths and user journeys.",
+     "quote": "0\n<EMAIL-REDACTED>\n\n\n\nTask Detail View - Coming Soon\nEnhanced task view with checklists and time tracking is under development"
+    },
+    {
+     "ask": "ASK-000604",
+     "interpretation": "Apply the same device/harness-side CLI-skill-plugin-MCP treatment to AgilePlus as soon as it is ready.",
+     "quote": "Same case for Agileplsu as soon as ready"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 34,
+   "clause": "gh pr create --repo kooshapari/job-cockpit --base main --head feat/bridge-wiring-2026-10-19 --title 'docs(agent-comms): migrate per-pane email routes proposal' --body 'migrated from the local-only harness-ops working copy.",
+   "candidates": [
+    {
+     "ask": "ASK-001576",
+     "interpretation": "Implement the domain routing policy where phenotype space is org-level, proj.lgenotype.space serves landing pages and docs, pheno.studio is the deploy studio, pheno.shop is for payment portals, and kooshapari hosts personal pages",
+     "quote": "Phenotype space is for org lvl. So for proj.lgenotype.space you get landing pages and docs.\n\nPheno.studio is our \"deploy studio\"\nP"
+    },
+    {
+     "ask": "ASK-001565",
+     "interpretation": "Restore the per-repo documentation and deploy baseline where every repo used phenotype-landing and pheno docs plus generic per-project micro front ends and backends, now merged into phenoshared, deploying to GitHub Pages, Vercel and Cloudflare Pages",
+     "quote": "All repos were meant to use phenotype-landing && pheno docs at min + more micro fend app or backends as generic per project deploy"
+    },
+    {
+     "ask": "ASK-000081",
+     "interpretation": "Rework the job outreach so the agent emails hiring staff directly instead of routing through a front-door/referral-only path",
+     "quote": "if you look my work and proj experience and + personal interest, perfectly align Yeah, front door is my point, though again the ag"
+    },
+    {
+     "ask": "ASK-000116",
+     "interpretation": "Own the setup of the <EMAIL-REDACTED> Porkbun forward into Gmail with the best subfolder organization, together with the earlier requested filters and rules",
+     "quote": "Going to make a pork bun email fwd (option 2 as defined below) for <EMAIL-REDACTED>, best handling for organizing as a subfolde"
+    },
+    {
+     "ask": "ASK-000692",
+     "interpretation": "Tie herdr control and all other deploys under a phenotype.space or kooshapari.com domain and link each to the appropriate org versus personal cockpit",
+     "quote": "Have you tied in herdr control and all other deploys under one of phenotype.space \\ kooshapari.com and linked to an appropriate Or"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 35,
+   "clause": "cand: i'll confirm the diff result this afternoon.",
+   "candidates": [
+    {
+     "ask": "ASK-001002",
+     "interpretation": "Correct the earlier reply (issue first seen on 81 not 93, possibly predating jcode usage) and have the codex chat that can answer properly draft the response",
+     "quote": "First seen on 81 not 93; experienced from first usage of jcode could easilybe older; ask the codex chat that can actually y answe "
+    },
+    {
+     "ask": "ASK-001697",
+     "interpretation": "For everything not done, accepted, or verified, give a deep explanation of why plus the forward WBS in depth as a DAG-style graph.",
+     "quote": "each page mostly ermpty; 1 add a tree of progress bars for both intents \\ domaisn of overall project if relevant;\n\n2. for everythi"
+    },
+    {
+     "ask": "ASK-001027",
+     "interpretation": "Prove the work and finalize it as soon as possible",
+     "quote": "Prove and finalize asap"
+    },
+    {
+     "ask": "ASK-000975",
+     "interpretation": "Confirm the status of the dot system and report back what is confirmed.",
+     "quote": "Confirm for dot"
+    },
+    {
+     "ask": "ASK-001982",
+     "interpretation": "Confirm that Bifrost item 1 was already answered and its answer should be option A.",
+     "quote": "A for bifrost 1 was answered alr rifht"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 36,
+   "clause": "r1 (medium): pr #1 sits open with no review/ci receipts verified.",
+   "candidates": [
+    {
+     "ask": "ASK-001377",
+     "interpretation": "Verify whether the item referenced in message phonemsg-01M512FG3X3X1NWZ7YEN83XE3Q is actually closed",
+     "quote": "That one I believe, but its open right now I think?"
+    },
+    {
+     "ask": "ASK-001083",
+     "interpretation": "Confirm the canary promotion scope (publish clean main without force-push, pin raw history, retain the repo name, finish private + archived) to close Batch 1.",
+     "quote": "nly canary promotion remains before Batch 1 closes.\nThe proposed scope awaits your confirmation: publish clean main 24b89dad74e5f2"
+    },
+    {
+     "ask": "ASK-000773",
+     "interpretation": "Mark item 1 closed and proceed with the remaining approved items",
+     "quote": "1 is closed  the rest are good"
+    },
+    {
+     "ask": "ASK-001340",
+     "interpretation": "Verify that no PR was opened against upstream Ghostty without approval and reverse it if it exists",
+     "quote": "I never approved a Ghostty pr"
+    },
+    {
+     "ask": "ASK-000208",
+     "interpretation": "Respond to Mark and pick up a PR",
+     "quote": "Respond to mark and pick a pr"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 37,
+   "clause": "friday, september 25, 2026, 1:06:26 pm pdt | koosha | i live in la.",
+   "candidates": [
+    {
+     "ask": "ASK-001751",
+     "interpretation": "Suspend all desk-host work items until 1am while Koosha takes the exam",
+     "quote": "Block desk items until 1am I am going to take an exam"
+    },
+    {
+     "ask": "ASK-001359",
+     "interpretation": "Always answer yes on Koosha's behalf when the request comes from his own sender",
+     "quote": "Again always yes. It's literally fr9m my sender?"
+    },
+    {
+     "ask": "ASK-000115",
+     "interpretation": "Add the Ishaan Jaffer Oct 12 LiteLLM research call to Koosha's calendar",
+     "quote": "Put on my cal"
+    },
+    {
+     "ask": "ASK-000125",
+     "interpretation": "Add the listed items to Koosha's calendar",
+     "quote": "Add the listed items to calendar yes"
+    },
+    {
+     "ask": "ASK-000120",
+     "interpretation": "Check whether a Sept 30 Donalda email exists in the mailbox and whether Koosha's reply is linked to it",
+     "quote": "Sept 30? Donalda I think I replied, check if linked. Siavosh called me late august. I have no collection of a sept 30 email"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 38,
+   "clause": "only provided fields are changed, and the workspace slug stays stable when the title changes.",
+   "candidates": [
+    {
+     "ask": "ASK-000585",
+     "interpretation": "Prime/\"caffenate\" the Desk environment in parallel with Koosha's own stabilization",
+     "quote": "i will stabilize desk but you need to caffenate it too"
+    },
+    {
+     "ask": "ASK-000384",
+     "interpretation": "Treat GitHub as an immutable ledger with rollback points, always push work, and roll back rather than fix unfixable failures on the personal sites",
+     "quote": "I can't tell you forge is an issue where sub agents or agent driven chats tend to pollute that conversation list. So you actually "
+    },
+    {
+     "ask": "ASK-001135",
+     "interpretation": "Revive and resume all previously parked, stopped, or idle agent lanes and pending work items across the Mac and desk hosts (i.e. re-activate every fan-out candidate that had been parked or completed-but-not-revived).",
+     "quote": "Revive all"
+    },
+    {
+     "ask": "ASK-001182",
+     "interpretation": "Treat the allegedly paused task as active (it was never paused) and keep it moving",
+     "quote": "I never paused it."
+    },
+    {
+     "ask": "ASK-001824",
+     "interpretation": "Keep the change richness of the new output while avoiding reduced content",
+     "quote": "I enjoy the changes you have; but not the reduction"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "kcode"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 39,
+   "clause": "dispensary collector, pick the best path.",
+   "candidates": [
+    {
+     "ask": "ASK-001784",
+     "interpretation": "Set the harvest (dispensary menu data collection) target to the Harvest local store in Santa Monica",
+     "quote": "The local in Santa Monica."
+    },
+    {
+     "ask": "ASK-001786",
+     "interpretation": "Proceed with option A of the harvest collection for the chosen target",
+     "quote": "A for harvest"
+    },
+    {
+     "ask": "ASK-000550",
+     "interpretation": "Proceed via the best available path for the item just discussed.",
+     "quote": "Best path for that"
+    },
+    {
+     "ask": "ASK-001674",
+     "interpretation": "Provide the best choice/best path for items 1 and 3.",
+     "quote": "Best choice for 1; 2 B Mac agents working via ssh; 3 Best path 4 HarnessDesk iirc5 cloud in tandem w local Khostty as splitter of "
+    },
+    {
+     "ask": "ASK-001399",
+     "interpretation": "Proceed along the best path.",
+     "quote": "1. Go 2go 3  best path 4 go 5 ok 6 ok 7 elaborate"
+    }
+   ],
+   "captured_by": "ASK-000550",
+   "why": "clause: dispensary collector, pick the best path; candidate: proceed via the best available path for the item just discussed - generic best-path ask, not the dispensary target",
+   "channel": [
+    "phone"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "W"
+  },
+  {
+   "idx": 40,
+   "clause": "then claude\\oai\\gemini data export scrape",
+   "candidates": [
+    {
+     "ask": "ASK-000431",
+     "interpretation": "Escalate to force support to fix the export issue, or otherwise monetize the fix",
+     "quote": "So cant we force support to fix && hand. Or make some money\u2026."
+    },
+    {
+     "ask": "ASK-000320",
+     "interpretation": "Complete the pending export request and produce the receipt confirmation for it",
+     "quote": "Been almost 24hrs, really no export? Do you even have receipt confirmation for the request?"
+    },
+    {
+     "ask": "ASK-000447",
+     "interpretation": "Locate the Claude JSON export in the Downloads folder",
+     "quote": "The JSON download from claude is in downaloads"
+    },
+    {
+     "ask": "ASK-000440",
+     "interpretation": "Obtain similar chat exports from Gemini and Claude",
+     "quote": "Lets get similar exports from Gemini, Claude"
+    },
+    {
+     "ask": "ASK-000260",
+     "interpretation": "Investigate whether Claude and Gemini data can be merged or migrated into GPT",
+     "quote": "State of gpt organization too? And perhaps data merge migr of Claude, gemini into gpt if supported?"
+    }
+   ],
+   "captured_by": "ASK-000440",
+   "why": "clause: then claude\\oai\\gemini data export scrape; candidate: obtain similar chat exports from Gemini and Claude",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "M"
+  },
+  {
+   "idx": 41,
+   "clause": "mispqste ignore this",
+   "candidates": [
+    {
+     "ask": "ASK-001620",
+     "interpretation": "Fix status text-block formatting by bolding messages requiring a response and restoring the expected MCQ format",
+     "quote": "So no you're also no longer bolding messages that require responses, just a part of the message that require responses, nor are yo"
+    },
+    {
+     "ask": "ASK-001356",
+     "interpretation": "Fix the issue raised in the referenced message phonemsg-01M50RJX3H600RCPWX305W4BXJ",
+     "quote": "Fix"
+    },
+    {
+     "ask": "ASK-001240",
+     "interpretation": "Fix MiniMax so PAYG attempts do not fail by preloading credits or excluding MiniMax from PAYG, given it has no auto-reload and no credits",
+     "quote": "There's no auto reload or credits on mmax. Payg attempts would fail"
+    },
+    {
+     "ask": "ASK-001805",
+     "interpretation": "Widen coverage so nothing is stalled waiting on unanswered MCQs",
+     "quote": "This not wide enogh everything, ,and for all waiting gon me \\ unanswered MCQ"
+    },
+    {
+     "ask": "ASK-000333",
+     "interpretation": "Ignore the Upwork item for instinct and skip the CV question and signature in the application",
+     "quote": "Ok, ignore up work no to instinct. Skip the cvs q and sign for forb.\n\nAnduril wdym. If for my friend he started Oct 5."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 42,
+   "clause": "fr007 2 passed exit",
+   "candidates": [
+    {
+     "ask": "ASK-002059",
+     "interpretation": "Diagnose and clear the stall located in the PM view.",
+     "quote": "No the stalled it\u2019s in pm view"
+    },
+    {
+     "ask": "ASK-002060",
+     "interpretation": "Diagnose and clear the stall, which is located in the PM view.",
+     "quote": "No the stalled it\u2019s in pm view"
+    },
+    {
+     "ask": "ASK-000764",
+     "interpretation": "Proceed with the pending entry now",
+     "quote": "Can do entry now"
+    },
+    {
+     "ask": "ASK-000360",
+     "interpretation": "Fix the drift issue and implement the exit handling alongside it",
+     "quote": "Along with fixing that drift send exit"
+    },
+    {
+     "ask": "ASK-001822",
+     "interpretation": "Emit a tick as the last message on each turn end or pause",
+     "quote": "last message on turn end\\paue"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "tool",
+   "grade": "N"
+  },
+  {
+   "idx": 43,
+   "clause": "dm from tiger: send exact recovery actions including any additional files moved, backup paths, commands and current api verification, concise",
+   "candidates": [
+    {
+     "ask": "ASK-000287",
+     "interpretation": "Report the complete state of all work and asks for the whole session, using search tools to confirm beyond the visible message limit",
+     "quote": "state of all work and asks in full session? Will probably need to use search tools given limit of messages you cans ee to confirm,"
+    },
+    {
+     "ask": "ASK-001064",
+     "interpretation": "Batch-recover the chats defined by each repo scope",
+     "quote": "The repo scope def batch recovery chats"
+    },
+    {
+     "ask": "ASK-002254",
+     "interpretation": "Triage the actual break point across the tailnet SSH chain (off-key/API-key \u2192 local Tailscale CLI \u2192 VM \u2192 tailnet \u2192 SSH to devices), show a verbatim CLI replay/trace of the internals instead of opaque timeouts, and ask the relevant party for the prior points.",
+     "quote": ""
+    },
+    {
+     "ask": "ASK-000683",
+     "interpretation": "Data-mine all Mac session data to identify anything else that must be moved",
+     "quote": "Then full data mine of all Mac session datas for anything else to move and full cleaning of Mac to solely an end user device with "
+    },
+    {
+     "ask": "ASK-000466",
+     "interpretation": "Run the restoration as batches of restore \u2192 forensic analysis/recovery \u2192 proper absorption/merge \u2192 re-delete.",
+     "quote": "It involves batches of restore -> forensic analysis \\ recovery -> proper absorption\\merge -> re-delete"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "peer",
+   "grade": "N"
+  },
+  {
+   "idx": 44,
+   "clause": "reveal and copy.",
+   "candidates": [
+    {
+     "ask": "ASK-001496",
+     "interpretation": "Provide a Vault tap for copy-to-vault so multiple credential copies can be made if needed",
+     "quote": "I will bring me to login. You give a vault tap for copy to vault ok in case u need to make multiple"
+    },
+    {
+     "ask": "ASK-001953",
+     "interpretation": "Copy the visible token into the target configuration",
+     "quote": "Token s visible, copy it"
+    },
+    {
+     "ask": "ASK-001499",
+     "interpretation": "Apply the same fully-owned login and token-copy handling to the other cases",
+     "quote": "Same case"
+    },
+    {
+     "ask": "ASK-000302",
+     "interpretation": "Apply the same decline-to-identify disclosure rule generally to scheduled tasks on any platform or service",
+     "quote": "Same case generally for various scheduled tasks on various platforms or services."
+    },
+    {
+     "ask": "ASK-001083",
+     "interpretation": "Confirm the canary promotion scope (publish clean main without force-push, pin raw history, retain the repo name, finish private + archived) to close Batch 1.",
+     "quote": "nly canary promotion remains before Batch 1 closes.\nThe proposed scope awaits your confirmation: publish clean main 24b89dad74e5f2"
+    }
+   ],
+   "captured_by": "ASK-001953",
+   "why": "clause: reveal and copy; candidate: copy the visible token into the target configuration - same credential-copy action, fragment too short to be certain",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "W"
+  },
+  {
+   "idx": 45,
+   "clause": "later evidence candidates (same thread) --- > saturday, october 10, 2026, 5:44:41 pm pdt | instinct | reply/reaction target: phonemsg-01m4m6mtdevgaht3e2tkvf4jen hit a real design constraint: the vault is fill-only",
+   "candidates": [
+    {
+     "ask": "ASK-001601",
+     "interpretation": "Produce a full analysis of the air lock project using his exact prompts plus artifacts found on devices, on the web, and in memories, plus additional web research",
+     "quote": "Um now I am now reading your text box. I'm going to do it backwards starting from nine out of nine. Uh all of these things sound g"
+    },
+    {
+     "ask": "ASK-002079",
+     "interpretation": "Report the state of all other non-job questions and asks, flagging which are stale, blocked, or not actively progressing, applying the stated dispositions (TRM skip, Shield skip, Akamai elaborate, item 5 defer, item 6 elaborate, item 7 skip, item 8 due Dec 14 2026)",
+     "quote": "What othe non jobs questions and asks, what is stlaled\\blcoked \\ not actively progressing and state of everything that s;; TRM ski"
+    },
+    {
+     "ask": "ASK-000998",
+     "interpretation": "Elaborate on the three open questions and address the full-vault condition",
+     "quote": "Elab on the 3 q. Vault filled"
+    },
+    {
+     "ask": "ASK-000783",
+     "interpretation": "Drive the pending Instinct handshake to closure by obtaining the agent's reply to the handshake email, which has had zero replies from the cockpit jcode VP-Eng",
+     "quote": "External (3)\nInstinct reply to handshake\n\u2022 What it is: Handshake email sent to <EMAIL-REDACTED> at 20:36:04Z (now 251+ min"
+    },
+    {
+     "ask": "ASK-001600",
+     "interpretation": "Produce a full analysis of airlock (the local no-mistakes fork) using Koosha's exact prompts and requests plus device, web, and memory research and additional web research",
+     "quote": "Um now I am now reading your text box. I'm going to do it backwards starting from nine out of nine. Uh all of these things sound g"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 46,
+   "clause": "dm from snail: progress ping (5-min stall on bg 306590c60n, not a hang",
+   "candidates": [
+    {
+     "ask": "ASK-002153",
+     "interpretation": "Benchmark the remaining models in the pool (opencode-go mimo/deepseek-v4.1-flash baseline, m3.1 flash, and the Claude trio) for throughput above 150k requests at $10/mo",
+     "quote": "Other models in pool -> >150k Req at 10$/mo models (rhe Ocgo mimo/ds4.1 baseline) + m3.1 flash +?"
+    },
+    {
+     "ask": "ASK-002125",
+     "interpretation": "Give a reason for every item that is paused or otherwise not actively progressing instead of leaving it stalled",
+     "quote": "For all pause or not a tiveltyp regressing , WHY"
+    },
+    {
+     "ask": "ASK-000092",
+     "interpretation": "Diagnose and eliminate the 15-minute lag between the porkbun forwarding inbox and the Gmail inbox",
+     "quote": "The Gmail is 15m behind the porkbun fwd inbox"
+    },
+    {
+     "ask": "ASK-002060",
+     "interpretation": "Diagnose and clear the stall, which is located in the PM view.",
+     "quote": "No the stalled it\u2019s in pm view"
+    },
+    {
+     "ask": "ASK-002211",
+     "interpretation": "Keep the internal ping that monitors chat/work state at 15 minutes",
+     "quote": "Internal ping to montiorchat\\wrok state internally is 15m"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "peer",
+   "grade": "N"
+  },
+  {
+   "idx": 47,
+   "clause": "if you are done with your work, call end_ambient_cycle with a summary of what you accomplished and schedule your next wake.",
+   "candidates": [
+    {
+     "ask": "ASK-001488",
+     "interpretation": "Provide a timeline that lands the work by the 5pm finish",
+     "quote": "Time line for 5pm finish"
+    },
+    {
+     "ask": "ASK-000459",
+     "interpretation": "Detect and wind the machine down before it sleeps, accounting for hibernate versus full shutdown that forces process restarts on boot",
+     "quote": "Ill take Ravi draft.\n\nMac not home can't wake. Waits 2 to 3hrs. And for future caffenate. (Open codes sessions have a exp flag tha"
+    },
+    {
+     "ask": "ASK-001779",
+     "interpretation": "Determine the next steps needed to push all work to finished and merged",
+     "quote": "So what's nxt to push all to finish and merged"
+    },
+    {
+     "ask": "ASK-001238",
+     "interpretation": "Report the state of all remaining work, including whether the Discord bridges and other slots are finished.",
+     "quote": "State of ALLL else? Discord bridges and otehr slots stills not done?"
+    },
+    {
+     "ask": "ASK-000415",
+     "interpretation": "Report what is left and the next steps.",
+     "quote": "What's left and next"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "system",
+   "grade": "N"
+  },
+  {
+   "idx": 48,
+   "clause": "from that list, select every subcommand that could relate to a daemon, server, socket, rpc, acp, session, attach, connect, bridge, ipc, watch or client.",
+   "candidates": [
+    {
+     "ask": "ASK-001446",
+     "interpretation": "Apply that whole-server watching and mention behavior to all attached agents",
+     "quote": "Goes for all attached agents"
+    },
+    {
+     "ask": "ASK-000533",
+     "interpretation": "Compare Slack versus Discord before choosing connectors, then research the optimal connectors for botb and for all agents and harnesses (GPT chat/work, Codex, local host systems, Muse, Grok, and future agents).",
+     "quote": "Compare slack vs discord before connectors considered.\n\nThen research optimal connectors for botb and for both / all agents (gpt.c"
+    },
+    {
+     "ask": "ASK-001717",
+     "interpretation": "Design a Windows daemon with an ephemeral/daemonless system that relays against the Mac",
+     "quote": "Consider windows daemon that has an ephemeral\\daemonless system to relay against Mac"
+    },
+    {
+     "ask": "ASK-000532",
+     "interpretation": "Bind all assistants and agents to a single conversation plane that supports channels and threads.",
+     "quote": "Would have to bind all assistants and agents to the single convo plane. Hence something w channels and threads is useful"
+    },
+    {
+     "ask": "ASK-001490",
+     "interpretation": "Determine the Paperclip-to-Discord plugin, connection, and integration path",
+     "quote": "Paperclip discord plugin /conn/integration?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 49,
+   "clause": "and on the rust-toolchain divergence, if you land a pin for dtolnay/rust-toolchain in portage i will cross-check that your sha is a commit that actually exists rather than a branch head, since a force-pushed stable branch is exactly the case where a pin looks current but is not",
+   "candidates": [
+    {
+     "ask": "ASK-001690",
+     "interpretation": "Research the fork problem of diverging while borrowing new upstream versions, including the decollision aspect.",
+     "quote": "The fork probalem also needs research; the dual problem of diverging while borrowing new upstream ver; and the decollision aspect"
+    },
+    {
+     "ask": "ASK-000327",
+     "interpretation": "Push the pending fixes upstream and explain whether the implementation is hand-rolled or a fork",
+     "quote": "Psuh fixes && what is this? Hand roll, fork ,etc?"
+    },
+    {
+     "ask": "ASK-001687",
+     "interpretation": "Implement the fix in Rust with proper stub handling so Rust itself performs the forwarding, as a quick patch.",
+     "quote": "Should be smarter; try rust & see; with proper stub handlings in rust just for this; perhaps rust itself doing the fwd; would be a"
+    },
+    {
+     "ask": "ASK-002254",
+     "interpretation": "Triage the actual break point across the tailnet SSH chain (off-key/API-key \u2192 local Tailscale CLI \u2192 VM \u2192 tailnet \u2192 SSH to devices), show a verbatim CLI replay/trace of the internals instead of opaque timeouts, and ask the relevant party for the prior points.",
+     "quote": ""
+    },
+    {
+     "ask": "ASK-000588",
+     "interpretation": "Deliver dual-deploy with smart transfer to available Rust routes and determine whether the frontend itself has regressed.",
+     "quote": "Dual-deploy w\\ smart transfer to available rust routes? Is the frontend itself seimialrly regressed?"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 50,
+   "clause": "dol and alps are cabins right",
+   "candidates": [
+    {
+     "ask": "ASK-000275",
+     "interpretation": "Implement \"thegent-sitback\" as a harness-agnostic cockpit: an MCP-backed manager that sees all open chats, performs routine actions, and escalates to one parent cockpit chat, updated for the last seven months of harness changes",
+     "quote": "second to last voice chat for the second to last voice chat covering ChatGPT. Thank you, that sounds perfect. Um, as an additional"
+    },
+    {
+     "ask": "ASK-000885",
+     "interpretation": "Route delegations to Kilo Cloud rather than Claude",
+     "quote": "not Claude, it was kilo cloud"
+    },
+    {
+     "ask": "ASK-000692",
+     "interpretation": "Tie herdr control and all other deploys under a phenotype.space or kooshapari.com domain and link each to the appropriate org versus personal cockpit",
+     "quote": "Have you tied in herdr control and all other deploys under one of phenotype.space \\ kooshapari.com and linked to an appropriate Or"
+    },
+    {
+     "ask": "ASK-000999",
+     "interpretation": "Pick the best architecture or choice for each of the three questions",
+     "quote": "Pick best architecture / choice for each"
+    },
+    {
+     "ask": "ASK-001792",
+     "interpretation": "Properly implement the hotel system so projects do not fall out of sync for days",
+     "quote": "And and again, if that earlier hotel system was properly implemented, maybe we wouldn't have this issue where we're out of sync fo"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 51,
+   "clause": "the entry roles are for math competition winners and ivy\\berkeley\\other target schools they prefer by default",
+   "candidates": [
+    {
+     "ask": "ASK-000786",
+     "interpretation": "Produce a distinct tuned resume for each target position, marked approved for submission",
+     "quote": "Each one gets a tuned resume, all  approved for submit"
+    },
+    {
+     "ask": "ASK-000192",
+     "interpretation": "Filter targeted roles to those delivering either a large experience/skill spike with switching power or financial stability sufficient to avoid layoff risk.",
+     "quote": "Focus of role must be extreme switching / personal branding power gained or otherwise similar experience/skill spike OR a financia"
+    },
+    {
+     "ask": "ASK-000178",
+     "interpretation": "Qualify each target role on a role-by-role basis instead of by a blanket rule.",
+     "quote": "dtermine role by role"
+    },
+    {
+     "ask": "ASK-000089",
+     "interpretation": "Target SWE or product roles only in the job search",
+     "quote": "I want swe or product roles."
+    },
+    {
+     "ask": "ASK-000188",
+     "interpretation": "Weight the job role search toward the 0-2 years-of-experience band, treating the 2-4 band as secondary.",
+     "quote": "For roles focus stronger on the 0 to 2 band. The 2-4 band secondarily"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 52,
+   "clause": "with no token they approve in chrome or paste one in **settings -> browser**.",
+   "candidates": [
+    {
+     "ask": "ASK-001503",
+     "interpretation": "Support all networks with each session/bot as its own user and all tokens stored in Infisical",
+     "quote": "All networks. Each sessiom/bot as it's own ussr. Tokens in Infisical"
+    },
+    {
+     "ask": "ASK-001966",
+     "interpretation": "Select/approve option A in reply to the referenced earlier message.",
+     "quote": "A"
+    },
+    {
+     "ask": "ASK-001801",
+     "interpretation": "Make the GitHub device-login tap/approve affordance present in Firefox",
+     "quote": "gh device tap on ff notnpresent"
+    },
+    {
+     "ask": "ASK-000742",
+     "interpretation": "Restore Porkbun access in Chrome with Browser/Computer Use controls attached so the domain mailbox can be inspected",
+     "quote": "Can you do thes Remaining email setup\nGoal: Receive mail sent to <EMAIL-REDACTED> in <EMAIL-REDACTED>, keep the sende"
+    },
+    {
+     "ask": "ASK-002241",
+     "interpretation": "Permit use of Cloudflare tokens",
+     "quote": "Cf tokens allowed"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "kcode"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 53,
+   "clause": "the forward isn\u2019t broken.",
+   "candidates": [
+    {
+     "ask": "ASK-000360",
+     "interpretation": "Fix the drift issue and implement the exit handling alongside it",
+     "quote": "Along with fixing that drift send exit"
+    },
+    {
+     "ask": "ASK-000091",
+     "interpretation": "Fix the email delivery path so newly forwarded mail actually shows up in Gmail",
+     "quote": "I don't see any new email"
+    },
+    {
+     "ask": "ASK-001667",
+     "interpretation": "Repair the broken clip.",
+     "quote": "Fix clip"
+    },
+    {
+     "ask": "ASK-000149",
+     "interpretation": "Research the web for a solution to the reply-forwarding problem.",
+     "quote": "Research web for a solution?"
+    },
+    {
+     "ask": "ASK-001687",
+     "interpretation": "Implement the fix in Rust with proper stub handling so Rust itself performs the forwarding, as a quick patch.",
+     "quote": "Should be smarter; try rust & see; with proper stub handlings in rust just for this; perhaps rust itself doing the fwd; would be a"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage",
+    "phone"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 54,
+   "clause": "preview server4397 already live.",
+   "candidates": [
+    {
+     "ask": "ASK-001902",
+     "interpretation": "Build a cockpit tab/pane that manages live status updates and historical ones",
+     "quote": "Build a rich pane to manage the status updates and historical ones ON the cockpit as a tab; tabs were added to kooshapri.com remov"
+    },
+    {
+     "ask": "ASK-001518",
+     "interpretation": "Provide a current status update",
+     "quote": "State?"
+    },
+    {
+     "ask": "ASK-001670",
+     "interpretation": "Report the live status of whether all desk chat panes/agents are down.",
+     "quote": "Desk chats all down?"
+    },
+    {
+     "ask": "ASK-002136",
+     "interpretation": "Confirm the herdr control plane is up and running",
+     "quote": "Herdr control not up?"
+    },
+    {
+     "ask": "ASK-001107",
+     "interpretation": "Give a current status update.",
+     "quote": "State"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 55,
+   "clause": "she says u cute asl",
+   "candidates": [
+    {
+     "ask": "ASK-002067",
+     "interpretation": "Data-mine the claude/codex/jcode chats for reference on how they render such state",
+     "quote": "State of civis, tracer \u2026 the repos I. Consistently ask about+ HarnessDesk as a tree of progress bars; \n\nOVERAL\n[\u2014] % (im using alp"
+    },
+    {
+     "ask": "ASK-000069",
+     "interpretation": "Learn Koosha's reply and conversational style from LinkedIn and Gmail so written output matches his voice",
+     "quote": "Yes. Now that you have linkedin look at my reply styles and conversational styles. Same case in Gmail and anywhere else like gpt w"
+    },
+    {
+     "ask": "ASK-000420",
+     "interpretation": "Design the mobile app with a native-optimal UI resembling a mix of ChatGPT, Messages, and Mail",
+     "quote": "Mobile app would demand native optimal ui. Close to a mix between chatgpt app \\ messages \\ mail"
+    },
+    {
+     "ask": "ASK-000717",
+     "interpretation": "Post the required reply in the OmniRoute WhatsApp group chat",
+     "quote": "Ravi Reply, and WhatsApp reply to omniroute gc needed. 1 discussed w u 1 discussed w gpt chat"
+    },
+    {
+     "ask": "ASK-000036",
+     "interpretation": "Name the assistant \"Koosha's Pilot Assistant\"",
+     "quote": "kooshas pilot assistant!"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  },
+  {
+   "idx": 56,
+   "clause": "done for hermes",
+   "candidates": [
+    {
+     "ask": "ASK-001950",
+     "interpretation": "Report the current state of the overall Hermes setup",
+     "quote": "Hermes overalls etup tstate? Drive discord off my Firefox"
+    },
+    {
+     "ask": "ASK-002045",
+     "interpretation": "Report the state of hermes.",
+     "quote": "Talk to jcode cockpit on Mac then, state of hermes paperclip all other desk + Mac setups and works from before"
+    },
+    {
+     "ask": "ASK-001259",
+     "interpretation": "Start the full migration of Hermes to the desk as soon as possible.",
+     "quote": "Start aa FULL migr of hermes to desk asap"
+    },
+    {
+     "ask": "ASK-001548",
+     "interpretation": "Finish Hermes setup, wire its bridges, and confirm it is alive and heartbeating",
+     "quote": "once again we once again we slip on the top of our heads in terms of infrastructure we owe agents containerization we owe agents t"
+    },
+    {
+     "ask": "ASK-002037",
+     "interpretation": "Report the current state of Hermes.",
+     "quote": "Talk to jcode cockpit on Mac then, state of hermes paperclip all other desk + Mac setups and works from before"
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "imessage",
+    "phone"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 57,
+   "clause": "only 1 here\u2019s deploy",
+   "candidates": [
+    {
+     "ask": "ASK-001123",
+     "interpretation": "Report the status of all deployments",
+     "quote": "statof all deploys?"
+    },
+    {
+     "ask": "ASK-001126",
+     "interpretation": "Scope the deploy-status report to the single deploy present here",
+     "quote": "Only 1 here\u2019s deploy;"
+    },
+    {
+     "ask": "ASK-001119",
+     "interpretation": "Deploy Plane as tasks.kooshapari.com",
+     "quote": "Plane as tasks.kooshapari.com"
+    },
+    {
+     "ask": "ASK-001896",
+     "interpretation": "Perform the release/deploy drop",
+     "quote": "You do the drop"
+    },
+    {
+     "ask": "ASK-001147",
+     "interpretation": "Change deploy behavior so it never queues and always deploys",
+     "quote": "never queue always deploy and expand width"
+    }
+   ],
+   "captured_by": "ASK-001126",
+   "why": "clause: only 1 here\u2019s deploy; candidate quote is verbatim the same string, scope the deploy-status report to the single deploy here",
+   "channel": [
+    "imessage",
+    "phone"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "M"
+  },
+  {
+   "idx": 58,
+   "clause": "pr #13336 live",
+   "candidates": [
+    {
+     "ask": "ASK-001340",
+     "interpretation": "Verify that no PR was opened against upstream Ghostty without approval and reverse it if it exists",
+     "quote": "I never approved a Ghostty pr"
+    },
+    {
+     "ask": "ASK-000208",
+     "interpretation": "Respond to Mark and pick up a PR",
+     "quote": "Respond to mark and pick a pr"
+    },
+    {
+     "ask": "ASK-001721",
+     "interpretation": "Address Tracera issue 1033",
+     "quote": "Tracera 1033"
+    },
+    {
+     "ask": "ASK-000938",
+     "interpretation": "Confirm GitHub CLI authentication is complete so PRs can be pushed",
+     "quote": "gh login done"
+    },
+    {
+     "ask": "ASK-000932",
+     "interpretation": "Attach automated tests to the PR",
+     "quote": "w\\ automated tests."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "agent",
+   "grade": "N"
+  },
+  {
+   "idx": 59,
+   "clause": "q3 is a consent to share your info acr \u2026 ### msg 992 | wednesday, october 7, 2026, 6:51:11 pm pdt | thread a cand: live with tomorrow's run.",
+   "candidates": [
+    {
+     "ask": "ASK-001592",
+     "interpretation": "Do preparatory work so the scheduled items (including the 5:00 PM window and the October 19 run) can proceed on time",
+     "quote": "Um now I am now reading your text box. I'm going to do it backwards starting from nine out of nine. Uh all of these things sound g"
+    },
+    {
+     "ask": "ASK-000272",
+     "interpretation": "Update the mygp.com study chat with the October 8 date and produce a refresher on the strong (5-7) and weak (4) modules, an adjusted score projection, a four-page double-sided cheat sheet, and a practice exam",
+     "quote": "Um, okay, perfect. I do need you to go onto mygp.com. There's a chat regarding studying for classes and an exam that's very recent"
+    },
+    {
+     "ask": "ASK-001598",
+     "interpretation": "Move the listed scheduled runs earlier, including ahead of the 5:00 p.m. reset, for the 5:00 p.m. and October 19 slots",
+     "quote": "Um now I am now reading your text box. I'm going to do it backwards starting from nine out of nine. Uh all of these things sound g"
+    },
+    {
+     "ask": "ASK-002079",
+     "interpretation": "Report the state of all other non-job questions and asks, flagging which are stale, blocked, or not actively progressing, applying the stated dispositions (TRM skip, Shield skip, Akamai elaborate, item 5 defer, item 6 elaborate, item 7 skip, item 8 due Dec 14 2026)",
+     "quote": "What othe non jobs questions and asks, what is stlaled\\blcoked \\ not actively progressing and state of everything that s;; TRM ski"
+    },
+    {
+     "ask": "ASK-000302",
+     "interpretation": "Apply the same decline-to-identify disclosure rule generally to scheduled tasks on any platform or service",
+     "quote": "Same case generally for various scheduled tasks on various platforms or services."
+    }
+   ],
+   "captured_by": "NONE",
+   "why": "no candidate expresses the same intent (adjacent-but-different treated as none)",
+   "channel": [
+    "harness"
+   ],
+   "speaker_pass2": "operator",
+   "grade": "N"
+  }
+ ],
+ "labeller": "single (agent), blinded to rank and cosine",
+ "labelled_at_utc": "2026-11-12T09:20:00Z",
+ "restored_at_utc": "2026-11-12T09:32Z",
+ "restore_note": "pass-1 labels were overwritten by re-running nonask_probe.py; the five graded captures are restored from nonask_pass1_preserved.json (not re-judged) and the 55 N assignments are forced by the preserved counts M=2/W=3/N=55. Per-item speaker attribution from pass 1 is LOST; speaker_pass2 is an independent second pass and its aggregate differs from pass 1's.",
+ "speaker_pass1_aggregate_lost": {
+  "agent": {
+   "n": 32,
+   "M": 1,
+   "W": 1,
+   "N": 30
+  },
+  "system": {
+   "n": 5,
+   "M": 0,
+   "W": 0,
+   "N": 5
+  },
+  "tool": {
+   "n": 2,
+   "M": 0,
+   "W": 0,
+   "N": 2
+  },
+  "operator": {
+   "n": 15,
+   "M": 1,
+   "W": 2,
+   "N": 12
+  },
+  "peer": {
+   "n": 4,
+   "M": 0,
+   "W": 0,
+   "N": 4
+  },
+  "other": {
+   "n": 2,
+   "M": 0,
+   "W": 0,
+   "N": 2
+  }
+ },
+ "channel_rule": "derived, not judged: the sampled clause is looked up in the probe's own member sets re-segmented here, so `channel` reports which export(s) it came from; a clause can appear in more than one",
+ "speaker_rule": "operator = Koosha's own words including text relayed through the instinct bridge or quoted under a timestamp header; agent = AI-authored narration, report, plan or instruction; peer = third-party DM; tool = raw tool output; system = harness banner, config block or injected prompt"
+}

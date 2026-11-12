@@ -7,18 +7,31 @@ reduced to zero defects, §3d; coverage re-derived at **clause granularity**, wh
 ask-classifier that failed validation and was therefore not used for the headline, §3f; the 98
 `source_ref` harvest documents declared **lost** with a search record and a pointer-coherence test in
 their place, §3g; a local embedding model selected by a test with a known answer, used to probe
-semantic coverage, which **withholds the headline** and publishes a floor instead, §3h; and the recall
-measurement that made the headline publishable, which raises union coverage from 8.0% to a lower bound
-of 10.7% without changing the verdict, §3i).
+semantic coverage, which **withholds the headline** and publishes a floor instead, §3h; the recall
+measurement that made semantic capture a rate rather than a floor, §3i; and the correction that
+retracts Rev 11's union figure because its numerator double counted a channel, plus the first sample of
+the last unprobed 32,891 units, §3j).
 
-**Revision history — this file has been wrong seven times, each time in the same direction (stating a
+**Revision history — this file has been wrong eight times, each time in the same direction (stating a
 confident number from an incomplete measurement). Rev 8 is the first entry that corrects nothing: it
 re-derives coverage at a finer granularity and finds the published shortfall survives the change.
 Rev 9 is mixed: one withdrawn carried figure, one near-miss on schema, and one measured loss. Rev 10
 adds a measurement rather than a correction, and its most important result is a refusal to publish a
-number. Rev 11 is the number Rev 10 refused to publish, and it withdraws Rev 10's floor as an estimate
-while keeping it as a floor, so the headline rises from 8.0% to 10.7% while the verdict does not
-change.**
+number. Rev 11 is the number Rev 10 refused to publish. Rev 12 retracts Rev 11's arithmetic — the
+semantic rate survives, the union it fed does not — and moves the headline back down: ~4.4%
+structurally, ~9.7% counting semantic capture, on a denominator that the same sample shows is mostly
+*not operator speech* at all.**
+
+> **Current numbers, as of Rev 12.** Use these; every other figure in this file is the number
+> published at the time of the section that made it, and §3f / §5 / §3i retain theirs for the record.
+>
+> | Quantity | Value |
+> |---|---|
+> | Structural coverage, consistent frame | **1,938 / 43,648 = 4.4%** |
+> | Semantic capture, uncited ask-cue units | **8/60 = 13.3%** [6.9–24.2] |
+> | Semantic capture, uncited non-ask-cue units | **2/60 = 3.3%** [0.9–11.4] |
+> | **Union coverage, frame A** | **≈9.65%** (range 6.5–17.9% from independent bounds) |
+> | Share of the non-ask-cue bucket that is operator speech | **25–38%** (15/60 pass 1, 23/60 pass 2); 47/60 come from agent-harness exports |
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -33,6 +46,7 @@ change.**
 | 9 | 0 of 98 `source_ref` harvest documents resolve (**lost**, 10 root classes searched); `source_ref` dates are harvest-date window ends, coherent for **98/98** docs; the register is **not** credential-free (2 of 8,042 rows) | two corrections carried in from earlier revisions: §8 still asserted "3 links are candidate wrong" after §3d had closed link integrity at zero, and the ledger's quote is **not** a column on `reg_asks` (it is `utterance_id` → `reg_utterances.body`); my own first pass also assumed UTC timestamps when 8,019 of 8,042 rows are PDT, and compared only 23 rows until the `uncomparable` counter caught it |
 | 10 | a **true semantic** probe was run on the 8,819 uncited ask-cue clauses with `nomic-embed-text-v1.5`; it **confirms** semantic capture exists (floor **2.12%** of the sample) but its high-band precision is only **0.567** strict / **0.733** lenient, so **no semantic coverage percentage is published** | not a retraction of a number — a refusal to publish one. It also retires the earlier claim that no semantic route existed: the earlier probe found no embedding stack installed, which was true of Python packages but not of `llama.cpp`, which is present with `llama-embedding` |
 | 11 | semantic capture among uncited ask-cue units is **13.3%** (8/60, 95% CI 6.9-24.2) on a **random** sample; union coverage is therefore at least **10.7%** (9.4-12.9), not 8.0% | Rev 10's 2.12% floor is withdrawn as an estimate of semantic coverage — not because it was miscalculated but because it was a floor built from a biased-high score band and could never be more. §3i measures the same quantity on a random draw. Note the trap this sets: 13.3% is a rate **within the 8,819-unit denominator**, and reading it as coverage of everything is the exact error this table exists to record |
+| 12 | **the union row double counted a channel.** Consistent-frame coverage is **1,938 / 43,648 = 4.4%** structurally, and **9.65%** counting semantic capture — not 8.0%, and not 10.7% | two defects, one arithmetic and one of scope. (a) `segment_units.py` sets `total_cited = sum(cited.values())` — sum across channels — while its denominator subtracts cross-channel duplications, so **1,525 citations were counted twice** (1,484 of them iMessage inside phone). Every published union figure from Rev 8 onward inherited that numerator; the per-channel rows are unaffected. (b) The union was called a lower bound because 32,891 uncited non-ask-cue units had never been sampled. They now have been: **2/60 strict**, and **62–75%** of the 60 clauses are not operator speech (pass 1: 32 agent / 2 tool / 5 system / 4 peer / 2 other; pass 2: 27/3/4/3), with **47/60 from agent-harness exports** |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -543,10 +557,24 @@ reproducible without a model.
 | iMessage | 6,363 | 8,214 | 1.29 | 1,487 | **18.1%** |
 | KCode | 166 | 2,185 | 13.16 | 2 | **0.1%** |
 | phone | 2,077 | 3,697 | 1.78 | 1,534 | **41.5%** |
-| **union** | 11,752 | **43,305** | — | **3,463** | **8.0%** |
+| ~~union~~ | ~~11,752~~ | ~~43,305~~ | — | ~~3,463~~ | ~~**8.0%**~~ |
+| **union (consistent)** | 11,752 | **43,648** | — | **1,938** | **4.4%** |
 
-(Member union 11,752 is the de-duplicated figure; the four channel member counts sum to 14,405. The
-clause union subtracts 3,939 cross-channel duplications from a 47,244-clause sum.)
+**The struck row is the retraction in §3j, and it is the reason this table is now two rows.** The
+per-channel rows are sound: each puts one channel's cited clauses over that same channel's distinct
+clauses. The union row was not. `segment_units.py` reads `total_cited = sum(cited.values())` — a plain
+sum across channels — while the denominator subtracts cross-channel duplications. So 1,487 iMessage
+clauses were counted in the numerator and again inside the phone channel's 1,534, while the denominator
+counted that text once. **1,525 citations were double counted; 1,484 of them are
+iMessage-inside-phone.** The consistent pair is **1,938 / 43,648 = 4.4%**, reproduced by
+`evidence/coverage_consistency.py`.
+
+(Member union 11,752 is the de-duplicated figure; the four channel member counts sum to 14,405.)
+
+One reproduction gap, stated rather than smoothed: this rebuild gets 8,230 iMessage clauses where the
+published run got 8,214, so the sums are 47,260 vs 47,244 and the containment union is 43,321 vs
+43,305. A 16-clause input drift of 0.04%, which changes none of the conclusions and is recorded in
+`coverage_consistency.json` under `input_drift`.
 
 **The objection does not hold.** Harness coverage is 1.52% on members and 1.3% on clauses:
 segmentation multiplied the numerator (88 members → 440 cited clauses) but multiplied the denominator
@@ -587,9 +615,9 @@ of **1.4%–1.7%**. Four independent cuts now agree:
 
 The gate's error does not widen that band much because both its false positives and its false
 negatives are diluted across a large denominator. **Granularity was not the problem; recall of the
-operator's asks is.** The headline is the clause-level figure: **8.0% of 43,305** on the mechanical
-substring test alone, raised to **at least 10.7%** once the semantic recall measured in §3i is counted,
-with 1.3–1.7% as the harness-specific one.
+operator's asks is.** The headline is the clause-level figure: **4.4% of 43,648** on the mechanical
+substring test alone (8.0% as published here; see the Rev 12 correction in §3j), raised to **≈9.65%**
+once semantic recall is counted, with 1.3–1.7% as the harness-specific one.
 
 Two limits, stated so this is not over-claimed:
 
@@ -863,6 +891,123 @@ Both text-bearing files were scanned before staging and **8 matches across the t
 a run rather than a re-runnable corpus. This is the third time corpus text has carried contact data into
 an artifact; the scan is a pipeline step now, not a review.
 
+> **Superseded on arithmetic only (Rev 12, §3j).** The 13.3% rate, its interval, the 0/60 at k=1 and
+the retrieval-precision finding all stand unchanged. The **10.7% union built on them does not**: it added
+1,176 semantic captures to a numerator of 3,463 that double counted 1,525 citations. In the consistent
+frame the union is **9.65%**, and the non-ask-cue bucket it declined to probe has now been sampled.
+
+---
+
+## 3j. The union row double counted a channel, and the last unprobed bucket is mostly not speech
+
+Two things were wrong with the headline, and neither is a difficulty of measurement. Both were
+arithmetic and scope, and both had been sitting in a committed script.
+
+### The numerator summed across channels; the denominator did not
+
+`segment_units.py` computes `total_cited = sum(cited.values())` and divides it by a clause union that
+subtracts 3,939 cross-channel duplications. The two sides of the ratio therefore count different things.
+`evidence/coverage_consistency.py` rebuilds the containment union directly and measures the damage:
+**1,525 cited strings were counted more than once, 1,484 of them iMessage clauses that also occur
+inside the phone export.** The phone channel alone accounts for 1,534 citations.
+
+| Frame | Numerator | Denominator | Coverage |
+|---|---:|---:|---:|
+| published (summed / deduplicated) | 3,463 | 43,305 | 8.0% |
+| **consistent (set union both sides)** | **1,938** | **43,648** | **4.4%** |
+
+This is the eighth time this file has stated a confident number from an incomplete measurement, and the
+first time the error made the register look **better** than it is. Every published union figure from
+Rev 8 onward carried the inflated numerator; the per-channel rows in §3f did not, because each divides
+one channel's cited clauses by that same channel's clauses.
+
+### The bucket that made the union a lower bound, now sampled
+
+The 8,819 ask-cue units were probed in §3i. The remaining **32,891 uncited non-ask-cue units had never
+been sampled**, which is why 10.7% had to be emitted as a lower bound.
+`evidence/nonask_probe.py` draws a random 60 (`seed=20261113`, distinct from the ask-cue draw's
+20261112), asserts the rebuilt population still sums to the published totals before sampling, and
+produces the same blind two-file split: labels in `nonask_label_sheet.json`, ranks and cosines in
+`nonask_candidates.json`.
+
+| measure | k/n | rate | 95% Wilson |
+|---|---:|---:|---|
+| capture@5 strict | 2/60 | **3.3%** | 0.9–11.4% |
+| capture@5 lenient | 5/60 | 8.3% | 3.6–18.1% |
+| capture@1 strict | 2/60 | 3.3% | 0.9–11.4% |
+
+Strict captures sat at rank 1 and rank 1; lenient additions at 2, 3 and 4. Five captures in sixty, where
+the ask-cue bucket yielded ten.
+
+### The sample found something more consequential than the rate
+
+Labeling required reading each clause, and most of the clauses were not written by the operator. Two
+independent attributions were made, and they disagree in detail while agreeing on the direction:
+
+| pass | operator | agent | tool | system | peer | other | non-operator |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| pass 1 (hand) | 15 | 32 | 2 | 5 | 4 | 2 | **45/60 = 75%** |
+| pass 2 (hand) | 23 | 27 | 3 | 4 | 3 | 0 | **37/60 = 62%** |
+
+The spread is the honest result: **between 62% and 75% of this bucket is not operator speech**. The
+channel composition is derived rather than judged and points the same way: **47 of the 60 clauses come
+from agent-harness exports** (42 harness, 5 KCode), 13 from iMessage, and 7 of those also occur in the
+phone ledger.
+
+**A process failure, disclosed rather than smoothed.** Pass 1's per-item attribution was hand-written
+into the label sheet, then destroyed when `nonask_probe.py` was re-run to fix a redaction bug: the probe
+emits a fresh sheet by design and overwrote it. The five graded captures were restored from the
+preserved pass-1 scorer output rather than re-judged — same idx, ask id, rank and reason, and the capture
+figures reproduce exactly (2/60 strict, 5/60 lenient, ranks 1 and 1) — and the 55 `N` labels are forced
+by the preserved counts M=2/W=3/N=55. Per-item speaker attribution was **not** recoverable, so pass 2 is
+an independent re-reading and both aggregates are recorded rather than one being presented as the
+original. The memo lives in `evidence/nonask_pass1_preserved.json` and the repair in
+`evidence/nonask_restore.py`.
+
+This matters more than the 3.3%. The denominator of every coverage figure in this file is described as
+"units of operator intent". For this bucket that description is measured false at a 62–75% non-operator
+share. **No revised denominator is computed here**, because the ask-cue bucket's speaker mix was never
+recorded, so the operator-speech share of the corpus is measured in one 32,891-unit bucket and
+unmeasured in the other 8,819. That is the next increment, and it is a prerequisite for restating
+coverage *of operator intent* rather than coverage *of units*.
+
+### The union, in one consistent frame
+
+| term | population | rate | captures |
+|---|---:|---:|---:|
+| structurally cited | — | — | 1,938 |
+| ask-cue, semantic@5 | 8,819 | 13.3% (8/60) | ≈1,176 |
+| non-ask-cue, semantic@5 | 32,891 | 3.3% (2/60) | ≈1,096 |
+| **union, frame A** | **43,648** | — | **≈4,210** |
+
+**4,210 / 43,648 = 9.65%**, emitted with `range_from_independent_bounds` of **6.5–17.9%**. That range
+is not a confidence interval: it adds each term's own 95% Wilson limit independently, and a joint
+interval would need the joint distribution. The point estimate is the number to use; the range shows how
+much the wide non-ask-cue interval moves it.
+
+So the register holds roughly **a tenth of the units it was tested against**, and **1 in 23** of them by
+verbatim substring alone. The confidence in that tenth is what changed; the shortfall did not. The
+migration gate stays closed, and now for a sharper reason than before: before, the concern was that
+coverage might be low. It is low, and the population being divided into is itself mostly machine
+text.
+
+| Artifact | Carries |
+|---|---|
+| `evidence/coverage_consistency.py` + `.json` | both frames, the 1,525 duplicates, the 16-clause input drift |
+| `evidence/nonask_probe.py` | sampling, population assertion, blind two-file split |
+| `evidence/nonask_label_sheet.json` | 60 clauses, shuffled candidates, `M`/`W`/`N` with a reason and a speaker each |
+| `evidence/nonask_candidates.json` | the same pairs with rank and cosine; read only by the scorer |
+| `evidence/nonask_score.py` + `nonask_scored.json` | every figure above, recomputed from those files |
+| `evidence/nonask_pass1_preserved.json` | the pre-loss scorer output: five captures with idx, ask id, rank, reason, and the pass-1 speaker aggregate |
+| `evidence/nonask_restore.py` | reattaches those labels to the regenerated sheet and derives `channel` |
+
+Both new JSONs quote raw corpus text and were scanned before staging: **16 matches** (7 emails and 1 IP
+literal in each of the two files) redacted to typed tokens. The scrub is now JSON-aware — a first attempt
+at raw text substitution produced invalid JSON around a string containing a literal backslash, which is
+recorded here because the same trap will recur. `nonask_score.py` reproduces identical output from the
+redacted files, so the figures hold, but as before the artifact records a run rather than a re-runnable
+corpus.
+
 ---
 
 ## 4. Occurrence volume is only partly recovered
@@ -918,7 +1063,9 @@ class of error produced kcode's 196 and the old jcode figure of 16,887.
 | Intent-level dedupe | NOT_RUN | No model exists for deciding that two different strings express one intent. String counts therefore overstate intents. |
 | Paperclip / herdr volumes | UNKNOWN | Not probed this session. |
 | iMessage substantive ratio | **MEASURED** | 9,011 text-bearing outbound rows → 6,418 substantive → 6,363 distinct; collapse is a near no-op (`evidence/imessage_kcode_recount.json`). |
-| Semantic coverage | **MEASURED — 13.3% at k=5** | Random 60-clause sample, labelled blind: **8/60 = 13.3%** [6.9–24.2] of uncited ask-cue clauses are reachable within five candidates, **0/60** at k=1 (§3i). Because those units are disjoint from the 3,463 structurally cited ones, union coverage is at least **10.7%** [9.4–12.9], replacing the 8.0% structural-only headline. Still a **lower bound**: the 31,023 uncited non-ask-cue units were never probed. §3h's 2.12% survives as a floor only. |
+| Semantic coverage | **MEASURED — 13.3% (ask-cue) / 3.3% (non-ask-cue)** | Two independent blind random-60 samples. Uncited ask-cue clauses: **8/60 = 13.3%** [6.9–24.2] reachable within five candidates, **0/60** at k=1 (§3i). Uncited non-ask-cue clauses: **2/60 = 3.3%** [0.9–11.4] (§3j). Both are disjoint from the 1,938 structurally cited units. |
+| Union coverage | **MEASURED — ≈9.65%** | (1,938 + ≈1,176 + ≈1,096) / 43,648 in one consistent frame, 6.5–17.9% from independent bounds (§3j). Supersedes both the 8.0% and the 10.7% figures, which paired a numerator summed across channels with a de-duplicated denominator. |
+| Denominator validity | **FAIL — 62–75% of the one bucket measured is not operator speech** | Two independent speaker passes on the 60-clause sample: 45/60 and 37/60 non-operator. Derived channel composition agrees: 47/60 come from agent-harness exports (42 harness, 5 KCode). The ask-cue bucket's speaker mix was never recorded, so no operator-speech denominator exists and coverage *of operator intent* cannot yet be stated (§3j). |
 | Semantic retrieval precision | **MEASURED — ≤2.7%** | At most 8 of 300 retrieved candidates carried the same intent as their clause, so top-1 lookup is unusable on this corpus: every strict capture sat at rank 2–5 (§3i). A better index does not fix an incomplete register. |
 
 ---

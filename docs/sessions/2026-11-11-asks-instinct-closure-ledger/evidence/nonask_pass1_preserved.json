@@ -1,0 +1,141 @@
+{
+ "provenance": "recovered from the pass-1 nonask_scored.json (written 2026-11-12T09:18Z) before a re-run of nonask_probe.py overwrote the label sheet. Unedited values.",
+ "labeller": "single (agent), blinded to rank and cosine",
+ "labelled_at_utc": "2026-11-12T09:20:00Z",
+ "restored_at_utc": "2026-11-12T09:32Z",
+ "seed": 20261114,
+ "topk": 5,
+ "sample_size": 60,
+ "population": 32891,
+ "label_counts": {
+  "M": 2,
+  "W": 3,
+  "N": 55
+ },
+ "by_speaker": {
+  "agent": {
+   "n": 32,
+   "M": 1,
+   "W": 1,
+   "N": 30
+  },
+  "system": {
+   "n": 5,
+   "M": 0,
+   "W": 0,
+   "N": 5
+  },
+  "tool": {
+   "n": 2,
+   "M": 0,
+   "W": 0,
+   "N": 2
+  },
+  "operator": {
+   "n": 15,
+   "M": 1,
+   "W": 2,
+   "N": 12
+  },
+  "peer": {
+   "n": 4,
+   "M": 0,
+   "W": 0,
+   "N": 4
+  },
+  "other": {
+   "n": 2,
+   "M": 0,
+   "W": 0,
+   "N": 2
+  }
+ },
+ "captures": [
+  {
+   "idx": 14,
+   "grade": "W",
+   "ask": "ASK-000443",
+   "rank": 4,
+   "cosine": 0.5193,
+   "speaker": "operator",
+   "why": "agent-voice note \"local cpu small data\"; candidate asks to gather benchmark data locally - same compute-placement concern, different act"
+  },
+  {
+   "idx": 39,
+   "grade": "W",
+   "ask": "ASK-000550",
+   "rank": 2,
+   "cosine": 0.6872,
+   "speaker": "operator",
+   "why": "clause: dispensary collector, pick the best path; candidate: proceed via the best available path for the item just discussed - generic best-path ask, not the dispensary target"
+  },
+  {
+   "idx": 40,
+   "grade": "M",
+   "ask": "ASK-000440",
+   "rank": 1,
+   "cosine": 0.712,
+   "speaker": "operator",
+   "why": "clause: then claude\\oai\\gemini data export scrape; candidate: obtain similar chat exports from Gemini and Claude"
+  },
+  {
+   "idx": 44,
+   "grade": "W",
+   "ask": "ASK-001953",
+   "rank": 3,
+   "cosine": 0.591,
+   "speaker": "agent",
+   "why": "clause: reveal and copy; candidate: copy the visible token into the target configuration - same credential-copy action, fragment too short to be certain"
+  },
+  {
+   "idx": 57,
+   "grade": "M",
+   "ask": "ASK-001126",
+   "rank": 1,
+   "cosine": 0.6999,
+   "speaker": "agent",
+   "why": "clause: only 1 here\u2019s deploy; candidate quote is verbatim the same string, scope the deploy-status report to the single deploy here"
+  }
+ ],
+ "capture_at_5": {
+  "strict": {
+   "k": 2,
+   "n": 60,
+   "rate": 0.0333,
+   "wilson95": [
+    0.0092,
+    0.1136
+   ]
+  },
+  "lenient": {
+   "k": 5,
+   "n": 60,
+   "rate": 0.0833,
+   "wilson95": [
+    0.0361,
+    0.1807
+   ]
+  }
+ },
+ "capture_at_1_strict": {
+  "k": 2,
+  "n": 60,
+  "rate": 0.0333,
+  "wilson95": [
+   0.0092,
+   0.1136
+  ]
+ },
+ "capture_ranks": {
+  "M": [
+   1,
+   1
+  ],
+  "W": [
+   2,
+   3,
+   4
+  ]
+ },
+ "loss_note": "per-item speaker attribution was not recoverable; only these aggregates survived."
+}

@@ -446,3 +446,94 @@ stays closed. Addendum 8's 2.12% survives **as a floor only**; as an estimate it
 per file) redacted to typed tokens. `recall_score.py` reproduces **byte-identical** output from the
 redacted files, so every figure holds, and the artifact records a run rather than a re-runnable corpus.
 Third occurrence — the scrub is a pipeline step now, not a review.
+
+## Addendum 10 — the union row double counted a channel, and the last bucket is mostly not speech (2026-11-12T09:25Z)
+
+**Two defects, neither of them a measurement difficulty.** Both had been sitting in committed scripts,
+and together they retire every union figure this ledger has published since Rev 8.
+
+**Defect 1 — numerator summed, denominator deduplicated.** `segment_units.py` computes
+`total_cited = sum(cited.values())` across channels, then divides by a clause union that subtracts 3,939
+cross-channel duplications. 1,525 citations were therefore counted twice, 1,484 of them iMessage clauses
+that also occur inside the phone export (which alone supplies 1,534 citations).
+`evidence/coverage_consistency.py` rebuilds the containment union on both sides of the ratio:
+
+| Frame | Numerator | Denominator | Coverage |
+|---|---:|---:|---:|
+| published | 3,463 | 43,305 | 8.0% |
+| **consistent** | **1,938** | **43,648** | **4.4%** |
+
+The per-channel rows in the granularity table are unaffected: each divides one channel's cited clauses by
+that same channel's clauses. Only the union row was wrong, and it was wrong from the first publication.
+
+**Defect 2 — the bucket that made the union a lower bound was never sampled.** 32,891 uncited
+non-ask-cue units. `evidence/nonask_probe.py` draws a random 60 (`seed=20261113`), asserts the rebuilt
+population still sums to the published totals before sampling, and uses the same blind two-file split as
+the ask-cue probe: labels in `nonask_label_sheet.json`, ranks and cosines in `nonask_candidates.json`.
+
+| measure | k/n | rate | 95% Wilson |
+|---|---:|---:|---|
+| capture@5 strict | 2/60 | **3.3%** | 0.9–11.4% |
+| capture@5 lenient | 5/60 | 8.3% | 3.6–18.1% |
+| capture@1 strict | 2/60 | 3.3% | 0.9–11.4% |
+
+**The finding that outranks the rate.** Speaker attribution was recorded alongside every label, and two
+independent passes agree that most of the clauses are not operator speech:
+
+| pass | operator | agent | tool | system | peer | other | non-operator |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| pass 1 | 15 | 32 | 2 | 5 | 4 | 2 | **45/60 = 75%** |
+| pass 2 | 23 | 27 | 3 | 4 | 3 | 0 | **37/60 = 62%** |
+
+The derived channel composition points the same way and cannot be argued with: **47 of the 60 clauses
+come from agent-harness exports** (42 harness, 5 KCode), 13 from iMessage, 7 of which also occur in the
+phone ledger. So the bucket's low capture rate is largely a statement about what the unit population
+contains, not about what the register missed. The corpus is described throughout this ledger as units of
+operator intent; in this bucket that description is measured false at a **62–75%** non-operator share. No
+revised denominator is computed, because the ask-cue bucket's speaker mix was never recorded, so
+operator-speech share is measured in one bucket and unmeasured in the other. Restating coverage *of
+operator intent* requires that second measurement first.
+
+**A process failure, recorded.** Pass-1 per-item attribution was hand-written into the label sheet and
+then destroyed by re-running `nonask_probe.py` to fix a redaction bug — the probe emits a fresh sheet by
+design. The five graded captures were restored from the preserved pass-1 scorer output rather than
+re-judged (same idx, ask id, rank and reason; the capture figures reproduce exactly), and the 55 `N`
+labels are forced by the preserved counts M=2/W=3/N=55. Per-item speaker attribution was not recoverable,
+so pass 2 is an independent re-reading and both aggregates are recorded. Memo:
+`evidence/nonask_pass1_preserved.json`; repair: `evidence/nonask_restore.py`. Nothing in the pass-1
+aggregate was copied into a per-item field.
+
+**Union, one consistent frame.**
+
+| term | population | rate | captures |
+|---|---:|---:|---:|
+| structurally cited | — | — | 1,938 |
+| ask-cue, semantic@5 | 8,819 | 13.3% (8/60) | ≈1,176 |
+| non-ask-cue, semantic@5 | 32,891 | 3.3% (2/60) | ≈1,096 |
+| **union, frame A** | **43,648** | — | **≈4,210** |
+
+**≈9.65%**, emitted as `coverage_pct_point` with `range_from_independent_bounds` 6.5–17.9%. The range is
+not a confidence interval: it adds each term's own Wilson limit independently. Addendum 9's 10.7% is
+retracted as arithmetic, not as a measurement — the 13.3% rate, its interval, the 0/60 at k=1 and the
+retrieval-precision finding all stand.
+
+**Denominator discipline, restated because it keeps biting.** Addendum 9 warned that 13.3% is a rate
+*within* an 8,819-unit bucket and must not be read as coverage of everything. The same warning now
+applies to 9.65%: it is coverage of **43,648 clauses**, of which roughly three quarters of the one bucket
+that has been attributed is machine text. It is not yet coverage of operator intent, and no figure in
+this ledger is.
+
+**Reproduction gap, stated not smoothed.** The rebuild gets 8,230 iMessage clauses where the published
+run got 8,214: sums 47,260 vs 47,244, containment union 43,321 vs 43,305. A 16-clause input drift of
+0.04%, recorded under `input_drift` in `coverage_consistency.json`; it changes no conclusion.
+
+**Redaction, fourth time.** Both new JSONs quote raw corpus text. Scanned before staging: **16 matches**
+(7 emails + 1 IP literal in each of the two files) redacted to typed tokens. The scrub is JSON-aware now:
+a first attempt at raw text substitution broke the JSON around a string containing a literal backslash.
+`nonask_score.py` reproduces identical output from the redacted files, so every figure holds, but as
+before the artifact records a run rather than a re-runnable corpus.
+
+**What the gate needs next, in order.** (1) Speaker attribution on a random sample of the 8,819 ask-cue
+units — without it there is no operator-speech denominator and no honest coverage-of-intent figure.
+(2) A second independent labeller on both sheets, since every rate here rests on one coder. Neither is
+started.

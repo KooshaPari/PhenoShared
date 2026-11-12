@@ -395,6 +395,14 @@ owning goal) and the script's stdout.
 
 **Current status:** `NOT_RUN` — no reconciliation matrix exists yet.
 
+**Partial progress (2026-11-12).** A one-frame reconciliation now exists for the two
+coverage channels that were previously added up in different frames:
+`evidence/coverage_consistency.py` → `evidence/coverage_consistency.json` derives
+`1,938 / 43,648 = 4.4%` structurally and `≈4,210 / 43,648 = 9.65%` with semantic
+capture, and records a 16-clause input drift (0.04%) explicitly rather than absorbing
+it. That satisfies closure rules 2 and 4 for the channels it covers and nothing more:
+it is not a per-source matrix, so this goal stays `NOT_RUN`.
+
 **Blocker (2026-11-11 audit):** `mined/scripts/reconcile_coverage.py` does not exist,
 and neither does the named evidence artifact `mined/COVERAGE-MATRIX.md`. The closure
 test above is not executable.

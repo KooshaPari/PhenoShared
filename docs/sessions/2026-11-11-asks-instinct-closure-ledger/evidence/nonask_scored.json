@@ -1,0 +1,233 @@
+{
+ "generated_at_utc": "2026-11-12T09:34:32Z",
+ "labelled_at_utc": "2026-11-12T09:20:00Z",
+ "labeller": "single (agent), blinded to rank and cosine",
+ "seed": 20261114,
+ "topk": 5,
+ "sample_size": 60,
+ "population": 32891,
+ "label_counts": {
+  "M": 2,
+  "W": 3,
+  "N": 55
+ },
+ "capture_at_5": {
+  "strict": {
+   "k": 2,
+   "n": 60,
+   "rate": 0.0333,
+   "wilson95": [
+    0.0092,
+    0.1136
+   ]
+  },
+  "lenient": {
+   "k": 5,
+   "n": 60,
+   "rate": 0.0833,
+   "wilson95": [
+    0.0361,
+    0.1807
+   ]
+  }
+ },
+ "capture_at_1_strict": {
+  "k": 2,
+  "n": 60,
+  "rate": 0.0333,
+  "wilson95": [
+   0.0092,
+   0.1136
+  ]
+ },
+ "capture_ranks": {
+  "M": [
+   1,
+   1
+  ],
+  "W": [
+   2,
+   3,
+   4
+  ]
+ },
+ "by_speaker_pass2": {
+  "agent": {
+   "n": 27,
+   "M": 1,
+   "W": 1,
+   "N": 25
+  },
+  "operator": {
+   "n": 23,
+   "M": 1,
+   "W": 2,
+   "N": 20
+  },
+  "tool": {
+   "n": 3,
+   "M": 0,
+   "W": 0,
+   "N": 3
+  },
+  "system": {
+   "n": 4,
+   "M": 0,
+   "W": 0,
+   "N": 4
+  },
+  "peer": {
+   "n": 3,
+   "M": 0,
+   "W": 0,
+   "N": 3
+  }
+ },
+ "by_channel": {
+  "harness": {
+   "n": 41,
+   "M": 1,
+   "W": 2,
+   "N": 38
+  },
+  "kcode": {
+   "n": 5,
+   "M": 0,
+   "W": 0,
+   "N": 5
+  },
+  "harness+imessage": {
+   "n": 1,
+   "M": 0,
+   "W": 0,
+   "N": 1
+  },
+  "imessage+phone": {
+   "n": 6,
+   "M": 1,
+   "W": 0,
+   "N": 5
+  },
+  "imessage": {
+   "n": 6,
+   "M": 0,
+   "W": 0,
+   "N": 6
+  },
+  "phone": {
+   "n": 1,
+   "M": 0,
+   "W": 1,
+   "N": 0
+  }
+ },
+ "speaker_pass1_aggregate_lost": {
+  "agent": {
+   "n": 32,
+   "M": 1,
+   "W": 1,
+   "N": 30
+  },
+  "system": {
+   "n": 5,
+   "M": 0,
+   "W": 0,
+   "N": 5
+  },
+  "tool": {
+   "n": 2,
+   "M": 0,
+   "W": 0,
+   "N": 2
+  },
+  "operator": {
+   "n": 15,
+   "M": 1,
+   "W": 2,
+   "N": 12
+  },
+  "peer": {
+   "n": 4,
+   "M": 0,
+   "W": 0,
+   "N": 4
+  },
+  "other": {
+   "n": 2,
+   "M": 0,
+   "W": 0,
+   "N": 2
+  }
+ },
+ "label_restore_note": "pass-1 labels were overwritten by re-running nonask_probe.py; the five graded captures are restored from nonask_pass1_preserved.json (not re-judged) and the 55 N assignments are forced by the preserved counts M=2/W=3/N=55. Per-item speaker attribution from pass 1 is LOST; speaker_pass2 is an independent second pass and its aggregate differs from pass 1's.",
+ "captures": [
+  {
+   "idx": 14,
+   "grade": "W",
+   "ask": "ASK-000443",
+   "rank": 4,
+   "cosine": 0.5193,
+   "speaker": "operator",
+   "why": "agent-voice note \"local cpu small data\"; candidate asks to gather benchmark data locally - same compute-placement concern, different act"
+  },
+  {
+   "idx": 39,
+   "grade": "W",
+   "ask": "ASK-000550",
+   "rank": 2,
+   "cosine": 0.6872,
+   "speaker": "operator",
+   "why": "clause: dispensary collector, pick the best path; candidate: proceed via the best available path for the item just discussed - generic best-path ask, not the dispensary target"
+  },
+  {
+   "idx": 40,
+   "grade": "M",
+   "ask": "ASK-000440",
+   "rank": 1,
+   "cosine": 0.712,
+   "speaker": "operator",
+   "why": "clause: then claude\\oai\\gemini data export scrape; candidate: obtain similar chat exports from Gemini and Claude"
+  },
+  {
+   "idx": 44,
+   "grade": "W",
+   "ask": "ASK-001953",
+   "rank": 3,
+   "cosine": 0.591,
+   "speaker": "agent",
+   "why": "clause: reveal and copy; candidate: copy the visible token into the target configuration - same credential-copy action, fragment too short to be certain"
+  },
+  {
+   "idx": 57,
+   "grade": "M",
+   "ask": "ASK-001126",
+   "rank": 1,
+   "cosine": 0.6999,
+   "speaker": "agent",
+   "why": "clause: only 1 here\u2019s deploy; candidate quote is verbatim the same string, scope the deploy-status report to the single deploy here"
+  }
+ ],
+ "union_frame_a": {
+  "total_units": 43648,
+  "structural_cited": 1938,
+  "ask_cue_population": 8819,
+  "ask_cue_rate": 0.13333333333333333,
+  "ask_cue_captures": 1176,
+  "non_ask_population": 32891,
+  "non_ask_rate": 0.03333333333333333,
+  "non_ask_captures": 1096,
+  "coverage_pct_point": 9.65,
+  "range_from_independent_bounds": [
+   6.53,
+   17.89
+  ],
+  "interval_caveat": "the bounds add each term's own 95% Wilson limit independently; this is a sensitivity range, not a joint confidence interval"
+ },
+ "verdict": "The non-ask-cue bucket is captured at a much lower rate than the ask-cue bucket, so the register's coverage does not rise much: the union figure in frame A is ~9.6%. The bucket is also mostly not operator speech - 47 of the 60 sampled clauses come from agent-harness exports and two independent speaker passes put the non-operator share at 62-75% - so its low rate says more about what the unit population contains than about what the register missed.",
+ "limitations": [
+  "single labeller, not independent",
+  "capture@5 is recall of the k=5 retrieval system, not ultimate recall",
+  "n=60 per bucket; the by_speaker split is a post-hoc subset with tiny n and is explanatory only",
+  "the union range adds independent bounds and is not a joint interval"
+ ]
+}
