@@ -185,11 +185,9 @@ impl SurfaceEventHub {
         let chunk_limit = state
             .subscriptions
             .values()
-            .filter(|subscription| {
-                subscription
-                    .surface_id
-                    .as_deref()
-                    .is_none_or(|id| id == surface_id)
+            .filter(|subscription| match subscription.surface_id.as_deref() {
+                Some(id) => id == surface_id,
+                None => true,
             })
             .map(|subscription| subscription.max_chunk_bytes)
             .min()
@@ -208,11 +206,11 @@ impl SurfaceEventHub {
                 Some(base64::engine::general_purpose::STANDARD.encode(chunk))
             };
             let subscriptions = state.subscriptions.iter_mut().filter(|(_, subscription)| {
-                subscription
-                    .surface_id
-                    .as_deref()
-                    .is_none_or(|id| id == surface_id)
-                    && seq >= subscription.from_seq
+                let surface_matches = match subscription.surface_id.as_deref() {
+                    Some(id) => id == surface_id,
+                    None => true,
+                };
+                surface_matches && seq >= subscription.from_seq
             });
             for (subscription_id, subscription) in subscriptions {
                 let event = SurfaceEventNotification {
