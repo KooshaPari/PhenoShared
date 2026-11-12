@@ -1,0 +1,67 @@
+{
+ "generated_at_utc": "2026-11-12T09:51:38Z",
+ "population": {
+  "uncited_ask_cue_units_union": 8819,
+  "asserted_against": 8819,
+  "per_channel_ask_cue_units_summing_to_more_than_union": {
+   "harness": 7287,
+   "imessage": 1012,
+   "kcode": 527,
+   "phone": 435
+  },
+  "occurrence_pairs": 9343
+ },
+ "unit_labels": {
+  "operator": 8819
+ },
+ "harvest_role_census_raw": {
+  "jcode": {
+   "role=user|is_human=False": 13147,
+   "role=user|is_human=True": 41975
+  },
+  "codex": {
+   "role=user|is_human=True": 9650
+  }
+ },
+ "occurrences": {
+  "total": 9343,
+  "by_speaker": {
+   "operator": 9343
+  },
+  "by_channel_and_speaker": {
+   "harness:operator": 7369,
+   "imessage:operator": 1012,
+   "kcode:operator": 527,
+   "phone:operator": 435
+  },
+  "operator_share": 1.0,
+  "operator_share_wilson_95": [
+   0.9996,
+   1.0
+  ]
+ },
+ "finding": "Every harvest record that survives the published filters declares itself an operator turn (role='user'), so declared-speaker attribution returns 100% operator on all 8819 ask-cue units by construction. The field is CONSTANT here and carries no discriminating power; a human labeller disagrees on 33 of 60 sampled clauses. Coverage of operator intent therefore still has no denominator, and the reason is now structural rather than merely unsampled.",
+ "method": "deterministic: the harvest's own `role` field for jcode/codex, and operator-only construction for outbound iMessage, kcode user turns and reg_utterances.role='user'",
+ "caveat": "`role` is the harness's record of who wrote the turn, not proof of operator authorship: pasted agent output appears inside user turns and assistant turns can quote the operator",
+ "rejected_rule": "neither metadata precedence nor 'operator wins' can be used to claim authorship: the surviving harvest is 100% role='user' by construction, and a human labeller disagrees on 33 of 60 clauses",
+ "harvest_rows_skipped": {
+  "injected": 21189,
+  "filtered": 22476,
+  "explicitly_not_human": 3699
+ },
+ "crosscheck_vs_nonask_labels": {
+  "n": 60,
+  "operator_agreement": 27,
+  "deterministic_labels": {
+   "operator": 59,
+   "absent": 1
+  },
+  "note": "agreement on the operator/not-operator cut. A clause the human judged operator but which also occurs inside an agent message is labelled `mixed` here, so it counts as disagreement -- this understates agreement and is left that way deliberately."
+ },
+ "limitations": [
+  "role is a declared field, not an adjudicated one",
+  "phone is an iMessage subset, so it cannot rescue the operator share",
+  "no adjudication of pasted agent output inside user turns",
+  "kcode and iMessage carry no per-message role diversity to measure"
+ ]
+}

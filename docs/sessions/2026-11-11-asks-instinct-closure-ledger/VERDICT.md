@@ -10,7 +10,9 @@ their place, §3g; a local embedding model selected by a test with a known answe
 semantic coverage, which **withholds the headline** and publishes a floor instead, §3h; the recall
 measurement that made semantic capture a rate rather than a floor, §3i; and the correction that
 retracts Rev 11's union figure because its numerator double counted a channel, plus the first sample of
-the last unprobed 32,891 units, §3j).
+the last unprobed 32,891 units, §3j; and the negative result that ends the search for a machine-readable
+authorship signal — the harvest's `role` field is constant after filtering, so coverage *of operator
+intent* has no denominator, §3k).
 
 **Revision history — this file has been wrong eight times, each time in the same direction (stating a
 confident number from an incomplete measurement). Rev 8 is the first entry that corrects nothing: it
@@ -20,9 +22,9 @@ adds a measurement rather than a correction, and its most important result is a 
 number. Rev 11 is the number Rev 10 refused to publish. Rev 12 retracts Rev 11's arithmetic — the
 semantic rate survives, the union it fed does not — and moves the headline back down: ~4.4%
 structurally, ~9.7% counting semantic capture, on a denominator that the same sample shows is mostly
-*not operator speech* at all.**
+*not operator speech* at all. Rev 13 adds no number; it removes a denominator.**
 
-> **Current numbers, as of Rev 12.** Use these; every other figure in this file is the number
+> **Current numbers, as of Rev 13.** Use these; every other figure in this file is the number
 > published at the time of the section that made it, and §3f / §5 / §3i retain theirs for the record.
 >
 > | Quantity | Value |
@@ -32,6 +34,7 @@ structurally, ~9.7% counting semantic capture, on a denominator that the same sa
 > | Semantic capture, uncited non-ask-cue units | **2/60 = 3.3%** [0.9–11.4] |
 > | **Union coverage, frame A** | **≈9.65%** (range 6.5–17.9% from independent bounds) |
 > | Share of the non-ask-cue bucket that is operator speech | **25–38%** (15/60 pass 1, 23/60 pass 2); 47/60 come from agent-harness exports |
+> | Declared-speaker attribution, ask-cue bucket | **UNUSABLE — 100% operator by construction** |
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -47,6 +50,7 @@ structurally, ~9.7% counting semantic capture, on a denominator that the same sa
 | 10 | a **true semantic** probe was run on the 8,819 uncited ask-cue clauses with `nomic-embed-text-v1.5`; it **confirms** semantic capture exists (floor **2.12%** of the sample) but its high-band precision is only **0.567** strict / **0.733** lenient, so **no semantic coverage percentage is published** | not a retraction of a number — a refusal to publish one. It also retires the earlier claim that no semantic route existed: the earlier probe found no embedding stack installed, which was true of Python packages but not of `llama.cpp`, which is present with `llama-embedding` |
 | 11 | semantic capture among uncited ask-cue units is **13.3%** (8/60, 95% CI 6.9-24.2) on a **random** sample; union coverage is therefore at least **10.7%** (9.4-12.9), not 8.0% | Rev 10's 2.12% floor is withdrawn as an estimate of semantic coverage — not because it was miscalculated but because it was a floor built from a biased-high score band and could never be more. §3i measures the same quantity on a random draw. Note the trap this sets: 13.3% is a rate **within the 8,819-unit denominator**, and reading it as coverage of everything is the exact error this table exists to record |
 | 12 | **the union row double counted a channel.** Consistent-frame coverage is **1,938 / 43,648 = 4.4%** structurally, and **9.65%** counting semantic capture — not 8.0%, and not 10.7% | two defects, one arithmetic and one of scope. (a) `segment_units.py` sets `total_cited = sum(cited.values())` — sum across channels — while its denominator subtracts cross-channel duplications, so **1,525 citations were counted twice** (1,484 of them iMessage inside phone). Every published union figure from Rev 8 onward inherited that numerator; the per-channel rows are unaffected. (b) The union was called a lower bound because 32,891 uncited non-ask-cue units had never been sampled. They now have been: **2/60 strict**, and **62–75%** of the 60 clauses are not operator speech (pass 1: 32 agent / 2 tool / 5 system / 4 peer / 2 other; pass 2: 27/3/4/3), with **47/60 from agent-harness exports** |
+| 13 | **declared-speaker attribution is unusable on this harvest.** Coverage of *operator intent* has no denominator, and the reason is structural rather than a sampling gap | the attempt was reasonable: two of four channels carry a `role` field, so authorship looked machine-readable. Measured: both exports contain only `role='user'` rows (55,122 jcode, 9,650 codex) with `is_human` as the sole varying flag, which the published filter drops when False. Declared speaker is therefore **constant** — 100% operator across 9,343 occurrence pairs and 8,819 units — so the field carries **zero** information. Where a human looked it is also contradicted: 27/60 agreement on the operator cut. Not a number corrected; a measurement avenue closed, and recorded as such |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -1010,6 +1014,68 @@ corpus.
 
 ---
 
+## 3k. Authorship cannot be measured from this harvest, so coverage of operator intent has no denominator
+
+**What was attempted.** §3j established that 62–75% of the non-ask-cue sample is not operator
+speech. The ask-cue bucket — the one every coverage figure is actually about — had never been
+attributed at all. Two of the four channels carry an authorship field in the harvest, so this looked
+like a measurement that needed no labelling: read `role` for jcode and codex, and treat outbound
+iMessage, kcode user turns and `reg_utterances.role='user'` as operator by construction.
+
+**What the field actually contains.** Both harvest files are user-turn extracts:
+
+| file | rows | values of `role` | `is_human` |
+|---|---:|---|---|
+| `jcode-occurrences.jsonl` | 55,122 | `user` (all 55,122) | `True` 41,975 / `False` 13,147 |
+| `codex_user_turns_v2.jsonl` | 9,650 | `user` (all 9,650) | `True` 9,650 |
+
+There is no `assistant` row anywhere in either file. The only varying flag is `is_human`, and the
+published filter uses it to drop the `False` rows. So **after filtering, declared speaker is constant**:
+
+```
+uncited ask-cue units (union, deduped): 8819  expected 8819
+occurrence pairs: 9343   by speaker: operator 9343
+  harness 7369 / imessage 1012 / kcode 527 / phone 435   -- all operator
+unit labels: operator 8819 of 8819 (100%)
+```
+
+A field that takes one value on every record carries **zero** information. The 100% is a property of
+how the harvest was built, not a finding about the corpus.
+
+**And it is contradicted where a human looked.** The same classifier, run over the 60 clauses a human
+labelled in §3j, calls 59 of them operator. The human puts 33 of those 60 elsewhere. Agreement on the
+operator/not-operator cut is **27/60 = 45%**, i.e. barely better than a coin flip, and the more
+generous reading — that a clause occurring in both an operator message and an agent message is
+labelled `mixed`, not `operator` — is applied here and still leaves the metadata on the wrong side of
+half the disagreements.
+
+The likely mechanism is visible in the corpus and is not exotic: jcode and codex sessions record
+continuation prompts, compaction summaries, swarm reports and pasted agent output as `user` turns,
+because in the transcript they *are* user-role turns. The operator did not write them. A field that
+records the transport role cannot distinguish who composed the text.
+
+**Consequences.**
+
+1. **Coverage of operator intent stays unmeasured, and the reason is now structural.** It is no longer
+   "we have not sampled the ask-cue bucket". It is "the only machine-readable authorship signal in
+   the harvest is degenerate". A bigger sample of the same field would return 100% again.
+2. **The published figures are unchanged but re-scoped.** 4.4% structural, 13.3% ask-cue semantic,
+   3.3% non-ask-cue semantic, ≈9.65% union — every one is a rate over *units*, and none is a rate over
+   *operator intent*. They are correct as stated and must not be restated as intent coverage.
+3. **The next instrument must be human, and it is not a bigger version of this one.** Adjudicating
+   authorship requires reading a sample of ask-cue clauses and judging composition — which is what
+   §3j's label sheet does, on the other bucket, at n=60. That is the work item this section hands
+   forward, with its expected outcome already known to be inconvenient: if the ask-cue bucket
+   resembles the non-ask-cue bucket, the true intent denominator is a fraction of 8,819 rather than
+   8,819, and every rate above it rises.
+
+**Artifacts.** `evidence/askcue_role.py` → `evidence/askcue_role.json`. The script asserts the
+population is 8,819 before reporting, so a denominator change is a hard failure rather than a quiet
+shift. One defect found and fixed during the build: the first version widened phone membership to all
+`reg_utterances` rows, which reported 10,335 units and was caught by that assertion.
+
+---
+
 ## 4. Occurrence volume is only partly recovered
 
 `evidence/OCCURRENCE-RECOUNT.md` established that **every previously mined file has
@@ -1065,7 +1131,7 @@ class of error produced kcode's 196 and the old jcode figure of 16,887.
 | iMessage substantive ratio | **MEASURED** | 9,011 text-bearing outbound rows → 6,418 substantive → 6,363 distinct; collapse is a near no-op (`evidence/imessage_kcode_recount.json`). |
 | Semantic coverage | **MEASURED — 13.3% (ask-cue) / 3.3% (non-ask-cue)** | Two independent blind random-60 samples. Uncited ask-cue clauses: **8/60 = 13.3%** [6.9–24.2] reachable within five candidates, **0/60** at k=1 (§3i). Uncited non-ask-cue clauses: **2/60 = 3.3%** [0.9–11.4] (§3j). Both are disjoint from the 1,938 structurally cited units. |
 | Union coverage | **MEASURED — ≈9.65%** | (1,938 + ≈1,176 + ≈1,096) / 43,648 in one consistent frame, 6.5–17.9% from independent bounds (§3j). Supersedes both the 8.0% and the 10.7% figures, which paired a numerator summed across channels with a de-duplicated denominator. |
-| Denominator validity | **FAIL — 62–75% of the one bucket measured is not operator speech** | Two independent speaker passes on the 60-clause sample: 45/60 and 37/60 non-operator. Derived channel composition agrees: 47/60 come from agent-harness exports (42 harness, 5 KCode). The ask-cue bucket's speaker mix was never recorded, so no operator-speech denominator exists and coverage *of operator intent* cannot yet be stated (§3j). |
+| Denominator validity | **FAIL — 62–75% of the one bucket measured is not operator speech, and the ask-cue bucket cannot be attributed at all** | Two independent speaker passes on the 60-clause non-ask-cue sample: 45/60 and 37/60 non-operator. Derived channel composition agrees: 47/60 come from agent-harness exports (42 harness, 5 KCode). For the ask-cue bucket the harvest's `role` field is **constant after filtering** (100% `user` across 8,819 units), so it carries no information, and a human disagrees with it on 33 of 60 clauses (§3k). No operator-speech denominator exists and coverage *of operator intent* cannot be stated. |
 | Semantic retrieval precision | **MEASURED — ≤2.7%** | At most 8 of 300 retrieved candidates carried the same intent as their clause, so top-1 lookup is unusable on this corpus: every strict capture sat at rank 2–5 (§3i). A better index does not fix an incomplete register. |
 
 ---

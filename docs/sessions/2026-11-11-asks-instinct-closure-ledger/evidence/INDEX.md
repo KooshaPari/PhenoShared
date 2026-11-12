@@ -533,7 +533,56 @@ a first attempt at raw text substitution broke the JSON around a string containi
 `nonask_score.py` reproduces identical output from the redacted files, so every figure holds, but as
 before the artifact records a run rather than a re-runnable corpus.
 
-**What the gate needs next, in order.** (1) Speaker attribution on a random sample of the 8,819 ask-cue
-units — without it there is no operator-speech denominator and no honest coverage-of-intent figure.
-(2) A second independent labeller on both sheets, since every rate here rests on one coder. Neither is
-started.
+**What the gate needs next, in order.** (1) ~~Speaker attribution on a random sample of the 8,819
+ask-cue units~~ — **attempted in Addendum 11 and closed as unusable**: the harvest's authorship field is
+constant after filtering, so it cannot supply an operator-speech denominator. The replacement is human
+adjudication on a sample of ask-cue clauses, which is the same instrument as Addendum 10 with a different
+population. (2) A second independent labeller on both sheets, since every rate here rests on one coder.
+Neither is started.
+
+## Addendum 11 — the authorship field is degenerate, so coverage of intent has no denominator (2026-11-12T09:55Z)
+
+**Attempted.** Addendum 10 measured speaker on the non-ask-cue bucket only. The ask-cue bucket is the
+one every coverage figure is about, and two of the four channels carry an authorship field, so this
+looked like it needed no labelling: `role` for jcode/codex, operator-by-construction elsewhere.
+
+**Measured.** Both harvest files are user-turn extracts and contain no `assistant` row at all.
+
+| file | rows | `role` | `is_human` |
+|---|---:|---|---|
+| `jcode-occurrences.jsonl` | 55,122 | `user` (all) | `True` 41,975 / `False` 13,147 |
+| `codex_user_turns_v2.jsonl` | 9,650 | `user` (all) | `True` 9,650 |
+
+`is_human` is the only varying flag, and the published filter drops the `False` rows. So post-filter
+declared speaker is **constant**:
+
+```
+uncited ask-cue units (union, deduped): 8819  expected 8819
+occurrence pairs: 9343   by speaker: operator 9343
+  harness 7369 / imessage 1012 / kcode 527 / phone 435   -- all operator
+unit labels: operator 8819 of 8819 (100%)
+```
+
+A field with one value on every record carries zero information. The 100% is the harvest's construction,
+not a property of the corpus.
+
+**Contradicted where a human looked.** The same classifier over Addendum 10's 60 hand-labelled clauses
+calls 59 operator; the human puts 33 elsewhere. Agreement on the operator cut is **27/60 = 45%**.
+
+**Why it happens, and it is not exotic.** jcode and codex record continuation prompts, compaction
+summaries, swarm reports and pasted agent output as `user` turns, because in the transcript they are
+user-role turns. Transport role cannot distinguish who composed the text.
+
+**Consequences.**
+
+1. Coverage of *operator intent* stays unmeasured, and now for a structural reason rather than a
+   sampling gap. A larger sample of the same field returns 100% again.
+2. Every published figure is a rate over **units**, never over **operator intent**. Correct as stated;
+   must not be restated as intent coverage.
+3. The next instrument has to be human adjudication on a sample of ask-cue clauses, and its likely
+   outcome is inconvenient: if that bucket resembles the non-ask-cue one, the true intent denominator
+   is a fraction of 8,819 and every rate above it rises.
+
+**Artifacts.** `evidence/askcue_role.py` → `evidence/askcue_role.json`. The population is asserted at
+8,819 before reporting, so a denominator change fails hard; that assertion caught a real defect during
+the build (phone membership widened to all `reg_utterances` rows reported 10,335).
