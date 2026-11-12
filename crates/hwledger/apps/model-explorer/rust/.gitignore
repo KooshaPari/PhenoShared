@@ -2,15 +2,9 @@
 # covered by the workspace-root `.gitignore` but we mirror it locally for the
 # case where contributors run cargo from within this directory in isolation.
 target/
-# The lockfile IS tracked here. Trunk lints this directory as its own
-# workspace and invokes `cargo clippy --locked`, which exits 101 with
-# "cannot create the lock file ... because --locked was passed" when no lock
-# is committed, so ignoring it made every `Lint & Format` run that touched a
-# crate in here fail before producing a single lint (observed 2026-11-12 on
-# PR #940, run 43184486398). Every other nested workspace in this repo
-# (perf-core, iac, python/ffi) tracks its lock for the same reason. Refresh
-# deliberately with `cargo update` rather than letting resolution float.
-
+# Library workspaces typically don't track their lockfile; skip it so the
+# sidebar can choose when to refresh dependencies.
+Cargo.lock
 # Operator-local tantivy index cache. `seed build` populates this directory
 # by default; contributors regenerate it on demand. Never commit the cache.
 hwledger-index/
