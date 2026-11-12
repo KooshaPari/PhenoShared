@@ -47,6 +47,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq
 
+      # Trunk's clippy linter builds the whole root workspace, and
+      # `crates/spawn-core-sys`' build script shells out to `zig build` to
+      # produce `crates/spawn-core/zig-out/lib/libspawn_core.a`. Without zig
+      # that build script aborts with "failed to run `zig build`: No such file
+      # or directory", which trunk reports as a tool failure and which fails
+      # this job before any lint result is trusted. Observed 2026-11-12 on PR
+      # #937, run 43164794413: "Checked 6 modified files / 12 existing issues /
+      # 1 failure". Same class of fix as the toolchain and jq steps above.
+      - name: Install Zig
+        uses: ./.github/actions/setup-zig
+
       - name: Trunk Check
         uses: trunk-io/trunk-action@04ba50e7658c81db7356da96657e6e77f220bfa3 # v1.3.1
 
