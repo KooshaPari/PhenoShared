@@ -295,6 +295,42 @@ vocabulary, not meaning:
 So distributional-lexical scoring is **not** a usable coverage estimator here, and it is recorded as
 a negative result rather than a number.
 
+### 3c. Cross-channel overlap and the union
+
+The phone-chat channel is already inside `ledger.db`, so the union of measured channels is computable
+without any new mining. Containment test each way, using the same >=12-char substantive filter:
+
+| Direction | Count | Share |
+|---|---:|---:|
+| phone-chat utterances that also appear in harness text | **499** | 24.0% of 2,075 |
+| harness intents that also appear in phone-chat text | 19 | 0.3% of 6,085 |
+
+The asymmetry is expected: phone utterances are short and can sit inside a long harness turn, while a
+long harness intent rarely sits inside a short phone message. The 499 are genuine cross-channel
+restatements, not phrase noise: the longest is a 3,979-character message, and samples include
+`"auth request no longer active on gpt callback"` and
+`"how nice we got the 2 exports so quick"`. The operator typed the same content into both channels.
+
+| Quantity | Value |
+|---|---:|
+| phone-chat substantive distinct | 2,075 |
+| harness cleaned distinct | 6,085 |
+| cross-channel overlap | 499 |
+| **union estimate** | **7,661** |
+| register distinct asks | 2,255 |
+| **register / union** | **29.4%** |
+
+**This is a count ratio, and a coarse one.** It mixes granularities (raw phone messages vs collapsed
+harness intents), it assumes the 499 overlap pairs are one intent each, and it excludes iMessage (911)
+and KCode (196), which would raise the union. Treat 29.4% as the best available sizing, not as
+validated coverage.
+
+Note on reproducibility: re-running the harness collapse inline gives **8,488** distinct and **6,085**
+cleaned, against the **8,506** distinct published in ~3a. The 18-string gap is from two independent
+implementations of the same filters, not from a data change. The 6,085 vs 5,799 difference is the
+noise-pattern pass being applied in a different order. Both are printed rather than reconciled
+silently.
+
 ### Corrected statement
 
 The register **is** a verbatim-anchored extraction of real operator utterances: 98.9% of its quotes
