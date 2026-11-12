@@ -320,11 +320,12 @@ all deltas negative (mode −2d at 7, then −7d at 6, −4d at 4, −1d at 3).
 independent signals — `source_missing = 1`, `utterance_id IS NULL`, no message link — the same ids
 (ASK-000345, -000637, -000664, -001844, -002254, -002255, -002256). No silent failure.
 
-**Credential scan.** Prompted by the corpus's descent from messages that had an unredacted published
-version. All 8,042 `reg_utterances` scanned for JWT, bearer, `sk-`, AWS-key, OTP-in-context and URL
-credential-parameter shapes: **2 rows match**, both assistant, both `?code=` (UTT-004428 on
-`100.96.135.160:3100`; UTT-004470 on `paperclip.phenotype.space`). Zero JWT, OTP, bearer or key hits.
-Recorded as an ingest scrub requirement, not as a clean bill.
+**Credential scan.** Prompted by the corpus's descent from a dataset whose redaction history is not
+uniform. All 8,042 `reg_utterances` scanned for JWT, bearer, `sk-`, AWS-key, OTP-in-context and URL
+credential-parameter shapes: **2 rows match**, both assistant, both `?code=` (UTT-004428 on a local
+service port; UTT-004470 on a project subdomain). Zero JWT, OTP, bearer or key hits. Recorded as an
+ingest scrub requirement, not as a clean bill. Hostnames withheld because this repository is public;
+they are recoverable from the two utterance ids in `ledger.db`.
 
 **What the loss costs.** Ask-level recall against the harvest is now unmeasurable, so "did the harvest
 miss asks?" cannot be answered. Quote fidelity is unaffected and stays verified (§3d). The loss

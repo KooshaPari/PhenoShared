@@ -666,13 +666,14 @@ predates the test.
 Neither question is about quote fidelity, which is verified. Both are about the harvest's own
 coverage. Recorded as a loss, not repaired, and not waived: the migration gate (§8) keeps it open.
 
-**The register is not credential-free.** Because this corpus descends from messages that had an
-unredacted published version at one point, "clean" had to be tested rather than assumed. Scanning all
+**The register is not credential-free.** Because this corpus descends from a dataset whose
+redaction history is not uniform, "clean" had to be tested rather than assumed. Scanning all
 8,042 `reg_utterances` for JWT, bearer, `sk-`/AWS key, OTP-in-context and URL credential-parameter
 shapes returns **2 rows**, both `role = assistant`, both a `?code=` callback parameter (UTT-004428 on
-`100.96.135.160:3100`, UTT-004470 on `paperclip.phenotype.space`). Zero JWT, zero OTP, zero bearer,
-zero key-shaped hits. Two rows is small but not zero, so **SessionLedger ingest must scrub URL
-credential parameters** rather than trust the register as clean.
+a local service port, UTT-004470 on a project subdomain). Zero JWT, zero OTP, zero bearer, zero
+key-shaped hits. Two rows is small but not zero, so **SessionLedger ingest must scrub URL credential
+parameters** rather than trust the register as clean. Hostnames are withheld here because this
+repository is public; they are recoverable from the two utterance ids in `ledger.db`.
 
 ---
 
