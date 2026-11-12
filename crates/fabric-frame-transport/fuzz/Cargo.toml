@@ -1,5 +1,6 @@
 [package]
 name = "fabric-frame-transport-fuzz"
+license = "MIT OR Apache-2.0"
 version = "0.0.0"
 authors = ["Phenotype Fabric Team"]
 publish = false

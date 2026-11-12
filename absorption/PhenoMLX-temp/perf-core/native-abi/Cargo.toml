@@ -2,6 +2,7 @@
 name = "native-abi"
 version = "0.1.0"
 edition = "2021"
+rust-version.workspace = true
 description = "Versioned Native ABI v1 contract — shared between C, Zig, Rust, Mojo, Nim, Go backends"
 license = "MIT OR Apache-2.0"
 

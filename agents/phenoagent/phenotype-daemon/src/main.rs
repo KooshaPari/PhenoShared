@@ -21,9 +21,6 @@ use protocol::VersionInfo;
 #[cfg(unix)]
 const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
 
-/// Default TCP port for cross-platform support
-const DEFAULT_TCP_PORT: u16 = 9456;
-
 /// Server configuration
 #[derive(Debug, Clone)]
 struct ServerConfig {
@@ -41,7 +38,7 @@ impl Default for ServerConfig {
         Self {
             #[cfg(unix)]
             socket_path: PathBuf::from(DEFAULT_SOCKET_PATH),
-            tcp_port: DEFAULT_TCP_PORT,
+            tcp_port: protocol::DEFAULT_TCP_PORT,
             tcp_only: cfg!(windows),
         }
     }

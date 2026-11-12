@@ -1,8 +1,27 @@
-# Clippy lints configuration
-warn = ["clippy::all", "clippy::pedantic"]
-allow = [
-  "clippy::module_name_repetitions",
-  "clippy::must_use_candidate",
-  "clippy::missing_errors_doc",
-  "clippy::missing_panics_doc",
-]
+# Clippy configuration (clippy.toml).
+#
+# Only clippy.toml-specific knobs belong here (e.g. `msrv`,
+# `disallowed-methods`, `cognitive-complexity-threshold`). Lint LEVELS do not:
+# `warn = [...]` / `allow = [...]` are not valid keys, and clippy >=1.7x treats
+# unknown keys as a hard error ("error reading Clippy's configuration file:
+# unknown field `warn`"), which aborted every `cargo clippy` invocation.
+#
+# The previous file declared:
+#   warn  = ["clippy::all", "clippy::pedantic"]   -> default for `clippy::all`
+#   allow = ["clippy::module_name_repetitions", "clippy::must_use_candidate",
+#            "clippy::missing_errors_doc", "clippy::missing_panics_doc"]
+#
+# `clippy::all` is already on by default, so nothing is lost. To actually enable
+# pedantic lints, declare levels in the workspace manifest instead:
+#
+#   # Cargo.toml
+#   [workspace.lints.clippy]
+#   pedantic = { level = "warn", priority = -1 }
+#   module_name_repetitions = "allow"
+#   must_use_candidate = "allow"
+#   missing_errors_doc = "allow"
+#   missing_panics_doc = "allow"
+#
+# ...and have each crate opt in with `[lints] workspace = true`.
+# That opt-in is not applied here (it touches every crate manifest) and is a
+# tracked follow-up.

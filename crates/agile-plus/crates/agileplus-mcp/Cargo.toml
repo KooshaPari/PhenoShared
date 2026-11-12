@@ -1,5 +1,6 @@
 [package]
 name = "agileplus-mcp"
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 edition = "2021"
 description = "AgilePlus MCP server (stub — model-context-protocol facade, see crates/agileplus-cli for impl)"

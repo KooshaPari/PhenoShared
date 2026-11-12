@@ -2,6 +2,7 @@
 name = "teamcomm-protocol"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 description = "teamcomm protocol — wire types for inter-agent coordination"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/KooshaPari/phenotype-teamcomm"

@@ -2,6 +2,7 @@
 name = "spawn-core-sys"
 version = "0.8.0"
 edition = "2021"
+rust-version.workspace = true
 description = "FFI bindings to Zig spawn-core (Unix) / Rust stub (Windows)"
 license = "MIT OR Apache-2.0"
 build = "build.rs"

@@ -1,5 +1,6 @@
 [package]
 name = "hwledger-app"
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 description = "hwLedger - LLM Capacity Planner + Fleet Ledger"
 authors = ["Koosha Pari"]

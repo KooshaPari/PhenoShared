@@ -1,5 +1,6 @@
 [package]
 name = "agileplus-api"
+license = "MIT OR Apache-2.0"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

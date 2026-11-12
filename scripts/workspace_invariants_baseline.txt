@@ -177,6 +177,7 @@ crates/phenotype-plugins/pheno-plugin-sqlite
 crates/phenotype-plugins/pheno-plugin-vessel
 crates/phenotype-plugins/pheno-plugin-vessel/fuzz
 crates/phenotype-test-fixtures
+crates/phinbox/tests/fixtures/discord/live-qualification-20261017/focused
 crates/playcua-app
 crates/playcua-bare
 crates/policystack/wrappers/rust

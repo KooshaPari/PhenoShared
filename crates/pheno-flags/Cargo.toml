@@ -2,6 +2,7 @@
 name = "pheno-flags"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 authors.workspace = true
 license.workspace = true
 description = "Env-driven boolean feature flags for PlayCua (and the rest of the pheno-* fleet). L5 #81 wiring."

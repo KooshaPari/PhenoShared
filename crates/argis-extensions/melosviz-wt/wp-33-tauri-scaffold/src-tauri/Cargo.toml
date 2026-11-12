@@ -1,5 +1,6 @@
 [package]
 name = "melosviz"
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 description = "Tauri: scaffold (src-tauri/Cargo.toml + tauri.conf.json) (WP-33)"
 authors = ["<REDACTED>"]

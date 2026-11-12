@@ -2,6 +2,7 @@
 name = "model-plan"
 version = "0.1.0"
 edition = "2021"
+rust-version.workspace = true
 license.workspace = true
 description = "Pure Rust domain crate: ModelPlan, OperatorPlan, StatePlan, scheduler policy, and reference interpreter for the Metal model runtime."
 

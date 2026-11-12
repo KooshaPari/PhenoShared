@@ -1,0 +1,26 @@
+# GitGuardian configuration for KooshaPari/PhenoShared
+#
+# Scope: narrow, per-file exceptions only. There is deliberately no blanket
+# ignore for the archival absorption trees, because a future verbatim copy
+# could carry a real credential and a wide ignore would hide it.
+#
+# Each entry below is an example credential that is published documentation
+# data, used as redaction test input. Neither is a live secret.
+
+ignore:
+  # AWS's own published example access key. It appears as INPUT to the
+  # redaction rules: redaction.rs asserts that this exact string is removed
+  # from output, and g2_fixture.rs uses it as a header value to be scrubbed.
+  # AWS documentation, not a credential. The literal key is deliberately not
+  # repeated here: this repository's own secret-guard scans added lines and would
+  # match it. GitGuardian reads the path, not the prose.
+  - path: docs/absorbed-from-PhenoObservability/pheno-otel/src/redaction.rs
+    reason: >-
+      Contains the published AWS documentation example access key as redaction test
+      input. Not a live credential.
+
+  # Same example key, used as a header value in a redaction fixture.
+  - path: docs/absorbed-from-PhenoObservability/pheno-otel/src/g2_fixture.rs
+    reason: >-
+      Contains the published AWS documentation example access key as redaction test
+      input. Not a live credential.
