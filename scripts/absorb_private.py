@@ -18,6 +18,7 @@ script prints DELETE-AUTHORISED only when the comparison passes.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -62,8 +63,13 @@ def absorb(registry_clone: str, url_registry: str, owner: str, repo: str,
     if code != 0:
         return False, "mirror clone failed: %s" % err.strip()[:150]
 
-    code, out, _ = git(mirror, "symbolic-ref", "--short", "HEAD")
-    branch = out.strip() or "main"
+    code, out, _ = sh(["gh", "api", "repos/%s/%s" % (owner, repo)])
+    if code != 0:
+        return False, "cannot read repo metadata"
+    # Not `symbolic-ref HEAD`: for a fork, `gh repo clone` points HEAD at the
+    # *upstream* default branch rather than the fork's own, which would absorb
+    # the wrong branch's content.
+    branch = json.loads(out).get("default_branch") or "main"
     try:
         source_tree = must(mirror, "rev-parse", "%s^{tree}" % branch)
     except RuntimeError as exc:

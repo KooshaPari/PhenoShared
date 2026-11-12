@@ -1,0 +1,70 @@
+# Deletion Record — where absorbed repositories went
+
+Every repository listed here has been deleted from GitHub. This file exists so
+that "it was absorbed" is checkable rather than asserted: for each entry, the
+surviving location of its files, its history and its discussion is named.
+
+Nothing may be added here before the corresponding proof exists. The checks are
+in `scripts/`:
+
+| Check | Script | What it proves |
+|---|---|---|
+| Code absorption | `verify_absorption.py` | Every source file exists in `absorption/`, path for path |
+| Private data absorption | `absorb_private.py` | Every file is byte-identical, by comparing git blob ids |
+| History | `prepare_deletion.py` | A bundle, or refs under `refs/preserved/`, round-trips |
+| Discussion | `prepare_deletion.py` | Issues, PRs and comments exported to the registry |
+| Local fork changes | `export_fork_patches.py` | The combined diff applies to the base and reproduces the fork tree |
+
+## 2026-11-12 — private ops repositories
+
+Nine small private operations repositories were absorbed into the private
+registry, not into PhenoShared, because they hold configuration and data rather
+than code destined for the public tree.
+
+Each was written to `PhenoRegistry/repos/<repo>/tree/` and its full history to
+`refs/preserved/<repo>/`. The proof is a comparison of git blob ids between the
+source tree and the pushed tree: git object ids are content hashes, so equality
+per path means every file arrived byte for byte. 769 files were compared across
+the nine and all matched. The registry was then read back independently and
+each tree and ref namespace confirmed present.
+
+| Repository | Files | Commits | Refs |
+|---|---:|---:|---:|
+| `agentapi` | 1 | 8 | 2 |
+| `runner-smoke` | 3 | 8 | 3 |
+| `nexus` | 22 | 16 | 8 |
+| `tailnet-smb-setup` | 21 | 20 | 1 |
+| `harness-ops` | 69 | 55 | 2 |
+| `PhenoMCP` | 1 | 112 | 2 |
+| `host-credentials` | 5 | 1 | 1 |
+| `host-ops` | 174 | 204 | 5 |
+| `PhenoMCPServers` | 473 | 115 | 3 |
+
+`host-credentials` held live credentials. Moving it into the private registry
+and deleting the repository reduces exposure: the material is now in one
+private place instead of two.
+
+## 2026-11-12 — histories too large for a bundle
+
+| Repository | History | Preserved as |
+|---|---|---|
+| `PhenoMLX-temp` | 187 MB, 421 commits, 8179 objects | `refs/preserved/PhenoMLX-temp/` in the registry |
+| `phenotype-canonicalization` | 116 KB bundle | `repos/phenotype-canonicalization/history/` |
+
+`PhenoMLX-temp` could not be stored as a bundle at all: GitHub rejects any file
+over 100 MB. Its objects were pushed as refs instead and verified by fetching
+them back (same tip `70529a8`, same 421 commits, same 8179 objects) and running
+`git fsck --full`.
+
+## 2026-11-12 — gaps that cannot be closed
+
+Nine repositories were deleted in an earlier pass with their files verified but
+without a history bundle or a discussion export: `Authvault`, `SessionLedger`,
+`ResearchLedger`, `cvp-fixture`, `netweave-3`, `phenotype-router-spec`,
+`herdr-session-adapter`, `rule30-research`, `BytePort`.
+
+Their files survive in `absorption/`. Their history and any issues or pull
+requests did not, and cannot be reconstructed. Only a GitHub Support restore
+within the retention window would recover them. `prepare_deletion.py` was
+written so that this cannot happen again: it refuses to authorise a deletion
+until history and discussion are both preserved.
