@@ -41,9 +41,12 @@ jobs:
     # them at all.
     #
     # This is NOT a duplicate of the Rust coverage floor. That is a separate
-    # gate: `.github/workflows/coverage.yml` runs `cargo tarpaulin
-    # --workspace --fail-under 37` over the Rust workspace. This gate
-    # measures the JS/TS surface under `src/`.
+    # gate in `.github/workflows/coverage.yml`, where tarpaulin measures each
+    # crate group with `--fail-under 0` only so that a small group still writes
+    # a report; the numbers that actually fail the build are the per-group
+    # floors plus `aggregate_floor = 53.80` in
+    # `.coverage-baselines/root-workspace.toml`. This gate measures the JS/TS
+    # surface under `src/`.
     #
     # The baseline is raised by a deliberate commit to `.coverage-baseline`,
     # NOT by this job writing to main. The old "Update baseline on main"

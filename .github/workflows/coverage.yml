@@ -214,10 +214,14 @@ jobs:
       - name: Install cargo-tarpaulin
         run: cargo install cargo-tarpaulin --locked
 
-      # No --fail-under 37 here on purpose: the floor lives in the committed
-      # baseline file, and this job enforces it in the next step. Two places to
-      # change a threshold is one too many, and the baseline file is the one a
-      # reviewer can diff.
+      # No `--fail-under 37` here on purpose. This step only MEASURES; the
+      # floors that fail the build are the per-group values and
+      # `aggregate_floor = 53.80` in `.coverage-baselines/root-workspace.toml`,
+      # enforced by `coverage_report.py aggregate` in the `coverage-root` job.
+      # The `>=37%` in that job's display name is a frozen branch-protection
+      # label, not the enforced number (see the floor history in the baseline
+      # file). Two places to change a threshold is one too many, and the
+      # baseline file is the one a reviewer can diff.
       #
       # `--fail-under 0` is NOT a no-op: the repo-root tarpaulin.toml sets
       # `fail-under = 37`, which tarpaulin applies to every run unless the CLI
