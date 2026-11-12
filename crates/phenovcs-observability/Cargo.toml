@@ -2,6 +2,7 @@
 name = "phenovcs-observability"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "PhenoVCS observability substrate — thin re-export of pheno-tracing (ADR-012, ADR-036)"

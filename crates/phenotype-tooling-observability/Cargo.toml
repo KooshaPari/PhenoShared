@@ -2,6 +2,7 @@
 name = "phenotype-tooling-observability"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 description = "OTel/OTLP observability for the phenotype-tooling workspace — Prometheus metrics, /health endpoint, SLOs"
 
 readme = "README.md"

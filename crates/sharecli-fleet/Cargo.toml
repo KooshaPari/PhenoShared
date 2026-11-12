@@ -2,6 +2,7 @@
 name = "sharecli-fleet"
 version = "0.8.0"
 edition = "2021"
+rust-version.workspace = true
 description = "Fleet registry and thermal governor for sharecli — NATS-based device coordination"
 license = "MIT"
 

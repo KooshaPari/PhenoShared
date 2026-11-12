@@ -2,6 +2,7 @@
 name = "phenotype-gfx"
 version = "0.2.0"
 edition = "2021"
+rust-version.workspace = true
 description = "Unified graphics kernel: voxel, LOD, streaming, postfx, water, voxelizer, terrain. Single Rust core per ADR-004."
 license = "MIT OR Apache-2.0"
 readme = "README.md"

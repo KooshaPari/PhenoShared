@@ -2,6 +2,7 @@
 name = "turbo-quant-mojo"
 version = "0.1.0"
 edition = "2021"
+rust-version.workspace = true
 license.workspace = true
 description = "phenotype-omlx turbo-quant in Mojo (cross-language FFI polyglot crate)"
 
