@@ -4,19 +4,28 @@ Deliverable: **D15.2**.
 
 ## Coverage and method
 
-- Method: `cargo metadata --no-deps --format-version 1`, run at the repository root on
+- Method: `cargo metadata --no-deps --format-version 1`, run at the
+  repository root on
   **2026-11-12**, parsed in place. Exit code 0.
-- **Coverage: 291 of 291 crates.** The metadata reported `workspace_members = 291` and
+- **Coverage: 291 of 291 crates.** The metadata reported
+  `workspace_members = 291` and
   `packages = 291`; every one appears exactly once below.
-- Layers are assigned from the crate's manifest path prefix, which is read from the metadata,
-  not guessed: `crates/` (267), `absorption/` (20), `examples/` (1), `tools/` (2), `native/` (1).
-- "Depended on by" lists **workspace** crates only, taken from the `dependencies` array of
-  each member's metadata entry. A crate with `0` has no dependent inside this workspace; it may
-  still be consumed from outside, published, or dead — that distinction is **not** resolved
+- Layers are assigned from the crate's manifest path prefix, which is read from
+  the metadata,
+  not guessed: `crates/` (267), `absorption/` (20), `examples/` (1),
+  `tools/` (2), `native/` (1).
+- "Depended on by" lists **workspace** crates only, taken from the
+  `dependencies` array of
+  each member's metadata entry. A crate with `0` has no dependent inside
+  this workspace; it may
+  still be consumed from outside, published, or dead — that distinction is
+  **not** resolved
   here.
 - Paths are shown without the trailing `/Cargo.toml`.
-- "Owns" is given per **family**, from the crate names, their paths and their dependency edges.
-  Per-crate intent statements were not read out of 291 `lib.rs` files, so an individual crate's
+- "Owns" is given per **family**, from the crate names, their paths and their
+  dependency edges.
+  Per-crate intent statements were not read out of 291 `lib.rs` files, so an
+  individual crate's
   exact responsibility is `UNKNOWN` where the family statement does not cover it.
 
 `cmd/dagrun` is **not** in this table: it is a separate Go module
@@ -33,18 +42,19 @@ Deliverable: **D15.2**.
 | `tools/` | 2 | test fakes |
 | `native/` | 1 | native binding |
 
-Aggregates from the same run: **121** crates have at least one in-workspace dependent,
-**170** have none. Highest: `substrate-core` 36, `fabric-capability` 15, `engine-spec` 12,
-`fabric-graph` 12, `focus-domain` 10, `hwledger-search-core` 9, `phenocompose-port-types` 9,
-`substrate-a2a` 8, `agileplus-domain` 6, `fabric-checker` 6, `fabric-frame-transport` 6.
+Aggregates from the same run: **121** crates have at least one in-workspace
+dependent, **170** have none. Highest: `substrate-core` 36,
+`fabric-capability` 15, `engine-spec` 12, `fabric-graph` 12, `focus-domain` 10,
+`hwledger-search-core` 9, `phenocompose-port-types` 9, `substrate-a2a` 8,
+`agileplus-domain` 6, `fabric-checker` 6, `fabric-frame-transport` 6.
 
 ---
 
 # Layer: `crates/` (267)
 
 ## Family: `agileplus-*` — spec-driven development domain
-Owns the AgilePlus domain model and its persistence/integration edges (cache, domain,
-events, git, github, graph, import, nats, triage).
+Owns the AgilePlus domain model and its persistence/integration edges
+(cache, domain, events, git, github, graph, import, nats, triage).
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -60,9 +70,9 @@ events, git, github, graph, import, nats, triage).
 | agileplus-triage | crates/agileplus-triage | 1 (agileplus-github) |
 
 ## Family: `substrate-*` — agent-execution substrate
-Owns the agent runtime: core traits, app assembly, the browser sub-stack (broker/cdp/mcp/
-provider), dag, memory, schedule, skills, trace, serve-lock, tui. `substrate-core` is the
-hub of the workspace at 36 dependents.
+Owns the agent runtime: core traits, app assembly, the browser sub-stack
+(broker/cdp/mcp/provider), dag, memory, schedule, skills, trace, serve-lock,
+tui. `substrate-core` is the hub of the workspace at 36 dependents.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -84,8 +94,9 @@ hub of the workspace at 36 dependents.
 | substrate-tui | crates/substrate-tui | 0 |
 
 ## Family: `driver-*` and `engine-*` — transport and model backends
-Owns two separable axes: a driver (argv/cli/http/mcp) and an engine (claude/codex/forge/
-agentapi/a2a/spec) behind `engine-spec`, plus conformance tests tying them together.
+Owns two separable axes: a driver (argv/cli/http/mcp) and an engine
+(claude/codex/forge/agentapi/a2a/spec) behind `engine-spec`, plus conformance
+tests tying them together.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -119,7 +130,8 @@ Owns the cloud variants of coding engines and the adapters that front them.
 | bifrost-routing | crates/bifrost-routing | 0 |
 
 ## Family: store / transport / protocol edges
-Owns the pluggable persistence and wire formats used by the driver and substrate layers.
+Owns the pluggable persistence and wire formats used by the driver and
+substrate layers.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -142,8 +154,10 @@ Owns the pluggable persistence and wire formats used by the driver and substrate
 | temporal-grounding | crates/temporal-grounding | 0 |
 
 ## Family: `fabric-*` — capture and desktop orchestration
-Owns the desktop fabric: capability detection, frame transport, graph, daemon, orchestrator,
-persistence, and every UI surface (gui, tray, tui, web, terminal, mojo surface).
+Owns the desktop fabric: capability detection, frame transport, graph, daemon,
+orchestrator,
+persistence, and every UI surface (gui, tray, tui, web, terminal, mojo
+surface).
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -169,8 +183,10 @@ persistence, and every UI surface (gui, tray, tui, web, terminal, mojo surface).
 | fabric-workspace | crates/fabric-workspace | 2 |
 
 ## Family: `focus-*` — focus/discipline product line
-Owns a full vertical: domain and events at the core, rituals/rules/policy/rewards/penalties on
-top, scheduler/calendar/planning/time for cadence, ui/mascot/coaching for experience, audit and
+Owns a full vertical: domain and events at the core,
+rituals/rules/policy/rewards/penalties on
+top, scheduler/calendar/planning/time for cadence, ui/mascot/coaching for
+experience, audit and
 observability for evidence.
 
 | Crate | Path | Depended on by |
@@ -202,7 +218,8 @@ observability for evidence.
 | focus-ui | crates/focus-ui | 0 |
 
 ## Family: `sharecli-*` — share/discovery CLI and its fleet
-Owns the CLI front end plus the subsystems it composes: fleet, mesh, fuse, ipc, session,
+Owns the CLI front end plus the subsystems it composes: fleet, mesh, fuse, ipc,
+session,
 sync, thermal tui, native trays.
 
 | Crate | Path | Depended on by |
@@ -235,7 +252,8 @@ Owns the protocol, the client, the daemon, an MCP surface and a smoke harness.
 | sidekick-messaging | crates/sidekick-messaging | 0 |
 
 ## Family: `hwledger-*` — hardware ledger and model explorer search
-Owns two things at once: a hardware ledger (bench, cli) and a model-explorer search stack
+Owns two things at once: a hardware ledger (bench, cli) and a model-explorer
+search stack
 (core, index, ingest, rag, skills, tags, server, mcp, evals). All live under
 `crates/hwledger/...`, i.e. nested inside a crate directory.
 
@@ -255,7 +273,8 @@ Owns two things at once: a hardware ledger (bench, cli) and a model-explorer sea
 | hwledger-server | crates/hwledger/apps/model-explorer/rust/crates/hwledger-server | 1 |
 
 Note: `hwledger-explorer-cli` and `hwledger-cli` declare the **same directory**
-(`.../rust/crates/hwledger-cli`). Two package names, one path — worth resolving, since a path
+(`.../rust/crates/hwledger-cli`). Two package names, one path — worth resolving,
+since a path
 shared by two members is not a normal Cargo layout. The cause is `UNKNOWN` here.
 
 ## Family: `eidolon-*` — desktop/mobile client surfaces
@@ -283,8 +302,10 @@ Owns camera capture, domain model, inference, math, an FFI edge and a CLI.
 | eyetracker-math | crates/eyetracker-math | 1 |
 
 ## Family: `pheno-compose-*` / `phenocompose-*` — compose runtime
-Owns a port-and-adapter design: `-port-types` is the shared vocabulary (9 dependents), with
-composer/di/runtime/publisher/secret ports and apple-container, wslc, secret-file, plugin and
+Owns a port-and-adapter design: `-port-types` is the shared vocabulary (9
+dependents), with
+composer/di/runtime/publisher/secret ports and apple-container, wslc, secret-file,
+plugin and
 agentctl adapters.
 
 | Crate | Path | Depended on by |
@@ -309,7 +330,8 @@ agentctl adapters.
 | phenocompose-wslc-adapter | crates/pheno-compose-wslc-adapter | 0 |
 
 ## Family: `pine-*` — sandbox / syscall runtime
-Owns the syscall layer, a compat shim, a loader, the NVMS bridge and the core model.
+Owns the syscall layer, a compat shim, a loader, the NVMS bridge and the core
+model.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -320,8 +342,10 @@ Owns the syscall layer, a compat shim, a loader, the NVMS bridge and the core mo
 | pine-syscall | crates/pine-syscall | 0 |
 
 ## Family: `phenotype-*` — org-wide primitives
-Owns the lowest layer of the workspace: errors, config, crypto, observability, retry,
-rate-limit, ports, tracing, telemetry, iter, time, string, diff, health, resilience.
+Owns the lowest layer of the workspace: errors, config, crypto, observability,
+retry,
+rate-limit, ports, tracing, telemetry, iter, time, string, diff, health,
+resilience.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -373,7 +397,8 @@ rate-limit, ports, tracing, telemetry, iter, time, string, diff, health, resilie
 | phenotype-voxel | crates/phenotype-voxel | 0 |
 
 ## Family: `pheno-*` (remaining shared utilities)
-Owns smaller cross-cutting helpers that are not part of the `phenotype-` primitive set.
+Owns smaller cross-cutting helpers that are not part of the `phenotype-`
+primitive set.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -397,7 +422,8 @@ Owns smaller cross-cutting helpers that are not part of the `phenotype-` primiti
 | phinbox | crates/phinbox | 0 |
 
 ## Family: ledger / verification / governance
-Owns traceability gates, acceptance contracts, benchmark guards and doc health checks.
+Owns traceability gates, acceptance contracts, benchmark guards and doc health
+checks.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -446,12 +472,16 @@ Owns clap-based argument extensions and their example.
 # Layer: `absorption/` (20)
 
 ## Family: `absorption/PhenoMLX-temp/perf-core/*`
-Owns absorbed PhenoMLX inference performance work: concurrency, kernels, Metal runtime, model
-plans, spec decode, tree attention, the `turbo-quant` family and its multi-language surfaces
+Owns absorbed PhenoMLX inference performance work: concurrency, kernels, Metal
+runtime, model
+plans, spec decode, tree attention, the `turbo-quant` family and its
+multi-language surfaces
 (C, Mojo, Nim, Zig), plus `native-abi` and the `fleet-proto` pair.
 
-Location note: every one of these 20 members sits under a directory named `-temp`. Whether
-that is a staging area or the permanent home is `UNKNOWN`; the dossier records it as a risk.
+Location note: every one of these 20 members sits under a directory named
+`-temp`. Whether
+that is a staging area or the permanent home is `UNKNOWN`; the dossier records it
+as a risk.
 
 | Crate | Path | Depended on by |
 | --- | --- | --- |
@@ -501,13 +531,19 @@ that is a staging area or the permanent home is `UNKNOWN`; the dossier records i
 
 ## What this document does not establish
 
-1. **Per-crate responsibility.** The family statements are derived from names, paths and
-   dependency edges. For 291 crates, individual intent needs a `lib.rs` read each.
-2. **Why 170 crates have no in-workspace dependent.** External consumers, publication, and
+1. **Per-crate responsibility.** The family statements are derived from names,
+   paths and
+   dependency edges. For 291 crates, individual intent needs a `lib.rs` read
+   each.
+2. **Why 170 crates have no in-workspace dependent.** External consumers,
+   publication, and
    dead code are indistinguishable from metadata alone.
-3. **The `README.md` drift.** `cargo metadata` reports 291 members on 2026-11-12; the README's
-   at-a-glance table says 290 measured 2026-11-11. Neither was re-derived here beyond the
+3. **The `README.md` drift.** `cargo metadata` reports 291 members on 2026-11-12;
+   the README's
+   at-a-glance table says 290 measured 2026-11-11. Neither was re-derived here
+   beyond the
    metadata run.
 4. **The two-packages-one-path anomaly** in `hwledger-explorer-cli` / `hwledger-cli`.
-5. **Anything Cargo cannot see.** `cmd/dagrun` is a Go module and is excluded by construction;
+5. **Anything Cargo cannot see.** `cmd/dagrun` is a Go module and is excluded by
+   construction;
    `docs/`, `.github/`, `scripts/` and similar trees are not workspace members.
