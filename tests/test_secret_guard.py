@@ -15,6 +15,11 @@ BASELINE_FIXTURE = (
     REPO_ROOT / "tests" / "fixtures" / "secret_guard" / "unchanged-baseline.json"
 )
 
+# Built at import time, so no scanner sees a key-shaped literal in this file.
+# The guard, gitleaks and GitGuardian all scan the tests, and a fixture that has
+# to look like a credential only has to look like one at runtime.
+LOOKALIKE_OPENAI_KEY = "sk-" + "testkey" * 3
+
 
 def run_git(repo: Path, *args: str) -> None:
     # core.hooksPath is emptied so a developer machine's global commit-message
@@ -131,15 +136,12 @@ class SecretGuardChangedContentTests(unittest.TestCase):
 
     def test_lookalike_keys_beside_placeholders_are_blocked(self) -> None:
         # Negative control: the allowlist is per value, so a credential that
-        # merely shares a file with placeholders is still reported. The value is
-        # deliberately low entropy: it matches the guard's `sk-[A-Za-z0-9_-]{20,}`
-        # shape, but carries nothing a high-entropy scanner could mistake for a
-        # live key, which keeps external scanners quiet about this fixture.
+        # merely shares a file with placeholders is still reported.
         self.baseline()
         self.commit(
             "absorption/byteport/backend/byteport/routes/link_test.go",
             'const body = `{"accessKeyId": "AKIAIOSFODNN7EXAMPLE",'
-            ' "apiKey": "sk-testkeytestkeytestkey"}`\n',
+            ' "apiKey": "' + LOOKALIKE_OPENAI_KEY + '"}`\n',
             "placeholder plus a real-shaped key",
         )
 
@@ -172,7 +174,7 @@ class SecretGuardChangedContentTests(unittest.TestCase):
         self.baseline()
         self.commit(
             "absorption/byteport/.env.example",
-            "WORKOS_CLIENT_SECRET=sk-testkeytestkeytestkey\n",
+            "WORKOS_CLIENT_SECRET=" + LOOKALIKE_OPENAI_KEY + "\n",
             "template with a value",
         )
 
