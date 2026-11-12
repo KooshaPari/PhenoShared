@@ -523,23 +523,36 @@ mod tests {
     #[tokio::test]
     async fn windows_list_find_focus_via_native_adapters() {
         // Real enumeration may return zero or more windows; must not silently
-        // invent an empty stub when the platform adapter errors.
+        // invent an empty stub when the platform adapter errors. On a host
+        // without an X display, or without an EWMH window manager, the guest
+        // adapter legitimately fails loud, so a loud -32603 is accepted here;
+        // what is never accepted is a silent `[]`.
         let list = handle_request(req("windows.list", Value::Null)).await;
-        assert!(
-            list.error.is_none(),
-            "windows.list must succeed or fail loud: {:?}",
-            list.error
-        );
-        let wins = list.result.expect("result");
-        assert!(wins.is_array(), "windows.list must return a JSON array");
+        let enumerated = match (&list.error, &list.result) {
+            (None, Some(wins)) => {
+                assert!(wins.is_array(), "windows.list must return a JSON array");
+                true
+            }
+            (Some(err), _) => {
+                assert_eq!(err.code, -32603, "list failures must be internal_error");
+                assert!(err.message.contains("windows.list"), "{}", err.message);
+                false
+            }
+            (None, None) => panic!("windows.list returned neither result nor error"),
+        };
 
         let found = handle_request(req(
             "windows.find",
             json!({ "title": "___no_such_playcua_win___" }),
         ))
         .await;
-        assert!(found.error.is_none(), "{:?}", found.error);
-        assert!(found.result.unwrap().is_null());
+        if enumerated {
+            assert!(found.error.is_none(), "{:?}", found.error);
+            assert!(found.result.unwrap().is_null());
+        } else {
+            let err = found.error.expect("find must fail loud without enumeration");
+            assert_eq!(err.code, -32603, "find failures must be internal_error");
+        }
 
         // Matches host: focus is Ok on macOS/Linux honest stub; Windows may
         // succeed or fail loud for a bogus hwnd — either is acceptable.

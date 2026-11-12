@@ -132,15 +132,19 @@ fn binary_starts_and_exits_cleanly_on_eof() {
     );
 }
 
-/// Asserts `pheno_tracing::init()` (and the builder API it wraps)
-/// produces a subscriber that emits to a custom `MakeWriter`. This
-/// is the L5 #81 wiring claim #2.
+/// Asserts the JSON subscriber shape `init_tracing()` installs (in
+/// `src/main.rs`) emits to a custom `MakeWriter`, using
+/// `tracing_subscriber::fmt` directly: `pheno-tracing` exposes only
+/// `init()`, not a subscriber builder. This is the L5 #81 wiring
+/// claim #2.
 #[test]
 fn tracing_subscriber_captures_log_via_custom_make_writer() {
     let buf = SharedBuf::default();
-    let subscriber = pheno_tracing::builder()
-        .with_default_directive("playcua_native", "trace")
-        .finish_json_with_writer(buf.clone());
+    let subscriber = tracing_subscriber::fmt()
+        .json()
+        .with_max_level(tracing::Level::TRACE)
+        .with_writer(buf.clone())
+        .finish();
 
     tracing::subscriber::with_default(subscriber, || {
         tracing::info!(marker = "l5-81-smoke", "playcua-native smoke test log line");
