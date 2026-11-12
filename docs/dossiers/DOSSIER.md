@@ -4,19 +4,21 @@ Deliverable: **D15.1**. Status: first edition.
 
 ## 0. Provenance of this document
 
-Every value below is either (a) measured by a command run on 2026-11-12 against the working
-tree at commit `5154a6828`, or (b) explicitly labelled as a *claim* reported by a source file
-in this repository that was **not** re-measured here. Values that could not be established are
-written as `UNKNOWN` together with the command that would settle them.
+Every value below is either (a) measured by a command run on 2026-11-12
+against the working tree at commit `5154a6828`, or (b) explicitly labelled
+as a *claim* reported by a source file in this repository that was **not**
+re-measured here. Values that could not be established are written as
+`UNKNOWN` together with the command that would settle them.
 
 Structure note: this dossier was specified to mirror
-`phenotype-omlx/docs/dossiers/DOSSIER.md`. **That path does not exist** — neither under
-`~/CodeProjects/Phenotype/repos/phenotype-omlx/` nor anywhere within four levels of this
-repository's root (`find . -maxdepth 4 -name DOSSIER.md` returned nothing). The heading
-structure below is therefore the generic dossier shape described in the docs-3/atlas programme
-(identity, absorption, architecture, quality, risks, evidence), not a copy of a file that
-could not be read. If the PhenoMLX dossier is restored, this section should be updated to say
-which headings were mirrored.
+`phenotype-omlx/docs/dossiers/DOSSIER.md`. **That path does not exist** —
+neither under `~/CodeProjects/Phenotype/repos/phenotype-omlx/` nor anywhere
+within four levels of this repository's root (`find . -maxdepth 4 -name
+DOSSIER.md` returned nothing). The heading structure below is therefore the
+generic dossier shape described in the docs-3/atlas programme (identity,
+absorption, architecture, quality, risks, evidence), not a copy of a file
+that could not be read. If the PhenoMLX dossier is restored, this section
+should be updated to say which headings were mirrored.
 
 ## 1. Identity
 
@@ -31,9 +33,9 @@ which headings were mirrored.
 | License | `MIT OR Apache-2.0` (`LICENSE-MIT`, `LICENSE-APACHE`) | `README.md` |
 | Object under assessment | the root Cargo workspace + the non-Rust trees it carries | this document |
 
-This is a **container**, not a single product. It is one workspace holding many independently
-consumable crates plus non-Rust assets. Treating it as one shippable artifact is the most
-common misreading of this repository.
+This is a **container**, not a single product. It is one workspace holding
+many independently consumable crates plus non-Rust assets. Treating it as
+one shippable artifact is the most common misreading of this repository.
 
 ## 2. Measured shape (2026-11-12)
 
@@ -57,27 +59,29 @@ Per-crate boundaries, paths and dependents are in [`../CRATE-BOUNDARIES.md`](../
 
 ### 2.1 Discrepancy to be aware of
 
-`README.md`'s at-a-glance table states **290** root workspace packages measured 2026-11-11;
-the metadata run on 2026-11-12 reports **291**. The README does not say
-which package was added, and this dossier does not assert a cause.
-Reconciling the two member sets needs a diff of the two lists, which this
-pass did not run (see open question 1).
+`README.md`'s at-a-glance table states **290** root workspace packages
+measured 2026-11-11; the metadata run on 2026-11-12 reports **291**. The
+README does not say which package was added, and this dossier does not
+assert a cause. Reconciling the two member sets needs a diff of the two
+lists, which this pass did not run (see open question 1).
 
 ## 3. Absorption history (evidence-backed)
 
-The only absorption visible as *workspace members* is PhenoMLX: all 20 `absorption/` members
-live under `absorption/PhenoMLX-temp/perf-core/` (`concurrent-exec`, `kernel-registry`,
-`metal-runtime`, `model-kernels`, `spec-decode`, `tree-attention`, the `turbo-quant` family,
-`native-abi`, `fleet-proto`, and so on). Note this means the PhenoMLX code is present **inside
-this workspace** at a `-temp` path, which is not a stable-looking location; whether it is
-intended to stay there is `UNKNOWN`.
+The only absorption visible as *workspace members* is PhenoMLX: all 20
+`absorption/` members live under `absorption/PhenoMLX-temp/perf-core/`
+(`concurrent-exec`, `kernel-registry`, `metal-runtime`, `model-kernels`,
+`spec-decode`, `tree-attention`, the `turbo-quant` family, `native-abi`,
+`fleet-proto`, and so on). Note this means the PhenoMLX code is present
+**inside this workspace** at a `-temp` path, which is not a stable-looking
+location; whether it is intended to stay there is `UNKNOWN`.
 
-Other absorbed material exists as non-member directories (`docs/absorbed-from-*`,
-`absorption/`), which are outside the Cargo workspace and therefore invisible to
-`cargo metadata`. A fuller chronological absorption account is maintained in
+Other absorbed material exists as non-member directories
+(`docs/absorbed-from-*`, `absorption/`), which are outside the Cargo
+workspace and therefore invisible to `cargo metadata`. A fuller
+chronological absorption account is maintained in
 `docs/dossiers/HANDOFF-PHENOSHARED.md` ("Absorption History") and
-`docs/ABSORPTION_INDEX.md`; this dossier cites them rather than restating them, and did not
-re-verify their claims.
+`docs/ABSORPTION_INDEX.md`; this dossier cites them rather than restating
+them, and did not re-verify their claims.
 
 ## 4. Non-Rust surface
 
@@ -91,12 +95,13 @@ Reported by `README.md` (measured there on 2026-11-11; **not** re-measured here)
 | ADRs | 82 in `docs/adr/`, 25 in `docs/adrs/` |
 | Registered project manifests | 178 (`projects/*.json`) |
 
-Independently observed on 2026-11-12 while surveying the tree: `cmd/` contains six
-sub-directories — `capprobe`, `checker`, `dagrun`, `promptscrape`, `trust`, `wire` — of which
-`cmd/dagrun` is a **separate Go module** (`module github.com/KooshaPari/dagrun`, `go 1.25.0`)
-and is therefore invisible to `cargo metadata`. Whether the other five are Go, Rust, or
-something else was not established: `UNKNOWN` (settle with `ls cmd/<name>` plus each
-`go.mod`/`Cargo.toml`).
+Independently observed on 2026-11-12 while surveying the tree: `cmd/`
+contains six sub-directories — `capprobe`, `checker`, `dagrun`,
+`promptscrape`, `trust`, `wire` — of which `cmd/dagrun` is a **separate Go
+module** (`module github.com/KooshaPari/dagrun`, `go 1.25.0`) and is
+therefore invisible to `cargo metadata`. Whether the other five are Go,
+Rust, or something else was not established: `UNKNOWN` (settle with
+`ls cmd/<name>` plus each `go.mod`/`Cargo.toml`).
 
 ## 5. Compilation and test status
 

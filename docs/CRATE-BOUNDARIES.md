@@ -50,9 +50,10 @@ dependent, **170** have none. Highest: `substrate-core` 36,
 
 ---
 
-# Layer: `crates/` (267)
+## Layer: `crates/` (267)
 
-## Family: `agileplus-*` — spec-driven development domain
+### Family: `agileplus-*` — spec-driven development domain
+
 Owns the AgilePlus domain model and its persistence/integration edges
 (cache, domain, events, git, github, graph, import, nats, triage).
 
@@ -69,7 +70,8 @@ Owns the AgilePlus domain model and its persistence/integration edges
 | agileplus-nats | crates/agileplus-nats | 0 |
 | agileplus-triage | crates/agileplus-triage | 1 (agileplus-github) |
 
-## Family: `substrate-*` — agent-execution substrate
+### Family: `substrate-*` — agent-execution substrate
+
 Owns the agent runtime: core traits, app assembly, the browser sub-stack
 (broker/cdp/mcp/provider), dag, memory, schedule, skills, trace, serve-lock,
 tui. `substrate-core` is the hub of the workspace at 36 dependents.
@@ -93,7 +95,8 @@ tui. `substrate-core` is the hub of the workspace at 36 dependents.
 | substrate-trace | crates/substrate-trace | 0 |
 | substrate-tui | crates/substrate-tui | 0 |
 
-## Family: `driver-*` and `engine-*` — transport and model backends
+### Family: `driver-*` and `engine-*` — transport and model backends
+
 Owns two separable axes: a driver (argv/cli/http/mcp) and an engine
 (claude/codex/forge/agentapi/a2a/spec) behind `engine-spec`, plus conformance
 tests tying them together.
@@ -112,7 +115,8 @@ tests tying them together.
 | engine-forge | crates/engine-forge | 3 |
 | engine-spec | crates/engine-spec | 12 (cliproxy-adapter, driver-cli, driver-http, +9) |
 
-## Family: `cloud-*` and routing adapters — hosted-engine bridges
+### Family: `cloud-*` and routing adapters — hosted-engine bridges
+
 Owns the cloud variants of coding engines and the adapters that front them.
 
 | Crate | Path | Depended on by |
@@ -129,7 +133,8 @@ Owns the cloud variants of coding engines and the adapters that front them.
 | phenotype-router-monitor | crates/phenotype-router-monitor | 0 |
 | bifrost-routing | crates/bifrost-routing | 0 |
 
-## Family: store / transport / protocol edges
+### Family: store / transport / protocol edges
+
 Owns the pluggable persistence and wire formats used by the driver and
 substrate layers.
 
@@ -153,7 +158,8 @@ substrate layers.
 | agent-forecast | crates/agent-forecast | 0 |
 | temporal-grounding | crates/temporal-grounding | 0 |
 
-## Family: `fabric-*` — capture and desktop orchestration
+### Family: `fabric-*` — capture and desktop orchestration
+
 Owns the desktop fabric: capability detection, frame transport, graph, daemon,
 orchestrator,
 persistence, and every UI surface (gui, tray, tui, web, terminal, mojo
@@ -182,7 +188,8 @@ surface).
 | fabric-web | crates/fabric-web | 0 |
 | fabric-workspace | crates/fabric-workspace | 2 |
 
-## Family: `focus-*` — focus/discipline product line
+### Family: `focus-*` — focus/discipline product line
+
 Owns a full vertical: domain and events at the core,
 rituals/rules/policy/rewards/penalties on
 top, scheduler/calendar/planning/time for cadence, ui/mascot/coaching for
@@ -217,7 +224,8 @@ observability for evidence.
 | focus-time | crates/focus-time | 0 |
 | focus-ui | crates/focus-ui | 0 |
 
-## Family: `sharecli-*` — share/discovery CLI and its fleet
+### Family: `sharecli-*` — share/discovery CLI and its fleet
+
 Owns the CLI front end plus the subsystems it composes: fleet, mesh, fuse, ipc,
 session,
 sync, thermal tui, native trays.
@@ -238,7 +246,8 @@ sync, thermal tui, native trays.
 | sharecli-tray-windows | crates/sharecli-tray-windows | 1 |
 | spawn-core-sys | crates/spawn-core-sys | 1 (sharecli) |
 
-## Family: `teamcomm-*` — team communication
+### Family: `teamcomm-*` — team communication
+
 Owns the protocol, the client, the daemon, an MCP surface and a smoke harness.
 
 | Crate | Path | Depended on by |
@@ -251,7 +260,8 @@ Owns the protocol, the client, the daemon, an MCP surface and a smoke harness.
 | teamcomm-smoke | crates/teamcomm-smoke | 0 |
 | sidekick-messaging | crates/sidekick-messaging | 0 |
 
-## Family: `hwledger-*` — hardware ledger and model explorer search
+### Family: `hwledger-*` — hardware ledger and model explorer search
+
 Owns two things at once: a hardware ledger (bench, cli) and a model-explorer
 search stack
 (core, index, ingest, rag, skills, tags, server, mcp, evals). All live under
@@ -277,7 +287,8 @@ Note: `hwledger-explorer-cli` and `hwledger-cli` declare the **same directory**
 since a path
 shared by two members is not a normal Cargo layout. The cause is `UNKNOWN` here.
 
-## Family: `eidolon-*` — desktop/mobile client surfaces
+### Family: `eidolon-*` — desktop/mobile client surfaces
+
 Owns a shared core with three consumer surfaces (desktop, mobile, sandbox); `eidolon-core`
 is the only member with dependents, all three of them in-family.
 
@@ -288,7 +299,8 @@ is the only member with dependents, all three of them in-family.
 | eidolon-mobile | crates/eidolon-mobile | 0 |
 | eidolon-sandbox | crates/eidolon-sandbox | 0 |
 
-## Family: `eyetracker-*` — eye tracking
+### Family: `eyetracker-*` — eye tracking
+
 Owns camera capture, domain model, inference, math, an FFI edge and a CLI.
 
 | Crate | Path | Depended on by |
@@ -301,7 +313,8 @@ Owns camera capture, domain model, inference, math, an FFI edge and a CLI.
 | eyetracker-inference | crates/eyetracker-inference | 2 |
 | eyetracker-math | crates/eyetracker-math | 1 |
 
-## Family: `pheno-compose-*` / `phenocompose-*` — compose runtime
+### Family: `pheno-compose-*` / `phenocompose-*` — compose runtime
+
 Owns a port-and-adapter design: `-port-types` is the shared vocabulary (9
 dependents), with
 composer/di/runtime/publisher/secret ports and apple-container, wslc, secret-file,
@@ -329,7 +342,8 @@ agentctl adapters.
 | phenocompose-secret-file-adapter | crates/pheno-compose-secret-file-adapter | 0 |
 | phenocompose-wslc-adapter | crates/pheno-compose-wslc-adapter | 0 |
 
-## Family: `pine-*` — sandbox / syscall runtime
+### Family: `pine-*` — sandbox / syscall runtime
+
 Owns the syscall layer, a compat shim, a loader, the NVMS bridge and the core
 model.
 
@@ -341,7 +355,8 @@ model.
 | pine-nvms | crates/pine-nvms | 0 |
 | pine-syscall | crates/pine-syscall | 0 |
 
-## Family: `phenotype-*` — org-wide primitives
+### Family: `phenotype-*` — org-wide primitives
+
 Owns the lowest layer of the workspace: errors, config, crypto, observability,
 retry,
 rate-limit, ports, tracing, telemetry, iter, time, string, diff, health,
@@ -396,7 +411,8 @@ resilience.
 | phenotype-validation | crates/phenotype-validation | 0 |
 | phenotype-voxel | crates/phenotype-voxel | 0 |
 
-## Family: `pheno-*` (remaining shared utilities)
+### Family: `pheno-*` (remaining shared utilities)
+
 Owns smaller cross-cutting helpers that are not part of the `phenotype-`
 primitive set.
 
@@ -421,7 +437,8 @@ primitive set.
 | nvms-manifest | crates/nvms-manifest | 1 (phenotype-nvms-adapter) |
 | phinbox | crates/phinbox | 0 |
 
-## Family: ledger / verification / governance
+### Family: ledger / verification / governance
+
 Owns traceability gates, acceptance contracts, benchmark guards and doc health
 checks.
 
@@ -445,7 +462,8 @@ checks.
 | legacy-scan | crates/legacy-scan | 0 |
 | fuzz-setup | crates/fuzz-setup | 0 |
 
-## Family: file / process / environment utilities
+### Family: file / process / environment utilities
+
 Owns small OS-level helpers.
 
 | Crate | Path | Depended on by |
@@ -459,7 +477,8 @@ Owns small OS-level helpers.
 | orchestrator | crates/orchestrator | 0 |
 | anthropic-usage-poll | crates/anthropic-usage-poll | 0 |
 
-## Family: CLI extension helpers
+### Family: CLI extension helpers
+
 Owns clap-based argument extensions and their example.
 
 | Crate | Path | Depended on by |
@@ -469,9 +488,10 @@ Owns clap-based argument extensions and their example.
 
 ---
 
-# Layer: `absorption/` (20)
+## Layer: `absorption/` (20)
 
-## Family: `absorption/PhenoMLX-temp/perf-core/*`
+### Family: `absorption/PhenoMLX-temp/perf-core/*`
+
 Owns absorbed PhenoMLX inference performance work: concurrency, kernels, Metal
 runtime, model
 plans, spec decode, tree attention, the `turbo-quant` family and its
@@ -508,20 +528,20 @@ as a risk.
 
 ---
 
-# Layer: `examples/` (1)
+## Layer: `examples/` (1)
 
 | Crate | Path | Depended on by | Owns |
 | --- | --- | --- | --- |
 | fabric-full-demo | examples/full-demo | 0 | a demo binary wiring the fabric stack; depended on by none, so it is a leaf demo |
 
-# Layer: `tools/` (2)
+## Layer: `tools/` (2)
 
 | Crate | Path | Depended on by | Owns |
 | --- | --- | --- | --- |
 | fake-codex-cloud | tools/fake-codex-cloud | 0 | a fake cloud-codex endpoint for tests; no workspace dependents, so it is exercised out-of-band `UNKNOWN` |
 | fake-forge | tools/fake-forge | 0 | a fake forge engine for tests; same as above |
 
-# Layer: `native/` (1)
+## Layer: `native/` (1)
 
 | Crate | Path | Depended on by | Owns |
 | --- | --- | --- | --- |
