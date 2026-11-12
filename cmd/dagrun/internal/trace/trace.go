@@ -150,7 +150,7 @@ func Merge(dir string) ([]Event, error) {
 
 // EmitNode appends one node-level event for a transition that happened
 // outside the automated runner — an agent claiming and completing a node
-// through `dagrun claim`/`done`, or the MCP equivalents.
+// through the CLI claim and completion verbs, or the MCP equivalents.
 //
 // The event names and the field shape are the ones the runner emits
 // ("node.claim", "node.done", "node.failed", "node.skipped"), so one trace

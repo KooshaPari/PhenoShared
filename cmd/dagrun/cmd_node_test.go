@@ -13,7 +13,7 @@ import (
 //
 // The trace is the DAG's only record, so a node whose state moved without an
 // event looks like a node that never ran. That was the defect: `dagrun next`,
-// `dagrun claim` and `dagrun done` moved the node through the store and
+// `dagrun claim` and the completion verb moved the node through the store and
 // wrote nothing, so `dagrun trace` answered "no events yet" for a run an
 // agent had already claimed and completed, while `dagrun run` recorded
 // run.start, node.adopt and run.end for the same plan.
@@ -42,7 +42,7 @@ nodes:
 		t.Fatalf("plan: %v", err)
 	}
 
-	// The node's contract has to hold for `done` to accept it, so the test
+	// The node's contract has to hold for the completion verb to accept it, so the test
 	// walks the real path rather than the --force shortcut.
 	if err := os.MkdirAll(filepath.Join(root, "artifacts"), 0o755); err != nil {
 		t.Fatalf("mkdir artifacts: %v", err)
