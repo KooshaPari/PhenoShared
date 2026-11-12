@@ -161,7 +161,10 @@ mod tests {
     struct FailingReader;
     impl Read for FailingReader {
         fn read(&mut self, _buf: &mut [u8]) -> io::Result<usize> {
-            Err(io::Error::new(io::ErrorKind::Other, "synthetic read failure"))
+            Err(io::Error::new(
+                io::ErrorKind::Other,
+                "synthetic read failure",
+            ))
         }
     }
 

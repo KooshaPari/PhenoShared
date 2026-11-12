@@ -100,7 +100,10 @@ fn oversized_input_produces_canonical_deny() {
     payload.push(b'!'); // exactly STDIN_LIMIT + 1 bytes
     assert!(payload.len() > 1024 * 1024, "payload must exceed LIMIT");
     let (code, stdout, stderr, _tmp) = run_harness(&payload, 30);
-    assert_eq!(code, 0, "exit code must be 0 (decision is in JSON): stderr={stderr}");
+    assert_eq!(
+        code, 0,
+        "exit code must be 0 (decision is in JSON): stderr={stderr}"
+    );
     let parsed: serde_json::Value = serde_json::from_str(&stdout).expect("stdout is JSON");
     assert_canonical_deny(&parsed, "Phinbox refused oversized input");
 }
@@ -122,7 +125,10 @@ fn timeout_zero_does_not_wait_and_returns_deny() {
     );
     assert_eq!(code, 0, "decision is the JSON, not the exit code");
     let parsed: serde_json::Value = serde_json::from_str(&stdout).expect("stdout is JSON");
-    assert_canonical_deny(&parsed, "Phinbox refused oversized input or unsupported wait bound");
+    assert_canonical_deny(
+        &parsed,
+        "Phinbox refused oversized input or unsupported wait bound",
+    );
 }
 
 /// Invalid timeout 121 — same as above: silent clamp is a forbidden behavior.
@@ -138,7 +144,10 @@ fn timeout_too_large_returns_deny_without_wait() {
     );
     assert_eq!(code, 0);
     let parsed: serde_json::Value = serde_json::from_str(&stdout).expect("stdout is JSON");
-    assert_canonical_deny(&parsed, "Phinbox refused oversized input or unsupported wait bound");
+    assert_canonical_deny(
+        &parsed,
+        "Phinbox refused oversized input or unsupported wait bound",
+    );
 }
 
 /// Malformed input (not valid JSON at all) must yield the canonical deny
@@ -160,7 +169,10 @@ fn malformed_input_does_not_create_pending_request() {
     let answered = tmp.path().join("answered");
     if answered.exists() {
         let count = std::fs::read_dir(&answered).map(|d| d.count()).unwrap_or(0);
-        assert_eq!(count, 0, "malformed input must not leave an answered record");
+        assert_eq!(
+            count, 0,
+            "malformed input must not leave an answered record"
+        );
     }
 }
 

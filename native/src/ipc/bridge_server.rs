@@ -532,12 +532,12 @@ mod tests {
             (None, Some(wins)) => {
                 assert!(wins.is_array(), "windows.list must return a JSON array");
                 true
-            }
+            },
             (Some(err), _) => {
                 assert_eq!(err.code, -32603, "list failures must be internal_error");
                 assert!(err.message.contains("windows.list"), "{}", err.message);
                 false
-            }
+            },
             (None, None) => panic!("windows.list returned neither result nor error"),
         };
 
@@ -550,7 +550,9 @@ mod tests {
             assert!(found.error.is_none(), "{:?}", found.error);
             assert!(found.result.unwrap().is_null());
         } else {
-            let err = found.error.expect("find must fail loud without enumeration");
+            let err = found
+                .error
+                .expect("find must fail loud without enumeration");
             assert_eq!(err.code, -32603, "find failures must be internal_error");
         }
 
