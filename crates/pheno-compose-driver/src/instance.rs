@@ -117,7 +117,7 @@ impl Instance {
 
     /// Get instance ID
     pub fn id(&self) -> u64 {
-        unsafe { (*self.inner.as_ptr()).id as u64 }
+        unsafe { (*self.inner.as_ptr()).id }
     }
 
     /// Get instance tier
