@@ -33,7 +33,10 @@ const DEFAULT_TCP_PORT: u16 = 9456;
 
 /// CLI args
 #[derive(Parser, Debug)]
-#[command(name = "phenotype-daemon", about = "Phenotype skill-management sidecar daemon")]
+#[command(
+    name = "phenotype-daemon",
+    about = "Phenotype skill-management sidecar daemon"
+)]
 struct Args {
     /// Verbosity (-v, -vv, -vvv for more, -q to silence)
     #[command(flatten)]
@@ -93,10 +96,7 @@ fn init_logging(filter: tracing_subscriber::filter::LevelFilter) {
 
 /// Run Unix socket server
 #[cfg(unix)]
-async fn run_unix_server(
-    config: &ServerConfig,
-    state: Arc<SharedState>,
-) -> anyhow::Result<()> {
+async fn run_unix_server(config: &ServerConfig, state: Arc<SharedState>) -> anyhow::Result<()> {
     // Remove existing socket if present
     if config.socket_path.exists() {
         tokio::fs::remove_file(&config.socket_path).await.ok();
@@ -119,10 +119,7 @@ async fn run_unix_server(
 }
 
 /// Run TCP server
-async fn run_tcp_server(
-    config: &ServerConfig,
-    state: Arc<SharedState>,
-) -> anyhow::Result<()> {
+async fn run_tcp_server(config: &ServerConfig, state: Arc<SharedState>) -> anyhow::Result<()> {
     let addr = format!("127.0.0.1:{}", config.tcp_port);
     let listener = TcpListener::bind(&addr).await?;
     info!("TCP server listening on {}", addr);
@@ -149,7 +146,10 @@ async fn main() -> anyhow::Result<()> {
         tracing::debug!(config = %cfg.display(), "config override");
     }
 
-    info!("Starting Phenotype Daemon v{}", VersionInfo::current().version);
+    info!(
+        "Starting Phenotype Daemon v{}",
+        VersionInfo::current().version
+    );
 
     let config = ServerConfig::default();
     // One shared BufferPool for the lifetime of the daemon. All
