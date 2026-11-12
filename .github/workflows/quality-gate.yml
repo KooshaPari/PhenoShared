@@ -129,8 +129,17 @@ jobs:
         run: cargo build --workspace --locked
       - name: 'make check (E1.6: fmt + clippy -D warnings + unit tests)'
         run: make check
-      - name: Install cross-target std (E1.7)
-        run: rustup target add x86_64-pc-windows-gnu x86_64-apple-darwin
+      # rust-std alone is not enough for a cross CHECK: cc-rs also needs a C
+      # cross-compiler, or the build scripts fail before rustc sees any of our
+      # source. mingw supplies x86_64-w64-mingw32-gcc for the windows-gnu leg,
+      # so that leg really compiles. The apple-darwin leg needs the macOS SDK
+      # (osxcross), which is not installable here, so the script reports it as
+      # SKIP rather than as a false red.
+      - name: Install cross-target toolchains (E1.7)
+        run: |
+          rustup target add x86_64-pc-windows-gnu x86_64-apple-darwin
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc-mingw-w64-x86-64
       - name: Cross-target check (E1.7)
         run: ./scripts/check-cross-targets.sh
       # arch-test contract: the workspace test suite must run through
