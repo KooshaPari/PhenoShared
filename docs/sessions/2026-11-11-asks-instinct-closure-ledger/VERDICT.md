@@ -1,14 +1,17 @@
 # Coverage Verdict — is the 2,259-ask register a complete capture of operator intent?
 
-Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T04:50Z` (all channels mined at occurrence
+Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T05:55Z` (all channels mined at occurrence
 level; union and coverage recomputed from one script; §3c; harness figure bounded by sampling and the
 denominator's contamination measured, §3e; link integrity re-tested with namespace resolution and
 reduced to zero defects, §3d; coverage re-derived at **clause granularity**, which required an
-ask-classifier that failed validation and was therefore not used for the headline, §3f).
+ask-classifier that failed validation and was therefore not used for the headline, §3f; the 98
+`source_ref` harvest documents declared **lost** with a search record and a pointer-coherence test in
+their place, §3g).
 
 **Revision history — this file has been wrong seven times, each time in the same direction (stating a
 confident number from an incomplete measurement). Rev 8 is the first entry that corrects nothing: it
-re-derives coverage at a finer granularity and finds the published shortfall survives the change.**
+re-derives coverage at a finer granularity and finds the published shortfall survives the change.
+Rev 9 is mixed: one withdrawn carried figure, one near-miss on schema, and one measured loss.**
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -20,6 +23,7 @@ re-derives coverage at a finer granularity and finds the published shortfall sur
 | 6 | harness coverage is a floor between **1.52% and 3.35%**, and **53.3%** of the uncited harness corpus is not operator intent | Rev 5 published 1.5% as if it were an estimate; it is a strict-substring floor, and the denominator it divides by is contaminated by peer DMs and harness artifacts |
 | 7 | **zero** wrong ask→message links; 0 link targets absent; 7 unlinked asks all self-flagged `source_missing` | Rev 5 blamed 3 candidate bad links and 23 unlinked targets. Both were defects in my test: `reg_ask_messages.message_id` is mixed-namespace, and Rev 5's own join note was backwards |
 | 8 | clause-granularity coverage is **8.0%** of the union; harness coverage stays **1.3–1.7%** however it is cut | not a retraction — a method result. It establishes that the low figure is **not** a granularity artifact, and it rejects the ask-classifier I built to sharpen the denominator (precision 0.73, recall 0.44) |
+| 9 | 0 of 98 `source_ref` harvest documents resolve (**lost**, 10 root classes searched); `source_ref` dates are harvest-date window ends, coherent for **98/98** docs; the register is **not** credential-free (2 of 8,042 rows) | two corrections carried in from earlier revisions: §8 still asserted "3 links are candidate wrong" after §3d had closed link integrity at zero, and the ledger's quote is **not** a column on `reg_asks` (it is `utterance_id` → `reg_utterances.body`); my own first pass also assumed UTC timestamps when 8,019 of 8,042 rows are PDT, and compared only 23 rows until the `uncomparable` counter caught it |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -601,6 +605,75 @@ cites **3,463 of 43,305 distinct operator clauses (8.0%)**, and harness coverage
 to 1.3–1.7% depending on how the denominator is cut. The shortfall is real, not a units artifact.
 
 
+### 3g. The 98 `source_ref` harvest documents are lost, and what that costs
+
+Every ask carries a `source_ref` in `reg_provenance`, drawn from exactly **98 distinct values**. All 98
+are bare filenames with no directory component (`October172026-02.md`, `October172026-p2.md`, and 8
+with no index at all such as `October22026.md`). **0 of the 98 resolves.** The documents that sat
+between the mined messages and the register cannot be produced.
+
+Predicate in every case was `find <root> -maxdepth N -name '*20[0-9][0-9]-*.md'` plus
+`git rev-list --all --objects` for the git tree. Roots searched, all returning zero:
+
+| Root | Depth | Matches |
+|---|---:|---:|
+| `phenotype-registry` working tree | 6 | 0 |
+| `phenotype-registry` all git objects, all refs, whole object DB | full | 0 |
+| `phenotype-registry` deleted paths (`--diff-filter=D`) | full | 0 |
+| `~/CodeProjects/Phenotype/repos` | 5 | 0 |
+| `~/CodeProjects/temp` | 8 | 0 |
+| `~/CodeProjects/{Exports,backups,docs,reports,infra,custody}` | 6 | 0 |
+| `~/Desktop`, `~/Downloads`, `~/Documents`, `~/.Trash` | 4 | 0 |
+| `~/.jcode/scratch`, `~/.hermes` | 3 | 0 |
+| chat-harvest archives in the PhenoRegistry restore tree (2 archives, 1,891 entries) | n/a | 0 |
+| Time Machine | n/a | no destinations configured |
+
+**The loss is real; the provenance claim survives it.** Two things were tested instead of assumed.
+
+*Quote-level anchoring.* The SQL ledger has **no quote column on `reg_asks`** — its text-bearing
+column is `interpretation` (a cleaned rendering), and the verbatim message is reached through
+`reg_asks.utterance_id`. That join resolves for **2,252 of 2,259** asks, the `reg_ask_messages`
+origin link holds for the same 2,252, and the remaining **7 agree across three independent
+signals**: `source_missing = 1`, `utterance_id IS NULL`, and no message link (ASK-000345,
+ASK-000637, ASK-000664, ASK-001844, ASK-002254, ASK-002255, ASK-002256). Nothing fails silently.
+
+*Pointer coherence.* With the documents gone, the `source_ref` values can still be tested against
+the messages they are linked to. Two readings, both measured:
+
+| Reading | Rule | Result |
+|---|---|---:|
+| A, same-day | `source_ref` date equals the linked message's date | 2,211 / 2,252 (**98.18%**) |
+| B, window end | `source_ref` date equals the **latest** message date among that document's asks | 98 / 98 docs (**100%**), covering 2,252 / 2,252 asks |
+
+Reading B is the correct model, and the measurement says why: **69 of the 98 documents are
+single-day** (message span exactly 0 days), while **29 are rollups** spanning 1–27 days, and in
+**29 of 29** the filename date is exactly the last message date in the rollup. The filename is the
+harvest date (window end), not a per-message date. Reading A's 41 "mismatches" are all these rollup
+asks, every delta negative, concentrated at −7d (6), −2d (7), −4d (4) and −1d (3). The `source_ref`
+values are therefore not decorative: they are internally consistent under a single model that
+predates the test.
+
+**What is actually lost.** Two questions can no longer be answered:
+
+1. Whether the register's 2,259 asks are the *whole* of what the harvest captured. Ask-level recall
+   against the harvest cannot be measured, because the harvest no longer exists. That matters for
+   the completeness question specifically: the loss removes one of the few remaining ways to test
+   whether asks were dropped between mining and register.
+2. Whether each register entry faithfully transcribes its harvest document, as opposed to faithfully
+   transcribing the *message*. The latter is verified (§3d, 100% of testable links); the former is
+   not.
+
+Neither question is about quote fidelity, which is verified. Both are about the harvest's own
+coverage. Recorded as a loss, not repaired, and not waived: the migration gate (§8) keeps it open.
+
+**The register is not credential-free.** Because this corpus descends from messages that had an
+unredacted published version at one point, "clean" had to be tested rather than assumed. Scanning all
+8,042 `reg_utterances` for JWT, bearer, `sk-`/AWS key, OTP-in-context and URL credential-parameter
+shapes returns **2 rows**, both `role = assistant`, both a `?code=` callback parameter (UTT-004428 on
+`100.96.135.160:3100`, UTT-004470 on `paperclip.phenotype.space`). Zero JWT, zero OTP, zero bearer,
+zero key-shaped hits. Two rows is small but not zero, so **SessionLedger ingest must scrub URL
+credential parameters** rather than trust the register as clean.
+
 ---
 
 ## 4. Occurrence volume is only partly recovered
@@ -694,8 +767,15 @@ In order of strength:
    (KCode∩iMessage). Summing channel counts without that subtraction would double-count 576 members.
 3. **Complete the external channels** (Gemini Takeout, OpenAI, Claude, Dot), which may add channels
    not yet known to exist at all.
-4. **Register provenance repair** for the remaining `FAIL` cells: 0 of 98 `source_ref` paths resolve
-   because the harvest `.md` documents are not on disk, 3 links are candidate wrong, 7 asks are sourceless.
+4. **Register provenance repair**, re-stated against what is actually open. Link integrity is **closed**
+   at zero wrong links (§3d); the carried "3 links are candidate wrong" figure was stale and is
+   withdrawn. What remains: 0 of 98 `source_ref` paths resolve because the harvest `.md` documents are
+   lost (§3g), and 7 asks are sourceless by three agreeing signals (§3g). The first of those is the
+   only one that cannot be repaired from data at hand, and it is the reason ask-level recall against
+   the harvest is unmeasurable.
+5. **Scrub URL credential parameters before any SessionLedger ingest.** The register is not
+   credential-free: 2 of 8,042 `reg_utterances` rows carry a `?code=` callback parameter (§3g). Small,
+   not zero.
 
 Do not use distributional similarity as a proxy: it was tested and rejected (0 of 12 high-band pairs
 were the same intent, §3b).

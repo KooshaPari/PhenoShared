@@ -1,0 +1,260 @@
+{
+  "distinct_source_refs": 98,
+  "source_refs_unparsed": [],
+  "asks_with_origin_message": 2252,
+  "searches": [
+    {
+      "root": "phenotype-registry (working tree, maxdepth 6)",
+      "matches": 0
+    },
+    {
+      "root": "phenotype-registry (all git objects, all refs, whole object DB)",
+      "matches": 0
+    },
+    {
+      "root": "phenotype-registry (git log --diff-filter=D, deleted paths)",
+      "matches": 0
+    },
+    {
+      "root": "~/CodeProjects/Phenotype/repos (maxdepth 5, .git/node_modules/target/.venv pruned)",
+      "matches": 0
+    },
+    {
+      "root": "~/CodeProjects/temp (maxdepth 4 then maxdepth 8)",
+      "matches": 0
+    },
+    {
+      "root": "~/CodeProjects/{Exports,backups,docs,reports,infra,custody} (maxdepth 6)",
+      "matches": 0
+    },
+    {
+      "root": "~/Desktop, ~/Downloads, ~/Documents, ~/.Trash (maxdepth 4)",
+      "matches": 0
+    },
+    {
+      "root": "~/.jcode/scratch, ~/.hermes (maxdepth 3)",
+      "matches": 0
+    },
+    {
+      "root": "chat-harvest zips in the PhenoRegistry restore tree (unzip -l, 2 archives, 1,891 entries)",
+      "matches": 0
+    },
+    {
+      "root": "Time Machine",
+      "matches": 0,
+      "note": "no destinations configured"
+    }
+  ],
+  "documents_found": 0,
+  "verdict": "LOST",
+  "register_integrity": {
+    "asks": 2259,
+    "asks_with_utterance_id": 2252,
+    "utterance_id_resolving_to_reg_utterances": 2252,
+    "asks_source_missing_flag": 7,
+    "asks_source_missing_and_no_utterance": 7,
+    "asks_no_utterance_and_no_message_link": 7,
+    "sourceless_ids": [
+      "ASK-000345",
+      "ASK-000637",
+      "ASK-000664",
+      "ASK-001844",
+      "ASK-002254",
+      "ASK-002255",
+      "ASK-002256"
+    ],
+    "note": "The 7 asks with source_missing=1 are the same 7 with a null utterance_id and the same 7 with no reg_ask_messages link; the three signals agree exactly, so nothing fails silently."
+  },
+  "credential_scan": {
+    "rows_scanned": 8042,
+    "patterns": {
+      "jwt": {
+        "rows": 0,
+        "by_role": {},
+        "ids": []
+      },
+      "url_credential_param": {
+        "rows": 2,
+        "by_role": {
+          "assistant": 2
+        },
+        "ids": [
+          "UTT-004428",
+          "UTT-004470"
+        ]
+      },
+      "otp_6digit_in_context": {
+        "rows": 0,
+        "by_role": {},
+        "ids": []
+      },
+      "bearer_header": {
+        "rows": 0,
+        "by_role": {},
+        "ids": []
+      },
+      "aws_access_key": {
+        "rows": 0,
+        "by_role": {},
+        "ids": []
+      },
+      "sk_style_key": {
+        "rows": 0,
+        "by_role": {},
+        "ids": []
+      }
+    },
+    "rows_matching_any": 2,
+    "requirement": "Migration into SessionLedger must scrub URL credential parameters before ingest; the register is not credential-free."
+  },
+  "coherence": {
+    "compared": 2252,
+    "reading_a_same_day": {
+      "rule": "ask's source_ref date equals the date of its linked message",
+      "agree": 2211,
+      "mismatch": 41,
+      "agreement_pct": 98.18
+    },
+    "reading_b_window_end": {
+      "rule": "source_ref date equals the LATEST message date among that doc's asks",
+      "docs_matching": 98,
+      "docs_exercised": 98,
+      "docs_matching_pct": 100.0,
+      "asks_covered": 2252,
+      "asks_covered_pct": 100.0
+    },
+    "doc_span_classes": {
+      "single_day_docs": 69,
+      "rollup_docs": 29,
+      "rollup_widths_days": [
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5,
+        6,
+        6,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        8,
+        10,
+        10,
+        11,
+        12,
+        12,
+        14,
+        27
+      ],
+      "max_rollup_width_days": 27
+    },
+    "doc_date_equals_message_date_local": 2211,
+    "mismatch_local": 41,
+    "uncomparable": 0,
+    "agreement_pct": 98.18,
+    "source_zones": {
+      "UTC": 23,
+      "PDT": 2229
+    },
+    "distinct_source_refs_exercised": 98,
+    "mismatch_delta_histogram": {
+      "-27": 1,
+      "-14": 1,
+      "-12": 3,
+      "-11": 1,
+      "-10": 3,
+      "-8": 3,
+      "-7": 6,
+      "-6": 3,
+      "-5": 3,
+      "-4": 4,
+      "-3": 3,
+      "-2": 7,
+      "-1": 3,
+      "0": 2211
+    },
+    "mismatch_examples": [
+      {
+        "ask": "ASK-000725",
+        "source_ref": "October112026-03.md",
+        "doc_date": "2026-10-11",
+        "message_ts": "Saturday, October 10, 2026, 12:16:00 AM PDT",
+        "message_date_local": "2026-10-10",
+        "delta_days": -1
+      },
+      {
+        "ask": "ASK-001042",
+        "source_ref": "October132026-02.md",
+        "doc_date": "2026-10-13",
+        "message_ts": "Sunday, October 11, 2026, 10:42:18 PM PDT",
+        "message_date_local": "2026-10-11",
+        "delta_days": -2
+      },
+      {
+        "ask": "ASK-001107",
+        "source_ref": "October132026-03.md",
+        "doc_date": "2026-10-13",
+        "message_ts": "Monday, October 12, 2026, 12:52:46 AM PDT",
+        "message_date_local": "2026-10-12",
+        "delta_days": -1
+      },
+      {
+        "ask": "ASK-001118",
+        "source_ref": "October132026-04.md",
+        "doc_date": "2026-10-13",
+        "message_ts": "Sunday, October 11, 2026, 6:25:57 PM PDT",
+        "message_date_local": "2026-10-11",
+        "delta_days": -2
+      },
+      {
+        "ask": "ASK-001129",
+        "source_ref": "October142026-06.md",
+        "doc_date": "2026-10-14",
+        "message_ts": "Monday, October 12, 2026, 10:30:27 PM PDT",
+        "message_date_local": "2026-10-12",
+        "delta_days": -2
+      },
+      {
+        "ask": "ASK-001136",
+        "source_ref": "October142026-01.md",
+        "doc_date": "2026-10-14",
+        "message_ts": "Sunday, October 11, 2026, 10:42:18 PM PDT",
+        "message_date_local": "2026-10-11",
+        "delta_days": -3
+      },
+      {
+        "ask": "ASK-001148",
+        "source_ref": "October142026-01.md",
+        "doc_date": "2026-10-14",
+        "message_ts": "Saturday, October 10, 2026, 1:00:34 AM PDT",
+        "message_date_local": "2026-10-10",
+        "delta_days": -4
+      },
+      {
+        "ask": "ASK-001177",
+        "source_ref": "October142026-02.md",
+        "doc_date": "2026-10-14",
+        "message_ts": "Sunday, October 11, 2026, 5:52:54 PM PDT",
+        "message_date_local": "2026-10-11",
+        "delta_days": -3
+      }
+    ]
+  },
+  "doc_dates_span": [
+    "2026-09-25",
+    "2026-11-04"
+  ],
+  "distinct_doc_dates_used": 38,
+  "implication": "The 98 harvest documents cannot be produced, so the message -> markdown -> register transformation is unauditable. Quote-level provenance is unaffected: the reg_asks.utterance_id -> reg_utterances.body join resolves for 2,252 of 2,259 asks and the reg_ask_messages link holds for the same 2,252, while the remaining 7 agree across three independent flags. The coherence test above shows the source_ref pointers are not decorative."
+}

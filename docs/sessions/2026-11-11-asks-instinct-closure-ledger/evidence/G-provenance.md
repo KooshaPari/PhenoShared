@@ -3,6 +3,13 @@
 Read-only inspection of `/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/asks-ledger/ledger.db`
 (sqlite3 `mode=ro`). No recursive search of `$HOME` or `/`; only exact paths named by the DB or the build script.
 
+> **SUPERSEDED IN PART (2026-11-12T05:55Z).** The dangling `source_ref` finding below is
+> confirmed and upgraded to a formal **loss declaration** in `../VERDICT.md` §3g and `INDEX.md`
+> Addendum 7: ten root classes searched (including the registry's whole git object DB and both
+> restore-tree archives), 0 of 98 found, and the pointers tested for coherence instead - 98/98 docs
+> match the window-end model. The "~118 suspect links" figure repeated below is stale; link
+> integrity closed at **zero** wrong links (VERDICT §3d).
+
 ## 1. Schemas
 
 ### reg_provenance (2259 rows)
@@ -148,3 +155,4 @@ DB=.../asks-ledger/ledger.db
 sqlite3 "file:$DB?mode=ro" "select source_missing,count(*) from reg_asks group by 1;"
 python3 - # recompute sha256 of reg_utterances.body vs body_sha256; positional register join
 ```
+

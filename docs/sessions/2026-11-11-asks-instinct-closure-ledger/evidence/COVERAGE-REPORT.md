@@ -4,6 +4,12 @@ Generated 2026-11-11T08:02Z from seven parallel bounded lanes (A–H).
 Per-lane detail: `A-gpt-full.md`, `B-gpt-partial.md`, `C-claude-gemini.md`, `D-harness.md`,
 `E-imessage-register.md`, `G-provenance.md`, `H-other-channels.md` in this directory.
 
+> **SUPERSEDED IN PART (2026-11-12T05:55Z).** The `0 / 98` `source_ref` row below stands, and is now
+> a formal loss declaration with a search record and a pointer-coherence test in `../VERDICT.md` §3g.
+> The "118 suspect links" in the repair list is stale: §3d closed link integrity at zero wrong
+> links. `reg_asks` also has **no quote column** - quotes reach `reg_utterances.body` via
+> `utterance_id` (§3g).
+
 ## 1. What the 2,259-ask register actually is
 
 Independently re-verified against `asks-ledger/ledger.db` (read-only):
@@ -82,3 +88,4 @@ Not needed: iMessage history (local, 8,983 text-bearing), harness transcripts (l
 4. Ask the operator only for the four external items above, in that order.
 5. Repair the register's provenance layer (98/98 dangling `source_ref`, 118 suspect links,
    805 dropped utterances, 7 sourceless asks) before treating it as the Instinct spine.
+

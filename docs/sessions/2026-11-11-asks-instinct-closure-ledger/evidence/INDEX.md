@@ -275,3 +275,57 @@ the two member-level cuts and the mechanical clause-level 1.3%.
 second rater would move precision and recall by several points. The finding used here — recall well
 below 0.9 — is robust to that; the exact 0.44 is not. iMessage and KCode clauses were segmented but not
 sampled, so their 18.1% and 41.5% carry unmeasured contamination.
+
+## Addendum 7 — the 98 harvest documents are lost; two readings tested, one model confirmed
+(2026-11-12T05:55Z)
+
+Files: `audit_harvest_sources.py`, `harvest_source_audit.json`.
+
+**Question.** All 2,259 asks cite one of 98 `source_ref` harvest documents, and none of the 98
+resolves. Is that a search failure, a relocation, or a real loss — and what does it cost?
+
+**Search.** Ten root classes, all zero: the registry working tree, the registry's whole git object DB
+(all refs, plus `--diff-filter=D` deleted paths), all Phenotype repos, `~/CodeProjects/temp` to depth
+8, six sibling trees under `~/CodeProjects`, Desktop/Downloads/Documents/Trash, `~/.jcode/scratch`
+and `~/.hermes`, and both chat-harvest archives in the PhenoRegistry restore tree (1,891 entries).
+Time Machine has no destinations configured. **Verdict: LOST**, not misplaced.
+
+**Two schema corrections found while doing this, both my own errors.**
+
+1. `reg_asks` has **no quote column**. Its columns are `id, utterance_id, interpretation,
+   first_asked_at, day, time, area, kind, category_id, reported_state, verified_state, reviewed,
+   reconciled_at, evidence_json, theme_key, issue_ref, issue_level, source_missing, updated_at`. The
+   quoted text is `original_text` in the `asks.json` export and `reg_utterances.body` in SQL, reached
+   via `utterance_id`. Any statement that "the register stores its quotes in `reg_asks`" is wrong.
+2. Timestamps are stored **local (PDT)**, not UTC: 8,019 PDT rows against 23 UTC. A first pass of
+   this script assumed UTC and silently compared only the 23 UTC rows, reporting "18 compared,
+   2,229 uncomparable". Caught by the `uncomparable` counter, not by the headline, which looked
+   plausible.
+
+**Coherence test.** The documents are gone, so what can be tested is whether the remaining pointers
+agree with the messages they point at.
+
+| Reading | Rule | Result |
+|---|---|---:|
+| A, same-day | `source_ref` date = linked message's date | 2,211 / 2,252 (**98.18%**) |
+| B, window end | `source_ref` date = latest message date in that document | 98 / 98 docs (**100%**), all 2,252 asks |
+
+Reading B is correct, and the split says why: **69 docs are single-day** (span 0), **29 are rollups**
+(span 1–27 days), and in **29 of 29** the filename date is exactly the rollup's last message date. The
+filename is the harvest date, not a per-message date. Reading A's 41 mismatches are all rollup asks,
+all deltas negative (mode −2d at 7, then −7d at 6, −4d at 4, −1d at 3).
+
+**Provenance baseline, measured.** `reg_asks.utterance_id` resolves to `reg_utterances` for 2,252 of
+2,259; `reg_ask_messages` origin links hold for the same 2,252. The remaining 7 agree across three
+independent signals — `source_missing = 1`, `utterance_id IS NULL`, no message link — the same ids
+(ASK-000345, -000637, -000664, -001844, -002254, -002255, -002256). No silent failure.
+
+**Credential scan.** Prompted by the corpus's descent from messages that had an unredacted published
+version. All 8,042 `reg_utterances` scanned for JWT, bearer, `sk-`, AWS-key, OTP-in-context and URL
+credential-parameter shapes: **2 rows match**, both assistant, both `?code=` (UTT-004428 on
+`100.96.135.160:3100`; UTT-004470 on `paperclip.phenotype.space`). Zero JWT, OTP, bearer or key hits.
+Recorded as an ingest scrub requirement, not as a clean bill.
+
+**What the loss costs.** Ask-level recall against the harvest is now unmeasurable, so "did the harvest
+miss asks?" cannot be answered. Quote fidelity is unaffected and stays verified (§3d). The loss
+constrains the *completeness* question, which is the question this whole programme is about.

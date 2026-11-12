@@ -5,6 +5,12 @@
 > rows were `DEDUPED_INPUT` placeholders; they are now measured at **6,363** and **166** distinct.
 > The union and coverage figures here are superseded by `VERDICT.md` section 3c and section 3e
 > (union 11,752, citation coverage 15.0%).
+>
+> **Addendum (2026-11-12T05:55Z).** The "0 of 98 `source_ref` paths resolve" line below is now a
+> formal loss declaration: ten root classes searched, and the surviving pointers pass a coherence
+> test (98/98 docs under the window-end model). See `../VERDICT.md` §3g and `INDEX.md` Addendum 7.
+> The "118 suspect ask->message links remain open" line is stale; link integrity closed at zero
+> wrong links (`VERDICT.md` §3d).
 
 Measured 2026-11-12 with `verify_channel_anchor.py` (read-only on `ledger.db`,
 `PRAGMA query_only=1`). Raw output: `channel_anchor_output.txt`.
@@ -66,3 +72,4 @@ question directly and were not read before that claim was published.
 - `reg_provenance.method` records `no-source-body-available` for exactly 7 asks; that is the same 7
   "sourceless asks" defect, documented at source.
 - 118 suspect ask->message links remain open; `ASK-000013` is confirmed wrong.
+
