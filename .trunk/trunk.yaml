@@ -45,13 +45,39 @@ lint:
         - json
         - graphql
         - prettier_supported_configs
+    # Every trunk command runs in a copy_targets sandbox, so gitleaks' cwd is a
+    # temp directory and the repository's `.gitleaks.toml` at the root was never
+    # discovered. Its allowlists were therefore dead in this lane, while
+    # security.yml honoured the same file through GITLEAKS_CONFIG. Observed
+    # 2026-11-12 on PR #937: `trunk check` flagged the AWS documentation example
+    # key and two test fixtures that .gitleaks.toml already allowlists. Pass the
+    # config explicitly so both lanes read one file.
+    - name: gitleaks
+      files: [ALL]
+      commands:
+        - name: lint
+          run: gitleaks detect --no-git --source=${target} --config=${workspace}/.gitleaks.toml --exit-code=101 -f sarif -r "${tmpfile}"
+          output: sarif
+          read_output_from: tmp_file
+          success_codes: [0, 101]
+          sandbox_type: copy_targets
+          cache_results: true
+          allow_empty_files: false
   enabled:
     - actionlint@1.7.12
     - bandit@1.9.4
     - black@26.10.1
     - buf-lint@1.75.0
     - checkov@3.4.3
-    - clippy@1.65.0
+    # clippy/rustfmt must ride the same toolchain as the `rust` runtime above:
+    # their versions are rust toolchain versions (`download: rust`), so a 1.65.0
+    # clippy is a 1.65.0 cargo, which cannot parse `edition = "2024"`. Observed
+    # 2026-11-12 on PR #937: every `Lint & Format` run died with
+    #   clippy  crates/sharecli-ffi  ... A tool failed to run
+    #   error: failed to load manifest for workspace member .../crates/fabric-terminal
+    #   failed to parse the `edition` key
+    # which made the lane permanently red for every PR, masking the real result.
+    - clippy@1.99.0
     - dotenv-linter@4.0.0
     - git-diff-check
     - gitleaks@8.30.1
@@ -70,7 +96,7 @@ lint:
     - prettier@3.9.10
     - renovate@44.223.1
     - ruff@0.17.4
-    - rustfmt@1.65.0
+    - rustfmt@1.99.0
     - shellcheck@0.11.0
     - shfmt@3.14.1
     - svgo@4.1.0
