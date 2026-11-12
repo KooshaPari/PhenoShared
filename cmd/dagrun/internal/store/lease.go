@@ -267,6 +267,23 @@ func (s *Store) Attempts(nodeID string) (int, bool) {
 	return ns.Attempts, true
 }
 
+// ClaimOwner reports the owner and epoch a node was claimed under, or empty
+// values when the node was never claimed.
+//
+// It has to be read before Force, because Force clears the owner: whoever
+// records the outcome needs to know who held the node to record it.
+func (s *Store) ClaimOwner(nodeID string) (string, int64) {
+	st, err := s.Snapshot()
+	if err != nil || st == nil {
+		return "", 0
+	}
+	ns := st.Nodes[nodeID]
+	if ns == nil {
+		return "", 0
+	}
+	return ns.Owner, ns.Epoch
+}
+
 // Force sets a status regardless of ownership. Used by `dagrun done|fail|skip`
 // when a human or a driving agent attests the outcome directly.
 func (s *Store) Force(nodeID, status, reason string, rep *verify.Report, now time.Time) error {

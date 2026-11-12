@@ -12,6 +12,7 @@ import (
 	"github.com/KooshaPari/dagrun/internal/harness"
 	"github.com/KooshaPari/dagrun/internal/plan"
 	"github.com/KooshaPari/dagrun/internal/store"
+	"github.com/KooshaPari/dagrun/internal/trace"
 	"github.com/KooshaPari/dagrun/internal/verify"
 )
 
@@ -257,6 +258,11 @@ func (s *Server) toolClaim(dir, node, owner string, ttl int) (any, bool, error) 
 	if err != nil {
 		return nil, true, err
 	}
+	if c.Won {
+		// An agent driving the plan over MCP is the agent-driven path: the
+		// claim belongs in the trace just as the runner's does.
+		_ = trace.EmitNode(h.st.Dir(), h.plan.Run, node, owner, "node.claim", "", c.Epoch)
+	}
 	return map[string]any{"node": node, "owner": owner, "won": c.Won, "epoch": c.Epoch, "reason": c.Reason}, !c.Won, nil
 }
 
@@ -277,9 +283,12 @@ func (s *Server) toolDone(ctx context.Context, dir, node string, force bool) (an
 	if !rep.OK {
 		reason = "forced done over MCP"
 	}
+	// Read the owner before Force, which clears it.
+	owner, epoch := h.st.ClaimOwner(node)
 	if err := h.st.Force(node, plan.StatusDone, reason, &rep, time.Now()); err != nil {
 		return nil, true, err
 	}
+	_ = trace.EmitNode(h.st.Dir(), h.plan.Run, node, owner, "node."+plan.StatusDone, reason, epoch)
 	return map[string]any{"node": node, "ok": true, "forced": !rep.OK, "report": rep}, false, nil
 }
 
@@ -295,9 +304,11 @@ func (s *Server) toolTerminal(dir, node, tool, reason string) (any, bool, error)
 	if tool == "dagrun_skip" {
 		status = plan.StatusSkipped
 	}
+	owner, epoch := h.st.ClaimOwner(node)
 	if err := h.st.Force(node, status, reason, nil, time.Now()); err != nil {
 		return nil, true, err
 	}
+	_ = trace.EmitNode(h.st.Dir(), h.plan.Run, node, owner, "node."+status, reason, epoch)
 	return map[string]any{"node": node, "status": status}, false, nil
 }
 
