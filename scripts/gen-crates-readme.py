@@ -6,12 +6,18 @@ than the workspace publishes. This derives the list from `cargo metadata
 --no-deps` so the index cannot silently fall behind again. A crate is
 "publishable" when [package].publish is not false.
 """
-import json, subprocess, sys, pathlib
+
+import json
+import pathlib
+import subprocess
+import sys
 
 root = pathlib.Path(__file__).resolve().parent.parent
 out = subprocess.run(
     ["cargo", "metadata", "--no-deps", "--format-version", "1"],
-    cwd=root, capture_output=True, text=True,
+    cwd=root,
+    capture_output=True,
+    text=True,
 )
 if out.returncode != 0:
     sys.exit("cargo metadata failed: " + out.stderr[-800:])
