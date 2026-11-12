@@ -257,10 +257,9 @@ jobs:
         uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
         env:
           # Same pin and same reasoning as `.github/workflows/security.yml`.
-          # The action's default (8.24.3) silently ignores every `[[allowlists]]`
-          # block in `.gitleaks.toml` (multiple global allowlists only landed in
-          # 8.25.0), so the documented placeholders in the test fixtures read as
-          # live leaks. 8.30.0 is the version this config is written against.
+          # The action's default (8.24.3) ignores every `[[allowlists]]` block in
+          # `.gitleaks.toml`, so the four documented placeholder fixtures read as
+          # live leaks.
           GITLEAKS_CONFIG: .gitleaks.toml
           GITLEAKS_VERSION: 8.30.0
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
