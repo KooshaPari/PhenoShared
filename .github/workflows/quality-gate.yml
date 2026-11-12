@@ -80,8 +80,13 @@ jobs:
           # libpipewire-0.3.pc. Without it the build stops with
           # "The system library `libpipewire-0.3` required by crate `libspa-sys`
           # was not found" (observed on run 43015019489).
+          # libgbm-dev + libegl1-mesa-dev: the same xcap dependency chain
+          # (gbm-sys, khronos-egl) links -lgbm and -lEGL at final link. With
+          # the .pc files absent the build compiles and then dies at link
+          # with "rust-lld: error: unable to find library -lgbm" for
+          # playcua-native's bins (observed on run 43142100710).
           sudo apt-get install -y pkg-config libgtk-3-dev libxdo-dev \
-            libpipewire-0.3-dev libspa-0.2-dev
+            libpipewire-0.3-dev libspa-0.2-dev libgbm-dev libegl1-mesa-dev
       # Zig is a build-time requirement, not a test dependency: the
       # crates/spawn-core-sys build script shells out to `zig build` to produce
       # crates/spawn-core/zig-out/lib/libspawn_core.a and links it. Without zig
