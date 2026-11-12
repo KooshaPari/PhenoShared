@@ -334,6 +334,10 @@ work without extra tooling installed.
 Equivalent entry points: `make check`, `make clippy`, `make verify`,
 `make test-unit`, `task lint`, `task test`, `task fmt:check`.
 
+The static archive `crates/spawn-core/zig-out/lib/libspawn_core.a` is
+gitignored. `make spawn-core` regenerates it from Zig source; the packages that
+link it are `sharecli-session`, `sharecli-ipc`, and `sharecli-ffi`.
+
 CI runs `.github/workflows/ci.yml` across Rust, Python (ruff), Go, and
 TypeScript, with `cargo-deny` advisories plus gitleaks and dependency review.
 
