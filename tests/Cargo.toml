@@ -11,9 +11,9 @@ name = "integration"
 path = "integration_test.rs"
 
 [dependencies]
-nvms-ffi = { path = "../crates/nvms-ffi" }
-pheno-compose-driver = { path = "../crates/pheno-compose" }
-pheno-config = { path = "../crates/pheno-config" }
+nvms-ffi = { path = "../crates/pheno-compose-bindings" }
+pheno-compose-driver = { path = "../crates/pheno-compose-driver" }
+pheno-config = { path = "../crates/pheno-compose-pheno-config" }
 serde_json = { workspace = true }
 
 # ── Integration tests (subdirectory) ────────────────────────────────────────

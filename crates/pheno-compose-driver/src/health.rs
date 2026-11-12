@@ -69,7 +69,7 @@ pub fn check() -> HealthReport {
                     ok: false,
                     error: Some(format!("{e:?}")),
                 }
-            }
+            },
         };
         probes.push(probe);
     }

@@ -13733,6 +13733,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "pheno-compose-driver"
+version = "0.1.0"
+dependencies = [
+ "nvms-ffi",
+ "pheno-config",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "pheno-config"
 version = "0.1.0"
 dependencies = [
