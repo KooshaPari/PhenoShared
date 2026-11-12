@@ -22,12 +22,13 @@
 #   2  nothing was checked (rustup missing, or no matrix target installed)
 #
 # SKIP is neither pass nor failure. A target whose rust-std is absent is
-# skipped before it runs. A target whose rust-std IS present but whose C
-# cross-compiler is missing (cc-rs 'failed to find tool', 'Compiler family
-# detection failed') is also skipped, because that is a gap in the host, not a
-# defect in the crate: no single host holds a C toolchain for every other
-# platform, and the Darwin legs need the macOS SDK. Real compile errors, i.e.
-# anything rustc actually reports, still fail the run.
+# skipped before it runs. A target whose rust-std IS present but which fails
+# without emitting any rustc diagnostic is also skipped: no `error[E....]` means
+# rustc never ran, so the cause is the host or the manifest, not this crate. No
+# single host holds a C toolchain for every other platform, and the Darwin legs
+# need the macOS SDK. A failure WITH a diagnostic is always a real error and
+# always fails the run. Every skip prints the tail of its output, so a skip can
+# never hide why it happened.
 #
 # CI (quality-gate E1.8 job) installs every matrix target before calling
 # this script, so a green run there proves the whole matrix ran; locally,
@@ -75,18 +76,21 @@ check_one() {
     checked=$((checked + 1))
     return
   fi
-  # A missing cross C toolchain is an environment gap, not a defect in this
-  # crate: cc-rs fails before rustc ever sees the source. Report it as SKIP so
-  # it can neither masquerade as a green check nor be reported as a false red.
-  # Anything rustc itself reports stays a real failure and keeps failing.
-  if printf '%s\n' "$out" \
-    | grep -qE 'failed to find tool|Compiler family detection failed'; then
-    echo "SKIP  — no cross C toolchain for ${target}"
+  # A failure carrying NO rustc diagnostic did not come from this crate: rustc
+  # never ran. The first attempt at this keyed on cc-rs's wording instead, and
+  # that was wrong -- the Darwin leg fails on a Linux host with a message that
+  # matches no known marker, so the run said FAILED and then printed nothing,
+  # because the detail grep also only looked for a rustc error. Judge on the
+  # diagnostic, not the phrasing.
+  if ! printf '%s\n' "$out" | grep -qE 'error\[E[0-9]+\]'; then
+    echo "SKIP  — no rustc diagnostic; build environment, not this crate"
+    # Always print the tail, so a skip can never hide its own reason.
+    printf '%s\n' "$out" | tail -6 | sed 's/^/        /'
     skipped=$((skipped + 1))
     return
   fi
   echo "FAILED"
-  printf '%s\n' "$out" | grep -E '^error' -A5 | head -40
+  printf '%s\n' "$out" | grep -E 'error\[E[0-9]+\]' -A5 | head -40
   checked=$((checked + 1))
   fail=1
 }
