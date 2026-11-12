@@ -826,3 +826,55 @@ on a different population and never depended on citation precision.
 | `evidence/rate_gate.json` | gate record: recall `NOT_RUN`, strict precision `FAIL` 0.7797, lenient `PASS` 0.9661, channel coverage `PASS` (2,229 + 23), fidelity `PASS` 0.9708, decision, envelope, what would change it | written by the script above |
 
 Section `3o` of `VERDICT.md` carries the prose.
+
+---
+
+## Addendum 16. The 12 disagreements adjudicated: 0.0788, gate unchanged
+
+**Prior context.** Addendum 14 measured inter-labeller agreement at kappa `0.65` on the
+`uncited_non_ask_cue` bucket, which meant **12 of 60 rows** disagreed and were listed but not
+adjudicated. That bucket is the one whose operator share supplies a term of the coverage denominator
+(`uncited_non_ask_cue x operator_share`), so the published pair `8.07%` and `8.47%` rested on a share
+nobody had reconciled.
+
+**Question.** Of those 12 disagreeing rows, how many does a third blind reading resolve, and does the
+resolved bucket count move the coverage pair?
+
+**Design.** `make_adjudication_sheet.py` isolated the 12 rows into `adjudication_sheet.json` and wrote
+`adjudication_key.json` (which labeller said what) **withheld** from the third reader. The third reader
+labelled all 12 blind into `adjudication_labels.json`; `adjudicate_disagreements.py` then joined them.
+Before emitting the new point the scorer asserted its own reconciliation: the recomputed disagreement
+set (**12**) is identical to the recorded set (`sets_identical: true`), and **both baselines were
+reproduced** (`labeller_1` to 4 dp, `labeller_2` exactly).
+
+**Result.** **11 of 12** resolve by majority of three (`5` to labeller 1, `6` to labeller 2); `1` is a
+three-way split (idx `59`). Bucket operator count of 60 moves to **23** (labeller 1) / **25**
+(labeller 2) / **26** (majority of three), range **26 to 27** if the split row goes the other way.
+
+**Adjudicated coverage = `0.0788` [0.0591, 0.1022]** (independent bounds, not a CI). Movement against
+the published pair: **0.59 pp below** labeller 1 and **0.19 pp below** labeller 2, so the third reading
+moves the estimate **down**.
+
+**Not deference.** All `7` operator determinations by the third reader are endorsed by one of the
+earlier two, so no row becomes operator on the third reader's word alone.
+
+**Gate decision: unchanged.** `WITHHOLD_RATE_AND_FLOOR` stands: recall is `NOT_RUN` (98 harvest
+documents lost) and strict precision is `0.7797`, below the `0.9` floor. Non-ask accuracy cannot rescue
+a gate that fails on those two cells. `evidence/rate_gate.json` now carries
+`coverage_pair.l3_adjudicated_point` beside `l1_point` and `l2_point`.
+
+**Honest limits.** A third reading on the same rubric by a model, not human ground truth. One reader
+decided 11 of the 12 rows. The three bucket shares come from three separate `n=60` samples, so not a
+joint estimate. The adjudicated point is reported alongside the pair, never instead of it. The 48
+already-agreed rows and the cited and ask-cue buckets are untouched.
+
+| artifact | what it is | reproduce (from `evidence/`) |
+|---|---|---|
+| `evidence/make_adjudication_sheet.py` | isolates the 12 disagreements into a blind sheet plus withheld key | `~/CodeProjects/temp/npenv/bin/python make_adjudication_sheet.py` |
+| `evidence/adjudication_sheet.json` | the 12-row blind sheet, no labeller identity attached | written by the script above |
+| `evidence/adjudication_key.json` | withheld key: which labeller said what | written by the same script |
+| `evidence/adjudication_labels.json` | the third reader's 12 verdicts, produced without the key | hand-labelled, not regenerable by script |
+| `evidence/adjudicate_disagreements.py` | reconciles the set, reproduces both baselines, applies majority of three, recomputes coverage | `~/CodeProjects/temp/npenv/bin/python adjudicate_disagreements.py` |
+| `evidence/adjudication.json` | counts, baselines, reconciliation assertions, adjudicated point and range, limits | written by the script above |
+
+Section `3p` of `VERDICT.md` carries the prose.

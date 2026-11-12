@@ -1,0 +1,68 @@
+{
+  "generated_at_utc": "2026-11-12T21:54:10Z",
+  "labeller": "third blind adjudicator (deepseek-v4.1-flash)",
+  "labeller_role": "third_independent",
+  "n": 12,
+  "items": [
+    {
+      "idx": 10,
+      "verdict": "tool",
+      "why": "JSON memory-record blob \"value_json\": \"false\""
+    },
+    {
+      "idx": 12,
+      "verdict": "agent",
+      "why": "status narration \"running: prompt pass over\""
+    },
+    {
+      "idx": 13,
+      "verdict": "operator",
+      "why": "terse shorthand \"value comp needed\""
+    },
+    {
+      "idx": 26,
+      "verdict": "tool",
+      "why": "bare command line, no human voice"
+    },
+    {
+      "idx": 35,
+      "verdict": "operator",
+      "why": "first-person \"i'll confirm the diff result\""
+    },
+    {
+      "idx": 40,
+      "verdict": "operator",
+      "why": "lowercase shorthand \"claude\\oai\\gemini data export\""
+    },
+    {
+      "idx": 44,
+      "verdict": "operator",
+      "why": "bare imperative \"reveal and copy\" to agent"
+    },
+    {
+      "idx": 48,
+      "verdict": "operator",
+      "why": "directive \"select every subcommand\" to agent"
+    },
+    {
+      "idx": 52,
+      "verdict": "agent",
+      "why": "third-person \"they approve\" markdown UI path"
+    },
+    {
+      "idx": 53,
+      "verdict": "operator",
+      "why": "terse verdict remark \"forward isn’t broken\""
+    },
+    {
+      "idx": 57,
+      "verdict": "operator",
+      "why": "garbled speech \"only 1 here’s deploy\""
+    },
+    {
+      "idx": 59,
+      "verdict": "system",
+      "why": "export header \"### msg 992 | wednesday\" metadata"
+    }
+  ]
+}

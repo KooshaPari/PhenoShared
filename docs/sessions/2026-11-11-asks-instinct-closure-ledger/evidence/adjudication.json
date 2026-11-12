@@ -1,0 +1,207 @@
+{
+ "generated_at_utc": "2026-11-12T21:54:41Z",
+ "script": "adjudicate_disagreements.py",
+ "question": "of the 12 rows where the two authorship labellers disagreed in the uncited_non_ask_cue bucket, how many does a third blind reading resolve, and does the resolved bucket count move the coverage pair",
+ "reconciliation": {
+  "recomputed_disagreements": 12,
+  "recorded_disagreements": 12,
+  "sets_identical": true,
+  "labeller_1_operator": 23,
+  "labeller_2_operator": 25,
+  "agreed_operator_rows": 19,
+  "identity_check": "labeller_1_operator - disputes_where_l1_says_operator == agreed_operator_rows and likewise for labeller 2"
+ },
+ "third_reading": {
+  "labeller": "third blind adjudicator (deepseek-v4.1-flash)",
+  "role": "third_independent",
+  "n": 12,
+  "verdict_counts": {
+   "operator": 7,
+   "agent": 2,
+   "tool": 2,
+   "system": 1,
+   "peer": 0,
+   "other": 0
+  },
+  "blind": "adjudication_key.json was withheld from the third reader"
+ },
+ "outcomes": {
+  "resolved_by_majority": 11,
+  "three_way_split": 1,
+  "split_idxs": [
+   59
+  ]
+ },
+ "rows": [
+  {
+   "idx": 10,
+   "labeller_1": "system",
+   "labeller_2": "tool",
+   "third": "tool",
+   "outcome": "resolves_to_labeller_2",
+   "third_why": "JSON memory-record blob \"value_json\": \"false\"",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 12,
+   "labeller_1": "system",
+   "labeller_2": "agent",
+   "third": "agent",
+   "outcome": "resolves_to_labeller_2",
+   "third_why": "status narration \"running: prompt pass over\"",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 13,
+   "labeller_1": "operator",
+   "labeller_2": "agent",
+   "third": "operator",
+   "outcome": "resolves_to_labeller_1",
+   "third_why": "terse shorthand \"value comp needed\"",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 26,
+   "labeller_1": "tool",
+   "labeller_2": "operator",
+   "third": "tool",
+   "outcome": "resolves_to_labeller_1",
+   "third_why": "bare command line, no human voice",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 35,
+   "labeller_1": "operator",
+   "labeller_2": "peer",
+   "third": "operator",
+   "outcome": "resolves_to_labeller_1",
+   "third_why": "first-person \"i'll confirm the diff result\"",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 40,
+   "labeller_1": "operator",
+   "labeller_2": "agent",
+   "third": "operator",
+   "outcome": "resolves_to_labeller_1",
+   "third_why": "lowercase shorthand \"claude\\oai\\gemini data export\"",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 44,
+   "labeller_1": "agent",
+   "labeller_2": "operator",
+   "third": "operator",
+   "outcome": "resolves_to_labeller_2",
+   "third_why": "bare imperative \"reveal and copy\" to agent",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 48,
+   "labeller_1": "agent",
+   "labeller_2": "operator",
+   "third": "operator",
+   "outcome": "resolves_to_labeller_2",
+   "third_why": "directive \"select every subcommand\" to agent",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 52,
+   "labeller_1": "agent",
+   "labeller_2": "operator",
+   "third": "agent",
+   "outcome": "resolves_to_labeller_1",
+   "third_why": "third-person \"they approve\" markdown UI path",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 53,
+   "labeller_1": "agent",
+   "labeller_2": "operator",
+   "third": "operator",
+   "outcome": "resolves_to_labeller_2",
+   "third_why": "terse verdict remark \"forward isn’t broken\"",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 57,
+   "labeller_1": "agent",
+   "labeller_2": "operator",
+   "third": "operator",
+   "outcome": "resolves_to_labeller_2",
+   "third_why": "garbled speech \"only 1 here’s deploy\"",
+   "consistent_with_key": true
+  },
+  {
+   "idx": 59,
+   "labeller_1": "operator",
+   "labeller_2": "peer",
+   "third": "system",
+   "outcome": "three_way_split",
+   "third_why": "export header \"### msg 992 | wednesday\" metadata",
+   "consistent_with_key": true
+  }
+ ],
+ "bucket_operator_count": {
+  "labeller_1": 23,
+  "labeller_2": 25,
+  "agreed_rows_only": 19,
+  "majority_of_three": 26,
+  "range_if_split_rows_go_other_way": [
+   26,
+   27
+  ],
+  "of": 60,
+  "share_majority": 0.433333,
+  "share_range": [
+   0.315724,
+   0.575081
+  ]
+ },
+ "coverage": {
+  "baseline_labeller_1": {
+   "point": 0.08467440310060001,
+   "reproduced": true,
+   "committed": 0.08467595059951623
+  },
+  "baseline_labeller_2": {
+   "point": 0.08067656809498826,
+   "reproduced": true,
+   "committed": 0.08067656809498826
+  },
+  "adjudicated": {
+   "point": 0.07881595166874919,
+   "low": 0.05914287355594733,
+   "high": 0.10219152033518923,
+   "method": "range_from_independent_bounds",
+   "is_confidence_interval": false,
+   "note": "low = lowest numerator over highest denominator; high = highest numerator over lowest denominator. Independent bounds only.",
+   "numerator_units": 1873.4,
+   "denominator_units": 23769.3,
+   "steps": [
+    "cited: 1938 x 58/60 = 1873.4000 (both labellers agree on this bucket, so it is not adjudicated)",
+    "uncited_ask_cue: 8819 x 52/60 = 7643.1333 (both labellers agree, not adjudicated)",
+    "uncited_non_ask_cue: 32891 x 26/60 = 14252.7667 (majority of three)",
+    "coverage = 1873.4000 / 23769.3000 = 0.07881595166874919"
+   ]
+  },
+  "movement_vs_baselines_pp": {
+   "vs_labeller_1": -0.586,
+   "vs_labeller_2": -0.186
+  },
+  "frame": {
+   "units": 43648,
+   "cited": 1938,
+   "uncited_ask_cue": 8819,
+   "uncited_non_ask_cue": 32891
+  }
+ },
+ "what_this_does_not_do": [
+  "it does not re-label the 48 rows the two labellers already agreed on",
+  "it does not touch the cited or ask-cue buckets, where agreement is exact",
+  "it does not turn three model labellers into human ground truth; it is a majority of three readings on one rubric",
+  "it does not change citation precision, so the rate stays withheld",
+  "the adjudicated point is still an estimate whose three bucket shares come from three separate n=60 samples, not a joint estimate"
+ ],
+ "exit_status": "computed"
+}

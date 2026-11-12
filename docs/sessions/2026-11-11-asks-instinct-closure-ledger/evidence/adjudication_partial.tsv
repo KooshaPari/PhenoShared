@@ -1,0 +1,12 @@
+10	tool	JSON memory-record blob "value_json": "false"
+12	agent	status narration "running: prompt pass over"
+13	operator	terse shorthand "value comp needed"
+26	tool	bare command line, no human voice
+35	operator	first-person "i'll confirm the diff result"
+40	operator	lowercase shorthand "claude\oai\gemini data export"
+44	operator	bare imperative "reveal and copy" to agent
+48	operator	directive "select every subcommand" to agent
+52	agent	third-person "they approve" markdown UI path
+53	operator	terse verdict remark "forward isn’t broken"
+57	operator	garbled speech "only 1 here’s deploy"
+59	system	export header "### msg 992 | wednesday" metadata

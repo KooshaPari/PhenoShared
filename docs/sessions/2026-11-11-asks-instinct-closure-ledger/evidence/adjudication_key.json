@@ -1,0 +1,91 @@
+{
+ "generated_at_utc": "2026-11-12T21:41:47Z",
+ "script": "make_adjudication_sheet.py",
+ "note": "withheld from the third reader; contains both earlier labellers' values",
+ "rows": [
+  {
+   "idx": 10,
+   "l1": "system",
+   "l2": "tool",
+   "l1_said_operator": false,
+   "l2_said_operator": false
+  },
+  {
+   "idx": 12,
+   "l1": "system",
+   "l2": "agent",
+   "l1_said_operator": false,
+   "l2_said_operator": false
+  },
+  {
+   "idx": 13,
+   "l1": "operator",
+   "l2": "agent",
+   "l1_said_operator": true,
+   "l2_said_operator": false
+  },
+  {
+   "idx": 26,
+   "l1": "tool",
+   "l2": "operator",
+   "l1_said_operator": false,
+   "l2_said_operator": true
+  },
+  {
+   "idx": 35,
+   "l1": "operator",
+   "l2": "peer",
+   "l1_said_operator": true,
+   "l2_said_operator": false
+  },
+  {
+   "idx": 40,
+   "l1": "operator",
+   "l2": "agent",
+   "l1_said_operator": true,
+   "l2_said_operator": false
+  },
+  {
+   "idx": 44,
+   "l1": "agent",
+   "l2": "operator",
+   "l1_said_operator": false,
+   "l2_said_operator": true
+  },
+  {
+   "idx": 48,
+   "l1": "agent",
+   "l2": "operator",
+   "l1_said_operator": false,
+   "l2_said_operator": true
+  },
+  {
+   "idx": 52,
+   "l1": "agent",
+   "l2": "operator",
+   "l1_said_operator": false,
+   "l2_said_operator": true
+  },
+  {
+   "idx": 53,
+   "l1": "agent",
+   "l2": "operator",
+   "l1_said_operator": false,
+   "l2_said_operator": true
+  },
+  {
+   "idx": 57,
+   "l1": "agent",
+   "l2": "operator",
+   "l1_said_operator": false,
+   "l2_said_operator": true
+  },
+  {
+   "idx": 59,
+   "l1": "operator",
+   "l2": "peer",
+   "l1_said_operator": true,
+   "l2_said_operator": false
+  }
+ ]
+}

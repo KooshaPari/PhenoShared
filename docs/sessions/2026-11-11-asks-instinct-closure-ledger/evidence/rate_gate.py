@@ -58,6 +58,10 @@ def main():
     print("== inputs (key figures actually read) ==")
     l1 = read_json("operator_coverage.json")
     l2 = read_json("operator_coverage_l2.json")
+    # optional third coverage point: a third blind reading adjudicating the 12 rows
+    # where labellers 1 and 2 disagreed. Absent is fine, and is recorded as absent
+    # rather than silently omitted.
+    adj = read_json("adjudication.json", required=False)
     agree = read_json("inter_labeller_agreement.json")
     prec = read_json("precision_scored.json")
     quote = read_json("ask_link_verification.json")
@@ -68,6 +72,9 @@ def main():
 
     l1_point = dig(l1, "coverage.point")
     l2_point = dig(l2, "coverage.point")
+    adj_point = dig(adj, "coverage.adjudicated.point")
+    adj_range = [dig(adj, "coverage.adjudicated.low"), dig(adj, "coverage.adjudicated.high")]
+    adj_nonask = dig(adj, "bucket_operator_count.majority_of_three")
     l1_range = [dig(l1, "coverage.low"), dig(l1, "coverage.high")]
     l2_range = [dig(l2, "coverage.low"), dig(l2, "coverage.high")]
     if l1:
@@ -283,6 +290,17 @@ def main():
         "coverage_pair": {
             "l1_point": None if l1_point is None else round(l1_point, 4),
             "l2_point": None if l2_point is None else round(l2_point, 4),
+            "l3_adjudicated_point": None if adj_point is None else round(adj_point, 4),
+            "l3_adjudicated_range": [
+                None if v is None else round(v, 4) for v in adj_range
+            ],
+            "l3_note": (
+                "NOT_RUN: adjudication.json absent" if adj_point is None else
+                "a third blind reading resolved 11 of the 12 inter-labeller disagreements "
+                f"by majority of three, moving the non-ask operator count to {adj_nonask} of 60. "
+                "It is a third reading on the same rubric, not human ground truth, and it is "
+                "reported alongside the pair, never instead of it"
+            ),
             "l1_range": [None if v is None else round(v, 4) for v in l1_range],
             "l2_range": [None if v is None else round(v, 4) for v in l2_range],
             "status": coverage_status,

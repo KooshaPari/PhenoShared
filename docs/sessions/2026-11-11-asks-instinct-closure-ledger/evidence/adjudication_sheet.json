@@ -1,0 +1,91 @@
+{
+ "generated_at_utc": "2026-11-12T21:41:47Z",
+ "script": "make_adjudication_sheet.py",
+ "purpose": "third, blind reading of the 12 rows where the two labellers disagreed in the uncited_non_ask_cue bucket, the bucket whose operator share drives the coverage denominator",
+ "seed": null,
+ "sampling": "exhaustive over the disagreement set, not a sample",
+ "n": 12,
+ "population": {
+  "bucket": "uncited_non_ask_cue",
+  "paired_rows": 60,
+  "disagreements": 12,
+  "involving_operator": 10,
+  "source_sheet": "nonask_speaker_sheet.json",
+  "source_agreement": "inter_labeller_agreement.json"
+ },
+ "instructions": "verdict is exactly one of: operator = Koosha's own words (an instruction, question, ruling, correction, plan, or remark addressed to an agent), including voice transcription, typos and relayed messages; agent = an AI agent's narration, plan, self-report, or instruction to another agent, including agent text pasted inside a human turn; tool = raw tool output, diff, log line, JSON blob, file listing; system = harness banner, injected prompt, skill or config block, or a metadata/transcript header with no human voice; peer = a third person's words (sender header, forwarded or quoted message); other = truly unresolvable. Judge the words only. Do not default to operator: if there is no human voice in the clause, it is not operator.",
+ "items": [
+  {
+   "idx": 10,
+   "clause": "\\u2014 not: do not fabricate tool output or approximate counts when the mcp server is not connected.\", \"confidence\": 0.9 }, { \"key\": \"project.kiro_inventory.agent_sources_available\", \"value_json\": \"false\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.agent_sources_count\", \"value_json\": \"0\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.last_verified_at\", \"value_json\": \"\\\"2026-11-04\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.mcp_server_connected\", \"value_json\": \"fa",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 12,
+   "clause": "running: prompt pass over the 985 vague chats",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 13,
+   "clause": "so value comp needed.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 26,
+   "clause": "git push --force-with-lease",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 35,
+   "clause": "cand: i'll confirm the diff result this afternoon.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 40,
+   "clause": "then claude\\oai\\gemini data export scrape",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 44,
+   "clause": "reveal and copy.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 48,
+   "clause": "from that list, select every subcommand that could relate to a daemon, server, socket, rpc, acp, session, attach, connect, bridge, ipc, watch or client.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 52,
+   "clause": "with no token they approve in chrome or paste one in **settings -> browser**.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 53,
+   "clause": "the forward isn\u2019t broken.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 57,
+   "clause": "only 1 here\u2019s deploy",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 59,
+   "clause": "q3 is a consent to share your info acr \u2026 ### msg 992 | wednesday, october 7, 2026, 6:51:11 pm pdt | thread a cand: live with tomorrow's run.",
+   "verdict": null,
+   "why": ""
+  }
+ ]
+}

@@ -36,7 +36,7 @@ is an estimate and not a published rate because citation precision is unmeasured
 produced all three samples. It does not replace any unit-based figure: those are rates over units,
 this is a rate over operator-authored units. Rev 16 puts a second, blind, independent labeller on all three sheets: coverage lands at 8.07% against 8.47%, and inter-labeller agreement is 1.00 on two buckets and 0.65 on the third. The single-labeller caveat is retired and replaced with a measured number, so the honest statement is now a pair, 8.07-8.47%; the rate is still withheld because citation precision is unmeasured. Rev 17 measures it: strict precision is 0.780 (46/59 judgeable), lenient 0.966, so the gate now fails on a number instead of on missing data, and the withheld rate has a stated reason rather than a pending one.**
 
-> **Current numbers, as of Rev 17.** Use these; every other figure in this file is the number
+> **Current numbers, as of Rev 18.** Use these; every other figure in this file is the number
 > published at the time of the section that made it, and §3f / §5 / §3i retain theirs for the record.
 >
 > | Quantity | Value |
@@ -49,7 +49,7 @@ this is a rate over operator-authored units. Rev 16 puts a second, blind, indepe
 > | Declared-speaker attribution, ask-cue bucket | **UNUSABLE — 100% operator by construction** |
 > | Ask-cue authorship | **86.7% operator speech** (52/60, 95% CI 75.8-93.1); the cited side is now labelled at 96.7%, so coverage of operator-authored units exists as an estimate |
 >
-> - **Coverage of operator-authored units: 8.07-8.47%** (first labeller 8.47% [6.4-11.1], second independent labeller 8.07% [6.1-10.5]; independent bounds, not a CI) -- still an estimate, not a published rate: citation precision is unmeasured. Inter-labeller agreement: kappa 1.00 on cited and ask-cue, 0.65 on the non-ask-cue bucket, 0.85 pooled. Citation precision is now measured: **0.780 strict / 0.966 lenient**, so the coverage pair is a ceiling-conditional estimate and the rate stays withheld (§3o).
+> - **Coverage of operator-authored units: 8.07-8.47%** (first labeller 8.47% [6.4-11.1], second independent labeller 8.07% [6.1-10.5]; independent bounds, not a CI) -- still an estimate, not a published rate: citation precision is unmeasured. Inter-labeller agreement: kappa 1.00 on cited and ask-cue, 0.65 on the non-ask-cue bucket, 0.85 pooled. Citation precision is now measured: **0.780 strict / 0.966 lenient**, so the coverage pair is a ceiling-conditional estimate and the rate stays withheld (§3o). A third blind reading then adjudicated the 12 inter-labeller disagreements and moves the estimate to 0.0788 [0.0591, 0.1022], 0.19 to 0.59 pp below the pair (§3p), with the gate decision unchanged.
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -70,6 +70,7 @@ this is a rate over operator-authored units. Rev 16 puts a second, blind, indepe
 | 15 | the cited side is **96.7% operator speech** (58/60, 95% CI 88.6-99.1), so with all three buckets measured the coverage of operator-authored units estimates at **8.47%** (range 6.4-11.1, independent bounds) | this is the first operator-intent figure in the verdict, and it is an **ESTIMATE with a range, not a published rate** — the operator's own gate is recall AND precision >= 0.9 and precision is unmeasured. The four unit-based figures (4.4% structural, 13.3% ask-cue semantic, 3.3% non-ask semantic, ~9.65% union) are unchanged: they are rates over units and this is a rate over operator-authored units |
 | 16 | a second **independent, blind** labeller on all three sheets puts coverage at **8.07%** (range 6.1-10.5), against the first labeller's 8.47%; inter-labeller kappa is **1.00** on the cited and ask-cue buckets and **0.65** on the non-ask-cue bucket (0.85 pooled) | not a retraction. It retires the single-labeller caveat and replaces it with a measured agreement number, and it widens the honest statement to **8.07-8.47%**. It does **not** publish a rate: citation precision is still `NOT_RUN`, both labellers are model labellers on one rubric, and the 12 non-ask-cue disagreements are listed rather than adjudicated |
 | 17 | "citation precision is unmeasured, so the coverage figure is an estimate" | — no number retracted. The measurement is now done and it *confirms* the withholding: strict precision 0.780 is below the 0.9 gate, and recall stays unmeasurable, so both halves of the gate fail on numbers. |
+| 18 | "the 12 non-ask disagreements are listed but unadjudicated" | nothing retracted. A third blind reading resolves 11 of 12 by majority of three; the estimate moves down to 0.0788 and the gate decision is unchanged. |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -1478,3 +1479,77 @@ envelope for intuition only.
 | `precision_scored.json` | machine-readable result: counts, both figures with intervals, per-channel and per-role splits, failure list, caveats | written by the script above |
 | `rate_gate.py` | evaluates the publication gate cell by cell and computes the decision and the derived envelope | `~/CodeProjects/temp/npenv/bin/python rate_gate.py` |
 | `rate_gate.json` | the gate record: recall `NOT_RUN`, strict precision `FAIL` at 0.7797, lenient `PASS`, channel coverage `PASS` at 2,229 + 23, quote fidelity `PASS` at 0.9708, decision `WITHHOLD_RATE_AND_FLOOR`, envelope, and what would change it | written by the script above |
+
+---
+
+## 3p. The 12 disagreements are adjudicated: the estimate moves to 0.0788, and the gate does not move
+
+The coverage denominator is not a raw count. It adds `cited x cited_share`, `uncited_ask_cue x ask_share`
+and `uncited_non_ask_cue x non_ask_share`, and the third term is the one nobody could defend: that is
+exactly the bucket where the two labellers disagreed on **12 of 60 rows**, which is what produced the
+`0.65` kappa in §3n. The published statement was therefore a pair, **8.07%** and **8.47%**, with the
+disagreement listed and unresolved. Rev 18 resolves it: a third blind reading moves the estimate to
+**0.0788 [0.0591, 0.1022]**, which is below both members of the pair.
+
+### The third reading
+
+The reader was blind: it saw the 12 rows and the rubric, and `adjudication_key.json` (which carries
+which labeller said what) was withheld from it. It labelled all 12 rows and never saw either earlier
+labeller's verdict. The scorer asserted its own reconciliation before emitting the new point, as
+`adjudication.json` records: the recomputed disagreement set (**12**) is identical to the recorded set
+(`sets_identical: true`), and **both baselines were reproduced** before the adjudicated point was
+written (`labeller_1` to 4 decimal places, `labeller_2` exactly). A third reading that quietly changed
+the earlier numbers would have been caught by that assertion.
+
+### Result
+
+| outcome | rows |
+|---|---:|
+| resolved to labeller 1 (majority of three) | 5 |
+| resolved to labeller 2 (majority of three) | 6 |
+| three-way split (idx `59`) | 1 |
+| **resolved by majority** | **11 of 12** |
+
+- **Bucket operator count, of 60:** labeller 1 = **23**, labeller 2 = **25**, majority of three = **26**.
+- **Range if the split row went the other way:** **26 to 27**.
+- **Adjudicated coverage = 0.0788**, range **[0.0591, 0.1022]** (independent bounds, not a CI).
+- **Movement against the published pair:** **0.59 pp below** labeller 1 and **0.19 pp below** labeller 2.
+  The third reading moves the estimate **down**, not up.
+
+### Why the majority is not just deference
+
+A majority of three can be three copies of one opinion. Here it is not: every one of the **7** operator
+determinations made by the third reader is endorsed by at least one of the earlier two, so **no row
+becomes operator on the third reader's word alone**. Remove the third reader and every resolved row
+still has a human-labelled-side supporter among the original pair. That is what makes "majority of three"
+a reconciliation rather than a tiebreak by seniority.
+
+### What it does to the gate
+
+Nothing. The decision stays `WITHHOLD_RATE_AND_FLOOR`, for the two reasons it was made: recall is
+`NOT_RUN` (the 98 harvest documents are lost, §3g) and strict citation precision is **0.7797**, below the
+`0.9` floor. Accuracy on the non-ask bucket cannot rescue a gate that fails on those two cells, so the
+adjudication is a better estimate of one denominator term and not a publication. `evidence/rate_gate.json`
+now carries `coverage_pair.l3_adjudicated_point` beside `l1_point` and `l2_point`, and the record is
+re-derivable with `rate_gate.py`.
+
+### What this does not do
+
+- It is a third reading on the same rubric by a model, not human ground truth.
+- One reader decided 11 of the 12 rows; only the split row has no majority at all.
+- The three bucket shares come from three separate `n=60` samples, so this is not a joint estimate.
+- It does not re-label the 48 rows the two labellers already agreed on, nor touch the cited or ask-cue
+  buckets, where agreement is exact.
+- The adjudicated point is reported alongside the pair, never instead of it: 8.07% and 8.47% remain the
+  two labeller figures, and `0.0788` is the reconciled reading.
+
+### Artifacts
+
+| artifact | what it is | reproduce (from this `evidence/` dir) |
+|---|---|---|
+| `make_adjudication_sheet.py` | isolates the 12 inter-labeller disagreements into a blind sheet and writes the withheld key | `~/CodeProjects/temp/npenv/bin/python make_adjudication_sheet.py` |
+| `adjudication_sheet.json` | the 12-row blind sheet the third reader saw, with no labeller identity attached | written by the script above |
+| `adjudication_key.json` | the withheld key: which labeller said what, withheld from the third reader | written by the same script |
+| `adjudication_labels.json` | the third reader's 12 verdicts, produced without the key | hand-labelled, not regenerable by script |
+| `adjudicate_disagreements.py` | reconciles the recorded disagreement set, reproduces both baselines, applies majority of three, recomputes coverage | `~/CodeProjects/temp/npenv/bin/python adjudicate_disagreements.py` |
+| `adjudication.json` | counts, both baselines, the reconciliation assertions, the adjudicated point and range, and the honest limits | written by the script above |

@@ -1,5 +1,5 @@
 {
- "generated_at_utc": "2026-11-12T21:34:24Z",
+ "generated_at_utc": "2026-11-12T21:56:18Z",
  "script": "rate_gate.py",
  "rules": {
   "publish_rate": "PUBLISH_RATE requires: recall measured AND recall >= 0.9 AND precision_strict >= 0.9.",
@@ -72,6 +72,12 @@
  "coverage_pair": {
   "l1_point": 0.0847,
   "l2_point": 0.0807,
+  "l3_adjudicated_point": 0.0788,
+  "l3_adjudicated_range": [
+   0.0591,
+   0.1022
+  ],
+  "l3_note": "a third blind reading resolved 11 of the 12 inter-labeller disagreements by majority of three, moving the non-ask operator count to 26 of 60. It is a third reading on the same rubric, not human ground truth, and it is reported alongside the pair, never instead of it",
   "l1_range": [
    0.0639,
    0.1109
