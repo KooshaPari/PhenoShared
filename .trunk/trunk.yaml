@@ -49,7 +49,7 @@ lint:
     - osv-scanner@2.7.1
     - oxipng@10.2.1
     - oxlint@1.93.0
-    - pinact@5.0.2
+    - pinact@4.0.0
     - prettier@3.9.10
     - renovate@44.223.1
     - ruff@0.17.4

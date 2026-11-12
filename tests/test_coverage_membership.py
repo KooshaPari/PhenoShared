@@ -105,7 +105,8 @@ class FakeWorkspace:
         self.workflow = self.root / "coverage.yml"
         self.ledger = self.root / "membership.toml"
         self.metadata.write_text(
-            json.dumps(metadata_document(self.root, packages)), encoding="utf-8")
+            json.dumps(metadata_document(self.root, packages)), encoding="utf-8"
+        )
         self.workflow.write_text(workflow_text(groups), encoding="utf-8")
         self.ledger.write_text(ledger, encoding="utf-8")
 
@@ -115,10 +116,14 @@ class FakeWorkspace:
     def run(self):
         """Run the guard against this workspace. Returns (exit code, output)."""
         argv = [
-            "--root", str(self.root),
-            "--metadata", str(self.metadata),
-            "--workflow", str(self.workflow),
-            "--ledger", str(self.ledger),
+            "--root",
+            str(self.root),
+            "--metadata",
+            str(self.metadata),
+            "--workflow",
+            str(self.workflow),
+            "--ledger",
+            str(self.ledger),
         ]
         out, err = io.StringIO(), io.StringIO()
         with redirect_stdout(out), redirect_stderr(err):
@@ -236,8 +241,9 @@ class MembershipGuardTests(unittest.TestCase):
             meta={"total_members": 1, "measured_members": 1, "excused_members": 0},
             excuses={},
         )
-        workspace.ledger.write_text("[meta]\nthis line has no equals sign\n",
-                                    encoding="utf-8")
+        workspace.ledger.write_text(
+            "[meta]\nthis line has no equals sign\n", encoding="utf-8"
+        )
         code, output = workspace.run()
         self.assertEqual(code, 1)
         self.assertIn("could not run", output)
@@ -271,11 +277,16 @@ class MembershipGuardTests(unittest.TestCase):
         """The real workspace passes: every member is measured or excused."""
         out, err = io.StringIO(), io.StringIO()
         with redirect_stdout(out), redirect_stderr(err):
-            code = membership.main([
-                "--root", str(REPO_ROOT),
-                "--workflow", str(REAL_WORKFLOW),
-                "--ledger", str(REAL_LEDGER),
-            ])
+            code = membership.main(
+                [
+                    "--root",
+                    str(REPO_ROOT),
+                    "--workflow",
+                    str(REAL_WORKFLOW),
+                    "--ledger",
+                    str(REAL_LEDGER),
+                ]
+            )
         output = out.getvalue() + err.getvalue()
         self.assertEqual(code, 0, output)
         self.assertIn("every workspace member", output)

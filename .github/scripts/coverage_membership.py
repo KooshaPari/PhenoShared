@@ -64,8 +64,15 @@ def load_metadata(root, metadata_path):
                 return json.load(fh)
         except (OSError, ValueError) as exc:
             raise MembershipError(f"{metadata_path}: cannot read metadata: {exc}")
-    command = ["cargo", "metadata", "--no-deps", "--format-version", "1",
-               "--manifest-path", os.path.join(root, "Cargo.toml")]
+    command = [
+        "cargo",
+        "metadata",
+        "--no-deps",
+        "--format-version",
+        "1",
+        "--manifest-path",
+        os.path.join(root, "Cargo.toml"),
+    ]
     # stdout and stderr must stay separate. cargo writes warnings and progress
     # to stderr, so merging the streams (stderr=STDOUT) prepends warning text to
     # the JSON document and turns a clean run into "Expecting value: line 1
@@ -80,13 +87,15 @@ def load_metadata(root, metadata_path):
     if completed.returncode != 0:
         detail = stderr or completed.stdout.decode("utf-8", "replace").strip()
         raise MembershipError(
-            f"cargo metadata failed ({completed.returncode}): {detail or '<no output>'}")
+            f"cargo metadata failed ({completed.returncode}): {detail or '<no output>'}"
+        )
     try:
         return json.loads(completed.stdout)
     except ValueError as exc:
         raise MembershipError(
             "cargo metadata produced invalid JSON: "
-            f"{exc}; stderr: {stderr or '<empty>'}")
+            f"{exc}; stderr: {stderr or '<empty>'}"
+        )
 
 
 def workspace_members(meta):
@@ -104,7 +113,7 @@ def workspace_members(meta):
         manifest, name = pkg.get("manifest_path"), pkg.get("name")
         if not manifest or not name:
             raise MembershipError("cargo metadata has a package without a name or path")
-        relative = manifest[len(root):] if manifest.startswith(root) else manifest
+        relative = manifest[len(root) :] if manifest.startswith(root) else manifest
         members[name] = relative.rsplit("/Cargo.toml", 1)[0]
     if not members:
         raise MembershipError("cargo metadata reports no workspace members")
@@ -135,21 +144,27 @@ def load_groups(workflow_path):
     include = matrix.get("include") if isinstance(matrix, dict) else None
     if not isinstance(include, list) or not include:
         raise MembershipError(
-            f"{workflow_path}: job '{GROUP_JOB}' has no strategy.matrix.include list")
+            f"{workflow_path}: job '{GROUP_JOB}' has no strategy.matrix.include list"
+        )
     groups = {}
     for entry in include:
         if not isinstance(entry, dict):
-            raise MembershipError(f"{workflow_path}: matrix entry is not a mapping: {entry!r}")
+            raise MembershipError(
+                f"{workflow_path}: matrix entry is not a mapping: {entry!r}"
+            )
         name, packages = entry.get("group"), entry.get("packages")
         if not isinstance(name, str) or not name.strip():
-            raise MembershipError(f"{workflow_path}: matrix entry has no group name: {entry!r}")
+            raise MembershipError(
+                f"{workflow_path}: matrix entry has no group name: {entry!r}"
+            )
         if isinstance(packages, str):
             owned = packages.split()
         elif isinstance(packages, list) and all(isinstance(p, str) for p in packages):
             owned = list(packages)
         else:
             raise MembershipError(
-                f"{workflow_path}: group '{name}' has an unreadable packages list: {packages!r}")
+                f"{workflow_path}: group '{name}' has an unreadable packages list: {packages!r}"
+            )
         if not owned:
             raise MembershipError(f"{workflow_path}: group '{name}' owns no packages")
         if name in groups:
@@ -212,7 +227,9 @@ def parse_ledger(path):
             continue
         if line.startswith("["):
             if not line.endswith("]"):
-                raise MembershipError(f"{path}:{index}: malformed section header: {raw}")
+                raise MembershipError(
+                    f"{path}:{index}: malformed section header: {raw}"
+                )
             section = line[1:-1].strip()
             if section not in LEDGER_SECTIONS:
                 raise MembershipError(f"{path}:{index}: unknown section [{section}]")
@@ -230,7 +247,8 @@ def parse_ledger(path):
         if value.startswith('"""'):
             if value != '"""':
                 raise MembershipError(
-                    f"{path}:{index}: multi-line string must open on its own line")
+                    f"{path}:{index}: multi-line string must open on its own line"
+                )
             text, index = _read_multiline(lines, index, path)
         elif value.startswith('"'):
             text = _read_quoted(value, path, index)
@@ -266,34 +284,48 @@ def check(members, groups, meta, excused, owner=None):
     owner = ownership(groups) if owner is None else owner
     for package, names in sorted(owner.items()):
         if package not in members:
-            problems.append(f"group(s) {', '.join(names)} list '{package}', which is not a workspace member")
+            problems.append(
+                f"group(s) {', '.join(names)} list '{package}', which is not a workspace member"
+            )
         if len(names) > 1:
-            problems.append(f"'{package}' is owned by {len(names)} groups ({', '.join(names)}); it would be counted twice")
+            problems.append(
+                f"'{package}' is owned by {len(names)} groups ({', '.join(names)}); it would be counted twice"
+            )
     for package in sorted(members):
         if owner.get(package):
             continue
         if package not in excused:
-            problems.append(f"member '{package}' ({members[package]}) is owned by no group and is not excused")
+            problems.append(
+                f"member '{package}' ({members[package]}) is owned by no group and is not excused"
+            )
         elif not excused[package].strip():
             problems.append(f"member '{package}' is excused with an empty reason")
     for package in sorted(excused):
         if package not in members:
-            problems.append(f"the ledger excuses '{package}', which is not a workspace member (stale)")
+            problems.append(
+                f"the ledger excuses '{package}', which is not a workspace member (stale)"
+            )
     measured = sum(1 for p in members if len(owner.get(p, [])) == 1)
     excused_count = sum(1 for p in members if not owner.get(p) and p in excused)
-    for key, actual in (("total_members", len(members)),
-                        ("measured_members", measured),
-                        ("excused_members", excused_count)):
+    for key, actual in (
+        ("total_members", len(members)),
+        ("measured_members", measured),
+        ("excused_members", excused_count),
+    ):
         if key not in meta:
             problems.append(f"the membership ledger [meta] is missing '{key}'")
             continue
         try:
             recorded = int(str(meta[key]).strip())
         except ValueError:
-            problems.append(f"the membership ledger [meta] '{key}' is not an integer: {meta[key]!r}")
+            problems.append(
+                f"the membership ledger [meta] '{key}' is not an integer: {meta[key]!r}"
+            )
             continue
         if recorded != actual:
-            problems.append(f"the membership ledger [meta] '{key}' says {recorded}, but the workspace has {actual}")
+            problems.append(
+                f"the membership ledger [meta] '{key}' says {recorded}, but the workspace has {actual}"
+            )
     return problems
 
 
@@ -309,8 +341,9 @@ def source_lines(root, package_dir):
             if not name.endswith(".rs"):
                 continue
             try:
-                with open(os.path.join(dirpath, name), encoding="utf-8",
-                          errors="replace") as fh:
+                with open(
+                    os.path.join(dirpath, name), encoding="utf-8", errors="replace"
+                ) as fh:
                     total += sum(1 for _ in fh)
             except OSError:
                 continue
@@ -322,18 +355,30 @@ def source_lines(root, package_dir):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--root", default=os.environ.get("GITHUB_WORKSPACE", "."),
-                        help="repository root (default: GITHUB_WORKSPACE or .)")
-    parser.add_argument("--metadata", default=None,
-                        help="cargo metadata JSON to read instead of running cargo "
-                             "metadata (default: run cargo metadata --no-deps)")
-    parser.add_argument("--workflow", default=None,
-                        help="coverage workflow holding the group package lists "
-                             f"(default: <root>/{DEFAULT_WORKFLOW})")
-    parser.add_argument("--ledger", default=None,
-                        help="membership ledger "
-                             f"(default: <root>/{DEFAULT_LEDGER})")
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--root",
+        default=os.environ.get("GITHUB_WORKSPACE", "."),
+        help="repository root (default: GITHUB_WORKSPACE or .)",
+    )
+    parser.add_argument(
+        "--metadata",
+        default=None,
+        help="cargo metadata JSON to read instead of running cargo "
+        "metadata (default: run cargo metadata --no-deps)",
+    )
+    parser.add_argument(
+        "--workflow",
+        default=None,
+        help="coverage workflow holding the group package lists "
+        f"(default: <root>/{DEFAULT_WORKFLOW})",
+    )
+    parser.add_argument(
+        "--ledger",
+        default=None,
+        help="membership ledger " f"(default: <root>/{DEFAULT_LEDGER})",
+    )
     args = parser.parse_args(argv)
     root = os.path.abspath(args.root)
     workflow = args.workflow or os.path.join(root, DEFAULT_WORKFLOW)
@@ -356,19 +401,25 @@ def main(argv=None):
     excused_lines = sum(source_lines(root, members[p]) for p in excused_members)
 
     print(f"workspace members:  {len(members)}")
-    print(f"coverage groups:     {len(groups)} "
-          f"({sum(len(g) for g in groups.values())} package entries)")
+    print(
+        f"coverage groups:     {len(groups)} "
+        f"({sum(len(g) for g in groups.values())} package entries)"
+    )
     print(f"measured:            {len(measured)} members owned by exactly one group")
     print(f"excused:             {len(excused_members)} members listed in {ledger}")
-    print(f"rust source lines:   {measured_lines} measured / {excused_lines} "
-          "excused (under each member's own package directory)")
+    print(
+        f"rust source lines:   {measured_lines} measured / {excused_lines} "
+        "excused (under each member's own package directory)"
+    )
     if problems:
         for problem in problems:
             print(f"::error::{problem}")
         print(f"\n{len(problems)} coverage membership problem(s).", file=sys.stderr)
         return 1
-    print("OK: every workspace member is measured by exactly one coverage group "
-          "or is excused with a reason.")
+    print(
+        "OK: every workspace member is measured by exactly one coverage group "
+        "or is excused with a reason."
+    )
     return 0
 
 
