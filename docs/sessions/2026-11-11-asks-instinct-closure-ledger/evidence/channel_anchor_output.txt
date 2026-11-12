@@ -1,0 +1,43 @@
+== tables ==
+  reg_answers            5417
+
+== reg_utterances shape ==
+  roles: {'assistant': 5417, 'user': 2625}
+  conversations: 3
+  sessions: 141
+  exact_body: {0: 5, 1: 8037}
+  conv id: chatdb
+  conv id: phoneconv-01M3D10S1REWYKC27825RK0JDT
+  conv id: phoneconv-01M5E89QP154YYM60H1H4CQZ6K
+  ts form: Friday, October 09, 2026, 06:03:06 AM UTC
+
+  user messages=2625 distinct=2367 substantive(>=12)=2075
+
+== anchoring (denominator = 2259 non-empty quotes) ==
+  exact user utterance   : 1506 (66.7%)
+  substring of utterance : 729 (32.3%)
+  ANCHORED               : 2235 (98.9%)
+  unanchored             : 24 (1.1%)
+
+== own-channel capture (denominator = 2075 substantive utterances) ==
+  cited by a >=12-char quote : 1733 (83.5%)
+  uncited                              : 342 (16.5%)
+
+== 12 sampled uncited (to estimate how many are real asks) ==
+  - not home to do
+  - that are assistants vs chats
+  - one of the agents
+  - redacted otp 6digit
+  - too many keys will do later
+  - disc tap done
+  - desk rebooted
+  - relay fail on top of id subject line and content content maybe trunc would be good to put in the err email i can t easily track id
+  - or dots specifically
+  - what github ops i mean as git itself i assume is never dealing w this
+  - was the name
+  - didn t see this 135k la sd chic seattle bay needs to make me rich to deal w that bs hybrid is my main pref roles on or between swe prod mgmt i love cl
+
+== ask -> message link ==
+  reg_ask_messages distinct asks: 2252 of 2259
+  relation values: {'origin': 2252}
+  reg_provenance.method: {'no-source-body-available': 7, 'relinked:alnum_exact:1.0': 45, 'relinked:contained:1.0': 741, 'relinked:exact:1.0': 1456, 'relinked:token_overlap:0.8': 1, 'relinked:token_overlap:0.875': 2, 'relinked:token_overlap:0.9': 1, 'relinked:token_overlap:1.0': 6}

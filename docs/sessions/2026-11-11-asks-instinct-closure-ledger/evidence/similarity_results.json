@@ -1,0 +1,386 @@
+{
+ "summary": {
+  "method": "token-level TF-IDF cosine, best match over distinct corpus intents",
+  "labelled_as": "distributional-lexical, NOT semantic",
+  "corpus_distinct_intents": 8506,
+  "register_distinct_entries": 2255,
+  "score_histogram": {
+   ">=0.0": 2255,
+   ">=0.1": 2250,
+   ">=0.2": 1957,
+   ">=0.3": 1257,
+   ">=0.4": 712,
+   ">=0.5": 380,
+   ">=0.6": 206,
+   ">=0.7": 123,
+   ">=0.8": 50,
+   ">=0.9": 22
+  },
+  "score_median": 0.3188,
+  "score_p90": 0.5899,
+  "score_max": 1.0
+ },
+ "note": "full results trimmed for repo size; regenerate with measure_similarity.py",
+ "high_band_sample": [
+  {
+   "asked_at": "Friday, September 25, 2026, 12:42:17 PM PDT",
+   "ask": "restrict access to private and account-connected sources so they are only read on koosha's explicit ask",
+   "quote": "yes to only look on explicit ask",
+   "score_ask": 0.2744,
+   "score_quote": 0.7403,
+   "score": 0.7403,
+   "corpus_match": "look at this"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 12:51:58 PM PDT",
+   "ask": "exclude personal data and personal conversations from assistant processing for now",
+   "quote": "all personal data and cons for now",
+   "score_ask": 0.1631,
+   "score_quote": 0.5356,
+   "score": 0.5356,
+   "corpus_match": "type pros\\cons for each too"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:04:48 PM PDT",
+   "ask": "widen and deepen the research baseline beyond what was delivered",
+   "quote": "good baseline but i'd go both wider and deeper",
+   "score_ask": 0.3352,
+   "score_quote": 0.5087,
+   "score": 0.5087,
+   "corpus_match": "deeper\\wider audit of downalods"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:05:36 PM PDT",
+   "ask": "use a valid-justification-plus-approval path (or a real integration) for any private or account-connected source access",
+   "quote": "you just need valid justifications + my approval and or the actual integration",
+   "score_ask": 0.5205,
+   "score_quote": 0.2157,
+   "score": 0.5205,
+   "corpus_match": "do all of that and guide me on private repo access"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:09:02 PM PDT",
+   "ask": "proceed with execution of the three approved pilots",
+   "quote": "sure for the 3",
+   "score_ask": 0.4189,
+   "score_quote": 0.0,
+   "score": 0.4189,
+   "corpus_match": "all of it proceed"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:11:05 PM PDT",
+   "ask": "proceed with establishing the account connection/integration",
+   "quote": "we can do the conn",
+   "score_ask": 0.4166,
+   "score_quote": 0.3828,
+   "score": 0.4166,
+   "corpus_match": "all of it proceed"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:16:31 PM PDT",
+   "ask": "verify whether the substrate repo still exists or was folded into the phenoai/phenoshared repo",
+   "quote": "does substrate still exist? iirc w folded it into phenoshared repo",
+   "score_ask": 0.2917,
+   "score_quote": 0.4304,
+   "score": 0.4304,
+   "corpus_match": "still others iirc, double check"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:33:01 PM PDT",
+   "ask": "use a sign-in-based flow rather than raw credentials when the agent gains access to koosha's accounts",
+   "quote": "sign in would be fine",
+   "score_ask": 0.157,
+   "score_quote": 0.4534,
+   "score": 0.4534,
+   "corpus_match": "open browser sign in in ff"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:39:04 PM PDT",
+   "ask": "weight new-build affordable developments heavily in the housing shortlist",
+   "quote": "new affordable devs considerable",
+   "score_ask": 0.3267,
+   "score_quote": 0.6901,
+   "score": 0.6901,
+   "corpus_match": "small individual devs"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:49:48 PM PDT",
+   "ask": "provide the requirements for the requested access and setup work",
+   "quote": "no, give req",
+   "score_ask": 0.4367,
+   "score_quote": 0.3653,
+   "score": 0.4367,
+   "corpus_match": "for all others provide mcq or clear provide [x"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 1:55:04 PM PDT",
+   "ask": "notify koosha as soon as 2fa is enabled on the account",
+   "quote": "updated, you will get 2fa, lmk asap",
+   "score_ask": 0.1292,
+   "score_quote": 0.5323,
+   "score": 0.5323,
+   "corpus_match": "do it all now asap"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 2:51:01 PM PDT",
+   "ask": "apply to jobs on koosha's behalf",
+   "quote": "can you *apply* to jobs on my behalf",
+   "score_ask": 0.3576,
+   "score_quote": 0.4645,
+   "score": 0.4645,
+   "corpus_match": "never delete, you can only tombstone and ask me to delete on your behalf"
+  },
+  {
+   "asked_at": "Friday, September 25, 2026, 2:51:01 PM PDT",
+   "ask": "connect and authorize koosha's simplify jobs premium account for the agent",
+   "quote": "can connect my simplify jobs premium acct too",
+   "score_ask": 0.4125,
+   "score_quote": 0.2838,
+   "score": 0.4125,
+   "corpus_match": "authorize and do all"
+  },
+  {
+   "asked_at": "[Saturday, September 26, 2026, 12:36:30 AM PDT]",
+   "ask": "provide a status summary of all other open/in-flight work items",
+   "quote": "state of other things",
+   "score_ask": 0.5456,
+   "score_quote": 0.7784,
+   "score": 0.7784,
+   "corpus_match": "state of that work"
+  },
+  {
+   "asked_at": "[Sunday, September 27, 2026, 10:42:45 AM PDT]",
+   "ask": "authorize the assistant to send the pending message using the \"addy\" send-as address",
+   "quote": "ok to send from your addy",
+   "score_ask": 0.5006,
+   "score_quote": 0.4277,
+   "score": 0.5006,
+   "corpus_match": "authorize and do all"
+  },
+  {
+   "asked_at": "Monday, September 28, 2026, 3:54:59 AM PDT",
+   "ask": "triage first before expanding scope",
+   "quote": "triiage first",
+   "score_ask": 0.2307,
+   "score_quote": 0.4906,
+   "score": 0.4906,
+   "corpus_match": "first prompt in session"
+  },
+  {
+   "asked_at": "[Tuesday, September 29, 2026, 7:05:38 AM PDT]",
+   "ask": "enumerate and return koosha's other outstanding work asks so they can be tracked",
+   "quote": "my other asks",
+   "score_ask": 0.1738,
+   "score_quote": 0.4092,
+   "score": 0.4092,
+   "corpus_match": "print mcq or user asks"
+  },
+  {
+   "asked_at": "[Wednesday, September 30, 2026, 10:27:12 PM PDT]",
+   "ask": "retry the sso sign-in flow",
+   "quote": "retry sso",
+   "score_ask": 0.3064,
+   "score_quote": 0.4488,
+   "score": 0.4488,
+   "corpus_match": "you should do all yourself, run vercel login ill finish the sso"
+  },
+  {
+   "asked_at": "Monday, October 5, 2026, 11:16:23 PM PDT",
+   "ask": "attempt the mailbox login through the snappymail webmail endpoint",
+   "quote": "https://snappymail.porkbun.com",
+   "score_ask": 0.3158,
+   "score_quote": 1.0,
+   "score": 1.0,
+   "corpus_match": "https://snappymail.porkbun.com"
+  },
+  {
+   "asked_at": "Monday, October 5, 2026, 11:26:45 PM PDT",
+   "ask": "add the ishaan jaffer oct 12 litellm research call to koosha's calendar",
+   "quote": "put on my cal",
+   "score_ask": 0.1376,
+   "score_quote": 0.5615,
+   "score": 0.5615,
+   "corpus_match": "cal 3--6 agents"
+  },
+  {
+   "asked_at": "Monday, October 5, 2026, 11:48:01 PM PDT",
+   "ask": "forward the siavosh email to koosha's own gmail",
+   "quote": "fwd\\ send to self agian the siavosh email to my gmail",
+   "score_ask": 0.2517,
+   "score_quote": 0.4154,
+   "score": 0.4154,
+   "corpus_match": "proc open it agian"
+  },
+  {
+   "asked_at": "Monday, October 5, 2026, 11:50:53 PM PDT",
+   "ask": "provide a working link for the clear inbox",
+   "quote": "hand me a link to open clear",
+   "score_ask": 0.5558,
+   "score_quote": 0.3039,
+   "score": 0.5558,
+   "corpus_match": "for all others provide mcq or clear provide [x"
+  },
+  {
+   "asked_at": "Monday, October 5, 2026, 11:53:53 PM PDT",
+   "ask": "clarify that the vault link's passphrase is the mailbox password and use it to unlock the mailbox",
+   "quote": "so wdym needs working mailbox password, that vault link\u2019s pass is the mailbox pass",
+   "score_ask": 0.2317,
+   "score_quote": 0.4398,
+   "score": 0.4398,
+   "corpus_match": "wdym which tool"
+  },
+  {
+   "asked_at": "Tuesday, October 6, 2026, 11:43:39 AM PDT",
+   "ask": "host the pull request in the phenoshared repo under the kooshapari account as the home for scratch projects",
+   "quote": "pr is on pheno shared? i think thays the best home for scratch projs",
+   "score_ask": 0.3329,
+   "score_quote": 0.4098,
+   "score": 0.4098,
+   "corpus_match": "whats needed from me? work on all gaps and finish\\polish all projs"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:08:56 AM PDT]",
+   "ask": "research the web for a solution to the reply-forwarding problem",
+   "quote": "research web for a solution",
+   "score_ask": 0.3681,
+   "score_quote": 0.43,
+   "score": 0.43,
+   "corpus_match": "use web research for toolng"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:09:08 AM PDT]",
+   "ask": "evaluate whether the resend api can also serve the outbound email path",
+   "quote": "resend api also",
+   "score_ask": 0.2947,
+   "score_quote": 0.6337,
+   "score": 0.6337,
+   "corpus_match": "resend is logged on"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:12:55 AM PDT]",
+   "ask": "compare a hybrid of options 1/2/3 (some or all) against picking only option 2 or only option 3",
+   "quote": "hybrid of 1\\2\\3 (some or all) vs either of 2 or 3",
+   "score_ask": 0.1159,
+   "score_quote": 0.4236,
+   "score": 0.4236,
+   "corpus_match": "no opencode-go either"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:13:30 AM PDT]",
+   "ask": "write clearer pros and cons for the 2+3 hybrid versus option 2 alone",
+   "quote": "clearer 2+3 vs 2 pro cons",
+   "score_ask": 0.5955,
+   "score_quote": 0.3247,
+   "score": 0.5955,
+   "corpus_match": "type pros\\cons for each too"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:14:40 AM PDT]",
+   "ask": "switch the email delivery provider from resend to gsso",
+   "quote": "resend -> gsso",
+   "score_ask": 0.2931,
+   "score_quote": 0.4142,
+   "score": 0.4142,
+   "corpus_match": "resend is logged on"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:20:24 AM PDT]",
+   "ask": "remove atoms.tech from the job-application target list",
+   "quote": "remove atoms.tech from it",
+   "score_ask": 0.5148,
+   "score_quote": 0.5753,
+   "score": 0.5753,
+   "corpus_match": "atoms.tech -> zz-pause-ref"
+  },
+  {
+   "asked_at": "Tuesday, October 6, 2026, 12:26:06 PM PDT",
+   "ask": "perform the merge directly and resolve the bot review comments",
+   "quote": "do the merge urself too resolve bot review cmmts",
+   "score_ask": 0.2325,
+   "score_quote": 0.5965,
+   "score": 0.5965,
+   "corpus_match": "a guide me, b do urself 3 do"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:29:54 AM PDT]",
+   "ask": "proceed with the worker-based approach including the marker additions",
+   "quote": "sure worker, marker adds ok",
+   "score_ask": 0.4153,
+   "score_quote": 0.1655,
+   "score": 0.4153,
+   "corpus_match": "all of it proceed"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:56:09 AM PDT]",
+   "ask": "provide a current state/status update on the work",
+   "quote": "state update",
+   "score_ask": 0.6113,
+   "score_quote": 0.4769,
+   "score": 0.6113,
+   "corpus_match": "for all others provide mcq or clear provide [x"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 12:56:32 AM PDT]",
+   "ask": "walk through the wait steps in the job pipeline",
+   "quote": "wall me thru the waits",
+   "score_ask": 0.5279,
+   "score_quote": 0.4724,
+   "score": 0.5279,
+   "corpus_match": "walk me through session"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 1:13:13 AM PDT]",
+   "ask": "confirm whether the send queue retries failed items and whether a retry setup time/backoff is applied",
+   "quote": "queue w retry setup time",
+   "score_ask": 0.3165,
+   "score_quote": 0.4958,
+   "score": 0.4958,
+   "corpus_match": "queue the builds"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 1:54:08 AM PDT]",
+   "ask": "provide the overall status of the job pipeline",
+   "quote": "back to your job pipeline generally, state",
+   "score_ask": 0.4211,
+   "score_quote": 0.2735,
+   "score": 0.4211,
+   "corpus_match": "overall state of the project"
+  },
+  {
+   "asked_at": "[Tuesday, October 6, 2026, 2:00:40 AM PDT]",
+   "ask": "set the compensation floor for accepting a job",
+   "quote": "floor for taking yes",
+   "score_ask": 0.1937,
+   "score_quote": 0.5862,
+   "score": 0.5862,
+   "corpus_match": "why is it taking so long"
+  },
+  {
+   "asked_at": "Wednesday, October 7, 2026, 1:16:35 PM PDT",
+   "ask": "make the assistant's app obtainable/distributable via app store or testflight since it is not discoverable",
+   "quote": "what app? i don\u2019t see it on the app store",
+   "score_ask": 0.2124,
+   "score_quote": 0.5516,
+   "score": 0.5516,
+   "corpus_match": "state of desktop app? i dont see a .app yet"
+  },
+  {
+   "asked_at": "Wednesday, October 7, 2026, 1:24:45 PM PDT",
+   "ask": "scrape all pheno-prefixed repos and inventory what already exists as org-level resources",
+   "quote": "scrape through all the pheno prefixed repos first and grasp what we have as a org level resource",
+   "score_ask": 0.4388,
+   "score_quote": 0.2985,
+   "score": 0.4388,
+   "corpus_match": "did you prompt scrape to validate"
+  },
+  {
+   "asked_at": "Wednesday, October 7, 2026, 1:38:49 PM PDT",
+   "ask": "scrape the job-related repos on github as additional job-board sources",
+   "quote": "there are job repos on github that should be scraped too",
+   "score_ask": 0.521,
+   "score_quote": 0.2334,
+   "score": 0.521,
+   "corpus_match": "did you prompt scrape to validate"
+  }
+ ]
+}

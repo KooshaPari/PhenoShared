@@ -1,6 +1,18 @@
 # Coverage Verdict — is the 2,259-ask register a complete capture of operator intent?
 
-Recorded (UTC): `2026-11-11T13:00Z`
+Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T02:30Z` (channel-scope correction, §3b).
+
+**Revision history — this file has been wrong three times and each time in the same direction
+(stating a confident provenance claim from an incomplete measurement).**
+
+| Rev | Claim | What was wrong |
+|---|---|---|
+| 1 | "at most 23%" | counted raw strings, 31.8% of which were harness text |
+| 2 | "39-43% coverage" | a volume ratio between different text populations, not coverage |
+| 3 | "the register is a synthesis, not an extraction" | measured the paraphrase field against the wrong corpus; the register's source channel is phone chat, and 98.9% of its quotes anchor verbatim there |
+
+Rev 4 (this one) is derived from the register's own provenance tables rather than from overlap with a
+corpus chosen by me.
 
 **This file answers one question only.** It does not propose a migration, does not compute a
 coverage percentage, and does not treat activity as evidence. Every cell below cites the
@@ -10,32 +22,50 @@ measurement it rests on. Cells that were not measured say `UNKNOWN` or `NOT_RUN`
 
 ## 1. The answer
 
-**No. The register is not a complete capture of operator intent, and it cannot be made one by
-inspection alone.** This is a structural finding, not a shortfall of a few percent:
+**No. The register is not a complete capture of operator intent, and the reason is channel scope,
+not fabrication.** Data can be read two levels down here and the two levels disagree, which is why
+this section was rewritten twice:
 
-> **The register does not contain operator utterances.** Its 2,259 `ask` entries are third-person
-> paraphrases synthesized from 98 markdown session documents; the verbatim `quote` field is the only
-> raw anchor, and it matches the harness corpus at **0.3% exact and 16.7% by substring**. Lexical
-> coverage is therefore **~0.3-16.7%** depending on the matching rule, and **semantic coverage is
-> unmeasured**.
->
-> The **39-43%** figure stated earlier is a **volume ratio** (2,259 entries vs 5,216-5,799 corpus
-> intents), **not a coverage measurement**, and is relabelled as such below. It was wrong to read it
-> as coverage, because it assumes both sides were drawn from the same text population. They were not.
+| Reading | `ask` field | `quote` field |
+|---|---|---|
+| what it is | LLM interpretation, third person | operator's verbatim text |
+| distinct entries | 2,255 (4 dupes in 2,259) | 2,132 |
+| anchored in the register's own message store | n/a | **2,235 of 2,259 (98.9%)** |
+| overlaps the mined harness corpus | 0.0% | 16.7% substring |
 
-**Two corrections, same day, both mine.**
+> **The register is a verbatim extraction from a phone-chat archive that this project never mined.**
+> `reg_utterances` holds 8,042 messages across 3 `phoneconv-<ULID>` conversations in 141 sessions,
+> with the operator's real typos intact, and 2,252 asks are explicitly linked to a source message via
+> `reg_ask_messages.relation = 'origin'`. So the register is real operator text, and my earlier
+> "synthesis, not extraction" verdict is **retracted**.
 
-1. This file first said "at most 23%" from 9,802 distinct strings. That was wrong in the pessimistic
-   direction: 9,802 counted raw strings, 31.8% of them harness-generated text that `is_injected`
-   missed. Intent clustering gave 5,216-5,799, i.e. 39-43% — which itself then had to be demoted from
-   "coverage" to "volume ratio" once the overlap was actually measured.
-2. The codex distinct non-injected count is **399, not 405**. The 405 came from a worker report whose
-   `is_injected` field was never persisted into the artifact, so it was not reproducible. 399 is
-   recomputed from the committed file and can be re-run by anyone.
+**Where the shortfall actually is.** Channels, not percentages:
 
-Each correction moved the number *down* in confidence while leaving the conclusion intact: the
-register is not an evidenced capture of operator intent. That conclusion now rests on measurement
-rather than on a ratio.
+| Channel | Distinct substantive intents | Register captures |
+|---|---:|---|
+| Phone chat (the register's own source) | 2,075 | 1,733 cited (83.5%), ~87% after sampling misses |
+| jcode + codex harness | 5,799 cleaned (of 8,506 distinct) | 357 (16.7%, substring) |
+| iMessage | 911 (`DEDUPED_INPUT`) | not measured |
+| KCode | 196 (`DEDUPED_INPUT`) | not measured |
+
+> The register is roughly an **87%-complete capture of one channel** and at most a **16.7% capture of
+> another**. Coverage of the union is `UNKNOWN` until all channels are mined and the cross-channel
+> overlap is measured rather than assumed. The 39-43% figure below is a **volume ratio**, not coverage.
+
+**Three corrections, same day, all mine.** Each moved confidence down while the conclusion held.
+
+1. "At most 23%" came from 9,802 raw strings. Wrong in the pessimistic direction: 31.8% of those were
+   harness text that `is_injected` missed. Intent clustering gave 5,216-5,799, i.e. 39-43%.
+2. That 39-43% then had to be demoted from "coverage" to "volume ratio" once overlap was measured,
+   because it assumed both sides came from the same text population.
+3. "The register is synthesized, not extracted" was **wrong**. I measured the `ask` paraphrase against
+   the harness corpus, got 0% overlap, and drew a provenance conclusion from it. Reading
+   `reg_ask_messages` and `reg_utterances` first would have shown the register's source channel is not
+   the harness at all. **Zero lexical overlap is not evidence of fabrication until channel scope is
+   established.**
+4. The codex distinct non-injected count is **399, not 405**. The 405 came from a worker report whose
+   `is_injected` field was never persisted into the artifact. 399 is recomputed from the committed
+   file.
 
 The previously circulated figure of 2% coverage is **withdrawn**. It was not derived from a query
 that anyone can reproduce, and its numerator and denominator were both post-dedupe counts.
@@ -60,21 +90,29 @@ Coverage of operator intent by the 2,259-ask register
 │   └── Duplicate suppression at the *intent* level ......... PARTIAL (§3a collapses the corpus the
 │                                                                   same way the register never was)
 ├── Register integrity
-│   ├── source_ref paths resolve ............................ FAIL  (0 of 98)
+│   ├── source_ref paths resolve ............................ FAIL  (0 of 98; src values are harvest
+│   │                                                               docs named MonthDYYYY-NN.md)
 │   ├── Suspect links resolved ............................. FAIL  (118 open; ASK-000013 confirmed wrong)
-│   ├── Unpromoted user utterances ......................... UNVERIFIED (805 was from an audit that
-│                                                                   missed reg_utterances; 8,042 rows exist)
-│   ├── Sourceless asks .................................... FAIL  (7)
+│   ├── Ask -> source message link ......................... PASS  (reg_ask_messages 2,252 of 2,259,
+│   │                                                               relation='origin' for all 2,252; §3b)
+│   ├── Utterance store present ............................ PASS  (reg_utterances 8,042; the earlier
+│   │                                                               "no user_utterances table" was a
+│   │                                                               name mismatch, not an absence)
+│   ├── Unpromoted user utterances ......................... UNVERIFIED (805 came from the audit that
+│   │                                                               missed reg_utterances)
+│   └── Sourceless asks .................................... FAIL  (7)
+├── Register vs channel overlap
+│   ├── Quote anchored in own message store ............... PASS  (2,235 of 2,259 = 98.9%; §3b)
+│   ├── Own-channel utterance capture .................... PARTIAL (1,733 of 2,075 substantive = 83.5%;
+│   │                                                               ~87% after sampling 342 uncited)
+│   ├── Harness-channel capture (substring) ............... PASS  (357 = 16.7% of 2,132)
+│   ├── Harness-channel capture (distributional-lexical) .. REJECTED (high band 0/12 true positives;
+│   │                                                               not a usable estimator; §3b)
 │   ├── Harness join possible .............................. FAIL  (reg_provenance.source is
-│                                                                   register.json for 2259/2259; all 2,259
-│                                                                   register src values are .md, not harness)
-├── Register vs corpus overlap
-│   ├── Lexical overlap measured on the `quote` anchor ..... PASS  (0.3% exact, 0.4% prefix-40,
-│                                                                   16.7% substring; §3b)
-│   ├── Lexical overlap measured on the `ask` field ........ PASS  (0.0% all three rules; §3b)
-│   ├── Register text shown to be non-verbatim ............ PASS  (fingerprint: 4 dupes in 2,259,
-│                                                                   1 harness artifact, 3rd person)
-│   └── Semantic coverage ................................. NOT_RUN (now the ONLY valid route)
+│   │                                                               register.json for 2259/2259; the register
+│   │                                                               never joined the harness)
+│   └── Union coverage across all channels ................ UNKNOWN (needs imessage + kcode mined and
+│                                                                   cross-channel overlap measured)
 └── External channels
     ├── Google Takeout (Gemini) ............................ BLOCKED (0 of 68 products selected)
     ├── OpenAI conversations.json ......................... BLOCKED (identity verification)
@@ -158,51 +196,113 @@ many distinct intents as the register has entries".
 
 ---
 
-## 3b. Measured overlap: the register is a synthesis, not an extraction
+## 3b. Channel scope: the register is a verbatim extraction from a channel we did not mine
 
-Register store: `~/CodeProjects/Phenotype/repos/phenotype-registry/asks-ledger/register.json`
-(2,259 records, all `src` values are `.md` files, 98 distinct). Projection `ledger.db` holds
-`reg_asks` 2,259, `reg_utterances` **8,042**, `reg_ask_messages` 2,252, `reg_answers` 5,417.
+**This section retracts an earlier verdict published in this same file.** The previous version of
+~3b concluded the register was "a synthesis, not an extraction" because its text did not match the
+harness corpus. That conclusion was wrong, and the error was mine: I treated zero lexical overlap as
+evidence of fabrication when it was evidence that I had compared the register against the wrong
+channel. The artifact itself carries the provenance tables needed to check this, and I did not read
+them before publishing the claim.
 
-**The audit finding "no user_utterances table exists" is wrong.** `reg_utterances` exists with 8,042
-rows and is the utterance store; the audit searched for the name `user_utterances` and missed it.
-There is still no table named `occurrence` or `occurrence_attribution`, so those two NOT_RUN marks
-stand, but the "no utterance store" claim does not.
+### What the register's own provenance says
 
-Running the register through the identical normalization used on the corpus, then matching:
+`ledger.db` holds the join the earlier audit declared missing:
 
-| Register field | Distinct | exact match | 40-char prefix | substring in a corpus turn |
-|---|---:|---:|---:|---:|
-| `ask` (synthesized paraphrase) | 2,255 | **0** (0.0%) | **0** (0.0%) | 1 (0.04%) |
-| `quote` (verbatim anchor) | 2,132 | **6** (0.3%) | **8** (0.4%) | **357** (16.7%) |
+| Table | Rows | What it is |
+|---|---:|---|
+| `reg_utterances` | 8,042 | the verbatim message store: `role`, `ts`, `body`, `body_sha256`, `exact_body` |
+| `reg_ask_messages` | 2,252 | ask -> message link, `relation = 'origin'` for 2,252 of 2,252 |
+| `reg_sessions` | 141 | sessions derived by `time-gap:45m` over 3 conversations |
+| `reg_provenance` | 2,259 | per-ask `source_ref` plus `method` such as `relinked:exact:1.0` |
 
-Zero overlap on `ask` was verified three independent ways (exact, prefix-40, and full substring
-search over the lowercased corpus), so it is not a matcher artifact.
+`reg_utterances` is **not** harness data. It is 8,042 messages across exactly 3 conversations:
 
-### Why: the register is generated text
+| conversation_id | messages | user | register quotes anchored here |
+|---|---:|---:|---:|
+| `phoneconv-01M3D10S1REWYKC27825RK0JDT` | 6,616 | 2,269 | 1,891 |
+| `phoneconv-01M5E89QP154YYM60H1H4CQZ6K` | 1,403 | 333 | 394 |
+| `chatdb` (an iMessage store) | 23 | 23 | 49 |
+| unanchored anywhere | — | — | 24 |
 
-| Fingerprint | Register | Raw harness corpus |
+Counts exceed 2,259 because a few quotes appear in more than one conversation. Timestamps are in UI
+form (`Friday, October 09, 2026, 06:03:06 AM UTC`), bodies keep the operator's real typos
+(`"Now you're going to need you to sell yourself."`, `"br8jt up infisical yab"`), and
+`exact_body = 1` for 8,037 of 8,042 rows. The register spans 38 distinct days,
+`2026-09-25` to `2026-11-04`.
+
+The builder also recorded how it linked each ask, in `reg_provenance.method`:
+`relinked:exact:1.0` 1,456, `relinked:contained:1.0` 741, `relinked:alnum_exact:1.0` 45,
+`relinked:token_overlap:0.8-1.0` 10, and `no-source-body-available` **7**. Those 7 are the same 7
+"sourceless asks" reported as a bare `FAIL` elsewhere; the defect is real but it is documented at
+source, not concealed.
+
+### The anchoring test
+
+Matching each register `quote` against the 2,620 user message bodies:
+
+| Result | Count | Share |
+|---|---:|---:|
+| quote is an **exact** user utterance (normalized) | 1,506 | 66.7% |
+| quote is a **substring** of a user utterance (mid-message excerpt) | 729 | 32.3% |
+| **anchored verbatim** | **2,235** | **98.9%** |
+| unanchored | 24 | 1.1% |
+
+The 24 unanchored are visibly real harvest text carrying literal `\n` and URL-encoded filenames, so
+they are harvest artifacts rather than invented entries.
+
+### Channel coverage, measured per channel
+
+| Channel | Distinct substantive intents | Register captures | Verdict |
+|---|---:|---|---|
+| **Phone chat** (the register's own source) | 2,075 | 1,733 cited (83.5%); ~87% after sampling misses | good, not complete |
+| **jcode + codex harness** | 5,799 cleaned (of 8,506 distinct) | 357 (16.7%, substring) | poor |
+| iMessage | 911 (mined, `DEDUPED_INPUT`) | unknown | not measured |
+| KCode | 196 (mined, `DEDUPED_INPUT`) | unknown | not measured |
+
+Phone-chat collapse: 2,620 messages -> 2,367 distinct strings -> 2,075 substantive (>=12 chars), and
+the collapse is a no-op there (exact, prefix-40, and Jaccard-0.8 all return 2,075). Of the 342
+uncited substantive utterances (16.5%), a random sample of 16 contained 3-4 genuine asks and the rest
+were conversational fragments (`"was the name"`, `"and processes"`, `"desk rebooted"`), giving roughly
+87% utterance-level capture of the register's own channel.
+
+### Why the earlier fingerprint reasoning misfired
+
+The signals I read as "synthesized" are real but they describe the `ask` field, not the register as a
+whole. `ask` holds an LLM interpretation (third person, deduplicated, near-zero harness noise);
+`quote` holds the operator's verbatim text. `build-asks.py` states the mapping explicitly:
+`original_text` <- `quote`, `interpretation` <- `ask`. I measured the paraphrase and drew a
+conclusion about the archive.
+
+The `.md` `src` values are consistent with this too: they are harvest documents named
+`MonthDYYYY-NN.md` (for example `September252026-01.md`, `October82026-02.md`), one per day-part, and
+they are not on disk in the registry repo, which is why 0 of 98 resolve.
+
+### Distributional similarity, tested and rejected
+
+Before reading the provenance tables I built a token-level TF-IDF cosine matcher (no ML stack is
+installed: no numpy, no torch, no ollama) over the 8,506 harness intents, to avoid relying on exact
+matching. It scored a median of 0.32 and put 712 entries at >= 0.40. **The high band is
+false-positive dominated: 0 of 12 sampled high-band pairs are the same intent.** They share
+vocabulary, not meaning:
+
+| Register | Corpus match | Same intent? |
 |---|---|---|
-| duplicate rate | 2,259 entries → 2,255 distinct (4 dupes) | 2.2-3.6x repeats |
-| harness-generated share | **1** of 2,259 (`auto_nudge`) | **31.8%** of distinct strings |
-| phrasing | 134 asks say "koosha"/"the operator", only 10 use first person | near-100% first person |
-| source | 98 `.md` session documents | harness session stores |
+| "why is paperclip mac only" | "state of mac works" | no |
+| "switch infisical to a bright/light theme" | "infisical has the creds" | no |
+| "stop directly dispatching or managing chats" | "manage the chats" | no |
 
-Uniform third-person phrasing, a 4-in-2,259 duplicate rate, and near-zero harness noise are the
-fingerprint of **summarization**, not of extraction. Raw operator typing in this same corpus is
-first-person, 31.8% harness noise, and repeats 2-4x. The register has none of those properties.
+So distributional-lexical scoring is **not** a usable coverage estimator here, and it is recorded as
+a negative result rather than a number.
 
-**What this establishes, and what it does not.** It is *measured* that the register's text does not
-match the harness corpus, and that its statistical fingerprint is synthetic. It is **UNKNOWN**
-whether the entries were LLM-summarized from the 98 markdown docs, hand-written, or lifted from a
-channel not yet mined (ChatGPT/Dot/Gemini exports remain `BLOCKED` or `NOT_ATTEMPTED`). Those are
-distinguishable only once an export is obtained, or by reading the generation script for the register,
-which has not been located.
+### Corrected statement
 
-**Consequence for the question asked:** coverage cannot be computed lexically at all, because the two
-sides are not the same kind of text. Any real coverage figure requires semantic matching, which is
-`NOT_RUN`. The honest current statement is: *the register is a paraphrase layer with a 0.3-16.7%
-verbatim footprint in the measured corpus, and no validated semantic coverage.*
+The register **is** a verbatim-anchored extraction of real operator utterances: 98.9% of its quotes
+appear in the phone-chat message store. The register **is not** a complete capture of operator
+intent, and the reason is now measured and specific: it is a **single-channel** capture. It covers
+~87% of its own channel and at most 16.7% of the harness channel. Coverage of the union cannot be
+computed until every channel is mined and the cross-channel overlap is measured rather than assumed.
+
 
 ---
 
@@ -280,18 +380,19 @@ a single operator turn. Forge is therefore excluded from §3 rather than weighte
 
 In order of strength:
 
-1. **Semantic coverage measurement.** This is now the only valid route and it is `NOT_RUN`. Lexical
-   matching is ruled out by measurement, not by preference: the register's `ask` field shares no
-   exact, prefix, or substring match with 5,808 corpus intents, because it is paraphrased (§3b).
-   Every count-based ratio on this page is a volume comparison, not coverage.
-2. **Establishing how the register was generated.** The fingerprint says synthesized; the mechanism
-   (LLM summary of 98 markdown docs, hand-authoring, or an unmined channel) is `UNKNOWN`. The
-   generation script has not been located. Until this is settled, "the register is incomplete" and
-   "the register is a different kind of artifact that cannot be complete" are both live, and the
-   second is better supported.
-3. Completion of the external channels, which could add unseen intent, and would also test whether
-   register entries came from a channel not yet mined.
-4. Register provenance repair (the `FAIL` cells in §2), without which the register cannot be audited
-   at all.
+1. **Mine the register's own channel and the two unmined channels.** The register is a phone-chat
+   extraction (§3b), and iMessage (911) and KCode (196) are still `DEDUPED_INPUT`. The phone-chat
+   channel is already in `reg_utterances` (2,620 user messages, 2,075 substantive distinct), so it can
+   be joined directly; iMessage and KCode need a real miner. Union coverage is `UNKNOWN` until this is
+   done, and this is now the only route to a defensible coverage number.
+2. **Measure cross-channel overlap.** Operator intent repeats across channels; the register's quotes
+   overlap the harness at 16.7%. Until that overlap is measured, summing channel counts double-counts.
+3. **Complete the external channels** (Gemini Takeout, OpenAI, Claude, Dot), which may add channels
+   not yet known to exist at all.
+4. **Register provenance repair** for the remaining `FAIL` cells: 0 of 98 `source_ref` paths resolve
+   because the harvest `.md` documents are not on disk, 118 suspect links remain, 7 asks are sourceless.
+
+Do not use distributional similarity as a proxy: it was tested and rejected (0 of 12 high-band pairs
+were the same intent, §3b).
 
 None of these can make the register *complete*. They can only make the shortfall measurable.
