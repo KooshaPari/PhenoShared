@@ -1,5 +1,12 @@
 # Occurrence Recount — asks corpora (2026-11-11)
 
+> **SUPERSEDED IN PART (2026-11-12).** This document records what the mined manifests
+> contained on 2026-11-11, including `imessage 7,684 / DEDUPED_INPUT` and `kcode 196 /
+> DEDUPED_INPUT`. Both channels have since been re-mined at occurrence level: iMessage is
+> **6,418 occurrences -> 6,363 distinct** and KCode is **2,457 occurrences -> 166 distinct**.
+> Current figures live in `imessage_kcode_recount.json` and `VERDICT.md` section 4. The tables
+> below are kept as the historical record of the manifest state, not as current counts.
+
 Scope: `~/CodeProjects/temp/asks-coverage/mined/` only. Read-only on the mined files and on every
 source directory. Nothing was re-mined, no mined file was modified.
 

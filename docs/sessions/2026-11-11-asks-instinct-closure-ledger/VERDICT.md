@@ -54,14 +54,16 @@ this section was rewritten twice:
 |---|---:|---|
 | Phone chat (the register's own source) | 2,075 | 1,733 cited (83.5%), ~87% after sampling misses |
 | jcode + codex harness | 5,799 cleaned (of 8,506 distinct) | 357 (16.7%, substring) |
-| iMessage | 911 (`DEDUPED_INPUT`) | not measured |
-| KCode | 196 (`DEDUPED_INPUT`) | not measured |
+| iMessage | **6,363** (was carried as 911) | 1,674 cited (26.3%) |
+| KCode | **166** (was carried as 196) | 2 cited (1.2%) |
 
-> The register is roughly an **87%-complete capture of one channel** and at most a **16.7% capture of
-> another**. Coverage of the union is `UNKNOWN` until all channels are mined and the cross-channel
-> overlap is measured rather than assumed. The 39-43% figure below is a **volume ratio**, not coverage.
+> Both of those rows read `DEDUPED_INPUT` / `not measured` for two revisions. They are measured now
+> (§3c); the corrected figures are worse than the carried ones for iMessage (911 → 6,363 distinct) and
+> slightly better for KCode (196 → 166). Union coverage is **15.0%**, not `UNKNOWN` — still a count
+> ratio, not an intent-level measure (§3c, §3e). The 39-43% figure below is a **volume ratio**, not
+> coverage.
 
-**Three corrections, same day, all mine.** Each moved confidence down while the conclusion held.
+**Seven corrections, all mine.** Each moved confidence down while the conclusion held.
 
 1. "At most 23%" came from 9,802 raw strings. Wrong in the pessimistic direction: 31.8% of those were
    harness text that `is_injected` missed. Intent clustering gave 5,216-5,799, i.e. 39-43%.
@@ -75,6 +77,13 @@ this section was rewritten twice:
 4. The codex distinct non-injected count is **399, not 405**. The 405 came from a worker report whose
    `is_injected` field was never persisted into the artifact. 399 is recomputed from the committed
    file.
+5. **6,085 harness distinct was fabricated.** `collapse_intents.py` outputs `clean_distinct: 5799`
+   (`8,506 - 2,707 noise`); 6,085 was never one of its outputs. See §3c.
+6. **1.5% harness coverage is a floor, not an estimate**, and **53.3%** of the uncited harness corpus
+   is not operator intent. See §3e.
+7. **The 3 "candidate bad links" and the 23 "absent link targets" were defects in my own test**, not
+   in the register. There are zero wrong links; the 7 unlinked asks are self-flagged
+   `source_missing`. See §3d.
 
 The previously circulated figure of 2% coverage is **withdrawn**. It was not derived from a query
 that anyone can reproduce, and its numerator and denominator were both post-dedupe counts.
@@ -150,11 +159,11 @@ Only sources where the count is reproducible from a committed artifact are summe
 |---|---:|---|
 | jcode | **8,290** | `evidence/JCODE-REEXTRACT.md`: 30,234 human non-injected occurrences → 8,290 distinct (3.65x repeat) |
 | codex | **399** | `evidence/CODEX-REEXTRACT.md` artifact, **recomputed**: 9,650 occurrences, 3,950 injected (40.9%), 5,700 non-injected → 399 distinct. Not 405; see §1 correction. |
-| imessage | **911** | prior lane: 7,684 records, 911 substantive (975 non-substantive / one-word) |
-| kcode | **196** | post-dedupe distinct (2,934 pre-dedupe, 14.97x) |
+| imessage | **6,363** | re-mined: 9,011 text-bearing outbound rows → 6,418 substantive → 6,363 distinct (`evidence/imessage_kcode_recount.json`). The carried 911 was a deduped artifact |
+| kcode | **166** | re-mined: 2,457 occurrences in 1,253 session files → 166 distinct (14.8x repeat). The carried 196 was post-dedupe against a different pre-dedupe base |
 | herdr | **0** | manifest records `persists_operator_prompt_text: false`; no text recoverable |
 | forge | **excluded** | authorship unresolved, see §7 |
-| **Total** | **9,802** | |
+| **Total** | **15,218** | naive sum of the rows above; cross-channel overlap is **not** removed here. The de-duplicated union is 11,752 (§3c). The pre-recount total was 9,802 |
 
 Forge is deliberately excluded from the numerator rather than estimated. Including a
 questionable source to strengthen a conclusion would be the same error this document exists to
@@ -272,8 +281,8 @@ they are harvest artifacts rather than invented entries.
 |---|---:|---|---|
 | **Phone chat** (the register's own source) | 2,075 | 1,733 cited (83.5%); ~87% after sampling misses | good, not complete |
 | **jcode + codex harness** | 5,799 cleaned (of 8,506 distinct) | 357 (16.7%, substring) | poor |
-| iMessage | 911 (mined, `DEDUPED_INPUT`) | unknown | not measured |
-| KCode | 196 (mined, `DEDUPED_INPUT`) | unknown | not measured |
+| iMessage | **6,363** | 1,674 cited (26.3%) | poor |
+| KCode | **166** | 2 cited (1.2%) | poor |
 
 Phone-chat collapse: 2,620 messages -> 2,367 distinct strings -> 2,075 substantive (>=12 chars), and
 the collapse is a no-op there (exact, prefix-40, and Jaccard-0.8 all return 2,075). Of the 342
@@ -546,7 +555,7 @@ class of error produced kcode's 196 and the old jcode figure of 16,887.
 | Forge authorship | FAIL | 99.5% of forge bytes carry contamination flags; see §7. Forge is 169.7 MB of the 203 MB merged corpus. |
 | Intent-level dedupe | NOT_RUN | No model exists for deciding that two different strings express one intent. String counts therefore overstate intents. |
 | Paperclip / herdr volumes | UNKNOWN | Not probed this session. |
-| iMessage substantive ratio | UNKNOWN | The 911/7,684 split was taken from a prior lane and was not re-verified here. |
+| iMessage substantive ratio | **MEASURED** | 9,011 text-bearing outbound rows → 6,418 substantive → 6,363 distinct; collapse is a near no-op (`evidence/imessage_kcode_recount.json`). |
 
 ---
 
@@ -575,13 +584,14 @@ a single operator turn. Forge is therefore excluded from §3 rather than weighte
 
 In order of strength:
 
-1. **Mine the register's own channel and the two unmined channels.** The register is a phone-chat
-   extraction (§3b), and iMessage (911) and KCode (196) are still `DEDUPED_INPUT`. The phone-chat
-   channel is already in `reg_utterances` (2,620 user messages, 2,075 substantive distinct), so it can
-   be joined directly; iMessage and KCode need a real miner. Union coverage is `UNKNOWN` until this is
-   done, and this is now the only route to a defensible coverage number.
-2. **Measure cross-channel overlap.** Operator intent repeats across channels; the register's quotes
-   overlap the harness at 16.7%. Until that overlap is measured, summing channel counts double-counts.
+1. ~~**Mine the register's own channel and the two unmined channels.**~~ **DONE (§3c).** iMessage
+   (6,363 distinct) and KCode (166 distinct) are mined at occurrence level; the phone-chat channel is
+   in `reg_utterances` (2,075 substantive distinct) and is itself an iMessage subset. Union coverage is
+   **15.0%**, which supersedes the earlier `UNKNOWN`. What remains open is granularity and the
+   denominator's composition (§3e), not channel scope.
+2. ~~**Measure cross-channel overlap.**~~ **DONE (§3c).** Register quotes overlap the harness at 23.1%
+   (466 of 2,018); channel-to-channel overlap is 517 (iMessage∩harness), 58 (KCode∩harness) and 1
+   (KCode∩iMessage). Summing channel counts without that subtraction would double-count 576 members.
 3. **Complete the external channels** (Gemini Takeout, OpenAI, Claude, Dot), which may add channels
    not yet known to exist at all.
 4. **Register provenance repair** for the remaining `FAIL` cells: 0 of 98 `source_ref` paths resolve

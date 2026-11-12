@@ -1,5 +1,11 @@
 # Channel scope: what the register is actually a capture of
 
+> **PARTLY SUPERSEDED (2026-11-12).** This document establishes the channel scope and the
+> register's verbatim anchoring, both of which still hold. Its iMessage (`911`) and KCode (`196`)
+> rows were `DEDUPED_INPUT` placeholders; they are now measured at **6,363** and **166** distinct.
+> The union and coverage figures here are superseded by `VERDICT.md` section 3c and section 3e
+> (union 11,752, citation coverage 15.0%).
+
 Measured 2026-11-12 with `verify_channel_anchor.py` (read-only on `ledger.db`,
 `PRAGMA query_only=1`). Raw output: `channel_anchor_output.txt`.
 
