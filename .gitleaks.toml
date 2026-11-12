@@ -20,7 +20,11 @@ useDefault = true
 description = "Non-source / build artefact paths"
 targetRules = [
   "generic-api-key",
-  "generic-high-entropy-secret",
+  # `generic-high-entropy-secret` was listed here and does not exist in
+  # gitleaks >= 8.29, so `gitleaks detect --config .gitleaks.toml` exited with
+  #   FTL Failed to load config error="[[allowlists]] target rule ID
+  #   'generic-high-entropy-secret' does not exist"
+  # and every allowlist in this file was inert. Removed so the file loads.
   "jwt",
   "slack-bot-token",
   "stripe-access-token",
@@ -72,6 +76,13 @@ regexes = [
   # literal has to be present and unredacted in the source. It is a made-up
   # value, not a Stripe key.
   '''sk_live_abc123def456xyz789''',
+  # AWS's published documentation example key, not a credential. It appears in
+  # absorption/byteport's link-handler test and in scripts/secret-guard.py's
+  # list of values the changed-content guard must not treat as findings.
+  '''AKIAIOSFODNN7EXAMPLE''',
+  # The obvious placeholder that sits beside it in the same list: a sequential
+  # alphabet, never a key.
+  '''AKIAABCDEFGHIJKLMNOP''',
 ]
 
 # 3. Regex-based allowlist scoped to test/fixture paths only.

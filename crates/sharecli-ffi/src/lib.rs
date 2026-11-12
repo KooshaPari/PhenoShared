@@ -17,6 +17,13 @@ use std::sync::OnceLock;
 
 use tokio::runtime::Runtime;
 
+// The IPC client has exactly two transports: a Unix domain socket on unix and a
+// loopback TCP port on windows. On any other target `rt()` would panic before a
+// runtime check could report anything, so name the gap at compile time rather
+// than leaving an unreachable branch inside `ipc_exchange`.
+#[cfg(not(any(unix, windows)))]
+compile_error!("sharecli-ffi has no IPC transport for this target");
+
 static RT: OnceLock<Runtime> = OnceLock::new();
 
 fn rt() -> &'static Runtime {
@@ -84,9 +91,9 @@ pub extern "C" fn sharecli_ipc_socket_path() -> *mut c_char {
 /// `sharecli_health_json`, `sharecli_request`, `sharecli_serve_get`) that has
 /// not already been freed. It must be the exact pointer returned, not an
 /// interior or offset pointer, and must not have been allocated by another
-/// allocator or freed by any other function. Passing any other pointer,
+/// allocator or freed by any other function. Supplying any other pointer,
 /// including a pointer into a Rust `CString` not produced by this library, is
-/// undefined behavior. A null pointer is accepted and is a no-op. The pointer
+/// undefined behavior. A null pointer is accepted and is ignored. The pointer
 /// must not be used after this call returns.
 /// Free a string allocated by this library.
 ///
@@ -100,6 +107,47 @@ pub unsafe extern "C" fn sharecli_free_string(ptr: *mut c_char) {
         drop(CString::from_raw(ptr));
     }
 }
+/// Send one newline-terminated RPC payload over the local transport and return
+/// the first response line.
+///
+/// The Unix socket and Windows TCP variants are defined once here so the FFI
+/// entry points cannot drift apart: they previously carried byte-identical
+/// copies of this block.
+async fn ipc_exchange(payload: &[u8]) -> anyhow::Result<String> {
+    use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
+
+    #[cfg(unix)]
+    {
+        use tokio::net::UnixStream;
+        let sock = socket_path_str();
+        let mut stream = UnixStream::connect(&sock).await?;
+        stream.write_all(payload).await?;
+        let (r, _) = stream.into_split();
+        let mut lines = BufReader::new(r).lines();
+        let line = lines.next_line().await?;
+        anyhow::Ok(line.unwrap_or_default())
+    }
+
+    #[cfg(windows)]
+    {
+        use tokio::net::TcpStream;
+        let addr = ipc_addr();
+        let mut stream = TcpStream::connect(&addr).await?;
+        stream.write_all(payload).await?;
+        let (r, _) = stream.into_split();
+        let mut lines = BufReader::new(r).lines();
+        let line = lines.next_line().await?;
+        anyhow::Ok(line.unwrap_or_default())
+    }
+}
+
+/// Hand a Rust string to C: allocate a NUL-terminated copy the caller owns, or
+/// return null when the string contains an interior NUL.
+fn into_c_string(s: String) -> *mut c_char {
+    CString::new(s)
+        .map(|c| c.into_raw())
+        .unwrap_or(std::ptr::null_mut())
+}
 
 /// # Safety
 ///
@@ -112,40 +160,9 @@ pub unsafe extern "C" fn sharecli_free_string(ptr: *mut c_char) {
 /// Returns a JSON string (must free with `sharecli_free_string`) or null on error.
 #[no_mangle]
 pub extern "C" fn sharecli_health_json() -> *mut c_char {
-    let result = rt().block_on(async {
-        use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-
-        let req = "{\"id\":1,\"method\":\"health.status\",\"params\":{}}\n";
-
-        #[cfg(unix)]
-        {
-            use tokio::net::UnixStream;
-            let sock = socket_path_str();
-            let mut stream = UnixStream::connect(&sock).await?;
-            stream.write_all(req.as_bytes()).await?;
-            let (r, _) = stream.into_split();
-            let mut lines = BufReader::new(r).lines();
-            let line = lines.next_line().await?;
-            anyhow::Ok(line.unwrap_or_default())
-        }
-
-        #[cfg(windows)]
-        {
-            use tokio::net::TcpStream;
-            let addr = ipc_addr();
-            let mut stream = TcpStream::connect(&addr).await?;
-            stream.write_all(req.as_bytes()).await?;
-            let (r, _) = stream.into_split();
-            let mut lines = BufReader::new(r).lines();
-            let line = lines.next_line().await?;
-            anyhow::Ok(line.unwrap_or_default())
-        }
-    });
-
-    match result {
-        Ok(s) => CString::new(s)
-            .map(|c| c.into_raw())
-            .unwrap_or(std::ptr::null_mut()),
+    let req = "{\"id\":1,\"method\":\"health.status\",\"params\":{}}\n";
+    match rt().block_on(ipc_exchange(req.as_bytes())) {
+        Ok(s) => into_c_string(s),
         Err(_) => std::ptr::null_mut(),
     }
 }
@@ -172,46 +189,14 @@ pub unsafe extern "C" fn sharecli_request(request_json: *const c_char) -> *mut c
     if request_json.is_null() {
         return std::ptr::null_mut();
     }
-    let req_str = match CStr::from_ptr(request_json).to_str() {
+    let mut payload = match CStr::from_ptr(request_json).to_str() {
         Ok(s) => s.to_owned(),
         Err(_) => return std::ptr::null_mut(),
     };
+    payload.push('\n');
 
-    let result = rt().block_on(async {
-        use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-
-        let mut payload = req_str.clone();
-        payload.push('\n');
-
-        #[cfg(unix)]
-        {
-            use tokio::net::UnixStream;
-            let sock = socket_path_str();
-            let mut stream = UnixStream::connect(&sock).await?;
-            stream.write_all(payload.as_bytes()).await?;
-            let (r, _) = stream.into_split();
-            let mut lines = BufReader::new(r).lines();
-            let line = lines.next_line().await?;
-            anyhow::Ok(line.unwrap_or_default())
-        }
-
-        #[cfg(windows)]
-        {
-            use tokio::net::TcpStream;
-            let addr = ipc_addr();
-            let mut stream = TcpStream::connect(&addr).await?;
-            stream.write_all(payload.as_bytes()).await?;
-            let (r, _) = stream.into_split();
-            let mut lines = BufReader::new(r).lines();
-            let line = lines.next_line().await?;
-            anyhow::Ok(line.unwrap_or_default())
-        }
-    });
-
-    match result {
-        Ok(s) => CString::new(s)
-            .map(|c| c.into_raw())
-            .unwrap_or(std::ptr::null_mut()),
+    match rt().block_on(ipc_exchange(payload.as_bytes())) {
+        Ok(s) => into_c_string(s),
         Err(_) => std::ptr::null_mut(),
     }
 }
@@ -349,7 +334,7 @@ mod tests {
 
     #[test]
     fn free_string_accepts_null() {
-        // Safety: null is explicitly permitted and is a no-op.
+        // Safety: null is explicitly permitted; this call does nothing.
         unsafe { sharecli_free_string(std::ptr::null_mut()) };
     }
 
