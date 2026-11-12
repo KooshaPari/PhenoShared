@@ -143,5 +143,9 @@ impl VersionInfo {
 /// Default socket path for Unix domain sockets
 pub const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
 
-/// Default TCP port
-pub const DEFAULT_TCP_PORT: u16 = 8953;
+/// Default TCP port.
+///
+/// Single source of truth: `crates/pheno-agent/phenotype-daemon/src/protocol.rs`.
+/// This archived copy previously disagreed with its own `main.rs`, so a client
+/// importing this constant dialled a port nothing listened on.
+pub const DEFAULT_TCP_PORT: u16 = 9456;

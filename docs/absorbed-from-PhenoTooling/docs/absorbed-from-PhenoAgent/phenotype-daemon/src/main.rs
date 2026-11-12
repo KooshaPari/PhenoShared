@@ -26,7 +26,9 @@ use protocol::VersionInfo;
 #[cfg(unix)]
 const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
 
-/// Default TCP port for cross-platform support
+/// Default TCP port for cross-platform support.
+///
+/// Single source of truth: `crates/pheno-agent/phenotype-daemon/src/protocol.rs`.
 const DEFAULT_TCP_PORT: u16 = 9456;
 
 /// CLI args
