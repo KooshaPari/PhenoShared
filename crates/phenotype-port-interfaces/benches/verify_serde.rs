@@ -45,5 +45,9 @@ fn bench_verify_response_serde(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, bench_verify_request_serde, bench_verify_response_serde);
+criterion_group!(
+    benches,
+    bench_verify_request_serde,
+    bench_verify_response_serde
+);
 criterion_main!(benches);

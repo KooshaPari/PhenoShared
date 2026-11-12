@@ -181,16 +181,23 @@ pub fn start_daemon(cfg: DaemonConfig) -> Result<DaemonHandle, ElicitError> {
     {
         let root = cfg.inbox_root.clone();
         let stop = Arc::clone(&shutdown);
-        thread::Builder::new().name("phinbox-management".into()).spawn(move || {
-            let store = match crate::management::Store::open(root.join("management.sqlite")) {
-                Ok(store) => store,
-                Err(_) => { warn!("management ledger unavailable"); return; }
-            };
-            while !stop.load(Ordering::SeqCst) {
-                if store.observe_inbox(&root).is_err() { warn!("management reconciliation failed"); }
-                thread::sleep(std::time::Duration::from_secs(2));
-            }
-        })?;
+        thread::Builder::new()
+            .name("phinbox-management".into())
+            .spawn(move || {
+                let store = match crate::management::Store::open(root.join("management.sqlite")) {
+                    Ok(store) => store,
+                    Err(_) => {
+                        warn!("management ledger unavailable");
+                        return;
+                    },
+                };
+                while !stop.load(Ordering::SeqCst) {
+                    if store.observe_inbox(&root).is_err() {
+                        warn!("management reconciliation failed");
+                    }
+                    thread::sleep(std::time::Duration::from_secs(2));
+                }
+            })?;
     }
 
     info!(
