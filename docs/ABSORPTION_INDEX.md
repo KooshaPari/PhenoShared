@@ -159,6 +159,30 @@ An entry may move to "absorbed" only after `verify_absorption.py <repo>` reports
 complete for that repo. Delete the source only after that, and record the
 verification date alongside the disposition.
 
+### Verified then deleted (2026-11-12)
+
+Nine repos were deleted only after `scripts/verify_absorption.py` reported each
+complete against its live source. Verification ran immediately before deletion,
+in the same pass, so no repo was deleted on a stale result.
+
+| Repo | Verified | Note |
+|---|---|---|
+| `Authvault` | 332/332 | |
+| `SessionLedger` | 934/934 | 123 files had been recovered earlier the same day |
+| `ResearchLedger` | 318/318 | |
+| `cvp-fixture` | 17/17 | |
+| `netweave-3` | 30/30 | |
+| `phenotype-router-spec` | 22/22 | |
+| `herdr-session-adapter` | 12/12 | |
+| `rule30-research` | 6/6 | |
+| `BytePort` | 676/680 | 3 withheld to the private registry, 1 compiled binary excluded, 362 files recovered earlier |
+
+Each deletion was confirmed with a following API call returning 404.
+
+The credentials that prompted this cleanup were confirmed dead by the operator
+before deletion proceeded: the `canvasApp` OpenAI keys and BytePort's
+`byteport-ghkey.pem` are no longer valid, so no rotation was outstanding.
+
 ## Worklog references
 
 - **MRG-13..MRG-16** (2026-11-11): Multi-branch consolidation. Full clones rather than shallow, union of file paths across every ref compared against the default branch to find branch-only content, `git bundle create --all` per repo verified with `git bundle verify` inside the source clone, bundles pushed to the private registry via the Git Data API. Total 48 files absorbed.
