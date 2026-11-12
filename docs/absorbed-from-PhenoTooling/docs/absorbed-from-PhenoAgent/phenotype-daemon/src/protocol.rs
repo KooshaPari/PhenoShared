@@ -34,7 +34,10 @@ pub enum Request {
 
     /// List all registered skills with pagination
     #[serde(rename = "skill.list")]
-    SkillList { limit: Option<usize>, offset: Option<usize> },
+    SkillList {
+        limit: Option<usize>,
+        offset: Option<usize>,
+    },
     /// Get a skill by ID
     #[serde(rename = "skill.get")]
     SkillGet { id: String },
@@ -66,10 +69,7 @@ pub enum Response {
     /// Success response
     Success,
     /// Error response
-    Error {
-        code: i32,
-        message: String,
-    },
+    Error { code: i32, message: String },
     /// Pong response for ping
     Pong,
     /// Version information
@@ -86,30 +86,17 @@ pub enum Response {
         uptime_seconds: u64,
     },
     /// Skill list response
-    SkillList {
-        skills: Vec<Skill>,
-        total: usize,
-    },
+    SkillList { skills: Vec<Skill>, total: usize },
     /// Single skill response
-    Skill {
-        skill: Skill,
-    },
+    Skill { skill: Skill },
     /// Skill exists check
-    SkillExists {
-        exists: bool,
-    },
+    SkillExists { exists: bool },
     /// Dependency resolution result
-    Resolved {
-        skill_ids: Vec<String>,
-    },
+    Resolved { skill_ids: Vec<String> },
     /// Conflict check result
-    ConflictCheck {
-        conflicts: Vec<String>,
-    },
+    ConflictCheck { conflicts: Vec<String> },
     /// Circular dependency check result
-    CircularCheck {
-        has_cycle: bool,
-    },
+    CircularCheck { has_cycle: bool },
 }
 
 /// Version information
@@ -143,5 +130,9 @@ impl VersionInfo {
 /// Default socket path for Unix domain sockets
 pub const DEFAULT_SOCKET_PATH: &str = "/tmp/phenotype-daemon.sock";
 
-/// Default TCP port
-pub const DEFAULT_TCP_PORT: u16 = 8953;
+/// Default TCP port.
+///
+/// Single source of truth: `crates/pheno-agent/phenotype-daemon/src/protocol.rs`.
+/// This archived copy previously disagreed with its own `main.rs`, so a client
+/// importing this constant dialled a port nothing listened on.
+pub const DEFAULT_TCP_PORT: u16 = 9456;

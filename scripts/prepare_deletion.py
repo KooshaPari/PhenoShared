@@ -221,23 +221,52 @@ def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, s
     if code != 0:
         return False, "mirror clone failed: %s" % err.decode("utf-8", "replace")[:100]
 
+    def refs(where: str) -> dict[str, str]:
+        _, out, _ = sh(["git", "-C", where, "for-each-ref",
+                        "--format=%(refname) %(objectname)"])
+        return dict(line.split(" ", 1)
+                    for line in out.decode("utf-8", "replace").splitlines() if " " in line)
+
+    def namespaces(source: dict[str, str]) -> list[str]:
+        found = set()
+        for name in source:
+            rest = name[len("refs/"):].split("/") if name.startswith("refs/") else []
+            if len(rest) >= 2:
+                found.add(rest[0])
+        # Our own namespaces inside the registry must never be copied into
+        # themselves.
+        found.discard("preserved")
+        found.discard("restored")
+        return sorted(found)
+
+    # Preserve EVERY ref namespace, not just heads and tags. Repositories in this
+    # account carry refs/pull/* (over a thousand in some), refs/keep/*,
+    # refs/archive/* and refs/sources/*, and a commit reachable only from one of
+    # those is invisible to a heads+tags capture. Enumerate instead of
+    # hard-coding, so a namespace nobody anticipated cannot be silently dropped.
+    source_refs = refs(mirror)
+    spaces = namespaces(source_refs)
+    if not spaces:
+        return False, "no refs found in the source"
+
     url = "https://github.com/%s/%s.git" % (owner, registry)
-    heads = "+refs/heads/*:refs/preserved/%s/heads/*" % repo
-    tags = "+refs/tags/*:refs/preserved/%s/tags/*" % repo
-    code, _, err = sh(["git", "-C", mirror, "push", url, heads, tags])
+    # One wildcard refspec rather than one per namespace. A repository here can
+    # carry over a thousand refs (HeliosCLI has 18 heads, 851 tags and 471 pull
+    # refs), and per-namespace refspecs are fine, but enumerating them all would
+    # overflow the Windows command-line limit. The source mirror never contains
+    # refs/preserved, so the wildcard cannot copy the registry into itself; if it
+    # somehow did, fall back to explicit namespaces.
+    if any(n.startswith("refs/preserved/") for n in source_refs):
+        spec = ["+refs/%s/*:refs/preserved/%s/%s/*" % (ns, repo, ns) for ns in spaces]
+    else:
+        spec = ["+refs/*:refs/preserved/%s/*" % repo]
+    code, _, err = sh(["git", "-C", mirror, "push", url] + spec)
     if code != 0:
         return False, "ref push failed: %s" % err.decode("utf-8", "replace")[:120]
 
-    def refs(where: str) -> dict[str, str]:
-        _, out, _ = sh(["git", "-C", where, "for-each-ref", "--format=%(refname) %(objectname)"])
-        return dict(line.split(" ", 1) for line in out.decode("utf-8", "replace").splitlines() if " " in line)
-
-    # Compare on the same key shape: strip the differing prefixes so both sides
-    # are "heads/<name>" and "tags/<name>". Stripping a fixed component count
-    # instead gives "main" on one side and "heads/main" on the other, which can
-    # never match and would report a complete push as broken.
-    expected = {m[len("refs/"):]: sha for m, sha in refs(mirror).items()
-                if m.startswith("refs/heads/") or m.startswith("refs/tags/")}
+    # Compare on the same key shape: both sides keyed "<namespace>/<name>".
+    expected = {m[len("refs/"):]: sha for m, sha in source_refs.items()
+                if m.startswith("refs/") and m[len("refs/"):].split("/")[0] in spaces}
     check = os.path.join(tmp, "check")
     os.makedirs(check, exist_ok=True)
     for args in (["init", "-q"], ["remote", "add", "origin", url],
@@ -246,15 +275,17 @@ def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, s
         if code != 0:
             return False, "verify fetch failed: %s" % err.decode("utf-8", "replace")[:100]
     actual = {m[len("refs/restored/"):]: sha for m, sha in refs(check).items()
-              if m.startswith("refs/restored/heads/") or m.startswith("refs/restored/tags/")}
+              if m.startswith("refs/restored/")}
     if actual != expected:
         missing = sorted(set(expected) - set(actual))
         differing = sorted(k for k in set(expected) & set(actual) if expected[k] != actual[k])
-        return False, "ref round-trip mismatch: %d missing, %d differing" % (len(missing), len(differing))
+        return False, ("ref round-trip mismatch: %d missing, %d differing "
+                       "(namespaces: %s)"
+                       % (len(missing), len(differing), ",".join(spaces)))
 
     _, commits, _ = sh(["git", "-C", mirror, "rev-list", "--all", "--count"])
-    return True, "%d refs, %s commits at refs/preserved/%s/" % (
-        len(expected), commits.decode().strip(), repo)
+    return True, "%d refs across %d namespaces (%s), %s commits" % (
+        len(expected), len(spaces), ",".join(spaces), commits.decode().strip())
 
 
 def export_threads(owner: str, repo: str) -> tuple[bool, dict]:

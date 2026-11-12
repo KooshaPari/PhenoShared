@@ -100,6 +100,30 @@ jobs:
             printf '%s=%s\n' "$k" "$(grep -c "^$k=" <<< "$(cat "$GITHUB_OUTPUT")")"
           done
 
+  sdk-catalog:
+    name: SDK Catalog Invariant
+    runs-on: ubuntu-latest
+    # HARD gate. The catalog invariant was on the pull-request path as a STEP
+    # inside the `python` job, but that job's first step is `ruff check`,
+    # which fails on the current tree. A failing step short-circuits the rest
+    # of the job, so the catalog step was reported `skipped` on every pull
+    # request (measured on run 43281874107) and a pull request could break
+    # the catalog without anything noticing before merge. As its own job with
+    # no `needs:` and no `if:`, it runs on every push and every pull_request.
+    #
+    # Measured green on 2026-11-12: `python3 tools/sdk-catalog/check.py` prints
+    # "PASS: 0 violation(s) across the checked rules" (exit 0).
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # tools/sdk-catalog/check.py recomputes the layer edges with
+      # `cargo metadata --no-deps --offline`. Without a cargo on PATH that call
+      # fails and the R2/R3 rules would report PASS against an empty package
+      # list, so the toolchain is a prerequisite of a meaningful verdict, not
+      # an optimisation.
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - name: Check sdk-catalog
+        run: python3 tools/sdk-catalog/check.py
+
   cargo-deny:
     name: Cargo Deny (Advisories + Licenses)
     needs: detect
@@ -153,15 +177,11 @@ jobs:
         run: ruff check .
       - name: ruff format --check
         run: ruff format --check .
-      # The catalog check existed but no pull-request workflow ran it, so it
-      # could not gate anything. tools/sdk-catalog/check.py recomputes the
-      # layer edges with `cargo metadata --no-deps --offline`; without a cargo
-      # on PATH that call fails and the R2/R3 rules would report PASS against an
-      # empty package list, so the toolchain is a prerequisite of a meaningful
-      # verdict, not an optimisation.
-      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
-      - name: sdk-catalog check
-        run: python3 tools/sdk-catalog/check.py
+      # The catalog invariant is NOT checked here. As a step of this job it sat
+      # behind `ruff check`, which fails on the current tree, so the job
+      # short-circuited and the catalog step reported `skipped` on every pull
+      # request (run 43281874107). It now runs as its own job, `sdk-catalog`,
+      # which the `ci / lint` aggregator treats as a HARD gate.
 
   go-modules:
     name: Go Module Registry
@@ -303,6 +323,7 @@ jobs:
       [
         detect,
         cargo-deny,
+        sdk-catalog,
         python,
         go-modules,
         go,
@@ -326,13 +347,15 @@ jobs:
           # GitHub and by the shell, and this aggregator had no way to see it.
           # A lane that can neither fail nor be observed failing is not a gate.
           #
-          # HARD     : detect, cargo-deny, registry-invariant
+          # HARD     : detect, cargo-deny, registry-invariant, sdk-catalog
           # ADVISORY : python, go-modules, go, typescript, security, dep-review
           #
           # Promotion requires a measured green run, recorded here with the
           # command and date. cargo-deny was promoted on 2026-11-12 after
           # `cargo deny --all-features check` reported advisories/bans/licenses/
-          # sources all ok (exit 0).
+          # sources all ok (exit 0). sdk-catalog was promoted on 2026-11-12
+          # after `python3 tools/sdk-catalog/check.py` reported "PASS: 0
+          # violation(s) across the checked rules" (exit 0).
           #
           # NOTE: the job id is `dep-review`. An earlier revision read
           # `needs.dependency-review.result`, which is not a job in this
@@ -343,6 +366,7 @@ jobs:
           for pair in \
             "detect:${{ needs.detect.result }}:hard" \
             "cargo-deny:${{ needs.cargo-deny.result }}:hard" \
+            "sdk-catalog:${{ needs.sdk-catalog.result }}:hard" \
             "registry-invariant:${{ needs.registry-invariant.result }}:hard" \
             "python:${{ needs.python.result }}:advisory" \
             "go-modules:${{ needs.go-modules.result }}:advisory" \
