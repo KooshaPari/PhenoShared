@@ -156,7 +156,7 @@ impl HuggingFaceAdapter {
         &self,
         req: reqwest::RequestBuilder,
     ) -> Result<reqwest::Response, IngestError> {
-        let policy = self.policy.unwrap_or(RateLimitPolicy::default());
+        let policy = self.policy.unwrap_or_default();
         let mut retries = 0u32;
         loop {
             // Enforce minimum interval between requests. `std::sync::Mutex`
@@ -165,19 +165,20 @@ impl HuggingFaceAdapter {
             // hold it across the unconditional final stamp either, or
             // the first call (where `last_request` is 0 and
             // `wait_ms` saturates to 0) self-deadlocks.
-            let now_ms: u64 = {
+            // The guard is confined to an inner scope so the lock is provably
+            // released before the sleep below; an explicit `drop(guard)` is not
+            // enough for `clippy::await_holding_lock` to see that.
+            let wait_ms = {
                 let last = self.last_request.lock().expect("lock poisoned");
                 let elapsed_ms = (now_ms_unix() * 1000).saturating_sub(*last * 1000);
-                let wait_ms = policy.min_interval_ms.saturating_sub(elapsed_ms);
-                if wait_ms > 0 {
-                    drop(last);
-                    tokio::time::sleep(std::time::Duration::from_millis(wait_ms)).await;
-                }
-                // Capture the timestamp for the post-sleep stamp; the
-                // post-sleep stamp below re-locks but only after we've
-                // dropped the guard above.
-                now_ms_unix()
+                policy.min_interval_ms.saturating_sub(elapsed_ms)
             };
+            if wait_ms > 0 {
+                tokio::time::sleep(std::time::Duration::from_millis(wait_ms)).await;
+            }
+            // Capture the timestamp for the post-sleep stamp; the stamp below
+            // re-locks, but only after the guard above has gone out of scope.
+            let now_ms = now_ms_unix();
             *self.last_request.lock().expect("lock poisoned") = now_ms;
 
             let resp = req

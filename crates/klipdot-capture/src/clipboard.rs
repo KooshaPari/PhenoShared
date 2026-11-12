@@ -548,6 +548,9 @@ mod base64 {
 }
 
 // Add hex dependency to Cargo.toml
+// Only the macOS `osascript` image path decodes hex, so the helper is gated
+// with its caller: ungated it is dead code on Linux and Windows.
+#[cfg(target_os = "macos")]
 mod hex {
     pub fn decode(data: &str) -> Result<Vec<u8>, hex::FromHexError> {
         hex::decode(data)

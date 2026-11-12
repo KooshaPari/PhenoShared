@@ -189,7 +189,7 @@ impl SurfaceEventHub {
                 subscription
                     .surface_id
                     .as_deref()
-                    .is_none_or(|id| id == surface_id)
+                    .map_or(true, |id| id == surface_id)
             })
             .map(|subscription| subscription.max_chunk_bytes)
             .min()
@@ -211,7 +211,7 @@ impl SurfaceEventHub {
                 subscription
                     .surface_id
                     .as_deref()
-                    .is_none_or(|id| id == surface_id)
+                    .map_or(true, |id| id == surface_id)
                     && seq >= subscription.from_seq
             });
             for (subscription_id, subscription) in subscriptions {

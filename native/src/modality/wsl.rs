@@ -215,7 +215,7 @@ impl WslDriver {
 
 impl Drop for WslDriver {
     fn drop(&mut self) {
-        if let Some(mut child) = self.child.take() {
+        if let Some(child) = self.child.take() {
             #[cfg(unix)]
             {
                 let pid = child.id().unwrap_or(0) as i32;
@@ -227,6 +227,9 @@ impl Drop for WslDriver {
             }
             #[cfg(not(unix))]
             {
+                // `start_kill` takes `&mut self` while the unix arm needs only
+                // `&self`, so the rebinding keeps both arms warning-free.
+                let mut child = child;
                 let _ = child.start_kill();
             }
         }

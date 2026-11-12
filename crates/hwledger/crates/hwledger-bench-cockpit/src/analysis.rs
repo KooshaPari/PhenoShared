@@ -13,7 +13,7 @@ pub fn build_suite_coverage(cells: &[Cell]) -> Vec<SuiteCoverageRow> {
             .or_insert(1);
     }
 
-    let mut order: Vec<&str> = KNOWN_SUITE_CATALOG.iter().copied().collect();
+    let mut order: Vec<&str> = KNOWN_SUITE_CATALOG.to_vec();
     for &s in by_suite.keys() {
         if !order.contains(&s) {
             order.push(s);

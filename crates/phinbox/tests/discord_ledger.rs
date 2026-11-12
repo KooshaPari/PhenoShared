@@ -92,8 +92,9 @@ fn competing_store_connections_cannot_both_accept_the_same_revision() {
     }
     let successes = workers
         .into_iter()
-        .map(|w| w.join().unwrap())
-        .filter(Result::is_ok)
+        // Count the workers whose CAS attempt won; a panicked worker still
+        // propagates through `unwrap`, exactly as before.
+        .filter_map(|w| w.join().unwrap().ok())
         .count();
     assert_eq!(
         successes, 1,

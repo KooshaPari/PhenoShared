@@ -601,7 +601,12 @@ impl MountContext for std::io::Result<()> {
 mod default_mount_options_tests {
     use fuser::{MountOption, SessionACL};
 
-    use super::{default_fuser_config, session_mount_options, smoke_fuser_config_for_backend};
+    use super::{default_fuser_config, session_mount_options};
+    // `smoke_fuser_config_for_backend` is only exercised by the macOS smoke
+    // tests below, so it is gated with them rather than imported on Linux.
+    #[cfg(target_os = "macos")]
+    use super::smoke_fuser_config_for_backend;
+    #[cfg(target_os = "macos")]
     use crate::FuseBackend;
 
     #[test]

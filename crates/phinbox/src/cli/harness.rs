@@ -161,10 +161,7 @@ mod tests {
     struct FailingReader;
     impl Read for FailingReader {
         fn read(&mut self, _buf: &mut [u8]) -> io::Result<usize> {
-            Err(io::Error::new(
-                io::ErrorKind::Other,
-                "synthetic read failure",
-            ))
+            Err(io::Error::other("synthetic read failure"))
         }
     }
 
@@ -175,7 +172,7 @@ mod tests {
         let mut cursor = Cursor::new(oversized);
         match read_bounded(&mut cursor, STDIN_LIMIT) {
             ReadOutcome::Oversize(buf) => assert_eq!(buf.len(), STDIN_LIMIT + 1),
-            other => panic!("expected Oversize, got {:?}", other),
+            other => panic!("expected Oversize, got {other:?}"),
         }
     }
 
@@ -185,7 +182,7 @@ mod tests {
         let mut cursor = Cursor::new(exact);
         match read_bounded(&mut cursor, STDIN_LIMIT) {
             ReadOutcome::Bounded(buf) => assert_eq!(buf.len(), STDIN_LIMIT),
-            other => panic!("expected Bounded, got {:?}", other),
+            other => panic!("expected Bounded, got {other:?}"),
         }
     }
 
@@ -194,7 +191,7 @@ mod tests {
         let mut reader = FailingReader;
         match read_bounded(&mut reader, STDIN_LIMIT) {
             ReadOutcome::IoError(msg) => assert!(msg.contains("synthetic read failure")),
-            other => panic!("expected IoError, got {:?}", other),
+            other => panic!("expected IoError, got {other:?}"),
         }
     }
 
