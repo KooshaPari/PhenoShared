@@ -15,11 +15,66 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-      - uses: DavidAnson/markdownlint-cli2-action@ded1f9488f68a970bc66ea5619e13e9b52e601cd
         with:
-          globs: |
-            README.md
-            docs/**/*.md
+          # Full history is required: the three-dot range below needs a
+          # merge base, which a depth-1 checkout of the base ref cannot give.
+          fetch-depth: 0
+      # This job lints ONLY the Markdown a change actually touches. The
+      # historical corpus is grandfathered: measured on 2026-11-11, the repo
+      # holds 8449 Markdown files (excluding absorption/, target/ and
+      # docs/absorbed-*), 40730 lines exceed 100 columns and 6226 files carry
+      # at least one such line. Retro-linting that corpus is not viable work,
+      # so the gate is a ratchet on new changes instead.
+      - name: Compute changed Markdown files
+        id: changed
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          # Pull requests diff three-dot against the base branch, so only the
+          # changes the PR introduces are considered. A push to main diffs
+          # against the commit it replaced. Anything else (first push, an
+          # unresolvable "before") falls back to the single parent commit.
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch --no-tags origin "$BASE_REF"
+            RANGE="origin/$BASE_REF...HEAD"
+          elif [ -n "${BEFORE_SHA:-}" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ] \
+            && git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+            RANGE="$BEFORE_SHA...HEAD"
+          else
+            RANGE="HEAD^...HEAD"
+          fi
+
+          # --diff-filter=d drops deleted paths: the linter cannot read a file
+          # that no longer exists. Renames survive as their new path only.
+          git diff --name-only --diff-filter=d "$RANGE" -- '*.md' > changed-md.txt
+          # Defensive: drop anything that vanished anyway, and any path that is
+          # not a regular file in the worktree.
+          : > lintable.md
+          while IFS= read -r f; do
+            [ -n "$f" ] && [ -f "$f" ] && printf '%s\n' "$f" >> lintable.md
+          done < changed-md.txt
+
+          echo "changed Markdown files:"
+          cat lintable.md
+          {
+            echo 'files<<CHANGED_MD_EOF'
+            cat lintable.md
+            echo 'CHANGED_MD_EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: No Markdown changes to lint
+        if: steps.changed.outputs.files == ''
+        run: echo "No Markdown files changed in this event; markdown-lint has nothing to check."
+
+      - uses: DavidAnson/markdownlint-cli2-action@ded1f9488f68a970bc66ea5619e13e9b52e601cd
+        # Requiring a non-empty list is what keeps an empty change set green:
+        # the action errors on an empty glob instead of passing.
+        if: steps.changed.outputs.files != ''
+        with:
+          globs: ${{ steps.changed.outputs.files }}
 
   adr-frontmatter:
     runs-on: ubuntu-24.04
