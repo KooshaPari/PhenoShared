@@ -9,8 +9,8 @@
 # `passed (3 checked, 0 skipped)` under a toolchain it could not name. That is
 # an environment gap reported as a pass; these tests fail on it.
 #
-# Fake binaries only (rustup, rustc, cargo) in a throwaway PATH. Nothing is
-# compiled and no network is used.
+# Fake binaries only (rustup, rustc, cargo) in a throwaway PATH: no real
+# toolchain is ever reached and no traffic leaves the machine.
 #
 # Bash 3.2 portable (macOS default); no external deps.
 
