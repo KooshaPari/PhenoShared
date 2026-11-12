@@ -167,6 +167,8 @@ def main() -> int:
     ap.add_argument("--also", action="append", default=[],
                     help="extra local root to count as coverage (repeatable)")
     ap.add_argument("--json", action="store_true", dest="as_json")
+    ap.add_argument("--allow-unreadable", action="store_true",
+                    help="exit 0 even when no source repo could be read")
     args = ap.parse_args()
 
     if args.all:
@@ -186,8 +188,11 @@ def main() -> int:
         return 0 if all(r["status"] != "incomplete" for r in results) else 1
 
     incomplete = 0
+    verified = 0
+    unreadable = 0
     for r in results:
         if r["status"] == "complete":
+            verified += 1
             notes = []
             if r["withheld_in_registry"]:
                 notes.append("%d withheld to registry" % r["withheld_in_registry"])
@@ -196,6 +201,7 @@ def main() -> int:
             suffix = ("  (" + ", ".join(notes) + ")") if notes else ""
             print("  OK    %-32s %d/%d%s" % (r["repo"], r["covered"], r["remote_files"], suffix))
         elif r["status"] == "unreadable":
+            unreadable += 1
             print("  SKIP  %-32s %s" % (r["repo"], r["detail"]))
         else:
             incomplete += 1
@@ -204,8 +210,23 @@ def main() -> int:
                 print("          " + m)
 
     print()
-    print("%d checked, %d incomplete" % (len(results), incomplete))
-    return 1 if incomplete else 0
+    print("%d checked, %d verified, %d incomplete, %d unreadable" %
+          (len(results), verified, incomplete, unreadable))
+
+    if incomplete:
+        return 1
+
+    # Every source unreadable means verification did not actually happen. Passing
+    # here would be false assurance, which is the exact failure this tool exists
+    # to prevent -- a token restricted to this repo cannot see private sources.
+    if results and verified == 0 and not args.allow_unreadable:
+        print()
+        print("No source repo could be read, so nothing was actually verified.")
+        print("Provide a token with read access to the source repos, or pass")
+        print("--allow-unreadable to record that verification was skipped on purpose.")
+        return 3
+
+    return 0
 
 
 if __name__ == "__main__":

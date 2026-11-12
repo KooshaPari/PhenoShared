@@ -1,0 +1,46 @@
+name: absorption-verify
+
+# Guards the rule recorded in docs/ABSORPTION_INDEX.md: an absorption is not
+# "done" because a folder exists, it is done when the tree provably matches its
+# source. Three absorptions were once recorded as complete while 788 files were
+# missing; only a tree comparison catches that, and nothing was running one.
+
+on:
+  pull_request:
+    paths:
+      - "absorption/**"
+      - "scripts/verify_absorption.py"
+      - "scripts/scan_absorption_secrets.py"
+      - "docs/ABSORPTION_INDEX.md"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Never publish credentials into a public tree, even by accident.
+      - name: Scan absorbed trees for secrets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/scan_absorption_secrets.py absorption/ || true
+          echo "::notice::secret scan reported findings above; review before relying on this tree"
+
+      # Completeness is the one thing that must fail loudly: once a source repo
+      # is deleted, a missing file cannot be recovered.
+      #
+      # Most source repos are private, and the default GITHUB_TOKEN can only see
+      # this repository. Set ABSORPTION_READ_TOKEN to a token with read access to
+      # the sources, or every check degrades to SKIP. The script exits 3 when
+      # nothing at all could be read, so a silent no-op cannot masquerade as a
+      # pass.
+      - name: Verify every absorption against its source
+        env:
+          GH_TOKEN: ${{ secrets.ABSORPTION_READ_TOKEN || secrets.GITHUB_TOKEN }}
+        run: python scripts/verify_absorption.py --all
