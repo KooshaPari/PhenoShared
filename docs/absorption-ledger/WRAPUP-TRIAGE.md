@@ -147,3 +147,95 @@ done
 
 The absorption test for the snapshot refs is the `git grep -h '^name = '` package-name
 list against each snapshot's `crates/*/Cargo.toml`.
+
+---
+
+## Addendum 2026-11-12: the three untriaged refs, triaged
+
+Measured at blob level, not at commit level. That measurement revises one conclusion
+above: **two crates absent from main were not counted**.
+
+| Ref | Commits unique to it | Disposition |
+|---|---|---|
+| `wrapup/zz-forensic-zz-pheno-20261108` | `9e1ca05fa` | **Empty tree.** The commit deletes everything it inherited: 9,855 files, 1,764,092 deletions against parent `ab32e9ec6`. Nothing to absorb, nothing at risk; the ref records a deletion, not stranded work. |
+| `wrapup/vitepress-relaunch-20261108` | `52aaca90e`, `6695b8738` | **Not absorbed.** 369 paths exist that main does not have. |
+| `wrapup/recovered-trunk-action-repair-20261108` | `44aa1d95a` | **Not absorbed.** 386 paths exist that main does not have. |
+
+### Where the two snapshots differ from main
+
+| Area | vitepress | recovered-trunk | Reading |
+|---|---|---|---|
+| `absorption/PhenoMLX-temp/perf-core/hwledger/` | 295 paths | 295 paths | **Pre-promotion copy.** The file set is identical to main's `crates/hwledger` (295 files each, zero branch-only paths, as `comm` reports). Content differs because main's promoted copy is the maintained one. No work at risk. |
+| root snapshot files | 55 | 58 | Main relocated them into `docs/absorbed-root-docs/`; of the 369 branch blobs, 249 are present in main at the relocated path. Older revisions. |
+| `.github/workflows/` | 3 | 6 | Older revisions of workflows main has since edited. |
+| `crates/phenotype-dag-core/` | 7 | 7 | **Absent from main.** See the correction below. |
+| `crates/pheno-registry-python/` | 7 | 7 | **Absent from main.** See the correction below. |
+| `tests/*.rs`, `tests/features`, `docs/adr`, `tools/integration-kit/`, `agents/phenoagent/` | 1 | 10 | Root-layout tests and ADRs from before the per-crate restructure; `tools/integration-kit/` and `agents/phenoagent/` are absent from main. |
+
+### Correction: two more main-absent crates
+
+`crates/phenotype-dag-core` (declares `name = "phenotype-dag-core"`; description says
+it is a standalone crate extracted from BytePort, renamed from `pheno-dag` on
+2026-09-01) and `crates/pheno-registry-python` (declares
+`name = "pheno-registry-python"`, a PyO3 SDK, `crate-type = ["cdylib"]`, depending on
+`phenotype-registry` at `../..`) appear in **neither the tree nor any manifest of
+`origin/main`**:
+
+```
+$ git ls-tree -r --name-only origin/main | grep -c 'crates/phenotype-dag-core/'
+0
+$ git ls-tree -r --name-only origin/main | grep -c 'crates/pheno-registry-python/'
+0
+$ git grep -l '^name = "phenotype-dag-core"' origin/main -- '**/Cargo.toml'
+(no output)
+```
+
+Their module content is absent too: `dag.rs`, `scheduler.rs`, `topo.rs`, `schema.rs`,
+`serialize.rs` and `lib.rs` all have blob hashes that occur nowhere in main, and main's
+nearest crates (`crates/substrate-dag`, `crates/dag-scheduler`) each hold a single
+`src/lib.rs`. Main nevertheless *refers* to both names: 25 paths mention
+`phenotype-dag-core` (audits plus `cmd/dagrun` Go code) and 11 mention
+`pheno-registry-python` (including the release workflow below).
+
+Both are held redundantly, so one ref deletion cannot lose them:
+
+| Crate | Refs holding it |
+|---|---|
+| `phenotype-dag-core` | `integration/absorbed-20261109`, `wrapup/{pheno,deny-advisory,vitepress-relaunch,d1-nontq,recovered-trunk-action-repair}-20261108` (6) |
+| `pheno-registry-python` | `wrapup/{pheno,deny-advisory,vitepress-relaunch,d1-nontq,recovered-trunk-action-repair}-20261108` (5) |
+
+**They join `phenoobservability` and `nanovms` on the do-not-delete list** until a
+product decision is recorded for each.
+
+### A latent defect this exposed
+
+Main's release workflow still builds the absent SDK:
+
+```
+$ git show origin/main:.github/workflows/publish-pypi.yml | sed -n '47p'
+          args: --release --out dist -m crates/pheno-registry-python/Cargo.toml
+```
+
+The step only runs on `release: [published]` or `workflow_dispatch`, so nothing is red
+today, but the next published release fails at wheel build because that manifest does
+not exist in main. Two small remedies, neither applied here because the choice is a
+product one:
+
+1. **Restore** `crates/pheno-registry-python/` (7 files; its manifest carries an empty
+   `[workspace]`, so the main workspace build is unaffected) from any ref in the table.
+2. **Retire** the SDK: drop the workflow step and the SDK references main carries in
+   `docs/atlas/codebase/`, `docs/dossiers/` and `docs/pilot/`.
+
+### Reproduction
+
+```bash
+git ls-tree -r --name-only "origin/wrapup/<ref>" | sort > branch.txt
+git ls-tree -r --name-only origin/main          | sort > main.txt
+comm -23 branch.txt main.txt                     # paths main does not have
+git ls-tree -r origin/main | awk '{print $3}' | sort -u > main-blobs.txt
+                                                 # then test each branch blob for membership
+git diff --stat ab32e9ec6 9e1ca05fa              # the empty-tree commit
+for r in $(git branch -r --list 'origin/wrapup/*'); do
+  git cat-file -e "$r:crates/phenotype-dag-core" 2>/dev/null && echo "$r"
+done
+```
