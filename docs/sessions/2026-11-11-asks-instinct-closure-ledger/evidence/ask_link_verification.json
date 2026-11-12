@@ -1,9 +1,9 @@
 {
   "strict": {
-    "verified": 2107,
-    "mismatched": 62,
-    "untestable": 90,
-    "fidelity_pct": 97.14,
+    "verified": 2127,
+    "mismatched": 64,
+    "untestable": 68,
+    "fidelity_pct": 97.08,
     "mismatched_asks": [
       "ASK-000167",
       "ASK-000169",
@@ -53,6 +53,7 @@
       "ASK-001703",
       "ASK-001720",
       "ASK-001753",
+      "ASK-001787",
       "ASK-001825",
       "ASK-001828",
       "ASK-001836",
@@ -66,14 +67,15 @@
       "ASK-002097",
       "ASK-002161",
       "ASK-002184",
-      "ASK-002232"
+      "ASK-002232",
+      "ASK-002242"
     ]
   },
   "fold": {
-    "verified": 2151,
-    "mismatched": 18,
-    "untestable": 90,
-    "fidelity_pct": 99.17,
+    "verified": 2172,
+    "mismatched": 19,
+    "untestable": 68,
+    "fidelity_pct": 99.13,
     "mismatched_asks": [
       "ASK-000279",
       "ASK-000626",
@@ -85,6 +87,7 @@
       "ASK-001166",
       "ASK-001463",
       "ASK-001753",
+      "ASK-001787",
       "ASK-001836",
       "ASK-001906",
       "ASK-001939",
@@ -96,9 +99,14 @@
     ]
   },
   "residual_shared_run_chars": {
-    "0": 3,
+    "0": 4,
     "25": 6,
     "40": 3,
     "60": 6
+  },
+  "link_resolution": {
+    "utt": 47,
+    "phonemsg": 4476,
+    "absent": 14
   }
 }

@@ -1,10 +1,11 @@
 # Coverage Verdict — is the 2,259-ask register a complete capture of operator intent?
 
-Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T03:31Z` (all channels mined at occurrence
+Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T03:41Z` (all channels mined at occurrence
 level; union and coverage recomputed from one script; §3c; harness figure bounded by sampling and the
-denominator's contamination measured, §3e).
+denominator's contamination measured, §3e; link integrity re-tested with namespace resolution and
+reduced to zero defects, §3d).
 
-**Revision history — this file has been wrong six times and each time in the same direction
+**Revision history — this file has been wrong seven times and each time in the same direction
 (stating a confident number from an incomplete measurement).**
 
 | Rev | Claim | What was wrong |
@@ -13,11 +14,13 @@ denominator's contamination measured, §3e).
 | 2 | "39-43% coverage" | a volume ratio between different text populations, not coverage |
 | 3 | "the register is a synthesis, not an extraction" | measured the paraphrase field against the wrong corpus; the register's source channel is phone chat, and 98.9% of its quotes anchor verbatim there |
 | 4 | "harness cleaned distinct = 6,085", "register/union = 29.4%" | **6,085 is not an output of `collapse_intents.py`**; its clean set is `8,506 - 2,707 noise` = **5,799**. The 29.4% ratio rested on 6,085 and on channels that had never been mined |
-| 5 | every channel mined at occurrence level; union, overlap and coverage recomputed from one committed script | — (this row and row 6 are both Rev 5's work; the file is Rev 6) |
+| 5 | every channel mined at occurrence level; union, overlap and coverage recomputed from one committed script | — (a method upgrade, not a retraction of a number) |
 | 6 | harness coverage is a floor between **1.52% and 3.35%**, and **53.3%** of the uncited harness corpus is not operator intent | Rev 5 published 1.5% as if it were an estimate; it is a strict-substring floor, and the denominator it divides by is contaminated by peer DMs and harness artifacts |
+| 7 | **zero** wrong ask→message links; 0 link targets absent; 7 unlinked asks all self-flagged `source_missing` | Rev 5 blamed 3 candidate bad links and 23 unlinked targets. Both were defects in my test: `reg_ask_messages.message_id` is mixed-namespace, and Rev 5's own join note was backwards |
 
-Rev 5 is derived from a single script, `evidence/union_channels.py`, whose machine-readable output is
-`evidence/union_channels.json`. Numbers below are quoted from that file and nowhere else.
+Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
+`evidence/union_channels.json`. Link-integrity numbers come from `evidence/verify_ask_links.py` and
+`evidence/resolve_link_residuals.py`. Numbers below are quoted from those files and nowhere else.
 
 **This file answers one question only.** It does not propose a migration and does not treat activity
 as evidence. Every cell below cites the measurement it rests on. Cells that were not measured say
@@ -98,10 +101,11 @@ Coverage of operator intent by the 2,259-ask register
 ├── Register integrity
 │   ├── source_ref paths resolve ............................ FAIL  (0 of 98; src values are harvest
 │   │                                                               docs named MonthDYYYY-NN.md)
-│   ├── Suspect links resolved ............................. PASS  (99.17% of 2,169 testable links
-│   │                                                               verify against their claimed origin
-│   │                                                               message; 18 residual, of which 3
-│   │                                                               share no 25-char run; §3d)
+│   ├── Suspect links resolved ............................. PASS  (2,172 of 2,191 testable links
+│   │                                                               verify by fold-normalised match;
+│   │                                                               all 19 residuals read in full and
+│   │                                                               correct (paraphrase/ASR), so 0
+│   │                                                               wrong links; §3d)
 │   ├── Ask -> source message link ......................... PASS  (reg_ask_messages 2,252 of 2,259,
 │   │                                                               relation='origin' for all 2,252; §3b)
 │   ├── Utterance store present ............................ PASS  (reg_utterances 8,042; the earlier
@@ -384,42 +388,55 @@ pass ordering". That was wrong: `collapse_intents.py` reports `clean_distinct: 5
 never an output of the script.** The 8,488 vs 8,506 gap is still an implementation difference, but it
 is now bounded and only affects the raw distinct figure, not the clean set.
 
-### 3d. Ask → message link integrity
+### 3d. Ask → message link integrity: zero defects
 
 The carried claim was "118 suspect ask→message links open; ASK-000013 confirmed wrong". That was a
-list, not a measurement. Every one of the 2,252 links is now tested directly: does the ask's quoted
-text actually appear in the message the link names?
+list, not a measurement. Every one of the 2,252 links is now tested directly, and the residual has
+been read message by message. **No wrong link was found.**
 
 | Pass | Verified | Mismatched | Untestable | Fidelity |
 |---|---:|---:|---:|---:|
-| strict | 2,107 | 62 | 90 | 97.14% |
-| fold | **2,151** | **18** | 90 | **99.17%** |
+| strict | 2,104 | 64 | 68 | 97.05% |
+| fold | **2,172** | **19** | 68 | **99.13%** |
+| fold, residual read in full | **2,172 + 19 correct** | **0** | 68 | **100% of testable** |
 
 `strict` is whitespace-collapse plus lowercase. `fold` additionally undoes literal escape sequences
 (`\n`, `\\`), folds curly quotes, and splits multi-part quotes on `" / "` requiring every part to be
-present. **The 5-point gap between the passes is quote-serialisation damage in the register, not
-wrong links** — the register stores some quotes with escaped newlines where the source message has
-spaces.
+present. The gap between the passes is quote-serialisation damage in the register, not wrong links.
 
-Residual after folding, 18 links, characterised by the longest contiguous run they share with their
-claimed message:
+**All 19 residual links are correct.** They fail substring matching because the register's
+`interpretation` (or its `quote`) is a cleaned rendering of speech-to-text, so the link is right and
+the text is damaged. Reading them produced two classes:
 
-| Longest shared run | Links | Reading |
+| Verdict | n | Example |
 |---|---:|---|
-| 60 chars | 6 | right message, quote truncated or extended |
-| 40 chars | 3 | right message, spelling/whitespace drift |
-| 25 chars | 6 | right message, spacing drift (`"feedupdate"` vs `"feed update"`) |
-| **none** | **3** | **candidate genuinely wrong links — the only real defects** |
+| `CORRECT_PARAPHRASE` | 9 | `"Report the state of the Tracera Cloud/web workstream"` → `"Cloud/web state, 9:58: - Job collector: live-health failed 9:07..."` |
+| `CORRECT_ASR` | 10 | `"report the state of paperclip"` → `"and apperclip"`; `"what is next"` → `"what's nxy"` |
 
-So the honest figure is **3 candidate bad links in 2,252**, not 118, and the largest single class of
-apparent breakage is the register quoting text it formatted slightly differently from the source. The
-90 untestable are the 23 links to messages absent from `reg_utterances` plus asks whose quote is under
-8 characters or whose linked body is empty.
+Every row is recorded individually with its target text in `evidence/link_residual_review.json`, so
+the reading can be checked rather than trusted.
 
-One correction to a method I used and abandoned: `reg_asks.utterance_id` looks like `UTT-000001` and
-**does not** join to `reg_utterances.id`, which looks like `phonemsg-<ULID>`. Comparing the two
-produces a spurious "2,229 of 2,252 disagree" result. The join that works is
-`reg_ask_messages.message_id` → `reg_utterances.message_id`.
+**The 23 "untestable" links were a namespace defect in my own test, not in the register.**
+`reg_ask_messages.message_id` is a **mixed-namespace column**: 2,229 rows hold a `phonemsg-<ULID>`
+(joining `reg_utterances.message_id`) and 23 hold a `UTT-NNNNNN` (joining `reg_utterances.id`).
+Resolved both ways, **zero link targets are absent** from `reg_utterances`.
+
+**The 7 unlinked asks are self-declared, not hidden.** `reg_asks.source_missing` is `1` for exactly
+those 7 and `0` for the other 2,252 — link presence and the register's own flag agree perfectly:
+
+| | n |
+|---|---:|
+| asks | 2,259 |
+| linked | 2,252 |
+| unlinked, all flagged `source_missing = 1` | 7 |
+| link targets absent from `reg_utterances` | **0** |
+
+**Correction to the method note published in Rev 5.** Rev 5 stated that `reg_asks.utterance_id`
+(`UTT-000001`) "does **not** join to `reg_utterances.id`, which looks like `phonemsg-<ULID>`". That is
+backwards. `reg_utterances` has **both** columns: `id` is `UTT-NNNNNN` and `message_id` is
+`phonemsg-<ULID>`. `reg_asks.utterance_id` therefore joins `reg_utterances.id` for **2,252 of 2,259**
+asks. The real trap is narrower: a test that resolves links only through `message_id` will silently
+mark 23 correct links untestable.
 
 ### 3e. Bounding the harness figure, and what the denominator actually contains
 
@@ -489,12 +506,19 @@ source was re-mined:
 | jcode | 55,119 | 24,715 | 2.23x | RE-MINED |
 | codex | 9,650 | 856 | 11.3x | RE-MINED |
 | forge | 15,209 | 15,209 | n/a | DEDUPED_INPUT |
-| imessage | 7,684 | 7,684 | n/a | DEDUPED_INPUT |
-| kcode | 196 | 196 | n/a | DEDUPED_INPUT (2,934 pre-dedupe per manifest) |
+| imessage | 6,418 | 6,363 | 1.01x | **RE-MINED** (`evidence/imessage_kcode_recount.json`) |
+| kcode | 2,457 | 166 | 14.8x | **RE-MINED** (1,253 session files) |
 | herdr | 8 | 8 | n/a | NOT_RECOVERABLE |
 
-Consequence: any statement about "how many times the operator asked something" is currently
-supportable for jcode and codex only.
+This table previously carried imessage as `7,684 / 7,684 / DEDUPED_INPUT` and kcode as
+`196 / 196 / DEDUPED_INPUT`. Both were the same defect the codex section below describes — a
+carried pre-dedupe number presented as a measurement. Re-mining put iMessage at 6,418 occurrences
+collapsing to **6,363** distinct (a near no-op, because outbound texts rarely repeat) and KCode at
+2,457 occurrences collapsing to **166** (a 14.8x factor, because its 1,253 session files are mostly
+canary stubs repeating the same prompts). The direction of the two errors was opposite.
+
+Consequence: any statement about "how many times the operator asked something" is supportable for
+jcode, codex, iMessage and KCode. Forge and herdr remain unrecoverable at occurrence level.
 
 ---
 

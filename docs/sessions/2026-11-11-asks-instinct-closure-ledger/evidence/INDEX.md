@@ -188,3 +188,40 @@ Recorded limits, so the correction is not over-claimed:
 - **iMessage was not sampled.** Whether a request to a *human* counts as operator intent is a
   definitional decision, not a measurement, and no contamination-adjusted union is published until it
   is settled.
+
+---
+
+## Addendum 5 — link integrity reduced to zero defects, and a Rev 5 method note retracted
+
+Re-running `verify_ask_links.py` with namespace resolution, then reading every residual against the
+full source message, closes the link question:
+
+| | n |
+|---|---:|
+| asks | 2,259 |
+| linked (`relation='origin'`) | 2,252 |
+| unlinked, **all** flagged `reg_asks.source_missing = 1` | 7 |
+| link targets absent from `reg_utterances` | **0** |
+| fold-normalised mismatches | 19 |
+| of those, read in full and judged correct | **19** |
+| **wrong links** | **0** |
+
+| Artifact | What it establishes |
+|---|---|
+| `verify_ask_links.py` (patched) | Adds a `resolve()` that tries `reg_utterances.message_id` then `reg_utterances.id`, and records `link_resolution` counts. Untestable drops 90 → 68 and verified rises 2,151 → 2,172. |
+| `resolve_link_residuals.py` | Reads all 19 residual pairs against their full source bodies and writes a per-row verdict, plus the namespace split and the unlinked set. |
+| `link_residual_review.json` | 9 `CORRECT_PARAPHRASE`, 10 `CORRECT_ASR`, `wrong_links_found: 0`; per-row interpretation and body excerpt for independent checking. |
+
+Two errors of mine, both recorded rather than quietly fixed:
+
+1. **`reg_ask_messages.message_id` is a mixed-namespace column** — 2,229 `phonemsg-<ULID>` plus 23
+   `UTT-NNNNNN`. A test resolving only via `message_id` marks 23 *correct* links untestable. There are
+   zero absent targets.
+2. **Rev 5's join note was backwards.** It said `reg_asks.utterance_id` (`UTT-000001`) does not join
+   `reg_utterances.id`. `reg_utterances` has both columns: `id` is `UTT-NNNNNN`, `message_id` is
+   `phonemsg-<ULID>`. The join `reg_asks.utterance_id → reg_utterances.id` succeeds for **2,252 of
+   2,259**.
+
+The 19 residual mismatches are not defects in the register; they are speech-to-text damage. Two
+readings, unchanged from the earlier review but now recorded row by row: `"report the state of
+paperclip"` ← `"and apperclip"`, and `"what is next"` ← `"what's nxy"`.

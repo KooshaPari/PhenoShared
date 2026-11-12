@@ -60,8 +60,26 @@ def main() -> int:
         "select id, interpretation from reg_asks")}
     links = {a: m for a, m in cur.execute(
         "select ask_id, message_id from reg_ask_messages")}
-    bodies = {m: b for m, b in cur.execute(
+
+    # `reg_ask_messages.message_id` is a MIXED-NAMESPACE column: 2,229 rows hold a
+    # `phonemsg-<ULID>` (which joins reg_utterances.message_id) and 23 hold a
+    # `UTT-NNNNNN` (which joins reg_utterances.id). Resolving only through
+    # message_id reports those 23 as untestable, not as wrong. Resolve both ways.
+    by_mid = {m: b for m, b in cur.execute(
         "select message_id, body from reg_utterances")}
+    by_id = {u: b for u, b in cur.execute(
+        "select id, body from reg_utterances")}
+    resolved_by = {}
+
+    def resolve(mid: str) -> tuple[str, str]:
+        if mid in by_mid:
+            resolved_by["phonemsg"] = resolved_by.get("phonemsg", 0) + 1
+            return by_mid[mid], "phonemsg"
+        if mid in by_id:
+            resolved_by["utt"] = resolved_by.get("utt", 0) + 1
+            return by_id[mid], "utt"
+        resolved_by["absent"] = resolved_by.get("absent", 0) + 1
+        return "", "absent"
 
     result: dict = {}
     for folding in (False, True):
@@ -75,7 +93,7 @@ def main() -> int:
         for ask, i in interp.items():
             q = next((x for x in quotes.get(norm(i, folding), [])
                       if len(x) >= MINQ), None)
-            b = norm(bodies.get(links.get(ask, ""), ""), folding)
+            b = norm(resolve(links.get(ask, ""))[0], folding)
             if q is None or not b:
                 skip += 1
                 continue
@@ -104,7 +122,7 @@ def main() -> int:
     for ask in result["fold"]["mismatched_asks"]:
         q = next((x for x in quotes.get(norm(interp[ask], folding), [])
                   if len(x) >= MINQ), "")
-        b = norm(bodies.get(links.get(ask, ""), ""), folding)
+        b = norm(resolve(links.get(ask, ""))[0], folding)
         best = 0
         for L in (60, 40, 25):
             if L > min(len(b), len(q)):
@@ -114,6 +132,8 @@ def main() -> int:
                 break
         shared[best] = shared.get(best, 0) + 1
     result["residual_shared_run_chars"] = {str(k): v for k, v in sorted(shared.items())}
+    result["link_resolution"] = resolved_by
+    print(f"\nlink resolution by namespace: {resolved_by}")
     print(f"\nresidual by longest shared run: {result['residual_shared_run_chars']}")
     print("  (a shared run >= 25 chars means the link points at the right message "
           "and the quote is damaged; 0 means a genuinely different message)")

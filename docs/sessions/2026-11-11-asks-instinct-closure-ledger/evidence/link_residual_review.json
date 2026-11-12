@@ -1,0 +1,180 @@
+{
+  "asks_total": 2259,
+  "asks_linked": 2252,
+  "asks_unlinked": 7,
+  "unlinked_asks": [
+    "ASK-000345",
+    "ASK-000637",
+    "ASK-000664",
+    "ASK-001844",
+    "ASK-002254",
+    "ASK-002255",
+    "ASK-002256"
+  ],
+  "unlinked_all_flagged_source_missing": true,
+  "source_missing_1_total": 7,
+  "target_namespaces": {
+    "phonemsg": 2229,
+    "utt": 23,
+    "absent": 0
+  },
+  "absent_targets": [],
+  "fold_residual_mismatches": 19,
+  "residual_reviewed": 19,
+  "wrong_links_found": 0,
+  "rows": [
+    {
+      "ask": "ASK-000279",
+      "target": "phonemsg-01M4EWVHDSHH0A3C6DF6F2J92G",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "755-char multi-topic utterance; one ask extracted",
+      "interpretation": "Work around ChatGPT's finicky uptime by waiting out the delay and reloading/ retrying until the chat responds",
+      "body_excerpt": "For the study guide chat, it should be that, uh, check for mentions of data mining, those exact module numbers, and 830 points for a B minus, as well as a mention that we cannot physically hit an A minus because we're around two to three points off. Those are things that should not be mentioned in any other chat and will be unique to this chat. For ChatGPT itself, I've faced that exact issue befor"
+    },
+    {
+      "ask": "ASK-000626",
+      "target": "phonemsg-01M4QDNJEJHSX8F642PM9FQDVM",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "'every deploy should work this way'",
+      "interpretation": "Make every project's deploy flow work the same standard way.",
+      "body_excerpt": "every deploy should work this way"
+    },
+    {
+      "ask": "ASK-000700",
+      "target": "phonemsg-01M4PJHPX2R7WT6MC7G7GTEC0W",
+      "verdict": "CORRECT_ASR",
+      "why": "'automatic feedupdate to dataset every 48hrs'",
+      "interpretation": "Set up an automatic feed that updates the dataset every 48 hours",
+      "body_excerpt": "Automatic feed\\update to dataset every 48hrs"
+    },
+    {
+      "ask": "ASK-000705",
+      "target": "phonemsg-01M4PJN2F27HE9ZKF5K3DKWJ15",
+      "verdict": "CORRECT_ASR",
+      "why": "'rebasingreplacive' = rebasing/replacive, spaces lost",
+      "interpretation": "Make the pull request a rebasing/replacive PR",
+      "body_excerpt": "The PR should be a rebasing\\replacive pr"
+    },
+    {
+      "ask": "ASK-000718",
+      "target": "phonemsg-01M4PM63RP8TBRN5AHTGFXP1TP",
+      "verdict": "CORRECT_ASR",
+      "why": "'cloudlocal' for cloud/local",
+      "interpretation": "Choose between chatgpt.com work and codex cloud/local for the follow-on batches when splitting to width of 25 repos as 5 repos by 5 agents",
+      "body_excerpt": "Im saying pick between chatgpt.com work || codex cloud\\local for the following batches when you split to width = 25 repos -> 5repo x5agent"
+    },
+    {
+      "ask": "ASK-000721",
+      "target": "phonemsg-01M4PMFY4SHQ2D60SZPP0AAD2J",
+      "verdict": "CORRECT_ASR",
+      "why": "'altnertivecomplementary' for alternative/complementary",
+      "interpretation": "Research alternative/complementary or competitor platforms for Paperclip plus a fork that supports own auth and agent/role definitions bound to harnesses",
+      "body_excerpt": "Paperclip needs altnertive\\complementary platform or just similar\\competitor research + a fork I assume for it to properly support all teh things we need, e.g. auth limited to codex sub rn when we want our own auth, similar case I assume for the agent\\role definitions and bindings to harnesses"
+    },
+    {
+      "ask": "ASK-000724",
+      "target": "phonemsg-01M4PMJCTY9GQ1TTPCTBZMXBHB",
+      "verdict": "CORRECT_ASR",
+      "why": "'blockstatus' for block/status",
+      "interpretation": "Provide an ETA for each outcome alongside granular progress block/status reporting",
+      "body_excerpt": "Need a Time to () for various outcomes w granular progress block\\status"
+    },
+    {
+      "ask": "ASK-001166",
+      "target": "phonemsg-01M4WPXNV83Q8ECTTP40K7JFPN",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "'no to swap m3 ref' read as leave the hardcoded ref",
+      "interpretation": "Leave the hardcoded m3 reference (pointing at m3.1 flash minimax on the OpenAI-compatible route) unswapped",
+      "body_excerpt": "NO to swap m3 ref which is hardcoded to m3.1 flash minimax on the openai combat"
+    },
+    {
+      "ask": "ASK-001463",
+      "target": "phonemsg-01M53D48EP96QKZ4GPB8DVAVH6",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "long utterance; asks for a state block per program",
+      "interpretation": "Produce a full state block and forward WBS for every listed program: agent containerization, browser and computer use, Hermes, Paperclip, agent-assistant infra, org and personal SSOT architecture, Tracera, ShareCLI, AgilePlus, Byteport, Civis, Khostty, Discord and email bridges, GPT chat reorg, port",
+      "body_excerpt": "All States regarding:\n\nAgent Containerization\n\nBrowser\\\u2026. Mentioend use development; prior attempts. Supposedly merged into Eidolon then PhenoShared\n\nHermes\\Paperclip\\Agent Assistnat Infra; \nOrg\\Personal SSOT Arch deployment and config\\setup\n\nTracera\nShareCLI\nAgilePLus\nByteport\nCivis\nKhostty\n\nDiscord bridge \\ Email Bridge \\ matter \\ other bridges to ALL agent sessions as SSOT for comms \\ coord;\n\nG"
+    },
+    {
+      "ask": "ASK-001753",
+      "target": "phonemsg-01M59B9QTN6B5PR5F6BSZVVDT1",
+      "verdict": "CORRECT_ASR",
+      "why": "'Desk allowed aga8n exam doje' = desk allowed again, exam done",
+      "interpretation": "Unblock and resume desk-host work items now that the exam is finished",
+      "body_excerpt": "Desk allowed aga8n exam doje"
+    },
+    {
+      "ask": "ASK-001787",
+      "target": "UTT-008025",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "'Cloud/web state, 9:58:' with a full status block",
+      "interpretation": "Report the state of the Tracera Cloud/web workstream",
+      "body_excerpt": "Cloud/web state, 9:58:\n- Job collector: live-health failed 9:07, Worker CPU cap alert 9:13, D1 status unknown (cap resets 5 PM)\n- Cockpit: API up, 52 projects, refreshed 9:39\n- KCode #124: draft, 4/5 checks, waits on desk runner\n- Tracera #1169/#1170: open, ~28/65 checks, Vercel red (quota); CI incomplete\n- Tracera health: Access 403 from here (last monitor: 524 at 4:17)\n- Resend: agents.kooshapar"
+    },
+    {
+      "ask": "ASK-001836",
+      "target": "phonemsg-01M5B0CXZ8DZ01Z7N4M7TWM575",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "'fan out agents to properly accelerate batch work on the 9x'",
+      "interpretation": "Fan out agents to properly accelerate the batch of 98 items",
+      "body_excerpt": "no just fan out agents to properly accelerate batch work on the 9"
+    },
+    {
+      "ask": "ASK-001906",
+      "target": "phonemsg-01M5H38VFZ595B9XKZHN2ZFREM",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "445-char utterance; 'tabs were added to kooshapri.com remove; dash only' reordered",
+      "interpretation": "Remove the tabs added to kooshapari.com and keep the dashboard-only layout",
+      "body_excerpt": "Build a rich pane to manage the status updates and historical ones ON the cockpit as a tab; tabs were added to kooshapri.com remove; dash only; and kooshapari.com: cursor invisible; broken\\ass renders and images; bad writing content\\blog drop entirely; some cards are light on light; the light bg for the card itself is bad agains page bg too; kooshapari needs construction banner + more restrained v"
+    },
+    {
+      "ask": "ASK-001939",
+      "target": "phonemsg-01M5G90D2XWPB4ME3K8G784BGH",
+      "verdict": "CORRECT_ASR",
+      "why": "'and apperclip' = apperclip for paperclip",
+      "interpretation": "Report the state of Paperclip.",
+      "body_excerpt": "And apperclip?"
+    },
+    {
+      "ask": "ASK-001956",
+      "target": "phonemsg-01M5GA97PYBDBR8HM28ZB570SM",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "'how to access hermesor use its uiagent or cli'",
+      "interpretation": "Document how to access Hermes via its UI, agent, or CLI and determine whether it is deployed on the desk yet",
+      "body_excerpt": "How to access hermes\\or use its ui\\agent or cli is it deployed on desk yet? Hermes on pwsh shows not recognize"
+    },
+    {
+      "ask": "ASK-002097",
+      "target": "phonemsg-01M5S49VYVY61E9KM8GF2WZJP5",
+      "verdict": "CORRECT_ASR",
+      "why": "'discord state'",
+      "interpretation": "Report the current state of the Discord integration",
+      "body_excerpt": "Discord state"
+    },
+    {
+      "ask": "ASK-002161",
+      "target": "phonemsg-01M5ZN671MC5Q1ZGJQB7NPMFB4",
+      "verdict": "CORRECT_ASR",
+      "why": "'token plan ( claude openai minimax sub) to ocgo equiv'",
+      "interpretation": "Convert the Claude, OpenAI and MiniMax subscription token plans into their opencode-go equivalents",
+      "body_excerpt": "Must convert token plan ( Claude openai minimax sub) to Ocgo equiv"
+    },
+    {
+      "ask": "ASK-002184",
+      "target": "phonemsg-01M60AAFTRBQXQ1BGNTEMKKJ0W",
+      "verdict": "CORRECT_PARAPHRASE",
+      "why": "'what is with all items paused and not acitively running'",
+      "interpretation": "Investigate and fix why all work items are paused and not actively running",
+      "body_excerpt": "what is with all items paused and not acitively running once again, why aren\u2019t they?"
+    },
+    {
+      "ask": "ASK-002232",
+      "target": "phonemsg-01M67EGR2V6H4MNRSJBS34WM0G",
+      "verdict": "CORRECT_ASR",
+      "why": "'what's nxy' = what's next",
+      "interpretation": "State what is next",
+      "body_excerpt": "What's nxy"
+    }
+  ],
+  "caveat": "verdicts are single-coder reading of quote vs full body"
+}
