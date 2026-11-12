@@ -96,7 +96,7 @@ fn oversized_input_produces_canonical_deny() {
     let padding = pad_target.saturating_sub(valid.len());
     let mut payload = Vec::with_capacity(pad_target + 1);
     payload.extend_from_slice(valid.as_bytes());
-    payload.extend(std::iter::repeat(b' ').take(padding));
+    payload.extend(std::iter::repeat_n(b' ', padding));
     payload.push(b'!'); // exactly STDIN_LIMIT + 1 bytes
     assert!(payload.len() > 1024 * 1024, "payload must exceed LIMIT");
     let (code, stdout, stderr, _tmp) = run_harness(&payload, 30);

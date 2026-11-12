@@ -256,6 +256,12 @@ jobs:
       - name: gitleaks
         uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
         env:
+          # Same pin and same reasoning as `.github/workflows/security.yml`.
+          # The action's default (8.24.3) ignores every `[[allowlists]]` block in
+          # `.gitleaks.toml`, so the four documented placeholder fixtures read as
+          # live leaks.
+          GITLEAKS_CONFIG: .gitleaks.toml
+          GITLEAKS_VERSION: 8.30.0
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dep-review:

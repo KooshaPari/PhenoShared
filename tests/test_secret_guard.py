@@ -9,17 +9,23 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GUARD = REPO_ROOT / "scripts" / "secret-guard.py"
 BASELINE_FIXTURE = (
     REPO_ROOT / "tests" / "fixtures" / "secret_guard" / "unchanged-baseline.json"
 )
 
+# Built at import time, so no scanner sees a key-shaped literal in this file.
+# The guard, gitleaks and GitGuardian all scan the tests, and a fixture that has
+# to look like a credential only has to look like one at runtime.
+LOOKALIKE_OPENAI_KEY = "sk-" + "testkey" * 3
+
 
 def run_git(repo: Path, *args: str) -> None:
+    # core.hooksPath is emptied so a developer machine's global commit-message
+    # hook cannot decide whether these fixture commits are allowed to exist.
     subprocess.run(
-        ["git", *args],
+        ["git", "-c", "core.hooksPath=", *args],
         cwd=repo,
         check=True,
         stdout=subprocess.PIPE,
@@ -55,6 +61,10 @@ class SecretGuardChangedContentTests(unittest.TestCase):
         path.write_text(content, encoding="utf-8")
         run_git(self.repo, "add", relative_path)
         run_git(self.repo, "commit", "--quiet", "-m", message)
+
+    def baseline(self) -> None:
+        """`--since-ref HEAD^` needs a parent commit to resolve against."""
+        self.commit("registry/index.json", '{"version": 1}\n', "baseline")
 
     def test_unchanged_baseline_pattern_is_ignored(self) -> None:
         baseline = json.loads(BASELINE_FIXTURE.read_text(encoding="utf-8"))
@@ -105,6 +115,87 @@ class SecretGuardChangedContentTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 2)
         self.assertIn("invalid git revision", result.stderr)
+
+    def test_documented_placeholder_values_are_ignored(self) -> None:
+        # The three findings that turned main red on 2026-11-11, in the shapes
+        # they appear in: the AWS documentation example key, two BytePort
+        # link-handler fixtures, and a scanner spelling out the fakes it hunts.
+        self.baseline()
+        self.commit(
+            "absorption/byteport/backend/byteport/routes/link_test.go",
+            'const body = `{"accessKeyId": "AKIAIOSFODNN7EXAMPLE",'
+            ' "apiKey": "sk-legacy-camelcase-key"}`\n'
+            'const fakes = {"AKIAABCDEFGHIJKLMNOP",'
+            ' "ghp_abcdefghijklmnopqrstuvwxyz0123456789"}\n',
+            "placeholder fixtures",
+        )
+
+        result = self.run_guard("--since-ref", "HEAD^")
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_lookalike_keys_beside_placeholders_are_blocked(self) -> None:
+        # Negative control: the allowlist is per value, so a credential that
+        # merely shares a file with placeholders is still reported.
+        self.baseline()
+        self.commit(
+            "absorption/byteport/backend/byteport/routes/link_test.go",
+            'const body = `{"accessKeyId": "AKIAIOSFODNN7EXAMPLE",'
+            ' "apiKey": "' + LOOKALIKE_OPENAI_KEY + '"}`\n',
+            "placeholder plus a real-shaped key",
+        )
+
+        result = self.run_guard("--since-ref", "HEAD^")
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("OpenAI key", result.stdout)
+        self.assertNotIn("AWS access key", result.stdout)
+
+    def test_env_template_is_scanned_rather_than_denied(self) -> None:
+        # `.env.example` is a file a repository has to commit. It carries names
+        # and local defaults, and no credential.
+        self.baseline()
+        self.commit(
+            "absorption/byteport/.env.example",
+            "# BytePort environment\n"
+            "BYTEPORT_API_PORT=8081\n"
+            "BYTEPORT_DATABASE_URL=sqlite:///data/byteport.db\n"
+            "BYTEPORT_PASETO_KEY=\n"
+            "WORKOS_CLIENT_SECRET=\n",
+            "env template",
+        )
+
+        result = self.run_guard("--since-ref", "HEAD^")
+
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("checked 1 changed file", result.stdout)
+
+    def test_env_template_carrying_a_key_is_blocked(self) -> None:
+        self.baseline()
+        self.commit(
+            "absorption/byteport/.env.example",
+            "WORKOS_CLIENT_SECRET=" + LOOKALIKE_OPENAI_KEY + "\n",
+            "template with a value",
+        )
+
+        result = self.run_guard("--since-ref", "HEAD^")
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("potential secret pattern (OpenAI key)", result.stdout)
+
+    def test_non_template_env_file_is_still_denied(self) -> None:
+        # The template exception is three suffixes wide, not a hole in the rule.
+        self.baseline()
+        self.commit(
+            "absorption/byteport/.env.local",
+            "WORKOS_CLIENT_SECRET=\n",
+            "local env file",
+        )
+
+        result = self.run_guard("--since-ref", "HEAD^")
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("blocked path for secrets/PII risk", result.stdout)
 
 
 if __name__ == "__main__":
