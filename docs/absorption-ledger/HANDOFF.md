@@ -39,6 +39,19 @@ The scrub question is now narrow and is **not** a secrets question:
 So the decision is whether disclosing your service hostnames is acceptable. If
 yes, the scrub is a handful of placeholders and the push is mechanical.
 
+**Scrub applied** to `E:\koosh\Agents\scratch\personal-split\S-scrubbed`
+(185 files). Two passes, 113 replacements across 43 files. The first pass had real
+blind spots worth recording: it matched `C:\Users\koosh` but not
+`/Users/kooshapari`, so macOS home paths kept the username, and an escaped dot
+(`agents\.kooshapari\.com` inside a regex literal) defeated both the hostname
+and email patterns. Post-scrub verification is now clean on home paths, real
+UUIDs, and the handle inside hostnames. The only residue is `KooshaPari` as the
+public GitHub org name, which is not a disclosure.
+
+Replacements keep the shapes valid so the code still parses: hostnames became
+`example.com`, UUIDs became a well-formed nil-shaped UUID, launchd labels became
+`com.example.*`. Publishing from `S-scrubbed` rather than `S` is the safer path.
+
 ## Do not redo
 
 - **Helios histories are preserved.** HeliosLite: 1,061 refs / 5 namespaces.
