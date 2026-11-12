@@ -100,6 +100,17 @@ jobs:
             printf '%s=%s\n' "$k" "$(grep -c "^$k=" <<< "$(cat "$GITHUB_OUTPUT")")"
           done
 
+  sdk-catalog:
+    name: SDK Catalog Invariant
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
+      - name: Check sdk-catalog
+        # tools/sdk-catalog/check.py is a stdlib-only invariant check. It was
+        # runnable but unreferenced by any workflow, so a catalog drift could
+        # merge green. This job puts it on every push and pull_request path.
+        run: python3 tools/sdk-catalog/check.py
+
   cargo-deny:
     name: Cargo Deny (Advisories + Licenses)
     needs: detect
