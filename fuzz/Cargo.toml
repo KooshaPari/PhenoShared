@@ -1,5 +1,6 @@
 [package]
 name = "phenotype-infra-fuzz"
+license = "MIT OR Apache-2.0"
 edition = "2021"
 [[bin]]
 name = "fuzz_target"

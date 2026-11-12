@@ -1,5 +1,6 @@
 [package]
 name = "turbo-quant-go"
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 edition = "2021"
 description = "Go cgo binding to TurboQuant C ABI"

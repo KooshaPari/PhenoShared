@@ -1,5 +1,6 @@
 [package]
 name = "turbo-quant-bench"
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 edition = "2021"
 description = "Microbenchmark harness for turbo-quant polyglot backends"
