@@ -4,6 +4,13 @@ Every repository listed here has been deleted from GitHub. This file exists so
 that "it was absorbed" is checkable rather than asserted: for each entry, the
 surviving location of its files, its history and its discussion is named.
 
+**Scope.** This covers the 2026-11-12 waves only. Earlier waves are recorded in
+[`../ABSORPTION_INDEX.md`](../ABSORPTION_INDEX.md), which remains the canonical
+index of absorbed and retired repositories; read the two together. This file
+exists because those waves introduced preservation methods that the index does
+not describe, and because the proof for each one needs to be readable beside the
+deletion rather than inferred from a worklog reference.
+
 Nothing may be added here before the corresponding proof exists. The checks are
 in `scripts/`:
 

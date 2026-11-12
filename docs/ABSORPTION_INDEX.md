@@ -118,6 +118,41 @@ store: several are described as the only surviving copy of upstreams whose remot
 no longer exist, holding repaired git bundles, bare mirrors and shallow-boundary
 preservations. They are not consolidation candidates and were left untouched.
 
+That caution was re-tested on 2026-11-12 rather than left as an assertion. No
+store's ref set matches any live repository, and the four that share a name with
+a live repo hold no commit that exists in it: `AgilePlus`, `Melosviz`, `Pine` and
+`Tracera` each have an archive carrying unmerged `pr-*` and `work-*` branches
+that survive nowhere else. Evidence in
+[`docs/absorption-ledger/RECOVERY-STORES.md`](absorption-ledger/RECOVERY-STORES.md).
+
+## Private ops, oversize histories and dependency forks (2026-11-12)
+
+Twenty-two repositories were deleted after new preservation methods were proved.
+Detail and per-repo proof: [`docs/absorption-ledger/DELETIONS.md`](absorption-ledger/DELETIONS.md).
+
+| Wave | Deleted | Content preserved as | History preserved as |
+|---|---:|---|---|
+| Private ops repositories | 9 | `PhenoRegistry/repos/<repo>/tree/` | `refs/preserved/<repo>/` |
+| Histories too large for a bundle | 2 | `absorption/PhenoMLX-temp/`, `absorption/phenotype-canonicalization/` | `refs/preserved/` and a bundle |
+| Dependency forks | 11 | not copied; every ref preserved | `refs/preserved/<repo>/`, 2,950 refs |
+
+Three points are worth carrying forward.
+
+**A bundle cannot preserve a large history.** GitHub rejects any file over
+100 MB, so `PhenoMLX-temp` at 187 MB could never be stored that way. History now
+goes in as real git objects under `refs/preserved/`, which has no such ceiling
+and restores with a plain fetch.
+
+**Counting files is not proving them.** The private ops repos were verified by
+comparing git blob ids between source and destination. Since a blob id is a
+content hash, equality per path proves every file byte-identical; 769 files
+across nine repos matched.
+
+**A fork's default branch is not its work.** Several `zz-*` forks have an
+inherited default branch identical to upstream while the real work sits
+elsewhere, so branch-diff exports silently dropped it. Preserving every ref made
+the export self-proving and avoided guessing. `Bifrost` alone carried 1,664 refs.
+
 ## Verification is required, not assumed
 
 This index records intent, not proof. Three entries above were marked absorbed

@@ -10,22 +10,34 @@ one of these believing it is a duplicate.
 
 ## The test
 
-Two tests were run, read-only.
+Three read-only checks were run.
 
 **Ref identity.** If a store's ref names and tip shas match a live repository
 exactly, the store holds nothing the live repository does not. None matched.
+
+**Tree identity across every repository.** A tree id is a content hash of the
+whole working tree, so two repositories sharing one contain the same files at the
+same paths. Comparing the default-branch tree id of all 83 repositories produced
+**no duplicate groups at all**, so no store's default branch duplicates any other
+repository under any name, not just a similarly named one.
 
 **Containment.** A store with only a few refs against a large live repository is
 probably a snapshot of an older state, in which case its commits would all be
 ancestors of the live branches. Checking whether each tip commit resolves inside
 the live repository settles it.
 
+What this does not establish: exhaustive per-branch containment between a store
+and a differently named repository. The default-branch sweep and the same-name
+ref comparison cover the realistic cases, but a store could in principle hold a
+non-default branch duplicating another repo's branch. Nothing found so far
+suggests that, and none of it is grounds for deletion either way.
+
 ## Result
 
 Of the 24 stores matching the archive name pattern:
 
-- **20 have no live counterpart at all.** Nothing else in the account carries
-  their content.
+- **20 have no live counterpart at all.** No other repository shares their name,
+  and no repository anywhere has the same default-branch tree.
 - **4 share a name with a live repository, and not one of their tip commits
   exists in it.**
 
