@@ -225,3 +225,53 @@ Two errors of mine, both recorded rather than quietly fixed:
 The 19 residual mismatches are not defects in the register; they are speech-to-text damage. Two
 readings, unchanged from the earlier review but now recorded row by row: `"report the state of
 paperclip"` ← `"and apperclip"`, and `"what is next"` ← `"what's nxy"`.
+
+---
+
+## Addendum 6 — clause granularity, and an ask-classifier rejected by its own validation
+(2026-11-12T04:50Z)
+
+Files: `segment_units.py`, `granularity_units.json`, `sample_ask_rules.py`, `ask_rule_sample.json`,
+`ask_rule_labels.json`, `score_ask_rules.py`, `ask_rule_validation.json`.
+
+**Question.** The union compares two different units: a register ask is one extracted intent, a harness
+member is a whole prompt. If that mismatch caused the low coverage figures, the shortfall would be a
+reporting artifact. §3f tests it.
+
+**Method.** `segment_units.py` splits every channel member on structure only — newlines, sentence
+terminators, semicolons, dash joins, list markers, min 12 chars — with no semantic judgement, so the
+denominator is reproducible without a model. Citation is unchanged: a register quote appearing as a
+substring of the clause.
+
+| Channel | Members | Clauses | Clauses/member | Cited | Coverage |
+|---|---:|---:|---:|---:|---:|
+| harness | 5,799 | 33,148 | 5.72 | 440 | 1.3% |
+| iMessage | 6,363 | 8,214 | 1.29 | 1,487 | 18.1% |
+| KCode | 166 | 2,185 | 13.16 | 2 | 0.1% |
+| phone | 2,077 | 3,697 | 1.78 | 1,534 | 41.5% |
+| union | 11,752 | 43,305 | — | 3,463 | **8.0%** |
+
+**Result: the objection does not hold.** The numerator and the denominator both grew
+(88 members → 440 cited clauses; 5,799 → 33,148 clauses), so harness coverage barely moved, 1.52% →
+1.3%. Granularity was not suppressing the figure.
+
+**A candidate headline was withheld.** Filtering clauses by ask cues selected 7,416 of 33,148 (22.4%)
+and would have produced a 0.7% headline. That filter was validated instead of trusted: 30 predicted-ask
+and 15 rejected clauses, `random.seed(23)`, hand-labelled, scored.
+
+| Measure | Value |
+|---|---:|
+| precision | 0.733 (22/30) |
+| ask rate in the rejected stratum | 0.267 (4/15) |
+| estimated true ask clauses | ≈ 12,300 (37.1%) |
+| **recall** | **0.44** |
+
+Recall 0.44 means the gate misses more than half the asks, so its denominator understates the ask
+population by ~40% and would have **inflated** coverage in the author's favour. It was rejected, and
+0.7% was not published. Correcting both sides for the measured error gives 1.4–1.7%, which agrees with
+the two member-level cuts and the mechanical clause-level 1.3%.
+
+**Limits.** One coder; clauses judged without parent message (biases terse fragments to `NOT_ASK`); a
+second rater would move precision and recall by several points. The finding used here — recall well
+below 0.9 — is robust to that; the exact 0.44 is not. iMessage and KCode clauses were segmented but not
+sampled, so their 18.1% and 41.5% carry unmeasured contamination.

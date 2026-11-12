@@ -1,0 +1,36 @@
+{
+  "seed": 23,
+  "strata": {
+    "PRED_ASK": {
+      "ASK": 22,
+      "NOT_ASK": 7,
+      "NOT_OPS": 1
+    },
+    "PRED_NOT": {
+      "NOT_ASK": 9,
+      "ASK": 4,
+      "AMBIGUOUS": 2
+    }
+  },
+  "n": {
+    "PRED_ASK": 30,
+    "PRED_NOT": 15
+  },
+  "population": {
+    "pred_ask": 7416,
+    "pred_not": 25732
+  },
+  "precision": 0.733,
+  "miss_rate_rejected_stratum": 0.267,
+  "estimated_true_ask_units": 12300,
+  "estimated_true_ask_share_pct": 37.1,
+  "recall": 0.442,
+  "coverage_gated_pct": 1.7,
+  "coverage_corrected_pct_range": [
+    1.4,
+    1.7
+  ],
+  "coverage_all_units_pct": 1.3,
+  "verdict": "REJECT for publication",
+  "limits": "single coder; units judged without parent message, which biases terse fragments toward NOT_ASK; iMessage and KCode not sampled"
+}

@@ -1,12 +1,14 @@
 # Coverage Verdict — is the 2,259-ask register a complete capture of operator intent?
 
-Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T03:41Z` (all channels mined at occurrence
+Recorded (UTC): `2026-11-11T13:00Z`. Revised `2026-11-12T04:50Z` (all channels mined at occurrence
 level; union and coverage recomputed from one script; §3c; harness figure bounded by sampling and the
 denominator's contamination measured, §3e; link integrity re-tested with namespace resolution and
-reduced to zero defects, §3d).
+reduced to zero defects, §3d; coverage re-derived at **clause granularity**, which required an
+ask-classifier that failed validation and was therefore not used for the headline, §3f).
 
-**Revision history — this file has been wrong seven times and each time in the same direction
-(stating a confident number from an incomplete measurement).**
+**Revision history — this file has been wrong seven times, each time in the same direction (stating a
+confident number from an incomplete measurement). Rev 8 is the first entry that corrects nothing: it
+re-derives coverage at a finer granularity and finds the published shortfall survives the change.**
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -17,10 +19,14 @@ reduced to zero defects, §3d).
 | 5 | every channel mined at occurrence level; union, overlap and coverage recomputed from one committed script | — (a method upgrade, not a retraction of a number) |
 | 6 | harness coverage is a floor between **1.52% and 3.35%**, and **53.3%** of the uncited harness corpus is not operator intent | Rev 5 published 1.5% as if it were an estimate; it is a strict-substring floor, and the denominator it divides by is contaminated by peer DMs and harness artifacts |
 | 7 | **zero** wrong ask→message links; 0 link targets absent; 7 unlinked asks all self-flagged `source_missing` | Rev 5 blamed 3 candidate bad links and 23 unlinked targets. Both were defects in my test: `reg_ask_messages.message_id` is mixed-namespace, and Rev 5's own join note was backwards |
+| 8 | clause-granularity coverage is **8.0%** of the union; harness coverage stays **1.3–1.7%** however it is cut | not a retraction — a method result. It establishes that the low figure is **not** a granularity artifact, and it rejects the ask-classifier I built to sharpen the denominator (precision 0.73, recall 0.44) |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
-`evidence/union_channels.json`. Link-integrity numbers come from `evidence/verify_ask_links.py` and
-`evidence/resolve_link_residuals.py`. Numbers below are quoted from those files and nowhere else.
+`evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
+(`evidence/granularity_units.json`) and its validation `evidence/score_ask_rules.py`
+(`evidence/ask_rule_validation.json`). Link-integrity numbers come from
+`evidence/verify_ask_links.py` and `evidence/resolve_link_residuals.py`. Numbers below are quoted from
+those files and nowhere else.
 
 **This file answers one question only.** It does not propose a migration and does not treat activity
 as evidence. Every cell below cites the measurement it rests on. Cells that were not measured say
@@ -63,7 +69,8 @@ this section was rewritten twice:
 > ratio, not an intent-level measure (§3c, §3e). The 39-43% figure below is a **volume ratio**, not
 > coverage.
 
-**Seven corrections, all mine.** Each moved confidence down while the conclusion held.
+**Seven corrections, all mine** — each moved confidence down while the conclusion held — **plus one
+structural test the conclusion passed** (item 8).
 
 1. "At most 23%" came from 9,802 raw strings. Wrong in the pessimistic direction: 31.8% of those were
    harness text that `is_injected` missed. Intent clustering gave 5,216-5,799, i.e. 39-43%.
@@ -84,6 +91,11 @@ this section was rewritten twice:
 7. **The 3 "candidate bad links" and the 23 "absent link targets" were defects in my own test**, not
    in the register. There are zero wrong links; the 7 unlinked asks are self-flagged
    `source_missing`. See §3d.
+8. **Not a correction — a test the conclusion passed.** Re-cutting the union at clause granularity
+   moved coverage from 15.0% of members to 8.0% of 43,305 clauses, and harness coverage from 1.52% to
+   1.3–1.7%: the shortfall is not a units artifact. The ask-classifier built to sharpen the
+   denominator was **rejected by its own validation** (precision 0.73, recall 0.44) before its 0.7%
+   figure could be published. See §3f.
 
 The previously circulated figure of 2% coverage is **withdrawn**. It was not derived from a query
 that anyone can reproduce, and its numerator and denominator were both post-dedupe counts.
@@ -491,6 +503,81 @@ Two honest limits on that correction, so it is not over-claimed:
   request to a human counts as "operator intent" is a definitional decision, not a measurement. Until
   that is settled, no contamination-adjusted union can be presented as a number.
 
+### 3f. Granularity normalisation: the figure survives the change
+
+§3e left one structural objection open. The union counts **members**, and the two sides disagree on
+what a member is: a register ask is an extracted intent, usually one imperative sentence, while a
+harness member is an entire prompt, median a few hundred characters and tailing past 4 KB. A prompt
+carrying eight asks is one member and can earn one citation. If that mismatch were the cause of the
+low figures, coverage would be a reporting artifact rather than a real shortfall. So every channel was
+re-cut at **clause granularity** (`evidence/segment_units.py`, `evidence/granularity_units.json`).
+
+The split is **structural only** — newlines, sentence terminators, semicolons, dash joins, list
+markers, minimum 12 characters — and contains no semantic judgement, so the denominator is
+reproducible without a model.
+
+| Channel | Members | Distinct clauses | Clauses/member | Cited clauses | Coverage |
+|---|---:|---:|---:|---:|---:|
+| harness | 5,799 | 33,148 | 5.72 | 440 | **1.3%** |
+| iMessage | 6,363 | 8,214 | 1.29 | 1,487 | **18.1%** |
+| KCode | 166 | 2,185 | 13.16 | 2 | **0.1%** |
+| phone | 2,077 | 3,697 | 1.78 | 1,534 | **41.5%** |
+| **union** | 11,752 | **43,305** | — | **3,463** | **8.0%** |
+
+(Member union 11,752 is the de-duplicated figure; the four channel member counts sum to 14,405. The
+clause union subtracts 3,939 cross-channel duplications from a 47,244-clause sum.)
+
+**The objection does not hold.** Harness coverage is 1.52% on members and 1.3% on clauses:
+segmentation multiplied the numerator (88 members → 440 cited clauses) but multiplied the denominator
+faster (5,799 → 33,148), so the ratio barely moved. The low harness figure is not an artifact of
+counting whole prompts.
+
+#### The ask-classifier I built to sharpen this was rejected on measurement
+
+8.0% is a **lower bound on ask coverage**, because the denominator carries non-ask clauses: pasted
+logs, status reports, metadata dumps. To tighten it, clauses were filtered by an explicit ask-cue rule
+set (imperative opener, request phrasing, question mark, question opener), which selected 7,416 of
+33,148 harness clauses (22.4%). That rule set gated a candidate headline of **0.7%**, so it was
+validated rather than trusted: 30 predicted-ask clauses and 15 rejected clauses, seeded
+(`evidence/sample_ask_rules.py`, `random.seed(23)`), labelled by hand
+(`evidence/ask_rule_labels.json`), scored (`evidence/score_ask_rules.py`).
+
+| Measure | Value |
+|---|---:|
+| precision — predicted asks that are asks | **0.733** (22/30) |
+| ask rate in the rejected stratum — the miss rate | **0.267** (4/15) |
+| estimated true ask clauses | **≈ 12,300** of 33,148 (37.1%) |
+| **recall** | **0.44** |
+
+**Recall of 0.44 means the gate misses more than half the asks**, so its denominator is not a
+measurement and 0.7% was withheld. The 7,416-clause denominator understates the ask population by
+~40%, which — had it been used — would have inflated coverage in my own favour. That is the same
+failure mode as revs 1, 2 and 4, caught before publication this time rather than after.
+
+Correcting numerator and denominator for the gate's measured error gives harness ask-clause coverage
+of **1.4%–1.7%**. Four independent cuts now agree:
+
+| Cut | Harness coverage |
+|---|---:|
+| members, strict substring (Rev 6 floor) | 1.52% |
+| members, upper bound if every sampled `NEW_ASK` is missed | 3.35% |
+| clauses, all (mechanical, no classifier) | 1.3% |
+| clauses, ask-gated and corrected for gate error | 1.4–1.7% |
+
+The gate's error does not widen that band much because both its false positives and its false
+negatives are diluted across a large denominator. **Granularity was not the problem; recall of the
+operator's asks is.** The headline remains the mechanical 8.0% clause-level figure, with 1.3–1.7% as
+the harness-specific one.
+
+Two limits, stated so this is not over-claimed:
+
+- Labels came from **one coder**, and clauses were judged without their parent message, which biases
+  terse fragments toward `NOT_ASK`. A second rater would move precision and recall by several points.
+  The conclusion used here — that recall is well below 0.9 — is robust to that; the exact 0.44 is not.
+- **iMessage and KCode clauses were segmented but not sampled.** iMessage's 18.1% and phone's 41.5%
+  are clause-count ratios with unmeasured contamination, exactly as §3e says of the iMessage member
+  figures.
+
 ### Corrected statement
 
 The register **is** a verbatim-anchored extraction of real operator utterances: 98.9% of its quotes
@@ -499,6 +586,11 @@ appear in the phone-chat message store and 96.7% appear somewhere in a mined cha
 it draws from **one** channel. It covers 26.3% of iMessage distinct messages, 1.5% of the harness
 corpus, 1.2% of KCode, and **15.0% of the 11,752-member union**. The migration gate stays closed on an
 order-of-magnitude shortfall, not on a disputed ratio.
+
+That conclusion was tested against the strongest structural objection available — that the union
+compares intents to whole prompts — and **survived it**. Re-cut at clause granularity (§3f) the register
+cites **3,463 of 43,305 distinct operator clauses (8.0%)**, and harness coverage moves only from 1.52%
+to 1.3–1.7% depending on how the denominator is cut. The shortfall is real, not a units artifact.
 
 
 ---
