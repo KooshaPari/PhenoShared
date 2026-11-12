@@ -42,10 +42,9 @@ use tracing::{error, info};
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
-    // L5 #81: tracing init goes through pheno_tracing::init() so the
-    // fleet has a single canonical subscriber configuration (JSON to
+    // L5 #81: single canonical subscriber configuration (JSON to
     // stderr, `RUST_LOG` env, default `info`). Idempotent.
-    pheno_tracing::init();
+    init_tracing();
 
     info!(
         version = env!("CARGO_PKG_VERSION"),
@@ -176,4 +175,23 @@ async fn run_stdio(app: Arc<app::App>) -> anyhow::Result<()> {
     writer.flush().await?;
     info!("playcua-native exiting");
     Ok(())
+}
+
+/// Install the process-wide tracing subscriber exactly once.
+///
+/// JSON to stderr so stdout stays a clean JSON-RPC channel, filter from
+/// `RUST_LOG`, default level `info`.
+fn init_tracing() {
+    use std::sync::Once;
+
+    static INIT: Once = Once::new();
+    INIT.call_once(|| {
+        let filter = tracing_subscriber::EnvFilter::try_from_default_env()
+            .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"));
+        tracing_subscriber::fmt()
+            .with_env_filter(filter)
+            .json()
+            .with_writer(std::io::stderr)
+            .init();
+    });
 }
