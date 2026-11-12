@@ -2,7 +2,8 @@
 """Gate sdk-catalog.json against the seam contract.
 
 Reads only sdk-catalog.json, so it is fast and runs anywhere. Exit 0 = all checked rules
-hold; exit 2 = at least one violation, printed as a table.
+hold; exit 2 = at least one violation, printed as a table; exit 3 = `cargo metadata` could not
+be evaluated, so R2/R3 were not checked (fail closed, never a silent PASS).
 
 Rules (numbers match the remediation plan's seam contract):
   R1  standalone packaging : every `publish` crate can `cargo package --no-verify`
@@ -43,10 +44,42 @@ def main():
     violations = {"R1": [], "R2": [], "R3": [], "R4": [], "R5": []}
     dev_only = []
 
-    # R2 + R3: recompute local edges, because the catalog stores counts, not pairs
-    raw = subprocess.run(["cargo", "metadata", "--no-deps", "--format-version", "1", "--offline"],
-                         cwd=ROOT, capture_output=True, text=True)
-    meta = json.loads(raw.stdout) if raw.returncode == 0 else {"packages": []}
+    # R2 + R3: recompute local edges, because the catalog stores counts, not pairs.
+    #
+    # Fail closed. R2/R3 are derived entirely from `cargo metadata`, so if that call fails
+    # the two rules have evaluated nothing at all. Treating the failure as an empty package
+    # list makes both rules report PASS against zero edges and the script exit 0, i.e. a
+    # green gate over an unevaluated contract. That is how a broken workspace manifest, or a
+    # runner without a cargo on PATH, would slip through a hard gate unnoticed.
+    try:
+        raw = subprocess.run(["cargo", "metadata", "--no-deps", "--format-version", "1",
+                              "--offline"], cwd=ROOT, capture_output=True, text=True)
+    except OSError as exc:
+        print(f"cargo is not runnable ({exc}); R2/R3 CANNOT be evaluated.", file=sys.stderr)
+        print("\nFAIL: layer/feature rules were not evaluated (exit 3).", file=sys.stderr)
+        return 3
+    if raw.returncode != 0:
+        detail = (raw.stderr or raw.stdout or "").strip().splitlines()[-4:]
+        print(f"cargo metadata failed (exit {raw.returncode}); "
+              "R2/R3 CANNOT be evaluated.", file=sys.stderr)
+        for line in detail:
+            print(f"  {line}", file=sys.stderr)
+        print("\nFAIL: layer/feature rules were not evaluated (exit 3).", file=sys.stderr)
+        return 3
+    try:
+        meta = json.loads(raw.stdout)
+    except json.JSONDecodeError as exc:
+        print(f"cargo metadata returned unparseable JSON ({exc}); "
+              "R2/R3 CANNOT be evaluated.", file=sys.stderr)
+        print("\nFAIL: layer/feature rules were not evaluated (exit 3).", file=sys.stderr)
+        return 3
+    if cat["member_count"] > 0 and not meta.get("packages"):
+        # A catalog that claims members cannot be reconciled with a workspace that reports
+        # none; that is a bad workspace view, not a clean bill of health.
+        print("cargo metadata reported zero packages but the catalog claims "
+              f"{cat['member_count']} members; R2/R3 CANNOT be evaluated.", file=sys.stderr)
+        print("\nFAIL: layer/feature rules were not evaluated (exit 3).", file=sys.stderr)
+        return 3
     path_of = {}
     for p in meta.get("packages", []):
         path_of[os.path.normpath(os.path.dirname(p["manifest_path"]))] = p["name"]
