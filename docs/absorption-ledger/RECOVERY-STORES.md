@@ -26,20 +26,40 @@ probably a snapshot of an older state, in which case its commits would all be
 ancestors of the live branches. Checking whether each tip commit resolves inside
 the live repository settles it.
 
-What this does not establish: exhaustive per-branch containment between a store
-and a differently named repository. The default-branch sweep and the same-name
-ref comparison cover the realistic cases, but a store could in principle hold a
-non-default branch duplicating another repo's branch. Nothing found so far
-suggests that, and none of it is grounds for deletion either way.
+**Tip identity across every repository.** A commit id hashes its content *and*
+its whole ancestry, so an exact copy, or a branch copied between repositories,
+leaves identical ids behind. Every ref tip across all 83 repositories was mapped:
+27,903 distinct tips, of which 34 are claimed by more than one repository. Five
+of the 25 stores share at least one tip with another *store*, so the overlaps
+were resolved by set containment. None is a subset of another - in every case
+each side still holds refs the other lacks.
+
+| Pair | Refs | Shared tips | Unique to each side |
+|---|---:|---:|---|
+| `Sidekick-archive-20261106` / `Sidekick-rb-archive-20261108` | 5 / 5 | 4 | 1 / 1 (a different `main`) |
+| `Tasken-archive-20261106` / `Tasken-rb-archive-20261108` | 5 / 5 | 1 | 4 / 4 |
+| `zz-QuadSGM-rb-archive-20261106` / `zz-archive-4sgm-archive` | 208 / 13 | 10 | 198 / 4 |
+| `Stashly-archive-20261106` / `Stashly-rb-archive-20261106` | 4 / 5 | 0 | 4 / 5 |
+
+Stashly is worth noting: the two archives carry identically named refs pointing
+at different commits, so identical naming is not evidence of identical content.
+
+What this does not establish: a store holding a commit that is an *ancestor* of
+another repository's branch rather than a tip. That case was tested where it was
+plausible - the four stores sharing a name with a live repo, all of which failed
+it - and nothing in the tip map suggests it elsewhere.
 
 ## Result
 
-Of the 24 stores matching the archive name pattern:
+Of the 25 stores:
 
 - **20 have no live counterpart at all.** No other repository shares their name,
   and no repository anywhere has the same default-branch tree.
 - **4 share a name with a live repository, and not one of their tip commits
   exists in it.**
+- **No store is contained in another store.** Five share at least one tip, but
+  set containment failed every time, so each one still holds refs found nowhere
+  else.
 
 | Store | Live repo | Store refs | Tips found in live |
 |---|---|---:|---:|
