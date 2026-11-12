@@ -7,14 +7,14 @@ on:
     branches: [main]
   schedule:
     # Weekly Monday 09:00 PDT cron (ADR-042 cadence)
-    - cron: '0 16 * * 1'
+    - cron: "0 16 * * 1"
   workflow_dispatch:
 
 permissions:
   contents: read
   packages: read
   security-events: write
-  id-token: write   # required for SLSA provenance
+  id-token: write # required for SLSA provenance
 
 jobs:
   codeql:
@@ -60,8 +60,7 @@ jobs:
           # global allowlists", #1777). On 8.24.3 every `[[allowlists]]` block
           # in `.gitleaks.toml` was silently ignored, so the file had no effect
           # and any default-rule hit on a documented placeholder failed the
-          # job. 8.30.0 is the version this config is written and verified
-          # against.
+          # job. 8.30.0 is the version this config is written against.
           GITLEAKS_VERSION: 8.30.0
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
