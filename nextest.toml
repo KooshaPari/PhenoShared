@@ -31,8 +31,20 @@ filter = "test(slow::)"
 retries = 3
 timeout = { per_test = 600 }
 
+# process_tree spawns real browser trees and asserts that shutdown reaps only
+# its own group. Running its tests concurrently lets one test's teardown remove
+# a process another test is still tracking, which made both cases fail on main
+# with "process ... outside the launch's own group disappeared".
+[[profile.phenotype.overrides]]
+filter = "binary(process_tree)"
+threads = 1
+
 # CI profile override
 [profile.phenotype.ci]
 fail-fast = true
 retries = 2
 timeout = { per_test = 120, per_item = 60 }
+
+[[profile.phenotype.ci.overrides]]
+filter = "binary(process_tree)"
+threads = 1

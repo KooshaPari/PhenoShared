@@ -46,6 +46,10 @@ fn bridge_bin() -> PathBuf {
     )
 }
 
+#[cfg_attr(
+    not(target_os = "windows"),
+    ignore = "window enumeration needs a Windows guest; headless Linux has no display"
+)]
 #[tokio::test]
 async fn real_bridge_bin_screenshot_input_windows() {
     let _guard = BRIDGE_ENV_LOCK.lock().await;
