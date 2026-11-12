@@ -3,6 +3,11 @@ on:
   push:
     branches: [main]
   pull_request:
+    paths:
+      - "crates/**"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "mutation*"
 jobs:
   mutants:
     runs-on: ubuntu-latest

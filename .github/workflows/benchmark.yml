@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
   pull_request:
+    paths:
+      - "benches/**"
+      - "bench/**"
+      - "benchmarks/**"
+      - "crates/**"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
   workflow_dispatch:
 
 permissions:

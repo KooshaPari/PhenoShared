@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
   pull_request:
+    paths:
+      - "docs/**"
+      - "**/*.md"
+      - "adrs/**"
 
 permissions:
   contents: read

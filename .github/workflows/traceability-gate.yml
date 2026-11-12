@@ -5,6 +5,11 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    paths:
+      - "specs/**"
+      - "docs/**"
+      - "scripts/traceability-check.py"
+      - ".github/workflows/traceability-gate.yml"
 
 permissions:
   contents: read

@@ -3,6 +3,13 @@ on:
   push:
     branches: [main]
   pull_request:
+    paths:
+      - "benches/**"
+      - "bench/**"
+      - "benchmarks/**"
+      - "crates/**"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
 jobs:
   bench:
     runs-on: ubuntu-latest
