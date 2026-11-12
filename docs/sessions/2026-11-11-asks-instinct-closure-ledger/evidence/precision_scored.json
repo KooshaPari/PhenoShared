@@ -1,0 +1,159 @@
+{
+ "generated_at_utc": "2026-11-12T21:24:28Z",
+ "script": "precision_score.py",
+ "question": "of the citations the register counted, what share point at a source unit that actually carries the intent?",
+ "labeller": "citation-precision labeller (deepseek-v4.1-flash)",
+ "n": 60,
+ "counts": {
+  "supported": 46,
+  "partial": 11,
+  "unsupported": 2,
+  "unresolvable": 1
+ },
+ "judgeable": 59,
+ "unresolvable_excluded": 1,
+ "precision": {
+  "strict": {
+   "value": 0.7796610169491526,
+   "wilson_95": [
+    0.6586730063236291,
+    0.8664580237207097
+   ],
+   "definition": "supported / (supported + partial + unsupported)"
+  },
+  "lenient": {
+   "value": 0.9661016949152542,
+   "wilson_95": [
+    0.8845642924988926,
+    0.9906540909083387
+   ],
+   "definition": "(supported + partial) / (supported + partial + unsupported)"
+  }
+ },
+ "denominator": {
+  "sampled_from": 2252,
+  "unit_of_measure": "origin links (one unit can carry several links)",
+  "distinct_cited_units_elsewhere": 1938,
+  "warning": "2,252 origin links and 1,938 distinct cited units are different quantities; a precision measured over links must not be multiplied into a unit count"
+ },
+ "by_channel": {
+  "phone": {
+   "n": 59,
+   "supported": 46,
+   "partial": 11,
+   "unsupported": 1,
+   "unresolvable": 1,
+   "strict_precision": 0.7931034482758621,
+   "lenient_precision": 0.9827586206896551
+  },
+  "chatdb": {
+   "n": 1,
+   "supported": 0,
+   "partial": 0,
+   "unsupported": 1,
+   "unresolvable": 0,
+   "strict_precision": 0.0,
+   "lenient_precision": 0.0
+  }
+ },
+ "by_relation": {
+  "origin": {
+   "n": 60,
+   "supported": 46,
+   "partial": 11,
+   "unsupported": 2,
+   "unresolvable": 1,
+   "strict_precision": 0.7796610169491526,
+   "lenient_precision": 0.9661016949152542
+  }
+ },
+ "by_link_role": {
+  "user": {
+   "n": 60,
+   "supported": 46,
+   "partial": 11,
+   "unsupported": 2,
+   "unresolvable": 1,
+   "strict_precision": 0.7796610169491526,
+   "lenient_precision": 0.9661016949152542
+  }
+ },
+ "retrieval_failure_modes": [
+  {
+   "idx": 0,
+   "verdict": "partial",
+   "why": "reports \"fuixed\" as done, not a request"
+  },
+  {
+   "idx": 7,
+   "verdict": "unsupported",
+   "why": "agent status block \"Cloud/web state\", not operator ask"
+  },
+  {
+   "idx": 12,
+   "verdict": "partial",
+   "why": "\"You sourced hte image before dl\" past report"
+  },
+  {
+   "idx": 21,
+   "verdict": "partial",
+   "why": "\"Desk, Mac up\" omits agent workloads"
+  },
+  {
+   "idx": 25,
+   "verdict": "partial",
+   "why": "\"may be worthwhile\" yet doubts \"similar spikes\""
+  },
+  {
+   "idx": 27,
+   "verdict": "partial",
+   "why": "\"still demands codex sub\" complaint, no directive"
+  },
+  {
+   "idx": 28,
+   "verdict": "partial",
+   "why": "\"Bundles dl on Mac\" terse, ambiguous"
+  },
+  {
+   "idx": 30,
+   "verdict": "unsupported",
+   "why": "rambles on credentials/containerization, no Tracera/AgilePlus deployment"
+  },
+  {
+   "idx": 36,
+   "verdict": "partial",
+   "why": "\"New branch\" fragment, no verb"
+  },
+  {
+   "idx": 44,
+   "verdict": "unresolvable",
+   "why": "\"For letters All + D parallel eyes\" too garbled"
+  },
+  {
+   "idx": 48,
+   "verdict": "partial",
+   "why": "\"old cached crawls\" diagnosed, no re-read order"
+  },
+  {
+   "idx": 52,
+   "verdict": "partial",
+   "why": "\"And apperclip?\" garbled fragment, state unstated"
+  },
+  {
+   "idx": 53,
+   "verdict": "partial",
+   "why": "\"Pdf lacks TREE\" complaint, no fix directive"
+  },
+  {
+   "idx": 54,
+   "verdict": "partial",
+   "why": "\"overalls etup tstate?\" garbled, plus Discord ask"
+  }
+ ],
+ "caveats": {
+  "single_labeller": "one model labeller produced all 60 verdicts; no second pass exists",
+  "n_60": "n=60 links sampled from 2252; a Wilson interval is reported but the sample is not stratified by channel",
+  "quote_fidelity_is_not_precision": "ask_link_verification.json measures whether the quoted words appear in the cited utterance (strict 97.08%, folded 99.13%). That is a precondition, not a measure of whether the utterance belongs to the intent, which is what this file measures",
+  "partial_is_not_free": "the lenient figure credits a unit that states only part of the claim or fits a sibling ask equally well; quote both, never the lenient one alone"
+ }
+}

@@ -12,7 +12,7 @@ measurement that made semantic capture a rate rather than a floor, §3i; and the
 retracts Rev 11's union figure because its numerator double counted a channel, plus the first sample of
 the last unprobed 32,891 units, §3j; and the negative result that ends the search for a machine-readable
 authorship signal — the harvest's `role` field is constant after filtering, so coverage *of operator
-intent* has no denominator, §3k).
+intent* has no denominator, §3k; and the citation-precision measurement that turns the publication gate into a decision with a number in it, §3o).
 
 **Revision history — this file has been wrong eight times, each time in the same direction (stating a
 confident number from an incomplete measurement). Rev 8 is the first entry that corrects nothing: it
@@ -34,9 +34,9 @@ operator speech (58/60). With all three buckets measured in the same frame, cove
 operator-authored units estimates at 8.47%, which is the first operator-intent figure in this file. It
 is an estimate and not a published rate because citation precision is unmeasured and one labeller
 produced all three samples. It does not replace any unit-based figure: those are rates over units,
-this is a rate over operator-authored units. Rev 16 puts a second, blind, independent labeller on all three sheets: coverage lands at 8.07% against 8.47%, and inter-labeller agreement is 1.00 on two buckets and 0.65 on the third. The single-labeller caveat is retired and replaced with a measured number, so the honest statement is now a pair, 8.07-8.47%; the rate is still withheld because citation precision is unmeasured.**
+this is a rate over operator-authored units. Rev 16 puts a second, blind, independent labeller on all three sheets: coverage lands at 8.07% against 8.47%, and inter-labeller agreement is 1.00 on two buckets and 0.65 on the third. The single-labeller caveat is retired and replaced with a measured number, so the honest statement is now a pair, 8.07-8.47%; the rate is still withheld because citation precision is unmeasured. Rev 17 measures it: strict precision is 0.780 (46/59 judgeable), lenient 0.966, so the gate now fails on a number instead of on missing data, and the withheld rate has a stated reason rather than a pending one.**
 
-> **Current numbers, as of Rev 16.** Use these; every other figure in this file is the number
+> **Current numbers, as of Rev 17.** Use these; every other figure in this file is the number
 > published at the time of the section that made it, and §3f / §5 / §3i retain theirs for the record.
 >
 > | Quantity | Value |
@@ -49,7 +49,7 @@ this is a rate over operator-authored units. Rev 16 puts a second, blind, indepe
 > | Declared-speaker attribution, ask-cue bucket | **UNUSABLE — 100% operator by construction** |
 > | Ask-cue authorship | **86.7% operator speech** (52/60, 95% CI 75.8-93.1); the cited side is now labelled at 96.7%, so coverage of operator-authored units exists as an estimate |
 >
-> - **Coverage of operator-authored units: 8.07-8.47%** (first labeller 8.47% [6.4-11.1], second independent labeller 8.07% [6.1-10.5]; independent bounds, not a CI) -- still an estimate, not a published rate: citation precision is unmeasured. Inter-labeller agreement: kappa 1.00 on cited and ask-cue, 0.65 on the non-ask-cue bucket, 0.85 pooled.
+> - **Coverage of operator-authored units: 8.07-8.47%** (first labeller 8.47% [6.4-11.1], second independent labeller 8.07% [6.1-10.5]; independent bounds, not a CI) -- still an estimate, not a published rate: citation precision is unmeasured. Inter-labeller agreement: kappa 1.00 on cited and ask-cue, 0.65 on the non-ask-cue bucket, 0.85 pooled. Citation precision is now measured: **0.780 strict / 0.966 lenient**, so the coverage pair is a ceiling-conditional estimate and the rate stays withheld (§3o).
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -69,6 +69,7 @@ this is a rate over operator-authored units. Rev 16 puts a second, blind, indepe
 | 14 | the ask-cue bucket is **86.7% operator speech** (52/60, 95% CI 75.8-93.1), so §3k's "fraction of 8,819" prediction is falsified in the favourable direction; the cited side remains unmeasured so **no coverage-of-intent rate is published** | an authorship share is not a coverage rate. Multiplying it into 8,819 estimates a denominator, not a numerator |
 | 15 | the cited side is **96.7% operator speech** (58/60, 95% CI 88.6-99.1), so with all three buckets measured the coverage of operator-authored units estimates at **8.47%** (range 6.4-11.1, independent bounds) | this is the first operator-intent figure in the verdict, and it is an **ESTIMATE with a range, not a published rate** — the operator's own gate is recall AND precision >= 0.9 and precision is unmeasured. The four unit-based figures (4.4% structural, 13.3% ask-cue semantic, 3.3% non-ask semantic, ~9.65% union) are unchanged: they are rates over units and this is a rate over operator-authored units |
 | 16 | a second **independent, blind** labeller on all three sheets puts coverage at **8.07%** (range 6.1-10.5), against the first labeller's 8.47%; inter-labeller kappa is **1.00** on the cited and ask-cue buckets and **0.65** on the non-ask-cue bucket (0.85 pooled) | not a retraction. It retires the single-labeller caveat and replaces it with a measured agreement number, and it widens the honest statement to **8.07-8.47%**. It does **not** publish a rate: citation precision is still `NOT_RUN`, both labellers are model labellers on one rubric, and the 12 non-ask-cue disagreements are listed rather than adjudicated |
+| 17 | "citation precision is unmeasured, so the coverage figure is an estimate" | — no number retracted. The measurement is now done and it *confirms* the withholding: strict precision 0.780 is below the 0.9 gate, and recall stays unmeasurable, so both halves of the gate fail on numbers. |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -1382,3 +1383,98 @@ the detector's precision (0.567 strict) and unmeasured recall support a floor of
 Neither instrument, and no combination of them, takes the register from *incomplete* to *complete*.
 
 None of these can make the register *complete*. They can only make the shortfall measurable.
+
+## 3o. Citation precision is measured: 0.780 strict, so the rate gate now fails on numbers
+
+Two questions have been running together in this file, and Rev 17 separates them by measurement.
+**Quote fidelity** asks whether the quoted words appear in the cited utterance: `ask_link_verification.json`
+reports **97.08% strict** (99.13% folded), and that is a **precondition**, not a verdict on attribution.
+**Citation precision** asks the harder question, whether the cited unit actually belongs to the intent the
+register counted it under. A link can be word-perfect and attached to the wrong ask, and fidelity cannot
+see that. Precision is now measured: **0.780 strict, 0.966 lenient**.
+
+### The sample
+
+60 origin links, seed `20261112`, drawn from the register's **2,252 origin links** by
+`make_precision_sheet.py`. The script writes a blind sheet (`precision_sheet.json`) and a withheld key
+(`precision_key.json`, carrying channel, link role, relation and fidelity per row). The labeller saw only
+the sheet, with the key withheld, and labelled all 60 rows blind into `precision_labeled.json`;
+`precision_score.py` joined sheet, labels and key into `precision_scored.json`.
+
+### Result
+
+| verdict | count |
+|---|---:|
+| supported | 46 |
+| partial | 11 |
+| unsupported | 2 |
+| unresolvable | 1 |
+| **judgeable (unresolvable excluded)** | **59** |
+
+- **Strict precision = supported / judgeable = 46/59 = 0.780**, Wilson 95% CI [0.659, 0.866].
+- **Lenient precision = (supported + partial) / judgeable = 57/59 = 0.966**, Wilson 95% CI [0.885, 0.991].
+
+### What the failures look like
+
+The failures are not fabrications, they are **fragments that name a subject without stating a
+directive**. Of the 11 `partial`, `Desk, Mac up` omits the agent workloads the ask was about; `New
+branch` is a fragment with no verb; `Pdf lacks TREE` complains but gives no fix order; `may be
+worthwhile` hedges rather than asks; `old cached crawls` diagnoses without ordering a re-read. The 2
+`unsupported` are a different failure: an agent status block (`Cloud/web state`) counted as an operator
+ask, and a rumination on credentials and containerisation that never mentions the ask's subject. The 1
+`unresolvable` is ASR garble (`For letters All + D parallel eyes`). The operational point is that a
+**shared keyword is not support**: `Pdf lacks TREE` shares `TREE` with the ask and still cannot be
+counted as carrying it.
+
+### What this does to the gate
+
+The publication rule is unchanged: a rate requires recall measured AND recall >= 0.9 AND strict
+precision >= 0.9. Recall stays permanently unmeasurable, because the 98 harvest documents that would
+supply it are declared lost (§3g). Strict precision is 0.780, which is below 0.9. **Both halves of the
+gate therefore fail on numbers, not on missing data**, and the withholding stops being provisional. The
+consequence for the coverage pair is direct: **8.07-8.47% is a CEILING-CONDITIONAL ESTIMATE**. It can
+only hold if every counted citation were correctly attributed, and the measurement shows that roughly
+one in five is not. It must never be quoted without the precision pair beside it. The decision recorded
+is `WITHHOLD_RATE_AND_FLOOR`, and the re-derivable record is `evidence/rate_gate.json`, written by
+`evidence/rate_gate.py` from `operator_coverage.json`, `operator_coverage_l2.json`,
+`inter_labeller_agreement.json`, `precision_scored.json` and `ask_link_verification.json`.
+
+### The derived envelope, and why it is not a figure
+
+Multiplying the two shares gives an envelope: `0.0807 x 0.780 = 6.30%` to `0.0847 x 0.966 = 8.18%`
+(recorded as `derived_envelope` in `rate_gate.json`, 0.0629 to 0.0818). It is **not a figure to quote**,
+because it multiplies a **unit-share** (coverage over operator-authored units) by a **link-share**
+(precision over origin links). The two operands come from different denominators, so the product is an
+envelope for intuition only.
+
+### What this does not do
+
+- **It rests on one labeller.** All 60 precision verdicts came from a single pass with no second sheet,
+  so the precision sheet does not have the inter-labeller protection that §3n gave the coverage sheets.
+- **It covers the phone channel.** The 2,252 origin links are **2,229 phone-channel plus 23 chatdb**, and
+  the two reconcile exactly with `reg_ask_messages where relation='origin'`. Harness-channel citations
+  were **not** sampled. Note also that **2,252 origin links and 1,938 distinct cited units are different
+  quantities** and must not be interchanged.
+- **The rubric's second clause is weakly answerable.** "No other ask fits it better" cannot be checked
+  hard when the labeller sees one ask at a time, so a `partial` can hide an attribution that a
+  side-by-side view would have resolved differently.
+- **`partial` is a genuine middle, not free credit.** The lenient figure counts a unit that states only
+  part of the claim, or that fits a sibling ask equally well, so `0.966` describes how close the
+  citations come, while `0.780` describes how many stand on their own. Quote both, never the lenient one
+  alone.
+- **It leaves §3h untouched.** The 2.12% semantic floor came from a different instrument on a different
+  population and never depended on citation precision, so `rate_gate.json` records that this decision
+  does not retroactively withdraw it.
+
+### Artifacts
+
+| artifact | what it is | reproduce (from this `evidence/` dir) |
+|---|---|---|
+| `make_precision_sheet.py` | draws the 60-link blind precision sample (seed `20261112`) and writes sheet plus withheld key | `~/CodeProjects/temp/npenv/bin/python make_precision_sheet.py` |
+| `precision_sheet.json` | the 60-row blind sheet handed to the labeller, `verdict` null | written by the script above |
+| `precision_key.json` | the withheld key: channel, link role, relation, quote fidelity per row | written by the same script |
+| `precision_labeled.json` | the labeller's 60 verdicts plus reasons, produced without the key | hand-labelled, not regenerable by script |
+| `precision_score.py` | joins sheet, labels and key; computes strict and lenient precision with Wilson intervals | `~/CodeProjects/temp/npenv/bin/python precision_score.py` |
+| `precision_scored.json` | machine-readable result: counts, both figures with intervals, per-channel and per-role splits, failure list, caveats | written by the script above |
+| `rate_gate.py` | evaluates the publication gate cell by cell and computes the decision and the derived envelope | `~/CodeProjects/temp/npenv/bin/python rate_gate.py` |
+| `rate_gate.json` | the gate record: recall `NOT_RUN`, strict precision `FAIL` at 0.7797, lenient `PASS`, channel coverage `PASS` at 2,229 + 23, quote fidelity `PASS` at 0.9708, decision `WITHHOLD_RATE_AND_FLOOR`, envelope, and what would change it | written by the script above |

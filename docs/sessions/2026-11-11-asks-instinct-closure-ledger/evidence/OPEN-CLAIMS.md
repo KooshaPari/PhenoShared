@@ -49,7 +49,9 @@ States are ordered: `change_made` < `integrated` < `workflow_validated` < `outco
 | E-union | ≈9.65% union coverage (frame A) as a coverage claim | change_made | VERDICT §3j: lower bound 6.5-17.9%; ~3/4 of attributed bucket is machine text; no operator-speech denominator | Human authorship sample on ask-cue bucket | ask-cue authorship sample labelled |
 | E-16drift | 16-clause input drift (0.04%) between rebuilds | change_made | VERDICT §3j: 8,230 vs 8,214 iMessage clauses | None — recorded, no conclusion change | `coverage_consistency.json` `input_drift` |
 | E-closure | Closure ledger's own checks: 9 of 11 name missing scripts/flags/columns | change_made | CLOSURE-LEDGER §1: usability FAIL | Implement named scripts/columns | scripts exist and run |
-| E-index | Evidence index lists only 4 addenda while VERDICT references 11 | change_made | INDEX addenda 1-4 vs VERDICT addenda 5-11 | Update INDEX to cover addenda 5-11 | INDEX addenda count = 11 |
+| E-index | Evidence index listed only 4 addenda while VERDICT referenced 11 | outcome_delivered | INDEX now runs to Addendum 15, including the precision and gate records | none, closed at Addendum 15 | last addendum heading = 15 |
+| P-cite | Citation precision was unmeasured, so the 8.07-8.47% coverage figure could only be called an estimate | outcome_delivered | VERDICT §3o / INDEX Addendum 15: strict precision **0.780** (46/59, Wilson [0.659, 0.866]), lenient **0.966** (57/59, [0.885, 0.991]), on 60 origin links (seed `20261112`) drawn from 2,252; `evidence/precision_scored.json` | Second independent labeller on the precision sheet (one pass only so far) | `~/CodeProjects/temp/npenv/bin/python precision_score.py` from `evidence/` → `judgeable=59`, `strict=0.7797` |
+| P-gate | The publication gate for the coverage rate: recall measured AND recall >= 0.9 AND strict precision >= 0.9 | outcome_delivered | VERDICT §3o: decision `WITHHOLD_RATE_AND_FLOOR`; recall `NOT_RUN` permanently (98 harvest documents lost, §3g) and strict precision 0.7797 < 0.9, so both halves fail on numbers; `evidence/rate_gate.json` | No agent action remains: a rate needs a measurable recall instrument (blocked) and strict precision >= 0.9 | `~/CodeProjects/temp/npenv/bin/python rate_gate.py` from `evidence/` → `decision=WITHHOLD_RATE_AND_FLOOR` |
 
 ## Derivative tasks with no owner
 
@@ -59,10 +61,12 @@ States are ordered: `change_made` < `integrated` < `workflow_validated` < `outco
 - Create `occurrence_attribution` table (G4 blocker).
 - Create the 6 missing G5 schema objects or rewrite the query (G5 blocker).
 - Add `--migrate-to-sessionledger` / `--dry-run` / `--diff-out` to `ask_research_ledger.py` (G7 blocker).
-- Human authorship adjudication on 60 ask-cue clauses (VERDICT §3k) — not started.
-- Second independent labeller on both label sheets (VERDICT §3j/§3k) — not started.
+- Human authorship adjudication on 60 ask-cue clauses (VERDICT §3k): DONE, §3m (86.7% operator, 52/60).
+- Second independent labeller on all three label sheets (VERDICT §3n): DONE, agreement kappa 1.00 / 1.00 / 0.65.
+- Citation precision on the register's origin links (VERDICT §3o): DONE, strict 0.780 / lenient 0.966; gate decided WITHHOLD_RATE_AND_FLOOR in `rate_gate.json`.
+- Second independent labeller on the PRECISION sheet (the one measurement still single-pass, §3o): not started.
 - iMessage/KCode clause contamination sampling (VERDICT §3f/§3e) — not started.
-- Update `evidence/INDEX.md` to cover addenda 5-11 (currently lists 4).
+- Update `evidence/INDEX.md` to cover addenda 5-15: DONE at Addendum 15.
 - Prepare `ATTRIBUTION-AUDIT.md` and `ACCEPTANCE.md` evidence artifacts (G4, G8).
 
-open=29 operator_gated=7 withdrawn=17 defects=1
+open=29 operator_gated=7 withdrawn=17 defects=1 closed=2 total=48

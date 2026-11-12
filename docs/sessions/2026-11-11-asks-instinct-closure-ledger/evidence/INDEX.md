@@ -754,3 +754,75 @@ be interchanged: 2,252 is origin links, 1,938 is distinct cited units.
 | `evidence/make_precision_sheet.py` | reads the register read-only, draws the 60-row sample, writes sheet plus withheld key | `python3 evidence/make_precision_sheet.py` |
 
 Section `3n` of `VERDICT.md` carries the prose.
+
+## Addendum 15, Citation precision: 0.780 strict, and the gate decided by numbers (2026-11-12T21:24Z)
+
+**Prior context.** Addendum 14 closed the single-labeller blocker on coverage and started the second
+one: citation precision was `NOT_RUN`, and the 60-row sample existed but was unlabelled. This addendum
+closes it. Precision is the question of whether a counted citation points at a unit that actually
+carries the intent it was counted under. It is not quote fidelity: `ask_link_verification.json` puts
+fidelity at **97.08% strict** (99.13% folded), and that is a precondition, because a word-perfect quote
+can still be attached to the wrong ask.
+
+**What was run.** 60 origin links, seed `20261112`, drawn from the register's **2,252 origin links** by
+`make_precision_sheet.py`; the blind sheet went out with the key (`precision_key.json`) withheld; the
+labeller's 60 verdicts were scored against the key by `precision_score.py`.
+
+**Counts.**
+
+| verdict | count |
+|---|---:|
+| supported | 46 |
+| partial | 11 |
+| unsupported | 2 |
+| unresolvable | 1 |
+| **judgeable** | **59** |
+
+**Precision.**
+
+| reading | numerator | figure | Wilson 95% |
+|---|---|---:|---|
+| strict | supported / judgeable, 46/59 | **0.780** | [0.659, 0.866] |
+| lenient | (supported + partial) / judgeable, 57/59 | **0.966** | [0.885, 0.991] |
+
+**Failure character.** The 11 `partial` are fragments that name a subject without stating a directive
+(`Desk, Mac up` drops the agent workloads; `New branch` has no verb; `Pdf lacks TREE` gives no fix
+order; `may be worthwhile` hedges; `old cached crawls` orders nothing). The 2 `unsupported` are an agent
+status block counted as an operator ask, and a credentials/containerisation rumination that never
+mentions the ask's subject. The 1 `unresolvable` is ASR garble. A shared keyword is not support:
+`Pdf lacks TREE` shares `TREE` with the ask and still carries no directive.
+
+**Channel scope.** The 2,252 origin links are **2,229 phone-channel plus 23 chatdb**, and the split
+reconciles exactly with `reg_ask_messages where relation='origin'`. Harness-channel citations were
+**not** sampled. Two different quantities sit next to each other here and must not be interchanged:
+**2,252 origin links** (the sampling frame) and **1,938 distinct cited units** (the coverage numerator).
+
+**Gate decision.** The rule is: a rate requires recall measured AND recall >= 0.9 AND strict precision
+>= 0.9. Recall stays permanently unmeasurable (the 98 harvest documents are lost, §3g), and strict
+precision is 0.780 against a 0.9 floor, so **both halves fail on numbers**. Decision:
+`WITHHOLD_RATE_AND_FLOOR`. For the coverage pair this means **8.07-8.47% is a ceiling-conditional
+estimate**, valid only if every counted citation were correct, and never quotable without the precision
+pair beside it.
+
+**Derived envelope, not a figure.** `0.0807 x 0.780 = 6.30%` to `0.0847 x 0.966 = 8.18%`
+(`derived_envelope` 0.0629-0.0818 in `rate_gate.json`). It multiplies a unit-share by a link-share, so
+it is intuition only.
+
+**What it does not do.** One labeller produced all 60 precision verdicts, with no second pass. Scope is
+the phone channel, not harness channels. The rubric clause "no other ask fits it better" is weakly
+answerable one ask at a time. `partial` is a real middle rather than free credit, so the lenient figure
+is never quoted alone. Section `3h`'s 2.12% semantic floor is unaffected: it used a different instrument
+on a different population and never depended on citation precision.
+
+| artifact | what it is | how to reproduce |
+|---|---|---|
+| `evidence/make_precision_sheet.py` | draws the 60-link blind sample (seed `20261112`) and writes sheet plus withheld key | `~/CodeProjects/temp/npenv/bin/python make_precision_sheet.py` (from `evidence/`) |
+| `evidence/precision_sheet.json` | the 60-row blind sheet, `verdict` null | written by the script above |
+| `evidence/precision_key.json` | withheld channel, link role, relation, quote fidelity per row | written by the same script |
+| `evidence/precision_labeled.json` | the labeller's 60 verdicts and reasons, produced without the key | hand-labelled, not regenerable by script |
+| `evidence/precision_score.py` | joins sheet, labels and key; computes strict and lenient precision with Wilson intervals | `~/CodeProjects/temp/npenv/bin/python precision_score.py` |
+| `evidence/precision_scored.json` | counts, both figures with intervals, per-channel and per-role splits, failure list, caveats | written by the script above |
+| `evidence/rate_gate.py` | evaluates the publication gate cell by cell; decides `WITHHOLD_RATE_AND_FLOOR`; computes the envelope | `~/CodeProjects/temp/npenv/bin/python rate_gate.py` |
+| `evidence/rate_gate.json` | gate record: recall `NOT_RUN`, strict precision `FAIL` 0.7797, lenient `PASS` 0.9661, channel coverage `PASS` (2,229 + 23), fidelity `PASS` 0.9708, decision, envelope, what would change it | written by the script above |
+
+Section `3o` of `VERDICT.md` carries the prose.
