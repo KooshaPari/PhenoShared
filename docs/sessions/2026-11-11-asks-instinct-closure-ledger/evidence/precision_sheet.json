@@ -1,0 +1,555 @@
+{
+ "generated_at_utc": "2026-11-12T21:07:12Z",
+ "seed": 20261112,
+ "n": 60,
+ "population": {
+  "cited_pairs": 2252,
+  "source_file": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/asks-ledger/ledger.db :: reg_ask_messages (relation='origin') joined to reg_asks / reg_utterances",
+  "links_read": 2252,
+  "ineligible": 0,
+  "note": "cited pairs are the register's origin links; each is one (unit id, ask id) citation the register counted"
+ },
+ "instructions": "verdict is exactly one of: supported = the unit's words plainly carry the ask's claim, and no other ask in the register fits it better; partial = the unit is on the same subject but states only part of the claim, or fits a sibling ask about equally well; unsupported = the unit is on a different subject, or is an agent/tool/system utterance rather than an operator one, or the claim is not in the text; unresolvable = the text is too truncated, garbled, or ambiguous to judge.",
+ "items": [
+  {
+   "idx": 0,
+   "unit_id": "UTT-003308",
+   "ask_id": "ASK-000867",
+   "unit_text": "xirp is fuixed on Mac",
+   "ask_claim": "Get xirp fixed on the Mac",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 1,
+   "unit_id": "UTT-007421",
+   "ask_id": "ASK-002074",
+   "unit_text": "What othe non jobs questions and asks, what is stlaled\\blcoked \\ not actively progressing and state of everything that s;; TRM skip; Shield skip; Akamai elaborate; 5 defer 6 elaborate 7 skip 8 Dec 14 2026",
+   "ask_claim": "Disposition the Shield work item as skip",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 2,
+   "unit_id": "UTT-003259",
+   "ask_id": "ASK-000845",
+   "unit_text": "State of all else?",
+   "ask_claim": "Deliver a status report covering all other outstanding work",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 3,
+   "unit_id": "UTT-005372",
+   "ask_id": "ASK-001570",
+   "unit_text": "So Authkit in some sites lives at 2 pts. Both login/sign up and protected pages. And on entry as all pages would have a check in addition for tailnet and Authkit login.\n\nThe q is do you now need to login twice or otherwise how is 2nd login stricter.",
+   "ask_claim": "Answer how the dual tailnet plus AuthKit login chain behaves and whether users must log in twice",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 4,
+   "unit_id": "UTT-003410",
+   "ask_id": "ASK-001027",
+   "unit_text": "Prove and finalize asap",
+   "ask_claim": "Prove the work and finalize it as soon as possible",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 5,
+   "unit_id": "UTT-001647",
+   "ask_id": "ASK-000476",
+   "unit_text": "Web access not rate limited in the same sense either and obv 5 restores done once is not the issue, so what is?",
+   "ask_claim": "Determine the actual root cause of the 403 given web access is not rate-limited in the same sense and five restores have already been done.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 6,
+   "unit_id": "UTT-003728",
+   "ask_id": "ASK-001001",
+   "unit_text": "Place in backups and deal w alternatives to deal w quotaor eta; also state of omni prod \\ CPA ?",
+   "ask_claim": "Place the work in backups, resolve the quota/ETA blockers with alternatives, and report the state of omni prod and CPA",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 7,
+   "unit_id": "UTT-008025",
+   "ask_id": "ASK-001787",
+   "unit_text": "Cloud/web state, 9:58:\n- Job collector: live-health failed 9:07, Worker CPU cap alert 9:13, D1 status unknown (cap resets 5 PM)\n- Cockpit: API up, 52 projects, refreshed 9:39\n- KCode #124: draft, 4/5 checks, waits on desk runner\n- Tracera #1169/#1170: open, ~28/65 checks, Vercel red (quota); CI incomplete\n- Tracera health: Access 403 from here (last monitor: 524 at 4:17)\n- Resend: agents.kooshapari.com domain Verified 9:57; send health unknown\n- Codex queue + ChatGPT chats: couldn't load from the cloud session, unknown",
+   "ask_claim": "Report the state of the Tracera Cloud/web workstream",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 8,
+   "unit_id": "UTT-004826",
+   "ask_id": "ASK-001454",
+   "unit_text": "I had many different asks. What happened to all of them",
+   "ask_claim": "Account for all previously issued asks and report what happened to each",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 9,
+   "unit_id": "UTT-002438",
+   "ask_id": "ASK-000724",
+   "unit_text": "Need a Time to () for various outcomes w granular progress block\\status",
+   "ask_claim": "Provide an ETA for each outcome alongside granular progress block/status reporting",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 10,
+   "unit_id": "UTT-006793",
+   "ask_id": "ASK-001947",
+   "unit_text": "Do all in firefox",
+   "ask_claim": "Execute all pending work through Firefox as the browser",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 11,
+   "unit_id": "UTT-007975",
+   "ask_id": "ASK-002228",
+   "unit_text": "Focus on exactly what fails here in the Tailscale login / desk + mac connect attempt vs on dots. And what web solus to enable web driven ssh exist for the same. Otherwise you have gsso. Ts dashboard surely offers enough to have a local agent setup receiving infra or herdr control etc",
+   "ask_claim": "Diagnose exactly what fails in the Tailscale login and desk/Mac connect attempts locally versus on DOTS, identify web-based SSH-driven solutions, and set up a local agent on the Tailscale dashboard for infra or herdr control",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 12,
+   "unit_id": "UTT-003277",
+   "ask_id": "ASK-000853",
+   "unit_text": "You sourced hte image before dl them to a place the server reads from",
+   "ask_claim": "Source and download images into a directory the server reads from before serving them",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 13,
+   "unit_id": "UTT-003103",
+   "ask_id": "ASK-000952",
+   "unit_text": "4pm digest weak, should be the EVERY PROJ TASK ASK OTHER",
+   "ask_claim": "Make the 4pm digest comprehensive across every project, task, ask and other work item instead of weak",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 14,
+   "unit_id": "UTT-007234",
+   "ask_id": "ASK-002027",
+   "unit_text": "No. Kilo org githuv has a repo of kilo cloud for self.host",
+   "ask_claim": "Self-host Kilo Cloud from the Kilo org GitHub repository",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 15,
+   "unit_id": "UTT-006080",
+   "ask_id": "ASK-001769",
+   "unit_text": "State of migr to various ssot adoptions?",
+   "ask_claim": "Report the state of migrations to the various SSOT adoptions",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 16,
+   "unit_id": "UTT-006226",
+   "ask_id": "ASK-001795",
+   "unit_text": "git acct /profile delineation to note use of employees or alias accts rather than directly use bot attributik  like @claude  or a phenoBot like acct.\n\nAn akash bot like solu similar to what's on herdrs repo is also needed. But for the 1st ask. The goal is to make all commits",
+   "ask_claim": "Add git account/profile delineation noting employee or alias accounts rather than direct bot attribution like @claude or a phenoBot-style account",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 17,
+   "unit_id": "UTT-000533",
+   "ask_id": "ASK-000104",
+   "unit_text": "If this doesnt work I see a 2nd password bundle, NOT mapped to webmail.porkbun.com but another pork bun domain, can try it",
+   "ask_claim": "Try the second password bundle against the other Porkbun domain when the webmail login does not work",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 18,
+   "unit_id": "UTT-007532",
+   "ask_id": "ASK-002133",
+   "unit_text": "Full wbs to finish and adoption",
+   "ask_claim": "Produce a full work-breakdown structure covering what is needed to finish the work and to drive adoption",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 19,
+   "unit_id": "UTT-004134",
+   "ask_id": "ASK-001251",
+   "unit_text": "Not home I can get you Mike's code. But device runs I can't do unless you can vault a sudo password and delete after",
+   "ask_claim": "Provide a vaulted sudo password for device-run operations and delete it after use",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 20,
+   "unit_id": "UTT-001413",
+   "ask_id": "ASK-000377",
+   "unit_text": "do it",
+   "ask_claim": "Execute the agreed work now",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 21,
+   "unit_id": "UTT-007684",
+   "ask_id": "ASK-002168",
+   "unit_text": "Desk, Mac up",
+   "ask_claim": "Ensure the Desk and Mac hosts are up with their agent workloads running, since both are in active use",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 22,
+   "unit_id": "UTT-001754",
+   "ask_id": "ASK-000490",
+   "unit_text": "Herdrs akash bot needs an eval. It responds in seconds. We want our own.",
+   "ask_claim": "Run an eval on the herdr Akash bot (which responds in seconds) and build an equivalent in-house bot",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 23,
+   "unit_id": "UTT-004625",
+   "ask_id": "ASK-001401",
+   "unit_text": "Paperclip adapter state.",
+   "ask_claim": "Report the Paperclip adapter state.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 24,
+   "unit_id": "UTT-007954",
+   "ask_id": "ASK-002220",
+   "unit_text": "If no change don’t print",
+   "ask_claim": "Report only if there is a change, printing nothing otherwise",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 25,
+   "unit_id": "UTT-000372",
+   "ask_id": "ASK-000068",
+   "unit_text": "Gemini may be worthwhile to look at but i can't think of similar spikes",
+   "ask_claim": "Evaluate Gemini as a possible third source of similar material",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 26,
+   "unit_id": "UTT-001601",
+   "ask_id": "ASK-000449",
+   "unit_text": "Org matrix structure e.g. more google-like peer2peer craziness vs amz\\ms hierarchy vs ? Etc is up to you and allowed to be dynamically tuned",
+   "ask_claim": "Choose the org matrix structure (Google-like peer-to-peer vs Amazon/Microsoft hierarchy) and allow it to be dynamically tuned",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 27,
+   "unit_id": "UTT-004417",
+   "ask_id": "ASK-001344",
+   "unit_text": "And still demands codex sub vs our various avail providers and harnesses",
+   "ask_claim": "Make Paperclip support the available providers and harnesses instead of demanding a Codex subscription",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 28,
+   "unit_id": "UTT-002591",
+   "ask_id": "ASK-000779",
+   "unit_text": "Bundles dl on Mac",
+   "ask_claim": "Download the study bundles onto the Mac",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 29,
+   "unit_id": "UTT-005592",
+   "ask_id": "ASK-001694",
+   "unit_text": "2. Same case what do I do",
+   "ask_claim": "State the procedure for handling the same case.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 30,
+   "unit_id": "UTT-005313",
+   "ask_id": "ASK-001545",
+   "unit_text": "once again we once again we slip on the top of our heads in terms of infrastructure we owe agents containerization we owe agents the I'll just call it general OS use/device use the very wide range starting with browser use and computer use um we have the access management generally so we have trivial credentials management with fiscal and other items similar to how we do vault um and then we have our paperclip installation which is done but the setup is not done paperclip still revolves around its own internally locked ecosystem rather than integrating with our own decentralized fragmented eco",
+   "ask_claim": "Come up to date on every deployment: Tracera on all devices, AgilePlus on each device, ShareCLI on each device, Fabric on each device, and the desktop backend plus Cloudflare frontend services",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 31,
+   "unit_id": "UTT-004056",
+   "ask_id": "ASK-001215",
+   "unit_text": "Today a 50% off first mo for minimax promo ends. Maybe worth a 2nd acct?",
+   "ask_claim": "Evaluate opening a second Minimax account before today's 50%-off first-month promo ends",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 32,
+   "unit_id": "UTT-000897",
+   "ask_id": "ASK-000206",
+   "unit_text": "For tracker. Include the local dispensary.\n\nAnd extrapolate 0.5g to per g prices so we see when getting 2x 0.5g is valuable",
+   "ask_claim": "Add the local dispensary to the tracker and extrapolate 0.5g prices to per-gram cost so 2x0.5g value can be seen",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 33,
+   "unit_id": "UTT-001146",
+   "ask_id": "ASK-000224",
+   "unit_text": "One wrinkle: OpenClaw's Codex-harness plugin is the strongest harness-agnostic story and it has iMessage. Hermes is younger and churnier - keep it off the public net, Tailscale for remote, approvals on. Full report getting PR'd to PhenoRegistry.\n\n\nI don't really like openclaw for a lot of reasons. Maybe it's changed by now. But for many of these esp adapters owning the migr into Hermes or another won't be too bad idt",
+   "ask_claim": "Avoid OpenClaw as the chosen platform",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 34,
+   "unit_id": "UTT-005588",
+   "ask_id": "ASK-001692",
+   "unit_text": "Repo scope recovery chat state?",
+   "ask_claim": "Recover and verify the repo scope and chat state.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 35,
+   "unit_id": "UTT-003768",
+   "ask_id": "ASK-001143",
+   "unit_text": "Install and deploy cpa management UI on the same cpa.kooshapari; /api for backend CPA; any oher cpa plugins or services missing?",
+   "ask_claim": "Install and deploy the CPA management UI on cpa.kooshapari with /api pointed at the CPA backend",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 36,
+   "unit_id": "UTT-002372",
+   "ask_id": "ASK-000704",
+   "unit_text": "New branch",
+   "ask_claim": "Create a new git branch for the work",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 37,
+   "unit_id": "UTT-006080",
+   "ask_id": "ASK-001768",
+   "unit_text": "State of migr to various ssot adoptions?",
+   "ask_claim": "Report the state of migration to the various SSOT adoptions",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 38,
+   "unit_id": "UTT-001016",
+   "ask_id": "ASK-000277",
+   "unit_text": "second to last voice chat for the second to last voice chat covering ChatGPT. Thank you, that sounds perfect. Um, as an additional note, this is more of an aside. I have chats that run on my desktop and on my laptop, right? Codex, JCode, other harnesses. For Codex, I think we can just do the QR matching. I'll have to do it manually so you can have access to them. Uh, I think chatgpt.com or elsewhere. This might be session specific, so I might have to do it manually on yours or you provide me a request QR or something for me. Otherwise, they are all connected to Herger. Um, so if I can somehow ",
+   "ask_claim": "Set up QR-code matching so the assistant can access the Codex chats running on desktop and laptop",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 39,
+   "unit_id": "UTT-002736",
+   "ask_id": "ASK-000835",
+   "unit_text": "Agents item should be connecting to local daemon or system otherwise what does the agents pane in tracera mean",
+   "ask_claim": "Make the Agents item connect to the local daemon or system so Tracera's agents pane has real meaning.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 40,
+   "unit_id": "UTT-001481",
+   "ask_id": "ASK-000320",
+   "unit_text": "Been almost 24hrs, really no export? Do you even have receipt confirmation for the request?",
+   "ask_claim": "Complete the pending export request and produce the receipt confirmation for it",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 41,
+   "unit_id": "UTT-004557",
+   "ask_id": "ASK-001383",
+   "unit_text": "Do via the Firefox browser on my Mac;",
+   "ask_claim": "Perform the task through the Firefox browser on the Mac.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 42,
+   "unit_id": "UTT-005608",
+   "ask_id": "ASK-001699",
+   "unit_text": "Check for simialr stlals\\forgottned",
+   "ask_claim": "Check for similar stale or forgotten items.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 43,
+   "unit_id": "UTT-003537",
+   "ask_id": "ASK-001080",
+   "unit_text": "Not started: Herdr iOS + Pose signing, Mac disk cleanup, push-list projects, Tracera UI/UX lane (queued), PhenoShared #433, Sentry revoke, PM tool pick, Paperclip alternatives, spend cut execution. Next digest ~5:18. Why",
+   "ask_claim": "Explain and clear why the listed workstreams have not started (Herdr iOS + Pose signing, Mac disk cleanup, push-list projects, Tracera UI/UX lane, PhenoShared #433, Sentry revoke, PM tool pick, Paperclip alternatives, spend cut execution).",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 44,
+   "unit_id": "UTT-003094",
+   "ask_id": "ASK-000945",
+   "unit_text": "For letters All + D parallel eyes",
+   "ask_claim": "Have all agent types plus Dots work the platform setup items in parallel rather than serially",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 45,
+   "unit_id": "UTT-003810",
+   "ask_id": "ASK-001156",
+   "unit_text": "Add cursor auth file to cpa",
+   "ask_claim": "Add the Cursor auth file to CPA",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 46,
+   "unit_id": "UTT-002958",
+   "ask_id": "ASK-000905",
+   "unit_text": "Cloudflare access needs trivial allow for <EMAIL-REDACTED>. And Authkit allowing or prereg of acct for all srvcs",
+   "ask_claim": "Add a trivial allow entry for <EMAIL-REDACTED> in Cloudflare Access",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 47,
+   "unit_id": "UTT-001834",
+   "ask_id": "ASK-000530",
+   "unit_text": "All other assistants would need the same.",
+   "ask_claim": "Apply the same setup that was just done to every other assistant, not just one.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 48,
+   "unit_id": "UTT-000059",
+   "ask_id": "ASK-000016",
+   "unit_text": "That descr abt my readmes is old and was edited almost a mo ago. It looks like you're reading old cached crawls",
+   "ask_claim": "Refresh stale cached crawl data and re-read current sources instead of old crawls",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 49,
+   "unit_id": "UTT-001709",
+   "ask_id": "ASK-000512",
+   "unit_text": "Yes to scrub",
+   "ask_claim": "Scrub/redact the sensitive content as instructed",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 50,
+   "unit_id": "UTT-007865",
+   "ask_id": "ASK-002205",
+   "unit_text": "Exact cmds run, can you do a vhs gif repro?",
+   "ask_claim": "Provide the exact commands run and produce a VHS GIF reproduction of the failure",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 51,
+   "unit_id": "UTT-003702",
+   "ask_id": "ASK-000995",
+   "unit_text": "Keep, ssot design doc needs to be made based on the various chats on it so far",
+   "ask_claim": "Write the SSOT design doc based on the various chats on it so far",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 52,
+   "unit_id": "UTT-006770",
+   "ask_id": "ASK-001939",
+   "unit_text": "And apperclip?",
+   "ask_claim": "Report the state of Paperclip.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 53,
+   "unit_id": "UTT-006510",
+   "ask_id": "ASK-001884",
+   "unit_text": "Pdf lacks TREE of progress bars and PAGE per intent\\ask\\repo;",
+   "ask_claim": "Fix the PDF to include a tree of progress bars and a page per intent/ask/repo",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 54,
+   "unit_id": "UTT-006806",
+   "ask_id": "ASK-001950",
+   "unit_text": "Hermes overalls etup tstate? Drive discord off my Firefox",
+   "ask_claim": "Report the current state of the overall Hermes setup",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 55,
+   "unit_id": "UTT-000723",
+   "ask_id": "ASK-000173",
+   "unit_text": "Id rather keep the aim there, for that referall should I mention that + prior gmail rej?",
+   "ask_claim": "Advise what the referral submission should mention (the referral plus the prior Gmail rejection).",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 56,
+   "unit_id": "UTT-005975",
+   "ask_id": "ASK-001762",
+   "unit_text": "open page for me",
+   "ask_claim": "Open the requested page in the user's browser",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 57,
+   "unit_id": "UTT-002070",
+   "ask_id": "ASK-000587",
+   "unit_text": "I told you to check worktree and a gent sprawl causing that usage alr",
+   "ask_claim": "Investigate and fix the worktree and agent sprawl that is causing the resource usage.",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 58,
+   "unit_id": "UTT-003788",
+   "ask_id": "ASK-001152",
+   "unit_text": "I need a mgmt key",
+   "ask_claim": "Provide a management key",
+   "verdict": null,
+   "why": ""
+  },
+  {
+   "idx": 59,
+   "unit_id": "UTT-001598",
+   "ask_id": "ASK-000448",
+   "unit_text": "Build out an org + system chart as well. Ofc I would sit at the top as either of Sponsor \\ Board style role; you’d need to consider where you, dots, muse, grok bot, all the other items you’ve considered self host side, + chats, and other areas sit, and build a proper org matrix, this is part of why we want paper clip which would allow that to be maintained much stronger",
+   "ask_claim": "Build an org and system chart with Koosha at the top (Sponsor/Board role), placing the assistant, dots, muse, grok bot, other self-hosted items, chats and other areas, maintained via Paperclip",
+   "verdict": null,
+   "why": ""
+  }
+ ]
+}

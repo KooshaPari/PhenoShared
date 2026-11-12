@@ -1,0 +1,352 @@
+{
+ "generated_at_utc": "2026-11-12T21:08:42Z",
+ "script": "inter_labeller_agreement.py",
+ "question": "do two independent labellers, reading the same 60 clauses per bucket, assign the same authorship?",
+ "readings": {
+  "cited": "almost perfect",
+  "uncited_ask_cue": "almost perfect",
+  "uncited_non_ask_cue": "substantial"
+ },
+ "per_bucket": [
+  {
+   "status": "MEASURED",
+   "labellers": [
+    "first labeller (cited_speaker_sheet; cited_labels.json assembled from cited_labels_partial.tsv + chunks 20-39/40-59)",
+    "second independent labeller (cited_labels_l2.json)"
+   ],
+   "n_paired": 60,
+   "six_class": {
+    "raw_agreement": 1.0,
+    "cohen_kappa": 1.0,
+    "confusion_l1_rows_by_l2_cols": {
+     "operator": {
+      "operator": 58,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "agent": {
+      "operator": 0,
+      "agent": 1,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "tool": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 1,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "system": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "peer": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "other": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     }
+    }
+   },
+   "operator_vs_rest": {
+    "raw_agreement": 1.0,
+    "cohen_kappa": 1.0,
+    "note": "this two-class collapse is the distinction the coverage estimate uses"
+   },
+   "operator_share": {
+    "labeller_1": {
+     "count": 58,
+     "of": 60,
+     "share": 0.9666666666666667
+    },
+    "labeller_2": {
+     "count": 58,
+     "of": 60,
+     "share": 0.9666666666666667
+    },
+    "absolute_difference_pp": 0.0
+   },
+   "disagreements": [],
+   "n_disagreements": 0,
+   "bucket": "cited"
+  },
+  {
+   "status": "MEASURED",
+   "labellers": [
+    "first labeller (askcue_labels.json)",
+    "second independent labeller (askcue_labels_l2.json)"
+   ],
+   "n_paired": 60,
+   "six_class": {
+    "raw_agreement": 1.0,
+    "cohen_kappa": 1.0,
+    "confusion_l1_rows_by_l2_cols": {
+     "operator": {
+      "operator": 52,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "agent": {
+      "operator": 0,
+      "agent": 6,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "tool": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 1,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "system": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "peer": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 1,
+      "other": 0
+     },
+     "other": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     }
+    }
+   },
+   "operator_vs_rest": {
+    "raw_agreement": 1.0,
+    "cohen_kappa": 1.0,
+    "note": "this two-class collapse is the distinction the coverage estimate uses"
+   },
+   "operator_share": {
+    "labeller_1": {
+     "count": 52,
+     "of": 60,
+     "share": 0.8666666666666667
+    },
+    "labeller_2": {
+     "count": 52,
+     "of": 60,
+     "share": 0.8666666666666667
+    },
+    "absolute_difference_pp": 0.0
+   },
+   "disagreements": [],
+   "n_disagreements": 0,
+   "bucket": "uncited_ask_cue"
+  },
+  {
+   "status": "MEASURED",
+   "labellers": [
+    "first labeller (nonask_label_sheet.json:speaker_pass2)",
+    "second independent labeller (nonask_labels_l2.json)"
+   ],
+   "n_paired": 60,
+   "six_class": {
+    "raw_agreement": 0.8,
+    "cohen_kappa": 0.6893874029335635,
+    "confusion_l1_rows_by_l2_cols": {
+     "operator": {
+      "operator": 19,
+      "agent": 2,
+      "tool": 0,
+      "system": 0,
+      "peer": 2,
+      "other": 0
+     },
+     "agent": {
+      "operator": 5,
+      "agent": 22,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "tool": {
+      "operator": 1,
+      "agent": 0,
+      "tool": 2,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     },
+     "system": {
+      "operator": 0,
+      "agent": 1,
+      "tool": 1,
+      "system": 2,
+      "peer": 0,
+      "other": 0
+     },
+     "peer": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 3,
+      "other": 0
+     },
+     "other": {
+      "operator": 0,
+      "agent": 0,
+      "tool": 0,
+      "system": 0,
+      "peer": 0,
+      "other": 0
+     }
+    }
+   },
+   "operator_vs_rest": {
+    "raw_agreement": 0.8333333333333334,
+    "cohen_kappa": 0.6531791907514451,
+    "note": "this two-class collapse is the distinction the coverage estimate uses"
+   },
+   "operator_share": {
+    "labeller_1": {
+     "count": 23,
+     "of": 60,
+     "share": 0.38333333333333336
+    },
+    "labeller_2": {
+     "count": 25,
+     "of": 60,
+     "share": 0.4166666666666667
+    },
+    "absolute_difference_pp": 3.33
+   },
+   "disagreements": [
+    {
+     "idx": 10,
+     "l1": "system",
+     "l2": "tool",
+     "preview": "\\u2014 not: do not fabricate tool output or approximate counts when the mcp server is not "
+    },
+    {
+     "idx": 12,
+     "l1": "system",
+     "l2": "agent",
+     "preview": "running: prompt pass over the 985 vague chats"
+    },
+    {
+     "idx": 13,
+     "l1": "operator",
+     "l2": "agent",
+     "preview": "so value comp needed."
+    },
+    {
+     "idx": 26,
+     "l1": "tool",
+     "l2": "operator",
+     "preview": "git push --force-with-lease"
+    },
+    {
+     "idx": 35,
+     "l1": "operator",
+     "l2": "peer",
+     "preview": "cand: i'll confirm the diff result this afternoon."
+    },
+    {
+     "idx": 40,
+     "l1": "operator",
+     "l2": "agent",
+     "preview": "then claude\\oai\\gemini data export scrape"
+    },
+    {
+     "idx": 44,
+     "l1": "agent",
+     "l2": "operator",
+     "preview": "reveal and copy."
+    },
+    {
+     "idx": 48,
+     "l1": "agent",
+     "l2": "operator",
+     "preview": "from that list, select every subcommand that could relate to a daemon, server, socket, rpc"
+    },
+    {
+     "idx": 52,
+     "l1": "agent",
+     "l2": "operator",
+     "preview": "with no token they approve in chrome or paste one in **settings -> browser**."
+    },
+    {
+     "idx": 53,
+     "l1": "agent",
+     "l2": "operator",
+     "preview": "the forward isn\u2019t broken."
+    },
+    {
+     "idx": 57,
+     "l1": "agent",
+     "l2": "operator",
+     "preview": "only 1 here\u2019s deploy"
+    },
+    {
+     "idx": 59,
+     "l1": "operator",
+     "l2": "peer",
+     "preview": "q3 is a consent to share your info acr \u2026 ### msg 992 | wednesday, october 7, 2026, 6:51:11"
+    }
+   ],
+   "n_disagreements": 12,
+   "bucket": "uncited_non_ask_cue"
+  }
+ ],
+ "pooled": {
+  "n_paired": 180,
+  "six_class": {
+   "raw_agreement": 0.9333333333333333,
+   "cohen_kappa": 0.8375939849624061
+  },
+  "operator_vs_rest": {
+   "raw_agreement": 0.9444444444444444,
+   "cohen_kappa": 0.8540145985401459
+  },
+  "note": "pooling across buckets is descriptive only; the three samples are not one random sample of the corpus"
+ },
+ "caveats": {
+  "labellers_not_identical_in_kind": "labeller 1 and labeller 2 are both model labellers working from the same rubric; agreement measures rubric reproducibility, not human ground truth",
+  "no_adjudication_yet": "disagreeing clauses are listed, not resolved; the coverage figure is not corrected by this file",
+  "chance_correction": "Cohen's kappa is reported alongside raw agreement because raw agreement alone is inflated when one class dominates (operator is 38-97% of a bucket)",
+  "small_n": "n=60 per bucket; kappa intervals are wide and are not computed here"
+ }
+}

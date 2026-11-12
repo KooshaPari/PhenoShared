@@ -1,0 +1,444 @@
+{
+ "generated_at_utc": "2026-11-12T12:16:45Z",
+ "source": "nonask_label_sheet.json",
+ "bucket": "uncited_non_ask_cue",
+ "seed": 20261114,
+ "n": 60,
+ "population": 32891,
+ "blind_to": [
+  "channel",
+  "capture outcome",
+  "first labeller's labels"
+ ],
+ "purpose": "second independent labeller on the non-ask bucket",
+ "what_this_is_not": "This measures authorship of the bucket. It does not by itself produce a coverage rate.",
+ "items": [
+  {
+   "idx": 0,
+   "clause": "another pane (w8:pr) has pushed 56d7256a with a complete fix",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 1,
+   "clause": "inspect it (`bg action=\"status\" task_id=\"7356150dix\"`, `bg action=\"output\" task_id=\"7356150dix\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"7356150dix\"`).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 2,
+   "clause": "you are a staffswe engineer on agileplus (local checkout /users/kooshapari/codeprojects/phenotype/repos/agileplus).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 3,
+   "clause": "creation looks gated on the desktop app, so you create it there and i'll walk you through.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 4,
+   "clause": "| recommended split: **github = truth for code history.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 5,
+   "clause": "[bash] $ printf minimax_route_ok → minimax_route_ok exact output: ``​` minimax_route_ok ``​`",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 6,
+   "clause": "then apply only ocr cli fix and rerun.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 7,
+   "clause": "inspect it (`bg action=\"status\" task_id=\"34151289s1\"`, `bg action=\"output\" task_id=\"34151289s1\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"34151289s1\"`).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 8,
+   "clause": "the other five are mapped honestly.",
+   "channels": [
+    "harness",
+    "imessage"
+   ]
+  },
+  {
+   "idx": 9,
+   "clause": "each of the 6 dependabot prs count=4 with the identical failing set (civic evidence gate, dependency delta, ci / lint, ci / test)",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 10,
+   "clause": "\\u2014 not: do not fabricate tool output or approximate counts when the mcp server is not connected.\", \"confidence\": 0.9 }, { \"key\": \"project.kiro_inventory.agent_sources_available\", \"value_json\": \"false\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.agent_sources_count\", \"value_json\": \"0\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.last_verified_at\", \"value_json\": \"\\\"2026-11-04\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kiro_inventory.mcp_server_connected\", \"value_json\": \"false\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.dashboard_route\", \"value_json\": \"\\\"/settings/chat/models\\\"\", \"confidence\": 0.8 }, { \"key\": \"project.kirocrew.deskcrew_identity_file\", \"value_json\": \"\\\"~/.ssh/id-git\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.deskcrew_ports\", \"value_json\": \"\\\"local_port 7779 -> remote_port 5476\\\"\", \"confidence\": 0.9 }, { \"key\": \"project.kirocrew.deskcrew_ssh_alias\", \"value_json\": \"\\\"desk\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.deskcrew_ssh_fix_applied\", \"value_json\": \"false\", \"confidence\": 0.9 }, { \"key\": \"project.kirocrew.deskcrew_ssh_host_current\", \"value_json\": \"\\\"<IP-REDACTED>\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.deskcrew_ssh_user_required\", \"value_json\": \"\\\"koosh\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.instances_json_path\", \"value_json\": \"\\\"/users/kooshapari/.kiro/crew/instances.json\\\"\", \"confidence\": 1.0 }, { \"key\": \"project.kirocrew.last_error_code\", \"value_json\": \"\\\"instance_connect_failed\\\"\", \"confidence\": 0.9 }, { \"key\": \"project.kirocrew.ssh_tunnel_argv\", \"value_json\": \"\\\"ssh -n -c -o batchmode=yes <host> (user/identityfile only from ssh config)\\\"\", \"confidence\": 0.9 } ] ## conversation to process [2026-11-07t00:56] user: looking to do a developnent freeze which requires full coollectionand cleaning\\push of all local states before moving forwards.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 11,
+   "clause": "the coordinator will reconcile and flip it after review",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 12,
+   "clause": "running: prompt pass over the 985 vague chats",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 13,
+   "clause": "so value comp needed.",
+   "channels": [
+    "imessage",
+    "phone"
+   ]
+  },
+  {
+   "idx": 14,
+   "clause": "local cpu small data",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 15,
+   "clause": "if hash differs stop.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 16,
+   "clause": "inspect it (`bg action=\"status\" task_id=\"573952pq13\"`, `bg action=\"output\" task_id=\"573952pq13\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"573952pq13\"`).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 17,
+   "clause": "trinzic ok skip it",
+   "channels": [
+    "imessage",
+    "phone"
+   ]
+  },
+  {
+   "idx": 18,
+   "clause": "dns authentication is configured, but this alone does not confirm that incoming forwarding is set up.",
+   "channels": [
+    "imessage",
+    "phone"
+   ]
+  },
+  {
+   "idx": 19,
+   "clause": "i was like there has to be some subliminal goon still roped in",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 20,
+   "clause": "recommended d (archive namespace).p20a + p28 done earlier this turn.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 21,
+   "clause": "hermes live per memory (unverified).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 22,
+   "clause": "so i can pay",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 23,
+   "clause": "worth a line in the arch docs … > thursday, october 8, 2026, 11:04:15 pm pdt | instinct | two options: (a) i re-enroll, you scan the same qr on your phone",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 24,
+   "clause": "my rpt at 25 now",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 25,
+   "clause": "consider fixing |\\n| low | style or minor suggestion | **note",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 26,
+   "clause": "git push --force-with-lease",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 27,
+   "clause": "prior attempt connection-reset.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 28,
+   "clause": "friday, october 9, 2026, 11:27:26 am pdt | instinct | reply/reaction target: <TOKEN-REDACTED> cleanup: went through your dump fully",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 29,
+   "clause": "two things: phaxis",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 30,
+   "clause": "the civic evidence gate then fails (asserts dependency_result == success on pull_request) and ci / lint + ci / test fail downstream.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 31,
+   "clause": "dm from badger: send concise exact 388 and 389 http response body/status findings directly to coordinator, then stop",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 32,
+   "clause": "background task stalled** `270638v8w4` · `poll for wave-12c commits fr` (`bash`) · no output or progress for 300s (running 6570s total) _no output captured yet._ the task is still running.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 33,
+   "clause": "if complete, run cargo test -p agileplus-import && cargo test -p agileplus-graph to verify, then commit with: test(import,graph): add comprehensive tests.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 34,
+   "clause": "gh pr create --repo kooshapari/job-cockpit --base main --head feat/bridge-wiring-2026-10-19 --title 'docs(agent-comms): migrate per-pane email routes proposal' --body 'migrated from the local-only harness-ops working copy.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 35,
+   "clause": "cand: i'll confirm the diff result this afternoon.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 36,
+   "clause": "r1 (medium): pr #1 sits open with no review/ci receipts verified.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 37,
+   "clause": "friday, september 25, 2026, 1:06:26 pm pdt | koosha | i live in la.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 38,
+   "clause": "only provided fields are changed, and the workspace slug stays stable when the title changes.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 39,
+   "clause": "dispensary collector, pick the best path.",
+   "channels": [
+    "phone"
+   ]
+  },
+  {
+   "idx": 40,
+   "clause": "then claude\\oai\\gemini data export scrape",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 41,
+   "clause": "mispqste ignore this",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 42,
+   "clause": "fr007 2 passed exit",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 43,
+   "clause": "dm from tiger: send exact recovery actions including any additional files moved, backup paths, commands and current api verification, concise",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 44,
+   "clause": "reveal and copy.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 45,
+   "clause": "later evidence candidates (same thread) --- > saturday, october 10, 2026, 5:44:41 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> hit a real design constraint: the vault is fill-only",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 46,
+   "clause": "dm from snail: progress ping (5-min stall on bg 306590c60n, not a hang",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 47,
+   "clause": "if you are done with your work, call end_ambient_cycle with a summary of what you accomplished and schedule your next wake.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 48,
+   "clause": "from that list, select every subcommand that could relate to a daemon, server, socket, rpc, acp, session, attach, connect, bridge, ipc, watch or client.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 49,
+   "clause": "and on the rust-toolchain divergence, if you land a pin for dtolnay/rust-toolchain in portage i will cross-check that your sha is a commit that actually exists rather than a branch head, since a force-pushed stable branch is exactly the case where a pin looks current but is not",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 50,
+   "clause": "dol and alps are cabins right",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 51,
+   "clause": "the entry roles are for math competition winners and ivy\\berkeley\\other target schools they prefer by default",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 52,
+   "clause": "with no token they approve in chrome or paste one in **settings -> browser**.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 53,
+   "clause": "the forward isn’t broken.",
+   "channels": [
+    "imessage",
+    "phone"
+   ]
+  },
+  {
+   "idx": 54,
+   "clause": "preview server4397 already live.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 55,
+   "clause": "she says u cute asl",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 56,
+   "clause": "done for hermes",
+   "channels": [
+    "imessage",
+    "phone"
+   ]
+  },
+  {
+   "idx": 57,
+   "clause": "only 1 here’s deploy",
+   "channels": [
+    "imessage",
+    "phone"
+   ]
+  },
+  {
+   "idx": 58,
+   "clause": "pr #13336 live",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 59,
+   "clause": "q3 is a consent to share your info acr … ### msg 992 | wednesday, october 7, 2026, 6:51:11 pm pdt | thread a cand: live with tomorrow's run.",
+   "channels": [
+    "harness"
+   ]
+  }
+ ]
+}

@@ -1,6 +1,7 @@
 {
- "generated_at_utc": "2026-11-12T12:05:47Z",
+ "generated_at_utc": "2026-11-12T21:09:02Z",
  "script": "operator_coverage.py",
+ "labeller_mode": "l1",
  "frame": {
   "name": "frame_a_set_union",
   "units": 43648,
@@ -46,6 +47,7 @@
    "field_used": "by_speaker_pass2 + sample_size (no non_operator_share field present)"
   }
  },
+ "l1_for_comparison": null,
  "per_bucket": [
   {
    "bucket": "cited",

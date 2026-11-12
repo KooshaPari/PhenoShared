@@ -1,0 +1,368 @@
+{
+ "generated_at_utc": "2026-11-12T21:04:33Z",
+ "labeller": "second independent labeller (deepseek-v4.1-flash)",
+ "labeller_role": "second_independent",
+ "n": 60,
+ "items": [
+  {
+   "idx": 0,
+   "clause": "read <TOKEN-REDACTED>.diff and report.md.",
+   "speaker": "operator",
+   "why": "instruction 'read ... and report.md' to an agent"
+  },
+  {
+   "idx": 1,
+   "clause": "avoid broad home find timeouts.",
+   "speaker": "operator",
+   "why": "imperative 'avoid broad home find timeouts'"
+  },
+  {
+   "idx": 2,
+   "clause": "verify current github repo metadata only for kooshapari/sidekick, kooshapari/stashly, kooshapari/tasken and phenotype-registry, compare with old july archived/queued docs in phenotype-registry-pr550.",
+   "speaker": "operator",
+   "why": "imperative 'verify ... only for kooshapari/...'"
+  },
+  {
+   "idx": 3,
+   "clause": "extract utilities from large modules",
+   "speaker": "operator",
+   "why": "imperative 'extract utilities from large modules'"
+  },
+  {
+   "idx": 4,
+   "clause": "report exact resolved paths (follow symlinks) and versions.",
+   "speaker": "operator",
+   "why": "imperative 'report exact resolved paths'"
+  },
+  {
+   "idx": 5,
+   "clause": "friday, october 9, 2026, 1:46:56 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> it doesnt matter which tab is which atp no?",
+   "speaker": "operator",
+   "why": "explicit '| koosha |' header, human question"
+  },
+  {
+   "idx": 6,
+   "clause": "use convo search tool",
+   "speaker": "operator",
+   "why": "imperative 'use convo search tool'"
+  },
+  {
+   "idx": 7,
+   "clause": "how is it still so busy",
+   "speaker": "operator",
+   "why": "human question 'how is it still so busy'"
+  },
+  {
+   "idx": 8,
+   "clause": "do not block on install",
+   "speaker": "operator",
+   "why": "imperative 'do not block on install'"
+  },
+  {
+   "idx": 9,
+   "clause": "clean tree, no trouble, need nothing.",
+   "speaker": "agent",
+   "why": "self-reported status 'need nothing' reads as agent narration"
+  },
+  {
+   "idx": 10,
+   "clause": "list wahts ready for deletion",
+   "speaker": "operator",
+   "why": "imperative with typo 'wahts ready for deletion'"
+  },
+  {
+   "idx": 11,
+   "clause": "why *not* impersonate another backend",
+   "speaker": "operator",
+   "why": "question 'why *not* impersonate another backend'"
+  },
+  {
+   "idx": 12,
+   "clause": "go.walk me througn this sessione 2e along with full wbs\\dag\\pert filled out\\labelded\\annotated\\colored",
+   "speaker": "operator",
+   "why": "voice-transcribed 'walk me througn this sessione'"
+  },
+  {
+   "idx": 13,
+   "clause": "don't also `artifact_save`.",
+   "speaker": "operator",
+   "why": "imperative 'don't also `artifact_save`'"
+  },
+  {
+   "idx": 14,
+   "clause": "dm from buffalo: please provide your full forensic report for all 4 repos (tokn, configra, authkit, audit-system).",
+   "speaker": "peer",
+   "why": "third-party relay 'dm from buffalo: please provide'"
+  },
+  {
+   "idx": 15,
+   "clause": "what is the itinerary",
+   "speaker": "operator",
+   "why": "question 'what is the itinerary'"
+  },
+  {
+   "idx": 16,
+   "clause": "exact labels: changed: <file | the exact added line | the full env block now on the gitleaks job> diff_size: <lines added/removed> prettier: <exit code | did it reformat unrelated lines?",
+   "speaker": "operator",
+   "why": "report-format directive 'exact labels: changed:'"
+  },
+  {
+   "idx": 17,
+   "clause": "which of those conditions are testable without touching live config or spawning against real stores",
+   "speaker": "operator",
+   "why": "question 'which of those conditions are testable'"
+  },
+  {
+   "idx": 18,
+   "clause": "reply \"written\" when done",
+   "speaker": "operator",
+   "why": "instruction 'reply \"written\" when done'"
+  },
+  {
+   "idx": 19,
+   "clause": "reply with exactly these 5 lines, nothing else: files_changed: <paths, comma separated> verified: <exact command(s) you ran> -> <pass/fail + key number> still_broken: <remaining denominator gaps, or \"none\"> risk: <what could still make a coverage run print a wrong percentage, or \"none\"> unverified: <what you could not check without running the full suite, or \"none\"> i specifically need two facts:",
+   "speaker": "operator",
+   "why": "directive 'reply with exactly these 5 lines'"
+  },
+  {
+   "idx": 20,
+   "clause": "do not treat absent as failure, and do not merge unless both read success.",
+   "speaker": "operator",
+   "why": "ruling 'do not treat absent as failure'"
+  },
+  {
+   "idx": 21,
+   "clause": "report: per-file before/after line counts, exact diff summary (funcs extracted), exact swift test result line, and projected dup-line reduction.",
+   "speaker": "operator",
+   "why": "directive 'report: per-file before/after line counts'"
+  },
+  {
+   "idx": 22,
+   "clause": "use slug \"index\" for the wiki index page.",
+   "speaker": "operator",
+   "why": "imperative 'use slug \"index\"'"
+  },
+  {
+   "idx": 23,
+   "clause": "require explicit human acceptance on the issue, and use current date 2026-11-03 rather than nov",
+   "speaker": "operator",
+   "why": "ruling 'require explicit human acceptance'"
+  },
+  {
+   "idx": 24,
+   "clause": "for once everything is setup, dynamic org scaling \\ departmentalization?",
+   "speaker": "operator",
+   "why": "voice-transcribed question 'dynamic org scaling'"
+  },
+  {
+   "idx": 25,
+   "clause": "check the forwarding rule, i can't see it.",
+   "speaker": "operator",
+   "why": "first person 'i can't see it'"
+  },
+  {
+   "idx": 26,
+   "clause": "test ## this node go test ./internal/report/ ## required output",
+   "speaker": "operator",
+   "why": "imperative 'go test ./internal/report/'"
+  },
+  {
+   "idx": 27,
+   "clause": "add cli project selection to this generator or a companion: sharecli, substrate, phenotype-omlx.",
+   "speaker": "operator",
+   "why": "imperative 'add cli project selection'"
+  },
+  {
+   "idx": 28,
+   "clause": "report the same way when you are done",
+   "speaker": "operator",
+   "why": "instruction 'report the same way when you are done'"
+  },
+  {
+   "idx": 29,
+   "clause": "read agents before edits.",
+   "speaker": "operator",
+   "why": "imperative 'read agents before edits'"
+  },
+  {
+   "idx": 30,
+   "clause": "read-only review of newly added rubric.md in <TOKEN-REDACTED>.",
+   "speaker": "operator",
+   "why": "assignment 'read-only review of newly added rubric.md'"
+  },
+  {
+   "idx": 31,
+   "clause": "report honestly: if job-cockpit already has equivalent receiver code, say so and only add the proposal doc",
+   "speaker": "operator",
+   "why": "directive 'report honestly: if job-cockpit ... say so'"
+  },
+  {
+   "idx": 32,
+   "clause": "review found missed dashboard routes and leftover fixture data tha \u2026 > tuesday, october 27, 2026, 3:46:52 pm pdt | instinct | i'll check both connections and resume what was blocked by access.",
+   "speaker": "agent",
+   "why": "narration 'review found missed dashboard routes', bridge reply"
+  },
+  {
+   "idx": 33,
+   "clause": "read-only task.",
+   "speaker": "operator",
+   "why": "terse constraint 'read-only task.'"
+  },
+  {
+   "idx": 34,
+   "clause": "do all fan out",
+   "speaker": "operator",
+   "why": "imperative 'do all fan out'"
+  },
+  {
+   "idx": 35,
+   "clause": "include one exact evidence fact from the file to verify tool use.",
+   "speaker": "operator",
+   "why": "requirement 'include one exact evidence fact'"
+  },
+  {
+   "idx": 36,
+   "clause": "do not bypass security approvals or perform unauthorized destructive/external actions.",
+   "speaker": "operator",
+   "why": "ruling 'do not bypass security approvals'"
+  },
+  {
+   "idx": 37,
+   "clause": "can a caller escape the intended root (traversal, absolute path, symlink, tilde, null bytes, windows-style paths)?",
+   "speaker": "operator",
+   "why": "security question 'can a caller escape the intended root'"
+  },
+  {
+   "idx": 38,
+   "clause": "should cherry-pick cleanly.**unactionable**: quinn-proto vulns are not fixed in upstream (also at0.11.15).",
+   "speaker": "agent",
+   "why": "report text '**unactionable**: quinn-proto vulns'"
+  },
+  {
+   "idx": 39,
+   "clause": "do not automatically reuse native workers without respecting that policy.",
+   "speaker": "operator",
+   "why": "ruling 'do not automatically reuse native workers'"
+  },
+  {
+   "idx": 40,
+   "clause": "update memories and agnets.md\\\"\", \"confidence\": 1.0 }, { \"key\": \"lesson.dd2092f392292dc5\", \"value_json\": \"use this skill when the user asks anything the agileplus spec-driven\\ndevelopment engine should answer: dashboard, feature state, work-package\\nstate, governance checks, audit verification, or the canonical one-line\\nstatus.",
+   "speaker": "tool",
+   "why": "raw JSON 'key': 'lesson...', 'confidence': 1.0 }"
+  },
+  {
+   "idx": 41,
+   "clause": "use `tail -c 200000000 <file> | grep -a ...` to bound, or grep with a session id pattern.",
+   "speaker": "operator",
+   "why": "imperative 'use `tail -c 200000000 <file>`'"
+  },
+  {
+   "idx": 42,
+   "clause": "report back in the requested format when done",
+   "speaker": "operator",
+   "why": "instruction 'report back in the requested format'"
+  },
+  {
+   "idx": 43,
+   "clause": "\u201ctop 5 contributor on current most popular foss llm routing platform with approximately 60k stars\u201d for hte images, could you ask your meta llm how i could incorporate this as an entry",
+   "speaker": "operator",
+   "why": "first person 'could you ask your meta llm'"
+  },
+  {
+   "idx": 44,
+   "clause": "do not redo): civis source is at c:\\users\\koosh\\dev\\civis (contains process-compose.yaml and crates\\server).",
+   "speaker": "operator",
+   "why": "first-hand path 'civis source is at c:\\users\\koosh'"
+  },
+  {
+   "idx": 45,
+   "clause": "let me re-verify this with concrete evidence:",
+   "speaker": "agent",
+   "why": "agent narration 'let me re-verify this'"
+  },
+  {
+   "idx": 46,
+   "clause": "do not invent results or decisions.",
+   "speaker": "operator",
+   "why": "ruling 'do not invent results or decisions'"
+  },
+  {
+   "idx": 47,
+   "clause": "do not invent a third lock implementation.",
+   "speaker": "operator",
+   "why": "ruling 'do not invent a third lock implementation'"
+  },
+  {
+   "idx": 48,
+   "clause": "read the file days/october12026.txt with the read tool.",
+   "speaker": "operator",
+   "why": "imperative 'read the file days/october12026.txt'"
+  },
+  {
+   "idx": 49,
+   "clause": "new test files must start with `//!",
+   "speaker": "operator",
+   "why": "rule 'new test files must start with `//!'"
+  },
+  {
+   "idx": 50,
+   "clause": "report evidence",
+   "speaker": "operator",
+   "why": "imperative 'report evidence'"
+  },
+  {
+   "idx": 51,
+   "clause": "(5) cost note: total api calls made, by probe also confirm explicitly: did you edit any file (the evidence doc or anything else)?",
+   "speaker": "operator",
+   "why": "requirement list 'did you edit any file'"
+  },
+  {
+   "idx": 52,
+   "clause": "ask ledger: 114 asks from your messages, all 24 unowned ones now assigned to lanes",
+   "speaker": "agent",
+   "why": "self-report 'asks from your messages ... assigned to lanes'"
+  },
+  {
+   "idx": 53,
+   "clause": "open candidates for you: #100 independent diff review + accurate description, #107 (installer-split successor with 8 commits, failing dependency delta + civic evidence gate + kilo), #114/#116 (now should rebase onto green main), and the unity build gap.",
+   "speaker": "agent",
+   "why": "self-report 'open candidates for you: #100'"
+  },
+  {
+   "idx": 54,
+   "clause": "do not spend more than one tool call investigating any single question.",
+   "speaker": "operator",
+   "why": "ruling 'do not spend more than one tool call'"
+  },
+  {
+   "idx": 55,
+   "clause": "read the file days/october202026.txt with the read tool.",
+   "speaker": "operator",
+   "why": "imperative 'read the file days/october202026.txt'"
+  },
+  {
+   "idx": 56,
+   "clause": "print those mcq",
+   "speaker": "operator",
+   "why": "imperative 'print those mcq'"
+  },
+  {
+   "idx": 57,
+   "clause": "don't claim geometry math as visual verification.",
+   "speaker": "operator",
+   "why": "ruling \"don't claim geometry math as visual verification\""
+  },
+  {
+   "idx": 58,
+   "clause": "drop it here and i'll start the watch: > monday, october 5, 2026, 10:18:57 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> https://app.instinct.com/session/vault/fill?<TOKEN-REDACTED>&src=imessage&preview=imessage > monday, october 5, 2026, 11:08:49 pm pdt | koosha | done > monday, october 5, 2026, 11:09:39 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> login bounced at webmail.porkbun.com",
+   "speaker": "operator",
+   "why": "first person 'i'll start the watch' plus '| koosha | done'"
+  },
+  {
+   "idx": 59,
+   "clause": "read the file days/october92026-01.txt with the read tool.",
+   "speaker": "operator",
+   "why": "imperative 'read the file days/october92026-01.txt'"
+  }
+ ]
+}

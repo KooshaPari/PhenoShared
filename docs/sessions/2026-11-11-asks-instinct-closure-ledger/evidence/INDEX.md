@@ -694,3 +694,63 @@ citation-precision sample.
 | `evidence/operator_coverage.json` | machine-readable result: per-bucket operator units, total 22,125.11, coverage 8.47% with range 6.4–11.1% and `is_confidence_interval: false` | written by the script above |
 
 Section `3m` of `VERDICT.md` carries the prose.
+
+---
+
+## Addendum 14 — a second independent labeller reproduces the coverage estimate at 8.07%, and the agreement is measured (2026-11-12T21:10Z)
+
+**Prior context.** Addendum 13 published 8.47% and named two blockers: one labeller produced all
+three bucket samples, and citation precision was unmeasured. This addendum closes the first blocker
+and starts the second. Neither figure is superseded: 8.47% remains the first labeller's derivation,
+8.07% is the second labeller's, and the honest statement is the pair.
+
+**What was run.** Three blind labelling lanes, one per bucket, each given only a `speaker`-null sheet
+and told not to open the first labeller's files. Independence holds afterwards on three checks: the
+sheets carried 0 non-null labels at hand-out; the two labellers produced 0 identical `why` strings in
+120 items on the cited and ask-cue buckets while choosing identical classes; and the same non-operator
+indices were reached independently (cited 1 and 50; ask-cue 9, 14, 32, 38, 40, 45, 52, 53).
+
+**Agreement.**
+
+| bucket | n | raw (6-class) | kappa (6-class) | kappa (operator vs rest) | share 1 → 2 | disagreements |
+|---|---:|---:|---:|---:|---|---:|
+| cited | 60 | 1.000 | 1.000 | 1.000 | 96.7% → 96.7% | 0 |
+| uncited ask-cue | 60 | 1.000 | 1.000 | 1.000 | 86.7% → 86.7% | 0 |
+| uncited non-ask-cue | 60 | 0.800 | 0.689 | 0.653 | 38.3% → 41.7% | 12 |
+| pooled (descriptive) | 180 | 0.933 | 0.838 | 0.854 | — | 12 |
+
+The 12 disagreements are all boundary calls: 7 operator↔agent, 2 operator↔peer, 1 tool↔operator,
+2 system↔tool or system↔agent. Kappa is 1.00 on two buckets and 0.65 on the only non-operator-dominant
+one, so the rubric is reproducible where the answer is clear and `substantial` where it is not. Raw
+agreement alone would have read 80% on that bucket; the chance-corrected figure is what is quoted.
+
+**Coverage, both derivations.** Same script, only the share source differs
+(`operator_coverage.py l1` / `l2`):
+
+| labeller | operator units | total | coverage | range (independent bounds) |
+|---|---:|---:|---:|---|
+| first | 1,873 | 22,125 | 8.47% | 6.39–11.09% |
+| second | 1,873 | 23,221 | 8.07% | 6.14–10.50% |
+
+The numerator is unchanged because the cited bucket reproduced exactly; only the non-ask-cue
+denominator moved, by 2 clauses of 60.
+
+**What remains.** Citation precision is `NOT_RUN`. A 60-row blind sample of the register's 2,252
+origin links is drawn (`precision_sheet.json`, key withheld in `precision_key.json`) and unlabelled,
+so nothing here speaks to precision. Note the two denominators are different quantities and must not
+be interchanged: 2,252 is origin links, 1,938 is distinct cited units.
+
+| artifact | what it is | how to reproduce |
+|---|---|---|
+| `evidence/inter_labeller_agreement.py` | measures raw agreement and Cohen's kappa per bucket, two-class and six-class, with the disagreement list | `python3 evidence/inter_labeller_agreement.py` (exit 3 = a bucket NOT_RUN) |
+| `evidence/inter_labeller_agreement.json` | machine-readable agreement, confusion matrices, 12 non-ask disagreements, plain-language reading per bucket | written by the script above |
+| `evidence/nonask_speaker_sheet.py` | draws the blind non-ask sheet; the older `nonask_label_sheet.json` could not be reused because it carries `speaker_pass2`, `captured_by` and `channel` | `python3 evidence/nonask_speaker_sheet.py` |
+| `evidence/nonask_speaker_sheet.json` | the blind non-ask sheet actually handed to the second labeller | written by the script above |
+| `evidence/{cited,askcue,nonask}_labels_l2.json` | the second labeller's 60 labels per bucket, plus `_partial.tsv` accumulation files | hand-labelled; not regenerable by script |
+| `evidence/operator_coverage.py l2` | re-derives coverage from the second labeller's shares; keeps the first labeller's figures under `inputs.l1_for_comparison` | `python3 evidence/operator_coverage.py l2` |
+| `evidence/operator_coverage_l2.json` | machine-readable second derivation: 8.07%, range 6.14–10.50% | written by the script above |
+| `evidence/precision_sheet.json` | 60-row blind citation-precision sample over the 2,252 origin links, `verdict` null | `python3 evidence/make_precision_sheet.py` (seed 20261112) |
+| `evidence/precision_key.json` | withheld channel, link role, relation and fidelity per row | written by the same script |
+| `evidence/make_precision_sheet.py` | reads the register read-only, draws the 60-row sample, writes sheet plus withheld key | `python3 evidence/make_precision_sheet.py` |
+
+Section `3n` of `VERDICT.md` carries the prose.

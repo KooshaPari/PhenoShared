@@ -34,9 +34,9 @@ operator speech (58/60). With all three buckets measured in the same frame, cove
 operator-authored units estimates at 8.47%, which is the first operator-intent figure in this file. It
 is an estimate and not a published rate because citation precision is unmeasured and one labeller
 produced all three samples. It does not replace any unit-based figure: those are rates over units,
-this is a rate over operator-authored units.**
+this is a rate over operator-authored units. Rev 16 puts a second, blind, independent labeller on all three sheets: coverage lands at 8.07% against 8.47%, and inter-labeller agreement is 1.00 on two buckets and 0.65 on the third. The single-labeller caveat is retired and replaced with a measured number, so the honest statement is now a pair, 8.07-8.47%; the rate is still withheld because citation precision is unmeasured.**
 
-> **Current numbers, as of Rev 15.** Use these; every other figure in this file is the number
+> **Current numbers, as of Rev 16.** Use these; every other figure in this file is the number
 > published at the time of the section that made it, and §3f / §5 / §3i retain theirs for the record.
 >
 > | Quantity | Value |
@@ -49,7 +49,7 @@ this is a rate over operator-authored units.**
 > | Declared-speaker attribution, ask-cue bucket | **UNUSABLE — 100% operator by construction** |
 > | Ask-cue authorship | **86.7% operator speech** (52/60, 95% CI 75.8-93.1); the cited side is now labelled at 96.7%, so coverage of operator-authored units exists as an estimate |
 >
-> - **Coverage of operator-authored units: 8.47%** (range 6.4-11.1, independent bounds, not a CI) -- an estimate, not a published rate; citation precision is unmeasured.
+> - **Coverage of operator-authored units: 8.07-8.47%** (first labeller 8.47% [6.4-11.1], second independent labeller 8.07% [6.1-10.5]; independent bounds, not a CI) -- still an estimate, not a published rate: citation precision is unmeasured. Inter-labeller agreement: kappa 1.00 on cited and ask-cue, 0.65 on the non-ask-cue bucket, 0.85 pooled.
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -68,6 +68,7 @@ this is a rate over operator-authored units.**
 | 13 | **declared-speaker attribution is unusable on this harvest.** Coverage of *operator intent* has no denominator, and the reason is structural rather than a sampling gap | the attempt was reasonable: two of four channels carry a `role` field, so authorship looked machine-readable. Measured: both exports contain only `role='user'` rows (55,122 jcode, 9,650 codex) with `is_human` as the sole varying flag, which the published filter drops when False. Declared speaker is therefore **constant** — 100% operator across 9,343 occurrence pairs and 8,819 units — so the field carries **zero** information. Where a human looked it is also contradicted: 27/60 agreement on the operator cut. Not a number corrected; a measurement avenue closed, and recorded as such |
 | 14 | the ask-cue bucket is **86.7% operator speech** (52/60, 95% CI 75.8-93.1), so §3k's "fraction of 8,819" prediction is falsified in the favourable direction; the cited side remains unmeasured so **no coverage-of-intent rate is published** | an authorship share is not a coverage rate. Multiplying it into 8,819 estimates a denominator, not a numerator |
 | 15 | the cited side is **96.7% operator speech** (58/60, 95% CI 88.6-99.1), so with all three buckets measured the coverage of operator-authored units estimates at **8.47%** (range 6.4-11.1, independent bounds) | this is the first operator-intent figure in the verdict, and it is an **ESTIMATE with a range, not a published rate** — the operator's own gate is recall AND precision >= 0.9 and precision is unmeasured. The four unit-based figures (4.4% structural, 13.3% ask-cue semantic, 3.3% non-ask semantic, ~9.65% union) are unchanged: they are rates over units and this is a rate over operator-authored units |
+| 16 | a second **independent, blind** labeller on all three sheets puts coverage at **8.07%** (range 6.1-10.5), against the first labeller's 8.47%; inter-labeller kappa is **1.00** on the cited and ask-cue buckets and **0.65** on the non-ask-cue bucket (0.85 pooled) | not a retraction. It retires the single-labeller caveat and replaces it with a measured agreement number, and it widens the honest statement to **8.07-8.47%**. It does **not** publish a rate: citation precision is still `NOT_RUN`, both labellers are model labellers on one rubric, and the 12 non-ask-cue disagreements are listed rather than adjudicated |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -1195,6 +1196,77 @@ citation-precision sample. Neither is currently produced.
 The labels were produced in three separate 20-item passes because a single 60-item lane failed at the
 transport layer four times across two routes. `assemble_cited_labels.py` concatenates, and asserts
 completeness, dedup and allowed values; it re-judges nothing.
+
+---
+
+## 3n. A second independent labeller: the single-labeller caveat is retired, the figure is 8.07-8.47%
+
+**What changed.** §3m published 8.47% and named the two things that kept it an estimate rather than a
+published rate: one labeller produced all three samples, and citation precision was unmeasured. The
+first half is now measured. A second labeller labelled **all three** 60-clause sheets blind: it was
+given only `speaker`-null sheets, never the first labeller's files. Two independence checks hold
+afterwards: every sheet's `speaker` field was null at hand-out (0 non-null of 180), and the two
+labellers produced **0 identical `why` strings out of 120** on the two clean buckets while still
+choosing the same classes. Reaching the same answer in different words is the shape genuine
+agreement takes; identical strings would have been the shape contamination takes.
+
+**Agreement, measured.** `evidence/inter_labeller_agreement.py` →
+`evidence/inter_labeller_agreement.json`. Cohen's kappa over the six rubric classes, and over the
+two-class collapse the coverage figure actually uses:
+
+| bucket | n | raw agreement (6-class) | kappa (6-class) | kappa (operator vs rest) | operator share, labeller 1 → 2 | disagreements |
+|---|---:|---:|---:|---:|---|---:|
+| cited | 60 | 1.000 | 1.000 | 1.000 | 96.7% → 96.7% | 0 |
+| uncited ask-cue | 60 | 1.000 | 1.000 | 1.000 | 86.7% → 86.7% | 0 |
+| uncited non-ask-cue | 60 | 0.800 | 0.689 | 0.653 | 38.3% → 41.7% | 12 |
+| pooled (descriptive only) | 180 | 0.933 | 0.838 | 0.854 | — | 12 |
+
+Two of three buckets reproduce exactly. The third, the only bucket that is not operator-dominant,
+reproduces at **kappa 0.653** on the operator/non-operator split — "substantial", not "almost
+perfect".
+
+**Where the disagreement sits.** All 12 disagreements are boundary calls, not wild ones: 7 flip
+operator↔agent, 2 operator↔peer, 1 tool↔operator, 2 system↔tool or system↔agent. That is precisely
+the distinction the coverage figure rests on, which is why it is reported per class rather than
+smoothed. Net effect on the bucket: +2 operator clauses (23/60 → 25/60).
+
+**What it does to the headline.** Re-deriving the same arithmetic on the second labeller's shares
+(`evidence/operator_coverage.py l2` → `evidence/operator_coverage_l2.json`, identical code path,
+only the share source differs):
+
+| labeller | cited | ask-cue | non-ask-cue | operator units | coverage | range (independent bounds) |
+|---|---:|---:|---:|---:|---:|---|
+| first | 96.7% | 86.7% | 38.3% | 1,873 / 22,125 | **8.47%** | 6.39–11.09% |
+| second | 96.7% | 86.7% | 41.7% | 1,873 / 23,221 | **8.07%** | 6.14–10.50% |
+
+Two independent derivations land **0.40 pp apart** and their ranges overlap almost entirely. The
+honest statement is therefore **coverage of operator-authored units is 8.07–8.47%**, quoted as the
+pair, with the second labeller's range the wider of the two.
+
+**What this does not do.** It retires `single_labeller_each_bucket` as a caveat and replaces it with
+a measured number; it does **not** make 8.07% a published rate. Three reasons, in order of weight:
+citation precision is still unmeasured (the sample is drawn and unlabelled, see below); both
+labellers are model labellers working from the same rubric, so this measures how reproducible the
+rubric is, not how a human would judge; and the 12 disagreements are listed, not adjudicated, so the
+figure is not corrected by this section. The rate gate needs precision **and** recall at 0.9; only
+the agreement half has moved.
+
+**Artifacts.** `evidence/inter_labeller_agreement.py` → `evidence/inter_labeller_agreement.json`
+(kappa, confusion matrix, the 12 disagreement rows with previews, the plain-language reading per
+bucket). Second labeller's raw output: `evidence/cited_labels_l2_partial.tsv` +
+`evidence/cited_labels_l2.json`, `evidence/askcue_labels_l2_partial.tsv` +
+`evidence/askcue_labels_l2.json`, `evidence/nonask_labels_l2_partial.tsv` +
+`evidence/nonask_labels_l2.json`. Blind sheet for the non-ask bucket:
+`evidence/nonask_speaker_sheet.py` → `evidence/nonask_speaker_sheet.json` (the pre-existing
+`nonask_label_sheet.json` could not be reused blind because it carries `speaker_pass2`,
+`captured_by` and `channel` on the same 60 clauses). Re-derivation:
+`evidence/operator_coverage.py l2` → `evidence/operator_coverage_l2.json`.
+
+Citation precision is the remaining half. A 60-row blind sample of cited unit↔ask pairs is drawn in
+`evidence/precision_sheet.json` with the per-row link and fidelity fields withheld in
+`evidence/precision_key.json`; it is **unlabelled**, so precision is `NOT_RUN`, not "high because
+fidelity was 97%". Quote fidelity (§3d: 97.08% strict, 99.13% folded) proves the quoted words exist
+in the cited utterance; it cannot prove the utterance belongs to that intent.
 
 ---
 

@@ -1,10 +1,25 @@
 #!/usr/bin/env python3
-"""Derive operator-authored coverage from the three bucket samples -> operator_coverage.json."""
-import json, math, os
+"""Derive operator-authored coverage from the three bucket samples.
+
+Usage: operator_coverage.py [l1|l2]
+
+  l1 (default) reads the first labeller's scored files and writes operator_coverage.json.
+  l2 reads the SECOND, independent labeller's label files and writes
+  operator_coverage_l2.json, so the coverage estimate can be re-derived without the
+  first labeller's judgements. l2 keeps the first labeller's figures in
+  `inputs.l1_for_comparison` so a reader can see both.
+
+The arithmetic is identical in both modes; only the share sources differ.
+"""
+import json, math, os, sys
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "operator_coverage.json")
+MODE = (sys.argv[1] if len(sys.argv) > 1 else "l1").lower()
+if MODE not in ("l1", "l2"):
+    raise SystemExit("usage: operator_coverage.py [l1|l2]")
+OUT = os.path.join(HERE, "operator_coverage.json" if MODE == "l1"
+                   else "operator_coverage_l2.json")
 Z = 1.959963984540054
 
 
@@ -20,6 +35,36 @@ def wilson(k, n, z=Z):
     c = p + z * z / (2 * n)
     h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))
     return [(c - h) / d, (c + h) / d]
+
+
+def l2_shares():
+    """Operator share per bucket from the SECOND independent labeller's labels."""
+    files = {"cited": "cited_labels_l2.json",
+             "uncited_ask_cue": "askcue_labels_l2.json",
+             "uncited_non_ask_cue": "nonask_labels_l2.json"}
+    out = {}
+    for bucket, fn in files.items():
+        doc = load(fn)
+        items = doc["items"]
+        n = len(items)
+        if n != 60:
+            raise SystemExit("DRIFT: %s has %d items, expected 60" % (fn, n))
+        if sorted(i["idx"] for i in items) != list(range(60)):
+            raise SystemExit("DRIFT: %s idx set is not 0..59" % fn)
+        bad = [i for i in items if i["speaker"] not in
+               ("operator", "agent", "tool", "system", "peer", "other")]
+        if bad:
+            raise SystemExit("DRIFT: %s has illegal speaker values" % fn)
+        op = sum(1 for i in items if i["speaker"] == "operator")
+        ci = wilson(op, n)
+        out[bucket] = {
+            "operator_share": op / n,
+            "wilson_95": ci,
+            "share_detail": {"count": op, "of": n, "share": op / n},
+            "share_source": "%s (second independent labeller): operator %d of %d, Wilson "
+                            "computed locally from k/n" % (fn, op, n),
+        }
+    return out
 
 
 def main():
@@ -67,6 +112,17 @@ def main():
                                         "echoed_in_sibling_files": [0.6167, [0.4902, 0.7291]]}},
     ]
 
+    if MODE == "l2":
+        sh = l2_shares()
+        l1_shares_for_comparison = {b["bucket"]: {"share": b["operator_share"],
+                                                  "wilson_95": b["wilson_95"]}
+                                    for b in buckets}
+        buckets = [{"bucket": b, "population": pop, **sh[b]}
+                   for b, pop in (("cited", cp), ("uncited_ask_cue", ap),
+                                  ("uncited_non_ask_cue", np_))]
+    else:
+        l1_shares_for_comparison = None
+
     steps = []
     for b in buckets:
         p, s = b["population"], b["operator_share"]
@@ -94,6 +150,7 @@ def main():
     out = {
         "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "script": "operator_coverage.py",
+        "labeller_mode": MODE,
         "frame": {"name": "frame_a_set_union", "units": frame, "cited": cp, "uncited": up,
                   "uncited_ask_cue": ap, "uncited_non_ask_cue": np_,
                   "identity_checks": {"cited + uncited == units": True,
@@ -115,6 +172,7 @@ def main():
                 "sample_size": n,
                 "field_used": "by_speaker_pass2 + sample_size (no non_operator_share field present)"},
         },
+        "l1_for_comparison": l1_shares_for_comparison,
         "per_bucket": buckets,
         "total_operator_units": {"point": tot_p, "low": tot_l, "high": tot_h},
         "coverage": {"point": cov["point"], "low": cov["low"], "high": cov["high"],
@@ -123,7 +181,10 @@ def main():
                              "numerator over lowest denominator. Independent bounds only."},
         "steps": steps,
         "caveats": {
-            "single_labeller_each_bucket": True,
+            "single_labeller_each_bucket": True if MODE == "l1" else (
+                "two labellers exist per bucket; each bucket figure here is the "
+                "second labeller's alone, and agreement between the two is measured "
+                "in inter_labeller_agreement.json, not assumed here"),
             "three_samples_not_one": "each bucket share comes from its own n=60 sample; the three intervals are not independent of each other and are not a joint estimate",
             "shares_multiplied_into_populations": "point estimates of a share are applied to a fixed population count; no design effect and no finite-population correction is applied",
             "citation_precision_unmeasured": "the numerator counts units the register matched; the precision of those matches is not measured here, so this is an estimate of coverage, not a published rate",
