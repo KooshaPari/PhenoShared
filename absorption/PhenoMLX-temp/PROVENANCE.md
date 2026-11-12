@@ -37,3 +37,27 @@ Consolidate repo sprawl. This repo is explicitly a *temp* copy:
 ## Source Repo Status
 
 - GitHub repo remains **unarchived** pending operator confirmation.
+
+## Completeness recovery (2026-11-12)
+
+`scripts/verify_absorption.py` compared this tree against the source and found
+4,677 of 5,736 files absent. Of those:
+
+- **4,374 are `.cargo-target/`** — Cargo build cache, deliberately excluded at
+  absorption time and correctly still excluded. Not content.
+- **303 were real content that had been missed**, including the entire
+  `perf-core/hwledger/` subtree (a Swift `bench-matrix` app, its Cargo manifest,
+  licenses and docs), three `qwen25-baselines` result JSONs, two session
+  artefact logs and one research file.
+
+Those 303 are now recovered. A secret scan over the recovered files and the rest
+of this tree reports 0 findings.
+
+Verify with:
+
+```bash
+python scripts/verify_absorption.py PhenoMLX-temp
+```
+
+The 4,374 `.cargo-target/` entries will still be reported; that is the intended
+exclusion, not a gap. Everything else is present.
