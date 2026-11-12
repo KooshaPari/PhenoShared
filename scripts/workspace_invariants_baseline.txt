@@ -166,7 +166,6 @@ crates/phenotype-cli
 crates/phenotype-config-loader
 crates/phenotype-core
 crates/phenotype-event-sourcing
-crates/phenotype-event-sourcing/phenotype-event-sourcing
 crates/phenotype-gfx/crates/phenotype-voxel
 crates/phenotype-manifest
 crates/phenotype-mock
