@@ -59,7 +59,7 @@ this section was rewritten twice:
 | Channel | Distinct substantive intents | Register captures |
 |---|---:|---|
 | Phone chat (the register's own source) | 2,075 | 1,733 cited (83.5%), ~87% after sampling misses |
-| jcode + codex harness | 5,799 cleaned (of 8,506 distinct) | 357 (16.7%, substring) |
+| jcode + codex harness | 5,799 cleaned (of 8,506 distinct) | 88 members cited (1.52%); 466 of 2,018 quotes appear in it (23.1%) |
 | iMessage | **6,363** (was carried as 911) | 1,674 cited (26.3%) |
 | KCode | **166** (was carried as 196) | 2 cited (1.2%) |
 
@@ -292,9 +292,17 @@ they are harvest artifacts rather than invented entries.
 | Channel | Distinct substantive intents | Register captures | Verdict |
 |---|---:|---|---|
 | **Phone chat** (the register's own source) | 2,075 | 1,733 cited (83.5%); ~87% after sampling misses | good, not complete |
-| **jcode + codex harness** | 5,799 cleaned (of 8,506 distinct) | 357 (16.7%, substring) | poor |
+| **jcode + codex harness** | 5,799 cleaned (of 8,506 distinct) | 88 members cited (1.52%); 466 of 2,018 quotes appear in it (23.1%); 440 of 33,148 clauses (1.3%) | poor |
 | iMessage | **6,363** | 1,674 cited (26.3%) | poor |
 | KCode | **166** | 2 cited (1.2%) | poor |
+
+> **The "Register captures" column mixes two directions on purpose, and they are not
+> interchangeable.** Member-side cells answer "what share of this channel does the register cite"
+> (88 / 5,799 = 1.52%). Quote-side cells answer "what share of the register's own quotes can be found
+> in this channel" (466 / 2,018 = 23.1%). A channel can score high on one and low on the other. The
+> `357 (16.7%)` figure that stood in the harness row for two revisions is **superseded** by the
+> measured pair above; its denominator was never recorded, so it cannot be re-derived and must not be
+> quoted.
 
 Phone-chat collapse: 2,620 messages -> 2,367 distinct strings -> 2,075 substantive (>=12 chars), and
 the collapse is a no-op there (exact, prefix-40, and Jaccard-0.8 all return 2,075). Of the 342
