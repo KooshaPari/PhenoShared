@@ -3,7 +3,14 @@
 Source: `KooshaPari/zz-zz-agentcheck-zz-pause-Agentora` (private, archived),
 default branch `main` at commit `4bdf9841521eb25a051fcb032276e05db435e41d`.
 
-This tree holds the 105 source paths that existed in neither `PhenoShared` nor
+This tree lives at `absorption-residue-Agentora/`, deliberately outside the
+`absorption/` namespace, because it is residue rather than a full absorption:
+2100 of the source repos 2205 paths are intentionally absent, so placing it
+under `absorption/` would make `verify_absorption.py` correctly report it as
+incomplete. Keeping that invariant strict is worth more than the convenience of
+a uniform path.
+
+It holds the 105 source paths that existed in neither `PhenoShared` nor
 `PhenoAI` after the Rust-crate and phenoagent split. The split itself was
 already complete: all 47 crate names collided and 0 were new.
 
