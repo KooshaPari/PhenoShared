@@ -868,7 +868,10 @@ In order of strength:
    credential-free: 2 of 8,042 `reg_utterances` rows carry a `?code=` callback parameter (§3g). Small,
    not zero.
 
-Do not use distributional similarity as a proxy: it was tested and rejected (0 of 12 high-band pairs
-were the same intent, §3b).
+Do not use **distributional** similarity as a proxy for sameness of intent: it was tested and rejected
+(0 of 12 high-band pairs were the same intent, §3b). A **true embedding** model is a different
+instrument and was run (§3h): the same question yields 17 of 30, so semantic capture does exist, but
+the detector's precision (0.567 strict) and unmeasured recall support a floor of 2.12%, not a rate.
+Neither instrument, and no combination of them, takes the register from *incomplete* to *complete*.
 
 None of these can make the register *complete*. They can only make the shortfall measurable.
