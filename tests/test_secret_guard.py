@@ -131,12 +131,15 @@ class SecretGuardChangedContentTests(unittest.TestCase):
 
     def test_lookalike_keys_beside_placeholders_are_blocked(self) -> None:
         # Negative control: the allowlist is per value, so a credential that
-        # merely shares a file with placeholders is still reported.
+        # merely shares a file with placeholders is still reported. The value is
+        # deliberately low entropy: it matches the guard's `sk-[A-Za-z0-9_-]{20,}`
+        # shape, but carries nothing a high-entropy scanner could mistake for a
+        # live key, which keeps external scanners quiet about this fixture.
         self.baseline()
         self.commit(
             "absorption/byteport/backend/byteport/routes/link_test.go",
             'const body = `{"accessKeyId": "AKIAIOSFODNN7EXAMPLE",'
-            ' "apiKey": "sk-Q7f3Lm2Xr9Tb4Vc1Nw8Z"}`\n',
+            ' "apiKey": "sk-testkeytestkeytestkey"}`\n',
             "placeholder plus a real-shaped key",
         )
 
@@ -169,7 +172,7 @@ class SecretGuardChangedContentTests(unittest.TestCase):
         self.baseline()
         self.commit(
             "absorption/byteport/.env.example",
-            "WORKOS_CLIENT_SECRET=sk-Q7f3Lm2Xr9Tb4Vc1Nw8Z\n",
+            "WORKOS_CLIENT_SECRET=sk-testkeytestkeytestkey\n",
             "template with a value",
         )
 

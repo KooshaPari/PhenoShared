@@ -95,9 +95,6 @@ paths = [
   '''(?i).*\.test\.[a-z]+$''',
   '''(?i).*_test\.go$''',
   '''(?i).*_test\.py$''',
-  # pytest modules are named test_<concern>.py, so a fixture that has to carry
-  # a key shape for a scanner test could not be written without this entry.
-  '''(?i)tests?/test_[^/]*\.py$''',
   '''(?i).*\.spec\.[a-z]+$''',
 ]
 regexes = [
