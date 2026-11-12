@@ -118,6 +118,47 @@ store: several are described as the only surviving copy of upstreams whose remot
 no longer exist, holding repaired git bundles, bare mirrors and shallow-boundary
 preservations. They are not consolidation candidates and were left untouched.
 
+## Verification is required, not assumed
+
+This index records intent, not proof. Three entries above were marked absorbed
+while their content was materially incomplete, and nothing in the record said so:
+
+| Repo | Recorded as | Actually present | Missing |
+|---|---|---|---|
+| `BytePort` | absorbed | 317 of 680 | **362** |
+| `PhenoMLX-temp` | absorbed, `.cargo-target` excluded | 1,059 of 5,736 | **303 real files** |
+| `SessionLedger` | absorbed | 811 of 934 | **123** |
+
+788 files in total. None of it was discoverable after deleting the sources, and a
+plain file copy does not fail loudly when it misses files — `.gitignore` silently
+drops whole subtrees, and a source tree can change layout between snapshots so
+that path overlap looks like coverage.
+
+### Prove it before deleting anything
+
+```bash
+python scripts/verify_absorption.py --all          # 30 absorptions, 0 incomplete
+python scripts/verify_absorption.py <repo> --json  # machine-readable
+python scripts/scan_absorption_secrets.py absorption/
+```
+
+`verify_absorption.py` compares every absorbed tree against its live source tree,
+counts files that git ignores, resolves deliberately withheld files against the
+private registry, and separates build artefacts from real content. It exits
+non-zero when something is genuinely missing.
+
+`scan_absorption_secrets.py` exists because an ad-hoc scan once checked AWS,
+GitHub, Slack, tailnet and PEM formats but not the OpenAI/Anthropic/HF/Google/
+Stripe ones. Real keys reached a candidate commit and were caught by GitHub Push
+Protection, not by us. Nothing leaked — the push was rejected — but the lesson is
+that a list of "the providers I thought of" is not a scanner.
+
+### Rule for future waves
+
+An entry may move to "absorbed" only after `verify_absorption.py <repo>` reports
+complete for that repo. Delete the source only after that, and record the
+verification date alongside the disposition.
+
 ## Worklog references
 
 - **MRG-13..MRG-16** (2026-11-11): Multi-branch consolidation. Full clones rather than shallow, union of file paths across every ref compared against the default branch to find branch-only content, `git bundle create --all` per repo verified with `git bundle verify` inside the source clone, bundles pushed to the private registry via the Git Data API. Total 48 files absorbed.
