@@ -1,0 +1,441 @@
+{
+ "generated_at_utc": "2026-11-12T09:57:22Z",
+ "seed": 20261115,
+ "n": 60,
+ "population": 8819,
+ "partition": {
+  "ask_cue": 8819,
+  "non_ask_cue": 32891,
+  "all_uncited": 41710
+ },
+ "instructions": "For each clause set `speaker` to ONE of: operator | agent | tool | system | peer | other, and give a one-line `why`. operator = Koosha's own words, including text relayed through an instinct or hermes bridge or quoted behind a `| koosha |` header. agent = an AI agent's narration, plan, report, or instruction to another agent, including pasted agent output inside a user turn. peer = a third party. tool = raw tool output. system = harness banner, injected prompt, config block. other = unresolvable. Channel is deliberately withheld; judge the text, not the source.",
+ "blind_to": [
+  "channel",
+  "declared role"
+ ],
+ "single_labeller": true,
+ "note": "channel is objective provenance, read only by the scorer",
+ "items": [
+  {
+   "idx": 0,
+   "clause": "read <TOKEN-REDACTED>.diff and report.md.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 1,
+   "clause": "avoid broad home find timeouts.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 2,
+   "clause": "verify current github repo metadata only for kooshapari/sidekick, kooshapari/stashly, kooshapari/tasken and phenotype-registry, compare with old july archived/queued docs in phenotype-registry-pr550.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 3,
+   "clause": "extract utilities from large modules",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 4,
+   "clause": "report exact resolved paths (follow symlinks) and versions.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 5,
+   "clause": "friday, october 9, 2026, 1:46:56 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> it doesnt matter which tab is which atp no?",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 6,
+   "clause": "use convo search tool",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 7,
+   "clause": "how is it still so busy",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 8,
+   "clause": "do not block on install",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 9,
+   "clause": "clean tree, no trouble, need nothing.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 10,
+   "clause": "list wahts ready for deletion",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 11,
+   "clause": "why *not* impersonate another backend",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 12,
+   "clause": "go.walk me througn this sessione 2e along with full wbs\\dag\\pert filled out\\labelded\\annotated\\colored",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 13,
+   "clause": "don't also `artifact_save`.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 14,
+   "clause": "dm from buffalo: please provide your full forensic report for all 4 repos (tokn, configra, authkit, audit-system).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 15,
+   "clause": "what is the itinerary",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 16,
+   "clause": "exact labels: changed: <file | the exact added line | the full env block now on the gitleaks job> diff_size: <lines added/removed> prettier: <exit code | did it reformat unrelated lines?",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 17,
+   "clause": "which of those conditions are testable without touching live config or spawning against real stores",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 18,
+   "clause": "reply \"written\" when done",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 19,
+   "clause": "reply with exactly these 5 lines, nothing else: files_changed: <paths, comma separated> verified: <exact command(s) you ran> -> <pass/fail + key number> still_broken: <remaining denominator gaps, or \"none\"> risk: <what could still make a coverage run print a wrong percentage, or \"none\"> unverified: <what you could not check without running the full suite, or \"none\"> i specifically need two facts:",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 20,
+   "clause": "do not treat absent as failure, and do not merge unless both read success.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 21,
+   "clause": "report: per-file before/after line counts, exact diff summary (funcs extracted), exact swift test result line, and projected dup-line reduction.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 22,
+   "clause": "use slug \"index\" for the wiki index page.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 23,
+   "clause": "require explicit human acceptance on the issue, and use current date 2026-11-03 rather than nov",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 24,
+   "clause": "for once everything is setup, dynamic org scaling \\ departmentalization?",
+   "channels": [
+    "imessage",
+    "phone"
+   ]
+  },
+  {
+   "idx": 25,
+   "clause": "check the forwarding rule, i can't see it.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 26,
+   "clause": "test ## this node go test ./internal/report/ ## required output",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 27,
+   "clause": "add cli project selection to this generator or a companion: sharecli, substrate, phenotype-omlx.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 28,
+   "clause": "report the same way when you are done",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 29,
+   "clause": "read agents before edits.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 30,
+   "clause": "read-only review of newly added rubric.md in <TOKEN-REDACTED>.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 31,
+   "clause": "report honestly: if job-cockpit already has equivalent receiver code, say so and only add the proposal doc",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 32,
+   "clause": "review found missed dashboard routes and leftover fixture data tha … > tuesday, october 27, 2026, 3:46:52 pm pdt | instinct | i'll check both connections and resume what was blocked by access.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 33,
+   "clause": "read-only task.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 34,
+   "clause": "do all fan out",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 35,
+   "clause": "include one exact evidence fact from the file to verify tool use.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 36,
+   "clause": "do not bypass security approvals or perform unauthorized destructive/external actions.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 37,
+   "clause": "can a caller escape the intended root (traversal, absolute path, symlink, tilde, null bytes, windows-style paths)?",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 38,
+   "clause": "should cherry-pick cleanly.**unactionable**: quinn-proto vulns are not fixed in upstream (also at0.11.15).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 39,
+   "clause": "do not automatically reuse native workers without respecting that policy.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 40,
+   "clause": "update memories and agnets.md\\\"\", \"confidence\": 1.0 }, { \"key\": \"lesson.dd2092f392292dc5\", \"value_json\": \"use this skill when the user asks anything the agileplus spec-driven\\ndevelopment engine should answer: dashboard, feature state, work-package\\nstate, governance checks, audit verification, or the canonical one-line\\nstatus.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 41,
+   "clause": "use `tail -c 200000000 <file> | grep -a ...` to bound, or grep with a session id pattern.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 42,
+   "clause": "report back in the requested format when done",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 43,
+   "clause": "“top 5 contributor on current most popular foss llm routing platform with approximately 60k stars” for hte images, could you ask your meta llm how i could incorporate this as an entry",
+   "channels": [
+    "imessage"
+   ]
+  },
+  {
+   "idx": 44,
+   "clause": "do not redo): civis source is at c:\\users\\koosh\\dev\\civis (contains process-compose.yaml and crates\\server).",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 45,
+   "clause": "let me re-verify this with concrete evidence:",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 46,
+   "clause": "do not invent results or decisions.",
+   "channels": [
+    "kcode"
+   ]
+  },
+  {
+   "idx": 47,
+   "clause": "do not invent a third lock implementation.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 48,
+   "clause": "read the file days/october12026.txt with the read tool.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 49,
+   "clause": "new test files must start with `//!",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 50,
+   "clause": "report evidence",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 51,
+   "clause": "(5) cost note: total api calls made, by probe also confirm explicitly: did you edit any file (the evidence doc or anything else)?",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 52,
+   "clause": "ask ledger: 114 asks from your messages, all 24 unowned ones now assigned to lanes",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 53,
+   "clause": "open candidates for you: #100 independent diff review + accurate description, #107 (installer-split successor with 8 commits, failing dependency delta + civic evidence gate + kilo), #114/#116 (now should rebase onto green main), and the unity build gap.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 54,
+   "clause": "do not spend more than one tool call investigating any single question.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 55,
+   "clause": "read the file days/october202026.txt with the read tool.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 56,
+   "clause": "print those mcq",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 57,
+   "clause": "don't claim geometry math as visual verification.",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 58,
+   "clause": "drop it here and i'll start the watch: > monday, october 5, 2026, 10:18:57 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> https://app.instinct.com/session/vault/fill?<TOKEN-REDACTED>&src=imessage&preview=imessage > monday, october 5, 2026, 11:08:49 pm pdt | koosha | done > monday, october 5, 2026, 11:09:39 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> login bounced at webmail.porkbun.com",
+   "channels": [
+    "harness"
+   ]
+  },
+  {
+   "idx": 59,
+   "clause": "read the file days/october92026-01.txt with the read tool.",
+   "channels": [
+    "harness"
+   ]
+  }
+ ]
+}

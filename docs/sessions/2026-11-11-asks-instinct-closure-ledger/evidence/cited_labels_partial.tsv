@@ -1,0 +1,20 @@
+0	operator	clipped "disc auth done" fragment in Koosha terse voice style
+1	tool	raw shell output "cd ~/downloads && mkdir -p seed"
+2	operator	question "discord state?" put directly by Koosha
+3	operator	imperative "retry console" instruction to an agent
+4	operator	correction "it looks like you're reading old cached crawls"
+5	operator	first-person remark "we also want to plug you into kilo cloud"
+6	operator	instinct relay of Koosha "access and ownership over my porkbun webmail"
+7	operator	garbled request "google fo rcf", ASR-like typos, not evidence against
+8	operator	"| koosha |" header quoting "vendor sales #s and their pricing sheets"
+9	operator	remark "same case for sebastian" voiced by Koosha
+10	operator	ruling "gh will not receive a dime from us"
+11	operator	instruction "paste the mp4s into chat"
+12	operator	instruction "1 tab per space"
+13	operator	"| koosha |" header over reply "yes to starship"
+14	operator	instruction "compare the rmcp vs fastmcp"
+15	operator	remark "this batch needs to be larger b4 complete"
+16	operator	numbered instruction "add a tree of progress bars"
+17	operator	"| koosha |" header, "ensure you update cockpit"
+18	operator	short reply "no for work unrelated to resume"
+19	operator	"| koosha |" header, "5 parent agents, subagents expected"

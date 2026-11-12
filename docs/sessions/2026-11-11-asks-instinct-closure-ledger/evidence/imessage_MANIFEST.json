@@ -1,81 +1,81 @@
 {
-  "source": "imessage",
-  "files_scanned": 1,
-  "files_parsed": 1,
-  "records": 7684,
-  "substantive": 911,
-  "one_word": 775,
-  "chars_total": 459033,
-  "ts_min": "2022-03-09T05:14:50Z",
-  "ts_max": "2026-11-11T07:32:16Z",
-  "errors": [],
-  "generated_at_utc": "2026-11-11T08:08:50Z",
-  "source_db": "/Users/kooshapari/Library/Messages/chat.db",
-  "access_mode": "read-only (sqlite URI mode=ro + PRAGMA query_only=1)",
-  "outbound_text_rows_scanned": 8983,
-  "records_before_dedupe": 8585,
-  "dedupe_dropped": 901,
-  "non_substantive": 6773,
-  "substantive_min_chars": 80,
-  "one_word_definition": "single whitespace-free token",
-  "excluded": {
-    "attachment_placeholder_only": 139,
-    "glyph_only": 90,
-    "reaction_code": 166,
-    "tapback_body": 1,
-    "whitespace_only": 2
+ "source": "imessage",
+ "files_scanned": 1,
+ "files_parsed": 1,
+ "records": 7684,
+ "substantive": 911,
+ "one_word": 775,
+ "chars_total": 459033,
+ "ts_min": "2022-03-09T05:14:50Z",
+ "ts_max": "2026-11-11T07:32:16Z",
+ "errors": [],
+ "generated_at_utc": "2026-11-11T08:08:50Z",
+ "source_db": "/Users/kooshapari/Library/Messages/chat.db",
+ "access_mode": "read-only (sqlite URI mode=ro + PRAGMA query_only=1)",
+ "outbound_text_rows_scanned": 8983,
+ "records_before_dedupe": 8585,
+ "dedupe_dropped": 901,
+ "non_substantive": 6773,
+ "substantive_min_chars": 80,
+ "one_word_definition": "single whitespace-free token",
+ "excluded": {
+  "attachment_placeholder_only": 139,
+  "glyph_only": 90,
+  "reaction_code": 166,
+  "tapback_body": 1,
+  "whitespace_only": 2
+ },
+ "top_chats": [
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 2051,
+   "display_name": null
   },
-  "top_chats": [
-    {
-      "chat": "+16504444459",
-      "records": 2051,
-      "display_name": null
-    },
-    {
-      "chat": "+14133280372",
-      "records": 1438,
-      "display_name": null
-    },
-    {
-      "chat": "+16023176400",
-      "records": 1049,
-      "display_name": null
-    },
-    {
-      "chat": "+17144524946",
-      "records": 966,
-      "display_name": null
-    },
-    {
-      "chat": "+13109138405",
-      "records": 458,
-      "display_name": null
-    },
-    {
-      "chat": "+14244489324",
-      "records": 334,
-      "display_name": null
-    },
-    {
-      "chat": "+13104039674",
-      "records": 226,
-      "display_name": null
-    },
-    {
-      "chat": "+13108667569",
-      "records": 146,
-      "display_name": null
-    },
-    {
-      "chat": "chat484334987112156279",
-      "records": 135,
-      "display_name": "Segregation committee II"
-    },
-    {
-      "chat": "+13109803616",
-      "records": 130,
-      "display_name": null
-    }
-  ],
-  "distinct_sessions": 55
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 1438,
+   "display_name": null
+  },
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 1049,
+   "display_name": null
+  },
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 966,
+   "display_name": null
+  },
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 458,
+   "display_name": null
+  },
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 334,
+   "display_name": null
+  },
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 226,
+   "display_name": null
+  },
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 146,
+   "display_name": null
+  },
+  {
+   "chat": "chat484334987112156279",
+   "records": 135,
+   "display_name": "Segregation committee II"
+  },
+  {
+   "chat": "<PHONE-REDACTED>",
+   "records": 130,
+   "display_name": null
+  }
+ ],
+ "distinct_sessions": 55
 }

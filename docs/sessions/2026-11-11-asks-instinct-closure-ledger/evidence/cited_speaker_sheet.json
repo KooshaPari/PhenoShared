@@ -1,0 +1,375 @@
+{
+ "generated_at_utc": "2026-11-12T11:10:54Z",
+ "seed": 20261116,
+ "n": 60,
+ "population": 1938,
+ "blind_to": [
+  "channel",
+  "declared role"
+ ],
+ "single_labeller": true,
+ "what_this_is_not": "This measures authorship of the matched side only. It does not by itself produce a coverage rate; a rate additionally needs the number of distinct operator-authored units on both sides in one frame.",
+ "instructions": "For each clause set `speaker` to ONE of: operator | agent | tool | system | peer | other, and give a one-line `why`. operator = Koosha's own words, including text relayed through an instinct or hermes bridge or quoted behind a `| koosha |` header. agent = an AI agent's narration, plan, report, or instruction to another agent, including pasted agent output inside a user turn. peer = a third party. tool = raw tool output. system = harness banner, injected prompt, config block. other = unresolvable. Channel is deliberately withheld; judge the text, not the source.",
+ "items": [
+  {
+   "idx": 0,
+   "clause": "disc auth done",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 1,
+   "clause": "  ~   v26.8.1   v3.9.6  14:27 ❯ cd ~/downloads && mkdir -p seed && tar xzf mac-scoped-sudo-v4-*.tgz -c seed && cd seed && ls [1] 91837 [1] + done _forge_drift_send \"drift.observe\" > /dev/null 2>&1 zsh: no matches found: mac-scoped-sudo-v4-*.tgz   ~/downloads   v26.8.1   v3.9.6   ✖ 1 14:27 ❯",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 2,
+   "clause": "discord state?",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 3,
+   "clause": "retry console",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 4,
+   "clause": "it looks like you're reading old cached crawls",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 5,
+   "clause": "we also want to plug you into kilo cloud.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 6,
+   "clause": "you need access and ownership over my porkbun webmail portal to give me notices on when to chk thst inbox > monday, october 5, 2026, 10:18:29 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> that explains everything",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 7,
+   "clause": "google fo rcf",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 8,
+   "clause": "next same-thread messages --- > thursday, october 1, 2026, 11:00:55 am pdt | koosha | reply/reaction target: <TOKEN-REDACTED> vendor sales #s and their pricing sheets exist in sheets > thursday, october 1, 2026, 11:01:59 am pdt | koosha | reply/reaction target: <TOKEN-REDACTED> i want swe or product roles.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 9,
+   "clause": "same case for sebastian",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 10,
+   "clause": "gh billing as has been said over and over gh will not receive a dime from us",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 11,
+   "clause": "paste the mp4s into chat",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 12,
+   "clause": "1 tab per space",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 13,
+   "clause": "next same-thread messages --- > thursday, october 8, 2026, 10:45:44 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> yes to starship > thursday, october 8, 2026, 10:46:01 pm pdt | koosha | review paperclip other toolings > thursday, october 8, 2026, 10:47:15 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> paperclip's the one real wrinkle.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 14,
+   "clause": "consider \\compare the rmcp vs fastmcp 4",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 15,
+   "clause": "so this batch needs to be larger b4 complete",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 16,
+   "clause": "1 add a tree of progress bars for both intents \\ domaisn of overall project if relevant",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 17,
+   "clause": "sunday, october 11, 2026, 5:08:59 pm pdt | koosha | there are a ton ensure eoyu dig and ensure you update cockpit > sunday, october 11, 2026, 5:09:21 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> waiting on you: porkbun login/captcha if the mail agent hits it",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 18,
+   "clause": "no for work unrelated to resume",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 19,
+   "clause": "next same-thread messages --- > sunday, october 11, 2026, 4:19:13 pm pdt | koosha | 5 parent agents, subagents expected > sunday, october 11, 2026, 4:20:34 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> ravi: yesterday's draft still stands",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 20,
+   "clause": "research the won't load issue on the web.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 21,
+   "clause": "i didn't unarchive agent d8d",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 22,
+   "clause": "you would own setting that up now along with those filters and rules\\systems i asked for earlier",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 23,
+   "clause": "drive discord off my firefox",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 24,
+   "clause": "overall ui\\ux in terms of polish\\design and int terms of functionality and breadth\\depth is incomplete on tracera nd ik for a fact there should be say 10-50x more on every dimension \\ quantifier",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 25,
+   "clause": "line of comms to jcode cockpit bidirectional",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 26,
+   "clause": "other than that, there's the state of traceera, state of agile plus, state of share cli, state of fabric, state of lightport, state of a whole lot of other",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 27,
+   "clause": "how 2 get conn recovery",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 28,
+   "clause": "or is your vm the issue",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 29,
+   "clause": "elsewhere running: cockpit pr for tonight's 23-row sweep, nvidia sta … > friday, october 9, 2026, 12:37:51 am pdt | koosha | hand me the browser auto url > friday, october 9, 2026, 12:39:15 am pdt | koosha | browser automation mark as done and moved to local ### msg 1285 | friday, october 9, 2026, 12:37:34 am pdt | thread a cand: study chat's loaded for tomorrow's exam.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 30,
+   "clause": "unblock email sending access.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 31,
+   "clause": "wednesday, september 30, 2026, 10:27:12 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> clear outreach email i replied to .",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 32,
+   "clause": "state of deploy for cpu fork and other solus i have been waiting on",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 33,
+   "clause": "a for mfa use txt opt and req me",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 34,
+   "clause": "do not wait till 5am on asap timelibe",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 35,
+   "clause": "parsec elaborate why ss -> coordinate click style system doesnt work for you > friday, october 9, 2026, 12:40:40 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> noted: kooshapari-desk, win/wsl2 is the target.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 36,
+   "clause": "latter is better but m3 is zdr",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 37,
+   "clause": "it fails the same way each time: \"confirm export\" sends me to \"verify your identity\", and … > saturday, october 10, 2026, 12:19:56 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> they can provide a secure download link themselves via email that requires login no?",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 38,
+   "clause": "model as mermaid for now before paperclip becomes the live management and presentation layer",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 39,
+   "clause": "run gh auth login on mac",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 40,
+   "clause": "appr9fe approve retry",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 41,
+   "clause": "the moment your subagent queue becomes a queue rather than active width those tasks must be sent somewhere where such an issue isnt present",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 42,
+   "clause": "monday, september 28, 2026, 3:38:18 am pdt | koosha | i want around 100 sent a day while avoiding this person is ai slop/spam or similar blacklists.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 43,
+   "clause": "why is paperclip mac only",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 44,
+   "clause": "desk hermes, desk paperclip, desk services, anything installed and deployed on the desk.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 45,
+   "clause": "codex win has exec iss7e",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 46,
+   "clause": "do the reinstall and place in fedora, all of these should be using wslc \\ podman deployments rather than bare metal so they are iac\\well encapsulating and lifecycle managemeble",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 47,
+   "clause": "tree of progress bars + dispatch tree + more epr tick as only status return",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 48,
+   "clause": "phenofabric state",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 49,
+   "clause": "1 a 2 elaborate in depth legacy bridge == dual deploy and only call new where not stubbed",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 50,
+   "clause": "you'd ge … > sunday, october 11, 2026, 5:07:51 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> gpt/claude re-org state: done: full ~1,700-chat inventory, classification csv v2 (985 vague chats flagged), your layout rules captured, rename api verified.",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 51,
+   "clause": "discord layer and various bridges status",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 52,
+   "clause": "incomplete and ass was",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 53,
+   "clause": "next same-thread messages --- > friday, october 9, 2026, 1:46:22 pm pdt | koosha | my rule was 3x3 filled before new space….",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 54,
+   "clause": "state of discord works",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 55,
+   "clause": "but device runs i can't do unless you can vault a sudo password and delete after",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 56,
+   "clause": "cost: a relay@ subdomain mx plus a small always-on handler (worker/vercel/pipedream) to parse a … > tuesday, october 6, 2026, 12:12:55 am pdt | koosha | hybrid of 1\\2\\3 (some or all) vs either of 2 or 3?",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 57,
+   "clause": "state of hermes, discord bridges, matter bridge, irc bridge, email bridge, other comms layers, paperclip adapters and setup, protal\\xirp setups and adapters",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 58,
+   "clause": "bad writing content\\blog drop entirely",
+   "speaker": null,
+   "why": ""
+  },
+  {
+   "idx": 59,
+   "clause": "each one gets a tuned resume, all approved for submit",
+   "speaker": null,
+   "why": ""
+  }
+ ]
+}

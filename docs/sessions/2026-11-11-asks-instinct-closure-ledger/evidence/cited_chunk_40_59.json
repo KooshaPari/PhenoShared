@@ -1,0 +1,124 @@
+{
+  "items": [
+    {
+      "idx": 40,
+      "clause": "appr9fe approve retry",
+      "speaker": "operator",
+      "why": "terse ASR \"appr9fe approve retry\" reply"
+    },
+    {
+      "idx": 41,
+      "clause": "the moment your subagent queue becomes a queue rather than active width those tasks must be sent somewhere where such an issue isnt present",
+      "speaker": "operator",
+      "why": "directive \"your subagent queue becomes a queue\""
+    },
+    {
+      "idx": 42,
+      "clause": "monday, september 28, 2026, 3:38:18 am pdt | koosha | i want around 100 sent a day while avoiding this person is ai slop/spam or similar blacklists.",
+      "speaker": "operator",
+      "why": "\"| koosha |\" header + \"i want\""
+    },
+    {
+      "idx": 43,
+      "clause": "why is paperclip mac only",
+      "speaker": "operator",
+      "why": "question \"why is paperclip mac only\""
+    },
+    {
+      "idx": 44,
+      "clause": "desk hermes, desk paperclip, desk services, anything installed and deployed on the desk.",
+      "speaker": "operator",
+      "why": "answer naming \"desk hermes, desk paperclip\""
+    },
+    {
+      "idx": 45,
+      "clause": "codex win has exec iss7e",
+      "speaker": "operator",
+      "why": "remark \"codex win has exec iss7e\""
+    },
+    {
+      "idx": 46,
+      "clause": "do the reinstall and place in fedora, all of these should be using wslc \\ podman deployments rather than bare metal so they are iac\\well encapsulating and lifecycle managemeble",
+      "speaker": "operator",
+      "why": "directive \"do the reinstall and place in fedora\""
+    },
+    {
+      "idx": 47,
+      "clause": "tree of progress bars + dispatch tree + more epr tick as only status return",
+      "speaker": "operator",
+      "why": "directive \"only status return\""
+    },
+    {
+      "idx": 48,
+      "clause": "phenofabric state",
+      "speaker": "operator",
+      "why": "terse ask \"phenofabric state\""
+    },
+    {
+      "idx": 49,
+      "clause": "1 a 2 elaborate in depth legacy bridge == dual deploy and only call new where not stubbed",
+      "speaker": "operator",
+      "why": "ruling \"dual deploy and only call new where not stubbed\""
+    },
+    {
+      "idx": 50,
+      "clause": "you'd ge … > sunday, october 11, 2026, 5:07:51 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> gpt/claude re-org state: done: full ~1,700-chat inventory, classification csv v2 (985 vague chats flagged), your layout rules captured, rename api verified.",
+      "speaker": "agent",
+      "why": "relayed instinct block \"state: done: full ~1,700-chat inventory\""
+    },
+    {
+      "idx": 51,
+      "clause": "discord layer and various bridges status",
+      "speaker": "operator",
+      "why": "terse ask \"discord layer and various bridges status\""
+    },
+    {
+      "idx": 52,
+      "clause": "incomplete and ass was",
+      "speaker": "operator",
+      "why": "garbled terse \"incomplete and ass was\""
+    },
+    {
+      "idx": 53,
+      "clause": "next same-thread messages --- > friday, october 9, 2026, 1:46:22 pm pdt | koosha | my rule was 3x3 filled before new space….",
+      "speaker": "operator",
+      "why": "\"| koosha |\" header \"my rule was 3x3 filled\""
+    },
+    {
+      "idx": 54,
+      "clause": "state of discord works",
+      "speaker": "operator",
+      "why": "terse ask \"state of discord works\""
+    },
+    {
+      "idx": 55,
+      "clause": "but device runs i can't do unless you can vault a sudo password and delete after",
+      "speaker": "operator",
+      "why": "\"i can't do unless you can vault a sudo password\""
+    },
+    {
+      "idx": 56,
+      "clause": "cost: a relay@ subdomain mx plus a small always-on handler (worker/vercel/pipedream) to parse a … > tuesday, october 6, 2026, 12:12:55 am pdt | koosha | hybrid of 1\\2\\3 (some or all) vs either of 2 or 3?",
+      "speaker": "operator",
+      "why": "\"| koosha |\" header \"hybrid of 1\\2\\3\""
+    },
+    {
+      "idx": 57,
+      "clause": "state of hermes, discord bridges, matter bridge, irc bridge, email bridge, other comms layers, paperclip adapters and setup, protal\\xirp setups and adapters",
+      "speaker": "operator",
+      "why": "terse ask \"state of hermes, discord bridges\""
+    },
+    {
+      "idx": 58,
+      "clause": "bad writing content\\blog drop entirely",
+      "speaker": "operator",
+      "why": "directive \"bad writing content\\blog drop entirely\""
+    },
+    {
+      "idx": 59,
+      "clause": "each one gets a tuned resume, all approved for submit",
+      "speaker": "operator",
+      "why": "ruling \"all approved for submit\""
+    }
+  ]
+}

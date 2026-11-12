@@ -1,0 +1,219 @@
+{
+ "generated_at_utc": "2026-11-12T12:05:47Z",
+ "labels_file": "askcue_labels.json",
+ "key_file": "askcue_speaker_key.json",
+ "labeller": "beam-free subagent",
+ "labels_generated_at_utc": "2026-11-12T11:04:30Z",
+ "n": 60,
+ "counts": {
+  "agent": 6,
+  "operator": 52,
+  "peer": 1,
+  "tool": 1
+ },
+ "wilson_95_by_speaker": {
+  "agent": [
+   0.0466,
+   0.2015
+  ],
+  "operator": [
+   0.7583,
+   0.9309
+  ],
+  "peer": [
+   0.0029,
+   0.0886
+  ],
+  "tool": [
+   0.0029,
+   0.0886
+  ]
+ },
+ "operator_share": {
+  "n": 52,
+  "of": 60,
+  "share": 0.8667,
+  "wilson_95": [
+   0.7583,
+   0.9309
+  ]
+ },
+ "non_operator_share": {
+  "n": 8,
+  "of": 60,
+  "share": 0.1333,
+  "wilson_95": [
+   0.0691,
+   0.2417
+  ]
+ },
+ "cross_tab_speaker_x_channel": {
+  "rows": [
+   "agent",
+   "operator",
+   "peer",
+   "tool"
+  ],
+  "columns": [
+   "harness",
+   "imessage",
+   "kcode",
+   "phone"
+  ],
+  "matrix": {
+   "agent": {
+    "harness": 6,
+    "imessage": 0,
+    "kcode": 0,
+    "phone": 0
+   },
+   "operator": {
+    "harness": 43,
+    "imessage": 4,
+    "kcode": 5,
+    "phone": 1
+   },
+   "peer": {
+    "harness": 1,
+    "imessage": 0,
+    "kcode": 0,
+    "phone": 0
+   },
+   "tool": {
+    "harness": 0,
+    "imessage": 0,
+    "kcode": 1,
+    "phone": 0
+   }
+  }
+ },
+ "single_channel_composition": {
+  "harness": 50,
+  "imessage": 3,
+  "kcode": 6,
+  "phone": 0
+ },
+ "channel_combinations": {
+  "harness": 50,
+  "kcode": 6,
+  "imessage": 3,
+  "imessage+phone": 1
+ },
+ "anti_anchor_check": {
+  "prior": "every channel implies operator",
+  "accuracy": 0.8667,
+  "agree": 52,
+  "n": 60,
+  "note": "this is what the metadata-only method would have scored, i.e. an upper bound on its usefulness"
+ },
+ "by_speaker": {
+  "agent": {
+   "n": 6,
+   "share": 0.1,
+   "wilson_95": [
+    0.0466,
+    0.2015
+   ],
+   "channels": {
+    "harness": 6,
+    "imessage": 0,
+    "kcode": 0,
+    "phone": 0
+   }
+  },
+  "operator": {
+   "n": 52,
+   "share": 0.8667,
+   "wilson_95": [
+    0.7583,
+    0.9309
+   ],
+   "channels": {
+    "harness": 43,
+    "imessage": 4,
+    "kcode": 5,
+    "phone": 1
+   }
+  },
+  "peer": {
+   "n": 1,
+   "share": 0.0167,
+   "wilson_95": [
+    0.0029,
+    0.0886
+   ],
+   "channels": {
+    "harness": 1,
+    "imessage": 0,
+    "kcode": 0,
+    "phone": 0
+   }
+  },
+  "tool": {
+   "n": 1,
+   "share": 0.0167,
+   "wilson_95": [
+    0.0029,
+    0.0886
+   ],
+   "channels": {
+    "harness": 0,
+    "imessage": 0,
+    "kcode": 1,
+    "phone": 0
+   }
+  }
+ },
+ "by_channel": {
+  "harness": {
+   "n": 50,
+   "speakers": {
+    "operator": 43,
+    "agent": 6,
+    "peer": 1
+   }
+  },
+  "imessage": {
+   "n": 4,
+   "speakers": {
+    "operator": 4
+   }
+  },
+  "kcode": {
+   "n": 6,
+   "speakers": {
+    "operator": 5,
+    "tool": 1
+   }
+  },
+  "phone": {
+   "n": 1,
+   "speakers": {
+    "operator": 1
+   }
+  }
+ },
+ "comparison_nonask_scored": {
+  "bucket": "DIFFERENT bucket (non-ask-cue), DIFFERENT sample",
+  "source": "nonask_scored.json",
+  "sample_n": 60,
+  "operator_n": 23,
+  "non_operator_n": 37,
+  "non_operator_share": 0.6167,
+  "non_operator_wilson_95": [
+   0.4902,
+   0.7291
+  ],
+  "note": "reference only; do not pool with the ask-cue bucket above"
+ },
+ "capture_note": "labels produced by a beam-free subagent against a blind sheet (channel withheld); see askcue_speaker_probe.py for instrument",
+ "hard_caveats": {
+  "single_labeller": true,
+  "not_an_independent_second_coder": true,
+  "sample_n": 60,
+  "population": 8819,
+  "seed": 20261115,
+  "measures": "authorship_of_the_bucket, not coverage_of_intent",
+  "no_coverage_of_intent_figure_may_be_derived_from_this_file_alone": true
+ }
+}

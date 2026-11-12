@@ -1,0 +1,124 @@
+{
+  "items": [
+    {
+      "idx": 20,
+      "clause": "research the won't load issue on the web.",
+      "speaker": "operator",
+      "why": "imperative to an agent: 'research the won't load issue'"
+    },
+    {
+      "idx": 21,
+      "clause": "i didn't unarchive agent d8d",
+      "speaker": "operator",
+      "why": "first-person past: 'i didn't unarchive agent d8d'"
+    },
+    {
+      "idx": 22,
+      "clause": "you would own setting that up now along with those filters and rules\\systems i asked for earlier",
+      "speaker": "operator",
+      "why": "directs agent: 'you would own setting that up'"
+    },
+    {
+      "idx": 23,
+      "clause": "drive discord off my firefox",
+      "speaker": "operator",
+      "why": "possessive imperative: 'off my firefox'"
+    },
+    {
+      "idx": 24,
+      "clause": "overall ui\\ux in terms of polish\\design and int terms of functionality and breadth\\depth is incomplete on tracera nd ik for a fact there should be say 10-50x more on every dimension \\ quantifier",
+      "speaker": "operator",
+      "why": "personal verdict: 'ik for a fact there should be'"
+    },
+    {
+      "idx": 25,
+      "clause": "line of comms to jcode cockpit bidirectional",
+      "speaker": "operator",
+      "why": "terse requirement fragment: 'line of comms to jcode cockpit'"
+    },
+    {
+      "idx": 26,
+      "clause": "other than that, there's the state of traceera, state of agile plus, state of share cli, state of fabric, state of lightport, state of a whole lot of other",
+      "speaker": "operator",
+      "why": "conversational lead-in: 'other than that, there's the state'"
+    },
+    {
+      "idx": 27,
+      "clause": "how 2 get conn recovery",
+      "speaker": "operator",
+      "why": "ASR-typo question: 'how 2 get conn recovery'"
+    },
+    {
+      "idx": 28,
+      "clause": "or is your vm the issue",
+      "speaker": "operator",
+      "why": "question to agent: 'is your vm the issue'"
+    },
+    {
+      "idx": 29,
+      "clause": "elsewhere running: cockpit pr for tonight's 23-row sweep, nvidia sta \u2026 > friday, october 9, 2026, 12:37:51 am pdt | koosha | hand me the browser auto url > friday, october 9, 2026, 12:39:15 am pdt | koosha | browser automation mark as done and moved to local ### msg 1285 | friday, october 9, 2026, 12:37:34 am pdt | thread a cand: study chat's loaded for tomorrow's exam.",
+      "speaker": "operator",
+      "why": "bridge header: '| koosha | hand me the browser'"
+    },
+    {
+      "idx": 30,
+      "clause": "unblock email sending access.",
+      "speaker": "operator",
+      "why": "imperative: 'unblock email sending access'"
+    },
+    {
+      "idx": 31,
+      "clause": "wednesday, september 30, 2026, 10:27:12 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> clear outreach email i replied to .",
+      "speaker": "operator",
+      "why": "header and first person: '| koosha | reply/reaction target'"
+    },
+    {
+      "idx": 32,
+      "clause": "state of deploy for cpu fork and other solus i have been waiting on",
+      "speaker": "operator",
+      "why": "first-person waiting: 'i have been waiting on'"
+    },
+    {
+      "idx": 33,
+      "clause": "a for mfa use txt opt and req me",
+      "speaker": "operator",
+      "why": "garbled directive: 'req me', 'txt opt'"
+    },
+    {
+      "idx": 34,
+      "clause": "do not wait till 5am on asap timelibe",
+      "speaker": "operator",
+      "why": "imperative with typo: 'do not wait till 5am'"
+    },
+    {
+      "idx": 35,
+      "clause": "parsec elaborate why ss -> coordinate click style system doesnt work for you > friday, october 9, 2026, 12:40:40 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> noted: kooshapari-desk, win/wsl2 is the target.",
+      "speaker": "operator",
+      "why": "instinct relay: '| instinct | reply/reaction target'"
+    },
+    {
+      "idx": 36,
+      "clause": "latter is better but m3 is zdr",
+      "speaker": "operator",
+      "why": "terse reply in dialogue: 'latter is better but m3 is zdr'"
+    },
+    {
+      "idx": 37,
+      "clause": "it fails the same way each time: \"confirm export\" sends me to \"verify your identity\", and \u2026 > saturday, october 10, 2026, 12:19:56 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> they can provide a secure download link themselves via email that requires login no?",
+      "speaker": "operator",
+      "why": "header plus first-person: 'sends me to verify your identity'"
+    },
+    {
+      "idx": 38,
+      "clause": "model as mermaid for now before paperclip becomes the live management and presentation layer",
+      "speaker": "operator",
+      "why": "directive: 'model as mermaid for now'"
+    },
+    {
+      "idx": 39,
+      "clause": "run gh auth login on mac",
+      "speaker": "operator",
+      "why": "short imperative command: 'run gh auth login on mac'"
+    }
+  ]
+}

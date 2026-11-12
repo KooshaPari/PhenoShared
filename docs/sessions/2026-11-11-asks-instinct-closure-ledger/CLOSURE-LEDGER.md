@@ -300,7 +300,7 @@ link can be repaired). **Feeds** G6, G7.
 | id | defect | claimed (UNVERIFIED) |
 |---|---|---|
 | G5.a | `reg_provenance.source_ref` markdown files resolving on disk | **0 / 98** |
-| G5.b | suspect links (quoted text absent from the joined body) | **118** (e.g. `ASK-000013` is a genuine wrong link) |
+| G5.b | ask→message link integrity (quoted text present in the joined body) | **measured, not open** — VERDICT §3d re-measured: **2,172 of 2,191** testable links verify, and all **19** residuals were read in full and judged correct (9 paraphrase, 10 ASR). State: `PASS` on the 2,191-link testable frame; the earlier "118 suspect links" figure is withdrawn |
 | G5.c | distinct operator messages behind the 2,259 asks | **1,843** (2,252 links ⇒ 238 utterances split into 2+ asks) |
 | G5.d | user utterances in source never promoted to an ask | **805** |
 | G5.e | asks with no source at all (`ASK-000345`, `000637`, `000664`, `001844`, `002254`, `002255`, `002256`) | **7** |

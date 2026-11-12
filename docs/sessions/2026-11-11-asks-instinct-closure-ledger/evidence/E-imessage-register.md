@@ -138,31 +138,31 @@ Inbound messages in the register window, 2026-09-25 → 2026-11-04. **99 distinc
 
 | # | handle | service | msgs | with text |
 |---|---|---|---|---|
-| 1 | +16504444459 | iMessage | 6,163 | 6,100 |
-| 2 | +14244489324 | iMessage | 1,548 | 1,547 |
-| 3 | +14133280372 | iMessage | 307 | 282 |
-| 4 | +17144524946 | SMS | 232 | 207 |
-| 5 | +17738950806 | iMessage | 100 | 95 |
-| 6 | +13108667569 | SMS | 56 | 50 |
-| 7 | +13103834132 | iMessage | 55 | 55 |
-| 8 | +15202396025 | iMessage | 50 | 47 |
-| 9 | +13103395923 | iMessage | 46 | 34 |
-| 10 | +16618178694 | SMS | 46 | 43 |
-| 11 | +19259008638 | iMessage | 46 | 46 |
-| 12 | +15203000922 | SMS | 44 | 44 |
-| 13 | +14244001253 | iMessage | 41 | 40 |
-| 14 | +16025780965 | iMessage | 38 | 37 |
-| 15 | +16023176400 | iMessage | 37 | 36 |
-| 16 | +12084122516 | iMessage | 32 | 30 |
-| 17 | +13104039674 | RCS | 32 | 28 |
-| 18 | +13238100574 | SMS | 30 | 30 |
-| 19 | +16619795014 | SMS | 30 | 30 |
-| 20 | +19256833391 | iMessage | 25 | 24 |
+| 1 | <PHONE-REDACTED> | iMessage | 6,163 | 6,100 |
+| 2 | <PHONE-REDACTED> | iMessage | 1,548 | 1,547 |
+| 3 | <PHONE-REDACTED> | iMessage | 307 | 282 |
+| 4 | <PHONE-REDACTED> | SMS | 232 | 207 |
+| 5 | <PHONE-REDACTED> | iMessage | 100 | 95 |
+| 6 | <PHONE-REDACTED> | SMS | 56 | 50 |
+| 7 | <PHONE-REDACTED> | iMessage | 55 | 55 |
+| 8 | <PHONE-REDACTED> | iMessage | 50 | 47 |
+| 9 | <PHONE-REDACTED> | iMessage | 46 | 34 |
+| 10 | <PHONE-REDACTED> | SMS | 46 | 43 |
+| 11 | <PHONE-REDACTED> | iMessage | 46 | 46 |
+| 12 | <PHONE-REDACTED> | SMS | 44 | 44 |
+| 13 | <PHONE-REDACTED> | iMessage | 41 | 40 |
+| 14 | <PHONE-REDACTED> | iMessage | 38 | 37 |
+| 15 | <PHONE-REDACTED> | iMessage | 37 | 36 |
+| 16 | <PHONE-REDACTED> | iMessage | 32 | 30 |
+| 17 | <PHONE-REDACTED> | RCS | 32 | 28 |
+| 18 | <PHONE-REDACTED> | SMS | 30 | 30 |
+| 19 | <PHONE-REDACTED> | SMS | 30 | 30 |
+| 20 | <PHONE-REDACTED> | iMessage | 25 | 24 |
 | 21 | **22395** | SMS | 25 | 25 |
-| 22 | +14809572028 | iMessage | 22 | 21 |
-| 23 | +16692944197 | iMessage | 16 | 16 |
-| 24 | +18334572262 | SMS | 13 | 13 |
-| 25 | +18338172650 | SMS | 13 | 13 |
+| 22 | <PHONE-REDACTED> | iMessage | 22 | 21 |
+| 23 | <PHONE-REDACTED> | iMessage | 16 | 16 |
+| 24 | <PHONE-REDACTED> | SMS | 13 | 13 |
+| 25 | <PHONE-REDACTED> | SMS | 13 | 13 |
 
 Handle-class breakdown, inbound in window (9,216 rows classified / 9,220 total):
 
@@ -176,10 +176,10 @@ Handle-class breakdown, inbound in window (9,216 rows classified / 9,220 total):
 Top shortcode/automation senders in window: `22395` 25, `738245` 5, `74338` 3, `90817` 3,
 `73202` 2, `78156` 2, `787473` 2, `88683` 2, then 8 handles with 1 each.
 
-All-time top inbound handles (context for the two dominant threads): `+16023176400` 37,641 msgs,
-`+14133280372` 7,363, `+14244109005` 7,049, `+13103395923` 6,644, `+16504444459` 6,163
-(1,336,642 chars — the assistant/agent endpoint), `+13109138405` SMS 4,350, then a long tail.
-The 2026-2025 volume sits heavily on `+16504444459` and `+14244489324`: the operator's assistant
+All-time top inbound handles (context for the two dominant threads): `<PHONE-REDACTED>` 37,641 msgs,
+`<PHONE-REDACTED>` 7,363, `<PHONE-REDACTED>` 7,049, `<PHONE-REDACTED>` 6,644, `<PHONE-REDACTED>` 6,163
+(1,336,642 chars — the assistant/agent endpoint), `<PHONE-REDACTED>` SMS 4,350, then a long tail.
+The 2026-2025 volume sits heavily on `<PHONE-REDACTED>` and `<PHONE-REDACTED>`: the operator's assistant
 channel, not human contacts.
 
 ---
@@ -244,3 +244,5 @@ select count(distinct message_id) from reg_ask_messages;
 
 - `probe.txt`, `ledger2.txt`, `ledger3.txt`, `ledger4.txt`, `ledger5.txt` — ledger probes
 - `chat.txt`, `chat2.txt` — chat.db probes
+
+> Redaction note: 32 E.164 phone-number occurrences (26 distinct numbers) in this file were replaced with <PHONE-REDACTED> on 2026-11-12T12:09:32Z because the repository is public. Counts and conclusions are unaffected.

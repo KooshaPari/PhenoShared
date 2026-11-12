@@ -1,0 +1,143 @@
+{
+ "generated_at_utc": "2026-11-12T12:05:47Z",
+ "script": "operator_coverage.py",
+ "frame": {
+  "name": "frame_a_set_union",
+  "units": 43648,
+  "cited": 1938,
+  "uncited": 41710,
+  "uncited_ask_cue": 8819,
+  "uncited_non_ask_cue": 32891,
+  "identity_checks": {
+   "cited + uncited == units": true,
+   "uncited_ask_cue + uncited_non_ask_cue == uncited": true
+  }
+ },
+ "inputs": {
+  "coverage_consistency.json": {
+   "frame_a_set_union.units": 43648,
+   "frame_a_set_union.cited": 1938,
+   "frame_a_set_union.uncited": 41710,
+   "frame_a_set_union.uncited_ask_cue": 8819,
+   "frame_a_set_union.uncited_non_ask_cue": 32891
+  },
+  "askcue_speaker_scored.json": {
+   "operator_share.share": 0.8667,
+   "operator_share.wilson_95": [
+    0.7583,
+    0.9309
+   ],
+   "operator_share.n": 52,
+   "operator_share.of": 60
+  },
+  "cited_speaker_scored.json": {
+   "operator_share.share": 0.9667,
+   "operator_share.wilson_95": [
+    0.8864,
+    0.9908
+   ],
+   "operator_share.n": 58,
+   "operator_share.of": 60
+  },
+  "nonask_scored.json": {
+   "by_speaker_pass2.operator.n": 23,
+   "by_speaker_pass2.non_operator.n (sum of agent/tool/system/peer)": 37,
+   "sample_size": 60,
+   "field_used": "by_speaker_pass2 + sample_size (no non_operator_share field present)"
+  }
+ },
+ "per_bucket": [
+  {
+   "bucket": "cited",
+   "population": 1938,
+   "operator_share": 0.9667,
+   "wilson_95": [
+    0.8864,
+    0.9908
+   ],
+   "share_source": "cited_speaker_scored.json:operator_share (58 of 60)",
+   "operator_units": {
+    "point": 1873.4646,
+    "low": 1717.8432,
+    "high": 1920.1704
+   }
+  },
+  {
+   "bucket": "uncited_ask_cue",
+   "population": 8819,
+   "operator_share": 0.8667,
+   "wilson_95": [
+    0.7583,
+    0.9309
+   ],
+   "share_source": "askcue_speaker_scored.json:operator_share (52 of 60)",
+   "operator_units": {
+    "point": 7643.4273,
+    "low": 6687.4477,
+    "high": 8209.6071
+   }
+  },
+  {
+   "bucket": "uncited_non_ask_cue",
+   "population": 32891,
+   "operator_share": 0.3833333333333333,
+   "wilson_95": [
+    0.27088272374082023,
+    0.5098240417590008
+   ],
+   "share_source": "derived from nonask_scored.json:by_speaker_pass2 (operator n=23, non-operator n=37 of sample_size=60): share = 1 - 37/60, interval = [1 - non_op_high, 1 - non_op_low]",
+   "non_operator_share_as_read": {
+    "value": 0.6166666666666667,
+    "wilson_95_computed": [
+     0.4901759582409993,
+     0.7291172762591798
+    ],
+    "echoed_in_sibling_files": [
+     0.6167,
+     [
+      0.4902,
+      0.7291
+     ]
+    ]
+   },
+   "operator_units": {
+    "point": 12608.216666666665,
+    "low": 8909.603666559318,
+    "high": 16768.622557495295
+   }
+  }
+ ],
+ "total_operator_units": {
+  "point": 22125.108566666666,
+  "low": 17314.894566559316,
+  "high": 26898.400057495295
+ },
+ "coverage": {
+  "point": 0.08467595059951623,
+  "low": 0.06386414048151981,
+  "high": 0.11089703102833051,
+  "method": "range_from_independent_bounds",
+  "is_confidence_interval": false,
+  "note": "low = lowest numerator over highest denominator; high = highest numerator over lowest denominator. Independent bounds only."
+ },
+ "steps": [
+  "cited: 1938 x 0.9667 = 1873.4646",
+  "cited: low 1938 x 0.8864 = 1717.8432 ; high 1938 x 0.9908 = 1920.1704",
+  "uncited_ask_cue: 8819 x 0.8667 = 7643.4273",
+  "uncited_ask_cue: low 8819 x 0.7583 = 6687.4477 ; high 8819 x 0.9309 = 8209.6071",
+  "uncited_non_ask_cue: 32891 x 0.3833333333333333 = 12608.2167",
+  "uncited_non_ask_cue: low 32891 x 0.27088272374082023 = 8909.6037 ; high 32891 x 0.5098240417590008 = 16768.6226",
+  "total point = 1873.4646 + 7643.4273 + 12608.2167 = 22125.1086",
+  "coverage point = cited_operator 1873.4646 / total 22125.1086 = 0.08467595059951623",
+  "coverage low  = LOWEST num 1717.8432 / HIGHEST den 26898.4001 = 0.06386414048151981",
+  "coverage high = HIGHEST num 1920.1704 / LOWEST den 17314.8946 = 0.11089703102833051"
+ ],
+ "caveats": {
+  "single_labeller_each_bucket": true,
+  "three_samples_not_one": "each bucket share comes from its own n=60 sample; the three intervals are not independent of each other and are not a joint estimate",
+  "shares_multiplied_into_populations": "point estimates of a share are applied to a fixed population count; no design effect and no finite-population correction is applied",
+  "citation_precision_unmeasured": "the numerator counts units the register matched; the precision of those matches is not measured here, so this is an estimate of coverage, not a published rate",
+  "rate_publication_gate": "operator policy: a published rate needs recall AND precision >= 0.9; this file does not meet that gate and must be cited as an estimate with its range",
+  "what_would_close_it": "a second independent labeller on all three sheets, plus a measured citation-precision sample"
+ }
+}

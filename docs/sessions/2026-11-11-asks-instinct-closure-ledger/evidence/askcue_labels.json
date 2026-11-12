@@ -1,0 +1,367 @@
+{
+ "generated_at_utc": "2026-11-12T11:04:30Z",
+ "labeller": "beam-free subagent",
+ "n": 60,
+ "items": [
+  {
+   "idx": 0,
+   "clause": "read <TOKEN-REDACTED>.diff and report.md.",
+   "speaker": "operator",
+   "why": "read chat2... operator instruction"
+  },
+  {
+   "idx": 1,
+   "clause": "avoid broad home find timeouts.",
+   "speaker": "operator",
+   "why": "avoid broad... operator instruction"
+  },
+  {
+   "idx": 2,
+   "clause": "verify current github repo metadata only for kooshapari/sidekick, kooshapari/stashly, kooshapari/tasken and phenotype-registry, compare with old july archived/queued docs in phenotype-registry-pr550.",
+   "speaker": "operator",
+   "why": "verify current github... operator"
+  },
+  {
+   "idx": 3,
+   "clause": "extract utilities from large modules",
+   "speaker": "operator",
+   "why": "extract utilities... operator"
+  },
+  {
+   "idx": 4,
+   "clause": "report exact resolved paths (follow symlinks) and versions.",
+   "speaker": "operator",
+   "why": "report exact resolved... operator"
+  },
+  {
+   "idx": 5,
+   "clause": "friday, october 9, 2026, 1:46:56 pm pdt | koosha | reply/reaction target: <TOKEN-REDACTED> it doesnt matter which tab is which atp no?",
+   "speaker": "operator",
+   "why": "koosha header: it doesnt matter..."
+  },
+  {
+   "idx": 6,
+   "clause": "use convo search tool",
+   "speaker": "operator",
+   "why": "use convo search tool"
+  },
+  {
+   "idx": 7,
+   "clause": "how is it still so busy",
+   "speaker": "operator",
+   "why": "how is it still so busy"
+  },
+  {
+   "idx": 8,
+   "clause": "do not block on install",
+   "speaker": "operator",
+   "why": "do not block on install"
+  },
+  {
+   "idx": 9,
+   "clause": "clean tree, no trouble, need nothing.",
+   "speaker": "agent",
+   "why": "clean tree... agent self-report"
+  },
+  {
+   "idx": 10,
+   "clause": "list wahts ready for deletion",
+   "speaker": "operator",
+   "why": "list wahts ready... operator"
+  },
+  {
+   "idx": 11,
+   "clause": "why *not* impersonate another backend",
+   "speaker": "operator",
+   "why": "why *not* impersonate... operator"
+  },
+  {
+   "idx": 12,
+   "clause": "go.walk me througn this sessione 2e along with full wbs\\dag\\pert filled out\\labelded\\annotated\\colored",
+   "speaker": "operator",
+   "why": "go.walk me througn... operator"
+  },
+  {
+   "idx": 13,
+   "clause": "don't also `artifact_save`.",
+   "speaker": "operator",
+   "why": "don't also artifact_save operator"
+  },
+  {
+   "idx": 14,
+   "clause": "dm from buffalo: please provide your full forensic report for all 4 repos (tokn, configra, authkit, audit-system).",
+   "speaker": "peer",
+   "why": "dm from buffalo peer"
+  },
+  {
+   "idx": 15,
+   "clause": "what is the itinerary",
+   "speaker": "operator",
+   "why": "what is the itinerary operator"
+  },
+  {
+   "idx": 16,
+   "clause": "exact labels: changed: <file | the exact added line | the full env block now on the gitleaks job> diff_size: <lines added/removed> prettier: <exit code | did it reformat unrelated lines?",
+   "speaker": "operator",
+   "why": "exact labels: changed... operator format"
+  },
+  {
+   "idx": 17,
+   "clause": "which of those conditions are testable without touching live config or spawning against real stores",
+   "speaker": "operator",
+   "why": "which of those conditions... operator"
+  },
+  {
+   "idx": 18,
+   "clause": "reply \"written\" when done",
+   "speaker": "operator",
+   "why": "reply written when done operator"
+  },
+  {
+   "idx": 19,
+   "clause": "reply with exactly these 5 lines, nothing else: files_changed: <paths, comma separated> verified: <exact command(s) you ran> -> <pass/fail + key number> still_broken: <remaining denominator gaps, or \"none\"> risk: <what could still make a coverage run print a wrong percentage, or \"none\"> unverified: <what you could not check without running the full suite, or \"none\"> i specifically need two facts:",
+   "speaker": "operator",
+   "why": "reply with exactly these 5 lines operator"
+  },
+  {
+   "idx": 20,
+   "clause": "do not treat absent as failure, and do not merge unless both read success.",
+   "speaker": "operator",
+   "why": "do not treat absent... operator"
+  },
+  {
+   "idx": 21,
+   "clause": "report: per-file before/after line counts, exact diff summary (funcs extracted), exact swift test result line, and projected dup-line reduction.",
+   "speaker": "operator",
+   "why": "report: per-file... operator"
+  },
+  {
+   "idx": 22,
+   "clause": "use slug \"index\" for the wiki index page.",
+   "speaker": "operator",
+   "why": "use slug index... operator"
+  },
+  {
+   "idx": 23,
+   "clause": "require explicit human acceptance on the issue, and use current date 2026-11-03 rather than nov",
+   "speaker": "operator",
+   "why": "require explicit human acceptance operator"
+  },
+  {
+   "idx": 24,
+   "clause": "for once everything is setup, dynamic org scaling \\ departmentalization?",
+   "speaker": "operator",
+   "why": "dynamic org scaling? operator"
+  },
+  {
+   "idx": 25,
+   "clause": "check the forwarding rule, i can't see it.",
+   "speaker": "operator",
+   "why": "check the forwarding rule operator"
+  },
+  {
+   "idx": 26,
+   "clause": "test ## this node go test ./internal/report/ ## required output",
+   "speaker": "operator",
+   "why": "test ## this node... operator"
+  },
+  {
+   "idx": 27,
+   "clause": "add cli project selection to this generator or a companion: sharecli, substrate, phenotype-omlx.",
+   "speaker": "operator",
+   "why": "add cli project selection operator"
+  },
+  {
+   "idx": 28,
+   "clause": "report the same way when you are done",
+   "speaker": "operator",
+   "why": "report the same way operator"
+  },
+  {
+   "idx": 29,
+   "clause": "read agents before edits.",
+   "speaker": "operator",
+   "why": "read agents before edits operator"
+  },
+  {
+   "idx": 30,
+   "clause": "read-only review of newly added rubric.md in <TOKEN-REDACTED>.",
+   "speaker": "operator",
+   "why": "read-only review of rubric operator"
+  },
+  {
+   "idx": 31,
+   "clause": "report honestly: if job-cockpit already has equivalent receiver code, say so and only add the proposal doc",
+   "speaker": "operator",
+   "why": "report honestly: if job-cockpit operator"
+  },
+  {
+   "idx": 32,
+   "clause": "review found missed dashboard routes and leftover fixture data tha … > tuesday, october 27, 2026, 3:46:52 pm pdt | instinct | i'll check both connections and resume what was blocked by access.",
+   "speaker": "agent",
+   "why": "review found missed dashboard... agent"
+  },
+  {
+   "idx": 33,
+   "clause": "read-only task.",
+   "speaker": "operator",
+   "why": "read-only task operator"
+  },
+  {
+   "idx": 34,
+   "clause": "do all fan out",
+   "speaker": "operator",
+   "why": "do all fan out operator"
+  },
+  {
+   "idx": 35,
+   "clause": "include one exact evidence fact from the file to verify tool use.",
+   "speaker": "operator",
+   "why": "include one exact evidence fact operator"
+  },
+  {
+   "idx": 36,
+   "clause": "do not bypass security approvals or perform unauthorized destructive/external actions.",
+   "speaker": "operator",
+   "why": "do not bypass security approvals operator"
+  },
+  {
+   "idx": 37,
+   "clause": "can a caller escape the intended root (traversal, absolute path, symlink, tilde, null bytes, windows-style paths)?",
+   "speaker": "operator",
+   "why": "can a caller escape... operator"
+  },
+  {
+   "idx": 38,
+   "clause": "should cherry-pick cleanly.**unactionable**: quinn-proto vulns are not fixed in upstream (also at0.11.15).",
+   "speaker": "agent",
+   "why": "should cherry-pick cleanly... agent"
+  },
+  {
+   "idx": 39,
+   "clause": "do not automatically reuse native workers without respecting that policy.",
+   "speaker": "operator",
+   "why": "do not automatically reuse... operator"
+  },
+  {
+   "idx": 40,
+   "clause": "update memories and agnets.md\\\"\", \"confidence\": 1.0 }, { \"key\": \"lesson.dd2092f392292dc5\", \"value_json\": \"use this skill when the user asks anything the agileplus spec-driven\\ndevelopment engine should answer: dashboard, feature state, work-package\\nstate, governance checks, audit verification, or the canonical one-line\\nstatus.",
+   "speaker": "tool",
+   "why": "JSON blob tool output"
+  },
+  {
+   "idx": 41,
+   "clause": "use `tail -c 200000000 <file> | grep -a ...` to bound, or grep with a session id pattern.",
+   "speaker": "operator",
+   "why": "use tail -c ... operator"
+  },
+  {
+   "idx": 42,
+   "clause": "report back in the requested format when done",
+   "speaker": "operator",
+   "why": "report back in requested format operator"
+  },
+  {
+   "idx": 43,
+   "clause": "“top 5 contributor on current most popular foss llm routing platform with approximately 60k stars” for hte images, could you ask your meta llm how i could incorporate this as an entry",
+   "speaker": "operator",
+   "why": "top 5 contributor... operator"
+  },
+  {
+   "idx": 44,
+   "clause": "do not redo): civis source is at c:\\users\\koosh\\dev\\civis (contains process-compose.yaml and crates\\server).",
+   "speaker": "operator",
+   "why": "do not redo): civis source... operator"
+  },
+  {
+   "idx": 45,
+   "clause": "let me re-verify this with concrete evidence:",
+   "speaker": "agent",
+   "why": "let me re-verify... agent"
+  },
+  {
+   "idx": 46,
+   "clause": "do not invent results or decisions.",
+   "speaker": "operator",
+   "why": "do not invent results... operator"
+  },
+  {
+   "idx": 47,
+   "clause": "do not invent a third lock implementation.",
+   "speaker": "operator",
+   "why": "do not invent a third lock... operator"
+  },
+  {
+   "idx": 48,
+   "clause": "read the file days/october12026.txt with the read tool.",
+   "speaker": "operator",
+   "why": "read the file days/october12026 operator"
+  },
+  {
+   "idx": 49,
+   "clause": "new test files must start with `//!",
+   "speaker": "operator",
+   "why": "new test files must start... operator"
+  },
+  {
+   "idx": 50,
+   "clause": "report evidence",
+   "speaker": "operator",
+   "why": "report evidence operator"
+  },
+  {
+   "idx": 51,
+   "clause": "(5) cost note: total api calls made, by probe also confirm explicitly: did you edit any file (the evidence doc or anything else)?",
+   "speaker": "operator",
+   "why": "cost note: total api calls... operator"
+  },
+  {
+   "idx": 52,
+   "clause": "ask ledger: 114 asks from your messages, all 24 unowned ones now assigned to lanes",
+   "speaker": "agent",
+   "why": "ask ledger: 114 asks... agent"
+  },
+  {
+   "idx": 53,
+   "clause": "open candidates for you: #100 independent diff review + accurate description, #107 (installer-split successor with 8 commits, failing dependency delta + civic evidence gate + kilo), #114/#116 (now should rebase onto green main), and the unity build gap.",
+   "speaker": "agent",
+   "why": "open candidates for you... agent"
+  },
+  {
+   "idx": 54,
+   "clause": "do not spend more than one tool call investigating any single question.",
+   "speaker": "operator",
+   "why": "do not spend more than one tool call operator"
+  },
+  {
+   "idx": 55,
+   "clause": "read the file days/october202026.txt with the read tool.",
+   "speaker": "operator",
+   "why": "read the file days/october202026 operator"
+  },
+  {
+   "idx": 56,
+   "clause": "print those mcq",
+   "speaker": "operator",
+   "why": "print those mcq operator"
+  },
+  {
+   "idx": 57,
+   "clause": "don't claim geometry math as visual verification.",
+   "speaker": "operator",
+   "why": "don't claim geometry math... operator"
+  },
+  {
+   "idx": 58,
+   "clause": "drop it here and i'll start the watch: > monday, october 5, 2026, 10:18:57 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> https://app.instinct.com/session/vault/fill?<TOKEN-REDACTED>&src=imessage&preview=imessage > monday, october 5, 2026, 11:08:49 pm pdt | koosha | done > monday, october 5, 2026, 11:09:39 pm pdt | instinct | reply/reaction target: <TOKEN-REDACTED> login bounced at webmail.porkbun.com",
+   "speaker": "operator",
+   "why": "drop it here and i'll start the watch operator"
+  },
+  {
+   "idx": 59,
+   "clause": "read the file days/october92026-01.txt with the read tool.",
+   "speaker": "operator",
+   "why": "read the file days/october92026-01 operator"
+  }
+ ]
+}

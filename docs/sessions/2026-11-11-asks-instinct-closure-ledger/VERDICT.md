@@ -22,9 +22,21 @@ adds a measurement rather than a correction, and its most important result is a 
 number. Rev 11 is the number Rev 10 refused to publish. Rev 12 retracts Rev 11's arithmetic — the
 semantic rate survives, the union it fed does not — and moves the headline back down: ~4.4%
 structurally, ~9.7% counting semantic capture, on a denominator that the same sample shows is mostly
-*not operator speech* at all. Rev 13 adds no number; it removes a denominator.**
+*not operator speech* at all. Rev 13 adds no number; it removes a denominator. Rev 14 puts a human
+instrument on the bucket whose denominator Rev 13 removed, and the result runs against that section's
+expectation: the ask-cue bucket is 86.7% operator speech (52/60), not the mostly-non-operator mix the
+non-ask-cue bucket shows. That falsifies §3k's prediction that the true intent denominator shrinks
+toward the non-ask-cue share. It is still an authorship share and not a coverage rate, because the
+cited side of the frame has no labels, so no coverage-of-intent figure is published. Rev 14 moves a
+denominator estimate and leaves the headline where it was. Rev 15 labels the cited side, the last
+unlabelled bucket, which turns a missing numerator into a measured one: the cited side is 96.7%
+operator speech (58/60). With all three buckets measured in the same frame, coverage of
+operator-authored units estimates at 8.47%, which is the first operator-intent figure in this file. It
+is an estimate and not a published rate because citation precision is unmeasured and one labeller
+produced all three samples. It does not replace any unit-based figure: those are rates over units,
+this is a rate over operator-authored units.**
 
-> **Current numbers, as of Rev 13.** Use these; every other figure in this file is the number
+> **Current numbers, as of Rev 15.** Use these; every other figure in this file is the number
 > published at the time of the section that made it, and §3f / §5 / §3i retain theirs for the record.
 >
 > | Quantity | Value |
@@ -35,6 +47,9 @@ structurally, ~9.7% counting semantic capture, on a denominator that the same sa
 > | **Union coverage, frame A** | **≈9.65%** (range 6.5–17.9% from independent bounds) |
 > | Share of the non-ask-cue bucket that is operator speech | **25–38%** (15/60 pass 1, 23/60 pass 2); 47/60 come from agent-harness exports |
 > | Declared-speaker attribution, ask-cue bucket | **UNUSABLE — 100% operator by construction** |
+> | Ask-cue authorship | **86.7% operator speech** (52/60, 95% CI 75.8-93.1); the cited side is now labelled at 96.7%, so coverage of operator-authored units exists as an estimate |
+>
+> - **Coverage of operator-authored units: 8.47%** (range 6.4-11.1, independent bounds, not a CI) -- an estimate, not a published rate; citation precision is unmeasured.
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -51,6 +66,8 @@ structurally, ~9.7% counting semantic capture, on a denominator that the same sa
 | 11 | semantic capture among uncited ask-cue units is **13.3%** (8/60, 95% CI 6.9-24.2) on a **random** sample; union coverage is therefore at least **10.7%** (9.4-12.9), not 8.0% | Rev 10's 2.12% floor is withdrawn as an estimate of semantic coverage — not because it was miscalculated but because it was a floor built from a biased-high score band and could never be more. §3i measures the same quantity on a random draw. Note the trap this sets: 13.3% is a rate **within the 8,819-unit denominator**, and reading it as coverage of everything is the exact error this table exists to record |
 | 12 | **the union row double counted a channel.** Consistent-frame coverage is **1,938 / 43,648 = 4.4%** structurally, and **9.65%** counting semantic capture — not 8.0%, and not 10.7% | two defects, one arithmetic and one of scope. (a) `segment_units.py` sets `total_cited = sum(cited.values())` — sum across channels — while its denominator subtracts cross-channel duplications, so **1,525 citations were counted twice** (1,484 of them iMessage inside phone). Every published union figure from Rev 8 onward inherited that numerator; the per-channel rows are unaffected. (b) The union was called a lower bound because 32,891 uncited non-ask-cue units had never been sampled. They now have been: **2/60 strict**, and **62–75%** of the 60 clauses are not operator speech (pass 1: 32 agent / 2 tool / 5 system / 4 peer / 2 other; pass 2: 27/3/4/3), with **47/60 from agent-harness exports** |
 | 13 | **declared-speaker attribution is unusable on this harvest.** Coverage of *operator intent* has no denominator, and the reason is structural rather than a sampling gap | the attempt was reasonable: two of four channels carry a `role` field, so authorship looked machine-readable. Measured: both exports contain only `role='user'` rows (55,122 jcode, 9,650 codex) with `is_human` as the sole varying flag, which the published filter drops when False. Declared speaker is therefore **constant** — 100% operator across 9,343 occurrence pairs and 8,819 units — so the field carries **zero** information. Where a human looked it is also contradicted: 27/60 agreement on the operator cut. Not a number corrected; a measurement avenue closed, and recorded as such |
+| 14 | the ask-cue bucket is **86.7% operator speech** (52/60, 95% CI 75.8-93.1), so §3k's "fraction of 8,819" prediction is falsified in the favourable direction; the cited side remains unmeasured so **no coverage-of-intent rate is published** | an authorship share is not a coverage rate. Multiplying it into 8,819 estimates a denominator, not a numerator |
+| 15 | the cited side is **96.7% operator speech** (58/60, 95% CI 88.6-99.1), so with all three buckets measured the coverage of operator-authored units estimates at **8.47%** (range 6.4-11.1, independent bounds) | this is the first operator-intent figure in the verdict, and it is an **ESTIMATE with a range, not a published rate** — the operator's own gate is recall AND precision >= 0.9 and precision is unmeasured. The four unit-based figures (4.4% structural, 13.3% ask-cue semantic, 3.3% non-ask semantic, ~9.65% union) are unchanged: they are rates over units and this is a rate over operator-authored units |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -1073,6 +1090,111 @@ records the transport role cannot distinguish who composed the text.
 population is 8,819 before reporting, so a denominator change is a hard failure rather than a quiet
 shift. One defect found and fixed during the build: the first version widened phone membership to all
 `reg_utterances` rows, which reported 10,335 units and was caught by that assertion.
+
+---
+
+## 3l. Authorship on the ask-cue bucket: 86.7% operator speech, and a falsified prediction
+
+**What was attempted.** §3k closed the machine-readable route: the harvest's `role` field is constant
+after filtering, so declared speaker carries no information. The hand-off there was human
+adjudication on the bucket every coverage figure is about. This section runs that instrument on the
+8,819 uncited ask-cue units.
+
+**The instrument.** A blind label sheet of 60 clauses, seed 20261115, drawn from the 8,819-unit
+population (the population is re-asserted at 8,819). The labeller saw the clause text with the channel
+withheld. One labeller, one pass: this is not an independent second coder, so every share below rests
+on one reading, as the non-ask-cue sheet does.
+
+**The result.**
+
+| speaker | n | share | Wilson 95% |
+|---|---:|---:|---|
+| operator | 52 | 86.7% | 75.8%–93.1% |
+| non-operator | 8 | 13.3% | 6.9%–24.2% |
+
+Of the 8 non-operator clauses: agent 6, peer 1, tool 1.
+
+**What the metadata method would have scored.** The §3k filter labels all 60 clauses operator, so it
+would score 86.7% (52/60) against these labels. That is an upper bound on its usefulness, not a
+validation: it is right because the bucket is mostly operator, and it gets the 8 wrong by
+construction. A scorer that agrees with a constant field tells you nothing about the field.
+
+**The falsified prediction.** §3k predicted:
+
+> if the ask-cue bucket resembles the non-ask-cue bucket, the true intent denominator is a fraction
+> of 8,819 rather than 8,819, and every rate above it rises.
+
+The non-ask-cue bucket, on the same instrument with a different sample, is 38.3% operator
+[27.1%–51.0%] and 61.7% non-operator [49.0%–72.9%]. The ask-cue bucket is 86.7% operator. The two
+buckets do not resemble each other, so the prediction is **FALSIFIED**: the denominator does not
+shrink toward the non-ask-cue share. Derived estimate only: 0.867 × 8,819 = 7,646 operator-authored
+uncited ask-cue units, interval 6,686–8,212, from the Wilson interval. This estimates a **denominator**,
+not a numerator.
+
+**What this does not license.** No coverage-of-operator-intent rate. A rate needs operator-authored
+counts on **both** sides in one frame, and only one side is measured. The cited side is 1,938 distinct
+matched strings and has no labels: `cited_speaker_probe.py` exists and a sample was drawn with seed
+20261116 at population 1,938, but no labels were produced. Coverage of operator intent is UNKNOWN.
+
+**Artifacts.** Ask-cue side: `evidence/askcue_speaker_probe.py` (draws the sheet and key),
+`evidence/askcue_speaker_key.json`, `evidence/askcue_labels.json`, `evidence/askcue_speaker_score.py`
+→ `evidence/askcue_speaker_scored.json`. Cited side, sheet drawn and unlabelled:
+`evidence/cited_speaker_probe.py` → `evidence/cited_speaker_sheet.json`,
+`evidence/cited_speaker_key.json`.
+
+---
+
+## 3m. Coverage of operator-authored units: 8.47%, the first operator-intent figure in this verdict
+
+**What changed.** §3l ended by naming the one missing side: the cited 1,938 matched strings had a drawn
+sheet and no labels, so the numerator of an intent-coverage rate did not exist. That side is now
+labelled. It is **96.7% operator speech** (58/60, Wilson 95% [88.6%, 99.1%]); the 2 non-operator
+clauses are 1 agent and 1 tool. With all three buckets of frame A measured on the same instrument, a
+coverage rate over operator-authored units can be computed.
+
+**The three bucket shares.** Each share is its own n=60 sample.
+
+| bucket | population | operator share | Wilson 95% | operator units |
+|---|---:|---:|---|---:|
+| cited | 1,938 | 96.7% (58/60) | 88.6–99.1% | 1,873 |
+| uncited ask-cue | 8,819 | 86.7% (52/60) | 75.8–93.1% | 7,643 |
+| uncited non-ask-cue | 32,891 | 38.3% (23/60) | 27.1–51.0% | 12,608 |
+
+**The arithmetic.** 1,938 × 0.9667 = 1,873.46; 8,819 × 0.8667 = 7,643.43; 32,891 × 0.3833 =
+12,608.22. Sum = **22,125.11** operator-authored units in 43,648. 1,873.46 / 22,125.11 = **8.47%**.
+
+**The range and why it is not a CI.** 1,717.84 / 26,898.40 = 6.4% is the lowest numerator over the
+highest denominator; 1,920.17 / 17,314.89 = 11.1% is the highest over the lowest. The published range
+is **6.4–11.1%**, method `range_from_independent_bounds`, `is_confidence_interval: false`. It combines
+three independent intervals by extremal pairing, so it is wider than a real interval and is not one.
+
+**Why this is an estimate and not a published rate.** The operator's own publication gate is recall
+AND precision >= 0.9. Precision is **unmeasured**, so the gate is not met. On top of that: one labeller
+produced each sheet; the three shares come from three separate n=60 samples and are not one joint
+estimate; and the shares were multiplied into fixed population counts with no design effect carried
+through. This is an **ESTIMATE of coverage, not a published rate.**
+
+**Why it does not replace the unit-based figures.** 4.4% structural, 13.3% ask-cue semantic, 3.3%
+non-ask semantic and ~9.65% union coverage are rates over **units** and remain correct as stated.
+8.47% is a rate over **operator-authored units**, a different quantity, and the two must not be
+confused. The ordering is expected: 8.47% sits above the 4.4% structural figure and below the ~9.65%
+unit-and-semantic union figure, because operator speech is a minority of units only in the non-ask
+bucket.
+
+**What would close it.** A second independent labeller on all three sheets, plus a measured
+citation-precision sample. Neither is currently produced.
+
+**Artifacts.** Labelling path: `evidence/cited_speaker_probe.py` (draws the 60-string sheet and key),
+`evidence/cited_speaker_sheet.json`, `evidence/cited_speaker_key.json`,
+`evidence/cited_labels_partial.tsv`, `evidence/cited_chunk_20_39.json`,
+`evidence/cited_chunk_40_59.json`, `evidence/assemble_cited_labels.py`,
+`evidence/cited_labels.json`, `evidence/cited_speaker_score.py`,
+`evidence/cited_speaker_scored.json`. Coverage path: `evidence/operator_coverage.py` →
+`evidence/operator_coverage.json`.
+
+The labels were produced in three separate 20-item passes because a single 60-item lane failed at the
+transport layer four times across two routes. `assemble_cited_labels.py` concatenates, and asserts
+completeness, dedup and allowed values; it re-judges nothing.
 
 ---
 

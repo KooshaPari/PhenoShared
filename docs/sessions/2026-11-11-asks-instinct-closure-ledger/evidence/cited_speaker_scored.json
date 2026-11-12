@@ -1,0 +1,199 @@
+{
+ "generated_at_utc": "2026-11-12T12:05:47Z",
+ "labels_file": "cited_labels.json",
+ "key_file": "cited_speaker_key.json",
+ "labeller": "three lane passes: partial.tsv (0-19) + chunk_20_39 + chunk_40_59; assembled mechanically",
+ "labels_generated_at_utc": "2026-11-12T11:57:31Z",
+ "n": 60,
+ "counts": {
+  "agent": 1,
+  "operator": 58,
+  "tool": 1
+ },
+ "wilson_95_by_speaker": {
+  "agent": [
+   0.0029,
+   0.0886
+  ],
+  "operator": [
+   0.8864,
+   0.9908
+  ],
+  "tool": [
+   0.0029,
+   0.0886
+  ]
+ },
+ "operator_share": {
+  "n": 58,
+  "of": 60,
+  "share": 0.9667,
+  "wilson_95": [
+   0.8864,
+   0.9908
+  ]
+ },
+ "non_operator_share": {
+  "n": 2,
+  "of": 60,
+  "share": 0.0333,
+  "wilson_95": [
+   0.0092,
+   0.1136
+  ]
+ },
+ "cross_tab_speaker_x_channel": {
+  "rows": [
+   "agent",
+   "operator",
+   "tool"
+  ],
+  "columns": [
+   "harness",
+   "imessage",
+   "phone"
+  ],
+  "matrix": {
+   "agent": {
+    "harness": 1,
+    "imessage": 0,
+    "phone": 0
+   },
+   "operator": {
+    "harness": 14,
+    "imessage": 41,
+    "phone": 44
+   },
+   "tool": {
+    "harness": 0,
+    "imessage": 1,
+    "phone": 1
+   }
+  }
+ },
+ "single_channel_composition": {
+  "harness": 15,
+  "imessage": 0,
+  "phone": 3
+ },
+ "channel_combinations": {
+  "imessage+phone": 42,
+  "harness": 15,
+  "phone": 3
+ },
+ "anti_anchor_check": {
+  "prior": "every channel implies operator",
+  "accuracy": 0.9667,
+  "agree": 58,
+  "n": 60,
+  "note": "this is what the metadata-only method would have scored, i.e. an upper bound on its usefulness"
+ },
+ "by_speaker": {
+  "agent": {
+   "n": 1,
+   "share": 0.0167,
+   "wilson_95": [
+    0.0029,
+    0.0886
+   ],
+   "channels": {
+    "harness": 1,
+    "imessage": 0,
+    "phone": 0
+   }
+  },
+  "operator": {
+   "n": 58,
+   "share": 0.9667,
+   "wilson_95": [
+    0.8864,
+    0.9908
+   ],
+   "channels": {
+    "harness": 14,
+    "imessage": 41,
+    "phone": 44
+   }
+  },
+  "tool": {
+   "n": 1,
+   "share": 0.0167,
+   "wilson_95": [
+    0.0029,
+    0.0886
+   ],
+   "channels": {
+    "harness": 0,
+    "imessage": 1,
+    "phone": 1
+   }
+  }
+ },
+ "by_channel": {
+  "harness": {
+   "n": 15,
+   "speakers": {
+    "operator": 14,
+    "agent": 1
+   }
+  },
+  "imessage": {
+   "n": 42,
+   "speakers": {
+    "operator": 41,
+    "tool": 1
+   }
+  },
+  "phone": {
+   "n": 45,
+   "speakers": {
+    "operator": 44,
+    "tool": 1
+   }
+  }
+ },
+ "comparison_askcue_scored": {
+  "bucket": "DIFFERENT bucket (ask-cue), DIFFERENT sample",
+  "source": "askcue_speaker_scored.json",
+  "sample_n": 60,
+  "operator_n": 52,
+  "non_operator_n": 8,
+  "operator_share": 0.8667,
+  "operator_wilson_95": [
+   0.7583,
+   0.9309
+  ],
+  "note": "reference only; do not pool with the cited bucket above"
+ },
+ "comparison_nonask_scored": {
+  "bucket": "DIFFERENT bucket (non-ask), DIFFERENT sample",
+  "source": "nonask_scored.json",
+  "sample_n": 60,
+  "operator_n": 23,
+  "non_operator_n": 37,
+  "non_operator_share": 0.6167,
+  "non_operator_wilson_95": [
+   0.4902,
+   0.7291
+  ],
+  "note": "reference only; do not pool with the cited bucket above"
+ },
+ "capture_note": "labels produced by a beam-free subagent against a blind sheet (channel withheld); see cited_speaker_probe.py for instrument",
+ "hard_caveats": {
+  "single_labeller": true,
+  "not_an_independent_second_coder": true,
+  "sample_n": 60,
+  "population": 1938,
+  "seed": 20261116,
+  "bucket": "cited",
+  "measures": "authorship_of_the_bucket, not coverage_of_intent",
+  "no_coverage_of_intent_figure_may_be_derived_from_this_file_alone": true,
+  "matched_side_only": true,
+  "matched_side_only=true": true,
+  "a coverage rate additionally requires the operator-authored count on BOTH sides expressed in one frame; this file alone yields no coverage rate": true,
+  "verbatim_caveats": [
+   "matched_side_only=true",
+   "a coverage rate additionally requires the operator-authored count on BOTH sides expressed in one frame; this file alone yields no coverage rate"
+  ]
+ }
+}
