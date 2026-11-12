@@ -13,12 +13,16 @@ artifact stage gate. Scope: the agent-driven path only (`plan` → `next` → `c
 | Host | `Darwin 27.0.0 arm64` (`uname -srm`) |
 | System Go toolchain | `go version go1.23.4 darwin/arm64` |
 | Module | `github.com/KooshaPari/dagrun` (`cmd/dagrun/go.mod:1`); Go directive `cmd/dagrun/go.mod:3` → `go 1.25.0`, resolved by `GOTOOLCHAIN=auto` to `go version go1.25.0 darwin/arm64` inside `cmd/dagrun`, the toolchain the probe binary was built with |
-| Probe binary | `/tmp/dagrun-probe`, 14,179,554 bytes, built outside the repository |
-| Probe workspace | `/Users/kooshapari/CodeProjects/temp/dagrun-gate-probe/`; run dir `.../dagrun-gate-probe/.dagrun`; `git status --porcelain -- cmd/dagrun` empty (clean) |
+| Probe binary + workspace | `/tmp/dagrun-probe` (14,179,554 bytes, built outside the repository); workspace `/Users/kooshapari/CodeProjects/temp/dagrun-gate-probe/`, run dir `.../dagrun-gate-probe/.dagrun`; `git status --porcelain -- cmd/dagrun` empty (clean) |
 
 Plan under test: node `1.1` (INTENT) declares `artifacts/PROBE_INTENT.md` (`min_bytes: 120`,
 `must_contain: ["Acceptance Criteria"]`); node `2.1` (GATE) depends on it, declares
 `artifacts/PROBE_GATE.txt` (`min_bytes: 12`, `must_contain: ["PROBE-PASS"]`), check `pwd; test -s artifacts/PROBE_GATE.txt`.
+
+Provenance: the transcript in section 2 is the probe run recorded in closed PR #955
+(`docs/dagrun-consolidation-traceability`), observed at the timestamp above and carried
+forward verbatim; the probe was not re-executed. The source facts cited in
+`../../TRACEABILITY.md` section 7 were re-read from the source, not taken from the probe.
 
 ## 2. Transcript
 
@@ -85,12 +89,11 @@ EXIT=0            # no output: the trace directory is empty
 
 ## 4. Finding
 
-1. **The artifact gate is correct and the negative control held.** Each `done` was
-   attempted once with the artifact absent and once with it present. Absent: exit 1,
-   naming the missing path (`missing file does not exist`) and, for node `2.1`, the
-   failing check (`check exited 1`). Present: exit 0 and `done <node> (<KIND>)`.
-   `validate` re-derived the same verdict from the filesystem alone (`0 broken`), and
-   `status` reported `progress 2/2 (100%)` only after both nodes had passed.
+1. **The artifact gate is correct and the negative control held.** Each `done` was attempted
+   once with the artifact absent and once with it present. Absent: exit 1, naming the missing
+   path (`missing file does not exist`) and, for node `2.1`, the failing check (`check exited 1`).
+   Present: exit 0 and `done <node> (<KIND>)`; `validate` re-derived the same verdict from the
+   filesystem alone (`0 broken`), and `status` reported `progress 2/2 (100%)` only after both passed.
 2. **The agent-driven path records no trace events.** `dagrun trace` exited 0 but printed
    `no events yet`, and `.dagrun/trace/` was empty afterwards, even though both nodes had
    been claimed and completed. A command exiting 0 is not evidence of a record.
@@ -100,10 +103,9 @@ EXIT=0            # no output: the trace directory is empty
 - It does **not** prove the orchestrator-driven `dagrun run` path is untraceable: that path
   was **NOT_RUN**, and whether `run` populates the trace where `next`/`claim`/`done` do not is UNKNOWN.
 - It does **not** speak to the semantic correctness of an artifact that satisfies a predicate:
-  a green gate means the file exists, is large enough, and contains the required strings.
-  Both artifacts are hand-written text files: green means the mechanism works, not that the work was done.
-- It does **not** cover the MCP surface, `serve`, `viz`, `replan`, `recover`, or
-  any real repository change.
+  a green gate means the file exists, is large enough, and contains the required strings. Both
+  artifacts are hand-written text files: green means the mechanism works, not that the work was done.
+- It does **not** cover the MCP surface, `serve`, `viz`, `replan`, `recover`, or any real repository change.
 - The cause of the empty trace is UNKNOWN from the probe alone; `../../TRACEABILITY.md` section 7 explains it from the source, not from this run.
 
 ## 6. Reproduce
@@ -115,6 +117,6 @@ cd /Users/kooshapari/CodeProjects/temp/dagrun-gate-probe
 rm -rf .dagrun artifacts
 ```
 
-The plan file is deliberately not committed (it lives outside the repository so the probe
-cannot dirty the tree); its full content is in closed PR #955, `cmd/dagrun/TRACEABILITY.md`
-section 5. Re-running section 2 verbatim should reproduce the same verdicts, or show it did not.
+The plan file is deliberately not committed (it lives outside the repository so the probe cannot
+dirty the tree); its full content is in closed PR #955, `cmd/dagrun/TRACEABILITY.md` section 5.
+Re-running section 2 verbatim should reproduce the same verdicts, or show it did not.
