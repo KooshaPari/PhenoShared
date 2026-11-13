@@ -78,3 +78,48 @@ live repos: 86
 == recovery stores (25, excluded by rule)
   AgilePlus-rb-archive-20261106, Melosviz-rb-archive-20261106, PhenoFastMCP-rb-archive-20261106, PhenoProc-archive-20261106, PhenoVCS-rb-archive-20261106, Pine-rb-archive-20261106, Quillr-rb-archive-20261106, Sidekick-archive-20261106, Sidekick-rb-archive-20261108, Stashly-archive-20261106, Stashly-rb-archive-20261106, Stashly-rb-archive-20261106-exact, Tasken-archive-20261106, Tasken-archive-20261106-exact, Tasken-rb-archive-20261108, Tracera-rb-archive-20261106, exports-temp-archive-20261108, forgecode-rb-archive-20261106, phenotype-archives-20261108, phenotype-registry-rb-archive-20261106, work-archive-20261105, zz-Parpoura-rb-archive-20261106, zz-QuadSGM-rb-archive-20261106, zz-localbase-rb-archive-20261106, zz-rich-cli-kit-archive-20261106
 ```
+
+## Classification of the 50, and why most are not targets
+
+Checking each name against `absorption/`, `absorption-residue-*` and
+`PhenoRegistry/repos/` changes the picture substantially.
+
+### Already handled (1)
+
+`host-ops` - its data is in `PhenoRegistry/repos/host-ops/`, restored by the
+operator. Do not absorb again.
+
+### Homes and destinations, not targets (4)
+
+`PhenoApps` (read-only sunset shelf that forbids source), `zz-pause-inc-QuadSGM`,
+`zz-pause-inc-Parpoura`, `zz-pause-Localbase` - these are the repositories the
+archives belong *in*.
+
+### Archives and evidence, keep (8)
+
+`zz-archive-grapheon`, `zz-archive-AgilePlus-recovery-evidence`,
+`zz-archive-4sgm-archive`, `zz-zz-agentcheck-PhenoInfra`,
+`zz-pause-inc-AgsLag`, `zz-pause-ref-AtomsTech`, `zz-pause-inc-FocalPoint`,
+`zz-pause-unk-Thegent`.
+
+These are recovery material of the same kind as the 25 named recovery stores, and
+the same reasoning applies: each is the only copy of what it holds.
+
+### Live products - not absorb targets without a specific instruction (27)
+
+`Civis`, `OmniRoute`, `PhenoMLX`, `Tracera`, `AgilePlus`, `Dino`, `KCode`,
+`PhenoTooling`, `ShareCLI`, `WorldSphereMod`, `KooshaPari`, `Khostty`, `Portage`,
+`CivicWarfare`, `PhenoBot`, `Melosviz`, `herdr`, `PhenoDesign`, `HeliosLab`,
+`PhenoAI`, `PhenoLab`, `PhenoFabric`, `kimaki`, `claude-remember`, `ratatui`,
+`shopping-home`, `heliosApp`.
+
+Together these are several GB of active development, and several are the account's
+flagship projects. Folding them into `PhenoShared` would dissolve their own
+history, issue trackers and release flows.
+
+"Unlisted but active repositories are valid absorb targets" reads as scope for the
+consolidation set. It is not authority to dissolve live products, and an agent
+should not infer that from it.
+
+**Recommendation:** treat these as out of scope until named individually. The
+consolidation value in this wave is in the archives and the already-handled set.
