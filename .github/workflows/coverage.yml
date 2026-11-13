@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # The check reads the workspace membership, so it needs a cargo that can
       # parse every manifest. The pin matches rust-toolchain.toml (E1.1/E1.2).
       #
@@ -179,7 +179,7 @@ jobs:
           - group: integrations
             packages: "agent-forecast airlock-v2 anthropic-usage-poll bifrost-routing cliproxy-adapter cloud-codex cloud-cursor cloud-dispatch-conformance cloud-kilo context-budget dag-scheduler dispatch-bridge driver-argv driver-cli driver-http driver-mcp engine-a2a engine-agentapi engine-claude engine-codex engine-conformance engine-forge engine-spec fake-codex-cloud fake-forge llm-router omniroute-adapter routing-phenotype-router teamcomm-cli teamcomm-client teamcomm-daemon teamcomm-mcp teamcomm-protocol teamcomm-smoke"
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: stable
@@ -344,7 +344,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Refuse to pass when the membership guard did not pass
         if: ${{ needs.coverage-membership.result != 'success' }}
@@ -382,7 +382,7 @@ jobs:
     # root one, so it needs much less headroom.
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: stable
