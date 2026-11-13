@@ -9,6 +9,20 @@ FFI / platform bindings for the Zig `spawn_core` hot path (semaphore + spawn + w
 | Linux / macOS | `zig build` → `libspawn_core.a`, linked from `build.rs` |
 | Windows | **No Zig.** `build.rs` skips Zig; `src/windows_stub.rs` provides the public API |
 
+### Zig versions
+
+`crates/spawn-core` builds on both the CI pin (**0.15.2**, see
+`.github/actions/setup-zig/action.yml`) and **0.16.x**, which removes several APIs
+0.15 only deprecated. Two spots are version-sensitive and must stay in the portable form:
+
+| What | Portable spelling | Why |
+|------|-------------------|-----|
+| libc linkage | `lib.root_module.link_libc = true` | `Compile.linkLibC()` is deprecated in 0.15.2 and removed in 0.16.0 |
+| POSIX spawn path | `std.c.chdir/execve/exit` + local `extern "c" fn fork()` | `std.posix.fork/chdir/execveZ/exit` were removed in 0.16.0 |
+
+Do not reintroduce `linkLibC()` or `std.posix.fork()`; both fail on 0.16 with
+`no field or member function named 'linkLibC'` / `'posix' has no member named 'fork'`.
+
 ### Windows gotcha
 
 Zig `spawn_core` uses POSIX `fork` / `waitpid` / pthread and does not compile on Windows.
