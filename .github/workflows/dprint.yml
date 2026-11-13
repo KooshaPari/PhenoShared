@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DPRINT_VERSION: "0.64.3"
+  DPRINT_VERSION: 0.64.3
 
 jobs:
   dprint:
