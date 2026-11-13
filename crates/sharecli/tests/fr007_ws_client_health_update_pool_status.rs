@@ -113,9 +113,15 @@ fn fr007_ws_client_health_update_pool_status_decode() {
 async fn fr007_ws_client_health_update_live_ipc_wrap() {
     use sharecli_ipc::ws_client::ClientMessage;
 
-    let handler = sharecli_ipc::handler::Handler::new()
-        .await
-        .expect("Handler::new");
+    let handler = {
+        let path = std::env::temp_dir().join(format!(
+            "sharecli-test-fr007_ws_client_health_update_pool_status-{}.sqlite",
+            std::process::id()
+        ));
+        sharecli_ipc::handler::Handler::with_session_store(
+            sharecli_session::SessionStore::open(&path).expect("SessionStore::open"),
+        )
+    };
     let resp = handler
         .dispatch(r#"{"id":1,"method":"health.status","params":{}}"#)
         .await;

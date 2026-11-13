@@ -836,9 +836,15 @@ fn fr007_operator_matrix_cli_text_watch_footer_same_tick() {
 /// FR-007 / AC-007.84 — IPC health.status + monitoring.report carry gate → host_watch → pool/status.
 #[tokio::test]
 async fn fr007_operator_matrix_ipc_envelopes() {
-    let handler = sharecli_ipc::handler::Handler::new()
-        .await
-        .expect("Handler::new");
+    let handler = {
+        let path = std::env::temp_dir().join(format!(
+            "sharecli-test-fr007_operator_matrix_ipc_envelopes-{}.sqlite",
+            std::process::id()
+        ));
+        sharecli_ipc::handler::Handler::with_session_store(
+            sharecli_session::SessionStore::open(&path).expect("SessionStore::open"),
+        )
+    };
 
     let health = handler
         .dispatch(r#"{"id":1,"method":"health.status","params":{}}"#)
