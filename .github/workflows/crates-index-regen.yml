@@ -16,19 +16,19 @@ name: crates-index-regen
 on:
   pull_request:
     paths:
-      - "Cargo.toml"
+      - Cargo.toml
       - "**/Cargo.toml"
-      - "crates/README.md"
-      - "scripts/gen-crates-readme.py"
-      - ".github/workflows/crates-index-regen.yml"
+      - crates/README.md
+      - scripts/gen-crates-readme.py
+      - .github/workflows/crates-index-regen.yml
   push:
     branches: [main]
     paths:
-      - "Cargo.toml"
+      - Cargo.toml
       - "**/Cargo.toml"
-      - "crates/README.md"
-      - "scripts/gen-crates-readme.py"
-      - ".github/workflows/crates-index-regen.yml"
+      - crates/README.md
+      - scripts/gen-crates-readme.py
+      - .github/workflows/crates-index-regen.yml
   workflow_dispatch:
 
 permissions:
