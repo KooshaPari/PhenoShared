@@ -878,3 +878,138 @@ already-agreed rows and the cited and ask-cue buckets are untouched.
 | `evidence/adjudication.json` | counts, baselines, reconciliation assertions, adjudicated point and range, limits | written by the script above |
 
 Section `3p` of `VERDICT.md` carries the prose.
+
+---
+
+## Addendum 17. Rev 19: a coverage range, a precision pair, an empty harness population, a verified sanitizer, and a recall frame
+
+**Prior context.** Rev 19 answers six operator questions against the Rev 18 record: Q1 A on the
+private history that still carries credentials, Q2 B on the sanitized export, Q3 B on whether the
+coverage figure can be re-derived under the operator ruling of 2026-11-12, where operator intent
+includes words addressed to any party and not only to an agent, Q5 A on citation precision, Q5 B on
+harness-channel citation precision, and Q5 C on ask-level recall. Rev 18 published a coverage pair
+(`8.07%` and `8.47%`), an adjudicated point (`0.0788`), a single-labeller precision figure (`0.780`
+strict, `0.966` lenient), and the gate decision `WITHHOLD_RATE_AND_FLOOR`.
+
+**Question.** What does each question settle, and what does each one change in the verdict.
+
+**Finding.** Six findings, one per question, none of which retracts a published point.
+
+**Q3 B, coverage under the ruling.** `evidence/coverage_q3b.json` records `measurable: false`. No
+per-row addressee, counterparty, recipient, sender, chat-kind or is-group field exists anywhere in
+the sample lineage, so re-derivation under the ruling needs a new labelling pass rather than a
+re-derivation. The three published points reproduce exactly (`0.0847`, `0.0807`, `0.0788`) and each
+becomes a range whose upper end is that old point: labeller 1 `[0.0770, 0.0847]`, labeller 2
+`[0.0737, 0.0807]`, adjudicated `[0.0722, 0.0788]`. The structural finding is that the old
+definition was never applied uniformly: the cited and ask-cue rubrics were authorship only and carry
+no addressee filter, only the non-ask-cue rubric carried the filter, and the non-ask-cue bucket
+enters the denominator only, so the ruling can only push coverage down. In the cited bucket 44 of
+the 58 operator rows are phone-channel rows counted under the authorship reading. A separate outer
+arithmetic bound `[0.0847, 0.3290]` is labelled a bound only and is not an estimate. The published
+pair (`8.07` to `8.47` percent) and the three points are **DEFINITION-A** figures (words addressed to
+an agent), which is narrower than the 2026-11-12 ruling, so they must be quoted only with that label.
+
+**Q5 A, citation precision as a pair.** `evidence/precision_pair_scored.json` joins two model
+labellers on one rubric over 60 origin links: kappa `0.4290`, `46` of `60` exact matches, `14`
+disagreements, and the sharp supported-versus-unsupported splits at idx `33` and idx `38`. L1 strict
+`0.7797` `[0.6587, 0.8665]` and lenient `0.9661` `[0.8846, 0.9907]`; L2 strict `0.7167`
+`[0.5923, 0.8149]` and lenient `0.9333` `[0.8407, 0.9738]`. The denominator is `2,252` origin
+links, not the `1,938` distinct cited units. Both lenient lower bounds sit below `0.9` (`0.8846` and
+`0.8407`), so precision of `0.9` or above cannot be excluded at 95 percent on the lenient reading,
+while on the strict reading it is excluded.
+
+**Q5 B, harness citation precision.** `evidence/precision_harness_sheet.json` carries `n = 0` and no
+items, with `blocked_reason` recorded. The `2,252` origin links resolve to `2,229` phone-channel
+and `23` chatdb utterances and `reg_utterances` holds zero harness-channel conversations, so the
+harness channel has no cited link rows to sample. The sheet's rubric is byte-equal to the rubric on
+the main precision sheet. The visibility-defined alternative is a different quantity and is not
+interchangeable with it: `evidence/register_channel_attribution.json` reports `466` of `2,018`
+distinct register quotes visible in harness by substring visibility, not by citation link row.
+
+**Q2 B, the sanitized export.** `evidence/sanitized_export_manifest.json` counts every credential
+pattern to zero: `phone_e164` `8,085` to `0`, `url_query_token` `2` to `0`, `otp_labelled` `2` to `0`,
+`long_b64_token` `186` to `0`, `email` `164` to `0`, `ipv4` `18` to `0`, and
+`all_credential_counts_zero: true`. `long_opaque_id_preserved` is `272` before and `272` after, by
+design. The output is `5,252,477` bytes with sha256 starting `d7941ea8`, and the manifest records
+the second run as byte-identical. The `redact_pii.py` defect is recorded in the same manifest: the
+token character class `[A-Za-z0-9+/=_-]` included `/`, so an absolute path and a 64-character hex
+sha256 matched as single tokens and were replaced wholesale, destroying `source_location`,
+`output_path` and `output_sha256` while redacting `0` secrets. `TOKEN_RE` now excludes `/` and
+`HEX_DIGEST_RE` exempts hex digests of 32 to 64 characters. Measured without a pipe,
+`sanitize_export.py` exits `2` on a missing input, `2` on the same path, `3` when the output exists
+and `--force` was not passed, and `0` normally; the earlier claim that it exits `0` on a missing
+input was a measurement error caused by piping through `tail`, which reports `tail`'s exit code.
+
+**Q5 C, ask-level recall, measured on one stratum.** `evidence/recall_reference_labeled.json` carries
+`60` windows drawn from a population of `3,337` eligible windows (harness `1,967`, iMessage `1,053`,
+kcode `317`; seed `20261121`), holding `103` reference asks (harness `63`, iMessage `40`, kcode `0`),
+`1` fragment and `0` non-verbatim quotes, and `evidence/recall_reference_label.py` re-verifies the
+labelling and returns PASS. `evidence/recall_asklevel_scored.json`, written by
+`evidence/recall_asklevel_match.py`, scores the frame against the register's `2,259` asks over `2,252`
+origin links. Every `reg_utterances` conversation id is `phoneconv` (`8,019` rows) or `chatdb` (`23`
+rows), so the harness stratum (`34` windows, `63` reference asks) and the kcode stratum (`8` windows,
+`0` reference asks) are **not measurable against this register**, and the script refuses to emit a
+zero there because a zero would describe the register's input scope rather than retrieval. The
+iMessage stratum is measurable: `18` windows, `40` reference asks, `0` fragments excluded, `25` matched
+(rule A containment `22`, rule B token Jaccard `4`, both `1`), recall **0.6250**, Wilson 95%
+`[0.4703, 0.7578]`, with the `15` unmatched asks listed with their quote and best Jaccard. The figure
+is lower-bound-style under a broad ask definition, because the reference labeller recorded personal
+asks addressed to another human (unmatched examples include "is steph homeless again" and "where in th
+e dinosaur") that the register was never built to capture, so the number conflates retrieval misses
+with asks the register never targeted. `evidence/rate_gate.json` was re-derived with the recall cell
+wired to the new artifact: recall **FAIL** `0.625` (threshold `0.9`), citation precision strict
+**FAIL** `0.7797`, citation precision lenient **PASS** `0.9661`, labeller independence **PASS**,
+precision channel coverage **PASS**, quote fidelity **PASS**, decision unchanged at
+`WITHHOLD_RATE_AND_FLOOR` with a derived reason.
+
+**Q4 A, the ingest transform.** The scrub landed in the other repo that owns the transform:
+`phenotype-registry`, branch `fix/asks-ingest-strip-url-credentials`, commit `b2f00282`, PR
+https://github.com/KooshaPari/PhenoRegistry/pull/778 . `scrub_url_credentials()` is called at the two
+`reg_utterances` inserts and at `reg_answers` before `body_sha256`, replaces only the value of a
+credential-named query parameter (`code`, `token`, `access_token`, `api_key`, `key`, `sig`,
+`signature`, `password`, `secret`, `session`) with `REDACTED`, leaves every other character intact, is
+idempotent, and adds no dependency. 9 unittest cases pass in `tests/test_asks_ledger_scrub.py`, and
+the live read-only check shows `reg_utterances` going from 2 credential values (`UTT-004428`,
+`UTT-004470`) to 0 and `reg_answers` from 2 to 0. The live `ledger.db` keeps the values until a
+rebuild, which is an operator-gated action.
+
+**What it changes.** Coverage under the ruling is now a definition-labelled range rather than a
+point, and the upper end of each range is the old point, not a new measurement. Citation precision
+is now a pair plus an agreement number, reported alongside the single-labeller figures and never
+instead of them, and the gate decision does not move. Harness citation precision is recorded as an
+empty population with the visibility-defined alternative named separately, not as a small number.
+The sanitized extract is verified numerically rather than asserted and is the only shareable form of
+the export. Ask-level recall is now measured on the iMessage stratum at `0.6250` [0.4703, 0.7578],
+the harness and kcode strata are recorded as not measurable against this register rather than as
+zero, and the `NOT_RUN` framing is retired for the stratum the register can represent. **Both halves
+of the publication gate now fail on measured numbers**, recall `0.625` and strict precision `0.7797`
+against the same `0.9` floor, so the gate no longer fails for want of an instrument. The
+private-history PII is recorded and accepted as it stands, and is not re-raised.
+
+**Artifacts.** Byte sizes are the on-disk sizes at the time of writing.
+
+| artifact | bytes | what it is | reproduce (from `evidence/`) |
+|---|---|---|---|
+| `evidence/redefine_coverage_q3b.py` | 28271 | re-derives the three published coverage points, computes the definition-labelled range and the outer arithmetic bound, records `measurable: false` | `python3 redefine_coverage_q3b.py` |
+| `evidence/coverage_q3b.json` | 14697 | the Q3 B record: measurable false, the three ranges, the outer bound, the rubric asymmetry, the caveats, what would close it | written by the script above |
+| `evidence/precision_pair_score.py` | 6481 | joins the two label sets and computes the pair: kappa, exact matches, disagreements, sharp indices, strict and lenient precision with Wilson intervals | `python3 precision_pair_score.py` |
+| `evidence/precision_pair_scored.json` | 2409 | the Q5 A pair record: kappa `0.4290`, `46`/`60` exact, `14` disagreements, sharp idx `33` and `38`, per-labeller strict and lenient figures | written by the script above |
+| `evidence/precision_harness_sheet.json` | 1503 | the Q5 B sheet: `n = 0`, `2,252` links split `2,229` phone and `23` chatdb, `blocked_reason`, the rubric | written by the harness sheet builder |
+| `evidence/precision_harness_key.json` | 198 | the withheld harness key, empty because there are no rows to withhold | written by the same script |
+| `evidence/register_channel_attribution.json` | 190 | the visibility-defined alternative: `466` of `2,018` distinct register quotes visible in harness | written by the attribution script |
+| `evidence/sanitize_export.py` | 13685 | the sanitizer: scrub, per-pattern counts, the same-path and `--force` guards, and the exit codes | `python3 sanitize_export.py <input.json> <output.json> [--force]` |
+| `evidence/redact_pii.py` | 6070 | the string-level redactor, with the `TOKEN_RE` and `HEX_DIGEST_RE` fix that stopped the over-match | `python3 redact_pii.py` |
+| `evidence/sanitized_export_manifest.json` | 4023 | the Q2 B record: counts before and after, output bytes and sha256, idempotency, the redaction defect and its fix | written by the sanitizer run |
+| `evidence/recall_reference_sheet.py` | 12776 | builds the 60-window reference frame across harness, iMessage and kcode (seed `20261121`) | `python3 recall_reference_sheet.py` |
+| `evidence/recall_reference_sheet.json` | 60150 | the 60 windows with their turn text and the population of `3,337` | written by the script above |
+| `evidence/recall_reference_key.json` | 19756 | the withheld reference key | written by the same script |
+| `evidence/recall_reference_label.py` | 7019 | re-verifies the blind labelling: verbatim substrings, turn ordinals, the empty-window justifications, and the totals | `python3 recall_reference_label.py` (read-only; prints VERIFICATION: PASS) |
+| `evidence/recall_reference_labeled.json` | 33534 | the Q5 C record: `103` reference asks, `1` fragment, `0` non-verbatim quotes, `60` windows | hand-labelled, not regenerable by script |
+| `evidence/recall_reference_empty_ok.json` | 1216 | hand justifications for the windows whose readable prose contains no operator ask | hand-written, not regenerable by script |
+| `evidence/recall_asklevel_match.py` | 12047 | matches the 103 reference asks against the register's 2,259 asks, decides which strata the register can represent at all, and refuses to emit a zero for a stratum it cannot | `python3 recall_asklevel_match.py` |
+| `evidence/recall_asklevel_scored.json` | 11825 | the Q5 C score: per-stratum measured flags, iMessage recall `0.6250` [0.4703, 0.7578], the 15 unmatched asks, the structural finding, and the caveats | written by the script above |
+| `evidence/rate_gate.py` | 17119 | the rewired gate: the recall cell now reads the ask-level artifact and is `NOT_RUN` only when no recall artifact exists, and the decision reason is derived from the cells | `python3 rate_gate.py` |
+| `evidence/rate_gate.json` | 4519 | the re-derived gate record: recall `FAIL` 0.625, strict precision `FAIL` 0.7797, lenient `PASS` 0.9661, labeller independence `PASS`, channel coverage `PASS`, quote fidelity `PASS`, decision `WITHHOLD_RATE_AND_FLOOR`, derived reason | written by the script above |
+| `evidence/recall_score.py` | 7254 | scores the older random-sample recall probe; it is a different instrument from the ask-level matcher and does not produce the ask-level figure | `python3 recall_score.py` |
+
+Section `§3q` of `VERDICT.md` carries the prose.

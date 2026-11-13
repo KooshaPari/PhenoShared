@@ -1,0 +1,1095 @@
+{
+ "generated_at_utc": "2026-11-13T02:24:26Z",
+ "script": "recall_reference_labelling",
+ "labeller": "recall-a",
+ "items": [
+  {
+   "idx": 0,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "both in parallel",
+     "intent": "run both tasks in parallel"
+    },
+    {
+     "turn": 2,
+     "quote": "all in parallel",
+     "intent": "run all tasks in parallel"
+    },
+    {
+     "turn": 3,
+     "quote": "state of desktop app? i dont see a .app yet",
+     "intent": "ask for status of the desktop app; no .app exists yet"
+    },
+    {
+     "turn": 4,
+     "quote": "install to my spotlight then genreate needed assets + ui\\ux polish \\ application overall desng structure? and create logos 2d 3d (blender if needed) asets etc as needed for splas and all other aras",
+     "intent": "install to Spotlight, generate assets, polish UI/UX and design structure, create 2D/3D logos for splash and other areas"
+    },
+    {
+     "turn": 5,
+     "quote": "also do teh 1-11 listed",
+     "intent": "also complete the listed items 1-11"
+    },
+    {
+     "turn": 6,
+     "quote": "strictly use subagetns",
+     "intent": "strictly use subagents"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 1,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 91,
+   "window_end_line": 96,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 2,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "whats next or blocking",
+     "intent": "ask what is next or blocking"
+    },
+    {
+     "turn": 2,
+     "quote": "use usbagents always, main ctx strictly must only be management\\high level ctx",
+     "intent": "always use subagents; main context must stay management/high-level only"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 3,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "walk me through eveyr change against forgecode; forgecode upstream is now 2.14 iirc; and walk me through how helioslite is backwards compat, but forgecode not forwards compat, and how decollision has ",
+     "intent": "walk through every change against forgecode (upstream 2.14) and explain backwards/forwards compatibility and decollision"
+    },
+    {
+     "turn": 2,
+     "quote": "walk me through eveyr change against forgecode; forgecode upstream is now 2.14 iirc; and walk me through how helioslite is backwards compat, but forgecode not forwards compat, and how decollision has ",
+     "intent": "walk through every change against forgecode (upstream 2.14) and explain backwards/forwards compatibility and decollision"
+    },
+    {
+     "turn": 6,
+     "quote": "hellohellouse usbagents always, main ctx strictly must only be management\\high level ctx",
+     "intent": "always use subagents; main context strictly management/high-level"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 4,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 37,
+   "window_end_line": 42,
+   "reference_asks": [
+    {
+     "turn": 3,
+     "quote": "do it all use subagents strictly as always, do it all use subagents strictly as always",
+     "intent": "do it all, using subagents strictly as always"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 5,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "do the merges",
+     "intent": "do the merges"
+    },
+    {
+     "turn": 2,
+     "quote": "finish your current bounded work, then deeply audit and advance the **full project or product represented by this conversation** toward its complete accepted intent. do not stop at a report, shallow m",
+     "intent": "finish bounded work then deeply audit and advance the full project toward its accepted intent, recovering complete intent and state"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 6,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 49,
+   "window_end_line": 54,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 7,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 145,
+   "window_end_line": 150,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 8,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "for release lifecycle v2, send a concise final status report for the phenoshared lane: exact ci runs/checks inspected and outcomes, current branch/head/worktree state, any edits or memory writes made,",
+     "intent": "release lifecycle v2: send a concise final status report for the phenoshared lane with CI outcomes, branch state, edits and next safe action, then stop"
+    },
+    {
+     "turn": 2,
+     "quote": "release lifecycle v2: please return a concise final phenoshared lane report with ci runs/check outcomes, branch/head/worktree state, any edits or memory writes, next safe step. report only; make no fu",
+     "intent": "release lifecycle v2: return a concise final phenoshared lane report with CI outcomes, branch state, edits and next safe step; report only"
+    },
+    {
+     "turn": 3,
+     "quote": "pr #411: continue key-rotator validation. load ~/ocgo.env only into the process environment; never print or commit secret values. use opencode-go:mimo-v2.6-flash if available. find the existing step 5",
+     "intent": "PR #411: continue key-rotator validation locally using only free models, no secrets printed"
+    },
+    {
+     "turn": 4,
+     "quote": "pr #411: continue key-rotator validation. load ~/ocgo.env only into the process environment; never print or commit secret values. use opencode-go:mimo-v2.6-flash if available. find the existing step",
+     "intent": "PR #411: continue key-rotator validation locally using only free models, no secrets printed"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 9,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 43,
+   "window_end_line": 48,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 10,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "need a quick proxy\\rotator. opencode-go -> input as many api keys as i want -> check usage \\ session stickyness other factors and load balance across n accounts usage limits; expose again as the ident",
+     "intent": "build a quick proxy/rotator for opencode-go accepting many API keys with usage/session-stickiness checks and load balancing, exposed as the same API"
+    },
+    {
+     "turn": 2,
+     "quote": "use subagents, research web etc as neede,d should live in phenoshared repo check for existing solus first ofc",
+     "intent": "use subagents and research; solution should live in the phenoshared repo after checking for existing solutions"
+    },
+    {
+     "turn": 3,
+     "quote": "go ahead yes",
+     "intent": "go ahead / proceed"
+    },
+    {
+     "turn": 4,
+     "quote": "\u2022 hook failed \u2514 hook exited without a status code fix this hooka nd the 21 warnings in codex as an aside",
+     "intent": "fix the failing hook and the codex warnings"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 11,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 49,
+   "window_end_line": 54,
+   "reference_asks": [
+    {
+     "turn": 2,
+     "quote": "operator rule (2026-11-10): you are an orchestrator, not an executor. do not perform the next step yourself. delegate it to a subagent via your own swarm, with a scoped brief (one question, bounded to",
+     "intent": "act as orchestrator: delegate the pending work to a subagent with a scoped brief before the next turn and report the delegation"
+    },
+    {
+     "turn": 3,
+     "quote": "what can you do in parlalel",
+     "intent": "ask what can be done in parallel"
+    },
+    {
+     "turn": 4,
+     "quote": "whats nxt operator rule (2026-11-10): you are an orchestrator, not an executor. do not perform the next step yourself. delegate it to a subagent via your own swarm, with a scoped brief (one question, ",
+     "intent": "ask what is next and what can be done in parallel"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 12,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 7,
+   "window_end_line": 12,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 13,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 79,
+   "window_end_line": 84,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "parlalelize\\ fanout subagents her possibel",
+     "intent": "parallelize / fan out subagents as much as possible"
+    },
+    {
+     "turn": 2,
+     "quote": "coordinator takeover. your lane (cargo deny gate, vitepress docs build, pr merging, swallow workers) is now consolidated under me. do not start new work; produce a handoff. report exactly: 1) every pr",
+     "intent": "coordinator takeover: stop new work and produce a handoff report covering merged PRs, open PRs, cargo deny fix, vitepress build, worker roster and open todos"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 14,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "proc fwd state of projec tand time till stable release, cvp",
+     "intent": "proceed and report state of project and time until stable release, cvp"
+    },
+    {
+     "turn": 2,
+     "quote": "proc do it all now",
+     "intent": "proceed and do it all now"
+    },
+    {
+     "turn": 3,
+     "quote": "walk me thru state of proja nd all cahnges against upstream, + qa materix",
+     "intent": "walk through state of project, all changes against upstream, and the QA matrix"
+    },
+    {
+     "turn": 4,
+     "quote": "wahhts nesxt and what do you need; you can and shiuld make worktrees\\checkouts",
+     "intent": "ask what is next, what is needed, and authorize making worktrees/checkouts"
+    },
+    {
+     "turn": 5,
+     "quote": "whats next or blcokng",
+     "intent": "ask what is next or blocking"
+    },
+    {
+     "turn": 6,
+     "quote": "give proper mcq and explanations of ctx",
+     "intent": "give proper MCQ and explanations of context"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 15,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 55,
+   "window_end_line": 60,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 16,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 17,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "reply with exactly: probe_ok",
+     "intent": "reply with exactly probe_ok"
+    },
+    {
+     "turn": 2,
+     "quote": "reply with exactly: probe_okstanding order from the user (11:00 pm), relayed by the instinct fleet lane: (1) drive everything you can in parallel, do not wait on him for any authorized path; no force-",
+     "intent": "standing order: drive everything in parallel, coordinate across lanes, post a duplex status line every 30 min, and reply ack with current state"
+    },
+    {
+     "turn": 4,
+     "quote": "reply with exactly: probe_okstanding order from the user (11:00 pm), relayed by the instinct fleet lane: (1) drive everything you can in parallel, do not wait on him for any authorized path; no force-",
+     "intent": "fragment"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 18,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 109,
+   "window_end_line": 114,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 19,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "print mcq as needed",
+     "intent": "print MCQ as needed"
+    },
+    {
+     "turn": 2,
+     "quote": "print mcq as needed",
+     "intent": "print MCQ as needed"
+    },
+    {
+     "turn": 4,
+     "quote": "waht can you do in parlalel",
+     "intent": "ask what can be done in parallel"
+    },
+    {
+     "turn": 5,
+     "quote": "fan out more agents",
+     "intent": "fan out more agents"
+    },
+    {
+     "turn": 6,
+     "quote": "write full handoff to phenoreg for later in parallel",
+     "intent": "write a full handoff to phenoreg for later, in parallel"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 20,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "why is it taking so long",
+     "intent": "ask why it is taking so long"
+    },
+    {
+     "turn": 2,
+     "quote": "from instinct, per koosha 2:07 pm oct 12 (hand off more, speed). task, low-risk, reversible: in this fork (omniroute) write docs/upstream-delta.md: upstream parent, commits ahead/behind, and every cha",
+     "intent": "instinct task per operator: write docs/upstream-delta.md in the omniroute fork (upstream parent, ahead/behind, changes by intent, demo needs), no merge or force-push, cockpit entry, reply in pane"
+    },
+    {
+     "turn": 5,
+     "quote": "as a side task local, desktop (other lcoal node), and github cloud need cleanup, e.g. merging and finishing all branches and the same for stashes or any other refs, then dealing w\\ local worktree spra",
+     "intent": "clean up local, desktop node and GitHub cloud (branches, stashes, refs), worktree sprawl, unfinished local work, then compress to one clean checkout against origin"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 21,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "whaats left as a whole till i canc lose this sess",
+     "intent": "ask what is left overall before the session can be closed"
+    },
+    {
+     "turn": 2,
+     "quote": "what login do you need",
+     "intent": "ask what login is needed"
+    },
+    {
+     "turn": 3,
+     "quote": "whaats left as a whole till i canc lose this sess",
+     "intent": "ask what is left overall before the session can be closed"
+    },
+    {
+     "turn": 4,
+     "quote": "fan out beama gens",
+     "intent": "fan out beam agents"
+    },
+    {
+     "turn": 5,
+     "quote": "elab as mcq for whats needed or next",
+     "intent": "elaborate as MCQ what is needed or next"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 22,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "we have 2+ chats over the last 1.5 years on this device this device, covering browser\\computer\\mobile\\.... automation infra, the most important one rightnow is just the brwoser part. a cloud brwoser t",
+     "intent": "evaluate browser/computer/mobile automation infra, especially the cloud browser, and derive current state and what is left to complete"
+    },
+    {
+     "turn": 2,
+     "quote": "we have 2+ chats over the last 1.5 years on this device this device, covering browser\\computer\\mobile\\.... automation infra, the most important one rightnow is just the brwoser part. a cloud brwoser t",
+     "intent": "evaluate browser/computer/mobile automation infra, especially the cloud browser, and derive current state and what is left to complete"
+    },
+    {
+     "turn": 4,
+     "quote": "work on it all",
+     "intent": "work on it all"
+    },
+    {
+     "turn": 5,
+     "quote": "where are your subagents \\ whya rent you fanning out? use provider: minimax/mini",
+     "intent": "ask why subagents are not being fanned out and direct use of provider minimax/mini"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 23,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "print full fwd wbs",
+     "intent": "print the full forward WBS"
+    },
+    {
+     "turn": 2,
+     "quote": "set 10m heartbeat style tick\\loop for project ownership\\mgmt to completion\\sunset",
+     "intent": "set a 10-minute heartbeat tick/loop for project ownership and management through completion or sunset"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 24,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 25,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 26,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 55,
+   "window_end_line": 60,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "1. elab solu 2. ignore doenst matter 3. elab solu 4 elab solu",
+     "intent": "elaborate solutions for items 1, 3 and 4; item 2 ignored"
+    },
+    {
+     "turn": 2,
+     "quote": "strictly fan otu usbagents. use opencode-go beam-free",
+     "intent": "strictly fan out subagents using opencode-go beam-free"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 27,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 7,
+   "window_end_line": 12,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "use ubagents!!!!!!! skip native use: cursor (agent cli -> gpt 5.6 luna medium || composer 2.5 non fase) codex (5.6 luna, astra low on request if you hit some walls or need extreme design qualiy",
+     "intent": "use subagents only; skip native models and use the named cursor/codex routes"
+    },
+    {
+     "turn": 2,
+     "quote": "fyi 31 commits behind tailcall (just dependabot\\renovates), and 337 brancehs onr emote. must work against these\\chip aginst before new non-inprogress work begins",
+     "intent": "account for being 31 commits behind tailcall and 337 remote branches before starting new non-in-progress work"
+    },
+    {
+     "turn": 3,
+     "quote": "work on all now",
+     "intent": "work on all now"
+    },
+    {
+     "turn": 4,
+     "quote": "whats next in depth",
+     "intent": "explain in depth what is next"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 28,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 91,
+   "window_end_line": 96,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 29,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 30,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 31,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 32,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 33,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "whats nxt in depth",
+     "intent": "ask what is next in depth"
+    },
+    {
+     "turn": 2,
+     "quote": "standing order from the user (11:00 pm, relayed by the instinct fleet lane): drive all authorized work in parallel, do not wait on him for authorized paths, no force-pushes. post a one-line state delt",
+     "intent": "standing order relayed by instinct fleet: drive authorized work in parallel, no force-pushes, post a one-line state delta every 30 min, reply ack with pane and state"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 34,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1321,
+   "window_end_line": 1326,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "sim case all deploys must go on podman or coolify\\localstack-like deploy surface",
+     "intent": "all deploys must go on podman or a coolify/localstack-like deploy surface"
+    },
+    {
+     "turn": 2,
+     "quote": "and general optimization of them and or tooling choice for them",
+     "intent": "optimize those deploys and/or the tooling choice for them"
+    },
+    {
+     "turn": 5,
+     "quote": "begin sharing everything w dots. those everything digests should go to it first. and full delegation as a result done b4 complete mcq if needed back to me and concise status return on all",
+     "intent": "begin sharing everything with dots first, delegate fully, send MCQ if needed, concise status on all"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 35,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1069,
+   "window_end_line": 1074,
+   "reference_asks": [
+    {
+     "turn": 2,
+     "quote": "prove and finalize asap",
+     "intent": "prove and finalize asap"
+    },
+    {
+     "turn": 3,
+     "quote": "liked \u201cportal's past sign-in already - but it's asking for a bigger grant: **read-only access to code, commit statuses, metadata and prs across 42 repos, 11 of them private. no write, no admin, future",
+     "intent": "confirm the broader GitHub read-only grant so the operator can type it in"
+    },
+    {
+     "turn": 4,
+     "quote": "state of everything else",
+     "intent": "ask for state of everything else"
+    },
+    {
+     "turn": 6,
+     "quote": "bring cockpit up 2 date. again should happen via api/cli/mcp style actions just like todoist jira etc not requiring manual pr redeploy churn",
+     "intent": "bring cockpit up to date, driven by api/cli/mcp style actions with no manual PR redeploy churn"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 36,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 835,
+   "window_end_line": 840,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "more on the ux aspect rn",
+     "intent": "give more on the UX aspect now"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 37,
+   "channel": "imessage",
+   "session_id": "imessage:1",
+   "window_start_line": 31,
+   "window_end_line": 36,
+   "reference_asks": [
+    {
+     "turn": 2,
+     "quote": "where in th e dinosaur",
+     "intent": "ask where in the dinosaur"
+    },
+    {
+     "turn": 3,
+     "quote": "is steph homeless again",
+     "intent": "ask whether steph is homeless again"
+    },
+    {
+     "turn": 5,
+     "quote": "why is he at luke's house when luke is 5k miles awat",
+     "intent": "ask why he is at luke's house when luke is 5k miles away"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 38,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 601,
+   "window_end_line": 606,
+   "reference_asks": [
+    {
+     "turn": 4,
+     "quote": "which app mythos is a 10t param",
+     "intent": "ask which app mythos is a 10T param model"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 39,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 271,
+   "window_end_line": 276,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "wtf is maybe july",
+     "intent": "ask what maybe july is"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 40,
+   "channel": "imessage",
+   "session_id": "imessage:1087",
+   "window_start_line": 229,
+   "window_end_line": 234,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 41,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1159,
+   "window_end_line": 1164,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "plane as tasks.kooshapari.com",
+     "intent": "deploy plane at tasks.kooshapari.com"
+    },
+    {
+     "turn": 2,
+     "quote": "cloudflare access gate",
+     "intent": "put it behind a Cloudflare Access gate"
+    },
+    {
+     "turn": 3,
+     "quote": "paperclip as paperclip.phenotype.space similar cf access",
+     "intent": "deploy paperclip at paperclip.phenotype.space with similar Cloudflare Access"
+    },
+    {
+     "turn": 4,
+     "quote": "similar pattern for anything else we have deployed",
+     "intent": "apply the same pattern to anything else deployed"
+    },
+    {
+     "turn": 5,
+     "quote": "statof all deploys",
+     "intent": "report state of all deploys"
+    },
+    {
+     "turn": 6,
+     "quote": "hermes state? ssot arch implementation state? ops dot",
+     "intent": "ask for hermes state, SSOT architecture implementation state, and ops dot state"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 42,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 889,
+   "window_end_line": 894,
+   "reference_asks": [
+    {
+     "turn": 2,
+     "quote": "review the dump of oct 10-11 txts in depth to id gaps",
+     "intent": "review the Oct 10-11 txt dump in depth and identify gaps"
+    },
+    {
+     "turn": 3,
+     "quote": "state of all gap",
+     "intent": "report state of all gaps"
+    },
+    {
+     "turn": 5,
+     "quote": "tracera gh actions integration + left hook integration + more for harness mcp hooks and other overall system, harness, project, gitops/cicd/devops install/integration must be done",
+     "intent": "tracera GitHub Actions integration, left-hook integration and more for harness MCP hooks and overall system/gitops/cicd/devops install must be done"
+    },
+    {
+     "turn": 6,
+     "quote": "r3check 429 wall",
+     "intent": "recheck the 429 wall"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 43,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 637,
+   "window_end_line": 642,
+   "reference_asks": [
+    {
+     "turn": 2,
+     "quote": "im going to send this to jcode cockpit chat, which will be the mac \u201chermes\u201d equivalent; you also need to help setup a resend line to work with my assistant systems both hermes and dots, muse, grokbot,",
+     "intent": "help set up a Resend line wired to hermes, dots, muse, grokbot and instinct; cf and resend access available; paste block given"
+    },
+    {
+     "turn": 3,
+     "quote": "you dont need it, just consider any email you sent",
+     "intent": "disregard that input and just consider any email already sent"
+    },
+    {
+     "turn": 4,
+     "quote": "walk through only for very high value apps; most clean",
+     "intent": "walk through only for very high value apps; most are clean"
+    },
+    {
+     "turn": 5,
+     "quote": "remember we expect tens to low hundreds a day at peak",
+     "intent": "remember the expected peak volume of tens to low hundreds of apps a day"
+    },
+    {
+     "turn": 6,
+     "quote": "zip the dat e is ok; for b skip",
+     "intent": "zip the date is ok; for b skip"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 44,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 115,
+   "window_end_line": 120,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "the things you know is not checking out how explicit proof both publicly and on the workspace drive or github, so you should be able to evaluate them. otherwise, again, if reviewing chatgpt career cha",
+     "intent": "check the explicit public/workspace-drive/GitHub proof for the claims and review chatgpt career chats if needed"
+    },
+    {
+     "turn": 2,
+     "quote": "ending a good sweet or being good at riding code is not something that would find interesting or appealing as a recruiter. i would say the way i think tackle problems, tackle ideas, and product design",
+     "intent": "judge from the chats how he thinks, plans and does product/system design rather than resume-style signals"
+    },
+    {
+     "turn": 3,
+     "quote": "done. you should hit our synced gmail",
+     "intent": "check the synced gmail"
+    },
+    {
+     "turn": 5,
+     "quote": "i want swe or product roles",
+     "intent": "target SWE or product roles"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 45,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1717,
+   "window_end_line": 1722,
+   "reference_asks": [
+    {
+     "turn": 2,
+     "quote": "state of jcode win fixe",
+     "intent": "report state of the jcode Windows fix"
+    },
+    {
+     "turn": 3,
+     "quote": "state of desk and mac + web\\cloud chat drives",
+     "intent": "report state of desk, mac and web/cloud chat drives"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 46,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 841,
+   "window_end_line": 846,
+   "reference_asks": [
+    {
+     "turn": 2,
+     "quote": "why tf are you connected w my dad",
+     "intent": "ask why the agent is connected with his dad"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 47,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 877,
+   "window_end_line": 882,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 48,
+   "channel": "imessage",
+   "session_id": "imessage:38",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 49,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 307,
+   "window_end_line": 312,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 50,
+   "channel": "imessage",
+   "session_id": "imessage:879",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "reference_asks": [
+    {
+     "turn": 1,
+     "quote": "what dles any of what you just said mean",
+     "intent": "ask what any of that means"
+    },
+    {
+     "turn": 2,
+     "quote": "no isolated fs memory etc",
+     "intent": "no isolated filesystem or memory"
+    },
+    {
+     "turn": 4,
+     "quote": "no vm or intermediate",
+     "intent": "no VM or intermediate layer"
+    },
+    {
+     "turn": 6,
+     "quote": "call me rnd 9 10",
+     "intent": "call him around 9-10"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 51,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 277,
+   "window_end_line": 282,
+   "reference_asks": [
+    {
+     "turn": 3,
+     "quote": "you must respect the friendship",
+     "intent": "you must respect the friendship"
+    }
+   ],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 52,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 53,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 54,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 55,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 56,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 57,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 58,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 59,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  }
+ ]
+}

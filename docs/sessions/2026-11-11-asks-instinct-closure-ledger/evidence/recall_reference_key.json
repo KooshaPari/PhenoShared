@@ -1,0 +1,919 @@
+{
+ "generated_at_utc": "2026-11-13T02:21:23Z",
+ "seed": 20261121,
+ "stratify_by": "channel",
+ "n": 60,
+ "population": {
+  "harness": 1967,
+  "imessage": 1053,
+  "kcode": 317
+ },
+ "allocation": {
+  "harness": 34,
+  "imessage": 18,
+  "kcode": 8
+ },
+ "withheld_from_labeller": "This file holds channel/session/ordinal/timestamp metadata only, no transcript text and no register ask id. It is withheld from the reference labeller so the frame can be reconstructed later without biasing labelling. The labeller must not open ledger.db, register.json, or this key while labelling.",
+ "items": [
+  {
+   "idx": 0,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "n_turns": 6,
+   "first_ts": "2026-09-13T04:12:05.015554Z",
+   "last_ts": "2026-09-13T07:49:05.329823Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 422,
+   "truncated": false
+  },
+  {
+   "idx": 1,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 91,
+   "window_end_line": 96,
+   "n_turns": 6,
+   "first_ts": "2026-09-13T07:54:23.495396Z",
+   "last_ts": "2026-09-13T10:38:43.591503Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 525,
+   "truncated": false
+  },
+  {
+   "idx": 2,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "n_turns": 6,
+   "first_ts": "2026-10-11T20:16:59.179659Z",
+   "last_ts": "2026-10-11T22:38:50.651642Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 2063,
+   "truncated": true
+  },
+  {
+   "idx": 3,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "n_turns": 6,
+   "first_ts": "2026-10-11T20:18:06.194625Z",
+   "last_ts": "2026-10-11T21:20:41.682621Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 996,
+   "truncated": false
+  },
+  {
+   "idx": 4,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 37,
+   "window_end_line": 42,
+   "n_turns": 6,
+   "first_ts": "2026-10-03T03:56:23.354391Z",
+   "last_ts": "2026-10-04T10:02:20.886777Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 542,
+   "truncated": false
+  },
+  {
+   "idx": 5,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "n_turns": 6,
+   "first_ts": "2026-10-17T07:48:17.937303Z",
+   "last_ts": "2026-10-18T10:01:22.798589Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 10120,
+   "truncated": true
+  },
+  {
+   "idx": 6,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 49,
+   "window_end_line": 54,
+   "n_turns": 6,
+   "first_ts": "2026-10-03T12:24:59.100049Z",
+   "last_ts": "2026-10-03T13:16:24.348711Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 526,
+   "truncated": false
+  },
+  {
+   "idx": 7,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 145,
+   "window_end_line": 150,
+   "n_turns": 6,
+   "first_ts": "2026-09-18T14:25:50.171031Z",
+   "last_ts": "2026-09-18T14:47:49.217279Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 3338,
+   "truncated": true
+  },
+  {
+   "idx": 8,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "n_turns": 6,
+   "first_ts": "2026-10-12T06:21:33.062680Z",
+   "last_ts": "2026-10-12T21:32:48.579880Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 2325,
+   "truncated": true
+  },
+  {
+   "idx": 9,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 43,
+   "window_end_line": 48,
+   "n_turns": 6,
+   "first_ts": "2026-09-18T03:48:01.070507Z",
+   "last_ts": "2026-09-18T04:20:44.771426Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 520,
+   "truncated": false
+  },
+  {
+   "idx": 10,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "n_turns": 6,
+   "first_ts": "2026-10-04T09:34:14.936Z",
+   "last_ts": "2026-10-08T06:20:56.536Z",
+   "sources": [
+    "codex"
+   ],
+   "text_chars": 3530,
+   "truncated": true
+  },
+  {
+   "idx": 11,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 49,
+   "window_end_line": 54,
+   "n_turns": 6,
+   "first_ts": "2026-11-10T07:28:04.981297Z",
+   "last_ts": "2026-11-10T10:30:50.897560Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 1375,
+   "truncated": true
+  },
+  {
+   "idx": 12,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 7,
+   "window_end_line": 12,
+   "n_turns": 6,
+   "first_ts": "2026-10-12T00:34:33.853078Z",
+   "last_ts": "2026-10-12T00:34:33.853133Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 867,
+   "truncated": false
+  },
+  {
+   "idx": 13,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 79,
+   "window_end_line": 84,
+   "n_turns": 6,
+   "first_ts": "2026-11-08T05:03:47.384680Z",
+   "last_ts": "2026-11-08T08:20:32.877237Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 2398,
+   "truncated": true
+  },
+  {
+   "idx": 14,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "n_turns": 6,
+   "first_ts": "2026-10-11T01:56:42.240252Z",
+   "last_ts": "2026-10-11T21:03:34.036385Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 394,
+   "truncated": false
+  },
+  {
+   "idx": 15,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 55,
+   "window_end_line": 60,
+   "n_turns": 6,
+   "first_ts": "2026-10-01T20:31:35.176607Z",
+   "last_ts": "2026-10-02T18:28:19.751538Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 526,
+   "truncated": false
+  },
+  {
+   "idx": 16,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "n_turns": 6,
+   "first_ts": "2026-10-16T03:35:22.526992Z",
+   "last_ts": "2026-10-16T03:44:31.012599Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 526,
+   "truncated": false
+  },
+  {
+   "idx": 17,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "n_turns": 6,
+   "first_ts": "2026-10-22T04:19:52.548888Z",
+   "last_ts": "2026-10-28T07:39:09.996691Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 12717,
+   "truncated": true
+  },
+  {
+   "idx": 18,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 109,
+   "window_end_line": 114,
+   "n_turns": 6,
+   "first_ts": "2026-11-10T03:05:30.114849Z",
+   "last_ts": "2026-11-10T05:50:22.416493Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 5814,
+   "truncated": true
+  },
+  {
+   "idx": 19,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "n_turns": 6,
+   "first_ts": "2026-11-07T10:24:20.689153Z",
+   "last_ts": "2026-11-07T11:07:35.529258Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 255,
+   "truncated": false
+  },
+  {
+   "idx": 20,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "n_turns": 6,
+   "first_ts": "2026-10-12T05:10:46.819302Z",
+   "last_ts": "2026-10-12T23:49:20.892664Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 1327,
+   "truncated": true
+  },
+  {
+   "idx": 21,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "n_turns": 6,
+   "first_ts": "2026-11-06T05:17:49.417915Z",
+   "last_ts": "2026-11-06T23:46:53.042038Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 299,
+   "truncated": false
+  },
+  {
+   "idx": 22,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "n_turns": 6,
+   "first_ts": "2026-11-05T00:40:05.777375Z",
+   "last_ts": "2026-11-06T00:57:16.746879Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 3025,
+   "truncated": true
+  },
+  {
+   "idx": 23,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "n_turns": 6,
+   "first_ts": "2026-10-16T00:59:49.728806Z",
+   "last_ts": "2026-10-16T01:17:13.154819Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 485,
+   "truncated": false
+  },
+  {
+   "idx": 24,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "n_turns": 6,
+   "first_ts": "2026-10-16T02:51:53.911804Z",
+   "last_ts": "2026-10-16T03:03:18.479729Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 526,
+   "truncated": false
+  },
+  {
+   "idx": 25,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "n_turns": 6,
+   "first_ts": "2026-09-24T08:57:02.051827Z",
+   "last_ts": "2026-09-27T15:27:09.636244Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 7684,
+   "truncated": true
+  },
+  {
+   "idx": 26,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 55,
+   "window_end_line": 60,
+   "n_turns": 6,
+   "first_ts": "2026-11-10T02:59:50.331094Z",
+   "last_ts": "2026-11-10T06:42:27.274247Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 503,
+   "truncated": false
+  },
+  {
+   "idx": 27,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 7,
+   "window_end_line": 12,
+   "n_turns": 6,
+   "first_ts": "2026-09-20T00:43:12.906445Z",
+   "last_ts": "2026-09-24T10:44:23.668314Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 630,
+   "truncated": false
+  },
+  {
+   "idx": 28,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 91,
+   "window_end_line": 96,
+   "n_turns": 6,
+   "first_ts": "2026-09-18T11:12:16.869972Z",
+   "last_ts": "2026-09-18T11:28:48.167142Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 1999,
+   "truncated": true
+  },
+  {
+   "idx": 29,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "n_turns": 6,
+   "first_ts": "2026-09-14T02:48:33.631092Z",
+   "last_ts": "2026-09-14T02:48:33.631135Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 30,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "n_turns": 6,
+   "first_ts": "2026-09-18T11:48:13.739659Z",
+   "last_ts": "2026-09-18T12:10:04.068172Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 3597,
+   "truncated": true
+  },
+  {
+   "idx": 31,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "n_turns": 6,
+   "first_ts": "2026-10-30T07:08:21.001296Z",
+   "last_ts": "2026-10-30T07:31:55.481271Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 2940,
+   "truncated": true
+  },
+  {
+   "idx": 32,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "n_turns": 6,
+   "first_ts": "2026-10-16T03:27:42.221901Z",
+   "last_ts": "2026-10-16T03:31:20.594638Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 526,
+   "truncated": false
+  },
+  {
+   "idx": 33,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "n_turns": 6,
+   "first_ts": "2026-10-22T02:55:39.346255Z",
+   "last_ts": "2026-10-22T07:42:35.153031Z",
+   "sources": [
+    "jcode"
+   ],
+   "text_chars": 1529,
+   "truncated": true
+  },
+  {
+   "idx": 34,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1321,
+   "window_end_line": 1326,
+   "n_turns": 6,
+   "first_ts": "813710701287000192",
+   "last_ts": "813712322968024704",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 1060,
+   "truncated": false
+  },
+  {
+   "idx": 35,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1069,
+   "window_end_line": 1074,
+   "n_turns": 6,
+   "first_ts": "813615556442062848",
+   "last_ts": "813617621124876800",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 681,
+   "truncated": false
+  },
+  {
+   "idx": 36,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 835,
+   "window_end_line": 840,
+   "n_turns": 6,
+   "first_ts": "811286107838319360",
+   "last_ts": "812366922869470080",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 366,
+   "truncated": false
+  },
+  {
+   "idx": 37,
+   "channel": "imessage",
+   "session_id": "imessage:1",
+   "window_start_line": 31,
+   "window_end_line": 36,
+   "n_turns": 6,
+   "first_ts": "804204797124810752",
+   "last_ts": "805172291668186240",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 251,
+   "truncated": false
+  },
+  {
+   "idx": 38,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 601,
+   "window_end_line": 606,
+   "n_turns": 6,
+   "first_ts": "804303317781298816",
+   "last_ts": "804303349012843904",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 325,
+   "truncated": false
+  },
+  {
+   "idx": 39,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 271,
+   "window_end_line": 276,
+   "n_turns": 6,
+   "first_ts": "803703887281898240",
+   "last_ts": "803703945397940608",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 305,
+   "truncated": false
+  },
+  {
+   "idx": 40,
+   "channel": "imessage",
+   "session_id": "imessage:1087",
+   "window_start_line": 229,
+   "window_end_line": 234,
+   "n_turns": 6,
+   "first_ts": "780945200964000000",
+   "last_ts": "781157937047000192",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 260,
+   "truncated": false
+  },
+  {
+   "idx": 41,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1159,
+   "window_end_line": 1164,
+   "n_turns": 6,
+   "first_ts": "813641487937000064",
+   "last_ts": "813641532332000000",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 346,
+   "truncated": false
+  },
+  {
+   "idx": 42,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 889,
+   "window_end_line": 894,
+   "n_turns": 6,
+   "first_ts": "813480920654999936",
+   "last_ts": "813526251024200192",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 1078,
+   "truncated": false
+  },
+  {
+   "idx": 43,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 637,
+   "window_end_line": 642,
+   "n_turns": 6,
+   "first_ts": "813442813480000000",
+   "last_ts": "813443436753000064",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 820,
+   "truncated": false
+  },
+  {
+   "idx": 44,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 115,
+   "window_end_line": 120,
+   "n_turns": 6,
+   "first_ts": "812568300328557440",
+   "last_ts": "812570535159280000",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 1133,
+   "truncated": false
+  },
+  {
+   "idx": 45,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1717,
+   "window_end_line": 1722,
+   "n_turns": 6,
+   "first_ts": "813997027172999808",
+   "last_ts": "814004173598999936",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 286,
+   "truncated": false
+  },
+  {
+   "idx": 46,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 841,
+   "window_end_line": 846,
+   "n_turns": 6,
+   "first_ts": "812946563271000192",
+   "last_ts": "812948749659000192",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 386,
+   "truncated": false
+  },
+  {
+   "idx": 47,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 877,
+   "window_end_line": 882,
+   "n_turns": 6,
+   "first_ts": "815528427567431168",
+   "last_ts": "815528488156296192",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 390,
+   "truncated": false
+  },
+  {
+   "idx": 48,
+   "channel": "imessage",
+   "session_id": "imessage:38",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "n_turns": 6,
+   "first_ts": "814922678047868032",
+   "last_ts": "814922885206745856",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 736,
+   "truncated": false
+  },
+  {
+   "idx": 49,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 307,
+   "window_end_line": 312,
+   "n_turns": 6,
+   "first_ts": "804994386430018176",
+   "last_ts": "804994505802888192",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 455,
+   "truncated": false
+  },
+  {
+   "idx": 50,
+   "channel": "imessage",
+   "session_id": "imessage:879",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "n_turns": 6,
+   "first_ts": "768600859424785920",
+   "last_ts": "768596907883625088",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 268,
+   "truncated": false
+  },
+  {
+   "idx": 51,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 277,
+   "window_end_line": 282,
+   "n_turns": 6,
+   "first_ts": "803703962944841344",
+   "last_ts": "803704023912497792",
+   "sources": [
+    "chat.db"
+   ],
+   "text_chars": 466,
+   "truncated": false
+  },
+  {
+   "idx": 52,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "n_turns": 6,
+   "first_ts": "2026-10-18T03:31:12.619663Z",
+   "last_ts": "2026-10-18T03:31:12.619735Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 53,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "n_turns": 6,
+   "first_ts": "2026-10-17T10:46:42.684457Z",
+   "last_ts": "2026-10-17T10:46:42.684490Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 54,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "n_turns": 6,
+   "first_ts": "2026-10-27T01:09:06.399687Z",
+   "last_ts": "2026-10-27T01:09:06.399730Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 55,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "n_turns": 6,
+   "first_ts": "2026-10-11T23:02:18.421834Z",
+   "last_ts": "2026-10-11T23:02:18.421877Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 56,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "n_turns": 6,
+   "first_ts": "2026-10-26T23:37:18.891653Z",
+   "last_ts": "2026-10-26T23:37:18.891696Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 57,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "n_turns": 6,
+   "first_ts": "2026-10-27T01:05:29.207803Z",
+   "last_ts": "2026-10-27T01:05:29.207852Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 58,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "n_turns": 6,
+   "first_ts": "2026-10-27T04:35:17.558163Z",
+   "last_ts": "2026-10-27T04:35:17.558205Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  },
+  {
+   "idx": 59,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "n_turns": 6,
+   "first_ts": "2026-10-27T04:49:19.587282Z",
+   "last_ts": "2026-10-27T04:49:19.587358Z",
+   "sources": [
+    "kcode"
+   ],
+   "text_chars": 874,
+   "truncated": false
+  }
+ ]
+}

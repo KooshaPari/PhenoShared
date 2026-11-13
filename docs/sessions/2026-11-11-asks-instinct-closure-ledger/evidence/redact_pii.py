@@ -17,7 +17,13 @@ import sys
 
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}")
 IPV4_RE = re.compile(r"(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])")
-TOKEN_RE = re.compile(r"(?<![A-Za-z0-9+/=_\-])[A-Za-z0-9+/=_\-]{32,}(?![A-Za-z0-9+/=_\-])")
+TOKEN_RE = re.compile(r"(?<![A-Za-z0-9+=_\-])[A-Za-z0-9+=_\-]{32,}(?![A-Za-z0-9+=_\-])")
+# DELIBERATELY EXCLUDES '/'. An earlier class included it, so an absolute path
+# with at least 32 characters in one unbroken run was matched as a single token
+# and replaced wholesale. That destroyed provenance fields (source_location,
+# output_path) in sanitized_export_manifest.json while redacting no secret at
+# all. Paths are not secrets; keep them out of the token pattern.
+HEX_DIGEST_RE = re.compile(r"^[0-9a-fA-F]{32,64}$")
 URL_PARAM_RE = re.compile(
     r"([?&])(code|token|key)=([^&#\s\"']*)", re.IGNORECASE
 )
@@ -36,9 +42,15 @@ DATE_SLUG_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
 
 
 def _scrub_token_string(s: str) -> tuple[str, int]:
+    hits = 0
+
     def repl(m: re.Match[str]) -> str:
+        nonlocal hits
         tok = m.group(0)
         if not _has_digit(tok):
+            return tok
+        # a hex digest (sha256, commit sha) is provenance, not a secret
+        if HEX_DIGEST_RE.match(tok):
             return tok
         # never touch path components or date-led directory slugs
         before = s[m.start() - 1] if m.start() > 0 else ""
@@ -47,9 +59,10 @@ def _scrub_token_string(s: str) -> tuple[str, int]:
             return tok
         if DATE_SLUG_RE.match(tok):
             return tok
+        hits += 1
         return "<TOKEN-REDACTED>"
 
-    return TOKEN_RE.subn(repl, s)
+    return TOKEN_RE.sub(repl, s), hits
 
 
 def scrub_string(value: str) -> tuple[str, int]:

@@ -20,8 +20,9 @@ RULES = {
     "publish_rate": "PUBLISH_RATE requires: recall measured AND recall >= 0.9 AND precision_strict >= 0.9.",
     "publish_floor": "PUBLISH_FLOOR requires: precision_strict >= 0.9 (a floor needs only precision).",
     "recall_not_run": (
-        "Recall is NOT_RUN, forever: the 98 source_ref harvest documents are declared lost, "
-        "so ask-level recall cannot be measured."
+        "Recall is NOT_RUN only when no recall artifact exists. The 98 source_ref harvest "
+        "documents are declared lost, so the original route to a recall denominator is gone, "
+        "and the corpus-derived reference frame replaces it on the channels the register covers."
     ),
     "read_discipline": "A failed read is UNKNOWN, never PASS. A percentage is never emitted where a cell is not PASS.",
 }
@@ -123,15 +124,44 @@ def main():
     # ---------------- cells ----------------
     cells = []
 
-    # recall: declared lost, never measurable
-    cells.append({
-        "cell": "recall",
-        "state": "NOT_RUN",
-        "value": None,
-        "threshold": RECALL_THRESHOLD,
-        "why": "the 98 source_ref harvest documents are declared lost, so ask-level recall cannot be measured",
-        "source": "declared lost, §3g",
-    })
+    # recall: measured on the one channel the register can represent
+    asklevel = read_json("recall_asklevel_scored.json", required=False)
+    if asklevel:
+        overall = asklevel.get("overall_scored_channels_only") or {}
+        rc = overall.get("recall") or {}
+        rvalue = rc.get("value")
+        rstate = "UNKNOWN"
+        if isinstance(rvalue, (int, float)):
+            rstate = "PASS" if rvalue >= RECALL_THRESHOLD else "FAIL"
+        cells.append({
+            "cell": "recall",
+            "state": rstate,
+            "value": rvalue,
+            "threshold": RECALL_THRESHOLD,
+            "why": (
+                "measured on the imessage stratum only, under a broad ask definition that "
+                "includes asks addressed to other humans; the register carries no harness or "
+                "kcode conversations, so those channels are not measurable against it rather "
+                "than zero"
+            ),
+            "source": "recall_asklevel_scored.json",
+            "scope": {
+                "channels_scored": overall.get("channels_scored"),
+                "channels_not_measured": overall.get("channels_not_measured"),
+                "denominator": overall.get("denominator"),
+                "matched": overall.get("matched"),
+                "wilson": rc,
+            },
+        })
+    else:
+        cells.append({
+            "cell": "recall",
+            "state": "NOT_RUN",
+            "value": None,
+            "threshold": RECALL_THRESHOLD,
+            "why": "no recall artifact available: recall is not measured here",
+            "source": "recall_asklevel_scored.json (absent)",
+        })
 
     if strict is None:
         strict_cell_state = "UNKNOWN"
@@ -257,11 +287,21 @@ def main():
     else:
         decision = "WITHHOLD_RATE_AND_FLOOR"
         failing = [c["cell"] for c in cells if c["state"] in ("FAIL", "NOT_RUN", "UNKNOWN")]
+        if recall_cell["state"] == "FAIL" and isinstance(recall_cell["value"], (int, float)):
+            recall_sentence = (
+                f"recall is measured at {round(recall_cell['value'], 4)}, below 0.9, on the "
+                "imessage stratum only (the register has no harness or kcode conversations)"
+            )
+        elif recall_cell["state"] == "NOT_RUN":
+            recall_sentence = "recall is NOT_RUN, so no rate can be measured"
+        else:
+            recall_sentence = f"recall is {recall_cell['state']}"
         decision_reason = (
             "citation_precision_strict is "
             + ("UNKNOWN" if strict_cell["state"] != "FAIL" else f"{strict_cell['value']} < 0.9")
-            + ", below the 0.9 floor every publication path needs, and recall is NOT_RUN "
-              "(documents lost) so no rate can be measured either; open cells: "
+            + ", below the 0.9 floor every publication path needs, and "
+            + recall_sentence
+            + "; open cells: "
             + ", ".join(failing) + "."
         )
 

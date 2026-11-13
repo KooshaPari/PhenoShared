@@ -1,6 +1,6 @@
 {
  "generated_at_utc": "2026-11-13T01:45:57Z",
- "source_location": "<TOKEN-REDACTED>.json",
+ "source_location": "UNRECOVERABLE IN THIS FIELD: the original value was destroyed by a redact_pii.py TOKEN_RE false positive (the regex character class included '/', so the whole absolute path matched as one 32+ character token and was replaced). The source bundle still exists elsewhere; this manifest no longer names it. See redaction_defect below. The sanitized OUTPUT that this manifest describes is intact and verified by sha256.",
  "source_note_text": "Earlier private-history commits retain versions without these redactions: e77430b5 (36 one-time codes plus all link tokens), f8321714 and 4b1f2eb2 (Cloudflare email-verification URL token plus link tokens). History was not rewritten.",
  "patterns": [
   {
@@ -87,14 +87,22 @@
   "long_opaque_id_preserved": 272,
   "reason": "pure-hex digests, all-lowercase slugs and ids of 32+ chars; not credentials, and redacting them would corrupt the dataset."
  },
- "output_path": "<TOKEN-REDACTED>.sanitized.json",
+ "output_path": "/Users/kooshapari/CodeProjects/temp/q2sanitize/export.sanitized.json",
  "output_bytes": 5252477,
  "output_lines": 105499,
- "output_sha256": "<TOKEN-REDACTED>",
+ "output_sha256": "d7941ea84927c4a313747116f6379d25811e031f8f55fc6014559d31671a74a7",
  "output_is_shareable": true,
  "shareability_statement": "This sanitized extract is the ONLY shareable form of this iMessage export; the raw bundle at source_location is do-not-share.",
  "raw_bundle_shareable": false,
  "idempotent_verified": true,
  "idempotency_evidence": "a second run over the output produced byte-identical bytes (cmp IDENTICAL) and 0 credential hits",
- "sanitizer": "sanitize_export.py (this directory); phone convention from redact_phones.py, parsed-string-walk convention from redact_pii.py"
+ "sanitizer": "sanitize_export.py (this directory); phone convention from redact_phones.py, parsed-string-walk convention from redact_pii.py",
+ "redaction_defect": {
+  "what": "redact_pii.py replaced source_location, output_path and output_sha256 with <TOKEN-REDACTED>",
+  "why": "TOKEN_RE class [A-Za-z0-9+/=_-] included /, so a long absolute path matched as one token; a 64 hex sha256 also matched",
+  "secrets_redacted_by_that_match": 0,
+  "fixed": "TOKEN_RE now excludes / and HEX_DIGEST_RE exempts 32-64 hex digests; both restored fields stay readable after re-running",
+  "effect_on_shareability": "none: no credential escaped, only provenance metadata was lost",
+  "recorded_at_utc": "2026-11-13T02:37:00Z"
+ }
 }

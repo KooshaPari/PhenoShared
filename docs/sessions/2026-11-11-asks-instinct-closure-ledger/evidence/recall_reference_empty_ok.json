@@ -1,0 +1,13 @@
+{
+ "generated_at_utc": "2026-11-13T02:26:00Z",
+ "script": "recall_reference_labelling",
+ "labeller": "recall-a",
+ "purpose": "Hand justifications for windows whose READABLE prose genuinely contains no operator ask, so an empty reference_asks is a finding rather than a miss.",
+ "items": {
+  "40": "All six turns are personal statements ('he liked no not at all j now', 'im too adult brained', 'my toes have blisters', 'i still have to go home'): no request, instruction or question.",
+  "47": "Six turns of market commentary about CVS/pharmacy ('pharmacy was a worthless part of biz', 'they didn't need it'): assertions, no ask.",
+  "48": "Six turns describing ghostty/herdr capabilities and past needs ('ghostty lacked session persistence...', 'herdr has a nice api...'), a URL, and 'i fuck w thus': descriptive statements, no request.",
+  "49": "Six turns of interpersonal argument ('stop acting like ur some busy person', 'and i have a masters'): reproaches and assertions; no request for work.",
+  "18": "Turns 1-2 are harness todo nudges, turn 3 a failed background-task notification, turn 4 a pasted DM review from another lane ('dm from sloth: review 1 - pr #828: defect ...'): none is an operator ask."
+ }
+}

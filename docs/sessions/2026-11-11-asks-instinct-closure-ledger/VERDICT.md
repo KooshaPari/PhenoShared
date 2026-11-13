@@ -36,7 +36,7 @@ is an estimate and not a published rate because citation precision is unmeasured
 produced all three samples. It does not replace any unit-based figure: those are rates over units,
 this is a rate over operator-authored units. Rev 16 puts a second, blind, independent labeller on all three sheets: coverage lands at 8.07% against 8.47%, and inter-labeller agreement is 1.00 on two buckets and 0.65 on the third. The single-labeller caveat is retired and replaced with a measured number, so the honest statement is now a pair, 8.07-8.47%; the rate is still withheld because citation precision is unmeasured. Rev 17 measures it: strict precision is 0.780 (46/59 judgeable), lenient 0.966, so the gate now fails on a number instead of on missing data, and the withheld rate has a stated reason rather than a pending one.**
 
-> **Current numbers, as of Rev 18.** Use these; every other figure in this file is the number
+> **Current numbers, as of Rev 19.** Use these; every other figure in this file is the number
 > published at the time of the section that made it, and §3f / §5 / §3i retain theirs for the record.
 >
 > | Quantity | Value |
@@ -50,6 +50,9 @@ this is a rate over operator-authored units. Rev 16 puts a second, blind, indepe
 > | Ask-cue authorship | **86.7% operator speech** (52/60, 95% CI 75.8-93.1); the cited side is now labelled at 96.7%, so coverage of operator-authored units exists as an estimate |
 >
 > - **Coverage of operator-authored units: 8.07-8.47%** (first labeller 8.47% [6.4-11.1], second independent labeller 8.07% [6.1-10.5]; independent bounds, not a CI) -- still an estimate, not a published rate: citation precision is unmeasured. Inter-labeller agreement: kappa 1.00 on cited and ask-cue, 0.65 on the non-ask-cue bucket, 0.85 pooled. Citation precision is now measured: **0.780 strict / 0.966 lenient**, so the coverage pair is a ceiling-conditional estimate and the rate stays withheld (§3o). A third blind reading then adjudicated the 12 inter-labeller disagreements and moves the estimate to 0.0788 [0.0591, 0.1022], 0.19 to 0.59 pp below the pair (§3p), with the gate decision unchanged.
+> - **Coverage is a range, not a point, and the range depends on a definition (Rev 19, §3q).** Q3 B shows the three published points never shared one definition: the cited and ask-cue rubrics were authorship-only ("Koosha's own words", no addressee filter) and are already valid under the operator ruling of 2026-11-12, while only the non-ask-cue rubric carried the addressee filter, and the non-ask-cue bucket enters the denominator only and never the numerator. Coverage under the ruling is therefore **labeller 1 [0.0770, 0.0847], labeller 2 [0.0737, 0.0807], adjudicated [0.0722, 0.0788]**. The upper end of each range is the old point (0.0847, 0.0807, 0.0788), not a new measurement; the lower end is that same old point with the flip candidates in the one bucket that can move. A separate outer arithmetic bound **[0.0847, 0.3290]** is a bound only and is not an estimate of the figure under the ruling. Re-derivation under the ruling is `measurable: false`, because no per-row addressee field exists anywhere in the sample lineage. In the cited bucket 44 of the 58 operator rows are phone-channel rows counted under the authorship reading, so the addressee filter never touched them.
+> - **Citation precision is a pair, and agreement is the headline: kappa 0.4290.** Two labellers on one rubric over 60 origin links agree on **46/60** exactly, with **14** disagreements, and the sharp supported-versus-unsupported splits sit at **idx 33** and **idx 38**. L1: strict **0.7797** [0.6587, 0.8665], lenient **0.9661** [0.8846, 0.9907]. L2: strict **0.7167** [0.5923, 0.8149], lenient **0.9333** [0.8407, 0.9738]. Both lenient lower bounds sit below 0.9 (0.8846 and 0.8407), so precision of 0.9 or above **cannot be excluded at 95 percent** on the lenient reading, while on the strict reading it is excluded. The denominator is 2,252 origin links, not the 1,938 distinct cited units. Both labellers are models on one rubric, not human ground truth.
+> - **Ask-level recall is measured on one stratum only: iMessage 0.6250 [0.4703, 0.7578].** The reference frame is **60** windows drawn from a population of **3,337** eligible windows (harness 1,967, iMessage 1,053, kcode 317; seed 20261121), carrying **103** reference asks, **1** fragment and **0** non-verbatim quotes, every retained quote a verified verbatim substring of its own window. Scored against the register's **2,259** asks, recall is measurable on the **iMessage** stratum alone: **40** reference asks, **25** matched, **0.6250**, Wilson 95% [0.4703, 0.7578]. The harness and kcode strata are **not measurable against this register**, because every `reg_utterances` conversation id is `phoneconv` (8,019 rows) or `chatdb` (23 rows) and the register holds no harness or kcode conversation at all. The figure is lower-bound-style under a broad ask definition, so it conflates retrieval misses with asks the register never targeted, and it is measured against a single model labeller on **18** windows of a 1,053-unit population. Both halves of the publication gate now fail on measured numbers: recall **0.625** against the 0.9 floor and strict citation precision **0.7797** against the same floor, so the decision stays `WITHHOLD_RATE_AND_FLOOR` and the recall half no longer fails for want of an instrument.
 
 | Rev | Claim | What was wrong |
 |---|---|---|
@@ -71,6 +74,7 @@ this is a rate over operator-authored units. Rev 16 puts a second, blind, indepe
 | 16 | a second **independent, blind** labeller on all three sheets puts coverage at **8.07%** (range 6.1-10.5), against the first labeller's 8.47%; inter-labeller kappa is **1.00** on the cited and ask-cue buckets and **0.65** on the non-ask-cue bucket (0.85 pooled) | not a retraction. It retires the single-labeller caveat and replaces it with a measured agreement number, and it widens the honest statement to **8.07-8.47%**. It does **not** publish a rate: citation precision is still `NOT_RUN`, both labellers are model labellers on one rubric, and the 12 non-ask-cue disagreements are listed rather than adjudicated |
 | 17 | "citation precision is unmeasured, so the coverage figure is an estimate" | — no number retracted. The measurement is now done and it *confirms* the withholding: strict precision 0.780 is below the 0.9 gate, and recall stays unmeasurable, so both halves of the gate fail on numbers. |
 | 18 | "the 12 non-ask disagreements are listed but unadjudicated" | nothing retracted. A third blind reading resolves 11 of 12 by majority of three; the estimate moves down to 0.0788 and the gate decision is unchanged. |
+| 19 | "the coverage pair is one figure under one definition" | No point retracted, one definitional error exposed. Q3 B shows the three published points have never shared a single definition: the cited and askcue rubrics were authorship-only (already valid under the ruling) while only the nonask rubric carried the addressee filter, and nonask enters the denominator only. Coverage under the ruling is therefore a range, not a point, and the upper end of that range is the old point. |
 
 Coverage numbers are derived from `evidence/union_channels.py`, whose machine-readable output is
 `evidence/union_channels.json`; clause-granularity numbers come from `evidence/segment_units.py`
@@ -1553,3 +1557,260 @@ re-derivable with `rate_gate.py`.
 | `adjudication_labels.json` | the third reader's 12 verdicts, produced without the key | hand-labelled, not regenerable by script |
 | `adjudicate_disagreements.py` | reconciles the recorded disagreement set, reproduces both baselines, applies majority of three, recomputes coverage | `~/CodeProjects/temp/npenv/bin/python adjudicate_disagreements.py` |
 | `adjudication.json` | counts, both baselines, the reconciliation assertions, the adjudicated point and range, and the honest limits | written by the script above |
+
+---
+
+## §3q Rev 19: six rulings landed, two defects found
+
+Rev 19 retracts no point. It answers six questions, lands all six operator rulings of 2026-11-12, finds
+two defects, and adds two measurements that move no ruling but do move the gate's reason. Three of the
+rulings (Q1 A, Q2 B, Q5 B) decide what may be published; Q3 B decides how every coverage number must
+be quoted; Q4 A decides what the ingest transform stores; Q5 A and Q5 C decide what gets measured.
+The two defects are the `redact_pii.py` over-match recorded under Q2 B and the coverage
+definition asymmetry recorded under Q3 B. Q5 A adds the agreement number to citation precision. Q5 C
+builds the recall frame, scores it, and retires the `NOT_RUN` framing for ask-level recall on the one
+stratum the register can represent.
+
+### Q1 A. History PII is accepted as it stands
+
+**Asked.** Whether the private-history commits that still carry credentials should be rewritten.
+
+**What the artifact says.** `evidence/sanitized_export_manifest.json` records in `source_note_text`
+that earlier private-history commits retain versions without these redactions: `e77430b5` (36
+one-time codes plus all link tokens), `f8321714` and `4b1f2eb2` (the Cloudflare email-verification
+URL token plus link tokens). History was not rewritten.
+
+**What it changes.** Nothing is retracted and nothing is re-raised. The operator accepted the history
+as it stands. The fact is recorded here and in the manifest, and the shareable form of the export is
+the sanitized extract, not the raw bundle (`raw_bundle_shareable: false`, `output_is_shareable:
+true`).
+
+**Closing path.** None. The question is closed on the operator's acceptance and is not re-opened by an
+agent.
+
+### Q2 B. The sanitized extract is verified numerically, and it is the only shareable form
+
+**Asked.** Whether the sanitizer produces a clean extract, and which form of the export may be
+shared.
+
+**What the artifact says.** `evidence/sanitized_export_manifest.json` counts before and after:
+`phone_e164` 8,085 to 0, `url_query_token` 2 to 0, `otp_labelled` 2 to 0, `long_b64_token` 186 to 0,
+`email` 164 to 0, `ipv4` 18 to 0. Every pattern that must be zero is zero
+(`all_credential_counts_zero: true`). `long_opaque_id_preserved` is 272 before and 272 after, by
+design: pure-hex digests, all-lowercase slugs and ids of 32 or more characters are provenance, not
+credentials, and redacting them would corrupt the dataset. The output is **5,252,477 bytes** with
+sha256 `d7941ea84927c4a313747116f6379d25811e031f8f55fc6014559d31671a74a7`, and the manifest records
+the second run as byte-identical (`cmp` IDENTICAL, zero credential hits).
+
+**The defect and its fix.** `redact_pii.py` replaced `source_location`, `output_path` and
+`output_sha256` with `<TOKEN-REDACTED>`. The cause was the token character class
+`[A-Za-z0-9+/=_-]`: it included `/`, so an absolute path with a 32-character unbroken run matched as a
+single token and was replaced wholesale, and a 64-character hex sha256 matched for the same reason.
+`secrets_redacted_by_that_match` is 0, so no credential escaped and only provenance metadata was
+lost, which leaves shareability unaffected. The fix is in the working tree: `TOKEN_RE` now excludes
+`/` and `HEX_DIGEST_RE` exempts hex digests of 32 to 64 characters, and both restored fields read
+back after a re-run. The original `source_location` value stays unrecoverable in that field, and the
+manifest says so.
+
+**The exit codes, measured without a pipe.** An earlier claim that `sanitize_export.py` exits 0 on a
+missing input was a measurement error caused by piping the command through `tail`, which reports
+`tail`'s exit code rather than the script's. Measured without a pipe: **2** for a missing input,
+**2** when input and output resolve to the same path, **3** when the output exists and `--force` was
+not passed, **0** on a normal run. Re-sanitizing the already-sanitized export is byte-identical.
+
+**What it changes.** The sanitized extract is verified rather than asserted, and it is the only
+shareable form of the export. The raw bundle stays do-not-share.
+
+**Closing path.** Share the sanitized output against its sha256, which the manifest records.
+
+### Q3 B. Coverage under the ruling is not measurable, and the three old points never shared a definition
+
+**Asked.** Whether the operator-coverage figure can be re-derived under the operator ruling of
+2026-11-12, where operator intent includes words addressed to any party rather than only to an
+agent.
+
+**What the artifact says.** `evidence/coverage_q3b.json` records `measurable: false`. No per-row
+addressee, counterparty, recipient, sender, chat-kind or is-group field is recorded anywhere in the
+sample lineage: the three speaker keys carry only `idx`, `clause` and `channels`, and the label files
+add only `speaker` and a free-text `why`. Re-derivation under the ruling would need a new labelling
+pass, not a re-derivation from recorded fields.
+
+The structural finding is sharper than the answer. The old definition was never applied uniformly.
+The cited and ask-cue rubrics were authorship based ("Koosha's own words", with peer defined as a
+person who is not Koosha) and carried no addressee filter, so they are already valid under the
+ruling and are unchanged. Only the non-ask-cue rubric carried the addressee filter, and the
+non-ask-cue bucket appears in the denominator only, never in the numerator. Any rows the ruling adds
+to that bucket can therefore only push coverage **down**. In the cited bucket 44 of the 58 operator
+rows are phone-channel rows counted under the authorship reading, so the addressee filter never
+touched them.
+
+The three published points reproduce exactly, at 0.0847 (labeller 1), 0.0807 (labeller 2) and 0.0788
+(adjudicated). Under the ruling each becomes a range whose upper end is that old point: labeller 1
+[0.0770, 0.0847], labeller 2 [0.0737, 0.0807], adjudicated [0.0722, 0.0788]. The lower end assumes
+every flip candidate in the non-ask-cue bucket is operator-authored, the upper end assumes none is.
+A separate outer arithmetic bound [0.0847, 0.3290] exists and is labelled a bound only: it assumes
+every operator-authored row in a phone-channel row is newly included, and it double counts rows that
+were already counted.
+
+**What it changes.** The three coverage numbers were never one figure under one definition, so
+coverage under the ruling is a definition-labelled range and not a point. No point is retracted.
+
+**The label every occurrence needs.** The published pair (8.07 to 8.47 percent) and the three points
+(0.0847, 0.0807, 0.0788) are **DEFINITION-A** figures: operator intent read as words addressed to an
+agent. Definition A is narrower than the 2026-11-12 ruling (words to any party), so a DEFINITION-A
+number is a lower-bound-style figure under the ruling, and it must never be quoted without the label.
+
+**Closing path.** Either add an audience field per unit at extraction time, so addressee is a
+recorded fact rather than an inference, or re-label the non-ask-cue bucket under the new rubric with
+the same two independent labellers and an adjudication pass and re-derive the figure from the new
+labels.
+
+### Q5 A. Citation precision is a pair, and kappa 0.4290 is the headline
+
+**Asked.** What is citation precision, and how much do the two labellers agree.
+
+**What the artifact says.** `evidence/precision_pair_scored.json`, two model labellers on one rubric
+over 60 origin links: kappa **0.4290**, **46 of 60** exact matches, **14** disagreements, and the
+sharp supported-versus-unsupported splits at **idx 33** and **idx 38**. L1 strict **0.7797**
+[0.6587, 0.8665] and lenient **0.9661** [0.8846, 0.9907]. L2 strict **0.7167** [0.5923, 0.8149] and
+lenient **0.9333** [0.8407, 0.9738]. The denominator is 2,252 origin links, not the 1,938 distinct
+cited units.
+
+**What it changes.** Precision is a pair plus an agreement number, reported alongside the single
+labeller figures and never instead of them. Both lenient lower bounds sit below 0.9 (0.8846 and
+0.8407), so precision of 0.9 or above cannot be excluded at 95 percent on the lenient reading, while
+on the strict reading it is excluded. The gate decision does not move: `citation_precision_strict`
+stays **FAIL** at 0.7797 and `citation_precision_lenient` stays **PASS** at 0.9661.
+
+**Closing path.** Human ground truth on the same 60 rows is the only route past model-labeller
+agreement. No agent action remains for the pair.
+
+### Q5 B. Harness citation precision has an empty population, and that is the finding
+
+**Asked.** What is citation precision on the harness channel.
+
+**What the artifact says.** `evidence/precision_harness_sheet.json` carries `n = 0` and no items. The
+2,252 origin links resolve to 2,229 phone-channel and 23 chatdb utterances, and `reg_utterances` holds
+zero harness-channel conversations, so the harness channel has no cited link rows to sample. The
+sheet records `blocked_reason`, and its rubric is byte-equal to the rubric on the main precision
+sheet.
+
+**What it changes.** A zero-population sheet is a finding, not a failure: harness citation precision
+is not a small number, it is an empty population. The visibility-defined alternative is a different
+quantity and is not interchangeable with it:
+`evidence/register_channel_attribution.json` reports 466 of 2,018 distinct register quotes visible in
+harness by substring visibility, not by citation link row.
+
+**Closing path.** Either drop harness citation precision as unmeasurable and report the visibility
+figure under its own name, or state the denominator the harness question needs before it can be
+asked.
+
+### Q5 C. Ask-level recall is measured on the iMessage stratum: 0.6250, and two strata are not measurable at all
+
+**Asked.** What is ask-level recall, the share of operator asks the register captures.
+
+**What the frame says.** `evidence/recall_reference_labeled.json` carries **60** windows drawn from
+a population of **3,337** eligible windows (harness 1,967, iMessage 1,053, kcode 317; seed 20261121),
+holding **103** reference asks (harness 63, iMessage 40, kcode 0), **1** fragment and **0** non-verbatim
+quotes: every retained quote is a verbatim substring of its own window, and
+`evidence/recall_reference_label.py` returns PASS. 27 of the 60 windows hold no operator ask. 23 of
+those contain no operator turn at all (redacted, system-only, or a pasted agent DM), and 5 are
+justified by hand in `evidence/recall_reference_empty_ok.json` (idx 18, 40, 47, 48, 49), with idx 18
+in both groups.
+
+**What the matcher says.** `evidence/recall_asklevel_scored.json`, written by
+`evidence/recall_asklevel_match.py`, scores the frame against the register's **2,259** asks over
+**2,252** origin links. The structural finding comes first: every `reg_utterances` conversation id is
+`phoneconv` (**8,019** rows) or `chatdb` (**23** rows), and the register holds no harness or kcode
+conversation id at all. The harness stratum (**34** windows, **63** reference asks) and the kcode
+stratum (**8** windows, **0** reference asks) are therefore **not measurable against this register**,
+and the script refuses to emit a zero there, because a zero would describe the register's input scope
+rather than retrieval.
+
+The **iMessage** stratum is measurable: **18** windows, **40** reference asks, **0** fragments
+excluded, **25** matched (rule A containment **22**, rule B token Jaccard **4**, both **1**), recall
+**0.6250**, Wilson 95% **[0.4703, 0.7578]**. The **15** unmatched asks are listed in the artifact with
+their quote and best Jaccard. The single fragment sits in a harness window, so the iMessage
+denominator of 40 contains no fragment.
+
+**What it changes.** The `NOT_RUN` framing for ask-level recall is retired for the iMessage stratum
+and replaced by a real number with a real limitation. That number is lower-bound-style under a broad
+ask definition: the reference labeller recorded every operator ask, including personal asks addressed
+to another human (unmatched examples include "is steph homeless again" and "where in th e dinosaur"),
+and those are asks the register was never built to capture. The measured value therefore conflates
+retrieval misses with asks the register never targeted, and it is measured against a single model
+labeller on **18** windows of a 1,053-unit iMessage population, so it is not presented as pure
+retrieval recall.
+
+**What it does to the gate.** `evidence/rate_gate.json` was re-derived with the recall cell wired to
+the new artifact, and its cells now read: recall **FAIL** 0.625 (threshold 0.9), citation precision
+strict **FAIL** 0.7797 (threshold 0.9), citation precision lenient **PASS** 0.9661, labeller
+independence **PASS**, precision channel coverage **PASS**, quote fidelity **PASS**. The decision is
+unchanged, `WITHHOLD_RATE_AND_FLOOR`, and its reason is now derived rather than hardcoded. **Both
+halves of the gate fail on measured numbers**: recall 0.625 against the 0.9 floor and strict precision
+0.7797 against the same floor. The gate no longer fails for want of a recall instrument.
+
+**Closing path.** Decide whether the register should ingest harness and kcode conversations at all.
+Until it does, the other two strata of the frame can never be scored against it, and the published
+recall figure stays a one-stratum figure.
+
+### Q4 A. The ingest transform strips URL credentials, so a rebuild cannot reintroduce them
+
+**Asked.** Whether the two `?code=` credential values that reached `reg_utterances` should be stripped
+in the ingest transform rather than only scrubbed once.
+
+**What was built.** A separate repo, `phenotype-registry`, branch
+`fix/asks-ingest-strip-url-credentials`, commit `b2f00282`, PR
+https://github.com/KooshaPari/PhenoRegistry/pull/778 . `scrub_url_credentials()` was added to
+`asks-ledger/build-asks-db.py` and is called at the two `reg_utterances` inserts and at `reg_answers`
+before `body_sha256` is computed. It replaces only the VALUE of a query parameter named `code`,
+`token`, `access_token`, `api_key`, `key`, `sig`, `signature`, `password`, `secret` or `session` with
+`REDACTED`; every other character is untouched, the function is idempotent, and no dependency was
+added.
+
+**Evidence.** 9 unittest cases pass in `tests/test_asks_ledger_scrub.py` (credential value replaced,
+empty credential, two credentials in one URL, unrelated query parameter unchanged, non-URL prose
+unchanged, idempotency). Live read-only proof: `reg_utterances` carried 2 credential values before
+(`UTT-004428`, `UTT-004470`) and 0 after transformation; `reg_answers` likewise 2 to 0.
+
+**What it changes.** The ruling is implemented in the transform, which is the only place that can hold
+it, so a future rebuild cannot reintroduce the values. It is not a retroactive scrub.
+
+**Closing path.** The live `ledger.db` still holds the values until a rebuild is run, and the two
+links were one-time. A rebuild is an operator-gated action, not an agent one.
+
+### What this changes about publication
+
+The gate decision is unchanged at `WITHHOLD_RATE_AND_FLOOR`, and the reasons are now sharper. Citation
+precision fails on a number (0.7797 strict against a 0.9 floor) and its stability across two labellers
+is only moderate (kappa 0.4290), so it must be quoted as a pair with its 14 disagreements and never
+averaged. Recall is unblocked in method and measured on one stratum (0.6250 on iMessage) while two
+strata are not measurable against this register at all, so it is not a pure retrieval figure. Coverage
+is a definition-labelled range whose upper end is the old point, not a new measurement. The rate
+remains withheld and no figure in this section may be published as a rate.
+
+### Artifacts
+
+| Artifact | Purpose | Reproduce |
+| --- | --- | --- |
+| `coverage_q3b.json` | Q3 B ruling applied: measurable false, three derived ranges, outer bound labelled a bound | `~/CodeProjects/temp/npenv/bin/python redefine_coverage_q3b.py` |
+| `redefine_coverage_q3b.py` | Regenerates the above and asserts the old points reproduce to 4dp | `~/CodeProjects/temp/npenv/bin/python redefine_coverage_q3b.py` |
+| `precision_labeled_l2.json` | Second independent precision labeller, 60 rows | produced by the labeller lane, no script |
+| `precision_pair_score.py` | Scores both labellers, kappa, Wilson intervals, asserts identical row triples | `~/CodeProjects/temp/npenv/bin/python precision_pair_score.py` |
+| `precision_pair_scored.json` | The pair: strict, lenient, agreement, 14 disagreements, sharp idx 33 and 38 | `~/CodeProjects/temp/npenv/bin/python precision_pair_score.py` |
+| `precision_harness_sheet.json` | Harness-channel precision sheet, n 0 with a recorded `blocked_reason` | no committed builder: written by a delegated lane, verified against `ledger.db` (`2,229` phone plus `23` chatdb plus `0` harness) |
+| `precision_harness_key.json` | Withheld key for the above, empty by construction | same as above |
+| `sanitize_export.py` | The sanitizer: named PATTERNS table, per-pattern hit counts, refuses existing output without `--force` | `~/CodeProjects/temp/npenv/bin/python sanitize_export.py <in> <out>` |
+| `sanitized_export_manifest.json` | Before/after counts, output sha256 and bytes, shareability statement | `~/CodeProjects/temp/npenv/bin/python sanitize_export.py` then re-read |
+| `redact_pii.py` | The redactor whose `TOKEN_RE` over-match destroyed manifest provenance; now excludes `/` and exempts hex digests | `~/CodeProjects/temp/npenv/bin/python redact_pii.py <json...>` |
+| `recall_instrument_design.md` | The corpus-derived recall frame: unit, strata, seed, formula, two named limitations | read only |
+| `recall_recon.txt` | Register table and column recon for the frame | read only |
+| `recall_reference_sheet.py` | Draws the stratified 60-window sample, no register ask id in any item | `~/CodeProjects/temp/npenv/bin/python recall_reference_sheet.py` |
+| `recall_reference_sheet.json` | The blank sheet: 60 windows, 3,337-unit population, seed 20261121 | same as above |
+| `recall_reference_key.json` | Withheld per-item channel and session metadata | same as above |
+| `recall_reference_labeled.json` | The blind reference labelling: 103 asks, 1 fragment, 0 non-verbatim quotes | `~/CodeProjects/temp/npenv/bin/python recall_reference_label.py` |
+| `recall_reference_label.py` | Verifies the labelling: quote substrings, idx coverage, per-channel totals | same as above |
+| `recall_asklevel_match.py` | Ask-level matcher: rule A containment, rule B Jaccard 0.6, refuses a zero where the register cannot represent a channel | `~/CodeProjects/temp/npenv/bin/python recall_asklevel_match.py` |
+| `recall_asklevel_scored.json` | The recall result: 25 of 40 on iMessage, 0.6250 [0.4703, 0.7578], two strata NOT_MEASURABLE | same as above |
+| `rate_gate.py` | The publication gate as a re-derivable decision over six named cells | `~/CodeProjects/temp/npenv/bin/python rate_gate.py` |
+| `rate_gate.json` | The gate record: cells, decision `WITHHOLD_RATE_AND_FLOOR`, derived reason | same as above |

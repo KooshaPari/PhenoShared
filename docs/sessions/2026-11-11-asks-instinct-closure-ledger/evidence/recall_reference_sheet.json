@@ -1,0 +1,619 @@
+{
+ "generated_at_utc": "2026-11-13T02:21:23Z",
+ "seed": 20261121,
+ "stratify_by": "channel",
+ "n": 60,
+ "population": {
+  "harness": 1967,
+  "imessage": 1053,
+  "kcode": 317
+ },
+ "allocation": {
+  "harness": 34,
+  "imessage": 18,
+  "kcode": 8
+ },
+ "instructions": "For each window record EVERY operator ask you can see as {\"turn\": <int>, \"quote\": <verbatim>, \"intent\": <one line>} in reference_asks. An ask is a request, instruction, or directive from the operator; a question counts, a statement of fact does not. If a turn is a fragment of an ask completed outside the window, use intent \"fragment\" and it is excluded from the denominator. matched_register_ask_ids stays empty: matching is a later step.",
+ "items": [
+  {
+   "idx": 0,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "text": "--- turn 19 ---\nboth in parallel\n\n--- turn 20 ---\nall in parallel\n\n--- turn 21 ---\nstate of desktop app? i dont see a .app yet\n\n--- turn 22 ---\ninstall to my spotlight then genreate needed assets + ui\\ux polish \\ application overall desng structure? and create logos 2d 3d (blender if needed) asets etc as needed for splas and all other aras\n\n--- turn 23 ---\nalso do teh 1-11 listed\n\n--- turn 24 ---\nstrictly use subagetns",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 1,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 91,
+   "window_end_line": 96,
+   "text": "--- turn 91 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 92 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 93 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 94 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 95 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 96 ---\nyou have 1 incomplete todo. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 2,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "text": "--- turn 103 ---\nwhats next or blocking\n\n--- turn 104 ---\nuse usbagents always, main ctx strictly must only be management\\high level ctx\n\n--- turn 105 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 106 ---\ndm from seedling: r6a status — both runs appeared (fired 21:17:33z on push 26dad9ef9). run rows (latest dump): 38175754384 | trunk check | completed | success | created 2026-10-11t21:17:33z | updated 21:17:45z | https://github.<TOKEN-REDACTED> 38175753646 | .github/workflows/scorecard.yml | completed | failure | created 2026-10-11t21:17:32z | updated 21:17:32z (0s, no jobs) | run#304 | https://github.<TOKEN-REDACTED> verdict r6a: green. trunk check success on 26dad9ef9. commit 26dad9ef9's prettier reformat fully repaired trunk check. companion for r6b: scorecard run id 38175753646, conclusion=failure. failure mode: workflow-level rejection — 0-second duration, zero jobs created, logs endpoint 404s, run name falls back to file path (all signatures of github refusing the workflow file before execution). actionlint on the exact file at this head pins it: `permissions:` used as a step-",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 3,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "text": "--- turn 73 ---\nwalk me through eveyr change against forgecode; forgecode upstream is now 2.14 iirc; and walk me through how helioslite is backwards compat, but forgecode not forwards compat, and how decollision has been done so forge can remain forgecode while we become a backwards compat at data level product\n\n--- turn 74 ---\nwalk me through eveyr change against forgecode; forgecode upstream is now 2.14 iirc; and walk me through how helioslite is backwards compat, but forgecode not forwards compat, and how decollision has been done so forge can remain forgecode while we become a backwards compat at data level product\n\n--- turn 75 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 76 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 77 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 78 ---\nhellohellouse usbagents always, main ctx strictly must only be management\\high level ctx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 4,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 37,
+   "window_end_line": 42,
+   "text": "--- turn 37 ---\nyou have 5 incomplete todos. continue working, or update the todo tool\n\n--- turn 38 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 39 ---\ndo it all use subagents strictly as always, do it all use subagents strictly as always\n\n--- turn 40 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 41 ---\nyou have 5 incomplete todos. continue working, or update the todo tool\n\n--- turn 42 ---\nyou have 5 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 5,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "text": "--- turn 13 ---\ndo the merges\n\n--- turn 14 ---\nfinish your current bounded work, then deeply audit and advance the **full project or product represented by this conversation** toward its complete accepted intent. do not stop at a report, shallow mvp, passing unit tests, or a plan. perform as much authorized implementation, integration, verification, and product-completion work as possible in this run. use the **state & forward docket v1.0** in phenoregistry (`<TOKEN-REDACTED>`), together with the existing master assessment kit, assessment dossier, agileplus, tracera, intent/boundary ssot, and relevant phenoregistry conventions. read the actual governing documents and preserve stronger existing records. ## 1. recover complete intent and actual state deeply investigate our historical conversations, memories, prior decisions, original requirements, accepted changes, github repositories and branches, issues, prs, releases, ci, architecture/spec/adr documents, deployment artifacts, accessible local state, and relevant primary web research. reconstruct the complete mature project/product goal tree, not merely what the latest task or currently implemented",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 6,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 49,
+   "window_end_line": 54,
+   "text": "--- turn 49 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 50 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 51 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 52 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 53 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 54 ---\nyou have 3 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 7,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 145,
+   "window_end_line": 150,
+   "text": "--- turn 145 ---\nbackground task** `845522163c` · `poll coverage for the total` (`bash`) · ✓ completed · 540.4s · exit 0 ```text suites_ok: 200 failed: 1 procs: 16 --- command finished with exit code: 0 --- ``` _full output:_ `bg action=\"output\" task_id=\"845522163c\"` **background task stalled** `250050vq66` · `poll the relaunched coverage` (`bash`) · no output or progress for 300s (running 300s total) _no output captured yet._ the task is still running. inspect it (`bg action=\"status\" task_id=\"250050vq66\"`, `bg action=\"output\" task_id=\"250050vq66\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"250050vq66\"`). the watchdog re-arms if output resumes\n\n--- turn 146 ---\nbackground task** `250050vq66` · `poll the relaunched coverage` (`bash`) · ✓ completed · 560.3s · exit 0 ```text suites_ok: 0 failed: 0 procs: 4 --- command finished with exit code: 0 --- ``` _full output:_ `bg action=\"output\" task_id=\"250050vq66\"` **background task stalled** `587578eskr` · `poll coverage again` (`bash`) · no output or progress for 300s (running 300s total) _no output captured yet._ the task is still running. inspect it (`bg action=\"status\" task_id=\"587578eskr\"`, `bg actio",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 8,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "text": "--- turn 73 ---\nfor release lifecycle v2, send a concise final status report for the phenoshared lane: exact ci runs/checks inspected and outcomes, current branch/head/worktree state, any edits or memory writes made, and next safe action. do not make further changes or infer policy. stop after reporting\n\n--- turn 74 ---\nrelease lifecycle v2: please return a concise final phenoshared lane report with ci runs/check outcomes, branch/head/worktree state, any edits or memory writes, next safe step. report only; make no further changes\n\n--- turn 75 ---\npr #411: continue key-rotator validation. load ~/ocgo.env only into the process environment; never print or commit secret values. use opencode-go:mimo-v2.6-flash if available. find the existing step 5 definition and run its preview using only models explicitly marked free; no paid fallback. keep this local and non-production. if mimo is not free or step 5 is unclear, report that without guessing. return validation and pr status\n\n--- turn 76 ---\npr #411: continue key-rotator validation. load ~/ocgo.env only into the process environment; never print or commit secret values. use opencode-go:mimo-v2.6-flash if available. find the existing step",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 9,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 43,
+   "window_end_line": 48,
+   "text": "--- turn 43 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 44 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 45 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 46 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 47 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 48 ---\nyou have 1 incomplete todo. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 10,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "text": "--- turn 1 ---\nneed a quick proxy\\rotator. opencode-go -> input as many api keys as i want -> check usage \\ session stickyness other factors and load balance across n accounts usage limits; expose again as the identical api, if possible evne not needing a base uri change (system level proxy?, this seems malicious by design though so maybe not?), or a proxy uri\n\n--- turn 2 ---\nuse subagents, research web etc as neede,d should live in phenoshared repo check for existing solus first ofc\n\n--- turn 3 ---\ngo ahead yes\n\n--- turn 4 ---\n• hook failed └ hook exited without a status code fix this hooka nd the 21 warnings in codex as an aside\n\n--- turn 5 ---\nits 10 warns; here is 1 warnings · 1 of 22 · startup /users/kooshapari/.codex/skills/competitive-platform-analysis/skill.md: failed to read file: too many open files (os error 24) 1-12 are the same; 13 warnings · 1 of 22 · startup /users/kooshapari/.codex/skills/competitive-platform-analysis/skill.md: failed to read file: too many open files (os error 24) warnings · 13 of 22 · startup codex is ignoring 3 unrecognized configuration settings. check for typos or deprecated settings. user (/users/kooshapari/.codex/config.toml): `mcp_servers.wo",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 11,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 49,
+   "window_end_line": 54,
+   "text": "--- turn 49 ---\nyou have 14 incomplete todos. continue working, or update the todo tool\n\n--- turn 50 ---\noperator rule (2026-11-10): you are an orchestrator, not an executor. do not perform the next step yourself. delegate it to a subagent via your own swarm, with a scoped brief (one question, bounded tool calls, write findings to a file), then integrate that result and report. the rule applies to you the same way it applies to the coordinator: panes orchestrate, subagents execute. before your next turn, delegate the pending work to a subagent and report the delegation, not a hand-rolled result\n\n--- turn 51 ---\nwhat can you do in parlalel\n\n--- turn 52 ---\nwhats nxt operator rule (2026-11-10): you are an orchestrator, not an executor. do not perform the next step yourself. delegate it to a subagent via your own swarm, with a scoped brief (one question, bounded tool calls, write findings to a file), then integrate that result and report. the rule applies to you the same way it applies to the coordinator: panes orchestrate, subagents execute. before your next turn, delegate the pending work to a subagent and report the delegation, not a hand-rolled result. what can you do in parlalel\n",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 12,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 7,
+   "window_end_line": 12,
+   "text": "--- turn 7 ---\nturn 6 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 8 ---\nturn 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 9 ---\nturn 8 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 10 ---\nturn 9 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 11 ---\nturn 10 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 12 ---\nturn 11 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 13,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 79,
+   "window_end_line": 84,
+   "text": "--- turn 79 ---\nparlalelize\\ fanout subagents her possibel\n\n--- turn 80 ---\ncoordinator takeover. your lane (cargo deny gate, vitepress docs build, pr merging, swallow workers) is now consolidated under me. do not start new work; produce a handoff. report exactly: 1) every pr you merged, with number and repo, 2) every pr still open with number and current state, 3) the cargo deny fix: what it changed, and confirmation it is merged, 4) vitepress build: is it green, still running, or failed, with the last 10 lines of the failing step, 5) your worker roster with each worker's state and what it was asked to do, 6) your open todos and anything you consider unfinished or risky. constraints: do not merge anything new, do not push, do not delete branches, do not retry a failed worker more than once. if a background build is still running, wait for it and include the outcome. then stand by for a directive\n\n--- turn 81 ---\nbackground task** `613652h0db` · `wait for the vitepress build` (`bash`) · ✓ completed · 60.4s · exit 0 ```text build ok: build complete in 382.74s. --- command finished with exit code: 0 --- ``` _full output:_ `bg action=\"output\" task_id=\"613652h0db\n\n--- turn 82 ---\nbackg",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 14,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "text": "--- turn 61 ---\nproc fwd state of projec tand time till stable release, cvp\n\n--- turn 62 ---\nproc do it all now\n\n--- turn 63 ---\nwalk me thru state of proja nd all cahnges against upstream, + qa materix\n\n--- turn 64 ---\nwahhts nesxt and what do you need; you can and shiuld make worktrees\\checkouts\n\n--- turn 65 ---\nwhats next or blcokng\n\n--- turn 66 ---\ngive proper mcq and explanations of ctx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 15,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 55,
+   "window_end_line": 60,
+   "text": "--- turn 55 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 56 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 57 ---\nyou have 3 incomplete todos. continue working, or update the todo tool\n\n--- turn 58 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 59 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 60 ---\nyou have 2 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 16,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "text": "--- turn 25 ---\nyou have 5 incomplete todos. continue working, or update the todo tool\n\n--- turn 26 ---\nyou have 4 incomplete todos. continue working, or update the todo tool\n\n--- turn 27 ---\nyou have 4 incomplete todos. continue working, or update the todo tool\n\n--- turn 28 ---\nyou have 4 incomplete todos. continue working, or update the todo tool\n\n--- turn 29 ---\nyou have 4 incomplete todos. continue working, or update the todo tool\n\n--- turn 30 ---\nyou have 4 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 17,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "text": "--- turn 1 ---\nreply with exactly: probe_ok\n\n--- turn 2 ---\nreply with exactly: probe_okstanding order from the user (11:00 pm), relayed by the instinct fleet lane: (1) drive everything you can in parallel, do not wait on him for any authorized path; no force-pushes. (2) coordinate across lanes. (3) post a duplex status line at least every 30 min, overnight too. reply now with one line: ack <pane> + current state. adds to your existing scope, does not replace it\n\n--- turn 3 ---\nbackground task stalled** `837597ige8` · `poll for the sonarcloud re-a` (`bash`) · no output or progress for 120s (running 261s total) last output: ```text [05:20:40z] <not yet> [05:21:36z] <not yet> [05:22:57z] <not yet> ``` the task is still running. inspect it (`bg action=\"status\" task_id=\"837597ige8\"`, `bg action=\"output\" task_id=\"837597ige8\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"837597ige8\"`). the watchdog re-arms if output resumes\n\n--- turn 4 ---\nreply with exactly: probe_okstanding order from the user (11:00 pm), relayed by the instinct fleet lane: (1) drive everything you can in parallel, do not wait on him for any authorized path; no force-pushes. (2) coordi",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 18,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 109,
+   "window_end_line": 114,
+   "text": "--- turn 109 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 110 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 111 ---\nbackground task** `2220598ly6` · `wait for #828 to become merg` (`bash`) · ✗ failed · 600.0s · exit 124 ```text poll 1: state=blocked | iac workspace coverage (serv=queued poll 2: state=blocked | iac workspace coverage (serv=queued poll 3: state=blocked | iac workspace coverage (serv=queued poll 4: state=blocked | iac workspace coverage (serv=queued poll 5: state=blocked | iac workspace coverage (serv=queued poll 6: state=blocked | iac workspace coverage (serv=queued poll 7: state=blocked | iac workspace coverage (serv=queued poll 8: state=blocked | iac workspace coverage (serv=queued poll 9: state=blocke... ``` _full output:_ `bg action=\"output\" task_id=\"2220598ly6\n\n--- turn 112 ---\ndm from sloth: review 1 - pr #828: defect (2 under-matches of r1). harness: ~<TOKEN-REDACTED>*.sh, old=origin/main guard, new=e8ee42409 guard, both via `git show <rev>:governance/happy-path-precommit.sh`, same staged diff line. defect a (severe) - `strip_quoted()` has no unterminated-qu",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 19,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "text": "--- turn 25 ---\nprint mcq as needed\n\n--- turn 26 ---\nprint mcq as needed\n\n--- turn 27 ---\nb; a+b+c+d; c\n\n--- turn 28 ---\nwaht can you do in parlalel\n\n--- turn 29 ---\nfan out more agents\n\n--- turn 30 ---\nwrite full handoff to phenoreg for later in parallel",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 20,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 73,
+   "window_end_line": 78,
+   "text": "--- turn 73 ---\nwhy is it taking so long\n\n--- turn 74 ---\nfrom instinct, per koosha 2:07 pm oct 12 (hand off more, speed). task, low-risk, reversible: in this fork (omniroute) write docs/upstream-delta.md: upstream parent, commits ahead/behind, and every change vs upstream grouped by intent (one line each, with the commit or pr). then list what would need a recorded demo (vhs or playwright) to prove it works. do not merge anything, never force-push, prefix any pr title with [instinct]-style 'authored by agent' first line, and write a 5-line state entry for this task into the cockpit when done (job-cockpit asks ledger) then reply in this pane\n\n--- turn 75 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 76 ---\nyou have 1 incomplete todo. continue working, or update the todo tool\n\n--- turn 77 ---\nas a side task local, desktop (other lcoal node), and github cloud need cleanup, e.g. merging and finishing all branches and the same for stashes or any other refs, then dealing w\\ local worktree sprawl teh same way and finishign any unstaged or unfinsihed local work before same deltion and compression to 1 checkout\\clean state against origin along w\\ new r",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 21,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "text": "--- turn 13 ---\nwhaats left as a whole till i canc lose this sess\n\n--- turn 14 ---\nwhat login do you need\n\n--- turn 15 ---\nwhaats left as a whole till i canc lose this sess\n\n--- turn 16 ---\nfan out beama gens\n\n--- turn 17 ---\nelab as mcq for whats needed or next\n\n--- turn 18 ---\na,b(desk),b+c,c,b+c",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 22,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "text": "--- turn 1 ---\nwe have 2+ chats over the last 1.5 years on this device this device, covering browser\\computer\\mobile\\.... automation infra, the most important one rightnow is just the brwoser part. a cloud brwoser that is both headless\\user take over\\observable and allows for iam\\multiple profiles and concurrent agent use of the same or different sessiions\\tabs etc. jcode has a baseline system for browser use i think to, evaluate all and deive the voerall current state nad whats left or next to complete finish\n\n--- turn 2 ---\nwe have 2+ chats over the last 1.5 years on this device this device, covering browser\\computer\\mobile\\.... automation infra, the most important one rightnow is just the brwoser part. a cloud brwoser that is both headless\\user take over\\observable and allows for iam\\multiple profiles and concurrent agent use of the same or different sessiions\\tabs etc. jcode has a baseline system for browser use i think to, evaluate all and deive the voerall current state nad whats left or next to complete finish\n\n--- turn 3 ---\nphenoshared will own it\n\n--- turn 4 ---\nwork on it all\n\n--- turn 5 ---\nwhere are your subagents \\ whya rent you fanning out? use provider: minimax/mini",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 23,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "text": "--- turn 61 ---\nprint full fwd wbs\n\n--- turn 62 ---\nset 10m heartbeat style tick\\loop for project ownership\\mgmt to completion\\sunset\n\n--- turn 63 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 64 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 65 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 66 ---\nyou have 6 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 24,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "text": "--- turn 25 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 26 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 27 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 28 ---\nyou have 6 incomplete todos. continue working, or update the todo tool\n\n--- turn 29 ---\nyou have 7 incomplete todos. continue working, or update the todo tool\n\n--- turn 30 ---\nyou have 6 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 25,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "text": "--- turn 13 ---\nbackground task stalled** `932910rnif` · `wait for the user to finish` (`bash`) · no output or progress for 45s (running 265s total) last output: ```text [[\"onetab - help\", \"https://www.one-tab.com/help\"], [\"how to use enhancer for youtube\\u2122\", \"https://www.mrfdev.com/how-to-use-enhancer-for-youtube\"], [\"enhancer for youtube\\u2122\", \"chrome-extension://ponfpcnoihfmfllpaingbgckeeldkhle/html/options.html\"], [\"home | tampermonkey\", \"https://www.tampermonkey.net/index.php?version=5.6.6239&ext=gcal&updated=true\"], [\"thank you for installing privacy badger!\", \"chrome-extension://pkehgijcmpdhfbdbbnkijodmdjhbjlgp/skin/firstrun.html\"], [\"job application for sample job application at simplify jobs\", \"chrome-extension://pbanhockgagggenencehbnadejlgchfc/assets/tutorial/tutorial.html\"], [\"help \\u2013 dark reader\", \"https://darkreader.org/help/en/\"], [\"get started | workos\", \"https://dashboard.workos.<TOKEN-REDACTED>\"]] [[\"onetab - help\", \"https://www.one-tab.com/help\"], [\"how to use enhancer for youtube\\u2122\", \"https://www.mrfdev.com/how-to-use-enhancer-for-youtube\"], [\"enhancer for youtube\\u2122\", \"chrome-extension://ponfpcnoihfmfllpain",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 26,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 55,
+   "window_end_line": 60,
+   "text": "--- turn 55 ---\n1. elab solu 2. ignore doenst matter 3. elab solu 4 elab solu\n\n--- turn 56 ---\nstrictly fan otu usbagents. use opencode-go beam-free\n\n--- turn 57 ---\nyou have 8 incomplete todos. continue working, or update the todo tool\n\n--- turn 58 ---\nyou have 12 incomplete todos. continue working, or update the todo tool\n\n--- turn 59 ---\nyou have 10 incomplete todos. continue working, or update the todo tool\n\n--- turn 60 ---\nyou have 10 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 27,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 7,
+   "window_end_line": 12,
+   "text": "--- turn 7 ---\nuse ubagents!!!!!!! skip native use: cursor (agent cli -> gpt 5.6 luna medium || composer 2.5 non fase) codex (5.6 luna, astra low on request if you hit some walls or need extreme design qualiy\n\n--- turn 8 ---\nfyi 31 commits behind tailcall (just dependabot\\renovates), and 337 brancehs onr emote. must work against these\\chip aginst before new non-inprogress work begins\n\n--- turn 9 ---\nwork on all now\n\n--- turn 10 ---\nwhats next in depth\n\n--- turn 11 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 12 ---\nyou have 1 incomplete todo. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 28,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 91,
+   "window_end_line": 96,
+   "text": "--- turn 91 ---\nbackground task stalled** `636793dfnv` · `poll relaunched coverage run` (`bash`) · no output or progress for 300s (running 300s total) _no output captured yet._ the task is still running. inspect it (`bg action=\"status\" task_id=\"636793dfnv\"`, `bg action=\"output\" task_id=\"636793dfnv\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"636793dfnv\"`). the watchdog re-arms if output resumes\n\n--- turn 92 ---\nbackground task** `636793dfnv` · `poll relaunched coverage run` (`bash`) · ✓ completed · 540.1s · exit 0 ```text suites_ok: 0 failed: 0 procs: 3 --- command finished with exit code: 0 --- ``` _full output:_ `bg action=\"output\" task_id=\"636793dfnv\n\n--- turn 93 ---\nbackground task stalled** `203255vxhz` · `poll coverage run again for` (`bash`) · no output or progress for 300s (running 300s total) _no output captured yet._ the task is still running. inspect it (`bg action=\"status\" task_id=\"203255vxhz\"`, `bg action=\"output\" task_id=\"203255vxhz\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"203255vxhz\"`). the watchdog re-arms if output resumes\n\n--- turn 94 ---\nyou have 2 incomplete todos. continue working, or u",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 29,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "text": "--- turn 19 ---\nturn 18 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 20 ---\nturn 19 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 21 ---\nturn 20 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 22 ---\nturn 21 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 23 ---\nturn 22 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 24 ---\nturn 23 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 30,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "text": "--- turn 103 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 104 ---\nbackground task** `079144hxwp` · `check whether the three disp` (`bash`) · ✓ completed · 90.9s · exit 0 ```text dirty: 0 --- command finished with exit code: 0 --- ``` _full output:_ `bg action=\"output\" task_id=\"079144hxwp\"` **background task stalled** `156246wkme` · `poll wave-3 progress via rep` (`bash`) · no output or progress for 300s (running 300s total) _no output captured yet._ the task is still running. inspect it (`bg action=\"status\" task_id=\"156246wkme\"`, `bg action=\"output\" task_id=\"156246wkme\"`) and decide whether to keep waiting or cancel it (`bg action=\"cancel\" task_id=\"156246wkme\"`). the watchdog re-arms if output resumes\n\n--- turn 105 ---\nbackground task** `156246wkme` · `poll wave-3 progress via rep` (`bash`) · ✓ completed · 540.4s · exit 0 ```text dirty: 25 m crates/agileplus-domain/src/builder.rs m crates/agileplus-domain/src/config/loader.rs m crates/agileplus-domain/src/credentials/factory.rs m crates/agileplus-domain/src/credentials/file.rs m crates/agileplus-domain/src/credentials/keychain.rs m crates/agileplus-domain/src/credentials/store.rs m crates/agi",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 31,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 1,
+   "window_end_line": 6,
+   "text": "--- turn 1 ---\nbackground task** `034096qy5m` · `check diff for translator-op` (`bash`) · ✓ completed · 0.6s · exit 0 ```text /users/kooshapari/.bash_profile: line 4: /tmp/cdist/env: no such file or directory commit <TOKEN-REDACTED> author: koosha pari <<EMAIL-REDACTED>> date: wed sep 16 16:15:10 2026 -0700 chore(lint): add oxlint config and oxlint-disable comments for pre-existing violations - add .oxlintrc.json with rules mirroring eslint config - add lint:oxlint and lint:oxlint:fix scripts to package.json - add oxlint ^1.61.0 to devdependencies - add scripts/qua... ``` _full output:_ `bg action=\"output\" task_id=\"034096qy5m\n\n--- turn 2 ---\nbackground task** `7969676bjw` · `run executor-default-base te` (`bash`) · ✓ completed · 6.8s · exit 0 ```text /users/kooshapari/.bash_profile: line 4: /tmp/cdist/env: no such file or directory ℹ pass 51 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ todo 0 ℹ duration_ms 4457.400209 --- command finished with exit code: 0 --- ``` _full output:_ `bg action=\"output\" task_id=\"7969676bjw\n\n--- turn 3 ---\nbackground task** `811795xv2a` · `run provider-models-route te` (`bash`) · ✓ completed · 64.7s · exit 0 ```text /users/kooshapari/.",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 32,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "text": "--- turn 61 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 62 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 63 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 64 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 65 ---\nyou have 2 incomplete todos. continue working, or update the todo tool\n\n--- turn 66 ---\nyou have 2 incomplete todos. continue working, or update the todo tool",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 33,
+   "channel": "harness",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "text": "--- turn 25 ---\nwhats nxt in depth\n\n--- turn 26 ---\nstanding order from the user (11:00 pm, relayed by the instinct fleet lane): drive all authorized work in parallel, do not wait on him for authorized paths, no force-pushes. post a one-line state delta (changes only) at least every 30 min, overnight too. reply now with one line: ack <your pane> + current state\n\n--- turn 27 ---\nyou have 5 incomplete todos. continue working, or update the todo tool\n\n--- turn 28 ---\nduplex status wf:p5 00:19 pdt: civis pr#1614 (cargo-deny 29->0) open head=f8b07723; ci green on cargo-deny/pr-governance/quality-manifest; addressing kilo/codeant review finding (wasmparser 0.248 vs wasmtime 50's 0.261 - real, fixed, wasmparser aligned to 0.261, mod-host 79/79 + watch 135/135 green). manifest regen for new head in progress (full workspace gate, ~70min). pr#1594 still blocked on main cargo-deny landing. no force-pushes. no blockers needing koosha\n\n--- turn 29 ---\nbackground task stalled** `912807xltb` · `cd ~/exports/analysis` (`bash`) · no output or progress for 180s (running 191s total) last output: ```text === full extraction (idempotent, additive only — insert or ignore) === started ``` the task is sti",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 34,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1321,
+   "window_end_line": 1326,
+   "text": "--- turn 1321 ---\nsim case all deploys must go on podman or coolify\\localstack-like deploy surface\n\n--- turn 1322 ---\nand general optimization of them and or tooling choice for them\n\n--- turn 1323 ---\nu did thst no\n\n--- turn 1324 ---\nd1 row write requests are temporarily blocked view d1 usage notification details account: kooshapari@gmail[.]com's account operation: rows written operation limit: 100,000 reset time: 2026-10-15 at 00:00:00 utc you have exceeded the daily d1 free tier limit of 100,000 rows written on account kooshapari@gmail[.]com's account. you can view your complete usage information in the dashboard. d1 row write requests will return errors until the limit resets on 2026-10-15 at 00:00:00 ut\n\n--- turn 1325 ---\nbegin sharing everything w dots. those everything digests should go to it first. and full delegation as a result done b4 complete mcq if needed back to me and concise status return on all\n\n--- turn 1326 ---\ndot@agents is your sender and receiving. the instinct email is the same for instinct. ko@ko / ko/gmail are mine alone",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 35,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1069,
+   "window_end_line": 1074,
+   "text": "--- turn 1069 ---\nit's alr on the mac\n\n--- turn 1070 ---\nprove and finalize asap\n\n--- turn 1071 ---\nliked “portal's past sign-in already - but it's asking for a bigger grant: **read-only access to code, commit statuses, metadata and prs across 42 repos, 11 of them private. no write, no admin, future repos excluded.** confirm and i'll type it in; github may show its own save screen for you after.”\n\n--- turn 1072 ---\nstate of everything else\n\n--- turn 1073 ---\n1. given in chat alr 2.later 3 given later 5 later6 mac up\n\n--- turn 1074 ---\nbring cockpit up 2 date. again should happen via api/cli/mcp style actions just like todoist jira etc not requiring manual pr redeploy churn",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 36,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 835,
+   "window_end_line": 840,
+   "text": "--- turn 835 ---\nmore on the ux aspect rn\n\n--- turn 836 ---\nthis and content being good are not compatible w over engineer ux\n\n--- turn 837 ---\nhence both wait\n\n--- turn 838 ---\notherwise every change inevitably fucks a beautiful fcp\n\n--- turn 839 ---\nhttps:<TOKEN-REDACTED>.vercel.app\n\n--- turn 840 ---\nhttps://pose-roulette-v301-vercel.vercel.app",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 37,
+   "channel": "imessage",
+   "session_id": "imessage:1",
+   "window_start_line": 31,
+   "window_end_line": 36,
+   "text": "--- turn 31 ---\nong i asked first\n\n--- turn 32 ---\nwhere in th e dinosaur\n\n--- turn 33 ---\nis steph homeless again\n\n--- turn 34 ---\ni'm cackling rn\n\n--- turn 35 ---\nwhy is he at luke's house when luke is 5k miles awat\n\n--- turn 36 ---\nya was gonna say",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 38,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 601,
+   "window_end_line": 606,
+   "text": "--- turn 601 ---\nbut for oai these niggas need better model arcg\n\n--- turn 602 ---\nbc the prices don't make sense\n\n--- turn 603 ---\nneither do that of anthropic\n\n--- turn 604 ---\nwhich app mythos is a 10t param\n\n--- turn 605 ---\nfor 1.5% gains\n\n--- turn 606 ---\nwhereas the 4bs are becoming equivalent to said multi trillions",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 39,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 271,
+   "window_end_line": 276,
+   "text": "--- turn 271 ---\nwtf is maybe july\n\n--- turn 272 ---\nyet u will fly out for a ginger twink freshman\n\n--- turn 273 ---\ni can do what i want i mog u\n\n--- turn 274 ---\nu won't even like socialize\n\n--- turn 275 ---\nevrry1 agrees this is disrespectful even for friendship\n\n--- turn 276 ---\nif you want a chance",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 40,
+   "channel": "imessage",
+   "session_id": "imessage:1087",
+   "window_start_line": 229,
+   "window_end_line": 234,
+   "text": "--- turn 229 ---\nhe liked no not at all j now\n\n--- turn 230 ---\nim too adult brained\n\n--- turn 231 ---\ntoni also wasn't traditional\n\n--- turn 232 ---\ntop middle dude has 0.89 gpa\n\n--- turn 233 ---\nmy toes have blisters\n\n--- turn 234 ---\ni still have to go home",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 41,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1159,
+   "window_end_line": 1164,
+   "text": "--- turn 1159 ---\nplane as tasks.kooshapari.com\n\n--- turn 1160 ---\ncloudflare access gate\n\n--- turn 1161 ---\npaperclip as paperclip.phenotype.space similar cf access\n\n--- turn 1162 ---\nsimilar pattern for anything else we have deployed\n\n--- turn 1163 ---\nstatof all deploys\n\n--- turn 1164 ---\nhermes state? ssot arch implementation state? ops dot",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 42,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 889,
+   "window_end_line": 894,
+   "text": "--- turn 889 ---\nchat msgs. its our convo in texrs\n\n--- turn 890 ---\nreview the dump of oct 10-11 txts in depth to id gaps\n\n--- turn 891 ---\nstate of all gap\n\n--- turn 892 ---\nliked “weekly sourcing just landed, 5 ranked: 1. sift stack - new grad swe, marina del rey hybrid, $125-145k. best local fit: rust/go, distributed telemetry. 2. whatnot - 2027 new grad, la hybrid, $155-160k. possibly already tracked, deduping before staging. 3. trm labs - university grad product engineer, la hybrid 3d, $130-150k. gate: degree done by summer 2026 - your bs should clear it. 4. revel - test swe entry, la onsite, pay undisclosed, 0-2 yoe explicit. 5. qumulo - new grad sde, seattle hybrid, $110-140k (relo, backup tier). disney: the two swe ii reqs both want 3+ yrs, so they're stretch-tier, not new finds. staging the clean ones for walkthroughs now.”\n\n--- turn 893 ---\ntracera gh actions integration + left hook integration + more for harness mcp hooks and other overall system, harness, project, gitops/cicd/devops install/integration must be done\n\n--- turn 894 ---\nr3check 429 wall",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 43,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 637,
+   "window_end_line": 642,
+   "text": "--- turn 637 ---\nof apps a day is still very very low and slow\n\n--- turn 638 ---\nim going to send this to jcode cockpit chat, which will be the mac “hermes” equivalent; you also need to help setup a resend line to work with my assistant systems both hermes and dots, muse, grokbot, and instinct, dots and instnct currently talk on email, we will be moving to discord, but bridges to discord may remain email. you have cf+resend and other accesses as needed; here is an example email [pasted 35 lines] instinct's prompt to you: (give me the paste block here\n\n--- turn 639 ---\nyou dont need it, just consider any email you sent\n\n--- turn 640 ---\nwalk through only for very high value apps; most clean\n\n--- turn 641 ---\nremember we expect tens to low hundreds a day at peak\n\n--- turn 642 ---\nzip the dat e is ok; for b skip",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 44,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 115,
+   "window_end_line": 120,
+   "text": "--- turn 115 ---\nthe things you know is not checking out how explicit proof both publicly and on the workspace drive or github, so you should be able to evaluate them. otherwise, again, if reviewing chatgpt career chats for them would actually give you the explicit proof or how that agent verified them too, all the things you said didn’t check out. i have effectively direct ways of proving if you truly can’t find it\n\n--- turn 116 ---\nending a good sweet or being good at riding code is not something that would find interesting or appealing as a recruiter. i would say the way i think tackle problems, tackle ideas, and product design or system design, i guess, is something that you’d find very, very, very intriguing and unique and not will compare to other engineers or people that you may wanna hire, so i would deeply look at my chats in the way i talk in the way i plan\n\n--- turn 117 ---\ndone. you should hit our synced gmail\n\n--- turn 118 ---\nvendor sales #s and their pricing sheets exist in sheets\n\n--- turn 119 ---\ni want swe or product roles\n\n--- turn 120 ---\nagain the fwd works 24/7 for years your singke case failed",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 45,
+   "channel": "imessage",
+   "session_id": "imessage:1405",
+   "window_start_line": 1717,
+   "window_end_line": 1722,
+   "text": "--- turn 1717 ---\na 2 a 3 a 4 it sup 5 a 6 ok 7 done\n\n--- turn 1718 ---\nstate of jcode win fixe\n\n--- turn 1719 ---\nstate of desk and mac + web\\cloud chat drives\n\n--- turn 1720 ---\nyou aren’t seemingly driving any\n\n--- turn 1721 ---\na, and login done\n\n--- turn 1722 ---\na ope npage ingot",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 46,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 841,
+   "window_end_line": 846,
+   "text": "--- turn 841 ---\nyo i just realized\n\n--- turn 842 ---\nwhy tf are you connected w my dad\n\n--- turn 843 ---\nexplains why he vibecoding 24/7\n\n--- turn 844 ---\ndmouse told me abt 10% of what we were doing so it was a beaut imma kms scenario half the hikes\n\n--- turn 845 ---\nthat via ferrata too i had no idea i was bouta be hanging off the mountain for 2hrs\n\n--- turn 846 ---\nsame as always",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 47,
+   "channel": "imessage",
+   "session_id": "imessage:2",
+   "window_start_line": 877,
+   "window_end_line": 882,
+   "text": "--- turn 877 ---\nbut ngl pharmacy was a worthless part of biz to cvs health\n\n--- turn 878 ---\nso it doesn't affect main operations\n\n--- turn 879 ---\nactually yea im prolly bullish pharmacy was a waste of time nos\n\n--- turn 880 ---\nthey didn't need it\n\n--- turn 881 ---\nbc most of their money comes from employee benefits\n\n--- turn 882 ---\nwhich have zero attachment to the physical pharmacy",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 48,
+   "channel": "imessage",
+   "session_id": "imessage:38",
+   "window_start_line": 103,
+   "window_end_line": 108,
+   "text": "--- turn 103 ---\nhave been working on this part as well\n\n--- turn 104 ---\nghostty lacked session persistence or durability. kinda temporal/hatchet like durabilkty was wanted + actual disk snapshots so crashes were recoverable at least at output level even if not proc or mem. bad cross ssh mgmt bad pane/tty mgmt. you can i think roughly scrape that panes exist but that's it. no introspection on their coord (window tab pane split hierarchical) or i/o access or other options. needed this\n\n--- turn 105 ---\nand shit no worky on windows\n\n--- turn 106 ---\nhttps://github.com/egoist/gorex\n\n--- turn 107 ---\ni fuck w thus\n\n--- turn 108 ---\nherdr has a nice api for pane/agent mgmt. hopefully this has smt similar to wire to my mosh clients",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 49,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 307,
+   "window_end_line": 312,
+   "text": "--- turn 307 ---\nstop acting like ur some busy person\n\n--- turn 308 ---\nyou rly can't say that given ur an unemployed undecided freshman\n\n--- turn 309 ---\nand i have a masters\n\n--- turn 310 ---\nand yet i have less trouble meeting with people across state lines with full time jobs\n\n--- turn 311 ---\nand yet they do not call me at 2am or multiple times a day as a life advisor\n\n--- turn 312 ---\ndisrespectful n this go w the flow shit does not help ur case",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 50,
+   "channel": "imessage",
+   "session_id": "imessage:879",
+   "window_start_line": 61,
+   "window_end_line": 66,
+   "text": "--- turn 61 ---\nwhat dles any of what you just said mean\n\n--- turn 62 ---\nno isolated fs memory etc\n\n--- turn 63 ---\nprly container\n\n--- turn 64 ---\nno vm or intermediate\n\n--- turn 65 ---\nhowever good base for provider routing instead\n\n--- turn 66 ---\ncall me rnd 9 10",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 51,
+   "channel": "imessage",
+   "session_id": "imessage:75",
+   "window_start_line": 277,
+   "window_end_line": 282,
+   "text": "--- turn 277 ---\nand/or the comfort of a backup option when i've never said yes to that\n\n--- turn 278 ---\nand/or any more emotional support answerings which was multiple fimes a day the last 2months\n\n--- turn 279 ---\nyou must respect the friendship\n\n--- turn 280 ---\nwhich you couldn't even tell your mom the thing thst publically defines my life the most\n\n--- turn 281 ---\nhence you don't listen to a thing i say\n\n--- turn 282 ---\ncase and point w deflective answer",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 52,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "text": "--- turn 19 ---\nturn 18 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 20 ---\nturn 19 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 21 ---\nturn 20 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 22 ---\nturn 21 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 23 ---\nturn 22 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 24 ---\nturn 23 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 53,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "text": "--- turn 19 ---\nturn 18 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 20 ---\nturn 19 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 21 ---\nturn 20 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 22 ---\nturn 21 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 23 ---\nturn 22 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 24 ---\nturn 23 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 54,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "text": "--- turn 25 ---\nturn 24 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 26 ---\nturn 25 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 27 ---\nturn 26 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 28 ---\nturn 27 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 29 ---\nturn 28 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 30 ---\nturn 29 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 55,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "text": "--- turn 13 ---\nturn 12 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 14 ---\nturn 13 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 15 ---\nturn 14 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 16 ---\nturn 15 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 17 ---\nturn 16 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 18 ---\nturn 17 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 56,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 25,
+   "window_end_line": 30,
+   "text": "--- turn 25 ---\nturn 24 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 26 ---\nturn 25 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 27 ---\nturn 26 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 28 ---\nturn 27 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 29 ---\nturn 28 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 30 ---\nturn 29 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 57,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "text": "--- turn 19 ---\nturn 18 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 20 ---\nturn 19 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 21 ---\nturn 20 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 22 ---\nturn 21 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 23 ---\nturn 22 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 24 ---\nturn 23 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 58,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 19,
+   "window_end_line": 24,
+   "text": "--- turn 19 ---\nturn 18 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 20 ---\nturn 19 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 21 ---\nturn 20 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 22 ---\nturn 21 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 23 ---\nturn 22 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 24 ---\nturn 23 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  },
+  {
+   "idx": 59,
+   "channel": "kcode",
+   "session_id": "<TOKEN-REDACTED>",
+   "window_start_line": 13,
+   "window_end_line": 18,
+   "text": "--- turn 13 ---\nturn 12 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 14 ---\nturn 13 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 15 ---\nturn 14 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 16 ---\nturn 15 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 17 ---\nturn 16 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n--- turn 18 ---\nturn 17 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "reference_asks": [],
+   "matched_register_ask_ids": []
+  }
+ ]
+}
