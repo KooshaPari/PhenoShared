@@ -25,7 +25,10 @@
     "**/site/**",
     "**/*.min.js",
     "**/*.min.css",
-    "Cargo.lock"
+    "Cargo.lock",
+    "**/mise.toml",
+    "**/phenotype-versions.toml",
+    "**/trace-gate.toml"
   ],
   "toml": {
     "lineWidth": 120,
