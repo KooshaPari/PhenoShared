@@ -1,5 +1,5 @@
 # TypeScript/Node.js Multi-Stage Build
-FROM node:20-slim as builder
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
@@ -35,7 +35,6 @@ RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 USER appuser
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node --version || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD node --version || exit 1
 
 CMD ["node", "dist/index.js"]

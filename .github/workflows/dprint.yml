@@ -3,9 +3,15 @@
 # is prettier's / oxlint's -- dprint deliberately stays out of those so a
 # fourth formatter never competes with the three already in place.
 #
-# Scope is the files CHANGED in the pull request, not the whole tree: this
-# gates new contributions honestly without failing on pre-existing legacy
-# formatting debt.
+# The two file types are gated differently, on purpose:
+#   Dockerfile -- repo-wide. There are 66 tracked Dockerfiles and all of them
+#     are formatted, so every one of them is checked on every pull request.
+#   TOML -- changed files only. 798 tracked TOML files still carry legacy
+#     formatting, so a whole-repo TOML check would report debt that no pull
+#     request introduced. The changed-files gate keeps new contributions
+#     honest without failing on the backlog.
+#
+# See docs/dprint-scope.md for the measured debt numbers behind that split.
 name: dprint
 
 on:
@@ -43,7 +49,19 @@ jobs:
           sudo install -m 0755 dprint-bin/dprint /usr/local/bin/dprint
           dprint --version
 
-      - name: Resolve changed TOML and Dockerfile files
+      - name: Check every tracked Dockerfile
+        run: |
+          set -euo pipefail
+          git ls-files | grep -Ei '(^|/)Dockerfile' > dockerfiles.txt || true
+          if [ ! -s dockerfiles.txt ]; then
+            echo "No tracked Dockerfile files; skipping the repo-wide Dockerfile check."
+            exit 0
+          fi
+          echo "Checking $(wc -l < dockerfiles.txt) tracked Dockerfile files:"
+          cat dockerfiles.txt
+          xargs -d '\n' -r dprint check --config dprint.json --allow-no-files < dockerfiles.txt
+
+      - name: Resolve changed TOML files
         id: changed
         env:
           BASE_REF: ${{ github.base_ref }}
@@ -51,18 +69,18 @@ jobs:
           set -euo pipefail
           git fetch --no-tags --prune origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
           git diff --name-only --diff-filter=ACMR "origin/${BASE_REF}...HEAD" > all-changed.txt
-          grep -E '\.toml$|Dockerfile' all-changed.txt > changed-files.txt || true
+          grep -E '\.toml$' all-changed.txt > changed-files.txt || true
           if [ ! -s changed-files.txt ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No changed TOML or Dockerfile files; skipping dprint check."
+            echo "No changed TOML files; skipping dprint check."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "Checking:"
             cat changed-files.txt
           fi
 
-      - name: Check formatting of changed files
+      - name: Check formatting of changed TOML files
         if: steps.changed.outputs.changed == 'true'
         run: |
           set -euo pipefail
-          xargs -d '\n' -r dprint check --config dprint.json < changed-files.txt
+          xargs -d '\n' -r dprint check --config dprint.json --allow-no-files < changed-files.txt
