@@ -1,58 +1,82 @@
-# host-ops intent staging — asks-instinct closure ledger (I15)
-# Staging file only. DO NOT apply while host-ops working tree is dirty.
+# host-ops intent staging — asks-instinct closure ledger (I35)
 
-## A. NEXT INTENT NUMBER
-I15. Evidence: highest existing heading in closure/INTENTS.md is `## I14` (line 241); next is I15.
+STATUS: APPLIED 2026-11-13. This file is no longer a staging instruction. It records what was
+applied, why the original instruction was wrong, and what the live rows assert now.
 
-## B. INTENT ENTRY (paste verbatim into closure/INTENTS.md)
+Host-ops commit: `35af87a` ("feat(closure): I35 scores the asks register's committed artifacts, not
+its prose") on `main`, pushed to `KooshaPari/host-ops`.
 
-## I15 — Asks register coverage is measured, not asserted
+## A. Intent number: the staging draft said I15, and that was wrong
 
-**Intent.** From the 2026-11-11 asks-instinct verdict: structural coverage, semantic capture
-(ask-cue and non-ask-cue), the union frame, and ask-cue authorship are each a measured quantity
-with a committed artifact and an executable check, not a carried number; ask-level recall is
-acknowledged as permanently unmeasurable and the operator-gated items stay open.
+The draft read "highest existing heading in `closure/INTENTS.md` is `## I14` (line 241); next is
+I15". Measured against the tree at apply time:
 
-| ID | Deliverable | Closed when |
-|----|-------------|-------------|
-| D15.1 | Structural coverage is a consistent count ratio | evidence/coverage_consistency.json frame_a_set_union reports cited 1938 and denominator 43648 |
-| D15.2 | Ask-cue semantic capture is measured on a random sample | evidence/recall_scored.json reproduces capture_at_5 = 8/60 |
-| D15.3 | Non-ask-cue semantic capture is measured on a random sample | evidence/nonask_scored.json reproduces 2/60 strict |
-| D15.4 | Union frame A is derived in ONE frame | evidence/nonask_scored.json emits union.frame_a with numerator ~4210 and denominator 43648 and explicitly no joint CI claim |
-| D15.5 | Ask-cue authorship is measured, not assumed | evidence/askcue_speaker_scored.json exists with a Wilson interval and single_labeller=true caveat, and the verdict cites the interval rather than a point value |
-| D15.6 | Independent second labeller on both sheets | a second labels file exists for BOTH sheets and an inter-labeller agreement figure is committed |
+```
+grep -cE '^#{2,3}[[:space:]]+I[0-9]+' closure/INTENTS.md   ->  34 headings, I1 .. I34
+grep -c 'I35' closure/INTENTS.md                            ->  0
+grep -c 'I35)' closure/scripts/config.sh                     ->  0
+```
 
-NOTE (operator-gated, no agent can close):
-- 98/98 harvest docs lost (October*.md); ask-level recall permanently unmeasurable.
-- 2 rows with a URL credential parameter (UTT-004428, UTT-004470) await a scrub ruling.
-- Unredacted-history commits e77430b5, f8321714, 4b1f2eb2 await a decision.
+So the draft had been written against a stale tree. I15 was already taken (`PhenoShared container-SDK
+unification`, a registered title with its own rows), and the next free number was **I35**. Applying
+the draft as written would have collided with a live intent, and H1 (no duplicate heading), H4 (no
+duplicate deliverable), and H6 (every heading has a title) would each have caught it only after the
+collision was written.
 
-## C. ROW CALLS (add to closure/scripts/closure-check; STATE = NOT_RUN until artifact committed)
+Applied as **I35**, with deliverables **D35.1 .. D35.8**.
 
-row D15.1 I15 NOT_RUN "coverage_consistency.json frame_a_set_union cited=1938 denom=43648 not yet wired as a check" "evidence/coverage_consistency.json"
-row D15.2 I15 NOT_RUN "recall_scored.json capture_at_5=8/60 not yet wired as a check" "evidence/recall_scored.json"
-row D15.3 I15 NOT_RUN "nonask_scored.json capture_at_5 strict=2/60 not yet wired as a check" "evidence/nonask_scored.json"
-row D15.4 I15 NOT_RUN "nonask_scored.json union.frame_a ~4210/43648 not yet wired as a check" "evidence/nonask_scored.json"
-row D15.5 I15 NOT_RUN "askcue_speaker_scored.json exists (operator 52/60, Wilson 75.8-93.1) but is not committed and not wired as a check" "evidence/askcue_speaker_scored.json"
-row D15.6 I15 NOT_RUN "no second-labeller file for either sheet" "evidence/*_speaker_sheet.json"
+## B. What the draft asserted that was no longer true
 
-## D. config.sh CHANGE
+The draft's placeholder rows were written before several artifacts existed, so pasting them would
+have published NOT_RUN for work that was already done and a wrong number for a key that never
+existed. Corrections made at apply time, each re-derived from the artifact:
 
-In closure/scripts/config.sh, intent_title(), add before the `*)` line:
-    I15) echo "Asks register coverage is measured, not asserted" ;;
+| Draft claim | Measured at apply time |
+|---|---|
+| D15.4 "union.frame_a ~4210/43648" | The key is `union_frame_a`, not `union`; it holds `ask_cue_captures` 1176 + `non_ask_captures` 1096 over `total_units` 43648 = 9.65 pct, with an `interval_caveat` saying the bounds are a sensitivity range and "not a joint confidence interval" |
+| D15.5 "operator 52/60 … not committed and not wired as a check" | `askcue_speaker_scored.json` is committed; the Wilson interval is [0.7583, 0.9309] on 52/60 |
+| D15.6 "no second-labeller file for either sheet" | `precision_pair_scored.json` exists: 46 exact of 60, Cohen kappa 0.4290, 14 disagreements |
+| implicit: recall is unmeasurable | `recall_asklevel_scored.json` measures iMessage 25/40 = 0.6250 [0.4703, 0.7578], and reports `harness` and `kcode` as `measured: false` with a stated reason rather than as 0.0 |
 
-## E. APPLY ORDER
+## C. What the applied check does
 
-1. Verify host-ops working tree is clean: `git -C ~/CodeProjects/host-ops status --porcelain` must be empty.
-2. Append the I15 intent entry (Section B) to closure/INTENTS.md.
-3. Add the six row calls (Section C) to closure/scripts/closure-check.
-4. Add the I15 case to closure/scripts/config.sh intent_title() (Section D).
-5. Run `closure/scripts/closure-check` (regenerates closure/TREE.md + closure/STATE.json).
-6. Commit INTENTS.md + closure-check + config.sh + TREE.md + STATE.json together.
-7. NEVER run a second scheduler (one ledger, one evaluator).
+`closure/scripts/checks/asks.sh` (sourced by `closure-check` right after the kcode-protection
+module). It materialises eight artifacts from branch `feat/researchledger-ingest-v2` of PhenoShared,
+preferring the committed blob (`git show <branch>:<path>`) and falling back to the canonical
+worktree; every row names which provenance served. A python program then re-derives each published
+value and prints `D35.n <STATE> <detail>`; bash turns those into `row()` calls.
 
-## F. GUARD LINE
+State semantics, which are the point of the intent: a missing artifact is `NOT_RUN`, an unparseable
+one is `UNKNOWN`, a deliverable the program did not print is `UNKNOWN`. None of those can be `PASS`.
 
-DO NOT APPLY while closure/INTENTS.md, closure/STATE.json, closure/TREE.md, closure/scripts/closure-check or closure/scripts/desk-probe.sh are modified -- that is another actor's in-flight D11.4 watchdog work.
-file_path">
-/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoShared-space/feat/researchledger-ingest-v2/wtree/docs/sessions/2026-11-11-asks-instinct-closure-ledger/evidence/hostops_intent_staging.md
+Negative-controlled before wiring in:
+
+| Mutation | Result |
+|---|---|
+| `frame_a_set_union.cited` back to 3463 (the retracted 8.0 pct) | D35.1 FAIL, other seven unchanged |
+| iMessage recall moved to 20/40 | D35.7 FAIL |
+| `decision_reason` restored to the hardcoded "NOT_RUN (documents lost)" | D35.8 FAIL |
+| artifacts absent | all eight NOT_RUN |
+
+## D. Wiring performed
+
+1. `closure/INTENTS.md`: appended the `## I35` heading, an Intent paragraph, and the D35.1 .. D35.8
+   table. The registry is append-only here; nothing above I35 was edited.
+2. `closure/scripts/config.sh`: added `I35) echo "Asks register coverage is measured with
+   re-derivable artifacts, and the publication gate is a computed decision" ;;`.
+3. `closure/scripts/closure-check`: sourced `checks/asks.sh` after `checks/kcode-protection.sh`.
+4. `closure/scripts/check-intent-ids.sh`: run, and it passes on the applied tree:
+   `H1 PASS 35 unique intent headings`, `H2 PASS every emitted intent id has a heading`,
+   `H4 PASS no deliverable id is emitted from two files`, `H5 PASS 28 modules, all reachable`,
+   `H6 PASS 35 declared intents, all carry a registered title`.
+
+## E. What is NOT done here
+
+`closure/TREE.md` and `closure/STATE.json` are generated by the sanctioned scheduler, not by hand.
+The `I35` cells appear after the next `closure/scripts/closure-scheduled` run, which evaluates
+`origin/main` in a throwaway worktree and writes the rendered pair back path-scoped. A manual
+`closure-check` cannot produce them: the render refuses to publish from a manual evaluation
+(`SKIPPED_MANUAL_EVAL_NOT_ALLOWED`) and a manual scratch render is a read-only diagnostic that
+writes no real artifact. This is the ledger's own rule (one ledger, one evaluator, one scheduler),
+and it is stated here so nobody reads the absence of an I35 block in TREE.md as a failure of the
+check.
