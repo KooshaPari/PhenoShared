@@ -41,6 +41,38 @@ pub struct LaunchOptions {
     pub connect_timeout: Duration,
 }
 
+/// Environment variable that overrides the launch connect budget, in seconds.
+///
+/// A busy host can take far longer than the default to publish a DevTools
+/// endpoint (macOS Spotlight and WindowServer contention are the classic
+/// cause), which fails an entire test binary for reasons unrelated to the
+/// code under test. CI therefore raises the budget for its test step without
+/// changing production behaviour, which keeps the 20s default.
+pub const LAUNCH_TIMEOUT_ENV: &str = "SUBSTRATE_BROWSER_LAUNCH_TIMEOUT_SECS";
+
+/// The default launch connect budget.
+pub const DEFAULT_CONNECT_TIMEOUT: Duration = Duration::from_secs(20);
+
+/// Resolve the launch connect budget from the environment.
+///
+/// Falls back to [`DEFAULT_CONNECT_TIMEOUT`] when the variable is unset,
+/// empty, unparseable, or zero: a malformed override must never panic and
+/// must never disable the wait entirely.
+fn connect_timeout_from_env() -> Duration {
+    parse_connect_timeout(std::env::var(LAUNCH_TIMEOUT_ENV).ok().as_deref())
+}
+
+/// Interpret a raw override value, falling back to the default.
+///
+/// Split out from [`connect_timeout_from_env`] so the fallback rules are
+/// testable without mutating the process environment.
+fn parse_connect_timeout(raw: Option<&str>) -> Duration {
+    raw.and_then(|raw| raw.trim().parse::<u64>().ok())
+        .filter(|secs| *secs > 0)
+        .map(Duration::from_secs)
+        .unwrap_or(DEFAULT_CONNECT_TIMEOUT)
+}
+
 impl LaunchOptions {
     /// Options for a headless browser using `user_data_dir`.
     pub fn headless(user_data_dir: impl Into<PathBuf>) -> Self {
@@ -48,7 +80,7 @@ impl LaunchOptions {
             user_data_dir: user_data_dir.into(),
             headless: true,
             extra_args: Vec::new(),
-            connect_timeout: Duration::from_secs(20),
+            connect_timeout: connect_timeout_from_env(),
         }
     }
 
@@ -407,4 +439,43 @@ fn which(name: &Path) -> bool {
         let candidate = dir.join(name);
         candidate.is_file()
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn launch_timeout_defaults_when_unset() {
+        assert_eq!(parse_connect_timeout(None), DEFAULT_CONNECT_TIMEOUT);
+        assert_eq!(DEFAULT_CONNECT_TIMEOUT, Duration::from_secs(20));
+    }
+
+    #[test]
+    fn launch_timeout_accepts_a_positive_override() {
+        assert_eq!(parse_connect_timeout(Some("90")), Duration::from_secs(90));
+        assert_eq!(
+            parse_connect_timeout(Some("  120  ")),
+            Duration::from_secs(120)
+        );
+    }
+
+    #[test]
+    fn launch_timeout_falls_back_on_malformed_values() {
+        for raw in [
+            "",
+            "   ",
+            "abc",
+            "-5",
+            "1.5",
+            "0",
+            "999999999999999999999999",
+        ] {
+            assert_eq!(
+                parse_connect_timeout(Some(raw)),
+                DEFAULT_CONNECT_TIMEOUT,
+                "malformed override {raw:?} must fall back to the default, not panic"
+            );
+        }
+    }
 }
