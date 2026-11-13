@@ -29,7 +29,7 @@ jobs:
       has_security: ${{ steps.detect.outputs.has_security }}
       has_trunk: ${{ steps.detect.outputs.has_trunk }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
 
@@ -114,7 +114,7 @@ jobs:
     # Measured green on 2026-11-12: `python3 tools/sdk-catalog/check.py` prints
     # "PASS: 0 violation(s) across the checked rules" (exit 0).
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # tools/sdk-catalog/check.py recomputes the layer edges with
       # `cargo metadata --no-deps --offline`. Without a cargo on PATH that call
       # fails and the R2/R3 rules would report PASS against an empty package
@@ -132,7 +132,7 @@ jobs:
     # HARD gate. Measured green on 2026-11-12: `cargo deny --all-features check`
     # reported "advisories ok, bans ok, licenses ok, sources ok" (exit 0).
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
       - name: cargo-deny check
         # v1 pins cargo-deny 0.14.21, which cannot parse the RustSec advisory
@@ -157,7 +157,7 @@ jobs:
     if: needs.detect.outputs.has_python == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.11"
@@ -196,7 +196,7 @@ jobs:
     if: needs.detect.outputs.has_go == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Verify every go.mod is declared or excluded
         run: python3 scripts/ci/check-go-modules.py
 
@@ -220,7 +220,7 @@ jobs:
       run:
         working-directory: ${{ matrix.module }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
@@ -261,7 +261,7 @@ jobs:
     if: needs.detect.outputs.has_typescript == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # The repo is bun-managed (packageManager: bun@1.3.10). npm cannot
       # resolve the root package.json's "workspace:*" dependency, so the old
       # npm ci / npm install pair aborted before lint or test ever ran.
@@ -286,7 +286,7 @@ jobs:
     if: needs.detect.outputs.has_security == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       - name: gitleaks
@@ -305,7 +305,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4
         with:
           fail-on-severity: low
@@ -314,7 +314,7 @@ jobs:
     name: Registry Invariant (absorption claims)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: self-test analyzer
         # RUNNER_TEMP is set on every runner; job-level `env` cannot use the
         # `runner` context (build-time "Unrecognized named-value" -> run
