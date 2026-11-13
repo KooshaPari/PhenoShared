@@ -10,8 +10,15 @@ permissions:
   contents: read
 
 concurrency:
+  # Cancel superseded runs on PULL REQUESTS only.
+  #
+  # `cargo-check` below is a MERGE-REQUIRED branch-protection context on main.
+  # With `cancel-in-progress: true` on main, each newer push cancelled the run
+  # that was about to report that context (measured 2026-11-13: runs 1883-1880
+  # on main were all `cancelled`). A required context that a newer push can
+  # kill is not a gate.
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   changes:
@@ -47,9 +54,22 @@ jobs:
           cache: true
       - run: go vet ./...
 
+  # MERGE-REQUIRED: branch protection on main requires the literal context
+  # string `cargo-check`, which is this job's name. A required context may not
+  # be conditional, so this job must run on every push to main and every PR:
+  #
+  #   * It previously carried `needs: changes` + `if: needs.changes.outputs.rust
+  #     == 'true'`. Any push that touched no Rust/toolchain path skipped the job,
+  #     and a skipped job creates NO check run, so the required context stayed
+  #     "Expected" forever. Measured 2026-11-13: the last main pushes were
+  #     docs/bundles-only (df959d2c4, 0becd7e0) and runs 1886 and 1885 both show
+  #     `cargo-check -> skipped`; no run in the last 10 on main reached a
+  #     verdict for this context. `make check (E1.6 ...)` lives inside this job,
+  #     which is why that step also never ran.
+  #
+  # The gate's CONTENT is unchanged: same toolchain pin, same `make check`,
+  # same fail-on-error. Only the condition that could suppress it is gone.
   cargo-check:
-    needs: changes
-    if: needs.changes.outputs.rust == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -149,7 +169,14 @@ jobs:
         uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2
         with:
           tool: cargo-nextest
+      # Host contention (macOS Spotlight / WindowServer, or a loaded shared
+      # runner) can push a real Chrome launch past the product's 20s default
+      # DevTools-endpoint budget. That is infrastructure latency, not a
+      # product defect, so the budget is raised for this step only; the
+      # shipped default stays 20s (crates/substrate-browser-cdp/src/launch.rs).
       - name: 'cargo nextest run --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration targets; ci profile)'
+        env:
+          SUBSTRATE_BROWSER_LAUNCH_TIMEOUT_SECS: "90"
         run: cargo nextest run --workspace --profile ci --locked --no-fail-fast
       - name: 'Upload cargo-nextest JUnit report (target/nextest/ci/junit.xml)'
         if: always()

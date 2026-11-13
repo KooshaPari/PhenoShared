@@ -62,9 +62,15 @@ fn assert_json_gate_before_host_watch(raw: &str, context: &str) {
 /// FR-007 / AC-007.45 — live `health.status` dispatch carries gate + host_watch siblings.
 #[tokio::test]
 async fn fr007_ipc_health_status_gate_host_watch_live() {
-    let handler = sharecli_ipc::handler::Handler::new()
-        .await
-        .expect("Handler::new");
+    let handler = {
+        let path = std::env::temp_dir().join(format!(
+            "sharecli-test-fr007_ipc_health_status_gate_host_watch-{}.sqlite",
+            std::process::id()
+        ));
+        sharecli_ipc::handler::Handler::with_session_store(
+            sharecli_session::SessionStore::open(&path).expect("SessionStore::open"),
+        )
+    };
     let resp = handler
         .dispatch(r#"{"id":1,"method":"health.status","params":{}}"#)
         .await;

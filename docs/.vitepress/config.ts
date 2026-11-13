@@ -8,6 +8,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig } from 'vitepress'
+import { escapeAnglePlaceholders } from '../../packages/docs/src/markdown/escape-angle-placeholders.ts'
 import { escapeCodeInterpolations } from '../../packages/docs/src/markdown/escape-code-interpolations.ts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -23,7 +24,13 @@ export default defineConfig({
   markdown: {
     // Keep `{{ ... }}` inside code samples from being compiled as Vue
     // interpolations -- see packages/docs/src/markdown/escape-code-interpolations.ts
-    config: escapeCodeInterpolations,
+    // Escape bare angle-bracket placeholders (`<REDACTED>`, `<T>`, `<repo>` ...)
+    // that would otherwise reach the Vue template compiler as unclosed HTML
+    // elements -- see packages/docs/src/markdown/escape-angle-placeholders.ts
+    config: (md) => {
+      escapeCodeInterpolations(md)
+      escapeAnglePlaceholders(md)
+    },
   },
 
   vite: {

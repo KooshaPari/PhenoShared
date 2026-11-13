@@ -136,9 +136,15 @@ fn assert_json_gate_host_watch_pool_only(raw: &str, context: &str) {
 /// FR-007 / AC-007.78 — live `health.status` dispatch embeds pool + status siblings.
 #[tokio::test]
 async fn fr007_ipc_health_status_pool_status_live() {
-    let handler = sharecli_ipc::handler::Handler::new()
-        .await
-        .expect("Handler::new");
+    let handler = {
+        let path = std::env::temp_dir().join(format!(
+            "sharecli-test-fr007_ipc_health_status_pool_status-{}.sqlite",
+            std::process::id()
+        ));
+        sharecli_ipc::handler::Handler::with_session_store(
+            sharecli_session::SessionStore::open(&path).expect("SessionStore::open"),
+        )
+    };
     let resp = handler
         .dispatch(r#"{"id":1,"method":"health.status","params":{}}"#)
         .await;
@@ -154,9 +160,15 @@ async fn fr007_ipc_health_status_pool_status_live() {
 /// FR-007 / AC-007.78 — live `pool.status` dispatch embeds nested status only.
 #[tokio::test]
 async fn fr007_ipc_pool_status_nested_status_live() {
-    let handler = sharecli_ipc::handler::Handler::new()
-        .await
-        .expect("Handler::new");
+    let handler = {
+        let path = std::env::temp_dir().join(format!(
+            "sharecli-test-fr007_ipc_pool_status_nested_status-{}.sqlite",
+            std::process::id()
+        ));
+        sharecli_ipc::handler::Handler::with_session_store(
+            sharecli_session::SessionStore::open(&path).expect("SessionStore::open"),
+        )
+    };
     let resp = handler
         .dispatch(r#"{"id":2,"method":"pool.status","params":{}}"#)
         .await;
@@ -172,9 +184,15 @@ async fn fr007_ipc_pool_status_nested_status_live() {
 /// FR-007 / AC-007.78 — live `status.snapshot` dispatch embeds nested pool only.
 #[tokio::test]
 async fn fr007_ipc_status_snapshot_nested_pool_live() {
-    let handler = sharecli_ipc::handler::Handler::new()
-        .await
-        .expect("Handler::new");
+    let handler = {
+        let path = std::env::temp_dir().join(format!(
+            "sharecli-test-fr007_ipc_status_snapshot_nested_pool-{}.sqlite",
+            std::process::id()
+        ));
+        sharecli_ipc::handler::Handler::with_session_store(
+            sharecli_session::SessionStore::open(&path).expect("SessionStore::open"),
+        )
+    };
     let resp = handler
         .dispatch(r#"{"id":3,"method":"status.snapshot","params":{}}"#)
         .await;
