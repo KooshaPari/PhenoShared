@@ -35,6 +35,12 @@ lint:
     - linters: [markdownlint]
       paths:
         - docs/audits/**
+    # prettier owns markdown here and its formatter rewrites tables and code
+    # fences. These are verbatim evidence artefacts; reformatting them would
+    # churn the record for no reader benefit.
+    - linters: [prettier]
+      paths:
+        - docs/audits/**
   # Each file extension is owned by exactly ONE formatter.
   # oxfmt (the `format` command of the oxlint definition) owns TypeScript/JavaScript:
   #   ts, tsx, mts, js, jsx, cjs, mjs
