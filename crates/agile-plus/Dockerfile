@@ -5,9 +5,9 @@
 # the root [workspace].members (see docs/remediation/OPS.md).
 #
 # Build:
-#   docker build -f Dockerfile -t agileplus-cli:local .
+# docker build -f Dockerfile -t agileplus-cli:local .
 # Run:
-#   docker run --rm agileplus-cli:local agileplus --version
+# docker run --rm agileplus-cli:local agileplus --version
 
 # syntax=docker/dockerfile:1
 

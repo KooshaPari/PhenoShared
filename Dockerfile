@@ -58,22 +58,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Create unrooted daemon user.
 RUN groupadd --gid 1000 fabric && \
-    useradd  --uid 1000 --gid fabric --shell /bin/false --create-home fabric
+    useradd --uid 1000 --gid fabric --shell /bin/false --create-home fabric
 
 # State directory for SQLite database and workspace data.
 RUN mkdir -p /var/lib/fabric && chown fabric:fabric /var/lib/fabric
 
 # Copy binaries from builder.
 COPY --from=builder /build/target/release/fabric-daemon /usr/local/bin/fabric-daemon
-COPY --from=builder /build/target/release/fabric-cli     /usr/local/bin/fabric-cli
+COPY --from=builder /build/target/release/fabric-cli /usr/local/bin/fabric-cli
 
 # Expose wire-server port.
 EXPOSE 9400
 
 # Health check: send a health_check message over the wire protocol.
 # fabric-daemon health --connect uses the TCP wire protocol on port 9400.
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD /usr/local/bin/fabric-cli health --connect 127.0.0.1:9400 || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD /usr/local/bin/fabric-cli health --connect 127.0.0.1:9400 || exit 1
 
 USER fabric
 
