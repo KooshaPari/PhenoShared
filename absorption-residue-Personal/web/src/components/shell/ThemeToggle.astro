@@ -1,0 +1,37 @@
+<button type="button" class="cockpit-control shrink-0" data-theme-toggle>Dark mode</button>
+<script>
+  const query = window.matchMedia('(prefers-color-scheme: dark)');
+  const key = 'cockpit-theme';
+  let explicit: 'light' | 'dark' | null = null;
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored === 'light' || stored === 'dark') explicit = stored;
+    else if (stored === null) {
+      const legacy = localStorage.getItem('job-cockpit-theme');
+      if (legacy === 'light' || legacy === 'dark') explicit = legacy;
+    }
+  } catch {}
+  function apply() {
+    const mode = explicit ?? (query.matches ? 'dark' : 'light');
+    document.documentElement.dataset.theme = mode;
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach(button => {
+      button.textContent = mode === 'dark' ? 'Light mode' : 'Dark mode';
+      button.setAttribute('aria-label', `Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`);
+    });
+  }
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach(button => {
+    button.addEventListener('click', () => {
+      explicit = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem(key, explicit); } catch {}
+      apply();
+    });
+  });
+  query.addEventListener('change', apply);
+  window.addEventListener('storage', event => {
+    if (event.key === key || event.key === null) {
+      explicit = event.newValue === 'dark' || event.newValue === 'light' ? event.newValue : null;
+      apply();
+    }
+  });
+  apply();
+</script>

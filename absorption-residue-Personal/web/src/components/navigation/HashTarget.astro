@@ -1,0 +1,24 @@
+<script>
+  // Compatibility with old section hashes, including content inserted by React.
+  const aliases: Record<string, string> = { base: 'trends', deals: 'trends', buy: 'planner', half: 'half-value',
+    al: 'insights', cad: 'insights', deal: 'insights' };
+  const allowed = new Set(['catalog', 'trends', 'insights', 'half-value', 'planner', ...Object.keys(aliases)]);
+  let observer: MutationObserver | undefined, frame: number | undefined;
+  function seek() {
+    observer?.disconnect(); if (frame !== undefined) cancelAnimationFrame(frame);
+    let hash: string;
+    try { hash = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    if (!allowed.has(hash)) return;
+    const id = aliases[hash] ?? hash;
+    if (id !== hash) history.replaceState(null, '', location.pathname + location.search + '#' + id);
+    function find() {
+      const target = document.getElementById(id);
+      if (!target) return false;
+      observer?.disconnect(); frame = requestAnimationFrame(() => target!.scrollIntoView({ block: 'start', behavior: 'instant' }));
+      return true;
+    }
+    if (!find()) { observer = new MutationObserver(find); observer.observe(document.getElementById('main') ?? document.body, { childList: true, subtree: true }); }
+  }
+  seek(); window.addEventListener('hashchange', seek);
+  window.addEventListener('pagehide', () => { observer?.disconnect(); if (frame !== undefined) cancelAnimationFrame(frame); }, { once: true });
+</script>

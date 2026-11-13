@@ -1,0 +1,16 @@
+[Unit]
+Description=Dot intake spool poller (relay writer feed)
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/root/dot-intake.env
+WorkingDirectory=/root/job-cockpit/tools/dot-relay-writer
+ExecStart=/usr/bin/python3 -m intake.poller
+Restart=on-failure
+RestartSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,35 @@
+{
+  "name": "job-cockpit-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "stage": "node scripts/stage-public.mjs",
+    "dev": "npm run stage && astro dev",
+    "check": "astro check",
+    "test": "npm run build && node --experimental-strip-types --test tests/*.test.ts",
+    "build": "npm run stage && npm run check && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "7.0.1",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.3.8",
+    "clsx": "2.1.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwind-merge": "3.7.0",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "6.0.3",
+    "linkedom": "^0.18.11"
+  }
+}

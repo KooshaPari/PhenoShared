@@ -1,0 +1,21 @@
+---
+interface Props { current?: 'jobs' | 'projects' | 'parent' | 'dispensary' | 'economics' | 'asks' | 'status'; }
+const { current } = Astro.props;
+const links = [
+  { id: 'asks', href: '/asks/', label: 'Asks' },
+  { id: 'jobs', href: '/', label: 'Jobs' },
+  { id: 'projects', href: '/projects/', label: 'Projects' },
+  { id: 'parent', href: '/parent/', label: 'Parent' },
+  { id: 'dispensary', href: '/dispensary/', label: 'Dispensary' },
+  { id: 'economics', href: '/economics/', label: 'Economics' },
+  { id: 'status', href: '/status/', label: 'Status' },
+];
+---
+<nav aria-label="Cockpits" class="mb-7 flex flex-wrap gap-2">
+  {links.map(link => (
+    <a href={link.href} aria-current={current === link.id ? 'page' : undefined}
+      class:list={['cockpit-control', current === link.id && 'bg-primary! text-primary-foreground! border-primary!']}>
+      {link.label}
+    </a>
+  ))}
+</nav>

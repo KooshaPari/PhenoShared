@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+import SiteNav from '../components/shell/SiteNav.astro';
+import ThemeToggle from '../components/shell/ThemeToggle.astro';
+interface Props {
+  title: string;
+  description?: string;
+  current?: 'jobs' | 'projects' | 'parent' | 'dispensary' | 'economics' | 'asks' | 'status';
+}
+const { title, description, current } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title} · Cockpit</title>
+    <slot name="head" />
+    {description && <meta name="description" content={description} />}
+    <script is:inline>
+      (() => {
+        let theme;
+        try {
+          theme = localStorage.getItem('cockpit-theme');
+          if (theme === null) theme = localStorage.getItem('job-cockpit-theme');
+        } catch {}
+        document.documentElement.dataset.theme = theme === 'dark' ||
+          (theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)
+          ? 'dark' : 'light';
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="cockpit-shell">
+      <SiteNav current={current} />
+      <main id="main" tabindex="-1">
+        <header class="mb-6 flex flex-wrap items-start justify-between gap-4">
+          <div class="min-w-0">
+            <h1>{title}</h1>
+            {description && <p class="mt-3 text-muted-foreground">{description}</p>}
+            <slot name="metadata" />
+          </div>
+          <ThemeToggle />
+        </header>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

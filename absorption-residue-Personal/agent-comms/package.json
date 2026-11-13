@@ -1,0 +1,13 @@
+{
+  "name": "agent-comms-receiver",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Zero-dependency recipient -> Herdr pane mapping and loopback wake receiver.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test receiver/test/"
+  }
+}

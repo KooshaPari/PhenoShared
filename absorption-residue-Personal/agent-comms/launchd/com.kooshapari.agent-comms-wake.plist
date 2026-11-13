@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.example.agent-comms-wake.plist — launchd job for the agent-comms wake
+  receiver (job-cockpit `agent-comms/receiver/src/index.js`).
+
+  WHY THIS JOB EXISTS. The receiver is the CONSUMER half of the agent-comms
+  bridge. PhenoBot (the producer) POSTs a receipt to it over loopback and only
+  treats the message as delivered when the receiver answers
+  `200 {status:"awakened", receiptId}`. Without a supervisor the receiver is
+  simply not running, so every wake is refused and every message is retained
+  for replay. This job is what makes the bridge actually RUN rather than merely
+  exist in the tree.
+
+  SAME HARDENING AS THE EXISTING JOBS (learned the hard way, twice):
+
+    * SuccessfulExit=false in KeepAlive parks on a clean exit; only a real
+      crash respawns. A plain KeepAlive=true respawns forever after a clean
+      shutdown.
+    * ThrottleInterval=30 prevents a respawn storm. A sustained failure
+      produces at most ~2 respawns per minute, not thousands per second. (The
+      previous bridge incarnation crash-looped 4414 times before it was
+      rolled back.)
+    * `exec` inside the zsh wrapper replaces the shell with node, so SIGTERM
+      from launchctl reaches node directly. Without `exec` the shell swallows
+      the signal and node never sees it.
+    * The env file is sourced with `set -a; . <file>; set +a` so every variable
+      it defines is exported.
+
+  SECRETS. The bearer token lives in the env file, NOT in this plist and NOT
+  in the repository. This plist contains no credential.
+
+  PLACEHOLDERS (substituted by install.sh before the plist is written to
+  ~/Library/LaunchAgents/; do NOT hand-edit the installed copy):
+
+    __NODE__    absolute path to the node binary, resolved at install time
+    __REPO__    absolute path to the job-cockpit repo root
+    __ENV__     absolute path to the env file holding WAKE_RECEIVER_TOKEN
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.example.agent-comms-wake</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>-c</string>
+        <string>set -a; . __ENV__; set +a; exec __NODE__ __REPO__/agent-comms/receiver/src/index.js</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__REPO__</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <key>StandardOutPath</key>
+    <string>__LOG_DIR__/wake.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__LOG_DIR__/wake.err.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>__HOME__</string>
+        <key>USER</key>
+        <string>__USER__</string>
+        <key>LOGNAME</key>
+        <string>__USER__</string>
+    </dict>
+</dict>
+</plist>
