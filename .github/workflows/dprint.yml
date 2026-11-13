@@ -1,0 +1,68 @@
+# Formatting gate for the file types dprint owns at the repo root: TOML and
+# Dockerfile. Markdown is markdownlint's, Python is ruff's, and the JS/TS tree
+# is prettier's / oxlint's -- dprint deliberately stays out of those so a
+# fourth formatter never competes with the three already in place.
+#
+# Scope is the files CHANGED in the pull request, not the whole tree: this
+# gates new contributions honestly without failing on pre-existing legacy
+# formatting debt.
+name: dprint
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DPRINT_VERSION: 0.64.3
+
+jobs:
+  dprint:
+    name: dprint (TOML + Dockerfile)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pinned dprint
+        run: |
+          set -euo pipefail
+          base_url="https://github.com/dprint/dprint/releases/download/${DPRINT_VERSION}"
+          asset="dprint-x86_64-unknown-linux-gnu.zip"
+          curl -fsSL -o "$asset" "${base_url}/${asset}"
+          curl -fsSL -o SHASUMS256.txt "${base_url}/SHASUMS256.txt"
+          grep " ${asset}\$" SHASUMS256.txt | sha256sum --check
+          unzip -o -q "$asset" -d dprint-bin
+          sudo install -m 0755 dprint-bin/dprint /usr/local/bin/dprint
+          dprint --version
+
+      - name: Resolve changed TOML and Dockerfile files
+        id: changed
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --prune origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
+          git diff --name-only --diff-filter=ACMR "origin/${BASE_REF}...HEAD" > all-changed.txt
+          grep -E '\.toml$|Dockerfile' all-changed.txt > changed-files.txt || true
+          if [ ! -s changed-files.txt ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changed TOML or Dockerfile files; skipping dprint check."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Checking:"
+            cat changed-files.txt
+          fi
+
+      - name: Check formatting of changed files
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          xargs -d '\n' -r dprint check --config dprint.json < changed-files.txt
