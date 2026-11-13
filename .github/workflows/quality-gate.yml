@@ -169,7 +169,14 @@ jobs:
         uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2
         with:
           tool: cargo-nextest
+      # Host contention (macOS Spotlight / WindowServer, or a loaded shared
+      # runner) can push a real Chrome launch past the product's 20s default
+      # DevTools-endpoint budget. That is infrastructure latency, not a
+      # product defect, so the budget is raised for this step only; the
+      # shipped default stays 20s (crates/substrate-browser-cdp/src/launch.rs).
       - name: 'cargo nextest run --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration targets; ci profile)'
+        env:
+          SUBSTRATE_BROWSER_LAUNCH_TIMEOUT_SECS: "90"
         run: cargo nextest run --workspace --profile ci --locked --no-fail-fast
       - name: 'Upload cargo-nextest JUnit report (target/nextest/ci/junit.xml)'
         if: always()
