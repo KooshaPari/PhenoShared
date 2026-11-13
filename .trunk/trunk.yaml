@@ -27,6 +27,14 @@ runtimes:
     - rust@1.99.0
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
+  # Recovered audit corpora are verbatim point-in-time evidence, not house docs.
+  # Markdownlint's MD013 (80 columns) cannot be satisfied without corrupting the
+  # record, and rewrites of historical evidence are not useful work. Same
+  # rationale as the docs/absorbed-* entries in .markdownlint-cli2.yaml.
+  ignore:
+    - linters: [markdownlint]
+      paths:
+        - docs/audits/**
   # Each file extension is owned by exactly ONE formatter.
   # oxfmt (the `format` command of the oxlint definition) owns TypeScript/JavaScript:
   #   ts, tsx, mts, js, jsx, cjs, mjs
