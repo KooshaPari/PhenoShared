@@ -97,9 +97,9 @@
 schema = "pheno.coverage-membership.v1"
 recorded_at_utc = "2026-11-10T03:01:17Z"
 recorded_at_commit = "7965cb9cee10b8da81fa4968edf1ced6e574d050"
-total_members = 291
+total_members = 292
 measured_members = 258
-excused_members = 33
+excused_members = 34
 measured_source_lines = 418609                                  # investigate: dated snapshot, not a live count
 excused_source_lines = 98089                                    # investigate: dated snapshot, not a live count
 measured_coverable_lines = 69250                                # investigate: dated snapshot, not a live count
@@ -453,4 +453,13 @@ display server: `enigo` 0.6 drives X11 through x11rb and `xcap` 0.9 through
 libwayshot/pipewire/XCB, while the Windows backend is behind the `windows` crate,
 so the headless ubuntu-24.04 runner can only exercise the non-display paths.
 KNOWN COVERAGE GAP.
+"""
+
+"phenotype-agent-contracts" = """
+Absorbed residue from Agentora, landed under absorption-residue-Agentora/rust and
+picked up as a root workspace member through a path dependency. Built and tested
+by the root Quality Gate, but no coverage group owns it. It ships contract types
+and ports with no test suite, so measuring it would add source lines to a group
+without covered lines. Excused as absorbed residue until the tree is adopted into
+crates/ and given tests.
 """
