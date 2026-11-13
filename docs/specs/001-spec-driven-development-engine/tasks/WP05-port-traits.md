@@ -65,11 +65,13 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 **Purpose**: Provide the persistence abstraction for all domain entities. The SQLite adapter (WP06) will implement this trait. The `rebuild_from_git` operation also uses this port.
 
 **Steps**:
+
 1. Create `crates/agileplus-core/src/ports/storage.rs`.
 2. Import domain types: `Feature`, `FeatureState`, `WorkPackage`, `WpState`, `GovernanceContract`, `AuditEntry`, `Evidence`, `PolicyRule`, `Metric`, `WpDependency`.
 3. Define the `StoragePort` trait with the following method groups:
 
 **Feature CRUD**:
+
 - `async fn create_feature(&self, feature: &Feature) -> Result<i64, DomainError>` -- returns new ID
 - `async fn get_feature_by_slug(&self, slug: &str) -> Result<Option<Feature>, DomainError>`
 - `async fn get_feature_by_id(&self, id: i64) -> Result<Option<Feature>, DomainError>`
@@ -78,6 +80,7 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 - `async fn list_all_features(&self) -> Result<Vec<Feature>, DomainError>`
 
 **Work Package CRUD**:
+
 - `async fn create_work_package(&self, wp: &WorkPackage) -> Result<i64, DomainError>`
 - `async fn get_work_package(&self, id: i64) -> Result<Option<WorkPackage>, DomainError>`
 - `async fn update_wp_state(&self, id: i64, state: WpState) -> Result<(), DomainError>`
@@ -87,11 +90,13 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 - `async fn get_ready_wps(&self, feature_id: i64) -> Result<Vec<WorkPackage>, DomainError>` -- WPs whose deps are all `done`
 
 **Audit CRUD**:
+
 - `async fn append_audit_entry(&self, entry: &AuditEntry) -> Result<i64, DomainError>`
 - `async fn get_audit_trail(&self, feature_id: i64) -> Result<Vec<AuditEntry>, DomainError>`
 - `async fn get_latest_audit_entry(&self, feature_id: i64) -> Result<Option<AuditEntry>, DomainError>`
 
 **Evidence + Policy + Metric CRUD**:
+
 - `async fn create_evidence(&self, evidence: &Evidence) -> Result<i64, DomainError>`
 - `async fn get_evidence_by_wp(&self, wp_id: i64) -> Result<Vec<Evidence>, DomainError>`
 - `async fn get_evidence_by_fr(&self, fr_id: &str) -> Result<Vec<Evidence>, DomainError>`
@@ -101,16 +106,18 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 - `async fn get_metrics_by_feature(&self, feature_id: i64) -> Result<Vec<Metric>, DomainError>`
 
 **Governance**:
+
 - `async fn create_governance_contract(&self, contract: &GovernanceContract) -> Result<i64, DomainError>`
 - `async fn get_governance_contract(&self, feature_id: i64, version: i32) -> Result<Option<GovernanceContract>, DomainError>`
 - `async fn get_latest_governance_contract(&self, feature_id: i64) -> Result<Option<GovernanceContract>, DomainError>`
 
-4. Ensure all method signatures use borrowed references for inputs (`&self`, `&Feature`) and owned types for outputs.
-5. Add doc comments to the trait and each method referencing the relevant FR IDs.
+1. Ensure all method signatures use borrowed references for inputs (`&self`, `&Feature`) and owned types for outputs.
+2. Add doc comments to the trait and each method referencing the relevant FR IDs.
 
 **Files**: `crates/agileplus-core/src/ports/storage.rs`
 
 **Validation**:
+
 - `cargo check -p agileplus-core` succeeds.
 - Every entity from `data-model.md` has at least create/get/list coverage.
 - Method signatures are consistent (borrowed inputs, owned outputs, `DomainError` errors).
@@ -122,30 +129,35 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 **Purpose**: Abstract git operations so tests can use an in-memory mock. The Git adapter (WP07) implements this with `git2`.
 
 **Steps**:
+
 1. Create `crates/agileplus-core/src/ports/vcs.rs`.
 2. Import relevant types: `Feature`, `WorkPackage`, and any path/string types needed.
 3. Define the `VcsPort` trait:
 
 **Worktree operations** (FR-010):
+
 - `async fn create_worktree(&self, feature_slug: &str, wp_id: &str) -> Result<PathBuf, DomainError>` -- returns worktree absolute path
 - `async fn list_worktrees(&self) -> Result<Vec<WorktreeInfo>, DomainError>`
 - `async fn cleanup_worktree(&self, worktree_path: &Path) -> Result<(), DomainError>`
 
 **Branch operations**:
+
 - `async fn create_branch(&self, branch_name: &str, base: &str) -> Result<(), DomainError>`
 - `async fn checkout_branch(&self, branch_name: &str) -> Result<(), DomainError>`
 - `async fn merge_to_target(&self, source: &str, target: &str) -> Result<MergeResult, DomainError>`
 - `async fn detect_conflicts(&self, source: &str, target: &str) -> Result<Vec<ConflictInfo>, DomainError>`
 
 **Artifact operations** (FR-014):
+
 - `async fn read_artifact(&self, feature_slug: &str, relative_path: &str) -> Result<String, DomainError>`
 - `async fn write_artifact(&self, feature_slug: &str, relative_path: &str, content: &str) -> Result<(), DomainError>`
 - `async fn artifact_exists(&self, feature_slug: &str, relative_path: &str) -> Result<bool, DomainError>`
 
 **History scanning** (FR-017 support):
+
 - `async fn scan_feature_artifacts(&self, feature_slug: &str) -> Result<FeatureArtifacts, DomainError>`
 
-4. Define supporting types in the same file or a `ports/types.rs`:
+1. Define supporting types in the same file or a `ports/types.rs`:
    - `WorktreeInfo { path: PathBuf, branch: String, feature_slug: String, wp_id: String }`
    - `MergeResult { success: bool, conflicts: Vec<ConflictInfo>, merged_commit: Option<String> }`
    - `ConflictInfo { path: String, ours: Option<String>, theirs: Option<String> }`
@@ -154,6 +166,7 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 **Files**: `crates/agileplus-core/src/ports/vcs.rs`
 
 **Validation**:
+
 - `cargo check -p agileplus-core` succeeds.
 - Worktree path convention matches plan.md: `.worktrees/<feature-slug>-<WP-id>/`.
 - Supporting types are serializable (`#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]`).
@@ -165,6 +178,7 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 **Purpose**: Abstract agent dispatch so different agent backends (Claude Code, Codex, future agents) are interchangeable. The Agent Dispatch adapter (WP08) implements this.
 
 **Steps**:
+
 1. Create `crates/agileplus-core/src/ports/agent.rs`.
 2. Define supporting types:
    - `AgentKind` enum: `ClaudeCode`, `Codex`
@@ -174,17 +188,19 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
    - `AgentStatus` enum: `Pending`, `Running { pid: u32 }`, `WaitingForReview { pr_url: String }`, `Completed { result: AgentResult }`, `Failed { error: String }`
 
 3. Define the `AgentPort` trait:
+
 - `async fn dispatch(&self, task: AgentTask, config: &AgentConfig) -> Result<AgentResult, DomainError>` -- spawn agent, wait for completion
 - `async fn dispatch_async(&self, task: AgentTask, config: &AgentConfig) -> Result<String, DomainError>` -- returns job ID, non-blocking
 - `async fn query_status(&self, job_id: &str) -> Result<AgentStatus, DomainError>`
 - `async fn cancel(&self, job_id: &str) -> Result<(), DomainError>`
 - `async fn send_instruction(&self, job_id: &str, instruction: &str) -> Result<(), DomainError>` -- send follow-up instruction to running agent
 
-4. Add doc comments referencing FR-004, FR-010, FR-011, FR-012, FR-013.
+1. Add doc comments referencing FR-004, FR-010, FR-011, FR-012, FR-013.
 
 **Files**: `crates/agileplus-core/src/ports/agent.rs`
 
 **Validation**:
+
 - `cargo check -p agileplus-core` succeeds.
 - `AgentTask` includes all context an agent needs: WP prompt, worktree path, context files (spec.md, plan.md, data-model.md).
 - `AgentResult` captures everything needed to create evidence records.
@@ -196,6 +212,7 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 **Purpose**: Abstract code review operations. The Review adapter (WP09) implements this with Coderabbit + GitHub API + manual fallback.
 
 **Steps**:
+
 1. Create `crates/agileplus-core/src/ports/review.rs`.
 2. Define supporting types:
    - `ReviewStatus` enum: `Pending`, `InProgress`, `Approved`, `ChangesRequested { comments: Vec<ReviewComment> }`, `Rejected { reason: String }`
@@ -205,6 +222,7 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
    - `PrInfo { url: String, number: u64, title: String, state: String, review_status: ReviewStatus, ci_status: CiStatus }`
 
 3. Define the `ReviewPort` trait:
+
 - `async fn get_review_status(&self, pr_url: &str) -> Result<ReviewStatus, DomainError>`
 - `async fn get_review_comments(&self, pr_url: &str) -> Result<Vec<ReviewComment>, DomainError>`
 - `async fn get_actionable_comments(&self, pr_url: &str) -> Result<Vec<ReviewComment>, DomainError>` -- filter for actionable only
@@ -213,11 +231,12 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 - `async fn await_review(&self, pr_url: &str, timeout_secs: u64) -> Result<ReviewStatus, DomainError>` -- poll until review complete or timeout
 - `async fn await_ci(&self, pr_url: &str, timeout_secs: u64) -> Result<CiStatus, DomainError>`
 
-4. Add doc comments referencing FR-012, FR-013.
+1. Add doc comments referencing FR-012, FR-013.
 
 **Files**: `crates/agileplus-core/src/ports/review.rs`
 
 **Validation**:
+
 - `cargo check -p agileplus-core` succeeds.
 - `ReviewComment` captures enough detail for agent fix loops (file path, line, severity, actionable flag).
 - Poll-based methods have explicit timeout parameters.
@@ -229,6 +248,7 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 **Purpose**: Abstract telemetry operations. The Telemetry adapter (WP10) implements this with OpenTelemetry.
 
 **Steps**:
+
 1. Create `crates/agileplus-core/src/ports/observability.rs`.
 2. Define supporting types:
    - `SpanContext { trace_id: String, span_id: String, parent_span_id: Option<String> }`
@@ -239,27 +259,31 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 3. Define the `ObservabilityPort` trait:
 
 **Tracing**:
+
 - `fn start_span(&self, name: &str, parent: Option<&SpanContext>) -> SpanContext`
 - `fn end_span(&self, ctx: &SpanContext)`
 - `fn add_span_event(&self, ctx: &SpanContext, name: &str, attributes: &[(&str, &str)])`
 - `fn set_span_error(&self, ctx: &SpanContext, error: &str)`
 
 **Metrics**:
+
 - `fn record_counter(&self, name: &str, value: u64, labels: &[(&str, &str)])`
 - `fn record_histogram(&self, name: &str, value: f64, labels: &[(&str, &str)])`
 - `fn record_gauge(&self, name: &str, value: f64, labels: &[(&str, &str)])`
 
 **Logging**:
+
 - `fn log(&self, entry: &LogEntry)`
 - `fn log_info(&self, message: &str)` -- convenience
 - `fn log_warn(&self, message: &str)` -- convenience
 - `fn log_error(&self, message: &str)` -- convenience
 
-4. Note: Tracing and metric methods are synchronous (not async) because telemetry should never block business logic. Fire-and-forget semantics.
+1. Note: Tracing and metric methods are synchronous (not async) because telemetry should never block business logic. Fire-and-forget semantics.
 
 **Files**: `crates/agileplus-core/src/ports/observability.rs`
 
 **Validation**:
+
 - `cargo check -p agileplus-core` succeeds.
 - Span methods are synchronous.
 - Metric names follow OpenTelemetry naming conventions (dotted lowercase: `agileplus.command.duration_ms`).
@@ -271,8 +295,10 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 **Purpose**: Provide a single import point for all ports. Define application-level service traits that compose multiple ports.
 
 **Steps**:
+
 1. Create or update `crates/agileplus-core/src/ports/mod.rs`.
 2. Add public module declarations:
+
    ```rust
    pub mod storage;
    pub mod vcs;
@@ -280,7 +306,9 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
    pub mod review;
    pub mod observability;
    ```
+
 3. Re-export all traits at the module level:
+
    ```rust
    pub use storage::StoragePort;
    pub use vcs::VcsPort;
@@ -288,8 +316,10 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
    pub use review::ReviewPort;
    pub use observability::ObservabilityPort;
    ```
+
 4. Re-export supporting types that adapters and CLI will need (WorktreeInfo, AgentTask, ReviewComment, etc.).
 5. Optionally define an `AppContext` struct or trait that bundles all ports for dependency injection:
+
    ```rust
    pub struct AppContext {
        pub storage: Box<dyn StoragePort + Send + Sync>,
@@ -299,11 +329,13 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
        pub telemetry: Box<dyn ObservabilityPort + Send + Sync>,
    }
    ```
+
 6. Update `crates/agileplus-core/src/lib.rs` to declare `pub mod ports;`.
 
 **Files**: `crates/agileplus-core/src/ports/mod.rs`, `crates/agileplus-core/src/lib.rs`
 
 **Validation**:
+
 - `cargo check --workspace` succeeds (all adapter crates can see port traits).
 - `use agileplus_core::ports::StoragePort;` works from any adapter crate.
 - `AppContext` compiles with trait object bounds.
@@ -334,6 +366,7 @@ Define all port traits in `crates/agileplus-core/src/ports/` that adapter crates
 | Timestamp | Action | Agent | Details |
 |-----------|--------|-------|---------|
 | 2026-02-27T00:00:00Z | Prompt generated | system | WP05 prompt created via /spec-kitty.tasks |
+
 - 2026-02-28T09:30:58Z – claude-wp05 – shell_pid=42392 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T09:38:12Z – claude-wp05 – shell_pid=42392 – lane=for_review – Port traits: StoragePort(26), VcsPort(11), AgentPort(5), ReviewPort(7), ObservabilityPort(11), AppContext generic
 - 2026-02-28T09:38:17Z – claude-wp05 – shell_pid=42392 – lane=done – Review passed: all port traits defined, workspace builds, generic AppContext

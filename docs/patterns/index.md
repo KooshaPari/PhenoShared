@@ -51,6 +51,7 @@ features:
 ## Pattern Categories
 
 ### Architecture Patterns
+
 Design patterns for system structure and organization.
 
 - [Hexagonal Architecture](./architecture/hexagonal.md) - Ports and adapters pattern
@@ -59,6 +60,7 @@ Design patterns for system structure and organization.
 - [Saga Pattern](./async/saga.md) - Distributed transaction management
 
 ### Async & Messaging Patterns
+
 Patterns for asynchronous and distributed systems.
 
 - [Outbox Pattern](./async/outbox.md) - Reliable message delivery
@@ -66,11 +68,13 @@ Patterns for asynchronous and distributed systems.
 - [CQRS](./architecture/cqrs.md) - Separating read and write models
 
 ### Authentication & Security Patterns
+
 Patterns for secure authentication and authorization.
 
 - [OAuth 2.0 with PKCE](./auth/oauth-pkce.md) - Modern OAuth with PKCE
 
 ### Caching Patterns
+
 Patterns for effective caching strategies.
 
 - [Cache-Aside](./caching/cache-aside.md) - Lazy loading pattern

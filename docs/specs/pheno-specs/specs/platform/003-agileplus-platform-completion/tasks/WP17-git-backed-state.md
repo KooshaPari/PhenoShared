@@ -61,12 +61,14 @@ Define the export format for git-backed state at `.agileplus/sync/` in the repos
 **File format rules:**
 
 - **Event files (.jsonl)**: One JSON object per line, ordered by `sequence` number (ascending)
+
   ```json
   {"entity_type":"Feature","entity_id":"1","sequence":1,"event_type":"Created","data":{...},"timestamp":"2026-03-02T10:00:00Z"}
   {"entity_type":"Feature","entity_id":"1","sequence":2,"event_type":"Transitioned","data":{...},"timestamp":"2026-03-02T10:00:05Z"}
   ```
 
 - **Snapshot files (.json)**: Latest snapshot only, pretty-printed with sorted keys
+
   ```json
   {
     "entity_type": "Feature",
@@ -79,6 +81,7 @@ Define the export format for git-backed state at `.agileplus/sync/` in the repos
   ```
 
 - **sync_state.json**: SyncMapping entries (vector clocks per peer)
+
   ```json
   {
     "sync_mappings": [
@@ -97,6 +100,7 @@ Define the export format for git-backed state at `.agileplus/sync/` in the repos
   ```
 
 - **device.json**: Local device information
+
   ```json
   {
     "device_id": "uuid-1",
@@ -107,6 +111,7 @@ Define the export format for git-backed state at `.agileplus/sync/` in the repos
   ```
 
 **Deterministic output:**
+
 - All JSON objects use sorted keys (alphabetical order)
 - Pretty-printed with 2-space indentation
 - UTF-8 encoding
@@ -143,6 +148,7 @@ pub struct ExportStats {
 ```
 
 Implementation details:
+
 - Create output directories if missing
 - Use `serde_json::to_string_pretty()` with custom serializer for sorted keys (or use `indexmap` with `sort_keys` feature)
 - Handle large event files by streaming writes (don't load entire JSONL into memory)
@@ -187,6 +193,7 @@ pub struct ImportStats {
 ```
 
 Implementation details:
+
 - Use transaction for atomic import
 - Rollback on error (no partial imports)
 - Skip duplicate events without error

@@ -21,12 +21,14 @@ Firepass provides a single control plane for issuing and validating JWTs, managi
 ## Consequences
 
 ### Positive
+
 - Single auth surface reduces the blast radius of credential compromise
 - Services are stateless with respect to auth — no session stores required
 - RBAC policies are auditable and version-controlled in the Firepass config repo
 - Standard OIDC means any OIDC-compatible IdP (GitHub, Google) can be wired in
 
 ### Negative / Trade-offs
+
 - Firepass is the hard dependency for every service; availability impacts propagate widely
 - Local dev requires either a Firepass stub or live credentials (see `KIMI_API_KEY`/`FIREPASS_BASE_URL` env vars)
 - Key rotation requires coordinated rollout across all consumer services

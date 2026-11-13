@@ -1,4 +1,5 @@
-# Retrospective: 
+# Retrospective
+
 **Feature**: `008-temporal-deployment-workflow-migration` | **Generated**: 2026-04-02
 
 ## Summary

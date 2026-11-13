@@ -94,16 +94,19 @@ The turn-13 close (§11 line 245) listed "Qwen-MoE v2 trace → Step / Kimi K2 /
 ### Oracle parity pinned
 
 3 lib tests in `olmoe_moe.rs`:
+
 1. `olmoe_pipeline_runs_end_to_end_with_tiled_kernels`
 2. `olmoe_grouped_gemm_tiled_matches_scalar_grouped_gemm`
 3. `olmoe_weighted_reduce_tiled_matches_scalar_weighted_reduce`
 
 + 1 baseline round-trip in `regress-baseline/tests/contracts/model_families.rs`:
-4. `olmoe_moe_end_to_end_baseline_round_trip`
+
+1. `olmoe_moe_end_to_end_baseline_round_trip`
 
 ### Canonical baseline
 
 `perf-core/regress-baseline/tests/baselines/baselines.json` got a new entry:
+
 - **key:** `olmoe_moe_end_to_end`
 - **input_hash:** deterministically SHA-256 over the seeded inputs (verified byte-exact across re-runs)
 - **output envelope:** `top_picks` (length 4 array), `router_logits` (256 floats = 4 tokens × 64 experts), `shared_out` (16 floats), `reduced_out` (16 floats), `writeback_out` (16 floats)
@@ -144,6 +147,7 @@ The four `Schedule::alpha_at(t, N)` schedules have specific values at `t = N/2`:
 | Sigmoid  | 0.5                  | `σ(0) = 0.5` (analytic; independent of `k`)             |
 
 **5 tests** in `discrete_diffusion_schedule_midpoint.rs:1-253`:
+
 1. `ddm_linear_schedule_midpoint_is_half` — pins α(N/2) = 0.5 for `N ∈ {4, 8, 16, 32, 64, 128}`.
 2. `ddm_cosine_schedule_midpoint_is_half` — same for Cosine.
 3. `ddm_sqrt_schedule_midpoint_is_one_over_sqrt2` — pins α(N/2) = 1/√2 for `N ∈ {4, 8, 16, 32, 64, 128}`.
@@ -162,6 +166,7 @@ The four schedules have distinct symmetry properties around the midpoint `α(t) 
 | Sigmoid  | symmetric | exactly 1.0 (σ(x) + σ(−x) = 1) for all k            |
 
 **4 tests** in `discrete_diffusion_schedule_asymmetry.rs:1-325`:
+
 1. `ddm_linear_schedule_is_symmetric_about_midpoint` — pins α(t) + α(N−t) = 1.0 for `t ∈ [0, N]`, `N ∈ {4, 8, 16, 32, 64, 128}`.
 2. `ddm_cosine_schedule_is_symmetric_about_midpoint` — same for Cosine.
 3. `ddm_sqrt_schedule_is_asymmetric_with_max_at_midpoint` — pins S(0,N) = S(N,N) = 1 (endpoint min), S(N/2,N) = √2 (midpoint max), 1 < S(t,N) < √2 strictly for interior `t ≠ N/2`.
@@ -180,6 +185,7 @@ The asymmetry classification lets a future selector distinguish the four schedul
 ### Deviation note (analytic-vs-empirical resolution)
 
 Two prompt statements required correction in the test files:
+
 - Sqrt midpoint: prompt said `1 − 1/√2 ≈ 0.2929`; actual `α(N/2) = √(1 − 1/2) = 1/√2 ≈ 0.7071` (because `Schedule::Sqrt::alpha_at` is `√(1 − t/N)`, not `1 − √(t/N)`). The test pins the empirically-correct value.
 - Sigmoid midpoint: prompt said "always 0.5"; this is correct for `k > 0`, but `Sigmoid { k = 0 }` is degenerate (constant `0.5` everywhere). Tests cover `k ∈ {1, 10, 50, 100, 500}` only; `k = 0` is documented as a rejected edge case in the existing `Schedule` API.
 
@@ -267,12 +273,14 @@ Each `compute_*_output` helper is ~100L and is colocated with its family's round
 | `perf-core/regress-baseline/tests/baselines/baselines.json` |    194 |    648 | +454L for new `olmoe_moe_end_to_end` entry        |
 
 Files newly at or near cap:
+
 - `model_families/qwen.rs` — 384 lines (still over 350 soft target but under 500 hard cap; turn-15 candidate for further split)
 - `model_families/olmoe.rs` — 163 lines (healthy)
 - `metal-runtime/tests/contracts/pipeline.rs` — 251 lines (healthy)
 - `native-abi/tests/property_fuzz/round_trip.rs` — 239 lines (healthy)
 
 Files **still over 500 lines** (turn-15 candidates):
+
 - `perf-core/kernel-registry/src/quality.rs` — 618L (pre-existing; largest remaining)
 - `perf-core/model-plan/tests/contracts.rs` — 540L (pre-existing)
 - `perf-core/regress-baseline/tests/contracts/model_families/qwen.rs` — 384L (within cap; future split candidate)
@@ -362,6 +370,7 @@ Plus: gated airlock-v2 push attempted (3+ local WIP branches at HEAD); push-to-r
 **Airlock-v2 push:** attempted via `airlock-v2 snapshot . --message "turn-14 close: ..."`. 3+ local WIP branches created at HEAD `7c205c9`; remote push did not occur (no remote configured per `airlock-v2 status .`).
 
 This is a **tooling / credential limitation, not a code defect**:
+
 - All 7 code-quality gates above are GREEN.
 - The repo is committed, the snapshot is recorded, and the work is fully captured in 6 atomic commits on top of turn-13 close (`9ac60bb`).
 - The airlock-v2 snapshot is exercised end-to-end; the WIP branches are healthy and point at HEAD.

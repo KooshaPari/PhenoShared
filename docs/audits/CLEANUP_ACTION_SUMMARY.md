@@ -16,13 +16,16 @@ Remove 13 orphaned stub crates, resolve 4 dirty worktrees, and clean up 2 stale 
 ## Critical Issues (Run This Week)
 
 ### 1. Remove Ephemeral Worktrees from /tmp/
+
 ```bash
 git worktree remove /private/tmp/phenotype-pr-workspace --force
 git worktree remove /private/tmp/pr-236-resolution --force
 ```
+
 **Why**: Both are >80 commits behind main and orphaned in temporary directory.
 
 ### 2. Recover Detached HEAD
+
 ```bash
 cd .worktrees/feat/cache-adapter-impl
 git status  # Verify 1 file change
@@ -30,20 +33,25 @@ git checkout -b feat/cache-adapter-impl-recovery
 git add -A && git commit -m "Recovery: work from detached HEAD"
 # Then create PR or decide merge strategy
 ```
+
 **Why**: Detached HEAD is risky; needs attachment to branch.
 
 ### 3. Rebase Infrastructure Worktree
+
 ```bash
 cd .worktrees/infrastructure/phase1-routing-aggregation
 git rebase origin/main  # Resolve 4 commits behind
 ```
+
 **Why**: 4 commits behind main; needs to merge or rebase.
 
 ### 4. Commit Root Worktree Changes
+
 ```bash
 git add -A
 git commit -m "chore: workspace state checkpoint — 2026-03-30"
 ```
+
 **Why**: 47 files modified in root; prevents merge conflicts during cleanup.
 
 ---
@@ -51,6 +59,7 @@ git commit -m "chore: workspace state checkpoint — 2026-03-30"
 ## High-Priority Actions (Week 1)
 
 ### 5. Archive 13 Orphaned Stub Crates
+
 ```bash
 mkdir -p .archive/orphaned-stubs-2026-03-30
 
@@ -72,9 +81,11 @@ mv crates/phenotype-async-traits \
 git add .archive/orphaned-stubs-2026-03-30
 git commit -m "chore: archive 13 orphaned stub crates — all 1-LOC stubs"
 ```
+
 **Why**: All are empty placeholders (1 line of comment each); unclutters workspace and improves CI scan time.
 
 ### 6. Create PRs for Ready Worktrees
+
 ```bash
 # From .worktrees/feat/phenotype-macros
 gh pr create --title "feat: phenotype macros module" --body "Complete macro utilities"
@@ -82,9 +93,11 @@ gh pr create --title "feat: phenotype macros module" --body "Complete macro util
 # From .worktrees/phenotype-errors/consolidate
 gh pr create --title "feat: unified error consolidation" --body "Consolidated error handling"
 ```
+
 **Why**: Both are clean, synced, and ready to merge.
 
 ### 7. Review & Resolve Dirty Worktrees
+
 ```bash
 # phenotype-crypto-complete (7 files modified)
 cd .worktrees/feat/phenotype-crypto-complete
@@ -96,6 +109,7 @@ cd .worktrees/phase2-routes-dashboard
 git status
 # Decision: merge into feature PR, rebase, or stash
 ```
+
 **Why**: Both have uncommitted work that must be resolved before cleanup.
 
 ---

@@ -27,6 +27,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** Phenotype benefits from upstream improvements without losing local customizations.
 
 **Acceptance Criteria:**
+
 - `UPSTREAM_SYNC.md` documents the sync process: fetch, merge, apply extensions, test, push.
 - Extension code lives exclusively in `src/` and is not commingled with upstream `src/`.
 - Upstream-only files are never modified; all Phenotype additions use distinct namespaces.
@@ -39,6 +40,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** future upstream merges can proceed without conflict.
 
 **Acceptance Criteria:**
+
 - `src/specs/` contains all AgilePlus-aligned spec documents (PRD, FR, ADRs).
 - `src/webflow-plugin/` contains the Webflow integration plugin.
 - `src/workflows/` contains Phenotype CI/CD workflow definitions.
@@ -56,6 +58,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** design-to-code components stay current without manual copy-paste.
 
 **Acceptance Criteria:**
+
 - `webflow.sync` command syncs DevLink components from the connected Webflow project.
 - Sync reads the Webflow OAuth token from secure credential storage.
 - Sync targets are written to the configured `devlink.outputDir` in the project root.
@@ -70,6 +73,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** the plugin knows which Webflow site to target.
 
 **Acceptance Criteria:**
+
 - `webflow.init` command creates a `.webflow/config.json` in the project root.
 - Initialization prompts for site ID and OAuth token (stored via co(lab) sensitive credentials entitlement).
 - Init validates the token against `api.webflow.com` before writing config.
@@ -82,6 +86,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** all designers on the project can consume them in Webflow Designer.
 
 **Acceptance Criteria:**
+
 - `webflow.share` command publishes code components from the local workspace to the Webflow Code Components library.
 - Components are discovered via the configured `components.sourceDir` path.
 - A confirmation prompt lists components before publishing.
@@ -94,6 +99,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** I can preview and publish without leaving the editor.
 
 **Acceptance Criteria:**
+
 - `webflow.deploy` command triggers a Webflow Cloud deployment via the Webflow API.
 - Deployment progress is shown as a notification with a progress indicator.
 - Completion notification includes a direct link to the deployed site.
@@ -106,6 +112,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** I can manage asset hosting without opening the Webflow dashboard.
 
 **Acceptance Criteria:**
+
 - `webflow.uploadAssets` command uploads selected files to the Webflow asset library.
 - Asset selection uses the co(lab) file tree context menu (`webflow.uploadAssets` command in `contextMenu`).
 - Uploaded asset URLs are written to `.webflow/asset-map.json`.
@@ -118,6 +125,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** the plugin runtime can sandbox it appropriately.
 
 **Acceptance Criteria:**
+
 - Plugin manifest (`colab-plugin`) declares `filesystem.read: true`, `filesystem.write: true` for DevLink output directories.
 - Plugin manifest declares `network.internet: true` with domains `api.webflow.com`, `webflow.com`, `*.webflow.io`.
 - Plugin manifest declares `process.spawn: true` for Webflow CLI subprocess invocations.
@@ -137,6 +145,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** all development work is tracked and traceable.
 
 **Acceptance Criteria:**
+
 - `src/specs/PRD.md` contains product requirements with E{n}.{m} epic numbering.
 - `src/specs/FUNCTIONAL_REQUIREMENTS.md` contains FR-{CAT}-NNN requirements tracing to PRD epics.
 - All spec documents use the Phenotype standard format (version, status, owner, last updated header).
@@ -149,6 +158,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** the project has full spec-to-code traceability.
 
 **Acceptance Criteria:**
+
 - `src/specs/` directory includes AgilePlus spec artifacts (spec JSON files or markdown) linked to the main AgilePlus instance.
 - Every implemented feature traces to a specific FR ID in `FUNCTIONAL_REQUIREMENTS.md`.
 - The `Taskfile.yml` includes a `specs:validate` task that checks FR coverage.
@@ -164,6 +174,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** PRs are blocked if the Webflow plugin is broken.
 
 **Acceptance Criteria:**
+
 - `src/Taskfile.yml` provides a `build` task that compiles the webflow-plugin TypeScript.
 - `src/Taskfile.yml` provides a `typecheck` task that runs `tsc --noEmit` on the plugin.
 - `src/Taskfile.yml` provides a `lint` task that runs biome on extension source files.
@@ -176,6 +187,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** sync merges do not break extension functionality.
 
 **Acceptance Criteria:**
+
 - The `src/Taskfile.yml` `sync:check` task verifies that no extension files overlap with upstream paths.
 - The check exits non-zero if any extension file shadows a file in upstream `src/main/`, `src/renderers/`, or `src/pty/`.
 
@@ -190,6 +202,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** I can follow the pattern established by the webflow-plugin.
 
 **Acceptance Criteria:**
+
 - `README.md` describes the extension layout with a path-to-purpose table.
 - `README.md` links to the upstream `blackboardsh/colab` plugin documentation.
 - `UPSTREAM_SYNC.md` describes all extension entry points that must be preserved during upstream merges.
@@ -202,6 +215,7 @@ The extension model uses `colab`'s native plugin architecture: each extension is
 **So that** I can use the plugin without reading the source code.
 
 **Acceptance Criteria:**
+
 - `src/webflow-plugin/README.md` documents all five commands: `webflow.init`, `webflow.sync`, `webflow.share`, `webflow.deploy`, `webflow.uploadAssets`.
 - Documentation includes prerequisites (Webflow API token, co(lab) version requirements).
 - Documentation lists all file paths written or modified by the plugin.

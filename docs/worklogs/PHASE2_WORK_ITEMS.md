@@ -56,12 +56,14 @@ Phase 2 builds on Phase 1's libification work and addresses the **3 largest tech
 **Description:** Create new module hierarchy in `agileplus-dashboard/src/routes/` to establish the foundation for routes splitting.
 
 **Acceptance Criteria:**
+
 - [ ] New directory structure created: `routes/dashboard.rs`, `routes/api.rs`, `routes/settings.rs`, `routes/health.rs`
 - [ ] Router facade (`routes/mod.rs`) compiles and exports all route groups
 - [ ] No breaking changes to existing imports (re-export from old path temporarily if needed)
 - [ ] File count changes verified: `routes.rs` (2,631 LOC) → 4 files with clear boundaries
 
 **Estimated Effort:**
+
 - Rust code: ~150 LOC (module structure, re-exports)
 - Time: ~20-25 min
 - Story Points: 2
@@ -70,6 +72,7 @@ Phase 2 builds on Phase 1's libification work and addresses the **3 largest tech
 **Blocks:** WI-2.2, WI-2.3, WI-2.4
 
 **Code Changes:**
+
 ```rust
 // Before: monolithic src/routes.rs (2,631 LOC)
 // After: modular structure
@@ -90,6 +93,7 @@ src/routes/
 **Description:** Extract all dashboard-specific request handlers and logic into `routes/dashboard.rs`.
 
 **Acceptance Criteria:**
+
 - [ ] All dashboard handlers (`GET /dashboard`, `/dashboard/status`, `/dashboard/logs`, etc.) moved to `routes/dashboard.rs`
 - [ ] Handler function signatures unchanged
 - [ ] Async/await patterns preserved
@@ -97,6 +101,7 @@ src/routes/
 - [ ] ~600 LOC extracted, zero duplicated logic
 
 **Estimated Effort:**
+
 - Rust code: ~600 LOC (handler logic, type definitions, middleware)
 - Time: ~15-20 min
 - Story Points: 3
@@ -105,6 +110,7 @@ src/routes/
 **Blocks:** WI-2.3, WI-2.4
 
 **Testing:**
+
 - Compile check: `cargo check --package agileplus-dashboard`
 - Unit tests: All dashboard route tests pass
 - Integration test: POST /dashboard requests return 200
@@ -116,6 +122,7 @@ src/routes/
 **Description:** Extract API endpoint handlers into `routes/api.rs`.
 
 **Acceptance Criteria:**
+
 - [ ] All `/api/v1/*` and `/api/v2/*` handlers moved to `routes/api.rs`
 - [ ] RESTful patterns preserved (GET, POST, PUT, DELETE handlers)
 - [ ] Middleware chain applied consistently
@@ -123,6 +130,7 @@ src/routes/
 - [ ] ~500 LOC extracted
 
 **Estimated Effort:**
+
 - Rust code: ~500 LOC (API handlers, JSON responses, error handling)
 - Time: ~12-15 min
 - Story Points: 3
@@ -131,6 +139,7 @@ src/routes/
 **Blocks:** WI-2.4
 
 **Testing:**
+
 - API test suite: GET /api/v1/status → 200
 - Error test: POST /api/invalid → 404
 - Middleware test: Auth headers validated
@@ -142,6 +151,7 @@ src/routes/
 **Description:** Extract configuration and health-check handlers into separate modules.
 
 **Acceptance Criteria:**
+
 - [ ] Settings handlers (GET/PUT `/settings/*`) in `routes/settings.rs` (~300 LOC)
 - [ ] Health handlers (GET `/health`, `/health/ready`) in `routes/health.rs` (~200 LOC)
 - [ ] Settings validation logic preserved
@@ -149,6 +159,7 @@ src/routes/
 - [ ] No global state coupling introduced
 
 **Estimated Effort:**
+
 - Rust code: ~500 LOC (settings handlers, health checks, status logic)
 - Time: ~15-18 min
 - Story Points: 3
@@ -156,11 +167,13 @@ src/routes/
 **Dependencies:** WI-2.1, WI-2.2, WI-2.3
 
 **Testing:**
+
 - Settings test: GET /settings returns 200
 - Health test: GET /health/ready → {"status": "ready"} or 503
 - Readiness check: Database connectivity validated
 
 **Post-WI-2.4 Verification:**
+
 - [ ] All 4 route modules compile without warnings
 - [ ] Original 2,631 LOC → ~2,100 LOC (24% reduction)
 - [ ] Cyclomatic complexity per function <10
@@ -180,6 +193,7 @@ src/routes/
 **Description:** Establish the foundation for splitting the monolithic SQLite adapter into focused, single-responsibility modules.
 
 **Acceptance Criteria:**
+
 - [ ] Directory structure: `src/store/mod.rs`, `src/store/sync.rs`, `src/store/query_builder.rs`, `src/store/migrations.rs`
 - [ ] Adapter facade in `src/lib.rs` re-exports store modules
 - [ ] No public API changes (breaking changes forbidden)
@@ -187,6 +201,7 @@ src/routes/
 - [ ] Zero lint warnings introduced
 
 **Estimated Effort:**
+
 - Rust code: ~150 LOC (module structure, trait boundaries)
 - Time: ~20-25 min
 - Story Points: 2
@@ -195,6 +210,7 @@ src/routes/
 **Blocks:** WI-2.6, WI-2.7
 
 **Code Changes:**
+
 ```rust
 // Before: monolithic src/lib.rs (1,582 LOC)
 // After: modular adapter
@@ -215,6 +231,7 @@ src/store/
 **Description:** Extract connection pooling, transaction management, and thread-safe synchronization into `store/sync.rs`.
 
 **Acceptance Criteria:**
+
 - [ ] Connection pool initialization moved to `sync.rs`
 - [ ] Transaction begin/commit/rollback logic consolidated
 - [ ] Thread-safety guarantees documented (Arc, Mutex, RwLock usage)
@@ -222,6 +239,7 @@ src/store/
 - [ ] ~400 LOC extracted, zero duplication
 
 **Estimated Effort:**
+
 - Rust code: ~400 LOC (pool management, transaction handlers, concurrency primitives)
 - Time: ~15-18 min
 - Story Points: 3
@@ -230,11 +248,13 @@ src/store/
 **Blocks:** WI-2.7
 
 **Testing:**
+
 - Connection pool: 10 concurrent reads → all succeed
 - Transaction: BEGIN → INSERT → COMMIT → row exists
 - Rollback: BEGIN → INSERT → ROLLBACK → row doesn't exist
 
 **Code Pattern:**
+
 ```rust
 // src/store/sync.rs
 pub struct ConnectionPool { ... }
@@ -249,6 +269,7 @@ pub fn commit_transaction(&self, txn: Txn) -> Result<()> { ... }
 **Description:** Extract SQL query building logic into `store/query_builder.rs`.
 
 **Acceptance Criteria:**
+
 - [ ] SQL generation functions (SELECT, INSERT, UPDATE, DELETE) in `query_builder.rs`
 - [ ] Parameterized queries enforced (no raw string interpolation)
 - [ ] WHERE clause builder with type-safe predicates
@@ -256,6 +277,7 @@ pub fn commit_transaction(&self, txn: Txn) -> Result<()> { ... }
 - [ ] ~300 LOC extracted
 
 **Estimated Effort:**
+
 - Rust code: ~300 LOC (query builder, SQL AST, parameterization)
 - Time: ~12-15 min
 - Story Points: 3
@@ -263,11 +285,13 @@ pub fn commit_transaction(&self, txn: Txn) -> Result<()> { ... }
 **Dependencies:** WI-2.5, WI-2.6
 
 **Testing:**
+
 - SELECT query: `SELECT * FROM users WHERE id = $1` (parameterized)
 - UPDATE query: `UPDATE users SET name = $1 WHERE id = $2`
 - JOIN query: Multi-table SELECT with correct JOIN syntax
 
 **Code Pattern:**
+
 ```rust
 // src/store/query_builder.rs
 pub struct QueryBuilder { ... }
@@ -283,6 +307,7 @@ pub fn build(&self) -> (String, Vec<SqlValue>) { ... }
 **Description:** Extract database schema migrations and version tracking into `store/migrations.rs`.
 
 **Acceptance Criteria:**
+
 - [ ] Migration structs (versioned schema changes) in `migrations.rs`
 - [ ] Migration runner: apply pending, rollback last
 - [ ] Schema version table maintained (`_schema_version`)
@@ -290,6 +315,7 @@ pub fn build(&self) -> (String, Vec<SqlValue>) { ... }
 - [ ] ~250 LOC extracted
 
 **Estimated Effort:**
+
 - Rust code: ~250 LOC (migration runner, schema tracking, versioning)
 - Time: ~10-12 min
 - Story Points: 2
@@ -297,11 +323,13 @@ pub fn build(&self) -> (String, Vec<SqlValue>) { ... }
 **Dependencies:** WI-2.5, WI-2.6, WI-2.7
 
 **Testing:**
+
 - Migration 001: Create `users` table → succeeds
 - Migration 002: Add `email` column → succeeds
 - Rollback: Drop `email` column → schema_version decremented
 
 **Code Pattern:**
+
 ```rust
 // src/store/migrations.rs
 pub struct Migration {
@@ -326,6 +354,7 @@ pub fn run_pending_migrations(pool: &ConnectionPool) -> Result<()> { ... }
 **Description:** Create a centralized configuration loader using `phenotype-config-core`'s `figment::UnifiedConfigLoader` pattern to replace scattered config loading across AgilePlus crates.
 
 **Acceptance Criteria:**
+
 - [ ] New module: `agileplus-config-loader` in workspace
 - [ ] Supports multiple config sources (env, TOML, defaults)
 - [ ] Type-safe configuration structs with validation
@@ -334,6 +363,7 @@ pub fn run_pending_migrations(pool: &ConnectionPool) -> Result<()> { ... }
 - [ ] ~300 LOC consolidation (net reduction from scattered code)
 
 **Estimated Effort:**
+
 - Rust code: ~300 LOC (config loader, validation, env parsing)
 - Time: ~15-18 min
 - Story Points: 3
@@ -341,6 +371,7 @@ pub fn run_pending_migrations(pool: &ConnectionPool) -> Result<()> { ... }
 **Dependencies:** None (parallel with WI-2.1-2.7)
 
 **Code Changes:**
+
 ```rust
 // Before: scattered config loading across crates
 // agileplus-dashboard/src/main.rs
@@ -359,11 +390,13 @@ println!("Cache: {}", config.cache.host);
 ```
 
 **Testing:**
+
 - Load from env vars: `DATABASE_URL=postgres://...` → config.database.url set
 - Load from TOML: `config.toml` with `[database]` section → parsed correctly
 - Validation: Invalid config → Err with descriptive message
 
 **Dependencies to Address:**
+
 - `phenotype-config-core` (wrap/use existing)
 - `figment` v0.13+ (multi-source config framework)
 - `serde` + `toml` (TOML parsing)
@@ -397,14 +430,17 @@ println!("Cache: {}", config.cache.host);
 ### Parallelization Strategy
 
 **Stream 1: Routes Refactoring (WI-2.1 → WI-2.4)**
+
 - Agent A: WI-2.1 (foundation) + WI-2.2 (dashboard extraction)
 - Agent B: WI-2.3 (API extraction) + WI-2.4 (settings/health)
 
 **Stream 2: SQLite Refactoring (WI-2.5 → WI-2.8)**
+
 - Agent C: WI-2.5 (foundation) + WI-2.6 (sync extraction)
 - Agent D: WI-2.7 (query builder) + WI-2.8 (migrations)
 
 **Stream 3: Config Consolidation (WI-2.9)**
+
 - Agent E: WI-2.9 (config loader, parallel execution)
 
 **Total Parallelism:** 5 agents, maximum wall-clock time ~8-12 min (bottleneck: dependency chains within each stream)
@@ -446,11 +482,13 @@ println!("Cache: {}", config.cache.host);
 ### Unit Testing (Per WI)
 
 Each work item must include:
+
 - Isolated unit tests for extracted modules
 - No external dependencies (mock as needed)
 - 100% happy-path coverage for new code
 
 **Example (WI-2.2 Dashboard Routes):**
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -468,11 +506,13 @@ mod tests {
 ### Integration Testing (Post-WI Verification)
 
 After each WI completes, verify:
+
 - Old and new code paths return identical results
 - No regressions in response times (benchmark if >5% slower)
 - Error cases handled identically
 
 **Tools:**
+
 - `cargo test` for Rust tests
 - `pytest` for Python (if applicable)
 - `tokio::test` for async tests
@@ -480,6 +520,7 @@ After each WI completes, verify:
 ### End-to-End Testing (Phase Completion)
 
 After all WIs complete:
+
 - [ ] Full test suite runs: `cargo test --all`
 - [ ] No new warnings: `cargo clippy --all -- -D warnings`
 - [ ] Build succeeds: `cargo build --release`
@@ -488,6 +529,7 @@ After all WIs complete:
 ### Regression Testing
 
 Before and after LOC measurements:
+
 ```bash
 # Before Phase 2
 cloc crates/agileplus-dashboard/src/ --csv > before_dashboard.csv
@@ -546,6 +588,7 @@ Once Phase 2 completes (all 9 WIs done), Phase 3 can begin:
 ### Phase 3 Scope Preview
 
 Phase 3 will address:
+
 - **Test fixture consolidation** (7 test files, ~150 LOC)
 - **CLI argument parsing** (3 CLI crates, ~3.5K LOC)
 - **Event serialization** (5 event types, already modular, optional)

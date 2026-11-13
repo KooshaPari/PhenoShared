@@ -288,6 +288,7 @@ and record the sync mapping. Traces to FR-P01, FR-P02, FR-P05.
 
 4. Ensure `StoragePort` has `get_sync_mapping` and `upsert_sync_mapping` methods. If they don't
    exist, add them to the trait and implement in `agileplus-sqlite`. Use:
+
    ```sql
    INSERT INTO sync_mappings (local_id, plane_id, entity_type, last_synced_at)
    VALUES (?1, ?2, ?3, ?4)
@@ -394,10 +395,12 @@ Traces to FR-P04, FR-P05.
 
 1. Inspect the current `sync_mappings` schema. If `entity_type TEXT` column does not exist:
    - Create `crates/agileplus-sqlite/src/migrations/007_sync_entity_type.sql`:
+
      ```sql
      ALTER TABLE sync_mappings ADD COLUMN entity_type TEXT NOT NULL DEFAULT 'feature';
      CREATE INDEX idx_sync_mappings_entity ON sync_mappings(entity_type, local_id);
      ```
+
    - Register the migration.
 
 2. Add to `StoragePort` trait (in `storage.rs`):

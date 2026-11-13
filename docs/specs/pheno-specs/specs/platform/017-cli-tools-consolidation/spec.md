@@ -19,6 +19,7 @@ This spec consolidates CLI tools by completing the LLM proxy, agent API, CLI fra
 ## Problem Statement
 
 CLI tools are fragmented and duplicated:
+
 - **LLM proxy** — incomplete implementation, missing features
 - **Agent API** — duplicates LLM proxy functionality
 - **CLI framework** — standalone, not adopted by other tools
@@ -57,30 +58,35 @@ CLI tools are fragmented and duplicated:
 ## Technical Approach
 
 ### Phase 1: Audit and Design (Week 1-2)
+
 1. Audit all 7 CLI tools: features, APIs, dependencies, user experience
 2. Identify duplicated functionality and overlapping concerns
 3. Design unified CLI architecture
 4. Plan deduplication of thegent-sharecli and thegent-cli-share
 
 ### Phase 2: LLM Proxy and Agent API (Week 2-4)
+
 1. Complete cliproxyapi-plusplus LLM proxy implementation
 2. Complete agentapi-plusplus agent API implementation
 3. Deduplicate overlapping functionality between proxy and API
 4. Establish clear boundaries between proxy and API layers
 
 ### Phase 3: CLI Framework Completion (Week 4-6)
+
 1. Complete Cmdra CLI framework implementation
 2. Add plugin system for CLI extensions
 3. Implement consistent command patterns
 4. Add comprehensive documentation
 
 ### Phase 4: Git Workflows and Subprocess (Week 6-8)
+
 1. Complete forgecode git workflow implementation
 2. Integrate git workflows with CLI framework
 3. Integrate thegent-subprocess with CLI framework
 4. Add subprocess management utilities
 
 ### Phase 5: Deduplication and Integration (Week 8-10)
+
 1. Merge thegent-sharecli and thegent-cli-share into single implementation
 2. Migrate all CLI tools to use Cmdra framework
 3. Integrate all components into unified CLI experience

@@ -1,6 +1,7 @@
 # ADR 0006 — Local-model driven item: `pheno-serve-dev` bootstrap (2026-07-04)
 
 ## Status
+
 Executed 2026-07-04. Awaiting user sign-off on `llama-server.exe` install to bring `local/qwen35-08b` profile from `active` (proxy-side) to `active` (engine-side).
 
 ## Context
@@ -36,6 +37,7 @@ and is **ready** to proxy as soon as `llama-server.exe` opens its upstream on
 ## What was actually executed
 
 ### Step 1 — `pheno-serve-dev` start
+
 - Process: `py3.13\python.exe -u -m pheno.serve.server --config config\pheno_serve.yaml`
 - PID: 458020, ~28.6 MB working set
 - Listens on: `127.0.0.1:21080`
@@ -43,12 +45,14 @@ and is **ready** to proxy as soon as `llama-server.exe` opens its upstream on
 - Stderr log: `bench/results/2026-07-04/pheno_serve_start.err`
 
 ### Step 2 — Smoke (`scripts/smoke_pheno_serve.py --skip-completion`)
+
 - `GET /healthz` → 200, body `{"ok": true, "service": "pheno-serve-dev"}`
 - `GET /v1/models` → 200, 7 profiles visible
 - `/v1/chat/completions` skipped per the `--skip-completion` flag
 - Artifact: `bench/results/2026-07-04/pheno_serve_smoke.json`
 
 ### Step 3 — Probe (`scripts/probe_pheno_serve.py --json`)
+
 - **Per-profile TCP reachability against the engine slots.**
 - `local/qwen35-08b` (llama_cpp): TCP to `127.0.0.1:8080` reachable → `tcp.ok=true`
 - All other local profiles (sglang / vllm / tensorrt_llm) → no engine listening → `tcp.ok=false`
@@ -56,6 +60,7 @@ and is **ready** to proxy as soon as `llama-server.exe` opens its upstream on
 - Artifact: `bench/results/2026-07-04/pheno_serve_probe.json`
 
 ### Step 4 — OpenRouter drift re-scrape
+
 - Endpoint: `GET https://openrouter.ai/api/v1/models`
 - No token required (public endpoint)
 - All 8 round-4 picks scraped (including `granite-4.0-h-micro` for transparency)
@@ -64,6 +69,7 @@ and is **ready** to proxy as soon as `llama-server.exe` opens its upstream on
 - Artifact: `bench/results/2026-07-04/or_drift_2026-07-04.json`
 
 ### Step 5 — Manifest
+
 - `bench/results/2026-07-04/local_qwen35_08b_probe/MANIFEST.md`
 - All paths, PIDs, ports, OR picks, plus a per-todo reference back to this ADR.
 

@@ -14,6 +14,7 @@
 ### Summary
 
 Comprehensive deep code audits across 5 primary projects (phenotype-infrakit, thegent, phenotype-shared, phenoSDK, heliosCLI) focusing on:
+
 - **LOC Reduction**: Dead code, duplication, unused deps, extractable utilities
 - **Decomposition**: Crate/module splitting, libification candidates, boundary violations
 - **Optimization**: Async patterns, allocations, trait object trade-offs, hot path optimization
@@ -33,6 +34,7 @@ Agents running in parallel to analyze codebase structure, identify opportunities
 ### Expected Output
 
 Each agent will produce:
+
 - **File-level breakdown** with paths, line numbers, LOC counts
 - **Opportunity ranking** (P0-P3 priority)
 - **Savings estimates** per opportunity (target: identify >5k LOC of reducible code per project)

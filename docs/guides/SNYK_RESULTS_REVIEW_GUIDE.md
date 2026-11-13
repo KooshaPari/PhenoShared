@@ -11,6 +11,7 @@ Complete guide to understanding, reviewing, and managing Snyk vulnerability repo
 ## Overview
 
 This guide covers:
+
 1. Reading and understanding vulnerability reports
 2. Interpreting severity levels and remediation guidance
 3. Creating `.snyk` policy files for suppressions
@@ -163,6 +164,7 @@ The JSON contains:
 ```
 
 **How to Read This:**
+
 1. **Package:** `lodash` version `4.17.20` is vulnerable
 2. **Severity:** This is a `high` priority finding (CVSS 6.5)
 3. **Impact:** Prototype Pollution allows attacker to modify object prototypes
@@ -215,6 +217,7 @@ CVSS Score: 0.0 (no impact) to 10.0 (critical)
 ```
 
 **Example CVSS Scores:**
+
 - `9.8` = Network-accessible RCE with no auth required (critical)
 - `7.5` = Network-accessible DoS or data leak (high)
 - `5.3` = Local privilege escalation (medium)
@@ -271,6 +274,7 @@ Found a vulnerability?
 ### 5.1: When to Create .snyk Files
 
 Create a `.snyk` policy file when you:
+
 - Suppress a vulnerability (with justification)
 - Accept risk after review
 - Document security exceptions
@@ -332,12 +336,14 @@ ignore:                                  # Suppressions
 If you have a vulnerability you want to suppress:
 
 1. Get the vulnerability ID from the JSON report:
+
    ```bash
    cat .snyk-reports/AgilePlus.json | jq '.vulnerabilities[0].id'
    # Output: SNYK-JS-LODASH-1234567
    ```
 
 2. Add to `.snyk`:
+
    ```yaml
    ignore:
      SNYK-JS-LODASH-1234567:
@@ -468,6 +474,7 @@ Before creating the PR:
 - [ ] Critical findings understood
 - [ ] No token or secrets in reports
 - [ ] All policy files validated:
+
   ```bash
   git ls-files | grep "\.snyk$" | xargs -I {} sh -c 'echo "Validating {}"; cat {}'
   ```
@@ -515,6 +522,7 @@ gh pr view
 ### Scenario 1: Critical Vulnerability Found
 
 **Finding:**
+
 ```json
 {
   "id": "SNYK-RUST-OPENSSL-HEARTBLEED",
@@ -527,6 +535,7 @@ gh pr view
 ```
 
 **Action:**
+
 ```bash
 # 1. This MUST be fixed, not suppressed
 # 2. Create urgent AgilePlus work item
@@ -550,6 +559,7 @@ Fixes SNYK-RUST-OPENSSL-HEARTBLEED critical vulnerability"
 ### Scenario 2: Medium-Severity Dev-Only Dependency
 
 **Finding:**
+
 ```json
 {
   "id": "SNYK-PYTHON-PYTEST-XXXX",
@@ -561,6 +571,7 @@ Fixes SNYK-RUST-OPENSSL-HEARTBLEED critical vulnerability"
 ```
 
 **Action:**
+
 ```bash
 # 1. This is dev-only, can be suppressed
 # 2. Create .snyk policy file
@@ -583,6 +594,7 @@ git add agileplus-agents/.snyk
 ### Scenario 3: Known Vulnerability with Workaround
 
 **Finding:**
+
 ```json
 {
   "id": "SNYK-JS-SERIALIZE-JAVASCRIPT-1234",
@@ -594,6 +606,7 @@ git add agileplus-agents/.snyk
 ```
 
 **Action:**
+
 ```bash
 # 1. Document workaround
 # 2. Create suppression with expiry
@@ -647,10 +660,10 @@ Next: GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md
 
 ## Reference
 
-- **Snyk Vulnerability Database:** https://snyk.io/vuln/
-- **CVSS Calculator:** https://www.first.org/cvss/calculator/3.1
-- **Snyk Policy as Code:** https://docs.snyk.io/cli/manage-policy-as-code
-- **CVE Details:** https://nvd.nist.gov/vuln/
+- **Snyk Vulnerability Database:** <https://snyk.io/vuln/>
+- **CVSS Calculator:** <https://www.first.org/cvss/calculator/3.1>
+- **Snyk Policy as Code:** <https://docs.snyk.io/cli/manage-policy-as-code>
+- **CVE Details:** <https://nvd.nist.gov/vuln/>
 
 ---
 

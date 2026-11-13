@@ -19,6 +19,7 @@
 **Estimated Size**: ~450 lines
 
 ### Included Subtasks
+
 - [x] T001 Initialize Go module (`pheno-cli`) with Cobra + Viper + Lipgloss deps
 - [x] T002 Create Cobra root command with subcommand stubs (publish, promote, audit, bootstrap, matrix, config)
 - [x] T003 Define `RegistryAdapter` interface in `internal/adapters/adapter.go`
@@ -27,17 +28,21 @@
 - [x] T006 Unit tests for version calculator (all 7 registries × 5 channels)
 
 ### Implementation Notes
+
 - Go 1.23+, use `go mod init github.com/KooshaPari/pheno-cli`
 - Adapter interface: `Detect()`, `Version()`, `Build()`, `Publish()`, `Verify()`
 - Version calculator is pure logic, no I/O — easy to test exhaustively
 
 ### Parallel Opportunities
+
 - T005 (detector) can proceed in parallel with T004 (version calculator)
 
 ### Dependencies
+
 - None (starting package)
 
 ### Risks & Mitigations
+
 - PyPI PEP 440 edge cases (dev vs alpha ordering) → comprehensive test matrix
 
 ---
@@ -50,6 +55,7 @@
 **Estimated Size**: ~350 lines
 
 ### Included Subtasks
+
 - [x] T007 Implement `internal/adapters/npm.go` — Detect (parse package.json, check private field)
 - [x] T008 Implement npm Version (SemVer pre-release + dist-tag mapping)
 - [x] T009 Implement npm Build (`npm pack`)
@@ -58,17 +64,21 @@
 - [x] T012 Unit + integration tests for npm adapter
 
 ### Implementation Notes
+
 - Dist-tag mapping: alpha→alpha, canary→canary, beta→beta, rc→rc, prod→latest
 - Handle scoped packages (`@org/name`)
 - Private detection: `"private": true` in package.json
 
 ### Parallel Opportunities
+
 - All of WP02 can proceed in parallel with WP03 and WP04
 
 ### Dependencies
+
 - Depends on WP01 (adapter interface)
 
 ### Risks & Mitigations
+
 - npm 2FA/OTP — document that CI uses granular access tokens with 2FA bypass
 
 ---
@@ -81,6 +91,7 @@
 **Estimated Size**: ~350 lines
 
 ### Included Subtasks
+
 - [x] T013 Implement `internal/adapters/pypi.go` — Detect (parse pyproject.toml, check classifiers)
 - [x] T014 Implement PyPI Version (PEP 440: alpha→aN, canary→devN, beta→bN, rc→rcN)
 - [x] T015 Implement PyPI Build (`python -m build`)
@@ -89,18 +100,22 @@
 - [x] T018 Unit + integration tests for PyPI adapter
 
 ### Implementation Notes
+
 - PEP 440 normalization: `0.2.0a1` not `0.2.0-alpha.1`
 - Canary maps to `devN` (sorts before alpha in PEP 440)
 - Private detection: `Private :: Do Not Upload` classifier
 - Support both hatchling and setuptools backends
 
 ### Parallel Opportunities
+
 - All of WP03 can proceed in parallel with WP02 and WP04
 
 ### Dependencies
+
 - Depends on WP01 (adapter interface)
 
 ### Risks & Mitigations
+
 - Multiple Python build backends (hatchling, setuptools, uv_build) — adapter calls `python -m build` generically
 
 ---
@@ -113,6 +128,7 @@
 **Estimated Size**: ~400 lines
 
 ### Included Subtasks
+
 - [x] T019 Implement `internal/adapters/crates.go` — Detect (parse Cargo.toml, workspace members, publish field)
 - [x] T020 Implement crates.io Version (SemVer pre-release: `-alpha.N`, `-beta.N`, etc.)
 - [x] T021 Implement topological dependency sorting for workspace crates
@@ -121,18 +137,22 @@
 - [x] T024 Unit + integration tests (including workspace ordering tests)
 
 ### Implementation Notes
+
 - Rate limiting: crates.io returns 429 with Retry-After header — parse and honor it
 - Workspace detection: parse `[workspace] members = [...]`, resolve paths
 - Topological sort: build dependency graph from `[dependencies]` path deps, publish leaves first
 - Never `--allow-dirty` — fail if working tree is dirty
 
 ### Parallel Opportunities
+
 - All of WP04 can proceed in parallel with WP02 and WP03
 
 ### Dependencies
+
 - Depends on WP01 (adapter interface)
 
 ### Risks & Mitigations
+
 - crates.io rate limits (experienced firsthand) — retry with exponential backoff + Retry-After header
 
 ---
@@ -145,6 +165,7 @@
 **Estimated Size**: ~400 lines
 
 ### Included Subtasks
+
 - [x] T025 Implement `internal/adapters/goproxy.go` — Detect (parse go.mod), Version (v-prefix SemVer)
 - [x] T026 Implement Go Publish (git tag + push — Go proxy pulls from VCS, no upload needed)
 - [x] T027 Implement Go Verify (check proxy.golang.org for module version)
@@ -154,17 +175,21 @@
 - [x] T031 Unit tests for Go adapter + stub adapter behavior
 
 ### Implementation Notes
+
 - Go proxy is unique: no "upload" step. Publishing = creating a git tag and pushing. Proxy discovers automatically.
 - Stubs implement the full adapter interface but return `ErrNotSupported` for Build/Publish/Verify
 - Hex adapter should parse mix.exs minimally (version, package name) even as a stub
 
 ### Parallel Opportunities
+
 - T028, T029, T030 are fully parallel (independent stubs)
 
 ### Dependencies
+
 - Depends on WP01 (adapter interface)
 
 ### Risks & Mitigations
+
 - Go proxy caching delays — Verify should poll with 5-min timeout
 
 ---
@@ -177,6 +202,7 @@
 **Estimated Size**: ~400 lines
 
 ### Included Subtasks
+
 - [x] T032 Define gate criteria data model in `internal/gate/criteria.go` (per-channel requirements)
 - [x] T033 Implement gate evaluator in `internal/gate/evaluator.go` (run criteria, collect results)
 - [x] T034 Implement risk-based channel skip logic (low-risk can skip intermediates, high-risk must traverse all)
@@ -185,6 +211,7 @@
 - [x] T037 Unit tests for evaluator (mock task runner commands, test risk-based skipping)
 
 ### Implementation Notes
+
 - Gate criteria execute task runner commands (e.g., `mise run lint`, `mise run test`)
 - Channel gates (from governance doc):
   - canary: lint + unit tests + security pass, flags documented
@@ -194,12 +221,15 @@
 - Risk profile read from package config or inferred from manifest
 
 ### Parallel Opportunities
+
 - T032-T033 (data model + evaluator) sequential; T034-T036 parallel after
 
 ### Dependencies
+
 - Depends on WP01 (adapter interface for package detection)
 
 ### Risks & Mitigations
+
 - Gate criteria may vary per repo — make criteria configurable via repo-level config file
 
 ---
@@ -212,6 +242,7 @@
 **Estimated Size**: ~400 lines
 
 ### Included Subtasks
+
 - [x] T038 Implement `cmd/publish.go` — detect packages, select adapter, build, publish
 - [x] T039 Implement `cmd/promote.go` — validate channel transition, run gate evaluation, publish on pass
 - [x] T040 Implement workspace publishing orchestration (topological order, verify between publishes)
@@ -220,18 +251,22 @@
 - [x] T043 Integration tests (mock registries, test full publish and promote flows)
 
 ### Implementation Notes
+
 - `pheno publish` is a direct publish (skip gates) — useful for manual intervention
 - `pheno promote` is gate-guarded — validates criteria before publishing
 - Config: `~/.config/pheno/config.toml` for global settings, `.pheno.toml` per repo
 - Credentials: read from env vars first, then config file, then GitHub secrets
 
 ### Parallel Opportunities
+
 - T041 (UI output) can proceed in parallel with T038-T040 (logic)
 
 ### Dependencies
+
 - Depends on WP01 (scaffold), WP02-WP05 (adapters), WP06 (gate engine)
 
 ### Risks & Mitigations
+
 - Credential management complexity — provide clear error messages when creds missing
 
 ---
@@ -244,6 +279,7 @@
 **Estimated Size**: ~350 lines
 
 ### Included Subtasks
+
 - [x] T044 Implement `cmd/audit.go` — scan configured repos, detect packages, query registries for current versions
 - [x] T045 Implement Lipgloss-styled audit table output (package, channel, version, registry URL, blocked-by)
 - [x] T046 Implement `cmd/matrix.go` — generate release matrix matching RELEASE_MATRIX_TEMPLATE.md format
@@ -251,18 +287,22 @@
 - [x] T048 Unit + integration tests for audit and matrix commands
 
 ### Implementation Notes
+
 - Repo discovery: by default scan parent directory for repos with supported manifests
 - Configurable via `~/.config/pheno/config.toml` → `repos_dir` or explicit repo list
 - Audit queries registries in parallel (one goroutine per repo)
 - Matrix output: markdown table matching governance template format
 
 ### Parallel Opportunities
+
 - T044-T045 (audit) parallel with T046 (matrix)
 
 ### Dependencies
+
 - Depends on WP01 (scaffold), WP02-WP05 (adapters for registry queries)
 
 ### Risks & Mitigations
+
 - Registry API rate limits during audit — throttle parallel queries
 
 ---
@@ -275,6 +315,7 @@
 **Estimated Size**: ~450 lines
 
 ### Included Subtasks
+
 - [x] T049 Implement `cmd/bootstrap.go` — orchestrate artifact generation based on detected languages
 - [x] T050 Create Go template files in `internal/templates/` for all generated artifacts
 - [x] T051 Implement mise.toml template generation (standardized tasks: lint, test, build, format, release:promote, release:status)
@@ -285,6 +326,7 @@
 - [x] T056 Integration test: bootstrap a mock repo and validate all artifacts
 
 ### Implementation Notes
+
 - Language detection from WP01's detector → determines which templates to generate
 - Templates use Go `text/template` with repo-specific variables (name, language, registry, risk profile)
 - Multi-language repos get merged configs (e.g., mise.toml with both Rust and Python tasks)
@@ -292,12 +334,15 @@
 - Generated CI workflows reference `<REDACTED>/phenotypeActions/.github/workflows/<name>.yml@v1`
 
 ### Parallel Opportunities
+
 - T051-T055 are all parallel (independent template files)
 
 ### Dependencies
+
 - Depends on WP01 (scaffold, detector), WP10 (centralized CI workflows to reference)
 
 ### Risks & Mitigations
+
 - Template drift between bootstrap-generated and centralized workflows — version-pin references
 
 ---
@@ -310,6 +355,7 @@
 **Estimated Size**: ~500 lines
 
 ### Included Subtasks
+
 - [x] T057 Create `publish.yml` reusable workflow (registry-specific publish with retry/backoff)
 - [x] T058 Create `gate-check.yml` reusable workflow (run channel-specific gate criteria)
 - [x] T059 Create `promote.yml` reusable workflow (orchestrate gate-check → publish)
@@ -319,6 +365,7 @@
 - [x] T063 Test workflows with `act` or dry-run mode
 
 ### Implementation Notes
+
 - All workflows use `workflow_call` trigger for reusability
 - Inputs: language (rust|python|typescript|go), registry, channel, risk_profile, version
 - Secrets: `NPM_TOKEN`, `PYPI_TOKEN`, `CRATES_TOKEN` from org-level secrets
@@ -327,12 +374,15 @@
 - promote.yml: composite — calls gate-check, then publish on success
 
 ### Parallel Opportunities
+
 - T057-T061 are all parallel (independent workflow files)
 
 ### Dependencies
+
 - None (can proceed independently; WP09 references these)
 
 ### Risks & Mitigations
+
 - GitHub Actions reusable workflow limitations (max 4 levels of nesting) — keep flat
 
 ---
@@ -345,6 +395,7 @@
 **Estimated Size**: ~400 lines
 
 ### Included Subtasks
+
 - [x] T064 Final evaluation: validate mise monorepo tasks feature stability (or select alternative)
 - [x] T065 Create reference mise.toml for Rust projects (cargo clippy, cargo test, cargo build, rustfmt)
 - [x] T066 [P] Create reference mise.toml for Python projects (ruff check, pytest, build, ruff format)
@@ -354,18 +405,22 @@
 - [x] T070 Validate all reference configs on sample repos from the org
 
 ### Implementation Notes
+
 - If mise monorepo tasks not stable by implementation time, fall back to moon or per-repo mise.toml
 - Each reference config includes: lint, test, build, format, release:promote, release:status
 - release:promote calls `pheno promote <channel>`; release:status calls `pheno audit --repo .`
 - Tool version pinning in each mise.toml (rust, python, node, go versions)
 
 ### Parallel Opportunities
+
 - T065-T068 are fully parallel (per-language configs)
 
 ### Dependencies
+
 - Depends on WP07 (pheno CLI publish/promote for release tasks)
 
 ### Risks & Mitigations
+
 - mise experimental features may be unstable — have moon fallback plan documented
 
 ---
@@ -378,14 +433,16 @@
 **Estimated Size**: ~350 lines
 
 ### Included Subtasks
+
 - [x] T071 Create pre-commit hook script (conventional commit message validation)
 - [x] T072 Add fast lint check to pre-commit (format check, encoding validation — <5s target)
-- [x] T073 Create pre-push hook script with channel-aware logic (feature/* → fast, beta/* → full suite)
+- [x] T073 Create pre-push hook script with channel-aware logic (feature/*→ fast, beta/* → full suite)
 - [x] T074 Create `.pre-commit-config.yaml` template (for repos using pre-commit framework)
 - [x] T075 Create standalone hook installer script (for repos not using pre-commit framework)
 - [x] T076 Test hooks: conventional commit rejection, timing validation, channel branching logic
 
 ### Implementation Notes
+
 - Pre-commit: validate `^(feat|fix|chore|docs|refactor|test|perf|ci|build|style|revert)(\(.+\))?!?: .+`
 - Fast lint: call `mise run format -- --check` (should complete in <5s for most repos)
 - Pre-push channel detection: parse branch name (`feature/*` → fast, `beta/*` → full, `rc/*` → full + rollback check)
@@ -393,12 +450,15 @@
 - Hooks are shell scripts (POSIX sh for portability)
 
 ### Parallel Opportunities
+
 - T071-T072 (pre-commit) parallel with T073 (pre-push)
 
 ### Dependencies
+
 - Depends on WP11 (task runner for lint/test commands)
 
 ### Risks & Mitigations
+
 - Pre-commit hook performance — keep under 5s; defer expensive checks to pre-push
 
 ---
@@ -411,6 +471,7 @@
 **Estimated Size**: ~350 lines
 
 ### Included Subtasks
+
 - [x] T077 Bootstrap AgilePlus (TypeScript/VitePress) — validate mise.toml, hooks, CI workflows
 - [x] T078 [P] Bootstrap tokenledger (Rust) — validate Rust-specific artifacts, crates.io publish test
 - [x] T079 [P] Bootstrap thegent (Python) — validate Python-specific artifacts, PyPI publish test
@@ -419,18 +480,22 @@
 - [x] T082 Document findings and adjust templates based on pilot feedback
 
 ### Implementation Notes
+
 - AgilePlus: private (no publish), only hooks + lint/test infrastructure
 - tokenledger: already published to crates.io — test pre-release publish
 - thegent: already published to PyPI — test pre-release publish
 - agentapi-plusplus: Go module — test git tag-based publishing
 
 ### Parallel Opportunities
+
 - T077-T080 are fully parallel (independent repos)
 
 ### Dependencies
+
 - Depends on WP09 (bootstrap), WP10 (CI workflows), WP11 (task runner), WP12 (hooks)
 
 ### Risks & Mitigations
+
 - Repos may have conflicting existing configs — bootstrap should detect and warn, not overwrite without confirmation
 
 ---
@@ -443,6 +508,7 @@
 **Estimated Size**: ~300 lines
 
 ### Included Subtasks
+
 - [x] T083 Create bulk bootstrap script (`pheno bootstrap --all` or directory-scanning mode)
 - [x] T084 Generate repo manifest (CSV/TOML listing all repos, languages, risk profiles, publish targets)
 - [x] T085 Run bulk bootstrap on remaining repos (with dry-run first)
@@ -450,18 +516,22 @@
 - [x] T087 Validate org-wide `pheno audit` after rollout
 
 ### Implementation Notes
+
 - `pheno bootstrap --all --repos-dir ~/CodeProjects/Phenotype/repos/` scans all subdirs
 - Dry-run mode: `--dry-run` shows what would be generated without writing files
 - PR creation: one PR per repo, titled "chore: add release governance infrastructure"
 - Risk profiles: default to `low` unless repo manifest overrides
 
 ### Parallel Opportunities
+
 - T085-T086 can be batched (bootstrap + PR creation per repo)
 
 ### Dependencies
+
 - Depends on WP13 (pilot validation)
 
 ### Risks & Mitigations
+
 - Bulk operations may hit GitHub API rate limits for PR creation — batch with delays
 
 ---
@@ -474,6 +544,7 @@
 **Estimated Size**: ~300 lines
 
 ### Included Subtasks
+
 - [x] T088 Write pheno CLI README.md (installation, commands, configuration)
 - [x] T089 Write governance model overview (evolving the 5-tier model, risk profiles, gate criteria)
 - [x] T090 Write contributor quickstart (bootstrap → develop → promote → publish)
@@ -482,17 +553,21 @@
 - [x] T093 Final cleanup: ensure all error messages are clear, help text is complete
 
 ### Implementation Notes
+
 - README goes in pheno-cli repo root
 - Governance overview and contributor quickstart can go in AgilePlus docs or pheno-cli docs
 - ADRs go in pheno-cli `docs/adr/` per constitution requirements
 
 ### Parallel Opportunities
+
 - T088-T092 are all parallel (independent docs)
 
 ### Dependencies
+
 - Depends on WP07 (CLI finalized), WP11 (task runner chosen), WP13 (pilot feedback)
 
 ### Risks & Mitigations
+
 - Docs get stale quickly — link to CLI help text rather than duplicating
 
 ---
@@ -529,6 +604,7 @@ Phase 5 (Polish):
 ```
 
 **Parallelization highlights**:
+
 - WP01 + WP10 can run simultaneously (Phase 0)
 - WP02, WP03, WP04, WP05, WP06 can ALL run simultaneously (Phase 1)
 - WP08 can start as soon as adapters are done (doesn't need gate engine)

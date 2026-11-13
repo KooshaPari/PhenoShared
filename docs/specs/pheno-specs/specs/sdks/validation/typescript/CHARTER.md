@@ -29,6 +29,7 @@
 **phenotype-validation-ts is the TypeScript/JavaScript validation library for the Phenotype ecosystem, providing Zod integration, type guards, and validation schemas that enable type-safe data validation in TypeScript applications.**
 
 Our mission is to validate TypeScript data by offering:
+
 - **Zod Integration**: Native Zod schemas
 - **Type Guards**: Runtime type checking
 - **Schema Composition**: Composable validators
@@ -37,6 +38,7 @@ Our mission is to validate TypeScript data by offering:
 ### 1.2 Vision
 
 To be the TypeScript validation standard where:
+
 - **Validation is Type-Safe**: Compile-time and runtime
 - **Schemas are Composable**: Reusable building blocks
 - **Errors are Typed**: TypeScript error handling
@@ -150,9 +152,11 @@ To be the TypeScript validation standard where:
 ## 8. Decision Authority Levels
 
 **Level 1: TypeScript Maintainer**
+
 - Updates
 
 **Level 2: Validation Lead**
+
 - API changes
 
 ---

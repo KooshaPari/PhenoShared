@@ -10,6 +10,7 @@
 ## Executive Summary
 
 This document expands the DUPLICATION.md audit with 5 detailed case studies per category, including:
+
 - Actual file paths with LOC measurements from code scanning
 - 2-3 NEW detailed consolidation strategies per category
 - Third-party library alternatives with download metrics
@@ -38,6 +39,7 @@ This document expands the DUPLICATION.md audit with 5 detailed case studies per 
 ### Case Study 1: GraphHealth vs CacheHealth vs BusHealth Consolidation
 
 **Current Implementation Pattern (GraphHealth):**
+
 - File: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-graph/src/health.rs` (45 LOC)
 - Contains enum + async check method
 - Type-specific implementation
@@ -45,6 +47,7 @@ This document expands the DUPLICATION.md audit with 5 detailed case studies per 
 **Issue:** CacheHealth (28 LOC) and BusHealth (12 LOC) are nearly identical but use different names
 
 **Consolidation Strategy:**
+
 ```rust
 // libs/health-core/src/lib.rs
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -71,6 +74,7 @@ impl HealthCheck for GraphBackend {
 ```
 
 **Migration Impact:**
+
 - GraphHealth (45 LOC) → 5 LOC (trait impl only) = **40 LOC savings**
 - CacheHealth (28 LOC) → 5 LOC (trait impl) = **23 LOC savings**
 - BusHealth (12 LOC) → 3 LOC (trait impl) = **9 LOC savings**
@@ -84,6 +88,7 @@ impl HealthCheck for GraphBackend {
 **Issue:** Only defines `CacheHealth` enum, NO async check method
 
 **Missing Implementation:**
+
 ```rust
 impl CacheHealth {
     pub async fn check(&self) -> Result<(), CacheError> {
@@ -101,11 +106,13 @@ impl CacheHealth {
 ### Case Study 3: Health Status API Response Standardization (50+ LOC)
 
 **Locations with Identical Patterns:**
+
 - agileplus-api: `src/routes/health.rs` (~25 LOC HTTP handler)
 - agileplus-cache: `src/health.rs` (~15 LOC handler)
 - agileplus-nats: `src/health.rs` (~10 LOC handler)
 
 **Common JSON Response:**
+
 ```json
 {
   "status": "healthy",
@@ -153,12 +160,14 @@ impl CacheHealth {
 **Total Nested Duplication:** 266 LOC
 
 **Additional Duplication in NATS:**
+
 - File: `crates/agileplus-nats/src/bus.rs:127-240` (114 LOC)
 - Type: `InMemoryBus` - similar HashMap pattern
 
 **Total Duplication:** 266 + 114 = **380 LOC of HashMap-based in-memory store boilerplate**
 
 **Common Pattern:**
+
 ```rust
 pub struct InMemoryStore<K, V> {
     data: RwLock<HashMap<K, V>>,
@@ -182,6 +191,7 @@ impl<K: Eq + Hash, V: Clone> InMemoryStore<K, V> {
 **Consolidation:** Extract to `libs/test-utils` with generic `InMemoryStore<K, V>` implementation
 
 **LOC Impact:**
+
 - phenotype-event-sourcing (delete nested + keep primary) | 266 | 0 | 266
 - agileplus-nats (use generic) | 114 | 30 | 84
 - libs/test-utils (new generic) | 0 | 60 | -60
@@ -192,10 +202,12 @@ impl<K: Eq + Hash, V: Clone> InMemoryStore<K, V> {
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-sync/src/store.rs:47-110` (87 LOC)
 
 **Current Implementation:**
+
 - Implements SyncMappingStore trait
 - 4 methods implemented (get, set, delete, list)
 
 **Missing Methods (Required by EventBus trait):**
+
 - `async fn create_stream(&self, config: &StreamConfig) -> Result<()>` (-20 LOC)
 - `async fn delete_stream(&self, stream: &str) -> Result<()>` (-15 LOC)
 - `async fn list_streams(&self) -> Result<Vec<String>>` (-10 LOC)
@@ -223,6 +235,7 @@ impl<K: Eq + Hash, V: Clone> InMemoryStore<K, V> {
 ### Event Bus Consolidation Strategy
 
 **Target Architecture:**
+
 ```
 libs/event-core/
 ├── src/lib.rs                  # EventBus trait definition
@@ -233,6 +246,7 @@ libs/event-core/
 ```
 
 **Migration Path:**
+
 1. Create libs/event-core with unified EventBus trait
 2. Move NATS implementation to libs/event-core/src/nats.rs
 3. Move InMemory implementation to libs/test-utils/src/in_memory.rs
@@ -240,6 +254,7 @@ libs/event-core/
 5. Complete agileplus-sync adapter
 
 **LOC Impact:**
+
 | Component | Current | After | Savings |
 |-----------|---------|-------|---------|
 | phenotype-event-sourcing (remove dup) | 266 | 0 | 266 |
@@ -255,6 +270,7 @@ libs/event-core/
 ### Category Overview
 
 **Builder Types Identified:**
+
 - Configuration builders (4): Cache, Graph, NATS, Domain
 - Query builders (3): Event, Sync, Feature
 - Custom builders (5): Policy, Service, Request, Response, Validator
@@ -264,6 +280,7 @@ libs/event-core/
 ### Case Study 1: Configuration Builders - Identical Structure (61 LOC)
 
 **Files:**
+
 1. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-cache/src/config.rs:13-35` (18 LOC)
 2. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-graph/src/config.rs:8-22` (18 LOC)
 3. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-nats/src/config.rs:10-40` (25 LOC)
@@ -271,6 +288,7 @@ libs/event-core/
 **Boilerplate Percentage:** ~60% (new/build methods)
 
 **Pattern:**
+
 ```rust
 pub struct CacheConfigBuilder {
     pool_size: Option<usize>,
@@ -302,11 +320,13 @@ impl CacheConfigBuilder {
 ### Case Study 2: Query Builders - Method Proliferation (115 LOC)
 
 **Files:**
+
 1. `crates/agileplus-events/src/query.rs:26-74` - EventQueryBuilder (45 LOC)
 2. `crates/agileplus-sync/src/query.rs:30-65` - SyncQueryBuilder (32 LOC)
 3. `crates/agileplus-domain/src/features/filter.rs:15-52` - FeatureFilterBuilder (38 LOC)
 
 **Duplicated Methods (All Identical Structure):**
+
 ```rust
 pub struct EventQueryBuilder {
     entity_type: Option<String>,
@@ -349,6 +369,7 @@ impl EventQueryBuilder {
 ### Builder Pattern Consolidation
 
 **Option 1: Builder Trait (Manual)**
+
 ```rust
 // libs/builder-core/src/lib.rs
 pub trait Builder<T> {
@@ -365,6 +386,7 @@ pub trait ConfigBuilder<T: Default> {
 **LOC Impact:** +50 LOC for trait, saves ~80 LOC from builders = 30 LOC net
 
 **Option 2: Derive Macro (Preferred)**
+
 ```rust
 #[derive(Builder)]
 pub struct CacheConfig {
@@ -377,6 +399,7 @@ pub struct CacheConfig {
 **LOC Impact:** +100 LOC for macro impl, saves ~120 LOC from builders = 20 LOC net
 
 **Consolidation Table:**
+
 | Component | Current | After | Savings |
 |-----------|---------|-------|---------|
 | Config builders (4×) | 61 | 25 | 36 |
@@ -401,12 +424,14 @@ pub struct CacheConfig {
 ### Case Study 1: Event Serialization Nested Duplicate (98 LOC × 2)
 
 **Files:**
+
 1. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/src/event.rs` (98 LOC)
 2. `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/phenotype-event-sourcing/src/event.rs` (99 LOC - IDENTICAL)
 
 **Duplication:** 98 LOC (one of the copies)
 
 **Manual impl Serialize Code:**
+
 ```rust
 impl Serialize for Event {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -426,6 +451,7 @@ impl Serialize for Event {
 ```
 
 **Alternative with Derive + Rename:**
+
 ```rust
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "type")]
@@ -443,11 +469,13 @@ pub enum Event {
 ### Case Study 2: Encrypted Field Serialization (90+ LOC, 3 Crates)
 
 **Locations:**
+
 1. `crates/agileplus-domain/src/credentials/mod.rs` (~30 LOC)
 2. `crates/agileplus-api/src/models/secret.rs` (~28 LOC)
 3. `platforms/heliosCLI/codex-rs/core/src/secret.rs` (~32 LOC)
 
 **Pattern:**
+
 ```rust
 #[serde(serialize_with = "encrypt_serialize")]
 #[serde(deserialize_with = "decrypt_deserialize")]
@@ -475,11 +503,13 @@ where D: Deserializer<'de> {
 ### Case Study 3: MessagePack Serialization (80+ LOC, NATS)
 
 **Locations:**
+
 1. `crates/agileplus-nats/src/bus.rs` (~25 LOC)
 2. `crates/agileplus-sync/src/store.rs` (~25 LOC)
 3. `crates/agileplus-events/src/store.rs` (~30 LOC)
 
 **Pattern:**
+
 ```rust
 pub async fn serialize_message(event: &Event) -> Result<Vec<u8>> {
     rmp_serde::to_vec(event)
@@ -501,6 +531,7 @@ pub async fn deserialize_message(bytes: &[u8]) -> Result<Event> {
 ### Serialization Consolidation
 
 **New Library: `libs/serde-adapters`**
+
 ```
 libs/serde-adapters/
 ├── src/lib.rs
@@ -511,6 +542,7 @@ libs/serde-adapters/
 ```
 
 **Total LOC Impact:**
+
 | Component | Current | After | Savings |
 |-----------|---------|-------|---------|
 | phenotype-event-sourcing (nested) | 98 | 25 | 73 |
@@ -538,6 +570,7 @@ libs/serde-adapters/
 **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/app-server/tests/common/auth_fixtures.rs` (68 LOC)
 
 **Contains:**
+
 ```rust
 pub fn create_test_user() -> User { /* 10 LOC */ }
 pub fn create_test_jwt_token() -> String { /* 15 LOC */ }
@@ -575,6 +608,7 @@ impl AuthFixtureBuilder {
 **Purpose:** Mock OpenAI-compatible API for testing model interactions
 
 **Contains:**
+
 - Server startup logic
 - Request handler stubs
 - Response builders
@@ -592,6 +626,7 @@ impl AuthFixtureBuilder {
 **File:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/app-server-protocol/tests/schema_fixtures.rs` (52 LOC)
 
 **Contains:**
+
 - Protocol message definitions
 - Request/response pairs
 - Schema validation examples
@@ -607,6 +642,7 @@ impl AuthFixtureBuilder {
 ### Test Fixtures Library Design
 
 **Target: `libs/test-fixtures/`**
+
 ```
 libs/test-fixtures/
 ├── src/lib.rs
@@ -620,6 +656,7 @@ libs/test-fixtures/
 **Total New LOC:** ~440 LOC
 
 **LOC Impact Summary:**
+
 | Component | Current | After | Savings |
 |-----------|---------|-------|---------|
 | Auth fixtures | 68 | 10 | 58 |
@@ -647,6 +684,7 @@ libs/test-fixtures/
 **Estimated Location:** `crates/agileplus-api/src/http/retry.rs`
 
 **Implementation:**
+
 ```rust
 pub async fn retry_with_backoff<F, T, Fut>(
     mut f: F,
@@ -692,6 +730,7 @@ where
 **Issue:** Different parameters cause inconsistent retry behavior across codebase
 
 **Example:**
+
 ```
 agileplus-api sequence: 100ms, 200ms, 400ms, 800ms, 1600ms (5 attempts)
 agileplus-redis sequence: 100ms, 200ms, 300ms (3 attempts, linear)
@@ -700,18 +739,21 @@ agileplus-redis sequence: 100ms, 200ms, 300ms (3 attempts, linear)
 ### Case Study 3: Algorithm Variation (3 Different Approaches)
 
 **Algorithm 1 (Exponential):** agileplus-api, heliosCLI
+
 ```
 backoff = base × (2 ^ attempt)
 Capped at max_backoff
 ```
 
 **Algorithm 2 (Linear):** agileplus-redis
+
 ```
 backoff = base × attempt
 No jitter
 ```
 
 **Algorithm 3 (Exponential with Hard Cap):** phenotype-event-sourcing
+
 ```
 backoff = min(base × (2 ^ attempt), max_backoff)
 ```
@@ -721,6 +763,7 @@ backoff = min(base × (2 ^ attempt), max_backoff)
 ### External Crate Alternative: `backoff` (600K+ downloads/week)
 
 **Using backoff crate:**
+
 ```rust
 use backoff::{ExponentialBackoff, backoff::Backoff};
 
@@ -773,18 +816,21 @@ backoff::future::retry(backoff, operation).await?;
 ### Implementation Roadmap
 
 **Phase 1 (2 weeks - Quick Wins):**
+
 - [ ] Delete phenotype-event-sourcing nested duplicate (266 LOC)
 - [ ] Create libs/health-core (80 LOC savings)
 - [ ] Adopt backoff crate (176 LOC savings)
 - **Phase 1 Total:** ~522 LOC savings
 
 **Phase 2 (3 weeks - Core Libraries):**
+
 - [ ] Create libs/event-core (407 LOC savings)
 - [ ] Create libs/serde-adapters (273 LOC savings)
 - [ ] Create libs/test-fixtures (250 LOC savings)
 - **Phase 2 Total:** ~930 LOC savings
 
 **Phase 3 (2 weeks - Builder Pattern):**
+
 - [ ] Extract builder trait or macro (53 LOC savings)
 - **Phase 3 Total:** ~53 LOC savings
 

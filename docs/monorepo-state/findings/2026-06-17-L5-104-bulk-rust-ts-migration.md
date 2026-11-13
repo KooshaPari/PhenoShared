@@ -15,6 +15,7 @@
 Of the 14 in-scope repos, **14 of 14 have ZERO unique Dmouse92 content** to migrate. The DM92 mirrors are either **empty** (12 repos) or **bit-identical to KP** (2 repos: `phenotype-ops` at SHA `a24997f`, `phenotype-teamcomm` at SHA `732e532`). The two repos with the smallest KP-ahead count (**Civis** and **Tracera**) both show "1 commit ahead" in shallow fetches, but that's a fetch-depth artifact — full KP/Civis main is in the thousands of commits, full KP/Tracera main is 553 commits. The DM92 mirrors are 0 KB regardless.
 
 **12 of 14 can be archived on DM92 immediately, with zero cherry-pick work**:
+
 - Cat **A** (KP fully absorbed, DM92 empty, archive DM92): PhenoCompose, PhenoPlugins, HeliosCLI, Pyron, HexaKit, Tracera, Civis, OmniRoute, KWatch, phenotype-otel, PhenoContracts (11 repos)
 - Cat **D** (KP archived, DM92 empty, archive DM92 with note): PhenoProc, Nanovms (2 repos)
 - Cat **E** (identical, archive DM92): phenotype-ops, phenotype-teamcomm (2 repos)
@@ -46,6 +47,7 @@ Legend: `Cat` = migration category (A=KP fully absorbed; B=DM92 has unique; C=DM
 | 15 | phenotype-teamcomm | 0 | 0 | 120 KB | active | 2026-06-15T23:26:09Z | 2026-06-18T02:02:21Z | **E** | archive DM92 (bit-identical to KP) |
 
 **Notes on the table:**
+
 - "DM92 size = 0 KB" means `gh api ... | .size` (GitHub's `size` field on the repo metadata) reports 0 — these are 12 empty repos. Verified locally: `git log main` returns `fatal: your current branch 'main' does not have any commits yet` (`/tmp/dmouse92-migration/PhenoCompose/` etc.).
 - "KP ↑" counts are `git rev-list --count main..kp-main` in the local DM92 clone. For the 12 empty repos, the count is the entire KP main history reachable from the fetched tip (KP/HeliosCLI has 292 commits on main reachable; KP/HexaKit has 504; KP/Tracera has 553; etc.). Total **2,117 KP-ahead commits** across the 14 repos (sum: 127+94+82+292+56+504+553+1+209+60+0+10+112+16+0+1).
 - **Civis caveat:** the "1" KP-ahead count is an artifact of `--depth=1` shallow fetch (the full KP/Civis main is in the thousands of commits; the 2000-file / 834K-line merge commit `dd02c5ec` is the only commit our shallow fetch got). The DM92 mirror is empty regardless. Categorical verdict: A. See §2.8 for full evidence.
@@ -109,6 +111,7 @@ Legend: `Cat` = migration category (A=KP fully absorbed; B=DM92 has unique; C=DM
 
 **DM92 state:** Empty. **KP state:** 553 commits ahead on main (corrected from initial "1" reading — the first diff snapshot was taken before the Tracera fetch fully completed; the actual KP/Tracera main has 553 commits reachable from the tip `fe4b6fcef`). Tip: `fe4b6fcefa516e47fc26757bb258b5ee70c62d62 feat: thin-service decouple — Tracera model layer onto traceability-core (Phase 2)`. Last push 2026-06-18T02:20:22Z.
 **Top 10 KP-ahead commits** (`git log --oneline main..kp-main` in `/tmp/dmouse92-migration/Tracera/`):
+
 - `fe4b6fcef feat: thin-service decouple — Tracera model layer onto traceability-core (Phase 2)`
 - `b550c7692 docs(g2): chokepoint audit verified-clean (#629)`
 - `91e2f6b6c feat(tracera): consolidate all branches`
@@ -132,6 +135,7 @@ Legend: `Cat` = migration category (A=KP fully absorbed; B=DM92 has unique; C=DM
 
 **DM92 state:** Empty (0 KB, 0 branches, 0 PRs).
 **KP state:** "1 commit ahead" — but this is a **shallow-fetch artifact**. The actual KP/Civis main is thousands of commits; the only commit our `--depth=1` fetch got is the tip `dd02c5ec feat(content): weighted seed-mix scenario knob (multi-race starting populations) (#565)`. Verified by:
+
 - `git rev-list --count kp/main` returns 1 (the shallow tip only)
 - `git rev-list --count main..kp/main` returns 1 (also the tip)
 - `git rev-list --count kp/main..main` returns 1 (the empty placeholder)
@@ -151,6 +155,7 @@ Legend: `Cat` = migration category (A=KP fully absorbed; B=DM92 has unique; C=DM
 
 **DM92 state:** Empty. **KP state:** 60 commits ahead on main. Tip: `13593f4 wip: save dirty state [auto]`. Last push 2026-06-18T02:05:24Z.
 **Note on tip commit message:** `wip: save dirty state [auto]` is the only "wip" commit on the 14 KP repos' tips. The 60-commit history includes:
+
 - `72417a1 chore(deps) bump github.com/charmbracelet/bubbletea from 0.25.0 to 1.3.10`
 - `5c090da style: fix gofmt across all Go source files`
 - `139d626 chore(deps) bump golang.org/x/term from 0.16.0 to 0.44.0`
@@ -259,6 +264,7 @@ gh repo archive Dmouse92/phenotype-teamcomm --confirm
 ```
 
 **Gate after each:**
+
 - `gh api repos/Dmouse92/phenotype-ops --jq '.archived'` → `true`
 - `gh api repos/Dmouse92/phenotype-teamcomm --jq '.archived'` → `true`
 
@@ -270,6 +276,7 @@ gh repo archive Dmouse92/Nanovms --confirm
 ```
 
 **Gate after each:**
+
 - `gh api repos/Dmouse92/PhenoProc --jq '.archived'` → `true`
 - `gh api repos/Dmouse92/Nanovms --jq '.archived'` → `true`
 - (KP side already archived — no gate needed there)
@@ -291,6 +298,7 @@ gh repo archive Dmouse92/PhenoContracts --confirm
 ```
 
 **Gate after each (template):**
+
 - `gh api repos/Dmouse92/<repo> --jq '.archived'` → `true`
 - KP-side remains unaffected (`gh api repos/<REDACTED>/<repo> --jq '.archived'`) → `false` for the 11 active repos, `true` for the 2 already-archived ones
 
@@ -310,6 +318,7 @@ done
 ### Step 6 — Update monorepo governance docs (single branch + PR)
 
 **Files to touch (read-only cross-references — per non-negotiable rule "ALWAYS prefer editing an existing file"):**
+
 - `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` — append a "Section 2.x — subagent D (14 bulk repos)" line referencing this plan file (the reviewer said "I'll integrate your findings" — leave this for the reviewer; if the reviewer accepts the plan, the parent audit doc gets one new bullet).
 - `AGENTS.md` — no change needed (the 14 repos are listed under "Sub-repos at a Glance"; if any should be removed from the list, do it in this PR).
 - `SSOT.md` — no change needed.
@@ -333,6 +342,7 @@ Per `worklogs/L5-101-app-governance-2026-06-15.json` schema (worklog v2.1 with `
 **File path pattern:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/worklogs/L5-104-<repo>-archive-2026-06-17.json`
 
 **Common fields:**
+
 - `task_id`: `V3-DAG-L5-104.x-<repo>` (x is the sub-id per §1 table; e.g. `L5-104.1` = PhenoCompose, etc.)
 - `task`: `Archive Dmouse92/<repo> mirror (L5-104 bulk migration plan)`
 - `date`: `2026-06-17`

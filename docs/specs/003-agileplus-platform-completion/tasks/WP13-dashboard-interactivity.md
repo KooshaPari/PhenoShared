@@ -30,6 +30,7 @@ Implementation command: `spec-kitty implement WP13 --base WP12`
 Add Server-Sent Events connection to base.html:
 
 **Implementation:**
+
 ```html
 <div hx-ext="sse" sse-connect="/api/stream?api_key={{ api_key }}">
   <!-- Page content receives SSE events -->
@@ -37,12 +38,14 @@ Add Server-Sent Events connection to base.html:
 ```
 
 **Behavior:**
+
 - Kanban board subscribes to `sse:feature_updated` events
 - Feature detail page subscribes to `sse:wp_updated` events
 - On event received, swap the affected card/component using htmx
 - Gracefully reconnect on connection loss (htmx handles retry)
 
 **Example in kanban.html:**
+
 ```html
 <div id="feature-{{ feature.id }}"
      class="feature-card"
@@ -57,6 +60,7 @@ Add Server-Sent Events connection to base.html:
 Implement drag-and-drop state transitions:
 
 **Alpine component:**
+
 ```html
 <div x-data="kanbanBoard()" class="kanban">
   <template x-for="column in columns" :key="column.state">
@@ -107,6 +111,7 @@ function kanbanBoard() {
 ```
 
 **Behavior:**
+
 - Drag feature card from one column to another
 - On drop: POST `/api/features/:id/transition` with `target_state`
 - Server validates transition, updates state, returns 200 or error
@@ -117,6 +122,7 @@ function kanbanBoard() {
 Add interactive transition buttons on feature cards and detail page:
 
 **On feature cards:**
+
 ```html
 <div class="feature-card-actions">
   <button hx-post="/api/features/{{ feature.id }}/transition"
@@ -136,6 +142,7 @@ Add interactive transition buttons on feature cards and detail page:
 ```
 
 **On detail page (expanded):**
+
 ```html
 <div class="state-transitions mt-4">
   <h3 class="font-bold">Transition to:</h3>
@@ -154,6 +161,7 @@ Add interactive transition buttons on feature cards and detail page:
 ```
 
 **Behavior:**
+
 - After successful transition, SSE event updates kanban board
 - Failed transitions show error toast
 - Confirm dialog prevents accidental transitions
@@ -163,6 +171,7 @@ Add interactive transition buttons on feature cards and detail page:
 Display real-time agent activity:
 
 **In base.html sidebar or dedicated panel:**
+
 ```html
 <div id="agent-activity"
      class="bg-zinc-800 rounded border border-zinc-700 p-4"
@@ -185,6 +194,7 @@ Display real-time agent activity:
 ```
 
 **Data structure (from /api/dashboard/agents):**
+
 ```json
 {
   "agents": [
@@ -205,6 +215,7 @@ Display real-time agent activity:
 ```
 
 **Status colors:**
+
 - `idle`: gray
 - `working`: blue
 - `error`: red
@@ -214,6 +225,7 @@ Display real-time agent activity:
 Implement interactive event timeline with expandable details:
 
 **Template:**
+
 ```html
 <div id="event-timeline" class="space-y-2">
   <div x-data="{ expanded: null }">
@@ -239,6 +251,7 @@ Implement interactive event timeline with expandable details:
 ```
 
 **Behavior:**
+
 - Click event row to expand/collapse payload JSON
 - Smooth transition animation
 - Color-code event types (state_changed=blue, feature_created=green, error=red, etc.)
@@ -248,6 +261,7 @@ Implement interactive event timeline with expandable details:
 Implement settings interface for configuration:
 
 **Page structure:**
+
 ```html
 <div class="p-6">
   <h1 class="text-3xl font-bold mb-6">Settings</h1>
@@ -311,6 +325,7 @@ Implement settings interface for configuration:
 ```
 
 **Behavior:**
+
 - Display current API key (masked by default, reveal on click)
 - Copy API key to clipboard
 - Edit Plane.so workspace/project

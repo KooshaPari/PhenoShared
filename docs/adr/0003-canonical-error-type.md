@@ -18,6 +18,7 @@ HTTP handler. The HTTP layer must either pattern-match on `Display`
 strings (brittle) or convert to `StatusCode` heuristically.
 
 We need:
+
 1. A single error type that knows which layer the error came from.
 2. A way to add context without re-allocating.
 3. An `IntoResponse` for axum handlers, but **only at the gateway layer**
@@ -67,11 +68,13 @@ pub enum Error {
 ## Consequences
 
 **Positive**
+
 - A single error type means callers can `match` exhaustively.
 - `tracing::error!(error = %err, …)` produces uniform logs.
 - Adding a new failure mode is a single enum variant change.
 
 **Negative**
+
 - The enum grows over time. We accept this; rustc will tell us which
   match arms became non-exhaustive.
 - `From<anyhow::Error>` is a one-way highway back to dynamic context.

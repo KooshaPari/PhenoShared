@@ -1,4 +1,5 @@
 # Phenotype Ecosystem Consolidation Audit
+
 Date: 2026-03-29
 
 ## P1 — Eliminate Entire Repos (merge into canonical)
@@ -10,17 +11,17 @@ Date: 2026-03-29
 
 ## P2 — Add Shared Module, Remove Per-Repo Impls
 
-5. Error types → `phenotype-shared/crates/phenotype-errors`
-6. CLI kit (Rust) → merge clikit + apikit → `phenotype-shared/crates/phenotype-cli`
-7. Go logging → standardize cliproxyapi-plusplus + KodeVibe-Go on slog stdlib
-8. Python HTTP → standardize zen + portage on httpx
+1. Error types → `phenotype-shared/crates/phenotype-errors`
+2. CLI kit (Rust) → merge clikit + apikit → `phenotype-shared/crates/phenotype-cli`
+3. Go logging → standardize cliproxyapi-plusplus + KodeVibe-Go on slog stdlib
+4. Python HTTP → standardize zen + portage on httpx
 
 ## P3 — Wrap 3rd-Party Libs
 
-9. phenotype-vessel → wrap bollard crate (~50 LOC vs ~500)
-10. phenotype-patch → wrap `similar` crate
-11. phenotype-sentinel → wrap `governor` + `circuit-breaker`
-12. pheno-crypto/phenotype-cipher → wrap RustCrypto chacha20poly1305 + age
+1. phenotype-vessel → wrap bollard crate (~50 LOC vs ~500)
+2. phenotype-patch → wrap `similar` crate
+3. phenotype-sentinel → wrap `governor` + `circuit-breaker`
+4. pheno-crypto/phenotype-cipher → wrap RustCrypto chacha20poly1305 + age
 
 ## P4 — Version Bumps (DONE via PRs)
 
@@ -61,4 +62,4 @@ Date: 2026-03-29
 | helix-logging archived | DONE | GitHub archived |
 | helix-tracing archived | DONE | GitHub archived |
 | thegent-cache archived | DONE | GitHub archived |
-| helix-logging + helix-tracing absorbed into tracely | DONE | PR #3 opened: https://github.com/KooshaPari/tracely/pull/3 |
+| helix-logging + helix-tracing absorbed into tracely | DONE | PR #3 opened: <https://github.com/KooshaPari/tracely/pull/3> |

@@ -1,4 +1,5 @@
 # Code Quality Metrics & Analysis
+
 **Phenotype Ecosystem Quality Assessment**
 
 ---
@@ -48,6 +49,7 @@ Total       | 1,716 | ✅ 82%    | ACCEPTABLE
 | config/mod.rs | 6,218 | 22 | 52 | MEDIUM (monitor) |
 
 **Interpretation:**
+
 - MI > 85: Good maintainability
 - MI 70-85: Acceptable
 - MI 50-70: Poor (needs refactoring)
@@ -118,6 +120,7 @@ Imports    Files    Cohesion Issue             Risk
 | 10 | multi_agents.rs | 90 | 20+ | 4 | MEDIUM |
 
 **Interpretation:**
+
 - Imports > 200 indicate missing abstractions
 - Should be max 30-50 imports per file
 - Suggests need for internal module reorganization
@@ -164,6 +167,7 @@ File Size       | Count | Avg Functions | Issue
 | run_execution_core_helpers.py | 1,670 | 12 | 139 | HIGH |
 
 **Issue with run_execution_core_helpers.py:**
+
 - Only 12 functions but 1,670 LOC = 139 LOC/function average
 - Needs immediate decomposition
 
@@ -257,6 +261,7 @@ Average                         -                 -         28/100
 ```
 
 **Critical Issues:**
+
 - codex.rs: Configuration + Message handling + State management
 - chat_composer.rs: UI + Event handling + Input validation
 - config/mod.rs: Parsing + Validation + Serialization
@@ -283,6 +288,7 @@ Total OCP violations                                       115+
 **LSP Score:** 85/100 (GOOD)
 
 Most trait implementations follow LSP properly. Issues:
+
 - Some handler implementations have side effects
 - Error types don't always substitute correctly
 
@@ -374,6 +380,7 @@ Hook dispatcher            Hook enum               Can't extend
 - Missing authentication checks in 5+ endpoints
 
 **Action Items:**
+
 1. Run SAST scanning (semgrep, bandit)
 2. Add input validation framework
 3. Implement rate limiting
@@ -427,6 +434,7 @@ Deferrable: 85 days
 ### Debt Interest (Cost of Not Addressing)
 
 **Per month:**
+
 - 5% slower development (lost productivity)
 - 10% more bugs (tight coupling, poor tests)
 - 20% longer debugging (hard to navigate)
@@ -522,6 +530,7 @@ python -m mypy platforms/thegent/src
 ### Immediate (1 week)
 
 1. **Run automated tools:**
+
    ```bash
    cargo clippy -- -W all > /tmp/clippy-report.txt
    cargo check --all-targets

@@ -22,6 +22,7 @@ services operating across distinct domains:
 ### Current Coordination Challenges
 
 Currently, these services communicate via:
+
 - **Synchronous HTTP REST** with ad-hoc request/response contracts (no schema enforcement)
 - **Shared Git repositories** for spec synchronization (eventual consistency, merge conflicts)
 - **File system polling** for work queue and state synchronization
@@ -92,6 +93,7 @@ single-node throughput (typically >100k msgs/sec), migrate to a managed Kafka cl
 (e.g., Confluent Cloud, AWS MSK) without changing application code — events remain unchanged.
 
 **Import paths**:
+
 - Go: `github.com/nats-io/nats.go v1.36+`
 - Rust: `nats = "0.25"`
 
@@ -175,6 +177,7 @@ components:
 ```
 
 **Event Catalog** (`docs/reference/EVENT_CATALOG.md`):
+
 - Registry of all publishable events across Phenotype repos
 - Event ID, type, schema location, publishing service, consuming services
 - Backward-compatibility and versioning rules
@@ -761,15 +764,15 @@ func (s *Subscriber) SubscribeToAgentExecutionEvents(ctx context.Context) error 
 
 ## References
 
-- **NATS JetStream**: https://docs.nats.io/nats-concepts/jetstream
-- **Event Sourcing Pattern**: https://martinfowler.com/eaaDev/EventSourcing.html
-- **Saga Pattern**: https://chrisrichardson.net/post/microservices/2019/07/09/developing-sagas-part-1.html
-- **Choreography vs Orchestration**: https://learn.microsoft.com/en-us/azure/architecture/patterns/saga
-- **OpenAPI & AsyncAPI**: https://www.asyncapi.com/
-- **Distributed Tracing**: https://opentelemetry.io/docs/
-- **NATS vs Kafka**: https://natsbyexample.com/
-- **Temporal Workflows**: https://temporal.io/ (for future consideration)
-- **Event Versioning**: https://www.confluent.io/blog/event-streaming-patterns-in-kafka/ (schema evolution)
-- **Dead Letter Queues**: https://docs.nats.io/nats-concepts/jetstream/consumer#dead-letter-policy
-- **Idempotency**: https://stripe.com/docs/idempotency
-- **Correlation IDs**: https://www.w3.org/TR/trace-context/
+- **NATS JetStream**: <https://docs.nats.io/nats-concepts/jetstream>
+- **Event Sourcing Pattern**: <https://martinfowler.com/eaaDev/EventSourcing.html>
+- **Saga Pattern**: <https://chrisrichardson.net/post/microservices/2019/07/09/developing-sagas-part-1.html>
+- **Choreography vs Orchestration**: <https://learn.microsoft.com/en-us/azure/architecture/patterns/saga>
+- **OpenAPI & AsyncAPI**: <https://www.asyncapi.com/>
+- **Distributed Tracing**: <https://opentelemetry.io/docs/>
+- **NATS vs Kafka**: <https://natsbyexample.com/>
+- **Temporal Workflows**: <https://temporal.io/> (for future consideration)
+- **Event Versioning**: <https://www.confluent.io/blog/event-streaming-patterns-in-kafka/> (schema evolution)
+- **Dead Letter Queues**: <https://docs.nats.io/nats-concepts/jetstream/consumer#dead-letter-policy>
+- **Idempotency**: <https://stripe.com/docs/idempotency>
+- **Correlation IDs**: <https://www.w3.org/TR/trace-context/>

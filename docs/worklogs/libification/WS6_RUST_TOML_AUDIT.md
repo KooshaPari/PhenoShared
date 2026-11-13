@@ -1,4 +1,5 @@
 # WS6 TOML Configuration Audit Report
+
 ## Phase 2 Libification Initiative — Standardization Assessment
 
 **Date:** 2026-03-29
@@ -13,6 +14,7 @@
 This audit examined TOML configuration handling across all Rust projects in the Phenotype workspace. The investigation identified **critical version fragmentation** (toml 0.8 vs 0.9.5), **library duplication** (two independent config systems), and **missed standardization opportunities**.
 
 **Key Findings:**
+
 - **3 projects** with explicit TOML dependencies (non-standard versions)
 - **1 dedicated config crate** (phenotype-config-core) exists but underutilized
 - **Multiple config patterns** across ecosystem (file-based, file-edit, enum-based)
@@ -24,6 +26,7 @@ This audit examined TOML configuration handling across all Rust projects in the 
 ## Projects Audited
 
 ### 1. phenotype (Main Workspace Root)
+
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos`
 
 | Metric | Value |
@@ -34,6 +37,7 @@ This audit examined TOML configuration handling across all Rust projects in the 
 | Config Format Support | TOML, YAML, JSON |
 
 **Key Crate: phenotype-config-core**
+
 ```
 Purpose: Unified configuration loading and management for Phenotype ecosystem
 Dependencies:
@@ -57,6 +61,7 @@ Pattern: File-based loader with format detection
 ```
 
 **Findings:**
+
 - Implements standard file-based config pattern
 - Supports multi-format deserialization via serde
 - Provides XDG directory integration
@@ -65,11 +70,14 @@ Pattern: File-based loader with format detection
 ---
 
 ### 2. heliosCLI (Large Multi-Crate Workspace)
+
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI`
 
 #### 2a. codex-rs Workspace
+
 **Cargo.toml:** 70+ member crates
 **Workspace Dependencies:**
+
 ```toml
 toml = "0.9.5"              # Read-only TOML parsing
 toml_edit = "0.24.0"        # In-place TOML mutation
@@ -121,6 +129,7 @@ serde_yaml = "0.9"
    - Hardened Runtime support
 
 **TOML Usage Pattern:**
+
 ```
 Read-Only:  toml::Value for parsing
             Used in: features.rs, exec_policy.rs
@@ -132,6 +141,7 @@ Edit:       toml_edit for mutations
 ```
 
 **Key Observation:** codex-rs implements a sophisticated, custom config system that **duplicates** phenotype-config-core's basic functionality while adding:
+
 - Layered config composition
 - TOML in-place editing
 - Platform-specific loaders
@@ -140,6 +150,7 @@ Edit:       toml_edit for mutations
 ---
 
 #### 2b. helios-rs Workspace
+
 **Cargo.toml:** Root workspace (2 members)
 **Dependencies:** Same as codex-rs (toml 0.9.5, toml_edit 0.24.0)
 
@@ -148,6 +159,7 @@ Edit:       toml_edit for mutations
 ---
 
 ### 3. platforms/thegent (Policy & Agent Framework)
+
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent`
 
 | Metric | Value |
@@ -157,12 +169,14 @@ Edit:       toml_edit for mutations
 | Pattern | Enum-based config |
 
 **Relevant Crates:**
+
 - `thegent-policy` - Policy engine (policy.rs, evaluator.rs)
 - `thegent-state-machine` - State management
 - `thegent-router` - Routing configuration
 - `thegent-config-*` - Various config modules
 
 **Config Pattern Observed:**
+
 ```rust
 // Enum-based configuration (no TOML parsing)
 enum PolicyConfig { ... }
@@ -173,6 +187,7 @@ enum StateTransition { ... }
 ```
 
 **Findings:**
+
 - thegent uses programmatic (enum-based) config
 - No TOML file dependencies
 - Isolated from phenotype-config-core
@@ -183,6 +198,7 @@ enum StateTransition { ... }
 ## TOML Library Inventory
 
 ### Version Distribution
+
 ```
 toml = "0.8"       → 1 project (phenotype root)
 toml = "0.9.5"     → 2 projects (heliosCLI codex-rs, helios-rs)
@@ -190,6 +206,7 @@ toml_edit = "0.24.0" → 2 projects (same as above)
 ```
 
 ### Version Gap Analysis
+
 | Library | Current | Latest | Gap | Risk |
 |---------|---------|--------|-----|------|
 | toml | 0.8-0.9.5 | 0.9.x | Major inconsistency | HIGH |
@@ -201,6 +218,7 @@ toml_edit = "0.24.0" → 2 projects (same as above)
 ## Config Pattern Analysis
 
 ### Pattern 1: File-Based Loader (phenotype-config-core)
+
 ```
 ┌─ ConfigLoader
 │  └─ load_from_file(path) -> Result<T>
@@ -211,6 +229,7 @@ toml_edit = "0.24.0" → 2 projects (same as above)
 ```
 
 **Characteristics:**
+
 - Simple, focused API
 - Multi-format support via format detection
 - XDG directory integration
@@ -222,6 +241,7 @@ toml_edit = "0.24.0" → 2 projects (same as above)
 ---
 
 ### Pattern 2: File-Based + Mutation (codex-rs)
+
 ```
 ┌─ ConfigLayerStack
 │  ├─ system layer (read-only)
@@ -238,6 +258,7 @@ toml_edit = "0.24.0" → 2 projects (same as above)
 ```
 
 **Characteristics:**
+
 - Layered composition
 - In-place TOML editing
 - Preserves comments/formatting
@@ -249,6 +270,7 @@ toml_edit = "0.24.0" → 2 projects (same as above)
 ---
 
 ### Pattern 3: Enum-Based Config (thegent)
+
 ```
 enum PolicyConfig {
     AllowAll,
@@ -262,6 +284,7 @@ impl PolicyConfig {
 ```
 
 **Characteristics:**
+
 - No file I/O required
 - Type-safe at compile time
 - Suitable for policy/state machines
@@ -276,6 +299,7 @@ impl PolicyConfig {
 ### Issue #1: Version Fragmentation (HIGH)
 
 **Problem:**
+
 ```
 phenotype root:  toml = "0.8"
 heliosCLI root:  toml = "0.9.5"
@@ -283,6 +307,7 @@ Workspace Scope: No workspace-level version pinning
 ```
 
 **Impact:**
+
 - Incompatible APIs between 0.8 and 0.9.5
 - Dependency resolution conflicts if shared
 - Violates "bleeding-edge first" mandate
@@ -295,12 +320,14 @@ Workspace Scope: No workspace-level version pinning
 ### Issue #2: Library Duplication (HIGH)
 
 **Problem:**
+
 - `phenotype-config-core` exists (complete, documented)
 - `codex-rs/core/config_loader` reinvents same functionality
 - 500+ LOC of duplicated config logic
 - Both systems coexist without integration
 
 **Evidence:**
+
 ```
 phenotype-config-core:  ~200 LOC
 codex-rs config system: ~500 LOC
@@ -308,6 +335,7 @@ Duplication factor: 2.5x
 ```
 
 **Impact:**
+
 - Maintenance burden increases with each fix
 - Inconsistent error handling across projects
 - Missed opportunity for shared testing
@@ -320,12 +348,14 @@ Duplication factor: 2.5x
 ### Issue #3: Missing Abstraction (MEDIUM)
 
 **Problem:**
+
 - codex-rs uses both `toml` and `toml_edit`
 - No safe wrapper for mutation operations
 - Raw API usage creates fragile code
 - No reusable pattern for edit operations
 
 **Example:**
+
 ```rust
 // Raw toml_edit usage scattered throughout
 use toml_edit::{DocumentMut, ArrayOfTables, Table};
@@ -334,6 +364,7 @@ let doc = DocumentMut::parse(content)?;
 ```
 
 **Impact:**
+
 - TOML mutation logic hard to test/maintain
 - Error handling not standardized
 - No safeguards against malformed output
@@ -345,17 +376,20 @@ let doc = DocumentMut::parse(content)?;
 ### Issue #4: Underutilization of phenotype-config-core (MEDIUM)
 
 **Problem:**
+
 - Crate is complete, well-documented
 - NOT used by largest TOML user (codex-rs)
 - Export for public use not established
 - Missing feature flags for optional deps
 
 **Evidence:**
+
 - Published to workspace but never consumed
 - codex-rs implements parallel system
 - No migration path documented
 
 **Impact:**
+
 - Investment not leveraged
 - Divergent interfaces across ecosystem
 - Inconsistent error handling
@@ -367,11 +401,13 @@ let doc = DocumentMut::parse(content)?;
 ### Issue #5: No Standardized Error Handling (LOW)
 
 **Problem:**
+
 - phenotype-config-core: `ConfigError` (thiserror)
 - codex-rs: Custom error types per module
 - No unified Result type
 
 **Impact:**
+
 - Error context lost across project boundaries
 - Inconsistent error messages
 - Client code must map multiple error types
@@ -383,10 +419,12 @@ let doc = DocumentMut::parse(content)?;
 ## Cross-Project Reuse Opportunities
 
 ### Opportunity 1: Unified TOML Reading
+
 **Location:** Standardize via phenotype-config-core
 **Effort:** LOW (30 min, 10 LOC)
 
 Create workspace dependency:
+
 ```toml
 # In workspace root Cargo.toml
 [workspace.dependencies]
@@ -395,6 +433,7 @@ phenotype-config-core = { path = "crates/phenotype-config-core" }
 ```
 
 ### Opportunity 2: TOML Editing Wrapper
+
 **Location:** New crate `phenotype-toml-edit`
 **Effort:** MEDIUM (90 min, 150 LOC)
 
@@ -416,6 +455,7 @@ impl TomlEdit {
 ```
 
 ### Opportunity 3: Config Layer Composition
+
 **Location:** Extend phenotype-config-core or new crate
 **Effort:** MEDIUM (2 hours, 250 LOC)
 
@@ -435,10 +475,12 @@ impl LayerStack {
 ```
 
 ### Opportunity 4: Shared Config Types
+
 **Location:** phenotype-config-core or new schema crate
 **Effort:** HIGH (variable, 200-400 LOC)
 
 Extract common types from codex-rs:
+
 - AppConfig (apps.toml)
 - MCP server specs
 - OTel configurations
@@ -505,12 +547,14 @@ phenotype-config-layers (NEW, OPTIONAL)
 ### Adoption Path by Project
 
 **phenotype (root + crates):**
+
 - Already using phenotype-config-core
 - Update toml to 0.9.5 in workspace
 - No breaking changes required
 - Status: ✓ Already aligned
 
 **heliosCLI/codex-rs:**
+
 - Option A: Migrate to phenotype-config-core + phenotype-toml-edit
   - Eliminates 500 LOC duplication
   - Effort: 3-4 hours
@@ -523,16 +567,19 @@ phenotype-config-layers (NEW, OPTIONAL)
   - Benefit: Codex can use for other projects
 
 **Recommendation:** Option B (codex-config-core)
+
 - Leverages existing, production-tested code
 - Maintains codex-rs's layered config system
 - Lower risk than wholesale migration
 - Codex config system can be shared with helios-rs
 
 **heliosCLI/helios-rs:**
+
 - Inherits codex-config-core after extraction
 - No additional changes needed
 
 **platforms/thegent:**
+
 - No TOML changes required
 - Enum-based configs suitable for use case
 - Document pattern in governance
@@ -544,29 +591,35 @@ phenotype-config-layers (NEW, OPTIONAL)
 ### Tier 1: Quick Wins (1 hour total)
 
 **T1.1: Unify TOML Versions**
+
 - File: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 - Change: `toml = "0.8"` → `toml = "0.9.5"`
 - Effort: 10 min
 - Risk: LOW (minor version bump, backward compatible)
 
 **T1.2: Workspace Dependency Pinning**
+
 - File: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 - Add to [workspace.dependencies]:
+
   ```toml
   toml = "0.9.5"
   toml_edit = "0.24.0"
   phenotype-config-core = { path = "crates/phenotype-config-core" }
   ```
+
 - Effort: 15 min
 - Risk: LOW
 
 **T1.3: Create phenotype-toml-edit Wrapper**
+
 - New crate: `crates/phenotype-toml-edit/`
 - Purpose: Safe TOML mutation abstraction
 - Effort: 45 min (~150 LOC)
 - Risk: LOW (new code, no dependencies on existing)
 
 **T1 Success Criteria:**
+
 - All projects use toml 0.9.5
 - Workspace dependencies pinned
 - phenotype-toml-edit builds and exports safe API
@@ -576,18 +629,21 @@ phenotype-config-layers (NEW, OPTIONAL)
 ### Tier 2: Medium Integration (3-4 hours total)
 
 **T2.1: Extract codex-config-core**
+
 - Location: `heliosCLI/codex-rs/config/` → new crate
 - Move: `core/src/config/` + `core/src/config_loader/` modules
 - Effort: 2 hours (~200 LOC refactor)
 - Risk: MEDIUM (requires careful testing)
 
 **T2.2: Add helios-rs Dependency**
+
 - File: `heliosCLI/helios-rs/Cargo.toml`
 - Add: `codex-config = { path = "../codex-rs/config" }`
 - Effort: 15 min
 - Risk: LOW
 
 **T2.3: Document Config Patterns**
+
 - File: New file `docs/CONFIG_GOVERNANCE.md`
 - Content:
   - Pattern 1: File-based (phenotype-config-core)
@@ -598,6 +654,7 @@ phenotype-config-layers (NEW, OPTIONAL)
 - Risk: LOW
 
 **T2 Success Criteria:**
+
 - codex-config-core builds independently
 - helios-rs uses codex-config-core
 - All patterns documented
@@ -607,12 +664,14 @@ phenotype-config-layers (NEW, OPTIONAL)
 ### Tier 3: Long-Term Consolidation (2-3 hours)
 
 **T3.1: Shared Config Types (Optional)**
+
 - Create: `crates/phenotype-config-types/`
 - Extract from codex-rs: AppConfig, MCP specs, OTel configs
 - Effort: 2 hours (~250 LOC)
 - Risk: MEDIUM (requires agreement on schemas)
 
 **T3.2: Config Composition Library (Optional)**
+
 - Create: `crates/phenotype-config-layers/`
 - Purpose: Multi-layer config composition
 - Build on: phenotype-config-core + codex-config-core patterns
@@ -620,6 +679,7 @@ phenotype-config-layers (NEW, OPTIONAL)
 - Risk: MEDIUM
 
 **T3.3: Governance Updates**
+
 - File: `Phenotype/repos/CLAUDE.md`
 - Add section: "Config Library Standards"
   - Use phenotype-config-core for simple file loading
@@ -630,6 +690,7 @@ phenotype-config-layers (NEW, OPTIONAL)
 - Risk: LOW
 
 **T3 Success Criteria:**
+
 - Shared config types available
 - Layer composition pattern documented and reusable
 - All config work uses standardized patterns
@@ -639,6 +700,7 @@ phenotype-config-layers (NEW, OPTIONAL)
 ## Effort & Risk Assessment
 
 ### Tier 1: Quick Wins
+
 | Task | LOC | Effort | Risk | Dependencies |
 |------|-----|--------|------|--------------|
 | Version unification | 5 | 10 min | LOW | None |
@@ -647,6 +709,7 @@ phenotype-config-layers (NEW, OPTIONAL)
 | **SUBTOTAL** | **~165** | **~70 min** | **LOW** | - |
 
 ### Tier 2: Medium Integration
+
 | Task | LOC | Effort | Risk | Dependencies |
 |------|-----|--------|------|--------------|
 | Extract codex-config-core | 200 | 2 hrs | MEDIUM | Tier 1 |
@@ -655,6 +718,7 @@ phenotype-config-layers (NEW, OPTIONAL)
 | **SUBTOTAL** | **~515** | **~2.75 hrs** | **MEDIUM** | Tier 1 |
 
 ### Tier 3: Long-Term
+
 | Task | LOC | Effort | Risk | Dependencies |
 |------|-----|--------|------|--------------|
 | Shared config types | 250 | 2 hrs | MEDIUM | Tier 2 |
@@ -663,6 +727,7 @@ phenotype-config-layers (NEW, OPTIONAL)
 | **SUBTOTAL** | **~550** | **~4.5 hrs** | **MEDIUM** | Tier 2 |
 
 ### Total Across All Tiers
+
 ```
 Total LOC: ~1,230
 Total Effort: ~7.25 hours
@@ -677,6 +742,7 @@ Effort Breakdown:
 ## Code Entity Map
 
 ### Before Standardization
+
 ```
 phenotype/crates/phenotype-config-core/
   src/lib.rs                 → ConfigLoader, ConfigFormat, ConfigDirs
@@ -701,6 +767,7 @@ platforms/thegent/crates/
 ```
 
 ### After Standardization (Target)
+
 ```
 phenotype/crates/phenotype-config-core/          ✓ Keep as-is
   src/lib.rs
@@ -743,6 +810,7 @@ phenotype/crates/phenotype-config-layers/        ← OPTIONAL (T3)
 ## Testing Requirements
 
 ### Tier 1 Testing
+
 - **phenotype-toml-edit:** Unit tests for safe mutation
   - Test document creation
   - Test value setting
@@ -750,6 +818,7 @@ phenotype/crates/phenotype-config-layers/        ← OPTIONAL (T3)
   - Test formatting preservation
 
 ### Tier 2 Testing
+
 - **codex-config-core:** Integration tests (move from codex-rs tests)
   - Test layer composition
   - Test platform-specific loading
@@ -757,6 +826,7 @@ phenotype/crates/phenotype-config-layers/        ← OPTIONAL (T3)
   - Test error propagation
 
 ### Tier 3 Testing (Optional)
+
 - **phenotype-config-types:** Roundtrip serialization tests
 - **phenotype-config-layers:** Composition precedence tests
 
@@ -794,6 +864,7 @@ serde_json = "workspace"
 ### Error Handling Standard
 
 All config operations MUST return `Result<T, ConfigError>` where:
+
 ```rust
 pub enum ConfigError {
     Io(std::io::Error),
@@ -817,6 +888,7 @@ Use `thiserror` for implementation.
 **Impact:** HIGH (largest TOML user)
 
 **Mitigation:**
+
 - Extract to new crate alongside core (no in-place refactor)
 - Keep all APIs identical during extraction
 - Run full test suite before merging
@@ -830,6 +902,7 @@ Use `thiserror` for implementation.
 **Impact:** MEDIUM (toml 0.8 → 0.9.5 bump)
 
 **Mitigation:**
+
 - toml 0.8 → 0.9.5 is minor version (mostly compatible)
 - Run `cargo update` locally and test before committing
 - Check changelogs for breaking changes
@@ -843,6 +916,7 @@ Use `thiserror` for implementation.
 **Impact:** LOW (codex-rs is well-contained)
 
 **Mitigation:**
+
 - Use `cargo tree` to verify dependency graph
 - Check for transitive dependencies
 - Test in isolation before integration
@@ -856,6 +930,7 @@ Use `thiserror` for implementation.
 **Impact:** MEDIUM (future projects may miss standards)
 
 **Mitigation:**
+
 - Add to project CLAUDE.md (enforced)
 - Create example project using standard pattern
 - Add to PR checklist (config choice validation)
@@ -866,18 +941,21 @@ Use `thiserror` for implementation.
 ## Success Criteria
 
 ### Tier 1 (Must-Have)
+
 - [ ] All TOML versions unified to 0.9.5
 - [ ] Workspace dependencies pinned
 - [ ] phenotype-toml-edit builds and exports
 - [ ] No version conflicts in `cargo tree`
 
 ### Tier 2 (Should-Have)
+
 - [ ] codex-config-core extracted and functional
 - [ ] helios-rs uses codex-config-core
 - [ ] CONFIG_GOVERNANCE.md written and reviewed
 - [ ] All existing tests pass
 
 ### Tier 3 (Nice-to-Have)
+
 - [ ] phenotype-config-types available (if needed)
 - [ ] phenotype-config-layers available (if needed)
 - [ ] Governance doc in CLAUDE.md
@@ -902,7 +980,7 @@ Use `thiserror` for implementation.
 
 ### Next Sprint
 
-3. **Execute Tier 2** (2.75 hours)
+1. **Execute Tier 2** (2.75 hours)
    - Extract or migrate config system
    - Document CONFIG_GOVERNANCE.md
    - Update helios-rs dependencies
@@ -910,14 +988,14 @@ Use `thiserror` for implementation.
 
 ### Future (Roadmap)
 
-4. **Execute Tier 3** (4.5 hours, optional)
+1. **Execute Tier 3** (4.5 hours, optional)
    - Build shared config types if needed
    - Build config composition library if needed
    - Integrate into thegent and other projects
 
 ### Long-Term Governance
 
-5. **Establish Standards**
+1. **Establish Standards**
    - Add to Phenotype CLAUDE.md
    - Enforce config pattern selection in PR reviews
    - Update architecture documentation
@@ -927,16 +1005,19 @@ Use `thiserror` for implementation.
 ## Conclusion
 
 The Phenotype workspace has **strong fundamentals** for TOML configuration management:
+
 - phenotype-config-core is production-ready
 - codex-rs has sophisticated, tested patterns
 - thegent correctly uses enum-based configs
 
 However, **fragmentation and duplication** create technical debt:
+
 - Version inconsistencies block cross-project reuse
 - Two independent config systems increase maintenance burden
 - Opportunity cost of underutilized libraries
 
 **This audit recommends a phased standardization approach:**
+
 1. **Tier 1** unifies versions and creates reusable tools (LOW EFFORT)
 2. **Tier 2** consolidates config systems (MEDIUM EFFORT, HIGH VALUE)
 3. **Tier 3** builds optional shared libraries (OPTIONAL, LONG-TERM)
@@ -954,6 +1035,7 @@ However, **fragmentation and duplication** create technical debt:
 ### Analyzed Files
 
 **phenotype-config-core:**
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/Cargo.toml`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/lib.rs`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/loader.rs`
@@ -962,6 +1044,7 @@ However, **fragmentation and duplication** create technical debt:
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-config-core/src/dirs_helper.rs`
 
 **heliosCLI/codex-rs config system:**
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/Cargo.toml`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/mod.rs`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config/edit.rs`
@@ -971,9 +1054,11 @@ However, **fragmentation and duplication** create technical debt:
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/codex-rs/core/src/config_loader/macos.rs`
 
 **heliosCLI/helios-rs:**
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/helios-rs/Cargo.toml`
 
 **platforms/thegent:**
+
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/Cargo.toml`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/policy.rs`
 - `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/crates/thegent-policy/src/engine.rs`

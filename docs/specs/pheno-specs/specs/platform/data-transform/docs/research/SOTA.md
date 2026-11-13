@@ -26,6 +26,7 @@ TypeScript applications routinely transform data between multiple representation
 | **View Models** | Presentation logic, UI concerns | Frequent changes |
 
 The transformation between these representations is a significant source of:
+
 - **Boilerplate code** — Property-by-property mapping
 - **Runtime errors** — Type mismatches at runtime
 - **Maintenance burden** — Multiple locations to update on schema changes
@@ -34,6 +35,7 @@ The transformation between these representations is a significant source of:
 ### 1.2 Historical Context
 
 Early TypeScript (2012-2018) relied on manual mapping:
+
 ```typescript
 // 2012-2015: Manual mapping
 const dto = {
@@ -43,6 +45,7 @@ const dto = {
 ```
 
 The 2015-2020 period saw decorator-based solutions:
+
 ```typescript
 // 2015-2020: Decorator-based (class-transformer)
 class UserDTO {
@@ -54,6 +57,7 @@ class UserDTO {
 ```
 
 Modern TypeScript (2020-present) emphasizes type-level programming:
+
 ```typescript
 // 2020+: Type-level transformation (Zod, io-ts)
 const UserDTO = z.object({
@@ -118,6 +122,7 @@ TypeScript Model/DTO Libraries
 **Overview:** The most widely used decorator-based transformation library.
 
 **Characteristics:**
+
 - Decorator-based property mapping
 - Supports classes with TypeScript decorators
 - Groups with exclusion/inclusion of properties
@@ -125,12 +130,14 @@ TypeScript Model/DTO Libraries
 - Versioning support for API evolution
 
 **Strengths:**
+
 - Mature, stable codebase (2015+)
 - Wide adoption (>5M weekly downloads)
 - Good documentation
 - Active maintenance
 
 **Weaknesses:**
+
 - Runtime-only type checking (no compile-time safety)
 - Requires `experimentalDecorators` flag
 - Heavy bundle impact (15KB gzipped)
@@ -138,6 +145,7 @@ TypeScript Model/DTO Libraries
 - Complex nested transformations difficult
 
 **Metrics:**
+
 | Metric | Value |
 |--------|-------|
 | Bundle Size | 15KB gzipped |
@@ -150,6 +158,7 @@ TypeScript Model/DTO Libraries
 **Overview:** Decorator-based validation library, often paired with class-transformer.
 
 **Characteristics:**
+
 - Validation decorators (@IsEmail, @Length, etc.)
 - Class-validator pipes for NestJS
 - Validation groups
@@ -157,12 +166,14 @@ TypeScript Model/DTO Libraries
 - Async validation support
 
 **Strengths:**
+
 - Comprehensive validation rules
 - NestJS integration
 - Active maintenance
 - Good TypeScript support
 
 **Weaknesses:**
+
 - Decorator-only approach
 - Runtime validation only
 - 12KB bundle size
@@ -173,6 +184,7 @@ TypeScript Model/DTO Libraries
 **Overview:** Schema declaration and validation library with TypeScript-first design.
 
 **Characteristics:**
+
 - Schema as first-class values
 - Type inference from schemas
 - Validation + transformation
@@ -180,6 +192,7 @@ TypeScript Model/DTO Libraries
 - Parsing (not validating)
 
 **Strengths:**
+
 - Excellent TypeScript inference
 - Composable schemas
 - No decorators required
@@ -187,12 +200,14 @@ TypeScript Model/DTO Libraries
 - Tree-shakeable
 
 **Weaknesses:**
+
 - Runtime validation (compile-time only for types)
 - 12KB bundle size
 - No built-in circular reference handling
 - Transformation is validation-adjacent, not primary
 
 **Metrics:**
+
 | Metric | Value |
 |--------|-------|
 | Bundle Size | 12KB gzipped |
@@ -205,6 +220,7 @@ TypeScript Model/DTO Libraries
 **Overview:** TypeScript-first runtime type system using codec pattern.
 
 **Characteristics:**
+
 - Phantom types for safety
 - Codec pattern (encoder + decoder)
 - Eq instance for equality
@@ -212,18 +228,21 @@ TypeScript Model/DTO Libraries
 - Category theory inspired
 
 **Strengths:**
+
 - Strong theoretical foundation
 - Excellent type inference
 - Compositional
 - No dependencies
 
 **Weaknesses:**
+
 - Steep learning curve (monads, functors)
 - Complex error messages
 - 10KB bundle size
 - Verbose schema definition
 
 **Metrics:**
+
 | Metric | Value |
 |--------|-------|
 | Bundle Size | 10KB gzipped |
@@ -236,17 +255,20 @@ TypeScript Model/DTO Libraries
 **Overview:** Type-level transformation library.
 
 **Characteristics:**
+
 - Type-level operations (Map, Filter, Merge)
 - 200+ type utilities
 - Fully erased at runtime
 - No runtime overhead
 
 **Strengths:**
+
 - Zero runtime cost
 - Powerful type manipulation
 - Excellent for library authors
 
 **Weaknesses:**
+
 - Complex error messages
 - Limited to type-level
 - No validation
@@ -257,17 +279,20 @@ TypeScript Model/DTO Libraries
 **Overview:** Next-generation schema library from Effect ecosystem.
 
 **Characteristics:**
+
 - Unified validation + transformation
 - Error accumulation
 - Schema composition
 - Refined types
 
 **Strengths:**
+
 - Excellent error messages
 - Composable
 - Sound type inference
 
 **Weaknesses:**
+
 - Effect dependency (monadic)
 - Larger bundle (18KB)
 - Effect ecosystem lock-in
@@ -277,17 +302,20 @@ TypeScript Model/DTO Libraries
 **Overview:** Modular alternative to Zod with smaller bundle.
 
 **Characteristics:**
+
 - Modular (import only what you use)
 - <3KB gzipped
 - TypeScript-first
 - Schema as objects
 
 **Strengths:**
+
 - Tiny bundle
 - Modular
 - Good TypeScript support
 
 **Weaknesses:**
+
 - Less mature
 - Smaller ecosystem
 - Runtime only
@@ -528,6 +556,7 @@ Use this framework to select a transformation library:
 ### 6.3 Datamold Selection Criteria
 
 Choose Datamold when:
+
 - TypeScript 7 is available (tsgo or tsc 7+)
 - Bundle size is critical (<5KB target)
 - Compile-time type safety is valued
@@ -613,6 +642,7 @@ Choose Datamold when:
 ## 9. Conclusion
 
 The TypeScript transformation landscape lacks a solution that provides:
+
 1. **Compile-time type safety** — No mapping errors in production
 2. **Zero runtime overhead** — Direct property access
 3. **Small bundle size** — <5KB gzipped
@@ -641,6 +671,7 @@ Datamold addresses these gaps through novel use of TypeScript 7's type system, p
 ## Appendix B: Schema Definition Syntax Comparison
 
 ### class-transformer
+
 ```typescript
 class UserDTO {
   @Expose() id: number;
@@ -651,6 +682,7 @@ class UserDTO {
 ```
 
 ### zod
+
 ```typescript
 const UserDTO = z.object({
   id: z.number(),
@@ -660,6 +692,7 @@ const UserDTO = z.object({
 ```
 
 ### io-ts
+
 ```typescript
 const UserDTO = t.type({
   id: t.number,
@@ -669,6 +702,7 @@ const UserDTO = t.type({
 ```
 
 ### Datamold (proposed)
+
 ```typescript
 const UserToDTO = schema(User, UserDTO, {
   transformers: [

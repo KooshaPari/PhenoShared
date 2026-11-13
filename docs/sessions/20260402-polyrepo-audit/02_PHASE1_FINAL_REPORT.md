@@ -27,6 +27,7 @@ Phase 1 achieved significant infrastructure cleanup and stabilization. **80.4 GB
 | #563 | feat(test-infra): CallSpy macros | ⏳ **READY - blocked** |
 
 **PR Fixes Applied:**
+
 - #553: Added WorkPackageBuilder fields (created_at, updated_at), fixed .gitignore typo, added FR traces
 - #562: Replaced ErrorKind with DomainError, added phenotype-error-core dependency
 - #577: Rebased to #589 with clean history
@@ -67,6 +68,7 @@ All 9 cloned repos had dirty files committed with appropriate messages.
 ✅ **COMPLETE**
 
 All 9 repos now on `main` branch:
+
 - phenotype-infrakit, AgilePlus, thegent, heliosCLI, heliosApp
 - agentapi-plusplus, cliproxyapi-plusplus, cloud, agent-wave, forgecode
 
@@ -96,6 +98,7 @@ All 9 repos now on `main` branch:
 **Problem**: The "Main Governance Baseline" ruleset requires "conversation resolution" before merge. GitHub Advanced Security alerts (Snyk, CodeQL, etc.) count as unresolved review threads.
 
 **Evidence**:
+
 ```
 GraphQL: Repository rule violations found
 A conversation must be resolved before this pull request can be merged.
@@ -124,6 +127,7 @@ A conversation must be resolved before this pull request can be merged.
 ### GitHub API Limitations
 
 Tried programmatic resolution via GraphQL:
+
 ```graphql
 mutation {
   resolveReviewThread(input: {threadId: "..."}) {
@@ -149,10 +153,10 @@ Security alerts are not regular review comments and require UI dismissal.
 
 ### Can Continue in Phase 2
 
-4. **Set up org .github repo** with reusable workflows
-5. **Enforce .gitignore** across all 25 cloned repos
-6. **Clone remaining ~200 repos** from GitHub
-7. **Set up package publishing** (npm, PyPI, crates.io)
+1. **Set up org .github repo** with reusable workflows
+2. **Enforce .gitignore** across all 25 cloned repos
+3. **Clone remaining ~200 repos** from GitHub
+4. **Set up package publishing** (npm, PyPI, crates.io)
 
 ---
 
@@ -187,14 +191,14 @@ Security alerts are not regular review comments and require UI dismissal.
 
 ### Immediate (You)
 
-1. Go to https://github.com/KooshaPari/phenotype-infrakit/pull/589
+1. Go to <https://github.com/KooshaPari/phenotype-infrakit/pull/589>
 2. Click "Resolve conversation" on all security alert threads (10 total)
 3. Click "Merge pull request"
 4. Repeat for #560, #561, #563
 
 ### Or
 
-1. Go to https://github.com/KooshaPari/phenotype-infrakit/settings/branches
+1. Go to <https://github.com/KooshaPari/phenotype-infrakit/settings/branches>
 2. Edit "Main Governance Baseline" ruleset
 3. Disable "Require resolved conversations before merging"
 4. Merge all PRs
@@ -213,6 +217,7 @@ Security alerts are not regular review comments and require UI dismissal.
 ## Key Insight
 
 The blocking issue is a **repository ruleset configuration**, not code quality. All PRs are technically ready to merge:
+
 - Code compiles and passes tests
 - Review feedback has been addressed
 - Security alerts are informational (not blocking by default)
@@ -220,6 +225,7 @@ The blocking issue is a **repository ruleset configuration**, not code quality. 
 The "conversation resolution" rule is stricter than typical OSS practices and requires active maintenance (dismissing alerts) to allow merges.
 
 **Recommendation**: Consider relaxing the rule to "Require conversation resolution before merging: OFF" since:
+
 1. You have CODEOWNERS for required reviews
 2. CI gates (Snyk, Semgrep) already block on real issues
 3. The current rule creates merge friction without additional security value

@@ -265,6 +265,7 @@ resolution) and deletion (with guard enforcement).
    Note: use `Box::pin` for recursive async functions to avoid infinite size at compile time.
 
    Example output for `--tree`:
+
    ```
    authentication (3 owned, 0 tagged)
      +-- oauth-providers (0 owned, 0 tagged)
@@ -277,6 +278,7 @@ resolution) and deletion (with guard enforcement).
    - Resolve slug to module (same root-search pattern as `delete`).
    - Call `storage.get_module_with_features(module.id).await?`.
    - Print sections:
+
      ```
      Module: authentication
      Description: Handles all auth flows
@@ -337,6 +339,7 @@ resolution) and deletion (with guard enforcement).
 **Purpose**: Expose `agileplus module` at the top level and cover command dispatch with tests.
 
 **Files**:
+
 - MODIFIED: `crates/agileplus-cli/src/main.rs` (or wherever the top-level `Commands` enum lives)
 
 **Steps**:

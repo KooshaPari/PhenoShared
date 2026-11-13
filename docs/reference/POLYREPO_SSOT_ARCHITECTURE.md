@@ -71,18 +71,21 @@ repos/                          # Git root (single .git/)
 ### 1.2 Current Canonical State Management
 
 **Primary Canonical Source**: `main` branch
+
 - All projects track `main`
 - Merges must be fast-forward to preserve linear history
 - No force-push policy in place (enforced via branch protection)
 - Divergence from `origin/main` requires explicit `git pull` reconciliation
 
 **Secondary Authority**: Specs Registry
+
 - Location: `/kitty-specs/` directory (26+ specifications)
 - Format: Markdown `spec.md` files with FR traceability
 - Versioning: None (currently static)
 - Conflicts: Manual merge required; no automation
 
 **Tertiary Authority**: AgilePlus Worklog
+
 - Location: `/worklog.md` (global) + `AgilePlus/.work-audit/worklog.md` (project)
 - Format: YAML-like work package tracking
 - Currency: Updated per session completion
@@ -116,6 +119,7 @@ repos/                          # Git root (single .git/)
 ### 1.3 Worktree Usage Pattern
 
 Current Worktree Structure:
+
 ```
 .worktrees/
 ├── docs/                           # docs refactoring
@@ -128,12 +132,14 @@ Current Worktree Structure:
 ```
 
 **Observations**:
+
 - Naming is inconsistent (some have `feat/` prefix, others have `phase` prefix)
 - No TTL or cleanup strategy
 - Some branches are likely merged (e.g., `phase2-routes-dashboard`)
 - No central registry mapping `.worktrees/<path>` → AgilePlus spec ID
 
 **Agent Behavior**:
+
 - Agents create `.worktrees/<project>/<topic>` for feature work (per CLAUDE.md)
 - Agents should commit to these branches, then open PR to `main`
 - Agents do NOT clean up merged worktrees (orphaned data accumulates)
@@ -206,6 +212,7 @@ Current Worktree Structure:
      - **Body** (full Markdown spec)
 
    **Example**:
+
    ```yaml
    FR-001-001:
      title: "Event sourcing with SHA-256 chains"
@@ -232,6 +239,7 @@ Current Worktree Structure:
    - Service: `scripts/spec-reconciliation-service.py`
    - Role: Atomic merge of concurrent spec contributions
    - Algorithm:
+
      ```
      FOR each agent's feature branch:
        1. Extract new/modified specs from FUNCTIONAL_REQUIREMENTS.md
@@ -299,6 +307,7 @@ Current Worktree Structure:
    - Create: `/docs/reference/DEPENDENCY_GRAPH_CANONICAL.md`
    - Format: YAML DAG (directed acyclic graph) representation
    - Content:
+
      ```yaml
      dependencies:
        phenotype-infrakit:         # Project
@@ -334,6 +343,7 @@ Current Worktree Structure:
      - Agent B updates `crates/phenotype-async-traits` deps
      - Potential conflict: Both crates now depend on each other (cycle)
    - Resolution algorithm:
+
      ```
      1. Detect cycle: A → B → A
      2. Identify common dependent: C (both A and B depend on C)
@@ -341,6 +351,7 @@ Current Worktree Structure:
      4. Update both A and B to depend on D only
      5. Merge in order: D merge first, then A, then B
      ```
+
    - Implementation: Add to spec merge service (extends Phase 1)
 
 4. **Dependency Graph Visualization** (NEW)
@@ -356,6 +367,7 @@ Current Worktree Structure:
    - Current bottleneck: Only one agent can merge at a time (main is serialized)
    - Solution: Use ephemeral `integration/*` branches for staging
    - Workflow:
+
      ```
      Agent 1: git checkout -b integration/feature-1 main
              git merge --no-ff feat/my-feature-1
@@ -374,6 +386,7 @@ Current Worktree Structure:
          3. Run full test suite
          4. MERGE to main in topological order (dependencies first)
      ```
+
    - Branch protection: Auto-delete `integration/*` after merge to main
    - Latency improvement: From serial (N × 5 min) to parallel (5 min + serial ordering)
 
@@ -420,6 +433,7 @@ Current Worktree Structure:
    - Current: `@phenotype/docs` published via GitHub Packages
    - Enhancement: Add semantic versioning + breaking change detection
    - Workflow:
+
      ```
      PUBLISHED VERSIONS:
        v0.1.0 — Initial VitePress theme (2026-03-15)
@@ -432,6 +446,7 @@ Current Worktree Structure:
        - Design token changes → minor version bump
        - CSS updates → patch version bump
      ```
+
    - Consumer projects pin versions: `@phenotype/docs: "~0.2.0"`
    - Migration guide: Created automatically for each breaking change
 
@@ -439,6 +454,7 @@ Current Worktree Structure:
    - Current: Governance scattered across repos (CLAUDE.md x 5, AGENTS.md x 3)
    - Goal: Single source of truth in thegent (platforms/thegent/dotfiles/governance/)
    - Projects import via symlink or submodule:
+
      ```
      repos/
        CLAUDE.md (symlink → platforms/thegent/.../CLAUDE.base.md)
@@ -450,12 +466,14 @@ Current Worktree Structure:
      agileplus/
        CLAUDE.md (extends ../CLAUDE.md + AgilePlus-specific rules)
      ```
+
    - Benefit: Single update propagates to all projects
    - Breaking change detection: Same as docs chassis
 
 3. **Cross-Repo Interface Contracts** (NEW)
    - Document: `/docs/reference/PHENOTYPE_PLATFORM_CONTRACTS.md`
    - Define stable interfaces between projects:
+
      ```yaml
      contracts:
        phenotype-error-core:
@@ -475,11 +493,13 @@ Current Worktree Structure:
            - v0.1→v0.2: WorkPackage.deps → WorkPackage.dependencies
              migration: Provide adapter function
      ```
+
    - Consumer projects declare which contracts they depend on
    - CI: Validates contract compatibility before merge
 
 4. **Spec Chassis Versioning & Registry** (BUILDS ON PHASE 1)
    - Extend SPECS_REGISTRY.md with capability declarations:
+
      ```yaml
      spec_registry:
        version: "1.0.0"
@@ -497,12 +517,14 @@ Current Worktree Structure:
              - crate: phenotype-error-core
                version: ">=1.0.0"
      ```
+
    - Agents can query: "Which crates provide EventStore trait?"
    - Impact analysis: "If I update FR-XXX, which specs are affected?"
 
 5. **Intent-Driven Module Loading** (NEW, EXPERIMENTAL)
    - Goal: Enable runtime module selection based on user intent (proof-of-concept)
    - Concept:
+
      ```
      User intent: "I need an event store"
 
@@ -517,12 +539,14 @@ Current Worktree Structure:
 
      User selects → module loaded (Module Federation at runtime)
      ```
+
    - Implementation: Proof-of-concept in agileplus-agents (Phase 3.5)
    - Impact: Enables multi-backend architectures, easier swapping
 
 6. **AI-Native Service Health Monitoring** (NEW, LONG-TERM)
    - Goal: Automatic module versioning based on test pass rates
    - Concept:
+
      ```
      phenotype-event-sourcing:
        - test pass rate: 98%
@@ -535,6 +559,7 @@ Current Worktree Structure:
        - version recommendation: v0.2.1 (pre-release)
        → If < 90%, suggest downgrade to v0.1.0
      ```
+
    - Automation: Weekly health report generated
    - Integration: Spec registry updated with health annotations
 
@@ -735,6 +760,7 @@ When merging feature branch feat/my-feature to main:
 **Current**: 50+ agents can work in parallel (bounded by system resources)
 
 **Safe Limits**:
+
 - **Simultaneous merges to main**: 5 (prevents git lock contention)
 - **Simultaneous integration/* branches**: Unlimited (no conflict)
 - **Simultaneous spec conflicts**: 10+ (spec service can handle batches)
@@ -994,17 +1020,20 @@ GET /api/deps/graph?format=mermaid
 ### 5.3 Service Deployment
 
 **Technology Stack**:
+
 - **Language**: Python 3.11+ (easy integration with GitPython, PyYAML)
 - **Framework**: FastAPI (async, lightweight)
 - **Persistence**: SQLite (local audit log) + Git (distributed state)
 - **CI Integration**: GitHub Actions (webhook-triggered on PR events)
 
 **Deployment Locations**:
+
 1. **Local development**: `scripts/spec-reconciliation-service.py` (runs on agent machine)
 2. **Shared CI**: GitHub Actions workflow `.github/workflows/reconciliation.yml`
 3. **Scheduled**: Every 5 minutes (cron) or on webhook
 
 **Failure Handling**:
+
 - Service crash: Git operations are idempotent; re-run on restart
 - Merge conflict (unexpected): Log to `AUDIT_LOG.md`, notify team lead
 - Network failure: Retry with exponential backoff (3 attempts, max 5 min)
@@ -1019,6 +1048,7 @@ GET /api/deps/graph?format=mermaid
 #### Phase 1: Specs Canonicalization (Weeks 1-2)
 
 **Week 1**:
+
 - Days 1-2: Create `specs/main` branch, push to remote, configure protection
 - Days 2-3: Build SPECS_REGISTRY.md, index all 26+ specs
 - Days 3-4: Deploy spec merge service (local testing)
@@ -1026,6 +1056,7 @@ GET /api/deps/graph?format=mermaid
 - Day 5: Train agents on specs/main workflow
 
 **Week 2**:
+
 - Days 1-2: Soft launch spec merge service (log only, don't merge)
 - Days 2-3: Monitor conflicts, fix edge cases
 - Days 3-4: Full rollout (service actively merges specs)
@@ -1033,11 +1064,13 @@ GET /api/deps/graph?format=mermaid
 - Day 5: Phase 1 complete, document learnings
 
 **Parallel Work** (1-2 agents per task):
+
 - Resolve git conflict markers in CLAUDE.md, AGENTS.md, worklog.md
 - Create AUDIT_LOG.md template
 - Set up GitHub branch protection for specs/main
 
 **Expected Deliverables**:
+
 - specs/main branch (live on GitHub)
 - SPECS_REGISTRY.md (26+ specs indexed)
 - Spec merge service (Python script)
@@ -1050,33 +1083,39 @@ GET /api/deps/graph?format=mermaid
 #### Phase 2: Dependency Reconciliation (Weeks 3-6)
 
 **Week 3**:
+
 - Days 1-2: Build DEPENDENCY_GRAPH_CANONICAL.md
 - Days 2-3: Enhance circular dep detection service
 - Days 3-4: Test with 5+ synthetic scenarios
 - Day 5: Document dependency update policy
 
 **Week 4**:
+
 - Days 1-2: Implement integration branch workflow
 - Days 2-3: Build merge orchestration service (topological sort)
 - Days 3-4: Test with 10+ concurrent merges
 - Day 5: Validate zero false positives
 
 **Week 5**:
+
 - Days 1-2: Deploy integration branch protection
 - Days 2-3: Auto-cleanup service for integration/*
 - Days 3-4: Stress test with high concurrency (20+ agents)
 - Day 5: Monitor for issues, refine
 
 **Week 6**:
+
 - Days 1-3: Polish, document, train agents
 - Days 4-5: Phase 2 complete, metrics collection
 
 **Parallel Work**:
+
 - Generate dependency graph visualization (Mermaid)
 - Set up Slack notifications for merge events
 - Create runbooks for common conflict scenarios
 
 **Expected Deliverables**:
+
 - DEPENDENCY_GRAPH_CANONICAL.md (30+ projects)
 - Enhanced circular dep detection (pre-commit hook)
 - Integration branch workflow (documented)
@@ -1089,30 +1128,36 @@ GET /api/deps/graph?format=mermaid
 #### Phase 3: Platform Chassis Federation (Weeks 8-12)
 
 **Week 8**:
+
 - Days 1-3: Determine @phenotype/docs versioning strategy
 - Days 3-5: Version thegent governance (v1.0.0 or current)
 
 **Week 9**:
+
 - Days 1-2: Deploy governance symlinks (repos/ → thegent/)
 - Days 2-3: Test symlink resolution in CI
 - Days 3-5: Document breaking change detection
 
 **Week 10**:
+
 - Days 1-3: Define platform contracts (error-core, event-sourcing, etc.)
 - Days 3-5: Create PHENOTYPE_PLATFORM_CONTRACTS.md
 
 **Week 11**:
+
 - Days 1-2: Implement contract validation in CI
 - Days 2-3: Build intent-driven module loading POC
 - Days 3-4: Test module selection workflow
 - Day 5: Document POC results
 
 **Week 12**:
+
 - Days 1-2: Implement AI-native health monitoring
 - Days 2-3: Generate first health report
 - Days 3-5: Polish, document, train agents
 
 **Expected Deliverables**:
+
 - Phenotype Docs Chassis v1.0.0 (stable)
 - Governance symlinks (all projects)
 - PHENOTYPE_PLATFORM_CONTRACTS.md (10+ contracts)
@@ -1225,26 +1270,31 @@ AFTER Phase 3:
 ### 8.2 Mitigation Strategies
 
 **Spec Merge Cycles**:
+
 - Phase 2 dependency validation catches cycles
 - Circular dep detection runs before spec merge
 - If cycle detected: Spec merge blocked, agent notified
 
 **Agent Adoption**:
+
 - Mandatory training session (30 min)
 - CI gate enforces adoption (blocks merges without specs/main usage)
 - Early feedback loop (Slack notifications for every spec merge)
 
 **Integration Branch Failures**:
+
 - Full test suite runs before merge (catch failures early)
 - If tests fail: Revert integration/* merge, notify agent
 - Maintain detailed log of what failed (for debugging)
 
 **Reconciliation Service Crashes**:
+
 - All git operations are idempotent (safe to retry)
 - Audit log stored in Git (distributed backup)
 - Automatic recovery: Service restarts, re-processes failed merges
 
 **Governance Symlinks**:
+
 - Use `git config --add core.symlinks true` for CI environments
 - Fallback: If symlinks fail, read from thegent directly
 - Test symlink resolution as part of CI setup
@@ -1280,6 +1330,7 @@ AFTER Phase 3:
 ### C. Service Implementation Checklist
 
 **Phase 1 - Spec Reconciliation**:
+
 - [ ] `scripts/spec-reconciliation-service.py` created
 - [ ] Service detects concurrent FUNCTIONAL_REQUIREMENTS.md changes
 - [ ] Service assigns sequential FR-IDs
@@ -1288,6 +1339,7 @@ AFTER Phase 3:
 - [ ] CI integration: spec merge on every PR
 
 **Phase 2 - Dependency Reconciliation**:
+
 - [ ] `scripts/detect-circular-deps.py` enhanced for pre-commit hook
 - [ ] `scripts/merge-orchestration-service.py` created
 - [ ] Service handles topological sorting
@@ -1296,6 +1348,7 @@ AFTER Phase 3:
 - [ ] CI integration: dep validation on every commit
 
 **Phase 3 - Platform Chassis**:
+
 - [ ] Governance symlinks deployed
 - [ ] Contract validation CI gate
 - [ ] Module loading POC
@@ -1367,6 +1420,7 @@ SSOT architecture replaces human choreography with **automated, conflict-aware s
 ---
 
 **Next Action**:
+
 1. Share this document with team leads for feedback
 2. Resolve git conflict markers in CLAUDE.md, AGENTS.md, worklog.md
 3. Create `specs/main` branch and push to origin

@@ -50,6 +50,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 ### Phase 1: Core Foundation (Weeks 1-4)
 
 #### 1.1 Project Infrastructure
+
 - [x] TypeScript 7 project setup with tsgo
 - [x] Monorepo structure (packages: core, codegen, runtime)
 - [x] CI/CD pipeline (GitHub Actions)
@@ -59,6 +60,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [x] Package publishing (npm, jsr)
 
 #### 1.2 Schema DSL Foundation
+
 - [ ] SchemaBuilder class with fluent API
 - [ ] Basic field mapping (direct, nested, computed)
 - [ ] Type inference from source to target
@@ -66,6 +68,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] Schema composition and inheritance
 
 #### 1.3 Core Transformation Engine
+
 - [ ] Synchronous transformer execution
 - [ ] Deep cloning with cycle detection
 - [ ] Path-based field access
@@ -75,6 +78,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 ### Phase 2: Advanced Transformations (Weeks 5-8)
 
 #### 2.1 Collection Handling
+
 - [ ] Array mapping with element transformers
 - [ ] Set/Map transformations
 - [ ] Record/object transformations
@@ -82,6 +86,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] Pagination support for large collections
 
 #### 2.2 Complex Types
+
 - [ ] Union type handling
 - [ ] Discriminated unions
 - [ ] Intersection types
@@ -89,6 +94,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] Generic type preservation
 
 #### 2.3 Validation Integration
+
 - [ ] Pre-transformation validation
 - [ ] Post-transformation validation
 - [ ] Custom validator composition
@@ -98,6 +104,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 ### Phase 3: Code Generation (Weeks 9-12)
 
 #### 3.1 Compiler Integration
+
 - [ ] TypeScript Compiler API integration
 - [ ] AST traversal for type extraction
 - [ ] Schema definition parser
@@ -105,6 +112,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] Source map generation
 
 #### 3.2 Build-time Optimization
+
 - [ ] Transform elimination at compile time
 - [ ] Dead code elimination for unused fields
 - [ ] Constant folding for computed values
@@ -112,6 +120,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] Tree-shaking friendly output
 
 #### 3.3 Development Tools
+
 - [ ] VSCode extension for schema autocomplete
 - [ ] ESLint plugin for schema validation
 - [ ] DevTools for transformation debugging
@@ -120,6 +129,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 ### Phase 4: Performance & Production (Weeks 13-16)
 
 #### 4.1 Runtime Optimization
+
 - [ ] Transformer memoization
 - [ ] Lazy evaluation for large objects
 - [ ] Streaming transformations
@@ -127,6 +137,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] SIMD optimizations where applicable
 
 #### 4.2 Advanced Features
+
 - [ ] Partial transformations (deltas)
 - [ ] Bidirectional transformations
 - [ ] Schema versioning and migration
@@ -134,6 +145,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] Batch transformations
 
 #### 4.3 Integration Ecosystem
+
 - [ ] Zod schema integration
 - [ ] Valibot integration
 - [ ] ArkType integration
@@ -143,6 +155,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 ### Phase 5: Production Hardening (Weeks 17-20)
 
 #### 5.1 Testing & Quality
+
 - [ ] 100% type coverage (tsc --noImplicitAny)
 - [ ] 95%+ test coverage
 - [ ] Fuzz testing for edge cases
@@ -150,6 +163,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] Performance regression testing
 
 #### 5.2 Documentation & Examples
+
 - [ ] Interactive playground
 - [ ] Migration guides from alternatives
 - [ ] Video tutorials
@@ -157,6 +171,7 @@ Datamold is a high-performance, type-safe TypeScript library for declarative dat
 - [ ] API reference with typedoc
 
 #### 5.3 Ecosystem Expansion
+
 - [ ] React hooks integration
 - [ ] Vue composables
 - [ ] Angular services
@@ -488,12 +503,14 @@ The system implements a layered architecture with clear separation of concerns:
 ### A.2 Component Interaction Patterns
 
 #### Synchronous Communication
+
 - Direct method calls within process
 - HTTP/gRPC for inter-service
 - Timeout and retry policies
 - Circuit breaker pattern
 
 #### Asynchronous Communication
+
 - Event-driven architecture
 - Message queue patterns
 - Publish/subscribe
@@ -530,6 +547,7 @@ Input → Validation → Transformation → Processing → Storage → Output
 ### B.3 Infrastructure Decisions
 
 Cloud Strategy:
+
 - Multi-cloud capability (AWS primary, Azure/GCP fallback)
 - Kubernetes for orchestration
 - Terraform for infrastructure as code
@@ -540,6 +558,7 @@ Cloud Strategy:
 ### C.1 Deployment Procedures
 
 #### Pre-Deployment Checklist
+
 - [ ] All tests passing (unit, integration, e2e)
 - [ ] Security scan clean (SAST, DAST, dependency check)
 - [ ] Performance benchmarks within SLA
@@ -550,6 +569,7 @@ Cloud Strategy:
 - [ ] On-call roster confirmed
 
 #### Deployment Steps
+
 1. Deploy to staging environment
 2. Run smoke tests
 3. Gradual traffic shift (10% → 25% → 50% → 100%)
@@ -560,12 +580,14 @@ Cloud Strategy:
 ### C.2 Incident Response
 
 Severity Levels:
+
 - **SEV1**: Service down, data loss, security breach
 - **SEV2**: Major feature degraded, workaround exists
 - **SEV3**: Minor feature issue, low impact
 - **SEV4**: Cosmetic issues, no user impact
 
 Response Times:
+
 | Severity | Acknowledge | Resolve |
 |----------|-------------|---------|
 | SEV1 | 5 min | 1 hour |
@@ -576,6 +598,7 @@ Response Times:
 ### C.3 Capacity Planning
 
 Scaling Triggers:
+
 - CPU utilization > 70% for 5 minutes
 - Memory utilization > 80% for 5 minutes
 - Request latency p99 > 500ms
@@ -585,10 +608,12 @@ Scaling Triggers:
 ### C.4 Disaster Recovery
 
 Recovery Objectives:
+
 - RPO (Recovery Point Objective): 5 minutes
 - RTO (Recovery Time Objective): 30 minutes
 
 Backup Strategy:
+
 - Continuous replication to secondary region
 - Point-in-time recovery enabled
 - Daily full backups retained for 30 days
@@ -599,6 +624,7 @@ Backup Strategy:
 ### D.1 Threat Model
 
 STRIDE Analysis:
+
 - **Spoofing**: Identity verification at all entry points
 - **Tampering**: Immutable audit logs, checksums
 - **Repudiation**: Non-repudiable event sourcing
@@ -718,6 +744,7 @@ STRIDE Analysis:
 ### H.2 Business Impact Analysis
 
 Critical Functions:
+
 1. User authentication (RTO: 15 min)
 2. Data persistence (RTO: 30 min)
 3. API availability (RTO: 5 min)
@@ -784,6 +811,7 @@ alerts:
 Sprint Duration: 2 weeks
 
 Sprint Cadence:
+
 - **Monday**: Sprint planning
 - **Daily**: Standup (15 min)
 - **Wednesday**: Mid-sprint review
@@ -834,6 +862,7 @@ Sprint Cadence:
 ### K.1 Common Patterns
 
 #### Pattern: Circuit Breaker
+
 ```rust
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::time::{Duration, Instant};
@@ -901,6 +930,7 @@ impl CircuitBreaker {
 ```
 
 #### Pattern: Retry with Exponential Backoff
+
 ```python
 import time
 import random
@@ -945,6 +975,7 @@ def retry(
 ### K.2 Configuration Examples
 
 #### Kubernetes Deployment
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -995,6 +1026,7 @@ spec:
 ```
 
 #### Terraform Infrastructure
+
 ```hcl
 variable "environment" {
   description = "Deployment environment"
@@ -1054,6 +1086,7 @@ resource "aws_rds_cluster" "postgres" {
 ### K.3 Database Schema Examples
 
 #### PostgreSQL Schema
+
 ```sql
 -- Core tables
 CREATE TABLE organizations (
@@ -1120,6 +1153,7 @@ CREATE TABLE events_y2024m02 PARTITION OF events
 ### K.4 API Design Examples
 
 #### RESTful API Specification
+
 ```yaml
 openapi: 3.0.3
 info:
@@ -1273,17 +1307,20 @@ security:
 ### L.2 Optimization Checklist
 
 Before Optimization:
+
 - [ ] Identify bottlenecks with profiling
 - [ ] Establish baseline metrics
 - [ ] Define success criteria
 
 During Optimization:
+
 - [ ] Change one thing at a time
 - [ ] Measure after each change
 - [ ] Document all changes
 - [ ] Maintain correctness tests
 
 After Optimization:
+
 - [ ] Verify all tests pass
 - [ ] Compare against baseline
 - [ ] Document trade-offs
@@ -1350,6 +1387,7 @@ After Optimization:
 ### M.3 Emergency Procedures
 
 1. **Service Down**
+
    ```
    1. Check monitoring dashboards
    2. Identify scope (partial/total)
@@ -1360,6 +1398,7 @@ After Optimization:
    ```
 
 2. **Data Corruption**
+
    ```
    1. Stop writes immediately
    2. Identify affected data
@@ -1370,6 +1409,7 @@ After Optimization:
    ```
 
 3. **Security Incident**
+
    ```
    1. Activate incident response team
    2. Contain the breach
@@ -1427,6 +1467,7 @@ in the Software without restriction...
 ### O.2 Data Processing
 
 Data processing activities:
+
 - User authentication data
 - Application logs
 - Performance metrics
@@ -1437,6 +1478,7 @@ All processing is documented in the Data Processing Register.
 ### O.3 Export Control
 
 This software is subject to export control regulations:
+
 - EAR (Export Administration Regulations)
 - EU Dual-Use Regulation
 
@@ -1447,6 +1489,7 @@ No cryptographic components exceed mass market encryption limits.
 ### P.1 New Team Member Checklist
 
 Week 1:
+
 - [ ] Access provisioning (GitHub, AWS, VPN)
 - [ ] Development environment setup
 - [ ] Codebase walkthrough
@@ -1454,18 +1497,21 @@ Week 1:
 - [ ] First commit (documentation update)
 
 Week 2:
+
 - [ ] Architecture deep dive
 - [ ] On-call shadowing
 - [ ] First feature (small, guided)
 - [ ] Tool training (monitoring, deployment)
 
 Week 3-4:
+
 - [ ] First independent feature
 - [ ] Code review participation
 - [ ] Documentation contributions
 - [ ] Process familiarity
 
 Month 2-3:
+
 - [ ] On-call rotation
 - [ ] Mentoring newer team members
 - [ ] Technical blog post
@@ -1474,12 +1520,14 @@ Month 2-3:
 ### P.2 Recommended Reading
 
 Technical:
+
 - "Designing Data-Intensive Applications" (Martin Kleppmann)
 - "Clean Architecture" (Robert C. Martin)
 - "The Rust Programming Language" (Steve Klabnik)
 - "Effective Go" (Go team)
 
 Domain:
+
 - "Building Microservices" (Sam Newman)
 - "Site Reliability Engineering" (Google)
 - "Continuous Delivery" (Jez Humble)
@@ -1487,12 +1535,14 @@ Domain:
 ### P.3 Training Resources
 
 Internal:
+
 - Architecture Decision Records (ADRs)
 - Runbooks and playbooks
 - Technical talks (recorded)
 - Code review guidelines
 
 External:
+
 - Online courses (reimbursed)
 - Conference attendance
 - Certification programs
@@ -1501,6 +1551,7 @@ External:
 ---
 
 **Document Statistics:**
+
 - Total sections: 16 appendices
 - Code examples: 10+
 - Configuration samples: 5+

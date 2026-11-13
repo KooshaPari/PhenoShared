@@ -38,12 +38,12 @@ that span multiple sources.
 
 | source_id | claim | confidence | primary_url | reproduced | date_verified | decays_after | replacement_evidence | task_trace |
 |---|---|---|---|---|---|---|---|---|
-| SOTA-001 deskflow | DeskFlow provides low-latency input sharing over LAN | verified-by-vendor-doc | https://deskflow.com/ | false | 2026-08-28 | 2027-08-28 | TBD: Fabric input sharing benchmark | TASK-014 (planned) |
-| SOTA-002 parsec | Parsec claims 30ms RTT for game streaming | claim-only | https://parsec.app/ | false | 2026-08-28 | 2026-12-31 | TBD: Fabric RT input benchmark | TASK-014 (planned) |
-| SOTA-003 looking-glass | Looking-glass uses shared memory + DXGI capture | verified-by-paper | https://looking-glass.io/ | false | 2026-08-28 | 2027-08-28 | TBD: Fabric surface-plane benchmark | TASK-014 (planned) |
-| SOTA-004 evdev | Linux evdev supports raw input injection | verified-by-vendor-doc | https://www.freedesktop.org/software/libevdoc/ | true (kernel headers) | 2026-08-28 | indefinite | n/a (kernel API) | TASK-007 (planned) |
-| SOTA-005 seamless-app | seamless-app uses TCP forwarding of X11/Wayland | claim-only | http://seamless-app.org/ | false | 2026-08-28 | 2026-12-31 | TBD: Fabric X11 forwarding test | TASK-014 (planned) |
-| SOTA-006 audio-network | PipeWire has built-in network audio (RTP / Opus) | verified-by-vendor-doc | https://pipewire.org/ | true (probe) | 2026-08-28 | 2027-08-28 | n/a (kernel + userspace feature) | TASK-007 (planned) |
+| SOTA-001 deskflow | DeskFlow provides low-latency input sharing over LAN | verified-by-vendor-doc | <https://deskflow.com/> | false | 2026-08-28 | 2027-08-28 | TBD: Fabric input sharing benchmark | TASK-014 (planned) |
+| SOTA-002 parsec | Parsec claims 30ms RTT for game streaming | claim-only | <https://parsec.app/> | false | 2026-08-28 | 2026-12-31 | TBD: Fabric RT input benchmark | TASK-014 (planned) |
+| SOTA-003 looking-glass | Looking-glass uses shared memory + DXGI capture | verified-by-paper | <https://looking-glass.io/> | false | 2026-08-28 | 2027-08-28 | TBD: Fabric surface-plane benchmark | TASK-014 (planned) |
+| SOTA-004 evdev | Linux evdev supports raw input injection | verified-by-vendor-doc | <https://www.freedesktop.org/software/libevdoc/> | true (kernel headers) | 2026-08-28 | indefinite | n/a (kernel API) | TASK-007 (planned) |
+| SOTA-005 seamless-app | seamless-app uses TCP forwarding of X11/Wayland | claim-only | <http://seamless-app.org/> | false | 2026-08-28 | 2026-12-31 | TBD: Fabric X11 forwarding test | TASK-014 (planned) |
+| SOTA-006 audio-network | PipeWire has built-in network audio (RTP / Opus) | verified-by-vendor-doc | <https://pipewire.org/> | true (probe) | 2026-08-28 | 2027-08-28 | n/a (kernel + userspace feature) | TASK-007 (planned) |
 | SOTA-007 moat-and-risk |  | claim-only | TBD | false | 2026-08-28 | TBD | TBD | n/a (analyst memo) |
 | SOTA-008 | | claim-only | TBD | false | 2026-08-28 | TBD | TBD | n/a |
 | SOTA-009 | | claim-only | TBD | false | 2026-08-28 | TBD | TBD | n/a |
@@ -74,7 +74,7 @@ follow-up PR once each SOTA file has been evaluated for confidence.
 
 | source_id | claim | confidence | primary_url | reproduced | date_verified | decays_after | replacement_evidence | task_trace |
 |---|---|---|---|---|---|---|---|---|
-| RISK-001 SPDX | All deps in `Cargo.lock` and `go.mod` have SPDX identifiers | verified-by-repo-scan | https://spdx.org/ | true (script) | 2026-08-28 | indefinite | n/a (script runs in CI) | n/a |
+| RISK-001 SPDX | All deps in `Cargo.lock` and `go.mod` have SPDX identifiers | verified-by-repo-scan | <https://spdx.org/> | true (script) | 2026-08-28 | indefinite | n/a (script runs in CI) | n/a |
 
 ## Promotion Path for `claim-only` Sources
 
@@ -96,6 +96,7 @@ This promotion is itself an atomic task (`TASK-NNN`).
 The `decays_after` field is a calendar date. After that date, the
 claim must be re-verified by re-running the reproduction. This is
 required because:
+
 - Vendor claims can change with new versions.
 - Kernel APIs can change.
 - Hardware revisions can change performance characteristics.

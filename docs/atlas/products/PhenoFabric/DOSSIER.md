@@ -27,8 +27,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Codec and hardware assumptions from old docs require verification
 - Locality optimization must not erase isolation
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

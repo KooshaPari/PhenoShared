@@ -148,7 +148,6 @@ confirmed: breaking `windows.rs` makes it exit 1, and 0 when clean.
 | macOS full matrix after the change | 193 passed / 0 failed |
 | guard negative control | exit 1 broken, exit 0 clean |
 
-
 ---
 
 # Phase 3 — audit of the untested surfaces, and real Windows runtime
@@ -255,7 +254,7 @@ Every defect here was invisible to the existing suite, for one of three
 reasons: the code was `cfg`-gated so it was never compiled; the test POSTed
 to the daemon directly and so never exercised the HTML form; or the
 documented behaviour simply had no test because it had never been
-implemented. Compile-and-unit-test gates do not reach any of those.
+implemented. Compile-and-unit-test gates do not reach any of those
 ---
 
 # Phase 4 — the lint gate was dead, and it was hiding real defects

@@ -114,6 +114,7 @@ The Phenotype Fabric branding asset pipeline is **well-structured and mostly com
 **Note:** The 3D renders are 16-bit color depth (from Blender Cycles). All other brand assets are 8-bit. This is expected for 3D renders but creates inconsistency in asset formats.
 
 **Issue:** The Blender script outputs to `//` (the blend file directory), but the renders are in the repo root. The `fallback-3d.py` outputs to `os.path.dirname(os.path.abspath(__file__))` which is `assets/3d/`. This means:
+
 - Running `gen-blender-logo.py` from `assets/3d/` would output to `assets/3d/` (correct)
 - Running `fallback-3d.py` from anywhere outputs to `assets/3d/` (correct)
 - But the actual renders are in the repo root (orphaned)
@@ -241,6 +242,7 @@ Uses Blender linear color space, so RGB values differ from sRGB hex. This is exp
 ### icon.svg
 
 All hex values in the SVG match the brand spec exactly:
+
 - `#1a1a2e` (background)
 - `#6464c8` (connections)
 - `#00d4aa` (nodes, glow)
@@ -324,6 +326,7 @@ All hex values in the SVG match the brand spec exactly:
 | Idempotent | YES (overwrites on re-run) |
 
 **Generated assets:**
+
 1. favicon-16.png (16x16)
 2. favicon-32.png (32x32)
 3. favicon-48.png (48x48)
@@ -352,6 +355,7 @@ All hex values in the SVG match the brand spec exactly:
 | Scene cleanup | YES (clears all objects/materials) |
 
 **Outputs:**
+
 1. logo-render.png (2048x2048)
 2. logo-render-wide.png (2048x1024)
 3. logo-render-icon.png (512x512)
@@ -448,6 +452,7 @@ The SVG uses `font-family: "Helvetica Neue, Helvetica, Arial, sans-serif"` with 
 ### Logo Mark Consistency
 
 The "F" glyph appears in these variants:
+
 - **icon.svg**: Rounded rect background, topology network, white F
 - **icon PNGs**: Same as SVG but rasterized
 - **Logo-dark.png / logo-light.png**: Icon + "Phenotype Fabric" text
@@ -522,17 +527,17 @@ This means `fallback-3d.py` renders have a slightly darker background and bright
 
 ### Short-Term (v0.2.0)
 
-5. **Create ASCII art banner** - For CLI startup output and terminal branding (30 min)
-6. **Move 3D renders** - Either move to assets/3d/ or add to .gitignore (5 min)
-7. **Fix fallback-3d.py output path** - Output to consistent location (5 min)
-8. **Add PWA icon sizes** - icon-144.png and icon-384.png to gen-all-assets.py (15 min)
+1. **Create ASCII art banner** - For CLI startup output and terminal branding (30 min)
+2. **Move 3D renders** - Either move to assets/3d/ or add to .gitignore (5 min)
+3. **Fix fallback-3d.py output path** - Output to consistent location (5 min)
+4. **Add PWA icon sizes** - icon-144.png and icon-384.png to gen-all-assets.py (15 min)
 
 ### Medium-Term (v1.0)
 
-9. **Add dark/light mode logo variants with 3D renders** - Currently only 2D logos have light variant
-10. **Add LinkedIn card** - 1200x627 variant in gen-all-assets.py (10 min)
-11. **Unify 2D and 3D generation** - Consider having gen-all-assets.py call fallback-3d.py
-12. **Add Windows .ico generation** - To gen-all-assets.py pipeline
+1. **Add dark/light mode logo variants with 3D renders** - Currently only 2D logos have light variant
+2. **Add LinkedIn card** - 1200x627 variant in gen-all-assets.py (10 min)
+3. **Unify 2D and 3D generation** - Consider having gen-all-assets.py call fallback-3d.py
+4. **Add Windows .ico generation** - To gen-all-assets.py pipeline
 
 ---
 

@@ -18,6 +18,7 @@ nanovms in the `superseded/archived` row. ADR-ECO-007 (2026-06-17)
 explicitly **AFFIRM**'d both:
 
 > ### Engine / isolation layer (keep separate)
+>
 > | **PhenoCompose** | `platform` | **AFFIRM** NVMS + process-compose isolation owner |
 > | **nanovms** | `platform` | **AFFIRM** in `phenotype-tooling` (archived standalone repo) |
 

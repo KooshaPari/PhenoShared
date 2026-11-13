@@ -1,4 +1,5 @@
 # LOC Reduction & Refactoring Plan
+
 **Phenotype Ecosystem Optimization Initiative**
 **Estimated Total Savings: 750-1,300 LOC | Timeline: 20 days | Parallelism: 4-6 agents**
 
@@ -30,6 +31,7 @@ pub fn used_function() { ... }
 **Confidence:** HIGH
 
 **Script:**
+
 ```bash
 # Find all dead_code suppressions
 grep -r "#\[allow(dead_code)\]" --include="*.rs"
@@ -42,6 +44,7 @@ grep -r "#\[allow(dead_code)\]" --include="*.rs"
 **Files:** 37+ TODO comments scattered across codebase
 
 **Analysis:**
+
 ```
 TODO              Count   Suggestion
 ─────────────────────────────────────
@@ -52,6 +55,7 @@ TODO              Count   Suggestion
 ```
 
 **Decision Matrix:**
+
 - If TODO is 6+ months old → Remove or implement
 - If TODO is blocking feature → Create AgilePlus spec
 - If TODO is "nice to have" → Remove with comment
@@ -77,6 +81,7 @@ use crate::some_used::module::Type;
 **Confidence:** HIGH
 
 **Automated:**
+
 ```bash
 cargo check --all-targets 2>&1 | grep "warning: unused"
 # Review and remove each unused import
@@ -146,6 +151,7 @@ macro_rules! handle_error {
 ```
 
 **Files to Consolidate:**
+
 - codex_message_processor.rs (20+ duplicates)
 - config/mod.rs (15+ duplicates)
 - protocol/v2.rs (10+ duplicates)
@@ -156,6 +162,7 @@ macro_rules! handle_error {
 **Confidence:** VERY HIGH
 
 **Implementation:**
+
 1. Analyze error handling patterns (30 min)
 2. Create unified error macro (30 min)
 3. Replace duplicates with macro calls (1 day)
@@ -218,6 +225,7 @@ impl MessageRegistry {
 **Confidence:** HIGH
 
 **Additional Benefits:**
+
 - Runtime extensibility (plugins can register handlers)
 - Easier to add new message types
 - Better testability
@@ -264,6 +272,7 @@ def mock_codex():
 #### 3.1.1 codex.rs (9,572 LOC → 3 modules)
 
 **Current Structure:**
+
 ```
 codex.rs
 ├── Configuration loading (2,000 LOC)
@@ -274,6 +283,7 @@ codex.rs
 ```
 
 **Target Structure:**
+
 ```
 codex/
 ├── config.rs (1,500 LOC, 50 imports)
@@ -291,6 +301,7 @@ codex/
 ```
 
 **Decomposition Steps:**
+
 1. Create `codex/` module directory (30 min)
 2. Extract ConfigLoader logic to `config.rs` (4 hours)
    - Move 2,000 LOC
@@ -310,6 +321,7 @@ codex/
 **Effort:** 5 days
 **LOC Savings:** 400 LOC (reduced overhead, better organization)
 **Benefits:**
+
 - 60% reduction in imports per file
 - Easier to test individual components
 - Better code navigation
@@ -318,6 +330,7 @@ codex/
 ### 3.1.2 chat_composer.rs (9,456 LOC → 4 modules)
 
 **Decomposition:**
+
 ```
 chat_composer/
 ├── composer_state.rs (2,000 LOC)
@@ -334,6 +347,7 @@ chat_composer/
 ### 3.1.3 codex_message_processor.rs (8,460 LOC → 2 modules)
 
 **Decomposition:**
+
 ```
 message_processor/
 ├── parser.rs (3,000 LOC)
@@ -348,6 +362,7 @@ message_processor/
 ### 3.1.4 chatwidget.rs (8,146 LOC → 3 modules)
 
 **Decomposition:**
+
 ```
 chatwidget/
 ├── state.rs (2,000 LOC)
@@ -363,6 +378,7 @@ chatwidget/
 ### 3.1.5 config/mod.rs (6,218 LOC → 4 modules)
 
 **Current Issues:**
+
 ```
 config/mod.rs
 ├── TOML parser (2,000 LOC)
@@ -375,6 +391,7 @@ config/mod.rs
 ```
 
 **Target:**
+
 ```
 config/
 ├── parser.rs (2,000 LOC, 40 imports)
@@ -389,6 +406,7 @@ config/
 **Effort:** 3 days
 **LOC Savings:** 200 LOC (imports optimization)
 **Benefits:**
+
 - 70% reduction in import statements per file
 - Faster compilation
 - Better testability
@@ -407,6 +425,7 @@ config/
 **Purpose:** Centralized error types and handling macros
 
 **Contents:**
+
 ```
 error_handling/
 ├── src/
@@ -427,6 +446,7 @@ error_handling/
 **Purpose:** Unified validation framework
 
 **Contents:**
+
 ```
 validation/
 ├── src/
@@ -446,6 +466,7 @@ validation/
 **Purpose:** Type-safe message routing
 
 **Contents:**
+
 ```
 message_dispatch/
 ├── src/
@@ -498,7 +519,7 @@ message_dispatch/
 | File | Lines | Tests | Strategy |
 |------|-------|-------|----------|
 | chatwidget/tests.rs | 8,692 | 243 | Split: component_a, component_b, integration |
-| test_unit_cli_impl_coverage_d.py | 2,470 | 100+ | Split: test_*_a.py, test_*_b.py |
+| test_unit_cli_impl_coverage_d.py | 2,470 | 100+ | Split: test_**a.py, test**_b.py |
 | test_unit_cli_coverage_c.py | 2,466 | 155 | Split by feature module |
 | test_e2e_cli_aliases.py | 1,992 | 246 | Split: core, advanced, edge_cases |
 
@@ -540,30 +561,35 @@ use crate::handlers::*;
 ## Overall Refactoring Plan Timeline
 
 ### Phase 1: Foundation (Days 1-3)
+
 - Dead code removal (3.5 days → compress to 2 days with parallel work)
 - Create module extraction crates (1.5 days)
 
 **Effort:** 3 days | Savings: 215 LOC
 
 ### Phase 2: Critical Refactors (Days 4-8)
+
 - Split 5 monolithic files (5 × 5-4 days = 22 days → compress to 5 days with 4 agents)
 - Create error handling macro (included in Phase 1)
 
 **Effort:** 5 days | Savings: 1,350 LOC
 
 ### Phase 3: Consolidation (Days 9-11)
+
 - Consolidate duplicates (error, validation, message dispatch)
 - Optimize imports
 
 **Effort:** 3 days | Savings: 735 LOC
 
 ### Phase 4: Test Coverage (Days 12-15)
+
 - Add tests to untested directories
 - Split large test files
 
 **Effort:** 4 days | LOC Added: 3,000 (tests)
 
 ### Phase 5: Validation & Integration (Days 16-20)
+
 - Full test suite execution
 - Performance benchmarking
 - Merge into main branch
@@ -606,28 +632,36 @@ use crate::handlers::*;
 ## Risk Mitigation
 
 ### Risk 1: Breaking Changes During Refactoring
+
 **Mitigation:**
+
 - Branch per module split
 - Comprehensive test suite before refactoring
 - Use `#[deprecated]` attributes during transition
 - Staged rollout
 
 ### Risk 2: Compilation Errors
+
 **Mitigation:**
+
 - Run `cargo check` after each change
 - Keep imports up-to-date
 - Use type-based search to find usages
 - Pair refactoring with responsible agent review
 
 ### Risk 3: Performance Regressions
+
 **Mitigation:**
+
 - Benchmark before and after
 - Profile hot paths
 - Use same algorithms (refactoring only, not rewriting)
 - Keep test suite green
 
 ### Risk 4: Missed Opportunities
+
 **Mitigation:**
+
 - Document all extracted patterns
 - Create checklist for each refactoring type
 - Share learnings with team
@@ -637,18 +671,21 @@ use crate::handlers::*;
 ## Success Criteria
 
 ### Quantitative
+
 - [ ] Total LOC reduction: 1,200+ (achieved)
 - [ ] Complexity reduction: 30-40% (verified via metrics)
 - [ ] Test coverage increase: 150+ new test files
 - [ ] Compile time reduction: 20-30%
 
 ### Qualitative
+
 - [ ] No regressions in functionality
 - [ ] Improved code readability (peer review confirms)
 - [ ] Better separation of concerns
 - [ ] Easier onboarding for new team members
 
 ### Timeline
+
 - [ ] Complete within 20 days
 - [ ] All tests passing
 - [ ] Zero critical/high severity issues
@@ -659,6 +696,7 @@ use crate::handlers::*;
 ## Post-Refactoring Maintenance
 
 ### Prevent Regression
+
 1. **Code review checklist:**
    - New monolithic files > 2,000 LOC?
    - New functions > 100 LOC with 50+ branches?
@@ -679,6 +717,7 @@ use crate::handlers::*;
 ## Rollout Strategy
 
 ### Staging
+
 1. **Feature branch:** `feature/codebase-optimization`
 2. **Per-module branches:** `feature/split-codex`, `feature/consolidate-errors`, etc.
 3. **Pull requests:** One per module (5-10 PRs total)
@@ -686,13 +725,16 @@ use crate::handlers::*;
 5. **CI/CD:** All tests must pass before merge
 
 ### Rollback Plan
+
 If critical issues arise:
+
 1. Revert to last known good state
 2. Identify root cause
 3. Create targeted fix
 4. Re-apply carefully
 
 ### Documentation
+
 - Update architecture docs with new module structure
 - Create migration guide for teams using affected modules
 - Document new macros/utilities
@@ -703,6 +745,7 @@ If critical issues arise:
 ## Appendix: File-by-File Refactoring Checklist
 
 ### codex.rs Refactoring Checklist
+
 - [ ] Create `codex/` directory
 - [ ] Extract ConfigLoader to `config.rs` (2,000 LOC)
 - [ ] Extract MessageHandler to `message_handler.rs` (3,500 LOC)
@@ -715,7 +758,8 @@ If critical issues arise:
 - [ ] Compare file sizes and complexity metrics
 - [ ] Code review and merge
 
-### Similar checklists for:
+### Similar checklists for
+
 - chat_composer.rs
 - codex_message_processor.rs
 - chatwidget.rs

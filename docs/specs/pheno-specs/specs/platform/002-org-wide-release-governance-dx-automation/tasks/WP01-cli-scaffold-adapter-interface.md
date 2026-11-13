@@ -34,6 +34,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 **Implementation Guidance:**
 
 1. Create a new Go module at the root of the AgilePlus repository:
+
    ```bash
    cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
    go mod init github.com/KooshaPari/pheno-cli
@@ -48,6 +49,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 3. Run `go mod tidy` to validate the go.mod and go.sum files.
 
 4. Create directory structure:
+
    ```
    .
    ├── cmd/
@@ -66,6 +68,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 5. Verify the module initializes correctly with `go mod verify`.
 
 **Acceptance Criteria:**
+
 - go.mod exists with correct module path and dependencies pinned
 - `go mod verify` passes
 - All four core packages are available and can be imported
@@ -80,6 +83,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 **Implementation Guidance:**
 
 1. Create `cmd/root.go` with Cobra's root command:
+
    ```go
    package cmd
 
@@ -112,6 +116,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
    - `cmd/config.go` — `config` command
 
 3. Each subcommand stub prints "not yet implemented":
+
    ```go
    var publishCmd = &cobra.Command{
      Use:   "publish",
@@ -130,6 +135,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 4. Wire all subcommands in `cmd/root.go` via `init()` blocks (or centralized registration).
 
 5. Create `cmd/main.go` (or let main.go live at root):
+
    ```go
    package main
 
@@ -143,6 +149,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
    ```
 
 6. Build and test:
+
    ```bash
    go build -o pheno cmd/main.go
    ./pheno --help
@@ -150,6 +157,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
    ```
 
 **Acceptance Criteria:**
+
 - Root command displays help and does not error
 - All 6 subcommands are registered and respond to `--help`
 - `go build` succeeds without warnings
@@ -225,6 +233,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
    ```
 
 2. Consider adding a registry factory function for future use:
+
    ```go
    type AdapterFactory interface {
      Create(registry string) (RegistryAdapter, error)
@@ -239,6 +248,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
    - **Verify**: Must poll until timeout; return false only after exhausting retries
 
 **Acceptance Criteria:**
+
 - Interface compiles without errors
 - All 7 error types are defined and exported
 - Package and Result structs are well-documented
@@ -323,6 +333,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 3. Test edge cases: version "0.0.1" with all channels, version "1.0.0" with increments 1 and 5.
 
 **Acceptance Criteria:**
+
 - CalculateVersion handles all 7 registries
 - PyPI formatting matches PEP 440
 - npm/crates/hex format is consistent
@@ -399,6 +410,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 3. Document how workspace detection will work (workspaces = multiple manifests detected per language).
 
 **Acceptance Criteria:**
+
 - DetectLanguages returns correct list of languages
 - All 7 language/manifest pairs are recognized
 - DetectPackages can be called without panic
@@ -502,6 +514,7 @@ WP01 establishes the foundational CLI structure and adapter interface that all d
 4. Generate coverage report: `go test -cover ./internal/version/...`
 
 **Acceptance Criteria:**
+
 - All 40+ test cases pass
 - Coverage > 95%
 - All registry/channel combinations are tested

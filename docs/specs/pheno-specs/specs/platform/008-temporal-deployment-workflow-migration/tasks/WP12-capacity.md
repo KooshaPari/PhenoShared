@@ -19,6 +19,7 @@ Audit the AX101 server (64GB RAM, 16 cores, 2TB NVMe) for Temporal + Hatchet dep
 ## Context
 
 The AX101 will run:
+
 - Temporal (Postgres + Elasticsearch + worker)
 - Hatchet (Postgres + worker)
 - NATS (pure event bus)

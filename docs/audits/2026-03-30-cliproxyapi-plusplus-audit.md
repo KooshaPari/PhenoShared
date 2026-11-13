@@ -18,7 +18,9 @@
 ## Project Overview
 
 ### Purpose
+
 A feature-rich LLM proxy and load balancer that routes requests to multiple LLM providers. Designed for:
+
 - Unified API gateway for multi-provider LLM access
 - Request caching, rate limiting, and quota management
 - OAuth and authentication proxying
@@ -27,6 +29,7 @@ A feature-rich LLM proxy and load balancer that routes requests to multiple LLM 
 - Dashboard UI and REST API for management
 
 ### Language & Stack
+
 - **Language:** Go 1.26.0
 - **Build System:** Standard Go toolchain + Docker
 - **Package Manager:** go mod
@@ -72,6 +75,7 @@ cliproxyapi-plusplus/
 ## Dependencies Analysis
 
 ### Top External Go Dependencies
+
 | Package | Version | Purpose |
 |---------|---------|---------|
 | github.com/gin-gonic/gin | v1.10.1 | HTTP framework (REST API) |
@@ -86,11 +90,13 @@ cliproxyapi-plusplus/
 | github.com/refraction-networking/utls | v1.8.2 | TLS fingerprinting |
 
 ### Build Dependencies
+
 - Go 1.26.0 (latest major version, bleeding-edge)
 - Docker (containerization support)
 - GoReleaser (binary distribution)
 
 ### Dependency Health
+
 - **Frequency:** 28 direct dependencies (lean, focused)
 - **Maturity:** All production-grade libraries with active maintenance
 - **Bleeding-Edge:** Uses latest major versions (gin v1.10, pgx v5, etc.)
@@ -101,6 +107,7 @@ cliproxyapi-plusplus/
 ## Architecture & Design Patterns
 
 ### Hexagonal Architecture Applied
+
 The project demonstrates clear separation of concerns:
 
 ```
@@ -120,6 +127,7 @@ The project demonstrates clear separation of concerns:
 ```
 
 ### Key Architectural Decisions
+
 1. **Provider Registry Pattern:** Pluggable provider interface with hot-reload config
 2. **Middleware Stack:** Caching, logging, rate limiting applied via middleware
 3. **OAuth Abstraction:** Unified OAuth interface for Copilot, GitLab, GitHub
@@ -127,6 +135,7 @@ The project demonstrates clear separation of concerns:
 5. **Config Hot-Reload:** Watcher pattern for live configuration updates
 
 ### Code Quality Indicators
+
 - **No godoc suppressions** in production code (excellent documentation standards)
 - **Interface-driven design:** Clear separation of concerns via Go interfaces
 - **Error handling:** Explicit error returns (no hidden panics)
@@ -137,6 +146,7 @@ The project demonstrates clear separation of concerns:
 ## Testing
 
 ### Test Coverage
+
 | Category | Count | Files |
 |----------|-------|-------|
 | Unit Tests | 98 | 98 test files |
@@ -145,6 +155,7 @@ The project demonstrates clear separation of concerns:
 | Total Test Files | 124 | Comprehensive coverage |
 
 ### Test Organization
+
 ```
 ./test/                         # Top-level integration tests
 ├── amp_management_test.go
@@ -159,6 +170,7 @@ internal/*/
 ```
 
 ### Test Examples
+
 - **Config tests:** validate YAML parsing, hot-reload semantics
 - **Auth tests:** OAuth flow, token refresh, API key validation
 - **Cache tests:** signature collision detection, TTL expiration
@@ -166,6 +178,7 @@ internal/*/
 - **Watcher tests:** file change detection, config diff semantics
 
 ### Test Quality
+
 - ✅ All tests reference functional requirements (FR-PHENO pattern)
 - ✅ Mock providers for unit testing (no external dependencies)
 - ✅ Integration tests validate end-to-end flows
@@ -176,20 +189,24 @@ internal/*/
 ## Integration with Phenotype Ecosystem
 
 ### Current Integration Status
+
 **No direct integration** with phenotype-infrakit, phenotype-router-monitor, or other Phenotype projects.
 
 **Why:** cliproxyapi-plusplus is an **external dependency consumer**, not a Phenotype-internal component. It:
+
 - Consumes LLM APIs from OpenAI, Anthropic, Google, etc.
 - Provides proxy/load-balancing services
 - Does not expose Phenotype internal interfaces or patterns
 
 ### Potential Integration Points
+
 1. **Error Types:** Could consume `phenotype-error-core` for standardized error handling
 2. **Config Management:** Could use `phenotype-config-core` for unified config loading
 3. **Health Checks:** Could expose `phenotype-health` interface for orchestration
 4. **Event Sourcing:** Could use `phenotype-event-sourcing` for audit logging of provider changes
 
 ### Dependency Direction
+
 ```
 Phenotype Ecosystem
     ↓ (potential: error, config, health traits)
@@ -203,6 +220,7 @@ LLM Provider APIs (OpenAI, Claude, Gemini, etc.)
 ## Functional Requirements & Specifications
 
 ### Documentation Status
+
 - ✅ **ADR.md:** 5,203 bytes (8 architecture decisions)
 - ✅ **FUNCTIONAL_REQUIREMENTS.md:** 4,801 bytes (comprehensive FR set)
 - ✅ **PRD.md:** 7,079 bytes (product vision and scope)
@@ -210,6 +228,7 @@ LLM Provider APIs (OpenAI, Claude, Gemini, etc.)
 - ✅ **USER_JOURNEYS.md:** 5,892 bytes (6+ user journeys)
 
 ### Feature Parity
+
 - REST API: Full CRUD for providers, models, authentication
 - Configuration: YAML-based, hot-reload capable
 - Authentication: OAuth2, API keys, Bearer tokens
@@ -222,6 +241,7 @@ LLM Provider APIs (OpenAI, Claude, Gemini, etc.)
 ## Code Metrics
 
 ### Size Analysis
+
 | Metric | Value |
 |--------|-------|
 | Total Lines of Code | 159,045 LOC |
@@ -232,12 +252,14 @@ LLM Provider APIs (OpenAI, Claude, Gemini, etc.)
 | Code-to-Test Ratio | ~1.3:1 (excellent) |
 
 ### Complexity Indicators
+
 - ✅ No files exceed 2,000 LOC (modular, well-decomposed)
 - ✅ Max nesting depth ~10 levels (readable control flow)
 - ✅ Clear separation of concerns (internal/ modules are independent)
 - ✅ No circular dependencies detected
 
 ### Dependencies per Module
+
 | Module | Dependencies | Assessment |
 |--------|--------------|------------|
 | api/ | 5-8 | Lightweight (only HTTP + logging) |
@@ -251,6 +273,7 @@ LLM Provider APIs (OpenAI, Claude, Gemini, etc.)
 ## Development Workflow
 
 ### Build & Test
+
 ```bash
 # Build
 go build -o cliproxy cmd/server/main.go
@@ -269,12 +292,14 @@ docker build -t cliproxy:latest .
 ```
 
 ### Configuration Management
+
 - **Example config:** config.example.yaml (20,737 bytes, fully annotated)
 - **Hot-reload:** Watcher pattern with file system monitoring
 - **Validation:** Schema validation at parse time
 - **Secrets:** Environment variable substitution for sensitive values
 
 ### Deployment
+
 - **Docker:** Single container image with multi-stage build
 - **Binary releases:** GoReleaser configuration for cross-platform builds
 - **Environment:** 12-factor app compliance (env vars, config files)
@@ -336,11 +361,13 @@ docker build -t cliproxy:latest .
 ## Cross-Project Reuse Opportunities
 
 ### Immediate (Phase 2)
+
 - **Error Types:** ~40 LOC consolidation into phenotype-error-core
 - **Config Loading:** ~500 LOC consolidation into phenotype-config-core (YAML→Figment)
 - **Health Interface:** ~60 LOC integration into phenotype-health
 
 ### Future (Phase 3+)
+
 - **Event Log:** ~200-300 LOC moved to phenotype-event-sourcing
 - **Public SDK:** 1,000+ LOC extracted to phenotype-llm-proxy-sdk
 

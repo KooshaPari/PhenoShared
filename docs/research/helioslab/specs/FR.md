@@ -15,6 +15,7 @@
 This enforces decoupling and enables test-double injection.
 
 **Acceptance Criteria:**
+
 - `ILocalBusPort.dispatch()` returns a correlated `ResponseEnvelope` for every registered method.
 - Unregistered method invocations return a structured error response (not a thrown exception).
 - Event fan-out reaches all active subscribers before `publish()` resolves.
@@ -32,6 +33,7 @@ This enforces decoupling and enables test-double injection.
 await their own response without observing responses to other concurrent commands.
 
 **Acceptance Criteria:**
+
 - Response `correlation_id` equals the originating command `id`.
 - Concurrent distinct commands produce independent correlated responses.
 - Timeout after configurable TTL with `BUS_TIMEOUT` error code.
@@ -50,6 +52,7 @@ await their own response without observing responses to other concurrent command
 root for agent sessions.
 
 **Acceptance Criteria:**
+
 - `create()` throws `WORKSPACE_NAME_CONFLICT` when the name already exists in state `active`.
 - All returned `Workspace.id` values match `/^ws_[0-9A-Z]{26}$/`.
 - `delete()` rejects with `WORKSPACE_HAS_ACTIVE_SESSIONS` when active sessions remain.
@@ -68,6 +71,7 @@ root for agent sessions.
 structured query, time-bounded export, and retention-policy purge.
 
 **Acceptance Criteria:**
+
 - `append()` never throws; storage failures are logged and swallowed.
 - `export()` returns a `RuntimeAuditBundle` with count = number of records in the time window.
 - `purge(before)` deletes only records with `recorded_at < before`.
@@ -86,6 +90,7 @@ program to `IProviderPort`.  This allows alternative providers (local models, te
 be swapped without changes to core logic.
 
 **Acceptance Criteria:**
+
 - `infer()` returns `InferenceResponse` with populated `text`, `inputTokens`, and `outputTokens`.
 - `healthCheck()` never throws; returns `{ ok: false, reason: string }` on network failure.
 - Providers register with a unique `providerId` string; duplicate registration throws `PROVIDER_CONFLICT`.

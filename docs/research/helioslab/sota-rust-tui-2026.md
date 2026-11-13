@@ -14,7 +14,7 @@ HeliosLab `phenoctl` operator UI this matches what we already ship — see
 
 ## Ratatui (recommended)
 
-- **Crate:** `ratatui` (https://crates.io/crates/ratatui)
+- **Crate:** `ratatui` (<https://crates.io/crates/ratatui>)
 - **Latest:** `0.30.1` (June 2026 line). The `0.30.0` release reorganized the
   crate into a modular workspace: `ratatui-core`, `ratatui-widgets`,
   `ratatui-crossterm`, `ratatui-termion`, `ratatui-termwiz`, `ratatui-macros`.
@@ -42,7 +42,7 @@ buffer-double-free path, and is not receiving fixes.
 
 ## Cursive (viable alternative)
 
-- **Crate:** `cursive` (https://crates.io/crates/cursive)
+- **Crate:** `cursive` (<https://crates.io/crates/cursive>)
 - **Latest:** `0.21.1`. ~4.8k stars. MIT-licensed. Still maintained, but the
   release cadence is much slower than Ratatui's.
 - **Backend model:** Crossterm by default; also supports Termion, Pancurses,
@@ -76,8 +76,8 @@ shared widgets in the Phenotype monorepo.
 
 ## References
 
-- Ratatui website: https://ratatui.rs/
-- Ratatui repo: https://github.com/ratatui/ratatui
-- Cursive repo: https://github.com/gyscos/cursive
-- Cursive docs: https://docs.rs/cursive/latest/cursive/
+- Ratatui website: <https://ratatui.rs/>
+- Ratatui repo: <https://github.com/ratatui/ratatui>
+- Cursive repo: <https://github.com/gyscos/cursive>
+- Cursive docs: <https://docs.rs/cursive/latest/cursive/>
 - In-repo: `pheno-cli/src/tui.rs`, `pheno-cli/Cargo.toml:11-21`

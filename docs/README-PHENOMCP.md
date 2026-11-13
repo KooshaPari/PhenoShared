@@ -1,4 +1,5 @@
 > **Pinned references (Phenotype-org)**
+>
 > - MSRV: see rust-toolchain.toml
 > - cargo-deny config: see deny.toml
 > - cargo-audit: rustsec/audit-check@v2 weekly
@@ -179,4 +180,3 @@ It exposes:
 
 Dual-licensed under MIT or Apache-2.0, at your option. See `LICENSE-MIT`
 and `LICENSE-APACHE`.
-

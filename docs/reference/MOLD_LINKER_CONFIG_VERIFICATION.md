@@ -49,24 +49,28 @@ cargo check --message-format=json 2>&1 | head -20
 ### Test 2: Cross-Platform Fallback ✓
 
 **On macOS (no mold required)**:
+
 - ✓ Rustflag `-fuse-ld=mold` is passed to compiler
 - ✓ ld64 (LLVM linker) is used (mold flag is ignored on macOS)
 - ✓ Builds complete successfully
 - ✓ No performance regression expected (ld64 is already fast)
 
 **On Linux (with mold installed)**:
+
 - ✓ Rustflag activates mold linker via `-fuse-ld=mold`
 - ✓ mold handles linking (5-10x faster)
 - ✓ Builds complete successfully
 - ✓ 73% link time improvement expected
 
 **On Linux (without mold installed)**:
+
 - ✓ Rustflag is passed but mold is not found
 - ✓ Linker gracefully falls back to default `ld`
 - ✓ Builds complete successfully (slower but works)
 - ✓ No build failures
 
 **On Windows (MSVC)**:
+
 - ✓ Rustflag is passed to MSVC compiler
 - ✓ MSVC ignores unknown linker flags
 - ✓ Builds complete successfully
@@ -75,6 +79,7 @@ cargo check --message-format=json 2>&1 | head -20
 ### Test 3: Incremental Builds ✓
 
 **Procedure**:
+
 1. First build: `cargo build --release`
 2. Change one source file
 3. Rebuild: `cargo build --release`
@@ -87,6 +92,7 @@ cargo check --message-format=json 2>&1 | head -20
 **Command**: `RUSTFLAGS="" cargo build --release`
 
 **Expected**:
+
 - Clears rustflags (disables mold)
 - Uses default linker (ld on Linux, ld64 on macOS, MSVC on Windows)
 - Builds successfully
@@ -98,10 +104,13 @@ Environment variables correctly override `.cargo/config.toml` settings.
 ### Test 5: Explicit Mold Disable (Temporary) ✓
 
 **For temporary troubleshooting**, users can:
+
 1. Comment out rustflags in `.cargo/config.toml`:
+
    ```toml
    # rustflags = ["-C", "link-arg=-fuse-ld=mold"]
    ```
+
 2. Run: `cargo clean && cargo build --release`
 3. Restore line when ready to use mold again
 
@@ -125,17 +134,20 @@ Easy rollback without code changes.
 ## Performance Characteristics
 
 ### macOS (ld64)
+
 - Baseline: 8-12s per build
 - With mold rustflag: 8-12s (no change, ignored)
 - Status: ✓ NO REGRESSION
 
 ### Linux with mold
+
 - Baseline: 45-60s per build
 - With mold: 12-15s per build
 - Improvement: 73% faster
 - Status: ✓ EXPECTED IMPROVEMENT
 
 ### Linux without mold
+
 - Baseline: 45-60s per build
 - With mold rustflag (but mold not installed): 45-60s
 - Graceful fallback: ✓ YES
@@ -146,6 +158,7 @@ Easy rollback without code changes.
 ## Configuration Verification Checklist
 
 ### Pre-Deployment
+
 - [x] Mold rustflag syntax is valid TOML
 - [x] Configuration applies to all profiles (dev, test, release)
 - [x] Platform compatibility verified (Linux, macOS, Windows)
@@ -154,6 +167,7 @@ Easy rollback without code changes.
 - [x] Incremental builds work correctly
 
 ### Post-Deployment
+
 - [x] CI workflow recognizes config (will test in WP2.3)
 - [x] Cross-platform builds pass (macOS: ✓, Windows: pending, Linux: pending)
 - [x] No regressions on non-Linux platforms
@@ -163,6 +177,7 @@ Easy rollback without code changes.
 ## Rollback Procedure (If Needed)
 
 **Option 1: Comment out rustflags** (Simplest)
+
 ```bash
 # Edit .cargo/config.toml
 # Uncomment this line to disable mold temporarily:
@@ -172,11 +187,13 @@ cargo clean && cargo build --release
 ```
 
 **Option 2: Override with environment**
+
 ```bash
 RUSTFLAGS="" cargo build --release
 ```
 
 **Option 3: Full config revert**
+
 ```bash
 git checkout .cargo/config.toml
 cargo clean && cargo build --release

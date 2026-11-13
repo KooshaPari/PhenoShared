@@ -7,6 +7,7 @@ Complete guide index for setting up error tracking across the Phenotype ecosyste
 ## Quick Navigation
 
 ### Getting Started (Start Here)
+
 👉 **[SENTRY_SETUP_README.md](./SENTRY_SETUP_README.md)** — High-level overview and quick start guide
 
 ### Detailed Guides
@@ -32,14 +33,14 @@ Complete guide index for setting up error tracking across the Phenotype ecosyste
 
 ### Verification & Reference
 
-4. **[SENTRY_SETUP_READY_CHECKLIST.md](../reference/SENTRY_SETUP_READY_CHECKLIST.md)** — Final readiness checklist
+1. **[SENTRY_SETUP_READY_CHECKLIST.md](../reference/SENTRY_SETUP_READY_CHECKLIST.md)** — Final readiness checklist
    - Verify all 3 projects created
    - Verify all 3 GitHub secrets configured
    - Verify local `.env` files updated
    - Sign-off section
    - Next phase instructions
 
-5. **[SENTRY_QUICK_REFERENCE.md](../reference/SENTRY_QUICK_REFERENCE.md)** — Quick lookup guide
+2. **[SENTRY_QUICK_REFERENCE.md](../reference/SENTRY_QUICK_REFERENCE.md)** — Quick lookup guide
    - Project summary table
    - Key URLs
    - Local `.env` paths
@@ -77,6 +78,7 @@ reference/
 ### For First-Time Users
 
 **Recommended order:**
+
 1. Read **SENTRY_SETUP_README.md** (5 min)
 2. Follow **SENTRY_MANUAL_SETUP_GUIDE.md** (15 min)
 3. Use **SENTRY_PROJECTS_TEMPLATE.md** to track progress (5 min)
@@ -107,21 +109,27 @@ reference/
 ## By Task
 
 ### Task: "Create Sentry Projects"
+
 → **SENTRY_MANUAL_SETUP_GUIDE.md** (Parts 1-4)
 
 ### Task: "Set Up GitHub Secrets"
+
 → **GITHUB_SECRETS_SETUP_GUIDE.md** (All sections)
 
 ### Task: "Update Local `.env` Files"
+
 → **SENTRY_MANUAL_SETUP_GUIDE.md** (Part 7)
 
 ### Task: "Verify Everything Works"
+
 → **SENTRY_SETUP_READY_CHECKLIST.md** (All sections)
 
 ### Task: "Find a URL or Secret Name"
+
 → **SENTRY_QUICK_REFERENCE.md** (Any section)
 
 ### Task: "Troubleshoot an Issue"
+
 → **SENTRY_MANUAL_SETUP_GUIDE.md** (Troubleshooting)
 → **GITHUB_SECRETS_SETUP_GUIDE.md** (Troubleshooting)
 → **SENTRY_QUICK_REFERENCE.md** (Troubleshooting Quick Links)
@@ -131,10 +139,12 @@ reference/
 ## File Descriptions
 
 ### SENTRY_SETUP_README.md
+
 **Type:** Overview & Quick Start
 **Length:** ~400 lines
 **Purpose:** High-level introduction to the 3-phase setup process
 **Covers:**
+
 - What you'll do in each phase
 - Prerequisites checklist
 - 30-second summary
@@ -143,10 +153,12 @@ reference/
 - Links to detailed guides
 
 ### SENTRY_MANUAL_SETUP_GUIDE.md
+
 **Type:** Detailed Walkthrough
 **Length:** ~850 lines
 **Purpose:** Complete step-by-step guide for creating Sentry projects
 **Covers:**
+
 - Account setup (one-time)
 - Create 3 projects (AgilePlus, phenotype-infrakit, heliosCLI)
 - Retrieve DSN tokens
@@ -156,10 +168,12 @@ reference/
 - Troubleshooting section
 
 ### GITHUB_SECRETS_SETUP_GUIDE.md
+
 **Type:** Detailed Walkthrough
 **Length:** ~500 lines
 **Purpose:** Complete step-by-step guide for GitHub organization secrets
 **Covers:**
+
 - Prerequisites and navigation checklist
 - Add 3 secrets (step-by-step)
 - Verify secrets are accessible from each repo
@@ -168,20 +182,24 @@ reference/
 - Security best practices
 
 ### SENTRY_PROJECTS_TEMPLATE.md
+
 **Type:** Tracking Template & Checklist
 **Length:** ~200 lines
 **Purpose:** Record project details as you create them
 **Covers:**
+
 - Summary table for all 3 projects
 - Detailed checklist per project
 - Overall verification checklist
 - Notes section
 
 ### SENTRY_SETUP_READY_CHECKLIST.md
+
 **Type:** Verification Checklist
 **Length:** ~300 lines
 **Purpose:** Final verification before moving to next phase
 **Covers:**
+
 - Sentry account setup verification
 - All 3 projects created and verified
 - All 3 GitHub secrets configured and verified
@@ -191,10 +209,12 @@ reference/
 - Next phase instructions
 
 ### SENTRY_QUICK_REFERENCE.md
+
 **Type:** Quick Lookup Reference
 **Length:** ~200 lines
 **Purpose:** Fast reference for key information
 **Covers:**
+
 - Projects summary table
 - DSN storage table
 - GitHub secret names
@@ -286,6 +306,7 @@ heliosCLI: https://github.com/KooshaPari/heliosCLI
 ### Q: I'm stuck. Where's the troubleshooting?
 
 **A:** See troubleshooting sections in:
+
 - **SENTRY_MANUAL_SETUP_GUIDE.md** (Sentry issues)
 - **GITHUB_SECRETS_SETUP_GUIDE.md** (GitHub issues)
 - **SENTRY_QUICK_REFERENCE.md** (Quick troubleshooting links)
@@ -375,11 +396,11 @@ Once that's done:
 ## Contact & Support
 
 For questions about:
-- **Sentry:** See https://docs.sentry.io/ or https://forum.sentry.io/
-- **GitHub Secrets:** See https://docs.github.com/en/actions/security-guides/encrypted-secrets
+
+- **Sentry:** See <https://docs.sentry.io/> or <https://forum.sentry.io/>
+- **GitHub Secrets:** See <https://docs.github.com/en/actions/security-guides/encrypted-secrets>
 - **These Guides:** Check troubleshooting sections or ask the team
 
 ---
 
 **Last Updated:** 2026-03-30
-

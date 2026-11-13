@@ -340,6 +340,7 @@ validation helper.
 Module/Cycle operations.
 
 **Files**:
+
 - MODIFIED: `crates/agileplus-domain/src/domain/feature.rs`
 - MODIFIED: `crates/agileplus-domain/src/error.rs`
 - MODIFIED: `crates/agileplus-domain/src/domain/mod.rs`
@@ -405,6 +406,7 @@ Module/Cycle operations.
    without `module_id` key and verify it deserialises successfully with `module_id = None`.
 
 **Validation**:
+
 - `cargo test -p agileplus-domain` -- ALL tests green (existing + new).
 - `cargo clippy -p agileplus-domain -- -D warnings` zero warnings.
 

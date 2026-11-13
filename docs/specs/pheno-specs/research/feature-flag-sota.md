@@ -41,6 +41,7 @@ The feature flag (feature toggle) market has evolved from simple configuration m
 ### Market Size and Growth
 
 The global feature flag management market is projected to reach $1.2B by 2028, growing at 23% CAGR. Key drivers:
+
 - DevOps adoption requiring safer deployment practices
 - Product-led growth requiring rapid experimentation
 - Regulatory compliance requiring audit trails
@@ -49,6 +50,7 @@ The global feature flag management market is projected to reach $1.2B by 2028, g
 ### Flagward Opportunity
 
 The gap exists between:
+
 - **LaunchDarkly**: Enterprise pricing, vendor lock-in, complex setup
 - **Unleash**: Good open-source option but complex architecture (Java/PostgreSQL dependency)
 - **Flipt**: Modern but limited ecosystem and language support
@@ -67,6 +69,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 **Market Position**: Undisputed leader, $3B+ valuation, 4,000+ customers, founded 2014
 
 **Architecture**:
+
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │                     LaunchDarkly Platform                       │
@@ -106,6 +109,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 ```
 
 **Key Technical Specifications**:
+
 - Flag evaluation: In-memory with eventual consistency
 - Update propagation: WebSocket/SSE with 30s heartbeat
 - Data model: Projects, Environments, Flags, Segments
@@ -113,6 +117,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Storage: DynamoDB global tables with multi-region replication
 
 **Strengths**:
+
 - 99.999% uptime SLA with enterprise support
 - Sub-10ms p99 evaluation latency for warm evaluations
 - 40-80ms cold start latency
@@ -125,6 +130,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Kill switches with automatic rollback
 
 **Weaknesses**:
+
 - Expensive pricing: $8.33/seat/month minimum ($1,500+/mo for teams)
 - MAU-based pricing creates unpredictable costs
 - Complex for small teams
@@ -133,6 +139,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Limited customizability for specific use cases
 
 **Performance Characteristics**:
+
 - Local evaluation: 300,000+ evals/sec per core
 - Server evaluation: 20,000+ evals/sec
 - Memory per SDK instance: 5-10MB
@@ -143,12 +150,14 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 **Market Position**: Strong #2, emphasis on data-driven experimentation, founded 2015
 
 **Differentiation**:
+
 - Deep integration with analytics platforms (Segment, Amplitude, Mixpanel)
 - Statistical significance engine built-in
 - Integration with data warehouses (Snowflake, BigQuery, Redshift)
 - Impression tracking for all flag evaluations
 
 **Architecture**:
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                     Split Platform                            │
@@ -169,6 +178,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 ```
 
 **Strengths**:
+
 - Strong Kubernetes integration
 - On-premise deployment option
 - Deterministic bucketing for consistent experiences
@@ -176,12 +186,14 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Comprehensive impression data for analysis
 
 **Weaknesses**:
+
 - Higher latency than competitors (60-100ms cold start)
 - Complex configuration for simple use cases
 - Pricing starts at $3,000/month
 - Less intuitive UI compared to LaunchDarkly
 
 **Performance Characteristics**:
+
 - Cold start: 60-100ms
 - Warm evaluation: 5-15ms
 - Requires connection to Split cloud for most features
@@ -191,11 +203,13 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 **Market Position**: Modern challenger, unified experimentation platform, founded 2020
 
 **Approach**:
+
 - Full-stack experimentation (feature flags + analytics + experimentation)
 - Gatekeeping with exposure logging built-in
 - Native experiment assignment with hash-based bucketing
 
 **Strengths**:
+
 - Unified platform reduces tool sprawl
 - SDK performance: <2ms p99 latency
 - 90-day data retention on all plans
@@ -203,12 +217,14 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Built-in metrics and dashboards
 
 **Weaknesses**:
+
 - Newer platform, smaller ecosystem
 - SDK maturity lags behind LaunchDarkly
 - Documentation gaps for edge cases
 - Less enterprise feature depth
 
 **Performance Characteristics**:
+
 - p99 latency: <2ms
 - Built-in metrics collection adds overhead
 
@@ -217,6 +233,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 **Market Position**: Part of larger experimentation platform, acquired by Episerver
 
 **Approach**:
+
 - Full-stack experimentation (feature flags + A/B testing)
 - Web experimentation (visual editor)
 - Personalization engine
@@ -229,6 +246,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 **Market Position**: Enterprise CI/CD integration, evolved from Rollout acquisition
 
 **Focus**:
+
 - GitOps-native flag management
 - Code references link flags to source code
 - Environment promotion workflows
@@ -237,11 +255,13 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Enterprise governance
 
 **Strengths**:
+
 - Kubernetes-native architecture
 - GitOps integration with Git repositories
 - Environment promotion between dev/staging/prod
 
 **Weaknesses**:
+
 - Steeper learning curve
 - Limited targeting rules compared to LaunchDarkly
 - Vendor lock-in concerns
@@ -252,17 +272,20 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 **Market Position**: Simple, hosted feature flag service, CDN-based delivery
 
 **Approach**:
+
 - CDN-based flag delivery
 - Simple configuration
 - Multiple deployment modes
 
 **Strengths**:
+
 - Global low-latency via CDN
 - Simple pricing model
 - Easy setup
 - Proxy mode for secure evaluation
 
 **Weaknesses**:
+
 - Less flexible targeting than competitors
 - Limited experimentation features
 - Smaller SDK ecosystem
@@ -273,13 +296,14 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 
 #### 1. Unleash
 
-**Repository**: https://github.com/Unleash/unleash  
+**Repository**: <https://github.com/Unleash/unleash>  
 **License**: Apache 2.0  
 **Primary Language**: TypeScript/Node.js (migrated from Java in 2021)  
 **GitHub Stars**: 7,000+  
 **Age**: 10+ years (founded 2014)
 
 **Architecture**:
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                     Unleash Platform                          │
@@ -306,6 +330,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 ```
 
 **Key Features**:
+
 - Gradual rollout (percentage-based)
 - Strategy constraints (userId, sessionId, environment, appName)
 - Custom activation strategies (plugin-based)
@@ -316,12 +341,14 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - API-first design
 
 **Deployment Options**:
+
 1. **Self-hosted**: Docker, Kubernetes, bare metal
 2. **Unleash Enterprise**: Managed hosting with additional features
 3. **Unleash Open Source**: Community edition
 4. **Unleash Pro**: Mid-tier managed option
 
 **Strengths**:
+
 - Battle-tested (10+ years in production)
 - Large, active community (7k+ GitHub stars)
 - Multiple SDK languages with official support
@@ -332,6 +359,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Migration path from other systems
 
 **Weaknesses**:
+
 - Requires PostgreSQL (infrastructure overhead)
 - Complex for simple use cases
 - Enterprise features (SSO, RBAC, audit log) are paywalled
@@ -340,6 +368,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Real-time updates require webhooks or polling
 
 **Performance Characteristics**:
+
 - P95 evaluation: ~5ms (SDK local mode)
 - P95 evaluation: 10-20ms (server-side)
 - Sync interval: 15 seconds default (configurable)
@@ -348,12 +377,13 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 
 #### 2. Flagsmith
 
-**Repository**: https://github.com/Flagsmith/flagsmith  
+**Repository**: <https://github.com/Flagsmith/flagsmith>  
 **License**: BSD-3-Clause  
 **Primary Language**: Python/Django  
 **GitHub Stars**: 3,000+
 
 **Architecture**:
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                     Flagsmith Platform                        │
@@ -376,6 +406,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 ```
 
 **Key Features**:
+
 - Remote config (string, number, JSON values)
 - Segments (user groups with attribute matching)
 - Identity overrides (per-user flag values)
@@ -385,11 +416,13 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Audit logging (paid tier)
 
 **Deployment**:
+
 - Docker Compose (simplest, single-node)
 - Kubernetes Helm chart
 - Flagsmith-hosted (SaaS with free tier)
 
 **Strengths**:
+
 - Simple deployment (single Docker Compose file)
 - Good UI/UX for flag management
 - Strong identity management features
@@ -398,6 +431,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - GraphQL and REST APIs
 
 **Weaknesses**:
+
 - No streaming updates (polling only, default 60s)
 - Python backend (performance concerns at very high scale)
 - Smaller community than Unleash
@@ -405,19 +439,21 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - SDK performance varies by language
 
 **Performance Characteristics**:
+
 - Server evaluation: 20-50ms
 - Polling interval: 60 seconds default
 - No local evaluation mode
 
 #### 3. Flipt
 
-**Repository**: https://github.com/flipt-io/flipt  
+**Repository**: <https://github.com/flipt-io/flipt>  
 **License**: GPL-3.0  
 **Primary Language**: Go  
 **GitHub Stars**: 2,500+  
 **Age**: 5+ years
 
 **Architecture**:
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                      Flipt Platform                           │
@@ -440,6 +476,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 ```
 
 **Key Features**:
+
 - Namespace isolation (multi-tenant)
 - GitOps workflow (flags as YAML)
 - Advanced rollout rules (date/time, percentage, segments)
@@ -449,6 +486,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Flag importing/exporting
 
 **Strengths**:
+
 - Single binary deployment (no dependencies)
 - Modern Go architecture (fast, memory-efficient)
 - GitOps native (declarative flag management)
@@ -457,6 +495,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Simple to operate
 
 **Weaknesses**:
+
 - Limited language SDKs (Go, Node.js, Python, Java, Ruby - fewer than competitors)
 - No streaming updates (manual refresh or polling)
 - No built-in experimentation
@@ -464,6 +503,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - GPL-3.0 license (copyleft, may concern some enterprises)
 
 **Performance**:
+
 - P99 evaluation: <1ms (local evaluation via SDK)
 - P99 evaluation: 2-5ms (server-side)
 - Cold start: <100ms
@@ -471,12 +511,13 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 
 #### 4. PostHog Feature Flags
 
-**Repository**: https://github.com/PostHog/posthog  
+**Repository**: <https://github.com/PostHog/posthog>  
 **License**: MIT  
 **Primary Language**: Python/Django + TypeScript  
 **Context**: Part of larger product analytics platform
 
 **Features**:
+
 - Integrated with product analytics
 - A/B testing with statistical analysis
 - Multivariate flags (multiple variants)
@@ -485,6 +526,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Early access management
 
 **Strengths**:
+
 - Generous free tier
 - Integrated analytics (no separate tools)
 - Open-source core (MIT license)
@@ -492,6 +534,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Statistical significance calculations
 
 **Weaknesses**:
+
 - Tied to PostHog platform (heavy if only need flags)
 - Complex for feature flags alone
 - Heavy infrastructure requirements (ClickHouse, Redis, PostgreSQL)
@@ -499,13 +542,14 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 
 #### 5. GrowthBook
 
-**Repository**: https://github.com/growthbook/growthbook  
+**Repository**: <https://github.com/growthbook/growthbook>  
 **License**: MIT  
 **Primary Language**: TypeScript/Node.js + React  
 **Positioning**: Open-source experimentation platform  
 **GitHub Stars**: 4,000+
 
 **Architecture**:
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                     GrowthBook Platform                       │
@@ -529,6 +573,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 ```
 
 **Key Features**:
+
 - Visual experiment editor
 - Data warehouse integration (BigQuery, Snowflake, Redshift, Postgres, MySQL, ClickHouse, Mixpanel)
 - Bayesian statistics engine
@@ -537,6 +582,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Visual change editor for non-technical users
 
 **Strengths**:
+
 - Strong experimentation focus
 - Data warehouse integration (bring your own data)
 - Bayesian statistics (modern approach)
@@ -544,6 +590,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 - Open-source (MIT license)
 
 **Weaknesses**:
+
 - Heavier than pure feature flag solutions
 - Requires data warehouse for full power
 - Complex setup compared to simpler flag tools
@@ -551,23 +598,26 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 
 #### 6. Togglz
 
-**Repository**: https://github.com/togglz/togglz  
+**Repository**: <https://github.com/togglz/togglz>  
 **License**: Apache 2.0  
 **Primary Language**: Java  
 **Positioning**: Java-focused feature toggle library
 
 **Focus**:
+
 - Spring Boot integration
 - Annotation-based feature toggles
 - JMX-based management console
 - Strategy-based activation
 
 **Strengths**:
+
 - Deep Java/Spring integration
 - Simple API for developers
 - Annotation-driven development
 
 **Weaknesses**:
+
 - Java-only (no other languages)
 - Library approach (not a service)
 - Limited enterprise features
@@ -581,6 +631,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 #### 1. Server-Side Evaluation
 
 **How it works**:
+
 ```
 ┌──────────┐     ┌─────┐     ┌──────────────┐     ┌─────────────┐
 │  Client  │────▶│ SDK │────▶│ Flagward     │────▶│ Evaluation  │
@@ -596,6 +647,7 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 ```
 
 **Flow**:
+
 1. Client calls SDK evaluation method
 2. SDK makes HTTP request to flag service API
 3. Service evaluates flag against provided context
@@ -603,24 +655,28 @@ Flagward can position as: *LaunchDarkly capabilities + Unleash flexibility + mod
 5. SDK returns value to client
 
 **Pros**:
+
 - Secure (rules not exposed to client)
 - Can use sensitive data in rules (PII remains server-side)
 - No SDK logic drift (single evaluation implementation)
 - Easier to audit and control
 
 **Cons**:
+
 - Network latency on every evaluation (20-100ms)
 - Server load increases with traffic
 - Single point of failure (if service is down, evaluations fail)
 - Higher infrastructure costs
 
 **Best for**:
+
 - Authorization decisions (who can access what)
 - Sensitive feature access (admin features, billing)
 - Backend services where latency is less critical
 - Compliance-sensitive evaluations
 
 **Caching Strategy**:
+
 ```typescript
 // Server-side evaluation with caching
 class ServerEvaluator {
@@ -645,6 +701,7 @@ class ServerEvaluator {
 #### 2. Local Evaluation (SDK-Bundled Rules)
 
 **How it works**:
+
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │                        SDK Lifecycle                           │
@@ -667,24 +724,28 @@ class ServerEvaluator {
 ```
 
 **Flow**:
+
 1. SDK initializes and fetches all flag rules from service
 2. Rules stored locally (memory, file, or embedded DB)
 3. Evaluation happens locally against stored rules
 4. Periodic sync keeps rules updated (WebSocket, polling, or push)
 
 **Pros**:
+
 - Sub-millisecond latency (<1ms typical)
 - Works offline (evaluation continues even without connectivity)
 - No server load from evaluations (scales with client count)
 - Resilient (no dependency on service availability for evaluation)
 
 **Cons**:
+
 - Rules exposed to client (security consideration)
 - SDK logic must match server (version compatibility)
 - Sync delay when rules change (stale data window)
 - Larger SDK bundle size (includes rule evaluation engine)
 
 **Best for**:
+
 - UI feature toggles (React, Vue, Angular)
 - High-throughput applications (thousands of evals/second)
 - Mobile applications (unreliable connectivity)
@@ -703,6 +764,7 @@ class ServerEvaluator {
 #### 3. Edge Evaluation
 
 **How it works**:
+
 ```
 ┌──────────┐     ┌─────────────┐     ┌────────────┐     ┌─────────┐
 │  Client  │────▶│  CDN Edge   │────▶│   Origin   │────▶│  Store  │
@@ -717,6 +779,7 @@ class ServerEvaluator {
 ```
 
 **Implementation**:
+
 ```javascript
 // Cloudflare Worker example
 export default {
@@ -742,18 +805,21 @@ export default {
 ```
 
 **Pros**:
+
 - Global low latency (sub-5ms from any location)
 - Reduced origin load
 - Can use geolocation data (country, city, ASN)
 - Works even if origin is down (with cached rules)
 
 **Cons**:
+
 - Limited execution environment (V8 isolates, limited CPU/memory)
 - Vendor lock-in (Cloudflare, Fastly, AWS Lambda@Edge)
 - Debugging complexity
 - Cold start latency for edge workers
 
 **Best for**:
+
 - Global applications with users worldwide
 - Geolocation-based targeting (country, region)
 - DDoS protection (block at edge)
@@ -802,6 +868,7 @@ Consistent bucketing ensures users see the same experience across sessions and d
 #### MurmurHash3 (Industry Standard)
 
 **Why MurmurHash3?**
+
 - Fast: 2-3x faster than SHA-256
 - Good distribution: uniform across output space
 - Avalanche effect: small input changes = large output changes
@@ -809,6 +876,7 @@ Consistent bucketing ensures users see the same experience across sessions and d
 - Non-cryptographic: appropriate for bucketing (not security)
 
 **Implementation**:
+
 ```typescript
 import { murmur3 } from 'murmurhash-js';
 
@@ -849,6 +917,7 @@ console.log(getBucket('user-123', 'new-checkout-flow')); // Always same number
 ```
 
 **Properties**:
+
 - Deterministic: same inputs = same output (across sessions, devices)
 - Uniform distribution: each bucket has equal probability
 - Fast computation: suitable for high-throughput evaluation
@@ -857,16 +926,19 @@ console.log(getBucket('user-123', 'new-checkout-flow')); // Always same number
 #### SHA-256 (Audit Trail and Security)
 
 Used for:
+
 - Audit log hashing (tamper detection)
 - Cryptographic verification
 - Secure randomization where needed
 
 **Trade-offs**:
+
 - Slower than MurmurHash3 (~10x slower)
 - Cryptographically secure
 - Use when security matters more than speed
 
 **Audit Hash Chain**:
+
 ```typescript
 import { createHash } from 'crypto';
 
@@ -916,6 +988,7 @@ function verifyChain(entries: AuditEntry[]): boolean {
 #### 1. Relational (PostgreSQL)
 
 **Schema Design**:
+
 ```sql
 -- Core flags table
 CREATE TABLE flags (
@@ -1012,6 +1085,7 @@ CREATE INDEX idx_experiments_status ON experiments(status);
 ```
 
 **Pros**:
+
 - ACID guarantees for data integrity
 - Complex queries with JOINs
 - Mature ecosystem (backups, replication, monitoring)
@@ -1019,6 +1093,7 @@ CREATE INDEX idx_experiments_status ON experiments(status);
 - Full-text search capabilities
 
 **Cons**:
+
 - Operational overhead (backups, monitoring, scaling)
 - Single region latency (unless using read replicas)
 - Connection pool management
@@ -1027,12 +1102,14 @@ CREATE INDEX idx_experiments_status ON experiments(status);
 #### 2. Embedded (SQLite)
 
 **Use cases**:
+
 - Single-node deployments
 - SDK local storage
 - Development and testing
 - Edge deployments
 
 **Schema** (simplified):
+
 ```sql
 -- SQLite uses similar schema but with type affinity
 CREATE TABLE flags (
@@ -1057,18 +1134,21 @@ CREATE TABLE cache_meta (
 ```
 
 **Pros**:
+
 - Zero configuration (single file)
 - No separate process
 - Fast reads (in-memory cache)
 - Portable (single file)
 
 **Cons**:
+
 - Write contention (limited concurrent writes)
 - No replication
 - Limited concurrent write performance
 - Not suitable for high-write scenarios
 
 **When to use**:
+
 - Development environments
 - Single-node production (low traffic)
 - SDK local storage
@@ -1080,6 +1160,7 @@ CREATE TABLE cache_meta (
 **Use case**: High-frequency reads, caching layer, real-time pub/sub
 
 **Schema**:
+
 ```
 # Flag storage
 flag:{environment}:{key} -> JSON (flag definition)
@@ -1101,6 +1182,7 @@ rate_limit:{api_key}:{window} -> Counter
 ```
 
 **Operations**:
+
 ```bash
 # Store flag
 SET flag:production:new-feature '{"key":"new-feature","enabled":true}' EX 3600
@@ -1117,18 +1199,21 @@ MGET flag:production:flag1 flag:production:flag2 ...
 ```
 
 **Pros**:
+
 - Sub-millisecond reads
 - Pub/sub for real-time updates
 - High throughput (100k+ ops/sec)
 - TTL support for automatic expiration
 
 **Cons**:
+
 - Data loss risk (unless using AOF/RDB persistence)
 - Memory-only (cost at scale)
 - Eventual consistency with replicas
 - No complex queries
 
 **Best practices**:
+
 - Use as cache layer, not primary store
 - Enable persistence (AOF + RDB)
 - Set appropriate TTLs
@@ -1218,6 +1303,7 @@ class FlagCache {
 ```
 
 **Cache headers**:
+
 ```http
 HTTP/1.1 200 OK
 Content-Type: application/json
@@ -1228,6 +1314,7 @@ Last-Modified: Mon, 04 Apr 2026 12:00:00 GMT
 ```
 
 **Benefits**:
+
 - Reduced origin load
 - Global low latency
 - Automatic cache invalidation via ETag
@@ -1239,18 +1326,21 @@ Last-Modified: Mon, 04 Apr 2026 12:00:00 GMT
 ### 1. Multi-Tenant Isolation
 
 **Approach 1: Database-per-tenant**
+
 - Complete isolation (security, performance)
 - High operational overhead (many databases to manage)
 - Expensive (each tenant needs full DB resources)
 - Complex migrations
 
 **Approach 2: Schema-per-tenant**
+
 - Good isolation
 - Shared resources (connection pool, compute)
 - Complex migrations (must apply to all schemas)
 - PostgreSQL-specific
 
 **Approach 3: Row-Level Security (RLS) - Recommended for Flagward**
+
 ```sql
 -- Enable RLS on tables
 ALTER TABLE flags ENABLE ROW LEVEL SECURITY;
@@ -1266,33 +1356,39 @@ SET app.current_tenant = 'tenant-uuid';
 ```
 
 **Pros**:
+
 - Single database (simpler operations)
 - Automatic filtering (no query changes needed)
 - Shared resources (cost-effective)
 - Easy migrations
 
 **Cons**:
+
 - PostgreSQL-specific
 - Must set context correctly on every connection
 - Potential for data leakage if misconfigured
 
 **Approach 4: Namespace isolation (Flipt-style)**
+
 ```
 /api/v1/namespaces/{namespace}/flags/{flag}
 ```
 
 **Pros**:
+
 - Application-level isolation
 - Works with any database
 - Simple to implement
 
 **Cons**:
+
 - No database-level enforcement
 - Must implement access control in application
 
 ### 2. Multi-Region Deployment
 
 **Active-Active**:
+
 ```
 ┌──────────────┐          ┌──────────────┐
 │  us-east-1   │◄────────►│  eu-west-1   │
@@ -1306,6 +1402,7 @@ SET app.current_tenant = 'tenant-uuid';
 ```
 
 **Characteristics**:
+
 - Both regions accept writes
 - Conflict resolution required
 - Higher complexity
@@ -1313,6 +1410,7 @@ SET app.current_tenant = 'tenant-uuid';
 - Requires CRDTs or conflict resolution
 
 **Active-Passive**:
+
 ```
 ┌──────────────┐          ┌──────────────┐
 │  us-east-1   │─────────▶│  eu-west-1   │
@@ -1326,6 +1424,7 @@ SET app.current_tenant = 'tenant-uuid';
 ```
 
 **Characteristics**:
+
 - Single write region
 - Standby for disaster recovery
 - Simpler conflict handling
@@ -1333,6 +1432,7 @@ SET app.current_tenant = 'tenant-uuid';
 - Lower cost than active-active
 
 **Read Replicas**:
+
 ```
 ┌──────────────┐
 │   Primary    │
@@ -1347,6 +1447,7 @@ SET app.current_tenant = 'tenant-uuid';
 ```
 
 **Characteristics**:
+
 - Single write node
 - Multiple read replicas
 - Async replication (eventual consistency)
@@ -1358,6 +1459,7 @@ SET app.current_tenant = 'tenant-uuid';
 #### Unified SDK Design
 
 **Core interface (consistent across all languages)**:
+
 ```typescript
 interface FlagwardClient {
   // Boolean flags
@@ -1398,6 +1500,7 @@ interface EvaluationContext {
 #### Platform-Specific Optimizations
 
 **Browser SDK**:
+
 ```typescript
 class BrowserSDK implements FlagwardClient {
   private storage: Storage;
@@ -1424,6 +1527,7 @@ class BrowserSDK implements FlagwardClient {
 ```
 
 **Node.js SDK**:
+
 ```typescript
 class NodeSDK implements FlagwardClient {
   private fs: typeof import('fs');
@@ -1451,6 +1555,7 @@ class NodeSDK implements FlagwardClient {
 ```
 
 **Mobile SDKs (iOS/Android)**:
+
 - Native storage (Keychain/Keystore for security)
 - Background sync when app enters foreground
 - Push notification triggered sync
@@ -1504,6 +1609,7 @@ interface Variant {
 ```
 
 **Evaluation Flow**:
+
 ```
 1. Check flag enabled (master toggle)
    └── Disabled? Return default value immediately
@@ -1750,6 +1856,7 @@ const experiment: Experiment = {
 ### 1. Secret Management
 
 **API Key Types**:
+
 ```
 sk_live_xxxxxxxxxxxxxxxx        # Server-side (full access)
 sk_test_xxxxxxxxxxxxxxxx        # Test environment
@@ -1759,6 +1866,7 @@ rk_live_xxxxxxxxxxxxxxxx        # Read-only key
 ```
 
 **Key Permissions Schema**:
+
 ```typescript
 interface KeyPermissions {
   flags: {
@@ -1795,6 +1903,7 @@ const clientKeyPermissions: KeyPermissions = {
 ```
 
 **Key Storage**:
+
 ```typescript
 // Hash keys in database (never store plaintext)
 async function createApiKey(permissions: KeyPermissions): Promise<string> {
@@ -1844,6 +1953,7 @@ async function verifyApiKey(providedKey: string): Promise<KeyPermissions | null>
 ### 2. Audit Logging
 
 **Tamper-Evident Chain**:
+
 ```typescript
 interface AuditEntry {
   id: string;                    // UUID
@@ -1945,6 +2055,7 @@ function verifyChain(entries: AuditEntry[]): { valid: boolean; brokenAt?: number
 ### 3. Access Control
 
 **RBAC Model**:
+
 ```typescript
 interface Role {
   id: string;
@@ -2154,6 +2265,7 @@ class RedisRateLimiter {
 ### 5. Data Protection
 
 **PII Handling**:
+
 ```typescript
 interface DataProtectionConfig {
   // Never log or store these attributes in plaintext
@@ -2270,6 +2382,7 @@ Test machine: AWS c5.xlarge (4 vCPU, 8GB RAM)
 ### CI/CD Integration
 
 **GitHub Actions**:
+
 ```yaml
 name: Feature Flag Validation
 
@@ -2315,6 +2428,7 @@ jobs:
 ```
 
 **GitOps Workflow**:
+
 ```yaml
 # .flagward/flags.yaml
 version: '1.0'
@@ -2364,6 +2478,7 @@ flags:
 ```
 
 **Sync workflow**:
+
 ```
 git push → CI runs → Validates flag YAML → Deploys to Flagward
                 ↓
@@ -2373,6 +2488,7 @@ git push → CI runs → Validates flag YAML → Deploys to Flagward
 ### Observability Integration
 
 **Metrics**:
+
 ```typescript
 interface FlagMetrics {
   // Evaluation metrics
@@ -2412,6 +2528,7 @@ evaluationCounter.inc({
 ```
 
 **Tracing**:
+
 ```typescript
 // OpenTelemetry integration
 import { trace } from '@opentelemetry/api';
@@ -2450,6 +2567,7 @@ async function evaluateFlag(flagKey: string, context: Context): Promise<boolean>
 ```
 
 **Logging**:
+
 ```typescript
 interface FlagLogEntry {
   timestamp: string;
@@ -2569,11 +2687,13 @@ app.post('/webhooks/flagward', (req, res) => {
 ### 1. AI-Powered Targeting
 
 **Smart Rollouts**:
+
 - ML models analyze historical rollouts to predict safe rollout speeds
 - Anomaly detection for automatic rollback
 - Predictive user segmentation based on behavior patterns
 
 **Implementation**:
+
 ```typescript
 interface SmartRolloutConfig {
   targetMetric: string;  // 'error_rate', 'conversion_rate'
@@ -2612,11 +2732,13 @@ class SmartRollout {
 ### 2. WebAssembly Evaluation
 
 **Universal Evaluation**:
+
 - Compile flag rules to WebAssembly for any environment
 - Sandboxed, secure evaluation
 - Consistent behavior across platforms
 
 **Benefits**:
+
 - Single evaluation engine (WASM) across all SDKs
 - Secure (sandboxed execution)
 - Fast (near-native performance)
@@ -2624,6 +2746,7 @@ class SmartRollout {
 ### 3. Edge-Native Flags
 
 **V8 Isolate Execution**:
+
 ```javascript
 // Cloudflare Worker
 export default {
@@ -2648,6 +2771,7 @@ export default {
 ### 4. Blockchain Audit
 
 **Immutable Audit Log**:
+
 - Smart contract for flag changes
 - Decentralized verification
 - Regulatory compliance (SOX, HIPAA)
@@ -2657,6 +2781,7 @@ export default {
 ### 5. Federated Flags
 
 **Multi-Provider Strategy**:
+
 ```typescript
 interface FederatedConfig {
   providers: {
@@ -2699,6 +2824,7 @@ class FederatedClient {
 ### 1. Core Positioning
 
 **Target Market**: Development teams of 10-200 engineers who:
+
 - Have outgrown simple config files or environment variables
 - Want LaunchDarkly capabilities without enterprise pricing
 - Prefer TypeScript/Node.js stack
@@ -2711,6 +2837,7 @@ class FederatedClient {
 ### 2. Technical Priorities
 
 **P0 (Must Have for v1.0)**:
+
 - [ ] Sub-10ms local evaluation (TypeScript)
 - [ ] SQLite support for simple deployments
 - [ ] PostgreSQL support for production
@@ -2725,6 +2852,7 @@ class FederatedClient {
 - [ ] Environment support (dev, staging, prod)
 
 **P1 (Should Have for v1.5)**:
+
 - [ ] Go SDK (for backend services)
 - [ ] Python SDK (for ML/data pipelines)
 - [ ] Edge deployment (Cloudflare Workers)
@@ -2736,6 +2864,7 @@ class FederatedClient {
 - [ ] Rate limiting
 
 **P2 (Nice to Have for v2.0)**:
+
 - [ ] Mobile SDKs (iOS, Android)
 - [ ] Experimentation framework (A/B testing)
 - [ ] AI-powered auto-rollback
@@ -2747,21 +2876,25 @@ class FederatedClient {
 ### 3. Architecture Decisions
 
 **Database**: Dual-mode support
+
 - SQLite for development, single-node deployments, edge
 - PostgreSQL for production, multi-node, high availability
 - Migration path: SQLite → PostgreSQL with export/import
 
 **Sync Strategy**: WebSocket primary, polling fallback
+
 - WebSocket: Real-time, efficient, preferred
 - Polling: Every 60 seconds, compatible with all networks
 - Configurable intervals based on environment
 
 **Evaluation**: Local-first with server fallback
+
 - SDK bundles rules for local evaluation (<1ms)
 - Server evaluation for sensitive operations (auth, billing)
 - Consistent MurmurHash3 bucketing
 
 **API Design**: REST + WebSocket
+
 - REST for management operations
 - WebSocket for real-time updates
 - gRPC considered for v2 (high-performance use cases)
@@ -2786,6 +2919,7 @@ class FederatedClient {
 ### 5. Success Metrics
 
 **Technical KPIs**:
+
 - P99 evaluation latency: <5ms (local), <20ms (server)
 - SDK bundle size: <30KB (minified + gzipped)
 - Memory footprint: <5MB per SDK instance
@@ -2793,6 +2927,7 @@ class FederatedClient {
 - Uptime target: 99.9% (self-hosted with monitoring)
 
 **Adoption KPIs**:
+
 - GitHub stars: 1000+ within 12 months of release
 - NPM downloads: 10k+/month within 6 months
 - Production deployments: 100+ tracked within 12 months
@@ -2800,6 +2935,7 @@ class FederatedClient {
 - Documentation completeness: 100% API coverage
 
 **Business KPIs**:
+
 - Cost per 1M evaluations: <$0.01 (self-hosted)
 - Time to first flag: <5 minutes (from install to first evaluation)
 - Migration time from LaunchDarkly: <1 day
@@ -2819,24 +2955,28 @@ class FederatedClient {
 ### 7. Go-to-Market Strategy
 
 **Phase 1: Developer Preview (Months 1-3)**
+
 - Core SDK (TypeScript)
 - SQLite support
 - Basic dashboard
 - 10 early adopters
 
 **Phase 2: Public Beta (Months 4-6)**
+
 - PostgreSQL support
 - Go SDK
 - Documentation complete
 - 100 beta users
 
 **Phase 3: GA Release (Months 7-9)**
+
 - Enterprise features (RBAC, audit)
 - Python SDK
 - Cloud deployment guides
 - Launch on HN, Product Hunt
 
 **Phase 4: Scale (Months 10-12)**
+
 - Experimentation framework
 - Mobile SDKs
 - Enterprise support offerings
@@ -2861,26 +3001,31 @@ class FederatedClient {
 ### A.2 Feature Flag Taxonomy
 
 **Release Toggles**: Enable trunk-based development
+
 - Short-lived (days to weeks)
 - Used for incomplete features
 - Removed after feature ships
 
 **Experiment Toggles**: A/B testing
+
 - Controlled experiments
 - Statistical analysis
 - Time-bounded
 
 **Ops Toggles**: Operational control
+
 - Circuit breakers
 - Rate limiting
 - Kill switches
 
 **Permission Toggles**: Access control
+
 - Plan-based features
 - Beta access
 - Internal features
 
 **Long-lived Toggles**: Configuration
+
 - Theme settings
 - Feature availability
 - Partner-specific features
@@ -2910,6 +3055,7 @@ class FederatedClient {
 **Base URL**: `https://api.flagward.io/v1`
 
 **Authentication**: Bearer token (API key)
+
 ```
 Authorization: Bearer sk_live_xxxxxxxxxxxxxxxx
 ```

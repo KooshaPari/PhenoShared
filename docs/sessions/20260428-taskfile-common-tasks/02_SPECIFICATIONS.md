@@ -9,4 +9,3 @@ Acceptance criteria:
 
 - The task file contains only the four requested common tasks.
 - Each task is aligned with the detected Bun/TypeScript repo tooling.
-

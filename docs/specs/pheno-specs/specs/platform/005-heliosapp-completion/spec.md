@@ -15,12 +15,14 @@ Complete modernization and stabilization of heliosApp (1022 commits since 2025-0
 ## Past Work (Retroactive Specs)
 
 ### Core Runtime (Completed)
+
 - TypeScript/Bun runtime implementation
 - Biome linting migration (oxc)
 - Desktop/solid-jsx components
 - Consolidated stabilization efforts
 
 ### CI/CD (Completed)
+
 - Policy gate workflows
 - Quality gate integration
 - Biome formatting standards
@@ -28,16 +30,19 @@ Complete modernization and stabilization of heliosApp (1022 commits since 2025-0
 ## Present Work (Current)
 
 ### WP001: OXC Migration
+
 - State: merged
 - Commits: oxc-migration-20260305-heliosapp-consolidated
 - Files: biome.json, package configs
 
 ### WP002: Consolidated Stabilization
+
 - State: merged
 - Focus: CI and runtime stability
 - PR: #306
 
 ### WP003: Phase 2 Decomposition
+
 - State: merged
 - Feature decomposition
 - PR: #305
@@ -45,16 +50,19 @@ Complete modernization and stabilization of heliosApp (1022 commits since 2025-0
 ## Future Work (Planned)
 
 ### WP010: Feature Completeness Audit
+
 - Audit all features against PRD
 - Identify stubbed/unimplemented features
 - Complete missing implementations
 
 ### WP011: Performance Optimization
+
 - Bundle size reduction
 - Runtime performance
 - Memory profiling
 
 ### WP012: Desktop Integration
+
 - Complete desktop app features
 - IPC communication
 - System tray integration
@@ -79,6 +87,7 @@ Complete modernization and stabilization of heliosApp (1022 commits since 2025-0
 ## Audit Update — 2026-04-02
 
 ### Current State
+
 - **Active branch**: `feat/fix-typescript-vite-federation` (NOT on main)
 - **Dirty files**: 3 (CLAUDE.md, PR_SUMMARY.md, untracked WORKLOG.md)
 - **Open PRs**: 2 (PRs #360-361 for methodology specs, 95% complete)
@@ -86,6 +95,7 @@ Complete modernization and stabilization of heliosApp (1022 commits since 2025-0
 - **Missing**: AGENTS.md file
 
 ### In-Progress Tasks
+
 1. **TypeScript/Vite federation fix** (85% complete):
    - Current branch, dirty CLAUDE.md
    - Left: Commit dirty files, verify host integration, merge
@@ -95,6 +105,7 @@ Complete modernization and stabilization of heliosApp (1022 commits since 2025-0
    - Left: Verify host integration, verify runtime federation loading
 
 ### Immediate Actions
+
 - [ ] Commit CLAUDE.md, PR_SUMMARY.md, WORKLOG.md
 - [ ] Verify host integration for Module Federation
 - [ ] Merge PRs #360-361
@@ -104,5 +115,6 @@ Complete modernization and stabilization of heliosApp (1022 commits since 2025-0
 - [ ] Clean node_modules (113 MB)
 
 ### Dependencies
+
 - Blocked on host application integration verification
 - Depends on AgilePlus spec 001 for work tracking integration

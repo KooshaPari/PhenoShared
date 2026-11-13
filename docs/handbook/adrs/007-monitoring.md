@@ -21,12 +21,14 @@ PhenoObservability exposes a thin, opinionated API surface that wraps OpenTeleme
 ## Consequences
 
 ### Positive
+
 - Single instrumentation API across all Phenotype services
 - Tracely and Sentinel are self-hostable; no mandatory SaaS telemetry vendor
 - OpenTelemetry foundation means export targets can be swapped (Jaeger, Tempo, Datadog)
 - Sentinel SLO definitions are code-reviewed alongside service changes
 
 ### Negative / Trade-offs
+
 - PhenoObservability is an internal library; documentation and support are internal-only
 - Teams must adopt the `phenotype-observe` SDK rather than raw OTEL — adds an abstraction layer
 - Tracely sampling configuration needs tuning to avoid storage cost blowup at high event volumes

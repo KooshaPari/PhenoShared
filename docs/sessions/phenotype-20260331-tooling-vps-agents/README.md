@@ -1,4 +1,5 @@
 # Session: Tooling Stack, VPS Research, and Lightweight Agent Alternatives
+
 **Date**: 2026-03-31
 **Session ID**: phenotype-20260331-tooling-vps-agents
 **Mac Hardware**: 16GB RAM, 10-core Apple Silicon (MacBook Pro)
@@ -8,6 +9,7 @@
 ## Context: What Was Discussed
 
 This session covered three major topics:
+
 1. **Complete tooling stack** evaluation for Phase 2 (CI/CD, coverage, error tracking, SAST)
 2. **VPS/Cloud research** for $20/mo self-hosted infrastructure
 3. **Lightweight agent alternatives** for running 100+ instances on local Mac
@@ -40,10 +42,12 @@ This session covered three major topics:
 **Recommendation**: SonarCloud for deep analysis (GitHub App one-click install)
 
 ### SAST (Already Deployed)
+
 - Semgrep + CodeQL working across 30 repos
 - Snyk partially deployed (token issues resolved)
 
 ### Error Tracking
+
 - Sentry: Token regenerated and working (organization: stealth-startup-3u)
 
 ---
@@ -74,6 +78,7 @@ This session covered three major topics:
 ### Optimal Architecture
 
 **Oracle Cloud (free) + Hetzner CX31 (~$10)** = $10/mo total
+
 - Oracle: SonarQube + artifact storage + PostgreSQL
 - Hetzner: Woodpecker CI + 2-3 agents
 
@@ -110,18 +115,21 @@ This session covered three major topics:
 ## Part 4: Action Items
 
 ### Completed
+
 - [x] Sentry token regenerated and verified working
 - [x] GitHub Secrets configured for 3 Phase 1 repos (AgilePlus, phenotype-infrakit, heliosCLI)
 - [x] VPS research documented
 - [x] Agent resource usage analyzed
 
 ### Pending
+
 - [ ] Complete Sentry project creation (API issue — POST not allowed)
 - [ ] SonarQube installation check
 - [ ] Deploy Woodpecker CI on Hetzner
 - [ ] Research lightweight agent alternatives
 
 ### User Decisions Needed
+
 1. Sentry project creation — manual or alternative approach?
 2. SonarQube — install now on Oracle free tier?
 3. Hetzner — sign up and deploy?

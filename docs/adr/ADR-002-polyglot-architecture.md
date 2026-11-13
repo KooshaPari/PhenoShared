@@ -16,6 +16,7 @@ The Compute/Infra layer needs to combine two pre-existing codebases with differe
 Directly translating either codebase into the other language would be wasteful and error-prone. The Go codebase has ~14 ADRs worth of engineering decisions tested over months of development. The Rust codebase has tight integration with the rest of the Phenotype ecosystem.
 
 The challenge: how to combine Go and Rust in a single workspace such that:
+
 - Developers can work in either language without friction
 - Build system resolves the cross-language boundary automatically
 - CI/CD can validate both runtimes

@@ -26,14 +26,17 @@
 **Description**: Detect circular references at compile time and error if found.
 
 **Pros**:
+
 - Simple implementation
 - No runtime overhead
 
 **Cons**:
+
 - Too restrictive for real-world use cases
 - User/manager relationships common in domain models
 
 **Performance Data**:
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | Detection time | N/A | Compile-time only |
@@ -43,10 +46,12 @@
 **Description**: Do not serialize circular references, load them on demand.
 
 **Pros**:
+
 - Natural for ORM-style patterns
 - Memory efficient
 
 **Cons**:
+
 - Changes object shape
 - Requires proxy/loader infrastructure
 
@@ -55,11 +60,13 @@
 **Description**: Replace circular references with placeholders during serialization, restore during deserialization.
 
 **Pros**:
+
 - Transparent to caller
 - Works with existing serialization
 - Configurable format
 
 **Cons**:
+
 - Extra pass during serialization
 - Memory for reference tracking
 
@@ -70,6 +77,7 @@
 **Chosen Option**: Option 3 - Placeholder Replacement
 
 **Rationale**:
+
 - Handles all circular cases without user code changes
 - Preserves object shape during serialization
 - Configurable placeholder format for compatibility

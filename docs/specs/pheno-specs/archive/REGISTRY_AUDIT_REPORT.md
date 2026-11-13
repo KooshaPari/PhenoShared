@@ -13,6 +13,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Core Registry Implementations
 
 #### 1. **pheno.core.registry** (Canonical)
+
 - **File**: `src/pheno/core/registry.py`
 - **Type**: Generic registry with advanced features
 - **Features**: Thread-safe, namespaced keys, entry points, priority-based resolution
@@ -20,6 +21,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Usage**: Primary registry for all new code
 
 #### 2. **pheno.adapters.base_registry**
+
 - **File**: `src/pheno/adapters/base_registry.py`
 - **Type**: Simple protocol-based registry
 - **Features**: Search, categories, metadata, callbacks
@@ -29,6 +31,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Provider Registries
 
 #### 3. **pheno.providers.registry** (Legacy)
+
 - **File**: `src/pheno/providers/registry.py`
 - **Type**: Model provider registry
 - **Features**: Provider priority, singleton pattern
@@ -36,6 +39,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Migration**: To `pheno.providers.registry_unified`
 
 #### 4. **pheno.providers.registry_unified**
+
 - **File**: `src/pheno/providers/registry_unified.py`
 - **Type**: Unified provider registry
 - **Features**: Built on BaseRegistry, singleton
@@ -43,6 +47,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Usage**: Model provider management
 
 #### 5. **pheno.providers.registry.core**
+
 - **File**: `src/pheno/providers/registry/core.py`
 - **Type**: Core provider registry
 - **Features**: Unified provider system
@@ -50,6 +55,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Usage**: Provider registry foundation
 
 #### 6. **pheno.providers.registry.compat**
+
 - **File**: `src/pheno/providers/registry/compat.py`
 - **Type**: Compatibility layer
 - **Features**: Backwards compatibility
@@ -59,6 +65,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Adapter Registries
 
 #### 7. **pheno.adapters.registry**
+
 - **File**: `src/pheno/adapters/registry.py`
 - **Type**: Adapter-specific registry
 - **Features**: Adapter management
@@ -68,6 +75,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Infrastructure Registries
 
 #### 8. **pheno.infrastructure.resources.registry**
+
 - **File**: `src/pheno/infrastructure/resources/registry.py`
 - **Type**: Resource registry
 - **Features**: Resource management, definitions
@@ -75,6 +83,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Migration**: To unified registry
 
 #### 9. **pheno.infra.port_registry**
+
 - **File**: `src/pheno/infra/port_registry.py`
 - **Type**: Port allocation registry
 - **Features**: Port management, allocation
@@ -82,6 +91,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Migration**: To unified registry
 
 #### 10. **pheno.infra.tunneling.registry**
+
 - **File**: `src/pheno/infra/tunneling/registry.py`
 - **Type**: Tunnel registry
 - **Features**: Tunnel management
@@ -91,6 +101,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### MCP Registries
 
 #### 11. **pheno.ports.mcp.tool_registry**
+
 - **File**: `src/pheno/ports/mcp/tool_registry.py`
 - **Type**: MCP tool registry
 - **Features**: Tool management for MCP
@@ -98,6 +109,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Migration**: To unified registry
 
 #### 12. **pheno.mcp.adapters.tool_registry**
+
 - **File**: `src/pheno/mcp/adapters/tool_registry.py`
 - **Type**: MCP adapter tool registry
 - **Features**: Adapter tool management
@@ -105,6 +117,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Migration**: To unified registry
 
 #### 13. **pheno.mcp.resources.registry**
+
 - **File**: `src/pheno/mcp/resources/registry.py`
 - **Features**: MCP resource management
 - **Status**: ⚠️ Needs consolidation
@@ -113,6 +126,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Authentication Registries
 
 #### 14. **pheno.auth.mfa.registry**
+
 - **File**: `src/pheno/auth/mfa/registry.py`
 - **Type**: MFA registry
 - **Features**: MFA method management
@@ -120,6 +134,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 - **Migration**: To unified registry
 
 #### 15. **pheno.auth.providers.registry**
+
 - **File**: `src/pheno/auth/providers/registry.py`
 - **Type**: Auth provider registry
 - **Features**: Auth provider management
@@ -129,6 +144,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Deployment Registries
 
 #### 16. **pheno.deployment.cloud.registry**
+
 - **File**: `src/pheno/deployment/cloud/registry.py`
 - **Type**: Cloud deployment registry
 - **Features**: Cloud platform management
@@ -138,6 +154,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Logging Registries
 
 #### 17. **pheno.logging.handlers.registry**
+
 - **File**: `src/pheno/logging/handlers/registry.py`
 - **Type**: Logging handler registry
 - **Features**: Log handler management
@@ -147,6 +164,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### CLI Registries
 
 #### 18. **pheno.clink.registry**
+
 - **File**: `src/pheno/clink/registry.py`
 - **Type**: CLI registry
 - **Features**: CLI command management
@@ -156,6 +174,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Port Registries
 
 #### 19. **pheno.ports.registry**
+
 - **File**: `src/pheno/ports/registry.py`
 - **Type**: Port registry
 - **Features**: Port management
@@ -165,6 +184,7 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ### Documentation Registries
 
 #### 20. **docs.generators.registry**
+
 - **File**: `docs/generators/registry.py`
 - **Type**: Documentation generator registry
 - **Features**: Doc generator management
@@ -228,26 +248,32 @@ Identified **39 registry implementations** across the Pheno-SDK codebase, with s
 ## Migration Strategy
 
 ### Phase 1: Core Registry Enhancement
+
 - ✅ Complete (already done)
 - Enhanced `pheno.core.registry` with all needed features
 
 ### Phase 2: Provider Registry Migration
+
 - ✅ Complete (already done)
 - Migrated to `pheno.providers.registry_unified`
 
 ### Phase 3: Adapter Registry Migration
+
 - ⏳ In Progress
 - Migrate `pheno.adapters.registry` to use core registry
 
 ### Phase 4: Infrastructure Registry Migration
+
 - ⏳ Pending
 - Migrate infrastructure registries to use core registry
 
 ### Phase 5: MCP Registry Migration
+
 - ⏳ Pending
 - Migrate MCP registries to use core registry
 
 ### Phase 6: Cleanup
+
 - ⏳ Pending
 - Remove legacy registry implementations
 

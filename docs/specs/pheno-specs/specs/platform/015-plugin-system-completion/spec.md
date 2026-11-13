@@ -19,6 +19,7 @@ This spec completes the plugin architecture by defining stable plugin interfaces
 ## Problem Statement
 
 Plugin architecture is incomplete and fragmented:
+
 - **Plugin interfaces** — defined but not stable, missing versioning guarantees
 - **Git backend** — partial implementation, missing error handling and tests
 - **SQLite backend** — partial implementation, missing migration support
@@ -54,30 +55,35 @@ Plugin architecture is incomplete and fragmented:
 ## Technical Approach
 
 ### Phase 1: Interface Design and Stabilization (Week 1-2)
+
 1. Audit existing plugin interfaces in agileplus-plugin-core
 2. Design stable plugin interface contract with versioning
 3. Define plugin lifecycle states and transitions
 4. Document all interfaces with examples
 
 ### Phase 2: Git Backend Completion (Week 2-4)
+
 1. Complete git backend implementation
 2. Add comprehensive error handling
 3. Implement git-specific operations (clone, fetch, commit, push)
 4. Add integration tests with real git repositories
 
 ### Phase 3: SQLite Backend Completion (Week 4-6)
+
 1. Complete SQLite backend implementation
 2. Add migration support for schema changes
 3. Implement SQLite-specific operations (query, transaction, backup)
 4. Add integration tests with real SQLite databases
 
 ### Phase 4: Plugin Host Integration (Week 6-8)
+
 1. Integrate thegent-plugin-host with plugin-core interfaces
 2. Implement plugin discovery mechanism
 3. Implement plugin loading and lifecycle management
 4. Add plugin configuration management
 
 ### Phase 5: Testing and Documentation (Week 8-10)
+
 1. Comprehensive integration testing across all components
 2. Performance testing for plugin loading and execution
 3. Complete documentation for plugin development

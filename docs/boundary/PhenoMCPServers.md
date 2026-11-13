@@ -36,6 +36,7 @@
 **Reviewer:** registry batch4 audit (queue-refresh-batch4)
 **Disposition-index row:** DSPI-NEW (`repo-PhenoMCPServers`, fsm=queued)
 **Decisions:**
+
 - ABSORB target: `phenotype-tooling/crates/phench-mcp/` (per registry
   batch4 row).
 - Coordination with `AgilePlus` BLOCK-A spine (see AgilePlus boundary

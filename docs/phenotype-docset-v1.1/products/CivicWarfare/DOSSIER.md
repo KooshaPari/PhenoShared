@@ -27,8 +27,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Repository rename does not change product obligations
 - Do not demand an unrelated standalone game architecture
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

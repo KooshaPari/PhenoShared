@@ -42,6 +42,7 @@ The Phenotype ecosystem requires a documentation and code generation system that
 **Description**: One repository containing specs, patterns, and templates
 
 **Example Structure**:
+
 ```
 phenotype-registry/
   specs/
@@ -51,12 +52,14 @@ phenotype-registry/
 ```
 
 **Pros**:
+
 - Simple navigation (one place to look)
 - Single CI/CD pipeline
 - Easy cross-linking
 - Unified search
 
 **Cons**:
+
 - Coupled release cycles
 - Different domains require different tools (conflict)
 - Blurs ownership boundaries
@@ -68,6 +71,7 @@ phenotype-registry/
 **Description**: Three independent repositories with no formal relationship
 
 **Example Structure**:
+
 ```
 PhenoSpecs/          # Independent
 PhenoHandbook/       # Independent
@@ -75,11 +79,13 @@ HexaKit/            # Independent
 ```
 
 **Pros**:
+
 - Maximum autonomy
 - Independent tooling choices
 - Simple per-repo workflows
 
 **Cons**:
+
 - No cross-registry navigation
 - Links break silently
 - Duplicate metadata
@@ -91,6 +97,7 @@ HexaKit/            # Independent
 **Description**: Three specialized registries with a master index coordinating them
 
 **Example Structure**:
+
 ```
 phenotype-registry/   # Master index (hub)
 PhenoSpecs/          # Specs registry (spoke)
@@ -99,6 +106,7 @@ HexaKit/            # Templates registry (spoke)
 ```
 
 **Pros**:
+
 - Clear separation of concerns
 - Cross-registry linking supported
 - Independent tooling per domain
@@ -107,6 +115,7 @@ HexaKit/            # Templates registry (spoke)
 - GitOps-friendly
 
 **Cons**:
+
 - Requires maintaining the hub
 - Link validation across repos
 - Slightly more complex initial setup
@@ -116,11 +125,13 @@ HexaKit/            # Templates registry (spoke)
 **Description**: Use Backstage as the unified registry interface
 
 **Pros**:
+
 - Mature developer portal
 - Rich plugin ecosystem
 - Entity model abstracts sources
 
 **Cons**:
+
 - Heavyweight (requires deployment)
 - Overkill for documentation-only use case
 - Requires JavaScript/TypeScript expertise
@@ -167,15 +178,16 @@ The hub-and-spoke model provides the best balance of separation and coordination
 
 - Related ADR: ADR-002 (Traceability-First Documentation)
 - Related ADR: ADR-003 (Automated Validation Strategy)
-- PhenoSpecs: https://github.com/KooshaPari/PhenoSpecs
-- PhenoHandbook: https://github.com/KooshaPari/PhenoHandbook
-- HexaKit: https://github.com/KooshaPari/HexaKit
+- PhenoSpecs: <https://github.com/KooshaPari/PhenoSpecs>
+- PhenoHandbook: <https://github.com/KooshaPari/PhenoHandbook>
+- HexaKit: <https://github.com/KooshaPari/HexaKit>
 
 ---
 
 ## Notes
 
 This decision was informed by:
+
 - Analysis of npm, PyPI, and crates.io (package registries)
 - Study of Backstage and other developer portals
 - Internal requirements gathering across teams

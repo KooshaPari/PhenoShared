@@ -33,16 +33,19 @@ The `libs/` directory contains 16 crates with `edition = "2021"`, but the main w
 **Approach:** Update `edition = "2021"` → `"2024"` in all 15 affected libs.
 
 **Pros:**
+
 - Clean solution, no workarounds
 - Unifies all code under one edition
 - Enables first-class dependency management
 
 **Cons:**
+
 - Must verify all dependencies support 2024
 - Potential compilation issues with older deps
 - 15 Cargo.toml files to update
 
 **Steps:**
+
 1. Audit all deps for 2024 compatibility
 2. Create migration branch: `libs/edition-migration-2024`
 3. Update each Cargo.toml
@@ -55,10 +58,12 @@ The `libs/` directory contains 16 crates with `edition = "2021"`, but the main w
 **Approach:** Keep 2021 edition, use feature flags to conditionally enable integration.
 
 **Pros:**
+
 - Minimal code changes
 - Can maintain backward compatibility
 
 **Cons:**
+
 - Complexity, two code paths
 - Not idiomatic Rust
 
@@ -69,10 +74,12 @@ The `libs/` directory contains 16 crates with `edition = "2021"`, but the main w
 **Approach:** Copy needed libs into `crates/agileplus-*` with 2024 edition.
 
 **Pros:**
+
 - Complete control
 - No external dependencies
 
 **Cons:**
+
 - Duplicates code
 - Maintenance burden
 - Loses shared versioning
@@ -90,10 +97,12 @@ cargo tree -e normal  # Check all deps
 ```
 
 **Known compatible deps:**
+
 - `anyhow`, `serde`, `serde_json`, `toml` - all 2024 ready
 - `thiserror` - has 2024 edition support
 
 **Potential issues:**
+
 - `tokio` - need to verify 2024 support (likely fine)
 - `async-trait` - need to verify 2024 support (likely fine)
 

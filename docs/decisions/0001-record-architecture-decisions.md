@@ -97,6 +97,7 @@ OmniRoute is the reference repo for AU2 (AU2=3). It has 4 ADRs in `docs/adr/`, i
 ## How to validate
 
 After applying:
+
 1. `ls docs/decisions/` — should show at least 1 ADR + README.md
 2. `grep "decisions\|ADR" README.md` — should find a reference
 3. The ADR file follows the MADR template (Status, Context, Decision, Consequences sections)

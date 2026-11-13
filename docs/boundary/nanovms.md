@@ -99,6 +99,7 @@ review), L8 (no context-cancel plumbing), L10 (legacy CI workflows).
 **Reviewer:** forge session (Phase 1 of `plans/2026-06-22-compute-infra-dag-v1.md`)
 **Worklog / finding:** `phenotype-infra/worklog/2026-06-23-71-pillar-scorecard.md` + `nanovms/worklog/2026-06-23-nanovms-portable.md`
 **Decisions:**
+
 - NV-001..007 (go.mod portability + dead `pheno-go-ctxkit` removal +
   UUID v4 request IDs) MERGED
 - NV-010..020 (sandbox hardening: landlock detection + `resolveExecCommand`

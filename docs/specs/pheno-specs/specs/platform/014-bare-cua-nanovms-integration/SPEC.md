@@ -17,6 +17,7 @@ nanovms provides a 3-tier isolation architecture (WASM sandbox, gVisor container
 ## Problem Statement
 
 bare-cua executes agent tools directly on the host system:
+
 - **No isolation**: Tool execution shares host resources
 - **Security risk**: Untrusted code can access sensitive files/systems
 - **Platform inconsistency**: Different isolation on macOS vs Linux vs Windows
@@ -78,6 +79,7 @@ bare-cua executes agent tools directly on the host system:
 ### Option A: Rust FFI to Go (Recommended)
 
 Create `bare-cua-nanovms-ffi` crate:
+
 - Link to nanovms Go library via cgo → cbindgen
 - Expose Rust-safe wrappers for sandbox operations
 - Async support via tokio

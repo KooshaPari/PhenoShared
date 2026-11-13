@@ -14,4 +14,5 @@
 | Git commit with message | ✅ |
 
 ## Git SHA
+
 `6f1881b` — A-04: absorb BytePort tooling into phenotype-infra/tools/byteport

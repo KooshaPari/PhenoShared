@@ -7,6 +7,7 @@
 ### Problem Statement
 
 Current build systems force tradeoffs between:
+
 - **Performance vs. Simplicity**: Fast tools (Bazel) are complex; simple tools lack features
 - **JavaScript vs. Polyglot**: JS tools don't handle native code well
 - **Caching vs. Correctness**: Aggressive caching risks; conservative caching wastes time
@@ -15,6 +16,7 @@ Current build systems force tradeoffs between:
 ### Solution Approach
 
 phenotype-forge addresses these tradeoffs through:
+
 - **Rust-based core**: Performance without memory safety compromises
 - **AI integration**: Smart caching, affected detection, and optimization
 - **Universal plugin system**: Support for any language or framework
@@ -74,6 +76,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: The system must support incremental builds that only rebuild affected targets based on file changes.
 
 **Acceptance Criteria**:
+
 - [ ] Detect file changes using content hashing (not timestamps)
 - [ ] Compute affected targets from changed files
 - [ ] Support file watching for continuous builds
@@ -81,12 +84,14 @@ To create the world's most intelligent, performant, and developer-friendly build
 - [ ] Parallel execution of independent targets
 
 **Technical Specifications**:
+
 - Content hashing algorithm: SHA-256
 - File watching: notify crate (cross-platform)
 - Affected detection: AST analysis + git diff
 - Parallelism: Tokio async runtime
 
 **Performance Requirements**:
+
 - <100ms for single file change detection
 - <1s to rebuild 1k targets from cold
 - Utilize all available CPU cores
@@ -100,6 +105,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Implement content-addressable caching to store and retrieve build artifacts.
 
 **Acceptance Criteria**:
+
 - [ ] Compute cache keys from source file content
 - [ ] Store build outputs in local cache (RocksDB)
 - [ ] Support remote cache (S3/R2 compatible)
@@ -107,12 +113,14 @@ To create the world's most intelligent, performant, and developer-friendly build
 - [ ] Cache verification and integrity checks
 
 **Technical Specifications**:
+
 - Local cache: RocksDB with LRU eviction
 - Remote cache: HTTP REST API
 - Cache key: SHA-256 hash of inputs + config + toolchain
 - Compression: zstd for large artifacts
 
 **Performance Requirements**:
+
 - <5ms local cache lookup
 - <50ms remote cache lookup
 - 95% cache hit rate in daily development
@@ -126,6 +134,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Execute tasks in dependency order with topological sorting and parallelization.
 
 **Acceptance Criteria**:
+
 - [ ] Parse task dependencies from configuration
 - [ ] Build dependency graph (DAG)
 - [ ] Detect circular dependencies
@@ -133,6 +142,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 - [ ] Parallelize independent tasks
 
 **Technical Specifications**:
+
 - Graph library: petgraph
 - Scheduling: Topological sort + level-based parallelization
 - Process management: Tokio process spawning
@@ -147,6 +157,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Support hermetic builds that are reproducible across environments.
 
 **Acceptance Criteria**:
+
 - [ ] Pin toolchain versions
 - [ ] Isolate environment variables
 - [ ] Sandbox build processes
@@ -164,6 +175,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Use AI to detect affected targets beyond simple file dependencies.
 
 **Acceptance Criteria**:
+
 - [ ] Analyze code semantics for impact analysis
 - [ ] Consider API surface changes
 - [ ] Evaluate type signature changes
@@ -171,6 +183,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 - [ ] Learn from historical build patterns
 
 **Technical Specifications**:
+
 - Model: Local ONNX Runtime inference
 - Features: AST embeddings, dependency embeddings
 - Training: Historical build data
@@ -184,6 +197,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Provide AI-generated suggestions for build optimization.
 
 **Acceptance Criteria**:
+
 - [ ] Analyze build graph for bottlenecks
 - [ ] Suggest parallelization opportunities
 - [ ] Recommend cache configuration
@@ -199,6 +213,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Allow natural language queries against the project graph.
 
 **Acceptance Criteria**:
+
 - [ ] Parse natural language questions
 - [ ] Query project dependency graph
 - [ ] Answer "what depends on X?"
@@ -216,6 +231,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Native integration with pnpm workspaces for monorepo package management.
 
 **Acceptance Criteria**:
+
 - [ ] Parse pnpm-workspace.yaml
 - [ ] Understand workspace package relationships
 - [ ] Leverage pnpm's content-addressable store
@@ -231,6 +247,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Automatic lockfile management and updates.
 
 **Acceptance Criteria**:
+
 - [ ] Detect lockfile changes
 - [ ] Trigger dependency installation
 - [ ] Verify lockfile consistency
@@ -246,6 +263,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Analyze dependencies for unused packages and security issues.
 
 **Acceptance Criteria**:
+
 - [ ] Detect unused dependencies
 - [ ] Identify duplicate dependencies
 - [ ] Flag known vulnerable packages
@@ -263,6 +281,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Universal plugin system based on WebAssembly for cross-language support.
 
 **Acceptance Criteria**:
+
 - [ ] Load WASM plugins at runtime
 - [ ] Sandboxed plugin execution
 - [ ] Plugin capability declaration
@@ -270,6 +289,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 - [ ] Plugin registry and distribution
 
 **Technical Specifications**:
+
 - Runtime: wasmtime
 - WASI support for filesystem access
 - Capability-based permissions
@@ -284,6 +304,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Built-in plugins for common languages and frameworks.
 
 **Acceptance Criteria**:
+
 - [ ] TypeScript/JavaScript plugin
 - [ ] Rust plugin
 - [ ] Go plugin
@@ -299,6 +320,7 @@ To create the world's most intelligent, performant, and developer-friendly build
 **Description**: Plugins for common task types (lint, test, build, etc.).
 
 **Acceptance Criteria**:
+
 - [ ] ESLint plugin
 - [ ] Prettier plugin
 - [ ] Jest/Vitest plugin
@@ -633,6 +655,7 @@ suggestions = true
 ### 8.1 Phase 1: Core Engine (MVP) - 3 months
 
 **Deliverables**:
+
 - [x] Rust-based build graph engine
 - [x] Content-addressable local caching (RocksDB)
 - [x] pnpm workspace integration
@@ -640,6 +663,7 @@ suggestions = true
 - [x] TypeScript/Go/Rust support
 
 **Success Criteria**:
+
 - Build 1k targets in <5 seconds
 - Cache hit rate >80%
 - Configuration <20 lines
@@ -647,6 +671,7 @@ suggestions = true
 ### 8.2 Phase 2: Developer Experience - 2 months
 
 **Deliverables**:
+
 - [ ] VS Code extension
 - [ ] Watch mode with fast rebuilds
 - [ ] Error message improvements
@@ -654,6 +679,7 @@ suggestions = true
 - [ ] Migration guides
 
 **Success Criteria**:
+
 - HMR <50ms
 - Setup time <5 minutes
 - Documentation coverage 100%
@@ -661,6 +687,7 @@ suggestions = true
 ### 8.3 Phase 3: Scale Features - 3 months
 
 **Deliverables**:
+
 - [ ] Remote caching (S3/R2)
 - [ ] Distributed execution
 - [ ] Cloud workspace support
@@ -668,6 +695,7 @@ suggestions = true
 - [ ] Usage analytics
 
 **Success Criteria**:
+
 - Remote cache <50ms lookup
 - Linear scaling with workers
 - 99.9% uptime
@@ -675,6 +703,7 @@ suggestions = true
 ### 8.4 Phase 4: Intelligence - 2 months
 
 **Deliverables**:
+
 - [ ] AI-powered optimization
 - [ ] Predictive builds
 - [ ] Automatic dependency management
@@ -682,6 +711,7 @@ suggestions = true
 - [ ] Natural language queries
 
 **Success Criteria**:
+
 - 20% build time reduction via AI
 - Natural language query accuracy >90%
 
@@ -856,6 +886,7 @@ suggestions = true
 **End of PRD: phenotype-forge**
 
 *Document Statistics:*
+
 - Total Lines: 850+
 - Sections: 16
 - Requirements: 30+

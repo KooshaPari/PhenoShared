@@ -45,6 +45,7 @@ Custom build rules. Custom toolchains. Plugin system. Integration points. Adapta
 ### In Scope
 
 **Build System Core:**
+
 - Build graph construction and validation
 - Incremental build computation
 - Parallel task execution with dependency ordering
@@ -53,6 +54,7 @@ Custom build rules. Custom toolchains. Plugin system. Integration points. Adapta
 - Build action sandboxing for hermeticity
 
 **Package Management:**
+
 - Dependency fetching from multiple registries
 - Semantic version resolution with lock file management
 - Private registry support for internal packages
@@ -61,6 +63,7 @@ Custom build rules. Custom toolchains. Plugin system. Integration points. Adapta
 - Dependency deduplication and optimization
 
 **Caching Infrastructure:**
+
 - Local content-addressable build cache
 - Remote distributed build cache
 - Cache key calculation with content hashing
@@ -69,6 +72,7 @@ Custom build rules. Custom toolchains. Plugin system. Integration points. Adapta
 - Cache hit rate analytics
 
 **Language Integration:**
+
 - Rust with Cargo integration and workspace support
 - TypeScript/JavaScript with npm/pnpm/yarn compatibility
 - Go with full modules support
@@ -77,6 +81,7 @@ Custom build rules. Custom toolchains. Plugin system. Integration points. Adapta
 - C/C++ with compiler abstraction
 
 **Cross-Compilation:**
+
 - Target triple management
 - Toolchain auto-detection and configuration
 - Cross-compilation rule definitions
@@ -84,6 +89,7 @@ Custom build rules. Custom toolchains. Plugin system. Integration points. Adapta
 - Emulation support for testing
 
 **Development Features:**
+
 - Watch mode for continuous rebuild
 - Hot reload for development servers
 - Progress reporting and build analytics
@@ -236,6 +242,7 @@ phenoForge/
 ### Development Process
 
 **New Language Support:**
+
 - Language ecosystem research
 - Build tool integration design
 - Rule implementation
@@ -244,6 +251,7 @@ phenoForge/
 - Documentation and examples
 
 **New Build Rules:**
+
 - Reproducibility testing protocol
 - Performance benchmarking
 - Incremental behavior verification
@@ -251,6 +259,7 @@ phenoForge/
 - Migration guide if replacing existing
 
 **Cache System Changes:**
+
 - Backward compatibility assessment
 - Cache invalidation testing
 - Migration testing for cache format changes

@@ -45,6 +45,7 @@ Vale linting. Style guide enforced. Broken link checking. Out-of-date detection.
 ### In Scope
 
 **Documentation Generation:**
+
 - API reference generation
 - Type documentation
 - Configuration documentation
@@ -52,6 +53,7 @@ Vale linting. Style guide enforced. Broken link checking. Out-of-date detection.
 - Diagram generation
 
 **Documentation Platform:**
+
 - Web documentation site
 - Search functionality
 - Version management
@@ -59,6 +61,7 @@ Vale linting. Style guide enforced. Broken link checking. Out-of-date detection.
 - Cross-linking
 
 **Content Management:**
+
 - Markdown processing
 - MDX support
 - Asset management
@@ -66,6 +69,7 @@ Vale linting. Style guide enforced. Broken link checking. Out-of-date detection.
 - Live code examples
 
 **Quality Tools:**
+
 - Vale linting integration
 - Link checking
 - Spell checking
@@ -73,6 +77,7 @@ Vale linting. Style guide enforced. Broken link checking. Out-of-date detection.
 - Coverage reporting
 
 **Distribution:**
+
 - Static site generation
 - PDF export
 - IDE plugins
@@ -164,11 +169,13 @@ phenodocs/
 ### Development Process
 
 **New Features:**
+
 - UX review
 - Performance testing
 - Accessibility review
 
 **Content Standards:**
+
 - Style guide compliance
 - Review process
 - Quality gates

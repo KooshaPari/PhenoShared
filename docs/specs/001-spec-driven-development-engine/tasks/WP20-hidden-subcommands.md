@@ -239,12 +239,14 @@ Wire to `TriageAdapter` from WP18. Each handler receives a `SubCommandContext` (
 the resolved storage port, sync adapter handles, and the audit logger).
 
 `triage:classify`:
+
 - Accept one required arg: `input` (raw text).
 - Call `TriageAdapter.classify(input)`.
 - Return `ClassificationResult` serialized as JSON to stdout.
 - Audit entry: input hash + classification label + confidence score.
 
 `triage:file-bug`:
+
 - Required args: `title`, `description`. Optional: `severity`, `feature_id`.
 - Create a `BacklogItem { item_type: Bug, ... }` via storage port.
 - If `GitHubSyncAdapter` is configured, call `sync_bug(&item)`.
@@ -252,6 +254,7 @@ the resolved storage port, sync adapter handles, and the audit logger).
 - Audit entry: item_id, sync_result.
 
 `triage:queue-idea`:
+
 - Required args: `title`. Optional: `description`, `tags`.
 - Create a `BacklogItem { item_type: Idea, ... }` via storage port only (no sync).
 - Return created item ID.
@@ -270,6 +273,7 @@ Wire to domain governance logic from WP13 (`GovernanceContract`, `PolicyEvaluato
 `ArtifactChain`).
 
 `governance:check-gates`:
+
 - Required args: `feature_id`.
 - Load the feature's `GovernanceContract` from storage.
 - Evaluate all contract rules against the current feature state.
@@ -277,12 +281,14 @@ Wire to domain governance logic from WP13 (`GovernanceContract`, `PolicyEvaluato
 - Non-zero exit code if any required gate fails.
 
 `governance:evaluate-policy`:
+
 - Required args: `policy_name`, `context_json`.
 - Look up the named policy in the policy registry.
 - Deserialize `context_json` into the policy's expected input type.
 - Run the policy evaluator and return pass/fail + explanation.
 
 `governance:verify-chain`:
+
 - Required args: `feature_id`.
 - Walk the artifact chain (spec -> plan -> WPs -> tasks).
 - Verify each artifact exists, has a valid hash, and links correctly to its parent.
@@ -300,18 +306,21 @@ tabular output when a `--human` flag is provided (default: JSON).
 Wire to `PlaneSyncAdapter` and `GitHubSyncAdapter` from WP19.
 
 `sync:push-plane`:
+
 - Required args: `feature_id`.
 - Call `PlaneSyncAdapter.sync_feature(feature_id)`.
 - Return `SyncResult { external_id, url, synced_at }`.
 - On error, return structured error with retry guidance.
 
 `sync:push-github`:
+
 - Required args: `bug_id`.
 - Load the backlog item by `bug_id`, assert `item_type == Bug`.
 - Call `GitHubSyncAdapter.sync_bug(&item)`.
 - Return GitHub issue URL + issue number.
 
 `sync:pull-status`:
+
 - No required args. Optional: `feature_id` to scope the pull.
 - Poll both Plane.so and GitHub for status updates on all open mirrored items.
 - Write updated statuses back to local storage.
@@ -330,34 +339,40 @@ time in audit log). If an adapter is not configured, the sub-command must return
 Wire to `VcsPort` (WP13) and shell execution via `std::process::Command`.
 
 `git:create-worktree`:
+
 - Required args: `wp_id`, `branch_name`.
 - Call `VcsPort.create_worktree(wp_id, branch_name)`.
 - Return the worktree path.
 
 `git:branch-from-wp`:
+
 - Required args: `wp_id`.
 - Derive branch name from WP metadata: `<feature_slug>-<wp_id_lowercase>`.
 - Call `VcsPort.create_branch(branch_name)`.
 - Return `{ branch_name, created_at }`.
 
 `git:merge-and-cleanup`:
+
 - Required args: `wp_id`.
 - Merge the WP's branch into main via `VcsPort.merge_branch()`.
 - Remove the worktree via `VcsPort.remove_worktree()`.
 - Return merge commit hash.
 
 `devops:lint-and-format`:
+
 - No required args. Optional: `--fix` flag.
 - Run `cargo fmt [--check]` and `cargo clippy -- -D warnings`.
 - Return structured output: `{ fmt_passed: bool, clippy_passed: bool, diagnostics: Vec<String> }`.
 
 `devops:conventional-commit`:
+
 - Required args: `message`.
 - Parse the message against the conventional commit spec (feat/fix/chore/docs/refactor/test/ci).
 - If `--generate` flag is set, generate a commit message from staged diff summary.
 - Return `{ valid: bool, parsed: Option<ConventionalCommit>, suggestion: Option<String> }`.
 
 `devops:run-ci-checks`:
+
 - No required args.
 - Run in sequence: fmt check, clippy, `cargo test --workspace`, `cargo audit`.
 - Short-circuit on first failure unless `--all` flag is set.
@@ -372,6 +387,7 @@ overridable via `--cwd`.
 ### T119 — Context, Escape & Meta Sub-Commands
 
 **Files**:
+
 - `crates/agileplus-cli/src/subcommands/context.rs`
 - `crates/agileplus-cli/src/subcommands/escape.rs`
 - `crates/agileplus-cli/src/subcommands/meta.rs`
@@ -379,21 +395,25 @@ overridable via `--cwd`.
 **Context sub-commands**:
 
 `context:load-spec`:
+
 - Required args: `feature_id`.
 - Read `kitty-specs/<feature_id>/spec.md` from disk.
 - Emit contents as a fenced markdown block to stdout for agent ingestion.
 
 `context:load-plan`:
+
 - Required args: `feature_id`.
 - Read `kitty-specs/<feature_id>/plan.md` from disk.
 - Emit contents as a fenced markdown block.
 
 `context:load-constitution`:
+
 - No required args.
 - Read `CONSTITUTION.md` from the workspace root.
 - Emit contents.
 
 `context:scan-codebase`:
+
 - No required args. Optional: `--depth` (default 2), `--filter` (glob pattern).
 - Walk the workspace crate tree and emit a summary: crate name, purpose (from Cargo.toml
   description), top-level modules.
@@ -402,6 +422,7 @@ overridable via `--cwd`.
 **Escape sub-commands**:
 
 `escape:quick-fix`:
+
 - Required args: `file_path`, `description`.
 - Write an audit entry marking state machine bypass with reason.
 - Emit a warning to stderr.
@@ -409,12 +430,14 @@ overridable via `--cwd`.
   receiving the bypass acknowledgment.
 
 `escape:hotfix`:
+
 - Required args: `description`, `ticket_ref`.
 - Create a `HotfixRecord` in storage with timestamp, caller, description, ticket_ref.
 - Write a high-priority audit entry.
 - Return `hotfix_id` for reference in commit message.
 
 `escape:skip-with-warning`:
+
 - Required args: `gate_name`, `justification`.
 - Record the skip in the governance contract override log.
 - Write audit entry with justification.
@@ -423,12 +446,14 @@ overridable via `--cwd`.
 **Meta sub-commands**:
 
 `meta:generate-router`:
+
 - No required args. Optional: `feature_id` to scope output.
 - Invoke `PromptRouter` from WP17 with the current workspace context.
 - Write the generated `CLAUDE.md` to the appropriate location.
 - Return path to the written file.
 
 `meta:update-agents-md`:
+
 - No required args.
 - Read the current sub-command registry via `SubCommandRegistry::all()`.
 - Generate a fresh `AGENTS.md` section listing all sub-commands with descriptions.
@@ -528,6 +553,7 @@ The reviewer should verify the following before moving this WP to `done`:
 ---
 
 _Work Package WP20 — Phase 5: Triage, Sync & Sub-Commands_
+
 - 2026-02-28T13:34:16Z – unknown – shell_pid=63412 – lane=for_review – Sub-commands crate: 25 commands, JSONL audit. 12 tests.
 - 2026-02-28T23:22:37Z – claude-opus – shell_pid=79344 – lane=doing – Started review via workflow command
 - 2026-02-28T23:22:50Z – claude-opus – shell_pid=79344 – lane=done – Review passed: 12 tests pass, 25 sub-commands in 8 categories, append-only JSONL audit

@@ -44,6 +44,7 @@ The Python validation ecosystem has undergone significant transformation since 2
 ### Strategic Recommendation
 
 A new validation library targeting **zero dependencies**, **protocol-based design**, and **error aggregation** would fill a significant gap in the ecosystem, particularly for:
+
 - Library authors avoiding dependency trees
 - Microservices with strict dependency budgets
 - Teams requiring protocol-based flexibility over inheritance
@@ -136,7 +137,7 @@ Maturity vs Innovation Matrix:
 
 ### 3.1 Pydantic v2
 
-**Repository**: https://github.com/pydantic/pydantic  
+**Repository**: <https://github.com/pydantic/pydantic>  
 **License**: MIT  
 **Stars**: 20,000+  
 **Maintainer**: Pydantic Organization (Samuel Colvin et al.)
@@ -246,7 +247,7 @@ Maturity vs Innovation Matrix:
 
 ### 3.2 attrs + cattrs
 
-**Repository**: https://github.com/python-attrs/attrs  
+**Repository**: <https://github.com/python-attrs/attrs>  
 **License**: MIT  
 **Stars**: 5,000+ (attrs), 500+ (cattrs)  
 **Maintainer**: Hynek Schlawack and contributors
@@ -334,7 +335,7 @@ Maturity vs Innovation Matrix:
 
 ### 3.3 Voluptuous
 
-**Repository**: https://github.com/alecthomas/voluptuous  
+**Repository**: <https://github.com/alecthomas/voluptuous>  
 **License**: BSD-3-Clause  
 **Stars**: 2,600+  
 **Maintainer**: Alec Thomas and contributors
@@ -389,7 +390,7 @@ validated = schema(data)  # Returns validated dict
 
 ### 3.4 Cerberus
 
-**Repository**: https://github.com/pyeve/cerberus  
+**Repository**: <https://github.com/pyeve/cerberus>  
 **License**: ISC  
 **Stars**: 2,100+  
 **Maintainer**: Nicola Iarocci and contributors
@@ -443,7 +444,7 @@ errors = validator.errors  # Detailed error dict
 
 ### 3.5 msgspec
 
-**Repository**: https://github.com/jcrist/msgspec  
+**Repository**: <https://github.com/jcrist/msgspec>  
 **License**: BSD-3-Clause  
 **Stars**: 2,000+  
 **Maintainer**: Jim Crist-Harif
@@ -544,12 +545,14 @@ errors = validator.errors  # Detailed error dict
 ### 4.1 Methodology
 
 All benchmarks run on:
+
 - CPU: AMD Ryzen 7 7800X3D
 - Python: 3.12.0
 - OS: Linux 6.7
 - Libraries: Latest stable versions (2026-04)
 
 Test model:
+
 ```python
 class User:
     name: str
@@ -577,10 +580,10 @@ class User:
 | Library | Per Instance | Overhead | Notes |
 |---------|--------------|----------|-------|
 | msgspec | 120 bytes | Minimal | C struct |
-| dataclasses | 152 bytes | Minimal | __dict__ slots |
-| attrs (slots) | 160 bytes | Small | __slots__ |
+| dataclasses | 152 bytes | Minimal | **dict** slots |
+| attrs (slots) | 160 bytes | Small | **slots** |
 | pydantic v2 | 280 bytes | Medium | Rust-backed |
-| attrs (dict) | 320 bytes | Medium | __dict__ |
+| attrs (dict) | 320 bytes | Medium | **dict** |
 | pydantic v1 | 450 bytes | High | Python objects |
 
 ### 4.4 Import/Startup Time
@@ -855,34 +858,34 @@ Target the **zero-dependency protocol validation** gap:
 
 ### Official Documentation
 
-- Pydantic: https://docs.pydantic.dev/
-- attrs: https://www.attrs.org/
-- msgspec: https://jcristharif.com/msgspec/
-- voluptuous: https://github.com/alecthomas/voluptuous
-- cerberus: https://docs.python-cerberus.org/
-- marshmallow: https://marshmallow.readthedocs.io/
-- cattrs: https://cattrs.readthedocs.io/
+- Pydantic: <https://docs.pydantic.dev/>
+- attrs: <https://www.attrs.org/>
+- msgspec: <https://jcristharif.com/msgspec/>
+- voluptuous: <https://github.com/alecthomas/voluptuous>
+- cerberus: <https://docs.python-cerberus.org/>
+- marshmallow: <https://marshmallow.readthedocs.io/>
+- cattrs: <https://cattrs.readthedocs.io/>
 
 ### Type System References
 
-- PEP 484: https://peps.python.org/pep-0484/
-- PEP 557: https://peps.python.org/pep-0557/
-- PEP 593: https://peps.python.org/pep-0593/
-- mypy: https://mypy.readthedocs.io/
-- pyright: https://microsoft.github.io/pyright/
+- PEP 484: <https://peps.python.org/pep-0484/>
+- PEP 557: <https://peps.python.org/pep-0557/>
+- PEP 593: <https://peps.python.org/pep-0593/>
+- mypy: <https://mypy.readthedocs.io/>
+- pyright: <https://microsoft.github.io/pyright/>
 
 ### Performance References
 
-- Pydantic v2 benchmarks: https://github.com/pydantic/pydantic/tree/main/benches
-- msgspec benchmarks: https://jcristharif.com/msgspec/benchmarks.html
-- Python performance tips: https://wiki.python.org/moin/PythonSpeed
+- Pydantic v2 benchmarks: <https://github.com/pydantic/pydantic/tree/main/benches>
+- msgspec benchmarks: <https://jcristharif.com/msgspec/benchmarks.html>
+- Python performance tips: <https://wiki.python.org/moin/PythonSpeed>
 
 ### Related Research
 
-- JSON Schema: https://json-schema.org/
-- OpenAPI: https://spec.openapis.org/
-- FastAPI: https://fastapi.tiangolo.com/
-- SQLModel: https://sqlmodel.tiangolo.com/
+- JSON Schema: <https://json-schema.org/>
+- OpenAPI: <https://spec.openapis.org/>
+- FastAPI: <https://fastapi.tiangolo.com/>
+- SQLModel: <https://sqlmodel.tiangolo.com/>
 
 ---
 

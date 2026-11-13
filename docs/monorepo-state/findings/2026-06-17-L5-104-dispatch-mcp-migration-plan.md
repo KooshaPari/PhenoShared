@@ -16,6 +16,7 @@ The parent audit doc (`findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md:17`)
 > `dispatch-mcp` — KP HEAD: 2026-06-18, unmerged branch `chore/w2-1-dispatch-mcp-2026-06-15`
 
 **Verified 2026-06-17 against `gh api`:**
+
 - `<REDACTED>/dispatch-mcp@main` HEAD is `a050e06` dated **2026-06-15T07:58:15Z** — *not* 2026-06-18.
   Source: `gh api "repos/<REDACTED>/dispatch-mcp/commits?sha=main&per_page=1"` first row.
 - The 6 unique Dmouse92 W2-1 commits are **NOT on KP main** as of 2026-06-17 19:00 PDT.
@@ -77,6 +78,7 @@ Local (`repos/dispatch-mcp`) and remote (verified via `git branch -a`):
 
 **ADR-013 reference text** (`docs/adr/2026-06-15/ADR-013-pheno-mcp-router-substrate.md:9-26`):
 > *"All pheno-mcp-* servers are built on `pheno-mcp-router`. The rules:*
+>
 > 1. *A new MCP server is a tier in an existing router, not a new router.*
 > 2. *Per-tier config (allowlist, sanitiser, size limit) is declared in the router's tier registry, not in the tool handler.*
 > 3. *The router owns the JSON-RPC envelope, the structured log, and the size limit.*
@@ -224,6 +226,7 @@ Each step: **target repo → branch → commit message**. Steps MUST execute in 
 **Branch:** `feat/port-cost-budget-quota-audit-tiers-2026-06-17` (cut from `main`)
 **Source:** cherry-pick from `/tmp/dmouse92-migration/dispatch-mcp` commit `6aad7fa` (the 5-module cost stack: `tiers.py`, `cost.py`, `budget.py`, `quota.py`, `audit.py`, `cost_middleware.py`)
 **Adaptation required:**
+
 - Rename module `dispatch_mcp.core.X` → `pheno_mcp_router.X` (per ADR-013 §3: substrate owns the envelope)
 - Update internal imports (`from dispatch_mcp.core.tiers import ...` → `from pheno_mcp_router.tiers import ...`)
 - Add `LLM_PORT` / `STORAGE_PORT` / `TOOL_PORT` adapter hooks in `cost_middleware.py` so middleware can plug into the existing `LlmPort` Protocol
@@ -231,6 +234,7 @@ Each step: **target repo → branch → commit message**. Steps MUST execute in 
 **Commit message (single squashed):** `feat(cost): port tiers/cost/budget/quota/audit/cost_middleware from dispatch-mcp W2-1 (L5-104.1)`
 
 Per-module commit split (recommended for review):
+
 1. `feat(tiers): add TierRegistry + DEFAULT_REGISTRY (10 tiers + UNKNOWN_PRICING sentinel)`
 2. `feat(cost): add CostCalculator + TokenEstimator + CostEstimate`
 3. `feat(budget): add BudgetTracker + BudgetExceeded`
@@ -239,6 +243,7 @@ Per-module commit split (recommended for review):
 6. `feat(cost-middleware): compose cost + budget + quota + audit into LlmPort/StoragePort wrappers`
 
 **Test commits (port alongside):**
+
 1. `test(tiers): port unit tests + add tier-pricing edge cases`
 2. `test(cost): port unit tests + chars/4 fallback coverage`
 3. `test(budget): port unit tests + unpriced-floor coverage`
@@ -263,6 +268,7 @@ Per-module commit split (recommended for review):
 **Branch:** `feat/llama-adapter-2026-06-17` (cut from `main`)
 **Source:** cherry-pick `src/dispatch_mcp/providers/llama_cpp.py` + `tests/test_providers_llama_cpp.py` + `tests/test_providers_llama_cpp_direct.py` from `/tmp/dmouse92-migration/dispatch-mcp` commit `a1aaef2`
 **Adaptation:**
+
 - Wrap `LlamaCppProvider.chat()` to match `LlmPort.chat(messages, model) -> str` Protocol (extract last assistant text from llama.cpp response).
 - Either:
   - **(a)** Add `LlamaAdapter(LlmAdapter)` class to `src/pheno_mcp_router/adapters.py`, OR
@@ -280,6 +286,7 @@ Per-module commit split (recommended for review):
 **Branch:** `feat/openai-compat-adapter-2026-06-17` (cut from `main`)
 **Source:** cherry-pick `src/dispatch_mcp/providers/openai_compat.py` + `tests/test_openai_compat.py` from `<REDACTED>/dispatch-mcp@feat/openai-compat-2026-06-15` (commit `977cd43`, KP-authored)
 **Adaptation:**
+
 - Wrap `OpenAICompatProvider` to satisfy `LlmPort.chat(messages, model) -> str`.
 - 87 % coverage target per source commit (`git show 977cd43`).
 - Retry policy (429/500/502/503/504 exponential backoff + jitter) becomes substrate concern — keep, document.
@@ -293,6 +300,7 @@ Per-module commit split (recommended for review):
 **Branch:** `feat/llama-cpp-devops-2026-06-17` (cut from `main`)
 **Source:** cherry-pick `docker/Dockerfile.llama` + `docker/llama-compose.yml` from `/tmp/dmouse92-migration/dispatch-mcp` commit `a1aaef2`
 **Adaptation:**
+
 - Move to `agent-devops-setups/llama-cpp/` per phenotype-ops layout (verified: `phenotype-ops/agent-devops-setups/` exists, `ls` shows existing devops-setups directories).
 - Update compose service name and env-var names to substrate names (`LLAMA_CPP_*` unchanged).
 **Commit message:** `feat(devops): add llama-cpp docker setup (Dockerfile + compose)`
@@ -303,6 +311,7 @@ Per-module commit split (recommended for review):
 **Target:** `<REDACTED>/dispatch-mcp`
 **Branch:** `wip/migrate-from-dmouse-w2-1-2026-06-17` (already exists at `a1aaef2`)
 **Action:** Land via PR from existing WIP branch to main. **Skip** the modules ported in Steps 3, 4, 5, 6 (already in substrate). **Keep** the cherry-pick set per Section 3:
+
 - `core/port.py`, `core/protocol.py`, `core/types.py`
 - `adapters/omni_http.py` extension
 - `server.py` extension
@@ -313,10 +322,12 @@ Per-module commit split (recommended for review):
 **Commit messages:** Already on branch (don't re-commit).
 **Adaptation required before merge:**
 - Update `server.py` to consume substrate cost/budget/quota/audit:
+
   ```python
   # OLD: from dispatch_mcp.core import cost, budget, quota, audit
   # NEW: from pheno_mcp_router import cost, budget, quota, audit
   ```
+
 - Update `pyproject.toml` to add `pheno-mcp-router` as a peer dependency.
 - Delete the in-tree copies of `cost.py`, `budget.py`, `quota.py`, `audit.py`, `cost_middleware.py`, `tiers.py` from dispatch-mcp (they now live in substrate).
 - Delete `providers/llama_cpp.py` (now in substrate); replace with thin shim that imports `pheno_mcp_router.LlamaAdapter` and re-exports.
@@ -341,6 +352,7 @@ Per-module commit split (recommended for review):
 **Target:** `<REDACTED>/repos` (this monorepo)
 **Branch:** `chore/l5-104-dispatch-mcp-migration-2026-06-17` (cut from current branch `chore/w5-adrs-sota-2026-06-15`)
 **Files to touch (read-only cross-references — per non-negotiable rule "ALWAYS prefer editing an existing file"):**
+
 - `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` — append "Section 2.1 dispatch-mcp: COMPLETE" with link to this plan file (the reviewer said "I'll integrate your findings" — leave this for the reviewer; if the reviewer accepts the plan, the parent audit doc gets one new bullet).
 - `AGENTS.md` — under "Sub-repos at a Glance → pheno-* family → Python", note that `pheno-mcp-router` now owns cost/budget/quota/audit per ADR-013 (one-line update).
 - `SSOT.md` — note substrate split: dispatch-mcp is a consumer of pheno-mcp-router for tier/cost/budget/quota/audit/llama_cpp.
@@ -370,6 +382,7 @@ For each of the 6 Dmouse92 commits, the **semantic content** must be reachable f
 ### 5.2 Per-file semantic equivalence (compound commit `a1aaef2`)
 
 For each file in Dmouse92 `a1aaef2`:
+
 | File | Reachability check |
 |---|---|
 | `docker/Dockerfile.llama` | `gh api repos/<REDACTED>/phenotype-ops/contents/agent-devops-setups/llama-cpp/Dockerfile --jq '.sha'` returns 200; visual diff via `curl -sL <raw-url> \| diff - <(curl -sL https://raw.githubusercontent.com/Dmouse92/dispatch-mcp/chore/w2-1-dispatch-mcp-2026-06-15/docker/Dockerfile.llama)` empty |

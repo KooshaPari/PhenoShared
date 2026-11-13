@@ -49,6 +49,7 @@ function userToDTO(user: User): UserDTO {
 ```
 
 This approach suffers from:
+
 1. **Maintenance burden** — Every domain model change requires updating multiple mappers
 2. **Type drift** — Runtime errors when DTOs don't match domain assumptions
 3. **No reuse** — Similar transformations copied across codebases
@@ -75,6 +76,7 @@ This approach suffers from:
 **User Story:** As a developer, I want to define a transformation schema once and have the mapper enforce type correctness automatically.
 
 **Acceptance Criteria:**
+
 - [ ] Schemas can be defined for simple value types
 - [ ] Schemas support nested object transformations
 - [ ] Schemas support array transformations with element mappers
@@ -82,6 +84,7 @@ This approach suffers from:
 - [ ] Schema definitions are reusable across the application
 
 **Example:**
+
 ```typescript
 const UserToDTOSchema = schema(User, UserDTO, {
   transformers: [
@@ -102,6 +105,7 @@ const dto = mapper.transform(user, UserToDTOSchema);
 **User Story:** As a developer, I want the TypeScript compiler to catch transformation errors before runtime.
 
 **Acceptance Criteria:**
+
 - [ ] Transformation source and target types are inferred from schema
 - [ ] Property name mismatches are caught at compile time
 - [ ] Type coercion is explicit and type-checked
@@ -115,6 +119,7 @@ const dto = mapper.transform(user, UserToDTOSchema);
 **User Story:** As a developer, I want to build complex transformations from simple, tested pieces.
 
 **Acceptance Criteria:**
+
 - [ ] Transformers can be chained in sequence
 - [ ] Transformers can be conditionally applied
 - [ ] Transformers can have fallbacks for missing data
@@ -122,6 +127,7 @@ const dto = mapper.transform(user, UserToDTOSchema);
 - [ ] Transformer composition is type-safe
 
 **Example:**
+
 ```typescript
 const fullName = compose(
   takeFirst('firstName', 'lastName'),
@@ -142,6 +148,7 @@ const userToDisplayName = schema(User, DisplayName, {
 **User Story:** As a developer, I want to transform objects with circular references (e.g., parent/child relationships) without special handling.
 
 **Acceptance Criteria:**
+
 - [ ] Circular references are detected automatically
 - [ ] Cycles are broken with configurable placeholders
 - [ ] Deserialization restores original graph structure
@@ -155,6 +162,7 @@ const userToDisplayName = schema(User, DisplayName, {
 **User Story:** As a developer, I want to validate data at transformation boundaries to ensure data integrity.
 
 **Acceptance Criteria:**
+
 - [ ] Pre-transformation validation catches invalid input
 - [ ] Post-transformation validation ensures output correctness
 - [ ] Validation errors are aggregated, not fail-fast
@@ -168,6 +176,7 @@ const userToDisplayName = schema(User, DisplayName, {
 **User Story:** As a developer, I want to create multiple DTO variants from a single domain model.
 
 **Acceptance Criteria:**
+
 - [ ] Partial projections select a subset of properties
 - [ ] Projections can rename properties
 - [ ] Nested objects can be flattened
@@ -216,6 +225,7 @@ const userToDisplayName = schema(User, DisplayName, {
 **Goal:** Transform domain models to API DTOs
 
 **Steps:**
+
 1. Developer defines domain model with rich types
 2. Developer defines DTO schema (flat, network-optimized)
 3. Developer creates transformation schema
@@ -223,6 +233,7 @@ const userToDisplayName = schema(User, DisplayName, {
 5. Type safety enforced at compile time
 
 **Success Criteria:**
+
 - Zero runtime type errors in production
 - Transformation code is 80% shorter than manual mapping
 - Schema changes trigger TypeScript errors across codebase
@@ -233,6 +244,7 @@ const userToDisplayName = schema(User, DisplayName, {
 **Goal:** Map between ORM entities and domain models
 
 **Steps:**
+
 1. Developer defines entity schema (database columns)
 2. Developer defines domain model (business logic)
 3. Developer creates bidirectional transformation schemas
@@ -240,6 +252,7 @@ const userToDisplayName = schema(User, DisplayName, {
 5. Circular references in entities handled correctly
 
 **Success Criteria:**
+
 - Entity changes reflected in domain types
 - Domain changes trigger entity validation
 - Circular references in entity graphs handled
@@ -250,6 +263,7 @@ const userToDisplayName = schema(User, DisplayName, {
 **Goal:** Build transformation pipelines for data processing
 
 **Steps:**
+
 1. Developer defines source and target schemas
 2. Developer composes transformers into pipeline
 3. Developer adds validation at pipeline boundaries
@@ -257,6 +271,7 @@ const userToDisplayName = schema(User, DisplayName, {
 5. Errors are aggregated with context
 
 **Success Criteria:**
+
 - Pipeline throughput > 50,000 records/sec
 - Validation errors include source location
 - Pipeline is testable in isolation
@@ -323,18 +338,21 @@ None — Datamold is a pure TypeScript library with zero runtime dependencies.
 ## Milestones
 
 ### M1: Core Schema and Mapper (v0.1.0)
+
 - Schema definition with type inference
 - Basic transformations (simple + nested)
 - Validation pipeline
 - 100% test coverage
 
 ### M2: Advanced Features (v0.2.0)
+
 - Circular reference handling
 - Transformer composition
 - Advanced projections
 - Performance optimization
 
 ### M3: Ecosystem Integration (v0.3.0)
+
 - zod adapter
 - class-validator adapter
 - TypeORM adapter

@@ -28,6 +28,7 @@ Consumer                    Agent Wave                    AgentAPI++
 ```
 
 **Steps**:
+
 1. Consumer creates a `Wave` with a list of `Task` descriptors and a policy budget.
 2. Agent Wave validates the policy (max cost, max agents, timeout).
 3. Dispatcher spawns agent slots and dispatches tasks via AgentAPI++.
@@ -35,6 +36,7 @@ Consumer                    Agent Wave                    AgentAPI++
 5. On full completion, `WaveResult` returned with per-task results and aggregate cost.
 
 **Failure Paths**:
+
 - Policy budget exceeded mid-wave: remaining tasks cancelled; partial results returned with `status: budget_exceeded`.
 - Agent slot failure: task re-queued or failed with `status: agent_error`.
 
@@ -66,6 +68,7 @@ Consumer                    Agent Wave
 ```
 
 **Steps**:
+
 1. Consumer defines tasks with `depends_on` references.
 2. Agent Wave builds a DAG from task dependencies.
 3. Independent tasks dispatched in parallel; dependent tasks wait.
@@ -95,6 +98,7 @@ Consumer                        |                              |
 ```
 
 **Steps**:
+
 1. Operator defines policy in `policy.toml` (loaded by Agent Wave at startup).
 2. Consumer submits `Wave.create(tasks)`.
 3. Agent Wave evaluates estimated cost, model tier, and data residency against policy.
@@ -122,6 +126,7 @@ Engineer                    Agent Wave
 ```
 
 **Steps**:
+
 1. Engineer subscribes to lifecycle events for a wave ID.
 2. Agent Wave emits typed events: `AgentStarted`, `AgentProgress`, `AgentCompleted`, `AgentError`, `WaveCompleted`.
 3. Engineer's subscriber receives events as SSE or typed channel stream.
@@ -150,6 +155,7 @@ CI Pipeline                 Agent Wave
 ```
 
 **Steps**:
+
 1. CI pipeline collects changed file list from git diff.
 2. Creates a `Wave` with one review task per file, bounded by `max_agents: 10`.
 3. Agent Wave dispatches up to 10 agents in parallel; queues remaining tasks.

@@ -14,6 +14,7 @@
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-error-core/`
 
 **Structure:**
+
 ```
 src/
 ├── lib.rs                 (407 LOC - main module, exports, unified enum)
@@ -37,6 +38,7 @@ Total: 1,522 LOC (including tests)
 The crate now provides 5 canonical error types as specified:
 
 #### ParseError
+
 - `Json` — JSON parsing failures
 - `Toml` — TOML parsing failures
 - `Yaml` — YAML parsing failures
@@ -46,6 +48,7 @@ The crate now provides 5 canonical error types as specified:
 - **Conversions:** Automatic from `serde_json::Error`
 
 #### DatabaseError
+
 - `NotFound` — Record not found
 - `AlreadyExists` — Constraint violations
 - `ConstraintViolation` — Business logic constraints
@@ -58,6 +61,7 @@ The crate now provides 5 canonical error types as specified:
 - **Conversions:** Automatic from `std::io::Error`
 
 #### ValidationError
+
 - `MissingField` — Required field missing
 - `InvalidValue` — Value validation failure
 - `InvalidType` — Type mismatch
@@ -69,6 +73,7 @@ The crate now provides 5 canonical error types as specified:
 - `Duplicate` — Uniqueness constraints
 
 #### ConfigError
+
 - `FileNotFound` — Missing config files
 - `ParseError` — Config parsing failures
 - `Invalid` — Invalid configuration values
@@ -79,6 +84,7 @@ The crate now provides 5 canonical error types as specified:
 - `SerializationError` — Config serialization
 
 #### InternalError
+
 - `System` — System-level errors
 - `Panic` — Panic/unrecoverable states
 - `Unrecoverable` — Unrecoverable failures
@@ -119,6 +125,7 @@ pub enum AgileplusError {
 ```
 
 Implements:
+
 - `Display` for error formatting
 - `Error` trait for error handling
 - Automatic `From<T>` conversions for all error types
@@ -126,6 +133,7 @@ Implements:
 ### 5. Test Coverage
 
 **Test Statistics:**
+
 - **Total Tests:** 91
 - **Pass Rate:** 100% ✓
 - **Test Categories:**
@@ -142,6 +150,7 @@ Implements:
   - Main lib tests: 11 (including unified error tests)
 
 **Test Examples:**
+
 ```rust
 #[test]
 fn test_database_error_creation() {
@@ -167,6 +176,7 @@ fn test_serde_json_error_to_parse_error() {
 ### 6. Dependency Management
 
 **Cargo.toml Configuration:**
+
 - Standalone crate (excluded from workspace)
 - Minimal dependencies for portability
 - Explicit versions for reliability
@@ -184,18 +194,21 @@ serde_json = "1.0"         # JSON support
 ## Metrics & Analysis
 
 ### Lines of Code (LOC)
+
 - **Core module files:** 1,522 total LOC
 - **Test coverage:** ~50% of crate is test code
 - **Documentation:** Comprehensive module-level docs
 - **Code reuse:** All error types follow consistent patterns
 
 ### Error Type Coverage
+
 - **5 canonical types:** ✓ All implemented
 - **5 additional types:** ✓ All implemented
 - **Total error variants:** 80+ enum variants
 - **Helper methods:** 50+ convenience constructors
 
 ### Consolidation Target
+
 - **Goal:** ~600 LOC savings (deduplication)
 - **Achieved:** Full error hierarchy with minimal duplication
 - **Zero regressions:** All tests pass
@@ -205,18 +218,23 @@ serde_json = "1.0"         # JSON support
 ## Architecture Decisions
 
 ### 1. Modular Structure
+
 Each error type lives in its own module for clarity and organization, following the single responsibility principle.
 
 ### 2. Thiserror Integration
+
 Uses `thiserror` crate for automatic `Display` and `Error` trait implementations, reducing boilerplate.
 
 ### 3. Unified Enum
+
 The `AgileplusError` enum allows treating all error types uniformly while maintaining type information, enabling better error handling strategies.
 
 ### 4. Trait Support
+
 Provided traits (`NotFoundMarker`, `ErrorKindProvider`) enable extensible error handling patterns without tight coupling.
 
 ### 5. Automatic Conversions
+
 `From<>` implementations for common types (serde_json::Error, std::io::Error) enable seamless integration.
 
 ---
@@ -224,6 +242,7 @@ Provided traits (`NotFoundMarker`, `ErrorKindProvider`) enable extensible error 
 ## Integration Points
 
 ### For AgilePlus Crates
+
 Error types can be imported and used directly:
 
 ```rust
@@ -246,6 +265,7 @@ fn process_data() -> Result<Data, AgileplusError> {
 ```
 
 ### For Error Handling
+
 Enable consistent error handling patterns across the ecosystem:
 
 ```rust
@@ -262,6 +282,7 @@ match result {
 ## Quality Assurance
 
 ### Build Status
+
 ```
 ✓ Compiles without warnings
 ✓ All tests pass (91/91)
@@ -270,12 +291,14 @@ match result {
 ```
 
 ### Testing Strategy
+
 - Unit tests for each error type
 - Conversion tests for automatic From<> implementations
 - Integration tests for unified enum
 - Happy path and error path coverage
 
 ### Documentation
+
 - Module-level documentation
 - Example error creation
 - Conversion examples
@@ -286,12 +309,14 @@ match result {
 ## Future Work
 
 ### Phase 3 Extensions
+
 1. **Integration with actual crates** — Migrate agileplus-cli, agileplus-dashboard, agileplus-p2p to use new error types
 2. **Error context** — Add `anyhow`-style context wrapping for better diagnostics
 3. **Error tracking** — Integration with error tracking services (Sentry, etc.)
 4. **Internationalization** — Support for translated error messages
 
 ### Optimization Opportunities
+
 1. **Error metadata** — Structured error data (error codes, timestamps, spans)
 2. **Error chains** — Better backtrace support
 3. **HTTP mapping** — Automatic HTTP status code mapping for API errors
@@ -302,6 +327,7 @@ match result {
 ## Compliance
 
 ### Requirements Met
+
 - ✅ 5 canonical error types created
 - ✅ Error enums consolidated (80+ variants)
 - ✅ Comprehensive tests (91 test cases)
@@ -310,6 +336,7 @@ match result {
 - ✅ Production-ready code quality
 
 ### Mode 1 Commit
+
 - Crate name: `agileplus-error-core`
 - Commit message: `refactor(errors): consolidate 85+ enums into agileplus-error-core crate`
 - Files changed: 12 created, 2 modified

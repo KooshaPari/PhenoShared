@@ -263,10 +263,12 @@ Tree B:  criterion = { workspace = true }
 Readings:
 
 - The ~11 `+1/−2` and `+2/−4` inference/ffi/domain deltas are **import and attribute ordering only**. Example, `eyetracker-domain/src/lib.rs`:
+
   ```
   Tree A:  use std::time::{Duration, SystemTime};  /  use serde::{Deserialize, Serialize};
   Tree B:  use serde::{Deserialize, Serialize};    /  use std::time::{Duration, SystemTime};
   ```
+
 - `eyetracker-camera/src/lib.rs` is a **block move, not a logic change**: the `impl PixelFormat { fn bytes_per_pixel }` block sits *before* `mod tests` in Tree A and *after* it in Tree B, plus a `use` merge (`nokhwa::pixel_format::RgbFormat` folded into a `nokhwa::{...}` group).
 - `eyetracker-cli/src/app.rs` is a same-size reshuffle (+12/−12) with no net byte growth.
 
@@ -403,7 +405,7 @@ This is the **same list** as the upstream repo's own root workspace (`../zz-merg
 
 ## 7. Recommendation
 
-### Keep Tree B — `crates/eyetracker-*` (7 crates + `eyetracker-PROVENANCE.md`). Remove Tree A — `crates/eyetracker/`.
+### Keep Tree B — `crates/eyetracker-*` (7 crates + `eyetracker-PROVENANCE.md`). Remove Tree A — `crates/eyetracker/`
 
 Evidence, ranked:
 

@@ -1,4 +1,5 @@
 # Dependency Phase 2: Complete Overview
+
 ## Consolidation, Dead Code Removal & Build Optimization
 
 **Date:** 2026-03-31
@@ -27,6 +28,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 ## Three Documents You Need
 
 ### 1. **DEPENDENCY_PHASE2_EXECUTION_PLAN.md** (Your Action Plan)
+
 **Read this first. This is your playbook.**
 
 - Daily schedule (Day 1, Day 2, Day 3)
@@ -39,6 +41,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 **Size:** ~8,500 lines | **Time to read:** 30-45 minutes
 
 **Key Sections:**
+
 - Work Package Breakdown (WP1-WP9 details)
 - Daily Schedule (08:00-17:00 with milestones)
 - Time Tracking Template (track actual vs planned)
@@ -47,6 +50,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 ---
 
 ### 2. **DEPENDENCY_PHASE2_VALIDATION.md** (Your Verification Toolkit)
+
 **Read this as you execute each work package.**
 
 - Baseline capture procedures (before Phase 2 starts)
@@ -59,6 +63,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 **Size:** ~6,500 lines | **Time to read:** 20-30 minutes (skim)
 
 **Key Sections:**
+
 - Pre-Phase Baseline (baseline measurement template)
 - Per-WP Validation (commands for WP1-WP9)
 - Performance Benchmarking (scripts for build time, binary size, test perf)
@@ -67,6 +72,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 ---
 
 ### 3. **This Document (Overview)**
+
 **You're reading it now. Quick reference and navigation.**
 
 ---
@@ -106,6 +112,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 ## Expected Impact
 
 ### Build Performance
+
 | Metric | Before | After | Improvement |
 |--------|--------|-------|-------------|
 | Cold build (release) | 81.2s | <68s | -16% to -20% |
@@ -114,6 +121,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 | Test compilation | 52s | <45s | -13% |
 
 ### Binary Size
+
 | Build Type | Before | After | Reduction |
 |------------|--------|-------|-----------|
 | Minimal (no features) | 45 MB | <38 MB | -15% |
@@ -121,6 +129,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 | Full (all features) | 850 MB | <806 MB | -5% |
 
 ### Code Quality
+
 | Metric | Before | After | Status |
 |--------|--------|-------|--------|
 | Dead code suppressions | 45 | 0 | ✓ Eliminated |
@@ -133,6 +142,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 *Same count, but all audited and documented for safety
 
 ### Dependencies
+
 | Metric | Before | After | Reduction |
 |--------|--------|-------|-----------|
 | Direct dependencies | 127 | 115-119 | -8 to -12 |
@@ -160,6 +170,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 | WP4 | Merge duplicate errors | 2h | Agent A |
 
 **End of Day 1 Checkpoint:**
+
 - ✓ 12 lib crates free of anyhow
 - ✓ 28 crates using standard features
 - ✓ 8 canonical error types
@@ -178,6 +189,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 | WP6 | Remove dead code | 4h | Agent A |
 
 **End of Day 2 Checkpoint:**
+
 - ✓ 8+ regex patterns lazily initialized
 - ✓ 45+ dead code suppressions eliminated
 - ✓ 1,200+ LOC removed (archived)
@@ -201,6 +213,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 | WP9 | Docs & completion notes | 2h | Agent A |
 
 **End of Day 3 Checkpoint:**
+
 - ✓ Before/after metrics captured
 - ✓ 3+ ADRs written
 - ✓ Completion report published
@@ -212,6 +225,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 ## Execution Paths (Choose One)
 
 ### Path A: Sequential (Safest, Slowest)
+
 - **Agents:** 1
 - **Duration:** 20 hours → 2.5 days
 - **Risk:** Low (single agent focuses deeply)
@@ -219,6 +233,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 - **Schedule:** Day 1 AM → Day 1 PM → Day 2 Full → Day 3 Full
 
 ### Path B: Parallel (Recommended, Balanced)
+
 - **Agents:** 2 concurrent
 - **Duration:** 20 hours → 1.5-2 days
 - **Risk:** Medium (coordination needed)
@@ -228,6 +243,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
   - Agent B: WP3, WP7 (independent, parallel)
 
 ### Path C: Aggressive (Fastest, Needs Coordination)
+
 - **Agents:** 4-5 concurrent
 - **Duration:** 20 hours → 3-4 hours (wall clock)
 - **Risk:** High (many parallel branches)
@@ -244,6 +260,7 @@ Unlike **Phase 2A** (from the Dependency Analysis, which focuses on crate extrac
 Your Phase 2 is **successful** if ALL of these pass:
 
 ### Build & Compilation (5 checks)
+
 - [ ] `cargo build --workspace` → 0 errors, 0 warnings
 - [ ] `cargo clippy` → 0 warnings
 - [ ] `cargo fmt --check` → 0 violations
@@ -251,24 +268,28 @@ Your Phase 2 is **successful** if ALL of these pass:
 - [ ] No compilation errors after any WP
 
 ### Testing (4 checks)
+
 - [ ] `cargo test --workspace` → 100% pass
 - [ ] `cargo test --release` → 100% pass
 - [ ] `cargo test --all-features` → 100% pass
 - [ ] No test regressions introduced
 
 ### Code Quality (4 checks)
+
 - [ ] Dead code suppressions: 45 → 0
 - [ ] Duplicate error types: 52 → 8
 - [ ] Orphaned error defs: 52 → 0
 - [ ] Zero unsafe code removed (audited only)
 
 ### Performance (4 checks)
+
 - [ ] Cold build: >15% faster
 - [ ] Incremental build: >15% faster
 - [ ] Binary size (minimal): >5% smaller
 - [ ] Test execution: >10% faster
 
 ### Documentation (3 checks)
+
 - [ ] 3+ ADRs written (features, errors, unsafe)
 - [ ] CHANGELOG.md updated
 - [ ] Completion report published
@@ -295,6 +316,7 @@ Your Phase 2 is **successful** if ALL of these pass:
 ## Rollback Strategy
 
 ### Per-WP Rollback (Easiest)
+
 ```bash
 # Rollback WP2 specifically
 git checkout -- crates/*/Cargo.toml
@@ -302,6 +324,7 @@ cargo test --workspace
 ```
 
 ### Full Phase Rollback (If Needed)
+
 ```bash
 # Return to phase2-start tag
 git reset --hard phase2-start
@@ -500,6 +523,7 @@ docs/reference/
 ## Support & Questions
 
 For questions about:
+
 - **What to do next:** See "Next Steps" (above)
 - **How to execute a WP:** See Execution Plan section for that WP
 - **How to validate a WP:** See Validation Framework section for that WP
@@ -533,4 +557,3 @@ For questions about:
 **Start Date:** 2026-04-01 (recommended)
 **Estimated Completion:** 2026-04-03
 **Maintainer:** Phenotype Architecture Team
-

@@ -21,11 +21,13 @@
 ## Test Categories
 
 ### Unit Tests
+
 - **Location**: As appropriate for language (TypeScript)
 - **Purpose**: Test individual components in isolation
 - **Coverage Target**: 90%
 
 ### Integration Tests
+
 - **Location**: tests/integration/
 - **Purpose**: Test component interactions
 - **Coverage Target**: 75%
@@ -43,9 +45,11 @@
 ## Coverage Gaps
 
 ### Critical Gaps
+
 1. TBD
 
 ### Partial Coverage
+
 1. TBD
 
 ---
@@ -53,10 +57,12 @@
 ## Recommendations
 
 ### Immediate Actions
+
 1. Add unit tests for domain types
 2. Add integration tests for adapters
 
 ### Short-term Actions
+
 1. Increase coverage to 80%
 
 ---

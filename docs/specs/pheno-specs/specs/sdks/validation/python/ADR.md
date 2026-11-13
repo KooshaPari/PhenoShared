@@ -92,30 +92,35 @@ An Architecture Decision Record (ADR) is a document that captures an important a
 ### Architecture Patterns
 
 ADRs related to high-level architectural patterns and styles:
+
 - ADR-002: Database Architecture
 - ADR-008: Microservices vs Monolith
 
 ### Technology Choices
 
 ADRs related to specific technology selections:
+
 - ADR-001: Technology Stack Selection
 - ADR-004: Authentication and Authorization
 
 ### Design Principles
 
 ADRs establishing patterns and conventions:
+
 - ADR-003: API Design Principles
 - ADR-009: Testing Strategy
 
 ### Infrastructure
 
 ADRs related to deployment and operations:
+
 - ADR-005: Deployment Strategy
 - ADR-010: Observability and Monitoring
 
 ### Data Management
 
 ADRs related to data storage and flow:
+
 - ADR-007: Event Sourcing vs CRUD
 - ADR-006: Caching Strategy
 
@@ -136,6 +141,7 @@ The project requires a technology stack that balances developer productivity, pe
 #### Decision
 
 Selected stack:
+
 - **Frontend**: React with TypeScript
 - **Backend**: Rust (Axum/Tokio) for performance-critical paths, Node.js for rapid prototyping
 - **Database**: PostgreSQL for relational data, Redis for caching
@@ -144,11 +150,13 @@ Selected stack:
 #### Consequences
 
 **Positive**:
+
 - Rust provides excellent performance and type safety
 - TypeScript enables full-stack type sharing
 - PostgreSQL offers ACID compliance and rich querying
 
 **Negative**:
+
 - Rust has a steeper learning curve for new team members
 - More complex build pipeline required
 
@@ -173,6 +181,7 @@ Data storage requirements include relational data, time-series metrics, and docu
 #### Decision
 
 Polyglot persistence approach:
+
 - **Primary Store**: PostgreSQL for transactional data
 - **Cache Layer**: Redis for session and query caching
 - **Search**: Elasticsearch for full-text search (future consideration)
@@ -181,11 +190,13 @@ Polyglot persistence approach:
 #### Consequences
 
 **Positive**:
+
 - Each data type uses optimal storage
 - Clear separation of concerns
 - Can scale components independently
 
 **Negative**:
+
 - Operational complexity increases
 - Need expertise in multiple systems
 
@@ -204,6 +215,7 @@ APIs are the contract between services and clients. Consistent, well-designed AP
 #### Decision
 
 Adopt RESTful principles with the following specifics:
+
 - JSON for request/response bodies
 - Standard HTTP methods (GET, POST, PUT, DELETE, PATCH)
 - Resource-oriented URLs (/users/{id}, not /getUser)
@@ -213,11 +225,13 @@ Adopt RESTful principles with the following specifics:
 #### Consequences
 
 **Positive**:
+
 - Predictable API behavior
 - Easy to document with OpenAPI
 - Broad client support
 
 **Negative**:
+
 - REST may not fit all use cases (e.g., real-time)
 - Versioning adds maintenance overhead
 
@@ -243,11 +257,13 @@ Security is paramount. The system must authenticate users and services, authoriz
 #### Consequences
 
 **Positive**:
+
 - Industry-standard security practices
 - Stateless authentication enables horizontal scaling
 - Fine-grained permission control
 
 **Negative**:
+
 - Token revocation requires additional infrastructure
 - JWT size can impact request headers
 
@@ -273,11 +289,13 @@ Deployment must be reliable, reversible, and support zero-downtime updates. The 
 #### Consequences
 
 **Positive**:
+
 - Zero-downtime deployments
 - Easy rollback capability
 - Infrastructure as Code
 
 **Negative**:
+
 - Kubernetes complexity requires expertise
 - Resource overhead for small deployments
 
@@ -303,11 +321,13 @@ Database load and response latency can be reduced with strategic caching. Howeve
 #### Consequences
 
 **Positive**:
+
 - Reduced database load
 - Faster response times
 - Graceful degradation if cache fails
 
 **Negative**:
+
 - Cache consistency challenges
 - Additional infrastructure to manage
 
@@ -326,6 +346,7 @@ Audit requirements and need for temporal queries suggest event sourcing, but CRU
 #### Decision
 
 Hybrid approach:
+
 - **Core entities**: Event sourcing for audit-critical data
 - **Supporting data**: CRUD for simple lookup tables
 - **Projection**: Read models derived from event streams
@@ -334,11 +355,13 @@ Hybrid approach:
 #### Consequences
 
 **Positive**:
+
 - Complete audit trail
 - Temporal queries possible
 - Can rebuild state from events
 
 **Negative**:
+
 - Higher complexity
 - Eventual consistency in projections
 - Learning curve for team
@@ -365,11 +388,13 @@ Team is growing, different components have different scaling requirements. Need 
 #### Consequences
 
 **Positive**:
+
 - Faster development initially
 - Clear boundaries enable future extraction
 - Reduced operational overhead early on
 
 **Negative**:
+
 - Risk of tight coupling if boundaries not respected
 - Later extraction requires effort
 
@@ -388,6 +413,7 @@ Quality is non-negotiable. Testing must be comprehensive yet efficient, providin
 #### Decision
 
 Testing pyramid:
+
 - **Unit tests**: 70% coverage, fast, no I/O
 - **Integration tests**: 20%, test component interactions
 - **E2E tests**: 10%, critical user journeys only
@@ -397,11 +423,13 @@ Testing pyramid:
 #### Consequences
 
 **Positive**:
+
 - Fast feedback on most changes
 - High confidence in refactorings
 - Bugs caught early
 
 **Negative**:
+
 - Test maintenance requires discipline
 - E2E tests can be flaky
 
@@ -420,6 +448,7 @@ Production systems fail. When they do, we need to understand why quickly. Observ
 #### Decision
 
 Three pillars of observability:
+
 - **Metrics**: Prometheus for aggregation, Grafana for visualization
 - **Logs**: Structured JSON logging, centralized aggregation
 - **Traces**: Distributed tracing for request flows
@@ -428,11 +457,13 @@ Three pillars of observability:
 #### Consequences
 
 **Positive**:
+
 - Faster incident resolution
 - Data-driven capacity planning
 - Proactive issue detection
 
 **Negative**:
+
 - Storage costs for telemetry
 - Performance overhead of instrumentation
 
@@ -443,6 +474,7 @@ Three pillars of observability:
 ### When to Write an ADR
 
 Write an ADR when:
+
 1. Making a significant architectural decision
 2. Choosing between multiple viable alternatives
 3. Setting a pattern others should follow
@@ -613,6 +645,7 @@ Example code or diagram
 ## Consequences
 
 [Impact on system qualities: performance, security, maintainability, etc.]
+
 ```
 
 ### Template 4: Deprecation ADR

@@ -17,6 +17,7 @@ This guide provides step-by-step procedures to test and verify Sentry integratio
 Create `.env.test` in each repo:
 
 **AgilePlus/.env.test**
+
 ```bash
 SENTRY_DSN=https://[your-dsn-key]@o[org-id].ingest.us.sentry.io/[project-id]
 ENVIRONMENT=test
@@ -24,6 +25,7 @@ RUST_LOG=sentry=debug
 ```
 
 **phenotype-infrakit/.env.test**
+
 ```bash
 SENTRY_DSN=https://[your-dsn-key]@o[org-id].ingest.us.sentry.io/[project-id]
 ENVIRONMENT=test
@@ -31,6 +33,7 @@ RUST_LOG=sentry=debug
 ```
 
 **heliosCLI/.env.test**
+
 ```bash
 SENTRY_DSN=https://[your-dsn-key]@o[org-id].ingest.us.sentry.io/[project-id]
 ENVIRONMENT=test
@@ -77,12 +80,14 @@ mod sentry_tests {
 ```
 
 **Run the test**:
+
 ```bash
 export SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]"
 cargo test test_panic_capture --lib -- --ignored 2>&1 | tee test-output.log
 ```
 
 **Verification**:
+
 1. Wait 5-10 seconds for async transport
 2. Go to Sentry Dashboard → AgilePlus → Issues
 3. Look for issue: "Test panic for Sentry capture"
@@ -126,6 +131,7 @@ mod sentry_tests {
 ```
 
 **Run the test**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
 export SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]"
@@ -133,6 +139,7 @@ cargo test test_error_capture --lib
 ```
 
 **Verification**:
+
 1. Go to Sentry Dashboard → phenotype-infrakit → Issues
 2. Look for: "Test I/O error for Sentry"
 3. Verify:
@@ -175,6 +182,7 @@ mod sentry_tests {
 ```
 
 **Run the test**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI
 export SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]"
@@ -182,6 +190,7 @@ cargo test test_async_error_capture --lib
 ```
 
 **Verification**:
+
 1. Go to Sentry Dashboard → heliosCLI → Issues
 2. Look for: "Async error: Async operation failed"
 3. Verify captured and categorized correctly
@@ -231,11 +240,13 @@ fn test_breadcrumb_trail() {
 ```
 
 **Run and verify**:
+
 ```bash
 cargo test test_breadcrumb_trail -- --nocapture
 ```
 
 In Sentry:
+
 1. Find the "Failed after processing" error
 2. Click to view details
 3. Scroll to **Breadcrumbs** section
@@ -273,11 +284,13 @@ fn test_context_tags() {
 ```
 
 **Run and verify**:
+
 ```bash
 cargo test test_context_tags
 ```
 
 In Sentry:
+
 1. Find the error "Database query failed"
 2. Click to expand **Tags** section
 3. Verify all tags present:
@@ -290,6 +303,7 @@ In Sentry:
 ### Test 4.1: Release Version Detection
 
 **In AgilePlus/Cargo.toml**:
+
 ```toml
 [package]
 name = "agileplus"
@@ -297,6 +311,7 @@ version = "1.0.0-test"
 ```
 
 **In main.rs**:
+
 ```rust
 let _guard = sentry::init(sentry::ClientOptions {
     release: sentry::release_name!(),
@@ -307,11 +322,13 @@ panic!("Testing release tracking");
 ```
 
 **Trigger and verify**:
+
 ```bash
 cargo run 2>&1 | head -20
 ```
 
 In Sentry:
+
 1. Go to **Issues** tab
 2. Find the panic
 3. Check **Release** field
@@ -328,6 +345,7 @@ sentry-cli releases list -p agileplus | grep 1.0.0-test
 ```
 
 Verification:
+
 1. Go to Sentry Dashboard → AgilePlus → **Releases**
 2. Should show: "1.0.0-test"
 3. Click to view release details
@@ -379,12 +397,14 @@ echo "Expected latency: <30 seconds from message send to dashboard"
 ```
 
 **Run the test**:
+
 ```bash
 chmod +x test-latency.sh
 ./test-latency.sh agileplus "$SENTRY_DSN"
 ```
 
 **Verification**:
+
 1. Note the time you ran the test
 2. Go to Sentry Dashboard → AgilePlus → **Issues**
 3. Check the timestamp of "Latency test message"
@@ -398,6 +418,7 @@ chmod +x test-latency.sh
 **Setup**: Ensure GitHub integration is enabled (see SENTRY_GITHUB_INTEGRATION.md)
 
 **Trigger test error 5+ times**:
+
 ```bash
 # Run test multiple times to trigger alert rule
 for i in {1..6}; do
@@ -408,6 +429,7 @@ done
 ```
 
 **Verification**:
+
 1. Go to Sentry Dashboard → AgilePlus → **Issues**
 2. Find the test error
 3. Check if it has a **GitHub Issue** indicator
@@ -433,6 +455,7 @@ sentry-cli releases list -p agileplus | grep 1.0.0-test
 ```
 
 **Verification**:
+
 1. Go to Sentry → AgilePlus → **Releases**
 2. Should show: "v1.0.0-test"
 3. Click release to see:
@@ -461,6 +484,7 @@ SENTRY_DSN="$HELIOSCLI_DSN" cargo test test_async_error_capture --lib
 ```
 
 **Verification**:
+
 1. Go to Sentry Dashboard
 2. Check each project received errors:
    - ✅ AgilePlus → Issues: "Test panic for Sentry capture"
@@ -515,6 +539,7 @@ SENTRY_DSN="https://invalid-dsn" cargo test test_error_capture --lib
 Use this checklist to verify complete Sentry setup:
 
 ### Infrastructure
+
 - [ ] Sentry organization created: phenotype
 - [ ] 3 projects created: AgilePlus, phenotype-infrakit, heliosCLI
 - [ ] DSN tokens stored in GitHub Secrets
@@ -522,6 +547,7 @@ Use this checklist to verify complete Sentry setup:
 - [ ] Repositories linked to Sentry projects
 
 ### SDK Integration
+
 - [ ] Sentry v0.33+ in Cargo.toml (AgilePlus)
 - [ ] Sentry v0.33+ in Cargo.toml (phenotype-infrakit)
 - [ ] Sentry v0.33+ in Cargo.toml (heliosCLI)
@@ -530,6 +556,7 @@ Use this checklist to verify complete Sentry setup:
 - [ ] Environment variables properly configured
 
 ### Error Capture
+
 - [ ] Panics captured automatically
 - [ ] Exceptions captured with sentry::capture_error()
 - [ ] Breadcrumbs traced in stack traces
@@ -537,6 +564,7 @@ Use this checklist to verify complete Sentry setup:
 - [ ] Async errors captured in Tokio tasks
 
 ### Testing
+
 - [ ] Local tests pass with Sentry enabled
 - [ ] Errors appear in dashboard within 10 seconds
 - [ ] Multiple errors properly grouped/deduped
@@ -544,6 +572,7 @@ Use this checklist to verify complete Sentry setup:
 - [ ] Environment tags correct (test/dev/prod)
 
 ### GitHub Integration
+
 - [ ] GitHub integration working (Issues, Commits, Releases)
 - [ ] Alert rules created for each project
 - [ ] Auto-issue creation tested and working
@@ -551,6 +580,7 @@ Use this checklist to verify complete Sentry setup:
 - [ ] Release tracking tested
 
 ### Performance
+
 - [ ] Capture latency < 30 seconds
 - [ ] No performance degradation in app
 - [ ] Async transport doesn't block main thread
@@ -561,22 +591,26 @@ Use this checklist to verify complete Sentry setup:
 ### Error not appearing in dashboard
 
 1. Check DSN is valid:
+
    ```bash
    echo $SENTRY_DSN
    ```
 
 2. Verify Sentry project exists:
+
    ```bash
    curl -I -H "Authorization: Bearer $SENTRY_AUTH_TOKEN" \
      https://sentry.io/api/0/projects/phenotype/agileplus/
    ```
 
 3. Check logs for send errors:
+
    ```bash
    RUST_LOG=sentry=debug cargo test test_error_capture
    ```
 
 4. Verify network connectivity:
+
    ```bash
    curl -v https://o[org-id].ingest.us.sentry.io/
    ```
@@ -584,6 +618,7 @@ Use this checklist to verify complete Sentry setup:
 ### Test hanging/timeout
 
 1. Check async guard is released:
+
    ```rust
    let _guard = sentry::init(...);
    // guard dropped here automatically
@@ -591,6 +626,7 @@ Use this checklist to verify complete Sentry setup:
    ```
 
 2. Ensure DSN present before init:
+
    ```bash
    SENTRY_DSN=... cargo test
    ```
@@ -598,6 +634,7 @@ Use this checklist to verify complete Sentry setup:
 ### Incorrect environment/tags
 
 1. Verify scope setup:
+
    ```rust
    sentry::with_scope(|scope| {
        scope.set_tag("key", "value");
@@ -606,6 +643,7 @@ Use this checklist to verify complete Sentry setup:
    ```
 
 2. Check ClientOptions environment:
+
    ```rust
    sentry::init(sentry::ClientOptions {
        environment: Some("test".into()),
@@ -616,6 +654,7 @@ Use this checklist to verify complete Sentry setup:
 ## Summary
 
 This test suite verifies:
+
 - ✅ Error capture (panic, exception, async)
 - ✅ Breadcrumb tracing
 - ✅ Context tags

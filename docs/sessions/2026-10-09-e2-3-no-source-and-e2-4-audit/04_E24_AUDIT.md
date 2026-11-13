@@ -138,6 +138,7 @@ members). One operator approval, one PR.
 ```
 
 **Sub-workspace candidates (3):**
+
 - `absorption/PhenoInfra/infrakit/crates/phenotype-event-sourcing/phenotype-event-sourcing/Cargo.toml` (1)
 - `infrakit/crates/phenotype-event-sourcing/phenotype-event-sourcing/Cargo.toml` (1)
 - 16 under `crates/agile-plus/crates/...` — this is a sub-workspace
@@ -169,6 +170,7 @@ fix is one of:
 **Option B.2:** Convert `workspace = true` deps to concrete mode versions
 in each of the 31 manifests. Mode versions from cargo metadata analysis
 (2026-10-09):
+
 ```
 tokio      ^1.42   (55 occurrences across all 230 manifests)
 anyhow     ^1.0    (20)
@@ -275,6 +277,7 @@ metadata will catch that before commit.
 **Alternative smaller-batch fix (2 PRs):**
 
 PR 1 (lower risk): 62 Pattern A only — add to members + add `[workspace.package]`
+
 + add `[workspace.dependencies]`.
 PR 2 (medium risk): 31 Pattern B — same change as PR 1 but for B only.
 
@@ -302,6 +305,7 @@ done
 ```
 
 Scripts:
+
 - `/tmp/categorize-complex.py` — current categorization (Pattern A, B, anomaly, archived)
 - `/tmp/fix-pattern-b.py` — pilot script (DEPRECATED, 11/33)
 - `/tmp/recategorize.py` — re-categorize after fix attempt

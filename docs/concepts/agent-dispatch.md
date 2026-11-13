@@ -53,6 +53,7 @@ The agent abstraction (defined in `crates/agileplus-domain/src/ports/agent.rs::A
 When dispatching to an agent, AgilePlus constructs a **multi-part prompt** that includes:
 
 ### 1. Feature Specification Context
+
 ```
 # Feature: User Authentication
 
@@ -68,6 +69,7 @@ When dispatching to an agent, AgilePlus constructs a **multi-part prompt** that 
 ```
 
 ### 2. Implementation Plan
+
 ```
 # Plan Overview
 
@@ -87,6 +89,7 @@ src/
 ```
 
 ### 3. Work Package Definition
+
 ```
 # Work Package: WP01 - Core Auth Models
 
@@ -110,6 +113,7 @@ Implement the User and Session models in src/auth/mod.rs
 ```bash
 cargo test --lib auth::tests
 ```
+
 ```
 
 ### 4. Contextual Code Examples
@@ -133,6 +137,7 @@ pub struct AgentConfig {
 ```
 
 Example:
+
 ```rust
 AgentConfig {
     kind: AgentKind::ClaudeCode,
@@ -161,6 +166,7 @@ pub struct AgentTask {
 Agents have access to **25 hidden sub-commands** for fine-grained control. These are invoked from within agent code:
 
 ### Branch Management (4 commands)
+
 ```bash
 agileplus branch create <name> <base>
 agileplus branch checkout <name>
@@ -169,6 +175,7 @@ agileplus branch current
 ```
 
 ### Commit Management (5 commands)
+
 ```bash
 agileplus commit create -m "message"
 agileplus commit amend -m "new message"
@@ -178,6 +185,7 @@ agileplus commit show <hash>
 ```
 
 ### Artifact Management (4 commands)
+
 ```bash
 agileplus artifact write <path> <content>
 agileplus artifact read <path>
@@ -186,6 +194,7 @@ agileplus artifact list
 ```
 
 ### Governance Operations (4 commands)
+
 ```bash
 agileplus governance check <transition>
 agileplus governance enforce <transition>
@@ -194,6 +203,7 @@ agileplus governance audit
 ```
 
 ### WP Management (4 commands)
+
 ```bash
 agileplus wp status <wp_id>
 agileplus wp complete <wp_id>
@@ -202,18 +212,21 @@ agileplus wp unblock <wp_id>
 ```
 
 ### CI/CD Operations (2 commands)
+
 ```bash
 agileplus ci run <suite>
 agileplus ci status <job_id>
 ```
 
 ### Query Operations (2 commands)
+
 ```bash
 agileplus query spec <feature_slug>
 agileplus query plan <feature_slug>
 ```
 
 Each sub-command is **logged to an append-only JSONL audit trail** with:
+
 - Command name and arguments
 - Pre-command state (git status, file list)
 - Exit code and output
@@ -221,6 +234,7 @@ Each sub-command is **logged to an append-only JSONL audit trail** with:
 - Timestamp and agent ID
 
 Example audit entry:
+
 ```json
 {
   "timestamp": "2025-03-01T14:32:15Z",
@@ -249,6 +263,7 @@ pub struct AgentResult {
 ```
 
 The result is **validated** against the WP's acceptance criteria:
+
 1. Tests pass? (`cargo test` exit code 0)
 2. Type check passes? (`cargo check` exit code 0)
 3. Lint warnings? (parsed from `cargo clippy`)
@@ -256,6 +271,7 @@ The result is **validated** against the WP's acceptance criteria:
 5. File scope respected? (agent didn't touch files outside its scope)
 
 If validation fails, the agent can be re-run (if `max_review_cycles > 0`) with feedback:
+
 ```
 ❌ Tests failed:
   - test_password_validation: expected 8 chars minimum, got 5 chars
@@ -323,6 +339,7 @@ If validation fails, the feature stays in `Implementing` and the agent can fix a
 Each agent type has a **harness** — an adapter that translates AgilePlus protocol into agent-specific invocations:
 
 ### Claude Code Harness (Current)
+
 ```
 1. Write prompt to PROMPT.md
 2. Invoke: claude --print < PROMPT.md
@@ -333,6 +350,7 @@ Each agent type has a **harness** — an adapter that translates AgilePlus proto
 ```
 
 ### Codex Harness (Planned - WP08)
+
 ```
 1. Write prompt to codex_input.json
 2. Invoke Codex API: POST /batch
@@ -343,6 +361,7 @@ Each agent type has a **harness** — an adapter that translates AgilePlus proto
 ```
 
 ### Cursor Harness (Planned - WP09)
+
 ```
 1. Write prompt to .cursorrules
 2. Write slash commands to COMMANDS.txt
@@ -380,6 +399,7 @@ sequenceDiagram
 ```
 
 This decoupling means:
+
 - The CLI can return immediately while the agent runs in the background
 - If the process crashes, NATS re-delivers the message (durable subscriber)
 - Multiple agents can run concurrently on different WPs
@@ -403,6 +423,7 @@ TTL: 7200 (2 hours after completion)
 ```
 
 Job state transitions:
+
 - `pending` → job created, not yet picked up
 - `running` → agent subprocess is active
 - `waiting_for_review` → agent finished, PR created

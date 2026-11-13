@@ -128,6 +128,7 @@ The first commit bundles three coherent hardening threads that were already pres
 ### 8.2 Commit `babcc33` — clippy sweep
 
 3 clippy errors that `573d21c` left behind:
+
 - `aligned_group_n` dead-code helper removed (was a duplicate of `well_formed_request`)
 - `let zero: f32 = 0.0;` unused variable deleted
 - `for g in 0..n_groups` loop replaced with `iter().enumerate().take(n_groups)` to satisfy `clippy::needless_range_loop`
@@ -137,6 +138,7 @@ The first commit bundles three coherent hardening threads that were already pres
 ### 8.3 Commit `610b494` — refactor oversized `recurrent.rs`
 
 `recurrent.rs` was 547 lines (over the 500-line cap). Split into 4 files:
+
 - `recurrent/mod.rs` (33L) — re-exports + `run_all_recurrent_sota()`
 - `recurrent/mamba_scan.rs` (251L) — `mamba_scan_byte_identical` + chunked variants
 - `recurrent/rwkv.rs` (175L) — `rwkv_wkv_oracle_byte_identical`

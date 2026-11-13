@@ -9,6 +9,7 @@
 ## Executive Summary
 
 ### Current State
+
 - **Total Python Projects:** 3 (heliosCLI, platforms/thegent, byteport SDK)
 - **HTTP Client Libraries Used:** 3 (httpx, aiohttp, requests)
 - **Files with HTTP Imports:** 42 files across projects
@@ -16,6 +17,7 @@
 - **Secondary Libraries:** requests (1 file), aiohttp (1 file)
 
 ### Key Findings
+
 1. **httpx is already dominant** across codebase (95% adoption)
 2. **Dual-import antipattern detected** in heliosCLI: extended_benchmark.py uses both httpx AND requests
 3. **Custom HTTP client wrappers exist** in both thegent and heliosCLI:
@@ -27,6 +29,7 @@
 5. **No urllib3 or httplib2 usage detected** - good sign for modern stack
 
 ### Standardization Gap
+
 - Only 1 file violates single-library policy (extended_benchmark.py mixing httpx + requests)
 - Otherwise, codebase is 95% aligned on httpx
 
@@ -39,11 +42,13 @@
 **Status:** MOSTLY COMPLIANT - 95% httpx standardization
 
 #### Dependencies Declared
+
 - `httpx>=0.28.1` ✓ (primary HTTP client)
 - `curl-cffi>=0.6.0` (optional, for performance)
 - No requests, aiohttp, urllib3, httplib2
 
 #### HTTP Client Files (28 files)
+
 ```
 src/thegent/infra/fast_http_client.py        ✓ httpx (with curl_cffi fallback)
 src/thegent/utils/http_helpers.py           ✓ httpx wrapper
@@ -82,20 +87,22 @@ thegent/src/thegent/utils/http_helpers.py   ✓ httpx (duplicate module)
 ```
 
 **HTTP Client Wrappers Found:**
+
 1. **FastHTTPClient** (`infra/fast_http_client.py`) - 165 lines
    - Wraps httpx + curl_cffi with automatic backend selection
    - Provides connection pooling and retry logic
    - Uses tenacity for exponential backoff
-   
+
 2. **HTTPClient** (`utils/http_helpers.py`) - 55 lines
    - Simple synchronous wrapper around httpx.Client
    - Lazy initialization, context manager support
-   
+
 3. **APIClient** (`api_helpers/__init__.py`) - 38 lines
    - JSON-specific wrapper for API calls
    - Creates new client per request (NO connection pooling)
 
 **Issues Found:**
+
 - APIClient creates new client on every request (performance issue, see WS4-PERF-001)
 - Multiple wrapper implementations with overlapping functionality
 - FastHTTPClient and HTTPClient both handle connection pooling differently
@@ -109,10 +116,12 @@ thegent/src/thegent/utils/http_helpers.py   ✓ httpx (duplicate module)
 **Status:** NON-COMPLIANT - Mixed httpx + requests
 
 #### Dependencies Declared
+
 - `httpx>=0.28.0` (in server optional-dependencies)
 - No explicit requests, aiohttp, urllib3, or httplib2 in pyproject.toml
 
 #### HTTP Client Files (8 files)
+
 ```
 harness/benchmarks/benchmark_runner.py               ✓ httpx
 harness/benchmarks/extended_benchmark.py             ✗ MIXED httpx + requests + aiohttp
@@ -124,6 +133,7 @@ harness/src/harness/http_pool.py                     ✓ httpx wrapper
 ```
 
 **HTTP Client Wrappers Found:**
+
 1. **HTTPConnectionPool** (`harness/src/harness/http_pool.py`) - 178 lines
    - Singleton pattern for shared connection pool
    - Supports both sync and async clients
@@ -131,6 +141,7 @@ harness/src/harness/http_pool.py                     ✓ httpx wrapper
    - Configurable pool parameters (PoolConfig dataclass)
 
 **Issues Found:**
+
 - `extended_benchmark.py` uses requests for health checks (lines 66, 75)
 - `extended_benchmark.py` uses aiohttp for direct Minimax API calls (line 162)
 - HTTPConnectionPool not used in extended_benchmark.py
@@ -147,10 +158,12 @@ harness/src/harness/http_pool.py                     ✓ httpx wrapper
 **Status:** COMPLIANT - 100% httpx
 
 #### Dependencies Declared
+
 - `httpx>=0.27.0` ✓ (primary HTTP client)
 - No requests, aiohttp, urllib3, or httplib2
 
 #### HTTP Client Files (2 files)
+
 ```
 apps/byteport/sdk/python/byteport/async_client.py   ✓ httpx
 apps/byteport/sdk/python/byteport/client.py         ✓ httpx
@@ -178,6 +191,7 @@ apps/byteport/sdk/python/byteport/client.py         ✓ httpx
 ### Tier 1: Production Wrappers (Used Widely)
 
 **FastHTTPClient** (`platforms/thegent/src/thegent/infra/fast_http_client.py`)
+
 - Status: PRODUCTION - used in core HTTP operations
 - Lines: 165
 - Features: Backend selection, connection pooling, tenacity retries
@@ -185,6 +199,7 @@ apps/byteport/sdk/python/byteport/client.py         ✓ httpx
 - Compliance: FR-LIB-001 reference
 
 **HTTPConnectionPool** (`heliosCLI/harness/src/harness/http_pool.py`)
+
 - Status: PRODUCTION - singleton for benchmark harness
 - Lines: 178
 - Features: Sync/async dual support, HTTP/2 enabled, configurable limits
@@ -193,12 +208,14 @@ apps/byteport/sdk/python/byteport/client.py         ✓ httpx
 ### Tier 2: Simple Wrappers (API Convenience)
 
 **HTTPClient** (`platforms/thegent/src/thegent/utils/http_helpers.py`)
+
 - Status: UTILITY - simple wrapper
 - Lines: 55
 - Features: Base URL support, timeout config, context manager
 - Issue: Lazy initialization creates new client each time
 
 **APIClient** (`platforms/thegent/src/thegent/api_helpers/__init__.py`)
+
 - Status: DEPRECATED - performance anti-pattern
 - Lines: 38
 - Issue: Creates NEW client per request (no connection pooling)
@@ -221,6 +238,7 @@ apps/byteport/sdk/python/byteport/client.py         ✓ httpx
 ### Tier 1: Critical (Must Fix)
 
 **WS4-CRITICAL-001: extended_benchmark.py Mixed Libraries**
+
 - Files: `heliosCLI/harness/benchmarks/extended_benchmark.py`
 - Issue: Uses requests + aiohttp alongside httpx
 - Impact: Adds 2 unnecessary dependencies, violates single-library policy
@@ -228,12 +246,14 @@ apps/byteport/sdk/python/byteport/client.py         ✓ httpx
 - Risk: LOW (isolated benchmark file, no API surface)
 
 **Action Items:**
+
 1. Replace `requests.get()` calls with `httpx.get()` (lines 66, 75)
 2. Replace `aiohttp.ClientSession()` with `httpx.AsyncClient()` (line 162)
 3. Remove requests from implicit dependencies
 4. Verify health check logic still works
 
 **Code Changes Required:**
+
 ```python
 # Before (lines 62-69)
 import requests
@@ -267,6 +287,7 @@ async with httpx.AsyncClient() as client:
 ### Tier 2: Important (Should Fix)
 
 **WS4-PERF-001: APIClient Creates New Client Per Request**
+
 - File: `platforms/thegent/src/thegent/api_helpers/__init__.py`
 - Issue: Each method creates new httpx.Client inside context manager
 - Impact: High connection overhead, defeats connection pooling
@@ -274,6 +295,7 @@ async with httpx.AsyncClient() as client:
 - Risk: LOW (simple refactoring)
 
 **Current Anti-Pattern:**
+
 ```python
 def get(self, path: str, **kwargs: Any) -> dict[str, Any]:
     with httpx.Client() as client:  # NEW client every call
@@ -281,6 +303,7 @@ def get(self, path: str, **kwargs: Any) -> dict[str, Any]:
 ```
 
 **Recommended Fix:**
+
 ```python
 def __init__(self, base_url: str = "", timeout: float = 30.0):
     self.base_url = base_url
@@ -302,7 +325,8 @@ def close(self) -> None:
 ```
 
 **WS4-DEDUP-001: Multiple HTTP Wrapper Implementations**
-- Files: 
+
+- Files:
   - `platforms/thegent/src/thegent/utils/http_helpers.py` (HTTPClient)
   - `platforms/thegent/src/thegent/api_helpers/__init__.py` (APIClient)
   - `heliosCLI/harness/src/harness/http_pool.py` (HTTPConnectionPool)
@@ -312,6 +336,7 @@ def close(self) -> None:
 - Risk: MEDIUM (requires coordination across projects)
 
 **Recommendation:** Create unified httpx wrapper in shared library with:
+
 - Connection pooling (required)
 - Base URL support (for API calls)
 - Timeout configuration
@@ -321,6 +346,7 @@ def close(self) -> None:
 ### Tier 3: Nice-to-Have (Optional)
 
 **WS4-OPT-001: Standardize on FastHTTPClient**
+
 - Status: OPTIONAL - curl_cffi fallback already working
 - Note: FastHTTPClient is already well-designed; keeping curl_cffi optional is correct
 
@@ -329,14 +355,17 @@ def close(self) -> None:
 ## Risk Assessment
 
 ### Low Risk
+
 - Replacing requests with httpx in extended_benchmark.py
 - Replacing aiohttp with httpx in extended_benchmark.py
 - Fixing APIClient connection pooling
 
 ### Medium Risk
+
 - Consolidating HTTP wrappers across projects (requires testing)
 
 ### No Risk
+
 - curl_cffi usage (optional backend, well-implemented)
 - httpx usage (95% already standardized)
 
@@ -370,13 +399,14 @@ def close(self) -> None:
 
 5. **Wrapper Standardization:** New HTTP wrappers MUST conform to:
    - Connection pooling by default
-   - Context manager support (__enter__/__exit__)
+   - Context manager support (**enter**/**exit**)
    - Both sync and async variants where used
    - Clear backend abstraction (e.g., FastHTTPClient pattern)
 
 #### Reference Implementation
 
 For projects needing HTTP client wrapper:
+
 ```python
 # patterns/httpx_wrapper.py
 import httpx
@@ -425,6 +455,7 @@ class HTTPClientWrapper:
 ### Phase 1: Eliminate Non-Standard Libraries (1-2 days)
 
 **WS4-IMPL-001:** Fix extended_benchmark.py mixed imports
+
 - Replace requests with httpx (2 calls)
 - Replace aiohttp with httpx (1 async function)
 - Update health check logic
@@ -436,6 +467,7 @@ class HTTPClientWrapper:
 ### Phase 2: Fix Performance Issues (2-3 days)
 
 **WS4-IMPL-002:** Refactor APIClient connection pooling
+
 - Fix APIClient to reuse persistent client
 - Add close() method for cleanup
 - Test with existing callers
@@ -446,6 +478,7 @@ class HTTPClientWrapper:
 ### Phase 3: Consolidate Wrappers (3-5 days)
 
 **WS4-IMPL-003:** Create shared HTTP wrapper library
+
 - Extract to phenotype-shared or new module
 - Support both sync and async
 - Connection pooling enforced
@@ -457,6 +490,7 @@ class HTTPClientWrapper:
 ### Phase 4: Update All Projects (2-3 days)
 
 **WS4-IMPL-004:** Migrate all projects to shared wrapper
+
 - Update thegent (use shared wrapper)
 - Update heliosCLI harness (use shared wrapper)
 - Update byteport SDK (verify httpx usage)
@@ -468,6 +502,7 @@ class HTTPClientWrapper:
 ### Phase 5: Policy Enforcement (1 day)
 
 **WS4-IMPL-005:** Add linting and CI checks
+
 - Add ruff rule: No imports of requests, aiohttp, httplib2
 - Add linter check in CI/CD
 - Document in CLAUDE.md
@@ -480,12 +515,14 @@ class HTTPClientWrapper:
 ## Estimated Impact
 
 ### Before Consolidation
+
 - 3 different HTTP libraries (httpx, requests, aiohttp)
 - 3 different connection pooling strategies
 - 1 performance anti-pattern (APIClient)
 - Inconsistent wrapper APIs
 
 ### After Consolidation
+
 - 1 HTTP library (httpx) + 1 optional backend (curl_cffi)
 - 1 unified connection pooling strategy
 - 0 performance anti-patterns
@@ -493,6 +530,7 @@ class HTTPClientWrapper:
 - Estimated improvement: 10-20% network latency reduction for batch operations
 
 ### Effort Estimate
+
 - **Total Implementation Time:** 8-12 hours
 - **Testing Time:** 4-6 hours
 - **Documentation:** 2-3 hours
@@ -503,11 +541,13 @@ class HTTPClientWrapper:
 ## Dependencies & Prerequisites
 
 ### Required Changes
+
 1. heliosCLI: Update extended_benchmark.py (remove requests, aiohttp)
 2. thegent: Fix APIClient (add persistent client)
 3. Shared: Create unified HTTP wrapper library
 
 ### Optional Improvements
+
 1. Add httpx wrapper as built-in to phenotype-shared
 2. Create benchmark suite comparing httpx vs curl_cffi performance
 3. Add HTTP client profiling to CI/CD
@@ -558,6 +598,7 @@ class HTTPClientWrapper:
 ### All HTTP Client Files
 
 **thegent (28 files):**
+
 ```
 src/thegent/infra/fast_http_client.py
 src/thegent/utils/http_helpers.py
@@ -596,6 +637,7 @@ thegent/src/thegent/utils/http_helpers.py
 ```
 
 **heliosCLI (8 files):**
+
 ```
 harness/benchmarks/benchmark_runner.py
 harness/benchmarks/extended_benchmark.py ← MIXED IMPORTS
@@ -607,6 +649,7 @@ harness/src/harness/http_pool.py
 ```
 
 **byteport (2 files):**
+
 ```
 apps/byteport/sdk/python/byteport/async_client.py
 apps/byteport/sdk/python/byteport/client.py
@@ -624,4 +667,3 @@ The Phenotype organization is **95% standardized on httpx**, with only one compl
 4. **Long-term (Week 4):** Add linting enforcement
 
 **Total effort:** 18-24 hours. **Risk:** LOW. **Payoff:** 10-20% latency improvement for network-heavy operations.
-

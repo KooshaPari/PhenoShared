@@ -57,7 +57,6 @@ Delete blockers:
 | Raw gitlinks/path refs | Cleared for known production blockers. Remaining search hits are registry rows, absorbed-source provenance, and historical audit/worklog docs; no known active Cargo path dep/raw apps gitlink blocker remains. |
 | Remote state | Current token gets 404; registry says archived private. Treat as archive-held, not hard-delete-ready. |
 
-
 ### 2026-06-21 phenotype-bus gate recheck
 
 | Check | Result | Evidence |

@@ -243,17 +243,21 @@ _Last updated: 2026-03-30 (Wave 112 audit)_
 ### Remaining Action Items
 
 #### IMMEDIATE (Safe Deletes)
+
 - [ ] DELETE `.archive/orphaned-worktrees/consolidate-libraries` (commits already in HEAD, 299MB)
 
 #### SHORT-TERM (Review Required)
+
 - [ ] REVIEW `.archive/orphaned-worktrees/expand-test-coverage` (403MB, different branch)
 - [ ] REVIEW `.archive/tests/test_phench_runtime.py` (exists in 3 other locations)
 - [ ] REVIEW `.archive/temp-directories/` (13MB, contains stashes)
 
 #### P0 - CRITICAL
+
 - [ ] **REVIEW** `repos/worktrees/AgilePlus/phenotype-docs` - 1022 unpushed commits
 
 #### P1 - HIGH  
+
 - [ ] PUSH + PR each worktree with unpushed commits
 
 ---
@@ -271,13 +275,15 @@ _End of Wave 94_
 
 | PR # | Title | Branch | URL |
 |------|-------|--------|-----|
-| #95 | feat(ci): add SBOM generation workflow | `feat/add-sbom-workflow` | https://github.com/KooshaPari/phenotype-infrakit/pull/95 |
-| #96 | feat(event-sourcing): LOC reduction | `feat/event-sourcing-loc-reduction` | https://github.com/KooshaPari/phenotype-infrakit/pull/96 |
+| #95 | feat(ci): add SBOM generation workflow | `feat/add-sbom-workflow` | <https://github.com/KooshaPari/phenotype-infrakit/pull/95> |
+| #96 | feat(event-sourcing): LOC reduction | `feat/event-sourcing-loc-reduction` | <https://github.com/KooshaPari/phenotype-infrakit/pull/96> |
 
 ### LOC Reduction Achievement
+
 - **-406 LOC net** in phenotype-event-sourcing (5 files: -494 deleted, +88 added)
 
 ### AggressivePlus Worktree Notes
+
 - `.worktrees/merge-spec-docs` has 57 commits ahead of main
 - Branches have no common ancestor - would need force-push or manual merge
 - phenotype-docs worktree already has commits pushed to agileplus/main
@@ -285,12 +291,14 @@ _End of Wave 94_
 ### Remaining Action Items
 
 #### P1 - HIGH  
+
 - [ ] REVIEW + MERGE PRs #95 and #96
 - [ ] CLEANUP: After PR merge, remove worktrees with no history in common
 - [ ] REVIEW `.archive/orphaned-worktrees/consolidate-libraries` - DELETE (299MB, commits already in HEAD)
 - [ ] REVIEW `.archive/orphaned-worktrees/expand-test-coverage` - DELETE (403MB)
 
 #### P2 - MEDIUM
+
 - [ ] Push remaining branches in `.worktrees/merge-spec-docs` (chore/consolidate-cost-tracking, etc.)
 - [ ] Resolve branch conflicts in AgilePlus worktrees
 
@@ -627,6 +635,7 @@ These create clutter and confusion in `git worktree list` output.
 | `.git/worktrees/resolve-pr58` | `phenotype-shared-wtrees/resolve-pr58/.git` | **BROKEN** | Container directory exists but no .git | `git worktree prune` |
 
 **Solution:**
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git worktree prune --verbose
@@ -683,6 +692,7 @@ These are **not** actual git worktrees (no `.git` linkage), just orphaned direct
 | `platforms/thegent` | `chore/sync-docs-security-deps` | DIRTY | 7 unpushed | full repo | **DUPLICATE** |
 
 **Action Required:**
+
 1. Verify if these are truly the same branch
 2. If YES: keep one, delete the other after push
 3. If NO: understand why 2 separate checkouts exist
@@ -701,7 +711,7 @@ These are **not** actual git worktrees (no `.git` linkage), just orphaned direct
 | `.archive/kitty-specs/` | 1 | ~1KB | phenotype-infrakit-lockfile-repair/ | 2026-03-29 | Minimal | **REVIEW + DELETE** |
 | `.archive/plans/` | 0 | 0B | Empty | 2026-03-29 | **EMPTY** | **DELETE** |
 | `.archive/schemas/` | 1 | ~1KB | schema file | 2026-03-29 | Minimal | **REVIEW + DELETE** |
-| `.archive/tests/` | 3 | ~3KB | Python test files + __pycache__ | 2026-03-29 | Minimal | **REVIEW + DELETE** |
+| `.archive/tests/` | 3 | ~3KB | Python test files + **pycache** | 2026-03-29 | Minimal | **REVIEW + DELETE** |
 
 All archive subdirectories contain 0-3 files. Candidates for complete removal after contents are verified as not referenced.
 
@@ -710,6 +720,7 @@ All archive subdirectories contain 0-3 files. Candidates for complete removal af
 ### Comprehensive Cleanup Checklist (4-Phase Plan)
 
 #### PHASE 1: Immediate Safe Deletions (~95 MB saved)
+
 ```bash
 # These are safe; no unpushed commits or referenced content
 rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/-C
@@ -723,6 +734,7 @@ rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/.worktrees/thegent
 ```
 
 #### PHASE 2: Conditional (Requires Action)
+
 ```bash
 # Must complete BEFORE deletion of parents
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/worktrees/thegent/chore/sync-docs-security-deps
@@ -737,6 +749,7 @@ git log origin/main..HEAD --oneline
 ```
 
 #### PHASE 3: Archive Cleanup (After Review)
+
 ```bash
 # After verifying no references in code/docs:
 rm -rf .archive/audit
@@ -748,6 +761,7 @@ rm -rf .archive/tests
 ```
 
 #### PHASE 4: Orphaned Worktrees (After Decisions)
+
 ```bash
 # After Phase 2 push/PR and Phase 3 review:
 rm -rf repos/worktrees
@@ -761,7 +775,9 @@ rm -rf worktrees/heliosCLI/release-v0.1.0
 ### Structural Problems Identified
 
 #### Problem 1: Worktree Fragmentation
+
 Worktrees are scattered across **6 different locations** with inconsistent naming:
+
 - `.worktrees/` (canonical intended location, but contains orphaned dirs)
 - `worktrees/` (duplicates `.worktrees/` naming; unclear separation)
 - `platforms/worktrees/` (unclear purpose; non-standard)
@@ -770,6 +786,7 @@ Worktrees are scattered across **6 different locations** with inconsistent namin
 - `heliosCLI-wtrees/` (orphaned, inconsistent naming)
 
 **Recommendation:** Consolidate ALL worktrees to single `.worktrees/` location with consistent naming:
+
 ```
 .worktrees/
   <repo-name>/
@@ -779,6 +796,7 @@ Worktrees are scattered across **6 different locations** with inconsistent namin
 ```
 
 Example:
+
 ```
 .worktrees/
   thegent/
@@ -793,15 +811,19 @@ Example:
 ```
 
 #### Problem 2: Git Metadata vs Filesystem Mismatch
+
 `.git/worktrees/` contains 5 orphaned metadata entries that no longer map to actual directories. This creates:
+
 - Cluttered `git worktree list` output
 - Confusion about what's actually checked out
 - Stale references blocking cleanup
 
 #### Problem 3: Duplicate Checkouts
+
 Same branch (`chore/sync-docs-security-deps`) exists in two places, wasting disk space and creating merge confusion. After push/PR, consolidate to single location.
 
 #### Problem 4: Inactive Metadata at Root
+
 Stray directory names like `/.C/` suggest incomplete command execution. Implement file system monitoring to catch these early.
 
 ---
@@ -848,6 +870,7 @@ Stray directory names like `/.C/` suggest incomplete command execution. Implemen
 ### Monthly Audit Recommendation
 
 Run this command monthly to catch orphaning early:
+
 ```bash
 git worktree list --all | while read line; do
   path=$(echo "$line" | awk '{print $1}')
@@ -862,7 +885,6 @@ done
 _Comprehensive audit completed: 2026-03-29 11:00 UTC_
 _Additions to document: 15+ new major findings, 25+ detailed tables, 4-phase cleanup plan_
 _Next audit due: 2026-04-29 (monthly check)_
-
 
 ---
 

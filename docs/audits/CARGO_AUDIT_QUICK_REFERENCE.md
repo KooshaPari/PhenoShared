@@ -13,7 +13,9 @@
 ## Critical Issues
 
 ### Issue #1: 12 Removed Crates Still Exist
+
 These were removed from `[workspace.members]` but directories remain:
+
 - phenotype-config-loader
 - phenotype-git-core
 - phenotype-iter
@@ -29,6 +31,7 @@ These were removed from `[workspace.members]` but directories remain:
 **Action**: Decide to restore or archive.
 
 ### Issue #2: 23 AgilePlus Crates in Wrong Location
+
 All `agileplus-*` crates (23 total) should be in separate workspace or clearly documented.
 
 **Action**: Segregate or explicitly add to members list.
@@ -36,6 +39,7 @@ All `agileplus-*` crates (23 total) should be in separate workspace or clearly d
 ## Unused Workspace Dependencies (8 candidates)
 
 Remove or document:
+
 - `blake3` v1.5 — Hash function, not used
 - `futures` v0.3 — Not used
 - `lru` v0.12 — Caching, not used
@@ -45,7 +49,9 @@ Remove or document:
 - `phenotype-errors` (workspace.dependencies) — No member uses it
 
 ## Aspirational Dependencies (5)
+
 Document intended use or remove:
+
 - `anyhow` — Error context (future)
 - `moka` — Advanced caching (future)
 - `reqwest` — HTTP client (service integrations)
@@ -74,5 +80,5 @@ Document intended use or remove:
 ---
 
 **Audit Date**: 2026-03-30
-**Repository**: phenotype-infrakit (https://github.com/KooshaPari/phenotype-infrakit)
+**Repository**: phenotype-infrakit (<https://github.com/KooshaPari/phenotype-infrakit>)
 **Status**: COMPLETED — Immediate action required on 2 critical issues

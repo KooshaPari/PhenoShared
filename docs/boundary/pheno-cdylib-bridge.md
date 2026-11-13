@@ -21,6 +21,7 @@ language — **without requiring them to compile the Rust toolchain**.
 This is the *embedder* surface. Memory *storage backends* (Supermemory,
 Letta, Cognee, Mem0, Graphiti, Hippo, Zep) live in `thegent-memory` itself.
 The bridge is purely a serialization layer that:
+
 1. Wraps `Box<dyn MemoryPort>` as `*mut c_void` opaque handles
 2. Marshals `*const c_char` ↔ Rust `String`/`&str` (CString round-trip)
 3. Returns ownership-clean errors via `pheno_last_error()`

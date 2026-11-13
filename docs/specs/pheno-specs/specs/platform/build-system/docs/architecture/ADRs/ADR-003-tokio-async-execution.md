@@ -72,6 +72,7 @@ We will use Tokio's async runtime with a work-stealing scheduler for task execut
 | Green Threads | 4KB | Low | Low | (deprecated) |
 
 Build tasks typically:
+
 - Spawn subprocesses (I/O wait)
 - Read/write files (I/O)
 - Some CPU work (hashing, graph computation)
@@ -101,6 +102,7 @@ Tokio is the dominant Rust async runtime:
 ### Work-Stealing vs Work-Sharing
 
 **Work-Stealing** (Tokio default):
+
 - Each worker has a local queue
 - Idle workers steal from busy workers
 - Good for task graphs with varying execution times
@@ -111,6 +113,7 @@ Worker 2 (idle):                       ◀── steals Task D
 ```
 
 **Work-Sharing**:
+
 - Central queue all workers pull from
 - Simpler but more contention
 - Better for uniform tasks
@@ -464,11 +467,11 @@ async fn execute_task(&self, task: &Task) -> Result<()> {
 
 ## References
 
-- Tokio: https://tokio.rs/
-- Async Rust Book: https://rust-lang.github.io/async-book/
-- Tokio Internals: https://tokio.rs/blog/2019-10-scheduler
-- Work-Stealing: https://en.wikipedia.org/wiki/Work_stealing
-- Structured Concurrency: https://vorpus.org/blog/notes-on-structured-concurrency/
+- Tokio: <https://tokio.rs/>
+- Async Rust Book: <https://rust-lang.github.io/async-book/>
+- Tokio Internals: <https://tokio.rs/blog/2019-10-scheduler>
+- Work-Stealing: <https://en.wikipedia.org/wiki/Work_stealing>
+- Structured Concurrency: <https://vorpus.org/blog/notes-on-structured-concurrency/>
 
 ## Changelog
 

@@ -23,17 +23,20 @@ Error handling is a fundamental aspect of system design that affects reliability
 We classify errors along multiple dimensions:
 
 #### By Origin
+
 - **User Errors**: Invalid input, permission violations, business rule violations
 - **System Errors**: Infrastructure failures, resource exhaustion, service unavailability
 - **Programming Errors**: Logic bugs, invariant violations, unhandled edge cases
 
 #### By Severity
+
 - **Fatal**: System cannot continue, requires restart
 - **Error**: Operation failed, but system remains stable
 - **Warning**: Potential issue, operation succeeded but requires attention
 - **Info**: Notable condition, not problematic
 
 #### By Recoverability
+
 - **Recoverable**: Can be resolved automatically with retry or fallback
 - **Manual**: Requires operator intervention
 - **Terminal**: Cannot be resolved, operation must fail
@@ -161,16 +164,19 @@ All API errors follow a consistent format:
 ## Implementation Guidelines
 
 ### For Domain Errors
+
 - Define explicit error types for each business rule violation
 - Include relevant domain context in error (entity IDs, attempted values)
 - Map to appropriate HTTP status codes at API boundary
 
 ### For Infrastructure Errors
+
 - Wrap external errors with context about the operation being attempted
 - Implement retry logic with exponential backoff
 - Use circuit breakers to prevent cascade failures
 
 ### For Programming Errors
+
 - Use assertions for invariant checking
 - Log extensively before failing
 - Never expose internal details to users
@@ -229,4 +235,3 @@ All API errors follow a consistent format:
 | $(date +%Y-%m-%d) | Initial strategy | Reliability Team |
 | $(date +%Y-%m-%d) | Added circuit breaker patterns | SRE Team |
 | $(date +%Y-%m-%d) | Accepted | Tech Lead |
-

@@ -7,6 +7,7 @@
 ## Context
 
 The Phenotype ecosystem has grown to multiple repositories with varying development practices. We need a consistent methodology for:
+
 - Feature development workflow
 - Requirements documentation
 - Implementation planning

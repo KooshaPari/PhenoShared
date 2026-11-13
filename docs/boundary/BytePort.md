@@ -75,6 +75,7 @@ dead code; hardened `tauri.conf.json`).
 **Reviewer:** forge session (Phase 1 of `plans/2026-06-22-compute-infra-dag-v1.md`)
 **Worklog / finding:** `phenotype-infra/worklog/2026-06-23-71-pillar-scorecard.md`
 **Decisions:**
+
 - BP-001 (dead code removal + tauri.conf.json hardening) MERGED (commit `ceb703df`)
   - Deleted: `src/ipc.rs`, `src/network.rs`, `src/adapters/`, `src/ports/`
   - Pruned: `aws-sdk-s3`, `tokio`, `tracing`, `async-trait`, `thiserror`,

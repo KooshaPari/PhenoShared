@@ -47,6 +47,7 @@ The system SHALL provide unified navigation across all Phenotype registries.
 | URL Stability | SHALL provide stable URLs for all artifacts |
 
 **Navigation Entry Format:**
+
 ```yaml
 navigation:
   - want_to: "Find a spec for a feature"
@@ -90,6 +91,7 @@ The system SHALL support bidirectional links between entities in different regis
 | R006 | WARNING | Patterns should have at least one template |
 
 **Link Entity Schema:**
+
 ```yaml
 type: CrossRegistryLink
 version: "1.0.0"
@@ -170,6 +172,7 @@ The system SHALL provide four levels of traceability from specifications to runn
 | Markdown | `<!-- @trace SPEC-XXX -->` | `<!-- @trace SPEC-AUTH-001 -->` |
 
 **Commit Message Format:**
+
 ```
 <type>(<scope>): <description>
 
@@ -204,6 +207,7 @@ The system SHALL provide automated validation of cross-registry links and artifa
 | Freshness check | Monthly | Create issue |
 
 **Validation Report Format:**
+
 ```
 Traceability Coverage Report
 ═══════════════════════════════════════════════════════════
@@ -237,6 +241,7 @@ Recommendations:
 The system SHALL define standard data models for all registry entities.
 
 **Spec Entity:**
+
 ```yaml
 type: Spec
 version: "1.0.0"
@@ -288,6 +293,7 @@ required: [id, title, status, domain]
 ```
 
 **Pattern Entity:**
+
 ```yaml
 type: Pattern
 version: "1.0.0"
@@ -333,6 +339,7 @@ required: [id, title, status, domain]
 ```
 
 **Template Entity:**
+
 ```yaml
 type: Template
 version: "1.0.0"
@@ -550,6 +557,7 @@ required: [id, name, language, category]
 ### 3.4 Registry Relationships
 
 **PhenoSpecs ↔ PhenoHandbook:**
+
 ```yaml
 # In PhenoSpecs/specs/auth/oauth.yaml
 implementation:
@@ -568,6 +576,7 @@ specs:
 ```
 
 **PhenoSpecs ↔ HexaKit:**
+
 ```yaml
 # In PhenoSpecs/specs/auth/oauth.yaml
 templates:
@@ -601,6 +610,7 @@ implements:
 | `/search?q={query}` | GET | Full-text search (future) |
 
 **Registry Index Response:**
+
 ```json
 {
   "version": "1.0.0",
@@ -641,6 +651,7 @@ implements:
 ### 4.2 Validation Script API
 
 **CLI Interface:**
+
 ```bash
 # Validate all links
 python scripts/validate_links.py --all
@@ -656,6 +667,7 @@ python scripts/validate_links.py --coverage
 ```
 
 **Output Format:**
+
 ```json
 {
   "valid": false,

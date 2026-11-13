@@ -5,6 +5,7 @@
 ### 1.1 GitHub CLI Wrapper Pattern
 
 All GitHub API interactions use `gh` CLI as the primary interface. Each command is wrapped in a shell function that:
+
 1. Checks `gh auth status` before any write operation.
 2. Captures stderr for error classification (auth failure vs. rate limit vs. not found).
 3. Returns structured output (JSON) for downstream parsing.
@@ -19,6 +20,7 @@ All GitHub API interactions use `gh` CLI as the primary interface. Each command 
 ### 1.3 Offline-First Planning
 
 When `gh auth` is invalid, all planning is done from local git state:
+
 - `git branch --no-merged main` → non-merged branch list.
 - `git worktree list` → worktree inventory.
 - `git remote -v` → remote topology validation.
@@ -92,11 +94,13 @@ gh_pr_check_summary() {
 ## 4. Performance & Security Considerations
 
 ### Performance
+
 - Parallel PR checks via `xargs -P 4` for check enumeration.
 - 2s sleep between CodeRabbit re-review posts to respect rate limits.
 - 30s timeout per `gh` call to prevent indefinite hangs.
 
 ### Security
+
 - `gh auth` uses token-scoped access; no raw credentials stored.
 - No secrets in session docs; only public PR metadata.
 - Branch deletion requires manual confirmation; no auto-force.

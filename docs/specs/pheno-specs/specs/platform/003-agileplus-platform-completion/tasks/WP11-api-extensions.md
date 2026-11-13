@@ -30,6 +30,7 @@ Implementation command: `spec-kitty implement WP11 --base WP09`
 Implement API key lifecycle on first startup:
 
 **Process:**
+
 - If no API key exists:
   1. Generate 32 random bytes, base64url-encode → plaintext key
   2. SHA-256 hash the key → store hash in `api_keys` table
@@ -37,6 +38,7 @@ Implement API key lifecycle on first startup:
   4. Print key to stdout on first run
 
 **Example output:**
+
 ```
 AgilePlus API initialized.
 API Key: agp_1234567890abcdefghijklmnopqrst
@@ -49,6 +51,7 @@ Store this key securely; it won't be shown again.
 Implement Axum extractor for authentication:
 
 **Behavior:**
+
 - Check `X-API-Key` header (or `?api_key=` query param)
 - Hash the provided key, compare against stored hashes in DB
 - Return 401 Unauthorized if invalid
@@ -56,6 +59,7 @@ Implement Axum extractor for authentication:
 - Skip auth for webhook endpoints (verify signature instead)
 
 **Usage in handlers:**
+
 ```rust
 async fn list_features(
     ApiKey: _,  // extractor ensures key is valid
@@ -68,6 +72,7 @@ async fn list_features(
 Implement CRUD operations in `crates/agileplus-api`:
 
 **Endpoints:**
+
 - `GET /api/features` → list (with `?state=`, `?label=` filters)
 - `GET /api/features/:id` → detail
 - `POST /api/features` → create (body: `{title, description, state?, labels?}`)
@@ -77,6 +82,7 @@ Implement CRUD operations in `crates/agileplus-api`:
 All operations emit events to event store.
 
 **Example:**
+
 ```bash
 curl -H "X-API-Key: agp_..." http://localhost:8080/api/features?state=implementing
 
@@ -90,6 +96,7 @@ curl -X POST -H "X-API-Key: agp_..." \
 Implement WP CRUD operations:
 
 **Endpoints:**
+
 - `GET /api/features/:fid/work-packages` → list WPs for feature
 - `GET /api/work-packages/:id` → detail
 - `POST /api/features/:fid/work-packages` → create WP under feature
@@ -103,12 +110,14 @@ All operations emit events to event store.
 Implement event retrieval and filtering:
 
 **Endpoints:**
+
 - `GET /api/events` → paginated list
   - Query params: `?entity_type=`, `?entity_id=`, `?since=`, `?until=`, `?type=`, `?actor=`, `?limit=`, `?offset=`
   - Returns: JSON array of events with timestamps, types, actors, payloads
 - `GET /api/events/:id` → single event detail with full payload
 
 **Example:**
+
 ```bash
 curl -H "X-API-Key: agp_..." \
   "http://localhost:8080/api/events?entity_type=feature&since=1h&limit=50"
@@ -121,9 +130,11 @@ Implement Server-Sent Events for real-time updates:
 **Endpoint:** `GET /api/stream` (requires API key)
 
 **Behavior:**
+
 - Stream real-time events as SSE
 - Subscribe to NATS broadcast channel
 - Format:
+
   ```
   event: feature_updated
   data: {"id": 1, "state": "implementing", "title": "Auth Flow", ...}
@@ -134,9 +145,11 @@ Implement Server-Sent Events for real-time updates:
   event: sync_conflict
   data: {"entity_type": "feature", "entity_id": 3, ...}
   ```
+
 - Use tokio broadcast channel fed from NATS subscription
 
 **Client usage:**
+
 ```javascript
 const stream = new EventSource('/api/stream?api_key=agp_...');
 stream.addEventListener('feature_updated', (e) => {
@@ -152,6 +165,7 @@ Aggregate all service health checks:
 **Endpoint:** `GET /health` (no auth required)
 
 **Response (JSON):**
+
 ```json
 {
   "status": "healthy",
@@ -168,6 +182,7 @@ Aggregate all service health checks:
 ```
 
 Status codes:
+
 - `healthy` (all services up, latency acceptable)
 - `degraded` (some services slow or one non-critical service down)
 - `unavailable` (critical service down)

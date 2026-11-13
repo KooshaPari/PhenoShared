@@ -55,6 +55,7 @@ phenotype-go (target)    ██████████████             
 The most popular Go validation library, using struct tags and reflection.
 
 **Architecture:**
+
 ```go
 // Struct tag-based validation
 import "github.com/go-playground/validator/v10"
@@ -71,12 +72,14 @@ err := validate.Struct(user)
 ```
 
 **Characteristics:**
+
 - **Strengths**: Mature, extensive validation functions, i18n support
 - **Limitations**: Heavy reflection use, no context support, fail-fast
 - **Performance**: 248ns/op simple validation
 - **Type Safety**: Compile-time tag parsing, runtime validation
 
 **Market Position:**
+
 - 15K GitHub stars
 - Used by 40%+ of Go web applications
 - Default choice for many developers
@@ -86,6 +89,7 @@ err := validate.Struct(user)
 Functional validation library with cleaner API than tag-based approaches.
 
 **Architecture:**
+
 ```go
 // Functional validation
 import validation "github.com/go-ozzo/ozzo-validation"
@@ -106,6 +110,7 @@ func (u User) Validate() error {
 ```
 
 **Characteristics:**
+
 - **Strengths**: Clean API, programmable rules, error aggregation
 - **Limitations**: More verbose than tags, no i18n
 - **Performance**: 180ns/op (faster than go-playground)
@@ -116,6 +121,7 @@ func (u User) Validate() error {
 Protocol Buffers validation with code generation.
 
 **Architecture:**
+
 ```protobuf
 // Protocol Buffers with validation
 message User {
@@ -126,6 +132,7 @@ message User {
 ```
 
 **Characteristics:**
+
 - **Strengths**: Fastest validation (45ns/op), type-safe, code generation
 - **Limitations**: Requires Protobuf, not suitable for general use
 - **Performance**: 45ns/op simple validation
@@ -487,10 +494,10 @@ Zero-Trust Validation:
 
 ### Official Documentation
 
-1. **go-playground/validator** - https://github.com/go-playground/validator
-2. **ozzo-validation** - https://github.com/go-ozzo/ozzo-validation
-3. **protovalidate** - https://github.com/bufbuild/protovalidate
-4. **Go Generics Proposal** - https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md
+1. **go-playground/validator** - <https://github.com/go-playground/validator>
+2. **ozzo-validation** - <https://github.com/go-ozzo/ozzo-validation>
+3. **protovalidate** - <https://github.com/bufbuild/protovalidate>
+4. **Go Generics Proposal** - <https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md>
 
 ### Research Papers
 
@@ -499,9 +506,9 @@ Zero-Trust Validation:
 
 ### Standards
 
-1. **JSON Schema Validation** - https://json-schema.org/
-2. **OpenAPI Specification** - https://spec.openapis.org/
-3. **Protocol Buffers** - https://protobuf.dev/
+1. **JSON Schema Validation** - <https://json-schema.org/>
+2. **OpenAPI Specification** - <https://spec.openapis.org/>
+3. **Protocol Buffers** - <https://protobuf.dev/>
 
 ---
 

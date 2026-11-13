@@ -7,12 +7,14 @@
 ## Context
 
 Queris needs robust connection pooling to handle:
+
 - **High-throughput scenarios** with thousands of concurrent queries
 - **Resource efficiency** to prevent database server overload
 - **Graceful degradation** under load spikes
 - **Observability** into connection health and performance
 
 The choice of connection pooling strategy significantly impacts:
+
 - Query latency (p50, p95, p99)
 - Throughput (queries per second)
 - Resource utilization (memory, connections)
@@ -31,12 +33,14 @@ The choice of connection pooling strategy significantly impacts:
 ### Option A: sqlx::Pool (Built-in)
 
 **Pros**:
+
 - ✅ Integrated with sqlx, no additional dependencies
 - ✅ Automatic connection recycling
 - ✅ Simple API
 - ✅ Cross-runtime support (tokio/async-std)
 
 **Cons**:
+
 - ⚠️ Limited customization options
 - ⚠️ Basic health checking
 - ⚠️ No advanced metrics out of the box
@@ -45,6 +49,7 @@ The choice of connection pooling strategy significantly impacts:
 ### Option B: deadpool (Recommended)
 
 **Pros**:
+
 - ✅ Highly configurable pool management
 - ✅ Per-type connection pools (useful for different DB roles)
 - ✅ Background health checking with configurable intervals
@@ -53,6 +58,7 @@ The choice of connection pooling strategy significantly impacts:
 - ✅ Built-in timeouts and backpressure
 
 **Cons**:
+
 - ⚠️ Additional dependency
 - ⚠️ More configuration required
 - ⚠️ Learning curve for advanced features
@@ -60,12 +66,14 @@ The choice of connection pooling strategy significantly impacts:
 ### Option C: bb8 (TikTok's Pool)
 
 **Pros**:
+
 - ✅ Battle-tested at TikTok scale
 - ✅ Customizable connection validation
 - ✅ Async-friendly design
 - ✅ Good performance characteristics
 
 **Cons**:
+
 - ⚠️ Less active development than deadpool
 - ⚠️ Fewer built-in features
 - ⚠️ Smaller community
@@ -73,11 +81,13 @@ The choice of connection pooling strategy significantly impacts:
 ### Option D: mobc
 
 **Pros**:
+
 - ✅ Inspired by Go's database/sql
 - ✅ Simple and familiar API
 - ✅ Good performance
 
 **Cons**:
+
 - ⚠️ Fewer features than deadpool
 - ⚠️ Less documentation
 - ⚠️ Smaller ecosystem
@@ -192,24 +202,28 @@ impl PoolTier {
 ## Implementation Plan
 
 ### Phase 1: Basic Pooling (Current)
+
 - [ ] deadpool-postgres integration
 - [ ] Basic pool configuration
 - [ ] Connection acquisition and release
 - [ ] Error handling for exhausted pools
 
 ### Phase 2: Health & Monitoring (2026 Q2)
+
 - [ ] Background health checks
 - [ ] Connection lifecycle hooks
 - [ ] Metrics export (prometheus format)
 - [ ] Pool statistics API
 
 ### Phase 3: Advanced Features (2026 Q3)
+
 - [ ] Read replica routing
 - [ ] Statement-level load balancing
 - [ ] Circuit breaker pattern for failed connections
 - [ ] Automatic failover to standby
 
 ### Phase 4: Optimization (2026 Q4)
+
 - [ ] Pool auto-tuning based on workload
 - [ ] Predictive connection warming
 - [ ] Connection multiplexing (HTTP/2 style)
@@ -217,6 +231,7 @@ impl PoolTier {
 ## Consequences
 
 ### Positive
+
 - **High performance** with efficient connection reuse
 - **Reliability** through health checking and automatic recovery
 - **Observability** via comprehensive metrics
@@ -224,11 +239,13 @@ impl PoolTier {
 - **Resource protection** through proper limits and timeouts
 
 ### Negative
+
 - **Configuration complexity** requires tuning for each workload
 - **Connection overhead** at high pool sizes
 - **Dependency on deadpool** which is less ubiquitous than built-in pools
 
 ### Mitigations
+
 - Provide sensible defaults for common workloads
 - Include pool monitoring in the Queris dashboard
 - Document tuning guidelines for different scenarios

@@ -28,14 +28,17 @@ adapters, other runtimes) about where and how security controls are needed.
 ```
 
 **Boundary A** — Caller ↔ Router (dispatch + mailbox):
+
 - Untrusted caller submits `RouterRequest` over the transport
 - Router must validate the request structure before routing
 
 **Boundary B** — Router ↔ Engine (mailbox):
+
 - Router forwards validated `RouterDispatch` to engines
 - Engines return mailbox events (status, errors, artifacts)
 
 **Boundary C** — All parties ↔ Trace/Artifact bus:
+
 - Trace events flow from router and engines to an observability sink
 - Artifacts are structured outputs returned on completion
 

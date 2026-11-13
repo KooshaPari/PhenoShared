@@ -56,6 +56,7 @@ export function createPhenotypeConfig(meta: SiteMeta): DefaultTheme.Config
 ```
 
 **Returns**: Fully configured VitePress config object with:
+
 - Sidebar navigation structure
 - Search configuration
 - Theme settings (dark mode default)
@@ -101,6 +102,7 @@ Projects using the Chassis must provide or configure:
 ```
 
 Install via:
+
 ```bash
 npm install @phenotype/docs
 # or
@@ -285,11 +287,13 @@ date: 2026-03-29
 ### 4.3 Integration Across Repos (3+)
 
 Successful integration must be verified in at least **3 projects**:
+
 1. AgilePlus (canonical reference)
 2. phenotype-shared (test subject)
 3. One additional repo (e.g., thegent or heliosCLI)
 
 For each:
+
 - [ ] @phenotype/docs installed and up-to-date
 - [ ] docs/.vitepress/config.ts uses createPhenotypeConfig()
 - [ ] `npm docs:build` succeeds with no errors
@@ -300,6 +304,7 @@ For each:
 ### 4.4 Specification Metadata
 
 Projects using Chassis must have:
+
 - [ ] `/PRD.md` with epic/story structure
 - [ ] `/FUNCTIONAL_REQUIREMENTS.md` with FR-XXX-NNN IDs
 - [ ] `/docs/reference/FR_TRACKER.md` linking FRs to code
@@ -309,6 +314,7 @@ Projects using Chassis must have:
 ### 4.5 Governance Compliance
 
 Chassis integration verifies:
+
 - [ ] All FRs have corresponding tests
 - [ ] No orphan tests (all tests map to FRs)
 - [ ] Lint/type checks pass (0 errors)
@@ -330,6 +336,7 @@ Chassis integration verifies:
 ### 5.2 Update Strategy
 
 Consumer projects:
+
 1. Update `docs/package.json`: `"@phenotype/docs": "^0.X.0"` (caret = allows MINOR + PATCH)
 2. Run `npm install @phenotype/docs@latest`
 3. Test: `npm docs:build && npm docs:preview`
@@ -340,6 +347,7 @@ The Chassis aims for **backward compatibility** within major versions.
 ### 5.3 Breaking Changes
 
 When a breaking change occurs:
+
 - Update to MAJOR version (e.g., 0.X.0 → 1.0.0)
 - Document migration guide in `@phenotype/docs` CHANGELOG
 - Update all consumer projects in coordinated PR stack
@@ -368,7 +376,6 @@ A: No. Chassis is a documentation + design system. AgilePlus is a separate (but 
 ## Related Docs
 
 - **AgilePlus Governance Chassis**: See `/docs/reference/AGILEPLUS_GOVERNANCE_CHASSIS.md`
-- **VitePress Documentation**: https://vitepress.dev
+- **VitePress Documentation**: <https://vitepress.dev>
 - **Design Tokens Reference**: See `@phenotype/docs` package in monorepo
-- **Impeccable CSS**: https://github.com/pbakaus/impeccable
-
+- **Impeccable CSS**: <https://github.com/pbakaus/impeccable>

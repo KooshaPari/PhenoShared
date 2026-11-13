@@ -72,6 +72,7 @@ This document lists ALL identified duplicate test files with exact LOC counts an
 | legacy_optional_middleware_additional_test.go | `./apps/byteport/backend/api/internal/infrastructure/http/middleware/` | 866 | legacy optional middleware | AUDIT | TBD | `.archive/legacy-tests/` (if deprecated) |
 
 **Decision Required**:
+
 - [ ] Are the corresponding legacy_*.go source files still in active use?
 - [ ] Have they been scheduled for removal?
 - [ ] Should tests be consolidated with modern equivalents instead?

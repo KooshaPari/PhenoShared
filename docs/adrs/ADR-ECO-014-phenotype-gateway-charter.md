@@ -1,6 +1,7 @@
 # ADR-ECO-014: phenotype-gateway domain charter
 
 ## Status
+
 Accepted (2026-06-17)
 
 ## Context

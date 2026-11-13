@@ -5,6 +5,7 @@ This guide documents the Sentry initialization for Phase 1 of the Security & QA 
 ## Overview
 
 Sentry is configured for three Tier 1 projects:
+
 - **AgilePlus** (Rust workspace, 24 crates)
 - **phenotype-infrakit** (Rust workspace)
 - **heliosCLI** (Rust workspace, 18 crates)
@@ -33,16 +34,19 @@ All projects use the Sentry Rust SDK v0.33+ for error capture, performance monit
 DSN tokens are stored as GitHub Secrets in each repository:
 
 **AgilePlus (`<REDACTED>/AgilePlus`)**:
+
 ```
 SENTRY_DSN_AGILEPLUS=https://[key]@o[org-id].ingest.us.sentry.io/[project-id]
 ```
 
 **phenotype-infrakit (`<REDACTED>/phenotype-infrakit`)**:
+
 ```
 SENTRY_DSN_INFRAKIT=https://[key]@o[org-id].ingest.us.sentry.io/[project-id]
 ```
 
 **heliosCLI** (if public repo):
+
 ```
 SENTRY_DSN_HELIOSCLI=https://[key]@o[org-id].ingest.us.sentry.io/[project-id]
 ```
@@ -140,12 +144,14 @@ impl From<Error> for sentry::event::Event<'static> {
 ### Error Capture Patterns
 
 **Pattern 1: Automatic Panic Capture**
+
 ```rust
 // Panics are automatically sent to Sentry via PanicIntegration
 panic!("This error will be captured by Sentry");
 ```
 
 **Pattern 2: Manual Error Capture**
+
 ```rust
 match risky_operation() {
     Ok(result) => println!("Success: {:?}", result),
@@ -158,6 +164,7 @@ match risky_operation() {
 ```
 
 **Pattern 3: With Context Tags**
+
 ```rust
 sentry::with_scope(
     |scope| {
@@ -169,6 +176,7 @@ sentry::with_scope(
 ```
 
 **Pattern 4: Breadcrumbs for Tracing**
+
 ```rust
 sentry::add_breadcrumb(sentry::Breadcrumb {
     category: "db".into(),
@@ -288,6 +296,7 @@ sentry-cli releases deploys -p agileplus v1.0.0 new --url https://agileplus.exam
 ### Local Testing
 
 **Test 1: Trigger Panic**
+
 ```bash
 # Add this to a test file or main.rs
 #[test]
@@ -305,6 +314,7 @@ SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]" cargo test
 ```
 
 **Test 2: Manual Error Capture**
+
 ```rust
 #[tokio::test]
 async fn test_sentry_manual_capture() {
@@ -383,6 +393,7 @@ jobs:
 **Problem**: Error capture not working, DSN not found.
 
 **Solution**:
+
 ```bash
 # Verify environment variable
 echo $SENTRY_DSN
@@ -399,6 +410,7 @@ SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]" cargo run
 **Problem**: Errors triggered locally but not visible in Sentry dashboard.
 
 **Checks**:
+
 1. Verify DSN is correct: `echo $SENTRY_DSN`
 2. Check network connectivity: `curl -I https://o[org-id].ingest.us.sentry.io`
 3. Increase verbosity: `RUST_LOG=sentry=debug cargo run`
@@ -410,6 +422,7 @@ SENTRY_DSN="https://[key]@o[org-id].ingest.us.sentry.io/[project-id]" cargo run
 **Problem**: Traces not appearing in Performance tab.
 
 **Solution**:
+
 ```rust
 // Ensure traces_sample_rate is > 0
 let _guard = sentry::init(sentry::ClientOptions {
@@ -487,11 +500,13 @@ Err("Database connection failed".to_string())
 ## Adding Sentry to a New Crate
 
 1. **Add dependency** to workspace `Cargo.toml`:
+
    ```toml
    sentry = { workspace = true }
    ```
 
 2. **In binary crate** (main.rs):
+
    ```rust
    let _guard = sentry::init(sentry::ClientOptions {
        dsn: std::env::var("SENTRY_DSN").ok(),
@@ -500,12 +515,14 @@ Err("Database connection failed".to_string())
    ```
 
 3. **In library crate** (lib.rs):
+
    ```rust
    // No initialization needed
    // Just use sentry::capture_error(&error) when needed
    ```
 
 4. **Add to tests**:
+
    ```rust
    #[test]
    fn test_error_handling() {
@@ -518,6 +535,7 @@ Err("Database connection failed".to_string())
    ```
 
 5. **Update .env.example**:
+
    ```bash
    # Sentry Configuration
    SENTRY_DSN=https://your-dsn-key@o[org-id].ingest.us.sentry.io/[project-id]
@@ -527,7 +545,7 @@ Err("Database connection failed".to_string())
 
 ### Organization-Level Configuration
 
-**URL**: https://sentry.io/settings/phenotype/
+**URL**: <https://sentry.io/settings/phenotype/>
 
 | Setting | Value | Purpose |
 |---------|-------|---------|
@@ -550,16 +568,19 @@ Organization: phenotype
 ### Alert Rules by Project
 
 **AgilePlus**:
+
 - Alert on: 5+ errors in 5 minutes
 - Notify: #agileplus-alerts (Slack)
 - Create issue: YES
 
 **phenotype-infrakit**:
+
 - Alert on: Any error in production
 - Notify: #infrastructure-alerts (Slack)
 - Create issue: YES
 
 **heliosCLI**:
+
 - Alert on: Unhandled exceptions
 - Notify: #helioscli-alerts (Slack)
 - Create issue: YES
@@ -576,14 +597,15 @@ Organization: phenotype
 
 ## References
 
-- **Sentry Rust SDK**: https://docs.sentry.io/platforms/rust/
-- **Sentry CLI**: https://docs.sentry.io/cli/
-- **Error Reporting Best Practices**: https://docs.sentry.io/product/error-reporting/
-- **Performance Monitoring**: https://docs.sentry.io/product/performance/
+- **Sentry Rust SDK**: <https://docs.sentry.io/platforms/rust/>
+- **Sentry CLI**: <https://docs.sentry.io/cli/>
+- **Error Reporting Best Practices**: <https://docs.sentry.io/product/error-reporting/>
+- **Performance Monitoring**: <https://docs.sentry.io/product/performance/>
 
 ## Summary
 
 This setup provides:
+
 - Real-time error tracking across 3 Tier 1 repos
 - Automatic panic and exception capture
 - GitHub integration for issue creation

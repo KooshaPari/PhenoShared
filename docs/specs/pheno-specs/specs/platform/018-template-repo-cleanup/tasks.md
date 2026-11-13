@@ -6,7 +6,7 @@
 
 ---
 
-## WP-001: Audit All 14 hexagon-* and Hexa* Repos — Identify Duplicates
+## WP-001: Audit All 14 hexagon-*and Hexa* Repos — Identify Duplicates
 
 - **State:** planned
 - **Sequence:** 1
@@ -19,9 +19,10 @@
   - Merge plan for each duplicate pair with conflict resolution strategy
 - **Estimated Effort:** M
 
-Conduct a comprehensive audit of all 14 hexagonal architecture template repositories. Identify duplicate pairs (hexagon-* vs Hexa* for each language), assess their differences, and plan merges. This audit produces the blueprint for WP-002's consolidation work.
+Conduct a comprehensive audit of all 14 hexagonal architecture template repositories. Identify duplicate pairs (hexagon-*vs Hexa* for each language), assess their differences, and plan merges. This audit produces the blueprint for WP-002's consolidation work.
 
 ### Subtasks
+
 - [ ] T001 Clone all 14 hexagonal template repos
 - [ ] T002 Analyze each repo: file structure, dependencies, build tools, configuration
 - [ ] T003 Compare hexagon-rust vs HexaRust: identify differences, recommend merge target
@@ -36,15 +37,17 @@ Conduct a comprehensive audit of all 14 hexagonal architecture template reposito
 - [ ] T012 Create merge plan: order of merges, branch strategy, verification steps
 
 ### Dependencies
+
 - None (starting WP for this spec)
 
 ### Risks & Mitigations
+
 - Hidden differences between duplicates: Deep file-level comparison, not just structure
 - Active projects using old templates: Document all known consumers before merge
 
 ---
 
-## WP-002: Merge hexagon-* + Hexa* Duplicates into Single Template Set
+## WP-002: Merge hexagon-*+ Hexa* Duplicates into Single Template Set
 
 - **State:** planned
 - **Sequence:** 2
@@ -59,9 +62,10 @@ Conduct a comprehensive audit of all 14 hexagonal architecture template reposito
   - All quality checks passing on merged templates
 - **Estimated Effort:** L
 
-Merge each hexagon-* / Hexa* duplicate pair into a single, unified template. The best features from both originals are preserved, conflicts are resolved, and the result is a clean, well-documented template. hexagon-odin is archived, and hexagon-shared content moves to the template generator.
+Merge each hexagon-*/ Hexa* duplicate pair into a single, unified template. The best features from both originals are preserved, conflicts are resolved, and the result is a clean, well-documented template. hexagon-odin is archived, and hexagon-shared content moves to the template generator.
 
 ### Subtasks
+
 - [ ] T013 Merge hexagon-rust + HexaRust → single hexagon-rust template
 - [ ] T014 Merge hexagon-go + HexaGo → single hexagon-go template
 - [ ] T015 Merge hexagon-python + HexaPython → single hexagon-python template
@@ -77,9 +81,11 @@ Merge each hexagon-* / Hexa* duplicate pair into a single, unified template. The
 - [ ] T025 Verify no broken references in active tooling
 
 ### Dependencies
+
 - WP-001 (audit complete, merge plan established)
 
 ### Risks & Mitigations
+
 - Merge conflicts: Careful file-level comparison, preserve all unique functionality
 - Breaking changes for consumers: Migration guides, backward-compatible transition period
 
@@ -101,6 +107,7 @@ Merge each hexagon-* / Hexa* duplicate pair into a single, unified template. The
 Audit all 13 language-specific template repositories, identify which are actively used, and plan consolidation. Inactive language templates are archived, active ones are consolidated, and shared configuration moves to the template generator.
 
 ### Subtasks
+
 - [ ] T026 Clone all 13 template-lang-* repos
 - [ ] T027 Analyze each repo: structure, dependencies, overlap with hexagon templates
 - [ ] T028 Assess active usage: check for projects generated from each template
@@ -112,9 +119,11 @@ Audit all 13 language-specific template repositories, identify which are activel
 - [ ] T034 Create consolidation plan: merge strategy, archival order, verification steps
 
 ### Dependencies
+
 - WP-001 (can start in parallel, but benefits from hexagon audit findings)
 
 ### Risks & Mitigations
+
 - Unknown active usage: Search codebase for template references, check git history
 - Overlap with hexagon templates: Decide whether to merge or keep separate based on use case
 
@@ -137,6 +146,7 @@ Audit all 13 language-specific template repositories, identify which are activel
 Create a single template generator tool that replaces manual template maintenance. The generator supports all template types (hexagonal architecture and language-specific), allows customization through configuration, and validates generated projects. Shared configuration from hexagon-shared and template-lang-commons is migrated into the generator.
 
 ### Subtasks
+
 - [ ] T035 Design generator architecture: template engine, configuration schema, output format
 - [ ] T036 Implement template engine: parse templates, apply variables, generate files
 - [ ] T037 Implement configuration schema: language, architecture, tools, dependencies
@@ -151,10 +161,12 @@ Create a single template generator tool that replaces manual template maintenanc
 - [ ] T046 Run quality checks: `cargo test` / `npm test`, linter, formatter
 
 ### Dependencies
+
 - WP-002 (hexagon-shared content extracted)
 - WP-003 (template-lang-commons content extracted)
 
 ### Risks & Mitigations
+
 - Generator complexity: Start with simple variable substitution, add advanced features incrementally
 - Template validation: Use actual build tools for each language, handle toolchain requirements
 
@@ -177,6 +189,7 @@ Create a single template generator tool that replaces manual template maintenanc
 Document all remaining templates with clear usage guidance, create a template registry, and establish a maintenance process. This is the final deliverable that makes the consolidated template ecosystem discoverable and usable.
 
 ### Subtasks
+
 - [ ] T047 Inventory all remaining templates: merged hexagon, consolidated lang-specific, generator
 - [ ] T048 Document each template: purpose, language, architecture, when to use, getting started
 - [ ] T049 Create template registry: structured index of all templates with metadata
@@ -187,11 +200,13 @@ Document all remaining templates with clear usage guidance, create a template re
 - [ ] T054 Publish template registry (markdown in docs/, or CLI command)
 
 ### Dependencies
+
 - WP-002 (hexagon merges complete)
 - WP-003 (lang template consolidation complete)
 - WP-004 (generator complete)
 
 ### Risks & Mitigations
+
 - Documentation drift: Link docs to actual templates, validate during CI
 - Missed references: Comprehensive search across all repos before finalizing
 

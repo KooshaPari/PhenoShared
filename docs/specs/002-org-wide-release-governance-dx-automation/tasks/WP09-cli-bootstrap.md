@@ -52,9 +52,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 ## Subtasks & Detailed Guidance
 
 ### Subtask T049 – Bootstrap Command Implementation
+
 - **Purpose**: Create the `pheno bootstrap` command with language detection and artifact generation
 - **Steps**:
   1. Create `cmd/bootstrap.go` with Cobra command definition:
+
      ```go
      var bootstrapCmd = &cobra.Command{
          Use:   "bootstrap [flags]",
@@ -71,6 +73,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          rootCmd.AddCommand(bootstrapCmd)
      }
      ```
+
   2. Implement `runBootstrap` function flow:
      - Detect languages in current directory (or use --language override)
      - For each language: generate language-specific templates (see T051–T055)
@@ -98,9 +101,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use `os.Stat` to check if files exist before writing; provide clear error messages; respect existing configurations when possible (merge rather than overwrite)
 
 ### Subtask T050 – Template System with Embedded Files
+
 - **Purpose**: Implement Go template system with embedded template files
 - **Steps**:
   1. Create `internal/templates/templates.go` to manage template loading and rendering:
+
      ```go
      package templates
 
@@ -131,6 +136,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          return buf.String(), err
      }
      ```
+
   2. Create `internal/templates/files/` directory for template files:
      - `files/mise.toml.tpl` (see T051)
      - `files/pre-commit.sh.tpl` (see T052)
@@ -139,25 +145,27 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
      - `files/release.yml.tpl` (see T054)
      - `files/cliff.toml.tpl` (see T055)
   3. Implement template variable substitution:
-    - `\{\{ .RepoName \}\}` → package name or directory name
-    - `\{\{ .Language \}\}` → detected language
-    - `\{\{ .Registry \}\}` → auto-detected or configured (npm, pypi, crates)
-    - `\{\{ .RiskProfile \}\}` → from --risk-profile flag
-    - `\{\{ .Author \}\}` → from git config or env
-    - `\{\{ .Email \}\}` → from git config or env
-  4. Template functions for common operations:
-    - `\{\{ upper .Language \}\}` → uppercase language name
-    - `\{\{ eq .Language "go" \}\}` → conditional rendering per language
-  5. Error handling: wrap template errors with file name and context
+  - `\{\{ .RepoName \}\}` → package name or directory name
+  - `\{\{ .Language \}\}` → detected language
+  - `\{\{ .Registry \}\}` → auto-detected or configured (npm, pypi, crates)
+  - `\{\{ .RiskProfile \}\}` → from --risk-profile flag
+  - `\{\{ .Author \}\}` → from git config or env
+  - `\{\{ .Email \}\}` → from git config or env
+  1. Template functions for common operations:
+  - `\{\{ upper .Language \}\}` → uppercase language name
+  - `\{\{ eq .Language "go" \}\}` → conditional rendering per language
+  1. Error handling: wrap template errors with file name and context
 
 - **Files**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/templates.go`, `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/internal/templates/files/*.tpl`
 - **Parallel?**: No (prerequisite for T051–T055)
 - **Notes**: Use `//go:embed` to embed files at compile time; ensure template files are valid Go templates; test template rendering with sample contexts
 
 ### Subtask T051 – Mise Task Templates
+
 - **Purpose**: Generate language-specific mise task definitions
 - **Steps**:
   1. Create `internal/templates/files/mise.toml.tpl` with common tasks:
+
 <pre v-pre><code class="language-gotemplate">
 {{- if eq .Language "go" }}
 run = "gofmt -w ."
@@ -227,6 +235,7 @@ run = "npm audit --audit-level=moderate || true"
 [tasks."test:integration"]
 description = "Run integration tests"
 </code></pre>
+
 ```
      run = "cargo test --test '*' --release"
 

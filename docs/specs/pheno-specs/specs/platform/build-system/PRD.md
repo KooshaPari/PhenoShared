@@ -13,6 +13,7 @@
 **Goal**: Allow users to define named tasks as Rust functions with macro annotations, forming the fundamental building block of the orchestration system.
 
 **User Stories**:
+
 - E1.1: As a developer, I want to annotate a Rust function with `#[task]` so that forge can discover and invoke it by name.
   - AC: `#[task]` compiles without error on any `fn` with no arguments or context-injectable arguments.
   - AC: Task name defaults to function name; overrideable via `#[task(name = "custom")]`.
@@ -30,6 +31,7 @@
 **Goal**: Build and execute a DAG of tasks in the correct order, detecting cycles at startup.
 
 **User Stories**:
+
 - E2.1: As a developer, I want forge to automatically run all transitive dependencies before my target task so I never manually chain commands.
   - AC: `forge test` with `test` depending on `build` always runs `build` first.
   - AC: Topological sort completes in O(V+E) over the task graph.
@@ -48,6 +50,7 @@
 **Goal**: Provide a clean, ergonomic command-line interface for running, listing, and watching tasks.
 
 **User Stories**:
+
 - E3.1: As a developer, I want to run a task by name (`forge <task>`) so that invocation is intuitive.
   - AC: `forge build` runs the `build` task.
   - AC: Unknown task names exit 1 with "Unknown task: `<name>`" message.
@@ -67,6 +70,7 @@
 **Goal**: Allow tasks and forge settings to be configured via TOML config files in addition to Rust macros.
 
 **User Stories**:
+
 - E4.1: As a project maintainer, I want to define task metadata (name, description, environment variables) in a `forge.toml` file so non-Rust contributors can understand the build system.
   - AC: `forge.toml` is loaded from the current working directory.
   - AC: TOML parsing uses the `toml = "0.8"` crate with strongly-typed structs.
@@ -83,6 +87,7 @@
 **Goal**: Instrument task execution with tracing, logging, and metrics for developer observability and integration with the broader Phenotype ecosystem.
 
 **User Stories**:
+
 - E5.1: As a platform engineer, I want task execution spans to be emitted via OpenTelemetry so long build pipelines are traceable.
   - AC: Each task invocation creates a child span with task name and status attributes.
   - AC: Tracing is provided via `helix-tracing` (phenotype-tracing) path dependency.

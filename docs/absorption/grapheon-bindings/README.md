@@ -32,9 +32,9 @@ current client path).
 ## Verification
 
 ```sh
-$ go build ./packages/graphclient/pkg/client/  # silent = success
-$ go vet ./packages/graphclient/...            # silent = clean
-$ go work use ./packages/graphclient           # registered
+go build ./packages/graphclient/pkg/client/  # silent = success
+go vet ./packages/graphclient/...            # silent = clean
+go work use ./packages/graphclient           # registered
 ```
 
 Build & vet pass. Future work: add a smoke test against a running

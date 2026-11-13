@@ -9,6 +9,7 @@
 ## Executive Summary
 
 This plan addresses the critical findings from the comprehensive duplication audit:
+
 - **1,650+ LOC** of unused library code
 - **~189 LOC** of duplicated error types (12 types)
 - **2,106 LOC** of port/trait architecture split
@@ -128,6 +129,7 @@ pub enum DomainError {
 #### Step 4: Migrate crates (8 hours)
 
 Per crate migration:
+
 1. Add `error-core` dependency
 2. Replace local error variants with imports
 3. Add `#[from]` derives
@@ -213,6 +215,7 @@ impl HttpClient {
 ### 5.1 Evaluate config-rs
 
 **Decision Criteria:**
+
 - Does it support TOML, YAML, JSON?
 - Does it support env var overrides?
 - Does it support validation?
@@ -234,17 +237,19 @@ If `config-rs` is not adopted:
 
 ### config-rs
 
-**URL:** https://crates.io/crates/config
+**URL:** <https://crates.io/crates/config>
 **Downloads:** 40M+
 **Purpose:** Configuration management
 
 **Pros:**
+
 - Multi-source (env, files, args)
 - Nested configuration
 - Schema validation
 - Well-maintained
 
 **Cons:**
+
 - Additional dependency
 - May not fit all use cases
 
@@ -252,16 +257,18 @@ If `config-rs` is not adopted:
 
 ### eventually
 
-**URL:** https://crates.io/crates/eventually
+**URL:** <https://crates.io/crates/eventually>
 **Stars:** ~500
 **Purpose:** Event sourcing framework
 
 **Pros:**
+
 - Standardized Aggregate/Repository traits
 - EventStore pattern
 - Command handling
 
 **Cons:**
+
 - Learning curve
 - May not fit all ES patterns
 
@@ -269,15 +276,17 @@ If `config-rs` is not adopted:
 
 ### anthropic
 
-**URL:** https://crates.io/crates/anthropic
+**URL:** <https://crates.io/crates/anthropic>
 **Purpose:** Claude SDK
 
 **Pros:**
+
 - First-class Claude support
 - Token counting
 - Tool use
 
 **Cons:**
+
 - New crate, may be unstable
 
 **Recommendation:** Evaluate for Week 6

@@ -14,6 +14,7 @@ All 4 PRs have been refined with code and workflow fixes. CI is now running with
 ## PR Status Summary
 
 ### 1. cliproxyapi-plusplus PR #945
+
 **Branch:** `cliproxyapi-plusplus/chore/pr942-import-surface-fix`
 
 | Fix Applied | Status |
@@ -29,6 +30,7 @@ All 4 PRs have been refined with code and workflow fixes. CI is now running with
 ---
 
 ### 2. phenotype-infrakit PR #594
+
 **Branch:** `feat/workspace-main-sync`
 
 | Fix Applied | Status |
@@ -40,12 +42,14 @@ All 4 PRs have been refined with code and workflow fixes. CI is now running with
 
 **CI Run:** 23923325... (in progress)  
 **Previous Issues:**
+
 - `error: could not find 'Cargo.toml'` → Fixed by force-adding
 - `./scripts/quality-gate.sh: No such file` → Created script
 
 ---
 
 ### 3. thegent PR #917
+
 **Branch:** `thegent/chore/policy-gate-fix`
 
 | Fix Applied | Status |
@@ -57,6 +61,7 @@ All 4 PRs have been refined with code and workflow fixes. CI is now running with
 ---
 
 ### 4. phenotype-infrakit PR #593
+
 **Branch:** `feat/crypto-and-ports-canonical`
 
 **Status:** Crypto crate and ports-canonical crate were implemented earlier. No new changes needed.
@@ -90,12 +95,15 @@ All 4 PRs have been refined with code and workflow fixes. CI is now running with
 ## Commits Created
 
 ### cliproxyapi-plusplus
+
 1. `1ff2028b` - fix(auth): restore vertex auth package stub
 
 ### phenotype-infrakit  
+
 1. `f1a9a9e060` - ci: add Cargo.toml, quality-gate.sh, and fix CI infrastructure
 
 ### thegent
+
 1. `cf4bdcf03` - ci: fix Semgrep SARIF (needs push)
 
 ---
@@ -103,10 +111,12 @@ All 4 PRs have been refined with code and workflow fixes. CI is now running with
 ## Files Modified/Created
 
 ### cliproxyapi-plusplus
+
 - `.github/workflows/ci.yml` (Go caching)
 - `pkg/llmproxy/auth/vertex/vertex.go` (created)
 
 ### phenotype-infrakit
+
 - `Cargo.toml` (force-added)
 - `scripts/quality-gate.sh` (created)
 - `.github/workflows/sast.yml` (CodeQL fix)
@@ -114,6 +124,7 @@ All 4 PRs have been refined with code and workflow fixes. CI is now running with
 - `.github/workflows/sast-full.yml` (Semgrep fix)
 
 ### thegent
+
 - `.github/workflows/security.yml` (Semgrep SARIF fix)
 
 ---

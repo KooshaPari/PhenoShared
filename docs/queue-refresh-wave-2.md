@@ -4,6 +4,7 @@ This queue refreshes the 10-deep absorption pipeline after the previous
 wave (v1.5.5 → v1.6.6) successfully absorbed 14 repos:
 
 **Previous wave (DONE):**
+
 1. `phenotype-router-spec` → `phenotype-registry` (docs/specs/)
 2. `pheno-context` → `pheno` (crates/pheno-context)
 3. `phenoResearchEngine` → `phenoAI` (airlock daemon)

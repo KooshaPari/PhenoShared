@@ -117,6 +117,7 @@ The "2026-06-20 audit correction" section below claimed phenoShared was "active 
 based on a `gh repo view` result that cached stale local data.
 
 **Verified state via GitHub API (2026-06-20, post-merge verification):**
+
 - `gh api repos/<REDACTED>/phenoShared` → **HTTP 404 Not Found**
 - `gh search repos phenoShared org:<REDACTED>` → **0 results**
 - The repo does not exist on GitHub — it was hard-deleted.
@@ -124,11 +125,13 @@ based on a `gh repo view` result that cached stale local data.
 The decompose is complete; repo 404 confirmed; gate is effectively done.
 
 **Registry state on origin/main is correct:**
+
 - `repo-phenoshared` note: "repo 404 post-absorption" — accurate
 - `gate-phenoshared` fsm: "done", note: "repo deleted (404)" — accurate
 - No further action needed on phenoShared.
 
 **New rows added to disposition-index.json via follow-up PR:**
+
 - `absorb-authvault`, `absorb-httpora`, `id59` (Tracely), `id60` (ObservabilityKit),
   `id61` (pheno-ci-templates), `phenotype-sdk`, `gw-pheno-flags`
 
@@ -141,6 +144,7 @@ The decompose is complete; repo 404 confirmed; gate is effectively done.
 The "Post-delete audit correction" section above claimed phenoShared was "restored as archived" (`isArchived: true`). This was also **false**.
 
 **Verified state (2026-06-20):**
+
 - `gh repo view <REDACTED>/phenoShared --json isArchived` → `{"isArchived": false}`
 - Last updated: `2026-06-20T08:23:53Z` (today)
 - Remote branches: 70 (active development, including `feat/l5-116-fu6-drift-check-reusable-2026-06-20` created today)
@@ -156,6 +160,7 @@ Updated state table:
 ~~Per BOUNDARY_OWNERS.md / ADR-ECO-014: no further delete action on phenoShared without explicit user sign-off and proof that the repo is archived (not just dep-free).~~
 
 **Disposition-index corrections (2026-06-20):**
+
 - `repo-phenoshared` note corrected: removed "repo404" language
 - `gate-phenoshared`: `fsm: done` → `fsm: hold`; note corrected to reflect active state
 - `id61 pheno-ci-templates`: removed "phenoShared is tombstoned" reference

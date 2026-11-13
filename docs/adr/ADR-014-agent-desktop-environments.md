@@ -7,6 +7,7 @@ Proposed
 ## Context
 
 NanoVMS needs to support AI agents that perform computer use:
+
 - Desktop environments (browser, file management)
 - Virtual displays (headless X11/Wayland)
 - Screen capture and input simulation
@@ -746,12 +747,14 @@ func (x *X11Bridge) Scroll(ctx context.Context, xPos, yPos int, deltaY int) erro
 ### Consequences
 
 ### Positive
+
 - Standardized computer use API for AI agents
 - Isolated agent environments (one VM per agent)
 - VNC/X11 provides universal display access
 - Pre-warmed pool reduces latency
 
 ### Negative
+
 - High resource usage per agent (4-8GB RAM)
 - VNC latency may affect pixel-accurate tasks
 - Browser automation limited to installed browsers

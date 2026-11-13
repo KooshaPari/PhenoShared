@@ -16,12 +16,14 @@ PhenoSDK manages credentials across a multi-tenant platform with complex organiz
 - **Project**: Atomic work units with isolated resources
 
 Requirements:
+
 1. Credentials must be isolated by scope to prevent leakage
 2. Permission inheritance should reduce configuration overhead
 3. Scope resolution must be fast (<10ms target)
 4. Support for 100,000+ total credentials across all scopes
 
 Alternative scoping models:
+
 1. **Flat namespacing**: Simple but no inheritance
 2. **RBAC only**: Flexible but complex to manage
 3. **Attribute-based (ABAC)**: Powerful but performance concerns
@@ -382,16 +384,19 @@ class PermissionEngine:
 ### Alternative 1: Flat Namespacing
 
 **Design:**
+
 ```
 credentials://{namespace}/{key}
 ```
 
 **Pros:**
+
 - Simple implementation
 - Fast lookups
 - Easy to understand
 
 **Cons:**
+
 - No inheritance
 - Manual permission management
 - Doesn't match organizational structure
@@ -402,17 +407,20 @@ credentials://{namespace}/{key}
 ### Alternative 2: Pure RBAC (Role-Based Access Control)
 
 **Design:**
+
 ```
 roles: ["admin", "developer", "viewer"]
 permissions: [{role, resource, action}]
 ```
 
 **Pros:**
+
 - Flexible
 - Industry standard
 - Fine-grained control
 
 **Cons:**
+
 - Complex to configure
 - Performance overhead
 - Doesn't map to organizational hierarchy
@@ -423,6 +431,7 @@ permissions: [{role, resource, action}]
 ### Alternative 3: Attribute-Based Access Control (ABAC)
 
 **Design:**
+
 ```
 policies: [
   {if: "user.dept == resource.dept", then: "allow"}
@@ -430,11 +439,13 @@ policies: [
 ```
 
 **Pros:**
+
 - Very flexible
 - Dynamic evaluation
 - Context-aware
 
 **Cons:**
+
 - Performance concerns (evaluation cost)
 - Complex policy debugging
 - Overkill for most use cases

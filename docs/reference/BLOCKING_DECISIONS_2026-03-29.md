@@ -11,12 +11,14 @@
 **Question**: Are these new shared modules or temporary/experimental directories?
 
 **Current State**:
+
 - Located in canonical `repos/phenotype-infrakit/packages/`
 - Three packages exist: pheno-core, pheno-llm, pheno-resilience
 - Mentioned in memory as potential shared extraction targets
 - No releases, no published packages yet
 
 **Implications**:
+
 - **If shared**: Need to publish to GitHub Packages, add to @phenotype scope, document interfaces
 - **If temporary**: Should be moved to `.archive/`, worktree, or deleted
 - **If forked**: Need to determine upstream and sync strategy
@@ -30,12 +32,14 @@
 **Question**: Intentional upstream sync or accidental checkin?
 
 **Current State**:
+
 - Repository is **archived** (read-only on GitHub)
 - 2,524 uncommitted changes on main
 - Cannot push or merge PRs to archived repo
 - Was part of fork strategy (vibeproxy, zen, aizen, vibe-kanban, ccusage)
 
 **Implications**:
+
 - **If intentional**: Must unarchive repo + merge changes as PR + push
 - **If accidental**: Should reset to last good commit
 - **If obsolete**: Archive intentional; clean up local changes and forget
@@ -49,12 +53,14 @@
 **Question**: Keep (merge as PR) or discard (reset)?
 
 **Current State**:
+
 - Local worktree branch with 386 commits ahead of main
 - Likely WIP from previous agent sessions
 - Unsynced with upstream zen-mcp-server fork
 - No active PR
 
 **Implications**:
+
 - **If keep**: Create PR, review changes, merge to main + push
 - **If discard**: `git reset --hard origin/main` to clean state
 - **If archive**: Move to `.archive/zen-wtrees-backup` with git-bundle for history recovery
@@ -68,12 +74,14 @@
 **Question**: Active ongoing work or historical cleanup?
 
 **Current State**:
+
 - Embedded in `.archive/` directory
 - Contains git repositories (embedded, not submodules)
 - Not in main worktree
 - Unknown usage
 
 **Implications**:
+
 - **If active**: Extract to separate repo + manage properly
 - **If historical**: Document the archive intent and verify no missing dependencies
 - **If data loss risk**: Create backups + export as git-bundles
@@ -87,6 +95,7 @@
 **Question**: Approve Hybrid Epoch+SemVer strategy?
 
 **Proposed Strategy** (from ab81250 agent):
+
 - **Manifest versioning**: `YYYY.QN.PATCH` (e.g., `v2026.03A.0` for Q1 2026)
 - **Crate/package versioning**: Independent SemVer per package (e.g., phenotype-shared@1.5.0)
 - **Release channels**: alpha, beta, stable branches
@@ -103,6 +112,7 @@
 **Question**: Which pattern(s) to adopt first?
 
 **Options**:
+
 - **Option A** (Foundation First): Chassis + Intent-Driven Registry
 - **Option B** (UI First): Module Federation + Health Monitoring
 - **Option C** (Incremental): Sidecar pattern for auth/logging consistency
@@ -124,6 +134,7 @@
 ✅ **Worklogs Consolidation**: Merged to main (a26fb98)
 
 **Remaining PRs to Merge**:
+
 - phenotype-shared, phenotype-nexus, phenotype-gauge, cliproxyapi-plusplus, ccusage, aizen, heliosCLI
 - Expect 10-15 more PRs from governance audit
 
@@ -142,6 +153,7 @@
 ## Timeline Estimate
 
 Once user provides input on blocking decisions:
+
 - Resolve zen-wtrees, vibe-kanban, phenoSDK, 4sgm: 1-2 hours (cleanup agents)
 - Merge pending PRs: 30 minutes (gh pr merge automation)
 - Implement Phase 1 (Chassis): 4-6 hours (documentation + interface design)
@@ -157,4 +169,3 @@ Once user provides input on blocking decisions:
 - `docs/reference/ARCHITECTURAL_PATTERNS_APPLICATION.md` — Complete pattern analysis
 - `VERSIONING_STRATEGY_SUMMARY.md` — Versioning details
 - Original audit reports from agents a36c97c, a617f74, a36a7aa
-

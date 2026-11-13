@@ -19,6 +19,7 @@ Remove all JetStream workflow/queue consumers and durable stream configurations 
 ## Context
 
 Before this WP, NATS is still running JetStream consumers that handle:
+
 - `agent.dispatch` queue group
 - `ci.pipeline.trigger` durable consumer
 - `data.sync.run` durable consumer

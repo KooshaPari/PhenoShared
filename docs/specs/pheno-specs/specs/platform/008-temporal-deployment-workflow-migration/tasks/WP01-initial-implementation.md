@@ -11,12 +11,15 @@ created_at: 2026-04-02T00:00:00Z
 # Work Package: Initial Implementation
 
 ## Feature
+
  (`008-temporal-deployment-workflow-migration`)
 
 ## Acceptance Criteria
+
 - Implement the feature as specified.
 
 ## File Scope
+
 - `/`
 - `CI/data`
 - `Log/event`
@@ -37,6 +40,7 @@ created_at: 2026-04-02T00:00:00Z
 - `workflow/queue`
 
 ## Instructions
+
 Implement this work package according to the acceptance criteria above.
 Refer to `kitty-specs/008-temporal-deployment-workflow-migration/spec.md` for the full specification and
 `kitty-specs/008-temporal-deployment-workflow-migration/plan.md` for the implementation plan.

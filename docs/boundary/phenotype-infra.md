@@ -84,6 +84,7 @@ L20 (devcontainer absent), L21 (SBOM absent).
 **Reviewer:** forge session (Phase 1 of `plans/2026-06-22-compute-infra-dag-v1.md`)
 **Worklog / finding:** `phenotype-infra/worklog/2026-06-23-71-pillar-scorecard.md` + `infra-research/worklog/2026-06-23-compute-infra-phase1.md`
 **Decisions:**
+
 - PI-001..007 (path-dep fix, in-workspace stub) MERGED (commit `b53bbe3`)
 - PI-080 (CI workflow) MERGED (commit `3fc0e1f`)
 - PC-001 (PhenoCompose dead cuda feature) MERGED

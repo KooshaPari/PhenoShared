@@ -118,6 +118,7 @@ the spec. Each scenario name includes the FR ID for traceability.
 **Implementation Steps**:
 
 1. Create `specify.feature`:
+
    ```gherkin
    Feature: Specification workflow
      As a developer using AgilePlus
@@ -150,6 +151,7 @@ the spec. Each scenario name includes the FR ID for traceability.
    ```
 
 2. Create `implement.feature`:
+
    ```gherkin
    Feature: Implementation workflow
      As a developer using AgilePlus
@@ -186,6 +188,7 @@ the spec. Each scenario name includes the FR ID for traceability.
    ```
 
 3. Create `governance.feature`:
+
    ```gherkin
    Feature: Governance enforcement
      As a project with quality standards
@@ -220,6 +223,7 @@ the spec. Each scenario name includes the FR ID for traceability.
    ```
 
 4. Create `audit.feature`:
+
    ```gherkin
    Feature: Audit trail integrity
      As an auditor
@@ -260,6 +264,7 @@ the actual domain layer and CLI commands using mock adapters.
 **Implementation Steps**:
 
 1. Set up the cucumber-rs test runner:
+
    ```rust
    // tests/bdd/main.rs
    use cucumber::World;
@@ -285,6 +290,7 @@ the actual domain layer and CLI commands using mock adapters.
    ```
 
 2. Implement Given steps for setting up test state:
+
    ```rust
    #[given(regex = r#"a fresh AgilePlus project with no features"#)]
    async fn fresh_project(world: &mut AgilePlusWorld) {
@@ -315,6 +321,7 @@ the actual domain layer and CLI commands using mock adapters.
    ```
 
 3. Implement When steps for executing commands:
+
    ```rust
    #[when(regex = r#"I run "agileplus specify" with feature slug "([^"]*)""#)]
    async fn run_specify(world: &mut AgilePlusWorld, slug: String) {
@@ -340,6 +347,7 @@ the actual domain layer and CLI commands using mock adapters.
    ```
 
 4. Implement Then steps for assertions:
+
    ```rust
    #[then(regex = r#"the feature "([^"]*)" exists in SQLite with state "([^"]*)""#)]
    async fn feature_exists_with_state(world: &mut AgilePlusWorld, slug: String, state: String) {
@@ -362,6 +370,7 @@ the actual domain layer and CLI commands using mock adapters.
    ```
 
 5. Add the BDD test target to `Cargo.toml`:
+
    ```toml
    [[test]]
    name = "bdd"
@@ -386,6 +395,7 @@ against the MCP tools and gRPC client.
 **Implementation Steps**:
 
 1. Set up the behave environment:
+
    ```python
    # mcp/tests/bdd/environment.py
    import asyncio
@@ -404,6 +414,7 @@ against the MCP tools and gRPC client.
    ```
 
 2. Implement Given steps:
+
    ```python
    # mcp/tests/bdd/steps/given_steps.py
    from behave import given
@@ -420,6 +431,7 @@ against the MCP tools and gRPC client.
    ```
 
 3. Implement When steps that call MCP tools through the mock gRPC client:
+
    ```python
    # mcp/tests/bdd/steps/when_steps.py
    from behave import when
@@ -441,6 +453,7 @@ against the MCP tools and gRPC client.
    ```
 
 4. Implement Then steps:
+
    ```python
    # mcp/tests/bdd/steps/then_steps.py
    from behave import then
@@ -456,6 +469,7 @@ against the MCP tools and gRPC client.
    ```
 
 5. Symlink the shared `.feature` files:
+
    ```bash
    ln -s ../../../../tests/bdd/features mcp/tests/bdd/features
    ```
@@ -480,6 +494,7 @@ and Python gRPC consumer agree on message formats.
 **Implementation Steps**:
 
 1. Create the Python consumer pact definitions:
+
    ```python
    # mcp/tests/contract/test_agileplus_pact.py
    import pytest
@@ -538,6 +553,7 @@ and Python gRPC consumer agree on message formats.
    ```
 
 2. Create the Rust provider verification:
+
    ```rust
    // tests/contract/pact_provider_test.rs
    use pact_verifier::*;
@@ -565,6 +581,7 @@ and Python gRPC consumer agree on message formats.
    the Rust provider.
 
 5. Add to Makefile:
+
    ```makefile
    test-contracts:
        cd mcp && uv run pytest tests/contract/ -v
@@ -586,6 +603,7 @@ stack for integration testing.
 **Implementation Steps**:
 
 1. Define the compose file:
+
    ```yaml
    version: "3.9"
    services:
@@ -648,6 +666,7 @@ stack for integration testing.
 2. Create `Dockerfile.test` that includes both Rust and Python test tooling.
 
 3. Create a test initialization script that sets up the test git repository:
+
    ```bash
    #!/bin/bash
    # tests/integration/setup-test-repo.sh
@@ -659,6 +678,7 @@ stack for integration testing.
    ```
 
 4. Add Makefile targets:
+
    ```makefile
    test-integration:
        docker compose -f tests/integration/docker-compose.test.yml up --build --abort-on-container-exit
@@ -671,6 +691,7 @@ stack for integration testing.
    ```
 
 5. Add Docker Compose profiles for partial testing:
+
    ```yaml
    services:
      agileplus-mcp:
@@ -678,6 +699,7 @@ stack for integration testing.
      test-runner:
        profiles: ["full", "test"]
    ```
+
    This allows `docker compose --profile mcp up` to test just the MCP service.
 
 **Testing**: Verify `docker compose config` validates the compose file. Run `docker compose
@@ -688,6 +710,7 @@ up` and verify all services start and health checks pass.
 ### T096: Implement Integration Test Scenarios — Full Workflow
 
 **Files**:
+
 - `tests/integration/test_full_workflow.rs`
 - `mcp/tests/integration/test_full_workflow.py`
 
@@ -697,6 +720,7 @@ test repository, verifying all commands work together.
 **Implementation Steps**:
 
 1. Implement the Rust integration test:
+
    ```rust
    // tests/integration/test_full_workflow.rs
    #[tokio::test]
@@ -774,6 +798,7 @@ test repository, verifying all commands work together.
    ```
 
 2. Implement a Python integration test that exercises the MCP tools:
+
    ```python
    # mcp/tests/integration/test_mcp_workflow.py
    import pytest
@@ -827,6 +852,7 @@ use as input.
    A minimal plan with 2-3 work packages, file scopes, and dependency declarations.
 
 3. Create `tests/fixtures/sample-governance.json`:
+
    ```json
    {
      "version": 1,
@@ -843,13 +869,16 @@ use as input.
    ```
 
 4. Create `tests/fixtures/sample-audit-chain.jsonl`:
+
    ```jsonl
    {"id":1,"feature_id":1,"timestamp":"2026-01-01T00:00:00Z","actor":"user","transition":"created -> specified","evidence_refs":[],"prev_hash":"0000000000000000000000000000000000000000000000000000000000000000","hash":"a1b2c3..."}
    {"id":2,"feature_id":1,"timestamp":"2026-01-01T01:00:00Z","actor":"user","transition":"specified -> researched","evidence_refs":[],"prev_hash":"a1b2c3...","hash":"d4e5f6..."}
    ```
+
    Compute real SHA-256 hashes so the chain is actually valid and can be verified.
 
 5. Create `tests/fixtures/sample-evidence/`:
+
    ```
    tests/fixtures/sample-evidence/
    ├── WP01/
@@ -860,6 +889,7 @@ use as input.
    ```
 
 6. Create `tests/fixtures/sample-meta.json`:
+
    ```json
    {
      "slug": "test-feature",
@@ -873,6 +903,7 @@ use as input.
 
 7. Create a Rust helper module `tests/fixtures/mod.rs` (or `tests/test_helpers.rs`) that
    loads fixtures:
+
    ```rust
    pub fn load_fixture(name: &str) -> String {
        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -949,6 +980,7 @@ use as input.
 | Timestamp | Event |
 |-----------|-------|
 | 2026-02-27T00:00:00Z | WP16 prompt generated via /spec-kitty.tasks |
+
 - 2026-03-02T02:17:36Z – s1-wp16 – shell_pid=65013 – lane=doing – Assigned agent via workflow command
 - 2026-03-02T02:40:46Z – s1-wp16 – shell_pid=65013 – lane=for_review – Ready: BDD tests and integration suite
 - 2026-03-02T02:41:16Z – s1-wp16 – shell_pid=65013 – lane=done – BDD acceptance tests and integration suite complete

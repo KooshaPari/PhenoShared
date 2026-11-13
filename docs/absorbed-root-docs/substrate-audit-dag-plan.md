@@ -35,6 +35,7 @@ The path from **57.8 → 100** is mechanical but volume-heavy. Estimated effort:
 ## 2. Rubric
 
 **Grading scale (per pillar):**
+
 - **Satisfied** — implemented, verifiable, no caveats
 - **Partial** — implemented but with known caveats (env-gated, partial coverage,
   warn-only, partial enforcement)
@@ -86,6 +87,7 @@ DAG edges: each Phase 0 item blocks several Phase 1 / Phase 2 items.
 | **P0.6** | Foundational ADRs (5) | `docs/adr/0002..0006` | 2h | ARCH-06, DOC-06 |
 
 **Phase 0 exit criteria:**
+
 - `cargo deny check` passes locally with the new config
 - CI fails when a deny violation is introduced
 - `docs/adr/` contains 6 accepted ADRs
@@ -117,6 +119,7 @@ DAG edges: each Phase 0 item blocks several Phase 1 / Phase 2 items.
 | **P1.8** | `.editorconfig` + `.pre-commit-config.yaml` (or `lefthook.yml`) | DX-04, DX-06 | 0.5d |
 
 **Phase 1 exit criteria:**
+
 - `cargo fuzz run http_body -- -runs=1000000` finds no crash for 10 min
 - `cargo llvm-cov report` shows ≥ 70% line coverage
 - `/metrics` returns Prometheus text, request-id appears in every log line
@@ -135,6 +138,7 @@ DAG edges: each Phase 0 item blocks several Phase 1 / Phase 2 items.
 | **P2.8** | `docs/TROUBLESHOOTING.md` + `docs/GLOSSARY.md` + `docs/FAQ.md` | DOC-13, DOC-15, DOC-16 | 0.5d |
 
 **Phase 2 exit criteria:**
+
 - `gh release download v0.3.0` produces `attestation.intoto.jsonl` (SLSA provenance)
 - `cyclonedx-bom.json` regenerates fresh on every release tag
 
@@ -155,6 +159,7 @@ P0.5 ── P1.4 ── P2.7 ── P3 long-tail
 ```
 
 **Slip-prone items:**
+
 - P1.5 (fuzz) — finds infinite-parser bugs which take longer than estimated
 - P2.2 (SLSA) — Rust SLSA generator config is fragile
 - P1.3 (OTel) — context propagation across `axum` → `tokio::spawn` is non-trivial

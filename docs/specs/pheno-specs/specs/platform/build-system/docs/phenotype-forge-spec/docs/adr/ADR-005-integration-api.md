@@ -43,6 +43,7 @@ We have decided to adopt a **multi-protocol integration strategy** with the foll
 ### API Architecture
 
 **Primary API: RESTful HTTP**
+
 - Standard HTTP methods (GET, POST, PUT, PATCH, DELETE)
 - Resource-oriented URL design
 - JSON request/response bodies
@@ -50,12 +51,14 @@ We have decided to adopt a **multi-protocol integration strategy** with the foll
 - OAuth 2.0 / JWT authentication
 
 **Secondary API: gRPC**
+
 - High-performance internal service communication
 - Strongly typed contracts via Protocol Buffers
 - Bi-directional streaming support
 - Service mesh integration
 
 **Event Interface: Async Messaging**
+
 - Event-driven communication for decoupled operations
 - At-least-once delivery guarantees
 - Schema evolution support
@@ -64,11 +67,13 @@ We have decided to adopt a **multi-protocol integration strategy** with the foll
 ### API Design Standards
 
 #### URL Structure
+
 ```
 /api/v1/{resource}/{id}/{sub-resource}
 ```
 
 Examples:
+
 - `GET /api/v1/users` — List users
 - `GET /api/v1/users/123` — Get specific user
 - `POST /api/v1/users` — Create user
@@ -78,6 +83,7 @@ Examples:
 #### Response Envelope
 
 Success:
+
 ```json
 {
   "data": { ... },
@@ -89,6 +95,7 @@ Success:
 ```
 
 Collection:
+
 ```json
 {
   "data": [ ... ],
@@ -234,4 +241,3 @@ Collection:
 | $(date +%Y-%m-%d) | Initial API design | API Design Team |
 | $(date +%Y-%m-%d) | Added gRPC specification | Platform Team |
 | $(date +%Y-%m-%d) | Accepted | Tech Lead |
-

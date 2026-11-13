@@ -12,6 +12,7 @@
 The **Auto-Merge Service** automatically merges clean specification branches (`specs/agent-*`) into the authoritative `specs/main` branch. It eliminates manual merge overhead while maintaining 100% traceability and zero conflicts.
 
 **Key Properties:**
+
 - **Batch processing:** Merge up to 50 concurrent branches every 5 minutes
 - **Conflict handling:** Automatic GitHub issues for manual review
 - **Validation gating:** Only validated specs merge

@@ -53,6 +53,7 @@ struct TaskSignature {
 | Blake3 | 2x | Very High | General purpose |
 
 xxHash3-128 provides:
+
 - **Speed**: ~8x faster than SHA-256
 - **Low collision probability**: 2^-128 for random inputs
 - **Streamable**: Process large files incrementally
@@ -61,6 +62,7 @@ xxHash3-128 provides:
 ### Why Not SHA-256
 
 SHA-256 is cryptographically secure but:
+
 - 3x slower than xxHash
 - Unnecessary for non-adversarial build caching
 - Bazel's default but with optional xxHash support
@@ -68,6 +70,7 @@ SHA-256 is cryptographically secure but:
 ### Why Not Timestamps
 
 Make-style timestamp comparison:
+
 - Faster than hashing (<1ms vs 10ms)
 - But fails with:
   - Clock skew across machines
@@ -100,6 +103,7 @@ Make-style timestamp comparison:
 | L3 | Team sharing | 50-200ms | Permanent |
 
 Benefits:
+
 1. **Fast local iteration**: L1/L2 for solo development
 2. **CI acceleration**: L3 shared across builds
 3. **Offline support**: L2 works without network
@@ -324,11 +328,11 @@ concurrent_uploads = 4
 
 ## References
 
-- xxHash: https://github.com/Cyan4973/xxHash
-- xxHash Rust: https://github.com/DoumanAsh/xxhash-rust
-- Bazel Remote Cache: https://bazel.build/remote/caching
-- Content-Defined Chunking: https://en.wikipedia.org/wiki/Rolling_hash
-- S3 Performance: https://docs.aws.amazon.com/whitepapers/latest/s3-optimizing-performance-best-practices/welcome.html
+- xxHash: <https://github.com/Cyan4973/xxHash>
+- xxHash Rust: <https://github.com/DoumanAsh/xxhash-rust>
+- Bazel Remote Cache: <https://bazel.build/remote/caching>
+- Content-Defined Chunking: <https://en.wikipedia.org/wiki/Rolling_hash>
+- S3 Performance: <https://docs.aws.amazon.com/whitepapers/latest/s3-optimizing-performance-best-practices/welcome.html>
 
 ## Changelog
 

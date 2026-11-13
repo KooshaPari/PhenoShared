@@ -22,12 +22,14 @@ PhenoSpecs is the unified specification registry for the Phenotype ecosystem —
 ## Phase Details
 
 ### Phase 1: Registry Structure
+
 - Repository structure (specs/, adrs/, openapi/)
 - registry.yaml format
 - SPEC.md template
 - ADR template
 
 ### Phase 2: Spec Templates
+
 - kitty-spec format alignment
 - spec.md structure
 - frd.md (functional requirements)
@@ -35,24 +37,28 @@ PhenoSpecs is the unified specification registry for the Phenotype ecosystem —
 - Integration with AgilePlus
 
 ### Phase 3: OpenAPI Contracts
+
 - User service API
 - Auth service API
 - Core service APIs
 - Schema validation
 
 ### Phase 4: ADR Archive
+
 - MADR format adoption
 - Architecture decision records
 - Decision rationale documentation
 - Supersedence tracking
 
 ### Phase 5: Traceability
+
 - spec-links CLI tool
 - Code annotation formats
 - FR → code traceability
 - Coverage reports
 
 ### Phase 6: CI/CD
+
 - PR validation
 - Link checking
 - Schema validation

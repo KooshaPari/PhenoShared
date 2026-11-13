@@ -109,6 +109,7 @@ Format: `<type>/<pipeline>/<description>`
 Types: `feat`, `fix`, `model`, `source`, `test`
 
 Examples:
+
 - `feat/users/add-dimension-table`
 - `fix/orders/correct-revenue-calc`
 - `model/analytics/add-funnel-metrics`
@@ -118,6 +119,7 @@ Examples:
 Format: `<type>(<scope>): <description>`
 
 Examples:
+
 - `feat(models): add user activity mart`
 - `fix(sources): correct API pagination`
 - `test(quality): add uniqueness checks`
@@ -210,18 +212,21 @@ datamold lineage --model <name>
 ## Agent Notes
 
 **Critical Implementation Details:**
+
 - All pipelines must be idempotent
 - Use incremental models for large datasets
 - Document data lineage
 - Handle schema drift gracefully
 
 **Known Gotchas:**
+
 - Column type changes require full refresh
 - Partitioning strategy affects query cost
 - Test data may differ from production
 - API rate limits affect extraction
 
 **Testing Strategy:**
+
 - Unit tests for transforms
 - Integration tests with test data
 - dbt tests for data quality

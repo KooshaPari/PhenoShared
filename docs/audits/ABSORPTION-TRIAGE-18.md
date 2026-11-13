@@ -174,12 +174,12 @@ a 0.5s perf budget exceeded under heavy host load — see known-issues).
 Evidence (commands run, output abbreviated):
 
 ```sh
-$ JCODE_SCRATCH_DIR=/Users/kooshapari/Library/Caches/jcode/scratch
-$ BUNDLE=~/CodeProjects/Phenotype/zz-archive/git-bundles-20260910/phenotype-archive.bundle
+JCODE_SCRATCH_DIR=/Users/kooshapari/Library/Caches/jcode/scratch
+BUNDLE=~/CodeProjects/Phenotype/zz-archive/git-bundles-20260910/phenotype-archive.bundle
 
-$ mkdir -p "$JCODE_SCRATCH_DIR/bundle-probe-repo" && cd "$JCODE_SCRATCH_DIR/bundle-probe-repo"
-$ git init -q && git bundle verify "$BUNDLE" 2>&1 | grep pm-core | wc -l      # 39 lines
-$ git fetch "$BUNDLE" 'refs/archive/phenotype-pm-core-2026-08-09/heads/master'
+mkdir -p "$JCODE_SCRATCH_DIR/bundle-probe-repo" && cd "$JCODE_SCRATCH_DIR/bundle-probe-repo"
+git init -q && git bundle verify "$BUNDLE" 2>&1 | grep pm-core | wc -l      # 39 lines
+git fetch "$BUNDLE" 'refs/archive/phenotype-pm-core-2026-08-09/heads/master'
 ```
 
 Inspecting `refs/archive/phenotype-pm-core-2026-08-09/heads/master`:

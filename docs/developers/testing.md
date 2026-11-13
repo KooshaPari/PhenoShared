@@ -531,6 +531,7 @@ jobs:
 ## TestHarness: Integration Test Infrastructure
 
 The `TestHarness` struct provides a complete, real-infrastructure test environment without mocks. It spins up:
+
 - An in-memory SQLite database (no file I/O)
 - A temporary git repository
 - A NATS test server (embedded)

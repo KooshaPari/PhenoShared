@@ -26,6 +26,7 @@ Create a comprehensive `process-compose.yml` file at the repository root that or
 ## Objective
 
 Implement:
+
 - Service definitions for 5 external services + API server
 - Health checks for each service
 - Dependency ordering for correct startup
@@ -35,6 +36,7 @@ Implement:
 ## Architecture
 
 The process-compose configuration:
+
 - Starts services in dependency order
 - Monitors health via health checks
 - Manages logs and process lifecycle
@@ -69,6 +71,7 @@ services:
 ```
 
 **Notes:**
+
 - `--jetstream` enables JetStream for advanced messaging
 - `--store_dir` persists JetStream state across restarts
 - HTTP port 8222 provides health check endpoint
@@ -96,6 +99,7 @@ Add to `process-compose.yml`:
 ```
 
 **Notes:**
+
 - Redis protocol compatible (uses `redis-cli` for health check)
 - RDB persistence for state recovery
 - Depends on NATS (but not strictly required; just for ordering)
@@ -126,6 +130,7 @@ Add to `process-compose.yml`:
 ```
 
 **Notes:**
+
 - Neo4j CE runs in console mode (foreground)
 - `NEO4J_AUTH` sets initial credentials (neo4j:agileplus)
 - Longer initial delay (15s) for Neo4j startup
@@ -159,6 +164,7 @@ Add to `process-compose.yml`:
 ```
 
 **Notes:**
+
 - Server console at port 9001 (admin UI)
 - API port 9000 for S3-compatible operations
 - Credentials set via environment
@@ -207,6 +213,7 @@ Add to `process-compose.yml`:
 ```
 
 **Notes:**
+
 - Depends on all 4 external services being healthy
 - Longer initial delay (30s) for Rust compilation and startup
 - RUST_LOG enables debug logging
@@ -402,19 +409,19 @@ services:
 
 ## Usage
 
-### Start all services:
+### Start all services
 
 ```bash
 process-compose up
 ```
 
-### Check service status:
+### Check service status
 
 ```bash
 process-compose ps
 ```
 
-### View logs for a service:
+### View logs for a service
 
 ```bash
 process-compose logs nats
@@ -424,13 +431,13 @@ process-compose logs minio
 process-compose logs agileplus-api
 ```
 
-### Stop all services:
+### Stop all services
 
 ```bash
 process-compose down
 ```
 
-### Clean up state (reset all data):
+### Clean up state (reset all data)
 
 ```bash
 rm -rf .agileplus/

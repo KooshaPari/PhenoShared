@@ -15,12 +15,14 @@ The Phenotype ecosystem requires a unified messaging infrastructure for:
 5. **Observability** — Distributed tracing spans, metrics
 
 Current state analysis:
+
 - Multiple Redis instances for caching and pub/sub (separation of concerns violation)
 - No persistent messaging for critical events
 - No built-in observability integration
 - Custom retry logic scattered across services
 
 Requirements:
+
 | Requirement | Priority | Notes |
 |-------------|----------|-------|
 | At-least-once delivery | P0 | Critical for workflow events |
@@ -246,26 +248,31 @@ impl EventBus for NatsEventBus {
 ## Migration Plan
 
 ### Phase 1: Development Setup (Week 1)
+
 - [ ] Single-node NATS for local dev
 - [ ] Docker compose configuration
 - [ ] Basic publisher/subscriber implementations
 
 ### Phase 2: Core Integration (Weeks 2-4)
+
 - [ ] heliosCLI workflow events
 - [ ] Domain event publishing
 - [ ] Command distribution
 
 ### Phase 3: Production Cluster (Weeks 5-6)
+
 - [ ] 3-node cluster deployment
 - [ ] Stream configuration
 - [ ] Monitoring integration
 
 ### Phase 4: Migration (Weeks 7-8)
+
 - [ ] Dual-publish to Redis and NATS
 - [ ] Gradual consumer migration
 - [ ] Redis pub/sub deprecation
 
 ### Phase 5: Cleanup (Week 9)
+
 - [ ] Remove Redis pub/sub code
 - [ ] Documentation updates
 - [ ] Team training

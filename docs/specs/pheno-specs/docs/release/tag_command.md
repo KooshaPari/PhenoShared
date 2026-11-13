@@ -18,6 +18,7 @@ git tag v<VERSION>
 ## Dry-Run
 
 A dry-run validation runs automatically on any PR that touches:
+
 - `Cargo.toml` (Rust)
 - `package.json` (Node)
 - Documentation files (Specs)

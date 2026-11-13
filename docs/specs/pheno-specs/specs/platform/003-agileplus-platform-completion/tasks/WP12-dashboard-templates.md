@@ -30,6 +30,7 @@ Implementation command: `spec-kitty implement WP12 --base WP11`
 Create new crate with Askama integration:
 
 **Cargo.toml:**
+
 - askama = "0.12"
 - axum
 - agileplus-domain
@@ -39,6 +40,7 @@ Create new crate with Askama integration:
 - chrono
 
 **Template directory structure (at repo root):**
+
 ```
 templates/
 ├── base.html
@@ -60,6 +62,7 @@ templates/
 ```
 
 Configure Askama in `Cargo.toml`:
+
 ```toml
 [package.metadata.askama]
 dirs = ["../templates"]
@@ -70,6 +73,7 @@ dirs = ["../templates"]
 Full-page layout template with navigation and structure:
 
 **Features:**
+
 - Navigation bar with AgilePlus logo and main links (Dashboard, Features, Events, Settings)
 - Sidebar with feature list and quick filters
 - Main content area with block for page-specific content
@@ -79,6 +83,7 @@ Full-page layout template with navigation and structure:
 - Keycap palette: dark mode, monospace fonts, high-contrast borders
 
 **Structure:**
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -108,12 +113,14 @@ Full-page layout template with navigation and structure:
 Kanban board partial for feature workflow visualization:
 
 **Features:**
+
 - Columns for each FeatureState (created through retrospected)
 - Feature cards in each column with title, state badge, WP count, labels
 - hx-get="/api/dashboard/kanban" hx-trigger="load, sse:feature_updated"
 - Drag-drop ready (event handlers added in T079)
 
 **Structure:**
+
 ```html
 <div id="kanban-board"
      hx-get="/api/dashboard/kanban"
@@ -139,6 +146,7 @@ Kanban board partial for feature workflow visualization:
 Feature detail page with full context:
 
 **Sections:**
+
 - Header: title, state, labels, sync status (local/remote/conflict)
 - Work packages list with progress bar
 - Event timeline (last 20 events)
@@ -146,6 +154,7 @@ Feature detail page with full context:
 - Action buttons: transition state, sync, dispatch agent
 
 **Example layout:**
+
 ```html
 <div class="p-6">
   <div class="border-b border-zinc-700 pb-6">
@@ -189,10 +198,12 @@ Work package list partial with progress visualization:
 **Table columns:** WP title, state, assignee, progress bar, task count
 
 **Features:**
+
 - hx-get="/api/dashboard/features/{id}/work-packages"
 - Refreshes on sse:wp_updated events
 
 **Example:**
+
 ```html
 <table class="w-full border-collapse text-sm">
   <thead>
@@ -223,12 +234,14 @@ Work package list partial with progress visualization:
 Service health status cards:
 
 **Features:**
+
 - Card per service: NATS, Dragonfly, Neo4j, MinIO, SQLite, API
 - Status indicator: green (healthy), yellow (degraded), red (unavailable)
 - Uptime, latency, last check time
 - hx-get="/api/dashboard/health" hx-trigger="every 10s"
 
 **Example card:**
+
 ```html
 <div class="health-card bg-zinc-800 rounded border border-green-700 p-4">
   <div class="flex items-center justify-between">
@@ -247,6 +260,7 @@ Service health status cards:
 Create route handlers that return correct template format:
 
 **Routes:**
+
 - `GET /dashboard` → render full `pages/dashboard.html` page
 - `GET /api/dashboard/kanban` → return partial `kanban.html` (if HxRequest header present)
 - `GET /api/dashboard/features/:id` → return full `feature-detail.html` or partial
@@ -258,6 +272,7 @@ Create route handlers that return correct template format:
 Check HxRequest header: if htmx request → return partial only, else → return full page layout
 
 **Example handler:**
+
 ```rust
 pub async fn kanban_board(
     State(state): State<AppState>,
@@ -276,7 +291,7 @@ pub async fn kanban_board(
 
 ## Definition of Done
 
-- Dashboard loads in browser at http://localhost:8080/dashboard
+- Dashboard loads in browser at <http://localhost:8080/dashboard>
 - Kanban board displays features grouped by state
 - Health panel refreshes every 10 seconds and shows accurate service status
 - All partials render correctly within full page layout

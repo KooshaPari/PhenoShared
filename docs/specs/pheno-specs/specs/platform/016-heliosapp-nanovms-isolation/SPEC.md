@@ -13,6 +13,7 @@
 heliosApp is a developer-focused AI runtime environment with a desktop shell, terminal multiplexing (Zellij/PAR), session management, and multi-provider AI inference. It uses Bun/TypeScript with a LocalBus message architecture. Currently, PTY sessions and AI provider execution run in the host process with limited isolation.
 
 nanovms provides 3-tier isolation (WASM, gVisor, Firecracker) that could secure heliosApp's multi-user colab-renderer scenarios and isolate untrusted agent execution. This is especially valuable for:
+
 - Multi-user collaborative sessions
 - Untrusted AI agents with terminal access
 - Session recovery via VM snapshots
@@ -21,6 +22,7 @@ nanovms provides 3-tier isolation (WASM, gVisor, Firecracker) that could secure 
 ## Problem Statement
 
 heliosApp sessions lack strong isolation:
+
 - **Shared process space**: PTY sessions run in host runtime
 - **No VM boundaries**: AI providers share memory with runtime
 - **Multi-user risk**: colab-renderer exposes host to other users

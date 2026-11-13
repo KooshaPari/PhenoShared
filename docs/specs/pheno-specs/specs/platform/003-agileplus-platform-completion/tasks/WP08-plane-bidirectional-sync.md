@@ -36,6 +36,7 @@ Create a configurable mapping between Plane.so state groups and AgilePlus Featur
 - Cancelled → (terminal, no AgilePlus equivalent — log warning)
 
 Store mapping in a `PlaneStateMapper` struct with:
+
 - `from_plane(state_group, state_name) → FeatureState`
 - `to_plane(FeatureState) → (state_group, state_id)`
 

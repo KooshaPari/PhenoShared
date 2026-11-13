@@ -1,4 +1,5 @@
 # Deep Codebase Audit Report - Phenotype Ecosystem
+
 **Date:** 2025-03-29
 **Scope:** All repositories in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/`
 **Focus:** LOC reduction, complexity analysis, dead code, architectural issues, test coverage
@@ -79,6 +80,7 @@ hook-dispatcher/main.rs            23          41 matches + 192 ifs
 ```
 
 **Root Causes:**
+
 - Match statements on large enum variants without extraction
 - Nested if chains for validation/error handling
 - No helper functions for common patterns
@@ -134,6 +136,7 @@ Unused imports        ~150    Cross-referenced files
 #### Test Coverage Issues
 
 **Directories with Source Files but ZERO Tests:**
+
 ```
 /heliosCLI/codex-rs/core/tests/suite           80 files
 /heliosCLI/codex-rs/app-server/tests/suite/v2  38 files
@@ -161,6 +164,7 @@ app.rs                                   144      HIGH
 ```
 
 **Impact:** High imports indicate:
+
 - Missing internal abstractions
 - Circular dependency risks
 - Difficult to refactor/test
@@ -293,24 +297,28 @@ Documentation        7      protocol/
 ### Duplication Consolidation Opportunities
 
 1. **Error Handler Macro** (Save 150-200 LOC)
+
    ```rust
    // Extract from 50+ match Err(e) patterns
    macro_rules! handle_error { ... }
    ```
 
 2. **Configuration Validator** (Save 100-150 LOC)
+
    ```rust
    // Extract from 30+ config validation blocks
    trait Validator { fn validate(&self) -> Result<()>; }
    ```
 
 3. **Message Handler Trait** (Save 100-150 LOC)
+
    ```rust
    // Extract from message processing duplicates
    trait MessageHandler { ... }
    ```
 
 4. **Test Fixtures** (Save 200-300 LOC)
+
    ```python
    // Consolidate pytest fixtures across 100+ test files
    ```
@@ -320,26 +328,31 @@ Documentation        7      protocol/
 ## Architectural Anti-Patterns Found
 
 ### 1. Monolithic Main Functions
+
 - **Files:** 7 files with 3,000+ LOC in `main.rs` or single-file crates
 - **Impact:** Hard to test, debug, and maintain
 - **Fix:** Split into modules/subcommands
 
 ### 2. Missing Trait Abstractions
+
 - **Example:** Message handlers hardcoded to Codex type
 - **Impact:** Can't swap implementations, tight coupling
 - **Fix:** Use trait objects for extensibility
 
 ### 3. Circular Dependencies (Potential)
+
 - **Pattern:** High import counts (300+) suggest circular dependencies
 - **Impact:** Long compile times, hard to refactor
 - **Fix:** Dependency graph audit + restructuring
 
 ### 4. Test/Src Mixing
+
 - **Files:** `codex.rs` has 60 tests + production code
 - **Impact:** Harder to navigate, slower compilation
 - **Fix:** Move to separate test module
 
 ### 5. Event Handling via Direct Calls
+
 - **Pattern:** Event handlers call business logic directly
 - **Impact:** No separation of concerns
 - **Fix:** Implement event bus pattern
@@ -418,6 +431,7 @@ Documentation        7      protocol/
 ## Refactoring Priorities & Roadmap
 
 ### Phase 1: Foundation (Weeks 1-2)
+
 - [x] Identify largest files and functions
 - [x] Analyze test coverage gaps
 - [ ] Establish coding standards for decomposition
@@ -425,6 +439,7 @@ Documentation        7      protocol/
 - **Effort:** 2-3 days planning + setup
 
 ### Phase 2: Critical Refactors (Weeks 3-4)
+
 **Focus:** Files 1-10 from Tier 1
 
 | Item | Target | Savings | Effort | Owner |
@@ -437,18 +452,21 @@ Documentation        7      protocol/
 **Expected Outcome:** 1,500 LOC reduction, 30-40% complexity decrease
 
 ### Phase 3: High-Priority Refactors (Weeks 5-6)
+
 **Focus:** Files 11-20 from Tier 2
 
 - 10 files × 1-2 days each = 10-20 days
 - Expected: 800 LOC reduction
 
 ### Phase 4: Infrastructure & Tests (Weeks 7-8)
+
 - Add tests to 150+ untested directories
 - Create error handling macros
 - Establish validation framework
 - **Expected:** 200+ LOC added (tests), 150 LOC saved (consolidation)
 
 ### Phase 5: Optimization & Hardening (Weeks 9-10)
+
 - Implement lazy-loading optimizations
 - Add memoization for hot paths
 - Performance benchmarking
@@ -531,6 +549,7 @@ Documentation        7      protocol/
 
 **From:** `config/mod.rs` (6,218 LOC, 115 imports)
 **To:**
+
 - `config/parser.rs` - TOML parsing logic
 - `config/validator.rs` - Validation rules
 - `config/serializer.rs` - Export logic

@@ -18,7 +18,7 @@
 
 ## Index Authority & Staleness
 
-This file (`ECOSYSTEM_MAP.md`) is the **canonical live ecosystem index** — the authoritative answer to *what repos exist and how they connect*. When another index disagrees with this one about repo roles or dependencies, this file wins.
+This file (`ECOSYSTEM_MAP.md`) is the **canonical live ecosystem index** — the authoritative answer to _what repos exist and how they connect_. When another index disagrees with this one about repo roles or dependencies, this file wins.
 
 Role split for the spec/governance spine (so indexes stop competing):
 
@@ -238,7 +238,7 @@ graph TD
 | **OmniRoute** (TS) | Active | **App/shell layer** — router UI + desktop client convergence (ADR-ECO-015); router logic may revamp in `packages/router` |
 | **Tokn** — `tokenledger::routing` | Active, Rust | **CANONICAL Rust routing substrate** (hexagonal: `pareto_router`/ports/adapters). Resolve "Rust routing" here, not the dead bifrost-routing stub. |
 | phenoAI (llm-router crate) | Active, Rust workspace | **Consumer / skeleton** — 64-file skeleton, empty README; NOT the canonical router. May consume OmniRoute / Tokn routing. |
-| phenoRouterMonitor | Active, Rust + Streamlit | Monitoring dashboard; **remove its 15 local phenotype-* path-copies, depend on HexaKit** (see dup table). |
+| phenoRouterMonitor | Active, Rust + Streamlit | Monitoring dashboard; __remove its 15 local phenotype-_ path-copies, depend on HexaKit_* (see dup table). |
 | bifrost | Fork (upstream maxim hq), Go | **Non-peer vendored fork; gateway use only — NOT the routing referent.** |
 | bifrost-routing (crate) | — | **Dead stub** (no Cargo.toml; superseded). Not the Rust routing referent — Tokn is. |
 | helios-router | — | Archived / superseded by OmniRoute. |
@@ -455,7 +455,7 @@ These are **traits / interfaces** that span multiple repos in the ecosystem. The
 | **Merge pheno → HexaKit** | pheno | 21 crates overlap; HexaKit is the canonical infrakit; retire pheno |
 | **Merge PhenoAgent stub → Agentora** | PhenoAgent | Empty manifest; description says "extracted from phenotype-infra" |
 | **Merge Metron + Traceon → phenoObservability** | Metron, Traceon | Both thin Rust wrappers; phenoObservability is the workspace home |
-| **Consolidate 8 *Kit Python SDKs → phenotype-python-sdk** | AuthKit, DataKit, McpKit, ObservabilityKit, ResilienceKit, TestingKit + PlatformKit (Go) | One publish target per language |
+| *_Consolidate 8 _Kit Python SDKs → phenotype-python-sdk__ | AuthKit, DataKit, McpKit, ObservabilityKit, ResilienceKit, TestingKit + PlatformKit (Go) | One publish target per language |
 | **Merge phenoRouterMonitor Rust core → phenoAI** | phenoRouterMonitor | Keep Streamlit dashboard as phenoAI/monitoring subdir |
 | **Retire phenoStandards** | phenoStandards | Self-marked deprecated; content moved to HexaKit/governance |
 | **Retire worktree-manager → PhenoVCS** | worktree-manager | 100% absorbed into PhenoVCS (`worktree-manager` crate); repo deleted 2026-06-16 |
@@ -677,7 +677,7 @@ bottom of this file. The `--check` mode of the regen script (and the
   - `--out FILE` — write to a different path (does not touch the canonical file).
   - `--bindings PATH` — override the path to the sibling curation-data repo's `_bindings.json`.
 
-*This document is the living ecosystem map for <REDACTED>/phenotype-registry. Update on each major rationalization action.*
+_This document is the living ecosystem map for <REDACTED>/phenotype-registry. Update on each major rationalization action._
 
 <!-- drift-detection: auto-regen-on-push-pr (.github/workflows/ecosystem-map-regen.yml) -->
 <!-- drift-detection: weekly-cron (.github/workflows/ecosystem-map-weekly.yml) -->

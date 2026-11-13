@@ -7,6 +7,7 @@
 ## What Was Done
 
 PhenoRegistry content absorbed into PhenoShared:
+
 - 3,848 files added, ~2.1M lines absorbed
 - Content landed in `registry/`, `crates/`, `archives/`, `docs/`
 
@@ -35,6 +36,7 @@ Two PhenoRegistry crates added to workspace members, one left orphaned:
 ### 2. Registry Data Audit
 
 The `registry/` directory contains operational data that needs classification:
+
 - `disposition-index.json` (663KB) - master disposition decisions
 - `components.lock` - component lockfile
 - `domain-roles.json` - domain role assignments

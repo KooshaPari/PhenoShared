@@ -107,6 +107,7 @@ Each work package has an explicit file scope: the list of files the agent is aut
 ### Allowed Exceptions
 
 **Lock files** (automatic dependency changes):
+
 - `package-lock.json`, `pnpm-lock.yaml`, `bun.lockb`
 - `Cargo.lock`
 - `requirements.txt` (if using pip)
@@ -130,6 +131,7 @@ The WP deliverables might say "Update tsconfig.json for strict mode". Only then:
 **Manifest files** (only if WP explicitly requires):
 
 Rarely, a WP might require updating:
+
 - `package.json` (add dependencies)
 - `tsconfig.json` (compiler options)
 - `.env.example` (document new env vars)
@@ -163,6 +165,7 @@ Before transitioning states, AgilePlus checks governance gates:
 ### SPECIFY → PLAN Gate
 
 Validates the specification:
+
 - [ ] Spec file exists and is valid markdown
 - [ ] Contains mission, acceptance criteria, FRs
 - [ ] FRs are traceable (FR-AUTH-001, FR-UI-002, etc.)
@@ -172,6 +175,7 @@ Validates the specification:
 ### PLAN → IMPLEMENT Gate
 
 Validates the plan:
+
 - [ ] Work packages defined (WP01, WP02, etc.)
 - [ ] Dependencies declared
 - [ ] File scope assigned
@@ -182,6 +186,7 @@ Validates the plan:
 ### IMPLEMENT → REVIEW Gate
 
 Validates implementation:
+
 - [ ] All WP01 deliverables exist
 - [ ] Tests pass locally
 - [ ] No files outside file_scope modified
@@ -193,6 +198,7 @@ Validates implementation:
 ### REVIEW → DONE Gate
 
 Validates review completion:
+
 - [ ] Code review approved (or waived)
 - [ ] CI tests pass
 - [ ] No governance violations outstanding
@@ -285,6 +291,7 @@ If governance rules conflict with task requirements:
 **Scenario:** Spec says "Email validation only", but tests require phone number field.
 
 **Resolution:**
+
 1. **Stop work** on implementation
 2. **Document conflict** in WP comment with link to spec section
 3. **Create blocker task** describing the conflict
@@ -292,6 +299,7 @@ If governance rules conflict with task requirements:
 5. **Resume** after conflict is resolved
 
 **Output:**
+
 ```json
 {
   "success": false,
@@ -311,6 +319,7 @@ If governance rules conflict with task requirements:
 **Scenario:** WP says "Build LoginForm", but needs to refactor auth.ts (outside scope).
 
 **Resolution:**
+
 1. **Stop** before modifying auth.ts
 2. **Document** why refactoring is needed (code smell, test failure, etc.)
 3. **Create new WP** for refactoring with proper scope
@@ -318,6 +327,7 @@ If governance rules conflict with task requirements:
 5. **Wait** for approval to do refactoring in new WP
 
 **Output:**
+
 ```json
 {
   "success": false,
@@ -337,6 +347,7 @@ If governance rules conflict with task requirements:
 **Scenario:** Need `zod` for email validation, but not in approved list.
 
 **Resolution:**
+
 1. **Stop** before adding dependency
 2. **Document** why it's needed (RFC 5322 email validation)
 3. **Request exception** from governance team
@@ -344,6 +355,7 @@ If governance rules conflict with task requirements:
 5. **Wait** for approval before adding dependency
 
 **Output:**
+
 ```json
 {
   "success": false,
@@ -368,6 +380,7 @@ Every agent action is logged immutably:
 ```
 
 This audit trail is:
+
 - **Append-only:** Cannot be modified or deleted
 - **Cryptographically chained:** Hash of each entry includes hash of previous entry
 - **Tamper-evident:** Any modification breaks the chain
@@ -376,6 +389,7 @@ This audit trail is:
 ## Summary
 
 **Remember:**
+
 1. **Follow spec exactly** — it's the source of truth
 2. **Stay in worktrees** — never touch main directly
 3. **Respect file scope** — only edit authorized files
@@ -464,6 +478,7 @@ Enforcement flow:
 ```
 
 Agents must not attempt to circumvent this by:
+
 - Checking out the branch manually without going through `implement`
 - Editing files that belong to WP01's scope while WP01 is not Done
 - Assuming WP01's changes are present before they're merged to main

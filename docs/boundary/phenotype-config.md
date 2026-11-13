@@ -36,6 +36,7 @@
 **Reviewer:** registry batch4 audit (queue-refresh-batch4)
 **Disposition-index row:** DSPI-NEW (`repo-phenotype-config`, fsm=queued)
 **Decisions:**
+
 - ABSORB target: `pheno` monorepo `crates/phenotype-config/`.
 - Federated — Python and TS bindings live in their respective
   monorepos (phenotype-python-sdk, phenodocs).

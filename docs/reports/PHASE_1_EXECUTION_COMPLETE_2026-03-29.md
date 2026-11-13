@@ -18,9 +18,11 @@
 ## Deliverables
 
 ### 1. **phenotype-error-core** ✅ SHIPPED
+
 **Location:** `crates/phenotype-error-core/`
 **Purpose:** Unified error handling framework
 **Contents:**
+
 - 5 canonical error types:
   - `ApiError` (8 variants) — HTTP and external API errors
   - `DomainError` (7 variants) — Business logic and domain violations
@@ -32,11 +34,13 @@
 - Full thiserror integration for Display/std::error::Error
 
 **Impact:**
+
 - Consolidates 85+ error enum definitions across codebase
 - ~600 LOC reduction through duplication elimination
 - Replaces custom error handling in agileplus-api, agileplus-domain, agileplus-graph, and 5+ other crates
 
 **Migrations Path:**
+
 ```rust
 // Existing code can implement From<E> for compatibility
 impl From<ApiError> for ErrorEnvelope {
@@ -49,9 +53,11 @@ impl From<ApiError> for ErrorEnvelope {
 ---
 
 ### 2. **phenotype-git-core** ✅ SHIPPED
+
 **Location:** `crates/phenotype-git-core/`
 **Purpose:** Git operations abstraction
 **Contents:**
+
 - Stub implementation for workspace integration
 - Ready for trait definitions (GitOperations, CommitParser, etc.)
 
@@ -60,9 +66,11 @@ impl From<ApiError> for ErrorEnvelope {
 ---
 
 ### 3. **phenotype-health** ✅ SHIPPED
+
 **Location:** `crates/phenotype-health/`
 **Purpose:** Shared health check abstraction
 **Contents:**
+
 - `HealthStatus` enum — UP, DEGRADED, DOWN states with optional message
 - `HealthChecker` async trait — Standard interface for all health checks
 - `HealthMonitor` — Orchestrator for multiple health checks with aggregation
@@ -74,11 +82,13 @@ impl From<ApiError> for ErrorEnvelope {
   - `MemoryHealthChecker` — Process memory usage monitoring
 
 **Impact:**
+
 - Consolidates 5+ health check implementations across nexus, agileplus-api, heliosCLI, phench
 - ~150 LOC reduction
 - 15 tests passing
 
 **Usage Example:**
+
 ```rust
 let monitor = HealthMonitor::new(Duration::from_secs(10));
 monitor.add_checker(DatabaseHealthChecker::new(pool.clone()));
@@ -90,11 +100,13 @@ let status = monitor.check_all().await;
 ---
 
 ### 4. **phenotype-config-core (Enhanced)** ✅ SHIPPED
+
 **Location:** `crates/phenotype-config-core/`
 **Purpose:** Unified configuration loading and management
 **Enhancement:** Added figment-based UnifiedConfigLoader
 
 **New Features:**
+
 - **UnifiedConfigLoader** — Automatic format detection (TOML/YAML/JSON)
 - **Environment Variable Support** — PREFIX_* environment overrides
 - **Directory Discovery** — XDG Base Directory compliance (Linux/macOS)
@@ -103,11 +115,13 @@ let status = monitor.check_all().await;
 - **Type-Safe Deserialization** — serde integration for type safety
 
 **Impact:**
+
 - Consolidates 4+ independent config loaders (agileplus, heliosCLI, phench, bifrost)
 - ~400 LOC reduction
 - Backward-compatible with existing ConfigLoader interface
 
 **Usage Example:**
+
 ```rust
 // Automatic multi-source loading: defaults + file + env vars
 let config = UnifiedConfigLoader::new()
@@ -125,10 +139,12 @@ let yaml_config = UnifiedConfigLoader::from_file("config.yaml")?;
 ## Workspace Integration
 
 **Updated Files:**
+
 - `Cargo.toml` — Added 4 new crates to workspace.members, added workspace.dependencies for figment, toml, serde_yaml, dirs, tempfile
 - `.gitignore` — Removed phenotype-config-core, phenotype-error-core, phenotype-git-core, phenotype-health from ignore list
 
 **Build Verification:**
+
 ```bash
 cargo build -p phenotype-error-core      # ✅ OK
 cargo build -p phenotype-git-core        # ✅ OK
@@ -149,6 +165,7 @@ cargo build -p phenotype-config-core     # ✅ OK
 | **TOTAL PHASE 1** | — | **~2,350 LOC** |
 
 **Affected Repositories:**
+
 - agileplus (5 error types removed)
 - heliosCLI (4 config loaders consolidated, health checks removed)
 - phenotype-event-sourcing (error consolidation ready)
@@ -163,14 +180,16 @@ cargo build -p phenotype-config-core     # ✅ OK
 ## Phase 1 Task Status
 
 ### Completed ✅
+
 1. **Directory Stub Cleanup** — 4 crates (phenotype-cache-adapter, phenotype-contracts, phenotype-policy-engine, phenotype-state-machine) cleaned up, tests passing
 2. **Error-Core Creation** — Full unified error framework shipped
 3. **Health-Crate Creation** — Shared health check abstraction shipped
 4. **Config-Core Enhancement** — Figment integration complete, migration path documented
 
 ### Blocked (Non-Critical) ⚠️
-3. **Event-Sourcing Cleanup** — Nested directory deletion requires git rm permission (user denied in canonical checkout)
-9. **Cleanup Scripts** — Inactive worktree cleanup requires rmdir permission (user denied)
+
+1. **Event-Sourcing Cleanup** — Nested directory deletion requires git rm permission (user denied in canonical checkout)
+2. **Cleanup Scripts** — Inactive worktree cleanup requires rmdir permission (user denied)
 
 **Note:** These are non-blocking for Phase 2. The actual code consolidation (items 1-4 above) is complete.
 
@@ -196,12 +215,14 @@ All phase 2 dependencies are now satisfied:
 ## Next Steps
 
 ### Immediate (Phase 2 Launch)
+
 1. ✅ Main branch updated with Phase 1 crates
 2. ⏳ Test Phase 2 crate (phenotype-ports-canonical) against new framework
 3. ⏳ Update existing crates to reference shared abstractions
 4. ⏳ Create migration guides for consumers
 
 ### Future (Phase 3)
+
 - Libification roadmap (extract more shared patterns)
 - Third-party integrations (wrap/fork candidates)
 - Performance optimization (reduce compile times)
@@ -238,6 +259,7 @@ Modified files:
 **Phase 1 Status:** ✅ **COMPLETE**
 
 All critical Phase 1 work is shipped to main:
+
 - 4 new shared crates created and integrated
 - ~2,350 LOC consolidation achieved
 - Workspace properly configured
@@ -245,6 +267,7 @@ All critical Phase 1 work is shipped to main:
 - Zero blockers for Phase 2 launch
 
 **Metrics:**
+
 - Crates Created: 4
 - Error Enums Consolidated: 85+
 - Health Check Implementations Consolidated: 5+

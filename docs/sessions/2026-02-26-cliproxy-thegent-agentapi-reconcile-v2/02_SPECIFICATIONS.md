@@ -7,6 +7,7 @@
 **Goal**: Systematically audit and triage all open PRs across 4 repos (`cliproxyapi++`, `cliproxyapi-plusplus`, `thegent`, `agentapi-plusplus`).
 
 **Acceptance Criteria**:
+
 - [ ] All open PRs per repo are enumerated with: PR number, branch name, merge state, check status, comment count.
 - [ ] PRs are classified by failure type: infra (CI/build/docs), CodeRabbit, merge conflict, review thread debt.
 - [ ] Clean merge candidates (0 failing checks, 0 unresolved threads) are flagged separately.
@@ -17,6 +18,7 @@
 **Goal**: Clear CodeRabbit failures en masse across all affected PRs.
 
 **Acceptance Criteria**:
+
 - [ ] For every PR with `CodeRabbit` failure, `@coderabbitai full review` is posted.
 - [ ] Rate-limit errors are caught and logged; operation retries after cooldown.
 - [ ] Batch execution completes without timing out.
@@ -26,6 +28,7 @@
 **Goal**: Audit and classify all local non-merged branches by type, age, and PR mapping.
 
 **Acceptance Criteria**:
+
 - [ ] All non-merged branches are listed per repo with prefix classification.
 - [ ] Stale branches (confirmed closed upstream) are identified.
 - [ ] Safe prune candidates (tmp-*, archive-*, ci-fix-tmp-*) are flagged.
@@ -36,6 +39,7 @@
 **Goal**: Fix root-cause CI drift in shared workflows before per-PR fixes.
 
 **Acceptance Criteria**:
+
 - [ ] `verify-required-check-names` drift is identified and fixed in the template repo.
 - [ ] Go `analyze`/`build` failures are traced to workflow template changes.
 - [ ] `Build Docs` failures are traced to Sphinx/Docsy config drift.
@@ -51,6 +55,7 @@ gh pr list --repo <owner/repo> --state open \
 ```
 
 Output shape:
+
 ```json
 {
   "number": 494,
@@ -69,6 +74,7 @@ gh pr checks <n> --repo <owner/repo> --json name,state,conclusion
 ```
 
 Output shape:
+
 ```json
 [
   {"name": "CodeRabbit", "state": "FAILURE", "conclusion": "FAILURE"},

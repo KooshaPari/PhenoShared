@@ -17,6 +17,7 @@ This index organizes all mold linker integration documentation across the phenot
 📄 **Location**: `/repos/docs/reference/MOLD_LINKER_QUICK_REFERENCE.md`
 
 **Covers**:
+
 - 1-minute installation
 - 30-second verification
 - Quick performance comparison
@@ -35,6 +36,7 @@ This index organizes all mold linker integration documentation across the phenot
 📄 **Location**: `/repos/docs/reference/MOLD_LINKER_INTEGRATION_PLAN.md`
 
 **Covers**:
+
 - Overview and objectives
 - Installation strategy (3 approaches per platform)
 - CI configuration (GitHub Actions)
@@ -48,6 +50,7 @@ This index organizes all mold linker integration documentation across the phenot
 **Read time**: 45 minutes | **Use case**: Full understanding and implementation planning
 
 **Key Sections**:
+
 1. Architecture & Design Principles
 2. Installation Strategy (Linux/macOS/Windows)
 3. Cargo Configuration
@@ -69,6 +72,7 @@ This index organizes all mold linker integration documentation across the phenot
 📄 **Location**: `/repos/docs/reference/MOLD_LINKER_WORK_PACKAGES.md`
 
 **Covers**:
+
 - WP2.1: Local Installation & Testing (2h)
 - WP2.2: Cargo Configuration Integration (1h)
 - WP2.3: CI Workflow Integration (1h)
@@ -76,6 +80,7 @@ This index organizes all mold linker integration documentation across the phenot
 - WP2.5: Documentation & Monitoring (1h)
 
 Each WP includes:
+
 - Objectives and success criteria
 - Detailed tasks with time estimates
 - Acceptance criteria checklist
@@ -95,6 +100,7 @@ Each WP includes:
 📄 **Location**: `/repos/docs/reports/MOLD_LINKER_IMPLEMENTATION_SUMMARY.md`
 
 **Covers**:
+
 - Executive summary
 - All deliverables completed
 - Technical architecture diagram
@@ -115,14 +121,17 @@ Each WP includes:
 ### Configuration Files
 
 **Location**: `/repos/.cargo/config.toml`
+
 ```toml
 [build]
 incremental = true
 rustflags = ["-C", "link-arg=-fuse-ld=mold"]
 ```
+
 Status: ✓ Updated
 
 **Location**: `/repos/.github/workflows/benchmark.yml`
+
 - Added job: `mold-link-benchmark`
 - Measures baseline and mold performance
 - Posts results as PR comment
@@ -181,18 +190,23 @@ Status: ✓ Updated
 ## How to Use These Documents
 
 ### If you have 5 minutes
+
 👉 Read: **MOLD_LINKER_QUICK_REFERENCE.md**
 
 ### If you have 15 minutes
+
 👉 Read: **MOLD_LINKER_IMPLEMENTATION_SUMMARY.md**
 
 ### If you have 45 minutes
+
 👉 Read: **MOLD_LINKER_INTEGRATION_PLAN.md**
 
 ### If you're implementing a work package
+
 👉 Read: **MOLD_LINKER_WORK_PACKAGES.md** (relevant WP section)
 
 ### If you're managing the project
+
 👉 Read: **This index** then **MOLD_LINKER_IMPLEMENTATION_SUMMARY.md**
 
 ---
@@ -200,12 +214,14 @@ Status: ✓ Updated
 ## Key Metrics
 
 ### Performance Target
+
 - **Baseline**: 45 seconds (default GNU ld)
 - **With mold**: 12 seconds (avg 3 runs)
 - **Improvement**: 73% (3.75x faster)
 - **Per-build savings**: ~33 seconds
 
 ### Effort Estimate
+
 - **Planning & Design**: 4 hours ✓ COMPLETE
 - **Local Testing**: 2 hours (WP2.1)
 - **Configuration & CI**: 2 hours (WP2.2, WP2.3)
@@ -214,6 +230,7 @@ Status: ✓ Updated
 - **Total**: 10 hours (4h design + 6h execution)
 
 ### Risk Level
+
 - **Overall**: LOW
 - **Reversibility**: TRIVIAL (one config line)
 - **Test Coverage**: COMPREHENSIVE (full test suite)
@@ -259,12 +276,14 @@ repos/
 ## Implementation Checklist
 
 ### Pre-Implementation
+
 - [ ] Read this index
 - [ ] Read MOLD_LINKER_IMPLEMENTATION_SUMMARY.md
 - [ ] Assign owners to 5 work packages
 - [ ] Schedule 6-hour execution window
 
 ### WP2.1: Local Testing (2h)
+
 - [ ] Install mold locally
 - [ ] Measure baseline build time
 - [ ] Build with mold 3 times
@@ -272,30 +291,35 @@ repos/
 - [ ] Document findings
 
 ### WP2.2: Configuration (1h)
+
 - [ ] Verify .cargo/config.toml
 - [ ] Test fallback behavior
 - [ ] Verify incremental builds
 - [ ] Document overrides
 
 ### WP2.3: CI Integration (1h)
+
 - [ ] Review workflow YAML syntax
 - [ ] Test workflow locally
 - [ ] Push test PR
 - [ ] Verify PR comment and artifacts
 
 ### WP2.4: Benchmarking (1h)
+
 - [ ] Run benchmark on main
 - [ ] Collect metrics
 - [ ] Generate performance report
 - [ ] Create trend baseline
 
 ### WP2.5: Monitoring (1h)
+
 - [ ] Finalize troubleshooting guide
 - [ ] Create rollback runbook
 - [ ] Define monitoring strategy
 - [ ] Update CHANGELOG.md
 
 ### Post-Implementation
+
 - [ ] Merge to main branch
 - [ ] Monitor benchmark results
 - [ ] Adjust thresholds if needed
@@ -306,12 +330,15 @@ repos/
 ## Communication Templates
 
 ### For Team Lead
+>
 > "Mold linker integration design complete. 6 hours execution effort spread across 5 work packages. Ready to assign to team."
 
 ### For Implementation Team
+>
 > "Your assigned work package (WP2.X) has detailed instructions in MOLD_LINKER_WORK_PACKAGES.md. Start with WP2.1 section for your task."
 
 ### For Stakeholders
+>
 > "Performance improvement ready: 73% faster link times on Linux CI (45s → 12s). Zero risk with automatic fallback. Execution starts [DATE]."
 
 ---
@@ -341,17 +368,20 @@ A: Immediately. All planning done. 6 hours execution needed.
 ## Support
 
 ### For Questions
+
 1. Check QUICK_REFERENCE.md FAQ section
 2. Check INTEGRATION_PLAN.md Troubleshooting
 3. Create GitHub issue with label `mold-integration`
 
 ### For Issues
+
 - **Local issues**: WP2.1 owner
 - **Config issues**: WP2.2 owner
 - **CI issues**: WP2.3 owner
 - **Escalation**: Build team lead
 
 ### For Updates
+
 - Quarterly: Review mold releases
 - Monthly: Check benchmark trends
 - Weekly (during execution): WP status updates

@@ -49,6 +49,7 @@ Decision matrix:
 | `phenotype-go-middleware` | http middleware patterns | `go.mod` |
 
 **Other:**
+
 - `phenotype-toolkit` — multi-language tool index
 - `plugin-typescript` — Vite/Stripe plugin idiom (TypeScript)
 - `docs/template-kitty-specs/001-commons/` — kitty-spec plan + spec (cross-domain common conventions)

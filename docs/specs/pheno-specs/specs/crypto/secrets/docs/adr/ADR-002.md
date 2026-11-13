@@ -130,11 +130,13 @@ Single database with table partitioning (rejected - does not solve access patter
 ### Option A: Status Quo (Do Nothing)
 
 **Pros:**
+
 - No immediate development cost
 - No migration risk
 - Familiar to current team
 
 **Cons:**
+
 - Technical debt continues to accumulate
 - Performance issues will worsen
 - Unable to meet growth projections
@@ -145,11 +147,13 @@ Single database with table partitioning (rejected - does not solve access patter
 ### Option B: Incremental Refactoring
 
 **Pros:**
+
 - Lower risk than full rewrite
 - Can spread costs over time
 - Easier to rollback if issues arise
 
 **Cons:**
+
 - May not address root causes
 - Could result in inconsistent architecture
 - Takes longer to realize benefits
@@ -160,11 +164,13 @@ Single database with table partitioning (rejected - does not solve access patter
 ### Option C: Third-party SaaS Solution
 
 **Pros:**
+
 - No development required
 - Expert support available
 - Immediate availability
 
 **Cons:**
+
 - Ongoing subscription costs
 - Less customization flexibility
 - Data privacy concerns
@@ -175,11 +181,13 @@ Single database with table partitioning (rejected - does not solve access patter
 ### Option D: Build In-House Alternative
 
 **Pros:**
+
 - Complete control over implementation
 - Tailored to exact requirements
 - No licensing constraints
 
 **Cons:**
+
 - High development cost
 - Longer time to market
 - Maintenance burden

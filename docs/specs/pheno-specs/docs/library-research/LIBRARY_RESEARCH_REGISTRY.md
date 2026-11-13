@@ -121,159 +121,159 @@
 
 ### Storage & Databases
 
-6. **"The Log-Structured Merge-Tree (LSM-Tree)"** (O'Neil et al., 1996)
+1. **"The Log-Structured Merge-Tree (LSM-Tree)"** (O'Neil et al., 1996)
    - Foundation: High-write throughput storage
    - Phenotype Use: Event store design, SQLite WAL mode
 
-7. **"Dynamo: Amazon's Highly Available Key-value Store"** (DeCandia et al., 2007)
+2. **"Dynamo: Amazon's Highly Available Key-value Store"** (DeCandia et al., 2007)
    - Foundation: Eventual consistency, gossip protocols
    - Phenotype Use: Edge-to-cloud sync, CRDTs
 
-8. **"Spanner: Google's Globally-Distributed Database"** (Corbett et al., 2012)
+3. **"Spanner: Google's Globally-Distributed Database"** (Corbett et al., 2012)
    - Foundation: TrueTime, external consistency
    - Phenotype Use: Reference for distributed time
 
-9. **"SQLite: Past, Present, and Future"** (Hipp, ongoing)
+4. **"SQLite: Past, Present, and Future"** (Hipp, ongoing)
    - Foundation: Embedded database design
    - Phenotype Use: phenotype-sqlite architecture
 
-10. **"Local-First Software"** (Kleppmann et al., 2019)
+5. **"Local-First Software"** (Kleppmann et al., 2019)
     - Foundation: CRDTs, local-first architecture
     - Phenotype Use: AgilePlus offline mode, worktree CRDTs
 
 ### Concurrency & Scheduling
 
-11. **"Scheduling Multithreaded Computations by Work Stealing"** (Blumofe & Leiserson, 1999)
+ 1. **"Scheduling Multithreaded Computations by Work Stealing"** (Blumofe & Leiserson, 1999)
     - Foundation: Tokio's scheduler design
     - Phenotype Use: Agent task scheduling, parallel spec validation
 
-12. **"Structured Concurrency"** (Sústrik, 2018)
+ 2. **"Structured Concurrency"** (Sústrik, 2018)
     - Foundation: Scoped concurrency, cancellation
     - Phenotype Use: Agent lifecycle management, sharecli process control
 
-13. **"The Problem of Time in Concurrent Systems"** (various)
+ 3. **"The Problem of Time in Concurrent Systems"** (various)
     - Foundation: Time in distributed systems
     - Phenotype Use: Event timestamping, trace correlation
 
-14. **"io_uring: Efficient I/O"** (Axboe, 2019)
+ 4. **"io_uring: Efficient I/O"** (Axboe, 2019)
     - Foundation: Linux async I/O
     - Phenotype Use: glommio evaluation, high-perf I/O
 
 ### Messaging & Event Systems
 
-15. **"Kafka: a Distributed Messaging System for Log Processing"** (Kreps et al., 2011)
+ 1. **"Kafka: a Distributed Messaging System for Log Processing"** (Kreps et al., 2011)
     - Foundation: Log-centric architecture
     - Phenotype Use: NATS JetStream design, event sourcing
 
-16. **"Exactly-Once Semantics in Distributed Systems"** (Confluent, 2018)
+ 2. **"Exactly-Once Semantics in Distributed Systems"** (Confluent, 2018)
     - Foundation: Idempotent producers, transactions
     - Phenotype Use: phenotype-nats exactly-once delivery
 
-17. **"Dissecting Message Queues"** (Tyler Treat, 2014)
+ 3. **"Dissecting Message Queues"** (Tyler Treat, 2014)
     - Foundation: Latency analysis of message brokers
     - Phenotype Use: NATS performance tuning
 
-18. **"Advanced Message Queuing Patterns"** (Pieter Hintjens, 2013)
+ 4. **"Advanced Message Queuing Patterns"** (Pieter Hintjens, 2013)
     - Foundation: ZeroMQ patterns
     - Phenotype Use: Alternative messaging patterns
 
 ### Observability
 
-19. **"Dapper, a Large-Scale Distributed Systems Tracing Infrastructure"** (Sigelman et al., 2010)
+ 1. **"Dapper, a Large-Scale Distributed Systems Tracing Infrastructure"** (Sigelman et al., 2010)
     - Foundation: Distributed tracing
     - Phenotype Use: phenotype-telemetry, Tracely design
 
-20. **"The Tail at Scale"** (Dean & Barroso, 2013)
+ 2. **"The Tail at Scale"** (Dean & Barroso, 2013)
     - Foundation: Latency variability in large systems
     - Phenotype Use: SLO design, latency budgets
 
-21. **"Monarch: Google's Planet-Scale Monitoring"** (Hilton et al., 2021)
+ 3. **"Monarch: Google's Planet-Scale Monitoring"** (Hilton et al., 2021)
     - Foundation: Global monitoring system
     - Phenotype Use: Tracely global aggregation
 
-22. **"Continuous Profiling in Production"** (various)
+ 4. **"Continuous Profiling in Production"** (various)
     - Foundation: Profiling at scale
     - Phenotype Use: Pyroscope integration
 
 ### Architecture & Design
 
-23. **"Hexagonal Architecture"** (Cockburn, 2005)
+ 1. **"Hexagonal Architecture"** (Cockburn, 2005)
     - Foundation: Ports and adapters
     - Phenotype Use: Core architectural pattern
 
-24. **"Clean Architecture"** (Martin, 2017)
+ 2. **"Clean Architecture"** (Martin, 2017)
     - Foundation: Dependency rule, layers
     - Phenotype Use: Code organization, domain purity
 
-25. **"Out of the Tar Pit"** (Moseley & Marks, 2006)
+ 3. **"Out of the Tar Pit"** (Moseley & Marks, 2006)
     - Foundation: Complexity reduction
     - Phenotype Use: Simplicity principle, spec-driven design
 
-26. **"CQRS, Task Based UIs, Event Sourcing"** (Young, 2010)
+ 4. **"CQRS, Task Based UIs, Event Sourcing"** (Young, 2010)
     - Foundation: CQRS pattern
     - Phenotype Use: phenotype-bdd, event-driven specs
 
-27. **"Domain-Driven Design"** (Evans, 2003)
+ 5. **"Domain-Driven Design"** (Evans, 2003)
     - Foundation: Ubiquitous language, bounded contexts
     - Phenotype Use: Module design in AgilePlus
 
 ### Testing & Verification
 
-28. **"QuickCheck: A Lightweight Tool for Random Testing"** (Claessen & Hughes, 2000)
+ 1. **"QuickCheck: A Lightweight Tool for Random Testing"** (Claessen & Hughes, 2000)
     - Foundation: Property-based testing
     - Phenotype Use: proptest integration
 
-29. **"Fuzzing: Hack, Art, and Science"** (Majumdar & Sen, 2021)
+ 2. **"Fuzzing: Hack, Art, and Science"** (Majumdar & Sen, 2021)
     - Foundation: Coverage-guided fuzzing
     - Phenotype Use: cargo-fuzz, security testing
 
-30. **"Formal Verification of the TLS 1.3 Handshake"** (Cremers et al., 2020)
+ 3. **"Formal Verification of the TLS 1.3 Handshake"** (Cremers et al., 2020)
     - Foundation: Protocol verification
     - Phenotype Use: rustls formal guarantees
 
-31. **"How to Test Your Tests"** (various)
+ 4. **"How to Test Your Tests"** (various)
     - Foundation: Test quality metrics
     - Phenotype Use: FR traceability validation
 
 ### AI/ML & LLMs
 
-32. **"Attention is All You Need"** (Vaswani et al., 2017)
+ 1. **"Attention is All You Need"** (Vaswani et al., 2017)
     - Foundation: Transformer architecture
     - Phenotype Use: LLM integration patterns
 
-33. **"LLaMA: Open and Efficient Foundation Language Models"** (Touvron et al., 2023)
+ 2. **"LLaMA: Open and Efficient Foundation Language Models"** (Touvron et al., 2023)
     - Foundation: Efficient LLM design
     - Phenotype Use: Local LLM evaluation (llama.cpp)
 
-34. **"Training Language Models to Follow Instructions"** (Ouyang et al., 2022)
+ 3. **"Training Language Models to Follow Instructions"** (Ouyang et al., 2022)
     - Foundation: Instruction tuning
     - Phenotype Use: Agent prompt engineering
 
-35. **"Chain-of-Thought Prompting"** (Wei et al., 2022)
+ 4. **"Chain-of-Thought Prompting"** (Wei et al., 2022)
     - Foundation: Reasoning in LLMs
     - Phenotype Use: Agent reasoning patterns
 
 ### Rust-Specific
 
-36. **"Ownership is Theft: Experiences with Ownership in Rust"** (various)
+ 1. **"Ownership is Theft: Experiences with Ownership in Rust"** (various)
     - Foundation: Ownership system
     - Phenotype Use: Memory safety in agents
 
-37. **"Rust: A Language for the Next 40 Years"** (Klabnik, 2016)
+ 2. **"Rust: A Language for the Next 40 Years"** (Klabnik, 2016)
     - Foundation: Rust design philosophy
     - Phenotype Use: Language selection rationale
 
-38. **"Fearless Concurrency with Rust"** (Turon, 2016)
+ 3. **"Fearless Concurrency with Rust"** (Turon, 2016)
     - Foundation: Safe concurrency
     - Phenotype Use: sharecli, thegent runtime
 
 ### Software Engineering
 
-39. **"Software Engineering at Google"** (Winters et al., 2020)
+ 1. **"Software Engineering at Google"** (Winters et al., 2020)
     - Foundation: Large-scale development
     - Phenotype Use: Monorepo practices, testing at scale
 
-40. **"Building Microservices"** (Newman, 2021)
+ 2. **"Building Microservices"** (Newman, 2021)
     - Foundation: Service design
     - Phenotype Use: PhenoProc service boundaries
 
@@ -295,52 +295,62 @@
 ### Wrap (70%) - Proven Libraries
 
 #### Core Runtime
+
 - **tokio** - Use as-is, customize scheduler hooks if needed
 - **async-trait** - Standard trait async
 - **futures** - Core async primitives
 
 #### Serialization
+
 - **serde** + **serde_json** - Standard encoding
 - **toml** - Human-readable config
 - **config** - Layered configuration
 
 #### Web & HTTP
+
 - **axum** - Add hexagonal middleware
 - **tower** - Service composition
 - **hyper** - Low-level HTTP
 
 #### Storage
+
 - **sqlx** - Async SQL with compile-time checks
 - **diesel** - Type-safe ORM (alternative)
 - **redis** - Caching layer
 
 #### Observability
+
 - **tracing** - Structured logging
 - **opentelemetry** - Distributed tracing
 - **prometheus** - Metrics
 
 #### CLI
+
 - **clap** - Argument parsing
 - **dialoguer** - Interactive prompts
 - **indicatif** - Progress bars
 
 #### Security
+
 - **rustls** - TLS (memory-safe)
 - **ring** - Cryptography
 - **argon2** - Password hashing
 
 #### Testing
+
 - **tokio-test** - Async testing
 - **proptest** - Property-based
 - **mockall** - Mocking
 - **criterion** - Benchmarking
 
 #### Networking
+
 - **tokio-tungstenite** - WebSocket
 - **tonic** - gRPC
 - **nats** - Messaging
 
 #### Misc
+
 - **chrono** - Date/time
 - **uuid** - UUID generation
 - **regex** - Pattern matching
@@ -349,6 +359,7 @@
 ### Handroll (20%) - Core Differentiators
 
 #### Phenotype-Specific (High Priority)
+
 1. **phenotype-spec-validator**
    - FR traceability verification
    - Code-to-spec linkage
@@ -380,19 +391,20 @@
    - Research: Documentation systems, federation
 
 #### Domain-Specific (Medium Priority)
-6. **phenotype-git-deep**
+
+1. **phenotype-git-deep**
    - Worktree management
    - Branch lifecycle
    - Merge strategies
    - Research: Git internals, graph theory
 
-7. **phenotype-config-merge**
+2. **phenotype-config-merge**
    - Multi-source config resolution
    - Environment overlays
    - Secret integration
    - Research: Configuration theory
 
-8. **phenotype-event-store**
+3. **phenotype-event-store**
    - SQLite-based event sourcing
    - Replay capabilities
    - Snapshot optimization
@@ -592,20 +604,23 @@
 ## Implementation Roadmap
 
 ### Phase 1: Core Wrappers (Q2 2026)
+
 1. **phenotype-nats** - Event bus with schema validation
 2. **phenotype-sqlite** - Embedded persistence with migrations
 3. **phenotype-telemetry** - OTel with pheno conventions
 4. **phenotype-http-client** - Reqwest + pheno interceptors
 
 ### Phase 2: Strategic Handrolls (Q3 2026)
-5. **phenotype-spec-validator** - FR traceability verification
-6. **phenotype-agent-runtime** - Sandboxed execution environment
-7. **phenotype-hexagonal-codegen** - Multi-language code generation
+
+1. **phenotype-spec-validator** - FR traceability verification
+2. **phenotype-agent-runtime** - Sandboxed execution environment
+3. **phenotype-hexagonal-codegen** - Multi-language code generation
 
 ### Phase 3: Advanced Integration (Q4 2026)
-8. **phenotype-bdd-integration** - Multi-language BDD with spec linkage
-9. **phenotype-docs-federation** - Multi-repo documentation aggregation
-10. **phenotype-crdt** - Local-first sync (research implementation)
+
+1. **phenotype-bdd-integration** - Multi-language BDD with spec linkage
+2. **phenotype-docs-federation** - Multi-repo documentation aggregation
+3. **phenotype-crdt** - Local-first sync (research implementation)
 
 ---
 
@@ -665,6 +680,7 @@ customization_depth: unlimited
 ## Research Bibliography (Complete)
 
 ### Foundational Papers
+
 1. Lamport, L. (1978). "Time, Clocks, and the Ordering of Events"
 2. Lamport, L. et al. (1982). "The Byzantine Generals Problem"
 3. Castro, M. & Liskov, B. (1999). "Practical Byzantine Fault Tolerance"
@@ -672,49 +688,58 @@ customization_depth: unlimited
 5. Corbett, J.C. et al. (2012). "Spanner: Google's Globally-Distributed Database"
 
 ### Concurrency & Scheduling
-6. Blumofe, R.D. & Leiserson, C.E. (1999). "Scheduling Multithreaded Computations by Work Stealing"
-7. Sústrik, M. (2018). "Structured Concurrency"
-8. Axboe, J. (2019). "io_uring: Efficient I/O"
+
+1. Blumofe, R.D. & Leiserson, C.E. (1999). "Scheduling Multithreaded Computations by Work Stealing"
+2. Sústrik, M. (2018). "Structured Concurrency"
+3. Axboe, J. (2019). "io_uring: Efficient I/O"
 
 ### Storage
-9. O'Neil, P. et al. (1996). "The Log-Structured Merge-Tree (LSM-Tree)"
-10. Kleppmann, M. et al. (2019). "Local-First Software"
+
+1. O'Neil, P. et al. (1996). "The Log-Structured Merge-Tree (LSM-Tree)"
+2. Kleppmann, M. et al. (2019). "Local-First Software"
 
 ### Messaging
-11. Kreps, J. et al. (2011). "Kafka: a Distributed Messaging System"
-12. Hintjens, P. (2013). "ZeroMQ - Messaging for Many Applications"
+
+ 1. Kreps, J. et al. (2011). "Kafka: a Distributed Messaging System"
+ 2. Hintjens, P. (2013). "ZeroMQ - Messaging for Many Applications"
 
 ### Observability
-13. Sigelman, B.H. et al. (2010). "Dapper, a Large-Scale Distributed Systems Tracing Infrastructure"
-14. Dean, J. & Barroso, L.A. (2013). "The Tail at Scale"
+
+ 1. Sigelman, B.H. et al. (2010). "Dapper, a Large-Scale Distributed Systems Tracing Infrastructure"
+ 2. Dean, J. & Barroso, L.A. (2013). "The Tail at Scale"
 
 ### Architecture
-15. Cockburn, A. (2005). "Hexagonal Architecture"
-16. Martin, R.C. (2017). "Clean Architecture"
-17. Moseley, B. & Marks, P. (2006). "Out of the Tar Pit"
-18. Young, G. (2010). "CQRS, Task Based UIs, Event Sourcing"
-19. Evans, E. (2003). "Domain-Driven Design"
+
+ 1. Cockburn, A. (2005). "Hexagonal Architecture"
+ 2. Martin, R.C. (2017). "Clean Architecture"
+ 3. Moseley, B. & Marks, P. (2006). "Out of the Tar Pit"
+ 4. Young, G. (2010). "CQRS, Task Based UIs, Event Sourcing"
+ 5. Evans, E. (2003). "Domain-Driven Design"
 
 ### Testing
-20. Claessen, K. & Hughes, J. (2000). "QuickCheck: A Lightweight Tool for Random Testing"
-21. Majumdar, R. & Sen, K. (2021). "Fuzzing: Hack, Art, and Science"
-22. Cremers, C. et al. (2020). "Formal Verification of the TLS 1.3 Handshake"
+
+ 1. Claessen, K. & Hughes, J. (2000). "QuickCheck: A Lightweight Tool for Random Testing"
+ 2. Majumdar, R. & Sen, K. (2021). "Fuzzing: Hack, Art, and Science"
+ 3. Cremers, C. et al. (2020). "Formal Verification of the TLS 1.3 Handshake"
 
 ### AI/ML
-23. Vaswani, A. et al. (2017). "Attention is All You Need"
-24. Touvron, H. et al. (2023). "LLaMA: Open and Efficient Foundation Language Models"
-25. Ouyang, L. et al. (2022). "Training Language Models to Follow Instructions"
-26. Wei, J. et al. (2022). "Chain-of-Thought Prompting Elicits Reasoning"
+
+ 1. Vaswani, A. et al. (2017). "Attention is All You Need"
+ 2. Touvron, H. et al. (2023). "LLaMA: Open and Efficient Foundation Language Models"
+ 3. Ouyang, L. et al. (2022). "Training Language Models to Follow Instructions"
+ 4. Wei, J. et al. (2022). "Chain-of-Thought Prompting Elicits Reasoning"
 
 ### Rust
-27. Klabnik, S. (2016). "Rust: A Language for the Next 40 Years"
-28. Turon, A. (2016). "Fearless Concurrency with Rust"
-29. Nichols, C. & Klabnik, S. "The Rust Programming Language" (Book)
+
+ 1. Klabnik, S. (2016). "Rust: A Language for the Next 40 Years"
+ 2. Turon, A. (2016). "Fearless Concurrency with Rust"
+ 3. Nichols, C. & Klabnik, S. "The Rust Programming Language" (Book)
 
 ### Software Engineering
-30. Winters, T. et al. (2020). "Software Engineering at Google"
-31. Newman, S. (2021). "Building Microservices" (2nd Edition)
-32. Hohpe, G. & Woolf, B. (2003). "Enterprise Integration Patterns"
+
+ 1. Winters, T. et al. (2020). "Software Engineering at Google"
+ 2. Newman, S. (2021). "Building Microservices" (2nd Edition)
+ 3. Hohpe, G. & Woolf, B. (2003). "Enterprise Integration Patterns"
 
 ---
 

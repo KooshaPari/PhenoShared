@@ -35,6 +35,7 @@ retrospective.rs (630 LOC)
 ```
 
 **Problems:**
+
 - Cannot test business logic without database
 - Cannot reuse in Web API or GRPC
 - Changes ripple through all layers
@@ -76,6 +77,7 @@ retrospective.rs (630 LOC)
 ```
 
 **Benefits:**
+
 - CLI handler is thin and testable
 - Service logic is pure (95% testable without I/O)
 - Ports are interfaces (mockable for tests)
@@ -90,6 +92,7 @@ retrospective.rs (630 LOC)
 ### Document 1: RETROSPECTIVE_REFACTOR_DESIGN.md (560 lines)
 
 **Content:**
+
 - Current state analysis (assumed 630 LOC structure)
 - Target architecture (hexagonal + CQRS)
 - Port definitions (inbound + outbound)
@@ -107,6 +110,7 @@ retrospective.rs (630 LOC)
 ### Document 2: RETROSPECTIVE_SERVICE_TRAITS.md (450 lines)
 
 **Content:**
+
 - Inbound port: `RetrospectiveService` trait (200 LOC annotated code)
   - 5 core methods with detailed docs
   - Configuration structs
@@ -126,6 +130,7 @@ retrospective.rs (630 LOC)
 ### Document 3: RETROSPECTIVE_MIGRATION_PHASES.md (650 lines)
 
 **Content:**
+
 - Phase 1: Port definition (2 days, 4 work packages)
   - WP1.1: Inbound port (4h)
   - WP1.2: Outbound ports (4h)
@@ -156,6 +161,7 @@ retrospective.rs (630 LOC)
 ### Document 4: RETROSPECTIVE_REUSABILITY_PATTERNS.md (580 lines)
 
 **Content:**
+
 - Pattern recognition (why it's reusable)
 - Concrete example: Applying to plan.rs (553 LOC → 430 LOC)
 - Second example: Applying to review.rs (630 LOC → 470 LOC)
@@ -173,6 +179,7 @@ retrospective.rs (630 LOC)
 ## Implementation Roadmap
 
 ### Week 1: Retrospective Service (Reference Implementation)
+
 ```
 Phase 1: Port Definitions
 ├─ Define RetrospectiveService trait
@@ -191,6 +198,7 @@ Status: ████████████████ 100% (Foundation comple
 ```
 
 ### Week 2: Plan Service (Pattern Application)
+
 ```
 Apply patterns from retrospective
 ├─ Create PlanService trait (180 LOC)
@@ -204,6 +212,7 @@ Total saved: 123 LOC (553 → 430)
 ```
 
 ### Week 3: Review Service (Pattern Consolidation)
+
 ```
 Reuse all infrastructure
 ├─ Create ReviewService trait (200 LOC)
@@ -217,6 +226,7 @@ Total saved: 160 LOC (630 → 470)
 ```
 
 ### Week 4: Cleanup & Consolidation
+
 ```
 ├─ Extract shared traits to common module
 ├─ Consolidate test fixtures
@@ -246,6 +256,7 @@ Total ecosystem LOC saved: 1,300+ LOC
 ### Testability
 
 **Before:** Testing a handler requires:
+
 - Database setup
 - Redis setup
 - Full integration
@@ -253,6 +264,7 @@ Total ecosystem LOC saved: 1,300+ LOC
 - Cannot test business logic in isolation
 
 **After:** Testing a service requires:
+
 - Mock 3 ports (100 LOC of mocks)
 - Pure logic tests run in <100ms
 - Business logic testable without I/O
@@ -262,11 +274,13 @@ Total ecosystem LOC saved: 1,300+ LOC
 ### Reusability
 
 **Before:** 0 reusable code
+
 - Handlers cannot be used in Web/GRPC
 - Business logic embedded in CLI
 - Adapters tightly coupled
 
 **After:** ~500 LOC of reusable infrastructure
+
 - Service trait usable in any interface
 - Adapters generic and reusable
 - Patterns exportable to other commands
@@ -290,6 +304,7 @@ Total ecosystem LOC saved: 1,300+ LOC
 ## Success Criteria Checklist
 
 ### Phase 1: Port Definitions
+
 - [ ] All traits compile without errors
 - [ ] All doc tests pass
 - [ ] No Clippy warnings
@@ -297,6 +312,7 @@ Total ecosystem LOC saved: 1,300+ LOC
 - [ ] Zero breaking changes to existing code
 
 ### Phase 2: Service Implementation
+
 - [ ] Service impl passes 80%+ test coverage
 - [ ] All adapters functional and tested
 - [ ] Integration tests pass
@@ -304,6 +320,7 @@ Total ecosystem LOC saved: 1,300+ LOC
 - [ ] Event sourcing works end-to-end
 
 ### Phase 3: CLI Operational
+
 - [ ] New handler < 150 LOC
 - [ ] All original functionality preserved
 - [ ] Performance same or better
@@ -312,6 +329,7 @@ Total ecosystem LOC saved: 1,300+ LOC
 - [ ] Old code removed
 
 ### Overall
+
 - [ ] 3 services implemented
 - [ ] ~450 LOC thin handlers (vs 1,813 LOC monolithic)
 - [ ] ~500 LOC reusable trait definitions
@@ -379,12 +397,14 @@ Total ecosystem LOC saved: 1,300+ LOC
 This refactor aligns with Phenotype's documented architecture:
 
 ### Hexagonal Architecture (Ports & Adapters)
+
 ✓ Inbound port: `RetrospectiveService` trait
 ✓ Outbound ports: Repository, Cache, EventBus
 ✓ Domain models isolated from infrastructure
 ✓ Adapters implement ports
 
 ### SOLID Principles
+
 ✓ Single Responsibility: Each layer has one job
 ✓ Open/Closed: Service closed for modification, open for extension via ports
 ✓ Liskov Substitution: All adapters implement port contracts
@@ -392,6 +412,7 @@ This refactor aligns with Phenotype's documented architecture:
 ✓ Dependency Inversion: CLI depends on abstractions (ports)
 
 ### xDD Methodologies
+
 ✓ TDD: Tests written first (95+ tests)
 ✓ BDD: Behavior specified via traits
 ✓ DDD: Domain-driven service design
@@ -399,6 +420,7 @@ This refactor aligns with Phenotype's documented architecture:
 ✓ Event Sourcing: All events published to audit log
 
 ### Code Quality
+
 ✓ No warnings (Clippy)
 ✓ Type-safe (Rust)
 ✓ Thread-safe (Send + Sync)

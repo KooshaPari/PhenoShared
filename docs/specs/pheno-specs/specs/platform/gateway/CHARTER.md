@@ -45,6 +45,7 @@ Local development, staging, production—consistent behavior. Service mesh integ
 ### In Scope
 
 **Service Discovery:**
+
 - DNS-based discovery
 - Consul, etcd, ZooKeeper integration
 - Kubernetes service discovery
@@ -52,12 +53,14 @@ Local development, staging, production—consistent behavior. Service mesh integ
 - Health check aggregation
 
 **Load Balancing:**
+
 - Round-robin, least connections, weighted
 - Geographic routing
 - Latency-based routing
 - Custom load balancing strategies
 
 **Traffic Management:**
+
 - Canary deployments
 - A/B testing support
 - Traffic splitting
@@ -65,6 +68,7 @@ Local development, staging, production—consistent behavior. Service mesh integ
 - Circuit breaking
 
 **Gateway Features:**
+
 - Request/response transformation
 - Authentication at edge
 - TLS termination
@@ -72,6 +76,7 @@ Local development, staging, production—consistent behavior. Service mesh integ
 - Caching integration
 
 **Observability:**
+
 - Distributed tracing
 - Metrics export
 - Request logging
@@ -175,16 +180,19 @@ Portalis/
 ### Development Process
 
 **New Features:**
+
 - Impact on existing routing assessed
 - Performance benchmarks
 - Rollback considerations
 
 **Routing Changes:**
+
 - Thorough testing in staging
 - Gradual rollout
 - Monitoring requirements
 
 **Breaking Changes:**
+
 - Migration guide
 - Deprecation period
 - Version management

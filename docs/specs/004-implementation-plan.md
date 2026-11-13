@@ -33,6 +33,7 @@
 **Why first:** pheno-harness's `eval/tbench.py` already runs TB 2.0 honestly. Adding 2.1 is a one-driver extension. The custom long-horizon Harbor-compatible suite fills the gap between short TB tasks and full DeepSWE work. TB 3.x is a watch (pre-release); not in primary lane.
 
 **Per-stage cost ceiling (from `state/hf_scrape/2026-07-04/cost_projection.md`):**
+
 - TB 2.0 full sweep (89 tasks × 11 picks × n=1) = $1,596.91; per pick = $145.17.
 - TB 2.1 full sweep = $1,758.31; per pick = $159.85.
 - Custom long-horizon (4h×30 tasks × 11 picks × n=1) = $5,797.50; per pick = $527.05.
@@ -46,6 +47,7 @@
 - **MODIFY** `pheno-harness/eval/HARBOR.md` — note TB 2.1 status + TB 3.x watch.
 
 **Acceptance:**
+
 - `python scripts/run_tbench_v21.py --subset 16` produces a `terminal-bench@2.0` manifest with the acquired local task-artifact hash when available.
 - `python scripts/run_tbench_v21.py --subset full` exits 0 on dry-run (no real model call needed; just task binding).
 - TB 3.x watch writes a one-line "compat status" row daily.
@@ -61,6 +63,7 @@
 **Why after Stage 1:** DeepSWE uses a separate verifier (post-v1.1) and Pier ≥ 0.3.0 — driver pattern follows TB 2.0/2.1 but adds Pier plumbing. 113 tasks across TS/Go/Python/JS/Rust.
 
 **Per-stage cost ceiling (from `state/hf_scrape/2026-07-04/cost_projection.md`):**
+
 - DeepSWE full sweep (113 × 11 picks × n=1) = $9,402.45; per pick = $854.77.
 - Pier sandbox cost is separate (Modal or similar); budget $200 for a 16-task subset probe first.
 - Stage 2 combined ceiling = ~$9,402 (n=1) or ~$37,610 (n=4).
@@ -73,6 +76,7 @@
 - **MODIFY** `pheno-harness/pheno/harbor_util.py` — handle DeepSWE's separate verifier (post-v1.1) and Pier ≥ 0.3.0 requirement.
 
 **Acceptance:**
+
 - `python scripts/run_deepswe.py --subset 16 --env modal` produces `bench/results/deepswe/<run_id>.json`.
 - Pier version pinned in `requirements` block; missing Pier aborts the run with a clear error.
 
@@ -93,6 +97,7 @@
 - **MODIFY** `pheno-harness/eval/tbench.py`, `eval/route_matrix.py` — emit `<run_id>.graph.json` after each run.
 
 **Acceptance:**
+
 - Re-run `python scripts/run_tbench_route_matrix.py --subset 4` and confirm `bench/results/tbench/<run_id>.graph.json` exists and is valid JSON.
 - Replay the `.graph.json` against a different model binding produces a comparable trace (still metrics-instrumented; not yet plan-execution).
 
@@ -118,6 +123,7 @@ integration once a local server exposes those fields; the profiler labels those
 metrics absent rather than fabricating them.
 
 **Acceptance:**
+
 - `python scripts/run_perf_suite.py --synthetic ...` validates scheduling without a model call.
 - Against a local endpoint it writes TTFT, chunk-proxy ITL, tokens/sec, warmup/failure rows, probe overhead, and resource peaks.
 - Cache-hit and queue fields are absent until supplied by the selected engine, never inferred.
@@ -144,6 +150,7 @@ The brief explicitly contrasts "just told to RLVRAF" with a **garden-managed** l
 - `scripts/run_self_improvement_tick.py` — daily dry-run entrypoint.
 
 **Acceptance:**
+
 - `python scripts/run_self_improvement_tick.py --dry-run` reads the last 7 days of ledger observations, applies all required gates, and reports pass/fail per lane without mutating state.
 - A synthetic failing run (intentionally injected) trips the regression gate.
 - A synthetic unsafe run (intentionally injected) trips the safety gate.
@@ -151,6 +158,7 @@ The brief explicitly contrasts "just told to RLVRAF" with a **garden-managed** l
 **Subagent use:** the implementation was audited and then completed in the main worktree after delegated workers disconnected.
 
 **Loop tick (daily, cron):**
+
 1. Aggregate last 24 h of eval results.
 2. Run all gates.
 3. If any gate fails → emit a "garden alert" with the failing lane + role + diff vs. previous tick. **No automatic promotion.**
@@ -165,6 +173,7 @@ This is the "garden-managed" property: the loop observes and proposes, a human (
 **Why after the perf suite:** depends on the perf suite, the matrix YAML, and a stable SGLang/vLLM/TRT-LLM toolchain.
 
 **Per-stage cost ceiling:** self-hosted only — no OR token cost. The cost is **disk + GPU-hours**:
+
 - 11 picks × T0–T4 × 4 engines = ~176 cells; ~5 min per cell = ~15 GPU-hours single-shot.
 - n_attempts=3 → ~45 GPU-hours.
 - Self-hosted weights: Qwen3.5 0.8B, LFM2.5 8B-A1B, and Ornith 8B alias only. Qwen/LFM Q4 artifacts and the published grafted Ornith MTP Q4 artifact are now hash-locked; no BF16 local assumption for large models.
@@ -177,6 +186,7 @@ This is the "garden-managed" property: the loop observes and proposes, a human (
 - **NEW** `pheno-harness/scripts/run_m1_fallback_smoke.py`
 
 **Acceptance:**
+
 - Per-tier sweep writes one row per (model, engine, quantization) cell.
 - M1 Pro smoke writes one row per (model, format) cell.
 - All rows tagged with the full reproducibility manifest.
@@ -200,6 +210,7 @@ Approval, PII/secret review, holdout split, golden replay, and actual
 model-backed execution remain gated after review artifacts exist.
 
 **Acceptance:**
+
 - 30 approved specs in `bench/fixtures/trace_replay/`.
 - 4 role suites scoring: `solo_engineer`, `coding_subagent`, `reviewer`, `planner_manager`.
 - All reviewed replays emit `.graph.json` when execution is enabled.
@@ -220,6 +231,7 @@ model-backed execution remain gated after review artifacts exist.
 - `pheno-harness/harness/intent_graph/replay.py`
 
 **Acceptance per sub-stage:**
+
 - **B:** deterministic tool execution reduces cost ≥ 20 % vs. chat-loop baseline (measured on TB 2.0 16-task subset).
 - **C:** planner emits a valid DAG on ≥ 80 % of TB 2.0 tasks; failure falls back to chat loop.
 - **D:** sub-agent fan-out reduces wall time ≥ 30 % on tasks with ≥ 3 independent reads.
@@ -236,17 +248,20 @@ model-backed execution remain gated after review artifacts exist.
 **When invoked:** only when (a) a harness plumbing change needs a cross-check, (b) a regression in TB 2.0 + DeepSWE is suspected to be env-specific (not model-specific).
 
 **Per-stage cost ceiling:**
+
 - SWE-bench Verified frozen 200-task subset × 11 picks × n=1 = $3,180 (rough).
 - SWE-bench Lite 300-task × 11 picks × n=1 = $4,770 (rough).
 - Stage 9 is **not in default weekly cadence** — explicit opt-in per run.
 
 **Files to add / modify:**
+
 - `pheno-harness/eval/swebench_verified.py` — frozen 200-task subset.
 - `pheno-harness/eval/swebench_lite.py` — full 300-task run.
 - `pheno-harness/scripts/run_swebench_regression.py` — gated by `--allow-swebench-regression` flag (default false).
 - **MODIFY** `pheno-harness/training/eval_holdout.yaml` — add SWE-bench Verified subset to holdout.
 
 **Acceptance:**
+
 - `python scripts/run_swebench_regression.py --allow-swebench-regression` produces `bench/results/swebench/<run_id>.json` with `pass@1`, `regressions`, and per-task wall time.
 - Default invocation (without flag) exits 0 with a printed notice that SWE-bench is debug-only.
 
@@ -259,6 +274,7 @@ model-backed execution remain gated after review artifacts exist.
 **Gating:** user sign-off required after **Stage 2 (DeepSWE)** or **Stage 6 (matrix sweep)** completes successfully. Do not start without explicit approval.
 
 **Scope (preview):**
+
 - Mirror Stages 1–9 against the codex fork.
 - Same eval suites; different harness substrate.
 - The matrix YAML, the trace-derived evalset, the perf suite, and the self-improvement loop transfer; the intent-graph Stages B–E require codex-internal refactors.

@@ -13,11 +13,13 @@
 ## v0.10 → v0.11 → v0.12 carry-over
 
 **v0.10 close (tagged 2026-08-08):**
+
 - 720 tests passing, mypy 0 errors, bandit 0 MEDIUM
 - 22 TypedDicts, 5 Protocols
 - 750+ tests collected; one known flake (sota cron UTC date rollover)
 
 **v0.11 close (2026-08-09):**
+
 - Lane A: 5 phenoforge launchd plists rewritten as valid XML
 - Lane B: 5 stale branches deleted (partial: preserve-launchd-installer
   remains a frozen snapshot)
@@ -31,6 +33,7 @@
 - 19 D-deep atomic batches (165 docstrings)
 
 **v0.12 picks up:**
+
 - Tracera persistent-trace-repository integration (Grapheon branch)
 - AgilePlus work-tracking API integration (replace JSONL backing store)
 - Forge-* launchd script bodies (currently `/usr/bin/true` placeholders)

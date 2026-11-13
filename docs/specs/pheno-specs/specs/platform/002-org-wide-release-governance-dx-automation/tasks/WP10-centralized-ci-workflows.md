@@ -50,9 +50,11 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 ## Subtasks & Detailed Guidance
 
 ### Subtask T057 – Publish Workflow
+
 - **Purpose**: Create reusable `publish.yml` workflow for building and publishing packages to registries
 - **Steps**:
   1. Create `.github/workflows/publish.yml` in phenotypeActions repository:
+
      ```yaml
      name: Publish
 
@@ -137,6 +139,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
              run: |
                echo "::notice title=Publish::✓ Published ${{ inputs.package_name }}@${{ inputs.version }} to ${{ inputs.registry }}"
      ```
+
   2. Implement language setup matrix:
      - Go: `actions/setup-go@v4`
      - Rust: `actions-rust-lang/setup-rust-action@v1`
@@ -153,9 +156,11 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 - **Notes**: Use mise tasks to abstract language-specific build/publish logic; handle registry-specific credentials; ensure idempotent operation
 
 ### Subtask T058 – Gate Check Workflow
+
 - **Purpose**: Create reusable `gate-check.yml` workflow for evaluating quality gates
 - **Steps**:
   1. Create `.github/workflows/gate-check.yml` in phenotypeActions repository:
+
      ```yaml
      name: Gate Check
 
@@ -248,6 +253,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
                  exit 1
                fi
      ```
+
   2. Implement conditional gate execution based on channel:
      - Alpha: lint, unit_tests
      - Canary+: add integration_tests, security_audit
@@ -266,9 +272,11 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 - **Notes**: Delegate gate execution to mise tasks; output results as JSON for machine consumption; use GitHub workflow annotations for visibility
 
 ### Subtask T059 – Promote Workflow
+
 - **Purpose**: Create reusable `promote.yml` workflow that combines gate-check and publish
 - **Steps**:
   1. Create `.github/workflows/promote.yml` in phenotypeActions repository:
+
      ```yaml
      name: Promote
 
@@ -343,6 +351,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
                  exit 1
                fi
      ```
+
   2. Chain workflows: gate-check → publish
   3. Only run publish if gate-check passes
   4. Include final notification step with summary
@@ -353,9 +362,11 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 - **Notes**: Use `needs` and `if` to implement conditional execution; inherit secrets for publish; provide clear output on success/failure
 
 ### Subtask T060 – Changelog Workflow
+
 - **Purpose**: Create reusable `changelog.yml` workflow for generating and committing changelog files
 - **Steps**:
   1. Create `.github/workflows/changelog.yml` in phenotypeActions repository:
+
      ```yaml
      name: Changelog
 
@@ -406,6 +417,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
                draft: false
                prerelease: false
      ```
+
   2. Parse conventional commits using git-cliff
   3. Group commits by type (feat, fix, chore, etc.)
   4. Generate markdown changelog in CHANGELOG.md
@@ -418,9 +430,11 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 - **Notes**: Use git-cliff for conventional commit parsing; set bot credentials for commits; handle case where changelog already exists (append)
 
 ### Subtask T061 – Audit Workflow (Scheduled)
+
 - **Purpose**: Create scheduled `audit.yml` workflow to periodically scan release status
 - **Steps**:
   1. Create `.github/workflows/audit.yml` in phenotypeActions repository:
+
      ```yaml
      name: Audit
 
@@ -477,6 +491,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
                name: audit-results
                path: audit-results.json
      ```
+
   2. Schedule weekly audit (configurable cron)
   3. Allow manual trigger via `workflow_dispatch`
   4. Parse JSON audit results
@@ -489,9 +504,11 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 - **Notes**: Schedule is UTC; configurable via cron expression; use GitHub API to create issues; support optional notifications
 
 ### Subtask T062 – Workflow Schema & Documentation
+
 - **Purpose**: Document consistent inputs/outputs interface across all workflows
 - **Steps**:
   1. Create `README.md` in phenotypeActions with workflow documentation:
+
      ```markdown
      # Phenotype Actions
 
@@ -525,6 +542,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
      ```
 
      ### gate-check.yml
+
      Evaluates quality gates for channel promotion.
 
      **Inputs:**
@@ -537,6 +555,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
      - `results` (string): JSON with gate results
 
      **Example:**
+
      ```yaml
      - uses: &lt;REDACTED&gt;/phenotypeActions/.github/workflows/gate-check.yml@v1
        with:
@@ -563,6 +582,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
      2. Document inputs/outputs in README
      3. Test with `act` or test repository
      4. Tag release version
+
      ```
 
   2. Document each workflow's purpose, inputs, outputs, and example usage
@@ -576,14 +596,18 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 - **Notes**: Use consistent schema format for all workflows; include example usage for each; document input validation rules
 
 ### Subtask T063 – Workflow Testing & Validation
+
 - **Purpose**: Test workflows locally and in a test repository
 - **Steps**:
   1. Install and use `act` (local GitHub Actions runner):
+
      ```bash
      # Test gate-check workflow locally
      act --job gate-check --input language=go --input channel=alpha --input risk_profile=low
      ```
+
   2. Create `tests/workflows_test.sh` script:
+
      ```bash
      #!/bin/bash
      # Test all reusable workflows
@@ -606,6 +630,7 @@ This work package implements reusable GitHub Actions workflows in the `phenotype
 
      echo "All tests passed!"
      ```
+
   3. Create test repository with sample Go/Rust/Python/TypeScript projects
   4. Push changes and verify workflows trigger correctly
   5. Verify outputs and artifacts are generated

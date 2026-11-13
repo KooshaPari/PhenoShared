@@ -13,4 +13,3 @@ portage, and thegent. Dirty checkouts were not cleaned or reset.
 | SessionLedger | local ahead history and dirty signal | preserve before audit |
 
 Canonical owners remain governed by `BOUNDARY_OWNERS.md`; preservation is not absorption.
-

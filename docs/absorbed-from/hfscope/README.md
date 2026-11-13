@@ -1,6 +1,6 @@
 # hfscope
 
-- **Source**: https://github.com/KooshaPari/zz-merge-unk-hfscope (**deleted**)
+- **Source**: <https://github.com/KooshaPari/zz-merge-unk-hfscope> (**deleted**)
 - **Declared module path**: `github.com/KooshaPari/hfscope` (**deleted**)
 - **Absorbed**: 2026-09-15 (per `hfscope/PROVENANCE.md`, "Absorbed Into: PhenoMLX (`hfscope/`)")
 - **Disposition**: EXCLUDE — vendored copy retained in-tree, **not** first-class

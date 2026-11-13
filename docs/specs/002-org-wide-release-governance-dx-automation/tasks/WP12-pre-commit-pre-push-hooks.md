@@ -28,9 +28,10 @@ history:
 **Primary Goal:** Implement git hooks for automated code quality validation and channel-aware pre-push checks, ensuring consistent commit messages and preventing broken code from reaching remote.
 
 **Success Criteria:**
+
 - Pre-commit hook validates conventional commits; rejects non-conforming messages
 - Pre-commit hook runs fast lint checks (<5s) without blocking legitimate commits
-- Pre-push hook enforces channel-aware testing (feature/* minimal, canary/* full test, rc/* full test + ROLLBACK.md check)
+- Pre-push hook enforces channel-aware testing (feature/*minimal, canary/* full test, rc/* full test + ROLLBACK.md check)
 - Hook installation is idempotent and works standalone or with pre-commit framework
 - All hooks are POSIX sh for portability (Linux, macOS, Windows-compatible)
 - Hooks tested on temp git repo with multiple scenarios
@@ -38,12 +39,14 @@ history:
 ## Context & Constraints
 
 **Context:**
+
 - WP11 established mise task standardization; WP12 hooks invoke these tasks
 - Conventional commits enable automated release note generation (WP09/WP10 use this)
 - Channel-aware pre-push gates (feature, canary, beta, rc, main) align with governance model
 - Hook installation must be simple: pheno bootstrap will run installer automatically
 
 **Constraints:**
+
 - Hooks written in POSIX sh for portability; no bash, zsh, or PowerShell
 - Pre-commit hook must complete <5s to avoid developer frustration
 - Merge commits must bypass commit message validation (git internally adds "Merge" prefix)
@@ -57,6 +60,7 @@ history:
 **Purpose:** Implement `.git/hooks/pre-commit` script to validate commit message format using conventional commits standard.
 
 **Steps:**
+
 1. Create shell script at `hooks/pre-commit`:
    - Read commit message from: `git diff --cached --name-only` (files only) and message from `cat "$1"` (message from git commit)
    - Actually, git pre-commit hook doesn't have access to message; use `pre-commit-msg` instead
@@ -74,6 +78,7 @@ history:
      - Subject: 1–72 characters
    - Special case: merge commits (start with "Merge") → skip validation
    - On failure: print helpful error message with examples:
+
      ```
      ❌ Commit message does not follow conventional commits format.
      Expected format: <type>(<scope>)?: <subject (1-72 chars)>
@@ -84,6 +89,7 @@ history:
        refactor!: breaking change in API
      Your message: [show user's message]
      ```
+
    - Exit code 1 on failure, 0 on success
    - Allow `--no-verify` (git handles this; hook is skipped)
 
@@ -95,12 +101,14 @@ history:
 5. Make POSIX-compliant; test on bash, sh, zsh
 
 **Files:**
+
 - Create: `hooks/commit-msg` (or update if exists)
 - Create: `hooks/pre-commit.sh` if needed for file checks
 
 **Parallel?** No (T072 builds on this).
 
 **Notes:**
+
 - Regex must be POSIX-compatible (some systems have limited regex support)
 - Alternatively, use simpler regex and check type/scope separately
 - Error messages should guide user without being condescending
@@ -112,6 +120,7 @@ history:
 **Purpose:** Add fast linting to pre-commit hook (after message validation), ensuring code formatting is correct before staging.
 
 **Steps:**
+
 1. Update or extend `hooks/pre-commit` script:
    - After commit-msg validation passes, run format/lint check
    - Invoke: `mise run format -- --check` (or repo's equivalent)
@@ -135,12 +144,14 @@ history:
 5. Make POSIX-compliant; handle tools gracefully if mise not installed
 
 **Files:**
+
 - Update: `hooks/pre-commit`
 - Reference task: T065–T068 (add `--check` flag support to format tasks)
 
 **Parallel?** Yes, after T071 complete.
 
 **Notes:**
+
 - Pre-commit timing is critical; if exceeds 5s, consider making it optional or async
 - Document in error message how to bypass if needed: `git commit --no-verify` (educate, don't enable by default)
 - Test on repos with 1000+ files to ensure performance
@@ -152,6 +163,7 @@ history:
 **Purpose:** Implement `.git/hooks/pre-push` to enforce channel-specific quality gates before pushing to remote.
 
 **Steps:**
+
 1. Create `hooks/pre-push` script:
    - Git provides input on stdin: local refs, remote refs, local SHAs, remote SHAs
    - Read from stdin: `while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do`
@@ -179,12 +191,14 @@ history:
 5. Make POSIX-compliant; handle missing mise gracefully
 
 **Files:**
+
 - Create: `hooks/pre-push`
 - Reference: ROLLBACK.md template (document structure for RC releases)
 
 **Parallel?** Yes, after T071 complete.
 
 **Notes:**
+
 - Pre-push hooks often fail silently; test thoroughly
 - Git pre-push hook input format: `<local-ref> <local-sha> <remote-ref> <remote-sha>`
 - Document why main is blocked: enforces PR review process
@@ -197,12 +211,14 @@ history:
 **Purpose:** Create `.pre-commit-config.yaml` template for repos choosing to use the pre-commit framework instead of standalone installer.
 
 **Steps:**
+
 1. Understand pre-commit framework:
    - YAML config that manages hooks from various sources
    - Can integrate local hooks (our shell scripts) or external hooks
    - Runs hooks in dependency order; easy to add/remove hooks per repo
 
 2. Create `.pre-commit-config.yaml` template:
+
    ```yaml
    repos:
      - repo: local
@@ -235,12 +251,14 @@ history:
    - If not: use standalone installer (T075) for simplicity
 
 **Files:**
+
 - Create: `.pre-commit-config.yaml` (template)
 - Reference: hooks from T071–T073
 
 **Parallel?** Yes, after T071–T073.
 
 **Notes:**
+
 - pre-commit framework is optional; pheno bootstrap will default to standalone installer
 - This template provided for teams already using pre-commit framework
 - Document in pheno bootstrap: "If .pre-commit-config.yaml exists, use pre-commit; else use standalone installer"
@@ -252,6 +270,7 @@ history:
 **Purpose:** Create `hooks/install.sh` for standalone installation of hooks (no framework required).
 
 **Steps:**
+
 1. Create `hooks/install.sh` script:
    - Copy `hooks/commit-msg` to `.git/hooks/commit-msg`
    - Copy `hooks/pre-commit` to `.git/hooks/pre-commit`
@@ -279,12 +298,14 @@ history:
 5. Script runs automatically via pheno bootstrap
 
 **Files:**
+
 - Create: `hooks/install.sh`
 - Reference: pheno bootstrap integration (WP09/WP10 or later)
 
 **Parallel?** Yes, after T071–T073.
 
 **Notes:**
+
 - Make script POSIX-compliant (works on all OSes)
 - Provide clear success message: "Hooks installed in .git/hooks/"
 - Document in pheno bootstrap: "Run `hooks/install.sh` after cloning"
@@ -296,6 +317,7 @@ history:
 **Purpose:** Create comprehensive test suite for hooks, validating all scenarios and measuring performance.
 
 **Steps:**
+
 1. **Setup test environment:**
    - Create temporary git repo: `mkdir test-repo && cd test-repo && git init`
    - Copy hooks: `cp -r ../hooks .git/hooks/` or `bash hooks/install.sh`
@@ -341,6 +363,7 @@ history:
    - Document any platform-specific issues
 
 **Files:**
+
 - Create: `tests/hooks-test.sh` (comprehensive test suite)
 - Create: `tests/fixtures/` (sample files for testing)
 - Document: `TESTING.md` (how to run tests)
@@ -348,6 +371,7 @@ history:
 **Parallel?** No (depends on T071–T075).
 
 **Notes:**
+
 - Test suite should be runnable in CI/CD pipeline
 - Validate error messages are clear and actionable
 - Common failure mode: pre-push hook not invoked because test fails before push is attempted
@@ -368,6 +392,7 @@ history:
 ## Review Guidance
 
 **Reviewers should verify:**
+
 - [ ] commit-msg hook validates conventional commits correctly (T071)
 - [ ] Pre-commit hook runs <5s and shows helpful error messages (T072)
 - [ ] Pre-push hook enforces channel-specific gates (T073)

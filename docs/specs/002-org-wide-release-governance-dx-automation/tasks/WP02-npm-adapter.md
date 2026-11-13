@@ -135,6 +135,7 @@ WP02 implements the npm RegistryAdapter, enabling detection, versioning, buildin
    - Workspace packages (monorepos with yarn/npm workspaces)
 
 **Acceptance Criteria:**
+
 - Detect returns all package.json files in the repo (excluding node_modules)
 - Scoped packages are handled correctly
 - Private flag is captured
@@ -181,6 +182,7 @@ WP02 implements the npm RegistryAdapter, enabling detection, versioning, buildin
    ```
 
 2. Document the dist-tag mapping in a comment:
+
    ```
    Dist-tag mappings:
    - alpha  → "alpha" (edge pre-release)
@@ -193,6 +195,7 @@ WP02 implements the npm RegistryAdapter, enabling detection, versioning, buildin
 3. Ensure that the Version method calls the calculator from WP01 (import the package).
 
 **Acceptance Criteria:**
+
 - Version method returns correct format (e.g., "1.2.3-alpha.1")
 - DistTag returns correct npm dist-tag per channel
 - Channel "prod" maps to "latest" (not "prod")
@@ -249,6 +252,7 @@ WP02 implements the npm RegistryAdapter, enabling detection, versioning, buildin
 4. Test with a real npm package or mock exec.
 
 **Acceptance Criteria:**
+
 - Build creates a valid tarball (.tgz file)
 - Tarball path is returned in BuildResult.ArtifactPath
 - Command runs from the correct directory (pkgDir)
@@ -363,6 +367,7 @@ WP02 implements the npm RegistryAdapter, enabling detection, versioning, buildin
 3. Environment variable for credentials: `npm_config_//registry.npmjs.org/:_authToken`
 
 **Acceptance Criteria:**
+
 - Publish command executes correctly with valid artifact
 - Rate limit (429) is detected and retried with proper sleep duration
 - Auth error (403) fails immediately with helpful message
@@ -430,6 +435,7 @@ WP02 implements the npm RegistryAdapter, enabling detection, versioning, buildin
 4. Handle scoped packages correctly in the URL (`@org/name` → `%40org%2Fname`).
 
 **Acceptance Criteria:**
+
 - Verify polls the registry endpoint
 - Returns true when version is found (200 status)
 - Returns false and error after 5-minute timeout
@@ -611,6 +617,7 @@ WP02 implements the npm RegistryAdapter, enabling detection, versioning, buildin
 4. Ensure retry logic tests validate that sleep/retry behavior works correctly.
 
 **Acceptance Criteria:**
+
 - Detect tests cover standard, scoped, private, and excluded packages
 - Version tests cover all 5 channels
 - DistTag tests verify channel→tag mapping

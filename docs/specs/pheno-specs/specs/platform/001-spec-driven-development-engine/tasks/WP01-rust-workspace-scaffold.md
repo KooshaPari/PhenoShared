@@ -52,8 +52,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -73,16 +74,17 @@ spec-kitty implement WP01
 
 > **Note**: This is the `agileplus-core` repository. The domain crate within it is named `agileplus-domain`. Agent dispatch (`agileplus-agents`), review (`agileplus-review`), and integration crates (agileplus-plane, agileplus-github, agileplus-triage) live in separate repos and are NOT members of this workspace.
 
-4. **Makefile targets work**: `make build`, `make test`, `make lint`, `make format` all succeed.
-5. **Docker Compose starts**: `docker-compose up --build` creates Rust builder and Python MCP containers without errors.
-6. **Proto stubs generated**: `make proto-gen` produces Rust (tonic) and Python (grpcio) stubs from `proto/agileplus.proto`.
-7. **Rust 2024 edition** used in all `Cargo.toml` files.
+1. **Makefile targets work**: `make build`, `make test`, `make lint`, `make format` all succeed.
+2. **Docker Compose starts**: `docker-compose up --build` creates Rust builder and Python MCP containers without errors.
+3. **Proto stubs generated**: `make proto-gen` produces Rust (tonic) and Python (grpcio) stubs from `proto/agileplus.proto`.
+4. **Rust 2024 edition** used in all `Cargo.toml` files.
 
 ---
 
 ## Context & Constraints
 
 ### Reference Documents
+
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- FR requirements
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- Project structure (lines 50-176), dependency graph, technical context
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- Entity definitions for domain module stubs
@@ -90,12 +92,14 @@ spec-kitty implement WP01
 - **Research**: `kitty-specs/001-spec-driven-development-engine/research.md` -- Technology choices and rationale
 
 ### Architectural Constraints
+
 - **Hexagonal architecture**: Domain crate has ZERO external dependencies except `serde`, `sha2`, `chrono`. All I/O goes through port traits.
 - **Workspace path dependencies**: Adapter crates depend on `agileplus-domain` via `path = "../agileplus-domain"`, NOT crates.io.
 - **Rust 2024 edition**: All crates use `edition = "2024"` for native async trait support.
 - **Proto generation**: `tonic-build` for Rust, `grpcio-tools` for Python. `protoc` must be pinned in Makefile and Docker.
 
 ### Key Dependencies (from plan.md Technical Context)
+
 - **Rust**: clap, axum, tokio, tonic, rusqlite, git2, opentelemetry, serde, sha2
 - **Python**: fastmcp>=3.0, grpcio, opentelemetry-sdk
 - **Build**: protoc (pinned version), buf (linting)
@@ -111,6 +115,7 @@ spec-kitty implement WP01
   1. Create `Cargo.toml` at the repository root.
   2. Define `[workspace]` with `resolver = "3"` (Rust 2024 default).
   3. List all 7 members under `workspace.members`:
+
      ```toml
      members = [
          "crates/agileplus-domain",
@@ -122,6 +127,7 @@ spec-kitty implement WP01
          "crates/agileplus-telemetry",
      ]
      ```
+
   4. Define `[workspace.dependencies]` for shared deps with version pinning:
      - `serde = { version = "1", features = ["derive"] }`
      - `serde_json = "1"`
@@ -144,6 +150,7 @@ spec-kitty implement WP01
 - **Steps**:
   1. Create directory: `crates/agileplus-domain/src/`
   2. Create `crates/agileplus-domain/Cargo.toml`:
+
      ```toml
      [package]
      name = "agileplus-domain"
@@ -157,11 +164,14 @@ spec-kitty implement WP01
      sha2.workspace = true
      thiserror.workspace = true
      ```
+
   3. Create `src/lib.rs` with module declarations:
+
      ```rust
      pub mod domain;
      pub mod ports;
      ```
+
   4. Create domain module stubs (each file has a comment header explaining its purpose):
      - `src/domain/mod.rs` -- re-exports `feature`, `work_package`, `governance`, `audit`, `state_machine`
      - `src/domain/feature.rs` -- `pub struct Feature {}` placeholder (fields come in WP03)
@@ -177,6 +187,7 @@ spec-kitty implement WP01
      - `src/ports/review.rs` -- `pub trait ReviewPort {}` placeholder
      - `src/ports/observability.rs` -- `pub trait ObservabilityPort {}` placeholder
   6. Create `src/error.rs` with a `DomainError` enum stub using `thiserror`:
+
      ```rust
      #[derive(Debug, thiserror::Error)]
      pub enum DomainError {
@@ -184,6 +195,7 @@ spec-kitty implement WP01
          NotImplemented,
      }
      ```
+
 - **Files**: `crates/agileplus-domain/Cargo.toml`, `crates/agileplus-domain/src/lib.rs`, `src/domain/*.rs`, `src/ports/*.rs`, `src/error.rs`
 - **Parallel?**: Yes -- independent after T001
 - **Validation**: `cargo build -p agileplus-domain` succeeds; `cargo doc -p agileplus-domain --no-deps` generates docs.
@@ -220,12 +232,14 @@ spec-kitty implement WP01
 - **Steps**:
   1. Create `Makefile` at repository root.
   2. Define variables at top:
+
      ```makefile
      PROTOC_VERSION := 28.3
      RUST_EDITION := 2024
      PYTHON_DIR := mcp
      PROTO_DIR := proto
      ```
+
   3. Implement targets:
      - `all`: depends on `build test lint`
      - `build`: `cargo build --workspace` then `cd $(PYTHON_DIR) && uv sync`
@@ -252,6 +266,7 @@ spec-kitty implement WP01
   1. Create `docker-compose.yml` at repository root.
   2. Define services:
      - **rust-builder**: Rust nightly image, mounts workspace, builds all crates
+
        ```yaml
        rust-builder:
          build:
@@ -263,7 +278,9 @@ spec-kitty implement WP01
          working_dir: /workspace
          command: cargo build --workspace
        ```
+
      - **python-mcp**: Python 3.13 image, mounts `mcp/` directory, runs FastMCP server
+
        ```yaml
        python-mcp:
          build:
@@ -276,6 +293,7 @@ spec-kitty implement WP01
          depends_on:
            - rust-builder
        ```
+
      - **sqlite-volume**: Named volume for SQLite database persistence
   3. Create `Dockerfile.rust`:
      - Base: `rust:nightly-slim`
@@ -297,12 +315,15 @@ spec-kitty implement WP01
 - **Purpose**: Wire in the shared proto definitions from the `agileplus-proto` repository as a git submodule so the gRPC contract is managed centrally. Generate typed stubs in both languages so WP02 (Python) and WP14 (gRPC server) can immediately use them.
 - **Steps**:
   1. Add the `agileplus-proto` repository as a git submodule at `proto/`:
+
      ```bash
      git submodule add <agileplus-proto-repo-url> proto
      git submodule update --init --recursive
      ```
+
   2. Verify `proto/agileplus.proto` is present in the submodule. It should define services including `AgilePlusCore` with methods covering Feature, WorkPackage, AuditEntry, etc.
   3. Create `buf.yaml` for protobuf linting at the repository root:
+
      ```yaml
      version: v2
      lint:
@@ -312,14 +333,17 @@ spec-kitty implement WP01
        use:
          - FILE
      ```
+
   4. Create `buf.gen.yaml` for code generation configuration.
   5. Add `build.rs` to `agileplus-grpc` crate for tonic-build:
+
      ```rust
      fn main() -> Result<(), Box<dyn std::error::Error>> {
          tonic_build::compile_protos("../../proto/agileplus.proto")?;
          Ok(())
      }
      ```
+
   6. Add tonic-build as a build-dependency in `agileplus-grpc/Cargo.toml`.
   7. Create a Python generation script at `mcp/scripts/generate_proto.py` using grpcio-tools.
   8. Commit the `.gitmodules` file and the `proto` submodule pointer.
@@ -333,6 +357,7 @@ spec-kitty implement WP01
 **Purpose**: Add minimum supported Rust version CI check using latest stable Rust.
 
 **Steps**:
+
 1. Add `rust-version = "stable"` field to workspace Cargo.toml
 2. Add CI job running `cargo check` with latest stable toolchain
 3. Add Windows target to CI matrix (macOS + Linux + Windows)
@@ -345,6 +370,7 @@ spec-kitty implement WP01
 **Purpose**: Set up rustdoc generation CI and FR/WP traceability convention.
 
 **Steps**:
+
 1. Add `cargo doc --no-deps --workspace` to CI pipeline
 2. Add module header convention: `//! Implements FR-XXX. See WPnn.`
 3. Add rustdoc examples requirement for public APIs in clippy config
@@ -357,6 +383,7 @@ spec-kitty implement WP01
 **Purpose**: Enforce that agileplus-domain has only serde/sha2/chrono as external deps.
 
 **Steps**:
+
 1. Add CI step: parse `crates/agileplus-domain/Cargo.toml` and verify `[dependencies]` contains only allowed crates (serde, sha2, chrono, serde_json)
 2. Script fails CI if unauthorized dependencies are added
 3. Configure workspace clippy with `must-use-candidate = "warn"`
@@ -411,6 +438,7 @@ Reviewers should verify:
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this Activity Log section
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ – agent_id – lane=<lane> – <action>`

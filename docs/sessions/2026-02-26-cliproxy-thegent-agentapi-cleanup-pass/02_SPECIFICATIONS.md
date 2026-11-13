@@ -7,6 +7,7 @@
 **Goal**: Enumerate all open PRs and classify by failure type.
 
 **Acceptance Criteria**:
+
 - [ ] All open PRs enumerated for `cliproxyapi-plusplus` and `thegent`.
 - [ ] Each PR has failure cluster identified.
 - [ ] CR-clean PRs identified separately.
@@ -16,6 +17,7 @@
 **Goal**: Post `@coderabbitai full review` comments on CodeRabbit-failing PRs.
 
 **Acceptance Criteria**:
+
 - [ ] All CodeRabbit-failing PRs received re-review comment.
 - [ ] Comments posted successfully.
 
@@ -24,6 +26,7 @@
 **Goal**: Detect stale local branches with no open PR.
 
 **Acceptance Criteria**:
+
 - [ ] All open PR head branches verified against upstream refs.
 - [ ] No safe prune candidates identified (held).
 

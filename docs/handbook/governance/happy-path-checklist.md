@@ -7,36 +7,43 @@ This checklist prevents AI-DD happy-path collapse. Any claim in code, PR text, t
 ## Core rules (AI-DD hardening)
 
 1. USER’S EYES = GROUND TRUTH
+
 - Contract: only close or claim `fixed/done/passed` after user-visible confirmation. Use `getUserConfirmation` or equivalent explicit human acceptance.
 - Fail pattern: `✅ Fixed`, `done`, `all good`, `pass` without user confirmation evidence.
 - PASS evidence: `getUserConfirmation` result, explicit human review note, or review-approved acceptance token in diff/comments.
 
-2. PROVE FRESH CODE
+1. PROVE FRESH CODE
+
 - Contract: always prove stale-code risk and freshness before accepting claims.
 - Fail pattern: `tests pass`/`build ok`/`fixed` when only status flags are refreshed and no stale-code checks were run.
 - PASS evidence: explicit cache purge, stale-clear command, or output with version/hash/banner/provenance in the same context.
 
-3. TELEMETRY ≠ TRUTH
+1. TELEMETRY ≠ TRUTH
+
 - Contract: telemetry/events alone are insufficient proof.
 - Fail pattern: build/test success reported from metrics/flags only (e.g., `flag=true`, `ok`, `200`) without last-link observables.
 - PASS evidence: build/test claim includes last-link evidence (artifact id, run URL, log excerpt, trace id, or user-visible output).
 
-4. STUDY EXISTING SOLUTIONS / EARLY STEERS
+1. STUDY EXISTING SOLUTIONS / EARLY STEERS
+
 - Contract: prefer known substrate over endless local reinvention.
 - Fail pattern: replacing/patching established patterns without checking equivalent internal/OSS precedent.
 - PASS evidence: link to reused source (`/docs`, ADR, existing module, or platform standard) and scoped diff.
 
-5. ROOT-CAUSE, not blunt-force constants
+1. ROOT-CAUSE, not blunt-force constants
+
 - Contract: remove root cause, not symptoms.
 - Fail pattern: `magic` or large constants/multipliers introduced without measured rationale.
 - PASS evidence: threshold derived from observed metrics and traceable bug root-cause notes.
 
-6. TRACK SIZE / PERF / ROBUSTNESS every build
+1. TRACK SIZE / PERF / ROBUSTNESS every build
+
 - Contract: include size and latency/throughput evidence for build/test claims.
 - Fail pattern: build/test/check claim without size/frame/latency/perf artifact.
 - PASS evidence: size/build artifact delta, frameMs/latency, and loadability or stability metric.
 
-7. DON’T GRIND
+1. DON’T GRIND
+
 - Contract: repeated retries/iterations must stop unless `confirmedWins` / user confirmation exists.
 - Fail pattern: high `iterCount/retryCount/attempts` thresholds with no `confirmedWins/userConfirmed`.
 - PASS evidence: bounded iteration policy and explicit user-confirmed checkpoint(s).

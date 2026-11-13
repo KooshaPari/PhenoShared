@@ -10,7 +10,9 @@
 ## Consolidated Audit Findings (Source: Agents a81c900, af79bb4, a6f24e3)
 
 ### From a81c900 (Duplication Audit) — COMPLETED
+
 **1,370+ LOC reduction opportunity identified across 8 duplication categories:**
+
 - Error handling: 17 projects, 350 LOC → 80 LOC (66% savings)
 - Config loading: 6 projects, 280 LOC → 60 LOC (78% savings)
 - In-memory stores: 5 projects, 200 LOC → 140 LOC (30% savings)
@@ -23,7 +25,9 @@
 **Total Phase 1-3 Impact:** 1,370 LOC, 40% maintenance burden reduction
 
 ### From af79bb4 (External OSS Research) — COMPLETED
+
 **13 major OSS wrapping opportunities:**
+
 - Python: returns, httpx consolidation, pydantic-settings, logfire, LangGraph (optional)
 - Rust: thiserror formalization, axum+reqwest consolidation, config crate, hexagonal (document)
 - Go: Extism plugins, slog/zap logging
@@ -32,7 +36,9 @@
 **Key insight:** Most recommendations are standardization/consolidation (not new deps). Focus: reduce hand-rolled implementations.
 
 ### From a6f24e3 (Inactive Folders Audit) — RATE-LIMITED
+
 **Partial findings (rate limit hit, will retry):**
+
 - Identified stale worktrees in `/platforms/worktrees/thegent/chore/sync-docs-security-deps/`
 - Cleanup action: Delete non-canonical worktrees after merging valuable work
 
@@ -41,20 +47,24 @@
 ## Phase 1 Work Streams (Parallel Execution)
 
 ### WS1: Rust thiserror Formalization
+
 **Agent:** a6f39f5 (haiku, running)
 **Objective:** Eliminate hand-rolled `impl Error` patterns across Rust crates
 **Status:** IN PROGRESS
+
 - [ ] Audit: heliosCLI/codex-rs, phenotype-infrakit, thegent-* for error patterns
 - [ ] Implement: Replace with `#[derive(Error, Debug)]`
 - [ ] Verify: `cargo check --all-features`, `cargo clippy --all-targets`
 - [ ] Deliver: PR WS1-RUST-THISERROR
 
 **Expected Deliverables:**
+
 - Audit report: `/tmp/WS1_AUDIT_REPORT.md` (file paths, LOC counts)
 - PR: WS1-RUST-THISERROR with thiserror replacements
 - Verification: cargo checks pass
 
 **Success Metrics:**
+
 - 0 hand-rolled `impl Error` patterns remaining
 - ~100-200 LOC saved
 - All tests pass
@@ -62,9 +72,11 @@
 ---
 
 ### WS2: Go Logging Middleware
+
 **Agent:** ac10c6f (haiku, running)
 **Objective:** Standardize logging in Go projects (byteport, bifrost-extensions)
 **Status:** IN PROGRESS
+
 - [ ] Audit: Current logging state in both projects
 - [ ] Choose: slog (stdlib) or zap
 - [ ] Implement: Middleware in byteport (gin framework)
@@ -73,12 +85,14 @@
 - [ ] Deliver: PR WS2-GO-LOGGING
 
 **Expected Deliverables:**
+
 - Audit report: `/tmp/WS2_AUDIT_REPORT.md`
 - Middleware files: `internal/middleware/logging.go` (both projects)
 - PR: WS2-GO-LOGGING with logging integration
 - Tests: Integration tests verifying middleware logs requests
 
 **Success Metrics:**
+
 - Structured logging active in both projects
 - All HTTP requests logged (method, path, status, latency)
 - ~50-100 LOC saved
@@ -87,20 +101,24 @@
 ---
 
 ### WS3: TypeScript Zod Validation Audit
+
 **Agent:** a6af21a (haiku, running)
 **Objective:** Verify all TS projects use `zod` for validation
 **Status:** IN PROGRESS
+
 - [ ] Audit: All TS projects (package.json, imports)
 - [ ] Report: Validation library usage (% zod vs others)
 - [ ] Plan: Migrations if non-zod found
 - [ ] Deliver: PR WS3-TS-VALIDATION (if needed)
 
 **Expected Deliverables:**
+
 - Audit report: `/tmp/WS3_AUDIT_REPORT.md`
 - PR: WS3-TS-VALIDATION (optional, if migrations needed)
 - Documentation: Schema location standards in CLAUDE.md
 
 **Success Metrics:**
+
 - All TS projects identified and audited
 - Clear mapping: which use zod vs others
 - If non-zod found: Migration plan created
@@ -146,17 +164,23 @@ Phase 1 Timeline (Parallel)
 **Expected start:** 2026-03-30 (after Phase 1 PRs merge)
 
 ### WS4: Python httpx Consolidation
+
 **Effort:** MEDIUM (~30 LOC, 1-2 days)
+
 - Consolidate HTTPClient + APIClient into single async-first client
 - Remove redundant wrapper patterns
 
 ### WS5: Python pydantic-settings
+
 **Effort:** MEDIUM (~30-50 LOC, 1-2 days)
+
 - Replace `python-dotenv` with pydantic-settings v2
 - Refactor config classes for env-based config
 
 ### WS6: Rust TOML Parser Consolidation
+
 **Effort:** MEDIUM (~50-100 LOC, 1-2 days)
+
 - Replace 3 TOML libraries (toml, rtoml, tomli) with `config` crate
 - Unify config loading pattern
 
@@ -169,18 +193,24 @@ Phase 1 Timeline (Parallel)
 **Expected start:** 2026-04-02 (after Phase 2 PRs merge)
 
 ### WS7: Python logfire Adoption
+
 **Effort:** MEDIUM (~100-200 LOC, 2-3 days)
+
 - Replace structlog + custom patterns with logfire
 - Add observability context injection
 
 ### WS8: Rust HTTP/Web Consolidation
+
 **Effort:** HIGH (~300-500 LOC, 3-4 days)
+
 - Consolidate proxy patterns into axum middleware
 - Create `thegent-proxy-middleware` crate
 - Refactor network-proxy + rmcp-client
 
 ### WS9: Go Extism Plugin System (Optional)
+
 **Effort:** HIGH (~200-400 LOC, 3-4 days)
+
 - Evaluate Extism for bifrost-extensions
 - Requires plugin interface redesign
 - Optional if Go plugins suffice
@@ -214,11 +244,13 @@ Phase 1 Timeline (Parallel)
 ## Handoff to Phase 2
 
 **Blockers for Phase 2:**
+
 - [ ] Phase 1 PRs merged to main (all 3 projects)
 - [ ] All Phase 1 agents report completion
 - [ ] Comprehensive report compiled (this document + agent reports)
 
 **Next Actions:**
+
 1. Monitor agents a6f39f5, ac10c6f, a6af21a for completion
 2. Compile agent reports into consolidated summary
 3. Review PRs, merge to main (should be straightforward)
@@ -239,4 +271,3 @@ Phase 1 Timeline (Parallel)
 **Report compiled:** 2026-03-29 (ongoing)
 **Next update:** When agents complete (expected ~3-4 hours)
 **Status page:** Check agent progress via `/private/tmp/claude-501/-Users-<REDACTED>-CodeProjects-Phenotype-repos/tasks/{agent-id}.output`
-

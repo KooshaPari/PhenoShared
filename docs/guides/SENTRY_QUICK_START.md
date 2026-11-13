@@ -12,11 +12,11 @@ Sentry is an error tracking and performance monitoring platform that automatical
 
 | What | Where |
 |------|-------|
-| Sentry Dashboard | https://sentry.io/organizations/phenotype/ |
-| AgilePlus Errors | https://sentry.io/organizations/phenotype/issues/?project=agileplus |
-| heliosCLI Errors | https://sentry.io/organizations/phenotype/issues/?project=helioscli |
-| phenotype-infrakit Errors | https://sentry.io/organizations/phenotype/issues/?project=phenotype-infrakit |
-| GitHub Integration Setup | https://sentry.io/settings/phenotype/integrations/github/ |
+| Sentry Dashboard | <https://sentry.io/organizations/phenotype/> |
+| AgilePlus Errors | <https://sentry.io/organizations/phenotype/issues/?project=agileplus> |
+| heliosCLI Errors | <https://sentry.io/organizations/phenotype/issues/?project=helioscli> |
+| phenotype-infrakit Errors | <https://sentry.io/organizations/phenotype/issues/?project=phenotype-infrakit> |
+| GitHub Integration Setup | <https://sentry.io/settings/phenotype/integrations/github/> |
 
 ## 5-Minute Setup Checklist
 
@@ -92,7 +92,7 @@ Once deployed:
 
 ### For Developers
 
-**My errors**: https://sentry.io/organizations/phenotype/issues/
+**My errors**: <https://sentry.io/organizations/phenotype/issues/>
 
 - See all errors across Tier 1 projects
 - Filter by project, environment, version
@@ -134,10 +134,12 @@ Once deployed:
 ### Create a GitHub Issue from Sentry Error
 
 **Automatic** (if alert rule enabled):
+
 - High-severity error triggers GitHub issue automatically
 - Link appears in issue body
 
 **Manual**:
+
 ```
 1. View error in Sentry
 2. Click "Recommended Actions" → "Create GitHub Issue"
@@ -182,6 +184,7 @@ gh workflow run sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 ### Errors not appearing in Sentry?
 
 1. **Check DSN is set**:
+
    ```bash
    echo $SENTRY_DSN  # Should print https://key@...
    ```
@@ -196,18 +199,18 @@ gh workflow run sentry-error-tracking.yml -R <REDACTED>/AgilePlus
    - Check your error is actually an error
 
 4. **Check Sentry project**:
-   - Go to: https://sentry.io/organizations/phenotype/projects/
+   - Go to: <https://sentry.io/organizations/phenotype/projects/>
    - Click your project
    - Look for "Client Keys" with active status
 
 ### GitHub issues not auto-creating?
 
 1. **Check GitHub integration is enabled**:
-   - Go to: https://sentry.io/settings/phenotype/integrations/github/
+   - Go to: <https://sentry.io/settings/phenotype/integrations/github/>
    - Should show "Installed"
 
 2. **Check alert rule exists**:
-   - Go to: https://sentry.io/organizations/phenotype/alerts/rules/
+   - Go to: <https://sentry.io/organizations/phenotype/alerts/rules/>
    - Should see a rule that creates GitHub issues
 
 3. **Check error severity**:
@@ -218,14 +221,14 @@ gh workflow run sentry-error-tracking.yml -R <REDACTED>/AgilePlus
 4. **Check GitHub permissions**:
    - Sentry app needs permission to create issues
    - Should see it in GitHub org settings
-   - If missing, reinstall: https://sentry.io/settings/phenotype/integrations/github/
+   - If missing, reinstall: <https://sentry.io/settings/phenotype/integrations/github/>
 
 ## Next Steps
 
-- **Set up Slack notifications**: https://sentry.io/settings/phenotype/integrations/slack/
-- **Enable Session Replays**: https://sentry.io/settings/phenotype/projects/&lt;project>/replay/
-- **Configure Performance Monitoring**: https://sentry.io/settings/phenotype/projects/&lt;project>/performance/
-- **Add custom tags**: See full docs at https://docs.sentry.io/
+- **Set up Slack notifications**: <https://sentry.io/settings/phenotype/integrations/slack/>
+- **Enable Session Replays**: <https://sentry.io/settings/phenotype/projects/&lt;project>/replay/>
+- **Configure Performance Monitoring**: <https://sentry.io/settings/phenotype/projects/&lt;project>/performance/>
+- **Add custom tags**: See full docs at <https://docs.sentry.io/>
 
 ## Reference
 

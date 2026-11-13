@@ -50,6 +50,7 @@ into a Phenotype repo would:
 
 All 4 source repos archived on GitHub (`gh repo archive <REDACTED>/<repo> -y`).
 Registry disposition-index updated:
+
 - `repo-UnityDoorstop-NexusPatched`: fsm=archived, target=phenotype-registry (this doc)
 - `repo-Compound-Spheres-3D-Backup`: fsm=archived, target=phenotype-registry (this doc)
 - `repo-WorldSphereMod`: fsm=archived, target=phenotype-registry (this doc)

@@ -430,6 +430,7 @@ v7 is "done" when **all** of the following are true:
 - **ADR-029** (T5.1, new in this plan) — `docs/adr/2026-06-17/ADR-029-hwledger-reclassification.md` — HwLedger PAUSED+archival
 
 Plus the prior ADRs that v7 references but does not modify:
+
 - **ADR-015** — worklog v2.0 (superseded by ADR-025 v2.1)
 - **ADR-023** — agent-effort governance (T5 HwLedger authority)
 

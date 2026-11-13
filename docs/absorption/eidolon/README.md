@@ -3,6 +3,7 @@
 Eidolon (the Phenotype-org agentic runtime substrate, 6094 LOC Rust
 across 5 crates) was absorbed from `<REDACTED>/Eidolon` into the pheno
 monorepo as:
+
 - `crates/eidolon-core/`
 - `crates/eidolon-desktop/`
 - `crates/eidolon-mobile/`

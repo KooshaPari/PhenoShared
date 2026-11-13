@@ -59,9 +59,11 @@ ls plans/2026-06-17-v7-dag-stable.md                  # v7 DAG (this turn; super
 ## Sub-repos at a Glance (sparse-checkout-visible, 2026-06-17)
 
 ### Active focus repos (5)
+
 `AgilePlus`, `PhenoCompose`, `PlayCua`, `BytePort`, `nanovms` — coordinated via `chore/l5-87-focus-repo-specs-2026-06-11` branch.
 
 ### pheno-* family (22 visible)
+
 - **Rust (11):** pheno-agents-md, pheno-cargo-template, pheno-cli-base, pheno-config, pheno-context, pheno-errors, pheno-flags, pheno-otel, pheno-port-adapter, pheno-tracing
 - **Python (10):** pheno-cost-card, pheno-fastapi-base, pheno-llms-txt, pheno-mcp-router, pheno-prompt-test, pheno-pydantic-models, pheno-scaffold-kit, pheno-vibecoding-guard, pheno-worklog-schema
 - **Go (1):** pheno-go-ctxkit
@@ -71,6 +73,7 @@ ls plans/2026-06-17-v7-dag-stable.md                  # v7 DAG (this turn; super
 See `L6_PHENO_REPOS_HEALTH_2026_06_14.md` for full health inventory (136 tests pass, 4 fail in pheno-agents-md). See `L6_PHENO_REPOS_HEALTH_2026_06_15_DELTA.md` for the 4 new crates added since. See `findings/71-pillar-2026-06-17.md` for the 71-pillar industry-standard audit (this turn).
 
 ### Submodule-style repos (~30 in submodules, e.g.)
+
 - `AuthKit`, `Civis`, `Eidolon`, `Eventra`, `HeliosLab`, `KWatch`, `PhenoKits`, `PhenoMCP`, `PhenoProc`, `Pyron`, `Tasken`, `Tracera`, `Tracely`, etc.
 
 **Deleted repos (wave-3 cleanup, 2026-06-18):** `KodeVibe`, `KlipDot`, `McpKit`, `NetScript`, `dispatch-mcp`, `cheap-llm-mcp`, `helios-router`, `Metron`, `phenotype-lexer-rs`, `phenotype-sdk`, `phenotype-bot-framework`, `phenotype-discord-adapter`, `phenotype-github-adapter`, `pheno-capacity` — all absorbed into `phenotype-tooling/docs/absorbed-from-X/`
@@ -295,6 +298,7 @@ Two complementary quality frameworks govern the fleet. See `audit-71-pillar-2026
 `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` (364 lines, execution COMPLETE 2026-06-17 20:55 PDT) — full cross-reference matrix, per-repo verdicts, decision matrix, execution log, stale warnings.
 
 Sub-plans:
+
 - `findings/2026-06-17-L5-104-dispatch-mcp-migration-plan.md` (527 lines)
 - `findings/2026-06-17-L5-104-pheno-adr012-migration-plan.md` (414 lines)
 - `findings/2026-06-17-L5-104-bulk-rust-ts-migration.md` (999 lines)
@@ -320,6 +324,7 @@ Combined intent: migrate all 4 repos in one wave, ensure full integration of spe
 ### Source archive status (verified 2026-06-18)
 
 All 4 source repos are now **archived** (read-only marker):
+
 - `<REDACTED>/dagctl` (pre-existing 2026-06-17 22:44)
 - `<REDACTED>/kwality` (set 2026-06-18 in this turn)
 - `<REDACTED>/phenotype-auth-ts` (set 2026-06-18 in this turn)
@@ -344,7 +349,6 @@ See `findings/2026-06-18-L5-109-4-repo-retirement.md` for full migration matrix,
 - **kwality README "STRICTLY DO NOT DELETE NOR UNARCHIVE"** is overridden by user's higher-level org consolidation directive. The retirement preserves all source, tests, docs, governance as a collection under `phenotype-tooling/docs/absorbed-from-kwality/`.
 - **dinoforge-packs ID divergence**: mirrored `warfare-starwars/manifest.yaml` uses legacy non-namespaced unit IDs (DO NOT load directly; see `Dino/docs/dinoforge-packs-absorption.md`).
 - **AuthKit polyglot**: `@phenotype/auth-ts` slots into existing `typescript/packages/*` workspace alongside the existing package.
-
 
 ## Stale / warnings
 

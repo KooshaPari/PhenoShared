@@ -3,6 +3,7 @@
 ## Repository State at Session Time
 
 ### cliproxyapi-plusplus
+
 - **Open PRs**: 30
 - **Failure clusters**:
   - 21 PRs share: `Analyze (Go)`, `build`, `CodeRabbit`, `verify-required-check-names`
@@ -12,6 +13,7 @@
   - 1 CR-clean pass (`#618`)
 
 ### thegent
+
 - **Open PRs**: 8
 - **Failure clusters**:
   - 4 PRs with broad infra failures (Build Docs, Build wheels, Comprehensive Benchmark, multi-platform Test)

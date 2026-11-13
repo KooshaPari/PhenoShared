@@ -67,6 +67,7 @@ io-ts                       ███                                 0.8M
 The dominant TypeScript validation library with excellent type inference.
 
 **Architecture:**
+
 ```typescript
 import { z } from 'zod';
 
@@ -88,12 +89,14 @@ if (result.success) {
 ```
 
 **Characteristics:**
+
 - **Strengths**: Excellent type inference, large ecosystem, great docs
 - **Limitations**: 12KB bundle, limited tree-shaking, single-file architecture
 - **Performance**: Fast, but not the fastest
 - **Bundle Size**: 12KB gzipped
 
 **Market Position:**
+
 - 35K GitHub stars
 - 8.5M weekly NPM downloads
 - Default choice for TypeScript validation
@@ -103,6 +106,7 @@ if (result.success) {
 Newer library focused on bundle size and tree-shakeability.
 
 **Architecture:**
+
 ```typescript
 import * as v from 'valibot';
 
@@ -121,6 +125,7 @@ const result = v.safeParse(UserSchema, data);
 ```
 
 **Characteristics:**
+
 - **Strengths**: 1KB bundle, tree-shakeable, modular API
 - **Limitations**: Smaller ecosystem, newer (less battle-tested)
 - **Performance**: Comparable to Zod
@@ -131,6 +136,7 @@ const result = v.safeParse(UserSchema, data);
 Older, battle-tested validation library inspired by Joi.
 
 **Architecture:**
+
 ```typescript
 import * as yup from 'yup';
 
@@ -148,6 +154,7 @@ try {
 ```
 
 **Characteristics:**
+
 - **Strengths**: Mature, conditional validation, extensive features
 - **Limitations**: 15KB bundle, class-based (less tree-shakeable)
 - **Performance**: Slower than Zod/Valibot
@@ -476,10 +483,10 @@ Federated Schema Registries:
 
 ### Official Documentation
 
-1. **Zod** - https://zod.dev/
-2. **Valibot** - https://valibot.dev/
-3. **Yup** - https://github.com/jquense/yup
-4. **React Hook Form** - https://react-hook-form.com/
+1. **Zod** - <https://zod.dev/>
+2. **Valibot** - <https://valibot.dev/>
+3. **Yup** - <https://github.com/jquense/yup>
+4. **React Hook Form** - <https://react-hook-form.com/>
 
 ### Research Papers
 
@@ -488,10 +495,10 @@ Federated Schema Registries:
 
 ### Open Source Projects
 
-1. **Zod** - https://github.com/colinhacks/zod (35K stars)
-2. **Valibot** - https://github.com/fabian-hiller/valibot (6K stars)
-3. **Yup** - https://github.com/jquense/yup (22K stars)
-4. **tRPC** - https://github.com/trpc/trpc (35K stars)
+1. **Zod** - <https://github.com/colinhacks/zod> (35K stars)
+2. **Valibot** - <https://github.com/fabian-hiller/valibot> (6K stars)
+3. **Yup** - <https://github.com/jquense/yup> (22K stars)
+4. **tRPC** - <https://github.com/trpc/trpc> (35K stars)
 
 ---
 

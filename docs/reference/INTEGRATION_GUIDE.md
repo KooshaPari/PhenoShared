@@ -161,6 +161,7 @@ pub struct MyService {
 **Purpose:** Unified error types for the entire ecosystem.
 
 **Exports:**
+
 - `ErrorKind`: Enum with 11 standard error variants
 - `Result<T>`: Type alias `std::result::Result<T, ErrorKind>`
 - Helper methods: `not_found()`, `validation()`, `timeout()`, etc.
@@ -191,6 +192,7 @@ match fetch_user("123") {
 **Purpose:** Unified configuration with multiple sources.
 
 **Exports:**
+
 - `Config`: Key-value container backed by `HashMap<String, serde_json::Value>`
 - `ConfigSource`: Trait for loading from different sources
 - `builder::ConfigBuilder`: Fluent API for construction
@@ -248,6 +250,7 @@ impl AsyncPort for ConcreteImpl {
 **Purpose:** Health check abstraction with pluggable implementations.
 
 **Exports:**
+
 - `HealthChecker`: Trait for health checks
 - `HealthStatus`: Enum (Healthy, Degraded, Unhealthy)
 - Standard implementations: DatabaseHealth, CacheHealth, ServiceHealth
@@ -292,6 +295,7 @@ async fn health_handler(checker: Arc<dyn HealthChecker>) -> Response {
 **Purpose:** Event store with hash chain integrity verification.
 
 **Key Features:**
+
 - Append-only event log with immutability
 - SHA-256 hash chain (ADR-002)
 - Event replay and snapshots
@@ -347,6 +351,7 @@ assert!(verified, "Chain integrity compromised");
 **Purpose:** Tiered caching (L1 in-memory, L2 external) with fallback logic.
 
 **Features:**
+
 - L1: LRU in-memory cache
 - L2: Redis, Memcached, or custom backends
 - Automatic fallback on L2 failure
@@ -383,6 +388,7 @@ cache.delete("user:123").await?;
 **Purpose:** Rule evaluation engine with TOML configuration (ADR-003).
 
 **Features:**
+
 - Load policies from TOML
 - Allow/Deny/Require rule types
 - Pattern matching and field evaluation
@@ -435,6 +441,7 @@ assert!(result.allowed());
 **Purpose:** Forward-only state machine with guard callbacks (ADR-004).
 
 **Features:**
+
 - Enforces forward-only transitions
 - Guard callbacks for pre-conditions
 - Transition history audit trail
@@ -498,6 +505,7 @@ for (from, to) in history {
 **Purpose:** Configurable retry logic with backoff strategies.
 
 **Features:**
+
 - Multiple backoff strategies (linear, exponential, jitter)
 - Max retries and max duration
 - Predicate-based retry decisions
@@ -531,6 +539,7 @@ let result = policy.execute(|| async {
 **Purpose:** Structured logging integration with tracing.
 
 **Features:**
+
 - Unified tracing span management
 - Log level configuration
 - JSON output support

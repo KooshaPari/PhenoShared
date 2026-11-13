@@ -7,6 +7,7 @@
 ## ✅ COMPLETED SO FAR
 
 ### Phase 0: Git Cleanup & PR Merges (✅ COMPLETE)
+
 - phenoSDK packages → Designated as **shared modules** (extraction strategy documented)
 - vibe-kanban → **Skipped** (archived repo, no action)
 - zen-wtrees → **Skipped** (clarification not provided, deferred)
@@ -14,6 +15,7 @@
 - PR merge sprint → **3 conflicting PRs resolved** (nexus, gauge, go-kit merged)
 
 ### Phase 1: Chassis Foundation (✅ COMPLETE)
+
 - ✅ PHENOTYPE_DOCS_CHASSIS_INTERFACE.md (created, 5+ sections, code examples)
 - ✅ AGILEPLUS_GOVERNANCE_CHASSIS.md (created, spec structure + FR tagging patterns)
 - ✅ CLAUDE.md updates in 7 locations (root + 6 crates/libs/platforms)
@@ -22,7 +24,9 @@
 - ✅ Supporting guides created (QUICKSTART, COMPLETION_REPORT, INDEX)
 
 ### Phase 2 Design Documentation (✅ COMPLETE)
+
 Created 7 comprehensive documents in `/docs/reference/`:
+
 1. FEDERATED_ARCHITECTURE_INDEX.md
 2. FEDERATED_HYBRID_ARCHITECTURE_OVERVIEW.md
 3. FEDERATED_HYBRID_ARCHITECTURE_PHASE2.md (6-part technical plan)
@@ -42,12 +46,14 @@ Created 7 comprehensive documents in `/docs/reference/`:
 **Tasks to Complete** (in order):
 
 #### Task 1: Analyze AgilePlus Architecture
+
 - [ ] Find main entry point (look for `src/main.ts`, `src/index.tsx`, `src/App.tsx`)
 - [ ] Identify framework (React? Vue? Svelte?)
 - [ ] Check routing structure (react-router, Nuxt routing, etc.)
 - [ ] Review package.json for dependencies
 
 **Command**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 ls -la AgilePlus/src/
@@ -55,11 +61,13 @@ cat AgilePlus/package.json | grep -A 20 '"dependencies"'
 ```
 
 #### Task 2: Install Module Federation
+
 - [ ] Add @module-federation/enhanced (latest version)
 - [ ] Add @module-federation/utilities
 - [ ] Verify installation
 
 **Command**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 bun add -D @module-federation/enhanced @module-federation/utilities
@@ -67,11 +75,13 @@ bun outdated @module-federation/enhanced
 ```
 
 #### Task 3: Create Module Federation Host Config
+
 - [ ] Create file: `module-federation.config.ts` at AgilePlus root
 - [ ] Define host configuration (name, port, shared libs, remotes)
 - [ ] Use template from FEDERATED_HYBRID_ARCHITECTURE_PHASE2.md Section B.2
 
 **Template** (save as `module-federation.config.ts`):
+
 ```typescript
 // AgilePlus Module Federation Host Config
 export const federationConfig = {
@@ -96,16 +106,19 @@ export const federationConfig = {
 ```
 
 #### Task 4: Update Vite Configuration
+
 - [ ] Update `vite.config.ts` to include Module Federation plugin
 - [ ] Reference template from FEDERATED_HYBRID_ARCHITECTURE_PHASE2.md Section B.2
 - [ ] Ensure port 3000 is configured
 
 **Check current vite.config.ts**:
+
 ```bash
 cat AgilePlus/vite.config.ts
 ```
 
 #### Task 5: Update Routing
+
 - [ ] Add dynamic import routes for `/dashboard/helios` and `/forecast/agent-wave`
 - [ ] Use React.lazy() or dynamic import
 - [ ] Wrap in error boundary (task 6)
@@ -114,12 +127,14 @@ cat AgilePlus/vite.config.ts
 **File to update**: `AgilePlus/src/routes/` (or similar routing location)
 
 #### Task 6: Create Error Boundary + Fallback UI
+
 - [ ] Create `src/components/ModuleErrorBoundary.tsx`
 - [ ] Implement error handling for failed module loads
 - [ ] Create fallback/lite-mode UI
 - [ ] Loading state while module fetches
 
 **Template**:
+
 ```typescript
 // src/components/ModuleErrorBoundary.tsx
 import React, { ReactNode } from 'react';
@@ -160,11 +175,13 @@ export class ModuleErrorBoundary extends React.Component<Props, State> {
 ```
 
 #### Task 7: Update npm Scripts
+
 - [ ] Verify `package.json` has dev script on port 3000
 - [ ] Test build: `bun run build`
 - [ ] Test dev: `bun run dev`
 
 **Commands**:
+
 ```bash
 cd AgilePlus
 bun run dev  # Should start on http://localhost:3000
@@ -176,7 +193,8 @@ bun run dev  # Should start on http://localhost:3000
 
 ## 📋 NEXT STEPS FOR CONTINUATION
 
-### Immediate (First Session):
+### Immediate (First Session)
+
 1. Read this handoff document (5 min)
 2. Complete Tasks 1-2 (Analyze + Install dependencies) — 15 min
 3. Complete Tasks 3-4 (Create configs) — 30 min
@@ -184,20 +202,25 @@ bun run dev  # Should start on http://localhost:3000
 
 **Total**: ~90 minutes to complete Phase 2.1
 
-### Then Proceed to Phase 2.2:
+### Then Proceed to Phase 2.2
+
 Configure heliosApp as remote module (similar to Phase 2.1, but for consumer):
+
 - Add Module Federation remote config to heliosApp
 - Expose Dashboard + components as remote modules
 - Add dual-mode npm scripts (dev vs dev:remote)
 - Test loading as remote from AgilePlus host
 
-### Then Proceed to Phase 2.3:
+### Then Proceed to Phase 2.3
+
 Configure agent-wave as remote module (same pattern as Phase 2.2)
 
-### Then Phase 2.4:
+### Then Phase 2.4
+
 Integration testing (all 3 modules together, error scenarios, fallback handling)
 
-### Then Phase 2.5:
+### Then Phase 2.5
+
 Production deployment (AWS S3 + CloudFront or Cloudflare Pages setup)
 
 ---
@@ -216,12 +239,12 @@ All in `/docs/reference/`:
 
 Phase 2.1 is complete when:
 
-- [ ] AgilePlus runs on http://localhost:3000
+- [ ] AgilePlus runs on <http://localhost:3000>
 - [ ] Module Federation host config created and committed
 - [ ] Routing includes `/dashboard/helios` and `/forecast/agent-wave` routes
 - [ ] Error boundary component created and integrated
 - [ ] npm scripts work: `bun run dev` and `bun run build`
-- [ ] No console errors when opening http://localhost:3000
+- [ ] No console errors when opening <http://localhost:3000>
 - [ ] Git status clean (all changes committed)
 
 ---
@@ -229,11 +252,13 @@ Phase 2.1 is complete when:
 ## 🚀 KEY FILES TO KNOW
 
 **Created This Session**:
+
 - `/docs/reference/` — All 7 Phase 2 design documents
 - `PHASE2_IMPLEMENTATION_HANDOFF.md` — This file
 - Previous sessions: PHENOTYPE_DOCS_CHASSIS_INTERFACE.md, AGILEPLUS_GOVERNANCE_CHASSIS.md, etc.
 
 **Files You'll Be Modifying**:
+
 - `AgilePlus/module-federation.config.ts` — NEW (create from template)
 - `AgilePlus/vite.config.ts` — UPDATE (add federation plugin)
 - `AgilePlus/src/routes/` or equivalent — UPDATE (add remote routes)
@@ -260,7 +285,7 @@ Phase 2.1 is complete when:
 
 1. **Check FEDERATED_HYBRID_ARCHITECTURE_PHASE2.md** for detailed examples
 2. **Check MODULE_FEDERATION_LOCAL_DEV_GUIDE.md** for troubleshooting (6 scenarios covered)
-3. **Check console errors** in browser DevTools when http://localhost:3000 loads
+3. **Check console errors** in browser DevTools when <http://localhost:3000> loads
 4. **Check git status** to see what files changed
 
 ---
@@ -268,6 +293,7 @@ Phase 2.1 is complete when:
 ## ✅ DELIVERABLES TO COMMIT
 
 Once Phase 2.1 complete, commit with message:
+
 ```
 feat(phase2): configure AgilePlus as Module Federation host
 
@@ -285,4 +311,3 @@ Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
 ---
 
 **Session Status**: Ready for next phase. All reference docs in place. Implementation tasks clearly defined. Pick up at Task 1 when resuming.
-

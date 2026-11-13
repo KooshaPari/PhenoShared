@@ -50,8 +50,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -78,12 +79,14 @@ spec-kitty implement WP02 --base WP00
 ## Context & Constraints
 
 ### Reference Documents
+
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- MCP integration requirements
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- Python MCP project structure (lines 135-152), technical context
 - **Contracts**: `agileplus-proto/schemas/mcp-tools.json` -- MCP tool definitions (in the agileplus-proto repo, added as a git submodule)
 - **Research**: `kitty-specs/001-spec-driven-development-engine/research.md` -- FastMCP 3.0 evaluation
 
 ### Architectural Constraints
+
 - **FastMCP 3.0**: Use the latest FastMCP release (3.x) for server creation. The server is the Python-side entry point for LLM tool calls.
 - **gRPC thin client**: Python MCP service does NO domain logic. Every tool call forwards to the Rust core via gRPC. Python is a translation layer only.
 - **uv package manager**: Use `uv` (not pip, poetry, or pipenv) for all Python dependency management.
@@ -91,6 +94,7 @@ spec-kitty implement WP02 --base WP00
 - **Separate process**: Python MCP runs as its own process, communicating with Rust via gRPC on localhost:50051.
 
 ### Dependency on WP00
+
 - WP00 must complete first because:
   - The `agileplus-proto` repository (established in WP00) is the source of truth for the gRPC interface and MCP tool schemas.
   - The proto submodule URL and commit reference are confirmed by WP00 before being pinned here.
@@ -105,6 +109,7 @@ spec-kitty implement WP02 --base WP00
 - **Steps**:
   1. Initialize the `agileplus-mcp` git repository (e.g., `git init agileplus-mcp`) if it does not already exist.
   2. Create `pyproject.toml` at the repo root:
+
      ```toml
      [project]
      name = "agileplus-mcp"
@@ -157,6 +162,7 @@ spec-kitty implement WP02 --base WP00
      python_version = "3.12"
      strict = true
      ```
+
   3. Create `.python-version` at repo root with content `3.13` (uv will use this).
   4. Run `uv sync` from the repo root to create the virtual environment and lockfile.
 - **Files**: `pyproject.toml`, `.python-version`
@@ -170,12 +176,15 @@ spec-kitty implement WP02 --base WP00
 - **Steps**:
   1. Create directory structure: `src/agileplus_mcp/`
   2. Create `src/agileplus_mcp/__init__.py`:
+
      ```python
      """AgilePlus MCP Service - FastMCP 3.0 bridge to Rust core via gRPC."""
 
      __version__ = "0.1.0"
      ```
+
   3. Create `src/agileplus_mcp/__main__.py` for `python -m` execution:
+
      ```python
      """Entry point for `python -m agileplus_mcp`."""
 
@@ -183,7 +192,9 @@ spec-kitty implement WP02 --base WP00
 
      main()
      ```
+
   4. Create `src/agileplus_mcp/server.py`:
+
      ```python
      """FastMCP 3.0 server for AgilePlus."""
 
@@ -206,6 +217,7 @@ spec-kitty implement WP02 --base WP00
          """Start the MCP server."""
          mcp.run()
      ```
+
   5. Ensure the server can start in stdio mode (default FastMCP transport) and SSE mode (for web clients).
 - **Files**: `src/agileplus_mcp/__init__.py`, `src/agileplus_mcp/__main__.py`, `src/agileplus_mcp/server.py`
 - **Parallel?**: No -- T009 and T010 depend on this for imports.
@@ -217,6 +229,7 @@ spec-kitty implement WP02 --base WP00
 - **Purpose**: Provide a typed gRPC client that connects to the Rust core service. All MCP tool handlers call through this client. At scaffold time, the client is a stub that can be instantiated but won't connect until the Rust gRPC server (WP14) is running.
 - **Steps**:
   1. Create `src/agileplus_mcp/grpc_client.py`:
+
      ```python
      """gRPC client for communication with Rust AgilePlus core."""
 
@@ -272,6 +285,7 @@ spec-kitty implement WP02 --base WP00
              """Stub: Get audit trail via gRPC."""
              raise NotImplementedError("gRPC stubs not yet generated")
      ```
+
   2. Add type stubs for all gRPC methods matching `proto/agileplus-proto/agileplus.proto` service definition (sourced from the proto submodule added in T011).
   3. Methods should raise `NotImplementedError` with a descriptive message until proto stubs are wired in WP14.
 - **Files**: `src/agileplus_mcp/grpc_client.py`
@@ -284,10 +298,13 @@ spec-kitty implement WP02 --base WP00
 - **Purpose**: Create the MCP tool modules that will be registered with the FastMCP server. Each module corresponds to a domain area and contains tool function stubs. The tool definitions should match `agileplus-proto/schemas/mcp-tools.json`. Also create empty stub directories for resources, prompts, and sampling per the MCP spec.
 - **Steps**:
   1. Create `src/agileplus_mcp/tools/__init__.py`:
+
      ```python
      """MCP tool modules for AgilePlus."""
      ```
+
   2. Create `src/agileplus_mcp/tools/features.py`:
+
      ```python
      """Feature management MCP tools."""
 
@@ -335,7 +352,9 @@ spec-kitty implement WP02 --base WP00
              """
              return [{"error": "not_implemented"}]
      ```
+
   3. Create `src/agileplus_mcp/tools/governance.py`:
+
      ```python
      """Governance and audit MCP tools."""
 
@@ -384,7 +403,9 @@ spec-kitty implement WP02 --base WP00
              """
              return {"error": "not_implemented"}
      ```
+
   4. Create `src/agileplus_mcp/tools/status.py`:
+
      ```python
      """Status and dashboard MCP tools."""
 
@@ -417,14 +438,17 @@ spec-kitty implement WP02 --base WP00
              """
              return {"error": "not_implemented"}
      ```
+
   5. Each tool function should have comprehensive docstrings (these become MCP tool descriptions visible to LLMs).
   6. All tools return stub responses with `{"error": "not_implemented"}` until WP14 wires them to gRPC.
   7. Create stub directories for other MCP primitives:
+
      ```
      src/agileplus_mcp/resources/__init__.py   # MCP Resources stubs (future)
      src/agileplus_mcp/prompts/__init__.py      # MCP Prompts stubs (future)
      src/agileplus_mcp/sampling/__init__.py     # MCP Sampling stubs (future)
      ```
+
      Each `__init__.py` should contain only a module docstring noting the primitive type and that it is a future-expansion stub.
 - **Files**: `src/agileplus_mcp/tools/__init__.py`, `src/agileplus_mcp/tools/features.py`, `src/agileplus_mcp/tools/governance.py`, `src/agileplus_mcp/tools/status.py`, `src/agileplus_mcp/resources/__init__.py`, `src/agileplus_mcp/prompts/__init__.py`, `src/agileplus_mcp/sampling/__init__.py`
 - **Parallel?**: Yes -- independent after T008. Can run alongside T009.
@@ -436,12 +460,15 @@ spec-kitty implement WP02 --base WP00
 - **Purpose**: Pin the shared proto repository as a git submodule so proto definitions and MCP tool schemas are available without relying on a monorepo layout. Also establish the test directory structure matching the project's test strategy: unit tests (pytest), BDD tests (behave), and contract tests (pact-python).
 - **Steps**:
   1. Add the proto submodule:
+
      ```bash
      git submodule add https://github.com/phenotype-org/agileplus-proto.git proto/agileplus-proto
      git submodule update --init --recursive
      ```
+
      This places the proto repo at `proto/agileplus-proto/` within the `agileplus-mcp` repo.
   2. Create directory tree:
+
      ```
      tests/
      ├── __init__.py
@@ -458,7 +485,9 @@ spec-kitty implement WP02 --base WP00
          ├── __init__.py
          └── .gitkeep
      ```
+
   3. Create `tests/conftest.py` with shared fixtures:
+
      ```python
      """Shared test fixtures for AgilePlus MCP tests."""
 
@@ -472,7 +501,9 @@ spec-kitty implement WP02 --base WP00
          """Create a gRPC client for testing (not connected)."""
          return AgilePlusCoreClient(host="localhost", port=50051)
      ```
+
   4. Create `tests/unit/test_server.py` with a minimal smoke test:
+
      ```python
      """Smoke tests for MCP server initialization."""
 
@@ -487,6 +518,7 @@ spec-kitty implement WP02 --base WP00
          assert "check_governance" in tool_names
          assert "get_dashboard" in tool_names
      ```
+
   5. Create `tests/bdd/environment.py` with behave setup stub.
 - **Files**: `proto/agileplus-proto` (submodule), `.gitmodules`, `tests/__init__.py`, `tests/conftest.py`, `tests/unit/__init__.py`, `tests/unit/test_server.py`, `tests/bdd/`, `tests/contract/`
 - **Parallel?**: No -- depends on T008 and T010 for imports; submodule step should complete before test files reference proto paths.
@@ -498,6 +530,7 @@ spec-kitty implement WP02 --base WP00
 **Purpose**: Set up sphinx/autodoc CI for Python API reference generation.
 
 **Steps**:
+
 1. Add sphinx + autodoc to dev dependencies in pyproject.toml
 2. Create `docs/conf.py` with autodoc configuration
 3. Add `make docs` target generating HTML API reference
@@ -553,6 +586,7 @@ Reviewers should verify:
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this Activity Log section
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ – agent_id – lane=<lane> – <action>`

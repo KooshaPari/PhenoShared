@@ -29,6 +29,7 @@ specs/agent-<agent-name>-<task-id>
 ```
 
 **Components:**
+
 - `specs/` — Spec branch prefix (reserved for specification work only)
 - `agent-&lt;name>` — Your agent identifier (lowercase, hyphens)
 - `&lt;task-id>` — Work item ID (from AgilePlus: WP-XXX-NNN, FR-XXX-NNN, or ADR-YYY)
@@ -75,6 +76,7 @@ Co-Authored-By: <agent-name> <agent@phenotype.local>
 ### Example Commits
 
 #### Example 1: Adding a new FR
+
 ```
 specs(functional-requirements): add FR-PHENOSDK-001 for SDK core decomposition
 
@@ -89,6 +91,7 @@ Co-Authored-By: phenosdk-decomposer <agent@phenotype.local>
 ```
 
 #### Example 2: Updating ADR
+
 ```
 specs(architecture): ADR-015 — crate organization and PR guidelines
 
@@ -102,6 +105,7 @@ Co-Authored-By: agileplus-merger <agent@phenotype.local>
 ```
 
 #### Example 3: Adding test traces
+
 ```
 specs(traceability): add test traces to FR-CORE-042
 
@@ -113,6 +117,7 @@ Co-Authored-By: explorer <agent@phenotype.local>
 ```
 
 #### Example 4: Multiple specs in one commit
+
 ```
 specs(platform): synchronize thegent specs across FR, ADR, PLAN
 
@@ -153,6 +158,7 @@ vim USER_JOURNEYS.md              # Document user flow
 ```
 
 **Key editing guidelines:**
+
 - FR format: Use `## FR-XXX-NNN: Title` headers
 - ADR format: Decision, Rationale, Consequences sections
 - PLAN format: Phase, Task, Depends-On, Status columns
@@ -171,6 +177,7 @@ pre-commit run --all-files
 ```
 
 If validation fails, fix issues:
+
 ```bash
 # Fix formatting
 prettier --write .
@@ -201,6 +208,7 @@ git show --format=%B -s
 #### Step 4: Pre-Push Validation
 
 **Before pushing, the pre-push hook validates:**
+
 - ✅ All commits have Spec-Traces
 - ✅ All Spec-Traces reference valid FRs/ADRs
 - ✅ Markdown structure valid
@@ -299,6 +307,7 @@ git push origin specs/agent-<name>-<task>
 **Conflict:** Agent A adds FR-001, Agent B adds FR-002, both edit summary
 
 **Resolution:**
+
 - Keep both FRs (merge both additions)
 - Re-order if needed (maintain numbering sequence)
 - Commit with updated Spec-Traces
@@ -309,6 +318,7 @@ git push origin specs/agent-<name>-<task>
 **Conflict:** Version number incremented by both agents
 
 **Resolution:**
+
 - Use highest version number
 - Document in CHANGELOG.md which commits incremented
 - Commit as single "version bump" commit
@@ -319,6 +329,7 @@ git push origin specs/agent-<name>-<task>
 **Conflict:** Multiple tests trace to same FR
 
 **Resolution:**
+
 - Keep all tests (more coverage is better)
 - Verify all Spec-Traces point to valid FRs
 - No action needed (not a real conflict)
@@ -332,6 +343,7 @@ Every test must trace to a functional requirement. Every FR must have tests.
 ### Adding Spec-Traces Comment to Tests
 
 #### Rust Example
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -355,6 +367,7 @@ mod tests {
 ```
 
 #### Python Example
+
 ```python
 # Traces to: FR-CORE-042
 def test_cache_invalidation_ttl():
@@ -375,6 +388,7 @@ def test_cache_memory_efficient():
 ```
 
 #### TypeScript Example
+
 ```typescript
 // Traces to: FR-THEGENT-012
 describe("Agent Routing", () => {
@@ -413,6 +427,7 @@ python3 scripts/validate-fr-test-coverage.py
 Before every push, verify:
 
 **Specification Quality**
+
 - [ ] Markdown structure valid (headers, lists, tables)
 - [ ] All new FRs follow format: `## FR-XXX-NNN: Title`
 - [ ] All new ADRs have: Decision, Rationale, Consequences
@@ -420,23 +435,27 @@ Before every push, verify:
 - [ ] No orphan sections (all sections traced to something)
 
 **Traceability**
+
 - [ ] Commit message includes Spec-Traces
 - [ ] Spec-Traces reference valid FRs/ADRs
 - [ ] Test traces point to valid FRs
 - [ ] 100% FR↔Test coverage maintained
 
 **Git Hygiene**
+
 - [ ] Commits squashed if >1 per task (optional; clean history preferred)
 - [ ] Commit author set to agent name + email
 - [ ] No local secrets or credentials in diffs
 - [ ] No large files (>10MB)
 
 **Testing**
+
 - [ ] Ran `pre-commit run --all-files` locally
 - [ ] Validation scripts passed
 - [ ] No warnings or errors in output
 
 **Conflict Check**
+
 - [ ] Checked for conflicts: `git diff origin/specs/main..HEAD`
 - [ ] If conflicts exist, documented in commit message
 
@@ -686,12 +705,14 @@ git push origin specs/agent-<name>-<task>
 ### Issue: "Spec-Traces format invalid"
 
 **Error:**
+
 ```
 ERROR: Commit <hash> missing Spec-Traces in correct format
 Expected: Spec-Traces: FR-XXX-NNN
 ```
 
 **Fix:**
+
 ```bash
 # Re-write last commit with correct format
 git commit --amend
@@ -707,11 +728,13 @@ git rebase -i HEAD~3
 ### Issue: "FR-CORE-042 not found in FUNCTIONAL_REQUIREMENTS.md"
 
 **Error:**
+
 ```
 ERROR: Spec-Traces references FR-CORE-042 but not found in FR document
 ```
 
 **Fix:**
+
 ```bash
 # Verify FR exists
 grep -n "## FR-CORE-042" FUNCTIONAL_REQUIREMENTS.md
@@ -733,11 +756,13 @@ git push
 ### Issue: "Auto-merge not triggering"
 
 **Symptoms:**
+
 - Branch pushed 10+ minutes ago
 - Still shows "pending" in GitHub Actions
 - No merge commit created
 
 **Debug:**
+
 ```bash
 # Check workflow status
 gh run list --workflow auto-merge-specs.yml
@@ -757,10 +782,12 @@ gh workflow run auto-merge-specs.yml
 ### Issue: "Merge conflict requires manual resolution"
 
 **Symptoms:**
+
 - GitHub issue created: "Merge Conflict: specs/agent-&lt;name>-&lt;task>"
 - Auto-merge failed
 
 **Resolution Steps:**
+
 ```bash
 # 1. Fetch latest
 git fetch origin

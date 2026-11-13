@@ -2,9 +2,10 @@
 
 ## Plane.so Current Capabilities
 
-Source: https://docs.plane.so/
+Source: <https://docs.plane.so/>
 
 ### Core Features (available, in scope for fork)
+
 - Workspaces and multi-tenancy
 - Projects, work items, cycles, modules
 - Pages/wiki
@@ -18,6 +19,7 @@ Source: https://docs.plane.so/
 - Board, list, and calendar views
 
 ### Observability / Integration Layer (available, may overlap)
+
 - Slack and GitHub integrations
 - Custom webhook triggers
 - API endpoints for external tooling
@@ -25,25 +27,30 @@ Source: https://docs.plane.so/
 ## Alternative Evaluation
 
 ### Linear
+
 - Too opinionated; limited customization for agent/evidence workflows
 - SaaS-only model; no self-hosted option that fits org constraints
 - Not a candidate for fork
 
 ### Height
+
 - Project management only; no PM substrate depth
 - Not a candidate
 
 ### OpenProject
+
 - Self-hosted but heavier; less active development than Plane
 - Not a candidate
 
 ### Plane
+
 - Best fit: open source, active development, covers full PM primitive surface, API-first design
 - Fork is the right call
 
 ## Org-Specific Surfaces NOT Covered by Plane
 
 These are already custom and must stay outside the fork:
+
 - Agent activity panels and telemetry
 - Service health/restart/toggle controls
 - Local process supervision (Dragonfly, PostgreSQL, NATS, MinIO)

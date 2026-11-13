@@ -9,6 +9,7 @@
 ## Installation (1 minute)
 
 ### Linux
+
 ```bash
 sudo apt update && sudo apt install -y mold
 mold --version
@@ -16,12 +17,14 @@ mold --version
 ```
 
 ### macOS (optional)
+
 ```bash
 brew install mold
 mold --version
 ```
 
 ### Verify
+
 ```bash
 which mold && mold --version
 ```
@@ -77,6 +80,7 @@ RUSTFLAGS="" cargo build --release
 ### To Disable Permanently
 
 Edit `.cargo/config.toml`:
+
 ```toml
 # Comment out mold rustflags:
 # rustflags = ["-C", "link-arg=-fuse-ld=mold"]
@@ -129,11 +133,13 @@ When you open a PR, the workflow posts:
 ## Troubleshooting
 
 ### "mold not found"
+
 ```bash
 sudo apt install -y mold
 ```
 
 ### Build fails with "undefined reference"
+
 ```bash
 # Check mold version
 mold --version
@@ -146,9 +152,11 @@ RUSTFLAGS="" cargo build --release
 ```
 
 ### macOS/Windows builds unaffected
+
 ✓ Expected behavior — mold is Linux-only, automatic fallback
 
 ### CI job fails with permission error
+
 ✓ Expected in some CI systems — workflow uses `sudo apt`
 
 ---
@@ -168,6 +176,7 @@ RUSTFLAGS="" cargo build --release
 ## Implementation Timeline
 
 ### Phase 1: Local Testing (2 hours)
+
 - [ ] Install mold locally
 - [ ] Measure baseline build time
 - [ ] Build with mold 3 times
@@ -175,6 +184,7 @@ RUSTFLAGS="" cargo build --release
 - [ ] Document findings
 
 ### Phase 2: Config & CI (2 hours)
+
 - [ ] Verify `.cargo/config.toml`
 - [ ] Test fallback behavior
 - [ ] Run CI workflow on PR
@@ -182,6 +192,7 @@ RUSTFLAGS="" cargo build --release
 - [ ] Archive benchmark results
 
 ### Phase 3: Monitoring (2 hours)
+
 - [ ] Document troubleshooting
 - [ ] Create rollback runbook
 - [ ] Set up monitoring strategy
@@ -207,6 +218,7 @@ RUSTFLAGS="" cargo build --release
 ## Next Steps
 
 1. **Local Testing**: Run benchmark on your machine
+
    ```bash
    sudo apt install -y mold
    cargo clean
@@ -214,6 +226,7 @@ RUSTFLAGS="" cargo build --release
    ```
 
 2. **Create PR**: Push a test PR to trigger CI
+
    ```bash
    git checkout -b test/mold-integration
    echo "test" >> README.md
@@ -249,23 +262,28 @@ RUSTFLAGS="" cargo build --release
 ## Performance Savings Calculator
 
 ### Per-Build
+
 - Baseline: 45s
 - With mold: 12s
 - **Savings: 33s per build**
 
 ### Daily (5 CI builds/day)
+
 - Savings: 33s × 5 = **165 seconds/day**
 - = **~2.75 minutes/day**
 
 ### Monthly (100 builds/month)
+
 - Savings: 33s × 100 = **3,300 seconds/month**
 - = **55 minutes/month**
 
 ### Annually (1,200 builds/year)
+
 - Savings: 33s × 1,200 = **39,600 seconds/year**
 - = **660 minutes/year = 11 hours/year**
 
 **Cost Savings** (at GitHub Actions billing rate):
+
 - Rough estimate: ~$X per year in CI runner time
 
 ---
@@ -274,9 +292,9 @@ RUSTFLAGS="" cargo build --release
 
 - **Main Plan**: `docs/reference/MOLD_LINKER_INTEGRATION_PLAN.md`
 - **Work Packages**: `docs/reference/MOLD_LINKER_WORK_PACKAGES.md`
-- **mold GitHub**: https://github.com/rui314/mold
-- **mold Performance Docs**: https://github.com/rui314/mold/blob/main/docs/perf.md
-- **Rust Linking**: https://doc.rust-lang.org/cargo/reference/config.html
+- **mold GitHub**: <https://github.com/rui314/mold>
+- **mold Performance Docs**: <https://github.com/rui314/mold/blob/main/docs/perf.md>
+- **Rust Linking**: <https://doc.rust-lang.org/cargo/reference/config.html>
 
 ---
 
@@ -332,7 +350,7 @@ A: No. Binaries are identical in functionality. Only the linker changes.
 A: Automatic fallback. No action needed. No performance impact either way.
 
 **Q: How do I report issues?**
-A: See troubleshooting guide or report to mold GitHub: https://github.com/rui314/mold/issues
+A: See troubleshooting guide or report to mold GitHub: <https://github.com/rui314/mold/issues>
 
 ---
 

@@ -137,6 +137,7 @@ tests. Baselines are keyed by hardware, OS, compiler, model, plan, and source re
 - RetNet is now a first-class model-plan operator and kernel tag: `OperatorKind::RetNet` maps to
   `KernelOp::RetNet` and the Metal dispatch bridge test passes. Model-plan (60), model-kernels
   (203), and Metal dispatch (19 focused) tests all pass after the addition.
+
 ### Qwen3.5 native recurrent-kernel evidence (2026-07-23)
 
 The installed MLX-LM Qwen3.5 path is not purely scalar: `GatedDeltaNet` invokes
@@ -280,6 +281,7 @@ are fail-closed rather than allowing an underflow/panic path.
 `metal-runtime --lib diffusion_self_verify` now passes 8/8, including rejection of malformed
 public block ranges before length calculation. Invalid `start >= end` and `end > tokens` values
 are fail-closed rather than allowing an underflow/panic path.
+
 - Bounded compile-only check (2026-08-07): `scripts/build_metal_runtime_bundle.sh` compiled all
   20 checked-in shaders with the Xcode Metal toolchain into a temporary directory, producing
   SHA-256 `ff53ce9e3d21244e4799887f72211133a4173c3671552555dfa7336bc7aa3d83`; the temporary

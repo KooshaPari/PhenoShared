@@ -110,6 +110,7 @@ int match_hunk(struct patch *patch, struct file *file, int offset) {
 ```
 
 Time complexity: O(H × C × W) where:
+
 - H = number of hunks
 - C = average context lines per hunk
 - W = search window size
@@ -206,6 +207,7 @@ zcmV?ib4J8PW@... (base85 encoded literal)
 ```
 
 Binary patch algorithms:
+
 1. **Literal**: Full file content (base85 encoded)
 2. **Delta**: xdelta encoding for efficiency
 
@@ -219,6 +221,7 @@ git apply --3way < patchfile
 ```
 
 Process:
+
 1. Try direct application
 2. If failed, look for base version in index
 3. Perform 3-way merge
@@ -250,6 +253,7 @@ git apply --whitespace=error patch.diff  # report only
 #### Implementation
 
 Located in Git source at:
+
 ```
 builtin/apply.c          # Main command
 diff.c                   # Diff parsing
@@ -729,6 +733,7 @@ Paths use JSON Pointer syntax:
 #### Implementation Libraries
 
 **JavaScript/TypeScript**:
+
 ```javascript
 import { applyPatch, createPatch } from 'fast-json-patch';
 
@@ -743,6 +748,7 @@ const diff = createPatch({ foo: 'bar' }, { foo: 'baz' });
 ```
 
 **Python**:
+
 ```python
 import jsonpatch
 
@@ -754,6 +760,7 @@ result = patch.apply(doc)
 ```
 
 **Rust**:
+
 ```rust
 use json_patch::{patch, PatchOperation};
 
@@ -819,6 +826,7 @@ OpenAPI Diff compares OpenAPI specifications to identify breaking and non-breaki
 #### Tools
 
 **OpenAPI Diff (Java)**:
+
 ```bash
 # CLI usage
 java -jar openapi-diff.jar old.yaml new.yaml
@@ -831,6 +839,7 @@ java -jar openapi-diff.jar --fail-on-incompatible old.yaml new.yaml
 ```
 
 **@apidevtools/openapi-diff (Node.js)**:
+
 ```javascript
 const diff = require('@apidevtools/openapi-diff');
 
@@ -937,11 +946,13 @@ flyway validate
 #### Schema Comparison Tools
 
 **PgAdmin Schema Diff**:
+
 - Visual schema comparison
 - Generate migration scripts
 - Table, index, constraint comparison
 
 **Liquibase**:
+
 ```xml
 <changeSet id="1" author="dev">
     <createTable tableName="users">
@@ -1022,6 +1033,7 @@ interface PatchProvider {
 ```
 
 **Features**:
+
 - **Apply Patch**: File → Apply Patch from Clipboard/File
 - **Create Patch**: VCS → Create Patch
 - **Shelve Changes**: VCS → Shelve Changes
@@ -1040,6 +1052,7 @@ interface PatchProvider {
 ```
 
 **Extensions**:
+
 - **Diff**: Enhanced diff viewer
 - **Partial Diff**: Compare selections
 - **Git Graph**: Visual commit/patch history
@@ -1087,6 +1100,7 @@ interface PatchProvider {
 ```
 
 **Patch Integration**:
+
 ```bash
 # Download PR as patch
 curl -L https://github.com/user/repo/pull/123.patch > pr.patch
@@ -1153,6 +1167,7 @@ cargo check
 #### Implementation
 
 Uses `patch` crate (Rust implementation):
+
 ```rust
 use patch::{Patch, parse};
 
@@ -1435,62 +1450,62 @@ phenotype-patch/
 ### Primary Documentation
 
 1. **GNU Patch Manual**. Free Software Foundation.
-   - https://www.gnu.org/software/diffutils/manual/
+   - <https://www.gnu.org/software/diffutils/manual/>
 
 2. **Git Documentation**. Git SCM.
-   - https://git-scm.com/docs/git-apply
-   - https://git-scm.com/docs/diff-format
+   - <https://git-scm.com/docs/git-apply>
+   - <https://git-scm.com/docs/diff-format>
 
 3. **RFC 6902: JSON Patch**. IETF.
-   - https://tools.ietf.org/html/rfcfc6902
+   - <https://tools.ietf.org/html/rfcfc6902>
 
 4. **OpenAPI Specification**. OpenAPI Initiative.
-   - https://spec.openapis.org/
+   - <https://spec.openapis.org/>
 
 ### Tool Repositories
 
-5. **Difftastic**. Wilfred Hughes.
-   - https://github.com/Wilfred/difftastic
+1. **Difftastic**. Wilfred Hughes.
+   - <https://github.com/Wilfred/difftastic>
 
-6. **Delta**. Dan Davison.
-   - https://github.com/dandavison/delta
+2. **Delta**. Dan Davison.
+   - <https://github.com/dandavison/delta>
 
-7. **Diff-So-Fancy**. So Fancy Team.
-   - https://github.com/so-fancy/diff-so-fancy
+3. **Diff-So-Fancy**. So Fancy Team.
+   - <https://github.com/so-fancy/diff-so-fancy>
 
-8. **Patch-ng**. Conan Team.
-   - https://github.com/conan-io/python-patch-ng
+4. **Patch-ng**. Conan Team.
+   - <https://github.com/conan-io/python-patch-ng>
 
 ### Books and Papers
 
-9. **Hunt, A., & Thomas, D. (2000)**. "The Pragmatic Programmer". 
+1. **Hunt, A., & Thomas, D. (2000)**. "The Pragmatic Programmer".
    - Chapter on code generation
 
-10. **Raymond, E. S. (2003)**. "The Art of Unix Programming".
+2. **Raymond, E. S. (2003)**. "The Art of Unix Programming".
     - Chapter on text processing
 
-11. **Spinellis, D. (2020)**. "Beautiful Architecture".
+3. **Spinellis, D. (2020)**. "Beautiful Architecture".
     - Chapter on diff algorithms
 
 ### Online Resources
 
-12. **Diffoscope**. Reproducible Builds Project.
-    - https://diffoscope.org/
+ 1. **Diffoscope**. Reproducible Builds Project.
+    - <https://diffoscope.org/>
 
-13. **LibXDiff**. Davide Libenzi.
-    - http://www.xmailserver.org/xdiff-lib.html
+ 2. **LibXDiff**. Davide Libenzi.
+    - <http://www.xmailserver.org/xdiff-lib.html>
 
-14. **Zig Diff Analysis**. Blog series on diff algorithms.
+ 3. **Zig Diff Analysis**. Blog series on diff algorithms.
     - Various technical deep-dives
 
 ### Related Standards
 
-15. **IEEE Std 1003.1 (POSIX)**. Diff and patch utilities.
+ 1. **IEEE Std 1003.1 (POSIX)**. Diff and patch utilities.
 
-16. **ECMA-404**. JSON standard (for JSON Patch).
+ 2. **ECMA-404**. JSON standard (for JSON Patch).
 
-17. **W3C XML Patch**. XML patch operations.
-    - https://www.w3.org/TR/xpath-31/
+ 3. **W3C XML Patch**. XML patch operations.
+    - <https://www.w3.org/TR/xpath-31/>
 
 ---
 

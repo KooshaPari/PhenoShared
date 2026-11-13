@@ -67,6 +67,7 @@ brew services start phenoforge/harbor/harbor
 ## Cross-repo note
 
 Harbor is consumed by:
+
 - `phenotype-portage/` — local evidence store (the upstream home).
 - `phenotype-omlx/` — uses harbor for model artifact transport.
 - `pheno-harness/harbor_cli/` — PowerShell drivers (Windows path).

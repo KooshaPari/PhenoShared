@@ -143,6 +143,7 @@ Live 2026-07-03 shortlist (kept for diff against v2 shortlist):
 | MLX (M1 Pro fallback only) | ✓ | ◐ | ✗ | ✗ | ✗ |
 
 **Why this is the recommendation:**
+
 - **T0 (drafts):** ik_llama / llama.cpp are lowest-overhead and pair naturally with speculative decoding (spec-dec needs a tiny draft model; this tier is the draft).
 - **T1 (small):** SGLang's low-latency RadixAttention is excellent for the chat-loop's tight inner loop. vLLM is also fine.
 - **T2 (mid):** SGLang and vLLM are roughly tied at this size on 3090 Ti. TensorRT-LLM is `◐` only because compile overhead is painful for nightly iteration; worth running once per release.
@@ -224,6 +225,7 @@ This is the **honest fit table**. Specific model names are deferred to `v2_short
 | 122 B MoE (10 B active) | 244 GB total | **NO** | 68 GB | **NO** |
 
 **Principles:**
+
 - BF16 dense weights ≠ usable on 3090 Ti at > 12 B; AWQ-INT4 / 4-bit GGUF only.
 - MoE params_total only saves compute, not VRAM — all weights must be resident.
 - AWQ-INT4 fit is the gating constraint for any model > 12 B.
@@ -300,6 +302,7 @@ Cloud pricing below is retained only for a future re-enable decision. It is not 
 **Self-hosted (3 models, per ADR 0005):** Qwen3.5 0.8B (`local/qwen35-08b`), LiquidAI LFM 2.5 8B-A1B (`local/lfm25-8b-a1b`), and the published grafted Ornith MTP Q4 artifact (`local/ornith-8b`). Exact artifact evidence is recorded in `state/*_q4_gguf_manifest.json` and `state/ornith_mtp_q4_manifest.json`. Pricing = amortized electricity only.
 
 **Historical full-sweep estimate** (8 cloud × TB2.0+DeepSWE+SWE-bench Verified × 3 attempts/task):
+
 - ~$30–80 per model
 - ~$240–640 for the full cloud baseline (1 sweep)
 - Local models: ~$0 (electricity only)

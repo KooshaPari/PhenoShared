@@ -19,6 +19,7 @@ This spec consolidates all 19 crates into a coherent, well-tested, and properly 
 ## Problem Statement
 
 19 infrastructure crates are scattered across the Phenotype ecosystem with:
+
 - **Inconsistent API surfaces** — no unified design principles or naming conventions
 - **Unstable versions** — crates change without semver discipline
 - **Missing publications** — many crates are not published to their package registries
@@ -69,18 +70,21 @@ This spec consolidates all 19 crates into a coherent, well-tested, and properly 
 ## Technical Approach
 
 ### Phase 1: Audit and Inventory (Week 1-2)
+
 1. Inventory all 19 crates: API surface, dependencies, test coverage, documentation
 2. Identify duplicated functionality and overlapping concerns
 3. Map crate dependencies (internal and external)
 4. Assess language fit for each crate (especially Zig and Python crates)
 
 ### Phase 2: Consolidation Design (Week 2-3)
+
 1. Design unified workspace structure for phenotype-infrakit
 2. Define API stabilization targets for each crate
 3. Plan crate merges (phenotype-shared → phenotype-contracts, PolicyStack → phenotype-policy-engine)
 4. Design consistent error handling patterns across all crates
 
 ### Phase 3: Implementation (Week 3-8)
+
 1. Migrate crates into unified workspace structure
 2. Stabilize API surfaces with proper semver
 3. Merge duplicate crates
@@ -88,6 +92,7 @@ This spec consolidates all 19 crates into a coherent, well-tested, and properly 
 5. Add comprehensive documentation
 
 ### Phase 4: Publication and Verification (Week 8-10)
+
 1. Publish Rust crates to crates.io
 2. Publish Python crate to PyPI
 3. Publish TypeScript crate to npm
@@ -138,6 +143,7 @@ This spec consolidates all 19 crates into a coherent, well-tested, and properly 
 Comprehensive audit of phenotype-infrakit completed. Key findings:
 
 ### Current State
+
 - **Workspace**: 19 crates in Rust workspace
 - **Open PRs**: 10 (PRs #544-563, all 90-95% complete)
 - **Active branch**: `fix/http-client-core-simplify`
@@ -146,6 +152,7 @@ Comprehensive audit of phenotype-infrakit completed. Key findings:
 - **Stale branches**: ~20 without PRs
 
 ### Immediate Actions Required
+
 1. **Merge 10 open PRs** (P1.1 in spec 021):
    - PR #544: Workspace stabilization
    - PR #553: Gitignore + test-infra
@@ -165,19 +172,24 @@ Comprehensive audit of phenotype-infrakit completed. Key findings:
 3. **Clean stale branches**: ~20 branches without PRs
 
 ### Crate Consolidation Opportunities
+
 Based on audit findings, the following crates should be consolidated:
+
 - **phenotype-contract** + **phenotype-contracts** → phenotype-contracts
 - **phenotype-error-core** + **phenotype-errors** + **phenotype-error-macros** → phenotype-error-core
 - **phenotype-ports-canonical** + **phenotype-port-traits** → phenotype-contracts
 - **phenotype-async-traits** → phenotype-contracts
 
 ### Workspace Split Consideration
+
 19 crates may be large for a single workspace. Consider splitting into 3 workspaces:
+
 - **core**: contracts, errors, config-core
 - **runtime**: event-sourcing, cache-adapter, state-machine, health
 - **tools**: policy-engine, validation, http-client
 
 ### Disk Usage
+
 - **Current**: 1.8 GB (source + target)
 - **Target**: 0.5 GB after `cargo clean`
 - **Build artifacts**: ~1.3 GB in target/

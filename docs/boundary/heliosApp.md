@@ -60,6 +60,7 @@ Nothing — this repo is **out of scope** for absorption.
 **Date:** 2026-07-17
 **Reviewer:** forge subagent (boundary-corrections pass)
 **Decisions:**
+
 - Language corrected: Swift → TypeScript
 - Disposition: TOO_LARGE_RETIRE
 - Do not absorb; keep remote live as-is

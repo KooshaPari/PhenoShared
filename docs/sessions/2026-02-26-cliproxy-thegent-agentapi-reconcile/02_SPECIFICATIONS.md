@@ -7,6 +7,7 @@
 **Goal**: Audit open PRs across 3 repos.
 
 **Acceptance Criteria**:
+
 - [ ] All open PRs enumerated with: number, branch, merge state, check status.
 - [ ] PRs classified by failure type.
 - [ ] Clean merge candidates flagged.
@@ -16,6 +17,7 @@
 **Goal**: Remove stale worktrees from cliproxyapi-plusplus.
 
 **Acceptance Criteria**:
+
 - [ ] `git worktree prune` executed successfully.
 - [ ] No stale worktree entries remain.
 

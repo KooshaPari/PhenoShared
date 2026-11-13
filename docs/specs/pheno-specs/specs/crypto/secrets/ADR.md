@@ -48,6 +48,7 @@ An Architecture Decision Record (ADR) captures an important architectural decisi
 ### When to Write an ADR
 
 Create an ADR when:
+
 - Choosing between competing technologies or approaches
 - Making structural changes to the codebase
 - Defining integration patterns with external systems
@@ -104,18 +105,23 @@ Total: 10
 ## Status Legend
 
 ### Accepted ✅
+
 The decision has been reviewed and approved by the team. It represents the current state of the architecture and should be followed unless superseded.
 
 ### Proposed 📝
+
 The decision is being considered but not yet finalized. Comments and feedback are welcome.
 
 ### Under Review 👀
+
 The ADR is actively being discussed. Team members should provide feedback before the review period ends.
 
 ### Deprecated ⚠️
+
 The decision is no longer recommended but may still be in use. New implementations should avoid this approach.
 
 ### Superseded 🔄
+
 The decision has been replaced by a newer ADR. The superseded ADR contains a reference to its replacement.
 
 ---
@@ -192,6 +198,7 @@ The decision has been replaced by a newer ADR. The superseded ADR contains a ref
    - Does it impact multiple parts of the system?
 
 2. **Reserve an ADR Number**
+
    ```bash
    # Find the next available number
    ls adr/ADR-*.md | sort -V | tail -1
@@ -233,6 +240,7 @@ The decision has been replaced by a newer ADR. The superseded ADR contains a ref
 ### Updating Existing ADRs
 
 When updating an ADR:
+
 - Add an "Amendments" section for minor updates
 - Create a new ADR if superseding (mark old as superseded)
 - Never delete or rewrite history - document the evolution
@@ -460,17 +468,17 @@ Rationale: [Explanation based on criteria weights]
 
 | Resource | URL | Description |
 |----------|-----|-------------|
-| ADR GitHub Organization | https://adr.github.io/ | ADR methodology and tools |
-| Markdown ADR Spec | https://adr.github.io/madr/ | Markdown ADR format |
-| Architecture Patterns | https://martinfowler.com/architecture/ | Patterns and practices |
+| ADR GitHub Organization | <https://adr.github.io/> | ADR methodology and tools |
+| Markdown ADR Spec | <https://adr.github.io/madr/> | Markdown ADR format |
+| Architecture Patterns | <https://martinfowler.com/architecture/> | Patterns and practices |
 
 ### Tools
 
 | Tool | Purpose | Link |
 |------|---------|------|
-| adr-tools | CLI for managing ADRs | https://github.com/npryce/adr-tools |
-| log4brains | Web-based ADR viewer | https://github.com/thomvaill/log4brains |
-| madr | Markdown ADR template | https://adr.github.io/madr/ |
+| adr-tools | CLI for managing ADRs | <https://github.com/npryce/adr-tools> |
+| log4brains | Web-based ADR viewer | <https://github.com/thomvaill/log4brains> |
+| madr | Markdown ADR template | <https://adr.github.io/madr/> |
 
 ---
 

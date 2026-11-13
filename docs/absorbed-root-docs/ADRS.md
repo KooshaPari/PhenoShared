@@ -39,6 +39,7 @@ The core question: Should we federate at build-time (static aggregation) or runt
 Aggregate all documentation during the build process, producing a single static site.
 
 **Implementation**:
+
 ```
 Source Repos → HubGenerator → VitePress Build → Static Site
 ```
@@ -48,6 +49,7 @@ Source Repos → HubGenerator → VitePress Build → Static Site
 Load documentation modules at runtime using webpack Module Federation or similar.
 
 **Implementation**:
+
 ```
 Shell App ──► Lazy loads ──► Remote Documentation Modules
 ```
@@ -57,6 +59,7 @@ Shell App ──► Lazy loads ──► Remote Documentation Modules
 Iframe-based or fetch-based composition in the browser.
 
 **Implementation**:
+
 ```
 Hub Frame ──► Fetches ──► Individual Doc Sites
 ```
@@ -87,6 +90,7 @@ Build-time federation provides the best balance of search quality, SEO, and simp
 ### Option 1: Build-Time Federation
 
 **Pros**:
+
 - Best SEO (all content pre-rendered)
 - Unified search index
 - No runtime complexity
@@ -94,6 +98,7 @@ Build-time federation provides the best balance of search quality, SEO, and simp
 - Single consistent theme
 
 **Cons**:
+
 - Requires source availability at build time
 - Longer build times
 - More complex CI/CD
@@ -101,11 +106,13 @@ Build-time federation provides the best balance of search quality, SEO, and simp
 ### Option 2: Runtime Federation
 
 **Pros**:
+
 - Independent deployments
 - Faster hub builds
 - Source availability not required at build
 
 **Cons**:
+
 - Search fragmentation (requires federated search solution)
 - SEO challenges (dynamic content less discoverable)
 - Complex runtime orchestration
@@ -117,10 +124,12 @@ Build-time federation provides the best balance of search quality, SEO, and simp
 ### Option 3: Client-Side Proxy
 
 **Pros**:
+
 - Simplest implementation
 - Source sites remain independent
 
 **Cons**:
+
 - Poor SEO (iframes/fetched content not indexed)
 - No unified search
 - jarring UX (iframes)
@@ -273,23 +282,27 @@ Primary Python implementation maintains ecosystem consistency while TypeScript t
 ### Option 1: Python CLI with TypeScript Bindings
 
 **Pros**:
+
 - Ecosystem consistency with docs_engine
 - Can expose as MCP tool
 - Fast development velocity
 - Good testing support
 
 **Cons**:
+
 - Multi-language maintenance
 - Two runtime dependencies
 
 ### Option 2: Pure TypeScript
 
 **Pros**:
+
 - Single language/stack
 - Direct VitePress integration
 - Can use Bun for performance
 
 **Cons**:
+
 - Divergence from docs_engine ecosystem
 - Harder to share logic with Python-based tooling
 - Less suitable for MCP tool exposure
@@ -299,9 +312,11 @@ Primary Python implementation maintains ecosystem consistency while TypeScript t
 ### Option 3: Hybrid Scripts
 
 **Pros**:
+
 - Use best tool for each subtask
 
 **Cons**:
+
 - High complexity
 - Hard to test
 - Hard to debug
@@ -466,22 +481,26 @@ Comprehensive implementation provides maximum value for AI-assisted workflows wh
 ### Option 1: Full Implementation
 
 **Pros**:
+
 - Maximum value for AI workflows
 - Token-efficient
 - Automatic generation
 - Standard compliant
 
 **Cons**:
+
 - More complex to implement
 - Additional build step
 
 ### Option 2: Minimal Implementation
 
 **Pros**:
+
 - Simple to implement
 - Follows convention
 
 **Cons**:
+
 - Limited value (just a link list)
 - No priority signaling
 - May not fit in context window for large sites
@@ -491,9 +510,11 @@ Comprehensive implementation provides maximum value for AI-assisted workflows wh
 ### Option 3: No Implementation
 
 **Pros**:
+
 - No implementation effort
 
 **Cons**:
+
 - LLMs scrape full site (high token cost, may exceed context window)
 - No priority signaling
 - Poor accuracy (LLM may miss critical content)

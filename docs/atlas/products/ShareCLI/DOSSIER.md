@@ -27,8 +27,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Current source must not inherit an old release validation
 - Similar commands may have incompatible credentials, inputs or side effects
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

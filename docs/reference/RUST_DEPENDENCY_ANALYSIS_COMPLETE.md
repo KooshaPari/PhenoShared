@@ -104,6 +104,7 @@ All 28 crates form a valid DAG (Directed Acyclic Graph).
 **Risk:** MINIMAL
 
 Tasks:
+
 1. Tag phenotype-error-core → v1.0.0 with STABILITY.md (20 min)
 2. Tag phenotype-config-core → v1.0.0 with STABILITY.md (20 min)
 3. Implement federation traits in phenotype-port-traits (45 min)
@@ -114,6 +115,7 @@ Tasks:
 **Risk:** MINIMAL (zero inter-dependencies)
 
 Parallelism:
+
 - Agent Group 1: crypto, git, health, async (4 crates)
 - Agent Group 2: contracts, mcp, port-traits, http (4 crates)
 - Agent Group 3: logging, process, time, cache (4 crates)
@@ -128,6 +130,7 @@ All 20 agents work simultaneously (15-20 min per agent).
 **Risk:** LOW (each depends on only 1 foundation)
 
 Order:
+
 1. config-loader (depends on config-core) — 20 min
 2. errors (depends on error-core) — 20 min
 3. event-sourcing (depends on error-core) — 25 min
@@ -140,6 +143,7 @@ Order:
 **Risk:** MINIMAL
 
 Tasks:
+
 1. Full workspace build verification (15 min)
 2. Full test suite validation (20 min)
 3. Circular dependency detection (10 min)
@@ -174,6 +178,7 @@ Application
 ### Plugin System Design
 
 **Port-Traits Layer:** Central interface hub with traits for:
+
 - ConfigProvider
 - ErrorHandler
 - EventStore
@@ -196,6 +201,7 @@ full = ["config", "errors", "events", "policy", "health", ...]
 ```
 
 **Binary Size Impact:**
+
 - Minimal (core only): ~5 MB
 - Standard (6 features): ~15 MB
 - Full (all plugins): ~50-100 MB
@@ -216,6 +222,7 @@ full = ["config", "errors", "events", "policy", "health", ...]
 ### Score: 4/10 (LOW)
 
 **Contributing Factors:**
+
 - Zero circular dependencies (-3 points)
 - Two-level DAG (-1 point)
 - 82% leaf nodes (-2 points)
@@ -259,24 +266,28 @@ full = ["config", "errors", "events", "policy", "health", ...]
 ## 7. Recommendations
 
 ### P0 (This Week)
+
 - [ ] Stabilize error-core to v1.0.0
 - [ ] Stabilize config-core to v1.0.0
 - [ ] Implement federation traits in port-traits
 - [ ] Assign Phase 2B agents
 
 ### P1 (Next Week)
+
 - [ ] Execute Phase 2B (parallel leaf extraction)
 - [ ] Execute Phase 2C (sequential dependent extraction)
 - [ ] Execute Phase 2D (validation)
 - [ ] Update ARCHITECTURE.md
 
 ### P2 (Following Week)
+
 - [ ] Implement PluginRegistry
 - [ ] Benchmark binary sizes
 - [ ] Create plugin documentation
 - [ ] Tag all crates v1.0.0
 
 ### P3 (Long-Term)
+
 - [ ] Export crates to separate repos
 - [ ] Establish plugin marketplace
 - [ ] Federation examples
@@ -286,22 +297,26 @@ full = ["config", "errors", "events", "policy", "health", ...]
 ## 8. Success Criteria
 
 ### Phase 2A
+
 - [ ] error-core tagged v1.0.0
 - [ ] config-core tagged v1.0.0
 - [ ] Federation traits implemented
 - [ ] All tests pass
 
 ### Phase 2B
+
 - [ ] All 20 leaf crates compile independently
 - [ ] All tests pass (100% success)
 - [ ] No new inter-crate dependencies
 
 ### Phase 2C
+
 - [ ] All 5 dependent crates extract with external deps
 - [ ] All tests pass
 - [ ] No circular dependencies
 
 ### Phase 2D
+
 - [ ] Full workspace builds cleanly
 - [ ] All tests pass (100%)
 - [ ] Documentation updated
@@ -311,11 +326,13 @@ full = ["config", "errors", "events", "policy", "health", ...]
 ## Files & Locations
 
 ### Analysis Location
+
 ```
 /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/
 ```
 
 ### Related Documents
+
 - `ARCHITECTURE.md` — System design
 - `PLAN.md` — Project roadmap
 - `FUNCTIONAL_REQUIREMENTS.md` — Feature specs
@@ -335,4 +352,3 @@ full = ["config", "errors", "events", "policy", "health", ...]
 **Status:** ✅ READY FOR PHASE 2 EXECUTION
 
 All prerequisites met. No blockers identified. Proceed with confidence.
-

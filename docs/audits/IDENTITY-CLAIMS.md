@@ -92,6 +92,7 @@ These present the repository, or a top-level part of it, as a different named pr
 | `A-01_VALIDATION.md:1`, `A-08_VALIDATION.md:1` | `# A-01 VALIDATION — Create phenotype-infra monorepo shell` / `— Port governance from phenotype-infra-ci-fix` | Assert a different repo as the thing being built. |
 
 **Count:** 1 (crates/README.md) + 1 (llms.txt) + 1 (.github/CODEOWNERS) + 2 (docs/README, docs/TOC)
+
 + 3 (ARCHITECTURE, AGENTS, docs/BENCHMARK_REPORT) + 1 (CHARTER) + 1 (INDEX) + 1 (CONTRIBUTING)
 + 1 (docs/PRD) + 4 (SPINE, docs/SPINE, ARCHIVED, CONSUMERS) + 2 (docs/architecture, docs/SSOT)
 + 2 (intent, STATUS-REPORT) + 1 (FR_TRACEABILITY) + 2 (architecture/overview, ports)
@@ -209,6 +210,7 @@ The column is headed **Origin**, so this *is* an origin claim, not merely a fami
 is wrong on both axes.
 
 **Axis 1 — the count is a prefix-matching bug.**
+
 - Claimed: 117.
 - First-level dirs matching `pheno-*`: **40** (38 with a manifest).
 - The claimed 117 is exactly `ls crates | grep -c '^pheno'` = **117**, which is an unanchored
@@ -233,6 +235,7 @@ records for `pheno-cdylib-bridge`, `pheno-context`, `pheno-forge-smoke`, `pheno-
 and `phenoData` as distinct absorbed projects.
 
 **Was PhenoAI absorbed into this repo? Yes — verified.**
+
 - Commit `208b0523` (2026-09-15): "chore: absorb PhenoAI (AI/LLM agent workspace + Eidolon
   runtime + PlayCua + researchintel)", adding 3,870 files.
 - Its content is present: `crates/llm-router`, `crates/mcp-server`, `crates/eidolon-core`,

@@ -29,6 +29,7 @@
 **PhenoMCP is the Model Context Protocol implementation and tooling platform for the Phenotype ecosystem, providing MCP servers, clients, and development tools that enable AI agents to interact seamlessly with Phenotype services.**
 
 Our mission is to standardize AI integration by offering:
+
 - **MCP Servers**: Phenotype service exposure to AI
 - **MCP Clients**: AI agent connectivity
 - **Development Tools**: MCP server development
@@ -37,6 +38,7 @@ Our mission is to standardize AI integration by offering:
 ### 1.2 Vision
 
 To be the MCP platform where:
+
 - **Services are Agent-Ready**: MCP server for every service
 - **Agents are Capable**: Rich tool ecosystem
 - **Development is Easy**: Simple MCP creation
@@ -151,9 +153,11 @@ Note: crates/ subdirectory has additional structure.
 ## 8. Decision Authority Levels
 
 **Level 1: MCP Developer**
+
 - Server updates
 
 **Level 2: Architecture Board**
+
 - Protocol changes
 
 ---

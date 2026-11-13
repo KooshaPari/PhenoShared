@@ -419,6 +419,7 @@ wrk -t8 -c200 -d30s -H "Content-Type: application/json" \
 **Decision**: Rust with Tokio async runtime
 
 **Rationale**:
+
 1. Performance: Rust delivers highest throughput with lowest latency
 2. Memory: Zero-cost abstractions and no GC provide predictable memory usage
 3. Latency: Deterministic execution eliminates GC pauses
@@ -470,84 +471,84 @@ wrk -t8 -c200 -d30s -H "Content-Type: application/json" \
 
 | Reference | URL | Description | Last Verified |
 |-----------|-----|-------------|--------------|
-| Tokio Runtime | https://tokio.rs/ | Rust async runtime | 2026-04-05 |
-| Hyper HTTP | https://hyper.rs/ | HTTP library for Rust | 2026-04-05 |
-| Tower Middleware | https://tower-rs.github.io/ | Middleware abstraction | 2026-04-05 |
-| Rustls | https://docs.rs/rustls/ | TLS implementation | 2026-04-05 |
-| Pingora | https://github.com/cloudflare/pingora | Cloudflare's Rust proxy | 2026-04-05 |
-| Axum Web Framework | https://docs.rs/axum/ | Ergonomic web framework | 2026-04-05 |
-| tonic gRPC | https://docs.rs/tonic/ | gRPC for Rust | 2026-04-05 |
-| h2 HTTP/2 | https://docs.rs/h2/ | HTTP/2 client/server | 2026-04-05 |
+| Tokio Runtime | <https://tokio.rs/> | Rust async runtime | 2026-04-05 |
+| Hyper HTTP | <https://hyper.rs/> | HTTP library for Rust | 2026-04-05 |
+| Tower Middleware | <https://tower-rs.github.io/> | Middleware abstraction | 2026-04-05 |
+| Rustls | <https://docs.rs/rustls/> | TLS implementation | 2026-04-05 |
+| Pingora | <https://github.com/cloudflare/pingora> | Cloudflare's Rust proxy | 2026-04-05 |
+| Axum Web Framework | <https://docs.rs/axum/> | Ergonomic web framework | 2026-04-05 |
+| tonic gRPC | <https://docs.rs/tonic/> | gRPC for Rust | 2026-04-05 |
+| h2 HTTP/2 | <https://docs.rs/h2/> | HTTP/2 client/server | 2026-04-05 |
 
 ### 9.2 API Gateway Documentation
 
 | Reference | URL | Description | Last Verified |
 |-----------|-----|-------------|--------------|
-| Kong Gateway | https://docs.konghq.com/gateway/ | Kong documentation | 2026-04-05 |
-| Envoy Proxy | https://www.envoyproxy.io/docs/envoy/latest | Envoy documentation | 2026-04-05 |
-| Tyk Gateway | https://tyk.io/docs/ | Tyk documentation | 2026-04-05 |
-| KrakenD | https://www.krakend.io/docs/ | KrakenD documentation | 2026-04-05 |
-| Gloo | https://docs.solo.io/gloo/latest/ | Gloo documentation | 2026-04-05 |
-| Traefik | https://doc.traefik.io/traefik/ | Traefik documentation | 2026-04-05 |
-| HAProxy | https://www.haproxy.com/documentation | HAProxy documentation | 2026-04-05 |
-| NGINX Plus | https://docs.nginx.com/nginx/ | NGINX documentation | 2026-04-05 |
+| Kong Gateway | <https://docs.konghq.com/gateway/> | Kong documentation | 2026-04-05 |
+| Envoy Proxy | <https://www.envoyproxy.io/docs/envoy/latest> | Envoy documentation | 2026-04-05 |
+| Tyk Gateway | <https://tyk.io/docs/> | Tyk documentation | 2026-04-05 |
+| KrakenD | <https://www.krakend.io/docs/> | KrakenD documentation | 2026-04-05 |
+| Gloo | <https://docs.solo.io/gloo/latest/> | Gloo documentation | 2026-04-05 |
+| Traefik | <https://doc.traefik.io/traefik/> | Traefik documentation | 2026-04-05 |
+| HAProxy | <https://www.haproxy.com/documentation> | HAProxy documentation | 2026-04-05 |
+| NGINX Plus | <https://docs.nginx.com/nginx/> | NGINX documentation | 2026-04-05 |
 
 ### 9.3 Academic Papers
 
 | Paper | URL | Institution | Year |
 |-------|-----|------------|------|
-| "Designing the Next Generation API Gateway" | https://arxiv.org/abs/2301.00001 | MIT | 2023 |
-| "Performance Analysis of API Gateways" | https://ieeexplore.ieee.org/document/10000001 | IEEE | 2023 |
-| "Rate Limiting Algorithms Survey" | https://dl.acm.org/doi/10.1145/3500001 | ACM | 2022 |
-| "Zero-Trust API Security" | https://csrc.nist.gov/publications/detail/sp/800-207/final | NIST | 2020 |
-| "Distributed Systems Rate Control" | https://USENIX.org/conference/osdi22/ | USENIX | 2022 |
-| "CRDTs for Distributed Rate Limiting" | https://arxiv.org/abs/2104.00001 | INRIA | 2021 |
-| "Memory Safety in Systems Programming" | https://www.usenix.org/system/files/sec22.pdf | USENIX | 2022 |
-| "Predictive Auto-scaling for Microservices" | https://dl.acm.org/doi/10.1145/3465998 | ACM | 2021 |
+| "Designing the Next Generation API Gateway" | <https://arxiv.org/abs/2301.00001> | MIT | 2023 |
+| "Performance Analysis of API Gateways" | <https://ieeexplore.ieee.org/document/10000001> | IEEE | 2023 |
+| "Rate Limiting Algorithms Survey" | <https://dl.acm.org/doi/10.1145/3500001> | ACM | 2022 |
+| "Zero-Trust API Security" | <https://csrc.nist.gov/publications/detail/sp/800-207/final> | NIST | 2020 |
+| "Distributed Systems Rate Control" | <https://USENIX.org/conference/osdi22/> | USENIX | 2022 |
+| "CRDTs for Distributed Rate Limiting" | <https://arxiv.org/abs/2104.00001> | INRIA | 2021 |
+| "Memory Safety in Systems Programming" | <https://www.usenix.org/system/files/sec22.pdf> | USENIX | 2022 |
+| "Predictive Auto-scaling for Microservices" | <https://dl.acm.org/doi/10.1145/3465998> | ACM | 2021 |
 
 ### 9.4 Industry Standards
 
 | Standard | Body | URL | Relevance |
 |----------|------|-----|-----------|
-| OAuth 2.0 | IETF | https://datatracker.ietf.org/doc/html/rfc6749 | Auth framework |
-| OpenID Connect | OpenID | https://openid.net/specs/openid-connect-core-1_0.html | Identity layer |
-| JWT Best Practices | IETF | https://datatracker.ietf.org/doc/html/rfc8725 | Token security |
-| mTLS | IETF | https://datatracker.ietf.org/doc/html/rfc8705 | Client certs |
-| Prometheus Metrics | CNCF | https://prometheus.io/docs/concepts/metric_types/ | Metrics format |
-| OpenTelemetry | CNCF | https://opentelemetry.io/docs/ | Tracing standard |
-| HTTP/2 | IETF | https://http2.github.io/ | Protocol standard |
-| HTTP/3 | IETF | https://quicwg.org/base-drafts/draft-ietf-quic-http.html | Next-gen protocol |
-| TLS 1.3 | IETF | https://tools.ietf.org/html/rfc8446 | Encryption |
-| gRPC | CNCF | https://grpc.io/ | RPC framework |
-| Service Mesh Interface | CNCF | https://smi-spec.io/ | Mesh standard |
-| Gateway API | Kubernetes | https://gateway-api.sigs.k8s.io/ | K8s gateway standard |
+| OAuth 2.0 | IETF | <https://datatracker.ietf.org/doc/html/rfc6749> | Auth framework |
+| OpenID Connect | OpenID | <https://openid.net/specs/openid-connect-core-1_0.html> | Identity layer |
+| JWT Best Practices | IETF | <https://datatracker.ietf.org/doc/html/rfc8725> | Token security |
+| mTLS | IETF | <https://datatracker.ietf.org/doc/html/rfc8705> | Client certs |
+| Prometheus Metrics | CNCF | <https://prometheus.io/docs/concepts/metric_types/> | Metrics format |
+| OpenTelemetry | CNCF | <https://opentelemetry.io/docs/> | Tracing standard |
+| HTTP/2 | IETF | <https://http2.github.io/> | Protocol standard |
+| HTTP/3 | IETF | <https://quicwg.org/base-drafts/draft-ietf-quic-http.html> | Next-gen protocol |
+| TLS 1.3 | IETF | <https://tools.ietf.org/html/rfc8446> | Encryption |
+| gRPC | CNCF | <https://grpc.io/> | RPC framework |
+| Service Mesh Interface | CNCF | <https://smi-spec.io/> | Mesh standard |
+| Gateway API | Kubernetes | <https://gateway-api.sigs.k8s.io/> | K8s gateway standard |
 
 ### 9.5 Tooling & Libraries
 
 | Tool | Purpose | URL | Alternatives |
 |------|---------|-----|--------------|
-| wrk | HTTP benchmarking | https://github.com/wg/wrk | ab, hey |
-| ghz | gRPC benchmarking | https://github.com/bojand/ghz | grpcurl |
-| vegeta | Load testing | https://github.com/tsenart/vegeta | wrk, hey |
-| k6 | Modern load testing | https://k6.io/ | wrk, vegeta |
-| Postman | API testing | https://www.postman.com/ | Insomnia, curl |
-| wscat | WebSocket testing | https://github.com/websockets/wscat | None |
-| grpcurl | gRPC CLI | https://github.com/fullstorydev/grpcurl | ghz |
-| hey | HTTP load generator | https://github.com/rakyll/hey | wrk |
-| autocannon | Node.js benchmarking | https://github.com/mcollina/autocannon | wrk |
-| bombardier | HTTP benchmarking | https://github.com/codesenberg/bombardier | wrk |
+| wrk | HTTP benchmarking | <https://github.com/wg/wrk> | ab, hey |
+| ghz | gRPC benchmarking | <https://github.com/bojand/ghz> | grpcurl |
+| vegeta | Load testing | <https://github.com/tsenart/vegeta> | wrk, hey |
+| k6 | Modern load testing | <https://k6.io/> | wrk, vegeta |
+| Postman | API testing | <https://www.postman.com/> | Insomnia, curl |
+| wscat | WebSocket testing | <https://github.com/websockets/wscat> | None |
+| grpcurl | gRPC CLI | <https://github.com/fullstorydev/grpcurl> | ghz |
+| hey | HTTP load generator | <https://github.com/rakyll/hey> | wrk |
+| autocannon | Node.js benchmarking | <https://github.com/mcollina/autocannon> | wrk |
+| bombardier | HTTP benchmarking | <https://github.com/codesenberg/bombardier> | wrk |
 
 ### 9.6 Cloud-Native Resources
 
 | Resource | URL | Description |
 |----------|-----|-------------|
-| Kubernetes Ingress | https://kubernetes.io/docs/concepts/services-networking/ingress/ | K8s ingress docs |
-| Istio | https://istio.io/ | Service mesh platform |
-| Linkerd | https://linkerd.io/ | Lightweight mesh |
-| Cilium | https://cilium.io/ | eBPF networking |
-| Envoy Gateway | https://gateway.envoyproxy.io/ | Envoy-based gateway |
-| NGINX Ingress | https://kubernetes.github.io/ingress-nginx/ | K8s ingress controller |
-| Contour | https://projectcontour.io/ | Envoy-based ingress |
+| Kubernetes Ingress | <https://kubernetes.io/docs/concepts/services-networking/ingress/> | K8s ingress docs |
+| Istio | <https://istio.io/> | Service mesh platform |
+| Linkerd | <https://linkerd.io/> | Lightweight mesh |
+| Cilium | <https://cilium.io/> | eBPF networking |
+| Envoy Gateway | <https://gateway.envoyproxy.io/> | Envoy-based gateway |
+| NGINX Ingress | <https://kubernetes.github.io/ingress-nginx/> | K8s ingress controller |
+| Contour | <https://projectcontour.io/> | Envoy-based ingress |
 
 ---
 

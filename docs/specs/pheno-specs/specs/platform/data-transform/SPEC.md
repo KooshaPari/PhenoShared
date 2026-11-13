@@ -44,6 +44,7 @@ Datamold is a TypeScript transformation library that redefines data mapping thro
 ### Target Use Cases
 
 Datamold excels in scenarios requiring:
+
 - **High-frequency transformations** — API gateways processing thousands of requests per second
 - **Type-critical systems** — Financial transactions, healthcare records, compliance data
 - **Bundle-constrained environments** — Edge computing, IoT, mobile web
@@ -83,6 +84,7 @@ function transformUserToDTO(user: User): UserDTO {
 ### Type-Driven Development
 
 Datamold embodies type-driven development: types are not merely annotations but active participants in program correctness. The type system:
+
 - Validates schema definitions at compile time
 - Prevents property name mismatches
 - Enforces transformer input/output compatibility
@@ -91,6 +93,7 @@ Datamold embodies type-driven development: types are not merely annotations but 
 ### Composability Over Configuration
 
 Complex transformations are built from simple, reusable components rather than monolithic configurations. This approach:
+
 - Enables testing of individual transformers in isolation
 - Promotes code reuse across projects
 - Simplifies debugging by narrowing failure scope
@@ -99,6 +102,7 @@ Complex transformations are built from simple, reusable components rather than m
 ### Explicit Over Implicit
 
 Datamold favors explicit declarations over implicit conventions:
+
 - No decorator magic — all transformations are declared
 - No hidden type coercion — conversions are explicit
 - No automatic property mapping — every mapping is declared
@@ -486,6 +490,7 @@ interface ComputedMapping<S, T> {
 Creates a new transformation schema.
 
 **Parameters:**
+
 - `source` — Type representation of source type
 - `target` — Type representation of target type
 - `config` — Schema configuration including transformers, validators, and projections
@@ -493,6 +498,7 @@ Creates a new transformation schema.
 **Returns:** A `Schema<S, T>` object ready for use with the mapper.
 
 **Example:**
+
 ```typescript
 const UserToDTO = schema(User, UserDTO, {
   transformers: [
@@ -512,6 +518,7 @@ const UserToDTO = schema(User, UserDTO, {
 Alternative schema creation with inferred types.
 
 **Example:**
+
 ```typescript
 const UserToDTO = createSchema({
   source: TypeRep.object<User>('User'),
@@ -527,12 +534,14 @@ const UserToDTO = createSchema({
 Creates a property mapping transformer.
 
 **Parameters:**
+
 - `sourceKey` — Key of the property to transform
 - `transformer` — Function transforming the property value
 
 **Returns:** A transformer that can be composed into schemas.
 
 **Example:**
+
 ```typescript
 const emailTransformer = map('email', (e: Email) => e.value);
 const dateTransformer = map('createdAt', (d: Date) => d.toISOString());
@@ -543,11 +552,13 @@ const dateTransformer = map('createdAt', (d: Date) => d.toISOString());
 Creates an array mapping transformer.
 
 **Example:**
+
 ```typescript
 const permissionsTransformer = mapArray((p: Permission) => p.name);
 ```
 
 #### `mapNested<S extends object, T extends object, K extends keyof S, L extends keyof T>(
+
   sourceKey: K,
   nestedSchema: Schema<S[K], T[L]>
 ): Transformer<S, T>`
@@ -555,11 +566,13 @@ const permissionsTransformer = mapArray((p: Permission) => p.name);
 Creates a nested object mapping transformer.
 
 **Example:**
+
 ```typescript
 const addressTransformer = mapNested('address', AddressToDTO);
 ```
 
 #### `compose<T1, T2, T3>(
+
   first: Transformer<T1, T2>,
   second: Transformer<T2, T3>
 ): Transformer<T1, T3>`
@@ -567,6 +580,7 @@ const addressTransformer = mapNested('address', AddressToDTO);
 Composes two transformers in sequence.
 
 **Example:**
+
 ```typescript
 const fullName = compose(
   (u: User) => `${u.firstName} ${u.lastName}`,
@@ -579,6 +593,7 @@ const fullName = compose(
 Pipes multiple transformers in sequence (left-to-right).
 
 **Example:**
+
 ```typescript
 const sanitize = pipe(
   trim(),
@@ -588,6 +603,7 @@ const sanitize = pipe(
 ```
 
 #### `optional<S, T>(
+
   transformer: Transformer<S, T>,
   defaultValue?: T
 ): Transformer<S | undefined | null, T>`
@@ -595,6 +611,7 @@ const sanitize = pipe(
 Wraps a transformer to handle optional values.
 
 **Example:**
+
 ```typescript
 const optionalManagerId = optional(
   map('manager', (m: User) => m.id),
@@ -603,6 +620,7 @@ const optionalManagerId = optional(
 ```
 
 #### `conditional<S, T>(
+
   predicate: (source: S) => boolean,
   trueTransformer: Transformer<S, T>,
   falseTransformer: Transformer<S, T>
@@ -611,6 +629,7 @@ const optionalManagerId = optional(
 Applies different transformers based on a condition.
 
 **Example:**
+
 ```typescript
 const roleBasedTransform = conditional(
   (user) => user.isAdmin,
@@ -630,6 +649,7 @@ The primary interface for executing transformations.
 Transforms a source object according to a schema.
 
 **Parameters:**
+
 - `source` — Object to transform
 - `schema` — Transformation schema
 
@@ -638,6 +658,7 @@ Transforms a source object according to a schema.
 **Throws:** `TransformError` if transformation fails
 
 **Example:**
+
 ```typescript
 const mapper = new Mapper();
 const dto = mapper.transform(user, UserToDTO);
@@ -648,6 +669,7 @@ const dto = mapper.transform(user, UserToDTO);
 Transforms an array of source objects.
 
 **Example:**
+
 ```typescript
 const dtos = mapper.transformMany(users, UserToDTO);
 ```
@@ -657,6 +679,7 @@ const dtos = mapper.transformMany(users, UserToDTO);
 Creates a projected view of a source object.
 
 **Example:**
+
 ```typescript
 const summary = mapper.project(user, UserSummary);
 ```
@@ -666,6 +689,7 @@ const summary = mapper.project(user, UserSummary);
 Validates a source object against a schema.
 
 **Example:**
+
 ```typescript
 const result = mapper.validate(user, UserToDTO);
 if (!result.success) {
@@ -678,12 +702,14 @@ if (!result.success) {
 Serializes an object to JSON with circular reference handling.
 
 **Parameters:**
+
 - `source` — Object to serialize
 - `options` — Serialization options including placeholder format
 
 **Returns:** JSON string
 
 **Example:**
+
 ```typescript
 const json = mapper.serialize(userGraph, {
   placeholder: '__ref__:{id}',
@@ -696,6 +722,7 @@ const json = mapper.serialize(userGraph, {
 Deserializes JSON to a typed object with circular reference restoration.
 
 **Example:**
+
 ```typescript
 const user = mapper.deserialize(json, JSONToUser, {
   placeholder: /__ref__:(\w+)/,
@@ -709,6 +736,7 @@ const user = mapper.deserialize(json, JSONToUser, {
 Creates a pre-transformation validation step.
 
 **Example:**
+
 ```typescript
 const schema = createSchema({
   validators: [
@@ -723,6 +751,7 @@ const schema = createSchema({
 Creates a post-transformation validation step.
 
 **Example:**
+
 ```typescript
 const schema = createSchema({
   validators: [
@@ -737,6 +766,7 @@ const schema = createSchema({
 Combines multiple validators, requiring all to pass.
 
 **Example:**
+
 ```typescript
 const strictEmail = all(
   Validators.required(),
@@ -760,6 +790,7 @@ Negates a validator.
 Creates a projection selecting specific properties.
 
 **Example:**
+
 ```typescript
 const userSummary = select('id', 'name', 'email');
 const summary = mapper.project(user, userSummary);
@@ -770,6 +801,7 @@ const summary = mapper.project(user, userSummary);
 Creates a projection excluding specific properties.
 
 **Example:**
+
 ```typescript
 const publicUser = exclude('password', 'ssn', 'internalNotes');
 ```
@@ -779,6 +811,7 @@ const publicUser = exclude('password', 'ssn', 'internalNotes');
 Creates a projection with property renaming.
 
 **Example:**
+
 ```typescript
 const apiFormat = rename({
   firstName: 'first_name',
@@ -792,6 +825,7 @@ const apiFormat = rename({
 Creates a projection flattening nested objects.
 
 **Example:**
+
 ```typescript
 const flatUser = flatten(['address', 'street']);
 // { address: { street: '123' } } → { address_street: '123' }
@@ -1257,6 +1291,7 @@ type DeepTransformer<S, T> = {
 ### Benchmark Methodology
 
 All benchmarks are conducted with:
+
 - **Hardware:** M3 Pro, 18GB RAM
 - **Runtime:** Bun 1.2.0, Node.js 22
 - **TypeScript:** tsgo (native compiler)
@@ -2254,6 +2289,7 @@ const schema = schema(User, UserDTO, {
 **Cause:** Recursive types or deeply nested schemas
 
 **Solution:**
+
 1. Break recursive schemas into separate definitions
 2. Use explicit type annotations
 3. Increase TypeScript's type depth limit (tsconfig.json):
@@ -2313,6 +2349,7 @@ const schema = schema(User, UserDTO, {
 **Symptom:** Transformations taking >100ms for single objects
 
 **Diagnosis:**
+
 ```typescript
 // Profile the transformation
 const start = performance.now();
@@ -2321,6 +2358,7 @@ console.log(`Transform took ${performance.now() - start}ms`);
 ```
 
 **Solutions:**
+
 1. Use projections to select only needed properties
 2. Enable lazy evaluation for expensive transforms
 3. Cache frequently used transformations
@@ -2333,6 +2371,7 @@ console.log(`Transform took ${performance.now() - start}ms`);
 **Cause:** Schema cache not releasing old entries
 
 **Solution:**
+
 ```typescript
 // Configure cache with limits
 const mapper = new Mapper({
@@ -2412,12 +2451,14 @@ Node.js 22+ is fully supported. For earlier versions:
 #### Browser Compatibility
 
 Datamold works in all modern browsers:
+
 - Chrome 90+
 - Firefox 88+
 - Safari 14+
 - Edge 90+
 
 For older browsers, include polyfills for:
+
 - `WeakRef` (Chrome 84+, Firefox 79+, Safari 14+)
 - `FinalizationRegistry` (same as WeakRef)
 
@@ -2480,6 +2521,7 @@ const dto = mapper.transform(user, UserToDTO);
 ```
 
 **Migration Steps:**
+
 1. Remove all `@Expose()` decorators
 2. Convert `@Transform()` to `map()` calls
 3. Replace `plainToInstance()` with `mapper.transform()`
@@ -2487,6 +2529,7 @@ const dto = mapper.transform(user, UserToDTO);
 5. Update tests to use schema-based transformation
 
 **Migration Checklist:**
+
 - [ ] Replace `@Expose()` with explicit `map()` calls
 - [ ] Replace `@Transform()` with transformer functions
 - [ ] Remove class decorators
@@ -2527,6 +2570,7 @@ const dto = mapper.transform(user, UserToDTO);
 ```
 
 **Migration Notes:**
+
 - zod schemas define output shape; Datamold schemas define transformations
 - zod validation is runtime; Datamold validation can be compile-time
 - zod's `.parse()` throws on invalid; Datamold validates during transform
@@ -2558,6 +2602,7 @@ const dto = mapper.transform(user, UserToDTO);
 ```
 
 **Key Differences:**
+
 - io-ts uses codec pattern (decode/encode); Datamold uses schema pattern
 - io-ts returns `Either`; Datamold throws on error (or returns with `transformSafe`)
 - io-ts validation is always runtime; Datamold moves validation to compile time
@@ -2589,6 +2634,7 @@ const UserToDTO = schema(User, UserDTO, {
 ```
 
 **Benefits of Migration:**
+
 - Type safety at compile time, not just trust
 - Reusable transformers across schemas
 - Easier testing (test transformers individually)
@@ -2825,10 +2871,10 @@ build: Update build configuration
 ### External References
 
 1. **TypeScript Handbook** (2024). Microsoft Corporation.
-   https://www.typescriptlang.org/docs/handbook/
+   <https://www.typescriptlang.org/docs/handbook/>
 
 2. **Go-based TypeScript Compiler** (2024). Microsoft TypeScript Blog.
-   https://devblogs.microsoft.com/typescript/announcing-typescript-7/
+   <https://devblogs.microsoft.com/typescript/announcing-typescript-7/>
 
 3. Pierce, B.C. (2002). *Types and Programming Languages*. MIT Press.
    - Relevant chapters: Subtyping, Polymorphism, Type Reconstruction
@@ -2836,22 +2882,22 @@ build: Update build configuration
 4. Bird, R. & Wadler, P. (1988). *Introduction to Functional Programming*.
    - Relevant for: Function composition, recursion patterns
 
-5. **Zod Documentation** (2024). https://zod.dev/
+5. **Zod Documentation** (2024). <https://zod.dev/>
    - API reference and best practices
 
-6. **io-ts Documentation** (2024). https://github.com/gcanti/io-ts
+6. **io-ts Documentation** (2024). <https://github.com/gcanti/io-ts>
    - Codec patterns and type-level programming
 
-7. **class-transformer Documentation** (2024). https://github.com/typestack/class-transformer
+7. **class-transformer Documentation** (2024). <https://github.com/typestack/class-transformer>
    - Decorator-based transformation patterns
 
-8. **Effect Schema Documentation** (2024). https://effect.website/
+8. **Effect Schema Documentation** (2024). <https://effect.website/>
    - Functional programming patterns for TypeScript
 
-9. **TypeScript Deep Dive** (2024). https://basarat.gitbook.io/typescript/
+9. **TypeScript Deep Dive** (2024). <https://basarat.gitbook.io/typescript/>
    - Advanced TypeScript patterns and techniques
 
-10. **Total TypeScript** (2024). https://www.totaltypescript.com/
+10. **Total TypeScript** (2024). <https://www.totaltypescript.com/>
     - Type-level programming tutorials
 
 ### Related Projects
@@ -2879,6 +2925,7 @@ build: Update build configuration
 ## Changelog
 
 ### v0.1.0 (Current) - 2026-04-04
+
 - Core schema and mapper
 - Basic transformations (simple, nested, array)
 - Validation pipeline with pre/post validators
@@ -2889,6 +2936,7 @@ build: Update build configuration
 - Comprehensive documentation
 
 ### v0.2.0 (Planned) - 2026-05-15
+
 - Circular reference handling with cycle restoration
 - Transformer composition library
 - Advanced projections (flatten, expand, rename)
@@ -2898,6 +2946,7 @@ build: Update build configuration
 - Array transformation utilities
 
 ### v0.3.0 (Planned) - 2026-06-30
+
 - zod schema adapter
 - class-validator adapter
 - TypeORM entity adapter
@@ -2907,6 +2956,7 @@ build: Update build configuration
 - Video tutorials
 
 ### v1.0.0 (Planned) - 2026-09-01
+
 - Bidirectional transformation support
 - Incremental computation for large datasets
 - Distributed transformation support
@@ -2946,6 +2996,7 @@ build: Update build configuration
 ## Feedback and Questions
 
 For questions about this specification:
+
 - Open an issue in the project repository
 - Contact the Architecture Team
 - Review the [FAQ](./docs/FAQ.md) (coming in v0.2.0)

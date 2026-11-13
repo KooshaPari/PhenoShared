@@ -64,13 +64,13 @@ jq --version
 
 ### Step 1: Create Snyk Account
 
-1. Go to https://app.snyk.io/auth/register
+1. Go to <https://app.snyk.io/auth/register>
 2. Sign up with GitHub or email
 3. Complete account setup
 
 ### Step 2: Generate API Token
 
-1. Navigate to Account Settings: https://app.snyk.io/account/settings
+1. Navigate to Account Settings: <https://app.snyk.io/account/settings>
 2. Scroll to **API Token** section
 3. Click "Generate Token"
 4. Copy the token (keep it private!)
@@ -89,7 +89,7 @@ source ~/.bashrc
 
 **Option B: GitHub Organization Secret**
 
-1. Go to: https://github.com/KooshaPari/repos/settings/secrets
+1. Go to: <https://github.com/KooshaPari/repos/settings/secrets>
 2. Click "New repository secret" (or "New organization secret" for all repos)
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your Snyk API token
@@ -99,7 +99,7 @@ source ~/.bashrc
 
 For individual repositories:
 
-1. Go to: https://github.com/KooshaPari/REPO/settings/secrets
+1. Go to: <https://github.com/KooshaPari/REPO/settings/secrets>
 2. Click "New repository secret"
 3. Name: `SNYK_TOKEN`
 4. Value: Paste your token
@@ -191,12 +191,12 @@ Reports are generated in `.snyk-reports/`:
 ### Enable Snyk in GitHub Settings
 
 1. **For Organization** (all repos):
-   - Go: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets
+   - Go: <https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets>
    - Add `SNYK_TOKEN` secret
    - All repos inherit this secret
 
 2. **For Single Repository**:
-   - Go: https://github.com/KooshaPari/REPO/settings/secrets
+   - Go: <https://github.com/KooshaPari/REPO/settings/secrets>
    - Add `SNYK_TOKEN` secret
    - Only this repo can access it
 
@@ -205,6 +205,7 @@ Reports are generated in `.snyk-reports/`:
 The workflow file is pre-configured at `.github/workflows/snyk-scan.yml`:
 
 **Features:**
+
 - Triggers on: PRs, main push, nightly schedule
 - Generates SARIF reports for Code Scanning
 - Auto-comments on PRs with results
@@ -305,7 +306,7 @@ ignore:
         expires: '2025-12-31T00:00:00.000Z'
 ```
 
-3. Commit policy file:
+1. Commit policy file:
 
 ```bash
 git add .snyk
@@ -387,6 +388,7 @@ Using deployment script:
 ```
 
 **Key Fields:**
+
 - `id`: Snyk vulnerability identifier
 - `severity`: Critical, High, Medium, Low
 - `fixedIn`: Versions where fix is available
@@ -495,7 +497,7 @@ git push
    - Comments appear on PRs
 
 2. **In Snyk Dashboard**:
-   - https://app.snyk.io/dashboard
+   - <https://app.snyk.io/dashboard>
    - Monitor project health
    - Set up alerts
 
@@ -516,6 +518,7 @@ curl -X GET "https://api.snyk.io/v1/test" \
 - heliosCLI
 
 **Steps:**
+
 1. Generate tokens
 2. Run `snyk-deploy.sh` for each repo
 3. Review and commit `.snyk` files
@@ -543,10 +546,10 @@ curl -X GET "https://api.snyk.io/v1/test" \
 
 ## Support & Documentation
 
-- **Snyk Docs**: https://docs.snyk.io
-- **CLI Reference**: https://docs.snyk.io/snyk-cli/cli-reference
-- **Policy Files**: https://docs.snyk.io/policies/the-snyk-policy-file
-- **GitHub Integration**: https://docs.snyk.io/integrations/git-repositories/github
+- **Snyk Docs**: <https://docs.snyk.io>
+- **CLI Reference**: <https://docs.snyk.io/snyk-cli/cli-reference>
+- **Policy Files**: <https://docs.snyk.io/policies/the-snyk-policy-file>
+- **GitHub Integration**: <https://docs.snyk.io/integrations/git-repositories/github>
 - **Issues/Questions**: Create issue in repos with `[snyk]` tag
 
 ## Quick Reference

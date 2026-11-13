@@ -1292,12 +1292,12 @@ $ cargo bench | tee bench-results.txt
 
 | Project | Description | Link |
 |---------|-------------|------|
-| sqlx | Async SQL with compile-time checks | https://github.com/launchbadge/sqlx |
-| Diesel | Safe, extensible ORM | https://diesel.rs/ |
-| SeaORM | Async ORM for Rust | https://www.sea-ql.org/SeaORM/ |
-| deadpool | Async pool manager | https://github.com/bikeshedder/deadpool |
-| refinery | Rust migration toolkit | https://github.com/rust-db/refinery |
-| sqlparser-rs | SQL parser | https://github.com/sqlparser-rs/sqlparser-rs |
+| sqlx | Async SQL with compile-time checks | <https://github.com/launchbadge/sqlx> |
+| Diesel | Safe, extensible ORM | <https://diesel.rs/> |
+| SeaORM | Async ORM for Rust | <https://www.sea-ql.org/SeaORM/> |
+| deadpool | Async pool manager | <https://github.com/bikeshedder/deadpool> |
+| refinery | Rust migration toolkit | <https://github.com/rust-db/refinery> |
+| sqlparser-rs | SQL parser | <https://github.com/sqlparser-rs/sqlparser-rs> |
 
 ### 13.3 Research Papers
 
@@ -1401,17 +1401,20 @@ U20260404150000_update_user_status_data
 ## Appendix F: Changelog
 
 ### v0.1.0 (2026-04-04)
+
 - Initial release
 - sqlx integration with PostgreSQL
 - Connection pooling with deadpool
 - Basic query builder foundation
 
 ### v0.2.0 (Planned - 2026 Q2)
+
 - Migration system (refinery integration)
 - Compile-time SQL macros
 - Type-safe query builder
 
 ### v0.3.0 (Planned - 2026 Q2)
+
 - MySQL backend support
 - SQLite backend support
 - Enhanced error handling
@@ -1428,41 +1431,41 @@ U20260404150000_update_user_status_data
 
 | # | Project | URL | Description |
 |---|---------|-----|-------------|
-| 1 | PostgreSQL | https://www.postgresql.org/ | Advanced open-source RDBMS |
-| 2 | MySQL | https://www.mysql.com/ | Popular open-source database |
-| 3 | SQLite | https://sqlite.org/ | Embedded SQL database |
-| 4 | MariaDB | https://mariadb.org/ | MySQL-compatible fork |
-| 5 | DuckDB | https://duckdb.org/ | Analytical in-process DB |
-| 6 | CockroachDB | https://www.cockroachlabs.com/ | Distributed SQL |
-| 7 | TiDB | https://pingcap.com/ | Distributed HTAP |
-| 8 | YugabyteDB | https://www.yugabyte.com/ | Distributed PostgreSQL |
-| 9 | ClickHouse | https://clickhouse.com/ | Columnar OLAP |
-| 10 | MongoDB | https://www.mongodb.com/ | Document database |
+| 1 | PostgreSQL | <https://www.postgresql.org/> | Advanced open-source RDBMS |
+| 2 | MySQL | <https://www.mysql.com/> | Popular open-source database |
+| 3 | SQLite | <https://sqlite.org/> | Embedded SQL database |
+| 4 | MariaDB | <https://mariadb.org/> | MySQL-compatible fork |
+| 5 | DuckDB | <https://duckdb.org/> | Analytical in-process DB |
+| 6 | CockroachDB | <https://www.cockroachlabs.com/> | Distributed SQL |
+| 7 | TiDB | <https://pingcap.com/> | Distributed HTAP |
+| 8 | YugabyteDB | <https://www.yugabyte.com/> | Distributed PostgreSQL |
+| 9 | ClickHouse | <https://clickhouse.com/> | Columnar OLAP |
+| 10 | MongoDB | <https://www.mongodb.com/> | Document database |
 
 ### G.2 Rust Database Ecosystem
 
 | # | Project | URL | Description |
 |---|---------|-----|-------------|
-| 11 | sqlx | https://github.com/launchbadge/sqlx | Async SQL |
-| 12 | Diesel | https://diesel.rs/ | Safe ORM |
-| 13 | SeaORM | https://www.sea-ql.org/SeaORM/ | Async ORM |
-| 14 | tokio-postgres | https://github.com/sfackler/rust-postgres | PostgreSQL driver |
-| 15 | deadpool | https://github.com/bikeshedder/deadpool | Connection pool |
-| 16 | bb8 | https://github.com/djc/bb8 | Connection pool |
-| 17 | refinery | https://github.com/rust-db/refinery | Migrations |
-| 18 | sqlparser-rs | https://github.com/sqlparser-rs/sqlparser-rs | SQL parser |
-| 19 | ormx | https://github.com/NyxCode/ormx | Lightweight ORM |
-| 20 | quaint | https://github.com/prisma/quaint | Query builder |
+| 11 | sqlx | <https://github.com/launchbadge/sqlx> | Async SQL |
+| 12 | Diesel | <https://diesel.rs/> | Safe ORM |
+| 13 | SeaORM | <https://www.sea-ql.org/SeaORM/> | Async ORM |
+| 14 | tokio-postgres | <https://github.com/sfackler/rust-postgres> | PostgreSQL driver |
+| 15 | deadpool | <https://github.com/bikeshedder/deadpool> | Connection pool |
+| 16 | bb8 | <https://github.com/djc/bb8> | Connection pool |
+| 17 | refinery | <https://github.com/rust-db/refinery> | Migrations |
+| 18 | sqlparser-rs | <https://github.com/sqlparser-rs/sqlparser-rs> | SQL parser |
+| 19 | ormx | <https://github.com/NyxCode/ormx> | Lightweight ORM |
+| 20 | quaint | <https://github.com/prisma/quaint> | Query builder |
 
 ### G.3 Documentation & Learning
 
 | # | Resource | URL | Description |
 |---|----------|-----|-------------|
-| 21 | Rust Async Book | https://rust-lang.github.io/async-book/ | Async programming |
-| 22 | SQL Performance | https://use-the-index-luke.com/ | Index optimization |
-| 23 | PostgreSQL Wiki | https://wiki.postgresql.org/wiki/Main_Page | Community docs |
-| 24 | Database Internals | https://www.databass.dev/ | DB internals book |
-| 25 | Readings in Databases | http://www.redbook.io/ | Classic papers |
+| 21 | Rust Async Book | <https://rust-lang.github.io/async-book/> | Async programming |
+| 22 | SQL Performance | <https://use-the-index-luke.com/> | Index optimization |
+| 23 | PostgreSQL Wiki | <https://wiki.postgresql.org/wiki/Main_Page> | Community docs |
+| 24 | Database Internals | <https://www.databass.dev/> | DB internals book |
+| 25 | Readings in Databases | <http://www.redbook.io/> | Classic papers |
 
 *For 200+ more references, see [docs/research/SOTA.md](./docs/research/SOTA.md)*
 
@@ -2006,6 +2009,7 @@ spec:
 ### L.1 N+1 Query Problem
 
 **Problem**:
+
 ```rust
 // BAD: N+1 queries
 let users = table!(users).fetch_all(&pool).await?;
@@ -2018,6 +2022,7 @@ for user in &users {
 ```
 
 **Solution**:
+
 ```rust
 // GOOD: Single JOIN query
 let users_with_posts: Vec<(User, Vec<Post>)> = table!(users)
@@ -2038,6 +2043,7 @@ let posts = table!(posts)
 ### L.2 Connection Leaks
 
 **Problem**:
+
 ```rust
 // BAD: Connection held across await points
 let conn = pool.acquire().await?;
@@ -2046,6 +2052,7 @@ conn.query("...").await?;
 ```
 
 **Solution**:
+
 ```rust
 // GOOD: Acquire only when needed
 let result = long_running_operation().await;
@@ -2060,6 +2067,7 @@ let data = {
 ### L.3 Over-Fetching Data
 
 **Problem**:
+
 ```rust
 // BAD: Fetching all columns when only a few needed
 let users = table!(users)
@@ -2069,6 +2077,7 @@ let names: Vec<String> = users.iter().map(|u| u.name.clone()).collect();
 ```
 
 **Solution**:
+
 ```rust
 // GOOD: Select only needed columns
 let names: Vec<String> = table!(users)
@@ -2080,12 +2089,14 @@ let names: Vec<String> = table!(users)
 ### L.4 Missing Connection Pool Limits
 
 **Problem**:
+
 ```rust
 // BAD: No pool limits
 let pool = Pool::connect(&url).await?; // Unbounded!
 ```
 
 **Solution**:
+
 ```rust
 // GOOD: Always configure pool limits
 let pool = Pool::connect(&url)
@@ -2179,6 +2190,7 @@ docs(api): clarify transaction usage
 ## Appendix N: Version History
 
 ### v0.1.0 (2026-04-04)
+
 - Initial release
 - sqlx integration with PostgreSQL
 - Connection pooling with deadpool
@@ -2186,30 +2198,35 @@ docs(api): clarify transaction usage
 - Migration system scaffolding
 
 ### v0.2.0 (Planned - 2026-04-15)
+
 - Type-safe query macros
 - Compile-time SQL verification
 - Enhanced error types
 - Documentation site
 
 ### v0.3.0 (Planned - 2026-05-01)
+
 - MySQL backend support
 - SQLite backend support
 - Multi-backend abstraction
 - Query result streaming
 
 ### v0.4.0 (Planned - 2026-05-15)
+
 - Advanced JOIN support
 - Subquery composition
 - Window functions
 - CTE (WITH clauses)
 
 ### v0.5.0 (Planned - 2026-06-01)
+
 - Query result caching
 - Read replica routing
 - Connection pool auto-tuning
 - Performance dashboards
 
 ### v1.0.0 (Planned - 2026-08-01)
+
 - Production stability
 - API freeze
 - LTS commitment
@@ -2530,5 +2547,3 @@ let result = collection!(orders)
 *This specification reflects Queris v2.0 architecture based on 2026 SOTA research. For updates and corrections, please open an issue on GitHub.*
 
 *End of Queris Specification v2.0*
-
-

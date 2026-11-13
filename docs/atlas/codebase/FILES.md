@@ -1413,7 +1413,7 @@ Sorted by LOC descending.
 | crates/argis-extensions/services/promptadapter/datasets/manager.py | 388 | 0 |  |
 | crates/dag-scheduler/src/main.rs | 388 | 0 | yes |
 | crates/harness-native/src/dispatcher.rs | 388 | 0 | yes |
-| crates/heliosbench/src/helios_bench/__init__.py | 388 | 0 |  |
+| crates/heliosbench/src/helios_bench/**init**.py | 388 | 0 |  |
 | crates/tokn-tokenledger/src/routing/adapters.rs | 388 | 0 |  |
 | promptadapter/datasets/manager.py | 388 | 0 |  |
 | agents/phenoagent/phenotype-skills/src/lib.rs | 387 | 3 |  |
@@ -1625,7 +1625,7 @@ Sorted by LOC descending.
 | crates/phenotype-journey-core/src/lib.rs | 357 | 6 |  |
 | include/phenotype_gfx.hpp | 357 | 0 |  |
 | pheno/evidence/atif.py | 357 | 0 |  |
-| python/omlx_research/nanovm/__init__.py | 357 | 0 |  |
+| python/omlx_research/nanovm/**init**.py | 357 | 0 |  |
 | tests/test_eval_contract_cli.py | 357 | 15 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/adapters/cloud/neon.py | 356 | 0 |  |
 | bench/stability.py | 356 | 0 |  |
@@ -1762,7 +1762,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/crates/agileplus-cli/src/commands/research.rs | 341 | 2 |  |
 | crates/sharecli/src/mp4_box.rs | 341 | 12 |  |
 | kernels/qwen3.5-0.8b/include/kernel_engine.h | 341 | 0 |  |
-| python/omlx_research/cli/__init__.py | 341 | 0 |  |
+| python/omlx_research/cli/**init**.py | 341 | 0 |  |
 | scripts/_bench_dual.py | 341 | 0 |  |
 | absorption/resume-all/bin/sharecli_bridge.py | 340 | 0 | yes |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/core.py | 340 | 0 |  |
@@ -2529,7 +2529,7 @@ Sorted by LOC descending.
 | servers/external/mcpforge/internal/lsp/transport.go | 269 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/checks.py | 268 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/checks.py | 268 | 0 |  |
-| agents/phenoagent/python/pheno-optimization/src/pheno_optimization/__init__.py | 268 | 0 |  |
+| agents/phenoagent/python/pheno-optimization/src/pheno_optimization/**init**.py | 268 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_decorators.py | 268 | 7 |  |
 | crates/agile-plus/crates/agileplus-dashboard/src/routes/agents.rs | 268 | 1 |  |
 | crates/agile-plus/crates/agileplus-governance/src/rate_limiter.rs | 268 | 2 |  |
@@ -2635,7 +2635,7 @@ Sorted by LOC descending.
 | phenotype-gfx/ssao_pass.rs | 262 | 9 |  |
 | src/postfx/ssao_pass.rs | 262 | 9 |  |
 | unity/postfx/tests/benchmarks/PostStackBenchmarks.cs | 262 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/cleanup/__init__.py | 261 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/cleanup/**init**.py | 261 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/src/types/index.ts | 261 | 0 | yes |
 | crates/connector-readwise/src/api.rs | 261 | 8 |  |
 | crates/focus-transpilers/src/wizard_transpiler.rs | 261 | 3 |  |
@@ -2790,7 +2790,7 @@ Sorted by LOC descending.
 | crates/phinbox/src/installer/mod.rs | 251 | 3 |  |
 | crates/policystack/tests/test_smoke_dispatch_host_hook.py | 251 | 4 |  |
 | python/omlx_research/cli/commands/_shared.py | 251 | 0 |  |
-| python/pheno-exceptions/src/pheno_exceptions/__init__.py | 251 | 0 |  |
+| python/pheno-exceptions/src/pheno_exceptions/**init**.py | 251 | 0 |  |
 | servers/pheno-org/tests/test_pheno_org_tools.py | 251 | 15 |  |
 | unity/terrain/src/Materials/TerrainMaterialProperty.cs | 251 | 0 |  |
 | agents/phenoagent/pheno-cli-go/internal/gate/evaluator_test.go | 250 | 6 |  |
@@ -3479,7 +3479,7 @@ Sorted by LOC descending.
 | crates/eidolon-sandbox/src/nanovm/mod.rs | 216 | 2 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-subcmds/src/audit.rs | 216 | 5 |  |
 | crates/teamcomm-protocol/src/error.rs | 216 | 6 |  |
-| pheno/evidence/adapters/__init__.py | 216 | 0 |  |
+| pheno/evidence/adapters/**init**.py | 216 | 0 |  |
 | _archived/byteport/backend/byteport/routes/auth.go | 215 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/performance/mcp_monitor.py | 215 | 0 |  |
 | agileplus/crates/agileplus-api/src/routes/cycle.rs | 215 | 0 |  |
@@ -4258,7 +4258,7 @@ Sorted by LOC descending.
 | _archived/byteport/backend/internal/container/container_test.go | 179 | 6 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/command_router.py | 179 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/auth/_env.py | 179 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/__init__.py | 179 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/**init**.py | 179 | 0 |  |
 | agileplus/crates/agileplus-cli/src/main.rs | 179 | 0 | yes |
 | agileplus/crates/agileplus-p2p/src/export/tests.rs | 179 | 2 |  |
 | crates/Cmdra/src/domain/services/mod.rs | 179 | 0 |  |
@@ -4312,7 +4312,7 @@ Sorted by LOC descending.
 | docs/specs/pheno-specs/specs/platform/001-spec-driven-development-engine/contracts/agileplus.proto | 178 | 0 |  |
 | infrakit/crates/phenotype-health/src/tests.rs | 178 | 15 |  |
 | kitty-specs/001-spec-driven-development-engine/contracts/agileplus.proto | 178 | 0 |  |
-| pheno/evidence/__init__.py | 178 | 0 |  |
+| pheno/evidence/**init**.py | 178 | 0 |  |
 | phenotype-gfx/lod.rs | 178 | 7 |  |
 | src/voxel/lod.rs | 178 | 7 |  |
 | _archived/byteport/src/pages/index.astro | 177 | 0 |  |
@@ -4360,7 +4360,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-workflow/src/pheno_workflow/core/engine.py | 175 | 0 |  |
 | agileplus/crates/agileplus-benchmarks/benches/api_response_times.rs | 175 | 4 |  |
 | agileplus/crates/agileplus-graph/src/queries.rs | 175 | 5 |  |
-| bench/suites/__init__.py | 175 | 0 |  |
+| bench/suites/**init**.py | 175 | 0 |  |
 | crates/agile-plus/crates/agileplus-benchmarks/benches/api_response_times.rs | 175 | 4 |  |
 | crates/agile-plus/crates/agileplus-dashboard/src/health.rs | 175 | 6 |  |
 | crates/agile-plus/crates/agileplus-domain/src/ids.rs | 175 | 5 |  |
@@ -4448,7 +4448,7 @@ Sorted by LOC descending.
 | scripts/run_perf_suite.py | 174 | 0 |  |
 | src/terrain/ports/material_registry.rs | 174 | 5 |  |
 | _archived/nanovms-core/pkg/runtime/runtime.go | 173 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/__init__.py | 173 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/**init**.py | 173 | 0 |  |
 | agileplus-agents/crates/agileplus-agent-dispatch/src/types.rs | 173 | 0 |  |
 | agileplus/agileplus-agents/crates/agileplus-agent-dispatch/src/types.rs | 173 | 0 |  |
 | agileplus/crates/agileplus-benchmarks/benches/event_replay.rs | 173 | 2 |  |
@@ -4555,7 +4555,7 @@ Sorted by LOC descending.
 | scripts/org-audits/scripts/org-audits/forge-runner/bin/autoqueue/monitor.sh | 170 | 0 | yes |
 | tests/mesher_triangle_regression.rs | 170 | 5 |  |
 | _archived/pheno-compose/src/config.rs | 169 | 3 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/__init__.py | 169 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/**init**.py | 169 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_session.py | 169 | 0 |  |
 | agileplus/python/tests/test_grpc_client.py | 169 | 9 |  |
 | crates/agile-plus/crates/agileplus-domain/src/credentials/factory.rs | 169 | 2 |  |
@@ -4693,8 +4693,8 @@ Sorted by LOC descending.
 | scripts/sync_routing_decisions.py | 167 | 0 |  |
 | servers/external/mcpforge/cmd/generate/types.go | 167 | 0 |  |
 | tests/test_vitepress_build.py | 167 | 12 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/reporters/__init__.py | 166 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/reporters/__init__.py | 166 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/reporters/**init**.py | 166 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/reporters/**init**.py | 166 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/tui_enhanced.py | 166 | 0 |  |
 | agileplus/crates/agileplus-grpc/src/server/governance.rs | 166 | 0 |  |
 | apps/phinbox-app/Sources/inbox-helper/RootView.swift | 166 | 0 |  |
@@ -4808,7 +4808,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/crates/agileplus-integration-tests/tests/feature_lifecycle.rs | 161 | 2 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-p2p/src/git_merge/tests.rs | 161 | 5 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-sqlite/src/repository/events.rs | 161 | 0 |  |
-| crates/hexa-kit/templates/hexagon/python/src/pyhex/domain/__init__.py | 161 | 0 |  |
+| crates/hexa-kit/templates/hexagon/python/src/pyhex/domain/**init**.py | 161 | 0 |  |
 | crates/phenotype-cost-core/src/pricing.rs | 161 | 5 |  |
 | crates/phenotype-infrakit/crates/phenotype-validation/src/types.rs | 161 | 4 |  |
 | crates/policystack/scripts/observability/d142_recurrence_spike_stability_budget_gate.py | 161 | 0 | yes |
@@ -4945,7 +4945,7 @@ Sorted by LOC descending.
 | crates/gateway/src/base85.rs | 157 | 6 |  |
 | crates/gateway/src/streaming.rs | 157 | 4 |  |
 | crates/hexa-kit/templates/hexagon/go/domain/aggregate_test.go | 157 | 8 |  |
-| crates/hexa-kit/templates/hexagon/python/src/pyhex/application/__init__.py | 157 | 0 |  |
+| crates/hexa-kit/templates/hexagon/python/src/pyhex/application/**init**.py | 157 | 0 |  |
 | crates/pheno-agent/phenotype-daemon/src/main.rs | 157 | 0 | yes |
 | crates/pheno-compose-port-types/src/compose.rs | 157 | 0 |  |
 | crates/phenotype-contracts/src/models/entity.rs | 157 | 4 |  |
@@ -4976,7 +4976,7 @@ Sorted by LOC descending.
 | crates/argis-extensions/pheno-config/tests/hot_reload_integration_test.rs | 156 | 3 |  |
 | crates/focus-storage/src/sqlite/wallet_store.rs | 156 | 0 |  |
 | crates/gateway/src/cron_parser.rs | 156 | 9 |  |
-| crates/hexa-kit/templates/hexagon/python/src/pyhex/adapters/__init__.py | 156 | 0 |  |
+| crates/hexa-kit/templates/hexagon/python/src/pyhex/adapters/**init**.py | 156 | 0 |  |
 | crates/phenotype-mock/src/lib.rs | 156 | 2 |  |
 | crates/policystack/scripts/ci/b124_signature_preflight_error_budget_gate.py | 156 | 0 | yes |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/dashboard_config.py | 155 | 0 |  |
@@ -5169,7 +5169,7 @@ Sorted by LOC descending.
 | servers/external/mcpforge/integrationtests/tests/rust/rename_symbol/rename_symbol_test.go | 149 | 1 |  |
 | src/terrain/terrain_lod.rs | 149 | 7 |  |
 | _archived/byteport/crates/byteport-transport/src/lib.rs | 148 | 2 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/__init__.py | 148 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/**init**.py | 148 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/server/status.py | 148 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/monitoring/monitor/process.py | 148 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/startup.py | 148 | 0 |  |
@@ -5241,7 +5241,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/crates/agileplus-cli/src/commands/review_loop.rs | 147 | 2 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-domain/src/domain/module.rs | 147 | 5 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-integration-tests/tests/modules_and_cycles/cycle_lifecycle.rs | 147 | 6 |  |
-| crates/hexa-kit/templates/hexagon/python/src/pyhex/ports/__init__.py | 147 | 0 |  |
+| crates/hexa-kit/templates/hexagon/python/src/pyhex/ports/**init**.py | 147 | 0 |  |
 | crates/phenotype-gfx/unity/terrain/src/LodBase.cs | 147 | 0 |  |
 | crates/phenotype-gfx/unity/terrain/src/Ports/IMaterialRegistry.cs | 147 | 0 |  |
 | crates/phenotype-infrakit/crates/phenotype-http-client/src/ports.rs | 147 | 0 |  |
@@ -5482,7 +5482,7 @@ Sorted by LOC descending.
 | unity/terrain/src/TerrainLod.cs | 139 | 0 |  |
 | agents/phenoagent/pheno-cli-go/internal/audit/formatter.go | 138 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/schemes/logs_scheme.py | 138 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/__init__.py | 138 | 5 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/**init**.py | 138 | 5 |  |
 | agileplus/crates/agileplus-domain/src/credentials/memory.rs | 138 | 8 |  |
 | agileplus/crates/agileplus-sqlite/src/repository/evidence.rs | 138 | 0 |  |
 | agileplus/pheno-cli/internal/audit/formatter.go | 138 | 0 |  |
@@ -5585,7 +5585,7 @@ Sorted by LOC descending.
 | scripts/run_bench_smoke.sh | 135 | 0 | yes |
 | unity/water/src/Rendering/WaterLod.cs | 135 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/cli/progress.py | 134 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/__init__.py | 134 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/**init**.py | 134 | 0 |  |
 | agileplus/crates/agileplus-api/src/api_key.rs | 134 | 4 |  |
 | agileplus/docs/.vitepress/theme/components/SidebarFilter.vue | 134 | 0 |  |
 | apps/bench-cockpit/server/cell_metrics.go | 134 | 0 |  |
@@ -5656,7 +5656,7 @@ Sorted by LOC descending.
 | python/pheno-mcp/src/pheno_mcp/tools/decorators.py | 133 | 0 |  |
 | scripts/scrape_openrouter_models.py | 133 | 0 |  |
 | scripts/snapshot.sh | 133 | 0 | yes |
-| src/pheno_agents_md/__init__.py | 133 | 0 |  |
+| src/pheno_agents_md/**init**.py | 133 | 0 |  |
 | tests/test_desktop_agentic_fixture.py | 133 | 6 |  |
 | tests/test_lefthook_workflow.py | 133 | 7 |  |
 | .vitepress/theme/components/NavTabs.vue | 132 | 0 |  |
@@ -5779,7 +5779,7 @@ Sorted by LOC descending.
 | driver-mcp/dispatch_mcp/server.py | 130 | 0 |  |
 | evals/harbor/interchange/validator.py | 130 | 0 |  |
 | pheno-cli/internal/pilot/validator_test.go | 130 | 5 |  |
-| python/pheno_config/src/pheno_config/__init__.py | 130 | 0 |  |
+| python/pheno_config/src/pheno_config/**init**.py | 130 | 0 |  |
 | python/pheno_core/src/pheno_core/registry/base.py | 130 | 0 |  |
 | scripts/probe_omniroute_models.py | 130 | 0 |  |
 | servers/substrate/dispatch_mcp/server.py | 130 | 0 |  |
@@ -5811,7 +5811,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/deployment/pipelines/system_service.py | 128 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/orchestration/python.py | 128 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/service_infra/tunnels.py | 128 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/__init__.py | 128 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/**init**.py | 128 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/support/storage.rs | 128 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/support/storage_port_impl/backlog.rs | 128 | 0 |  |
 | agileplus/crates/agileplus-benchmarks/benches/event_append_throughput.rs | 128 | 2 |  |
@@ -5950,7 +5950,7 @@ Sorted by LOC descending.
 | tests/test_install_wsl_pheno_serve_sh.py | 127 | 6 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/service_manager/base.py | 126 | 0 |  |
 | agents/phenoagent/python/pheno-providers/src/pheno_providers/catalogs/loader.py | 126 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/utils/__init__.py | 126 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/utils/**init**.py | 126 | 0 |  |
 | apps/phinbox-app/Sources/inbox-helper/main.swift | 126 | 0 |  |
 | crates/agileplus-api/src/routes/governance.rs | 126 | 0 |  |
 | crates/agileplus-sync/src/report.rs | 126 | 3 |  |
@@ -6339,7 +6339,7 @@ Sorted by LOC descending.
 | .vitepress/theme/components/CodeAnnotation.vue | 115 | 0 |  |
 | _archived/byteport/frontend/web/src/routes/+page.svelte | 115 | 0 |  |
 | agents/phenoagent/pheno-cli-go/internal/taskrunner/validator.go | 115 | 0 |  |
-| agents/phenoagent/python/pheno-providers/src/pheno_providers/registry/__init__.py | 115 | 0 |  |
+| agents/phenoagent/python/pheno-providers/src/pheno_providers/registry/**init**.py | 115 | 0 |  |
 | agileplus/crates/agileplus-import/src/importer/features.rs | 115 | 0 |  |
 | agileplus/pheno-cli/internal/taskrunner/validator.go | 115 | 0 |  |
 | crates/a2a/src/message.rs | 115 | 0 |  |
@@ -6570,7 +6570,7 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/routes/home/settings/+page.svelte | 110 | 0 |  |
 | _archived/nanovms-core/internal/domain/stubs.go | 110 | 0 |  |
 | agents/phenoagent/pheno-cli-go/internal/adapters/goproxy_test.go | 110 | 7 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/adapters/__init__.py | 110 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/adapters/**init**.py | 110 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/coordinator.py | 110 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/optimization_cache.py | 110 | 0 |  |
 | agileplus/crates/agileplus-import/src/importer/modules.rs | 110 | 0 |  |
@@ -6868,7 +6868,7 @@ Sorted by LOC descending.
 | scripts/run_heterogeneous_perf.py | 106 | 0 |  |
 | tests/integration_voxel_lod.rs | 106 | 3 |  |
 | _archived/byteport/frontend/web/tailwind.config.ts | 105 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/__init__.py | 105 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/**init**.py | 105 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/cleanup/_models.py | 105 | 0 |  |
 | agileplus/crates/agileplus-dashboard/tests/seed_integration.rs | 105 | 8 |  |
 | agileplus/crates/agileplus-domain/src/ports/review.rs | 105 | 0 |  |
@@ -6973,7 +6973,7 @@ Sorted by LOC descending.
 | _archived/byteport/backend/internal/application/deployment/dto.go | 103 | 0 |  |
 | _archived/byteport/ports/ssot_test.go | 103 | 5 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/service_manager/monitor.py | 103 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/__init__.py | 103 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/**init**.py | 103 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/cycle/args.rs | 103 | 0 |  |
 | agileplus/crates/agileplus-dashboard/src/routes/tests.rs | 103 | 8 |  |
 | agileplus/crates/agileplus-subcmds/src/sync/push.rs | 103 | 0 |  |
@@ -7006,7 +7006,7 @@ Sorted by LOC descending.
 | .vitepress/theme/components/ModuleSwitcher.vue | 102 | 0 |  |
 | _archived/byteport/backend/internal/domain/deployment/status_test.go | 102 | 4 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/resources_models.py | 102 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/__init__.py | 102 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/**init**.py | 102 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/providers/azure_ad.py | 102 | 0 |  |
 | agileplus/crates/agileplus-plane/src/client/resources/cycles.rs | 102 | 0 |  |
 | crates/agile-plus/crates/agileplus-plane/src/client/resources/cycles.rs | 102 | 0 |  |
@@ -7207,7 +7207,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/tunnel_sync/base/config.py | 98 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/dashboard_websocket.py | 98 | 0 |  |
 | agileplus/crates/agileplus-fixtures/src/test_fixtures.rs | 98 | 2 |  |
-| agileplus/python/src/agileplus_mcp/sampling/__init__.py | 98 | 0 |  |
+| agileplus/python/src/agileplus_mcp/sampling/**init**.py | 98 | 0 |  |
 | apps/bench-cockpit/scripts/start-dev.sh | 98 | 0 | yes |
 | audits/org-audit-snapshots/ops/heavy-runner-cron/lib/common.sh | 98 | 0 | yes |
 | audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/ops/heavy-runner-cron/lib/common.sh | 98 | 0 | yes |
@@ -7216,7 +7216,7 @@ Sorted by LOC descending.
 | bench/runner/model_adapter_mlx.py | 98 | 0 |  |
 | crates/agile-plus/crates/agileplus-api/src/routes/users.rs | 98 | 0 |  |
 | crates/agile-plus/crates/agileplus-fixtures/src/test_fixtures.rs | 98 | 2 |  |
-| crates/agile-plus/python/src/agileplus_mcp/sampling/__init__.py | 98 | 0 |  |
+| crates/agile-plus/python/src/agileplus_mcp/sampling/**init**.py | 98 | 0 |  |
 | crates/argis-extensions/argis-monitor/src/target.rs | 98 | 2 |  |
 | crates/argis-extensions/pheno-ssot-template/scripts/check-ssot-invariant-2-logging.sh | 98 | 0 | yes |
 | crates/eidolon-desktop/src/windows/mod.rs | 98 | 2 |  |
@@ -7225,8 +7225,8 @@ Sorted by LOC descending.
 | crates/gateway/src/semver.rs | 98 | 5 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-fixtures/src/test_fixtures.rs | 98 | 2 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-graph/src/lib.rs | 98 | 6 |  |
-| crates/hexa-kit/agileplus/python/src/agileplus_mcp/sampling/__init__.py | 98 | 0 |  |
-| crates/hexa-kit/python/src/agileplus_mcp/sampling/__init__.py | 98 | 0 |  |
+| crates/hexa-kit/agileplus/python/src/agileplus_mcp/sampling/**init**.py | 98 | 0 |  |
+| crates/hexa-kit/python/src/agileplus_mcp/sampling/**init**.py | 98 | 0 |  |
 | crates/phenotype-event-sourcing/src/event.rs | 98 | 2 |  |
 | crates/phenotype-infrakit/crates/phenotype-health/src/lib.rs | 98 | 2 |  |
 | crates/phenotype-tooling-observability/src/argis_monitor/poller.rs | 98 | 0 |  |
@@ -7239,7 +7239,7 @@ Sorted by LOC descending.
 | native/tests/fixtures/fake-playcua-bridge.py | 98 | 0 | yes |
 | phenotype-infrakit/crates/phenotype-health/src/lib.rs | 98 | 2 |  |
 | python/pheno-core/src/pheno_core/errors.py | 98 | 0 |  |
-| python/src/agileplus_mcp/sampling/__init__.py | 98 | 0 |  |
+| python/src/agileplus_mcp/sampling/**init**.py | 98 | 0 |  |
 | scripts/org-audits/scripts/org-audits/ops/heavy-runner-cron/lib/common.sh | 98 | 0 | yes |
 | scripts/relocate_wsl_distro.ps1 | 98 | 0 |  |
 | servers/substrate/team_mailbox_server.py | 98 | 0 |  |
@@ -7666,7 +7666,7 @@ Sorted by LOC descending.
 | agileplus/crates/agileplus-graph/src/health.rs | 90 | 3 |  |
 | agileplus/pheno-cli/internal/discover/repos_test.go | 90 | 1 |  |
 | audits/org-audits/2026-07/_loose-inbox/scripts-repo-duplicate-2026-07-14/repo-duplicate-workflow.sh | 90 | 0 | yes |
-| bench/rlvr_af/__init__.py | 90 | 0 |  |
+| bench/rlvr_af/**init**.py | 90 | 0 |  |
 | crates/agile-plus/crates/agileplus-cli/src/commands/import.rs | 90 | 0 |  |
 | crates/agile-plus/crates/agileplus-cli/src/commands/list_epics.rs | 90 | 2 |  |
 | crates/agile-plus/crates/agileplus-mcp-intent/src/storage.rs | 90 | 0 |  |
@@ -7790,7 +7790,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-llm/src/pheno_llm/routing/ensemble.py | 88 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/config/endpoints.py | 88 | 0 |  |
 | agents/phenoagent/python/pheno-process/src/pheno_process/services/nextjs.py | 88 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/fixtures/__init__.py | 88 | 1 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/fixtures/**init**.py | 88 | 1 |  |
 | agileplus/crates/agileplus-cli/src/commands/cycle/mod.rs | 88 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/module/list.rs | 88 | 0 |  |
 | agileplus/pheno-cli/cmd/matrix.go | 88 | 0 |  |
@@ -7958,10 +7958,10 @@ Sorted by LOC descending.
 | agileplus/crates/agileplus-plane/src/client/resources/work_items.rs | 84 | 0 |  |
 | agileplus/docs/specs/001-spec-driven-development-engine/contracts/core.proto | 84 | 0 |  |
 | agileplus/pheno-cli/internal/errors/messages_test.go | 84 | 7 |  |
-| audits/org-audit-snapshots/audits/worklog-schema/src/pheno_worklog_schema/__main__.py | 84 | 0 | yes |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/worklog-schema/src/pheno_worklog_schema/__main__.py | 84 | 0 | yes |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/worklog-schema/src/pheno_worklog_schema/__main__.py | 84 | 0 | yes |
-| audits/org-audits/worklog-schema/src/pheno_worklog_schema/__main__.py | 84 | 0 | yes |
+| audits/org-audit-snapshots/audits/worklog-schema/src/pheno_worklog_schema/**main**.py | 84 | 0 | yes |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/worklog-schema/src/pheno_worklog_schema/**main**.py | 84 | 0 | yes |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/worklog-schema/src/pheno_worklog_schema/**main**.py | 84 | 0 | yes |
+| audits/org-audits/worklog-schema/src/pheno_worklog_schema/**main**.py | 84 | 0 | yes |
 | crates/agile-plus/crates/agileplus-dashboard/web/src/components/foundation/Radio.tsx | 84 | 0 |  |
 | crates/agile-plus/crates/agileplus-domain/src/ports/plane_sync.rs | 84 | 0 |  |
 | crates/agile-plus/crates/agileplus-sqlite/src/migrations/025_intent_graph_views.sql | 84 | 0 |  |
@@ -8004,7 +8004,7 @@ Sorted by LOC descending.
 | unity/water/tests/GerstnerWaveBankEdgeCaseTests.cs | 84 | 0 |  |
 | _archived/byteport/backend/internal/application/deployment/errors.go | 83 | 0 |  |
 | _archived/byteport/backend/internal/application/deployment/terminate_deployment.go | 83 | 0 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/__init__.py | 83 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/**init**.py | 83 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/patterns/microservices.py | 83 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/patterns/solid.py | 83 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/patterns/temporary_field.py | 83 | 0 |  |
@@ -8110,7 +8110,7 @@ Sorted by LOC descending.
 | _archived/byteport/backend/byteport/models/projects.go | 81 | 0 |  |
 | _archived/byteport/frontend/web/src/components/combo.svelte | 81 | 0 |  |
 | _archived/byteport/ssot_test.go | 81 | 5 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/types/__init__.py | 81 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/types/**init**.py | 81 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/middleware/templates.py | 81 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/service_manager/models.py | 81 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/templates/resources/db.py | 81 | 0 |  |
@@ -8162,7 +8162,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/schemes/prompts.py | 80 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/detectors.py | 80 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/plugin.py | 80 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/testing/__init__.py | 80 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/testing/**init**.py | 80 | 0 |  |
 | agileplus/crates/agileplus-subcmds/src/sync/pull.rs | 80 | 0 |  |
 | agileplus/docs/.vitepress/theme/components/ModuleSwitcher.vue | 80 | 0 |  |
 | crates/agile-plus/crates/agileplus-subcmds/src/sync/pull.rs | 80 | 0 |  |
@@ -8306,8 +8306,8 @@ Sorted by LOC descending.
 | packages/github-fetcher/src/index.ts | 78 | 0 | yes |
 | pheno-cli/internal/audit/formatter_test.go | 78 | 2 |  |
 | pheno-cli/internal/hooks/installer.go | 78 | 0 |  |
-| python/core_utils/src/pheno_core_utils/__init__.py | 78 | 0 |  |
-| python/pheno-core-utils/src/pheno_core_utils/__init__.py | 78 | 0 |  |
+| python/core_utils/src/pheno_core_utils/**init**.py | 78 | 0 |  |
+| python/pheno-core-utils/src/pheno_core_utils/**init**.py | 78 | 0 |  |
 | python/src/agileplus_proto/gen/agileplus/v1/core_pb2.py | 78 | 0 |  |
 | scripts/cron/force_fire_all.sh | 78 | 0 | yes |
 | scripts/hash_pip.py | 78 | 0 |  |
@@ -8355,7 +8355,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/utils/exceptions.py | 76 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/interfaces/mixins.py | 76 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/enums/status_enums.py | 76 | 0 |  |
-| agents/phenoagent/python/pheno-observability/src/pheno_observability/__init__.py | 76 | 0 |  |
+| agents/phenoagent/python/pheno-observability/src/pheno_observability/**init**.py | 76 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/logging/formatter.py | 76 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/providers/auth0.py | 76 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/providers/okta.py | 76 | 0 |  |
@@ -8490,7 +8490,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-clink/src/pheno_clink/config/cli_clients.py | 73 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/kinfra/info.py | 73 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/middleware/loading.py | 73 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/tools/__init__.py | 73 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/tools/**init**.py | 73 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/patterns/ddd.py | 73 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/data_clump.py | 73 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/god_object.py | 73 | 0 |  |
@@ -8549,12 +8549,12 @@ Sorted by LOC descending.
 | kernels/qwen3.5-0.8b/zig/qwen3_5.zig | 73 | 0 |  |
 | pheno-cli/internal/errors/messages.go | 73 | 0 |  |
 | python/omlx_research/benchmarks/qwen35_e3_runner.py | 73 | 0 |  |
-| python/pheno-async/src/pheno_async/__init__.py | 73 | 0 |  |
+| python/pheno-async/src/pheno_async/**init**.py | 73 | 0 |  |
 | scripts/acquire_llama_cpp_binary.ps1 | 73 | 0 |  |
 | tests/test_install_launchd_sh.py | 73 | 4 |  |
 | tests/test_install_smoke.py | 73 | 4 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/storage/base.py | 72 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/agents/__init__.py | 72 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/agents/**init**.py | 72 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/shared_templates.py | 72 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/event_store.rs | 72 | 0 |  |
 | agileplus/crates/agileplus-subcmds/src/sync/status.rs | 72 | 0 |  |
@@ -8594,7 +8594,7 @@ Sorted by LOC descending.
 | scripts/smoke_pheno_serve.py | 72 | 0 |  |
 | tests/test_gguf_conversion.py | 72 | 2 |  |
 | agents/phenoagent/pheno-cli-go/internal/gate/criteria.go | 71 | 0 |  |
-| agents/phenoagent/python/pheno-quality/src/pheno_quality/__init__.py | 71 | 0 |  |
+| agents/phenoagent/python/pheno-quality/src/pheno_quality/**init**.py | 71 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/presence.py | 71 | 0 |  |
 | agileplus-mcp/src/agileplus_mcp/tools/features.py | 71 | 0 |  |
 | agileplus/pheno-cli/internal/gate/criteria.go | 71 | 0 |  |
@@ -8626,7 +8626,7 @@ Sorted by LOC descending.
 | crates/sharecli/tests/e2e_chaos_recovery.rs | 71 | 1 |  |
 | crates/sharecli/tests/fr006_agent_pid_watch.rs | 71 | 5 |  |
 | crates/substrate-app/tests/tiered_dispatch.rs | 71 | 5 |  |
-| kernels/qwen3.5-0.8b/weights/__init__.py | 71 | 0 |  |
+| kernels/qwen3.5-0.8b/weights/**init**.py | 71 | 0 |  |
 | koosha-portfolio/src/pages/resume.astro | 71 | 0 |  |
 | native/src/adapters/linux/ewmh.rs | 71 | 0 |  |
 | pheno-cli/internal/gate/criteria.go | 71 | 0 |  |
@@ -8634,8 +8634,8 @@ Sorted by LOC descending.
 | python/tests/bdd/environment.py | 71 | 0 |  |
 | tests/test_inference_runner_policy.py | 71 | 5 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/components/base.py | 70 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/grpc/__init__.py | 70 | 0 |  |
-| agents/phenoagent/python/pheno-llm/src/pheno_llm/routing/__init__.py | 70 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/grpc/**init**.py | 70 | 0 |  |
+| agents/phenoagent/python/pheno-llm/src/pheno_llm/routing/**init**.py | 70 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/patterns/feature_envy.py | 70 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/optimization_concurrency.py | 70 | 0 |  |
 | agileplus/crates/agileplus-git/tests/integration/harness.rs | 70 | 0 |  |
@@ -8683,7 +8683,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/networking/options.py | 69 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/tunnel_sync/public.py | 69 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/tunneling/convenience.py | 69 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/adapters/__init__.py | 69 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/adapters/**init**.py | 69 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/execution/_concurrency.py | 69 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/logging/logger.py | 69 | 0 |  |
 | agileplus/crates/agileplus-subcmds/src/platform/workspace.rs | 69 | 0 |  |
@@ -8769,7 +8769,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/components/status.py | 67 | 0 |  |
 | agents/phenoagent/python/pheno-clink/src/pheno_clink/parsers/codex.py | 67 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/types/project.py | 67 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/__init__.py | 67 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/**init**.py | 67 | 0 |  |
 | agents/phenoagent/python/pheno-providers/src/pheno_providers/shared.py | 67 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/patterns/data_clump.py | 67 | 0 |  |
 | agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/temporal/compat.py | 67 | 0 |  |
@@ -8822,7 +8822,7 @@ Sorted by LOC descending.
 | _archived/byteport/scripts/coverage-rust.sh | 66 | 0 |  |
 | absorption/resume-all/bin/resume-summarize.py | 66 | 0 | yes |
 | agents/phenoagent/CLIProxyAPI/sdk/cliproxy/auth/types.go | 66 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/desktop/__init__.py | 66 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/desktop/**init**.py | 66 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/kinfra/cleanup.py | 66 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/service_infra/cleanup.py | 66 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/patterns/inappropriate_intimacy.py | 66 | 0 |  |
@@ -8857,7 +8857,7 @@ Sorted by LOC descending.
 | crates/sharecli/src/shutdown.rs | 66 | 2 |  |
 | crates/sharecli/src/uuid.rs | 66 | 6 |  |
 | fuzz/fuzz_targets/fuzz_target_1.rs | 66 | 0 |  |
-| gui/admin-extensions/__init__.py | 66 | 0 |  |
+| gui/admin-extensions/**init**.py | 66 | 0 |  |
 | iac/terraform/oci/ampere-primary.tf | 66 | 0 |  |
 | native/src/bin/playcua-bridge.rs | 66 | 0 | yes |
 | python/src/agileplus_proto/gen/agileplus/v1/agents_pb2.py | 66 | 0 |  |
@@ -8873,10 +8873,10 @@ Sorted by LOC descending.
 | add_docs.py | 65 | 0 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/monitor/environment.py | 65 | 0 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/monitor/simple.py | 65 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/__init__.py | 65 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/**init**.py | 65 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/auth/_storage.py | 65 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/__init__.py | 65 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/temporal/__init__.py | 65 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/**init**.py | 65 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/temporal/**init**.py | 65 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/src/stores/agileplus.ts | 65 | 0 |  |
 | agileplus/crates/agileplus-domain/src/credentials/keychain.rs | 65 | 0 |  |
 | agileplus/crates/agileplus-p2p/src/git_merge/resolver.rs | 65 | 0 |  |
@@ -9008,7 +9008,7 @@ Sorted by LOC descending.
 | crates/agile-plus/crates/agileplus-subcmds/src/platform/types.rs | 62 | 0 |  |
 | crates/agile-plus/pheno-cli/cmd/root.go | 62 | 0 |  |
 | crates/agileplus-subcmds/src/platform/types.rs | 62 | 0 |  |
-| crates/argis-extensions/pheno-scaffold-kit/src/pheno_scaffold_kit/__main__.py | 62 | 0 | yes |
+| crates/argis-extensions/pheno-scaffold-kit/src/pheno_scaffold_kit/**main**.py | 62 | 0 | yes |
 | crates/argis-extensions/pheno-scaffold-kit/tests/test_render.py | 62 | 4 |  |
 | crates/argis-extensions/scripts/ssot_inject.sh | 62 | 0 | yes |
 | crates/argis-extensions/tools/perf-budget-table/render.py | 62 | 0 |  |
@@ -9047,8 +9047,8 @@ Sorted by LOC descending.
 | _archived/nanovms-core/pkg/deploy/deploy.go | 61 | 0 |  |
 | _archived/nanovms-core/pkg/pheno-integration/integration_test.go | 61 | 3 |  |
 | agents/phenoagent/pheno-cli-go/internal/rollout/pr.go | 61 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/tunneling/__init__.py | 61 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/__init__.py | 61 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/tunneling/**init**.py | 61 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/**init**.py | 61 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/components/status_panel.py | 61 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/plan/parsing.rs | 61 | 0 |  |
 | agileplus/crates/agileplus-plane/src/client/models.rs | 61 | 0 |  |
@@ -9099,7 +9099,7 @@ Sorted by LOC descending.
 | tests/test_tbench_v3_watch.py | 61 | 7 |  |
 | _archived/byteport/backend/models/deployments_additional_test.go | 60 | 3 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/analysis/analysis_classes.py | 60 | 0 |  |
-| agents/phenoagent/python/pheno-observability/src/pheno_observability/metrics/__init__.py | 60 | 0 |  |
+| agents/phenoagent/python/pheno-observability/src/pheno_observability/metrics/**init**.py | 60 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/base/_progress.py | 60 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/providers/github.py | 60 | 0 |  |
 | agileplus-mcp/tests/unit/test_server.py | 60 | 5 |  |
@@ -9138,7 +9138,7 @@ Sorted by LOC descending.
 | .vitepress/theme/components/Layout.vue | 59 | 0 |  |
 | _archived/byteport/backend/byteport/lib/fuzz_test.go | 59 | 0 |  |
 | _archived/byteport/backend/nvms/projectManager/parser.go | 59 | 0 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/__init__.py | 59 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/**init**.py | 59 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/middleware/health.py | 59 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/lazy_class.py | 59 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/registry.py | 59 | 0 |  |
@@ -9192,15 +9192,15 @@ Sorted by LOC descending.
 | pheno/trace_store/config.py | 59 | 0 |  |
 | phenotype-infrakit/crates/phenotype-rate-limiter/src/error.rs | 59 | 0 |  |
 | python/omlx_research/benchmarks/kv_cache_memory.py | 59 | 0 |  |
-| python/pheno-errors/src/pheno_errors/__init__.py | 59 | 0 |  |
+| python/pheno-errors/src/pheno_errors/**init**.py | 59 | 0 |  |
 | registry/absorbed-crates/pheno-forge-smoke/scripts/run-smoke.sh | 59 | 0 | yes |
 | registry/audit-absorption-justification/_close-p2-p3-p4.sh | 59 | 0 |  |
 | servers/external/mcpforge/integrationtests/workspaces/python/another_consumer.py | 59 | 0 |  |
-| agents/phenoagent/python/pheno-cicd/src/pheno_cicd/__init__.py | 58 | 0 |  |
+| agents/phenoagent/python/pheno-cicd/src/pheno_cicd/**init**.py | 58 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/interfaces/base.py | 58 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/monitoring/monitor/config.py | 58 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/tunneling/registry.py | 58 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/cli/__init__.py | 58 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/cli/**init**.py | 58 | 0 |  |
 | agileplus/crates/agileplus-api/src/routes/stream.rs | 58 | 0 |  |
 | agileplus/crates/agileplus-graph/src/config.rs | 58 | 2 |  |
 | bench/adapters_typing.py | 58 | 0 |  |
@@ -9209,7 +9209,7 @@ Sorted by LOC descending.
 | crates/agile-plus/desktop/scripts/prepare-bundle.mjs | 58 | 0 |  |
 | crates/agileplus-api/src/routes/stream.rs | 58 | 0 |  |
 | crates/agileplus-graph/src/config.rs | 58 | 2 |  |
-| crates/argis-extensions/pheno-worklog-schema/src/pheno_worklog_schema/__main__.py | 58 | 0 | yes |
+| crates/argis-extensions/pheno-worklog-schema/src/pheno_worklog_schema/**main**.py | 58 | 0 | yes |
 | crates/argis-extensions/scripts/cache-stats.sh | 58 | 0 |  |
 | crates/argis-extensions/tools/evolve-chaos/evolve.py | 58 | 0 |  |
 | crates/argis-extensions/tools/sbom-cyclonedx-fleet/generate_v2.py | 58 | 0 |  |
@@ -9279,7 +9279,7 @@ Sorted by LOC descending.
 | tests/test_evidence_adapters_circuit_breaker.py | 57 | 2 |  |
 | _archived/byteport/backend/nvms/lib/index.go | 56 | 0 |  |
 | agents/phenoagent/pheno-cli-go/cmd/publish_test.go | 56 | 1 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/nvms/__init__.py | 56 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/nvms/**init**.py | 56 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/oauth/credential_broker.py | 56 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/audit_governance.rs | 56 | 4 |  |
 | agileplus/crates/agileplus-cli/src/commands/cycle/create.rs | 56 | 0 |  |
@@ -9296,7 +9296,7 @@ Sorted by LOC descending.
 | crates/agileplus-api/tests/api_integration/audit_governance.rs | 56 | 4 |  |
 | crates/argis-extensions/pheno-config/tests/proptest_smoke.rs | 56 | 4 |  |
 | crates/argis-extensions/pheno-errors/examples/otel_quickstart.rs | 56 | 0 | yes |
-| crates/argis-extensions/pheno-llms-txt/src/pheno_llms_txt/__main__.py | 56 | 0 | yes |
+| crates/argis-extensions/pheno-llms-txt/src/pheno_llms_txt/**main**.py | 56 | 0 | yes |
 | crates/argis-extensions/pheno-port-adapter/examples/otel_quickstart.rs | 56 | 0 | yes |
 | crates/clap-ext/src/error.rs | 56 | 0 |  |
 | crates/eidolon-desktop/src/linux/atspi/mod.rs | 56 | 0 |  |
@@ -9326,7 +9326,7 @@ Sorted by LOC descending.
 | crates/tokn-pareto-rs/src/error.rs | 56 | 5 |  |
 | crates/tokn-tokenledger/src/clap_ext.rs | 56 | 0 |  |
 | crates/tokn-tokenledger/src/routing/mod.rs | 56 | 0 |  |
-| evals/harbor/interchange/__init__.py | 56 | 0 |  |
+| evals/harbor/interchange/**init**.py | 56 | 0 |  |
 | infrakit/crates/phenotype-port-traits/src/inbound/query.rs | 56 | 4 |  |
 | packages/ui/src/Header.astro | 56 | 0 |  |
 | pheno-cli/cmd/publish_test.go | 56 | 1 |  |
@@ -9375,7 +9375,7 @@ Sorted by LOC descending.
 | python/omlx_research/tests/test_hwledger_probe.py | 55 | 4 |  |
 | servers/external/mcpforge/internal/watcher/gitignore.go | 55 | 0 |  |
 | .github/scripts/clean-git-locks.sh | 54 | 0 | yes |
-| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/__init__.py | 54 | 0 |  |
+| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/**init**.py | 54 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/module/create.rs | 54 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/plan/tests.rs | 54 | 6 |  |
 | audits/org-audits/2026-07/_loose-inbox/pheno-llm-level1-2026-07-14/scripts/start-server.sh | 54 | 0 | yes |
@@ -9464,7 +9464,7 @@ Sorted by LOC descending.
 | tests/test_self_improvement.py | 53 | 3 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/exceptions.py | 52 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/plugin.py | 52 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/assertions/__init__.py | 52 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/assertions/**init**.py | 52 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/optimization_config.py | 52 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/reporters.py | 52 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/execution/_flags.py | 52 | 0 |  |
@@ -9483,7 +9483,7 @@ Sorted by LOC descending.
 | crates/agileplus-domain/src/credentials/store.rs | 52 | 0 |  |
 | crates/agileplus-import/src/importer/projects.rs | 52 | 0 |  |
 | crates/agileplus-subcmds/src/platform/down.rs | 52 | 0 |  |
-| crates/argis-extensions/services/researchintel/__init__.py | 52 | 0 |  |
+| crates/argis-extensions/services/researchintel/**init**.py | 52 | 0 |  |
 | crates/eidolon-desktop/src/linux/stub.rs | 52 | 0 |  |
 | crates/eidolon-desktop/src/windows/gate.rs | 52 | 1 |  |
 | crates/engine-spec/src/lib.rs | 52 | 0 |  |
@@ -9511,14 +9511,14 @@ Sorted by LOC descending.
 | forge-daemon/build.zig | 52 | 0 |  |
 | hfscope/internal/server/page.go | 52 | 0 |  |
 | iac/oci-lottery/src/state.rs | 52 | 0 |  |
-| researchintel/__init__.py | 52 | 0 |  |
+| researchintel/**init**.py | 52 | 0 |  |
 | scripts/print_pheno_serve_routes.py | 52 | 0 |  |
 | scripts/verify-locale-coverage.mjs | 52 | 0 |  |
 | scripts/verify_rfc_process.py | 52 | 0 |  |
 | tests/test_contamination_guard.py | 52 | 3 |  |
 | _archived/byteport/backend/internal/domain/deployment/errors.go | 51 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/button/index.ts | 51 | 0 | yes |
-| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/architecture/__init__.py | 51 | 0 |  |
+| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/architecture/**init**.py | 51 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/supabase_client.py | 51 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/module/tag.rs | 51 | 0 |  |
 | agileplus/crates/agileplus-git/tests/integration/worktrees.rs | 51 | 3 |  |
@@ -9576,7 +9576,7 @@ Sorted by LOC descending.
 | tests/test_garden_retention_promotion.py | 51 | 2 |  |
 | _archived/byteport/frontend/web/src/stories/Header.svelte | 50 | 0 |  |
 | agents/phenoagent/python/pheno-analytics/src/pheno_analytics/code/import_linter.py | 50 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/__init__.py | 50 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/**init**.py | 50 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/kinfra/ports.py | 50 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/service_infra/ports.py | 50 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/core/base/client_adapter.py | 50 | 0 |  |
@@ -9607,7 +9607,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/crates/agileplus-subcmds/src/sync/mod.rs | 50 | 0 |  |
 | crates/hexa-kit/crates/phenotype-error-macros/src/lib.rs | 50 | 0 |  |
 | crates/hexa-kit/crates/phenotype-xdd-lib/docs/.vitepress/site-meta.mjs | 50 | 0 |  |
-| crates/hexa-kit/templates/hexagon/python/src/pyhex/__init__.py | 50 | 0 |  |
+| crates/hexa-kit/templates/hexagon/python/src/pyhex/**init**.py | 50 | 0 |  |
 | crates/hexa-kit/templates/kotlin/templates/kotlin/src/main/kotlin/com/phenotype/domain/ports/inbound/UseCaseService.kt | 50 | 0 |  |
 | crates/pheno-compose-pheno-config/src/sandbox.rs | 50 | 0 |  |
 | crates/phenotype-error-macros/src/lib.rs | 50 | 0 |  |
@@ -9632,7 +9632,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-clink/src/pheno_clink/agents/codex.py | 49 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/deployer.py | 49 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/aiohttp_otel.py | 49 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/__init__.py | 49 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/**init**.py | 49 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/src/test/setup.ts | 49 | 0 |  |
 | agileplus/pheno-cli/internal/publish/orchestrator.go | 49 | 0 |  |
 | cmd/checker/decision.go | 49 | 0 |  |
@@ -9641,7 +9641,7 @@ Sorted by LOC descending.
 | crates/agile-plus/pheno-cli/internal/publish/orchestrator.go | 49 | 0 |  |
 | crates/agileplus-subcmds/src/sync/mod.rs | 49 | 0 |  |
 | crates/argis-extensions/bifrost/core/core.go | 49 | 0 |  |
-| crates/argis-extensions/services/promptadapter/datasets/__init__.py | 49 | 0 |  |
+| crates/argis-extensions/services/promptadapter/datasets/**init**.py | 49 | 0 |  |
 | crates/argis-extensions/tools/perf-gate/perf_gate.py | 49 | 0 |  |
 | crates/eidolon-desktop/src/recording/probe.rs | 49 | 0 |  |
 | crates/fabric-daemon/src/auth/middleware/jwt.rs | 49 | 0 |  |
@@ -9656,7 +9656,7 @@ Sorted by LOC descending.
 | crates/phenotype-router/src/bifrost_adapter.rs | 49 | 0 |  |
 | crates/phinbox/plugins/codex/install.sh | 49 | 0 | yes |
 | crates/pine-compat/src/lib.rs | 49 | 0 |  |
-| crates/policystack/cli/src/policy_federation/__init__.py | 49 | 0 |  |
+| crates/policystack/cli/src/policy_federation/**init**.py | 49 | 0 |  |
 | crates/policystack/scripts/ci/b110_signature_preflight_quality_gate.py | 49 | 0 |  |
 | crates/policystack/scripts/ci/b98_policy_regression_gate.py | 49 | 0 |  |
 | crates/policystack/scripts/ci/b99_policy_coverage_gate.py | 49 | 0 |  |
@@ -9671,9 +9671,9 @@ Sorted by LOC descending.
 | packages/docs/src/theme/components/OpenAPI.vue | 49 | 0 |  |
 | pheno-cli/internal/publish/orchestrator.go | 49 | 0 |  |
 | pheno-cli/internal/version/calculator_test.go | 49 | 2 |  |
-| promptadapter/datasets/__init__.py | 49 | 0 |  |
+| promptadapter/datasets/**init**.py | 49 | 0 |  |
 | python/omlx_research/agents/tidar_runner.py | 49 | 0 |  |
-| python/pheno-mcp/src/pheno_mcp/__init__.py | 49 | 0 |  |
+| python/pheno-mcp/src/pheno_mcp/**init**.py | 49 | 0 |  |
 | researchintel/crawlers/arxiv_crawler.py | 49 | 0 |  |
 | src/tokens/glass.ts | 49 | 0 |  |
 | tests/test_evidence_adapters_rate_limit.py | 49 | 2 |  |
@@ -9722,7 +9722,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/types/health.py | 47 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/networking/ports.py | 47 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/migrations/migration.py | 47 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/auth/__init__.py | 47 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/auth/**init**.py | 47 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/queue/output.rs | 47 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/src/components/layout/Badge.tsx | 47 | 0 |  |
 | apps/bench-cockpit/src/lib/echart.tsx | 47 | 0 |  |
@@ -9758,7 +9758,7 @@ Sorted by LOC descending.
 | docs/atlas/tests/test_package_and_schedule.py | 47 | 16 |  |
 | docs/phenotype-docset-v1.1/tests/test_package_and_schedule.py | 47 | 16 |  |
 | docs/test-patterns/proptest_smoke.rs | 47 | 3 |  |
-| kernels/qwen3.5-0.8b/mojo/__init__.mojo | 47 | 0 |  |
+| kernels/qwen3.5-0.8b/mojo/**init**.mojo | 47 | 0 |  |
 | pheno-cli/cmd/plugin.go | 47 | 0 |  |
 | ports/model_loader.py | 47 | 0 |  |
 | python/pheno_core/src/pheno_core/registry/globals.py | 47 | 0 |  |
@@ -9778,10 +9778,10 @@ Sorted by LOC descending.
 | unity/postfx/tests/Editor/PostStackEditTests.cs | 47 | 0 |  |
 | _archived/byteport/backend/nvms/lib/awspin/types.go | 46 | 0 |  |
 | agents/phenoagent/python/pheno-analytics/src/pheno_analytics/code/wily_support.py | 46 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cli/__init__.py | 46 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/__init__.py | 46 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cli/**init**.py | 46 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/**init**.py | 46 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/realtime/base.py | 46 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/__init__.py | 46 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/**init**.py | 46 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/flow_adapters.py | 46 | 0 |  |
 | agileplus-mcp/docs/conf.py | 46 | 0 |  |
 | agileplus/agileplus-mcp/docs/conf.py | 46 | 0 |  |
@@ -9869,7 +9869,7 @@ Sorted by LOC descending.
 | iac/terraform/gcp/e2-micro.tf | 45 | 0 |  |
 | infrakit/crates/phenotype-port-traits/src/lib.rs | 45 | 4 |  |
 | python/omlx_research/tests/test_smoke_models.py | 45 | 4 |  |
-| python/pheno_core/src/pheno_core/registry/__init__.py | 45 | 0 |  |
+| python/pheno_core/src/pheno_core/registry/**init**.py | 45 | 0 |  |
 | registry/absorbed-crates/eidolon/eidolon-core/src/viewport.rs | 45 | 0 |  |
 | registry/absorbed-crates/stashly/src/infrastructure/error.rs | 45 | 2 |  |
 | tests/test_doctor.py | 45 | 3 |  |
@@ -9886,7 +9886,7 @@ Sorted by LOC descending.
 | agents/phenoagent/phenotype-router-monitor/src/api.rs | 44 | 1 |  |
 | agents/phenoagent/phenotype-router-monitor/src/monitor.rs | 44 | 1 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/components/config.py | 44 | 0 |  |
-| agents/phenoagent/python/pheno-llm/src/pheno_llm/optimization/__init__.py | 44 | 0 |  |
+| agents/phenoagent/python/pheno-llm/src/pheno_llm/optimization/**init**.py | 44 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/test_runner.py | 44 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/module/mod.rs | 44 | 0 |  |
 | architecture/schemas/event.proto | 44 | 0 |  |
@@ -9930,10 +9930,10 @@ Sorted by LOC descending.
 | _archived/nanovms-core/pkg/tier/wasm.go | 43 | 0 |  |
 | agents/phenoagent/pheno-cli-go/cmd/root.go | 43 | 0 |  |
 | agents/phenoagent/python/pheno-analytics/src/pheno_analytics/architecture/config.py | 43 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/networking/__init__.py | 43 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/networking/**init**.py | 43 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/service_infra/wrappers.py | 43 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process.py | 43 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/templates/__init__.py | 43 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/templates/**init**.py | 43 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/templates/caching.py | 43 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/cycle/remove.rs | 43 | 0 |  |
 | agileplus/crates/agileplus-domain/src/ports/mod.rs | 43 | 0 |  |
@@ -9981,11 +9981,11 @@ Sorted by LOC descending.
 | .vitepress/theme/components/AuditTimeline.vue | 42 | 0 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/utils/paths.py | 42 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/kinfra/wrappers.py | 42 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/templates/resources/__init__.py | 42 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/wildcard_handler/__init__.py | 42 | 0 |  |
-| agents/phenoagent/python/pheno-llm/src/pheno_llm/protocol/__init__.py | 42 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/templates/resources/**init**.py | 42 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/wildcard_handler/**init**.py | 42 | 0 |  |
+| agents/phenoagent/python/pheno-llm/src/pheno_llm/protocol/**init**.py | 42 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/metrics/providers.py | 42 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/framework/__init__.py | 42 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/framework/**init**.py | 42 | 0 |  |
 | agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/temporal/context.py | 42 | 0 |  |
 | agileplus/crates/agileplus-cache/src/config.rs | 42 | 0 |  |
 | agileplus/crates/agileplus-cache/src/health.rs | 42 | 1 |  |
@@ -10045,7 +10045,7 @@ Sorted by LOC descending.
 | _archived/nanovms-core/cmd/nvms/main.go | 41 | 0 | yes |
 | _archived/nanovms-core/internal/adapters/linux/syscalls.go | 41 | 0 |  |
 | agents/phenoagent/pheno-cli-go/internal/config/config.go | 41 | 0 |  |
-| agents/phenoagent/python/pheno-process/src/pheno_process/__init__.py | 41 | 0 |  |
+| agents/phenoagent/python/pheno-process/src/pheno_process/**init**.py | 41 | 0 |  |
 | agileplus/crates/agileplus-nats/src/config.rs | 41 | 0 |  |
 | agileplus/crates/agileplus-subcmds/src/device/mod.rs | 41 | 0 |  |
 | agileplus/pheno-cli/internal/config/config.go | 41 | 0 |  |
@@ -10100,9 +10100,9 @@ Sorted by LOC descending.
 | absorption/resume-all/bin/resume-context.py | 40 | 0 | yes |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/interfaces/database.py | 40 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/types/alerts.py | 40 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/multi_cloud/__init__.py | 40 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/base/__init__.py | 40 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/qa/__init__.py | 40 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/multi_cloud/**init**.py | 40 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/base/**init**.py | 40 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/qa/**init**.py | 40 | 0 |  |
 | agileplus-agents/crates/agileplus-agent-review/tests/fallback_tests.rs | 40 | 5 |  |
 | agileplus/agileplus-agents/crates/agileplus-agent-review/tests/fallback_tests.rs | 40 | 5 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/support/mod.rs | 40 | 0 | yes |
@@ -10172,8 +10172,8 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/lib/components/ui/select/select-item.svelte | 39 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/interfaces/registry.py | 39 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/middleware/types.py | 39 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/fly/__init__.py | 39 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/vercel/__init__.py | 39 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/fly/**init**.py | 39 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/vercel/**init**.py | 39 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/testing/logging_config.py | 39 | 0 |  |
 | agents/phenoagent/python/pheno-providers/src/pheno_providers/registry_provider_mixin.py | 39 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/optimization_network.py | 39 | 0 |  |
@@ -10229,7 +10229,7 @@ Sorted by LOC descending.
 | src/main.rs | 39 | 0 | yes |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/templates/resources/messaging.py | 38 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/wildcard_handler/suggest.py | 38 | 0 |  |
-| agents/phenoagent/python/pheno-observability/src/pheno_observability/monitoring/__init__.py | 38 | 0 |  |
+| agents/phenoagent/python/pheno-observability/src/pheno_observability/monitoring/**init**.py | 38 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/execution/intelligent_execution/types.py | 38 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/module/delete.rs | 38 | 0 |  |
 | agileplus/crates/agileplus-domain/src/config/core.rs | 38 | 0 |  |
@@ -10276,8 +10276,8 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/monitor/runner.py | 37 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/proxy_gateway/config.py | 37 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/tunnel_sync/models.py | 37 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/utils/__init__.py | 37 | 0 |  |
-| agents/phenoagent/python/pheno-llm/src/pheno_llm/__init__.py | 37 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/utils/**init**.py | 37 | 0 |  |
+| agents/phenoagent/python/pheno-llm/src/pheno_llm/**init**.py | 37 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/registry.py | 37 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/ui/compat.py | 37 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/support/storage_port_impl/sync_mapping.rs | 37 | 0 |  |
@@ -10332,7 +10332,7 @@ Sorted by LOC descending.
 | crates/agile-plus/desktop/electrobun.config.ts | 36 | 0 |  |
 | crates/agileplus-domain/src/config/credentials.rs | 36 | 0 |  |
 | crates/argis-extensions/docs/.vitepress/config.mts | 36 | 0 |  |
-| crates/argis-extensions/pheno-vibecoding-guard/src/pheno_vibecoding_guard/__main__.py | 36 | 0 | yes |
+| crates/argis-extensions/pheno-vibecoding-guard/src/pheno_vibecoding_guard/**main**.py | 36 | 0 | yes |
 | crates/fabric-frame-transport/fuzz/fuzz_targets/parse_message.rs | 36 | 0 |  |
 | crates/focus-crypto/benches/focus_crypto_benchmarks.rs | 36 | 0 |  |
 | crates/focus-time/src/lib.rs | 36 | 0 |  |
@@ -10359,7 +10359,7 @@ Sorted by LOC descending.
 | agents/phenoagent/phenotype-governance/tests/fr_coverage.ts | 35 | 4 |  |
 | agents/phenoagent/python/pheno-clink/src/pheno_clink/parsers/base.py | 35 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/interfaces/orchestrator.py | 35 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/vector/__init__.py | 35 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/vector/**init**.py | 35 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/cleanup/_constants.py | 35 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/logging/structured_events.py | 35 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/assertions/prompts.py | 35 | 0 |  |
@@ -10403,7 +10403,7 @@ Sorted by LOC descending.
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/components/factories.py | 34 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/templates/resources/cache.py | 34 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/broker_providers.py | 34 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/ui/__init__.py | 34 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/ui/**init**.py | 34 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/support/observability.rs | 34 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/.storybook/main.ts | 34 | 0 | yes |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-event-sourcing/src/async_store.rs | 34 | 0 |  |
@@ -10449,8 +10449,8 @@ Sorted by LOC descending.
 | unity/water/tests/GerstnerWaveBankTestHelpers.cs | 34 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/form/form-fieldset.svelte | 33 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/select/index.ts | 33 | 0 | yes |
-| agents/phenoagent/python/pheno-clink/src/pheno_clink/agents/__init__.py | 33 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/telemetry/__init__.py | 33 | 0 |  |
+| agents/phenoagent/python/pheno-clink/src/pheno_clink/agents/**init**.py | 33 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/telemetry/**init**.py | 33 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/schemes/base.py | 33 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/credential_broker.py | 33 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_progress_enhanced.py | 33 | 0 |  |
@@ -10491,7 +10491,7 @@ Sorted by LOC descending.
 | fuzz/fuzz_targets/psub_a2a_message.rs | 33 | 0 |  |
 | infrakit/crates/phenotype-shared-config/src/lib.rs | 33 | 0 |  |
 | native/src/window/linux.rs | 33 | 0 |  |
-| python/pheno_core/src/pheno_core/utils/__init__.py | 33 | 0 |  |
+| python/pheno_core/src/pheno_core/utils/**init**.py | 33 | 0 |  |
 | python/tests/integration/test_mcp_feature_lifecycle.py | 33 | 1 |  |
 | researchintel/crawlers/registry.py | 33 | 0 |  |
 | scripts/inspect_db.py | 33 | 0 |  |
@@ -10502,8 +10502,8 @@ Sorted by LOC descending.
 | _archived/byteport/backend/internal/infrastructure/persistence/postgres/models.go | 32 | 0 |  |
 | _archived/byteport/frontend/web/src/stories/Page.stories.svelte | 32 | 0 |  |
 | _archived/byteport/ports/blog/content_collections.go | 32 | 0 |  |
-| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/code/__init__.py | 32 | 0 |  |
-| agents/phenoagent/python/pheno-clink/src/pheno_clink/parsers/__init__.py | 32 | 0 |  |
+| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/code/**init**.py | 32 | 0 |  |
+| agents/phenoagent/python/pheno-clink/src/pheno_clink/parsers/**init**.py | 32 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/supabase/client.py | 32 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_cache.py | 32 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_progress.py | 32 | 0 |  |
@@ -10541,13 +10541,13 @@ Sorted by LOC descending.
 | _archived/byteport/backend/internal/application/deployment/dto_additional.go | 31 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/input/index.ts | 31 | 0 | yes |
 | _archived/byteport/frontend/web/src/stories/Button.stories.svelte | 31 | 0 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/components/__init__.py | 31 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/base/__init__.py | 31 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/components/**init**.py | 31 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/base/**init**.py | 31 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/proxy_gateway/server/events.py | 31 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/services/__init__.py | 31 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/services/**init**.py | 31 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/neon/client.py | 31 | 0 |  |
-| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/__init__.py | 31 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/fixtures/__init__.py | 31 | 0 |  |
+| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/**init**.py | 31 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/fixtures/**init**.py | 31 | 0 |  |
 | agileplus-mcp/tests/bdd/environment.py | 31 | 0 |  |
 | agileplus/agileplus-mcp/tests/bdd/environment.py | 31 | 0 |  |
 | agileplus/crates/agileplus-domain/src/domain/cycle/with_features.rs | 31 | 0 |  |
@@ -10590,25 +10590,25 @@ Sorted by LOC descending.
 | pheno/paths.py | 31 | 0 |  |
 | phenotype-governance/configs/typescript/eslint.config.js | 31 | 0 |  |
 | phenotype-infrakit/crates/phenotype-project-registry/src/lib.rs | 31 | 0 |  |
-| python/omlx_research/cli/commands/__init__.py | 31 | 0 |  |
+| python/omlx_research/cli/commands/**init**.py | 31 | 0 |  |
 | python/pheno_core/src/pheno_core/registry/adapters/enums.py | 31 | 0 |  |
 | scripts/smoke_install.sh | 31 | 0 | yes |
 | servers/external/ops-mcp/images.go | 31 | 0 |  |
 | .github/scripts/security-guard.sh | 30 | 0 | yes |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/nvms/parser.py | 30 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/pooling/__init__.py | 30 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/pooling/**init**.py | 30 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/nvms/parser.py | 30 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/project_templates.py | 30 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/schemes/__init__.py | 30 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/workflow/__init__.py | 30 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/schemes/**init**.py | 30 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/workflow/**init**.py | 30 | 0 |  |
 | agents/phenoagent/python/pheno-process/src/pheno_process/base/health_check.py | 30 | 0 |  |
-| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/__init__.py | 30 | 0 |  |
+| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/**init**.py | 30 | 0 |  |
 | agileplus/crates/agileplus-domain/src/config/telemetry.rs | 30 | 0 |  |
 | agileplus/crates/agileplus-nats/src/lib.rs | 30 | 0 |  |
 | bench/datasets/helios_bench/helios_bench__merge_sort/solution/solve.py | 30 | 0 |  |
 | bench/ports/energy.py | 30 | 0 |  |
 | bench/ports/inference.py | 30 | 0 |  |
-| bench/v0/__init__.py | 30 | 0 |  |
+| bench/v0/**init**.py | 30 | 0 |  |
 | crates/agile-plus/crates/agileplus-domain/src/config/telemetry.rs | 30 | 0 |  |
 | crates/agile-plus/crates/agileplus-domain/src/lib.rs | 30 | 0 |  |
 | crates/agile-plus/crates/agileplus-nats/src/lib.rs | 30 | 0 |  |
@@ -10647,19 +10647,19 @@ Sorted by LOC descending.
 | scripts/tests/test_cuda_build_profile.sh | 30 | 0 | yes |
 | servers/external/mcpforge/internal/protocol/tables.go | 30 | 0 |  |
 | _archived/byteport/backend/internal/infrastructure/http/handlers/basic_test.go | 29 | 2 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/monitor/__init__.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/monitor/**init**.py | 29 | 0 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/monitors.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_manager/__init__.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_manager/**init**.py | 29 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/core/resources_adapter.py | 29 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/service_manager.py | 29 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/tunnel_sync/models.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/adapters/__init__.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-observability/src/pheno_observability/runtime_metrics/__init__.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-providers/src/pheno_providers/__init__.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/__init__.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/patterns/__init__.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/__init__.py | 29 | 0 |  |
-| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/patterns/__init__.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/adapters/**init**.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-observability/src/pheno_observability/runtime_metrics/**init**.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-providers/src/pheno_providers/**init**.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/**init**.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/architectural/patterns/**init**.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/**init**.py | 29 | 0 |  |
+| agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/pattern_detector/patterns/**init**.py | 29 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/testing/live_runner.py | 29 | 0 |  |
 | agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/temporal/decorators.py | 29 | 0 |  |
 | agileplus/crates/agileplus-domain/src/config/api.rs | 29 | 0 |  |
@@ -10688,7 +10688,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/python/tests/integration/conftest.py | 29 | 0 |  |
 | crates/hexa-kit/crates/phenotype-xdd-lib/docs/tests/component/build-output.test.mjs | 29 | 1 |  |
 | crates/hexa-kit/docs/tests/playwright.config.ts | 29 | 0 |  |
-| crates/phench/src/phench/__init__.py | 29 | 0 |  |
+| crates/phench/src/phench/**init**.py | 29 | 0 |  |
 | crates/phinbox/src/inbox/expire.rs | 29 | 0 |  |
 | crates/settly/src/infrastructure/error.rs | 29 | 0 |  |
 | crates/stashly/src/domain/ports.rs | 29 | 0 |  |
@@ -10716,11 +10716,11 @@ Sorted by LOC descending.
 | agents/phenoagent/pheno-cli-go/internal/adapters/registry.go | 28 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/modern/vercel.py | 28 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/modern/vercel.py | 28 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/performance/__init__.py | 28 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/schemes/__init__.py | 28 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/performance/**init**.py | 28 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/schemes/**init**.py | 28 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/divergent_change.py | 28 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/execution/intelligent_execution/__init__.py | 28 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/mocking/__init__.py | 28 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/execution/intelligent_execution/**init**.py | 28 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/mocking/**init**.py | 28 | 0 |  |
 | agileplus-agents/crates/agileplus-agent-dispatch/src/lib.rs | 28 | 0 |  |
 | agileplus/agileplus-agents/crates/agileplus-agent-dispatch/src/lib.rs | 28 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/worktree.rs | 28 | 1 |  |
@@ -10776,24 +10776,24 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src-tauri/src/main.rs | 27 | 0 | yes |
 | _archived/byteport/frontend/web/src/lib/components/ui/accordion/accordion-trigger.svelte | 27 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/form/form-field-errors.svelte | 27 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/monitoring/__init__.py | 27 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/tenancy/__init__.py | 27 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/core/__init__.py | 27 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/tui/__init__.py | 27 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/monitoring/**init**.py | 27 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/tenancy/**init**.py | 27 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/core/**init**.py | 27 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/tui/**init**.py | 27 | 0 |  |
 | agents/phenoagent/python/pheno-observability/src/pheno_observability/logging.py | 27 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/duplicate_code.py | 27 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/message_chain.py | 27 | 0 |  |
 | agents/phenoagent/python/pheno-quality/src/pheno_quality/tools/detectors/shotgun_surgery.py | 27 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/__init__.py | 27 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/**init**.py | 27 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/support/storage_port_impl/evidence.rs | 27 | 0 |  |
 | agileplus/crates/agileplus-cache/src/lib.rs | 27 | 0 |  |
 | agileplus/docs/.vitepress/theme/composables/useModuleFilter.ts | 27 | 0 |  |
-| agileplus/python/src/agileplus_proto/__init__.py | 27 | 0 |  |
+| agileplus/python/src/agileplus_proto/**init**.py | 27 | 0 |  |
 | apps/bench-cockpit/scripts/langfuse/print-cursor-mcp-snippet.sh | 27 | 0 | yes |
 | crates/agile-plus/crates/agileplus-api/tests/api_integration/support/storage_port_impl/evidence.rs | 27 | 0 |  |
 | crates/agile-plus/docs/.vitepress/theme/composables/useModuleFilter.ts | 27 | 0 |  |
 | crates/agile-plus/history_cleanup.sh | 27 | 0 |  |
-| crates/agile-plus/python/src/agileplus_proto/__init__.py | 27 | 0 |  |
+| crates/agile-plus/python/src/agileplus_proto/**init**.py | 27 | 0 |  |
 | crates/agile-plus/rust/src/lib.rs | 27 | 1 |  |
 | crates/agileplus-api/tests/api_integration/support/storage_port_impl/evidence.rs | 27 | 0 |  |
 | crates/agileplus-cache/src/lib.rs | 27 | 0 |  |
@@ -10803,9 +10803,9 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/crates/agileplus-api/tests/api_integration/support/storage_port_impl/evidence.rs | 27 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-cache/src/lib.rs | 27 | 0 |  |
 | crates/hexa-kit/agileplus/docs/.vitepress/theme/composables/useModuleFilter.ts | 27 | 0 |  |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/__init__.py | 27 | 0 |  |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/**init**.py | 27 | 0 |  |
 | crates/hexa-kit/docs/.vitepress/theme/composables/useModuleFilter.ts | 27 | 0 |  |
-| crates/hexa-kit/python/src/agileplus_proto/__init__.py | 27 | 0 |  |
+| crates/hexa-kit/python/src/agileplus_proto/**init**.py | 27 | 0 |  |
 | crates/hexa-kit/templates/appgen/desktop-electrobun/src/logger.ts | 27 | 0 |  |
 | crates/hexa-kit/templates/hexagon/go/docs/.vitepress/config.mts | 27 | 0 |  |
 | crates/logify/docs/specs/acceptance/stubs/fr_04_log_error.rs | 27 | 3 |  |
@@ -10820,7 +10820,7 @@ Sorted by LOC descending.
 | docs/specs/pheno-specs/archive/agent-wave/docs/.vitepress/config.mts | 27 | 0 |  |
 | iac/terraform/oci/ampere-secondary.tf | 27 | 0 |  |
 | migrations/v003_routing_history.py | 27 | 0 |  |
-| python/src/agileplus_proto/__init__.py | 27 | 0 |  |
+| python/src/agileplus_proto/**init**.py | 27 | 0 |  |
 | registry/absorbed-crates/stashly/src/ports/driving/mod.rs | 27 | 0 |  |
 | scripts/orb-down.sh | 27 | 0 |  |
 | src/voxel/ports/mod.rs | 27 | 0 |  |
@@ -10833,10 +10833,10 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/stories/Header.stories.svelte | 26 | 0 |  |
 | _archived/nanovms-core/pkg/pheno-integration/integration.go | 26 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/core/engine.py | 26 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/metrics/__init__.py | 26 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/metrics/**init**.py | 26 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/assertions/performance.py | 26 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/integration/workflows.py | 26 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/task_manager/__init__.py | 26 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/task_manager/**init**.py | 26 | 0 |  |
 | agileplus/crates/agileplus-fixtures/src/lib.rs | 26 | 0 |  |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-event-sourcing/src/lib.rs | 26 | 0 |  |
 | crates/agile-plus/crates/agileplus-fixtures/src/lib.rs | 26 | 0 |  |
@@ -10861,9 +10861,9 @@ Sorted by LOC descending.
 | crates/policystack/scripts/security/e53_attestation_freshness_gate.py | 26 | 0 | yes |
 | crates/sharecli/tests/c00_l6_perf_budget_gate.rs | 26 | 3 |  |
 | crates/supervisor/src/error.rs | 26 | 0 |  |
-| gui/admin-extensions/api/__init__.py | 26 | 0 |  |
+| gui/admin-extensions/api/**init**.py | 26 | 0 |  |
 | middleware/pheno-routing-logger.js | 26 | 0 |  |
-| python/omlx_research/backends/__init__.py | 26 | 0 |  |
+| python/omlx_research/backends/**init**.py | 26 | 0 |  |
 | python/phenosdk/src/pheno/adapters/persistence/in_memory.py | 26 | 0 |  |
 | python/phenosdk/src/pheno/vector/client.py | 26 | 0 |  |
 | registry/absorbed-crates/eidolon/eidolon-mobile/src/native/mod.rs | 26 | 0 |  |
@@ -10877,14 +10877,14 @@ Sorted by LOC descending.
 | unity/terrain/_stub/Vector3.cs | 26 | 0 |  |
 | _archived/byteport/backend/byteport/models/data.go | 25 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/command/command-item.svelte | 25 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/startup/__init__.py | 25 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/project/__init__.py | 25 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/startup/**init**.py | 25 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/project/**init**.py | 25 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/core/optimizations.py | 25 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/logging/__init__.py | 25 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/logging/**init**.py | 25 | 0 |  |
 | agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/temporal/integrations.py | 25 | 0 |  |
 | agileplus/crates/agileplus-p2p/src/export/serialization.rs | 25 | 0 |  |
 | agileplus/tests/integration/setup-test-repo.sh | 25 | 0 | yes |
-| bench/v0/providers/__init__.py | 25 | 0 |  |
+| bench/v0/providers/**init**.py | 25 | 0 |  |
 | bifrost/migrations/001_bifrost_model_cache.sql | 25 | 0 |  |
 | crates/agile-plus/crates/agileplus-dashboard/web/playwright.config.ts | 25 | 0 |  |
 | crates/agile-plus/crates/agileplus-dashboard/web/tailwind.config.js | 25 | 0 |  |
@@ -10922,13 +10922,13 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src-tauri/src/lib.rs | 24 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/command/command-dialog.svelte | 24 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/command/command-input.svelte | 24 | 0 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/deployment/__init__.py | 24 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/deployment/**init**.py | 24 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/cli_bridge.py | 24 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_infra/__init__.py | 24 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/tunnel_sync/__init__.py | 24 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_infra/**init**.py | 24 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/tunnel_sync/**init**.py | 24 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/service_manager_core.py | 24 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/entry_points/__init__.py | 24 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/__init__.py | 24 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/entry_points/**init**.py | 24 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/**init**.py | 24 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/vite.config.ts | 24 | 0 |  |
 | agileplus/crates/agileplus-domain/src/credentials/factory.rs | 24 | 0 |  |
 | agileplus/crates/agileplus-domain/src/domain/cycle/feature.rs | 24 | 0 |  |
@@ -10969,7 +10969,7 @@ Sorted by LOC descending.
 | crates/policystack/scripts/policy/c69_replay_drift_budget_gate.py | 24 | 0 | yes |
 | gui/desktop/macos/Package.swift | 24 | 0 |  |
 | packages/auth/src/middleware.ts | 24 | 0 |  |
-| python/omlx_research/agents/__init__.py | 24 | 0 |  |
+| python/omlx_research/agents/**init**.py | 24 | 0 |  |
 | python/src/agileplus_proto/gen/agileplus/v1/common_pb2_grpc.py | 24 | 0 |  |
 | scripts/collect_traces.py | 24 | 0 |  |
 | scripts/vsdevcmd.ps1 | 24 | 0 |  |
@@ -10981,7 +10981,7 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/playwright.config.ts | 23 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/command/command.svelte | 23 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/popover/popover-content.svelte | 23 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/adapters/__init__.py | 23 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/adapters/**init**.py | 23 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/handlers.py | 23 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/vite.config.js | 23 | 0 |  |
 | agileplus/python/tests/integration/test_mcp_audit_chain.py | 23 | 1 |  |
@@ -11033,18 +11033,18 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/lib/components/ui/label/label.svelte | 22 | 0 |  |
 | _archived/byteport/frontend/web/src/routes/home/settings/profile/schema.ts | 22 | 0 |  |
 | agents/phenoagent/CLIProxyAPI/sdk/cliproxy/auth/auth.go | 22 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/kinfra/__init__.py | 22 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/health/__init__.py | 22 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/kinfra/**init**.py | 22 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/health/**init**.py | 22 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/mocking/prompts.py | 22 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/providers/__init__.py | 22 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/oauth/oauth_automation/providers/**init**.py | 22 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/.storybook/preview.ts | 22 | 0 |  |
 | agileplus/crates/agileplus-p2p/src/export/errors.rs | 22 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/migrations/010_create_events.sql | 22 | 0 |  |
 | agileplus/python/tests/integration/test_mcp_governance_gate.py | 22 | 1 |  |
-| audits/org-audit-snapshots/audits/worklog-schema/src/pheno_worklog_schema/__init__.py | 22 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/worklog-schema/src/pheno_worklog_schema/__init__.py | 22 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/worklog-schema/src/pheno_worklog_schema/__init__.py | 22 | 0 |  |
-| audits/org-audits/worklog-schema/src/pheno_worklog_schema/__init__.py | 22 | 0 |  |
+| audits/org-audit-snapshots/audits/worklog-schema/src/pheno_worklog_schema/**init**.py | 22 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/worklog-schema/src/pheno_worklog_schema/**init**.py | 22 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/worklog-schema/src/pheno_worklog_schema/**init**.py | 22 | 0 |  |
+| audits/org-audits/worklog-schema/src/pheno_worklog_schema/**init**.py | 22 | 0 |  |
 | bench/run.py | 22 | 0 |  |
 | crates/agile-plus/crates/agileplus-dashboard/web/.storybook/preview.ts | 22 | 0 |  |
 | crates/agile-plus/crates/agileplus-dashboard/web/src/i18n/useLocale.ts | 22 | 0 |  |
@@ -11096,7 +11096,7 @@ Sorted by LOC descending.
 | vitest.config.ts | 22 | 0 |  |
 | .vitepress/theme/components/StickyHeader.vue | 21 | 0 |  |
 | _archived/byteport/frontend/web/svelte.config.js | 21 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/interfaces/__init__.py | 21 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cloud/interfaces/**init**.py | 21 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/mocking/resources.py | 21 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/mocking/tools.py | 21 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/src/components/index.ts | 21 | 0 | yes |
@@ -11138,17 +11138,17 @@ Sorted by LOC descending.
 | native/src/adapters/mod.rs | 21 | 0 |  |
 | packages/docs/src/theme/components/StickyHeader.vue | 21 | 0 |  |
 | ports/adapters/local.py | 21 | 0 |  |
-| python/pheno_core/src/pheno_core/__init__.py | 21 | 0 |  |
+| python/pheno_core/src/pheno_core/**init**.py | 21 | 0 |  |
 | scripts/lib/rtl.ts | 21 | 0 |  |
 | unity/terrain/_stub/Color.cs | 21 | 0 |  |
-| verifier/__init__.py | 21 | 0 |  |
+| verifier/**init**.py | 21 | 0 |  |
 | .vitepress/theme/components/DocStatusBadge.vue | 20 | 0 |  |
 | _grade_three.py | 20 | 0 |  |
-| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/ast/__init__.py | 20 | 0 |  |
+| agents/phenoagent/python/pheno-analytics/src/pheno_analytics/ast/**init**.py | 20 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/modern/fly.py | 20 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/modern/fly.py | 20 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/integration/multi_server.py | 20 | 1 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/process/__init__.py | 20 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/process/**init**.py | 20 | 0 |  |
 | agileplus-agents/crates/agileplus-agent-service/build.rs | 20 | 0 | yes |
 | agileplus-mcp/src/agileplus_mcp/server.py | 20 | 0 |  |
 | agileplus/agileplus-agents/crates/agileplus-agent-service/build.rs | 20 | 0 | yes |
@@ -11215,13 +11215,13 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/lib/components/ui/avatar/avatar.svelte | 19 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/command/command-group.svelte | 19 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/popover/index.ts | 19 | 0 | yes |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/__init__.py | 19 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/adapters/__init__.py | 19 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/**init**.py | 19 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/adapters/**init**.py | 19 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/container.py | 19 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/orchestration/__init__.py | 19 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/orchestration/**init**.py | 19 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/schemes/common.py | 19 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/template_engine/__init__.py | 19 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/patterns/__init__.py | 19 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/template_engine/**init**.py | 19 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/patterns/**init**.py | 19 | 0 |  |
 | agileplus/crates/agileplus-api/tests/api_integration/support/storage_port_impl/policy.rs | 19 | 0 |  |
 | agileplus/crates/agileplus-domain/src/domain/metric.rs | 19 | 0 |  |
 | agileplus/crates/agileplus-grpc/src/server/tests.rs | 19 | 1 |  |
@@ -11273,11 +11273,11 @@ Sorted by LOC descending.
 | crates/tokn-tokenledger/src/lib.rs | 19 | 0 |  |
 | infrakit/crates/phenotype-http-client/src/error.rs | 19 | 0 |  |
 | infrakit/crates/phenotype-string/src/lib.rs | 19 | 0 |  |
-| needle/__init__.py | 19 | 0 |  |
+| needle/**init**.py | 19 | 0 |  |
 | packaging/homebrew/substrate.rb | 19 | 0 |  |
-| pheno/trace_store/__init__.py | 19 | 0 |  |
+| pheno/trace_store/**init**.py | 19 | 0 |  |
 | phenotype-infrakit/crates/phenotype-validation/src/ports.rs | 19 | 0 |  |
-| scripts/atlas/atlaslib/__init__.py | 19 | 0 |  |
+| scripts/atlas/atlaslib/**init**.py | 19 | 0 |  |
 | sites/thegent-landing/src/lib/index.ts | 19 | 0 | yes |
 | src/tokens/typography.ts | 19 | 0 |  |
 | tests/test_heterogeneous_perf.py | 19 | 1 |  |
@@ -11290,15 +11290,15 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/lib/components/ui/form/form-label.svelte | 18 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/form/form-legend.svelte | 18 | 0 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/tui/flows.py | 18 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/enums/__init__.py | 18 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/enums/**init**.py | 18 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/templates.py | 18 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/performance/__init__.py | 18 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/performance/**init**.py | 18 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/mod.rs | 18 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/src/components/foundation/index.ts | 18 | 0 | yes |
 | agileplus/crates/agileplus-domain/src/domain/cycle/mod.rs | 18 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/migrations/014_create_device_nodes.sql | 18 | 0 |  |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-event-sourcing/src/store.rs | 18 | 0 |  |
-| bench/contracts/__init__.py | 18 | 0 |  |
+| bench/contracts/**init**.py | 18 | 0 |  |
 | bench/datasets/helios_bench/helios_bench__matrix_multiply/solution/solve.py | 18 | 0 |  |
 | crates/Cmdra/src/infrastructure/tracing.rs | 18 | 0 |  |
 | crates/agile-plus/agileplus-agents/crates/agileplus-agent-service/build.rs | 18 | 0 | yes |
@@ -11346,7 +11346,7 @@ Sorted by LOC descending.
 | gui/desktop/macos/Sources/PhenotypeOMLX/main.swift | 18 | 0 |  |
 | handbook/tests/e2e/smoke.spec.ts | 18 | 3 |  |
 | phenotype-gfx/adapters/mod.rs | 18 | 0 |  |
-| python/pheno-mcp/src/pheno_mcp/agents/__init__.py | 18 | 0 |  |
+| python/pheno-mcp/src/pheno_mcp/agents/**init**.py | 18 | 0 |  |
 | scripts/clone-devenv-abstraction-worktree.sh | 18 | 0 | yes |
 | scripts/generate-specs-from-git.sh | 18 | 0 | yes |
 | scripts/rust-coverage.sh | 18 | 0 | yes |
@@ -11367,10 +11367,10 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/lib/components/ui/dialog/dialog-title.svelte | 17 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/select/select-label.svelte | 17 | 0 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/commands/build.py | 17 | 0 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/core/__init__.py | 17 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/security/__init__.py | 17 | 0 |  |
-| agents/phenoagent/python/pheno-observability/src/pheno_observability/monitoring/adapters/__init__.py | 17 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/__init__.py | 17 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/core/**init**.py | 17 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/security/**init**.py | 17 | 0 |  |
+| agents/phenoagent/python/pheno-observability/src/pheno_observability/monitoring/adapters/**init**.py | 17 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestrators/**init**.py | 17 | 0 |  |
 | agileplus/.github/hooks/security-guard.sh | 17 | 0 | yes |
 | agileplus/crates/agileplus-domain/src/plugins/mod.rs | 17 | 0 |  |
 | agileplus/crates/agileplus-integration-tests/src/lib.rs | 17 | 0 |  |
@@ -11419,8 +11419,8 @@ Sorted by LOC descending.
 | packages/design-tokens/tailwind.config.mjs | 17 | 0 |  |
 | phenotype-gfx/lib.rs | 17 | 0 |  |
 | phenotype-infrakit/crates/phenotype-http-client/src/error.rs | 17 | 0 |  |
-| python/omlx_research/engines/__init__.py | 17 | 0 |  |
-| python/omlx_research/ports/__init__.py | 17 | 0 |  |
+| python/omlx_research/engines/**init**.py | 17 | 0 |  |
+| python/omlx_research/ports/**init**.py | 17 | 0 |  |
 | python/src/agileplus_mcp/grpc_errors.py | 17 | 0 |  |
 | python/tests/integration/test_mcp_feature_listing.py | 17 | 1 |  |
 | scripts/lint.sh | 17 | 0 |  |
@@ -11435,13 +11435,13 @@ Sorted by LOC descending.
 | _test_cosign2.sh | 16 | 0 |  |
 | agents/phenoagent/python/pheno-analytics/src/pheno_analytics/ast/models.py | 16 | 0 |  |
 | agents/phenoagent/python/pheno-cli/src/pheno_cli/app/core/version.py | 16 | 0 |  |
-| agents/phenoagent/python/pheno-clink/src/pheno_clink/__init__.py | 16 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/__init__.py | 16 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/atoms/__init__.py | 16 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/adapters/cloud/__init__.py | 16 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/desktop/widgets/__init__.py | 16 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/adapters/cloud/__init__.py | 16 | 0 |  |
-| agents/phenoagent/python/pheno-process/src/pheno_process/services/__init__.py | 16 | 0 |  |
+| agents/phenoagent/python/pheno-clink/src/pheno_clink/**init**.py | 16 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/**init**.py | 16 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/atoms/**init**.py | 16 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/adapters/cloud/**init**.py | 16 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/control_center/desktop/widgets/**init**.py | 16 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/adapters/cloud/**init**.py | 16 | 0 |  |
+| agents/phenoagent/python/pheno-process/src/pheno_process/services/**init**.py | 16 | 0 |  |
 | agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/testing/cache.py | 16 | 0 |  |
 | agileplus/crates/agileplus-dashboard/web/src/components/layout/index.ts | 16 | 0 | yes |
 | agileplus/crates/agileplus-domain/src/domain/mod.rs | 16 | 0 |  |
@@ -11504,11 +11504,11 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/.storybook/main.js | 15 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/accordion/accordion-item.svelte | 15 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/avatar/index.ts | 15 | 0 | yes |
-| agents/phenoagent/python/pheno-clink/src/pheno_clink/config/__init__.py | 15 | 0 |  |
+| agents/phenoagent/python/pheno-clink/src/pheno_clink/config/**init**.py | 15 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/status_page/types.py | 15 | 0 |  |
-| agents/phenoagent/python/pheno-llm/src/pheno_llm/quality/__init__.py | 15 | 0 |  |
+| agents/phenoagent/python/pheno-llm/src/pheno_llm/quality/**init**.py | 15 | 0 |  |
 | agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/pytest_plugins/auth.py | 15 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/integration/__init__.py | 15 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/integration/**init**.py | 15 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/migrations/004_create_audit_log.sql | 15 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/migrations/005_create_evidence.sql | 15 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/migrations/017_create_projects.sql | 15 | 0 |  |
@@ -11518,7 +11518,7 @@ Sorted by LOC descending.
 | audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/tooling/inventory-refresh.sh | 15 | 0 | yes |
 | audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/tooling/inventory-refresh.sh | 15 | 0 | yes |
 | bench/datasets/helios_bench/helios_bench__bayesian_sampler/solution/solve.py | 15 | 0 |  |
-| bench/ports/__init__.py | 15 | 0 |  |
+| bench/ports/**init**.py | 15 | 0 |  |
 | crates/agile-plus/crates/agileplus-api/src/lib.rs | 15 | 0 |  |
 | crates/agile-plus/crates/agileplus-dashboard/web/src/components/onboarding/index.ts | 15 | 0 | yes |
 | crates/agile-plus/crates/agileplus-domain/fuzz/fuzz_targets/wp_state_roundtrip.rs | 15 | 0 |  |
@@ -11532,7 +11532,7 @@ Sorted by LOC descending.
 | crates/argis-extensions/pheno-errors/scripts/coverage.sh | 15 | 0 | yes |
 | crates/argis-extensions/pheno-port-adapter/scripts/coverage.sh | 15 | 0 | yes |
 | crates/argis-extensions/pheno-scaffold-kit/examples/quickstart.py | 15 | 0 |  |
-| crates/argis-extensions/pheno-worklog-schema/src/pheno_worklog_schema/__init__.py | 15 | 0 |  |
+| crates/argis-extensions/pheno-worklog-schema/src/pheno_worklog_schema/**init**.py | 15 | 0 |  |
 | crates/argis-extensions/tools/cosign-verify-step/verify.sh | 15 | 0 |  |
 | crates/fabric-daemon/src/auth/mod.rs | 15 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-sqlite/src/migrations/004_create_audit_log.sql | 15 | 0 |  |
@@ -11563,7 +11563,7 @@ Sorted by LOC descending.
 | sites/phenokits-landing/src/lib/site.ts | 15 | 0 |  |
 | templates/rust-crate/examples/template_usage.rs | 15 | 0 | yes |
 | tools/org-audits/inventory-refresh.sh | 15 | 0 | yes |
-| traces/__init__.py | 15 | 0 |  |
+| traces/**init**.py | 15 | 0 |  |
 | unity/water/tests/WaterShaderTests.cs | 15 | 0 |  |
 | _archived/byteport/backend/internal/infrastructure/persistence/postgres/deployment_repository_helper_integration_test.go | 14 | 0 |  |
 | _archived/byteport/backend/internal/infrastructure/persistence/postgres/deployment_repository_helper_unit_test.go | 14 | 0 |  |
@@ -11593,7 +11593,7 @@ Sorted by LOC descending.
 | crates/agileplus-sqlite/src/migrations/007_create_metrics.sql | 14 | 0 |  |
 | crates/agileplus-sqlite/src/repository/mod.rs | 14 | 0 |  |
 | crates/agileplus-triage/src/lib.rs | 14 | 0 |  |
-| crates/argis-extensions/pheno-llms-txt/src/pheno_llms_txt/__init__.py | 14 | 0 |  |
+| crates/argis-extensions/pheno-llms-txt/src/pheno_llms_txt/**init**.py | 14 | 0 |  |
 | crates/argis-extensions/tools/pillar-fleet/inventory.sh | 14 | 0 |  |
 | crates/driver-argv/src/lib.rs | 14 | 0 |  |
 | crates/driver-http/src/main.rs | 14 | 0 | yes |
@@ -11614,7 +11614,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/crates/agileplus-import/src/lib.rs | 14 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-sqlite/src/migrations/007_create_metrics.sql | 14 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-sqlite/src/repository/mod.rs | 14 | 0 |  |
-| crates/hexa-kit/python/pheno-atoms/src/pheno_atoms/__init__.py | 14 | 0 |  |
+| crates/hexa-kit/python/pheno-atoms/src/pheno_atoms/**init**.py | 14 | 0 |  |
 | crates/hexa-kit/templates/swift/templates/swift/Sources/App/Domain/Ports/Inbound.swift | 14 | 0 |  |
 | crates/local-ops/bin/refresh_zsh_cache.zsh | 14 | 0 | yes |
 | crates/local-ops/tests/test_agileplus_worklog_guard.sh | 14 | 0 | yes |
@@ -11625,7 +11625,7 @@ Sorted by LOC descending.
 | infrakit/crates/phenotype-analytics/src/traits.rs | 14 | 0 |  |
 | infrakit/docs/.vitepress/config.mts | 14 | 0 |  |
 | infrakit/docs/.vitepress/site-meta.mjs | 14 | 0 |  |
-| python/pheno-atoms/src/pheno_atoms/__init__.py | 14 | 0 |  |
+| python/pheno-atoms/src/pheno_atoms/**init**.py | 14 | 0 |  |
 | python/pheno_core/src/pheno_core/registry/adapters/types.py | 14 | 0 |  |
 | scripts/check_docs_links.py | 14 | 0 |  |
 | scripts/watch_tbench_v3.py | 14 | 0 |  |
@@ -11636,10 +11636,10 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/.storybook/preview.js | 13 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/command/command-empty.svelte | 13 | 0 |  |
 | agents/phenoagent/python/pheno-analytics/src/pheno_analytics/exceptions.py | 13 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_templates/__init__.py | 13 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/cli_builder/__init__.py | 13 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/adapters/__init__.py | 13 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/pytest_plugins/__init__.py | 13 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_templates/**init**.py | 13 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/cli_builder/**init**.py | 13 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/adapters/**init**.py | 13 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/pytest_plugins/**init**.py | 13 | 0 |  |
 | agileplus/crates/agileplus-domain/src/domain/cycle/progress.rs | 13 | 0 |  |
 | agileplus/crates/agileplus-github/src/lib.rs | 13 | 0 |  |
 | agileplus/crates/agileplus-integration-tests/src/common/fixtures.rs | 13 | 0 |  |
@@ -11664,8 +11664,8 @@ Sorted by LOC descending.
 | crates/agileplus-p2p/src/export/types.rs | 13 | 0 |  |
 | crates/agileplus-sqlite/src/migrations/006_create_policy_rules.sql | 13 | 0 |  |
 | crates/agileplus-sqlite/src/repository/modules/mod.rs | 13 | 0 |  |
-| crates/argis-extensions/pheno-scaffold-kit/src/pheno_scaffold_kit/__init__.py | 13 | 0 |  |
-| crates/argis-extensions/pheno-vibecoding-guard/src/pheno_vibecoding_guard/__init__.py | 13 | 0 |  |
+| crates/argis-extensions/pheno-scaffold-kit/src/pheno_scaffold_kit/**init**.py | 13 | 0 |  |
+| crates/argis-extensions/pheno-vibecoding-guard/src/pheno_vibecoding_guard/**init**.py | 13 | 0 |  |
 | crates/bifrost-routing/src/error.rs | 13 | 0 |  |
 | crates/eidolon-mobile/src/bin/eidolon_xcui_helper.rs | 13 | 0 | yes |
 | crates/fabric-web/src/app/pages/mod.rs | 13 | 0 |  |
@@ -11704,8 +11704,8 @@ Sorted by LOC descending.
 | _archived/byteport/backend/nvms/models/instances.go | 12 | 0 |  |
 | _archived/nanovms-core/internal/ports/stubs.go | 12 | 0 |  |
 | _test_cosign.sh | 12 | 0 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/__init__.py | 12 | 0 |  |
-| agents/phenoagent/python/pheno-providers/src/pheno_providers/catalogs/__init__.py | 12 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/**init**.py | 12 | 0 |  |
+| agents/phenoagent/python/pheno-providers/src/pheno_providers/catalogs/**init**.py | 12 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/migrations/003_create_governance_contracts.sql | 12 | 0 |  |
 | bench/datasets/helios_bench/helios_bench__log_parser/solution/solve.py | 12 | 0 |  |
 | crates/Cmdra/src/infrastructure/mod.rs | 12 | 0 |  |
@@ -11738,7 +11738,7 @@ Sorted by LOC descending.
 | docs/tests/unit/site-meta.test.mjs | 12 | 2 |  |
 | iac/oci-post-acquire/hooks.d.example/10-update-portfolio-card.sh | 12 | 0 | yes |
 | phenotype-gfx/ports/chunk.rs | 12 | 0 |  |
-| python/pheno-core/src/pheno_core/__init__.py | 12 | 0 |  |
+| python/pheno-core/src/pheno_core/**init**.py | 12 | 0 |  |
 | rust/src/lib.rs | 12 | 0 |  |
 | scripts/cron/install.sh | 12 | 0 | yes |
 | servers/external/ops-mcp/tests/smoke_test.go | 12 | 1 |  |
@@ -11751,15 +11751,15 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/lib/components/ui/select/select-separator.svelte | 11 | 0 |  |
 | _archived/nanovms-core/src/lib.rs | 11 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/cli/shared.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/local/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/middleware/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/proxy_gateway/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/status_page/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/local/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-llm/src/pheno_llm/providers/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/analysis/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/graph/__init__.py | 11 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/team/__init__.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/local/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/middleware/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/proxy_gateway/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/status_page/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/local/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-llm/src/pheno_llm/providers/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/analysis/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/graph/**init**.py | 11 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/resources/team/**init**.py | 11 | 0 |  |
 | agileplus-mcp/tests/conftest.py | 11 | 0 |  |
 | agileplus/agileplus-mcp/tests/conftest.py | 11 | 0 |  |
 | agileplus/crates/agileplus-contract-tests/src/lib.rs | 11 | 0 |  |
@@ -11767,7 +11767,7 @@ Sorted by LOC descending.
 | agileplus/rust/src/lib.rs | 11 | 0 |  |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-port-traits/src/inbound/mod.rs | 11 | 0 |  |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-port-traits/src/outbound/mod.rs | 11 | 0 |  |
-| bench/services/__init__.py | 11 | 0 |  |
+| bench/services/**init**.py | 11 | 0 |  |
 | crates/Cmdra/src/application/mod.rs | 11 | 0 |  |
 | crates/agile-plus/agileplus-mcp/tests/conftest.py | 11 | 0 |  |
 | crates/agile-plus/crates/agileplus-api/src/router/handlers.rs | 11 | 0 |  |
@@ -11825,9 +11825,9 @@ Sorted by LOC descending.
 | src/water/mod.rs | 11 | 0 |  |
 | unity/postfx/tests/benchmarks/Program.cs | 11 | 0 |  |
 | agents/phenoagent/python/pheno-deployment/src/pheno_deployment/utils.py | 10 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/__init__.py | 10 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/infrastructure/mcp_extensions/__init__.py | 10 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/cli_builder/core/__init__.py | 10 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/**init**.py | 10 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/infrastructure/mcp_extensions/**init**.py | 10 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/cli_builder/core/**init**.py | 10 | 0 |  |
 | agileplus/crates/agileplus-api/src/routes/mod.rs | 10 | 0 |  |
 | agileplus/crates/agileplus-benchmarks/src/lib.rs | 10 | 0 |  |
 | agileplus/crates/agileplus-domain/src/lib.rs | 10 | 0 |  |
@@ -11926,22 +11926,22 @@ Sorted by LOC descending.
 | _archived/byteport/backend/nvms/models/secrets.go | 9 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/dialog/dialog-portal.svelte | 9 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/components/ui/label/index.ts | 9 | 0 | yes |
-| agents/phenoagent/python/pheno-clink/src/pheno_clink/prompts/__init__.py | 9 | 0 |  |
-| agents/phenoagent/python/pheno-clink/src/pheno_clink/tools/__init__.py | 9 | 0 |  |
+| agents/phenoagent/python/pheno-clink/src/pheno_clink/prompts/**init**.py | 9 | 0 |  |
+| agents/phenoagent/python/pheno-clink/src/pheno_clink/tools/**init**.py | 9 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/tunneling.py | 9 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/services/__init__.py | 9 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/agents/adapters/__init__.py | 9 | 0 |  |
-| agents/phenoagent/python/pheno-process/src/pheno_process/base/__init__.py | 9 | 0 |  |
-| agents/phenoagent/python/pheno-process/src/pheno_process/components/__init__.py | 9 | 0 |  |
-| agileplus-mcp/src/agileplus_mcp/prompts/__init__.py | 9 | 0 |  |
-| agileplus/agileplus-mcp/src/agileplus_mcp/prompts/__init__.py | 9 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/services/**init**.py | 9 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/agents/adapters/**init**.py | 9 | 0 |  |
+| agents/phenoagent/python/pheno-process/src/pheno_process/base/**init**.py | 9 | 0 |  |
+| agents/phenoagent/python/pheno-process/src/pheno_process/components/**init**.py | 9 | 0 |  |
+| agileplus-mcp/src/agileplus_mcp/prompts/**init**.py | 9 | 0 |  |
+| agileplus/agileplus-mcp/src/agileplus_mcp/prompts/**init**.py | 9 | 0 |  |
 | agileplus/crates/agileplus-cli/src/commands/implement/tests.rs | 9 | 1 |  |
 | agileplus/crates/agileplus-dashboard/src/lib.rs | 9 | 0 |  |
 | agileplus/crates/agileplus-dashboard/src/seed.rs | 9 | 0 |  |
 | agileplus/crates/agileplus-grpc/src/lib.rs | 9 | 0 |  |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-contracts/src/lib.rs | 9 | 0 |  |
 | crates/Cmdra/src/adapters/mod.rs | 9 | 0 |  |
-| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/prompts/__init__.py | 9 | 0 |  |
+| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/prompts/**init**.py | 9 | 0 |  |
 | crates/agile-plus/crates/agileplus-cli/src/commands/implement/tests.rs | 9 | 1 |  |
 | crates/agile-plus/crates/agileplus-dashboard/src/seed.rs | 9 | 0 |  |
 | crates/agile-plus/crates/agileplus-grpc/src/lib.rs | 9 | 0 |  |
@@ -11954,8 +11954,8 @@ Sorted by LOC descending.
 | crates/argis-extensions/pheno-worklog-schema/examples/quickstart.py | 9 | 0 |  |
 | crates/fabric-capture/build.rs | 9 | 0 | yes |
 | crates/fabric-daemon/src/lib.rs | 9 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/prompts/__init__.py | 9 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/prompts/__init__.py | 9 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/prompts/**init**.py | 9 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/prompts/**init**.py | 9 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-cli/src/commands/implement/tests.rs | 9 | 1 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-dashboard/src/lib.rs | 9 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-dashboard/src/seed.rs | 9 | 0 |  |
@@ -12018,8 +12018,8 @@ Sorted by LOC descending.
 | handbook/tooling/vitest.config.ts | 9 | 0 |  |
 | iac/tailscale/apply-acl.sh | 9 | 0 | yes |
 | packages/site-base/astro.config.mjs | 9 | 0 |  |
-| python/omlx_research/adapters/__init__.py | 9 | 0 |  |
-| python/pheno-mcp/src/pheno_mcp/tools/__init__.py | 9 | 0 |  |
+| python/omlx_research/adapters/**init**.py | 9 | 0 |  |
+| python/pheno-mcp/src/pheno_mcp/tools/**init**.py | 9 | 0 |  |
 | sites/agileplus-landing/vitest.config.ts | 9 | 0 |  |
 | sites/benchora-landing/vitest.config.ts | 9 | 0 |  |
 | sites/projects-landing/vitest.config.ts | 9 | 0 |  |
@@ -12027,35 +12027,35 @@ Sorted by LOC descending.
 | .cargo/rustc-wrapper.sh | 8 | 0 | yes |
 | _archived/byteport/backend/nvms/lib/awspin/index.go | 8 | 0 |  |
 | absorption/pheno-forge/docs/absorbed/schemaforge/src/index.test.ts | 8 | 1 |  |
-| agents/phenoagent/python/pheno-cicd/src/pheno_cicd/__main__.py | 8 | 0 | yes |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/monitoring/monitor/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/templates/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/tunnel_sync/base/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/migrations/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/realtime/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/storage/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/tunnel_sync/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/core/base/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-process/src/pheno_process/factories/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/factories/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/cost/__init__.py | 8 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/patterns/__init__.py | 8 | 0 |  |
-| agileplus-mcp/src/agileplus_mcp/resources/__init__.py | 8 | 0 |  |
-| agileplus-mcp/src/agileplus_mcp/sampling/__init__.py | 8 | 0 |  |
-| agileplus/agileplus-mcp/src/agileplus_mcp/resources/__init__.py | 8 | 0 |  |
-| agileplus/agileplus-mcp/src/agileplus_mcp/sampling/__init__.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-cicd/src/pheno_cicd/**main**.py | 8 | 0 | yes |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/monitoring/monitor/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/templates/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/tunnel_sync/base/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/migrations/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/realtime/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/storage/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/tunnel_sync/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/core/base/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-process/src/pheno_process/factories/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/factories/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/cost/**init**.py | 8 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/patterns/**init**.py | 8 | 0 |  |
+| agileplus-mcp/src/agileplus_mcp/resources/**init**.py | 8 | 0 |  |
+| agileplus-mcp/src/agileplus_mcp/sampling/**init**.py | 8 | 0 |  |
+| agileplus/agileplus-mcp/src/agileplus_mcp/resources/**init**.py | 8 | 0 |  |
+| agileplus/agileplus-mcp/src/agileplus_mcp/sampling/**init**.py | 8 | 0 |  |
 | agileplus/crates/agileplus-nats/src/health.rs | 8 | 0 |  |
 | agileplus/docs/.vitepress/theme/index.ts | 8 | 0 | yes |
-| bench/__main__.py | 8 | 0 | yes |
+| bench/**main**.py | 8 | 0 | yes |
 | bench/datasets/helios_bench/helios_bench__binary_search/tests/test_solution.py | 8 | 1 |  |
 | bench/datasets/helios_bench/helios_bench__matrix_multiply/tests/test_solution.py | 8 | 1 |  |
 | bench/datasets/helios_bench/helios_bench__merge_sort/tests/test_solution.py | 8 | 1 |  |
 | bench/datasets/helios_bench/helios_bench__word_count/tests/test_solution.py | 8 | 1 |  |
 | crates/Cmdra/src/adapters/primary/mod.rs | 8 | 0 |  |
 | crates/Cmdra/src/adapters/secondary/mod.rs | 8 | 0 |  |
-| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/resources/__init__.py | 8 | 0 |  |
-| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/sampling/__init__.py | 8 | 0 |  |
+| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/resources/**init**.py | 8 | 0 |  |
+| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/sampling/**init**.py | 8 | 0 |  |
 | crates/agile-plus/crates/agileplus-artifacts/src/lib.rs | 8 | 0 |  |
 | crates/agile-plus/crates/agileplus-domain/src/adapters/mod.rs | 8 | 0 |  |
 | crates/agile-plus/crates/agileplus-nats/src/health.rs | 8 | 0 |  |
@@ -12064,10 +12064,10 @@ Sorted by LOC descending.
 | crates/eyetracker-ffi/build.rs | 8 | 0 | yes |
 | crates/fabric-capture/src/uia/os_impl/mod.rs | 8 | 0 |  |
 | crates/focus-mcp-server/src/lib.rs | 8 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/resources/__init__.py | 8 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/sampling/__init__.py | 8 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/resources/__init__.py | 8 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/sampling/__init__.py | 8 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/resources/**init**.py | 8 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/sampling/**init**.py | 8 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/resources/**init**.py | 8 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/sampling/**init**.py | 8 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-nats/src/health.rs | 8 | 0 |  |
 | crates/hexa-kit/agileplus/docs/.vitepress/theme/index.ts | 8 | 0 | yes |
 | crates/hexa-kit/crates/phenotype-cache-adapter/examples/usage.rs | 8 | 0 | yes |
@@ -12091,11 +12091,11 @@ Sorted by LOC descending.
 | evals/harbor/tasks/omlx-niah-api-smoke/tests/test_state.py | 8 | 1 |  |
 | hfscope/tests/smoke.test.ts | 8 | 1 |  |
 | infrakit/crates/phenotype-bdd/src/domain/ports/outbound/mod.rs | 8 | 0 |  |
-| kernels/qwen3.5-0.8b/weights/__main__.py | 8 | 0 | yes |
+| kernels/qwen3.5-0.8b/weights/**main**.py | 8 | 0 | yes |
 | native/src/adapters/input_capture.rs | 8 | 0 |  |
 | native/src/adapters/renderer.rs | 8 | 0 |  |
-| python/pheno-mcp/src/pheno_mcp/mcp/__init__.py | 8 | 0 |  |
-| python/pheno_core/src/pheno_core/registry/adapters/__init__.py | 8 | 0 |  |
+| python/pheno-mcp/src/pheno_mcp/mcp/**init**.py | 8 | 0 |  |
+| python/pheno_core/src/pheno_core/registry/adapters/**init**.py | 8 | 0 |  |
 | servers/external/mcpforge/internal/tools/logging.go | 8 | 0 |  |
 | servers/forge3-bridge/forge3_mcp.py | 8 | 0 |  |
 | sites/agileplus-landing/src/env.d.ts | 8 | 0 |  |
@@ -12114,30 +12114,30 @@ Sorted by LOC descending.
 | _archived/byteport/frontend/web/src/routes/home/+layout.svelte | 7 | 0 |  |
 | _archived/byteport/tests/smoke_test.rs | 7 | 1 |  |
 | agents/phenoagent/pheno-cli-go/main.go | 7 | 0 | yes |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/templates/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/cli/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/server/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/proxy_gateway/server/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_manager/manager/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/cloud/__init__.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/templates/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/cli/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/server/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/proxy_gateway/server/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/service_manager/manager/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/cloud/**init**.py | 7 | 0 |  |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/service_manager_operations.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/config/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/logging/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/oauth/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/testing/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/execution/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/pytest_plugins/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/base/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/components/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/monitoring/__init__.py | 7 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/scheduling/__init__.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/config/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/logging/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/oauth/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-mcp/src/pheno_mcp/qa/testing/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/execution/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/pytest_plugins/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/base/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/tui/components/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/monitoring/**init**.py | 7 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/scheduling/**init**.py | 7 | 0 |  |
 | agileplus/crates/agileplus-integration-tests/src/common/mod.rs | 7 | 0 |  |
 | agileplus/pheno-cli/main.go | 7 | 0 | yes |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/omniroute-core/build.rs | 7 | 0 | yes |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-event-sourcing/examples/usage.rs | 7 | 0 | yes |
 | bench/datasets/helios_bench/helios_bench__buggy_add/solution/solve.py | 7 | 0 |  |
 | bench/datasets/helios_bench/helios_bench__debug_division/solution/solve.py | 7 | 0 |  |
-| bench/runner/__init__.py | 7 | 0 |  |
+| bench/runner/**init**.py | 7 | 0 |  |
 | crates/agile-plus/crates/agileplus-integration-tests/src/common/mod.rs | 7 | 0 |  |
 | crates/agile-plus/pheno-cli/main.go | 7 | 0 | yes |
 | crates/agileplus-integration-tests/src/common/mod.rs | 7 | 0 |  |
@@ -12151,7 +12151,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/pheno-cli/main.go | 7 | 0 | yes |
 | crates/hexa-kit/forgecode-fork/src/lib.rs | 7 | 0 |  |
 | crates/perfharness/src/regimes/mod.rs | 7 | 0 |  |
-| crates/phench/phench/__init__.py | 7 | 0 |  |
+| crates/phench/phench/**init**.py | 7 | 0 |  |
 | crates/phenotype-event-sourcing/examples/usage.rs | 7 | 0 | yes |
 | crates/phenotype-gfx/src/water/lod_base.rs | 7 | 0 |  |
 | crates/phenotype-infrakit/crates/phenotype-bdd/src/domain/mod.rs | 7 | 0 |  |
@@ -12162,7 +12162,7 @@ Sorted by LOC descending.
 | crates/policystack/.vitepress-dist/assets/worklogs_README.md.TEye5N8w.js | 7 | 0 |  |
 | crates/policystack/tests/test_smoke.py | 7 | 1 |  |
 | crates/settly/src/infrastructure/observability.rs | 7 | 0 |  |
-| gui/admin-extensions/routes/__init__.py | 7 | 0 |  |
+| gui/admin-extensions/routes/**init**.py | 7 | 0 |  |
 | iac/oci-post-acquire/oci-post-acquire.sh | 7 | 0 | yes |
 | iac/scripts/bootstrap-oci.sh | 7 | 0 | yes |
 | iac/scripts/health-check.sh | 7 | 0 | yes |
@@ -12203,7 +12203,7 @@ Sorted by LOC descending.
 | crates/hexa-kit/agileplus/crates/agileplus-domain/src/credentials/keys.rs | 6 | 0 |  |
 | crates/hexa-kit/docs/tests/e2e/docsite.spec.ts | 6 | 1 |  |
 | crates/hexa-kit/templates/hexagon/rust/benches/perf.rs | 6 | 0 |  |
-| crates/phench/phench/__main__.py | 6 | 0 | yes |
+| crates/phench/phench/**main**.py | 6 | 0 | yes |
 | crates/pheno-agent/phenotype-daemon/src/lib.rs | 6 | 0 |  |
 | crates/phinbox/src/mcp.rs | 6 | 0 |  |
 | crates/settly/benches/perf.rs | 6 | 0 |  |
@@ -12212,22 +12212,22 @@ Sorted by LOC descending.
 | crates/stashly/benches/perf.rs | 6 | 0 |  |
 | docs/tests/e2e/docsite.spec.ts | 6 | 1 |  |
 | evals/harbor/tasks/omlx-qwen35-policy/tests/test_state.py | 6 | 1 |  |
-| harness/intent_graph/__init__.py | 6 | 0 |  |
+| harness/intent_graph/**init**.py | 6 | 0 |  |
 | native/src/adapters/linux/mod.rs | 6 | 0 |  |
 | packages/pheno-core/src/index.ts | 6 | 0 | yes |
-| python/omlx_research/cli/__main__.py | 6 | 0 | yes |
-| researchintel/crawlers/__init__.py | 6 | 0 |  |
-| scripts/dual_gpu/__init__.py | 6 | 0 |  |
+| python/omlx_research/cli/**main**.py | 6 | 0 | yes |
+| researchintel/crawlers/**init**.py | 6 | 0 |  |
+| scripts/dual_gpu/**init**.py | 6 | 0 |  |
 | scripts/release-preflight.sh | 6 | 0 | yes |
 | servers/external/mcpforge/integrationtests/workspaces/go/helper.go | 6 | 0 |  |
 | servers/external/mcpforge/integrationtests/workspaces/rust/src/helper.rs | 6 | 0 |  |
 | sites/odin-landing/astro.config.mjs | 6 | 0 |  |
 | sites/thegent-landing/src/lib/site.ts | 6 | 0 |  |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/commands/__init__.py | 5 | 0 |  |
-| agents/phenoagent/python/pheno-clink/src/pheno_clink/utils/__init__.py | 5 | 0 |  |
-| agileplus-mcp/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
-| agileplus/agileplus-mcp/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
-| agileplus/python/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/commands/**init**.py | 5 | 0 |  |
+| agents/phenoagent/python/pheno-clink/src/pheno_clink/utils/**init**.py | 5 | 0 |  |
+| agileplus-mcp/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
+| agileplus/agileplus-mcp/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
+| agileplus/python/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
 | agileplus/templates/static/alpine.min.js | 5 | 0 |  |
 | bench/datasets/helios_bench/helios_bench__bayesian_sampler/solution/solve.sh | 5 | 0 |  |
 | bench/datasets/helios_bench/helios_bench__binary_search/solution/solve.sh | 5 | 0 |  |
@@ -12245,28 +12245,28 @@ Sorted by LOC descending.
 | bench/datasets/helios_bench/helios_bench__write_tests/solution/solve.sh | 5 | 0 |  |
 | bench/runner/main.py | 5 | 0 | yes |
 | crates/Cmdra/src/bin/main.rs | 5 | 0 | yes |
-| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
+| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
 | crates/agile-plus/crates/agileplus-api/src/middleware/mod.rs | 5 | 0 |  |
 | crates/agile-plus/crates/agileplus-import/src/lib.rs | 5 | 0 |  |
 | crates/agile-plus/crates/agileplus-sqlite/src/migrations/026_feature_labels.sql | 5 | 0 |  |
-| crates/agile-plus/python/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
+| crates/agile-plus/python/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
 | crates/agile-plus/templates/static/alpine.min.js | 5 | 0 |  |
 | crates/agileplus-cli/src/lib.rs | 5 | 0 |  |
 | crates/apisync/src/adapters/rest/mod.rs | 5 | 0 |  |
 | crates/apisync/src/infrastructure/mod.rs | 5 | 0 |  |
 | crates/focus-plugin-sdk/src/capabilities/mod.rs | 5 | 0 |  |
 | crates/heliosbench/src/helios_bench/cli.py | 5 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
-| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
-| crates/hexa-kit/agileplus/python/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
+| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
+| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
+| crates/hexa-kit/agileplus/python/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
 | crates/hexa-kit/agileplus/templates/static/alpine.min.js | 5 | 0 |  |
 | crates/hexa-kit/crates/phenotype-contract-tests/src/lib.rs | 5 | 0 |  |
-| crates/hexa-kit/python/phenosdk/src/pheno/adapters/persistence/__init__.py | 5 | 0 |  |
-| crates/hexa-kit/python/phenosdk/src/pheno/mcp/__init__.py | 5 | 0 |  |
-| crates/hexa-kit/python/phenosdk/src/pheno/shared/__init__.py | 5 | 0 |  |
-| crates/hexa-kit/python/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
-| crates/hexa-kit/python/src/pheno/mcp/__init__.py | 5 | 0 |  |
-| crates/hexa-kit/python/src/pheno/shared/__init__.py | 5 | 0 |  |
+| crates/hexa-kit/python/phenosdk/src/pheno/adapters/persistence/**init**.py | 5 | 0 |  |
+| crates/hexa-kit/python/phenosdk/src/pheno/mcp/**init**.py | 5 | 0 |  |
+| crates/hexa-kit/python/phenosdk/src/pheno/shared/**init**.py | 5 | 0 |  |
+| crates/hexa-kit/python/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
+| crates/hexa-kit/python/src/pheno/mcp/**init**.py | 5 | 0 |  |
+| crates/hexa-kit/python/src/pheno/shared/**init**.py | 5 | 0 |  |
 | crates/hexa-kit/src/error.rs | 5 | 0 |  |
 | crates/hexa-kit/templates/static/alpine.min.js | 5 | 0 |  |
 | crates/hexa-kit/templates/zig/templates/zig/build.zig | 5 | 0 |  |
@@ -12287,13 +12287,13 @@ Sorted by LOC descending.
 | crates/policystack/scripts/runtime/factory_exec_guard.sh | 5 | 0 | yes |
 | crates/policystack/scripts/runtime/factory_network_guard.sh | 5 | 0 | yes |
 | crates/policystack/scripts/runtime/factory_write_guard.sh | 5 | 0 | yes |
-| crates/policystack/tests/integration/__init__.py | 5 | 0 |  |
+| crates/policystack/tests/integration/**init**.py | 5 | 0 |  |
 | crates/stashly/src/adapters/mod.rs | 5 | 0 |  |
 | crates/stashly/src/infrastructure/mod.rs | 5 | 0 |  |
 | crates/tasken/tests/oracle_acceptance.rs | 5 | 0 |  |
 | crates/worktree-manager/src/worktree_manager/application/mod.rs | 5 | 0 |  |
 | driver-mcp/dispatch_server.py | 5 | 0 |  |
-| eval/__init__.py | 5 | 0 |  |
+| eval/**init**.py | 5 | 0 |  |
 | hfscope/internal/config/prod.go | 5 | 0 |  |
 | infrakit/crates/phenotype-contract-tests/src/lib.rs | 5 | 0 |  |
 | infrakit/crates/phenotype-testing/src/lib.rs | 5 | 0 |  |
@@ -12303,14 +12303,14 @@ Sorted by LOC descending.
 | packages/pheno-llm/src/index.ts | 5 | 0 | yes |
 | phenotype-infrakit/crates/phenotype-bdd/src/adapters/mod.rs | 5 | 0 |  |
 | phenotype-infrakit/crates/phenotype-rate-limiter/src/adapters/mod.rs | 5 | 0 |  |
-| playground/__init__.py | 5 | 0 |  |
-| python/omlx_research/vpu_dashboard/__init__.py | 5 | 0 |  |
-| python/phenosdk/src/pheno/adapters/persistence/__init__.py | 5 | 0 |  |
-| python/phenosdk/src/pheno/mcp/__init__.py | 5 | 0 |  |
-| python/phenosdk/src/pheno/shared/__init__.py | 5 | 0 |  |
-| python/src/agileplus_mcp/__main__.py | 5 | 0 | yes |
-| python/src/pheno/mcp/__init__.py | 5 | 0 |  |
-| python/src/pheno/shared/__init__.py | 5 | 0 |  |
+| playground/**init**.py | 5 | 0 |  |
+| python/omlx_research/vpu_dashboard/**init**.py | 5 | 0 |  |
+| python/phenosdk/src/pheno/adapters/persistence/**init**.py | 5 | 0 |  |
+| python/phenosdk/src/pheno/mcp/**init**.py | 5 | 0 |  |
+| python/phenosdk/src/pheno/shared/**init**.py | 5 | 0 |  |
+| python/src/agileplus_mcp/**main**.py | 5 | 0 | yes |
+| python/src/pheno/mcp/**init**.py | 5 | 0 |  |
+| python/src/pheno/shared/**init**.py | 5 | 0 |  |
 | registry/absorbed-crates/stashly/src/infrastructure/mod.rs | 5 | 0 |  |
 | servers/substrate/dispatch_server.py | 5 | 0 |  |
 | src/error.rs | 5 | 0 |  |
@@ -12319,25 +12319,25 @@ Sorted by LOC descending.
 | agileplus/crates/agileplus-cli/src/lib.rs | 4 | 0 |  |
 | agileplus/crates/agileplus-sqlite/src/tests.rs | 4 | 0 |  |
 | agileplus/docs/tests/unit/site-meta.test.mjs | 4 | 0 |  |
-| agileplus/python/src/agileplus_mcp/__init__.py | 4 | 0 |  |
+| agileplus/python/src/agileplus_mcp/**init**.py | 4 | 0 |  |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoKits/typescript-preservation/plugin-typescript/src/domain/index.ts | 4 | 0 | yes |
 | crates/agile-plus/crates/agileplus-application/src/events.rs | 4 | 0 |  |
 | crates/agile-plus/crates/agileplus-cli/src/lib.rs | 4 | 0 |  |
 | crates/agile-plus/crates/agileplus-sqlite/src/tests.rs | 4 | 0 |  |
 | crates/agile-plus/docs/tests/unit/site-meta.test.mjs | 4 | 0 |  |
-| crates/agile-plus/python/src/agileplus_mcp/__init__.py | 4 | 0 |  |
+| crates/agile-plus/python/src/agileplus_mcp/**init**.py | 4 | 0 |  |
 | crates/agileplus-api/src/middleware/mod.rs | 4 | 0 |  |
 | crates/agileplus-sqlite/src/tests.rs | 4 | 0 |  |
-| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/src/melosviz/analysis/__init__.py | 4 | 0 |  |
+| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/src/melosviz/analysis/**init**.py | 4 | 0 |  |
 | crates/fabric-gui/src/lib.rs | 4 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-api/src/middleware/mod.rs | 4 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-cli/src/lib.rs | 4 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-sqlite/src/tests.rs | 4 | 0 |  |
 | crates/hexa-kit/agileplus/docs/tests/unit/site-meta.test.mjs | 4 | 0 |  |
-| crates/hexa-kit/agileplus/python/src/agileplus_mcp/__init__.py | 4 | 0 |  |
-| crates/hexa-kit/python/phenosdk/src/pheno/auth/__init__.py | 4 | 0 |  |
-| crates/hexa-kit/python/phenosdk/src/pheno/vector/__init__.py | 4 | 0 |  |
-| crates/hexa-kit/python/src/agileplus_mcp/__init__.py | 4 | 0 |  |
+| crates/hexa-kit/agileplus/python/src/agileplus_mcp/**init**.py | 4 | 0 |  |
+| crates/hexa-kit/python/phenosdk/src/pheno/auth/**init**.py | 4 | 0 |  |
+| crates/hexa-kit/python/phenosdk/src/pheno/vector/**init**.py | 4 | 0 |  |
+| crates/hexa-kit/python/src/agileplus_mcp/**init**.py | 4 | 0 |  |
 | crates/phenotype-gfx/src/terrain/ports/mod.rs | 4 | 0 |  |
 | crates/phenotype-gfx/src/water/ports/mod.rs | 4 | 0 |  |
 | crates/policystack/docs/tests/unit/site-meta.test.mjs | 4 | 0 |  |
@@ -12348,52 +12348,52 @@ Sorted by LOC descending.
 | infrakit/scripts/bootstrap-dev.sh | 4 | 0 |  |
 | infrakit/scripts/validate-governance.sh | 4 | 0 |  |
 | phenotype-gfx/ports/mod.rs | 4 | 0 |  |
-| python/pheno_utils/src/pheno_utils/__init__.py | 4 | 0 |  |
-| python/phenosdk/src/pheno/auth/__init__.py | 4 | 0 |  |
-| python/phenosdk/src/pheno/vector/__init__.py | 4 | 0 |  |
-| python/src/agileplus_mcp/__init__.py | 4 | 0 |  |
-| python/src/agileplus_mcp/tools/__init__.py | 4 | 0 |  |
+| python/pheno_utils/src/pheno_utils/**init**.py | 4 | 0 |  |
+| python/phenosdk/src/pheno/auth/**init**.py | 4 | 0 |  |
+| python/phenosdk/src/pheno/vector/**init**.py | 4 | 0 |  |
+| python/src/agileplus_mcp/**init**.py | 4 | 0 |  |
+| python/src/agileplus_mcp/tools/**init**.py | 4 | 0 |  |
 | scripts/bootstrap-dev.sh | 4 | 0 | yes |
 | scripts/validate-governance.sh | 4 | 0 | yes |
 | servers/external/mcpforge/integrationtests/workspaces/clangd/src/another_consumer.cpp | 4 | 0 |  |
 | servers/external/mcpforge/integrationtests/workspaces/rust/src/clean.rs | 4 | 0 |  |
 | src/terrain/ports/mod.rs | 4 | 0 |  |
 | src/water/ports/mod.rs | 4 | 0 |  |
-| .archive/Repos-phenodocs-2026-07-15/dirty-files-as-of-2026-07-15/scripts/__init__.py | 3 | 0 |  |
+| .archive/Repos-phenodocs-2026-07-15/dirty-files-as-of-2026-07-15/scripts/**init**.py | 3 | 0 |  |
 | _archived/byteport/crates/byteport-transport/src/ports/mod.rs | 3 | 0 |  |
 | _archived/byteport/frontend/web/src-tauri/build.rs | 3 | 0 | yes |
-| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/utils/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/docker/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/nvms/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/cloud/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/modern/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/core/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/neon/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/supabase/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/turso/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/query/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/docker/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/cloud/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/modern/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/core/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/memory/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/planning/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/providers/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/tools/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/core/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/persistence/__init__.py | 3 | 0 |  |
-| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/testing/__init__.py | 3 | 0 |  |
-| agileplus-mcp/src/agileplus_mcp/__init__.py | 3 | 0 |  |
-| agileplus/agileplus-mcp/src/agileplus_mcp/__init__.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-cli/src/pheno_cli/app/utils/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/docker/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/nvms/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/cloud/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-deployment/src/pheno_deployment/platforms/modern/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/core/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/neon/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/supabase/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/platforms/turso/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/query/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/docker/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/cloud/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/deploy/platforms/modern/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/core/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/memory/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/planning/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/providers/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/agents/tools/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/orchestration/core/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/persistence/**init**.py | 3 | 0 |  |
+| agents/phenoagent/python/pheno-workflow/src/pheno_workflow/testing/**init**.py | 3 | 0 |  |
+| agileplus-mcp/src/agileplus_mcp/**init**.py | 3 | 0 |  |
+| agileplus/agileplus-mcp/src/agileplus_mcp/**init**.py | 3 | 0 |  |
 | agileplus/docs/tests/component/build-output.test.mjs | 3 | 0 |  |
 | agileplus/docs/tests/e2e/docsite.spec.ts | 3 | 1 |  |
-| bench/__init__.py | 3 | 0 |  |
-| bench/ablation/__init__.py | 3 | 0 |  |
+| bench/**init**.py | 3 | 0 |  |
+| bench/ablation/**init**.py | 3 | 0 |  |
 | bench/fixtures/long_horizon_example/schema-fixture/tests/test.sh | 3 | 0 |  |
-| bench/matrix/__init__.py | 3 | 0 |  |
-| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/__init__.py | 3 | 0 |  |
+| bench/matrix/**init**.py | 3 | 0 |  |
+| crates/agile-plus/agileplus-mcp/src/agileplus_mcp/**init**.py | 3 | 0 |  |
 | crates/agile-plus/crates/agileplus-dashboard/web/src/theme/index.ts | 3 | 0 | yes |
-| crates/agile-plus/dispatch-mcp/src/dispatch_mcp/__init__.py | 3 | 0 |  |
+| crates/agile-plus/dispatch-mcp/src/dispatch_mcp/**init**.py | 3 | 0 |  |
 | crates/agile-plus/docs/tests/component/build-output.test.mjs | 3 | 0 |  |
 | crates/agile-plus/docs/tests/e2e/docsite.spec.ts | 3 | 1 |  |
 | crates/argis-extensions/melosviz-wt/wp-33-tauri-scaffold/src-tauri/build.rs | 3 | 0 | yes |
@@ -12402,15 +12402,15 @@ Sorted by LOC descending.
 | crates/fabric-persist/src/schema.rs | 3 | 0 |  |
 | crates/focus-ffi/build.rs | 3 | 0 | yes |
 | crates/focus-ffi/src/bin/uniffi-bindgen.rs | 3 | 0 | yes |
-| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/__init__.py | 3 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/__init__.py | 3 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/src/agileplus_mcp/**init**.py | 3 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/src/agileplus_mcp/**init**.py | 3 | 0 |  |
 | crates/hexa-kit/agileplus/docs/tests/component/build-output.test.mjs | 3 | 0 |  |
 | crates/hexa-kit/agileplus/docs/tests/e2e/docsite.spec.ts | 3 | 1 |  |
-| crates/hexa-kit/python/phenosdk/src/pheno/__init__.py | 3 | 0 |  |
-| crates/hexa-kit/python/src/pheno/__init__.py | 3 | 0 |  |
+| crates/hexa-kit/python/phenosdk/src/pheno/**init**.py | 3 | 0 |  |
+| crates/hexa-kit/python/src/pheno/**init**.py | 3 | 0 |  |
 | crates/hexa-kit/templates/go/templates/go/domain/doc.go | 3 | 0 |  |
 | crates/hexa-kit/templates/swift/templates/swift/Sources/App/main.swift | 3 | 0 |  |
-| crates/phench/src/phench/__main__.py | 3 | 0 | yes |
+| crates/phench/src/phench/**main**.py | 3 | 0 | yes |
 | crates/phenotype-gfx/src/voxelizer.rs | 3 | 0 |  |
 | crates/phenotype-infrakit/crates/phenotype-bdd/src/application/mod.rs | 3 | 0 |  |
 | crates/policystack/.vitepress-dist/assets/journeys_index.md.Bw-gSuga.js | 3 | 0 |  |
@@ -12421,41 +12421,41 @@ Sorted by LOC descending.
 | crates/stashly/src/application/mod.rs | 3 | 0 |  |
 | crates/substrate-tui/src/lib.rs | 3 | 0 |  |
 | docs/.vitepress/theme/index.ts | 3 | 0 | yes |
-| driver-mcp/dispatch_mcp/__init__.py | 3 | 0 |  |
+| driver-mcp/dispatch_mcp/**init**.py | 3 | 0 |  |
 | evals/harbor/tasks/omlx-turbo-ssot/solution/solve.sh | 3 | 0 | yes |
 | fuzz/fuzz_target.rs | 3 | 0 |  |
 | infrakit/crates/phenotype-bdd/src/domain/ports/mod.rs | 3 | 0 |  |
 | infrakit/docs/tests/component/build-output.test.mjs | 3 | 0 |  |
 | infrakit/docs/tests/e2e/docsite.spec.ts | 3 | 1 |  |
-| pheno/__init__.py | 3 | 0 |  |
-| pheno/serve/__init__.py | 3 | 0 |  |
+| pheno/**init**.py | 3 | 0 |  |
+| pheno/serve/**init**.py | 3 | 0 |  |
 | phenotype-gfx/voxelizer.rs | 3 | 0 |  |
 | phenotype-infrakit/crates/phenotype-bdd/src/application/mod.rs | 3 | 0 |  |
-| python/phenosdk/src/pheno/__init__.py | 3 | 0 |  |
-| python/src/pheno/__init__.py | 3 | 0 |  |
+| python/phenosdk/src/pheno/**init**.py | 3 | 0 |  |
+| python/src/pheno/**init**.py | 3 | 0 |  |
 | registry/absorbed-crates/stashly/src/application/mod.rs | 3 | 0 |  |
-| scripts/doc-sync/__init__.py | 3 | 0 |  |
-| servers/substrate/dispatch_mcp/__init__.py | 3 | 0 |  |
+| scripts/doc-sync/**init**.py | 3 | 0 |  |
+| servers/substrate/dispatch_mcp/**init**.py | 3 | 0 |  |
 | sites/hwledger-landing/src/lib/index.ts | 3 | 0 | yes |
 | sites/phenokits-landing/src/lib/index.ts | 3 | 0 | yes |
 | src/voxelizer.rs | 3 | 0 |  |
 | absorption/pheno-forge/docs/absorbed/schemaforge/src/index.ts | 2 | 0 | yes |
 | agileplus/crates/agileplus-dashboard/web/vite.config.d.ts | 2 | 0 |  |
 | agileplus/docs/tests/playwright.config.ts | 2 | 0 |  |
-| agileplus/python/tests/bdd/__init__.py | 2 | 0 |  |
-| agileplus/python/tests/integration/__init__.py | 2 | 0 |  |
+| agileplus/python/tests/bdd/**init**.py | 2 | 0 |  |
+| agileplus/python/tests/integration/**init**.py | 2 | 0 |  |
 | crates/agile-plus/crates/agileplus-dashboard/web/vite.config.d.ts | 2 | 0 |  |
 | crates/agile-plus/docs/tests/playwright.config.ts | 2 | 0 |  |
-| crates/agile-plus/python/tests/bdd/__init__.py | 2 | 0 |  |
-| crates/agile-plus/python/tests/integration/__init__.py | 2 | 0 |  |
+| crates/agile-plus/python/tests/bdd/**init**.py | 2 | 0 |  |
+| crates/agile-plus/python/tests/integration/**init**.py | 2 | 0 |  |
 | crates/arch-test/src/lib.rs | 2 | 0 |  |
-| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/src/melosviz/__init__.py | 2 | 0 |  |
+| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/src/melosviz/**init**.py | 2 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-dashboard/web/vite.config.d.ts | 2 | 0 |  |
 | crates/hexa-kit/agileplus/docs/tests/playwright.config.ts | 2 | 0 |  |
-| crates/hexa-kit/agileplus/python/tests/bdd/__init__.py | 2 | 0 |  |
-| crates/hexa-kit/agileplus/python/tests/integration/__init__.py | 2 | 0 |  |
-| crates/hexa-kit/python/tests/bdd/__init__.py | 2 | 0 |  |
-| crates/hexa-kit/python/tests/integration/__init__.py | 2 | 0 |  |
+| crates/hexa-kit/agileplus/python/tests/bdd/**init**.py | 2 | 0 |  |
+| crates/hexa-kit/agileplus/python/tests/integration/**init**.py | 2 | 0 |  |
+| crates/hexa-kit/python/tests/bdd/**init**.py | 2 | 0 |  |
+| crates/hexa-kit/python/tests/integration/**init**.py | 2 | 0 |  |
 | crates/hexa-kit/templates/mojo/templates/mojo/main.mojo | 2 | 0 |  |
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/o/f1ea4330472a4c6ebcbfed6922919020/dependencies.zig | 2 | 0 |  |
 | crates/pheno-schema-port/src/adapters/mod.rs | 2 | 0 |  |
@@ -12467,35 +12467,35 @@ Sorted by LOC descending.
 | evals/harbor/tasks/omlx-turbo-ssot/tests/test_state.py | 2 | 1 |  |
 | infrakit/crates/phenotype-bdd/src/domain/mod.rs | 2 | 0 |  |
 | packages/docs/src/utils/index.ts | 2 | 0 | yes |
-| python/omlx_research/__init__.py | 2 | 0 |  |
-| python/tests/bdd/__init__.py | 2 | 0 |  |
-| python/tests/integration/__init__.py | 2 | 0 |  |
+| python/omlx_research/**init**.py | 2 | 0 |  |
+| python/tests/bdd/**init**.py | 2 | 0 |  |
+| python/tests/integration/**init**.py | 2 | 0 |  |
 | src/index.ts | 2 | 0 | yes |
-| .archive/Repos-phenodocs-2026-07-15/dirty-files-as-of-2026-07-15/tests/__init__.py | 1 | 0 |  |
+| .archive/Repos-phenodocs-2026-07-15/dirty-files-as-of-2026-07-15/tests/**init**.py | 1 | 0 |  |
 | _archived/byteport/frontend/web/src-tauri/src/adapters/mod.rs | 1 | 0 |  |
 | _archived/byteport/frontend/web/src/lib/index.ts | 1 | 0 | yes |
-| agileplus-mcp/src/agileplus_mcp/tools/__init__.py | 1 | 0 |  |
-| agileplus-mcp/tests/__init__.py | 1 | 0 |  |
-| agileplus-mcp/tests/bdd/__init__.py | 1 | 0 |  |
-| agileplus-mcp/tests/contract/__init__.py | 1 | 0 |  |
-| agileplus-mcp/tests/unit/__init__.py | 1 | 0 |  |
-| agileplus/agileplus-mcp/tests/__init__.py | 1 | 0 |  |
-| agileplus/agileplus-mcp/tests/bdd/__init__.py | 1 | 0 |  |
-| agileplus/agileplus-mcp/tests/contract/__init__.py | 1 | 0 |  |
-| agileplus/agileplus-mcp/tests/unit/__init__.py | 1 | 0 |  |
+| agileplus-mcp/src/agileplus_mcp/tools/**init**.py | 1 | 0 |  |
+| agileplus-mcp/tests/**init**.py | 1 | 0 |  |
+| agileplus-mcp/tests/bdd/**init**.py | 1 | 0 |  |
+| agileplus-mcp/tests/contract/**init**.py | 1 | 0 |  |
+| agileplus-mcp/tests/unit/**init**.py | 1 | 0 |  |
+| agileplus/agileplus-mcp/tests/**init**.py | 1 | 0 |  |
+| agileplus/agileplus-mcp/tests/bdd/**init**.py | 1 | 0 |  |
+| agileplus/agileplus-mcp/tests/contract/**init**.py | 1 | 0 |  |
+| agileplus/agileplus-mcp/tests/unit/**init**.py | 1 | 0 |  |
 | agileplus/crates/agileplus-error-core/src/lib.rs | 1 | 0 |  |
 | agileplus/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
-| agileplus/python/tests/bdd/steps/__init__.py | 1 | 0 |  |
+| agileplus/python/tests/bdd/steps/**init**.py | 1 | 0 |  |
 | agileplus/templates/static/htmx.min.js | 1 | 0 |  |
 | archives/zz-archive-phenotype-registry/docs/absorption/PhenoLang/registry-preservation-2026-06-20/crates/phenotype-ports-canonical/src/lib.rs | 1 | 0 |  |
-| crates/agile-plus/agileplus-mcp/tests/__init__.py | 1 | 0 |  |
-| crates/agile-plus/agileplus-mcp/tests/bdd/__init__.py | 1 | 0 |  |
-| crates/agile-plus/agileplus-mcp/tests/contract/__init__.py | 1 | 0 |  |
-| crates/agile-plus/agileplus-mcp/tests/unit/__init__.py | 1 | 0 |  |
+| crates/agile-plus/agileplus-mcp/tests/**init**.py | 1 | 0 |  |
+| crates/agile-plus/agileplus-mcp/tests/bdd/**init**.py | 1 | 0 |  |
+| crates/agile-plus/agileplus-mcp/tests/contract/**init**.py | 1 | 0 |  |
+| crates/agile-plus/agileplus-mcp/tests/unit/**init**.py | 1 | 0 |  |
 | crates/agile-plus/crates/agileplus-api-types/src/lib.rs | 1 | 0 |  |
 | crates/agile-plus/crates/agileplus-plugin-core/src/lib.rs | 1 | 0 |  |
 | crates/agile-plus/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
-| crates/agile-plus/python/tests/bdd/steps/__init__.py | 1 | 0 |  |
+| crates/agile-plus/python/tests/bdd/steps/**init**.py | 1 | 0 |  |
 | crates/agile-plus/templates/static/htmx.min.js | 1 | 0 |  |
 | crates/agileplus-api-types/src/lib.rs | 1 | 0 |  |
 | crates/agileplus-error-core/src/lib.rs | 1 | 0 |  |
@@ -12503,17 +12503,17 @@ Sorted by LOC descending.
 | crates/conft/crates/conft/typescript/packages/conft/eslint.config.mjs | 1 | 0 |  |
 | crates/conft/crates/conft/typescript/packages/conft/vitest.config.ts | 1 | 0 |  |
 | crates/gateway/src/conn_pool.rs | 1 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/tests/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/tests/bdd/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/tests/contract/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/agileplus-mcp/tests/unit/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/tests/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/tests/bdd/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/tests/contract/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/agileplus/agileplus-mcp/tests/unit/__init__.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/tests/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/tests/bdd/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/tests/contract/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus-mcp/tests/unit/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/tests/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/tests/bdd/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/tests/contract/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus/agileplus-mcp/tests/unit/**init**.py | 1 | 0 |  |
 | crates/hexa-kit/agileplus/crates/agileplus-error-core/src/lib.rs | 1 | 0 |  |
 | crates/hexa-kit/agileplus/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
-| crates/hexa-kit/agileplus/python/tests/bdd/steps/__init__.py | 1 | 0 |  |
+| crates/hexa-kit/agileplus/python/tests/bdd/steps/**init**.py | 1 | 0 |  |
 | crates/hexa-kit/agileplus/templates/static/htmx.min.js | 1 | 0 |  |
 | crates/hexa-kit/crates/phenotype-analytics/src/lib.rs | 1 | 0 |  |
 | crates/hexa-kit/crates/phenotype-casbin-wrapper/src/lib.rs | 1 | 0 |  |
@@ -12522,15 +12522,15 @@ Sorted by LOC descending.
 | crates/hexa-kit/crates/phenotype-ports-canonical/src/lib.rs | 1 | 0 |  |
 | crates/hexa-kit/crates/phenotype-process/src/lib.rs | 1 | 0 |  |
 | crates/hexa-kit/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
-| crates/hexa-kit/python/pheno-atoms/tests/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/python/phenosdk/src/pheno/adapters/__init__.py | 1 | 0 |  |
-| crates/hexa-kit/python/tests/bdd/steps/__init__.py | 1 | 0 |  |
+| crates/hexa-kit/python/pheno-atoms/tests/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/python/phenosdk/src/pheno/adapters/**init**.py | 1 | 0 |  |
+| crates/hexa-kit/python/tests/bdd/steps/**init**.py | 1 | 0 |  |
 | crates/hexa-kit/src/memory.rs | 1 | 0 |  |
 | crates/hexa-kit/src/snapshot.rs | 1 | 0 |  |
 | crates/hexa-kit/src/store.rs | 1 | 0 |  |
 | crates/hexa-kit/templates/go/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
 | crates/hexa-kit/templates/hexagon/go/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
-| crates/hexa-kit/templates/hexagon/python/tests/__init__.py | 1 | 0 |  |
+| crates/hexa-kit/templates/hexagon/python/tests/**init**.py | 1 | 0 |  |
 | crates/hexa-kit/templates/kotlin/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
 | crates/hexa-kit/templates/mojo/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
 | crates/hexa-kit/templates/static/htmx.min.js | 1 | 0 |  |
@@ -12539,8 +12539,8 @@ Sorted by LOC descending.
 | crates/logify/src/infrastructure/mod.rs | 1 | 0 |  |
 | crates/logkit/src/infrastructure/mod.rs | 1 | 0 |  |
 | crates/pheno-data-from-phenoData/smoke-tests/src/lib.rs | 1 | 0 |  |
-| crates/pheno-registry-python/python/__init__.py | 1 | 0 |  |
-| crates/pheno-registry-python/python/tests/__init__.py | 1 | 0 |  |
+| crates/pheno-registry-python/python/**init**.py | 1 | 0 |  |
+| crates/pheno-registry-python/python/tests/**init**.py | 1 | 0 |  |
 | crates/phenotype-cache-adapter/src/lib.rs | 1 | 0 |  |
 | crates/phenotype-crypto/src/lib.rs | 1 | 0 |  |
 | crates/phenotype-git-core/src/lib.rs | 1 | 0 |  |
@@ -12624,11 +12624,11 @@ Sorted by LOC descending.
 | crates/policystack/.vitepress-dist/assets/zh-TW_index.md.EhG6Oix6.lean.js | 1 | 0 |  |
 | crates/policystack/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
 | docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
-| driver-mcp/dispatch_mcp/adapters/__init__.py | 1 | 0 |  |
-| driver-mcp/dispatch_mcp/core/__init__.py | 1 | 0 |  |
+| driver-mcp/dispatch_mcp/adapters/**init**.py | 1 | 0 |  |
+| driver-mcp/dispatch_mcp/core/**init**.py | 1 | 0 |  |
 | forgecode-fork/src/lib.rs | 1 | 0 |  |
-| harness/harbor/__init__.py | 1 | 0 |  |
-| harness/self_improvement/__init__.py | 1 | 0 |  |
+| harness/harbor/**init**.py | 1 | 0 |  |
+| harness/self_improvement/**init**.py | 1 | 0 |  |
 | hfscope/internal/server/static/htmx-2.0.3.min.js | 1 | 0 |  |
 | infrakit/crates/phenotype-cache-adapter/src/lib.rs | 1 | 0 |  |
 | infrakit/crates/phenotype-crypto/src/lib.rs | 1 | 0 |  |
@@ -12643,83 +12643,83 @@ Sorted by LOC descending.
 | infrakit/crates/phenotype-test-infra/src/lib.rs | 1 | 0 |  |
 | infrakit/docs/tests/helpers/site-meta.mjs | 1 | 0 |  |
 | koosha-portfolio/src/env.d.ts | 1 | 0 |  |
-| perf/__init__.py | 1 | 0 |  |
-| python/omlx_research/cli/tests/__init__.py | 1 | 0 |  |
-| python/pheno-atoms/tests/__init__.py | 1 | 0 |  |
-| python/pheno-mcp/tests/__init__.py | 1 | 0 |  |
-| python/pheno_utils/src/pheno_utils/commands/__init__.py | 1 | 0 |  |
-| python/phenosdk/src/pheno/adapters/__init__.py | 1 | 0 |  |
-| python/tests/bdd/steps/__init__.py | 1 | 0 |  |
-| researchintel/mcp/__init__.py | 1 | 0 |  |
-| scripts/__init__.py | 1 | 0 |  |
+| perf/**init**.py | 1 | 0 |  |
+| python/omlx_research/cli/tests/**init**.py | 1 | 0 |  |
+| python/pheno-atoms/tests/**init**.py | 1 | 0 |  |
+| python/pheno-mcp/tests/**init**.py | 1 | 0 |  |
+| python/pheno_utils/src/pheno_utils/commands/**init**.py | 1 | 0 |  |
+| python/phenosdk/src/pheno/adapters/**init**.py | 1 | 0 |  |
+| python/tests/bdd/steps/**init**.py | 1 | 0 |  |
+| researchintel/mcp/**init**.py | 1 | 0 |  |
+| scripts/**init**.py | 1 | 0 |  |
 | servers/external/mcpforge/integrationtests/workspaces/clangd/include/helper.hpp | 1 | 0 |  |
-| servers/substrate/dispatch_mcp/adapters/__init__.py | 1 | 0 |  |
-| servers/substrate/dispatch_mcp/core/__init__.py | 1 | 0 |  |
-| src/application/__init__.ts | 1 | 0 |  |
+| servers/substrate/dispatch_mcp/adapters/**init**.py | 1 | 0 |  |
+| servers/substrate/dispatch_mcp/core/**init**.py | 1 | 0 |  |
+| src/application/**init**.ts | 1 | 0 |  |
 | src/hash.rs | 1 | 0 |  |
 | src/memory.rs | 1 | 0 |  |
 | src/snapshot.rs | 1 | 0 |  |
 | src/store.rs | 1 | 0 |  |
 | src/tokens.ts | 1 | 0 |  |
 | templates/static/htmx.min.js | 1 | 0 |  |
-| tests/__init__.py | 1 | 0 |  |
-| tests/trace_store/__init__.py | 1 | 0 |  |
+| tests/**init**.py | 1 | 0 |  |
+| tests/trace_store/**init**.py | 1 | 0 |  |
 | _archived/byteport/frontend/web/src/components/settings.svelte | 0 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/__init__.py | 0 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/**init**.py | 0 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/renderer.py | 0 | 0 |  |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/__init__.py | 0 | 0 |  |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/**init**.py | 0 | 0 |  |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/manager.py | 0 | 0 |  |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/rls/__init__.py | 0 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/__init__.py | 0 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/monitoring/__init__.py | 0 | 0 |  |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/streaming/__init__.py | 0 | 0 |  |
-| agileplus/python/src/agileplus_proto/gen/__init__.py | 0 | 0 |  |
-| agileplus/python/src/agileplus_proto/gen/agileplus/__init__.py | 0 | 0 |  |
-| agileplus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py | 0 | 0 |  |
-| agileplus/python/tests/__init__.py | 0 | 0 |  |
-| agileplus/python/tests/contract/__init__.py | 0 | 0 |  |
-| audits/org-audit-snapshots/audits/drift-detector/tests/__init__.py | 0 | 0 |  |
-| audits/org-audit-snapshots/audits/framework-lint/tests/__init__.py | 0 | 0 |  |
-| audits/org-audit-snapshots/audits/predict-dry/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/drift-detector/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/framework-lint/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/predict-dry/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/drift-detector/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/framework-lint/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/predict-dry/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/drift-detector/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/framework-lint/tests/__init__.py | 0 | 0 |  |
-| audits/org-audits/predict-dry/tests/__init__.py | 0 | 0 |  |
-| beads/__init__.py | 0 | 0 |  |
-| beads/agileplus_adapter/__init__.py | 0 | 0 |  |
-| crates/agile-plus/python/src/agileplus_proto/gen/__init__.py | 0 | 0 |  |
-| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/__init__.py | 0 | 0 |  |
-| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py | 0 | 0 |  |
-| crates/agile-plus/python/src/phenotype_traceability/__init__.py | 0 | 0 |  |
-| crates/agile-plus/python/tests/__init__.py | 0 | 0 |  |
-| crates/agile-plus/python/tests/contract/__init__.py | 0 | 0 |  |
-| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/tests/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/agileplus/python/tests/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/agileplus/python/tests/contract/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/python/src/agileplus_proto/gen/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/v1/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/python/tests/__init__.py | 0 | 0 |  |
-| crates/hexa-kit/python/tests/contract/__init__.py | 0 | 0 |  |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/rls/**init**.py | 0 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/**init**.py | 0 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/monitoring/**init**.py | 0 | 0 |  |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/streaming/**init**.py | 0 | 0 |  |
+| agileplus/python/src/agileplus_proto/gen/**init**.py | 0 | 0 |  |
+| agileplus/python/src/agileplus_proto/gen/agileplus/**init**.py | 0 | 0 |  |
+| agileplus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py | 0 | 0 |  |
+| agileplus/python/tests/**init**.py | 0 | 0 |  |
+| agileplus/python/tests/contract/**init**.py | 0 | 0 |  |
+| audits/org-audit-snapshots/audits/drift-detector/tests/**init**.py | 0 | 0 |  |
+| audits/org-audit-snapshots/audits/framework-lint/tests/**init**.py | 0 | 0 |  |
+| audits/org-audit-snapshots/audits/predict-dry/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/drift-detector/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/framework-lint/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/predict-dry/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/drift-detector/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/framework-lint/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/predict-dry/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/drift-detector/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/framework-lint/tests/**init**.py | 0 | 0 |  |
+| audits/org-audits/predict-dry/tests/**init**.py | 0 | 0 |  |
+| beads/**init**.py | 0 | 0 |  |
+| beads/agileplus_adapter/**init**.py | 0 | 0 |  |
+| crates/agile-plus/python/src/agileplus_proto/gen/**init**.py | 0 | 0 |  |
+| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/**init**.py | 0 | 0 |  |
+| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py | 0 | 0 |  |
+| crates/agile-plus/python/src/phenotype_traceability/**init**.py | 0 | 0 |  |
+| crates/agile-plus/python/tests/**init**.py | 0 | 0 |  |
+| crates/agile-plus/python/tests/contract/**init**.py | 0 | 0 |  |
+| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/tests/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/agileplus/python/tests/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/agileplus/python/tests/contract/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/python/src/agileplus_proto/gen/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/v1/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/python/tests/**init**.py | 0 | 0 |  |
+| crates/hexa-kit/python/tests/contract/**init**.py | 0 | 0 |  |
 | crates/policystack/scripts/federation/a_.py | 0 | 0 |  |
-| crates/policystack/tests/__init__.py | 0 | 0 |  |
-| docs/specs/pheno-specs/specs/platform/gateway/__init__.py | 0 | 0 |  |
-| python/omlx_research/scripts/__init__.py | 0 | 0 |  |
-| python/omlx_research/tests/__init__.py | 0 | 0 |  |
-| python/src/agileplus_proto/gen/__init__.py | 0 | 0 |  |
-| python/src/agileplus_proto/gen/agileplus/__init__.py | 0 | 0 |  |
-| python/src/agileplus_proto/gen/agileplus/v1/__init__.py | 0 | 0 |  |
-| python/tests/__init__.py | 0 | 0 |  |
-| python/tests/contract/__init__.py | 0 | 0 |  |
-| servers/forge3-bridge/tests/__init__.py | 0 | 0 |  |
+| crates/policystack/tests/**init**.py | 0 | 0 |  |
+| docs/specs/pheno-specs/specs/platform/gateway/**init**.py | 0 | 0 |  |
+| python/omlx_research/scripts/**init**.py | 0 | 0 |  |
+| python/omlx_research/tests/**init**.py | 0 | 0 |  |
+| python/src/agileplus_proto/gen/**init**.py | 0 | 0 |  |
+| python/src/agileplus_proto/gen/agileplus/**init**.py | 0 | 0 |  |
+| python/src/agileplus_proto/gen/agileplus/v1/**init**.py | 0 | 0 |  |
+| python/tests/**init**.py | 0 | 0 |  |
+| python/tests/contract/**init**.py | 0 | 0 |  |
+| servers/forge3-bridge/tests/**init**.py | 0 | 0 |  |
 
 ## Docs over 200 lines (2408)
 
@@ -16983,7 +16983,7 @@ Repo rule: target 350 lines. Includes every file in the section above.
 | crates/argis-extensions/services/promptadapter/datasets/manager.py | 388 | 38 | 0 | crates |
 | crates/dag-scheduler/src/main.rs | 388 | 38 | 0 | crates |
 | crates/harness-native/src/dispatcher.rs | 388 | 38 | 0 | crates |
-| crates/heliosbench/src/helios_bench/__init__.py | 388 | 38 | 0 | crates |
+| crates/heliosbench/src/helios_bench/**init**.py | 388 | 38 | 0 | crates |
 | crates/tokn-tokenledger/src/routing/adapters.rs | 388 | 38 | 0 | crates |
 | promptadapter/datasets/manager.py | 388 | 38 | 0 | promptadapter |
 | agents/phenoagent/phenotype-skills/src/lib.rs | 387 | 37 | 3 | agents |
@@ -17195,7 +17195,7 @@ Repo rule: target 350 lines. Includes every file in the section above.
 | crates/phenotype-journey-core/src/lib.rs | 357 | 7 | 6 | crates |
 | include/phenotype_gfx.hpp | 357 | 7 | 0 | include |
 | pheno/evidence/atif.py | 357 | 7 | 0 | pheno |
-| python/omlx_research/nanovm/__init__.py | 357 | 7 | 0 | python |
+| python/omlx_research/nanovm/**init**.py | 357 | 7 | 0 | python |
 | tests/test_eval_contract_cli.py | 357 | 7 | 15 | tests |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/adapters/cloud/neon.py | 356 | 6 | 0 | agents |
 | bench/stability.py | 356 | 6 | 0 | bench |
@@ -21914,7 +21914,7 @@ Includes every file in the section above.
 | crates/argis-extensions/services/promptadapter/datasets/manager.py | 388 | 38 |  | crates |
 | crates/dag-scheduler/src/main.rs | 388 | 38 |  | crates |
 | crates/harness-native/src/dispatcher.rs | 388 | 38 |  | crates |
-| crates/heliosbench/src/helios_bench/__init__.py | 388 | 38 |  | crates |
+| crates/heliosbench/src/helios_bench/**init**.py | 388 | 38 |  | crates |
 | crates/hexa-kit/docs/worklogs/LOC_REDUCTION_INITIATIVE_FINAL_STATUS.md | 388 | 38 |  | crates |
 | crates/tokn-tokenledger/src/routing/adapters.rs | 388 | 38 |  | crates |
 | docs/worklogs/LOC_REDUCTION_INITIATIVE_FINAL_STATUS.md | 388 | 38 |  | docs |
@@ -22355,7 +22355,7 @@ Includes every file in the section above.
 | docs/worklogs/MERGE_PR477_CONSOLIDATION_2026-03-30.md | 357 | 7 |  | docs |
 | include/phenotype_gfx.hpp | 357 | 7 |  | include |
 | pheno/evidence/atif.py | 357 | 7 |  | pheno |
-| python/omlx_research/nanovm/__init__.py | 357 | 7 |  | python |
+| python/omlx_research/nanovm/**init**.py | 357 | 7 |  | python |
 | tests/test_eval_contract_cli.py | 357 | 7 |  | tests |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/db/EXAMPLES.md | 356 | 6 |  | agents |
 | agents/phenoagent/python/pheno-kits/src/pheno_kits/infra/adapters/cloud/neon.py | 356 | 6 |  | agents |
@@ -22458,14 +22458,14 @@ Includes every file in the section above.
 | _archived/byteport/frontend/web/src/components/settings.svelte |
 | _archived/byteport/tr |
 | _log_pr.txt |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/__init__.py |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/**init**.py |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/renderer.py |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/__init__.py |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/**init**.py |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/manager.py |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/rls/__init__.py |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/__init__.py |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/monitoring/__init__.py |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/streaming/__init__.py |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/rls/**init**.py |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/**init**.py |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/monitoring/**init**.py |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/streaming/**init**.py |
 | agileplus-mcp/tests/bdd/features/.gitkeep |
 | agileplus-mcp/tests/contract/.gitkeep |
 | agileplus/agileplus-mcp/tests/bdd/features/.gitkeep |
@@ -22483,30 +22483,30 @@ Includes every file in the section above.
 | agileplus/docs/specs/003-agileplus-platform-completion/research/source-register.csv |
 | agileplus/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | agileplus/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
-| agileplus/python/src/agileplus_proto/gen/__init__.py |
-| agileplus/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| agileplus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| agileplus/python/tests/__init__.py |
-| agileplus/python/tests/contract/__init__.py |
+| agileplus/python/src/agileplus_proto/gen/**init**.py |
+| agileplus/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| agileplus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| agileplus/python/tests/**init**.py |
+| agileplus/python/tests/contract/**init**.py |
 | archives/zz-archive-phenotype-registry/docs/absorption/Profila/patches/local-ahead.patch |
-| audits/org-audit-snapshots/audits/drift-detector/tests/__init__.py |
-| audits/org-audit-snapshots/audits/framework-lint/tests/__init__.py |
-| audits/org-audit-snapshots/audits/predict-dry/tests/__init__.py |
+| audits/org-audit-snapshots/audits/drift-detector/tests/**init**.py |
+| audits/org-audit-snapshots/audits/framework-lint/tests/**init**.py |
+| audits/org-audit-snapshots/audits/predict-dry/tests/**init**.py |
 | audits/org-audit-snapshots/audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/drift-detector/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/framework-lint/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/predict-dry/tests/__init__.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/drift-detector/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/framework-lint/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/predict-dry/tests/**init**.py |
 | audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/drift-detector/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/framework-lint/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/predict-dry/tests/__init__.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/drift-detector/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/framework-lint/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/predict-dry/tests/**init**.py |
 | audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| audits/org-audits/drift-detector/tests/__init__.py |
-| audits/org-audits/framework-lint/tests/__init__.py |
-| audits/org-audits/predict-dry/tests/__init__.py |
+| audits/org-audits/drift-detector/tests/**init**.py |
+| audits/org-audits/framework-lint/tests/**init**.py |
+| audits/org-audits/predict-dry/tests/**init**.py |
 | audits/org-audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| beads/__init__.py |
-| beads/agileplus_adapter/__init__.py |
+| beads/**init**.py |
+| beads/agileplus_adapter/**init**.py |
 | bench/results/2026-07-04/_wsl_install_2026-07-17T02-50-16Z.log.err |
 | bench/results/2026-07-04/_wsl_install_2026-07-17T02-55-43Z.log.err |
 | bench/results/2026-07-04/pheno_serve_start.err |
@@ -22532,14 +22532,14 @@ Includes every file in the section above.
 | crates/agile-plus/docs/specs/003-agileplus-platform-completion/research/source-register.csv |
 | crates/agile-plus/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | crates/agile-plus/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
-| crates/agile-plus/python/src/agileplus_proto/gen/__init__.py |
-| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| crates/agile-plus/python/src/phenotype_traceability/__init__.py |
-| crates/agile-plus/python/tests/__init__.py |
-| crates/agile-plus/python/tests/contract/__init__.py |
+| crates/agile-plus/python/src/agileplus_proto/gen/**init**.py |
+| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| crates/agile-plus/python/src/phenotype_traceability/**init**.py |
+| crates/agile-plus/python/tests/**init**.py |
+| crates/agile-plus/python/tests/contract/**init**.py |
 | crates/apisync/.env.example |
-| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/tests/__init__.py |
+| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/tests/**init**.py |
 | crates/clap-ext/AGENTS.md |
 | crates/clap-ext/CLAUDE.md |
 | crates/eidolon-sandbox/assets/canned-rootfs/minimal-tree/etc/systemd/system/.gitkeep |
@@ -22567,11 +22567,11 @@ Includes every file in the section above.
 | crates/hexa-kit/agileplus/docs/specs/003-agileplus-platform-completion/research/source-register.csv |
 | crates/hexa-kit/agileplus/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | crates/hexa-kit/agileplus/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/__init__.py |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| crates/hexa-kit/agileplus/python/tests/__init__.py |
-| crates/hexa-kit/agileplus/python/tests/contract/__init__.py |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/**init**.py |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| crates/hexa-kit/agileplus/python/tests/**init**.py |
+| crates/hexa-kit/agileplus/python/tests/contract/**init**.py |
 | crates/hexa-kit/docs/changes/.gitkeep |
 | crates/hexa-kit/docs/checklists/.gitkeep |
 | crates/hexa-kit/docs/guides/.gitkeep |
@@ -22585,11 +22585,11 @@ Includes every file in the section above.
 | crates/hexa-kit/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | crates/hexa-kit/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
 | crates/hexa-kit/docs/worklogs/data/.gitkeep |
-| crates/hexa-kit/python/src/agileplus_proto/gen/__init__.py |
-| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| crates/hexa-kit/python/tests/__init__.py |
-| crates/hexa-kit/python/tests/contract/__init__.py |
+| crates/hexa-kit/python/src/agileplus_proto/gen/**init**.py |
+| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| crates/hexa-kit/python/tests/**init**.py |
+| crates/hexa-kit/python/tests/contract/**init**.py |
 | crates/hexa-kit/templates/genesis/docs/intent/prompts/.gitkeep |
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/h/53778dde145b2dab155f3ea8443ebba7.txt |
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/h/timestamp |
@@ -22600,7 +22600,7 @@ Includes every file in the section above.
 | crates/policystack/.vitepress-dist/vp-icons.css |
 | crates/policystack/policies/suggestions/.gitkeep |
 | crates/policystack/scripts/federation/a_.py |
-| crates/policystack/tests/__init__.py |
+| crates/policystack/tests/**init**.py |
 | docs/acceptance-contracts/.gitkeep |
 | docs/changes/.gitkeep |
 | docs/checklists/.gitkeep |
@@ -22630,7 +22630,7 @@ Includes every file in the section above.
 | docs/specs/pheno-specs/specs/platform/004-modules-and-cycles/tasks/.gitkeep |
 | docs/specs/pheno-specs/specs/platform/build-system/docs/research/SOTA-Build-Systems.md |
 | docs/specs/pheno-specs/specs/platform/build-system/docs/research/SOTA-CI-CD-Platforms.md |
-| docs/specs/pheno-specs/specs/platform/gateway/__init__.py |
+| docs/specs/pheno-specs/specs/platform/gateway/**init**.py |
 | docs/worklogs/data/.gitkeep |
 | iac/.grade-reports/deny.raw |
 | kitty-specs/001-spec-driven-development-engine/tasks/.gitkeep |
@@ -22643,15 +22643,15 @@ Includes every file in the section above.
 | phenotype-governance/README.md |
 | phenotype-hub/tests/.gitkeep |
 | py.typed |
-| python/omlx_research/scripts/__init__.py |
-| python/omlx_research/tests/__init__.py |
-| python/src/agileplus_proto/gen/__init__.py |
-| python/src/agileplus_proto/gen/agileplus/__init__.py |
-| python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| python/tests/__init__.py |
-| python/tests/contract/__init__.py |
+| python/omlx_research/scripts/**init**.py |
+| python/omlx_research/tests/**init**.py |
+| python/src/agileplus_proto/gen/**init**.py |
+| python/src/agileplus_proto/gen/agileplus/**init**.py |
+| python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| python/tests/**init**.py |
+| python/tests/contract/**init**.py |
 | sbom/pheno-workspace.cdx.json |
-| servers/forge3-bridge/tests/__init__.py |
+| servers/forge3-bridge/tests/**init**.py |
 | state/.gitkeep |
 | state/_scrape_2026-07-03.err |
 | state/ornith-8b-mtp_llamabench_CUDA0.json |

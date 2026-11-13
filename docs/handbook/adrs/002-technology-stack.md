@@ -21,12 +21,14 @@ Rust delivers memory safety and deterministic performance with no GC pauses, whi
 ## Consequences
 
 ### Positive
+
 - Single language per layer reduces context-switching cost
 - Rust ownership model eliminates whole classes of runtime bugs
 - TanStack's headless primitives avoid opinionated UI lock-in
 - FastMCP keeps Python services thin and MCP-compliant by default
 
 ### Negative / Trade-offs
+
 - Rust compile times are longer than Go or TypeScript
 - Rust learning curve is steep for developers new to the ownership model
 - Mixing three languages requires discipline to avoid layering violations

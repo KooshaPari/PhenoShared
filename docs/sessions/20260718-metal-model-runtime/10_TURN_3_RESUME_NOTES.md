@@ -100,6 +100,7 @@ message; clamp `window_size` so a degenerate `window_size = 0` key
 still matches scalar fallbacks.
 
 **Coverage** (16 unit + 3 integration tests):
+
 - valid inputs round-trip the expected `ShapeSignature`
 - `window_size > seq_len` is clamped
 - `window_size == 0` is clamped to 1
@@ -152,6 +153,7 @@ New doctor check `mlx_lm_required_by_command(cmd)` upgrades
 `{"run", "serve", "eval"}` and `mlx_lm` is missing.
 
 **Coverage** (6 helper tests + 3 doctor tests):
+
 - helper raises when `mlx_lm` is hidden via `sys.modules`
 - helper returns the module when present
 - result is cached across calls

@@ -142,11 +142,13 @@ The Phenotype ecosystem is in **stable, high-quality state** with strong archite
 | platforms/thegent | Go + Rust + Python | 142s | 12s | 89s | 18s |
 
 **Target Q2 2026:**
+
 - Cold builds: ≤60s (incremental), ≤90s (cold)
 - Test suite: ≤45s (all repos combined)
 - Lint pass: ≤10s total
 
 **Optimization Opportunities:**
+
 - Reduce thegent cold build via crate splitting (routes.rs decomposition saves ~8s)
 - Parallel linting (oxlint, ruff, clippy in parallel: 18s → 6s)
 - Incremental build cache optimization (DependencyMap pre-computation)
@@ -239,6 +241,7 @@ The Phenotype ecosystem is in **stable, high-quality state** with strong archite
 | platforms/thegent | ✅ 88% | ⚠️ 82% | ✅ 85% | **B+ (85%)** |
 
 **Areas for Improvement:**
+
 - **thegent:** routes.rs and sqlite/lib.rs merge adapter logic with handlers; split into focused files (P1.3 in Phase 1 roadmap)
 - **heliosCLI:** Config loading scattered across 3 modules; consolidate via unified config loader (P2.2 in roadmap)
 - **All repos:** Event sourcing patterns present but not formalized; standardize via phenotype-event-sourcing crate (Phase 2)
@@ -495,6 +498,7 @@ alerts:
 **Participants:** Tech Lead, QA Lead, Architecture Lead
 
 **Agenda (45 minutes):**
+
 1. Review baseline vs. actual (10 min)
 2. Discuss blockers & challenges (15 min)
 3. Adjust targets if needed (10 min)
@@ -503,6 +507,7 @@ alerts:
 ### Quarterly Ecosystem Assessment (Q2: 2026-06-30)
 
 **Deliverable:** Updated ECOSYSTEM_HEALTH_METRICS.md with:
+
 - New baseline metrics (June snapshot)
 - Q2 targets achieved vs. missed
 - Q3 target proposal

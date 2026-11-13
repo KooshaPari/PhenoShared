@@ -26,6 +26,7 @@ Create the `agileplus-artifacts` crate with MinIO/S3-compatible object storage f
 ## Objective
 
 Implement:
+
 - MinIO/S3 connection with configurable endpoint
 - 4 managed buckets for different artifact types
 - ArtifactStore trait with CRUD operations
@@ -36,6 +37,7 @@ Implement:
 ## Architecture
 
 The artifact storage layer provides:
+
 - **Bucket organization** by purpose (artifacts, events, audit, snapshots)
 - **Lifecycle management** for archival and cleanup
 - **Multipart upload** for efficiency and resumability
@@ -49,6 +51,7 @@ The artifact storage layer provides:
 Create a new crate at `crates/agileplus-artifacts/`.
 
 **Cargo.toml:**
+
 ```toml
 [package]
 name = "agileplus-artifacts"
@@ -72,6 +75,7 @@ tokio = { version = "1", features = ["full"] }
 ```
 
 **Directory structure:**
+
 ```
 crates/agileplus-artifacts/
 ├── Cargo.toml
@@ -85,6 +89,7 @@ crates/agileplus-artifacts/
 ```
 
 **lib.rs content:**
+
 ```rust
 pub mod archival;
 pub mod bucket;

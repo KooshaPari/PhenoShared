@@ -75,7 +75,7 @@ _Verified against root `Cargo.toml` + `crates/` layout._
 
 | # | Question | Suggested method |
 |---|----------|------------------|
-| R1 | How many distinct `NotFound` / `Serialization` variants exist **shelf-wide**? | `rg 'NotFound\(|Serialization'` on `CodeProjects/Phenotype/repos` (exclude `target/`, `.git`). |
+| R1 | How many distinct `NotFound` / `Serialization` variants exist **shelf-wide**? | `rg 'NotFound\(|Serialization'` on `CodeProjects/Phenotype/repos` (exclude `target/`,`.git`). |
 | R2 | Which crates already use **thiserror** 2.x vs 1.x? | `rg 'thiserror'` + `Cargo.toml` version pins. |
 | R3 | Are **inner** nested crates referenced by any CI job? | Search workflows for path `phenotype-event-sourcing/phenotype-event-sourcing`. |
 | R4 | Duplicate **Repository** trait definitions across repos? | `rg 'trait Repository'` limited to `libs/` + `crates/`. |

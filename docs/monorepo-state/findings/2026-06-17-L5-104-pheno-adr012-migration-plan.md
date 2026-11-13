@@ -5,6 +5,7 @@
 **Author:** Forge session (&lt;REDACTED&gt; active)
 **Worklog:** `worklogs/L5-104-pheno-adr012-migration-2026-06-17.json` (to be created per §6)
 **Inputs:**
+
 - `findings/2026-06-15-CONFIG_CONSOLIDATION-v1.md` (subagent-B v6 audit, pre-ADR-022)
 - `docs/adr/2026-06-15/ADR-022-config-consolidation-two-crate-split.md:1-72` (ratified 2026-06-15)
 - `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md:89-117` (parent L5-104 audit, this repo)
@@ -64,6 +65,7 @@ For every file path Dmouse92's ADR-012 branch touches, we queried the GitHub Com
 | `crates/phenotype-shared-config/CANONICAL.md` | **0** | **0** | DOES NOT EXIST on KP. Dmouse92's is genuinely new. |
 
 **Summary:**
+
 - **0 of 19 sampled file paths** has any KP/main commit since 2026-06-15. The KP/pheno repo has been dormant on these files since the Dmouse92 ADR-012 work began.
 - **4 of 19 files do not exist on KP/main at all** (`docs/slsa.md`, `.github/workflows/release-attestation.yml`, `crates/phenotype-config-loader/CANONICAL.md`, `crates/phenotype-shared-config/CANONICAL.md`) — these are Dmouse92-unique additions.
 - **3 of 19 files** have SHA pins already on KP (`ci.yml`, `audit.yml`, `scorecard.yml`) — pinned by PR #132 (merged 2026-05-01).
@@ -143,6 +145,7 @@ For every file path Dmouse92's ADR-012 branch touches, we queried the GitHub Com
 ### 3.1 `<REDACTED>/phenotype-config` (Rust core)
 
 **Repo metadata** (`gh api repos/<REDACTED>/phenotype-config`):
+
 - `default_branch`: `main`
 - `archived`: `false`
 - `description`: **"config role owner: settly Rust core + Conft/Py edges (RFC 002)"**
@@ -151,9 +154,11 @@ For every file path Dmouse92's ADR-012 branch touches, we queried the GitHub Com
 - Description explicitly references RFC 002 of ADR-022.
 
 **Recent commits** (`gh api 'repos/<REDACTED>/phenotype-config/commits?per_page=15'`):
+
 - `599d37d 2026-06-17T08:53:56Z feat(genesis): bootstrap config role with settly crate (RFC 002)` — single bootstrap commit.
 
 **Root inventory** (`gh api repos/<REDACTED>/phenotype-config/contents`):
+
 ```
 file: Cargo.toml          (workspace manifest)
 file: README.md
@@ -167,11 +172,13 @@ dir:  okf/
 ```
 
 **Crates layout** (`gh api repos/<REDACTED>/phenotype-config/contents/crates`):
+
 ```
 dir: settly/
 ```
 
 **`crates/settly/` inventory** (40+ files including full hexagonal architecture):
+
 - Workspace: `Cargo.toml`, `Cargo.lock`, `rust-toolchain.toml`, `mise.toml`
 - Hexagonal layers in `crates/settly/src/`: `domain/`, `adapters/`, `application/`, `infrastructure/`
 - Domain modules: `config.rs`, `errors.rs`, `idempotency.rs`, `layers.rs`, `mod.rs`, `ports.rs`, `sources.rs`, `validation.rs` (8 files, full domain)
@@ -184,6 +191,7 @@ dir: settly/
 ### 3.2 `<REDACTED>/Conft` (TypeScript edge)
 
 **Repo metadata** (`gh api repos/<REDACTED>/Conft`):
+
 - `default_branch`: `main`
 - `archived`: `false`
 - `description`: "Phenotype configuration workspace (standalone)"
@@ -191,6 +199,7 @@ dir: settly/
 - `open_issues`: 22
 
 **Root inventory** (`gh api repos/<REDACTED>/Conft/contents`):
+
 ```
 file: AGENTS.md, CLAUDE.md, SOTA.md, charter.md, intent.md, review.md
 file: README.md, CHANGELOG.md, CITATION.cff, CONTRIBUTING.md, SECURITY.md, SUPPORT.md, VERSION, FUNDING.yml
@@ -199,6 +208,7 @@ dir:  .agileplus, .github, docs, okf, typescript/packages/
 ```
 
 **TS package** (`gh api repos/<REDACTED>/Conft/contents/typescript/packages/conft`):
+
 - `package.json`: name `@phenotype/config-ts`, v0.1.0, hex-shaped (Zod validation)
 - `tsconfig.json`, `eslint.config.js`, `bun.lock`, `Taskfile.yml`
 - Docs: `README.md`, `SPEC.md`, `PLAN.md`, `PRD.md`, `ADR.md`, `CHARTER.md`, `CLAUDE.md`, `FUNCTIONAL_REQUIREMENTS.md`, `SOTA.md`, `ARCHIVED.md`
@@ -271,7 +281,7 @@ The plan is **6 PRs over 4 substrate targets**, sequenced to minimize merge conf
 | **Rationale** | Per ADR-022 §4: "DELETE: pheno/crates/phenotype-config-core". Substrate `phenotype-config/crates/settly/src/domain/config.rs` already contains the canonical config domain (`Priority`, `ConfigSource`, etc.). |
 | **Verification** | `git ls-tree -r kp/main --name-only | grep "^crates/phenotype-config-core/"` no longer matches; substrate builds pass |
 | **Estimated LoC** | −75 + 8 (CANONICAL.md rewrite) |
-| **Blockers** | **WARN**: KP/main does NOT have `phenotype-config-core` as a workspace member (verified `git show kp/main:Cargo.toml | grep phenotype-config-core`), so deletion has zero Cargo build impact. Verify no path-based consumers via `grep -r "phenotype-config-core" --include="*.toml"` across the fleet. |
+| **Blockers** | **WARN**: KP/main does NOT have `phenotype-config-core` as a workspace member (verified `git show kp/main:Cargo.toml | grep phenotype-config-core`), so deletion has zero Cargo build impact. Verify no path-based consumers via`grep -r "phenotype-config-core" --include="*.toml"` across the fleet. |
 
 ### Step 5 — Port coverage target + docs/README/index.md updates to `pheno`
 
@@ -309,6 +319,7 @@ The plan is **6 PRs over 4 substrate targets**, sequenced to minimize merge conf
 ## §5. Dmouse92 pheno archive verification
 
 **Dmouse92 pheno current state** (`gh api repos/Dmouse92/pheno`):
+
 - `archived`: **`false`** (NOT yet archived; cannot proceed with Step 6)
 - `default_branch`: `chore/adr-012-config-consolidation-2026-06-15` (unusual; the ADR-012 branch IS the default branch on Dmouse92's fork — likely because it was the only branch pushed on 2026-06-15)
 - `pushed_at`: 2026-06-15T23:28:18Z
@@ -319,6 +330,7 @@ The plan is **6 PRs over 4 substrate targets**, sequenced to minimize merge conf
 - `open_issues_count`: 5
 
 **Branches** (`gh api 'repos/Dmouse92/pheno/branches?per_page=20'`):
+
 - `chore/adr-012-config-consolidation-2026-06-15` (the ADR-012 branch)
 - 5 `dependabot/github_actions/*` branches (auto-generated PR feeds; stale since 2026-06-15)
 
@@ -326,6 +338,7 @@ The plan is **6 PRs over 4 substrate targets**, sequenced to minimize merge conf
 The 7 unique commits match the local analysis (§2.1) byte-for-byte.
 
 **Pre-archive checklist:**
+
 1. ✅ All 7 commits analyzed and fate-assigned (§2).
 2. ✅ Substrate PRs (Steps 1-3) drafted or merged.
 3. ✅ pheno-side PRs (Steps 4-5) drafted or merged.
@@ -333,6 +346,7 @@ The 7 unique commits match the local analysis (§2.1) byte-for-byte.
 5. ⏳ Update `findings/2026-06-17-L5-104-dmouse92-to-<REDACTED>.md` §2.2 from PENDING to RESOLVED after Step 6.
 
 **Archive prerequisites (no-go conditions):**
+
 - ❌ DO NOT archive Dmouse92/pheno if any of the 7 commits contains content not yet captured in §2.2.
 - ❌ DO NOT archive Dmouse92/pheno if the substrate PRs (Steps 1-3) are still in DRAFT.
 - ❌ DO NOT archive Dmouse92/pheno if the 5 open issues contain unresolved migration context (read them first; they're listed via `gh issue list --repo Dmouse92/pheno --state all`).
@@ -401,6 +415,7 @@ Create `worklogs/L5-104-pheno-adr012-migration-2026-06-17.json` with the followi
 All commands cited in this plan are reproducible from `/tmp/dmouse92-migration/pheno/` (a `git clone` of `https://github.com/Dmouse92/pheno.git` with `git remote add kp https://github.com/KooshaPari/pheno.git && git fetch kp main --depth=200`). Auth: `gh` is `<REDACTED>` (verified 2026-06-17 18:43 PDT). Dmouse92 is read-only collaborator — NO push operations performed.
 
 **Citations:**
+
 - W5 PR #130: `gh pr view 130 --repo <REDACTED>/pheno --json title,state,headRefName,baseRefName,additions,deletions,changedFiles` (retrieved 2026-06-17; MERGED 2026-04-30)
 - W5 PR #131: same query, #131 (MERGED 2026-05-01)
 - W5 PR #132: same query, #132 (MERGED 2026-05-01)

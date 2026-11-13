@@ -37,6 +37,7 @@ Archive-only record. Live contract work now lives in downstream owners and inter
 **Reviewer:** codex
 **Worklog / finding:** `worklogs/L7-001-intent-boundary-curation-2026-06-17.json`
 **Decisions:**
+
 - Archived and delete-ready; contract functionality is decomposed elsewhere.
 
 **Next review:** 2026-07-17

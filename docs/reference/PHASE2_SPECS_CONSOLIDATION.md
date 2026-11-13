@@ -33,9 +33,11 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ## phase2a Requirements (FR-PHASE2A-001 through FR-PHASE2A-008)
 
 ### FR-PHASE2A-001: Discovery & Classification
+
 **Description:** Audit all projects in `/Users/<REDACTED>/Repos/` and classify by type (infrastructure, documentation, tools, libraries, applications).
 
 **Acceptance Criteria:**
+
 - [ ] All 25+ projects classified (infrastructure, documentation, tooling, libraries, applications)
 - [ ] Dependency map created (what depends on what)
 - [ ] Archival candidates identified (stale, redundant projects)
@@ -46,15 +48,18 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ---
 
 ### FR-PHASE2A-002: Archival of Dead/Stale Projects
+
 **Description:** Move stale, duplicate, or obsolete projects to `.archive/` for preservation without cluttering active workspace.
 
 **Acceptance Criteria:**
+
 - [ ] Stale projects identified (last commit >30 days ago, no recent changes)
 - [ ] All stale projects moved to `.archive/scattered-projects/` (non-destructive)
 - [ ] Archival log created: `.archive/scattered-projects/ARCHIVAL_LOG.md`
 - [ ] Git: `git add .archive/scattered-projects/ARCHIVAL_LOG.md && git commit`
 
 **Projects Candidates for Archival:**
+
 - `znap/` — Zsh plugin (maintenance: unknown)
 - `seebeen/`, `justyntemme/`, etc. — User forks (not active development)
 - Any with `last commit > 2026-02-01`
@@ -64,15 +69,18 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ---
 
 ### FR-PHASE2A-003: Create Fork Strategy for External Contributors
+
 **Description:** Move community fork directories to `.archive/contributor-forks/` and document integration pathway.
 
 **Acceptance Criteria:**
+
 - [ ] 6-8 contributor fork directories identified (Aloxaf/, justyntemme/, etc.)
 - [ ] Moved to `.archive/contributor-forks/` with symlinks (optional, for continuity)
 - [ ] Document: How to re-integrate future contributions (git submodule, npm package, etc.)
 - [ ] File: `docs/reference/CONTRIBUTOR_FORK_STRATEGY.md`
 
 **Example Forks:**
+
 - Aloxaf/ — Community fork of thegent
 - justyntemme/ — User contribution
 - kylesnowschwartz/ — User fork
@@ -83,9 +91,11 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ---
 
 ### FR-PHASE2A-004: Establish Canonical Project Locations
+
 **Description:** Define and enforce canonical locations for all active Phenotype projects.
 
 **Acceptance Criteria:**
+
 - [ ] Canonical locations defined in `WORKSPACE_STRUCTURE.md`:
   - `/repos/phenotype-infrakit/` — Rust workspace (28 crates)
   - `/repos/agent-wave/` — Orchestration docs & spec infrastructure
@@ -107,9 +117,11 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ---
 
 ### FR-PHASE2A-005: Dependency Graph Clarification
+
 **Description:** Map all cross-project dependencies to clarify what depends on what.
 
 **Acceptance Criteria:**
+
 - [ ] Dependency graph created (Mermaid diagram): Which projects consume which?
 - [ ] Circular dependency detection (expected: none or documented)
 - [ ] Registry of npm packages, git submodules, and Cargo workspace members
@@ -117,6 +129,7 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 - [ ] Diagram embedded in WORKSPACE_STRUCTURE.md
 
 **Key Mappings:**
+
 - phenotype-infrakit (Rust) → depends on: none (canonical)
 - agent-wave → depends on: @phenotype/docs (npm)
 - phenodocs → consumed by: agent-wave, heliosCLI, phenotype-design, bifrost-extensions
@@ -128,9 +141,11 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ---
 
 ### FR-PHASE2A-006: Workspace.exclude Rebalancing
+
 **Description:** Update root Cargo.toml workspace.members and workspace.exclude to reflect actual project structure and phase 2 intentions.
 
 **Acceptance Criteria:**
+
 - [ ] All 35 physical crates classified (members vs excluded)
 - [ ] Duplicates removed (phenotype-config-core in crates/ and libs/)
 - [ ] AgilePlus crates decision made (separate workspace vs exclude)
@@ -139,6 +154,7 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 - [ ] Report: `docs/audits/2026-03-30-root-workspace-audit.md` (already created, needs action items tracked)
 
 **Action Items:**
+
 - [ ] Remove `libs/phenotype-config-core` (duplicate)
 - [ ] Resolve agileplus-* crate membership conflict
 - [ ] Add 18 unaccounted crates (classify each)
@@ -149,9 +165,11 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ---
 
 ### FR-PHASE2A-007: Documentation of Scattered Projects
+
 **Description:** Document each scattered project's purpose, current state, and integration plan.
 
 **Acceptance Criteria:**
+
 - [ ] Each project has an audit report in `docs/audits/2026-03-30-*.md`:
   - ✓ agent-wave (complete)
   - [ ] civ (CI/validation infrastructure)
@@ -170,9 +188,11 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 ---
 
 ### FR-PHASE2A-008: Integration Pathway Planning
+
 **Description:** Define how each scattered project integrates into unified workspace.
 
 **Acceptance Criteria:**
+
 - [ ] Integration strategy document: `docs/reference/INTEGRATION_PATHWAY.md`
 - [ ] For each project:
   - Current state (standalone repo, monorepo member, NPM package, etc.)
@@ -182,6 +202,7 @@ Phenotype ecosystem projects are scattered across `/Users/<REDACTED>/Repos/` (ag
 - [ ] Phased rollout plan (Week 1, 2, 3, 4)
 
 **Example Pathway:**
+
 ```
 agent-wave (ACTIVE)
   ├─ Current: standalone repo + submodule (phenodocs)
@@ -211,12 +232,14 @@ civ (ACTIVE)
 ### WP-2a-001: Full Ecosystem Audit & Classification
 
 **Deliverables:**
+
 1. Audit report: `/docs/audits/2026-03-30-ecosystem-discovery.md` (35+ projects, classification, dependencies)
 2. Dependency graph: `docs/reference/ECOSYSTEM_DEPENDENCY_GRAPH.md` (Mermaid diagram, registry)
 3. Archival log: `.archive/scattered-projects/ARCHIVAL_LOG.md`
 4. Candidate list: Stale projects for archival (with last-commit dates)
 
 **Acceptance Criteria:**
+
 - All 25+ projects in `/Repos/` audited
 - Classification complete (infrastructure, docs, tools, libraries, apps)
 - Dependency map created (text + Mermaid diagram)
@@ -232,12 +255,14 @@ civ (ACTIVE)
 ### WP-2a-002: Archival & Cleanup
 
 **Deliverables:**
+
 1. Stale projects moved to `.archive/scattered-projects/`
 2. Contributor forks moved to `.archive/contributor-forks/`
 3. Archival log updated with timestamps
 4. Git commit: "chore: archive stale scattered projects"
 
 **Acceptance Criteria:**
+
 - All identified stale projects moved
 - All contributor forks organized
 - Git history preserved (git mv, not rm)
@@ -253,11 +278,13 @@ civ (ACTIVE)
 ### WP-2a-003: Canonical Structure Definition
 
 **Deliverables:**
+
 1. `WORKSPACE_STRUCTURE.md` — Canonical locations for all active projects
 2. `docs/reference/CONTRIBUTOR_FORK_STRATEGY.md` — Community contribution workflow
 3. Updated `.gitignore` (optional: exclude scattered projects not in canonical)
 
 **Acceptance Criteria:**
+
 - 12+ canonical locations defined
 - All active Phenotype projects mapped
 - Fork strategy documented (submodule, npm package, or other)
@@ -273,6 +300,7 @@ civ (ACTIVE)
 ### WP-2a-004: Individual Project Audits
 
 **Deliverables:**
+
 1. 10-11 individual audit reports in `docs/audits/`:
    - civ-audit.md
    - heliosCLI-audit.md
@@ -286,6 +314,7 @@ civ (ACTIVE)
    - phenotypeActions-audit.md
 
 **Acceptance Criteria:**
+
 - Each audit covers: purpose, language, structure, tests, phenotype integration, blockers
 - All match agent-wave audit format (for consistency)
 - Dependency list complete for each project
@@ -300,12 +329,14 @@ civ (ACTIVE)
 ### WP-2a-005: Integration Pathway & Phased Rollout
 
 **Deliverables:**
+
 1. `docs/reference/INTEGRATION_PATHWAY.md` — Current → Target state for each project
 2. Phased rollout plan (Week 1, 2, 3, 4)
 3. Blocker identification for each migration
 4. Dependency list for phase2b and phase2c
 
 **Acceptance Criteria:**
+
 - All 12+ projects have defined pathway
 - Blockers clearly identified
 - Rollout plan is executable in 4 weeks
@@ -321,6 +352,7 @@ civ (ACTIVE)
 ### WP-2a-006: Cargo.toml Workspace Rebalancing
 
 **Deliverables:**
+
 1. Updated `Cargo.toml`: corrected members/exclude lists
 2. Removed duplicate phenotype-config-core (libs/ version archived)
 3. Resolved agileplus-* crate decision
@@ -329,6 +361,7 @@ civ (ACTIVE)
 6. Commit: "fix: rebalance Cargo.toml workspace structure"
 
 **Acceptance Criteria:**
+
 - Zero duplicate crate definitions
 - All 35 crates declared (either members or excluded)
 - Cargo build passes with zero warnings
@@ -384,9 +417,11 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ## phase2b Requirements (FR-PHASE2B-001 through FR-PHASE2B-004)
 
 ### FR-PHASE2B-001: Workspace Structure Verification
+
 **Description:** Verify all 28 member crates build cleanly, tests pass, and no warnings exist.
 
 **Acceptance Criteria:**
+
 - [ ] All 28 member crates in Cargo.toml
 - [ ] `cargo check --workspace` passes (zero errors, zero warnings)
 - [ ] `cargo test --workspace` passes (all test suites)
@@ -401,9 +436,11 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ---
 
 ### FR-PHASE2B-002: Core Implementation — Forgecode
+
 **Description:** Implement forgecode system for generating deterministic, universally-comparable codes for any Rust struct.
 
 **Acceptance Criteria:**
+
 - [ ] `crates/phenotype-forgecode/` created
 - [ ] ForgecodeGenerator trait defined (sha256-based)
 - [ ] Implementations for 5+ core types (String, Vec, HashMap, custom structs)
@@ -412,6 +449,7 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 - [ ] Doc: forgecode semantics & determinism guarantees documented
 
 **Acceptance Criteria (Detailed):**
+
 - [ ] trait ForgecodeGenerator { fn forgecode(&self) -> String; }
 - [ ] impl for String: sha256(utf8_bytes).to_hex()
 - [ ] impl for Vec&lt;T>: concatenate all elements' forgecodes, then sha256
@@ -428,9 +466,11 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ---
 
 ### FR-PHASE2B-003: Core Implementation — Bifrost Contracts
+
 **Description:** Implement Bifrost contract system for multi-stage deployments.
 
 **Acceptance Criteria:**
+
 - [ ] `crates/phenotype-bifrost/` created
 - [ ] Contract trait defined: stage lifecycle, execution guards
 - [ ] 3 stage implementations: PreFlight, Deploy, PostValidation
@@ -439,6 +479,7 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 - [ ] Integration: Contracts can be composed (Contract&lt;A> + Contract&lt;B>)
 
 **Acceptance Criteria (Detailed):**
+
 - [ ] trait BifrostContract \{ fn validate(&self) -> Result<()>; fn execute(&mut self) -> Result<()>; }
 - [ ] struct PreFlightStage; impl stage validation (preconditions)
 - [ ] struct DeployStage; impl actual deployment logic
@@ -454,9 +495,11 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ---
 
 ### FR-PHASE2B-004: Test Infrastructure & Mocking
+
 **Description:** Implement phenotype-test-infra crate with comprehensive mocking, property-based testing, and spec traceability.
 
 **Acceptance Criteria:**
+
 - [ ] `crates/phenotype-test-infra/` enhanced with:
   - [ ] MockBuilder&lt;T> for quick test doubles
   - [ ] PropertyTest trait for property-based testing
@@ -467,7 +510,8 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 - [ ] All new tests use SpecTrace linking
 
 **Acceptance Criteria (Detailed):**
-- [ ] macro test_spec(FR_ID) { /* test body */ } expands to #[test] with spec link
+
+- [ ] macro test_spec(FR_ID) { /*test body*/ } expands to #[test] with spec link
 - [ ] MockBuilder::new().with_field(value).build() creates test double
 - [ ] PropertyTest::generate() creates random input for property-based tests
 - [ ] Example mocks: MockHealthChecker, MockCacheAdapter, MockRepository
@@ -483,7 +527,9 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ## phase2b Work Packages
 
 ### WP-2b-001: Workspace Verification & Lint
+
 **Deliverables:**
+
 - [ ] All 28 crates build cleanly
 - [ ] All tests pass
 - [ ] Zero warnings (`clippy`, `fmt`)
@@ -498,7 +544,9 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ---
 
 ### WP-2b-002: Forgecode Implementation
+
 **Deliverables:**
+
 - [ ] `crates/phenotype-forgecode/` with full impl
 - [ ] 8+ test cases (determinism, collision, composition)
 - [ ] Documentation: forgecode semantics & guarantees
@@ -512,7 +560,9 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ---
 
 ### WP-2b-003: Bifrost Contracts Implementation
+
 **Deliverables:**
+
 - [ ] `crates/phenotype-bifrost/` with stage contracts
 - [ ] 3 stage types + composition logic
 - [ ] 10+ test cases (success, failure, rollback)
@@ -526,7 +576,9 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ---
 
 ### WP-2b-004: Test Infrastructure Enhancement
+
 **Deliverables:**
+
 - [ ] `crates/phenotype-test-infra/` enhanced
 - [ ] MockBuilder, PropertyTest, SpecTrace
 - [ ] 5+ example mocks
@@ -541,7 +593,9 @@ Phase 2B follows phase2a consolidation and focuses on repairing the workspace fo
 ---
 
 ### WP-2b-005: Integration & Verification
+
 **Deliverables:**
+
 - [ ] All implementations integrated into workspace
 - [ ] Tests passing (100% suite)
 - [ ] Clippy zero warnings
@@ -581,9 +635,11 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 ## phase2c Requirements (FR-PHASE2C-001 through FR-PHASE2C-003)
 
 ### FR-PHASE2C-001: Router Monitor Implementation
+
 **Description:** Implement missing router monitor handler for civ (CI/validation infrastructure).
 
 **Acceptance Criteria:**
+
 - [ ] `crates/phenotype-monitor/` created (or enhanced)
 - [ ] RouterMonitor trait: `fn observe(&self, route: Route) -> Result<()>`
 - [ ] WebSocket handler implemented: `fn handle_websocket(&mut self, msg: Message)`
@@ -591,6 +647,7 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 - [ ] Traces: All tests → FR-PHASE2C-001
 
 **Acceptance Criteria (Detailed):**
+
 - [ ] trait RouterMonitor { fn observe(&self, route: Route) -> Result<()>; }
 - [ ] impl for HTTP routes: track request/response pairs
 - [ ] impl for WebSocket: bidirectional message handling
@@ -608,9 +665,11 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 ---
 
 ### FR-PHASE2C-002: Observer Pattern Completion
+
 **Description:** Implement full observer pattern support for route monitoring.
 
 **Acceptance Criteria:**
+
 - [ ] Observer trait: `fn on_route_change(&mut self, route: &Route) -> Result<()>`
 - [ ] Observable trait: `fn subscribe(&mut self, observer: Box<dyn Observer>)`
 - [ ] Notifications: All observers notified on route state changes
@@ -618,6 +677,7 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 - [ ] Integration: Works with RouterMonitor
 
 **Acceptance Criteria (Detailed):**
+
 - [ ] trait Observer { fn on_route_change(&mut self, route: &Route) -> Result<()>; }
 - [ ] trait Observable { fn subscribe(&mut self, obs: Box&lt;dyn Observer>); fn notify_all(&mut self, route: &Route); }
 - [ ] Tests: Subscribe observer successfully
@@ -632,9 +692,11 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 ---
 
 ### FR-PHASE2C-003: WebSocket Gateway Integration
+
 **Description:** Integrate WebSocket support into phenotype gateway for real-time updates.
 
 **Acceptance Criteria:**
+
 - [ ] WebSocket endpoint: `/ws/routes` (subscribe to route updates)
 - [ ] WebSocket endpoint: `/ws/health` (subscribe to health checks)
 - [ ] Message format: JSON with `type`, `data`, `timestamp` fields
@@ -642,6 +704,7 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 - [ ] Integration: Works with civ's validation pipeline
 
 **Acceptance Criteria (Detailed):**
+
 - [ ] Route change message: `{ "type": "route_update", "data": { "route": "...", "status": "..." }, "timestamp": "..." }`
 - [ ] Health check message: `{ "type": "health_check", "data": { "service": "...", "status": "..." }, "timestamp": "..." }`
 - [ ] Tests: Subscribe to `/ws/routes`
@@ -658,7 +721,9 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 ## phase2c Work Packages
 
 ### WP-2c-001: Router Monitor Implementation
+
 **Deliverables:**
+
 - [ ] `crates/phenotype-monitor/` with RouterMonitor trait
 - [ ] WebSocket handler implementation
 - [ ] 10+ tests (observe, websocket, error cases)
@@ -672,7 +737,9 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 ---
 
 ### WP-2c-002: Observer Pattern Completion
+
 **Deliverables:**
+
 - [ ] Observer + Observable traits
 - [ ] Notification logic
 - [ ] 8+ tests (subscribe, notify, unsubscribe)
@@ -686,7 +753,9 @@ Phase 2C unblocks the router monitoring system (civ) by implementing missing Web
 ---
 
 ### WP-2c-003: WebSocket Gateway Integration
+
 **Deliverables:**
+
 - [ ] `/ws/routes` endpoint
 - [ ] `/ws/health` endpoint
 - [ ] JSON message format
@@ -744,6 +813,7 @@ phase2c (Apr 18-28) [starts mid-phase2b]
 These three specs (phase2a, phase2b, phase2c) are designed to integrate with AgilePlus task management:
 
 **AgilePlus Commands (when available):**
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
 
@@ -764,6 +834,7 @@ agileplus task add phase2a-consolidation --id "WP02" \
 ```
 
 **For now (manual tracking):**
+
 - Use `docs/reference/PHASE2_SPECS_CONSOLIDATION.md` (this document) as source of truth
 - Track progress in `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/PHASE2_PROGRESS.md`
 - Update spec status after each WP completion
@@ -775,6 +846,7 @@ agileplus task add phase2a-consolidation --id "WP02" \
 Phase 2 is complete when:
 
 ✅ **phase2a (Consolidation):**
+
 - All 25+ scattered projects audited & classified
 - Stale projects archived
 - Canonical structure defined & documented
@@ -782,6 +854,7 @@ Phase 2 is complete when:
 - Integration pathways clear for all projects
 
 ✅ **phase2b (Foundation):**
+
 - All 28 member crates build cleanly (zero warnings)
 - forgecode system implemented & tested
 - bifrost contracts implemented & tested
@@ -789,6 +862,7 @@ Phase 2 is complete when:
 - All tests passing, all traces linked to FR
 
 ✅ **phase2c (Monitoring):**
+
 - RouterMonitor implemented with WebSocket support
 - Observer pattern fully functional
 - WebSocket gateway endpoints live (/ws/routes, /ws/health)

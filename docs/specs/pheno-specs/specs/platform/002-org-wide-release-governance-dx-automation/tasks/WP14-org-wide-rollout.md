@@ -28,6 +28,7 @@ history:
 **Primary Goal:** Automate bootstrapping and governance infrastructure deployment across all 47 Phenotype repos, with manifest-driven configuration, bulk operations, and automated PR creation.
 
 **Success Criteria:**
+
 - `pheno bootstrap --all` flag implemented and tested on sample directory
 - Repository manifest (`repos.toml`) generation automated with auto-detection and override support
 - Bulk bootstrap with dry-run capability working on full repo directory
@@ -40,12 +41,14 @@ history:
 ## Context & Constraints
 
 **Context:**
+
 - WP13 pilot validated pheno bootstrap on 4 repos; WP14 scales to all 47 repos
 - Manifest-driven approach: repos.toml specifies language, registry, risk profile, and publish settings
 - Automation reduces toil and ensures consistency across org
 - PR creation enables review and approval process before merging infrastructure changes
 
 **Constraints:**
+
 - Bulk operations must have dry-run mode to preview before applying
 - Rate limiting: GitHub API limits PR creation; must batch with delays
 - 47 repos span 4+ languages; each may have unique structure
@@ -60,6 +63,7 @@ history:
 **Purpose:** Add `--all` flag to `pheno bootstrap` command to automatically discover and bootstrap all repos in a directory.
 
 **Steps:**
+
 1. **Command signature:**
    - `pheno bootstrap --all --repos-dir <path> [--dry-run] [--skip <repo1>,<repo2>...]`
    - `--all`: enable bulk mode
@@ -76,12 +80,14 @@ history:
 3. **Dry-run output:**
    - Print header: "Dry-run mode. Will bootstrap N repos:"
    - For each repo, print:
+
      ```
      agileplux (TypeScript) – private
      tokenledger (Rust) – publish to crates.io
      thegent (Python) – publish to PyPI
      agentapi-plusplus (Go) – publish to go proxy
      ```
+
    - Ask for confirmation before proceeding (in dry-run or real mode?)
    - Actually, dry-run should just show; don't ask. Real mode should ask if >10 repos.
 
@@ -101,12 +107,14 @@ history:
    - Very verbose (--debug): show all commands being run
 
 **Files:**
+
 - Update: pheno CLI bootstrap command (main.rs or equivalent)
 - Reference: Lipgloss docs for progress bar
 
 **Parallel?** No (blocks T084–T086).
 
 **Notes:**
+
 - Dry-run is critical safety feature; users will trust it if reliable
 - Progress bar improves UX for long-running bulk operations
 - Error collection and summary reporting helps users prioritize fixes
@@ -118,6 +126,7 @@ history:
 **Purpose:** Create command `pheno manifest generate` to auto-detect repo metadata and produce `repos.toml` with override support.
 
 **Steps:**
+
 1. **Command signature:**
    - `pheno manifest generate --repos-dir <path> --output <file> [--override <repo:field=value>...]`
    - Scans `repos-dir` for git repos
@@ -146,6 +155,7 @@ history:
      - Otherwise: low (can be overridden)
 
 3. **Output format: `repos.toml`:**
+
    ```toml
    [[repos]]
    name = "agileplux"
@@ -194,6 +204,7 @@ history:
    - Allow overwrite with `--force` flag
 
 **Files:**
+
 - Create: pheno CLI `manifest generate` subcommand
 - Output: `repos.toml` at specified path
 - Reference: pheno bootstrap language detection logic
@@ -201,6 +212,7 @@ history:
 **Parallel?** Yes, with T085 after T083 complete.
 
 **Notes:**
+
 - Auto-detection heuristics may have edge cases; override support handles them
 - Risk profile is subjective; document decision criteria
 - Manifest validation should be strict to prevent downstream issues
@@ -212,11 +224,13 @@ history:
 **Purpose:** Execute bulk bootstrap on all repos in directory with dry-run preview.
 
 **Steps:**
+
 1. **Workflow:**
    - User runs: `pheno bootstrap --all --repos-dir ~/CodeProjects/Phenotype/repos/ --dry-run`
    - Pheno discovers all repos in directory (T083)
    - For each repo, preview what would happen (don't actually bootstrap)
    - Output format (example):
+
      ```
      Dry-run: Bootstrap 47 repos
 
@@ -237,6 +251,7 @@ history:
 
      Total changes: 47 repos modified (0 skipped, 0 errors in dry-run)
      ```
+
    - User reviews output; if satisfied, runs without `--dry-run`
 
 2. **Actual bootstrap (without dry-run):**
@@ -269,12 +284,14 @@ history:
    - `--debug`: show all commands being executed
 
 **Files:**
+
 - Update: pheno CLI bootstrap `--all` implementation
 - Reference: T083 repo discovery and progress tracking
 
 **Parallel?** Yes, with T086–T087 after T084 complete.
 
 **Notes:**
+
 - Dry-run is the safety valve; ensure it's accurate so users trust it
 - Error logging to file is critical for troubleshooting on 47-repo scale
 - Parallelization helps but must be careful not to overload system
@@ -286,6 +303,7 @@ history:
 **Purpose:** For each bootstrapped repo, create GitHub PR with standardized template summarizing changes.
 
 **Steps:**
+
 1. **Workflow:**
    - After successful bootstrap of a repo, create PR automatically
    - Use `gh pr create` (GitHub CLI; must be installed and authenticated)
@@ -296,6 +314,7 @@ history:
    - Or per-repo variation: `chore: bootstrap governance infrastructure (mise, hooks, CI/CD)`
 
 3. **PR body template (heredoc):**
+
    ```markdown
    ## Summary
    This PR adds release governance infrastructure to [repo-name], including:
@@ -342,12 +361,14 @@ history:
    - Save PR URLs to file for easy access: `pr-links.txt`
 
 **Files:**
+
 - Update: pheno CLI to call `gh pr create` after each bootstrap
 - Reference: GitHub CLI documentation
 
 **Parallel?** Yes, with T085, T087 after T084 complete.
 
 **Notes:**
+
 - Requires `gh` CLI to be installed and authenticated
 - Rate limiting: 5-second delay is conservative; adjust if GitHub allows faster
 - Error handling is critical; don't let one failed PR block others
@@ -359,10 +380,12 @@ history:
 **Purpose:** After rollout, run org-wide audit and generate release matrix to verify all repos are correctly configured.
 
 **Steps:**
+
 1. **Org-wide audit:**
    - Command: `pheno audit --repos-dir ~/CodeProjects/Phenotype/repos/`
    - Scans all repos, detects packages/modules, reports current versions and channels
    - Output: table with columns:
+
      ```
      Repo                 | Language | Package/Module     | Version        | Channel | Registry      | Private
      ================================================================================
@@ -383,6 +406,7 @@ history:
    - Command: `pheno matrix`
    - Shows all repos, current version, next promotable versions, release readiness
    - Example output:
+
      ```
      Release Readiness Matrix
 
@@ -411,6 +435,7 @@ history:
    - Status: ✓ Ready for production
 
 **Files:**
+
 - Update: pheno CLI `audit --repos-dir` subcommand (if not exists)
 - Create: pheno CLI `matrix` subcommand
 - Reference: org-wide rollout results
@@ -418,6 +443,7 @@ history:
 **Parallel?** No (depends on T083–T086 completion).
 
 **Notes:**
+
 - Matrix is a visualization tool; helps stakeholders understand release readiness at a glance
 - Audit performance on 47 repos is important baseline; may need optimization
 - Error reporting will guide teams on which repos need fixes
@@ -439,6 +465,7 @@ history:
 ## Review Guidance
 
 **Reviewers should verify:**
+
 - [ ] `--all` flag implemented with dry-run and `--skip` support (T083)
 - [ ] Manifest generation auto-detects language, registry, risk profile (T084)
 - [ ] Bulk bootstrap works with dry-run; error handling and progress bar present (T085)

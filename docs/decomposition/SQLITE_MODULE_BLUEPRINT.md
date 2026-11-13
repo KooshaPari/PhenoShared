@@ -9,6 +9,7 @@ This document shows the exact structure of each decomposed module with all publi
 ## Module 1: `store/sync.rs` (Connection Pooling & Transactions)
 
 ### Module Declaration
+
 ```rust
 // src/store/sync.rs
 
@@ -509,6 +510,7 @@ mod tests {
 ## Module 2: `store/query_builder.rs` (Dynamic SQL Construction)
 
 ### Module Declaration
+
 ```rust
 // src/store/query_builder.rs
 

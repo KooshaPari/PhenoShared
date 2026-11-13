@@ -57,6 +57,7 @@ AgilePlus monorepo exhibits significant opportunities for refactoring:
 ### 1. agileplus-cli (8,594 LOC → 6,500 LOC target)
 
 **Current State**:
+
 - 57 Rust files across 23 command modules
 - Largest file: `commands/validate.rs` (674 LOC) with 14 functions
 - Other large files: retrospective (630), plan (553), implement (443), specify (439)
@@ -64,6 +65,7 @@ AgilePlus monorepo exhibits significant opportunities for refactoring:
 - Issue: Commands mix CLI parsing, business logic, and formatting
 
 **Decomposition Opportunities**:
+
 ```
 BEFORE: agileplus-cli/src/commands/{validate,plan,implement,retrospective}.rs
 AFTER:  
@@ -75,11 +77,13 @@ AFTER:
 ```
 
 **Large Function Examples**:
+
 - `run_validate()` in validate.rs (calls 6 helper functions, 150+ LOC)
 - `evaluate_policies()` in validate.rs (280+ LOC, deeply nested match)
 - `run_plan()` in plan.rs (200+ LOC with policy evaluation)
 
 **LOC Reduction Path**:
+
 1. Extract command modules into separate crate-per-command (saves 3,000 LOC by pruning CLI wrapper)
 2. Move policy evaluation to agileplus-domain (shared with API)
 3. Consolidate evidence formatting logic (currently duplicated across commands)
@@ -90,6 +94,7 @@ AFTER:
 ### 2. agileplus-sqlite (6,124 LOC → 4,500 LOC target)
 
 **Current State**:
+
 - 29 files, single 1,582 LOC `lib.rs` monolith
 - 125 function implementations (4 impl blocks)
 - Contains: schema builder, query executor, migration runner, test fixtures
@@ -97,6 +102,7 @@ AFTER:
 - Issue: Database operations, migrations, and schema all in one file
 
 **Critical Code Concentration**:
+
 ```rust
 lib.rs (1,582 LOC):
   - impl Repository { ... } (schema + queries + mutations)
@@ -108,6 +114,7 @@ lib.rs (1,582 LOC):
 **Test/Src Ratio**: 899 LOC tests for 6,124 LOC src (14.6% - low for DB layer)
 
 **Decomposition Strategy**:
+
 ```
 BEFORE: lib.rs (1,582) + rebuild.rs (501) + repository/* (scattered)
 AFTER:
@@ -119,6 +126,7 @@ AFTER:
 ```
 
 **Optimization Opportunities**:
+
 - Replace 8+ `Vec::new()` allocations in query builders with pre-allocated capacity
 - Consolidate 12+ similar WHERE clause builders into macro
 - Parameter heavy functions: `build_query()` with 7+ params → builder pattern
@@ -128,6 +136,7 @@ AFTER:
 ### 3. agileplus-dashboard (5,561 LOC → 3,500 LOC target)
 
 **Current State**:
+
 - Only 14 files, but routes.rs monolith = 2,631 LOC
 - 28 functions for HTTP route handling
 - Secondary files: seed (541), templates (431), process_detector (362)
@@ -135,6 +144,7 @@ AFTER:
 - Issue: All route handlers, response formatting, and template rendering in one file
 
 **routes.rs Breakdown**:
+
 ```
 - GET /dashboard/health         (100+ LOC, nested match on service state)
 - GET /dashboard/config         (150+ LOC, config serialization)
@@ -146,6 +156,7 @@ AFTER:
 ```
 
 **Memory Allocation Issues**:
+
 ```rust
 Line 601:  let mut warnings = Vec::new();      // In loop
 Line 674:  let mut cards: HashMap<String, Vec<...>> = HashMap::new();  // In loop
@@ -154,6 +165,7 @@ Line 2402: let mut q = std::collections::HashMap::new();  // Nested loop
 ```
 
 **Decomposition Strategy**:
+
 ```
 BEFORE: routes.rs (2,631 LOC, 28 functions)
 AFTER:
@@ -169,6 +181,7 @@ AFTER:
 ```
 
 **LOC Reduction Path**:
+
 1. Extract routes into modules (saves 1,500 LOC via reduced indentation, better organization)
 2. Create response builder types (eliminate 6+ match arms for formatting)
 3. Move template rendering to separate service
@@ -179,6 +192,7 @@ AFTER:
 ### 4. agileplus-p2p (3,943 LOC → 2,500 LOC target)
 
 **Current State**:
+
 - 24 files with critical size concentration:
   - git_merge.rs: 613 LOC
   - import.rs: 525 LOC
@@ -187,6 +201,7 @@ AFTER:
 - Issue: Merge/import/export logic should be separate crates
 
 **Module Structure**:
+
 ```
 p2p/
   git_merge.rs      (613 LOC) - 3-way merge algorithm
@@ -202,6 +217,7 @@ p2p/
 ```
 
 **Decomposition Strategy**:
+
 ```
 Extract 3 new crates:
   - agileplus-merge  (git_merge.rs + git_merge/ subdir) → 650 LOC
@@ -217,6 +233,7 @@ Simplify p2p to:
 ```
 
 **Git Merge Optimization**:
+
 - Line 483: `result.lines().filter(...).collect()` → use iterator without intermediate Vec
 - Nested match arms (5+ levels) → state machine pattern
 - Repeated hunk parsing → extract to shared function
@@ -228,6 +245,7 @@ Simplify p2p to:
 ### 5. agileplus-subcmds (4,386 LOC → 2,800 LOC target)
 
 **Current State**:
+
 - 36 files mixing 4+ domains: device, events, audit, registry, dashboard, platform
 - Largest files:
   - device.rs (701 LOC, 17 functions)
@@ -236,6 +254,7 @@ Simplify p2p to:
 - Issue: Subcommand handlers for unrelated domains mixed in one crate
 
 **Decomposition Opportunities**:
+
 ```
 Extract to separate crates:
   - agileplus-cmd-device  (device.rs + device/ subdir) → 800 LOC
@@ -249,6 +268,7 @@ Keep in subcmds:
 ```
 
 **device.rs (701 LOC) Concerns**:
+
 - Device discovery (100+ LOC)
 - Device pairing (150+ LOC)
 - Device status tracking (100+ LOC)
@@ -261,12 +281,14 @@ Keep in subcmds:
 ### 6. agileplus-domain (4,258 LOC → 2,800 LOC target)
 
 **Current State**:
+
 - 52 files across 4 domain modules: backlog, feature, cycle, service_health
 - Storage port interface: 290 LOC (monolithic trait)
 - Max indentation depth: 28 levels
 - Issue: Interface bloat, unused methods, and tangled concerns
 
 **Storage Port Problems**:
+
 ```rust
 pub trait StoragePort {
   // 40+ methods covering:
@@ -282,6 +304,7 @@ pub trait StoragePort {
 ```
 
 **Decomposition Strategy**:
+
 ```
 Split monolithic StoragePort into:
   - FeatureStorage (15 methods)
@@ -294,6 +317,7 @@ Each in its own file with focused responsibility
 ```
 
 **Domain Analysis**:
+
 - backlog.rs (250 LOC) - query filters
 - feature.rs (189 LOC) - entity definition
 - cycle.rs + tests (170 LOC) - cycle logic
@@ -305,6 +329,7 @@ Each in its own file with focused responsibility
 ### 7. agileplus-plane (3,855 LOC → 2,300 LOC target)
 
 **Current State**:
+
 - 24 files with sync logic tightly coupled
 - outbound.rs (498 LOC) - Plane issue creation
 - webhook.rs (347 LOC) - incoming webhooks
@@ -314,10 +339,12 @@ Each in its own file with focused responsibility
 - Max indentation depth: 24 levels
 
 **Memory Issues**:
+
 - Line 16-50: Multiple nested for loops without pre-allocation
 - sync_queue operations create new HashMap on each cycle
 
 **Decomposition Strategy**:
+
 ```
 INBOUND path (webhooks):
   - routes/webhook.rs (347 LOC)
@@ -341,6 +368,7 @@ Consolidation target: 2,300 LOC
 ### 8. agileplus-api (3,114 LOC → 1,800 LOC target)
 
 **Current State**:
+
 - 23 files with scattered route handlers
 - router.rs (185 LOC) - only 6 routes registered
 - 15 route files in routes/ subdir
@@ -348,6 +376,7 @@ Consolidation target: 2,300 LOC
 - Max indentation depth: 24 levels
 
 **Route Distribution Issues**:
+
 ```
 routes/
   backlog.rs       - backlog CRUD
@@ -363,11 +392,13 @@ routes/
 ```
 
 **Consolidation Opportunity**:
+
 - Most routes follow CRUD pattern → create shared route builder macro
 - Response formatting duplicated across files → centralized response types
 - Query parameter parsing duplicated → query extractor middleware
 
 **LOC Reduction Path**:
+
 ```
 Before: 3,114 LOC src
 After:  1,800 LOC
@@ -384,6 +415,7 @@ After:  1,800 LOC
 ### 9. agileplus-git (2,556 LOC → 1,500 LOC target)
 
 **Coordinator Complexity** (346 LOC):
+
 - Line 1: impl Coordinator { ... (16 functions)
 - Nested state machine handling
 - Reference cycle detection algorithm
@@ -391,11 +423,13 @@ After:  1,800 LOC
 - Max indentation depth: 28 levels
 
 **Materialize.rs** (633 LOC, 8+ match statements):
+
 - Entity snapshots (250 LOC)
 - Diff calculation (200 LOC)
 - History tracking (100+ LOC)
 
 **Optimization Path**:
+
 ```
 Extract:
   - agileplus-git-diff (materialize.rs) → 400 LOC
@@ -414,12 +448,14 @@ Keep in agileplus-git:
 ### 10. agileplus-grpc (1,956 LOC → 1,200 LOC target)
 
 **Current State**:
+
 - 14 files with gRPC service handlers
 - Protobuf code generation adds significant LOC
 - Service implementations (500+ LOC) could be simplified
 - Response mapping duplicated across services
 
 **Opportunity**:
+
 - Extract protobuf-generated types to separate crate
 - Consolidate service handler patterns with macro
 - Move validation logic to domain layer
@@ -429,12 +465,14 @@ Keep in agileplus-git:
 ### 11. agileplus-telemetry (1,837 LOC → 1,100 LOC target)
 
 **Current State**:
+
 - 7 files with instrumentation builders
 - span/event/metric decorators (49+ distinct types)
 - Builder pattern opportunity for meter/span creation
 - Max indentation depth: 24 levels
 
 **Optimization**:
+
 - Consolidate span builders (270 LOC) → 150 LOC via macro
 - Consolidate metric builders (280 LOC) → 170 LOC via macro
 - Move sampling logic to middleware
@@ -444,6 +482,7 @@ Keep in agileplus-git:
 ### 12. agileplus-graph (1,124 LOC → 700 LOC target)
 
 **Current State**:
+
 - 7 files, well-organized:
   - store.rs (326 LOC) - graph storage
   - nodes.rs (270 LOC) - node operations
@@ -453,6 +492,7 @@ Keep in agileplus-git:
   - config.rs (58 LOC) - configuration
 
 **Query Builder Opportunities**:
+
 - 175 LOC query builder → can be reduced by 30% via pattern extraction
 - Parameter count audit needed (functions with 5+ params)
 - Iterator chains could be simplified
@@ -462,11 +502,13 @@ Keep in agileplus-git:
 ### 13. agileplus-nats (781 LOC → 500 LOC target)
 
 **Bus Handler** (361 LOC):
+
 - Message routing (180 LOC)
 - Subject matching (100+ LOC)
 - Handler dispatch (80+ LOC)
 
 **Decomposition**:
+
 ```
 Extract:
   - message_router.rs (180 LOC)
@@ -485,6 +527,7 @@ Keep:
 ### 14. agileplus-import (755 LOC → 500 LOC target)
 
 **Current State**:
+
 - 10 files, focused scope
 - manifest.rs (325 LOC) - manifest parsing
 - Only 1 pub function (concerning - possibly dead code)
@@ -493,6 +536,7 @@ Keep:
 **Issue**: Low public API surface suggests tight internal coupling
 
 **Opportunity**:
+
 - Consolidate similar importer patterns (6+ different formats)
 - Move format detection logic to shared place
 - Reduce manifest validation logic (150+ LOC) via serde attributes
@@ -502,31 +546,38 @@ Keep:
 ## Priority 3 (Lower Priority / Well-Structured)
 
 ### 15. agileplus-triage (731 LOC)
+
 - Only 4 files, focused concern (triage classification)
 - Small, well-structured crate
 - No immediate refactoring needed
 
 ### 16. agileplus-cache (460 LOC)
+
 - 7 files, simple abstraction
 - Opportunity: Consolidate cache backends (3+ implementations)
 
 ### 17. agileplus-github (458 LOC)
+
 - 3 files, webhook adapter only
 - Too small to decompose further
 
 ### 18. agileplus-sync (832 LOC)
+
 - 7 files, replication coordination
 - Well-focused, minimal decomposition opportunity
 
 ### 19. agileplus-events (815 LOC)
+
 - 6 files, event type definitions + serialization
 - Opportunity: Consolidate event type definitions (14+ pub fns)
 
 ### 20. agileplus-benchmarks (245 LOC)
+
 - 2 files, benchmarking suite
 - Standalone, keep as-is
 
 ### 21. agileplus-contract-tests (11 LOC)
+
 - 1 file, stub/placeholder
 - **Action**: Merge into agileplus-integration-tests
 
@@ -537,33 +588,39 @@ Keep:
 ### Identified Duplications
 
 **1. Query Building (3 crates)**
+
 - agileplus-sqlite: WHERE clause builders (200+ LOC)
 - agileplus-api: Query parameter extraction (150+ LOC)
 - agileplus-domain: Backlog filters (200+ LOC)
 → **Consolidation opportunity**: Create agileplus-query-builder crate (300 LOC, saves 400 LOC)
 
 **2. Response Formatting (2 crates)**
+
 - agileplus-api: JSON response formatting (250+ LOC)
 - agileplus-dashboard: Template response formatting (250+ LOC)
 → **Consolidation opportunity**: Create response-formatter middleware (200 LOC, saves 200 LOC)
 
 **3. State Mapping (2 crates)**
+
 - agileplus-plane: Plane state ↔ AgilePlus state (266 LOC)
 - agileplus-domain: Feature state transitions (150+ LOC)
 → **Consolidation opportunity**: Centralize state machine (200 LOC, saves 150 LOC)
 
 **4. Evidence Handling (2 crates)**
+
 - agileplus-dashboard: Evidence gallery/upload (250+ LOC)
 - agileplus-api: Evidence endpoints (200+ LOC)
 → **Consolidation opportunity**: Extract agileplus-evidence crate (300 LOC, saves 300 LOC)
 
 **5. Event Serialization (3 crates)**
+
 - agileplus-events: Event type defs (300+ LOC)
 - agileplus-nats: NATS envelope (85 LOC)
 - agileplus-api: Event endpoints (100+ LOC)
 → **Consolidation opportunity**: Unified event schema (200 LOC, saves 100 LOC)
 
 **6. Configuration Management (2 crates)**
+
 - agileplus-dashboard: Config serialization/validation (300+ LOC)
 - agileplus-import: Manifest config parsing (200+ LOC)
 → **Consolidation opportunity**: Shared config trait (150 LOC, saves 250 LOC)
@@ -602,6 +659,7 @@ for service_config in service_configs {
 results.extend(all_services);
 all_warnings.extend(all_warnings);
 ```
+
 **Savings**: Eliminate 500+ unnecessary allocations per sync cycle
 
 ---
@@ -646,6 +704,7 @@ let query = QueryBuilder::new("features")
     .limit(100)
     .build();
 ```
+
 **Savings**: Reduce 20+ function signatures, improve usability
 
 ---
@@ -672,6 +731,7 @@ result.lines()
 
 // Or use iterator adapter pattern throughout
 ```
+
 **Savings**: Eliminate intermediate Vec allocation (common in merge loops)
 
 ---
@@ -681,19 +741,23 @@ result.lines()
 ### Heavy Dependencies Review
 
 **agileplus-cli**:
+
 - `tokio` (async runtime) - could be optional feature
 - `serde_json` + `toml` - consolidate to one format or feature-gate
 - Consider: move large CLI frameworks to separate CLI crate
 
 **agileplus-sqlite**:
+
 - `sqlx` - already pinned, good
 - Review: unused query macros
 
 **agileplus-dashboard**:
+
 - `axum` (web framework) - OK, core dependency
 - `tera` (templates) - could move to separate template crate
 
 **agileplus-api**:
+
 - `axum` - OK
 - Review: middleware duplication with dashboard
 
@@ -702,22 +766,25 @@ result.lines()
 ## Implementation Roadmap
 
 ### Phase 1: Critical Extractions (2-3 weeks)
+
 1. Extract CLI commands to separate crates (save 3,000 LOC)
 2. Split dashboard routes.rs into modules (save 1,500 LOC)
 3. Decompose P2P merge/import/export (save 1,400 LOC)
 **Total Phase 1**: ~5,900 LOC reduction
 
 ### Phase 2: Domain Consolidation (2 weeks)
-4. Split SQLite into query/mutation layers (save 1,600 LOC)
-5. Split domain storage port into smaller ports (save 1,400 LOC)
-6. Extract shared query builder (save 400 LOC)
+
+1. Split SQLite into query/mutation layers (save 1,600 LOC)
+2. Split domain storage port into smaller ports (save 1,400 LOC)
+3. Extract shared query builder (save 400 LOC)
 **Total Phase 2**: ~3,400 LOC reduction
 
 ### Phase 3: Optimization & Cleanup (1-2 weeks)
-7. Fix memory allocations in loops (perf improvement)
-8. Consolidate duplicated response formatters (save 200 LOC)
-9. Merge contract-tests into integration-tests (save 11 LOC)
-10. Resolve unused code and dead imports (save 300 LOC)
+
+1. Fix memory allocations in loops (perf improvement)
+2. Consolidate duplicated response formatters (save 200 LOC)
+3. Merge contract-tests into integration-tests (save 11 LOC)
+4. Resolve unused code and dead imports (save 300 LOC)
 **Total Phase 3**: ~510 LOC reduction
 
 **Grand Total Potential**: ~9,810 LOC reduction (18% of codebase)
@@ -727,12 +794,14 @@ result.lines()
 ## Quality Metrics Target
 
 ### Before Refactoring
+
 - Total LOC: 66,693
 - Largest crate: 8,884 LOC
 - Test coverage: ~14% (12,395 test LOC)
 - Code duplication: 8+ instances
 
 ### After Refactoring
+
 - Target LOC: 56,000 (16% reduction)
 - Largest crate: 5,500 LOC (decompose further if needed)
 - Test coverage: 18%+ (improved due to unit testing extracted modules)

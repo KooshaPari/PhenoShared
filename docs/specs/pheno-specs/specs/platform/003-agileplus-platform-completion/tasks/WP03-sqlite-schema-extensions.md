@@ -26,6 +26,7 @@ Extend the existing `agileplus-sqlite` crate with event sourcing tables and impl
 ## Objective
 
 Implement:
+
 - 5 new tables for events, snapshots, sync mappings, API keys, device nodes
 - SqliteEventStore implementing the EventStore trait
 - WAL mode optimization for concurrent access
@@ -34,6 +35,7 @@ Implement:
 ## Architecture
 
 The SQLite event store provides:
+
 - ACID-compliant event persistence
 - Index optimization for common query patterns
 - Foreign key integrity (optional, at your discretion)
@@ -67,6 +69,7 @@ CREATE INDEX IF NOT EXISTS idx_events_actor ON events(actor);
 ```
 
 **Rationale:**
+
 - Composite index on (entity_type, entity_id, sequence) for fast lookups by entity
 - Timestamp index for time-range queries
 - Event type and actor indexes for filtering by event/actor
@@ -91,6 +94,7 @@ CREATE INDEX IF NOT EXISTS idx_snapshots_time ON snapshots(created_at);
 ```
 
 **Rationale:**
+
 - DESC ordering on event_sequence for efficient "latest snapshot" queries
 - Time index for cleanup operations
 
@@ -118,6 +122,7 @@ CREATE INDEX IF NOT EXISTS idx_sync_time ON sync_mappings(last_synced_at);
 ```
 
 **Rationale:**
+
 - Unique on (entity_type, entity_id) to enforce one-to-one relationship
 - Unique on plane_issue_id to prevent duplicates
 - Time index for sync monitoring
@@ -142,6 +147,7 @@ CREATE INDEX IF NOT EXISTS idx_api_keys_active ON api_keys(revoked, created_at);
 ```
 
 **Rationale:**
+
 - Unique on key_hash (never store plaintext keys!)
 - Index on hash for fast lookups
 - Composite index on (revoked, created_at) for "active keys" queries
@@ -168,6 +174,7 @@ CREATE INDEX IF NOT EXISTS idx_devices_lastseen ON device_nodes(last_seen);
 ```
 
 **Rationale:**
+
 - Unique on device_id (primary key-like constraint)
 - Indexes for lookup by device ID, hostname, or recency
 
@@ -425,6 +432,7 @@ impl EventStore for SqliteEventStore {
 ```
 
 **Key implementation notes:**
+
 - All async methods return proper EventError variants
 - BLOB columns store hash arrays
 - TEXT columns store JSON and timestamps as ISO 8601 strings
@@ -478,6 +486,7 @@ async fn migrate_internal(pool: &SqlitePool) -> Result<(), Error> {
 ```
 
 **WAL Mode benefits:**
+
 - Allows concurrent reads while writes are in progress
 - Reduces lock contention
 - Improves throughput for event append operations

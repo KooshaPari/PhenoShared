@@ -26,6 +26,7 @@ Create the `agileplus-graph` crate with Neo4j connectivity, node/relationship CR
 ## Objective
 
 Implement:
+
 - Neo4j connection management
 - Node types with uniqueness constraints
 - Relationship CRUD operations
@@ -36,6 +37,7 @@ Implement:
 ## Architecture
 
 The graph layer models:
+
 - **Features** as nodes with state and metadata
 - **WorkPackages** as nodes with ordinal sequencing
 - **Agents** as nodes representing users/systems
@@ -50,6 +52,7 @@ The graph layer models:
 Create a new crate at `crates/agileplus-graph/`.
 
 **Cargo.toml:**
+
 ```toml
 [package]
 name = "agileplus-graph"
@@ -70,6 +73,7 @@ tokio = { version = "1", features = ["full"] }
 ```
 
 **Directory structure:**
+
 ```
 crates/agileplus-graph/
 ├── Cargo.toml
@@ -84,6 +88,7 @@ crates/agileplus-graph/
 ```
 
 **lib.rs content:**
+
 ```rust
 pub mod config;
 pub mod health;

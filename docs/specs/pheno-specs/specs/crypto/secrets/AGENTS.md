@@ -104,6 +104,7 @@ npm run dev
 Format: `<type>/<domain>/<description>`
 
 Examples:
+
 - `feat/scanner/add-trivy-integration`
 - `fix/policy/correct-csp-check`
 - `compliance/soc2/add-controls`
@@ -113,6 +114,7 @@ Examples:
 Format: `<type>(<scope>): <description>`
 
 Examples:
+
 - `feat(scanner): implement container scanning`
 - `fix(opa): handle null input gracefully`
 - `compliance(soc2): add access control evidence`
@@ -187,12 +189,14 @@ opa eval -i input.json -d policies/ 'data.security.violations'
 ## Agent Notes
 
 **Critical Details:**
+
 - All scan results must be auditable
 - Policies are evaluated in sandbox
 - Secrets must never be logged
 - CI gates can block deployments
 
 **Known Gotchas:**
+
 - False positives require tuning
 - Large repos need chunked scanning
 - Policy changes affect all projects

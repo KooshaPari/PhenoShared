@@ -9,6 +9,7 @@
 ## Phase 3.1: Setup & Infrastructure ✅ COMPLETE
 
 ### Deliverables
+
 - ✅ Created `pheno/llm/routing/` directory
 - ✅ Created `pheno/llm/protocol/` directory
 - ✅ Created `pheno/mcp/tools/` directory
@@ -43,14 +44,17 @@
 ## Phase 3.2 Deliverables ✅
 
 ### Source Code
+
 - ✅ `pheno/llm/optimization/context_folding.py` (489 LOC) - Generified, zero zen-mcp-server dependencies
 - ✅ `pheno/llm/optimization/__init__.py` - Updated exports
 
 ### Documentation
+
 - ✅ `docs/llm/context_folding.md` - 300+ line comprehensive guide
 - ✅ Includes: Quick start, algorithm, configuration, benchmarks, FAQ
 
 ### Key Improvements from zen-mcp-server version
+
 1. **Removed Dependencies:**
    - ❌ `from src.shared.logging import get_logger`
    - ❌ `from src.shared.utilities.common.litellm_router_optimized import get_litellm_router`
@@ -72,6 +76,7 @@
 ## Phase 3.3 Deliverables ✅
 
 ### Source Code
+
 - ✅ `pheno/llm/routing/ensemble.py` (884 LOC) - Generified, zero zen-mcp-server dependencies
 - ✅ `pheno/llm/routing/__init__.py` - Updated exports with all ensemble classes
 - ✅ `pheno/llm/ports.py` - Extended with routing ports:
@@ -82,10 +87,12 @@
   - `RoutingMetricsPort` - Performance metrics interface
 
 ### Documentation
+
 - ✅ `docs/llm/ensemble_routing.md` - 700+ line comprehensive guide
 - ✅ Includes: Quick start, 7 strategies explained with tradeoffs, configuration reference, integration examples (FastAPI/LangChain/Pydantic AI), performance benchmarks, advanced usage, 12+ FAQ answers
 
 ### Key Improvements from zen-mcp-server version
+
 1. **Removed Dependencies:**
    - ❌ `from src.shared.logging import get_logger`
    - ❌ `from src.shared.utilities.common.litellm_router_optimized import get_litellm_router, select_best_model`
@@ -116,6 +123,7 @@
    - ✅ A/B testing framework support
 
 ### Implementation Stats
+
 - **Lines of Code**: 884 (original: 612, +44% with enhancements)
 - **Classes**: 10 (EnsembleConfig, BaseRoutingStrategy, 7 Strategy classes, EnsembleRouter)
 - **Functions**: 30+ with comprehensive type hints
@@ -130,6 +138,7 @@
 ## Phase 3.4 Deliverables ✅
 
 ### Source Code
+
 - ✅ `pheno/llm/protocol/optimization.py` (808 LOC) - Generified, zero zen-mcp-server dependencies
 - ✅ `pheno/llm/protocol/__init__.py` - Updated exports with all protocol classes
 - ✅ `pheno/llm/ports.py` - Added protocol optimization ports:
@@ -139,10 +148,12 @@
   - `ProtocolPort` - Generic protocol interface
 
 ### Documentation
+
 - ✅ `docs/llm/protocol_optimization.md` - 958 line comprehensive guide
 - ✅ Includes: Quick start, architecture, optimization techniques, configuration, benchmarks, integration patterns, troubleshooting, performance tuning, 15+ FAQ answers
 
 ### Key Improvements from zen-mcp-server version
+
 1. **Removed Dependencies:**
    - ❌ `from src.shared.logging import get_logger`
    - ✅ → Configurable logger via dependency injection
@@ -166,6 +177,7 @@
    - ✅ Overall latency reduction: 30-50%
 
 ### Implementation Stats
+
 - **Lines of Code**: 808 (original: 607, +33% with enhancements)
 - **Classes**: 7 (ProtocolConfig, Request, BatchMetrics, ContinuousBatcher, RequestCompressor, ConnectionPool, PriorityQueue, OptimizedProtocol)
 - **Functions**: 25 with comprehensive type hints
@@ -179,19 +191,23 @@
 ## Phase 3.5 Deliverables ✅
 
 ### Source Code
+
 - ✅ `pheno/mcp/tools/decorators.py` (952 LOC) - Generified, zero zen-mcp-server dependencies
 - ✅ `pheno/mcp/tools/__init__.py` - Updated exports with all decorator classes
 - ✅ `pheno/mcp/ports.py` - Already contains DecoratorPort, SchemaGeneratorPort, ValidationPort
 
 ### Documentation
+
 - ✅ `docs/mcp/tool_decorators_guide.md` - 1,050+ line comprehensive guide
 - ✅ Includes: Quick start, core concepts, basic usage, advanced features, multi-framework support, schema generation, validation, error handling, integration patterns, performance tips, 10+ FAQ answers
 
 ### Integration Examples
+
 - ✅ `examples/mcp_tool_decorators_example.py` - 381 LOC comprehensive example
 - ✅ Includes: Basic registration, validation, coercion, error handling, deprecation, batch registration, framework-specific conversion
 
 ### Key Improvements from zen-mcp-server version
+
 1. **Removed Dependencies:**
    - ❌ `from src.shared.logging import get_logger`
    - ✅ → Standard Python logging with configurable logger
@@ -212,6 +228,7 @@
    - ✅ Comprehensive documentation with 1,050+ lines
 
 ### Implementation Stats
+
 - **Lines of Code**: 952 (original: ~350, +172%)
 - **Classes**: 2 (ToolFramework, ToolMetadata)
 - **Functions**: 15 with comprehensive type hints
@@ -228,6 +245,7 @@
 **Begin Phase 3.8: Extract Refactoring Patterns CLI**
 
 **What to do**:
+
 1. Read `zen-mcp-server/src/patterns/refactoring_patterns.py` and related files
 2. Generify: Remove zen-specific dependencies and imports
 3. Extract: Create CLI tool for code extraction/analysis/validation
@@ -237,6 +255,7 @@
 7. Commit: Ready for integration testing
 
 **Expected Deliverables**:
+
 - `pheno/patterns/refactoring/analyzer.py` (~400 LOC)
 - `pheno/patterns/refactoring/extractor.py` (~500 LOC)
 - `pheno/patterns/refactoring/validator.py` (~400 LOC)

@@ -48,6 +48,7 @@ only `std`.
 ## Consequences
 
 **Positive**
+
 - Adding an engine is a new crate; nothing in the gateway or core moves.
 - We can swap `PhenotypeRouterAdapter` for a different router without
   touching dispatch code.
@@ -55,6 +56,7 @@ only `std`.
   both wire the same adapters, just at different ingress layers.
 
 **Negative**
+
 - New contributors must understand the layer rules before they can land
   code. The rule of thumb: "where does the trait live? — that's the
   adapter's home."

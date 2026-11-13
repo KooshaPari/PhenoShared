@@ -20,6 +20,7 @@ All other Phase 1 items are either complete or deferred to Phase 2 (Tier 2 mediu
 ## Current Spec State (Actual, 2026-03-29)
 
 ### phenotype-infrakit — COMPLETE ✅
+
 | Spec | Lines | Status | Score |
 |------|-------|--------|-------|
 | PRD.md | 184 | ✅ Substantive | 95/100 |
@@ -33,6 +34,7 @@ All other Phase 1 items are either complete or deferred to Phase 2 (Tier 2 mediu
 ---
 
 ### heliosCLI — COMPLETE ✅
+
 | Spec | Lines | Status | Score |
 |------|-------|--------|-------|
 | PRD.md | 217 | ✅ Substantive | 95/100 |
@@ -48,6 +50,7 @@ All other Phase 1 items are either complete or deferred to Phase 2 (Tier 2 mediu
 ---
 
 ### platforms/thegent — PARTIAL+ ⚠️
+
 | Spec | Lines | Status | Score |
 |------|-------|--------|-------|
 | PRD.md | 65 | ⚠️ Minimal | 85/100 |
@@ -67,6 +70,7 @@ All other Phase 1 items are either complete or deferred to Phase 2 (Tier 2 mediu
 ### Task #31: Create platforms/thegent/USER_JOURNEYS.md
 
 **Scope:**
+
 - Document 5-7 user actor journeys through thegent multi-agent orchestration workflows
 - Map to existing FUNCTIONAL_REQUIREMENTS.md (704 lines, already comprehensive)
 - User actors: HAX agent operators, researchers, platform engineers, system integrators
@@ -74,11 +78,13 @@ All other Phase 1 items are either complete or deferred to Phase 2 (Tier 2 mediu
 - Full FR↔UJ traceability matrix (100% coverage of all FRs)
 
 **Reference Templates:**
+
 - `heliosCLI/USER_JOURNEYS.md` (449 lines) — CLI/interaction pattern
 - `phenotype-infrakit/USER_JOURNEYS.md` (262 lines) — system-level pattern
 - Both follow: UJ-NNN header, Actor/Goal/Preconditions/Flow/Involved FRs/Metrics structure
 
 **Expected Output:**
+
 - platforms/thegent/USER_JOURNEYS.md (~300-400 lines substantive)
 - Journey Metrics table (5-7 journeys × columns: UJ ID, Actor, Frequency, Priority, Status)
 - Traceability Matrix (all 20+ FRs covered by ≥1 journey, 100% coverage target)
@@ -87,11 +93,13 @@ All other Phase 1 items are either complete or deferred to Phase 2 (Tier 2 mediu
 **Effort:** 1 sprint (~2 hours direct writing)
 
 **Result on Completion:**
+
 - platforms/thegent moves from L4 (85/100) → L5 (95/100)
 - Ecosystem score: 92/100 → 95/100 ✅
 - Phase 1 COMPLETE: All 3 canonical repos at L5
 
 **Acceptance Criteria:**
+
 - ✅ USER_JOURNEYS.md exists at platforms/thegent/USER_JOURNEYS.md
 - ✅ ≥300 lines substantive content (excluding metadata)
 - ✅ 5-7 end-to-end journeys documented with ASCII flows
@@ -146,6 +154,7 @@ Four decisions remain unresolved from shelf audit phase:
 **Task:** Create platforms/thegent/USER_JOURNEYS.md (Task #31)
 
 **Steps:**
+
 1. Analyze platforms/thegent/FUNCTIONAL_REQUIREMENTS.md (704 lines)
    - Extract major feature clusters: agent coordination, routing, memory, observability
    - Identify user actor types: operators, researchers, integrators, platform engineers
@@ -186,11 +195,13 @@ Four decisions remain unresolved from shelf audit phase:
 ### Week 2+ (Phase 2) — Deferred
 
 **Phase 2a — Expand thegent PRD (Sprint 2)**
+
 - Expand platforms/thegent/PRD.md from 65→150+ lines
 - Add feature epics E1-E5 with acceptance criteria
 - Score: 85/100 → 88/100
 
 **Phase 2b — Create TRACEABILITY_MAP.md (Sprints 3-4)**
+
 - Cross-project traceability linking:
   - phenotype-infrakit policies → heliosCLI commands → thegent agents
   - Shared FR patterns (authentication, caching, event sourcing)
@@ -214,17 +225,20 @@ Four decisions remain unresolved from shelf audit phase:
 ## Recommendation for Team-Lead
 
 **Immediate Next Step:**
+
 1. Resolve 4 blocker decisions (listed above)
 2. Assign Task #31 (thegent USER_JOURNEYS) to Phase 1 executor
 3. Set target completion: 2026-04-05 (1 sprint)
 
 **Team Assignment:**
+
 - Task #31 executor (1 role) — Writer/analyst
   - Skills: Technical writing, FR analysis, traceability mapping
   - Effort: ~2 hours focused work
   - Leverage: heliosCLI and phenotype-infrakit templates as reference
 
 **Post-Sprint-1:**
+
 - Review Phase 1 completion (Tier 1 blocker done)
 - Decide on Phase 2 scope and timeline (Tier 2 items)
 - 4 blocker decisions can be resolved in parallel while Phase 1 executes

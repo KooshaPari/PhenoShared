@@ -7,6 +7,7 @@
 ## Overview
 
 This guide covers automated and manual setup of 3 Sentry projects for error tracking across:
+
 - **AgilePlus** (Rust workspace)
 - **phenotype-infrakit** (Rust workspace)
 - **heliosCLI** (Rust workspace)
@@ -18,6 +19,7 @@ Each project will generate a DSN token, configured as GitHub Secrets for CI/CD i
 ## Quick Start (Automated)
 
 ### Prerequisites
+
 - Sentry auth token with `project:admin` scope stored in `~/.sentryclirc`
 - `sentry-cli` installed (v3.3.5+)
 - GitHub CLI (`gh`) authenticated
@@ -25,21 +27,27 @@ Each project will generate a DSN token, configured as GitHub Secrets for CI/CD i
 ### Steps
 
 1. **Verify token permissions:**
+
    ```bash
    sentry-cli organizations list
    ```
+
    Expected: List of organizations you have access to
 
 2. **Run the automated script:**
+
    ```bash
    bash /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/create-sentry-projects.sh
    ```
 
 3. **Verify GitHub Secrets:**
+
    ```bash
    gh secret list | grep SENTRY_DSN
    ```
+
    Expected:
+
    ```
    SENTRY_DSN_AGILEPLUS
    SENTRY_DSN_HELIOSCLI
@@ -52,7 +60,7 @@ Each project will generate a DSN token, configured as GitHub Secrets for CI/CD i
 
 ### Step 1: Log into Sentry Dashboard
 
-1. Go to https://sentry.io/
+1. Go to <https://sentry.io/>
 2. Sign in with your account
 3. Navigate to Organization: **stealth-startup-3u**
 
@@ -99,6 +107,7 @@ gh secret list | grep SENTRY_DSN
 ```
 
 Expected output:
+
 ```
 SENTRY_DSN_AGILEPLUS    Updated 2026-03-31
 SENTRY_DSN_HELIOSCLI    Updated 2026-03-31
@@ -115,7 +124,7 @@ SENTRY_DSN_INFRAKIT     Updated 2026-03-31
 
 **Solution:**
 
-1. Log into Sentry: https://sentry.io/settings/auth-tokens/
+1. Log into Sentry: <https://sentry.io/settings/auth-tokens/>
 2. Find your token in the list
 3. Check the **Scopes** column
 4. If missing `project:admin`:
@@ -126,11 +135,14 @@ SENTRY_DSN_INFRAKIT     Updated 2026-03-31
      - `team:admin` ✓
 5. Copy the new token
 6. Update `~/.sentryclirc`:
+
    ```bash
    nano ~/.sentryclirc
    # Replace the token= line with your new token
    ```
+
 7. Verify:
+
    ```bash
    sentry-cli organizations list
    ```
@@ -140,6 +152,7 @@ SENTRY_DSN_INFRAKIT     Updated 2026-03-31
 **Solution:**
 
 1. Create the config file:
+
    ```bash
    mkdir -p ~/.config/sentry
    cat > ~/.sentryclirc <<EOF
@@ -148,9 +161,10 @@ SENTRY_DSN_INFRAKIT     Updated 2026-03-31
    EOF
    ```
 
-2. Get token from: https://sentry.io/settings/auth-tokens/
+2. Get token from: <https://sentry.io/settings/auth-tokens/>
 3. Replace `<YOUR_TOKEN_HERE>` with your actual token
 4. Verify:
+
    ```bash
    sentry-cli organizations list
    ```
@@ -160,11 +174,13 @@ SENTRY_DSN_INFRAKIT     Updated 2026-03-31
 **Solution:**
 
 1. Verify GitHub CLI is authenticated:
+
    ```bash
    gh auth status
    ```
 
 2. If not authenticated:
+
    ```bash
    gh auth login
    ```
@@ -211,7 +227,7 @@ Integration using `SENTRY_DSN_HELIOSCLI`
 - [ ] 3 DSN tokens obtained and verified
 - [ ] GitHub Secrets configured (`SENTRY_DSN_*`)
 - [ ] `sentry-cli` can authenticate: `sentry-cli organizations list`
-- [ ] Projects appear in Sentry dashboard: https://sentry.io/organizations/stealth-startup-3u/projects/
+- [ ] Projects appear in Sentry dashboard: <https://sentry.io/organizations/stealth-startup-3u/projects/>
 - [ ] Each project has valid DSN in format: `https://<key>@<subdomain>.ingest.sentry.io/<id>`
 
 ---
@@ -228,7 +244,7 @@ Integration using `SENTRY_DSN_HELIOSCLI`
 
 ## References
 
-- Sentry Auth Tokens: https://sentry.io/settings/auth-tokens/
-- Sentry Rust SDK: https://docs.sentry.io/platforms/rust/
-- sentry-cli Documentation: https://docs.sentry.io/cli/
-- GitHub Secrets: https://docs.github.com/en/actions/security-guides/encrypted-secrets
+- Sentry Auth Tokens: <https://sentry.io/settings/auth-tokens/>
+- Sentry Rust SDK: <https://docs.sentry.io/platforms/rust/>
+- sentry-cli Documentation: <https://docs.sentry.io/cli/>
+- GitHub Secrets: <https://docs.github.com/en/actions/security-guides/encrypted-secrets>

@@ -1,6 +1,7 @@
 # A-06 Validation
 
 ## ADR files present in `docs/adr/`
+
 - [x] ADR-001-hybrid-compute-mesh.md (updated with repo paths)
 - [x] ADR-002-polyglot-architecture.md (new)
 - [x] ADR-001-language-selection.md (from nanovms)
@@ -19,12 +20,14 @@
 - [x] ADR-014-agent-desktop-environments.md
 
 ## Cross-references
+
 - [x] ADR-001 references ADR-002 in Related section
 - [x] ADR-001 lists actual crate paths
 - [x] ADR-002 references ADR-001
 - [x] ADR-002 describes 3-mode build.rs orchestration
 
 ## Git state
+
 - [x] All files committed
 - [x] Commit message matches convention
 

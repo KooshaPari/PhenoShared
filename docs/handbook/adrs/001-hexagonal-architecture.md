@@ -15,6 +15,7 @@ The Phenotype ecosystem requires a consistent architectural approach across all 
 - **heliosApp**: Web application framework
 
 We need an architecture that supports:
+
 1. **Testability** — Easy to test without complex mocking infrastructure
 2. **Technology Independence** — Ability to swap implementations (DB, HTTP framework, etc.)
 3. **Parallel Development** — Teams can work on different adapters simultaneously
@@ -160,15 +161,19 @@ phenotype-component/
 ## Implementation
 
 ### Phase 1: New Components
+
 All new Phenotype components must implement hexagonal architecture from day one.
 
 ### Phase 2: Existing Components
+
 Gradual refactoring of existing code during feature work:
+
 - Extract domain logic into pure functions
 - Create port interfaces for external dependencies
 - Move framework code to adapters
 
 ### Phase 3: Verification
+
 - Automated architecture tests (cargo-architect)
 - PR checklist for hexagonal compliance
 - Architecture decision records for exceptions

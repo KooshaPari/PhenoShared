@@ -92,16 +92,19 @@ Major project directories needing evaluation:
 ## Next Actions
 
 ### Immediate (P0)
+
 1. Update submodules (portage, thegent-plugin-host, vibeproxy)
 2. Clean up cliproxyapi-plusplus untracked files
 3. Decide on 41 new project directories
 
 ### Short-term (P1)
+
 1. Continue cliproxyapi-plusplus next bounded slice
 2. Check heliosApp stash recovery status
 3. Clean thegent-pr908-policy-fix untracked test files
 
 ### Long-term (P2)
+
 1. Organize new project directories into proper structure
 2. Create worktrees for active development lanes
 3. Implement PR families from heliosApp stash decomposition

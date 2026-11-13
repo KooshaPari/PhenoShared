@@ -38,6 +38,7 @@ This phase also addresses **CLI command handler consolidation** (validate.rs 674
 ### 3a.1: routes.rs Decomposition (2,631 LOC → 6-8 files)
 
 **Current State:**
+
 ```
 agileplus-dashboard/src/routes.rs
 ├── GET /dashboard/health              (45 LOC)
@@ -56,6 +57,7 @@ agileplus-dashboard/src/routes.rs
 ```
 
 **Problem:**
+
 - 53 handlers in single file → high coupling
 - Each handler ~50 LOC avg, many >100 LOC (should be <50)
 - Template consolidation (header/auth/error handling repeated)
@@ -96,6 +98,7 @@ agileplus-dashboard/src/
 ```
 
 **Benefits:**
+
 - Single handler per route: ~50-75 LOC each (manageable)
 - Each file ~300-600 LOC (maintainable)
 - Reusable middleware (AuthGuard, ErrorHandler) → 200-300 LOC saved
@@ -113,6 +116,7 @@ agileplus-dashboard/src/
 | **WI-3.1.5** | Consolidate tests; update integration tests to hit all routes | -200 (net) | 1.5h | All routes tested; 0 regressions; clippy 0 warnings |
 
 **Validation:**
+
 ```bash
 # After Phase 3a.1 complete:
 cloc agileplus-dashboard/src/routes/
@@ -130,6 +134,7 @@ cargo test --lib routes:: --release
 ### 3a.2: sqlite/lib.rs Decomposition (1,582 LOC → 4-5 files)
 
 **Current State:**
+
 ```
 agileplus-sqlite/src/lib.rs (1,582 LOC)
 ├── SQLiteStore (main struct)
@@ -141,6 +146,7 @@ agileplus-sqlite/src/lib.rs (1,582 LOC)
 ```
 
 **Problem:**
+
 - Everything in src/lib.rs → no internal module structure
 - Query building mixed with store logic → 1,015 indent levels
 - Migrations hardcoded with queries → maintenance burden
@@ -188,6 +194,7 @@ agileplus-sqlite/src/
 ```
 
 **Benefits:**
+
 - Parallel module development (query team ≠ store team ≠ migration team)
 - Query builders testable without database (~150 LOC test savings)
 - Migrations versionable, deployable independently
@@ -205,6 +212,7 @@ agileplus-sqlite/src/
 | **WI-3.2.5** | Update store.rs to use new modules; integration tests | -100 (refactor) | 2h | store.rs <350 LOC; all tests pass; no panics in migrations |
 
 **Validation:**
+
 ```bash
 # After Phase 3a.2 complete:
 cargo test -p agileplus-sqlite --lib 2>&1 | tail -1
@@ -222,6 +230,7 @@ cargo build --release 2>&1 | grep -c "warning:"
 ### 3b.1: validate.rs Decomposition (674 LOC → 2-3 files)
 
 **Current State:**
+
 ```
 agileplus-cli/src/commands/validate.rs (674 LOC)
 ├── ValidateCommand struct (50 LOC)
@@ -238,6 +247,7 @@ agileplus-cli/src/commands/validate.rs (674 LOC)
 ```
 
 **Proposed Structure:**
+
 ```
 agileplus-cli/src/commands/validate/
 ├── mod.rs                    (40 LOC) — ValidateCommand entry point
@@ -247,6 +257,7 @@ agileplus-cli/src/commands/validate/
 ```
 
 **Benefits:**
+
 - Each validator focused on single schema
 - Reporter reusable in other commands (lint, check, etc.)
 - Error types extracted to shared lib (phenotype-errors integration)
@@ -258,6 +269,7 @@ agileplus-cli/src/commands/validate/
 ### 3b.2: retrospective.rs Decomposition (630 LOC → 2-3 files)
 
 **Current State:**
+
 ```
 agileplus-cli/src/commands/retrospective.rs (630 LOC)
 ├── RetrospectiveCommand
@@ -266,6 +278,7 @@ agileplus-cli/src/commands/retrospective.rs (630 LOC)
 ```
 
 **Proposed Structure:**
+
 ```
 agileplus-cli/src/commands/retrospective/
 ├── mod.rs                    (40 LOC) — Entry point
@@ -280,6 +293,7 @@ agileplus-cli/src/commands/retrospective/
 ### 3b.3: plan.rs Decomposition (553 LOC → 2 files)
 
 **Current State:**
+
 ```
 agileplus-cli/src/commands/plan.rs (553 LOC)
 ├── PlanCommand
@@ -288,6 +302,7 @@ agileplus-cli/src/commands/plan.rs (553 LOC)
 ```
 
 **Proposed Structure:**
+
 ```
 agileplus-cli/src/commands/plan/
 ├── mod.rs                    (40 LOC) — Entry point
@@ -313,6 +328,7 @@ agileplus-cli/src/commands/plan/
 ### 3c.1: Suppressions Audit & Removal
 
 **Current Suppressions:**
+
 - registry.rs: 7 `#[allow(dead_code)]`
 - core.rs: 4 `#[allow(dead_code)]`
 - routes.rs: 2 `#[allow(dead_code)]` (reduced after 3a.1)
@@ -320,6 +336,7 @@ agileplus-cli/src/commands/plan/
 - **Total: 45+ suppressions across workspace**
 
 **Action:**
+
 1. Audit each suppression → determine if truly dead or just internal
 2. Remove dead code OR move to internal modules if kept
 3. Update CLIPPY_CONFIG.toml if patterns are unavoidable
@@ -395,20 +412,24 @@ High Impact
 ### Recommended Execution Order
 
 **Week 1 (Mon-Wed): Megafile Refactoring (Parallel)**
+
 - **Monday:** Kick off WI-3.1.1 (handlers.rs) + WI-3.2.1 (pool.rs) — 2 agents, 1.5h each
 - **Tuesday:** WI-3.1.2 (dashboard.rs) + WI-3.2.2 (query/) — 2 agents, 2-4h each
 - **Wednesday:** WI-3.1.3 (settings.rs) + WI-3.2.3 (migration/) — 2 agents, 1.5-2.5h each
 
 **Week 1 (Thu-Fri): Megafile Completion**
+
 - **Thursday:** WI-3.1.4 (workitems.rs, evidence.rs, agents.rs) — 1 agent, 5h
 - **Friday:** WI-3.1.5 + WI-3.2.4 + WI-3.2.5 (tests & validation) — 1 agent, 5.5h
 
 **Week 2 (Mon-Wed): CLI Handlers**
+
 - **Monday:** WI-3.3.1 (validate/mod.rs + spec_validator.rs) — 1 agent, 3h
 - **Tuesday:** WI-3.3.2 (retrospective/mod.rs + generator.rs) — 1 agent, 3h
 - **Wednesday:** WI-3.3.3 (plan/mod.rs + loader.rs) — 1 agent, 2.5h
 
 **Week 2 (Thu-Fri): Dead Code & Validation**
+
 - **Thursday:** WI-3.4.1 (suppressions audit) + WI-3.4.2 (removal/consolidation) — 1 agent, 4-6h
 - **Friday:** Full regression testing, final validation, PR prep
 
@@ -464,6 +485,7 @@ kill %1
 ### Phase 3a: Megafile Refactoring
 
 #### WI-3.1.1: Extract Shared Route Middleware
+
 - **Scope:** handlers.rs (extract AuthGuard, ResponseWrapper, ErrorHandler)
 - **Input Files:** agileplus-dashboard/src/routes.rs
 - **Output Files:** agileplus-dashboard/src/routes/handlers.rs
@@ -478,6 +500,7 @@ kill %1
 - **Est. Effort:** 2.5h
 
 #### WI-3.1.2: Extract Dashboard Routes
+
 - **Scope:** routes/dashboard.rs (GET /dashboard/*, dashboard analytics)
 - **Input Files:** agileplus-dashboard/src/routes.rs (~600 LOC of dashboard handlers)
 - **Output Files:** agileplus-dashboard/src/routes/dashboard.rs
@@ -491,6 +514,7 @@ kill %1
 - **Est. Effort:** 2h
 
 #### WI-3.1.3: Extract Settings Routes
+
 - **Scope:** routes/settings.rs (GET/POST /dashboard/settings)
 - **Acceptance Criteria:**
   - settings.rs <350 LOC
@@ -500,6 +524,7 @@ kill %1
 - **Est. Effort:** 1.5h
 
 #### WI-3.1.4: Extract Remaining Routes (workitems, evidence, agents)
+
 - **Scope:** routes/workitems.rs, routes/evidence.rs, routes/agents.rs
 - **Input Files:** agileplus-dashboard/src/routes.rs (~931 LOC)
 - **Output Files:** 3 new files in routes/
@@ -511,6 +536,7 @@ kill %1
 - **Est. Effort:** 5h
 
 #### WI-3.1.5: Test Suite Consolidation & Validation
+
 - **Scope:** Integration tests, route testing, regression verification
 - **Input Files:** tests/routes_*.rs
 - **Acceptance Criteria:**
@@ -524,6 +550,7 @@ kill %1
 ---
 
 #### WI-3.2.1: Extract Connection Pool
+
 - **Scope:** pool.rs (connection pooling logic)
 - **Input Files:** agileplus-sqlite/src/lib.rs (~100 LOC)
 - **Output Files:** agileplus-sqlite/src/pool.rs
@@ -536,6 +563,7 @@ kill %1
 - **Est. Effort:** 1.5h
 
 #### WI-3.2.2: Extract Query Builder Module
+
 - **Scope:** query/ (builder.rs, workitems.rs, evidence.rs)
 - **Input Files:** agileplus-sqlite/src/lib.rs (~400 LOC query logic)
 - **Output Files:** query/mod.rs, query/builder.rs, query/workitems.rs, query/evidence.rs
@@ -549,6 +577,7 @@ kill %1
 - **Est. Effort:** 4h
 
 #### WI-3.2.3: Extract Migration Module
+
 - **Scope:** migration/ (runner.rs, m00X_*.rs)
 - **Input Files:** agileplus-sqlite/src/lib.rs (~200 LOC migrations)
 - **Output Files:** migration/mod.rs, migration/runner.rs, migration/m001_*.rs, etc.
@@ -561,6 +590,7 @@ kill %1
 - **Est. Effort:** 2.5h
 
 #### WI-3.2.4: Extract Serialization
+
 - **Scope:** serialize.rs (JSON/binary serde logic)
 - **Input Files:** agileplus-sqlite/src/lib.rs (~250 LOC)
 - **Output Files:** agileplus-sqlite/src/serialize.rs
@@ -573,6 +603,7 @@ kill %1
 - **Est. Effort:** 2h
 
 #### WI-3.2.5: Refactor SQLiteStore & Integration Tests
+
 - **Scope:** store.rs refactor, integration test validation
 - **Input Files:** agileplus-sqlite/src/lib.rs
 - **Output Files:** agileplus-sqlite/src/store.rs (refactored)
@@ -589,6 +620,7 @@ kill %1
 ### Phase 3b: CLI Handler Consolidation
 
 #### WI-3.3.1: Validate Command Decomposition
+
 - **Scope:** validate/ (mod.rs, spec_validator.rs, config_validator.rs, reporter.rs)
 - **Input Files:** agileplus-cli/src/commands/validate.rs (674 LOC)
 - **Output Files:** validate/mod.rs, validate/spec_validator.rs, validate/config_validator.rs, validate/reporter.rs
@@ -602,6 +634,7 @@ kill %1
 - **Est. Effort:** 6-8h
 
 #### WI-3.3.2: Retrospective Command Decomposition
+
 - **Scope:** retrospective/ (mod.rs, generator.rs, formatter.rs)
 - **Input Files:** agileplus-cli/src/commands/retrospective.rs (630 LOC)
 - **Output Files:** retrospective/mod.rs, retrospective/generator.rs, retrospective/formatter.rs
@@ -614,6 +647,7 @@ kill %1
 - **Est. Effort:** 6-8h
 
 #### WI-3.3.3: Plan Command Decomposition
+
 - **Scope:** plan/ (mod.rs, loader.rs, renderer.rs)
 - **Input Files:** agileplus-cli/src/commands/plan.rs (553 LOC)
 - **Output Files:** plan/mod.rs, plan/loader.rs, plan/renderer.rs
@@ -631,6 +665,7 @@ kill %1
 ### Phase 3c: Dead Code Cleanup
 
 #### WI-3.4.1: Dead Code Audit
+
 - **Scope:** Audit all `#[allow(dead_code)]` suppressions (45+)
 - **Input Files:** grep -r "allow(dead_code)" agileplus-*/src/
 - **Acceptance Criteria:**
@@ -641,6 +676,7 @@ kill %1
 - **Est. Effort:** 2h
 
 #### WI-3.4.2: Dead Code Removal/Consolidation
+
 - **Scope:** Remove dead code or move to internal modules; update suppressions
 - **Acceptance Criteria:**
   - Zero unjustified suppressions
@@ -678,6 +714,7 @@ kill %1
 | **Cumulative** | **15-20K** | **25-35K** | **8-12K** | **~1K** | **~2K** | **51-70K** |
 
 **Final Workspace Health:**
+
 - ✅ 68% of AgilePlus codebase optimized (63,892 LOC → 50,000-55,000 net)
 - ✅ 0 files >700 LOC (vs. 2 megafiles >1,500 LOC in Phase 2)
 - ✅ Avg file size ~300 LOC (vs. ~800 LOC baseline)

@@ -23,6 +23,7 @@
 Define the stable plugin interface contract that all plugin backends must implement. This includes lifecycle management, versioning guarantees, and a plugin registry for discovery and loading. This is the foundation that WP-002, WP-003, and WP-004 build upon.
 
 ### Subtasks
+
 - [ ] T001 Audit existing plugin interfaces in agileplus-plugin-core
 - [ ] T002 Design stable plugin interface contract: Plugin trait with lifecycle methods
 - [ ] T003 Define plugin lifecycle state machine: unloaded → loading → loaded → running → stopping → stopped
@@ -37,9 +38,11 @@ Define the stable plugin interface contract that all plugin backends must implem
 - [ ] T012 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - None (starting WP for this spec)
 
 ### Risks & Mitigations
+
 - Interface instability: Careful design review, version compatibility checking prevents breaking changes
 - Plugin loading security: Sandboxing design documented, signature verification planned for future
 
@@ -62,6 +65,7 @@ Define the stable plugin interface contract that all plugin backends must implem
 Complete the git VCS adapter plugin that implements the plugin-core interface for git-based storage and version control. This plugin enables AgilePlus to use git repositories as a storage backend for specs, plans, and audit chains.
 
 ### Subtasks
+
 - [ ] T013 Audit current agileplus-plugin-git state: existing code, gaps, dependencies
 - [ ] T014 Implement Plugin trait for git backend: init, load, save, query operations
 - [ ] T015 Implement git clone operation with auth support (SSH keys, HTTPS tokens)
@@ -76,9 +80,11 @@ Complete the git VCS adapter plugin that implements the plugin-core interface fo
 - [ ] T024 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - WP-001 (plugin-core interface stable)
 
 ### Risks & Mitigations
+
 - git2 API complexity: Reference existing git2 usage in codebase, test edge cases thoroughly
 - Network operation failures: Implement retry with exponential backoff, configurable timeouts
 
@@ -101,6 +107,7 @@ Complete the git VCS adapter plugin that implements the plugin-core interface fo
 Complete the SQLite storage adapter plugin that implements the plugin-core interface for SQLite-based persistence. This plugin provides local storage with migration support, enabling AgilePlus to store specs, WPs, and audit data in SQLite databases.
 
 ### Subtasks
+
 - [ ] T025 Audit current agileplus-plugin-sqlite state: existing code, gaps, dependencies
 - [ ] T026 Implement Plugin trait for SQLite backend: init, load, save, query operations
 - [ ] T027 Implement migration system: embedded SQL migrations with up/down support
@@ -115,9 +122,11 @@ Complete the SQLite storage adapter plugin that implements the plugin-core inter
 - [ ] T036 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - WP-001 (plugin-core interface stable)
 
 ### Risks & Mitigations
+
 - Migration safety: Test migrations on copy of database, support rollback on failure
 - Concurrency: Use WAL mode, document single-writer limitation
 
@@ -141,6 +150,7 @@ Complete the SQLite storage adapter plugin that implements the plugin-core inter
 Integrate thegent-plugin-host with the plugin-core interfaces, enabling thegent to discover, load, and manage plugins. This involves cross-language integration (Rust plugin interfaces with Go plugin host), plugin discovery, lifecycle management, and configuration.
 
 ### Subtasks
+
 - [ ] T037 Audit thegent-plugin-host: current prototype state, Go/Rust FFI approach
 - [ ] T038 Design Rust/Go FFI boundary: cgo with Rust C ABI, or shared protobuf service
 - [ ] T039 Implement plugin discovery: scan configured directories, load plugin manifests
@@ -156,11 +166,13 @@ Integrate thegent-plugin-host with the plugin-core interfaces, enabling thegent 
 - [ ] T049 Run quality checks across all components
 
 ### Dependencies
+
 - WP-001 (plugin-core interface stable)
 - WP-002 (git plugin available for integration testing)
 - WP-003 (SQLite plugin available for integration testing)
 
 ### Risks & Mitigations
+
 - Cross-language FFI complexity: Start with simple cgo, benchmark, consider gRPC alternative
 - Plugin loading security: Document sandboxing requirements, plan signature verification for future
 - Performance overhead: Benchmark plugin loading, optimize hot paths, support lazy loading

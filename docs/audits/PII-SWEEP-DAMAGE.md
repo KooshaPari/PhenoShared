@@ -474,45 +474,45 @@ reverted with `git show <pre-sweep>:<path>` rather than guessed.
 
 ### Tier 2 — mechanical but needs a policy decision
 
-7. **Un-redact the public namespace globally.** The single decision that resolves
+1. **Un-redact the public namespace globally.** The single decision that resolves
    ~39,000 of the 41,291 sites: is `KooshaPari` (the GitHub org, in URLs, owner
    refs and npm scopes) to be treated as public or redacted? The repositories are
    public on GitHub, so redaction buys no privacy and costs all provenance. A
    scripted `git show 3b6d8798^`-based revert of B-class sites is safe **once that
    decision is made** — but it must be a decision, not a heuristic, and the result
    must be diffed for the nested cases `ed4c0642` created.
-8. **`/Users/<REDACTED>/` (21,770 sites).** Genuinely a judgement call: the token
+2. **`/Users/<REDACTED>/` (21,770 sites).** Genuinely a judgement call: the token
    is the local account name. Recommended resolution: keep it redacted in
    *published prose*, restore it in *executable scripts, tests and doc runbooks*,
    where a placeholder makes the code wrong. That split is mechanical to apply.
-9. **Strip the hidden dead code, then remove the allows.** 152 diagnostics are
+3. **Strip the hidden dead code, then remove the allows.** 152 diagnostics are
    now visible via `--force-warn`. The `fabric-daemon` auth stack is the largest
    single question: delete it or wire it up? Do not simply delete the `allow`
    lines — that converts a silent state into 152 warnings and the gate stays red.
-10. **`orchestrator/src/lib.rs`: restore `#![warn(missing_docs)]`** after
+4. **`orchestrator/src/lib.rs`: restore `#![warn(missing_docs)]`** after
     documenting, or explicitly accept the debt in the code rather than silently
     flipping intent. The downgrade should not survive review.
 
 ### Tier 3 — needs human judgement / is unrecoverable
 
-11. **Duplicate-file multiplication.** `audits/org-audits/…`,
+ 1. **Duplicate-file multiplication.** `audits/org-audits/…`,
     `audits/org-audit-snapshots/…`, `scripts/org-audits/…`, `docs/…` hold 4–6
     copies of the same damaged files. Decide which copy is canonical *before*
     repairing, or the repair must be applied N times and will drift.
-12. **Semantic rewrites inside prose and audit records** (§1.3). Where the sweep
+ 2. **Semantic rewrites inside prose and audit records** (§1.3). Where the sweep
     collapsed a deliberate `KooshaPari`/`kooshapari` distinction or rewrote
     narrative, mechanical revert can restore the string but not always the
     sentence. Needs a reading pass.
-13. **`.patch` files (18) and `*.pre-<date>` snapshots.** These are frozen
+ 3. **`.patch` files (18) and `*.pre-<date>` snapshots.** These are frozen
     evidence. Restoring them changes hashes that other documents cite, so repair
     and re-citation must move together.
-14. **Genuinely lost:** the 12 degenerate sites (§2.1 D) where `ed4c0642` glued a
+ 4. **Genuinely lost:** the 12 degenerate sites (§2.1 D) where `ed4c0642` glued a
     marker into an address **and** the intervening commits rewrote the same line;
     `git log -S` cannot always recover the original. Verify per-site with
     `git log -S '<the specific string>'` before assuming recoverability — the
     audit found the pre-sweep text is retained for the `.mailmap` cases but that
     is not guaranteed everywhere.
-15. **Cannot be repaired by any of the above:** the confidence loss. A repo that
+ 5. **Cannot be repaired by any of the above:** the confidence loss. A repo that
     silently falsified 44,496 strings, and whose own broken-link tracker and
     lint gate were themselves broken, needs verification the *counts* in this
     audit remain reproducible after repair — i.e. re-run §0 and expect the

@@ -1,10 +1,12 @@
 # Phenotype Wrap-Up Work DAG (2026-06-17)
+
 **Status:** All completed tasks green; 4 strands documented for follow-up
 **Format:** Topological DAG with explicit dependencies and parallel streams
 
 ---
 
 ## Legend
+
 - ✅ DONE — work landed on &lt;REDACTED&gt;
 - 🟡 PUSHED_AS_WIP — work preserved as wip/* branch awaiting follow-up PR
 - 🟠 STRANDED — work in local worktree, no working remote (ARCHIVE_ONLY)
@@ -192,11 +194,13 @@
 ## Parallelism notes
 
 The 4 wrap-up streams (AgilePlus, pheno, dispatch-mcp, phenotype-ops) are **fully independent** and could have been parallelized across subagents. In this session they were executed sequentially because:
+
 1. The user-priority was speed-to-completion, not peak parallelism
 2. The shell tool's `cwd` parameter required sequential re-anchoring per call
 3. The `Task` tool was failing in this session (JSON error)
 
 **Next-session improvement**: For wrap-up of this size, dispatch one `forge` subagent per repo (4 in parallel) with explicit instructions:
+
 - "Fix origin, push WIP branches, drop obsolete stashes"
 - "Do NOT touch Dmouse92 remote — user has scoped that out"
 - "Report back when done; do not push force-with-lease without confirmation"

@@ -11,6 +11,7 @@ This document outlines the strategy for migrating existing registry implementati
 ## Migration Phases
 
 ### Phase 1: Core Registry Enhancement ✅
+
 - **Status**: Complete
 - **Actions**:
   - Enhanced `pheno.core.registry` with advanced features
@@ -18,6 +19,7 @@ This document outlines the strategy for migrating existing registry implementati
   - Added migration utilities in `pheno.core.registry_migration`
 
 ### Phase 2: Provider Registry Migration ✅
+
 - **Status**: Complete
 - **Actions**:
   - Migrated to `pheno.providers.registry_unified`
@@ -25,6 +27,7 @@ This document outlines the strategy for migrating existing registry implementati
   - Maintained backward compatibility
 
 ### Phase 3: Adapter Registry Migration ⏳
+
 - **Status**: In Progress
 - **Actions**:
   - Migrate `pheno.adapters.registry` to use unified system
@@ -32,6 +35,7 @@ This document outlines the strategy for migrating existing registry implementati
   - Create migration guide
 
 ### Phase 4: Infrastructure Registry Migration ⏳
+
 - **Status**: Pending
 - **Actions**:
   - Migrate infrastructure registries
@@ -39,6 +43,7 @@ This document outlines the strategy for migrating existing registry implementati
   - Consolidate port registries
 
 ### Phase 5: MCP Registry Migration ⏳
+
 - **Status**: Pending
 - **Actions**:
   - Migrate MCP tool registries
@@ -46,6 +51,7 @@ This document outlines the strategy for migrating existing registry implementati
   - Update MCP adapters
 
 ### Phase 6: Cleanup ⏳
+
 - **Status**: Pending
 - **Actions**:
   - Remove legacy registry implementations
@@ -55,16 +61,19 @@ This document outlines the strategy for migrating existing registry implementati
 ## Migration Approach
 
 ### 1. Backward Compatibility
+
 - Maintain existing APIs during migration
 - Add deprecation warnings
 - Provide migration guides
 
 ### 2. Incremental Migration
+
 - Migrate one registry type at a time
 - Test each migration thoroughly
 - Rollback capability for each phase
 
 ### 3. Zero Breaking Changes
+
 - All existing code continues to work
 - New code uses unified system
 - Gradual transition period
@@ -72,6 +81,7 @@ This document outlines the strategy for migrating existing registry implementati
 ## Migration Steps
 
 ### Step 1: Add Deprecation Warnings
+
 ```python
 import warnings
 from pheno.core.registry_migration import deprecated_registry
@@ -87,6 +97,7 @@ class OldAdapterRegistry:
 ```
 
 ### Step 2: Create Compatibility Layer
+
 ```python
 from pheno.core.registry_migration import LegacyRegistryAdapter
 
@@ -99,6 +110,7 @@ adapter.register("llm:openai", OpenAIAdapter)
 ```
 
 ### Step 3: Update Imports
+
 ```python
 # Old imports
 from pheno.adapters.registry import AdapterRegistry
@@ -108,6 +120,7 @@ from pheno.core.registry import get_adapter_registry
 ```
 
 ### Step 4: Migrate Data
+
 ```python
 from pheno.core.registry_migration import get_migration_manager
 
@@ -121,11 +134,13 @@ migration_manager.run_migration("old_adapter_registry")
 ### 1. Adapter Registry Migration
 
 #### Current State
+
 - **File**: `src/pheno/adapters/registry.py`
 - **Features**: Adapter management, type-based registration
 - **Usage**: Used by adapter system
 
 #### Migration Plan
+
 1. **Add deprecation warnings** to existing AdapterRegistry
 2. **Create compatibility layer** that forwards to unified system
 3. **Update imports** in consuming code
@@ -133,6 +148,7 @@ migration_manager.run_migration("old_adapter_registry")
 5. **Remove old implementation** after migration period
 
 #### Code Changes
+
 ```python
 # Before
 from pheno.adapters.registry import AdapterRegistry
@@ -148,6 +164,7 @@ registry.register_adapter(AdapterType.LLM, "openai", OpenAIAdapter)
 ### 2. Infrastructure Registry Migration
 
 #### Current State
+
 - **Files**:
   - `src/pheno/infrastructure/resources/registry.py`
   - `src/pheno/infra/port_registry.py`
@@ -156,6 +173,7 @@ registry.register_adapter(AdapterType.LLM, "openai", OpenAIAdapter)
 - **Usage**: Used by infrastructure system
 
 #### Migration Plan
+
 1. **Consolidate** all infrastructure registries into unified system
 2. **Create specialized registries** for each infrastructure type
 3. **Update infrastructure managers** to use unified registries
@@ -163,6 +181,7 @@ registry.register_adapter(AdapterType.LLM, "openai", OpenAIAdapter)
 5. **Remove old implementations**
 
 #### Code Changes
+
 ```python
 # Before
 from pheno.infrastructure.resources.registry import ResourceRegistry
@@ -179,6 +198,7 @@ tunnel_registry = get_component_registry()  # For tunnel management
 ### 3. MCP Registry Migration
 
 #### Current State
+
 - **Files**:
   - `src/pheno/ports/mcp/tool_registry.py`
   - `src/pheno/mcp/adapters/tool_registry.py`
@@ -187,6 +207,7 @@ tunnel_registry = get_component_registry()  # For tunnel management
 - **Usage**: Used by MCP system
 
 #### Migration Plan
+
 1. **Consolidate** MCP registries into unified system
 2. **Create MCP-specific registries** in unified system
 3. **Update MCP adapters** to use unified registries
@@ -196,16 +217,19 @@ tunnel_registry = get_component_registry()  # For tunnel management
 ## Testing Strategy
 
 ### 1. Unit Tests
+
 - Test each registry migration individually
 - Verify data integrity after migration
 - Test backward compatibility
 
 ### 2. Integration Tests
+
 - Test registry interactions
 - Verify system functionality
 - Test performance impact
 
 ### 3. Regression Tests
+
 - Run full test suite after each migration
 - Verify no breaking changes
 - Test rollback scenarios
@@ -213,16 +237,19 @@ tunnel_registry = get_component_registry()  # For tunnel management
 ## Rollback Strategy
 
 ### 1. Code Rollback
+
 - Keep old implementations during migration period
 - Use feature flags to switch between old and new
 - Maintain backward compatibility
 
 ### 2. Data Rollback
+
 - Backup registry data before migration
 - Provide rollback scripts
 - Test rollback procedures
 
 ### 3. Configuration Rollback
+
 - Maintain old configuration formats
 - Provide configuration migration tools
 - Support both old and new configurations
@@ -230,21 +257,25 @@ tunnel_registry = get_component_registry()  # For tunnel management
 ## Success Metrics
 
 ### 1. Code Reduction
+
 - **Target**: 3,200+ LOC reduction
 - **Current**: 0 LOC reduced
 - **Progress**: 0%
 
 ### 2. Registry Consolidation
+
 - **Target**: 39 registries → 6 unified registries
 - **Current**: 39 registries
 - **Progress**: 0%
 
 ### 3. Performance Impact
+
 - **Target**: No performance degradation
 - **Current**: Not measured
 - **Progress**: 0%
 
 ### 4. Breaking Changes
+
 - **Target**: Zero breaking changes
 - **Current**: Zero breaking changes
 - **Progress**: 100%
@@ -252,24 +283,28 @@ tunnel_registry = get_component_registry()  # For tunnel management
 ## Timeline
 
 ### Week 1: Adapter Registry Migration
+
 - Add deprecation warnings
 - Create compatibility layer
 - Update imports
 - Test migration
 
 ### Week 2: Infrastructure Registry Migration
+
 - Consolidate infrastructure registries
 - Update infrastructure managers
 - Test integration
 - Verify performance
 
 ### Week 3: MCP Registry Migration
+
 - Consolidate MCP registries
 - Update MCP adapters
 - Test MCP functionality
 - Verify compatibility
 
 ### Week 4: Cleanup and Documentation
+
 - Remove legacy implementations
 - Update documentation
 - Add comprehensive tests
@@ -278,18 +313,22 @@ tunnel_registry = get_component_registry()  # For tunnel management
 ## Risk Mitigation
 
 ### 1. Breaking Changes
+
 - **Risk**: Code breaks during migration
 - **Mitigation**: Maintain backward compatibility, gradual migration
 
 ### 2. Data Loss
+
 - **Risk**: Registry data lost during migration
 - **Mitigation**: Backup data, test migration thoroughly
 
 ### 3. Performance Impact
+
 - **Risk**: System performance degrades
 - **Mitigation**: Performance testing, optimization
 
 ### 4. Integration Issues
+
 - **Risk**: System integration breaks
 - **Mitigation**: Comprehensive testing, rollback capability
 

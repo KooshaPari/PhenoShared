@@ -50,9 +50,11 @@ This work package implements discovery, visibility, and reporting tools for mult
 ## Subtasks & Detailed Guidance
 
 ### Subtask T044 – Audit Command Implementation
+
 - **Purpose**: Create the `pheno audit` command to discover packages and query their registry status
 - **Steps**:
   1. Create `cmd/audit.go` with Cobra command definition:
+
      ```go
      var auditCmd = &cobra.Command{
          Use:   "audit [flags]",
@@ -68,6 +70,7 @@ This work package implements discovery, visibility, and reporting tools for mult
          rootCmd.AddCommand(auditCmd)
      }
      ```
+
   2. Implement `runAudit` function flow:
      - Determine scan root (use --repo if provided, else --repos-dir or config.repos_dir)
      - Call `discover.FindRepositories(reposDir)` to list all repos (see T047)
@@ -87,10 +90,12 @@ This work package implements discovery, visibility, and reporting tools for mult
 - **Notes**: Reuse config system from WP07; handle missing repos gracefully; ensure registry queries use caching (see T048)
 
 ### Subtask T045 – Audit Status Table Formatting
+
 - **Purpose**: Implement Lipgloss table and alternate format renderers for audit results
 - **Steps**:
   1. Create `internal/audit/formatter.go` to define output structures
   2. Define AuditResult struct to capture per-package status:
+
      ```go
      type AuditResult struct {
          Package        *Package
@@ -112,7 +117,9 @@ This work package implements discovery, visibility, and reporting tools for mult
          Duration   time.Duration
      }
      ```
+
   3. Implement `FormatLipglossTable` function:
+
      ```go
      func FormatLipglossTable(report *AuditReport) string {
          // Create Lipgloss table with columns:
@@ -126,20 +133,25 @@ This work package implements discovery, visibility, and reporting tools for mult
          // auth-service | go | custom-pkg | prod | v1.2.3 | ✓ | https://pkg.example.com/auth-service
      }
      ```
+
   4. Implement `FormatJSON` function:
+
      ```go
      func FormatJSON(report *AuditReport) (string, error) {
          // Serialize AuditReport as pretty-printed JSON
          // Include metadata: timestamp, scan duration, counts
      }
      ```
+
   5. Implement `FormatCSV` function:
+
      ```go
      func FormatCSV(report *AuditReport) (string, error) {
          // CSV format with headers: Package, Language, Registry, Channel, Version, Status, URL
          // Escape special chars in package names
      }
      ```
+
   6. Add summary section to Lipgloss output showing totals:
      - Total repos scanned
      - Total packages found
@@ -151,9 +163,11 @@ This work package implements discovery, visibility, and reporting tools for mult
 - **Notes**: Use consistent color palette from WP07; ensure CSV escaping is RFC 4180 compliant; truncate long URLs with ellipsis in table view
 
 ### Subtask T046 – Release Matrix Generation
+
 - **Purpose**: Generate markdown-formatted release governance matrix matching org template
 - **Steps**:
   1. Create `cmd/matrix.go` with Cobra command definition:
+
      ```go
      var matrixCmd = &cobra.Command{
          Use:   "matrix [flags]",
@@ -168,6 +182,7 @@ This work package implements discovery, visibility, and reporting tools for mult
          rootCmd.AddCommand(matrixCmd)
      }
      ```
+
   2. Implement `runMatrix` function flow:
      - Load spec from spec file or auto-detect (look for `*-spec.md` in current dir)
      - Parse spec to extract work packages and initiatives (if not already in structured format)
@@ -177,12 +192,14 @@ This work package implements discovery, visibility, and reporting tools for mult
      - Render markdown table
      - Write to file or stdout
   3. Markdown table structure matching RELEASE_MATRIX_TEMPLATE.md:
+
      ```markdown
      | Initiative | Channel | Layer | PR | Depends-On | Owner | Rollback Plan | Risk | Acceptance Criteria | Status | Blockers |
      |---|---|---|---|---|---|---|---|---|---|---|
      | WP01 - Package Model | alpha | core | | | @user | | low | model complete, tests pass | in progress | none |
      | WP02 - Registry Adapters | alpha | core | #123 | WP01 | @user | | medium | 4 adapters, integration tests pass | pending | none |
      ```
+
   4. Auto-populate fields from config and discovery:
      - Initiative: from spec WP/phase
      - Channel: from current package status (alpha/beta/prod)
@@ -199,9 +216,11 @@ This work package implements discovery, visibility, and reporting tools for mult
 - **Notes**: Auto-detect spec file by scanning cwd and parent dirs; support both `.md` and `.json` spec formats; document template column meanings in inline comments
 
 ### Subtask T047 – Repository Discovery Engine
+
 - **Purpose**: Implement filesystem scanning to locate repositories and filter them based on rules
 - **Steps**:
   1. Create `internal/discover/repos.go` with discovery logic:
+
      ```go
      type RepositoryInfo struct {
          Path     string  // Absolute path to repo root
@@ -215,6 +234,7 @@ This work package implements discovery, visibility, and reporting tools for mult
          // Return list of RepositoryInfo
      }
      ```
+
   2. Implement repo detection heuristics:
      - Must contain one of: `.git`, `package.json`, `setup.py`, `Cargo.toml`, `go.mod`, `.gitignore`
      - May be single repo (has manifest) or monorepo (subdirs have manifests)
@@ -235,9 +255,11 @@ This work package implements discovery, visibility, and reporting tools for mult
 - **Notes**: Use `filepath.WalkDir` for efficient directory traversal; respect `.gitignore` patterns if available; ensure symlink handling is safe (prevent infinite loops)
 
 ### Subtask T048 – Audit Tests & Caching
+
 - **Purpose**: Comprehensive tests for discovery, audit formatting, and registry query caching
 - **Steps**:
   1. Create `internal/discover/repos_test.go`:
+
      ```go
      func TestFindRepositories(t *testing.T) {
          // Create temp dir with nested repos
@@ -252,7 +274,9 @@ This work package implements discovery, visibility, and reporting tools for mult
          // Test that .git is detected correctly
      }
      ```
+
   2. Create `internal/audit/formatter_test.go`:
+
      ```go
      func TestFormatLipglossTable(t *testing.T) {
          // Create sample AuditReport with mixed statuses
@@ -270,7 +294,9 @@ This work package implements discovery, visibility, and reporting tools for mult
          // Test escaping of special chars
      }
      ```
+
   3. Create `cmd/audit_test.go`:
+
      ```go
      func TestAuditCommand(t *testing.T) {
          // Setup: temp workspace with repos
@@ -279,7 +305,9 @@ This work package implements discovery, visibility, and reporting tools for mult
          // Verify output contains expected packages and statuses
      }
      ```
+
   4. Implement registry query caching:
+
      ```go
      type QueryCache struct {
          mu    sync.RWMutex
@@ -303,6 +331,7 @@ This work package implements discovery, visibility, and reporting tools for mult
          return result, nil
      }
      ```
+
   5. Test caching behavior: verify cache hits and misses
   6. Ensure tests run in <10 seconds (mock all registry calls)
 

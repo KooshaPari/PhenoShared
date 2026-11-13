@@ -49,6 +49,7 @@ post_coderabbit_batch() {
 ### 1.3 Clean PR Identification
 
 A PR is a clean merge candidate when:
+
 - `mergeStateStatus == "MERGEABLE"`
 - `reviewDecision != "CHANGES_REQUESTED"`
 - `failingChecks == []`
@@ -70,6 +71,7 @@ A PR is a clean merge candidate when:
 ## 3. Governance Documentation
 
 Created `docs/governance/stacked-prs/05-pr-reconciliation.md` covering:
+
 - Merge order for stacked PRs (leaf → root)
 - Conflict resolution procedures
 - CI gating strategy

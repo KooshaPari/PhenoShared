@@ -21,6 +21,7 @@ Create Grafana dashboards displaying workflow-level SLOs for all Temporal and Ha
 Grafana and Prometheus should already be in the planned monitoring stack. Temporal exposes Prometheus metrics at `http://localhost:9233/metrics`. Hatchet also exposes Prometheus metrics. Configure Prometheus to scrape both, then build Grafana dashboards.
 
 Temporal's key metrics:
+
 - `temporal_workflow_started_total` — workflows started
 - `temporal_workflow_completed_total` — workflows completed
 - `temporal_workflow_failed_total` — workflows failed
@@ -29,6 +30,7 @@ Temporal's key metrics:
 - `temporal_activity_retries_total` — activity retry count
 
 Hatchet's key metrics:
+
 - `hatchet_run_started_total`
 - `hatchet_run_completed_total`
 - `hatchet_run_failed_total`
@@ -298,6 +300,7 @@ groups:
 ### 5. Wire Alerts to Notification Channel
 
 Add to alert annotations:
+
 ```yaml
 notifications:
   - uid: slack-platform

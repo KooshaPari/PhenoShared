@@ -10,4 +10,3 @@ Phenotype runner mesh and proposed HW mesh agent bus.
 - Added the sladge badge to the README badge header.
 - Kept the change scoped to governance metadata and session documentation.
 - Left infrastructure, runbooks, IaC, and operational behavior unchanged.
-

@@ -36,10 +36,12 @@ some items i've noticed may be dupl
 ### 1. Inactive Folders (NOT Canonical)
 
 **Skip unless:**
+
 - Ensure at latest: local AND `origin/main` with merged stashes
 - Review for potential archival/migration
 
 **Action:**
+
 - Update to latest if behind
 - Merge stashes
 - Move to `.archive/` if truly inactive
@@ -47,12 +49,14 @@ some items i've noticed may be dupl
 ### 2. Worktrees
 
 **Action:**
+
 - Finished + pushed to cloud → Open PR → Delete after merge review
 - Keep clean `.worktrees/` directory
 
 ### 3. Canonical Folders
 
 **Organization:**
+
 - Top-level `repos/` contains PROJECTS (canonical folders)
 - Each project should have:
   - Hyper-organized root level
@@ -63,6 +67,7 @@ some items i've noticed may be dupl
   - `INDEX.md` for large directories
 
 **For Agents:**
+
 - Use canonical folders to run tests/validate
 - Use worktrees for real work
 
@@ -99,7 +104,7 @@ some items i've noticed may be dupl
 
 ## External 3rd Party Analysis (CRITICAL)
 
-### For Each Dependency/Package, Analyze:
+### For Each Dependency/Package, Analyze
 
 #### 1. Integration Level
 
@@ -165,6 +170,7 @@ some items i've noticed may be dupl
 ### 1. DUPLICATION AUDIT
 
 **Focus:**
+
 - [ ] Identify duplicate code within projects
 - [ ] Identify duplicate code across projects
 - [ ] Identify duplicate patterns (not just code)
@@ -176,6 +182,7 @@ some items i've noticed may be dupl
 ### 2. LIBIFICATION AUDIT
 
 **Focus:**
+
 - [ ] Extractable patterns > 100 LOC
 - [ ] Common utilities that could be shared
 - [ ] Duplicated business logic
@@ -186,6 +193,7 @@ some items i've noticed may be dupl
 ### 3. EXTERNAL_PKG AUDIT
 
 **Focus:**
+
 - [ ] Identify custom implementations that match external packages
 - [ ] Evaluate fork/modify/wrap opportunities
 - [ ] Assess developer quality of external packages
@@ -196,6 +204,7 @@ some items i've noticed may be dupl
 ### 4. PATTERN_INVENTORY
 
 **Focus:**
+
 - [ ] Hexagonal architecture patterns
 - [ ] Event sourcing patterns
 - [ ] State machine patterns
@@ -207,6 +216,7 @@ some items i've noticed may be dupl
 ### 5. SYS_IMPROVE_AUDIT
 
 **Focus:**
+
 - [ ] Quick wins < 50 LOC
 - [ ] Code quality improvements
 - [ ] Performance optimizations
@@ -217,6 +227,7 @@ some items i've noticed may be dupl
 ### 6. DECOMPOSITION_AUDIT
 
 **Focus:**
+
 - [ ] Microservice boundaries
 - [ ] Module boundaries
 - [ ] Shared kernel identification
@@ -228,7 +239,7 @@ some items i've noticed may be dupl
 
 ## Agent Coordination Protocol
 
-### For Each Audit Task:
+### For Each Audit Task
 
 1. **Read canonical worklogs first**
    - `docs/worklogs/README.md` - Index
@@ -278,6 +289,7 @@ some items i've noticed may be dupl
 ### Libification Recommendations
 
 When LOC > 100:
+
 - Recommend extraction
 - Estimate effort
 - Identify dependencies
@@ -285,6 +297,7 @@ When LOC > 100:
 ### External Fork/Wrap Candidates
 
 When applicable:
+
 - Link to original repo/package
 - Assess integration level
 - Estimate fork/modify effort
@@ -294,12 +307,14 @@ When applicable:
 ## Codebase Atlas Integration
 
 For every pattern identified:
+
 - **File path:** Exact location
 - **Feature domain:** What it does
 - **LOC:** Lines of code
 - **Language:** Rust, TypeScript, Python, etc.
 
 Flag opportunities for:
+
 - **libification:** Extract to shared library
 - **productization:** Internal tool → standalone product
 - **fork candidates:** External repo worth forking
@@ -310,6 +325,7 @@ Flag opportunities for:
 ## Cross-Ecosystem Search Examples
 
 ### Rust (crates.io)
+
 ```bash
 # Event sourcing
 cargo search eventually
@@ -326,6 +342,7 @@ cargo search saga
 ```
 
 ### npm
+
 ```bash
 # Event sourcing
 npm search @eventually/core
@@ -337,6 +354,7 @@ npm search workflow-engine
 ```
 
 ### PyPI
+
 ```bash
 # Event sourcing
 pip search eventsourcing
@@ -346,6 +364,7 @@ pip search casbin
 ```
 
 ### GitHub
+
 ```bash
 # General search
 gh search repos "event sourcing rust" --stars >10

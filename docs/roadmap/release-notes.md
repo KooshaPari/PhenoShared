@@ -15,24 +15,28 @@ Initial release of AgilePlus with core spec-driven development capabilities.
 ### ✨ Features
 
 #### Specification Management
+
 - Create feature specifications with requirements, success criteria, and edge cases
 - Parse and validate specs from markdown
 - Spec lifecycle: Draft → Specified → Implemented → Shipped
 - Specification checklists for quality gates
 
 #### Planning Engine
+
 - Automatic work package decomposition from specifications
 - Dependency graph generation and analysis
 - Critical path computation
 - Work package templates and customization
 
 #### Worktree Management
+
 - Isolated development environment per work package
 - Automatic branch creation and management
 - Worktree cleanup after merge
 - Concurrent worktree support for parallel development
 
 #### Agent Dispatch
+
 - Claude Code harness with structured prompt delivery
 - Agent session management and monitoring
 - Work package-specific constraints and guardrails
@@ -40,6 +44,7 @@ Initial release of AgilePlus with core spec-driven development capabilities.
 - Session logging and audit trail
 
 #### Governance Framework
+
 - Immutable audit trail with hash-chained commits
 - Specification and implementation checklists
 - Governance constraint enforcement
@@ -47,6 +52,7 @@ Initial release of AgilePlus with core spec-driven development capabilities.
 - Constitution-based policy definition
 
 #### Triage & Queue Management
+
 - Auto-classification of incoming items (bug, feature, task, idea)
 - Priority scoring and ranking
 - Duplicate detection
@@ -54,7 +60,9 @@ Initial release of AgilePlus with core spec-driven development capabilities.
 - Integration with Slack/email for submissions
 
 #### CLI Interface
+
 Complete command set:
+
 - `agileplus specify` — Create feature specs
 - `agileplus plan` — Generate work packages
 - `agileplus implement` — Dispatch agent to WP
@@ -68,12 +76,14 @@ Complete command set:
 - And more (30+ commands)
 
 #### Issue Tracker Sync
+
 - **Plane.so** — Full bi-directional sync (issues, status, comments)
 - **GitHub** — Issues, pull requests, project boards
 - Auto-mapping of status between AgilePlus and trackers
 - Sync scheduling and conflict resolution
 
 #### Documentation System
+
 - 5-layer documentation taxonomy (PhenoDocs)
 - Frontmatter schema for cross-referencing
 - Spec federation and cross-repo linking
@@ -141,6 +151,7 @@ agileplus-cli/           # Command-line interface
 ### 🔧 Integrations
 
 **Supported Integrations**:
+
 - ✓ Plane.so (bi-directional)
 - ✓ GitHub (bi-directional)
 - ✓ Claude Code agent
@@ -149,7 +160,7 @@ agileplus-cli/           # Command-line interface
 
 ### 📚 Documentation
 
-- Comprehensive docs at https://docs.agileplus.dev
+- Comprehensive docs at <https://docs.agileplus.dev>
 - 50+ pages of guides, examples, and API reference
 - Getting started guide
 - Troubleshooting section
@@ -188,6 +199,7 @@ Thanks to early testers, contributors, and the open-source community.
 ## v0.2.0 (Upcoming — Feb 28, 2026)
 
 **Expected Features**:
+
 - gRPC API (programmatic access)
 - MCP server (AI agent tools)
 - PostgreSQL storage backend
@@ -225,9 +237,10 @@ AgilePlus uses [semantic versioning](https://semver.org/):
 
 ### Reporting Bugs
 
-Found a bug? Report it at: https://github.com/KooshaPari/AgilePlus/issues
+Found a bug? Report it at: <https://github.com/KooshaPari/AgilePlus/issues>
 
 Include:
+
 - AgilePlus version (`agileplus --version`)
 - Operating system and Rust version
 - Steps to reproduce
@@ -237,7 +250,7 @@ Include:
 
 For security vulnerabilities, **do not** open a public issue.
 
-Email: security@agileplus.dev
+Email: <security@agileplus.dev>
 
 We take security seriously and will respond within 24 hours.
 
@@ -273,12 +286,14 @@ All changes are tracked in `CHANGELOG.md` in the repository.
 ### v0.1.1 (March 2026 — Expected)
 
 **Bug Fixes**:
+
 - Fix agent dispatch not inheriting `NATS_URL` from environment when `platform up` is not running
 - Fix `audit-verify` command panicking on empty audit trail (new features with zero transitions)
 - Fix SQLite migration 003 failing on Windows due to path separator in migration filename
 - Fix Plane.so webhook handler returning 500 on malformed JSON payload (now returns 400)
 
 **Improvements**:
+
 - `agileplus platform status` now shows service uptime and memory usage
 - Audit chain verification is 40% faster (parallel SHA-256 computation)
 - CLI startup time reduced from 120ms to 85ms (lazy-load adapters)
@@ -292,22 +307,26 @@ All changes are tracked in `CHANGELOG.md` in the repository.
 The pre-release (spec001 WP01-WP20) established the core domain model and CLI. v0.1.0 completed:
 
 **WP19**: Process-compose orchestration
+
 - Added `process-compose.yaml` with NATS, Dragonfly, Neo4j, MinIO services
 - Added `agileplus platform up/down/status/logs` subcommands
 - Health check endpoints for all services
 
 **WP20**: htmx dashboard MVP
+
 - Added `agileplus-api` crate with Askama templates
 - SSE event stream for real-time WP state updates
 - Alpine.js drag-and-drop for Kanban board
 - Feature and WP detail pages
 
 **WP21**: Git-backed state sync
+
 - Added `VcsPort::export_state()` and `import_state()`
 - P2P sync via Tailscale peer discovery
 - Vector clock implementation for causal consistency
 
 **Spec003** (post-v0.1.0): Platform completion
+
 - NATS JetStream integration for all domain events
 - Dragonfly job state tracking for async agent dispatch
 - Neo4j dependency graph for advanced WP scheduling

@@ -142,33 +142,40 @@ silent drift.
 ## Alternatives Considered
 
 ### Option A: Status Quo (no canonical taxonomy)
+
 Let each SDK keep its own structure. Rejected: divergence keeps widening, "the
 SDK" has no consistent meaning, and gaps stay invisible.
 
 ### Option B: Force all three languages (incl. Rust) to mirror the Kit set
+
 Rejected: `phenoUtils` crates are primitives, not application kits; mirroring
 would cargo-cult structure onto the wrong layer and misrepresent intent.
 
 ### Option C: Make Go the canonical shape and trim Python to match
+
 Rejected: Python is the more complete SDK; trimming it would destroy working
 surface to chase symmetry downward.
 
 ### Option D: Defer until publishing is designed
+
 Rejected: publishing is *gated on* having a canonical taxonomy; deferring this
 blocks the prerequisite.
 
 ## References
 
 ### Internal Documentation
+
 - `phenotype-python-sdk` — `pyproject.toml` `[tool.uv.workspace]` members
 - `phenotype-go-sdk` — `go.work`, root `README.md` package table
 - `phenoUtils` — `crates/` (primitives tier)
 
 ### Related ADRs
+
 - [ADR-001](001-hexagonal-architecture.md): Hexagonal Architecture — Kits expose ports; adapters per language
 - [ADR-002](002-rust-primary-language.md): Rust as Primary Language — contextualizes why Rust/phenoUtils is the primitives tier, not a peer SDK
 
 ### Decision Log
+
 - 2026-06-02: Proposed following the substrate-coherence audit; Python+Go as
   peer SDKs with canonical kit set `{auth, data, mcp, observability,
   resilience, testing}`, Rust as primitives tier.

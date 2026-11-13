@@ -9,4 +9,3 @@ Use a preserve-first two-stage flow:
 5. Verify every remote ref and only then evaluate canonical boundary absorption.
 
 No source branch is reset, rebased destructively, deleted, or force-pushed.
-

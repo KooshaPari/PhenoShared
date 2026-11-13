@@ -81,6 +81,7 @@ npm run docs:dev
 **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web/`
 
 **Vite Configuration**:
+
 ```typescript
 // vite.config.ts
 export default defineConfig({
@@ -106,6 +107,7 @@ export default defineConfig({
 ```
 
 **Start Development**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/crates/agileplus-dashboard/web
 npm install    # First time only
@@ -113,15 +115,18 @@ npm run dev    # Start dev server with HMR
 ```
 
 **Access**:
+
 - Frontend: `http://localhost:5173`
 - API requests to `/api/*` automatically proxy to `http://localhost:3000`
 
 **HMR Features**:
+
 - Instant React component updates
 - Preserved component state during edits
 - Real-time stylesheet changes via Tailwind + PostCSS
 
 **File Watchers**:
+
 - `src/**/*.{tsx,ts,css}` — component and style updates
 - `vite.config.ts` — requires manual restart
 
@@ -132,6 +137,7 @@ npm run dev    # Start dev server with HMR
 **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp/`
 
 **Vite Configuration**:
+
 ```typescript
 // vite.config.ts
 export default defineConfig({
@@ -174,6 +180,7 @@ export default defineConfig({
 ```
 
 **Start Development**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosApp
 
@@ -186,14 +193,17 @@ npm run dev:remote # Serves remoteEntry.js on http://localhost:3001
 ```
 
 **Access**:
+
 - Standalone: `http://localhost:3001`
 - Remote entry: `http://localhost:3001/remoteEntry.js`
 
 **HMR Features**:
+
 - React component HMR with state preservation
 - Module Federation: updates propagate to host app if host app is also in dev mode
 
 **Module Federation Shared Dependencies**:
+
 - React and React DOM are singletons — host and remote use same instance
 - Prevents version conflicts and reduces bundle size
 
@@ -204,6 +214,7 @@ npm run dev:remote # Serves remoteEntry.js on http://localhost:3001
 **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/portage/viewer/`
 
 **Vite Configuration**:
+
 ```typescript
 // vite.config.ts
 export default defineConfig({
@@ -213,6 +224,7 @@ export default defineConfig({
 ```
 
 **Start Development**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/portage/viewer
 npm install
@@ -226,6 +238,7 @@ npm run dev    # Default Vite dev server with HMR
 **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs/`
 
 **Start Development**:
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus/docs
 npm install
@@ -235,6 +248,7 @@ npm run docs:dev   # VitePress dev server with HMR
 **Access**: `http://localhost:5175`
 
 **HMR Features**:
+
 - Markdown and Vue component hot reload
 - Sidebar/nav updates without page reload
 - Real-time preview of documentation changes
@@ -248,6 +262,7 @@ npm run docs:dev   # VitePress dev server with HMR
 For frontend services that need environment variables, create a `.env.local` or `.env.development` file in the service directory:
 
 **AgilePlus Dashboard** (`.env.local`):
+
 ```bash
 # API Configuration
 VITE_API_URL=http://localhost:3000
@@ -257,6 +272,7 @@ VITE_DEV_MODE=true
 ```
 
 **heliosApp** (`.env.local`):
+
 ```bash
 # Federation mode
 FEDERATION_MODE=standalone
@@ -302,6 +318,7 @@ server: {
 ### Vite Default Watching
 
 By default, Vite watches:
+
 - `src/**/*` — all source files
 - `public/**/*` — static assets
 - `vite.config.ts` — build config (requires restart)
@@ -349,6 +366,7 @@ server: {
 ```
 
 **Usage in React**:
+
 ```typescript
 // All requests to /api/* go to http://localhost:3000
 const response = await fetch('/api/v1/specs');
@@ -393,11 +411,13 @@ remotes: {
 ### Vite Build Version Too Old
 
 Check `package.json`:
+
 ```bash
 npm list vite
 ```
 
 Update if needed:
+
 ```bash
 npm install vite@latest
 ```
@@ -490,6 +510,7 @@ To add HMR to a new frontend service:
 ### Step 1: Add Vite Config
 
 Create `vite.config.ts`:
+
 ```typescript
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -549,11 +570,11 @@ export default defineConfig({
 
 ## References
 
-- **Vite HMR Configuration**: https://vitejs.dev/config/server-options.html#server-hmr
-- **Vite Fast Refresh**: https://vitejs.dev/guide/features.html#hot-module-replacement
-- **Module Federation**: https://module-federation.io/
-- **VitePress**: https://vitepress.dev/
-- **process-compose**: https://github.com/F1bonacc1/process-compose
+- **Vite HMR Configuration**: <https://vitejs.dev/config/server-options.html#server-hmr>
+- **Vite Fast Refresh**: <https://vitejs.dev/guide/features.html#hot-module-replacement>
+- **Module Federation**: <https://module-federation.io/>
+- **VitePress**: <https://vitepress.dev/>
+- **process-compose**: <https://github.com/F1bonacc1/process-compose>
 
 ---
 

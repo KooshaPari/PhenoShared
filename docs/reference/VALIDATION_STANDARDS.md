@@ -5,6 +5,7 @@ This document defines the standard validation approach for all TypeScript projec
 ## Overview
 
 Zod provides:
+
 - Runtime validation with type-safe inference
 - Composable, chainable schema builders
 - Integration with form libraries (react-hook-form, formik)

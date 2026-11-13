@@ -23,6 +23,7 @@
 **Rationale:** `sqlx` is the most widely adopted async Rust database library. Its `FromRow` derive macro and query macros align well with `dbkit`s goal of typed query results without an ORM.
 
 **Alternatives Considered:**
+
 - diesel: sync-first; async support is bolted on; less ergonomic for Phenotype patterns.
 - sea-orm: full ORM; more abstraction than `dbkit` intends to provide.
 - raw tokio-postgres: no multi-database support; higher boilerplate.

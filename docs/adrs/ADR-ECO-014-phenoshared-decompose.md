@@ -1,9 +1,11 @@
 # ADR-ECO-014: Decompose phenoShared — no generic consolidation repo
 
 ## Status
+
 Amended (2026-11-11) — see §Amendment below
 
 ## Context
+
 `phenoShared` absorbed cross-cutting crates during HexaKit P3 eviction as a **staging** home. It has no domain orientation — it is neither a role owner, nor a justified SDK/framework boundary. Fleet repoints that terminate on `phenoShared` recreate a junk-drawer monorepo under a different name.
 
 ## Decision
@@ -40,7 +42,6 @@ Amended (2026-11-11) — see §Amendment below
 - `disposition-index.json` gains repo-level `phenoShared` row `DECOMPOSE`; crate rows note `interim: phenoShared` where applicable.
 - HexaKit wave 14+ parity work **routes crates to role owners**, not new phenoShared pins as end state.
 - DELETE gate for phenoShared runs after pheno archive gate and per-crate consumer scan.
-
 
 ## Amendment (2026-11-11)
 

@@ -264,12 +264,14 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** Standardized skill definitions for AI agents with 40+ pre-built skills.
 
 **Key Features:**
+
 - Skill composition and chaining
 - Integration with Claude Code, Copilot
 - Development, testing, deployment skills
 - Tool definitions and prompts
 
 **Opportunity:** Create `platforms/harbor-skills` fork for AgilePlus domain:
+
 - Custom skills: `specify`, `implement`, `validate`, `review`, `ship`
 - Skill registry for agent dispatch
 - Integration with existing CLI commands
@@ -283,12 +285,14 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** Real-time data processing with LLM integration, 30+ connectors.
 
 **Key Features:**
+
 - Real-time stream processing
 - MCP server capability
 - RAG pipeline support
 - Connectors: Kafka, PostgreSQL, S3, NATS
 
 **Opportunity:** Create `platforms/pathway-xpack`:
+
 - Real-time event processing for AgilePlus
 - Semantic search for specs/plans (RAG)
 - MCP server wrapper
@@ -302,12 +306,14 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** Local AI knowledge base with embeddings, semantic search, multiple interfaces.
 
 **Key Features:**
+
 - Semantic search over documents, notes, code
 - Web, Obsidian, Emacs interfaces
 - Agentic capabilities
 - Local-first privacy
 
 **Opportunity:** Create `platforms/knowledge-base`:
+
 - Index AgilePlus specs and plans
 - RAG for agent context injection
 - Natural language queries over project knowledge
@@ -321,6 +327,7 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** Code generation tool with agent-driven development patterns.
 
 **Key Features:**
+
 - Project scaffolding
 - Template management
 - Agent integration
@@ -335,12 +342,14 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** Data quality validation framework with expectation suites.
 
 **Key Features:**
+
 - Expectation suites and checkpoints
 - Data profiling
 - Pipeline integration
 - HTML reports
 
 **Opportunity:** Create `platforms/llm-eval`:
+
 - Validate agent outputs against expectation suites
 - Profile agent behavior and code quality
 - Checkpoint-based validation
@@ -352,12 +361,14 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** Edge/serverless deployment to 40+ targets with AI/LLM support.
 
 **Key Features:**
+
 - 40+ deployment targets
 - Built-in AI/LLM support
 - Hybrid rendering
 - TypeScript-first
 
 **Opportunity:** Create `platforms/nitro-agent`:
+
 - Deploy MCP server as serverless
 - Agent runtime at edge locations
 - Hybrid local + cloud architecture
@@ -369,6 +380,7 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** BI tool with YAML-first approach and dbt integration.
 
 **Key Features:**
+
 - YAML-first configuration
 - dbt integration
 - Metrics layer
@@ -383,6 +395,7 @@ Deep research into 30 starred GitHub repositories. Identified patterns, gaps, an
 **What:** Educational platform covering 50+ technologies.
 
 **Key Features:**
+
 - Build your own X tutorials
 - Language-agnostic guides
 - Progressive complexity
@@ -551,6 +564,7 @@ Quarterly technology radar update based on starred repo analysis.
 **What:** The standard graph database with Cypher query language.
 
 **Key Features:**
+
 - ACID transactions
 - Cypher query language
 - Graph algorithms
@@ -563,6 +577,7 @@ Quarterly technology radar update based on starred repo analysis.
 **What:** Distributed graph database with GraphQL-like query language (DQL).
 
 **Key Features:**
+
 - Horizontal scaling
 - Low-latency queries
 - Distributed transactions
@@ -575,6 +590,7 @@ Quarterly technology radar update based on starred repo analysis.
 **What:** Rust-native in-memory graph library.
 
 **Key Features:**
+
 - No external dependency
 - Optimal for small-medium graphs
 - Graph algorithms built-in
@@ -605,12 +621,14 @@ Quarterly technology radar update based on starred repo analysis.
 **What:** Zero-copy deserialization for Rust with zero allocation reads.
 
 **Key Features:**
+
 - Zero allocation on deserialization
 - 10-100x faster than JSON
 - Mature ecosystem
 - Schema evolution support
 
 **Benchmark:**
+
 ```
 JSON serialize:   1.2 µs
 JSON deserialize:   2.1 µs
@@ -625,6 +643,7 @@ rkyv deserialize:   0.1 µs (zero-copy)
 **What:** Efficient cross-platform serialization by Google.
 
 **Key Features:**
+
 - Multiple language support
 - Schema evolution
 - Direct memory access
@@ -635,6 +654,7 @@ rkyv deserialize:   0.1 µs (zero-copy)
 ---
 
 ## 2026-03-29 - Supply Chain Security Research
+
 ## 2026-03-29 - Agent Protocol Landscape Research (Wave 93)
 
 ### Agent Communication Protocols Comparison
@@ -1253,10 +1273,12 @@ osv-scanner -r -L ./sbom.spdx.json
 ### Supply Chain Attacks
 
 **Known incidents (2026):**
+
 - LiteLLM v1.82.7-1.82.8 (supply chain, 2026-03-25)
 - Multiple PyPI typosquatting campaigns
 
 **Mitigation:**
+
 1. Pin exact versions with hash verification
 2. Use OSV for vulnerability monitoring
 3. Generate and publish SBOMs
@@ -1265,6 +1287,7 @@ osv-scanner -r -L ./sbom.spdx.json
 ---
 
 ## 2026-03-29 - Edge Computing Research
+
 ### LLM Orchestration & MCP (2026 State of the Art)
 
 | Package | Target | Action | Rationale |
@@ -1316,6 +1339,7 @@ osv-scanner -r -L ./sbom.spdx.json
 **What:** Global edge computing with V8 isolates.
 
 **Key Features:**
+
 - 200+ data centers
 - <5ms cold start
 - TypeScript/JavaScript
@@ -1328,6 +1352,7 @@ osv-scanner -r -L ./sbom.spdx.json
 **What:** WebAssembly-based edge computing.
 
 **Key Features:**
+
 - WASM runtime
 - Rust support
 - TypeScript SDK
@@ -1340,6 +1365,7 @@ osv-scanner -r -L ./sbom.spdx.json
 **What:** MicroVM-based distributed computing.
 
 **Key Features:**
+
 - Lightweight VMs
 - Strong isolation
 - Fast cold starts
@@ -1350,6 +1376,7 @@ osv-scanner -r -L ./sbom.spdx.json
 ---
 
 ## 2026-03-29 - Observability Stack Research
+
 **Priority:** P0
 
 ### Evaluated Repositories for Direct Usage (Blackbox)
@@ -1402,6 +1429,7 @@ osv-scanner -r -L ./sbom.spdx.json
 **What:** Vendor-neutral observability standard.
 
 **Key Features:**
+
 - Traces, metrics, logs
 - Language-agnostic
 - Backends: Jaeger, Tempo, etc.
@@ -1414,6 +1442,7 @@ osv-scanner -r -L ./sbom.spdx.json
 **What:** Complete observability platform.
 
 **Key Features:**
+
 - Dashboards
 - Alerting
 - Multi-data source
@@ -1867,6 +1896,7 @@ _Last updated: 2026-03-30 (Wave 123)_
 | `heliosCLI/codex-rs/core/*` | Canonical heliosCLI | ✅ Active |
 
 ### Stash Status
+
 - 10 stashes found
 - Recommendation: Apply or drop before major changes
 - Backup branch if stashes needed long-term
@@ -2002,6 +2032,7 @@ class PhenotypeAggregate(Aggregate):
 ### Top Recommendation: casbin-rs
 
 **casbin-rs** provides production-ready RBAC/ABAC with:
+
 - **Multiple models**: RBAC, ABAC, ACL, etc.
 - **Role inheritance**: Hierarchical roles
 - **Adapter system**: File, DB, API backends
@@ -2020,6 +2051,7 @@ let allowed = e.enforce(("alice", "data1", "read")).await?;
 ### Alternative: Cedar
 
 **Cedar** (AWS) provides formal verification capabilities:
+
 - **Formal verification**: Prove policy correctness
 - **Schema validation**: Catch errors at compile time
 - **DENY overrides**: Explicit denial logic
@@ -2052,6 +2084,7 @@ let policy: Policy = "permit(principal, action, resource)".parse()?;
 ### Top Recommendation: gix (gitoxide)
 
 **gix** is the pure-Rust implementation of Git with:
+
 - **No C dependencies**: Static linking
 - **High performance**: Optimized for large repos
 - **Async support**: Non-blocking operations
@@ -2088,7 +2121,7 @@ for oid in revwalk {
 | **gum** | Rust | 5k | EVALUATE |
 | **typer** | Python | 15k | ✅ ADOPT |
 | **click** | Python | 20k | Legacy |
-| ** textual** | Python | 10k | EVALUATE |
+| **textual** | Python | 10k | EVALUATE |
 
 ### Rust: clap v5
 
@@ -2149,6 +2182,7 @@ Comprehensive research into 9 Rust ecosystem categories. Found massive opportuni
 ### 1. Error Handling: `thiserror` 2.x vs `anyhow` 1.x vs `error-stack` 0.5
 
 ### Current State
+
 Phenotype workspace is **93% compliant** with `thiserror` adoption.
 
 ### Crate Comparison
@@ -2183,6 +2217,7 @@ pub enum StateMachineError {
 ```
 
 ### LOC Savings
+
 | Pattern | Before | After | Savings |
 |---------|--------|-------|---------|
 | Error enums (15+ crates) | 850+ LOC | ~350 LOC | **500 LOC** |
@@ -2193,6 +2228,7 @@ pub enum StateMachineError {
 ### 2. Config: `figment` 0.10 vs `config` 0.14 vs Custom TOML
 
 ### Current State
+
 - `figment` 0.10 already in `Cargo.toml:66`
 - `phenotype-config-core` exists (96 LOC) but unused
 - Custom TOML loading in 8+ locations across workspace
@@ -2224,6 +2260,7 @@ let config: MyConfig = Figment::new()
 ```
 
 ### LOC Savings
+
 | Location | Current LOC | With figment | Savings |
 |----------|-------------|--------------|---------|
 | TOML loader | 84 | 30 | 54 |
@@ -2237,7 +2274,9 @@ let config: MyConfig = Figment::new()
 ### 3. State Machines: `statig` 0.7 vs `smlang` 0.8 vs `phenotype-state-machine`
 
 ### Current State
+
 **Duplicate FSM implementations found** (~726 LOC redundant):
+
 - `phenotype-state-machine/src/lib.rs`: 624 LOC (string-based FSM with guards)
 - Nested duplicate: 365 LOC (generic/typed FSM)
 
@@ -2266,6 +2305,7 @@ smlang equivalent (estimated): ~250 LOC
 ```
 
 ### LOC Savings
+
 | Action | Current | Target | Savings |
 |--------|---------|--------|---------|
 | Remove nested duplicate | 365 LOC | 0 | **365 LOC** |
@@ -2277,7 +2317,9 @@ smlang equivalent (estimated): ~250 LOC
 ### 4. Caching: `moka` 0.12 vs `quick_cache` 0.5 vs Current LRU+DashMap
 
 ### Current State
+
 `phenotype-cache-adapter/src/lib.rs` (158 LOC):
+
 - L1: `lru::LruCache` (bounded, fast)
 - L2: `moka::sync::Cache` (unbounded, TTL-aware)
 
@@ -2295,6 +2337,7 @@ smlang equivalent (estimated): ~250 LOC
 **Keep current `moka` + `lru` approach** but consider `quick_cache` for simpler TTL-free caches.
 
 ### LOC Savings
+
 Current implementation (158 LOC) is already well-optimized. No significant LOC savings.
 
 ---
@@ -2302,7 +2345,9 @@ Current implementation (158 LOC) is already well-optimized. No significant LOC s
 ### 5. Retry: `backon` 1.0 vs `backoff` 0.4 vs `stamina` vs `phenotype-retry`
 
 ### Current State
+
 **4 implementations found** (~186 LOC across workspace):
+
 - `phenotype-retry/src/lib.rs`: 91 LOC (builder pattern)
 - `crates/agileplus-api/src/http/retry.rs`: 44 LOC
 - `crates/agileplus-redis/src/retry.rs`: 38 LOC
@@ -2337,6 +2382,7 @@ retry(ExponentialBuilder::default(), || async { /* ... */ }).await?
 **Replace `phenotype-retry` with `backon` 1.0** or wrap `backoff` for simplicity.
 
 ### LOC Savings
+
 | Component | Current | After | Savings |
 |-----------|---------|-------|---------|
 | phenotype-retry | 91 | 0 (remove) | 91 |
@@ -2350,7 +2396,9 @@ retry(ExponentialBuilder::default(), || async { /* ... */ }).await?
 ### 6. Hashing: `xxhash-rust` 0.8 vs `blake3` 1.5 vs `sha2`
 
 ### Current State
+
 `phenotype-crypto/src/hash.rs` (82 LOC):
+
 - `sha2` for KDF (password hashing context)
 - `blake3` for event chain hashing (3-5x faster than SHA-256)
 
@@ -2371,6 +2419,7 @@ retry(ExponentialBuilder::default(), || async { /* ... */ }).await?
 ### 7. Async Traits: Native `async fn` in Trait (Rust 1.75+) vs `async-trait` 0.1
 
 ### Current State
+
 **36+ usages of `#[async_trait]` across workspace.**
 
 ### Rust Evolution Timeline
@@ -2400,6 +2449,7 @@ trait DynamicRepository: Send + Sync {
 ```
 
 ### LOC Savings
+
 | Pattern | With async-trait | Native | Savings |
 |---------|------------------|--------|---------|
 | Trait definitions (15 traits) | ~180 LOC | ~120 LOC | **60 LOC** |
@@ -2409,6 +2459,7 @@ trait DynamicRepository: Send + Sync {
 ### 8. Derive Macros: `derive_more` 1.0 vs `strum` 0.26 vs `derivative` 2.2 vs `bon` 3.0
 
 ### Current State
+
 - `derive_more` 1.0 already in `Cargo.toml:85`
 - `strum` 0.26 already in `Cargo.toml:86`
 - Custom derive implementations in `phenotype-macros`
@@ -2467,6 +2518,7 @@ let query = Query::builder().limit(10).offset(0).build();
 ```
 
 ### LOC Savings
+
 | Pattern | Current | With Derives | Savings |
 |---------|---------|--------------|---------|
 | Display impls | 159 LOC | 56 LOC | **103 LOC** |
@@ -2479,7 +2531,9 @@ let query = Query::builder().limit(10).offset(0).build();
 ### 9. Telemetry: `opentelemetry` 1.0 vs `tracing` - Consolidation
 
 ### Current State
+
 **Fragmented telemetry across 3 systems:**
+
 - `phenotype-telemetry`: Metrics registry, timers, snapshots (420 LOC)
 - `phenotype-logging`: tracing subscriber wrapper (244 LOC)
 - `thegent-metrics`: Monolithic metrics (unmeasured)

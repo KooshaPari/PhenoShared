@@ -52,9 +52,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 ## Subtasks & Detailed Guidance
 
 ### Subtask T049 – Bootstrap Command Implementation
+
 - **Purpose**: Create the `pheno bootstrap` command with language detection and artifact generation
 - **Steps**:
   1. Create `cmd/bootstrap.go` with Cobra command definition:
+
      ```go
      var bootstrapCmd = &cobra.Command{
          Use:   "bootstrap [flags]",
@@ -71,6 +73,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          rootCmd.AddCommand(bootstrapCmd)
      }
      ```
+
   2. Implement `runBootstrap` function flow:
      - Detect languages in current directory (or use --language override)
      - For each language: generate language-specific templates (see T051–T055)
@@ -98,9 +101,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use `os.Stat` to check if files exist before writing; provide clear error messages; respect existing configurations when possible (merge rather than overwrite)
 
 ### Subtask T050 – Template System with Embedded Files
+
 - **Purpose**: Implement Go template system with embedded template files
 - **Steps**:
   1. Create `internal/templates/templates.go` to manage template loading and rendering:
+
      ```go
      package templates
 
@@ -131,6 +136,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          return buf.String(), err
      }
      ```
+
   2. Create `internal/templates/files/` directory for template files:
      - `files/mise.toml.tpl` (see T051)
      - `files/pre-commit.sh.tpl` (see T052)
@@ -155,9 +161,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use `//go:embed` to embed files at compile time; ensure template files are valid Go templates; test template rendering with sample contexts
 
 ### Subtask T051 – Mise Task Templates
+
 - **Purpose**: Generate language-specific mise task definitions
 - **Steps**:
   1. Create `internal/templates/files/mise.toml.tpl` with common tasks:
+
      ```toml
      [tasks.format]
      description = "Format code"
@@ -265,6 +273,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
      description = "Show release status"
      run = "pheno audit --repo ."
      ```
+
   2. Ensure all tasks are language-appropriate and use standard tooling
   3. Include common tasks: format, lint, test, build, audit, docs:build
   4. Include release tasks: release:promote, release:status
@@ -275,9 +284,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use conditional rendering (if/else) to generate language-specific tasks; ensure all referenced tools are either built-in or commonly installed; test generated file is valid TOML
 
 ### Subtask T052 – Pre-Commit Hook Template
+
 - **Purpose**: Generate shell script that enforces conventional commit format and runs fast formatting checks
 - **Steps**:
   1. Create `internal/templates/files/pre-commit.sh.tpl`:
+
      ```bash
      #!/bin/bash
      # Pre-commit hook: Enforce conventional commit format and fast linting
@@ -306,6 +317,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
      echo "✓ Commit message valid"
      exit 0
      ```
+
   2. Ensure regex pattern matches common conventional commit types (feat, fix, chore, docs, refactor, test, perf, ci, build, style, revert)
   3. Support optional scope in parentheses: `feat(api): add endpoint`
   4. Support breaking change indicator (!): `feat!: breaking change`
@@ -317,9 +329,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use basic POSIX shell commands to avoid dependencies; handle quoted commit messages correctly; be lenient on format check failure (don't block commit)
 
 ### Subtask T053 – Pre-Push Hook Template
+
 - **Purpose**: Generate shell script that enforces linting and testing based on branch pattern
 - **Steps**:
   1. Create `internal/templates/files/pre-push.sh.tpl`:
+
      ```bash
      #!/bin/bash
      # Pre-push hook: Run tests and linting based on branch pattern
@@ -368,6 +382,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
      echo "✓ Lint check passed"
      exit 0
      ```
+
   2. Detect branch name and apply rules:
      - `feature/*` → run lint only
      - `beta/*` or `rc/*` → run full test suite
@@ -381,9 +396,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use POSIX-compatible regex syntax; handle missing tasks gracefully (warn but don't fail); ensure hook doesn't interfere with automated pushes (CI/CD systems)
 
 ### Subtask T054 – CI Workflow Templates
+
 - **Purpose**: Generate GitHub Actions workflow files that integrate with phenotypeActions reusable workflows
 - **Steps**:
   1. Create `internal/templates/files/ci.yml.tpl`:
+
      ```yaml
      name: CI
 
@@ -406,7 +423,9 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
                risk_profile: {{ .RiskProfile }}
              secrets: inherit
      ```
+
   2. Create `internal/templates/files/release.yml.tpl`:
+
      ```yaml
      name: Release
 
@@ -441,6 +460,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
              with:
                version: ${{ github.ref_name }}
      ```
+
   3. Ensure workflows reference correct phenotypeActions workflows (from WP10)
   4. Support language variable substitution
   5. Include necessary secrets and inputs
@@ -450,9 +470,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use v4 of actions/checkout; reference phenotypeActions with semantic versioning; support language and registry variable substitution
 
 ### Subtask T055 – Changelog Template (cliff.toml)
+
 - **Purpose**: Generate git-cliff configuration for automatic changelog generation
 - **Steps**:
   1. Create `internal/templates/files/cliff.toml.tpl`:
+
      ```toml
      [changelog]
      # git-cliff configuration for changelog generation
@@ -498,6 +520,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          {message_regex = "^test", group = "Testing"},
      ]
      ```
+
   2. Configure conventional commit parsing
   3. Group commits by type (feat, fix, chore, etc.)
   4. Include breaking changes in output
@@ -508,9 +531,11 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
 - **Notes**: Use valid TOML and git-cliff template syntax; test template with sample commits; ensure changelog output is readable and follows organization standards
 
 ### Subtask T056 – Bootstrap Integration Test
+
 - **Purpose**: End-to-end test creating a temp repo and verifying all expected files
 - **Steps**:
   1. Create `cmd/bootstrap_test.go`:
+
      ```go
      func TestBootstrapGoProject(t *testing.T) {
          // Create temp dir
@@ -555,6 +580,7 @@ This work package implements the `pheno bootstrap` command to automate DX scaffo
          // Invalid: "add feature", "feat : extra space"
      }
      ```
+
   2. Use temp directories that are cleaned up after test
   3. Verify generated files are valid (parse TOML, YAML, shell syntax)
   4. Verify template substitution works (check for &#123;&#123; .Language &#125;&#125; is replaced)

@@ -14,6 +14,7 @@
 ## What was absorbed
 
 3 Rust crates (22 source files + tests):
+
 - `traceability-core` — core data model, matrix, contract, progress, impact
 - `traceability-decorators` — decorator patterns for link assertions
 - `trace-gate` — governance gate binary with tests

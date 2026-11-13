@@ -119,21 +119,25 @@ cat worklogs/DUPLICATION.md
 ## Agent Responsibilities
 
 ### Forge (Implementation Agent)
+
 - Write worklogs for implementation findings
 - Update DUPLICATION.md when finding copy-paste code
 - Update DEPENDENCIES.md for dependency changes
 
 ### Muse (Code Review Agent)
+
 - Write worklogs for code quality findings
 - Update ARCHITECTURE.md for design feedback
 - Update GOVERNANCE.md for quality gate findings
 
 ### Sage (Research Agent)
+
 - Write worklogs for all research activities
 - Update RESEARCH.md with starred repo analysis
 - Update PERFORMANCE.md with optimization research
 
 ### Helios (Testing Agent)
+
 - Write worklogs for testing findings
 - Update INTEGRATION.md for integration test results
 - Update PERFORMANCE.md for benchmark results
@@ -141,6 +145,7 @@ cat worklogs/DUPLICATION.md
 ## Example Worklog Entries
 
 ### Research Entry
+
 ```markdown
 ## 2026-03-29 - khoj-ai/khoj Analysis
 
@@ -163,6 +168,7 @@ Analyzed Khoj AI knowledge base for semantic search capabilities.
 ```
 
 ### Decision Entry
+
 ```markdown
 ## 2026-03-29 - Fork Decision: utils/pty
 
@@ -195,6 +201,7 @@ Fork `utils/pty` to `phenotype-process` for shared PTY/process management.
 ## Questions?
 
 Ask in the current session or check:
+
 - `worklogs/README.md` - Full worklog documentation
 - `worklogs/aggregate.sh` - Aggregation script
 - `PLAN.md` - Implementation plan with priorities

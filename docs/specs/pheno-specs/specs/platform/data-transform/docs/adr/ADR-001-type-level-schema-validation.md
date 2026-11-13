@@ -26,16 +26,19 @@
 **Description**: Use TypeScript's type system to validate schema definitions using generic constraints and conditional types.
 
 **Pros**:
+
 - Zero runtime cost
 - Leverages TypeScript's type checker
 - Works with existing tooling
 
 **Cons**:
+
 - Complex type error messages
 - Limited to what TypeScript can express
 - May hit type instantiation depth limits
 
 **Performance Data**:
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | Compile-time overhead | ~50ms per schema | Internal benchmark |
@@ -46,11 +49,13 @@
 **Description**: Use TypeScript 7's macro system to validate schemas at compile time.
 
 **Pros**:
+
 - More expressive validation
 - Better error messages
 - Can generate helpful diagnostics
 
 **Cons**:
+
 - Requires tsgo compiler
 - Macro system still evolving
 - Potential compatibility issues
@@ -60,11 +65,13 @@
 **Description**: Use type-level constraints for basic validation + optional macro-based validation for complex cases.
 
 **Pros**:
+
 - Best of both worlds
 - Graceful degradation
 - Future-proof for TypeScript 7
 
 **Cons**:
+
 - More complex implementation
 - Two validation paths to maintain
 
@@ -74,7 +81,8 @@
 
 **Chosen Option**: Option 3 - Combined Approach
 
-**Rationale**: 
+**Rationale**:
+
 - Type-level constraints catch common errors (missing properties, type mismatches) with zero overhead
 - Macros can be opt-in for complex validation that type-level constraints cannot express
 - This approach works today with TypeScript 6 and enables full functionality with TypeScript 7

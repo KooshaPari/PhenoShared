@@ -27,6 +27,7 @@ This document explores the implementation patterns, testing strategies, and arch
 The simplest form of feature flag - a binary switch that enables or disables a code path.
 
 **Implementation Pattern**
+
 ```typescript
 // Basic boolean flag check
 if (featureFlags.isEnabled('new-checkout-flow')) {
@@ -37,18 +38,21 @@ if (featureFlags.isEnabled('new-checkout-flow')) {
 ```
 
 **Best Practices**
+
 - Always provide a default value (usually `false` for safety)
 - Use descriptive names (verb-noun pattern): `enable-new-dashboard`, `disable-cache`
 - Keep flag checks close to the feature they control
 - Avoid deep nesting of flag checks
 
 **Use Cases**
+
 - Kill switches for emergency disable
 - Feature release gates
 - Maintenance mode toggles
 - Beta feature access
 
 **Anti-Patterns to Avoid**
+
 ```typescript
 // BAD: Nested flag hell
 if (flags.isEnabled('feature-a')) {
@@ -72,6 +76,7 @@ return strategy.execute();
 Flags with multiple possible values (not just on/off), enabling A/B/n testing and complex configuration.
 
 **Implementation Pattern**
+
 ```typescript
 // Multivariate flag returning string values
 const buttonColor = featureFlags.getValue('cta-button-color', 'blue');
@@ -82,6 +87,7 @@ const algorithm = featureFlags.getValue('search-algorithm', 'default');
 ```
 
 **Configuration Structure**
+
 ```json
 {
   "flagKey": "search-algorithm",
@@ -119,6 +125,7 @@ const algorithm = featureFlags.getValue('search-algorithm', 'default');
 ```
 
 **Use Cases**
+
 - A/B/n testing with multiple variants
 - Dynamic configuration injection
 - Algorithm selection
@@ -132,6 +139,7 @@ const algorithm = featureFlags.getValue('search-algorithm', 'default');
 Progressively exposing a feature to a percentage of users, enabling canary releases and risk mitigation.
 
 **Implementation Pattern**
+
 ```typescript
 // Deterministic percentage-based rollout
 function isEnabledForUser(flagKey: string, userId: string, percentage: number): boolean {
@@ -155,6 +163,7 @@ const shouldShowFeature = isEnabledForUser('new-ui', user.id, 10);
 ```
 
 **Progressive Rollout Strategy**
+
 ```
 Phase 1: 0%    - Internal testing only
 Phase 2: 1%    - Canary release (watch for errors)
@@ -167,6 +176,7 @@ Phase 7: Remove flag - Cleanup
 
 **Stickiness Consideration**
 Users must consistently fall into the same bucket to avoid UX inconsistency:
+
 ```typescript
 // With stickiness - user always sees same variant
 const variant = flags.getVariant('new-ui', user.id); // Consistent
@@ -183,6 +193,7 @@ const variant = flags.getVariant('new-ui'); // Inconsistent
 Emergency flags designed to immediately disable functionality when issues are detected, acting as manual circuit breakers.
 
 **Implementation Pattern**
+
 ```typescript
 class KillSwitchManager {
   private flags: FeatureFlagClient;
@@ -229,12 +240,14 @@ const result = await killSwitch.executeWithKillSwitch(
 ```
 
 **Characteristics**
+
 - Default to "safe" path (usually legacy/off state)
 - Instant propagation required (<5 seconds)
 - Audited engagement (who, when, why)
 - Automatic recovery evaluation
 
 **Naming Convention**
+
 ```
 Bad:  new-feature
 Good: kill-payment-v2-api
@@ -250,6 +263,7 @@ Good: emergency-fallback-search
 Rolling out features to a small, representative subset of users before broader deployment.
 
 **Implementation Architecture**
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Canary Release Pipeline                     │
@@ -282,6 +296,7 @@ Rolling out features to a small, representative subset of users before broader d
 ```
 
 **Targeting Rules for Canary**
+
 ```typescript
 // Sophisticated canary targeting
 const canaryRules = {
@@ -306,6 +321,7 @@ const canaryRules = {
 Using feature flags to randomly assign users to different variants and measure outcomes.
 
 **Test Design Pattern**
+
 ```typescript
 // A/B test with metrics tracking
 class ABTestRunner {
@@ -357,6 +373,7 @@ class ABTestRunner {
 ```
 
 **Statistical Considerations**
+
 ```
 Minimum Sample Size Calculation:
 
@@ -384,6 +401,7 @@ Total for 2 variants: ~7,700 users
 ### 2.1 Client-Side vs Server-Side Evaluation
 
 #### Client-Side SDK Pattern
+
 ```typescript
 // Browser/Mobile SDK
 class ClientFeatureFlagSDK {
@@ -427,6 +445,7 @@ class ClientFeatureFlagSDK {
 ```
 
 #### Server-Side SDK Pattern
+
 ```typescript
 // Server SDK with local evaluation
 class ServerFeatureFlagSDK {
@@ -479,6 +498,7 @@ class ServerFeatureFlagSDK {
 | **Use Case** | High-traffic APIs | Simple web apps |
 
 **Hybrid Approach (Best of Both)**
+
 ```typescript
 class HybridFlagClient {
   private localFlags: Map<string, FlagDefinition>;
@@ -506,6 +526,7 @@ class HybridFlagClient {
 ### 2.3 Caching Strategies
 
 #### Tiered Caching Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Caching Hierarchy                            │
@@ -532,6 +553,7 @@ class HybridFlagClient {
 ```
 
 #### Cache Invalidation Patterns
+
 ```typescript
 // Event-driven invalidation
 class CacheManager {
@@ -577,6 +599,7 @@ class CacheManager {
 ### 3.1 Testing in a Feature-Flagged System
 
 **The Combinatorial Problem**
+
 ```
 With n feature flags, you have 2^n possible states.
 
@@ -587,6 +610,7 @@ With n feature flags, you have 2^n possible states.
 ```
 
 **Testing Strategy: Risk-Based Sampling**
+
 ```typescript
 // Test critical paths with all combinations
 const criticalFlags = ['payment-flow', 'auth-v2'];
@@ -881,6 +905,7 @@ configManager.subscribe((config) => {
 ```
 
 **Lifecycle Automation**
+
 ```typescript
 interface FlagLifecycle {
   createdAt: Date;
@@ -946,6 +971,7 @@ class FlagLifecycleManager {
 ### 4.3 Targeting and Segmentation Patterns
 
 **Context-Aware Targeting**
+
 ```typescript
 interface EvaluationContext {
   userId: string;
@@ -1018,6 +1044,7 @@ class ContextualTargetingEngine {
 ```
 
 **Segment Definition and Reuse**
+
 ```typescript
 // Reusable segments
 const segments = {
@@ -1076,6 +1103,7 @@ const flagConfig = {
 ### 5.1 Common Anti-Patterns
 
 **1. Magic Strings**
+
 ```typescript
 // BAD
 if (flags.isEnabled('flag123')) { }
@@ -1090,6 +1118,7 @@ if (flags.isEnabled(FEATURE_FLAGS.NEW_CHECKOUT_FLOW)) { }
 ```
 
 **2. Deep Nesting**
+
 ```typescript
 // BAD
 function processOrder(order) {
@@ -1129,6 +1158,7 @@ function processOrder(order) {
 ```
 
 **3. Database Calls in Flag Checks**
+
 ```typescript
 // BAD - N+1 query problem
 for (const user of users) {
@@ -1152,6 +1182,7 @@ for (let i = 0; i < users.length; i++) {
 ```
 
 **4. Stale Flags**
+
 ```typescript
 // Problem: Flags that stay in code forever
 // 3 years later, this flag is still checked but always true
@@ -1172,6 +1203,7 @@ if (flags.isEnabled('migration-completed-2023')) {
 ### 5.2 Security Considerations
 
 **Data Leakage Prevention**
+
 ```typescript
 // BAD - Exposing all flags to client
 app.get('/flags', (req, res) => {
@@ -1189,6 +1221,7 @@ app.get('/flags', authenticate, (req, res) => {
 ```
 
 **Flag Tampering Prevention**
+
 ```typescript
 // Verify flag overrides are legitimate
 class SecureFlagClient {
@@ -1222,6 +1255,7 @@ class SecureFlagClient {
 ## 6. Implementation Checklist
 
 ### Pre-Implementation
+
 - [ ] Define flag naming convention
 - [ ] Establish lifecycle policy (max flag age)
 - [ ] Set up monitoring and alerting
@@ -1229,6 +1263,7 @@ class SecureFlagClient {
 - [ ] Document rollback procedures
 
 ### During Implementation
+
 - [ ] Use feature flag client abstraction (not direct API calls)
 - [ ] Add default values for all flags
 - [ ] Implement proper error handling
@@ -1236,6 +1271,7 @@ class SecureFlagClient {
 - [ ] Create kill switches for critical paths
 
 ### Post-Implementation
+
 - [ ] Remove flags after full rollout
 - [ ] Monitor flag usage and performance
 - [ ] Review flag health regularly
@@ -1247,22 +1283,26 @@ class SecureFlagClient {
 ## 7. References
 
 ### Industry Standards
+
 1. Fowler, Martin & Hodgson, Pete. "Feature Toggles (aka Feature Flags)" - martinfowler.com, 2017
 2. Humble, Jez & Farley, David. "Continuous Delivery" - Addison-Wesley, 2010
 3. Nygard, Michael. "Release It!" - Pragmatic Bookshelf, 2018
 
 ### Platform-Specific Patterns
+
 1. LaunchDarkly SDK Reference Guides - docs.launchdarkly.com
 2. Split Pattern Library - help.split.io/hc/en-us
 3. Unleash Best Practices - docs.getunleash.io/topics/feature-flags
 4. Flagsmith Implementation Guide - docs.flagsmith.com
 
 ### Research Papers
+
 1. "Experimentation in Large-Scale Online Services" - Google, KDD 2015
 2. "Overlapping Experiment Infrastructure" - Google, 2010
 3. "The Netflix Simian Army" - Netflix Tech Blog, 2011
 
 ### Open Source Projects
+
 1. Unleash/unleash - github.com/Unleash/unleash
 2. Flagsmith/flagsmith - github.com/Flagsmith/flagsmith
 3. OpenFeature Specification - openfeature.dev

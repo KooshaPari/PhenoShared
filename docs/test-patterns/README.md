@@ -18,7 +18,9 @@ that breaks every time a refactor lands, these live as reference patterns:
 ## What's here
 
 ### `proptest_smoke.rs` — Property-based testing (TEST-03)
+
 Demonstrates the pattern for `proptest!` macros:
+
 - Generating random inputs (u32, String, Vec&lt;u8>, HashMap)
 - Defining invariants via `prop_assert!`, `prop_assert_eq!`
 - Configuring the runner with `ProptestConfig::default()`
@@ -29,8 +31,10 @@ To enable: add `proptest = "1"` to `[dev-dependencies]` of your crate's
 into `crates/<your-crate>/tests/proptest_smoke.rs`.
 
 ### `snapshots_smoke.rs` — Snapshot testing (TEST-07)
+
 Demonstrates the pattern for `insta::assert_json_snapshot!` and
 `insta::assert_debug_snapshot!`:
+
 - Capturing structured outputs for golden-file review
 - Inline vs external snapshot files
 - CI-friendly failure reporting (`INSTA_UPDATE=auto` for auto-accepting)
@@ -40,6 +44,7 @@ cargo-insta` for the auto-accept workflow. Snapshots land in
 `crates/<your-crate>/tests/snapshots/`.
 
 ### `criterion_bench.rs` — Load / soak benchmarks (TEST-09)
+
 Already exists in the workspace at `/benches/criterion_bench.rs` but the
 `[[bench]]` target in the root `Cargo.toml` is not wired. Wiring requires:
 

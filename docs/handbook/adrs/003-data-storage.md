@@ -28,12 +28,14 @@ PostgreSQL is the battle-tested default for ACID transactional data; its JSON/JS
 ## Consequences
 
 ### Positive
+
 - Each tier has a clear, non-overlapping responsibility
 - DragonFly is Redis-API compatible — no client code changes
 - NATS embeds into services as a library, simplifying local dev
 - MinIO runs in Docker for local and CI parity with production
 
 ### Negative / Trade-offs
+
 - Four distinct technologies increases operator knowledge requirements
 - NATS JetStream semantics differ from Kafka; team needs onboarding
 - DragonFly is newer than Redis; long-term support track less proven

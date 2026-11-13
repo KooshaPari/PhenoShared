@@ -18,12 +18,14 @@
 ## Project Overview
 
 ### Purpose
+
 1. **CLI Agent:** OpenAI Codex fork optimized for performance (CPU, latency, memory)
 2. **Router Dashboard:** Interactive Pareto frontier visualization with provider ledger
 3. **Harness System:** 20+ validation crates for testing, caching, checkpointing, discovery, resilience
 4. **Phenotype Integration:** Full spec documentation, governance, architecture decision records
 
 ### Language & Stack
+
 - **Languages:** Rust (1,025 files, ~450K LOC), Python (103 files, ~3K LOC), Go (1 file)
 - **Build Systems:** Bazel (monorepo), Cargo (Rust), UV/pip (Python), npm/pnpm (JS/Node)
 - **Frameworks:**
@@ -84,6 +86,7 @@ heliosCLI/
 ```
 
 **Code Distribution:**
+
 - Rust: 1,025 files, ~450K LOC (codex-rs + harness crates)
 - Python: 103 files, ~3K LOC (harness, app.py)
 - Go: 1 file (harness/cache.go)
@@ -94,7 +97,9 @@ heliosCLI/
 ## The helios_router Component: Separability Analysis
 
 ### Current State
+
 **helios_router is NOT a separate microservice**—it is embedded as:
+
 - **Entry Point:** app.py (Streamlit main application)
 - **Database Layer:** helios_router_ui/db/schema.py (SQLite)
 - **Pareto Engine:** helios_router_ui/pareto/engine.py (optimization logic)
@@ -102,6 +107,7 @@ heliosCLI/
 - **Event Bus:** helios_router_ui/nats_client.py (NATS integration, optional)
 
 ### Architecture of app.py
+
 ```python
 # app.py: ~11KB monolithic Streamlit app
 
@@ -143,14 +149,18 @@ structure:
    - Estimated effort to make framework-agnostic: **4-6 hours**
 
 ### Separation Estimate: 22-32 hours
+
 To create a standalone `helios-router` service:
+
 - Extract business logic (Pareto engine, DB access) from Streamlit
 - Create REST API layer (FastAPI/Starlette)
 - Establish clean interfaces for UI, DB, EventBus
 - Migrate tests to framework-agnostic structure
 
 ### Recommendation: DO NOT SEPARATE (Phase 2-3)
+
 **Keep as monolithic dashboard.** Rationale:
+
 - ✅ Current architecture is appropriate for Streamlit (rapid iteration, exploratory analysis)
 - ✅ Separation cost (22-32h) outweighs benefit for current use case
 - ✅ If microservice needed in future, extract via dedicated phase (3+ months out)
@@ -161,6 +171,7 @@ To create a standalone `helios-router` service:
 ## Dependencies Analysis
 
 ### Python Dependencies (app.py + harness/)
+
 | Package | Version | Purpose |
 |---------|---------|---------|
 | streamlit | >=1.44.0 | Dashboard UI framework |
@@ -176,7 +187,9 @@ To create a standalone `helios-router` service:
 | httpx | >=0.28.0 | HTTP client (optional, server extra) |
 
 ### Rust Dependencies (Cargo.toml Workspace)
+
 Top transitive dependencies across harness crates:
+
 | Crate | Purpose |
 |-------|---------|
 | tokio | Async runtime |
@@ -189,12 +202,14 @@ Top transitive dependencies across harness crates:
 | criterion | Benchmarking |
 
 ### JavaScript/Node Dependencies (pnpm-lock.yaml)
+
 - TypeScript ecosystem (tsconfig, prettier, eslint)
 - Tailwind CSS (styling)
 - Vite (bundling, if present)
 - Various skill/plugin packages
 
 ### Dependency Health
+
 - ✅ **Bleeding-edge:** Python 3.14, latest major versions (pandas 2.2+, numpy 2.0+)
 - ✅ **Lean:** 11 direct Python dependencies (no bloat)
 - ✅ **Well-maintained:** All actively maintained by core teams
@@ -205,6 +220,7 @@ Top transitive dependencies across harness crates:
 ## Architecture & Design Patterns
 
 ### Layered Architecture (Observed)
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │       Streamlit Dashboard (Presentation)             │
@@ -220,7 +236,9 @@ Top transitive dependencies across harness crates:
 ```
 
 ### Rust Harness Architecture (Exemplary)
+
 The 20+ harness crates demonstrate **trait-driven design:**
+
 - **harness_interfaces:** Trait definitions (Runnable, Cached, etc.)
 - **harness_cache:** LRU cache implementation (generic over T)
 - **harness_schema:** Test schema DSL (serde-based)
@@ -229,6 +247,7 @@ The 20+ harness crates demonstrate **trait-driven design:**
 - **harness_orchestrator:** Coordinates multiple crate workflows
 
 ### Code Quality
+
 - ✅ Python: MyPy type checking enabled, ruff linting, pytest coverage
 - ✅ Rust: No unsafe code in harness crates (all safe, idiomatic)
 - ✅ Documentation: Comprehensive (docs/ with 76+ files)
@@ -239,6 +258,7 @@ The 20+ harness crates demonstrate **trait-driven design:**
 ## Testing
 
 ### Rust Test Suite (Harness Crates)
+
 ```bash
 # Via Cargo
 cargo test --all
@@ -256,6 +276,7 @@ bazel test //crates/...
 | [harness_*] | 80-100+ | Distributed across 20 crates |
 
 ### Python Test Suite (harness/ + tests/)
+
 | File | Tests | Purpose |
 |------|-------|---------|
 | test_cache_classes.py | ~15 | Cache layer (LRU, TTL) |
@@ -269,6 +290,7 @@ bazel test //crates/...
 **Total Python Tests:** ~90-100 across test_*.py files
 
 ### Test Organization
+
 - ✅ Pytest configuration: `pyproject.toml` with proper paths
 - ✅ Inline Rust tests: Cargo conventions followed
 - ✅ Coverage tracking: pytest-cov configured
@@ -279,6 +301,7 @@ bazel test //crates/...
 ## Integration with Phenotype Ecosystem
 
 ### Current Integration Status
+
 **Strong governance integration, minimal code dependency:**
 
 - ✅ **ADR.md:** Present (linked from root)
@@ -289,7 +312,9 @@ bazel test //crates/...
 - ✅ **Harness Crates:** Demonstrate trait-driven hexagonal patterns
 
 ### Lack of Phenotype Library Integration
+
 **heliosCLI does NOT use:**
+
 - ❌ phenotype-error-core (uses custom error types)
 - ❌ phenotype-config-core (uses YAML directly)
 - ❌ phenotype-health (no health check trait exposed)
@@ -298,7 +323,9 @@ bazel test //crates/...
 **Why:** heliosCLI is primarily a **Rust CLI fork** with Python dashboard overlay—it evolved independently and has its own error/config patterns.
 
 ### Architecture Alignment
+
 ✅ **Harness crates are exemplary** of Phenotype hexagonal architecture:
+
 - Clear port/adapter pattern in trait definitions
 - No circular dependencies
 - SOLID principles applied throughout
@@ -309,6 +336,7 @@ bazel test //crates/...
 ## Code Metrics
 
 ### Size Analysis
+
 | Metric | Value |
 |--------|-------|
 | Rust Files | 1,025 |
@@ -321,6 +349,7 @@ bazel test //crates/...
 | Largest Files | routes.rs (2,631 LOC), sqlite/lib.rs (1,582 LOC) |
 
 ### Complexity Hotspots
+
 | File | LOC | Issue | Severity |
 |------|-----|-------|----------|
 | codex-rs/core/tools/routes.rs | 2,631 | 53 async handlers, deep nesting | High |
@@ -328,6 +357,7 @@ bazel test //crates/...
 | harness/benchmarks/extended_benchmark.py | Mixed imports | Duplicate test definitions | Medium |
 
 ### Dead Code
+
 - 45+ `#[allow(dead_code)]` suppressions in Rust
 - ~8,000 LOC test duplication across worktrees (test_phench_*.py)
 - Estimated ~3-5% unused imports
@@ -337,6 +367,7 @@ bazel test //crates/...
 ## Development Workflow
 
 ### Build & Test
+
 ```bash
 # Rust (Cargo)
 cargo build --release
@@ -355,11 +386,13 @@ bazel test //...
 ```
 
 ### Hot Reload & Development
+
 - Streamlit: Automatic reload on Python changes (`streamlit run app.py`)
 - Rust: Cargo watch for file changes
 - Bazel: Incremental build support
 
 ### CI/CD
+
 - GitHub Actions (expected, not verified)
 - Bazel test integration
 - Pytest coverage reporting
@@ -369,6 +402,7 @@ bazel test //...
 ## Functional Requirements & Documentation
 
 ### Documentation Status
+
 - ✅ **PLAN.md:** 12 phases detailed (Discovery → Release/Deployment)
 - ✅ **PRD.md:** 4 epics (Foundation, Execution Core, Agent Integration, CLI Interface)
 - ✅ **FUNCTIONAL_REQUIREMENTS.md:** 50+ functional requirements
@@ -376,6 +410,7 @@ bazel test //...
 - ✅ **USER_JOURNEYS.md:** Stub (85 bytes)—ready for expansion
 
 ### Governance Alignment
+
 - ✅ Follows Phenotype documentation standards
 - ✅ Uses AgilePlus format for specs
 - ✅ Traces code to FR requirements
@@ -446,6 +481,7 @@ bazel test //...
 ## Cross-Project Reuse Opportunities
 
 ### High-Value Extractions (Phase 2-3)
+
 1. **harness_cache:** Generic LRU cache with TTL (2,000+ LOC)
 2. **harness_schema:** Test schema DSL (1,500+ LOC)
 3. **harness_runner:** Parallel test orchestration (2,500+ LOC)
@@ -454,6 +490,7 @@ bazel test //...
 **Total Sharable:** 7,000+ LOC (if extracted to phenotype-infrakit)
 
 ### Savings Across Ecosystem
+
 - AgilePlus could use harness_schema for test definitions
 - Other repos could use harness_cache for caching layers
 - Reduces duplication by ~3,000 LOC
@@ -467,6 +504,7 @@ bazel test //...
 ### Consolidation Status: ✅ READY FOR PHASE 2
 
 **Recommendation:** Include in Phase 2 with focus on:
+
 1. Expanding USER_JOURNEYS.md
 2. Extracting high-value harness crates to shared
 3. Integrating phenotype error/health traits

@@ -24,6 +24,7 @@
 **File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 
 **Line 30**:
+
 ```toml
 tokio = { version = "1", features = ["full"] }
 ```
@@ -31,6 +32,7 @@ tokio = { version = "1", features = ["full"] }
 ### The Problem
 
 `tokio::full` includes 10+ features, many of which are unused:
+
 - `signal` — UNIX signal handling (not used in workspace)
 - `process` — Child process spawning (not used)
 - `rt-auto-detect` — Auto-detect runtime (redundant with explicit `rt-multi-thread`)
@@ -40,6 +42,7 @@ Unused features still compile, adding 10-20% to incremental build time.
 ### The Fix
 
 **Replace with**:
+
 ```toml
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "fs", "io-util", "net"] }
 ```
@@ -55,6 +58,7 @@ tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"
 - `net` — TCP, UDP (needed for networking)
 
 Dropped (unused in workspace):
+
 - ~~`signal`~~ — Not used
 - ~~`process`~~ — Not used
 - ~~`rt-auto-detect`~~ — Redundant with explicit `rt-multi-thread`
@@ -76,6 +80,7 @@ time cargo build  # Expected: ~50-60s (20-25% faster)
 ### Rollback
 
 If tests fail, simply revert line 30:
+
 ```toml
 tokio = { version = "1", features = ["full"] }
 ```
@@ -89,6 +94,7 @@ tokio = { version = "1", features = ["full"] }
 **File**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/Cargo.toml`
 
 **Lines 50-54**:
+
 ```toml
 [profile.release]
 opt-level = "z"
@@ -104,6 +110,7 @@ By default, Rust generates exception-handling code in release builds (`panic = "
 ### The Fix
 
 **Add one line**:
+
 ```toml
 [profile.release]
 opt-level = "z"
@@ -123,11 +130,13 @@ panic = "abort"  # ← ADD THIS LINE
 ### Trade-offs
 
 **Pro**:
+
 - 2-5% smaller binaries
 - Slightly faster linking
 - Simpler panic behavior
 
 **Con** (minimal):
+
 - panics become crashes (not unwinds)
 - Any `catch_unwind` blocks won't catch panics (but you shouldn't use these in production anyway)
 
@@ -320,16 +329,19 @@ nano Cargo.toml
 ```
 
 **Find line 30**:
+
 ```
 tokio = { version = "1", features = ["full"] }
 ```
 
 **Replace with**:
+
 ```
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "fs", "io-util", "net"] }
 ```
 
 **Save and verify**:
+
 ```bash
 git diff Cargo.toml  # See changes
 
@@ -345,6 +357,7 @@ git commit -m "perf: reduce tokio feature set for faster builds"
 ### Step 2: Add panic = "abort"
 
 **In same Cargo.toml, find lines 50-54**:
+
 ```
 [profile.release]
 opt-level = "z"
@@ -354,11 +367,13 @@ strip = true
 ```
 
 **Add after `strip = true`**:
+
 ```
 panic = "abort"
 ```
 
 Final result:
+
 ```
 [profile.release]
 opt-level = "z"
@@ -369,6 +384,7 @@ panic = "abort"
 ```
 
 **Save and verify**:
+
 ```bash
 git diff Cargo.toml  # See changes
 
@@ -516,10 +532,10 @@ A: No, the `.cargo/config.toml` alone helps. The sccache CI actions are optional
 ## References
 
 - Full audit: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/BUILD_PERFORMANCE_AUDIT_2026-03-30.md`
-- Cargo book: https://doc.rust-lang.org/cargo/
-- Profile reference: https://doc.rust-lang.org/cargo/reference/profiles.html
-- sccache: https://github.com/mozilla/sccache
-- rust-cache action: https://github.com/Swatinem/rust-cache
+- Cargo book: <https://doc.rust-lang.org/cargo/>
+- Profile reference: <https://doc.rust-lang.org/cargo/reference/profiles.html>
+- sccache: <https://github.com/mozilla/sccache>
+- rust-cache action: <https://github.com/Swatinem/rust-cache>
 
 ---
 

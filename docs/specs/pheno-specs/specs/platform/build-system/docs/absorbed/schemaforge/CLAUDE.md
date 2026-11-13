@@ -6,7 +6,7 @@ Craft utilities and helpers
 
 ## Key Files
 
--  - Project overview
+- Project overview
 - See project-specific directories
 
 ## Development Commands

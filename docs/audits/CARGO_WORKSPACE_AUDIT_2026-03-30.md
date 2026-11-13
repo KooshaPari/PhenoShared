@@ -5,6 +5,7 @@
 This audit examined the root `Cargo.toml` workspace configuration against actual crate membership, dependency declarations, and usage patterns in the phenotype-infrakit monorepo.
 
 **Overall Status**: ⚠️ MODERATE ISSUES FOUND
+
 - **Members**: 7 valid, all present, all version-consistent
 - **Workspace Dependencies**: 24 declared, 8 potentially unused (but some legitimate build/feature deps)
 - **Orphaned Crates**: 42 found in `/crates` directory, not listed in workspace members
@@ -15,6 +16,7 @@ This audit examined the root `Cargo.toml` workspace configuration against actual
 ## 1. Workspace Configuration
 
 ### 1.1 Root Metadata
+
 ```toml
 [workspace.package]
 version = "0.2.0"
@@ -33,6 +35,7 @@ description = "Phenotype Infrastructure Kit"
 ## 2. Workspace Members Audit
 
 ### 2.1 Declared Members
+
 The workspace declares **7 members** in `[workspace.members]`:
 
 | Crate | Status | Version | Cargo.toml Present |
@@ -50,42 +53,49 @@ The workspace declares **7 members** in `[workspace.members]`:
 ### 2.2 Member Details
 
 #### phenotype-error-core
+
 - **Lines**: 15
 - **Dependencies**: serde, thiserror, tokio (dev)
 - **Purpose**: Canonical error types for ecosystem
 - **Status**: ✓ Minimal, clean
 
 #### phenotype-errors
+
 - **Lines**: 18
 - **Dependencies**: chrono, phenotype-error-core, serde, serde_json, thiserror, tokio (dev)
 - **Purpose**: Extended error handling utilities
 - **Status**: ✓ Clean
 
 #### phenotype-contracts
+
 - **Lines**: 19
 - **Dependencies**: async-trait, chrono, phenotype-error-core, serde, serde_json, thiserror, tokio (dev), uuid
 - **Purpose**: Shared trait contracts
 - **Status**: ✓ Clean
 
 #### phenotype-health
+
 - **Lines**: 15
 - **Dependencies**: serde, thiserror, tokio (dev)
 - **Purpose**: Health check abstraction (Kubernetes probes)
 - **Status**: ✓ Minimal, clean
 
 #### phenotype-port-traits
+
 - **Lines**: 15
 - **Dependencies**: serde, thiserror, tokio (dev)
 - **Purpose**: Port/adapter trait definitions
 - **Status**: ✓ Minimal, clean
 
 #### phenotype-policy-engine
+
 - **Lines**: 19
 - **Dependencies**: dashmap, regex, serde, serde_json, thiserror, tokio (dev), toml
 - **Purpose**: Rule-based policy evaluation
 - **Status**: ✓ Clean, used dashmap appropriately
 
 #### phenotype-telemetry
+
 - **Lines**: 15
 - **Dependencies**: serde, thiserror, tokio (dev)
 - **Purpose**: Observability and tracing utilities
@@ -158,6 +168,7 @@ phenotype-errors = { version = "0.2.0", path = "crates/phenotype-errors" }
 ### 3.3 Unused Workspace Dependencies (Candidates for Cleanup)
 
 **Category 1: Likely Unused (no apparent use case in current members)**
+
 - `blake3` (v1.5) — Hash function, not used anywhere
 - `futures` (v0.3) — Not used in current members
 - `lru` (v0.12) — Caching, not currently used
@@ -166,9 +177,11 @@ phenotype-errors = { version = "0.2.0", path = "crates/phenotype-errors" }
 - `strum` (v0.26) — Enum utilities, not used
 
 **Category 2: Internal Dependencies Not Used by Members**
+
 - `phenotype-errors` — Listed as workspace.package dep but not used by any member (only phenotype-contracts uses phenotype-error-core)
 
 **Category 3: May Be Aspirational/Legacy (consider removal or document intent)**
+
 - `anyhow` (v1.0) — Error context utility (common pattern, but not currently used)
 - `hex` (v0.4) — Hex encoding (transitive of sha2, but not directly used)
 - `moka` (v0.12) — Advanced caching (aspirational)
@@ -186,6 +199,7 @@ phenotype-errors = { version = "0.2.0", path = "crates/phenotype-errors" }
 The workspace declares only **7 members**, but **42 crate directories** exist in `/crates` directory:
 
 **Orphaned Phenotype Crates (19)**:
+
 - phenotype-async-traits
 - phenotype-config-loader ⚠️ (declared separately but NOT in members list!)
 - phenotype-contract (duplicate of phenotype-contracts?)
@@ -210,9 +224,11 @@ The workspace declares only **7 members**, but **42 crate directories** exist in
 - phenotype-validation ⚠️ (declared separately but NOT in members list!)
 
 **Orphaned AgilePlus Crates (23)**:
+
 - agileplus-api, agileplus-api-types, agileplus-benchmarks, agileplus-cache, agileplus-cli, agileplus-contract-tests, agileplus-dashboard, agileplus-domain, agileplus-error-core, agileplus-events, agileplus-fixtures, agileplus-git, agileplus-github, agileplus-graph, agileplus-grpc, agileplus-import, agileplus-integration-tests, agileplus-nats, agileplus-p2p, agileplus-plane, agileplus-sqlite, agileplus-subcmds, agileplus-sync, agileplus-telemetry, agileplus-triage
 
 **Orphaned Other Crates (3)**:
+
 - bifrost-routing
 - forgecode-core
 
@@ -221,6 +237,7 @@ The workspace declares only **7 members**, but **42 crate directories** exist in
 ⚠️ **CRITICAL**: At least **12 crates are marked as declared separately** (see ⚠️ marks above):
 
 From the git diff analysis, these crates were **removed from the members list** but their Cargo.toml files still exist:
+
 - phenotype-config-loader
 - phenotype-git-core
 - phenotype-iter
@@ -234,6 +251,7 @@ From the git diff analysis, these crates were **removed from the members list** 
 - phenotype-validation
 
 **Possible causes**:
+
 1. **Recent refactor**: These may have been moved to separate repositories or archived
 2. **Git merge conflict resolution error**: The members list was mangled during a merge
 3. **Intentional separation**: Crates may now be in separate monorepos (AgilePlus owns the 23 agileplus-* crates)
@@ -252,6 +270,7 @@ The root `Cargo.toml` appears to be **polyrepo-aware** but not properly segregat
 - **Other** (forgecode-core, etc.): Unknown scope
 
 **Recommendation**: Clarify repository boundaries:
+
 1. If AgilePlus is separate, move all `agileplus-*` crates out of this root workspace
 2. If shared, add them explicitly to members list with documentation
 3. If in transition, explicitly archive them in `.archive/` until resolved
@@ -293,6 +312,7 @@ The root `Cargo.toml` appears to be **polyrepo-aware** but not properly segregat
 ### 7.1 Key Observations
 
 **Clean Layering**:
+
 ```
 phenotype-error-core (base)
     ↓
@@ -306,6 +326,7 @@ phenotype-health, phenotype-port-traits, phenotype-telemetry, phenotype-policy-e
 **No Circular Dependencies Detected**: ✓ Good
 
 **Internal Dependencies** (cross-crate):
+
 - phenotype-errors depends on phenotype-error-core ✓
 - phenotype-contracts uses phenotype-error-core ✓
 - All other crates use only workspace.dependencies ✓
@@ -315,14 +336,17 @@ phenotype-health, phenotype-port-traits, phenotype-telemetry, phenotype-policy-e
 ## 8. Build Profile Analysis
 
 ### 8.1 Development Profile
+
 ```toml
 [profile.dev]
 opt-level = 0
 debug = true
 ```
+
 **Status**: ✓ Standard, appropriate for development
 
 ### 8.2 Release Profile
+
 ```toml
 [profile.release]
 opt-level = "z"      # Size optimization
@@ -330,6 +354,7 @@ lto = true           # Link-time optimization
 codegen-units = 1    # Single-threaded codegen for better optimization
 strip = true         # Strip symbols
 ```
+
 **Status**: ✓ Aggressive optimization appropriate for library distribution
 
 ---
@@ -369,6 +394,7 @@ strip = true         # Strip symbols
 ### Phase 1: Immediate Clarity (1 day)
 
 1. **Segregate workspaces** by organization:
+
    ```bash
    # Option A: Move AgilePlus to separate workspace
    mkdir -p AgilePlus-workspace/crates
@@ -380,6 +406,7 @@ strip = true         # Strip symbols
    ```
 
 2. **Archive stale phenotype crates**:
+
    ```bash
    # Move orphaned/stale phenotype crates to .archive/
    for crate in phenotype-contract phenotype-cost-core phenotype-crypto \
@@ -397,6 +424,7 @@ strip = true         # Strip symbols
 ### Phase 2: Dependency Cleanup (1-2 days)
 
 1. **Remove truly unused dependencies** from workspace.dependencies:
+
    ```toml
    # Remove these (no current or planned use)
    - blake3
@@ -408,6 +436,7 @@ strip = true         # Strip symbols
    ```
 
 2. **Consolidate aspirational dependencies**:
+
    ```toml
    # [workspace.dependencies] — Aspirational (for roadmap features)
    anyhow = "1.0"              # Error context (future)
@@ -450,4 +479,4 @@ The **7-member core workspace is healthy**: consistent versioning, no circular d
 
 **Audit Date**: 2026-03-30
 **Auditor**: Claude Code (automated analysis)
-**Repository**: https://github.com/KooshaPari/phenotype-infrakit
+**Repository**: <https://github.com/KooshaPari/phenotype-infrakit>

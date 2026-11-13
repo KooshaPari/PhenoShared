@@ -121,6 +121,7 @@ graph TD
 5. WP07 — depends on WP05 and WP06, merges last
 
 This ensures:
+
 - No merge conflicts (dependencies already in main)
 - Linear history (clean git log)
 - Easy to bisect if issue discovered
@@ -137,6 +138,7 @@ strategy = "squash"
 ```
 
 Behavior:
+
 ```
 All commits in WP02 → single squashed commit on main
 
@@ -158,6 +160,7 @@ strategy = "rebase"
 ```
 
 Behavior:
+
 ```
 All commits in WP02 → replayed on top of main
 
@@ -179,6 +182,7 @@ strategy = "merge"
 ```
 
 Behavior:
+
 ```
 All commits in WP02 + merge commit on main
 
@@ -271,6 +275,7 @@ enabled = true
 ```
 
 System automatically:
+
 - Closes all WP issues
 - Updates feature issue to "Shipped"
 - Comments with merge commit link

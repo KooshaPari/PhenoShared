@@ -29,6 +29,7 @@ Documentation for **Phenotype Phase 1-2** implementation:
 Unified foundation providing design system, documentation, and governance.
 
 **Key Features**:
+
 - Design Consistency: All UIs unified
 - Documentation Parity: Easy navigation
 - Governance Alignment: Predictable workflows
@@ -38,6 +39,7 @@ Unified foundation providing design system, documentation, and governance.
 ### Quickstart (10 min)
 
 1. **Add submodule** (1 min)
+
    ```bash
    git submodule add https://github.com/KooshaPari/phenotype-docs.git docs/.phenotype-chassis
    ```

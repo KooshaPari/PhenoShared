@@ -17,6 +17,7 @@ With multiple registries (PhenoSpecs, PhenoHandbook, HexaKit) and cross-registry
 4. **Reactive**: Issues found after merge
 
 We need automated validation that runs on every PR, ensuring:
+
 - Links are valid (not 404)
 - Schemas are correct (valid YAML/JSON)
 - Traceability is complete (no orphans)
@@ -49,6 +50,7 @@ We need automated validation that runs on every PR, ensuring:
 **Description**: Single service that validates all registries
 
 **Architecture**:
+
 ```
 ┌─────────────────────────────────────────┐
 │  Validation Service                     │
@@ -59,11 +61,13 @@ We need automated validation that runs on every PR, ensuring:
 ```
 
 **Pros**:
+
 - Unified configuration
 - Shared caching
 - Centralized reporting
 
 **Cons**:
+
 - Single point of failure
 - Requires hosting
 - Complex cross-repo authentication
@@ -74,6 +78,7 @@ We need automated validation that runs on every PR, ensuring:
 **Description**: Each repo validates itself independently
 
 **Architecture**:
+
 ```
 ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
 │ PhenoSpecs   │  │ PhenoHandbook│  │   HexaKit   │
@@ -82,11 +87,13 @@ We need automated validation that runs on every PR, ensuring:
 ```
 
 **Pros**:
+
 - Simple per-repo setup
 - No cross-repo coordination
 - Fast
 
 **Cons**:
+
 - Cannot validate cross-repo links
 - Duplicate configuration
 - Inconsistent rules
@@ -96,6 +103,7 @@ We need automated validation that runs on every PR, ensuring:
 **Description**: phenotype-registry CI triggers validation workflows in spokes
 
 **Architecture**:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                   phenotype-registry                         │
@@ -116,11 +124,13 @@ We need automated validation that runs on every PR, ensuring:
 ```
 
 **Pros**:
+
 - Cross-repo validation possible
 - Single configuration in hub
 - Can aggregate results
 
 **Cons**:
+
 - Requires cloning multiple repos
 - Slightly slower
 
@@ -129,6 +139,7 @@ We need automated validation that runs on every PR, ensuring:
 **Description**: Webhooks trigger validation on any registry change
 
 **Architecture**:
+
 ```
 ┌──────────────┐     ┌──────────────┐
 │  PhenoSpecs  │────▶│   Webhook    │
@@ -140,10 +151,12 @@ We need automated validation that runs on every PR, ensuring:
 ```
 
 **Pros**:
+
 - Real-time validation
 - Event-driven efficiency
 
 **Cons**:
+
 - Requires webhook infrastructure
 - Complex error handling
 - Harder to debug
@@ -153,6 +166,7 @@ We need automated validation that runs on every PR, ensuring:
 **Description**: PR validation for immediate feedback + scheduled runs for consistency
 
 **Architecture**:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                   PR Validation (Fast)                       │
@@ -171,12 +185,14 @@ We need automated validation that runs on every PR, ensuring:
 ```
 
 **Pros**:
+
 - Fast feedback on PRs
 - Thorough checks scheduled
 - Cost-effective
 - Simple implementation
 
 **Cons**:
+
 - Cross-repo issues found after merge (mitigated by scheduled runs)
 
 ---
@@ -261,6 +277,7 @@ We need automated validation that runs on every PR, ensuring:
 ### Phase 1: Per-Repo Validation (Complete)
 
 Each registry has:
+
 - [x] YAML/JSON schema validation
 - [x] Markdown linting
 - [x] Internal link checking
@@ -346,9 +363,9 @@ jobs:
 
 - Parent ADR: ADR-001 (Multi-Registry Architecture)
 - Related ADR: ADR-002 (Traceability-First Documentation)
-- GitHub Actions: https://docs.github.com/actions
-- yamllint: https://yamllint.readthedocs.io/
-- lychee: https://github.com/lycheeverse/lychee
+- GitHub Actions: <https://docs.github.com/actions>
+- yamllint: <https://yamllint.readthedocs.io/>
+- lychee: <https://github.com/lycheeverse/lychee>
 
 ---
 
@@ -366,6 +383,7 @@ jobs:
 ### Error Message Format
 
 All validation errors should follow:
+
 ```
 <level>: <file>:<line>:<col>: <message>
 

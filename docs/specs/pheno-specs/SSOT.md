@@ -1,11 +1,13 @@
 # PhenoSpecs — Single Source of Truth
 
 ## Identity
+
 - **Repo:** PhenoSpecs
 - **Owner:** &lt;REDACTED&gt;
 - **Added to fleet:** 2026-06-28 (v55 SSOT gap-fill wave)
 
 ## Scope
+
 | Scope | Pattern | Notes |
 |-------|---------|-------|
 | Code | `src/` | Primary |

@@ -78,6 +78,7 @@ The canonical Rust implementation lives at
 [`<REDACTED>/substrate/crates/substrate-core`](https://github.com/KooshaPari/substrate/tree/main/crates/substrate-core).
 
 Specifically:
+
 - `domain.rs` — Task, Conversation, Session, Message, StructuredResult, RoutingDecision, EngineCapabilities, TaskState
 - `ports.rs` — EnginePort, RoutingPort, TransportPort, StorePort, DispatchApi
 - `trace.rs` — TracePort + TraceEvent + TaskRegistered/TaskCompleted/TaskFailed variants

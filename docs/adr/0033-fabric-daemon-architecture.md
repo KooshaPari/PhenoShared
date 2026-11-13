@@ -11,6 +11,7 @@ Proposed
 ## Context
 
 R3 requires a persistent service daemon that:
+
 1. Manages topology, lease, and plan state across restarts
 2. Handles wire transport connections per spec 025
 3. Provides health/status endpoints for operators
@@ -53,18 +54,21 @@ Create `fabric-daemon` as a standalone crate with five modules:
 ## Alternatives considered
 
 ### A. Async runtime (tokio) for wire server
+
 Rejected: the daemon is I/O-bound but connection count is low (single-digit
 nodes in R3). `std::net::TcpListener` with `try_clone()` is simpler and
 avoids tokio version conflicts with the rest of the workspace. If R3+
 demands hundreds of concurrent connections, migrate to tokio then.
 
 ### B. gRPC for wire transport
+
 Rejected: spec 025 defines a JSON-over-TCP wire format. gRPC would
 require protobuf schema generation and HTTP/2 framing, adding complexity
 without consumer demand. JSON is already the interop format between
 Go (`cmd/wire/`) and Rust (`fabric-graph`).
 
 ### C. In-process SQLite (rusqlite)
+
 Accepted: `rusqlite` with WAL mode provides single-process durability
 without external database dependencies. The daemon is the sole SQLite
 writer — no locking contention. Checkpoint interval is configurable.

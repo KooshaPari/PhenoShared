@@ -19,4 +19,5 @@
 | Git commit with message | ✅ |
 
 ## Git SHA
+
 `ac422b8` — A-03: absorb PhenoCompose driver into phenotype-infra/crates/

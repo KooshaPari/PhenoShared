@@ -24,10 +24,12 @@ This document tracks the deduplication effort to centralize shared files across 
 **Before**: 33 projects had identical `AGENTS.md` files (108KB each)
 
 **After**:
+
 - `template-commons/AGENTS.md` is the canonical source
 - 32 projects now symlink to `../template-commons/AGENTS.md`
 
 **Projects Updated**:
+
 ```bash
 # Replaced with symlinks:
 BytePort, Duple, phenotype-docs-engine, Seedloom, Datamold,
@@ -45,10 +47,12 @@ template-domain-webapp, phenotypeActions
 **Before**: 13 projects had identical `SECURITY.md` files
 
 **After**:
+
 - `template-commons/SECURITY.md` is the canonical source
 - 12 projects now symlink to `../template-commons/SECURITY.md`
 
 **Projects Updated**:
+
 ```bash
 phenotype-dep-guard, template-domain-service-api, template-lang-mojo,
 template-lang-go, template-lang-elixir-hex, template-lang-rust,
@@ -111,16 +115,19 @@ ln -s ../template-commons/SECURITY.md SECURITY.md
 ## Remaining Work
 
 ### High Priority
+
 - [ ] Verify all symlinks work correctly
 - [ ] Update project documentation to reference canonical sources
 - [ ] Add CI check to detect new duplicate files
 
 ### Medium Priority
+
 - [ ] Migrate remaining projects to use reusable CI workflows
 - [ ] Create additional pre-commit templates (Go, Kotlin, etc.)
 - [ ] Document the symlink update process for new projects
 
 ### Low Priority
+
 - [ ] Create tooling to automate symlink creation
 - [ ] Add pre-commit hook to validate symlinks
 

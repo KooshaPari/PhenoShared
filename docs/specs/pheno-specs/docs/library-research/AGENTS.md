@@ -28,11 +28,13 @@ Phenotype-Registry is the central repository and package management system for t
 ## Stack
 
 ### Primary Language & Runtime
+
 - **Language**: Go 1.24+ (registry service), Rust (CLI)
 - **Runtime**: Native with aggressive generics adoption
 - **Architecture**: Microservices with shared storage backend
 
 ### Core Dependencies
+
 ```go
 // Web Framework
 github.com/gin-gonic/gin
@@ -62,6 +64,7 @@ go.uber.org/zap                   # Logging
 ```
 
 ### Registry Types Supported
+
 - **Cargo**: Rust crate registry
 - **npm**: JavaScript package registry
 - **Go Module**: Go module proxy
@@ -70,6 +73,7 @@ go.uber.org/zap                   # Logging
 - **Generic**: Arbitrary artifact storage
 
 ### Build & Development Tools
+
 - **Task Runner**: Task (Taskfile.yml)
 - **Linting**: golangci-lint
 - **Testing**: gotestsum
@@ -192,16 +196,19 @@ Phenotype-Registry implements a multi-format registry with pluggable backends:
 ### Component Breakdown
 
 #### 1. API Gateway
+
 - **Format Adapters**: Protocol-specific endpoints
 - **Authentication**: JWT, API keys, mTLS
 - **Rate Limiting**: Per-user and per-package limits
 
 #### 2. Core Services
+
 - **Package Manager**: CRUD operations for packages
 - **Version Manager**: Version metadata, yanking
 - **Download Service**: Package serving with caching
 
 #### 3. Storage Layer
+
 - **PostgreSQL**: Package metadata, versions, dependencies
 - **S3/MinIO**: Actual package files (tarballs, wheels)
 - **Redis**: Hot package cache, download counters
@@ -251,11 +258,13 @@ type Package struct {
 ### Testing Requirements
 
 #### Test Coverage
+
 - **Minimum Coverage**: 80% for services, 70% for adapters
 - **Critical Paths**: 95% for publish/download paths
 - **Measurement**: `go test -coverprofile` with CI
 
 #### Test Categories
+
 ```bash
 # Unit tests
 task test:unit
@@ -270,6 +279,7 @@ task test:e2e
 ### Code Quality
 
 #### Go Standards
+
 ```bash
 # Linting
 golangci-lint run --config=.golangci.yml
@@ -467,11 +477,13 @@ auth:
 #### Issue: Package publish failing with 409
 
 **Symptoms:**
+
 ```
 Error: 409 Conflict - version already exists
 ```
 
 **Resolution:**
+
 ```bash
 # Check if version exists
 registry package info my-package --version 1.0.0
@@ -490,6 +502,7 @@ registry publish --force
 #### Issue: High storage costs
 
 **Diagnosis:**
+
 ```bash
 # Check storage usage
 registry metrics | grep storage
@@ -499,6 +512,7 @@ registry package list --sort=size --limit=50
 ```
 
 **Resolution:**
+
 ```bash
 # Enable lifecycle policies
 registry config set storage.lifecycle.enabled true
@@ -512,6 +526,7 @@ registry package prune --older-than 1y --keep-versions 5
 #### Issue: Search returning no results
 
 **Diagnosis:**
+
 ```bash
 # Check search index
 registry index status
@@ -521,6 +536,7 @@ curl http://localhost:9200/_cluster/health
 ```
 
 **Resolution:**
+
 ```bash
 # Rebuild index
 registry index rebuild
@@ -534,6 +550,7 @@ registry logs --component indexer
 #### Issue: Slow package downloads
 
 **Diagnosis:**
+
 ```bash
 # Check cache hit rate
 registry metrics | grep cache_hit
@@ -542,6 +559,7 @@ registry metrics | grep cache_hit
 ```
 
 **Resolution:**
+
 ```bash
 # Warm cache
 registry cache warm --popular

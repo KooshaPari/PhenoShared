@@ -15,9 +15,11 @@
 ## 2. Functional Requirements
 
 ### FR-VALID-001: Zod Integration
+
 **Priority**: P0 (Critical)
 **Description**: Zod-based validation
 **Acceptance Criteria**:
+
 - Zod schema definitions
 - Type inference
 - Refinements
@@ -25,9 +27,11 @@
 - Default values
 
 ### FR-VALID-002: Custom Schemas
+
 **Priority**: P1 (High)
 **Description**: Custom validation logic
 **Acceptance Criteria**:
+
 - Custom schemas
 - Branded types
 - Lazy schemas
@@ -35,9 +39,11 @@
 - Schema composition
 
 ### FR-VALID-003: JSON Schema
+
 **Priority**: P1 (High)
 **Description**: JSON Schema interoperability
 **Acceptance Criteria**:
+
 - JSON Schema export
 - JSON Schema import
 - OpenAPI generation
@@ -48,6 +54,7 @@
 ## 4. Release Criteria
 
 ### Version 1.0
+
 - [ ] Zod integration
 - [ ] Type inference
 - [ ] JSON Schema support

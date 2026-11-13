@@ -31,6 +31,7 @@ This is **maximal scope**: all 5 adapter wrappings + 2 new ports + FR-006/FR-007
 ### Hexagonal adapter pattern (consistent with Phase 3)
 
 Every adapter is a thin class that:
+
 - Lives under `apps/runtime/src/adapters/<port-name>/<adapter>.ts`
 - Implements the corresponding `I<Name>Port` interface 1:1
 - Delegates all real work to the existing module (no re-implementation)
@@ -123,6 +124,7 @@ Within budget: ≤ 2000 lines, ≤ 25 files... wait, **32 files busts the 25-fil
 ## Resumption check-in
 
 This spec is the deliverable the pending todo requested. No code lands until you confirm. Once approved I'll:
+
 1. Open branch `feat/phase4-port-adapters`
 2. Land adapters in PR #494 (5 existing ports)
 3. Land trace + network ports in PR #495

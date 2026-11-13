@@ -12,4 +12,3 @@
 
 - Item 3 depends on items 1 and 2.
 - Item 5 depends on items 3 and 4.
-

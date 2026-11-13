@@ -45,6 +45,7 @@ Registry integrated with governance. Charter compliance tracked. Quality gates v
 ### In Scope
 
 **Package Registry:**
+
 - Crate registry (Rust)
 - NPM registry (TypeScript/JavaScript)
 - PyPI registry (Python)
@@ -52,12 +53,14 @@ Registry integrated with governance. Charter compliance tracked. Quality gates v
 - Container registry
 
 **Service Catalog:**
+
 - Service registration
 - API endpoint catalog
 - Service dependency mapping
 - Health status integration
 
 **Schema Registry:**
+
 - OpenAPI spec registry
 - Protobuf schema registry
 - JSON Schema registry
@@ -65,6 +68,7 @@ Registry integrated with governance. Charter compliance tracked. Quality gates v
 - Compatibility checking
 
 **Metadata Management:**
+
 - Ownership information
 - Documentation links
 - Source repository links
@@ -72,6 +76,7 @@ Registry integrated with governance. Charter compliance tracked. Quality gates v
 - Quality metrics
 
 **Discovery Tools:**
+
 - Search and query API
 - Dependency graph visualization
 - Impact analysis
@@ -164,11 +169,13 @@ phenotype-registry/
 ### Development Process
 
 **New Registrations:**
+
 - Automated via CI/CD
 - Metadata validation
 - Duplicate checking
 
 **Lifecycle Changes:**
+
 - Approval workflow
 - Notification to consumers
 - Audit logging

@@ -19,6 +19,7 @@ This spec catalogs all 19 private repos, maps their relationships to public repo
 ## Problem Statement
 
 Private repositories are unmanaged and undocumented:
+
 - **No catalog** — no comprehensive list of private repos and their purposes
 - **Unknown relationships** — unclear how private repos relate to public repos
 - **Potential duplicates** — private repos may duplicate public repo functionality
@@ -69,30 +70,35 @@ Private repositories are unmanaged and undocumented:
 ## Technical Approach
 
 ### Phase 1: Discovery and Catalog (Week 1-2)
+
 1. Query GitHub API for all private repos with metadata
 2. Document each repo's purpose, ownership, and access controls
 3. Map dependencies between private repos
 4. Identify sensitive content requiring special handling
 
 ### Phase 2: Public-Private Mapping (Week 2-3)
+
 1. Compare private repos with public repos
 2. Identify duplicates between private and public repos
 3. Document relationships and dependencies
 4. Assess which private repos should remain private
 
 ### Phase 3: Duplicate Resolution (Week 3-4)
+
 1. Evaluate each duplicate pair for merge or archive
 2. Plan migration for repos to be merged
 3. Archive repos that are superseded
 4. Update references to archived repos
 
 ### Phase 4: Governance Model (Week 4-5)
+
 1. Define private repo lifecycle management
 2. Establish access control procedures
 3. Create security requirements documentation
 4. Define maintenance schedules for private repos
 
 ### Phase 5: Documentation and Verification (Week 5-6)
+
 1. Document all private repos with purpose and ownership
 2. Create comprehensive private repo catalog
 3. Verify all access controls are correct

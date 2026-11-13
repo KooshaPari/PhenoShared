@@ -37,18 +37,21 @@ Portalis empowers development teams to expose, secure, and monitor their APIs wi
 #### User Journey Examples
 
 **Journey 1: API Publication**
+
 1. Developer creates microservice
 2. Developer adds Portalis annotations to OpenAPI spec
 3. Portalis generates routing, auth, and rate limiting config
 4. API is live with zero additional code
 
 **Journey 2: Security Audit**
+
 1. Security engineer reviews centralized audit logs
 2. Discovers anomalous access pattern
 3. Blocks specific API key or IP range
 4. All APIs immediately protected
 
 **Journey 3: Rate Limit Debug**
+
 1. External partner reports rate limit errors
 2. DevOps checks partner's usage metrics
 3. Partner exceeded quota; adjusts tier or temporarily raises limit
@@ -206,6 +209,7 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Validate JWT tokens from any OIDC-compliant provider
 
 **Requirements:**
+
 - Support RS256, RS384, RS512 algorithms
 - Validate issuer and audience claims
 - Fetch and cache JWKS from provider
@@ -213,6 +217,7 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 - Extract claims for downstream services
 
 **Acceptance Criteria:**
+
 - [ ] Valid JWT grants access to protected routes
 - [ ] Expired JWT returns 401 with clear error
 - [ ] Invalid signature returns 401
@@ -224,12 +229,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Support OAuth 2.0 authorization code flow
 
 **Requirements:**
+
 - Integrate with WorkOS, Auth0, Okta, generic OIDC
 - Exchange codes for tokens
 - Support token refresh
 - Cache tokens appropriately
 
 **Acceptance Criteria:**
+
 - [ ] Authorization redirect works for configured provider
 - [ ] Token exchange succeeds
 - [ ] Refresh flow maintains session
@@ -240,12 +247,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Validate API keys from request headers
 
 **Requirements:**
+
 - Support configurable header names
 - Store keys securely (bcrypt hashed)
 - Support key scopes
 - Allow key rotation without downtime
 
 **Acceptance Criteria:**
+
 - [ ] Valid API key grants access
 - [ ] Invalid key returns 401
 - [ ] Key with insufficient scope returns 403
@@ -256,12 +265,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Enforce role-based permissions on routes
 
 **Requirements:**
+
 - Define roles with permissions
 - Map consumers to roles
 - Check permissions before routing
 - Support wildcard permissions
 
 **Acceptance Criteria:**
+
 - [ ] Consumer with correct role accesses route
 - [ ] Consumer without role gets 403
 - [ ] Roles can be updated without restart
@@ -273,12 +284,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Implement token bucket algorithm for rate limiting
 
 **Requirements:**
+
 - Configurable bucket capacity
 - Configurable refill rate
 - Per-route and per-consumer limits
 - Support burst allowance
 
 **Acceptance Criteria:**
+
 - [ ] Requests within limit succeed
 - [ ] Requests exceeding limit get 429
 - [ ] Bucket refills over time
@@ -289,12 +302,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Implement sliding window algorithm for smoother limits
 
 **Requirements:**
+
 - Configurable window size
 - Per-consumer windows
 - Redis-backed for distributed deployments
 - Consistent window boundaries
 
 **Acceptance Criteria:**
+
 - [ ] Limits enforce over sliding window
 - [ ] Distributed instances share state
 - [ ] Window boundary transitions smoothly
@@ -304,12 +319,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Implement periodic quotas for billing
 
 **Requirements:**
+
 - Support hourly, daily, monthly periods
 - Track usage per consumer
 - Reset at period boundary
 - Support grace periods
 
 **Acceptance Criteria:**
+
 - [ ] Quota enforced over billing period
 - [ ] Usage visible in metrics
 - [ ] Period rollover works correctly
@@ -321,12 +338,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Route requests based on path, method, headers
 
 **Requirements:**
+
 - Support path parameters (`/users/{id}`)
 - Support wildcards (`/api/**`)
 - Support regex patterns
 - Priority-based route selection
 
 **Acceptance Criteria:**
+
 - [ ] Path parameters extracted and forwarded
 - [ ] Wildcards match correctly
 - [ ] Regex routes work
@@ -337,12 +356,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Distribute traffic across upstream instances
 
 **Requirements:**
+
 - Round robin algorithm
 - Least connections algorithm
 - IP hash algorithm
 - Health-aware routing
 
 **Acceptance Criteria:**
+
 - [ ] Traffic distributed evenly (round robin)
 - [ ] Unhealthy instances excluded
 - [ ] Session affinity works (IP hash)
@@ -352,12 +373,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Monitor upstream health
 
 **Requirements:**
+
 - HTTP health check endpoint
 - Configurable interval and timeout
 - Passive health checks on failures
 - Automatic recovery
 
 **Acceptance Criteria:**
+
 - [ ] Unhealthy upstream marked
 - [ ] Traffic routes to healthy instances
 - [ ] Recovery detected and instances restored
@@ -369,12 +392,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Export metrics in Prometheus format
 
 **Requirements:**
+
 - Request counters by route, status
 - Latency histograms
 - Upstream health metrics
 - Rate limit metrics
 
 **Acceptance Criteria:**
+
 - [ ] /metrics endpoint returns Prometheus format
 - [ ] All required metrics present
 - [ ] Labels enable flexible querying
@@ -384,12 +409,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** JSON-formatted logs with correlation
 
 **Requirements:**
+
 - Request ID in every log
 - Structured fields (JSON)
 - Configurable log levels
 - Audit events for security
 
 **Acceptance Criteria:**
+
 - [ ] All requests logged with ID
 - [ ] Logs parseable as JSON
 - [ ] Security events logged separately
@@ -399,12 +426,14 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 **Description:** Distributed tracing support
 
 **Requirements:**
+
 - Trace context propagation
 - Span creation per request
 - Sampling configuration
 - Export to OTLP-compatible backends
 
 **Acceptance Criteria:**
+
 - [ ] Traceparent header propagated
 - [ ] Spans show gateway processing
 - [ ] Upstream traces linked
@@ -578,5 +607,5 @@ The API gateway market is valued at $4.5B in 2026, growing 15% annually. Key tre
 ---
 
 **Document Owner:** Portalis Team  
-**Contact:** portalis@phenotype.io  
+**Contact:** <portalis@phenotype.io>  
 **Last Updated:** 2026-04-04

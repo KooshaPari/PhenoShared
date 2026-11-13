@@ -68,6 +68,7 @@ tests as out-of-scope failures. They exercise
 `scripts/reconciliation_preflight_checks_{infra,packet,security,security_remote}.py`
 which are the canonical "is the local repo consistent with the latest
 SOTA chain + remote bundle?" check. Many were failing because:
+
 - `PreflightInputs` / `CurrentSnapshot` weren't exported (now fixed in `719cb62`)
 - `Iterable` was missing from typing imports (now fixed in `719cb62`)
 - Bundle header constants duplicated across modules (now fixed by daemon)
@@ -126,6 +127,7 @@ adapters via parent-module lookup. Refactor to expose adapters via
 5 harbor-required tests are currently skipped because `harbor>=0.6.0` and
 `repo2rlenv>=0.8.0` aren't in the test venv. These tests validate the
 "is the local model + container runner wired correctly for terminal-bench
+
 + Repo2RLEnv upstream?" check.
 
 | ID | Title | depends_on | ac |

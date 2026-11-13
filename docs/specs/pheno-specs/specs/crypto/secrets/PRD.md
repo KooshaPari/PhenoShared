@@ -1,4 +1,5 @@
 # Product Requirements Document (PRD)
+
 # Guardis - Enterprise Secrets Management System
 
 **Version:** 3.0  
@@ -82,45 +83,55 @@ Guardis is a comprehensive enterprise secrets management system for the Phenotyp
 ### 2.1 Core Problems Addressed
 
 #### Problem 1: Secret Sprawl
+
 Organizations store secrets across multiple systems—environment variables, configuration files, databases, and code repositories—creating security vulnerabilities and management nightmares.
 
 **Evidence:**
+
 - 70% of organizations have secrets in code repositories
 - Average enterprise has secrets in 15+ different locations
 - 60% of breaches involve leaked credentials
 - Secret rotation is rarely performed due to complexity
 
 #### Problem 2: Static Credentials
+
 Traditional approaches use long-lived static credentials that, once compromised, provide attackers persistent access. Rotation is manual and error-prone.
 
 **Evidence:**
+
 - Average credential lifetime: 18 months
 - Manual rotation causes 30% of production incidents
 - Static credentials found in 85% of security audits
 - Developers share credentials for convenience
 
 #### Problem 3: Lack of Audit Trails
+
 Organizations cannot track who accessed what secrets when, making compliance impossible and breach investigation difficult.
 
 **Evidence:**
+
 - 50% of organizations cannot trace secret access
 - Compliance audits fail due to missing audit trails
 - Insider threats go undetected
 - Forensic analysis takes weeks
 
 #### Problem 4: High Availability Gaps
+
 Secret management systems are often single points of failure. When they go down, applications cannot authenticate or retrieve secrets.
 
 **Evidence:**
+
 - 40% of secret management systems are single-node
 - Downtime blocks application startup
 - No disaster recovery procedures
 - Geographic limitations
 
 #### Problem 5: Multi-Tenancy Challenges
+
 Sharing secret management across teams requires proper isolation. Without it, teams see each other's secrets or need separate instances.
 
 **Evidence:**
+
 - 80% of teams share secret management instances
 - No namespace isolation in basic solutions
 - RBAC complexity leads to over-permissioning
@@ -144,6 +155,7 @@ Sharing secret management across teams requires proper isolation. Without it, te
 ### 3.1 Primary User Personas
 
 #### Persona 1: CISO "Victoria"
+
 - **Demographics:** 45 years old, security executive
 - **Experience:** 20 years cybersecurity, CISSP
 - **Goals:** Reduce breach risk, pass audits, demonstrate security posture
@@ -151,6 +163,7 @@ Sharing secret management across teams requires proper isolation. Without it, te
 - **Usage Pattern:** Dashboards, audit reports, policy enforcement
 
 #### Persona 2: DevOps Engineer "Diego"
+
 - **Demographics:** 32 years old, platform engineering
 - **Experience:** 8 years DevOps, Kubernetes expert
 - **Goals:** Automate secret management, reduce toil
@@ -158,6 +171,7 @@ Sharing secret management across teams requires proper isolation. Without it, te
 - **Usage Pattern:** Terraform, CLI, Kubernetes integration
 
 #### Persona 3: Application Developer "Alex"
+
 - **Demographics:** 28 years old, full-stack developer
 - **Experience:** 5 years development, cloud-native
 - **Goals:** Easy secret access without security burden
@@ -165,6 +179,7 @@ Sharing secret management across teams requires proper isolation. Without it, te
 - **Usage Pattern:** SDKs, environment variables, token auth
 
 #### Persona 4: Compliance Officer "Rachel"
+
 - **Demographics:** 40 years old, compliance specialist
 - **Experience:** 15 years audit, risk management
 - **Goals:** Demonstrate control effectiveness, pass audits
@@ -172,6 +187,7 @@ Sharing secret management across teams requires proper isolation. Without it, te
 - **Usage Pattern:** Audit logs, reports, evidence collection
 
 #### Persona 5: Platform Architect "Marcus"
+
 - **Demographics:** 42 years old, infrastructure architect
 - **Experience:** 18 years infrastructure, cloud architecture
 - **Goals:** Design resilient, scalable secret management
@@ -198,12 +214,14 @@ Sharing secret management across teams requires proper isolation. Without it, te
 ### 4.1 Secret Storage (FR-STORAGE-001 to FR-STORAGE-020)
 
 #### FR-STORAGE-001: KV Secrets Engine v2
+
 - Store arbitrary secrets as key-value pairs
 - Versioning with history
 - Soft delete with recovery
 - Metadata tracking (created, updated, versions)
 
 **API Example:**
+
 ```bash
 vault kv put secret/app/config db_password=s3cr3t api_key=abc123
 vault kv get secret/app/config
@@ -212,12 +230,14 @@ vault kv get -version=1 secret/app/config  # Retrieve old version
 ```
 
 #### FR-STORAGE-002: Path-Based Organization
+
 - Hierarchical secret paths
 - Path-based policies
 - List operations at path levels
 - Bulk operations
 
 #### FR-STORAGE-003: Secret Metadata
+
 - Creation timestamp
 - Last update timestamp
 - Version number
@@ -225,6 +245,7 @@ vault kv get -version=1 secret/app/config  # Retrieve old version
 - Custom metadata (max 128KB)
 
 #### FR-STORAGE-004: Versioning
+
 - Automatic versioning on update
 - Minimum versions to retain (configurable)
 - Version retrieval
@@ -234,6 +255,7 @@ vault kv get -version=1 secret/app/config  # Retrieve old version
 ### 4.2 Dynamic Secrets (FR-DYNAMIC-001 to FR-DYNAMIC-020)
 
 #### FR-DYNAMIC-001: Database Secret Engine
+
 - Generate dynamic database credentials
 - Support: PostgreSQL, MySQL, MongoDB, MSSQL, Oracle
 - Automatic credential rotation
@@ -241,12 +263,14 @@ vault kv get -version=1 secret/app/config  # Retrieve old version
 - TTL-based leases
 
 **API Example:**
+
 ```bash
 vault read database/creds/readonly
 # Returns: username, password, lease_id, lease_duration, renewable
 ```
 
 #### FR-DYNAMIC-002: Cloud Secret Engines
+
 - AWS: Generate IAM credentials, STS tokens
 - Azure: Generate service principals, access tokens
 - GCP: Generate service account keys, access tokens
@@ -254,6 +278,7 @@ vault read database/creds/readonly
 - Role-based permission scoping
 
 #### FR-DYNAMIC-003: Lease Management
+
 - Configurable TTL
 - Lease renewal
 - Lease revocation
@@ -261,6 +286,7 @@ vault read database/creds/readonly
 - Lease listing and filtering
 
 #### FR-DYNAMIC-004: Role Configuration
+
 - Creation statements (database schemas)
 - Revocation statements
 - Default TTL
@@ -270,6 +296,7 @@ vault read database/creds/readonly
 ### 4.3 Encryption (FR-ENCRYPT-001 to FR-ENCRYPT-015)
 
 #### FR-ENCRYPT-001: Transit Secrets Engine
+
 - Encryption-as-a-service
 - Decryption with key management
 - Sign/verify operations
@@ -277,12 +304,14 @@ vault read database/creds/readonly
 - Key rotation
 
 **API Example:**
+
 ```bash
 vault write transit/encrypt/app-key plaintext=$(base64 <<< "sensitive data")
 vault write transit/decrypt/app-key ciphertext=vault:v1:abcde...
 ```
 
 #### FR-ENCRYPT-002: Key Management
+
 - Named encryption keys
 - Automatic key rotation
 - Manual key rotation
@@ -290,11 +319,13 @@ vault write transit/decrypt/app-key ciphertext=vault:v1:abcde...
 - Key derivation
 
 #### FR-ENCRYPT-003: Convergent Encryption
+
 - Same plaintext → same ciphertext
 - Deduplication support
 - Context-based encryption
 
 #### FR-ENCRYPT-004: Batch Operations
+
 - Batch encrypt/decrypt
 - Batch sign/verify
 - Performance optimization
@@ -302,23 +333,27 @@ vault write transit/decrypt/app-key ciphertext=vault:v1:abcde...
 ### 4.4 PKI (FR-PKI-001 to FR-PKI-020)
 
 #### FR-PKI-001: Root CA Management
+
 - Generate root CAs
 - Import external CAs
 - CA chaining
 - CA rotation
 
 #### FR-PKI-002: Intermediate CA
+
 - Generate intermediate CAs
 - CA signing
 - Certificate policy enforcement
 
 #### FR-PKI-003: Certificate Issuance
+
 - Role-based certificate issuance
 - TTL enforcement
 - Key type selection (RSA, ECDSA, Ed25519)
 - Subject alternative names (SANs)
 
 **API Example:**
+
 ```bash
 vault write pki/issue/app-role \
   common_name=app.example.com \
@@ -327,6 +362,7 @@ vault write pki/issue/app-role \
 ```
 
 #### FR-PKI-004: Certificate Revocation
+
 - CRL generation
 - OCSP support
 - Revocation tracking
@@ -335,6 +371,7 @@ vault write pki/issue/app-role \
 ### 4.5 Authentication (FR-AUTH-001 to FR-AUTH-020)
 
 #### FR-AUTH-001: Token Auth
+
 - Vault tokens
 - Token policies
 - Token hierarchies (parent/child)
@@ -342,29 +379,34 @@ vault write pki/issue/app-role \
 - Token TTL and renewal
 
 #### FR-AUTH-002: Kubernetes Auth
+
 - Service account verification
 - JWT validation
 - Role mapping
 - In-cluster and external cluster
 
 #### FR-AUTH-003: GitHub Auth
+
 - GitHub team/organization mapping
 - Personal access token verification
 - Organization restriction
 
 #### FR-AUTH-004: LDAP Auth
+
 - LDAP bind authentication
 - Group membership mapping
 - User search
 - TLS/StartTLS
 
 #### FR-AUTH-005: OIDC/OAuth2
+
 - OpenID Connect integration
 - OAuth2 token validation
 - Userinfo endpoint support
 - Group/claim mapping
 
 #### FR-AUTH-006: AppRole
+
 - RoleID/SecretID authentication
 - Push/pull delivery modes
 - SecretID constraints (CIDR, TTL)
@@ -373,12 +415,14 @@ vault write pki/issue/app-role \
 ### 4.6 Authorization (FR-AUTHZ-001 to FR-AUTHZ-015)
 
 #### FR-AUTHZ-001: Policy-Based Access Control
+
 - HCL policy syntax
 - Path-based rules
 - Operation restrictions (read, write, delete, list, sudo)
 - Parameter constraints
 
 **Policy Example:**
+
 ```hcl
 path "secret/app/*" {
   capabilities = ["read", "list"]
@@ -390,12 +434,14 @@ path "secret/app/admin" {
 ```
 
 #### FR-AUTHZ-002: Namespaces
+
 - Multi-tenancy isolation
 - Namespace-scoped policies
 - Namespace administration
 - Hierarchical namespaces (enterprise)
 
 #### FR-AUTHZ-003: Entities and Groups
+
 - Entity (user) management
 - Group membership
 - Group policies
@@ -404,6 +450,7 @@ path "secret/app/admin" {
 ### 4.7 High Availability (FR-HA-001 to FR-HA-015)
 
 #### FR-HA-001: Raft Consensus
+
 - Integrated Raft storage
 - 3/5/7 node clusters
 - Automatic leader election
@@ -411,6 +458,7 @@ path "secret/app/admin" {
 - Quorum-based writes
 
 **Configuration:**
+
 | Cluster Size | Quorum | Fault Tolerance |
 |-------------|--------|-----------------|
 | 3 nodes | 2 | 1 node |
@@ -418,12 +466,14 @@ path "secret/app/admin" {
 | 7 nodes | 4 | 3 nodes |
 
 #### FR-HA-002: Disaster Recovery
+
 - Automated snapshots
 - Snapshot restoration
 - DR cluster promotion
 - Cross-region replication
 
 #### FR-HA-003: Performance Standby
+
 - Read scaling with performance standbys
 - Automatic failover
 - Client redirection
@@ -431,18 +481,21 @@ path "secret/app/admin" {
 ### 4.8 Audit Logging (FR-AUDIT-001 to FR-AUDIT-015)
 
 #### FR-AUDIT-001: Audit Devices
+
 - File audit device
 - Socket audit device
 - Syslog audit device
 - Custom audit backends
 
 #### FR-AUDIT-002: Audit Entry Format
+
 - Standardized JSON format
 - Request/response hashing
 - Client information
 - Authentication details
 
 **Example Audit Entry:**
+
 ```json
 {
   "time": "2026-04-05T12:00:00Z",
@@ -459,6 +512,7 @@ path "secret/app/admin" {
 ```
 
 #### FR-AUDIT-003: Tamper Resistance
+
 - Response hashing (hmac-sha256)
 - Forward-only log devices
 - External SIEM integration
@@ -471,6 +525,7 @@ path "secret/app/admin" {
 ### 5.1 Performance Requirements (NFR-PERF-001 to NFR-PERF-010)
 
 #### NFR-PERF-001: Throughput
+
 | Operation | Target | Max |
 |-----------|--------|-----|
 | KV read | 10,000 ops/sec | 25,000 |
@@ -480,6 +535,7 @@ path "secret/app/admin" {
 | Dynamic creds | 200 ops/sec | 500 |
 
 #### NFR-PERF-002: Latency
+
 | Operation | p50 | p99 |
 |-----------|-----|-----|
 | KV read | <5ms | <20ms |
@@ -488,6 +544,7 @@ path "secret/app/admin" {
 | Authentication | <50ms | <200ms |
 
 #### NFR-PERF-003: Cluster Performance
+
 - Leader change: <5 seconds
 - Data replication: <100ms lag
 - Snapshot creation: <1 minute per GB
@@ -496,18 +553,21 @@ path "secret/app/admin" {
 ### 5.2 Reliability Requirements (NFR-REL-001 to NFR-REL-010)
 
 #### NFR-REL-001: Availability
+
 - 99.99% uptime (5-node cluster)
 - Automatic failover
 - No single point of failure
 - Graceful degradation
 
 #### NFR-REL-002: Data Durability
+
 - Write-ahead logging
 - Automatic snapshots
 - Transaction safety
 - No data loss on failover
 
 #### NFR-REL-003: Disaster Recovery
+
 - RPO: <5 minutes
 - RTO: <15 minutes
 - Cross-region replication (optional)
@@ -516,24 +576,28 @@ path "secret/app/admin" {
 ### 5.3 Security Requirements (NFR-SEC-001 to NFR-SEC-015)
 
 #### NFR-SEC-001: Encryption
+
 - Data at rest: AES-256-GCM
 - Data in transit: TLS 1.3
 - Key encryption: Shamir's Secret Sharing
 - Master key: Auto-unseal or manual
 
 #### NFR-SEC-002: Access Control
+
 - Defense in depth
 - Least privilege
 - Separation of duties
 - Regular access review
 
 #### NFR-SEC-003: Audit
+
 - 100% operation logging
 - Immutable audit trail
 - SIEM integration
 - Real-time alerting
 
 #### NFR-SEC-004: Compliance
+
 - FIPS 140-2 Level 3 (with HSM)
 - SOC 2 Type II support
 - PCI DSS compliance
@@ -542,12 +606,14 @@ path "secret/app/admin" {
 ### 5.4 Scalability Requirements (NFR-SCALE-001 to NFR-SCALE-010)
 
 #### NFR-SCALE-001: Data Scale
+
 - 10M+ secrets per cluster
 - 100K+ namespaces
 - 1M+ active leases
 - 10GB+ audit logs/day
 
 #### NFR-SCALE-002: Client Scale
+
 - 10,000+ concurrent clients
 - 100,000+ authenticated entities
 - 1,000+ namespaces
@@ -559,22 +625,26 @@ path "secret/app/admin" {
 ### 6.1 Security Team Stories
 
 #### US-SEC-001: Centralized Secret Management
+
 **As a** CISO  
 **I want** all secrets in a centralized, encrypted store  
 **So that** I can enforce security policies
 
 **Acceptance Criteria:**
+
 - [ ] Single source of truth for secrets
 - [ ] Policy enforcement at central point
 - [ ] Audit logging of all access
 - [ ] Encryption at rest and in transit
 
 #### US-SEC-002: Audit Compliance
+
 **As a** compliance officer  
 **I want** complete audit trails of secret access  
 **So that** I can pass compliance audits
 
 **Acceptance Criteria:**
+
 - [ ] Every secret access logged
 - [ ] Who, what, when for each access
 - [ ] Tamper-evident logs
@@ -583,22 +653,26 @@ path "secret/app/admin" {
 ### 6.2 DevOps Stories
 
 #### US-DEVOPS-001: Automated Secret Rotation
+
 **As a** DevOps engineer  
 **I want** credentials rotated automatically  
 **So that** I don't have to manage rotation manually
 
 **Acceptance Criteria:**
+
 - [ ] Dynamic credentials generated on demand
 - [ ] Automatic expiration and revocation
 - [ ] No manual rotation procedures
 - [ ] Application handles rotation transparently
 
 #### US-DEVOPS-002: Infrastructure as Code
+
 **As a** DevOps engineer  
 **I want** to manage Guardis through Terraform  
 **So that** configuration is version controlled
 
 **Acceptance Criteria:**
+
 - [ ] Terraform provider available
 - [ ] All resources manageable via IaC
 - [ ] State import/export supported
@@ -607,22 +681,26 @@ path "secret/app/admin" {
 ### 6.3 Developer Stories
 
 #### US-DEV-001: Easy Secret Access
+
 **As a** developer  
 **I want** to retrieve secrets with minimal code  
 **So that** I can focus on business logic
 
 **Acceptance Criteria:**
+
 - [ ] Simple SDK integration
 - [ ] Environment variable injection
 - [ ] Kubernetes integration
 - [ ] Clear error messages
 
 #### US-DEV-002: Local Development
+
 **As a** developer  
 **I want** to develop locally with Guardis  
 **So that** I can test secret integration
 
 **Acceptance Criteria:**
+
 - [ ] Local dev instance easy to run
 - [ ] Dev/prod parity maintained
 - [ ] Mock/test modes available
@@ -635,9 +713,11 @@ path "secret/app/admin" {
 ### 7.1 Core Features
 
 #### F-CORE-001: Vault Cluster
+
 **Description:** HashiCorp Vault with Raft consensus
 
 **Capabilities:**
+
 - 3/5/7 node clustering
 - Automatic leader election
 - Log replication
@@ -647,9 +727,11 @@ path "secret/app/admin" {
 ---
 
 #### F-CORE-002: Secret Engines
+
 **Description:** Multiple secret backends
 
 **Engines:**
+
 - KV-v2: Versioned key-value
 - Database: Dynamic database credentials
 - AWS/Azure/GCP: Cloud credentials
@@ -661,9 +743,11 @@ path "secret/app/admin" {
 ---
 
 #### F-CORE-003: Auth Methods
+
 **Description:** Multiple authentication backends
 
 **Methods:**
+
 - Token: Vault-native tokens
 - Kubernetes: Service account auth
 - GitHub: GitHub token auth
@@ -678,9 +762,11 @@ path "secret/app/admin" {
 ### 7.2 Enterprise Features
 
 #### F-ENT-001: Namespaces
+
 **Description:** Multi-tenancy isolation
 
 **Capabilities:**
+
 - Scoped secrets and policies
 - Namespace administration
 - Self-service for teams
@@ -689,9 +775,11 @@ path "secret/app/admin" {
 ---
 
 #### F-ENT-002: Sentinel
+
 **Description:** Policy as code (enterprise)
 
 **Capabilities:**
+
 - Fine-grained access control
 - Request/response inspection
 - Custom policy logic
@@ -700,9 +788,11 @@ path "secret/app/admin" {
 ---
 
 #### F-ENT-003: Replication
+
 **Description:** Cross-region disaster recovery
 
 **Capabilities:**
+
 - DR replication
 - Performance replication
 - Filtered replication
@@ -755,24 +845,28 @@ path "secret/app/admin" {
 ### 9.1 Pre-Release Checklist
 
 #### Security
+
 - [ ] Security audit complete
 - [ ] Penetration testing passed
 - [ ] FIPS compliance (if required)
 - [ ] Secrets scanning clean
 
 #### Performance
+
 - [ ] Load testing passed
 - [ ] Latency targets met
 - [ ] Throughput targets met
 - [ ] Failover tested
 
 #### Documentation
+
 - [ ] Architecture documented
 - [ ] Runbooks complete
 - [ ] API reference current
 - [ ] Troubleshooting guide ready
 
 #### Operations
+
 - [ ] Monitoring configured
 - [ ] Alerting validated
 - [ ] Backup tested
@@ -796,6 +890,7 @@ path "secret/app/admin" {
 ### 10.1 Architecture Decision Records
 
 Refer to SPEC.md for detailed ADRs:
+
 - ADR-001: Raft vs. Consul storage
 - ADR-002: Auto-unseal strategy
 - ADR-003: Namespace isolation model

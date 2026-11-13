@@ -21,6 +21,7 @@ The immutable core of the system: domain entities, state machines, port traits, 
 | `error/` | DomainError enum with strong typing |
 
 **Key Types:**
+
 - `Feature { id, slug, state: FeatureState, ...}`
 - `WorkPackage { id, feature_id, sequence, state: WpState, ...}`
 - `AuditEntry { id, feature_slug, timestamp, actor, transition, hash, ... }` (immutable)
@@ -49,6 +50,7 @@ Command-line interface using `clap` for argument parsing and subcommand routing.
 | `commands/queue` | `agileplus queue {add,list,show,pop}` |
 
 **Key Types:**
+
 - `Cli { command: Commands, verbose: u8, db: PathBuf, repo: Option<PathBuf> }`
 - `Commands` enum (Specify, Research, Plan, Implement, Validate, Ship, Retrospective, Triage, Queue)
 - Individual command args structs (SpecifyArgs, PlanArgs, ImplementArgs, etc.)
@@ -73,6 +75,7 @@ SQLite adapter implementing `StoragePort`.
 | `MetricRepository` | Performance metrics recording |
 
 **Key Features:**
+
 - Tokio async runtime via `tokio-rusqlite`
 - Connection pooling via `sqlx`
 - Transaction support for atomicity
@@ -87,6 +90,7 @@ SQLite adapter implementing `StoragePort`.
 RESTful HTTP adapter for remote access.
 
 **Key Routes:**
+
 - `GET /features` — list features
 - `POST /features` — create feature
 - `GET /features/:slug` — get feature by slug
@@ -103,6 +107,7 @@ RESTful HTTP adapter for remote access.
 gRPC service adapter (WP09) implementing `AgilePlusCoreService`.
 
 **Key Services:**
+
 - Feature operations: GetFeature, ListFeatures, GetFeatureState
 - Work package operations: ListWorkPackages, GetWorkPackageStatus
 - Governance: CheckGovernanceGate, GetAuditTrail, VerifyAuditChain
@@ -128,6 +133,7 @@ Git adapter implementing `VcsPort`.
 | `HistoryScanner` | Audit trail reconstruction from git log |
 
 **Key Features:**
+
 - Async via `git2` (blocking) wrapped in `tokio::task::spawn_blocking`
 - Worktree isolation for agent workspaces
 - Merge conflict detection without applying
@@ -150,6 +156,7 @@ Triage classifier and backlog queue.
 | `BacklogQueue` | In-memory or persisted task queue |
 
 **Key Features:**
+
 - Keyword-based classification (can be replaced with ML model)
 - Priority scoring
 - Queue persistence to JSON/SQLite
@@ -170,6 +177,7 @@ Triage classifier and backlog queue.
 | `PlaneEventListener` | Webhook handler for external updates |
 
 **Key Features:**
+
 - OAuth2 authentication
 - Issue state mapping
 - Automatic PR linking
@@ -191,6 +199,7 @@ GitHub integration for PR/issue tracking.
 | `ReviewAdapter` | PR review status polling (CodeRabbit fallback) |
 
 **Key Features:**
+
 - GraphQL for efficient querying
 - OAuth App authentication
 - PR template rendering
@@ -219,6 +228,7 @@ Hidden subcommand registry and audit system.
 | `audit` | log, query, verify | Audit trail queries |
 
 **Key Features:**
+
 - Append-only JSONL audit log
 - Command signature tracking (args, exit code, duration)
 - Agent-accessible via MCP
@@ -259,6 +269,7 @@ Agent dispatch and lifecycle management (WP08).
 | `JobState` | Pending, Running, Completed, Failed |
 
 **Key Features:**
+
 - Job ID tracking (UUID v4)
 - Async dispatch with background tracking
 - Status polling for long-running agents
@@ -274,6 +285,7 @@ Agent dispatch and lifecycle management (WP08).
 gRPC service for agent-facing APIs (WP09).
 
 **Key Services:**
+
 - Agent registration
 - Prompt delivery
 - Output collection
@@ -294,6 +306,7 @@ Code review automation and fallback (WP09).
 | `FallbackReviewer` | Simple heuristic-based review |
 
 **Key Features:**
+
 - Wait for CodeRabbit reviews
 - Poll GitHub Actions status
 - Fallback to basic checks if CI/review unavailable

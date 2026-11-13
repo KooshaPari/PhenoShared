@@ -14,6 +14,7 @@
 
 **v0.11 close:** 100% docstring coverage, 24/24 tasks done.
 **v0.12 close (in progress):**
+
 - Phase 0, 1, 6, 7 closed (33+ tasks)
 - Phase 2, 3, 4, 5, 8 in flight
 - 790 tests pass, 0 flakes
@@ -21,6 +22,7 @@
 - Hermetic subset (264 tests, 42s)
 
 **v0.13 picks up:**
+
 - Tag v0.12 (move from `74f31504` to current HEAD with full D-deep + Tracera)
 - Close remaining v0.12 phases (2, 3, 4, 5, 8)
 - Begin Tracera production rollout (was feature-flagged in v0.12)

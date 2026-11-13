@@ -121,6 +121,7 @@ class ZodString extends ZodType<string, ZodStringDef> {
 ```
 
 **Core Strengths**:
+
 - Industry-standard type inference via `z.infer<typeof Schema>`
 - Comprehensive format validators (email, URL, UUID, cuid, datetime, etc.)
 - Active maintenance and massive ecosystem (React Hook Form, tRPC, etc.)
@@ -133,6 +134,7 @@ class ZodString extends ZodType<string, ZodStringDef> {
 - Preprocess for input transformation
 
 **Notable Weaknesses**:
+
 - Class-based design limits functional composition patterns
 - Async validation is second-class (`.refine()` with async feels bolted-on)
 - No built-in schema serialization (requires `zod-to-json-schema`)
@@ -185,6 +187,7 @@ if (result.success) {
 The modular, tree-shakeable alternative to Zod (~1KB core).
 
 **Strengths**:
+
 - Tiny bundle size (~1KB for core validators)
 - Fully modular design (import only what you need)
 - Excellent tree-shaking support
@@ -195,6 +198,7 @@ The modular, tree-shakeable alternative to Zod (~1KB core).
 - Growing ecosystem (integrations being added)
 
 **Weaknesses**:
+
 - Newer, smaller ecosystem (no React Hook Form yet)
 - Less documentation than Zod (improving rapidly)
 - Fewer built-in validators (community growing)
@@ -237,6 +241,7 @@ const UniqueEmailSchema = pipeAsync(
 JSON Schema-first approach with the fastest validation performance.
 
 **Strengths**:
+
 - First-class JSON Schema generation (schemas ARE JSON Schema)
 - Native OpenAPI/Fastify compatibility
 - Static type generation from JSON Schema
@@ -247,6 +252,7 @@ JSON Schema-first approach with the fastest validation performance.
 - Excellent for API-first development
 
 **Weaknesses**:
+
 - JSON Schema semantics leak through (confusing for newcomers)
 - Error handling depends on external validator
 - Limited transformation support
@@ -285,6 +291,7 @@ const errors = [...Value.Errors(UserSchema, unknownData)];
 The older standard that pioneered schema validation in JavaScript (2014).
 
 **Strengths**:
+
 - Mature, battle-tested for 10+ years
 - Fast synchronous validation (~80K ops/sec)
 - Good form library integration (Formik built around Yup)
@@ -294,6 +301,7 @@ The older standard that pioneered schema validation in JavaScript (2014).
 - Custom test framework
 
 **Weaknesses**:
+
 - TypeScript support is an afterthought (added v0.28+)
 - No tuple validation
 - Limited union handling (no discriminated unions)
@@ -329,6 +337,7 @@ interface User {
 Enterprise-grade validation from the hapi.js ecosystem.
 
 **Strengths**:
+
 - Comprehensive validation rules (100+ built-in)
 - Excellent error messages with context
 - Extension system for custom validators
@@ -337,6 +346,7 @@ Enterprise-grade validation from the hapi.js ecosystem.
 - Built-in casting/conversion
 
 **Weaknesses**:
+
 - Class-based, mutable API
 - Poor TypeScript inference
 - Heavy bundle size (~80KB minified)
@@ -354,6 +364,7 @@ Enterprise-grade validation from the hapi.js ecosystem.
 Decorator-based validation for TypeScript class-heavy applications.
 
 **Strengths**:
+
 - Decorators feel natural in Angular/NestJS
 - Extensive validator set (40+ decorators)
 - Validation groups for conditional scenarios
@@ -361,6 +372,7 @@ Decorator-based validation for TypeScript class-heavy applications.
 - Automatic transformation with class-transformer
 
 **Weaknesses**:
+
 - Requires `reflect-metadata` polyfill
 - Performance issues with decorator overhead
 - No type inference from decorators
@@ -378,6 +390,7 @@ Decorator-based validation for TypeScript class-heavy applications.
 Functional programming approach with Either-based error handling.
 
 **Strengths**:
+
 - Pure functional, no side effects
 - Excellent TypeScript integration
 - Category theory foundations
@@ -386,6 +399,7 @@ Functional programming approach with Either-based error handling.
 - Branded types
 
 **Weaknesses**:
+
 - Steep learning curve (FP knowledge required)
 - Verbose API
 - Slow type inference
@@ -419,12 +433,14 @@ if (isRight(result)) {
 Validation library inspired by testing frameworks (Jest/Mocha).
 
 **Strengths**:
+
 - API inspired by unit testing
 - Separate validation logic from data shape
 - Good for complex form validation
 - Suite-based organization
 
 **Weaknesses**:
+
 - Unconventional API (not schema-based)
 - Limited type inference
 - No composable schemas
@@ -475,6 +491,7 @@ Validation library inspired by testing frameworks (Jest/Mocha).
 ### Benchmark Methodology
 
 All benchmarks run on:
+
 - Node.js 20.x
 - 16GB RAM
 - Intel Core i9-13900K (single-threaded)
@@ -501,11 +518,13 @@ All benchmarks run on:
 #### Gap 1: First-Class Async Validation
 
 Current state:
+
 - Zod's `.refine(async)` breaks fluent chain
 - Valibot's `pipeAsync()` is best but still feels bolted-on
 - TypeBox requires external validator
 
 **phenotype-ts approach**:
+
 ```typescript
 const schema = v.string().check(async (val) => {
   const exists = await db.users.findUnique({ where: { email: val } });
@@ -519,10 +538,12 @@ const result = await v.validate(schema, data);
 #### Gap 2: Native Schema Serialization
 
 Current state:
+
 - Only TypeBox has native JSON Schema
 - Zod/Valibot require plugins with drift risk
 
 **phenotype-ts approach**:
+
 ```typescript
 const schema = v.object({
   email: v.string().email(),
@@ -537,9 +558,11 @@ const openApiSchema = v.toOpenAPI(schema);
 #### Gap 3: Transformation Type Inference
 
 Current state:
+
 - Zod's `.transform()` creates confusing output types
 
 **phenotype-ts approach**:
+
 ```typescript
 const schema = v.string()
   .transform(s => s.trim())      // Input: string, Output: string
@@ -622,6 +645,7 @@ interface User {
 ### 3. Edge Runtime Optimization
 
 Bundle size becoming critical:
+
 - Valibot gaining traction (1KB)
 - TypeBox popular for edge functions
 - Zod working on tree-shaking
@@ -648,24 +672,28 @@ for await (const item of stream.validate(wsConnection)) {
 ### Library Selection Guide
 
 **Choose Zod when**:
+
 - Largest ecosystem needed
 - React Hook Form integration required
 - Error message quality is critical
 - Team familiar with class-based APIs
 
 **Choose Valibot when**:
+
 - Bundle size is primary concern
 - In edge/runtime-constrained environment
 - Prefer functional composition
 - Can accept smaller ecosystem
 
 **Choose TypeBox when**:
+
 - JSON Schema/OpenAPI compatibility required
 - Performance is critical
 - Using Fastify
 - Want zero-overhead type inference
 
 **Choose phenotype-validation-ts when**:
+
 - First-class async validation needed
 - Schema serialization required
 - Want clean transformation pipelines
@@ -677,26 +705,26 @@ for await (const item of stream.validate(wsConnection)) {
 
 ### Official Documentation
 
-- Zod: https://zod.js.org
-- Valibot: https://valibot.dev
-- TypeBox: https://github.com/sinclairzx81/typebox
-- Yup: https://github.com/jquense/yup
-- Joi: https://joi.dev
-- class-validator: https://github.com/typestack/class-validator
-- io-ts: https://github.com/gcanti/io-ts
-- Vest: https://ealush.com/vest
+- Zod: <https://zod.js.org>
+- Valibot: <https://valibot.dev>
+- TypeBox: <https://github.com/sinclairzx81/typebox>
+- Yup: <https://github.com/jquense/yup>
+- Joi: <https://joi.dev>
+- class-validator: <https://github.com/typestack/class-validator>
+- io-ts: <https://github.com/gcanti/io-ts>
+- Vest: <https://ealush.com/vest>
 
 ### Standards
 
-- JSON Schema: https://json-schema.org/
-- OpenAPI: https://spec.openapis.org/
-- TypeScript: https://www.typescriptlang.org/
+- JSON Schema: <https://json-schema.org/>
+- OpenAPI: <https://spec.openapis.org/>
+- TypeScript: <https://www.typescriptlang.org/>
 
 ### Community Resources
 
-- Total TypeScript: https://www.totaltypescript.com/
-- React Hook Form: https://react-hook-form.com/
-- tRPC: https://trpc.io/
+- Total TypeScript: <https://www.totaltypescript.com/>
+- React Hook Form: <https://react-hook-form.com/>
+- tRPC: <https://trpc.io/>
 
 ---
 

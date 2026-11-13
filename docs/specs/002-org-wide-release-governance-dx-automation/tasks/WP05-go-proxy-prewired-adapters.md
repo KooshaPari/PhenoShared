@@ -103,6 +103,7 @@ WP05 implements a fully functional Go proxy adapter and pre-wired stubs for Hex 
    - Multiple modules (unlikely in go.mod, but handle gracefully)
 
 **Acceptance Criteria:**
+
 - Detect reads go.mod correctly
 - Extracts module path from `module` directive
 - Returns single Package with Registry="go"
@@ -193,6 +194,7 @@ WP05 implements a fully functional Go proxy adapter and pre-wired stubs for Hex 
 4. Verify that the git repository is clean before tagging.
 
 **Acceptance Criteria:**
+
 - Version method returns `v` prefixed version
 - Build returns empty artifact (no build step needed)
 - Publish creates annotated git tag
@@ -262,6 +264,7 @@ WP05 implements a fully functional Go proxy adapter and pre-wired stubs for Hex 
 4. Go proxy is typically faster than npm; 10s interval is appropriate.
 
 **Acceptance Criteria:**
+
 - Verify polls the Go proxy API
 - Returns true when version is found (200 status)
 - Returns false and error after 5-minute timeout
@@ -381,6 +384,7 @@ WP05 implements a fully functional Go proxy adapter and pre-wired stubs for Hex 
 4. The message indicates this is pre-wired for future implementation (not abandoned).
 
 **Acceptance Criteria:**
+
 - Detect reads mix.exs and extracts name and version
 - Version method returns correct format
 - Build/Publish/Verify return ErrNotSupported gracefully
@@ -492,6 +496,7 @@ WP05 implements a fully functional Go proxy adapter and pre-wired stubs for Hex 
 5. Note: Zig's registry is still evolving; this adapter is ready for future integration.
 
 **Acceptance Criteria:**
+
 - Detect reads build.zig.zon and extracts name and version
 - Version method returns git tag format
 - Build/Publish/Verify return ErrNotSupported gracefully
@@ -590,6 +595,7 @@ WP05 implements a fully functional Go proxy adapter and pre-wired stubs for Hex 
 5. Version method also returns error (versioning not meaningful without a registry).
 
 **Acceptance Criteria:**
+
 - Detect reads mojoproject.toml and extracts name and version
 - Version method returns error with clear message
 - Build/Publish/Verify return ErrNotSupported gracefully
@@ -770,6 +776,7 @@ WP05 implements a fully functional Go proxy adapter and pre-wired stubs for Hex 
 4. Run tests with `go test -v ./internal/adapters/...`
 
 **Acceptance Criteria:**
+
 - Go adapter tests pass (Detect, Version, Build)
 - Hex, Zig, Mojo Detect tests pass (can parse manifests)
 - Hex, Zig, Mojo Build/Publish/Verify tests return ErrNotSupported

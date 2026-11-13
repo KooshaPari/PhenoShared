@@ -20,13 +20,15 @@
 4. **Composable transformers** — Build complex transformations from reusable transformer functions
 5. **Zero dependencies** — Pure TypeScript with no runtime dependencies
 
-**Consequences:** 
+**Consequences:**
+
 - TypeScript 7 (tsgo or tsc 7+) is required for full compile-time verification
 - Learning curve for developers accustomed to runtime-only solutions
 - Schema definitions add initial overhead that pays off in type safety
 - No decorator support (by design — avoids experimentalDecorators dependency)
 
 **Alternatives Considered:**
+
 - Decorator-based approach (class-transformer): Rejected — runtime only, requires experimentalDecorators
 - Runtime schema approach (zod, io-ts): Rejected — no compile-time verification, runtime overhead
 - Code generation (automapper): Rejected — build complexity, generated code maintenance
@@ -42,12 +44,14 @@
 **Decision:** Datamold has zero runtime dependencies. All functionality is implemented in pure TypeScript using only the standard library.
 
 **Consequences:**
+
 - Bundle size <5KB gzipped for core module
 - No transitive dependency vulnerabilities
 - All type system features use native TypeScript
 - Performance depends solely on JavaScript engine optimization
 
 **Alternatives Considered:**
+
 - Validation adapter for zod: Deferred — could be added as optional peer dependency
 - Reflection polyfill: Rejected — would increase bundle size significantly
 
@@ -60,6 +64,7 @@
 **Context:** Complex applications need to transform between many different model types. Schemas should be composable to avoid duplication and enable reuse.
 
 **Decision:** Schemas are composed from:
+
 1. **Source/target type pairs** — Compile-time type constraints
 2. **Transformer chains** — Ordered list of transformation functions
 3. **Validator chains** — Ordered list of validation predicates
@@ -74,11 +79,13 @@ const schema = schema(Source, Target, {
 ```
 
 **Consequences:**
+
 - Schema definitions can be reused and extended
 - Transformer libraries can be shared across projects
 - Composition is type-safe (TypeScript infers types)
 
 **Alternatives Considered:**
+
 - Class-based schemas: Rejected — couples to class system
 - Functional composition only: Rejected — lacks declarative structure
 
@@ -91,6 +98,7 @@ const schema = schema(Source, Target, {
 **Context:** Object graphs with bidirectional relationships (parent/child, user/roles) cause serialization failures in most transformation libraries.
 
 **Decision:** Datamold handles circular references through:
+
 1. **Cycle detection** — Traverse graph with visited set, detect cycles
 2. **Placeholder substitution** — Replace circular references with placeholders
 3. **Restoration on deserialization** — Reconstruct original graph from placeholders
@@ -110,11 +118,13 @@ const restored = mapper.deserialize(serialized, {
 ```
 
 **Consequences:**
+
 - Automatic handling of parent/child, user/roles, and similar patterns
 - Configurable placeholder format for integration compatibility
 - Slight performance overhead (<10%) for cycle detection
 
 **Alternatives Considered:**
+
 - Ref counting: Rejected — requires schema annotations
 - Property exclusion: Rejected — loses information
 - Manual cycle breaking: Rejected — developer burden

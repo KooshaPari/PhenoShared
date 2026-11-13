@@ -26,15 +26,18 @@
 **Description**: Use `pipe()` and `compose()` for left-to-right or right-to-left function composition.
 
 **Pros**:
+
 - Familiar from functional programming
 - Easy to understand
 - Naturally type-safe
 
 **Cons**:
+
 - Multiple transformers require nesting
 - Error messages can be confusing
 
 **Performance Data**:
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | Composition overhead | 0ns | Direct chaining |
@@ -44,10 +47,12 @@
 **Description**: Use fluent `.then().then()` chain for sequential transformations.
 
 **Pros**:
+
 - IDE autocomplete friendly
 - Easy to read sequentially
 
 **Cons**:
+
 - Builder overhead
 - Less composable
 
@@ -56,10 +61,12 @@
 **Description**: Pass array of transformers to be applied in sequence.
 
 **Pros**:
+
 - Simple mental model
 - Easy to add/remove steps
 
 **Cons**:
+
 - No type safety across array elements
 - Runtime iteration overhead
 
@@ -68,11 +75,13 @@
 **Description**: Support both `compose()` for functional style and `pipe()` for sequential style, with transformers as first-class values.
 
 **Pros**:
+
 - Flexibility for different use cases
 - Best of both worlds
 - Type-safe by default
 
 **Cons**:
+
 - Two APIs to maintain
 - Decision paralysis for users
 
@@ -83,6 +92,7 @@
 **Chosen Option**: Option 4 - Hybrid Approach
 
 **Rationale**:
+
 - `compose()` for transforming single values through multiple functions
 - `pipe()` for readable sequential transformations
 - Both are zero-overhead and type-safe

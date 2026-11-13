@@ -132,6 +132,7 @@ All `agileplus-*` crates are present but not listed in phenotype-infrakit worksp
 ### Priority 3: Archive Legitimate Orphans (THIS WEEK)
 
 Move to `.archive/` or to their appropriate repositories:
+
 - phenotype-contract (resolve duplicate)
 - phenotype-async-traits
 - phenotype-cost-core

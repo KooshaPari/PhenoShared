@@ -29,13 +29,13 @@ curl http://localhost:8080/ready
 | Service | URL | Purpose |
 |---------|-----|---------|
 | NATS Server | nats://localhost:4222 | Message broker |
-| NATS Monitoring | http://localhost:8222 | Server metrics/console |
+| NATS Monitoring | <http://localhost:8222> | Server metrics/console |
 | Dragonfly | redis://localhost:6379 | Cache layer |
 | Neo4j Bolt | bolt://localhost:7687 | Graph database (protocol) |
-| Neo4j Browser | http://localhost:7474 | Graph DB UI |
-| MinIO S3 API | http://localhost:9000 | Object storage API |
-| MinIO Console | http://localhost:9001 | S3 management UI |
-| AgilePlus API | http://localhost:8080 | Application server |
+| Neo4j Browser | <http://localhost:7474> | Graph DB UI |
+| MinIO S3 API | <http://localhost:9000> | Object storage API |
+| MinIO Console | <http://localhost:9001> | S3 management UI |
+| AgilePlus API | <http://localhost:8080> | Application server |
 
 ### Typical Development Workflow
 
@@ -772,6 +772,7 @@ spec:
 ### Common Issues and Solutions
 
 #### 1. Service Connection Refused
+
 ```bash
 # Check service is running
 docker ps | grep nats
@@ -785,6 +786,7 @@ nc -zv localhost 4222
 ```
 
 #### 2. Permission Denied on MinIO Data
+
 ```bash
 # Fix ownership
 sudo chown -R 1000:1000 ./data/minio
@@ -792,12 +794,14 @@ chmod -R 755 ./data/minio
 ```
 
 #### 3. Neo4j Memory Error
+
 ```bash
 # Increase heap size in environment
 export NEO4J_server_memory_heap_max__size=2g
 ```
 
 #### 4. Redis Connection Pool Exhausted
+
 ```rust
 // Increase pool size in code
 let pool = bb8::Pool::builder()
@@ -807,6 +811,7 @@ let pool = bb8::Pool::builder()
 ```
 
 #### 5. NATS JetStream not persisting
+
 ```bash
 # Verify storage directory exists
 mkdir -p data/jetstream

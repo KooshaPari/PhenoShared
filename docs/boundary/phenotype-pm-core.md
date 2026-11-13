@@ -17,6 +17,7 @@ review_cadence: never (absorbed)
 
 The phenotype-pm-core repo was a small Rust workspace (142KB, 7 branches)
 with 3 crates providing PM/traceability functionality:
+
 - `crates/traceability-core` — core traceability data model (14 source files)
 - `crates/traceability-decorators` — decorator pattern for traceability (4 source files + binary)
 - `crates/trace-gate` — trace gate for PM governance (4 source files + binary + tests)
@@ -32,6 +33,7 @@ with 3 crates providing PM/traceability functionality:
 ## Workspace registration
 
 Added to `phenotype-tooling/Cargo.toml` workspace members:
+
 ```toml
 "crates/trace-gate",
 "crates/traceability-core",

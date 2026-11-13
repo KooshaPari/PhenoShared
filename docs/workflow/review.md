@@ -160,6 +160,7 @@ agileplus move WP01 --to done
 ```
 
 Effect:
+
 - WP marked as `done`
 - Dependent WPs unblocked
 - Can proceed to next phase
@@ -217,6 +218,7 @@ Estimated additional work: 2-3 hours
 ```
 
 Effect:
+
 - WP marked as `planned` with feedback
 - Implementer addresses feedback
 - Resubmits for review

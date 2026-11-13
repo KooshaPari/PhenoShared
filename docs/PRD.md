@@ -133,6 +133,7 @@ Agents use typed APIs to:
 A single installer and coherent UI/CLI/API across Linux, Windows, and macOS.
 
 Stories:
+
 - E1.1: device and realm discovery;
 - E1.2: graph canvas and simple workspace mode;
 - E1.3: command palette and global hotkeys;
@@ -145,6 +146,7 @@ Stories:
 Typed node/port/link model for video, audio, HID, MIDI, clipboard, file, storage, terminal, telemetry, and compute/data.
 
 Stories:
+
 - E2.1: graph object model and schema;
 - E2.2: format/capability negotiation;
 - E2.3: clock and latency metadata;
@@ -157,6 +159,7 @@ Stories:
 Discover the least-expensive valid route for every link.
 
 Stories:
+
 - E3.1: same-process and same-OS paths;
 - E3.2: same-host cross-realm shared-memory/virtio paths;
 - E3.3: PCIe/P2P/DMA capability graph;
@@ -170,6 +173,7 @@ Stories:
 Treat input and output focus as lease-governed transactions.
 
 Stories:
+
 - E4.1: evdev/uinput/libei host broker;
 - E4.2: Windows and macOS endpoint agents;
 - E4.3: pressed-key/button ledger;
@@ -183,6 +187,7 @@ Stories:
 Make desktops and applications appear wherever requested.
 
 Stories:
+
 - E5.1: full desktop takeover/mirror;
 - E5.2: virtual display extend mode;
 - E5.3: semantic application forwarding;
@@ -196,6 +201,7 @@ Stories:
 Protect professional audio and interactive media.
 
 Stories:
+
 - E6.1: PipeWire/JACK-style audio graph;
 - E6.2: WASAPI/ASIO/CoreAudio adapters;
 - E6.3: network clock estimation and ASRC;
@@ -209,6 +215,7 @@ Stories:
 Preserve source intent and adapt to sink capabilities.
 
 Stories:
+
 - E7.1: EDID/ICC/display capability inventory;
 - E7.2: 8/10-bit and HDR metadata negotiation;
 - E7.3: workload-specific 4:4:4/4:2:2/4:2:0 policy;
@@ -222,6 +229,7 @@ Stories:
 Place work and objects across all connected resources.
 
 Stories:
+
 - E8.1: CPU/GPU/NPU/memory/storage/network inventory;
 - E8.2: immutable object references and residency;
 - E8.3: task/process/function/kernel placement;
@@ -236,6 +244,7 @@ Stories:
 Prevent throughput work from destroying foreground performance.
 
 Stories:
+
 - E9.1: service classes RT0–Bulk;
 - E9.2: CPU affinity and core shielding;
 - E9.3: GPU/encoder/decoder reservations;
@@ -249,6 +258,7 @@ Stories:
 Safely expose automation-created environments.
 
 Stories:
+
 - E10.1: short-lived enrollment and certificates;
 - E10.2: TTL and cleanup;
 - E10.3: surface publication;
@@ -262,6 +272,7 @@ Stories:
 Protect an unusually privileged system.
 
 Stories:
+
 - E11.1: mutual identity and pairing;
 - E11.2: route capabilities and least privilege;
 - E11.3: privileged helper isolation;
@@ -275,6 +286,7 @@ Stories:
 Expose stable contracts without absorbing adjacent products.
 
 Stories:
+
 - E12.1: ShareCLI process/resource adapter;
 - E12.2: NVMS runtime inventory;
 - E12.3: thegent TaskSpec placement contract;

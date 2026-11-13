@@ -6,6 +6,7 @@ do-not-edit-locally: regenerate via scripts/propagate-intent-to-repos.py
                      or update in the source-of-truth registry repo
 -->
 ---
+
 repo: "phenotype-landing"
 aliases: []
 role: unknown

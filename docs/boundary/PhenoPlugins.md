@@ -46,6 +46,7 @@ subcrates directly, not PhenoPlugins (which is archived).
 **Reviewer:** forge subagent (wave 2026-07-17-queue-refresh-2)
 **Absorption commit:** see `docs/absorption/PhenoPlugins/README.md`
 **Decisions:**
+
 - PhenoPlugins absorbed into pheno monorepo as 5 sub-crates
 - Crate names renamed `pheno-plugin-*` → `pheno-plugins-*`
 - pheno-plugins-sqlite downgraded rusqlite 0.40 → 0.32 (workspace

@@ -66,6 +66,7 @@
 **The Phenotype Registry System unifies specifications, patterns, and templates into a cohesive, traceable ecosystem that enables consistent, high-quality software development across the organization.**
 
 We exist to:
+
 1. **Connect knowledge**: Bridge the gap between "what to build" and "how to build it"
 2. **Ensure consistency**: Provide canonical patterns and specifications
 3. **Enable traceability**: Track decisions from requirements through implementation
@@ -80,6 +81,7 @@ These tenets guide the Phenotype Registry System's development:
 **Every artifact must be traceable.**
 
 Specifications link to patterns. Patterns link to templates. Templates generate code that references specifications. This bidirectional traceability ensures that:
+
 - Requirements have implementations
 - Code has rationale
 - Changes have impact analysis
@@ -90,6 +92,7 @@ Specifications link to patterns. Patterns link to templates. Templates generate 
 **Git is the source of truth.**
 
 All registries are Git repositories. All changes flow through Git workflows. This enables:
+
 - Version control for all artifacts
 - Pull request reviews
 - Automated CI/CD validation
@@ -137,6 +140,7 @@ The Phenotype Registry System serves as the **unified entry point** for all Phen
 ### 3.2 Scope
 
 **In Scope**:
+
 - Registry relationship documentation
 - Cross-registry linking protocol
 - Traceability standards
@@ -144,6 +148,7 @@ The Phenotype Registry System serves as the **unified entry point** for all Phen
 - Navigation and discovery
 
 **Out of Scope**:
+
 - Content of individual registries (delegated to spokes)
 - Implementation repositories (separate repos)
 - Runtime systems (separate projects)
@@ -161,12 +166,14 @@ The Phenotype Registry System serves as the **unified entry point** for all Phen
 ### 3.4 Problem Statement
 
 **Current State**: Documentation is scattered across:
+
 - Wiki pages (outdated)
 - Confluence (hard to search)
 - README files (inconsistent)
 - Team knowledge (tribal)
 
 **Desired State**: Unified, version-controlled, traceable documentation:
+
 - Single entry point for all knowledge
 - Bidirectional links between artifacts
 - Automated validation and freshness checks
@@ -318,6 +325,7 @@ The Phenotype Registry System serves as the **unified entry point** for all Phen
 **Relationship**: PhenoSpecs specifications reference PhenoHandbook patterns that implement them.
 
 **Example**:
+
 ```yaml
 # In PhenoSpecs/specs/auth/oauth.yaml
 implementation:
@@ -332,6 +340,7 @@ implementation:
 **Relationship**: PhenoSpecs specifications inform HexaKit templates.
 
 **Example**:
+
 ```yaml
 # In PhenoSpecs/specs/auth/oauth.yaml
 templates:
@@ -345,6 +354,7 @@ templates:
 **Relationship**: PhenoHandbook patterns reference originating PhenoSpecs specs.
 
 **Example**:
+
 ```yaml
 # In PhenoHandbook/patterns/auth/oauth-pkce.md
 ---
@@ -360,6 +370,7 @@ specs:
 **Relationship**: HexaKit templates follow PhenoHandbook pattern guidance.
 
 **Example**:
+
 ```yaml
 # In HexaKit/by-language/go/templates/oauth/template.yaml
 ---
@@ -375,6 +386,7 @@ follows:
 **Relationship**: HexaKit templates include PhenoSpecs spec stubs.
 
 **Example**:
+
 ```yaml
 # In HexaKit/by-language/go/templates/oauth/template.yaml
 ---
@@ -389,6 +401,7 @@ implements:
 **Relationship**: HexaKit templates implement PhenoHandbook patterns.
 
 **Example**:
+
 ```yaml
 # In HexaKit/by-language/go/templates/oauth/template.yaml
 ---
@@ -403,6 +416,7 @@ implements:
 All cross-registry links MUST be bidirectional. If A links to B, B MUST link to A.
 
 **Validation Rule**:
+
 ```
 FOR EACH link IN registry_a.links:
   target = registry_b.get(link.target_id)
@@ -418,7 +432,7 @@ FOR EACH link IN registry_a.links:
 
 **Purpose**: Central source of truth for design specifications
 
-**URL**: https://github.com/KooshaPari/PhenoSpecs
+**URL**: <https://github.com/KooshaPari/PhenoSpecs>
 
 #### 5.1.1 Structure
 
@@ -477,7 +491,7 @@ registries:
 
 **Purpose**: Living documentation for how to build software
 
-**URL**: https://github.com/KooshaPari/PhenoHandbook
+**URL**: <https://github.com/KooshaPari/PhenoHandbook>
 
 #### 5.2.1 Structure
 
@@ -543,7 +557,7 @@ templates:
 
 **Purpose**: Code templates and project scaffolding
 
-**URL**: https://github.com/KooshaPari/HexaKit
+**URL**: <https://github.com/KooshaPari/HexaKit>
 
 #### 5.3.1 Structure
 
@@ -601,7 +615,7 @@ files:
 
 **Purpose**: Unified navigation and cross-registry coordination
 
-**URL**: https://github.com/KooshaPari/phenotype-registry
+**URL**: <https://github.com/KooshaPari/phenotype-registry>
 
 #### 5.4.1 Structure
 
@@ -2023,6 +2037,7 @@ if __name__ == "__main__":
 #### 11.1.1 Finding Resources
 
 **I want to find a specification:**
+
 ```bash
 # Browse PhenoSpecs
 cd PhenoSpecs
@@ -2036,6 +2051,7 @@ cat registry.yaml | grep SPEC-AUTH
 ```
 
 **I want to learn a pattern:**
+
 ```bash
 # Browse PhenoHandbook
 cd PhenoHandbook
@@ -2046,6 +2062,7 @@ cat patterns/auth/oauth-pkce.md
 ```
 
 **I want to use a template:**
+
 ```bash
 # List templates
 hexakit list
@@ -2058,6 +2075,7 @@ cd my-service
 #### 11.1.2 Adding Traceability
 
 **In commit messages:**
+
 ```
 spec(AUTH): implement OAuth2 flow
 
@@ -2069,6 +2087,7 @@ following PATTERN-AUTH-OAUTH-PKCE.
 ```
 
 **In code comments:**
+
 ```python
 # @trace SPEC-AUTH-001
 # @implements PATTERN-AUTH-OAUTH-PKCE
@@ -2082,6 +2101,7 @@ def get_authorization_url():
 #### 11.2.1 Creating Specifications
 
 **Step 1: Define the spec structure:**
+
 ```yaml
 # specs/new-domain/feature.yaml
 id: SPEC-NEW-001
@@ -2110,6 +2130,7 @@ links:
 ```
 
 **Step 2: Register the spec:**
+
 ```yaml
 # Update registry.yaml
 specs:
@@ -2120,6 +2141,7 @@ specs:
 ```
 
 **Step 3: Create related pattern:**
+
 ```markdown
 ---
 id: PATTERN-NEW-FEATURE
@@ -2143,6 +2165,7 @@ specs:
 #### 11.2.2 Reviewing Changes
 
 **Checklist for spec review:**
+
 - [ ] ID follows naming convention (SPEC-DOMAIN-NNN)
 - [ ] Status is appropriate
 - [ ] Requirements are clear and testable
@@ -2155,6 +2178,7 @@ specs:
 #### 11.3.1 Enforcing Standards
 
 **Enable CI validation:**
+
 ```yaml
 # .github/workflows/phenotype-check.yml
 name: Phenotype Compliance
@@ -2182,6 +2206,7 @@ jobs:
 ```
 
 **Add pre-commit hooks:**
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
@@ -2197,6 +2222,7 @@ repos:
 #### 11.3.2 Monitoring Adoption
 
 **Track spec coverage:**
+
 ```bash
 # Generate coverage report
 python scripts/coverage_report.py \
@@ -2206,6 +2232,7 @@ python scripts/coverage_report.py \
 ```
 
 **Weekly review:**
+
 - Review coverage report
 - Identify orphaned specs
 - Track new pattern adoption
@@ -2318,6 +2345,7 @@ Format: `SPEC-<DOMAIN>-<NNN>`
 | Number | 3 digits | 001, 042, 123 |
 
 Examples:
+
 - `SPEC-AUTH-001` - Authentication spec #1
 - `SPEC-API-042` - API spec #42
 - `SPEC-DATA-003` - Data layer spec #3
@@ -2333,6 +2361,7 @@ Format: `PATTERN-<DOMAIN>-<NAME>`
 | Name | UPPERCASE-WITH-DASHES | OAUTH-PKCE, RATE-LIMIT |
 
 Examples:
+
 - `PATTERN-AUTH-OAUTH-PKCE` - OAuth PKCE pattern
 - `PATTERN-API-RATE-LIMIT` - API rate limiting pattern
 - `PATTERN-STRUCTURE-HEXAGONAL` - Hexagonal architecture pattern
@@ -2348,6 +2377,7 @@ Format: `TEMPLATE-<LANGUAGE>-<NAME>`
 | Name | UPPERCASE-WITH-DASHES | SERVICE, CLI, OAUTH |
 
 Examples:
+
 - `TEMPLATE-GO-SERVICE` - Go service template
 - `TEMPLATE-TS-REACT` - TypeScript React template
 - `TEMPLATE-RUST-CLI` - Rust CLI template
@@ -2511,18 +2541,23 @@ How does the pattern solve the problem?
 ## Consequences
 
 ### Benefits
+
 - Benefit one
 - Benefit two
 
 ### Trade-offs
+
 - Trade-off one
 - Trade-off two
 
 ## Related Patterns
+
 - [Pattern Name](link)
 
 ## References
+
 - [Source](url)
+
 ```
 
 #### D.3 Template Config Template

@@ -69,6 +69,7 @@ Pydantic v1:           ██████ 450 bytes
 The dominant validation framework, with a Rust core providing exceptional performance.
 
 **Architecture:**
+
 ```python
 from pydantic import BaseModel, EmailStr, Field
 
@@ -87,6 +88,7 @@ user = User(name="John", email="john@example.com", age=30)
 ```
 
 **Characteristics:**
+
 - **Strengths**: Blazing fast (Rust core), excellent type integration, serialization
 - **Limitations**: Heavy dependency (pydantic-core), limited custom validators
 - **Performance**: 85K ops/sec (simple), 42K ops/sec (complex)
@@ -94,6 +96,7 @@ user = User(name="John", email="john@example.com", age=30)
 - **Dependencies**: pydantic-core (Rust), typing-extensions
 
 **Market Position:**
+
 - 20K GitHub stars
 - 80%+ of new Python API projects use Pydantic
 - FastAPI dependency driving adoption
@@ -103,6 +106,7 @@ user = User(name="John", email="john@example.com", age=30)
 Lightweight class decorators with optional validation via cattrs.
 
 **Architecture:**
+
 ```python
 import attr
 from cattrs import Converter
@@ -124,6 +128,7 @@ user = converter.structure(data, User)
 ```
 
 **Characteristics:**
+
 - **Strengths**: Zero dependencies (attrs), very fast, slots support
 - **Limitations**: Validation requires cattrs (separate), manual setup
 - **Performance**: 120K ops/sec with attrs, 65K ops/sec with cattrs
@@ -135,6 +140,7 @@ user = converter.structure(data, User)
 High-performance serialization with built-in validation.
 
 **Architecture:**
+
 ```python
 import msgspec
 
@@ -149,6 +155,7 @@ user = decoder.decode(b'{"name": "John", "email": "john@example.com", "age": 30}
 ```
 
 **Characteristics:**
+
 - **Strengths**: Fastest Python validation (850K ops/sec), C extension
 - **Limitations**: Primarily for serialization, limited validation features
 - **Performance**: 850K ops/sec (simple), 420K ops/sec (complex)
@@ -501,10 +508,10 @@ Streaming Validation:
 
 ### Official Documentation
 
-1. **Pydantic** - https://docs.pydantic.dev/
-2. **attrs** - https://www.attrs.org/
-3. **msgspec** - https://jcristharif.com/msgspec/
-4. **Python Dataclasses** - https://docs.python.org/3/library/dataclasses.html
+1. **Pydantic** - <https://docs.pydantic.dev/>
+2. **attrs** - <https://www.attrs.org/>
+3. **msgspec** - <https://jcristharif.com/msgspec/>
+4. **Python Dataclasses** - <https://docs.python.org/3/library/dataclasses.html>
 
 ### Research Papers
 
@@ -513,10 +520,10 @@ Streaming Validation:
 
 ### Open Source Projects
 
-1. **Pydantic** - https://github.com/pydantic/pydantic (20K stars)
-2. **attrs** - https://github.com/python-attrs/attrs (5K stars)
-3. **msgspec** - https://github.com/jcrist/msgspec (2K stars)
-4. **Cerberus** - https://github.com/pyeve/cerberus (2K stars)
+1. **Pydantic** - <https://github.com/pydantic/pydantic> (20K stars)
+2. **attrs** - <https://github.com/python-attrs/attrs> (5K stars)
+3. **msgspec** - <https://github.com/jcrist/msgspec> (2K stars)
+4. **Cerberus** - <https://github.com/pyeve/cerberus> (2K stars)
 
 ---
 

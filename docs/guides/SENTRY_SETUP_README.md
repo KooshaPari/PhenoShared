@@ -11,6 +11,7 @@ Complete reference for setting up Sentry error tracking across the Phenotype eco
 ## Overview
 
 This guide walks you through creating 3 Sentry projects and configuring GitHub organization secrets for:
+
 - **AgilePlus** (Rust backend)
 - **phenotype-infrakit** (Rust library)
 - **heliosCLI** (Rust CLI)
@@ -22,16 +23,19 @@ All errors will be automatically reported to Sentry from your CI/CD pipelines an
 ## 3-Phase Process
 
 ### Phase 1: Manual Sentry Setup (15 minutes)
+
 Create 3 Sentry projects and obtain DSN tokens.
 
 **See:** `SENTRY_MANUAL_SETUP_GUIDE.md`
 
 ### Phase 2: GitHub Secrets Configuration (10 minutes)
+
 Configure organization-level GitHub secrets for CI/CD access.
 
 **See:** `GITHUB_SECRETS_SETUP_GUIDE.md`
 
 ### Phase 3: Verification (5 minutes)
+
 Verify everything is configured correctly using the checklist.
 
 **See:** `SENTRY_SETUP_READY_CHECKLIST.md`
@@ -54,10 +58,10 @@ Verify everything is configured correctly using the checklist.
 ### Prerequisites Checklist
 
 - [ ] **Sentry Account:** You have a Sentry.io account (free tier is fine)
-  - Sign up: https://sentry.io/
+  - Sign up: <https://sentry.io/>
   - No payment required for free tier
 - [ ] **GitHub Access:** You have admin or "Maintain" role in the `<REDACTED>` organization
-  - Verify: https://github.com/organizations/&lt;REDACTED&gt;/people
+  - Verify: <https://github.com/organizations/&lt;REDACTED&gt;/people>
 - [ ] **Safe Password Manager:** You have a place to store DSN tokens securely
   - Examples: 1Password, LastPass, Bitwarden, Apple Keychain
 - [ ] **Time:** You have ~45 uninterrupted minutes
@@ -87,7 +91,7 @@ That's it! The next phase will integrate the SDK.
 
 ### Step 1: Create Sentry Projects
 
-Go to https://sentry.io/ and create 3 projects:
+Go to <https://sentry.io/> and create 3 projects:
 
 | Project | Platform | DSN Storage |
 |---------|----------|-------------|
@@ -100,6 +104,7 @@ Go to https://sentry.io/ and create 3 projects:
 ### Step 2: Record Project Details
 
 Use `SENTRY_PROJECTS_TEMPLATE.md` to track:
+
 - Project IDs
 - DSN URLs
 - GitHub secret names
@@ -107,7 +112,7 @@ Use `SENTRY_PROJECTS_TEMPLATE.md` to track:
 
 ### Step 3: Create GitHub Secrets
 
-Go to https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions and create 3 secrets:
+Go to <https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions> and create 3 secrets:
 
 ```
 Secret Name: SENTRY_DSN_AGILEPLUS
@@ -144,6 +149,7 @@ Repeat for phenotype-infrakit and heliosCLI.
 ### Step 5: Verify Everything
 
 Use `SENTRY_SETUP_READY_CHECKLIST.md` to verify:
+
 - [ ] All 3 Sentry projects exist
 - [ ] All 3 GitHub secrets are configured
 - [ ] All 3 local `.env` files are updated
@@ -156,6 +162,7 @@ Use `SENTRY_SETUP_READY_CHECKLIST.md` to verify:
 ### Q: What's a DSN?
 
 **A:** DSN = Data Source Name. It's a unique URL that identifies your Sentry project:
+
 ```
 https://abc123def456@sentry.io/9876543210
      └────────────┬──────────┘  └──────────┘
@@ -165,6 +172,7 @@ https://abc123def456@sentry.io/9876543210
 ### Q: Can I use one project for all 3 repos?
 
 **A:** No. Create separate projects so you can:
+
 - Track errors by repo independently
 - Set different alert rules per project
 - Manage team access per project
@@ -173,6 +181,7 @@ https://abc123def456@sentry.io/9876543210
 ### Q: What if I lose my DSN?
 
 **A:** You can always retrieve it:
+
 1. Go to Sentry project settings
 2. Click **"Client Keys (DSN)"**
 3. Copy the DSN again
@@ -182,6 +191,7 @@ No problem — it's not a secret like a password.
 ### Q: Are there costs?
 
 **A:** Free tier includes:
+
 - 5,000 events/month per project
 - Up to 7 projects
 - Basic features (issue tracking, error grouping)
@@ -192,6 +202,7 @@ Upgrade to paid if you exceed limits.
 ### Q: How long does setup take?
 
 **A:** ~45 minutes total:
+
 - Sentry projects: 15 min
 - GitHub secrets: 10 min
 - Local `.env`: 5 min
@@ -201,6 +212,7 @@ Upgrade to paid if you exceed limits.
 ### Q: Can I undo if I make a mistake?
 
 **A:** Yes! Just:
+
 1. Delete the project in Sentry (Settings → Danger Zone → Delete Project)
 2. Delete the GitHub secret (Settings → Secrets → Delete)
 3. Start over — no harm done
@@ -208,6 +220,7 @@ Upgrade to paid if you exceed limits.
 ### Q: What happens after this setup?
 
 **A:** Next phase:
+
 1. Install Sentry Rust SDK in each project
 2. Configure error handling to send to Sentry
 3. Test with sample errors
@@ -238,7 +251,7 @@ Upgrade to paid if you exceed limits.
 
 ### In `/docs/reference/`
 
-4. **SENTRY_SETUP_READY_CHECKLIST.md** (300+ lines)
+1. **SENTRY_SETUP_READY_CHECKLIST.md** (300+ lines)
    - Final verification checklist
    - Sign-off section
    - Summary table
@@ -253,6 +266,7 @@ Once all items in `SENTRY_SETUP_READY_CHECKLIST.md` are checked ✅:
 **Notify:** Tell the team: "Sentry setup complete. Ready for SDK integration."
 
 The next phase will:
+
 1. Install `sentry-rs` crate in each project
 2. Configure error hooks
 3. Set up release tracking
@@ -267,8 +281,8 @@ If you get stuck:
 1. **Check the troubleshooting section** in each guide
 2. **Verify prerequisites** are met
 3. **Double-check URLs** and secret names (case-sensitive)
-4. **Review Sentry docs:** https://docs.sentry.io/platforms/rust/
-5. **Review GitHub docs:** https://docs.github.com/en/actions/security-guides/encrypted-secrets
+4. **Review Sentry docs:** <https://docs.sentry.io/platforms/rust/>
+5. **Review GitHub docs:** <https://docs.github.com/en/actions/security-guides/encrypted-secrets>
 
 ---
 
@@ -340,4 +354,3 @@ You'll know you're successful when:
 ---
 
 **You've got this! 🚀**
-

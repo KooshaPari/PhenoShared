@@ -26,6 +26,7 @@
 **Summary:** PTY utilities in `platforms/heliosCLI/codex-rs/utils/pty` are used by 3+ repos and should be forked to `phenotype-process`.
 
 **Details:**
+
 | Attribute | Value |
 |-----------|-------|
 | LOC | ~750 |
@@ -34,6 +35,7 @@
 | Priority | CRITICAL |
 
 **Next Steps:**
+
 - [ ] Fork to `libs/phenotype-process`
 - [ ] Migrate users to new crate
 - [ ] Test on CI (Unix + Windows)
@@ -50,6 +52,7 @@
 **Summary:** Error handling in `platforms/heliosCLI/codex-rs/core/src/error.rs` should be forked to `phenotype-error`.
 
 **Details:**
+
 | Attribute | Value |
 |-----------|-------|
 | LOC | ~400 (pattern), ~1148 (total) |
@@ -58,6 +61,7 @@
 | Priority | CRITICAL |
 
 **Next Steps:**
+
 - [ ] Fork to `libs/phenotype-error`
 - [ ] Add AgilePlus-specific variants
 - [ ] Create migration guide
@@ -74,6 +78,7 @@
 **Summary:** Audited heliosCLI for modernization opportunities.
 
 **Findings:**
+
 | Category | Current | Recommendation |
 |----------|---------|----------------|
 | CLI parsing | clap | Already optimal |
@@ -83,6 +88,7 @@
 | Progress feedback | None | Add indicatif |
 
 **Dependencies to Add:**
+
 ```toml
 # Missing modern tooling
 indicatif = "0.17"
@@ -90,6 +96,7 @@ figment = "0.10"
 ```
 
 **Next Steps:**
+
 - [ ] Add indicatif for progress feedback
 - [ ] Evaluate figment for config
 - [ ] Fork PTY utilities
@@ -105,6 +112,7 @@ figment = "0.10"
 **Summary:** Reviewed heliosCLI architecture patterns for consistency.
 
 **Pattern Comparison:**
+
 | Pattern | heliosCLI | AgilePlus | Alignment |
 |---------|-----------|-----------|-----------|
 | Error handling | thiserror | thiserror | ✅ Match |
@@ -113,6 +121,7 @@ figment = "0.10"
 | Config format | TOML | TOML | ✅ Match |
 
 **Recommendations:**
+
 1. Adopt `phenotype-error` when forked
 2. Standardize on `command-group` for process management
 3. Add `indicatif` for progress feedback
@@ -129,12 +138,14 @@ figment = "0.10"
 **Summary:** Audit of framework patterns across heliosCLI crates.
 
 **Crates Reviewed:**
+
 - `codex-rs/core`
 - `codex-rs/utils`
 - `codex-rs/cli`
 - `codex-rs/agent`
 
 **Findings:**
+
 - Consistent use of `thiserror`
 - Async patterns via `async-trait`
 - Config via manual TOML parsing
@@ -151,6 +162,7 @@ figment = "0.10"
 **Summary:** Consider adding codecrafters-style learning mode to heliosCLI.
 
 **Concept:**
+
 ```
 helios learn git
 # → Interactive git internals tutorial
@@ -159,10 +171,12 @@ helios learn git
 ```
 
 **Similar To:**
+
 - codecrafters-io/build-your-own-x (starred repo)
 - GitHub's git tutorial
 
 **Next Steps:**
+
 - [ ] Evaluate feasibility
 - [ ] Design learning curriculum
 - [ ] Prototype first module
@@ -178,6 +192,7 @@ helios learn git
 **Summary:** Research from KushDocs on LLM inference optimization.
 
 **Options:**
+
 | Solution | Pros | Cons |
 |----------|------|------|
 | SGLang | Faster than vLLM | Newer, less tested |
@@ -185,6 +200,7 @@ helios learn git
 | Local (llama.cpp) | Privacy, no API cost | Slower, less capable |
 
 **Next Steps:**
+
 - [ ] Benchmark current setup
 - [ ] Evaluate SGLang vs vLLM
 - [ ] Consider hybrid approach

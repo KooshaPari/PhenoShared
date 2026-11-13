@@ -47,6 +47,7 @@ tolerance in `round_trip.rs:97`, leaving a narrower `scale / 2 + 1e-5` bound
 that is violated by ~2 f32 ULPs on wide-span groups.
 
 The bug sat undetected for the turn-14 close because:
+
 1. The pre-split file (`tests/property_fuzz.rs:395`) used the multiplier.
 2. The split moved `assert_fencepost_round_trip` (which DOES use the multiplier) to `main.rs:181` and rewrote the inline proptest at `round_trip.rs:97` from
    scratch — losing the multiplier in the rewrite.
@@ -232,6 +233,7 @@ multiplier. So the pinned shrinks pin the **helper's contract** (which is
 correct in both pre-split and post-split), not the proptest body. To pin
 the proptest body's tolerance-multiplier contract, the proptest itself
 must run — which it does on every gate. Combined, the two layers (helper
+
 + proptest + pinned shrinks) defend the contract at three levels.
 
 ---

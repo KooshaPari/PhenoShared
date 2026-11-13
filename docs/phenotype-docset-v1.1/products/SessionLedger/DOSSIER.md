@@ -26,8 +26,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Previous pause/active naming contradictions require scoped acceptance
 - A trace platform is not automatically a lossless arbitrary-transcript archive
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

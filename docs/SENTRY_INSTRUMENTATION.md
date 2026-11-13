@@ -67,6 +67,7 @@ cargo test -p harness_utils --test sentry_integration_test -- --nocapture
 ### Added Dependencies
 
 All three repos now include Sentry 0.33 with the following features:
+
 - `backtrace` — Automatic stack trace collection
 - `contexts` — Enhanced error context
 - `debug-images` — Debug symbol resolution
@@ -74,16 +75,19 @@ All three repos now include Sentry 0.33 with the following features:
 ### Module Structure
 
 #### AgilePlus
+
 - **Location:** `libs/logger/src/sentry_config.rs`
 - **Export:** `logger::initialize()`, `logger::capture_error()`, `logger::capture_message()`
 - **Integration Point:** Initialize in main entry points (CLI, API servers)
 
 #### phenotype-infrakit
+
 - **Location:** `crates/phenotype-sentry-config/src/lib.rs`
 - **Export:** `phenotype_sentry_config::initialize()` and related functions
 - **Integration Point:** Available for all crates in workspace
 
 #### heliosCLI
+
 - **Location:** `crates/harness_utils/src/sentry_config.rs`
 - **Export:** `harness_utils::sentry_config::initialize()` and related functions
 - **Integration Point:** Available throughout harness system
@@ -112,24 +116,27 @@ fn main() {
 
 | Variable | Required | Default | Notes |
 |----------|----------|---------|-------|
-| `SENTRY_DSN` | No | Test mode (stderr) | Get from https://sentry.io/settings/organization/projects/ |
+| `SENTRY_DSN` | No | Test mode (stderr) | Get from <https://sentry.io/settings/organization/projects/> |
 | `SENTRY_ENVIRONMENT` | No | "development" | Use: development, staging, production |
 | `SENTRY_RELEASE` | No | Auto-detected | Override with specific version |
 
 ### Setup
 
 1. **Copy template:**
+
    ```bash
    cp .env.example .env
    ```
 
 2. **Edit .env with your DSN:**
+
    ```bash
    SENTRY_DSN=https://your-key@sentry.io/your-project-id
    SENTRY_ENVIRONMENT=development
    ```
 
 3. **Add to .env.test for testing (optional):**
+
    ```bash
    SENTRY_DSN=https://test@test.ingest.sentry.io/0
    SENTRY_ENVIRONMENT=test
@@ -144,7 +151,7 @@ fn main() {
 ### One-Time Setup
 
 1. **Link GitHub Organization to Sentry:**
-   - Go to https://sentry.io/settings/integrations/github/
+   - Go to <https://sentry.io/settings/integrations/github/>
    - Click "Add Installation"
    - Authorize &lt;REDACTED&gt; GitHub account
    - Select repositories: AgilePlus, phenotype-infrakit, heliosCLI
@@ -167,6 +174,7 @@ fn main() {
 For CI/CD pipelines:
 
 1. **Add to GitHub repository secrets:**
+
    ```
    SENTRY_DSN_AGILEPLUS=https://your-key@sentry.io/agileplus-id
    SENTRY_DSN_INFRAKIT=https://your-key@sentry.io/infrakit-id
@@ -174,12 +182,14 @@ For CI/CD pipelines:
    ```
 
 2. **Use in GitHub Actions workflows:**
+
    ```yaml
    env:
      SENTRY_DSN: $&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS &#125;&#125;
    ```
 
 3. **Add to .env during CI:**
+
    ```bash
    echo "SENTRY_DSN=$SENTRY_DSN" >> .env
    ```
@@ -255,7 +265,7 @@ fn operation_with_context() -> anyhow::Result<()> {
 ### Viewing Errors in Sentry
 
 1. **Go to Sentry Dashboard:**
-   - https://sentry.io/organizations/
+   - <https://sentry.io/organizations/>
 
 2. **Select Project:**
    - AgilePlus
@@ -273,6 +283,7 @@ fn operation_with_context() -> anyhow::Result<()> {
      - Related errors
 
 4. **Search Issues:**
+
    ```
    # Show errors from production
    environment:production
@@ -289,6 +300,7 @@ fn operation_with_context() -> anyhow::Result<()> {
 **Error Trend:** Watch the dashboard graph for sudden spikes
 
 **Email Alerts:** Sentry sends digest emails:
+
 - Hourly (enabled by default)
 - Daily
 - Weekly
@@ -300,6 +312,7 @@ fn operation_with_context() -> anyhow::Result<()> {
 ### Issue: No Events Appearing in Sentry Dashboard
 
 **Solution 1: Verify DSN is set**
+
 ```bash
 # Check environment
 echo $SENTRY_DSN
@@ -308,6 +321,7 @@ echo $SENTRY_DSN
 ```
 
 **Solution 2: Verify Sentry is initialized**
+
 ```rust
 fn main() {
     let _guard = logger::initialize();
@@ -320,6 +334,7 @@ fn main() {
 ```
 
 **Solution 3: Enable debug logging**
+
 ```bash
 RUST_LOG=sentry=debug cargo test --lib sentry_config
 ```
@@ -327,14 +342,17 @@ RUST_LOG=sentry=debug cargo test --lib sentry_config
 ### Issue: Events Captured But Not Creating GitHub Issues
 
 **Solution 1: Check GitHub integration is enabled**
+
 - Sentry Settings → Integrations → GitHub
 - Status should show "Installed"
 
 **Solution 2: Verify alert rule configuration**
+
 - Sentry → Alerts → Check rules trigger severity
 - Adjust if needed (some errors may be filtered)
 
 **Solution 3: Check GitHub repo has write permissions**
+
 - GitHub Settings → Integrations & Applications
 - Sentry should have "Read and Write" on Issues
 
@@ -343,6 +361,7 @@ RUST_LOG=sentry=debug cargo test --lib sentry_config
 **Expected:** <30 seconds (usually <5 seconds)
 
 **If slower:**
+
 1. Check Sentry project is not rate-limited
 2. Verify network connectivity from application to Sentry
 3. Check if running in test mode (stderr logging) instead of real DSN
@@ -354,11 +373,13 @@ thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: InvalidD
 ```
 
 **Solution:** DSN format must be:
+
 ```
 https://key@sentry.io/project-id
 ```
 
 Not:
+
 ```
 https://key@sentry.io    # Missing project ID
 https://key@host.ingest.sentry.io/0  # Using test DSN
@@ -369,6 +390,7 @@ https://key@host.ingest.sentry.io/0  # Using test DSN
 **Cause:** Multiple `initialize()` calls or guard dropped prematurely
 
 **Solution:** Initialize once at application startup:
+
 ```rust
 fn main() {
     let _guard = initialize();  // Keep guard alive until shutdown
@@ -408,6 +430,7 @@ SENTRY_RELEASE=0.1.1 cargo build --release
 ### Breadcrumbs
 
 Sentry captures breadcrumbs (preceding events) automatically:
+
 - HTTP requests
 - Database queries (if instrumented)
 - Log messages

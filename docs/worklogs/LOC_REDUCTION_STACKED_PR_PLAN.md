@@ -54,6 +54,7 @@ origin/main
 ## Protocol Definitions
 
 ### AgentAdapterProtocol
+
 ```python
 # src/thegent/agents/protocols/adapter.py
 from typing import Protocol, Any
@@ -84,6 +85,7 @@ class AgentAdapterProtocol(Protocol):
 ```
 
 ### RouterProtocol
+
 ```python
 # src/thegent/agents/protocols/router.py
 from typing import Protocol, TYPE_CHECKING
@@ -113,6 +115,7 @@ class RouterProtocol(Protocol):
 ## Implementation Order
 
 ### Phase 1: Protocol Foundation (Low Risk)
+
 1. Create `agents/protocols/` directory
 2. Add `__init__.py`
 3. Define `AgentAdapterProtocol`
@@ -121,23 +124,27 @@ class RouterProtocol(Protocol):
 6. **PR**: `refactor/agent-protocols`
 
 ### Phase 2: Adapter Extraction (Medium Risk)
+
 1. Extract `cliproxy_adapter.py` logic into implementations
 2. Create `CodexAdapter`, `ClaudeAdapter`, `CursorAdapter`
 3. Update imports in dependent files
 4. **PR**: `refactor/extract-agent-adapters`
 
 ### Phase 3: Crew Router (Medium Risk)
+
 1. Move crew routing logic to `agents/crew/router.py`
 2. Add crew-specific protocol
 3. **PR**: `feat/crew-router-protocol`
 
 ### Phase 4: Phench Service Decompose (High Risk)
+
 1. Identify functional boundaries in `service.py`
 2. Create module structure
 3. Extract incrementally
 4. **PR**: `refactor/phench-service-decompose`
 
 ### Phase 5: CLI Execution Decompose (High Risk)
+
 1. Same approach as phench
 2. Focus on testable units
 3. **PR**: `refactor/cli-execution-decompose`

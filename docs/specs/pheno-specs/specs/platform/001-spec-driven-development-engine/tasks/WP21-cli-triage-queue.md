@@ -344,6 +344,7 @@ Built-in patterns (configurable):
 `AutoTriageHook` implements a `fn process_output_chunk(&self, chunk: &str, context: &ImplementContext) -> Vec<AutoTriageAction>` interface that is called by the `implement` command's output streaming loop.
 
 Each `AutoTriageAction` is either:
+
 - `QueueItem { pattern_id, extracted_text, suggested_type }` — add to backlog.
 - `FileBug { pattern_id, title, description, severity }` — call `triage:file-bug`.
 - `Notify { message }` — display to user without creating artifacts.
@@ -383,6 +384,7 @@ and prepares to commit work.
 **Conventional Commit Enforcement**:
 
 Provide a `ConventionalCommitValidator` that:
+
 - Parses a commit message string against the spec: `<type>(<scope>): <subject>`.
 - Accepts types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `ci`, `perf`, `build`.
 - Returns `ValidationResult { valid: bool, parsed: Option<ConventionalCommit>, errors: Vec<String> }`.
@@ -399,6 +401,7 @@ Validate branch names via `BranchNameValidator::validate(name: &str) -> Validati
 **Pre-Push Checklist**:
 
 `DevOpsDefaultsEnforcer::pre_push_check(context: &AgentContext) -> PrePushReport`:
+
 1. Validate commit message format.
 2. Validate branch name format.
 3. Run `devops:lint-and-format` (via sub-command dispatch).
@@ -408,6 +411,7 @@ Validate branch names via `BranchNameValidator::validate(name: &str) -> Validati
 
 When an agent opens a PR, `PrTemplateBuilder::build(wp: &WorkPackage, commits: &[Commit]) -> String`
 generates a PR body including:
+
 - WP ID and title.
 - Subtasks addressed (from commits).
 - Test coverage summary (from `cargo test` output).
@@ -471,7 +475,7 @@ appropriate sub-command chain for the agent to execute first.
 | accept | in_progress | `governance:verify-chain` → `sync:push-plane` |
 | any | blocked | `governance:check-gates` (to surface the blocking gate) |
 
-4. Return `FirstActionPlan { wp_id, phase, lane, sub_command_chain: Vec<String> }`.
+1. Return `FirstActionPlan { wp_id, phase, lane, sub_command_chain: Vec<String> }`.
 
 **Integration with router output**:
 
@@ -533,6 +537,7 @@ Both commands must appear in the top-level `--help` output with one-line descrip
 **Telemetry**:
 
 Each command invocation must emit a telemetry event via `TelemetryPort`:
+
 - `event_type`: `"cli_command"`.
 - `command`: `"triage"` or `"queue"`.
 - `subcommand`: for `queue`, the sub-subcommand (`"add"`, `"list"`, etc.).
@@ -682,6 +687,7 @@ The reviewer should verify the following before moving this WP to `done`:
 ---
 
 _Work Package WP21 — Phase 5: Triage, Sync & Sub-Commands_
+
 - 2026-02-28T13:34:30Z – claude-opus – shell_pid=66424 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T13:38:23Z – claude-opus – shell_pid=66424 – lane=for_review – Triage/queue CLI commands, 25 prompt seeds. 4 tests.
 - 2026-02-28T23:22:54Z – claude-opus – shell_pid=79650 – lane=doing – Started review via workflow command

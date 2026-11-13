@@ -9,6 +9,7 @@
 Most validation libraries treat async validation as an afterthought. Zod's `.check()` breaks the fluent chain, Yup's `.test()` has awkward error handling, and even Valibot's async support feels bolted on.
 
 For modern applications, async validation is common:
+
 - Database lookups to check uniqueness
 - API calls to external services
 - File system checks
@@ -41,6 +42,7 @@ const asyncResult = await validate(asyncSchema, "user@example.com");
 ### The `.check()` Method
 
 The `.check()` method accepts:
+
 1. A predicate function (sync or async)
 2. Optional configuration with message, code, and metadata
 
@@ -155,6 +157,6 @@ Cons: Callback patterns are less composable than Promises
 
 ## References
 
-- Zod async validation: https://zod.js.org
-- Valibot async: https://valibot.dev
-- io-ts: https://github.com/gcanti/io-ts
+- Zod async validation: <https://zod.js.org>
+- Valibot async: <https://valibot.dev>
+- io-ts: <https://github.com/gcanti/io-ts>

@@ -26,6 +26,7 @@ Add 6 new entity types to the domain model and extend 2 existing entities. These
 ## Objective
 
 Implement all entity types with:
+
 - Complete struct definitions with all required fields
 - Proper serialization/deserialization support
 - Validation logic for domain invariants
@@ -55,6 +56,7 @@ pub struct Event {
 ```
 
 **Validation:**
+
 - `entity_type` and `event_type` non-empty
 - `sequence` must be positive
 - `hash` and `prev_hash` must be exactly 32 bytes each
@@ -62,11 +64,13 @@ pub struct Event {
 - `payload` must be valid JSON
 
 **Display impl:**
+
 ```
 Event(entity_type={}, entity_id={}, sequence={}, event_type={}, timestamp={})
 ```
 
 Add to `crates/agileplus-domain/src/domain/mod.rs`:
+
 ```rust
 pub mod event;
 pub use event::Event;
@@ -89,12 +93,14 @@ pub struct Snapshot {
 ```
 
 **Validation:**
+
 - `entity_type` non-empty
 - `event_sequence` non-negative
 - `state` must be valid JSON
 - `created_at` must not be in the future
 
 **Display impl:**
+
 ```
 Snapshot(entity_type={}, entity_id={}, sequence={}, created_at={})
 ```
@@ -120,6 +126,7 @@ pub struct SyncMapping {
 ```
 
 **Validation:**
+
 - `entity_type` non-empty
 - `plane_issue_id` non-empty (format: "PROJ-123")
 - `content_hash` non-empty (typically hex digest)
@@ -127,6 +134,7 @@ pub struct SyncMapping {
 - `conflict_count` non-negative
 
 **Display impl:**
+
 ```
 SyncMapping(entity_type={}, plane_issue_id={}, direction={}, last_synced={})
 ```
@@ -157,17 +165,20 @@ pub struct ServiceHealth {
 ```
 
 **Validation:**
+
 - `service_name` non-empty
 - `uptime_seconds` non-negative
 - `connection_info` non-empty
 - `metadata` must be valid JSON
 
 **Display impl:**
+
 ```
 ServiceHealth(service={}, status={:?}, uptime={}s)
 ```
 
 **Methods:**
+
 - `is_healthy() -> bool` (true if Healthy)
 - `time_since_check(&self) -> Duration`
 
@@ -190,6 +201,7 @@ pub struct DeviceNode {
 ```
 
 **Validation:**
+
 - `device_id` non-empty (UUID or machine ID format)
 - `hostname` non-empty
 - `tailscale_ip` if Some, must be valid IPv6 format
@@ -197,11 +209,13 @@ pub struct DeviceNode {
 - `platform_version` non-empty (semantic version format)
 
 **Display impl:**
+
 ```
 DeviceNode(device_id={}, hostname={}, last_seen={})
 ```
 
 **Methods:**
+
 - `is_online(threshold_seconds: u64) -> bool` (check if last_seen within threshold)
 
 Re-export in `domain/mod.rs`.
@@ -223,6 +237,7 @@ pub struct ApiKey {
 ```
 
 **Validation:**
+
 - `key_hash` must be exactly 32 bytes (SHA-256)
 - `name` non-empty
 - `created_at` must not be in the future
@@ -230,11 +245,13 @@ pub struct ApiKey {
 - If `revoked`, `last_used_at` cannot be in the future
 
 **Display impl:**
+
 ```
 ApiKey(name={}, created={}, revoked={})
 ```
 
 **Methods:**
+
 - `is_active() -> bool` (not revoked)
 - `days_since_creation(&self) -> u64`
 - `days_since_last_used(&self) -> Option<u64>`
@@ -244,6 +261,7 @@ Re-export in `domain/mod.rs`.
 ### T007: Extend Feature and WorkPackage
 
 **Extend Feature** in `crates/agileplus-domain/src/domain/feature.rs`:
+
 ```rust
 pub struct Feature {
     // ... existing fields ...
@@ -254,11 +272,13 @@ pub struct Feature {
 ```
 
 **Validations:**
+
 - `plane_issue_id` if Some, must be non-empty
 - `plane_state_id` if Some, must be non-empty
 - `labels` items must be non-empty strings
 
 **Extend WorkPackage** in `crates/agileplus-domain/src/domain/workpackage.rs`:
+
 ```rust
 pub struct WorkPackage {
     // ... existing fields ...
@@ -267,9 +287,11 @@ pub struct WorkPackage {
 ```
 
 **Validation:**
+
 - `plane_sub_issue_id` if Some, must be non-empty
 
 **Add builder methods** to both Feature and WorkPackage:
+
 ```rust
 impl Feature {
     pub fn with_plane_issue_id(mut self, id: String) -> Self { ... }

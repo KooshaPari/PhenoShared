@@ -51,8 +51,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -78,6 +79,7 @@ spec-kitty implement WP00
 ## Context & Constraints
 
 ### Reference Documents
+
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- FR requirements
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- Project structure, dependency graph, technical context
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- Entity definitions used by proto message types
@@ -85,6 +87,7 @@ spec-kitty implement WP00
 - **Research**: `kitty-specs/001-spec-driven-development-engine/research.md` -- Technology choices and rationale
 
 ### Architectural Constraints
+
 - **Separate repository**: `agileplus-proto` is a standalone repo, not a subdirectory of the main workspace. It is the source of truth for the gRPC contract boundary.
 - **4-file proto layout**: Protos are split into `common.proto`, `core.proto`, `agents.proto`, `integrations.proto` -- do NOT merge them into a single file.
 - **`buf` for linting and codegen**: Use `buf` (not raw `protoc`) as the primary build tool. `buf.yaml` and `buf.gen.yaml` control linting and generation targets.
@@ -93,6 +96,7 @@ spec-kitty implement WP00
 - **Package namespace**: All proto files use `package agileplus.v1;` and `option go_package`, `option java_package` etc. for multi-language compatibility.
 
 ### Key Dependencies
+
 - **buf**: v2 schema; `buf lint` with STANDARD ruleset; `buf generate` with tonic and grpcio-tools plugins
 - **Rust**: `prost = "0.13"`, `tonic = "0.12"`, `tonic-build` as build-dep
 - **Python**: `grpcio`, `grpcio-tools`, `betterproto` (optional typed dataclasses output)
@@ -212,6 +216,7 @@ spec-kitty implement WP00
 - **Purpose**: Configure buf as the authoritative build tool for proto linting and multi-language code generation. This replaces direct protoc invocations and ensures consistent, reproducible output.
 - **Steps**:
   1. Create `buf.yaml` at repository root:
+
      ```yaml
      version: v2
      modules:
@@ -223,8 +228,10 @@ spec-kitty implement WP00
        use:
          - FILE
      ```
+
   2. Create `buf.gen.yaml` at repository root with two plugins:
      - **Rust (tonic/prost)**:
+
        ```yaml
        version: v2
        plugins:
@@ -239,13 +246,16 @@ spec-kitty implement WP00
              - no_server=false
              - no_client=false
        ```
+
      - **Python (grpcio)**:
+
        ```yaml
          - remote: buf.build/protocolbuffers/python
            out: python/src/gen
          - remote: buf.build/grpc/python
            out: python/src/gen
        ```
+
   3. Create a `buf.lock` by running `buf dep update` (this pins remote plugin versions).
   4. Add a `Makefile` (or `justfile`) at the repo root with targets:
      - `lint`: `buf lint`
@@ -263,6 +273,7 @@ spec-kitty implement WP00
 **Purpose**: Generate initial buf breaking change baseline and add CI check to prevent accidental breaking changes to proto contracts.
 
 **Steps**:
+
 1. Run `buf breaking` to generate initial baseline image
 2. Add `buf breaking --against .git#branch=main` to CI pipeline
 3. Document breaking change policy in README: breaking changes require version bump in buf.yaml
@@ -276,6 +287,7 @@ spec-kitty implement WP00
 - **Steps**:
   1. Create `rust/` directory with:
      - `rust/Cargo.toml`:
+
        ```toml
        [package]
        name = "agileplus-proto"
@@ -292,7 +304,9 @@ spec-kitty implement WP00
        tonic-build = "0.12"
        prost-build = "0.13"
        ```
+
      - `rust/build.rs`:
+
        ```rust
        fn main() -> Result<(), Box<dyn std::error::Error>> {
            tonic_build::configure()
@@ -310,7 +324,9 @@ spec-kitty implement WP00
            Ok(())
        }
        ```
+
      - `rust/src/lib.rs`:
+
        ```rust
        //! Generated gRPC stubs for AgilePlus.
        //! Do not edit -- regenerate with `buf generate` or `cargo build`.
@@ -321,9 +337,11 @@ spec-kitty implement WP00
            }
        }
        ```
+
      - `rust/src/gen/` directory (created by `buf generate`; add `.gitkeep` to track in git or add to `.gitignore` if stubs are not committed)
   2. Create `python/` directory with:
      - `python/pyproject.toml`:
+
        ```toml
        [project]
        name = "agileplus-proto"
@@ -343,9 +361,11 @@ spec-kitty implement WP00
        [tool.hatch.build.targets.wheel]
        packages = ["src/agileplus_proto"]
        ```
+
      - `python/src/agileplus_proto/__init__.py` with re-exports of generated stub modules
      - `python/src/gen/` directory (created by `buf generate`; add `.gitkeep` or `.gitignore`)
   3. Create a CI skeleton at `.github/workflows/ci.yml`:
+
      ```yaml
      name: CI
      on: [push, pull_request]
@@ -364,6 +384,7 @@ spec-kitty implement WP00
            - name: Install Python deps
              run: cd python && pip install uv && uv sync
      ```
+
   4. Run `cargo build` in `rust/` and `uv sync` in `python/` to validate.
 - **Files**: `rust/Cargo.toml`, `rust/build.rs`, `rust/src/lib.rs`, `python/pyproject.toml`, `python/src/agileplus_proto/__init__.py`, `.github/workflows/ci.yml`
 - **Parallel?**: No -- depends on T000f (buf.gen.yaml must exist; `buf generate` must have run to produce gen files, or `build.rs` handles generation at compile time).
@@ -421,6 +442,7 @@ Reviewers should verify:
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this Activity Log section
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ – agent_id – lane=<lane> – <action>`

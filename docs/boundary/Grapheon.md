@@ -38,6 +38,7 @@
 **Reviewer:** registry boundary audit (recovery/default-branch verification)
 **Disposition:** `KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW`
 **Decisions:**
+
 - The prior ABSORB proposal into `pheno/crates/grapheon/` is stale and is
   withdrawn. Current `Grapheon` is a private, non-archived recovery branch
   whose active Cargo workspace is the Tracera runtime (`tracera-server`,

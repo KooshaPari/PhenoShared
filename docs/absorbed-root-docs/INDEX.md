@@ -26,7 +26,6 @@
 - benchmark, real-time audio, HDR/color, fault, security and acceptance plans;
 - ecosystem authority contracts, examples, packaging, operations and risk registers.
 
-
 ## Top-level product and program documents
 
 - [`ALD.md`](ALD.md) — Architecture / Abstraction-Level Design — 3,778 bytes

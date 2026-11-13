@@ -18,13 +18,13 @@
 
 ## Cockpit source-boundary requirements
 
-7. Preserve a time-stamped source-to-renderer-to-output hash chain before any migration.
-8. Record live rehash drift as a separate observation; never relabel a historical hash as current.
-9. Keep `phenotype-dag/`, `beads/`, and `cockpit/` intact and non-Git until an explicit boundary
+1. Preserve a time-stamped source-to-renderer-to-output hash chain before any migration.
+2. Record live rehash drift as a separate observation; never relabel a historical hash as current.
+3. Keep `phenotype-dag/`, `beads/`, and `cockpit/` intact and non-Git until an explicit boundary
    repository decision is approved.
-10. Treat AgilePlus as the operational successor, phenotype-registry as schema/governance owner,
+4. Treat AgilePlus as the operational successor, phenotype-registry as schema/governance owner,
     and Tracera as a future consumer.
-11. Require atomic writer and renderer migration before a source/output replacement claim.
+5. Require atomic writer and renderer migration before a source/output replacement claim.
 
 ### Cockpit acceptance criteria
 

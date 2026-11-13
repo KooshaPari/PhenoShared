@@ -32,6 +32,7 @@
 3. **Posts PR comment** with results
 
 **Example PR Comment**:
+
 ```
 🔗 **Mold Linker Benchmark Results**
 
@@ -50,6 +51,7 @@
 **Trigger**: If `MOLD_AVG > 13.3s` (>10% above target)
 
 **Action in Workflow**:
+
 ```yaml
 - name: Check for link time regression
   run: |
@@ -63,6 +65,7 @@
 ```
 
 **Investigation Steps**:
+
 1. Check recent commits (new dependencies?)
 2. Review workspace Cargo.toml changes
 3. Verify mold version
@@ -74,6 +77,7 @@
 **Trigger**: If improvement `< 60%` (target is 73%)
 
 **Action**:
+
 ```yaml
 - name: Validate improvement percentage
   run: |
@@ -85,6 +89,7 @@
 ```
 
 **Investigation Steps**:
+
 1. Verify mold is in PATH
 2. Check if mold is being used: `cargo build -vv 2>&1 | grep mold`
 3. Verify `.cargo/config.toml` has rustflags
@@ -99,6 +104,7 @@
 **Tasks**:
 
 1. **Review last 7 CI runs**
+
    ```bash
    # Check GitHub Actions tab:
    # https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/benchmark.yml
@@ -110,6 +116,7 @@
    ```
 
 2. **Calculate rolling average**
+
    ```
    Mold times from last 7 runs:
    12.3, 12.1, 12.0, 12.2, 12.1, 12.3, 12.0
@@ -119,6 +126,7 @@
    ```
 
 3. **Check for outliers**
+
    ```
    Outlier detection (±2 std dev):
    12.3 - outlier? No (within range)
@@ -126,6 +134,7 @@
    ```
 
 4. **Document findings**
+
    ```
    Week of 2026-04-07:
    - 7 benchmark runs
@@ -143,6 +152,7 @@
 **Tasks**:
 
 1. **Aggregate monthly metrics**
+
    ```
    April 2026 Mold Benchmark Summary
    ═════════════════════════════════════
@@ -158,6 +168,7 @@
    ```
 
 2. **Review mold releases**
+
    ```
    Visit: https://github.com/rui314/mold/releases
 
@@ -168,6 +179,7 @@
    ```
 
 3. **Check for workspace changes**
+
    ```
    Workspace metrics (April):
    - Crates: 24 (no new crates)
@@ -176,6 +188,7 @@
    ```
 
 4. **Create monthly report**
+
    ```markdown
    # Mold Linker - Monthly Report (April 2026)
 
@@ -209,6 +222,7 @@
 **Tasks**:
 
 1. **Annual trend analysis**
+
    ```
    Q1 2026 Performance Trend
    ═════════════════════════════════════
@@ -227,6 +241,7 @@
    - Any known incompatibilities?
 
 3. **Consider version upgrade**
+
    ```
    mold v2.4.x → v2.5.x?
 
@@ -242,6 +257,7 @@
    ```
 
 4. **Update ADR** (Architecture Decision Record)
+
    ```markdown
    # ADR-NNN: Mold Linker Optimization
 
@@ -271,6 +287,7 @@
 **Tasks**:
 
 1. **Calculate actual annual impact**
+
    ```
    2026 Mold Linker Impact
    ═════════════════════════════════════
@@ -284,6 +301,7 @@
    ```
 
 2. **Compare alternatives**
+
    ```
    Alternative linkers evaluated:
    - GNU ld: 45-60s (baseline)
@@ -295,6 +313,7 @@
    ```
 
 3. **Plan next year**
+
    ```
    2027 Mold Strategy:
    - Maintain current integration
@@ -304,6 +323,7 @@
    ```
 
 4. **Document in CHANGELOG**
+
    ```markdown
    ## 2026 Performance Improvements
 
@@ -324,11 +344,13 @@
 **Trigger**: Link time > 13.3s (10% above target)
 
 **Action**:
+
 - [ ] Fail GitHub Actions job
 - [ ] Post warning in PR comment
 - [ ] Tag @team-lead
 
 **Investigation**:
+
 ```bash
 # Check workspace changes
 git log --oneline -10
@@ -348,11 +370,13 @@ df -h
 **Trigger**: Improvement < 60%
 
 **Action**:
+
 - [ ] Fail GitHub Actions job
 - [ ] Post error in PR comment
 - [ ] Block merge until fixed
 
 **Investigation**:
+
 ```bash
 # Verify rustflags
 grep rustflags .cargo/config.toml
@@ -369,11 +393,13 @@ which mold && mold --version
 **Trigger**: Build fails with linker error
 
 **Action**:
+
 - [ ] Fail GitHub Actions job
 - [ ] Capture full error output
 - [ ] Create issue if mold bug suspected
 
 **Investigation**:
+
 ```bash
 # Fallback to default linker
 RUSTFLAGS="" cargo build --release
@@ -387,6 +413,7 @@ RUSTFLAGS="" cargo build --release
 **Trigger**: mold version > 1 minor behind latest
 
 **Action**:
+
 - [ ] Create issue: "Update mold to vX.Y.Z"
 - [ ] Test on branch
 - [ ] Schedule upgrade
@@ -396,23 +423,27 @@ RUSTFLAGS="" cargo build --release
 ## Maintenance Tasks
 
 ### Weekly
+
 - [ ] Review GitHub Actions benchmark results
 - [ ] Check for linker errors in CI logs
 - [ ] Spot-check PR comments for results
 
 ### Monthly
+
 - [ ] Aggregate weekly metrics into monthly report
 - [ ] Review mold GitHub releases page
 - [ ] Check for security advisories
 - [ ] Share summary with team
 
 ### Quarterly
+
 - [ ] Trend analysis (last 3 months)
 - [ ] Ecosystem evaluation (community reports)
 - [ ] Version upgrade decision
 - [ ] Update ADR if decisions change
 
 ### Annually
+
 - [ ] Impact calculation (time saved, value)
 - [ ] Alternative linker re-evaluation
 - [ ] Strategic planning for next year
@@ -429,6 +460,7 @@ RUSTFLAGS="" cargo build --release
 **Artifact**: `benchmark-metrics.json` (90-day retention)
 
 **Contents**:
+
 ```json
 {
   "timestamp": "2026-03-31T12:00:00Z",
@@ -444,6 +476,7 @@ RUSTFLAGS="" cargo build --release
 ### Manual Reporting
 
 **Monthly Report Template**:
+
 ```markdown
 # Mold Linker - Monthly Report (YYYY-MM)
 
@@ -472,16 +505,19 @@ RUSTFLAGS="" cargo build --release
 ### If Monitoring Detects Issue
 
 **Level 1: Variance Detection** (<5% above target)
+
 - [ ] Investigate workspace changes
 - [ ] Monitor next 2-3 builds
 - [ ] Document findings
 
 **Level 2: Regression Detection** (5-10% above target)
+
 - [ ] Investigate immediately
 - [ ] Consider temporary rollback
 - [ ] File issue if mold-related
 
 **Level 3: Failure** (Build fails with mold)
+
 - [ ] Rollback immediately (Procedure 1: Comment out)
 - [ ] Investigate root cause
 - [ ] File bug with mold project if needed
@@ -494,6 +530,7 @@ RUSTFLAGS="" cargo build --release
 **Deliverable**: Comprehensive monitoring strategy ✓
 
 **Key Components**:
+
 - Real-time CI alerts
 - Weekly review cadence
 - Monthly aggregation

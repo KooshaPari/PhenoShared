@@ -27,8 +27,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Runner presence does not establish benchmark execution
 - Do not duplicate Portage orchestration authority
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

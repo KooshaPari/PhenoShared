@@ -67,14 +67,18 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Purpose**: Create the adapter struct that wraps a git2 Repository and implements VcsPort.
 
 **Steps**:
+
 1. Create `crates/agileplus-git/src/lib.rs` with the adapter struct.
 2. Define `GitVcsAdapter`:
+
    ```rust
    pub struct GitVcsAdapter {
        repo_path: PathBuf,
    }
    ```
+
    Note: Do NOT store `git2::Repository` in the struct (it's not `Send`). Instead, open a fresh handle in each method:
+
    ```rust
    fn open_repo(&self) -> Result<Repository, DomainError> {
        Repository::open(&self.repo_path).map_err(|e| DomainError::Vcs(e.to_string()))
@@ -95,6 +99,7 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Files**: `crates/agileplus-git/src/lib.rs`
 
 **Validation**:
+
 - `GitVcsAdapter::new` succeeds on a valid git repo and fails on a non-repo directory.
 - `open_repo()` returns a usable `Repository` handle.
 - The adapter is `Send + Sync` (required for trait object in AppContext).
@@ -106,12 +111,15 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Purpose**: Manage isolated worktrees for parallel WP implementation. Each WP gets its own worktree so agents don't conflict.
 
 **Steps**:
+
 1. Create `crates/agileplus-git/src/worktree.rs` (or implement in lib.rs).
 
 2. **create_worktree**:
+
    ```rust
    async fn create_worktree(&self, feature_slug: &str, wp_id: &str) -> Result<PathBuf, DomainError>
    ```
+
    - Compute worktree path: `<repo_root>/.worktrees/<feature_slug>-<wp_id>/`
    - Create the directory if it doesn't exist.
    - Create a branch: `<feature_slug>-<wp_id>` based on current HEAD (or a specified base).
@@ -120,18 +128,22 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
    - Return the absolute path to the worktree.
 
 3. **list_worktrees**:
+
    ```rust
    async fn list_worktrees(&self) -> Result<Vec<WorktreeInfo>, DomainError>
    ```
+
    - Use `repo.worktrees()` to get worktree names.
    - For each, use `repo.find_worktree(name)` to get details.
    - Parse feature_slug and wp_id from the worktree name (split on last `-`).
    - Return `WorktreeInfo` with path, branch, feature_slug, wp_id.
 
 4. **cleanup_worktree**:
+
    ```rust
    async fn cleanup_worktree(&self, worktree_path: &Path) -> Result<(), DomainError>
    ```
+
    - Validate the path is under `.worktrees/`.
    - Use `repo.find_worktree(name)` then `worktree.prune(opts)` with force option.
    - Delete the worktree directory from filesystem.
@@ -142,6 +154,7 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Files**: `crates/agileplus-git/src/worktree.rs`
 
 **Validation**:
+
 - Create a worktree, verify directory exists and contains a valid git checkout.
 - List worktrees, verify the created worktree appears.
 - Cleanup worktree, verify directory removed and `git worktree list` no longer shows it.
@@ -154,28 +167,35 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Purpose**: Create branches, checkout, merge, and detect conflicts -- all building blocks for the implement/ship workflow.
 
 **Steps**:
+
 1. Create `crates/agileplus-git/src/branch.rs`.
 
 2. **create_branch**:
+
    ```rust
    async fn create_branch(&self, branch_name: &str, base: &str) -> Result<(), DomainError>
    ```
+
    - Resolve `base` to a commit: `repo.revparse_single(base)?.peel_to_commit()?`
    - Create branch: `repo.branch(branch_name, &commit, false)?`
    - `false` = don't force (error if branch exists).
 
 3. **checkout_branch**:
+
    ```rust
    async fn checkout_branch(&self, branch_name: &str) -> Result<(), DomainError>
    ```
+
    - Resolve branch to reference: `repo.find_branch(branch_name, BranchType::Local)?`
    - Set HEAD: `repo.set_head(refname)?`
    - Checkout HEAD: `repo.checkout_head(Some(CheckoutBuilder::new().force()))?`
 
 4. **merge_to_target**:
+
    ```rust
    async fn merge_to_target(&self, source: &str, target: &str) -> Result<MergeResult, DomainError>
    ```
+
    - Checkout target branch.
    - Get annotated commit for source: `repo.find_annotated_commit(oid)?`
    - Perform merge analysis: `repo.merge_analysis(&[&annotated])?`
@@ -186,9 +206,11 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
      - If clean: create merge commit, return `MergeResult { success: true, merged_commit: Some(oid) }`.
 
 5. **detect_conflicts**:
+
    ```rust
    async fn detect_conflicts(&self, source: &str, target: &str) -> Result<Vec<ConflictInfo>, DomainError>
    ```
+
    - Perform a dry-run merge analysis without committing.
    - Use `repo.merge_trees()` on the two branch trees with the merge base.
    - Iterate `index.conflicts()` to collect conflicting paths.
@@ -197,6 +219,7 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Files**: `crates/agileplus-git/src/branch.rs`
 
 **Validation**:
+
 - Create branch from HEAD, verify branch exists.
 - Checkout branch, verify HEAD points to it.
 - Merge non-conflicting branches, verify fast-forward or merge commit created.
@@ -210,36 +233,45 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Purpose**: Read and write spec/plan/audit artifacts in the `kitty-specs/<feature>/` directory structure.
 
 **Steps**:
+
 1. Create `crates/agileplus-git/src/artifact.rs`.
 
 2. **read_artifact**:
+
    ```rust
    async fn read_artifact(&self, feature_slug: &str, relative_path: &str) -> Result<String, DomainError>
    ```
+
    - Compute full path: `<repo_root>/kitty-specs/<feature_slug>/<relative_path>`
    - Read file contents via `std::fs::read_to_string()`.
    - Return `DomainError::NotFound` if file doesn't exist.
    - Note: This reads from the working directory, not from git objects. This is intentional -- artifacts are always read from the current working tree state.
 
 3. **write_artifact**:
+
    ```rust
    async fn write_artifact(&self, feature_slug: &str, relative_path: &str, content: &str) -> Result<(), DomainError>
    ```
+
    - Compute full path, create parent directories if needed.
    - Write content via `std::fs::write()`.
    - Stage the file: `repo.index()?.add_path(relative)?; repo.index()?.write()?`
    - Do NOT commit -- the caller decides when to commit (batch multiple writes).
 
 4. **artifact_exists**:
+
    ```rust
    async fn artifact_exists(&self, feature_slug: &str, relative_path: &str) -> Result<bool, DomainError>
    ```
+
    - Check `Path::exists()` for the computed path.
 
 5. **scan_feature_artifacts**:
+
    ```rust
    async fn scan_feature_artifacts(&self, feature_slug: &str) -> Result<FeatureArtifacts, DomainError>
    ```
+
    - Base path: `<repo_root>/kitty-specs/<feature_slug>/`
    - Read `meta.json` if present.
    - Read `audit/chain.jsonl` if present.
@@ -249,6 +281,7 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Files**: `crates/agileplus-git/src/artifact.rs`
 
 **Validation**:
+
 - Write an artifact, read it back, verify content matches.
 - Write stages the file in git index.
 - Read non-existent artifact returns NotFound.
@@ -261,20 +294,25 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Purpose**: Scan the git repository for all feature artifact directories to support the SQLite rebuild operation (FR-017).
 
 **Steps**:
+
 1. Add to `crates/agileplus-git/src/artifact.rs` or a new `crates/agileplus-git/src/scanner.rs`.
 
 2. Implement a scanning function:
+
    ```rust
    pub fn scan_all_features(&self) -> Result<Vec<String>, DomainError>
    ```
+
    - List directories under `kitty-specs/` in the working tree.
    - Filter to directories containing `meta.json`.
    - Return feature slugs.
 
 3. Implement commit history extraction:
+
    ```rust
    pub fn get_feature_history(&self, feature_slug: &str) -> Result<Vec<CommitInfo>, DomainError>
    ```
+
    - Walk the commit log filtered to paths under `kitty-specs/<feature_slug>/`.
    - Use `repo.revwalk()` with path filtering.
    - Return `CommitInfo { oid: String, message: String, author: String, timestamp: DateTime<Utc> }`.
@@ -284,6 +322,7 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Files**: `crates/agileplus-git/src/scanner.rs` or `crates/agileplus-git/src/artifact.rs`
 
 **Validation**:
+
 - In a test repo with 2 feature dirs, `scan_all_features` returns both slugs.
 - `get_feature_history` returns commits touching the specified feature dir.
 - Directories without `meta.json` are excluded from scan results.
@@ -295,9 +334,11 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Purpose**: Comprehensive integration tests that exercise all VcsPort methods against real (temporary) git repositories.
 
 **Steps**:
+
 1. Create `crates/agileplus-git/tests/integration.rs`.
 
 2. Test harness setup:
+
    ```rust
    fn setup_test_repo() -> (TempDir, GitVcsAdapter) {
        let dir = tempdir().unwrap();
@@ -337,6 +378,7 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 **Files**: `crates/agileplus-git/tests/integration.rs`
 
 **Validation**:
+
 - All tests pass on macOS and Linux.
 - Tests are isolated (temp dirs, no shared state).
 - Each VcsPort method has at least one test.
@@ -370,6 +412,7 @@ Implement the git adapter in `crates/agileplus-git/` that fulfills the `VcsPort`
 | Timestamp | Action | Agent | Details |
 |-----------|--------|-------|---------|
 | 2026-02-27T00:00:00Z | Prompt generated | system | WP07 prompt created via /spec-kitty.tasks |
+
 - 2026-02-28T09:38:28Z – claude-wp07 – shell_pid=57564 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T09:48:22Z – claude-wp07 – shell_pid=57564 – lane=for_review – Ready for review: GitVcsAdapter with 19 passing tests
 - 2026-02-28T09:51:01Z – claude-wp07 – shell_pid=57564 – lane=done – Review passed: path traversal fix applied, all 19 tests pass

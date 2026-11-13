@@ -48,6 +48,7 @@ without an interactive browser, we use a local key pair instead. Both methods
 satisfy the OpenSSF Scorecard Signed-Releases check (4-10 depending on tlog upload).
 
 For full keyless + Rekor transparency log, run interactively:
+
 ```bash
 COSIGN_PASSWORD="" cosign sign-blob \
     --output-signature pheno-harness-${TAG}.tar.gz.sig \

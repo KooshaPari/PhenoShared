@@ -10,6 +10,7 @@
 ## Overview
 
 Extract Phenotype's 43-router ecosystem and cost tracking logic into **4 shareable Rust crates** that can be consumed by:
+
 - **VibeProxy** (if macOS fork is activated in Phase 3+)
 - **Phenotype ecosystem** (thegent, heliosCLI, etc.)
 - **External harnesses** (Cursor, Roo Code, Kilo Code)
@@ -28,16 +29,19 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Components:**
 
 1. **Token Counter Trait** (Rust trait + PyO3 binding)
+
    ```rust
    pub trait TokenCounter {
        fn count_input(&self, text: &str) -> usize;
        fn count_output(&self, text: &str) -> usize;
    }
    ```
+
    - Implementations: OpenAI (GPT-3.5, GPT-4), Anthropic (Claude variants), Google (Gemini), etc.
    - ~800 LOC
 
 2. **Provider Pricing Registry**
+
    ```rust
    pub struct ModelPrice {
        provider: String,
@@ -47,11 +51,13 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        region: Option<String>, // "us-east", etc.
    }
    ```
+
    - Extracted from: `thegent/utils/routing_impl/cost_calculator.py` + model_metadata.py
    - Versioning: Semantic (major = new provider, minor = new models, patch = price updates)
    - ~2,000 LOC (data structures + registry)
 
 3. **Cost Calculator**
+
    ```rust
    pub fn calculate_cost(
        model: &str,
@@ -59,10 +65,12 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        output_tokens: usize,
    ) -> Result<f64, CostError>
    ```
+
    - Extract from: `cost_calculator.py` (5.2K LOC)
    - ~500 LOC
 
 4. **Budget Tracker**
+
    ```rust
    pub struct Budget {
        limit_usd: f64,
@@ -70,10 +78,12 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        alerts: Vec<Alert>, // @50%, @75%, @90%
    }
    ```
+
    - Extract from: `budget.py` (8.1K LOC)
    - ~1,200 LOC
 
 **Deliverables:**
+
 - `phenotype-cost-core` crate with examples
 - Python bindings via PyO3 (for VibeProxy Python integration)
 - Tests: 100+ property-based tests for price accuracy
@@ -83,6 +93,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Blockers:** None
 
 **Metrics:**
+
 - Input tokens ±5% accuracy vs official APIs
 - Budget enforcement latency <10ms
 - Zero runtime panics
@@ -96,6 +107,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Components:**
 
 1. **Model Registry Structure**
+
    ```rust
    pub struct ModelMetadata {
        id: String, // "gpt-4-turbo", "claude-3-opus", etc.
@@ -110,10 +122,12 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        deprecated_date: Option<Date>,
    }
    ```
+
    - Extract from: `model_metadata.py` (14.3K LOC)
    - ~1,500 LOC
 
 2. **Provider Endpoints**
+
    ```rust
    pub struct ProviderConfig {
        name: String, // "openai", "anthropic", etc.
@@ -123,13 +137,16 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        supported_models: Vec<String>,
    }
    ```
+
    - ~800 LOC
 
 3. **Model Alias Resolver**
+
    ```rust
    pub fn resolve_alias(alias: &str) -> Result<&ModelMetadata>
    // Handles: "gpt4" → "gpt-4-turbo", "claude" → "claude-3-opus", etc.
    ```
+
    - Extract from: `harness_model_mapping.py` (5.7K LOC)
    - ~600 LOC
 
@@ -141,6 +158,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
    - Example: 0.3.0 adds GPT-4o, deprecates text-davinci-003
 
 **Deliverables:**
+
 - `phenotype-models` crate with embedded JSON registry
 - Model update CLI tool: `phenotype-models-update --add gpt-4o`
 - Tests: Verify all models have pricing, endpoints, capabilities
@@ -150,6 +168,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Blockers:** Need to scrape/maintain official model lists
 
 **Metrics:**
+
 - Model lookup: <1µs (in-memory)
 - Registry JSON <50KB gzipped
 - 99.9% uptime of model availability
@@ -163,6 +182,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Components:**
 
 1. **Header Types** (GW-* series from cliproxy_adapter.py)
+
    ```rust
    pub struct ObservabilityHeaders {
        event_id: String, // "tg-<8hex>" (GW-35)
@@ -173,10 +193,12 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        cache_ttl_seconds: Option<u32>,
    }
    ```
+
    - Extract from: `cliproxy_adapter.py` (lines 195-500)
    - ~800 LOC
 
 2. **Metrics Definitions**
+
    ```rust
    pub enum Metric {
        TokensProcessed(usize),
@@ -188,9 +210,11 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        FallbackActivations,
    }
    ```
+
    - ~400 LOC
 
 3. **Tracing Context**
+
    ```rust
    pub struct TraceContext {
        trace_id: String,
@@ -199,9 +223,11 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        metadata: Map<String, String>,
    }
    ```
+
    - ~300 LOC
 
 **Deliverables:**
+
 - `phenotype-observability` crate (serializable JSON/binary)
 - Integration with `tracing` crate for Rust
 - Python bindings via PyO3
@@ -210,6 +236,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Blockers:** None
 
 **Metrics:**
+
 - Serialization overhead <1ms
 - JSON size <500 bytes per request
 - Zero allocations on hot path
@@ -223,6 +250,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Components:**
 
 1. **Core Router Trait**
+
    ```rust
    #[async_trait]
    pub trait Router {
@@ -245,9 +273,11 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        latency_estimate_ms: f64,
    }
    ```
+
    - ~600 LOC
 
 2. **Error Types**
+
    ```rust
    pub enum RoutingError {
        NoBudget { limit: f64, required: f64 },
@@ -256,9 +286,11 @@ This enables **fast iteration** on routing algorithms and cost models without cr
        RateLimited { reset_after_ms: u64 },
    }
    ```
+
    - ~200 LOC
 
 3. **Common Implementations**
+
    ```rust
    // Adapters for existing 43 routers
    pub struct CostAwareRouter { ... }
@@ -266,18 +298,22 @@ This enables **fast iteration** on routing algorithms and cost models without cr
    pub struct ParsingRouter { ... }
    // (each wrapped to implement the trait)
    ```
+
    - ~2,000 LOC (adapters for 10-15 key routers)
 
 4. **Router Composition** (composite pattern)
+
    ```rust
    pub struct CompositeRouter {
        routers: Vec<Box<dyn Router>>,
        strategy: CompositionStrategy, // first_success, weighted_vote, etc.
    }
    ```
+
    - ~800 LOC
 
 **Deliverables:**
+
 - `phenotype-router-traits` crate
 - Adapter implementations for 10-15 key routers (cost-aware, circuit-breaker, pareto, etc.)
 - Python bindings (PyO3)
@@ -287,6 +323,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 **Blockers:** Requires stable interface agreement with LiteLLM router
 
 **Metrics:**
+
 - Router latency: <5ms for decision
 - Memory footprint per router: <10MB
 - No blocked threads (all async)
@@ -390,6 +427,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 ## Success Criteria
 
 ### Phase 1
+
 - [ ] All 4 crates compile without warnings
 - [ ] 100+ property-based tests pass (pricing accuracy, token counting)
 - [ ] PyO3 bindings work with Python 3.8+
@@ -397,17 +435,20 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 - [ ] Published to crates.io with 1000+ downloads (first month)
 
 ### Phase 2
+
 - [ ] VibeProxy uses all 4 crates (if fork activated)
 - [ ] VibeProxy CI passes with new dependencies
 - [ ] Integration tests: VibeProxy ↔ Phenotype routing layer
 
 ### Phase 3
+
 - [ ] All 43 routers adapted to trait-based interface
 - [ ] Phenotype tests pass (100% coverage of routing)
 - [ ] Performance: router decision latency <5ms (p99)
 - [ ] Legacy Python code archived, not deleted
 
 ### Phase 4
+
 - [ ] No Python code in `routing_impl/*.py` (all legacy)
 - [ ] Integration tests pass with new clean architecture
 - [ ] Migration guide published
@@ -441,6 +482,7 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 ## Deliverables Checklist
 
 ### Phase 1
+
 - [ ] `phenotype-cost-core` crate (Rust + PyO3)
 - [ ] `phenotype-models` crate (with JSON registry)
 - [ ] `phenotype-observability` crate
@@ -451,16 +493,19 @@ This enables **fast iteration** on routing algorithms and cost models without cr
 - [ ] Model update CLI tool
 
 ### Phase 2 (conditional)
+
 - [ ] VibeProxy fork using all 4 crates
 - [ ] VibeProxy PR with integration tests
 
 ### Phase 3
+
 - [ ] All 43 routers adapted to trait-based
 - [ ] Python bindings for all 4 crates
 - [ ] Phenotype v0.4.0 release
 - [ ] Legacy code archived
 
 ### Phase 4
+
 - [ ] Migration guide published
 - [ ] Release notes complete
 - [ ] Zero legacy Python router code in active use

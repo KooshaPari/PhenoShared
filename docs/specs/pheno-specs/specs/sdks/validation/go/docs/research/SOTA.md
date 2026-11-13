@@ -21,6 +21,7 @@ This document provides a comprehensive analysis of the Go validation library eco
 5. **Type Safety**: No library provides compile-time validation guarantees without code generation
 
 **phenotype-validation-go Strategic Opportunity**: Create a hybrid approach that combines:
+
 - The ergonomics of struct tags (go-playground style)
 - The performance of functional validation (ozzo style)
 - First-class context propagation (industry gap)
@@ -109,7 +110,7 @@ This document provides a comprehensive analysis of the Go validation library eco
 
 ### 1. go-playground/validator (Industry Standard)
 
-**Repository**: https://github.com/go-playground/validator  
+**Repository**: <https://github.com/go-playground/validator>  
 **Stars**: ~15,200  
 **Current Version**: v10.22.0 (March 2024)  
 **Go Version**: 1.18+ (generics support)  
@@ -538,7 +539,7 @@ func ValidationMiddleware[T any]() gin.HandlerFunc {
 
 ### 2. asaskevich/govalidator (Legacy Standard)
 
-**Repository**: https://github.com/asaskevich/govalidator  
+**Repository**: <https://github.com/asaskevich/govalidator>  
 **Stars**: ~6,100  
 **Last Significant Release**: v11 (2022)  
 **License**: MIT  
@@ -636,7 +637,7 @@ func validateDynamicData() {
 
 ### 3. ozzo-validation (Functional Approach)
 
-**Repository**: https://github.com/go-ozzo/ozzo-validation  
+**Repository**: <https://github.com/go-ozzo/ozzo-validation>  
 **Stars**: ~3,800  
 **Current Version**: v4.3.3  
 **Go Version**: 1.18+  
@@ -915,7 +916,7 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 
 ### 4. protoc-gen-validate (Code Generation)
 
-**Repository**: https://github.com/bufbuild/protoc-gen-validate  
+**Repository**: <https://github.com/bufbuild/protoc-gen-validate>  
 **Stars**: ~3,400  
 **Maintainer**: Buf (protocol buffer ecosystem)  
 **License**: Apache 2.0  
@@ -1073,7 +1074,7 @@ var _User_ID_Pattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-
 
 ### 5. gookit/validate (i18n-Focused)
 
-**Repository**: https://github.com/gookit/validate  
+**Repository**: <https://github.com/gookit/validate>  
 **Stars**: ~1,200  
 **License**: MIT  
 **Focus**: Internationalization and localization
@@ -2139,6 +2140,7 @@ Legend:
 ### For Library Selection
 
 **Choose go-playground/validator when**:
+
 - Maximum ecosystem compatibility required
 - Struct tag ergonomics are critical
 - i18n with 40+ locales needed
@@ -2147,6 +2149,7 @@ Legend:
 - Migration from govalidator in progress
 
 **Choose ozzo-validation when**:
+
 - Clean architecture principles prioritized
 - Testability and mocking are critical
 - Error aggregation mandatory
@@ -2155,6 +2158,7 @@ Legend:
 - Custom validation logic extensive
 
 **Choose protoc-gen-validate when**:
+
 - gRPC/protobuf ecosystem committed
 - Performance is paramount (10-50x gain)
 - Multi-language validation needed
@@ -2162,6 +2166,7 @@ Legend:
 - Enterprise/governance requirements strict
 
 **Choose phenotype-validation-go when**:
+
 - Context propagation for timeouts/cancellation needed
 - Both tags and functional patterns required
 - Error aggregation with performance combined
@@ -2172,6 +2177,7 @@ Legend:
 ### Migration Recommendations
 
 **From govalidator → go-playground**:
+
 ```go
 // Step 1: Find/replace imports
 import "github.com/asaskevich/govalidator"
@@ -2203,6 +2209,7 @@ if err := validate.Struct(user); err != nil {
 ```
 
 **From go-playground → phenotype-validation-go** (migration path):
+
 ```go
 // Step 1: Update imports (drop-in compatible)
 import "github.com/phenotype/phenotype-validation-go/pkg/validator"
@@ -2221,6 +2228,7 @@ validate.ValidateStruct(ctx, user)  // New API
 ### Development Priorities for phenotype-validation-go
 
 **Phase 1: Core (MVP)**
+
 1. Rule interface with context propagation
 2. 50+ built-in validators (most common)
 3. Struct tag parsing with caching
@@ -2228,6 +2236,7 @@ validate.ValidateStruct(ctx, user)  // New API
 5. Basic i18n support (10 locales)
 
 **Phase 2: Advanced Features**
+
 1. Rule composition (And, Or, Not, When)
 2. Validation pipeline API
 3. OpenAPI/JSON Schema export
@@ -2235,6 +2244,7 @@ validate.ValidateStruct(ctx, user)  // New API
 5. Advanced i18n (40+ locales)
 
 **Phase 3: Performance & Enterprise**
+
 1. Zero-allocation hot path optimization
 2. Optional code generation
 3. WASM compilation support
@@ -2249,41 +2259,41 @@ validate.ValidateStruct(ctx, user)  // New API
 
 | Library | Docs URL | Quality |
 |---------|----------|---------|
-| go-playground/validator | https://pkg.go.dev/github.com/go-playground/validator/v10 | ★★★★★ |
-| ozzo-validation | https://pkg.go.dev/github.com/go-ozzo/ozzo-validation/v4 | ★★★★☆ |
-| govalidator | https://pkg.go.dev/github.com/asaskevich/govalidator | ★★★☆☆ |
-| protoc-gen-validate | https://github.com/bufbuild/protoc-gen-validate | ★★★★☆ |
-| gookit/validate | https://github.com/gookit/validate | ★★★☆☆ |
+| go-playground/validator | <https://pkg.go.dev/github.com/go-playground/validator/v10> | ★★★★★ |
+| ozzo-validation | <https://pkg.go.dev/github.com/go-ozzo/ozzo-validation/v4> | ★★★★☆ |
+| govalidator | <https://pkg.go.dev/github.com/asaskevich/govalidator> | ★★★☆☆ |
+| protoc-gen-validate | <https://github.com/bufbuild/protoc-gen-validate> | ★★★★☆ |
+| gookit/validate | <https://github.com/gookit/validate> | ★★★☆☆ |
 
 ### Go Language Resources
 
-- Go Reflection Deep Dive: https://go.dev/blog/laws-of-reflection
-- Go Generics Tutorial: https://go.dev/doc/tutorial/generics
-- Context Package: https://pkg.go.dev/context
-- Sync.Pool: https://pkg.go.dev/sync#Pool
-- Benchmarking: https://pkg.go.dev/testing#hdr-Benchmarks
+- Go Reflection Deep Dive: <https://go.dev/blog/laws-of-reflection>
+- Go Generics Tutorial: <https://go.dev/doc/tutorial/generics>
+- Context Package: <https://pkg.go.dev/context>
+- Sync.Pool: <https://pkg.go.dev/sync#Pool>
+- Benchmarking: <https://pkg.go.dev/testing#hdr-Benchmarks>
 
 ### Web Framework Integration Guides
 
-- Gin: https://gin-gonic.com/docs/examples/validating-form-data/
-- Echo: https://echo.labstack.com/docs/binding#validate-data
-- Fiber: https://docs.gofiber.io/api/middleware/validator
-- Chi: https://go-chi.io/#/pages/middleware
+- Gin: <https://gin-gonic.com/docs/examples/validating-form-data/>
+- Echo: <https://echo.labstack.com/docs/binding#validate-data>
+- Fiber: <https://docs.gofiber.io/api/middleware/validator>
+- Chi: <https://go-chi.io/#/pages/middleware>
 
 ### Related Projects
 
-- JSON Schema: https://json-schema.org/
-- OpenAPI: https://swagger.io/specification/
-- Protobuf: https://protobuf.dev/
-- Cue Lang: https://cuelang.org/ (configuration validation)
-- Rego (OPA): https://www.openpolicyagent.org/ (policy validation)
+- JSON Schema: <https://json-schema.org/>
+- OpenAPI: <https://swagger.io/specification/>
+- Protobuf: <https://protobuf.dev/>
+- Cue Lang: <https://cuelang.org/> (configuration validation)
+- Rego (OPA): <https://www.openpolicyagent.org/> (policy validation)
 
 ### Community Resources
 
-- r/golang: https://reddit.com/r/golang
-- Gophers Slack: https://invite.slack.golangbridge.org/
-- Go Time Podcast: https://changelog.com/gotime
-- Golang Weekly: https://golangweekly.com/
+- r/golang: <https://reddit.com/r/golang>
+- Gophers Slack: <https://invite.slack.golangbridge.org/>
+- Go Time Podcast: <https://changelog.com/gotime>
+- Golang Weekly: <https://golangweekly.com/>
 
 ---
 

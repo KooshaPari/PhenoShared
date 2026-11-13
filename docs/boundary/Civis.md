@@ -47,6 +47,7 @@ depended_on_by: []
 **Reviewer:** forge subagent (batch4 absorption queue)
 **Worklog / finding:** `audits/absorption-justifications/Civis-2026-07-17.md`
 **Decisions:**
+
 - Adopt **ARCHIVE_ONLY** disposition per task failsafe clause (cargo not on PATH on this host; 22 GB `target/` artifact dir; 28+ workspace members + Bevy 0.18 client + Godot/Unreal sub-projects; `vendor/phenodocs` submodule).
 - Update `repo-Civis` registry row: `disposition: AFFIRM → ARCHIVE_ONLY`, `target: phenotype-registry`, `boundary_doc: docs/boundary/Civis.md`.
 - Archive `<REDACTED>/Civis` on GitHub via `gh repo archive <REDACTED>/Civis -y`.

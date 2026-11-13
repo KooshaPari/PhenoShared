@@ -22,6 +22,7 @@
 Conduct a comprehensive catalog of all 19 private repositories. Each repo is documented with its purpose, ownership, access controls, dependencies, and relationship to public repos. Sensitive content is inventoried for security review.
 
 ### Subtasks
+
 - [ ] T001 Query GitHub API for all private repos with metadata (size, language, last activity)
 - [ ] T002 Document each repo's purpose and functionality from README and code analysis
 - [ ] T003 Identify ownership and access controls for each repo (who has access, permission levels)
@@ -33,9 +34,11 @@ Conduct a comprehensive catalog of all 19 private repositories. Each repo is doc
 - [ ] T009 Validate catalog accuracy: cross-reference with repo owners
 
 ### Dependencies
+
 - None (starting WP for this spec)
 
 ### Risks & Mitigations
+
 - Access limitations: Ensure proper credentials for all private repos before starting
 - Sensitive content exposure: Handle with care, document findings securely, do not log sensitive data
 
@@ -58,6 +61,7 @@ Conduct a comprehensive catalog of all 19 private repositories. Each repo is doc
 Complete the three core agent infrastructure private repositories. phenotype-agent-core provides agent dispatch and lifecycle management, phenotype-vessel provides container utilities, and phenotype-sentinel provides security monitoring. These are foundational private repos that other private and public repos depend on.
 
 ### Subtasks
+
 - [ ] T010 Audit phenotype-agent-core: existing code, gaps, dependencies
 - [ ] T011 Complete agent dispatch: create, start, stop, monitor agents
 - [ ] T012 Complete agent lifecycle management: state machine, health checks, recovery
@@ -73,9 +77,11 @@ Complete the three core agent infrastructure private repositories. phenotype-age
 - [ ] T022 Run quality checks across all three repos
 
 ### Dependencies
+
 - WP-001 (catalog complete, understanding of repo purposes and dependencies)
 
 ### Risks & Mitigations
+
 - Scope creep in core repos: Strict scope enforcement, defer additional features to future specs
 - Security sensitivity in sentinel: Handle threat detection rules carefully, review before committing
 
@@ -100,6 +106,7 @@ Complete the three core agent infrastructure private repositories. phenotype-age
 Complete the five application/tool private repositories. Each provides distinct functionality: schema generation, feature flags, database utilities, Cursor integration, and civic data tools. These are standalone tools that serve specific purposes within the Phenotype ecosystem.
 
 ### Subtasks
+
 - [ ] T023 Audit Schemaforge: existing schema generation code, gaps
 - [ ] T024 Complete Schemaforge: schema validation, export formats (JSON Schema, Protobuf, OpenAPI)
 - [ ] T025 Audit Flagward: existing feature flag code, gaps
@@ -115,9 +122,11 @@ Complete the five application/tool private repositories. Each provides distinct 
 - [ ] T035 Run quality checks across all five repos
 
 ### Dependencies
+
 - WP-001 (catalog complete, understanding of repo purposes)
 
 ### Risks & Mitigations
+
 - Multi-language complexity: Rust (Schemaforge), TypeScript (Flagward, Cursora), Go (Civis). (Prismal removed from WP-003 scope — archived 2026-05-03.)
 - UI components in Flagward: Keep UI minimal, focus on API completeness first
 
@@ -139,6 +148,7 @@ Complete the five application/tool private repositories. Each provides distinct 
 Identify and analyze duplicates between private and public repositories. Six private repos have public equivalents that may contain overlapping functionality. Each duplicate pair is analyzed and a resolution recommendation is made.
 
 ### Subtasks
+
 - [ ] T036 Compare template-lang-go (private) vs template-lang-go (public): overlap analysis
 - [ ] T037 Compare template-commons (private) vs template-lang-commons (public): overlap analysis
 - [ ] T038 Compare phenotype-docs-engine (private) vs phenotype-docs-engine (public): overlap analysis
@@ -151,9 +161,11 @@ Identify and analyze duplicates between private and public repositories. Six pri
 - [ ] T045 Incorporate stakeholder feedback into resolution plan
 
 ### Dependencies
+
 - WP-001 (catalog complete, all repos documented)
 
 ### Risks & Mitigations
+
 - Stakeholder disagreement: Clear rationale, data-driven recommendations, appeal process
 - Hidden functionality differences: Deep code comparison, not just surface-level analysis
 
@@ -176,6 +188,7 @@ Identify and analyze duplicates between private and public repositories. Six pri
 Create a governance model and sync plan for managing private repositories going forward. This includes sync strategies for private-public repo pairs, access control procedures, security requirements, and maintenance schedules. The comprehensive private repo catalog is published as the final deliverable.
 
 ### Subtasks
+
 - [ ] T046 Design sync plan for each private-public pair: one-way sync, two-way sync, or manual
 - [ ] T047 Define sync frequency: per-repo schedule based on change velocity
 - [ ] T048 Define conflict resolution: how to handle divergent changes between private and public
@@ -188,9 +201,11 @@ Create a governance model and sync plan for managing private repositories going 
 - [ ] T055 Implement approved governance procedures
 
 ### Dependencies
+
 - WP-004 (duplicate analysis complete, sync targets identified)
 
 ### Risks & Mitigations
+
 - Sync complexity: Start with manual sync, automate incrementally
 - Security requirements: Involve security team in requirements definition
 - Governance adoption: Clear documentation, training for team members

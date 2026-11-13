@@ -44,6 +44,7 @@ phenotype-forge is a next-generation build system and task orchestrator designed
 ### Problem Statement
 
 Current build systems force tradeoffs between:
+
 - **Performance vs. Simplicity**: Fast tools (Bazel) are complex; simple tools lack features
 - **JavaScript vs. Polyglot**: JS tools don't handle native code well
 - **Caching vs. Correctness**: Aggressive caching risks; conservative caching wastes time
@@ -52,6 +53,7 @@ Current build systems force tradeoffs between:
 ### Solution Approach
 
 phenotype-forge addresses these tradeoffs through:
+
 - **Rust-based core**: Performance without memory safety compromises
 - **AI integration**: Smart caching, affected detection, and optimization
 - **Universal plugin system**: Support for any language or framework
@@ -80,6 +82,7 @@ phenotype-forge addresses these tradeoffs through:
 ### 1.1 Project Context
 
 The Phenotype ecosystem requires a build system that can:
+
 - Handle polyglot projects (Rust, TypeScript, Go, Python)
 - Scale from small projects to enterprise monorepos
 - Integrate with AI-assisted development workflows
@@ -88,6 +91,7 @@ The Phenotype ecosystem requires a build system that can:
 ### 1.2 Problem Statement
 
 Current build systems force tradeoffs between:
+
 - **Performance vs. Simplicity**: Fast tools (Bazel) are complex; simple tools lack features
 - **JavaScript vs. Polyglot**: JS tools don't handle native code well
 - **Caching vs. Correctness**: Aggressive caching risks; conservative caching wastes time
@@ -96,6 +100,7 @@ Current build systems force tradeoffs between:
 ### 1.3 Solution Approach
 
 phenotype-forge addresses these tradeoffs through:
+
 - **Rust-based core**: Performance without memory safety compromises
 - **AI integration**: Smart caching, affected detection, and optimization
 - **Universal plugin system**: Support for any language or framework
@@ -194,6 +199,7 @@ Webpack      ██████████████████████�
 #### 3.2.3 Strategic Integration
 
 phenotype-forge will:
+
 1. Use **Vite** as default bundler (best DX)
 2. Offer **Bun** as fast path (CI builds)
 3. Provide **unified configuration** across bundlers
@@ -370,6 +376,7 @@ trait BuildEngine {
 ```
 
 **Build Request Structure**:
+
 ```rust
 struct BuildRequest {
     targets: Vec<TargetId>,
@@ -392,6 +399,7 @@ struct BuildResult {
 ```
 
 **Build Graph Structure**:
+
 ```rust
 struct BuildGraph {
     targets: HashMap<TargetId, Target>,
@@ -457,6 +465,7 @@ enum EdgeType {
 ```
 
 **Scheduling Algorithm**:
+
 ```rust
 async fn schedule_tasks(graph: &TaskGraph, options: ScheduleOptions) -> ScheduleResult {
     // 1. Compute topological order
@@ -1564,6 +1573,7 @@ impl QueryEngine {
 ### 16.1 Phase 1: Core Engine (MVP) - 3 months
 
 **Deliverables**:
+
 - [ ] Rust-based build graph engine
 - [ ] Content-addressable local caching (RocksDB)
 - [ ] pnpm workspace integration
@@ -1571,6 +1581,7 @@ impl QueryEngine {
 - [ ] TypeScript/Go/Rust support
 
 **Success Criteria**:
+
 - Build 1k targets in <5 seconds
 - Cache hit rate >80%
 - Configuration <20 lines
@@ -1578,6 +1589,7 @@ impl QueryEngine {
 ### 16.2 Phase 2: Developer Experience - 2 months
 
 **Deliverables**:
+
 - [ ] VS Code extension
 - [ ] Watch mode with fast rebuilds
 - [ ] Error message improvements
@@ -1585,6 +1597,7 @@ impl QueryEngine {
 - [ ] Migration guides
 
 **Success Criteria**:
+
 - HMR <50ms
 - Setup time <5 minutes
 - Documentation coverage 100%
@@ -1592,6 +1605,7 @@ impl QueryEngine {
 ### 16.3 Phase 3: Scale Features - 3 months
 
 **Deliverables**:
+
 - [ ] Remote caching (S3/R2)
 - [ ] Distributed execution
 - [ ] Cloud workspace support
@@ -1599,6 +1613,7 @@ impl QueryEngine {
 - [ ] Usage analytics
 
 **Success Criteria**:
+
 - Remote cache <50ms lookup
 - Linear scaling with workers
 - 99.9% uptime
@@ -1606,6 +1621,7 @@ impl QueryEngine {
 ### 16.4 Phase 4: Intelligence - 2 months
 
 **Deliverables**:
+
 - [ ] AI-powered optimization
 - [ ] Predictive builds
 - [ ] Automatic dependency management
@@ -1613,6 +1629,7 @@ impl QueryEngine {
 - [ ] Natural language queries
 
 **Success Criteria**:
+
 - 20% build time reduction via AI
 - Natural language query accuracy >90%
 
@@ -1868,16 +1885,16 @@ phenotype init --from-npm-scripts
 
 ### 21.3 External References
 
-1. Bazel Documentation: https://bazel.build/docs
-2. Buck2 Documentation: https://buck2.build/docs
-3. Pants Documentation: https://pantsbuild.org/docs
-4. Nx Documentation: https://nx.dev/getting-started/intro
-5. Turborepo Documentation: https://turbo.build/repo/docs
-6. Vite Documentation: https://vitejs.dev/guide/why
-7. esbuild Documentation: https://esbuild.github.io/
-8. Bun Documentation: https://bun.sh/docs
-9. pnpm Documentation: https://pnpm.io/workspaces
-10. Rush Documentation: https://rushjs.io/pages/intro/welcome/
+1. Bazel Documentation: <https://bazel.build/docs>
+2. Buck2 Documentation: <https://buck2.build/docs>
+3. Pants Documentation: <https://pantsbuild.org/docs>
+4. Nx Documentation: <https://nx.dev/getting-started/intro>
+5. Turborepo Documentation: <https://turbo.build/repo/docs>
+6. Vite Documentation: <https://vitejs.dev/guide/why>
+7. esbuild Documentation: <https://esbuild.github.io/>
+8. Bun Documentation: <https://bun.sh/docs>
+9. pnpm Documentation: <https://pnpm.io/workspaces>
+10. Rush Documentation: <https://rushjs.io/pages/intro/welcome/>
 
 ### 21.4 Academic Papers
 
@@ -2038,48 +2055,60 @@ Size        | phenotype | Buck2  | Bazel  | Nx
 ### Appendix E: Troubleshooting
 
 #### Issue: Slow cache lookups
+
 **Symptoms**: Cache operations taking >50ms
-**Solution**: 
+**Solution**:
+
 - Check RocksDB compaction settings
 - Ensure SSD storage (not HDD)
 - Verify cache directory has sufficient space
 - Run `phenotype cache verify` to check integrity
 
 #### Issue: High memory usage
+
 **Symptoms**: Process using >1GB RAM
-**Solution**: 
+**Solution**:
+
 - Reduce `cache.local.max_size` in config
 - Disable watch mode when not needed
 - Limit parallelism with `--parallel` flag
 - Enable swap if running on resource-constrained machine
 
 #### Issue: Plugin not loading
+
 **Symptoms**: Plugin command fails with "unable to load"
-**Solution**: 
+**Solution**:
+
 - Verify WASM file is valid: `wasm-validate plugin.wasm`
 - Check WASI compatibility version
 - Ensure plugin manifest is valid JSON
 - Check file permissions on plugin directory
 
 #### Issue: Remote cache 401 Unauthorized
+
 **Symptoms**: Remote cache operations failing
-**Solution**: 
+**Solution**:
+
 - Check `cache.remote.token` is set correctly
 - Verify team access in dashboard
 - Regenerate token if expired
 - Check network connectivity to cache server
 
 #### Issue: Build graph inconsistency
+
 **Symptoms**: Missing or incorrect dependencies
 **Solution**:
+
 - Run `phenotype clean` to clear stale data
 - Re-scan workspace: `phenotype build --force`
 - Check for circular dependencies
 - Verify package.json files are valid
 
 #### Issue: Slow initial scan
+
 **Symptoms**: First run takes minutes
 **Solution**:
+
 - Exclude large directories (node_modules, .git)
 - Use incremental scanning
 - Pre-build file index
@@ -2088,6 +2117,7 @@ Size        | phenotype | Buck2  | Bazel  | Nx
 ### Appendix F: Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+
 - Development setup
 - Code style guidelines
 - Testing requirements
@@ -2153,6 +2183,7 @@ forge/
 Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 
 Example:
+
 ```
 feat(cache): add RocksDB backend
 

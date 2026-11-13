@@ -117,6 +117,7 @@ Legend: ✅ = safe to archive once its merge PR is green · 🔶 = blocked, must
 | phenoShared | none via real npm name `@phenotype/shared-utils`; legacy textual refs in DataKit/ObservabilityKit/TestingKit/PhenoObservability (all either absorbed this wave or repointed under ObsKit row) — **verify no live import before archiving** | ✅ safe (verify) |
 
 ### Must stay standalone (per plan, NOT archived)
+
 None among these 25 — every source is a genuine absorption target. (Plan-level standalones:
 phenotype-auth-ts, HeliosLab, Conft, PhenoMCP, PhenoSpecs — not part of this wave.)
 
@@ -161,7 +162,6 @@ phenotype-auth-ts, HeliosLab, Conft, PhenoMCP, PhenoSpecs — not part of this w
 | `PlatformKit` | DevHex | consumers | phenotype-go-sdk | ✅ repointed |
 | `PhenoAgent` | PhenoDevOps, Pyron | `Cargo.toml` | Agentora `pheno-agent` | 🔶 blocked |
 | `FocalPoint` | (none) | — | HexaKit manual | 🔶 867MB vendor |
-
 
 **SAFE after merge (12)** — no external dependents:
 `Metron` ✅, `FocalPoint`, `phenoXddLib` ✅, `DataKit`, `ResilienceKit`, `TestingKit`, `PhenoKits` ✅,

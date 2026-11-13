@@ -127,6 +127,7 @@ If `next run` is `never` or `none`, the plist has a malformed schedule (e.g.
 ### "Bootstrap failed: 5: I/O error"
 
 Either:
+
 - The agent is already loaded (re-run `bootstrap` and it silently succeeds), or
 - The .plist file is malformed (`plutil -lint <plist>` to verify)
 

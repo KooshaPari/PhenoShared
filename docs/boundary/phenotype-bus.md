@@ -37,6 +37,7 @@ Archived reference only. No active boundary work remains.
 **Reviewer:** codex
 **Worklog / finding:** `worklogs/L7-001-intent-boundary-curation-2026-06-17.json`
 **Decisions:**
+
 - Archived and delete-ready; no active boundary surface remains.
 
 **Next review:** 2026-07-17

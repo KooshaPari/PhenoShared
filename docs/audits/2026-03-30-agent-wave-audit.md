@@ -7,7 +7,7 @@
 **Location:** `/Users/<REDACTED>/Repos/agent-wave/`
 **Language:** TypeScript / JavaScript
 **Package Manager:** Bun v1.2.0
-**Repository:** https://github.com/KooshaPari/agent-wave
+**Repository:** <https://github.com/KooshaPari/agent-wave>
 **License:** MIT
 **Size:** 3.3 MB, 404 files
 
@@ -34,12 +34,14 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
 ## Key Findings
 
 ### Completed (E1: Repository Governance)
+
 - ✅ Pre-commit YAML linting configured
 - ✅ CI/CD quality gates implemented
 - ✅ Self-merge gate for bot PRs
 - ✅ 6/6 Functional Requirements complete (FR-GOV-001 to FR-GOV-006)
 
 ### Planned (E2–E5: 28 FRs)
+
 - E2: Wave Execution Engine (13 FRs)
 - E3: Agent Lifecycle Management (7 FRs)
 - E4: AgentAPI++ Integration (4 FRs)
@@ -47,12 +49,14 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
 
 ## Dependencies
 
-**External:** 
+**External:**
+
 - @phenotype/docs (0.1.0) — design system
 - vitepress (1.6.4) — documentation framework
 - bun (1.2.0) — runtime
 
 **Ecosystem Integration:**
+
 - AgentAPI++ (blocks E4)
 - agentops-policy-federation (blocks E5)
 - phenotype-contracts (candidate for cross-repo sharing)
@@ -77,10 +81,12 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
 ## Blockers
 
 **External Blockers:**
+
 - ❌ AgentAPI++ task submission API not published
 - ❌ Policy federation endpoint not documented
 
 **Internal Blockers:**
+
 - ⚠️ Submodule dependency (docs/phenodocs) — verify stability
 
 ## Summary

@@ -17,6 +17,7 @@ Currently, these implementations may have overlapping concerns and duplicated ty
 ## Problem Statement
 
 Potential duplication between MCP implementations:
+
 - **Type duplication**: helios-mcp-server and phenotype-mcp-core may define overlapping types
 - **Incompatible serialization**: Different JSON schemas for MCP messages
 - **Wasted maintenance**: Two teams maintaining similar MCP code
@@ -81,24 +82,30 @@ After (Unified):
 ## Audit Plan
 
 ### Step 1: Type Inventory
+
 Inventory MCP types in both implementations:
 
 **helios-mcp-server types:**
+
 - `McpMessage`, `McpRequest`, `McpResponse`
 - `Tool`, `ToolCall`, `ToolResult`
 - `Resource`, `ResourceTemplate`
 - `Content`, `TextContent`, `ImageContent`
 
 **phenotype-mcp-core types:**
+
 - (Need to audit actual contents)
 
 ### Step 2: Compare & Map
+
 - Identify exact duplicates
 - Identify semantic equivalents (same purpose, different names)
 - Identify unique types (only in one implementation)
 
 ### Step 3: Unification Strategy
+
 For each type group:
+
 - **Exact duplicates**: Use phenotype-mcp-core version
 - **Semantic equivalents**: Choose best design, migrate both
 - **Unique types**: Move to phenotype-mcp-core if generally useful

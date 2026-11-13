@@ -57,6 +57,7 @@ agileplus
 #### High Priority
 
 1. **Shell Completion**
+
    ```bash
    # Missing: --completions flag
    agileplus --completions bash > /etc/bash_completion.d/agileplus
@@ -64,12 +65,14 @@ agileplus
    ```
 
 2. **Interactive Mode**
+
    ```rust
    // Missing: Interactive TUI for specify, plan, validate
    // Could use: ratatui, cursive, or tui-rs
    ```
 
 3. **Progress Indicators**
+
    ```rust
    // Missing: Progress bars for long operations
    // Example: git operations, API calls
@@ -77,6 +80,7 @@ agileplus
    ```
 
 4. **Colorized Output**
+
    ```rust
    // Missing: Colored terminal output
    // Could use: ansi_term, colored, yansi
@@ -85,13 +89,15 @@ agileplus
 
 #### Medium Priority
 
-5. **Enhanced Error Messages**
+1. **Enhanced Error Messages**
+
    ```rust
    // Current: anyhow error chain
    // Better: Context-aware suggestions
    ```
 
-6. **Command Aliases**
+2. **Command Aliases**
+
    ```bash
    # Missing: Short aliases
    agileplus spec     # instead of specify
@@ -99,7 +105,8 @@ agileplus
    agileplus val      # instead of validate
    ```
 
-7. **Configuration File**
+3. **Configuration File**
+
    ```toml
    # ~/.agileplus/config.toml
    [defaults]
@@ -168,6 +175,7 @@ struct StubAgentAdapter;
 #### High Priority
 
 1. **Streaming Responses**
+
    ```rust
    // Missing: Server-Sent Events for long operations
    // Example: validate, ship commands
@@ -177,6 +185,7 @@ struct StubAgentAdapter;
    ```
 
 2. **Agent-Friendly Errors**
+
    ```json
    // Current: Human-readable errors
    // Better: Structured error codes for agents
@@ -195,6 +204,7 @@ struct StubAgentAdapter;
    ```
 
 3. **Batch Operations**
+
    ```rust
    // Missing: Bulk operations for agents
    // Example: Implement multiple WPs at once
@@ -203,13 +213,15 @@ struct StubAgentAdapter;
 
 #### Medium Priority
 
-4. **Agent Context Injection**
+1. **Agent Context Injection**
+
    ```rust
    // Missing: Standardized context for agents
    // Could use: OpenAI function calling format
    ```
 
-5. **Progress Webhooks**
+2. **Progress Webhooks**
+
    ```rust
    // Missing: Webhook callbacks for long operations
    // Could notify agent of progress via HTTP POST
@@ -273,6 +285,7 @@ Audit of developer experience - onboarding, documentation, IDE support, and buil
 #### High Priority
 
 1. **Dev Container**
+
    ```dockerfile
    # .devcontainer/Dockerfile
    # Missing: Development environment container
@@ -280,6 +293,7 @@ Audit of developer experience - onboarding, documentation, IDE support, and buil
    ```
 
 2. **Pre-commit Hooks**
+
    ```yaml
    # .pre-commit-config.yaml
    # Missing: Standardized pre-commit hooks
@@ -287,6 +301,7 @@ Audit of developer experience - onboarding, documentation, IDE support, and buil
    ```
 
 3. **Fast CI with Caching**
+
    ```yaml
    # .github/workflows/ci.yml
    # Missing: sccache, cargo cache
@@ -294,6 +309,7 @@ Audit of developer experience - onboarding, documentation, IDE support, and buil
    ```
 
 4. **Cargo Dist for Releases**
+
    ```toml
    # Missing: cargo-dist integration
    # Would provide: Cross-platform releases, installers
@@ -301,19 +317,22 @@ Audit of developer experience - onboarding, documentation, IDE support, and buil
 
 #### Medium Priority
 
-5. **IDE Debugging Support**
+1. **IDE Debugging Support**
+
    ```vscode
    // .vscode/launch.json
    // Missing: Debug configurations for CLI
    ```
 
-6. **Documentation Generator**
+2. **Documentation Generator**
+
    ```rust
    // Missing: cargo doc --document-private-items
    // Missing: docs.rs integration
    ```
 
-7. **ASCIINEMA Recording**
+3. **ASCIINEMA Recording**
+
    ```bash
    # Missing: Demo recording scripts
    # For: README, onboarding
@@ -423,7 +442,7 @@ enum Commands {
 ### Related
 
 - `crates/agileplus-cli/src/main.rs`
-- https://docs.rs/clap_complete
+- <https://docs.rs/clap_complete>
 
 ---
 
@@ -483,7 +502,7 @@ fn draw_validation_ui<B: Backend>(f: &mut Frame<B>, state: &ValidationState) {
 ### Related
 
 - `crates/agileplus-cli/src/commands/validate.rs`
-- https://ratatui.rs/
+- <https://ratatui.rs/>
 
 ---
 
@@ -572,6 +591,7 @@ Documentation experience improvements for developers and users.
 #### High Priority
 
 1. **API Reference**
+
    ```
    Missing: OpenAPI/Swagger docs
    Should: Generate from code annotations
@@ -579,6 +599,7 @@ Documentation experience improvements for developers and users.
    ```
 
 2. **Architecture Guide**
+
    ```
    Missing: System architecture overview
    Should: ADR-based architecture docs
@@ -586,6 +607,7 @@ Documentation experience improvements for developers and users.
    ```
 
 3. **Tutorials**
+
    ```
    Missing: Getting started guide
    Missing: Feature walkthrough
@@ -594,13 +616,15 @@ Documentation experience improvements for developers and users.
 
 #### Medium Priority
 
-4. **Cheat Sheet**
+1. **Cheat Sheet**
+
    ```markdown
    # Quick reference for common commands
    # PDF/HTML format for wall display
    ```
 
-5. **Troubleshooting Guide**
+2. **Troubleshooting Guide**
+
    ```markdown
    # Common errors and fixes
    # Debug techniques
@@ -933,6 +957,7 @@ Comparison of modern TUI frameworks for building rich terminal user interfaces i
 **What:** Declarative TUI framework (successor to tui-rs)
 
 **Key Features:**
+
 - 100% thread-safe
 - Layout engine (block, flex, grid)
 - Widget library (paragraph, table, chart, gauge)
@@ -941,6 +966,7 @@ Comparison of modern TUI frameworks for building rich terminal user interfaces i
 - Multiple backends (crossterm, termion, ncurses)
 
 **Hello World:**
+
 ```rust
 use ratatui::{
     Terminal,
@@ -967,6 +993,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 **Async Integration:**
+
 ```rust
 use ratatui::async_pipe::{Receiver, Sender};
 
@@ -992,12 +1019,14 @@ async fn async_render(rx: Receiver<AppEvent>) {
 **What:** Simple TUI framework for Rust
 
 **Key Features:**
+
 - Simple API
 - Good documentation
 - Synchronous only
 - Event handling
 
 **Hello World:**
+
 ```rust
 use cursive::{Cursive, views::TextView};
 
@@ -1013,12 +1042,14 @@ fn main() {
 **What:** Rich TUI framework in Python
 
 **Key Features:**
+
 - CSS-like styling
 - React-like reactivity
 - Built-in widgets
 - Async support
 
 **Hello World:**
+
 ```python
 from textual.app import App
 from textual.widgets import Static
@@ -1072,6 +1103,7 @@ if __name__ == "__main__":
 #### 1. Structured Output
 
 **Current:** Natural language responses
+
 ```json
 {
   "message": "The feature was created successfully. The ID is abc123."
@@ -1079,6 +1111,7 @@ if __name__ == "__main__":
 ```
 
 **Better:** Structured JSON with schema
+
 ```json
 {
   "status": "success",
@@ -1097,12 +1130,14 @@ if __name__ == "__main__":
 #### 2. Error Codes for Agents
 
 **Current:** Human-readable
+
 ```
 Error: governance check failed
 Rule GOV-001 not met: code coverage 45% < 80%
 ```
 
 **Better:** Machine-readable with fix hints
+
 ```json
 {
   "error": {
@@ -1126,6 +1161,7 @@ Rule GOV-001 not met: code coverage 45% < 80%
 #### 3. Streaming Responses
 
 **Current:** Batch response
+
 ```json
 {
   "results": ["item1", "item2", "item3"]
@@ -1133,6 +1169,7 @@ Rule GOV-001 not met: code coverage 45% < 80%
 ```
 
 **Better:** Server-Sent Events (SSE)
+
 ```
 event: progress
 data: {"current": 1, "total": 10, "message": "Processing item 1"}
@@ -1150,6 +1187,7 @@ data: {"total": 10, "successful": 9, "failed": 1}
 #### 4. Tool Calling Protocol
 
 **Standard:** OpenAI function calling format
+
 ```json
 {
   "tool_calls": [
@@ -1174,12 +1212,14 @@ data: {"total": 10, "successful": 9, "failed": 1}
 **What:** Standard protocol for AI tool integration
 
 **Benefits:**
+
 - 70%+ of AI applications use MCP
 - Vendor-neutral tool definitions
 - Streaming support built-in
 - Tool versioning
 
 **Phenotype MCP Integration:**
+
 ```rust
 // phenotype-mcp-server/src/lib.rs
 
@@ -1223,12 +1263,14 @@ impl PhenotypeMcpServer {
 ### Batch Operations
 
 **Single:**
+
 ```rust
 POST /api/features
 {"title": "Feature A"}
 ```
 
 **Batch:**
+
 ```rust
 POST /api/features/batch
 {
@@ -1496,6 +1538,7 @@ How was this tested?
 - [ ] Documentation updated
 - [ ] No clippy warnings
 ```
+
 ```
 
 ### Action Items

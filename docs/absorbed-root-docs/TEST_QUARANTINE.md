@@ -27,6 +27,7 @@ This document defines how substrate manages flaky tests in CI.
 ## CI Integration
 
 The `.github/workflows/ci.yml` workflow:
+
 - Runs all tests, including quarantined ones, but quarantined tests don't gate merge
 - Posts a summary comment on PRs with the list of quarantined tests that ran
 - Tracks quarantine age and flags tests approaching the 30-day limit
@@ -34,6 +35,7 @@ The `.github/workflows/ci.yml` workflow:
 ## Owner Responsibility
 
 Each quarantined test has an assigned owner who must:
+
 - Investigate root cause within 7 days
 - File an issue for tracking
 - Update the `QUARANTINE.md` file with progress notes

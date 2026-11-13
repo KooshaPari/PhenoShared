@@ -9,6 +9,7 @@
 ## Overview
 
 Phase 2 consists of three interconnected specs:
+
 1. **phase2a-consolidation** — Scatter → Unified Structure (4 weeks)
 2. **phase2b-foundation** — Workspace Repair & Implementations (3 weeks)
 3. **phase2c-monitoring** — Router Monitor Unblocking (2 weeks)
@@ -217,6 +218,7 @@ PHASE 2C (Apr 18-28) [starts after WP-2b-005]
    - workspace-repair-agent (haiku) — WP-2a-006
 
 3. **Create AgilePlus Specs** (if AgilePlus becomes available)
+
    ```bash
    agileplus specify --title "Phase 2A: Consolidate Scattered Projects"
    agileplus task add phase2a-consolidation --id "WP01" --title "Ecosystem Audit"
@@ -251,6 +253,7 @@ PHASE 2C (Apr 18-28) [starts after WP-2b-005]
 Phase 2 spec is complete when:
 
 ### phase2a (Consolidation)
+
 - [x] All 8 FRs documented with acceptance criteria
 - [x] All 6 WPs defined with deliverables & owners
 - [x] Dependency graph clear (WP-2a-006 blocks phase2b)
@@ -258,6 +261,7 @@ Phase 2 spec is complete when:
 - [x] Effort estimated (10-11.5 hours, 15 agents)
 
 ### phase2b (Foundation)
+
 - [x] All 4 FRs documented with acceptance criteria
 - [x] All 5 WPs defined with deliverables & owners
 - [x] Dependency on phase2a clear (WP-2a-006)
@@ -265,6 +269,7 @@ Phase 2 spec is complete when:
 - [x] Effort estimated (11.5-15 hours, 6 agents)
 
 ### phase2c (Monitoring)
+
 - [x] All 3 FRs documented with acceptance criteria
 - [x] All 3 WPs defined with deliverables & owners
 - [x] Dependency on phase2b clear (WP-2b-005)

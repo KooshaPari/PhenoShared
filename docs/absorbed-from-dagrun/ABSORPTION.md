@@ -168,7 +168,6 @@ The one legitimate `--force` case is a repo whose content is provably present
 here AND whose bundle restores. Both are checkable with two commands, so there is
 no reason to force on a hunch.
 
-
 ## Operational notes for whoever reads this next
 
 Three things about the *process* of this absorption, recorded because they will

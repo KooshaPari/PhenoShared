@@ -20,22 +20,27 @@ This repository is part of the Phenotype organization ecosystem, implementing
 ## Architecture
 
 ### Components
+
 - Component A: [Description]
 - Component B: [Description]
 
 ### Data Flow
+
 1. Input → Processing → Output
 2. [Additional flow steps]
 
 ## Development Guidelines
 
 ### Code Style
+
 - Follow language-specific conventions
 - Maintain traceability to FRs (FR-XXX-NNN format)
 - Include tests with FR annotations
 
 ### FR Traceability
+
 All code changes must reference Feature Requirements:
+
 - Use @pytest.mark.traces_to("FR-XXX-NNN") for Python
 - Use #[trace_to("FR-XXX-NNN")] for Rust
 - Use tracesTo("FR-XXX-NNN") for Go/TypeScript
@@ -43,9 +48,11 @@ All code changes must reference Feature Requirements:
 ## Testing
 
 ### Test Framework
+
 - [Framework name and version]
 
 ### Running Tests
+
 ```bash
 # Run all tests
 [command]
@@ -56,12 +63,7 @@ All code changes must reference Feature Requirements:
 
 ## Dependencies
 
-- [Dependency 1]: [Purpose]
-- [Dependency 2]: [Purpose]
-
 ## Related Repositories
-
-- [repo-name]: [Relationship]
 
 ## AI Development Notes
 

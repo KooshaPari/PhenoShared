@@ -5,6 +5,7 @@ This guide covers setup and configuration of the Sentry-GitHub integration for a
 ## Overview
 
 The Sentry-GitHub integration enables:
+
 - **Auto-Issue Creation**: Errors automatically create GitHub issues
 - **Commit Linking**: Stack traces link to responsible commits
 - **Release Tracking**: Git tags automatically register as releases in Sentry
@@ -82,6 +83,7 @@ The Sentry-GitHub integration enables:
 3. Configure:
 
 **Trigger**:
+
 ```
 When: An issue is first seen
     AND has more than 5 occurrences in 5 minutes
@@ -89,6 +91,7 @@ When: An issue is first seen
 ```
 
 **Action**:
+
 ```
 Send a notification to: #agileplus-errors (Slack)
 AND Create an issue in: <REDACTED>/AgilePlus
@@ -97,7 +100,7 @@ AND Create an issue in: <REDACTED>/AgilePlus
    Labels: sentry, error, triage
 ```
 
-4. Click **Save**
+1. Click **Save**
 
 ### phenotype-infrakit Alert Rule
 
@@ -106,12 +109,14 @@ AND Create an issue in: <REDACTED>/AgilePlus
 3. Configure:
 
 **Trigger**:
+
 ```
 When: An error event is received
     AND is in the [production] environment
 ```
 
 **Action**:
+
 ```
 Send a notification to: #infrastructure-errors (Slack)
 AND Create an issue in: <REDACTED>/phenotype-infrakit
@@ -119,7 +124,7 @@ AND Create an issue in: <REDACTED>/phenotype-infrakit
    Labels: sentry, infrastructure, critical
 ```
 
-4. Click **Save**
+1. Click **Save**
 
 ### heliosCLI Alert Rule
 
@@ -128,12 +133,14 @@ AND Create an issue in: <REDACTED>/phenotype-infrakit
 3. Configure:
 
 **Trigger**:
+
 ```
 When: An error event is received
     AND error.type is one of [panic, exception, unhandled]
 ```
 
 **Action**:
+
 ```
 Send a notification to: #helioscli-errors (Slack)
 AND Create an issue in: <REDACTED>/heliosCLI
@@ -141,7 +148,7 @@ AND Create an issue in: <REDACTED>/heliosCLI
    Labels: sentry, cli, bug
 ```
 
-4. Click **Save**
+1. Click **Save**
 
 ## Step 4: Release Tracking Configuration
 
@@ -200,6 +207,7 @@ let _guard = sentry::init(sentry::ClientOptions {
 ## Step 5: Slack Integration (Optional)
 
 ### Prerequisites
+
 - Sentry organization must have admin permissions
 - Slack workspace where you have admin rights
 
@@ -219,6 +227,7 @@ let _guard = sentry::init(sentry::ClientOptions {
 1. Project Settings → **Integrations** → **Slack**
 2. Select channel for notifications
 3. Configure what triggers notifications:
+
    ```
    - New issues
    - Regression detected
@@ -259,6 +268,7 @@ To enable Sentry to show source code in error pages:
 ### Source Code Display
 
 Once configured, stack traces will show:
+
 ```
 Error in routes.rs:42
 ────────────────────
@@ -344,6 +354,7 @@ git push origin v0.0.1-test
 ### Test 3: Verify GitHub Issue Creation
 
 1. Trigger intentional error in tests:
+
    ```rust
    #[test]
    fn test_github_issue_creation() {
@@ -353,6 +364,7 @@ git push origin v0.0.1-test
    ```
 
 2. Run test multiple times to reach 5+ occurrences:
+
    ```bash
    for i in {1..6}; do cargo test test_github_issue_creation; done
    ```
@@ -374,6 +386,7 @@ git push origin v0.0.1-test
 **Problem**: GitHub integration lists no repositories.
 
 **Solution**:
+
 1. Check GitHub app permissions: Settings → Applications → Authorized OAuth Apps
 2. Re-authorize Sentry app if needed
 3. Verify org admin has granted access
@@ -384,6 +397,7 @@ git push origin v0.0.1-test
 **Problem**: Errors appear in Sentry but no GitHub issues created.
 
 **Checks**:
+
 1. Verify alert rule is enabled: Project Settings → Alert Rules
 2. Check trigger conditions are met (e.g., 5+ occurrences)
 3. Verify GitHub repository is linked: Project Settings → Integrations → GitHub
@@ -395,12 +409,15 @@ git push origin v0.0.1-test
 **Problem**: Git tag pushed but not appearing in Sentry Releases.
 
 **Solution**:
+
 1. Verify webhook is active: GitHub Repo → Settings → Webhooks → Sentry
 2. Check webhook delivery logs for errors
 3. Manually create release:
+
    ```bash
    sentry-cli releases create -p agileplus "$(git describe --tags)"
    ```
+
 4. Verify version format matches `Cargo.toml` (without 'v' prefix)
 
 ### Commits Not Linked to Release
@@ -408,6 +425,7 @@ git push origin v0.0.1-test
 **Problem**: Release shows in Sentry but commit list is empty.
 
 **Solution**:
+
 ```bash
 # Manually set commits
 sentry-cli releases set-commits -p agileplus v1.2.3 \
@@ -419,6 +437,7 @@ sentry-cli releases set-commits -p agileplus v1.2.3 \
 **Problem**: Alert rules trigger but Slack stays silent.
 
 **Solution**:
+
 1. Verify Slack integration is enabled: Org Settings → Integrations → Slack
 2. Check channel exists and Sentry app has access
 3. Go to Project Settings → Integrations → Slack
@@ -430,6 +449,7 @@ sentry-cli releases set-commits -p agileplus v1.2.3 \
 ### 1. Meaningful Release Names
 
 Use semantic versioning with dates:
+
 ```
 v1.2.3           # Standard release
 v1.2.3-rc.1      # Release candidate
@@ -439,6 +459,7 @@ v1.2.3-2026-03-30 # Date-based release
 ### 2. Include Commit Context
 
 Commit messages should reference issues:
+
 ```
 git commit -m "Fix database error (#42)"
            # This links to GitHub issue #42
@@ -448,6 +469,7 @@ git commit -m "Fix database error (#42)"
 ### 3. Add Release Notes in GitHub
 
 When creating a release:
+
 ```
 Title: v1.2.3 - Security & QA Phase 1
 Description:
@@ -460,6 +482,7 @@ Description:
 ### 4. Monitor Alert Rules
 
 Regularly review alert performance:
+
 1. Project Settings → **Alert Rules**
 2. Check "recent alerts" section
 3. Disable overly-sensitive rules
@@ -468,6 +491,7 @@ Regularly review alert performance:
 ### 5. Archive Resolved Issues
 
 Once fixed, mark in Sentry:
+
 1. Go to issue
 2. Click **Resolve** or **Archive**
 3. GitHub issue auto-closes if linked
@@ -476,6 +500,7 @@ Once fixed, mark in Sentry:
 ## Summary
 
 The Sentry-GitHub integration provides:
+
 - ✅ Automatic error-to-issue conversion
 - ✅ Commit linking for root cause analysis
 - ✅ Release tracking with version correlation

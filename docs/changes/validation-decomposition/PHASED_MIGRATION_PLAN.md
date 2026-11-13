@@ -25,6 +25,7 @@
 ### Work Items
 
 #### WI-1.1: Trait Definitions (1 hour)
+
 - **File**: `crates/phenotype-validation/src/traits/mod.rs`
 - **Subtasks**:
   - [ ] Define `ValidationRule` trait with `validate()`, `name()`, `severity()`
@@ -35,7 +36,8 @@
 - **Test**: `cargo test traits::` must pass
 
 #### WI-1.2: Core Rules Implementation (1.5 hours)
-- **Files**: 
+
+- **Files**:
   - `crates/phenotype-validation/src/traits/rule.rs`
 - **Subtasks**:
   - [ ] Implement `RequiredRule` (non-empty check)
@@ -47,6 +49,7 @@
 - **Test**: `cargo test traits::rule::` must pass with 80%+ coverage
 
 #### WI-1.3: Field Validator Implementation (1 hour)
+
 - **File**: `crates/phenotype-validation/src/traits/field_validator.rs`
 - **Subtasks**:
   - [ ] Implement `FieldValidator::new()` (empty constructor)
@@ -58,6 +61,7 @@
 - **Test**: `cargo test traits::field_validator::` must pass
 
 ### Success Criteria for Phase 1
+
 - [ ] All 4 trait files created and compile
 - [ ] 55+ tests passing
 - [ ] 0 compiler warnings
@@ -65,6 +69,7 @@
 - [ ] Atomic commit pushed to branch: `validation/phase-1-traits`
 
 ### Rollback Plan
+
 Delete `crates/phenotype-validation/src/traits/` and revert Cargo.toml dependencies.
 
 ---
@@ -78,6 +83,7 @@ Delete `crates/phenotype-validation/src/traits/` and revert Cargo.toml dependenc
 ### Work Items
 
 #### WI-2.1: ValidatorRegistry (1.5 hours)
+
 - **File**: `crates/phenotype-validation/src/registry.rs`
 - **Subtasks**:
   - [ ] Define `ValidatorFactory` type (fn pointer)
@@ -90,6 +96,7 @@ Delete `crates/phenotype-validation/src/traits/` and revert Cargo.toml dependenc
 - **Test**: `cargo test registry::` must pass, registry is thread-safe
 
 #### WI-2.2: Preset Validators (2 hours)
+
 - **File**: `crates/phenotype-validation/src/presets.rs` (refactor)
 - **Subtasks**:
   - [ ] Implement `email_validator()` preset
@@ -106,6 +113,7 @@ Delete `crates/phenotype-validation/src/traits/` and revert Cargo.toml dependenc
 - **Test**: `cargo test presets::` must pass, all presets discoverable via registry
 
 #### WI-2.3: lib.rs Integration (1 hour)
+
 - **File**: `crates/phenotype-validation/src/lib.rs`
 - **Subtasks**:
   - [ ] Update documentation with architecture overview
@@ -117,6 +125,7 @@ Delete `crates/phenotype-validation/src/traits/` and revert Cargo.toml dependenc
 - **Test**: `cargo build && cargo test` must pass
 
 ### Success Criteria for Phase 2
+
 - [ ] Registry fully functional (register, get, list, exists)
 - [ ] 9 preset validators registered and tested
 - [ ] 28+ tests passing
@@ -125,6 +134,7 @@ Delete `crates/phenotype-validation/src/traits/` and revert Cargo.toml dependenc
 - [ ] Atomic commit pushed to branch: `validation/phase-2-registry`
 
 ### Rollback Plan
+
 Delete `crates/phenotype-validation/src/registry.rs`, revert `presets.rs` to old version.
 
 ---
@@ -138,6 +148,7 @@ Delete `crates/phenotype-validation/src/registry.rs`, revert `presets.rs` to old
 ### Work Items
 
 #### WI-3.1: Documentation (1 hour)
+
 - **Files**:
   - `docs/guides/VALIDATION_DECOMPOSITION_AND_REGISTRY_PATTERN.md` (240 lines)
   - `docs/changes/validation-decomposition/MIGRATION_GUIDE.md` (350 lines)
@@ -152,6 +163,7 @@ Delete `crates/phenotype-validation/src/registry.rs`, revert `presets.rs` to old
 - **Test**: Files are valid Markdown, Mermaid diagrams render
 
 #### WI-3.2: Examples (1 hour)
+
 - **Files**:
   - `crates/phenotype-validation/examples/basic_usage.rs` (80 LOC)
   - `crates/phenotype-validation/examples/custom_validator.rs` (120 LOC)
@@ -166,6 +178,7 @@ Delete `crates/phenotype-validation/src/registry.rs`, revert `presets.rs` to old
 - **Test**: All examples compile and run
 
 #### WI-3.3: CLI Integration Example (1 hour)
+
 - **File**: `docs/changes/validation-decomposition/CLI_INTEGRATION_EXAMPLE.md` (250 LOC)
 - **Subtasks**:
   - [ ] Show how to migrate `CreatePlanCommand` validator
@@ -177,6 +190,7 @@ Delete `crates/phenotype-validation/src/registry.rs`, revert `presets.rs` to old
 - **Test**: Examples are valid Rust (compile-checkable via code blocks)
 
 ### Success Criteria for Phase 3
+
 - [ ] All documentation files created
 - [ ] All examples compile and run successfully
 - [ ] 0 Markdown linting errors (via vale/markdownlint)
@@ -185,6 +199,7 @@ Delete `crates/phenotype-validation/src/registry.rs`, revert `presets.rs` to old
 - [ ] Atomic commit pushed: `docs(validation): complete migration guide and examples`
 
 ### Rollback Plan
+
 Delete documentation and examples; they do not affect crate functionality.
 
 ---
@@ -194,6 +209,7 @@ Delete documentation and examples; they do not affect crate functionality.
 ### Testing & Verification (Throughout all phases)
 
 #### QA-1: Comprehensive Test Suite
+
 - **Effort**: ~2 hours (distributed across phases)
 - **Subtasks**:
   - [ ] Unit tests: 80+ tests across all modules
@@ -204,6 +220,7 @@ Delete documentation and examples; they do not affect crate functionality.
 - **Test**: `cargo test --all` passes with 0 failures
 
 #### QA-2: Linting & Code Quality
+
 - **Effort**: ~1 hour (distributed)
 - **Subtasks**:
   - [ ] Clippy: `cargo clippy --all -- -D warnings` passes
@@ -213,6 +230,7 @@ Delete documentation and examples; they do not affect crate functionality.
 - **Test**: All quality checks pass in CI
 
 #### QA-3: Backward Compatibility
+
 - **Effort**: ~1 hour (distributed)
 - **Subtasks**:
   - [ ] Old `is_valid_email()` function still available
@@ -222,6 +240,7 @@ Delete documentation and examples; they do not affect crate functionality.
 - **Test**: Legacy tests pass
 
 ### Documentation Review (End of Phase 3)
+
 - [ ] Architecture Decision Record (ADR) written
 - [ ] User guide updated in main README
 - [ ] API changes documented in CHANGELOG.md
@@ -232,6 +251,7 @@ Delete documentation and examples; they do not affect crate functionality.
 ## Dependencies & Blockers
 
 ### Required Dependencies
+
 ```toml
 regex.workspace = true       # PatternRule implementation
 uuid.workspace = true        # UUID validation
@@ -239,6 +259,7 @@ once_cell.workspace = true   # Lazy registry singleton
 ```
 
 ### No Blockers Identified
+
 - All traits compile without external dependencies
 - Registry uses standard library + once_cell
 - Tests can use mocks/fixtures
@@ -273,6 +294,7 @@ By end of Phase 3:
 ## Execution Notes
 
 ### Parallel Execution (Recommended)
+
 - **Team**: 2-3 agents
 - **Agent A**: WI-1.1 + WI-1.2 (3.5 hours) → Phase 1 complete
 - **Agent B**: WI-2.1 + WI-2.2 (3.5 hours) → Phase 2 complete (depends on Phase 1)
@@ -280,6 +302,7 @@ By end of Phase 3:
 - **Wall-clock**: ~4 hours (critical path: Phase 1 → Phase 2 → Phase 3)
 
 ### Sequential Execution (Alternative)
+
 - **Team**: 1 agent
 - **Order**: WI-1.1 → WI-1.2 → WI-1.3 → WI-2.1 → WI-2.2 → WI-2.3 → WI-3.1 → WI-3.2 → WI-3.3
 - **Wall-clock**: ~12 hours (1 agent, sequential)
@@ -302,9 +325,9 @@ These are follow-up tasks for after validation system is ready:
 
 | Role | Name | Approval | Date |
 |------|------|----------|------|
-| Implementer | TBD | [ ] | __ / __ / ____ |
-| Reviewer | TBD | [ ] | __ / __ / ____ |
-| Owner | TBD | [ ] | __ / __ / ____ |
+| Implementer | TBD | [ ] | **/** / ____ |
+| Reviewer | TBD | [ ] | **/** / ____ |
+| Owner | TBD | [ ] | **/** / ____ |
 
 ---
 
@@ -315,4 +338,3 @@ These are follow-up tasks for after validation system is ready:
 - **Examples**: `docs/guides/VALIDATION_EXAMPLES.md`
 - **Crate**: `/crates/phenotype-validation/`
 - **Related ADR**: TBD (to be created in Phase 1 completion)
-

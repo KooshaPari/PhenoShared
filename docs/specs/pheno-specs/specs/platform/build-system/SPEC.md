@@ -2611,6 +2611,7 @@ forge watch --debounce 1000
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for full details.
 
 Quick start:
+
 ```bash
 # Clone repository
 git clone https://github.com/phenotype/forge.git
@@ -2631,6 +2632,7 @@ forge --config examples/basic/forge.toml build
 phenoForge is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
 Third-party dependencies:
+
 - tokio: MIT
 - clap: MIT OR Apache-2.0
 - serde: MIT OR Apache-2.0

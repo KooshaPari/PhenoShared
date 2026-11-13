@@ -6,6 +6,7 @@
 **Dep graph:** strict topological; tasks may declare `depends_on: [list]`.
 
 > v0.14 picks up v0.13 carry-over:
+>
 > 1. cross-repo PR merge close-out (10 PRs, task 65 gate),
 > 2. production dual-write enable (task 20 + cohort monitoring),
 > 3. Agri-Plus decoupling (deprecate cockpit post-cycle),
@@ -17,6 +18,7 @@
 **v0.13 close:** 62/100 new tasks shipped, 38 from v0.12. Tag
 `v0.13-pheno-harness-summit` pinned.
 **v0.14 picks up:**
+
 - Phase 0, 5, 6, 7, 8 closed
 - Phase 1 task 20 (prod enable) requires user auth prompt
 - Phase 4 (cross-repo PR merges) requires gh auth

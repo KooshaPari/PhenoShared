@@ -56,6 +56,7 @@ SDK resolution rather than the system's is exactly the kind of latent trap this
 program exists to find.
 
 ## 0. Headline
+
 | Question | Answer |
 | --- | --- |
 | Workspace members (real, from `cargo metadata`) | **79** |
@@ -103,6 +104,7 @@ which is the honest measurement. `cargo clean` was not run (prohibited by the ta
 ```bash
 cargo metadata --no-deps --format-version 1        # exit 0
 ```
+
 - `workspace_members` = **79**
 - `packages` = **79**
 - `workspace_default_members` = **79**
@@ -111,6 +113,7 @@ cargo metadata --no-deps --format-version 1        # exit 0
 ```bash
 cargo metadata --format-version 1 --offline        # exit 0, 2.2 s
 ```
+
 Full dependency resolution succeeds **offline** — the registry cache is complete for the workspace.
 (Important: this is what makes `--offline` a safe measurement tool rather than an artificial blocker
 for the *workspace*. It is not complete for the non-members; see 5.3.)
@@ -200,6 +203,7 @@ No run needed to be killed.
 ```bash
 cargo check --workspace --offline --message-format=json
 ```
+
 - **exit code 0**, 01:37:42Z → 01:38:28Z (**46 s**)
 - `build-finished.success = True`
 - 704 `compiler-artifact` events covering **586 distinct packages** (79 members + transitive deps)
@@ -236,6 +240,7 @@ cargo check --workspace --offline \
   --target-dir /Users/kooshapari/.jcode/scratch/phenoshared-cold-target \
   --message-format=json
 ```
+
 - **exit code 0**, 01:45:50Z → 01:47:36Z (**106 s**)
 - `build-finished.success = True`
 - 704 `compiler-artifact` events, **`fresh: false` for all 704** — nothing was reused
@@ -253,6 +258,7 @@ with zero errors.
 env -u SDKROOT cargo check --workspace --offline \
   --target-dir /Users/kooshapari/.jcode/scratch/phenoshared-control-target
 ```
+
 - **exit code 0**, 1 m 54 s (114 s). Same success, without any environment workaround.
 
 This control matters because of Section 6: it establishes that the workspace's cold check does **not**
@@ -266,6 +272,7 @@ cargo check --workspace --all-targets --offline \
   --target-dir /Users/kooshapari/.jcode/scratch/phenoshared-cold-target \
   --message-format=json
 ```
+
 - **exit code 0**, 30.9 s (incremental on top of run (b))
 - `build-finished.success = True`
 - **members covered: 79 / 79** — including `crates/wave-3lane-tests`
@@ -347,6 +354,7 @@ Full literal output for the cleanest reproduction:
 ```bash
 cargo check --manifest-path iac/Cargo.toml --offline     # exit 101
 ```
+
 ```
 error[E0432]: unresolved import `oci_helpers`
  --> oci-lottery/src/config.rs:1:5
@@ -469,9 +477,11 @@ error: failed to download `async-nats v0.47.0`
 Caused by:
   attempting to make an HTTP request, but --offline was specified
 ```
+
 ```
 error: no matching package named `crc32c` found
 ```
+
 ```
 error: checksum for `serde v1.0.217` changed between lock files
 ```
@@ -503,6 +513,7 @@ must not be equated with "builds".
 ```bash
 printf 'int main(void){return 0;}\n' | cc -x c - -o /tmp/probe
 ```
+
 - **exit code 1**, reproduced 3× (01:39Z, 01:45Z, 01:52Z)
 - no output binary produced
 

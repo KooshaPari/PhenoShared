@@ -33,6 +33,7 @@ Performance: 1M+ msgs/sec, sub-ms latency
 ```
 
 **Key Features**:
+
 - Exactly-once delivery semantics
 - Persistent streams with configurable retention
 - Pull and push consumer patterns
@@ -58,6 +59,7 @@ Performance: 20-50% better memory efficiency than Redis
 ```
 
 **Use Cases**:
+
 - Snapshot caching with TTL (SET + expiry)
 - Rate limiting (INCR + time windows)
 - Session state (HSET with field structure)
@@ -65,6 +67,7 @@ Performance: 20-50% better memory efficiency than Redis
 - Dependency graph cache (ZSET for versioning)
 
 **Dragonfly Advantages**:
+
 - Multi-threaded (leverages modern CPUs)
 - Single binary distribution
 - 50ms startup vs 200ms for Redis
@@ -88,6 +91,7 @@ Performance: O(1) relationship traversal
 ```
 
 **Modeling Capability**:
+
 - Feature → WorkPackage relationships
 - Dependency graphs (DEPENDS_ON, BLOCKS, RELATES_TO)
 - Cross-project artifact links
@@ -95,6 +99,7 @@ Performance: O(1) relationship traversal
 - Full ACID transactions
 
 **Why Neo4j over alternatives**:
+
 - Purpose-built for graph queries (not relational)
 - Browser UI for development exploration
 - Mature Rust driver with connection pooling
@@ -102,6 +107,7 @@ Performance: O(1) relationship traversal
 - Constraint and index support
 
 **Alternatives Considered** (Not recommended):
+
 - SurrealDB: Still alpha, limited graph support
 - EdgeDB: PostgreSQL-based, weaker graph indexing
 - SQLite + Recursive CTEs: File-based limits scale, no native graph indexing
@@ -123,6 +129,7 @@ License:     AGPL (MinIO) / Apache 2.0 (AWS SDK)
 ```
 
 **Capabilities**:
+
 - Multi-part uploads with resume
 - Metadata and tagging
 - Versioning and lifecycle policies
@@ -131,6 +138,7 @@ License:     AGPL (MinIO) / Apache 2.0 (AWS SDK)
 - Bucket policies and access controls
 
 **Local Standalone Mode**:
+
 - No external dependencies
 - Embedded or containerized
 - Console UI at :9001
@@ -151,11 +159,13 @@ Performance: ~1-2 seconds startup for full stack
 ```
 
 **Dependency Ordering**:
+
 - `depends_on: <service>: complete` → Wait for health check
 - `depends_on: <service>: started` → Wait for process launch only
 - Automatic restart with backoff policy
 
 **Health Checks**:
+
 ```yaml
 health_check:
   test: ["CMD", "curl", "-f", "http://localhost:port/health"]
@@ -165,6 +175,7 @@ health_check:
 ```
 
 **Readiness Probes**:
+
 ```yaml
 readiness_probe:
   test: ["CMD", "curl", "-f", "http://localhost:port/ready"]
@@ -174,6 +185,7 @@ readiness_probe:
 ```
 
 **Key Advantages for Local-First**:
+
 - No Docker daemon overhead
 - File-watch mode for auto-rebuild
 - Native process debugging/profiling
@@ -276,6 +288,7 @@ LOG_FORMAT=compact|json
 ## Implementation Path
 
 ### Phase 1: Local Development (Day 1)
+
 1. Install Process Compose
 2. Copy `process-compose.yml` from template
 3. Add Cargo dependencies from section 2
@@ -286,6 +299,7 @@ LOG_FORMAT=compact|json
 **Estimated Time**: 4-6 hours
 
 **Success Criteria**:
+
 - All services start and become healthy
 - API health endpoint returns 200
 - All integration tests pass
@@ -293,6 +307,7 @@ LOG_FORMAT=compact|json
 ---
 
 ### Phase 2: Example Application (Day 1-2)
+
 1. Implement WorkPackageGraph model (Neo4j)
 2. Implement RedisCache layer (caching)
 3. Implement event publishing via NATS
@@ -302,6 +317,7 @@ LOG_FORMAT=compact|json
 **Estimated Time**: 8-12 hours
 
 **Success Criteria**:
+
 - Create WP with dependencies
 - Query dependencies from Neo4j
 - Cache snapshots in Redis
@@ -311,6 +327,7 @@ LOG_FORMAT=compact|json
 ---
 
 ### Phase 3: Containerization (Day 2)
+
 1. Create Dockerfile for Rust API
 2. Create docker-compose.yml for full stack
 3. Test local container deployment
@@ -319,6 +336,7 @@ LOG_FORMAT=compact|json
 **Estimated Time**: 4-6 hours
 
 **Success Criteria**:
+
 - `docker-compose up` starts entire stack
 - Container health checks pass
 - API accessible at localhost:8080
@@ -326,6 +344,7 @@ LOG_FORMAT=compact|json
 ---
 
 ### Phase 4: Kubernetes Deployment (Day 3)
+
 1. Create K8s manifests (ConfigMap, Secrets, Services, Deployments)
 2. Deploy to local K8s (Docker Desktop or minikube)
 3. Test service discovery and networking
@@ -334,6 +353,7 @@ LOG_FORMAT=compact|json
 **Estimated Time**: 6-8 hours
 
 **Success Criteria**:
+
 - All pods become healthy
 - Services communicate correctly
 - Ingress route works
@@ -341,6 +361,7 @@ LOG_FORMAT=compact|json
 ---
 
 ### Phase 5: CI/CD Integration (Day 3-4)
+
 1. Create GitHub Actions workflow
 2. Test build and deploy stages
 3. Set up automated testing on PRs
@@ -349,6 +370,7 @@ LOG_FORMAT=compact|json
 **Estimated Time**: 4-6 hours
 
 **Success Criteria**:
+
 - CI builds on every push
 - Tests run and report results
 - Container images pushed to registry
@@ -358,6 +380,7 @@ LOG_FORMAT=compact|json
 ## Key Design Decisions
 
 ### 1. Why Dragonfly over Redis?
+
 - Modern C++20 implementation with multi-threaded I/O
 - 50% faster on modern hardware
 - Superior memory efficiency (critical for containerized local dev)
@@ -366,6 +389,7 @@ LOG_FORMAT=compact|json
 - 100% Redis protocol compatible (can swap to Valkey if licensing becomes issue)
 
 ### 2. Why Neo4j over alternatives?
+
 - Purpose-built for graph queries with O(1) relationship traversal
 - Mature Rust driver (neo4rs) with full Bolt protocol support
 - Browser UI for development and debugging
@@ -374,6 +398,7 @@ LOG_FORMAT=compact|json
 - 15+ years of production hardening
 
 ### 3. Why NATS JetStream for messaging?
+
 - Exactly-once delivery semantics (critical for feature state transitions)
 - Persistent streams with configurable retention policies
 - Both pull and push consumer patterns
@@ -383,6 +408,7 @@ LOG_FORMAT=compact|json
 - Open source (Apache 2.0)
 
 ### 4. Why Process Compose for orchestration?
+
 - Zero Docker daemon overhead (direct OS process management)
 - File-watch mode for rapid development iteration
 - Health check and readiness probe support
@@ -391,6 +417,7 @@ LOG_FORMAT=compact|json
 - Zero infrastructure cost
 
 ### 5. Why aws-sdk-s3 over minio-rs?
+
 - Wider ecosystem adoption and examples
 - Higher-level abstractions (ByteStream, collectors)
 - Better error handling and retry strategies
@@ -482,6 +509,7 @@ LOG_FORMAT=compact|json
 ## Support & Resources
 
 ### Official Documentation
+
 - [NATS Rust Client](https://github.com/nats-io/nats.rs)
 - [NATS JetStream Docs](https://docs.nats.io/nats-concepts/jetstream)
 - [Dragonfly Docs](https://www.dragonflydb.io/docs)
@@ -490,11 +518,13 @@ LOG_FORMAT=compact|json
 - [Process Compose](https://github.com/F1bonacci/process-compose)
 
 ### Example Repositories
+
 - [NATS Examples](https://github.com/nats-io/nats-by-example)
 - [Neo4rs Examples](https://github.com/neo4j-labs/neo4rs/tree/main/examples)
 - [AWS SDK Examples](https://github.com/awslabs/aws-sdk-rust/tree/main/examples)
 
 ### Benchmarks
+
 - [NATS Performance](https://github.com/nats-io/nats-bench)
 - [Dragonfly vs Redis](https://www.dragonflydb.io/benchmarks)
 

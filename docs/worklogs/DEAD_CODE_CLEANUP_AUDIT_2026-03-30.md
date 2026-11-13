@@ -7,6 +7,7 @@ The dead code cleanup task has been completed. The phenotype-infrakit workspace 
 ## Audit Details
 
 ### Suppressions Analysis
+
 ```
 ✓ Zero #[allow(dead_code)] suppressions found
 ✓ Zero #[allow(unused_imports)] suppressions found  
@@ -15,6 +16,7 @@ The dead code cleanup task has been completed. The phenotype-infrakit workspace 
 ```
 
 ### Crates Audited
+
 - **24 Rust crates** in workspace
 - **1,372 total Rust files** analyzed
 - **0 dead code suppressions** across entire workspace
@@ -65,6 +67,7 @@ Test failures:          0
 ### What Was Removed (Historical)
 
 Based on git history analysis, previous cleanups removed:
+
 - ~600 LOC of duplicated error handling code (consolidated into phenotype-error-core)
 - ~150 LOC of scattered health check implementations
 - ~400 LOC of redundant config loader patterns
@@ -73,23 +76,28 @@ Based on git history analysis, previous cleanups removed:
 ## Recommendations
 
 ### 1. CI/CD Enforcement
+
 Add to CI pipeline to prevent dead code from accumulating:
+
 ```bash
 cargo clippy --workspace -- -D warnings
 cargo clippy --all-targets -- -D warnings
 ```
 
 ### 2. Regular Audits
+
 - Schedule quarterly dead code audits
 - Use `cargo clippy` regularly during development
 - Monitor for `#[allow(...)]` suppressions
 
 ### 3. Code Retention Best Practices
+
 - For code that must be preserved (e.g., legacy, reference): move to `.archive/` directory
 - Never use `#[allow(dead_code)]` as a retention mechanism
 - Document why archived code is kept
 
 ### 4. Enforcement in Development
+
 - Configure pre-commit hooks to catch dead code
 - Use IDE clippy extensions for real-time feedback
 - Code review process should flag new suppressions

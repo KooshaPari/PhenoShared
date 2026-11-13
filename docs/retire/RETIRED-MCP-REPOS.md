@@ -17,7 +17,6 @@
 | [Apisync](https://github.com/KooshaPari/Apisync) | **DELETED** 2026-06-20 (was ARCHIVED 2026-06-19, fully drained 2026-06-20 — all 153 source files absorbed, 0 remaining) | absorbs → [apikit](https://github.com/KooshaPari/apikit) @ 28887d6 (HTTP toolkit + final governance/CI/tooling drain) + [HexaKit](https://github.com/KooshaPari/HexaKit) 5 ADRs @ 48a8d4f + [HexaKit `templates/hexagon/rust/`](https://github.com/KooshaPari/HexaKit/tree/main/templates/hexagon/rust) cargo templates @ 31a1332 |
 | [pheno-cargo-template](https://github.com/KooshaPari/pheno-cargo-template) | **DELETED** 2026-06-20 (was ABSORBED-INTO-HEXAKIT) | [HexaKit `templates/hexagon/rust/`](https://github.com/KooshaPari/HexaKit/tree/main/templates/hexagon/rust) — use `cargo generate --git https://github.com/KooshaPari/HexaKit --subfolder templates/hexagon/rust` |
 
-
 ## AgentMCP patterns (absorb, not duplicate)
 
 [AgentMCP](https://github.com/KooshaPari/AgentMCP) remains the **agent-runtime** MCP protocol lane (orchestration tools).

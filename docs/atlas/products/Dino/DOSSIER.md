@@ -26,8 +26,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - A schema/SDK build does not prove the mod loads in the supported game
 - Fork licensing and update compatibility remain part of the contract
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

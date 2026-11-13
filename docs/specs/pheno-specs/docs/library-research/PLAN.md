@@ -19,18 +19,21 @@ The Phenotype Registry System is the unified entry point connecting PhenoSpecs, 
 ## Phase Details
 
 ### Phase 1: Navigation Hub
+
 - Master README with quick navigation
 - Registry index table
 - "I want to..." decision matrix
 - Registry relationship diagram
 
 ### Phase 2: Cross-Registry Links
+
 - Link PhenoSpecs ↔ PhenoHandbook
 - Link PhenoSpecs ↔ HexaKit
 - Link PhenoHandbook ↔ HexaKit
 - Bidirectional navigation
 
 ### Phase 3: Automation
+
 - Cross-registry link validation
 - Consistency checks
 - Broken link detection

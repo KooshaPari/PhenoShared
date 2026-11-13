@@ -51,6 +51,7 @@
 | P2 | Airlock v2 | NOT RESOLVED: `repos/.airlock/bin/airlock-v2.py` is still absent on this machine. Only an unrelated Homebrew `airlock` (keychain tool, v0.1.38) is on PATH. CI must install or vendor the project's Airlock v2 before snapshots can run. Snapshots and contract gating remain blocked on this. The new `omlx-research doctor` subcommand (commit 9f5384d) surfaces this gap explicitly via the `airlock_v2_installed` check so users see it on every doctor run. The `mlx_lm_required_by_command` check (commit 89d1cac) similarly surfaces missing-required-dependency gaps per active subcommand. |
 
 Issues are removed only after a reproducing test, forward fix, validation evidence, and review.
+
 ### Qwen3.5 custom gated-delta promotion (open)
 
 An opt-in custom `mx.fast.metal_kernel` replacement is wired for Qwen3.5 gated-delta and has

@@ -33,6 +33,7 @@ WP01 (Domain Entities)
 **Prompt**: `tasks/WP01-domain-entities.md`
 
 Subtasks:
+
 - [ ] T001: Create Module struct with slug, friendly_name, description, parent_module_id
 - [ ] T002: Create ModuleFeatureTag struct (module_id, feature_id, created_at)
 - [ ] T003: Create CycleState enum with transition validation (Draft→Active→Review→Shipped→Archived)
@@ -52,6 +53,7 @@ Subtasks:
 **Prompt**: `tasks/WP02-storage-adapter.md`
 
 Subtasks:
+
 - [ ] T007: Add Module CRUD methods to StoragePort trait
 - [ ] T008: Add Cycle CRUD methods to StoragePort trait
 - [ ] T009: Add join table methods (tag/untag, add/remove Feature from Cycle)
@@ -72,6 +74,7 @@ Subtasks:
 **Prompt**: `tasks/WP03-cli-module.md`
 
 Subtasks:
+
 - [ ] T014: Create module.rs command module with ModuleArgs enum (create, list, show, assign, tag, untag, delete)
 - [ ] T015: Implement module create (with --parent flag) and module delete (with child/feature guards)
 - [ ] T016: Implement module list (flat + --tree recursive) and module show (owned + tagged features)
@@ -86,6 +89,7 @@ Subtasks:
 **Prompt**: `tasks/WP04-cli-cycle.md`
 
 Subtasks:
+
 - [ ] T019: Create cycle.rs command module with CycleArgs enum
 - [ ] T020: Implement cycle create (--start, --end, --module scope) and cycle list (by state)
 - [ ] T021: Implement cycle show (assigned features, WP progress aggregate, date range)
@@ -104,6 +108,7 @@ Subtasks:
 **Prompt**: `tasks/WP05-dashboard-views.md`
 
 Subtasks:
+
 - [ ] T024: Add Module and Cycle API routes in agileplus-api (list, show, tree)
 - [ ] T025: Create module_tree.html Askama template (recursive tree with feature counts)
 - [ ] T026: Create cycle_kanban.html template (columns by CycleState, feature cards)
@@ -122,6 +127,7 @@ Subtasks:
 **Prompt**: `tasks/WP06-plane-sync.md`
 
 Subtasks:
+
 - [ ] T029: Extend PlaneClient with module CRUD API methods (POST/PUT/DELETE /modules/)
 - [ ] T030: Extend PlaneClient with cycle CRUD API methods (POST/PUT/DELETE /cycles/)
 - [ ] T031: Implement outbound push for Module/Cycle create/update/delete events
@@ -140,6 +146,7 @@ Subtasks:
 **Prompt**: `tasks/WP07-integration-tests.md`
 
 Subtasks:
+
 - [ ] T034: Test Module hierarchy CRUD lifecycle (create tree, assign features, list --tree, delete guards)
 - [ ] T035: Test Cycle lifecycle (create, add features, transition through states, gate enforcement)
 - [ ] T036: Test Module-scoped Cycle (scope validation, rejection of out-of-scope features)

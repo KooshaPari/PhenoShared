@@ -53,7 +53,7 @@ spec:
 
 **Best Practices:**
 
-1. **Prefix with space** to exclude from shell history: ` export SECRET=value`
+1. **Prefix with space** to exclude from shell history: `export SECRET=value`
 2. **Use files for high-sensitivity secrets** when process inspection is a concern
 3. **Validate at startup** that required secrets are present
 4. **Clear after use** if secrets are only needed for initialization
@@ -496,6 +496,7 @@ spec:
 **Certificate Management:**
 
 Istio automatically:
+
 1. Generates per-service certificates (SPIFFE identities)
 2. Distributes certificates via SDS (Secret Discovery Service)
 3. Rotates certificates before expiration (default: 24h lifetime)
@@ -1062,22 +1063,22 @@ spec:
 
 ### Documentation
 
-1. OWASP Secrets Management Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
-2. Kubernetes Secrets Documentation: https://kubernetes.io/docs/concepts/configuration/secret/
-3. Docker Secrets: https://docs.docker.com/engine/swarm/secrets/
-4. AWS Secrets Manager Rotation: https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html
-5. Azure Key Vault Soft-Delete: https://docs.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview
-6. SPIFFE Specification: https://spiffe.io/docs/latest/spiffe-about/overview/
-7. Secretless Broker Documentation: https://docs.secretless.io/
+1. OWASP Secrets Management Cheat Sheet: <https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html>
+2. Kubernetes Secrets Documentation: <https://kubernetes.io/docs/concepts/configuration/secret/>
+3. Docker Secrets: <https://docs.docker.com/engine/swarm/secrets/>
+4. AWS Secrets Manager Rotation: <https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html>
+5. Azure Key Vault Soft-Delete: <https://docs.microsoft.com/en-us/azure/key-vault/general/soft-delete-overview>
+6. SPIFFE Specification: <https://spiffe.io/docs/latest/spiffe-about/overview/>
+7. Secretless Broker Documentation: <https://docs.secretless.io/>
 
 ### Tools
 
-1. GitLeaks: https://github.com/gitleaks/gitleaks
-2. TruffleHog: https://github.com/trufflesecurity/trufflehog
-3. Detect Secrets: https://github.com/Yelp/detect-secrets
-4. Talisman: https://github.com/thoughtworks/talisman
-5. git-secrets: https://github.com/awslabs/git-secrets
-6. Trivy (secret scanning): https://aquasecurity.github.io/trivy/
+1. GitLeaks: <https://github.com/gitleaks/gitleaks>
+2. TruffleHog: <https://github.com/trufflesecurity/trufflehog>
+3. Detect Secrets: <https://github.com/Yelp/detect-secrets>
+4. Talisman: <https://github.com/thoughtworks/talisman>
+5. git-secrets: <https://github.com/awslabs/git-secrets>
+6. Trivy (secret scanning): <https://aquasecurity.github.io/trivy/>
 
 ### Research Papers
 

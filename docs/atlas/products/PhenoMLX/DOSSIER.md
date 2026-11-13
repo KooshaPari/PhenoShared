@@ -27,8 +27,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - A faster result can be a different quantization or cached workload
 - Research placeholders must not be advertised as supported inference
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

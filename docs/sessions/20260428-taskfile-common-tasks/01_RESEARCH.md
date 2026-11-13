@@ -10,4 +10,3 @@
   - `coverage/`
   - `docs/.vitepress/`
 - The repository already had a broader `Taskfile.yml`; the requested change is a simplification to the core task surface.
-

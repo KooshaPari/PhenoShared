@@ -19,6 +19,7 @@
 ## New Cluster DAG (Phase 3 backlog — 142 work units)
 
 ### T-BN.* Benchora (12 units — building on merged PR #46)
+
 - T-BN.1 ✅ DONE — Makefile + example + corrected scorecard (PR #46)
 - T-BN.2 — Bump criterion, proptest, hex, quickcheck to latest stable
 - T-BN.3 — Add `[[bench]]` harness for `Contract::verify` micro-benchmark
@@ -33,6 +34,7 @@
 - T-BN.12 — Cross-reference Authvault absorption in `MIGRATION.md`
 
 ### T-TR.* Tracera (state-verification, deferred — depends on network + clone fix)
+
 - T-TR.0 — Verify Tracera remote state (clone + README scan)
 - T-TR.1 — Audit Astro + SvelteKit code paths for dead components
 - T-TR.2 — Pin all Astro/Svelte/Vite actions to commit SHAs (T-TR.2.1..2.10)
@@ -47,6 +49,7 @@
 - T-TR.11 — OpenTelemetry SDK upgrade track
 
 ### T-TG.* thegent (state-verification, deferred)
+
 - T-TG.0 — Verify thegent remote state, rebuild clone
 - T-TG.1 — Type-hint coverage: mypy --strict on all `src/`
 - T-TG.2 — Pin Python to 3.12+ across all workflows (drop 3.9/3.10/3.11)
@@ -61,6 +64,7 @@
 - T-TG.11 — Reconcile the 3 _audit branches + thegent-protections
 
 ### T-AV.* Authvault (status: ARCHIVED — absorbed into AuthKit)
+
 - **No work planned.** `ARCHIVED.md` explicitly states absorption is complete.
 - T-AV.0 — Track AuthKit absorption health (read-only — verify all 51 Authvault crates have AuthKit equivalents).
 - T-AV.1 — Add a script to `~/.forge/audit-absorbed.sh` that auto-detects any future archive-without-absorption drift.

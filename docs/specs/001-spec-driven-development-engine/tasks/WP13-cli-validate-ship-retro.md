@@ -107,6 +107,7 @@ governance contract has corresponding evidence artifacts, and that all policy ru
 **Implementation Steps**:
 
 1. Define the clap subcommand struct:
+
    ```rust
    #[derive(Parser)]
    pub struct ValidateArgs {
@@ -155,6 +156,7 @@ governance contract has corresponding evidence artifacts, and that all policy ru
    subsequent `ship` command) uses the validation result.
 
 **Edge Cases**:
+
 - Feature has no governance contract: fail with clear error suggesting `agileplus plan` first.
 - Evidence artifacts referenced in DB but missing from git: warn, mark as `artifact_missing`.
 - Multiple governance contract versions: use the latest `version` for the feature.
@@ -176,6 +178,7 @@ into a structured result. This is the core logic that T073 calls.
 
 1. Define a `GovernanceEvaluator` struct that takes references to StoragePort and the loaded
    governance contract:
+
    ```rust
    pub struct GovernanceEvaluator<'a, S: StoragePort> {
        storage: &'a S,
@@ -213,6 +216,7 @@ domain logic that both CLI and API might need. The CLI command would instantiate
 the concrete adapter, but the logic itself depends only on port traits.
 
 **Testing**: Extensive unit tests with mock StoragePort. Test matrix:
+
 - All evidence present and passing -> overall pass.
 - One evidence missing -> overall fail, correct item identified.
 - Evidence present but threshold violated -> overall fail with threshold details.
@@ -231,6 +235,7 @@ worktrees, archives the feature spec directory, and writes the final audit entry
 **Implementation Steps**:
 
 1. Define the clap subcommand struct:
+
    ```rust
    #[derive(Parser)]
    pub struct ShipArgs {
@@ -282,6 +287,7 @@ worktrees, archives the feature spec directory, and writes the final audit entry
 10. Print a summary: feature slug, WPs merged, branches cleaned, final audit hash.
 
 **Atomicity Strategy**:
+
 - Perform all git merges first. If any fail, roll back by resetting the target branch to
   its pre-ship state (save the ref before starting).
 - SQLite updates happen after all git operations succeed.
@@ -289,6 +295,7 @@ worktrees, archives the feature spec directory, and writes the final audit entry
   (git is source of truth; SQLite can be rebuilt).
 
 **Edge Cases**:
+
 - Feature has WPs still in `doing` or `review` state: fail, list incomplete WPs.
 - Target branch has diverged since validation: detect via git2 merge analysis, warn user.
 - Worktree already cleaned up (manual deletion): skip cleanup, log info.
@@ -309,6 +316,7 @@ improving the development process and governance constitution.
 **Implementation Steps**:
 
 1. Define the clap subcommand struct:
+
    ```rust
    #[derive(Parser)]
    pub struct RetrospectiveArgs {
@@ -355,6 +363,7 @@ improving the development process and governance constitution.
    - Format as actionable TOML snippets that could be added to a constitution file.
 
 7. Build the retrospective report as markdown:
+
    ```markdown
    # Retrospective: <feature friendly_name>
    ## Summary
@@ -394,6 +403,7 @@ research, plan, implement commands for consistency).
 **Implementation Steps**:
 
 1. Create a shared state enforcement helper (if not already present from WP11/WP12):
+
    ```rust
    // crates/agileplus-core/src/domain/state_machine.rs or a new helper module
    pub fn require_state(
@@ -473,6 +483,7 @@ in WP11/WP12, ensuring they have access to all required port implementations.
 **Implementation Steps**:
 
 1. Register the three new subcommands in the main CLI App enum:
+
    ```rust
    #[derive(Subcommand)]
    enum Commands {
@@ -488,6 +499,7 @@ in WP11/WP12, ensuring they have access to all required port implementations.
 
 2. In the main dispatch function, add match arms for the new commands. Each receives the
    shared `AppContext` (or equivalent DI container) that holds concrete adapter instances:
+
    ```rust
    Commands::Validate(args) => {
        validate::execute(args, &ctx.storage, &ctx.vcs, &ctx.telemetry).await
@@ -501,6 +513,7 @@ in WP11/WP12, ensuring they have access to all required port implementations.
    ```
 
 3. Each command's `execute` function signature should accept port trait references:
+
    ```rust
    pub async fn execute(
        args: ValidateArgs,
@@ -574,5 +587,6 @@ test with in-memory mocks.
 | Timestamp | Event |
 |-----------|-------|
 | 2026-02-27T00:00:00Z | WP13 prompt generated via /spec-kitty.tasks |
+
 - 2026-02-28T10:09:41Z – claude-wp13 – shell_pid=97285 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T10:18:29Z – claude-wp13 – shell_pid=97285 – lane=done – Review passed: validate+ship+retro, 133 tests

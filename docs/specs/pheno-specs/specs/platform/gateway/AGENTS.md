@@ -58,6 +58,7 @@
 ## Validation
 
 Run before any commit:
+
 ```bash
 python3 validate_governance.py
 ```

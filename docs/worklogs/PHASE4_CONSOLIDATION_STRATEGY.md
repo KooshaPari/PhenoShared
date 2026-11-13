@@ -1,9 +1,11 @@
 # Phase 4 Test Consolidation Strategy
 
 ## Overview
+
 Phase 4 consolidates 7,860 LOC of duplicate tests across thegent (platforms/thegent) via 3 focused phases.
 
 **Target Savings:**
+
 - Phase 4.1: ~2,300 LOC (iterative suites)
 - Phase 4.3: ~500-800 LOC (supplementary tests)
 - Phase 4.2: ~1,200-1,726 LOC (legacy tests)
@@ -14,7 +16,9 @@ Phase 4 consolidates 7,860 LOC of duplicate tests across thegent (platforms/theg
 ## Phase 4.1: Consolidate Iterative Test Suites (PRIORITY: HIGH, RISK: LOW)
 
 ### Pattern
+
 Multiple versions of the same test suite with incremental names:
+
 - `models_100_percent_test.go` (13K)
 - `models_comprehensive_test.go` (15K) ← **MASTER**
 - `models_database_integration_test.go` (12K)
@@ -22,10 +26,12 @@ Multiple versions of the same test suite with incremental names:
 - `models_ultimate_100_percent_test.go` (13K)
 
 Similar patterns in:
+
 - `lib/cloud/` (3 variants: core, comprehensive, additional, error_uncovered)
 - `internal/infrastructure/auth/` (3 variants: service, comprehensive, edge_cases)
 
 ### Strategy
+
 1. **Identify the master file** (usually "comprehensive" or the most complete)
 2. **Extract unique test cases** from variant files
 3. **Merge into master** (careful to avoid test name collisions)
@@ -47,9 +53,11 @@ Similar patterns in:
 ## Phase 4.3: Consolidate Supplementary Tests (PRIORITY: HIGH, RISK: LOW-MED)
 
 ### Pattern
+
 Additional test files with `_additional_test.go` suffix containing supplementary test cases.
 
 Files to consolidate:
+
 1. `models/deployments_additional_test.go` → `models/deployments_test.go`
 2. `lib/cloud/cloud_additional_test.go` → `lib/cloud/cloud_comprehensive_test.go`
 3. `internal/application/deployment/application_additional_test.go` → application suite
@@ -61,6 +69,7 @@ Files to consolidate:
 ### Consolidation Strategy
 
 For each `*_additional_test.go`:
+
 1. Read the file to extract all test functions
 2. Identify the corresponding base test file
 3. Check for import cycle issues
@@ -75,9 +84,11 @@ For each `*_additional_test.go`:
 ## Phase 4.2: Audit and Archive Legacy Tests (PRIORITY: MEDIUM, RISK: MEDIUM)
 
 ### Pattern
+
 Legacy/deprecated test files that test code paths no longer in use.
 
 Files identified:
+
 1. `legacy_auth_handlers_test.go` (3.3K)
 2. `internal/infrastructure/http/middleware/legacy_optional_auth_middleware_uncovered_test.go`
 3. `internal/infrastructure/http/middleware/legacy_optional_middleware_additional_test.go`
@@ -85,6 +96,7 @@ Files identified:
 ### Audit Checklist
 
 For each legacy file:
+
 - [ ] Check if tested code still exists in codebase
 - [ ] Search for references to tested functions
 - [ ] Determine if code path is deprecated or partially used
@@ -113,6 +125,7 @@ For each legacy file:
 ## Technical Implementation
 
 ### Archive Directory Structure
+
 ```
 .archive/thegent-test-deduplication/
 ├── phase-4-1-iterative-suites/
@@ -141,6 +154,7 @@ For each legacy file:
 ### Git Operations
 
 All deletions use non-destructive `git mv`:
+
 ```bash
 # Create archive dirs
 mkdir -p .archive/thegent-test-deduplication/{phase-4-{1,2,3}}
@@ -158,6 +172,7 @@ done
 ### Testing & Verification
 
 After each phase:
+
 ```bash
 cd platforms/thegent
 go test ./...
@@ -165,6 +180,7 @@ go test -cover ./...
 ```
 
 Verify LOC reduction:
+
 ```bash
 git diff HEAD~1 --stat | grep -E "deleted|changed"
 ```
@@ -192,4 +208,3 @@ git diff HEAD~1 --stat | grep -E "deleted|changed"
 5. Execute Phase 4.2: Audit and archive legacy tests
 6. Commit with message: "refactor(thegent): archive legacy tests (-X LOC)"
 7. Open PR with summary of all changes
-

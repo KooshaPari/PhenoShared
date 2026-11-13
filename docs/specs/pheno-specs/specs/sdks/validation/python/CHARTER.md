@@ -29,6 +29,7 @@
 **phenotype-validation-python is the Python validation library for the Phenotype ecosystem, providing Pydantic integration, validation decorators, and validation rules that enable data validation in Python applications.**
 
 Our mission is to validate Python data by offering:
+
 - **Pydantic Integration**: Seamless Pydantic support
 - **Validation Decorators**: Function validation
 - **Custom Rules**: Extensible validators
@@ -37,6 +38,7 @@ Our mission is to validate Python data by offering:
 ### 1.2 Vision
 
 To be the Python validation standard where:
+
 - **Validation is Pythonic**: Idiomatic patterns
 - **Errors are Clear**: Actionable messages
 - **Extension is Easy**: Custom validators
@@ -150,9 +152,11 @@ To be the Python validation standard where:
 ## 8. Decision Authority Levels
 
 **Level 1: Python Maintainer**
+
 - Updates
 
 **Level 2: Validation Lead**
+
 - API changes
 
 ---

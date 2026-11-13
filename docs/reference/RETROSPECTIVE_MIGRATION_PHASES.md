@@ -26,14 +26,17 @@ PHASE 1: PORT DEFINITION        PHASE 2: SERVICE IMPL        PHASE 3: CLI CUTOVE
 ## Phase 1: Port & Contract Definition (2 Days)
 
 ### Objective
+
 Establish the boundary contracts without touching existing code.
 
 ### Work Packages
 
 #### WP1.1: Inbound Port Definition (4 hours)
+
 **Deliverable:** `crates/phenotype-contracts/src/ports/inbound/retrospective.rs` (200 LOC)
 
 **Tasks:**
+
 1. Create `RetrospectiveService` trait with 5 core methods
 2. Define `RetrospectiveConfig` struct
 3. Define `ExportFormat` enum + helpers
@@ -41,24 +44,29 @@ Establish the boundary contracts without touching existing code.
 5. Add doc comments for all public items
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package phenotype-contracts
 cargo test --doc -p phenotype-contracts
 ```
 
 **Testing:**
+
 - Doc tests for error types
 - No warnings on build
 
 ---
 
 #### WP1.2: Outbound Ports Definition (4 hours)
+
 **Deliverable:**
+
 - `crates/phenotype-contracts/src/ports/outbound/repository.rs` (50 LOC)
 - `crates/phenotype-contracts/src/ports/outbound/cache.rs` (40 LOC)
 - `crates/phenotype-contracts/src/ports/outbound/event_bus.rs` (60 LOC)
 
 **Tasks:**
+
 1. Define `RetrospectiveRepository` trait (6 methods)
 2. Define `RepositoryError` error type
 3. Define `RetrospectiveCache` trait (5 methods)
@@ -68,21 +76,25 @@ cargo test --doc -p phenotype-contracts
 7. Define `EventBusError` error type
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package phenotype-contracts
 cargo clippy --package phenotype-contracts -- -D warnings
 ```
 
 **Testing:**
+
 - No Clippy warnings
 - All traits are `Send + Sync`
 
 ---
 
 #### WP1.3: Domain Models (3 hours)
+
 **Deliverable:** `crates/phenotype-contracts/src/models/retrospective.rs` (100 LOC)
 
 **Tasks:**
+
 1. Create `Retrospective` aggregate root
 2. Create `TimeRange` value object
 3. Create `Metric`, `Trend`, `Insight` entities
@@ -91,35 +103,42 @@ cargo clippy --package phenotype-contracts -- -D warnings
 6. Implement utility methods (e.g., `TimeRange::parse()`)
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package phenotype-contracts
 serde_json::to_string(&retrospective).is_ok()
 ```
 
 **Testing:**
+
 - Serde serialization round-trip tests
 - TimeRange validation tests
 
 ---
 
 #### WP1.4: Module Organization & Testing (3 hours)
+
 **Deliverable:**
+
 - Updated `crates/phenotype-contracts/src/lib.rs`
 - Contract tests in `crates/phenotype-contracts/src/tests/`
 
 **Tasks:**
+
 1. Export all ports and models from lib.rs
 2. Create contract tests (mock implementations)
 3. Create test fixtures for common scenarios
 4. Document the port interface contract
 
 **Acceptance Criteria:**
+
 ```bash
 cargo test --package phenotype-contracts --lib
 cargo test --package phenotype-contracts --doc
 ```
 
 **Testing:**
+
 - All doc tests pass
 - All unit tests pass
 - No dead code warnings
@@ -142,14 +161,17 @@ cargo test --package phenotype-contracts --doc
 ## Phase 2: Service Implementation & Adapters (3 Days)
 
 ### Objective
+
 Implement the business logic and concrete adapters.
 
 ### Work Packages
 
 #### WP2.1: RetrospectiveServiceImpl (2 days)
+
 **Deliverable:** `crates/phenotype-core/src/services/retrospective_service.rs` (300 LOC)
 
 **Tasks:**
+
 1. Create `RetrospectiveServiceImpl` struct
 2. Implement `RetrospectiveService` trait methods:
    - `generate()` - Build + persist + publish event
@@ -171,6 +193,7 @@ Implement the business logic and concrete adapters.
    - `export_pdf()` - PDF generation (stub for MVP)
 
 **Key Design Points:**
+
 - Separate I/O from pure logic
 - All public methods are async
 - Ports used exclusively for I/O
@@ -178,6 +201,7 @@ Implement the business logic and concrete adapters.
 - Event publishing on state changes
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package phenotype-core
 cargo clippy --package phenotype-core -- -D warnings
@@ -185,6 +209,7 @@ cargo test --package phenotype-core
 ```
 
 **Testing:** (WP2.5)
+
 - Unit tests for pure logic (50+ tests)
 - Integration tests with mock ports (30+ tests)
 - Error path coverage (15+ tests)
@@ -192,9 +217,11 @@ cargo test --package phenotype-core
 ---
 
 #### WP2.2: SQLite Repository Adapter (1 day)
+
 **Deliverable:** `crates/phenotype-sqlite-adapter/src/retrospective_repository.rs` (150 LOC)
 
 **Tasks:**
+
 1. Implement `RetrospectiveRepository` trait for SQLite
 2. Create database schema (migrations)
 3. Implement `create()` - INSERT with generated ID
@@ -205,6 +232,7 @@ cargo test --package phenotype-core
 8. Implement `count_by_range()` - COUNT for pagination
 
 **Database Schema:**
+
 ```sql
 CREATE TABLE retrospectives (
     id TEXT PRIMARY KEY,
@@ -223,12 +251,14 @@ CREATE TABLE retrospectives (
 ```
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package phenotype-sqlite-adapter
 cargo test --package phenotype-sqlite-adapter
 ```
 
 **Testing:**
+
 - CRUD operations (8+ tests)
 - Index usage verification
 - Constraint enforcement (3+ tests)
@@ -236,9 +266,11 @@ cargo test --package phenotype-sqlite-adapter
 ---
 
 #### WP2.3: Redis Cache Adapter (6 hours)
+
 **Deliverable:** `crates/phenotype-redis-adapter/src/retrospective_cache.rs` (100 LOC)
 
 **Tasks:**
+
 1. Implement `RetrospectiveCache` trait for Redis
 2. Implement `cache_aggregates()` - SET with TTL
 3. Implement `get_aggregates()` - GET with deserialize
@@ -248,6 +280,7 @@ cargo test --package phenotype-sqlite-adapter
 7. Add error handling for connection failures
 
 **Key Design Points:**
+
 - Fail-open for cache misses (return Ok(None))
 - Fail-closed for cache writes (return Err)
 - Exponential backoff on connection retry
@@ -255,12 +288,14 @@ cargo test --package phenotype-sqlite-adapter
 - Stats collected for observability
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package phenotype-redis-adapter
 cargo test --package phenotype-redis-adapter
 ```
 
 **Testing:**
+
 - Cache hit/miss scenarios (6+ tests)
 - TTL expiration (2+ tests)
 - Connection failure handling (4+ tests)
@@ -268,9 +303,11 @@ cargo test --package phenotype-redis-adapter
 ---
 
 #### WP2.4: Event Bus Adapter (6 hours)
+
 **Deliverable:** `crates/phenotype-event-bus-adapter/src/retrospective_events.rs` (120 LOC)
 
 **Tasks:**
+
 1. Implement `RetrospectiveEventBus` trait
 2. Choose backend (start with SQLite append-only log, optional Kafka)
 3. Implement `publish()` - Persist + queue for subscribers
@@ -280,6 +317,7 @@ cargo test --package phenotype-redis-adapter
 7. Add tracing/observability
 
 **Event Store Schema:**
+
 ```sql
 CREATE TABLE retrospective_events (
     id TEXT PRIMARY KEY,
@@ -294,12 +332,14 @@ CREATE TABLE retrospective_events (
 ```
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package phenotype-event-bus-adapter
 cargo test --package phenotype-event-bus-adapter
 ```
 
 **Testing:**
+
 - Event persistence (4+ tests)
 - Event stream ordering (3+ tests)
 - Retry logic (3+ tests)
@@ -307,7 +347,9 @@ cargo test --package phenotype-event-bus-adapter
 ---
 
 #### WP2.5: Comprehensive Testing (1 day)
+
 **Deliverable:**
+
 - `crates/phenotype-core/src/services/tests/` (200 LOC)
 - Integration tests
 - Test fixtures
@@ -315,6 +357,7 @@ cargo test --package phenotype-event-bus-adapter
 **Test Categories:**
 
 **Unit Tests (Pure Logic)** - 50+ tests
+
 ```rust
 #[test]
 fn test_aggregate_metrics_empty() { }
@@ -334,6 +377,7 @@ fn test_export_json_roundtrip() { }
 ```
 
 **Integration Tests** - 30+ tests
+
 ```rust
 #[tokio::test]
 async fn test_generate_persists_to_repository() { }
@@ -347,6 +391,7 @@ async fn test_export_all_formats() { }
 ```
 
 **Error Path Tests** - 15+ tests
+
 ```rust
 #[tokio::test]
 async fn test_generate_repository_failure() { }
@@ -358,6 +403,7 @@ async fn test_export_invalid_format() { }
 ```
 
 **Acceptance Criteria:**
+
 ```bash
 cargo test --package phenotype-core --lib -- --test-threads=1
 cargo tarpaulin -p phenotype-core --out Html
@@ -365,6 +411,7 @@ cargo tarpaulin -p phenotype-core --out Html
 ```
 
 **Testing:**
+
 - 95+ tests written
 - 80%+ code coverage
 - All error paths covered
@@ -389,14 +436,17 @@ cargo tarpaulin -p phenotype-core --out Html
 ## Phase 3: CLI Refactor & Cutover (2 Days)
 
 ### Objective
+
 Replace old 630 LOC monolith with thin 150 LOC handler.
 
 ### Work Packages
 
 #### WP3.1: CLI Command Refactor (1 day)
+
 **Deliverable:** `crates/agileplus-cli/src/commands/retrospective.rs` (150 LOC)
 
 **Tasks:**
+
 1. Create `RetrospectiveCmd` struct with subcommands
 2. Implement 4 subcommands:
    - `gen` - Generate retrospective
@@ -408,6 +458,7 @@ Replace old 630 LOC monolith with thin 150 LOC handler.
 5. Add command help text and examples
 
 **New Handler Structure:**
+
 ```rust
 pub async fn execute(self, ctx: &CliContext) -> Result<()> {
     let service = ctx.retrospective_service();
@@ -426,6 +477,7 @@ pub async fn execute(self, ctx: &CliContext) -> Result<()> {
 ```
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package agileplus-cli
 cargo clippy --package agileplus-cli -- -D warnings
@@ -433,6 +485,7 @@ agileplus retrospective gen --from 2026-03-01 --to 2026-03-31
 ```
 
 **Testing:**
+
 - CLI integration tests (10+ tests)
 - Help text validation
 - Argument parsing tests
@@ -440,15 +493,18 @@ agileplus retrospective gen --from 2026-03-01 --to 2026-03-31
 ---
 
 #### WP3.2: Context Wiring (6 hours)
+
 **Deliverable:** Updated `crates/agileplus-cli/src/context.rs`
 
 **Tasks:**
+
 1. Add service creation to `CliContext`
 2. Wire service dependencies (repo, cache, event bus)
 3. Add service builder for testing
 4. Update documentation
 
 **Code:**
+
 ```rust
 impl CliContext {
     pub fn retrospective_service(&self) -> Arc<dyn RetrospectiveService> {
@@ -462,21 +518,25 @@ impl CliContext {
 ```
 
 **Acceptance Criteria:**
+
 ```bash
 cargo build --package agileplus-cli
 cargo test --package agileplus-cli
 ```
 
 **Testing:**
+
 - Context initialization (3+ tests)
 - Service wiring validation
 
 ---
 
 #### WP3.3: Old Code Removal (4 hours)
+
 **Deliverable:** Clean repo with old code removed
 
 **Tasks:**
+
 1. Delete old `retrospective.rs` (630 LOC)
 2. Update imports in dependent modules
 3. Remove old test files
@@ -484,12 +544,14 @@ cargo test --package agileplus-cli
 5. Update CHANGELOG
 
 **Verification:**
+
 ```bash
 git diff HEAD~1 -- crates/agileplus-cli/src/commands/
 # Should show: -630 LOC old code, +150 LOC new code
 ```
 
 **Testing:**
+
 - Full CLI test suite passes
 - No dead imports
 - No compilation errors
@@ -497,12 +559,15 @@ git diff HEAD~1 -- crates/agileplus-cli/src/commands/
 ---
 
 #### WP3.4: Migration Documentation (4 hours)
+
 **Deliverable:**
+
 - `docs/reference/RETROSPECTIVE_MIGRATION_GUIDE.md`
 - Code comments for future maintainers
 - Updated API documentation
 
 **Content:**
+
 1. Before/After architecture diagrams
 2. File layout changes
 3. Testing migration guide
@@ -510,6 +575,7 @@ git diff HEAD~1 -- crates/agileplus-cli/src/commands/
 5. Performance comparison
 
 **Acceptance Criteria:**
+
 ```bash
 cargo doc --open
 # Verify all public items documented
@@ -602,14 +668,17 @@ impl TestContext {
 ## Parallel Execution Strategy
 
 **Phase 1:** Single agent (serialized, 2 days)
+
 - Must be sequential (later work depends on traits)
 
 **Phase 2:** 3 agents in parallel (3 days)
+
 - Agent A: Service implementation
 - Agent B: Repository + Cache adapters
 - Agent C: Event bus adapter + Testing
 
 **Phase 3:** 2 agents in parallel (2 days)
+
 - Agent A: CLI refactor + context wiring
 - Agent B: Migration docs + old code removal
 
@@ -627,6 +696,7 @@ If issues arise, rollback points are:
 **After Phase 3:** Production cutover (old code deleted)
 
 To rollback Phase 3:
+
 1. Revert CLI handler commit
 2. Keep services as internal API
 3. No data migration needed (same DB schema)
@@ -636,6 +706,7 @@ To rollback Phase 3:
 ## Success Criteria Summary
 
 ### Phase 1: Contracts Defined
+
 - Traits compile without errors
 - All doc tests pass
 - No warnings with Clippy
@@ -643,6 +714,7 @@ To rollback Phase 3:
 - No breaking changes to existing code
 
 ### Phase 2: Services Implemented
+
 - Service impl passes 80%+ tests
 - All adapters functional
 - Integration tests pass
@@ -650,6 +722,7 @@ To rollback Phase 3:
 - Event sourcing works end-to-end
 
 ### Phase 3: CLI Operational
+
 - New handler < 150 LOC
 - All original functionality preserved
 - Performance same or better

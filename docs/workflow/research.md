@@ -116,24 +116,30 @@ Maps existing code relevant to the feature:
 
 ### With Event System
 ```
+
 UserSignedUp event
   → email handler listens
   → sends welcome email
+
 ```
 
 ### With Database
 ```
+
 Email events
   → stored in email_queue table
   → processed by async worker
   → status updated (pending → sent → failed)
+
 ```
 
 ### With User Model
 ```
+
 User entity
   → needs email_subscribed boolean
   → needs email_preferences JSON
+
 ```
 ```
 
@@ -252,11 +258,13 @@ tokio::spawn(async {
 **Choice**: Handlebars for email templates
 
 **Rationale**:
+
 - Lightweight, no unsafe code
 - Used in 2 other features already
 - Good for email templates
 
 **Alternative**: Tera or Minijinja
+
 - More powerful, overkill for email
 - Would introduce new dependency
 
@@ -269,11 +277,13 @@ tokio::spawn(async {
 **Choice**: Direct API calls (not wrapper crate)
 
 **Rationale**:
+
 - We only need send + webhook handling
 - Reduces dependency bloat
 - Simple REST API, easy to maintain
 
 **Implementation**:
+
 ```rust
 POST https://api.sendgrid.com/v3/mail/send
 {
@@ -294,6 +304,7 @@ POST https://api.sendgrid.com/v3/mail/send
 | Async runtime | tokio (existing) | High |
 | Template engine | Handlebars | Medium |
 | SendGrid API | Direct REST | High |
+
 ```
 
 ## When to Research
@@ -457,6 +468,7 @@ agileplus plan 001
 ```
 
 This uses the research to create:
+
 - Architecture decisions
 - File changes list
 - Build sequence

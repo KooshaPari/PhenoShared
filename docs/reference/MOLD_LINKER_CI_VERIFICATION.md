@@ -25,6 +25,7 @@ The mold linker has been integrated into the GitHub Actions CI/CD pipeline via a
 ### Job: `mold-link-benchmark`
 
 #### Metadata
+
 ```yaml
 name: Mold Linker Benchmark
 runs-on: ubuntu-latest
@@ -34,6 +35,7 @@ permissions:
 ```
 
 #### Why Ubuntu Latest?
+
 - Mold linker is optimized for Linux (GNU ld baseline)
 - macOS uses ld64 (already fast)
 - Windows uses MSVC linker
@@ -44,26 +46,33 @@ permissions:
 ## Workflow Steps
 
 ### Step 1: Checkout Code
+
 ```yaml
 - uses: actions/checkout@v6
 ```
+
 Standard: Fetch repository code.
 
 ### Step 2: Setup Rust Toolchain
+
 ```yaml
 - uses: dtolnay/rust-toolchain@stable
 ```
+
 Uses stable Rust (sufficient for benchmark; nightly not needed).
 
 ### Step 3: Cache Dependencies
+
 ```yaml
 - uses: Swatinem/rust-cache@v2
   with:
     workspaces: .
 ```
+
 Caches Cargo artifacts to speed up subsequent runs.
 
 ### Step 4: Install Mold Linker
+
 ```yaml
 - name: Install mold linker
   run: |
@@ -76,6 +85,7 @@ Caches Cargo artifacts to speed up subsequent runs.
 **Expected Output**: `Mold version: 2.x.x (or latest)`
 
 ### Step 5: Verify Installation
+
 ```yaml
 - name: Verify mold installation
   run: which mold && mold --version
@@ -83,12 +93,14 @@ Caches Cargo artifacts to speed up subsequent runs.
 
 **Purpose**: Ensure mold is in PATH and accessible
 **Expected Output**:
+
 ```
 /usr/bin/mold
 Mold 2.4.x release
 ```
 
 ### Step 6: Baseline Build (No Mold)
+
 ```yaml
 - name: Build baseline (default ld)
   id: baseline
@@ -107,6 +119,7 @@ Mold 2.4.x release
 **Note**: Uses nanosecond precision for accurate measurement
 
 ### Steps 7-9: Mold Benchmark Runs (3x)
+
 ```yaml
 - name: Build with mold (run 1)
   id: mold1
@@ -127,6 +140,7 @@ Repeated 3 times (runs 1, 2, 3)
 **Why 3 runs?** To average out variance and ensure reproducibility
 
 ### Step 10: Calculate & Report Results
+
 ```yaml
 - name: Calculate metrics and report
   if: github.event_name == 'pull_request'
@@ -140,11 +154,13 @@ Repeated 3 times (runs 1, 2, 3)
 ```
 
 **Purpose**:
+
 1. Calculate average mold time
 2. Compute improvement percentage
 3. Post results as PR comment (if pull request)
 
 **Output Format**:
+
 ```
 🔗 **Mold Linker Benchmark Results**
 
@@ -192,17 +208,20 @@ github api repos/<REDACTED>/phenotype-infrakit/actions/workflows
 ### Test 2: Job Runs on Linux Only ✓
 
 The `runs-on: ubuntu-latest` specification ensures:
+
 - ✓ mold installation is available via apt
 - ✓ GNU ld is the default linker (mold's baseline)
 - ✓ Benchmark is meaningful (5-10x improvement expected)
 
 **Non-Linux Platforms**:
+
 - macOS runner: Would skip job (not in trigger events for macOS)
 - Windows runner: Would skip job (not in trigger events for Windows)
 
 ### Test 3: PR Comment Report Format ✓
 
 When running on a PR, the workflow posts:
+
 - ✓ Baseline time
 - ✓ Mold run 1, 2, 3
 - ✓ Average mold time
@@ -212,6 +231,7 @@ When running on a PR, the workflow posts:
 ### Test 4: Measurement Accuracy ✓
 
 Uses nanosecond-precision timestamps:
+
 ```bash
 START_TIME=$(date +%s%N)  # Nanoseconds since epoch
 END_TIME=$(date +%s%N)
@@ -283,6 +303,7 @@ Job completed in: ~15 minutes (4 × full builds + overhead)
 ### Manual Test (Before Going Live)
 
 1. Create test PR with dummy commit:
+
    ```bash
    git checkout -b test/mold-benchmark
    echo "# Test" > TEST.md
@@ -293,7 +314,7 @@ Job completed in: ~15 minutes (4 × full builds + overhead)
    ```
 
 2. Monitor workflow in GitHub Actions tab:
-   - Go to: https://github.com/KooshaPari/phenotype-infrakit/actions
+   - Go to: <https://github.com/KooshaPari/phenotype-infrakit/actions>
    - Find: "Mold Linker Benchmark" job
    - Verify: All steps pass
 
@@ -318,16 +339,19 @@ Job completed in: ~15 minutes (4 × full builds + overhead)
 ## Monitoring & Maintenance
 
 ### Weekly
+
 - [ ] Check benchmark results from automated PRs
 - [ ] Monitor for linker errors or failures
 - [ ] Verify mold version is current
 
 ### Monthly
-- [ ] Review mold release notes: https://github.com/rui314/mold/releases
+
+- [ ] Review mold release notes: <https://github.com/rui314/mold/releases>
 - [ ] Check for security updates
 - [ ] Compare link times against baseline
 
 ### Quarterly
+
 - [ ] Evaluate mold adoption in ecosystem
 - [ ] Consider upgrading to new major version
 - [ ] Review and update plan based on CI results
@@ -339,6 +363,7 @@ Job completed in: ~15 minutes (4 × full builds + overhead)
 **If benchmark job fails repeatedly**:
 
 1. Comment out or remove mold job from `.github/workflows/benchmark.yml`:
+
    ```bash
    # Temporarily disable mold job
    git edit .github/workflows/benchmark.yml  # Remove mold-link-benchmark job
@@ -356,6 +381,7 @@ Job completed in: ~15 minutes (4 × full builds + overhead)
 ## WP2.3 Status: COMPLETE ✓
 
 **Deliverables**:
+
 - [x] mold-link-benchmark job added to benchmark.yml
 - [x] Job runs on ubuntu-latest only
 - [x] Baseline and mold measurements implemented

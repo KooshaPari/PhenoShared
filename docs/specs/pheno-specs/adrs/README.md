@@ -40,6 +40,7 @@ We use the [MADR](https://adr.github.io/madr/) (Markdown ADR) format with Phenot
 ## ADR Categories
 
 ### Architecture & Design
+
 - ADR-001: Hexagonal Architecture Adoption
 - ADR-004: Unified Specification Registry
 - ADR-012: Architecture Foundation and Core Principles
@@ -49,11 +50,13 @@ We use the [MADR](https://adr.github.io/madr/) (Markdown ADR) format with Phenot
 - ADR-016: Deployment Pipeline and Infrastructure Strategy
 
 ### Process & Workflow
+
 - ADR-003: Spec-Driven Development via AgilePlus
 - ADR-005: Multi-Format Documentation Strategy
 - ADR-006: Traceability-First Development
 
 ### Technology Choices
+
 - ADR-002: Rust as Primary Systems Language
 - ADR-007: Evaluation Strategy
 - ADR-008: Real-Time Synchronization Strategy
@@ -121,7 +124,7 @@ How will we address the negative consequences?
 
 ## Best Practices
 
-1. **One decision per ADR**: Keep focused on a single architectural choice     
+1. **One decision per ADR**: Keep focused on a single architectural choice
 2. **Include context**: Explain the forces and constraints that led to this decision
 3. **Document consequences**: Every decision has trade-offs
 4. **Link related decisions**: Use the Related section to connect ADRs
@@ -132,7 +135,7 @@ How will we address the negative consequences?
 
 - [MADR](https://adr.github.io/madr/) - Markdown ADR format
 - [ADR Organization](https://adr.github.io/) - ADR resources and tools
-- [Documenting Architecture Decisions](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) - Original blog post by Michael Nygard     
+- [Documenting Architecture Decisions](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) - Original blog post by Michael Nygard
 - [PhenoSpecs SPEC](../SPEC.md) - System specification
 
 ---

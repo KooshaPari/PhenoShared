@@ -9,6 +9,7 @@
 ## Phase 1 Overview
 
 Phase 1 focuses on **low-effort, high-impact standardization** across the Phenotype ecosystem:
+
 - **WS1 (Rust):** Formalize error handling with `thiserror` derive macros
 - **WS2 (Go):** Implement structured logging middleware patterns
 - **WS3 (TypeScript):** Validate Zod v3.24.x standardization across projects
@@ -32,23 +33,27 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
 | Compliance percentage | **93%** |
 
 **Projects Audited:**
+
 - ✅ phenotype-infrakit (4 files)
 - ✅ heliosCLI/codex-rs (5 files)
 - ✅ platforms/thegent (4 files)
 - ✅ heliosCLI harness crates (5 files)
 
 **Tier 1 Migrations (Immediate):**
+
 1. `/crates/phenotype-policy-engine/phenotype-policy-engine/src/error.rs` — 26 LOC
    - Effort: ~5 minutes
    - Risk: Low
    - Migrate 4x `impl From<_>` → `#[from]` attributes
 
 **Tier 2 Migrations (Next Pass):**
+
 1. `/heliosCLI/codex-rs/codex-api/src/error.rs` — 5 LOC
    - Effort: ~2 minutes
    - Risk: Low
 
 **Exceptions (Keep As-Is):**
+
 - `windows-sandbox-rs/setup_error.rs` — intentional for anyhow integration
 - `phenotype-config-core/src/error.rs` — custom logic justified
 
@@ -65,10 +70,12 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
 **Latest Update:** All middleware tests passing, running full test suite
 
 **Implementation Created:**
+
 - `/platforms/thegent/apps/byteport/backend/api/internal/middleware/logging.go` — Structured logging middleware
 - `/platforms/thegent/apps/byteport/backend/api/internal/middleware/logging_test.go` — Comprehensive tests
 
 **Test Results:**
+
 - TestLoggingMiddleware_PathLogging ✅ PASS
 - TestLoggingMiddleware_ResponseSize ✅ PASS
 - TestLoggingMiddleware_ClientIP ✅ PASS
@@ -95,6 +102,7 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
 | Compliance percentage | **100%** |
 
 **Projects Audited:**
+
 - ✅ heliosCLI SDK — Zod ^3.24.2 (with zod-to-json-schema)
 - ✅ platforms/thegent/byteport/frontend — Zod ^3.24.1 (with @hookform/resolvers)
 - ✅ platforms/thegent/byteport/sdk — No validation library (N/A for CLI tools)
@@ -102,6 +110,7 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
 **Status:** ✅ **AUDIT PASSED** — No migration required
 
 **Governance Updates Recommended:**
+
 1. Document Zod standard in CLAUDE.md files (all 3 project levels)
 2. Version alignment: heliosCLI SDK → 3.24.2 (consistency)
 3. Optional: Extract BytePort Frontend inline schemas to `src/schemas/`
@@ -126,15 +135,18 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
 ## Phase 1 Deliverables
 
 ### Audit Reports
+
 - ✅ `/tmp/WS1_AUDIT_REPORT.md` — Rust error handling audit (313 lines)
 - ✅ `/tmp/WS3_AUDIT_REPORT.md` — TypeScript validation audit (466 lines)
 - ▶️ WS2 audit report (pending completion)
 
 ### Code Artifacts
+
 - ✅ `logging.go` + `logging_test.go` — Go middleware implementation with test coverage
 - ⏳ WS2 audit report summarizing middleware patterns and testing results
 
 ### Governance Updates
+
 - 📝 **PENDING:** Update CLAUDE.md files with Zod validation standard (from WS3)
 - 📝 **PENDING:** Update Rust error handling standard (from WS1)
 - 📝 **PENDING:** Update Go logging standard (from WS2)
@@ -144,6 +156,7 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
 ## Phase 1 Next Steps
 
 ### Immediate (After WS2 Completion)
+
 1. Collect WS2 final audit report and middleware implementation details
 2. Consolidate all three audit reports into master summary
 3. Create per-project worktree branches for Phase 1 migrations:
@@ -152,11 +165,13 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
    - `chore/phase1-ws3-ts-validation-docs`
 
 ### Short-Term (Phase 1 Implementation)
+
 1. Migrate WS1 files (phenotype-policy-engine, codex-api) — ~7 minutes
 2. Merge WS2 Go logging middleware — requires integration testing
 3. Merge WS3 CLAUDE.md governance updates — documentation only
 
 ### Phase 2 Preparation
+
 - Launch WS4 (Python httpx consolidation) — ~30-50 LOC
 - Launch WS5 (Python pydantic-settings) — ~30-50 LOC
 - Launch WS6 (Rust TOML consolidation) — ~50-100 LOC
@@ -166,16 +181,19 @@ Phase 1 focuses on **low-effort, high-impact standardization** across the Phenot
 ## Cross-Cutting Observations
 
 ### Ecosystem Health
+
 - **Rust:** Excellent standardization (93% thiserror adoption already in place)
 - **Go:** Patterns fragmented — logging middleware addresses critical gap
 - **TypeScript:** Perfect standardization (100% Zod adoption)
 
 ### Key Insights
+
 1. **Rust error handling** is already highly standardized — only minor cleanup needed
 2. **Go logging** requires new implementation (no existing middleware pattern)
 3. **TypeScript validation** already meets standards — governance documentation sufficient
 
 ### Reuse Opportunities
+
 - Go logging middleware can be templated for other Go projects (heliosCLI, codex-rs)
 - Zod schema patterns can be documented in central reference (optional enhancement)
 - Rust error handling patterns can be enforced via linting rules

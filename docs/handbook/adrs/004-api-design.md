@@ -21,12 +21,14 @@ JSON-RPC provides a lightweight, protocol-neutral envelope for typed method disp
 ## Consequences
 
 ### Positive
+
 - Engine services communicate with zero REST overhead and full type safety
 - Web APIs remain RESTful and discoverable via OpenAPI spec
 - Clear boundary prevents RPC anti-patterns from reaching public consumers
 - Both protocols are JSON-native, so serialisation logic is shared
 
 ### Negative / Trade-offs
+
 - Two protocol stacks require developers to be fluent in both
 - JSON-RPC error codes differ from HTTP status codes; mapping layer needed at the boundary
 - GraphQL or gRPC may be reconsidered if subscription patterns become dominant

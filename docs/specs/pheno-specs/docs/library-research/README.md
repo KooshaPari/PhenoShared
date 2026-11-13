@@ -1,21 +1,26 @@
 # Phenotype Registry System - Master Index
 
 **Unified entry point for all Phenotype registries.**
+
 ## Registry Files
 
 ### Core Registries
+
 - [PhenoSpecs Registry](https://github.com/KooshaPari/PhenoSpecs/blob/main/registry.yaml) - Specifications
 - [HexaKit Registry](https://github.com/KooshaPari/HexaKit/blob/main/registry.yaml) - Templates
 - [PhenoHandbook Config](https://github.com/KooshaPari/PhenoHandbook/blob/main/docs/.vitepress/config.mts) - Patterns
 
 ### 📚 Library & Research Registry
+
 **[LIBRARY_RESEARCH_REGISTRY.md](./LIBRARY_RESEARCH_REGISTRY.md)** - Comprehensive catalog of:
+
 - **150+ libraries** used across all repos
 - **40+ research papers** and technical foundations
 - **Wrap vs Handroll decisions** with rationale
 - **Research bibliographies** by domain
 
 This registry enables informed decisions about when to wrap existing libraries versus build custom solutions.
+
 - **LIBRARY_RESEARCH_REGISTRY.md** - Libraries, dependencies & research papers
 
 ---
@@ -84,12 +89,14 @@ Flow:
 **Purpose:** Central source of truth for design specifications
 
 **Key Files:**
+
 - `registry.yaml` - Index of all specs with links to implementations
 - `specs/<domain>/` - Feature specifications by domain
 - `adrs/` - Architecture Decision Records
 - `openapi/` - API contracts
 
 **Usage:**
+
 ```bash
 # Find a spec
 ls PhenoSpecs/specs/auth/
@@ -103,6 +110,7 @@ cat PhenoSpecs/registry.yaml | grep SPEC-AUTH-001
 **Purpose:** Living documentation for how to build software
 
 **Key Files:**
+
 - `patterns/<domain>/` - Design patterns
 - `anti-patterns/` - Common mistakes
 - `guidelines/` - Coding standards
@@ -110,6 +118,7 @@ cat PhenoSpecs/registry.yaml | grep SPEC-AUTH-001
 - `mkdocs.yml` - Documentation site config
 
 **Usage:**
+
 ```bash
 # Read a pattern
 cat PhenoHandbook/patterns/auth/oauth-pkce.md
@@ -125,12 +134,14 @@ cat PhenoHandbook/checklists/deployment.md
 **Purpose:** Code templates and project scaffolding
 
 **Key Files:**
+
 - `registry.yaml` - Template index with metadata
 - `by-language/<lang>/` - Language templates
 - `by-project/<type>/` - Project templates
 - `by-architecture/<pattern>/` - Architecture templates
 
 **Usage:**
+
 ```bash
 # List templates
 hexakit list --category by-language
@@ -159,6 +170,7 @@ Each registry links to the others:
 ## CI/CD Integration
 
 All registries have:
+
 - Automated validation on PR
 - Link checking (spec → pattern → template)
 - Traceability verification

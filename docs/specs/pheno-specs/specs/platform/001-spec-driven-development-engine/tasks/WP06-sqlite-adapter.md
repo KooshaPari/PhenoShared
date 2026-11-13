@@ -68,6 +68,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Purpose**: Define the database schema as versioned, embedded SQL migrations that run on startup. Migrations must be idempotent and reversible.
 
 **Steps**:
+
 1. Create `crates/agileplus-sqlite/src/migrations/` directory.
 2. Create migration files numbered sequentially:
    - `001_create_features.sql` -- features table
@@ -81,6 +82,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
    - `009_create_indexes.sql` -- all indexes from data-model.md
 
 3. Each migration file contains `-- UP` and `-- DOWN` sections:
+
    ```sql
    -- UP
    CREATE TABLE IF NOT EXISTS features (
@@ -109,6 +111,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/migrations/` (all files), `crates/agileplus-sqlite/src/migrations/mod.rs`
 
 **Validation**:
+
 - Migrations create all 8 tables + indexes.
 - Running migrations twice is idempotent (uses `CREATE TABLE IF NOT EXISTS`).
 - `_migrations` table tracks which migrations have been applied.
@@ -121,14 +124,17 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Purpose**: Create the adapter struct that holds the database connection and implements the `StoragePort` trait.
 
 **Steps**:
+
 1. Create `crates/agileplus-sqlite/src/lib.rs` with the public adapter struct.
 2. Define `SqliteStorageAdapter`:
+
    ```rust
    pub struct SqliteStorageAdapter {
        conn: Arc<Mutex<Connection>>,  // Write-serialized connection
        read_pool: Vec<Connection>,     // Read-only connections for concurrent reads
    }
    ```
+
 3. Implement constructor:
    - `pub fn new(db_path: &Path) -> Result&lt;Self, DomainError>` -- opens DB, enables WAL, runs migrations
    - `pub fn in_memory() -> Result&lt;Self, DomainError>` -- for testing
@@ -140,6 +146,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/lib.rs`
 
 **Validation**:
+
 - `SqliteStorageAdapter::in_memory()` succeeds and creates all tables.
 - WAL mode is confirmed via `PRAGMA journal_mode;` query.
 - Foreign keys are enforced.
@@ -151,6 +158,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Purpose**: Implement all feature-related `StoragePort` methods.
 
 **Steps**:
+
 1. Implement in `crates/agileplus-sqlite/src/lib.rs` or a separate `repository/features.rs`:
    - `create_feature`: INSERT with all fields, return `last_insert_rowid()`.
    - `get_feature_by_slug`: SELECT WHERE slug = ?1, map row to `Feature` struct.
@@ -170,6 +178,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/lib.rs` or `crates/agileplus-sqlite/src/repository/features.rs`
 
 **Validation**:
+
 - All 6 feature methods work with in-memory SQLite.
 - Parameterized queries (no string interpolation).
 - Row mapping handles all Feature fields including spec_hash (BLOB).
@@ -181,6 +190,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Purpose**: Implement all work-package-related `StoragePort` methods including dependency queries.
 
 **Steps**:
+
 1. Implement WP CRUD methods:
    - `create_work_package`: INSERT, handle `file_scope` as JSON text, return ID.
    - `get_work_package`: SELECT by ID, parse `file_scope` JSON array.
@@ -191,6 +201,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
    - `get_ready_wps`: Query WPs in `planned` state whose dependencies are all in `done` state.
 
 2. The `get_ready_wps` query is the most complex:
+
    ```sql
    SELECT wp.* FROM work_packages wp
    WHERE wp.feature_id = ?1 AND wp.state = 'planned'
@@ -211,6 +222,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/lib.rs` or `crates/agileplus-sqlite/src/repository/work_packages.rs`
 
 **Validation**:
+
 - `file_scope` round-trips correctly (Vec&lt;String> -> JSON text -> Vec&lt;String>).
 - `get_ready_wps` correctly evaluates transitive dependency satisfaction.
 - WP foreign key to features is enforced.
@@ -222,6 +234,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Purpose**: Implement audit entry persistence. The hash chain integrity is a domain concern (WP04) -- this layer just stores and retrieves entries.
 
 **Steps**:
+
 1. Implement audit methods:
    - `append_audit_entry`: INSERT with hash and prev_hash as BLOBs. Verify that prev_hash matches the hash of the most recent entry for this feature (defense in depth).
    - `get_audit_trail`: SELECT WHERE feature_id = ?1 ORDER BY id ASC (chronological order for chain verification).
@@ -230,6 +243,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 2. BLOB handling for hashes: rusqlite handles `[u8; 32]` or `Vec&lt;u8>` natively. Use `row.get::<_, Vec&lt;u8>>(col)` and convert.
 3. `evidence_refs` stored as JSON text, deserialized on read.
 4. Defense-in-depth check in `append_audit_entry`:
+
    ```rust
    let latest = self.get_latest_audit_entry(entry.feature_id).await?;
    if let Some(latest) = latest {
@@ -247,6 +261,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/lib.rs` or `crates/agileplus-sqlite/src/repository/audit.rs`
 
 **Validation**:
+
 - Hash BLOBs store and retrieve correctly (32 bytes each).
 - Chain integrity check in append prevents broken chains at the storage layer.
 - Audit trail returns entries in chronological order.
@@ -258,6 +273,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Purpose**: Complete the remaining `StoragePort` methods for evidence, policy rules, and metrics.
 
 **Steps**:
+
 1. **Evidence CRUD**:
    - `create_evidence`: INSERT, return ID. `metadata` stored as nullable JSON text.
    - `get_evidence_by_wp`: SELECT WHERE wp_id = ?1.
@@ -281,6 +297,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/lib.rs` or `crates/agileplus-sqlite/src/repository/` (multiple files)
 
 **Validation**:
+
 - JSON fields (evidence.metadata, policy_rule.rule, governance_contract.rules) round-trip correctly.
 - Evidence type CHECK constraint is enforced (valid types from data-model.md).
 - Policy domain CHECK constraint is enforced (quality, security, reliability).
@@ -292,10 +309,13 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Purpose**: Parse git artifacts (meta.json, audit/chain.jsonl, evidence files) and populate SQLite from scratch. This is the "SQLite is a cache" guarantee -- if the database is deleted, it can be fully reconstructed from git.
 
 **Steps**:
+
 1. Add a method to `SqliteStorageAdapter`:
+
    ```rust
    pub async fn rebuild_from_git(&self, vcs: &dyn VcsPort) -> Result<RebuildReport, DomainError>
    ```
+
    Note: This method takes a `VcsPort` reference to read git artifacts without coupling to git2 directly.
 
 2. Define `RebuildReport { features_restored: usize, wps_restored: usize, audit_entries_restored: usize, evidence_restored: usize }`.
@@ -321,6 +341,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 **Files**: `crates/agileplus-sqlite/src/rebuild.rs`
 
 **Validation**:
+
 - Rebuild from fixtures produces identical records to manual creation.
 - Chain integrity is verified during import (rejects corrupt chain.jsonl).
 - Transaction atomicity: partial failure leaves DB unchanged.
@@ -354,6 +375,7 @@ Implement the SQLite storage adapter in `crates/agileplus-sqlite/` that fulfills
 | Timestamp | Action | Agent | Details |
 |-----------|--------|-------|---------|
 | 2026-02-27T00:00:00Z | Prompt generated | system | WP06 prompt created via /spec-kitty.tasks |
+
 - 2026-02-28T09:38:26Z – claude-wp06 – shell_pid=57473 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T09:51:42Z – claude-wp06 – shell_pid=57473 – lane=for_review – Ready for review: SqliteStorageAdapter with 23 passing tests
 - 2026-02-28T09:51:50Z – claude-wp06 – shell_pid=57473 – lane=done – Review passed: 23 tests, clean build, parameterized queries, WAL mode

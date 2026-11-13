@@ -12,4 +12,3 @@ heavy-build dispatch flows.
 The badge is appropriate as governance metadata because this repo controls
 agent execution infrastructure. It should remain a README badge only and should
 not affect IaC, secrets, runbooks, or runtime configuration.
-

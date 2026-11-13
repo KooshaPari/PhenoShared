@@ -37,6 +37,7 @@ fn test() -> TaskResult {
 ```
 
 The macro system will provide:
+
 - `#[task]` - Marks a function as a task
 - `#[deps(...)]` - Declares task dependencies
 - `#[cache]` - Enables output caching
@@ -48,6 +49,7 @@ The macro system will provide:
 ### Why Native Rust Code
 
 1. **Type Safety**: Compile-time error detection
+
    ```rust
    // This will fail at compile time if 'build' doesn't exist
    #[deps(build)]
@@ -83,6 +85,7 @@ The macro system will provide:
 ### Comparison with Mage (Go)
 
 Mage proved this approach works at scale. We improve upon it by:
+
 - Using Rust's more expressive macro system
 - Built-in async support via Tokio
 - Better dependency declaration (attribute vs function call)
@@ -201,10 +204,10 @@ test_task = task(
 
 ## References
 
-- Mage Design: https://magefile.org/
-- Rust Procedural Macros: https://doc.rust-lang.org/reference/procedural-macros.html
-- Inventory Pattern: https://github.com/dtolnay/inventory
-- Bazel Starlark: https://bazel.build/rules/language
+- Mage Design: <https://magefile.org/>
+- Rust Procedural Macros: <https://doc.rust-lang.org/reference/procedural-macros.html>
+- Inventory Pattern: <https://github.com/dtolnay/inventory>
+- Bazel Starlark: <https://bazel.build/rules/language>
 
 ## Changelog
 

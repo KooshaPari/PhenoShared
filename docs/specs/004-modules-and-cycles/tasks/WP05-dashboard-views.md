@@ -23,6 +23,7 @@ WP02 must be merged. WP05 can run in parallel with WP03, WP04, and WP06.
 ## Objectives
 
 Add Module and Cycle views to the `agileplus-api` dashboard crate. This includes:
+
 - REST API routes for serving Module tree and Cycle data as JSON (for programmatic access).
 - Askama HTML templates for the Module tree sidebar, Cycle kanban board, and Cycle detail page.
 - SSE event type extensions to push Module/Cycle change events to connected browser clients.

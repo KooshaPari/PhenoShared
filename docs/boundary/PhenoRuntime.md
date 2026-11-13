@@ -38,6 +38,7 @@
 **Reviewer:** registry batch4 audit (queue-refresh-batch4)
 **Disposition-index row:** DSPI-NEW (`repo-PhenoRuntime`, fsm=queued)
 **Decisions:**
+
 - ABSORB target: `pheno` monorepo (placeholder — deep audit required
   first; current branch may carry WIP that needs reconciliation).
 

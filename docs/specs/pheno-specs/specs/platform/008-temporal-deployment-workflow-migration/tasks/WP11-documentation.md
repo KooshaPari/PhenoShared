@@ -19,6 +19,7 @@ Create all operational documentation for the Temporal + Hatchet infrastructure. 
 ## Context
 
 Documentation lives in `docs/infra/` of the main project repository. Each document below must be:
+
 - Written in Markdown with Mermaid diagrams for architecture
 - Linked from `docs/infra/README.md`
 - Reviewed by a human operator before merge
@@ -112,13 +113,17 @@ graph LR
 ## Key Concepts
 
 ### Workflows
+
 A Workflow is a durable function execution. It has:
+
 - **Workflow ID**: Unique identifier (e.g., `agent-dispatch-{task_id}`)
 - **Run ID**: Each execution of a workflow gets a new run ID
 - **Task Queue**: Worker's subscription queue (default: `default`)
 
 ### Activities
+
 An Activity is a single step executed by a worker:
+
 - Heartbeat support for long-running steps
 - Automatic retry with configurable backoff
 - Timeout per activity and per attempt
@@ -136,9 +141,9 @@ An Activity is a single step executed by a worker:
 | Port | Service | URL |
 |------|---------|-----|
 | 7233 | gRPC | temporal:7233 |
-| 8233 | Frontend UI | https://temporal.internal |
-| 9233 | Metrics | http://temporal:9233/metrics |
-| 9200 | Elasticsearch | http://elasticsearch:9200 |
+| 8233 | Frontend UI | <https://temporal.internal> |
+| 9233 | Metrics | <http://temporal:9233/metrics> |
+| 9200 | Elasticsearch | <http://elasticsearch:9200> |
 
 ## Environment Variables
 
@@ -152,21 +157,25 @@ An Activity is a single step executed by a worker:
 ## Common Operations
 
 ### View Running Workflows
+
 ```bash
 tctl workflow list
 ```
 
 ### Cancel a Stuck Workflow
+
 ```bash
 tctl workflow cancel {workflow_id}
 ```
 
 ### Reset a Failed Workflow
+
 ```bash
 tctl workflow reset --workflow_id {workflow_id} --reason "Manual reset after bug fix"
 ```
 
 ### View Workflow History
+
 ```bash
 tctl workflow show {workflow_id}
 ```
@@ -177,6 +186,7 @@ tctl workflow show {workflow_id}
 curl http://localhost:8233/health
 # Expected: {"status":"SERVING"}
 ```
+
 ```
 
 ### 3. `docs/infra/temporal/AUTHORING.md` — Workflow Authoring Guide
@@ -251,6 +261,7 @@ cargo test --package temporal-worker --test workflow_integration
 3. **Timeout**: Always set reasonable timeouts
 4. **Saga**: Use compensation for distributed transactions
 5. **Local activity**: For < 30s synchronous work, use `#[activity(local)]`
+
 ```
 
 ### 4. `docs/infra/temporal/TROUBLESHOOT.md` — Troubleshooting Guide
@@ -321,6 +332,7 @@ docker logs temporal-worker --since=5m | grep -E "ERROR|panic"
 
 - **Cancel**: Ends the workflow immediately. Use for stuck/abort workflows.
 - **Reset**: Erases history and restarts from the beginning. Use after fixing a bug in the workflow code.
+
 ```
 
 ### 5. `docs/infra/hatchet/README.md` — Hatchet Overview
@@ -362,8 +374,9 @@ graph LR
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| HATCHET_API_URL | https://hatchet.internal | Hatchet API endpoint |
+| HATCHET_API_URL | <https://hatchet.internal> | Hatchet API endpoint |
 | HATCHET_DB_PASSWORD | (from .env) | PostgreSQL password |
+
 ```
 
 ### 6. `docs/infra/nats/README.md` — NATS Role
@@ -414,6 +427,7 @@ curl http://localhost:8222/healthz
 # Check connections
 nats server info
 ```
+
 ```
 
 ## Acceptance Criteria

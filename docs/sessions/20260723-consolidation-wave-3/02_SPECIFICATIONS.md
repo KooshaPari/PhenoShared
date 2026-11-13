@@ -16,4 +16,3 @@ Acceptance:
 - [x] AgilePlus dirty payload snapshot recorded; publication remains blocked.
 - [ ] Remaining high-priority local-ahead repos preserved and published.
 - [ ] Wave 3 top-20 docket fully dispositioned.
-

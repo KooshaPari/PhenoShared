@@ -89,6 +89,7 @@ dc961ae  chore(repro): Cargo.lock SHA-256 lockfile + verify_lockfile.sh
 ### 6.3 Commit `c1be0bc` — MoE top-k stress
 
 `perf-core/kernel-registry/tests/sota_operators/moe_routing.rs:336-495` — added 4 tests:
+
 1. `moe_routing_top_k_4_byte_identical_64_experts` — `top_k=4`, `num_experts=64`, `batch=16`, seed `0xC0FFEE42`
 2. `moe_routing_top_k_8_byte_identical_64_experts` — Mixtral-8x7B native top-k=8, seed `0xDEADBEE8`
 3. `moe_routing_top_k_4_weights_sum_to_one` — per-token weight sum in `(0.999, 1.001)`
@@ -101,6 +102,7 @@ Two `for t in 0..batch` loops converted to `enumerated()` to satisfy clippy `nee
 `perf-core/kernel-registry/tests/sota_operators/discrete_diffusion_l2.rs` (214L, new) — added 3 tests: linear + cosine schedule L2 reconstruction error decaying as T ∈ {4, 16, 64, 256}, plus seed-determinism (T=64 bit-identical). Helper `reconstruction_l2_error(T, schedule, tokens, vocab, mask_id, seed)` re-implemented locally with `Lcg` (no leak of private items). Test names use `T` (capital) under `#[allow(non_snake_case)]` — clippy compliant.
 
 Observed L2 errors:
+
 ```
 T=4   linear=19.3391 cosine=19.3391
 T=16  linear=8.3666  cosine=12.6095
@@ -169,6 +171,7 @@ The remaining 2 WARN are external dependencies intentionally not installed in th
 | **8 close** | **19** | **17** | **2** | **0** |
 
 **Turn 8 transitions:**
+
 - Added 1 new check (`doctor_check_count_at_least_18`) → pass.
 
 The only remaining WARNs are external deps. To close them, install `mlx-lm` + `turboquant-rust-extension` (both genuine optional out-of-tree deps).

@@ -19,12 +19,14 @@ Run Temporal + Hatchet in production alongside the rollback branch for 48 hours.
 ## Context
 
 The 48-hour window is based on:
+
 - Full diurnal cycle covered (2 day/night ops periods)
 - CI runs (hourly) + data syncs (every 6h) covered multiple times
 - Agent dispatches (sporadic) observed over enough volume
 - Temporal history retention default is 7 days — 48h is well within retention
 
 During this period:
+
 - Temporal is the primary workflow engine
 - `rollback/nats-workflow-logic` branch is archived (not deleted)
 - GitHub release tag `v1.0.0-temporal` is created on success

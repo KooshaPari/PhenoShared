@@ -90,6 +90,7 @@ tokio runtime and port implementations.
 ### T085: Implement axum Router in `crates/agileplus-api/src/`
 
 **Files**:
+
 - `crates/agileplus-api/src/lib.rs`
 - `crates/agileplus-api/src/router.rs`
 
@@ -99,6 +100,7 @@ middleware stack.
 **Implementation Steps**:
 
 1. Define the shared application state:
+
    ```rust
    #[derive(Clone)]
    pub struct AppState<S: StoragePort, V: VcsPort, O: ObservabilityPort> {
@@ -110,6 +112,7 @@ middleware stack.
    ```
 
 2. Build the router with route groups:
+
    ```rust
    pub fn create_router<S, V, O>(state: AppState<S, V, O>) -> Router
    where
@@ -137,6 +140,7 @@ middleware stack.
    - `audit.rs`: GET /features/:slug/audit, POST /features/:slug/audit/verify
 
 4. Add health and info endpoints (no auth required):
+
    ```rust
    Router::new()
        .route("/health", get(|| async { Json(json!({"status": "ok"})) }))
@@ -145,6 +149,7 @@ middleware stack.
    ```
 
 5. Set up the server startup integrated with the existing `serve` command:
+
    ```rust
    pub async fn start_api(addr: SocketAddr, state: AppState<...>) -> Result<()> {
        let app = create_router(state);
@@ -165,6 +170,7 @@ without auth. Test that authenticated endpoints return 401 without a key.
 ### T086: Implement API Route Handlers
 
 **Files**:
+
 - `crates/agileplus-api/src/routes/features.rs`
 - `crates/agileplus-api/src/routes/work_packages.rs`
 - `crates/agileplus-api/src/routes/governance.rs`
@@ -176,6 +182,7 @@ services through port traits.
 **Implementation Steps**:
 
 1. Implement feature handlers:
+
    ```rust
    pub async fn list_features(
        State(state): State<AppState<impl StoragePort, impl VcsPort, impl ObservabilityPort>>,
@@ -200,6 +207,7 @@ services through port traits.
    ```
 
 2. Implement work package handlers:
+
    ```rust
    pub async fn list_work_packages(
        State(state): State<AppState<...>>,
@@ -213,6 +221,7 @@ services through port traits.
    ```
 
 3. Implement governance handlers:
+
    ```rust
    pub async fn get_governance(
        State(state): State<AppState<...>>,
@@ -235,6 +244,7 @@ services through port traits.
    ```
 
 4. Implement audit handlers:
+
    ```rust
    pub async fn get_audit_trail(
        State(state): State<AppState<...>>,
@@ -248,6 +258,7 @@ services through port traits.
 
 5. Define response types in a `responses.rs` module. These are separate from domain types —
    they control the JSON shape exposed to API consumers:
+
    ```rust
    #[derive(Serialize)]
    pub struct FeatureResponse {
@@ -261,6 +272,7 @@ services through port traits.
    ```
 
 6. Define a consistent `ApiError` enum mapped to HTTP status codes:
+
    ```rust
    pub enum ApiError {
        NotFound(String),        // 404
@@ -296,6 +308,7 @@ endpoints.
 **Implementation Steps**:
 
 1. Define the middleware function:
+
    ```rust
    pub async fn validate_api_key(
        State(state): State<AppState<...>>,
@@ -324,6 +337,7 @@ endpoints.
 
 2. API keys are stored in the credential store (T088). The middleware loads valid keys
    and compares using constant-time comparison to prevent timing attacks:
+
    ```rust
    use subtle::ConstantTimeEq;
    fn keys_match(provided: &[u8], stored: &[u8]) -> bool {
@@ -355,6 +369,7 @@ Plane.so API key, AgilePlus API keys) using the OS keychain with encrypted-file 
 **Implementation Steps**:
 
 1. Define the credential store trait:
+
    ```rust
    #[async_trait]
    pub trait CredentialStore: Send + Sync {
@@ -367,6 +382,7 @@ Plane.so API key, AgilePlus API keys) using the OS keychain with encrypted-file 
    ```
 
 2. Implement the OS keychain backend using the `keyring` crate:
+
    ```rust
    pub struct KeychainCredentialStore {
        service_prefix: String, // "agileplus"
@@ -397,17 +413,20 @@ Plane.so API key, AgilePlus API keys) using the OS keychain with encrypted-file 
    ```
 
 3. Implement the encrypted-file fallback for systems without a keychain:
+
    ```rust
    pub struct FileCredentialStore {
        path: PathBuf, // ~/.agileplus/credentials.enc
    }
    ```
+
    - Use `aes-gcm` crate for AES-256-GCM encryption.
    - Derive encryption key from a user-provided passphrase via `argon2` KDF.
    - Store credentials as encrypted JSON: `{"github_token": "...", "coderabbit_key": "..."}`.
    - On first use, prompt for passphrase and cache in memory for the session.
 
 4. Implement automatic backend selection:
+
    ```rust
    pub fn create_credential_store(config: &AppConfig) -> Box<dyn CredentialStore> {
        match config.credential_backend {
@@ -425,6 +444,7 @@ Plane.so API key, AgilePlus API keys) using the OS keychain with encrypted-file 
    ```
 
 5. Add CLI commands for credential management:
+
    ```
    agileplus config set-credential github-token <value>
    agileplus config get-credential github-token
@@ -439,6 +459,7 @@ Plane.so API key, AgilePlus API keys) using the OS keychain with encrypted-file 
    - `api-keys`: Comma-separated list of valid AgilePlus API keys for auth middleware.
 
 **Security Considerations**:
+
 - Never log credential values. Log only "credential accessed: github-token" level messages.
 - Clear credential values from memory after use (use `zeroize` crate).
 - File fallback: set file permissions to 0600 on creation.
@@ -459,6 +480,7 @@ defaults for all configurable values.
 **Implementation Steps**:
 
 1. Define the config struct with serde:
+
    ```rust
    #[derive(Debug, Deserialize, Serialize)]
    pub struct AppConfig {
@@ -528,6 +550,7 @@ defaults for all configurable values.
    ```
 
 2. Implement config loading with layered resolution:
+
    ```rust
    impl AppConfig {
        pub fn load() -> Result<Self, ConfigError> {
@@ -563,6 +586,7 @@ defaults for all configurable values.
    ```
 
 3. Support environment variable overrides with the pattern `AGILEPLUS_<SECTION>_<KEY>`:
+
    ```rust
    pub fn load_with_env_overrides() -> Result<AppConfig, ConfigError> {
        let mut config = Self::load()?;
@@ -578,6 +602,7 @@ defaults for all configurable values.
    ```
 
 4. Add a CLI config command for viewing and editing:
+
    ```
    agileplus config show          # print current effective config
    agileplus config edit          # open config.toml in $EDITOR
@@ -589,6 +614,7 @@ defaults for all configurable values.
    valid, etc. Return actionable error messages.
 
 **Example config.toml**:
+
 ```toml
 [core]
 database_path = "~/.agileplus/agileplus.db"
@@ -628,6 +654,7 @@ loading with invalid values (errors), and environment variable overrides.
 **Implementation Steps**:
 
 1. Set up the test harness:
+
    ```rust
    use axum_test::TestServer;
 
@@ -643,6 +670,7 @@ loading with invalid values (errors), and environment variable overrides.
    ```
 
 2. Test each endpoint group:
+
    ```rust
    #[tokio::test]
    async fn test_list_features() {
@@ -673,6 +701,7 @@ loading with invalid values (errors), and environment variable overrides.
    ```
 
 3. Test governance and audit endpoints:
+
    ```rust
    #[tokio::test]
    async fn test_get_audit_trail() { /* ... */ }
@@ -739,6 +768,7 @@ loading with invalid values (errors), and environment variable overrides.
 | Timestamp | Event |
 |-----------|-------|
 | 2026-02-27T00:00:00Z | WP15 prompt generated via /spec-kitty.tasks |
+
 - 2026-03-02T01:38:17Z – s1-wp15 – shell_pid=26726 – lane=doing – Assigned agent via workflow command
 - 2026-03-02T02:16:48Z – s1-wp15 – shell_pid=26726 – lane=for_review – Ready: API layer and credentials
 - 2026-03-02T02:17:17Z – s1-wp15 – shell_pid=26726 – lane=done – API layer and credential management complete

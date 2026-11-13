@@ -26,15 +26,18 @@
 **Description**: Use `Reflect.metadata` and runtime reflection, with caching for performance.
 
 **Pros**:
+
 - Simple implementation
 - Flexible at runtime
 
 **Cons**:
+
 - Runtime overhead (10-30% slower)
 - Requires reflect-metadata polyfill
 - Bundle size impact (~3KB additional)
 
 **Performance Data**:
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | Transform overhead | +15% vs manual | Internal benchmark |
@@ -45,11 +48,13 @@
 **Description**: Generate transformation code at compile time using compiler plugins or macros.
 
 **Pros**:
+
 - Zero runtime overhead
 - Direct property access
 - Bundle size unchanged
 
 **Cons**:
+
 - Requires TypeScript compiler integration
 - Complex to implement and debug
 - May have compatibility issues across TypeScript versions
@@ -59,12 +64,14 @@
 **Description**: Provide schema definition API that compiles to direct property access patterns. Use type inference to eliminate generic overhead.
 
 **Pros**:
+
 - Zero runtime overhead for simple cases
 - Works with standard TypeScript
 - Debuggable stack traces
 - No compiler plugin required
 
 **Cons**:
+
 - Schemas must be defined with specific patterns
 - Complex transformations require explicit typing
 
@@ -75,6 +82,7 @@
 **Chosen Option**: Option 3 - Schema Pre-Compilation
 
 **Rationale**:
+
 - Achieves zero-cost abstraction for the common case
 - Works with standard TypeScript tooling (tsc, tsgo)
 - Stack traces remain debuggable

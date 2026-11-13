@@ -10,6 +10,7 @@
 ## Executive Summary
 
 The phenotype-infrakit workspace contains:
+
 - **13 orphaned crate directories** (not in root Cargo.toml workspace members list)
 - **13 active git worktrees** (mostly stale, dirty, or detached)
 - **711MB archive debris** from prior work
@@ -27,11 +28,13 @@ The phenotype-infrakit workspace contains:
 ### Recommended Actions
 
 **Immediate (Week 1):**
+
 - Move 13 orphaned stub crates to `.archive/orphaned-stubs-2026-03-30/` (non-destructive)
 - Clean up 3 dirty worktrees: decide merge vs abandon per branch
 - Delete 2 out-of-sync worktrees in `/tmp` (ephemeral workspace)
 
 **Follow-up (Week 2-3):**
+
 - Update root Cargo.toml with any intentional new crates from worktrees
 - Document deployment status of each worktree branch
 - Implement worktree cleanup checklist in CI
@@ -97,6 +100,7 @@ Total: 31 crates discovered via `find ./crates -maxdepth 1 -type d -name "phenot
 ### Recommendations for Orphaned Crates
 
 **Option A: Archive as Deferred Work** (Recommended)
+
 ```bash
 mkdir -p .archive/orphaned-stubs-2026-03-30
 mv crates/phenotype-async-traits \
@@ -116,12 +120,14 @@ mv crates/phenotype-async-traits \
 ```
 
 **Rationale**:
+
 - Preserves code in git history (non-destructive)
 - Unclutters workspace (0 actual implementation to lose)
 - Allows easy resurrection if needed
 - Frees CI/build scanning time
 
 **Option B: Delete** (if confirmed never needed)
+
 ```bash
 git rm -r crates/phenotype-{async-traits,config-loader,contract,cost-core,...}
 git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
@@ -134,6 +140,7 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 ### Worktree Inventory (13 total)
 
 **Root worktree** (canonical):
+
 ```
 /Users/<REDACTED>/CodeProjects/Phenotype/repos [main] — 47 files modified (DIRTY)
 ```
@@ -168,6 +175,7 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 ### Stale Worktree Breakdown
 
 **By Status:**
+
 - **Synced & Clean** (3): adr-002-new, phenosdk-decompose-core, phenotype-string
 - **Clean but needs merge** (2): phenotype-macros, phenotype-errors/consolidate
 - **Dirty (uncommitted work)** (4): feat/cache-adapter-impl, phenotype-crypto-complete, phase2-routes-dashboard, infrastructure/phase1-routing-aggregation
@@ -180,6 +188,7 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 **Critical (This Week):**
 
 1. **feat/cache-adapter-impl** — Detached HEAD
+
    ```bash
    cd .worktrees/feat/cache-adapter-impl
    git status
@@ -189,12 +198,14 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
    ```
 
 2. **Ephemeral worktrees in /tmp/** — Delete immediately
+
    ```bash
    git worktree remove /private/tmp/phenotype-pr-workspace --force
    git worktree remove /private/tmp/pr-236-resolution --force
    ```
 
 3. **infrastructure/phase1-routing-aggregation** — 4 commits behind
+
    ```bash
    cd .worktrees/infrastructure/phase1-routing-aggregation
    git rebase origin/main  # or merge
@@ -203,18 +214,18 @@ git commit -m "chore: remove stale placeholder crates (all 1-LOC stubs)"
 
 **High Priority (Week 1):**
 
-4. **phenotype-crypto-complete** (7 dirty files) + **phase2-routes-dashboard** (6 dirty)
+1. **phenotype-crypto-complete** (7 dirty files) + **phase2-routes-dashboard** (6 dirty)
    - Decision for each: merge, rebase, or stash
    - Run tests, fix conflicts
    - Commit or prepare PR
 
-5. **phenotype-errors/consolidate** + **phenotype-macros**
+2. **phenotype-errors/consolidate** + **phenotype-macros**
    - Both ready to merge; create PRs
    - Verify CI passes
 
 **Optional (Week 2-3):**
 
-6. **decompose-sqlite-adapter** (external location)
+1. **decompose-sqlite-adapter** (external location)
    - Move into `.worktrees/` hierarchy or document rationale
    - Standardize worktree structure
 
@@ -304,6 +315,7 @@ No immediate action needed. Archive serves as historical record and allows easy 
 ### Dirty Tree Status
 
 **Main worktree (`/repos`)**: 47 files modified
+
 ```
 M Cargo.toml
 M crates/phenotype-string/Cargo.toml
@@ -340,12 +352,14 @@ All 18 declared workspace members exist and are properly located.
 ### Phase 1: Immediate Cleanup (This Week)
 
 - [ ] **Commit dirty tree** in root worktree (47 files)
+
   ```bash
   git add -A
   git commit -m "chore: workspace state checkpoint 2026-03-30"
   ```
 
 - [ ] **Remove stale ephemeral worktrees**
+
   ```bash
   git worktree remove /private/tmp/phenotype-pr-workspace --force
   git worktree remove /private/tmp/pr-236-resolution --force
@@ -356,12 +370,14 @@ All 18 declared workspace members exist and are properly located.
   - Document decision in PR description
 
 - [ ] **Rebase/merge stale infrastructure worktree**
+
   ```bash
   cd .worktrees/infrastructure/phase1-routing-aggregation
   git rebase origin/main
   ```
 
 - [ ] **Archive orphaned stubs** (non-destructive)
+
   ```bash
   mkdir -p .archive/orphaned-stubs-2026-03-30
   mv crates/phenotype-async-traits ... .archive/orphaned-stubs-2026-03-30/
@@ -391,12 +407,14 @@ All 18 declared workspace members exist and are properly located.
   - Require PR per worktree before merging
 
 - [ ] **Update CI to detect stale worktrees**
+
   ```bash
   # Hook to warn if git worktree list has uncommitted changes
   # or branches >2 weeks behind main
   ```
 
 - [ ] **Periodic (weekly) audit script**
+
   ```bash
   scripts/audit-workspace-health.sh
   # Reports: orphans, stale worktrees, dead code, dirty trees
@@ -423,6 +441,7 @@ All 18 declared workspace members exist and are properly located.
 ## 10. Appendix: Commands for Cleanup
 
 ### Remove all stale worktrees at once
+
 ```bash
 # Ephemeral (in /tmp)
 git worktree remove /private/tmp/phenotype-pr-workspace --force
@@ -436,6 +455,7 @@ git worktree prune
 ```
 
 ### Archive orphaned crates
+
 ```bash
 mkdir -p .archive/orphaned-stubs-2026-03-30
 
@@ -452,6 +472,7 @@ git commit -m "chore: archive 13 orphaned stub crates (all 1-LOC stubs) — 2026
 ```
 
 ### Check workspace health
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 cargo check --workspace 2>&1 | head -20  # Build health

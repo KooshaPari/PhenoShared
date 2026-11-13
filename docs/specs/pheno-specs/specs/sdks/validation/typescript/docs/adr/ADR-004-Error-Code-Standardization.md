@@ -7,10 +7,12 @@
 ## Context
 
 Validation errors in most libraries are either:
+
 1. Strings (human-readable but not machine-readable)
 2. Custom objects (flexible but inconsistent)
 
 This makes programmatic error handling difficult:
+
 - i18n requires maintaining string keys
 - API responses need consistent error shapes
 - Client-side validation parity is hard
@@ -178,6 +180,6 @@ Cons: Harder to read in code, harder to debug
 
 ## References
 
-- JSON Schema validation: https://json-schema.org
-- Zod error handling: https://zod.js.org
-- Yup validation: https://github.com/jquense/yup
+- JSON Schema validation: <https://json-schema.org>
+- Zod error handling: <https://zod.js.org>
+- Yup validation: <https://github.com/jquense/yup>

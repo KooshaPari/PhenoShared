@@ -607,6 +607,7 @@ conflict_strategy = "local-wins"
 ```
 
 AgilePlus state wins. Plane.so is updated to match AgilePlus:
+
 ```
 Resolution: AgilePlus "Doing" wins → update Plane.so to "In Progress"
 Audit: conflict recorded, resolution actor = sync:local-wins

@@ -37,12 +37,14 @@ The Phenotype ecosystem contains **4 independent config loading patterns** with 
 ### 1. phenotype-config-loader (350 LOC)
 
 **Implementation:**
+
 - Figment-based builder pattern
 - Cascading source priority: ENV vars > TOML files > defaults
 - Support for custom search paths
 - Type-safe deserialization via serde
 
 **Current API:**
+
 ```rust
 pub struct AppConfigLoader {
     env_prefix: Option<String>,
@@ -61,11 +63,13 @@ pub enum ConfigLoaderError {
 ```
 
 **Strengths:**
+
 - Production-ready, well-tested (9 test cases)
 - Comprehensive error types
 - Flexible path searching
 
 **Weaknesses:**
+
 - Tightly coupled to figment
 - Helper structs duplicated elsewhere
 - No trait abstraction for alternatives
@@ -78,6 +82,7 @@ pub enum ConfigLoaderError {
 **Current Status:** Stub/early-stage
 
 **Implementation:**
+
 ```rust
 #[derive(Debug, Clone, Default)]
 pub struct Config {
@@ -90,6 +95,7 @@ pub trait ConfigSource {
 ```
 
 **Issues:**
+
 - Too minimal to be useful
 - ConfigSource only has `get()` method
 - No builder, no validation, no error handling
@@ -100,6 +106,7 @@ pub trait ConfigSource {
 ### 3. phenotype-policy-engine (180 LOC)
 
 **Implementation:**
+
 ```rust
 pub struct RuleConfig {
     pub r#type: String, pub fact: String, pub pattern: String,
@@ -117,16 +124,19 @@ pub struct PoliciesConfigFile {
 ```
 
 **Loading:**
+
 - Manual TOML parsing
 - No figment dependency
 - Domain-specific validation
 
 **Strengths:**
+
 - Well-designed domain model
 - Conversion patterns (to_policy/to_rule)
 - Validates rule types during conversion
 
 **Weaknesses:**
+
 - Domain-specific; not reusable for other config types
 - Error types specific to policy engine
 - No support for nested env var overrides
@@ -136,6 +146,7 @@ pub struct PoliciesConfigFile {
 ### 4. phenotype-telemetry (40 LOC)
 
 **Implementation:**
+
 ```rust
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TelemetryConfig {
@@ -151,18 +162,22 @@ pub struct TelemetryConfig {
 ## Cross-Project Reuse Patterns Found
 
 ### Pattern 1: Cascading Config Priority
+
 Found in: config-loader (explicit), policy-engine (implicit)
 **Current:** Each implements independently
 
 ### Pattern 2: TOML File Loading
+
 Found in: config-loader (line 156-158), policy-engine (line 93-98)
 **Duplication:** ~20 LOC per crate
 
 ### Pattern 3: Serde Defaults
+
 Found in: config-loader (9 defaults), policy-engine (1 default), telemetry
 **Pattern:** `#[serde(default = "fn_name")]`
 
 ### Pattern 4: Error Conversion
+
 Found in: 5+ crates with different error types for same domain
 **Current:** No unified handling
 
@@ -194,16 +209,19 @@ phenotype-error-core → defines Configuration error variant
 ## Can Consume phenotype-config-core v2
 
 **Tier 1 (Ready):**
+
 - phenotype-config-loader (already depends)
 - phenotype-policy-engine (currently standalone)
 - phenotype-telemetry (inline config)
 
 **Tier 2 (Conditional):**
+
 - phenotype-contracts (refactor trait)
 - phenotype-mcp (minimal config)
 - phenotype-event-sourcing (minimal config)
 
 **Tier 3 (Not Ready):**
+
 - 22 other crates (no config needs)
 
 ---
@@ -264,27 +282,32 @@ pub trait ConfigValidator: Send + Sync + 'static {
 ## Migration Sequence (5 Phases)
 
 ### Phase 1: Prepare phenotype-config-core v2 (1-2 days)
+
 - Expand ConfigError with all variants
 - Implement ConfigLoader, ConfigLoaderSync traits
 - Implement ConfigValidator trait
 - Add error conversions
 
 ### Phase 2: Migrate phenotype-config-loader (2-3 days)
+
 - Refactor to FigmentConfigLoader
 - Implement ConfigLoader trait
 - Move helpers to shared module
 - Keep AppConfigLoader as deprecated alias
 
 ### Phase 3: Migrate phenotype-policy-engine (1-2 days)
+
 - Refactor PoliciesConfigFile to use ConfigError
 - Implement PolicyConfigLoader trait
 - Add PolicyValidator
 
 ### Phase 4: Consolidate telemetry & event-sourcing (1 day)
+
 - Add TelemetryConfigValidator
 - Add SnapshotConfigValidator
 
 ### Phase 5: Align phenotype-contracts (1 day)
+
 - Re-export ConfigLoader from config-core
 - Update trait definition
 - Add error conversions
@@ -294,13 +317,16 @@ pub trait ConfigValidator: Send + Sync + 'static {
 ## Breaking Changes & Mitigation
 
 ### phenotype-config-loader
+
 - ConfigLoaderError → ConfigError (provide From impl)
 - AppConfigLoader → FigmentConfigLoader (keep alias for 1 release)
 
 ### phenotype-contracts
+
 - ConfigLoader trait updated (use ConfigError)
 
 ### phenotype-policy-engine
+
 - Internal only (no breaking changes)
 
 ---

@@ -5,6 +5,7 @@ This document describes the optional feature flags available in the Phenotype wo
 ## Overview
 
 Feature flags in Phenotype allow you to:
+
 - Include only the backends and functionality you need
 - Reduce default binary size by making optional dependencies truly optional
 - Support multiple transport and storage backends simultaneously
@@ -35,33 +36,39 @@ Feature flags in Phenotype allow you to:
 Two-tier cache with pluggable backends.
 
 #### Default Features
+
 - `in-memory` - Two-tier LRU (L1) + Moka (L2) cache for local caching
 
 #### Optional Features
+
 - `redis` - Redis client for distributed caching
 - `memcached` - Memcached client for high-performance caching
 
 #### Examples
 
 **Local development (default)**:
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = "0.2"
 ```
 
 **With Redis**:
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = { version = "0.2", features = ["redis"] }
 ```
 
 **Multiple backends**:
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = { version = "0.2", features = ["in-memory", "redis"] }
 ```
 
 **Minimal (no caching)**:
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = { version = "0.2", default-features = false }
@@ -72,9 +79,11 @@ phenotype-cache-adapter = { version = "0.2", default-features = false }
 Event sourcing with pluggable backends and blake3 hash chains.
 
 #### Default Features
+
 - `memory-store` - In-memory event store (recommended for development)
 
 #### Optional Features
+
 - `kafka` - Apache Kafka for distributed event streaming
 - `redis-streams` - Redis Streams for lightweight persistence
 - `sql-store` - SQL database (PostgreSQL) for durable storage
@@ -82,18 +91,21 @@ Event sourcing with pluggable backends and blake3 hash chains.
 #### Examples
 
 **Development with in-memory store**:
+
 ```toml
 [dependencies]
 phenotype-event-sourcing = "0.2"
 ```
 
 **Production with Kafka**:
+
 ```toml
 [dependencies]
 phenotype-event-sourcing = { version = "0.2", features = ["kafka"] }
 ```
 
 **Multiple backends**:
+
 ```toml
 [dependencies]
 phenotype-event-sourcing = { version = "0.2", features = ["kafka", "redis-streams", "sql-store"] }
@@ -104,9 +116,11 @@ phenotype-event-sourcing = { version = "0.2", features = ["kafka", "redis-stream
 Observability infrastructure with multiple tracing and metrics backends.
 
 #### Default Features
+
 - (None) - Observability is opt-in
 
 #### Optional Features
+
 - `tracing` - OpenTelemetry-compatible distributed tracing
 - `opentelemetry` - Full OpenTelemetry SDK with Jaeger exporter
 - `prometheus` - Prometheus metrics export
@@ -114,12 +128,14 @@ Observability infrastructure with multiple tracing and metrics backends.
 #### Examples
 
 **With tracing**:
+
 ```toml
 [dependencies]
 phenotype-telemetry = { version = "0.2", features = ["tracing"] }
 ```
 
 **Full observability (tracing + metrics)**:
+
 ```toml
 [dependencies]
 phenotype-telemetry = { version = "0.2", features = ["tracing", "prometheus"] }
@@ -130,9 +146,11 @@ phenotype-telemetry = { version = "0.2", features = ["tracing", "prometheus"] }
 Structured logging with multiple backend options.
 
 #### Default Features
+
 - (None) - Logging is opt-in
 
 #### Optional Features
+
 - `tracing` - Tracing-based structured logging
 - `slog` - Slog structured logging framework
 - `slog-json` - JSON formatting for slog
@@ -140,12 +158,14 @@ Structured logging with multiple backend options.
 #### Examples
 
 **With tracing**:
+
 ```toml
 [dependencies]
 phenotype-logging = { version = "0.2", features = ["tracing"] }
 ```
 
 **With slog and JSON output**:
+
 ```toml
 [dependencies]
 phenotype-logging = { version = "0.2", features = ["slog-json"] }
@@ -154,6 +174,7 @@ phenotype-logging = { version = "0.2", features = ["slog-json"] }
 ## Recommended Feature Combinations
 
 ### Development Environment
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = "0.2"  # in-memory default
@@ -163,6 +184,7 @@ phenotype-logging = { version = "0.2", features = ["tracing"] }
 ```
 
 ### Production with Kafka & Redis
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = { version = "0.2", features = ["redis"] }
@@ -172,6 +194,7 @@ phenotype-logging = { version = "0.2", features = ["tracing"] }
 ```
 
 ### Production with PostgreSQL
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = { version = "0.2", features = ["redis"] }
@@ -181,6 +204,7 @@ phenotype-logging = { version = "0.2", features = ["tracing"] }
 ```
 
 ### Minimal (no optional features)
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = { version = "0.2", default-features = false }
@@ -240,6 +264,7 @@ The feature-pluggable architecture follows the **Hexagonal Architecture** patter
 ```
 
 Each adapter layer is optional:
+
 - **Cache**: Choose in-memory, Redis, or Memcached
 - **Events**: Choose memory, Kafka, Redis, or SQL
 - **Telemetry**: Choose tracing, OpenTelemetry, or Prometheus
@@ -259,6 +284,7 @@ If you're migrating from a monolithic build:
 Example migration:
 
 **Before** (all dependencies included):
+
 ```toml
 [dependencies]
 phenotype-cache-adapter = "0.2"
@@ -267,6 +293,7 @@ phenotype-telemetry = "0.2"
 ```
 
 **After** (only needed features):
+
 ```toml
 [dependencies]
 # We use Redis for caching in production
@@ -282,6 +309,7 @@ phenotype-telemetry = { version = "0.2", features = ["opentelemetry"] }
 ## Future Enhancements
 
 Phase 3 roadmap includes:
+
 - Additional cache backends (DynamoDB, Etcd)
 - Additional event stores (NATS, EventStoreDB)
 - Additional telemetry integrations (DataDog, New Relic)

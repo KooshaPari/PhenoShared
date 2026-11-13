@@ -5,6 +5,7 @@
 **Driver:** `proc` / `proc all` / `proc <id>`.
 
 > v0.15 picks up v0.14 carry-over:
+>
 > 1. **Cross-repo PR merge close-out** (10 PRs, task 65 gate — long-overdue).
 > 2. **Production dual-write enable** (task 20 — long-overdue).
 > 3. **External MCP consumer hardening** (post-audit follow-ups).

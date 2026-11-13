@@ -220,6 +220,7 @@ An agent receives a user request. Before executing, it reads the project's `CLAU
 ### Functional Requirements
 
 **Core Workflow:**
+
 - **FR-001**: System MUST provide a `specify` command that conducts a guided discovery interview and produces a structured specification stored in both git and SQLite.
 - **FR-002**: System MUST provide a `research` command that supports both pre-specify (domain/market analysis, codebase scanning) and post-specify (technical feasibility) modes.
 - **FR-003**: System MUST provide a `plan` command that generates work packages with dependency ordering, acceptance criteria traced to spec FRs, and governance contracts.
@@ -229,79 +230,95 @@ An agent receives a user request. Before executing, it reads the project's `CLAU
 - **FR-007**: System MUST provide an optional `retrospective` command that generates learnings and suggests governance amendments.
 
 **Planning Commands — Implicit Refinement:**
+
 - **FR-008**: Each planning command (`specify`, `research`, `plan`) MUST include implicit refinement/review loops — the user can re-run any command to iterate, with changes tracked as revisions in the audit log.
 - **FR-009**: Planning commands MUST implicitly incorporate relevant governance checks (constitution compliance, consistency with existing specs/plans).
 
 **Implementation Automation:**
+
 - **FR-010**: The `implement` command MUST create isolated git worktrees per work package.
 - **FR-011**: The `implement` command MUST instruct agents to include the original WP goal/prompt in PR descriptions.
 - **FR-012**: The `implement` command MUST await automated code review (Coderabbit) and loop agents on review comments and CI failures until the PR is green.
 - **FR-013**: The `implement` command MUST respect WP dependency ordering — dependent WPs wait for their prerequisites to complete.
 
 **Storage and Auditability:**
+
 - **FR-014**: System MUST use git as the primary source of truth for all artifacts (specs, plans, tasks, evidence).
 - **FR-015**: System MUST use SQLite as the operational database for state tracking, querying, and performance.
 - **FR-016**: System MUST maintain a hash-chained (SHA-256) audit log in SQLite for all state transitions.
 - **FR-017**: System MUST be able to rebuild SQLite state from git history if the database is lost or corrupted.
 
 **Governance — Smart Contracts:**
+
 - **FR-018**: System MUST enforce governance contracts that define required evidence for each state transition.
 - **FR-019**: System MUST block state transitions when required evidence is missing, with clear error messages referencing the specific contract and missing evidence.
 - **FR-020**: System MUST support policy rules across domains: quality (lint, type-check, test coverage), security (vulnerability scanning), and reliability.
 - **FR-021**: System MUST support FR-to-evidence tracing — every functional requirement must map to test evidence before validation passes.
 
 **Interfaces:**
+
 - **FR-022**: System MUST expose capabilities via a FastMCP 3.0 server for external tool/agent integration.
 - **FR-023**: System MUST provide a CLI interface for scripting and CI/CD integration.
 - **FR-024**: System MUST provide an API layer for web UI integration (Plane.so or equivalent).
 - **FR-025**: System MUST support extensibility via agent Skills and plugins.
 
 **Web UI:**
+
 - **FR-026**: System MUST integrate with Plane.so (or equivalent OSS) for visual project management — kanban boards, spec browsing, audit trail viewing, dashboard.
 - **FR-027**: The web UI MUST be a sidecar — running alongside the CLI, reading from the same git+SQLite data store, not a separate system.
 
 **Credential Management:**
+
 - **FR-030**: System MUST manage integration credentials (GitHub, Coderabbit, Plane.so) via its own encrypted local config.
 - **FR-031**: System MUST NOT manage LLM or agent harness credentials — these are delegated entirely to Claude Code/Codex.
 - **FR-032**: System MUST interact with agents exclusively through MCP, Skills, and slash commands — never by touching CLI binaries directly.
 
 **State Machine:**
+
 - **FR-033**: System MUST enforce strict command ordering by default: specify → research → plan → implement → validate → ship.
 - **FR-034**: System MAY allow skipping steps only when the user's prompt clearly indicates it's unnecessary (e.g., trivial fix, quick prototype), with a warning logged in the audit trail.
 
 **Observability:**
+
 - **FR-035**: System MUST emit structured logs for all operations.
 - **FR-036**: System MUST collect and store metrics in SQLite (time-per-WP, agent runs, review cycles, command durations).
 - **FR-037**: System MUST support OpenTelemetry trace export to external dashboards.
 
 **Conflict Resolution:**
+
 - **FR-038**: System MUST use worktree isolation as the default conflict prevention mechanism for parallel WPs.
 - **FR-039**: System MUST support dependency-aware scheduling — when WPs declare shared files, conflicting WPs are serialized rather than parallelized.
 
 **Triage & Queue:**
+
 - **FR-040**: System MUST provide a `triage` sub-command that classifies input as bug, feature, idea, or task and routes to the appropriate artifact store (GitHub issue, Plane.so item, SQLite backlog).
 - **FR-041**: System MUST auto-triage bugs discovered by agents during `implement` — agents file bugs without interrupting their current WP workflow.
 - **FR-042**: System MUST provide a `queue` sub-command that adds items to a backlog for later processing, surfaced during the next `specify` or `plan` cycle.
 
 **Sync & Integration:**
+
 - **FR-043**: System MUST sync feature/WP state from SQLite to Plane.so (create/update work items, update kanban board status).
 - **FR-044**: System MUST sync bug reports from SQLite to GitHub Issues (create issues with structured metadata, labels, and feature/WP cross-references).
 - **FR-045**: System MUST detect and warn on mirror-side edits (changes made directly in Plane.so or GitHub that conflict with SQLite state).
 
 **Prompt Routing & Sub-Commands:**
+
 - **FR-046**: System MUST generate a project-specific `CLAUDE.md` and `AGENTS.md` that acts as a prompt router for agents, classifying user intent and routing to appropriate sub-command chains.
 - **FR-047**: System MUST expose ~25 hidden sub-commands (grouped as triage, governance, PM sync, git/devops, context, quick escapes) invocable by agents via the SlashCommand tool.
 - **FR-048**: System MUST log all agent sub-command invocations in the audit trail, including the routing decision and chain of commands executed.
 
 **MCP Primitives:**
+
 - **FR-049**: MCP server MUST implement all 6 MCP primitives: Tools (CRUD), Resources (read specs/audit), Prompts (command templates), Sampling (server-initiated triage/analysis), Roots (workspace boundaries), Elicitation (discovery interviews).
 - **FR-050**: MCP server MUST leverage FastMCP 3.0 features: background tasks (via Docket+SQLite), component versioning, per-component auth, Resources-as-Tools/Prompts-as-Tools transforms, native OpenTelemetry.
 
 **Agent DevOps Defaults:**
+
 - **FR-051**: Agents MUST follow CI/CD best practices by default: conventional commits, PR templates with WP context, branch naming conventions, automated linting before push.
 - **FR-052**: Agents MUST use the project's CLAUDE.md/AGENTS.md as their first-action classifier before executing any work.
 
 **Multi-Repo Architecture:**
+
 - **FR-053**: System MUST define all inter-service contracts in a shared `agileplus-proto` repository, consumed by all service repos as a git submodule or dependency.
 - **FR-054**: Each service repository (core, mcp, agents, integrations) MUST be independently buildable and testable with only the proto dependency.
 - **FR-055**: Cross-repo communication MUST use gRPC with Protobuf contracts — no direct in-process calls between repos.
@@ -309,6 +326,7 @@ An agent receives a user request. Before executing, it reads the project's `CLAU
 - **FR-057**: Each service MUST implement its own gRPC service definition (core.proto, agents.proto, integrations.proto) with shared message types from common.proto.
 
 **Governance Source:**
+
 - **FR-028**: System MUST serve as the canonical governance source for the Phenotype organization, consolidating worktree discipline, quality gates, and agent workflow rules.
 - **FR-029**: System MUST integrate and extend existing Phenotype governance patterns (from parpour, civ, thegent).
 

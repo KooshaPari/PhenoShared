@@ -105,6 +105,7 @@ The root aggregate. Represents a unit of work from idea to shipment.
 **Valid states**: `created`, `specified`, `researched`, `planned`, `implementing`, `validated`, `shipped`, `retrospected`
 
 **State transitions**:
+
 ```
 created → specified        (specify command completes)
 specified → researched     (research command completes)
@@ -152,6 +153,7 @@ Defines required evidence and policy rules for state transitions.
 | bound_at | TEXT | NOT NULL | ISO 8601, when contract was bound to feature |
 
 **Rule schema** (JSON):
+
 ```json
 {
   "transition": "implementing → validated",

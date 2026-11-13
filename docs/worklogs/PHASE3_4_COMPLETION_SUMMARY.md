@@ -25,6 +25,7 @@ Parallel execution of Phase 3 and Phase 4 LOC reduction has been completed succe
 ## Phase 3: AgilePlus File Decomposition
 
 ### Scope
+
 Decompose two monolithic files in AgilePlus that exceed best practices for file size:
 
 | File | Current | Target | Reduction | Status |
@@ -36,6 +37,7 @@ Decompose two monolithic files in AgilePlus that exceed best practices for file 
 ### Routes.rs Decomposition Plan
 
 **Target Module Structure** (5 files):
+
 - `routes/mod.rs` (431 LOC) — Router registration, type definitions, utilities
 - `routes/dashboard.rs` (600 LOC) — Dashboard page handlers
 - `routes/api.rs` (500 LOC) — API endpoints (CRUD operations)
@@ -43,6 +45,7 @@ Decompose two monolithic files in AgilePlus that exceed best practices for file 
 - `routes/health.rs` (200 LOC) — Health checks, event handlers
 
 **Handler Mapping** (40+ async handlers):
+
 - Dashboard handlers → dashboard.rs
 - API endpoints → api.rs
 - Settings/config → settings.rs
@@ -50,6 +53,7 @@ Decompose two monolithic files in AgilePlus that exceed best practices for file 
 - Types & utilities → mod.rs
 
 **Re-export Pattern**:
+
 ```rust
 // src/routes.rs (becomes routes/mod.rs)
 pub mod dashboard;
@@ -72,18 +76,21 @@ pub use routes::Router;
 ### SQLite/lib.rs Decomposition Plan
 
 **Target Module Structure** (4 files):
+
 - `store/mod.rs` (632 LOC) — Trait definitions, public API
 - `store/sync.rs` (400 LOC) — Synchronization logic
 - `store/query_builder.rs` (300 LOC) — SQL generation
 - `store/migrations.rs` (250 LOC) — Schema management
 
 **Component Mapping**:
+
 - Storage trait & implementations → mod.rs
 - Sync logic → sync.rs
 - Query building helpers → query_builder.rs
 - Migration scripts → migrations.rs
 
-**Dependencies**: 
+**Dependencies**:
+
 - All modules depend on mod.rs (trait definitions)
 - Query builder used by sync logic
 - Migrations independent (called at startup)
@@ -91,6 +98,7 @@ pub use routes::Router;
 ### Phase 3 Deliverables
 
 ✅ **PHASE3_DECOMPOSITION_STATUS.md** (5,000+ lines)
+
 - Current state analysis with evidence
 - Target module structure details
 - Complete handler-to-module mapping tables
@@ -98,6 +106,7 @@ pub use routes::Router;
 - Verification checklist (9-point quality gate)
 
 ✅ **PHASE3_EXECUTION_READINESS_REPORT.md** (600+ lines)
+
 - Key findings and status
 - Why previous attempt failed
 - What's ready for execution
@@ -105,6 +114,7 @@ pub use routes::Router;
 - Critical dependencies and success criteria
 
 ### Phase 3 Execution Prerequisites
+
 - Location: `.worktrees/merge-spec-docs/agileplus/`
   - routes.rs: `crates/agileplus-dashboard/src/routes.rs`
   - sqlite/lib.rs: `crates/agileplus-sqlite/src/lib.rs`
@@ -112,7 +122,9 @@ pub use routes::Router;
 - Tests: Both crates have existing test suites (will verify after decomposition)
 
 ### Phase 3 Status
+
 **BLUEPRINT COMPLETE** — Implementation-ready with detailed guidance on:
+
 - File structure and layout
 - Handler/method distribution
 - Import/re-export patterns
@@ -136,6 +148,7 @@ pub use routes::Router;
 | Auth | 3 → 1 | 1,133 | 344 | 789 LOC |
 
 **Consolidation Details**:
+
 - Models: Merged 100%, comprehensive, final, ultimate variants into single comprehensive suite
 - Cloud: Merged cloud_core and cloud_error_uncovered into comprehensive
 - Auth: Merged service and edge_cases variants into comprehensive
@@ -151,6 +164,7 @@ pub use routes::Router;
 **Files Archived**: 7 supplementary test files
 
 **Archived Files**:
+
 - models/deployments_additional_test.go
 - lib/cloud/cloud_additional_test.go
 - internal/application/deployment/application_additional_test.go
@@ -171,6 +185,7 @@ pub use routes::Router;
 **Files Archived**: 2 legacy test files pending code audit
 
 **Archived Files**:
+
 - legacy_auth_handlers_test.go (340 LOC)
 - legacy_optional_auth_middleware_uncovered_test.go (520 LOC)
 
@@ -202,21 +217,25 @@ pub use routes::Router;
 ### Phase 4 Deliverables
 
 ✅ **PHASE4_COMPLETION_REPORT.md** (345 lines)  
+
 - Phase-by-phase breakdown with LOC metrics
 - Archive structure and file listing
 - Commit messages and timeline
 - Verification checklist results
 
 ✅ **PHASE4_EXECUTION_COMPLETE.md**  
+
 - Quick summary for canonical repos
 - Status and metrics overview
 
 ✅ **PHASE4_VERIFICATION.md**  
+
 - Test execution results
 - Archive structure validation
 - Audit checklist for Phase 4.2
 
 ### Phase 4 Status
+
 **FULLY EXECUTED & COMMITTED** — All changes in feature branch ready for merge
 
 ---
@@ -234,12 +253,14 @@ pub use routes::Router;
 ### Architecture Improvements
 
 **Phase 3** (AgilePlus):
+
 - ✅ Improved handler organization (HTMX-based separation)
 - ✅ Better module cohesion (dashboard, API, settings, health)
 - ✅ Easier testing (modular structure)
 - ✅ Reduced cognitive load (smaller files)
 
 **Phase 4** (thegent):
+
 - ✅ Eliminated test duplication (3 test file variants → 1)
 - ✅ Cleaner test organization (by functional area)
 - ✅ Easier maintenance (no parallel test suites)
@@ -250,6 +271,7 @@ pub use routes::Router;
 ## Integration Path
 
 ### For Phase 3 (Still to be executed)
+
 1. Use provided blueprints as reference
 2. Execute routes.rs decomposition first (no dependencies)
 3. Execute sqlite/lib.rs decomposition second
@@ -260,6 +282,7 @@ pub use routes::Router;
 **Estimated effort**: 4-6 hours (two experienced Rust developers or 8-10 hours solo)
 
 ### For Phase 4 (Ready to merge)
+
 1. Feature branch: `feat/phase4-test-consolidation`
 2. All commits properly squashed or chained
 3. Tests verified locally (all passing)
@@ -273,6 +296,7 @@ pub use routes::Router;
 ## Quality Assurance Checklist
 
 ### Phase 3
+
 - [ ] routes.rs decomposition implemented per blueprint
 - [ ] sqlite/lib.rs decomposition implemented per blueprint
 - [ ] `cargo check --workspace` passes (both crates)
@@ -284,6 +308,7 @@ pub use routes::Router;
 - [ ] Code review completed (logic correctness, naming, organization)
 
 ### Phase 4
+
 - [x] Phase 4.1 tests passing (3,093 LOC saved)
 - [x] Phase 4.3 tests passing (1,893 LOC saved)
 - [x] Phase 4.2 audit completed (860 LOC archived)
@@ -299,17 +324,20 @@ pub use routes::Router;
 ## Next Steps
 
 ### Immediate (Today)
+
 1. ✅ Phase 3 blueprints created and reviewed
 2. ✅ Phase 4 fully executed and committed
 3. Create PR for Phase 4 work (ready to merge)
 
 ### Short Term (This Week)
+
 1. Execute Phase 3 implementation using provided blueprints
 2. Merge Phase 4 PR to main
 3. Create combined Phase 3-4 PR with both implementations
 4. Verify in main that combined LOC reduction is ~8,596 LOC
 
 ### Medium Term (Next Sprint)
+
 1. Measure actual impact of Phase 3-4 combined
 2. Launch Phase 5 (if planned) for additional modules
 3. Document lessons learned for future decomposition initiatives
@@ -319,15 +347,18 @@ pub use routes::Router;
 ## Reference Documents
 
 **Phase 3**:
+
 - `/repos/.worktrees/merge-spec-docs/docs/PHASE3_DECOMPOSITION_STATUS.md`
 - `/repos/.worktrees/merge-spec-docs/PHASE3_EXECUTION_READINESS_REPORT.md`
 
 **Phase 4**:
+
 - `/repos/docs/worklogs/PHASE4_COMPLETION_REPORT.md`
 - `/repos/docs/worklogs/PHASE4_EXECUTION_COMPLETE.md`
 - `/repos/docs/worklogs/PHASE4_VERIFICATION.md`
 
 **Archive Locations**:
+
 - Phase 3: (pending execution)
 - Phase 4: `/repos/platforms/thegent/apps/byteport/backend/api/.archive/thegent-test-deduplication/`
 
@@ -344,6 +375,7 @@ The Phase 3-4 LOC reduction initiative has achieved:
 ✅ **Documentation**: Complete technical guidance for future maintenance  
 
 The initiative demonstrates effective codebase health improvement through:
+
 - **File decomposition** (reducing cognitive load)
 - **Test deduplication** (improving maintainability)
 - **Non-destructive refactoring** (preserving git history)

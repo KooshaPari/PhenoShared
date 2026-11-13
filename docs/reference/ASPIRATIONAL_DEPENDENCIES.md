@@ -11,6 +11,7 @@
 This document tracks workspace dependencies that are **declared but not yet actively used**. These are "aspirational" in the sense that they represent intentional planned usage, not accidental inclusions.
 
 Each entry includes:
+
 - Dependency name and version
 - Intended use case
 - Priority level (High/Medium/Low)
@@ -28,11 +29,13 @@ Each entry includes:
 **Status**: Aspirational (not used by 7 core members)
 
 **Intended Use**:
+
 - Error context wrapping in application layers (vs library crates)
 - Simplified error handling in binaries and integration tests
 - Dev-dependencies for test fixtures and harnesses
 
 **Target Crates**:
+
 - `agileplus-cli` — Command-line error context
 - `agileplus-dashboard` — Server error responses
 - Integration test suites (dev-dependencies)
@@ -42,6 +45,7 @@ Each entry includes:
 **Timeline**: Phase 2 (when integration patterns finalized)
 
 **Notes**:
+
 - `phenotype-error-core` and `phenotype-errors` provide structured errors for libraries
 - `anyhow` bridges to application layers where error context is needed
 - Consensus: Keep declared (active future use) rather than comment out
@@ -55,11 +59,13 @@ Each entry includes:
 **Status**: Aspirational (declared but not used; `lru` used in phenotype-cache-adapter instead)
 
 **Intended Use**:
+
 - Advanced distributed caching with TTL, expiry, and metrics
 - Future replacement/upgrade from `lru` when performance requirements increase
 - Multi-tier caching strategies (L1: LRU, L2: moka)
 
 **Target Crates**:
+
 - `phenotype-cache-adapter` — Upgrade tier 2 cache implementation
 - `agileplus-dashboard` — Session caching with TTL
 
@@ -68,6 +74,7 @@ Each entry includes:
 **Timeline**: Phase 3 (when cache optimization is prioritized)
 
 **Notes**:
+
 - Currently `phenotype-cache-adapter` uses `lru` + `dashmap` + `tokio`
 - Moka provides better TTL semantics and metrics out-of-the-box
 - Reference: Keep as workspace dependency to avoid add/remove churn
@@ -81,12 +88,14 @@ Each entry includes:
 **Status**: Aspirational (not used by core members; AgilePlus has own vendored variants)
 
 **Intended Use**:
+
 - HTTP client for external service integrations
 - GitHub API interactions
 - Slack/Jira webhook callbacks
 - Third-party SAAS connectors
 
 **Target Crates**:
+
 - `agileplus-github` — GitHub API client (currently hand-rolled)
 - `agileplus-integration-tests` — External service mocking/testing
 - `phenotype-*` crates in Phase 2+ (service adapters)
@@ -96,6 +105,7 @@ Each entry includes:
 **Timeline**: Phase 2 (service integration layer)
 
 **Notes**:
+
 - AgilePlus already has `reqwest` in some crate manifests (localized usage)
 - Consolidate to workspace dependency when integration layer is standardized
 - TLS stack: use `reqwest` features (`rustls`, `native-tls`) per deployment needs
@@ -109,12 +119,14 @@ Each entry includes:
 **Status**: Aspirational (declared but zero usage in source code)
 
 **Intended Use**:
+
 - Distributed tracing instrumentation
 - Span/event emission for observability
 - Integration with Jaeger, OpenTelemetry, Honeycomb
 - Debug logging in async contexts
 
 **Target Crates**:
+
 - `phenotype-telemetry` — Tracing adapter/bridge (currently empty stub)
 - `phenotype-cache-adapter` — Request tracing (already declared locally)
 - `agileplus-dashboard` — Request/response tracing
@@ -125,6 +137,7 @@ Each entry includes:
 **Timeline**: Phase 2-3 (observability layer)
 
 **Notes**:
+
 - `phenotype-telemetry` scaffold exists but is not populated
 - Should export `tracing` macros + pre-configured spans
 - Pair with `tracing-subscriber` for initialization (not yet declared)

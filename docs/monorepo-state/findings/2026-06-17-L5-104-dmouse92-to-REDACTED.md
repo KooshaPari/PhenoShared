@@ -70,6 +70,7 @@
 **Substrate state (CRITICAL):** `<REDACTED>/pheno-mcp-router` does NOT exist on GitHub (404). Substrate is local-only at `repos/pheno-mcp-router/`, no `origin` remote, 8 commits, uncommitted working tree (3 modified + 2 untracked). **Step 1 of migration plan = publish substrate first.**
 
 **Per-file migration action (from sub-agent plan):**
+
 - 6 modules → substrate (`tiers.py`, `cost.py`, `budget.py`, `quota.py`, `audit.py`, `cost_middleware.py`) — ~2,000 LOC + ~2,400 LOC tests
 - 2 adapters → substrate (`LlamaAdapter` from `llama_cpp.py` + `OpenAICompatAdapter` from KP-authored `openai_compat.py`)
 - 1 doc → substrate (`PROVIDER_GUIDE.md`)
@@ -104,6 +105,7 @@
 **KP/pheno state:** HEAD = `a109d9c` (2026-06-13T01:10:33Z), dormant on ADR-012 files for 4+ days. 0 of 19 sampled Dmouse92 ADR-012 file paths has any KP/main commit since 2026-06-15.
 
 **4 files do NOT exist on KP/main at all** (Dmouse92-unique additions):
+
 - `docs/slsa.md`
 - `.github/workflows/release-attestation.yml`
 - `crates/phenotype-config-loader/CANONICAL.md`
@@ -289,12 +291,12 @@
 | 20:36 | Archive `Dmouse92/pheno` | OK | (Dmouse92 ADR-012 absorbed in 1 phenotype-config PR) |
 | 20:36 | Archive `Dmouse92/AgilePlus` + 16 others (PhenoCompose, PhenoPlugins, PhenoProc, HeliosCLI, Pyron, HexaKit, Tracera, Civis, OmniRoute, KWatch, phenotype-ops, phenotype-otel, Nanovms, PhenoContracts, phenotype-teamcomm, forgecode, phenodocs) | OK | (all empty/bit-identical/KP-archived) |
 | 20:37 | `gh auth switch --user <REDACTED>` | OK | (back to KP for PR work) |
-| 20:40 | Push `feat/port-cost-budget-quota-audit-tiers-2026-06-17` to `pheno-mcp-router` | OK | PR #1: https://github.com/KooshaPari/pheno-mcp-router/pull/1 |
-| 20:40 | Push `feat/llama-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #2: https://github.com/KooshaPari/pheno-mcp-router/pull/2 |
-| 20:40 | Push `feat/openai-compat-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #3: https://github.com/KooshaPari/pheno-mcp-router/pull/3 |
-| 20:41 | Push `feat/l5-104-canonical-markers-2026-06-17` to `phenotype-config` | OK | PR #1: https://github.com/KooshaPari/phenotype-config/pull/1 |
-| 20:41 | Push `feat/llama-cpp-devops-2026-06-17` to `phenotype-ops` | OK | PR #2: https://github.com/KooshaPari/phenotype-ops/pull/2 |
-| 20:45 | Push `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` to `dispatch-mcp` | OK | PR #1: https://github.com/KooshaPari/dispatch-mcp/pull/1 |
+| 20:40 | Push `feat/port-cost-budget-quota-audit-tiers-2026-06-17` to `pheno-mcp-router` | OK | PR #1: <https://github.com/KooshaPari/pheno-mcp-router/pull/1> |
+| 20:40 | Push `feat/llama-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #2: <https://github.com/KooshaPari/pheno-mcp-router/pull/2> |
+| 20:40 | Push `feat/openai-compat-adapter-2026-06-17` to `pheno-mcp-router` | OK | PR #3: <https://github.com/KooshaPari/pheno-mcp-router/pull/3> |
+| 20:41 | Push `feat/l5-104-canonical-markers-2026-06-17` to `phenotype-config` | OK | PR #1: <https://github.com/KooshaPari/phenotype-config/pull/1> |
+| 20:41 | Push `feat/llama-cpp-devops-2026-06-17` to `phenotype-ops` | OK | PR #2: <https://github.com/KooshaPari/phenotype-ops/pull/2> |
+| 20:45 | Push `chore/w1-1-cheap-llm-mcp-deprecation-note-2026-06-15` to `dispatch-mcp` | OK | PR #1: <https://github.com/KooshaPari/dispatch-mcp/pull/1> |
 | 20:50 | Verify all 6 PRs created + branches on origin | OK | 6/6 PRs OPEN, 6/6 branches on `origin` |
 | 20:55 | Commit audit doc + governance refresh | OK | This commit |
 | TBD | Repoint `phenotype-config-core/CANONICAL.md` from `phenoShared` to `phenotype-config` on KP/pheno | TODO | separate PR to `<REDACTED>/pheno` |
@@ -354,6 +356,7 @@ After user's request to "guarantee 100% migr" via per-repo codex exec, codex exe
 | `a1aaef2` part | docker/Dockerfile.llama + docker/llama-compose.yml | `<REDACTED>/phenotype-ops` | `feat/llama-cpp-devops-2026-06-17` | +3 |
 
 **File-level absorption check (DM92 6aad7fa vs KP PR branch):**
+
 - DM92 file structure: `src/pheno_mcp_router/core/{audit,budget,cost,cost_middleware,port,protocol,quota,tiers,types}.py`
 - KP PR branch file structure: `src/pheno_mcp_router/{audit,budget,cost,cost_middleware,quota,tiers}.py` (flattened to top-level per ADR-013)
 - **Match (after path normalization):** 6 of 6 core files (audit.py, budget.py, cost.py, cost_middleware.py, quota.py, tiers.py) ✓

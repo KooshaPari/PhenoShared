@@ -39,14 +39,17 @@ A complete Phase 2 execution suite with real-time dashboard, team briefs, automa
 ## Quick Start (2 Minutes)
 
 ### Step 1: Understand What Phase 2 Is
+
 Read **PHASE_2_EXECUTION_DASHBOARD.md** → "Executive Summary" section (2 min)
 
 **TL;DR**: 50+ agents, 3 parallel batches, 4.5 hours, reduce codebase by 43-67K lines
 
 ### Step 2: Find Your Role
+
 Go to **PHASE_2_EXECUTION_INDEX.md** → "Quick Navigation by Role" section
 
 Pick one:
+
 - I'm a **team lead** → Follow "Team Lead" path
 - I'm an **executor** → Follow "Executor" path
 - I'm a **stakeholder** → Follow "Stakeholder" path
@@ -54,9 +57,11 @@ Pick one:
 - I'm monitoring **metrics** → Follow "Monitor" path
 
 ### Step 3: Get Started
+
 Follow the "Start Here" docs for your role (10-15 min)
 
 ### Step 4: During Execution
+
 - Team leads: Monitor PHASE_2_EXECUTION_DASHBOARD.md (update every 30 min)
 - Executors: Keep PHASE_2_TEAM_BRIEF.md nearby, follow hourly checkpoints
 - Everyone: Use PHASE_2_EXECUTION_INDEX.md to find answers
@@ -66,26 +71,32 @@ Follow the "Start Here" docs for your role (10-15 min)
 ## Document Map (What Goes Where)
 
 ### For Daily Team Meetings
+
 - **PHASE_2_TEAM_BRIEF.md** — "Hourly Checkpoints" section (standup template)
 
 ### For Execution
+
 - **PHASE_2_TEAM_BRIEF.md** — Print this! (quick reference at desk)
 - **PHASE2_MASTER_ROADMAP.md** — Detailed breakdown for your WP
 - **PHASE2_QUICK_START.md** — Tactical guidance during work
 
 ### For Leadership
+
 - **PHASE_2_EXECUTION_DASHBOARD.md** — Live status and metrics
 - **PHASE2_CONSOLIDATED_SUMMARY.md** — Executive summary
 
 ### For Verification
+
 - **PHASE2_SUCCESS_CRITERIA.md** — Sign-off checklist
 - **PHASE_2_EXECUTION_DASHBOARD.md** — "Hourly Checkpoints" section
 
 ### For Understanding Dependencies
+
 - **PHASE2_EXECUTION_DAG.md** — Dependency graph and batch structure
 - **PHASE_2_EXECUTION_DASHBOARD.md** — "Dependencies & Blocking Scenarios" section
 
 ### For Automation
+
 - **PHASE_2_DASHBOARD_UPDATE.sh** — Run every 30 min to update metrics
 
 ---
@@ -93,6 +104,7 @@ Follow the "Start Here" docs for your role (10-15 min)
 ## Key Information At-A-Glance
 
 ### Phase 2 Scope
+
 - **3 Work Streams**: AgilePlus decomposition, cross-repo consolidation, ecosystem decomposition
 - **11 Work Packages**: WP1-11 (routes, sqlite, config, validators, fixtures, errors, cross-repo, adapters, events, federation, phenosdk)
 - **50+ Agents**: Organized into 3 batches (A: 20, B: 38, C: 78, some shared capacity)
@@ -100,6 +112,7 @@ Follow the "Start Here" docs for your role (10-15 min)
 - **Success Criteria**: All 847 tests passing, 43-67K LOC reduced, zero lint errors
 
 ### Critical Dependencies (Gates)
+
 ```
 T+0:00   ┬─ Batch A (routes + sqlite) — starts immediately
          ├─ Batch B (config + CLI) — starts immediately (WP7 waits for WP3)
@@ -111,6 +124,7 @@ T+4:30   └─ All complete
 ```
 
 ### By-the-Hour Checkpoints
+
 - **T+1:00** — Architecture review complete
 - **T+2:00** — Migration underway, 500+ tests passing
 - **T+2:30** — Batch A complete (215 tests)
@@ -119,7 +133,9 @@ T+4:30   └─ All complete
 - **T+4:30** — ALL COMPLETE (847 tests)
 
 ### Rollback Conditions
+
 Stop execution if:
+>
 - >30% tests failing and cannot unblock in 1h
 - 3+ work packages blocked simultaneously
 - Critical architectural issue discovered
@@ -131,11 +147,13 @@ Stop execution if:
 ### Before Execution (Setup — 30 min)
 
 1. **Read orientation** (5 min)
+
    ```
    PHASE_2_EXECUTION_INDEX.md → "Quick Navigation by Role"
    ```
 
 2. **Read your role's documents** (15 min)
+
    ```
    Executors: PHASE_2_TEAM_BRIEF.md + PHASE2_MASTER_ROADMAP.md
    Team leads: PHASE_2_EXECUTION_DASHBOARD.md + PHASE2_EXECUTION_DAG.md
@@ -143,6 +161,7 @@ Stop execution if:
    ```
 
 3. **Prepare infrastructure** (10 min)
+
    ```bash
    # Print for team members
    lp -d printer PHASE_2_TEAM_BRIEF.md
@@ -158,24 +177,28 @@ Stop execution if:
 ### During Execution (Real-Time — 4.5 hours)
 
 1. **Every 30 minutes**
+
    ```bash
    ./docs/worklogs/PHASE_2_DASHBOARD_UPDATE.sh
    # Updates: PHASE_2_EXECUTION_DASHBOARD.md with latest metrics
    ```
 
 2. **Every hour** (standup)
+
    ```
    PHASE_2_TEAM_BRIEF.md → "Hourly Checkpoints" section
    Report to team: completion %, blockers, next milestone
    ```
 
 3. **When blocked**
+
    ```
    PHASE_2_EXECUTION_DASHBOARD.md → "Blocking Scenario Recovery"
    Or: PHASE_2_TEAM_BRIEF.md → "Common Issues & Quick Fixes"
    ```
 
 4. **When reviewing PRs**
+
    ```
    PHASE2_SUCCESS_CRITERIA.md → Your WP section
    Verify all completion criteria met before approval
@@ -184,18 +207,21 @@ Stop execution if:
 ### After Execution (Completion — 30 min)
 
 1. **Verify completion**
+
    ```
    PHASE2_SUCCESS_CRITERIA.md → Run verification procedures
    Confirm: 847 tests passing, zero lint errors, all WPs merged
    ```
 
 2. **Create completion summary**
+
    ```
    PHASE_2_EXECUTION_DASHBOARD.md → "Post-Completion Actions"
    Document metrics, lessons learned, Phase 3 insights
    ```
 
 3. **Archive dashboard**
+
    ```bash
    cp PHASE_2_EXECUTION_DASHBOARD.md \
       docs/worklogs/.archive/PHASE_2_EXECUTION_DASHBOARD_FINAL_2026-03-30.md
@@ -208,6 +234,7 @@ Stop execution if:
 All files are in: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/`
 
 **New Files**:
+
 - PHASE_2_EXECUTION_DASHBOARD.md
 - PHASE_2_TEAM_BRIEF.md
 - PHASE_2_EXECUTION_INDEX.md
@@ -215,6 +242,7 @@ All files are in: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/
 - PHASE_2_README.md (this file)
 
 **Existing Phase 2 Docs**:
+
 - PHASE2_MASTER_ROADMAP.md
 - PHASE2_EXECUTION_DAG.md
 - PHASE2_SUCCESS_CRITERIA.md
@@ -223,6 +251,7 @@ All files are in: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/
 - PHASE2_MASTER_INDEX.md
 
 **Related**:
+
 - PHASE2_COMPLETE_DELIVERY_SUMMARY.md (overview of all Phase 2 planning)
 
 ---
@@ -313,6 +342,7 @@ This package integrates with:
 ## Troubleshooting
 
 ### Dashboard not updating?
+
 ```bash
 # Check if script is working
 ./docs/worklogs/PHASE_2_DASHBOARD_UPDATE.sh --run-tests
@@ -322,18 +352,21 @@ ls -la /tmp/phase2-metrics/
 ```
 
 ### Can't find a document?
+
 ```bash
 # All Phase 2 docs are in:
 ls -la docs/worklogs/PHASE*.md
 ```
 
 ### Need quick reference?
+
 ```
 PHASE_2_TEAM_BRIEF.md has all quick commands and checklists
 PHASE_2_EXECUTION_INDEX.md has FAQ section
 ```
 
 ### Document out of sync?
+
 ```bash
 # Dashboard is auto-updated every 30 min
 # If you edit manually, make backup:
@@ -348,12 +381,14 @@ cp PHASE_2_EXECUTION_DASHBOARD.md \
 **Created**: 2026-03-30 by Claude Code (Phenotype Execution Suite v2)
 
 **Based On**:
+
 - Phase 1 completion summary (LOC audit, decomposition roadmap)
 - Existing Phase 2 planning documents (6 files)
 - Phenotype governance protocols (xDD, hexagonal architecture)
 - User requirements (real-time dashboard, team coordination)
 
 **References**:
+
 - `docs/worklogs/PHASE2_COMPLETE_DELIVERY_SUMMARY.md` (planning overview)
 - `docs/worklogs/LOC_AUDIT_AND_OPTIMIZATION_PLAN.md` (baseline metrics)
 - `docs/worklogs/CODE_DECOMPOSITION_WORK_ITEMS.md` (decomposition strategy)
@@ -363,11 +398,13 @@ cp PHASE_2_EXECUTION_DASHBOARD.md \
 ## Support & Escalation
 
 **During Execution**:
+
 - **Quick Questions** → Ask in standup or Slack
 - **Blocked Issues** → Post in GitHub issue, tag team lead
 - **Critical Blockers** → Escalate to tech lead immediately
 
 **Documentation Issues**:
+
 - **Document unclear** → Open issue with section reference
 - **Dashboard not updating** → Check automation script logs
 - **Need new reference** → Post request in Phase 2 issue tracker
@@ -395,4 +432,3 @@ These documents are part of the Phenotype organization project and follow the re
 **Ready to Execute?** → Start with PHASE_2_EXECUTION_INDEX.md
 
 **Last Updated**: 2026-03-30 00:00 UTC
-

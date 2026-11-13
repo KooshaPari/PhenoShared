@@ -87,6 +87,7 @@ The kernel is **additive**: `weighted_reduce_tiled` and `grouped_gemm_tiled` pub
 ### Oracle parity pinned
 
 7 inline lib tests in `writeback.rs`:
+
 1. `coalesced_writeback_matches_naive_per_token_sum`
 2. `stage_expert_outputs_preserves_expert_layout`
 3. `tile_size_for_matches_reduce_tiled_policy` (byte-equal to `reduce_tiled::tile_size_for` for hidden ∈ {1, 16, 32, 64, 65, 128, 256})
@@ -94,11 +95,13 @@ The kernel is **additive**: `weighted_reduce_tiled` and `grouped_gemm_tiled` pub
 5. `writeback_rejects_zero_hidden`
 6. `writeback_rejects_out_length_mismatch`
 7. `writeback_handles_uneven_buckets` (capacity_used = {2, 0, 3})
+
 + 1 helper test (`expected_eo_len_matches_product`)
 
 ### SOTA chain coverage
 
 `perf-core/kernel-registry/tests/sota_operators/grouped_gemm_moe.rs` got 2 new chain tests:
+
 - `dispatch_aware_writeback_matches_naive_for_random_dispatch` — runs `moe_dispatch` → `grouped_gemm_tiled` → `stage_expert_outputs` → `coalesced_writeback` and compares to a naive expert-by-expert reduction with the same weights.
 - `writeback_coalesces_into_residual_buffer_byte_equal_to_scalar_reference` — explicit byte-equality pin against a hand-written residual-loop scalar.
 
@@ -117,6 +120,7 @@ The kernel is **additive**: `weighted_reduce_tiled` and `grouped_gemm_tiled` pub
 ### Canonical baseline
 
 `perf-core/regress-baseline/tests/baselines/baselines.json` got a new entry:
+
 - **key:** `moe_writeback_2x8`
 - **input_hash:** `479b992410f8ec6ffb4f3e628cca83103d8b63ab290e10693944584ef375c358`
 - **output (first row of `[num_tokens=8, hidden=4]` residual buffer):** `[-0.9235052, 0.1325779, -0.7258748, -0.8661256]`
@@ -139,6 +143,7 @@ Commit `228aade` addresses the turn-11 forward-priority callout (`18_TURN_11_RES
 `perf-core/kernel-registry/tests/sota_operators/discrete_diffusion_schedule_derivative.rs` (new, 332 lines) adds **5 tests** using the existing `Schedule::alpha_at(t: usize, num_steps: usize) -> f64` integer-step API — no new method on `Schedule` was added (test surface stays API-stable). Finite-difference stencils (`forward_diff`, `central_diff`, `backward_diff`) are local helpers at lines 55-75.
 
 The 5 tests:
+
 1. `ddm_linear_schedule_derivative_is_constant_negative` — pins exact `-1/N` via forward / central / backward differences for `N ∈ {4, 8, 32, 128}`.
 2. `ddm_sqrt_schedule_derivative_is_monotonically_more_negative_than_linear` — magnitude ordering vs. Linear at `t = 0` (less steep: `1/(2*sqrt(1)) = 0.5 < 1`) and at `t = N - 1` (diverges to `-∞`).
 3. `ddm_sigmoid_schedule_derivative_zero_at_midpoint` — central diff strictly negative at midpoint across `N ∈ {4, 8, 16, 32, 64}` × `k ∈ {10, 50, 100}`; boundary-derivative magnitude monotonically non-increasing in `k`.
@@ -175,6 +180,7 @@ The turn-11 notes referenced a *forward plan* ("Turn-12 should lift these…"), 
 ### What the documentation commit does
 
 `perf-core/model-kernels/src/moe/reduce_tiled.rs:131-244` adds a 113-line comment block at the top of the `tests` module documenting:
+
 - the factual gap between the turn-11 §13 claim and the actual code,
 - the four SOTA test contracts (f32 `1e-6`, f16 `1e-3`, bf16 `1e-2`, i8 scale-aware `2^-7`) with shape, parity, and tolerance,
 - the kernel/DAG item that should introduce the SIMD path (dispatch-aware writeback stage at `docs/sessions/20260718-metal-model-runtime/03_DAG_WBS.md:198`, with `MoeReduceTiledSimd` slotting into `coverage_matrix.rs`),
@@ -220,10 +226,12 @@ Both files now sit under the 350-line target. In Rust, `tests/*.rs` files are ea
 | `perf-core/model-kernels/tests/writeback_bench.rs`           |      — |   277 | NEW (split off from above)                        |
 
 Files newly at the cap:
+
 - `writeback.rs` — 350 lines (right at target; could split further if next turn needs additions)
 - `reduce_tiled.rs` — 426 lines (still well under the 500-line hard cap)
 
 Files over 500 lines (pre-existing, not caused by turn-12):
+
 - `perf-core/metal-runtime/tests/contracts.rs` — 532
 - `perf-core/metal-runtime/src/compile.rs` — 506
 - `perf-core/native-abi/tests/property_fuzz.rs` — 531
@@ -297,6 +305,7 @@ Plus: gated airlock-v2 push attempted (`wip/20260720T0201-18c3dd03bd7b86b0`); pu
 **Airlock-v2 push:** attempted via `airlock-v2 snapshot . --message "turn-12 close"`. Snapshot branch `wip/20260720T0201-18c3dd03bd7b86b0` created locally at HEAD 60f875d; remote push did not occur (no remote configured per `airlock-v2 status .`).
 
 This is a **tooling / credential limitation, not a code defect**:
+
 - All 7 code-quality gates above are GREEN.
 - The repo is committed, the snapshot is recorded, and the work is fully captured in 4 atomic commits on top of turn-11 close (`628d788`).
 - The airlock-v2 snapshot is exercised end-to-end; the snapshot branch is healthy and points at HEAD.

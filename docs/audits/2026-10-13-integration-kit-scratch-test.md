@@ -11,6 +11,7 @@ git -C /tmp/instinct-scratch-test commit --allow-empty -m 'chore: initial commit
 ## Test 1 — full install (no flags)
 
 Command:
+
 ```bash
 bash tools/integration-kit/install.sh \
   --source /tmp/instinct-kit-20261013 \
@@ -18,6 +19,7 @@ bash tools/integration-kit/install.sh \
 ```
 
 Expected output (relevant excerpt):
+
 ```
 [install] workflows → /tmp/instinct-scratch-test/.github/workflows/ (reusable-*.yml)
   COPIED: .github/workflows/reusable-lint.yml
@@ -44,11 +46,13 @@ Result: all 6 expected files installed, all checks pass.
 ## Test 2 — JSON round-trip
 
 Command:
+
 ```bash
 python3 -c "import json; d=json.load(open('/tmp/instinct-scratch-test/.mcp-hooks.json')); print('valid-after-install:', list(d['hooks'].keys()))"
 ```
 
 Result:
+
 ```
 valid-after-install: ['PreToolUse', 'PostToolUse', 'Notification', 'Stop']
 ```
@@ -58,6 +62,7 @@ JSON file survived the install intact.
 ## Test 3 — idempotency (re-run without --force)
 
 Command:
+
 ```bash
 bash tools/integration-kit/install.sh \
   --source /tmp/instinct-kit-20261013 \
@@ -66,6 +71,7 @@ bash tools/integration-kit/install.sh \
 ```
 
 Expected output (relevant excerpt):
+
 ```
 [install] workflows → /tmp/instinct-scratch-test/.github/workflows/ (reusable-*.yml)
   SKIP (exists): .github/workflows/reusable-lint.yml — re-run with --force to overwrite
@@ -78,6 +84,7 @@ Result: existing files preserved; no overwrites.
 ## Test 4 — force overwrite
 
 Command:
+
 ```bash
 bash tools/integration-kit/install.sh \
   --source /tmp/instinct-kit-20261013 \
@@ -87,6 +94,7 @@ bash tools/integration-kit/install.sh \
 ```
 
 Output:
+
 ```
 [install] workflows → /tmp/instinct-scratch-test/.github/workflows/ (reusable-*.yml)
   COPIED: .github/workflows/reusable-lint.yml
@@ -99,6 +107,7 @@ Result: `--force` overwrites existing files as expected.
 ## Test 5 — dry-run against an existing repo
 
 Command:
+
 ```bash
 bash tools/integration-kit/install.sh \
   --source /tmp/instinct-kit-20261013 \
@@ -108,6 +117,7 @@ bash tools/integration-kit/install.sh \
 ```
 
 Expected output (relevant excerpt) — note: NO mkdir, NO post-install verification:
+
 ```
 [install] workflows → /Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/.github/workflows/ (reusable-*.yml)
   WOULD COPY: .github/workflows/reusable-lint.yml
@@ -123,6 +133,7 @@ report missing files (since it did not attempt to create them).
 ## Test 6 — components with whitespace and case
 
 Command:
+
 ```bash
 bash tools/integration-kit/install.sh \
   --source /tmp/instinct-kit-20261013 \

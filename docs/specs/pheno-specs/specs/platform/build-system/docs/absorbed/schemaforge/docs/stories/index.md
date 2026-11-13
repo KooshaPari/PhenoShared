@@ -18,6 +18,7 @@ title: User Stories
 ## Story Format
 
 Each story includes:
+
 - **🎬 GIF Demo**: Visual walkthrough
 - **📋 Prerequisites**: What you need
 - **💻 Code**: Copy-paste ready

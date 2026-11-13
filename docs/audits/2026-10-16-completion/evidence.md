@@ -2,7 +2,7 @@
 
 ## Identity and method
 
-Frozen GitHub main and local origin/main: `1448514e5692d8de6e40be8c7b67c6b5168f9fe2` (2026-10-15T03:53:41Z). Origin: https://github.com/KooshaPari/PhenoShared.git. Docs branch: `docs/completion-usability-20261016`, isolated worktree `/tmp/phenoshared-completion-20261016`. Original checkout `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoShared` remains on `tmp-pose-ci` with its untracked recovery/test/build artifacts preserved.
+Frozen GitHub main and local origin/main: `1448514e5692d8de6e40be8c7b67c6b5168f9fe2` (2026-10-15T03:53:41Z). Origin: <https://github.com/KooshaPari/PhenoShared.git>. Docs branch: `docs/completion-usability-20261016`, isolated worktree `/tmp/phenoshared-completion-20261016`. Original checkout `/Users/kooshapari/CodeProjects/Phenotype/repos/PhenoShared` remains on `tmp-pose-ci` with its untracked recovery/test/build artifacts preserved.
 
 The earlier `/tmp/phenoshared-inventory-20261016.md` described 33,251 files and 85 literal members in the older checkout. This publication recomputes inventory from current main: **33,345 tracked files; 168 top-level tracked directories; 272 root files; 371 first-level crate directories; 333 first-level Cargo manifests; 980 recognized package/build manifests; 249 literal root workspace member paths.** These are different source denominators, not unexplained drift in completion. Literal member count is not `cargo metadata` resolved package count. No Cargo dependency resolution/build was performed.
 

@@ -5,6 +5,7 @@ Complete step-by-step guide to deploy Snyk security scanning across the Phenotyp
 **Time Required:** 5-10 minutes (execution time)
 **Complexity:** Intermediate
 **Prerequisites:**
+
 - Snyk token acquired (see SNYK_TOKEN_ACQUISITION_GUIDE.md)
 - Snyk CLI installed and authenticated
 - All repos cloned locally
@@ -14,6 +15,7 @@ Complete step-by-step guide to deploy Snyk security scanning across the Phenotyp
 ## Overview
 
 This guide walks you through:
+
 1. Verifying local environment and prerequisites
 2. Running the Snyk deployment script
 3. Understanding deployment stages and output
@@ -73,6 +75,7 @@ ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos | grep -E "^d"
 ```
 
 **Expected Output:** Directories including:
+
 - `AgilePlus`
 - `heliosCLI`
 - `phenotype-infrakit`
@@ -107,6 +110,7 @@ export SNYK_TOKEN="your-token-here"
 Replace `your-token-here` with your actual token from Part 1 of SNYK_TOKEN_ACQUISITION_GUIDE.md.
 
 **Verify:**
+
 ```bash
 echo $SNYK_TOKEN
 # Output should show your token
@@ -127,6 +131,7 @@ ls -la scripts/snyk-deploy.sh
 ```
 
 **Expected Output:**
+
 ```
 -rwxr-xr-x  ... scripts/snyk-deploy.sh
 ```
@@ -184,6 +189,7 @@ Starting Snyk security scans...
 ```
 
 **What This Means:**
+
 - Script confirmed all dependencies are available
 - Report directory (`.snyk-reports/`) was created
 - Deployment is starting
@@ -234,6 +240,7 @@ Typical deployment takes 5-10 minutes:
 | **Total** | **5-10 min** | **100%** |
 
 **Note:** Times vary based on:
+
 - Number of manifest files per repo
 - Size of dependency trees
 - Network latency (Snyk API calls)
@@ -257,6 +264,7 @@ This shows newly created report files every 5 seconds.
 ### 5.1: Repository Processing Examples
 
 #### Example 1: Rust-Only Repository
+
 ```
 Scanning: phenotype-infrakit
   Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-infrakit
@@ -273,12 +281,14 @@ Scanning: phenotype-infrakit
 ```
 
 **What This Means:**
+
 - Repository has multiple Cargo.toml files (workspace structure)
 - Snyk scanned all of them
 - Found 2 medium-severity vulnerabilities
 - Results saved to JSON file
 
 #### Example 2: Multi-Language Repository
+
 ```
 Scanning: AgilePlus
   Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/AgilePlus
@@ -296,12 +306,14 @@ Scanning: AgilePlus
 ```
 
 **What This Means:**
+
 - Repository uses 3 languages
 - One missing lock file (go.sum) — Snyk still scanned what it could
 - Found 1 critical vulnerability (needs immediate attention)
 - Manual review flag indicates special handling needed
 
 #### Example 3: Repository with No Vulnerabilities
+
 ```
 Scanning: phenotype-contracts
   Repository: /Users/<REDACTED>/CodeProjects/Phenotype/repos/phenotype-contracts
@@ -315,6 +327,7 @@ Scanning: phenotype-contracts
 ```
 
 **What This Means:**
+
 - Repository has no known vulnerabilities
 - All dependencies are up to date
 - Still generates a report (for completeness)
@@ -374,6 +387,7 @@ ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/
 ```
 
 **Expected Output:**
+
 ```
 drwx------ ... .snyk-reports
 -rw-r--r-- ... report.txt
@@ -392,6 +406,7 @@ cat /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports/report.txt
 ```
 
 **Expected Output (first 50 lines):**
+
 ```
 =================================================================
 Snyk Security Scan Report
@@ -430,6 +445,7 @@ TIER 1 REPOSITORIES (Priority Scan)
 **Cause:** Token not exported before running script
 
 **Solution:**
+
 ```bash
 export SNYK_TOKEN="your-token-here"
 ./scripts/snyk-deploy.sh
@@ -440,6 +456,7 @@ export SNYK_TOKEN="your-token-here"
 **Cause:** Snyk CLI not installed or not in PATH
 
 **Solution:**
+
 ```bash
 # Install with Homebrew
 brew install snyk
@@ -456,7 +473,8 @@ snyk --version
 **Cause:** Token is invalid or expired
 
 **Solution:**
-1. Regenerate token at https://app.snyk.io
+
+1. Regenerate token at <https://app.snyk.io>
 2. Export the new token
 3. Re-run the script
 
@@ -470,6 +488,7 @@ export SNYK_TOKEN="new-token-here"
 **Cause:** Network issues or large repositories
 
 **Solution:**
+
 ```bash
 # Run with extended timeout (example: 30 minutes)
 timeout 1800 ./scripts/snyk-deploy.sh
@@ -484,6 +503,7 @@ snyk test --json > ../snyk-reports/AgilePlus.json
 **Cause:** `.snyk-reports/` directory not writable
 
 **Solution:**
+
 ```bash
 # Check permissions
 ls -la /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports
@@ -501,6 +521,7 @@ rm -rf /Users/<REDACTED>/CodeProjects/Phenotype/repos/.snyk-reports
 **Cause:** Repository-specific issues (missing manifests, corrupted files)
 
 **Solution:**
+
 1. Script will skip failing repos and continue
 2. Review error messages for each failed repo
 3. Run individual scans on problem repos:
@@ -517,22 +538,26 @@ snyk test --json-file-output=snyk-report.json
 After successful deployment:
 
 ### Immediate (Before Proceeding)
+
 1. ✅ Verify report files exist: `ls -la .snyk-reports/`
 2. ✅ Review summary: `cat .snyk-reports/report.txt`
 3. ✅ Keep SNYK_TOKEN for reference (you may need it for GitHub Secrets)
 
 ### Short-Term (Next Guide)
+
 1. Proceed to **SNYK_RESULTS_REVIEW_GUIDE.md**
 2. Understand vulnerability findings
 3. Review and suppress findings with justification
 4. Create `.snyk` policy files
 
 ### Medium-Term (GitHub Integration)
+
 1. Add SNYK_TOKEN to GitHub organization secrets
 2. Deploy GitHub Actions workflows (GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md)
 3. Enable automated nightly scans
 
 ### Long-Term (Ongoing)
+
 1. Monitor reports for new vulnerabilities
 2. Plan remediation for critical/high findings
 3. Track fixes in AgilePlus work items
@@ -542,10 +567,10 @@ After successful deployment:
 
 ## Reference
 
-- **Snyk CLI Commands:** https://docs.snyk.io/cli
-- **Snyk Test Options:** https://docs.snyk.io/cli/commands/test
-- **Snyk Policy Files:** https://docs.snyk.io/cli/manage-policy-as-code
-- **Severity Definitions:** https://docs.snyk.io/getting-started/severity-levels
+- **Snyk CLI Commands:** <https://docs.snyk.io/cli>
+- **Snyk Test Options:** <https://docs.snyk.io/cli/commands/test>
+- **Snyk Policy Files:** <https://docs.snyk.io/cli/manage-policy-as-code>
+- **Severity Definitions:** <https://docs.snyk.io/getting-started/severity-levels>
 
 ---
 

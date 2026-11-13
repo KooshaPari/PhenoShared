@@ -202,6 +202,7 @@ Read on 2026-07-03. Findings the audit pins down vs. flags.
 The brief contrasts "just told to RLVRAF" with a managed self-improvement loop. The audit pins the requirements before `IMPLEMENTATION_PLAN.md` fills the implementation.
 
 **Required signals (every loop tick must observe at least these):**
+
 - **Per-task signal:** pass/fail, wall time, turns, tool calls, tokens in/out, cost, patch size, test pass rate, regressions, verbosity, escalation count, recoverability.
 - **Per-lane signal:** same, aggregated per `harness/lanes.yaml` lane.
 - **Per-route-kind signal:** same, aggregated per `omniroute_cloud | local_direct | omniroute_combo`.
@@ -209,6 +210,7 @@ The brief contrasts "just told to RLVRAF" with a managed self-improvement loop. 
 - **Per-serving-engine signal:** TTFT, ITL p50/p95/p99, aggregate tokens/sec, queue wait, cache hit rate, harness overhead.
 
 **Required gates (no promotion without all green):**
+
 - **Holdout gate:** eval holdout must score ≥ X (X from `config/eval_pillars.yaml` thresholds, not from training set).
 - **Regression gate:** SWE-bench Verified subset must not regress.
 - **Safety gate:** `verifier/risky_action.py` must remain at 0 high-severity violations.
@@ -216,10 +218,12 @@ The brief contrasts "just told to RLVRAF" with a managed self-improvement loop. 
 - **Reproducibility gate:** every run logs commit hash, model id, provider, hardware profile, env vars.
 
 **Required retention:**
+
 - All trace records retained for the eval window + a rolling 30-day archive.
 - Nightly DPO candidates filtered against the holdout BEFORE training (already partially done in `eval/tbench.py`).
 
 **Required evaluator clocks:**
+
 - **Real-time clock:** wall-clock budget per task (e.g. 5 min micro-eval from `config/local_model_bench_matrix.yaml`).
 - **Eval clock:** full Harbor TB2/2.1 sweep on a weekly cadence.
 - **Promotion clock:** lane promotion only after two consecutive green windows.

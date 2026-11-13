@@ -40,6 +40,7 @@ minute end-to-end matrix against MiniMax-M3 via `forge -p`.
 | 7 | **startup-bench** | StartupBench July 2026 — founder/startup evaluation | Vendored subset (~10 startup scenarios) |
 
 **Naming convention** (matches existing hyphen pattern):
+
 - `kernel_bench.py` / `KernelBenchSuite` / name=`kernel-bench`
 - `browser_comp.py` / `BrowserCompSuite` / name=`browser-comp`
 - `osworld.py` / `OSWorldSuite` / name=`os-world`
@@ -49,6 +50,7 @@ minute end-to-end matrix against MiniMax-M3 via `forge -p`.
 - `startup_bench.py` / `StartupBenchSuite` / name=`startup-bench`
 
 **Template** (from `_stub.py`):
+
 ```python
 @register
 class XxxSuite(BaseSuite):
@@ -86,18 +88,21 @@ class XxxSuite(BaseSuite):
 ## 4. Task breakdown
 
 ### Agent 1 — kernel-bench, arc-agi
+
 - kernel-bench: 20 GPU kernel prompts (CUDA-equivalent in Mojo? Just prompt-text
   with 'write a GPU kernel that ...')
 - arc-agi: 10 grid puzzles, each with 4-shot exemplar. Heuristic judge = exact
   output match on the arithmetic solution.
 
 ### Agent 2 — browser-comp, os-world
+
 - browser-comp: 10 web-agent scenarios ('search for X on Y', 'compare prices
   of Z'). Heuristic judge = substring match.
 - os-world: 10 OS tasks ('create a file at /tmp/...', 'list processes that
   use port ...'). Heuristic judge = keyword match.
 
 ### Agent 3 — pinch-bench, vending-bench, startup-bench
+
 - pinch-bench: 15 TDD-style prompts (write tests, then code, then refactor).
   Heuristic judge = has "test_", has "def ", has "assert".
 - vending-bench: 2 prompts (vending machine OO design, cookie shop inventory).

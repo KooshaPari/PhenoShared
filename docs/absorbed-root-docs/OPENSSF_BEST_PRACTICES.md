@@ -64,7 +64,7 @@ This file documents our self-assessment against the
 2. Submit the answers via PR to
    <https://github.com/coreinfrastructure/best-practices-badge>.
 3. After server-side validation, the badge URL becomes
-   <https://www.bestpractices.dev/projects/<id>>.
+   <<https://www.bestpractices.dev/projects/><id>>.
 
 ## Audit log
 

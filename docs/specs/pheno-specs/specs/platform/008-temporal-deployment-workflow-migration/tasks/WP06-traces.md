@@ -19,6 +19,7 @@ Emit OpenTelemetry traces from Temporal workflows to Jaeger. Every workflow exec
 ## Context
 
 Temporal has built-in OpenTelemetry support. Enable it via the `TemporalSdk` config. The worker SDK emits spans automatically for:
+
 - Workflow execution
 - Activity execution
 - Child workflow calls

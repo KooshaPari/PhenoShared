@@ -127,6 +127,7 @@ the candidates that survived the hard filter.
 
 A single `compile(&topology, &intent) -> Result<RoutePlan>` that does
 hard filtering and soft scoring in one traversal. **Rejected** because:
+
 - The two passes have different error semantics (filter errors are
   "no candidate" and should be silent; score is a `Result` of `f64`).
 - The test suite needs to assert on `Score { breakdown }`, which
@@ -138,6 +139,7 @@ hard filtering and soft scoring in one traversal. **Rejected** because:
 
 Implementing lease acquisition in `RoutePlan` so that `compile`
 returns a `Result<(RoutePlan, LeaseToken)>`. **Rejected** because:
+
 - Breaks test determinism (every test would have to mint a lease).
 - Forces a global lease service into the R0 crate, which is a
   stateful, network-aware component. R0 should be pure.

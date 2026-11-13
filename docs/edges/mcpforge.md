@@ -15,4 +15,3 @@ behavior in ADR-019.
 
 - Runtime and sync source of truth: `servers/substrate/` (PhenoMCPServers catalog path)
 - Substrate dev mirror: `KooshaPari/substrate` (`driver-mcp` mirror; see `driver-mcp/SYNC.md`)
-

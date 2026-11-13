@@ -167,29 +167,30 @@ Step-by-step order to minimize blockers:
 
 **Phase 2: Core (Days 2-3)**
 
-4. SendGrid integration (HTTP client, API calls)
-5. Email queue worker (async processing)
-6. Template rendering (Handlebars setup)
+1. SendGrid integration (HTTP client, API calls)
+2. Email queue worker (async processing)
+3. Template rendering (Handlebars setup)
 
 *Why next*: Implements sending mechanism
 
 **Phase 3: Integration (Days 3-4)**
 
-7. Event handlers (connect to event system)
-8. Account settings endpoint (preference management)
-9. Email preferences model
+1. Event handlers (connect to event system)
+2. Account settings endpoint (preference management)
+3. Email preferences model
 
 *Why next*: Connects to rest of system
 
 **Phase 4: Quality (Days 4-5)**
 
-10. Integration tests
-11. Error handling refinements
-12. Documentation
+ 1. Integration tests
+ 2. Error handling refinements
+ 3. Documentation
 
 *Why last*: All pieces in place to test thoroughly
 
 **Parallelizable Steps:**
+
 - Steps 4-8 can run in parallel (no dependencies between them)
 - Only constraint: All of Phase 1 must complete before Phase 2
 

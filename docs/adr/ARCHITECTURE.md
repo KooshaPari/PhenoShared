@@ -87,12 +87,14 @@ crates/agileplus-domain/
 ### Port Interfaces
 
 #### Primary (Driving) Ports
+
 - `AgentPort` - Agent lifecycle and task delegation
 - `ReviewPort` - Code review operations
 - `ContentPort` - Content/document management
 - `VcsPort` - Version control operations
 
 #### Secondary (Driven) Ports
+
 - `StoragePort` - Persistence abstraction
 - `EventPort` - Event publishing
 - `ObservabilityPort` - Metrics, traces, logs
@@ -150,6 +152,7 @@ impl<P: StoragePort, E: EventPort> BacklogService<P, E> {
 ### Single Responsibility Principle (SRP)
 
 Each module has one reason to change:
+
 - `BacklogService` - only backlog management
 - `FeatureService` - only feature operations
 - `CycleService` - only cycle/iteration management
@@ -157,6 +160,7 @@ Each module has one reason to change:
 ### Open/Closed Principle (OCP)
 
 Domain entities open for extension, closed for modification:
+
 - Use traits for new behavior
 - Value objects immutable
 
@@ -167,6 +171,7 @@ All port implementations must satisfy port contracts.
 ### Interface Segregation Principle (ISP)
 
 Fine-grained ports over monolithic interfaces:
+
 - `AgentPort` vs generic `ServicePort`
 - `StoragePort` vs `PersistencePort`
 
@@ -302,6 +307,7 @@ PortError ──wrap──→ ApplicationError ──wrap──→ DomainError
 ### Result Type Convention
 
 All port and service methods return `Result<T, Error>`:
+
 - `Ok(T)` - Success with value
 - `Err(DomainError)` - Business rule violation
 - `Err(ApplicationError)` - Operational failure

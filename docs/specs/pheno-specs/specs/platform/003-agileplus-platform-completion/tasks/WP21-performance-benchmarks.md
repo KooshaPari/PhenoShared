@@ -68,6 +68,7 @@ criterion_main!(benches);
 ```
 
 **Metrics to track:**
+
 - Average append time (microseconds per event)
 - p50, p95, p99 latencies
 - Throughput (events/second): target ≥10,000 events/sec
@@ -75,11 +76,13 @@ criterion_main!(benches);
 - WAL checkpoint overhead
 
 **Configuration:**
+
 - SQLite: WAL mode enabled
 - Batch size: measure both individual appends and batch inserts
 - Database size: test with 0KB (cold), 10MB, 100MB
 
 **Output format (regression detection):**
+
 ```
 Event Append Throughput
 =======================
@@ -158,6 +161,7 @@ criterion_main!(benches);
 ```
 
 **Metrics to track:**
+
 - Full replay (1000 events): target <100ms
 - Snapshot-based replay (900 snapshot + 100 new): target <10ms
 - Snapshot load time: <1ms
@@ -165,6 +169,7 @@ criterion_main!(benches);
 - Memory usage during replay: <10MB for single entity
 
 **Comparison output:**
+
 ```
 Event Replay Performance
 ========================
@@ -242,18 +247,21 @@ criterion_main!(benches);
 ```
 
 **Metrics to track:**
+
 - GET /api/features (list 100): p95 <100ms, p99 <200ms
 - GET /api/features/:id: p95 <50ms, p99 <100ms
 - POST /api/features/:id/transition: p95 <100ms, p99 <200ms
 - GET /health: p95 <10ms, p99 <20ms
 
 **Test scenarios:**
+
 - Cold start (first request, cache miss)
 - Warm cache (repeated requests)
 - Cache invalidation (after state change)
 - Concurrent requests (10 parallel clients)
 
 **Output format:**
+
 ```
 API Response Time Benchmarks
 =============================
@@ -322,18 +330,21 @@ criterion_main!(benches);
 ```
 
 **Metrics to track:**
+
 - Push single feature: target <2s
 - Pull single feature: target <2s
 - Full sync (100 features, no conflicts): target <30s
 - Sync with conflict resolution (5 conflicts): target <10s
 
 **Test scenarios:**
+
 - Network latency simulation (50ms, 100ms)
 - Plane.so API rate limiting (100 req/min)
 - Large payloads (5KB+ feature descriptions)
 - Partial failures and retries
 
 **Output format:**
+
 ```
 Sync Round-Trip Performance
 ============================
@@ -395,17 +406,20 @@ async fn memory_usage_idle() {
 ```
 
 **Metrics to track:**
+
 - agileplus-api at idle: target <100MB
 - Dragonfly cache: documented, no hard gate
 - Neo4j JVM: documented, excluded from gate
 - Total platform: documented
 
 **Load test scenario:**
+
 - Run with 100 features, 500 work packages
 - 10 concurrent API clients making requests
 - Steady-state memory after 5 minutes
 
 **Output format:**
+
 ```
 Memory Usage (idle)
 ===================

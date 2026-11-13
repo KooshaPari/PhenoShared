@@ -48,8 +48,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -76,16 +77,19 @@ spec-kitty implement WP09 --base WP05
 ## Context & Constraints
 
 ### Prerequisite Work
+
 - **WP05 (Port Traits)** must be complete. The `ReviewPort` trait in `agileplus-domain/src/ports/review.rs` defines the interface this adapter implements.
 - Review the port trait signatures carefully. All methods return `Result<T, DomainError>`.
 
 ### Key References
+
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- FR-012 (review-fix loop), FR-011 (PR description with goal context)
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- Agent dispatch section, review loop description
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- Evidence entity (type: `review_approval`), WorkPackage.pr_state field
 - **Contracts**: `kitty-specs/001-spec-driven-development-engine/contracts/` -- API contract for review-related endpoints
 
 ### Architectural Constraints
+
 - This crate implements the `ReviewPort` trait defined in `agileplus-core`. It must not depend on other adapter crates.
 - Use `octocrab` or raw `reqwest` for GitHub API calls. Prefer `octocrab` for type safety unless it lacks needed endpoints.
 - Credentials (GitHub token) are retrieved from the credential store via configuration -- do not hardcode tokens or read environment variables directly in the adapter. Accept a config struct at construction time.
@@ -93,6 +97,7 @@ spec-kitty implement WP09 --base WP05
 - The adapter must be `Send + Sync` for use in async contexts with tokio.
 
 ### Crate Dependencies
+
 ```toml
 [dependencies]
 agileplus-core = { path = "../agileplus-core" }
@@ -142,6 +147,7 @@ wiremock = "0.6"
 - **Steps**:
   1. Create `crates/agileplus-agent-review/src/coderabbit.rs`.
   2. Define a `CoderabbitComment` struct:
+
      ```rust
      pub struct CoderabbitComment {
          pub id: u64,
@@ -153,6 +159,7 @@ wiremock = "0.6"
          pub created_at: DateTime<Utc>,
      }
      ```
+
   3. Define `CommentSeverity` enum: `Info`, `Warning`, `Error`.
   4. Implement `fetch_review_comments(client, owner, repo, pr_number) -> Result<Vec<CoderabbitComment>>`:
      - Call GitHub API: `GET /repos/{owner}/{repo}/pulls/{pr}/comments` for inline comments.
@@ -204,6 +211,7 @@ wiremock = "0.6"
 - **Steps**:
   1. Create `crates/agileplus-agent-review/src/ci_status.rs`.
   2. Define `CiStatus` enum:
+
      ```rust
      pub enum CiStatus {
          Passed,
@@ -221,6 +229,7 @@ wiremock = "0.6"
          pub completed_at: Option<DateTime<Utc>>,
      }
      ```
+
   3. Implement `check_ci_status(client, owner, repo, pr_number) -> Result<CiStatus>`:
      - Get the PR's head SHA via `GET /repos/{owner}/{repo}/pulls/{pr}` -> `head.sha`.
      - Fetch check runs: `GET /repos/{owner}/{repo}/commits/{sha}/check-runs`.
@@ -287,16 +296,19 @@ wiremock = "0.6"
 ## Test Strategy
 
 ### Unit Tests
+
 - Location: `crates/agileplus-agent-review/tests/`
 - Run: `cargo test -p agileplus-review`
 - All GitHub API interactions are mocked with `wiremock`.
 - Test coverage target: >85% for all modules.
 
 ### Mock Fixtures
+
 - Realistic GitHub API JSON responses stored in `tests/mock_responses/`.
 - Fixtures should be derived from actual GitHub API documentation examples.
 
 ### Edge Cases to Cover
+
 - Empty PR (no comments, no checks)
 - Coderabbit comment with malformed body
 - GitHub API returns 500 (server error)
@@ -337,6 +349,7 @@ wiremock = "0.6"
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this file (Activity Log section below "Valid lanes")
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ -- agent_id -- lane=<lane> -- <action>`
@@ -345,6 +358,7 @@ wiremock = "0.6"
 6. Agent ID should identify who made the change (claude-sonnet-4-5, codex, etc.)
 
 **Format**:
+
 ```
 - YYYY-MM-DDTHH:MM:SSZ -- <agent_id> -- lane=<lane> -- <brief action description>
 ```
@@ -359,6 +373,7 @@ To change a work package's lane, either:
 2. **Use CLI**: `spec-kitty agent tasks move-task WP09 --to <lane> --note "message"` (recommended)
 
 **Initial entry**:
+
 - 2026-02-27T00:00:00Z -- system -- lane=planned -- Prompt created.
 - 2026-03-02T01:23:26Z – s1-wp09 – shell_pid=59200 – lane=doing – Assigned agent via workflow command
 - 2026-03-02T02:27:13Z – s1-wp09 – shell_pid=59200 – lane=for_review – Ready: code review adapter

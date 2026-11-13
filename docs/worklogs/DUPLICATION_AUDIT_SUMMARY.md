@@ -10,9 +10,11 @@
 ## Documents Generated
 
 ### 1. DUPLICATION.md (Original - 2,217 lines)
+
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md`
 
 **Contents:**
+
 - Executive summary of all duplication findings
 - Priority matrix (P0-P5) with LOC savings estimates
 - Cross-repository and intra-repository patterns
@@ -20,6 +22,7 @@
 - 20+ findings with summary tables
 
 **Key Metrics:**
+
 - Total Duplication Identified: ~9,000 LOC
 - Estimated Savings: ~4,300 LOC
 - Affected Crates: 400+
@@ -27,12 +30,14 @@
 ---
 
 ### 2. DUPLICATION_EXPANSION_20260329.md (New - 797 lines, ~25KB)
+
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_EXPANSION_20260329.md`
 
 **Contents:**
 Detailed expansions with 5+ case studies per category:
 
 #### Category 1: Health Check Enums (8+ Instances)
+
 - **Case Study 1:** GraphHealth vs CacheHealth vs BusHealth consolidation (40 LOC savings)
 - **Case Study 2:** Missing health check method implementations (24 LOC gap)
 - **Case Study 3:** Health status API response standardization (50 LOC duplication)
@@ -41,6 +46,7 @@ Detailed expansions with 5+ case studies per category:
 - **Net Savings:** 40 LOC
 
 #### Category 2: Event Bus Adapter Patterns (5 Implementations)
+
 - **Case Study 1:** Duplicate HashMap implementation (266 LOC + 114 LOC nested = 380 LOC)
 - **Case Study 2:** Incomplete sync adapter (87 LOC, needs +45 LOC)
 - **Case Study 3:** Redis adapter edition mismatch (150 LOC unused)
@@ -49,6 +55,7 @@ Detailed expansions with 5+ case studies per category:
 - **Net Savings:** 407 LOC
 
 #### Category 3: Builder Pattern Analysis (12+ Instances)
+
 - **Case Study 1:** Config builders - boilerplate proliferation (61 LOC × 3 builders)
 - **Case Study 2:** Query builders - method duplication (115 LOC × 3 builders)
 - **Case Study 3:** PolicyBuilder - complex merge logic (52 LOC)
@@ -57,6 +64,7 @@ Detailed expansions with 5+ case studies per category:
 - **Net Savings:** 53 LOC
 
 #### Category 4: Serialization/Deserialization Boilerplate (353 LOC)
+
 - **Case Study 1:** Event serialization nested duplicate (98 LOC × 2 = 196 LOC)
 - **Case Study 2:** Encrypted field serialization (90+ LOC, 3 crates)
 - **Case Study 3:** MessagePack serialization (80+ LOC, 3 crates)
@@ -64,6 +72,7 @@ Detailed expansions with 5+ case studies per category:
 - **Net Savings:** 273 LOC
 
 #### Category 5: Test Fixtures and Mocks (310 LOC)
+
 - **Case Study 1:** Auth fixture duplication (68 + 65 = 133 LOC)
 - **Case Study 2:** Mock server implementation (85 + 70 = 155 LOC)
 - **Case Study 3:** Schema fixture duplication (52 + 50 = 102 LOC)
@@ -71,6 +80,7 @@ Detailed expansions with 5+ case studies per category:
 - **Net Savings:** 250 LOC
 
 #### Category 6: Retry/Backoff Logic (186 LOC)
+
 - **Case Study 1:** HTTP retry pattern (44 + 42 = 86 LOC)
 - **Case Study 2:** Configuration variation inconsistency (4 different configs)
 - **Case Study 3:** Algorithm variation (3 different approaches)
@@ -96,18 +106,21 @@ Detailed expansions with 5+ case studies per category:
 ### Implementation Roadmap
 
 **Phase 1: Quick Wins (2 weeks)**
+
 - [ ] Delete phenotype-event-sourcing nested duplicate (266 LOC)
 - [ ] Create libs/health-core (82 LOC savings)
 - [ ] Adopt backoff crate (163 LOC savings)
 - **Subtotal:** ~511 LOC savings
 
 **Phase 2: Core Libraries (3 weeks)**
+
 - [ ] Create libs/event-core (407 LOC savings)
 - [ ] Create libs/serde-adapters (273 LOC savings)
 - [ ] Create libs/test-fixtures (250 LOC savings)
 - **Subtotal:** ~930 LOC savings
 
 **Phase 3: Builder Pattern (2 weeks)**
+
 - [ ] Extract builder trait/macro (53 LOC savings)
 - **Subtotal:** ~53 LOC savings
 
@@ -119,18 +132,21 @@ Detailed expansions with 5+ case studies per category:
 ## File Location Reference
 
 ### Original Duplication Analysis
+
 - **Primary Document:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION.md`
 - **Line Count:** 2,217 lines
 - **Size:** 85+ KB
 - **Status:** Comprehensive baseline audit
 
 ### Expansion with Detailed Case Studies
+
 - **New Document:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_EXPANSION_20260329.md`
 - **Line Count:** 797 lines (~800 lines total)
 - **Size:** 25 KB
 - **Status:** 5+ detailed case studies per major category
 
 ### This Summary
+
 - **Document:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/worklogs/DUPLICATION_AUDIT_SUMMARY.md`
 - **Purpose:** Cross-reference guide for all audit materials
 
@@ -139,12 +155,14 @@ Detailed expansions with 5+ case studies per category:
 ## Key Metrics
 
 ### Code Coverage
+
 - **Rust Files Analyzed:** 40+ actual codebase files
 - **LOC Measurements:** All estimates backed by actual file scans
 - **Crates Affected:** 15+ crates across AgilePlus, heliosCLI, thegent
 - **Cross-Repository Patterns:** 6+ patterns identified across 3+ repos
 
 ### Consolidation Opportunities
+
 - **Health Check Enums:** 8+ instances (227 LOC) → 82 LOC savings
 - **Event Bus Adapters:** 5 implementations (617 LOC) → 407 LOC savings
 - **Builder Patterns:** 12+ instances (228 LOC) → 53 LOC savings
@@ -153,6 +171,7 @@ Detailed expansions with 5+ case studies per category:
 - **Retry Logic:** 186 LOC → 163 LOC savings (via backoff crate)
 
 ### External Crate Recommendations
+
 1. **backoff** (600K+ downloads/week) - Replace 4 retry implementations
 2. **figment** (500K downloads/week) - Replace config loaders
 3. **gix** (gitoxide) - Replace git2 for Git operations
@@ -164,24 +183,28 @@ Detailed expansions with 5+ case studies per category:
 ## Action Items Priority
 
 ### 🔴 CRITICAL (P0 - Do First)
+
 - [ ] Delete nested phenotype-event-sourcing duplicate (266 LOC)
 - [ ] Migrate libs/ to edition 2024 (unblock 11 unused libraries)
 - [ ] Create libs/health-core with unified enum (82 LOC savings)
 - [ ] Adopt backoff crate (163 LOC savings)
 
 ### 🟡 HIGH (P1 - Next Sprint)
+
 - [ ] Create libs/event-core unified trait (407 LOC savings)
 - [ ] Create libs/serde-adapters (273 LOC savings)
 - [ ] Integrate Redis adapter (100 LOC savings)
 - [ ] Complete agileplus-sync adapter
 
 ### 🟠 MEDIUM (P2 - This Quarter)
+
 - [ ] Create libs/test-fixtures (250 LOC savings)
 - [ ] Extract builder patterns (53 LOC savings)
 - [ ] Create libs/query-core (45+ LOC savings)
 - [ ] Consolidate error types (400-500 LOC savings)
 
 ### 🟢 LOW (P3 - Future)
+
 - [ ] Document builder pattern conventions
 - [ ] Create shared CLI framework
 - [ ] Unify database schemas
@@ -192,11 +215,13 @@ Detailed expansions with 5+ case studies per category:
 ## Reference Materials
 
 ### Within Codebase
+
 1. **DUPLICATION.md** - Comprehensive baseline audit with 20+ findings
 2. **DUPLICATION_EXPANSION_20260329.md** - 5+ detailed case studies per category
 3. **DUPLICATION_AUDIT_SUMMARY.md** - This document (cross-reference guide)
 
 ### Related Specifications
+
 - Reference: `docs/reference/LIBRARY_CONSOLIDATION_TRACKER.md` (for tracking progress)
 - Plans: `docs/reports/LIBIFICATION_EXTRACTION_PLAN_2026-03-29.md`
 - Research: `docs/research/consolidation-audit-2026-03-29.md`

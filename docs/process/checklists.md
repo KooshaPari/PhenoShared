@@ -114,6 +114,7 @@ agileplus checklist 001 --type specification --complete
 ```
 
 Marks spec as validated and unlocks the `plan` command.
+
 ```
 
 ## Implementation Checklist

@@ -18,6 +18,7 @@ Modern software systems suffer from a critical gap between specifications and im
 - **$500B** annual cost of software defects (NIST, 2022)
 
 In the Phenotype ecosystem, we observe:
+
 - Specifications written but never linked to code
 - Code changes without corresponding spec updates
 - "Why" questions requiring archaeology through git history
@@ -36,6 +37,7 @@ In the Phenotype ecosystem, we observe:
 ### Requirements Analysis
 
 **Functional Requirements:**
+
 - FR-001: Link specifications to code implementations
 - FR-002: Support multiple programming languages
 - FR-003: Validate traceability completeness
@@ -43,6 +45,7 @@ In the Phenotype ecosystem, we observe:
 - FR-005: Query traceability graph
 
 **Non-Functional Requirements:**
+
 - NFR-001: Low annotation overhead (minimize boilerplate)
 - NFR-002: Language-agnostic where possible
 - NFR-003: CI/CD integration (validation gates)
@@ -63,11 +66,13 @@ SPEC-001   | src/token.rs     | generate_token
 ```
 
 **Pros:**
+
 - Simple to understand
 - Language-agnostic
 - Can track any relationship
 
 **Cons:**
+
 - Manual maintenance (guaranteed staleness)
 - Separate from code (context switching)
 - No IDE integration
@@ -84,11 +89,13 @@ git commit -m "Implement SPEC-001 FR-002: Add PKCE support"
 ```
 
 **Pros:**
+
 - Natural workflow integration
 - Historical traceability
 - No code changes needed
 
 **Cons:**
+
 - Depends on commit message discipline
 - Coarse-grained (file level at best)
 - Difficult to query current state
@@ -101,6 +108,7 @@ git commit -m "Implement SPEC-001 FR-002: Add PKCE support"
 **Method**: Embed traceability metadata directly in source code via annotations/comments.
 
 **Rust:**
+
 ```rust
 #[trace_fr(spec = "SPEC-AUTH-001", fr = "FR-002")]
 fn authenticate(request: AuthRequest) -> AuthResponse {
@@ -109,6 +117,7 @@ fn authenticate(request: AuthRequest) -> AuthResponse {
 ```
 
 **Go:**
+
 ```go
 // FR: SPEC-AUTH-001 FR-002 - PKCE support
 func GeneratePKCE() (*PKCEPair, error) {
@@ -117,6 +126,7 @@ func GeneratePKCE() (*PKCEPair, error) {
 ```
 
 **TypeScript:**
+
 ```typescript
 /**
  * @spec SPEC-AUTH-001
@@ -129,6 +139,7 @@ function generatePKCE(): PKCEPair {
 ```
 
 **Pros:**
+
 - Fine-grained (function/method level)
 - IDE-friendly (hover to see spec)
 - Language-idiomatic
@@ -136,6 +147,7 @@ function generatePKCE(): PKCEPair {
 - Survives refactoring (when refactored with code)
 
 **Cons:**
+
 - Language-specific syntax
 - Adds visual noise (minimal with practice)
 - Requires team discipline
@@ -147,10 +159,12 @@ function generatePKCE(): PKCEPair {
 **Method**: Infer traceability through code analysis (AST matching, naming conventions).
 
 **Pros:**
+
 - No manual annotations
 - Automatic detection
 
 **Cons:**
+
 - Brittle heuristics
 - False positives/negatives
 - Limited to simple patterns
@@ -175,6 +189,7 @@ This is not optional documentation — it is a first-class engineering requireme
 #### Language-Specific Formats
 
 **Rust (Procedural Macro):**
+
 ```rust
 // Required: spec identifier
 // Optional: specific FR, repo override
@@ -196,6 +211,7 @@ mod oauth {
 ```
 
 **Go (Comment Convention):**
+
 ```go
 // Single line: "FR: <spec-id> <fr-id> [description]"
 // FR: SPEC-AUTH-001 FR-002 - PKCE support
@@ -213,6 +229,7 @@ func GeneratePKCEWithRotation() (*PKCEPair, *Token, error) {
 ```
 
 **TypeScript/JavaScript (JSDoc Tags):**
+
 ```typescript
 /**
  * @spec SPEC-AUTH-001
@@ -231,6 +248,7 @@ const generatePKCE = (): PKCEPair => {
 ```
 
 **Python (Decorators):**
+
 ```python
 from phenotype.traceability import trace
 
@@ -323,6 +341,7 @@ phenospecs trace watch [--repo <path>]
 ```
 
 **IntelliJ Plugin:**
+
 - Line markers for traced code
 - Spec reference navigation
 - Coverage highlighting
@@ -330,6 +349,7 @@ phenospecs trace watch [--repo <path>]
 ### 6.6 CI/CD Integration
 
 **GitHub Actions:**
+
 ```yaml
 - name: Traceability Check
   uses: phenotype/spec-links-action@v1
@@ -340,6 +360,7 @@ phenospecs trace watch [--repo <path>]
 ```
 
 **GitLab CI:**
+
 ```yaml
 traceability:
   script:
@@ -361,6 +382,7 @@ traceability:
 | Line Coverage | % of traced code lines (optional) | N/A |
 
 **Coverage Report:**
+
 ```yaml
 summary:
   total_specs: 50
@@ -440,18 +462,22 @@ details:
 ## Migration Strategy
 
 ### Phase 1: New Code (Immediate)
+
 - All new features require traceability annotations
 - CI gates enforce coverage
 
 ### Phase 2: Active Code (Month 1-3)
+
 - Annotate code actively being modified
 - Focus on critical paths (auth, security, core APIs)
 
 ### Phase 3: Backlog (Month 3-6)
+
 - Backfill annotations for stable, important code
 - Lower priority for experimental/temporary code
 
 ### Phase 4: Enforcement (Month 6+)
+
 - 100% coverage required for all production code
 - Exceptions require ADR with justification
 

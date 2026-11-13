@@ -527,6 +527,7 @@ history:
   shell_pid: ''
   action: Prompt generated via /spec-kitty.tasks
 ```
+
 - 2026-02-28T13:25:29Z – claude-opus – shell_pid=41285 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T13:31:16Z – claude-opus – shell_pid=41285 – lane=for_review – GitHub sync crate: client, sync, conflict detection. 7 tests.
 - 2026-02-28T23:22:19Z – claude-opus – shell_pid=78956 – lane=doing – Started review via workflow command

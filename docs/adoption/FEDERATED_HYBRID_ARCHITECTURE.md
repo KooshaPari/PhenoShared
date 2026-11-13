@@ -3,6 +3,7 @@
 ## Executive Summary
 
 **Phase 2** extends Chassis with runtime module federation:
+
 - Dynamic module loading (webpack Module Federation)
 - Multiple repos composed into unified shell
 - Independent versioning and deployment
@@ -17,6 +18,7 @@
 ## Problem: Monolithic Composition
 
 Current architecture bundles all modules together:
+
 - No independent deployment
 - Recompile required for any change
 - Teams blocked on each other
@@ -27,6 +29,7 @@ Current architecture bundles all modules together:
 ## Solution: Federated Micro-Frontends
 
 Independent deployment with unified UI:
+
 - Teams own modules end-to-end
 - Versioning per module
 - A-B testing per module
@@ -38,22 +41,30 @@ Independent deployment with unified UI:
 ## 4 Standard Federation Patterns
 
 ### 1. Module Federation (Runtime) — Recommended
+
 Webpack dynamic module loading
+
 - Pros: True independence, lazy loading
 - Cons: Version mismatches, shared deps
 
 ### 2. Micro-Frontends (Domain-Driven)
+
 Repo-specific with own tech stacks
+
 - Pros: Full flexibility, isolation
 - Cons: Harder state sharing
 
 ### 3. Monorepo + Submodules (Build-Time)
+
 Git submodules with Nx/Turborepo
+
 - Pros: Simple, shared deps
 - Cons: Tight coupling
 
 ### 4. Sidecar Services  
+
 Helper service alongside main app
+
 - Pros: Auto-healing, scaling
 - Cons: Operational complexity
 
@@ -62,15 +73,19 @@ Helper service alongside main app
 ## 4 Unique Phenotype Patterns
 
 ### 1. Platform-Centric Chassis
+
 @phenotype/docs provides shared identity and design
 
 ### 2. Intent-Driven Orchestration (AI-Native)
+
 Agents request features by intent; system loads modules
 
 ### 3. Domain-Aligned Modular Monoliths
+
 Monorepo with strict boundaries + federation for extensions
 
 ### 4. Feedback-Loop / Self-Healing
+
 Monitor modules, auto-swap on failures
 
 ---

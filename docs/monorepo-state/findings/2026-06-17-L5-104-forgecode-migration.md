@@ -64,6 +64,7 @@ KP branches NOT in upstream    (21):  (full list in § 2.2)
 ```
 
 The two "DM92-only" entries are:
+
 - `dependabot/npm_and_yarn/esbuild-0.28.1` — auto-generated Dependabot branch, no Phenotype work
 - `feat/session-viewer` — KP-only feature, propagated to DM92 at fork time (33-second window — see § 3.1)
 
@@ -152,6 +153,7 @@ Plus `main` (which IS on DM92 and upstream, so it's the only "shared" branch).
 - **Present on upstream `tailcallhq/forgecode`?** No — `gh api repos/tailcallhq/forgecode/branches/feat/session-viewer` returns `404 Branch not found`.
 
 **Timeline:**
+
 - 2026-06-15T05:35:04Z — `feat/session-viewer` commit pushed (author = Phenotype Agent)
 - 2026-06-15T05:35:37Z — `Dmouse92/forgecode` fork created (33 seconds later)
 - 2026-06-15T05:35:50Z — last push to DM92 (no further activity)
@@ -199,7 +201,7 @@ This is also consistent with the repo metadata: `Dmouse92/forgecode` has zero co
 The task brief mentioned `aaronfagan/forgecode` as a possible upstream. Verifying:
 
 ```bash
-$ gh api repos/aaronfagan/forgecode 2>&1 | jq '{message: .message, status: .status}'
+gh api repos/aaronfagan/forgecode 2>&1 | jq '{message: .message, status: .status}'
 ```
 
 (`aaronfagan/forgecode` does not exist on GitHub — the correct upstream is `tailcallhq/forgecode`, which is the org that publishes the `forgecode` CLI / IDE assistant on crates.io. ADR-001 references the same tailcallhq upstream in its "NetScript" deletion rationale.)
@@ -213,14 +215,17 @@ $ gh api repos/aaronfagan/forgecode 2>&1 | jq '{message: .message, status: .stat
 1. **Confirm with user** (Dmouse92 owns the repo; &lt;REDACTED&gt; is read-only-collaborator, not owner).
 2. **Document the archive rationale** in the parent L5-104 file: § 2.5 now reads "Archive DM92 (no unique content; 1:1 mirror of upstream tailcallhq/forgecode; KP is the active fork with 21 KP-only branches)."
 3. **Archive via `gh repo archive`**:
+
    ```bash
    # Run as Dmouse92 (NOT <REDACTED> — read-only-collaborator cannot archive someone else's repo)
    gh auth switch --user Dmouse92
    gh repo archive Dmouse92/forgecode --confirm
    gh auth switch --user <REDACTED>
    ```
+
 4. **Verify** the archive on the GitHub web UI: `https://github.com/Dmouse92/forgecode` shows "This repository has been archived. It is now read-only."
 5. **Update L5-104** decision-matrix row for forgecode:
+
    ```
    | forgecode | 0 branches to migrate; archive DM92 (stale upstream mirror) | self | DONE |
    ```

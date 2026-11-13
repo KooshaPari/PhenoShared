@@ -30,11 +30,13 @@
 **WP0.1: Root-level npm configuration**
 
 - [ ] Update `.npmrc` with @phenotype scope
+
   ```ini
   @phenotype:registry=https://npm.pkg.github.com
   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
   always-auth=true
   ```
+
 - [ ] Update `pnpm-workspace.yaml` to include `packages/*`
 - [ ] Verify workspace is recognized: `pnpm list -r --depth=0`
 
@@ -172,12 +174,14 @@ export class PhenotypeError extends Error {
 **WP1.6: Index and re-exports**
 
 - [ ] Create `src/index.ts` re-exporting all modules:
+
   ```typescript
   export * from './ports/inbound';
   export * from './ports/outbound';
   export * from './models/index';
   export * from './errors/index';
   ```
+
 - [ ] Verify exports with: `pnpm --filter @phenotype/pheno-core run build`
 
 **WP1.7: Unit tests**
@@ -246,6 +250,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify: `pnpm --filter @phenotype/pheno-resilience build`
 
 **Tests for event-sourcing**:
+
 - [ ] Create `tests/event-sourcing.test.ts`
   - [ ] Test append and retrieve
   - [ ] Test sequence numbering
@@ -272,6 +277,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify compilation
 
 **Tests for state-machine**:
+
 - [ ] Create `tests/state-machine.test.ts`
   - [ ] Test state transitions
   - [ ] Test guard evaluation (permit/deny)
@@ -299,6 +305,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify compilation
 
 **Tests for policy-engine**:
+
 - [ ] Create `tests/policy-engine.test.ts`
   - [ ] Test basic rule matching
   - [ ] Test deny-overrides combinator
@@ -330,6 +337,7 @@ export class PhenotypeError extends Error {
 - [ ] Verify compilation
 
 **Tests for cache**:
+
 - [ ] Create `tests/cache.test.ts`
   - [ ] Test LRU basic operations
   - [ ] Test LRU eviction on max size
@@ -505,11 +513,13 @@ export class PhenotypeError extends Error {
 **WP4.4: Create GitHub release**
 
 - [ ] Tag each package:
+
   ```bash
   git tag -a @phenotype/pheno-core@1.0.0 -m "Release pheno-core 1.0.0"
   git tag -a @phenotype/pheno-resilience@1.0.0 -m "Release pheno-resilience 1.0.0"
   git tag -a @phenotype/pheno-llm@1.0.0 -m "Release pheno-llm 1.0.0"
   ```
+
 - [ ] Push tags: `git push origin --tags`
 - [ ] Verify workflow triggered in GitHub Actions
 - [ ] Monitor workflow for success
@@ -517,13 +527,17 @@ export class PhenotypeError extends Error {
 **WP4.5: Verify package publication**
 
 - [ ] Package available on GitHub Packages:
+
   ```bash
   npm view @phenotype/pheno-core --registry https://npm.pkg.github.com
   ```
+
 - [ ] Package installable:
+
   ```bash
   npm install @phenotype/pheno-core --registry https://npm.pkg.github.com
   ```
+
 - [ ] Check all three packages published:
   - [ ] @phenotype/pheno-core
   - [ ] @phenotype/pheno-resilience
@@ -532,6 +546,7 @@ export class PhenotypeError extends Error {
 **WP4.6: Root documentation**
 
 - [ ] Create `packages/README.md`
+
   ```markdown
   # @phenotype Packages
 
@@ -547,6 +562,7 @@ export class PhenotypeError extends Error {
   Configure .npmrc for GitHub Packages, then:
   npm install @phenotype/pheno-core
   ```
+
 - [ ] Create `packages/PUBLISHING.md` with release procedures
 - [ ] Create `packages/CONTRIBUTING.md` with dev setup
 

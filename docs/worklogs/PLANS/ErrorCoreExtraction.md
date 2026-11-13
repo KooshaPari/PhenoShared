@@ -118,6 +118,7 @@ cargo test
 ## Migration Example
 
 **Before:**
+
 ```rust
 // crates/agileplus-domain/src/error.rs
 #[derive(Debug, thiserror::Error)]
@@ -131,6 +132,7 @@ pub enum DomainError {
 ```
 
 **After:**
+
 ```rust
 // crates/agileplus-domain/src/error.rs
 use agileplus_error_core::{DomainError, StorageError, NotFound};

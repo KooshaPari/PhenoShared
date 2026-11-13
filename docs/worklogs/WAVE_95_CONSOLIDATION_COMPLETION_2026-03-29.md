@@ -9,6 +9,7 @@
 ## Executive Summary
 
 Completed comprehensive consolidation and libification of the Phenotype ecosystem:
+
 - **Nested duplicate consolidation merged** (PR #85): 1.7K LOC removed
 - **3 shared libraries produced & committed**: phenotype-config-core, phenotype-git-core, phenotype-error-core (spec)
 - **6 parallel audit agents**: Deep research across 100+ repos, 9,000 LOC duplication mapped
@@ -20,6 +21,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 ## Phase 1: Research & Audit (COMPLETE)
 
 ### Agents Deployed
+
 | Agent | Task | Status | Output |
 |-------|------|--------|--------|
 | aaaf10f | Inactive folders audit | ✅ | INACTIVE_FOLDERS.md (657 lines, +343) |
@@ -30,6 +32,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 | ae78298 | Stale folder cleanup | ✅ | PR #66 merged (.gitignore updated) |
 
 **Key Findings:**
+
 - ~2,000 LOC of new audit content appended (all docs doubled)
 - 27 major inactive folder issues identified
 - 9,000 LOC duplication mapped with extraction roadmap
@@ -41,6 +44,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 ## Phase 2: Implementation & Consolidation (COMPLETE)
 
 ### Consolidation Agents
+
 | Agent | Task | Status | Output |
 |-------|------|--------|--------|
 | a042252 | Extract phenotype-error-core spec | ✅ | 10 docs (spec, tasks.md, meta.json) + 210 KB |
@@ -53,6 +57,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 ### Merged Work
 
 **PR #85: Consolidate Nested Duplicates** ✅
+
 ```
 40 files changed: 1,829 insertions(+), 2,972 deletions(-)
 - phenotype-cache-adapter/phenotype-cache-adapter/ removed
@@ -66,6 +71,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 ### Live Libraries (Committed to Main)
 
 **phenotype-config-core** - Unified configuration library
+
 - **Location:** `/crates/phenotype-config-core/`
 - **LOC:** 450 (consolidated from 650+ across 5 impls)
 - **Features:** Multi-format (TOML/YAML/JSON), XDG/Windows dirs, validation, merging
@@ -73,6 +79,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 - **Consolidates:** thegent-hooks, phenotype-policy-engine, codex-rs, harness_checkpoint, network-proxy
 
 **phenotype-git-core** - Centralized git operations library
+
 - **Location:** `/crates/phenotype-git-core/`
 - **LOC:** 1,325 (consolidated from 581 LOC duplication)
 - **Features:** TTL caching (70% call reduction), lock detection, agent metadata, async worktrees
@@ -82,6 +89,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 ### Specifications (Ready for Implementation)
 
 **phenotype-error-core** - Error type consolidation spec
+
 - **Location:** `.agileplus/specs/phenotype-error-core/`
 - **Files:** spec.md, tasks.md, meta.json (10 documents total)
 - **Scope:** 442 LOC → 200 LOC shared lib (196 LOC savings, 49% reduction)
@@ -100,6 +108,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 ## Archival Strategy (Per User Preference 2026-03-29)
 
 **Policy:** Always use `.archive/` directory instead of `rm` for stale/duplicate/obsolete code.
+
 - Preserves code for reference (non-destructive)
 - Follows long-term stability protocol
 - Reduces cognitive load of permanent deletion
@@ -107,6 +116,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
 ### Pending Archival Tasks (Require Terminal)
 
 1. **phenotype-event-sourcing nested dup** (PREPARED)
+
    ```bash
    mkdir -p /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/phenotype-event-sourcing/.archive
    mv phenotype-event-sourcing/ .archive/nested-duplicate-2026-03-29/
@@ -114,6 +124,7 @@ Completed comprehensive consolidation and libification of the Phenotype ecosyste
    ```
 
 2. **Build artifacts** (add/, docs/node_modules/) (PREPARED)
+
    ```bash
    mkdir -p /Users/<REDACTED>/CodeProjects/Phenotype/repos/.archive
    mv add/ .archive/stale-add-2026-03-29/
@@ -134,6 +145,7 @@ All archive documentation is prepared in `.archive/` directory.
 ## Consolidation Impact Metrics
 
 ### LOC Reduction Achieved
+
 | Item | Status | LOC Savings |
 |------|--------|------------|
 | Nested duplicate consolidation | ✅ Merged | 1,700 |
@@ -144,6 +156,7 @@ All archive documentation is prepared in `.archive/` directory.
 | **Total Ecosystem Impact** | | **3,656+ LOC** |
 
 ### Code Quality Improvements
+
 - ✅ Nested workspace confusion eliminated
 - ✅ Config loading duplication consolidated
 - ✅ Git operations centralized with caching
@@ -155,16 +168,19 @@ All archive documentation is prepared in `.archive/` directory.
 ## Next Actions (Recommended Order)
 
 ### Immediate (Terminal, 15 min)
+
 1. Archive phenotype-event-sourcing nested dup
 2. Archive build artifacts (add/, docs/node_modules/)
 3. Remove unused deps from Cargo.toml
 4. Merge remaining PRs (#79, #138)
 
 ### Short-term (Agent-driven, 10-15 min)
+
 1. Implement phenotype-error-core (7 WPs)
 2. Integrate config-core into thegent-hooks + phenotype-policy-engine
 
 ### Medium-term (Agent-driven, 45-70 min)
+
 1. Integrate git-core into affected crates
 2. Phase 2 migrations (health-check patterns, auth middleware)
 

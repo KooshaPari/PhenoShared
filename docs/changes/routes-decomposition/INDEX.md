@@ -18,19 +18,19 @@
 
 ### Detailed Technical Documents
 
-3. **[DESIGN.md](DESIGN.md)** — Architecture and design decisions
+1. **[DESIGN.md](DESIGN.md)** — Architecture and design decisions
    - Module responsibility assignments
    - Design patterns used
    - Trade-offs and rationale
    - **Read this**: For architects reviewing decomposition strategy
 
-4. **[MIGRATION_CHECKLIST.md](MIGRATION_CHECKLIST.md)** — Step-by-step implementation guide
+2. **[MIGRATION_CHECKLIST.md](MIGRATION_CHECKLIST.md)** — Step-by-step implementation guide
    - 10-phase implementation checklist
    - Verification steps
    - Testing procedures
    - **Read this**: For engineers implementing the decomposition
 
-5. **[MODULE_BOUNDARIES.md](MODULE_BOUNDARIES.md)** — Dependency maps and boundary rules
+3. **[MODULE_BOUNDARIES.md](MODULE_BOUNDARIES.md)** — Dependency maps and boundary rules
    - Dependency graph visualization
    - Communication patterns between modules
    - Boundary rules and constraints
@@ -73,29 +73,34 @@ crates/agileplus-dashboard/src/routes/
 ## Document Map for Different Roles
 
 ### For Project Managers
+
 1. Start with: **COMPLETION_REPORT.md** (section: Executive Summary)
 2. Check: Quality assurance table
 3. Review: Next steps timeline
 
 ### For Developers (Implementation)
+
 1. Start with: **IMPLEMENTATION_SUMMARY.md** (section: Module Summary)
 2. Learn: Import patterns and usage
 3. Use: Code patterns & recipes
 4. Reference: Troubleshooting guide
 
 ### For Code Reviewers
+
 1. Start with: **DESIGN.md** (section: Design Decisions)
 2. Verify: **MODULE_BOUNDARIES.md** dependency graph
 3. Review: **MIGRATION_CHECKLIST.md** verification steps
 4. Audit: Test coverage in tests.rs
 
 ### For Architects
+
 1. Start with: **DESIGN.md** (section: Architectural Approach)
 2. Analyze: **MODULE_BOUNDARIES.md** (dependency analysis)
 3. Consider: Cross-project reuse opportunities (COMPLETION_REPORT.md)
 4. Plan: Phase 3 further decomposition
 
 ### For DevOps / Release Engineers
+
 1. Start with: **COMPLETION_REPORT.md** (section: Rollback Plan)
 2. Verify: CI/CD integration points
 3. Monitor: Post-integration performance baseline
@@ -105,17 +110,20 @@ crates/agileplus-dashboard/src/routes/
 ## Key Takeaways
 
 ### What Changed
+
 - **From**: 1 monolithic routes.rs file (2,631 LOC)
 - **To**: 9 focused modules (2,967 LOC total)
 - **Result**: 83% reduction in largest module size
 
 ### What Stayed the Same
+
 - ✅ Public API (all types re-exported)
 - ✅ Handler functionality (100% behavior preserved)
 - ✅ Configuration format
 - ✅ Router structure
 
 ### What Improved
+
 - ✅ Code maintainability (+9 focused modules)
 - ✅ Test coverage (+35 unit tests)
 - ✅ Developer velocity (easier to locate code)
@@ -161,11 +169,13 @@ See **COMPLETION_REPORT.md** for full verification details.
 ## File Locations
 
 ### Source Code (After Merge)
+
 ```
 /Users/<REDACTED>/CodeProjects/Phenotype/repos/crates/agileplus-dashboard/src/routes/
 ```
 
 ### Documentation (On Main)
+
 ```
 /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/changes/routes-decomposition/
 ├── INDEX.md (this file)
@@ -181,11 +191,13 @@ See **COMPLETION_REPORT.md** for full verification details.
 ## Related Work
 
 ### Cross-Project Reuse Opportunities
+
 - **Phase 3 Task**: Extract evidence gallery → `phenotype-evidence` crate
 - **Phase 3 Task**: Extract service health → `phenotype-service-health` crate
 - **Phase 3 Task**: Dashboard patterns → Design system library
 
 ### Connected PRs & Issues
+
 - **PR #279**: Merge commit with decomposition
 - **Commit 290b9759d**: "refactor(agileplus-dashboard): decompose routes"
 

@@ -9,6 +9,7 @@
 In most validation libraries, a schema's input type and output type are the same. Zod's `.transform()` breaks this assumption by modifying types mid-chain, making it painful to use transformations while maintaining type safety.
 
 For real-world applications, transformations are essential:
+
 - Trimming whitespace from strings
 - Converting date strings to Date objects
 - Normalizing phone numbers
@@ -19,6 +20,7 @@ We need transformations that preserve full type safety throughout the pipeline.
 ## Decision
 
 Every schema in phenotype-validation-ts has two distinct types:
+
 - `Input<S>`: The type of data the schema accepts
 - `Output<S>`: The type of data the schema produces
 
@@ -152,6 +154,6 @@ Cons: Breaks composition, requires explicit typing
 
 ## References
 
-- Zod transforms: https://zod.js.org
-- io-ts: https://github.com/gcanti/io-ts
-- TypeBox: https://github.com/sinclairzx81/typebox
+- Zod transforms: <https://zod.js.org>
+- io-ts: <https://github.com/gcanti/io-ts>
+- TypeBox: <https://github.com/sinclairzx81/typebox>

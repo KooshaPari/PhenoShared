@@ -13,6 +13,7 @@
 ### Extension Points
 
 Custom code that should be preserved during sync:
+
 - `src/specs/` - AgilePlus specs
 - `src/webflow-plugin/` - Custom webflow storage
 - `src/workflows/` - Phenotype CI workflows

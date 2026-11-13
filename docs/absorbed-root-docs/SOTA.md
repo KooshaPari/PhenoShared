@@ -30,6 +30,7 @@ The static site generator ecosystem has consolidated around four primary archite
 ### 1.2 Architectural Differentiation
 
 **VitePress** (selected for PhenoDocs):
+
 - Hot Module Replacement (HMR) with state preservation
 - Native Vue 3 SFC integration for custom components
 - Built-in full-text search (no external service)
@@ -37,16 +38,19 @@ The static site generator ecosystem has consolidated around four primary archite
 - TypeScript-first configuration API
 
 **Docusaurus** (evaluated, rejected):
+
 - React-based component model creates impedance mismatch with Vue-heavy Phenotype ecosystem
 - MDX overhead significant for pure documentation use cases
 - Plugin architecture adds complexity without proportional benefit
 
 **Astro** (evaluated, rejected):
+
 - Islands architecture excellent for content sites
 - Higher configuration burden for documentation-specific features
 - Less mature documentation-specific ecosystem (no built-in search)
 
 **mdBook** (evaluated, rejected):
+
 - Fastest build performance (Rust-native)
 - Limited extensibility for custom UI components
 - Search implementation requires external backend or wasm
@@ -56,6 +60,7 @@ The static site generator ecosystem has consolidated around four primary archite
 Build performance is critical for documentation at scale. A 10,000-page corpus represents a large but realistic target for PhenoDocs federation.
 
 **Measured Performance (cold build)**:
+
 ```
 VitePress 1.6:     1.25s  (8,000 pps)
 Docusaurus 3.6:    2.38s  (4,200 pps)
@@ -65,6 +70,7 @@ mdBook 0.4:        0.83s  (12,000 pps)
 ```
 
 **Incremental Build Performance**:
+
 ```
 VitePress HMR:     <50ms per edit
 Docusaurus Fast Refresh: 120ms per edit
@@ -84,6 +90,7 @@ Documentation sites must load instantly. First Contentful Paint (FCP) and Time t
 | Lighthouse | 98 | 94 | 99 | >95 |
 
 VitePress achieves these scores through:
+
 - Pre-rendered static HTML
 - Progressive hydration of Vue components
 - Route-based code splitting
@@ -160,14 +167,17 @@ Modern software organizations maintain documentation across dozens of repositori
 Three primary approaches have emerged:
 
 **Git Submodules** (Kubernetes, early patterns):
+
 - Pros: Version-locked content, simple infrastructure
 - Cons: Update latency, merge conflicts, submodule complexity
 
 **Content Aggregation** (Docusaurus plugins, PhenoDocs approach):
+
 - Pros: Build-time aggregation, single index, unified search
 - Cons: Build complexity, source availability requirement
 
 **Client-Side Federation** (Module Federation for docs):
+
 - Pros: Independent deployments, runtime composition
 - Cons: SEO challenges, search fragmentation, performance overhead
 
@@ -282,6 +292,7 @@ The `.llms.txt` file (proposed by Anthropic, adopted by Vercel, Stripe, and othe
 ```
 
 Benefits:
+
 - Token-efficient context (vs. scraping full site)
 - Priority signaling (Docs vs. Optional sections)
 - Structured discovery for LLM tool use
@@ -414,12 +425,14 @@ Merge to Main:
 ### 8.2 Quality Gates
 
 **Must Pass**:
+
 - Markdown syntax valid
 - No broken internal links
 - TypeScript compiles
 - Build succeeds
 
 **Should Pass**:
+
 - Prose style (vale)
 - Spell check
 - Image optimization
@@ -432,16 +445,19 @@ Merge to Main:
 ### 9.1 VitePress vs. Alternatives
 
 **vs. Docusaurus**:
+
 - VitePress: 2.5x faster build, 50% smaller bundle
 - Docusaurus: Larger plugin ecosystem, i18n maturity
 - Decision: VitePress for performance-critical docs
 
 **vs. MkDocs**:
+
 - VitePress: Interactive components, modern UX
 - MkDocs: Python ecosystem integration
 - Decision: VitePress for multi-language orgs
 
 **vs. mdBook**:
+
 - VitePress: Rich theming, search quality
 - mdBook: Raw performance, simplicity
 - Decision: VitePress for complex UIs
@@ -449,6 +465,7 @@ Merge to Main:
 ### 9.2 Ecosystem Alignment
 
 Phenotype ecosystem uses:
+
 - **Vue 3**: Primary frontend framework
 - **TypeScript**: All typed code
 - **Vite**: Build tool
@@ -463,16 +480,19 @@ VitePress aligns perfectly with this stack.
 ### 10.1 Emerging Patterns (2026–2027)
 
 **AI-Native Documentation**:
+
 - LLM-generated first drafts from code
 - Automated translation with context preservation
 - Conversational interfaces (chat with docs)
 
 **Real-Time Collaboration**:
+
 - Multiplayer editing in documentation
 - Comments and suggestions (like Google Docs)
 - Live cursors and presence
 
 **Intelligent Search**:
+
 - Semantic search (embeddings-based)
 - Natural language queries
 - Intent-based result ranking
@@ -550,6 +570,7 @@ Areas requiring further investigation:
 ### Appendix A: Benchmark Methodology
 
 Build performance measured on:
+
 - Hardware: MacBook Pro M3 (12-core CPU, 18GB RAM)
 - OS: macOS 15.3
 - Test corpus: 10,000 markdown pages (generated)
@@ -668,6 +689,7 @@ Mathematical notation support:
 Documentation version control strategies:
 
 **Docs-as-Code (Recommended)**:
+
 ```
 Repository Structure:
 ├── src/
@@ -685,6 +707,7 @@ Workflow:
 ```
 
 **Version Branching**:
+
 ```
 main          ●────●────●────●
                │    │    │
@@ -1539,4 +1562,3 @@ Team expertise:
 **Document Status**: Layer 2 (Docs) — Stable  
 **Review Cycle**: Quarterly  
 **Next Review**: 2026-07-04
-

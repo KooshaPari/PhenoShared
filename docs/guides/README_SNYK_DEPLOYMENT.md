@@ -30,34 +30,34 @@ This system contains **6 comprehensive guides + 1 overview + this README**:
 
 ### Phase-Specific Guides (In Order)
 
-3. **SNYK_TOKEN_ACQUISITION_GUIDE.md** (5-10 minutes)
+1. **SNYK_TOKEN_ACQUISITION_GUIDE.md** (5-10 minutes)
    - Create Snyk account (if needed)
    - Generate API token
    - Secure storage techniques
    - Verification commands
    - Troubleshooting token issues
 
-4. **SNYK_LOCAL_DEPLOYMENT_GUIDE.md** (5-10 minutes)
+2. **SNYK_LOCAL_DEPLOYMENT_GUIDE.md** (5-10 minutes)
    - Environment setup
    - Run deployment script
    - Monitor progress (5-10 minutes execution)
    - Understanding output
    - Verification of results
 
-5. **SNYK_RESULTS_REVIEW_GUIDE.md** (10-15 minutes)
+3. **SNYK_RESULTS_REVIEW_GUIDE.md** (10-15 minutes)
    - Reading vulnerability reports
    - Understanding severity levels & CVSS
    - Decision: fix vs. suppress findings
    - Creating .snyk policy files
    - Committing results to git
 
-6. **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md** (5-10 minutes)
+4. **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md** (5-10 minutes)
    - Set GitHub organization secrets
    - Deploy snyk-scan.yml workflows
    - Verify workflows trigger
    - Monitor nightly scans
 
-7. **SNYK_EXPECTED_OUTPUTS.md** (Reference)
+5. **SNYK_EXPECTED_OUTPUTS.md** (Reference)
    - Real examples of successful output
    - What each message means
    - Common errors & solutions
@@ -69,6 +69,7 @@ This system contains **6 comprehensive guides + 1 overview + this README**:
 ## 🚀 Quick Start (Choose Your Path)
 
 ### Path A: I'm Ready Now (30 minutes)
+
 1. Read: **SNYK_DEPLOYMENT_OVERVIEW.md** (5 min)
 2. Follow: **SNYK_TOKEN_ACQUISITION_GUIDE.md** (5 min)
 3. Follow: **SNYK_LOCAL_DEPLOYMENT_GUIDE.md** (5-10 min)
@@ -76,12 +77,14 @@ This system contains **6 comprehensive guides + 1 overview + this README**:
 5. Follow: **GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md** (5 min)
 
 ### Path B: I Want to Understand First (45 minutes)
+
 1. Read: **SNYK_DEPLOYMENT_OVERVIEW.md** (10 min)
 2. Skim: All phase-specific guides (15 min)
 3. Read: **SNYK_EXPECTED_OUTPUTS.md** (10 min)
 4. Then follow Quick Start path (20 min execution)
 
 ### Path C: I'm Doing This with a Checklist
+
 1. Open: **SNYK_DEPLOYMENT_CHECKLIST.md** in editor
 2. Follow: Each phase in order
 3. Check off: Each item as you complete it
@@ -92,6 +95,7 @@ This system contains **6 comprehensive guides + 1 overview + this README**:
 ## 📊 What Gets Deployed
 
 ### On Your Local Machine
+
 ```
 Repository Root: /Users/<REDACTED>/CodeProjects/Phenotype/repos/
 
@@ -111,6 +115,7 @@ Created per-repo:
 ```
 
 ### On GitHub
+
 ```
 Organization: <REDACTED>
 
@@ -142,7 +147,7 @@ Verify you have everything before starting:
 - [ ] Git installed: `git --version`
 - [ ] Admin access to &lt;REDACTED&gt; GitHub organization
 - [ ] All 30 repos cloned locally
-- [ ] Snyk account (sign up at https://app.snyk.io if needed)
+- [ ] Snyk account (sign up at <https://app.snyk.io> if needed)
 - [ ] 30 minutes of uninterrupted time
 - [ ] Ability to securely paste token (will be in env var, not git)
 
@@ -153,6 +158,7 @@ Verify you have everything before starting:
 ## 🎯 Execution Overview
 
 ### Phase 1: Token Acquisition (5-10 minutes)
+
 **Guide:** SNYK_TOKEN_ACQUISITION_GUIDE.md
 
 ```bash
@@ -169,6 +175,7 @@ snyk auth $SNYK_TOKEN
 ---
 
 ### Phase 2: Local Deployment (5-10 minutes)
+
 **Guide:** SNYK_LOCAL_DEPLOYMENT_GUIDE.md
 
 ```bash
@@ -184,6 +191,7 @@ cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 ---
 
 ### Phase 3: Results Review (10-15 minutes)
+
 **Guide:** SNYK_RESULTS_REVIEW_GUIDE.md
 
 ```bash
@@ -204,6 +212,7 @@ git push origin main
 ---
 
 ### Phase 4: GitHub Integration (5-10 minutes)
+
 **Guide:** GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md
 
 ```bash
@@ -245,15 +254,18 @@ Tier 1 Status:
 ## 🔗 Key Resources
 
 ### Documentation
+
 - All guides: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_*.md`
 - Checklist: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/guides/SNYK_DEPLOYMENT_CHECKLIST.md`
 
 ### External Links
-- Snyk App: https://app.snyk.io
-- Snyk CLI Docs: https://docs.snyk.io/cli
-- GitHub Org Secrets: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
+
+- Snyk App: <https://app.snyk.io>
+- Snyk CLI Docs: <https://docs.snyk.io/cli>
+- GitHub Org Secrets: <https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions>
 
 ### Generated Content
+
 - Reports (after phase 2): `.snyk-reports/`
 - Policy files (after phase 3): `**/.snyk` in each repo
 - Workflows (after phase 4): `.github/workflows/snyk-scan.yml`
@@ -263,27 +275,35 @@ Tier 1 Status:
 ## ❓ FAQ
 
 ### Q: How long does deployment take?
+
 **A:** 25-30 minutes total (mostly execution, minimal active time)
 
 ### Q: Do I need to commit my Snyk token?
+
 **A:** Absolutely not. Token stays in environment variable, never in git. GitHub Actions uses organization secret instead.
 
 ### Q: What if critical vulnerabilities are found?
+
 **A:** Create urgent AgilePlus work item. See SNYK_RESULTS_REVIEW_GUIDE.md Part 4 for decision flow.
 
 ### Q: Can I run this multiple times?
+
 **A:** Yes! Re-run the script anytime to get fresh reports. Overwrite old reports or rename them.
 
 ### Q: Do workflows run automatically after setup?
+
 **A:** Yes! After Phase 4, they:
+
 - Run on every push to main
 - Run on every PR to main
 - Run daily at 2 AM UTC (automated)
 
 ### Q: What happens if a workflow finds vulnerabilities?
+
 **A:** Workflow doesn't block merges (continue-on-error: true). Results appear in Actions tab & artifacts. You can review & decide on fixes.
 
 ### Q: Can I add workflows to other repos later?
+
 **A:** Yes! Same workflow works for any repo. See GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md Part 3 for copy-paste instructions.
 
 ---
@@ -291,6 +311,7 @@ Tier 1 Status:
 ## 🎓 Learning Path
 
 **First Time (Complete Novice):**
+
 1. Read SNYK_DEPLOYMENT_OVERVIEW.md thoroughly (understand the flow)
 2. Read SNYK_EXPECTED_OUTPUTS.md (recognize what's normal)
 3. Print SNYK_DEPLOYMENT_CHECKLIST.md (follow step-by-step)
@@ -298,11 +319,13 @@ Tier 1 Status:
 5. Reference troubleshooting sections as needed
 
 **Experienced (Know Snyk/GitHub):**
+
 1. Skim SNYK_DEPLOYMENT_OVERVIEW.md (understand business flow)
 2. Execute using SNYK_DEPLOYMENT_CHECKLIST.md
 3. Reference specific guides only if you hit issues
 
 **Implementing for Another Org:**
+
 1. Copy all markdown files to your repo
 2. Adapt paths in guides (from `/Users/<REDACTED>/...` to your paths)
 3. Follow the same 4-phase structure
@@ -312,6 +335,7 @@ Tier 1 Status:
 ## 🔐 Security Notes
 
 ### Token Handling
+
 - ❌ Never commit SNYK_TOKEN to git
 - ❌ Never share token in chat/email
 - ✅ Store in environment variable (memory only)
@@ -319,12 +343,14 @@ Tier 1 Status:
 - ✅ Regenerate if ever exposed
 
 ### Report Handling
+
 - ✅ Commit `.snyk-reports/` to git (no secrets inside)
 - ✅ Commit `.snyk` policy files to git
 - ✅ Keep reports for audit trail
 - ✅ Don't modify reports (they're read-only after generation)
 
 ### Workflow Secrets
+
 - ✅ GitHub automatically encrypts organization secrets
 - ✅ Secrets not logged in workflow output
 - ✅ Only available to workflows (not in shell environment)
@@ -338,7 +364,7 @@ Tier 1 Status:
 
 - "SNYK_TOKEN not set" → `export SNYK_TOKEN="..."` → SNYK_LOCAL_DEPLOYMENT_GUIDE.md § 2.1
 - "snyk: command not found" → `brew install snyk` → SNYK_TOKEN_ACQUISITION_GUIDE.md § 1.1
-- "Unauthorized" error → Regenerate token at https://app.snyk.io → SNYK_TOKEN_ACQUISITION_GUIDE.md § 5
+- "Unauthorized" error → Regenerate token at <https://app.snyk.io> → SNYK_TOKEN_ACQUISITION_GUIDE.md § 5
 - Workflow won't trigger → Check secret is set → GITHUB_WORKFLOW_DEPLOYMENT_GUIDE.md § 8
 - Can't understand output → Check SNYK_EXPECTED_OUTPUTS.md for examples → SNYK_EXPECTED_OUTPUTS.md
 - Don't know how to suppress → Read decision matrix → SNYK_RESULTS_REVIEW_GUIDE.md § 4
@@ -348,17 +374,20 @@ Tier 1 Status:
 ## 🎬 Recommended Workflow
 
 ### Before You Start
+
 - [ ] Read SNYK_DEPLOYMENT_OVERVIEW.md (understand what's happening)
 - [ ] Run command: `snyk --version` (verify CLI installed)
 - [ ] Run command: `gh auth status` (verify GitHub access)
 
 ### During Execution
+
 - [ ] Keep SNYK_DEPLOYMENT_CHECKLIST.md open in editor
 - [ ] Have SNYK_EXPECTED_OUTPUTS.md in a browser tab (for reference)
 - [ ] One terminal window for commands
 - [ ] One browser window for GitHub/Snyk dashboard
 
 ### After Completion
+
 - [ ] Review .snyk-reports/report.txt
 - [ ] Create AgilePlus work items for critical/high findings
 - [ ] Brief team on results
@@ -377,6 +406,7 @@ Tier 1 Status:
 ## 📖 How to Use This Documentation
 
 ### As a Single User Following Guides
+
 1. **Start:** Read SNYK_DEPLOYMENT_OVERVIEW.md
 2. **Execute:** Follow SNYK_DEPLOYMENT_CHECKLIST.md (check off as you go)
 3. **Reference:** Use other guides for detailed instructions per phase
@@ -384,6 +414,7 @@ Tier 1 Status:
 5. **Done:** Sign off on checklist when complete
 
 ### As a Team Lead Delegating Work
+
 1. **Share:** All files in `/docs/guides/SNYK_*.md`
 2. **Assign:** SNYK_DEPLOYMENT_OVERVIEW.md to team member first
 3. **Track:** Have them use SNYK_DEPLOYMENT_CHECKLIST.md
@@ -391,6 +422,7 @@ Tier 1 Status:
 5. **Review:** Verify results once they complete all phases
 
 ### For Documentation/Training
+
 1. **Sequence:** Use the 4-phase structure (Token → Deploy → Review → GitHub)
 2. **Examples:** Reference SNYK_EXPECTED_OUTPUTS.md for real output
 3. **Checklist:** Use SNYK_DEPLOYMENT_CHECKLIST.md as training template
@@ -403,26 +435,31 @@ Tier 1 Status:
 You'll know you've succeeded when:
 
 ✅ **Phase 1: Token Acquired**
+
 - `snyk auth <token>` succeeds
 - `snyk test --dry-run` works
 
 ✅ **Phase 2: Local Deployment Complete**
+
 - `.snyk-reports/` directory created
 - 30 JSON files generated
 - Summary report readable
 
 ✅ **Phase 3: Results Reviewed**
+
 - `report.txt` reviewed
 - `.snyk` policy files created
 - Changes committed to git
 
 ✅ **Phase 4: GitHub Workflows Active**
+
 - SNYK_TOKEN in organization secrets
 - Workflows deployed to 3 Tier 1 repos
 - First runs completed successfully
 - No "Unauthorized" errors
 
 ✅ **Ongoing**
+
 - Nightly scans running at 2 AM UTC
 - Team can see results in GitHub Actions
 - Vulnerabilities tracked in AgilePlus

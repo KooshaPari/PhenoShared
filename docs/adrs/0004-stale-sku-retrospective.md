@@ -58,6 +58,7 @@ No weight is downloaded until those four are answered.
 ### 3.4 Ranking function is corrected
 
 The next scrape pass will use `sort="last_modified"` as the primary listing key, then apply a **capability-first** secondary ranking:
+
 - Owner-only canonical flagship (filter derivatives / exl2 / uncapped reuploads).
 - Live downloads as a coarse signal (not primary).
 - Per-model `cardData` + README scrape for: architecture family, MoE active ratio, context length, training tokens, license, last-modified, eval score tags (HumanEval/MBPP/LiveCodeBench/TBench/MMLU-Pro/IFEval if present in cardData or model-index metadata).

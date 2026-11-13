@@ -11,6 +11,7 @@
 The phenotype-infrakit workspace exhibits **excellent incremental build performance** (90x speedup over cold builds) and **clean dependency management** with no duplicate versions. However, the workspace carries unnecessary compile-time overhead through aggressive feature enablement in `tokio`, missing binary optimizations, and no CI/CD caching configuration.
 
 **Key Findings**:
+
 - ✅ Cold build: **81.2s** (234 units, well-parallelized)
 - ✅ Incremental build: **0.9s** (24 units, excellent)
 - ⚠️ tokio "full" feature set adds ~15-20% compile time unnecessarily
@@ -19,6 +20,7 @@ The phenotype-infrakit workspace exhibits **excellent incremental build performa
 - ✅ LTO + aggressive optimization already enabled
 
 **Achievable Improvements**:
+
 - 30-40% faster incremental builds (3x Quick Win)
 - 2-5% smaller release binaries (1x Quick Win)
 - 40-60% faster CI builds with sccache (1x Quick Win)
@@ -37,6 +39,7 @@ Parallelism: ~4-8 concurrent jobs
 ```
 
 **Breakdown** (estimated):
+
 - External dependencies: 60s (74%)
 - Workspace crates: 21s (26%)
 - Linking: 0.2s (negligible)
@@ -87,6 +90,7 @@ strip = true
 ```
 
 **Assessment**:
+
 | Setting | Current | Impact | Status |
 |---------|---------|--------|--------|
 | `opt-level` | "z" (max size) | Smaller binaries, slower compile | ✅ Good |
@@ -120,6 +124,7 @@ debug = true
 ```
 
 **Assessment**:
+
 - `opt-level = 0` is appropriate for fast compilation during development
 - No split-debuginfo optimization to reduce relink time
 
@@ -205,7 +210,7 @@ tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"
 | 2 | serde ecosystem | ~12s | Code generation via derives |
 | 3 | syn + proc-macro2 | ~8s | Meta-programming in macros |
 | 4 | chrono | ~6s | Timezone data, datetime logic |
-| 5 | workspace crates (parallel) | ~8s | phenotype-* and agileplus-* |
+| 5 | workspace crates (parallel) | ~8s | phenotype-*and agileplus-* |
 
 ### Procedural Macros in Workspace
 
@@ -229,6 +234,7 @@ phenotype-policy-engine
 ```
 
 **Critical path** (on-the-fly dependencies that block other compiles):
+
 1. serde + thiserror (common base)
 2. tokio (in dev-dependencies of many tests)
 3. phenotype-error-core (shared by policy-engine, errors, contracts)
@@ -260,6 +266,7 @@ Ratio:            90x improvement
 ### Identified Inefficiencies
 
 **None found in primary code paths.** Workspace uses:
+
 - ✅ Lazy initialization (parking_lot, once_cell)
 - ✅ Lock-free datastructures (dashmap for concurrent access)
 - ✅ Async I/O (tokio, async-trait)
@@ -318,6 +325,7 @@ jobs:
 ```
 
 **Verification**:
+
 ```bash
 cargo clean
 time cargo build  # measure cold build
@@ -343,6 +351,7 @@ time cargo build  # measure cold build
 ```
 
 **Verification**:
+
 ```bash
 cargo build --release
 ls -lh target/release/phenotype-*  # check binary sizes
@@ -387,6 +396,7 @@ incremental = true
 **Current**: Uses `regex` crate (1.12.3) for policy pattern matching
 
 **Recommended analysis**:
+
 ```bash
 # Search for regex pattern usage
 cd crates/phenotype-policy-engine
@@ -394,6 +404,7 @@ grep -r "Regex::new\|Pattern\|regex!" src/
 ```
 
 **If patterns are simple** (no alternation, grouping, lookahead):
+
 - Consider `regex-lite` (300KB vs 500KB compiled size)
 - Benchmark: `cargo build --release` with/without
 
@@ -470,6 +481,7 @@ serde = { workspace = true }  # ← ensures single version across workspace
 ```
 
 **Verification**:
+
 ```bash
 cargo tree --duplicates
 # Output: No duplicate dependencies found ✅
@@ -482,6 +494,7 @@ cargo tree --duplicates
 ### No Dead Code Detected
 
 ✅ All workspace dependencies are consumed:
+
 - `serde` → serialization/deserialization in models
 - `thiserror` → error types
 - `tokio` → async runtime (in tests, phenotype-health)
@@ -542,27 +555,27 @@ No cascading rebuilds detected ✅
 
 ### 🟠 HIGH (Do Soon)
 
-2. **Add panic = "abort"** (2-5% binary size, 0 compile-time cost)
+1. **Add panic = "abort"** (2-5% binary size, 0 compile-time cost)
    - Change: Cargo.toml lines 50-54
    - Effort: 1 min
    - Test: `cargo build --release && ls -lh target/release/`
 
-3. **Configure sccache (CI only)** (40-60% CI speedup)
+2. **Configure sccache (CI only)** (40-60% CI speedup)
    - Create: .cargo/config.toml
    - Update: .github/workflows/ci.yml (if exists)
    - Effort: 5 min
 
 ### 🟡 MEDIUM (Backlog)
 
-4. Audit regex patterns in phenotype-policy-engine
-5. Profile individual crate times with `cargo -Z timings`
-6. Consider blake3 extraction if crypto becomes bottleneck
+1. Audit regex patterns in phenotype-policy-engine
+2. Profile individual crate times with `cargo -Z timings`
+3. Consider blake3 extraction if crypto becomes bottleneck
 
 ### 🟢 LOW (Future)
 
-7. Profile-guided optimization (PGO) for release
-8. Polyrepo split if AgilePlus > 40 crates
-9. Mold linker integration (macOS/Linux only)
+1. Profile-guided optimization (PGO) for release
+2. Polyrepo split if AgilePlus > 40 crates
+3. Mold linker integration (macOS/Linux only)
 
 ---
 
@@ -642,6 +655,7 @@ RECOMMENDED CHANGES:
 The phenotype-infrakit workspace is **well-architected** with excellent incremental compilation performance and clean dependency management. The three quick wins (tokio features, panic = "abort", sccache) are **low-risk, high-impact** optimizations that can yield **20-30% overall build time reduction** with minimal effort.
 
 **Recommended next steps**:
+
 1. Apply Quick Wins #1-3 immediately (10 minutes total)
 2. Benchmark with `cargo build --timings` before/after
 3. Add to CI pipeline once local builds verified

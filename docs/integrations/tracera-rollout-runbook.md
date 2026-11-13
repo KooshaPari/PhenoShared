@@ -118,6 +118,7 @@ Each event is independently sampled via `random.random()` against
 and emitted as `tracera:sampled_out` hooks (for test introspection).
 
 Sample rate resolution order (highest priority first):
+
 1. Explicit `sample_rate=` constructor arg on `TraceraBridge(...)`.
 2. `TRACERA_DUAL_WRITE_SAMPLE_RATE` env var.
 3. `trace_bridges.dual_write_sample_rate` in the runtime config.
@@ -144,6 +145,7 @@ If dual-write is causing Tracera outages or the bridge is failing
 unsafe:
 
 1. **Disable dual-write globally** (fastest path):
+
    ```sh
    # Override the env to off, regardless of cohort policy
    TRACERA_DUAL_WRITE_DEFAULT=false PHENO_ENV=prod .venv/bin/python <cmd>
@@ -159,6 +161,7 @@ unsafe:
    default), so reverting never re-enables dual-write.
 
 4. **Verify rollback**:
+
    ```sh
    PHENO_ENV=prod .venv/bin/python -c "
    from pheno.runtime_config import load_config

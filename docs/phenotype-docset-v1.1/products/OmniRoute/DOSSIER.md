@@ -7,12 +7,14 @@
 ## Current State (2026-09-16)
 
 ### PEP 1.0 Remediation (Complete)
+
 - **F-01:** Decomposed `route.ts` from 2429 to 1455 lines (-40%)
 - **F-02:** 37 MCP injection tests (all passing)
 - **F-03:** 19 performance benchmarks (all passing)
 - **PR #745:** Cherry-picked 10 commits from main
 
 ### Quality Gates
+
 | Gate | Status |
 |------|--------|
 | G0 Identity | PASS |
@@ -24,4 +26,5 @@
 | G6 Deploy | BLOCKED (pending merge) |
 
 ## Repository
-- **GitHub:** https://github.com/KooshaPari/OmniRoute
+
+- **GitHub:** <https://github.com/KooshaPari/OmniRoute>

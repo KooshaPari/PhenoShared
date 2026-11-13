@@ -1,9 +1,11 @@
 # ADR-ECO-007: Gateway merge superset boundaries
 
 ## Status
+
 Accepted (2026-06-17, Wave 14 gateway rationalization)
 
 ## Context
+
 Remote audit (2026-06-17) found **34 branches** on `agentapi-plusplus`, registry contradictions (PLAN archived OmniRoute and agentapi++ while ECOSYSTEM_MAP Cluster A keeps OmniRoute canonical), and overlapping gateway/inference/engine layers without explicit `DOMAIN_ROLES` entries.
 
 ## Decision
@@ -42,9 +44,11 @@ Remote audit (2026-06-17) found **34 branches** on `agentapi-plusplus`, registry
 | **vibeproxy-\*** | **Out of scope** for this program |
 
 ## Rationale
+
 Three-layer topology prevents gateway repos from absorbing inference engines (omlx/mlx-lm) or isolation runtimes (nanovms/PhenoCompose). agentapi-plusplus org work supersedes stale "archive upstream fork" guidance.
 
 ## Consequences
+
 - `RATIONALIZATION_PLAN.md` Step 1 archive list corrected for OmniRoute and agentapi-plusplus
 - Wave 15 executes branch merge on agentapi-plusplus; disposition `fsm` → `done` when branches ≤ 5
 - cliproxy boundary appendix lives in this ADR; implementation in Wave 16

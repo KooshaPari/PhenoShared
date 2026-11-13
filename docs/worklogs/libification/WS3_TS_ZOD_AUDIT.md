@@ -11,6 +11,7 @@
 Audit of all TypeScript projects in the Phenotype ecosystem for validation library usage.
 
 **Key Findings:**
+
 - **3 TypeScript Projects** identified in the canonical repositories
 - **2 Projects (67%)** using Zod for validation
 - **0 Projects** using Yup, Joi, Valibot, or ArkType
@@ -45,9 +46,10 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/heliosCLI/`
 
-#### Sub-Projects:
+#### Sub-Projects
 
 **a) SDK: TypeScript** ✅ ZOD
+
 - **Path:** `heliosCLI/sdk/typescript/`
 - **Package:** `@openai/codex-sdk`
 - **Dependencies:**
@@ -61,6 +63,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 - **Status:** ✅ **COMPLIANT**
 
 **b) Shell Tool MCP** ⚪ NO VALIDATION LIBS
+
 - **Path:** `heliosCLI/shell-tool-mcp/`
 - **Package:** `@openai/codex-shell-tool-mcp`
 - **Dependencies:** None (no validation library)
@@ -68,6 +71,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 - **Status:** ⚪ **N/A - Tool Binary Package**
 
 **c) Codex CLI** ⚪ NO VALIDATION LIBS
+
 - **Path:** `heliosCLI/codex-cli/`
 - **Package:** `@openai/codex`
 - **Dependencies:** None (no validation library)
@@ -75,6 +79,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 - **Status:** ⚪ **N/A - CLI Tool**
 
 **d) Root Package** ⚪ NO VALIDATION LIBS
+
 - **Path:** `heliosCLI/package.json`
 - **Type:** Monorepo workspace root
 - **Dependencies:** Prettier only (formatting)
@@ -84,9 +89,10 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/`
 
-#### Sub-Projects:
+#### Sub-Projects
 
 **a) BytePort Frontend (web-next)** ✅ ZOD
+
 - **Path:** `platforms/thegent/apps/byteport/frontend/web-next/`
 - **Package:** `byteport-web`
 - **Dependencies:**
@@ -95,6 +101,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 - **Usage:**
   - File: `components/deployment-wizard.tsx` - Zod schema for deployment form validation
   - Schema Definition:
+
     ```typescript
     const deploymentSchema = z.object({
       name: z.string().min(1, "Name is required").max(50),
@@ -103,6 +110,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
       // ... more fields
     })
     ```
+
   - Resolver: `zodResolver(deploymentSchema)` with `react-hook-form`
   - Pattern: Standard form validation with runtime type inference
 - **Files Using Zod:** 2 files found
@@ -111,6 +119,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 - **Status:** ✅ **COMPLIANT**
 
 **b) BytePort SDK (TypeScript)** ⚪ NO VALIDATION LIBS
+
 - **Path:** `platforms/thegent/apps/byteport/sdk/typescript/`
 - **Package:** `@byteport/sdk`
 - **Dependencies:** None (no validation library)
@@ -119,6 +128,7 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 - **Status:** ⚪ **CANDIDATE FOR MIGRATION** (if validation schemas are needed)
 
 **c) Root Package & Docs** ⚪ NO VALIDATION LIBS
+
 - **Path:** `platforms/thegent/package.json` and `docs/`
 - **Type:** Monorepo + documentation sites
 - **Dependencies:** VitePress, Puppeteer, Mermaid (no validation libs)
@@ -152,25 +162,30 @@ Audit of all TypeScript projects in the Phenotype ecosystem for validation libra
 ### Current Patterns Observed
 
 **Pattern 1: Inline Schemas (React Components)**
+
 ```typescript
 // Location: platforms/thegent/apps/byteport/frontend/web-next/components/
 const deploymentSchema = z.object({...})
 ```
+
 - Used in: Deployment wizard component
 - Advantage: Co-located with component
 - Consideration: May benefit from extraction to `src/schemas/`
 
 **Pattern 2: Sample/Example Schemas**
+
 ```typescript
 // Location: heliosCLI/sdk/typescript/samples/
 const schema = z.object({...})
 ```
+
 - Used in: SDK documentation examples
 - Purpose: Demonstrate zod-to-json-schema integration
 
 ### Recommended Standard Pattern
 
 **File Organization (if implemented):**
+
 ```
 src/
 ├── components/       # React components
@@ -183,6 +198,7 @@ src/
 ```
 
 **Schema File Template:**
+
 ```typescript
 // src/schemas/deployment.ts
 import { z } from "zod"
@@ -250,6 +266,7 @@ export const validateDeploymentName = (name: string) => {
 ### Results
 
 **No custom validation implementations found** in:
+
 - BytePort Frontend
 - heliosCLI SDK
 - Platform-level utilities
@@ -345,12 +362,14 @@ All TypeScript projects use **Zod** for runtime validation.
 Store validation schemas in `src/schemas/` directory:
 
 ```
+
 src/
 ├── schemas/
 │   ├── auth.ts
 │   ├── deployment.ts
 │   ├── user.ts
 │   └── index.ts
+
 ```
 
 ### Example Schema
@@ -393,6 +412,7 @@ export const deploymentJsonSchema = zodToJsonSchema(deploymentSchema)
 
 Do not create custom validation functions. Use Zod schemas instead.
 Use `.safeParse()` for runtime validation with error handling.
+
 ```
 
 ---

@@ -9,6 +9,7 @@ This directory contains comprehensive workspace audits and health checks for the
 **File**: `WORKSPACE_ORPHANS_AND_STALE_2026-03-30.md` (466 lines)
 
 Comprehensive audit of:
+
 - **13 orphaned crate directories** (placeholder stubs, 1 LOC each)
 - **13 git worktrees** (3 clean, 4 dirty, 2 detached/behind, 3 ready to merge)
 - **2 stale ephemeral worktrees** (in /tmp/, >80 commits behind main)
@@ -17,12 +18,14 @@ Comprehensive audit of:
 - **711MB archive** (properly segregated historical work)
 
 **Key Findings**:
+
 - All orphaned crates are empty placeholders
 - No missing workspace members
 - Archive structure is healthy
 - Dead code markers appropriate for early-stage crates
 
 **Sections**:
+
 1. Executive Summary
 2. Orphaned Crates Analysis (13 crates with status table)
 3. Stale Worktrees Analysis (13 worktrees with merge status)
@@ -39,6 +42,7 @@ Comprehensive audit of:
 **File**: `CLEANUP_ACTION_SUMMARY.md` (193 lines)
 
 Quick reference guide with:
+
 - **7 Critical/High-Priority Actions** with exact commands
 - **Worktree Status Reference Table** (12 worktrees with action items)
 - **Orphaned Crates Reference** (13 crates with implementation status)
@@ -52,11 +56,13 @@ Quick reference guide with:
 **File**: `../scripts/workspace-cleanup.sh` (258 lines)
 
 Semi-automated cleanup script supporting:
+
 - **Phases**: `critical`, `phase1`, `phase2`, `all`
 - **Modes**: dry-run (default), `--execute` or `-f` to apply changes
 - **Features**: Color output, progress logging, dependency ordering
 
 **Usage**:
+
 ```bash
 ./scripts/workspace-cleanup.sh critical        # Preview critical phase
 ./scripts/workspace-cleanup.sh critical -f     # Execute critical phase
@@ -68,18 +74,22 @@ Semi-automated cleanup script supporting:
 ## How to Use
 
 ### First Time: Understand the Issues
+
 1. Read: `CLEANUP_ACTION_SUMMARY.md` (5 min)
 2. Skim: `WORKSPACE_ORPHANS_AND_STALE_2026-03-30.md` (10 min)
 3. Decide: Which items to tackle first
 
 ### Execute Cleanup
+
 1. Run dry-run: `./scripts/workspace-cleanup.sh critical`
 2. Review output
 3. Execute: `./scripts/workspace-cleanup.sh critical --execute`
 4. Verify: Check `git worktree list` and `cargo check --workspace`
 
 ### Verify Cleanup
+
 Use the **Verification Checklist** in `CLEANUP_ACTION_SUMMARY.md`:
+
 ```bash
 git worktree list                    # Should show only 9 worktrees
 cargo check --workspace              # Should build cleanly

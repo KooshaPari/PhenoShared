@@ -35,6 +35,7 @@ The Phenotype ecosystem has grown to encompass multiple repositories, languages,
 Through interviews with leads across teams, we identified these requirements:
 
 **Functional Requirements:**
+
 - FR-001: Central index of all specifications
 - FR-002: Cross-repository traceability
 - FR-003: Support for multiple spec formats (Markdown, OpenAPI, ADRs)
@@ -42,6 +43,7 @@ Through interviews with leads across teams, we identified these requirements:
 - FR-005: Integration with existing workflows (Git, CI/CD)
 
 **Non-Functional Requirements:**
+
 - NFR-001: Low latency for common queries (<100ms)
 - NFR-002: High availability (99.9% uptime not required - Git-based)
 - NFR-003: Minimal maintenance overhead
@@ -55,11 +57,13 @@ Through interviews with leads across teams, we identified these requirements:
 **Approach**: Consolidate all specifications into a single monorepo.
 
 **Pros:**
+
 - Single source of truth
 - Atomic changes across specs
 - Simplified CI/CD
 
 **Cons:**
+
 - Massive migration effort
 - Breaks repository boundaries
 - Scale concerns (repo size)
@@ -72,12 +76,14 @@ Through interviews with leads across teams, we identified these requirements:
 **Approach**: Deploy Spotify's Backstage as the developer portal.
 
 **Pros:**
+
 - Mature platform
 - Rich plugin ecosystem
 - Software Catalog feature
 - Strong community
 
 **Cons:**
+
 - Heavy infrastructure (K8s, databases)
 - Complex setup and maintenance
 - Overkill for current needs
@@ -90,12 +96,14 @@ Through interviews with leads across teams, we identified these requirements:
 **Approach**: Use SaaS documentation platform as the registry.
 
 **Pros:**
+
 - Excellent UX
 - Rich editing features
 - Search capabilities
 - Access control
 
 **Cons:**
+
 - Vendor lock-in
 - Poor code integration
 - No Git versioning
@@ -109,6 +117,7 @@ Through interviews with leads across teams, we identified these requirements:
 **Approach**: Create a dedicated `PhenoSpecs` repository with structured indexing.
 
 **Pros:**
+
 - Git-native (versioning, PR workflow)
 - Low maintenance (static files)
 - Language-agnostic
@@ -117,6 +126,7 @@ Through interviews with leads across teams, we identified these requirements:
 - Free (GitHub hosted)
 
 **Cons:**
+
 - Requires custom tooling
 - No built-in UI (can be added later)
 - Manual curation needed
@@ -126,6 +136,7 @@ Through interviews with leads across teams, we identified these requirements:
 ### Research Basis
 
 This decision is informed by:
+
 - [RESEARCH.md](RESEARCH.md) - Analysis of 50+ documentation systems
 - Industry case studies (Netflix, Monzo, Stripe)
 - Internal survey of engineering teams
@@ -210,18 +221,21 @@ Three-layer traceability architecture:
 **Annotation Formats:**
 
 Rust:
+
 ```rust
 #[trace_fr(spec = "SPEC-AUTH-001", fr = "FR-002")]
 fn authorize(request: AuthRequest) -> AuthResponse { }
 ```
 
 Go:
+
 ```go
 // FR: SPEC-AUTH-001 FR-002 - PKCE support
 func GeneratePKCE() (*PKCEPair, error) { }
 ```
 
 TypeScript:
+
 ```typescript
 /**
  * @spec SPEC-AUTH-001

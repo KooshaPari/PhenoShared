@@ -9,6 +9,7 @@ This repository is designed to work seamlessly with Claude (and other advanced A
 - Keep parent-agent work focused on validation, synthesis, and final merges.
 
 **Authority and Scope**
+
 - This file is the canonical contract for all agent behavior in this repository.
 - Act autonomously; only pause when blocked by missing secrets, external access, or truly destructive actions.
 
@@ -42,6 +43,7 @@ This repository is designed to work seamlessly with Claude (and other advanced A
 Agents MUST operate with **maximum autonomy**:
 
 **When to proceed without asking:**
+
 - Implementation details and technical approach decisions
 - Library/framework choices aligned with existing patterns
 - Code structure and organization
@@ -54,6 +56,7 @@ Agents MUST operate with **maximum autonomy**:
 - Removing dead code and legacy patterns
 
 **Only ask when truly blocked by:**
+
 - Missing credentials/secrets (cannot be inferred from environment)
 - External service access permissions
 - Genuine product ambiguity (behavior not determinable from specs/code/tests)
@@ -71,6 +74,7 @@ Agents MUST operate with **maximum autonomy**:
 Before implementing ANY feature or fix, agents MUST conduct comprehensive research:
 
 **1. Codebase Research (Always Required):**
+
 ```bash
 # Find similar implementations
 rg "pattern_name" --type py -A 5 -B 5
@@ -98,6 +102,7 @@ rg "raise.*Error\|except.*:" --type py -A 2
 ```
 
 **2. Web Research (When Needed):**
+
 - External API documentation
 - Library usage patterns (when introducing new dependencies)
 - Best practices for performance/security patterns
@@ -106,6 +111,7 @@ rg "raise.*Error\|except.*:" --type py -A 2
 - Cloud service integration patterns (Supabase, Vercel, etc.)
 
 **3. Research Documentation:**
+
 - Document findings in `docs/sessions/<session-id>/01_RESEARCH.md`
 - Include URLs, code examples, and decision rationale
 - Update continuously as new information discovered
@@ -147,12 +153,14 @@ uv pip install <package>
 - **Update ALL callers simultaneously** when changing signatures
 
 **Forward-Only Progression:**
+
 - NO `git revert` or `git reset` (fix forward instead)
 - NO haphazard delete-and-rewrite cycles
 - Push forward to clean, working states via incremental fixes
 - Document issues in `05_KNOWN_ISSUES.md`, resolve systematically
 
 **Full Production-Grade Implementation:**
+
 - NO minimal implementations or MVPs
 - NO "we'll add this later" placeholder code
 - Every feature: production-ready, fully tested, documented
@@ -166,12 +174,14 @@ uv pip install <package>
 Understand these as first-class constraints before editing:
 
 ### Runtime & Framework
+
 - **Python**: 3.10+ (async-first)
 - **Framework**: FastAPI/FastMCP
 - **Package Manager**: uv preferred
 - **Type System**: Pydantic models, strict typing
 
 ### Key Modules
+
 ```
 src/<package>/
   main.py              # Application entrypoint
@@ -207,6 +217,7 @@ docs/
 ```
 
 ### Style Constraints
+
 - **Line length**: 100 characters
 - **Formatter**: Ruff/Black
 - **Type checker**: mypy/pyright
@@ -215,7 +226,8 @@ docs/
 - **Typing**: typed where practical, explicit error handling
 - **Logging**: clear, structured logging
 
-### Agent Must:
+### Agent Must
+
 - Reuse existing layers instead of bypassing them
 - Keep changes minimal, composable, and driven by tests
 - Proactively decompose files approaching 350 lines
@@ -253,6 +265,7 @@ Before adding features to any file, check its current line count. If it approach
 ### Decomposition Patterns
 
 **Pattern 1: Service Submodule**
+
 ```
 # Before: services/embedding_factory.py (400+ lines)
 # After:
@@ -265,6 +278,7 @@ services/embedding/
 ```
 
 **Pattern 2: Adapter Extraction**
+
 ```
 # Before: infrastructure/adapters.py (500+ lines)
 # After:
@@ -276,6 +290,7 @@ infrastructure/
 ```
 
 **Pattern 3: Tool Decomposition**
+
 ```
 # Before: tools/entity.py (400+ lines)
 # After:
@@ -287,6 +302,7 @@ tools/entity/
 ```
 
 **Pattern 4: API Route Splitting**
+
 ```
 # Before: api/routes/users.py (500+ lines)
 # After:
@@ -298,6 +314,7 @@ api/routes/users/
 ```
 
 **Pattern 5: Test Consolidation**
+
 ```
 # Before: Multiple test files for same concern
 # After: Single file with fixtures/markers
@@ -307,6 +324,7 @@ tests/unit/services/
 ```
 
 **Pattern 6: Database Models**
+
 ```
 # Before: db/models.py (600+ lines)
 # After:
@@ -331,46 +349,54 @@ db/models/
 For every task (bug, feature, infra, test):
 
 ### 1. Review
+
 - Read the issue/error, relevant code, and existing tests
 - Use search (`rg`, Glob/Read tools) to map usages before editing
 - Check line counts on affected files; note decomposition needs
 - Identify all callers and dependencies
 
 ### 2. Research
+
 - Check related modules and patterns in-repo
 - When external APIs/libraries are involved, consult their official docs via web search
 - Reference this contract for architectural constraints
 - Document findings in session folder
 
 ### 3. Plan
+
 - Formulate a short, concrete plan (in your reasoning, keep user-facing text concise)
 - Ensure the plan aligns with existing abstractions and auth/infra patterns
 - If any file will exceed 350 lines, include decomposition in the plan
 - Identify test coverage requirements
 
 ### 4. Execute
+
 - Implement in small, verifiable increments
 - Match coding style, respect typing and logging conventions
 - Decompose proactively; don't wait until a file hits 500 lines
 - Update all callers simultaneously
 
 ### 5. Size-Check
+
 - If any edited file nears 350 lines, plan decomposition
 - Identify ALL callers/dependencies before changes—no partial updates
 - Verify interfaces remain narrow and clear
 
 ### 6. Test
+
 - Run targeted tests via CLI or `uv run pytest …` relevant to the change
 - Start with focused suites; only widen scope if risk is broader
 - Verify decomposed modules have equivalent test coverage
 - For new test files: follow canonical naming (see Test File Naming section)
 
 ### 7. Review & Polish
+
 - Re-read diffs mentally; simplify, remove dead code, align naming with repo norms
 - Verify all files stay ≤500 lines (ideally ≤350)
 - Ensure no backwards compatibility shims remain
 
 ### 8. Repeat
+
 - If tests or behavior fail, loop without waiting for user direction
 - Continue until clean; pause only when blocked
 
@@ -492,6 +518,7 @@ The name of a test file should answer: **"What component/concern does this test?
 ### Naming Rules with Detailed Rationale
 
 ✅ **Good (canonical - concern-based):**
+
 - `test_entity.py` – tests the entity tool; any implementation detail for entity operations belongs here
 - `test_entity_crud.py` – tests CREATE/READ/UPDATE/DELETE operations; separated by operation domain
 - `test_entity_validation.py` – tests entity validation logic; separated by technical concern (validation)
@@ -504,11 +531,13 @@ The name of a test file should answer: **"What component/concern does this test?
 - `test_embedding_factory.py` – all embedding factory tests; factory is the component
 
 **Why each is canonical:**
+
 - Each name describes *what's being tested* (the component, tool, domain, or integration point)
 - Two files with same test names would indicate duplication → consolidate
 - File name and implementation are tightly coupled; changing implementation invites consolidation review
 
 ❌ **Bad (not canonical - metadata-based):**
+
 - `test_entity_fast.py` – ❌ "fast" describes *speed*, not *content*. Use `@pytest.mark.performance` or `@pytest.mark.smoke` instead
 - `test_entity_slow.py` – ❌ "slow" describes *duration*, not *concern*. Use markers in the same file
 - `test_entity_unit.py` – ❌ "unit" describes *execution scope*, not *what's tested*. Use conftest fixtures (`mcp_client_inmemory`)
@@ -522,6 +551,7 @@ The name of a test file should answer: **"What component/concern does this test?
 - `test_api_2.py` – ❌ Arbitrary numbering; merge or name by concern
 
 **How to recognize bad naming:**
+
 - Does the suffix describe *how* to run the test? → Bad (use markers/fixtures)
 - Does the suffix describe *when* it was written? → Bad (belongs in commit message)
 - Does the suffix describe *temporal state*? (old/new/final/draft) → Bad (refactor instead)
@@ -555,6 +585,7 @@ The name of a test file should answer: **"What component/concern does this test?
 **Core principle**: Use **fixtures and markers**, NOT separate files, to handle test variants.
 
 **Why?**
+
 - One file = one concern = one source of truth
 - Fixtures parametrize execution without duplication
 - Markers categorize tests for selective runs
@@ -599,6 +630,7 @@ async def test_entity_creation(mcp_client):
 ```
 
 **Benefits:**
+
 - Single file, not three
 - Same test logic runs across variants automatically
 - Adding new variant only requires updating fixture
@@ -650,6 +682,7 @@ async def test_entity_large_dataset(mcp_client):
 ```
 
 **CI/CD Usage:**
+
 ```bash
 # Quick smoke tests only
 pytest -m smoke  # 5 seconds
@@ -685,6 +718,7 @@ async def test_entity_creation(mcp_client_e2e):  # Same test name again!
 ```
 
 **Problems:**
+
 - Code duplication (test logic repeated 3 times)
 - Maintenance burden (change test → update in 3 places)
 - Confusing directory structure
@@ -696,22 +730,27 @@ async def test_entity_creation(mcp_client_e2e):  # Same test name again!
 When multiple test files cover overlapping concerns, use this decision tree:
 
 **Question 1: Do they test the same component/tool?**
+
 - **Yes** → They should be one file
 - **No** → Proceed to Q2
 
 **Question 2: Do they use different clients?**
+
 - **Yes** → Use fixture parametrization (see Pattern 1 above), same file
 - **No** → Proceed to Q3
 
 **Question 3: Are they fundamentally different test types?**
+
 - **Yes** (e.g., slow perf tests vs quick unit tests) → Use markers (see Pattern 2), same file
 - **No** → Proceed to Q4
 
 **Question 4: Do they test genuinely different subsystems?**
+
 - **Yes** → Split by subsystem concern, keep separate
 - **No** → Merge them; they have duplicate concerns
 
 **Action Items:**
+
 | Scenario | Decision | Implementation |
 |----------|----------|-----------------|
 | Same tool, different clients | Merge | Use `@pytest.fixture(params=[...])` |
@@ -790,6 +829,7 @@ tests/
 ### Valid vs Invalid Patterns
 
 **✅ GOOD - Clear decomposition:**
+
 ```
 services/auth/password.py          # Password operations
 services/auth/session.py           # Session management
@@ -814,6 +854,7 @@ storage/s3.py                      # S3 storage
 ```
 
 **❌ BAD - Meaningless suffixes (MERGE IMMEDIATELY):**
+
 ```
 services/auth_fast.py              # Merge into auth.py
 services/auth_v2.py                # Use git history
@@ -847,6 +888,7 @@ api/api_routes.py                   # Just api/routes.py
 ### Before Creating ANY File
 
 Ask these questions:
+
 1. ✅ **Does this concern already have a file?** → Add to existing
 2. ✅ **Can I name it with ONE clear noun/verb?** → If no, rethink
 3. ✅ **Does the name describe a decomposition?** → If no, probably wrong
@@ -892,6 +934,7 @@ uv run pytest tests/
 ### Real-World Examples
 
 **Scenario 1: Found duplicate files**
+
 ```bash
 # BEFORE
 src/<package>/services/chat.py              # 200 lines
@@ -907,6 +950,7 @@ src/<package>/services/chat.py              # 350 lines
 ```
 
 **Scenario 2: Need to split large file**
+
 ```bash
 # BEFORE
 src/<package>/services/claude_client.py     # 600 lines
@@ -927,6 +971,7 @@ src/<package>/services/claude/
 ```
 
 **Scenario 3: Multiple test files for same thing**
+
 ```bash
 # BEFORE
 tests/test_auth.py                 # Basic tests
@@ -1013,6 +1058,7 @@ docs/sessions/<YYYYMMDD-descriptive-name>/
 ### Documentation Update Protocol
 
 **When to update (prefer updating over creating new files):**
+
 - Discovery → update `01_RESEARCH.md`
 - Requirements change → update `02_SPECIFICATIONS.md` + `03_DAG_WBS.md`
 - Implementation pivot → update `04_IMPLEMENTATION_STRATEGY.md`
@@ -1020,6 +1066,7 @@ docs/sessions/<YYYYMMDD-descriptive-name>/
 - Test added/changed → update `06_TESTING_STRATEGY.md`
 
 **Frequency:**
+
 - After significant discoveries
 - Before context switches
 - When blocked by uncertainty (document in ARUs)
@@ -1031,11 +1078,13 @@ docs/sessions/<YYYYMMDD-descriptive-name>/
 **When encountering doc proliferation (anywhere in repo):**
 
 1. **Detect orphaned docs**
+
    ```bash
    find . -name "*.md" -type f | grep -E "(SUMMARY|STATUS|REPORT|COMPLETE|FINAL|CHECKLIST|V[0-9]|_OLD|_NEW|_DRAFT)"
    ```
 
 2. **Apply decision tree**
+
    ```
    Is doc still relevant?
    ├─ NO  → Delete immediately (after reviewing for unique info)
@@ -1053,6 +1102,7 @@ docs/sessions/<YYYYMMDD-descriptive-name>/
    - Update session folder structure if needed
 
 **Examples:**
+
 ```bash
 # Session-specific, still relevant → move to session
 mv OAUTH_COMPLETION_SUMMARY.md docs/sessions/20251110-oauth-impl/06_COMPLETION.md
@@ -1068,6 +1118,7 @@ rm GUIDE_V1.md GUIDE_V2.md GUIDE_FINAL.md
 ### Canonical Repository Documentation (Exceptions)
 
 These live in `docs/` root and persist across sessions:
+
 - `docs/README.md` - Project overview, getting started
 - `docs/ARCHITECTURE.md` - System architecture, design patterns
 - `docs/API_REFERENCE.md` - Tool/API documentation
@@ -1076,6 +1127,7 @@ These live in `docs/` root and persist across sessions:
 - `docs/TROUBLESHOOTING.md` - Common issues, debugging
 
 **Update protocol:**
+
 - Session details → session folder
 - Permanent architectural changes → canonical docs
 - Uncertain → start in session folder, promote if universally relevant
@@ -1083,23 +1135,27 @@ These live in `docs/` root and persist across sessions:
 ### Agent Behavioral Rules for Documentation
 
 **Session start:**
+
 1. Create `docs/sessions/<session-id>/` directory
 2. Initialize `00_SESSION_OVERVIEW.md` with goals
 3. Reference (don't duplicate) canonical docs
 
 **During session:**
+
 1. Update session docs continuously (living documents)
 2. Never create temporal suffixed docs
 3. Consolidate new findings into existing session docs
 4. When creating diagrams/artifacts → save to `artifacts/` subdirectory
 
 **Before ending session:**
+
 1. Review all session docs for completeness
 2. Scan repo for orphaned docs created during work
 3. Move/consolidate docs outside session folder
 4. Update canonical docs if permanent changes made
 
 **When finding doc proliferation:**
+
 1. Immediately flag for consolidation
 2. Apply decision tree (above)
 3. Delete temporal/redundant docs aggressively
@@ -1133,11 +1189,13 @@ find . -name "*.md" -type f | sed 's|/[^/]*$||' | sort | uniq -c | sort -rn
 ### Real-World Impact
 
 **Before:**
+
 - Root: 37 .md files (various STATUS, SUMMARY, FINAL docs)
 - tests/: 49 .md files (GUIDE, REPORT, CHECKLIST docs)
 - Difficult to find current information
 
 **After:**
+
 - Root: ~4 .md files (AGENTS.md, CLAUDE.md, WARP.md, README.md)
 - tests/: 1 .md file (README.md)
 - All session work in `docs/sessions/<date-name>/`
@@ -1566,7 +1624,8 @@ async def create_entity(data: EntityCreate) -> Entity:
 
 ## 11. Security & Secrets
 
-### Never:
+### Never
+
 - Add real credentials or tokens to code
 - Hardcode secrets in configuration
 - Log sensitive information (API keys, passwords, tokens)
@@ -1574,7 +1633,8 @@ async def create_entity(data: EntityCreate) -> Entity:
 - Store secrets in test files
 - Include secrets in error messages
 
-### Always:
+### Always
+
 ```bash
 # Use environment variables
 export API_KEY="your-key"
@@ -1715,6 +1775,7 @@ class UserCreate(BaseModel):
 ## 12. Common Workflows
 
 ### Adding a New API Endpoint
+
 ```bash
 # 1. Define route in api/routes/
 # Create new file or add to existing router
@@ -1741,6 +1802,7 @@ python cli.py types check
 ```
 
 ### Adding a New MCP Tool
+
 ```bash
 # 1. Define tool in tools/<domain>.py or tools/<domain>/
 @mcp.tool
@@ -1759,6 +1821,7 @@ python cli.py mcp inspect
 ```
 
 ### Adding a New Service
+
 ```bash
 # 1. Create service in services/<domain>.py
 # If >350 lines, create services/<domain>/ submodule
@@ -1777,6 +1840,7 @@ wc -l src/<package>/services/<domain>.py
 ```
 
 ### Refactoring Large File
+
 ```bash
 # 1. Check current size
 wc -l src/<file>.py
@@ -1808,6 +1872,7 @@ python cli.py test run
 ```
 
 ### Updating Database Schema
+
 ```bash
 # 1. Update schema in Supabase or migration file
 
@@ -1823,6 +1888,7 @@ python cli.py test run --scope integration
 ```
 
 ### Debugging a Test Failure
+
 ```bash
 # 1. Run the specific failing test with verbose output
 uv run pytest tests/path/to/test.py::test_name -v --tb=long
@@ -1848,6 +1914,7 @@ python cli.py test run
 ### Common Issues
 
 **Import errors:**
+
 ```bash
 # Ensure venv is activated
 source .venv/bin/activate
@@ -1863,6 +1930,7 @@ uv pip list | grep <package>
 ```
 
 **Type errors:**
+
 ```bash
 # Run mypy for details
 uv run mypy src/<package>
@@ -1875,6 +1943,7 @@ uv run mypy src/<package>/services/<file>.py
 ```
 
 **Test failures:**
+
 ```bash
 # Run with verbose output
 uv run pytest tests/ -v
@@ -1893,6 +1962,7 @@ uv run pytest tests/test_<module>.py::<test_name> -v --pdb
 ```
 
 **Database connection issues:**
+
 ```bash
 # Check environment variables
 echo $DATABASE_URL
@@ -1906,6 +1976,7 @@ curl $SUPABASE_URL/rest/v1/ -H "apikey: $SUPABASE_KEY"
 ```
 
 **Rate limiting issues:**
+
 ```bash
 # Check rate limit status
 # Review logs for rate limit errors
@@ -1917,6 +1988,7 @@ curl $SUPABASE_URL/rest/v1/ -H "apikey: $SUPABASE_KEY"
 ```
 
 **Memory issues:**
+
 ```bash
 # Profile memory usage
 python -m memory_profiler src/<package>/main.py
@@ -1986,6 +2058,7 @@ stats.print_stats(10)
 ## 14. Performance Metrics
 
 ### Key Indicators
+
 - **API Response Time**: <500ms for typical requests
 - **Database Query Time**: <100ms for simple queries
 - **Test Execution**: <30s for unit suite, <5min for full suite
@@ -1993,6 +2066,7 @@ stats.print_stats(10)
 - **File Size**: All modules ≤500 lines
 
 ### Optimization Targets
+
 - Use async/await for all I/O operations
 - Cache expensive computations (embeddings, queries)
 - Optimize database queries with proper indexes
@@ -2288,11 +2362,13 @@ async def debug_workflow(
 ## 17. Behavioral Constraints for Agents
 
 ### Autonomous Operation
+
 - Do NOT ask user what to do next unless blocked
 - Loop through SWE cycle until clean
 - Only pause for: missing secrets, true ambiguity, destructive ops
 
 ### Code Quality
+
 - Never introduce security vulnerabilities (OWASP top 10)
 - Always respect file size limits (350/500)
 - Match existing patterns; don't invent new ones
@@ -2302,11 +2378,13 @@ async def debug_workflow(
 ### When to Ask
 
 Only pause for user input when:
+
 - Credentials, API keys, or external IDs are required and cannot be inferred
 - There is a genuine product/behavior ambiguity not answered by code/tests/docs
 - An operation may be destructive (data deletion, production migrations, forced pushes)
 
 ### Communication Style
+
 - Keep explanations concise; focus tokens on accurate code and commands
 - Document decisions in session folder, not in chat
 - Provide actionable next steps, not vague suggestions
@@ -2316,6 +2394,7 @@ Only pause for user input when:
 ## 18. Quick Reference Commands
 
 ### Testing
+
 ```bash
 python cli.py test run                    # All tests via CLI
 python cli.py test run --scope unit       # Unit tests
@@ -2327,6 +2406,7 @@ uv run pytest -m "not slow"               # Skip slow tests
 ```
 
 ### Quality
+
 ```bash
 python cli.py lint check                  # Lint via CLI
 python cli.py lint fix                    # Auto-fix via CLI
@@ -2337,6 +2417,7 @@ uv run mypy src/                          # Type check
 ```
 
 ### Git
+
 ```bash
 git status                                # Status
 git diff                                  # Changes
@@ -2346,6 +2427,7 @@ git log --oneline -10                     # Recent history
 ```
 
 ### Files
+
 ```bash
 wc -l <file>                              # Line count
 find src/ -name "*.py" -exec wc -l {} +   # All Python files
@@ -2355,6 +2437,7 @@ rg "pattern" --type py -A 5 -B 5          # With context
 ```
 
 ### Documentation
+
 ```bash
 # Find markdown creep
 find . -name "*.md" -not -path "./docs/*" -not -name "README.md"

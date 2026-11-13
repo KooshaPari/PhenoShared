@@ -28,6 +28,7 @@
 **Description**: Full tokio runtime with multiple worker threads, blocking thread pool for CPU-intensive tasks.
 
 **Pros**:
+
 - Maximum throughput for I/O-bound tasks
 - Automatic work-stealing for load balancing
 - Built-in blocking thread pool
@@ -35,12 +36,14 @@
 - Familiar to Rust developers
 
 **Cons**:
+
 - Higher memory overhead per task
 - Async stack traces harder to read
 - Context switching overhead
 - More complex profiling
 
 **Performance Data**:
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | Query throughput | 52,000 QPS | Benchmark (16 threads) |
@@ -53,6 +56,7 @@
 **Description**: Single-threaded runtime using current-thread runtime variant.
 
 **Pros**:
+
 - Minimal memory overhead
 - Predictable latency (no context switching)
 - Simple profiling
@@ -60,12 +64,14 @@
 - Minimal overhead for short queries
 
 **Cons**:
+
 - No parallelism for CPU-intensive operations
 - Underutilizes multi-core systems
 - Poor throughput for high-concurrency scenarios
 - Blocking operations impact all queries
 
 **Performance Data**:
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | Query throughput | 18,000 QPS | Benchmark |
@@ -78,12 +84,14 @@
 **Description**: Combine Tokio's multi-thread with async-std's single-thread capabilities based on workload.
 
 **Pros**:
+
 - Flexibility to choose per-query
 - Best latency for simple queries
 - Good throughput for complex queries
 - Can target specific performance profiles
 
 **Cons**:
+
 - Two runtimes to maintain
 - API inconsistency
 - Larger binary size
@@ -91,6 +99,7 @@
 - Debugging challenges
 
 **Performance Data**:
+
 | Metric | Value | Source |
 |--------|-------|--------|
 | Query throughput | 48,000 QPS | Benchmark |

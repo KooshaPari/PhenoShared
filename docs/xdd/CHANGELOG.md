@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Repository hygiene bootstrap: `SECURITY.md`, `CONTRIBUTING.md`, `.github/CODEOWNERS`, `CHANGELOG.md` (per audit #206).
 
 ### Changed
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 ### Fixed
+
 - `AGENTS.md`: replaced corrupted commit (invalid UTF-8, CRLF line endings, embedded HTML entity, control character) with the canonical clean version aligned with the docs-only PRD constraint.
 
 ### Security

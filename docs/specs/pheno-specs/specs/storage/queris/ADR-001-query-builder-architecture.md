@@ -7,6 +7,7 @@
 ## Context
 
 Queris needs a query builder that balances:
+
 - **Type safety**: Compile-time SQL validation to prevent runtime errors
 - **Ergonomics**: Intuitive API that feels idiomatic to Rust developers
 - **Performance**: Zero-cost abstractions with minimal runtime overhead
@@ -26,6 +27,7 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 ### Option A: Diesel (Full ORM)
 
 **Pros**:
+
 - ✅ Compile-time query verification
 - ✅ Type-safe DSL with strong type inference
 - ✅ Built-in migration system
@@ -33,6 +35,7 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 - ✅ Mature ecosystem with extensive documentation
 
 **Cons**:
+
 - ⚠️ Async support requires additional crate (tokio-diesel)
 - ⚠️ Complex trait system increases compile times
 - ⚠️ DSL learning curve for complex queries
@@ -41,6 +44,7 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 ### Option B: sqlx (Compile-time Checked SQL)
 
 **Pros**:
+
 - ✅ True compile-time SQL verification via `query!` macro
 - ✅ Native async/await support
 - ✅ Direct SQL with type-safe result mapping
@@ -48,6 +52,7 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 - ✅ Fast runtime performance (minimal overhead)
 
 **Cons**:
+
 - ⚠️ Requires live database connection for compile-time checks
 - ⚠️ No built-in query builder (just raw SQL)
 - ⚠️ External migration tool required
@@ -56,6 +61,7 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 ### Option C: SeaORM (Async-first ORM)
 
 **Pros**:
+
 - ✅ Native async support from ground up
 - ✅ Entity derive macros for boilerplate reduction
 - ✅ Built-in migration CLI
@@ -63,6 +69,7 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 - ✅ Good relationship handling
 
 **Cons**:
+
 - ⚠️ Runtime query building (less compile-time safety)
 - ⚠️ Heavier abstraction with more memory overhead
 - ⚠️ Less control over generated SQL
@@ -72,12 +79,14 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 **Decision**: **SELECTED**
 
 **Approach**: Hybrid architecture combining:
+
 1. **sqlx** for compile-time SQL verification and runtime execution
 2. **Custom DSL** for ergonomic query composition
 3. **Deadpool** for connection pooling
 4. **Refinery** for migrations
 
 **Justification**:
+
 - Best of both worlds: compile-time safety + ergonomic API
 - sqlx provides rock-solid foundation with proven production use
 - Custom DSL can evolve based on Phenotype-specific needs
@@ -135,24 +144,28 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 ## Implementation Plan
 
 ### Phase 1: Foundation (Current)
+
 - [ ] sqlx integration with deadpool connection pooling
 - [ ] Basic table/query DSL macros
 - [ ] Type-safe result mapping
 - [ ] PostgreSQL driver support
 
 ### Phase 2: Multi-Backend (2026 Q2)
+
 - [ ] MySQL driver support
 - [ ] SQLite driver support
 - [ ] MongoDB connector (via mongodb crate)
 - [ ] Backend-specific optimizations
 
 ### Phase 3: Advanced Querying (2026 Q3)
+
 - [ ] JOIN DSL with type-safe relationship mapping
 - [ ] Subquery support
 - [ ] Window functions
 - [ ] Common Table Expressions (CTEs)
 
 ### Phase 4: Optimization (2026 Q4)
+
 - [ ] Query plan caching
 - [ ] Prepared statement optimization
 - [ ] Connection pool auto-tuning
@@ -161,6 +174,7 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 ## Consequences
 
 ### Positive
+
 - **Compile-time safety** prevents entire categories of runtime SQL errors
 - **Async-first** design matches Phenotype ecosystem requirements
 - **Zero-cost abstractions** maintain high performance
@@ -168,12 +182,14 @@ We evaluated multiple approaches from the Rust ecosystem and beyond, considering
 - **sqlx maturity** reduces risk with proven production usage
 
 ### Negative
+
 - **Build-time database dependency** requires live DB for compile-time checks
 - **Complex build setup** needs CI caching for schema verification
 - **Learning curve** for custom DSL patterns
 - **Macro debugging** can be challenging when things go wrong
 
 ### Mitigations
+
 - Use `SQLX_OFFLINE=true` for CI/build environments with cached query metadata
 - Provide comprehensive DSL documentation and examples
 - Implement compile-time error messages that guide developers

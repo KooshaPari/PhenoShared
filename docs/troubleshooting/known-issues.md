@@ -4,7 +4,7 @@
 > **Scope:** Operational issues for the `substrate` Cargo workspace, the `psub-gateway` HTTP service, the `psub` CLI, and `driver-http`.
 > **Sister docs:** [`docs/operations/runbook.md`](../operations/runbook.md) · [`docs/adr/`](../adr/) · [`docs/friction-log.md`](../friction-log.md)
 
-Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hypothetical "If you see X, try Y" pattern. **No issue numbers are fabricated.** To open or claim an issue: &lt;https://github.com/KooshaPari/substrate/issues>.
+Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hypothetical "If you see X, try Y" pattern. **No issue numbers are fabricated.** To open or claim an issue: &lt;<https://github.com/KooshaPari/substrate/issues>>.
 
 ---
 
@@ -12,7 +12,7 @@ Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hy
 
 ### ISSUE-001: `psub-orchestrator` fails `cargo check` with 4 `Pin<&mut EventStream&lt;T>>` borrow errors
 
-**Symptom**: `cargo check -p psub-orchestrator` emits 4 errors of shape `E0596: cannot borrow data in dereference of \`Pin<&mut EventStream&lt;T>>\` as mutable`, plus 4 warnings. `Stream::poll_next` cannot deref through the `Pin` because `EventStream&lt;T>` does not implement `DerefMut`.
+**Symptom**: `cargo check -p psub-orchestrator` emits 4 errors of shape `E0596: cannot borrow data in dereference of \`Pin<&mut EventStream&lt;T>>\` as mutable`, plus 4 warnings.`Stream::poll_next` cannot deref through the `Pin` because `EventStream&lt;T>` does not implement `DerefMut`.
 
 **Root cause**: `crates/psub-orchestrator/src/stream.rs:21` calls `self.inner.next()` directly on a pinned reference. The `Stream` trait is implemented for `&mut EventStream&lt;T>`, not `Pin<&mut EventStream&lt;T>>`.
 
@@ -32,7 +32,7 @@ Every entry points at a real GitHub issue, a real file/ADR in this repo, or a hy
 
 ### ISSUE-003: `bitcoin_segwit_addr.rs:52` non-camel-case `type u5` warning
 
-**Symptom**: `cargo check -p psub-gateway` emits `warning: type alias \`u5\` should have an upper camel case name` at `crates/psub-gateway/src/bitcoin_segwit_addr.rs:52:6`. Under `clippy --workspace --all-targets -- -D warnings` (AGENTS.md policy), this becomes a hard error.
+**Symptom**: `cargo check -p psub-gateway` emits `warning: type alias \`u5\` should have an upper camel case name` at `crates/psub-gateway/src/bitcoin_segwit_addr.rs:52:6`. Under`clippy --workspace --all-targets -- -D warnings` (AGENTS.md policy), this becomes a hard error.
 
 **Root cause**: `type u5 = u8;` mirrors the upstream `bech32` crate's internal naming. AGENTS.md § Gotchas says "fix, don't `#[allow]` (allow needs a tracking-issue comment)", so the upstream idiom must be re-bound rather than silenced.
 
@@ -79,5 +79,5 @@ PLACEHOLDER_CONTAINER_SECTION
 - [`docs/operations/runbook.md`](../operations/runbook.md) — top-level operator runbook.
 - [`docs/adr/0004-atomic-claim-lease.md`](../adr/0004-atomic-claim-lease.md) — design rationale for ISSUE-303.
 - [`docs/adr/0005-sqlite-default-store.md`](../adr/0005-sqlite-default-store.md) — design rationale for ISSUE-201.
-- GitHub issues: &lt;https://github.com/KooshaPari/substrate/issues> — currently **#58 OPEN** (Meta: OmniRoute fork PR realignment to release/v3.8.37) and **#69 CLOSED** (build(runtime): OsString::to_string() fails on Rust 1.95).
+- GitHub issues: &lt;<https://github.com/KooshaPari/substrate/issues>> — currently **#58 OPEN** (Meta: OmniRoute fork PR realignment to release/v3.8.37) and **#69 CLOSED** (build(runtime): OsString::to_string() fails on Rust 1.95).
 - [`docs/friction-log.md`](../friction-log.md) — rolling log of operator friction.

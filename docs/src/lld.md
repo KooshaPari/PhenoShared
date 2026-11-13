@@ -91,6 +91,7 @@ For candidate node `n` and operation/region `r`:
 \[
 C(n,r) =
 T_q + T_c + T_s + T_d + T_x + T_y + T_o
+
 + \lambda_r R_{deadline}
 + \lambda_p R_{pressure}
 + \lambda_f R_{failure}

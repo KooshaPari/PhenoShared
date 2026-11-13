@@ -390,6 +390,7 @@ confirms the `modules` and `cycles` tables exist, and that an existing `features
    - Then `DELETE FROM modules WHERE id = ?1`.
 
 4. Implement `get_module_with_features` (Traces to FR-M05):
+
    ```sql
    -- Owned features
    SELECT * FROM features WHERE module_id = ?1
@@ -402,6 +403,7 @@ confirms the `modules` and `cycles` tables exist, and that an existing `features
    -- Direct children
    SELECT * FROM modules WHERE parent_module_id = ?1
    ```
+
    Return `None` if the module doesn't exist.
 
 5. Implement remaining methods (`get_module_by_id`, `get_module_by_slug`, `update_module`,
@@ -446,13 +448,16 @@ confirms the `modules` and `cycles` tables exist, and that an existing `features
 5. Implement `get_cycle_with_features` (Traces to FR-C06):
    - Get cycle row. Return `Ok(None)` if missing.
    - Get assigned features:
+
      ```sql
      SELECT f.* FROM features f
      JOIN cycle_features cf ON cf.feature_id = f.id
      WHERE cf.cycle_id = ?1
      ORDER BY f.slug
      ```
+
    - Compute WP progress aggregate:
+
      ```sql
      SELECT wp.state, COUNT(*) as cnt
      FROM work_packages wp
@@ -461,6 +466,7 @@ confirms the `modules` and `cycles` tables exist, and that an existing `features
      WHERE cf.cycle_id = ?1
      GROUP BY wp.state
      ```
+
      Map results into `WpProgressSummary` (total = sum of all counts; bucket by WpState string).
    - Construct `CycleWithFeatures` and return.
 
@@ -486,6 +492,7 @@ confirms the `modules` and `cycles` tables exist, and that an existing `features
 **Steps**:
 
 1. In `modules.rs`, implement `tag_feature_to_module` and `untag_feature_from_module`:
+
    ```sql
    -- tag
    INSERT OR IGNORE INTO module_feature_tags (module_id, feature_id, created_at)
@@ -499,18 +506,22 @@ confirms the `modules` and `cycles` tables exist, and that an existing `features
    - Fetch the cycle to get `module_scope_id`.
    - If `module_scope_id` is `Some(scope_id)`:
      - Check if `feature.module_id == Some(scope_id)` (owned) OR a tag exists:
+
        ```sql
        SELECT COUNT(*) FROM module_feature_tags
        WHERE module_id = ?1 AND feature_id = ?2
        ```
+
      - If neither, return `DomainError::FeatureNotInModuleScope { feature_slug, module_slug }`.
    - Insert into `cycle_features`:
+
      ```sql
      INSERT OR IGNORE INTO cycle_features (cycle_id, feature_id, added_at)
      VALUES (?1, ?2, datetime('now'))
      ```
 
 3. Implement `remove_feature_from_cycle`:
+
    ```sql
    DELETE FROM cycle_features WHERE cycle_id = ?1 AND feature_id = ?2
    ```

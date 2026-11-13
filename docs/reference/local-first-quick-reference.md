@@ -52,12 +52,14 @@ anyhow = "1"
 ### 1. NATS JetStream
 
 **Verify Connection**:
+
 ```rust
 let client = async_nats::connect("nats://localhost:4222").await?;
 println!("Connected to NATS");
 ```
 
 **Create Stream**:
+
 ```rust
 let jetstream = jetstream::new(client);
 jetstream
@@ -72,6 +74,7 @@ jetstream
 ### 2. Dragonfly Redis
 
 **Verify Connection**:
+
 ```rust
 let manager = RedisConnectionManager::new("redis://localhost:6379")?;
 let pool = bb8::Pool::builder().max_size(16).build(manager).await?;
@@ -81,6 +84,7 @@ assert_eq!(pong, "PONG");
 ```
 
 **Set Value with TTL**:
+
 ```rust
 use redis::AsyncCommands;
 let key = "snapshot:wp-001";
@@ -91,12 +95,14 @@ conn.set_ex(key, value, 3600).await?;  // 1 hour TTL
 ### 3. Neo4j
 
 **Verify Connection**:
+
 ```rust
 let graph = Graph::new("bolt://localhost:7687", "neo4j", "password").await?;
 let mut result = graph.execute(neo4rs::query("RETURN 1 AS test")).await?;
 ```
 
 **Create Node and Query**:
+
 ```rust
 graph
     .execute(
@@ -122,6 +128,7 @@ while let Ok(Some(row)) = result.next().await {
 ### 4. MinIO / S3
 
 **Verify Connection**:
+
 ```rust
 let s3 = aws_sdk_s3::Client::from_conf(
     aws_sdk_s3::config::Builder::from(&config)
@@ -133,6 +140,7 @@ s3.list_buckets().send().await?;
 ```
 
 **Upload Artifact**:
+
 ```rust
 use aws_sdk_s3::primitives::ByteStream;
 
@@ -310,6 +318,7 @@ mod tests {
 ## Troubleshooting Common Issues
 
 ### NATS Connection Refused
+
 ```bash
 # Check if NATS is running
 ps aux | grep nats-server
@@ -319,6 +328,7 @@ nats-server -v
 ```
 
 ### Redis/Dragonfly Connection Issues
+
 ```rust
 // Test with different retry strategy
 let client = redis::Client::open("redis://localhost:6379")?;
@@ -332,6 +342,7 @@ let conn_manager = client
 ```
 
 ### Neo4j Authentication Failed
+
 ```bash
 # Verify credentials match container environment
 # Default: neo4j / password
@@ -341,6 +352,7 @@ cypher-shell -a bolt://localhost:7687 -u neo4j -p password
 ```
 
 ### MinIO Bucket Not Found
+
 ```rust
 // Create bucket if it doesn't exist
 match s3.head_bucket().bucket("artifacts").send().await {
@@ -355,6 +367,7 @@ match s3.head_bucket().bucket("artifacts").send().await {
 ```
 
 ### Process Compose Port Conflicts
+
 ```bash
 # Check what's using port 4222
 lsof -i :4222
@@ -368,6 +381,7 @@ kill -9 <PID>
 ## Performance Tuning
 
 ### NATS Optimization
+
 ```conf
 # In nats.conf
 jetstream {
@@ -384,6 +398,7 @@ max_connections: 10000
 ```
 
 ### Dragonfly/Redis Optimization
+
 ```bash
 # Increase client buffer
 CONFIG SET client-output-buffer-limit "normal 0 0 0"
@@ -394,6 +409,7 @@ CONFIG SET slowlog-max-len 128
 ```
 
 ### Neo4j Optimization
+
 ```conf
 # In docker/neo4j.conf
 dbms.memory.heap.initial_size=512m
@@ -420,6 +436,7 @@ dbms.memory.pagecache.size=500m
 ## Links and Resources
 
 ### Official Documentation
+
 - [NATS Rust Client](https://github.com/nats-io/nats.rs)
 - [NATS JetStream Docs](https://docs.nats.io/nats-concepts/jetstream)
 - [Dragonfly Docs](https://www.dragonflydb.io/)
@@ -428,11 +445,13 @@ dbms.memory.pagecache.size=500m
 - [Process Compose](https://github.com/F1bonacci/process-compose)
 
 ### Example Repositories
+
 - [NATS Examples](https://github.com/nats-io/nats-by-example)
 - [Neo4rs Examples](https://github.com/neo4j-labs/neo4rs/tree/main/examples)
 - [AWS SDK Examples](https://github.com/awslabs/aws-sdk-rust/tree/main/examples)
 
 ### Benchmarks & Performance
+
 - [NATS Benchmarks](https://github.com/nats-io/nats-bench)
 - [Dragonfly vs Redis Benchmarks](https://www.dragonflydb.io/benchmarks)
 

@@ -53,6 +53,7 @@ Additional Crates (Phase 2 candidates):
 ### 1.2 Dependency Categories
 
 #### Core Ecosystem (Always Required)
+
 | Crate | Version | Usage | Impact |
 |-------|---------|-------|--------|
 | `thiserror` | 2.0.18 | Error types in all crates | CRITICAL — zero-cost error ergonomics |
@@ -61,6 +62,7 @@ Additional Crates (Phase 2 candidates):
 | `tokio` | 1.50.0 | Async runtime | CRITICAL — async ops, but over-featured |
 
 #### Workspace-Level Dependencies (Consolidated)
+
 ```toml
 # Root Cargo.toml [workspace.dependencies]
 serde = { version = "1", features = ["derive"] }
@@ -110,6 +112,7 @@ url = "2"
 **Current State**: All crates use `tokio = { version = "1", features = ["full"] }`
 
 This includes:
+
 ```rust
 // Full feature set (expensive for compilation):
 full = [
@@ -173,6 +176,7 @@ regex              → 1.12.3 (everywhere)
 **Current State**: Workspace-level feature consolidation is excellent.
 
 **Workspace Defaults**:
+
 ```toml
 [workspace.dependencies]
 serde = { version = "1", features = ["derive"] }    # Only derive needed
@@ -229,6 +233,7 @@ Incremental Timeline:
 ```
 
 **Phase 1 Optimizations (Already Completed)**:
+
 - ✅ Reduced tokio features (saved ~400ms)
 - ✅ Added `panic = "abort"` to release profile (faster codegen)
 - ✅ Configured sccache (reduced CI rebuild cost)
@@ -245,6 +250,7 @@ Incremental Timeline:
 | `Combined release build` | ~2.5-3.2 MB | (with all features) |
 
 **Optimization Potential**:
+
 - Strip debug symbols (already done via `strip = true`)
 - Use `opt-level = "z"` (already done)
 - Reduce LTO aggressiveness (current: `lto = true`) → Consider `lto = "thin"` for faster builds
@@ -260,12 +266,14 @@ Incremental Timeline:
 **Effort**: 30-45 minutes
 **Impact**: Catch unused transitive dependencies early; unblock Phase 2 work
 **Steps**:
+
 1. Add `cargo-udeps` to CI build matrix
 2. Run `cargo +nightly udeps --all-targets`
 3. Create workflow step to flag unused dependencies
 4. Add to quality-gate.sh
 
 **Work Item**:
+
 ```
 Title: Add cargo-udeps CI check
 Category: Quality Gates
@@ -293,11 +301,13 @@ persistence = ["tokio/rt", "serde_json"]
 ```
 
 **Per-crate adoption**:
+
 - `phenotype-policy-engine`: Enable feature flag for regex caching
 - `phenotype-router-monitor`: Isolate networking stack
 - `phenotype-telemetry`: Optional observability (can disable in lib mode)
 
 **Work Item**:
+
 ```
 Title: Add optional feature flags to workspace crates
 Category: Build Optimization
@@ -318,17 +328,20 @@ Acceptance Criteria:
 **Analysis**:
 
 Current usage of `anyhow`:
+
 ```
 phenotype-error-core: 1 usage (catch-all error handling)
 phenotype-router-monitor: 2 usages (monitoring error reporting)
 ```
 
 **Change Plan**:
+
 - Replace `anyhow::Result<T>` with `Result<T, PhenotypeError>` in libraries
 - Keep `anyhow` only in CLI/binary crates
 - Use `phenotype-error-core` canonical error types
 
 **Work Item**:
+
 ```
 Title: Remove anyhow from lib crates, use canonical errors
 Category: Code Quality
@@ -351,6 +364,7 @@ Acceptance Criteria:
 **Scope**: Phase 2 (post-dependency consolidation)
 
 **Steps**:
+
 1. Create PGO instrumentation build
 2. Run representative workload
 3. Apply PGO optimization
@@ -366,6 +380,7 @@ Acceptance Criteria:
 **Impact**: 20-30% faster debug/release builds, 5-8% slower runtime (acceptable trade-off)
 
 **Change**:
+
 ```toml
 [profile.release]
 lto = "thin"  # Instead of true
@@ -375,6 +390,7 @@ codegen-units = 2  # More parallelism, slightly less optimization
 **Trade-off**: Release binaries 2-3% larger, but 30% faster to build (good for CI).
 
 **Work Item**:
+
 ```
 Title: Use thin LTO in release builds
 Category: Build Performance
@@ -390,6 +406,7 @@ Estimated Effort: 1 tool call (Cargo.toml change)
 **Impact**: Reduce regex compilation time, faster cold starts
 
 **Change**:
+
 ```rust
 // In phenotype-policy-engine/src/lib.rs
 use once_cell::sync::Lazy;
@@ -401,6 +418,7 @@ static POLICY_PATTERN: Lazy<Regex> = Lazy::new(|| {
 ```
 
 **Work Item**:
+
 ```
 Title: Lazy-initialize regex patterns in policy engine
 Category: Build Optimization
@@ -418,6 +436,7 @@ Estimated Effort: 1 tool call
 **Impact**: Minimal (serde is gold standard), possible 5-10% smaller binaries with `bincode` or `postcard`
 
 **Candidates**:
+
 - `bincode` — Binary format, faster serialization
 - `postcard` — Lightweight, embedded-friendly
 - `msgpack` — Space-efficient, cross-language
@@ -436,6 +455,7 @@ Estimated Effort: 1 tool call
 **Current**: `reqwest` defaults to native TLS (OpenSSL on Unix, SChannel on Windows)
 
 **Change**:
+
 ```toml
 [dependencies]
 reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
@@ -478,12 +498,14 @@ reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-feature
 **Rust 2021 Edition**: Supports Edition 2024 (planned for 2026-10)
 
 **Minor/Patch Updates**: Run quarterly
+
 ```bash
 cargo update --aggressive  # Allows minor version bumps
 cargo test --all          # Verify compatibility
 ```
 
 **Major Updates**: Plan for next major version release
+
 - tokio 2.x: Monitor (breaking changes expected)
 - serde 2.0: High impact, coordinate with ecosystem
 
@@ -513,18 +535,21 @@ Week 2:
 ### Parallel Work Streams
 
 **Work Stream A** (Dependency Consolidation):
+
 - HI-002, HI-003, MI-003
 - Owner: To be assigned
 - Effort: 6-8 tool calls
 - Timeline: Days 1-5
 
 **Work Stream B** (Build Performance):
+
 - HI-001, MI-002
 - Owner: To be assigned
 - Effort: 2-3 tool calls
 - Timeline: Days 2-4
 
 **Work Stream C** (Testing & Validation):
+
 - Integration tests, benchmarks, CI updates
 - Runs in parallel with A/B
 - Timeline: Days 3-5
@@ -619,6 +644,7 @@ Based on dependency patterns across Phenotype ecosystem:
 ## Appendix A: Complete Dependency List by Category
 
 ### Serialization Ecosystem (4 crates)
+
 ```
 serde@1.0.228
   └─ serde_core@1.0.228
@@ -628,6 +654,7 @@ zmij@1.0.21
 ```
 
 ### Async Runtime (8 crates)
+
 ```
 tokio@1.50.0
   ├─ tokio-macros@2.6.1 (proc-macro)
@@ -644,6 +671,7 @@ futures@0.3.32
 ```
 
 ### Error Handling (2 crates)
+
 ```
 thiserror@2.0.18
   └─ thiserror-impl@2.0.18 (proc-macro)
@@ -651,6 +679,7 @@ anyhow@1.0.102
 ```
 
 ### Networking (12+ crates)
+
 ```
 reqwest@0.12.28
   ├─ hyper@1.x
@@ -665,6 +694,7 @@ url@2.5.8
 ```
 
 ### Tracing & Logging (5 crates)
+
 ```
 tracing@0.1.44
 tracing-subscriber@0.3.23
@@ -672,6 +702,7 @@ tracing-subscriber@0.3.23
 ```
 
 ### Utilities (15+ crates)
+
 ```
 uuid@1.23.0 [v4, serde features]
 chrono@0.4.44 [serde feature]
@@ -685,6 +716,7 @@ once_cell@1.19
 ```
 
 ### Proc Macros Infrastructure (8 crates)
+
 ```
 syn@2.0.117
 quote@1.0.45
@@ -693,6 +725,7 @@ async-trait@0.1.89
 ```
 
 ### Platform/System (20+ crates)
+
 ```
 libc@0.2.183
 cfg-if@1.0.4
@@ -707,6 +740,7 @@ cfg-if@1.0.4
 ### Recommended Feature Sets by Crate Type
 
 **Library Crate (no runtime)**:
+
 ```toml
 [dependencies]
 serde = { version = "1", features = ["derive"] }
@@ -714,6 +748,7 @@ thiserror = "2"
 ```
 
 **Async Library**:
+
 ```toml
 [dependencies]
 tokio = { version = "1", features = ["rt", "macros", "sync"] }
@@ -722,6 +757,7 @@ async-trait = "0.1"
 ```
 
 **CLI/Binary**:
+
 ```toml
 [dependencies]
 tokio = { version = "1", features = ["full"] }
@@ -729,6 +765,7 @@ anyhow = "1"
 ```
 
 **Telemetry**:
+
 ```toml
 [dependencies]
 tracing = "0.1"
@@ -789,6 +826,7 @@ panic = "abort"
 ## Questions & Support
 
 For questions about this audit:
+
 1. Review Phase 2 work items (Sections 5.1-5.2)
 2. Check implementation roadmap (Section 7)
 3. Consult Cargo.lock for exact versions (Appendix D)

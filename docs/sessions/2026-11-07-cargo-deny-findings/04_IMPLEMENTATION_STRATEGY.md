@@ -28,6 +28,7 @@ loom = { version = "0.7" }        # was: features = ["futures"]
 Effect: `pin-utils` disappears from `Cargo.lock` entirely. **No ignore entry.**
 
 ### F2 — `crypto-bigint` (RUSTSEC-2026-0387, timing sidechannel) and
+
 `rsa` (RUSTSEC-2023-0071, Marvin Attack) — **BOTH REMOVED**
 
 These two were the only *vulnerability*-level findings, and the only ones

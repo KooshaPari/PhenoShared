@@ -43,6 +43,7 @@ The security posture is **positive at the spec level**: requirements correctly m
 **Finding:** No actual storage code or configuration files exist. The referenced directories (`src/webflow-plugin/`, `.webflow/`) are not present.
 
 **Spec Requirements (Correctly Defined):**
+
 - `FR-INIT-004`: OAuth tokens MUST be stored via `sensitive.credentials` API, NOT in plaintext in `.webflow/config.json`
 - `FR-WFP-009`: `sensitive.credentials: true` entitlement declared for OAuth token storage
 - `FR-SHARE-003`: Published component IDs written to `.webflow/published-components.json` (non-sensitive audit log)
@@ -57,6 +58,7 @@ The security posture is **positive at the spec level**: requirements correctly m
 **Finding:** No network code exists to audit.
 
 **Spec Requirements (Correctly Defined):**
+
 - `FR-WFP-006`: Network entitlement limited to `api.webflow.com`, `webflow.com`, `*.webflow.io` only
 - `FR-ASSET-003`: Asset uploads restricted to `api.webflow.com` only
 - `FR-INIT-002`: OAuth token validation against `https://api.webflow.com` before config write
@@ -64,6 +66,7 @@ The security posture is **positive at the spec level**: requirements correctly m
 **Risk Level:** NONE — No transmission implementation exists.
 
 **Recommendation:** When implemented, ensure:
+
 1. All API calls use HTTPS only
 2. OAuth tokens are sent via Authorization headers, not URL parameters
 3. Network entitlements are enforced at the plugin host level, not just declared
@@ -93,12 +96,14 @@ The security posture is **positive at the spec level**: requirements correctly m
 ## Recommendations
 
 ### Immediate (Before Implementation)
+
 1. Add OAuth token refresh/expiration handling to specs
 2. Define input validation requirements for all user inputs
 3. Specify HTTPS enforcement for all network calls
 4. Add error message sanitization requirements (no tokens/secrets in error output)
 
 ### During Implementation
+
 1. Follow FR-INIT-004 strictly — never store tokens in plaintext
 2. Enforce network entitlements at runtime, not just in manifest
 3. Implement structured logging that excludes sensitive fields
@@ -106,6 +111,7 @@ The security posture is **positive at the spec level**: requirements correctly m
 5. Use HTTPS for all Webflow API communication
 
 ### Post-Implementation
+
 1. Run security linting on all TypeScript code
 2. Audit actual network calls against declared entitlements
 3. Test error messages for sensitive data leakage

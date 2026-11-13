@@ -102,6 +102,7 @@ All WPs complete? → YES, proceed
 ```
 
 Every requirement must have:
+
 - ✓ Implementation in code
 - ✓ Test coverage
 - ✓ Verification status
@@ -136,6 +137,7 @@ From spec:
 ```
 
 All success criteria must be:
+
 - Measured or tested
 - Show passing status
 - Have supporting evidence

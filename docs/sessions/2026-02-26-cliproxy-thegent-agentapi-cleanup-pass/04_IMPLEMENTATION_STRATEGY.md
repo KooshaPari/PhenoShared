@@ -15,15 +15,18 @@ Pure GitHub CLI (`gh`) + shell scripting for all operations. No code changes —
 ## Workflow Details
 
 ### CR Re-review Wave
+
 - Filter PRs where `CodeRabbit` check is failing.
 - Post `@coderabbitai full review` comment on each.
 - Monitor CR queue for drain before retry wave.
 
 ### Cluster Wave (deferred)
+
 - Fix shared CI check manifest/gates in `cliproxyapi-plusplus`.
 - Do NOT touch per-feature logic until gates are stable.
 
 ### thegent Hold/Serialize
+
 - PRs with infra failures (Build Docs, Build wheels, Benchmark, multi-platform Test) held.
 - Wait for shared baseline gates to be stable.
 

@@ -29,6 +29,7 @@
 **phenotype-validation-go is the Go validation library for the Phenotype ecosystem, providing validation primitives, struct tags, and validation rules that enable data validation in Go applications.**
 
 Our mission is to validate Go data by offering:
+
 - **Validation Primitives**: Basic validators
 - **Struct Tags**: Declarative validation
 - **Custom Rules**: Extensible validation
@@ -37,6 +38,7 @@ Our mission is to validate Go data by offering:
 ### 1.2 Vision
 
 To be the Go validation standard where:
+
 - **Validation is Declarative**: Tags over code
 - **Errors are Clear**: Actionable messages
 - **Extension is Easy**: Custom validators
@@ -150,9 +152,11 @@ To be the Go validation standard where:
 ## 8. Decision Authority Levels
 
 **Level 1: Go Maintainer**
+
 - Updates
 
 **Level 2: Validation Lead**
+
 - API changes
 
 ---

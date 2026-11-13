@@ -50,8 +50,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -80,16 +81,19 @@ spec-kitty implement WP11 --base WP10
 ## Context & Constraints
 
 ### Prerequisite Work
+
 - **WP06 (SQLite Adapter)**: provides the `SqliteStorageAdapter` implementing `StoragePort` for feature/audit persistence.
 - **WP07 (Git Adapter)**: provides the `GitVcsAdapter` implementing `VcsPort` for committing spec files and reading artifacts.
 - **WP10 (Telemetry Adapter)**: provides the `TelemetryAdapter` implementing `ObservabilityPort` for span creation and logging.
 
 ### Key References
+
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- FR-001 (specify), FR-002 (research), FR-008 (refinement), FR-009 (governance checks)
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- CLI crate structure, clap derive macros, discovery interview design
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- Feature entity (slug, state, spec_hash), AuditEntry entity, state transitions
 
 ### Architectural Constraints
+
 - The CLI crate depends on `agileplus-core` (domain + ports) and all adapter crates. It is the composition root.
 - Use clap derive macros for argument parsing. Global flags: `--verbose`, `--config <path>`, `--feature <slug>`.
 - All commands must create a telemetry span and record duration as a metric.
@@ -97,6 +101,7 @@ spec-kitty implement WP11 --base WP10
 - Discovery interview uses `dialoguer` for structured prompts. The interview must be interruptible (Ctrl+C saves partial progress).
 
 ### Crate Dependencies
+
 ```toml
 [dependencies]
 agileplus-core = { path = "../agileplus-core" }
@@ -129,6 +134,7 @@ tempfile = "3"
 - **Steps**:
   1. Create `crates/agileplus-cli/src/main.rs`.
   2. Define the top-level clap App using derive macros:
+
      ```rust
      #[derive(Parser)]
      #[command(name = "agileplus", version, about = "Spec-driven development engine")]
@@ -152,7 +158,9 @@ tempfile = "3"
          // Plan, Implement, Validate, Ship, Retrospective added in WP12/WP13
      }
      ```
+
   3. Define `SpecifyArgs` and `ResearchArgs`:
+
      ```rust
      #[derive(Args)]
      struct SpecifyArgs {
@@ -180,6 +188,7 @@ tempfile = "3"
          mode: Option<ResearchMode>,
      }
      ```
+
   4. In `main()`:
      - Parse args with `Cli::parse()`.
      - Load telemetry config and initialize `TelemetryAdapter`.
@@ -230,6 +239,7 @@ tempfile = "3"
      - Record metric: command duration.
      - Print summary: "Feature {slug} specified. Spec written to kitty-specs/{slug}/spec.md".
   4. Implement the Markdown template for spec generation:
+
      ```markdown
      # Specification: {friendly_name}
      **Slug**: {slug} | **Date**: {date} | **State**: specified
@@ -252,6 +262,7 @@ tempfile = "3"
      ## Acceptance Criteria
      {criteria}
      ```
+
   5. Handle Ctrl+C during interview: catch the interrupt, save partial answers to a temp file, print "Partial spec saved to {path}. Resume with --from-file {path}".
 - **Files**: `crates/agileplus-cli/src/commands/specify.rs`
 - **Parallel?**: Yes, independent of T062 after T060.
@@ -277,6 +288,7 @@ tempfile = "3"
        - Look for existing specs, READMEs, package manifests.
        - Identify language/framework from file extensions and config files.
      - Generate a `research.md` with codebase analysis:
+
        ```markdown
        # Research: {slug} (Pre-Specify)
        **Date**: {date} | **Mode**: codebase-scan
@@ -293,6 +305,7 @@ tempfile = "3"
        ## Recommended Investigation Areas
        {suggestions based on codebase}
        ```
+
      - Write to `kitty-specs/{slug}/research.md` via VCS.
      - No state transition (feature may not exist yet).
   4. Implement `research_post_specify(feature, vcs, storage) -> Result<()>`:
@@ -302,6 +315,7 @@ tempfile = "3"
        - Identify potential conflicts with existing code.
        - Estimate scope based on FR count and file references.
      - Generate a `research.md` with feasibility analysis:
+
        ```markdown
        # Research: {slug} (Post-Specify)
        **Date**: {date} | **Mode**: feasibility
@@ -318,6 +332,7 @@ tempfile = "3"
        ## Recommended Approach
        {suggestions for plan phase}
        ```
+
      - Transition feature state: `specified -> researched`.
      - Append audit entry for the transition.
      - Record command metric.
@@ -382,6 +397,7 @@ tempfile = "3"
      - If only `info`, print them and proceed.
   5. Wire governance checks into `specify` (after spec generation, before persistence) and `research` (before state transition in post-specify mode).
   6. Define violation types:
+
      ```rust
      pub struct Violation {
          pub rule: String,
@@ -396,6 +412,7 @@ tempfile = "3"
          Info,
      }
      ```
+
 - **Files**: `crates/agileplus-cli/src/commands/governance.rs`
 - **Parallel?**: No -- must integrate with T061 and T062.
 - **Notes**:
@@ -408,6 +425,7 @@ tempfile = "3"
 - **Purpose**: Set up the dependency injection wiring in `main.rs` that constructs concrete adapter instances and passes them to command handlers as trait objects.
 - **Steps**:
   1. In `main.rs`, create an `AppContext` struct that holds all port implementations:
+
      ```rust
      struct AppContext {
          storage: Box<dyn StoragePort>,
@@ -415,18 +433,22 @@ tempfile = "3"
          telemetry: Box<dyn ObservabilityPort>,
      }
      ```
+
   2. Implement `AppContext::init(config: &AppConfig) -> Result<Self>`:
      - Open SQLite DB: `SqliteStorageAdapter::open(&config.db_path)?`
      - Open git repo: `GitVcsAdapter::open_from_cwd()?`
      - Init telemetry: `TelemetryAdapter::new(telemetry_config)?`
      - Return context with all adapters boxed as trait objects.
   3. Update command handlers to accept `&AppContext` instead of individual adapters:
+
      ```rust
      pub async fn run_specify(args: SpecifyArgs, ctx: &AppContext) -> Result<()> {
          // Use ctx.storage, ctx.vcs, ctx.telemetry
      }
      ```
+
   4. In `main()`, create context once, pass to command handler:
+
      ```rust
      let ctx = AppContext::init(&config)?;
      match cli.command {
@@ -434,8 +456,10 @@ tempfile = "3"
          Commands::Research(args) => commands::research::run_research(args, &ctx).await?,
      }
      ```
+
   5. Implement graceful shutdown: `ctx.telemetry.flush()` before exit.
   6. For testing, create a `TestContext` with mock implementations:
+
      ```rust
      #[cfg(test)]
      impl AppContext {
@@ -448,6 +472,7 @@ tempfile = "3"
          }
      }
      ```
+
 - **Files**:
   - `crates/agileplus-cli/src/main.rs` (extend)
   - `crates/agileplus-cli/src/context.rs` (new, if extracted)
@@ -462,21 +487,25 @@ tempfile = "3"
 ## Test Strategy
 
 ### Unit Tests
+
 - Location: `crates/agileplus-cli/tests/`
 - Run: `cargo test -p agileplus-cli`
 
 ### CLI Integration Tests (using `assert_cmd`)
+
 - Test `agileplus --help` prints usage.
 - Test `agileplus specify --from-file fixtures/sample-spec.md --feature test-001` creates a feature.
 - Test `agileplus research --feature test-001` produces research.md.
 - Test re-running specify detects changes and logs revision.
 
 ### Mock-Based Unit Tests
+
 - Test command handlers with mock ports (MockStoragePort, MockVcsPort).
 - Test governance checks with known violations.
 - Test refinement diffing with fixture specs.
 
 ### Fixtures
+
 - `tests/fixtures/sample-spec.md` -- a complete spec file for non-interactive testing.
 - `tests/fixtures/sample-spec-revised.md` -- a modified version for refinement testing.
 - `tests/fixtures/constitution.md` -- a sample constitution with rules.
@@ -515,6 +544,7 @@ tempfile = "3"
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this file (Activity Log section below "Valid lanes")
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ -- agent_id -- lane=<lane> -- <action>`
@@ -523,6 +553,7 @@ tempfile = "3"
 6. Agent ID should identify who made the change (claude-sonnet-4-5, codex, etc.)
 
 **Format**:
+
 ```
 - YYYY-MM-DDTHH:MM:SSZ -- <agent_id> -- lane=<lane> -- <brief action description>
 ```
@@ -537,6 +568,7 @@ To change a work package's lane, either:
 2. **Use CLI**: `spec-kitty agent tasks move-task WP11 --to <lane> --note "message"` (recommended)
 
 **Initial entry**:
+
 - 2026-02-27T00:00:00Z -- system -- lane=planned -- Prompt created.
 - 2026-02-28T09:52:05Z – claude-wp11 – shell_pid=81185 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T09:59:59Z – claude-wp11 – shell_pid=81185 – lane=for_review – Ready: specify+research commands, 21 tests

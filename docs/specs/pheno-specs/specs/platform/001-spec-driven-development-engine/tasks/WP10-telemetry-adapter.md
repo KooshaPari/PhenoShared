@@ -48,8 +48,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -76,14 +77,17 @@ spec-kitty implement WP10 --base WP05
 ## Context & Constraints
 
 ### Prerequisite Work
+
 - **WP05 (Port Traits)** must be complete. The `ObservabilityPort` trait in `agileplus-core/src/ports/observability.rs` defines the interface this adapter implements.
 
 ### Key References
+
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- observability requirements
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- telemetry crate in dependency graph, performance goals (<50ms CLI startup)
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- Metric entity (command, duration_ms, agent_runs, review_cycles)
 
 ### Architectural Constraints
+
 - This crate implements `ObservabilityPort` from `agileplus-core`. It must not depend on other adapter crates.
 - Use the `tracing` ecosystem for structured logging and span management. Use `opentelemetry` + `opentelemetry-otlp` for export.
 - The adapter must support a "no-op" mode where all telemetry calls succeed but produce no output (for testing and minimal configurations).
@@ -91,6 +95,7 @@ spec-kitty implement WP10 --base WP05
 - Initialization must be lazy or fast -- do not block CLI startup waiting for OTLP collector connection.
 
 ### Crate Dependencies
+
 ```toml
 [dependencies]
 agileplus-core = { path = "../agileplus-core" }
@@ -122,6 +127,7 @@ tempfile = "3"
 - **Steps**:
   1. Create `crates/agileplus-telemetry/src/lib.rs` with module declarations: `pub mod traces; pub mod metrics; pub mod logs; mod config;`.
   2. Define `TelemetryAdapter` struct:
+
      ```rust
      pub struct TelemetryAdapter {
          tracer: opentelemetry::global::BoxedTracer,
@@ -130,6 +136,7 @@ tempfile = "3"
          initialized: bool,
      }
      ```
+
   3. Implement `TelemetryAdapter::new(config: TelemetryConfig) -> Result<Self>`:
      - Initialize the OTLP trace exporter pipeline if `config.otlp_endpoint` is set.
      - Initialize the OTLP metrics exporter if enabled.
@@ -159,6 +166,7 @@ tempfile = "3"
 - **Steps**:
   1. Create `crates/agileplus-telemetry/src/traces.rs`.
   2. Define span attribute constants:
+
      ```rust
      pub const ATTR_COMMAND: &str = "agileplus.command";
      pub const ATTR_FEATURE_SLUG: &str = "agileplus.feature.slug";
@@ -166,6 +174,7 @@ tempfile = "3"
      pub const ATTR_AGENT_TYPE: &str = "agileplus.agent.type";
      pub const ATTR_REVIEW_CYCLE: &str = "agileplus.review.cycle";
      ```
+
   3. Implement `create_command_span(command_name: &str, feature_slug: Option<&str>) -> tracing::Span`:
      - Creates a top-level span with `tracing::info_span!`.
      - Sets `ATTR_COMMAND` and optionally `ATTR_FEATURE_SLUG`.
@@ -180,6 +189,7 @@ tempfile = "3"
      - Adds an event (log line) to an existing span.
      - Used for milestone markers: "PR created", "review received", "CI passed".
   7. Implement `SpanGuard` wrapper that auto-records duration on drop:
+
      ```rust
      pub struct SpanGuard {
          span: tracing::Span,
@@ -192,6 +202,7 @@ tempfile = "3"
          }
      }
      ```
+
 - **Files**: `crates/agileplus-telemetry/src/traces.rs`
 - **Parallel?**: Yes, independent of T057 and T058 after T055.
 - **Notes**:
@@ -205,6 +216,7 @@ tempfile = "3"
 - **Steps**:
   1. Create `crates/agileplus-telemetry/src/metrics.rs`.
   2. Define the metric instruments at module level:
+
      ```rust
      pub struct MetricsRecorder {
          agent_runs: Counter<u64>,
@@ -212,6 +224,7 @@ tempfile = "3"
          command_duration: Histogram<f64>,
      }
      ```
+
   3. Implement `MetricsRecorder::new(meter: &Meter) -> Self`:
      - `agent_runs` = counter named `agileplus.agent.runs` with description "Number of agent invocations".
      - `review_cycles` = counter named `agileplus.review.cycles` with description "Number of review-fix loop iterations".
@@ -221,6 +234,7 @@ tempfile = "3"
      - `record_review_cycle(feature_slug: &str, wp_id: &str, cycle: u32)`: increments counter.
      - `record_command_duration(command: &str, feature_slug: Option<&str>, duration: Duration)`: records histogram value.
   5. Implement `MetricSnapshot` struct for SQLite persistence:
+
      ```rust
      pub struct MetricSnapshot {
          pub command: String,
@@ -230,6 +244,7 @@ tempfile = "3"
          pub timestamp: DateTime<Utc>,
      }
      ```
+
   6. Implement `collect_snapshot(command: &str) -> MetricSnapshot`:
      - Captures current counter values for the given command context.
      - Returns a snapshot that the caller can persist to SQLite via StoragePort.
@@ -255,6 +270,7 @@ tempfile = "3"
      - Configure env filter from `config.level` (default: `info`, override with `AGILEPLUS_LOG` env var).
      - Compose with the OpenTelemetry layer from T055 using `tracing_subscriber::registry().with(fmt_layer).with(otel_layer)`.
   3. Define `LogConfig`:
+
      ```rust
      pub struct LogConfig {
          pub level: String,          // "trace", "debug", "info", "warn", "error"
@@ -263,7 +279,9 @@ tempfile = "3"
          pub include_target: bool,   // include module path
      }
      ```
+
   4. Define `LogOutput` enum:
+
      ```rust
      pub enum LogOutput {
          Stdout,
@@ -271,7 +289,9 @@ tempfile = "3"
          Both(PathBuf),
      }
      ```
+
   5. Implement JSON log format with these fields:
+
      ```json
      {
        "timestamp": "2026-02-27T10:30:00.123Z",
@@ -286,6 +306,7 @@ tempfile = "3"
        }
      }
      ```
+
   6. Implement log file rotation:
      - Use `tracing-appender` for non-blocking file writes with daily rotation.
      - Keep last 7 log files by default (configurable).
@@ -303,6 +324,7 @@ tempfile = "3"
 - **Steps**:
   1. Create `crates/agileplus-telemetry/src/config.rs`.
   2. Define `TelemetryConfig` struct (deserializable from YAML):
+
      ```rust
      #[derive(Deserialize, Default)]
      pub struct TelemetryConfig {
@@ -331,6 +353,7 @@ tempfile = "3"
          pub trace_ratio: f64,  // 0.0 to 1.0, default 1.0 (sample everything)
      }
      ```
+
   3. Implement `TelemetryConfig::load() -> Result<Self>`:
      - Look for config at `~/.agileplus/otel-config.yaml`.
      - If file does not exist, return `TelemetryConfig::default()` (no OTLP, info logging to stdout).
@@ -338,6 +361,7 @@ tempfile = "3"
      - Expand `~` to actual home directory using `dirs::home_dir()`.
   4. Implement `TelemetryConfig::load_from(path: &Path) -> Result<Self>` for testing.
   5. Create a default config template that `agileplus init` could write:
+
      ```yaml
      # AgilePlus OpenTelemetry Configuration
      otlp:
@@ -354,6 +378,7 @@ tempfile = "3"
      sampling:
        trace_ratio: 1.0
      ```
+
   6. Implement validation:
      - `trace_ratio` must be between 0.0 and 1.0.
      - `endpoint` must be a valid URL if present.
@@ -371,12 +396,14 @@ tempfile = "3"
 ## Test Strategy
 
 ### Unit Tests
+
 - Location: `crates/agileplus-telemetry/tests/`
 - Run: `cargo test -p agileplus-telemetry`
 - Use `tracing-test` for capturing and asserting on emitted spans and events.
 - Use `tempfile` for testing file-based log output.
 
 ### Config Tests
+
 - Valid YAML parses correctly.
 - Missing file returns defaults.
 - Malformed YAML returns descriptive error.
@@ -384,18 +411,21 @@ tempfile = "3"
 - Validation catches invalid trace_ratio, missing endpoint, etc.
 
 ### Trace Tests
+
 - Command span creates correctly with attributes.
 - Child spans nest under parent.
 - SpanGuard records duration on drop.
 - No-op adapter produces no output.
 
 ### Metrics Tests
+
 - Counter increments correctly.
 - Histogram records in correct bucket.
 - Snapshot captures delta values.
 - Reset clears state for test isolation.
 
 ### Log Tests
+
 - JSON format contains all expected fields.
 - File output writes to correct path.
 - Level filtering works (debug messages excluded at info level).
@@ -435,6 +465,7 @@ tempfile = "3"
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this file (Activity Log section below "Valid lanes")
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ -- agent_id -- lane=<lane> -- <action>`
@@ -443,6 +474,7 @@ tempfile = "3"
 6. Agent ID should identify who made the change (claude-sonnet-4-5, codex, etc.)
 
 **Format**:
+
 ```
 - YYYY-MM-DDTHH:MM:SSZ -- <agent_id> -- lane=<lane> -- <brief action description>
 ```
@@ -457,6 +489,7 @@ To change a work package's lane, either:
 2. **Use CLI**: `spec-kitty agent tasks move-task WP10 --to <lane> --note "message"` (recommended)
 
 **Initial entry**:
+
 - 2026-02-27T00:00:00Z -- system -- lane=planned -- Prompt created.
 - 2026-03-02T01:09:10Z – s1-wp10 – shell_pid=98662 – lane=doing – Assigned agent via workflow command
 - 2026-03-02T01:15:43Z – s1-wp10 – shell_pid=98662 – lane=for_review – Ready: telemetry adapter

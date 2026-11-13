@@ -1,4 +1,5 @@
 # Code Optimization Deep-Dive Report
+
 **Date**: 2026-03-29  
 **Scope**: Phenotype Ecosystem (Rust, Python, TypeScript)  
 **Focus**: Hot paths, memory allocations, performance anti-patterns, caching opportunities
@@ -21,9 +22,11 @@ Analysis across **66,746 lines of Rust code** (primary ecosystem), **4,792 lines
 ## 1. Hot Path Analysis
 
 ### 1.1 Dashboard Routes (agileplus-dashboard/src/routes.rs)
+
 **LOC**: 2,631 | **Call Frequency**: Every HTTP request | **Criticality**: CRITICAL
 
-#### Hot Functions:
+#### Hot Functions
+
 | Function | LOC | Call Path | Issue | Impact |
 |----------|-----|-----------|-------|--------|
 | `dashboard_page()` | ~50 | Every dashboard view | Rebuilds project summaries + filter evaluation on every render | High |
@@ -35,6 +38,7 @@ Analysis across **66,746 lines of Rust code** (primary ecosystem), **4,792 lines
 | `load_projects()` | ~20 | Every major route | Iterates store, rebuilds summaries | Medium |
 
 **Key Findings**:
+
 - `build_feature_events()` is called 3+ times per page render with no caching
 - No pagination on event timelines (loads ALL events into memory)
 - `Config::load()` happens on each route handler start
@@ -43,9 +47,11 @@ Analysis across **66,746 lines of Rust code** (primary ecosystem), **4,792 lines
 ---
 
 ### 1.2 SQLite Storage Adapter (agileplus-sqlite/src/lib.rs)
+
 **LOC**: 1,582 | **Call Frequency**: Every query | **Criticality**: CRITICAL
 
-#### Hot Functions:
+#### Hot Functions
+
 | Function | LOC | Issue | Estimated Impact |
 |----------|-----|-------|------------------|
 | `lock()` | 2 | **Mutex on every async call** — sync lock in async context blocks runtime thread | -30% throughput |
@@ -60,9 +66,11 @@ Analysis across **66,746 lines of Rust code** (primary ecosystem), **4,792 lines
 ---
 
 ### 1.3 NATS Event Bus (agileplus-nats/src/bus.rs)
+
 **LOC**: 361 | **Call Frequency**: Every event publish/subscribe | **Criticality**: HIGH
 
-#### Hot Functions:
+#### Hot Functions
+
 | Function | Issue | Estimated Impact |
 |----------|-------|------------------|
 | `InMemoryEventBus::publish()` | Vec clones on every publish, no batching | +5ms per publish |
@@ -73,9 +81,11 @@ Analysis across **66,746 lines of Rust code** (primary ecosystem), **4,792 lines
 ---
 
 ### 1.4 Configuration Loading (phenotype-config-core/src/loader.rs)
+
 **LOC**: 358 | **Call Frequency**: Startup + every route (if not cached) | **Criticality**: HIGH
 
-#### Hot Functions:
+#### Hot Functions
+
 | Function | Issue | Estimated Impact |
 |----------|-------|------------------|
 | `load_from_file()` | **No cache**, file I/O on every call | 10-50ms per call |
@@ -88,9 +98,11 @@ Analysis across **66,746 lines of Rust code** (primary ecosystem), **4,792 lines
 ---
 
 ### 1.5 P2P Git Operations (agileplus-p2p/src/*.rs)
+
 **LOC**: 613-525 (git_merge.rs, import.rs) | **Call Frequency**: Feature sync, imports | **Criticality**: HIGH
 
-#### Hot Functions:
+#### Hot Functions
+
 | Function | File | LOC | Issue | Impact |
 |----------|------|-----|-------|--------|
 | `materialize_feature()` | git.rs (633) | ~50 | String formatting in loop for each WP | +2KB alloc/WP |
@@ -102,6 +114,7 @@ Analysis across **66,746 lines of Rust code** (primary ecosystem), **4,792 lines
 ## 2. Memory Allocation Opportunities
 
 ### 2.1 String Concatenation Anti-Pattern
+
 **Crate**: agileplus-dashboard, agileplus-git, agileplus-cli  
 **Pattern**: `format!()` in loops instead of `write!()`  
 **LOC**: 15+ instances across dashboard/routes.rs
@@ -117,6 +130,7 @@ for wp in work_packages {
     writeln!(out, "**WP-{}**: {}", wp.id, wp.title)?;
 }
 ```
+
 **Impact**: -20% heap allocations in document generation  
 **Effort**: 2 hours  
 **Priority**: HIGH (frequent path)
@@ -124,10 +138,12 @@ for wp in work_packages {
 ---
 
 ### 2.2 Unnecessary Clone in Loops
+
 **Crate**: agileplus-dashboard, agileplus-git  
 **Pattern**: Feature/WP cloned for filtering, building views
 
 **Example 1** - Dashboard routes.rs:269-290 (build_kanban_cards):
+
 ```rust
 // BEFORE
 pub fn build_kanban_cards(features: Vec<Feature>) -> Vec<KanbanCard> {
@@ -144,7 +160,9 @@ pub fn build_kanban_cards(features: &[Feature]) -> Vec<KanbanCard> {
     }).collect()
 }
 ```
+
 **Locations**:
+
 - routes.rs:286-310 (build_project_summaries)
 - routes.rs:359-466 (build_feature_events) — **clones events list 2-3x**
 - routes.rs:669-688 (build_kanban_cards)
@@ -156,6 +174,7 @@ pub fn build_kanban_cards(features: &[Feature]) -> Vec<KanbanCard> {
 ---
 
 ### 2.3 Vec Pre-Allocation Missing
+
 **Crate**: agileplus-dashboard, agileplus-nats  
 **Pattern**: Vec grows dynamically when size is known upfront
 
@@ -168,7 +187,9 @@ for row in results { features.push(...); }
 let mut features = Vec::with_capacity(results.len());
 for row in results { features.push(...); }
 ```
+
 **Locations**:
+
 - routes.rs:286-310 (project summaries)
 - routes.rs:359-466 (feature events)
 - bus.rs:160-188 (InMemoryEventBus publish)
@@ -181,10 +202,12 @@ for row in results { features.push(...); }
 ---
 
 ### 2.4 Excessive JSON Serialization
+
 **Crate**: agileplus-dashboard  
 **Pattern**: Objects serialized to JSON, then parsed back
 
 **Example** - routes.rs:1572-1601 (feature_evidence_json):
+
 ```rust
 let evidence_bundles = load_evidence_bundles_from_disk(feature_id);
 let json = serde_json::to_string(&evidence_bundles)?;  // ← serialize
@@ -192,6 +215,7 @@ let response: EvidenceGalleryJson = serde_json::from_str(&json)?;  // ← deseri
 ```
 
 **Locations**:
+
 - routes.rs:1572-1601 (evidence JSON)
 - routes.rs:1034-1058 (health_json building ServiceHealthJson)
 
@@ -204,6 +228,7 @@ let response: EvidenceGalleryJson = serde_json::from_str(&json)?;  // ← deseri
 ## 3. Performance Anti-Patterns
 
 ### 3.1 Mutex on Every Async Call (CRITICAL)
+
 **Crate**: agileplus-sqlite  
 **Location**: lib.rs:lock() method
 
@@ -231,12 +256,15 @@ async fn list_all_features(&self) -> Result<Vec<Feature>, DomainError> {
 ---
 
 ### 3.2 No Pagination on List Queries
+
 **Crate**: agileplus-sqlite, agileplus-dashboard  
 **Locations**:
+
 - sqlite/lib.rs: `list_all_features()`, `list_wps_by_feature()`, `get_audit_trail()`
 - routes.rs: `build_feature_events()` — loads ALL events without limit
 
 **Example**:
+
 ```rust
 // BEFORE - no limit
 pub fn get_audit_trail(&self, feature_id: i64) -> Result<Vec<AuditEntry>, DomainError> {
@@ -257,15 +285,18 @@ pub fn get_audit_trail(&self, feature_id: i64, limit: usize, offset: usize)
 ---
 
 ### 3.3 Regex Compilation in Loops
+
 **Crate**: agileplus-git, agileplus-cli  
 **Pattern**: `Regex::new()` inside hot loops
 
 **Search pattern**:
+
 ```bash
 grep -r "Regex::new" crates/ --include="*.rs"
 ```
 
 **Likely locations** (from naming convention):
+
 - agileplus-validate.rs (validation)
 - agileplus-cli/src/commands/validate.rs (674 LOC)
 
@@ -287,12 +318,15 @@ if FEATURE_ID_REGEX.is_match(id) { ... }
 ---
 
 ### 3.4 N+1 Query Patterns
+
 **Crate**: agileplus-sqlite, agileplus-dashboard  
 **Locations**:
+
 - routes.rs:822-854 (feature_detail) — loads feature, then queries WPs separately, then queries evidence separately
 - routes.rs:856-869 (wp_list) — loads WPs, then likely loads each WP's evidence in a loop (unverified)
 
 **Pattern**:
+
 ```rust
 // BEFORE (N+1)
 let feature = db.get_feature(id)?;  // Query 1
@@ -312,6 +346,7 @@ let feature_with_wps = db.get_feature_with_wps_and_evidence(id)?;
 ---
 
 ### 3.5 Lock Contention in NATS Bus
+
 **Crate**: agileplus-nats  
 **Location**: bus.rs:InMemoryEventBus (uses Vec&lt;Envelope> with Mutex)
 
@@ -328,10 +363,12 @@ let feature_with_wps = db.get_feature_with_wps_and_evidence(id)?;
 ## 4. Caching Opportunities
 
 ### 4.1 Config Caching (CRITICAL)
+
 **Crate**: phenotype-config-core + agileplus-dashboard  
 **Current**: `Config::load()` file I/O on every call
 
 **Proposed**:
+
 ```rust
 // In app_state or shared state
 pub struct CachedConfig {
@@ -359,12 +396,14 @@ impl CachedConfig {
 ---
 
 ### 4.2 Project Summary Caching
+
 **Crate**: agileplus-dashboard  
 **Location**: routes.rs:286-310 (build_project_summaries)
 
 **Current**: Rebuilds every time `dashboard_page()` or similar is called.
 
 **Proposed**:
+
 ```rust
 // In SharedState
 pub struct CachedProjectSummaries {
@@ -382,12 +421,14 @@ pub struct CachedProjectSummaries {
 ---
 
 ### 4.3 Feature Events Pagination + Local Cache
+
 **Crate**: agileplus-dashboard  
 **Location**: routes.rs:359-466 (build_feature_events), routes.rs:890-912 (feature_events)
 
 **Current**: Loads all events, formats all, returns all.
 
 **Proposed**:
+
 ```rust
 pub async fn feature_events(
     Path(id): Path<i64>,
@@ -405,12 +446,14 @@ pub async fn feature_events(
 ---
 
 ### 4.4 Health Status Caching
+
 **Crate**: agileplus-dashboard  
 **Location**: routes.rs:1034-1058 (health_json)
 
 **Current**: Calls every service, formats JSON every time. UI polls every 1s.
 
 **Proposed**:
+
 ```rust
 pub struct CachedHealthStatus {
     status: Arc<RwLock<HealthStatus>>,
@@ -426,12 +469,14 @@ pub struct CachedHealthStatus {
 ---
 
 ### 4.5 Evidence Bundle Disk Cache
+
 **Crate**: agileplus-dashboard  
 **Location**: routes.rs:1345-1451 (load_evidence_bundles_from_disk)
 
 **Current**: Reads files from disk every request.
 
 **Proposed**:
+
 ```rust
 pub struct EvidenceBundleCache {
     cache: Arc<RwLock<HashMap<String, Vec<EvidenceBundleView>>>>,
@@ -448,12 +493,14 @@ pub struct EvidenceBundleCache {
 ## 5. Async/Concurrency Optimization
 
 ### 5.1 Sync Lock in Async Context
+
 **Crate**: agileplus-sqlite  
 **Issue**: Every database operation acquires `Mutex<Connection>` synchronously in async handler.
 
 **Impact**: Thread pool saturation, cascading latency increase at load.
 
 **Solution Options**:
+
 1. **Use `tokio::sync::Mutex`**: Async-aware, yields instead of blocking
 2. **Connection pool (r2d2/sqlx)**: Multiple connections, parallelism
 3. **Blocking thread pool**: `tokio::task::spawn_blocking()`
@@ -467,10 +514,12 @@ pub struct EvidenceBundleCache {
 ---
 
 ### 5.2 Task Batching in Event Processing
+
 **Crate**: agileplus-nats  
 **Issue**: Each publish/subscribe handled individually. No batching.
 
 **Proposed**:
+
 ```rust
 pub struct BatchedEventBus {
     batch_size: usize,
@@ -488,6 +537,7 @@ pub struct BatchedEventBus {
 ---
 
 ### 5.3 Parallel Work Package Processing
+
 **Crate**: agileplus-sqlite  
 **Issue**: `get_ready_wps()` calculates dependencies serially.
 
@@ -543,23 +593,27 @@ pub struct BatchedEventBus {
 ## 8. Implementation Roadmap
 
 ### Phase 1: Critical (Week 1)
+
 - [ ] Mutex → async pool (sqlite)
 - [ ] Config caching
 - [ ] Remove clones in dashboard loops
 
 ### Phase 2: High-Impact (Week 2)
+
 - [ ] N+1 query elimination
 - [ ] Pagination on list queries
 - [ ] Project summary cache
 - [ ] String formatting fixes (write! vs format!)
 
 ### Phase 3: Medium-Impact (Week 3)
+
 - [ ] NATS lock-free queue
 - [ ] Health caching
 - [ ] Evidence bundle cache
 - [ ] Lazy regex
 
 ### Phase 4: Nice-to-Have (Week 4+)
+
 - [ ] Task batching
 - [ ] Parallel WP processing
 - [ ] Trie-based routing
@@ -570,6 +624,7 @@ pub struct BatchedEventBus {
 ## 9. Measurement Strategy
 
 ### Before-Baseline
+
 ```bash
 # Latency profiling
 wrk -t4 -c10 -d30s http://localhost:3000/dashboard
@@ -582,6 +637,7 @@ sqlite3 :memory: "EXPLAIN QUERY PLAN SELECT ..."
 ```
 
 ### After-Optimization
+
 - Compare P95/P99 latency
 - Memory allocation count (valgrind / heaptrack)
 - Database query count
@@ -604,6 +660,7 @@ sqlite3 :memory: "EXPLAIN QUERY PLAN SELECT ..."
 ## 11. Estimated Aggregate Impact
 
 If **Top 5 optimizations** implemented:
+
 - **Latency**: -40-60% (P95 response time)
 - **Throughput**: +2-3x concurrent requests
 - **Memory**: -20-30% heap allocations
@@ -662,6 +719,7 @@ Event Bus
 ## Appendix C: Database Query Opportunities
 
 **Current Queries** (N+1 antipattern):
+
 ```sql
 -- Route: /feature/{id}
 SELECT * FROM features WHERE id = ?;        -- Query 1
@@ -671,6 +729,7 @@ SELECT * FROM audit WHERE feature_id = ?;   -- Query 4
 ```
 
 **Optimized** (single query with joins):
+
 ```sql
 SELECT
   f.id, f.title, ...,
@@ -685,6 +744,7 @@ WHERE f.id = ?;
 ```
 
 **Indexing improvements**:
+
 ```sql
 CREATE INDEX idx_wps_feature_id ON work_packages(feature_id);
 CREATE INDEX idx_audit_feature_id ON audit(feature_id, created_at DESC);

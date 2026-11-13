@@ -18,49 +18,58 @@ Modern Go applications heavily use context.Context for request-scoped values, ca
 ## Options Considered
 
 ### Option 1: No Context Support (Current ecosystem standard)
+
 ```go
 err := validator.ValidateStruct(user)
 ```
 
 **Pros**:
+
 - Simple API
 - Compatible with existing libraries
 - No context propagation complexity
 
 **Cons**:
+
 - No cancellation support
 - No timeout handling
 - Can't access request-scoped data
 - Difficult to integrate with tracing
 
 ### Option 2: Context as First Parameter
+
 ```go
 err := validator.ValidateStruct(ctx, user)
 ```
 
 **Pros**:
+
 - Idiomatic Go (ctx is first param convention)
 - Full context support
 - Cancellation, timeouts, values all available
 - Future-proof for tracing
 
 **Cons**:
+
 - Breaking change from existing libraries
 - More verbose for simple cases
 - Requires context.Background() for non-request validation
 
 ### Option 3: Context as Optional Parameter
+
 ```go
 err := validator.ValidateStruct(user)  // no context
 err := validator.ValidateStruct(user, validator.WithContext(ctx))  // with context
 ```
 
 **Pros**:
+
 - Backward compatible API
 - Context available when needed
 - Simple cases stay simple
 
 **Cons**:
+
 - Inconsistent with Go conventions
 - Optional parameters in Go are awkward
 - Easy to forget context when needed
@@ -79,6 +88,7 @@ ValidateSchema(ctx context.Context, v any, schema Schema) error
 ## Consequences
 
 ### Positive
+
 - **Idiomatic Go**: Follows standard context pattern
 - **Full functionality**: Cancellation, timeouts, values all supported
 - **Tracing**: OpenTelemetry traces can propagate
@@ -86,6 +96,7 @@ ValidateSchema(ctx context.Context, v any, schema Schema) error
 - **Future-proof**: As Go ecosystem evolves, context becomes more essential
 
 ### Negative
+
 - **Breaking change**: Different from all existing validation libraries
 - **Verbosity**: Simple validations need context.Background()
 - **Learning curve**: New developers must understand context

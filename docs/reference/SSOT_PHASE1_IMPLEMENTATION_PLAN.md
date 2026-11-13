@@ -1,4 +1,5 @@
 # Polyrepo SSOT Phase 1 — Implementation Plan
+
 ## Specs Canonicalization (2-Week Sprint)
 
 **Status:** Ready for Execution
@@ -13,6 +14,7 @@
 ## Executive Summary
 
 This plan establishes the **Single Source of Truth (SSOT)** for Phenotype ecosystem specifications through:
+
 - **specs/main** — Authoritative FR/ADR registry with linear history
 - **Auto-merge orchestration** — Concurrent spec branches → specs/main (5-min batches)
 - **FR↔Test traceability gate** — CI validation ensuring 100% coverage
@@ -29,9 +31,11 @@ This plan establishes the **Single Source of Truth (SSOT)** for Phenotype ecosys
 **Goal:** Create authoritative specs/main branch with merge strategy, commit hooks, CI validation.
 
 #### Task 1.1: Branch Protection & Merge Strategy (4h)
+
 **Owner:** DevOps Lead
 
 **Deliverables:**
+
 - [ ] Verify specs/main exists on origin with linear history (no merge commits)
 - [ ] Branch protection rules:
   - Require 1 approval (from specs-admin role)
@@ -44,6 +48,7 @@ This plan establishes the **Single Source of Truth (SSOT)** for Phenotype ecosys
 - [ ] Create `.github/BRANCH_PROTECTION_SPECS_MAIN.yml` documenting rules
 
 **Git Commands:**
+
 ```bash
 # Verify specs/main branch
 git checkout specs/main
@@ -55,6 +60,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ```
 
 **Success Criteria:**
+
 - ✅ specs/main protected on all repos (phenotype-infrakit, AgilePlus, platforms/thegent)
 - ✅ Linear history verified (no merge commits)
 - ✅ CI validation gate configured
@@ -62,11 +68,14 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ---
 
 #### Task 1.2: FR/ADR/PLAN/USER_JOURNEYS Master Registry (6h)
+
 **Owner:** Spec Coordinator
 
 **Deliverables:**
+
 - [ ] Create `/SPECS_REGISTRY.md` at repo root (master index)
 - [ ] Structure:
+
   ```markdown
   # Specs Registry — Single Source of Truth
 
@@ -93,6 +102,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 - [ ] Create `/specs/REGISTRY_SCHEMA.json` — Spec metadata validation schema
+
   ```json
   {
     "$schema": "http://json-schema.org/draft-07/schema#",
@@ -114,6 +124,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 - [ ] Document in `/docs/reference/SPECS_REGISTRY_GUIDE.md` (how to use/maintain)
 
 **Success Criteria:**
+
 - ✅ SPECS_REGISTRY.md exists with all repos listed
 - ✅ Version tracking accurate (cross-checked against HEAD)
 - ✅ Schema validates all existing specs
@@ -122,10 +133,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ---
 
 #### Task 1.3: Commit Message Format & FR Traceability (4h)
+
 **Owner:** QA Lead
 
 **Deliverables:**
+
 - [ ] Create `.commit-template` at repo root
+
   ```
   <type>(<scope>): <subject>
 
@@ -137,11 +151,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 - [ ] Git config (auto-applied in CI):
+
   ```bash
   git config commit.template .commit-template
   ```
 
 - [ ] Create pre-commit hook: `scripts/hooks/validate-spec-traces.sh`
+
   ```bash
   #!/bin/bash
   # Validate that commit message references at least one FR/ADR/PLAN spec
@@ -161,6 +177,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 - [ ] Document in `/docs/reference/COMMIT_MESSAGE_FORMAT.md`
 
 **Success Criteria:**
+
 - ✅ .commit-template enforced on all agent commits
 - ✅ 100% of specs/main commits have Spec-Traces
 - ✅ CI validates traceability (no untraced commits merge)
@@ -168,10 +185,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ---
 
 #### Task 1.4: Pre-Push Validation & CI Gate (6h)
+
 **Owner:** CI Engineer
 
 **Deliverables:**
+
 - [ ] Create `.github/workflows/ssot-validation.yml` (runs on every push to specs/*)
+
   ```yaml
   name: SSOT Validation Gate
 
@@ -234,6 +254,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - `scripts/generate-ssot-report.py` — Create human-readable validation report
 
 - [ ] Hook into pre-push (local validation before remote):
+
   ```bash
   #!/bin/bash
   # .git/hooks/pre-push
@@ -247,6 +268,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ All specs/agent-* PRs require CI validation
 - ✅ No unvalidated commits merge to specs/main
 - ✅ Validation report auto-generated on every push
@@ -257,10 +279,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ### Day 2-3: Agent Commit Hooks & Traceability
 
 #### Task 1.5: Agent Onboarding & Commit Hook Installation (8h)
+
 **Owner:** Agent Lead
 
 **Deliverables:**
+
 - [ ] Create `scripts/agent-setup.sh` — One-time agent setup
+
   ```bash
   #!/bin/bash
   # Agent onboarding: Configure git hooks, commit template, etc.
@@ -297,6 +322,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - How to merge (auto or manual review)
 
 - [ ] Document agent personas & FR mappings:
+
   ```yaml
   agents:
     - name: phenosdk-decomposer
@@ -316,6 +342,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ Agent setup script tested with 3+ agents
 - ✅ All agents have pre-commit + pre-push hooks
 - ✅ First 50 agent commits have valid Spec-Traces
@@ -326,10 +353,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ### Day 4: Auto-Merge Service Architecture
 
 #### Task 1.6: Design Auto-Merge Orchestration Service (8h)
+
 **Owner:** Infrastructure Architect
 
 **Deliverables:**
+
 - [ ] Create `/docs/reference/AUTO_MERGE_SERVICE_ARCHITECTURE.md`
+
   ```
   # Auto-Merge Service Architecture
 
@@ -373,6 +403,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 - [ ] Create batch merge orchestrator skeleton:
+
   ```rust
   // libs/phenotype-batch-merger/src/lib.rs
 
@@ -416,6 +447,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 - [ ] Create GitHub Actions trigger:
+
   ```yaml
   # .github/workflows/auto-merge-specs.yml
 
@@ -444,6 +476,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ Merge orchestrator design documented
 - ✅ Batch processing strategy clear (5-min windows)
 - ✅ Conflict handling strategy defined (GitHub issues)
@@ -454,10 +487,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ### Day 5: Validation Gate & Traceability
 
 #### Task 1.7: FR↔Test Traceability CI Gate (8h)
+
 **Owner:** QA Engineer
 
 **Deliverables:**
+
 - [ ] Create `scripts/validate-fr-test-coverage.py`
+
   ```python
   #!/usr/bin/env python3
   """
@@ -526,12 +562,14 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 - [ ] Integrate into CI workflow:
+
   ```yaml
   - name: Validate FR↔Test coverage
     run: python3 scripts/validate-fr-test-coverage.py
   ```
 
 - [ ] Create traceability matrix generator:
+
   ```python
   # scripts/generate-traceability-matrix.py
   # Output: docs/TRACEABILITY_MATRIX.md
@@ -544,6 +582,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - Validation workflow
 
 **Success Criteria:**
+
 - ✅ All FRs in FUNCTIONAL_REQUIREMENTS.md have ≥1 test
 - ✅ All tests in test suite trace to ≥1 FR
 - ✅ Traceability matrix auto-generated weekly
@@ -556,10 +595,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ### Day 6: Auto-Merge Implementation & Testing
 
 #### Task 2.1: Implement Batch Merge Orchestrator (10h)
+
 **Owner:** Infrastructure Engineer
 
 **Deliverables:**
+
 - [ ] Complete implementation of `libs/phenotype-batch-merger/src/lib.rs`:
+
   ```rust
   pub async fn attempt_merge(
       &self,
@@ -611,6 +653,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - Authentication errors
 
 - [ ] Create GitHub integration:
+
   ```rust
   pub struct GitHubIssueCreator {
       client: reqwest::Client,
@@ -631,6 +674,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 - [ ] Test suite:
+
   ```rust
   #[tokio::test]
   async fn test_merge_no_conflicts() {
@@ -649,6 +693,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ Orchestrator builds cleanly (no warnings)
 - ✅ All 3 test cases pass
 - ✅ Orchestrator handles 100+ concurrent merge attempts
@@ -657,9 +702,11 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ---
 
 #### Task 2.2: Deploy GitHub Actions Workflows (6h)
+
 **Owner:** DevOps Engineer
 
 **Deliverables:**
+
 - [ ] Deploy `.github/workflows/auto-merge-specs.yml` to all repos
   - Schedule: Every 5 minutes
   - Trigger: Push to specs/agent-*
@@ -675,11 +722,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - Block merge if coverage <100%
 
 - [ ] Create GitHub Actions secrets:
+
   ```bash
   gh secret set GH_BOT_TOKEN -b "$(gh auth token)"
   ```
 
 - [ ] Test workflows:
+
   ```bash
   # Trigger manually
   gh workflow run auto-merge-specs.yml
@@ -689,6 +738,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ All 3 workflows deploy successfully
 - ✅ Workflows run automatically on schedule
 - ✅ Manual trigger works (for testing)
@@ -699,9 +749,11 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ### Day 7-8: Agent Onboarding & Documentation
 
 #### Task 2.3: Agent Workflow Standardization (8h)
+
 **Owner:** Spec Coordinator (see separate document)
 
 **Deliverables:**
+
 - [ ] Create `/docs/reference/SSOT_PHASE1_AGENT_WORKFLOW.md`
   - Agent branching pattern
   - Commit message format with examples
@@ -711,6 +763,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - (Full document separate)
 
 - [ ] Create GitHub PR template for agent branches:
+
   ```markdown
   # Agent Spec Reconciliation PR
 
@@ -738,6 +791,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 - [ ] Update AGENT_WORKFLOW.md with examples:
+
   ```bash
   # Example: Agent creates spec branch
   git checkout -b specs/agent-phenosdk-decomposer-fr001
@@ -760,6 +814,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ Agent workflow documented with 5+ examples
 - ✅ All agents onboarded and tested
 - ✅ First 10 spec branches merge successfully
@@ -768,9 +823,11 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ---
 
 #### Task 2.4: Spec Documentation & Training (6h)
+
 **Owner:** Tech Writer
 
 **Deliverables:**
+
 - [ ] Create training guide: `/docs/guides/SSOT_PHASE1_QUICKSTART.md`
   - 5-minute overview of specs/main architecture
   - Common workflows (create branch, commit, merge)
@@ -790,6 +847,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - Upload to team wiki
 
 - [ ] Update CLAUDE.md with SSOT references:
+
   ```markdown
   ## SSOT Phase 1 Governance
 
@@ -803,6 +861,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ Quickstart guide <500 words, <5 min read
 - ✅ All 4 spec types have format examples
 - ✅ Video walkthrough recorded (optional)
@@ -813,9 +872,11 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ### Day 9: Operational Monitoring & Metrics
 
 #### Task 2.5: Deploy SSOT Monitoring & Health Dashboard (8h)
+
 **Owner:** Platform Engineer
 
 **Deliverables:**
+
 - [ ] Create `.github/workflows/ssot-health-check.yml`
   - Runs daily at 9am UTC
   - Checks:
@@ -826,6 +887,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - Output: Health score (42/100 → 65/100 target)
 
 - [ ] Create health score calculation:
+
   ```python
   # scripts/calculate-ssot-health.py
 
@@ -869,6 +931,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
     - Active agent branches
     - Recent issues/conflicts
   - Example:
+
     ```
     # SSOT Health Dashboard (Updated 2026-03-31 09:00 UTC)
 
@@ -893,6 +956,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
     ```
 
 - [ ] Create alerting:
+
   ```yaml
   # .github/workflows/ssot-alerts.yml
 
@@ -919,6 +983,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ Health dashboard auto-updates daily
 - ✅ Health score currently 42/100 (baseline)
 - ✅ Projected 65/100 after Phase 1 complete
@@ -929,10 +994,13 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ### Day 10: Deployment & Final Verification
 
 #### Task 2.6: Deployment to All Repos & Final QA (10h)
+
 **Owner:** Release Manager
 
 **Deliverables:**
+
 - [ ] Deployment checklist:
+
   ```markdown
   # SSOT Phase 1 Deployment Checklist
 
@@ -978,6 +1046,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   - Root cause analysis
 
 - [ ] Create success metrics report:
+
   ```markdown
   # SSOT Phase 1 Success Metrics (Target)
 
@@ -994,6 +1063,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
   ```
 
 **Success Criteria:**
+
 - ✅ All 3 repos deployed and operational
 - ✅ Health score reaches 65/100
 - ✅ No critical issues post-deployment
@@ -1004,6 +1074,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ## Critical Path Analysis
 
 **Longest dependency chain:**
+
 1. Task 1.1 (Branch protection setup) — 4h
 2. Task 1.2 (Registry structure) — 6h
 3. Task 1.3 (Commit messages) — 4h
@@ -1045,6 +1116,7 @@ gh api repos/<REDACTED>/phenotype-infrakit/branches/specs/main/protection \
 ## Next Steps: Phase 2
 
 After Phase 1 completes:
+
 1. **Expand specs completeness** (95/100 → 98/100)
 2. **Cross-repo traceability** (link phenotype-infrakit → heliosCLI → thegent)
 3. **Evidence bundle integration** (tests, Playwright, CI/CD links in specs)

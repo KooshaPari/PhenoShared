@@ -33,6 +33,7 @@ or accepts input — a service, a CLI, a database, a queue, a third-party depend
 network boundary, a CI workflow, even a build artifact.
 
 Example components (adjust to your system):
+
 - Public web frontend
 - Public API
 - Auth service
@@ -103,6 +104,7 @@ This is a real example you can copy and adapt. Below is a partial threat model f
 ## Review cadence
 
 Review the threat model:
+
 - **On every major release** (semver minor)
 - **On any new external dependency** added
 - **On any new public-facing endpoint**

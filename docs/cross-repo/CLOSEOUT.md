@@ -3,6 +3,7 @@
 **Signal date:** 2026-08-10
 **Driver:** forge (agent CLI)
 **Refs:**
+
 - `docs/cross-repo/v0.12-pr-audit-2026-08-10.md` (Task 51)
 - `docs/plans/2026-08-10-v0.11-cross-repo-merge-policy.md` (Task 52)
 - `docs/cross-repo/post-merge-2026-08-10.md` (Task 60)

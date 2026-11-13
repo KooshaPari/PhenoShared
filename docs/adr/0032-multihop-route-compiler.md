@@ -52,17 +52,20 @@ with five components:
 ## Alternatives considered
 
 ### A. Extend existing `compile()` with multi-hop support
+
 Rejected: the existing `compile()` is a single-purpose function tightly
 coupled to `IntentRequirements` hard-filter + soft-scoring. Adding multi-hop
 logic would bloat the function beyond 500 lines and break the single-responsibility
 principle.
 
 ### B. Separate `fabric-multihop` crate
+
 Rejected: the multi-hop compiler operates entirely within `fabric-graph`
 types (`Topology`, `NodeId`, `RoutePlan`, `RouteStep`). A separate crate
 would create a circular dependency or require duplicating model types.
 
 ### C. Graph-theory library (petgraph) for pathfinding
+
 Rejected: BFS on `Topology.nodes` + `Topology.edges` is 20 lines.
 Adding petgraph as a dependency for one BFS is overkill. Custom BFS
 is trivially correct and avoids dependency version conflicts.

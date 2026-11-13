@@ -35,6 +35,7 @@ Without a unification strategy, each format exists in isolation:
 #### Markdown Specifications (Current)
 
 **Format (kitty-spec):**
+
 ```markdown
 ---
 id: kitty-spec-001
@@ -54,12 +55,14 @@ type: feature|bugfix|refactor
 ```
 
 **Strengths:**
+
 - Human-readable
 - Version control friendly
 - Rich formatting options
 - Easy authoring
 
 **Weaknesses:**
+
 - Limited structure enforcement
 - Custom frontmatter schema
 - No standard validation
@@ -69,6 +72,7 @@ type: feature|bugfix|refactor
 #### OpenAPI Specifications
 
 **Format (OpenAPI 3.1):**
+
 ```yaml
 openapi: '3.1.0'
 info:
@@ -81,12 +85,14 @@ paths:
 ```
 
 **Strengths:**
+
 - Industry standard
 - Rich tooling ecosystem
 - Code generation support
 - Validation available
 
 **Weaknesses:**
+
 - YAML/JSON only (less readable)
 - API-focused (not general specs)
 - Verbose for simple cases
@@ -96,6 +102,7 @@ paths:
 #### Architecture Decision Records
 
 **Format (MADR):**
+
 ```markdown
 # ADR-001: Decision Title
 
@@ -113,12 +120,14 @@ Accepted
 ```
 
 **Strengths:**
+
 - Lightweight
 - Clear decision capture
 - Good tool support
 - Time-proven format
 
 **Weaknesses:**
+
 - Limited to decisions
 - No code linkage
 - Manual maintenance
@@ -130,6 +139,7 @@ Accepted
 From analysis of existing documentation and team feedback:
 
 **Functional:**
+
 - FR-001: Support Markdown-based specifications
 - FR-002: Support OpenAPI for API contracts
 - FR-003: Support MADR for architecture decisions
@@ -138,6 +148,7 @@ From analysis of existing documentation and team feedback:
 - FR-006: Consistent metadata extraction
 
 **Non-Functional:**
+
 - NFR-001: Zero overhead for existing formats
 - NFR-002: Don't invent new formats unless necessary
 - NFR-003: Allow format-specific tooling
@@ -150,11 +161,13 @@ From analysis of existing documentation and team feedback:
 **Approach**: Standardize on one format (e.g., Markdown with embedded OpenAPI).
 
 **Pros:**
+
 - Ultimate simplicity
 - Single toolchain
 - Consistent experience
 
 **Cons:**
+
 - Massive migration effort
 - Loses OpenAPI tooling benefits
 - Poor fit for API documentation
@@ -167,11 +180,13 @@ From analysis of existing documentation and team feedback:
 **Approach**: Store in canonical format, convert to others as needed.
 
 **Pros:**
+
 - Single source of truth
 - Flexible output
 - Could support any format
 
 **Cons:**
+
 - Round-trip fidelity concerns
 - Complex conversion logic
 - Loses format-specific features
@@ -184,12 +199,14 @@ From analysis of existing documentation and team feedback:
 **Approach**: Support multiple formats with unified indexing.
 
 **Pros:**
+
 - Zero migration (existing docs remain)
 - Retains format strengths
 - Gradual adoption possible
 - Flexible for future formats
 
 **Cons:**
+
 - More complex registry
 - Format-specific validators needed
 - Potential inconsistency
@@ -270,7 +287,9 @@ interface AuthSession { ... }
 ```
 
 ## Implementation Links
+
 - phenotype-auth-ts: `src/oauth/`
+
 ```
 
 #### OpenAPI Extension Fields
@@ -355,6 +374,7 @@ adrs:
 Enable references between formats:
 
 **From Markdown spec to OpenAPI:**
+
 ```markdown
 ## API Contract
 
@@ -364,6 +384,7 @@ See {{< openapi "auth-api-v1" >}} for embedded API docs.
 ```
 
 **From OpenAPI to spec:**
+
 ```yaml
 paths:
   /oauth/token:
@@ -372,6 +393,7 @@ paths:
 ```
 
 **From ADR to specs:**
+
 ```markdown
 ## Related Specifications
 
@@ -476,6 +498,7 @@ paths:
 This decision enables the registry to work with existing documentation while providing a path for unification. The key insight is that the registry provides the unified interface while allowing format diversity.
 
 Future formats to consider:
+
 - AsyncAPI for event-driven APIs
 - C4 models for architecture diagrams
 - JSON Schema for data models

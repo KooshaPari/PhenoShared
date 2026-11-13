@@ -8,7 +8,7 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 
 ## Sentry Account Setup
 
-- [ ] Sentry account created (free tier at https://sentry.io/)
+- [ ] Sentry account created (free tier at <https://sentry.io/>)
 - [ ] Organization created and verified
 - [ ] Organization slug noted: `_______________`
 - [ ] Organization API token generated (optional): `_______________`
@@ -70,16 +70,19 @@ Use this checklist to verify that all Sentry projects and GitHub secrets are con
 ### Repository Access Verified
 
 **AgilePlus Repository**
+
 - [ ] `https://github.com/KooshaPari/AgilePlus/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_AGILEPLUS` visible in organization secrets
 - [ ] Status shows: "Available"
 
 **phenotype-infrakit Repository**
+
 - [ ] `https://github.com/KooshaPari/phenotype-infrakit/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_INFRAKIT` visible in organization secrets
 - [ ] Status shows: "Available"
 
 **heliosCLI Repository**
+
 - [ ] `https://github.com/KooshaPari/heliosCLI/settings/secrets/actions` opened
 - [ ] `SENTRY_DSN_HELIOSCLI` visible in organization secrets
 - [ ] Status shows: "Available"
@@ -195,6 +198,7 @@ Once this checklist is complete, the next phase will:
 Once complete, notify the team:
 
 **Message Template:**
+
 ```
 ✅ All 3 Sentry projects created and configured:
    - AgilePlus (Project ID: ___________)
@@ -210,4 +214,3 @@ Once complete, notify the team:
 
 Ready for SDK finalization phase.
 ```
-

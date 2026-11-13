@@ -30,6 +30,7 @@ All crates copied (not moved) from `pheno/crates/` to `phenotype-shared/crates/`
 ## Destination Choice
 
 **phenotype-shared** selected because:
+
 - LIB semantics — all 4 crates are generic, reusable infrastructure libraries
 - No domain coupling; each crate is independent
 - Matches phenotype-shared's existing crate collection

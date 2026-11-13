@@ -17,6 +17,7 @@ nanovms provides a unified 3-tier isolation architecture with cross-platform ada
 ## Problem Statement
 
 heliosCLI sandboxing is Linux-only:
+
 - **Limited platform support**: No sandboxing on macOS or Windows
 - **Single tier**: Only Landlock+seccomp, no WASM or microVM options
 - **Manual setup**: Users must configure Landlock/seccomp manually
@@ -79,6 +80,7 @@ heliosCLI sandboxing is Linux-only:
 ### Phase 1: Adapter Trait (heliosCLI)
 
 Define `SandboxExecutor` trait in heliosCLI:
+
 ```rust
 trait SandboxExecutor {
     async fn execute(&self, cmd: Command, tier: Tier) -> Result<Output>;
@@ -90,6 +92,7 @@ trait SandboxExecutor {
 ### Phase 2: nanovms Client Crate
 
 Create `nanovms-client` Rust crate:
+
 - FFI bindings to nanovms Go library
 - gRPC client alternative
 - Async/await support via tokio
@@ -97,6 +100,7 @@ Create `nanovms-client` Rust crate:
 ### Phase 3: Adapter Implementation
 
 Implement `nanovms-sandbox-adapter` crate:
+
 - Implements `SandboxExecutor` trait
 - Maps heliosCLI policies to nanovms tiers
 - Configuration translation

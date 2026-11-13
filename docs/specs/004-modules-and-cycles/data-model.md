@@ -15,6 +15,7 @@
 | updated_at | DateTime\<Utc\> | required | |
 
 **Invariants:**
+
 - `parent_module_id` cannot reference self or any descendant (no cycles in tree)
 - `slug` unique among siblings (same `parent_module_id`)
 - Cannot delete if owns Features or has child Modules
@@ -52,6 +53,7 @@ Draft → Active → Review → Shipped → Archived
 ```
 
 Allowed transitions:
+
 - Draft → Active
 - Active → Review
 - Active → Draft (revert)
@@ -76,6 +78,7 @@ Allowed transitions:
 ### Feature (Modified)
 
 Add field:
+
 | Field | Type | Constraints | Notes |
 |-------|------|-------------|-------|
 | module_id | Option\<i64\> | FK → modules.id | null for unassigned (backward compat) |

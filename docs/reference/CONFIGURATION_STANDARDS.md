@@ -5,6 +5,7 @@ This document defines the standard configuration management approach for all Pyt
 ## Overview
 
 Pydantic Settings provides:
+
 - Type-safe configuration management with automatic validation
 - Environment variable loading with optional `.env` file support
 - Composite settings with inheritance and field validation
@@ -18,7 +19,7 @@ Pydantic Settings provides:
 \`\`\`
 src/
 ├── config/
-│   ├── __init__.py           # Export settings classes
+│   ├── **init**.py           # Export settings classes
 │   ├── base.py               # BaseSettings with common config
 │   ├── core.py               # Core application settings
 │   ├── database.py           # Database-specific settings
@@ -30,6 +31,7 @@ src/
 ### Environment Variables Convention
 
 Use consistent prefixes per project:
+
 - \`THGENT_*\` for thegent project
 - \`AGILEPLUS_*\` for AgilePlus project
 - \`PHENCH_*\` for phench project
@@ -40,7 +42,9 @@ Use consistent prefixes per project:
 ### 1. Base Settings Configuration
 
 \`\`\`python
+
 # src/config/base.py
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator
 from typing import Optional
@@ -81,7 +85,9 @@ class Settings(BaseSettings):
 ### 2. Composite Settings Pattern
 
 \`\`\`python
+
 # src/config/core.py
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, field_validator, ConfigDict
 from typing import Optional
@@ -189,13 +195,16 @@ class AppConfig(BaseSettings):
 ### 1. Never Hardcode Secrets
 
 \`\`\`python
+
 # Good: Use environment variables
+
 class Config(BaseSettings):
     api_key: str = Field(..., description='API key from environment')
 
     model_config = SettingsConfigDict(env_prefix='MYAPP_')
 
 # Bad: Hardcoded secrets
+
 class Config(BaseSettings):
     api_key: str = 'sk-1234567890'  # Don't do this!
 \`\`\`
@@ -203,7 +212,9 @@ class Config(BaseSettings):
 ### 2. Validate Configuration on Startup
 
 \`\`\`python
+
 # Good: Validate during initialization
+
 def startup_config():
     """Validate configuration at startup."""
     settings = get_settings()

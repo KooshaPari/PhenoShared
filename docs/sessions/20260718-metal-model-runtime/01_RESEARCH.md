@@ -2,16 +2,16 @@
 
 ## Primary Sources
 
-- Qwen3-Coder-Next: https://huggingface.co/Qwen/Qwen3-Coder-Next
-- DeepSeek-V3: https://arxiv.org/abs/2412.19437
-- LLaDA: https://arxiv.org/abs/2502.09992
-- Dream: https://arxiv.org/abs/2508.15487
-- Mamba: https://arxiv.org/abs/2312.00752
-- Jamba: https://arxiv.org/abs/2403.19887
-- RWKV: https://arxiv.org/abs/2305.13048
-- MLX custom kernels: https://ml-explore.github.io/mlx/build/html/dev/custom_metal_kernels.html
-- Bonsai model family: https://huggingface.co/microsoft
-- Liquid Foundation Models: https://huggingface.co/LiquidAI
+- Qwen3-Coder-Next: <https://huggingface.co/Qwen/Qwen3-Coder-Next>
+- DeepSeek-V3: <https://arxiv.org/abs/2412.19437>
+- LLaDA: <https://arxiv.org/abs/2502.09992>
+- Dream: <https://arxiv.org/abs/2508.15487>
+- Mamba: <https://arxiv.org/abs/2312.00752>
+- Jamba: <https://arxiv.org/abs/2403.19887>
+- RWKV: <https://arxiv.org/abs/2305.13048>
+- MLX custom kernels: <https://ml-explore.github.io/mlx/build/html/dev/custom_metal_kernels.html>
+- Bonsai model family: <https://huggingface.co/microsoft>
+- Liquid Foundation Models: <https://huggingface.co/LiquidAI>
 
 ## Verified Operator Families
 
@@ -75,10 +75,10 @@ reusing them, including one command queue per GPU; pipeline-state creation is an
 state evaluation. This directly supports the next optimization: cache verified libraries,
 compute pipeline states, and command queues instead of recreating them per binding call.
 
-- Persistent objects: https://developer.apple.com/library/archive/documentation/3DDrawing/Conceptual/MTLBestPracticesGuide/PersistentObjects.html
-- Command structure: https://developer.apple.com/documentation/Metal/setting-up-a-command-structure
+- Persistent objects: <https://developer.apple.com/library/archive/documentation/3DDrawing/Conceptual/MTLBestPracticesGuide/PersistentObjects.html>
+- Command structure: <https://developer.apple.com/documentation/Metal/setting-up-a-command-structure>
 - Metal 4 command queues and reusable argument tables:
-  https://msc-kobol-public-prod.apple.com/documentation/Metal/understanding-the-metal-4-core-api
+  <https://msc-kobol-public-prod.apple.com/documentation/Metal/understanding-the-metal-4-core-api>
 
 The current model-family map should include Qwen3.5/3.6 MoE and Qwen3.5-Omni hybrid
 attention+MoE, DeepSeek MLA+MoE, Kimi Linear/KDA, LFM2 recurrent-convolution hybrids, ZAYA
@@ -86,12 +86,12 @@ compressed-context/top-1 MoE, BitNet/Bonsai ternary, and diffusion families such
 Wan, Qwen-Image, and masked diffusion decoders. Qwen3.5/3.6 share the same Transformers model
 type, while Qwen3.5-Omni uses a hybrid attention MoE for its Thinker/Talker paths.
 
-- Qwen3.5 MoE docs: https://huggingface.co/docs/transformers/main/model_doc/qwen3_5_moe
-- Qwen3.5-Omni report: https://arxiv.org/abs/2604.15804
-- BitNet official repository: https://github.com/microsoft/BitNet
-- BitNet.cpp paper: https://arxiv.org/abs/2502.11880
+- Qwen3.5 MoE docs: <https://huggingface.co/docs/transformers/main/model_doc/qwen3_5_moe>
+- Qwen3.5-Omni report: <https://arxiv.org/abs/2604.15804>
+- BitNet official repository: <https://github.com/microsoft/BitNet>
+- BitNet.cpp paper: <https://arxiv.org/abs/2502.11880>
 - MLX Swift model registry (including Qwen MoE and BitNet entries):
-  https://github.com/ml-explore/mlx-swift-lm/blob/main/skills/mlx-swift-lm/references/supported-models.md
+  <https://github.com/ml-explore/mlx-swift-lm/blob/main/skills/mlx-swift-lm/references/supported-models.md>
 
 Decision: benchmark and optimize shared Metal execution infrastructure before adding another
 family-specific shader. The six-kernel artifact-backed baseline now records median/p95 and exact
@@ -149,6 +149,7 @@ selection, timestep-aware diffusion calibration, and packed ternary/W4A8 kernels
 - [MoE-Lens](https://huggingface.co/papers/2504.09345) and [SliceMoE](https://doi.org/10.18653/v1/2025.emnlp-main.807)
   motivate capacity-aware routing, expert-load histograms, and slice-level grouped-GEMM metrics;
   the existing MoE artifacts should add those measurements before model promotion.
+
 ### Qwen3.5 native MLX Metal path (2026-07-23)
 
 The installed `mlx-lm` Qwen3.5 implementation (`models/qwen3_5.py`) routes linear
@@ -169,6 +170,7 @@ failed upstream Metal compilation because its `Dk / 32` tile count becomes zero;
 kernel selection must enforce `Dk >= 32` (Qwen3.5 production dimensions satisfy this).
 Against MLX's compiled ops reference on the same tensors, the native kernel measured
 `max_abs_error=5.72e-6` and `state_max_abs_error=0.0` across eight recurrent tokens.
+
 ### 2026-07-23 — Qwen3.5 gated-delta replacement
 
 The isolated MLX-LM 0.31.2 runtime exposes `mlx_lm.models.gated_delta.gated_delta_kernel` as a
@@ -189,8 +191,8 @@ API reports exactly 8192 prompt tokens. Live Apple Container evidence is recorde
 `artifacts/harbor-qwen35-20260727-8192.json`: reward 1.0, exact needle match, no errors or
 retries, and `context_tokens_exact=true`.
 
-References: https://github.com/QwenLM/Qwen3/blob/main/docs/source/deployment/vllm.md and
-https://huggingface.co/Qwen/Qwen3.5-35B-A3B-GPTQ-Int4.
+References: <https://github.com/QwenLM/Qwen3/blob/main/docs/source/deployment/vllm.md> and
+<https://huggingface.co/Qwen/Qwen3.5-35B-A3B-GPTQ-Int4>.
 
 ### 2026-07-28 - MoE, ternary, and non-Qwen reference gap matrix
 
@@ -218,9 +220,9 @@ DeepSeek's official V2 implementation and FlashInfer's MLA API both treat latent
 attention as a distinct path rather than dense GQA. The hardware-centric MLA study further
 motivates minimizing cache traversals and keeping latent/RoPE dimensions explicit:
 
-- https://github.com/deepseek-ai/DeepSeek-V2
-- https://docs.flashinfer.ai/api/attention.html
-- https://arxiv.org/abs/2506.02523
+- <https://github.com/deepseek-ai/DeepSeek-V2>
+- <https://docs.flashinfer.ai/api/attention.html>
+- <https://arxiv.org/abs/2506.02523>
 
 The MLA Metal shader now uses a numerically stable online log-sum-exp recurrence. It computes
 each cache-entry score once, updates the running maximum/norm, and accumulates values in the
@@ -277,14 +279,14 @@ fallback/rollback counts. A governor must cap concurrency, queue depth, context 
 retry count before any live experiment.
 
 Primary references: MLX-LM model loading and prompt-cache guidance
-(https://github.com/ml-explore/mlx-lm), Apple Metal compute/resource synchronization
-(https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/ and
-https://developer.apple.com/documentation/metal/resource-synchronization), Harbor's eval
-and adapter contracts (https://www.harborframework.com/docs/run-jobs/run-evals and
-https://www.harborframework.com/docs/datasets/adapters), BitNet b1.58
-(https://arxiv.org/abs/2402.17764), KVQuant (https://arxiv.org/abs/2401.18079), TurboQuant
-(https://arxiv.org/abs/2504.19874), and LLaDA diffusion language modeling
-(https://arxiv.org/abs/2502.09992). These references guide experiments only; acceptance
+(<https://github.com/ml-explore/mlx-lm>), Apple Metal compute/resource synchronization
+(<https://developer.apple.com/documentation/metal/mtlcomputecommandencoder/> and
+<https://developer.apple.com/documentation/metal/resource-synchronization>), Harbor's eval
+and adapter contracts (<https://www.harborframework.com/docs/run-jobs/run-evals> and
+<https://www.harborframework.com/docs/datasets/adapters>), BitNet b1.58
+(<https://arxiv.org/abs/2402.17764>), KVQuant (<https://arxiv.org/abs/2401.18079>), TurboQuant
+(<https://arxiv.org/abs/2504.19874>), and LLaDA diffusion language modeling
+(<https://arxiv.org/abs/2502.09992>). These references guide experiments only; acceptance
 remains tied to the exact local Qwen3.5 snapshot and immutable Harbor/Portage evidence.
 
 ### 2026-07-31 - VRAM note: tiered state and Qwen3.5 serving boundaries

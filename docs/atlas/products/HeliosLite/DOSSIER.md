@@ -27,8 +27,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Latest-release absence in older audit is a revalidation item, not permanent status
 - Connection stability must not conceal stale or unsafe state
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

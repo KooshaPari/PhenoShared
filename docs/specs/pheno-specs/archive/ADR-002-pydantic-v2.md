@@ -7,12 +7,14 @@
 ## Context
 
 PhenoSDK requires robust data validation across multiple domains:
+
 - OAuth token responses (varying provider schemas)
 - Credential data (sensitive, structured)
 - MCP protocol messages (JSON-RPC with specific schema)
 - Configuration objects (hierarchical, typed)
 
 Data validation options in Python:
+
 1. **Dataclasses**: Standard library, no validation
 2. **Pydantic v1**: Mature, well-known, slower performance
 3. **Pydantic v2**: Rewritten in Rust, 5-50x faster, new API
@@ -243,11 +245,13 @@ class CredentialData(BaseModel):
 ### Alternative 1: Pydantic v1
 
 **Pros:**
+
 - Mature, widely used
 - Python 3.8+ support
 - Familiar API
 
 **Cons:**
+
 - 5-50x slower than v2
 - Slower JSON serialization
 - Legacy maintenance mode
@@ -257,11 +261,13 @@ class CredentialData(BaseModel):
 ### Alternative 2: Dataclasses + Manual Validation
 
 **Pros:**
+
 - Standard library only
 - No dependencies
 - Full control
 
 **Cons:**
+
 - Boilerplate-heavy
 - Inconsistent validation patterns
 - No serialization helpers
@@ -272,11 +278,13 @@ class CredentialData(BaseModel):
 ### Alternative 3: attrs
 
 **Pros:**
+
 - Flexible
 - Good performance
 - Mature ecosystem
 
 **Cons:**
+
 - Requires additional validation libraries
 - More verbose than Pydantic
 - Less ecosystem integration

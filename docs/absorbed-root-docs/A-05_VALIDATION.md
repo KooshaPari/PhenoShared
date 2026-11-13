@@ -16,4 +16,5 @@
 | Git commit | ✅ |
 
 ## Git SHA
+
 `1fb03fb` — A-05: fix build.rs link chain for nvms-ffi -> nanovms-core

@@ -50,9 +50,11 @@ This work package exposes the core publication and promotion workflows through t
 ## Subtasks & Detailed Guidance
 
 ### Subtask T038 – Publish Command Implementation
+
 - **Purpose**: Create the `pheno publish` command to build and publish a single package or workspace to its configured registry
 - **Steps**:
   1. Create `cmd/publish.go` with Cobra command definition:
+
      ```go
      var publishCmd = &cobra.Command{
          Use:   "publish [flags]",
@@ -68,6 +70,7 @@ This work package exposes the core publication and promotion workflows through t
          rootCmd.AddCommand(publishCmd)
      }
      ```
+
   2. Implement `runPublish` function flow:
      - Detect current working directory or use `--repo` flag
      - Call package discovery (from WP01/WP05)
@@ -91,9 +94,11 @@ This work package exposes the core publication and promotion workflows through t
 - **Notes**: Reuse adapter interface from WP02; handle case where multiple manifests exist in same dir (warn and use priority); ensure dry-run still performs all validation and build steps
 
 ### Subtask T039 – Promote Command Implementation
+
 - **Purpose**: Create the `pheno promote` command to validate channel transition, run gate evaluation, and publish on gate pass
 - **Steps**:
   1. Create `cmd/promote.go` with Cobra command definition:
+
      ```go
      var promoteCmd = &cobra.Command{
          Use:   "promote <channel> [flags]",
@@ -110,6 +115,7 @@ This work package exposes the core publication and promotion workflows through t
          rootCmd.AddCommand(promoteCmd)
      }
      ```
+
   2. Implement `runPromote` function flow:
      - Parse target channel argument (alpha/canary/beta/rc/prod)
      - Load current channel from package metadata or config
@@ -133,10 +139,12 @@ This work package exposes the core publication and promotion workflows through t
 - **Notes**: Reuse gate evaluator from WP06; handle channel detection (ask user if ambiguous); ensure dry-run still validates gates fully
 
 ### Subtask T040 – Workspace Publishing Orchestration
+
 - **Purpose**: Implement topological dependency resolution and parallel publishing for independent packages in a workspace
 - **Steps**:
   1. Create `internal/publish/orchestrator.go`
   2. Implement topological sort to order packages by dependencies:
+
      ```go
      type PublishOrder struct {
          Phases [][]Package  // Each phase is a list of packages to publish in parallel
@@ -148,7 +156,9 @@ This work package exposes the core publication and promotion workflows through t
          // Example: [pkg_a], [pkg_b, pkg_c] means publish A first, then B and C together
      }
      ```
+
   3. Implement parallel publishing within a phase:
+
      ```go
      func PublishPhase(ctx context.Context, packages []Package, adapter registry.Adapter) error {
          var wg sync.WaitGroup
@@ -177,6 +187,7 @@ This work package exposes the core publication and promotion workflows through t
          return nil
      }
      ```
+
   4. Implement verification step between phases:
      - After each phase, verify all published packages exist in registry
      - If any verification fails, halt and error (don't proceed to next phase)
@@ -191,10 +202,12 @@ This work package exposes the core publication and promotion workflows through t
 - **Notes**: Use Go's `sync.WaitGroup` for parallel publishing; ensure context cancellation propagates to all goroutines; handle partial phase failure gracefully
 
 ### Subtask T041 – Lipgloss Output & Progress Indicators
+
 - **Purpose**: Implement human-friendly Lipgloss progress spinners and result tables for publish and promote commands
 - **Steps**:
   1. Create `internal/ui/progress.go` for Lipgloss components
   2. Implement spinner component using `bubbles/spinner`:
+
      ```go
      import "github.com/charmbracelet/bubbles/spinner"
 
@@ -214,7 +227,9 @@ This work package exposes the core publication and promotion workflows through t
          return ps.spinner.View() + " " + ps.message
      }
      ```
+
   3. Implement Lipgloss table for gate results (builds on WP06 reporter):
+
      ```go
      func FormatGateResultsTable(report *gate.PromotionReport) string {
          t := table.New()
@@ -223,18 +238,23 @@ This work package exposes the core publication and promotion workflows through t
          // Include summary row at end
      }
      ```
+
   4. Implement publish progress bar:
+
      ```go
      func FormatPublishProgress(current, total int, pkgName string) string {
          // Show "Publishing [###---] pkg_a (2/5)"
      }
      ```
+
   5. Implement summary box showing overall results:
+
      ```go
      func FormatSummary(published []Package, failed []Package, duration time.Duration) string {
          // Box style with checkmark/X counts and duration
      }
      ```
+
   6. Ensure all output is ANSI color-safe and readable in both light/dark terminals
   7. Add quiet mode (only success/error, no spinners)
 
@@ -243,9 +263,11 @@ This work package exposes the core publication and promotion workflows through t
 - **Notes**: Use Lipgloss color palette consistently (green=#2d7d4d, red=#d74242, yellow=#c9ab47); test output on different terminal widths; ensure spinner doesn't break in CI/non-TTY environments
 
 ### Subtask T042 – Viper Configuration System
+
 - **Purpose**: Implement global and per-repo configuration with environment variable overrides
 - **Steps**:
   1. Create `internal/config/config.go` to initialize Viper:
+
      ```go
      func InitConfig() error {
          viper.SetConfigName("config")
@@ -264,7 +286,9 @@ This work package exposes the core publication and promotion workflows through t
          return viper.ReadInConfig()  // Errors on missing file are acceptable
      }
      ```
+
   2. Define global config structure in `~/.config/pheno/config.toml`:
+
      ```toml
      repos_dir = "/path/to/repos"
      default_risk_profile = "low"
@@ -274,12 +298,15 @@ This work package exposes the core publication and promotion workflows through t
      pypi_token = ""
      crates_token = ""
      ```
+
   3. Define per-repo config in `.pheno.toml` at package root:
+
      ```toml
      language = "go"  # Override auto-detection
      risk_profile = "medium"
      registry = "custom-npm.example.com"
      ```
+
   4. Implement precedence: env vars > local `.pheno.toml` > global `~/.config/pheno/config.toml` > defaults
   5. Support env var loading for sensitive values:
      - `PHENO_NPM_TOKEN` → npm credentials
@@ -294,9 +321,11 @@ This work package exposes the core publication and promotion workflows through t
 - **Notes**: Don't log sensitive values; use Viper's feature to read from env with SetEnvKeyReplacer; test config loading from both global and local files; ensure TOML format is valid and human-readable
 
 ### Subtask T043 – Integration Tests
+
 - **Purpose**: End-to-end tests covering full publish and promote workflows with mocked adapters
 - **Steps**:
   1. Create `cmd/publish_test.go` for publish command integration tests:
+
      ```go
      func TestPublishSinglePackage(t *testing.T) {
          // Setup: create temp dir with package.json
@@ -322,7 +351,9 @@ This work package exposes the core publication and promotion workflows through t
          // Assert: "would publish" message shown
      }
      ```
+
   2. Create `cmd/promote_test.go` for promote command integration tests:
+
      ```go
      func TestPromoteWithGatePass(t *testing.T) {
          // Setup: package at alpha, gate.Evaluate mocked to return pass
@@ -355,7 +386,9 @@ This work package exposes the core publication and promotion workflows through t
          // Assert: publish.Publish NOT called
      }
      ```
+
   3. Create `internal/publish/orchestrator_test.go`:
+
      ```go
      func TestComputePublishOrder(t *testing.T) {
          // Test topological sort
@@ -363,6 +396,7 @@ This work package exposes the core publication and promotion workflows through t
          // Test parallel independence
      }
      ```
+
   4. Use test helpers to:
      - Create temporary workspaces with manifests
      - Mock registry adapters with predictable responses

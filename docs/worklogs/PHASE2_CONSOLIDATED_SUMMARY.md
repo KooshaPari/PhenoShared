@@ -46,12 +46,15 @@ This document summarizes Phase 2 planning and execution guidance. **5 companion 
 ## Executive Summary: Phase 2 at a Glance
 
 ### The Goal
+
 Consolidate fragmented libraries and standardize OSS patterns across 3 repositories:
+
 - **Python HTTPX** (platforms/thegent)
 - **Python Pydantic** (phenotype ecosystem)
 - **Rust TOML Config** (phenotype-infrakit + AgilePlus)
 
 ### The Numbers
+
 | Metric | Target | Status |
 |--------|--------|--------|
 | **Total LOC Reduction** | ~1,230 | READY |
@@ -105,6 +108,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 ### Decision 1: Parallel Execution over Sequential
 
 **Rationale**: WS4, WS5, WS6 have zero dependencies on each other
+
 - Different languages (Python, Rust)
 - Different repos (thegent, phenotype-infrakit)
 - Can start simultaneously and run to completion
@@ -115,6 +119,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 ### Decision 2: Batch A Fast-Track (Foundation First)
 
 **Rationale**: WS5 (docs) and WS6 crate creation have no blocking dependencies
+
 - Both can be done in first 2.5 hours
 - Clears path for WS6 project migrations
 - WS5 is low-risk (docs only)
@@ -127,6 +132,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 **Applied to**: Both WS4 and WS6 (medium-risk work streams)
 
 **Strategy**:
+
 - Comprehensive benchmarking before/after (performance validation)
 - Full test suite running at multiple checkpoints
 - Clear rollback procedures (documented in PHASE2_SUCCESS_CRITERIA.md)
@@ -139,6 +145,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 **Applied to**: Any deprecated code (part of WS4 cleanup)
 
 **Strategy**: Use `.archive/` directories instead of deletion
+
 - Preserves git history
 - Allows rollback if needed
 - Non-destructive per global CLAUDE.md guidance
@@ -150,11 +157,13 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 **Applied to**: All 3 work streams
 
 **Deliverables**:
+
 - WS4: `HTTP_CLIENT_PATTERNS.md` + `POL-HTTP-001.md` (policy)
 - WS5: `PYDANTIC_SETTINGS_PATTERNS.md`
 - WS6: `CONFIG_LOADER_PATTERNS.md`
 
 **Purpose**: Future-proof consolidations and standardize across org
+
 - New developers onboard faster
 - Policies enforced consistently
 - Patterns become team baseline
@@ -166,33 +175,43 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 ## Critical Success Factors
 
 ### 1. **Clear Work Breakdown**
+
 ✅ Done: 12+ detailed work packages with explicit tasks
+
 - Each task has estimated duration
 - Each task has defined output (code, tests, docs)
 - Success criteria clear and measurable
 
 ### 2. **Dependency Clarity**
+
 ✅ Done: Full DAG showing zero cross-WS dependencies
+
 - WS4, WS5, WS6 can start immediately
 - All within-WS dependencies documented (Batches A→E)
 - No circular dependencies
 
 ### 3. **Risk Mitigation**
+
 ✅ Done: Matrix of risks with mitigation for each
+
 - Performance regression → benchmark before/after
 - API incompatibility → static analysis + test
 - Merge conflicts → frequent rebasing
 - Incomplete migration → systematic find/replace with verification
 
 ### 4. **Team Alignment**
+
 ✅ Done: Clear agent assignments with role definitions
+
 - Agent 1 = WS4 (Python HTTPX)
 - Agent 2 = WS6 (Rust TOML)
 - Agent 3 = WS5 + Integration
 - Optional Agent 4 = acceleration support
 
 ### 5. **Verification & Sign-Off**
+
 ✅ Done: Detailed checklist with verification commands
+
 - Per-work-stream criteria (detailed, measurable)
 - Integration criteria (cross-repo validation)
 - Sign-off template (copy/paste ready)
@@ -203,6 +222,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 ## How to Use These Documents
 
 ### For Team Lead
+
 1. Read this document (5 min)
 2. Assign agents using team structure in PHASE2_EXECUTION_DAG.md
 3. Share PHASE2_QUICK_START.md with all agents
@@ -210,6 +230,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 5. Reference PHASE2_MASTER_ROADMAP.md for detailed task info
 
 ### For Agent 1 (WS4 Lead)
+
 1. Read PHASE2_QUICK_START.md (5 min)
 2. Read "WS4 Details" section in PHASE2_MASTER_ROADMAP.md (20 min)
 3. Create wip/phase2-ws4 branch
@@ -217,6 +238,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 5. Use PHASE2_SUCCESS_CRITERIA.md "WS4" section for verification
 
 ### For Agent 2 (WS6 Lead)
+
 1. Read PHASE2_QUICK_START.md (5 min)
 2. Read "WS6 Details" section in PHASE2_MASTER_ROADMAP.md (20 min)
 3. Create wip/phase2-ws6 branch
@@ -224,6 +246,7 @@ Total: ~24-26 hours wall-clock (with 3+ agents in parallel)
 5. Use PHASE2_SUCCESS_CRITERIA.md "WS6" section for verification
 
 ### For Agent 3 (WS5 + Integration)
+
 1. Read PHASE2_QUICK_START.md (5 min)
 2. Read "WS5 Details" in PHASE2_MASTER_ROADMAP.md (10 min)
 3. Create wip/phase2-ws5 branch (docs only)
@@ -263,12 +286,14 @@ Total: 26 hours wall-clock (3 days with ~8-9 hour/day agent work)
 ## What Happens After Phase 2
 
 ### Immediate (Upon Merge to Main)
+
 1. All feature branches merged to main
 2. Tests re-run in main branch
 3. Metrics verified in production state
 4. PHASE2_COMPLETION_REPORT.md generated
 
 ### Short-term (1-2 weeks)
+
 1. **Phase 3 kicks off**: AgilePlus file decomposition
    - routes.rs: 2,631 → 431 LOC
    - sqlite/lib.rs: 1,582 → 632 LOC
@@ -281,6 +306,7 @@ Total: 26 hours wall-clock (3 days with ~8-9 hour/day agent work)
    - Best practices for Phase 3+
 
 ### Medium-term (Next sprint)
+
 1. **Phase 4 consideration**: Additional decomposition if phase 3 succeeds
 2. **Cross-org reuse patterns**: Document shared consolidation patterns
 3. **Training**: Team onboarding on new consolidated modules
@@ -290,12 +316,14 @@ Total: 26 hours wall-clock (3 days with ~8-9 hour/day agent work)
 ## Success Metrics You'll Track
 
 ### During Execution (Daily)
+
 - ✅ Tasks completed (count against WBS)
 - ✅ Tests passing (% of suite)
 - ✅ Linter clean (warnings count)
 - ✅ Blockers identified and mitigated
 
 ### Upon Completion (Batch E)
+
 - ✅ LOC reduction verified (WS4: 180-240, WS6: 500+, WS5: +45-90)
 - ✅ All tests passing (100% of suite)
 - ✅ Zero compiler warnings
@@ -304,6 +332,7 @@ Total: 26 hours wall-clock (3 days with ~8-9 hour/day agent work)
 - ✅ Commits clean and well-described
 
 ### After Merge (Phase 2 sign-off)
+
 - ✅ metrics in main verified
 - ✅ All pattern guides active and referenced
 - ✅ Team trained on new consolidated modules
@@ -340,24 +369,28 @@ docs/worklogs/
 **Before you start, verify:**
 
 ### Planning Documents
+
 - ☑ PHASE2_MASTER_ROADMAP.md created ✅
 - ☑ PHASE2_EXECUTION_DAG.md created ✅
 - ☑ PHASE2_SUCCESS_CRITERIA.md created ✅
 - ☑ PHASE2_QUICK_START.md created ✅
 
 ### Team & Infrastructure
+
 - ☑ Agents assigned (names/roles filled in)
 - ☑ Feature branches created (wip/phase2-ws{4,5,6})
 - ☑ Standup time scheduled (daily, 10 min)
 - ☑ Communication channels set up (Slack/email for blockers)
 
 ### Knowledge & Readiness
+
 - ☑ All agents read PHASE2_QUICK_START.md
 - ☑ Team lead read PHASE2_MASTER_ROADMAP.md
 - ☑ Agents understand their WS in detail
 - ☑ Success criteria understood by all
 
 ### Tooling & Environment
+
 - ☑ Python linters installed (pylint, flake8)
 - ☑ Rust tools ready (cargo, clippy)
 - ☑ Test runners available (pytest, cargo test)
@@ -384,6 +417,7 @@ Phase 2 is the **foundation** for Phase 3 (file decomposition), Phase 4 (cross-r
 ### You've Got This
 
 This is a **well-planned, low-risk initiative** with:
+
 - ✅ Clear scope (3 work streams)
 - ✅ Detailed task breakdown (12+ packages)
 - ✅ Risk mitigation for all concerns
@@ -419,4 +453,3 @@ This is a **well-planned, low-risk initiative** with:
 *Status: READY FOR EXECUTION*
 *All 5 companion documents complete and comprehensive*
 *Total documentation: ~2,000 lines across all guides*
-

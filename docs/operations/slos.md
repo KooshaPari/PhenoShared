@@ -111,6 +111,7 @@ OmniRoute is the reference repo for OB4 (OB4=2). It has SLOs in its docs and a p
 ## How to validate
 
 After applying:
+
 1. `grep -r "slos\|SLO" docs/` — should find the new file
 2. `grep "slos\|SLO" README.md` — should find a reference
 3. The table has at least 3 rows (one per SLI category: availability, latency, error rate)

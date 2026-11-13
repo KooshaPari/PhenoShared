@@ -24,6 +24,7 @@
 **38 Rust crates** in `crates/` (thegent-atom, thegent-benchmark, thegent-cache, thegent-crypto, thegent-discovery, thegent-docs, thegent-dspy, thegent-fs, thegent-git, thegent-hooks, thegent-jsonl, thegent-maif, thegent-memory, thegent-metrics, **thegent-nvms**, thegent-offload, thegent-parser, thegent-path-resolve, thegent-plugin-host, thegent-policy, thegent-resources, thegent-router, thegent-runtime, thegen-tbash, …).
 
 **Subdirectories** (selected):
+
 - `agents/` — agent definitions
 - `agileplus/` — embedded AgilePlus (canonical spine)
 - `apps/` — applications

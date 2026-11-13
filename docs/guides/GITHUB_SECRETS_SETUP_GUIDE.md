@@ -5,6 +5,7 @@ Step-by-step walkthrough for configuring organization-level GitHub secrets for S
 **Estimated Time:** 10 minutes
 
 **What You'll Create:**
+
 - 3 GitHub organization secrets
 - Each secret is scoped to its respective repository
 - All secrets are accessible from GitHub Actions workflows
@@ -34,6 +35,7 @@ Step-by-step walkthrough for configuring organization-level GitHub secrets for S
 ### Secret Scope
 
 Each secret is assigned to specific repositories:
+
 - `SENTRY_DSN_AGILEPLUS` → accessible from `AgilePlus` repo
 - `SENTRY_DSN_INFRAKIT` → accessible from `phenotype-infrakit` repo
 - `SENTRY_DSN_HELIOSCLI` → accessible from `heliosCLI` repo
@@ -59,7 +61,7 @@ Before starting, verify you're in the right place:
 
 #### Step 1: Click "New organization secret"
 
-1. Go to: https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions
+1. Go to: <https://github.com/organizations/&lt;REDACTED&gt;/settings/secrets/actions>
 2. Click **"New organization secret"** (green button, top right)
 
 #### Step 2: Fill in Secret Details
@@ -67,17 +69,20 @@ Before starting, verify you're in the right place:
 You'll see a form with 3 fields:
 
 **Field 1: Name**
+
 ```
 Name: SENTRY_DSN_AGILEPLUS
 ```
 
 **Field 2: Secret value**
+
 ```
 Paste the full DSN from Sentry:
 https://your-key@sentry.io/your-project-id
 ```
 
 Example:
+
 ```
 https://abc123def456@sentry.io/9876543210
 ```
@@ -87,6 +92,7 @@ https://abc123def456@sentry.io/9876543210
 Select: **"Selected repositories"** (radio button)
 
 Then click **"Add repositories"** and search for:
+
 ```
 AgilePlus
 ```
@@ -98,6 +104,7 @@ Select `<REDACTED>/AgilePlus` from the dropdown.
 Click **"Add secret"** (green button at bottom)
 
 **Confirmation:** You should be redirected to the Secrets list and see:
+
 ```
 SENTRY_DSN_AGILEPLUS — Updated X seconds ago
 ```
@@ -113,17 +120,20 @@ SENTRY_DSN_AGILEPLUS — Updated X seconds ago
 #### Step 2: Fill in Secret Details
 
 **Field 1: Name**
+
 ```
 Name: SENTRY_DSN_INFRAKIT
 ```
 
 **Field 2: Secret value**
+
 ```
 Paste the full DSN from Sentry:
 https://your-key@sentry.io/your-project-id
 ```
 
 Example:
+
 ```
 https://def456ghi789@sentry.io/9876543211
 ```
@@ -133,6 +143,7 @@ https://def456ghi789@sentry.io/9876543211
 Select: **"Selected repositories"**
 
 Click **"Add repositories"** and search for:
+
 ```
 phenotype-infrakit
 ```
@@ -144,6 +155,7 @@ Select `<REDACTED>/phenotype-infrakit` from the dropdown.
 Click **"Add secret"**
 
 **Confirmation:**
+
 ```
 SENTRY_DSN_INFRAKIT — Updated X seconds ago
 ```
@@ -159,17 +171,20 @@ SENTRY_DSN_INFRAKIT — Updated X seconds ago
 #### Step 2: Fill in Secret Details
 
 **Field 1: Name**
+
 ```
 Name: SENTRY_DSN_HELIOSCLI
 ```
 
 **Field 2: Secret value**
+
 ```
 Paste the full DSN from Sentry:
 https://your-key@sentry.io/your-project-id
 ```
 
 Example:
+
 ```
 https://ghi789jkl012@sentry.io/9876543212
 ```
@@ -179,6 +194,7 @@ https://ghi789jkl012@sentry.io/9876543212
 Select: **"Selected repositories"**
 
 Click **"Add repositories"** and search for:
+
 ```
 heliosCLI
 ```
@@ -190,6 +206,7 @@ Select `<REDACTED>/heliosCLI` from the dropdown.
 Click **"Add secret"**
 
 **Confirmation:**
+
 ```
 SENTRY_DSN_HELIOSCLI — Updated X seconds ago
 ```
@@ -202,44 +219,50 @@ After creating all 3 secrets, verify they're accessible from each repository.
 
 ### Verify from AgilePlus Repository
 
-1. Go to: https://github.com/KooshaPari/AgilePlus
+1. Go to: <https://github.com/KooshaPari/AgilePlus>
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
+
    ```
    ✓ SENTRY_DSN_AGILEPLUS — Available
    ```
 
 If not visible:
+
 - The secret may not have been assigned to this repo
 - Go back to Org Settings and re-edit the secret
 - Add `AgilePlus` to the repository list
 
 ### Verify from phenotype-infrakit Repository
 
-1. Go to: https://github.com/KooshaPari/phenotype-infrakit
+1. Go to: <https://github.com/KooshaPari/phenotype-infrakit>
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
+
    ```
    ✓ SENTRY_DSN_INFRAKIT — Available
    ```
 
 If not visible:
+
 - Go back to Org Settings and re-edit the secret
 - Add `phenotype-infrakit` to the repository list
 
 ### Verify from heliosCLI Repository
 
-1. Go to: https://github.com/KooshaPari/heliosCLI
+1. Go to: <https://github.com/KooshaPari/heliosCLI>
 2. Click **Settings** (top navigation)
 3. Click **Secrets and variables** → **Actions** (left sidebar)
 4. Under **"Organization secrets"** section, you should see:
+
    ```
    ✓ SENTRY_DSN_HELIOSCLI — Available
    ```
 
 If not visible:
+
 - Go back to Org Settings and re-edit the secret
 - Add `heliosCLI` to the repository list
 
@@ -280,11 +303,13 @@ The `$&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS &#125;&#125;` will be replaced w
 ### Problem: "Repository not found" when adding repo to secret
 
 **Possible Causes:**
+
 1. Repository name is misspelled
 2. You don't have admin access to the organization
 3. The repository doesn't exist yet
 
 **Solution:**
+
 1. Double-check the repository name in the GitHub URL
 2. Make sure you're logged in with an account that has admin access
 3. Verify the repository exists at `https://github.com/KooshaPari/{repo-name}`
@@ -292,11 +317,13 @@ The `$&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS &#125;&#125;` will be replaced w
 ### Problem: Secret not visible in repository settings
 
 **Possible Causes:**
+
 1. Secret was created at repository level (not organization level)
 2. Repository wasn't added to the secret access list
 3. Repository name in the access list is incorrect
 
 **Solution:**
+
 1. Go back to **Organization Settings** (not repository settings)
 2. Edit the secret and verify the repository is in the access list
 3. Check for typos in the repository name
@@ -304,11 +331,13 @@ The `$&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS &#125;&#125;` will be replaced w
 ### Problem: Workflow can't access the secret
 
 **Possible Causes:**
+
 1. Secret name is wrong (case-sensitive)
 2. Repository isn't in the secret's access list
 3. Workflow is using the wrong syntax
 
 **Solution:**
+
 1. Verify the secret name matches exactly: `SENTRY_DSN_AGILEPLUS` (not `sentry_dsn_agileplus`)
 2. Go to Org Settings and confirm the repository is in the access list
 3. Use correct syntax in workflow: `$&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS &#125;&#125;`
@@ -316,10 +345,12 @@ The `$&#123;&#123; secrets.SENTRY_DSN_AGILEPLUS &#125;&#125;` will be replaced w
 ### Problem: "Insufficient permissions" error
 
 **Possible Causes:**
+
 1. Your GitHub account doesn't have admin/maintain role in the organization
 2. Organization has additional security policies
 
 **Solution:**
+
 1. Ask organization owner to confirm your role
 2. Request admin or "Maintain" access if needed
 3. Check organization security settings
@@ -366,4 +397,3 @@ Once all secrets are configured and verified:
 2. **CI/CD Integration:** GitHub Actions workflows will automatically access secrets
 3. **SDK Installation:** Next phase will integrate the Sentry SDK into each project
 4. **Testing:** Send test errors to verify Sentry is capturing data
-

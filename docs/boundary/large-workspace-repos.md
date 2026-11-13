@@ -29,7 +29,7 @@ from the spine.
 
 ## PhenoRuntime — `crates/` member list (13 crates)
 
-**Source**: https://github.com/KooshaPari/PhenoRuntime
+**Source**: <https://github.com/KooshaPari/PhenoRuntime>
 **Audit size**: 1.3M total, 14 source files (cross-crate)
 **Binary entry point**: `src/main.rs` (the `pheno-runtime` daemon)
 
@@ -53,7 +53,7 @@ from the spine.
 workspace. Likely partial duplicates.
 
 **Triangulation hint**: If a future need arises for a unified substrate
-runtime, the eyetracker-* crates are the most distinct (no equivalent in
+runtime, the eyetracker-*crates are the most distinct (no equivalent in
 pheno workspace); the pheno-* / phenotype-* crates should be flagged for
 de-duplication rather than absorption.
 
@@ -61,7 +61,7 @@ de-duplication rather than absorption.
 
 ## HexaKit — `crates/` member list (38 crates, subset)
 
-**Source**: https://github.com/KooshaPari/HexaKit
+**Source**: <https://github.com/KooshaPari/HexaKit>
 **Audit size**: 1.5G total, 176 source files
 **Confirmed overlap with `pheno` workspace** (partial duplicates expected):
 `phenotype-error-core`, `phenotype-contracts`, `phenotype-crypto`,
@@ -69,6 +69,7 @@ de-duplication rather than absorption.
 `phenotype-async-traits`, `phenotype-logging`, `phenotype-cache-adapter-stub`
 
 Selected HexaKit members (38 total — see `find . -name Cargo.toml` for full list):
+
 - `cipher` — likely crypto wrapper
 - `hexakit-cli` — CLI binary
 - `phenotype-analytics`, `phenotype-bdd`, `phenotype-cache-adapter-stub`
@@ -94,7 +95,7 @@ Suggested as a separate "Pheno vs HexaKit de-duplication" project.
 
 ## Grapheon — member list (7 crates)
 
-**Source**: https://github.com/KooshaPari/zz-archive-grapheon (retired/renamed 2026-09-03)
+**Source**: <https://github.com/KooshaPari/zz-archive-grapheon> (retired/renamed 2026-09-03)
 **Audit size**: 8.6G total (heavy build/cache footprint), 23 source files
 
 **Triangulation hint**: The 8.6G footprint with only 23 source files suggests
@@ -105,7 +106,7 @@ graph DB stack; treat as foreign infrastructure until proven otherwise.
 
 ## Tasken — single-crate (`taskkit`)
 
-**Source**: https://github.com/KooshaPari/Tasken
+**Source**: <https://github.com/KooshaPari/Tasken>
 **Audit size**: 1.1G (most is upstream dep cache)
 **Pub name**: `taskkit` (mismatch with repo name `Tasken`)
 
@@ -121,7 +122,7 @@ independent repo** rather than absorbing.
 
 ## Agentora — `crates/` member list (43 crates)
 
-**Source**: https://github.com/KooshaPari/Agentora
+**Source**: <https://github.com/KooshaPari/Agentora>
 **Audit size**: 249M, 104 source files
 
 **Key observation**: Also nested as a sub-directory inside
@@ -136,7 +137,7 @@ rather than from the standalone Agentora repo.
 
 ## PhenoCompose — `crates/` member list (28 crates)
 
-**Source**: https://github.com/KooshaPari/PhenoCompose
+**Source**: <https://github.com/KooshaPari/PhenoCompose>
 **Audit size**: 3.1M, 68 source files
 
 **Domain**: Multi-model composition (likely LLM model routing / composition

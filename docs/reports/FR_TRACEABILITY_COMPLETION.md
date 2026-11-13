@@ -55,9 +55,11 @@ Fixed FR traceability tracking for AgilePlus by creating comprehensive documenta
 ## Deliverables
 
 ### 1. FR_TRACKER.md
+
 **Location:** `docs/reference/FR_TRACKER.md`
 
 Comprehensive implementation status tracker:
+
 - **Structure:** Tables per FR category with ID, requirement, status, code location, test name, notes
 - **Content:** All 63 FRs with individual status tracking
 - **Summary:** Quick-reference stats table showing implementation by category
@@ -65,6 +67,7 @@ Comprehensive implementation status tracker:
 - **Maintenance Notes:** Instructions for updating as FRs progress
 
 #### Key Sections
+
 - Summary table (category-level stats)
 - 16 FR category sections (alphabetical)
 - Key test locations (crate-indexed)
@@ -73,9 +76,11 @@ Comprehensive implementation status tracker:
 - Maintenance guidance
 
 ### 2. CODE_ENTITY_MAP.md
+
 **Location:** `docs/reference/CODE_ENTITY_MAP.md`
 
 Bidirectional code-to-FR mapping:
+
 - **Domain Entities** - Feature, WorkPackage, Module, Project, etc. mapped to FR-DOMAIN-*
 - **API Routes** - REST endpoints, CLI commands, gRPC services mapped to their FRs
 - **Storage & Persistence** - SQLite, cache, content storage mapped to FR-STORAGE/CONTENT
@@ -84,6 +89,7 @@ Bidirectional code-to-FR mapping:
 - **Reverse Index** - Quick FR→code lookup by category
 
 #### Key Sections
+
 - Domain entities (16 FRs)
 - Audit and evidence (6 FRs)
 - API routes and handlers (11 FRs)
@@ -96,9 +102,11 @@ Bidirectional code-to-FR mapping:
 - Architecture notes (port-based design, crate dependencies)
 
 ### 3. Test File Annotations (Example)
+
 **Location:** `crates/agileplus-api/tests/api_integration/core_routes.rs`
 
 Demonstrates FR ID annotation pattern:
+
 ```rust
 #[tokio::test]
 async fn health_no_auth_required() {
@@ -136,9 +144,11 @@ Pattern: `// Traces to: FR-XXX-YYY, ...` comment above test function
 ### Notable Gaps Identified
 
 **Missing Implementation:**
+
 - **FR-CLI-011** - `validate` command for governance contract checking (referenced in FUNCTIONAL_REQUIREMENTS.md but not implemented)
 
 **Partial Implementations (High Priority):**
+
 - **FR-DOMAIN-007** - WorkPackageDependency cycle detection (topological sort defined, test coverage limited)
 - **FR-DOMAIN-012** - Snapshot entity (structure defined, test coverage minimal)
 - **FR-STORAGE-004** - LRU cache with configurable TTL (cache structure present, TTL configuration incomplete)
@@ -150,11 +160,13 @@ Pattern: `// Traces to: FR-XXX-YYY, ...` comment above test function
 ## Test Traceability Example
 
 ### Updated File
+
 `crates/agileplus-api/tests/api_integration/core_routes.rs`
 
 **Before:** No FR references; test purposes unclear relative to requirements
 
 **After:** Each test annotated with FR IDs:
+
 ```
 health_no_auth_required()          → Traces to: FR-API-005, FR-DOMAIN-014
 list_features_requires_auth()      → Traces to: FR-API-007
@@ -163,6 +175,7 @@ response_content_type_is_json()    → Traces to: FR-API-001
 ```
 
 This pattern can be applied to all other test files in:
+
 - `crates/agileplus-api/tests/api_integration/` (multiple test modules)
 - `crates/agileplus-cli/tests/` (CLI tests)
 - `crates/agileplus-domain/tests/` (domain model tests)
@@ -174,18 +187,21 @@ This pattern can be applied to all other test files in:
 ## How to Use These Documents
 
 ### For Implementers
+
 1. **Check FR status:** Open `FR_TRACKER.md`, search for FR ID (e.g., "FR-DOMAIN-001")
 2. **Find code location:** See "Code Location" and "Test File" columns
 3. **Understand implementation:** Cross-reference `CODE_ENTITY_MAP.md` for entity details
 4. **Write tests:** Use example annotations in `core_routes.rs` as pattern for new test files
 
 ### For QA/Verification
+
 1. **Verify coverage:** FR_TRACKER.md shows which FRs have test coverage
 2. **Find test files:** "Key Test Locations" section maps by crate
 3. **Add FR annotations:** Use "// Traces to: FR-XXX-YYY" pattern
 4. **Track gaps:** "Missing" and "Partial" entries highlight work needed
 
 ### For Architecture Review
+
 1. **Understand entity relationships:** CODE_ENTITY_MAP.md reverse index shows FR→code mapping
 2. **Trace dependencies:** "Reverse Index" section shows primary crate per FR range
 3. **Identify reuse:** Same entity appears in multiple test files; consolidation opportunities
@@ -195,16 +211,19 @@ This pattern can be applied to all other test files in:
 ## Maintenance and Next Steps
 
 ### Immediate (Next Session)
+
 1. **Implement FR-CLI-011** - Add `validate` command for governance contract checking
 2. **Expand test annotations** - Add "// Traces to: FR-XXX-YYY" to all remaining test files
 3. **Verify partial implementations** - Check each "Partial" status against actual code
 
 ### Medium Term (Next Sprint)
+
 1. **Complete P2P replication** - Vector clock merge, device discovery, conflict detection
 2. **Add missing tests** - Increase coverage for partial implementations
 3. **Update trackers** - Mark FRs as "Implemented" once tests are complete
 
 ### Long Term (Quarterly)
+
 1. **Automated traceability** - Generate FR_TRACKER from code annotations via CI
 2. **Gap analysis** - Periodic review of missing/partial implementations
 3. **Coverage metrics** - Track percentage of FRs with test coverage
@@ -250,6 +269,7 @@ This pattern can be applied to all other test files in:
 - ✓ **Documentation** - Complete with usage guides, maintenance notes, and next steps
 
 This enables developers to:
+
 - Quickly locate code implementing a given FR
 - Verify test coverage for requirements
 - Identify missing implementations

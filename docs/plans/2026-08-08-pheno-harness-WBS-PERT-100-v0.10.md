@@ -24,6 +24,7 @@ AMC / Agentora (Phase 4) remains **paused** per user directive — not in
 v0.10 scope.
 
 v0.10 picks up:
+
 - 212 remaining mypy type errors (debug fixture + adapter typing)
 - Dep-gap robustness expansion (httpx, huggingface_hub PinningStatus)
 - Sub-package docstring coverage (eval/, verifier/, pheno/evidence)
@@ -70,7 +71,7 @@ v0.10 picks up:
 ## Phase 1 — Mypy type error sweep (6–25)
 
 The post-v0.9 audit (`5433e4b`) ran mypy and found 212 type errors
-after the eval/__init__.py + shim-re-export fixes. They're clustered in:
+after the eval/**init**.py + shim-re-export fixes. They're clustered in:
 
 - 6–10: `bench/adapters*.py` (Mock/MLX/OpenAI/Anthropic typing)
 - 11–15: `bench/comparison/*.py` (adapter mock typing)

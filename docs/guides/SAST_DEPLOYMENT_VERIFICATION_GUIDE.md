@@ -21,17 +21,20 @@ pre-commit run --all-files --dry-run
 
 ## Files Present?
 
-### All 3 Files Required:
+### All 3 Files Required
 
 ✅ `.github/workflows/security-guard.yml`
+
 - Contains GitHub Actions workflow for CI/CD
 - Triggers on PR and push
 
 ✅ `.semgrep.yaml`
+
 - Configuration for Semgrep SAST scanner
 - Includes rules and exclusions
 
 ✅ `.pre-commit-config.yaml`
+
 - Local pre-commit hooks for developer machines
 - Includes Semgrep, TruffleHog, language-specific linters
 
@@ -63,6 +66,7 @@ pre-commit run --hook-stage pre-push --all-files
 ### Expected Output
 
 Success (no issues):
+
 ```
 Semgrep....................................................................Passed
 TruffleHog.................................................................Passed
@@ -73,6 +77,7 @@ check-yaml.................................................................Passe
 ```
 
 Failure (found issue):
+
 ```
 Semgrep....................................................................Failed
 - hook id: semgrep
@@ -156,6 +161,7 @@ npx eslint .
 1. Identify the rule ID from the error (e.g., `typescript.express.security.audit.express-open-redirect`)
 
 2. Create `.semgrep-allowlist.json`:
+
 ```json
 {
   "skip_rules": [
@@ -164,7 +170,8 @@ npx eslint .
 }
 ```
 
-3. Update `.semgrep.yaml`:
+1. Update `.semgrep.yaml`:
+
 ```yaml
 # Add to rules section
 rules:
@@ -176,6 +183,7 @@ rules:
 #### TruffleHog False Positive
 
 Create `.trufflehog-allowlist.json`:
+
 ```json
 {
   "skip": [
@@ -221,22 +229,26 @@ trufflehog git file://.
 Add to your GitHub Actions workflow (e.g., in `.github/workflows/ci.yml`):
 
 **Rust:**
+
 ```yaml
 - uses: dtolnay/rust-toolchain@stable
 ```
 
 **Go:**
+
 ```yaml
 - uses: golangci/golangci-lint-action@v3
 ```
 
 **Python:**
+
 ```yaml
 - uses: actions/setup-python@v5
 - run: pip install ruff
 ```
 
 **TypeScript:**
+
 ```yaml
 - uses: actions/setup-node@v4
 - run: npm ci
@@ -285,11 +297,13 @@ semgrep --config .semgrep.yaml src/ tests/
 ### Interpreting Results
 
 ✅ **Passed:** All security checks clean
+
 - No Semgrep findings
 - No secrets detected
 - All language-specific checks pass
 
 ❌ **Failed:** Security issue found
+
 - Click "Details" to see full output
 - Review Semgrep findings with line numbers
 - Fix in your branch and push again
@@ -331,14 +345,15 @@ dist/
 
 ### Resources
 
-- **Semgrep Rules:** https://semgrep.dev/explore
-- **TruffleHog Docs:** https://github.com/trufflesecurity/trufflehog
-- **Pre-commit Framework:** https://pre-commit.com/
+- **Semgrep Rules:** <https://semgrep.dev/explore>
+- **TruffleHog Docs:** <https://github.com/trufflesecurity/trufflehog>
+- **Pre-commit Framework:** <https://pre-commit.com/>
 
 ### Common Questions
 
 **Q: Can I skip security checks for my commit?**
 A: Not recommended, but possible:
+
 ```bash
 git commit --no-verify  # Dangerous!
 # Better: Fix the issue first, then commit normally
@@ -346,6 +361,7 @@ git commit --no-verify  # Dangerous!
 
 **Q: How do I update Semgrep rules?**
 A: Create custom rules in `.semgrep-rules/` directory:
+
 ```bash
 mkdir -p .semgrep-rules
 # Create .semgrep-rules/custom.yaml with org-specific rules
@@ -353,6 +369,7 @@ mkdir -p .semgrep-rules
 
 **Q: Why is my test file flagged by Semgrep?**
 A: Tests are usually excluded. Check `.semgrep.yaml` for your file pattern:
+
 ```yaml
 exclude:
   - "**/*_test.rs"
@@ -361,6 +378,7 @@ exclude:
 
 **Q: Can I use different hooks per environment?**
 A: Yes, use pre-commit stages:
+
 ```bash
 # Only pre-commit hooks (local dev)
 pre-commit run --hook-stage pre-commit --all-files
@@ -389,8 +407,9 @@ pre-commit run --hook-stage pre-push --all-files
 ---
 
 **Need Help?**
+
 - Check detailed report: `docs/reports/TIER2_3_DEPLOYMENT_REPORT.md`
 - Review deployment logs: `scripts/sast-deployment-*.log`
-- Consult Semgrep docs: https://semgrep.dev/docs/
+- Consult Semgrep docs: <https://semgrep.dev/docs/>
 
 **Last Updated:** 2026-03-31

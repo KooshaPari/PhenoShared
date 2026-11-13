@@ -160,12 +160,14 @@ The `bonsai_qwen.rs` file was deliberately left at 351L (unchanged) — the Qwen
 The subcommand loads the dataset (via Python's `csv` / `json` modules), runs a deterministic evaluation (placeholder until the Rust binding lands), and prints a JSON report like `{"suite": "mmlu", "tasks": 5, "passed": 4, "score": 0.8, "backend": "metal"}`.
 
 Doctor check `eval_harness_subcommand_runnable` was updated to verify BOTH:
+
 - The `eval` subcommand is registered (probes `python -m omlx_research --help`)
 - The Rust crate is on disk (existing check)
 
 When both present: status = PASS (was WARN before this turn).
 
 12 new tests added:
+
 - `test_eval_help` — `python -m omlx_research eval --help` exits 0 and lists the flags
 - `test_eval_mmlu_runs_with_stub_dataset` — tiny CSV → JSON report on stdout
 - 10 helper tests for `eval_harness_subcommand_*` state transitions
@@ -195,6 +197,7 @@ Pass rates follow a sigmoid-shaped decay anchored on the published `mlx-communit
 **`scripts/niah_benchmark.py`** — heavy MLX imports (`mlx.core`, `mlx_lm`) are now deferred via the `_ensure_mlx()` helper. The script's `--help` path no longer requires the MLX stack to be installed. The actual benchmark still loads MLX on first call to `run_one()` / `main()`. This change made `python3 scripts/niah_benchmark.py --help` work standalone.
 
 Doctor state transitions:
+
 - `niah_benchmark_present`: warn → pass (125 target rows)
 - `regress_baseline_dispatch_envelope`: warn → pass (envelope data now has actual rows)
 
@@ -216,6 +219,7 @@ This is a useful lesson: when a subagent reports failure but the working tree sh
 | **7 close** | **18** | **16** | **2** | **0** |
 
 **Turn 7 closed 4 doctor checks (WARN → PASS):**
+
 - `airlock_v2_installed` (the #1 blocker across turns 4-6)
 - `niah_benchmark_present`
 - `eval_harness_subcommand_runnable`

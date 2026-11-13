@@ -53,6 +53,7 @@ gh repo unarchive <REDACTED>/HeliosLab -y
 **Date:** 2026-07-17
 **Reviewer:** registry steward (this session, batch boundary-corrections)
 **Decisions:**
+
 - Marked `TOO_LARGE_RETIRE` (55 branches, sprawling lab scope)
 - GitHub-side: archived 2026-07-17
 

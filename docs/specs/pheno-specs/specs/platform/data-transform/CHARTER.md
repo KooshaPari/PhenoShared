@@ -159,6 +159,7 @@ Same pipeline definition, different execution modes. Batch for historical, strea
 ### User Personas
 
 #### Persona: Priya (Data Engineer)
+
 - **Role**: Building data platform
 - **Challenge**: 50 data sources, quality issues
 - **Goals**: Reliable, observable pipelines
@@ -166,6 +167,7 @@ Same pipeline definition, different execution modes. Batch for historical, strea
 - **Success Criteria**: 99.9% pipeline success, full lineage visibility
 
 #### Persona: David (Analytics Engineer)
+
 - **Role**: Creating data models for BI
 - **Challenge**: Type safety in data transformations
 - **Goals**: Testable, versioned data models
@@ -173,6 +175,7 @@ Same pipeline definition, different execution modes. Batch for historical, strea
 - **Success Criteria**: CI/CD for data, tested transformations
 
 #### Persona: Sarah (Data Platform Lead)
+
 - **Role**: Managing data infrastructure
 - **Challenge**: Scale, governance, compliance
 - **Goals**: Self-service data platform

@@ -40,24 +40,31 @@ This file supersedes the 2026-06-15 17:35 PDT index that lived here 2026-06-15 �
 ## Sub-projects (current layout)
 
 ### Active focus repos (5)
+
 `AgilePlus`, `PhenoCompose`, `PlayCua`, `BytePort`, `nanovms` — coordinated via `chore/l5-87-focus-repo-specs-2026-06-11` branch. Each now has a SPEC.md per L5-#87 worklog.
 
 ### Apps & shells
+
 `apps/`, `phenotype-unity/`, `phenotype-voxel/`, `phenotype-landing/`, `phenotype-journeys/`
 
 ### Shared libraries (pheno-* family)
+
 22 directories under `pheno-*/` (see `AGENTS.md` for the full breakdown). 21 buildable crates (Rust+Python+Go), 1 worktree container, 1 TypeScript out-of-scope.
 
 ### Shared libraries (phenotype-* and others)
+
 `crates/`, `libs/`, `phenoShared/`, `phenoData/`, `phenoUtils/`, `phenoContracts/`, `phenoSchema/`, `phenoKits/`, `phenodocs/`, `phenotype-auth-ts/`, `phenotype-bus/`, `phenotype-dep-guard/`, `phenotype-e2e-base/`, `phenotype-errors/`, `phenotype-go-sdk/`, `phenotype-hub/`, `phenotype-infra/`, `phenotype-journeys/`, `phenotype-landing/`, `phenotype-omlx/`, `phenotype-otel/`, `phenotype-postfx/`, `phenotype-py-extras/`, `phenotype-py-utils/`, `phenotype-python-sdk/`, `phenotype-registry/`, `phenoRuntim` and more.
 
 ### Services
+
 `services/`, `phenoMCP/`, `phenoAgents/`, `phenoVCS/`, `phenoObservability/`, `phenoEvents/`, `phenoRuntime/`, `phenoProc/`, `phenoDesign/`, `phenoCompose/`, `phenotype-bus/`, `phenotype-registry/`, `phenotype-otel/`
 
 ### Tooling
+
 `tooling/`, `thegent/`, `dispatch-mcp/`, `cheap-llm-mcp/`, `phenotype-ops-mcp/`, `phenotype-tooling/`, `phenotype-infrakit/`, `phenotype-org-audits/`
 
 ### Active worktrees
+
 `*-wtrees/` directories (per-feature branches) — 7+ feature branches checked out, 6 stash-backup branches also checked out
 
 ---

@@ -35,6 +35,7 @@
 ## Current Status
 
 Pending — implementation not started. Requires:
+
 1. Fork Plane repository into the org's GitHub
 2. Define the AgilePlus control-plane boundary adapter layer
 3. Migrate or quarantine duplicate dashboard code

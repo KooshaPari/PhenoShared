@@ -289,7 +289,7 @@ const TASK_KEYWORDS: &[&str] = &[
 
 **Pattern rules** (applied before keyword scan):
 
-- If input contains a stack trace pattern (lines starting with `at ` or `File "`, or contains `Traceback (most recent call last)`) → `Bug`.
+- If input contains a stack trace pattern (lines starting with `at` or `File "`, or contains `Traceback (most recent call last)`) → `Bug`.
 - If input matches `^\s*(fix|fixes|fixed)\s+#\d+` (case-insensitive regex) → `Bug`.
 - If input matches `^\s*(feat|feature)(\(.+\))?:` (conventional commit prefix) → `Feature`.
 - If input matches `^\s*(chore|refactor|docs|style|test|ci)(\(.+\))?:` → `Task`.
@@ -337,6 +337,7 @@ impl Classify for Classifier {
 ```
 
 The `classify` method:
+
 1. Lowercase and trim the input.
 2. Apply pattern rules (regex). Return immediately on match.
 3. Count keyword hits per category.
@@ -398,7 +399,9 @@ When you receive a new input from the user, classify it and route as follows:
 If the input is clearly a small self-contained change (rename, single-line fix, config tweak), you may use:
 
 ```
+
 agileplus escape quick-fix "&lt;description>"
+
 ```
 
 This bypasses the triage flow and creates a minimal WP directly in the active feature.
@@ -472,6 +475,7 @@ Each significant agent action should be logged to the WP prompt file's `history`
   shell_pid: '<pid>'
   action: <description>
 ```
+
 ```
 
 Write to `{output_dir}/AGENTS.md`. Return the written path. Overwrite if exists.
@@ -577,6 +581,7 @@ mod tests {
 **BacklogItem CRUD tests** (inline in `backlog.rs`):
 
 Test `create`, `get`, `list_by_type`, `list_by_feature`, `promote_to_feature`, and `close` using an in-memory SQLite database (`:memory:` connection). Verify:
+
 - Created item has correct `kind`, `state = Open`, non-empty `id`.
 - `list_by_type` returns only items of the specified kind.
 - `list_by_feature` returns only items with the given slug.
@@ -586,12 +591,14 @@ Test `create`, `get`, `list_by_type`, `list_by_feature`, `promote_to_feature`, a
 **Router output validation** (inline in `router.rs`):
 
 Use `tempfile::TempDir` to write to a temp directory. Assert:
+
 - `CLAUDE.md` exists and contains the project name, slug, and all routing-rule table rows.
 - `AGENTS.md` exists and contains all seven command rows and all five behavioral rules.
 
 Add `tempfile` as a dev-dependency.
 
 ---
+
 - 2026-02-28T13:20:44Z – claude-opus – shell_pid=3392 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T13:25:04Z – claude-opus – shell_pid=3392 – lane=for_review – Triage crate complete: classifier, backlog, router. 17 tests pass.
 - 2026-02-28T23:21:19Z – claude-opus – shell_pid=78007 – lane=doing – Started review via workflow command

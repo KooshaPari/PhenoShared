@@ -149,15 +149,19 @@ All perf suites tag every run with `(commit, model_id, route_kind, engine, quant
 - Run on a small subset first (16 tasks) before the full 113.
 
 ### Waypoint 4 — SWE-bench Verified regression
+
 ### Waypoint 4 — SWE-bench Verified (deprioritized)
+
 - `eval/swebench_verified.py` exists for **regression-anchor only** (not a primary ranking signal). Once the cross-task composite is trustworthy, drop nightly runs to weekly, then monthly.
 - Frozen 200-task subset, held out from training by `training/eval_holdout.yaml`.
 - Any drop > threshold fails the regression gate in `harness/self_improvement/gates.py`. Track but never optimize against.
 
 ### Waypoint 5 — Long-horizon custom Harbor-compatible
+
 - `eval/long_horizon.py` runs replayable multi-day spec derived from real agent traces (see `TRACE_EVALSET_PLAN.md` for the spec schema).
 - Sourced from Claude / Codex / ForgeCode / Factory Droid / Cursor-agent / public long-orchestration chats.
 - Per-role scored separately. Includes recoverability, escalation, and tokenizer-rotation metrics.
+
 ---
 
 ## 4. Intent-graph / scheduler architecture (the next big build)
@@ -268,6 +272,7 @@ The chat-loop must keep working while the intent-graph layer comes online. Stage
 Default `w_pass = 0.4, w_speed = 0.3, w_cost = 0.3` (already in `eval/route_matrix.py`). Pillar weights live in `config/eval_pillars.yaml`. Tunable per lane.
 
 **Three axes are tracked separately and never merged:**
+
 - `quality_axis = pass + robustness + safety`
 - `harness_axis = verbosity + overhead + recoverability + determinism`
 - `serving_axis = tokens_per_sec + cache_hit + ttft_p95 + vram_efficiency`
@@ -348,7 +353,9 @@ Subagents always report back to the main thread with file paths and a 5-line sum
 ---
 
 ## 9. Open architectural decisions (parking lot)
+
 ## 9. Open architectural decisions (parking lot)
+
 1. **Latent-MAS vs text-MAS.** Corpus notes latent is cheaper but less inspectable. Decision deferred; do not commit.
 2. **Planner-as-LoRA vs full-model planner.** Pheno-harness's `config/role_lora.yaml` already supports role-LoRA. Planner likely becomes a role-LoRA on the main lane model. Decide after Waypoint 2.
 3. **Local vs cloud fan-out.** 3090 Ti runs the 3 self-hosted aliases (`local/qwen35-08b`, `local/lfm25-8b-a1b`, `local/ornith-8b`); cloud runs the 8 OpenRouter baselines via `forge-dev → omniroute-dev → OpenRouter`. Decide per-task kind.

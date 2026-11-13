@@ -7,7 +7,7 @@
 - **200+ local branches** (down to 150+ after cleanup)
 - **9 open PRs** (6 open, 3 merged in last 48h)
 - **13 feature branches** with unmerged commits (1,017 changelog + 12 features)
-- **1 dirty file** (python/pheno-core/__init__.py) blocking operations
+- **1 dirty file** (python/pheno-core/**init**.py) blocking operations
 - **CI billing exhausted** (all test runs fail; policy: merge after local verification)
 
 ---
@@ -15,6 +15,7 @@
 ## Immediate Action (BLOCKING)
 
 **Fix dirty working tree FIRST:**
+
 ```bash
 cd /Users/<REDACTED>/CodeProjects/Phenotype/repos
 git checkout python/  # discard changes
@@ -29,6 +30,7 @@ Then proceed with parallel task swarm.
 ## Opportunity: Parallel Execution
 
 **20 independent haiku tasks** spanning:
+
 - 4 PR merges (T1.1-T1.4) — ready now
 - 5 branch→PR conversions (T2.1-T2.5) — ready now
 - 2 changelog integration (T3.1-T3.2) — after T1.* complete
@@ -45,14 +47,18 @@ Then proceed with parallel task swarm.
 ## High-Value Work
 
 ### Immediate (5 min)
+
 Merge 4 ready PRs:
+
 - #250 phenosdk-sanitize-atoms (+386 LOC)
 - #252 consolidate nested crates (+862 LOC)
 - #254 fix dependencies (+381 LOC)
 - #262 archive state-machine (+12,191 LOC) **large but clean**
 
 ### Next (10 min)
+
 Create 5 new PRs from unmerged branches:
+
 - phenosdk-wave-a-contracts (1 commit)
 - phenosdk-decompose-mcp (1 commit)
 - consolidate-nested-duplicates (2 commits)
@@ -60,13 +66,17 @@ Create 5 new PRs from unmerged branches:
 - worklog-consolidation (5 commits, needs rebase)
 
 ### Integration (15 min)
+
 Merge massive changelog integration:
+
 - docs/changelog-update (1,017 commits, expect conflicts)
 - Validate CHANGELOG.md syntax
 - Verify no truncation/corruption
 
 ### Cleanup (10 min)
+
 Delete 30+ orphaned branches:
+
 - Remove all "[gone]" tracked branches
 - Delete experiment/local-only branches
 - Verify no circular dependencies
@@ -124,12 +134,14 @@ Delete 30+ orphaned branches:
 ## Recommended Execution
 
 ### Option A: Full Parallel (15 min, 10-15 agents)
+
 1. Fix dirty tree (pre-flight)
 2. Launch haiku swarm with 20 tasks
 3. Monitor critical path (T1→T3→T7)
 4. Collect results, validate, commit
 
 ### Option B: Phased Sequential (50 min, single agent)
+
 1. Fix dirty tree
 2. Phase 1: T1.1-T1.4 (PR merges)
 3. Phase 2: T2.1-T2.5 (branch PRs)
@@ -138,6 +150,7 @@ Delete 30+ orphaned branches:
 6. Phase 5: T5-T8 (verification + docs)
 
 ### Option C: Manual (ad-hoc)
+
 Pick specific tasks from PARALLEL_TASK_BATCH_2026-03-30.md and execute individually.
 
 ---
@@ -165,12 +178,14 @@ Pick specific tasks from PARALLEL_TASK_BATCH_2026-03-30.md and execute individua
 ## Contact/Handoff
 
 **Executor requirements:**
+
 - GitHub CLI (`gh`) configured
 - Rust toolchain (`cargo`) for T7.*
 - Shell access (bash/zsh)
 - Write permission to phenotype-infrakit
 
 **Coordination:**
+
 - Use PARALLEL_TASK_BATCH_2026-03-30.md for detailed commands
 - Refer to SESSION_STATE_ANALYSIS_2026-03-30.md for context/rationale
 - Monitor T7.1 and T7.2 (critical path); others parallelizable

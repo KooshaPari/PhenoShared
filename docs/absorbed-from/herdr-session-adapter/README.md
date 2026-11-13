@@ -18,4 +18,3 @@ Per-file provenance, source commit and split counts: `absorption/herdr-session-a
 
 The source repo has not been archived or deleted; that remains a separate
 operator decision after this record landed.
-

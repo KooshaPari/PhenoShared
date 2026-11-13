@@ -19,6 +19,7 @@ This spec completes the observability stack by implementing distributed tracing,
 ## Problem Statement
 
 Observability in the Phenotype ecosystem is fragmented:
+
 - **Distributed tracing** — incomplete implementation, no trace context propagation
 - **Metrics collection** — isolated metrics, no correlation with traces
 - **Structured logging** — no trace ID injection, inconsistent log formats
@@ -58,24 +59,28 @@ Observability in the Phenotype ecosystem is fragmented:
 ## Technical Approach
 
 ### Phase 1: Architecture Design (Week 1-2)
+
 1. Design unified observability architecture
 2. Define interfaces between tracing, metrics, logging, profiling
 3. Choose W3C Trace Context for trace propagation
 4. Design consistent labeling scheme for metrics
 
 ### Phase 2: Distributed Tracing (Week 2-4)
+
 1. Complete tracely distributed tracing implementation
 2. Implement W3C Trace Context propagation
 3. Add trace context extraction/injection for HTTP, gRPC, message queues
 4. Integrate tracing with thegent-metrics and thegent-shm
 
 ### Phase 3: Logging and Metrics Integration (Week 4-6)
+
 1. Add automatic trace ID injection to helix-logging
 2. Unify log format across all services
 3. Integrate thegent-metrics with tracing pipeline
 4. Optimize thegent-shm shared memory performance
 
 ### Phase 4: Profiling and Benchmarking (Week 6-8)
+
 1. Complete Tracera profiling implementation
 2. Integrate profiling with tracing pipeline
 3. Complete Profila benchmarking framework
@@ -83,6 +88,7 @@ Observability in the Phenotype ecosystem is fragmented:
 5. Correlate benchmarking results with production metrics
 
 ### Phase 5: Dashboard and Alerting (Week 8-10)
+
 1. Design unified observability dashboard
 2. Implement alerting rules based on observability data
 3. Create runbooks for common observability scenarios

@@ -7,7 +7,7 @@ This document compares **Agent Wave** with similar tools in the AI agent orchest
 | Repository | Purpose | Key Features | Language/Framework | Maturity | Comparison |
 |------------|---------|--------------|-------------------|----------|------------|
 | **Agent Wave (this repo)** | Agent orchestration framework | Multi-agent wave execution, Agent lifecycle management, Parallel task dispatch | TypeScript/Bun | Planning | Planned orchestration layer |
-| [ LangGraph](https://github.com/langchain-ai/langgraph) | Multi-agent workflows | DAG-based execution, State management, Human-in-loop | Python | Stable | Production-grade orchestration |
+| [LangGraph](https://github.com/langchain-ai/langgraph) | Multi-agent workflows | DAG-based execution, State management, Human-in-loop | Python | Stable | Production-grade orchestration |
 | [AutoGen](https://github.com/microsoft/autogen) | Multi-agent conversation | Agent collaboration, Role-based agents | Python | Stable | Microsoft-backed |
 | [CrewAI](https://github.com/crewai/crewai) | Multi-agent orchestration | Role-based agents, Task delegation | Python | Stable | Popular for simple workflows |
 | [AgentVerse](https://github.com/open-agi/agentverse) | Multi-agent simulation | Agent simulation, Task decomposition | Python | Beta | Research-focused |
@@ -63,6 +63,7 @@ Agent Wave aims to provide:
 ### vs LangGraph
 
 LangGraph is production-grade but:
+
 - Complex DAG-based model may be overkill for simple workflows
 - Python-only
 - No wave-based concept
@@ -73,6 +74,7 @@ Agent Wave provides simpler wave-based model with lifecycle awareness.
 ### vs AutoGen
 
 AutoGen is Microsoft-backed but:
+
 - Conversational model doesn't fit batch orchestration
 - No health/shutdown concepts
 - Complex agent definitions
@@ -82,6 +84,7 @@ Agent Wave focuses on batch/orchestration use cases.
 ### vs CrewAI
 
 CrewAI is popular but:
+
 - Role-based, not wave-based
 - No lifecycle management
 - Python-only

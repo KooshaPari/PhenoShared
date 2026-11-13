@@ -9,12 +9,14 @@
 ## Quick Navigation
 
 ### Executive Level
+
 - **[PYTHON_DECOMPOSITION_SUMMARY.md](./PYTHON_DECOMPOSITION_SUMMARY.md)** (5 min read)
   - High-level overview of Phase 2 goals, benefits, and success criteria
   - Best starting point for understanding the initiative
   - Use this for steering committee presentations
 
 ### Implementation Level
+
 - **[PYTHON_DECOMPOSITION_PLAN.md](./PYTHON_DECOMPOSITION_PLAN.md)** (20 min read, 250 lines)
   - Detailed 4-phase decomposition strategy
   - Architecture decisions and trade-offs
@@ -30,6 +32,7 @@
   - Migration path and backward compatibility
 
 ### Technical Design
+
 - **[PYTHON_DEPENDENCY_GRAPH.md](./PYTHON_DEPENDENCY_GRAPH.md)** (15 min read)
   - Current state vs. target state dependency graphs
   - Module relationships (ASCII diagrams)
@@ -38,6 +41,7 @@
   - Circular dependency detection
 
 ### Testing & QA
+
 - **[PYTHON_TESTING_STRATEGY.md](./PYTHON_TESTING_STRATEGY.md)** (25 min read)
   - Pytest markers by phase
   - Test pyramid and coverage targets
@@ -50,21 +54,25 @@
 ## Document Map by Role
 
 ### For Project Manager
+
 1. **PYTHON_DECOMPOSITION_SUMMARY.md** — Overview & timeline
 2. **PYTHON_PHASE2_EXTRACTION_ROADMAP.md** — Effort estimates & milestones
 3. **PYTHON_DECOMPOSITION_PLAN.md** — Risk mitigation & success criteria
 
 ### For Architect
+
 1. **PYTHON_DECOMPOSITION_PLAN.md** — Architecture decisions
 2. **PYTHON_DEPENDENCY_GRAPH.md** — Dependency design
 3. **PYTHON_TESTING_STRATEGY.md** — Test architecture
 
 ### For Developer/Agent
+
 1. **PYTHON_PHASE2_EXTRACTION_ROADMAP.md** — Work items & steps
 2. **PYTHON_DECOMPOSITION_PLAN.md** — Acceptance criteria
 3. **PYTHON_TESTING_STRATEGY.md** — Test execution
 
 ### For QA/Tester
+
 1. **PYTHON_TESTING_STRATEGY.md** — Complete testing strategy
 2. **PYTHON_PHASE2_EXTRACTION_ROADMAP.md** — Test validation steps
 3. **PYTHON_DECOMPOSITION_PLAN.md** — Success metrics
@@ -188,24 +196,28 @@ PROPERTIES:
 ## Success Metrics
 
 **Phase 2.1 Complete:**
+
 - [ ] pheno-mcp-core published to PyPI
 - [ ] 0 duplicate MCPEntryPoint definitions
 - [ ] All tests passing (80%+ coverage)
 - [ ] Zero circular dependencies
 
 **Phase 2.2 Complete:**
+
 - [ ] pheno-agents published to PyPI
 - [ ] Agent classes fully extracted & independent
 - [ ] All tests passing (80%+ coverage)
 - [ ] Backward compat in pheno-mcp maintained
 
 **Phase 2.3 Complete:**
+
 - [ ] pheno-atoms published to PyPI
 - [ ] Auth, persistence, vector adapters consolidated
 - [ ] Optional dependencies working correctly
 - [ ] All tests passing (75%+ coverage)
 
 **Phase 2.4 Complete:**
+
 - [ ] phenotype-sdk published to PyPI (meta-package)
 - [ ] phenosdk-legacy alias working (backward compat)
 - [ ] All 5 packages available on PyPI & GitHub Packages

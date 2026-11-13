@@ -162,18 +162,21 @@ Compliance requirements (SOC2, PCI-DSS, etc.) are encoded as scan rules. Complia
 ### User Personas
 
 #### Persona: Alex (Security Engineer)
+
 - **Role**: Building AppSec program
 - **Pain Points**: Tool sprawl, false positives
 - **Goals**: Consolidated, accurate scanning
 - **Success Criteria**: 80% of issues caught pre-commit
 
 #### Persona: Sarah (Developer)
+
 - **Role**: Writing Go microservices
 - **Pain Points**: Security alerts too late
 - **Goals**: Fix issues as I code
 - **Success Criteria**: Zero security issues in PR
 
 #### Persona: Jordan (DevOps Lead)
+
 - **Role**: Securing deployment pipeline
 - **Pain Points**: Manual security reviews
 - **Goals**: Automated security gates

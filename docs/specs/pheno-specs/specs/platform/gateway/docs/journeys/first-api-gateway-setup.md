@@ -27,6 +27,7 @@ portalis --version
 ```
 
 **Expected Output:**
+
 ```
 Portalis v0.1.0
  Commit: a1b2c3d4
@@ -67,6 +68,7 @@ portalis validate --config ~/.config/portalis/gateway.yaml
 ```
 
 **Expected Output:**
+
 ```
 [✓] Configuration valid
 [✓] Gateway name: my-first-gateway
@@ -91,6 +93,7 @@ curl -v http://localhost:3000/
 ```
 
 **Expected Output:**
+
 ```
 * Connected to localhost:3000
 < HTTP/1.0 200 OK
@@ -147,6 +150,7 @@ portalis routes list --config ~/.config/portalis/gateway.yaml
 ```
 
 **Expected Output:**
+
 ```
 Routes:
 ┌────────────────┬──────────────────┬─────────────────┬─────────────┐
@@ -180,6 +184,7 @@ curl http://localhost:8080/health
 ```
 
 **Expected Output:**
+
 ```
 # GET /api/users/123
 HTTP/1.1 200 OK
@@ -204,6 +209,7 @@ portalis diag --config ~/.config/portalis/gateway.yaml
 ```
 
 **Expected Output:**
+
 ```
 [✓] Gateway running on 0.0.0.0:8080
 [✓] Upstream user-service: healthy

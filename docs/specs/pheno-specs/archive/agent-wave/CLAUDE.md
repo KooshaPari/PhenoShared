@@ -17,12 +17,14 @@ These rules apply to ALL projects. Project-level CLAUDE.md files supplement (and
 **CRITICAL**: Operate as a strategic manager, not a worker. Delegate to subagents.
 
 ### Keep in Main Context
+
 - User intent and requirements
 - Strategic decisions and trade-offs
 - Summaries of completed work
 - Critical architectural knowledge
 
 ### Delegate to Subagents
+
 - File exploration (>3 files)
 - Pattern searches across codebase
 - Multi-file implementations
@@ -127,6 +129,7 @@ When generating **plans**, **roadmaps**, or **implementation breakdowns**:
 **CRITICAL**: All project documentation follows a strict organization structure.
 
 ### Root-Level Files (Keep in Root)
+
 - `README.md` -- Main project documentation
 - `CHANGELOG.md` -- Project changelog
 - `AGENTS.md` -- AI agent instructions
@@ -208,6 +211,7 @@ Projects with spec docs SHOULD maintain trackers in `docs/reference/`:
 ## Auto-Detection Behavior
 
 **On session start:**
+
 - If spec docs are missing, acknowledge it and offer to generate them
 - Greenfield project: offer to scaffold all spec docs from project analysis
 - Brownfield project: offer to analyze existing codebase and generate docs mapping to what exists
@@ -218,16 +222,19 @@ Projects with spec docs SHOULD maintain trackers in `docs/reference/`:
 **MUST include docsite setup in any new project initialization:**
 
 For greenfield projects:
+
 - Copy VitePress template from `thegent/templates/vitepress-full/` to new project
 - Run `pnpm install && pnpm docs:build` to verify setup
 - Document in project CLAUDE.md
 
 For brownfield projects (existing projects without docsites):
+
 - Check if `docs-dist/index.html` exists -- if not, propose adding docsite
 - Use same template from `thegent/templates/vitepress-full/`
 - Run `pnpm install && pnpm docs:build` to verify
 
 **Quick setup (30 seconds):**
+
 ```bash
 cp -r thegent/templates/vitepress-full myproject/docs/.vitepress
 # Rename .template files, edit config.ts placeholders
@@ -236,6 +243,7 @@ open docs-dist/index.html
 ```
 
 **Why:** All projects should have statically viewable docs that can be opened via `file://` in browser. This enables:
+
 - Team documentation browsing without deployment
 - Cross-project links between portfolio docs (`~project:/path`)
 - Versioned docs via git branches
@@ -247,12 +255,14 @@ open docs-dist/index.html
 **MUST initialize these for ALL new projects:**
 
 ### 1. Docsite (VitePress)
+
 - [ ] Copy `thegent/templates/vitepress-full/` to `docs/.vitepress/`
 - [ ] Run `pnpm install && pnpm docs:build`
 - [ ] Verify `docs-dist/index.html` opens in browser
 - [ ] Add to CLAUDE.md
 
 ### 2. Taskfile (NOT Make)
+
 - [ ] Create `Taskfile.yml` with standard tasks:
   - `lint` - Run all linters
   - `test` - Run tests
@@ -261,6 +271,7 @@ open docs-dist/index.html
 - [ ] Use Taskfile includes from `thegent/templates/` if available
 
 ### 3. Linters (Language-Specific)
+
 | Stack | Linter | Formatter | Config Template |
 |-------|--------|-----------|---------------|
 | Python | ruff | ruff format | `thegent/templates/python/pyproject.template.toml` |
@@ -274,6 +285,7 @@ open docs-dist/index.html
 | Bash | shellcheck | shfmt | `thegent/templates/bash/.shellcheckrc` |
 
 ### 4. Project Scaffolding Tools (CLI/App Frameworks)
+
 | Stack | CLI Framework | Web Framework | Config |
 |-------|--------------|---------------|--------|
 | Python | typer | FastAPI/starlette | `pyproject.toml` |
@@ -285,11 +297,13 @@ open docs-dist/index.html
 | C# | commandline | ASP.NET Core | `.csproj` |
 
 ### 5. Pre-commit Hooks
+
 - [ ] Add `.pre-commit-config.yaml`
 - [ ] Include: ruff-check, ruff-format, gitleaks, trailing-whitespace
 - [ ] Run `pre-commit install`
 
 ### 5. Quality Gates
+
 - [ ] Create `hooks/quality-gate.sh` with:
   - Lint check (0 errors)
   - Test check (all pass)
@@ -298,6 +312,7 @@ open docs-dist/index.html
 - [ ] Add to Stop hook or pre-commit
 
 ### 6. Test Infrastructure (Per Language)
+
 | Stack | Test Runner | Coverage | Test Config |
 |-------|-------------|----------|-------------|
 | Python | pytest + pytest-xdist | coverage.py | `pyproject.toml` [tool.pytest] |
@@ -311,6 +326,7 @@ open docs-dist/index.html
 | Bash | bats-core | - | `*.bats` files |
 
 ### 7. Full Traceability Setup
+
 - [ ] Create `FUNCTIONAL_REQUIREMENTS.md` with FR-{CAT}-NNN IDs
 - [ ] Create `docs/reference/FR_TRACKER.md` to track FR implementation status
 - [ ] Create `docs/reference/CODE_ENTITY_MAP.md` mapping code <-> requirements
@@ -323,7 +339,9 @@ open docs-dist/index.html
 - [ ] Run: `task quality` to verify spec verification
 
 ### 8. CLAUDE.md Project Instructions
+
 Create project-specific `CLAUDE.md` with:
+
 - Project name, description, stack
 - Library preferences table
 - Domain-specific patterns
@@ -362,17 +380,20 @@ task quality
 ```
 
 **During work:**
+
 - When making significant code changes (new modules, features, architecture changes), note which spec docs would need updating
 - When completing a task, mentally check if trackers should be updated
 - If you add new functions/modules, note they should be added to CODE_ENTITY_MAP.md
 
 **On session end:**
+
 - If there are unmapped code changes, acknowledge and update trackers if appropriate
 - Treat session end as a documentation checkpoint
 
 ## Change Documentation (per-change, for significant changes)
 
 For significant changes (new features, major refactors, architecture changes):
+
 - Create `docs/changes/{change-name}/` with:
   - `proposal.md` -- What and why
   - `design.md` -- Technical approach, affected components
@@ -426,6 +447,7 @@ For thegent-specific agents, see `docs/reference/INDEX.md` for agent ↔ referen
 ## Package Manager
 
 **Use the project's preferred package manager.** Detect from lockfiles:
+
 - `bun.lockb` or `bun.lock` -> use `bun`
 - `pnpm-lock.yaml` -> use `pnpm`
 - `yarn.lock` -> use `yarn`
@@ -443,6 +465,7 @@ For thegent-specific agents, see `docs/reference/INDEX.md` for agent ↔ referen
 ## Multi-Actor Coordination (generalized)
 
 When multiple agents or actors share a dev environment:
+
 - **Debounce commands:** Use project-provided wrappers (Makefile targets, scripts) that prevent concurrent execution conflicts.
 - **Shared service management:** Use the project's process orchestrator as source of truth for service health.
 - **Hold-if-running logic:** Prefer wrappers that allow multiple actors to share processes without force-killing.
@@ -520,12 +543,14 @@ AgilePlus Governance
 ## Test-First Development (TDD/BDD)
 
 ### TDD Mandate
+
 - For NEW modules: test file MUST exist before implementation file
 - For BUG FIXES: failing test MUST be written before the fix
 - For REFACTORS: existing tests must pass before AND after
 
 ### BDD Requirements
-- Feature files (*.feature / *.bdd) map to user stories in PRD
+
+- Feature files (*.feature /*.bdd) map to user stories in PRD
 - Given/When/Then steps must be traceable to FRs
 - BDD test names reference FR IDs: "Feature: FR-AUTH-001 User Login"
 
@@ -545,7 +570,9 @@ AgilePlus Governance
 | Snapshot/Golden | Optional | Optional (if UI) | Required |
 
 ### Smart Contract Pattern (Spec Verification)
+
 Specs (PRD/FR) -> Tests (must reference FR IDs) -> Checks (must be green) = Verified
+
 - Every FR-XXX-NNN in FUNCTIONAL_REQUIREMENTS.md MUST have >=1 test referencing it
 - Every test MUST reference >=1 FR-XXX-NNN (no orphan tests)
 - All linters + type checkers + security scanners MUST pass (0 errors)
@@ -553,6 +580,7 @@ Specs (PRD/FR) -> Tests (must reference FR IDs) -> Checks (must be green) = Veri
 - If ALL checks green AND ALL FRs have tests -> spec is "programmatically verified"
 
 ### Architecture Enforcement
+
 - Python: import-linter config enforces layer boundaries
 - Go: depguard in golangci.yml enforces package dependency rules
 - TypeScript: eslint-plugin-boundaries enforces module boundaries
@@ -567,6 +595,7 @@ Quality templates for all supported languages are in `~/.claude/templates/qualit
 ## Subagent Quality Enforcement
 
 Subagents and tasks are NOT exempt from quality gates. The following hooks fire on subagent lifecycle:
+
 - SubagentStart: tracks subagent scope and expected file changes
 - SubagentStop: runs lint/syntax/security on all files the subagent modified
 - TaskCompleted: verifies task output meets quality standards (test files, lint, syntax)
@@ -574,6 +603,7 @@ Subagents and tasks are NOT exempt from quality gates. The following hooks fire 
 ## Specification Verification ("Smart Contract")
 
 The spec-verifier runs on Stop and produces a verification verdict:
+
 - VERIFIED: all FRs have tests, all checks green, coverage met
 - GAPS: lists uncovered FRs, orphan tests, failing checks
 This is the "if green, it works" guarantee — programmatic proof that specs are implemented.
@@ -581,6 +611,7 @@ This is the "if green, it works" guarantee — programmatic proof that specs are
 ## Complexity Ratchet
 
 Complexity must never increase. The ratchet enforcer:
+
 - Measures cyclomatic complexity, cognitive complexity, maintainability index
 - Compares against baseline — any increase is flagged
 - Baseline auto-updates downward (tighter over time)
@@ -589,6 +620,7 @@ Complexity must never increase. The ratchet enforcer:
 ## Security Pipeline
 
 4-layer security scanning on every Stop:
+
 1. Secret detection (gitleaks + regex patterns)
 2. SAST (Semgrep, bandit, gosec, brakeman, psalm)
 3. Dependency audit (pip-audit, npm audit, govulncheck, cargo audit)
@@ -597,6 +629,7 @@ Complexity must never increase. The ratchet enforcer:
 ## Test Maturity Model
 
 Projects are assessed on a 5-level scale:
+
 - Level 1 — MVP: tests exist and are runnable
 - Level 2 — Production-Ready: coverage >= 60%, integration tests, no bare suppressions
 - Level 3 — Scale: coverage >= 80%, FR traceability >= 50%, security scanning, strict linters
@@ -607,6 +640,7 @@ Target: Level 3 for all projects, Level 4+ for critical systems.
 ## Runtime Verification
 
 For projects that opt in (via qa-config.json `runtime_verification`):
+
 - Python: beartype (O(1) type checking at runtime), deal (Design by Contract)
 - Go: goleak (goroutine leak detection), race detector
 - Resilience: toxiproxy (network fault injection), chaos-toolkit (experiments)
@@ -615,14 +649,18 @@ Templates available in `~/.claude/templates/quality/runtime/`.
 ## QA Governance v3.1 — Deep Enforcement Enhancements
 
 ### Cognitive Complexity Enforcement
+
 The complexity-ratchet hook now measures both cyclomatic AND cognitive complexity:
+
 - Cognitive complexity weights branching by nesting depth (branch at nesting level N = score 1+N)
 - Max cognitive complexity per function: 15 (configurable in qa-config.json)
 - Code duplication detection via jscpd (max 5% duplication)
 - Dead code detection via vulture (Python) and knip (JS/TS)
 
 ### AI Slop Detection
+
 The post-edit-checker now scans every Write/Edit for AI-generated antipatterns:
+
 - Placeholder TODOs ("TODO: implement", "TODO: add")
 - Lorem ipsum filler text
 - Placeholder domains (example.com in non-test files)
@@ -632,13 +670,17 @@ The post-edit-checker now scans every Write/Edit for AI-generated antipatterns:
 Advisory only — prints warnings, does not block.
 
 ### Dead Import & Dead Code Detection
+
 Quality-gate.sh (Stop) and post-edit-checker.sh (PostToolUse) now detect:
+
 - Dead imports: ruff F401 (Python), oxlint no-unused-vars (JS/TS)
 - Dead code: vulture --min-confidence 80 (Python), knip --no-progress (JS/TS)
 - Code duplication: jscpd with 5% threshold
 
 ### Supply Chain Security (Layer 5)
+
 Security pipeline expanded from 4 to 5 layers:
+
 1. Secrets (gitleaks + regex patterns)
 2. SAST (semgrep, bandit, gosec)
 3. Dependencies (pip-audit, npm audit, govulncheck, cargo-audit, osv-scanner)
@@ -646,13 +688,16 @@ Security pipeline expanded from 4 to 5 layers:
 5. **Supply Chain** (syft SBOM generation, OSV-Scanner, opengrep)
 
 ### Enhanced Test Maturity Model
+
 Test maturity expanded from 16 to 20 criteria across 5 levels:
+
 - **L4 new**: Snapshot/golden tests (3pts), Approval tests (2pts)
 - **L5 new**: Chaos/resilience tests (3pts), Fuzz testing (3pts)
 - Enhanced property-based test detection: hypothesis, fast-check, gopter, proptest
 - Points rebalanced: 20pts per level, 100pts total
 
 ### Hook Stderr Convention
+
 All hooks that exit non-zero now write descriptive failure messages to stderr.
 Format: `HOOK_NAME FAIL: reason` (e.g., "SUPPRESSION BLOCKER FAIL: 2 new lint suppression(s)")
 This ensures Claude Code displays the actual failure reason instead of "No stderr output".

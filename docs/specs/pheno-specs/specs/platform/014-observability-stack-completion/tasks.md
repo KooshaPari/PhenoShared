@@ -22,6 +22,7 @@
 Complete the Phench benchmarking framework with full statistical analysis, result reporting, and integration hooks for the observability pipeline. Phench serves as the benchmarking component that correlates development-time benchmarks with production performance metrics.
 
 ### Subtasks
+
 - [ ] T001 Audit current Phench state: existing code, gaps, dependencies
 - [ ] T002 Implement statistical analysis module: mean, stddev, percentiles, confidence intervals
 - [ ] T003 Implement benchmark result exporters: JSON, CSV, Markdown report
@@ -33,9 +34,11 @@ Complete the Phench benchmarking framework with full statistical analysis, resul
 - [ ] T009 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - None (can start independently)
 
 ### Risks & Mitigations
+
 - Statistical analysis complexity: Use existing crates (statrs) as reference, implement core functions
 - Benchmark flakiness: Implement warmup phases, multiple iterations, outlier rejection
 
@@ -58,6 +61,7 @@ Complete the Phench benchmarking framework with full statistical analysis, resul
 Complete the tracely distributed tracing implementation with full W3C Trace Context propagation. This is the backbone of the observability stack, providing trace IDs that correlate logs, metrics, and profiling data across services.
 
 ### Subtasks
+
 - [ ] T010 Audit current tracely state: existing tracing code, protocol adapters, gaps
 - [ ] T011 Implement W3C Trace Context: traceparent and traceparent header parsing/generation
 - [ ] T012 Implement HTTP trace context injection/extraction middleware
@@ -72,9 +76,11 @@ Complete the tracely distributed tracing implementation with full W3C Trace Cont
 - [ ] T021 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - None (can start in parallel with WP-001)
 
 ### Risks & Mitigations
+
 - W3C spec compliance: Reference official W3C Trace Context spec, test against conformance suite
 - Performance overhead: Benchmark tracing overhead, optimize hot paths, support sampling
 
@@ -97,6 +103,7 @@ Complete the tracely distributed tracing implementation with full W3C Trace Cont
 Integrate thegent-metrics with the tracing pipeline and optimize thegent-shm shared memory for low-latency metric collection. Metrics receive trace context from tracely, enabling correlation between traces and metric anomalies.
 
 ### Subtasks
+
 - [ ] T022 Audit thegent-metrics: current metric types, collection patterns, export formats
 - [ ] T023 Audit thegent-shm: shared memory layout, read/write performance, safety guarantees
 - [ ] T024 Implement trace ID injection into metric labels in thegent-metrics
@@ -109,9 +116,11 @@ Integrate thegent-metrics with the tracing pipeline and optimize thegent-shm sha
 - [ ] T031 Run quality checks across both crates
 
 ### Dependencies
+
 - WP-002 (tracely trace context available for metric injection)
 
 ### Risks & Mitigations
+
 - SHM safety: Use unsafe carefully, add extensive safety tests, consider memmap2 crate
 - Metric cardinality explosion: Enforce label limits, document cardinality best practices
 
@@ -134,6 +143,7 @@ Integrate thegent-metrics with the tracing pipeline and optimize thegent-shm sha
 Complete helix-logging with automatic trace ID injection and unified log format. Logs become correlated with traces and metrics through shared trace IDs, enabling full-stack observability queries.
 
 ### Subtasks
+
 - [ ] T032 Audit helix-logging: current log format, structured logging support, output targets
 - [ ] T033 Implement automatic trace ID injection via tracing subscriber layer
 - [ ] T034 Define unified log format: timestamp, level, service, trace_id, span_id, message, fields
@@ -146,9 +156,11 @@ Complete helix-logging with automatic trace ID injection and unified log format.
 - [ ] T041 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - WP-002 (tracely trace context available for log injection)
 
 ### Risks & Mitigations
+
 - Log volume: Implement sampling, rate limiting, and structured field filtering
 - Trace ID extraction failures: Graceful degradation — log without trace_id, warn once
 
@@ -171,6 +183,7 @@ Complete helix-logging with automatic trace ID injection and unified log format.
 Complete Profila as the profiling toolkit and integrate it with the tracing pipeline. Tracera's profiling prototype functionality is merged into Profila. Profile data is correlated with trace spans, enabling identification of performance bottlenecks within specific request flows.
 
 ### Subtasks
+
 - [ ] T042 Audit Profila and Tracera: existing profiling code, overlap, gaps
 - [ ] T043 Merge Tracera profiling functionality into Profila
 - [ ] T044 Implement CPU profiling with pprof-compatible output
@@ -182,9 +195,11 @@ Complete Profila as the profiling toolkit and integrate it with the tracing pipe
 - [ ] T050 Run quality checks across merged codebase
 
 ### Dependencies
+
 - WP-002 (tracely trace context for profile correlation)
 
 ### Risks & Mitigations
+
 - Profiling overhead: Support sampling profilers, document overhead benchmarks
 - Platform-specific profiling: Test on macOS and Linux, document platform limitations
 
@@ -205,6 +220,7 @@ Complete Profila as the profiling toolkit and integrate it with the tracing pipe
 Archive helix-tracing now that tracely provides complete distributed tracing functionality. Document the archival rationale, migration path, and ensure no active repos depend on the archived code.
 
 ### Subtasks
+
 - [ ] T051 Audit helix-tracing: confirm all functionality covered by tracely
 - [ ] T052 Create archival README with rationale, tracely migration guide, and timeline
 - [ ] T053 Archive helix-tracing via GitHub API
@@ -214,10 +230,12 @@ Archive helix-tracing now that tracely provides complete distributed tracing fun
 - [ ] T057 Document archival decision in observability stack documentation
 
 ### Dependencies
+
 - WP-002 (tracely complete and verified as replacement)
 - WP-004 (helix-logging updated to use tracely)
 
 ### Risks & Mitigations
+
 - Missed references: Comprehensive grep/search across all active repos before archival
 - Functionality gap: Audit (T051) confirms tracely covers all helix-tracing features
 

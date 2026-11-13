@@ -21,12 +21,14 @@ Vercel provides instant preview URLs per branch, edge-cached CDN delivery, and n
 ## Consequences
 
 ### Positive
+
 - PR preview deployments are automatic on Vercel; no staging environment to maintain
 - GitHub Actions runners cover Rust, Node, and Docker workloads with standard marketplace actions
 - Zero-config for most projects; Vercel auto-detects framework from package.json
 - Free tier covers all current org projects
 
 ### Negative / Trade-offs
+
 - Vercel vendor lock-in for frontend hosting; migrating would require re-configuring build pipelines
 - GitHub Actions minutes are limited on free plans; large matrix builds may need optimisation
 - Backend services (Rust, NATS, Postgres) are not on Vercel — container orchestration is a future decision

@@ -164,11 +164,12 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
 4. Handle normalized package names (PyPI converts to lowercase with underscores/hyphens).
 
 **Acceptance Criteria:**
+
 - Detect finds all pyproject.toml files
 - Extracts name and version from [project] section
 - Extracts name and version from [tool.poetry] section (fallback)
 - Correctly identifies private packages
-- Skips excluded directories (venv, __pycache__, etc.)
+- Skips excluded directories (venv, **pycache**, etc.)
 - Returns empty list for non-Python repos
 
 ---
@@ -193,6 +194,7 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
    ```
 
 2. The WP01 calculator already implements PEP 440 formatting:
+
    ```
    alpha  → "{base}a{increment}"        (e.g., "1.2.3a1")
    canary → "{base}.dev{increment}"     (e.g., "1.2.3.dev1")  [sorts before alpha]
@@ -202,6 +204,7 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
    ```
 
 3. Document PEP 440 sorting order in a comment:
+
    ```
    PEP 440 sort order (from oldest to newest):
    1. dev releases:    1.0.dev0, 1.0.dev1, ...
@@ -218,6 +221,7 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
    - Build metadata (+...) is stripped on upload
 
 **Acceptance Criteria:**
+
 - Version method returns PEP 440-compliant strings
 - Canary versions (.dev) sort before alpha versions
 - All 5 channels produce correct pre-release identifiers
@@ -274,6 +278,7 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
 4. Ensure `build` package is available (`pip install build`).
 
 **Acceptance Criteria:**
+
 - Build executes `python -m build` in package directory
 - Returns dist/ directory path
 - Handles errors from build failures
@@ -376,6 +381,7 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
    - Config file: `~/.pypirc`
 
 **Acceptance Criteria:**
+
 - Publish runs `twine upload dist/*`
 - Already-published versions return success (idempotent)
 - Auth errors fail with helpful message
@@ -453,6 +459,7 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
 4. Poll every 10 seconds, timeout after 5 minutes.
 
 **Acceptance Criteria:**
+
 - Verify polls the PyPI JSON API endpoint
 - Returns true when version is found (200 status)
 - Returns false and error after 5-minute timeout
@@ -665,6 +672,7 @@ WP03 implements the PyPI RegistryAdapter, enabling detection, versioning, buildi
 3. Run tests with `go test -v ./internal/adapters/...`
 
 **Acceptance Criteria:**
+
 - All version tests pass
 - Private package detection works
 - Excluded directories are skipped

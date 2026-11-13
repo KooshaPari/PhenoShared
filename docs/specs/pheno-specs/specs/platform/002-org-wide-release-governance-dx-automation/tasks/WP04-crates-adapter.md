@@ -203,6 +203,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
 4. Respect `publish = false` in Cargo.toml to mark non-publishable crates.
 
 **Acceptance Criteria:**
+
 - Detects single-crate projects (no workspace)
 - Detects workspace members with glob patterns
 - Extracts path dependencies for each member
@@ -232,6 +233,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
    ```
 
 2. The WP01 calculator uses SemVer pre-release format:
+
    ```
    alpha  → "{base}-alpha.{increment}"    (e.g., "1.2.3-alpha.1")
    canary → "{base}-canary.{increment}"   (e.g., "1.2.3-canary.1")
@@ -244,6 +246,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
    Example: 1.2.3-alpha.1 < 1.2.3-beta.1 < 1.2.3-rc.1 < 1.2.3
 
 **Acceptance Criteria:**
+
 - Version returns SemVer pre-release format
 - Prod channel returns plain semantic version
 - All 5 channels supported
@@ -328,6 +331,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
 3. Return packages in publish order (leaves first).
 
 4. Example:
+
    ```
    Workspace:
    - crate-a (no deps)
@@ -338,6 +342,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
    ```
 
 5. Detect cycles:
+
    ```
    Cycle example:
    - crate-a (depends on crate-b)
@@ -347,6 +352,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
    ```
 
 **Acceptance Criteria:**
+
 - TopoSort returns packages in correct dependency order
 - Detects cycles and returns error with message
 - Handles single-crate projects (no sorting needed)
@@ -494,6 +500,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
 4. Handle rate limiting with Retry-After header parsing.
 
 **Acceptance Criteria:**
+
 - Build fails if work tree is not clean
 - Build runs `cargo package -p <name>`
 - Publish runs `cargo publish -p <name>`
@@ -563,6 +570,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
 4. Timeout after 5 minutes.
 
 **Acceptance Criteria:**
+
 - Verify polls the crates.io API endpoint
 - Returns true when version is found (200 status)
 - Returns false and error after 5-minute timeout
@@ -777,6 +785,7 @@ WP04 implements the crates.io RegistryAdapter for Rust packages. This adapter ha
 3. Run tests with `go test -v ./internal/adapters/...`
 
 **Acceptance Criteria:**
+
 - All detection tests pass
 - TopoSort returns correct order for DAG
 - Cycle detection works correctly

@@ -25,4 +25,5 @@
 | Git commit with message `A-02: absorb nanovms core` | ✅ |
 
 ## Git SHA
+
 `f22d4e0` — A-02: absorb nanovms core into phenotype-infra/crates/nanovms-core

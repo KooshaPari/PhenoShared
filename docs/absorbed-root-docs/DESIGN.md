@@ -64,6 +64,7 @@ DAG (intent graph) where:
   test result, metric, and final outcome, emit a `.graph.json` per run.
 
 Migration is staged A → E (no behavior change in Stage A; full planner
+
 + multi-agent + strong re-entry by Stage E). See
 `docs/specs/001-eval-architecture.md` §4 and
 `docs/specs/004-implementation-plan.md` §9.

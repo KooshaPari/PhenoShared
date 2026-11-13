@@ -54,8 +54,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -82,11 +83,13 @@ spec-kitty implement WP04 --base WP03
 ## Context & Constraints
 
 ### Reference Documents
+
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- AuditEntry (lines 149-166), GovernanceContract (lines 126-148), Evidence (lines 168-182), PolicyRule (lines 184-197)
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- Audit chain design (lines 213-224), governance contract model
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- FR-016 (hash-chained audit), FR-018 (governance contracts), FR-020 (policy rules), FR-021 (evidence linking)
 
 ### Architectural Constraints
+
 - **Pure domain logic**: Lives in `agileplus-core`. No I/O, no file access, no database calls.
 - **sha2 crate**: Use `sha2::Sha256` for all hashing. No custom crypto.
 - **Deterministic hashing**: The hash function must produce identical output across platforms, Rust versions, and serialization contexts. Use byte concatenation with fixed separators, NOT serde_json serialization (JSON key ordering is not guaranteed).
@@ -94,6 +97,7 @@ spec-kitty implement WP04 --base WP03
 - **serde_json for rules**: The `rules` field in GovernanceContract is stored as `serde_json::Value` for flexibility, but validated against a schema at bind time.
 
 ### Dependency on WP03
+
 - WP03 provides `Feature`, `FeatureState`, `StateTransition`, `WorkPackage`, and `WpState` types.
 - `AuditEntry.transition` uses the `StateTransition` type from WP03.
 - `Evidence.wp_id` references `WorkPackage.id` from WP03.
@@ -109,6 +113,7 @@ spec-kitty implement WP04 --base WP03
 - **Steps**:
   1. Open `crates/agileplus-core/src/domain/governance.rs` (stub from WP01).
   2. Implement `GovernanceContract`:
+
      ```rust
      use chrono::{DateTime, Utc};
      use serde::{Deserialize, Serialize};
@@ -125,7 +130,9 @@ spec-kitty implement WP04 --base WP03
          pub bound_at: DateTime<Utc>,
      }
      ```
+
   3. Define `GovernanceRule`:
+
      ```rust
      #[derive(Debug, Clone, Serialize, Deserialize)]
      pub struct GovernanceRule {
@@ -147,6 +154,7 @@ spec-kitty implement WP04 --base WP03
          pub threshold: Option<Value>,
      }
      ```
+
   4. Implement `GovernanceContract::new()` constructor.
   5. Implement `GovernanceContract::validate_rules(&self) -> Result<(), DomainError>`:
      - Check that all transitions reference valid `FeatureState` pairs
@@ -166,6 +174,7 @@ spec-kitty implement WP04 --base WP03
 - **Steps**:
   1. Open `crates/agileplus-core/src/domain/audit.rs` (stub from WP01).
   2. Implement `AuditEntry`:
+
      ```rust
      use chrono::{DateTime, Utc};
      use serde::{Deserialize, Serialize};
@@ -201,6 +210,7 @@ spec-kitty implement WP04 --base WP03
          pub fr_id: String,
      }
      ```
+
   3. Implement `AuditEntry::genesis(feature_id: i64, actor: &str) -> Self`:
      - Creates the first entry in a chain
      - `prev_hash` is `[0u8; 32]`
@@ -218,6 +228,7 @@ spec-kitty implement WP04 --base WP03
 - **Purpose**: The deterministic hash function that creates the chain links. Correctness here is paramount -- any deviation means chain verification will fail.
 - **Steps**:
   1. In `audit.rs`, implement the hash function:
+
      ```rust
      use sha2::{Sha256, Digest};
 
@@ -261,6 +272,7 @@ spec-kitty implement WP04 --base WP03
          hash
      }
      ```
+
   2. Key design decisions:
      - **Big-endian** for integer encoding (platform-independent)
      - **RFC 3339** for timestamp serialization (deterministic format)
@@ -278,6 +290,7 @@ spec-kitty implement WP04 --base WP03
 - **Purpose**: Verify the integrity of an entire audit chain. This is called by the `validate` command and can detect if any entry has been tampered with, deleted, or inserted out of order.
 - **Steps**:
   1. Implement in `audit.rs`:
+
      ```rust
      /// Verify the integrity of an audit chain.
      ///
@@ -341,7 +354,9 @@ spec-kitty implement WP04 --base WP03
          Ok(entries.len())
      }
      ```
+
   2. Define `AuditChainError` enum:
+
      ```rust
      #[derive(Debug, thiserror::Error)]
      pub enum AuditChainError {
@@ -355,7 +370,9 @@ spec-kitty implement WP04 --base WP03
          NonSequentialId { entry_id: i64, expected_id: i64 },
      }
      ```
+
   3. Implement `AuditChain` convenience wrapper:
+
      ```rust
      pub struct AuditChain {
          entries: Vec<AuditEntry>,
@@ -369,6 +386,7 @@ spec-kitty implement WP04 --base WP03
          pub fn last_hash(&self) -> [u8; 32] { ... }
      }
      ```
+
 - **Files**: `crates/agileplus-core/src/domain/audit.rs`
 - **Parallel?**: No -- depends on T019 and T020.
 - **Validation**: Valid chains verify; tampered entries detected; missing entries detected; non-sequential IDs caught.
@@ -379,6 +397,7 @@ spec-kitty implement WP04 --base WP03
 - **Purpose**: Define the evidence artifact type that proves a functional requirement has been satisfied. Evidence is linked to both a work package (producer) and a functional requirement (what it proves).
 - **Steps**:
   1. In `governance.rs`, implement `Evidence`:
+
      ```rust
      #[derive(Debug, Clone, Serialize, Deserialize)]
      pub struct Evidence {
@@ -402,6 +421,7 @@ spec-kitty implement WP04 --base WP03
          ManualAttestation,
      }
      ```
+
   2. Implement `Evidence::new()` constructor.
   3. Implement `Evidence::satisfies_requirement(&self, req: &EvidenceRequirement) -> bool`:
      - Check `evidence_type` matches `req.evidence_type`
@@ -421,6 +441,7 @@ spec-kitty implement WP04 --base WP03
 - **Purpose**: Define configurable policy rules that are evaluated during the validate command. Policies are domain-scoped (quality, security, reliability) and can be enabled/disabled.
 - **Steps**:
   1. In `governance.rs`, implement:
+
      ```rust
      #[derive(Debug, Clone, Serialize, Deserialize)]
      pub struct PolicyRule {
@@ -465,7 +486,9 @@ spec-kitty implement WP04 --base WP03
          ReviewApproved,
      }
      ```
+
   2. Implement `PolicyRule::evaluate(&self, evidence: &[Evidence]) -> PolicyResult`:
+
      ```rust
      #[derive(Debug, Clone)]
      pub enum PolicyResult {
@@ -474,6 +497,7 @@ spec-kitty implement WP04 --base WP03
          Skip { reason: String },  // rule inactive or not applicable
      }
      ```
+
   3. Implement each `PolicyCheck` variant's evaluation logic:
      - `MinCoverage`: find TestResult evidence, extract coverage from metadata, compare
      - `MaxCriticalFindings`: find SecurityScan evidence, extract critical count, compare
@@ -493,6 +517,7 @@ spec-kitty implement WP04 --base WP03
 - **Steps**:
   1. Create test module(s) in `audit.rs` and `governance.rs`.
   2. **Audit chain tests (10+ tests)**:
+
      ```rust
      #[test]
      fn test_genesis_entry_has_zero_prev_hash() { ... }
@@ -540,7 +565,9 @@ spec-kitty implement WP04 --base WP03
          // evidence_refs, or prev_hash each produce a different hash
      }
      ```
+
   3. **Evidence tests (5+ tests)**:
+
      ```rust
      #[test]
      fn test_evidence_satisfies_matching_requirement() { ... }
@@ -557,7 +584,9 @@ spec-kitty implement WP04 --base WP03
      #[test]
      fn test_completeness_check_all_satisfied() { ... }
      ```
+
   4. **Policy evaluation tests (8+ tests)**:
+
      ```rust
      #[test]
      fn test_min_coverage_passes_above_threshold() { ... }
@@ -583,7 +612,9 @@ spec-kitty implement WP04 --base WP03
      #[test]
      fn test_evaluate_all_policies_mixed_results() { ... }
      ```
+
   5. **Governance contract tests (3+ tests)**:
+
      ```rust
      #[test]
      fn test_contract_rules_for_transition() { ... }
@@ -594,6 +625,7 @@ spec-kitty implement WP04 --base WP03
      #[test]
      fn test_contract_versioning() { ... }
      ```
+
   6. Consider proptest for hash determinism and chain integrity properties.
 - **Files**: `crates/agileplus-core/src/domain/audit.rs` (inline tests), `crates/agileplus-core/src/domain/governance.rs` (inline tests), or `crates/agileplus-core/tests/`
 - **Parallel?**: No -- depends on T018-T023 being complete.
@@ -605,6 +637,7 @@ spec-kitty implement WP04 --base WP03
 **Purpose**: Use proptest to verify hash chain integrity invariants.
 
 **Steps**:
+
 1. Write property tests: any chain of N entries verifies correctly
 2. Write property tests: tampering with any single entry breaks chain verification
 3. Write property tests: governance evaluation is deterministic for same inputs
@@ -617,6 +650,7 @@ spec-kitty implement WP04 --base WP03
 **Purpose**: Verify audit/governance test suite catches mutations (≥90%).
 
 **Steps**:
+
 1. Run `cargo mutants -p agileplus-domain -- --test audit --test governance`
 2. Verify mutation score ≥90% for audit.rs and governance.rs
 3. Fix gaps with targeted tests
@@ -628,6 +662,7 @@ spec-kitty implement WP04 --base WP03
 **Purpose**: Import and extend existing Phenotype governance patterns (FR-028, FR-029).
 
 **Steps**:
+
 1. Analyze existing governance from parpour, civ, thegent repos
 2. Extract reusable patterns: worktree discipline, quality gates, agent workflow rules
 3. Encode as default governance contract templates in domain crate
@@ -687,6 +722,7 @@ Reviewers should verify:
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this Activity Log section
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ – agent_id – lane=<lane> – <action>`

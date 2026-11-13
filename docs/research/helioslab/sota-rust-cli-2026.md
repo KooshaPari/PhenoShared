@@ -27,6 +27,7 @@ The recommended stack for new HeliosLab/Phenotype CLI work is:
 ## 1. Argument parsing: `clap` vs `argh` vs `lexopt`
 
 ### `clap` 4.6.x (recommended default)
+
 - **Current version**: 4.6.1 (per docs.rs).
 - **MSRV**: 1.74, supports the last two minor Rust releases.
 - **Strengths**: derive macros, builder API, value parsers, `--help`, shell
@@ -39,6 +40,7 @@ The recommended stack for new HeliosLab/Phenotype CLI work is:
   auto-generated help. The de-facto standard in the Rust ecosystem.
 
 ### `argh` 0.1.19
+
 - **Current version**: 0.1.19 (per docs.rs).
 - **Origin**: Google Fuchsia. Conforms to the Fuchsia commandline tools spec.
 - **Strengths**: derive-based, optimized for **code size**, fast compile
@@ -49,6 +51,7 @@ The recommended stack for new HeliosLab/Phenotype CLI work is:
   kilobyte of binary size matters.
 
 ### `lexopt` 0.3.2
+
 - **Current version**: 0.3.2 (per docs.rs).
 - **Strengths**: deliberately minimal, single-file, iterator-style parser.
   Zero derive macros, zero codegen, minimal dependencies.
@@ -58,6 +61,7 @@ The recommended stack for new HeliosLab/Phenotype CLI work is:
   over the parsing semantics.
 
 ### Verdict
+
 For `phenoctl` and similar Phenotype CLIs, **clap with `derive` is the right
 choice**. `pheno-cli/Cargo.toml:15` already declares
 `clap = { version = "4", features = ["derive"] }` and `pheno-cli/src/main.rs:9`

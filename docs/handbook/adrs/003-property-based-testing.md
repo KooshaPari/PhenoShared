@@ -15,12 +15,14 @@ The Phenotype ecosystem requires robust testing strategies for:
 - **All libraries**: 18+ crates in the ecosystem
 
 Current testing challenges:
+
 1. **Example-Based Testing Limitations** — Test cases don't catch edge cases
 2. **Maintenance Burden** — Large test suites with repetitive setup
 3. **Boundary Testing** — Difficult to exercise all input combinations
 4. **Regression Discovery** — Bugs found in production not caught by tests
 
 Testing requirements:
+
 | Requirement | Current State | Target State |
 |-------------|---------------|--------------|
 | Edge case coverage | ~40% | > 90% |
@@ -32,6 +34,7 @@ Testing requirements:
 ## Decision
 
 We will adopt **Property-Based Testing (PBT)** as the default testing strategy for domain logic, with example-based tests reserved for:
+
 1. Integration tests with specific fixtures
 2. Regression tests for specific bugs
 3. Documentation examples
@@ -419,21 +422,25 @@ fn test_encryption() {}
 ## Migration Plan
 
 ### Phase 1: New Code (Immediate)
+
 - [ ] All new domain code requires property tests
 - [ ] PR template includes property test checklist
 - [ ] Code review enforces property test coverage
 
 ### Phase 2: Critical Paths (Q2 2026)
+
 - [ ] Add property tests to Order domain
 - [ ] Add property tests to Workflow engine
 - [ ] Add property tests to Spec validation
 
 ### Phase 3: Broad Coverage (Q3 2026)
+
 - [ ] Property tests for all value objects
 - [ ] Property tests for command validation
 - [ ] State machine tests for workflows
 
 ### Phase 4: Optimization (Q4 2026)
+
 - [ ] Parallel test execution
 - [ ] CI case count tuning
 - [ ] Regression case minimization

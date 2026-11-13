@@ -3,6 +3,7 @@
 ## Overview
 
 Successfully completed Tasks 3, 4, and 5 of Phase 2 planning:
+
 - Task 3: Audit agent-wave repository
 - Task 4: Audit root Cargo.toml workspace configuration
 - Task 5: Create AgilePlus specifications for Phase 2 work
@@ -14,20 +15,23 @@ Successfully completed Tasks 3, 4, and 5 of Phase 2 planning:
 ## Task 3: Agent Wave Audit
 
 ### Deliverable
+
 **File:** `/repos/docs/audits/2026-03-30-agent-wave-audit.md`
 
 ### Key Findings
 
 **Project Overview:**
+
 - **Location:** `~/Repos/agent-wave/`
 - **Language:** TypeScript / JavaScript
 - **Package Manager:** Bun v1.2.0 (enforced via preinstall)
-- **Repository:** https://github.com/KooshaPari/agent-wave
+- **Repository:** <https://github.com/KooshaPari/agent-wave>
 - **Size:** 3.3 MB, 404 files
 - **Status:** Governance-scaffolding phase
 
 **Architecture:**
 Agent Wave occupies the orchestration layer between consumers and individual AI agents:
+
 ```
 Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
               ↓
@@ -35,6 +39,7 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
 ```
 
 **Specification Maturity:**
+
 - ✅ E1 (Repository Governance) — COMPLETE
   - Pre-commit YAML linting
   - CI/CD quality gates
@@ -48,11 +53,13 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
   - E5: Policy Federation (4 FRs)
 
 **Dependencies:**
+
 - External: @phenotype/docs (0.1.0), vitepress (1.6.4), bun (1.2.0)
 - Ecosystem: AgentAPI++, policy-federation, phenotype-contracts
 - ⚠️ Blockers: AgentAPI++ contracts not published, policy federation endpoint not documented
 
 **Recommendations:**
+
 1. Move to `/repos/` immediately (clear scope, no circular deps)
 2. Integrate into unified monorepo governance
 3. Finalize AgentAPI++ & policy federation contracts (unblocks E4 & E5)
@@ -60,6 +67,7 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
 5. Create AgilePlus specs for E2–E5 implementation roadmap
 
 **Cross-Project Reuse Opportunities:**
+
 - Wave Manifest Schema → phenotype-contracts (shared orchestrators)
 - Health Check Protocol → phenotype-health (align TypeScript ↔ Rust)
 - Policy Query Types → phenotype-policy-engine (centralize domain models)
@@ -70,6 +78,7 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
 ## Task 4: Root Cargo.toml Audit
 
 ### Deliverable
+
 **File:** `/repos/docs/audits/2026-03-30-root-workspace-audit.md`
 
 ### Critical Findings
@@ -77,6 +86,7 @@ Consumer → Agent Wave Orchestrator ↔ AgentAPI++ ↔ CLI Agents
 **Compilation Status:** ⚠️ BROKEN
 
 **Blocking Error:**
+
 ```
 error[E0432]: unresolved import `phenotype_error_core::CoreError`
   --> crates/phenotype-test-infra/src/lib.rs:25:9
@@ -85,6 +95,7 @@ error[E0432]: unresolved import `phenotype_error_core::CoreError`
 **Root Cause:** `phenotype-test-infra` attempts to import `CoreError` from `phenotype-error-core`, but the type is not publicly exported.
 
 **Workspace Structure:**
+
 - **Total Crates:** 27
 - **Active Members:** 13 (all exist, all directories present)
 - **Excluded Crates:** 14
@@ -113,6 +124,7 @@ error[E0432]: unresolved import `phenotype_error_core::CoreError`
    - Action: Decide for each: Include, Archive, or Remove
 
 **Workspace Dependencies Analysis:**
+
 - ✅ 29 packages declared
 - ✅ All bleeding-edge versions (tokio 1, serde 1.0, thiserror 2.0, gix 0.81)
 - ⚠️ Missing: `once_cell` used by some crates but not in workspace.dependencies
@@ -135,7 +147,9 @@ error[E0432]: unresolved import `phenotype_error_core::CoreError`
 ## Task 5: Phase 2 Specifications & Work Plan
 
 ### Deliverables
+
 **Files:**
+
 - `/repos/docs/audits/PHASE_2_SPECS_AND_WORKPLAN.md` (comprehensive roadmap)
 - This document (completion report)
 
@@ -150,6 +164,7 @@ error[E0432]: unresolved import `phenotype_error_core::CoreError`
 ### Phase 2A: Consolidation (1-2 weeks)
 
 **Projects to Move to `/repos/`:**
+
 1. agent-wave (3.3 MB, governance-phase)
 2. clipproxyapi-plusplus (25+ MB, Go/Rust)
 3. heliosCLI (100+ MB, multi-lang)
@@ -157,6 +172,7 @@ error[E0432]: unresolved import `phenotype_error_core::CoreError`
 5. phenotype-shared (15+ MB, shared utilities)
 
 **Work Packages:**
+
 - WP 2A-01: Audit & Plan Repository Moves
 - WP 2A-02: Execute Repository Moves
 - WP 2A-03: Archive Legacy/IDE Projects
@@ -167,6 +183,7 @@ error[E0432]: unresolved import `phenotype_error_core::CoreError`
 **Critical Work:** Fix workspace compilation errors
 
 **Work Packages:**
+
 - **WP 2B-01:** Fix Root Cargo.toml Issues (CRITICAL)
   - Add CoreError export
   - Remove phenotype-git-core from exclude
@@ -197,6 +214,7 @@ error[E0432]: unresolved import `phenotype_error_core::CoreError`
 **Objective:** Unblock phenotype-router-monitor compilation; publish API contracts
 
 **Work Packages:**
+
 - WP 2C-01: Fix phenotype-router-monitor Build (1-2 days)
 - WP 2C-02: Router Health Check Integration (1 day)
 - WP 2C-03: Document ClipProxy API Contracts (1 day)
@@ -219,18 +237,21 @@ Phase 3 (Implementation begins) [Week 8+]
 ### Success Criteria
 
 **By End of Phase 2A:**
+
 - ✅ All 5 projects in `/repos/`
 - ✅ CI/CD pipelines functional
 - ✅ Legacy projects archived
 - ✅ Root docs updated
 
 **By End of Phase 2B:**
+
 - ✅ Workspace compiles (zero errors)
 - ✅ All crate exports documented
 - ✅ TypeScript tooling configured
 - ✅ Dependencies consistent
 
 **By End of Phase 2C:**
+
 - ✅ Router compiles + tests pass
 - ✅ API contracts published
 - ✅ Integration tests functional
@@ -239,6 +260,7 @@ Phase 3 (Implementation begins) [Week 8+]
 ### AgilePlus Spec Templates (Ready to Create)
 
 **Spec 1: phase2a-consolidation**
+
 ```
 Title: Phase 2A: Consolidate Scattered Projects
 Description: Move agent-wave, clipproxyapi-plusplus, heliosCLI, phenotype-design, phenotype-shared from ~/Repos to /repos
@@ -246,6 +268,7 @@ Work Packages: 4 (WP 2A-01 through 2A-04)
 ```
 
 **Spec 2: phase2b-foundation**
+
 ```
 Title: Phase 2B: Foundation (Workspace Repair + Implementations)
 Description: Fix Cargo.toml, implement missing exports, standardize crate structure
@@ -254,6 +277,7 @@ Critical Blocker: WP 2B-01 must complete before WP 2B-02+
 ```
 
 **Spec 3: phase2c-monitoring**
+
 ```
 Title: Phase 2C: Monitoring Unblock + API Ready
 Description: Resolve phenotype-router-monitor build, publish API contracts
@@ -266,6 +290,7 @@ Depends-On: Phase 2B (partial)
 ## Commits Generated
 
 ### Commit 1: Phase 2 Audit Documents
+
 ```
 commit 72aaf0275
 docs(audits): add Phase 2 workspace audits and planning documents
@@ -298,17 +323,20 @@ Summary:
 ## Key Takeaways
 
 ### Agent Wave (Task 3)
+
 - ✅ Governance phase complete; implementation-ready
 - 📋 28 FRs documented for E2–E5 implementation
 - 🎯 Ready to move to `/repos/` + create implementation specs
 
 ### Cargo.toml (Task 4)
+
 - ⚠️ CRITICAL: CoreError export missing (blocks all builds)
 - 🔨 Fix estimate: <15 minutes
 - 📋 Workspace cleanup needed: decide fate of 14 excluded crates
 - 🎯 Unblock compilation immediately; clarify strategy in 2B-02
 
 ### Phase 2 Plan (Task 5)
+
 - 📅 8-10 week timeline with 3 clear sub-phases
 - 🎯 13 work packages total
 - 📊 Parallelizable work streams (consolidation, foundation, monitoring)
@@ -319,19 +347,23 @@ Summary:
 ## Next Steps
 
 ### Immediate (This Week)
+
 1. ✅ Create 3 AgilePlus specs (phase2a, phase2b, phase2c)
 2. ✅ Register 13 work packages in AgilePlus
 3. Assign agents to parallel work streams
 
 ### Week 1-2 (Phase 2A Execution)
+
 - Audit remaining projects (clipproxyapi, heliosCLI, phenotype-design, phenotype-shared)
 - Begin repository consolidation to `/repos/`
 
 ### Week 2-3 (Phase 2B Execution)
+
 - Execute WP 2B-01: Fix Cargo.toml (unblock compilation)
 - Execute WP 2B-02..05 in parallel
 
 ### Week 4+ (Phase 2C Execution)
+
 - Router unblock + API contract publication
 - Ready for Phase 3 implementation
 
@@ -352,16 +384,19 @@ Summary:
 ## References
 
 **Audit Documents:**
+
 - `/repos/docs/audits/2026-03-30-agent-wave-audit.md`
 - `/repos/docs/audits/2026-03-30-root-workspace-audit.md`
 - `/repos/docs/audits/PHASE_2_SPECS_AND_WORKPLAN.md`
 
 **Memory (System Context):**
+
 - Global CLAUDE.md policies
 - Phenotype governance (Phenotype/CLAUDE.md)
 - User preferences (workspace audit work, bleeding-edge deps, wrap-over-handroll)
 
 **Success Criteria:**
+
 - ✅ Agent-wave audit written and committed
 - ✅ Root Cargo.toml audit written and committed
 - ✅ Phase 2 workplan with 13 WPs documented

@@ -28,6 +28,7 @@ history:
 **Primary Goal:** Standardize on mise for task execution across all Phenotype repos and validate language-specific reference configurations.
 
 **Success Criteria:**
+
 - Mise v2026.x stability confirmed across 4 language ecosystems (Rust, Python, TypeScript, Go)
 - Decision documented in ADR with fallback strategy if experimental features unstable
 - 4 reference `mise.toml` files validated on production repos
@@ -37,12 +38,14 @@ history:
 ## Context & Constraints
 
 **Context:**
+
 - WP07 established pheno CLI infrastructure; WP11 feeds task definitions into it
 - 47 repos across 4 primary languages; current state: mix of Taskfile, npm scripts, make, and ad-hoc tooling
 - Mise selected as standardized task runner; experimental monorepo features provide centralized task inheritance
 - Current state: mise 2025.x deployed on some repos; v2026.x released with stability improvements
 
 **Constraints:**
+
 - Backward compatibility: repos currently using Taskfile.yml must migrate gracefully (pheno bootstrap handles this)
 - Monorepo task inheritance must stabilize; fallback to per-repo configuration if experimental flag still required
 - Reference configs must be minimal yet complete for all supported language toolchains
@@ -55,6 +58,7 @@ history:
 **Purpose:** Determine if mise v2026.x monorepo task inheritance has stabilized. If still experimental, document fallback to per-repo mise.toml without inheritance.
 
 **Steps:**
+
 1. Check mise v2026.x release notes for monorepo task deprecations or breaking changes
 2. Test mise v2026.x on a sample Rust + Python polyglot repo:
    - Create temp workspace with `[dirs]` configuration
@@ -69,12 +73,14 @@ history:
 6. If unstable: add migration guidance to bootstrap templates and pheno CLI error messages
 
 **Files:**
+
 - Create or update: `docs/adr/001-task-runner-selection.md`
 - Reference: mise v2026.x documentation and release notes
 
 **Parallel?** No (blocks T065–T070).
 
 **Notes:**
+
 - Stability is the gate; if 2026.x is production-ready, no fallback needed
 - Document any environment-specific issues (macOS vs Linux vs Windows)
 
@@ -85,7 +91,9 @@ history:
 **Purpose:** Create validated `mise.toml` template for Rust repos with standard task definitions and environment configuration.
 
 **Steps:**
+
 1. Create base template at `templates/rust/mise.toml`:
+
    ```toml
    [env]
    RUSTFLAGS = "-D warnings -W clippy::all"
@@ -104,6 +112,7 @@ history:
    release:promote = "pheno promote"
    release:status = "pheno audit --repo ."
    ```
+
 2. Add detailed comments for each section:
    - `[env]`: explain RUSTFLAGS for strict linting, RUST_BACKTRACE for debugging
    - `[tools]`: nightly default; document pinning specific version if needed
@@ -114,12 +123,14 @@ history:
 5. Document migration path: "If you have Taskfile.yml, replace with this template and remove Taskfile.yml"
 
 **Files:**
+
 - Create: `templates/rust/mise.toml`
 - Create: `templates/rust/MIGRATION.md` (if Taskfile.yml exists)
 
 **Parallel?** Yes, with T066–T068 after T064 complete.
 
 **Notes:**
+
 - nightly may require weekly updates; consider pinning to stable if preferred
 - Document cargo features and how to extend task:subtask nesting
 
@@ -130,7 +141,9 @@ history:
 **Purpose:** Create validated `mise.toml` template for Python repos with standard task definitions.
 
 **Steps:**
+
 1. Create base template at `templates/python/mise.toml`:
+
    ```toml
    [env]
    PYTHONUNBUFFERED = "1"
@@ -148,6 +161,7 @@ history:
    release:promote = "pheno promote"
    release:status = "pheno audit --repo ."
    ```
+
 2. Add environment setup guidance:
    - Virtual environment creation (if needed; modern Python tools often handle this)
    - Ruff vs Black decision (use ruff as unified linter + formatter)
@@ -157,12 +171,14 @@ history:
 5. Test on actual Python repo (thegent planned for T079)
 
 **Files:**
+
 - Create: `templates/python/mise.toml`
 - Create: `templates/python/pyproject.toml` (snippet for pytest config)
 
 **Parallel?** Yes, with T065, T067–T068 after T064 complete.
 
 **Notes:**
+
 - Python 3.14 is forward-looking; adjust to 3.13 if 3.14 not yet stable at implementation time
 - Document common pip-audit issues (license scanning vs vulnerability scanning)
 
@@ -173,7 +189,9 @@ history:
 **Purpose:** Create validated `mise.toml` template for TypeScript/Node repos.
 
 **Steps:**
+
 1. Create base template at `templates/typescript/mise.toml`:
+
    ```toml
    [env]
    NODE_ENV = "development"
@@ -190,6 +208,7 @@ history:
    release:promote = "pheno promote"
    release:status = "pheno audit --repo ."
    ```
+
 2. Include package.json snippet:
    - devDependencies: eslint, vitest, typescript, prettier
    - scripts section (optional; prefer mise tasks)
@@ -198,6 +217,7 @@ history:
 5. Test on actual TypeScript repo (AgilePlus planned for T077)
 
 **Files:**
+
 - Create: `templates/typescript/mise.toml`
 - Create: `templates/typescript/eslint.config.js` (starter config)
 - Create: `templates/typescript/vitest.config.ts` (starter config)
@@ -205,6 +225,7 @@ history:
 **Parallel?** Yes, with T065–T066, T068 after T064 complete.
 
 **Notes:**
+
 - Node 22 aligns with LTS; verify it's stable at implementation time
 - Document npm audit limitations (optional dependencies, false positives)
 
@@ -215,7 +236,9 @@ history:
 **Purpose:** Create validated `mise.toml` template for Go repos.
 
 **Steps:**
+
 1. Create base template at `templates/go/mise.toml`:
+
    ```toml
    [env]
    CGO_ENABLED = "1"
@@ -232,18 +255,21 @@ history:
    release:promote = "pheno promote"
    release:status = "pheno audit --repo ."
    ```
+
 2. Include `.golangci.yml` starter configuration with linter rules
 3. Document govulncheck integration (replaces deprecated go.vulnerabilities)
 4. Document CGO requirement (if cgo-free builds preferred, comment out)
 5. Test on actual Go repo (agentapi-plusplus planned for T080)
 
 **Files:**
+
 - Create: `templates/go/mise.toml`
 - Create: `templates/go/.golangci.yml` (starter config)
 
 **Parallel?** Yes, with T065–T067 after T064 complete.
 
 **Notes:**
+
 - Go 1.23 stable; adjust if newer LTS available at implementation time
 - govulncheck is relatively new; ensure team is familiar or add docs/tutorial
 
@@ -254,6 +280,7 @@ history:
 **Purpose:** Define `release:promote` and `release:status` tasks that work identically across all languages via pheno CLI.
 
 **Steps:**
+
 1. Define release:promote task:
    - Signature: `pheno promote <channel>` (where channel: alpha|beta|rc|stable)
    - Implemented by WP07 pheno CLI; task runner simply invokes it
@@ -272,12 +299,14 @@ history:
    - `mise run release:status` (sample output)
 
 **Files:**
+
 - Add to all templates: T065–T068 mise.toml files
 - Create or update: `docs/governance/release-channels.md`
 
 **Parallel?** No (depends on T065–T068 completion).
 
 **Notes:**
+
 - Pheno CLI must be installed for these tasks to work; pheno bootstrap ensures this
 - Document in error message what to do if pheno is not found
 
@@ -288,6 +317,7 @@ history:
 **Purpose:** Deploy all 4 reference configs on actual Phenotype repos and verify all tasks execute successfully.
 
 **Steps:**
+
 1. **Rust (tokenledger):**
    - Copy template from T065 to `tokenledger/mise.toml`
    - Run: `mise run lint` (should pass or show fixable clippy warnings)
@@ -328,6 +358,7 @@ history:
    - Flag any templates needing adjustment
 
 **Files:**
+
 - Update: T065–T068 templates based on real-world testing
 - Create: `docs/task-runner-reference.md` (results summary)
 - Update: Each of 4 repos with mise.toml
@@ -335,6 +366,7 @@ history:
 **Parallel?** No (depends on T065–T069 completion).
 
 **Notes:**
+
 - This is the critical validation step; issues found here drive template fixes
 - Measure task execution times; if any task exceeds 30s, document why and optimizations
 
@@ -353,6 +385,7 @@ history:
 ## Review Guidance
 
 **Reviewers should verify:**
+
 - [ ] Mise v2026.x stability assessment complete (T064)
 - [ ] All 4 language reference configs exist and match expected structure (T065–T068)
 - [ ] Release tasks (promote/status) included in all configs (T069)

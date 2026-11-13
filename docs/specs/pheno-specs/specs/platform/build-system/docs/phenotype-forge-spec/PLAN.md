@@ -59,6 +59,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 ### Phase 1: CLI Foundation (Weeks 1-4)
 
 #### 1.1 Project Infrastructure
+
 - [x] Rust CLI project setup
 - [x] Clap for argument parsing
 - [x] CI/CD pipeline
@@ -66,6 +67,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [x] Homebrew tap setup
 
 #### 1.2 Core Commands
+
 - [ ] `forge new` - Create new project
 - [ ] `forge generate` - Generate code from template
 - [ ] `forge add` - Add module to existing project
@@ -73,6 +75,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] `forge list` - List available templates
 
 #### 1.3 Configuration
+
 - [ ] Global config file
 - [ ] Project config file
 - [ ] Template sources (git, local)
@@ -82,6 +85,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 ### Phase 2: Template System (Weeks 5-8)
 
 #### 2.1 Template Engine
+
 - [ ] Handlebars integration
 - [ ] Askama for Rust templates
 - [ ] Variable substitution
@@ -90,6 +94,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] Partial templates
 
 #### 2.2 Template Discovery
+
 - [ ] Git repository templates
 - [ ] Local filesystem templates
 - [ ] Registry API (remote)
@@ -97,6 +102,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] Semantic versioning support
 
 #### 2.3 Interactive Prompts
+
 - [ ] Inquire.rs for prompts
 - [ ] Validation of inputs
 - [ ] Conditional questions
@@ -106,6 +112,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 ### Phase 3: Language Templates (Weeks 9-12)
 
 #### 3.1 Rust Templates
+
 - [ ] Binary project
 - [ ] Library project
 - [ ] Workspace project
@@ -114,6 +121,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] CLI tool (clap)
 
 #### 3.2 Python Templates
+
 - [ ] Package project
 - [ ] FastAPI service
 - [ ] CLI tool (Typer)
@@ -121,6 +129,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] PyO3 extension
 
 #### 3.3 TypeScript Templates
+
 - [ ] Node.js library
 - [ ] Fastify service
 - [ ] React/Vue/Svelte app
@@ -128,6 +137,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] Deno project
 
 #### 3.4 Go Templates
+
 - [ ] Module project
 - [ ] Gin service
 - [ ] CLI tool (Cobra)
@@ -136,6 +146,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 ### Phase 4: Advanced Generation (Weeks 13-16)
 
 #### 4.1 OpenAPI Generation
+
 - [ ] Parse OpenAPI spec
 - [ ] Generate client SDKs
 - [ ] Generate server stubs
@@ -143,6 +154,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] Documentation generation
 
 #### 4.2 Protobuf Generation
+
 - [ ] Parse .proto files
 - [ ] Generate services
 - [ ] Generate clients
@@ -150,6 +162,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] Validation integration
 
 #### 4.3 Database Generation
+
 - [ ] Schema to migrations
 - [ ] Entity generation
 - [ ] Repository patterns
@@ -159,6 +172,7 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 ### Phase 5: Template Ecosystem (Weeks 17-20)
 
 #### 5.1 Template Registry
+
 - [ ] Central template repository
 - [ ] Template ratings
 - [ ] Usage statistics
@@ -166,12 +180,14 @@ Phenotype-Forge is a code generation and templating platform for the Phenotype e
 - [ ] Security scanning
 
 #### 5.2 Custom Templates
+
 - [ ] Template creation guide
 - [ ] Template testing framework
 - [ ] Template publishing
 - [ ] Template documentation
 
 #### 5.3 IDE Integration
+
 - [ ] VSCode extension
 - [ ] JetBrains plugin
 - [ ] Neovim integration
@@ -305,12 +321,14 @@ The system implements a layered architecture with clear separation of concerns:
 ### A.2 Component Interaction Patterns
 
 #### Synchronous Communication
+
 - Direct method calls within process
 - HTTP/gRPC for inter-service
 - Timeout and retry policies
 - Circuit breaker pattern
 
 #### Asynchronous Communication
+
 - Event-driven architecture
 - Message queue patterns
 - Publish/subscribe
@@ -347,6 +365,7 @@ Input → Validation → Transformation → Processing → Storage → Output
 ### B.3 Infrastructure Decisions
 
 Cloud Strategy:
+
 - Multi-cloud capability (AWS primary, Azure/GCP fallback)
 - Kubernetes for orchestration
 - Terraform for infrastructure as code
@@ -357,6 +376,7 @@ Cloud Strategy:
 ### C.1 Deployment Procedures
 
 #### Pre-Deployment Checklist
+
 - [ ] All tests passing (unit, integration, e2e)
 - [ ] Security scan clean (SAST, DAST, dependency check)
 - [ ] Performance benchmarks within SLA
@@ -367,6 +387,7 @@ Cloud Strategy:
 - [ ] On-call roster confirmed
 
 #### Deployment Steps
+
 1. Deploy to staging environment
 2. Run smoke tests
 3. Gradual traffic shift (10% → 25% → 50% → 100%)
@@ -377,12 +398,14 @@ Cloud Strategy:
 ### C.2 Incident Response
 
 Severity Levels:
+
 - **SEV1**: Service down, data loss, security breach
 - **SEV2**: Major feature degraded, workaround exists
 - **SEV3**: Minor feature issue, low impact
 - **SEV4**: Cosmetic issues, no user impact
 
 Response Times:
+
 | Severity | Acknowledge | Resolve |
 |----------|-------------|---------|
 | SEV1 | 5 min | 1 hour |
@@ -393,6 +416,7 @@ Response Times:
 ### C.3 Capacity Planning
 
 Scaling Triggers:
+
 - CPU utilization > 70% for 5 minutes
 - Memory utilization > 80% for 5 minutes
 - Request latency p99 > 500ms
@@ -402,10 +426,12 @@ Scaling Triggers:
 ### C.4 Disaster Recovery
 
 Recovery Objectives:
+
 - RPO (Recovery Point Objective): 5 minutes
 - RTO (Recovery Time Objective): 30 minutes
 
 Backup Strategy:
+
 - Continuous replication to secondary region
 - Point-in-time recovery enabled
 - Daily full backups retained for 30 days
@@ -416,6 +442,7 @@ Backup Strategy:
 ### D.1 Threat Model
 
 STRIDE Analysis:
+
 - **Spoofing**: Identity verification at all entry points
 - **Tampering**: Immutable audit logs, checksums
 - **Repudiation**: Non-repudiable event sourcing
@@ -535,6 +562,7 @@ STRIDE Analysis:
 ### H.2 Business Impact Analysis
 
 Critical Functions:
+
 1. User authentication (RTO: 15 min)
 2. Data persistence (RTO: 30 min)
 3. API availability (RTO: 5 min)
@@ -601,6 +629,7 @@ alerts:
 Sprint Duration: 2 weeks
 
 Sprint Cadence:
+
 - **Monday**: Sprint planning
 - **Daily**: Standup (15 min)
 - **Wednesday**: Mid-sprint review
@@ -651,6 +680,7 @@ Sprint Cadence:
 ### K.1 Common Patterns
 
 #### Pattern: Circuit Breaker
+
 ```rust
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::time::{Duration, Instant};
@@ -718,6 +748,7 @@ impl CircuitBreaker {
 ```
 
 #### Pattern: Retry with Exponential Backoff
+
 ```python
 import time
 import random
@@ -762,6 +793,7 @@ def retry(
 ### K.2 Configuration Examples
 
 #### Kubernetes Deployment
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -812,6 +844,7 @@ spec:
 ```
 
 #### Terraform Infrastructure
+
 ```hcl
 variable "environment" {
   description = "Deployment environment"
@@ -871,6 +904,7 @@ resource "aws_rds_cluster" "postgres" {
 ### K.3 Database Schema Examples
 
 #### PostgreSQL Schema
+
 ```sql
 -- Core tables
 CREATE TABLE organizations (
@@ -937,6 +971,7 @@ CREATE TABLE events_y2024m02 PARTITION OF events
 ### K.4 API Design Examples
 
 #### RESTful API Specification
+
 ```yaml
 openapi: 3.0.3
 info:
@@ -1090,17 +1125,20 @@ security:
 ### L.2 Optimization Checklist
 
 Before Optimization:
+
 - [ ] Identify bottlenecks with profiling
 - [ ] Establish baseline metrics
 - [ ] Define success criteria
 
 During Optimization:
+
 - [ ] Change one thing at a time
 - [ ] Measure after each change
 - [ ] Document all changes
 - [ ] Maintain correctness tests
 
 After Optimization:
+
 - [ ] Verify all tests pass
 - [ ] Compare against baseline
 - [ ] Document trade-offs
@@ -1167,6 +1205,7 @@ After Optimization:
 ### M.3 Emergency Procedures
 
 1. **Service Down**
+
    ```
    1. Check monitoring dashboards
    2. Identify scope (partial/total)
@@ -1177,6 +1216,7 @@ After Optimization:
    ```
 
 2. **Data Corruption**
+
    ```
    1. Stop writes immediately
    2. Identify affected data
@@ -1187,6 +1227,7 @@ After Optimization:
    ```
 
 3. **Security Incident**
+
    ```
    1. Activate incident response team
    2. Contain the breach
@@ -1244,6 +1285,7 @@ in the Software without restriction...
 ### O.2 Data Processing
 
 Data processing activities:
+
 - User authentication data
 - Application logs
 - Performance metrics
@@ -1254,6 +1296,7 @@ All processing is documented in the Data Processing Register.
 ### O.3 Export Control
 
 This software is subject to export control regulations:
+
 - EAR (Export Administration Regulations)
 - EU Dual-Use Regulation
 
@@ -1264,6 +1307,7 @@ No cryptographic components exceed mass market encryption limits.
 ### P.1 New Team Member Checklist
 
 Week 1:
+
 - [ ] Access provisioning (GitHub, AWS, VPN)
 - [ ] Development environment setup
 - [ ] Codebase walkthrough
@@ -1271,18 +1315,21 @@ Week 1:
 - [ ] First commit (documentation update)
 
 Week 2:
+
 - [ ] Architecture deep dive
 - [ ] On-call shadowing
 - [ ] First feature (small, guided)
 - [ ] Tool training (monitoring, deployment)
 
 Week 3-4:
+
 - [ ] First independent feature
 - [ ] Code review participation
 - [ ] Documentation contributions
 - [ ] Process familiarity
 
 Month 2-3:
+
 - [ ] On-call rotation
 - [ ] Mentoring newer team members
 - [ ] Technical blog post
@@ -1291,12 +1338,14 @@ Month 2-3:
 ### P.2 Recommended Reading
 
 Technical:
+
 - "Designing Data-Intensive Applications" (Martin Kleppmann)
 - "Clean Architecture" (Robert C. Martin)
 - "The Rust Programming Language" (Steve Klabnik)
 - "Effective Go" (Go team)
 
 Domain:
+
 - "Building Microservices" (Sam Newman)
 - "Site Reliability Engineering" (Google)
 - "Continuous Delivery" (Jez Humble)
@@ -1304,12 +1353,14 @@ Domain:
 ### P.3 Training Resources
 
 Internal:
+
 - Architecture Decision Records (ADRs)
 - Runbooks and playbooks
 - Technical talks (recorded)
 - Code review guidelines
 
 External:
+
 - Online courses (reimbursed)
 - Conference attendance
 - Certification programs
@@ -1318,6 +1369,7 @@ External:
 ---
 
 **Document Statistics:**
+
 - Total sections: 16 appendices
 - Code examples: 10+
 - Configuration samples: 5+

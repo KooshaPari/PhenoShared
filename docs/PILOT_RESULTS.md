@@ -39,6 +39,7 @@ substrate dispatch "Print exactly: PILOT-WORKER-OK" --tier worker --cwd /tmp
 | JSON valid | YES |
 
 Raw output:
+
 ```json
 {
   "engine": "codex",
@@ -94,6 +95,7 @@ Both substrate and native codex return identical answers. Substrate adds structu
 ### Structured output
 
 Output is valid JSON (serde_json correctly escapes embedded newlines as `\n`). Fields:
+
 - `engine: string` — which backend ran
 - `output: string` — raw text output from the model (trailing `\n` included)
 - `succeeded_tier: string` — which tier actually ran (may differ from requested on reroute-up)

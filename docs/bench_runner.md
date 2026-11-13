@@ -110,10 +110,10 @@ _DISPATCH = {
 }
 ```
 
-4. Add a unit test under
+1. Add a unit test under
    `tests/test_bench_runner.py::TestBuildAdapter` that asserts
    `--model my-factory-xyz` routes to your adapter.
-5. Run `pytest tests/test_bench_runner.py -v` — every test must pass
+2. Run `pytest tests/test_bench_runner.py -v` — every test must pass
    with no real network calls.
 
 ### Adapter contract

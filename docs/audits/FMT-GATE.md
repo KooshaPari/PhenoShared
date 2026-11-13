@@ -270,6 +270,7 @@ the wrong toolchain.
 
 **Method used (validated).** Pin the toolchain explicitly with `rustup run <tc> rustfmt`, one
 option per scratch config:
+
 - for each option, write a scratch `rustfmt.toml` containing **only that option**;
 - run `rustup run stable rustfmt --check --edition 2021 sample.rs`, capture stderr;
 - classify as NIGHTLY-ONLY iff stderr matches `unstable features are only available`;

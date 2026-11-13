@@ -187,10 +187,12 @@ assigned Features are Validated or Shipped before accepting the state change.
 1. Implement `async fn create(args: CreateArgs, storage: &dyn StoragePort) -> anyhow::Result<()>`:
 
    - Parse `start_date`:
+
      ```rust
      let start = chrono::NaiveDate::parse_from_str(&args.start, "%Y-%m-%d")
          .map_err(|_| anyhow::anyhow!("Invalid start date '{}': expected YYYY-MM-DD", args.start))?;
      ```
+
    - Parse `end_date` identically.
    - Resolve optional module scope:
      - If `args.module = Some(slug)`, look up `storage.get_module_by_slug(&slug, None).await?`.
@@ -205,20 +207,24 @@ assigned Features are Validated or Shipped before accepting the state change.
 2. Implement `async fn list(args: ListArgs, storage: &dyn StoragePort) -> anyhow::Result<()>`:
 
    - Parse optional state filter:
+
      ```rust
      let state_filter = args.state
          .map(|s| s.parse::<CycleState>()
              .map_err(|e| anyhow::anyhow!("Unknown state '{}': {}", s, e)))
          .transpose()?;
      ```
+
    - Call `storage.list_cycles(state_filter).await?`.
    - If empty, print `"No cycles found."`.
    - Otherwise, print a table:
+
      ```
      NAME                    STATE    START        END          SCOPE
      Sprint W10              Active   2026-03-03   2026-03-14   (all)
      Notif Refactor          Draft    2026-03-15   2026-03-28   notifications
      ```
+
    - Resolve scope slug: fetch module name from `storage.get_module_by_id(scope_id)` for display;
      show `"(all)"` when `module_scope_id = None`.
 
@@ -289,10 +295,12 @@ assigned Features are Validated or Shipped before accepting the state change.
    - Resolve feature by slug. If `None`, error `"Feature '{}' not found"`.
    - Call `storage.add_feature_to_cycle(cycle.id, feature.id).await`.
    - On `Err(DomainError::FeatureNotInModuleScope { feature_slug, module_slug })`, return:
+
      ```
      "Cannot add: feature '{}' is not owned by or tagged to module '{}' (cycle scope).
       Use 'agileplus module assign {}' or 'agileplus module tag {}' first."
      ```
+
    - On success, print: `"Added feature '{}' to cycle '{}'."`.
 
 2. Implement `async fn remove(args: RemoveArgs, storage: &dyn StoragePort) -> anyhow::Result<()>`:
@@ -329,10 +337,12 @@ entry point and add unit tests.
 
    - Resolve cycle by name. If `None`, error.
    - Parse `target_state`:
+
      ```rust
      let target: CycleState = args.target_state.parse()
          .map_err(|e| anyhow::anyhow!("Unknown cycle state '{}': {}", args.target_state, e))?;
      ```
+
    - Validate the edge is allowed at the domain level: call `cycle.state.transition(target)`.
      On `Err(DomainError::InvalidTransition { from, to, reason })`, return:
      `"Cannot transition from {} to {}: {}"`.
@@ -340,6 +350,7 @@ entry point and add unit tests.
      return `Ok(())`.
 
    - Special gate for `CycleState::Shipped` (Traces to FR-C07):
+
      ```rust
      if target == CycleState::Shipped {
          let cwf = storage.get_cycle_with_features(cycle.id).await?
@@ -370,6 +381,7 @@ entry point and add unit tests.
    ```
 
    In dispatch:
+
    ```rust
    Commands::Cycle(args) => commands::cycle::run(args, &storage).await?,
    ```

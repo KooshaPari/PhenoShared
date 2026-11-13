@@ -91,6 +91,7 @@ These patterns should either propagate errors or have explicit preconditions doc
 | phenotype-event-sourcing/phenotype-event-sourcing/lib.rs | 27 | Documentation example | `.unwrap()` in doc comment | SHOULD: Use `?` in doc example |
 
 **Recommended Fix:**
+
 ```rust
 // BEFORE (current, unsafe)
 let config = PoliciesConfigFile::from_file(path).unwrap();
@@ -109,6 +110,7 @@ let config = PoliciesConfigFile::from_file(path)
 All `RwLock` types **must** use `parking_lot::RwLock`, never `std::sync::RwLock`.
 
 **Enforcement:**
+
 ```bash
 # CI check
 cargo clippy -- -W clippy::manual_async_fn
@@ -298,23 +300,27 @@ for n in filtered {
 **Defensive Pattern:** Migrate RwLock to parking_lot (DONE)
 
 All lock operations are now infallible:
+
 ```rust
 // ✅ Current (safe)
 let store = self.events.read();  // Never panics
 ```
 
 **Remaining Acceptable Patterns:**
+
 - Post-check unwraps on `events.last()` (INVARIANT-checked)
 - Test code unwraps (TEST ONLY)
 
 ### phenotype-policy-engine
 
 **Action Items:**
+
 1. Configuration loading should return Result, not panic
 2. Refactor loader.rs to validate before unwrap
 3. Propagate configuration errors to caller
 
 **Acceptable Patterns:**
+
 - Test code unwraps (TEST ONLY)
 - Policy/rule evaluation tests
 
@@ -401,9 +407,9 @@ fn test_suppression_requires_comment() {
 
 ## References
 
-- **parking_lot Docs:** https://docs.rs/parking_lot/
-- **Clippy Lint Reference:** https://rust-lang.github.io/rust-clippy/
-- **RFC 2119 (MUST/SHOULD):** https://tools.ietf.org/html/rfc2119
+- **parking_lot Docs:** <https://docs.rs/parking_lot/>
+- **Clippy Lint Reference:** <https://rust-lang.github.io/rust-clippy/>
+- **RFC 2119 (MUST/SHOULD):** <https://tools.ietf.org/html/rfc2119>
 
 ---
 

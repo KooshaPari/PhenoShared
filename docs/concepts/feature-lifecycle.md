@@ -70,6 +70,7 @@ Output:
 ```
 
 At this point:
+
 - Feature exists in the domain model (Feature struct, state = `Created`)
 - An audit entry is created with actor, timestamp, initial metadata
 - The hash chain begins (prev_hash = 0x0...)
@@ -138,6 +139,7 @@ spec_hash = sha256("# User Authentication\n...")
 This hash is immutable and tracks the feature through its lifecycle.
 
 Transition to **Specified**:
+
 ```
 agileplus transition user-authentication created->specified \
   --spec-path features/user-authentication/spec.md
@@ -193,6 +195,7 @@ We will:
 ```
 
 Transition to **Researched**:
+
 ```
 agileplus transition user-authentication specified->researched \
   --research-path features/user-authentication/research.md
@@ -222,21 +225,25 @@ The plan **decomposes** the feature into independent work packages with clear bo
 ## Architecture Overview
 
 ```
+
 User -> bcrypt -> password_hash (DB)
               -> compare on login
 
 Login flow:
+
   1. User submits email + password
   2. Query user by email
   3. bcrypt.verify(password, user.password_hash)
   4. If OK, issue JWT token (signed with RS256)
   5. Token stored in httpOnly cookie
   6. Future requests validate token signature
+
 ```
 
 ## File Structure
 
 ```
+
 src/
   ├── auth/
   │   ├── mod.rs (new)
@@ -247,6 +254,7 @@ src/
   │   └── auth.rs (JWT validation middleware)
 tests/
   ├── auth_integration.rs (new)
+
 ```
 
 ## Work Packages
@@ -287,6 +295,7 @@ tests/
 ## Dependency Graph
 
 ```
+
 WP01 (Models)
   ├→ WP02 (API)
   └→ WP03 (Middleware)
@@ -295,6 +304,7 @@ Execution order:
   Layer 1: WP01 (no dependencies)
   Layer 2: WP02 (depends on WP01)
   Layer 3: WP03 (depends on WP01, WP02)
+
 ```
 
 ## Build Sequence
@@ -317,6 +327,7 @@ Execution order:
 ```
 
 Transition to **Planned**:
+
 ```
 agileplus transition user-authentication researched->planned \
   --plan-path features/user-authentication/plan.md
@@ -345,6 +356,7 @@ Created work packages:
 For each WP, an agent or developer:
 
 1. Creates a worktree and branch:
+
    ```
    git worktree add .worktrees/user-authentication/WP01 \
      -b feature/user-authentication/WP01 main
@@ -356,15 +368,17 @@ For each WP, an agent or developer:
    - Acceptance tests to satisfy
 
 3. Implements in isolation:
+
    ```
-   $ cd .worktrees/user-authentication/WP01
-   $ cargo add bcrypt
-   $ # Implement src/auth/models.rs
-   $ cargo test
-   $ git commit -m "WP01: Implement User and Session models"
+   cd .worktrees/user-authentication/WP01
+   cargo add bcrypt
+   # Implement src/auth/models.rs
+   cargo test
+   git commit -m "WP01: Implement User and Session models"
    ```
 
 4. Pushes for review (agent workflow):
+
    ```
    $ agileplus wp complete WP01
    Validating WP01 acceptance criteria...
@@ -376,6 +390,7 @@ For each WP, an agent or developer:
    ```
 
 WP state transitions:
+
 - `Planned → Doing` — agent starts work
 - `Doing → Review` — code ready for review
 - `Review → Done` — approved and merged
@@ -475,6 +490,7 @@ After the feature has been live for a period, the team gathers to reflect:
 ```
 
 Transition to **Retrospected**:
+
 ```
 agileplus transition user-authentication shipped->retrospected \
   --retrospective-path features/user-authentication/retrospective.md
@@ -553,6 +569,7 @@ WP01 runs first (no deps). WP02 and WP03 both depend on WP01 but not each other,
 ## NATS Events Throughout Lifecycle
 
 Every phase transition publishes to NATS JetStream. This drives:
+
 - Real-time SSE updates to the dashboard
 - Dragonfly cache invalidation
 - External sync hooks (Plane.so, GitHub)

@@ -1664,6 +1664,7 @@ fn default_refresh_before() -> f64 { 0.2 } // Refresh at 80% of TTL
 ### 7.2 API Response Formats
 
 **Route Response:**
+
 ```json
 {
   "name": "users-api",
@@ -1691,6 +1692,7 @@ fn default_refresh_before() -> f64 { 0.2 } // Refresh at 80% of TTL
 ```
 
 **Upstream Health Response:**
+
 ```json
 {
   "name": "user-service",
@@ -1713,6 +1715,7 @@ fn default_refresh_before() -> f64 { 0.2 } // Refresh at 80% of TTL
 ```
 
 **Rate Limit Status Response:**
+
 ```json
 {
   "consumer_id": "consumer-001",
@@ -1894,6 +1897,7 @@ Modern gateways implement Zero Trust principles:
 Portalis leverages Tokio for high-performance async I/O:
 
 **Request Flow:**
+
 1. Kernel notifies epoll of new connection
 2. Tokio schedules accept task on idle worker
 3. Worker spawns per-connection task
@@ -2030,6 +2034,7 @@ impl Node {
 ### 11.3 JWT Validation Pipeline
 
 **Validation Steps:**
+
 1. Extract from Authorization: Bearer `<token>` header
 2. Parse JWT structure (header.payload.signature)
 3. Verify signature using JWKS
@@ -2156,6 +2161,7 @@ impl TokenBucket {
 **Distributed Rate Limiting:**
 
 Uses Redis with Lua scripts for atomic operations:
+
 - Token bucket with Redis INCR and EXPIRE
 - Sliding window with Redis ZADD and ZREMRANGEBYSCORE
 - Consensus-less coordination for eventual consistency
@@ -3250,14 +3256,17 @@ Is the gateway responding?
 **Date**: 2026-04-01
 
 #### Context
+
 Need to select a programming language for the Portalis API gateway that delivers maximum performance while maintaining safety and developer productivity.
 
 #### Decision
+
 Use Rust with the Tokio async runtime for Portalis implementation.
 
 #### Consequences
 
 **Positive**:
+
 - Memory safety without garbage collection pauses
 - Zero-cost abstractions for high performance
 - Excellent async/await support via Tokio
@@ -3265,6 +3274,7 @@ Use Rust with the Tokio async runtime for Portalis implementation.
 - Growing ecosystem of web libraries (Hyper, Axum, Tower)
 
 **Negative**:
+
 - Steeper learning curve than Go
 - Longer compile times
 - Smaller talent pool
@@ -3286,20 +3296,24 @@ Use Rust with the Tokio async runtime for Portalis implementation.
 **Date**: 2026-04-02
 
 #### Context
+
 Need an efficient data structure for route matching that supports path parameters, wildcards, and high performance.
 
 #### Decision
+
 Use a radix tree (compressed trie) for route storage and matching.
 
 #### Consequences
 
 **Positive**:
+
 - O(m) matching where m = path length
 - Memory efficient through compression
 - Supports path parameters naturally
 - Better cache locality than hash maps
 
 **Negative**:
+
 - More complex implementation
 - Harder to debug than simple maps
 
@@ -3311,20 +3325,24 @@ Use a radix tree (compressed trie) for route storage and matching.
 **Date**: 2026-04-03
 
 #### Context
+
 Need a distributed store for rate limiting state across multiple gateway instances.
 
 #### Decision
+
 Use Redis with Lua scripts for atomic rate limit operations.
 
 #### Consequences
 
 **Positive**:
+
 - Atomic operations via Lua scripts
 - Excellent performance for in-memory operations
 - Wide operational familiarity
 - Pub/Sub for cache invalidation
 
 **Negative**:
+
 - Additional infrastructure dependency
 - Single point of failure (mitigated with Redis Cluster)
 
@@ -3345,19 +3363,23 @@ Use Redis with Lua scripts for atomic rate limit operations.
 **Date**: 2026-04-04
 
 #### Context
+
 Need to update gateway configuration without restarting the service to avoid downtime.
 
 #### Decision
+
 Implement hot config reload using OS file system notifications with atomic config swapping.
 
 #### Consequences
 
 **Positive**:
+
 - Zero-downtime configuration updates
 - Immediate effect of changes
 - Rollback capability
 
 **Negative**:
+
 - Potential for temporary inconsistency during transition
 - Need careful validation of new config
 
@@ -3369,20 +3391,24 @@ Implement hot config reload using OS file system notifications with atomic confi
 **Date**: 2026-04-05
 
 #### Context
+
 Need a unified observability solution for metrics, logs, and traces.
 
 #### Decision
+
 Use OpenTelemetry for distributed tracing and Prometheus for metrics.
 
 #### Consequences
 
 **Positive**:
+
 - Vendor-neutral standard
 - Wide ecosystem support
 - Correlation of traces, metrics, and logs
 - Future-proof integration
 
 **Negative**:
+
 - Complexity of OpenTelemetry setup
 - Overhead of instrumentation
 
@@ -3394,19 +3420,23 @@ Use OpenTelemetry for distributed tracing and Prometheus for metrics.
 **Date**: 2026-04-05
 
 #### Context
+
 Need to support multiple rate limiting algorithms for different use cases.
 
 #### Decision
+
 Implement both Token Bucket (for burst handling) and Sliding Window (for fairness) algorithms.
 
 #### Consequences
 
 **Positive**:
+
 - Flexibility for different use cases
 - Burst handling with token bucket
 - Fairness with sliding window
 
 **Negative**:
+
 - More code to maintain
 - Configuration complexity
 
@@ -3418,19 +3448,23 @@ Implement both Token Bucket (for burst handling) and Sliding Window (for fairnes
 **Date**: 2026-04-05
 
 #### Context
+
 Need efficient JWT validation with support for key rotation.
 
 #### Decision
+
 Implement three-tier caching: in-memory (L1), Redis (L2), with fallback to JWKS endpoint.
 
 #### Consequences
 
 **Positive**:
+
 - Fast validation via caching
 - Automatic key rotation support
 - Reduced load on identity provider
 
 **Negative**:
+
 - Cache invalidation complexity
 - Potential stale key issues
 
@@ -3442,19 +3476,23 @@ Implement three-tier caching: in-memory (L1), Redis (L2), with fallback to JWKS 
 **Date**: 2026-04-05
 
 #### Context
+
 Need to prevent cascade failures when upstream services are unhealthy.
 
 #### Decision
+
 Implement circuit breaker pattern with CLOSED, OPEN, and HALF-OPEN states.
 
 #### Consequences
 
 **Positive**:
+
 - Prevents cascade failures
 - Fast fail for unhealthy upstreams
 - Automatic recovery
 
 **Negative**:
+
 - Additional complexity
 - Potential for premature circuit opening
 
@@ -3466,19 +3504,23 @@ Implement circuit breaker pattern with CLOSED, OPEN, and HALF-OPEN states.
 **Date**: 2026-04-05
 
 #### Context
+
 Primary deployment target is Kubernetes infrastructure.
 
 #### Decision
+
 Design for Kubernetes-first with proper liveness/readiness probes, HPA, and service discovery.
 
 #### Consequences
 
 **Positive**:
+
 - Native K8s integration
 - Auto-scaling support
 - Service mesh compatibility
 
 **Negative**:
+
 - Less optimal for bare metal
 - K8s-specific knowledge required
 
@@ -3490,19 +3532,23 @@ Design for Kubernetes-first with proper liveness/readiness probes, HPA, and serv
 **Date**: 2026-04-05
 
 #### Context
+
 Need machine-parseable logs for observability and debugging.
 
 #### Decision
+
 Use structured JSON logging with correlation IDs and standard fields.
 
 #### Consequences
 
 **Positive**:
+
 - Easy parsing by log aggregation systems
 - Correlation across services
 - Rich query capabilities
 
 **Negative**:
+
 - Larger log volume
 - Human readability reduced
 
@@ -3728,41 +3774,41 @@ Phase 6: Decommission old gateway
 
 | # | Project | URL | Description |
 |---|---------|-----|-------------|
-| 1 | Tokio | https://tokio.rs/ | Rust async runtime |
-| 2 | Hyper | https://hyper.rs/ | HTTP library |
-| 3 | Tower | https://github.com/tower-rs/tower | Middleware framework |
-| 4 | Axum | https://docs.rs/axum | Web framework |
-| 5 | Pingora | https://github.com/cloudflare/pingora | Cloudflare's Rust proxy |
-| 6 | Rustls | https://github.com/rustls/rustls | TLS library |
+| 1 | Tokio | <https://tokio.rs/> | Rust async runtime |
+| 2 | Hyper | <https://hyper.rs/> | HTTP library |
+| 3 | Tower | <https://github.com/tower-rs/tower> | Middleware framework |
+| 4 | Axum | <https://docs.rs/axum> | Web framework |
+| 5 | Pingora | <https://github.com/cloudflare/pingora> | Cloudflare's Rust proxy |
+| 6 | Rustls | <https://github.com/rustls/rustls> | TLS library |
 
 ### I.2 API Gateway Solutions
 
 | # | Project | URL | Description |
 |---|---------|-----|-------------|
-| 7 | Kong | https://konghq.com/ | API gateway platform |
-| 8 | Envoy | https://www.envoyproxy.io/ | Service proxy |
-| 9 | Tyk | https://tyk.io/ | API gateway |
-| 10 | KrakenD | https://www.krakend.io/ | Ultra-fast gateway |
-| 11 | Traefik | https://traefik.io/ | Cloud-native router |
-| 12 | Caddy | https://caddyserver.com/ | HTTP server |
+| 7 | Kong | <https://konghq.com/> | API gateway platform |
+| 8 | Envoy | <https://www.envoyproxy.io/> | Service proxy |
+| 9 | Tyk | <https://tyk.io/> | API gateway |
+| 10 | KrakenD | <https://www.krakend.io/> | Ultra-fast gateway |
+| 11 | Traefik | <https://traefik.io/> | Cloud-native router |
+| 12 | Caddy | <https://caddyserver.com/> | HTTP server |
 
 ### I.3 Authentication Standards
 
 | # | Standard | URL | Description |
 |---|----------|-----|-------------|
-| 13 | OAuth 2.0 | https://oauth.net/2/ | Authorization framework |
-| 14 | OpenID Connect | https://openid.net/connect/ | Identity layer |
-| 15 | JWT | https://jwt.io/ | JSON Web Tokens |
-| 16 | JWKS | https://tools.ietf.org/html/rfc7517 | JSON Web Key Set |
+| 13 | OAuth 2.0 | <https://oauth.net/2/> | Authorization framework |
+| 14 | OpenID Connect | <https://openid.net/connect/> | Identity layer |
+| 15 | JWT | <https://jwt.io/> | JSON Web Tokens |
+| 16 | JWKS | <https://tools.ietf.org/html/rfc7517> | JSON Web Key Set |
 
 ### I.4 Observability
 
 | # | Project | URL | Description |
 |---|---------|-----|-------------|
-| 17 | Prometheus | https://prometheus.io/ | Metrics |
-| 18 | OpenTelemetry | https://opentelemetry.io/ | Observability |
-| 19 | Jaeger | https://www.jaegertracing.io/ | Distributed tracing |
-| 20 | Grafana | https://grafana.com/ | Visualization |
+| 17 | Prometheus | <https://prometheus.io/> | Metrics |
+| 18 | OpenTelemetry | <https://opentelemetry.io/> | Observability |
+| 19 | Jaeger | <https://www.jaegertracing.io/> | Distributed tracing |
+| 20 | Grafana | <https://grafana.com/> | Visualization |
 
 ---
 
@@ -3773,7 +3819,7 @@ Phase 6: Decommission old gateway
 **Status:** Draft  
 **Next Review:** 2026-04-11  
 **Owner:** Portalis Team  
-**Contact:** portalis@phenotype.io
+**Contact:** <portalis@phenotype.io>
 
 ---
 

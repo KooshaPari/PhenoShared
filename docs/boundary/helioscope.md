@@ -42,6 +42,7 @@ out_of_scope:
 **Reviewer:** forge subagent (L5-130 retirement sweep)
 **Worklog / finding:** `worklogs/L5-130-helioscope-cleanup-2026-06-21.json`
 **Decisions:**
+
 - Repo marked retired 2026-06-21; superseded by `helios-cli`. Boundary file retained as tombstone.
 
 **Next review:** never (retired)

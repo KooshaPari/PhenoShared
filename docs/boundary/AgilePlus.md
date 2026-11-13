@@ -52,6 +52,7 @@
 **Reviewer:** registry spine audit (deep-workspace audit, 2026-07-17 batch3)
 **Disposition-index row:** DSPI-20
 **Decisions:**
+
 - ARCHIVE_ONLY (not absorption).
 - Proposed spine promotion to PLATFORM role — pending human ratification.
 

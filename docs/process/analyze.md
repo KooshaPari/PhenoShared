@@ -15,6 +15,7 @@ Analyzes three layers of artifacts:
 3. **Implementation layer** — actual code, tests, deliverables
 
 Checks for:
+
 - **Consistency** — do plan and code match the spec?
 - **Completeness** — are all requirements covered?
 - **Dependency correctness** — are WP dependencies valid?
@@ -269,6 +270,7 @@ agileplus analyze 001 --phase spec
 ```
 
 Validates specification alone:
+
 - Checklist completion
 - Requirement clarity
 - No implementation details
@@ -280,6 +282,7 @@ agileplus analyze 001 --phase plan
 ```
 
 Validates spec + plan:
+
 - All FRs mapped to WPs
 - Reasonable architecture
 - Dependency correctness
@@ -291,6 +294,7 @@ agileplus analyze 001 --phase full
 ```
 
 Validates spec + plan + code:
+
 - All FRs implemented
 - All tests passing
 - No scope creep
@@ -298,19 +302,25 @@ Validates spec + plan + code:
 ## Interpreting Results
 
 ### Green Status
+
 ✓ Feature is well-defined and ready
+
 - All checks pass
 - No gaps or inconsistencies
 - Ready to proceed
 
 ### Yellow Status
+
 ⚠ Feature has minor issues
+
 - Non-blocking gaps (e.g., documentation missing)
 - Recommendations for improvement
 - Can proceed; fix before shipping
 
 ### Red Status
+
 ✗ Feature has blocking issues
+
 - Required work is missing
 - Gaps that prevent shipping
 - Must fix before proceeding
@@ -346,6 +356,7 @@ Generates interactive HTML report (opens in browser).
 **Important**: `analyze` never modifies artifacts. It only reports findings.
 
 To act on findings, you must manually:
+
 - Edit the spec to add missing requirements
 - Edit the plan to cover gaps
 - Edit the code to implement discovered gaps

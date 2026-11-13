@@ -86,6 +86,7 @@ AgilePlus commands through standardized tool definitions. Proto definitions live
 
 The proto files in the `agileplus-proto` repo (scaffolded in WP00/WP01) define the
 `AgilePlusCoreService` in `core.proto`. Key RPCs include:
+
 - `GetFeature`, `ListFeatures`, `CreateFeature` — feature management
 - `GetWorkPackage`, `ListWorkPackages` — WP queries
 - `RunCommand` — dispatch a CLI command (specify, plan, implement, etc.)
@@ -129,6 +130,7 @@ domain layer to external clients (primarily the Python MCP service). The server 
 **Implementation Steps**:
 
 1. Define the server struct that holds references to all port implementations:
+
    ```rust
    pub struct AgilePlusCoreServer<S, V, A, R, O>
    where
@@ -151,6 +153,7 @@ domain layer to external clients (primarily the Python MCP service). The server 
    `core.proto` in the `agileplus-proto` submodule.
 
 3. For each unary RPC, implement the handler method:
+
    ```rust
    async fn get_feature(
        &self,
@@ -166,6 +169,7 @@ domain layer to external clients (primarily the Python MCP service). The server 
    ```
 
 4. Implement the `RunCommand` RPC which dispatches to the appropriate CLI command logic:
+
    ```rust
    async fn run_command(
        &self,
@@ -183,6 +187,7 @@ domain layer to external clients (primarily the Python MCP service). The server 
    ```
 
 5. Set up the server startup function:
+
    ```rust
    pub async fn start_server(
        addr: SocketAddr,
@@ -215,6 +220,7 @@ gRPC entry point for MCP clients without requiring all downstream services to be
 **Implementation Steps**:
 
 1. Create a `ProxyRouter` struct holding optional channels to downstream services:
+
    ```rust
    pub struct ProxyRouter {
        agents_client: Option<AgentsServiceClient<Channel>>,
@@ -256,6 +262,7 @@ ensure every gRPC handler correctly delegates to the domain layer.
 **Implementation Steps**:
 
 1. Create a `conversions.rs` module with `From`/`Into` implementations:
+
    ```rust
    impl From<domain::Feature> for proto::Feature {
        fn from(f: domain::Feature) -> Self {
@@ -309,6 +316,7 @@ Uses generated stubs from the `agileplus-proto` submodule (imported as `agileplu
 **Implementation Steps**:
 
 1. Create the client class with connection management:
+
    ```python
    import grpc
    from agileplus_proto import core_pb2, core_pb2_grpc
@@ -330,6 +338,7 @@ Uses generated stubs from the `agileplus-proto` submodule (imported as `agileplu
    ```
 
 2. Implement typed wrapper methods for each RPC:
+
    ```python
    async def get_feature(self, slug: str) -> dict:
        request = core_pb2.GetFeatureRequest(slug=slug)
@@ -351,6 +360,7 @@ Uses generated stubs from the `agileplus-proto` submodule (imported as `agileplu
    ```
 
 3. Implement the agent event stream consumer:
+
    ```python
    async def stream_agent_events(self, feature_slug: str):
        request = core_pb2.StreamAgentEventsRequest(feature_slug=feature_slug)
@@ -373,6 +383,7 @@ Uses generated stubs from the `agileplus-proto` submodule (imported as `agileplu
    server can continue the trace.
 
 6. Use `contextlib.asynccontextmanager` for connection lifecycle:
+
    ```python
    @asynccontextmanager
    async def connect_client(address: str = "localhost:50051"):
@@ -392,6 +403,7 @@ behavior, and correct proto message construction.
 ### T082: Implement MCP Tool Handlers in `agileplus-mcp/src/agileplus_mcp/tools/`
 
 **Files**:
+
 - `agileplus-mcp/src/agileplus_mcp/tools/features.py`
 - `agileplus-mcp/src/agileplus_mcp/tools/governance.py`
 - `agileplus-mcp/src/agileplus_mcp/tools/status.py`
@@ -406,6 +418,7 @@ results.
    match `contracts/mcp-tools.json` exactly (tool names, parameter schemas, descriptions).
 
 2. Implement `features.py`:
+
    ```python
    from fastmcp import tool
    from agileplus_mcp.grpc_client import AgilePlusCoreClient
@@ -433,6 +446,7 @@ results.
    ```
 
 3. Implement `governance.py`:
+
    ```python
    @tool(name="agileplus_validate")
    async def validate(feature_slug: str, client: AgilePlusCoreClient) -> dict:
@@ -456,6 +470,7 @@ results.
    ```
 
 4. Implement `status.py`:
+
    ```python
    @tool(name="agileplus_status")
    async def status(feature_slug: str | None = None, client: AgilePlusCoreClient = None) -> dict:
@@ -476,6 +491,7 @@ results.
    ```
 
 5. Register all tools with the FastMCP server in `server.py`:
+
    ```python
    from fastmcp import FastMCP
    from agileplus_mcp.tools import features, governance, status
@@ -496,6 +512,7 @@ responses.
 ### T083: Implement Agent Event Streaming
 
 **Files**:
+
 - `agileplus-core/crates/agileplus-grpc/src/streaming.rs`
 - `agileplus-mcp/src/agileplus_mcp/tools/status.py` (add streaming tool)
 
@@ -506,6 +523,7 @@ from the Rust core.
 **Implementation Steps**:
 
 1. Define the event types in the domain layer:
+
    ```rust
    #[derive(Clone, Debug, Serialize)]
    pub enum AgentEvent {
@@ -519,6 +537,7 @@ from the Rust core.
    ```
 
 2. Create an event bus in the Rust core using `tokio::sync::broadcast`:
+
    ```rust
    pub struct EventBus {
        sender: broadcast::Sender<AgentEvent>,
@@ -535,6 +554,7 @@ from the Rust core.
    ```
 
 3. Implement the server-streaming RPC in the gRPC server:
+
    ```rust
    async fn stream_agent_events(
        &self,
@@ -557,6 +577,7 @@ from the Rust core.
    of agent execution.
 
 5. On the Python side, add a streaming status tool:
+
    ```python
    @tool(name="agileplus_stream_status")
    async def stream_status(feature_slug: str, client: AgilePlusCoreClient) -> AsyncIterator[dict]:
@@ -575,6 +596,7 @@ via Python client, verify all events received in order. Test disconnection and r
 ### T084: Write Pact Contract Tests for Rust-Python gRPC Boundary
 
 **Files**:
+
 - `agileplus-core/tests/contract/rust_provider_test.rs`
 - `agileplus-mcp/tests/contract/python_consumer_test.py`
 - `agileplus-core/tests/contract/pacts/` (generated pact files)
@@ -585,6 +607,7 @@ consumer agree on message formats and behavior, preventing integration regressio
 **Implementation Steps**:
 
 1. Set up the Python consumer side with `pact-python`:
+
    ```python
    # agileplus-mcp/tests/contract/test_agileplus_consumer.py
    from pact import Consumer, Provider
@@ -605,6 +628,7 @@ consumer agree on message formats and behavior, preventing integration regressio
    ```
 
 2. Set up the Rust provider side with `pact-rust`:
+
    ```rust
    #[tokio::test]
    async fn verify_pact_contract() {
@@ -642,6 +666,7 @@ intentional breaking changes (modify a proto field, verify pact fails).
 **Purpose**: Implement server-initiated analysis via MCP Sampling (FR-049).
 
 **Steps**:
+
 1. Implement sampling handlers in `agileplus-mcp/src/agileplus_mcp/sampling/`
 2. Auto-triage: server analyzes agent output and classifies bugs/issues
 3. Governance pre-check: server proactively validates before state transitions
@@ -655,6 +680,7 @@ intentional breaking changes (modify a proto field, verify pact fails).
 **Purpose**: Implement workspace boundary declarations via MCP Roots (FR-049).
 
 **Steps**:
+
 1. Implement roots provider in MCP server
 2. Declare per-feature roots: feature dir, worktree paths, config dirs
 3. Roots update dynamically as features/WPs are created
@@ -667,6 +693,7 @@ intentional breaking changes (modify a proto field, verify pact fails).
 **Purpose**: Implement discovery interviews via MCP Elicitation (FR-049).
 
 **Steps**:
+
 1. Implement elicitation handlers for specify/clarify flows
 2. Server sends structured questions, receives answers
 3. Wire to specify and clarify command workflows via gRPC
@@ -723,6 +750,7 @@ intentional breaking changes (modify a proto field, verify pact fails).
 | Timestamp | Event |
 |-----------|-------|
 | 2026-02-27T00:00:00Z | WP14 prompt generated via /spec-kitty.tasks |
+
 - 2026-03-02T01:23:35Z – s1-wp14 – shell_pid=60270 – lane=doing – Assigned agent via workflow command
 - 2026-03-02T01:37:36Z – s1-wp14 – shell_pid=60270 – lane=for_review – Ready: gRPC server and MCP integration
 - 2026-03-02T01:38:04Z – s1-wp14 – shell_pid=60270 – lane=done – gRPC server and MCP integration complete

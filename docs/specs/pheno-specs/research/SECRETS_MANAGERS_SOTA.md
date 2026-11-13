@@ -61,6 +61,7 @@ path "database/roles/app-reader" {
 ```
 
 **Key Benefits:**
+
 - Credentials exist only for their TTL duration
 - Automatic revocation eliminates stale credentials
 - Each client receives unique credentials enabling audit trails
@@ -157,6 +158,7 @@ CyberArk represents the established enterprise leader in privileged access manag
 **Pricing:**
 
 CyberArk follows enterprise pricing with custom quotes. Typical ranges:
+
 - Digital Vault: $50,000-$200,000/year entry point
 - Full PAS Suite: $200,000-$1M+/year depending on scale
 - Conjur Open Source: Free (enterprise support available)
@@ -614,6 +616,7 @@ provider "onepassword" {
 ### 4.3 Decision Framework
 
 **Choose HashiCorp Vault when:**
+
 - Maximum security isolation is required (air-gapped, regulated environments)
 - Dynamic secrets (database, cloud IAM) are critical
 - PKI infrastructure management is needed
@@ -621,12 +624,14 @@ provider "onepassword" {
 - Multi-cloud or hybrid cloud deployment
 
 **Choose Cloud-Native (AWS/Azure/GCP) when:**
+
 - Single-cloud strategy
 - Deep integration with cloud services is needed
 - Existing cloud IAM investment
 - Managed service preference
 
 **Choose Doppler when:**
+
 - Developer experience is the primary concern
 - Multi-environment consistency needed
 - Team without dedicated security operations
@@ -634,6 +639,7 @@ provider "onepassword" {
 - GitOps workflow integration
 
 **Choose 1Password when:**
+
 - Consumer-grade UX for developers
 - Already using 1Password for team passwords
 - Biometric authentication desired
@@ -646,11 +652,13 @@ provider "onepassword" {
 ### 5.1 Encryption Standards
 
 **At Rest:**
+
 - Minimum: AES-256-GCM
 - Preferred: AES-256-GCM with envelope encryption
 - HSM protection for master keys in regulated environments
 
 **In Transit:**
+
 - Minimum: TLS 1.2
 - Preferred: TLS 1.3
 - Certificate pinning for high-security environments
@@ -679,13 +687,13 @@ provider "onepassword" {
 
 ### Official Documentation
 
-1. HashiCorp Vault Documentation: https://developer.hashicorp.com/vault/docs
-2. AWS Secrets Manager Developer Guide: https://docs.aws.amazon.com/secretsmanager/latest/userguide/
-3. Azure Key Vault Documentation: https://docs.microsoft.com/en-us/azure/key-vault/
-4. Google Secret Manager Documentation: https://cloud.google.com/secret-manager/docs
-5. Doppler Documentation: https://docs.doppler.com/
-6. 1Password Secrets Automation: https://developer.1password.com/
-7. CyberArk Documentation: https://docs.cyberark.com/
+1. HashiCorp Vault Documentation: <https://developer.hashicorp.com/vault/docs>
+2. AWS Secrets Manager Developer Guide: <https://docs.aws.amazon.com/secretsmanager/latest/userguide/>
+3. Azure Key Vault Documentation: <https://docs.microsoft.com/en-us/azure/key-vault/>
+4. Google Secret Manager Documentation: <https://cloud.google.com/secret-manager/docs>
+5. Doppler Documentation: <https://docs.doppler.com/>
+6. 1Password Secrets Automation: <https://developer.1password.com/>
+7. CyberArk Documentation: <https://docs.cyberark.com/>
 
 ### Security Standards
 

@@ -51,10 +51,13 @@ flowchart TB
 ## Choose Your Journey
 
 ### 🌱 Beginner
+
 - [Quick Start](./quick-start) - Get running in 5 minutes
 
 ### 🚀 Intermediate  
+
 - [Core Integration](./core-integration) - Integrate with your stack
 
 ### 🏆 Advanced
+
 - [Production Setup](./production-setup) - Enterprise deployment

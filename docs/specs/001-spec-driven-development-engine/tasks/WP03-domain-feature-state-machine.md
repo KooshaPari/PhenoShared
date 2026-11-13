@@ -52,8 +52,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -81,11 +82,13 @@ spec-kitty implement WP03 --base WP01
 ## Context & Constraints
 
 ### Reference Documents
+
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- Feature entity (lines 73-101), WorkPackage entity (lines 103-124), WP Dependency (lines 213-222)
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- State machine design (lines 198-210), conflict resolution (lines 244-250)
 - **Spec**: `kitty-specs/001-spec-driven-development-engine/spec.md` -- FR-033 (strict state ordering), FR-034 (skip with warning), FR-038/FR-039 (dependency scheduling)
 
 ### Architectural Constraints
+
 - **Pure domain logic**: This code lives in `agileplus-core` which has NO I/O dependencies. No database, no filesystem, no network.
 - **Compiler-enforced safety**: Use Rust enums with exhaustive match. The compiler must reject any transition handler that doesn't cover all states.
 - **Result types**: All fallible operations return `Result<T, DomainError>`. Skip transitions return `Result<TransitionResult, DomainError>` where `TransitionResult` can be `Ok` or `Warning(String)`.
@@ -93,6 +96,7 @@ spec-kitty implement WP03 --base WP01
 - **Chrono for timestamps**: Use `chrono::DateTime<Utc>` for all timestamp fields.
 
 ### Dependency on WP01
+
 - WP01 provides the crate structure (`crates/agileplus-core/`) with empty module stubs.
 - This WP replaces the empty structs in `domain/feature.rs`, `domain/work_package.rs`, and `domain/state_machine.rs` with full implementations.
 
@@ -106,6 +110,7 @@ spec-kitty implement WP03 --base WP01
 - **Steps**:
   1. Open `crates/agileplus-core/src/domain/feature.rs` (exists as stub from WP01).
   2. Replace the empty struct with the full implementation:
+
      ```rust
      use chrono::{DateTime, Utc};
      use serde::{Deserialize, Serialize};
@@ -133,6 +138,7 @@ spec-kitty implement WP03 --base WP01
          pub updated_at: DateTime<Utc>,
      }
      ```
+
   3. Implement a `Feature::new()` constructor that:
      - Takes `slug`, `friendly_name`, `spec_hash`, and optional `target_branch` (defaults to `"main"`)
      - Sets `state` to `FeatureState::Created`
@@ -151,6 +157,7 @@ spec-kitty implement WP03 --base WP01
 - **Steps**:
   1. Open `crates/agileplus-core/src/domain/state_machine.rs`.
   2. Define `FeatureState` enum:
+
      ```rust
      #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
      #[serde(rename_all = "snake_case")]
@@ -165,10 +172,12 @@ spec-kitty implement WP03 --base WP01
          Retrospected,
      }
      ```
+
   3. Implement `FeatureState::ordinal()` returning `u8` (0-7) for ordering comparisons.
   4. Implement `FeatureState::next()` returning `Option<FeatureState>` -- the single valid forward transition. Returns `None` for `Retrospected`.
   5. Implement `FeatureState::display_name()` returning a human-readable string.
   6. Define `StateTransition`:
+
      ```rust
      #[derive(Debug, Clone, Serialize, Deserialize)]
      pub struct StateTransition {
@@ -177,6 +186,7 @@ spec-kitty implement WP03 --base WP01
          pub skipped: Vec<FeatureState>,  // states skipped (empty for normal transitions)
      }
      ```
+
   7. Implement `Display` for `StateTransition` formatting as `"specified -> researched"`.
   8. Implement `FromStr` for `FeatureState` to parse from lowercase strings.
 - **Files**: `crates/agileplus-core/src/domain/state_machine.rs`
@@ -189,6 +199,7 @@ spec-kitty implement WP03 --base WP01
 - **Purpose**: The core state machine logic that enforces valid transitions and handles skip-with-warning. This is the heart of the governance enforcement system and must be rock-solid.
 - **Steps**:
   1. Define `TransitionResult` enum:
+
      ```rust
      #[derive(Debug, Clone)]
      pub enum TransitionResult {
@@ -201,12 +212,14 @@ spec-kitty implement WP03 --base WP01
          },
      }
      ```
+
   2. Implement `FeatureState::transition(self, target: FeatureState) -> Result<TransitionResult, DomainError>`:
      - If `target == self`: return `Err(DomainError::NoOpTransition)`
      - If `target.ordinal() < self.ordinal()`: return `Err(DomainError::InvalidTransition { from: self, to: target, reason: "backward transitions are not allowed" })`
      - If `target == self.next().unwrap()`: return `Ok(TransitionResult::Ok(StateTransition { from: self, to: target, skipped: vec![] }))`
      - If `target.ordinal() > self.ordinal() + 1`: collect all skipped states, return `Ok(TransitionResult::Warning { transition, message: format!("Skipped states: {:?}", skipped) })`
   3. Add the `InvalidTransition` and `NoOpTransition` variants to `DomainError`:
+
      ```rust
      #[derive(Debug, thiserror::Error)]
      pub enum DomainError {
@@ -221,6 +234,7 @@ spec-kitty implement WP03 --base WP01
          // ... existing variants
      }
      ```
+
   4. Implement `Feature::transition(&mut self, target: FeatureState) -> Result<TransitionResult, DomainError>`:
      - Calls `self.state.transition(target)`
      - On success, updates `self.state = target` and `self.updated_at = Utc::now()`
@@ -237,6 +251,7 @@ spec-kitty implement WP03 --base WP01
 - **Steps**:
   1. Open `crates/agileplus-core/src/domain/work_package.rs`.
   2. Define `WpState` enum:
+
      ```rust
      #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
      #[serde(rename_all = "snake_case")]
@@ -248,7 +263,9 @@ spec-kitty implement WP03 --base WP01
          Blocked,
      }
      ```
+
   3. Implement the `WorkPackage` struct with all fields from data-model.md:
+
      ```rust
      #[derive(Debug, Clone, Serialize, Deserialize)]
      pub struct WorkPackage {
@@ -267,6 +284,7 @@ spec-kitty implement WP03 --base WP01
          pub updated_at: DateTime<Utc>,
      }
      ```
+
   4. Define `PrState` enum: `Open`, `Review`, `ChangesRequested`, `Approved`, `Merged`.
   5. Implement `WorkPackage::new()` constructor with required fields.
   6. Implement `WpState::can_transition_to(target) -> bool`:
@@ -289,6 +307,7 @@ spec-kitty implement WP03 --base WP01
 - **Purpose**: Model the dependency graph between work packages and provide scheduling logic that determines which WPs can run in parallel. This is critical for the `implement` command's parallelism strategy.
 - **Steps**:
   1. Define `WpDependency` in `work_package.rs` (or a separate `dependencies.rs`):
+
      ```rust
      #[derive(Debug, Clone, Serialize, Deserialize)]
      pub struct WpDependency {
@@ -308,13 +327,16 @@ spec-kitty implement WP03 --base WP01
          Data,
      }
      ```
+
   2. Implement `DependencyGraph` struct:
+
      ```rust
      pub struct DependencyGraph {
          /// Adjacency list: wp_id -> list of wp_ids it depends on
          edges: HashMap<i64, Vec<WpDependency>>,
      }
      ```
+
   3. Implement `DependencyGraph::new(wps: &[WorkPackage], deps: &[WpDependency]) -> Self`.
   4. Implement `DependencyGraph::add_file_overlap_edges(&mut self, wps: &[WorkPackage])`:
      - For each pair of WPs, check `has_file_overlap`
@@ -340,6 +362,7 @@ spec-kitty implement WP03 --base WP01
   1. Create test module in `crates/agileplus-core/src/domain/state_machine.rs` (inline) or `crates/agileplus-core/tests/state_machine_tests.rs` (integration test).
   2. Test categories:
      **Valid forward transitions (7 tests)**:
+
      ```rust
      #[test]
      fn test_created_to_specified() {
@@ -348,7 +371,9 @@ spec-kitty implement WP03 --base WP01
      }
      // ... one test per valid step
      ```
+
      **Invalid backward transitions (7+ tests)**:
+
      ```rust
      #[test]
      fn test_specified_to_created_blocked() {
@@ -356,7 +381,9 @@ spec-kitty implement WP03 --base WP01
          assert!(matches!(result, Err(DomainError::InvalidTransition { .. })));
      }
      ```
+
      **No-op transitions (8 tests)**:
+
      ```rust
      #[test]
      fn test_same_state_noop() {
@@ -364,7 +391,9 @@ spec-kitty implement WP03 --base WP01
          assert!(matches!(result, Err(DomainError::NoOpTransition(_))));
      }
      ```
+
      **Skip transitions with warning (5+ tests)**:
+
      ```rust
      #[test]
      fn test_created_to_planned_skips_with_warning() {
@@ -377,7 +406,9 @@ spec-kitty implement WP03 --base WP01
          }
      }
      ```
+
      **Feature struct integration (3+ tests)**:
+
      ```rust
      #[test]
      fn test_feature_transition_updates_state() {
@@ -386,8 +417,10 @@ spec-kitty implement WP03 --base WP01
          assert_eq!(feature.state, FeatureState::Specified);
      }
      ```
+
      **WP state machine (5+ tests)**: Valid and invalid WP transitions.
      **Dependency graph (5+ tests)**:
+
      ```rust
      #[test]
      fn test_ready_wps_respects_dependencies() { ... }
@@ -398,7 +431,9 @@ spec-kitty implement WP03 --base WP01
      #[test]
      fn test_file_overlap_adds_dependency() { ... }
      ```
+
   3. Consider adding proptest for property-based testing:
+
      ```rust
      proptest! {
          #[test]
@@ -412,6 +447,7 @@ spec-kitty implement WP03 --base WP01
          }
      }
      ```
+
 - **Files**: `crates/agileplus-core/src/domain/state_machine.rs` (inline tests) or `crates/agileplus-core/tests/`
 - **Parallel?**: No -- depends on T012-T016 being complete.
 - **Validation**: `cargo test -p agileplus-core` passes 20+ tests with 0 failures.
@@ -422,6 +458,7 @@ spec-kitty implement WP03 --base WP01
 **Purpose**: Use proptest to exhaustively verify FSM transition invariants.
 
 **Steps**:
+
 1. Add `proptest` to dev-dependencies
 2. Write property tests: for any valid state, only valid transitions succeed
 3. Write property tests: skip transitions always produce Warning
@@ -435,6 +472,7 @@ spec-kitty implement WP03 --base WP01
 **Purpose**: Verify FSM test suite catches mutations (cargo-mutants ≥90%).
 
 **Steps**:
+
 1. Add `cargo-mutants` to dev tooling
 2. Run `cargo mutants -p agileplus-domain -- --test state_machine`
 3. Verify mutation score ≥90%. Fix gaps by adding targeted tests.
@@ -488,6 +526,7 @@ Reviewers should verify:
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this Activity Log section
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ – agent_id – lane=<lane> – <action>`

@@ -1,6 +1,7 @@
 # ADR-ECO-015: Hybrid gateway — app layer, Go planes, desktop convergence
 
 ## Status
+
 Accepted (2026-06-18)
 
 ## Context

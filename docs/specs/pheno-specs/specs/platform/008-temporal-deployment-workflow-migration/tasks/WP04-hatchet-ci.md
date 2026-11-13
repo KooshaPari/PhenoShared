@@ -19,6 +19,7 @@ Deploy Hatchet on Hetzner alongside Temporal. Migrate CI pipeline trigger workfl
 ## Context
 
 Hatchet is a lightweight workflow dispatcher built on Postgres. It has:
+
 - A React dashboard for job visibility
 - Go and Python SDKs
 - Cron scheduling and webhook triggers

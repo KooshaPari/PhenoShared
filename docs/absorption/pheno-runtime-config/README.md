@@ -56,7 +56,7 @@ implemented inside various repos (pheno, Configra) and consolidated into
 - Source repo `<REDACTED>/pheno-runtime-config` was last pushed 2026-06-28.
 - No subsequent pushes since absorption queue pickup 2026-07-17.
 - Target `<REDACTED>/pheno` workspace is being dismantled per `gw-pheno`
-  gate (in-progress). Until agileplus-* and phenotype-* crate relocations
+  gate (in-progress). Until agileplus-*and phenotype-* crate relocations
   settle (planned 2026-08-01), pheno-runtime-config sits at
   `crates/pheno-runtime-config` in pheno as the canonical Rust home.
 - Once `gw-pheno` completes, this crate will reland at

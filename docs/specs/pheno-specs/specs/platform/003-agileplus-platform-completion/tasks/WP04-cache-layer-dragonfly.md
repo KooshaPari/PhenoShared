@@ -26,6 +26,7 @@ Create the `agileplus-cache` crate with Dragonfly (Redis-compatible) connection 
 ## Objective
 
 Implement:
+
 - Thread-safe connection pool to Dragonfly
 - Generic typed get/set operations
 - ProjectionCache for feature/WP state caching
@@ -35,6 +36,7 @@ Implement:
 ## Architecture
 
 The cache layer provides:
+
 - **Connection pooling** via bb8 for efficient resource use
 - **Type safety** through serde serialization
 - **TTL support** for automatic expiration
@@ -48,6 +50,7 @@ The cache layer provides:
 Create a new crate at `crates/agileplus-cache/`.
 
 **Cargo.toml:**
+
 ```toml
 [package]
 name = "agileplus-cache"
@@ -71,6 +74,7 @@ tokio = { version = "1", features = ["full"] }
 ```
 
 **Directory structure:**
+
 ```
 crates/agileplus-cache/
 ├── Cargo.toml
@@ -85,6 +89,7 @@ crates/agileplus-cache/
 ```
 
 **lib.rs content:**
+
 ```rust
 pub mod config;
 pub mod health;

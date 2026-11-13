@@ -8,6 +8,7 @@
 ## Problem Statement
 
 3 independent config loading implementations exist, all sharing the same pattern:
+
 1. File existence check
 2. Read file contents
 3. Parse to struct (TOML/YAML/JSON)
@@ -109,6 +110,7 @@ members = [
 ### Phase 4: Integrate with Crates (6 hours)
 
 **agileplus-domain:**
+
 ```rust
 // Before
 use crate::config::loader::ConfigLoader;
@@ -122,6 +124,7 @@ let config = TomlLoader::new(home_dir() / ".agileplus/config.toml")
 ```
 
 **agileplus-telemetry:**
+
 ```rust
 // Before
 use crate::config::TelemetryConfig;
@@ -135,6 +138,7 @@ let config = YamlLoader::new(home_dir() / ".agileplus/otel-config.yaml")
 ```
 
 **vibe-kanban:**
+
 ```rust
 // Before
 use crate::models::config::Config;

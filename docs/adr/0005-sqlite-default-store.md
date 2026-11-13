@@ -49,12 +49,14 @@ binary distribution reproducible.
 ## Consequences
 
 **Positive**
+
 - Single dependency: no Postgres / MySQL / etc. to deploy.
 - Predictable performance (no network jumps).
 - WAL mode gives us concurrent readers + a single writer.
 - Migrations are transparent SQL files — auditable in `git diff`.
 
 **Negative**
+
 - We must accept that "scale out" means "shard the SQLite file", not
   "add another replica". This is fine for substrate's envelope
   (dispatch is naturally single-leader; see ADR-0004).

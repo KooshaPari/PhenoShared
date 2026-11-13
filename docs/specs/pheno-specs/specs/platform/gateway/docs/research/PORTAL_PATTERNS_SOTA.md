@@ -78,12 +78,14 @@ The simplest approach renders HTML fragments on the server and combines them int
 ```
 
 **Advantages:**
+
 - Fast initial page load
 - SEO-friendly server-rendered content
 - No client-side JavaScript complexity
 - Caching at CDN level
 
 **Disadvantages:**
+
 - Limited interactivity
 - Page reload for navigation
 - Server dependency for composition
@@ -104,11 +106,13 @@ Micro-frontends are published as packages and bundled at build time.
 ```
 
 **Advantages:**
+
 - Single deployable artifact
 - Dependency deduplication
 - Compile-time type checking
 
 **Disadvantages:**
+
 - Lockstep release process
 - Rebuild required for any change
 - Coupling reintroduced at release stage
@@ -124,12 +128,14 @@ Each micro-frontend renders in its own iframe, providing complete isolation.
 ```
 
 **Advantages:**
+
 - Complete CSS and JS isolation
 - Independent deployment
 - Security boundary
 - Legacy application integration
 
 **Disadvantages:**
+
 - Routing and deep-linking complexity
 - Responsive design challenges
 - Communication overhead (postMessage)
@@ -156,12 +162,14 @@ Micro-frontends expose global render functions loaded via script tags.
 ```
 
 **Advantages:**
+
 - Independent deployability
 - Flexible integration
 - Framework-agnostic
 - Dynamic loading capabilities
 
 **Disadvantages:**
+
 - Global namespace pollution
 - CSS collision risks
 - Contract management complexity
@@ -188,6 +196,7 @@ Micro-frontends define custom HTML elements that the container instantiates.
 ```
 
 **Advantages:**
+
 - Native browser standards
 - Encapsulation via Shadow DOM
 - No global namespace pollution
@@ -195,6 +204,7 @@ Micro-frontends define custom HTML elements that the container instantiates.
 - Lifecycle management via custom element callbacks
 
 **Disadvantages:**
+
 - Browser support considerations (polyfills needed for older browsers)
 - Learning curve for Web Components APIs
 
@@ -254,6 +264,7 @@ declare global {
 #### 1.4.1 Dashboard Layout Patterns
 
 **Grid Layout Pattern**
+
 ```
 ┌─────────────────────────────────────┐
 │           Header / Nav                │
@@ -270,6 +281,7 @@ declare global {
 ```
 
 **Sidebar Pattern**
+
 ```
 ┌─────────┬─────────────────────────────┐
 │         │                             │
@@ -282,6 +294,7 @@ declare global {
 ```
 
 **Tabbed Dashboard Pattern**
+
 ```
 ┌─────────────────────────────────────┐
 │  Tab A │ Tab B │ Tab C │ Tab D      │
@@ -460,6 +473,7 @@ The BFF pattern creates dedicated backend services optimized for specific fronte
 ```
 
 **SAML Characteristics:**
+
 - XML-based protocol
 - Enterprise-focused
 - Signed assertions
@@ -491,6 +505,7 @@ The BFF pattern creates dedicated backend services optimized for specific fronte
 ```
 
 **OIDC Characteristics:**
+
 - JSON-based (JWT)
 - Modern, mobile-friendly
 - Token-based authentication
@@ -514,6 +529,7 @@ For B2B portals serving multiple organizations:
 ```
 
 **Multi-Tenant SSO Requirements:**
+
 | Requirement | Implementation |
 |-------------|---------------|
 | Organization Discovery | Subdomain, URL parameter, or email domain |
@@ -830,12 +846,12 @@ Spotify's Backstage is a leading open-source developer portal framework.
 
 | Reference | URL | Description | Last Verified |
 |-----------|-----|-------------|--------------|
-| Micro Frontends | https://martinfowler.com/articles/micro-frontends.html | Martin Fowler's definitive guide | 2026-04-05 |
-| API Gateway Pattern | https://microservices.io/patterns/apigateway.html | Microservices.io pattern | 2026-04-05 |
-| Gateway Aggregation | https://learn.microsoft.com/en-us/azure/architecture/patterns/gateway-aggregation | Microsoft Azure pattern | 2026-04-05 |
-| Web Components | https://developer.mozilla.org/en-US/docs/Web/API/Web_components | MDN documentation | 2026-04-05 |
-| Backstage | https://backstage.io/docs/overview/what-is-backstage | Developer portal framework | 2026-04-05 |
-| BFF Pattern | https://samnewman.io/patterns/architectural/bff/ | Sam Newman's BFF pattern | 2026-04-05 |
+| Micro Frontends | <https://martinfowler.com/articles/micro-frontends.html> | Martin Fowler's definitive guide | 2026-04-05 |
+| API Gateway Pattern | <https://microservices.io/patterns/apigateway.html> | Microservices.io pattern | 2026-04-05 |
+| Gateway Aggregation | <https://learn.microsoft.com/en-us/azure/architecture/patterns/gateway-aggregation> | Microsoft Azure pattern | 2026-04-05 |
+| Web Components | <https://developer.mozilla.org/en-US/docs/Web/API/Web_components> | MDN documentation | 2026-04-05 |
+| Backstage | <https://backstage.io/docs/overview/what-is-backstage> | Developer portal framework | 2026-04-05 |
+| BFF Pattern | <https://samnewman.io/patterns/architectural/bff/> | Sam Newman's BFF pattern | 2026-04-05 |
 
 ### 8.2 Academic & Industry Sources
 
@@ -850,11 +866,11 @@ Spotify's Backstage is a leading open-source developer portal framework.
 
 | Tool | Purpose | URL |
 |------|---------|-----|
-| Single-SPA | Micro-frontend framework | https://single-spa.js.org/ |
-| Module Federation | Webpack plugin | https://module-federation.io/ |
-| Lit | Web Components library | https://lit.dev/ |
-| Stencil | Web Components compiler | https://stenciljs.com/ |
-| Qiankun | Micro-frontend framework | https://qiankun.umijs.org/ |
+| Single-SPA | Micro-frontend framework | <https://single-spa.js.org/> |
+| Module Federation | Webpack plugin | <https://module-federation.io/> |
+| Lit | Web Components library | <https://lit.dev/> |
+| Stencil | Web Components compiler | <https://stenciljs.com/> |
+| Qiankun | Micro-frontend framework | <https://qiankun.umijs.org/> |
 
 ---
 

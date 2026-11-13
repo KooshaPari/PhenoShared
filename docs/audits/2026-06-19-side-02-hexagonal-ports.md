@@ -56,6 +56,7 @@ for `SqliteStorageAdapter`. `content_storage.rs` likely does the same for
 ## Findings
 
 ### F1: StoragePort is a god-trait (51 methods)
+
 `agileplus-domain/src/ports/storage.rs` defines 51 methods on `StoragePort`.
 This violates ISP (Interface Segregation Principle). Recommendation: split
 into per-aggregate traits:
@@ -69,6 +70,7 @@ into per-aggregate traits:
 - `ModulePort` (modules + feature tags)
 
 ### F2: Two incompatible ports/ patterns
+
 - `phenotype-contracts/ports/` uses **CQRS marker traits** (Command, Query, ports).
 - `agileplus-domain/ports/` uses **rich domain ports** (Agent, Storage, VCS).
 - `agileplus-sqlite/ports/` uses **trait-named adapter files** (storage_port.rs).
@@ -77,11 +79,13 @@ These are not necessarily wrong, but they're inconsistent. A newcomer would be
 confused by the three patterns.
 
 ### F3: No `adapters/` directory anywhere
+
 The conventional hexagonal layout is `domain/ports/ + infra/adapters/`. Here
 adapters are co-located with the trait impls in the same crate. This is fine
 for small systems but blurs the boundary as the system grows.
 
 ### F4: `mod.rs` files have no `pub use` re-exports
+
 `phenotype-contracts/src/ports/mod.rs` and `agileplus-domain/src/ports/mod.rs`
 should re-export the traits for ergonomic imports
 (`use crate::ports::Command;` vs `use crate::ports::inbound::Command;`).

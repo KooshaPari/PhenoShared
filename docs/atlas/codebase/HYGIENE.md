@@ -190,8 +190,6 @@ Test-variant suffixes (`_unit`, `_fast`, `_slow`, `_integration`, `_e2e`, `_smok
 | tests/test_install_smoke.py | test-variant suffix `_smoke` — variants belong in fixtures and markers, not file names |
 | tests/test_smoke.py | test-variant suffix `_smoke` — variants belong in fixtures and markers, not file names |
 
-
-
 ## 3. `tests/` files that define tests but are not `test_*.rs` (666)
 
 Rust integration tests must be named `test_<concern>.rs`. Helper modules inside `tests/` that declare no `#[test]` (for example `common/mod.rs`) are not test files and are deliberately excluded.
@@ -426,8 +424,6 @@ Rust integration tests must be named `test_<concern>.rs`. Helper modules inside 
 | scripts/hf_round4_followups_v2.py | temporal suffix `_v2` — versioning belongs in git |
 | scripts/watch_tbench_v3.py | temporal suffix `_v3` — versioning belongs in git |
 
-
-
 ## 5. Markdown docs outside `docs/` (5719)
 
 Canonical repo docs are allowed at the root by name, and a component's own `README.md`/`CHANGELOG.md` beside its manifest is normal content. Those standard component docs (1187 files) are counted and then set aside. What remains is the finding: markdown living somewhere with no owning component and no `docs/` home.
@@ -471,8 +467,6 @@ Canonical repo docs are allowed at the root by name, and a component's own `READ
 | VALIDATION_REPORT.md |
 | phase2_federation_spec.md |
 | substrate-audit-dag-plan.md |
-
-
 
 **Nested outside `docs/`, non-standard names (5606) — top clusters:**
 
@@ -852,14 +846,14 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | _archived/byteport/frontend/web/src/components/settings.svelte |
 | _archived/byteport/tr |
 | _log_pr.txt |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/__init__.py |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/**init**.py |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/fallback_site/template_renderer/renderer.py |
-| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/__init__.py |
+| agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/**init**.py |
 | agents/phenoagent/python/pheno-infra/src/pheno_infra/utils/process/port_manager/manager.py |
-| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/rls/__init__.py |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/__init__.py |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/monitoring/__init__.py |
-| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/streaming/__init__.py |
+| agents/phenoagent/python/pheno-kits/src/pheno_kits/db/rls/**init**.py |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/collaboration/**init**.py |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/monitoring/**init**.py |
+| agents/phenoagent/python/pheno-testing/src/pheno_testing/mcp_qa/streaming/**init**.py |
 | agileplus-mcp/tests/bdd/features/.gitkeep |
 | agileplus-mcp/tests/contract/.gitkeep |
 | agileplus/agileplus-mcp/tests/bdd/features/.gitkeep |
@@ -877,30 +871,30 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | agileplus/docs/specs/003-agileplus-platform-completion/research/source-register.csv |
 | agileplus/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | agileplus/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
-| agileplus/python/src/agileplus_proto/gen/__init__.py |
-| agileplus/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| agileplus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| agileplus/python/tests/__init__.py |
-| agileplus/python/tests/contract/__init__.py |
+| agileplus/python/src/agileplus_proto/gen/**init**.py |
+| agileplus/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| agileplus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| agileplus/python/tests/**init**.py |
+| agileplus/python/tests/contract/**init**.py |
 | archives/zz-archive-phenotype-registry/docs/absorption/Profila/patches/local-ahead.patch |
-| audits/org-audit-snapshots/audits/drift-detector/tests/__init__.py |
-| audits/org-audit-snapshots/audits/framework-lint/tests/__init__.py |
-| audits/org-audit-snapshots/audits/predict-dry/tests/__init__.py |
+| audits/org-audit-snapshots/audits/drift-detector/tests/**init**.py |
+| audits/org-audit-snapshots/audits/framework-lint/tests/**init**.py |
+| audits/org-audit-snapshots/audits/predict-dry/tests/**init**.py |
 | audits/org-audit-snapshots/audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/drift-detector/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/framework-lint/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/predict-dry/tests/__init__.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/drift-detector/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/framework-lint/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/predict-dry/tests/**init**.py |
 | audits/org-audits/2026-07/zz-archive-archive2/wt-audit-rebuild-v38/audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/drift-detector/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/framework-lint/tests/__init__.py |
-| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/predict-dry/tests/__init__.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/drift-detector/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/framework-lint/tests/**init**.py |
+| audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/predict-dry/tests/**init**.py |
 | audits/org-audits/2026-07/zz-archive-archive2/wt-feature-state-table-org/audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| audits/org-audits/drift-detector/tests/__init__.py |
-| audits/org-audits/framework-lint/tests/__init__.py |
-| audits/org-audits/predict-dry/tests/__init__.py |
+| audits/org-audits/drift-detector/tests/**init**.py |
+| audits/org-audits/framework-lint/tests/**init**.py |
+| audits/org-audits/predict-dry/tests/**init**.py |
 | audits/org-audits/worklog-schema/src/pheno_worklog_schema/py.typed |
-| beads/__init__.py |
-| beads/agileplus_adapter/__init__.py |
+| beads/**init**.py |
+| beads/agileplus_adapter/**init**.py |
 | bench/results/2026-07-04/_wsl_install_2026-07-17T02-50-16Z.log.err |
 | bench/results/2026-07-04/_wsl_install_2026-07-17T02-55-43Z.log.err |
 | bench/results/2026-07-04/pheno_serve_start.err |
@@ -926,14 +920,14 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | crates/agile-plus/docs/specs/003-agileplus-platform-completion/research/source-register.csv |
 | crates/agile-plus/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | crates/agile-plus/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
-| crates/agile-plus/python/src/agileplus_proto/gen/__init__.py |
-| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| crates/agile-plus/python/src/phenotype_traceability/__init__.py |
-| crates/agile-plus/python/tests/__init__.py |
-| crates/agile-plus/python/tests/contract/__init__.py |
+| crates/agile-plus/python/src/agileplus_proto/gen/**init**.py |
+| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| crates/agile-plus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| crates/agile-plus/python/src/phenotype_traceability/**init**.py |
+| crates/agile-plus/python/tests/**init**.py |
+| crates/agile-plus/python/tests/contract/**init**.py |
 | crates/apisync/.env.example |
-| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/tests/__init__.py |
+| crates/argis-extensions/melosviz-wt/wp-4-backend-implement-analysis-engine/tests/**init**.py |
 | crates/clap-ext/AGENTS.md |
 | crates/clap-ext/CLAUDE.md |
 | crates/eidolon-sandbox/assets/canned-rootfs/minimal-tree/etc/systemd/system/.gitkeep |
@@ -961,11 +955,11 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | crates/hexa-kit/agileplus/docs/specs/003-agileplus-platform-completion/research/source-register.csv |
 | crates/hexa-kit/agileplus/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | crates/hexa-kit/agileplus/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/__init__.py |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| crates/hexa-kit/agileplus/python/tests/__init__.py |
-| crates/hexa-kit/agileplus/python/tests/contract/__init__.py |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/**init**.py |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| crates/hexa-kit/agileplus/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| crates/hexa-kit/agileplus/python/tests/**init**.py |
+| crates/hexa-kit/agileplus/python/tests/contract/**init**.py |
 | crates/hexa-kit/docs/changes/.gitkeep |
 | crates/hexa-kit/docs/checklists/.gitkeep |
 | crates/hexa-kit/docs/guides/.gitkeep |
@@ -979,11 +973,11 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | crates/hexa-kit/docs/specs/003-agileplus-platform-completion/tasks/.gitkeep |
 | crates/hexa-kit/docs/specs/004-modules-and-cycles/tasks/.gitkeep |
 | crates/hexa-kit/docs/worklogs/data/.gitkeep |
-| crates/hexa-kit/python/src/agileplus_proto/gen/__init__.py |
-| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/__init__.py |
-| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| crates/hexa-kit/python/tests/__init__.py |
-| crates/hexa-kit/python/tests/contract/__init__.py |
+| crates/hexa-kit/python/src/agileplus_proto/gen/**init**.py |
+| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/**init**.py |
+| crates/hexa-kit/python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| crates/hexa-kit/python/tests/**init**.py |
+| crates/hexa-kit/python/tests/contract/**init**.py |
 | crates/hexa-kit/templates/genesis/docs/intent/prompts/.gitkeep |
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/h/53778dde145b2dab155f3ea8443ebba7.txt |
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/h/timestamp |
@@ -994,7 +988,7 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | crates/policystack/.vitepress-dist/vp-icons.css |
 | crates/policystack/policies/suggestions/.gitkeep |
 | crates/policystack/scripts/federation/a_.py |
-| crates/policystack/tests/__init__.py |
+| crates/policystack/tests/**init**.py |
 | docs/acceptance-contracts/.gitkeep |
 | docs/changes/.gitkeep |
 | docs/checklists/.gitkeep |
@@ -1024,7 +1018,7 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | docs/specs/pheno-specs/specs/platform/004-modules-and-cycles/tasks/.gitkeep |
 | docs/specs/pheno-specs/specs/platform/build-system/docs/research/SOTA-Build-Systems.md |
 | docs/specs/pheno-specs/specs/platform/build-system/docs/research/SOTA-CI-CD-Platforms.md |
-| docs/specs/pheno-specs/specs/platform/gateway/__init__.py |
+| docs/specs/pheno-specs/specs/platform/gateway/**init**.py |
 | docs/worklogs/data/.gitkeep |
 | iac/.grade-reports/deny.raw |
 | kitty-specs/001-spec-driven-development-engine/tasks/.gitkeep |
@@ -1037,15 +1031,15 @@ Empty tracked files are usually either legitimate `.gitkeep` placeholders or a s
 | phenotype-governance/README.md |
 | phenotype-hub/tests/.gitkeep |
 | py.typed |
-| python/omlx_research/scripts/__init__.py |
-| python/omlx_research/tests/__init__.py |
-| python/src/agileplus_proto/gen/__init__.py |
-| python/src/agileplus_proto/gen/agileplus/__init__.py |
-| python/src/agileplus_proto/gen/agileplus/v1/__init__.py |
-| python/tests/__init__.py |
-| python/tests/contract/__init__.py |
+| python/omlx_research/scripts/**init**.py |
+| python/omlx_research/tests/**init**.py |
+| python/src/agileplus_proto/gen/**init**.py |
+| python/src/agileplus_proto/gen/agileplus/**init**.py |
+| python/src/agileplus_proto/gen/agileplus/v1/**init**.py |
+| python/tests/**init**.py |
+| python/tests/contract/**init**.py |
 | sbom/pheno-workspace.cdx.json |
-| servers/forge3-bridge/tests/__init__.py |
+| servers/forge3-bridge/tests/**init**.py |
 | state/.gitkeep |
 | state/_scrape_2026-07-03.err |
 | state/ornith-8b-mtp_llamabench_CUDA0.json |
@@ -1193,8 +1187,6 @@ Tracked files carrying build-artifact extensions, living under a build cache pat
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/o/f1ea4330472a4c6ebcbfed6922919020/dependencies.zig | build cache or vendored dependency tree | 103 |
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/h/53778dde145b2dab155f3ea8443ebba7.txt | build cache or vendored dependency tree | 0 |
 | crates/hexa-kit/templates/zig/templates/zig/.zig-cache/h/timestamp | build cache or vendored dependency tree | 0 |
-
-
 
 ## 10. Files larger than 1 MiB (42)
 

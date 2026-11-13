@@ -26,6 +26,7 @@ Create the `agileplus-events` crate, a complete event sourcing framework. This i
 ## Objective
 
 Implement:
+
 - EventStore trait with async operations
 - Hash chain computation and verification (SHA-256)
 - Event replay engine with Aggregate pattern
@@ -35,6 +36,7 @@ Implement:
 ## Architecture
 
 The event sourcing engine follows these principles:
+
 - **Immutability:** Events are append-only
 - **Causality:** Each event references its predecessor via hash
 - **Efficiency:** Snapshots allow fast loading at recent points
@@ -47,6 +49,7 @@ The event sourcing engine follows these principles:
 Create a new crate at `crates/agileplus-events/`.
 
 **Cargo.toml:**
+
 ```toml
 [package]
 name = "agileplus-events"
@@ -68,6 +71,7 @@ tokio = { version = "1", features = ["full"] }
 ```
 
 **Directory structure:**
+
 ```
 crates/agileplus-events/
 ├── Cargo.toml
@@ -81,6 +85,7 @@ crates/agileplus-events/
 ```
 
 **lib.rs content:**
+
 ```rust
 pub mod hash;
 pub mod replay;
@@ -172,6 +177,7 @@ pub trait EventStore: Send + Sync {
 ```
 
 **Design notes:**
+
 - All methods are async to support various backends (database, remote)
 - Events must be returned in sequence order (ascending)
 - Sequence numbers are monotonically increasing per entity

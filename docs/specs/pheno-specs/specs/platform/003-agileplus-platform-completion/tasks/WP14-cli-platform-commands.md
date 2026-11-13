@@ -30,17 +30,21 @@ Implementation command: `spec-kitty implement WP14 --base WP10`
 Start the platform and all services:
 
 **Behavior:**
+
 - Detect `process-compose` binary in PATH
 - If missing: print install instructions and exit with error
+
   ```
   Error: process-compose not found.
   Install from: https://github.com/F1bonacc1/process-compose
   ```
+
 - If found: spawn `process-compose up -f process-compose.yml`
 - Wait for all health checks to pass (poll `/health` every 2s, timeout 60s)
 - Display status table on success
 
 **Output:**
+
 ```
 Starting AgilePlus platform...
 process-compose starting (pid 12345)
@@ -67,11 +71,13 @@ Platform ready. Dashboard: http://localhost:8080/dashboard
 Stop all platform services:
 
 **Behavior:**
+
 - Run `process-compose down`
 - Wait for graceful shutdown (max 30s)
 - Print confirmation
 
 **Output:**
+
 ```
 Stopping AgilePlus platform...
 ✓ process-compose stopped
@@ -84,12 +90,14 @@ Platform down.
 Query service health and display status:
 
 **Behavior:**
+
 - Query `GET /health` endpoint
 - If API running: display per-service status from response
 - If API not running: attempt direct pings to individual services
 - Display table with color-coding
 
 **Output (all healthy):**
+
 ```
 Service        Status    Latency    Uptime       Last Check
 ───────────────────────────────────────────────────────────────
@@ -104,6 +112,7 @@ Overall Status: HEALTHY
 ```
 
 **Output (degraded):**
+
 ```
 Service        Status      Latency    Uptime       Last Check
 ──────────────────────────────────────────────────────────────
@@ -118,6 +127,7 @@ Overall Status: DEGRADED (1 service slow, 1 service down)
 ```
 
 **Color-coding:**
+
 - Green: healthy (latency < 50ms)
 - Yellow: degraded (latency 50-200ms or non-critical service down)
 - Red: unavailable (critical service unreachable)
@@ -127,6 +137,7 @@ Overall Status: DEGRADED (1 service slow, 1 service down)
 Display and follow service logs:
 
 **Behavior:**
+
 - Run `process-compose logs [service]`
 - Options:
   - `--follow` / `-f` (stream logs)
@@ -135,6 +146,7 @@ Display and follow service logs:
 - If no service specified: show combined logs for all services
 
 **Examples:**
+
 ```bash
 agileplus platform logs              # All logs, last 100 lines
 agileplus platform logs nats         # NATS logs only
@@ -143,6 +155,7 @@ agileplus platform logs neo4j --since 30m  # Neo4j logs from last 30m
 ```
 
 **Output:**
+
 ```
 [14:23:45] [api] Server listening on 0.0.0.0:8080
 [14:23:46] [nats] Server started (pid=12456)
@@ -156,6 +169,7 @@ agileplus platform logs neo4j --since 30m  # Neo4j logs from last 30m
 Query and display event log:
 
 **Options:**
+
 - `--feature <slug>` (filter by feature)
 - `--since <duration>` (e.g., `1h`, `7d`, `2025-03-01`)
 - `--type <event_type>` (e.g., `feature_created`, `state_changed`)
@@ -165,6 +179,7 @@ Query and display event log:
 - `--limit N` (default: 50)
 
 **Default output (table):**
+
 ```
 agileplus events --since 2h
 
@@ -178,6 +193,7 @@ Time                  | Entity           | Type               | Actor       | Su
 ```
 
 **JSON output:**
+
 ```bash
 agileplus events --since 1h --format json
 [
@@ -195,6 +211,7 @@ agileplus events --since 1h --format json
 ```
 
 **Filtered example:**
+
 ```bash
 agileplus events --feature auth-flow --since 24h
 ```
@@ -204,10 +221,12 @@ agileplus events --feature auth-flow --since 24h
 Launch and manage dashboard:
 
 **Subcommands:**
+
 - `open`: Launch default browser to dashboard URL
 - `port <N>`: Configure dashboard port (default 8080, write to config)
 
 **Examples:**
+
 ```bash
 agileplus dashboard open          # Open http://localhost:8080/dashboard
 agileplus dashboard port 3000     # Set port to 3000, write to config
@@ -215,12 +234,14 @@ agileplus dashboard               # Alias for `open`
 ```
 
 **Behavior:**
+
 - `open`: Check if API is running on configured port. If not, suggest `agileplus platform up`
 - Launch browser using system default: `open` (macOS), `xdg-open` (Linux), `start` (Windows)
 - Print dashboard URL to stdout
 - Verify browser opened successfully; on failure, print URL for manual navigation
 
 **Output:**
+
 ```bash
 agileplus dashboard open
 Opening http://localhost:8080/dashboard in browser...
@@ -232,6 +253,7 @@ Dashboard port updated to 3000.
 ```
 
 **Error cases:**
+
 ```bash
 agileplus dashboard open
 Error: API server not running on port 8080.

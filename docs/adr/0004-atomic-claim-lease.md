@@ -52,6 +52,7 @@ concurrency.
 ## Consequences
 
 **Positive**
+
 - Cross-platform: SQLite is the only dependency.
 - The lease TTL bounds the worst-case split-brain interval to 30s.
 - The same SQLite file is the mailbox store, so the claim and the
@@ -59,6 +60,7 @@ concurrency.
   dead holder.
 
 **Negative**
+
 - We accept a 30s split-brain window. Acceptable because dispatch is
   idempotent and the mailbox marks each task with its claimed holder id.
 - `rusqlite` is mandatory (already a workspace dependency; ADR-0005).

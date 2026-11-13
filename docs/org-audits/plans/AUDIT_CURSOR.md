@@ -122,6 +122,7 @@ Coverage:  0.0%
 ## Update Protocol
 
 When a repo audit (P2 scorecard) is committed:
+
 1. Check the box: `- [ ] <repo>` → `- [x] <repo>`
 2. Update `CURRENT` to the next unchecked repo (or `COMPLETE` if all done)
 3. Update `LAST_COMPLETED` and `LAST_RUN` timestamps

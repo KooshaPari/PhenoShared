@@ -150,12 +150,14 @@ The "zero-dep confirmed" claim at delete time was **false**. The actual sequence
 **Both `<REDACTED>/phenoShared` and `<REDACTED>/Pyron` are now restored as archived**, not deleted. Fleet-wide rescan confirms zero live cargo git deps across the org.
 
 Gate state corrected in `registry/disposition-index.json`:
+
 - `gate-phenoshared`: `done` → `hold` (awaiting explicit user sign-off before any further delete action per BOUNDARY_OWNERS / ADR-ECO-014).
 - `gate-pyron`: `done` → `hold` (same rationale).
 
 The `phenoShared-niche` archive verdict above (TOMBSTONE → ARCHIVED, never deleted) was correct and remains in effect.
 
 **References for the regression sequence:**
+
 - HexaKit #278 — `https://github.com/KooshaPari/HexaKit/pull/278` @ `d83d1ca`
 - HexaKit #279 — reverted cache-adapter pin (reason: path stub not pushed)
 - HexaKit #285 — drained last phenoShared pin via in-tree stub

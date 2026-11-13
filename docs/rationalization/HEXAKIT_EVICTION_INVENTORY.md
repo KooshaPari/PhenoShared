@@ -220,6 +220,7 @@ The "0 pins remain" claim in wave 5b above was **premature**. The actual sequenc
 **Both `phenoShared` and `Pyron` are restored as archived** — no live cargo pins remain in any org consumer. Gate state in `registry/disposition-index.json` is now `hold` for both `gate-phenoshared` and `gate-pyron`, pending explicit user sign-off per BOUNDARY_OWNERS / ADR-ECO-014.
 
 See also:
+
 - `registry/disposition-index.json` rows `repo-phenoshared`, `gate-phenoshared`, `gate-pyron` (corrected 2026-06-19)
 - `registry/components.lock` `_archive_notes.phenoShared`, `_archive_notes.Pyron` (corrected 2026-06-19)
 - `docs/disposition/phenoshared-p4-checkpoint.md` "Post-delete audit correction" section

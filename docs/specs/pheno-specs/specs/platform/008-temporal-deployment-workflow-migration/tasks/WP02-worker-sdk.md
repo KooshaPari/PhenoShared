@@ -21,6 +21,7 @@ Integrate the Temporal Rust SDK into the codebase. Implement a minimal worker th
 Rust is the primary language for all services in the Phenotype ecosystem. The Temporal Rust SDK (`temporal-sdk`) is production-ready. Use `tokio` as the async runtime.
 
 The worker will be a separate binary or a service module within the existing Rust workspace. It needs to:
+
 1. Connect to Temporal at `TEMPORAL_HOST` (default: `http://localhost:8233`)
 2. Register a namespace (default: `default`)
 3. Register at least one workflow type and one activity type
@@ -48,6 +49,7 @@ serde_json = "1"
 ### 2. Create `crates/temporal-worker/` Module
 
 Structure:
+
 ```
 crates/temporal-worker/
 ├── Cargo.toml

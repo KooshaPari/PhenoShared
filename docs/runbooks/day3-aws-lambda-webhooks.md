@@ -21,6 +21,7 @@ terraform apply lambda.plan
 ```
 
 Records:
+
 - Lambda function ARN.
 - API Gateway URL (public) — this becomes the webhook endpoint.
 

@@ -32,11 +32,13 @@ Add device management CLI commands to `crates/agileplus-subcmds` for peer discov
 Implement the `device discover` subcommand that queries Tailscale peers and checks for AgilePlus availability.
 
 **Command:**
+
 ```bash
 agileplus device discover
 ```
 
 **Implementation:**
+
 1. Query Tailscale local API for peer list (via `agileplus-p2p::discovery::discover_peers()`)
 2. For each peer, attempt connection to AgilePlus port (default 3000)
 3. If connection succeeds, probe endpoint (e.g., `GET /health`) to confirm AgilePlus is running
@@ -44,6 +46,7 @@ agileplus device discover
 5. Format and display as table
 
 **Output:**
+
 ```
 DEVICE ID                          HOSTNAME          TAILSCALE IP   STATUS    LAST SEEN             AGILEPLUS VERSION
 550e8400-e29b-41d4-a716-446655440000  my-laptop         100.x.x.1      online    2026-03-02 10:15:30   0.1.0
@@ -52,16 +55,19 @@ DEVICE ID                          HOSTNAME          TAILSCALE IP   STATUS    LA
 ```
 
 **Status values:**
+
 - `online`: Device reachable and AgilePlus responding
 - `offline`: Device reachable but AgilePlus not responding
 - `unreachable`: Device not reachable on Tailscale network
 
 **Flags:**
+
 - `--timeout <seconds>`: Connection timeout per peer (default: 2)
 - `--port <port>`: Custom AgilePlus port (default: 3000)
 - `--json`: Output as JSON instead of table
 
 **Error handling:**
+
 - If Tailscale local API not available, suggest installing Tailscale
 - If no peers found, inform user that device is not on a Tailscale network
 
@@ -70,6 +76,7 @@ DEVICE ID                          HOSTNAME          TAILSCALE IP   STATUS    LA
 Implement the `device sync` subcommand for triggering P2P event replication.
 
 **Commands:**
+
 ```bash
 # Sync with all discovered peers
 agileplus device sync --all
@@ -82,6 +89,7 @@ agileplus device sync
 ```
 
 **Implementation:**
+
 1. If `--peer` is specified, sync with that device only
 2. If `--all` is specified, discover peers and sync with all online peers
 3. If neither flag is specified and exactly one peer is discovered, sync automatically
@@ -91,6 +99,7 @@ agileplus device sync
 7. Display sync report with statistics
 
 **Output:**
+
 ```
 Syncing with server-1 (550e8400-e29b-41d4-a716-446655440001)...
 
@@ -110,6 +119,7 @@ Sync completed successfully.
 ```
 
 **Flags:**
+
 - `--peer <device-id>`: Sync with specific peer
 - `--all`: Sync with all discovered peers
 - `--strategy <strategy>`: Conflict resolution strategy: `local-wins`, `remote-wins`, `merge` (default: `local-wins`)
@@ -117,6 +127,7 @@ Sync completed successfully.
 - `--verbose`: Show event-by-event details
 
 **Error handling:**
+
 - If peer is offline, report and continue to next peer (if `--all`)
 - If sync fails with a peer, log error and allow retry
 - Handle network interruptions gracefully (reconnect with backoff)
@@ -126,11 +137,13 @@ Sync completed successfully.
 Implement the `device status` subcommand for viewing local device info and sync state.
 
 **Command:**
+
 ```bash
 agileplus device status
 ```
 
 **Implementation:**
+
 1. Query local DeviceNode from SQLite
 2. Fetch sync vector (map of entity → last synced sequence)
 3. Query sync mappings for all known peers
@@ -139,6 +152,7 @@ agileplus device status
 6. Format as structured output
 
 **Output:**
+
 ```
 Local Device Status
 ===================
@@ -171,11 +185,13 @@ Health Check:
 ```
 
 **Flags:**
+
 - `--json`: Output as JSON for scripting
 - `--peers-only`: Show only peer sync state (omit local device info)
 - `--vectors-only`: Show only sync vectors (omit peer list)
 
 **Error handling:**
+
 - If device not initialized, suggest running `agileplus device discover` first
 - If database unavailable, report degraded status
 

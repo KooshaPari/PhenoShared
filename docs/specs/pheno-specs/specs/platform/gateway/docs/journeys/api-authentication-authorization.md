@@ -14,6 +14,7 @@
 ## Overview
 
 Portalis provides comprehensive authentication and authorization:
+
 - JWT validation (RS256, HS256)
 - OAuth 2.0 / OIDC integration
 - API Key management
@@ -66,6 +67,7 @@ portalis auth validate --config ~/.config/portalis/auth.yaml
 ```
 
 **Expected Output:**
+
 ```
 [✓] Authentication enabled
 [✓] JWT provider configured (issuer: https://auth.example.com)
@@ -155,6 +157,7 @@ portalis auth validate-jwt \
 ```
 
 **Expected Output:**
+
 ```
 JWT Validation Results:
 [✓] Signature: valid
@@ -211,6 +214,7 @@ portalis auth device-code \
 ```
 
 **Expected Output:**
+
 ```
 Device Authorization Flow:
 [1] Open the following URL:
@@ -273,6 +277,7 @@ portalis api-keys list --config ~/.config/portalis/api-keys.yaml
 ```
 
 **Expected Output:**
+
 ```
 API Keys:
 ┌─────────────┬─────────────────────────┬──────────┬────────────────┐
@@ -294,6 +299,7 @@ portalis api-keys create \
 ```
 
 **Expected Output:**
+
 ```
 [✓] API Key created
     ID: key-new-001
@@ -386,6 +392,7 @@ curl -H "Authorization: Bearer $TEST_TOKEN" \
 ```
 
 **Expected Output:**
+
 ```
 # Test 1: Public route
 HTTP/1.1 200 OK
@@ -421,6 +428,7 @@ portalis test auth \
 ```
 
 **Expected Output:**
+
 ```
 Auth Test Results:
 [✓] jwt-valid: PASSED (200 OK, user_id extracted)
@@ -435,6 +443,7 @@ Result: 5/5 tests passed
 ## Next Steps
 
 You've completed all journey tutorials:
+
 - [First API Gateway Setup](./first-api-gateway-setup.md)
 - [Implementing Rate Limiting](./implementing-rate-limiting.md)
 - API Authentication & Authorization

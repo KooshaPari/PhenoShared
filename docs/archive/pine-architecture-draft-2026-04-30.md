@@ -3,6 +3,7 @@
 ## Overview
 
 Pine provides application compatibility through:
+
 1. **Binary parsing** (PE/ELF/Mach-O loaders)
 2. **Syscall translation** (Windows/macOS/Linux → Phenotype)
 3. **API emulation** (Win32, Cocoa, POSIX compatibility)
@@ -119,6 +120,7 @@ flags; Pine does not need to construct the JSON directly.
 The Pine binary loader uses nvms in three phases:
 
 **1. Phase 1 — Image resolution:**
+
 ```rust
 // Choose tier based on binary provenance / signature
 let tier = match binary_provenance {
@@ -129,6 +131,7 @@ let tier = match binary_provenance {
 ```
 
 **2. Phase 2 — VM launch:**
+
 ```rust
 let instance_id = format!("pine__{}", session_id);
 let mut cmd = Command::new("nvms");
@@ -145,6 +148,7 @@ let instance_id = /* parse from stdout / use pre-agreed ID */;
 ```
 
 **3. Phase 3 — Binary injection and execution:**
+
 ```rust
 // Upload binary into VM
 Command::new("nvms")

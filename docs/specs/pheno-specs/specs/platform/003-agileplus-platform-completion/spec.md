@@ -209,17 +209,20 @@ A developer works on AgilePlus on their laptop, commits and pushes. On their des
 This project implements:
 
 ### Hexagonal Architecture (Ports & Adapters)
+
 - **Domain**: Core business logic (entities, value objects, services, events, ports)
 - **Application**: Use cases (commands, queries, handlers)
 - **Adapters**: Primary (REST, CLI) and Secondary (persistence, cache, messaging)
 
 ### Clean Architecture Layers
+
 - **Enterprise Rules**: Domain entities, services, value objects
 - **Application**: Use cases, interactors, DTOs
 - **Interface Adapters**: Controllers, presenters, gateways
 - **Frameworks & Drivers**: Database, web, external interfaces
 
 ### xDD Methodologies
+
 - **TDD**: Test-Driven Development - red/green/refactor cycle
 - **BDD**: Behavior-Driven Development - Gherkin scenarios
 - **SDD**: Specification-Driven Development - executable specs

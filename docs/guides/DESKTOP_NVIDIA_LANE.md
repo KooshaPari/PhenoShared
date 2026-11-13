@@ -66,6 +66,7 @@ python3 scripts/provision_desktop_worktree.py \
 ```
 
 The script:
+
 1. Pings the rig over SSH (tailscale).
 2. Clones `fix/desktop-vllm-runtime` into a fresh worktree.
 3. Records the entry in `evidence/dual_gpu/worktrees.json`

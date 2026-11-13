@@ -228,8 +228,8 @@ DELETE archived repo  IFF:
 - `RATIONALIZATION_EXECUTION.md` — absorption wave (§1 partially superseded here for obs libs)
 - Open gap ports: [registry#76](https://github.com/KooshaPari/phenotype-registry/pull/76), [phenokits-commons#3](https://github.com/KooshaPari/phenokits-commons/pull/3), [Agentora#79](https://github.com/KooshaPari/Agentora/pull/79), [phenotype-tooling#155](https://github.com/KooshaPari/phenotype-tooling/pull/155), [PhenoObservability#157](https://github.com/KooshaPari/PhenoObservability/pull/157)
 
-
 ### Interaction (added 2026-06-23)
+
 - **Canonical owner:** `<REDACTED>/eyetracker`
 - **Stack:** Rust + UniFFI bindings (Kotlin + Swift)
 - **Boundary:** Eye-tracking framework, calibration, fixation detection, dwell-click accessibility
@@ -240,6 +240,7 @@ DELETE archived repo  IFF:
 - **Recommendation:** **KEEP_ACTIVE** — establish per-platform SOTA gap closure roadmap
 
 ### Event-bus Runtime (updated 2026-07-14)
+
 - **Canonical owner:** `<REDACTED>/phenoEvents` ([v0.1.0](https://github.com/KooshaPari/phenoEvents/releases/tag/v0.1.0))
 - **Stack:** Rust (SQLite durable outbox + OTLP)
 - **Boundary:** Reusable runtime event bus, envelope handling, retries, DLQ, idempotency, projections, and tracing.
@@ -250,6 +251,7 @@ DELETE archived repo  IFF:
 - **Recommendation:** **KEEP_ACTIVE** — consolidate eligible consumers onto phenoEvents; retain Eventra only as read-only history.
 
 ### Configuration (Rust) (refreshed 2026-06-23)
+
 - **Canonical owner:** `<REDACTED>/Configra`
 - **Stack:** Rust
 - **Boundary:** Rust config framework (typed layered config, hot-reload, schema validation)
@@ -260,6 +262,7 @@ DELETE archived repo  IFF:
 - **Recommendation:** **KEEP_ACTIVE** — add notify + figment + schemars + aes-gcm; reconcile README encryption-at-rest claim
 
 ### Performance / Benchmark Harness (added 2026-06-23)
+
 - **Canonical owner:** `<REDACTED>/Benchora`
 - **Stack:** Rust (criterion)
 - **Boundary:** Perf-harness framework, regression gating, baseline matrix for owned scope
@@ -270,6 +273,7 @@ DELETE archived repo  IFF:
 - **Recommendation:** **KEEP_ACTIVE** — add github-action-benchmark + cargo-flamegraph + dhat/iai
 
 ### HTTP Middleware (added 2026-06-23)
+
 - **Canonical owner:** `<REDACTED>/Quillr`
 - **Stack:** Rust (httpora-core) + TypeScript (@<REDACTED>/quillts)
 - **Boundary:** HTTP toolkit — Tower middleware (rate-limit/retry/CB/CORS) + TS client
@@ -280,6 +284,7 @@ DELETE archived repo  IFF:
 - **Recommendation:** **KEEP_ACTIVE** — add reqwest + quinn/h3 + tracing-opentelemetry + moka
 
 ### Auth Runtime (refreshed 2026-06-24)
+
 - **Canonical owner:** `<REDACTED>/AuthKit` (active; successor to archived Authvault)
 - **Historical owner:** `<REDACTED>/Authvault` (archived 2026-06-20, commit c7994b9)
 - **Stack:** Rust (OAuth2/OIDC/JWT/RBAC/ABAC, multi-tenant)

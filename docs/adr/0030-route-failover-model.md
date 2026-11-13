@@ -82,12 +82,14 @@ surface to `LeaseState::Revoked` immediately and require a fresh
 ## Consequences
 
 Positive:
+
 - No silent failures. Every degraded surface produces a journaled event.
 - Soft failures allow graceful degradation without re-admit.
 - The re-plan strategy is a pure function (`replan(plan, topology, event) -> Option<RoutePlan>`),
   unit-testable, no I/O.
 
 Negative:
+
 - Adding a per-surface event log means `SurfaceLease` carries an
   `event_log: Vec<RouteStepFailure>` field. This is a small struct-size
   tax. Acceptable.

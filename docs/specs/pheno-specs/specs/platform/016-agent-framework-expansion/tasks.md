@@ -23,6 +23,7 @@
 Complete Agentora as the central agent orchestration framework. Agentora coordinates multiple agents, decomposes tasks, assigns work, and manages the unified agent lifecycle. This is the backbone that all other agent framework components integrate with.
 
 ### Subtasks
+
 - [ ] T001 Audit current Agentora state: existing orchestration code, gaps, dependencies
 - [ ] T002 Design multi-agent coordination architecture: leader-follower, peer-to-peer, broadcast
 - [ ] T003 Implement AgentOrchestrator: create, manage, and coordinate agent groups
@@ -37,9 +38,11 @@ Complete Agentora as the central agent orchestration framework. Agentora coordin
 - [ ] T012 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - None (starting WP for this spec)
 
 ### Risks & Mitigations
+
 - Orchestration complexity: Start with leader-follower pattern, add peer-to-peer incrementally
 - Agent failure handling: Implement retry with checkpoint, graceful degradation
 
@@ -62,6 +65,7 @@ Complete Agentora as the central agent orchestration framework. Agentora coordin
 Implement the Model Context Protocol (MCP) server in AgentMCP and integrate it with Agentora's orchestration layer. This exposes agent capabilities as MCP tools, enabling external MCP clients to interact with the agent framework.
 
 ### Subtasks
+
 - [ ] T013 Audit current AgentMCP state: existing MCP implementation, protocol coverage
 - [ ] T014 Complete MCP tool server: register tools, handle tool calls, return results
 - [ ] T015 Implement MCP resource server: serve agent state, results, and metadata
@@ -75,9 +79,11 @@ Implement the Model Context Protocol (MCP) server in AgentMCP and integrate it w
 - [ ] T023 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - WP-001 (Agentora orchestration layer available for integration)
 
 ### Risks & Mitigations
+
 - MCP spec compliance: Reference official MCP specification, test against MCP conformance
 - Protocol versioning: Support MCP version negotiation, document supported versions
 
@@ -101,6 +107,7 @@ Implement the Model Context Protocol (MCP) server in AgentMCP and integrate it w
 Complete agent-wave as the event-driven communication layer for agent-to-agent messaging. Events are integrated with the agent lifecycle, ensuring proper delivery, routing, and filtering. This enables asynchronous coordination between agents.
 
 ### Subtasks
+
 - [ ] T024 Audit current agent-wave state: existing event system, routing, gaps
 - [ ] T025 Design event schema: event types, payloads, metadata (source, timestamp, priority)
 - [ ] T026 Implement event bus: publish, subscribe, unsubscribe with topic-based routing
@@ -114,9 +121,11 @@ Complete agent-wave as the event-driven communication layer for agent-to-agent m
 - [ ] T034 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - WP-001 (Agentora lifecycle available for event delivery integration)
 
 ### Risks & Mitigations
+
 - Event ordering: Implement causal ordering for related events, document ordering guarantees
 - Event volume: Implement rate limiting, backpressure, and event deduplication
 
@@ -139,6 +148,7 @@ Complete agent-wave as the event-driven communication layer for agent-to-agent m
 Complete agentops-policy-federation for policy distribution and enforcement across agents. Policies are distributed to agent groups, enforced at the agent level, and versioned for consistency. This ensures agents operate within defined constraints.
 
 ### Subtasks
+
 - [ ] T035 Audit current agentops-policy-federation: existing policy code, distribution mechanism
 - [ ] T036 Design policy schema: policy rules, scopes, priorities, versioning
 - [ ] T037 Implement policy distribution: push policies to agent groups, version tracking
@@ -152,9 +162,11 @@ Complete agentops-policy-federation for policy distribution and enforcement acro
 - [ ] T045 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - WP-001 (Agentora orchestration available for policy attachment)
 
 ### Risks & Mitigations
+
 - Policy enforcement performance: Cache policy evaluations, optimize hot paths
 - Policy conflicts: Implement clear resolution strategy (priority-based, deny-overrides)
 
@@ -178,6 +190,7 @@ Complete agentops-policy-federation for policy distribution and enforcement acro
 Complete helMo for agent mobility — the ability to migrate agent state between hosts. This enables load balancing, fault tolerance, and dynamic resource allocation. helMo integrates with Agentora for orchestration-aware mobility.
 
 ### Subtasks
+
 - [ ] T046 Audit current helMo state: existing mobility prototype, serialization approach
 - [ ] T047 Design agent state serialization format: what to serialize, what to reconstruct
 - [ ] T048 Implement state serialization: capture agent context, memory, and execution state
@@ -192,9 +205,11 @@ Complete helMo for agent mobility — the ability to migrate agent state between
 - [ ] T057 Run quality checks: `cargo test`, `cargo clippy -- -D warnings`, `cargo fmt`
 
 ### Dependencies
+
 - WP-001 (Agentora orchestration for mobility actions)
 
 ### Risks & Mitigations
+
 - State serialization completeness: Thorough testing of agent state capture, document limitations
 - Migration failures: Implement checkpoint-based rollback, test failure scenarios extensively
 
@@ -217,6 +232,7 @@ Complete helMo for agent mobility — the ability to migrate agent state between
 Complete agent-devops-setups with CI/CD templates for deploying and managing agent projects. Templates cover GitHub Actions, GitLab CI, deployment configurations, and monitoring setups for the full agent framework.
 
 ### Subtasks
+
 - [ ] T058 Audit current agent-devops-setups: existing templates, gaps
 - [ ] T059 Create GitHub Actions template for agent project CI (build, test, lint)
 - [ ] T060 Create GitHub Actions template for agent deployment (orchestration cluster)
@@ -229,9 +245,11 @@ Complete agent-devops-setups with CI/CD templates for deploying and managing age
 - [ ] T067 Create example agent project using all templates end-to-end
 
 ### Dependencies
+
 - WP-001 through WP-005 (agent framework components available for template integration)
 
 ### Risks & Mitigations
+
 - Template drift: Pin dependency versions in templates, document update process
 - Platform compatibility: Test templates on both GitHub Actions and GitLab CI
 

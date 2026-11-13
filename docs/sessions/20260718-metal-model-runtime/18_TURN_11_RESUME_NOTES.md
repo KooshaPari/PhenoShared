@@ -227,6 +227,7 @@ Plus: gated airlock-v2 push attempted (`wip/20260720T0036-18c3d8630f914930`); pu
 **Airlock-v2 push:** attempted via `airlock-v2 snapshot . --message "turn-11 close"`. Snapshot branch `wip/20260720T0036-18c3d8630f914930` created locally at HEAD 4463e85; remote push did not occur (no remote configured per `airlock-v2 status .`).
 
 This is a **tooling / credential limitation, not a code defect**:
+
 - All 7 code-quality gates above are GREEN.
 - The repo is committed, the snapshot is recorded, and the work is fully captured in 8 atomic commits on top of turn-10 close (`a9245ff`).
 - The airlock-v2 snapshot is exercised end-to-end; the snapshot branch is healthy.

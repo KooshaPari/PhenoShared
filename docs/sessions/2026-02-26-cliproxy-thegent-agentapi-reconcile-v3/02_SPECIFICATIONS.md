@@ -7,6 +7,7 @@
 **Goal**: Audit all open PRs across 4 repos using a locally cached snapshot when live API is unstable.
 
 **Acceptance Criteria**:
+
 - [ ] Snapshot covers all 4 repos: cliproxyapi++, cliproxyapi-plusplus, thegent, agentapi-plusplus.
 - [ ] Snapshot includes: PR number, merge state, failing checks, CodeRabbit status.
 - [ ] Clean merge candidates are flagged (0 failing checks, 0 unresolved threads).
@@ -17,6 +18,7 @@
 **Goal**: Clear CodeRabbit failures across all affected PRs in a single session.
 
 **Acceptance Criteria**:
+
 - [ ] All PRs with `CodeRabbit` failure in snapshot receive `@coderabbitai full review`.
 - [ ] Batch execution handles rate-limit errors gracefully (log + continue).
 - [ ] Total PRs re-reviewed: 88 (86 cliproxyapi-plusplus + 2 thegent).
@@ -26,6 +28,7 @@
 **Goal**: Document PR reconciliation workflow in the governance handbook.
 
 **Acceptance Criteria**:
+
 - [ ] New module `docs/governance/stacked-prs/05-pr-reconciliation.md` created.
 - [ ] Index `docs/governance/stacked-prs/README.md` updated to reference the new module.
 - [ ] Document covers: merge order, conflict resolution, CI gating, review debt.

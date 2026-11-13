@@ -117,7 +117,7 @@ Comprehensive audit of external dependencies, package modernization opportunitie
 ### 2026-03-30 - Git wrapper compatibility upgrade
 
 - `gix` set to `0.81` with features `status`, `revision`, `parallel`, `sha1` in the root workspace.
-- `phenotype-git-core` sources currently use now-deprecated gix methods; need revision to newer API names (`rev_walk`, `Category::LocalBranch`, `Repository::head` APIs). 
+- `phenotype-git-core` sources currently use now-deprecated gix methods; need revision to newer API names (`rev_walk`, `Category::LocalBranch`, `Repository::head` APIs).
 - Consider pinning to `gix` `0.79` if API update risk is high until full migration is done.
 
 ### Python Modernization Targets
@@ -138,11 +138,13 @@ Comprehensive audit of external dependencies, package modernization opportunitie
 **Priority:** P0
 
 ### Verified Pinned Versions (Security Fixes)
+
 - **LiteLLM**: Pinned to `v1.90.0` (fixed Mar 2026 supply chain vulnerability in v1.82.7).
 - **gix**: Pinned to `v0.79.0` (resolves RUSTSEC-2025-0140).
 - **async-nats**: Pinned to `v0.37.0` (resolves RUSTSEC-2025-0134 via rustls-pemfile update).
 
 ### New Security Tooling Integration
+
 - **cargo-deny**: Integrated in `Cargo.toml`; fails CI on `RUSTSEC` advisories.
 - **trufflehog**: Pre-commit hook added for secret scanning.
 - **osv-scanner**: Added to monthly dependency audit schedule.
@@ -163,34 +165,40 @@ Migrated manual `Error` and `Display` implementations to use `thiserror` and `de
 ### Completed Migrations
 
 #### 1. keyring-store/src/lib.rs - CredentialStoreError
+
 - **Before:** 39 LOC (manual Error + Display impls)
 - **After:** 18 LOC (thiserror derive)
 - **Savings:** 21 LOC (54% reduction)
 - **Dependencies:** Added `thiserror = { workspace = true }`
 
 #### 2. core/src/error.rs - ConnectionFailedError
+
 - **Before:** 14 LOC (manual Display impl)
 - **After:** 4 LOC (thiserror derive)
 - **Savings:** 10 LOC (71% reduction)
 
 #### 3. utils/stream-parser/src/utf8_stream.rs - Utf8StreamParserError
+
 - **Before:** 38 LOC (manual Error + Display impls)
 - **After:** 14 LOC (thiserror derive)
 - **Savings:** 24 LOC (63% reduction)
 - **Dependencies:** Added `thiserror = { workspace = true }`
 
 #### 4. tui/src/clipboard_paste.rs - PasteImageError & PasteTextError
+
 - **Before:** 52 LOC (2x manual Error + Display impls)
 - **After:** 16 LOC (thiserror derive)
 - **Savings:** 36 LOC (69% reduction)
 
 #### 5. secrets/src/lib.rs - SecretName
+
 - **Before:** 8 LOC (manual Display impl)
 - **After:** 2 LOC (derive_more::Display)
 - **Savings:** 6 LOC (75% reduction)
 - **Dependencies:** Added `derive_more = { workspace = true, features = ["display"] }`
 
 #### 6. protocol/src/mcp.rs - RequestId
+
 - **Before:** 8 LOC (manual Display impl)
 - **After:** 2 LOC (derive_more::Display)
 - **Savings:** 6 LOC (75% reduction)
@@ -259,6 +267,7 @@ derive_more = { workspace = true, features = ["display"] }
 ---
 
 ## 2026-03-29 - LOC Reduction Deep Audit (Extended)
+
 | `buf` | Proto lint/breaking checks | `buf.yaml`, CI pipeline |
 
 #### Could Improve Codebase 🟠
@@ -461,12 +470,14 @@ Decision framework for determining when to fork vs wrap vs use directly.
 ### When to Blackbox
 
 **Blackbox (Direct Use) is preferred when:**
+
 - Crate is well-maintained
 - No phenotype-specific customizations needed
 - Public API is stable
 - Security updates are timely
 
 **Examples:**
+
 - `serde`, `tokio`, `axum`, `clap`, `tracing`
 - Standard protocol implementations
 - Well-established libraries
@@ -474,12 +485,14 @@ Decision framework for determining when to fork vs wrap vs use directly.
 ### When to Whitebox
 
 **Whitebox (Fork/Modify) is preferred when:**
+
 - Need features not in upstream
 - Need to patch security issues faster
 - Need phenotype-specific customizations
 - Fork has better maintenance
 
 **Examples:**
+
 - Process/PTY management (cross-platform quirks)
 - Error handling patterns (AgilePlus-specific)
 - Git operations (worktree support)
@@ -487,11 +500,13 @@ Decision framework for determining when to fork vs wrap vs use directly.
 ### When to Graybox
 
 **Graybox (Wrap/Extend) is preferred when:**
+
 - Need to add phenotype API layer
 - Need to adapt interfaces
 - Need to add caching/metrics
 
 **Examples:**
+
 - Git client wrappers
 - Config loading with phenotype defaults
 - Secret storage with phenotype keychain
@@ -817,6 +832,7 @@ Deep audit of phenotype-infrakit workspace dependencies with blackbox/whitebox/g
 ### Workspace Cargo.toml Analysis
 
 **Workspace Members:**
+
 ```toml
 members = [
     "crates/evidence-ledger",
@@ -958,6 +974,7 @@ members = [
 #### Root Cause Analysis
 
 The nested crate structure appears to be from an **in-progress rebase** where:
+
 1. Inner crates contain the actual implementation
 2. Outer crates were created as workspace entries
 3. After rebase completes, inner crates will become canonical
@@ -975,6 +992,7 @@ The nested crate structure appears to be from an **in-progress rebase** where:
 **Purpose:** Audit trail and evidence ledger for governance
 
 **Current Implementation:**
+
 ```rust
 // crates/evidence-ledger/src/
 ├── lib.rs          // 25 LOC - exports
@@ -984,6 +1002,7 @@ The nested crate structure appears to be from an **in-progress rebase** where:
 ```
 
 **Dependencies:**
+
 - `sha2` for chain hashing
 - `serde` for serialization
 - `chrono` for timestamps
@@ -1788,6 +1807,7 @@ Comprehensive Python dependency audit across heliosCLI and thegent. Found modern
 ### Security Considerations: Overrides
 
 Both projects use dependency overrides for security:
+
 - heliosCLI: `punycode`, `esbuild` (JavaScript)
 - thegent: Uses pyproject.toml for Python (cleaner)
 
@@ -1816,16 +1836,19 @@ Both projects use dependency overrides for security:
 #### Recommendation: Standardize on Workspace Dependencies
 
 **For Rust:**
+
 - Keep workspace root (`/Cargo.toml`) for common deps
 - Remove unused: `lru`, `parking_lot`, `moka`, `dashmap`
 - Add: `tokio` (with unified version 1.40+)
 - Enforce: All sub-crates must inherit workspace versions
 
 **For Python:**
+
 - thegent uses uv workspaces correctly
 - Standardize heliosCLI on uv workspaces if multi-package
 
 **For TypeScript:**
+
 - Choose: pnpm 10.x (already used) or bun (cutting-edge)
 - Migrate heliosCLI workspace root from npm to pnpm
 - Standardize VitePress: upgrade all to 1.6.4
@@ -1996,6 +2019,7 @@ Earlier stacked PRs (#99–#101) were closed without merge; workflow initially l
 ### Rust Async Ecosystem: Current State (2026-03)
 
 #### async-trait Crate Status
+
 - **Latest:** `async-trait v0.1.89` (stable)
 - **Rust 1.75+:** Native `async fn` in traits works for **static dispatch only**
 - **Gap:** `dyn Trait` with async fn still requires `#[async_trait]` macro
@@ -2004,6 +2028,7 @@ Earlier stacked PRs (#99–#101) were closed without merge; workflow initially l
 **Recommendation:** Continue using `async-trait` for dynamic dispatch patterns. Monitor for native `dyn async` stabilization (likely 2026-2027).
 
 #### Key Rust Edition 2024 Changes
+
 - **Async closures:** `async || { }` syntax now stable
 - **Return position impl Trait (RPITIT):** Fully stable
 - **Type alias impl Trait:** Fully stable
@@ -2087,6 +2112,7 @@ Earlier stacked PRs (#99–#101) were closed without merge; workflow initially l
 ### Worktrees Summary
 
 #### Active Worktrees (.worktrees/ - 18 total)
+
 | Worktree | Branch | Status | Action |
 |----------|--------|--------|--------|
 | add-tests | feat/add-crate-tests | Merged | DELETE after PR |
@@ -2281,7 +2307,7 @@ _Last updated: 2026-03-31_
 | **Ecosystem** | 60%+ of crates | 20% | 10% |
 | **Thread pool** | Multi-threaded | Single-threaded | Flexible |
 | **Timer wheel** | Built-in | External | Built-in |
-| ** mio integration** | ✅ | ✅ | ✅ |
+| **mio integration** | ✅ | ✅ | ✅ |
 | **Community** | Very large | Medium | Small |
 | **Stability** | Stable | Stable | Stable |
 
@@ -2612,7 +2638,6 @@ deadpool-runtime = "0.6"
 
 _Last updated: 2026-03-31 (Wave 131-133)_
 
-
 ---
 
 ## 2026-03-31 - Wave 161: git2→gix Migration Attempt (RUSTSEC-2025-0140)
@@ -2676,6 +2701,7 @@ gix = { version = "0.81", default-features = false, features = ["status", "revis
 ### gix 0.81 Feature Flags
 
 Minimum working set:
+
 ```toml
 gix = { version = "0.81", default-features = false, features = [
     "status",    # For repo.status()
@@ -2899,7 +2925,6 @@ rg "phenotype.?error.?core|PhenotypeErrorCore" crates/ --type rust
 ---
 
 _Last updated: 2026-03-31 (Wave 161-164)_
-
 
 ---
 

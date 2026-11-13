@@ -20,6 +20,7 @@
 
 > **L5-104.7 / ADR-031 supersession pattern.** The "sister repo / mono umbrella" pattern is
 > retired. phenotype-gfx is now the single canonical graphics/visual substrate (Rust core
+>
 > + Zig/Mojo hot-path ports + C#/other edges, per ADR-004 single-core-ffi-edges). The 4
 > sister repos (phenotype-voxel, phenotype-terrain, phenotype-water, phenotype-postfx) are
 > SUPERSEDED, not archived-after-extract. Absorbing PR: [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10)
@@ -303,7 +304,7 @@ thegent-sharecli   → already archived
 
 > **32 canonical repos** (well under the <25-50 preferred target, inside <100 ceiling).
 > Husks remain as archived redirects — never deleted.
-> _2026-06-18:_ -1 vs 2026-05-30 (phenotype-voxel + phenotype-postfx absorbed into phenotype-gfx via PR #10; 33 → 32).
+> *2026-06-18:* -1 vs 2026-05-30 (phenotype-voxel + phenotype-postfx absorbed into phenotype-gfx via PR #10; 33 → 32).
 
 ---
 
@@ -372,9 +373,9 @@ Priority order: highest ROI first, dependency-safe (no step breaks a downstream 
 | 6 | **phenotype-templates** | 1 KB README-only; template scaffolding actually lives in `phenokits-commons/templates` | convert to real GitHub template repo OR archive | Low |
 
 > ⚠️ **Helios cluster caveat (verified):** the declared canonical target
-> `helios-cli` is itself only a **10% non-building scaffold** (README: _"SCAFFOLD
+> `helios-cli` is itself only a **10% non-building scaffold** (README: *"SCAFFOLD
 > … codex-rs workspace members declared but source NOT committed; does not
-> build"_). Do **not** archive `helioscope` / `HeliosCLI` until the working code
+> build"*). Do **not** archive `helioscope` / `HeliosCLI` until the working code
 > is migrated into `helios-cli` (or retarget the redirect to whichever copy is
 > kept). This needs a dedicated triage issue on `helios-cli`.
 
@@ -389,7 +390,7 @@ Priority order: highest ROI first, dependency-safe (no step breaks a downstream 
 | 11 | **phenotype-otel + Profila** ↔ PhenoObservability | PO already has `tracing/` + `profiling/` dirs | fold both into PhenoObservability |
 | 12 | **agileplus-spec-harmonizer** ↔ AgilePlus | 13 KB format-bridge (Rust, 12/12 tests) | merge into AgilePlus; keep spec-kitty only if plugin actively distributed |
 | 13 | **phenotype-water + phenotype-terrain** | (supersession pattern — see [Active Consolidation](#active-consolidation-2026-06-18-phenotype-gfx-absorbs-the-4-sister-repos)) absorbed into <REDACTED>/phenotype-gfx via [phenotype-gfx#10](https://github.com/KooshaPari/phenotype-gfx/pull/10) per ADR-004 + ADR-031. Disposition: SUPERSEDE (target=phenotype-gfx, fsm=archived). All 4 source repos archived + deleted 2026-06-18 (delete_repo scope). phenotype-voxel + phenotype-postfx absorbed in the same PR. |
-| 14 | **Httpora + Quillr** | half-baked HTTP repos with self-acknowledged naming drift (Quillr README: _"repo 'Quillr'/README 'quill'…to reconcile"_) | reconcile identity/name first |
+| 14 | **Httpora + Quillr** | half-baked HTTP repos with self-acknowledged naming drift (Quillr README: *"repo 'Quillr'/README 'quill'…to reconcile"*) | reconcile identity/name first |
 
 ### Tier 3 — lower confidence (worth a look)
 

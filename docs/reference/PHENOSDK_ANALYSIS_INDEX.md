@@ -12,6 +12,7 @@
 This index consolidates all analysis, specifications, and implementation guidance for extracting phenotype-infrakit Rust crates as permanent @phenotype npm packages.
 
 **Three packages planned**:
+
 1. `@phenotype/pheno-core` - Hexagonal architecture contracts (zero dependencies)
 2. `@phenotype/pheno-resilience` - Event sourcing, state machines, policies, caching
 3. `@phenotype/pheno-llm` - LLM integration and prompt management

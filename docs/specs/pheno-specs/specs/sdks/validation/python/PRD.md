@@ -15,9 +15,11 @@
 ## 2. Functional Requirements
 
 ### FR-VALID-001: Pydantic Integration
+
 **Priority**: P0 (Critical)
 **Description**: Pydantic-compatible validation
 **Acceptance Criteria**:
+
 - Pydantic v2 support
 - Custom field validators
 - Root validators
@@ -25,9 +27,11 @@
 - Type coercion
 
 ### FR-VALID-002: Schema Validation
+
 **Priority**: P1 (High)
 **Description**: JSON Schema support
 **Acceptance Criteria**:
+
 - JSON Schema generation
 - JSON Schema validation
 - Draft 2020-12 support
@@ -35,9 +39,11 @@
 - Schema export
 
 ### FR-VALID-003: Custom Validators
+
 **Priority**: P1 (High)
 **Description**: Extensible validation
 **Acceptance Criteria**:
+
 - Decorator API
 - Class-based validators
 - Async validators
@@ -49,6 +55,7 @@
 ## 4. Release Criteria
 
 ### Version 1.0
+
 - [ ] Pydantic integration
 - [ ] Custom validators
 - [ ] JSON Schema support

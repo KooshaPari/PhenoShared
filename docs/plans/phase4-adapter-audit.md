@@ -20,6 +20,7 @@
 | `__init__.py` | — | — | 14 | re-exports |
 
 **DAG v0.10 spec lists** `arxiv, github, hf, openalex, semantic_scholar, wikipedia` (6). Disk diverges:
+
 - `huggingface.py` == `hf` (name mismatch only).
 - `modelscope.py` + `reddit.py` + `local_corpus.py` exist on disk but are not in the DAG’s 6.
 - `openalex.py`, `semantic_scholar.py`, `wikipedia.py` do **not** exist on disk — gap noted for tasks 66–68 (they will be created or scoped out).

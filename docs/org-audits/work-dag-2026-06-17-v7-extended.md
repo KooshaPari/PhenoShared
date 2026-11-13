@@ -1,4 +1,5 @@
 # Phenotype v7+ Work DAG (2026-06-17, extended)
+
 **Status:** Extends `work-dag-2026-06-17-wrapup.md` with the post-wrap-up engineering backlog
 **Scope:** 5 tracks — A (WIP landing), B (strand recovery), C (⚠ pillar unblock), D (△ pillar backfill), E (foundation re-eval)
 **Source:** `audit-71-pillar-2026-06-17-wrapup.md` + `work-dag-2026-06-17-wrapup.md`

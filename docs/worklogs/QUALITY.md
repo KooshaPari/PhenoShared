@@ -53,15 +53,15 @@ Comprehensive audit of test coverage, quality metrics, and quality engineering o
 
 #### Medium Gaps
 
-5. **Inconsistent test naming**
+1. **Inconsistent test naming**
    - Some use `test_foo`, others use `testFoo`
    - Standardize to snake_case
 
-6. **No test fixtures sharing**
+2. **No test fixtures sharing**
    - Duplicated fixtures across crates
    - Extract to test-utils crate
 
-7. **No benchmark CI integration**
+3. **No benchmark CI integration**
    - Benchmarks exist but not in CI
    - Track performance regressions
 

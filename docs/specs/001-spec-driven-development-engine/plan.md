@@ -12,6 +12,7 @@ Architecture: 5 independent repositories — proto (shared contracts), Rust core
 
 **Language/Version**: Rust 2024 edition (nightly for async trait features) + Python 3.13+ (free-threaded)
 **Primary Dependencies**:
+
 - Rust: clap (CLI), axum + tokio (API), tonic (gRPC), rusqlite (SQLite), git2 (libgit2 bindings), opentelemetry (tracing), serde (serialization), sha2 (hash chains)
 - Python: fastmcp>=3.0 (MCP server), grpcio (gRPC client), opentelemetry-sdk (tracing)
 **Storage**: SQLite (rusqlite) + git (git2/libgit2). SQLite for operational state; git for source of truth.
@@ -234,6 +235,7 @@ tests/
 ## Dependency Graph
 
 ### Intra-repo (agileplus-core)
+
 ```
 agileplus-cli ──┐
 agileplus-api ──┼──► agileplus-domain ◄── agileplus-grpc
@@ -249,6 +251,7 @@ agileplus-api ──┼──► agileplus-domain ◄── agileplus-grpc
 ```
 
 ### Inter-repo (gRPC boundaries)
+
 ```
 agileplus-cli ──► agileplus-core (in-process)
                       │
@@ -310,6 +313,7 @@ implement WP01 →
 ### 4. Conflict Resolution (FR-038, FR-039)
 
 WPs declare their file scope in plan metadata. The scheduler:
+
 1. Builds a file-overlap graph from WP declarations
 2. WPs with no overlapping files → parallel worktrees
 3. WPs with overlapping files → serialized (dependency edge added)
@@ -435,6 +439,7 @@ Per project constitution: Coderabbit auto-review is the review gate. No human ap
 | Elicitation | Discovery interviews: specify clarifications, plan interrogation, constitution phases |
 
 FastMCP 3.0 features used:
+
 - **Background tasks** (Docket+SQLite): Long-running sync jobs, agent dispatch monitoring
 - **Component versioning**: MCP tools versioned independently, backward-compatible evolution
 - **Per-component auth**: Different access levels for CLI vs external agents vs web UI

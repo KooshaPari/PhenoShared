@@ -19,6 +19,7 @@ async fn liveness_check() -> StatusCode {
 ```
 
 **Use for:**
+
 - Kubernetes pod restart decisions
 - Basic process monitoring
 - Circuit breaker decisions

@@ -24,11 +24,13 @@ Zero Trust Architecture is built upon several fundamental principles that collec
 #### 1.1.1 Never Trust, Always Verify
 
 The cornerstone principle of Zero Trust eliminates the concept of trusted networks. Every access request must be:
+
 - **Authenticated**: Verify the identity of the user or service
 - **Authorized**: Confirm the requester has permission for the requested resource
 - **Encrypted**: Protect data in transit and at rest
 
 This principle applies equally to:
+
 - Internal users vs. external users
 - Corporate devices vs. personal devices
 - On-premises networks vs. cloud environments
@@ -58,6 +60,7 @@ All access decisions must be based on multiple signals and policies:
 #### 1.1.4 Use Least Privilege Access
 
 Access should be:
+
 - **Just-in-time (JIT)**: Granted only when needed
 - **Just-enough**: Limited to required scope
 - **Time-bound**: Automatically expire after defined periods
@@ -78,6 +81,7 @@ Identity is the primary control plane in Zero Trust. Key aspects include:
 - **Behavioral Biometrics**: Continuous authentication based on user patterns
 
 **Implementation Patterns:**
+
 ```
 Primary Identity Sources:
 ├── Corporate Identity (Active Directory, Azure AD)
@@ -100,6 +104,7 @@ Device trustworthiness must be established before granting access:
 - **Hardware-backed Security**: TPM, Secure Enclave, hardware keys
 
 **Device Trust Levels:**
+
 | Level | Characteristics | Access Rights |
 |-------|----------------|---------------|
 | High | Corporate-managed, fully compliant | Full access |
@@ -118,6 +123,7 @@ Network segmentation and micro-segmentation are critical:
 - **Network Access Control (NAC)**: Dynamic access based on device state
 
 **Network Architecture Evolution:**
+
 ```
 Traditional:          Zero Trust:
 ┌─────────┐          ┌─────────┐
@@ -147,6 +153,7 @@ Application-centric security focuses on:
 - **Application-layer Encryption**: Protect data at the application level
 
 **Application Access Patterns:**
+
 1. **Reverse Proxy**: External access through controlled gateway
 2. **Application Proxy**: Cloud-delivered, identity-aware proxy
 3. **Direct Access**: For modern apps with built-in Zero Trust
@@ -163,6 +170,7 @@ Data-centric security requires:
 - **Data Masking**: Redact sensitive information
 
 **Data Protection Strategies:**
+
 ```
 Classification → Controls
 ═══════════════════════════════════════════════
@@ -218,18 +226,21 @@ BeyondCorp is Google's implementation of Zero Trust, developed over a decade and
 #### 2.1.2 BeyondCorp Key Components
 
 **Device Inventory Database:**
+
 - Comprehensive device registry with hardware identifiers
 - Certificate-based device identity (X.509 certificates)
 - Continuous device health monitoring
 - Integration with device management systems
 
 **User Identity Service:**
+
 - Centralized identity management
 - Group-based access policies
 - Multi-factor authentication enforcement
 - Single sign-on (SSO) capabilities
 
 **Access Control Engine:**
+
 - Policy enforcement point
 - Real-time trust scoring
 - Dynamic access decisions
@@ -249,6 +260,7 @@ Google implements sophisticated trust scoring:
 | Threat Intelligence | Medium | Known malicious indicators |
 
 **Dynamic Access Decisions:**
+
 ```
 if (device_trust_score > 0.8 AND user_risk_score < 0.3):
     grant_full_access()
@@ -291,6 +303,7 @@ Microsoft's Zero Trust implementation leverages Azure AD as the identity control
 Azure AD Conditional Access provides policy-based access control:
 
 **Policy Components:**
+
 1. **Assignments**: Who and what the policy applies to
    - Users and groups
    - Cloud apps or actions
@@ -315,6 +328,7 @@ Azure AD Conditional Access provides policy-based access control:
 Risk-based protection using machine learning:
 
 **Risk Types:**
+
 - **Sign-in Risk**: Real-time and offline analysis of sign-in attempts
   - Anonymous IP address
   - Atypical travel
@@ -329,6 +343,7 @@ Risk-based protection using machine learning:
   - Anomalous user activity
 
 **Automated Remediation:**
+
 ```
 Risk Level    │  Action
 ──────────────┼────────────────────────────────
@@ -366,17 +381,20 @@ AWS provides Zero Trust capabilities through multiple services:
 #### 2.3.2 AWS Zero Trust Patterns
 
 **AWS Verified Access:**
+
 - VPN-less access to corporate applications
 - Policy-based access using AWS IAM
 - Continuous trust evaluation
 - Integration with device trust providers (Jamf, CrowdStrike, etc.)
 
 **AWS Private CA:**
+
 - Private certificate authority for mTLS
 - Device and workload identity
 - Automated certificate lifecycle management
 
 **AWS Network Firewall:**
+
 - VPC-level traffic inspection
 - Stateful firewall rules
 - Intrusion prevention capabilities
@@ -413,6 +431,7 @@ Okta provides identity-centric Zero Trust:
 Contextual authentication with risk-based step-up:
 
 **Risk Signals:**
+
 - Location
 - Device
 - Network
@@ -420,6 +439,7 @@ Contextual authentication with risk-based step-up:
 - Threat intelligence
 
 **Adaptive Policies:**
+
 ```
 if (risk_score < 30):
     allow_single_factor()
@@ -463,6 +483,7 @@ else:
 ```
 
 **Benefits:**
+
 - Consistent policy across all access scenarios
 - Centralized visibility and control
 - Simplified user experience with SSO
@@ -488,6 +509,7 @@ Initiation:              Connection:
 ```
 
 **Characteristics:**
+
 - Dark cloud (infrastructure not visible)
 - SPA (Single Packet Authorization) for hiding
 - Mutual authentication (client and controller)
@@ -510,6 +532,7 @@ Traditional:                    Zero Trust Micro-segmentation:
 ```
 
 **Implementation Approaches:**
+
 1. **Network-based**: VLANs, subnets, ACLs
 2. **Hypervisor-based**: VMware NSX, KVM-based
 3. **Host-based**: OS firewall rules, agents
@@ -534,6 +557,7 @@ Time ─────────────────────────
 ```
 
 **Benefits:**
+
 - Reduces standing privileges
 - Limits blast radius of compromised credentials
 - Provides audit trail for privileged access
@@ -558,6 +582,7 @@ API Request Flow:
 ```
 
 **API Security Patterns:**
+
 1. **Token-based Auth**: OAuth 2.0, JWT with short expiry
 2. **mTLS**: Certificate-based mutual authentication
 3. **API Gateway**: Centralized policy enforcement
@@ -581,6 +606,7 @@ API Request Flow:
 ### 4.2 Forrester Zero Trust eXtended (ZTX) Framework
 
 Forrester's ZTX extends Zero Trust across:
+
 1. **Data**: Classification, protection, monitoring
 2. **People**: User access, identity management
 3. **Devices**: Endpoint security, IoT, mobile
@@ -605,21 +631,25 @@ Forrester's ZTX extends Zero Trust across:
 ### 5.2 Migration Strategy
 
 **Phase 1: Foundation (Months 1-3)**
+
 - Identity consolidation
 - MFA rollout
 - Asset inventory
 
 **Phase 2: Core Implementation (Months 4-9)**
+
 - Access proxy deployment
 - Initial segmentation
 - Policy framework
 
 **Phase 3: Expansion (Months 10-18)**
+
 - Micro-segmentation
 - Device trust
 - Continuous monitoring
 
 **Phase 4: Optimization (Ongoing)**
+
 - Analytics-driven improvements
 - Automation
 - Threat intelligence integration

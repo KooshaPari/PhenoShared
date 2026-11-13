@@ -13,6 +13,7 @@
 The Phenotype ecosystem has 50+ foundational crates in `/repos/crates/` providing infrastructure services: logging (phenotype-logging), metrics (phenotype-metrics), config (phenotype-config-core), validation (phenotype-validation), error handling (phenotype-error-core), async traits (phenotype-async-traits), contracts (phenotype-contracts), and more.
 
 Many projects across the repos shelf are not using these crates, instead duplicating functionality or implementing their own versions. This creates:
+
 - Wasted effort reimplementing the same patterns
 - Inconsistent APIs across projects
 - Fragmented maintenance burden
@@ -21,6 +22,7 @@ Many projects across the repos shelf are not using these crates, instead duplica
 ## Problem Statement
 
 Projects are not leveraging phenotype crates:
+
 - **bare-cua**: Custom config, validation, error handling
 - **heliosCLI**: Custom telemetry, metrics, health checks
 - **HexaKit**: Custom contracts, port traits
@@ -53,6 +55,7 @@ Projects are not leveraging phenotype crates:
 ## phenotype Crate Inventory
 
 ### Foundation Layer
+
 | Crate | Purpose | Dependencies | Maturity |
 |-------|---------|--------------|----------|
 | phenotype-core | Core types and traits | serde, chrono | Stable |
@@ -65,6 +68,7 @@ Projects are not leveraging phenotype crates:
 | phenotype-macros | Procedural macros | syn, quote | Stable |
 
 ### Infrastructure Layer
+
 | Crate | Purpose | Dependencies | Maturity |
 |-------|---------|--------------|----------|
 | phenotype-logging | Structured logging | tracing | Stable |
@@ -81,6 +85,7 @@ Projects are not leveraging phenotype crates:
 | phenotype-bdd | BDD testing | cucumber | Beta |
 
 ### Security Layer
+
 | Crate | Purpose | Dependencies | Maturity |
 |-------|---------|--------------|----------|
 | phenotype-security-aggregator | Security utilities | none | Beta |
@@ -121,28 +126,36 @@ Projects are not leveraging phenotype crates:
 ## Migration Strategy
 
 ### Phase 1: Assessment
+
 For each target project:
+
 - Identify duplicated functionality
 - Map to phenotype crate equivalents
 - Assess breaking changes
 - Estimate migration effort
 
 ### Phase 2: Foundation Crates First
+
 Start with zero-dependency crates:
+
 - phenotype-core (types)
 - phenotype-error-core (errors)
 - phenotype-validation (validation)
 - phenotype-string (utilities)
 
 ### Phase 3: Infrastructure Crates
+
 Add infrastructure dependencies:
+
 - phenotype-config-core (config)
 - phenotype-logging (logging)
 - phenotype-telemetry (observability)
 - phenotype-metrics (metrics)
 
 ### Phase 4: Advanced Crates
+
 Add specialized crates:
+
 - phenotype-contracts (interfaces)
 - phenotype-port-traits (ports)
 - phenotype-mcp-core (MCP types)

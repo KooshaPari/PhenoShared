@@ -26,8 +26,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Broad Wine-equivalent language exceeded prior demonstrated state
 - No generic compatibility score can replace a program corpus
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

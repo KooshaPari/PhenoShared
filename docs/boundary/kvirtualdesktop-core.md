@@ -33,6 +33,7 @@
 **Reviewer:** registry batch4 audit (queue-refresh-batch4)
 **Disposition-index row:** DSPI-NEW (`repo-kvirtualdesktop-core`, fsm=queued)
 **Decisions:**
+
 - ABSORB target: `pheno` monorepo `crates/kvirtualdesktop/`.
 - No standalone GitHub repo — federated only via portage.git
   refs (registry metadata).

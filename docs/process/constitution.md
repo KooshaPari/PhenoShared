@@ -106,6 +106,7 @@ A complete constitution for an auth service:
 
 ### Crate Boundaries
 ```
+
 agileplus-core/       # Domain model, entities, value objects
   ├── models/         # User, Feature, Spec, Plan
   ├── entities/       # WorkPackage, Requirement
@@ -125,6 +126,7 @@ agileplus-adapters/   # Implementations
   ├── file_storage/   # FileStoragePort
   ├── git_vcs/        # GitVcsPort
   └── claude_agent/   # ClaudeAgentPort
+
 ```
 
 ### Dependency Rules
@@ -146,12 +148,14 @@ agileplus-adapters/   # Implementations
 Format: `type(scope): description`
 
 ```
+
 feat(spec): add validation for required fields
 fix(plan): handle circular work package dependencies
 docs(guide): add getting-started section
 refactor(engine): extract planning logic to separate module
 test(integration): add end-to-end workflow tests
 chore(deps): bump serde to 1.0.200
+
 ```
 
 Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
@@ -210,6 +214,7 @@ agent:
 ## Naming Conventions
 
 ### Branches
+
 - Feature: `feat/{feature-id}-{short-slug}`
   - Example: `feat/001-oauth-auth`, `feat/WP02-login-endpoint`
 - Fix: `fix/{issue-id}-{short-slug}`
@@ -218,6 +223,7 @@ agent:
   - Example: `docs/getting-started`
 
 ### Commits
+
 - Format: `type(scope): description`
 - Scope is optional but recommended
 - Capitalize description (Implement, not implement)
@@ -225,6 +231,7 @@ agent:
 - Use imperative mood (Add, not Added)
 
 ### Files & Modules
+
 - Rust files: `snake_case.rs`
 - Modules: `pub mod snake_case;`
 - Constants: `SCREAMING_SNAKE_CASE`
@@ -233,6 +240,7 @@ agent:
 - Test functions: `test_descriptive_name()`
 
 ### IDs
+
 - Features: `{NNN}-{slug}` (e.g., `001-oauth-auth`)
 - Work packages: `WP{NN}` within a feature (e.g., `WP01`, `WP02`)
 - ADRs: `ADR-{NNN}` (e.g., `ADR-001`)
@@ -241,16 +249,19 @@ agent:
 ## Performance Targets
 
 ### Response Times
+
 - CLI commands: < 2 seconds for most operations
 - Spec parsing: < 500ms for <5KB specs
 - Plan generation: < 2 seconds for <20 work packages
 
 ### Test Execution
+
 - Unit tests: < 30 seconds for full suite
 - Integration tests: < 60 seconds
 - Full test suite (unit + integration): < 90 seconds
 
 ### Database
+
 - Spec queries: < 100ms (p99)
 - Sync operations: < 5 seconds per issue tracker
 

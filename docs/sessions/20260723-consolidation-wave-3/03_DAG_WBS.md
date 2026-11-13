@@ -12,4 +12,3 @@ A [G] Wave 2 merged
 
 Current gates: A complete; B/C in progress; D in progress; E blocked per candidate until evidence
 is complete; F/G pending.
-

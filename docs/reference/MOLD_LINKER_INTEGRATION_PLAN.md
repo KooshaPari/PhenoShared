@@ -74,6 +74,7 @@ The mold linker is a drop-in replacement for the default GNU ld that provides 5-
 ### Linux (Primary Target)
 
 #### Option 1: Package Manager (Recommended for CI)
+
 ```bash
 # Ubuntu/Debian (GitHub Actions runner)
 sudo apt update && sudo apt install -y mold
@@ -88,6 +89,7 @@ which mold && mold --version
 **Use Case**: CI/CD pipelines (GitHub Actions)
 
 #### Option 2: Direct Download (Fallback)
+
 ```bash
 # Latest release from GitHub
 MOLD_VERSION="v2.4.1"  # Update as needed
@@ -103,6 +105,7 @@ mold --version
 **Use Case**: Local development, offline environments
 
 #### Option 3: From Source (Advanced)
+
 ```bash
 git clone https://github.com/rui314/mold.git
 cd mold
@@ -196,6 +199,7 @@ Runs on every push to main and PR, Linux runners only.
 **Placement**: Add to `.github/workflows/benchmark.yml` or create new `.github/workflows/mold-link-benchmark.yml`
 
 **Key Features**:
+
 1. Installs mold via apt
 2. Measures baseline build (without mold)
 3. Measures builds with mold (3 runs, averaged)
@@ -203,6 +207,7 @@ Runs on every push to main and PR, Linux runners only.
 5. Posts comment on PR with results
 
 **Expected Output**:
+
 ```
 🔗 Mold Linker Benchmark Results
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -216,10 +221,12 @@ Recommendation: ✓ Mold is stable; use for all CI builds
 ### Workflow Configuration Details
 
 **Runner Selection**:
+
 - `runs-on: ubuntu-latest` (only Linux runners support mold)
 - Skip macOS, Windows, custom runners
 
 **Dependencies**:
+
 ```yaml
 - name: Install mold
   run: |
@@ -231,6 +238,7 @@ Recommendation: ✓ Mold is stable; use for all CI builds
 ```
 
 **Benchmark Steps**:
+
 ```yaml
 - name: Build workspace (baseline, default ld)
   run: cargo build --release --workspace
@@ -277,11 +285,13 @@ Recommendation: ✓ Mold is stable; use for all CI builds
 **Where to add benchmark job**:
 
 Option A: Extend existing `.github/workflows/benchmark.yml` (preferred)
+
 - Add mold-specific job alongside existing cargo-bench job
 - Shares cache, codebase, dependencies
 - Single workflow file to maintain
 
 Option B: Create new `.github/workflows/mold-link-benchmark.yml`
+
 - Isolated, can run independently
 - Clearer job separation
 - Slightly higher action time (two workflow files parsed)
@@ -295,6 +305,7 @@ Option B: Create new `.github/workflows/mold-link-benchmark.yml`
 ### Baseline Measurement
 
 **Procedure**:
+
 1. Start with clean state: `cargo clean`
 2. Build entire workspace in release mode: `cargo build --release --workspace`
 3. Record **link phase time** (not total build time):
@@ -306,6 +317,7 @@ Option B: Create new `.github/workflows/mold-link-benchmark.yml`
 ### Mold Build Measurement
 
 **Procedure**:
+
 1. Ensure mold is installed and in PATH: `which mold`
 2. Enable mold via `.cargo/config.toml` (included in config above)
 3. Build 3 times (to account for cache warming):
@@ -402,11 +414,13 @@ In CI, add conditional job:
 ### Monitoring & Escalation
 
 **During implementation**:
+
 1. Run benchmark in PR
 2. Monitor CI job for linker errors
 3. Check for any security warnings from dependabot
 
 **Post-deployment**:
+
 1. Track link times in benchmark results
 2. Alert if link time regresses >10% from baseline
 3. Audit mold releases monthly for security updates
@@ -416,6 +430,7 @@ In CI, add conditional job:
 ## Implementation Sequence
 
 ### Phase 1: Local Setup & Testing (WP2.1)
+
 **Time**: 2 hours
 
 1. Install mold locally
@@ -423,6 +438,7 @@ In CI, add conditional job:
    - macOS: `brew install mold` (optional)
 
 2. Test baseline build
+
    ```bash
    cargo clean
    /usr/bin/time cargo build --release --workspace
@@ -432,6 +448,7 @@ In CI, add conditional job:
 3. Enable mold in `.cargo/config.toml` (prepared config below)
 
 4. Test with mold
+
    ```bash
    cargo clean
    /usr/bin/time cargo build --release --workspace
@@ -439,12 +456,14 @@ In CI, add conditional job:
    ```
 
 5. Verify correctness
+
    ```bash
    cargo test --workspace --release
    cargo clippy --workspace -- -D warnings
    ```
 
 ### Phase 2: Cargo Configuration (WP2.2)
+
 **Time**: 1 hour
 
 1. Update `.cargo/config.toml` with mold rustflags
@@ -453,6 +472,7 @@ In CI, add conditional job:
 4. Commit config changes
 
 ### Phase 3: CI Workflow Integration (WP2.3)
+
 **Time**: 1 hour
 
 1. Extend `.github/workflows/benchmark.yml` with mold job
@@ -462,6 +482,7 @@ In CI, add conditional job:
 5. Test PR to verify workflow triggers
 
 ### Phase 4: Benchmark & Measurement (WP2.4)
+
 **Time**: 1 hour
 
 1. Run benchmark workflow on main branch
@@ -471,6 +492,7 @@ In CI, add conditional job:
 5. Share results with team
 
 ### Phase 5: Documentation & Troubleshooting (WP2.5)
+
 **Time**: 1 hour
 
 1. Add troubleshooting section to MOLD_LINKER_INTEGRATION_PLAN.md
@@ -484,9 +506,11 @@ In CI, add conditional job:
 ## Work Packages
 
 ### WP2.1: Local Installation & Testing
+
 **Owner**: DevOps/Platform Team
 **Effort**: 2h
 **Acceptance Criteria**:
+
 - [ ] mold installed and verified on local machine
 - [ ] Baseline link time recorded
 - [ ] Mold-based build produces identical binaries
@@ -495,6 +519,7 @@ In CI, add conditional job:
 - [ ] Fallback verified (build works without mold)
 
 **Tasks**:
+
 1. Install mold via package manager or download
 2. Run baseline benchmark 3 times
 3. Enable mold in config
@@ -503,9 +528,11 @@ In CI, add conditional job:
 6. Run full test suite to verify correctness
 
 ### WP2.2: Cargo Configuration
+
 **Owner**: Build/Release Team
 **Effort**: 1h
 **Acceptance Criteria**:
+
 - [ ] `.cargo/config.toml` includes mold rustflags
 - [ ] Configuration is platform-aware (optional on non-Linux)
 - [ ] Incremental builds work correctly
@@ -513,6 +540,7 @@ In CI, add conditional job:
 - [ ] Comment documents version constraints
 
 **Tasks**:
+
 1. Add mold-specific rustflags to config
 2. Verify platform detection works
 3. Test with and without mold present
@@ -520,9 +548,11 @@ In CI, add conditional job:
 5. Commit changes with clear message
 
 ### WP2.3: CI Workflow Integration
+
 **Owner**: CI/CD Engineer
 **Effort**: 1h
 **Acceptance Criteria**:
+
 - [ ] GitHub Actions workflow installs mold
 - [ ] Benchmark job runs on Linux only
 - [ ] Baseline and mold times measured
@@ -531,6 +561,7 @@ In CI, add conditional job:
 - [ ] No impact on existing CI jobs
 
 **Tasks**:
+
 1. Extend `.github/workflows/benchmark.yml`
 2. Add apt install step for mold
 3. Implement baseline measurement
@@ -539,9 +570,11 @@ In CI, add conditional job:
 6. Test on PR to verify
 
 ### WP2.4: Performance Benchmark & Reporting
+
 **Owner**: Performance/QA Team
 **Effort**: 1h
 **Acceptance Criteria**:
+
 - [ ] Baseline link time documented
 - [ ] Mold benchmark results recorded
 - [ ] Improvement percentage calculated
@@ -550,6 +583,7 @@ In CI, add conditional job:
 - [ ] Results shared with team
 
 **Tasks**:
+
 1. Run full benchmark on main branch
 2. Record all timing measurements
 3. Calculate average and improvement
@@ -558,9 +592,11 @@ In CI, add conditional job:
 6. Communicate results to stakeholders
 
 ### WP2.5: Documentation & Monitoring
+
 **Owner**: Technical Writer/DevOps
 **Effort**: 1h
 **Acceptance Criteria**:
+
 - [ ] Troubleshooting guide completed
 - [ ] Known issues documented
 - [ ] Rollback procedures tested and verified
@@ -569,6 +605,7 @@ In CI, add conditional job:
 - [ ] CHANGELOG updated with feature
 
 **Tasks**:
+
 1. Add troubleshooting section to plan doc
 2. Document known mold issues and workarounds
 3. Create step-by-step rollback runbook
@@ -583,8 +620,10 @@ In CI, add conditional job:
 ### Common Issues & Resolutions
 
 #### Issue 1: "mold not found"
+
 **Cause**: mold not installed or not in PATH
 **Resolution**:
+
 ```bash
 # Install
 sudo apt install -y mold
@@ -595,8 +634,10 @@ mold --version
 ```
 
 #### Issue 2: Build fails with "undefined reference to symbol"
+
 **Cause**: Linker issue with mold version
 **Resolution**:
+
 ```bash
 # Check mold version
 mold --version
@@ -609,8 +650,10 @@ RUSTFLAGS="" cargo build --release
 ```
 
 #### Issue 3: Binary size increased with mold
+
 **Cause**: LTO settings interact differently with mold
 **Resolution**:
+
 ```bash
 # Verify binary is correct size
 ls -lh target/release/your_binary
@@ -624,8 +667,10 @@ sudo apt install mold=2.3.1  # Specific version
 ```
 
 #### Issue 4: GitHub Actions job fails with "Permission denied"
+
 **Cause**: apt requires sudo, permissions issue
 **Resolution**:
+
 ```yaml
 - name: Install mold
   run: |
@@ -636,6 +681,7 @@ sudo apt install mold=2.3.1  # Specific version
 ```
 
 #### Issue 5: macOS/Windows builds unaffected
+
 **Expected Behavior**: mold is Linux-specific; other platforms use native linker
 **No Action Needed**: Config gracefully falls back
 
@@ -646,15 +692,18 @@ sudo apt install mold=2.3.1  # Specific version
 ### Ongoing Tasks
 
 **Weekly**:
+
 - Monitor benchmark results in Actions artifacts
 - Check for linker-related errors in CI logs
 
 **Monthly**:
-- Review mold release notes: https://github.com/rui314/mold/releases
+
+- Review mold release notes: <https://github.com/rui314/mold/releases>
 - Audit for security updates
 - Compare link times against baseline (watch for regressions)
 
 **Quarterly**:
+
 - Evaluate mold adoption in ecosystem (any known issues?)
 - Consider upgrading to new major version if available
 - Review and update this plan based on experience
@@ -807,11 +856,11 @@ incremental = true
 
 ## References
 
-- **mold GitHub**: https://github.com/rui314/mold
-- **mold Documentation**: https://github.com/rui314/mold/blob/main/docs/perf.md
-- **Rust Linking Performance**: https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html (LTO section)
-- **Linux ELF Linker Overview**: https://sourceware.org/binutils/docs/ld/
-- **Cargo Config Reference**: https://doc.rust-lang.org/cargo/reference/config.html
+- **mold GitHub**: <https://github.com/rui314/mold>
+- **mold Documentation**: <https://github.com/rui314/mold/blob/main/docs/perf.md>
+- **Rust Linking Performance**: <https://blog.rust-lang.org/2022/11/03/Rust-1.65.0.html> (LTO section)
+- **Linux ELF Linker Overview**: <https://sourceware.org/binutils/docs/ld/>
+- **Cargo Config Reference**: <https://doc.rust-lang.org/cargo/reference/config.html>
 
 ---
 

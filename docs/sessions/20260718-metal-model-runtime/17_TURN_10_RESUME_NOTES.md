@@ -178,6 +178,7 @@ Plus: cherry-pick `4fb4443` merge resolved (ebfa098), pre-push recursion bug fix
 **Airlock-v2 push:** attempted on `wip/turn-10-final` to `github.com:<REDACTED>/phenotype-omlx.git`. The push itself succeeded locally (the airlock-v2 client returned a 200 envelope) but the remote repository rejected the receive with `403 Forbidden: Resource not accessible by integration` — i.e. the integration token bound to this checkout's git-credential store does not have write scope on the `phenotype-omlx.git` remote.
 
 This is a **tooling / credential limitation, not a code defect**:
+
 - All 6 code-quality gates above are GREEN.
 - The repo is committed, the snapshot is recorded, and the work is fully captured in 11 atomic commits on top of turn-9 close (`d0020b8`).
 - The airlock-v2 push-retry wrapper added in turn-10 (`scripts/push_wip.sh`) is exercised by its own 4-case test suite; the script itself works correctly. The credential gap is upstream of the script's contract.
@@ -291,4 +292,3 @@ and lands SOTA-operator coverage incrementally instead of in one
 | DDM discrete-step L2 decay harness for `Linear + Sqrt + Sigmoid` | unchanged |
 | **NEW** eval-harness cherry-pick split (3 sub-cherry-picks) | `types-only` first |
 | **NEW** `cargo workspace` internal check (count ≥ 8) wired to doctor | this would let us catch the count drift earlier |
-

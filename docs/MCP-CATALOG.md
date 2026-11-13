@@ -20,10 +20,12 @@
 ## Tool surfaces
 
 ### dispatch-mcp (FastMCP 3.x, stdio)
+
 `dispatch`, `dispatch_custom`, `dispatch_health`, `dispatch_liveness`.
 Delegates to OmniRoute over HTTP (`OMNIROUTE_URL`).
 
 ### cheap-llm MCP bridge (FastMCP 2.x, stdio) — GRADUATED
+
 `complete`, `stream_complete`, `health`, `cost_summary`, `providers`,
 `list_live_models`. Routes to Minimax/Kimi/Fireworks budget providers.
 **NOTE:** The cheap-llm MCP runtime has been graduated into PhenoMCP.
@@ -31,19 +33,23 @@ All functionality, provider integrations, and budget routing now live in the
 PhenoMCP Python FastMCP bridge. The original repo is archived.
 
 ### kmobile (hand-rolled JSON-RPC, stdio)
+
 `device_list/connect/install`, `simulator_list/start/stop`,
 `project_build/status`, `test_run/record`, `mobile_deploy/test`.
 NOTE: does not use any MCP SDK — custom `McpServer` struct + serde_json.
 Schema drift / protocol-version risk. Candidate for migration to `rmcp`.
 
 ### KaskMan (official TS SDK, stdio)
+
 R&D-platform tools registered via `ListToolsRequestSchema`/`CallToolRequestSchema`.
 
 ### MCPForge (mark3labs/mcp-go, stdio)
+
 Exposes LSP semantic operations as MCP tools. Distinct purpose (dev tooling),
 not an application server.
 
 ### PhenoMCP (FastMCP bridge, stdio) — CANONICAL org entrypoint
+
 Org governance/agent/knowledge/policy/session/workflow tools, registered via
 `FastMCP.add_tool`. **The Python FastMCP bridge (`python -m pheno_mcp`) is the
 canonical, supported PhenoMCP MCP entrypoint.** FastMCP is the org framework

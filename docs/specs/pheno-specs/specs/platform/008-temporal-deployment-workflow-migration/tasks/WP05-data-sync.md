@@ -27,6 +27,7 @@ grep -r "nats\|jetstream\|JetStream" --include="*.rs" --include="*.toml" -l \
 ```
 
 Document each sync pipeline:
+
 - Source (what DB/endpoint?)
 - Destination (what DB/endpoint?)
 - Sync interval (hourly/daily/manual?)

@@ -53,11 +53,13 @@ done
 ## Add GitHub Secret (3 minutes)
 
 **Organization Secret** (recommended):
-1. Go: https://github.com/KooshaPari/settings/secrets
+
+1. Go: <https://github.com/KooshaPari/settings/secrets>
 2. New secret: Name=`SNYK_TOKEN`, Value=your-token
 
 **Or per-repo**:
-1. Go: https://github.com/KooshaPari/REPO/settings/secrets
+
+1. Go: <https://github.com/KooshaPari/REPO/settings/secrets>
 2. New secret: Name=`SNYK_TOKEN`, Value=your-token
 
 ## Common Commands
@@ -95,8 +97,8 @@ done
 ## View Results
 
 1. **Local**: `cat .snyk-reports/snyk-deployment-*.txt`
-2. **GitHub Code Scanning**: https://github.com/KooshaPari/REPO/security/code-scanning
-3. **Snyk Dashboard**: https://app.snyk.io/dashboard
+2. **GitHub Code Scanning**: <https://github.com/KooshaPari/REPO/security/code-scanning>
+3. **Snyk Dashboard**: <https://app.snyk.io/dashboard>
 
 ## Severity Levels
 
@@ -161,7 +163,7 @@ fix: {}
 ## Next Steps
 
 1. ✅ All infrastructure ready
-2. ⏳ **Get Snyk token**: https://app.snyk.io/account/settings
+2. ⏳ **Get Snyk token**: <https://app.snyk.io/account/settings>
 3. ⏳ **Install CLI**: `brew install snyk`
 4. ⏳ **Run Phase 1**: `./scripts/snyk-deploy.sh $SNYK_TOKEN`
 5. ⏳ **Add GitHub secret**: Add `SNYK_TOKEN` to org settings
@@ -171,5 +173,5 @@ fix: {}
 
 - Full setup guide: `docs/reference/SNYK_SETUP_GUIDE.md`
 - Automation status: `SNYK_AUTOMATION_READY.md`
-- Snyk docs: https://docs.snyk.io
-- CLI reference: https://docs.snyk.io/snyk-cli/cli-reference
+- Snyk docs: <https://docs.snyk.io>
+- CLI reference: <https://docs.snyk.io/snyk-cli/cli-reference>

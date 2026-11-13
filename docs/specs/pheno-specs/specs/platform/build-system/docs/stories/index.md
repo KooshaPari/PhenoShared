@@ -13,6 +13,7 @@
 ## Story Format
 
 Each story includes:
+
 - **GIF Demo**: Visual walkthrough
 - **Code Blocks**: Copy-paste ready
 - **Mermaid Diagrams**: Architecture visualization

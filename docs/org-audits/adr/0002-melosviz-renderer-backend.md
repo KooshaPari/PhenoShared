@@ -21,6 +21,7 @@ festival mainstage screens behind a DJ — an automatic VJ background, deliverab
 and (ideally) live realtime.
 
 **Operator constraints (decisive):**
+
 - Max feat/perf/experimental: prefer **Rust/Zig/Mojo** (else C++/C#/Go).
 - GPU-native: **Vulkan (+Metal, DX12)** where possible.
 - **Wrap/build-over-hand-roll**: favor existing engines + a **node-graph programming layer** over a bespoke renderer.
@@ -48,10 +49,11 @@ and (ideally) live realtime.
 | 4b. Notch | 5 | 5 | 4 | 5 | 4 | — | 2 (NO node-gen API; Win+Nvidia only; $$$) |
 | 4c. vvvv gamma | 4 | 4 | 3 | 3 | 3 | — | 3 (XML/C#; nascent agent patterns) |
 
-_Scores from the 4-agent design panel (Blender / Rust-wgpu / Adobe / node-tools), corroborated by
-operator constraints. Full per-option reports archived in `.audit-run-v37/initiatives/MELOSVIZ.md`._
+*Scores from the 4-agent design panel (Blender / Rust-wgpu / Adobe / node-tools), corroborated by
+operator constraints. Full per-option reports archived in `.audit-run-v37/initiatives/MELOSVIZ.md`.*
 
 **Panel's decisive findings:**
+
 - **TouchDesigner wins the node-tools class 95.6%** and is the single most **agent-automatable** option:
   Python `td.op()` lets an agent *generate and wire* a unique network per track (not just tune params).
   It does **BOTH live (NDI/Spout/Syphon, Ableton-Link) AND frame-perfect offline MP4 (Movie File Out TOP)**
@@ -117,6 +119,7 @@ P5 Polish/parity     scene library (50+), cross-scene morphing, e2e music-video 
 ## Sponsor go/no-go (the gate)
 
 This is **PROPOSED**. Confirm before build:
+
 1. Accept **TouchDesigner as the primary engine** (covers both live + offline, most agent-automatable),
    with **Blender (Cycles) as the optional high-fidelity offline companion**?
 2. License posture: start on TD **Non-Commercial (free)** for R&D, upgrade to Commercial ($600 one-time)

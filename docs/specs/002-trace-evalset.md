@@ -47,6 +47,7 @@ Roles are inferred from message metadata + content + tool calls. Each role has a
 | `advisor_critic` | Pure advisory; no edits. Comments and questions. | read, search | "is this a good idea?" |
 
 **Inference rules (in priority order):**
+
 1. Explicit `role: <id>` in the trace metadata (used by pheno-harness and forge-dev).
 2. Tool-call signature matches a known role pattern (e.g. test-only role → `qa_test`).
 3. Prompt header matches a known pattern (e.g. starts with "Review this diff" → `reviewer`).
@@ -163,6 +164,7 @@ def run_role_replay(spec: TaskSpec, model_binding: ModelBinding) -> RunResult:
 ```
 
 **Three guarantees the executor must hold:**
+
 1. **Determinism of non-model steps.** `tool_call` and `assertion` are reproducible from the same `replay.jsonl` + same repo state.
 2. **Budget enforcement.** Hard stop when `constraints` are exceeded. Run is marked `failed:budget_exceeded`.
 3. **Trace recording is non-negotiable.** Every turn emits an entry; the run is rejected by the scoreboard if any turn is missing.
@@ -233,6 +235,7 @@ bench/results/role_eval/<role_id>/
 ```
 
 Promotion rules (in `harness/self_improvement/promotion.py`):
+
 - A model/lane is eligible for promotion into `<role_id>` only if:
   - `pass ≥ pass_threshold` (per role; from `config/eval_pillars.yaml`)
   - `wall_s ≤ wall_s_budget`
@@ -259,11 +262,13 @@ These ChatGPT-* files directly informed the per-role design and metric choices:
 ## 9. Scale targets
 
 For the program to be statistically meaningful, each role suite needs at least:
+
 - 30 approved specs at first cut
 - 80 approved specs at v1.0
 - 200 approved specs at v2.0
 
 Sourced roughly:
+
 - 50 % from local Claude traces (most prolific source)
 - 25 % from Codex / ForgeCode / Factory Droid / Cursor combined
 - 15 % from public analyses

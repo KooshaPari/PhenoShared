@@ -10,11 +10,13 @@
 ## Context and Problem Statement
 
 In complex software systems, critical knowledge is often lost between:
+
 - **Requirements** (what we need to build)
 - **Design decisions** (why we chose an approach)
 - **Implementation** (the actual code)
 
 This gap leads to:
+
 1. **Knowledge silos**: Only authors understand why decisions were made
 2. **Change impact blindness**: Modifying code breaks unknown requirements
 3. **Compliance gaps**: Cannot prove requirements are met
@@ -48,11 +50,13 @@ This gap leads to:
 **Examples**: DOORS, Jama, Polarion, custom database
 
 **Pros**:
+
 - Rich query capabilities
 - Dashboards and reporting
 - Enterprise-grade features
 
 **Cons**:
+
 - Expensive (licensing)
 - Requires separate workflow
 - Sync issues with code changes
@@ -64,6 +68,7 @@ This gap leads to:
 **Description**: Embed traceability directly in code comments
 
 **Example**:
+
 ```python
 # @trace SPEC-AUTH-001
 # @implements PATTERN-OAUTH-PKCE
@@ -72,12 +77,14 @@ def authenticate():
 ```
 
 **Pros**:
+
 - Co-located with code
 - Survives refactoring
 - Language-agnostic
 - Searchable with standard tools
 
 **Cons**:
+
 - Comment maintenance burden
 - No centralized view
 - Requires discipline
@@ -88,6 +95,7 @@ def authenticate():
 **Description**: Use commit messages for high-level traceability, with optional code comments for precision
 
 **Example**:
+
 ```
 spec(AUTH): implement OAuth2 flow
 
@@ -99,12 +107,14 @@ following PATTERN-OAUTH-PKCE for enhanced security.
 ```
 
 **Pros**:
+
 - Git history as traceability log
 - Standard tooling (git log)
 - Works with any language
 - PR reviews catch missing traces
 
 **Cons**:
+
 - Requires commit discipline
 - Granularity limited to commits
 
@@ -113,6 +123,7 @@ following PATTERN-OAUTH-PKCE for enhanced security.
 **Description**: YAML/JSON files mapping specs to code locations
 
 **Example**:
+
 ```yaml
 # traceability.yaml
 SPEC-AUTH-001:
@@ -124,11 +135,13 @@ SPEC-AUTH-001:
 ```
 
 **Pros**:
+
 - Machine-readable
 - Queryable
 - Separate from code
 
 **Cons**:
+
 - Sync issues with refactoring
 - Manual maintenance
 - Easy to forget updates
@@ -138,6 +151,7 @@ SPEC-AUTH-001:
 **Description**: Combine commit messages for high-level traceability with optional inline comments for precision
 
 **Commit Message**:
+
 ```
 spec(AUTH): implement OAuth2 flow
 
@@ -146,6 +160,7 @@ Closes SPEC-AUTH-001
 ```
 
 **Code Comment (optional)**:
+
 ```python
 # @trace SPEC-AUTH-001
 def get_authorization_url():
@@ -153,6 +168,7 @@ def get_authorization_url():
 ```
 
 **Registry Link**:
+
 ```yaml
 # In PhenoSpecs/specs/auth/oauth.yaml
 implemented_by:
@@ -161,6 +177,7 @@ implemented_by:
 ```
 
 **Pros**:
+
 - Multiple entry points for traceability
 - Git history as audit trail
 - Coarse-grained via commits, fine-grained via comments
@@ -168,6 +185,7 @@ implemented_by:
 - Validatable via CI
 
 **Cons**:
+
 - Multiple formats to learn
 - Requires tooling to harvest links
 
@@ -290,20 +308,22 @@ implemented_by:
 
 - Parent ADR: ADR-001 (Multi-Registry Architecture)
 - Related ADR: ADR-003 (Automated Validation Strategy)
-- Conventional Commits: https://www.conventionalcommits.org/
-- Git notes: https://git-scm.com/docs/git-notes
+- Conventional Commits: <https://www.conventionalcommits.org/>
+- Git notes: <https://git-scm.com/docs/git-notes>
 
 ---
 
 ## Notes
 
 This decision prioritizes:
+
 1. **Git-native**: Works with existing tools
 2. **Non-blocking**: Doesn't slow down development
 3. **Validatable**: Can be checked automatically
 4. **Evolvable**: Can start simple and add rigor
 
 The hybrid approach acknowledges that:
+
 - Not all code needs fine-grained traceability
 - Commit-level traceability provides 80% of value
 - Code-level comments handle the remaining 20%

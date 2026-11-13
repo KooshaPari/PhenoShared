@@ -3,12 +3,14 @@
 ## Quality Gates
 
 ### Pre-Commit Checks
+
 - [ ] All tests pass
 - [ ] FR traceability verified (ptrace analyze)
 - [ ] Code coverage >= 80%
 - [ ] Linting passes
 
 ### Pre-Merge Checks
+
 - [ ] PR reviewed by 1+ maintainer
 - [ ] CI/CD pipeline passes
 - [ ] Drift check < 90%
@@ -16,11 +18,11 @@
 
 ## Branch Strategy
 
-- 
+-
   - Production-ready code
-- 
+-
   - Integration branch
-- 
+-
   - Feature work
 
 ## Release Process
@@ -33,6 +35,7 @@
 ## Compliance
 
 This repository follows:
+
 - Phenotype organization standards
 - FR traceability requirements
 - AI attribution guidelines (.phenotype/ai-traceability.yaml)

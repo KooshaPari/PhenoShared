@@ -1,4 +1,5 @@
 # Dependency Phase 2: Complete Document Index
+
 ## Quick Navigation & Resource Guide
 
 **Date:** 2026-03-31
@@ -10,6 +11,7 @@
 ## Start Here: Three-Document Guide
 
 ### Document 1: DEPENDENCY_PHASE2_OVERVIEW.md
+
 **Your 5-10 minute quick start**
 
 - What is Phase 2? (Goals & scope)
@@ -24,6 +26,7 @@
 **Best for:** Decision-makers, quick orientation
 
 **Key Decision Points:**
+
 - Approve Phase 2 execution? ✓/✗
 - Choose execution path: Sequential (A) | Parallel (B) | Aggressive (C)?
 - Assign agents/owners?
@@ -31,6 +34,7 @@
 ---
 
 ### Document 2: DEPENDENCY_PHASE2_EXECUTION_PLAN.md
+
 **Your detailed playbook (The MAP)**
 
 - 9 work packages (WP1-WP9) with full details:
@@ -54,6 +58,7 @@
 **Best for:** Implementation team leads, agents executing work
 
 **Key Sections:**
+
 - Pages 1-15: Work Package Details (read before executing each WP)
 - Pages 16-20: Daily Schedule (reference daily)
 - Pages 21-25: Risk & Mitigation (reference as needed)
@@ -62,6 +67,7 @@
 ---
 
 ### Document 3: DEPENDENCY_PHASE2_VALIDATION.md
+
 **Your verification toolkit (The TEST)**
 
 - Pre-phase baseline capture (what to measure before starting)
@@ -76,6 +82,7 @@
 **Best for:** QA teams, validators, test automation
 
 **Key Sections:**
+
 - Pages 1-5: Baseline Capture (run ONCE before Phase 2)
 - Pages 6-45: Per-WP Validation (reference during execution)
 - Pages 46-55: Benchmarking Scripts (run after major WPs)
@@ -86,7 +93,9 @@
 ## Quick Navigation by Role
 
 ### Project Lead / Stakeholder
+
 **Time budget:** 20 minutes
+
 1. Read: OVERVIEW.md "What is Phase 2?" (5 min)
 2. Skim: OVERVIEW.md "Expected Impact" table (3 min)
 3. Review: OVERVIEW.md "Risk Matrix & Mitigation" (5 min)
@@ -98,7 +107,9 @@
 ---
 
 ### Technical Architect / Decision Maker
+
 **Time budget:** 45 minutes
+
 1. Read: OVERVIEW.md completely (20 min)
 2. Skim: EXECUTION_PLAN.md "Work Package Breakdown" (15 min)
 3. Review: EXECUTION_PLAN.md "Dependency Graph" (5 min)
@@ -109,7 +120,9 @@
 ---
 
 ### Implementation Team Lead
+
 **Time budget:** 90 minutes (before Phase 2 starts)
+
 1. Read: OVERVIEW.md completely (20 min)
 2. Read: EXECUTION_PLAN.md completely (45 min)
 3. Skim: VALIDATION.md sections relevant to your path (15 min)
@@ -120,7 +133,9 @@
 ---
 
 ### Individual Agent/Developer (Assigned Specific WPs)
+
 **Time budget:** 15 minutes per WP + execution time
+
 1. Get: Task assignment from team lead (which WPs?)
 2. Read: Your WP section in EXECUTION_PLAN.md (10 min)
 3. Reference: Your WP validation in VALIDATION.md during execution (5 min)
@@ -135,6 +150,7 @@
 ## Document Features & Structure
 
 ### OVERVIEW.md
+
 ```
 ├── What is Phase 2? (scope, goals)
 ├── Three Documents You Need (this section)
@@ -155,6 +171,7 @@
 ```
 
 ### EXECUTION_PLAN.md
+
 ```
 ├── Executive Summary (impact metrics)
 ├── Work Package Breakdown (WP1-WP9 details)
@@ -181,6 +198,7 @@
 ```
 
 ### VALIDATION.md
+
 ```
 ├── Executive Summary (validation framework overview)
 ├── Part 1: Pre-Phase Baseline (baseline metrics template)
@@ -216,6 +234,7 @@
 ## Key Metrics at a Glance
 
 ### Build Performance Impact
+
 | Metric | Before | Target | Status |
 |--------|--------|--------|--------|
 | Cold build | 81.2s | <68s (-16%) | 🎯 |
@@ -223,6 +242,7 @@
 | Test compilation | 52s | <45s (-13%) | 🎯 |
 
 ### Code Quality Impact
+
 | Metric | Before | After | Status |
 |--------|--------|-------|--------|
 | Dead code suppressions | 45 | 0 | 🎯 |
@@ -230,6 +250,7 @@
 | Feature flag standards | 0 | 6 | 🎯 |
 
 ### Effort Distribution
+
 | Phase | Hours | Days | Activities |
 |-------|-------|------|------------|
 | Day 1 | 8h | 1 | Quick wins + consolidation |
@@ -242,6 +263,7 @@
 ## Execution Timeline
 
 ### Pre-Execution (1 day before)
+
 - [ ] Approve plan (decision)
 - [ ] Assign agents (15 min)
 - [ ] Create feature branch (5 min)
@@ -249,11 +271,13 @@
 - [ ] Prepare environment (30 min)
 
 ### Execution (Days 1-3)
+
 - [ ] Day 1: WP1-WP4 (8 hours)
 - [ ] Day 2: WP5-WP7 (8 hours)
 - [ ] Day 3: WP8-WP9 (4 hours)
 
 ### Post-Execution (1 day after)
+
 - [ ] Final validation (1 hour)
 - [ ] Peer review (1 hour)
 - [ ] Merge to main (15 min)
@@ -268,18 +292,21 @@
 ## Critical Success Factors
 
 ### Must-Have
+
 - [ ] All 9 work packages completed
 - [ ] Zero test failures
 - [ ] All 3 documents read by relevant people
 - [ ] Approval from project lead
 
 ### Should-Have
+
 - [ ] >15% build time improvement
 - [ ] Comprehensive time tracking
 - [ ] Peer review before merge
 - [ ] Completion report published
 
 ### Nice-to-Have
+
 - [ ] Automated CI validation passes
 - [ ] Binary size report generated
 - [ ] Lessons learned documented
@@ -290,21 +317,25 @@
 ## File Locations
 
 All Phase 2 documents stored in:
+
 ```
 /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/
 ```
 
 ### Core Documents
+
 - `DEPENDENCY_PHASE2_OVERVIEW.md` — Start here (536 lines)
 - `DEPENDENCY_PHASE2_EXECUTION_PLAN.md` — Detailed playbook (918 lines)
 - `DEPENDENCY_PHASE2_VALIDATION.md` — Testing toolkit (1,214 lines)
 - `DEPENDENCY_PHASE2_INDEX.md` — This navigation guide (this file)
 
 ### Related Documents (Background)
+
 - `RUST_DEPENDENCY_ANALYSIS_COMPLETE.md` — Dependency analysis
 - `RUST_DEPENDENCY_ANALYSIS_INDEX.md` — Analysis navigation
 
 ### Reports (Generated During Phase 2)
+
 - `PHASE2_BASELINE.md` — Pre-execution metrics (generated)
 - `PHASE2_TIME_LOG.md` — Time tracking (generated)
 - `WP1_VALIDATION_REPORT.md` through `WP9_VALIDATION_REPORT.md` (generated)
@@ -316,23 +347,27 @@ All Phase 2 documents stored in:
 ## How to Get Started (Right Now)
 
 ### In 5 Minutes
+
 1. Read: OVERVIEW.md "What is Phase 2?" section
 2. Skim: "Expected Impact" table
 3. Decide: Approve execution? Yes/No
 
 ### In 15 Minutes
+
 1. Complete the 5-minute steps (above)
 2. Review: "Risk Matrix & Mitigation"
 3. Review: "Success Criteria" checklist
 4. Decide: Which execution path? (A/B/C)
 
 ### In 30 Minutes
+
 1. Complete the 15-minute steps (above)
 2. Assign: Agents/owners to WPs
 3. Prepare: Create feature branch
 4. Schedule: Kickoff meeting
 
 ### In 90 Minutes
+
 1. Complete the 30-minute steps (above)
 2. Read: Entire OVERVIEW.md (45 min)
 3. Ready: Begin Phase 2 execution
@@ -343,6 +378,7 @@ All Phase 2 documents stored in:
 
 **Q: Should I read all three documents?**
 A: It depends on your role:
+
 - Project lead: Just OVERVIEW.md (20 min)
 - Team lead: OVERVIEW.md + EXECUTION_PLAN.md (75 min)
 - Developer: OVERVIEW.md + your assigned WP in EXECUTION_PLAN.md (20 min)
@@ -356,6 +392,7 @@ A: No. The work package order is based on dependencies. Follow WP1→WP2→WP4�
 
 **Q: How much time do I need to allocate?**
 A:
+
 - Reading: 1.5-2 hours (all documents)
 - Execution: 16-20 hours (actual work)
 - Validation: 2-3 hours (testing)
@@ -369,6 +406,7 @@ A: See "Risk & Mitigation" in OVERVIEW.md and "Rollback Strategy" in EXECUTION_P
 ## Document Integrity
 
 All documents are:
+
 - ✓ UTF-8 encoded
 - ✓ Markdown formatted
 - ✓ Cross-referenced
@@ -377,6 +415,7 @@ All documents are:
 - ✓ Status marked (READY FOR EXECUTION)
 
 ### Verification
+
 ```bash
 # Check file sizes
 ls -lh /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY_PHASE2*
@@ -393,6 +432,7 @@ file -b /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/DEPENDENCY
 ## Handoff Checklist
 
 Before starting Phase 2, verify:
+
 - [ ] All 4 documents present (OVERVIEW, EXECUTION_PLAN, VALIDATION, INDEX)
 - [ ] All 3 agents/team members have read OVERVIEW.md
 - [ ] Team lead has read EXECUTION_PLAN.md
@@ -407,6 +447,7 @@ Before starting Phase 2, verify:
 ## Support & Escalation
 
 For questions about:
+
 - **What to do:** See OVERVIEW.md "Next Steps"
 - **How to execute:** See EXECUTION_PLAN.md for your WP
 - **How to validate:** See VALIDATION.md for your WP
@@ -451,4 +492,3 @@ Ready? Let's make Phenotype faster and cleaner! 🚀
 **Status:** 🟡 **READY FOR LAUNCH**
 
 **Approve Phase 2?** Yes / No / Modify Plan
-

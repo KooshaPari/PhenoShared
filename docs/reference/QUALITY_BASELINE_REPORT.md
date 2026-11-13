@@ -9,6 +9,7 @@
 ## Executive Summary
 
 Quality gate infrastructure has been deployed to all Tier 1 repositories with:
+
 - ✅ Consolidated `.pre-commit-config.yaml` with language-specific rules
 - ✅ Cross-repo quality gate script (`scripts/quality-gate.sh`)
 - ✅ GitHub Actions workflows for CI/CD enforcement
@@ -16,6 +17,7 @@ Quality gate infrastructure has been deployed to all Tier 1 repositories with:
 - ✅ Branch protection enforcement configuration
 
 **Key Deliverables**:
+
 1. **LINTING_AND_QUALITY_SETUP.md** — Complete implementation guide (4 layers, all tools configured)
 2. **scripts/quality-gate.sh** — Universal quality gate script (auto-detects languages, supports --fix)
 3. **GitHub Actions Workflows** — Production-ready CI/CD (lint, format, type-check jobs)
@@ -28,6 +30,7 @@ Quality gate infrastructure has been deployed to all Tier 1 repositories with:
 ### phenotype-infrakit
 
 **Status**: ⏳ Scaffold (README only)
+
 - **Languages**: Rust (planned, crates not yet added)
 - **Pre-commit Config**: ❌ Not present (will add when crates added)
 - **GitHub Actions**: ❌ Not present
@@ -40,6 +43,7 @@ Quality gate infrastructure has been deployed to all Tier 1 repositories with:
 ### heliosCLI
 
 **Status**: ✅ Mature (18 Rust crates, PyO3 FFI)
+
 - **Languages**: Rust (primary), Python (secondary)
 - **Pre-commit Config**: ⚠️ Present but minimal (no Rust linting)
 - **GitHub Actions**: ✅ Comprehensive (rust-ci.yml, quality.yml, etc.)
@@ -54,6 +58,7 @@ Quality gate infrastructure has been deployed to all Tier 1 repositories with:
 ### platforms/thegent
 
 **Status**: ✅ Mature monorepo (Go 5.34M LOC, Python tooling, Rust security)
+
 - **Languages**: Go (primary, 16K+ files), Python (tooling), Rust (security hooks)
 - **Pre-commit Config**: ✅ Comprehensive (Gates 1-3, trufflehog, ruff, type-check)
 - **GitHub Actions**: ✅ Extensive (CodeQL, custom security, dx-audit)
@@ -73,6 +78,7 @@ Quality gate infrastructure has been deployed to all Tier 1 repositories with:
 **What**: Runs before every `git commit`
 **Speed**: <5 seconds
 **Tools**:
+
 - General: trailing-whitespace, end-of-file-fixer, check-yaml, check-toml, detect-private-key
 - Rust: rustfmt --check, clippy --all-targets
 - Python: ruff check, ruff format --check
@@ -80,6 +86,7 @@ Quality gate infrastructure has been deployed to all Tier 1 repositories with:
 - Commit message: conventional-pre-commit
 
 **Install**:
+
 ```bash
 pip install pre-commit
 cd <repo>
@@ -98,6 +105,7 @@ pre-commit install
 **What**: Runs on PR open/push, reports to PR
 **Speed**: 2-5 minutes
 **Jobs**:
+
 - `lint-and-format`: Format check, clippy, ruff, gofmt
 - `type-check`: cargo check, mypy strict
 - `summary`: Aggregate results
@@ -108,6 +116,7 @@ pre-commit install
 
 **What**: Prevents merge until all CI checks pass
 **Configuration**:
+
 ```
 Settings → Branches → Add rule
 Pattern: main
@@ -202,6 +211,7 @@ repos:
 **Location**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/quality-gate.sh`
 
 **Features**:
+
 - Auto-detects Rust, Python, Go projects
 - Supports `--fix` flag for auto-formatting
 - Provides clear pass/fail summary
@@ -266,22 +276,26 @@ repos:
 For each Tier 1 repo:
 
 - [ ] **Step 1: Install pre-commit framework**
+
   ```bash
   pip install pre-commit
   ```
 
 - [ ] **Step 2: Clone/navigate to repo**
+
   ```bash
   cd <repo>
   ```
 
 - [ ] **Step 3: Install repo hooks**
+
   ```bash
   pre-commit install
   pre-commit install --hook-type pre-push
   ```
 
 - [ ] **Step 4: Test quality gate**
+
   ```bash
   cd /path/to/repos
   ./scripts/quality-gate.sh
@@ -292,6 +306,7 @@ For each Tier 1 repo:
   - Add repo-specific `pyproject.toml`, `.golangci.yml`, `rustfmt.toml`
 
 - [ ] **Step 6: Verify hook execution** (optional)
+
   ```bash
   pre-commit run --all-files
   ```
@@ -301,6 +316,7 @@ For each Tier 1 repo:
 ## Next Steps (Phase 1 → Phase 2)
 
 ### Immediate (This Week)
+
 1. **Fix phenotype-infrakit dependencies**
    - Add Cargo.toml workspace
    - Enable pre-commit config
@@ -316,6 +332,7 @@ For each Tier 1 repo:
    - Test quality gate on feature branch
 
 ### Phase 2 Enhancements (Next Sprint)
+
 - Add coverage tracking (codecov, cargo-tarpaulin)
 - Add security scanning (cargo-audit, CodeQL)
 - Add performance benchmarking (criterion, cargo-bench)
@@ -327,6 +344,7 @@ For each Tier 1 repo:
 ## Troubleshooting Guide
 
 ### Hooks Not Running
+
 ```bash
 # Reinstall hooks
 pre-commit install
@@ -337,6 +355,7 @@ pre-commit run --all-files
 ```
 
 ### Formatting Conflicts
+
 ```bash
 # Auto-fix all formatting
 cargo fmt
@@ -349,10 +368,12 @@ git commit --amend --no-edit
 ```
 
 ### Slow Hook Execution
+
 - Move slower hooks (clippy, mypy) to `pre-push` stage
 - Increase timeout: `timeout: 60` in `.pre-commit-config.yaml`
 
 ### Skipping Hooks (Emergency Only)
+
 ```bash
 git commit --no-verify  # Bypass pre-commit
 git push --no-verify    # Bypass pre-push
@@ -379,11 +400,11 @@ git push --no-verify    # Bypass pre-push
 ## References
 
 - **Setup Guide**: `/Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/LINTING_AND_QUALITY_SETUP.md`
-- **Pre-Commit Framework**: https://pre-commit.com/
-- **Ruff**: https://docs.astral.sh/ruff/
-- **Clippy**: https://github.com/rust-lang/rust-clippy
-- **golangci-lint**: https://golangci-lint.run/
-- **ESLint**: https://eslint.org/
+- **Pre-Commit Framework**: <https://pre-commit.com/>
+- **Ruff**: <https://docs.astral.sh/ruff/>
+- **Clippy**: <https://github.com/rust-lang/rust-clippy>
+- **golangci-lint**: <https://golangci-lint.run/>
+- **ESLint**: <https://eslint.org/>
 
 ---
 
@@ -400,8 +421,8 @@ git push --no-verify    # Bypass pre-push
 | Tier 1 Repos | ⚠️ | heliosCLI ✅, thegent ✅, infrakit pending |
 
 **Estimated Effort to Full Adoption**:
+
 - phenotype-infrakit: 30 min (add Cargo.toml, enable hooks)
 - heliosCLI: 1 hour (fix deps, update pre-commit config, run quality checks)
 - platforms/thegent: 20 min (verify hooks installed)
 - **Total**: ~2 hours per repo = 6 team-hours to full rollout
-

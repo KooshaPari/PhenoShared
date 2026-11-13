@@ -11,6 +11,7 @@
 **VibeProxy** (public: `github.com/automazeio/vibeproxy`) is a **native macOS menu bar application** that eliminates duplicate AI subscription costs by routing requests through a unified proxy backend (CLIProxyAPIPlus). It provides seamless token management and multi-account failover.
 
 **Phenotype ecosystem status:**
+
 - **No local vibeproxy fork found** in workspace (checked: active repos, archives, git configs)
 - **VibeProxy is referenced** in archived specs (FR-1608, FR-1493, FR-1512, etc.) as an aspirational integration target for *future* multi-platform support (Phase 3+)
 - **Actual routing layer:** Phenotype uses **cliproxy** (Go backend) + **thegent's own routing_impl** (Python, 11.7K LOC, 43 specialized routers) as primary request routing and metering architecture
@@ -23,6 +24,7 @@
 ### Purpose & Scope
 
 **VibeProxy** is a **desktop proxy application** (macOS-first) that:
+
 - Wraps **CLIProxyAPIPlus** (Go backend) with native SwiftUI UI
 - Manages **OAuth credentials** for 6+ providers (Claude, ChatGPT, Gemini, Qwen, GLM, Antigravity)
 - Provides **multi-account failover** with automatic round-robin distribution
@@ -59,12 +61,14 @@
 ### Plugin/Provider System
 
 **Extension Points:**
+
 - **Provider Adapters:** New AI providers added via adapter pattern (OAuth flow, request/response mapping)
 - **Configuration:** TOML-based config for provider credentials and routing rules
 - **Model Mapping:** Canonical model names to provider-specific model IDs
 - **Cost Calculation:** Per-provider token pricing + usage tracking
 
 **Current Providers:**
+
 1. Claude (Anthropic) — via Vercel AI Gateway
 2. ChatGPT (OpenAI) — direct API
 3. Gemini (Google) — direct API
@@ -75,6 +79,7 @@
 ### API Metering & Usage Tracking
 
 **Capabilities:**
+
 - **Token Counting:** Tracks input/output tokens per request
 - **Cost Calculation:** USD cost computed from token counts + provider pricing tables
 - **Usage Aggregation:** Per-provider, per-model, per-account summaries
@@ -82,6 +87,7 @@
 - **Failover Logic:** Automatic switchover to secondary account when primary rate-limited
 
 **Metrics Exported:**
+
 - Total cost (USD)
 - Token usage (input + output)
 - Request count per provider
@@ -162,6 +168,7 @@ Phenotype uses a **multi-layered routing architecture:**
 **Router Breakdown by Category:**
 
 **Core Routing (10 routers):**
+
 1. **auto_router.py** (155 LOC) — Automatic provider selection based on model name
 2. **litellm_router.py** (36.6K LOC) — Heavy-duty LiteLLM integration with guardrails + retries
 3. **pareto_router.py** (22.2K LOC) — Pareto-optimal provider selection (cost vs quality tradeoff)
@@ -215,6 +222,7 @@ Phenotype uses a **multi-layered routing architecture:**
 43. **harvest.py** (2.7K LOC) — Data collection for router training
 
 **Cost Tracking (2 modules):**
+
 - **cost_calculator.py** (5.2K LOC) — USD cost computation from token counts
 - **auto_router.py** has cost awareness built-in
 
@@ -303,6 +311,7 @@ Phenotype uses a **multi-layered routing architecture:**
 **Audit Result:** No evidence of a local VibeProxy fork in workspace.
 
 **Evidence:**
+
 - Searched: `find /Users/<REDACTED> -name "vibeproxy*"` → No active repos
 - Checked: `.git/config` across all projects → No `automazeio/vibeproxy` remotes
 - Archived refs: `spec-dumps/merged.md` contains 20+ FR citations to VibeProxy, all as **aspirational Phase 3+ work** (not started)
@@ -317,12 +326,14 @@ Phenotype uses a **multi-layered routing architecture:**
 ### 1. **Core Capability Duplication**
 
 **Overlap Points:**
+
 - Multi-account failover (VibeProxy's round-robin vs Phenotype's circuit-breaker)
 - OAuth credential management (VibeProxy's AppDelegate vs Phenotype's Bifrost)
 - Token counting & cost tracking (VibeProxy's metrics vs Phenotype's cost_calculator)
 - Request/response transformation (VibeProxy's mappings vs Phenotype's 9 routers)
 
 **Recommendation:**
+
 - Extract **provider-agnostic core** into a shared library: `phenotype-routing-core`
 - Includes: cost calculator, token counter, budget tracker, circuit breaker, rate limiter
 - Both VibeProxy and Phenotype depend on it
@@ -330,10 +341,12 @@ Phenotype uses a **multi-layered routing architecture:**
 ### 2. **Model Metadata Registry**
 
 **Overlap:**
+
 - VibeProxy maintains provider model lists (in CLIProxyAPIPlus)
 - Phenotype maintains `model_metadata.py` (14.3K LOC) with context windows, pricing, capabilities
 
 **Opportunity:**
+
 - Consolidate into a **shared, versioned model registry** (Rust crate)
 - Include: context length, token pricing (in/out), provider endpoints, capabilities
 - Versioned releases (e.g., `phenotype-models-v0.3.0` adds GPT-4o, removes deprecated models)
@@ -342,10 +355,12 @@ Phenotype uses a **multi-layered routing architecture:**
 ### 3. **Cost Calculation & Token Pricing**
 
 **Overlap:**
+
 - VibeProxy: token counts → USD (in CLIProxyAPIPlus)
 - Phenotype: `cost_calculator.py` (5.2K LOC) + per-provider pricing tables
 
 **Opportunity:**
+
 - Extract **pricing tables + algorithm** into `phenotype-pricing`
 - Support: per-provider, per-model, per-region pricing
 - Versioning: update on model price changes, new model announcements
@@ -353,6 +368,7 @@ Phenotype uses a **multi-layered routing architecture:**
 ### 4. **Route Execution Engine**
 
 **Phenotype-Specific (no VibeProxy equivalent):**
+
 - 43 specialized routers cover use cases VibeProxy doesn't: semantic load balancing, ML-based routing, task-specific optimization
 - **Opportunity:** Extract generic router framework (`phenotype-router-framework`) that allows:
   - Custom router plugins (Rust trait + Python adapter)
@@ -362,12 +378,14 @@ Phenotype uses a **multi-layered routing architecture:**
 ### 5. **Observability & Tracing**
 
 **Phenotype adds (not in VibeProxy):**
+
 - Event tracing (GW-35: tg-event-id)
 - TTFT measurement (GW-38: tg-ttft-ms)
 - Fallback step tracking (GW-36: tg-fallback-step)
 - Per-request cost response headers
 
 **Opportunity:**
+
 - Extract observability traits into `phenotype-observability`
 - Implement for both VibeProxy (optional headers) and Phenotype (default)
 
@@ -376,23 +394,27 @@ Phenotype uses a **multi-layered routing architecture:**
 ## Related Projects & Tools in Workspace
 
 ### 1. **LiteLLM** (Python, 36.6K LOC in workspace)
+
 - **Status:** Integrated as primary router in Phenotype
 - **Purpose:** Multi-provider LLM abstraction + guardrails
 - **Overlap with VibeProxy:** Handles multiple providers (Claude, GPT, Gemini, etc.)
 - **Relationship:** VibeProxy could use LiteLLM as backend instead of custom CLIProxyAPIPlus
 
 ### 2. **cliproxyapi-plusplus** (Go, external)
+
 - **Status:** External dependency (forked by &lt;REDACTED&gt;, known as cliproxy)
 - **Purpose:** Proxy backend for VibeProxy; used by Phenotype for fallback
 - **Integration:** Phenotype has `cliproxy_adapter.py` that proxies to cliproxyapi-plusplus backend
 - **Concern:** Embedded in local setup; possible consolidation with Phenotype's LiteLLM layer
 
 ### 3. **Vercel AI Gateway**
+
 - **Status:** External service used by VibeProxy (for Claude safety)
 - **Integration:** Phenotype mentions in notes (openrouter.ai and Vercel AI Gateway for access)
 - **Overlap:** Both use as transport layer
 
 ### 4. **Other Harnesses** (Cursor, Roo Code, Kilo Code)
+
 - **Status:** Documented in archives
 - **Purpose:** Coding-specific AI harnesses with own routing logic
 - **Overlap:** All have API routing/metering; some duplication possible
@@ -503,6 +525,7 @@ Phenotype uses a **multi-layered routing architecture:**
 ### Phase 2: Migrate VibeProxy (2-3 weeks)
 
 **If VibeProxy fork is activated in future:**
+
 - Replace CLIProxyAPIPlus cost calculations with `phenotype-cost-core`
 - Use `phenotype-models` for model registry
 - Adopt `phenotype-observability` headers
@@ -510,6 +533,7 @@ Phenotype uses a **multi-layered routing architecture:**
 ### Phase 3: Consolidate Phenotype Routers (6-8 weeks)
 
 **Refactor to use shared libraries:**
+
 - Decouple `cost_aware_router`, `litellm_router`, etc. from inline implementations
 - Extract common patterns: retry logic, error handling, observability
 - Publish `phenotype-router-core` (Rust) with Python bindings (PyO3)
@@ -527,24 +551,29 @@ Phenotype uses a **multi-layered routing architecture:**
 ## Recommendations
 
 ### 1. **No Immediate Action on VibeProxy**
+
 - VibeProxy remains external reference; no fork is needed now
 - If macOS desktop support becomes priority, *then* evaluate fork vs integration
 
 ### 2. **Extract Shared Libraries (High Priority)**
+
 - `phenotype-cost-core`, `phenotype-models`, `phenotype-observability`, `phenotype-router-traits`
 - Both Phenotype and future VibeProxy fork will benefit
 - Enables faster iteration without cross-project coordination
 
 ### 3. **Document VibeProxy Integration Path**
+
 - Create spec: `kitty-specs/VIBEPROXY_INTEGRATION_PHASE3.md`
 - Define: When to fork, where to integrate, migration checklist
 - Include: CLIProxyAPIPlus → Phenotype routing layer decision matrix
 
 ### 4. **Consolidate Related Tools**
+
 - Audit Cursor, Roo Code, Kilo Code harnesses for reusable patterns
 - Consider: Extract into `phenotype-harness-core` for shared use
 
 ### 5. **Cost Tracking as MVP**
+
 - First consolidation target: `phenotype-cost-core`
 - This is the most valuable shared capability
 - Enables cost transparency across tools (VibeProxy + Phenotype + others)
@@ -613,6 +642,7 @@ routing_impl/
 **Location:** `/Users/<REDACTED>/CodeProjects/Phenotype/repos/platforms/thegent/src/thegent/cliproxy_adapter.py` (1,268 LOC)
 
 **Responsibilities:**
+
 - HTTP/WebSocket gateway
 - OAuth validation (Bifrost)
 - Request transformation

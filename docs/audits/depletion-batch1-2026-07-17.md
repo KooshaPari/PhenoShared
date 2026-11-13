@@ -37,6 +37,7 @@ systematic audit of every &lt;REDACTED&gt; repo.
 ## Net Fleet Reduction
 
 If all 10 batch1 actions are executed:
+
 - **GitHub archives**: +2 (phenotype-apps, phantom-dist-sbom cannot be archived since 404)
 - **Local clones relocated to `_retire/`**: 8 (total ~3GB freed from active fleet root)
 - **Registry row updates**: 2 (phantom rows → NEVER_EXISTED_REMOTE)

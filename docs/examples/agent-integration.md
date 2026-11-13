@@ -9,6 +9,7 @@ End-to-end example of dispatching an AI agent to implement a work package. Shows
 ## Scenario
 
 You have a feature `003-auth-system` with three work packages:
+
 - WP01: User & Session models (DONE)
 - WP02: Login endpoint (PLANNED, ready to implement)
 - WP03: Session middleware (BLOCKED until WP02 completes)
@@ -98,6 +99,7 @@ agileplus implement 003 --wp WP02 --agent claude-code
 ```
 
 Behind the scenes, AgilePlus:
+
 1. Creates a worktree at `.worktrees/003-auth-system-WP02`
 2. Checks out a new branch `feat/003-auth-system-WP02` from main
 3. Packages the prompt with spec, plan, and governance constraints
@@ -307,7 +309,7 @@ $ git commit -m "feat(WP02): implement login endpoint with JWT"
 Agent creates multiple commits:
 
 ```bash
-$ git log --oneline -5
+git log --oneline -5
 ```
 
 ```

@@ -22,7 +22,7 @@
 
 ## Code Coverage
 
-<TestCoverageBadge 
+<TestCoverageBadge
     :overall="92"
     :unit="95"
     :integration="89"

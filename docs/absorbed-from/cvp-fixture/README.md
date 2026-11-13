@@ -18,4 +18,3 @@ Per-file provenance, source commit and split counts: `absorption/cvp-fixture/PRO
 
 The source repo has not been archived or deleted; that remains a separate
 operator decision after this record landed.
-

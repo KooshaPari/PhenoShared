@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 NanoVMS needs comprehensive testing across:
+
 - Unit tests
 - Integration tests
 - Performance benchmarks
@@ -150,11 +151,13 @@ func TestWithDatabase(t *testing.T) {
 ## Consequences
 
 ### Positive
+
 - Fast feedback loop (unit tests)
 - Real environment testing (integration)
 - Performance regression detection
 - Game automation validation
 
 ### Negative
+
 - Complex test infrastructure
 - Multi-platform testing overhead

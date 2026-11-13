@@ -30,6 +30,7 @@ phenotype-validation-go/
 ## Quality Standards
 
 ### Go Standards
+
 - **Line length**: 100 characters
 - **Formatter**: `gofmt`, `goimports`
 - **Linter**: `golangci-lint`
@@ -38,9 +39,11 @@ phenotype-validation-go/
 ## Git Workflow
 
 ### Branch Naming
+
 Format: `validation-go/<type>/<description>`
 
 Examples:
+
 - `validation-go/feat/schema-validator`
 - `validation-go/fix/error-messages`
 
@@ -79,6 +82,7 @@ go vet ./...
 ## Agent Notes
 
 When working in phenotype-validation-go:
+
 1. Go equivalent of validation framework
 2. Coordinate with other validation projects
 3. Align with PhenoProc validation work

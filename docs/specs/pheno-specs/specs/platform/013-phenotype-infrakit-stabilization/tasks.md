@@ -22,6 +22,7 @@
 Conduct a comprehensive audit of all 19 infrastructure crates across Rust, Python, TypeScript, and Zig ecosystems. Each crate is evaluated for API stability, test coverage, documentation quality, and maturity. The audit produces a categorized inventory and identifies duplicated functionality for consolidation planning.
 
 ### Subtasks
+
 - [ ] T001 Clone all 19 crate repositories and verify buildability
 - [ ] T002 Measure API surface for each crate (public types, functions, traits)
 - [ ] T003 Run test coverage analysis on all crates (cargo tarpaulin for Rust, pytest-cov for Python, etc.)
@@ -33,9 +34,11 @@ Conduct a comprehensive audit of all 19 infrastructure crates across Rust, Pytho
 - [ ] T009 Produce audit report with findings, recommendations, and consolidation roadmap
 
 ### Dependencies
+
 - None (starting WP for this spec)
 
 ### Risks & Mitigations
+
 - Some crates may not build: Document build failures separately, do not block audit
 - Incomplete test coverage data: Use multiple tools (tarpaulin, llvm-cov) for cross-validation
 
@@ -58,6 +61,7 @@ Conduct a comprehensive audit of all 19 infrastructure crates across Rust, Pytho
 Consolidate all Rust infrastructure crates into a single phenotype-infrakit workspace. This involves restructuring the crate layout, merging duplicate crates (phenotype-shared → phenotype-contracts, PolicyStack → phenotype-policy-engine), establishing workspace-level dependency management, and ensuring all crates build cleanly together.
 
 ### Subtasks
+
 - [ ] T010 Design unified workspace structure: crate grouping, feature flags, dependency versions
 - [ ] T011 Create root Cargo.toml with workspace members and shared dependency versions
 - [ ] T012 Migrate phenotype-config into workspace with existing tests and docs
@@ -72,9 +76,11 @@ Consolidate all Rust infrastructure crates into a single phenotype-infrakit work
 - [ ] T021 Run `cargo fmt --check` and fix all formatting issues
 
 ### Dependencies
+
 - WP-001 (audit complete, consolidation targets identified)
 
 ### Risks & Mitigations
+
 - Breaking changes during merge: Careful type reconciliation, deprecation periods for renamed types
 - Dependency version conflicts: Workspace-level version pinning resolves conflicts
 
@@ -97,6 +103,7 @@ Consolidate all Rust infrastructure crates into a single phenotype-infrakit work
 Stabilize the API surfaces of all consolidated crates. This includes adding missing test coverage, writing comprehensive documentation, enforcing type constraints (Debug, Clone), and establishing semver versioning discipline. Each crate receives a stable API contract that downstream consumers can rely on.
 
 ### Subtasks
+
 - [ ] T022 Audit public APIs: enforce Debug + Clone, remove unnecessary impl Trait
 - [ ] T023 Write unit tests for phenotype-config (target: ≥80% coverage)
 - [ ] T024 Write unit tests for phenotype-cipher, Authvault, Tokn (crypto/auth crates, target: ≥90%)
@@ -110,9 +117,11 @@ Stabilize the API surfaces of all consolidated crates. This includes adding miss
 - [ ] T032 Verify ≥80% test coverage with cargo tarpaulin
 
 ### Dependencies
+
 - WP-002 (workspace consolidation complete, all crates building together)
 
 ### Risks & Mitigations
+
 - Test coverage gaps in complex crates: Prioritize crypto/auth crates (≥90%), accept lower for utility crates
 - API instability: Document breaking changes in CHANGELOG, use deprecation attributes
 
@@ -135,6 +144,7 @@ Stabilize the API surfaces of all consolidated crates. This includes adding miss
 Publish all stabilized crates to their respective package registries. Rust crates go to crates.io, the Python crate to PyPI, and the TypeScript crate to npm. CI/CD pipelines are configured to automate publishing on version tags, with proper credential management and verification steps.
 
 ### Subtasks
+
 - [ ] T033 Configure crates.io API token in CI secrets for Phenotype org
 - [ ] T034 Add publish metadata to each Rust crate: license, repository, documentation, keywords
 - [ ] T035 Publish phenotype-contracts, phenotype-config, phenotype-cipher to crates.io
@@ -148,9 +158,11 @@ Publish all stabilized crates to their respective package registries. Rust crate
 - [ ] T043 Evaluate phenotype-logging-zig (Zig): decide publish to Zig package registry or deprecate
 
 ### Dependencies
+
 - WP-003 (API surfaces stabilized, tests passing, versions set)
 
 ### Risks & Mitigations
+
 - Registry name conflicts: Check name availability early, reserve names if needed
 - CI credential exposure: Use encrypted secrets, scoped tokens with minimal permissions
 
@@ -172,6 +184,7 @@ Publish all stabilized crates to their respective package registries. Rust crate
 Perform a final cross-crate dependency audit to eliminate duplication, resolve security vulnerabilities, and establish dependency management policies. This ensures the workspace is clean, secure, and maintainable before the initial stable release.
 
 ### Subtasks
+
 - [ ] T044 Audit workspace dependency tree: identify duplicates, version conflicts
 - [ ] T045 Consolidate shared dependencies to workspace-level [workspace.dependencies]
 - [ ] T046 Run cargo audit for Rust security vulnerabilities, fix or document acceptances
@@ -183,9 +196,11 @@ Perform a final cross-crate dependency audit to eliminate duplication, resolve s
 - [ ] T052 Final quality gate: `cargo test --workspace`, `cargo clippy --workspace -- -D warnings`, `cargo fmt --check`
 
 ### Dependencies
+
 - WP-004 (all crates published, dependency tree stable)
 
 ### Risks & Mitigations
+
 - Security vulnerabilities in transitive deps: Document acceptances for unfixable, plan upgrades
 - Breaking dependency updates: Pin versions, test upgrades in isolated branch
 

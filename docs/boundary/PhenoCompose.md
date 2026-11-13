@@ -64,6 +64,7 @@ PhenoCompose crosses into other Phenotype repos at the following seams:
 
 **Score: 54/60 (90.0%)** — strongest repo in the compute/infra
 subtree. The hexagonal `port-*` design + `#![forbid(unsafe_code)]`
+
 + `#![deny(missing_docs)]` is SOTA-grade (cf. claude-code-sdk-rs,
 fastmcp, gastown).
 
@@ -78,6 +79,7 @@ once any prompt binds to this repo.
 **Reviewer:** forge session (Phase 1 of `plans/2026-06-22-compute-infra-dag-v1.md`)
 **Worklog / finding:** `phenotype-infra/worklog/2026-06-23-71-pillar-scorecard.md` + `PhenoCompose/worklog/2026-06-23-pc-001-dead-features.md`
 **Decisions:**
+
 - PC-001 (drop dead `cuda` feature flag) MERGED (commit `aebf3be`)
 - `cargo check -p nvms-ffi --offline` GREEN
 - The `shim` module in `bindings/rust-ffi/src/lib.rs:398-598` is

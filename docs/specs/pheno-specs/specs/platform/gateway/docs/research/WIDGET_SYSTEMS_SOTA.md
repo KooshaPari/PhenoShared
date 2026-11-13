@@ -269,6 +269,7 @@ optional = ["redis", "metrics"]
 #### 2.1.2 Component Registration Patterns
 
 **Global Registry Pattern**
+
 ```javascript
 // Global component registry
 window.PortalComponents = {
@@ -298,6 +299,7 @@ const UserProfile = PortalComponents.get('user-profile');
 ```
 
 **Module Registry Pattern**
+
 ```typescript
 // Scoped component registry
 class ComponentRegistry {
@@ -1269,37 +1271,37 @@ export default createWidget({
 
 | Reference | URL | Description |
 |-----------|-----|-------------|
-| Web Components MDN | https://developer.mozilla.org/en-US/docs/Web/API/Web_components | Official documentation |
-| Custom Elements Spec | https://html.spec.whatwg.org/multipage/custom-elements.html | HTML spec |
-| Shadow DOM Spec | https://dom.spec.whatwg.org/#shadow-trees | DOM spec |
-| Lit Library | https://lit.dev/ | Modern web components library |
-| Stencil | https://stenciljs.com/ | Web components compiler |
+| Web Components MDN | <https://developer.mozilla.org/en-US/docs/Web/API/Web_components> | Official documentation |
+| Custom Elements Spec | <https://html.spec.whatwg.org/multipage/custom-elements.html> | HTML spec |
+| Shadow DOM Spec | <https://dom.spec.whatwg.org/#shadow-trees> | DOM spec |
+| Lit Library | <https://lit.dev/> | Modern web components library |
+| Stencil | <https://stenciljs.com/> | Web components compiler |
 
 ### 8.2 Plugin Architecture References
 
 | Reference | URL | Description |
 |-----------|-----|-------------|
-| Backstage Plugins | https://backstage.io/docs/plugins/create-a-plugin | Backstage plugin docs |
-| Grafana Plugins | https://grafana.com/docs/grafana/latest/developers/plugins/ | Grafana plugin guide |
-| Kong Plugins | https://docs.konghq.com/gateway/latest/plugin-development/ | Kong plugin development |
-| VS Code Extensions | https://code.visualstudio.com/api | VS Code extension API |
+| Backstage Plugins | <https://backstage.io/docs/plugins/create-a-plugin> | Backstage plugin docs |
+| Grafana Plugins | <https://grafana.com/docs/grafana/latest/developers/plugins/> | Grafana plugin guide |
+| Kong Plugins | <https://docs.konghq.com/gateway/latest/plugin-development/> | Kong plugin development |
+| VS Code Extensions | <https://code.visualstudio.com/api> | VS Code extension API |
 
 ### 8.3 Security References
 
 | Reference | URL | Description |
 |-----------|-----|-------------|
-| CSP Reference | https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP | Content Security Policy |
-| iframe Sandbox | https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox | iframe sandboxing |
-| Trusted Types | https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API | XSS prevention |
-| Subresource Integrity | https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity | SRI documentation |
+| CSP Reference | <https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP> | Content Security Policy |
+| iframe Sandbox | <https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox> | iframe sandboxing |
+| Trusted Types | <https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API> | XSS prevention |
+| Subresource Integrity | <https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity> | SRI documentation |
 
 ### 8.4 Module Federation References
 
 | Reference | URL | Description |
 |-----------|-----|-------------|
-| Module Federation | https://module-federation.io/ | Official documentation |
-| Webpack 5 MF | https://webpack.js.org/concepts/module-federation/ | Webpack implementation |
-| Native Federation | https://www.npmjs.com/package/@angular-architects/native-federation | Framework-agnostic |
+| Module Federation | <https://module-federation.io/> | Official documentation |
+| Webpack 5 MF | <https://webpack.js.org/concepts/module-federation/> | Webpack implementation |
+| Native Federation | <https://www.npmjs.com/package/@angular-architects/native-federation> | Framework-agnostic |
 
 ---
 

@@ -38,6 +38,7 @@ opentelemetry-sdk = "0.28"
 ```
 
 Create an `init_tracer()` function that:
+
 - Reads `OTEL_EXPORTER_OTLP_ENDPOINT` from environment (default: `http://localhost:4317`)
 - Creates an HTTP binary protocol exporter targeting the endpoint
 - Builds a `TracerProvider` with a batch span exporter
@@ -74,6 +75,7 @@ let app = Router::new()
 ```
 
 This middleware automatically:
+
 - Propagates trace context on incoming HTTP requests (via W3C Trace Context headers)
 - Injects trace context on outgoing HTTP requests
 - Creates a span for each request
@@ -118,6 +120,7 @@ let subscriber = tracing_subscriber::fmt::layer()
 ```
 
 Ensure that:
+
 - Log output is valid JSON, one record per line
 - Each log entry includes `target` field (module path)
 - Span lifecycle events (creation, close) are recorded

@@ -9,6 +9,7 @@
 The TypeScript validation library landscape predominantly uses class-based schemas (Zod, Yup, Joi). This approach, while familiar to many developers, introduces limitations that impact testability, serialization, and functional composition.
 
 We need to choose a schema representation that:
+
 1. Enables pure functional composition
 2. Supports schema serialization (for storage, transmission, code generation)
 3. Allows easy mocking and testing
@@ -118,6 +119,6 @@ Cons: Non-standard, confusing to users
 
 ## References
 
-- Zod: https://zod.js.org
-- io-ts: https://github.com/gcanti/io-ts
-- TypeBox: https://github.com/sinclairzx81/typebox
+- Zod: <https://zod.js.org>
+- io-ts: <https://github.com/gcanti/io-ts>
+- TypeBox: <https://github.com/sinclairzx81/typebox>

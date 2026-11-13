@@ -31,6 +31,7 @@ Distributed ecosystems face specification challenges:
 ### Impact Analysis
 
 These challenges result in:
+
 - Integration failures and delays
 - Incompatible implementations
 - Testing gaps and quality issues
@@ -41,6 +42,7 @@ These challenges result in:
 ### Solution Vision
 
 PhenoSpecs provides:
+
 - Machine-readable specifications as binding contracts
 - Semantic versioning with explicit migration paths
 - Technology-independent specification formats
@@ -56,6 +58,7 @@ PhenoSpecs provides:
 ### Primary Users
 
 #### 1. Implementers
+
 - **Profile**: Building components to specification
 - **Goals**: Clear, testable specification guidance
 - **Pain Points**:
@@ -65,6 +68,7 @@ PhenoSpecs provides:
 - **Success Criteria**: Clear specs with testable requirements
 
 #### 2. Integrators
+
 - **Profile**: Connecting systems across the ecosystem
 - **Goals**: Reliable integration with compatibility guarantees
 - **Pain Points**:
@@ -74,6 +78,7 @@ PhenoSpecs provides:
 - **Success Criteria**: Guaranteed compatibility
 
 #### 3. Architects
+
 - **Profile**: Designing systems and setting standards
 - **Goals**: Clear standards with governance
 - **Pain Points**:
@@ -85,11 +90,13 @@ PhenoSpecs provides:
 ### Secondary Users
 
 #### 4. QA Engineers
+
 - **Profile**: Testing implementations against specs
 - **Needs**: Test vectors, compliance suites, validation tools
 - **Usage**: Test development, compliance verification
 
 #### 5. Product Managers
+
 - **Profile**: Planning features and dependencies
 - **Needs**: Specification status, roadmap visibility
 - **Usage**: Planning, dependency management
@@ -111,24 +118,28 @@ PhenoSpecs provides:
 ### FR-1: Interface Specifications
 
 #### FR-1.1: API Contracts
+
 - The system SHALL provide OpenAPI specifications
 - The system SHALL provide GraphQL schema specifications
 - The system SHALL support gRPC service definitions
 - The system SHALL provide WebSocket protocol specs
 
 #### FR-1.2: Protocol Definitions
+
 - The system SHALL define wire protocols
 - The system SHALL specify handshake sequences
 - The system SHALL document error handling
 - The system SHALL provide version negotiation
 
 #### FR-1.3: Data Schemas
+
 - The system SHALL provide JSON Schema definitions
 - The system SHALL support Protocol Buffers
 - The system SHALL provide Avro schemas
 - The system SHALL support custom formats
 
 #### FR-1.4: Event Formats
+
 - The system SHALL define event schemas
 - The system SHALL provide event type registries
 - The system SHALL document event ordering
@@ -137,24 +148,28 @@ PhenoSpecs provides:
 ### FR-2: Protocol Specifications
 
 #### FR-2.1: Wire Protocols
+
 - The system SHALL specify binary protocols
 - The system SHALL define text protocols
 - The system SHALL document encoding rules
 - The system SHALL provide protocol state machines
 
 #### FR-2.2: Handshake Sequences
+
 - The system SHALL define connection establishment
 - The system SHALL specify capability negotiation
 - The system SHALL document authentication flows
 - The system SHALL provide session management
 
 #### FR-2.3: Error Handling
+
 - The system SHALL define error codes
 - The system SHALL specify error formats
 - The system SHALL document retry strategies
 - The system SHALL provide error recovery
 
 #### FR-2.4: Version Negotiation
+
 - The system SHALL specify version discovery
 - The system SHALL define capability negotiation
 - The system SHALL document backward compatibility
@@ -163,24 +178,28 @@ PhenoSpecs provides:
 ### FR-3: Compliance Testing
 
 #### FR-3.1: Test Suites
+
 - The system SHALL provide compliance test suites
 - The system SHALL support automated testing
 - The system SHALL provide test vectors
 - The system SHALL document expected behavior
 
 #### FR-3.2: Compliance Checkers
+
 - The system SHALL provide automated compliance tools
 - The system SHALL generate compliance reports
 - The system SHALL provide certification badges
 - The system SHALL support continuous compliance
 
 #### FR-3.3: Certification Process
+
 - The system SHALL define certification levels
 - The system SHALL provide certification tests
 - The system SHALL issue compliance certificates
 - The system SHALL maintain certification registry
 
 #### FR-3.4: Fuzzing Targets
+
 - The system SHALL provide fuzzing harnesses
 - The system SHALL define fuzzing dictionaries
 - The system SHALL document fuzzing strategies
@@ -189,24 +208,28 @@ PhenoSpecs provides:
 ### FR-4: RFC Process
 
 #### FR-4.1: Proposal Templates
+
 - The system SHALL provide RFC templates
 - The system SHALL define proposal stages
 - The system SHALL provide submission guidelines
 - The system SHALL support proposal drafting
 
 #### FR-4.2: Review Workflow
+
 - The system SHALL define review stages
 - The system SHALL assign reviewers
 - The system SHALL track review status
 - The system SHALL provide review comments
 
 #### FR-4.3: Decision Records
+
 - The system SHALL record RFC decisions
 - The system SHALL document rationale
 - The system SHALL track implementation
 - The system SHALL support appeals
 
 #### FR-4.4: Publication
+
 - The system SHALL publish accepted specifications
 - The system SHALL maintain version history
 - The system SHALL provide changelogs
@@ -215,24 +238,28 @@ PhenoSpecs provides:
 ### FR-5: Registry
 
 #### FR-5.1: Central Catalog
+
 - The system SHALL provide specification catalog
 - The system SHALL support search and filtering
 - The system SHALL provide specification details
 - The system SHALL support categorization
 
 #### FR-5.2: Status Tracking
+
 - The system SHALL track specification status
 - The system SHALL define lifecycle states
 - The system SHALL provide status transitions
 - The system SHALL notify on status changes
 
 #### FR-5.3: Implementation Links
+
 - The system SHALL link specs to implementations
 - The system SHALL track implementation status
 - The system SHALL provide implementation guides
 - The system SHALL support implementation registration
 
 #### FR-5.4: Version Management
+
 - The system SHALL manage specification versions
 - The system SHALL support semantic versioning
 - The system SHALL provide version comparison
@@ -245,12 +272,14 @@ PhenoSpecs provides:
 ### NFR-1: Quality
 
 #### NFR-1.1: Clarity
+
 - Specifications SHALL be unambiguous
 - Specifications SHALL include examples
 - Specifications SHALL define all terms
 - Specifications SHALL provide rationale
 
 #### NFR-1.2: Completeness
+
 - Specifications SHALL cover all cases
 - Specifications SHALL include error scenarios
 - Specifications SHALL provide edge cases
@@ -259,12 +288,14 @@ PhenoSpecs provides:
 ### NFR-2: Stability
 
 #### NFR-2.1: Versioning
+
 - Specifications SHALL use semantic versioning
 - Breaking changes SHALL be explicit
 - Migration paths SHALL be documented
 - Deprecation SHALL include timelines
 
 #### NFR-2.2: Backward Compatibility
+
 - New versions SHALL maintain compatibility where possible
 - Breaking changes SHALL be justified
 - The system SHALL provide compatibility matrices
@@ -272,12 +303,14 @@ PhenoSpecs provides:
 ### NFR-3: Accessibility
 
 #### NFR-3.1: Discoverability
+
 - Specifications SHALL be searchable
 - Specifications SHALL be well-organized
 - Cross-references SHALL be maintained
 - The system SHALL provide navigation
 
 #### NFR-3.2: Formats
+
 - Specifications SHALL be machine-readable
 - Specifications SHALL be human-readable
 - Multiple formats SHALL be supported
@@ -294,6 +327,7 @@ PhenoSpecs provides:
 **So that** I can find the right specification for my implementation.
 
 **Acceptance Criteria**:
+
 - Given search terms, when entered, then relevant specs are returned
 - Given a specification, when viewed, then full details are displayed
 - Given versions, when listed, then compatibility is shown
@@ -305,6 +339,7 @@ PhenoSpecs provides:
 **So that** I can build compliant implementations.
 
 **Acceptance Criteria**:
+
 - Given a spec, when read, then requirements are clear
 - Given test vectors, when used, then implementation is validated
 - Given examples, when followed, then implementation is correct
@@ -316,6 +351,7 @@ PhenoSpecs provides:
 **So that** I can verify they meet specifications.
 
 **Acceptance Criteria**:
+
 - Given compliance suite, when run, then results are clear
 - Given failures, when detected, then details are provided
 - Given success, when achieved, then certificate is issued
@@ -327,6 +363,7 @@ PhenoSpecs provides:
 **So that** the ecosystem can evolve with community input.
 
 **Acceptance Criteria**:
+
 - Given RFC template, when used, then proposal is structured
 - Given submission, when reviewed, then feedback is provided
 - Given approval, when granted, then spec is published
@@ -338,6 +375,7 @@ PhenoSpecs provides:
 **So that** I understand why specifications are designed as they are.
 
 **Acceptance Criteria**:
+
 - Given an ADR, when read, then context is clear
 - Given a decision, when documented, then rationale is explained
 - Given history, when reviewed, then evolution is visible
@@ -351,6 +389,7 @@ PhenoSpecs provides:
 **Description**: Central storage for all specifications with versioning.
 
 **Components**:
+
 - Spec database
 - Version control
 - Format support
@@ -367,6 +406,7 @@ PhenoSpecs provides:
 **Description**: Test suites, checkers, and certification.
 
 **Components**:
+
 - Test suite library
 - Compliance checker
 - Certification system
@@ -383,6 +423,7 @@ PhenoSpecs provides:
 **Description**: Proposal, review, and publication workflow.
 
 **Components**:
+
 - RFC templates
 - Review workflow
 - Decision tracking
@@ -399,6 +440,7 @@ PhenoSpecs provides:
 **Description**: Web interface for browsing and searching specifications.
 
 **Components**:
+
 - Search interface
 - Specification viewer
 - Status dashboard
@@ -415,6 +457,7 @@ PhenoSpecs provides:
 **Description**: Links between specifications and implementations.
 
 **Components**:
+
 - Implementation registry
 - Status tracking
 - Compatibility matrix
@@ -431,6 +474,7 @@ PhenoSpecs provides:
 **Description**: Automatic generation of human-readable documentation.
 
 **Components**:
+
 - Doc generator
 - Diagram generator
 - Changelog generator
@@ -478,6 +522,7 @@ PhenoSpecs provides:
 ### MVP Release (Month 2)
 
 **Must Have**:
+
 - [ ] Spec repository structure
 - [ ] 20+ specifications
 - [ ] RFC template
@@ -485,6 +530,7 @@ PhenoSpecs provides:
 - [ ] Web portal
 
 **Exit Criteria**:
+
 - 20+ specs published
 - 5+ implementations tracked
 - Internal adoption active
@@ -492,6 +538,7 @@ PhenoSpecs provides:
 ### Beta Release (Month 4)
 
 **Must Have**:
+
 - [ ] 50+ specifications
 - [ ] Full compliance framework
 - [ ] RFC process active
@@ -499,6 +546,7 @@ PhenoSpecs provides:
 - [ ] API access
 
 **Exit Criteria**:
+
 - 50+ specs
 - 20+ implementations
 - RFC process running
@@ -506,6 +554,7 @@ PhenoSpecs provides:
 ### GA Release (Month 6)
 
 **Must Have**:
+
 - [ ] 100+ specifications
 - [ ] All format support
 - [ ] Full compliance suites
@@ -513,6 +562,7 @@ PhenoSpecs provides:
 - [ ] Professional support
 
 **Exit Criteria**:
+
 - 100+ specs
 - 50+ implementations
 - Compliance >95%
@@ -531,10 +581,10 @@ PhenoSpecs provides:
 
 ### B. References
 
-- OpenAPI: https://spec.openapis.org/
-- JSON Schema: https://json-schema.org/
-- Semantic Versioning: https://semver.org/
-- RFC Process: https://www.ietf.org/standards/rfcs/
+- OpenAPI: <https://spec.openapis.org/>
+- JSON Schema: <https://json-schema.org/>
+- Semantic Versioning: <https://semver.org/>
+- RFC Process: <https://www.ietf.org/standards/rfcs/>
 
 ### C. Document Control
 
@@ -652,6 +702,7 @@ components:
 ```
 
 **RFC States**:
+
 - **Draft**: Initial proposal, author working
 - **Draft (active)**: Published for community feedback
 - **Final Comment**: Last call for objections
@@ -714,12 +765,14 @@ def test_get_user_returns_404_for_invalid_user():
 #### Governance Model
 
 **Spec Committee**:
+
 - 5-7 members
 - Diverse representation
 - Rotating membership
 - Consensus-based decisions
 
 **Decision Making**:
+
 - Lazy consensus (silence = assent)
 - Objection resolution process
 - Escalation path
@@ -728,11 +781,13 @@ def test_get_user_returns_404_for_invalid_user():
 #### Change Management
 
 **Minor Changes** (editorial, clarifications):
+
 - Single reviewer approval
 - Fast-track process
 - No RFC required
 
 **Major Changes** (functional, breaking):
+
 - Full RFC process
 - Community comment period
 - Committee approval
@@ -743,6 +798,7 @@ def test_get_user_returns_404_for_invalid_user():
 #### Pre-publication Review
 
 **Technical Review**:
+
 - [ ] Accuracy verified
 - [ ] Completeness checked
 - [ ] Consistency with existing specs
@@ -750,12 +806,14 @@ def test_get_user_returns_404_for_invalid_user():
 - [ ] Examples compile/run
 
 **Editorial Review**:
+
 - [ ] Clear language
 - [ ] Proper formatting
 - [ ] Links working
 - [ ] No typos/grammar issues
 
 **Governance Review**:
+
 - [ ] Proper process followed
 - [ ] Stakeholders consulted
 - [ ] Breaking changes justified
@@ -764,12 +822,14 @@ def test_get_user_returns_404_for_invalid_user():
 #### Post-publication Monitoring
 
 **Metrics**:
+
 - Implementation adoption rate
 - Compliance test pass rate
 - Community feedback volume
 - RFC reference frequency
 
 **Reviews**:
+
 - Quarterly spec health check
 - Annual comprehensive review
 - Triggered review on issues
@@ -779,6 +839,7 @@ def test_get_user_returns_404_for_invalid_user():
 #### Cross-Implementation Testing
 
 **Test Matrix**:
+
 | Implementation A | Implementation B | Test Result |
 |----------------|------------------|-------------|
 | Reference (Go) | Java | ✅ |
@@ -787,29 +848,32 @@ def test_get_user_returns_404_for_invalid_user():
 | Rust | TypeScript | ✅ |
 
 **Federation Testing**:
+
 - End-to-end scenarios
 - Message exchange
 - Error handling
 - Recovery procedures
-
 
 ### Specification Tooling
 
 #### IDE and Editor Support
 
 **VS Code Extension**:
+
 - OpenAPI/AsyncAPI validation
 - Schema autocomplete
 - Refactoring support
 - Live preview
 
 **JetBrains Plugin**:
+
 - Intelligent completion
 - Navigation between specs
 - Inspections and quick fixes
 - Test generation
 
 **CLI Tools**:
+
 ```bash
 # Validate specification
 phenospec validate api.yaml
@@ -829,24 +893,28 @@ phenospec test --spec=api.yaml --implementation=http://localhost:8080
 #### API Design Patterns
 
 **Versioning**:
+
 - URL path (/v1/, /v2/)
 - Header (Accept-Version)
 - Query parameter (?version=2)
 - Content negotiation
 
 **Pagination**:
+
 - Offset-based (page, limit)
 - Cursor-based (after, limit)
 - Token-based (next_token)
 - Time-based (since, until)
 
 **Filtering**:
+
 - Query parameters (?status=active)
 - RSQL/FIQL syntax
 - GraphQL-style fields
 - POST with filter body
 
 **Sorting**:
+
 - Query parameter (?sort=-created)
 - Multi-field support
 - Default sorts
@@ -855,6 +923,7 @@ phenospec test --spec=api.yaml --implementation=http://localhost:8080
 #### Error Handling Standards
 
 **Error Format**:
+
 ```json
 {
   "error": {
@@ -867,7 +936,7 @@ phenospec test --spec=api.yaml --implementation=http://localhost:8080
 ```
 
 **Error Categories**:
+
 - 4xx: Client errors (validation, auth, not found)
 - 5xx: Server errors (unavailable, timeout)
 - Custom: Business logic errors
-

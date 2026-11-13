@@ -27,11 +27,13 @@ TruffleHog provides deep git-history scanning that catches secrets even in old c
 ## Consequences
 
 ### Positive
+
 - CI blocks merges on secret leaks and known CVEs before they reach main
 - `deny.toml` is checked into each repo — licence policy is explicit and auditable
 - Dependabot PRs keep dependency graphs fresh with minimal manual effort
 
 ### Negative / Trade-offs
+
 - TruffleHog has a false-positive rate that may require per-repo allowlist tuning
 - `cargo-deny` only covers Rust; npm/Python dependency audits rely on Dependabot and npm audit
 - Dependabot noise can be high on projects with many transitive deps; batch-update config required

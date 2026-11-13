@@ -9,6 +9,7 @@
 ## Executive Summary
 
 This document consolidates findings from subagent analysis on:
+
 1. Duplicate code patterns across projects (LOC reduction opportunities)
 2. External fork/wrap decisions (third-party integration strategy)
 3. Inactive/non-canonical folder audit

@@ -38,6 +38,7 @@ _To be filled._
 **Reviewer:** forge subagent (L7-001 sweep)
 **Worklog / finding:** `worklogs/L7-001-intent-boundary-curation-2026-06-17.json`
 **Decisions:**
+
 - Initial scaffolding; needs human review.
 
 **Next review:** 2026-07-17

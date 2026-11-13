@@ -162,6 +162,7 @@ async fn events_sqlite_pact() -> Result<()> {
 ```
 
 **Interactions to verify:**
+
 - Append event successfully (return sequence and hash)
 - Get events by entity (ordered by sequence)
 - Get events by sequence range (inclusive)
@@ -170,6 +171,7 @@ async fn events_sqlite_pact() -> Result<()> {
 - Error handling: invalid entity type, out-of-range sequence
 
 **Error types verified:**
+
 - `EventStoreError::DuplicateEvent` when appending duplicate
 - `EventStoreError::InvalidSequence` when sequence is non-monotonic
 - `EventStoreError::NotFound` when querying non-existent entity
@@ -317,6 +319,7 @@ async fn sync_plane_pact() -> Result<()> {
 ```
 
 **Interactions to verify:**
+
 - Push feature (create issue): request shape, response shape with plane_id
 - Pull feature (get issue): response mapping to Feature struct
 - List labels: pagination, field mapping
@@ -324,6 +327,7 @@ async fn sync_plane_pact() -> Result<()> {
 - Error responses: 400 (invalid input), 401 (auth), 404 (not found), 500 (server error)
 
 **Request/response shapes:**
+
 - Requests include workspace_id, proper headers, and formatted field names
 - Responses parse to expected types (PlaneIssue, Label)
 - Timestamp fields convert correctly
@@ -433,6 +437,7 @@ async fn api_dashboard_pact() -> Result<()> {
 ```
 
 **Interactions to verify:**
+
 - GET /api/dashboard/kanban: HTML partial with status columns
 - GET /api/features/:id: JSON feature detail
 - POST /api/features/:id/transition: State change response
@@ -525,6 +530,7 @@ async fn api_events_pact() -> Result<()> {
 ```
 
 **Interactions to verify:**
+
 - Query events with entity filters: response shape, pagination
 - Pagination: limit, offset, total count
 - Filter application: entity_type, entity_id

@@ -18,6 +18,7 @@ npm install -g @craft/cli
 ## Usage
 
 Define schema:
+
 ```yaml
 # schema.yaml
 entities:
@@ -29,11 +30,13 @@ entities:
 ```
 
 Generate:
+
 ```bash
 craft generate --schema schema.yaml --output ./generated
 ```
 
 Generates:
+
 - Rust structs
 - TypeScript interfaces
 - Go structs

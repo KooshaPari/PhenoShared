@@ -7,12 +7,14 @@
 ## Context
 
 The Phenotype ecosystem requires a primary systems programming language for:
+
 - High-performance services
 - CLI tools
 - Systems-level libraries
 - Cross-platform compatibility
 
 We evaluated options based on:
+
 - Performance characteristics
 - Memory safety
 - Developer productivity

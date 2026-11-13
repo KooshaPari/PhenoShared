@@ -33,4 +33,3 @@ Per-file provenance: `repos/tailnet-smb-setup/PROVENANCE.md` in `PhenoRegistry`.
 
 The source repo has not been archived or deleted; that remains a separate
 operator decision after this record landed.
-

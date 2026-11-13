@@ -1,4 +1,5 @@
 # Substrate Dispatch Migration Plan
+
 **2026-06-30 · Phenotype agent fleet dispatch infrastructure consolidation**
 
 ## Executive Summary
@@ -22,6 +23,7 @@ This plan proposes adopting **substrate** (<REDACTED>/substrate @ ecee354) + **f
 **Maturity:** Release-ready · 150+ tests · clippy clean · 6 driver faces + 10 engine adapters + 6 port traits.
 
 **Three inbound driver faces:**
+
 1. **CLI** (`driver-cli` / `substrate` binary)
    - Subcommands: `plan`, `dispatch`, `cloud-dispatch`, `--dry-run`, `--fake`
    - Local engines: forge, codex, claude, agentapi
@@ -39,12 +41,14 @@ This plan proposes adopting **substrate** (<REDACTED>/substrate @ ecee354) + **f
    - Status: available but not wired into Phenotype workflow runners yet
 
 **Hexagonal core** (`substrate-core`):
+
 - Port traits: `EnginePort`, `RoutingPort`, `TransportPort`, `StorePort`, `DispatchApi`, `SchedulePort`, `WorkflowPort`, `ClaimPort`, `SkillPort`, `MemoryPort`, `ProcessPort`, `WatcherPort`, `EventStorePort`
 - Routing superset: round-robin / weighted / least-used / power-of-two-choices, per-target circuit breaker (Closed/Open/HalfOpen), weighted fallback chain
 - `DispatchPlanner`: engine + session-mode selection (Background/Foreground/InProcess)
 - Event sourcing: append-only event log, duplicate-seq rejection, `TaskLifecycleProjection` demo
 
 **Orchestration superset** (2026-06):
+
 - `SchedulePort`: cron/interval/daily/weekly via croner
 - `WorkflowPort`: petgraph DAG topo order, ready-set, cycle detection
 - `ClaimPort`: BEGIN IMMEDIATE atomic claim + strsim fuzzy dedup (SQLite + file-based lockfile)
@@ -62,12 +66,14 @@ This plan proposes adopting **substrate** (<REDACTED>/substrate @ ecee354) + **f
 **Maturity:** Production-ready · 33-crate workspace · Phenotype-org fork of upstream tailcallhq/forgecode.
 
 **Phenotype additions:**
+
 - SQLite session store with WAL + zstd compression
 - Conversation FTS/vector search
 - Subagent breadcrumbs (conversation-id + fork pointers)
 - deny.toml + cargo-deny CI
 
 **CLI interface:**
+
 - `forge exec <prompt>`: invoke as executor
 - Builtin conversation management, provider routing, session persistence
 - Model aliases and fallback strategies
@@ -97,6 +103,7 @@ Three ad-hoc primitives:
    - No tier routing or circuit breaking
 
 **Cross-cutting gaps:**
+
 - No centralized routing decision logic
 - No dry-run / plan introspection
 - No inter-task resource scheduling (build contention)
@@ -112,6 +119,7 @@ Three ad-hoc primitives:
 **Single entry point:** `substrate dispatch` (via CLI, HTTP, MCP tool)
 
 **Model-tier routing (3-tier):**
+
 - **heavy:** gpt-5.5, reasoning_effort=low (synthesis, architecture review)
 - **main:** gpt-5.4-mini, low (typical multi-step tasks)
 - **worker:** gpt-5.3-codex-spark, medium (high-concurrency leaf tasks)
@@ -119,32 +127,39 @@ Three ad-hoc primitives:
 **Three inbound adapters (pick one per context):**
 
 1. **MCP tool (for Phenotype workflows)**
+
    ```
    @mcp
    tool substrate_dispatch(tier, cwd, task)
      → DispatchPlan (engine, session_mode, argv) + StructuredResult JSON
    ```
+
    - Wired into OmniRoute MCP server (or standalone server)
    - Used by: Claude agents, AgilePlus plan execution, phenotype-router skill composition
    - Advantage: structured output, dry-run support, tiers as first-class citizen
 
 2. **CLI (for local shells, CI, ad-hoc dispatch)**
+
    ```bash
    substrate dispatch --tier main --cwd . --mode background "implement feature X"
    substrate plan --engine forge --cwd . "echo hi"   # dry-run introspection
    ```
+
    - Dogfooded binary in ~/.local/bin/substrate
    - Advantage: simple, no server needed, scripting-friendly
 
 3. **HTTP API (for polyglot / remote dispatch)**
+
    ```
    POST /v1/dispatch { tier, cwd, task, mode?, dry_run? }
      → { plan, result?, error? }
    ```
+
    - Optional; useful if dispatch needs to cross network boundaries
    - Status: implemented, untested in production
 
 **Engines (adapt from substrate):**
+
 - **forge** (primary): forge-dev fork; rich conversation mgmt, multi-provider, proven
 - **codex:** substrate-native adapter; uses installed codex binary
 - **claude:** substrate-native adapter; uses installed claude binary
@@ -152,6 +167,7 @@ Three ad-hoc primitives:
 - **cursor, kilo, codex-cloud:** cloud dispatch adapters (future; substrate already has stubs)
 
 **Orchestration layers (dogfooded into workflows):**
+
 - **Routing:** phenotype-router decision logic plugged into substrate `RoutingPort`
 - **Build contention:** sharecli semaphore hooks in `ProcessPort` (serialize cargo/ruff/git-lock)
 - **Persistence:** store-sqlite for task lifecycle, event log, dedup claims
@@ -202,14 +218,16 @@ Three ad-hoc primitives:
 ## Phased Migration DAG
 
 ### Phase 1: Setup & Verification (Week 1)
+
 **Goal:** Substrate ready for pilot; forge-dev proven in this session.
 
 **Tasks:**
+
 1. **Fix CodexEngine argv bug** (substrate PR or local patch)
    - File: `substrate/crates/engine-codex/src/lib.rs`
    - Change: argv builder; drop `--prompt` flag; pass prompt positionally
    - Test: `substrate dispatch --tier main --fake "echo hi"` → success
-   
+
 2. **Verify forge-dev CLI works end-to-end**
    - Clone forgecode; `cargo build --release -p forge_main`
    - Test: `forge exec --skip-git-repo-check "hello world"`
@@ -229,9 +247,11 @@ Three ad-hoc primitives:
 ---
 
 ### Phase 2: Pilot Integration (Week 1-2)
+
 **Goal:** Route THIS session's dispatches through substrate; measure latency, error rates, outputs.
 
 **Tasks:**
+
 1. **Wire substrate MCP into OmniRoute** (or standalone server)
    - Absorb driver-mcp tools into OmniRoute's MCP server (or bind a separate FastMCP instance)
    - Expose as `@mcp substrate_dispatch(tier, cwd, task)` tool
@@ -252,16 +272,19 @@ Three ad-hoc primitives:
    - Monitor: CPU, memory, API rate limit errors
    - Record: max concurrent tasks before throttle
 
-**Blockers:** 
+**Blockers:**
+
 - CodexEngine argv bug (blocks codex engine; forge unaffected)
 - sharecli integration (nice-to-have; pilot can run without it)
 
 ---
 
 ### Phase 3: Cutover (Week 2-3)
+
 **Goal:** Replace Agent() + codex exec in all workflows; retire old primitives.
 
 **Tasks:**
+
 1. **Update Phenotype AGENTS.md / CLAUDE.md**
    - Deprecation notice for Agent() (Opus too expensive; use substrate heavy tier instead)
    - Deprecation notice for bare `codex exec` (use `substrate dispatch --tier X`)
@@ -280,15 +303,18 @@ Three ad-hoc primitives:
    - GitHub Actions workflows: use `substrate dispatch --tier main` for long-running jobs
    - Locally: CI cache via substrate event log (dry-run for parity checks)
 
-**Blockers:** 
+**Blockers:**
+
 - Phenotype-router integration (blocks Combo routing strategy); can defer to phase 4
 
 ---
 
 ### Phase 4: Performance Optimization (Week 3-4)
+
 **Goal:** Tune for packing density; reduce contention; measure total-cost improvement.
 
 **Tasks:**
+
 1. **Integrate sharecli build semaphore**
    - Hook substrate `ProcessPort` adapter to sharecli syscall-level scheduling
    - Benefit: 20+ concurrent agents; only 1-2 cargo builds at a time
@@ -302,14 +328,15 @@ Three ad-hoc primitives:
 3. **Establish tier-per-workload mapping**
    - Document: which task types use which tier (heavy for arch review, main for typical, worker for map-reduce)
    - SLO dashboard: tier latency/cost/quality percentiles
-   - Cost forecast: X workers * Y hours/day * Z cost/worker = expected monthly spend
+   - Cost forecast: X workers *Y hours/day* Z cost/worker = expected monthly spend
 
 4. **Enable event sourcing for audit trail**
    - SQLite event log: every dispatch decision, model choice, fallback trigger
    - Query: "why did task X use model Y?" (trace chain)
    - Export: telemetry to OmniRoute observability for cost/latency correlation
 
-**Blockers:** 
+**Blockers:**
+
 - sharecli maturity (currently R&D; needs hardening)
 - Phenotype-router refactor (nice-to-have for phase 4; can ship phase 3 without it)
 
@@ -318,6 +345,7 @@ Three ad-hoc primitives:
 ## Resource Allocation
 
 ### Effort Estimate (agent-driven)
+
 | Phase | Work | Tier | Est. Duration |
 |-------|------|------|---|
 | 1 | Fix + verify + audit | codex/forge | 1-2 hours |
@@ -327,6 +355,7 @@ Three ad-hoc primitives:
 | **TOTAL** | | | **~12-16 hours** |
 
 ### Repositories Impacted
+
 | Repo | Change | Timing |
 |------|--------|--------|
 | <REDACTED>/substrate | Fix CodexEngine argv; wire MCP into ecosystem | Phase 1-2 |
@@ -342,24 +371,28 @@ Three ad-hoc primitives:
 ## Success Criteria
 
 ### Phase 1
+
 - ✅ CodexEngine argv fix merged and tested
 - ✅ Substrate MCP tools advertise correctly
 - ✅ forge-dev CLI invocation succeeds 10/10 times
 - ✅ Audit document lists all current dispatch patterns
 
 ### Phase 2
+
 - ✅ Substrate dispatch latency ≤ 2x codex exec baseline (accounting for planner overhead)
 - ✅ Cost per task ≤ baseline (tier matching is accurate)
 - ✅ Max concurrency: 20+ worker-tier tasks without rate-limit errors
 - ✅ Structured output contract satisfied (result JSON parseable by all callers)
 
 ### Phase 3
+
 - ✅ Zero Agent() calls in agent template code
 - ✅ All phenofleet dispatches routed through substrate CLI
 - ✅ OmniRoute MCP server exposes substrate_dispatch tool
 - ✅ Deprecation notices in AGENTS.md / CLAUDE.md
 
 ### Phase 4
+
 - ✅ sharecli semaphore integration working (cargo serialize; agents fan out)
 - ✅ phenotype-router combo rules queryable via substrate routing layer
 - ✅ Event log: 100% dispatch decisions recorded
@@ -370,12 +403,14 @@ Three ad-hoc primitives:
 ## Cross-Links & Assumptions
 
 ### Blocked By / Enables
+
 - **Blocks:** [[project_sharecli]] (waiting for dispatch consolidation; sharecli integrates into ProcessPort)
 - **Enables:** [[feedback_no_memory_scare]] (substrate + sharecli = no agent-count throttling; only build-contention queuing)
 - **Related:** [[feedback_codex_dispatch_pattern]] (codex exec pattern; substrate formalizes it)
 - **Related:** [[project_phenofleet]] (dispatch is the leaf; phenofleet orchestrates the DAG)
 
 ### Assumptions
+
 1. **Substrate code is stable** (v2.0.0-ready, 150+ tests; risk: low)
 2. **forge-dev inherits upstream reliability** (tailcallhq/forgecode proven; risk: low)
 3. **OmniRoute can absorb one more MCP server** (or run standalone; risk: low)
@@ -410,7 +445,8 @@ If substrate dispatch causes widespread failures:
 
 ## Next Steps (Handoff)
 
-### For the implementer:
+### For the implementer
+
 1. Read the 7 references above (30 min)
 2. Fix CodexEngine argv bug (20 min)
 3. Run phase 1 verification tasks (1 hour)
@@ -418,7 +454,8 @@ If substrate dispatch causes widespread failures:
 5. Run phase 2 pilot dispatches in session (2 hours)
 6. Record measurements; report back to team lead
 
-### For the team lead:
+### For the team lead
+
 1. Review this plan; approve phase 1-2 (no external blockers expected)
 2. Assign phase 3-4 to codex workers once phase 2 data is in
 3. Monitor cost + latency metrics weekly; adjust tier mapping if needed

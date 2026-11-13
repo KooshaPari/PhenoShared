@@ -24,6 +24,7 @@ Pony is an actor-model language where data-race freedom is guaranteed by the typ
 | `trn` | No | Yes | Yes | Transferable ownership. Exclusive mutable, but can be consumed by transfer. |
 
 The key insight: **data races are impossible** because the type system enforces:
+
 - No two `iso` references to the same object (uniqueness)
 - `val` references cannot be mutated
 - `ref` references cannot cross actor boundaries
@@ -120,6 +121,7 @@ The critical invariant: during transfer, the source loses access before the dest
 ### 3.1 Design
 
 We can encode Pony-like compile-time safety in Rust using **PhantomData markers** as type parameters. This gives us:
+
 - Zero runtime cost (PhantomData is zero-sized)
 - Compile-time enforcement of LocalityTier and TrustScope constraints
 - No garbage collector overhead
@@ -335,6 +337,7 @@ impl LocalityMarker for Remote {}
 Fabric's failover system (PF-WP-021) can re-plan routes when nodes fail. A route originally at L3PcieP2P might be re-planned to L6Lan. If the seat lease is typed as `TypedSeatLease<SameHost, _>`, the re-planning breaks the type-level guarantee.
 
 **Mitigation:** The markers apply only to the *current* route step, not the lifetime of the connection. At each re-plan boundary, the type is re-validated. This means:
+
 - Typed wrappers exist only within a single route step's execution
 - Re-plan boundaries use runtime `LocalityTier` (the current model)
 - The compile-time markers are a local optimization, not a global invariant

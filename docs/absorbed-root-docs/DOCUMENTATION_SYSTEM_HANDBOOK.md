@@ -211,6 +211,7 @@ hooks:
 The `generate-sidebar.py` script reads doc types and frontmatter to auto-generate `docs/.vitepress/sidebar-auto.ts`.
 
 `srcExclude` patterns (not built into VitePress):
+
 - `docset/**`, `plans/**`, `research/**` (existing)
 - `scratch/**` (Layer 0)
 - `ideas/**`, `debug/**` (Layer 1 raw, included in /lab/ separately)

@@ -110,6 +110,7 @@ bun install → bun run build (per site) → Astro static output
 Pheno is a **Rust Cargo workspace**. PhenoLanding is a **Bun/Node.js Astro monorepo**. These are fundamentally different ecosystems with no shared build toolchain.
 
 **However**, Pheno already hosts non-Rust content:
+
 - `koosha-portfolio/` is an Astro site (same stack as PhenoLanding)
 - `docs/` is VitePress (JS/TS)
 - These exist as standalone directories with independent `package.json` files
@@ -203,6 +204,7 @@ Maintain PhenoLanding as a git submodule. This avoids merge conflicts but adds o
 ### 5.2 Per-Site Conflicts (NONE EXPECTED)
 
 Each site under `sites/` is self-contained with its own:
+
 - `package.json` (no Cargo.toml collision)
 - `astro.config.mjs`
 - `src/`
@@ -214,6 +216,7 @@ Each site under `sites/` is self-contained with its own:
 ### 5.3 Per-Site Inner `.github/` Workflows
 
 Each site has its own `.github/workflows/ci.yml` and `trufflehog.yml`. These are designed for standalone repos. In the merged monorepo, they become inert (GitHub only reads `.github/workflows/` from the default branch root). Options:
+
 - **Delete them**: They won't run in the merged repo
 - **Keep them for reference**: If sites are ever re-extracted
 - **Convert to reusable workflows**: For site-specific CI triggered from root
@@ -276,6 +279,7 @@ Each site has its own `.github/workflows/ci.yml` and `trufflehog.yml`. These are
 PhenoLanding's CI uses a **language-detection pattern**: it scans for `Cargo.toml`, `package.json`, `pyproject.toml`, `go.mod` and runs only relevant jobs. This is ideal for a polyglot monorepo.
 
 **Recommended approach:**
+
 1. Adopt PhenoLanding's `ci.yml` as the base
 2. Add pheno's Rust-specific jobs (cargo-deny, grouped builds)
 3. Add path filters to avoid running Astro CI on Rust-only changes and vice versa
@@ -394,6 +398,7 @@ If landing pages need independent CI/CD, they can be extracted back out. PhenoLa
 ### 11.4 Governance: ADR for Landing Pages
 
 Create an ADR (e.g., ADR-025) documenting:
+
 - Landing pages live under `sites/landing/` in the pheno monorepo
 - Each site is an independent Astro project with its own `package.json`
 - Landing pages are NOT Cargo workspace members

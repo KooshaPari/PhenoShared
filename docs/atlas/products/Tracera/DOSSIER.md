@@ -27,8 +27,6 @@ For each answer, identify actual build roots, public entrypoints, owned state, p
 - Existing tracera-atlas is ALM-oriented; reuse must not redefine the product
 - Persistent model and external engine work state need distinct owners
 
-
-
 ## 4. Comparator and reuse hypotheses
 
 Initial baselines to verify and version-pin:

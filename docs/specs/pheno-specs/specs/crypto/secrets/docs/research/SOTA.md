@@ -42,6 +42,7 @@
 | Max secrets | Unlimited | Unlimited | Unlimited | Unlimited | Unlimited |
 
 **References**:
+
 - [HashiCorp Vault Documentation](https://developer.hashicorp.com/vault/docs) - Secrets management platform
 - [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/) - AWS secrets service
 - [GCP Secret Manager](https://cloud.google.com/secret-manager/docs) - GCP secrets service
@@ -78,6 +79,7 @@
 | Cost per key/month | $1-10 | $1-10 | $1-10 | Free (self-managed) | Free |
 
 **References**:
+
 - [AWS KMS Documentation](https://docs.aws.amazon.com/kms/) - AWS key management
 - [GCP KMS Documentation](https://cloud.google.com/kms/docs) - GCP key management
 - [SOPS](https://github.com/mozilla/sops) - Secrets OPerationS
@@ -116,6 +118,7 @@
 | Custom plugin | Yes | No | No | Yes |
 
 **References**:
+
 - [Vault Authentication](https://developer.hashicorp.com/vault/docs/auth) - Auth methods documentation
 - [Keycloak](https://www.keycloak.org/documentation) - OpenID provider
 - [Ory](https://www.ory.sh/docs/) - Cloud-native identity
@@ -154,6 +157,7 @@
 | Cost | Infrastructure | S3 + Athena | Infrastructure only |
 
 **References**:
+
 - [Vault Audit Devices](https://developer.hashicorp.com/vault/docs/audit) - Audit documentation
 - [CloudTrail](https://docs.aws.amazon.com/awscloudtrail/) - AWS audit service
 - [OpenTelemetry Audit](https://opentelemetry.io/docs/) - Observability standard
@@ -287,6 +291,7 @@ cargo run --release --example bench_cluster -- --nodes 3 --operations 10000
 | Binary size | 25MB | 150MB (plus Go) | N/A | 6x smaller |
 
 **References**:
+
 - [Vault Benchmark](https://github.com/hashicorp/vault-benchmark) - Vault benchmarking tool
 - [AWS Secrets Manager Performance](https://docs.aws.amazon.com/secretsmanager/latest/apireference/) - AWS SM limits
 - [Merkle Tree Verification](https://en.wikipedia.org/wiki/Merkle_tree) - Cryptographic verification
@@ -335,6 +340,7 @@ cargo run --release --example bench_cluster -- --nodes 3 --operations 10000
 8. **Rust-native implementation** for memory safety and performance
 
 **Alternatives Considered**:
+
 - **Building on Vault**: Rejected because of operational complexity and cloud lock-in
 - **Cloud-native only**: Rejected because of multi-cloud requirements
 - **PostgreSQL-based**: Rejected because Raft provides better consistency guarantees
@@ -384,20 +390,20 @@ cargo run --release --example bench_cluster -- --nodes 3 --operations 10000
 
 | Reference | URL | Description | Last Verified |
 |-----------|-----|-------------|--------------|
-| HashiCorp Vault | https://developer.hashicorp.com/vault/docs | Secrets management platform | 2026-04-04 |
-| Rust | https://www.rust-lang.org/ | Systems programming language | 2026-04-04 |
-| Tokio | https://tokio.rs/ | Async runtime for Rust | 2026-04-04 |
-| Serde | https://serde.rs/ | Serialization framework | 2026-04-04 |
-| OpenTelemetry | https://opentelemetry.io/ | Observability framework | 2026-04-04 |
-| Raft | https://raft.github.io/ | Consensus algorithm | 2026-04-04 |
+| HashiCorp Vault | <https://developer.hashicorp.com/vault/docs> | Secrets management platform | 2026-04-04 |
+| Rust | <https://www.rust-lang.org/> | Systems programming language | 2026-04-04 |
+| Tokio | <https://tokio.rs/> | Async runtime for Rust | 2026-04-04 |
+| Serde | <https://serde.rs/> | Serialization framework | 2026-04-04 |
+| OpenTelemetry | <https://opentelemetry.io/> | Observability framework | 2026-04-04 |
+| Raft | <https://raft.github.io/> | Consensus algorithm | 2026-04-04 |
 
 ### 6.2 Academic Papers
 
 | Paper | URL | Institution | Year |
 |-------|-----|-------------|------|
-| "In Search of an Understandable Consensus Algorithm" | https://raft.github.io/raft.pdf | Stanford | 2014 |
-| "Merkle Tree Signature Scheme" | https://www.merkle.us/ | Merkel.us | 1979 |
-| "Zero Trust Architecture" | https://csrc.nist.gov/publications/detail/sp/800-207/final | NIST | 2020 |
+| "In Search of an Understandable Consensus Algorithm" | <https://raft.github.io/raft.pdf> | Stanford | 2014 |
+| "Merkle Tree Signature Scheme" | <https://www.merkle.us/> | Merkel.us | 1979 |
+| "Zero Trust Architecture" | <https://csrc.nist.gov/publications/detail/sp/800-207/final> | NIST | 2020 |
 | "A Study of Secrets Management in Cloud-Native Systems" | MIT CSAIL publication | MIT | 2023 |
 | "Envelope Encryption" | Google Cloud publication | Google | 2021 |
 
@@ -405,22 +411,22 @@ cargo run --release --example bench_cluster -- --nodes 3 --operations 10000
 
 | Standard | Body | URL | Relevance |
 |----------|------|-----|-----------|
-| SOC 2 | AICPA | https://www.aicpa.org/soc2 | Compliance framework |
-| HIPAA | HHS | https://www.hhs.gov/hipaa/ | Healthcare compliance |
-| PCI-DSS | PCI SSC | https://www.pcisecuritystandards.org/ | Payment card compliance |
-| FIPS 140-3 | NIST | https://csrc.nist.gov/projects/cryptographic-module-validation-program | Cryptographic modules |
-| ISO 27001 | ISO | https://www.iso.org/isoiec-27001-information-security.html | Information security |
+| SOC 2 | AICPA | <https://www.aicpa.org/soc2> | Compliance framework |
+| HIPAA | HHS | <https://www.hhs.gov/hipaa/> | Healthcare compliance |
+| PCI-DSS | PCI SSC | <https://www.pcisecuritystandards.org/> | Payment card compliance |
+| FIPS 140-3 | NIST | <https://csrc.nist.gov/projects/cryptographic-module-validation-program> | Cryptographic modules |
+| ISO 27001 | ISO | <https://www.iso.org/isoiec-27001-information-security.html> | Information security |
 
 ### 6.4 Tooling & Libraries
 
 | Tool | Purpose | URL | Alternatives |
 |------|---------|-----|--------------|
-| criterion | Rust benchmarking | https://bheisner.github.io/criterion.rs/ | autometrics |
-| tracing | Structured logging | https://tokio.rs/tokio/structured-logging | log + spans |
-| sqlx | Async database | https://github.com/launchbadge/sqlx | diesel |
-| redis-rs | Redis client | https://github.com/redis-rs/redis | redis |
-| jsonwebtoken | JWT handling | https://github.com/kean/jwt-swift | other JWT libs |
-| OPA | Policy engine | https://www.openpolicyagent.org/ | Casbin |
+| criterion | Rust benchmarking | <https://bheisner.github.io/criterion.rs/> | autometrics |
+| tracing | Structured logging | <https://tokio.rs/tokio/structured-logging> | log + spans |
+| sqlx | Async database | <https://github.com/launchbadge/sqlx> | diesel |
+| redis-rs | Redis client | <https://github.com/redis-rs/redis> | redis |
+| jsonwebtoken | JWT handling | <https://github.com/kean/jwt-swift> | other JWT libs |
+| OPA | Policy engine | <https://www.openpolicyagent.org/> | Casbin |
 
 ---
 

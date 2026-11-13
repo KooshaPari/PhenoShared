@@ -79,6 +79,7 @@
 **Current state:** No provenance generated. The `release.yml` workflow uploads artifacts via `actions/upload-artifact` but produces no attestation.
 
 **Remediation path:**
+
 1. Add `slsa-github-generator/go` workflow to generate signed provenance for Go builds
 2. Add `slsa-github-generator/generic` for Rust binaries
 3. Use `actions/attest-build-provenance` for GitHub-native attestation
@@ -91,6 +92,7 @@
 **Current state:** Builds have full network access. Cargo downloads crates from registries at build time.
 
 **Remediation path:**
+
 1. Pre-populate `CARGO_HOME` vendor directory with `cargo vendor`
 2. Run builds in Docker containers with `--network=none`
 3. Use `actions/cache` to restore vendored deps before build
@@ -102,6 +104,7 @@
 **Current state:** Not verified. Rust builds are mostly deterministic with `Cargo.lock`, but no verification step exists.
 
 **Remediation path:**
+
 1. Add CI job that rebuilds and diffs outputs
 2. Set `RUSTFLAGS="-C link-arg=-Wl,--build-id=none"` for deterministic binary IDs
 3. Strip timestamps via `REPRODUCIBLE_BUILD=1` convention
@@ -113,6 +116,7 @@
 **Current state:** `main` branch has **no branch protection rules**. Direct pushes are possible.
 
 **Remediation path:**
+
 1. Enable branch protection on `main`:
    - Require pull request reviews (at least 1)
    - Require status checks (CI must pass)

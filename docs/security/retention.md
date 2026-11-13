@@ -96,6 +96,7 @@ OmniRoute is the reference repo for PR2 (PR2=1, partial). It has a retention pol
 ## How to validate
 
 After applying:
+
 1. `grep -r "retention" docs/` — should find the new file
 2. `grep "retention" README.md SECURITY.md` — should find references in both
 3. The table has at least 5 rows (source code, build artifacts, issues, user data, backups)

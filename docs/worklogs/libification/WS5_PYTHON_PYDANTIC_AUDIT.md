@@ -1,4 +1,5 @@
 # WS5: Python Configuration Management Audit Report
+
 ## Pydantic-Settings v2.x Standardization Assessment
 
 **Report Date:** 2026-03-29
@@ -76,6 +77,7 @@ class ThegentSettings(BaseSettings):
 ```
 
 **Key Features:**
+
 - Prefix-based environment variables: `THGENT_*`
 - `.env` file auto-loading (no manual `load_dotenv()`)
 - Type validation via Pydantic validators
@@ -85,6 +87,7 @@ class ThegentSettings(BaseSettings):
 #### Data Models (69+ BaseModel classes)
 
 Supporting models for:
+
 - Project registry (`project_registry.py`)
 - Org/project tenancy (`org_tenancy.py`, `project_tenancy.py`)
 - Sandbox configuration (`sandbox.py`)
@@ -138,6 +141,7 @@ Supporting models for:
 #### Issue: Missing pydantic-settings
 
 ⚠️ **Opportunity:** BytePort uses `python-dotenv` and `pydantic` but **NOT `pydantic-settings`**. This suggests:
+
 - Manual `.env` file loading via `load_dotenv()` (not found in audit)
 - OR environment variables only (no `.env` support)
 - Missing centralized settings class
@@ -160,6 +164,7 @@ Supporting models for:
 **Status:** NO CONFIGURATION (Not applicable)
 
 **Projects:**
+
 - `heliosCLI/pyproject.toml` - Streamlit dashboard (no config needed)
 - `heliosCLI/harness/src/harness/teammates.py` - Uses pydantic BaseModel (data models only, not settings)
 - `heliosCLI/packages/heliosbench/` - Benchmark definitions (no config)
@@ -194,6 +199,7 @@ class DelegationRequest(BaseModel):
 **Status:** COMPLIANT (Minimal Python)
 
 **Projects:**
+
 - `thegent-router` (PyO3 binding)
 - `thegent-policy` (PyO3 binding)
 - `thegent-crypto`, `thegent-cache`, `thegent-parser`, etc.
@@ -267,6 +273,7 @@ Total Python Projects Audited: 5
 #### Detailed Steps
 
 1. **Update dependencies**
+
    ```toml
    # apps/byteport/sdk/python/pyproject.toml
    dependencies = [
@@ -278,6 +285,7 @@ Total Python Projects Audited: 5
    ```
 
 2. **Create config module** (if not present)
+
    ```python
    # apps/byteport/sdk/python/byteport/config.py
    from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -293,6 +301,7 @@ Total Python Projects Audited: 5
    ```
 
 3. **Migrate from manual load_dotenv()**
+
    ```python
    # BEFORE (if used)
    from dotenv import load_dotenv
@@ -303,6 +312,7 @@ Total Python Projects Audited: 5
    ```
 
 4. **Add test**
+
    ```python
    def test_byteport_settings_from_env(monkeypatch):
        monkeypatch.setenv("BYTEPORT_TIMEOUT", "60")
@@ -334,7 +344,7 @@ Total Python Projects Audited: 5
 
 ### Short-term (Tier 2 - Optional)
 
-4. ⚠️ **BytePort migration**
+1. ⚠️ **BytePort migration**
    - Create work package (low priority)
    - Reference thegent pattern
    - Benefit: Type-safe config, auto-validation, single source of truth
@@ -556,13 +566,13 @@ class ProjectRegistry(BaseModel):
 
 ### Priority 2: CI/CD (SHORT-TERM)
 
-2. **Add pydantic version check to CI**
+1. **Add pydantic version check to CI**
    - Ensure all new projects use v2.x+
    - Block merges with v1 dependencies
 
 ### Priority 3: Harmonization (OPTIONAL)
 
-3. **BytePort migration (deferred)**
+1. **BytePort migration (deferred)**
    - Add pydantic-settings support
    - Create BaseSettings class
    - Migrate from manual config loading
@@ -570,7 +580,7 @@ class ProjectRegistry(BaseModel):
 
 ### Priority 4: Audit (REFERENCE)
 
-4. **Periodic re-audit**
+1. **Periodic re-audit**
    - Every 12 months
    - Check for new v1 projects
    - Verify pydantic version upgrades

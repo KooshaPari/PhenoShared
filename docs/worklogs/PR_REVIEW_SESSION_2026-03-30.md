@@ -1,6 +1,7 @@
 # PR & Branch Review Summary — 2026-03-30 (Session 2)
 
 ## Previous Session (Earlier 2026-03-30)
+
 Previous session merged PRs #880, #889, #891 and reviewed 7 open PRs on thegent.
 See original notes below for PR #882, #886, #483 details.
 
@@ -9,6 +10,7 @@ See original notes below for PR #882, #886, #483 details.
 ## Session 2: phenotype-infrakit Branch Audit
 
 ### Workspace Fixes Applied
+
 - **Cargo.toml merge conflict** — resolved `<<<<<<< HEAD` markers from parallel agent work
 - **`phenotype-validation`** — `tokio::sync::RwLock` → `std::sync::RwLock` (sync context)
 - **`phenotype-validation`** — removed dangling-ref `impl Default for &RequiredRule`
@@ -16,11 +18,13 @@ See original notes below for PR #882, #886, #483 details.
 - **`phenotype-telemetry`** — fixed `LogLevel::from_str` → `LogLevel::parse` in tests
 
 ### Build Environment
+
 Disk at 92%, linker SIGKILL failures. Static review used. Full build deferred.
 
 ### Branch Review Results
 
 **Deleted (10 branches):**
+
 - `feat/phenosdk-decompose-core` — duplicates main's existing domain model
 - `docs/adr-002-event-sourcing-strategy` — unresolvable merge conflicts
 - `docs/worklog-wave-93` — entire AgilePlus project dump (wrong repo)
@@ -44,6 +48,7 @@ Disk at 92%, linker SIGKILL failures. Static review used. Full build deferred.
 | `chore/loc-reduction-worklog-20260329` | CHERRY-PICK | Best doc content (ARCHITECTURE.md) |
 
 ### Stacked PR Plan
+
 1. `feat/phenotype-macros` — proc macros (independent)
 2. String compression/normalization extraction
 3. HttpTransport trait extraction
@@ -51,6 +56,7 @@ Disk at 92%, linker SIGKILL failures. Static review used. Full build deferred.
 5. Workspace reorg + shared-config
 
 ### Cross-Agent Notes
+
 Another agent actively modifying Cargo.toml (expanded to 31 members).
 Active worktrees at `.worktrees/` — don't delete those branches without removing worktrees.
 
@@ -59,6 +65,7 @@ Active worktrees at `.worktrees/` — don't delete those branches without removi
 ## Original Session Notes (2026-03-30 Earlier)
 
 ### Merged PRs (5)
+
 | PR # | Title | Result |
 |------|-------|--------|
 | 880 | chore(thegent): add ADR and PLAN specs | Merged |
@@ -66,6 +73,7 @@ Active worktrees at `.worktrees/` — don't delete those branches without removi
 | 891 | Add CodeQL analysis workflow | Merged |
 
 ### PRs Needing Attention (from earlier session)
+
 | PR # | Status | Action |
 |------|--------|--------|
 | 882 | Merging conflict | Needs rebase on updated main |
@@ -73,6 +81,7 @@ Active worktrees at `.worktrees/` — don't delete those branches without removi
 | 483 | phenotype-infrakit | Conflict resolution needed |
 
 ### Architectural Improvements (thegent)
+
 | File | LOC | Target | Strategy |
 |------|-----|--------|----------|
 | phench/service.py | 2,423 | 500 | Extract to modules |
@@ -82,5 +91,6 @@ Active worktrees at `.worktrees/` — don't delete those branches without removi
 | agents/codex_proxy.py | 1,264 | 500 | Extract crew |
 
 ### References
+
 - ADR-015: docs/adr/ADR-015-crate-organization.md
 - thegent Architecture: platforms/thegent/ARCHITECTURE_OVERVIEW.md

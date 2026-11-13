@@ -56,12 +56,14 @@ The convergence of these disciplines—security patterns and threat modeling—e
 ```
 
 **Key Principles:**
+
 - Each layer must provide value independently
 - Layer failures should not cascade
 - Monitoring at every layer
 - Principle of least privilege at each boundary
 
 **Implementation Example:**
+
 ```
 Web Application Defense in Depth:
 
@@ -115,6 +117,7 @@ User Request
 | Break-Glass | Emergency access | Incident response |
 
 **RBAC vs ABAC vs PBAC:**
+
 ```
 RBAC: Role → Permissions
      "Admin" → [read, write, delete]
@@ -128,6 +131,7 @@ PBAC: Policy Rules → Decision
 ```
 
 **Least Privilege Implementation:**
+
 ```
 Permission Levels:
 
@@ -173,6 +177,7 @@ Access      │ Admin      │ Operations │ Data       │ Info
 | Permissions | Permissive | Restrictive |
 
 **Example - Database Security:**
+
 ```
 Insecure Defaults (Traditional):
 ┌─────────────────────────────────────────┐
@@ -214,6 +219,7 @@ Secure by Default (Modern):
 | Door lock | Lock (if power fails) |
 
 **Fail Safe vs Fail Secure:**
+
 ```
 Fail Safe (Safety-Critical):    Fail Secure (Security-Critical):
 ───────────────────────────     ─────────────────────────────
@@ -243,6 +249,7 @@ on replication failure          on authentication failure
 | Segregation | Different teams for different functions |
 
 **Example - Financial Transaction:**
+
 ```
 Transaction Approval Flow:
 
@@ -267,6 +274,7 @@ Transaction Approval Flow:
 **Solution**: Use different types of controls at each layer
 
 **Defense in Breadth Strategy:**
+
 ```
 Single Vendor Stack (Risky):    Diverse Stack (Robust):
 ┌─────────────┐                  ┌─────────────┐
@@ -303,6 +311,7 @@ all layers                       needed to breach layers
 | Data | Access patterns, downloads | DLP alerts, access anomalies |
 
 **Audit Trail Requirements:**
+
 ```
 Comprehensive Audit Log:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -341,12 +350,14 @@ Policy Justification: User is member of Finance group
 **Pattern**: Protect stored data from unauthorized access
 
 **Implementation:**
+
 - **Database Encryption**: Transparent Data Encryption (TDE)
 - **File Encryption**: Full disk encryption (FDE)
 - **Object Storage**: Client-side or server-side encryption
 - **Key Management**: Hardware Security Modules (HSM), KMS
 
 **Encryption at Rest Tiers:**
+
 ```
 Storage Layer Encryption:
 
@@ -378,12 +389,14 @@ Storage Layer Encryption:
 **Pattern**: Protect data during transmission
 
 **Implementation:**
+
 - **TLS 1.3**: Latest transport security standard
 - **mTLS**: Mutual authentication with certificates
 - **VPN**: Encrypted network tunnels
 - **Application-level**: End-to-end encryption
 
 **Encryption in Transit Hierarchy:**
+
 ```
 Security Level    │ Protocol          │ Use Case
 ──────────────────┼───────────────────┼────────────────────
@@ -399,6 +412,7 @@ Basic             │ TLS 1.1/1.0       │ Legacy (deprecated)
 **Pattern**: Data encrypted from source to destination, unreadable by intermediaries
 
 **Implementation:**
+
 - **Client-Side Encryption**: Data encrypted before leaving client
 - **Zero-Knowledge Architecture**: Service cannot access plaintext
 - **Key Escrow Alternatives**: Distributed key management
@@ -430,12 +444,14 @@ Server sees only encrypted data
 **Pattern**: Maintain secure stateful connections between entities
 
 **Implementation:**
+
 - **Session Tokens**: Cryptographically secure, random tokens
 - **Token Binding**: Bind tokens to client characteristics
 - **Session Timeout**: Automatic expiration
 - **Concurrent Session Control**: Limit parallel sessions
 
 **Secure Session Architecture:**
+
 ```
 Session Establishment:
 
@@ -492,6 +508,7 @@ STRIDE is a threat classification model developed by Microsoft for identifying s
 | **E**levation of Privilege | Gaining unauthorized access | Exploiting privilege escalation bug | Authorization, least privilege |
 
 **STRIDE per Element:**
+
 ```
 Component: Web Application API
 
@@ -534,6 +551,7 @@ Component: Web Application API
 Attack trees provide a structured way to analyze how an attacker might achieve a goal.
 
 **Attack Tree Structure:**
+
 ```
 Goal: Steal Customer Credit Card Data
 
@@ -574,6 +592,7 @@ Goal: Steal Customer Credit Card Data
 | Backup Extraction | Access backups | Medium | High | Low |
 
 **Calculating Attack Probability:**
+
 ```
 AND Node: Multiply probabilities
 OR Node:  Use highest probability (attacker picks easiest)
@@ -601,6 +620,7 @@ DREAD provides a quantitative risk scoring methodology:
 | **D**iscoverability | How easily can the vulnerability be found | 0-10 |
 
 **Risk Score Calculation:**
+
 ```
 Total Score = (Damage + Reproducibility + Exploitability + AffectedUsers + Discoverability) / 5
 
@@ -612,6 +632,7 @@ Interpretation:
 ```
 
 **DREAD Example:**
+
 ```
 Threat: SQL Injection in Login Form
 
@@ -693,6 +714,7 @@ The NIST CSF provides a comprehensive approach to security risk management.
 ISO 27001 is the international standard for information security management systems (ISMS).
 
 **ISO 27001 Structure:**
+
 ```
 ISO/IEC 27001:2022 (Annex A Controls)
 
@@ -802,6 +824,7 @@ Implementation Group 3 (Organizational):
 ```
 
 **CIS Controls vs NIST Mapping:**
+
 ```
 NIST CSF Function  │ CIS Control Example
 ───────────────────┼────────────────────────────────
@@ -843,6 +866,7 @@ The OWASP Top 10 represents the most critical web application security risks.
 | A10:2021 | SSRF | Server-side request forgery | URL validation, deny-list, network segmentation |
 
 **OWASP Proactive Controls:**
+
 ```
 C1: Define Security Requirements
 C2: Leverage Security Frameworks and Libraries

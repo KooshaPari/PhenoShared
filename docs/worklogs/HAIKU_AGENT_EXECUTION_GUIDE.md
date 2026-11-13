@@ -1,4 +1,5 @@
 # Haiku Agent Execution Guide — Phase 3 Optimization
+
 ## Quick-Reference for Cheaper Agent Execution (15-minute onboarding)
 
 ---
@@ -16,18 +17,22 @@ Complete 8 work streams to finalize Phase 3 optimization. Each work stream = 1 h
 ## 📋 Work Streams (Pick One, Complete It)
 
 ### Stream 1: HS1-Merge
+
 **Task:** Merge feat/phenotype-crypto-implementation to main
 **Effort:** 10-15 min
 **Steps:**
+
 1. Run: `cargo check` on current branch (verify no errors)
 2. Create PR: `gh pr create --title "feat(crypto): integrate phenotype-crypto"` → main
 3. Merge when ready
 4. Verify: `cargo check --all` on main after merge
 
 ### Stream 2: HS2-CacheAdapter
+
 **Task:** Standardize crates/phenotype-cache-adapter/Cargo.toml
 **Effort:** 5 min
 **Changes:**
+
 ```toml
 # Before:
 version = "0.2.0"
@@ -43,9 +48,11 @@ dashmap.workspace = true
 ```
 
 ### Stream 3: HS2-Logging
+
 **Task:** Standardize crates/phenotype-logging/Cargo.toml
 **Effort:** 3 min
 **Changes:**
+
 ```toml
 # Add to [package] section:
 version.workspace = true
@@ -54,9 +61,11 @@ license.workspace = true
 ```
 
 ### Stream 4: HS2-MCP
+
 **Task:** Fix crates/phenotype-mcp/Cargo.toml
 **Effort:** 5-10 min
 **Changes:**
+
 ```toml
 # Change:
 dirs = "5.0"
@@ -66,9 +75,11 @@ dirs.workspace = true
 ```
 
 ### Stream 5: HS3-RemoveUnused
+
 **Task:** Remove unused workspace dependencies
 **Effort:** 5 min
 **Steps:**
+
 1. Open: Cargo.toml
 2. Find: `moka = { version = "0.12", features = ["sync"] }`
 3. Find: `lru = "0.12"`
@@ -78,9 +89,11 @@ dirs.workspace = true
 7. Verify: No new errors
 
 ### Stream 6: HS4-GitCore
+
 **Task:** Fix crates/phenotype-git-core/src/lib.rs errors
 **Effort:** 15-20 min
 **Errors to Fix:**
+
 - E0061: function takes more arguments
 - E0282: type annotations needed
 - E0599: method not found
@@ -88,28 +101,34 @@ dirs.workspace = true
 **Action:** Review git2 v0.20 docs, update API calls
 
 ### Stream 7: HS4-StringRegex
+
 **Task:** Fix phenotype-string regex compilation
 **Effort:** 5-10 min
 **Error:** `error[E0433]: failed to resolve: use of unresolved module or unlinked crate regex`
 **Fix:**
-1. Check: Does Cargo.toml have `regex = "1"` in workspace.dependencies? 
+
+1. Check: Does Cargo.toml have `regex = "1"` in workspace.dependencies?
 2. If no: Add it
 3. Run: `cargo clean && cargo check -p phenotype-string`
 
 ### Stream 8: HS5-Roadmap
+
 **Task:** Create docs/worklogs/OPTIMIZATION_ROADMAP_P1_P2_P3.md
 **Effort:** 20-30 min
 **Content:** Table of all P1-P3 optimization items (see PHASE_3_OPTIMIZATION_WORKLOG for format)
 
 ### Stream 9: HS5-Summary
+
 **Task:** Create docs/worklogs/PHASE_3_COMPLETION_SUMMARY_2026-03-30.md
 **Effort:** 15-20 min
 **Contents:** Summarize all 8 work streams completed
 
 ### Stream 10: HS6-PRIntegration
+
 **Task:** Track and merge open PRs
 **Effort:** 30-45 min
 **Steps:**
+
 1. Run: `gh pr list --state open`
 2. For each PR: Check if ready to merge (CI status, no conflicts)
 3. Merge ready ones: `gh pr merge <PR#>`
@@ -140,6 +159,7 @@ EOF
 ```
 
 **Examples:**
+
 - `fix(cache-adapter): standardize to workspace dependencies`
 - `refactor(logging): use workspace.package metadata`
 - `chore(workspace): remove unused moka, lru, parking_lot`
@@ -149,15 +169,19 @@ EOF
 ## 🔧 Troubleshooting
 
 ### Problem: `cargo check` fails after my changes
+
 **Solution:** Check that all `workspace = true` references match actual workspace.dependencies entries
 
 ### Problem: Build takes too long
+
 **Solution:** Use `cargo check` (not `cargo build`) - it's 3-5x faster
 
 ### Problem: PR merge conflicts
+
 **Solution:** Run `git pull origin main --rebase` before merging
 
 ### Problem: "Type annotations needed" error
+
 **Solution:** Add explicit type hint: `let var: Type = ...;`
 
 ---
@@ -165,6 +189,7 @@ EOF
 ## 📊 Execution Order (Recommended)
 
 **Batch 1 (Start First):**
+
 1. HS1-Merge (critical path)
 2. HS3-RemoveUnused (can run in parallel)
 
@@ -244,4 +269,3 @@ EOF
 ---
 
 **Ready? Pick a stream above and get started! You've got this. 🚀**
-

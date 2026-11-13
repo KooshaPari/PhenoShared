@@ -391,6 +391,7 @@ agileplus agent test cursor --prompt "Write hello world"
 ```
 
 This runs a minimal test through your harness and validates:
+
 - Harness starts without error
 - Prompt is delivered correctly
 - Output is collected successfully
@@ -466,6 +467,7 @@ All harnesses must produce consistent output. The orchestrator expects:
 ## Common Pitfalls
 
 1. **Forgetting to set working directory:** Agent can't find files
+
    ```rust
    // ✗ WRONG: Runs in current directory
    cmd.spawn()
@@ -475,6 +477,7 @@ All harnesses must produce consistent output. The orchestrator expects:
    ```
 
 2. **Not handling timeouts:** Process hangs indefinitely
+
    ```rust
    // ✗ WRONG: No timeout
    let output = child.wait_with_output().await?;
@@ -484,6 +487,7 @@ All harnesses must produce consistent output. The orchestrator expects:
    ```
 
 3. **Not extracting commits:** Orchestrator can't track work
+
    ```rust
    // ✗ WRONG: Returns empty commit list
    commits: vec![],
@@ -493,6 +497,7 @@ All harnesses must produce consistent output. The orchestrator expects:
    ```
 
 4. **Hardcoding paths:** Breaks in CI/Docker
+
    ```rust
    // ✗ WRONG: Hardcoded path
    let binary = "/usr/local/bin/claude";

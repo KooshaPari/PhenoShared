@@ -46,6 +46,7 @@ The commit is on main. Branch is stale.
 | **Recommendation** | **REVIEW and potentially MERGE** after verifying `fabric-daemon` code compiles with v10. Dep update is valid but requires a build check. |
 
 Key changes in jsonwebtoken 10:
+
 - Removed `ring` dependency, now uses `signature` crate
 - Added `getrandom` dependency
 - Semver major bump = possible API breakage
@@ -91,6 +92,7 @@ Key changes in jsonwebtoken 10:
 ### Dependency Upgrade Note
 
 If upgrading the OpenTelemetry stack in the future, all crates must be bumped together:
+
 ```
 opentelemetry = "0.27"      # -> latest compatible
 opentelemetry_sdk = "0.27"   # -> latest compatible

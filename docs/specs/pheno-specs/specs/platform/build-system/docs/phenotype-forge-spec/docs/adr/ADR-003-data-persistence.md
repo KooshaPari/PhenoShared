@@ -41,6 +41,7 @@ We have decided to adopt a **polyglot persistence** strategy with the following 
 ### Primary Data Store
 
 **Relational Database** for primary persistence:
+
 - ACID transactions for consistency
 - Rich query capabilities
 - Mature operational tooling
@@ -51,6 +52,7 @@ We have decided to adopt a **polyglot persistence** strategy with the following 
 ### Caching Layer
 
 **In-Memory Cache** for hot data:
+
 - Sub-millisecond read access
 - Reduced load on primary store
 - Configurable TTL and eviction policies
@@ -60,6 +62,7 @@ We have decided to adopt a **polyglot persistence** strategy with the following 
 ### Event Store (Optional)
 
 **Append-Only Event Log** for critical events:
+
 - Immutable audit trail
 - Event sourcing capability
 - Replay and reconstruction support
@@ -187,7 +190,6 @@ We have decided to adopt a **polyglot persistence** strategy with the following 
 | $(date +%Y-%m-%d) | Validated with load testing | DBA Team |
 | $(date +%Y-%m-%d) | Accepted | Tech Lead |
 
-
 ## Additional Implementation Considerations
 
 ### Performance Characteristics
@@ -258,4 +260,3 @@ This decision should be revisited when:
 - Project PLAN.md — Implementation roadmap
 - Project PRD.md — Product requirements
 - Other ADRs in this directory — Related architectural decisions
-

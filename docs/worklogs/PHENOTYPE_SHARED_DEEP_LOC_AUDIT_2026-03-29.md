@@ -1,5 +1,7 @@
 # Phenotype-Shared Deep LOC Audit (2026-03-29)
+
 ## Executive Summary
+
 **Audit Date**: 2026-03-29  
 **Total Rust LOC**: 5,110 (src) + 306 (tests)  
 **Total Python LOC**: 3,841 (src) + 900 (tests)  
@@ -18,6 +20,7 @@
 - **Source**: 1,429 LOC (6 files)
 - **Tests**: 0 LOC (0 files)
 - **Dependencies**: 7 total
+
   ```
   - dirs
   - figment
@@ -27,6 +30,7 @@
   - toml
   - tracing
   ```
+
 - **Large Files** (>300 LOC):
   - `src/unified.rs`: 423 lines
   - `src/loader.rs`: 358 lines
@@ -48,6 +52,7 @@
 - **Tests**: 148 LOC (1 files)
 - **Test Ratio**: 0.30 - ⚠ Low
 - **Dependencies**: 4 total
+
   ```
   - serde
   - serde_json
@@ -60,11 +65,13 @@
 - **Source**: 443 LOC (1 files)
 - **Tests**: 0 LOC (0 files)
 - **Dependencies**: 3 total
+
   ```
   - serde
   - serde_json
   - thiserror
   ```
+
 - **Large Files** (>300 LOC):
   - `src/lib.rs`: 443 lines
 
@@ -76,6 +83,7 @@
 ## 2. Python Packages Analysis
 
 **Total Python LOC**: 3,841 lines of code
+
 ### src
 
 - **Total**: 3,144 LOC (26 files)
@@ -89,12 +97,15 @@
 ## 3. Cross-Language Duplication Patterns
 
 ### Error Handling Duplication
+
 Crates with error handling modules: phenotype-config-core, phenotype-policy-engine
 
 **Recommendation**: Consolidate into phenotype-error-core
 
 ### Configuration Patterns
+
 ### Loading/Initialization Patterns
+
 Crates with loader modules: phenotype-config-core, phenotype-policy-engine
 
 **Recommendation**: Share loader abstractions
@@ -102,7 +113,6 @@ Crates with loader modules: phenotype-config-core, phenotype-policy-engine
 ## 4. Decomposition Analysis
 
 ### Crate Interdependencies
-
 
 ### Extraction Candidates
 
@@ -192,7 +202,6 @@ Crates with loader modules: phenotype-config-core, phenotype-policy-engine
 | Avg Crate Size | 851 LOC |
 | Largest Crate | phenotype-config-core |
 
-
 ---
 
 ## 8. Detailed Dependency Analysis
@@ -200,6 +209,7 @@ Crates with loader modules: phenotype-config-core, phenotype-policy-engine
 ### phenotype-config-core
 
 **External Dependencies** (9 total):
+
 - `dirs`
 - `figment`
 - `serde`
@@ -215,6 +225,7 @@ Crates with loader modules: phenotype-config-core, phenotype-policy-engine
 ### phenotype-error-core
 
 **External Dependencies** (4 total):
+
 - `anyhow`
 - `serde`
 - `serde_json`
@@ -225,6 +236,7 @@ Crates with loader modules: phenotype-config-core, phenotype-policy-engine
 ### phenotype-health
 
 **External Dependencies** (4 total):
+
 - `serde`
 - `serde_json`
 - `thiserror`
@@ -416,4 +428,3 @@ Estimated complexity by crate (based on nested conditions/loops):
 2. **Define Clear Boundaries**
    - Use workspace metadata to document dependencies
    - Enforce with import-linter
-

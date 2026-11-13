@@ -3,6 +3,7 @@
 ## Cargo Workspace Audit (2026-03-30)
 
 ### Primary Report
+
 - **CARGO_WORKSPACE_AUDIT_2026-03-30.md** (453 lines, 17KB)
   - Comprehensive audit of root Cargo.toml and workspace configuration
   - Analysis of 7 workspace members
@@ -13,6 +14,7 @@
   - Version consistency verification
 
 ### Quick References
+
 - **CARGO_AUDIT_QUICK_REFERENCE.md** (80 lines, 2.4KB)
   - At-a-glance summary
   - Critical issues highlighted
@@ -35,12 +37,14 @@
 **Version**: Perfect consistency at 0.2.0 across all members
 
 ### Critical Issues
+
 1. 🔴 12 phenotype-* crates removed from members but still exist
 2. 🔴 23 agileplus-* crates belong to separate workspace but mixed in directory
 3. 🟡 8 unused workspace dependencies candidates for removal/documentation
 4. 🟡 5 aspirational dependencies need intent documentation
 
 ### Key Quality Metrics
+
 | Metric | Status |
 |--------|--------|
 | Version Consistency | ✓ Perfect (0.2.0) |
@@ -55,6 +59,7 @@
 ## Other Audit Reports (Historical)
 
 ### Previous Audits (2026-03-30)
+
 - **WORKSPACE_ORPHANS_AND_STALE_2026-03-30.md** — Analysis of orphaned and stale artifacts
 - **VIBEPROXY_ROUTING_AUDIT_2026-03-30.md** — VibeProxy routing configuration audit
 - **CONFIG_MIGRATION_PLAN.md** — Configuration consolidation and migration strategy
@@ -64,6 +69,7 @@
 - **TASKS_3_4_5_COMPLETION_REPORT.md** — Task completion metrics and reporting
 
 ### Workspace Audits
+
 - **2026-03-30-root-workspace-audit.md** — Root workspace summary
 - **2026-03-30-heliosCLI-audit.md** — heliosCLI workspace audit
 - **2026-03-30-agent-wave-audit.md** — Agent-wave audit
@@ -74,15 +80,18 @@
 ## How to Use These Reports
 
 ### For Quick Overview
+
 1. Start with **CARGO_AUDIT_QUICK_REFERENCE.md**
 2. Review critical issues section
 
 ### For Complete Understanding
+
 1. Read **CARGO_WORKSPACE_AUDIT_2026-03-30.md** (sections 1-5)
 2. Reference **CARGO_MEMBERS_INVENTORY.md** for detailed tables
 3. Check recommendations section for action items
 
 ### For Implementation
+
 1. Review Phase 1 recommendations in main audit (immediate clarity)
 2. Use CARGO_MEMBERS_INVENTORY.md for crate disposition decisions
 3. Execute recommendations in specified order
@@ -93,16 +102,19 @@
 ## Key Recommendations
 
 ### Immediate (1 day)
+
 1. Clarify phenotype-infrakit scope vs AgilePlus scope
 2. Decide: move agileplus-* to separate workspace or add to members
 3. Investigate 12 recently-removed crates
 
 ### Short-term (1-2 days)
+
 1. Remove 8 unused workspace dependencies
 2. Document 5 aspirational dependencies with roadmap
 3. Archive or restore 12 removed crates
 
 ### Medium-term (1 week)
+
 1. Update workspace documentation with clear organization
 2. Establish crate ownership and lifecycle policies
 3. Create WORKSPACE_ORGANIZATION.md with guidelines
@@ -125,7 +137,7 @@ INDEX.md                                 (This file)
 ## Audit Metadata
 
 - **Date**: 2026-03-30
-- **Repository**: phenotype-infrakit (https://github.com/KooshaPari/phenotype-infrakit)
+- **Repository**: phenotype-infrakit (<https://github.com/KooshaPari/phenotype-infrakit>)
 - **Scope**: Root Cargo.toml workspace configuration
 - **Analysis Method**: Static file analysis, grep patterns, direct inspection
 - **Confidence Level**: High
@@ -138,6 +150,7 @@ INDEX.md                                 (This file)
 Recommended re-audit date: **2026-04-15** (after Phase 1 recommendations are implemented)
 
 Track progress:
+
 - [ ] Clarify repository boundaries
 - [ ] Resolve 12 removed crates
 - [ ] Remove/document unused dependencies

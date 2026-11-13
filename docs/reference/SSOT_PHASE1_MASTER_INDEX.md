@@ -20,10 +20,12 @@
 ## Document Overview
 
 ### 1. Executive Summary
+
 **File:** `docs/reference/SSOT_PHASE1_EXECUTIVE_SUMMARY.md`
 **Length:** 14 KB (250 lines)
 **Audience:** Executives, project sponsors, team leads
 **Contains:**
+
 - What we're building (specs governance system)
 - 3 core components overview
 - 5 work packages summary
@@ -37,10 +39,12 @@
 ---
 
 ### 2. Detailed Implementation Plan
+
 **File:** `docs/reference/SSOT_PHASE1_IMPLEMENTATION_PLAN.md`
 **Length:** 31 KB (550 lines)
 **Audience:** Project leads, engineers (all disciplines)
 **Contains:**
+
 - Week 1 breakdown (5 days × 8h)
 - Week 2 breakdown (5 days × 8h)
 - Day-by-day tasks with dependencies
@@ -53,6 +57,7 @@
 **Key takeaway:** 6 major tasks across 10 days, clear execution path
 
 **Task Breakdown:**
+
 | Task | Effort | Owner | Days |
 |------|--------|-------|------|
 | 1.1: Branch Protection | 4h | DevOps | 1-2 |
@@ -71,10 +76,12 @@
 ---
 
 ### 3. Agent Workflow Guide
+
 **File:** `docs/reference/SSOT_PHASE1_AGENT_WORKFLOW.md`
 **Length:** 21 KB (400 lines)
 **Audience:** All agents, team leads
 **Contains:**
+
 - Agent branching pattern (`specs/agent-<name>-<task>`)
 - Commit message format with 4+ examples
 - Step-by-step workflow (create, edit, validate, push)
@@ -91,6 +98,7 @@
 **Key takeaway:** Clear, step-by-step process agents follow for every spec change
 
 **Example Workflows:**
+
 1. **Workflow A:** Agent updates single FR (4 commits shown)
 2. **Workflow B:** Agent adds multiple specs (6 commits shown)
 3. **Workflow C:** Agent resolves merge conflict (step-by-step)
@@ -98,10 +106,12 @@
 ---
 
 ### 4. Auto-Merge Service Architecture
+
 **File:** `docs/reference/AUTO_MERGE_SERVICE_ARCHITECTURE.md`
 **Length:** 17 KB (350 lines)
 **Audience:** Architects, infrastructure engineers, senior developers
 **Contains:**
+
 - Component architecture (5 pieces)
 - Service specification (Rust implementation)
 - Data flow sequences (3 scenarios)
@@ -115,6 +125,7 @@
 **Key takeaway:** Detailed technical design of batch-merger service (implementation-ready)
 
 **Components:**
+
 1. **Batch Merger** (Rust microservice, ~400 LOC)
    - `list_agent_branches()` — Find all specs/agent-* branches
    - `validate_branch()` — Check markdown, Spec-Traces, FR↔Test
@@ -128,10 +139,12 @@
 ---
 
 ### 5. Work Packages Breakdown
+
 **File:** `docs/reference/SSOT_PHASE1_WORK_PACKAGES.md`
 **Length:** 20 KB (380 lines)
 **Audience:** Team leads, work package owners
 **Contains:**
+
 - 5 work packages (WP1.1-1.5) with full specifications
 - Dependency graph (DAG)
 - Team assignments & responsibilities
@@ -161,17 +174,20 @@
 ## Reading Paths by Role
 
 ### If You're a Project Sponsor/Executive
+
 1. Read: **Executive Summary** (10 min)
 2. Decide: Approve Phase 1 investment?
 3. Action: Assign work packages to team leads
 
 ### If You're a Team Lead
+
 1. Read: **Executive Summary** (10 min)
 2. Read: **Work Packages** (20 min)
 3. Read: **Implementation Plan** details for your tasks
 4. Action: Assign WP to team members, track progress
 
 ### If You're an Engineer (Any Discipline)
+
 1. Read: **Implementation Plan** (30 min) — Find your task
 2. Read: **Work Packages** (20 min) — Understand full context
 3. Read task-specific docs:
@@ -181,12 +197,14 @@
 4. Action: Clone starter code, begin implementation
 
 ### If You're an Agent (Using SSOT)
+
 1. Read: **Agent Workflow Guide** (20 min)
 2. Run: `scripts/agent-setup.sh <your-name>`
 3. Follow: Workflow A (update single FR)
 4. Reference: Troubleshooting section (as needed)
 
 ### If You're an Architect/Infrastructure Designer
+
 1. Read: **Auto-Merge Service Architecture** (25 min)
 2. Read: **Implementation Plan** Task 2.1 (merge orchestrator)
 3. Review: GitHub Actions workflow design
@@ -197,17 +215,20 @@
 ## Cross-References & Links
 
 ### Dependency Chains
+
 - **Phase 1 → Phase 2:** See "Next Steps" in Work Packages
 - **SSOT Phase 1 → AgilePlus:** See Integration section
 - **Specs/Main → Spec Registry:** See WP1.2
 
 ### Related Documents (External)
+
 - **Main governance:** `/repos/CLAUDE.md`
 - **AgilePlus specs:** `/AgilePlus/kitty-specs/`
 - **Agent instructions:** `/AGENTS.md`
 - **Phase execution:** Previous phase docs in `docs/reference/`
 
 ### Implementation Resources
+
 - **Starter code:** `libs/phenotype-batch-merger/` (stub)
 - **GitHub Actions templates:** `.github/workflows/` (to be created)
 - **Scripts location:** `scripts/` (validation, hooks, utilities)
@@ -217,6 +238,7 @@
 ## Key Metrics Dashboard
 
 ### Baseline (Current State)
+
 | Metric | Value | Status |
 |--------|-------|--------|
 | Specs completeness | 78/100 | 🟡 Partial |
@@ -226,6 +248,7 @@
 | Agent adoption (SSOT) | 0% | ⚪ Not started |
 
 ### Target (After Phase 1)
+
 | Metric | Value | Status |
 |--------|-------|--------|
 | Specs completeness | 95/100 | 🟢 High |
@@ -239,6 +262,7 @@
 ## Quick Lookup Tables
 
 ### Tasks by Duration
+
 | Duration | Tasks |
 |----------|-------|
 | 4h | WP1.1 (branch protection) |
@@ -246,6 +270,7 @@
 | 8h+ | WP1.3 (merge), WP1.5 (onboarding) |
 
 ### Tasks by Owner
+
 | Owner | WPs |
 |-------|-----|
 | DevOps | WP1.1, WP2.2 (4h + 6h) |
@@ -255,12 +280,14 @@
 | Tech Writer | WP1.5 (documentation) |
 
 ### Critical Path
+
 1. WP1.1 (Branch setup) — 4h
 2. WP1.2 (Registry) — 6h
 3. WP1.5 (Onboarding) — 12h
 **Total:** 22 sequential hours (+ parallel WP1.3, WP1.4)
 
 ### Parallelizable Work
+
 - WP1.1 + WP1.2 (both start Day 1-2)
 - WP1.3 + WP1.4 (both start Day 3-4)
 - All finalized by Day 10
@@ -270,18 +297,21 @@
 ## Checklist for Getting Started
 
 ### Day 1 (Today)
+
 - [ ] Review Executive Summary
 - [ ] Approve Phase 1 investment
 - [ ] Assign WP owners to team leads
 - [ ] Schedule kickoff meeting
 
 ### Week 1 Kickoff
+
 - [ ] All-hands overview (30 min)
 - [ ] WP owners read implementation plan
 - [ ] Engineers start assigned WPs
 - [ ] Create #ssot-phase1 Slack channel
 
 ### Week 1 Progress
+
 - [ ] WP1.1 complete (branch setup)
 - [ ] WP1.2 foundation (registry structure)
 - [ ] WP1.3 underway (merge service)
@@ -289,6 +319,7 @@
 - [ ] Daily standup (15 min)
 
 ### Week 2 Progress
+
 - [ ] WP1.3 complete (auto-merge working)
 - [ ] WP1.4 complete (CI validation)
 - [ ] WP1.5 underway (agent onboarding)
@@ -296,6 +327,7 @@
 - [ ] Daily standup (15 min)
 
 ### Week 2 Final (Days 9-10)
+
 - [ ] Final testing & QA
 - [ ] Documentation finalized
 - [ ] Team trained
@@ -303,6 +335,7 @@
 - [ ] Deployment approval
 
 ### Post-Phase 1 (Week of 2026-04-11)
+
 - [ ] Go/no-go decision
 - [ ] Retrospective meeting (1h)
 - [ ] Phase 1 closure report
@@ -352,22 +385,26 @@ A: Batch processing scales to 100+ agents. Just increase batch interval (5 min �
 ## Next Actions
 
 ### For Sponsors/Executives
+
 1. Read Executive Summary (10 min)
 2. Approve $8,000 investment
 3. Schedule team lead assignments
 
 ### For Team Leads
+
 1. Read Executive Summary (10 min)
 2. Read Work Packages (20 min)
 3. Identify which WP you'll own
 4. Schedule team kickoff
 
 ### For Engineers
+
 1. Wait for WP assignment from lead
 2. Read relevant implementation plan tasks
 3. Clone starter code & begin
 
 ### For Agents
+
 1. Wait for Phase 1 completion (2 weeks)
 2. Run `scripts/agent-setup.sh <your-name>`
 3. Follow Agent Workflow Guide
@@ -378,15 +415,18 @@ A: Batch processing scales to 100+ agents. Just increase batch interval (5 min �
 ## Support & Communication
 
 **For questions:**
+
 - Technical: DM infrastructure team
 - Governance: DM spec coordinator
 - Scheduling: Post in #ssot-phase1 Slack
 
 **For blockers:**
+
 - Raise in daily standup (15 min)
 - Create GitHub issue with tag `ssot-phase1-blocker`
 
 **For feedback:**
+
 - Post-Phase 1 retrospective (all hands)
 - Anonymous feedback survey (Google Form)
 

@@ -58,6 +58,7 @@ crates/phenotype-config-core/src/
 ### Key Code Changes
 
 **error.rs (expanded):**
+
 ```rust
 #[derive(Debug, Error)]
 pub enum ConfigError {
@@ -81,6 +82,7 @@ impl From<serde_json::Error> for ConfigError { ... }
 ```
 
 **loader.rs (NEW):**
+
 ```rust
 #[async_trait]
 pub trait ConfigLoader: Send + Sync + 'static {
@@ -97,6 +99,7 @@ pub trait ConfigLoaderSync: Send + Sync + 'static {
 ```
 
 **validator.rs (NEW):**
+
 ```rust
 pub trait ConfigValidator: Send + Sync + 'static {
     type Config: Debug + Send + Sync + 'static;
@@ -108,6 +111,7 @@ impl<C, V1, V2> ConfigValidator for ChainValidator<V1, V2> { ... }
 ```
 
 **provider.rs (NEW):**
+
 ```rust
 pub trait ConfigProvider: Send + Sync + 'static {
     type Config: Debug + Send + Sync + 'static;
@@ -172,6 +176,7 @@ crates/phenotype-config-loader/src/
 ### Key Code Changes
 
 **figment_loader.rs (NEW):**
+
 ```rust
 #[async_trait]
 impl<T: DeserializeOwned + Send + 'static> ConfigLoader for FigmentConfigLoader {
@@ -190,6 +195,7 @@ impl<T: DeserializeOwned + Send + 'static> ConfigLoader for FigmentConfigLoader 
 ```
 
 **lib.rs (update):**
+
 ```rust
 pub use figment_loader::FigmentConfigLoader;
 
@@ -244,6 +250,7 @@ crates/phenotype-policy-engine/src/
 ### Key Code Changes
 
 **loader.rs (update):**
+
 ```rust
 pub struct PolicyConfigLoader {
     path: std::path::PathBuf,
@@ -269,6 +276,7 @@ impl ConfigLoader for PolicyConfigLoader {
 ```
 
 **validator.rs (NEW):**
+
 ```rust
 pub struct PolicyValidator;
 
@@ -318,6 +326,7 @@ crates/phenotype-event-sourcing/src/
 ### Code Changes
 
 **phenotype-telemetry/src/validator.rs:**
+
 ```rust
 pub struct TelemetryConfigValidator;
 
@@ -334,6 +343,7 @@ impl ConfigValidator for TelemetryConfigValidator {
 ```
 
 **phenotype-event-sourcing/src/validator.rs:**
+
 ```rust
 pub struct SnapshotConfigValidator;
 
@@ -377,6 +387,7 @@ crates/phenotype-contracts/src/
 ### Code Changes
 
 **outbound.rs (update):**
+
 ```rust
 // Re-export from config-core
 pub use phenotype_config_core::ConfigLoader;

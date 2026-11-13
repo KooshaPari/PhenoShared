@@ -86,6 +86,7 @@ agileplus specify "Add two-factor authentication"
 **Specification interview:**
 
 The tool asks targeted questions to capture:
+
 - What problem does this solve?
 - Who will use it?
 - What are the key scenarios?
@@ -655,6 +656,7 @@ project/
 ```
 
 This means:
+
 - WP01 and WP02 agents can run simultaneously without conflicting
 - Branches are isolated (`feature/auth/WP01` vs `feature/auth/WP02`)
 - Merging is dependency-ordered (WP01 merges before WP02)

@@ -4,6 +4,7 @@ Generated: 2026-11-12
 Source: `absorption/` directory (27 trees) + `docs/absorbed-from*/` (6 formal + 21 informal)
 
 ## State definitions
+
 - **staged**: in container, not wired, has a named promotion owner
 - **landed**: wired + tested
 - **archived**: kept, explicitly never built
@@ -79,6 +80,7 @@ Source: `absorption/` directory (27 trees) + `docs/absorbed-from*/` (6 formal + 
 | vibeproxy-monitoring-unified | no | archived (no formal record) |
 
 ## Summary
+
 - Total absorption trees: 27 (absorption/) + 27 (docs/absorbed-from/) = 54
 - Landed: 1 (dagrun)
 - Staged: 6 (Authvault, byteport, pheno-forge, PhenoInfra, PhenoMLX-temp, phenotype-router-monitor, phenotype-router-spec) — actually 7
@@ -86,4 +88,5 @@ Source: `absorption/` directory (27 trees) + `docs/absorbed-from*/` (6 formal + 
 - Dead: 0
 
 ## docs/absorbed-root-docs
+
 54 foreign-provenance root .md files (relocated in P1 from repo root)

@@ -11,16 +11,19 @@
 ### Infrastructure Verification
 
 - [ ] **Deployment script exists**: `/scripts/snyk-deploy.sh`
+
   ```bash
   test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/snyk-deploy.sh && echo "✅"
   ```
 
 - [ ] **Policy generator exists**: `/scripts/snyk-policy-generator.sh`
+
   ```bash
   test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/scripts/snyk-policy-generator.sh && echo "✅"
   ```
 
 - [ ] **GitHub workflow exists**: `/.github/workflows/snyk-scan.yml`
+
   ```bash
   test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/.github/workflows/snyk-scan.yml && echo "✅"
   ```
@@ -29,6 +32,7 @@
   - `docs/reference/SNYK_SETUP_GUIDE.md`
   - `docs/reference/SNYK_QUICK_REFERENCE.md`
   - `SNYK_AUTOMATION_READY.md`
+
   ```bash
   test -f /Users/<REDACTED>/CodeProjects/Phenotype/repos/docs/reference/SNYK_SETUP_GUIDE.md && echo "✅"
   ```
@@ -36,34 +40,40 @@
 ### Local Environment
 
 - [ ] **Snyk CLI installed**:
+
   ```bash
   which snyk && snyk --version
   # Output should show: snyk <version>
   ```
 
   If missing:
+
   ```bash
   brew install snyk    # macOS
   npm install -g snyk  # npm
   ```
 
 - [ ] **jq installed** (JSON parser):
+
   ```bash
   which jq && jq --version
   ```
 
   If missing:
+
   ```bash
   brew install jq      # macOS
   apt-get install jq   # Linux
   ```
 
 - [ ] **Git configured**:
+
   ```bash
   git config user.name && git config user.email
   ```
 
 - [ ] **Bash 4.0+** (for script compatibility):
+
   ```bash
   bash --version  # Should be 4.0 or higher
   ```
@@ -75,18 +85,18 @@
 ### Step 1: Snyk Account
 
 - [ ] **Account created** (if needed)
-  - Go: https://app.snyk.io/auth/register
+  - Go: <https://app.snyk.io/auth/register>
   - Sign up with GitHub or email
   - Verify email
 
 - [ ] **Account active**
-  - Log in: https://app.snyk.io/dashboard
+  - Log in: <https://app.snyk.io/dashboard>
   - Confirm you see the dashboard
 
 ### Step 2: API Token Generation
 
 - [ ] **Navigate to settings**
-  - Go: https://app.snyk.io/account/settings
+  - Go: <https://app.snyk.io/account/settings>
   - Scroll to "API Token" section
 
 - [ ] **Generate token**
@@ -102,6 +112,7 @@
 ### Step 3: Token Verification
 
 - [ ] **Test token locally**
+
   ```bash
   export SNYK_TOKEN="your-token-here"
   snyk auth "$SNYK_TOKEN"
@@ -115,7 +126,7 @@
 ### Option A: Organization Secret (Recommended)
 
 - [ ] **Navigate to org settings**
-  - Go: https://github.com/KooshaPari/settings/secrets
+  - Go: <https://github.com/KooshaPari/settings/secrets>
   - Or: GitHub > Settings (top-right) > Organization Settings > Secrets
 
 - [ ] **Create new secret**
@@ -133,7 +144,7 @@
 For each Tier 1 repo:
 
 - [ ] **Navigate to repo secrets**
-  - Go: https://github.com/KooshaPari/AgilePlus/settings/secrets
+  - Go: <https://github.com/KooshaPari/AgilePlus/settings/secrets>
   - (Replace AgilePlus with phenotype-infrakit, heliosCLI, etc.)
 
 - [ ] **Create secret for each repo**
@@ -168,6 +179,7 @@ For each Tier 1 repo:
   - If not: `cd /Users/<REDACTED>/CodeProjects/Phenotype/repos`
 
 - [ ] **Target repos exist**
+
   ```bash
   test -d AgilePlus && echo "✅ AgilePlus"
   test -d phenotype-infrakit && echo "✅ phenotype-infrakit"
@@ -177,12 +189,14 @@ For each Tier 1 repo:
 ### Execute Deployment
 
 - [ ] **Run deployment script**
+
   ```bash
   export SNYK_TOKEN="your-token-here"
   ./scripts/snyk-deploy.sh "$SNYK_TOKEN"
   ```
 
   Expected output:
+
   ```
   ✓ Pre-Flight Checks
   ✓ Snyk CLI installed
@@ -198,6 +212,7 @@ For each Tier 1 repo:
 ### Review Reports
 
 - [ ] **Check deployment summary**
+
   ```bash
   cat .snyk-reports/snyk-deployment-*.txt
   ```
@@ -208,12 +223,14 @@ For each Tier 1 repo:
   - Failed: 0
 
 - [ ] **Review per-repo reports**
+
   ```bash
   ls -la .snyk-reports/*/
   # Should have: test-TIMESTAMP.json, test-TIMESTAMP.txt, snyk.sarif
   ```
 
 - [ ] **Check vulnerability counts**
+
   ```bash
   for dir in .snyk-reports/*/; do
     echo "$(basename $dir):"
@@ -222,6 +239,7 @@ For each Tier 1 repo:
   ```
 
 - [ ] **Verify .snyk policy files created**
+
   ```bash
   ls -la AgilePlus/.snyk phenotype-infrakit/.snyk heliosCLI/.snyk
   # All should exist (-rw-r--r--)
@@ -246,6 +264,7 @@ For each Tier 1 repo:
 ### Review Policies
 
 - [ ] **Open .snyk files for review**
+
   ```bash
   cat AgilePlus/.snyk
   cat phenotype-infrakit/.snyk
@@ -269,6 +288,7 @@ For each Tier 1 repo:
   - Open `.snyk` in editor
   - Add vulnerability IDs from test reports
   - Format:
+
     ```yaml
     ignore:
       'SNYK-VULN-ID':
@@ -284,17 +304,20 @@ For each Tier 1 repo:
 ### Commit Changes
 
 - [ ] **Stage policy files**
+
   ```bash
   git add AgilePlus/.snyk phenotype-infrakit/.snyk heliosCLI/.snyk
   ```
 
 - [ ] **Verify staged changes**
+
   ```bash
   git diff --cached --stat
   # Should show: AgilePlus/.snyk, phenotype-infrakit/.snyk, heliosCLI/.snyk
   ```
 
 - [ ] **Create commit**
+
   ```bash
   git commit -m "chore(security): add Snyk policy files for Tier 1 repos
 
@@ -303,6 +326,7 @@ For each Tier 1 repo:
 - heliosCLI: Auto-generated Snyk policy
 
 These policies define vulnerability suppression rules and scan exclusions."
+
   ```
 
 - [ ] **Push to remote**
@@ -312,7 +336,7 @@ These policies define vulnerability suppression rules and scan exclusions."
   ```
 
 - [ ] **Verify on GitHub**
-  - Go: https://github.com/KooshaPari/repos/commits/main
+  - Go: <https://github.com/KooshaPari/repos/commits/main>
   - Confirm commit appears
   - Click commit to verify `.snyk` files changed
 
@@ -325,12 +349,14 @@ These policies define vulnerability suppression rules and scan exclusions."
 #### AgilePlus
 
 - [ ] **Copy workflow file**
+
   ```bash
   mkdir -p AgilePlus/.github/workflows
   cp .github/workflows/snyk-scan.yml AgilePlus/.github/workflows/
   ```
 
 - [ ] **Stage and commit**
+
   ```bash
   cd AgilePlus
   git add .github/workflows/snyk-scan.yml
@@ -342,21 +368,24 @@ These policies define vulnerability suppression rules and scan exclusions."
 - Comments on PRs with vulnerability summary"
   git push origin main
   cd ..
+
   ```
 
 - [ ] **Verify on GitHub**
-  - Go: https://github.com/KooshaPari/AgilePlus/blob/main/.github/workflows/snyk-scan.yml
+  - Go: <https://github.com/KooshaPari/AgilePlus/blob/main/.github/workflows/snyk-scan.yml>
   - Should see file contents
 
 #### phenotype-infrakit
 
 - [ ] **Copy workflow file**
+
   ```bash
   mkdir -p phenotype-infrakit/.github/workflows
   cp .github/workflows/snyk-scan.yml phenotype-infrakit/.github/workflows/
   ```
 
 - [ ] **Stage and commit**
+
   ```bash
   cd phenotype-infrakit
   git add .github/workflows/snyk-scan.yml
@@ -368,12 +397,14 @@ These policies define vulnerability suppression rules and scan exclusions."
 #### heliosCLI
 
 - [ ] **Copy workflow file**
+
   ```bash
   mkdir -p heliosCLI/.github/workflows
   cp .github/workflows/snyk-scan.yml heliosCLI/.github/workflows/
   ```
 
 - [ ] **Stage and commit**
+
   ```bash
   cd heliosCLI
   git add .github/workflows/snyk-scan.yml
@@ -389,9 +420,9 @@ These policies define vulnerability suppression rules and scan exclusions."
 ### Check Workflow Activation
 
 - [ ] **Go to Actions tab for each repo**
-  - https://github.com/KooshaPari/AgilePlus/actions
-  - https://github.com/KooshaPari/phenotype-infrakit/actions
-  - https://github.com/KooshaPari/heliosCLI/actions
+  - <https://github.com/KooshaPari/AgilePlus/actions>
+  - <https://github.com/KooshaPari/phenotype-infrakit/actions>
+  - <https://github.com/KooshaPari/heliosCLI/actions>
 
 - [ ] **Verify workflow appears in list**
   - Should show "Snyk Security Scan" in workflow list
@@ -421,18 +452,18 @@ These policies define vulnerability suppression rules and scan exclusions."
 ### Enable GitHub Code Scanning
 
 - [ ] **Go to Security settings for each repo**
-  - https://github.com/KooshaPari/AgilePlus/settings (Security tab)
+  - <https://github.com/KooshaPari/AgilePlus/settings> (Security tab)
   - Check "Code Scanning Alerts" is enabled
 
 - [ ] **View Code Scanning dashboard**
-  - Go: https://github.com/KooshaPari/AgilePlus/security/code-scanning
+  - Go: <https://github.com/KooshaPari/AgilePlus/security/code-scanning>
   - Should show vulnerabilities from Snyk SARIF uploads
   - May be empty if no vulnerabilities found
 
 - [ ] **Repeat for all Tier 1 repos**
-  - [ ] AgilePlus: https://github.com/KooshaPari/AgilePlus/security/code-scanning
-  - [ ] phenotype-infrakit: https://github.com/KooshaPari/phenotype-infrakit/security/code-scanning
-  - [ ] heliosCLI: https://github.com/KooshaPari/heliosCLI/security/code-scanning
+  - [ ] AgilePlus: <https://github.com/KooshaPari/AgilePlus/security/code-scanning>
+  - [ ] phenotype-infrakit: <https://github.com/KooshaPari/phenotype-infrakit/security/code-scanning>
+  - [ ] heliosCLI: <https://github.com/KooshaPari/heliosCLI/security/code-scanning>
 
 ---
 
@@ -441,6 +472,7 @@ These policies define vulnerability suppression rules and scan exclusions."
 ### Verify Local Scanning Still Works
 
 - [ ] **Test snyk in one repo**
+
   ```bash
   cd AgilePlus
   snyk test
@@ -449,6 +481,7 @@ These policies define vulnerability suppression rules and scan exclusions."
   ```
 
 - [ ] **Test deployment script again**
+
   ```bash
   ./scripts/snyk-deploy.sh "$SNYK_TOKEN" AgilePlus
   # Should complete successfully
@@ -457,18 +490,18 @@ These policies define vulnerability suppression rules and scan exclusions."
 ### Monitor Dashboard
 
 - [ ] **Check Snyk dashboard**
-  - Go: https://app.snyk.io/dashboard
+  - Go: <https://app.snyk.io/dashboard>
   - Should show Tier 1 repos being monitored
   - All 3 repos should appear in project list
 
 - [ ] **Set up Snyk alerts** (optional)
-  - Go: https://app.snyk.io/account/settings
+  - Go: <https://app.snyk.io/account/settings>
   - Configure email notifications for new vulnerabilities
 
 ### Verify GitHub Integration
 
 - [ ] **Check GitHub Code Scanning**
-  - Go: https://github.com/KooshaPari/repos/security/code-scanning
+  - Go: <https://github.com/KooshaPari/repos/security/code-scanning>
   - Should show vulnerabilities from Snyk scans
   - Multiple repos should be visible
 
@@ -556,7 +589,7 @@ After rollback, re-diagnose and retry Phase 1.
 | Setup guide | `docs/reference/SNYK_SETUP_GUIDE.md` |
 | Quick reference | `docs/reference/SNYK_QUICK_REFERENCE.md` |
 | Automation status | `SNYK_AUTOMATION_READY.md` |
-| Snyk docs | https://docs.snyk.io |
+| Snyk docs | <https://docs.snyk.io> |
 | CLI help | `snyk --help` or `snyk test --help` |
 
 ---

@@ -49,7 +49,7 @@ substrate: dispatch-failed: codex exited with status 64
 
 ### 3.2 Multi-line crash with context
 
-For errors that need a cause chain (`anyhow`), the first line follows §3.1; subsequent lines are indented two spaces and prefixed with `caused by: `:
+For errors that need a cause chain (`anyhow`), the first line follows §3.1; subsequent lines are indented two spaces and prefixed with `caused by:`:
 
 ```
 substrate: dispatch-failed: codex exited with status 64

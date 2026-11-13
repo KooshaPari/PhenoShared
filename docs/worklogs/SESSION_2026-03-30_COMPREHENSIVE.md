@@ -20,6 +20,7 @@ This session gathered and documented the state of phenotype-infrakit following t
 ### Key Achievement
 
 Established baseline understanding of:
+
 - Current workspace member list (18 crates)
 - Dependency structure and workspace.dependencies configuration
 - Build stability issues and root causes
@@ -36,12 +37,14 @@ Established baseline understanding of:
 ### Changes Made
 
 #### Major Restructuring
+
 - **Moved bifrost-routing** from repository root to `crates/bifrost-routing/`
 - **Added forgecode-core** new crate with agent and provider modules
 - **Fixed workspace.package configuration** (edition 2021, Rust 1.81)
 - **Consolidated workspace dependencies** (expanded from 28 to 35+ deps)
 
 #### File Statistics
+
 ```
 Files Changed: 21
 Lines Added: +561
@@ -56,10 +59,12 @@ Major Changes:
 ```
 
 #### Conflicts Resolved
+
 **Merge Conflicts: 0** (clean merge)
 **Resolution Notes**: No manual conflict resolution needed; changes merged automatically
 
 #### Dependency Fixes
+
 **Total Dependencies Added**: 7 new workspace members
 
 1. **forgecode-core** (new crate)
@@ -82,6 +87,7 @@ Major Changes:
 **Workspace Health**: ⚠️ FAILING
 **Error Count**: 14+ compilation errors
 **Error Categories**:
+
 - Missing gix API methods (9 errors) — API compatibility issue
 - Type annotation missing (4 errors) — Type inference problem
 - Import resolution failures — Fixed in root Cargo.toml
@@ -123,6 +129,7 @@ let repo = gix::open(path).map_err(|e| GitError::NotARepo(e.to_string()))?;
 
 **Status**: RESOLVED
 **Solution**: Root `Cargo.toml` now includes:
+
 ```toml
 [workspace.dependencies]
 phenotype-error-core = { version = "0.2.0", path = "crates/phenotype-error-core" }
@@ -152,6 +159,7 @@ phenotype-contracts = { version = "0.2.0", path = "crates/phenotype-contracts" }
 ### Unchanged Core Crates (18 total members)
 
 **Workspace members (complete list)**:
+
 1. ✅ phenotype-error-core
 2. ✅ phenotype-state-machine
 3. ✅ phenotype-contracts
@@ -186,6 +194,7 @@ phenotype-contracts = { version = "0.2.0", path = "crates/phenotype-contracts" }
 **Workspace Dependencies** (35 entries):
 
 **External Crates**:
+
 - `serde` 1.x with derive
 - `tokio` 1.x full features
 - `thiserror` 2.x
@@ -202,6 +211,7 @@ phenotype-contracts = { version = "0.2.0", path = "crates/phenotype-contracts" }
 - `strum` 0.26 — enum utilities
 
 **Internal Crates** (workspace members):
+
 - `phenotype-error-core` (v0.2.0)
 - `phenotype-errors` (v0.2.0)
 - `phenotype-contracts` (v0.2.0)
@@ -236,6 +246,7 @@ moka.workspace = true
 ### Quality Checks
 
 **Code Quality Tools** (configured, not run):
+
 - `cargo clippy` — lint analysis
 - `cargo fmt` — formatting
 - `cargo test` — unit tests
@@ -302,18 +313,18 @@ repos/
 
 ### Important (Test Coverage)
 
-2. **Type Annotation Inference**
+1. **Type Annotation Inference**
    - **Impact**: Compiler cannot infer types in closure contexts
    - **Root Cause**: gix API refactoring changed error types
    - **Status**: Dependency of Issue #1
 
-3. **forgecode-core Integration**
+2. **forgecode-core Integration**
    - **Impact**: New crate added in PR#477 not yet verified
    - **Status**: NOT TESTED
 
 ### Non-Critical (Quality)
 
-4. **Reduced Test Coverage in bifrost-routing**
+1. **Reduced Test Coverage in bifrost-routing**
    - **Change**: Test count 291 → 51 (82% reduction)
    - **Status**: Requires investigation if intentional or accidental
 
@@ -436,19 +447,19 @@ d9835499c docs: add Wave 108+ completion summary - workspace production-ready
 
 ### Follow-up Actions (Medium Priority)
 
-4. **Investigate bifrost-routing test reduction**
+1. **Investigate bifrost-routing test reduction**
    - Determine if test count change was intentional
    - Recover any accidentally deleted tests
    - **Estimated**: 1 hour
 
-5. **Create per-crate worklog entries**
+2. **Create per-crate worklog entries**
    - Document changes to each modified crate
    - Create traceback to PR #477
    - **Estimated**: 2 hours
 
 ### Long-term Items (Low Priority)
 
-6. **Workspace dependency audit**
+1. **Workspace dependency audit**
    - Check for unused dependencies
    - Consolidate overlapping deps
    - Optimize Cargo.lock further

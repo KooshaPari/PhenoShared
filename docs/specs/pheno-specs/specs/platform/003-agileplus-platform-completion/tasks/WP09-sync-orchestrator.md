@@ -30,6 +30,7 @@ Implementation command: `spec-kitty implement WP09 --base WP03`
 Create new crate with appropriate dependencies:
 
 **Cargo.toml:**
+
 - agileplus-domain
 - agileplus-events
 - serde / serde_json

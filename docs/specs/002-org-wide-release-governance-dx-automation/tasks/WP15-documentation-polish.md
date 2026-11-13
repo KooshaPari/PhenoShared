@@ -29,6 +29,7 @@ history:
 **Primary Goal:** Create comprehensive, user-friendly documentation for pheno CLI and governance model, with architecture decision records and error message polish, enabling smooth adoption across organization.
 
 **Success Criteria:**
+
 - pheno CLI README covers installation, quick start, all commands, configuration, and adapter status
 - Governance model documentation explains 5-tier channel system, risk profiles, and promotion workflow
 - Contributor quickstart guides new developers through bootstrap-to-publish workflow
@@ -40,6 +41,7 @@ history:
 ## Context & Constraints
 
 **Context:**
+
 - WP07 established pheno CLI commands; documentation needed to guide users
 - WP11 standardized task runners; need to explain why and how to use
 - WP13 pilot validated bootstrap; feedback should inform documentation
@@ -47,6 +49,7 @@ history:
 - Architecture decisions (task runner, registry adapter) should be documented for future reference
 
 **Constraints:**
+
 - Documentation must be in `pheno-cli` repository (separate from specs)
 - ADRs follow standard format (Status, Context, Decision, Consequences)
 - Error messages must be user-facing; developers should not see stack traces
@@ -60,6 +63,7 @@ history:
 **Purpose:** Write comprehensive README.md in pheno-cli repo root, documenting installation, usage, commands, configuration, and adapter status.
 
 **Steps:**
+
 1. **Structure:**
    - Title: "pheno – Release Governance CLI"
    - Tagline: "Standardize release processes across polyglot organizations"
@@ -75,6 +79,7 @@ history:
 3. **Quick Start section (5 mins):**
    - Scenario: User has new repo, wants to add governance infrastructure
    - Steps:
+
      ```
      1. Install: go install github.com/phenotype-org/pheno-cli@latest
      2. Install mise (task runner)
@@ -84,6 +89,7 @@ history:
      6. Promote pre-release: pheno promote alpha
      7. Publish: (handled by CI/CD)
      ```
+
    - Expected output at each step (what success looks like)
    - Common issues and how to fix
 
@@ -107,6 +113,7 @@ history:
    - Config file search order: `.phenorc.toml` in repo, env vars, defaults
 
 6. **Adapter Status table:**
+
    ```
    | Registry    | Status      | Notes                        |
    |-------------|-------------|------------------------------|
@@ -131,12 +138,14 @@ history:
    - Development setup (Go 1.23+, make, pre-commit hooks)
 
 **Files:**
+
 - Create/update: `pheno-cli/README.md`
 - Reference: pheno CLI source code for accurate command docs
 
 **Parallel?** No (depends on WP07 commands finalized).
 
 **Notes:**
+
 - README should be readable in 10 minutes (skim, don't read every word)
 - Code examples should copy-paste without modification
 - Links to detailed docs (governance, ADRs) for deeper dives
@@ -149,6 +158,7 @@ history:
 **Purpose:** Create comprehensive document explaining the evolved 5-tier release governance model, risk profiles, channel gates, and promotion workflow.
 
 **Steps:**
+
 1. **Document: `docs/governance/GOVERNANCE_MODEL.md`:**
    - Target audience: teams evaluating if/how to adopt, contributors understanding the flow
    - Length: ~2000 words (can skim in 15 mins, detailed read in 30 mins)
@@ -179,6 +189,7 @@ history:
      - High: strict gates (lint, test, security audit, approval)
 
    **Promotion Workflow (with mermaid diagram):**
+
    ```
    dev (main branch)
         ↓ [run promote alpha]
@@ -239,12 +250,14 @@ history:
    - Link to CI/CD setup (WP09/WP10)
 
 **Files:**
+
 - Create: `docs/governance/GOVERNANCE_MODEL.md`
 - Create: mermaid diagrams (embedded in markdown)
 
 **Parallel?** Yes, after T088 started.
 
 **Notes:**
+
 - Tone: educational, explain reasoning behind decisions
 - Avoid jargon; define terms on first use
 - Use examples from real repos (tokenledger, thegent, etc.)
@@ -257,6 +270,7 @@ history:
 **Purpose:** Create step-by-step guide for new contributors to onboard with pheno, mise, and governance workflow.
 
 **Steps:**
+
 1. **Document: `CONTRIBUTING.md` (at repo root or docs/):**
    - Target audience: developers new to pheno governance
    - Length: ~1200 words (15 mins to read and understand)
@@ -266,10 +280,11 @@ history:
    **Prerequisites:**
    - Install Go 1.23+
    - Install Git (latest)
-   - Install mise: https://mise.jdx.dev
+   - Install mise: <https://mise.jdx.dev>
    - Install pheno: `go install github.com/phenotype-org/pheno-cli@latest`
 
    **Step 1: Clone & Setup (2 mins):**
+
    ```
    git clone https://github.com/phenotype-org/<repo>
    cd <repo>
@@ -278,6 +293,7 @@ history:
    ```
 
    **Step 2: Verify Setup (3 mins):**
+
    ```
    mise run lint    # should pass
    mise run test    # should pass
@@ -291,16 +307,19 @@ history:
    - Fix format and retry
 
    **Step 4: Run Tests Locally (5 mins):**
+
    ```
    mise run test               # run all tests
    mise run test:integration   # if available
    ```
 
    **Step 5: Push & Create PR (5 mins):**
+
    ```
    git push origin feature-branch
    # Open PR on GitHub (link provided by git)
    ```
+
    - CI runs: `mise run lint`, `mise run test`, `mise run build`
    - Pre-push hook already ran locally; expect CI to pass
    - If CI fails: review logs, fix locally, push again
@@ -311,6 +330,7 @@ history:
    - CI runs release gate
 
    **Step 7: (Maintainer Only) Promote & Release:**
+
    ```
    pheno promote alpha          # bump to pre-release
    # (after testing)
@@ -336,6 +356,7 @@ history:
    - Governance: ensures consistent, reliable releases
 
 5. **Quick reference table:**
+
    | Task | Command | Time |
    |------|---------|------|
    | Install | `mise install` | 2m |
@@ -345,12 +366,14 @@ history:
    | Build | `mise run build` | varies |
 
 **Files:**
+
 - Create/update: `CONTRIBUTING.md` (at repo root)
 - Reference: WP11 task definitions, governance model
 
 **Parallel?** Yes, with T089.
 
 **Notes:**
+
 - This is the onboarding document; should be discoverable from README
 - Use language appropriate for junior developers (no jargon)
 - Include copy-paste commands (users will thank you)
@@ -363,6 +386,7 @@ history:
 **Purpose:** Document the decision to standardize on mise as the task runner across all repos.
 
 **Steps:**
+
 1. **Document: `docs/adr/001-task-runner-selection.md`:**
    - Format: use ADR template (Title, Status, Context, Decision, Consequences, Alternatives)
 
@@ -416,12 +440,14 @@ history:
    - Collect feedback from teams on pain points
 
 **Files:**
+
 - Create: `docs/adr/001-task-runner-selection.md`
 - Reference: mise documentation, pheno CLI
 
 **Parallel?** Yes, with T092.
 
 **Notes:**
+
 - ADR is for documentation and future reference (why decisions were made)
 - Status should be "Accepted"; if later superseded, mark as "Superseded"
 - Alternatives section is important; shows decision-making process
@@ -433,6 +459,7 @@ history:
 **Purpose:** Document the design of pheno's registry adapter system to support multiple package registries.
 
 **Steps:**
+
 1. **Document: `docs/adr/002-registry-adapter-architecture.md`:**
 
    **Title:** Registry Adapter Architecture for Multi-Registry Support
@@ -450,6 +477,7 @@ history:
 
    **Decision:**
    - Implement registry adapter as Go interface:
+
      ```go
      type Adapter interface {
        ParseVersion() (Version, error)
@@ -458,6 +486,7 @@ history:
        RollbackRelease(version string) error
      }
      ```
+
    - Each registry implements Adapter:
      - CratesIoAdapter (Rust)
      - PyPiAdapter (Python)
@@ -490,12 +519,14 @@ history:
    - Collect feedback on adapter usability from teams adding new registries
 
 **Files:**
+
 - Create: `docs/adr/002-registry-adapter-architecture.md`
 - Reference: pheno CLI source code (adapter implementations)
 
 **Parallel?** Yes, with T091.
 
 **Notes:**
+
 - This ADR explains why pheno is structured a certain way
 - Helps future developers understand the design and make consistent extensions
 - Links to actual code are helpful (point to file/function)
@@ -507,6 +538,7 @@ history:
 **Purpose:** Review all user-facing error messages in pheno CLI, ensure clarity and actionability, remove raw stack traces.
 
 **Steps:**
+
 1. **Inventory:**
    - Search pheno CLI source code for error messages:
      - stderr output
@@ -563,12 +595,14 @@ history:
    - Create `docs/troubleshooting.md` with common errors and solutions
    - Link error messages to troubleshooting guide where applicable
    - Example:
+
      ```
      Error: crates token not found
      See: docs/troubleshooting.md#crates-token-setup
      ```
 
 **Files:**
+
 - Update: pheno CLI error handling (multiple files)
 - Create: `docs/troubleshooting.md`
 - Create: error message audit spreadsheet (internal reference)
@@ -576,6 +610,7 @@ history:
 **Parallel?** Yes, after other docs started (T088–T092).
 
 **Notes:**
+
 - This is polish work; not critical for MVP but improves user experience significantly
 - Error message quality is often the difference between users trusting a tool or abandoning it
 - Test error messages as thoroughly as success cases
@@ -596,6 +631,7 @@ history:
 ## Review Guidance
 
 **Reviewers should verify:**
+
 - [ ] pheno CLI README covers installation, quick start, all commands, config, adapter status (T088)
 - [ ] Governance model document explains 5-tier system, risk profiles, promotion flow with diagrams (T089)
 - [ ] Contributor quickstart is clear, copy-paste commands work, covers full workflow (T090)

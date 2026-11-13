@@ -7,12 +7,14 @@
 ## Context
 
 PhenoSDK requires high-performance I/O operations across multiple domains:
+
 - Credential storage/retrieval from OS keyring and encrypted files
 - OAuth token exchanges with external providers
 - MCP protocol communication with AI tools
 - Concurrent access patterns from multiple scopes
 
 Python offers multiple concurrency models:
+
 1. **Synchronous with threading**: Simple but GIL-limited, prone to blocking
 2. **Synchronous with multiprocessing**: High overhead, complex state sharing
 3. **Async/await**: Cooperative multitasking, efficient I/O handling
@@ -140,10 +142,12 @@ async def test_multiple_clients():
 ### Alternative 1: Synchronous with Threading
 
 **Pros:**
+
 - Simpler mental model
 - Works with any library
 
 **Cons:**
+
 - GIL limits true parallelism
 - Thread overhead for I/O operations
 - Complex synchronization for shared state
@@ -154,10 +158,12 @@ async def test_multiple_clients():
 ### Alternative 2: Hybrid Sync/Async
 
 **Pros:**
+
 - Supports both patterns
 - Flexibility for different use cases
 
 **Cons:**
+
 - Code duplication or complexity
 - Harder to maintain
 - API surface confusion
@@ -167,10 +173,12 @@ async def test_multiple_clients():
 ### Alternative 3: Multiprocessing
 
 **Pros:**
+
 - True parallelism for CPU-bound work
 - Process isolation
 
 **Cons:**
+
 - High memory overhead
 - Complex IPC
 - Not suitable for I/O-bound SDK

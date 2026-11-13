@@ -149,6 +149,7 @@ contract; R1 only adds a richer *verifier* path. No fixture changes
 ## Consequences
 
 Positive:
+
 - **Revocation is now possible.** A compromised `NodeAuthority` can be
   revoked at any time by the operator appending to the TrustRoot-signed
   revocation list. A node trying to use the revoked key gets
@@ -160,6 +161,7 @@ Positive:
 - **Backwards compatible.** R0 callers keep working; new callers opt in.
 
 Negative:
+
 - **Boilerplate at the call site.** Constructing a `TrustStore`
   requires knowing the TrustRoot key. This is documented but adds
   friction for small-scale deployments.

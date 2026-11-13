@@ -52,6 +52,7 @@ WP01 → WP02 → WP03
 ## Group 1: Foundation (P1, Sequential)
 
 ### WP01 — Domain Model Extensions
+
 **File**: `tasks/WP01-domain-model-extensions.md`
 **Dependencies**: none
 **Priority**: P1 | **Est. lines**: ~400
@@ -66,6 +67,7 @@ WP01 → WP02 → WP03
 - [x] T007: Add Serialize/Deserialize, validation, and builder patterns for all new entities
 
 ### WP02 — Event Sourcing Engine
+
 **File**: `tasks/WP02-event-sourcing-engine.md`
 **Dependencies**: WP01
 **Priority**: P1 | **Est. lines**: ~500
@@ -80,6 +82,7 @@ WP01 → WP02 → WP03
 - [x] T014: Implement event queries (by entity, time range, event type, actor)
 
 ### WP03 — SQLite Schema Extensions
+
 **File**: `tasks/WP03-sqlite-schema-extensions.md`
 **Dependencies**: WP02
 **Priority**: P1 | **Est. lines**: ~450
@@ -98,6 +101,7 @@ WP01 → WP02 → WP03
 ## Group 2: Infrastructure (P1, Parallel after Group 1)
 
 ### WP04 — Cache Layer (Dragonfly)
+
 **File**: `tasks/WP04-cache-layer-dragonfly.md`
 **Dependencies**: WP03
 **Priority**: P1 | **Est. lines**: ~350
@@ -111,6 +115,7 @@ WP01 → WP02 → WP03
 - [x] T027: Add health check (PING command)
 
 ### WP05 — Graph Layer (Neo4j)
+
 **File**: `tasks/WP05-graph-layer-neo4j.md`
 **Dependencies**: WP03
 **Priority**: P1 | **Est. lines**: ~400
@@ -124,6 +129,7 @@ WP01 → WP02 → WP03
 - [x] T033: Add health check and index management
 
 ### WP06 — Artifact Storage (MinIO)
+
 **File**: `tasks/WP06-artifact-storage-minio.md`
 **Dependencies**: WP03
 **Priority**: P1 | **Est. lines**: ~350
@@ -137,6 +143,7 @@ WP01 → WP02 → WP03
 - [x] T039: Add health check (list buckets)
 
 ### WP07 — Process Compose Configuration
+
 **File**: `tasks/WP07-process-compose-config.md`
 **Dependencies**: WP03
 **Priority**: P1 | **Est. lines**: ~300
@@ -154,6 +161,7 @@ WP01 → WP02 → WP03
 ## Group 3: Sync Engine (P1, after Groups 1-2)
 
 ### WP08 — Plane.so Bidirectional Sync
+
 **File**: `tasks/WP08-plane-bidirectional-sync.md`
 **Dependencies**: WP03
 **Priority**: P1 | **Est. lines**: ~500
@@ -168,6 +176,7 @@ WP01 → WP02 → WP03
 - [x] T052: Implement sync queue with retry (exponential backoff, bounded buffer)
 
 ### WP09 — Sync Orchestrator
+
 **File**: `tasks/WP09-sync-orchestrator.md`
 **Dependencies**: WP03
 **Priority**: P1 | **Est. lines**: ~400
@@ -181,6 +190,7 @@ WP01 → WP02 → WP03
 - [x] T058: Wire sync engine to NATS (publish sync events, subscribe to inbound)
 
 ### WP10 — CLI Sync Commands
+
 **File**: `tasks/WP10-cli-sync-commands.md`
 **Dependencies**: WP08, WP09
 **Priority**: P1 | **Est. lines**: ~350
@@ -197,6 +207,7 @@ WP01 → WP02 → WP03
 ## Group 4: API & Dashboard (P2, after Group 3)
 
 ### WP11 — API Extensions
+
 **File**: `tasks/WP11-api-extensions.md`
 **Dependencies**: WP03, WP08, WP09
 **Priority**: P2 | **Est. lines**: ~450
@@ -211,6 +222,7 @@ WP01 → WP02 → WP03
 - [x] T070: Add health/status endpoint aggregating all service health checks
 
 ### WP12 — Dashboard Templates
+
 **File**: `tasks/WP12-dashboard-templates.md`
 **Dependencies**: WP11
 **Priority**: P2 | **Est. lines**: ~500
@@ -225,6 +237,7 @@ WP01 → WP02 → WP03
 - [x] T077: Wire htmx partial swap endpoints (hx-get for each component)
 
 ### WP13 — Dashboard Interactivity
+
 **File**: `tasks/WP13-dashboard-interactivity.md`
 **Dependencies**: WP12
 **Priority**: P2 | **Est. lines**: ~400
@@ -238,6 +251,7 @@ WP01 → WP02 → WP03
 - [x] T083: Implement settings page (API key display, sync config, service URLs)
 
 ### WP14 — CLI Platform Commands
+
 **File**: `tasks/WP14-cli-platform-commands.md`
 **Dependencies**: WP07, WP10
 **Priority**: P2 | **Est. lines**: ~400
@@ -255,6 +269,7 @@ WP01 → WP02 → WP03
 ## Group 5: Observability (P2, Parallel)
 
 ### WP15 — OpenTelemetry Integration
+
 **File**: `tasks/WP15-opentelemetry-integration.md`
 **Dependencies**: WP03
 **Priority**: P2 | **Est. lines**: ~350
@@ -271,6 +286,7 @@ WP01 → WP02 → WP03
 ## Group 6: Multi-Device Sync (P3, after Group 3)
 
 ### WP16 — P2P Sync via Tailscale
+
 **File**: `tasks/WP16-p2p-sync-tailscale.md`
 **Dependencies**: WP09
 **Priority**: P3 | **Est. lines**: ~400
@@ -283,6 +299,7 @@ WP01 → WP02 → WP03
 - [x] T099: Implement vector clock sync (track per-entity sequence numbers across devices)
 
 ### WP17 — Git-Backed State Sync
+
 **File**: `tasks/WP17-git-backed-state.md`
 **Dependencies**: WP16
 **Priority**: P3 | **Est. lines**: ~350
@@ -294,6 +311,7 @@ WP01 → WP02 → WP03
 - [x] T103: Implement conflict detection for git merge scenarios
 
 ### WP18 — CLI Device Commands
+
 **File**: `tasks/WP18-cli-device-commands.md`
 **Dependencies**: WP17
 **Priority**: P3 | **Est. lines**: ~250
@@ -308,6 +326,7 @@ WP01 → WP02 → WP03
 ## Group 7: Integration Testing & Hardening (P3)
 
 ### WP19 — End-to-End Integration Tests
+
 **File**: `tasks/WP19-e2e-integration-tests.md`
 **Dependencies**: WP14
 **Priority**: P3 | **Est. lines**: ~400
@@ -320,6 +339,7 @@ WP01 → WP02 → WP03
 - [x] T111: Test service failure recovery (kill service, verify restart, verify no data loss)
 
 ### WP20 — Contract Tests
+
 **File**: `tasks/WP20-contract-tests.md`
 **Dependencies**: WP19
 **Priority**: P3 | **Est. lines**: ~300
@@ -331,6 +351,7 @@ WP01 → WP02 → WP03
 - [x] T115: Add pact tests for agileplus-api ↔ agileplus-events boundary
 
 ### WP21 — Performance Benchmarks
+
 **File**: `tasks/WP21-performance-benchmarks.md`
 **Dependencies**: WP20
 **Priority**: P3 | **Est. lines**: ~300

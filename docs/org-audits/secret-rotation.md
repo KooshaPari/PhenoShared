@@ -35,11 +35,13 @@ orchestrator.
    app or a freshly-installed app — either is fine; app-rotation is
    independent of webhook-rotation).
 3. **Update the env file** on the heavy-runner:
+
    ```bash
    sudo sed -i "s|^SLACK_FLEET_WEBHOOK=.*|SLACK_FLEET_WEBHOOK=<NEW-URL>|" /etc/phenotype-fleet.env
    sudo chmod 0600 /etc/phenotype-fleet.env
    cat /etc/phenotype-fleet.env   # verify
    ```
+
 4. **Update the GitHub Actions secret** in `<REDACTED>/phenotype-tooling`:
    `Settings → Secrets and variables → Actions → SLACK_FLEET_WEBHOOK → Update`.
 5. **Force a re-run** of the workflow `fleet-substrate-tools-backup.yml`

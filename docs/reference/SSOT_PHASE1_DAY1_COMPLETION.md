@@ -1,4 +1,5 @@
 # SSOT Phase 1 — Day 1 Completion Report
+
 **Branch Infrastructure Setup (WP1.1)**
 
 **Date Completed:** 2026-03-31
@@ -10,6 +11,7 @@
 ## Overview
 
 Day 1 establishes the authoritative `specs/main` branch infrastructure with:
+
 - Protected branch rules enforced on GitHub
 - Linear commit history (no merge commits)
 - CI validation gates on all spec changes
@@ -209,6 +211,7 @@ Protection: ENABLED on all 3 repos
 ## Next Steps: Day 2-3
 
 Day 2-3 (WP1.2) will:
+
 - Create SPECS_REGISTRY.md (master spec index)
 - Create ADR_REGISTRY.md (architecture decisions)
 - Create PLAN_REGISTRY.md (implementation plans)
@@ -241,6 +244,7 @@ Day 2-3 (WP1.2) will:
 ## Phase 1 Progress
 
 **Week 1 (Days 1-5):** 40 hours total
+
 - ✅ Day 1 (WP1.1 - Branch Infrastructure): **4h COMPLETE**
 - ⏳ Days 2-3 (WP1.2 - Registries & Metadata): 6h PENDING
 - ⏳ Day 4 (WP1.3 - Auto-Merge Architecture): 8h PENDING

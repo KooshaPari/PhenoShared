@@ -14,4 +14,3 @@ Security, cryptography, secrets management, and key management specifications.
 - Secret rotation strategies
 - HSM integration patterns
 - Zero-trust access control
-

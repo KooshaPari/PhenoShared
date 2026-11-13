@@ -3,6 +3,7 @@
 **Date:** 2026-09-17
 **Reviewer:** jcode (main thread, after 8/10 subagents crashed on mimo-v2.5)
 **Scope:**
+
 - `~/Downloads/phenotype-canonicalization/` (6 .md files)
 - `~/Downloads/docs-5/` (353 .md files, 624 total, 1.1 MB)
 - Baseline: `~/Downloads/docs-3/` (145 .md files, 262 total, 0.5 MB)
@@ -19,6 +20,7 @@
 | ADRs | 13 | 15 | +2 |
 
 docs-5 is a strict superset of docs-3 with the following net-new directories:
+
 - `adr/` — 15 ADRs (13 migrated + 2 new: 014, 015, 016)
 - `architecture/` — design layer decomposition
 - `examples/` — worked examples
@@ -62,6 +64,7 @@ AgilePlus, BytePort, CivicWarfare, Civis, Dino, HeliosCLI, HeliosLab, HeliosLite
 | Substrate | 1/7 | Same gap |
 
 **Observation:** The 6 missing files per product are:
+
 1. `START-HERE.md`
 2. `STATE.md`
 3. `NEXT-ACTIONS.md`
@@ -76,11 +79,13 @@ These are the same 6 files missing across all 10 incomplete products, indicating
 ### `~/Downloads/phenotype-canonicalization/`
 
 **README.md** — Research proposal for canonical engineering patterns covering:
+
 - Agentic migration paths (from human-only to human+agent workflows)
 - Federated governance (multiple repos cooperating under one authority)
 - Pattern libraries and standardization across the 33+ products
 
 **REPORT.md** (~37KB) — Comprehensive analysis of canonical tooling patterns:
+
 - Inventory of existing tooling across Phenotype repos
 - Gap analysis: what's missing for canonical patterns
 - Recommendations for tooling consolidation
@@ -92,17 +97,20 @@ These are the same 6 files missing across all 10 incomplete products, indicating
 ### `~/Downloads/docs-5/` (root structural docs)
 
 **START-HERE.md** — v1.4 controlling entry point. Changes from docs-3 v1.1:
+
 - One-owner-per-repo model (vs docs-3's looser allocation)
 - Explicit per-repo owner allocation table
 - Federation contract becomes mandatory (was optional in docs-3)
 
 **README.md** (~47KB) — Operational handbook. vs docs-3 README:
+
 - 33 product dossiers vs 4
 - 15 ADRs vs 13
 - Full portfolio roster with 54 session seats
 - Federation protocol with JSON schemas for cross-repo handoffs
 
 **SSOT_AUTHORITY.md** — Single Source of Truth definitions. Largely identical to docs-3, with these additions:
+
 - Federation contracts are now first-class SSOT entries
 - Per-product dossiers override global guidance when they conflict
 - Owner prompts are SSOT for execution style
@@ -110,6 +118,7 @@ These are the same 6 files missing across all 10 incomplete products, indicating
 **PRD.md, REQUIREMENTS.md, SPECIFICATION.md, ALD.md, HLD.md, LLD.md, DOMAIN_MODEL.md, ROADMAP.md, TRACEABILITY.md, VALIDATION_REPORT.md** — All present and extended.
 
 **CHANGELOG-V1.2.md, CHANGELOG-V1.3.md, CHANGELOG-V1.4.md** — Version progression:
+
 - v1.2: Added proof grading system, capability composition
 - v1.3: Added federation protocol, reciprocal application
 - v1.4: Added 29 new product dossiers, one-owner-per-repo model
@@ -199,6 +208,7 @@ docs-3 has `SSOT_AUTHORITY.md` claiming authority as the "single source of truth
 `canonicalization/` is the research/policy layer. `docs-5/` is the execution layer. The 6 canonicalization docs describe *why* and *what* canonical patterns should exist; docs-5's `prompts/`, `proof/`, `federation/`, `qa/`, and `specs/` are the *how*.
 
 **Mapping:**
+
 - `CANONICAL-ENGINEERING.md` → docs-5 `architecture/`, `specs/`
 - `AGENTIC-MIGRATION.md` → docs-5 `prompts/`, `operations/`
 - `FEDERATED-GOVERNATION.md` → docs-5 `federation/`
@@ -209,6 +219,7 @@ docs-3 has `SSOT_AUTHORITY.md` claiming authority as the "single source of truth
 ### For our 4 active repos (PhenoShared, PhenoRegistry, PhenoMLX, HeliosLab, Portage)
 
 These all have full dossiers in docs-5 (parity with docs-3). No immediate dossier work required. They DO need:
+
 - Federation contract handoff schemas populated
 - Proof grading artifacts (per ADR-016)
 - QA metrics report (per `qa/METRICS.md`)
@@ -222,6 +233,7 @@ Per sponsor scope, **ResearchLedger is intentionally out of scope** (per existin
 ### For the entire Phenotype org
 
 docs-5 should be adopted as the canonical replacement for docs-3. Recommended sequence:
+
 1. Verify 23 "complete" product dossiers are actually substantive (vole's dump suggests they are, but needs spot-check)
 2. Fill the 6 missing files for 5 incomplete products (PhenoAI, PhenoGfx, PhenoInfra, PhenoTooling, Pine)
 3. Migrate docs-5 into the active repo as `~/CodeProjects/Phenotype/repos/pheno/docs/` canonical docs

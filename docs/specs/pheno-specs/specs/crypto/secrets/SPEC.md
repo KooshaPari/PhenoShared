@@ -36,7 +36,6 @@
 
 ---
 
-
 ## 11. Vault Cluster Architecture with Raft Consensus Deep Dive
 
 ### 11.1 Raft Consensus Protocol Overview
@@ -2456,18 +2455,18 @@ echo "Results saved to $RESULTS_DIR"
 
 | Resource | URL | Description |
 |----------|-----|-------------|
-| HashiCorp Vault | https://www.vaultproject.io/ | Core storage technology |
-| Vault Raft Storage | https://developer.hashicorp.com/vault/docs/configuration/storage/raft | Raft backend docs |
-| Raft Paper | https://raft.github.io/raft.pdf | Ongaro & Ousterhout (2014) |
-| AES-GCM Standard | https://csrc.nist.gov/publications/detail/sp/800-38d/final | NIST specification |
-| TLS 1.3 RFC | https://tools.ietf.org/html/rfc8446 | Transport security |
-| OpenTelemetry | https://opentelemetry.io/ | Observability framework |
-| Prometheus | https://prometheus.io/ | Metrics collection |
-| SOC 2 Trust Criteria | https://www.aicpa.org/soc | Compliance framework |
-| PCI DSS | https://www.pcisecuritystandards.org/ | Payment security |
-| Kubernetes External Secrets | https://external-secrets.io/ | K8s integration |
-| SPIFFE/SPIRE | https://spiffe.io/ | Workload identity |
-| NIST 800-57 | https://csrc.nist.gov/publications/detail/sp/800-57-part-1/rev-5/final | Key management |
+| HashiCorp Vault | <https://www.vaultproject.io/> | Core storage technology |
+| Vault Raft Storage | <https://developer.hashicorp.com/vault/docs/configuration/storage/raft> | Raft backend docs |
+| Raft Paper | <https://raft.github.io/raft.pdf> | Ongaro & Ousterhout (2014) |
+| AES-GCM Standard | <https://csrc.nist.gov/publications/detail/sp/800-38d/final> | NIST specification |
+| TLS 1.3 RFC | <https://tools.ietf.org/html/rfc8446> | Transport security |
+| OpenTelemetry | <https://opentelemetry.io/> | Observability framework |
+| Prometheus | <https://prometheus.io/> | Metrics collection |
+| SOC 2 Trust Criteria | <https://www.aicpa.org/soc> | Compliance framework |
+| PCI DSS | <https://www.pcisecuritystandards.org/> | Payment security |
+| Kubernetes External Secrets | <https://external-secrets.io/> | K8s integration |
+| SPIFFE/SPIRE | <https://spiffe.io/> | Workload identity |
+| NIST 800-57 | <https://csrc.nist.gov/publications/detail/sp/800-57-part-1/rev-5/final> | Key management |
 
 ### 25.3 Glossary
 
@@ -2489,8 +2488,6 @@ echo "Results saved to $RESULTS_DIR"
 | **Raft** | Consensus algorithm for distributed systems |
 | **KV v2** | Vault Key-Value store version 2 (versioned secrets) |
 | **CAS** | Check-And-Set - Optimistic concurrency control |
-
-
 
 ### 25.4 Related Phenotype Projects
 

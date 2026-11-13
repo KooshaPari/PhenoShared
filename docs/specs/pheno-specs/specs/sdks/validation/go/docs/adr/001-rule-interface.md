@@ -11,21 +11,25 @@ Need to define how individual validation rules are structured and executed withi
 ## Options Considered
 
 ### Option 1: Function-based
+
 ```go
 type ValidationFunc func(ctx context.Context, value any, field string) error
 ```
 
 **Pros**:
+
 - Simple and lightweight
 - Easy to define inline
 - No interface overhead
 
 **Cons**:
+
 - Harder to introspect
 - Difficult to add metadata
 - Less extensible for complex rules
 
 ### Option 2: Interface-based
+
 ```go
 type Rule interface {
     Name() string
@@ -35,23 +39,28 @@ type Rule interface {
 ```
 
 **Pros**:
+
 - Self-documenting
 - Easy to extend
 - Can carry metadata
 - Supports complex rule hierarchies
 
 **Cons**:
+
 - Slightly more verbose
 - Interface overhead (minimal)
 
 ### Option 3: Struct tags only
+
 No runtime rule system, only struct tag parsing.
 
 **Pros**:
+
 - Extremely simple
 - Zero runtime overhead for rule definitions
 
 **Cons**:
+
 - No dynamic validation
 - Limited flexibility
 - Hard to test in isolation
@@ -73,6 +82,7 @@ type Rule interface {
 ## Consequences
 
 ### Positive
+
 - **Extensible**: Anyone can implement Rule for custom validation
 - **Context propagation**: First-class support for cancellation/timeouts
 - **Self-documenting**: Rule parameters are discoverable via Params()
@@ -80,6 +90,7 @@ type Rule interface {
 - **Composable**: Rules can be combined and decorated
 
 ### Negative
+
 - **Verbosity**: More code than simple functions
 - **Interface overhead**: Minimal but non-zero (measured at <1ns)
 - **Learning curve**: Developers must understand interface concept

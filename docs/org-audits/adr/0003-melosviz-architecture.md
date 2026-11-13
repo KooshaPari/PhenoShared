@@ -32,12 +32,15 @@ the floor to build up from. F1 (PR #23) already wired onsets+chord/scale; P1 (in
 Adopt the exploration's **split, spec-first architecture**. Four planes:
 
 ### 1. Control-plane (the brain) — `melosviz` Python repo (origin/main, extend it)
+
 Owns the source of truth and orchestration:
+
 - **Audio analysis** → canonical **timeline JSON** (BPM, beats, downbeats, bar/phrase, sections, onsets, kick/snare/hat events, bass/mid/high band envelopes, stems, MIR semantics/mood) — this is RenderSpec v2 (P1, in build).
 - **Spec model**: `scene spec` (assets + domains), `scanner spec` (cone/orbit/falloff/bpm-lock/write-channels), `material spec` (per-domain look families), `transition spec` (mask→domain mappings), `look/shot spec` (camera + section motifs).
 - **Conductor**: routes each shot/segment to the best renderer; composites; encodes. CLI (`viz analyze|build|push|render|diff|apply`) + service API.
 
 ### 2. Renderers (orchestrated, best-tool-per-job) — none is "the engine"
+
 | Tool | Best-at role | Headless/agent driver |
 |------|--------------|----------------------|
 | **TouchDesigner** | realtime runtime/editor + live VJ IO (NDI/Spout/Syphon, Link/MIDI/OSC) + GPA review; hosts the hybrid-domain mixer + scanner fields | Python (`td.op`), OSC/WS bridge |
@@ -49,11 +52,13 @@ Owns the source of truth and orchestration:
 | **Bevy / Rust+wgpu** | optional embeddable / perf escape-hatch — **NOT primary** | Rust |
 
 ### 3. Hybrid scene + scanner model (the creative core, from the exploration)
+
 - **Domains**: `photo` (equirect/360/projected), `mesh` (tri-mesh/depth-shell/wireframe), `splat` (3DGS/radiance-field/point-cloud), `performer` (roto mattes), `fx` (particles/edge/stylized).
 - **Scanner = moving volumetric mask generator** (cone/sphere/spline/rotating-lobe, bpm-locked, occlusion-aware) writing channels (`reveal_splat`, `hide_photo`, `boost_wireframe`, `edge_emission`, …) that drive domain opacity/material/effects. Optionally **semantic** ("prefer human silhouettes on vocals", "reflective materials on hats").
 - **Transitions** are declarative `mask→domain` mappings, beat-locked.
 
 ### 4. Bridge & round-trip
+
 OSC/WebSocket/shared-JSON between brain and runtime; **manual GUI edits serialize back to structured overrides** (`overrides.yaml`), never trapped in the editor binary. `viz diff overrides` surfaces divergence from canonical spec.
 
 ## Phased build (standing approval — dispatch without further gating; sponsor-only items excepted)
@@ -79,6 +84,7 @@ to the matching tool. This is the conductor's dispatch key:
 `experimental_code_gen → Bevy` · final `encode/HDR → Media Encoder` · `archive → Premiere XML`.
 
 **Build the headless-GOLD tools first** (maturity matrix → de-risks the unattended pipeline):
+
 - **GOLD (fully headless, agent-codegen):** Blender (`-b --python`), Media Encoder (watch-folder + JS API),
   Photoshop Firefly (REST), Bevy (native CLI). → build these first.
 - **SILVER (headless + wrapper):** After Effects (aerender + nexrender), TouchDesigner (pre-programmed patches).
@@ -94,7 +100,9 @@ fastest fully-headless MVP, with AE motion-gfx and the live/Unreal path layered 
 **Negative / risk:** many tool integrations (phase them — Blender offline first, it's the highest-leverage single renderer); Gaussian-splat pipeline is research-fast-moving (treat as one domain, not the only scene rep); per-tool headless automation has gotchas (aerender licensing on render nodes, EEVEE-Next headless Linux-only → use Cycles, TD Non-Commercial license for R&D).
 
 ## Gap-sweep adoptions (fold into the spec/backlog)
+
 From the gap-sweep + exploration: **photosensitive-epilepsy flash-safety limiter (P1 — safety)**; structure/segmentation (MSAF) & drop/build detection; CLAP/Essentia mood embeddings; Ableton-Link/SMPTE/genlock sync; NDI/Spout/Syphon + projection-mapping/LED + HAP/NotchLC codecs; HDR/ACES/ProRes masters; Gaussian-splat (3DGS/3DGUT) + radiance-field domain; Roto Brush 3 performer isolation; anti-repetition/novelty + per-track narrative arc (the core "make it not look like loops" secret sauce); seeded reproducibility + show-file format; operator preview console.
 
 ## Status / standing approval
+
 Operator gave **"always approve"** — build phases dispatch and report without per-step gating. **Excepted (still sponsor-only):** paid licenses (TouchDesigner Commercial, Unreal royalty, Adobe render-node licensing), repo un-archiving, and the canvasApp key (#55, unrelated). Build proceeds P1→P3 now.

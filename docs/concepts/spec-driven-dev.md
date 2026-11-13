@@ -18,6 +18,7 @@ Most development workflows fail in predictable ways:
 - **Compliance risk** — no evidence trail for regulated environments
 
 Traditional agile methods address some of these, but they often:
+
 - Rely on oral tradition and Jira descriptions
 - Assume human judgment at every gate
 - Don't scale to distributed AI-driven development
@@ -117,6 +118,7 @@ AgilePlus doesn't care which agent writes the code:
 - **Copilot** — prompt files in `.github/prompts/`
 
 All agents receive:
+
 1. **Spec context** — what to build
 2. **Plan context** — how to decompose it
 3. **WP definition** — exactly which piece to implement
@@ -124,6 +126,7 @@ All agents receive:
 5. **File scope** — which files can be touched
 
 Agents can call **hidden sub-commands** (25 total, across 8 categories) to:
+
 - Manage branches (`agileplus branch create`, `checkout`, `delete`)
 - Commit atomically (`agileplus commit create`, `amend`, `fixup`)
 - Write governance artifacts (`agileplus artifact write`, `hash`)

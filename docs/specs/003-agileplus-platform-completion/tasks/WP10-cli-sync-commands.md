@@ -30,6 +30,7 @@ Implementation command: `spec-kitty implement WP10 --base WP09`
 Push all local features/WPs that have changed since last sync to Plane.so.
 
 **Behavior:**
+
 - Use `SyncMapping` to determine what changed
 - Display `SyncReport` on completion
 - Options:
@@ -37,6 +38,7 @@ Push all local features/WPs that have changed since last sync to Plane.so.
   - `--dry-run` (show what would sync without actually syncing)
 
 **Output:**
+
 ```
 Pushing 3 features to Plane.so...
 ✓ Feature 'auth-flow' created (plane_issue_id: #42)
@@ -50,6 +52,7 @@ Duration: 2.3s
 Pull all Plane.so changes since last sync.
 
 **Behavior:**
+
 - Process pending webhook events if any queued
 - Display `SyncReport`
 - Options:
@@ -57,6 +60,7 @@ Pull all Plane.so changes since last sync.
   - `--dry-run`
 
 **Output:**
+
 ```
 Pulling changes from Plane.so...
 ✓ Feature 'auth-flow' updated
@@ -70,12 +74,14 @@ Duration: 1.8s
 Enable/disable auto-sync mode.
 
 **Behavior:**
+
 - `on`: Enable auto-sync. Every feature/WP mutation automatically triggers a push.
 - `off`: Disable auto-sync.
 - `status`: Show current auto-sync setting.
 - Store setting in config file.
 
 **Output:**
+
 ```
 agileplus sync auto status
 Auto-sync is ON
@@ -89,6 +95,7 @@ Auto-sync disabled
 Display sync status for all tracked entities.
 
 **Output (table):**
+
 ```
 Entity                    | Local State  | Remote State | Last Synced | Match | Conflicts
 ─────────────────────────────────────────────────────────────────────────────────────
@@ -104,11 +111,13 @@ Color-code: green=synced, yellow=pending, red=conflict.
 Interactive conflict resolution.
 
 **Behavior:**
+
 - Show local vs remote values side-by-side
 - Prompt user to choose: `(L)ocal wins`, `(R)emote wins`, `(M)erge manually`
 - Apply chosen resolution via `SyncOrchestrator`
 
 **Example:**
+
 ```
 agileplus sync resolve feature 5
 Conflict in Feature 'api-design':

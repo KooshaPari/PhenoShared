@@ -281,6 +281,7 @@ authentication:
 **Approach**: Use Kong as the API gateway with Lua plugins.
 
 **Rejected Because**:
+
 - Heavy resource usage (NGINX + Lua VM)
 - Database dependency (PostgreSQL/Cassandra) for config
 - Complex plugin development in Lua
@@ -288,6 +289,7 @@ authentication:
 - Higher latency per request
 
 **Comparison:**
+
 | Metric | Kong | Portalis |
 |--------|------|----------|
 | Requests/sec | 5,000 | 50,000+ |
@@ -300,6 +302,7 @@ authentication:
 **Approach**: Use Envoy as the data plane with custom control plane.
 
 **Rejected Because**:
+
 - Complex configuration (xDS protocol)
 - Heavy for simple use cases
 - Lua/WASM for custom logic
@@ -311,6 +314,7 @@ authentication:
 **Approach**: Build custom gateway using Go frameworks.
 
 **Considered But**:
+
 - Runtime GC pauses affect latency consistency
 - Larger binary size than Rust
 - Less compile-time safety
@@ -321,6 +325,7 @@ authentication:
 **Approach**: Build gateway with Node.js/Fastify.
 
 **Rejected Because**:
+
 - GC pauses at high request rates
 - Lower throughput than compiled languages
 - Callback complexity without async/await clarity
@@ -329,30 +334,35 @@ authentication:
 ## Implementation Phases
 
 ### Phase 1: Core Gateway
+
 - HTTP server with routing
 - Basic upstream forwarding
 - Health checks
 - Configuration loading
 
 ### Phase 2: Authentication
+
 - JWT validation
 - API key authentication
 - OAuth 2.0/OIDC integration
 - RBAC middleware
 
 ### Phase 3: Rate Limiting
+
 - Token bucket algorithm
 - Sliding window algorithm
 - Per-consumer quotas
 - Redis integration for distributed limiting
 
 ### Phase 4: Observability
+
 - Structured logging (tracing)
 - Prometheus metrics
 - OpenTelemetry traces
 - Audit logging
 
 ### Phase 5: Advanced Features
+
 - gRPC proxying
 - WebSocket support
 - Request/response transformation
@@ -361,17 +371,20 @@ authentication:
 ## Security Considerations
 
 ### Authentication Security
+
 - JWT signatures verified against JWKS
 - API keys stored with bcrypt hashing
 - OAuth tokens never logged
 - Rate limiting on auth endpoints
 
 ### Transport Security
+
 - TLS 1.2+ required
 - Strong cipher suites
 - Certificate rotation support
 
 ### Configuration Security
+
 - Secrets in environment variables
 - No plaintext passwords in config
 - Config validation before apply

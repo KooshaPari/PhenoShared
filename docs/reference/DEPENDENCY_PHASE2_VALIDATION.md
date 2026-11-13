@@ -1,4 +1,5 @@
 # Dependency Phase 2: Validation Framework
+
 ## Testing, Measurement & Verification Protocols
 
 **Date Created:** 2026-03-31
@@ -162,6 +163,7 @@ Create `/docs/reports/PHASE2_BASELINE.md`:
 ### 2.1 WP1 Validation: cargo-udeps CI Check
 
 **Success Criteria:**
+
 - [ ] cargo-udeps installed: `which cargo-udeps`
 - [ ] CI workflow created: `.github/workflows/cargo-udeps.yml`
 - [ ] Workflow passes on main branch
@@ -190,12 +192,14 @@ gh workflow run cargo-udeps.yml --ref main
 ```
 
 **Test After Validation:**
+
 ```bash
 cargo build --workspace
 cargo test --workspace
 ```
 
 **Sign-Off Checklist:**
+
 - [ ] cargo-udeps successfully installed
 - [ ] All 28 crates scanned
 - [ ] No compilation errors during scan
@@ -207,6 +211,7 @@ cargo test --workspace
 ### 2.2 WP2 Validation: Remove anyhow from Library Crates
 
 **Success Criteria:**
+
 - [ ] Zero `use anyhow::` imports in 12 lib crates
 - [ ] All anyhow references replaced with thiserror
 - [ ] All 12 crates compile without warnings
@@ -303,6 +308,7 @@ $ cargo build --all-targets --workspace
 ```
 
 All tests pass.
+
 ```
 
 ---
@@ -397,6 +403,7 @@ cat /tmp/feature-matrix.csv
 ### 2.4 WP4 Validation: Merge Error Types
 
 **Success Criteria:**
+
 - [ ] All 45+ duplicate error types removed
 - [ ] 8 canonical types defined in error-core
 - [ ] All tests pass (100%)
@@ -511,6 +518,7 @@ Total: 28 LOC (consolidated from 150+ LOC scattered across 12 crates)
 ### 2.5 WP5 Validation: Lazy-Initialize Regex
 
 **Success Criteria:**
+
 - [ ] 8+ regex patterns wrapped in once_cell::Lazy
 - [ ] All tests pass
 - [ ] No behavioral changes
@@ -578,6 +586,7 @@ echo "✓ All WP5 validation checks passed"
 ### 2.6 WP6 Validation: Dead Code Removal
 
 **Success Criteria:**
+
 - [ ] All `#[allow(dead_code)]` reviewed
 - [ ] 45+ suppressions eliminated
 - [ ] 1,200+ LOC removed
@@ -686,6 +695,7 @@ Create `docs/reports/WP6_DEAD_CODE_AUDIT.md`:
 ### 2.7 WP7 Validation: Unsafe Code Audit
 
 **Success Criteria:**
+
 - [ ] All 8 unsafe blocks documented
 - [ ] Safety comments explain invariants
 - [ ] All tests cover unsafe paths
@@ -1166,6 +1176,7 @@ echo "✓ Post-merge verification complete"
 **Symptom:** `error[E0433]: cannot find type 'Error' in this scope`
 
 **Solution:**
+
 1. Check for `use anyhow::Error;` statements (should be removed)
 2. Replace with concrete error type from error-core
 3. Update `?` operator usage to map to concrete type
@@ -1175,6 +1186,7 @@ echo "✓ Post-merge verification complete"
 **Symptom:** Duplicate feature definitions in Cargo.toml
 
 **Solution:**
+
 1. Audit all feature flags using provided script
 2. Remove duplicates, keep one canonical name
 3. Update Cargo.lock: `cargo update`
@@ -1184,6 +1196,7 @@ echo "✓ Post-merge verification complete"
 **Symptom:** Tests fail after unsafe audit
 
 **Solution:**
+
 1. Do not remove unsafe code in Phase 2
 2. Only document safety invariants
 3. Create new issue for Phase 3 refactoring
@@ -1211,4 +1224,3 @@ echo "✓ Post-merge verification complete"
 **Status:** 🟡 READY FOR EXECUTION
 **Maintainer:** Phenotype Architecture Team
 **Last Updated:** 2026-03-31
-

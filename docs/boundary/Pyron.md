@@ -40,6 +40,7 @@ Archived tombstone state, migration evidence, and historical lockstep repoint no
 **Reviewer:** forge subagent (L7-001 sweep)
 **Worklog / finding:** `worklogs/L7-001-intent-boundary-curation-2026-06-17.json`
 **Decisions:**
+
 - Restored as archived after premature deleted/404 state.
 - No new work binds to Pyron; use domain owner repos instead.
 

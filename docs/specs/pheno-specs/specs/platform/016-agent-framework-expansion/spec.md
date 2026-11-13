@@ -19,6 +19,7 @@ This spec completes the agent framework by implementing agent orchestration, MCP
 ## Problem Statement
 
 Agent framework is incomplete and fragmented:
+
 - **Agent orchestration** — basic orchestration, missing multi-agent coordination
 - **MCP protocol** — implemented but not integrated with orchestration
 - **Event-driven communication** — standalone, no integration with agent lifecycle
@@ -56,30 +57,35 @@ Agent framework is incomplete and fragmented:
 ## Technical Approach
 
 ### Phase 1: Architecture Design (Week 1-2)
+
 1. Design unified agent framework architecture
 2. Define interfaces between orchestration, MCP, communication, policy, mobility
 3. Design agent lifecycle states and transitions
 4. Plan integration points between all components
 
 ### Phase 2: Orchestration and MCP Integration (Week 2-4)
+
 1. Complete Agentora multi-agent coordination
 2. Integrate AgentMCP with orchestration layer
 3. Implement agent task decomposition and assignment
 4. Add agent coordination patterns (leader-follower, peer-to-peer)
 
 ### Phase 3: Communication and Policy Integration (Week 4-6)
+
 1. Integrate agent-wave event-driven communication with agent lifecycle
 2. Implement event routing and filtering
 3. Integrate agentops-policy-federation with agent orchestration
 4. Implement policy distribution and enforcement
 
 ### Phase 4: Mobility and DevOps Integration (Week 6-8)
+
 1. Complete helMo agent mobility implementation
 2. Integrate mobility with orchestration layer
 3. Integrate agent-devops-setups with core framework
 4. Implement agent deployment and configuration management
 
 ### Phase 5: Testing and Documentation (Week 8-10)
+
 1. Comprehensive integration testing across all components
 2. Multi-agent scenario testing
 3. Performance testing for communication and mobility

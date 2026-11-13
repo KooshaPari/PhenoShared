@@ -19,7 +19,7 @@ per-repo artifacts.
 | :--- | :---- | :--------- | :---------------------------------------------------------- | :------- | :---------------- |
 | 1    | L7-001 | 2026-06-17 | Contract + full Mac+Windows prompt/plan/response curation | complete | 82 intent + 123 boundary files rendered; 45,091 unique records |
 | 2    | L7-002 | 2026-06-18 | Collision resolution (alias → canonical rebinding)          | complete (per L7-003 cross-ref) | 15 merges + 6 drops → 108 canonical repos bound; branch tip `f5b6d7d6` |
-| 3    | L7-003 | 2026-06-18 | Ecosystem reconciliation (ECOSYSTEM_MAP ↔ L7-002 _bindings) | complete (orphan LIVE; main PUSH-PENDING) | 0 merge conflicts; +SSOT layer; 8 stubs; orphan @ `cef45570` |
+| 3    | L7-003 | 2026-06-18 | Ecosystem reconciliation (ECOSYSTEM_MAP ↔ L7-002_bindings) | complete (orphan LIVE; main PUSH-PENDING) | 0 merge conflicts; +SSOT layer; 8 stubs; orphan @ `cef45570` |
 
 ### 1.1 L7-001 (2026-06-17) — Intent + Boundary Contract + Curation Sweep
 
@@ -138,6 +138,7 @@ Verified via `https://api.github.com/repos/<REDACTED>/phenotype-registry/branche
 | Tip message | `docs(worklog): L7-003 FINAL — orphan @ fcf30c3c LIVE w/ 8 stubs + PhenoDesign case-fix` |
 
 Local branch tip history (last 5, all on orphan):
+
 - `cef45570` — docs(worklog): L7-003 FINAL
 - `46e73eac` — fix(registry): add canonical PhenoDesign.md files
 - `63d46c65` — fix(registry): remove lowercase phenoDesign.md duplicates

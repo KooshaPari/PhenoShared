@@ -48,10 +48,12 @@ This work package implements the core gate evaluation engine that enforces quali
 ## Subtasks & Detailed Guidance
 
 ### Subtask T032 – Gate Criteria Data Model
+
 - **Purpose**: Define the structure for configurable quality gates that can be evaluated per channel
 - **Steps**:
   1. Create `internal/gate/criteria.go`
   2. Define the `Channel` type as a constant iota:
+
      ```go
      package gate
 
@@ -82,7 +84,9 @@ This work package implements the core gate evaluation engine that enforces quali
          }
      }
      ```
+
   3. Define the `GateCriterion` struct with fields: ID (string, unique key), Name (human-readable), Command (shell command to execute), RequiredFrom (Channel where this gate activates)
+
      ```go
      type GateCriterion struct {
          ID           string
@@ -91,7 +95,9 @@ This work package implements the core gate evaluation engine that enforces quali
          RequiredFrom Channel
      }
      ```
+
   4. Create a map of default gate criteria:
+
      ```go
      var DefaultGates = map[string]GateCriterion{
          "lint": {
@@ -138,7 +144,9 @@ This work package implements the core gate evaluation engine that enforces quali
          },
      }
      ```
+
   5. Add a `GateSet` type to represent a collection of gates filtered for a target channel:
+
      ```go
      type GateSet struct {
          Criteria []GateCriterion
@@ -160,10 +168,12 @@ This work package implements the core gate evaluation engine that enforces quali
 - **Notes**: Ensure Channel ordering is meaningful for gate filtering; GateCriterion struct must be serializable for config files (use struct tags for YAML/JSON)
 
 ### Subtask T033 – Gate Evaluator Implementation
+
 - **Purpose**: Implement the core evaluation logic that executes each gate criterion and records results
 - **Steps**:
   1. Create `internal/gate/evaluator.go`
   2. Define the `GateResult` struct to capture the outcome of a single criterion:
+
      ```go
      type GateResult struct {
          CriterionID string
@@ -174,7 +184,9 @@ This work package implements the core gate evaluation engine that enforces quali
          Error       string  // non-empty if command failed
      }
      ```
+
   3. Define the `PromotionReport` struct summarizing the full evaluation:
+
      ```go
      type PromotionReport struct {
          Package       *Package
@@ -186,7 +198,9 @@ This work package implements the core gate evaluation engine that enforces quali
          TotalDuration int64  // milliseconds
      }
      ```
+
   4. Implement the `Evaluate` function signature (see T034 for full logic):
+
      ```go
      type RiskProfile string
 
@@ -198,6 +212,7 @@ This work package implements the core gate evaluation engine that enforces quali
 
      func Evaluate(ctx context.Context, pkg *Package, fromChannel, toChannel Channel, riskProfile RiskProfile) (*PromotionReport, error)
      ```
+
   5. Implement gate criterion execution:
      - Accept target channel, return filtered gate set
      - For each criterion, spawn `exec.CommandContext` with timeout (default 5m)
@@ -212,16 +227,20 @@ This work package implements the core gate evaluation engine that enforces quali
 - **Notes**: Use context with timeout to prevent hanging gates; log each criterion execution; return error if Package is nil or channels invalid; consider stderr as non-fatal (only fail if command exits non-zero)
 
 ### Subtask T034 – Risk-Based Promotion Rules
+
 - **Purpose**: Enforce risk-profile-dependent channel traversal constraints
 - **Steps**:
   1. Add risk-based promotion validation logic to `Evaluate` function in T033
   2. Define channel transition rules:
+
      ```go
      // Low risk: can skip Canary, skip Beta, go directly Alpha → Beta or Beta → Prod
      // Medium risk: must do at minimum Canary → Beta → RC, cannot skip Beta
      // High risk: must traverse all 5 tiers in order: Alpha → Canary → Beta → RC → Prod
      ```
+
   3. Implement validation before gate evaluation:
+
      ```go
      func ValidateChannelTransition(from, to Channel, risk RiskProfile) error {
          // Check that 'from' < 'to' (monotonic progression)
@@ -256,6 +275,7 @@ This work package implements the core gate evaluation engine that enforces quali
          return nil
      }
      ```
+
   4. Call `ValidateChannelTransition` at the start of `Evaluate`, returning error if invalid
   5. Document the rules in code comments with examples
   6. Add integration points with `Evaluate` to check risk before running gates
@@ -265,10 +285,12 @@ This work package implements the core gate evaluation engine that enforces quali
 - **Notes**: Reject invalid transitions early to fail fast; include helpful error messages; consider that "skip" means moving more than one tier; validate that risk profile is not empty string
 
 ### Subtask T035 – Structured Report Formatting
+
 - **Purpose**: Generate human-readable Lipgloss tables and machine-readable JSON output for gate evaluation results
 - **Steps**:
   1. Create `internal/gate/reporter.go`
   2. Implement `FormatLipglossTable` function to render `PromotionReport` as a Lipgloss table:
+
      ```go
      import "github.com/charmbracelet/lipgloss"
 
@@ -279,7 +301,9 @@ This work package implements the core gate evaluation engine that enforces quali
          // Summary row at end: "Overall │ PASSED   │ 3.2s    │"
      }
      ```
+
   3. Implement `FormatJSON` function to serialize `PromotionReport` as structured JSON:
+
      ```go
      func FormatJSON(report *PromotionReport) (string, error) {
          data := map[string]interface{}{
@@ -296,6 +320,7 @@ This work package implements the core gate evaluation engine that enforces quali
          return json.MarshalIndent(data, "", "  ")
      }
      ```
+
   4. Add helper to render individual `GateResult` with status indicator (✓/✗)
   5. Handle very long output (cap at 100 chars or ellipsize)
   6. Ensure both formats are valid, parseable, and machine-consumable
@@ -305,10 +330,12 @@ This work package implements the core gate evaluation engine that enforces quali
 - **Notes**: Use Lipgloss `table.New()` with style chain for borders and colors; JSON must be valid and escape special chars; ensure timestamps are RFC3339 format
 
 ### Subtask T036 – Default Gate Criterion Implementation
+
 - **Purpose**: Implement built-in handlers for each default gate criterion, including special logic for file-based gates
 - **Steps**:
   1. Extend `internal/gate/criteria.go` or create `internal/gate/builtin.go` for special handlers
   2. Implement each built-in gate as a callable command:
+
      ```
      lint                → mise run lint
      unit_tests          → mise run test
@@ -318,6 +345,7 @@ This work package implements the core gate evaluation engine that enforces quali
      rollback_plan       → custom logic (check for ROLLBACK.md)
      monitoring_dashboards → custom logic (check for monitoring config)
      ```
+
   3. For `rollback_plan`, add custom evaluation logic that:
      - Checks for existence of `ROLLBACK.md` in the package root
      - If file exists and is > 100 bytes, consider it a pass
@@ -333,13 +361,16 @@ This work package implements the core gate evaluation engine that enforces quali
 - **Notes**: Ensure rollback and monitoring checks are robust to different file locations; use package root as base directory; if a mise task doesn't exist, exec will fail naturally and that's acceptable
 
 ### Subtask T037 – Gate Evaluation Unit Tests
+
 - **Purpose**: Comprehensive test coverage for gate evaluation logic, risk-based skipping, and invalid transitions
 - **Steps**:
   1. Create `internal/gate/evaluator_test.go`
   2. Mock `exec.CommandContext` or use `testutil.MockExec` to avoid actual command execution:
+
      ```go
      type mockExecFunc func(ctx context.Context, name string, arg ...string) *exec.Cmd
      ```
+
   3. Test risk-based channel skipping:
      - Test low-risk: Alpha→Prod succeeds (skips all intermediate)
      - Test medium-risk: Alpha→Beta→RC succeeds; Alpha→RC fails (skips Beta)

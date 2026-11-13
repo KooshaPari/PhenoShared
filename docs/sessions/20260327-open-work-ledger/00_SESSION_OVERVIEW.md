@@ -6,6 +6,7 @@
 ## Purpose
 
 Consolidate all open work across repos into a single prioritized ledger, replacing fragmented chat-based status tracking with a durable, reviewable document. Every item here is either:
+
 - Actively being worked
 - Scheduled next
 - Blocked on a named dependency

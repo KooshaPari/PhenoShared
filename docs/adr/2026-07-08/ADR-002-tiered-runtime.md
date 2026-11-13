@@ -37,6 +37,7 @@ We adopt a three-tier runtime:
    tree-attention, and fleet-proto. Compiles to `.so` / `.dylib` / `.dll`.
 
 The three tiers communicate via:
+
 - **Framework ↔ Python:** `PYTHONPATH` ordering. The OMLX framework's
   site-packages is first; the research packages come after.
 - **Python ↔ Rust:** pyo3 FFI module `_phenotype_omlx_core`. Optional —

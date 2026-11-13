@@ -27,6 +27,7 @@ Analysis of the thegent repository reveals **~7,000+ LOC of redundant and iterat
 **Affected Files** (by location):
 
 #### Directory: `apps/byteport/backend/api/models/`
+
 - `models_100_percent_test.go` - 482 LOC (7 test functions)
 - `models_comprehensive_test.go` - 544 LOC (11 test functions)
 - `models_final_100_percent_test.go` - 519 LOC (5 test functions)
@@ -35,16 +36,20 @@ Analysis of the thegent repository reveals **~7,000+ LOC of redundant and iterat
 **Combined models testing**: 2,032 LOC testing the same `models.go` code
 
 #### Directory: `apps/byteport/backend/api/lib/`
+
 - `cloud_comprehensive_test.go` - 909 LOC (comprehensive test variant)
 - `lib_comprehensive_test.go` - some duplicate coverage
   
 #### Directory: `apps/byteport/backend/api/internal/infrastructure/auth/`
+
 - `workos_comprehensive_test.go` - comprehensive variant of workos service tests
 
 #### Directory: `apps/byteport/backend/api/testhelpers/`
+
 - `database_comprehensive_test.go` - 486 LOC (comprehensive test helper variant)
 
 **Root Cause**: Appears to be iterative development where test coverage was improved in stages, with each iteration creating a new file rather than replacing the old one. Files contain overlapping test functions with different naming conventions:
+
 - Some tests named for "100%" coverage goals
 - Some tests named "comprehensive"
 - Some tests are "final" or "ultimate" iterations
@@ -58,6 +63,7 @@ Analysis of the thegent repository reveals **~7,000+ LOC of redundant and iterat
 **Problem**: Test files for deprecated or legacy code paths not yet removed.
 
 **Affected Files**:
+
 - `legacy_auth_handlers_test.go` - 384 LOC
 - `legacy_optional_auth_middleware_uncovered_test.go` - 476 LOC  
 - `legacy_optional_middleware_additional_test.go` - 866 LOC
@@ -65,6 +71,7 @@ Analysis of the thegent repository reveals **~7,000+ LOC of redundant and iterat
 **Location**: `apps/byteport/backend/api/` and `apps/byteport/backend/api/internal/infrastructure/http/middleware/`
 
 **Analysis**: These files test "legacy" code paths. If the underlying code is deprecated or scheduled for removal, these tests may be unnecessary. Needs investigation:
+
 - Are the legacy code paths still in use?
 - Are there newer, non-legacy equivalents being tested elsewhere?
 - Can these tests be consolidated into the modern test suite?
@@ -78,6 +85,7 @@ Analysis of the thegent repository reveals **~7,000+ LOC of redundant and iterat
 **Problem**: Test files split across multiple files with "_additional" suffix, fragmenting test suites.
 
 **Affected Files**:
+
 - `application_additional_test.go` - 399 LOC
 - `middleware_additional_test.go` - 358 LOC
 - `credential_validator_additional_test.go` - 88 LOC
@@ -86,11 +94,13 @@ Analysis of the thegent repository reveals **~7,000+ LOC of redundant and iterat
 - `deployment_repository_additional_test.go` - 94 LOC
 
 **Pattern**: Each component has both a main test file and one or more "_additional" files. This suggests:
+
 - Initial test suite was created in main file
 - New tests were added in "_additional" files rather than being integrated
 - Possible circular dependency or import cycle issues preventing consolidation
 
 **Recommendation**: Investigate why "_additional" files were needed (likely import cycle resolution). Then consolidate by:
+
 1. Resolving any import cycles in main test file
 2. Merging "_additional" test cases into main test file
 3. Removing "_additional" files
@@ -102,6 +112,7 @@ Analysis of the thegent repository reveals **~7,000+ LOC of redundant and iterat
 **Test Count Variations**: Multiple test files testing the same component:
 
 Example - Handlers testing:
+
 - `handlers_test.go`
 - `handlers_helpers_test.go`
 - `deployment_handlers_test.go`
@@ -109,6 +120,7 @@ Example - Handlers testing:
 - `legacy_auth_handlers_test.go`
 
 These files appear to be:
+
 - Specialized test files for specific handler variants (auth vs deployment)
 - OR test utilities and helpers (handlers_helpers_test.go)
 - Consolidation opportunity depends on whether tests are genuinely for different code paths
@@ -125,12 +137,14 @@ These files appear to be:
 | **TOTAL IDENTIFIED** | **17 files** | **~7,860** | **~7,000+ LOC** |
 
 **Current State**:
+
 - Total test files (excluding vendor/gomodcache): ~5,207 files
 - Actual project test LOC: 27,972 LOC
 - Source code LOC (Go): 1,345,982 LOC
 - Test-to-source ratio: 0.16:1 (healthy)
 
 **Post-Consolidation Estimate**:
+
 - Test files: ~5,190 files (17 consolidated)
 - Test LOC: ~21,000 LOC (7,000 removed)
 - New ratio: 0.015:1 (excellent)
@@ -144,6 +158,7 @@ These files appear to be:
 **Strategy**: Merge 4 models test files into one "models_comprehensive_test.go" using best-of-breed tests.
 
 **Steps**:
+
 1. Analyze all 4 models test files to identify unique test cases
 2. For duplicated tests, keep the highest-quality version
 3. Merge all unique tests into single file with clear section comments
@@ -159,6 +174,7 @@ These files appear to be:
 **Strategy**: Determine status of legacy code paths and either consolidate or archive tests.
 
 **Steps**:
+
 1. For each legacy test file, find corresponding source code (legacy_* file)
 2. Check git blame/history to understand deprecation status
 3. Decision tree:
@@ -174,6 +190,7 @@ These files appear to be:
 **Strategy**: Merge "_additional" test files back into main test files, resolving any import issues.
 
 **Steps**:
+
 1. For each "_additional" file, identify why it exists (import cycle, too large, etc.)
 2. If import cycle: Fix import structure, then merge
 3. If size: Use table-driven tests or helper functions to keep main file manageable
@@ -188,8 +205,9 @@ These files appear to be:
 ## Implementation Roadmap
 
 ### PR #1: Consolidate Iterative Test Suites
+
 - **Title**: refactor(thegent): consolidate iterative models and comprehensive test suites
-- **Changes**: 
+- **Changes**:
   - Merge models_*.go variants into models_comprehensive_test.go
   - Merge other comprehensive/additional test suites
   - Archive old files
@@ -198,6 +216,7 @@ These files appear to be:
 - **Effort**: 2-3 hours
 
 ### PR #2: Archive or Consolidate Legacy Tests
+
 - **Title**: refactor(thegent): consolidate legacy test files with modern equivalents
 - **Changes**:
   - Move truly deprecated tests to .archive/
@@ -208,6 +227,7 @@ These files appear to be:
 - **Effort**: 1-2 hours
 
 ### PR #3: Merge Additional Test Files
+
 - **Title**: refactor(thegent): merge supplementary test files into main test suites
 - **Changes**:
   - Fix import cycles if blocking consolidation
@@ -222,14 +242,17 @@ These files appear to be:
 ## Risk Assessment
 
 **Low Risk**:
+
 - Consolidating iterative test suites (same tests, different names)
 - Merging supplementary files (additive content)
 
 **Medium Risk**:
+
 - Legacy test file handling (depends on code deprecation status)
 - May need to update code if legacy paths are still used but not tested
 
 **Mitigation**:
+
 - Run full test suite after each consolidation
 - Keep comprehensive git history (use git mv rather than rm)
 - Use .archive/ instead of deletion for traceability
@@ -268,6 +291,7 @@ These files appear to be:
 **Source code LOC**: 1,345,982 LOC
 
 **Key directories scanned**:
+
 - `./apps/byteport/backend/api/models/` - 4 iterative test files
 - `./apps/byteport/backend/api/lib/` - comprehensive test variants
 - `./apps/byteport/backend/api/internal/infrastructure/` - legacy and additional tests

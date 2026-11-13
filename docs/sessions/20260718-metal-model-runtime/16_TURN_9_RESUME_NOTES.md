@@ -147,6 +147,7 @@ This fix is **defensible** because: (a) the asymmetric-quant error bound IS one 
 ### 6.7 Commit `c8e5534` — Pre-push hook installer
 
 `scripts/install_pre_push_hook.sh` (97L, new) — idempotent installer for the git pre-push hook. Writes a self-contained 24-line hook to `.git/hooks/pre-push` that:
+
 - Uses `git rev-parse --show-toplevel` to find the repo root.
 - Runs `bash scripts/snapshot.sh` (the gated snapshotter).
 - Propagates `DRY_RUN` from the calling shell.
@@ -163,6 +164,7 @@ This was turn-8 forward priority #4.
 ### 6.9 Commit `a0fba0f` — Spec-decode proposal state
 
 `perf-core/kernel-registry/tests/sota_operators/spec_decode_proposal_state.rs` (294L, new) — 4 tests covering the proposal-state contract surface (noted as a gap in the session overview line 32):
+
 1. `proposal_state_initializes_with_zero_acceptance_count`
 2. `proposal_state_accepts_draft_tokens_byte_identical`
 3. `proposal_state_rejects_with_zero_acceptance_preserves_state`
@@ -173,6 +175,7 @@ The `ProposalState` type lives in a private `mod proposal_state` within the test
 ### 6.10 Commit `c0cf2d6` — ZAYA × LFM interaction oracle
 
 `perf-core/kernel-registry/tests/sota_operators/zaya_lfm_interaction.rs` (333L, new) — 3 cross-family interaction tests:
+
 1. `zaya_activations_bias_lfm_routing_toward_fewer_experts` (hypothesis: 1-bit activations → ≤4 unique experts per token vs. ~5.5 baseline)
 2. `zaya_lfm_combination_remains_byte_identical_across_runs` (determinism under fixed seed)
 3. `zaya_lfm_combination_under_seed_sweep_distributes_across_experts` (≥6/8 expert slots used across 8 seeds)
@@ -196,6 +199,7 @@ Both checks degrade to **WARN** (never FAIL) on file-not-found/OSError so partia
 ### 6.13 Commits `7e55e1b`, `27c74d0`, `a6201d8` — Module-size sweep
 
 Three refactor-only commits:
+
 - `zaya_activations.rs` (476L) → `zaya_activations_basic.rs` (361L) + `zaya_activations_advanced.rs` (153L)
 - `discrete_diffusion.rs` (468L) → `discrete_diffusion_schedule.rs` (105L) + `discrete_diffusion_sampler.rs` (407L)
 - `python/omlx_research/cli/__init__.py` (542L) → `__init__.py` (412L) + `_cmd_eval.py` (164L)
@@ -237,6 +241,7 @@ The remaining 2 WARN are external dependencies intentionally not installed in th
 | **9 close** | **21** | **19** | **2** | **0** |
 
 **Turn 9 transitions:**
+
 - Added 2 new checks (`coverage_tag_count_at_least_25`, `eval_harness_suite_count_at_least_4`) → both PASS
 - Raised meta-check threshold from 19 → 21 → still PASS
 
@@ -346,7 +351,7 @@ Created this turn:
 - `python/omlx_research/cli/_doctor_extra_niah.py` (208L, new) — split from _doctor_extra_checks.py
 - `python/omlx_research/cli/_doctor_extra_eval.py` (205L, new) — split from _doctor_extra_checks.py
 - `python/omlx_research/cli/_doctor_extra_kernel.py` (202L, new) — split from _doctor_extra_checks.py
-- `python/omlx_research/cli/_cmd_eval.py` (164L, new) — eval subcommand extracted from __init__.py
+- `python/omlx_research/cli/_cmd_eval.py` (164L, new) — eval subcommand extracted from **init**.py
 - `.git/hooks/pre-push` (24L, local only — NOT in git) — the hook content
 
 Modified this turn:

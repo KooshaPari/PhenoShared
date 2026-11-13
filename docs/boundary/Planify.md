@@ -42,6 +42,7 @@
 **Reviewer:** registry spine audit (deep-workspace audit, 2026-07-17 batch3)
 **Disposition-index row:** DSPI-11
 **Decisions:**
+
 - ARCHIVE_ONLY with catalog-not-consolidate pattern.
 - `site/` + `infra/` layers recommended for future targeted extraction.
 

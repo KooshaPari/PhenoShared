@@ -90,16 +90,19 @@ Tests (b) and (c) pin byte-equality between the scalar and tiled paths, so any d
 ### Oracle parity pinned
 
 3 lib tests in `qwen_moe_v2.rs`:
+
 1. `qwen_moe_v2_pipeline_runs_end_to_end_with_tiled_kernels`
 2. `qwen_moe_v2_grouped_gemm_tiled_matches_scalar_grouped_gemm`
 3. `qwen_moe_v2_weighted_reduce_tiled_matches_scalar_weighted_reduce`
 
 + 1 baseline round-trip in `regress-baseline/tests/contracts/model_families.rs`:
-4. `qwen_moe_end_to_end_v2_baseline_round_trip`
+
+1. `qwen_moe_end_to_end_v2_baseline_round_trip`
 
 ### Canonical baseline
 
 `perf-core/regress-baseline/tests/baselines/baselines.json` got a new entry:
+
 - **key:** `qwen_moe_end_to_end_v2`
 - **input_hash:** `d24185e30749da9b297f3f6837a6990e5092d7c42c5d8155876e4a92a8aaa4da`
 - **output envelope (first 4 floats of `reduced_out`):** `[0.0018646344542503357, 0.0018646344542503357, 0.0018646344542503357, 0.0018646344542503357]`
@@ -118,6 +121,7 @@ Tests (b) and (c) pin byte-equality between the scalar and tiled paths, so any d
 ### Deviation note (record of analytic-vs-empirical resolution)
 
 The turn-13 prompt stated:
+
 - "Sqrt: strictly convex on `(0, N)`" — empirical analysis shows Sqrt's `d²α/dt² = −1/(4N²·(1−t/N)^(3/2))` is **strictly negative on `(0, N)`** (i.e., Sqrt is *concave*, not convex).
 - "Cosine: strictly concave on `(0, N)`" — empirical analysis shows Cosine's `d²α/dt² = −(π²/(2N²))·cos(tπ/N)` is **concave on `(0, N/2)` and convex on `(N/2, N)`** (sign split).
 - "Sigmoid: convex-then-concave" — empirical analysis shows Sigmoid's `d²α/dt² = (4k²/N²)·α·(1−α)·(1−2α)` is **concave-then-convex** (inflection sign-flip at `t = N/2`).
@@ -133,6 +137,7 @@ Commit `297b544` addresses the turn-12 forward-priority callout (`19_TURN_12_RES
 `perf-core/kernel-registry/tests/sota_operators/discrete_diffusion_schedule_convexity.rs` (new, 326 lines) adds **5 tests** using the existing `Schedule::alpha_at(t: usize, num_steps: usize) -> f64` integer-step API — no new method on `Schedule` was added (test surface stays API-stable). The integer-step central second-derivative stencil `α(t+1) − 2·α(t) + α(t−1)` (with `h = 1`) mirrors the turn-12 derivative file's local helper style exactly.
 
 The 5 tests:
+
 1. `ddm_linear_schedule_second_derivative_is_zero` — pins exact `0.0` (within `|d²| ≤ 1e-6` numerical floor) for `N ∈ {4, 8, 16, 32, 64, 128}`.
 2. `ddm_sqrt_schedule_is_strictly_concave_on_interior` — central second-derivative at `t ∈ [1, N-1]` for `N ∈ {4, 8, 32, 128}` is strictly **negative** (Sqrt is concave on `(0, N)`).
 3. `ddm_cosine_schedule_is_concave_then_convex` — sign-split at `N/2`: negative for `t < N/2`, positive for `t > N/2`, with `N ∈ {4, 8, 32, 128}`.
@@ -144,6 +149,7 @@ The 5 tests:
 ### Why this matters
 
 This is the third orthogonal axis in the DDM coverage sweep:
+
 - Turn-9: `alpha(t)` function form (Linear + Cosine L2 decay)
 - Turn-11: L2 decay regression for Sqrt + Sigmoid {k}
 - Turn-12: First derivative `dα/dt` (sign + magnitude pin)
@@ -192,11 +198,13 @@ Each file sits well under the 350-line target. The largest is `tests.rs` at 277L
 | `perf-core/metal-runtime/src/compile/tests.rs`                  |      — |    277 | NEW (moved tests block)                           |
 
 Files newly at or near cap:
+
 - `discrete_diffusion_schedule_convexity.rs` — 326 lines (under soft target)
 - `qwen_moe_v2.rs` — 332 lines (under soft target)
 - `model_families.rs` — 500 lines (**at the 500-line hard cap**; turn-14 candidate for split into per-family sub-modules)
 
 Files over 500 lines (pre-existing, not caused by turn-13):
+
 - `perf-core/native-abi/tests/property_fuzz.rs` — 531
 - `perf-core/metal-runtime/tests/contracts.rs` — 532
 - `perf-core/kernel-registry/src/quality.rs` — 618
@@ -275,6 +283,7 @@ Plus: gated airlock-v2 push attempted (5+ local WIP branches at HEAD); push-to-r
 **Airlock-v2 push:** attempted via `airlock-v2 snapshot . --message "turn-13 close: qwen-moe-v2 trace + DDM-convexity + compile.rs split"`. 5+ local WIP branches created at HEAD `297b544`; remote push did not occur (no remote configured per `airlock-v2 status .`).
 
 This is a **tooling / credential limitation, not a code defect**:
+
 - All 7 code-quality gates above are GREEN.
 - The repo is committed, the snapshot is recorded, and the work is fully captured in 3 atomic commits on top of turn-12 close (`c55ed46`).
 - The airlock-v2 snapshot is exercised end-to-end; the WIP branches are healthy and point at HEAD.

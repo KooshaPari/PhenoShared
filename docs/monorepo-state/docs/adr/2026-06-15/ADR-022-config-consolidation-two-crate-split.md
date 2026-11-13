@@ -46,6 +46,7 @@ The cross-language contract (common field names: `url`, `port`, `db_path`, `log_
 ## Consequences
 
 *Positive:*
+
 - 9-crate sprawl → 3-crate canonical surface (Rust service, Rust lib, Python service).
 - Cross-language parity: porting a service between Rust and Python no longer requires renaming config keys.
 - 1,801 LoC of legacy code removed (275 + 64 + 142 + 1,320 = 1,801).
@@ -53,6 +54,7 @@ The cross-language contract (common field names: `url`, `port`, `db_path`, `log_
 - 12-factor path is the documented default: `combine('config.toml', 'PHENO_SERVICE')` in Rust; `MySettings()` with Pydantic-settings in Python.
 
 *Negative:*
+
 - Consumers that used the deleted `pheno/config-loader` or `pheno/libs/phenotype-config-core` APIs must migrate to `phenoShared/phenotype-config-core::FileConfig` / `CascadeLoader` (documented in `pheno-config/docs/twelve-factor.md`).
 - Settly GitHub archive is a public, irreversible step (mitigated by history preservation on the archived repo).
 - Cross-language parity requires both repos to update the canonical field list together; future fields are added to a coordination doc (`pheno-config/docs/twelve-factor.md`).

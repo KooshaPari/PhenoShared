@@ -116,6 +116,7 @@ agileplus implement WP01
 ```
 
 This:
+
 - Creates worktree at `.worktrees/001-feature-WP01`
 - Checks out dedicated branch `feat/001-feature-WP01`
 - Loads the WP prompt file
@@ -302,6 +303,7 @@ Dependent WPs waiting on this:
 ```
 
 This:
+
 - Moves WP from `doing` → `for_review`
 - Marks ready for code review
 - Unblocks dependent WPs (they can start planning)
@@ -350,6 +352,7 @@ agileplus implement WP01 --agent claude-code
 ```
 
 Claude receives:
+
 - WP prompt
 - Spec and plan context
 - File paths to modify

@@ -32,10 +32,12 @@ already gone or never re-added.
 ## Disposition
 
 Per AGENTS.md §16 (don't-do list):
+
 - `git push --force` is blocked — cannot amend d48b365 and force-push
 - `git reset --hard` is blocked — cannot rewrite local history
 
 So the canonical record remains as-is. This audit doc is the corrective:
+
 - Anyone reading d48b365's commit body should be aware the "451/-0" claim is wrong.
 - The actual diff is documented above.
 

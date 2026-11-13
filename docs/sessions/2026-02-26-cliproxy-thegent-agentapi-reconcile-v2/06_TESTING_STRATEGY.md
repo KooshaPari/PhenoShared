@@ -27,6 +27,7 @@
 ### 2.1 Dry-Run Mode
 
 All destructive operations (branch deletion, PR closure) use dry-run flags:
+
 ```bash
 git branch -d -n <branch>  # dry-run only
 gh pr close <n> --dry-run   # if supported
@@ -35,6 +36,7 @@ gh pr close <n> --dry-run   # if supported
 ### 2.2 Snapshot Before Changes
 
 Before any live operation:
+
 1. Record current PR state: `gh pr list --json number,mergeStateStatus > pr_snapshot_before.jsonl`
 2. Record current branch list: `git branch > branches_before.txt`
 3. Run the operation
@@ -43,6 +45,7 @@ Before any live operation:
 ### 2.3 Synthetic Test Data
 
 For offline testing:
+
 - PR numbers from known snapshots (e.g., #494 for thegent, #618 for cliproxyapi++)
 - Branch names from local inventory
 - Merge states from documented audit

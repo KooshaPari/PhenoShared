@@ -29,6 +29,7 @@ history:
 **Primary Goal:** Deploy pheno bootstrap and governance infrastructure on 4 strategically selected repos (AgilePlus, tokenledger, thegent, agentapi-plusplus), validate all components work end-to-end, and document findings for org-wide rollout.
 
 **Success Criteria:**
+
 - All 4 repos successfully bootstrapped with mise.toml, hooks, and CI workflows
 - AgilePlus (TypeScript, private) verified with private artifact handling
 - tokenledger (Rust) successfully promoted to alpha on crates.io
@@ -41,6 +42,7 @@ history:
 ## Context & Constraints
 
 **Context:**
+
 - WP09/WP10 established CI/CD infrastructure and pheno CLI commands
 - WP11 created language-specific task runner configs
 - WP12 implemented git hooks for quality gates
@@ -48,6 +50,7 @@ history:
 - Pilot results will inform process improvements before rolling out to all 47 repos
 
 **Constraints:**
+
 - Publishing to registries must work end-to-end (alpha channel for pre-release testing)
 - AgilePlus publishing artifacts must be suppressed (private project, no registry publish)
 - All repos must follow WP11 mise.toml structure; no deviations
@@ -65,6 +68,7 @@ history:
 **Purpose:** Deploy pheno bootstrap on AgilePlus (TypeScript/VitePress project), verify mise.toml creation, hook installation, and CI workflows; validate private artifact handling.
 
 **Steps:**
+
 1. **Prepare AgilePlus:**
    - Ensure repo is on canonical `main` branch (from governance rules, work in worktree if modifying)
    - Verify current state: does `mise.toml` exist? If yes, backup to `mise.toml.backup`
@@ -109,6 +113,7 @@ history:
    - Verify private artifact handling is correct (no publish in CI)
 
 **Files:**
+
 - Generated: `AgilePlus/mise.toml`
 - Generated: `AgilePlus/.phenorc.toml`
 - Generated: `AgilePlus/.github/workflows/*`
@@ -117,6 +122,7 @@ history:
 **Parallel?** No (blocks T081–T082).
 
 **Notes:**
+
 - AgilePlus is a key pilot because it's private; validates that publishing is correctly suppressed
 - VitePress is a relatively simple project; good baseline for TS validation
 - Record build output paths; may differ from standard `dist/` if VitePress uses custom config
@@ -128,6 +134,7 @@ history:
 **Purpose:** Deploy pheno bootstrap on tokenledger (Rust), verify mise.toml, test pre-release publishing to crates.io (alpha channel), validate topological sort for workspace dependencies.
 
 **Steps:**
+
 1. **Prepare tokenledger:**
    - Ensure repo is on canonical `main` branch
    - Check if workspace (multiple crates) or single crate: `cat Cargo.toml | grep -A 10 "^\[workspace\]"`
@@ -178,6 +185,7 @@ history:
    - Verify crates.io correctly marks it as pre-release
 
 **Files:**
+
 - Generated: `tokenledger/mise.toml`
 - Generated: `tokenledger/.phenorc.toml`
 - Modified: `tokenledger/Cargo.toml` (version bump on promote)
@@ -186,6 +194,7 @@ history:
 **Parallel?** Yes (with T079–T080 after bootstrap complete).
 
 **Notes:**
+
 - Alpha publish to crates.io is a critical test; issues here block org-wide rollout
 - Topological sort is only relevant if workspace exists; single crate is simpler
 - Document credentials setup: pheno must have crates.io token configured
@@ -197,6 +206,7 @@ history:
 **Purpose:** Deploy pheno bootstrap on thegent (Python), verify mise.toml, test pre-release publishing to PyPI (alpha channel), validate PEP 440 version format.
 
 **Steps:**
+
 1. **Prepare thegent:**
    - Ensure repo is on canonical `main` branch
    - Check Python project structure: `pyproject.toml` or `setup.py`
@@ -236,10 +246,12 @@ history:
 
 6. **Validate test markers:**
    - Verify `pyproject.toml` includes pytest marker config:
+
      ```toml
      [tool.pytest.ini_options]
      markers = ["integration: integration tests"]
      ```
+
    - Verify `mise run test:integration` works if integration tests exist
 
 7. **Document findings:**
@@ -248,6 +260,7 @@ history:
    - Note any dependency conflicts or pip-audit warnings
 
 **Files:**
+
 - Generated: `thegent/mise.toml`
 - Generated: `thegent/.phenorc.toml`
 - Modified: `thegent/pyproject.toml` (version bump on promote)
@@ -256,6 +269,7 @@ history:
 **Parallel?** Yes (with T078, T080 after bootstrap complete).
 
 **Notes:**
+
 - PEP 440 versioning is strict; `a1` is correct, not `alpha.1` or `a.1`
 - PyPI pre-release detection: verify wheels upload correctly with alpha marker
 - Document credentials: pheno must have PyPI token configured
@@ -267,6 +281,7 @@ history:
 **Purpose:** Deploy pheno bootstrap on agentapi-plusplus (Go), verify mise.toml, test pre-release publishing via git tags and Go proxy, validate topological sort (if multi-module).
 
 **Steps:**
+
 1. **Prepare agentapi-plusplus:**
    - Ensure repo is on canonical `main` branch
    - Check Go project structure: single module or multi-module setup
@@ -316,6 +331,7 @@ history:
    - Note multi-module behavior (if applicable)
 
 **Files:**
+
 - Generated: `agentapi-plusplus/mise.toml`
 - Generated: `agentapi-plusplus/.phenorc.toml`
 - Generated: CI workflows
@@ -324,6 +340,7 @@ history:
 **Parallel?** Yes (with T078–T079 after bootstrap complete).
 
 **Notes:**
+
 - Go proxy discovery takes time (5-10 mins); don't check immediately after push
 - Go versioning: no go.mod version field; rely on git tags
 - Multi-module support is advanced; document if this gets complex
@@ -335,6 +352,7 @@ history:
 **Purpose:** Run `pheno audit` across all 4 repos to verify package detection, version accuracy, and no errors.
 
 **Steps:**
+
 1. **Single-repo audits:**
    - AgilePlus: `pheno audit --repo AgilePlus/` → verify project detected as private, no package listed
    - tokenledger: `pheno audit --repo tokenledger/` → verify crate detected, version `0.1.0-alpha.1`
@@ -370,12 +388,14 @@ history:
    - Flag issues for resolution before org-wide rollout
 
 **Files:**
+
 - Reference: output of `pheno audit` on all 4 repos
 - Document: findings in `docs/pilot-rollout-results.md`
 
 **Parallel?** No (depends on T077–T080 completion).
 
 **Notes:**
+
 - This is a comprehensive sanity check; all 4 repos should audit cleanly
 - Audit timing: if repos are large, may take >1 min; document baseline
 - Org-wide audit will scale to 47 repos; current performance with 4 is baseline
@@ -387,6 +407,7 @@ history:
 **Purpose:** Synthesize pilot results, document what worked, identify template or process improvements, update docs/templates before org-wide rollout.
 
 **Steps:**
+
 1. **Compile results document: `docs/pilot-rollout-results.md`:**
    - Executive summary: all 4 repos bootstrapped successfully, no critical blockers
    - Repo summaries (T077–T080):
@@ -424,6 +445,7 @@ history:
    - Add troubleshooting guide for future bootstraps
 
 **Files:**
+
 - Create: `docs/pilot-rollout-results.md`
 - Update: `templates/rust/mise.toml`, `templates/python/mise.toml`, `templates/typescript/mise.toml`, `templates/go/mise.toml` (if corrections needed)
 - Update: pheno CLI documentation or error messages (if issues found)
@@ -431,6 +453,7 @@ history:
 **Parallel?** No (depends on T077–T081 completion).
 
 **Notes:**
+
 - This is the gate for org-wide rollout; findings must be carefully reviewed
 - If major issues found: create blocking tasks in WP14, don't proceed until resolved
 - If minor issues: document as known issues and proceed
@@ -451,6 +474,7 @@ history:
 ## Review Guidance
 
 **Reviewers should verify:**
+
 - [ ] AgilePlus bootstrapped successfully; private artifact handling correct (T077)
 - [ ] tokenledger alpha version on crates.io (T078)
 - [ ] thegent alpha version on PyPI with correct PEP 440 format (T079)

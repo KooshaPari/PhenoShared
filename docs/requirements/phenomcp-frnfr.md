@@ -20,12 +20,14 @@ FastMCP-convention Python surface for PhenoMCP. It provides `Server`, `ServerCon
 `py.typed` marker for static-analysis compatibility.
 
 **Acceptance criteria:**
+
 - `from pheno_mcp import Server, Tool, Resource, Prompt, Client` succeeds after `uv sync`.
 - `pyproject.toml` declares the package and its entry points; `uv.lock` is committed.
 - `py.typed` is present and `mypy` resolves types without `--ignore-missing-imports`.
 - CI (`ubuntu-24.04`, SHA-pinned) runs `uv run pytest` and all tests pass.
 
 **Traceability:**
+
 - PR #76 (pheno_mcp Python package + workflow hygiene ubuntu-24.04 + SHA pins)
 - Tests: `python/tests/test_init.py`
 
@@ -42,12 +44,14 @@ return serialised dicts suitable for a JSON-RPC `tools/list` response. Each obje
 `to_dict()` maps to the MCP wire format (`inputSchema`, `mimeType`, etc.).
 
 **Acceptance criteria:**
+
 - `register_tool(t)` followed by `list_tools()` returns exactly one entry with matching name.
 - Re-registering the same key replaces the prior entry (no duplicates).
 - `list_resources()` / `list_prompts()` follow the same contract.
 - All three `to_dict()` methods serialise correctly to expected MCP field names.
 
 **Traceability:**
+
 - PR #76, PR #78 (registration wiring)
 - Tests: `python/tests/test_server.py`, `python/tests/test_server_comprehensive.py`
 
@@ -64,6 +68,7 @@ MCP wire requests. It routes `tools/list`, `resources/list`, `prompts/list`, and
 via `inspect.iscoroutinefunction`.
 
 **Acceptance criteria:**
+
 - `handle_request("tools/list", {})` returns `{"tools": [...]}`.
 - `handle_request("resources/list", {})` returns `{"resources": [...]}`.
 - `handle_request("prompts/list", {})` returns `{"prompts": [...]}`.
@@ -72,6 +77,7 @@ via `inspect.iscoroutinefunction`.
 - Both sync and async handlers execute correctly.
 
 **Traceability:**
+
 - PR #76, PR #80 (request validation hardening)
 - Tests: `python/tests/test_server.py`, `python/tests/test_server_comprehensive.py`, `python/tests/test_integration.py`
 
@@ -89,6 +95,7 @@ return `-32603 Internal error` (defensive guard). Every error response carries t
 canonical `{"jsonrpc": "2.0", "error": {"code": N, "message": "...", "data": {...}}, "id": null}` shape.
 
 **Acceptance criteria:**
+
 - `handle_request(None, {})` → code `-32600`.
 - `handle_request("tools/call", {"name": "", "arguments": {}})` → code `-32602`.
 - `handle_request("tools/call", {"name": "x", "arguments": "bad"})` → code `-32602`.
@@ -97,6 +104,7 @@ canonical `{"jsonrpc": "2.0", "error": {"code": N, "message": "...", "data": {..
 - A tool handler that raises still returns an error dict (no exception propagated to caller).
 
 **Traceability:**
+
 - PR #80 (`[codex] harden MCP request validation`)
 - Tests: `python/tests/test_server_comprehensive.py`, `python/tests/test_server.py`
 
@@ -115,6 +123,7 @@ HTTP errors are caught and returned as `{"error": ..., "status_code": ...}` — 
 `register_governance_tools(server)` wires both tools onto any `Server` instance.
 
 **Acceptance criteria:**
+
 - `ledger_query` input schema has zero required fields; all six filter fields are optional.
 - `ledger_verify` input schema requires exactly `from_entry` and `to_entry`.
 - `handle_ledger_query` issues `GET /api/v1/governance/ledger` and returns parsed JSON.
@@ -123,6 +132,7 @@ HTTP errors are caught and returned as `{"error": ..., "status_code": ...}` — 
 - `register_governance_tools(server)` makes both tools visible in `server.list_tools()`.
 
 **Traceability:**
+
 - PR #77 (wire ledger_query governance tool end-to-end)
 - Tests: `python/tests/test_governance_tools.py`
 
@@ -139,6 +149,7 @@ Both read `PARPOURA_BASE_URL`. HTTP errors are caught and returned as
 `{"error": ..., "status_code": ...}`.
 
 **Acceptance criteria:**
+
 - `session_suspend` requires exactly `session_id`.
 - `session_resume` requires exactly `bundle_ref`.
 - `handle_session_suspend` issues `POST /api/v1/sessions/{session_id}/suspend`.
@@ -147,6 +158,7 @@ Both read `PARPOURA_BASE_URL`. HTTP errors are caught and returned as
 - `register_session_tools(server)` makes both tools visible in `server.list_tools()`.
 
 **Traceability:**
+
 - PR #78 (wire all tool bundles + `create_configured_server`)
 - Tests: `python/tests/test_session_tools.py`
 
@@ -166,6 +178,7 @@ Both read `PARPOURA_BASE_URL`. HTTP errors are caught and returned as
 HTTP errors are caught and returned as `{"error": ..., "status_code": ...}`.
 
 **Acceptance criteria:**
+
 - `workflow_execute` requires `workflow_id`; `workflow_type` is optional.
 - `workflow_status` and `workflow_cancel` each require exactly `workflow_id`.
 - `workflow_list` requires no arguments.
@@ -174,6 +187,7 @@ HTTP errors are caught and returned as `{"error": ..., "status_code": ...}`.
 - `register_workflow_tools(server)` makes all four tools visible in `server.list_tools()`.
 
 **Traceability:**
+
 - PR #78
 - Tests: `python/tests/test_workflow_tools.py`
 
@@ -195,12 +209,14 @@ all 19 tools (`ledger_query`, `ledger_verify`, `agent_create`, `agent_list`,
 importing individual bundle modules.
 
 **Acceptance criteria:**
+
 - `create_configured_server()` returns a `Server` with exactly 19 tools registered.
 - `create_configured_server(ServerConfig(name="test"))` propagates the config to the server.
 - Returned server handles `tools/list` and returns all 19 tool names.
 - No exception raised on construction with default config.
 
 **Traceability:**
+
 - PR #78 (`feat(tools): wire all tool bundles + create_configured_server factory`)
 - Tests: `python/tests/test_configured_server.py`
 
@@ -218,6 +234,7 @@ object-safe Rust trait (`Box<dyn SearchPort>` compiles). Methods: `ensure_index(
 `SearchPortError` variants: `Index`, `Search`, `Delete`, `Transport`.
 
 **Acceptance criteria:**
+
 - `Box<dyn SearchPort>` compiles (object-safety smoke test passes).
 - `InMemorySearchStore` in `doubles` module fully implements the trait.
 - `ensure_index` is idempotent — calling twice on the same index name succeeds.
@@ -226,6 +243,7 @@ object-safe Rust trait (`Box<dyn SearchPort>` compiles). Methods: `ensure_index(
 - `SearchResults.estimated_total_hits` matches the actual hit count.
 
 **Traceability:**
+
 - PR #81 (`feat: hexagonal port traits — SearchPort + SkillStoragePort (audit #4)`)
 - Tests: `crates/pheno-ports/src/doubles.rs` (test series `search_double_*`)
 
@@ -251,6 +269,7 @@ fully unit-tested without a live Qdrant.  Live-server tests are gated behind
 `#[ignore = "requires live Qdrant on localhost:6333"]`.
 
 **Acceptance criteria:**
+
 - `Box<dyn SearchPort> = Box::new(QdrantClient::new(...))` compiles (object-safety).
 - `build_upsert_body` serialises `SearchDocument.id` as both point id and `_pheno_id` payload field.
 - `build_scroll_body` emits a `should` filter with `match.text` clauses covering `name`, `content`, `text`, `_pheno_id`.
@@ -259,6 +278,7 @@ fully unit-tested without a live Qdrant.  Live-server tests are gated behind
 - `cargo check --workspace` is clean (no errors, no warnings).
 
 **Traceability:**
+
 - PLAN-MCP-002 → SHIPPED
 - PR feat/qdrant-searchport
 - Tests: `crates/pheno-qdrant/src/lib.rs` (`test_build_*`, `test_qdrant_client_is_search_port`)
@@ -276,6 +296,7 @@ object-safe trait. `SkillEntry` fields: `id`, `name`, `version`, `code`, `runtim
 `Serialise`, `Backend`.
 
 **Acceptance criteria:**
+
 - `Box<dyn SkillStoragePort>` compiles (object-safety smoke test passes).
 - `InMemorySkillStore` in `doubles` module fully implements the trait.
 - `put` then `get` returns bit-identical entry.
@@ -285,6 +306,7 @@ object-safe trait. `SkillEntry` fields: `id`, `name`, `version`, `code`, `runtim
 - `delete` removes the entry; subsequent `get` returns `NotFound`.
 
 **Traceability:**
+
 - PR #81
 - Tests: `crates/pheno-ports/src/doubles.rs` (test series `skill_store_*`),
   `crates/phenotype-surrealdb/src/lib.rs` (test series `test_port_*`, `test_pheno_surreal_*`)
@@ -304,6 +326,7 @@ that pre-date the port trait. Fast unit tests use `mem://`; ignored tests cover 
 SurrealKv path.
 
 **Acceptance criteria:**
+
 - `PhenoSurreal::new("mem://").await` succeeds without external services.
 - `Box<dyn SkillStoragePort> = Box::new(PhenoSurreal::new(...).await.unwrap())` compiles.
 - `SkillStoragePort::put/get/list/delete` work through the SurrealDB API.
@@ -311,6 +334,7 @@ SurrealKv path.
 - Ignored tests exercise the local SurrealKv path for round-trip and delete coverage.
 
 **Traceability:**
+
 - PLAN-MCP-001 → SHIPPED
 - Tests: `crates/phenotype-surrealdb/src/lib.rs` (all non-ignored `#[tokio::test]` functions)
 
@@ -343,6 +367,7 @@ import-time segfaults on Python 3.14 alpha builds where pydantic-core's C
 extension has an ABI mismatch.
 
 **Acceptance criteria:**
+
 - `from pheno_mcp.transport import build_fastmcp_bridge, run_stdio, run_stdio_async` succeeds.
 - `build_fastmcp_bridge(create_configured_server())` registers all 19 tools on a FastMCP instance.
 - `run_stdio` is a synchronous callable; `run_stdio_async` is an async coroutine function.
@@ -351,6 +376,7 @@ extension has an ABI mismatch.
 - On Python builds where `mcp` is importable: an in-memory `ClientSession` can call `list_tools` and `call_tool` end-to-end via the bridge.
 
 **Traceability:**
+
 - PLAN-MCP-006 → SHIPPED
 - PR feat/mcp-transport
 - Tests: `python/tests/test_transport.py`
@@ -371,6 +397,7 @@ The bundles follow the same `PARPOURA_BASE_URL` env-var pattern as the existing 
 `register_agent_tools(server)`, `register_knowledge_tools(server)`, and `register_policy_tools(server)` wire all 11 tools onto any `Server` instance.
 
 **Acceptance criteria:**
+
 - `agent_create` uses `POST /api/v1/agents`; `agent_list` uses `GET /api/v1/agents`; `agent_get` uses `GET /api/v1/agents/{agent_id}`; `agent_delete` uses `DELETE /api/v1/agents/{agent_id}`.
 - `knowledge_store` uses `POST /api/v1/knowledge`; `knowledge_retrieve` uses `GET /api/v1/knowledge/{knowledge_id}`; `knowledge_search` uses `GET /api/v1/knowledge/search`; `knowledge_delete` uses `DELETE /api/v1/knowledge/{knowledge_id}`.
 - `policy_list` uses `GET /api/v1/policies`; `policy_get` uses `GET /api/v1/policies/{policy_id}`; `policy_evaluate` uses `POST /api/v1/policies/evaluate`.
@@ -378,6 +405,7 @@ The bundles follow the same `PARPOURA_BASE_URL` env-var pattern as the existing 
 - `register_agent_tools(server)`, `register_knowledge_tools(server)`, and `register_policy_tools(server)` make all 11 tools visible in `server.list_tools()`.
 
 **Traceability:**
+
 - PLAN-MCP-004 → SHIPPED
 - Tests: `python/tests/test_agent_tools.py`, `python/tests/test_knowledge_tools.py`, `python/tests/test_policy_tools.py`
 

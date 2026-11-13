@@ -80,6 +80,7 @@ Two halves in one crate:
 | `--mode=sidecar` | Loads the bridge; probes sidecar health; route calls must succeed. | Pre-flight check before a real forge session. |
 
 Exit codes:
+
 - `0` — all required checks passed.
 - `1` — one or more required checks failed.
 - `2` — bridge not loadable (cdylib missing).

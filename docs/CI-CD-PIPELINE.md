@@ -13,11 +13,11 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 
 ## Quick Links
 
-- **CI Workflow**: https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/ci.yml
-- **Security Workflow**: https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/security.yml
-- **Benchmark Workflow**: https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/benchmark.yml
-- **Release Workflow**: https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/release.yml
-- **Coverage Dashboard**: https://codecov.io/gh/&lt;REDACTED&gt;/phenotype-infrakit
+- **CI Workflow**: <https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/ci.yml>
+- **Security Workflow**: <https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/security.yml>
+- **Benchmark Workflow**: <https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/benchmark.yml>
+- **Release Workflow**: <https://github.com/KooshaPari/phenotype-infrakit/actions/workflows/release.yml>
+- **Coverage Dashboard**: <https://codecov.io/gh/&lt;REDACTED&gt;/phenotype-infrakit>
 
 ## Workflow 1: CI (Build, Lint, Test, Coverage)
 
@@ -26,6 +26,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 **Purpose**: Automatically build, lint, test, and measure code coverage on every push and pull request.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Manual trigger (`workflow_dispatch`)
@@ -33,6 +34,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 ### Jobs
 
 #### 1.1 Build Job
+
 - **Runs on**: ubuntu-latest, macos-latest (parallel)
 - **Components**: Rust toolchain (stable) + clippy + rustfmt
 - **Steps**:
@@ -44,6 +46,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Artifacts**: Release binaries
 
 #### 1.2 Lint Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Install Rust with clippy and rustfmt
@@ -53,6 +56,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Fails if**: Any clippy warning OR formatting issues
 
 #### 1.3 Test Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Run `cargo test --release --all --verbose`
@@ -60,6 +64,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Output**: Test results summary
 
 #### 1.4 Python Tests Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Set up Python 3.11
@@ -70,6 +75,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Output**: Python test results
 
 #### 1.5 Coverage Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Install tarpaulin
@@ -97,6 +103,7 @@ env:
 **Purpose**: Detect vulnerabilities, secrets, licensing issues, and run static analysis.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Daily schedule (2am UTC)
@@ -105,6 +112,7 @@ env:
 ### Jobs
 
 #### 2.1 Cargo Audit Job
+
 - **Tool**: `cargo audit`
 - **Purpose**: Check for known vulnerabilities in Rust dependencies
 - **Command**: `cargo audit --all-features --deny warnings`
@@ -112,6 +120,7 @@ env:
 - **Fails if**: Critical or high severity vulnerabilities found
 
 #### 2.2 Cargo Deny Job
+
 - **Tool**: `cargo-deny`
 - **Purpose**: Enforce dependency, license, and source policies
 - **Configuration**: Uses existing `deny.toml` file
@@ -123,6 +132,7 @@ env:
 - **Fails if**: Policy violation detected
 
 #### 2.3 Gitleaks Job
+
 - **Tool**: Gitleaks GitHub Action
 - **Purpose**: Detect secrets and sensitive information in git history
 - **Features**:
@@ -133,6 +143,7 @@ env:
 - **Fails if**: Secrets detected
 
 #### 2.4 CodeQL Analysis Job
+
 - **Tool**: GitHub CodeQL (built-in SAST)
 - **Languages**: C++ (from Rust compilation), Python
 - **Purpose**: Static Application Security Testing
@@ -141,6 +152,7 @@ env:
 - **Duration**: ~5-10 min per language
 
 #### 2.5 Python Security Job
+
 - **Tools**: Bandit (SAST), Safety (dependencies)
 - **Purpose**: Security checks for Python code
 - **Steps**:
@@ -158,6 +170,7 @@ env:
 **Purpose**: Detect performance regressions and track performance trends.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Manual trigger (`workflow_dispatch`)
@@ -165,6 +178,7 @@ env:
 ### Jobs
 
 #### 3.1 Benchmark Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Check for `benches/` directory
@@ -192,12 +206,14 @@ env:
 **Purpose**: Automatically build and publish releases when tags are pushed.
 
 **Triggers**:
+
 - Push tag matching `v*.*.*` (e.g., `v1.0.0`, `v2.1.3-rc1`)
 - Manual trigger with version input
 
 ### Jobs
 
 #### 4.1 Build Release Job
+
 - **Runs on**: Multiple platforms (parallel)
   - `x86_64-unknown-linux-gnu` (Ubuntu)
   - `x86_64-apple-darwin` (macOS Intel)
@@ -212,6 +228,7 @@ env:
 - **Output**: Platform-specific binaries
 
 #### 4.2 Create Release Job
+
 - **Runs on**: ubuntu-latest
 - **Depends on**: build-release (waits for all binaries)
 - **Permissions**: Requires `contents: write`
@@ -335,6 +352,7 @@ Required status checks for branch protection:
 - ✅ `cargo-deny`
 
 Optional checks:
+
 - `CodeQL C++` (code scanning)
 - `CodeQL Python` (code scanning)
 - `Gitleaks` (secret detection)
@@ -347,16 +365,19 @@ Optional checks:
 ### Workflow Not Triggering
 
 1. Verify workflow is enabled:
+
    ```bash
    gh workflow list
    ```
 
 2. Check branch filter:
+
    ```bash
    grep -A 2 "on:" .github/workflows/ci.yml
    ```
 
 3. Ensure commit is on `main`:
+
    ```bash
    git branch -a --contains HEAD
    ```
@@ -383,6 +404,7 @@ Optional checks:
 ## Best Practices
 
 1. **Test Locally First**:
+
    ```bash
    cargo build --release
    cargo clippy --all -- -D warnings
@@ -390,6 +412,7 @@ Optional checks:
    ```
 
 2. **Keep Dependencies Updated**:
+
    ```bash
    cargo audit        # Check vulnerabilities
    cargo update       # Update dependencies
@@ -407,6 +430,7 @@ Optional checks:
    - Document suppressions in `deny.toml`
 
 5. **Test Releases Locally**:
+
    ```bash
    cargo build --release --target x86_64-unknown-linux-gnu
    ./target/x86_64-unknown-linux-gnu/release/agileplus --version
@@ -430,6 +454,7 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 ### IDE Configuration
 
 **VS Code** (`settings.json`):
+
 ```json
 {
   "rust-analyzer.checkOnSave.command": "clippy",
@@ -442,6 +467,7 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 ```
 
 **IntelliJ IDEA**:
+
 - Settings > Languages & Frameworks > Rust > Clippy
 - Enable "External linter" with `--all-targets -- -D warnings`
 

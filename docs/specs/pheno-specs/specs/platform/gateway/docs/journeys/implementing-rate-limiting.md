@@ -13,6 +13,7 @@
 ## Overview
 
 Rate limiting protects your APIs from abuse, ensures fair usage, and enables predictable scaling. Portalis supports:
+
 - Global rate limits (requests per second/minute)
 - Per-consumer quotas (daily/monthly limits)
 - Sliding window and fixed window algorithms
@@ -52,6 +53,7 @@ portalis rate-limits show --config ~/.config/portalis/gateway.yaml
 ```
 
 **Expected Output:**
+
 ```
 Global Rate Limits:
 ┌──────────────────┬──────────────┬────────┬────────┐
@@ -106,6 +108,7 @@ portalis quotas list --config ~/.config/portalis/quotas.yaml
 ```
 
 **Expected Output:**
+
 ```
 Consumer Quotas:
 ┌─────────────────┬──────────────┬────────────────┐
@@ -162,6 +165,7 @@ done
 ```
 
 **Expected Output:**
+
 ```
 # First 100 requests
 HTTP/1.1 200 OK
@@ -185,6 +189,7 @@ portalis rate-limits metrics --config ~/.config/portalis/gateway.yaml
 ```
 
 **Expected Output:**
+
 ```
 Rate Limit Metrics:
 ┌─────────────────┬────────────┬───────────┬────────────────┐
@@ -203,6 +208,7 @@ portalis logs --filter rate_limit --last 50
 ```
 
 **Expected Output:**
+
 ```
 [2026-04-04T23:30:15Z] INFO  consumer-alice: 100/100 requests used (99% consumed)
 [2026-04-04T23:30:16Z] WARN  consumer-alice: Rate limit exceeded (quota=free-tier)
@@ -242,6 +248,7 @@ portalis test rate-limit \
 ```
 
 **Expected Output:**
+
 ```
 Rate Limit Test Results:
 [✓] Sent 150 requests

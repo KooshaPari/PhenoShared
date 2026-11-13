@@ -77,6 +77,7 @@ Queris centralizes these concerns so all services share a single, well-tested im
 | E1.5 | Developer | Connection metrics | I can monitor pool health |
 
 **Acceptance Criteria**:
+
 - `Queris::connect(url)` creates a working pool
 - Invalid URLs return descriptive errors
 - `pool.health_check()` returns `Result<()>`
@@ -97,6 +98,7 @@ Queris centralizes these concerns so all services share a single, well-tested im
 | E2.5 | Developer | Transaction support | I can group operations |
 
 **Acceptance Criteria**:
+
 - `pool.fetch_one::<User>("SELECT * FROM users WHERE id = $1", [id])`
 - `pool.fetch_all::<Post>("SELECT * FROM posts WHERE user_id = $1", [user_id])`
 - All errors implement `std::error::Error`
@@ -117,6 +119,7 @@ Queris centralizes these concerns so all services share a single, well-tested im
 | E3.5 | Developer | Subquery support | I can write complex queries |
 
 **Example**:
+
 ```rust
 let users = table!(users)
     .filter(status.eq("active"))
@@ -141,6 +144,7 @@ let users = table!(users)
 | E4.5 | Developer | Migration status command | I know what ran |
 
 **Acceptance Criteria**:
+
 - `Migrator::run()` applies pending migrations
 - Checksums prevent tampering
 - Already-applied migrations are skipped
@@ -161,6 +165,7 @@ let users = table!(users)
 | E5.5 | Developer | `ConnectionFailed` variant | I know when DB is unreachable |
 
 **Error Variants**:
+
 ```rust
 pub enum QuerisError {
     ConnectionFailed { source: sqlx::Error, url: String },
@@ -187,6 +192,7 @@ pub enum QuerisError {
 | E6.4 | Developer | Backend capability detection | I can adapt behavior |
 
 **Supported Backends**:
+
 | Backend | Status | Notes |
 |---------|--------|-------|
 | PostgreSQL 16+ | ✅ Full | Primary target |
@@ -207,6 +213,7 @@ pub enum QuerisError {
 | E7.4 | Developer | Query plan caching | Repeated queries are fast |
 
 **Performance Targets**:
+
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | p99 Latency | < 5ms | hyperfine benchmark |
@@ -228,6 +235,7 @@ pub enum QuerisError {
 | E8.4 | Developer | Fixture loading | I seed test data |
 
 **Acceptance Criteria**:
+
 - Unit tests use in-memory SQLite
 - `#[cfg(feature = "integration")]` gates integration tests
 - `TestPool::new()` creates isolated test database

@@ -51,8 +51,9 @@ history:
 ---
 
 ## Markdown Formatting
+
 Wrap HTML/XML tags in backticks: `` `<div>` ``, `` `<script>` ``
-Use language identifiers in code blocks: ````python`, ````bash`
+Use language identifiers in code blocks: ````python`,````bash`
 
 ---
 
@@ -80,22 +81,26 @@ spec-kitty implement WP12 --base WP11
 ## Context & Constraints
 
 ### Prerequisite Work
+
 - **WP08 (Agent Dispatch Adapter)**: provides `AgentDispatchAdapter` implementing `AgentPort` for spawning agents.
 - **WP09 (Review Adapter)**: provides `ReviewAdapter` implementing `ReviewPort` for Coderabbit integration and CI checks.
 - **WP11 (CLI Specify/Research)**: provides the CLI scaffold (`main.rs`, `AppContext`, clap routing) and the specify/research commands.
 
 ### Key References
+
 - **Spec**: FR-003 (plan), FR-004 (implement), FR-010 (agent dispatch), FR-011 (PR description), FR-012 (review-fix loop), FR-038 (conflict resolution), FR-039 (dependency scheduling)
 - **Plan**: `kitty-specs/001-spec-driven-development-engine/plan.md` -- agent dispatch flow, conflict resolution design, scheduler logic
 - **Data Model**: `kitty-specs/001-spec-driven-development-engine/data-model.md` -- WorkPackage entity (file_scope, pr_url, pr_state, agent_id), WpDependency entity, GovernanceContract entity
 
 ### Architectural Constraints
+
 - The `implement` command is the most complex in the system. It orchestrates VCS, agent dispatch, review, and telemetry in a long-running async workflow.
 - Agent dispatch must be cancellable. If the user presses Ctrl+C, the system should attempt to clean up worktrees and record a partial audit entry.
 - The review-fix loop is bounded. After max cycles, the WP is marked `blocked` with a governance exception in the audit trail.
 - PR creation uses `gh pr create` via shell -- abstract this behind the AgentPort or a dedicated utility.
 
 ### Crate Dependencies (additions to WP11)
+
 ```toml
 [dependencies]
 # In addition to WP11 deps:
@@ -134,6 +139,7 @@ agileplus-review = { path = "../agileplus-review" }
      - Transition feature: `researched -> planned`.
      - Append audit entry with evidence referencing the plan artifacts.
   3. Define `PlanArgs`:
+
      ```rust
      #[derive(Args)]
      struct PlanArgs {
@@ -149,6 +155,7 @@ agileplus-review = { path = "../agileplus-review" }
          agents_per_wp: usize,
      }
      ```
+
   4. Print a summary table of generated WPs with their dependencies and parallel groups.
 - **Files**: `crates/agileplus-cli/src/commands/plan.rs`
 - **Parallel?**: Yes, the plan command file is independent of the implement command file (T069-T071).
@@ -169,11 +176,13 @@ agileplus-review = { path = "../agileplus-review" }
      - Cross-reference with actual repo file listing to validate paths exist or are plausible new files.
      - Return deduplicated, sorted file path list.
   3. Implement `build_overlap_graph(wps: &[WorkPackage]) -> OverlapGraph`:
+
      ```rust
      pub struct OverlapGraph {
          edges: Vec<(WpId, WpId, Vec<String>)>,  // (wp_a, wp_b, shared_files)
      }
      ```
+
      - For each pair of WPs, compute `file_scope` intersection.
      - If intersection is non-empty, add an edge with the shared file list.
   4. Implement `OverlapGraph::parallel_groups(&self) -> Vec<Vec<WpId>>`:
@@ -197,19 +206,23 @@ agileplus-review = { path = "../agileplus-review" }
 - **Steps**:
   1. Create `crates/agileplus-cli/src/commands/scheduler.rs`.
   2. Implement `Scheduler` struct:
+
      ```rust
      pub struct Scheduler {
          wps: Vec<WorkPackage>,
          deps: Vec<WpDependency>,
      }
      ```
+
   3. Implement `Scheduler::execution_plan(&self) -> Vec<ExecutionWave>`:
+
      ```rust
      pub struct ExecutionWave {
          pub wave_number: u32,
          pub wp_ids: Vec<WpId>,
      }
      ```
+
      - Topological sort of the dependency graph.
      - Group into waves: wave 0 = WPs with no dependencies; wave 1 = WPs whose deps are all in wave 0; etc.
      - Within each wave, all WPs can run in parallel.
@@ -249,6 +262,7 @@ agileplus-review = { path = "../agileplus-review" }
        c. When a WP's PR is merged, mark WP as `done`, add to completed set.
        d. Record metrics for each WP (duration, agent runs, review cycles).
   3. Define `ImplementArgs`:
+
      ```rust
      #[derive(Args)]
      struct ImplementArgs {
@@ -272,6 +286,7 @@ agileplus-review = { path = "../agileplus-review" }
          resume: bool,
      }
      ```
+
   4. Implement single-WP mode (`--wp WP01`):
      - Skip scheduler, directly dispatch the named WP.
      - Still check dependencies are met (all deps must be `done`).
@@ -300,6 +315,7 @@ agileplus-review = { path = "../agileplus-review" }
   1. Create `crates/agileplus-cli/src/commands/pr_builder.rs`.
   2. Implement `build_pr_description(wp: &WorkPackage, feature: &Feature, spec_content: &str) -> String`:
      - Generate a Markdown PR body:
+
        ```markdown
        ## Work Package: {wp.title}
 
@@ -326,6 +342,7 @@ agileplus-review = { path = "../agileplus-review" }
        ---
        *Generated by AgilePlus spec-driven development engine*
        ```
+
   3. Implement `build_pr_title(wp: &WorkPackage) -> String`:
      - Format: `"WP{wp.id:02}: {wp.title}"` (e.g., "WP09: Code Review Adapter").
      - Truncate to 72 characters if needed.
@@ -349,6 +366,7 @@ agileplus-review = { path = "../agileplus-review" }
 - **Steps**:
   1. Create `crates/agileplus-cli/src/commands/review_loop.rs`.
   2. Implement `run_review_loop(wp: &WorkPackage, ctx: &AppContext, max_cycles: u32) -> Result<ReviewOutcome>`:
+
      ```rust
      pub enum ReviewOutcome {
          Approved,
@@ -357,7 +375,9 @@ agileplus-review = { path = "../agileplus-review" }
          Cancelled,
      }
      ```
+
   3. The loop:
+
      ```
      for cycle in 1..=max_cycles {
          // 1. Wait for CI to complete
@@ -388,6 +408,7 @@ agileplus-review = { path = "../agileplus-review" }
      }
      return Ok(MaxCyclesReached { ... })
      ```
+
   4. Implement `format_feedback(comments: &[CoderabbitComment]) -> String`:
      - Convert structured comments into a prompt the agent can understand.
      - Include file path, line number, and actionable text.
@@ -413,6 +434,7 @@ agileplus-review = { path = "../agileplus-review" }
 - **Purpose**: Extend the `AppContext` from WP11 to include AgentPort and ReviewPort, update the subcommand routing to include plan and implement.
 - **Steps**:
   1. Update `AppContext` in `main.rs` or `context.rs`:
+
      ```rust
      struct AppContext {
          storage: Box<dyn StoragePort>,
@@ -422,10 +444,12 @@ agileplus-review = { path = "../agileplus-review" }
          review: Box<dyn ReviewPort>,     // NEW
      }
      ```
+
   2. Update `AppContext::init()` to construct the new adapters:
      - `AgentDispatchAdapter::new(agent_config)?`
      - `ReviewAdapter::new(review_config)?`
   3. Add `Plan` and `Implement` to the `Commands` enum in `main.rs`:
+
      ```rust
      #[derive(Subcommand)]
      enum Commands {
@@ -435,11 +459,14 @@ agileplus-review = { path = "../agileplus-review" }
          Implement(ImplementArgs), // NEW
      }
      ```
+
   4. Route to handlers:
+
      ```rust
      Commands::Plan(args) => commands::plan::run_plan(args, &ctx).await?,
      Commands::Implement(args) => commands::implement::run_implement(args, &ctx).await?,
      ```
+
   5. Update `TestContext` with mock AgentPort and ReviewPort.
   6. Add module declarations in `commands/mod.rs`: `pub mod plan; pub mod implement; pub mod scheduler; pub mod scope; pub mod pr_builder; pub mod review_loop;`.
 - **Files**:
@@ -457,22 +484,26 @@ agileplus-review = { path = "../agileplus-review" }
 ## Test Strategy
 
 ### Unit Tests
+
 - Location: `crates/agileplus-cli/tests/`
 - Run: `cargo test -p agileplus-cli`
 
 ### Scheduler Tests
+
 - Diamond dependency graph resolves to 3 waves.
 - Cycle detection catches A -> B -> A.
 - Single WP with no deps returns immediately.
 - `next_ready` returns correct WPs as predecessors complete.
 
 ### Plan Command Tests
+
 - Mock VcsPort returns fixture spec + research.
 - Verify WP records created in MockStoragePort.
 - Verify governance contract created.
 - Verify state transition `researched -> planned`.
 
 ### Implement Command Tests
+
 - Mock all ports: agent returns success, review returns approved.
 - Verify worktree created via MockVcsPort.
 - Verify PR created with correct description.
@@ -481,11 +512,13 @@ agileplus-review = { path = "../agileplus-review" }
 - Test resume mode: mock WP in `doing` state, verify re-entry.
 
 ### PR Builder Tests
+
 - Verify FR references extracted from acceptance criteria.
 - Verify checklist format.
 - Verify title truncation at 72 chars.
 
 ### CLI Integration Tests
+
 - `agileplus plan --feature test-001` with fixture data.
 - `agileplus implement --feature test-001 --wp WP01` with mock agents.
 
@@ -525,6 +558,7 @@ agileplus-review = { path = "../agileplus-review" }
 ### How to Add Activity Log Entries
 
 **When adding an entry**:
+
 1. Scroll to the bottom of this file (Activity Log section below "Valid lanes")
 2. **APPEND the new entry at the END** (do NOT prepend or insert in middle)
 3. Use exact format: `- YYYY-MM-DDTHH:MM:SSZ -- agent_id -- lane=<lane> -- <action>`
@@ -533,6 +567,7 @@ agileplus-review = { path = "../agileplus-review" }
 6. Agent ID should identify who made the change (claude-sonnet-4-5, codex, etc.)
 
 **Format**:
+
 ```
 - YYYY-MM-DDTHH:MM:SSZ -- <agent_id> -- lane=<lane> -- <brief action description>
 ```
@@ -547,6 +582,7 @@ To change a work package's lane, either:
 2. **Use CLI**: `spec-kitty agent tasks move-task WP12 --to <lane> --note "message"` (recommended)
 
 **Initial entry**:
+
 - 2026-02-27T00:00:00Z -- system -- lane=planned -- Prompt created.
 - 2026-02-28T10:00:27Z – claude-wp12 – shell_pid=90068 – lane=doing – Assigned agent via workflow command
 - 2026-02-28T10:09:35Z – claude-wp12 – shell_pid=90068 – lane=done – Review passed: plan+implement commands, 48 tests
