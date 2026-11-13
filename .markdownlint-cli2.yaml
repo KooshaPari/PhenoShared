@@ -19,3 +19,9 @@ ignores:
   # docs/specs/**, the per-product dossiers) stay linted.
   - "docs/absorbed-*"
   - "docs/absorbed-*/**"
+  # Recovered audit corpora: point-in-time investigation artefacts, not house
+  # docs. Same rationale as docs/absorbed-* above - these are verbatim evidence
+  # (long evidence lines, wide tables, machine-produced output) and rewriting
+  # them to an 80-column house style would corrupt the record. Kept under
+  # docs/audits/** so hand-authored docs stay linted.
+  - "docs/audits/**"
