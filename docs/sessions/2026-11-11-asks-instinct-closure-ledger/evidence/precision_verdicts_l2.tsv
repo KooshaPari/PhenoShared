@@ -1,0 +1,60 @@
+0	partial	says 'is fuixed' - reports state, not a request to fix
+1	partial	'Shield skip' present but unit mainly asks 'state of everything'
+2	supported	'State of all else' asks status of outstanding work
+3	partial	same dual tailnet/AuthKit subject; no 'login twice' question
+4	supported	'Prove and finalize asap' carries the claim
+5	supported	'not rate limited ... so what is?' asks root cause
+6	supported	'Place in backups' plus 'state of omni prod'
+7	unsupported	agent status dump ('Job collector: live-health failed'), not operator speech
+8	supported	'many different asks. What happened to all of them'
+9	supported	'Time to ()' plus 'granular progress block'
+10	supported	'Do all in firefox'
+11	supported	'exactly what fails here in the Tailscale login / desk + mac'
+12	partial	'before dl', not before serving; sequence asserted differs
+13	supported	'4pm digest weak, should be the EVERY PROJ TASK ASK'
+14	supported	'Kilo org githuv has a repo of kilo cloud for self.host'
+15	supported	'State of migr to various ssot adoptions?'
+16	supported	'git acct /profile delineation to note use of employees'
+17	supported	'2nd password bundle' ... 'another pork bun domain, can try'
+18	supported	'Full wbs to finish and adoption'
+19	supported	'vault a sudo password and delete after' for 'device runs'
+20	supported	'do it' executes the agreed work
+21	partial	'Desk, Mac up' only; no 'workloads' or 'active use'
+22	supported	'akash bot needs an eval. It responds in seconds'
+23	supported	'Paperclip adapter state.'
+24	supported	'If no change don't print'
+25	partial	'may be worthwhile to look at'; no 'third source' assertion
+26	supported	'google-like peer2peer ... vs amz ms hierarchy ... up to you'
+27	partial	states defect 'still demands codex sub', not the fix
+28	supported	'Bundles dl on Mac'
+29	supported	'Same case what do I do' asks the procedure
+30	unsupported	rambles 'infrastructure we owe agents containerization'; no deployment names
+31	supported	'Today a 50% off first mo for minimax promo ends'
+32	supported	'Include the local dispensary' + 'extrapolate 0.5g to per g'
+33	unsupported	calls OpenClaw 'strongest'; claim says avoid OpenClaw
+34	partial	'Repo scope recovery chat state?' lists items; no 'verify'
+35	supported	'Install and deploy cpa management UI on the same cpa.kooshapari'
+36	supported	'New branch'
+37	supported	'State of migr to various ssot adoptions?'
+38	unsupported	voice transcript 'an additional note'; no QR-code content
+39	supported	'Agents item should be connecting to local daemon'
+40	partial	'really no export?' asks status, not to complete it
+41	supported	'Do via the Firefox browser on my Mac'
+42	supported	'Check for simialr stlals forgottned'
+43	partial	'Not started:' lists items; no 'explain and clear why'
+44	partial	'All + D parallel eyes' garbled; no 'setup items'
+45	supported	'Add cursor auth file to cpa'
+46	supported	'trivial allow for <EMAIL-REDACTED>' in 'Cloudflare access'
+47	supported	'All other assistants would need the same.'
+48	partial	diagnoses 'old cached crawls'; no refresh request
+49	supported	'Yes to scrub'
+50	supported	'Exact cmds run' + 'vhs gif repro'
+51	supported	'ssot design doc needs to be made based on the various chats'
+52	supported	'And apperclip?' asks Paperclip state
+53	supported	'Pdf lacks TREE of progress bars and PAGE per intent ask repo'
+54	supported	'Hermes overalls etup tstate?'
+55	supported	'referall should I mention that + prior gmail rej?'
+56	supported	'open page for me'
+57	partial	'told you to check worktree and agent sprawl'; no 'fix'
+58	supported	'I need a mgmt key'
+59	supported	'Build out an org + system chart' with 'Sponsor Board' at top

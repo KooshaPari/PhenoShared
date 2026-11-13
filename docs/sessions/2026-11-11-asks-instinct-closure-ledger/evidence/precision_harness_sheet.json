@@ -1,0 +1,19 @@
+{
+ "generated_at_utc": "2026-11-13T01:30:15Z",
+ "seed": 20261120,
+ "n": 0,
+ "channel": "harness",
+ "population": {
+  "cited_pairs": 0,
+  "source_file": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/asks-ledger/ledger.db :: reg_ask_messages (relation='origin') joined to reg_utterances via message_id/id",
+  "links_read": 2252,
+  "channel_counts": {
+   "chatdb": 23,
+   "phone": 2229
+  },
+  "note": "register link rows resolve only into phone (2229) and chatdb (23) conversations; no harness-channel cited pair exists to sample. Harness-channel visibility is a separate, non-citation measure: register_channel_attribution.json reports 466 register quotes visible_in harness (substring visibility, not a citation link row)."
+ },
+ "blocked_reason": "no harness citations exist: all 2252 origin links resolve to a phone (2229) or chatdb (23) utterance, and reg_utterances holds zero harness-channel conversations, so the harness channel has no cited link rows to sample.",
+ "instructions": "verdict is exactly one of: supported = the unit's words plainly carry the ask's claim, and no other ask in the register fits it better; partial = the unit is on the same subject but states only part of the claim, or fits a sibling ask about equally well; unsupported = the unit is on a different subject, or is an agent/tool/system utterance rather than an operator one, or the claim is not in the text; unresolvable = the text is too truncated, garbled, or ambiguous to judge.",
+ "items": []
+}

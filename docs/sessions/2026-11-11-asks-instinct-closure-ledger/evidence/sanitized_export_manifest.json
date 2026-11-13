@@ -1,0 +1,100 @@
+{
+ "generated_at_utc": "2026-11-13T01:45:57Z",
+ "source_location": "<TOKEN-REDACTED>.json",
+ "source_note_text": "Earlier private-history commits retain versions without these redactions: e77430b5 (36 one-time codes plus all link tokens), f8321714 and 4b1f2eb2 (Cloudflare email-verification URL token plus link tokens). History was not rewritten.",
+ "patterns": [
+  {
+   "name": "cloudflare_email_verify_url",
+   "description": "Cloudflare email-verification URL token"
+  },
+  {
+   "name": "url_query_token",
+   "description": "credential-shaped URL query value (link tokens)"
+  },
+  {
+   "name": "jwt",
+   "description": "JWT (3 dot-separated base64url segments)"
+  },
+  {
+   "name": "otp_labelled",
+   "description": "labelled one-time / device / login code"
+  },
+  {
+   "name": "otp_hash_or_is",
+   "description": "6-digit code after '#' or 'is '"
+  },
+  {
+   "name": "long_b64_token",
+   "description": "long base64url/opaque token in text or URL"
+  },
+  {
+   "name": "long_opaque_id_preserved",
+   "description": "long id/slug/hex digest preserved by design"
+  },
+  {
+   "name": "email",
+   "description": "email address"
+  },
+  {
+   "name": "ipv4",
+   "description": "IPv4 address"
+  },
+  {
+   "name": "phone_e164",
+   "description": "E.164 phone (+1 + 10 digits)"
+  },
+  {
+   "name": "phone_formatted",
+   "description": "formatted +1 phone number"
+  }
+ ],
+ "counts_before": {
+  "cloudflare_email_verify_url": 0,
+  "url_query_token": 2,
+  "jwt": 0,
+  "otp_labelled": 2,
+  "otp_hash_or_is": 0,
+  "long_b64_token": 186,
+  "long_opaque_id_preserved": 272,
+  "email": 164,
+  "ipv4": 18,
+  "phone_e164": 8085,
+  "phone_formatted": 2
+ },
+ "counts_after": {
+  "cloudflare_email_verify_url": 0,
+  "url_query_token": 0,
+  "jwt": 0,
+  "otp_labelled": 0,
+  "otp_hash_or_is": 0,
+  "long_b64_token": 0,
+  "long_opaque_id_preserved": 272,
+  "email": 0,
+  "ipv4": 0,
+  "phone_e164": 0,
+  "phone_formatted": 0
+ },
+ "credential_patterns_that_must_be_zero": [
+  "cloudflare_email_verify_url",
+  "url_query_token",
+  "jwt",
+  "otp_labelled",
+  "otp_hash_or_is",
+  "long_b64_token"
+ ],
+ "all_credential_counts_zero": true,
+ "preserved_by_design": {
+  "long_opaque_id_preserved": 272,
+  "reason": "pure-hex digests, all-lowercase slugs and ids of 32+ chars; not credentials, and redacting them would corrupt the dataset."
+ },
+ "output_path": "<TOKEN-REDACTED>.sanitized.json",
+ "output_bytes": 5252477,
+ "output_lines": 105499,
+ "output_sha256": "<TOKEN-REDACTED>",
+ "output_is_shareable": true,
+ "shareability_statement": "This sanitized extract is the ONLY shareable form of this iMessage export; the raw bundle at source_location is do-not-share.",
+ "raw_bundle_shareable": false,
+ "idempotent_verified": true,
+ "idempotency_evidence": "a second run over the output produced byte-identical bytes (cmp IDENTICAL) and 0 credential hits",
+ "sanitizer": "sanitize_export.py (this directory); phone convention from redact_phones.py, parsed-string-walk convention from redact_pii.py"
+}

@@ -1,0 +1,366 @@
+{
+ "generated_at_utc": "2026-11-13T02:02:36Z",
+ "script": "redefine_coverage_q3b.py",
+ "question": "Can the operator-coverage figure be re-derived under the operator ruling of 2026-11-12 (operator intent includes words addressed to ANY party)?",
+ "ruling": "operator intent includes words addressed to ANY party, not only words addressed to an agent",
+ "ruling_date": "2026-11-12",
+ "definition_old": "operator = words addressed to an agent. Encoded verbatim in the nonask labeller rubric ('operator = Koosha's own words: an instruction, question, ruling, correction, or remark addressed to an agent') and in the adjudication rubric.",
+ "definition_new": "operator = words addressed to any party; i.e. operator authorship with the audience unrestricted, so operator words addressed to a human peer also count as operator intent.",
+ "measurable": false,
+ "not_measurable_reason": "No per-row AUDIENCE or counterparty field is recorded anywhere in the sample lineage. The only per-row fields carried by the three speaker keys are idx, clause and channels; the label files add only speaker (authorship) and why (free text). There is no recipient, counterparty, is_group, chat_kind, sender or recipient field, so a row's addressee cannot be read from the artefacts and the set of rows whose operator status flips under the new ruling cannot be enumerated. Re-deriving the figure under the new ruling would require a NEW labelling pass under the new rubric, not a re-derivation from recorded fields.",
+ "audience_field_present": false,
+ "fields_found": {
+  "nonask_speaker_key.json": [
+   "channels",
+   "clause",
+   "idx"
+  ],
+  "askcue_speaker_key.json": [
+   "channels",
+   "clause",
+   "idx"
+  ],
+  "cited_speaker_key.json": [
+   "channels",
+   "clause",
+   "idx"
+  ],
+  "label_files_add": [
+   "clause",
+   "idx",
+   "speaker",
+   "why"
+  ],
+  "searched_without_result": [
+   "recipient",
+   "recipients",
+   "counterparty",
+   "is_group",
+   "isgroup",
+   "chat_kind",
+   "chatkind",
+   "sender",
+   "addressee",
+   "audience",
+   "addressed_to",
+   "addressee_kind",
+   "party"
+  ],
+  "scanned_files": [
+   "nonask_candidates.json",
+   "ask_rule_sample.json",
+   "cited_chunk_20_39.json",
+   "cited_chunk_40_59.json",
+   "recall_candidates.json",
+   "nonask_speaker_sheet.json",
+   "askcue_speaker_sheet.json",
+   "cited_speaker_sheet.json",
+   "nonask_labels_l2.json",
+   "askcue_labels_l2.json",
+   "cited_labels_l2.json",
+   "askcue_labels.json",
+   "cited_labels.json",
+   "adjudication.json",
+   "adjudication_sheet.json",
+   "union_channels.json",
+   "imessage_MANIFEST.json"
+  ],
+  "scanned_files_audience_name_hits": []
+ },
+ "old_points": {
+  "labeller_1": {
+   "point": 0.08467595059951623,
+   "point_4dp": 0.0847,
+   "reproduced": true,
+   "source": "operator_coverage.json (labeller_mode l1); recomputed by this script from coverage_consistency.json, askcue_speaker_scored.json, cited_speaker_scored.json, nonask_scored.json"
+  },
+  "labeller_2": {
+   "point": 0.08067656809498826,
+   "point_4dp": 0.0807,
+   "reproduced": true,
+   "source": "operator_coverage_l2.json (labeller_mode l2); recomputed by this script from cited_labels_l2.json, askcue_labels_l2.json, nonask_labels_l2.json"
+  },
+  "adjudicated": {
+   "point": 0.07881595166874919,
+   "point_4dp": 0.0788,
+   "committed_point": 0.07881595166874919,
+   "reproduced": true,
+   "source": "adjudication.json coverage.adjudicated; recomputed by this script (cited and askcue shares from labeller 1, nonask operator count 26 = majority of three)"
+  }
+ },
+ "per_bucket": {
+  "cited": {
+   "bucket": "cited",
+   "n": 60,
+   "population": 1938,
+   "fields": [
+    "channels",
+    "clause",
+    "idx"
+   ],
+   "old_operator_count": 58,
+   "old_operator_count_baseline": "labeller_1",
+   "newly_included_count": null,
+   "new_operator_count": null,
+   "new_operator_count_range": {
+    "labeller_1": [
+     58,
+     58
+    ],
+    "labeller_2": [
+     58,
+     58
+    ],
+    "adjudicated": [
+     58,
+     58
+    ]
+   },
+   "new_operator_count_range_basis": "the cited and askcue rubrics were already authorship based ('operator = Koosha's own words', with peer defined as a person who is not Koosha) and carried NO addressee filter, so the new ruling changes nothing in this bucket. Range is degenerate by construction.",
+   "by_baseline": {
+    "labeller_1": {
+     "old_operator_count": 58,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": true,
+     "phone_operator_rows": 44,
+     "phone_operator_rows_source": "cited_labels.json joined to cited_speaker_key.json on idx"
+    },
+    "labeller_2": {
+     "old_operator_count": 58,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": true,
+     "phone_operator_rows": 44,
+     "phone_operator_rows_source": "cited_labels_l2.json joined to cited_speaker_key.json on idx"
+    },
+    "adjudicated": {
+     "old_operator_count": 58,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": true,
+     "phone_operator_rows": 44,
+     "phone_operator_rows_source": "cited_labels.json joined to cited_speaker_key.json on idx"
+    }
+   }
+  },
+  "askcue": {
+   "bucket": "uncited_ask_cue",
+   "n": 60,
+   "population": 8819,
+   "fields": [
+    "channels",
+    "clause",
+    "idx"
+   ],
+   "old_operator_count": 52,
+   "old_operator_count_baseline": "labeller_1",
+   "newly_included_count": null,
+   "new_operator_count": null,
+   "new_operator_count_range": {
+    "labeller_1": [
+     52,
+     52
+    ],
+    "labeller_2": [
+     52,
+     52
+    ],
+    "adjudicated": [
+     52,
+     52
+    ]
+   },
+   "new_operator_count_range_basis": "the cited and askcue rubrics were already authorship based ('operator = Koosha's own words', with peer defined as a person who is not Koosha) and carried NO addressee filter, so the new ruling changes nothing in this bucket. Range is degenerate by construction.",
+   "by_baseline": {
+    "labeller_1": {
+     "old_operator_count": 52,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": true,
+     "phone_operator_rows": 1,
+     "phone_operator_rows_source": "askcue_labels.json joined to askcue_speaker_key.json on idx"
+    },
+    "labeller_2": {
+     "old_operator_count": 52,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": true,
+     "phone_operator_rows": 1,
+     "phone_operator_rows_source": "askcue_labels_l2.json joined to askcue_speaker_key.json on idx"
+    },
+    "adjudicated": {
+     "old_operator_count": 52,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": true,
+     "phone_operator_rows": 1,
+     "phone_operator_rows_source": "askcue_labels.json joined to askcue_speaker_key.json on idx"
+    }
+   }
+  },
+  "nonask": {
+   "bucket": "uncited_non_ask_cue",
+   "n": 60,
+   "population": 32891,
+   "fields": [
+    "channels",
+    "clause",
+    "idx"
+   ],
+   "old_operator_count": 23,
+   "old_operator_count_baseline": "labeller_1",
+   "newly_included_count": null,
+   "new_operator_count": null,
+   "new_operator_count_range": {
+    "labeller_1": [
+     23,
+     27
+    ],
+    "labeller_2": [
+     25,
+     29
+    ],
+    "adjudicated": [
+     26,
+     30
+    ]
+   },
+   "new_operator_count_range_basis": "old count, to old count plus the non-operator rows in human channels (phone or imessage), which are the only rows whose label could have been decided by the addressee filter. Nonask labeller 2 shows 4 such rows; labeller 1 per-item labels are LOST (aggregate only, see nonask_scored.json label_restore_note), so 4 is carried across and flagged.",
+   "by_baseline": {
+    "labeller_1": {
+     "old_operator_count": 23,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": false,
+     "phone_operator_rows": 7,
+     "phone_operator_rows_source": "all 7 phone-channel rows assumed operator-authored, because labeller 1 per-item attribution is lost (nonask_scored.json label_restore_note)"
+    },
+    "labeller_2": {
+     "old_operator_count": 25,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": true,
+     "phone_operator_rows": 4,
+     "phone_operator_rows_source": "nonask_labels_l2.json joined to nonask_speaker_key.json on idx"
+    },
+    "adjudicated": {
+     "old_operator_count": 26,
+     "newly_included_count": null,
+     "new_operator_count": null,
+     "per_item_labels_available": false,
+     "phone_operator_rows": 7,
+     "phone_operator_rows_source": "all 7 phone-channel rows assumed operator-authored, because per-item adjudicated labels exist only for the 12 disputed rows"
+    }
+   }
+  }
+ },
+ "bound": {
+  "type": "outer bound on the coverage point under the new ruling",
+  "low": 0.08467595059951623,
+  "high": 0.3289896293495702,
+  "low_basis": "the new ruling is a superset of the old one (it relaxes the addressee filter), so operator units can only be added, never removed. The coverage point therefore cannot fall below the old point on this construction.",
+  "formula": "high = old_point + (sum over buckets of population_b * phone_operator_rows_b / n_b) / total_operator_units_old",
+  "upper_end_is_a_bound_not_a_measurement": true,
+  "upper_end_note": "The upper end is an arithmetic bound, not a measurement and not an estimate of the figure under the new ruling. It assumes every operator-authored row in a phone-channel row is newly included AND is included in the numerator bucket, which is the allocation most favourable to coverage. It is deliberately generous: most phone-channel operator rows were ALREADY counted under the old authorship-based labels, so this bound double counts them.",
+  "per_bucket_phone_operator_units": {
+   "labeller_1": {
+    "cited": 1421.2,
+    "askcue": 146.98333333333332,
+    "nonask": 3837.2833333333333,
+    "delta_units": 5405.466666666667,
+    "total_operator_units_old": 22125.108566666666,
+    "delta_point": 0.24431367875005397
+   },
+   "labeller_2": {
+    "cited": 1421.2,
+    "askcue": 146.98333333333332,
+    "nonask": 2192.733333333333,
+    "delta_units": 3760.9166666666665,
+    "total_operator_units_old": 23221.11666666667,
+    "delta_point": 0.16196105986863965
+   },
+   "adjudicated": {
+    "cited": 1421.2,
+    "askcue": 146.98333333333332,
+    "nonask": 3837.2833333333333,
+    "delta_units": 5405.466666666667,
+    "total_operator_units_old": 23769.3,
+    "delta_point": 0.22741379286166052
+   }
+  },
+  "by_baseline": {
+   "labeller_1": {
+    "low": 0.08467595059951623,
+    "high": 0.3289896293495702
+   },
+   "labeller_2": {
+    "low": 0.08067656809498826,
+    "high": 0.24263762796362792
+   },
+   "adjudicated": {
+    "low": 0.07881595166874919,
+    "high": 0.30622974453040974
+   }
+  }
+ },
+ "derived_tighter_range": {
+  "type": "range derived from the rubric asymmetry actually recorded in the artefacts",
+  "basis": "The old definition was NOT applied uniformly. The cited and askcue rubrics were authorship based with no addressee filter, so those buckets are already valid under the new ruling and are unchanged. Only the nonask rubric carried the addressee filter, and the nonask bucket appears in the DENOMINATOR only, never in the numerator. So any operator rows the new ruling adds to the nonask bucket can only push the coverage point DOWN, never up. The recorded flip candidates are the non-operator rows in human channels: 4 of 60 in the nonask labeller 2 labels.",
+  "by_baseline": {
+   "labeller_1": {
+    "low": 0.07704074266557347,
+    "high": 0.08467595059951623,
+    "nonask_operator_range": [
+     23,
+     27
+    ]
+   },
+   "labeller_2": {
+    "low": 0.07371571013443456,
+    "high": 0.08067656809498826,
+    "nonask_operator_range": [
+     25,
+     29
+    ]
+   },
+   "adjudicated": {
+    "low": 0.07215921711319478,
+    "high": 0.07881595166874919,
+    "nonask_operator_range": [
+     26,
+     30
+    ]
+   }
+  },
+  "note": "This range is tighter than the outer bound above but it is still a bound, not a measurement: the low end assumes every flip candidate in the nonask bucket is operator-authored, the high end assumes none is."
+ },
+ "rubric_asymmetry_finding": {
+  "finding": "The three old points (0.0847, 0.0807, 0.0788) do not correspond to one definition. The nonask rubric and the adjudication rubric define operator as 'addressed to an agent'. The cited rubric and the askcue rubric define operator as 'Koosha's own words' with peer as 'a person who is not Koosha', i.e. authorship only, with no addressee filter. 44 of the 58 operator rows in the cited bucket are phone-channel rows counted under the authorship reading.",
+  "consequence": "Before the new ruling is applied, the operator-coverage figure is not a single well defined quantity. The ruling resolves the definition going forward; it does not retroactively reconcile the three existing points.",
+  "evidence": [
+   "nonask_speaker_sheet.json",
+   "adjudication_sheet.json",
+   "cited_speaker_sheet.json instructions",
+   "askcue_speaker_sheet.json instructions"
+  ]
+ },
+ "caveats": [
+  "channel is NOT a recorded audience. Phone and iMessage rows include operator traffic to agents through the instinct and hermes bridges, so a phone-channel row can be addressed to an agent. Channel is used here only as the recorded structural proxy that the task specifies, not as an audience fact.",
+  "the outer bound's upper end double counts: most phone-channel operator rows were already counted under the old authorship-based labels.",
+  "labeller 1 per-item labels for the nonask bucket are LOST (nonask_scored.json label_restore_note: per-item speaker attribution from pass 1 is LOST, only aggregates survive). The nonask bound therefore uses the labeller 2 per-item rows or a stated worst case.",
+  "each bucket share comes from its own n=60 sample; the three samples are not independent of each other.",
+  "shares are applied to fixed population counts with no design effect and no finite population correction.",
+  "citation precision is unmeasured, so the figure is an estimate of coverage, not a published rate."
+ ],
+ "what_would_close_it": [
+  "add an audience field (recipient or counterparty or chat kind or is_group) at extraction time, per unit, so addressee is a recorded fact rather than an inference",
+  "or re-label the nonask bucket under the new rubric (operator = Koosha's own words, any audience), with the same two independent labellers and an adjudication pass, and re-derive the figure from the new labels"
+ ],
+ "not_modified": [
+  "operator_coverage.json",
+  "operator_coverage_l2.json",
+  "adjudication.json",
+  "any markdown"
+ ]
+}

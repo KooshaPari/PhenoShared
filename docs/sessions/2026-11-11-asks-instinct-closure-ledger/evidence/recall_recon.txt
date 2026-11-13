@@ -1,0 +1,17 @@
+RECALL REFERENCE FRAME — RECON (2026-11-12)
+iMessage db, read-only (URI mode=ro + PRAGMA query_only=1; never copied, never written):
+  /Users/kooshapari/Library/Messages/chat.db
+  message(ROWID, text, date, is_from_me, handle_id); chat_message_join(chat_id, message_id)
+  session id = chat_message_join.chat_id ; channel = "imessage" ; role = is_from_me=1
+  timestamp = message.date (Apple epoch ns) ; order = message.ROWID
+harness channel (jcode + codex JSONL, no sqlite):
+  temp/asks-coverage/jcode-occurrences.jsonl + codex_user_turns_v2.jsonl
+  fields session_id, ts, msg_index, text, is_human, is_injected ; role = human and not injected
+  channel = "harness" ; order = (ts, msg_index or 0) ; ts = ts
+kcode channel (~/.kcode/sessions/*.json): id, messages[]{role, display_role, content|text, timestamp}
+  session id = id ; role = user minus display_role "system" ; order = message list order
+Eligibility: norm(text) len >= 12 and no NOISE match (recount_imessage_kcode.keep/norm)
+Unit: 6 consecutive eligible operator turns in ONE session; partial tail dropped.
+window_start_line / window_end_line = 1-based turn ordinal of window first/last turn in session.
+Ledger (opened mode=ro only, never used to build this frame): asks-ledger/ledger.db
+No register ask id is read into, or written to, the sheet.
