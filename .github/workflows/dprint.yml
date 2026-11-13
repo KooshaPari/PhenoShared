@@ -52,11 +52,18 @@ jobs:
       - name: Check every tracked Dockerfile
         run: |
           set -euo pipefail
-          git ls-files | grep -Ei '(^|/)Dockerfile' > dockerfiles.txt || true
-          if [ ! -s dockerfiles.txt ]; then
-            echo "No tracked Dockerfile files; skipping the repo-wide Dockerfile check."
-            exit 0
+          git ls-files > tracked.txt
+          tracked=$(wc -l < tracked.txt)
+          resolved=$(grep -Eic '(^|/)Dockerfile' tracked.txt || true)
+          echo "tracked files: ${tracked}; tracked Dockerfiles: ${resolved}"
+          # A count of zero is asserted against, never accepted as a pass: zero
+          # Dockerfiles can only mean the checkout or the pattern is wrong, and a
+          # silent green is exactly how a gate stops meaning anything.
+          if [ "${resolved}" -lt 1 ]; then
+            echo "::error::Resolved 0 Dockerfiles out of ${tracked} tracked files."
+            exit 1
           fi
+          grep -Ei '(^|/)Dockerfile' tracked.txt > dockerfiles.txt
           echo "Checking $(wc -l < dockerfiles.txt) tracked Dockerfile files:"
           cat dockerfiles.txt
           xargs -d '\n' -r dprint check --config dprint.json --allow-no-files < dockerfiles.txt
@@ -69,6 +76,13 @@ jobs:
           set -euo pipefail
           git fetch --no-tags --prune origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
           git diff --name-only --diff-filter=ACMR "origin/${BASE_REF}...HEAD" > all-changed.txt
+          # A pull request always changes at least one file. An empty list means the
+          # diff resolved against the wrong base, so fail instead of skipping green.
+          if [ ! -s all-changed.txt ]; then
+            echo "::error::The base diff reported 0 changed files against origin/${BASE_REF}."
+            exit 1
+          fi
+          echo "changed files: $(wc -l < all-changed.txt)"
           grep -E '\.toml$' all-changed.txt > changed-files.txt || true
           if [ ! -s changed-files.txt ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -83,4 +97,4 @@ jobs:
         if: steps.changed.outputs.changed == 'true'
         run: |
           set -euo pipefail
-          xargs -d '\n' -r dprint check --config dprint.json --allow-no-files < changed-files.txt
+          xargs -d '\n' -r dprint check --config dprint.json < changed-files.txt
