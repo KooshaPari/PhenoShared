@@ -161,8 +161,14 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.11"
-      - name: Install ruff
-        run: pip install ruff
+      - name: Install ruff (version-pinned)
+        # Pinned: an unpinned `pip install ruff` let the gate's tool version float,
+        # so the verdict could change with no change to the code.
+        # requirements-ci-lint.txt is not usable here: its generated form puts each
+        # --hash on an indented continuation line with no trailing `\`, which pip
+        # ignores, so `--require-hashes` rejects it (reproduced on pip 24.0 and
+        # 26.3). Regenerate it with trailing backslashes before switching to it.
+        run: pip install ruff==0.16.5
       # These steps FAIL on violations. They previously ended in
       # `|| echo "::warning::..."`, which made the step exit 0 and, combined with
       # a job-level `continue-on-error`, produced a lane that could not fail and
@@ -170,9 +176,10 @@ jobs:
       # ADVISORY, so a red result is reported and does not block a merge; the
       # difference is that it is now visible.
       #
-      # Measured 2026-11-12: `ruff check .` reports 17929 findings across the
-      # tree, most inside absorbed corpora. Scoping ruff to first-party Python is
-      # the prerequisite for promoting this lane to HARD.
+      # Measured 2026-11-13T09:26:58Z at ruff 0.16.5 (the pinned version):
+      # `ruff check . --output-format=concise | wc -l` reports 18051 findings
+      # across the tree, most inside absorbed corpora. Scoping ruff to first-party
+      # Python is the prerequisite for promoting this lane to HARD.
       - name: ruff check
         run: ruff check .
       - name: ruff format --check
