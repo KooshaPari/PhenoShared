@@ -26,8 +26,16 @@ permissions:
   contents: read
 
 concurrency:
+  # Cancel superseded runs on PULL REQUESTS only. main is different: BOTH
+  # merge-required coverage contexts ("Root workspace coverage (whole workspace
+  # — ≥37%)", "IAC workspace coverage (service — ≥10%)") are produced here, and
+  # `cancel-in-progress: true` on main let each newer push cancel the run that
+  # was about to report them. Measured 2026-11-13: the last 10 main runs were
+  # 9 `cancelled` (1712, 1711, 1709-1704, ...) and only 1710 reached a verdict,
+  # which is why no coverage context reported on main. A required context that
+  # a newer push can kill is not a gate.
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   CARGO_TERM_COLOR: always
