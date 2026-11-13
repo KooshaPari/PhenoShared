@@ -5,15 +5,15 @@
 
 ## What it deliberately does not own
 
-| File type | Owner | Why not dprint |
-|---|---|---|
-| Markdown | markdownlint (3 configs) | already gated; a second formatter would fight it |
-| Python | ruff (advisory lane) | ruff owns import order and style |
-| JS/TS | prettier + oxlint | already gated in the TS/JS lane |
+| File type | Owner                    | Why not dprint                                   |
+| --------- | ------------------------ | ------------------------------------------------ |
+| Markdown  | markdownlint (3 configs) | already gated; a second formatter would fight it |
+| Python    | ruff (advisory lane)     | ruff owns import order and style                 |
+| JS/TS     | prettier + oxlint        | already gated in the TS/JS lane                  |
 
 Adding any of those to dprint would put a fourth formatter in
 competition with the three already in place. That is why the original
-`crates/hexa-kit/dprint.json` (4 plugins, executed by nothing) was
+`crates/hexa-kit/dprint.json` (4 plugins, read by nothing) was
 narrowed to two plugins when it moved to the root.
 
 ## Gate shape
@@ -26,11 +26,11 @@ narrowed to two plugins when it moved to the root.
 
 ## Measured TOML debt (baseline 2026-11-13, dprint 0.64.3)
 
-| Count | Meaning |
-|---|---|
-| 798 | tracked TOML files whose formatting differs |
-| 545 | of those, first-party |
-| 253 | of those, inside absorbed or archived corpora |
+| Count | Meaning                                       |
+| ----- | --------------------------------------------- |
+| 798   | tracked TOML files whose formatting differs   |
+| 545   | of those, first-party                         |
+| 253   | of those, inside absorbed or archived corpora |
 
 First-party breaks down as crates 415, agents 29, python 23,
 infrakit 23, iac 9, repo root 8, other 38.
