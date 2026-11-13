@@ -34,6 +34,11 @@ Prettier produces for Markdown tables, so the file this writes is also the file
 the formatter gate expects.
 
 Requires Python 3.11+ for `tomllib`.
+
+Pass `--check` to verify without writing: it renders the index in memory and
+compares it against the committed `crates/README.md`, exiting 1 when the file is
+stale. That is what the `crates-index-regen` workflow runs, so the index cannot
+fall behind the manifests again without a red gate.
 """
 
 import pathlib
@@ -281,7 +286,28 @@ def render_withheld(cells, fill=None):
 lines.append(render_withheld(withheld_table[0]))
 lines.append(render_withheld(withheld_table[0], fill="-"))
 lines.extend(render_withheld(cells) for cells in withheld_table[1:])
-(root / "crates" / "README.md").write_text("\n".join(lines) + "\n")
+
+content = "\n".join(lines) + "\n"
+target = root / "crates" / "README.md"
+
+if "--check" in sys.argv[1:]:
+    current = target.read_text(encoding="utf-8") if target.is_file() else ""
+    if current != content:
+        print(
+            f"crates/README.md is stale: it should list {len(rows)} publishable "
+            f"and {len(withheld)} withheld crates.\n"
+            "Regenerate it with:\n"
+            "    python3 scripts/gen-crates-readme.py",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    print(
+        f"crates/README.md is up to date with {len(rows)} publishable "
+        f"and {len(withheld)} withheld crates"
+    )
+    sys.exit(0)
+
+target.write_text(content)
 print(
     f"wrote crates/README.md with {len(rows)} publishable "
     f"and {len(withheld)} withheld crates"
