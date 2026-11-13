@@ -145,6 +145,10 @@ pub const SpawnParams = extern struct {
 // libc declarations not always in std.c across platforms.
 extern "c" fn setpriority(which: c_int, who: c_uint, prio: c_int) c_int;
 extern "c" fn waitpid(pid: std.c.pid_t, status: ?*c_int, options: c_int) std.c.pid_t;
+// zig 0.16.0 moved `fork` into std.c's *private* block and dropped it from
+// std.posix entirely, so declare it directly (we already link libc). This is the
+// same libc symbol `std.posix.fork()` called on 0.15.x.
+extern "c" fn fork() c_int;
 
 // posix_spawn family — macOS only (Linux uses fork+exec below).
 const posix_spawn_fn = if (is_macos)
@@ -274,18 +278,24 @@ extern "c" fn posix_spawnattr_destroy(attr: *anyopaque) c_int;
 fn spawn_posix(params: *const SpawnParams) i32 {
     if (is_macos) unreachable;
 
-    const pid = std.posix.fork() catch return -1;
+    // Declared as libc calls (std.c.chdir/execve/exit exist on both zig 0.15.x and
+    // 0.16.x). zig 0.16.0 removed std.posix.fork/chdir/execveZ/exit, which is what
+    // this path used to call; the libc equivalents are the same functions those
+    // wrappers forwarded to, so behaviour and return values are unchanged.
+    const pid = fork();
+    if (pid < 0) return -1;
     if (pid == 0) {
         // Child: apply cwd, then exec.
         if (params.cwd) |cwd| {
-            std.posix.chdir(std.mem.sliceTo(cwd, 0)) catch std.posix.exit(127);
+            // cwd is already NUL-terminated ([*:0]const u8).
+            if (std.c.chdir(cwd) != 0) std.c.exit(127);
         }
-        std.posix.execveZ(
+        _ = std.c.execve(
             params.program,
             params.argv,
             params.envp orelse @ptrCast(std.c.environ),
-        ) catch {};
-        std.posix.exit(127);
+        );
+        std.c.exit(127);
     }
     return @intCast(pid);
 }

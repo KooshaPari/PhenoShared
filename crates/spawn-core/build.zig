@@ -20,7 +20,14 @@ pub fn build(b: *std.Build) void {
         .root_module = lib_module,
         .linkage = .static,
     });
-    lib.linkLibC();
+    // libc linkage is a MODULE property. `Compile.linkLibC()` was only ever a shim
+    // for `compile.root_module.link_libc = true`: zig 0.15.2 marks it
+    // "Deprecated; use `compile.root_module.link_libc = true` instead", and zig
+    // 0.16.0 removes it outright, failing the build with
+    //   error: no field or member function named 'linkLibC' in 'Build.Step.Compile'
+    // The root_module field below exists in both 0.15.x and 0.16.x, so this is the
+    // one spelling that builds on both.
+    lib.root_module.link_libc = true;
     // Required on Linux so the final rustc link finds __zig_probe_stack from
     // any remaining probe sites. On macOS, `zig build` of this static lib
     // fails resolving libSystem — build.rs uses `zig build-obj` + `ar` instead.
@@ -41,7 +48,8 @@ pub fn build(b: *std.Build) void {
     const unit_tests = b.addTest(.{
         .root_module = test_module,
     });
-    unit_tests.linkLibC();
+    // Same deprecated/removed `linkLibC()` shim as above; use the module field.
+    unit_tests.root_module.link_libc = true;
 
     const run_tests = b.addRunArtifact(unit_tests);
     const test_step = b.step("test", "Run spawn-core unit tests");
