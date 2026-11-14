@@ -164,10 +164,15 @@ jobs:
       - name: Install ruff (version-pinned)
         # Pinned: an unpinned `pip install ruff` let the gate's tool version float,
         # so the verdict could change with no change to the code.
-        # requirements-ci-lint.txt is not usable here: its generated form puts each
-        # --hash on an indented continuation line with no trailing `\`, which pip
-        # ignores, so `--require-hashes` rejects it (reproduced on pip 24.0 and
-        # 26.3). Regenerate it with trailing backslashes before switching to it.
+        # requirements-ci-lint.txt is still NOT used by this job. It is now
+        # installable under `--require-hashes`: hash_pip.py emits pip-compile
+        # blocks (the requirement line and every continuation but the last carry
+        # a trailing `\`) and pins the whole dependency closure, not only the
+        # top-level tools. Proven 2026-11-13, a fresh venv per file, Python 3.12
+        # on macOS arm64: all five requirements-ci-*.txt installed at exit 0.
+        # That proof is local only. Switching this job to the pin file needs the
+        # same check on the Linux runner, and requirements-ci-test.txt needs
+        # Python >= 3.12 (numpy) while this job runs 3.11.
         run: pip install ruff==0.16.5
       # These steps FAIL on violations. They previously ended in
       # `|| echo "::warning::..."`, which made the step exit 0 and, combined with
@@ -177,8 +182,9 @@ jobs:
       # difference is that it is now visible.
       #
       # Measured 2026-11-13T09:26:58Z at ruff 0.16.5 (the pinned version):
-      # `ruff check . --output-format=concise | wc -l` reports 18051 findings
-      # across the tree, most inside absorbed corpora. Scoping ruff to first-party
+      # `ruff check . --output-format=concise | wc -l` reports 18049 findings
+      # on the Linux runner, 18051 on macOS arm64 (2 fewer on Linux), across the
+      # tree, most inside absorbed corpora. Scoping ruff to first-party
       # Python is the prerequisite for promoting this lane to HARD.
       - name: ruff check
         run: ruff check .
