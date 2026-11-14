@@ -33,6 +33,7 @@ jobs:
           echo "PR_HEAD_SHA=$PR_HEAD_SHA"
           echo "PR_LABELS=$PR_LABELS"
 
+          if ! command -v jq >/dev/null; then echo "ERROR: jq is required for exact label matching but was not found on the runner."; exit 1; fi
           if ! jq -e 'type == "array" and all(.[]; type == "string")' <<< "$PR_LABELS" >/dev/null; then
             echo "ERROR: PR_LABELS must be a JSON array of strings."
             exit 1
