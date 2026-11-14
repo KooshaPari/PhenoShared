@@ -6,57 +6,57 @@ Canonical index of archived repos absorbed or retired into the Phenotype platfor
 
 Registry wave G19 stub absorption — owner repo: **phenotype-infra**. Registry ledger: `phenotype-registry` wave15 execution doc (`docs/operations/wave15-execution-2026-06-17.md`).
 
-| Repo | Disposition | Absorption README | Worklog ref | Notes |
-|------|-------------|-------------------|-------------|-------|
-| [phenotype-hub](https://github.com/KooshaPari/phenotype-hub) | ABSORB | [docs/absorbed-from/phenotype-hub/README.md](absorbed-from/phenotype-hub/README.md) | L5-111 | Governance scaffold docs; canonical owner is this repo. P8 in `phenotype-registry/ECOSYSTEM_MAP.md` §6. |
-| [vibeproxy-monitoring-unified](https://github.com/KooshaPari/vibeproxy-monitoring-unified) | RETIRE | [docs/absorbed-from/vibeproxy-monitoring-unified/README.md](absorbed-from/vibeproxy-monitoring-unified/README.md) | L5-111 | Empty stub; pointer to [cliproxyapi-plusplus VIBEPROXY_ABSORPTION](https://github.com/KooshaPari/cliproxyapi-plusplus/blob/main/docs/VIBEPROXY_ABSORPTION.md). P9 in `phenotype-registry/ECOSYSTEM_MAP.md` §6. |
+| Repo                                                                                       | Disposition | Absorption README                                                                                                 | Worklog ref | Notes                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [phenotype-hub](https://github.com/KooshaPari/phenotype-hub)                               | ABSORB      | [docs/absorbed-from/phenotype-hub/README.md](absorbed-from/phenotype-hub/README.md)                               | L5-111      | Governance scaffold docs; canonical owner is this repo. P8 in `phenotype-registry/ECOSYSTEM_MAP.md` §6.                                                                                                              |
+| [vibeproxy-monitoring-unified](https://github.com/KooshaPari/vibeproxy-monitoring-unified) | RETIRE      | [docs/absorbed-from/vibeproxy-monitoring-unified/README.md](absorbed-from/vibeproxy-monitoring-unified/README.md) | L5-111      | Empty repository; pointer to [cliproxyapi-plusplus VIBEPROXY_ABSORPTION](https://github.com/KooshaPari/cliproxyapi-plusplus/blob/main/docs/VIBEPROXY_ABSORPTION.md). P9 in `phenotype-registry/ECOSYSTEM_MAP.md` §6. |
 
 ## Sprawl consolidation wave (2026-09-27)
 
 Repo-sprawl reduction wave — owner repo: **PhenoShared (phenoAI)**. Five standalone repos absorbed as plain copies under `absorption/<repo>/`, each with a `PROVENANCE.md`.
 
-| Repo | Disposition | Absorption README | Worklog ref | Notes |
-|------|-------------|-------------------|-------------|-------|
-| [phenotype-canonicalization](https://github.com/KooshaPari/phenotype-canonicalization) | ABSORB | [docs/absorbed-from/phenotype-canonicalization/README.md](absorbed-from/phenotype-canonicalization/README.md) | SPR-01 | Agent-authored canonicalization docs/audit, 44 files. Source left unarchived pending operator confirmation. |
-| [phenotype-cvp-audit-2026-09-14](https://github.com/KooshaPari/phenotype-cvp-audit-2026-09-14) | ABSORB | [docs/absorbed-from/phenotype-cvp-audit-2026-09-14/README.md](absorbed-from/phenotype-cvp-audit-2026-09-14/README.md) | SPR-02 | One-off dated CVP audit deliverable, 6 files. Source left unarchived pending operator confirmation. |
-| [phenoDesign-visual-production-v2](https://github.com/KooshaPari/phenoDesign-visual-production-v2) | ABSORB | [docs/absorbed-from/phenoDesign-visual-production-v2/README.md](absorbed-from/phenoDesign-visual-production-v2/README.md) | SPR-03 | Distinct from the governed `phenoDesign` design-system repo. Source left unarchived pending operator confirmation. |
-| [PhenoMLX-temp](https://github.com/KooshaPari/PhenoMLX-temp) | ABSORB | [docs/absorbed-from/PhenoMLX-temp/README.md](absorbed-from/PhenoMLX-temp/README.md) | SPR-04 | Temp snapshot; ~646 MB `.cargo-target/` excluded. Canonical source is live `KooshaPari/PhenoMLX`. GitHub repo `KooshaPari/PhenoMLX-temp` is archived. |
-| [PhenoInfra](https://github.com/KooshaPari/PhenoInfra) | ABSORB | [docs/absorbed-from/PhenoInfra/README.md](absorbed-from/PhenoInfra/README.md) | SPR-05 | Compute/infra monorepo snapshot; not wired into root workspace. Source repo already archived. |
+| Repo                                                                                               | Disposition | Absorption README                                                                                                         | Worklog ref | Notes                                                                                                                                                 |
+| -------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [phenotype-canonicalization](https://github.com/KooshaPari/phenotype-canonicalization)             | ABSORB      | [docs/absorbed-from/phenotype-canonicalization/README.md](absorbed-from/phenotype-canonicalization/README.md)             | SPR-01      | Agent-authored canonicalization docs/audit, 44 files. Source left unarchived pending operator confirmation.                                           |
+| [phenotype-cvp-audit-2026-09-14](https://github.com/KooshaPari/phenotype-cvp-audit-2026-09-14)     | ABSORB      | [docs/absorbed-from/phenotype-cvp-audit-2026-09-14/README.md](absorbed-from/phenotype-cvp-audit-2026-09-14/README.md)     | SPR-02      | One-off dated CVP audit deliverable, 6 files. Source left unarchived pending operator confirmation.                                                   |
+| [phenoDesign-visual-production-v2](https://github.com/KooshaPari/phenoDesign-visual-production-v2) | ABSORB      | [docs/absorbed-from/phenoDesign-visual-production-v2/README.md](absorbed-from/phenoDesign-visual-production-v2/README.md) | SPR-03      | Distinct from the governed `phenoDesign` design-system repo. Source left unarchived pending operator confirmation.                                    |
+| [PhenoMLX-temp](https://github.com/KooshaPari/PhenoMLX-temp)                                       | ABSORB      | [docs/absorbed-from/PhenoMLX-temp/README.md](absorbed-from/PhenoMLX-temp/README.md)                                       | SPR-04      | Temp snapshot; ~646 MB `.cargo-target/` excluded. Canonical source is live `KooshaPari/PhenoMLX`. GitHub repo `KooshaPari/PhenoMLX-temp` is archived. |
+| [PhenoInfra](https://github.com/KooshaPari/PhenoInfra)                                             | ABSORB      | [docs/absorbed-from/PhenoInfra/README.md](absorbed-from/PhenoInfra/README.md)                                             | SPR-05      | Compute/infra monorepo snapshot; not wired into root workspace. Source repo already archived.                                                         |
 
 ## Vendored-off-Go-tool disposition wave (2026-10-29)
 
 Vendored-copy disposition pass for a Go tool absorbed outside the `absorption/` flow — owner repo: **PhenoShared (phenoAI)**. Entry recorded so the tree is permanently excluded from CI and from future module sweeps.
 
-| Repo | Disposition | Absorption README | Worklog ref | Notes |
-|------|-------------|-------------------|-------------|-------|
-| [zz-merge-unk-hfscope](https://github.com/KooshaPari/zz-merge-unk-hfscope) | EXCLUDE | [docs/absorbed-from/hfscope/README.md](absorbed-from/hfscope/README.md) | HF-01 | Vendored at `hfscope/` (not `absorption/`); `PROVENANCE.md` declares absorption into PhenoMLX, yet the copy lives here. **Both upstreams deleted** (`KooshaPari/hfscope`, `KooshaPari/zz-merge-unk-hfscope` → "Repository not found"). Absorption incomplete: `cmd/` missing while `go.mod`/`Makefile` reference `cmd/hfscope` + `cmd/hfscope-token`, so `make build` is broken by construction; the `templ.Home` vet failure needs `templ generate` first (gitignored `**/*_templ.go`); 10 files not gofmt-clean. **Excluded from all CI.** Canonical is the external hfscope repo (currently deleted). |
+| Repo                                                                       | Disposition | Absorption README                                                       | Worklog ref | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [zz-merge-unk-hfscope](https://github.com/KooshaPari/zz-merge-unk-hfscope) | EXCLUDE     | [docs/absorbed-from/hfscope/README.md](absorbed-from/hfscope/README.md) | HF-01       | Vendored at `hfscope/` (not `absorption/`); `PROVENANCE.md` declares absorption into PhenoMLX, yet the copy lives here. **Both upstreams deleted** (`KooshaPari/hfscope`, `KooshaPari/zz-merge-unk-hfscope` → "Repository not found"). Absorption incomplete: `cmd/` missing while `go.mod`/`Makefile` reference `cmd/hfscope` + `cmd/hfscope-token`, so `make build` is broken by construction; the `templ.Home` vet failure needs `templ generate` first (gitignored `**/*_templ.go`); 10 files not gofmt-clean. **Excluded from all CI.** Canonical is the external hfscope repo (currently deleted). |
 
 ## PhenoMCPServers delta completion wave (2026-11-10)
 
 Closes the delta left by an earlier partial absorption of PhenoMCPServers into this repo — owner repo: **PhenoShared (phenoAI)**. Files land at their upstream relative paths; nothing was placed under `absorption/`.
 
-| Repo | Disposition | Absorption README | Worklog ref | Notes |
-|------|-------------|-------------------|-------------|-------|
-| [PhenoMCPServers](https://github.com/KooshaPari/PhenoMCPServers) | ABSORB | [docs/absorbed-from/PhenoMCPServers/README.md](absorbed-from/PhenoMCPServers/README.md) | MCP-01 | Delta completion at source `8eb182b`. 46 files absorbed (2 schemas, 6 validators, 6 tests, 15 templates, 17 docs, 1 adapted CI workflow). Now 353/473 source files byte-identical here (45 of them added by this wave; the 46th landed as the adapted `phenomcp-catalog` workflow); 119 remaining diffs are the pre-existing `<REDACTED>` owner scrub plus monorepo adaptations. Source repo **left live and unarchived** pending operator decision — a prior audit recorded an unresolved `DECLARE_SPINE` recommendation. |
+| Repo                                                             | Disposition | Absorption README                                                                       | Worklog ref | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [PhenoMCPServers](https://github.com/KooshaPari/PhenoMCPServers) | ABSORB      | [docs/absorbed-from/PhenoMCPServers/README.md](absorbed-from/PhenoMCPServers/README.md) | MCP-01      | Delta completion at source `8eb182b`. 46 files absorbed (2 schemas, 6 validators, 6 tests, 15 templates, 17 docs, 1 adapted CI workflow). Now 353/473 source files byte-identical here (45 of them added by this wave; the 46th landed as the adapted `phenomcp-catalog` workflow); 119 remaining diffs are the pre-existing `<REDACTED>` owner scrub plus monorepo adaptations. Source repo **left live and unarchived** pending operator decision — a prior audit recorded an unresolved `DECLARE_SPINE` recommendation. |
 
 ## Twelve-repo consolidation wave (2026-11-11)
 
 Code and private data were separated before publication. Code lands here under `absorption/<repo>/`; withheld files went to the private `PhenoRegistry` under `repos/<repo>/`. Owner repo: **PhenoShared (phenoAI)**.
 
-| Repo | Disposition | Absorption README | Worklog ref | Notes |
-|------|-------------|-------------------|-------------|-------|
-| `Authvault` (private source) | ABSORB | [docs/absorbed-from/Authvault/README.md](absorbed-from/Authvault/README.md) | MRG-01 | 322 code files. 11 dropped by root .gitignore (*.log, worklogs/). No private data. |
-| `ResearchLedger` (private source) | ABSORB | [docs/absorbed-from/ResearchLedger/README.md](absorbed-from/ResearchLedger/README.md) | MRG-02 | 313 code files. 6 dropped by .gitignore. `linkedin-capture.json` withheld by ignore rule. |
-| `SessionLedger` (private source) | ABSORB | [docs/absorbed-from/SessionLedger/README.md](absorbed-from/SessionLedger/README.md) | MRG-03 | 806 code files. 6 dropped by .gitignore (vendor/, audit_scorecard.json). |
-| `cvp-fixture` (private source) | ABSORB | [docs/absorbed-from/cvp-fixture/README.md](absorbed-from/cvp-fixture/README.md) | MRG-04 | 17 code files, conformance fixtures. |
-| `herdr-session-adapter` (private source) | ABSORB | [docs/absorbed-from/herdr-session-adapter/README.md](absorbed-from/herdr-session-adapter/README.md) | MRG-05 | 12 code files. |
-| [kiro-adapters](https://github.com/KooshaPari/kiro-adapters) | ABSORB | [docs/absorbed-from/kiro-adapters/README.md](absorbed-from/kiro-adapters/README.md) | MRG-06 | 160 code files. 1 file withheld for a tailnet address; path held privately. |
-| `netweave-3` (private source) | ABSORB | [docs/absorbed-from/netweave-3/README.md](absorbed-from/netweave-3/README.md) | MRG-07 | 30 code files. |
-| `phenotype-router-spec` (private source) | ABSORB | [docs/absorbed-from/phenotype-router-spec/README.md](absorbed-from/phenotype-router-spec/README.md) | MRG-08 | 22 code files, A2A protocol schemas. |
-| `rule30-research` (private source) | ABSORB | [docs/absorbed-from/rule30-research/README.md](absorbed-from/rule30-research/README.md) | MRG-09 | 6 code files. |
-| `host-ops` (private source) | DATA_ONLY | private: `PhenoRegistry/repos/host-ops/` | MRG-10 | 107 files, all withheld. Host runbooks, tailnet addresses, Cloudflare zone id. No public copy. |
-| `harness-ops` (private source) | DATA_ONLY | private: `PhenoRegistry/repos/harness-ops/` | MRG-11 | 65 files, all withheld. Agent-comms deploy scripts and wrangler config carrying the Cloudflare zone id. |
-| `tailnet-smb-setup` (private source) | DATA_ONLY | private: `PhenoRegistry/repos/tailnet-smb-setup/` | MRG-12 | 21 files, all withheld. `research/lanes/credentials.md` and tailnet addressing. |
+| Repo                                                         | Disposition | Absorption README                                                                                   | Worklog ref | Notes                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Authvault` (private source)                                 | ABSORB      | [docs/absorbed-from/Authvault/README.md](absorbed-from/Authvault/README.md)                         | MRG-01      | 322 code files. 11 dropped by root .gitignore (*.log, worklogs/). No private data.                                                                                                                                                                                                                           |
+| `ResearchLedger` (private source)                            | ABSORB      | [docs/absorbed-from/ResearchLedger/README.md](absorbed-from/ResearchLedger/README.md)               | MRG-02      | 313 code files. 6 dropped by .gitignore. `linkedin-capture.json` withheld by ignore rule.                                                                                                                                                                                                                    |
+| `SessionLedger` (private source)                             | ABSORB      | [docs/absorbed-from/SessionLedger/README.md](absorbed-from/SessionLedger/README.md)                 | MRG-03      | 806 code files. 6 dropped by .gitignore (vendor/, audit_scorecard.json).                                                                                                                                                                                                                                     |
+| `cvp-fixture` (private source)                               | ABSORB      | [docs/absorbed-from/cvp-fixture/README.md](absorbed-from/cvp-fixture/README.md)                     | MRG-04      | 17 code files, conformance fixtures.                                                                                                                                                                                                                                                                         |
+| `herdr-session-adapter` (private source)                     | ABSORB      | [docs/absorbed-from/herdr-session-adapter/README.md](absorbed-from/herdr-session-adapter/README.md) | MRG-05      | 12 code files.                                                                                                                                                                                                                                                                                               |
+| [kiro-adapters](https://github.com/KooshaPari/kiro-adapters) | ABSORB      | [docs/absorbed-from/kiro-adapters/README.md](absorbed-from/kiro-adapters/README.md)                 | MRG-06      | 160 code files. 1 file withheld for a tailnet address; path held privately.                                                                                                                                                                                                                                  |
+| `netweave-3` (private source)                                | ABSORB      | [docs/absorbed-from/netweave-3/README.md](absorbed-from/netweave-3/README.md)                       | MRG-07      | 30 code files.                                                                                                                                                                                                                                                                                               |
+| `phenotype-router-spec` (private source)                     | ABSORB      | [docs/absorbed-from/phenotype-router-spec/README.md](absorbed-from/phenotype-router-spec/README.md) | MRG-08      | 22 code files, A2A protocol schemas.                                                                                                                                                                                                                                                                         |
+| `rule30-research` (private source)                           | ABSORB      | [docs/absorbed-from/rule30-research/README.md](absorbed-from/rule30-research/README.md)             | MRG-09      | 6 code files.                                                                                                                                                                                                                                                                                                |
+| `host-ops` (private source)                                  | DATA_ONLY   | private: `PhenoRegistry/repos/host-ops/tree/`                                                       | MRG-10      | 683 files and every ref, whole repo, no public copy. Grafted from source `main` (`f8b39eb8`) on 2026-11-14 onto `refs/preserved/host-ops/`; `verify_absorption.py` reports 683/683 and `verify_preserved.py` matches `tree 6879bb6f95 == branch main`. Supersedes the 107-file per-file split of 2026-11-11. |
+| `harness-ops` (private source)                               | DATA_ONLY   | private: `PhenoRegistry/repos/harness-ops/`                                                         | MRG-11      | 65 files, all withheld. Agent-comms deploy scripts and wrangler config carrying the Cloudflare zone id.                                                                                                                                                                                                      |
+| `tailnet-smb-setup` (private source)                         | DATA_ONLY   | private: `PhenoRegistry/repos/tailnet-smb-setup/`                                                   | MRG-12      | 21 files, all withheld. `research/lanes/credentials.md` and tailnet addressing.                                                                                                                                                                                                                              |
 
 Selection policy: `host-ops`, `harness-ops` and `tailnet-smb-setup` moved wholly to the private registry because a per-file split would still publish host tooling, systemd unit names and runbook cadence. Every other repo was split per file on content. `argis-extensions` was deliberately excluded: its content already exists here at `crates/argis-extensions`.
 
@@ -64,12 +64,12 @@ Selection policy: `host-ops`, `harness-ops` and `tailnet-smb-setup` moved wholly
 
 The four remaining repos from the deletion list that held real history. Files land here under `absorption/<repo>/`; each repo's full commit graph is stored as a verified git bundle in the private `PhenoRegistry` under `repos/<repo>/history/`, because absorbing only the default branch would have dropped their other branches.
 
-| Repo | Disposition | Worklog ref | Files | Branches | Notes |
-|------|-------------|-------------|-------|----------|-------|
-| `phenoStandards` (private source) | ABSORB | MRG-13 | 25 | 11 | 23 default-branch files plus `FUNDING.yml` and `docs/story-ledger-phenoStandards.md`, which existed only on non-default branches. |
-| `argisexec` (private source) | ABSORB | MRG-14 | 6 | 6 | 4 default-branch files plus `FUNDING.yml` and `docs/story-ledger-argisexec.md` from other branches. |
-| `zen` (private source) | ABSORB | MRG-15 | 17 | 4 | 16 default-branch files plus `docs/story-ledger-zen.md`. |
-| `vibeproxy-monitoring-unified` (private source) | EMPTY | MRG-16 | 0 | 23 | All 23 refs point at one commit with an empty tree. Nothing to consolidate; the bundle preserves the ref graph for audit. Earlier reporting described 21 branches of content, which was wrong. |
+| Repo                                            | Disposition | Worklog ref | Files | Branches | Notes                                                                                                                                                                                          |
+| ----------------------------------------------- | ----------- | ----------- | ----- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `phenoStandards` (private source)               | ABSORB      | MRG-13      | 25    | 11       | 23 default-branch files plus `FUNDING.yml` and `docs/story-ledger-phenoStandards.md`, which existed only on non-default branches.                                                              |
+| `argisexec` (private source)                    | ABSORB      | MRG-14      | 6     | 6        | 4 default-branch files plus `FUNDING.yml` and `docs/story-ledger-argisexec.md` from other branches.                                                                                            |
+| `zen` (private source)                          | ABSORB      | MRG-15      | 17    | 4        | 16 default-branch files plus `docs/story-ledger-zen.md`.                                                                                                                                       |
+| `vibeproxy-monitoring-unified` (private source) | EMPTY       | MRG-16      | 0     | 23       | All 23 refs point at one commit with an empty tree. Nothing to consolidate; the bundle preserves the ref graph for audit. Earlier reporting described 21 branches of content, which was wrong. |
 
 Branch-only files were extracted per ref rather than assumed absent, and each repo's `PROVENANCE.md` names the ref each came from. A leak scan over all 52 absorbed files found no private identifiers. Deleting a repo also discards its discussion, so the threads were exported before any deletion: 61 issues, 53 pull requests and 136 comments across the four, of which 19 issues and 11 pull requests were still open. Those exports live beside the bundles in the private `PhenoRegistry` under `repos/<repo>/github/`.
 
@@ -77,12 +77,12 @@ Branch-only files were extracted per ref rather than assumed absent, and each re
 
 All four source repos were deleted after the preconditions below were asserted, each verified absent by a following API call:
 
-| Repo | Absorbed files | Bundle | Issues/PRs exported | Deleted |
-|---|---|---|---|---|
-| `phenoStandards` | 26 | yes | 10 / 10 | yes |
-| `argisexec` | 7 | yes | 8 / 4 | yes |
-| `zen` | 18 | yes | 1 / 1 | yes |
-| `vibeproxy-monitoring-unified` | 1 | yes | 42 / 38 | yes |
+| Repo                           | Absorbed files | Bundle | Issues/PRs exported | Deleted |
+| ------------------------------ | -------------- | ------ | ------------------- | ------- |
+| `phenoStandards`               | 26             | yes    | 10 / 10             | yes     |
+| `argisexec`                    | 7              | yes    | 8 / 4               | yes     |
+| `zen`                          | 18             | yes    | 1 / 1               | yes     |
+| `vibeproxy-monitoring-unified` | 1              | yes    | 42 / 38             | yes     |
 
 Two further empty repos from the same deletion batch were removed with them: `4sgm-archive2` and `forge-AgilePlus`, both 0 files, 0 branches, 0 issues.
 
@@ -93,11 +93,11 @@ Two further empty repos from the same deletion batch were removed with them: `4s
 Final pass over the remaining candidates. Content was absorbed here; full history
 and discussion were captured to the private `PhenoRegistry` before each deletion.
 
-| Repo | Files absorbed | Notes |
-|---|---|---|
-| `canvasApp` | 205 | Vendored `.venv`/`node_modules` excluded as non-project content; 27 apparent secrets were all vendored library files (`certifi/cacert.pem`, google-auth), not project material. |
-| `.team-status` | 7 | NOTES_DOCS import from `~/CodeProjects/Phenotype/repos/`. |
-| `analysis-archive` | 2 | Tombstone: its last commit reads "remove the tooling now that PhenoShared carries it". |
+| Repo               | Files absorbed | Notes                                                                                                                                                                           |
+| ------------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `canvasApp`        | 205            | Vendored `.venv`/`node_modules` excluded as non-project content; 27 apparent secrets were all vendored library files (`certifi/cacert.pem`, google-auth), not project material. |
+| `.team-status`     | 7              | NOTES_DOCS import from `~/CodeProjects/Phenotype/repos/`.                                                                                                                       |
+| `analysis-archive` | 2              | Tombstone: its last commit reads "remove the tooling now that PhenoShared carries it".                                                                                          |
 
 Also deleted as empty: `2phenoEvents` (0 KB, 2 branches, no content).
 
@@ -130,11 +130,11 @@ that survive nowhere else. Evidence in
 Twenty-two repositories were deleted after new preservation methods were proved.
 Detail and per-repo proof: [`docs/absorption-ledger/DELETIONS.md`](absorption-ledger/DELETIONS.md).
 
-| Wave | Deleted | Content preserved as | History preserved as |
-|---|---:|---|---|
-| Private ops repositories | 9 | `PhenoRegistry/repos/<repo>/tree/` | `refs/preserved/<repo>/` |
-| Histories too large for a bundle | 2 | `absorption/PhenoMLX-temp/`, `absorption/phenotype-canonicalization/` | `refs/preserved/` and a bundle |
-| Dependency forks | 11 | not copied; every ref preserved | `refs/preserved/<repo>/`, 2,950 refs |
+| Wave                             | Deleted | Content preserved as                                                  | History preserved as                 |
+| -------------------------------- | ------: | --------------------------------------------------------------------- | ------------------------------------ |
+| Private ops repositories         |       9 | `PhenoRegistry/repos/<repo>/tree/`                                    | `refs/preserved/<repo>/`             |
+| Histories too large for a bundle |       2 | `absorption/PhenoMLX-temp/`, `absorption/phenotype-canonicalization/` | `refs/preserved/` and a bundle       |
+| Dependency forks                 |      11 | not copied; every ref preserved                                       | `refs/preserved/<repo>/`, 2,950 refs |
 
 Three points are worth carrying forward.
 
@@ -158,11 +158,11 @@ the export self-proving and avoided guessing. `Bifrost` alone carried 1,664 refs
 This index records intent, not proof. Three entries above were marked absorbed
 while their content was materially incomplete, and nothing in the record said so:
 
-| Repo | Recorded as | Actually present | Missing |
-|---|---|---|---|
-| `BytePort` | absorbed | 317 of 680 | **362** |
-| `PhenoMLX-temp` | absorbed, `.cargo-target` excluded | 1,059 of 5,736 | **303 real files** |
-| `SessionLedger` | absorbed | 811 of 934 | **123** |
+| Repo            | Recorded as                        | Actually present | Missing            |
+| --------------- | ---------------------------------- | ---------------- | ------------------ |
+| `BytePort`      | absorbed                           | 317 of 680       | **362**            |
+| `PhenoMLX-temp` | absorbed, `.cargo-target` excluded | 1,059 of 5,736   | **303 real files** |
+| `SessionLedger` | absorbed                           | 811 of 934       | **123**            |
 
 788 files in total. None of it was discoverable after deleting the sources, and a
 plain file copy does not fail loudly when it misses files — `.gitignore` silently
@@ -200,17 +200,17 @@ Nine repos were deleted only after `scripts/verify_absorption.py` reported each
 complete against its live source. Verification ran immediately before deletion,
 in the same pass, so no repo was deleted on a stale result.
 
-| Repo | Verified | Note |
-|---|---|---|
-| `Authvault` | 332/332 | |
-| `SessionLedger` | 934/934 | 123 files had been recovered earlier the same day |
-| `ResearchLedger` | 318/318 | |
-| `cvp-fixture` | 17/17 | |
-| `netweave-3` | 30/30 | |
-| `phenotype-router-spec` | 22/22 | |
-| `herdr-session-adapter` | 12/12 | |
-| `rule30-research` | 6/6 | |
-| `BytePort` | 676/680 | 3 withheld to the private registry, 1 compiled binary excluded, 362 files recovered earlier |
+| Repo                    | Checked | Note                                                                                        |
+| ----------------------- | ------- | ------------------------------------------------------------------------------------------- |
+| `Authvault`             | 332/332 |                                                                                             |
+| `SessionLedger`         | 934/934 | 123 files had been recovered earlier the same day                                           |
+| `ResearchLedger`        | 318/318 |                                                                                             |
+| `cvp-fixture`           | 17/17   |                                                                                             |
+| `netweave-3`            | 30/30   |                                                                                             |
+| `phenotype-router-spec` | 22/22   |                                                                                             |
+| `herdr-session-adapter` | 12/12   |                                                                                             |
+| `rule30-research`       | 6/6     |                                                                                             |
+| `BytePort`              | 676/680 | 3 withheld to the private registry, 1 binary artefact excluded, 362 files recovered earlier |
 
 Each deletion was confirmed with a following API call returning 404.
 
