@@ -7,11 +7,11 @@
 
 ## Where the content went
 
-| Destination | Files | Visibility |
-|---|---|---|
-| public copy | 0 | withheld entirely |
-| `repos/host-ops/tree/` in `PhenoRegistry` | 683 | private |
-| `refs/preserved/host-ops/` in `PhenoRegistry` | 85 refs | private |
+| Destination                                   | Files   | Visibility        |
+| --------------------------------------------- | ------- | ----------------- |
+| public copy                                   | 0       | withheld entirely |
+| `repos/host-ops/tree/` in `PhenoRegistry`     | 683     | private           |
+| `refs/preserved/host-ops/` in `PhenoRegistry` | 85 refs | private           |
 
 The whole repository is stored privately, not a per-file selection: the default
 branch as `tree/`, and every branch and pull-request ref under
