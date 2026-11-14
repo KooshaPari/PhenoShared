@@ -91,20 +91,34 @@ def main() -> int:
         # equality check needs, without discarding anything.
         existing = registry_refs(repo)
         stale = sorted(set(existing) - set(want))
+        quarantined = 0
         for name in stale:
             sha = existing[name]
             # Create the superseded ref first, then remove the preserved one, so
-            # an interruption leaves a duplicate rather than a gap.
-            pd.sh(["gh", "api", "--method", "POST",
-                   "repos/%s/%s/git/refs" % (OWNER, REGISTRY),
-                   "-f", "ref=refs/superseded/%s/%s" % (repo, name[len("refs/"):]),
-                   "-f", "sha=%s" % sha])
-            pd.sh(["gh", "api", "--method", "DELETE",
-                   "repos/%s/%s/git/refs/preserved/%s/%s"
-                   % (OWNER, REGISTRY, repo, name[len("refs/"):])])
+            # an interruption leaves a duplicate rather than a gap. Both return
+            # codes are checked: an ignored failure here silently deletes the
+            # only copy, which is the exact bug this whole block exists to undo.
+            code, _, err = pd.sh(["gh", "api", "--method", "POST",
+                                  "repos/%s/%s/git/refs" % (OWNER, REGISTRY),
+                                  "-f", "ref=refs/superseded/%s/%s"
+                                  % (repo, name[len("refs/"):]),
+                                  "-f", "sha=%s" % sha])
+            if code != 0:
+                print("   KEPT      could not quarantine %s: %s"
+                      % (name, err.decode("utf-8", "replace").strip()[:90]))
+                continue
+            code, _, err = pd.sh(["gh", "api", "--method", "DELETE",
+                                  "repos/%s/%s/git/refs/preserved/%s/%s"
+                                  % (OWNER, REGISTRY, repo,
+                                     name[len("refs/"):])])
+            if code != 0:
+                print("   DUPLICATE %s copied to superseded but not removed: %s"
+                      % (name, err.decode("utf-8", "replace").strip()[:90]))
+                continue
+            quarantined += 1
         if stale:
-            print("   superseded %d refs (kept under refs/superseded/%s/): %s"
-                  % (len(stale), repo, ", ".join(stale)))
+            print("   superseded %d/%d stale refs under refs/superseded/%s/"
+                  % (quarantined, len(stale), repo))
 
         try:
             ok, detail = pd.store_history_as_refs(REGISTRY, OWNER, repo)
@@ -117,16 +131,30 @@ def main() -> int:
             failures += 1
             continue
 
+        # The source is live and may be pushed to while this runs, so a ref can
+        # appear after `want` was read, and a branch deleted on the source after
+        # the push leaves the registry holding a ref the source no longer has.
+        # Only a ref the source has and the registry lacks is a real failure:
+        # that one would be lost by deleting the source. Registry-only refs are
+        # preserved history and are kept.
         got = registry_refs(repo)
-        if got != want:
-            missing = sorted(set(want) - set(got))
-            differ = sorted(k for k in set(want) & set(got) if want[k] != got[k])
+        missing = sorted(set(want) - set(got))
+        differ = sorted(k for k in set(want) & set(got) if want[k] != got[k])
+        extra = sorted(set(got) - set(want))
+        if missing or differ:
             print("   REFUSED  ref mismatch: %d missing, %d differing"
                   % (len(missing), len(differ)))
+            for k in missing[:5]:
+                print("      MISSING %s" % k)
+            for k in differ[:5]:
+                print("      DIFFER  %s" % k)
             failures += 1
             continue
 
-        print("   preserved  %d refs identical, %s" % (len(want), detail))
+        note = ""
+        if extra:
+            note = " (%d registry-only kept)" % len(extra)
+        print("   preserved  %d refs verified, %s%s" % (len(want), detail, note))
         print("   DELETE-AUTHORISED %s" % repo)
 
     print()

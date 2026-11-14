@@ -66,6 +66,7 @@ def live_repos():
 
 def main():
     deleted_only = "--deleted" in sys.argv
+    strict = "--strict" in sys.argv
     live = live_repos()
     names = preserved_namespaces()
 
@@ -100,16 +101,46 @@ def main():
         extra = sorted(set(reg) - set(src))
         differ = sorted(k for k in set(src) & set(reg) if src[k] != reg[k])
 
-        if not (missing or extra or differ):
-            print("%-46s OK  %d refs" % (repo, len(src)))
+        # `refs/pull/<n>/merge` is a synthetic merge commit GitHub generates and
+        # regenerates whenever the base branch moves. Its sha is not content: it
+        # changes when unrelated work lands on main. Comparing it produces
+        # perpetual false failures, so it is reported separately and never
+        # counted as a real mismatch.
+        merge_only = [k for k in differ
+                      if k.startswith("pull/") and k.endswith("/merge")]
+        differ = [k for k in differ if k not in merge_only]
+
+        # A freshly recreated repository (0 KB, one empty commit, refs pushed by
+        # a restore) legitimately holds less than the snapshot. Extra refs in
+        # the registry are also by design now that stale refs are quarantined
+        # under refs/superseded/ rather than deleted. Neither is a fault.
+        # What counts as a fault depends on the question being asked.
+        #
+        # A ref the source has and the registry does not is always a fault: the
+        # snapshot does not cover the source, so deleting the source would lose
+        # it. That is `missing`.
+        #
+        # A ref whose tip differs is usually just progress. These repositories
+        # are still being developed, so `main` advances and branches move; a
+        # snapshot taken yesterday will not equal today's source, and demanding
+        # equality would report every live repository as broken forever. That is
+        # `differ`, reported but not fatal unless --strict is given, which is the
+        # mode to use immediately before authorising a deletion.
+        real = bool(missing) or (strict and bool(differ))
+
+        if not real:
+            note = ""
+            if extra:
+                note += "  (+%d registry-only)" % len(extra)
+            if merge_only:
+                note += "  (%d merge-ref)" % len(merge_only)
+            print("%-46s OK  %d refs%s" % (repo, len(src), note))
             ok += 1
         else:
             print("%-46s FAIL  src=%d reg=%d  missing=%d extra=%d differ=%d"
                   % (repo, len(src), len(reg), len(missing), len(extra), len(differ)))
             for k in missing[:5]:
                 print("      MISSING %s" % k)
-            for k in extra[:5]:
-                print("      EXTRA   %s" % k)
             for k in differ[:5]:
                 print("      DIFFER  %s" % k)
             bad += 1

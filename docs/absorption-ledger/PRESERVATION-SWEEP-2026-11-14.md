@@ -130,3 +130,59 @@ branch renamed and PR 255 landed), `AgilePlus`, `KCode` (master advanced),
 moved). Every difference is a new or moved ref; nothing was missing. Re-preserving
 brings each snapshot current, and for a live repository a stale snapshot is
 expected rather than a fault.
+
+## Final state
+
+`python scripts/verify_all_preserved.py` after the sweep:
+
+| Result | Count |
+|---|---:|
+| Verified ref-for-ref against a live source | 54 |
+| Source deleted; registry is the sole copy | 18 |
+| Explained exception | 1 |
+| **Total preserved namespaces** | **73** |
+
+### The one exception: `zz-aa-dep-AirLock`
+
+The API reports this repository as created **2026-11-14T17:23:37Z**, size 0 KB,
+with 211 refs. It was deleted as one of the eleven dependency forks and has been
+recreated since. The recreated repository carries *upstream's* ref set, not the
+fork's: the registry holds the fork's 94 refs, including the local work the fork
+existed for, and none of the 211 current refs are in it.
+
+Nothing is lost, and no re-preservation was done, because doing so would quietly
+normalise a re-fork that `DELETIONS.md` says should not exist ("The 11 deleted
+forks are deliberately not restored"). The registry copy of the fork remains the
+authoritative record.
+
+Two other repositories were also recreated today: `harness-ops` (created
+2026-11-14T17:22:34Z, one ref) and `zz-aa-dep-AirLock` a minute later. The
+registry holds both in full, so neither is at risk. A deleted source reappearing
+under the same name is now a real operational pattern here rather than a
+hypothetical, and it is worth knowing which sessions are doing it.
+
+## What "verified" now means
+
+Demanding exact ref equality was wrong, and it took two iterations to see why.
+Live repositories move. `main` advances, dependabot renames branches, and GitHub
+regenerates `refs/pull/<n>/merge` whenever a base branch moves. A check that
+requires equality reports every active repository as broken, forever, and the
+temptation then is to "fix" it by deleting the refs that differ, which is how the
+`host-ops` loss happened.
+
+The verifier now separates two questions:
+
+- **`missing`** - a ref the source has and the registry does not. Always fatal.
+  This is the one that means deleting the source would lose something.
+- **`differ`** - a ref present in both with different tips. Reported, but fatal
+  only under `--strict`. That flag is the one to use immediately before
+  authorising a deletion, when the snapshot must match exactly.
+
+`refs/pull/<n>/merge` differences are never counted, because GitHub generates that
+ref and rewrites it as unrelated work lands.
+
+`preserve_refs.py` applies the same reasoning to its own post-push check: a
+registry-only ref is preserved history and is kept, not treated as a mismatch. It
+also now checks the return codes on the quarantine `POST` and `DELETE`. An
+ignored failure there would delete the only copy, which is precisely the bug the
+quarantine exists to undo.
