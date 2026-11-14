@@ -1,6 +1,6 @@
 # Deletion Record — where absorbed repositories went
 
-Every repository listed here has been deleted from GitHub. This file exists so
+Except for `host-ops`, which was re-created and is deliberately retained as explained below, every repository listed here has been deleted from GitHub. This file exists so
 that "it was absorbed" is checkable rather than asserted: for each entry, the
 surviving location of its files, its history and its discussion is named.
 
