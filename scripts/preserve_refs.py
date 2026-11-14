@@ -72,18 +72,39 @@ def main() -> int:
             failures += 1
             continue
 
-        # Clear leftovers before preserving. A previous run may have kept a ref
-        # the source does not have, for example an upstream branch pulled in by
-        # `gh repo clone`; a leftover misrepresents the fork, and it would also
-        # make the preservation's own equality check fail.
+        # Quarantine leftovers before preserving, never delete them.
+        #
+        # A previous run may hold a ref the source no longer has. That happens
+        # two ways, and they are not equivalent:
+        #
+        #   * an inherited branch pulled in by `gh repo clone`, which really
+        #     does misrepresent the fork; and
+        #   * a branch the source deleted after this preservation captured it.
+        #
+        # The first is noise. The second is the only remaining record of that
+        # branch, because the source has already thrown it away. Deleting both
+        # is a data-loss bug: re-preserving host-ops destroyed 27 captured
+        # branches that way before this was noticed.
+        #
+        # So move them aside under refs/superseded/ instead. That keeps
+        # refs/preserved/<repo>/* exactly equal to the source, which is what the
+        # equality check needs, without discarding anything.
         existing = registry_refs(repo)
         stale = sorted(set(existing) - set(want))
         for name in stale:
+            sha = existing[name]
+            # Create the superseded ref first, then remove the preserved one, so
+            # an interruption leaves a duplicate rather than a gap.
+            pd.sh(["gh", "api", "--method", "POST",
+                   "repos/%s/%s/git/refs" % (OWNER, REGISTRY),
+                   "-f", "ref=refs/superseded/%s/%s" % (repo, name[len("refs/"):]),
+                   "-f", "sha=%s" % sha])
             pd.sh(["gh", "api", "--method", "DELETE",
                    "repos/%s/%s/git/refs/preserved/%s/%s"
                    % (OWNER, REGISTRY, repo, name[len("refs/"):])])
         if stale:
-            print("   cleared    %d stale refs: %s" % (len(stale), ", ".join(stale)))
+            print("   superseded %d refs (kept under refs/superseded/%s/): %s"
+                  % (len(stale), repo, ", ".join(stale)))
 
         try:
             ok, detail = pd.store_history_as_refs(REGISTRY, OWNER, repo)
