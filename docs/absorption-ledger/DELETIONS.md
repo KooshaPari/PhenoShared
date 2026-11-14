@@ -44,7 +44,7 @@ each tree and ref namespace confirmed present.
 | `harness-ops`       |    69 |      55 |    2 |
 | `PhenoMCP`          |     1 |     112 |    2 |
 | `host-credentials`  |     5 |       1 |    1 |
-| `host-ops`          |   683 |     894 |   85 |
+| `host-ops`          |   683 |     911 |   113 (42 heads + 71 pull; measured 2026-11-14; 85 in the earlier snapshot) |
 | `PhenoMCPServers`   |   473 |     115 |    3 |
 
 `host-ops` was originally recorded here as 174 files, 204 commits and 5 refs.
