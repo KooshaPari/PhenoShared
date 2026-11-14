@@ -140,23 +140,13 @@ mod tests {
 
     #[test]
     fn test_default_bridge_path_env_override() {
-        let saved = std::env::var("PHENO_BRIDGE_PATH").ok();
-        std::env::set_var("PHENO_BRIDGE_PATH", "/tmp/custom_bridge.so");
-        let p = default_bridge_path();
+        let p = bridge_path_from_env(Some("/tmp/custom_bridge.so"));
         assert_eq!(p, std::path::PathBuf::from("/tmp/custom_bridge.so"));
-        // Restore
-        if let Some(v) = saved {
-            std::env::set_var("PHENO_BRIDGE_PATH", v);
-        } else {
-            std::env::remove_var("PHENO_BRIDGE_PATH");
-        }
     }
 
     #[test]
     fn test_default_bridge_path_no_env() {
-        let saved = std::env::var("PHENO_BRIDGE_PATH").ok();
-        std::env::remove_var("PHENO_BRIDGE_PATH");
-        let p = default_bridge_path();
+        let p = bridge_path_from_env(None);
         // When no env var and no system path exists, falls back to exe-relative.
         let _parent = p.parent().expect("bridge path should have a parent");
         let fname = p.file_name().expect("bridge path should have a file name");
@@ -164,10 +154,6 @@ mod tests {
             fname == "libpheno_bridge.dylib" || fname == "libpheno_bridge.so",
             "expected bridge library basename, got {fname:?}"
         );
-        // Restore
-        if let Some(v) = saved {
-            std::env::set_var("PHENO_BRIDGE_PATH", v);
-        }
     }
 
     #[test]
@@ -462,8 +448,12 @@ impl Drop for Bridge {
 
 /// Resolve the bridge library path from an explicit path or default search.
 pub fn default_bridge_path() -> std::path::PathBuf {
+    bridge_path_from_env(std::env::var("PHENO_BRIDGE_PATH").ok().as_deref())
+}
+
+fn bridge_path_from_env(env_path: Option<&str>) -> std::path::PathBuf {
     // 1. PHENO_BRIDGE_PATH env var (explicit override)
-    if let Ok(p) = std::env::var("PHENO_BRIDGE_PATH") {
+    if let Some(p) = env_path {
         return std::path::PathBuf::from(p);
     }
     // 2. macOS: Homebrew prefix
