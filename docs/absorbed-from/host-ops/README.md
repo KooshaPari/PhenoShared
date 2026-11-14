@@ -10,8 +10,8 @@
 | Destination | Files | Visibility |
 |---|---|---|
 | public copy | 0 | withheld entirely |
-| `repos/host-ops/tree/` in `PhenoRegistry` | 677 | private |
-| `refs/preserved/host-ops/` in `PhenoRegistry` | 88 refs | private |
+| `repos/host-ops/tree/` in `PhenoRegistry` | 683 | private |
+| `refs/preserved/host-ops/` in `PhenoRegistry` | 85 refs | private |
 
 The whole repository is stored privately, not a per-file selection: the default
 branch as `tree/`, and every branch and pull-request ref under
@@ -29,24 +29,27 @@ record for this repo.
 
 ## Verification
 
+The snapshot is the default branch at `f8b39eb8` (tree `6879bb6f95`), pushed to
+the private registry as `781f9a75`.
+
 The 2026-11-11 pass copied 107 files flat. That was a partial selection, and it
 went stale while the source kept moving, so on 2026-11-14 the whole default
 branch was grafted instead and the flat copy removed as a superseded duplicate.
 
 ```console
 $ python scripts/verify_absorption.py host-ops
-  OK    host-ops                         677/677  (677 withheld to registry)
+  OK    host-ops                         683/683  (683 withheld to registry)
 
 $ python scripts/verify_preserved.py host-ops
-host-ops                 tree bfd66b3229 == branch main
+host-ops                 tree 6879bb6f95 == branch main
 ```
 
 `verify_absorption.py` reads the source tree from GitHub and resolves every path
-against the private registry, so 677 of 677 means no source file is
+against the private registry, so 683 of 683 means no source file is
 unaccounted for. `verify_preserved.py` compares the grafted subtree id with the
 tree id of every preserved branch and names the branch it matches, so the copy is
 the default branch rather than a lookalike. Byte identity was proved separately
-by comparing git blob ids per path: 677 of 677 matched.
+by comparing git blob ids per path: 683 of 683 matched.
 
 ## Provenance
 

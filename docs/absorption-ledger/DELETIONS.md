@@ -44,7 +44,7 @@ each tree and ref namespace confirmed present.
 | `harness-ops` | 69 | 55 | 2 |
 | `PhenoMCP` | 1 | 112 | 2 |
 | `host-credentials` | 5 | 1 | 1 |
-| `host-ops` | 677 | 889 | 88 |
+| `host-ops` | 683 | 894 | 85 |
 | `PhenoMCPServers` | 473 | 115 | 3 |
 
 `host-ops` was originally recorded here as 174 files, 204 commits and 5 refs.
@@ -52,8 +52,9 @@ Those were the numbers at the moment of the first pass, and they stopped being
 the truth almost immediately: the repository was re-created at
 2026-11-12T11:17:10Z, minutes after this wave, and work continued in it. The
 figure above is the 2026-11-14 refresh, when the whole default branch was
-grafted (`repos/host-ops/tree/`, 677 files, blob-identical) and every ref
-re-pushed to `refs/preserved/host-ops/`. **`host-ops` is live as of that date, so
+grafted (`repos/host-ops/tree/`, 683 files, blob-identical) and every ref
+re-pushed to `refs/preserved/host-ops/`, at source `f8b39eb8`.
+**`host-ops` is live as of that date, so
 its deletion is outstanding rather than done**, and the flat 107-file copy from
 the 2026-11-11 per-file split was removed at the same time as a superseded
 duplicate.
