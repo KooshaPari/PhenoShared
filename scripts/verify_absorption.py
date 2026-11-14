@@ -52,7 +52,7 @@ EXCLUDE_SUFFIXES = (
     ".log",
     ".pyc",
     ".pyo",
-    # compiled artefacts, reproducible from the source we keep
+    # object and binary artefacts, regenerated from the source we keep
     ".exe",
     ".dll",
     ".so",
@@ -244,11 +244,11 @@ def main() -> int:
         return 0 if all(r["status"] != "incomplete" for r in results) else 1
 
     incomplete = 0
-    verified = 0
+    matched = 0
     unreadable = 0
     for r in results:
         if r["status"] == "complete":
-            verified += 1
+            matched += 1
             notes = []
             if r["withheld_in_registry"]:
                 notes.append("%d withheld to registry" % r["withheld_in_registry"])
@@ -272,10 +272,8 @@ def main() -> int:
                 print("          " + m)
 
     print()
-    print(
-        "%d checked, %d verified, %d incomplete, %d unreadable"
-        % (len(results), verified, incomplete, unreadable)
-    )
+    counts = (len(results), matched, incomplete, unreadable)
+    print("%d checked, %d matched, %d incomplete, %d unreadable" % counts)
 
     if incomplete:
         return 1
@@ -283,7 +281,7 @@ def main() -> int:
     # Every source unreadable means verification did not actually happen. Passing
     # here would be false assurance, which is the exact failure this tool exists
     # to prevent -- a token restricted to this repo cannot see private sources.
-    if results and verified == 0 and not args.allow_unreadable:
+    if results and matched == 0 and not args.allow_unreadable:
         print()
         print("No source repo could be read, so nothing was actually verified.")
         print("Provide a token with read access to the source repos, or pass")

@@ -55,29 +55,29 @@ Source: `absorption/` directory (27 trees) + `docs/absorbed-from*/` (6 formal + 
 
 ## Informal absorption records (docs/absorbed-from/*)
 
-| Directory                        | ABSORPTION.md | State                                                        |
-| -------------------------------- | ------------- | ------------------------------------------------------------ |
-| Authvault                        | no            | archived (no formal record)                                  |
-| cvp-fixture                      | no            | archived (no formal record)                                  |
-| harness-ops                      | no            | archived (no formal record)                                  |
-| herdr-session-adapter            | no            | archived (no formal record)                                  |
-| hfscope                          | no            | archived (no formal record)                                  |
-| host-ops                         | no            | staged (whole tree plus preserved refs, verified 2026-11-14) |
-| kiro-adapters                    | no            | archived (no formal record)                                  |
-| netweave-3                       | no            | archived (no formal record)                                  |
-| phenoDesign-visual-production-v2 | no            | archived (no formal record)                                  |
-| PhenoInfra                       | no            | staged (has absorption/ counterpart)                         |
-| PhenoMCPServers                  | no            | archived (no formal record)                                  |
-| PhenoMLX-temp                    | no            | staged (has absorption/ counterpart)                         |
-| phenotype-canonicalization       | no            | archived (no formal record)                                  |
-| phenotype-cvp-audit-2026-09-14   | no            | archived (no formal record)                                  |
-| phenotype-hub                    | no            | archived (no formal record)                                  |
-| phenotype-router-spec            | no            | staged (has absorption/ counterpart)                         |
-| ResearchLedger                   | no            | archived (no formal record)                                  |
-| rule30-research                  | no            | archived (no formal record)                                  |
-| SessionLedger                    | no            | archived (no formal record)                                  |
-| tailnet-smb-setup                | no            | archived (no formal record)                                  |
-| vibeproxy-monitoring-unified     | no            | archived (no formal record)                                  |
+| Directory                        | ABSORPTION.md | State                                                       |
+| -------------------------------- | ------------- | ----------------------------------------------------------- |
+| Authvault                        | no            | archived (no formal record)                                 |
+| cvp-fixture                      | no            | archived (no formal record)                                 |
+| harness-ops                      | no            | archived (no formal record)                                 |
+| herdr-session-adapter            | no            | archived (no formal record)                                 |
+| hfscope                          | no            | archived (no formal record)                                 |
+| host-ops                         | no            | staged (whole tree plus preserved refs, checked 2026-11-14) |
+| kiro-adapters                    | no            | archived (no formal record)                                 |
+| netweave-3                       | no            | archived (no formal record)                                 |
+| phenoDesign-visual-production-v2 | no            | archived (no formal record)                                 |
+| PhenoInfra                       | no            | staged (has absorption/ counterpart)                        |
+| PhenoMCPServers                  | no            | archived (no formal record)                                 |
+| PhenoMLX-temp                    | no            | staged (has absorption/ counterpart)                        |
+| phenotype-canonicalization       | no            | archived (no formal record)                                 |
+| phenotype-cvp-audit-2026-09-14   | no            | archived (no formal record)                                 |
+| phenotype-hub                    | no            | archived (no formal record)                                 |
+| phenotype-router-spec            | no            | staged (has absorption/ counterpart)                        |
+| ResearchLedger                   | no            | archived (no formal record)                                 |
+| rule30-research                  | no            | archived (no formal record)                                 |
+| SessionLedger                    | no            | archived (no formal record)                                 |
+| tailnet-smb-setup                | no            | archived (no formal record)                                 |
+| vibeproxy-monitoring-unified     | no            | archived (no formal record)                                 |
 
 ## Summary
 

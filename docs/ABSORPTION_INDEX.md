@@ -6,10 +6,10 @@ Canonical index of archived repos absorbed or retired into the Phenotype platfor
 
 Registry wave G19 stub absorption — owner repo: **phenotype-infra**. Registry ledger: `phenotype-registry` wave15 execution doc (`docs/operations/wave15-execution-2026-06-17.md`).
 
-| Repo                                                                                       | Disposition | Absorption README                                                                                                 | Worklog ref | Notes                                                                                                                                                                                                          |
-| ------------------------------------------------------------------------------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [phenotype-hub](https://github.com/KooshaPari/phenotype-hub)                               | ABSORB      | [docs/absorbed-from/phenotype-hub/README.md](absorbed-from/phenotype-hub/README.md)                               | L5-111      | Governance scaffold docs; canonical owner is this repo. P8 in `phenotype-registry/ECOSYSTEM_MAP.md` §6.                                                                                                        |
-| [vibeproxy-monitoring-unified](https://github.com/KooshaPari/vibeproxy-monitoring-unified) | RETIRE      | [docs/absorbed-from/vibeproxy-monitoring-unified/README.md](absorbed-from/vibeproxy-monitoring-unified/README.md) | L5-111      | Empty stub; pointer to [cliproxyapi-plusplus VIBEPROXY_ABSORPTION](https://github.com/KooshaPari/cliproxyapi-plusplus/blob/main/docs/VIBEPROXY_ABSORPTION.md). P9 in `phenotype-registry/ECOSYSTEM_MAP.md` §6. |
+| Repo                                                                                       | Disposition | Absorption README                                                                                                 | Worklog ref | Notes                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------------------ | ----------- | ----------------------------------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [phenotype-hub](https://github.com/KooshaPari/phenotype-hub)                               | ABSORB      | [docs/absorbed-from/phenotype-hub/README.md](absorbed-from/phenotype-hub/README.md)                               | L5-111      | Governance scaffold docs; canonical owner is this repo. P8 in `phenotype-registry/ECOSYSTEM_MAP.md` §6.                                                                                                              |
+| [vibeproxy-monitoring-unified](https://github.com/KooshaPari/vibeproxy-monitoring-unified) | RETIRE      | [docs/absorbed-from/vibeproxy-monitoring-unified/README.md](absorbed-from/vibeproxy-monitoring-unified/README.md) | L5-111      | Empty repository; pointer to [cliproxyapi-plusplus VIBEPROXY_ABSORPTION](https://github.com/KooshaPari/cliproxyapi-plusplus/blob/main/docs/VIBEPROXY_ABSORPTION.md). P9 in `phenotype-registry/ECOSYSTEM_MAP.md` §6. |
 
 ## Sprawl consolidation wave (2026-09-27)
 
@@ -200,17 +200,17 @@ Nine repos were deleted only after `scripts/verify_absorption.py` reported each
 complete against its live source. Verification ran immediately before deletion,
 in the same pass, so no repo was deleted on a stale result.
 
-| Repo                    | Verified | Note                                                                                        |
-| ----------------------- | -------- | ------------------------------------------------------------------------------------------- |
-| `Authvault`             | 332/332  |                                                                                             |
-| `SessionLedger`         | 934/934  | 123 files had been recovered earlier the same day                                           |
-| `ResearchLedger`        | 318/318  |                                                                                             |
-| `cvp-fixture`           | 17/17    |                                                                                             |
-| `netweave-3`            | 30/30    |                                                                                             |
-| `phenotype-router-spec` | 22/22    |                                                                                             |
-| `herdr-session-adapter` | 12/12    |                                                                                             |
-| `rule30-research`       | 6/6      |                                                                                             |
-| `BytePort`              | 676/680  | 3 withheld to the private registry, 1 compiled binary excluded, 362 files recovered earlier |
+| Repo                    | Checked | Note                                                                                        |
+| ----------------------- | ------- | ------------------------------------------------------------------------------------------- |
+| `Authvault`             | 332/332 |                                                                                             |
+| `SessionLedger`         | 934/934 | 123 files had been recovered earlier the same day                                           |
+| `ResearchLedger`        | 318/318 |                                                                                             |
+| `cvp-fixture`           | 17/17   |                                                                                             |
+| `netweave-3`            | 30/30   |                                                                                             |
+| `phenotype-router-spec` | 22/22   |                                                                                             |
+| `herdr-session-adapter` | 12/12   |                                                                                             |
+| `rule30-research`       | 6/6     |                                                                                             |
+| `BytePort`              | 676/680 | 3 withheld to the private registry, 1 binary artefact excluded, 362 files recovered earlier |
 
 Each deletion was confirmed with a following API call returning 404.
 

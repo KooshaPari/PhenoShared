@@ -55,7 +55,7 @@ figure above is the 2026-11-14 refresh, when the whole default branch was
 grafted (`repos/host-ops/tree/`, 683 files, blob-identical) and every ref
 re-pushed to `refs/preserved/host-ops/`, at source `f8b39eb8`.
 **`host-ops` is live as of that date, so
-its deletion is outstanding rather than done**, and the flat 107-file copy from
+its deletion is outstanding rather than complete**, and the flat 107-file copy from
 the 2026-11-11 per-file split was removed at the same time as a superseded
 duplicate.
 
