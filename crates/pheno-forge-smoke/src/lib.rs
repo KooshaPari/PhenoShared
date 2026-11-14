@@ -78,6 +78,9 @@ unsafe impl Sync for MemoryHandle {}
 mod tests {
     use super::*;
 
+    // Both path tests mutate the same process-wide environment variable.
+    static BRIDGE_PATH_ENV_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+
     #[test]
     fn test_provider_label() {
         assert_eq!(Provider::Supermemory.label(), "sm");
@@ -140,6 +143,7 @@ mod tests {
 
     #[test]
     fn test_default_bridge_path_env_override() {
+        let _guard = BRIDGE_PATH_ENV_LOCK.lock().unwrap();
         let saved = std::env::var("PHENO_BRIDGE_PATH").ok();
         std::env::set_var("PHENO_BRIDGE_PATH", "/tmp/custom_bridge.so");
         let p = default_bridge_path();
@@ -154,6 +158,7 @@ mod tests {
 
     #[test]
     fn test_default_bridge_path_no_env() {
+        let _guard = BRIDGE_PATH_ENV_LOCK.lock().unwrap();
         let saved = std::env::var("PHENO_BRIDGE_PATH").ok();
         std::env::remove_var("PHENO_BRIDGE_PATH");
         let p = default_bridge_path();
