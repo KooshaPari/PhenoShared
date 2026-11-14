@@ -54,7 +54,7 @@ Code and private data were separated before publication. Code lands here under `
 | `netweave-3` (private source) | ABSORB | [docs/absorbed-from/netweave-3/README.md](absorbed-from/netweave-3/README.md) | MRG-07 | 30 code files. |
 | `phenotype-router-spec` (private source) | ABSORB | [docs/absorbed-from/phenotype-router-spec/README.md](absorbed-from/phenotype-router-spec/README.md) | MRG-08 | 22 code files, A2A protocol schemas. |
 | `rule30-research` (private source) | ABSORB | [docs/absorbed-from/rule30-research/README.md](absorbed-from/rule30-research/README.md) | MRG-09 | 6 code files. |
-| `host-ops` (private source) | DATA_ONLY | private: `PhenoRegistry/repos/host-ops/` | MRG-10 | 107 files, all withheld. Host runbooks, tailnet addresses, Cloudflare zone id. No public copy. |
+| `host-ops` (private source) | DATA_ONLY | private: `PhenoRegistry/repos/host-ops/tree/` | MRG-10 | 677 files and every ref, whole repo, no public copy. Grafted from source `main` on 2026-11-14 onto `refs/preserved/host-ops/`; `verify_absorption.py` reports 677/677 and `verify_preserved.py` matches `tree == branch main`. Supersedes the 107-file per-file split of 2026-11-11. |
 | `harness-ops` (private source) | DATA_ONLY | private: `PhenoRegistry/repos/harness-ops/` | MRG-11 | 65 files, all withheld. Agent-comms deploy scripts and wrangler config carrying the Cloudflare zone id. |
 | `tailnet-smb-setup` (private source) | DATA_ONLY | private: `PhenoRegistry/repos/tailnet-smb-setup/` | MRG-12 | 21 files, all withheld. `research/lanes/credentials.md` and tailnet addressing. |
 

@@ -61,7 +61,7 @@ Source: `absorption/` directory (27 trees) + `docs/absorbed-from*/` (6 formal + 
 | harness-ops | no | archived (no formal record) |
 | herdr-session-adapter | no | archived (no formal record) |
 | hfscope | no | archived (no formal record) |
-| host-ops | no | archived (no formal record) |
+| host-ops | no | staged (whole tree plus preserved refs, verified 2026-11-14) |
 | kiro-adapters | no | archived (no formal record) |
 | netweave-3 | no | archived (no formal record) |
 | phenoDesign-visual-production-v2 | no | archived (no formal record) |

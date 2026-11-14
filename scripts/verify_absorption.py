@@ -107,6 +107,13 @@ def stored_in_registry(owner: str, registry: str, repo: str, paths: set[str]) ->
             continue
         tail = line[len("repos/"):]
         repo_part, _, rest = tail.partition("/")
+        # Two layouts exist. An absorbed app keeps its files directly under
+        # repos/<repo>/, while a private ops repo absorbed by absorb_private.py
+        # is stored whole under repos/<repo>/tree/ (its every branch also lives
+        # in refs/preserved/<repo>/). Accept both, or the tree/ layout reports
+        # its entire content as missing.
+        if rest.lower().startswith("tree/"):
+            rest = rest[len("tree/"):]
         if repo_part.lower() == repo.lower() and rest.lower() in lowered:
             registry_paths.add(rest)
     return registry_paths
