@@ -11,7 +11,7 @@
 | --------------------------------------------- | ------- | ----------------- |
 | public copy                                   | 0       | withheld entirely |
 | `repos/host-ops/tree/` in `PhenoRegistry`     | 683     | private           |
-| `refs/preserved/host-ops/` in `PhenoRegistry` | 85 refs | private           |
+| `refs/preserved/host-ops/` in `PhenoRegistry` | 113 refs (42 heads + 71 pull; measured 2026-11-14; 85 refs in the earlier snapshot) | private           |
 
 The whole repository is stored privately, not a per-file selection: the default
 branch as `tree/`, and every branch and pull-request ref under
