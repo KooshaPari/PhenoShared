@@ -38,6 +38,7 @@ def main() -> int:
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--owner", default="KooshaPari")
     ap.add_argument("--registry", default="PhenoRegistry")
+    ap.add_argument("--at", help="compare against this preserved source commit instead of branch tips")
     args = ap.parse_args()
 
     work = tempfile.mkdtemp(prefix="verify-preserved-")
@@ -81,15 +82,34 @@ def main() -> int:
         subtree = git(clone, "rev-parse", "refs/check/main:%s" % prefix)
 
         matches = []
+        pinned = None
+        if args.at:
+            code, out, _ = sh(["git", "-C", clone, "rev-parse", "--verify",
+                               "--end-of-options", "%s^{commit}" % args.at])
+            if code == 0:
+                pinned = out.strip()
         for ref in git(clone, "for-each-ref", "--format=%(refname)",
                        "refs/check/%s/heads/" % repo).splitlines():
-            if git(clone, "rev-parse", "%s^{tree}" % ref) == subtree:
+            comparison = ref
+            if args.at:
+                if pinned is None:
+                    continue
+                code, _, _ = sh(["git", "-C", clone, "merge-base", "--is-ancestor",
+                                  pinned, ref])
+                if code != 0:
+                    continue
+                comparison = pinned
+            if git(clone, "rev-parse", "%s^{tree}" % comparison) == subtree:
                 matches.append(ref.split("/heads/")[-1])
 
         if matches:
-            print("%-24s tree %s == branch %s" % (repo, subtree[:10], ", ".join(matches)))
+            suffix = " at %s" % pinned if args.at else ""
+            print("%-24s tree %s == branch %s%s"
+                  % (repo, subtree[:10], ", ".join(matches), suffix))
         else:
-            print("%-24s tree %s matches NO preserved branch" % (repo, subtree[:10]))
+            suffix = (" at %s" % args.at if args.at else
+                      "; source is live and may have moved; --at pins the comparison")
+            print("%-24s tree %s matches NO preserved branch%s" % (repo, subtree[:10], suffix))
             failures += 1
 
     print()
