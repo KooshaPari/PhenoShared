@@ -67,8 +67,8 @@ publish target of five scheduled jobs that run out of
 | `com.kooshapari.closure-check`      | `closure/scripts/closure-scheduled`, 4x/day at `:23` |
 | `com.kooshapari.closure-dispatch`   | `closure/scripts/closure-dispatch`                   |
 | `com.kooshapari.agent-routes-guard` | `bin/agent-routes-guard --quiet`                     |
-| `com.kooshapari.inbound-canary`     | `bin/inbound-canary`                                 |
-| `com.kooshapari.wt-reconciler`      | `bin/wt-reconciler`                                  |
+| `com.kooshapari.inbound-canary`     | `~/bin/inbound-canary`, a symlink into `bin/`        |
+| `com.kooshapari.wt-reconciler`      | `~/bin/wt-reconciler`, a symlink into `bin/`         |
 
 Between the 2026-11-14 refresh and the same evening the source accepted 40 more
 files, so it is actively written, not dormant. Two concrete obstacles stop the
@@ -84,8 +84,14 @@ registry from taking over that publish path today:
 The removal needs one of two decisions: keep the live loop in a standalone
 repository (today's state, one repository that the registry also archives), or
 move the closure loop into a repository of its own with the registry holding the
-archive. Neither is a file move, so neither is recorded here as a pending
-deletion.
+archive. Neither is a file move, and the second option's cost is measured rather
+than estimated: `closure/` is 330 files and 4.5 MB, `bin/` is 52 files and
+428 KB, `REPO` is derived from the script's own path
+(`REPO="$(cd "$CLOSURE/.." && pwd)"`, line 186) and the commit is pushed with
+refspec `HEAD:main` (lines 1780-1811), while `CLOSURE_LIVE_REPO` is exported by
+the script (line 199) instead of read from the environment. A port is therefore
+a repository plus 382 files plus a `REPO=` change, not a redirect. Neither
+option is recorded here as a pending deletion.
 
 `host-credentials` held live credentials. Moving it into the private registry
 and deleting the repository reduces exposure: the material is now in one
