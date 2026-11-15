@@ -228,7 +228,12 @@ def main() -> int:
     ap.add_argument("--all", action="store_true", help="verify every absorption/ dir")
     ap.add_argument("--owner", default="KooshaPari")
     ap.add_argument("--registry", default="PhenoRegistry")
-    ap.add_argument("--root", help="override the local directory for --repo")
+    ap.add_argument(
+        "--root",
+        help="override the local directory for --repo; relative paths resolve against "
+        "the repository root (the script's grandparent directory), not the current "
+        "working directory",
+    )
     ap.add_argument(
         "--also",
         action="append",
@@ -257,6 +262,10 @@ def main() -> int:
         targets = [(args.repo, root)]
     else:
         ap.error("give a repo name or --all")
+
+    for _, path in targets:
+        if not os.path.isdir(path):
+            ap.error("directory does not exist: %s" % os.path.abspath(path))
 
     results = [
         verify(name, args.owner, path, args.registry, args.also, args.at)
