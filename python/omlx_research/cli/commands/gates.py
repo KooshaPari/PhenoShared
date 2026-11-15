@@ -34,7 +34,6 @@ import sys
 import time
 from typing import Any
 
-
 GATES_DIRNAME = "gates"
 SCHEMA_VERSION = 1
 
@@ -58,6 +57,7 @@ def gates_path(kernel_id: str) -> str:
 # ---------------------------------------------------------------------------
 # Storage helpers.
 # ---------------------------------------------------------------------------
+
 
 def _empty_config(kernel_id: str) -> dict[str, Any]:
     return {
@@ -98,7 +98,7 @@ def load_config(kernel_id: str) -> dict[str, Any]:
     if not os.path.exists(path):
         return _empty_config(kernel_id)
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
     except (OSError, json.JSONDecodeError) as e:
         print(f"error: cannot read gates file {path}: {e}", file=sys.stderr)
@@ -144,6 +144,7 @@ def find_gate(config: dict[str, Any], gate_id: str) -> dict[str, Any] | None:
 # Subcommand handlers.
 # ---------------------------------------------------------------------------
 
+
 def _parse_threshold(raw: str | float | int | None) -> float:
     if raw is None:
         raise ValueError("--threshold is required")
@@ -174,7 +175,8 @@ def cmd_gates_list(args: argparse.Namespace) -> int:
                 },
                 indent=2,
                 sort_keys=True,
-            ) + "\n"
+            )
+            + "\n"
         )
         return 0
 
@@ -187,8 +189,7 @@ def cmd_gates_list(args: argparse.Namespace) -> int:
     for g in config["gates"]:
         print(
             f"  - {g['id']:24s} threshold={g['threshold']:.4f} "
-            f"direction={g['direction']}"
-            + (f"  note={g['note']!r}" if g.get("note") else "")
+            f"direction={g['direction']}" + (f"  note={g['note']!r}" if g.get("note") else "")
         )
     return 0
 
@@ -244,7 +245,8 @@ def cmd_gates_add(args: argparse.Namespace) -> int:
                 },
                 indent=2,
                 sort_keys=True,
-            ) + "\n"
+            )
+            + "\n"
         )
     else:
         print(f"{verb} gate {new_gate['id']!r} for {args.kernel_id}")
@@ -288,7 +290,8 @@ def cmd_gates_remove(args: argparse.Namespace) -> int:
                 },
                 indent=2,
                 sort_keys=True,
-            ) + "\n"
+            )
+            + "\n"
         )
     else:
         print(f"removed gate {args.gate!r} from {args.kernel_id} (remaining: {after})")
@@ -332,9 +335,7 @@ def cmd_gates_check(args: argparse.Namespace) -> int:
         "direction": direction,
         "passes": passes,
         "observed_delta": (
-            round(score - threshold, 6)
-            if direction == "at_least"
-            else round(threshold - score, 6)
+            round(score - threshold, 6) if direction == "at_least" else round(threshold - score, 6)
         ),
     }
     if getattr(args, "json", False):
@@ -367,8 +368,7 @@ def cmd_gates(args: argparse.Namespace) -> int:
     fn = _SUBCOMMANDS.get(sub or "")
     if fn is None:
         print(
-            f"error: unknown subcommand {sub!r}; expected one of "
-            f"{sorted(_SUBCOMMANDS.keys())}",
+            f"error: unknown subcommand {sub!r}; expected one of {sorted(_SUBCOMMANDS.keys())}",
             file=sys.stderr,
         )
         return 2

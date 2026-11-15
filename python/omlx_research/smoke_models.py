@@ -6,6 +6,7 @@ Qwen2.5 is quarantined behind ``OMLX_ALLOW_LEGACY_QWEN25=1``.
 Mature evals belong in **Portage/Harbor** + ``harbor-langfuse``, not ad-hoc
 scripts or LangSmith. Langfuse is the canonical observability backend. Prefer ``scripts/evals/run_via_harbor.sh``.
 """
+
 from __future__ import annotations
 
 import json
@@ -72,9 +73,7 @@ def assert_qwen35(model: str, *, allow_legacy: bool | None = None) -> str:
                 f"only for local debug (not FR acceptance)."
             )
     if not is_qwen35 and not allow_legacy:
-        raise SmokeModelError(
-            f"requires Qwen3.5 in model id (got {model!r})"
-        )
+        raise SmokeModelError(f"requires Qwen3.5 in model id (got {model!r})")
     return model
 
 

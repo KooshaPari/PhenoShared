@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock
 
-from behave import given 
+from behave import given
 
 
 def _make_feature(slug: str, state: str) -> dict[str, Any]:

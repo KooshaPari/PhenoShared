@@ -13,13 +13,13 @@ runs `omlx-research web`, this module binds to a port and serves:
 """
 
 from __future__ import annotations
+
 import argparse
 import http.server
 import json
 import os
 import socketserver
 import sys
-import threading
 from pathlib import Path
 
 PANEL_DIR = Path(__file__).resolve().parents[3] / "gui" / "admin-extensions"
@@ -27,15 +27,11 @@ PANEL_DIR = Path(__file__).resolve().parents[3] / "gui" / "admin-extensions"
 
 class _Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):  # noqa: A002 — silence default access log
-        sys.stderr.write(
-            "[omlx-research-web] %s - %s\n" % (self.address_string(), format % args)
-        )
+        sys.stderr.write("[omlx-research-web] %s - %s\n" % (self.address_string(), format % args))
 
-    def do_GET(self):  # noqa: N802
+    def do_GET(self):
         if self.path == "/" or self.path.startswith("/index.html"):
-            self._serve_file(
-                PANEL_DIR / "templates" / "research_panel.html", "text/html"
-            )
+            self._serve_file(PANEL_DIR / "templates" / "research_panel.html", "text/html")
         elif self.path.startswith("/static/"):
             rel = self.path[len("/static/") :]
             full = PANEL_DIR / "static" / rel
@@ -59,7 +55,7 @@ class _Handler(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(404)
 
-    def do_POST(self):  # noqa: N802
+    def do_POST(self):
         if self.path.startswith("/api/v1/inference"):
             length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(length).decode("utf-8") if length else "{}"
@@ -107,12 +103,12 @@ class _Handler(http.server.SimpleHTTPRequestHandler):
         out: dict = {"backends": {}}
         try:
             from omlx_research.backends import (
-                MlxBackend,
-                MetalKernelBackend,
-                VllmBackend,
-                TensorrtBackend,
-                SglangBackend,
                 LlamaCppBackend,
+                MetalKernelBackend,
+                MlxBackend,
+                SglangBackend,
+                TensorrtBackend,
+                VllmBackend,
             )
 
             for cls in (

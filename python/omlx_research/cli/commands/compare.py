@@ -22,13 +22,12 @@ import sys
 
 from ._shared import validate_trace
 
-
 TOP_REJECTED = 3  # how many rejected reasons to surface
 
 
 def _load(path: str, label: str) -> tuple[dict | None, int]:
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
         print(f"error: {label} trace not found: {path}", file=sys.stderr)
@@ -51,9 +50,7 @@ def _load(path: str, label: str) -> tuple[dict | None, int]:
 def _summary(trace: dict) -> dict:
     sel = trace.get("selected") or {}
     rejected = trace.get("rejected") or []
-    top_reasons = [
-        r.get("reason", "?") for r in rejected[:TOP_REJECTED] if isinstance(r, dict)
-    ]
+    top_reasons = [r.get("reason", "?") for r in rejected[:TOP_REJECTED] if isinstance(r, dict)]
     return {
         "plan_id": trace.get("plan_id"),
         "op_id": trace.get("op_id"),

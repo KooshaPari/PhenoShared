@@ -88,6 +88,8 @@ PROMOTION_RECORD_FIELDS: tuple[str, ...] = (
     "justification",
     "tuning_record_id",
 )
+
+
 def _sha256_hex(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -119,6 +121,8 @@ def sign_record(record: dict[str, Any], signing_key: bytes) -> str:
     on ``PromotionRecord::sign_with`` in quality.rs).
     """
     return hmac.new(signing_key, canonical_bytes(record), hashlib.sha256).hexdigest()
+
+
 # ---------------------------------------------------------------------------
 # Gate parsing.
 # ---------------------------------------------------------------------------
@@ -158,12 +162,14 @@ def parse_gates(spec: str) -> list[dict[str, Any]]:
             raise ValueError(f"gate {gid!r}: threshold {thr!r} not a float") from e
         if value != value or value in (float("inf"), float("-inf")):  # NaN / inf
             raise ValueError(f"gate {gid!r}: threshold must be finite")
-        out.append({
-            "id": gid,
-            "threshold": value,
-            "direction": _AT_LEAST,
-            "note": "",
-        })
+        out.append(
+            {
+                "id": gid,
+                "threshold": value,
+                "direction": _AT_LEAST,
+                "note": "",
+            }
+        )
     if not out:
         raise ValueError("--gates spec parsed to zero gates")
     return out
@@ -182,6 +188,7 @@ def gate_passes(gate: dict[str, Any], score: float) -> bool:
 # Candidate construction (when no cache record exists yet).
 # ---------------------------------------------------------------------------
 
+
 def _synthetic_evidence(kernel_id: str, gates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Build deterministic synthetic evidence for the in-memory candidate.
 
@@ -197,14 +204,16 @@ def _synthetic_evidence(kernel_id: str, gates: list[dict[str, Any]]) -> list[dic
         # Use the first 4 bytes as an unsigned int, map to [0.5, 1.0).
         n = int.from_bytes(digest[:4], "big")
         score = 0.5 + (n / 0xFFFFFFFF) * 0.5
-        out.append({
-            "id": gate["id"],
-            "score": round(score, 4),
-            "dataset_revision": "synthetic@2026-07",
-            "source_revision": "synthetic-rev-0",
-            "captured_at_unix_ms": int(time.time() * 1000),
-            "note": "deterministic synthetic evidence (no benchmark harness wired)",
-        })
+        out.append(
+            {
+                "id": gate["id"],
+                "score": round(score, 4),
+                "dataset_revision": "synthetic@2026-07",
+                "source_revision": "synthetic-rev-0",
+                "captured_at_unix_ms": int(time.time() * 1000),
+                "note": "deterministic synthetic evidence (no benchmark harness wired)",
+            }
+        )
     return out
 
 
@@ -218,7 +227,7 @@ def evidence_from_evaluation_report(
     suite name becomes the gate id (``_`` → ``-``); score is ``accuracy``.
     """
     try:
-        with open(report_path, "r", encoding="utf-8") as f:
+        with open(report_path, encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError as e:
         raise ValueError(f"--report path not found: {report_path}") from e
@@ -240,14 +249,16 @@ def evidence_from_evaluation_report(
 
     gate_id = suite.replace("_", "-")
     src = source_revision or f"eval-report:{os.path.basename(report_path)}"
-    return [{
-        "id": gate_id,
-        "score": float(accuracy),
-        "dataset_revision": f"eval-harness:{gate_id}",
-        "source_revision": src,
-        "captured_at_unix_ms": int(time.time() * 1000),
-        "note": f"imported from EvaluationReport JSON ({report_path})",
-    }]
+    return [
+        {
+            "id": gate_id,
+            "score": float(accuracy),
+            "dataset_revision": f"eval-harness:{gate_id}",
+            "source_revision": src,
+            "captured_at_unix_ms": int(time.time() * 1000),
+            "note": f"imported from EvaluationReport JSON ({report_path})",
+        }
+    ]
 
 
 def _load_cached_record(kernel_id: str) -> dict[str, Any] | None:
@@ -260,7 +271,7 @@ def _load_cached_record(kernel_id: str) -> dict[str, Any] | None:
     if not os.path.exists(path):
         return None
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
     except (OSError, json.JSONDecodeError):
         return None
@@ -326,6 +337,7 @@ def build_candidate(
 # ---------------------------------------------------------------------------
 # Validation (mirrors PromotionRecord::validate + PromotionValidator::promote).
 # ---------------------------------------------------------------------------
+
 
 class PromotionError(Exception):
     """Raised when a record fails promotion. Holds a structured payload."""
@@ -399,6 +411,7 @@ def validate(record: dict[str, Any]) -> None:
 # I/O.
 # ---------------------------------------------------------------------------
 
+
 def _ensure_dir(path: str) -> None:
     parent = os.path.dirname(path)
     os.makedirs(parent, exist_ok=True)
@@ -417,6 +430,7 @@ def write_promotion_record(kernel_id: str, record: dict[str, Any]) -> str:
 # ---------------------------------------------------------------------------
 # Summary renderer.
 # ---------------------------------------------------------------------------
+
 
 def _human_summary(record: dict[str, Any], cache_path: str, decision: str) -> str:
     lines = [
@@ -462,6 +476,7 @@ def _json_summary(
 # ---------------------------------------------------------------------------
 # Entry point.
 # ---------------------------------------------------------------------------
+
 
 def cmd_promote(args: argparse.Namespace) -> int:
     """CLI entry point: ``promote <kernel_id> --gates ... [--report ...] [--sign-key ...]``"""

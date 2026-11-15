@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
-from behave import when 
+from behave import when
 
 
 @when('I run "agileplus specify" with feature slug "{slug}"')

@@ -569,6 +569,62 @@ Stage 2 has three steps:
    are clean and the lane is green. The ratchet makes the lane green without
    hiding the whole-tree debt, but promotion still requires clean checked paths.
 
+### Stage 2 status: `python/` is the first enforced whole-tree scope
+
+Step 1 and step 2 above are in place for one tree. `python/` went from **833
+diagnostics / 152 files** to **192 diagnostics / 79 files** (ruff 0.16.5,
+`-77%`): safe autofixes, a formatter pass, and hand fixes for the rules that
+were real defects rather than style. `ruff format --check python/` is at
+`RC=0`.
+
+Two blocking steps now enforce that tree on every run of the `Python` job:
+
+```
+ruff check (python/ tree - blocking)          ruff check python/ --force-exclude --ignore "$PY_TREE_DEBT"
+ruff format --check (python/ tree - blocking) ruff format --check python/ --force-exclude
+```
+
+`PY_TREE_DEBT` is a measured list of the **39 rules that are still not clean**
+in that tree, with 192 diagnostics behind them. Enforced rules are the project
+ruleset minus that list, so every already-clean rule is now protected against
+regression in `python/` instead of only in changed files. The before/after
+figures, and the fact that the list is a debt register rather than a mute
+button, are stated inline next to the list in `ci.yml`.
+
+Two properties are deliberate:
+
+- **The list may only shrink.** Paying a rule down means deleting it from
+  `PY_TREE_DEBT` in the same PR that reaches zero for it. Adding an entry
+  requires recording the measured count and the reason beside it.
+- **Nothing is hidden.** The advisory whole-tree steps still report all 39
+  rules, plus the rest of the repo. A rule on the list is not enforced yet; it
+  is not invisible.
+
+Step 3 (promoting the lane to HARD in the aggregator) is out of scope here and
+remains open: the whole-tree advisory debt is still ~17,800 diagnostics outside
+`python/`.
+
+### A linter must never be the only guard on its own output
+
+While landing the above, `ruff format python/` silently rewrote **nine** files
+into invalid Python and `ruff format --check python/` then reported them as
+correctly formatted. Cause, isolated by testing one setting at a time:
+`python/ruff.toml` declared `target-version = "py314"`, and the CI-pinned
+ruff 0.16.5 rewrites tuple `except` clauses to the Python 2 form
+`except A, B:` under that target. Under `py313`, `py312`, or an unrecognised
+value the parentheses are preserved.
+
+Two changes follow, both in this PR:
+
+- `python/ruff.toml` now declares `py313`, with the reason and the isolation
+  result recorded next to it. This is the enforceable target at the pinned
+  ruff, not a statement that the tree cannot use 3.14.
+- The `Python` job gained a blocking `python/ compiles` step
+  (`python -m compileall -q -f python/`). A formatter cannot be the control on
+  its own output: a separate syntax check is what turns this class of failure
+  from "green" into "red". Every gate added here should be assumed capable of
+  this until an independent check says otherwise.
+
 ### Known parse defects left deliberately unresolved
 
 A lint/parse finding whose correct behaviour is unknown is recorded, not silenced.

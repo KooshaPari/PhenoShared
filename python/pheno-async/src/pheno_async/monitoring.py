@@ -72,7 +72,8 @@ class TaskMetrics:
                 self.min_execution_time = min(self.min_execution_time, result.execution_time)
                 self.max_execution_time = max(self.max_execution_time, result.execution_time)
                 self.average_execution_time = self.total_execution_time / max(
-                    1, self.completed_tasks,
+                    1,
+                    self.completed_tasks,
                 )
 
         # Add to recent tasks
@@ -226,7 +227,11 @@ class ProgressTracker:
         self._notify_progress(workflow_id, self._workflow_progress[workflow_id])
 
     def update_workflow_progress(
-        self, workflow_id: str, task_id: str, task_status: str, task_progress: dict[str, Any] | None = None,
+        self,
+        workflow_id: str,
+        task_id: str,
+        task_status: str,
+        task_progress: dict[str, Any] | None = None,
     ) -> None:
         """
         Update progress for a workflow.
@@ -486,13 +491,20 @@ class TaskMonitor:
         self.progress_tracker.start_workflow_tracking(workflow_id, total_tasks)
 
     def update_workflow_progress(
-        self, workflow_id: str, task_id: str, task_status: str, task_progress: dict[str, Any] | None = None,
+        self,
+        workflow_id: str,
+        task_id: str,
+        task_status: str,
+        task_progress: dict[str, Any] | None = None,
     ) -> None:
         """
         Update progress for a workflow.
         """
         self.progress_tracker.update_workflow_progress(
-            workflow_id, task_id, task_status, task_progress,
+            workflow_id,
+            task_id,
+            task_status,
+            task_progress,
         )
 
     def complete_workflow_progress(self, workflow_id: str, success: bool = True) -> None:

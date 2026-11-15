@@ -1,4 +1,5 @@
 """FR-TEST: smoke_models SSOT — Qwen3.5 gate + role defaults."""
+
 from __future__ import annotations
 
 import os

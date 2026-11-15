@@ -19,7 +19,6 @@ import sys
 
 from omlx_research.cli import _doctor_checks as checks_mod
 from omlx_research.cli import _doctor_extra_eval as eval_extra
-from omlx_research.cli import _doctor_extra_kernel as kernel_extra
 from omlx_research.cli import _doctor_extra_niah as niah_extra
 from omlx_research.cli import _doctor_turn5_checks as turn5
 from omlx_research.cli.doctor import (
@@ -27,7 +26,6 @@ from omlx_research.cli.doctor import (
     PASS,
     WARN,
 )
-
 
 # --- omlx_research_version ------------------------------------------------
 
@@ -37,7 +35,8 @@ def test_omlx_research_version_passes_for_installed_package():
     c = checks_mod.omlx_research_version()
     assert c.status == PASS
     assert c.id == "omlx_research_version"
-    import omlx_research  # noqa: F401
+    import omlx_research
+
     assert omlx_research.__version__ in c.details
 
 
@@ -68,7 +67,8 @@ def test_niah_benchmark_present_passes_when_script_exists(monkeypatch):
 
     monkeypatch.setattr(niah_extra, "_find_niah_benchmark", _fake_find)
     monkeypatch.setattr(
-        niah_extra.subprocess, "run",
+        niah_extra.subprocess,
+        "run",
         lambda *a, **kw: _FakeProc(),
     )
     c = checks_mod.niah_benchmark_present()
@@ -90,17 +90,20 @@ def test_niah_benchmark_present_warns_when_script_missing(monkeypatch):
 
 def test_niah_benchmark_present_warns_when_help_fails(monkeypatch):
     """Present script that fails --help -> WARN."""
+
     class _FakeProc:
         returncode = 2
         stdout = ""
         stderr = "usage: bad args"
 
     monkeypatch.setattr(
-        niah_extra, "_find_niah_benchmark",
+        niah_extra,
+        "_find_niah_benchmark",
         lambda: "/tmp/__fake_niah__.py",
     )
     monkeypatch.setattr(
-        niah_extra.subprocess, "run",
+        niah_extra.subprocess,
+        "run",
         lambda *a, **kw: _FakeProc(),
     )
     c = checks_mod.niah_benchmark_present()
@@ -121,11 +124,13 @@ def test_eval_harness_subcommand_warns_when_python_missing_but_rust_present(monk
     WARN (not FAIL).
     """
     monkeypatch.setattr(
-        eval_extra, "_cli_has_eval_subcommand",
+        eval_extra,
+        "_cli_has_eval_subcommand",
         lambda: False,
     )
     monkeypatch.setattr(
-        eval_extra, "_eval_harness_rust_crate",
+        eval_extra,
+        "_eval_harness_rust_crate",
         lambda: (True, "perf-core/eval-harness/"),
     )
     monkeypatch.setattr(eval_extra, "_list_eval_harness_tests", lambda: [])
@@ -146,11 +151,13 @@ def test_eval_harness_subcommand_warns_when_both_missing(monkeypatch):
     decode/inference paths without it.
     """
     monkeypatch.setattr(
-        eval_extra, "_cli_has_eval_subcommand",
+        eval_extra,
+        "_cli_has_eval_subcommand",
         lambda: False,
     )
     monkeypatch.setattr(
-        eval_extra, "_eval_harness_rust_crate",
+        eval_extra,
+        "_eval_harness_rust_crate",
         lambda: (False, "perf-core/eval-harness/Cargo.toml not found"),
     )
     c = checks_mod.eval_harness_subcommand_runnable()
@@ -421,7 +428,7 @@ def test_niah_results_has_real_targets():
     path = os.path.join(repo_root, "niah_results.json")
     assert os.path.isfile(path), f"niah_results.json missing at {path}"
 
-    with open(path, "r", encoding="utf-8") as fh:
+    with open(path, encoding="utf-8") as fh:
         data = json.load(fh)
 
     assert isinstance(data, dict), f"niah_results.json root is {type(data).__name__}, expected dict"
@@ -455,12 +462,10 @@ def test_niah_results_has_real_targets():
         default=1.0,
     )
     assert short_floor >= 0.7, (
-        f"short-context pass_rate floor {short_floor:.3f} < 0.7 "
-        f"(context_length ≤ 4096)"
+        f"short-context pass_rate floor {short_floor:.3f} < 0.7 (context_length ≤ 4096)"
     )
     assert long_floor >= 0.5, (
-        f"long-context pass_rate floor {long_floor:.3f} < 0.5 "
-        f"(context_length = 262144)"
+        f"long-context pass_rate floor {long_floor:.3f} < 0.5 (context_length = 262144)"
     )
 
 
@@ -479,7 +484,9 @@ def test_niah_benchmark_present_warns_when_results_unpopulated(tmp_path, monkeyp
 
     monkeypatch.setattr(niah_extra, "_find_niah_benchmark", lambda: fake_script)
     monkeypatch.setattr(
-        niah_extra.subprocess, "run", lambda *a, **kw: _FakeProc(),
+        niah_extra.subprocess,
+        "run",
+        lambda *a, **kw: _FakeProc(),
     )
     # Point project_root at an isolated tmp_path so the real
     # niah_results.json (which has 125 target rows) does not leak
@@ -491,7 +498,8 @@ def test_niah_benchmark_present_warns_when_results_unpopulated(tmp_path, monkeyp
 
 
 def test_niah_benchmark_present_passes_when_help_ok_and_results_populated(
-    tmp_path, monkeypatch,
+    tmp_path,
+    monkeypatch,
 ):
     """Help-exits-0 + niah_results.json populated -> PASS (real-repo state)."""
     # Write a populated niah_results.json at the tmp_path so the
@@ -516,11 +524,7 @@ def test_niah_benchmark_present_passes_when_help_ok_and_results_populated(
     scripts_dir = tmp_path / "scripts"
     scripts_dir.mkdir()
     script = scripts_dir / "niah_benchmark.py"
-    script.write_text(
-        "import argparse\n"
-        "parser = argparse.ArgumentParser()\n"
-        "parser.parse_args()\n"
-    )
+    script.write_text("import argparse\nparser = argparse.ArgumentParser()\nparser.parse_args()\n")
     monkeypatch.setattr(niah_extra, "project_root", lambda: str(tmp_path))
     c = checks_mod.niah_benchmark_present()
     assert c.status == PASS, c.details
@@ -532,7 +536,8 @@ def test_niah_benchmark_present_passes_when_help_ok_and_results_populated(
 
 
 def test_regress_baseline_dispatch_envelope_passes_when_results_populated(
-    tmp_path, monkeypatch,
+    tmp_path,
+    monkeypatch,
 ):
     """Populated niah_results.json alone drives the PASS — the
     regress_baseline extension status is supplementary, not blocking.
@@ -563,7 +568,8 @@ def test_regress_baseline_dispatch_envelope_passes_when_results_populated(
 
 
 def test_regress_baseline_dispatch_envelope_warns_when_results_unpopulated(
-    tmp_path, monkeypatch,
+    tmp_path,
+    monkeypatch,
 ):
     """Empty/missing niah_results.json AND no regress_baseline ->
     WARN with both signals surfaced in details."""

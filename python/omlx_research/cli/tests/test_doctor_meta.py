@@ -23,7 +23,6 @@ from unittest.mock import MagicMock, patch
 from omlx_research.cli import _doctor_meta_checks as meta_mod
 from omlx_research.cli._doctor_shared import FAIL, PASS, WARN
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -86,7 +85,9 @@ def test_threshold_pass_when_count_equals_floor(monkeypatch):
     _patch_threshold(monkeypatch, 18)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(18)])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == PASS
@@ -100,7 +101,9 @@ def test_threshold_pass_when_count_above_floor(monkeypatch):
     _patch_threshold(monkeypatch, 18)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(19)])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == PASS
@@ -118,7 +121,9 @@ def test_threshold_warn_when_count_in_warn_band(monkeypatch):
     _patch_threshold(monkeypatch, 18)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(15)])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == WARN
@@ -131,7 +136,9 @@ def test_threshold_warn_at_lower_boundary(monkeypatch):
     _patch_threshold(monkeypatch, 18)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(12)])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == WARN
@@ -144,7 +151,9 @@ def test_threshold_warn_at_upper_boundary(monkeypatch):
     _patch_threshold(monkeypatch, 18)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(17)])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == WARN
@@ -161,7 +170,9 @@ def test_threshold_fail_when_count_below_floor(monkeypatch):
     _patch_threshold(monkeypatch, 18)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(8)])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == FAIL
@@ -174,7 +185,9 @@ def test_threshold_fail_when_count_zero(monkeypatch):
     _patch_threshold(monkeypatch, 18)
     envelope = _envelope([])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == FAIL
@@ -243,7 +256,9 @@ def test_subprocess_missing_checks_key_maps_to_warn(monkeypatch):
     _ensure_env_unset(monkeypatch)
     envelope = {"schema_version": 1, "ok": True}
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == WARN
@@ -267,7 +282,8 @@ def test_subprocess_timeout_maps_to_warn(monkeypatch):
     """Subprocess timeout → WARN (the check cannot conclude)."""
     _ensure_env_unset(monkeypatch)
     with patch.object(
-        meta_mod.subprocess, "run",
+        meta_mod.subprocess,
+        "run",
         side_effect=subprocess.TimeoutExpired("cmd", 120),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
@@ -279,7 +295,9 @@ def test_subprocess_oserror_maps_to_warn(monkeypatch):
     """OS-level failure to spawn the subprocess → WARN."""
     _ensure_env_unset(monkeypatch)
     with patch.object(
-        meta_mod.subprocess, "run", side_effect=OSError("no such executable"),
+        meta_mod.subprocess,
+        "run",
+        side_effect=OSError("no such executable"),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
     assert c.status == WARN
@@ -298,7 +316,8 @@ def test_subprocess_invocation_passes_meta_depth_env(monkeypatch):
     _ensure_env_unset(monkeypatch)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(19)])
     with patch.object(
-        meta_mod.subprocess, "run",
+        meta_mod.subprocess,
+        "run",
         return_value=_completed_process(envelope),
     ) as mock_run:
         meta_mod.doctor_check_count_at_least_18()
@@ -318,7 +337,8 @@ def test_subprocess_invocation_uses_module_form(monkeypatch):
     _ensure_env_unset(monkeypatch)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(19)])
     with patch.object(
-        meta_mod.subprocess, "run",
+        meta_mod.subprocess,
+        "run",
         return_value=_completed_process(envelope),
     ) as mock_run:
         meta_mod.doctor_check_count_at_least_18()
@@ -362,7 +382,8 @@ def test_subprocess_env_includes_python_source_root(monkeypatch):
     monkeypatch.delenv("PYTHONPATH", raising=False)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(19)])
     with patch.object(
-        meta_mod.subprocess, "run",
+        meta_mod.subprocess,
+        "run",
         return_value=_completed_process(envelope),
     ) as mock_run:
         meta_mod.doctor_check_count_at_least_18()
@@ -371,9 +392,7 @@ def test_subprocess_env_includes_python_source_root(monkeypatch):
     assert env is not None, "subprocess.run was not called with env"
     pp = env.get("PYTHONPATH", "")
     src = meta_mod._python_source_root()
-    assert src in pp, (
-        f"PYTHONPATH must contain source root {src!r}, got {pp!r}"
-    )
+    assert src in pp, f"PYTHONPATH must contain source root {src!r}, got {pp!r}"
 
 
 def test_subprocess_env_preserves_existing_pythonpath(monkeypatch):
@@ -385,7 +404,8 @@ def test_subprocess_env_preserves_existing_pythonpath(monkeypatch):
     monkeypatch.setenv("PYTHONPATH", sentinel)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(19)])
     with patch.object(
-        meta_mod.subprocess, "run",
+        meta_mod.subprocess,
+        "run",
         return_value=_completed_process(envelope),
     ) as mock_run:
         meta_mod.doctor_check_count_at_least_18()
@@ -439,7 +459,7 @@ def test_load_min_check_count_reads_from_sibling_toml(tmp_path, monkeypatch):
     ``[meta].min_check_count`` in the sibling ``doctor_config.toml``.
     """
     cfg = tmp_path / "doctor_config.toml"
-    cfg.write_text('[meta]\nmin_check_count = 27\n')
+    cfg.write_text("[meta]\nmin_check_count = 27\n")
     # Point the loader at the temp file by patching ``__file__`` to a
     # sibling-of-cfg marker. ``_config_path`` resolves via
     # ``Path(__file__).resolve().parent``, so we synthesize a fake
@@ -482,13 +502,14 @@ def test_load_min_check_count_falls_back_when_key_absent(tmp_path, monkeypatch):
     fake_module = tmp_path / "_doctor_meta_checks.py"
     fake_module.write_text("# placeholder for path arithmetic\n")
     cfg = fake_module.parent / meta_mod._CONFIG_FILENAME
-    cfg.write_text('[meta]\nsome_other_key = 1\n')  # no min_check_count
+    cfg.write_text("[meta]\nsome_other_key = 1\n")  # no min_check_count
     monkeypatch.setattr(meta_mod, "__file__", str(fake_module))
     assert meta_mod._load_min_check_count() == meta_mod._DEFAULT_MIN_CHECK_COUNT
 
 
 def test_threshold_from_config_flows_through_to_check_status(
-    tmp_path, monkeypatch,
+    tmp_path,
+    monkeypatch,
 ):
     """End-to-end: a config-driven threshold changes the meta-check's
     verdict. With threshold=30 and live count=19, the meta-check is
@@ -504,22 +525,22 @@ def test_threshold_from_config_flows_through_to_check_status(
     monkeypatch.setattr(meta_mod, "_load_min_check_count", lambda default=18: 30)
     envelope = _envelope([_check_entry(f"c{i}") for i in range(19)])
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
-    assert c.status == WARN, (
-        f"with threshold=30 and count=19 expected WARN, got {c.status!r}"
-    )
+    assert c.status == WARN, f"with threshold=30 and count=19 expected WARN, got {c.status!r}"
     assert "30" in c.description
     assert meta_mod._CONFIG_FILENAME in c.description
 
     # Threshold = 10: count 19 is comfortably above PASS.
     monkeypatch.setattr(meta_mod, "_load_min_check_count", lambda default=18: 10)
     with patch.object(
-        meta_mod.subprocess, "run", return_value=_completed_process(envelope),
+        meta_mod.subprocess,
+        "run",
+        return_value=_completed_process(envelope),
     ):
         c = meta_mod.doctor_check_count_at_least_18()
-    assert c.status == PASS, (
-        f"with threshold=10 and count=19 expected PASS, got {c.status!r}"
-    )
+    assert c.status == PASS, f"with threshold=10 and count=19 expected PASS, got {c.status!r}"
     assert "10" in c.description

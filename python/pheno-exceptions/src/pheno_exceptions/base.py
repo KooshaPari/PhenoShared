@@ -29,6 +29,7 @@ class ErrorCategory(Enum):
     """
     Categories of errors for consistent handling and routing.
     """
+
     # Network and communication errors
     NETWORK = "network"
 
@@ -82,6 +83,7 @@ class ErrorContext:
     """
     Rich error context information for debugging and logging.
     """
+
     # Core identification
     error_id: str
     error_code: str

@@ -1,9 +1,10 @@
 """MLX backend — primary path on Apple Silicon."""
 
 from __future__ import annotations
+
 import logging
-import time
 import os
+import time
 
 from .base import BackendBase, BackendCapabilities, GenerateRequest, GenerateResponse
 
@@ -20,14 +21,10 @@ def quantization_execution_provenance(compressed_layers: int = 0) -> dict[str, o
     """
     cache_compression_verified = compressed_layers > 0
     return {
-        "execution_source": (
-            "turbo_kv_cache" if cache_compression_verified else "not_executed"
-        ),
+        "execution_source": ("turbo_kv_cache" if cache_compression_verified else "not_executed"),
         "rust_quantization_executed": False,
         "cache_compression_verified": cache_compression_verified,
-        "evidence_scope": (
-            "turbo_kv_cache_state" if cache_compression_verified else "none"
-        ),
+        "evidence_scope": ("turbo_kv_cache_state" if cache_compression_verified else "none"),
     }
 
 
@@ -43,9 +40,7 @@ class MlxBackend(BackendBase):
         supports_spec_decode=True,
     )
 
-    def __init__(
-        self, model_path: str | None = None, enable_custom_qwen_kernel: bool = False
-    ):
+    def __init__(self, model_path: str | None = None, enable_custom_qwen_kernel: bool = False):
         self.model_path = model_path
         self._enable_custom_qwen_kernel = enable_custom_qwen_kernel
         self.custom_kernel_stats = {"installed": False, "dispatches": 0, "fallbacks": 0}
@@ -60,13 +55,11 @@ class MlxBackend(BackendBase):
         # Default to Rust path for the encode side; flip to True via env
         # var PHENOTYPE_OMLX_USE_PYTHON_TQ=1 to A/B the Python `turboquant`
         # package's TurboQuant on the same call sites.
-        self._use_python_turboquant = (
-            os.environ.get("PHENOTYPE_OMLX_USE_PYTHON_TQ", "0") == "1"
-        )
+        self._use_python_turboquant = os.environ.get("PHENOTYPE_OMLX_USE_PYTHON_TQ", "0") == "1"
 
     def is_available(self) -> bool:
         try:
-            import mlx.core  # noqa
+            import mlx.core
 
             return True
         except ImportError:
@@ -135,9 +128,7 @@ class MlxBackend(BackendBase):
                 cv = py.quantize(chunk)
                 # cv.codebook/zeros/scales + indices (Python TurboQuant returns
                 # a struct; we normalize to the Rust return shape).
-                indices = getattr(cv, "indices", None) or list(
-                    getattr(cv, "packed", [])
-                )
+                indices = getattr(cv, "indices", None) or list(getattr(cv, "packed", []))
                 if not indices:
                     continue
                 for idx in indices:
@@ -154,9 +145,7 @@ class MlxBackend(BackendBase):
                 zeros.append(zero)
             return {
                 "shape": [len(flat)],
-                "packed": bytes(
-                    buf[: cursor // 8 if cursor % 8 == 0 else cursor // 8 + 1]
-                ),
+                "packed": bytes(buf[: cursor // 8 if cursor % 8 == 0 else cursor // 8 + 1]),
                 "scales": scales,
                 "zeros": zeros,
             }
@@ -195,14 +184,8 @@ class MlxBackend(BackendBase):
                 if not (scales and zeros):
                     out.extend([0.0] * gs)
                     continue
-                scale = (
-                    scales[gi // group_size]
-                    if (gi // group_size) < len(scales)
-                    else 1.0
-                )
-                zero = (
-                    zeros[gi // group_size] if (gi // group_size) < len(zeros) else 0.0
-                )
+                scale = scales[gi // group_size] if (gi // group_size) < len(scales) else 1.0
+                zero = zeros[gi // group_size] if (gi // group_size) < len(zeros) else 0.0
                 out.extend([(float(zero) + 1.0) * float(scale)] * gs)
             return out
         perf = self._rust_perf()
@@ -234,7 +217,7 @@ class MlxBackend(BackendBase):
         for layer in getattr(self._model, "layers", []):
             family = "dense_attention"
             if hasattr(layer, "linear_attn"):
-                inner = getattr(layer, "linear_attn")
+                inner = layer.linear_attn
                 name = type(inner).__name__.lower()
                 family = "deltanet" if "delta" in name else "linear_recurrent"
             elif hasattr(layer, "self_attn"):
@@ -265,9 +248,9 @@ class MlxBackend(BackendBase):
         if self._enable_custom_qwen_kernel and not self._custom_kernel_attempted:
             self._custom_kernel_attempted = True
             try:
-                from .qwen_gated_delta_kernel import install
-
                 import mlx.core as mx
+
+                from .qwen_gated_delta_kernel import install
 
                 self.custom_kernel_stats = install(self._model, mx)
             except Exception as exc:
@@ -294,12 +277,12 @@ class MlxBackend(BackendBase):
 
     def generate_with_turbo_cache(
         self,
-        req: "GenerateRequest",
+        req: GenerateRequest,
         turbo_bits: int = 4,
         turbo_key_bits: int | None = None,
         compact_after_prefill: bool = True,
         force_compact: bool = False,
-    ) -> "GenerateResponse":
+    ) -> GenerateResponse:
         """Generate using TurboQuant+ KV cache compression.
 
         Production path that uses TurboKVCacheLite (TheTom's MLX fork +
@@ -342,8 +325,8 @@ class MlxBackend(BackendBase):
         try:
             from mlx.nn.layers.turbo_kv_cache import (
                 TurboKVCacheLite,
-                make_turbo_cache,
                 compact_turbo_cache,
+                make_turbo_cache,
             )
         except ImportError as e:
             return GenerateResponse(
@@ -400,17 +383,14 @@ class MlxBackend(BackendBase):
                 n_compressed = sum(
                     1
                     for c in turbo_cache
-                    if isinstance(c, TurboKVCacheLite)
-                    and getattr(c, "_compacted", False)
+                    if isinstance(c, TurboKVCacheLite) and getattr(c, "_compacted", False)
                 )
             except Exception as exc:
                 logger.warning("compact_turbo_cache failed: %s", exc)
                 n_compressed = -1
                 bytes_freed = 0
 
-        quantization_provenance = quantization_execution_provenance(
-            max(n_compressed, 0)
-        )
+        quantization_provenance = quantization_execution_provenance(max(n_compressed, 0))
 
         return GenerateResponse(
             text=text,

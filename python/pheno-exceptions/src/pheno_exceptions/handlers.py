@@ -34,7 +34,9 @@ POSTGRES_ERROR_MAP = {
 }
 
 
-def normalize_postgres_error(err: Exception, fallback_message: str = "Database error") -> PhenoException:
+def normalize_postgres_error(
+    err: Exception, fallback_message: str = "Database error"
+) -> PhenoException:
     """
     Normalize PostgreSQL exceptions to Pheno exceptions.
 

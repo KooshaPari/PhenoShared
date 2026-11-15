@@ -10,20 +10,25 @@ Run ALL strategies concurrently — each picks its native backend per phase.
 No pytorch fallback, no llamacpp-as-strategy — only the strategy's declared
 compatible_backends are used.
 """
-import sys, time, asyncio
+
+import asyncio
+import sys
+import time
+
 # Repo-relative import path (FR-5 E2 — no hard-coded absolute repos python join).
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_ROOT / "python"))
 
-from omlx_research.nanovm import (
-    discover_plugins, list_available_backends, list_available_strategies,
-    get_registry,
-)
 from omlx_research.hardware import detect_hardware
 from omlx_research.hybrid.orchestrator import get_executor
-
+from omlx_research.nanovm import (
+    discover_plugins,
+    get_registry,
+    list_available_backends,
+    list_available_strategies,
+)
 
 # ── 1. Plugin discovery ─────────────────────────────────────────────────
 print("=" * 64)
@@ -62,7 +67,7 @@ executor = get_executor()
 registry = get_registry()
 spec = registry.get("latentmas")
 if spec:
-    print(f"\n  latentmas spec (from registry):")
+    print("\n  latentmas spec (from registry):")
     print(f"    phases:              {spec.phases}")
     print(f"    compatible_backends: {spec.compatible_backends}")
     print(f"    default_pool:        {spec.default_pool}")
@@ -70,7 +75,7 @@ if spec:
 
 prompt = "What is the capital of France?"
 result = asyncio.run(executor.run("latentmas", prompt, max_tokens=20, temperature=0.0))
-print(f"\n  Result:")
+print("\n  Result:")
 print(f"    strategy:        {result.strategy}")
 print(f"    text:            {result.text[:80]!r}")
 print(f"    elapsed_ms:      {result.elapsed_ms:.1f}")
@@ -78,9 +83,11 @@ print(f"    parallel:        {result.parallel}")
 print(f"    backends_used:   {result.backends_used}")
 print(f"    fallback_used:   {result.fallback_used}")
 if result.phase_results:
-    print(f"    phase_results:")
+    print("    phase_results:")
     for phase, r in result.phase_results.items():
-        print(f"      - {phase:20s} backend={r.backend_name:12s} ok={r.ok} elapsed={r.elapsed_ms:.1f}ms text={r.text[:30]!r}")
+        print(
+            f"      - {phase:20s} backend={r.backend_name:12s} ok={r.ok} elapsed={r.elapsed_ms:.1f}ms text={r.text[:30]!r}"
+        )
 
 
 # ── 4. ALL strategies concurrently ───────────────────────────────────────
@@ -97,7 +104,7 @@ total_elapsed = (time.perf_counter() - t0) * 1000
 print(f"\n  All {len(results)} strategies completed in {total_elapsed:.1f}ms (wall clock)")
 print()
 print(f"  {'Strategy':15s} {'Backend(s)':40s} {'Elapsed':>10s}")
-print(f"  {'-'*15} {'-'*40} {'-'*10:>10}")
+print(f"  {'-' * 15} {'-' * 40} {'-' * 10:>10}")
 for r in results:
     backends_str = ", ".join(set(r.backends_used.values())) if r.backends_used else "-"
     print(f"  {r.strategy:15s} {backends_str:40s} {r.elapsed_ms:>9.1f}ms")
