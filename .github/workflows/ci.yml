@@ -238,6 +238,38 @@ jobs:
           fi
           echo "Checking formatting of ${#files[@]} changed Python files."
           printf '%s\0' "${files[@]}" | xargs -0 ruff format --check --force-exclude
+      # Stage 2 of the ruff ratchet: `python/` is the first whole-tree scope to be
+      # enforced rather than only tolerated. Enforced rules = the project ruleset
+      # MINUS the explicit debt list below. The list is measured, not assumed:
+      # 192 diagnostics / 79 files / 39 rules at Ruff 0.16.5 on 2026-11-15, after
+      # the same branch took the tree from 833 to 192 (-77%).
+      #
+      # THE DEBT LIST MAY ONLY SHRINK. Pay a rule down, then delete it from
+      # PY_TREE_DEBT in the same PR that reaches zero for it. Never add an entry
+      # without recording the measured count and the reason beside it. The
+      # advisory whole-tree steps below still report every one of these rules, so
+      # nothing is hidden: it is deliberately not yet enforced, rather than unseen.
+      - name: ruff check (python/ tree - blocking)
+        env:
+          PY_TREE_DEBT: A001,A004,B006,B007,B904,B905,D401,E402,E501,E722,F401,F841,N803,N806,N818,RUF001,RUF002,RUF003,RUF005,RUF012,RUF043,RUF059,S104,S105,S108,S110,S112,S311,S603,S607,SIM102,SIM108,SIM117,SIM118,T201,UP031,UP035,UP042,UP046
+        run: |
+          set -euo pipefail
+          ruff check python/ --force-exclude --ignore "$PY_TREE_DEBT"
+      - name: ruff format --check (python/ tree - blocking)
+        run: |
+          set -euo pipefail
+          ruff format --check python/ --force-exclude
+      # Independent control on the two steps above. A linter or formatter bug must
+      # never be able to green-light broken Python, and one was measured here on
+      # 2026-11-15: ruff 0.16.5 with `target-version = "py314"` rewrites
+      # `except (A, B):` into `except A, B:` (a Python 2 syntax error), and then
+      # `ruff format --check` reports the INVALID form as correctly formatted. The
+      # format gate alone therefore passed a nine-file syntax regression. This step
+      # compiles every module so that class of failure cannot reach `main`.
+      - name: python/ compiles (syntax gate - blocking)
+        run: |
+          set -euo pipefail
+          python -m compileall -q -f python/
       - name: ruff format --check (whole tree - advisory)
         continue-on-error: true
         run: ruff format --check .
