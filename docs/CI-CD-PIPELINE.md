@@ -26,6 +26,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 **Purpose**: Automatically build, lint, test, and measure code coverage on every push and pull request.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Manual trigger (`workflow_dispatch`)
@@ -33,6 +34,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 ### Jobs
 
 #### 1.1 Build Job
+
 - **Runs on**: ubuntu-latest, macos-latest (parallel)
 - **Components**: Rust toolchain (stable) + clippy + rustfmt
 - **Steps**:
@@ -44,6 +46,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Artifacts**: Release binaries
 
 #### 1.2 Lint Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Install Rust with clippy and rustfmt
@@ -53,6 +56,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Fails if**: Any clippy warning OR formatting issues
 
 #### 1.3 Test Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Run `cargo test --release --all --verbose`
@@ -60,6 +64,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Output**: Test results summary
 
 #### 1.4 Python Tests Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Set up Python 3.11
@@ -70,6 +75,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Output**: Python test results
 
 #### 1.5 Coverage Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Install tarpaulin
@@ -97,6 +103,7 @@ env:
 **Purpose**: Detect vulnerabilities, secrets, licensing issues, and run static analysis.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Daily schedule (2am UTC)
@@ -105,6 +112,7 @@ env:
 ### Jobs
 
 #### 2.1 Cargo Audit Job
+
 - **Tool**: `cargo audit`
 - **Purpose**: Check for known vulnerabilities in Rust dependencies
 - **Command**: `cargo audit --all-features --deny warnings`
@@ -112,6 +120,7 @@ env:
 - **Fails if**: Critical or high severity vulnerabilities found
 
 #### 2.2 Cargo Deny Job
+
 - **Tool**: `cargo-deny`
 - **Purpose**: Enforce dependency, license, and source policies
 - **Configuration**: Uses existing `deny.toml` file
@@ -123,6 +132,7 @@ env:
 - **Fails if**: Policy violation detected
 
 #### 2.3 Gitleaks Job
+
 - **Tool**: Gitleaks GitHub Action
 - **Purpose**: Detect secrets and sensitive information in git history
 - **Features**:
@@ -133,6 +143,7 @@ env:
 - **Fails if**: Secrets detected
 
 #### 2.4 CodeQL Analysis Job
+
 - **Tool**: GitHub CodeQL (built-in SAST)
 - **Languages**: C++ (from Rust compilation), Python
 - **Purpose**: Static Application Security Testing
@@ -141,6 +152,7 @@ env:
 - **Duration**: ~5-10 min per language
 
 #### 2.5 Python Security Job
+
 - **Tools**: Bandit (SAST), Safety (dependencies)
 - **Purpose**: Security checks for Python code
 - **Steps**:
@@ -158,6 +170,7 @@ env:
 **Purpose**: Detect performance regressions and track performance trends.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Manual trigger (`workflow_dispatch`)
@@ -165,6 +178,7 @@ env:
 ### Jobs
 
 #### 3.1 Benchmark Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Check for `benches/` directory
@@ -192,12 +206,14 @@ env:
 **Purpose**: Automatically build and publish releases when tags are pushed.
 
 **Triggers**:
+
 - Push tag matching `v*.*.*` (e.g., `v1.0.0`, `v2.1.3-rc1`)
 - Manual trigger with version input
 
 ### Jobs
 
 #### 4.1 Build Release Job
+
 - **Runs on**: Multiple platforms (parallel)
   - `x86_64-unknown-linux-gnu` (Ubuntu)
   - `x86_64-apple-darwin` (macOS Intel)
@@ -212,6 +228,7 @@ env:
 - **Output**: Platform-specific binaries
 
 #### 4.2 Create Release Job
+
 - **Runs on**: ubuntu-latest
 - **Depends on**: build-release (waits for all binaries)
 - **Permissions**: Requires `contents: write`
@@ -254,20 +271,20 @@ gh release download v1.0.0 --pattern "agileplus-*"
 
 ### Build Times (with Swatinem cache)
 
-| Platform | First Run | Cached Run |
-|----------|-----------|-----------|
-| Linux (x86_64) | ~8 min | ~2 min |
-| macOS (x86_64) | ~10 min | ~3 min |
-| macOS (ARM64) | ~8 min | ~2-3 min |
+| Platform       | First Run | Cached Run |
+| -------------- | --------- | ---------- |
+| Linux (x86_64) | ~8 min    | ~2 min     |
+| macOS (x86_64) | ~10 min   | ~3 min     |
+| macOS (ARM64)  | ~8 min    | ~2-3 min   |
 
 ### Workflow Duration
 
-| Workflow | Parallel | Total Time | Cost |
-|----------|----------|-----------|------|
-| CI | 3 parallel jobs | ~15 min | Free (ubuntu) |
-| Security | Sequential | ~10 min | Free (ubuntu) |
-| Benchmarks | 1 job | ~20 min | Free (ubuntu) |
-| Release | Parallel builds | ~30 min | Free (ubuntu) |
+| Workflow   | Parallel        | Total Time | Cost          |
+| ---------- | --------------- | ---------- | ------------- |
+| CI         | 3 parallel jobs | ~15 min    | Free (ubuntu) |
+| Security   | Sequential      | ~10 min    | Free (ubuntu) |
+| Benchmarks | 1 job           | ~20 min    | Free (ubuntu) |
+| Release    | Parallel builds | ~30 min    | Free (ubuntu) |
 
 ### Monthly Cost Estimate
 
@@ -275,13 +292,13 @@ gh release download v1.0.0 --pattern "agileplus-*"
 
 **Current setup** (ubuntu-only, no macOS/Windows runners):
 
-| Scenario | Monthly Usage |
-|----------|---------------|
-| 10 commits/day | ~100 hours (CI + Security) |
-| 2 releases/month | ~2 hours (Release) |
-| Benchmarks on PR | ~10 hours |
-| Daily security scan | ~4 hours |
-| **Total** | **~116 hours** |
+| Scenario            | Monthly Usage              |
+| ------------------- | -------------------------- |
+| 10 commits/day      | ~100 hours (CI + Security) |
+| 2 releases/month    | ~2 hours (Release)         |
+| Benchmarks on PR    | ~10 hours                  |
+| Daily security scan | ~4 hours                   |
+| **Total**           | **~116 hours**             |
 
 **Status**: Well within free tier (20,000 min = 333 hours)
 
@@ -335,6 +352,7 @@ Required status checks for branch protection:
 - ✅ `cargo-deny`
 
 Optional checks:
+
 - `CodeQL C++` (code scanning)
 - `CodeQL Python` (code scanning)
 - `Gitleaks` (secret detection)
@@ -347,11 +365,13 @@ Optional checks:
 ### Workflow Not Triggering
 
 1. Verify workflow is enabled:
+
    ```bash
    gh workflow list
    ```
 
 2. Check branch filter:
+
    ```bash
    grep -A 2 "on:" .github/workflows/ci.yml
    ```
@@ -383,6 +403,7 @@ Optional checks:
 ## Best Practices
 
 1. **Test Locally First**:
+
    ```bash
    cargo build --release
    cargo clippy --all -- -D warnings
@@ -390,6 +411,7 @@ Optional checks:
    ```
 
 2. **Keep Dependencies Updated**:
+
    ```bash
    cargo audit        # Check vulnerabilities
    cargo update       # Update dependencies
@@ -430,6 +452,7 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 ### IDE Configuration
 
 **VS Code** (`settings.json`):
+
 ```json
 {
   "rust-analyzer.checkOnSave.command": "clippy",
@@ -442,6 +465,7 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 ```
 
 **IntelliJ IDEA**:
+
 - Settings > Languages & Frameworks > Rust > Clippy
 - Enable "External linter" with `--all-targets -- -D warnings`
 
@@ -498,33 +522,33 @@ spend a bounded cleanup pass there.
 
 The top ten rules are:
 
-| Rule | Diagnostics |
-| --- | ---: |
-| UP006 | 3,019 |
-| UP045 | 2,435 |
-| I001 | 1,714 |
-| S101 | 1,492 |
-| F401 | 1,178 |
-| W293 | 1,022 |
-| UP035 | 888 |
-| BLE001 | 731 |
-| E501 | 371 |
-| TRY401 | 333 |
+| Rule   | Diagnostics |
+| ------ | ----------: |
+| UP006  |       3,019 |
+| UP045  |       2,435 |
+| I001   |       1,714 |
+| S101   |       1,492 |
+| F401   |       1,178 |
+| W293   |       1,022 |
+| UP035  |         888 |
+| BLE001 |         731 |
+| E501   |         371 |
+| TRY401 |         333 |
 
 The measured top-level breakdown is:
 
-| Tree | Diagnostics | Files |
-| --- | ---: | ---: |
-| docs | 4,871 | 977 |
-| agents | 4,675 | 635 |
-| crates | 3,772 | 259 |
-| absorption | 1,973 | 287 |
-| python | 833 | 152 |
-| scripts | 328 | 85 |
-| researchledger | 290 | 89 |
-| researchintel | 295 | 12 |
-| agileplus | 245 | 24 |
-| audits | 188 | 39 |
+| Tree           | Diagnostics | Files |
+| -------------- | ----------: | ----: |
+| docs           |       4,871 |   977 |
+| agents         |       4,675 |   635 |
+| crates         |       3,772 |   259 |
+| absorption     |       1,973 |   287 |
+| python         |         833 |   152 |
+| scripts        |         328 |    85 |
+| researchledger |         290 |    89 |
+| researchintel  |         295 |    12 |
+| agileplus      |         245 |    24 |
+| audits         |         188 |    39 |
 
 Whole-tree safe autofix was rejected: it changed **4,437 files**, with
 **+118,562 / -63,065 lines**, and still left **6,233 errors**. This is not an
