@@ -1,7 +1,2 @@
-import os
-import sys
-
-
-def probe( a,b ):
-    x=1
-    return x
+def probe_two(a):
+    return a+1
