@@ -21,7 +21,6 @@ from omlx_research.cli.commands import promote as promote_mod
 from omlx_research.cli.commands.promote import (
     PromotionError,
     build_candidate,
-    cache_root,
     canonical_bytes,
     cmd_promote,
     content_hash,
@@ -33,8 +32,8 @@ from omlx_research.cli.commands.promote import (
     validate,
 )
 
-
 # --- stdio capture ---------------------------------------------------------
+
 
 class _IO:
     def __init__(self):
@@ -56,6 +55,7 @@ def _ns(**kw) -> argparse.Namespace:
 
 # --- fixture: redirect cache to tmp_path -----------------------------------
 
+
 @pytest.fixture
 def cache(monkeypatch, tmp_path):
     """Point the promote module's cache root at ``tmp_path/.omlx/cache``."""
@@ -74,6 +74,7 @@ def evaluation_report(tmp_path):
 
 
 # --- pure-function tests ---------------------------------------------------
+
 
 def test_parse_gates_basic():
     gates = parse_gates("mmlu=0.85,gpqa=0.75")
@@ -141,31 +142,72 @@ def test_canonical_bytes_excludes_signature_and_hash():
 
 
 def test_canonical_bytes_is_stable_under_key_reorder():
-    a = canonical_bytes({"candidate_id": "k", "source_revision": "r", "approved_at_unix_ms": 1,
-                         "approver": "", "gates": [], "evidence": [],
-                         "justification": "", "tuning_record_id": None})
-    b = canonical_bytes({"tuning_record_id": None, "justification": "", "evidence": [],
-                         "gates": [], "approver": "", "approved_at_unix_ms": 1,
-                         "source_revision": "r", "candidate_id": "k"})
+    a = canonical_bytes(
+        {
+            "candidate_id": "k",
+            "source_revision": "r",
+            "approved_at_unix_ms": 1,
+            "approver": "",
+            "gates": [],
+            "evidence": [],
+            "justification": "",
+            "tuning_record_id": None,
+        }
+    )
+    b = canonical_bytes(
+        {
+            "tuning_record_id": None,
+            "justification": "",
+            "evidence": [],
+            "gates": [],
+            "approver": "",
+            "approved_at_unix_ms": 1,
+            "source_revision": "r",
+            "candidate_id": "k",
+        }
+    )
     assert a == b
 
 
 def test_content_hash_changes_when_field_changes():
-    a = content_hash({"candidate_id": "k1", "source_revision": "r",
-                      "approved_at_unix_ms": 1, "approver": "",
-                      "gates": [], "evidence": [], "justification": "",
-                      "tuning_record_id": None})
-    b = content_hash({"candidate_id": "k2", "source_revision": "r",
-                      "approved_at_unix_ms": 1, "approver": "",
-                      "gates": [], "evidence": [], "justification": "",
-                      "tuning_record_id": None})
+    a = content_hash(
+        {
+            "candidate_id": "k1",
+            "source_revision": "r",
+            "approved_at_unix_ms": 1,
+            "approver": "",
+            "gates": [],
+            "evidence": [],
+            "justification": "",
+            "tuning_record_id": None,
+        }
+    )
+    b = content_hash(
+        {
+            "candidate_id": "k2",
+            "source_revision": "r",
+            "approved_at_unix_ms": 1,
+            "approver": "",
+            "gates": [],
+            "evidence": [],
+            "justification": "",
+            "tuning_record_id": None,
+        }
+    )
     assert a != b
 
 
 def test_sign_record_uses_hmac_sha256():
-    rec = {"candidate_id": "k", "source_revision": "r", "approved_at_unix_ms": 1,
-           "approver": "", "gates": [], "evidence": [], "justification": "",
-           "tuning_record_id": None}
+    rec = {
+        "candidate_id": "k",
+        "source_revision": "r",
+        "approved_at_unix_ms": 1,
+        "approver": "",
+        "gates": [],
+        "evidence": [],
+        "justification": "",
+        "tuning_record_id": None,
+    }
     key = b"deadbeef"
     sig = sign_record(rec, key)
     expected = hmac.new(key, canonical_bytes(rec), hashlib.sha256).hexdigest()
@@ -175,6 +217,7 @@ def test_sign_record_uses_hmac_sha256():
 
 
 # --- validate() tests ------------------------------------------------------
+
 
 def test_validate_rejects_synthetic_evidence():
     """Synthetic scores must never be sufficient for promotion."""
@@ -245,18 +288,21 @@ def test_validate_rejects_duplicate_evidence():
 
 # --- cmd_promote integration tests ----------------------------------------
 
+
 def test_cmd_promote_writes_signed_record(cache, evaluation_report, monkeypatch):
     monkeypatch.setenv("USER", "tester")
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-1",
-            gates="mmlu=0.1",
-            sign_key="deadbeef",
-            approver="alice",
-            decision="auto",
-            json=False,
-            report=str(evaluation_report),
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-1",
+                gates="mmlu=0.1",
+                sign_key="deadbeef",
+                approver="alice",
+                decision="auto",
+                json=False,
+                report=str(evaluation_report),
+            )
+        )
     assert rc == 0
     out = io.stdout.getvalue()
     assert "promotion         : OK" in out
@@ -273,15 +319,17 @@ def test_cmd_promote_writes_signed_record(cache, evaluation_report, monkeypatch)
 
 def test_cmd_promote_unsigned_record_has_no_signature(cache, evaluation_report):
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-2",
-            gates="mmlu=0.0",
-            sign_key=None,
-            approver="bob",
-            decision="auto",
-            json=False,
-            report=str(evaluation_report),
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-2",
+                gates="mmlu=0.0",
+                sign_key=None,
+                approver="bob",
+                decision="auto",
+                json=False,
+                report=str(evaluation_report),
+            )
+        )
     assert rc == 0
     rec = json.loads(open(promotion_path("knl-promote-2")).read())
     assert rec["signature"] is None
@@ -290,14 +338,16 @@ def test_cmd_promote_unsigned_record_has_no_signature(cache, evaluation_report):
 
 def test_cmd_promote_rejects_failing_gate(cache):
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-fail",
-            gates="mmlu=10.0",
-            sign_key=None,
-            approver="tester",
-            decision="auto",
-            json=False,
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-fail",
+                gates="mmlu=10.0",
+                sign_key=None,
+                approver="tester",
+                decision="auto",
+                json=False,
+            )
+        )
     assert rc == 2
     assert "promotion rejected" in io.stderr.getvalue()
     # Cache file should not be written on failure.
@@ -306,14 +356,16 @@ def test_cmd_promote_rejects_failing_gate(cache):
 
 def test_cmd_promote_json_envelope_on_failure(cache):
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-fail-json",
-            gates="mmlu=10.0",
-            sign_key=None,
-            approver="tester",
-            decision="auto",
-            json=True,
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-fail-json",
+                gates="mmlu=10.0",
+                sign_key=None,
+                approver="tester",
+                decision="auto",
+                json=True,
+            )
+        )
     assert rc == 2
     payload = json.loads(io.stdout.getvalue())
     assert payload["kind"] == "gate_rejected"
@@ -323,29 +375,33 @@ def test_cmd_promote_json_envelope_on_failure(cache):
 
 def test_cmd_promote_malformed_gates_returns_exit_2(cache):
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-bad",
-            gates="mmlu",
-            sign_key=None,
-            approver="tester",
-            decision="auto",
-            json=False,
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-bad",
+                gates="mmlu",
+                sign_key=None,
+                approver="tester",
+                decision="auto",
+                json=False,
+            )
+        )
     assert rc == 2
     assert "must be 'id=threshold'" in io.stderr.getvalue()
 
 
 def test_cmd_promote_bad_sign_key_returns_exit_2(cache, evaluation_report):
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-badkey",
-            gates="mmlu=0.0",
-            sign_key="not-hex!",
-            approver="tester",
-            decision="auto",
-            json=False,
-            report=str(evaluation_report),
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-badkey",
+                gates="mmlu=0.0",
+                sign_key="not-hex!",
+                approver="tester",
+                decision="auto",
+                json=False,
+                report=str(evaluation_report),
+            )
+        )
     assert rc == 2
     assert "hex bytes" in io.stderr.getvalue()
 
@@ -353,25 +409,29 @@ def test_cmd_promote_bad_sign_key_returns_exit_2(cache, evaluation_report):
 def test_cmd_promote_reuses_cached_evidence(cache, evaluation_report):
     """A second promote call should reuse the evidence from the cache."""
     with _IO():
-        cmd_promote(_ns(
-            kernel_id="knl-promote-reuse",
-            gates="mmlu=0.0",
-            sign_key=None,
-            approver="t",
+        cmd_promote(
+            _ns(
+                kernel_id="knl-promote-reuse",
+                gates="mmlu=0.0",
+                sign_key=None,
+                approver="t",
                 decision="auto",
                 json=False,
                 report=str(evaluation_report),
-        ))
+            )
+        )
     rec_first = json.loads(open(promotion_path("knl-promote-reuse")).read())
     with _IO():
-        cmd_promote(_ns(
-            kernel_id="knl-promote-reuse",
-            gates="mmlu=0.0",
-            sign_key=None,
-            approver="t",
-            decision="auto",
-            json=False,
-        ))
+        cmd_promote(
+            _ns(
+                kernel_id="knl-promote-reuse",
+                gates="mmlu=0.0",
+                sign_key=None,
+                approver="t",
+                decision="auto",
+                json=False,
+            )
+        )
     rec_second = json.loads(open(promotion_path("knl-promote-reuse")).read())
     # The two calls used the same scores; the only differences should be
     # approved_at_unix_ms (and possibly content_hash).
@@ -380,15 +440,17 @@ def test_cmd_promote_reuses_cached_evidence(cache, evaluation_report):
 
 def test_cmd_promote_json_output_is_structured(cache, evaluation_report):
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-json",
-            gates="mmlu=0.0",
-            sign_key="00ff",
-            approver="alice",
-            decision="manual",
-            json=True,
-            report=str(evaluation_report),
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-json",
+                gates="mmlu=0.0",
+                sign_key="00ff",
+                approver="alice",
+                decision="manual",
+                json=True,
+                report=str(evaluation_report),
+            )
+        )
     assert rc == 0
     payload = json.loads(io.stdout.getvalue())
     assert payload["ok"] is True
@@ -402,14 +464,18 @@ def test_cmd_promote_json_output_is_structured(cache, evaluation_report):
 def test_evidence_from_evaluation_report_fixture(tmp_path):
     """FR-6 P1/P3: import accuracy from EvaluationReport JSON."""
     fixture = tmp_path / "evaluation_report_mmlu.json"
-    fixture.write_text(json.dumps({
-        "suite": "mmlu",
-        "task_count": 100,
-        "correct_count": 71,
-        "accuracy": 0.71,
-        "mean_score": 0.71,
-        "results": [],
-    }))
+    fixture.write_text(
+        json.dumps(
+            {
+                "suite": "mmlu",
+                "task_count": 100,
+                "correct_count": 71,
+                "accuracy": 0.71,
+                "mean_score": 0.71,
+                "results": [],
+            }
+        )
+    )
     rows = evidence_from_evaluation_report(str(fixture))
     assert len(rows) == 1
     assert rows[0]["id"] == "mmlu"
@@ -420,24 +486,30 @@ def test_evidence_from_evaluation_report_fixture(tmp_path):
 def test_cmd_promote_from_report_fixture(cache, tmp_path):
     """FR-6 P3: promote --report uses EvaluationReport scores (not synthetic)."""
     fixture = tmp_path / "evaluation_report_mmlu.json"
-    fixture.write_text(json.dumps({
-        "suite": "mmlu",
-        "task_count": 100,
-        "correct_count": 71,
-        "accuracy": 0.71,
-        "mean_score": 0.71,
-        "results": [],
-    }))
+    fixture.write_text(
+        json.dumps(
+            {
+                "suite": "mmlu",
+                "task_count": 100,
+                "correct_count": 71,
+                "accuracy": 0.71,
+                "mean_score": 0.71,
+                "results": [],
+            }
+        )
+    )
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-report",
-            gates="mmlu=0.65",
-            sign_key=None,
-            approver="salmon",
-            decision="auto",
-            json=True,
-            report=str(fixture),
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-report",
+                gates="mmlu=0.65",
+                sign_key=None,
+                approver="salmon",
+                decision="auto",
+                json=True,
+                report=str(fixture),
+            )
+        )
     assert rc == 0
     payload = json.loads(io.stdout.getvalue())
     assert payload["ok"] is True
@@ -449,38 +521,46 @@ def test_cmd_promote_from_report_fixture(cache, tmp_path):
 
 def test_cmd_promote_report_missing_returns_exit_2(cache):
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-noreport",
-            gates="mmlu=0.0",
-            sign_key=None,
-            approver="t",
-            decision="auto",
-            json=False,
-            report="/nonexistent/evaluation_report.json",
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-noreport",
+                gates="mmlu=0.0",
+                sign_key=None,
+                approver="t",
+                decision="auto",
+                json=False,
+                report="/nonexistent/evaluation_report.json",
+            )
+        )
     assert rc == 2
     assert "not found" in io.stderr.getvalue()
 
 
 def test_cmd_promote_report_gate_mismatch_rejects(cache, tmp_path):
     fixture = tmp_path / "gpqa.json"
-    fixture.write_text(json.dumps({
-        "suite": "gpqa",
-        "accuracy": 0.9,
-        "task_count": 1,
-        "correct_count": 1,
-        "mean_score": 0.9,
-        "results": [],
-    }))
+    fixture.write_text(
+        json.dumps(
+            {
+                "suite": "gpqa",
+                "accuracy": 0.9,
+                "task_count": 1,
+                "correct_count": 1,
+                "mean_score": 0.9,
+                "results": [],
+            }
+        )
+    )
     with _IO() as io:
-        rc = cmd_promote(_ns(
-            kernel_id="knl-promote-mismatch",
-            gates="mmlu=0.5",
-            sign_key=None,
-            approver="t",
-            decision="auto",
-            json=False,
-            report=str(fixture),
-        ))
+        rc = cmd_promote(
+            _ns(
+                kernel_id="knl-promote-mismatch",
+                gates="mmlu=0.5",
+                sign_key=None,
+                approver="t",
+                decision="auto",
+                json=False,
+                report=str(fixture),
+            )
+        )
     assert rc == 2
     assert "no evidence" in io.stderr.getvalue() or "promotion rejected" in io.stderr.getvalue()

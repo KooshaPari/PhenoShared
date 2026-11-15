@@ -13,12 +13,10 @@ This CLI provides unified access to various utility functions for:
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any
 
 import typer
-from typing_extensions import Annotated
 
 from pheno_utils import __version__
 from pheno_utils.cleanup import format_report as format_cleanup_report
@@ -26,7 +24,8 @@ from pheno_utils.cleanup import validate_cleanup
 from pheno_utils.codemap import format_codemap, generate_codemap
 from pheno_utils.dependencies import analyze_dependencies, render_mermaid
 from pheno_utils.docstrings import simplify_directory
-from pheno_utils.file_sizes import check_file_sizes, format_report as format_size_report
+from pheno_utils.file_sizes import check_file_sizes
+from pheno_utils.file_sizes import format_report as format_size_report
 from pheno_utils.health import format_health_report, run_health_checks
 from pheno_utils.inventory import build_inventory, inventory_to_markdown
 from pheno_utils.loc_counter import count_loc

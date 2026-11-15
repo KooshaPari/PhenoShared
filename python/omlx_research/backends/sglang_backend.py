@@ -1,8 +1,10 @@
 """SGLang backend — primary inference engine for NVIDIA clusters."""
 
 from __future__ import annotations
+
 import logging
 import time
+
 from .base import (
     BackendBase,
     BackendCapabilities,
@@ -26,9 +28,7 @@ class SglangBackend(LazyBackendMixin, BackendBase):
         supports_spec_decode=True,
     )
 
-    def __init__(
-        self, model_path: str | None = None, base_url: str = "http://127.0.0.1:30000"
-    ):
+    def __init__(self, model_path: str | None = None, base_url: str = "http://127.0.0.1:30000"):
         self.model_path = model_path
         self.base_url = base_url
         self._runtime = None
@@ -36,7 +36,7 @@ class SglangBackend(LazyBackendMixin, BackendBase):
 
     def is_available(self) -> bool:
         try:
-            import sglang  # noqa
+            import sglang
 
             return True
         except ImportError:
@@ -52,9 +52,7 @@ class SglangBackend(LazyBackendMixin, BackendBase):
                         model_path=self.model_path, base_url=self.base_url
                     )
             except Exception as e:
-                logger.warning(
-                    "Failed to load sglang model from %s: %s", self.model_path, e
-                )
+                logger.warning("Failed to load sglang model from %s: %s", self.model_path, e)
                 self._load_error = str(e)
 
     def generate(self, req: GenerateRequest) -> GenerateResponse:

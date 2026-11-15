@@ -8,15 +8,15 @@ Re-exports are kept intentionally minimal — only the ``cmd_*`` callables are
 exposed because that's all ``main()`` needs.
 """
 
-from .inspect import cmd_inspect
-from .explain import cmd_explain
-from .tune import cmd_tune
-from .replay import cmd_replay
 from .compare import cmd_compare
 from .evidence import cmd_evidence
+from .explain import cmd_explain
 from .gates import cmd_gates
+from .inspect import cmd_inspect
 from .promote import cmd_promote
 from .quarantine import cmd_quarantine
+from .replay import cmd_replay
+from .tune import cmd_tune
 
 __all__ = [
     "cmd_compare",

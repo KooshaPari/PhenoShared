@@ -32,12 +32,12 @@ import argparse
 
 def cmd_status(_: argparse.Namespace) -> int:
     from ..backends import (
-        MlxBackend,
-        MetalKernelBackend,
-        VllmBackend,
-        TensorrtBackend,
-        SglangBackend,
         LlamaCppBackend,
+        MetalKernelBackend,
+        MlxBackend,
+        SglangBackend,
+        TensorrtBackend,
+        VllmBackend,
     )
 
     rows = []
@@ -64,8 +64,8 @@ def cmd_status(_: argparse.Namespace) -> int:
 
 
 def cmd_inference(args: argparse.Namespace) -> int:
-    from ..backends import GenerateRequest, MlxBackend, MetalKernelBackend
-    from ..engines import HybridDispatch, DispatchPolicy
+    from ..backends import GenerateRequest, MetalKernelBackend, MlxBackend
+    from ..engines import DispatchPolicy, HybridDispatch
 
     req = GenerateRequest(
         prompt=args.prompt, max_tokens=args.max_tokens, temperature=args.temperature
@@ -100,9 +100,10 @@ def cmd_inference(args: argparse.Namespace) -> int:
 
 
 def cmd_spec_decode(args: argparse.Namespace) -> int:
-    from ..engines import SpeculativeEngine, SpecMode
-    from ..engines.spec_decode import SpecConfig
     import numpy as np
+
+    from ..engines import SpecMode, SpeculativeEngine
+    from ..engines.spec_decode import SpecConfig
 
     # Toy target: returns a numpy logits vector (length 32).
     # The engine calls `int(target(prefix).argmax())` for fallback — pass
@@ -137,14 +138,13 @@ def cmd_spec_decode(args: argparse.Namespace) -> int:
         width = 4
         depth = args.depth
         mask_size = width**depth + 1
-        print(
-            f"Medusa: heads={width} depth={depth} → tree shape ({mask_size}, {mask_size})"
-        )
+        print(f"Medusa: heads={width} depth={depth} → tree shape ({mask_size}, {mask_size})")
     return 0
 
 
 def cmd_latentmas(args: argparse.Namespace) -> int:
     import asyncio
+
     from ..agents import latentmas_fanout
 
     async def one_agent(_p, _s, idx):

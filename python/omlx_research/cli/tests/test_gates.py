@@ -12,7 +12,6 @@ import pytest
 
 from omlx_research.cli.commands import gates as gates_mod
 from omlx_research.cli.commands.gates import (
-    cache_root,
     cmd_gates,
     cmd_gates_add,
     cmd_gates_check,
@@ -24,8 +23,8 @@ from omlx_research.cli.commands.gates import (
     save_config,
 )
 
-
 # --- stdio capture ---------------------------------------------------------
+
 
 class _IO:
     def __init__(self):
@@ -47,6 +46,7 @@ def _ns(**kw) -> argparse.Namespace:
 
 # --- fixtures --------------------------------------------------------------
 
+
 @pytest.fixture
 def cache(monkeypatch, tmp_path):
     monkeypatch.setattr(gates_mod, "_project_root", lambda: str(tmp_path))
@@ -54,6 +54,7 @@ def cache(monkeypatch, tmp_path):
 
 
 # --- storage tests ---------------------------------------------------------
+
 
 def test_load_config_returns_empty_when_missing(cache):
     cfg = load_config("missing-kernel")
@@ -66,16 +67,19 @@ def test_load_config_normalizes_existing_file(cache):
     path = gates_path("k1")
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
-        json.dump({
-            "schema_version": 1,
-            "kernel_id": "k1",
-            "updated_at_unix_ms": 0,
-            "gates": [
-                {"id": "mmlu", "threshold": 0.7, "direction": "at_least", "note": "ok"},
-                {"id": "bogus", "threshold": "not-a-number"},  # dropped
-                {"not-a-gate": True},  # dropped
-            ],
-        }, f)
+        json.dump(
+            {
+                "schema_version": 1,
+                "kernel_id": "k1",
+                "updated_at_unix_ms": 0,
+                "gates": [
+                    {"id": "mmlu", "threshold": 0.7, "direction": "at_least", "note": "ok"},
+                    {"id": "bogus", "threshold": "not-a-number"},  # dropped
+                    {"not-a-gate": True},  # dropped
+                ],
+            },
+            f,
+        )
     cfg = load_config("k1")
     assert len(cfg["gates"]) == 1
     assert cfg["gates"][0]["id"] == "mmlu"
@@ -99,6 +103,7 @@ def test_find_gate_returns_match(cache):
 
 # --- list tests ------------------------------------------------------------
 
+
 def test_cmd_gates_list_empty(cache):
     with _IO() as io:
         rc = cmd_gates_list(_ns(kernel_id="k-empty", json=False))
@@ -108,10 +113,12 @@ def test_cmd_gates_list_empty(cache):
 
 def test_cmd_gates_list_human(cache):
     cfg = load_config("k-list")
-    cfg["gates"].extend([
-        {"id": "mmlu", "threshold": 0.7, "direction": "at_least", "note": "main"},
-        {"id": "gpqa", "threshold": 0.5, "direction": "at_least", "note": ""},
-    ])
+    cfg["gates"].extend(
+        [
+            {"id": "mmlu", "threshold": 0.7, "direction": "at_least", "note": "main"},
+            {"id": "gpqa", "threshold": 0.5, "direction": "at_least", "note": ""},
+        ]
+    )
     save_config("k-list", cfg)
     with _IO() as io:
         rc = cmd_gates_list(_ns(kernel_id="k-list", json=False))
@@ -137,13 +144,20 @@ def test_cmd_gates_list_json(cache):
 
 # --- add tests -------------------------------------------------------------
 
+
 def test_cmd_gates_add_creates_file(cache):
     with _IO() as io:
-        rc = cmd_gates_add(_ns(
-            kernel_id="k-add", gate="mmlu", threshold=0.85,
-            at_least=True, at_most=False, note="MMLU-Pro main",
-            json=False,
-        ))
+        rc = cmd_gates_add(
+            _ns(
+                kernel_id="k-add",
+                gate="mmlu",
+                threshold=0.85,
+                at_least=True,
+                at_most=False,
+                note="MMLU-Pro main",
+                json=False,
+            )
+        )
     assert rc == 0
     assert "added gate 'mmlu'" in io.stdout.getvalue()
     assert "0.85" in io.stdout.getvalue()
@@ -156,11 +170,17 @@ def test_cmd_gates_add_updates_existing(cache):
     cfg["gates"].append({"id": "mmlu", "threshold": 0.5, "direction": "at_least", "note": ""})
     save_config("k-upd", cfg)
     with _IO() as io:
-        rc = cmd_gates_add(_ns(
-            kernel_id="k-upd", gate="mmlu", threshold=0.9,
-            at_least=True, at_most=False, note="bumped",
-            json=False,
-        ))
+        rc = cmd_gates_add(
+            _ns(
+                kernel_id="k-upd",
+                gate="mmlu",
+                threshold=0.9,
+                at_least=True,
+                at_most=False,
+                note="bumped",
+                json=False,
+            )
+        )
     assert rc == 0
     assert "updated" in io.stdout.getvalue()
     cfg = load_config("k-upd")
@@ -171,11 +191,17 @@ def test_cmd_gates_add_updates_existing(cache):
 
 def test_cmd_gates_add_at_most_direction(cache):
     with _IO():
-        rc = cmd_gates_add(_ns(
-            kernel_id="k-atmost", gate="ppl", threshold=10.0,
-            at_least=False, at_most=True, note="",
-            json=False,
-        ))
+        rc = cmd_gates_add(
+            _ns(
+                kernel_id="k-atmost",
+                gate="ppl",
+                threshold=10.0,
+                at_least=False,
+                at_most=True,
+                note="",
+                json=False,
+            )
+        )
     assert rc == 0
     cfg = load_config("k-atmost")
     assert cfg["gates"][0]["direction"] == "at_most"
@@ -183,30 +209,51 @@ def test_cmd_gates_add_at_most_direction(cache):
 
 def test_cmd_gates_add_missing_gate_arg(cache):
     with _IO() as io:
-        rc = cmd_gates_add(_ns(
-            kernel_id="k-x", gate=None, threshold=0.5,
-            at_least=True, at_most=False, note="", json=False,
-        ))
+        rc = cmd_gates_add(
+            _ns(
+                kernel_id="k-x",
+                gate=None,
+                threshold=0.5,
+                at_least=True,
+                at_most=False,
+                note="",
+                json=False,
+            )
+        )
     assert rc == 2
     assert "--gate ID is required" in io.stderr.getvalue()
 
 
 def test_cmd_gates_add_missing_threshold(cache):
     with _IO() as io:
-        rc = cmd_gates_add(_ns(
-            kernel_id="k-x", gate="mmlu", threshold=None,
-            at_least=True, at_most=False, note="", json=False,
-        ))
+        rc = cmd_gates_add(
+            _ns(
+                kernel_id="k-x",
+                gate="mmlu",
+                threshold=None,
+                at_least=True,
+                at_most=False,
+                note="",
+                json=False,
+            )
+        )
     assert rc == 2
     assert "threshold" in io.stderr.getvalue()
 
 
 def test_cmd_gates_add_json(cache):
     with _IO() as io:
-        rc = cmd_gates_add(_ns(
-            kernel_id="k-add-json", gate="mmlu", threshold=0.7,
-            at_least=True, at_most=False, note="", json=True,
-        ))
+        rc = cmd_gates_add(
+            _ns(
+                kernel_id="k-add-json",
+                gate="mmlu",
+                threshold=0.7,
+                at_least=True,
+                at_most=False,
+                note="",
+                json=True,
+            )
+        )
     assert rc == 0
     payload = json.loads(io.stdout.getvalue())
     assert payload["verb"] == "added"
@@ -216,12 +263,15 @@ def test_cmd_gates_add_json(cache):
 
 # --- remove tests ----------------------------------------------------------
 
+
 def test_cmd_gates_remove_happy(cache):
     cfg = load_config("k-rm")
-    cfg["gates"].extend([
-        {"id": "mmlu", "threshold": 0.5, "direction": "at_least", "note": ""},
-        {"id": "gpqa", "threshold": 0.5, "direction": "at_least", "note": ""},
-    ])
+    cfg["gates"].extend(
+        [
+            {"id": "mmlu", "threshold": 0.5, "direction": "at_least", "note": ""},
+            {"id": "gpqa", "threshold": 0.5, "direction": "at_least", "note": ""},
+        ]
+    )
     save_config("k-rm", cfg)
     with _IO():
         rc = cmd_gates_remove(_ns(kernel_id="k-rm", gate="mmlu", json=False))
@@ -258,14 +308,20 @@ def test_cmd_gates_remove_json(cache):
 
 # --- check tests -----------------------------------------------------------
 
+
 def test_cmd_gates_check_passes(cache):
     cfg = load_config("k-check")
     cfg["gates"].append({"id": "mmlu", "threshold": 0.7, "direction": "at_least", "note": ""})
     save_config("k-check", cfg)
     with _IO() as io:
-        rc = cmd_gates_check(_ns(
-            kernel_id="k-check", gate="mmlu", score=0.85, json=False,
-        ))
+        rc = cmd_gates_check(
+            _ns(
+                kernel_id="k-check",
+                gate="mmlu",
+                score=0.85,
+                json=False,
+            )
+        )
     assert rc == 0
     out = io.stdout.getvalue()
     assert "result : OK" in out
@@ -276,9 +332,14 @@ def test_cmd_gates_check_fails(cache):
     cfg["gates"].append({"id": "mmlu", "threshold": 0.7, "direction": "at_least", "note": ""})
     save_config("k-check-fail", cfg)
     with _IO() as io:
-        rc = cmd_gates_check(_ns(
-            kernel_id="k-check-fail", gate="mmlu", score=0.5, json=False,
-        ))
+        rc = cmd_gates_check(
+            _ns(
+                kernel_id="k-check-fail",
+                gate="mmlu",
+                score=0.5,
+                json=False,
+            )
+        )
     assert rc == 0  # the *command* succeeds; "FAIL" is the gate verdict, not exit code
     out = io.stdout.getvalue()
     assert "result : FAIL" in out
@@ -289,31 +350,51 @@ def test_cmd_gates_check_at_most(cache):
     cfg["gates"].append({"id": "ppl", "threshold": 10.0, "direction": "at_most", "note": ""})
     save_config("k-check-am", cfg)
     with _IO() as io:
-        rc = cmd_gates_check(_ns(
-            kernel_id="k-check-am", gate="ppl", score=5.0, json=False,
-        ))
+        rc = cmd_gates_check(
+            _ns(
+                kernel_id="k-check-am",
+                gate="ppl",
+                score=5.0,
+                json=False,
+            )
+        )
     assert rc == 0
     assert "result : OK" in io.stdout.getvalue()
     with _IO() as io:
-        rc = cmd_gates_check(_ns(
-            kernel_id="k-check-am", gate="ppl", score=20.0, json=False,
-        ))
+        rc = cmd_gates_check(
+            _ns(
+                kernel_id="k-check-am",
+                gate="ppl",
+                score=20.0,
+                json=False,
+            )
+        )
     assert "result : FAIL" in io.stdout.getvalue()
 
 
 def test_cmd_gates_check_unknown_gate_returns_exit_2(cache):
     with _IO() as io:
-        rc = cmd_gates_check(_ns(
-            kernel_id="k-check-unk", gate="mmlu", score=0.5, json=False,
-        ))
+        rc = cmd_gates_check(
+            _ns(
+                kernel_id="k-check-unk",
+                gate="mmlu",
+                score=0.5,
+                json=False,
+            )
+        )
     assert rc == 2
 
 
 def test_cmd_gates_check_missing_score(cache):
     with _IO() as io:
-        rc = cmd_gates_check(_ns(
-            kernel_id="k-check-2", gate="mmlu", score=None, json=False,
-        ))
+        rc = cmd_gates_check(
+            _ns(
+                kernel_id="k-check-2",
+                gate="mmlu",
+                score=None,
+                json=False,
+            )
+        )
     assert rc == 2
     assert "--score" in io.stderr.getvalue()
 
@@ -323,9 +404,14 @@ def test_cmd_gates_check_json(cache):
     cfg["gates"].append({"id": "mmlu", "threshold": 0.7, "direction": "at_least", "note": ""})
     save_config("k-check-json", cfg)
     with _IO() as io:
-        rc = cmd_gates_check(_ns(
-            kernel_id="k-check-json", gate="mmlu", score=0.85, json=True,
-        ))
+        rc = cmd_gates_check(
+            _ns(
+                kernel_id="k-check-json",
+                gate="mmlu",
+                score=0.85,
+                json=True,
+            )
+        )
     assert rc == 0
     payload = json.loads(io.stdout.getvalue())
     assert payload["passes"] is True
@@ -336,30 +422,46 @@ def test_cmd_gates_check_json(cache):
 
 # --- cmd_gates dispatch ----------------------------------------------------
 
+
 def test_cmd_gates_dispatches_to_list(cache):
     with _IO() as io:
-        rc = cmd_gates(_ns(
-            gates_action="list", kernel_id="dispatch-list", json=False,
-        ))
+        rc = cmd_gates(
+            _ns(
+                gates_action="list",
+                kernel_id="dispatch-list",
+                json=False,
+            )
+        )
     assert rc == 0
     assert "no gates configured" in io.stdout.getvalue()
 
 
 def test_cmd_gates_dispatches_to_add(cache):
     with _IO():
-        rc = cmd_gates(_ns(
-            gates_action="add", kernel_id="dispatch-add",
-            gate="mmlu", threshold=0.7,
-            at_least=True, at_most=False, note="", json=False,
-        ))
+        rc = cmd_gates(
+            _ns(
+                gates_action="add",
+                kernel_id="dispatch-add",
+                gate="mmlu",
+                threshold=0.7,
+                at_least=True,
+                at_most=False,
+                note="",
+                json=False,
+            )
+        )
     assert rc == 0
     assert any(g["id"] == "mmlu" for g in load_config("dispatch-add")["gates"])
 
 
 def test_cmd_gates_unknown_subcommand(cache):
     with _IO() as io:
-        rc = cmd_gates(_ns(
-            gates_action="bogus", kernel_id="k-x", json=False,
-        ))
+        rc = cmd_gates(
+            _ns(
+                gates_action="bogus",
+                kernel_id="k-x",
+                json=False,
+            )
+        )
     assert rc == 2
     assert "unknown subcommand" in io.stderr.getvalue()

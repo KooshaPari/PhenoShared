@@ -3,14 +3,13 @@
 Verifies that all atoms.tech and ATOMS identifiers have been properly removed.
 """
 
-import pytest
 import sys
 from pathlib import Path
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from pheno.mcp.entry_points import MCPEntryPoint, MCPCLI
+from pheno.mcp.entry_points import MCPCLI, MCPEntryPoint
 from pheno.shared.mcp_entry_points import MCPConfiguration, MCPEntryPointRegistry
 
 

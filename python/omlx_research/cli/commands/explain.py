@@ -64,8 +64,7 @@ def cmd_explain(args: argparse.Namespace) -> int:
     op_kind = args.op_kind
     if op_kind not in OPERATOR_CONTRACTS:
         print(
-            f"error: unknown op-kind {op_kind!r}. "
-            f"Supported: {_supported_set()}",
+            f"error: unknown op-kind {op_kind!r}. Supported: {_supported_set()}",
             file=sys.stderr,
         )
         return 4

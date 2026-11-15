@@ -1,9 +1,9 @@
 """Memory profiling for agent execution strategies."""
 
 import asyncio
-import tracemalloc
-import time
 import json
+import time
+import tracemalloc
 
 
 class MockModel:

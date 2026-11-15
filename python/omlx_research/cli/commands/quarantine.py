@@ -28,7 +28,6 @@ from typing import Any
 
 from . import promote as _promote
 
-
 AUDIT_FILENAME = "audit.jsonl"
 
 
@@ -49,16 +48,18 @@ def audit_path() -> str:
 
 
 def _human_summary(entry: dict[str, Any], cache_path: str) -> str:
-    return "\n".join([
-        f"action            : {entry['action']}",
-        f"candidate_id      : {entry['candidate_id']}",
-        f"reason            : {entry['reason']}",
-        f"unix_ts           : {entry['unix_ts']}",
-        f"approver          : {entry['approver']}",
-        f"content_hash      : {entry['content_hash'][:16]}{'...' if entry['content_hash'] else ''}",
-        f"audit_path        : {cache_path}",
-        "quarantine        : OK",
-    ])
+    return "\n".join(
+        [
+            f"action            : {entry['action']}",
+            f"candidate_id      : {entry['candidate_id']}",
+            f"reason            : {entry['reason']}",
+            f"unix_ts           : {entry['unix_ts']}",
+            f"approver          : {entry['approver']}",
+            f"content_hash      : {entry['content_hash'][:16]}{'...' if entry['content_hash'] else ''}",
+            f"audit_path        : {cache_path}",
+            "quarantine        : OK",
+        ]
+    )
 
 
 def _json_summary(entry: dict[str, Any], cache_path: str) -> dict[str, Any]:
@@ -146,9 +147,7 @@ def cmd_quarantine(args: argparse.Namespace) -> int:
         print(f"error: unknown action {action!r} (expected hold|rollback)", file=sys.stderr)
         return 2
 
-    approver = (
-        getattr(args, "approver", None) or os.environ.get("USER") or "unknown"
-    )
+    approver = getattr(args, "approver", None) or os.environ.get("USER") or "unknown"
     entry = _build_entry(args.kernel_id, reason, action, approver)
 
     try:
@@ -158,9 +157,7 @@ def cmd_quarantine(args: argparse.Namespace) -> int:
         return 3
 
     if getattr(args, "json", False):
-        sys.stdout.write(
-            json.dumps(_json_summary(entry, path), indent=2, sort_keys=True) + "\n"
-        )
+        sys.stdout.write(json.dumps(_json_summary(entry, path), indent=2, sort_keys=True) + "\n")
     else:
         print(_human_summary(entry, path))
     return 0

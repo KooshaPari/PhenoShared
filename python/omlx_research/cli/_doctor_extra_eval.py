@@ -33,7 +33,6 @@ from ._doctor_shared import (
     project_root,
 )
 
-
 __all__ = [
     "eval_harness_subcommand_runnable",
 ]
@@ -75,7 +74,7 @@ def _eval_harness_module() -> tuple[bool, str]:
     ``__file__`` (when importable) or a short diagnostic string.
     """
     try:
-        import omlx_research.eval as _eval_mod  # type: ignore  # noqa: F401
+        import omlx_research.eval as _eval_mod  # type: ignore
     except Exception as e:
         return False, f"{type(e).__name__}: {e}"
     file_attr = getattr(_eval_mod, "__file__", None) or "<built-in>"

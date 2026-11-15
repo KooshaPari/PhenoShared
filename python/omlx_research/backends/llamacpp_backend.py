@@ -1,8 +1,10 @@
 """llama.cpp backend — cross-platform (macOS, Linux, Windows, iOS, Android)."""
 
 from __future__ import annotations
+
 import logging
 import time
+
 from .base import BackendBase, BackendCapabilities, GenerateRequest, GenerateResponse
 
 logger = logging.getLogger(__name__)
@@ -28,7 +30,7 @@ class LlamaCppBackend(BackendBase):
 
     def is_available(self) -> bool:
         try:
-            import llama_cpp  # noqa
+            import llama_cpp
 
             return True
         except ImportError:
@@ -41,9 +43,7 @@ class LlamaCppBackend(BackendBase):
 
                 self._model = Llama(model_path=self.model_path, n_ctx=self.n_ctx)
             except Exception as e:
-                logger.warning(
-                    "Failed to load llamacpp model from %s: %s", self.model_path, e
-                )
+                logger.warning("Failed to load llamacpp model from %s: %s", self.model_path, e)
                 self._load_error = str(e)
 
     def generate(self, req: GenerateRequest) -> GenerateResponse:

@@ -114,7 +114,9 @@ class ReadinessChecker:
         self._check_registry[name] = check_func
 
     def run_all_checks(
-        self, priorities: list[CheckPriority] = None, parallel: bool = True,
+        self,
+        priorities: list[CheckPriority] = None,
+        parallel: bool = True,
     ) -> list[CheckResult]:
         """
         Run all readiness checks.
@@ -241,7 +243,11 @@ class ReadinessChecker:
             else:
                 # Run sync checks in executor
                 task = asyncio.get_event_loop().run_in_executor(
-                    None, run_single_check, check_name, check_func, priority,
+                    None,
+                    run_single_check,
+                    check_name,
+                    check_func,
+                    priority,
                 )
                 tasks.append(task)
 
@@ -300,16 +306,16 @@ class ReadinessChecker:
         """
         report = f"""# Deployment Readiness Report
 
-Generated: {summary['timestamp']}
+Generated: {summary["timestamp"]}
 
 ## Summary
 
-- **Total Checks**: {summary['total_checks']}
-- **Passed**: {summary['passed']}
-- **Failed**: {summary['failed']}
-- **Warnings**: {summary['warnings']}
-- **Readiness Score**: {summary['readiness_score']:.1f}%
-- **Can Deploy**: {'✅ Yes' if summary['can_deploy'] else '❌ No'}
+- **Total Checks**: {summary["total_checks"]}
+- **Passed**: {summary["passed"]}
+- **Failed**: {summary["failed"]}
+- **Warnings**: {summary["warnings"]}
+- **Readiness Score**: {summary["readiness_score"]:.1f}%
+- **Can Deploy**: {"✅ Yes" if summary["can_deploy"] else "❌ No"}
 
 ## Check Results
 
@@ -356,14 +362,19 @@ Generated: {summary['timestamp']}
             # Run ruff check
             ruff_result = subprocess.run(
                 ["ruff", "check", "--output-format=json", "."],
-                check=False, capture_output=True,
+                check=False,
+                capture_output=True,
                 text=True,
                 cwd=Path.cwd(),
             )
 
             # Run mypy
             mypy_result = subprocess.run(
-                ["mypy", "--show-error-codes", "."], check=False, capture_output=True, text=True, cwd=Path.cwd(),
+                ["mypy", "--show-error-codes", "."],
+                check=False,
+                capture_output=True,
+                text=True,
+                cwd=Path.cwd(),
             )
 
             ruff_issues = len(json.loads(ruff_result.stdout)) if ruff_result.stdout else 0
@@ -401,7 +412,8 @@ Generated: {summary['timestamp']}
         try:
             result = subprocess.run(
                 ["python", "-m", "pytest", "--tb=no", "-q"],
-                check=False, capture_output=True,
+                check=False,
+                capture_output=True,
                 text=True,
                 cwd=Path.cwd(),
             )
@@ -437,7 +449,11 @@ Generated: {summary['timestamp']}
         try:
             # Run safety check
             safety_result = subprocess.run(
-                ["safety", "check", "--json"], check=False, capture_output=True, text=True, cwd=Path.cwd(),
+                ["safety", "check", "--json"],
+                check=False,
+                capture_output=True,
+                text=True,
+                cwd=Path.cwd(),
             )
 
             if safety_result.returncode == 0:
@@ -488,7 +504,11 @@ Generated: {summary['timestamp']}
 
             # Check if dependencies are installable
             install_result = subprocess.run(
-                ["pip", "check"], check=False, capture_output=True, text=True, cwd=Path.cwd(),
+                ["pip", "check"],
+                check=False,
+                capture_output=True,
+                text=True,
+                cwd=Path.cwd(),
             )
 
             if install_result.returncode == 0 and requirements_files:

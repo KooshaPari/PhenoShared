@@ -27,8 +27,6 @@ guard so a single broken check can never abort the report.
 
 from __future__ import annotations
 
-from typing import Optional
-
 from ._doctor_extra_niah import _load_niah_results  # shared niah_results.json helper
 from ._doctor_registry import register_check
 from ._doctor_shared import (
@@ -36,9 +34,7 @@ from ._doctor_shared import (
     PASS,
     WARN,
     Check,
-    project_root,
 )
-
 
 __all__ = [
     "omlx_research_version",
@@ -56,7 +52,7 @@ def omlx_research_version() -> Check:
     """Report the installed ``omlx_research.__version__`` (always pass)."""
     desc = "omlx_research package version (omlx_research.__version__)"
     try:
-        import omlx_research  # type: ignore  # noqa: F401
+        import omlx_research  # type: ignore
     except Exception as e:
         return Check(
             id="omlx_research_version",
@@ -121,10 +117,10 @@ def regress_baseline_dispatch_envelope() -> Check:
     results_ok = results_loaded and target_count >= _NIAH_TARGET_ROW_FLOOR
 
     # Sub-check 2: regress_baseline Python extension (supplementary).
-    rb_status: Optional[str] = None
-    rb_budget: Optional[int] = None
+    rb_status: str | None = None
+    rb_budget: int | None = None
     try:
-        import regress_baseline  # type: ignore  # noqa: F401
+        import regress_baseline  # type: ignore
     except Exception as e:
         rb_status = (
             f"regress_baseline Python extension not importable "
@@ -148,8 +144,7 @@ def regress_baseline_dispatch_envelope() -> Check:
             else:
                 if budget_value <= 0:
                     rb_status = (
-                        f"dispatch_budget((m=64, n=64, k=64)) = "
-                        f"{budget_value} (non-positive)"
+                        f"dispatch_budget((m=64, n=64, k=64)) = {budget_value} (non-positive)"
                     )
                 else:
                     rb_budget = budget_value

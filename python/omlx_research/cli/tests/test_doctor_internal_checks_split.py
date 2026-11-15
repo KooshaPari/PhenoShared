@@ -33,7 +33,6 @@ from __future__ import annotations
 from omlx_research.cli import _doctor_internal_checks_split as split_mod
 from omlx_research.cli._doctor_shared import FAIL, PASS, WARN
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -60,12 +59,14 @@ def _patch_count(
     """
     if metal_runtime is not None:
         monkeypatch.setattr(
-            split_mod, "_count_metal_runtime_tests",
+            split_mod,
+            "_count_metal_runtime_tests",
             lambda _path: (True, f"found {metal_runtime} distinct #[test] reference(s) under src"),
         )
     if cli is not None:
         monkeypatch.setattr(
-            split_mod, "_count_cli_subcommands",
+            split_mod,
+            "_count_cli_subcommands",
             lambda _path: (True, f"found {cli} distinct cmd_* subcommand(s)"),
         )
 
@@ -81,12 +82,14 @@ def _patch_missing(monkeypatch, target: str) -> None:
     """
     if target == "metal_runtime":
         monkeypatch.setattr(
-            split_mod, "_count_metal_runtime_tests",
+            split_mod,
+            "_count_metal_runtime_tests",
             lambda _path: (False, "perf-core/metal-runtime/src not on disk"),
         )
     elif target == "cli":
         monkeypatch.setattr(
-            split_mod, "_count_cli_subcommands",
+            split_mod,
+            "_count_cli_subcommands",
             lambda _path: (False, "python/omlx_research/cli/__init__.py not on disk"),
         )
     else:
@@ -170,7 +173,8 @@ def test_metal_runtime_warns_when_dir_missing(monkeypatch):
 def test_metal_runtime_warns_on_oserror(monkeypatch):
     """OS-level read failure → WARN (defensive)."""
     monkeypatch.setattr(
-        split_mod, "_count_metal_runtime_tests",
+        split_mod,
+        "_count_metal_runtime_tests",
         lambda _path: (False, "PermissionError: [Errno 13] Permission denied"),
     )
     c = split_mod.metal_runtime_lib_test_count_at_least_25()
@@ -248,7 +252,8 @@ def test_cli_subcmd_warns_when_file_missing(monkeypatch):
 def test_cli_subcmd_warns_on_oserror(monkeypatch):
     """OS-level read failure → WARN (defensive)."""
     monkeypatch.setattr(
-        split_mod, "_count_cli_subcommands",
+        split_mod,
+        "_count_cli_subcommands",
         lambda _path: (False, "OSError: [Errno 2] No such file or directory"),
     )
     c = split_mod.python_cli_subcommand_count_at_least_6()
@@ -270,18 +275,14 @@ def test_metal_runtime_passes_on_real_repo():
     the import wiring.
     """
     c = split_mod.metal_runtime_lib_test_count_at_least_25()
-    assert c.status == PASS, (
-        f"real metal-runtime did not clear the floor: {c.details}"
-    )
+    assert c.status == PASS, f"real metal-runtime did not clear the floor: {c.details}"
     assert c.id == "metal_runtime_lib_test_count_at_least_25"
 
 
 def test_cli_subcmd_passes_on_real_repo():
     """The real CLI __init__.py must register ≥6 distinct cmd_*."""
     c = split_mod.python_cli_subcommand_count_at_least_6()
-    assert c.status == PASS, (
-        f"real CLI did not expose 6 subcommands: {c.details}"
-    )
+    assert c.status == PASS, f"real CLI did not expose 6 subcommands: {c.details}"
     assert c.id == "python_cli_subcommand_count_at_least_6"
 
 

@@ -79,9 +79,7 @@ def _packed_state_bytes(cache: Any, *, index: int) -> int:
         raise CompressionContractError(
             f"full-attention layer {index} is not a TurboKVCache runtime state"
         )
-    compacted = bool(
-        getattr(cache, "_compacted", False) or getattr(cache, "_is_compressed", False)
-    )
+    compacted = bool(getattr(cache, "_compacted", False) or getattr(cache, "_is_compressed", False))
     if not compacted:
         raise CompressionContractError(
             f"TurboKVCache at full-attention layer {index} is not compacted"
@@ -98,7 +96,9 @@ def _full_attention_indices(model: Any) -> list[int]:
     layers = getattr(model, "layers", None)
     if not isinstance(layers, Sequence) or not layers:
         raise CompressionContractError("model must expose non-empty runtime layers")
-    indices = [index for index, layer in enumerate(layers) if not getattr(layer, "is_linear", False)]
+    indices = [
+        index for index, layer in enumerate(layers) if not getattr(layer, "is_linear", False)
+    ]
     if not indices:
         raise CompressionContractError("Qwen3.5 model exposes no full-attention layers")
     return indices

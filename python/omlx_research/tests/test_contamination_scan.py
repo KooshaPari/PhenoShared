@@ -1,4 +1,5 @@
 """Unit tests for L2 contamination scan helpers."""
+
 from __future__ import annotations
 
 import importlib.util
@@ -7,12 +8,7 @@ from pathlib import Path
 
 
 def _load():
-    path = (
-        Path(__file__).resolve().parents[3]
-        / "scripts"
-        / "evals"
-        / "contamination_scan.py"
-    )
+    path = Path(__file__).resolve().parents[3] / "scripts" / "evals" / "contamination_scan.py"
     spec = importlib.util.spec_from_file_location("contamination_scan", path)
     mod = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
@@ -31,8 +27,7 @@ class TestContaminationScan(unittest.TestCase):
         """FR-L2-002: all pass@1=1 and judge=0 → UNTRUSTED_SYNTHETIC."""
         mod = _load()
         cells = [
-            {"pass_at_1": 1.0, "judge_score": 0.0, "reply": "ok", "task_id": "t1"}
-            for _ in range(3)
+            {"pass_at_1": 1.0, "judge_score": 0.0, "reply": "ok", "task_id": "t1"} for _ in range(3)
         ]
         result = mod.scan(cells, fixtures=[])
         self.assertEqual(result["verdict"], "UNTRUSTED_SYNTHETIC")

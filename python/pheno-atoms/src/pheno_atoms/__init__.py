@@ -1,7 +1,7 @@
 """Pheno-Atoms: Core atom types and validation for Phenotype SDK."""
 
 from .atoms import Atom, AtomType, AtomValidator
-from .exceptions import AtomValidationError, AtomError
+from .exceptions import AtomError, AtomValidationError
 
 __version__ = "0.1.0"
 

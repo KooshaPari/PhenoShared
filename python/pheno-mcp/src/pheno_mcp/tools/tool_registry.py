@@ -3,8 +3,8 @@
 Provides a generic registry for tools that can be used by any MCP server.
 """
 
-from typing import Any, Callable, Dict, List, Optional
 import inspect
+from typing import Any, Callable, Dict, List, Optional
 
 
 class ToolRegistry:
@@ -25,6 +25,7 @@ class ToolRegistry:
             name: Name of the tool
             callable_obj: The callable that implements the tool
             **metadata: Additional metadata about the tool
+
         """
         self._tools[name] = callable_obj
 
@@ -47,6 +48,7 @@ class ToolRegistry:
 
         Returns:
             The callable or None if not found
+
         """
         return self._tools.get(name)
 
@@ -58,6 +60,7 @@ class ToolRegistry:
 
         Returns:
             Tool information dictionary or None if not found
+
         """
         return self._tool_info.get(name)
 
@@ -69,6 +72,7 @@ class ToolRegistry:
 
         Returns:
             True if tool is registered, False otherwise
+
         """
         return name in self._tools
 
@@ -77,6 +81,7 @@ class ToolRegistry:
 
         Returns:
             List of tool names
+
         """
         return list(self._tools.keys())
 
@@ -85,6 +90,7 @@ class ToolRegistry:
 
         Returns:
             Number of registered tools
+
         """
         return len(self._tools)
 
@@ -93,6 +99,7 @@ class ToolRegistry:
 
         Returns:
             List of tool information dictionaries
+
         """
         return list(self._tool_info.values())
 
@@ -101,6 +108,7 @@ class ToolRegistry:
 
         Returns:
             False - this registry supports generic MCP tools
+
         """
         return False
 
@@ -112,13 +120,16 @@ class ToolRegistry:
 
         Returns:
             Dictionary of parameter information
+
         """
         params = {}
         for param_name, param in sig.parameters.items():
             if param_name == "self":
                 continue
             params[param_name] = {
-                "type": str(param.annotation) if param.annotation != inspect.Parameter.empty else "Any",
+                "type": str(param.annotation)
+                if param.annotation != inspect.Parameter.empty
+                else "Any",
                 "required": param.default == inspect.Parameter.empty,
                 "default": str(param.default) if param.default != inspect.Parameter.empty else None,
             }

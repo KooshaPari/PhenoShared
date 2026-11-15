@@ -1,9 +1,9 @@
 """LatentMAS vs single-agent comparison benchmark."""
 
 import asyncio
-import time
 import json
-from dataclasses import dataclass, field
+import time
+from dataclasses import dataclass
 
 
 @dataclass

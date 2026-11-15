@@ -1,4 +1,5 @@
 """Regression coverage for the dedicated Harbor Qwen3.5 MLX server adapter."""
+
 from __future__ import annotations
 
 import sys
@@ -49,9 +50,7 @@ class TestHarborMlxServer(unittest.TestCase):
         self.assertEqual("thread-local:gpu", stream)
         self.assertEqual(stream, generate.generation_stream)
         self.assertEqual(stream, server.generation_stream)
-        self.assertEqual(
-            [("default_device", None), ("new_thread_local_stream", "gpu")], mlx.calls
-        )
+        self.assertEqual([("default_device", None), ("new_thread_local_stream", "gpu")], mlx.calls)
 
     def test_patch_installs_stream_in_generation_worker_not_import_thread(self) -> None:
         """The adapter patches only the dedicated mlx-lm generation worker."""

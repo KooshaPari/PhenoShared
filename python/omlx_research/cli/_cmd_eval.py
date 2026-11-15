@@ -32,8 +32,6 @@ import json
 import os
 import sys
 import time
-from typing import Optional
-
 
 EVAL_VALID_SUITES: tuple[str, ...] = (
     "mmlu",
@@ -57,14 +55,12 @@ def _eval_load_dataset(suite: str, dataset_path: str) -> list[dict]:
     the schema check lives in the Rust loader.
     """
     if not os.path.isfile(dataset_path):
-        raise FileNotFoundError(
-            f"dataset not found: {dataset_path} (suite={suite})"
-        )
+        raise FileNotFoundError(f"dataset not found: {dataset_path} (suite={suite})")
 
     if suite in ("terminal-bench", "perplexity"):
         # JSONL: one JSON object per line.
         rows: list[dict] = []
-        with open(dataset_path, "r", encoding="utf-8") as fh:
+        with open(dataset_path, encoding="utf-8") as fh:
             for lineno, raw in enumerate(fh, start=1):
                 raw = raw.strip()
                 if not raw:
@@ -73,14 +69,14 @@ def _eval_load_dataset(suite: str, dataset_path: str) -> list[dict]:
                     rows.append(json.loads(raw))
                 except json.JSONDecodeError as e:
                     raise ValueError(
-                        f"dataset {dataset_path} line {lineno}: "
-                        f"invalid JSON: {e}"
+                        f"dataset {dataset_path} line {lineno}: invalid JSON: {e}"
                     ) from e
         return rows
 
     # CSV: dict-reader on the header row.
     import csv as _csv  # local import — keeps startup lean
-    with open(dataset_path, "r", encoding="utf-8", newline="") as fh:
+
+    with open(dataset_path, encoding="utf-8", newline="") as fh:
         reader = _csv.DictReader(fh)
         return [dict(row) for row in reader]
 
@@ -122,7 +118,7 @@ def cmd_eval(args: argparse.Namespace) -> int:
     suite: str = args.suite
     dataset_path: str = args.dataset
     backend: str = args.backend
-    report_path: Optional[str] = args.report
+    report_path: str | None = args.report
 
     try:
         rows = _eval_load_dataset(suite, dataset_path)

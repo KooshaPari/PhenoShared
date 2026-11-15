@@ -35,10 +35,7 @@ class TestConsoleLogging:
 
     def test_setup_console_logging(self) -> None:
         """Test setting up console logging."""
-        logger = setup_console_logging(
-            name="test_console_setup",
-            level="INFO"
-        )
+        logger = setup_console_logging(name="test_console_setup", level="INFO")
 
         assert logger is not None
         # Verify that the logger was created with correct name
@@ -47,10 +44,7 @@ class TestConsoleLogging:
 
     def test_console_logging_level(self) -> None:
         """Test console logging respects log level."""
-        logger = setup_console_logging(
-            name="test_level",
-            level="ERROR"
-        )
+        logger = setup_console_logging(name="test_level", level="ERROR")
 
         # Set up to capture at handler level
         assert logger is not None
@@ -61,19 +55,13 @@ class TestJsonLogging:
 
     def test_setup_json_logging(self) -> None:
         """Test setting up JSON logging."""
-        logger = setup_json_logging(
-            name="test_json",
-            level="INFO"
-        )
+        logger = setup_json_logging(name="test_json", level="INFO")
 
         assert logger is not None
 
     def test_json_logging_format(self) -> None:
         """Test JSON logging outputs valid JSON."""
-        logger = setup_json_logging(
-            name="test_json_format",
-            level="INFO"
-        )
+        logger = setup_json_logging(name="test_json_format", level="INFO")
 
         assert logger is not None
         # JSON logging is configured through structlog
@@ -86,11 +74,7 @@ class TestFileLogging:
         """Test setting up file logging."""
         log_file = tmp_path / "test.log"
 
-        logger = setup_file_logging(
-            name="test_file",
-            filepath=str(log_file),
-            level="INFO"
-        )
+        logger = setup_file_logging(name="test_file", filepath=str(log_file), level="INFO")
 
         assert logger is not None
 
@@ -98,11 +82,7 @@ class TestFileLogging:
         """Test that file logging actually writes to file."""
         log_file = tmp_path / "test_write.log"
 
-        logger = setup_file_logging(
-            name="test_file_write",
-            filepath=str(log_file),
-            level="INFO"
-        )
+        logger = setup_file_logging(name="test_file_write", filepath=str(log_file), level="INFO")
 
         logger.info("test message")
 

@@ -37,9 +37,7 @@ def test_publish_local_writes_valid_json(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setattr(hwledger_probe, "_nvidia_smi", list)
     output = hwledger_probe.publish_local(tmp_path / "heartbeat.json")
     assert output.is_file()
-    assert json.loads(output.read_text(encoding="utf-8"))["schema"] == (
-        "pheno.device.heartbeat/v0"
-    )
+    assert json.loads(output.read_text(encoding="utf-8"))["schema"] == ("pheno.device.heartbeat/v0")
 
 
 def test_publish_local_refuses_overwrite(tmp_path: Path, monkeypatch) -> None:
