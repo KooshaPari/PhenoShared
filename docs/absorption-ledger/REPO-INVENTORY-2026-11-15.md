@@ -15,10 +15,16 @@ Columns: `repo`, `priv`, `mb`, `refs` (refs preserved in the registry),
 |---|---:|---|
 | `keep` | 77 | deliberately retained; no action |
 | `decide` | 19 | needs an owner decision, evidence already gathered |
-| `absorb-or-keep` | 6 | history preserved, content not absorbed anywhere |
-| `preserve-first` | 7 | no preserved refs at all |
+| `absorb-or-keep` | 12 | history preserved, content not absorbed anywhere |
 | `delete-eligible` | 2 | history and content both present |
+| `preserve-first` | 1 | no preserved refs at all |
 | **total** | **111** | |
+
+Six repositories moved out of `preserve-first` on 2026-11-15 when their refs were
+preserved: `argis-extensions-preserved-20261114` (1 ref), `claude-plugins-official`
+(2 refs, 4,830 commits), `cliproxyapi-plusplus` (1), `hexakit` (1), `hwledger` (1)
+and `slipstream` (6 refs, 1,132 commits). They land in `absorb-or-keep` because
+history now exists but no absorbed content was found for them by name.
 
 ## The target question
 
@@ -38,21 +44,24 @@ So two targets are actually in play and they need different work:
 Until one is chosen, the 77 `keep` rows are a recommendation, not a plan to reach
 2. This is the one question that gates everything else.
 
-## `preserve-first` (7): no preserved refs
+## `preserve-first` (1): no preserved refs
 
-New repositories that appeared after the last sweep, or were never covered:
+Only `.github` remains. It is org-level configuration, and it cannot be preserved
+under its own name because git forbids a ref component starting with a dot, so
+`refs/preserved/.github/` is not a legal ref. Preserving it would need a renamed
+namespace such as `refs/preserved/github-org/`, which no current tooling does.
 
-| Repository | MB | Note |
-|---|---:|---|
-| `argis-extensions-preserved-20261114` | 9.2 | appeared 2026-11-14, name suggests a preservation copy |
-| `claude-plugins-official` | 19.1 | public |
-| `cliproxyapi-plusplus` | 7.7 | private |
-| `hexakit` | 12.7 | private |
-| `hwledger` | 0.6 | private |
-| `slipstream` | 32.2 | public |
-| `.github` | 0.1 | org config; git forbids a ref component starting with a dot, so it cannot be preserved under its own name |
+The six that were here on 2026-11-15 have been preserved and now sit in
+`absorb-or-keep`:
 
-These are all cheap to preserve and should be, whatever the target turns out to be.
+| Repository | Refs | Commits |
+|---|---:|---:|
+| `argis-extensions-preserved-20261114` | 1 | 1 |
+| `claude-plugins-official` | 2 | 4,830 |
+| `cliproxyapi-plusplus` | 1 | 1 |
+| `hexakit` | 1 | 1 |
+| `hwledger` | 1 | 1 |
+| `slipstream` | 6 | 1,132 |
 
 ## `delete-eligible` (2)
 
@@ -72,12 +81,14 @@ live counterparts, and for `OmniRoute` the live versions were shown to be newer,
 so the snapshots are older states. This row is a judgement call about whether to
 keep duplicate-ish snapshots at all, not an evidence gap.
 
-## `absorb-or-keep` (6)
+## `absorb-or-keep` (12)
 
 `HarnessDesk`, `StealthStartup`, `chatta`, `phenoreg-browser-audit`,
-`zz-ref-HeliosCLI`, `zz-ref-HeliosLite`. History is preserved (80, 1, 174, 13,
-1,340 and 1,064 refs). None has an absorbed content tree, so absorbing is the work
-that remains before any deletion.
+`zz-ref-HeliosCLI`, `zz-ref-HeliosLite`, plus the six preserved on 2026-11-15
+(`argis-extensions-preserved-20261114`, `claude-plugins-official`,
+`cliproxyapi-plusplus`, `hexakit`, `hwledger`, `slipstream`). History is preserved
+for all twelve. None has an absorbed content tree found by name, so absorbing is
+the work that remains before any deletion.
 
 ## What this inventory does not claim
 
