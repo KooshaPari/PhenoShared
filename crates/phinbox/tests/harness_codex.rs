@@ -140,15 +140,32 @@ fn management_acknowledgment_and_close_do_not_answer_permission() {
     let tmp = tempfile::tempdir().unwrap();
     let root = tmp.path().to_path_buf();
     let wait = root.clone();
+    // This test's claim is a NEGATIVE: closing the workflow item must not answer the
+    // permission request, so the deny has to come from the request's own bounded wait
+    // and not from the close. Two things follow, and a 1s bound satisfied neither.
+    //
+    // 1. The wait bound must outlast this test's own setup -- a tempdir, `wait_request`
+    //    (itself bounded at 2s), a SQLite open, `observe_inbox` and a `get` -- or the
+    //    request expires before the Close is applied and the store imports the item
+    //    already Closed. The Close below was then refused as "closed item is
+    //    immutable", which reads as a store defect but was the fixture answering
+    //    itself first. Observed on main at c6d8068e9, quality-gate run 43668683308,
+    //    nextest step only: `make check` runs lib targets and never reaches this file.
+    // 2. The Close must be proven to have landed, or a test that never closed anything
+    //    passes on the timeout alone. That is what the status assertion below is for.
+    //
+    // 30s is inside the fixture's own 1..=120 bound. The cost is real: the test now
+    // spends its bound waiting, because the deny it asserts can only arrive when the
+    // request expires.
     let worker = thread::spawn(move || {
-        codex_permission_request(&serde_json::to_vec(&input()).unwrap(), &wait, 1)
+        codex_permission_request(&serde_json::to_vec(&input()).unwrap(), &wait, 30)
     });
     let req = wait_request(&root);
     let store = phinbox::management::Store::open(root.join("management.sqlite")).unwrap();
     store.observe_inbox(&root).unwrap();
     let id = format!("inbox:{}", req.request_id);
     let item = store.get(&id).unwrap().unwrap();
-    store
+    let closed = store
         .apply(phinbox::management::Command {
             event_id: "synthetic-close".into(),
             item_id: id,
@@ -157,6 +174,12 @@ fn management_acknowledgment_and_close_do_not_answer_permission() {
             action: phinbox::management::Action::Close,
         })
         .unwrap();
+    assert_eq!(
+        closed.status,
+        phinbox::management::Status::Closed,
+        "the Close must land before the wait expires, or this test proves only that an \
+         unanswered request denies"
+    );
     assert_eq!(behavior(&worker.join().unwrap()), "deny");
 }
 
