@@ -467,3 +467,89 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 - [Cargo Book](https://doc.rust-lang.org/cargo/)
 - [Rust Security Guidelines](https://anssi-fr.github.io/rust-guide/)
 - [CI-CD Setup Instructions](CI-CD-SETUP.md)
+
+## Python Ruff ratchet and measured debt
+
+The ratchet rule is: new and modified Python must be clean; pre-existing debt is
+measured and only shrinks. On pull requests, added and modified `*.py` files are
+checked with blocking Ruff lint and format steps. Whole-tree lint and format
+remain visible advisory steps with `continue-on-error: true`. A failed shallow
+base-commit fetch prints a notice and skips the changed-file check because an
+infrastructure flake must not red the gate. Push events run the advisory checks.
+The `ci / lint` aggregator still classifies the Python job as ADVISORY, so
+"blocking" currently means failing the Python job, not blocking the merge.
+
+The baseline below was measured on **2026-11-15** against `origin/main`
+`e6969738b`, macOS arm64, with the CI-pinned Ruff **0.16.5** installed through
+`uv tool run` over a pristine `git archive` of that commit. It is **18,018
+diagnostics over 2,710 files across 197 distinct rules**. An earlier
+measurement recorded in the workflow comment on 2026-11-13 read 18,049 on the
+Linux runner and 18,051 on macOS arm64 (2 fewer on Linux); the difference from
+18,018 is drift in the tree between the two commits, not a change of tool
+version. Both numbers are quoted because replacing one with the other without
+saying which commit it came from is how a stale figure ends up looking current.
+
+One consequence worth stating: a changed-file ratchet is strict. Editing a
+legacy file makes that whole file blocking, so a PR that touches a file with
+pre-existing violations must clean that file, or leave it alone. That is
+deliberate - it is what makes the debt monotone - but it means the first
+contributor to touch a noisy file inherits its lint debt and should expect to
+spend a bounded cleanup pass there.
+
+The top ten rules are:
+
+| Rule | Diagnostics |
+| --- | ---: |
+| UP006 | 3,019 |
+| UP045 | 2,435 |
+| I001 | 1,714 |
+| S101 | 1,492 |
+| F401 | 1,178 |
+| W293 | 1,022 |
+| UP035 | 888 |
+| BLE001 | 731 |
+| E501 | 371 |
+| TRY401 | 333 |
+
+The measured top-level breakdown is:
+
+| Tree | Diagnostics | Files |
+| --- | ---: | ---: |
+| docs | 4,871 | 977 |
+| agents | 4,675 | 635 |
+| crates | 3,772 | 259 |
+| absorption | 1,973 | 287 |
+| python | 833 | 152 |
+| scripts | 328 | 85 |
+| researchledger | 290 | 89 |
+| researchintel | 295 | 12 |
+| agileplus | 245 | 24 |
+| audits | 188 | 39 |
+
+Whole-tree safe autofix was rejected: it changed **4,437 files**, with
+**+118,562 / -63,065 lines**, and still left **6,233 errors**. This is not an
+acceptable small CI change. The advisory baseline is visible debt, not permission
+for it to grow by accident. This ratchet checks touched files, not a numerical
+whole-tree debt ceiling, so reviewers must ensure cleanup only shrinks the debt.
+
+There is pin drift: `.github/workflows/ci.yml` installs **ruff==0.16.5**, while
+`.trunk/trunk.yaml` pins **0.17.4**. CI enforces **0.16.5**. This change does not
+silently upgrade either tool pin.
+
+Stage 2 has three steps:
+
+1. Clean one first-party tree and verify both lint and format at the CI pin.
+2. Add that clean tree to the blocking path list so unchanged files in the tree
+   are checked too, in addition to the current changed-file ratchet.
+3. Promote the Python job to HARD in the aggregator only after the checked paths
+   are clean and the lane is green. The ratchet makes the lane green without
+   hiding the whole-tree debt, but promotion still requires clean checked paths.
+
+### Known parse defects left deliberately unresolved
+
+A lint/parse finding whose correct behaviour is unknown is recorded, not silenced.
+
+- `crates/argis-extensions/scripts/adr_backlink_check.py`: not Python source at all, the `.py` blob holds three lines of captured `git` error output. No live executor was found by basename outside root docs. Fix deferred because the genuine validator's proven provenance is UNKNOWN, and renaming could break unknown external callers.
+- `crates/policystack/scripts/policy/c100_forensic_bundle_gap_gate.py:92`: genuine missing-suite syntax error, `if not _truthy(...)` has no body before the following top-level `for`. Intent UNKNOWN, so adding `pass` would silence a real defect. The fix needs the gap-counting contract.
+- `docs/absorbed-from-PhenoTooling/scripts/stream_compat_matrix.py:304`: invalid conditional used as a dict-unpack operand. Inside an archival corpus that `ABSORPTION.md` says is not built and not linted, so it is out of scope for the ratchet by design.
+- `phenotype-hub/SECURITY.md`: dangling symlink to `../template-commons/SECURITY.md`, which does not exist in the merged tree. Root `SECURITY.md` exists. Retargeting needs a decision about which disclosure policy is authoritative, and guessing on a security policy is worse than leaving it visible.
