@@ -571,7 +571,7 @@ Stage 2 has three steps:
 
 ### Stage 2 status: `python/` is the first enforced whole-tree scope
 
-Step 1 and step 2 above are done for one tree. `python/` went from **833
+Step 1 and step 2 above are in place for one tree. `python/` went from **833
 diagnostics / 152 files** to **192 diagnostics / 79 files** (ruff 0.16.5,
 `-77%`): safe autofixes, a formatter pass, and hand fixes for the rules that
 were real defects rather than style. `ruff format --check python/` is at
@@ -600,9 +600,9 @@ Two properties are deliberate:
   rules, plus the rest of the repo. A rule on the list is not enforced yet; it
   is not invisible.
 
-Step 3 (promoting the lane to HARD in the aggregator) is still not done, and is
-not done by this change: the whole-tree advisory debt remains ~17,800
-diagnostics outside `python/`.
+Step 3 (promoting the lane to HARD in the aggregator) is out of scope here and
+remains open: the whole-tree advisory debt is still ~17,800 diagnostics outside
+`python/`.
 
 ### A linter must never be the only guard on its own output
 

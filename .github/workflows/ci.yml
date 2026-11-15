@@ -156,6 +156,14 @@ jobs:
     needs: detect
     if: needs.detect.outputs.has_python == 'true'
     runs-on: ubuntu-latest
+    # One debt register, two scopes. The changed-file gate below applies this
+    # list to `python/**` so that touching a file in that tree does not demand
+    # paying down debt the whole-tree gate deliberately still tolerates; the
+    # whole-tree gate then applies the same list to every file, so the tree as a
+    # whole cannot regress either. Files outside `python/` keep the full ruleset
+    # in both gates. A rule that is paid down leaves the list everywhere at once.
+    env:
+      PY_TREE_DEBT: A001,A004,B006,B007,B904,B905,D401,E402,E501,E722,F401,F841,N803,N806,N818,RUF001,RUF002,RUF003,RUF005,RUF012,RUF043,RUF059,S104,S105,S108,S110,S112,S311,S603,S607,SIM102,SIM108,SIM117,SIM118,T201,UP031,UP035,UP042,UP046
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
@@ -208,7 +216,28 @@ jobs:
           # --force-exclude: a path that project config deliberately excludes
           # (archival corpora such as docs/absorbed-from-**) must stay excluded
           # even when named explicitly on the command line.
-          printf '%s\0' "${files[@]}" | xargs -0 ruff check --force-exclude
+          # Two scopes, one debt register. A changed file under `python/` is
+          # already governed by the whole-tree gate further down, which enforces
+          # the same ruleset-minus-debt across every file in that tree. Judging
+          # it by the full ruleset here instead would demand paying down
+          # tree-wide debt on first touch and would make the two gates disagree
+          # about what `python/` may contain. Everything else keeps the full
+          # ruleset in both gates.
+          py_tree=()
+          rest=()
+          for f in "${files[@]}"; do
+            case "$f" in
+              python/*) py_tree+=("$f") ;;
+              *) rest+=("$f") ;;
+            esac
+          done
+          if ((${#rest[@]})); then
+            printf '%s\0' "${rest[@]}" | xargs -0 ruff check --force-exclude
+          fi
+          if ((${#py_tree[@]})); then
+            printf '%s\0' "${py_tree[@]}" | xargs -0 ruff check --force-exclude \
+              --ignore "$PY_TREE_DEBT"
+          fi
       - name: ruff check (whole tree - advisory, pre-existing debt)
         # Baseline: 18,018 diagnostics / 2,710 files / 197 rules at Ruff 0.16.5.
         # Debt must only shrink. Growing it by accident is not acceptable.
@@ -250,8 +279,6 @@ jobs:
       # advisory whole-tree steps below still report every one of these rules, so
       # nothing is hidden: it is deliberately not yet enforced, rather than unseen.
       - name: ruff check (python/ tree - blocking)
-        env:
-          PY_TREE_DEBT: A001,A004,B006,B007,B904,B905,D401,E402,E501,E722,F401,F841,N803,N806,N818,RUF001,RUF002,RUF003,RUF005,RUF012,RUF043,RUF059,S104,S105,S108,S110,S112,S311,S603,S607,SIM102,SIM108,SIM117,SIM118,T201,UP031,UP035,UP042,UP046
         run: |
           set -euo pipefail
           ruff check python/ --force-exclude --ignore "$PY_TREE_DEBT"
