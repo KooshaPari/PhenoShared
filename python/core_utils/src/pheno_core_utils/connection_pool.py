@@ -184,7 +184,9 @@ class ConnectionPool:
                 return None
 
             conn_wrapper = ConnectionWrapper(
-                connection=conn, created_at=time.time(), last_used=time.time(),
+                connection=conn,
+                created_at=time.time(),
+                last_used=time.time(),
             )
 
             self._created_count += 1
@@ -557,7 +559,10 @@ class PoolManager:
         self.logger = logging.getLogger(__name__)
 
     def create_pool(
-        self, name: str, config: PoolConfig, connection_factory: Callable,
+        self,
+        name: str,
+        config: PoolConfig,
+        connection_factory: Callable,
     ) -> ConnectionPool:
         """
         Create a new named connection pool.

@@ -5,7 +5,7 @@ Traceability: WP16-T093
 
 from __future__ import annotations
 
-from behave import then 
+from behave import then
 
 
 @then('a spec.md file exists at "{path}"')

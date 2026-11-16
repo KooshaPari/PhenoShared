@@ -32,9 +32,7 @@ def test_julia_required_fails_when_missing(monkeypatch):
 def test_julia_required_passes_when_present(monkeypatch):
     """E1: ``julia`` on PATH ⇒ PASS and surface the resolved binary."""
 
-    monkeypatch.setattr(
-        niah_extra.shutil, "which", lambda _name: "/opt/homebrew/bin/julia"
-    )
+    monkeypatch.setattr(niah_extra.shutil, "which", lambda _name: "/opt/homebrew/bin/julia")
 
     class _FakeProc:
         returncode = 0
@@ -80,9 +78,7 @@ def test_niah_benchmark_legacy_path_doctor_fails(monkeypatch, tmp_path):
     assert "legacy" in c.details.lower() or "phenotype-omlx/python" in c.details
 
 
-def test_niah_benchmark_legacy_path_doctor_passes_for_repo_relative(
-    monkeypatch, tmp_path
-):
+def test_niah_benchmark_legacy_path_doctor_passes_for_repo_relative(monkeypatch, tmp_path):
     """Doctor PASS when the script uses repo-relative ``<root>/python``."""
 
     good = tmp_path / "niah_benchmark.py"
@@ -119,9 +115,7 @@ def test_niah_live_artifact_must_not_overwrite_envelope_name():
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    rc = mod.main(
-        ["--output", "niah_results.json", "--server-url", "http://127.0.0.1:9"]
-    )
+    rc = mod.main(["--output", "niah_results.json", "--server-url", "http://127.0.0.1:9"])
     assert rc == 2
 
 
@@ -205,10 +199,8 @@ def test_measure_turbo_cache_metrics_full_attn_only():
         def __init__(self, nbytes: int):
             self.nbytes = nbytes
 
-    class TurboKVCache:  # noqa: N801 — mirror runtime type name
-        def __init__(
-            self, *, compressed: bool, packed: int = 0, raw: int = 0, resident: int = 0
-        ):
+    class TurboKVCache:
+        def __init__(self, *, compressed: bool, packed: int = 0, raw: int = 0, resident: int = 0):
             self._is_compressed = compressed
             self._packed_keys = _Arr(packed) if packed else None
             self._packed_values = None
@@ -251,9 +243,7 @@ def test_measure_turbo_cache_metrics_full_attn_only():
     assert m1["compression_effective"] is True
     assert m1["byte_reduction_ratio"] == 1400 / 5000
 
-    empty = mod.measure_turbo_cache_metrics(
-        [KVCache(), KVCache()], fp16_baseline_bytes=100
-    )
+    empty = mod.measure_turbo_cache_metrics([KVCache(), KVCache()], fp16_baseline_bytes=100)
     assert empty["turbo_layers"] == 0
     assert empty["byte_reduction_effective"] is False
 
@@ -274,9 +264,7 @@ def test_committed_instrumented_envelope_is_schema_v2_byte_reduction():
     assert data["packed_state_any"] is True
     assert data["byte_reduction_any"] is True
     assert data["evidence_label"] == "live_verified"
-    assert _sha256(path) == (
-        "862bc610c16a3e4b4b637e85670bf493e24a82a31adfc88c7efd7a5a7d6407d3"
-    )
+    assert _sha256(path) == ("862bc610c16a3e4b4b637e85670bf493e24a82a31adfc88c7efd7a5a7d6407d3")
 
 
 def test_committed_answer128_exact_retrieval_not_compression_proof():
@@ -316,9 +304,7 @@ def test_evidence_index_roles_match_committed_artifacts():
 
     root = Path(project_root())
     index = json.loads(
-        (root / "research" / "fr5_qwen35_evidence_index.json").read_text(
-            encoding="utf-8"
-        )
+        (root / "research" / "fr5_qwen35_evidence_index.json").read_text(encoding="utf-8")
     )
     by_path = {a["path"]: a for a in index["artifacts"]}
     instr = by_path["research/fr5_niah_qwen35_0_8b_instrumented.json"]

@@ -27,6 +27,7 @@ Usage:
         prompt="...",
     )
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -35,16 +36,18 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-from ..nanovm import PluginRegistry, PluginSpec, PluginKind, get_registry
+from ..nanovm import PluginKind, PluginRegistry, PluginSpec, get_registry
 
 logger = logging.getLogger(__name__)
 
 
 # ── Data classes ────────────────────────────────────────────────────────────
 
+
 @dataclass
 class BackendRequest:
     """A single request sent to a backend for one pipeline phase."""
+
     prompt: str
     max_tokens: int = 50
     temperature: float = 0.0
@@ -55,6 +58,7 @@ class BackendRequest:
 @dataclass
 class BackendResult:
     """Result of one backend invocation."""
+
     backend_name: str
     backend_kind: str
     text: str = ""
@@ -79,6 +83,7 @@ class BackendResult:
 @dataclass
 class PipelineResult:
     """Result of running one strategy's pipeline."""
+
     strategy: str
     prompt: str
     phase_results: dict[str, BackendResult] = field(default_factory=dict)
@@ -95,16 +100,14 @@ class PipelineResult:
             "text": self.text,
             "elapsed_ms": self.elapsed_ms,
             "parallel": self.parallel,
-            "phases": {
-                phase: br.to_dict()
-                for phase, br in self.phase_results.items()
-            },
+            "phases": {phase: br.to_dict() for phase, br in self.phase_results.items()},
             "backends_used": self.backends_used,
             "fallback_used": self.fallback_used,
         }
 
 
 # ── Backend execution surface ──────────────────────────────────────────────
+
 
 def _stub_backend_execute(
     backend: PluginSpec, phase: str, request: BackendRequest
@@ -154,6 +157,7 @@ def _run_backend(backend: PluginSpec, phase: str, request: BackendRequest) -> Ba
 
 
 # ── Pipeline executor ──────────────────────────────────────────────────────
+
 
 class PipelineExecutor:
     """Run strategy pipelines using compatible backends from the shared pool.
@@ -218,7 +222,10 @@ class PipelineExecutor:
             if b is None:
                 continue
             score = b.priority
-            if 0 <= phase_idx < len(strategy.default_pool) and strategy.default_pool[phase_idx] == cand:
+            if (
+                0 <= phase_idx < len(strategy.default_pool)
+                and strategy.default_pool[phase_idx] == cand
+            ):
                 score += 100
             if score > best_score:
                 best = b
@@ -344,8 +351,10 @@ class PipelineExecutor:
         All run in parallel against the same prompt, each on its native backend.
         """
         return await asyncio.gather(
-            *[self.run(s, prompt, max_tokens=max_tokens, temperature=temperature)
-              for s in strategies],
+            *[
+                self.run(s, prompt, max_tokens=max_tokens, temperature=temperature)
+                for s in strategies
+            ],
             return_exceptions=False,
         )
 
@@ -363,6 +372,7 @@ def get_executor() -> PipelineExecutor:
 
 
 # ── CLI surface (replaces the old FusionPolicy API) ───────────────────────
+
 
 async def dispatch(
     strategy_name: str,
@@ -385,10 +395,10 @@ async def dispatch_all(
 __all__ = [
     "BackendRequest",
     "BackendResult",
-    "PipelineResult",
     "PipelineExecutor",
-    "get_executor",
+    "PipelineResult",
     "dispatch",
     "dispatch_all",
+    "get_executor",
     "register_executor",
 ]

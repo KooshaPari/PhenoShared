@@ -1,8 +1,10 @@
 """vLLM backend — optional, NVIDIA primary."""
 
 from __future__ import annotations
+
 import logging
 import time
+
 from .base import BackendBase, BackendCapabilities, GenerateRequest, GenerateResponse
 
 logger = logging.getLogger(__name__)
@@ -27,7 +29,7 @@ class VllmBackend(BackendBase):
 
     def is_available(self) -> bool:
         try:
-            import vllm  # noqa
+            import vllm
 
             return True
         except ImportError:
@@ -41,9 +43,7 @@ class VllmBackend(BackendBase):
                 self._llm = LLM(model=self.model_path)
                 self._sampling = SamplingParams
             except Exception as e:
-                logger.warning(
-                    "Failed to load vllm model from %s: %s", self.model_path, e
-                )
+                logger.warning("Failed to load vllm model from %s: %s", self.model_path, e)
                 self._load_error = str(e)
 
     def generate(self, req: GenerateRequest) -> GenerateResponse:

@@ -1,9 +1,10 @@
 """Parallel-batch engine — submit N prompts, gather N responses."""
 
 from __future__ import annotations
+
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from typing import Callable
+from dataclasses import dataclass
 
 
 @dataclass
@@ -34,4 +35,8 @@ class ParallelBatchEngine:
     def __call__(self, items: list) -> list[BatchResult]:
         with ThreadPoolExecutor(max_workers=self.config.max_workers) as pool:
             futures = [pool.submit(self.fn, x) for x in items]
-            return [BatchResult(text=f.result(), tokens=1, latency_ms=1) for f in futures if not f.exception()]
+            return [
+                BatchResult(text=f.result(), tokens=1, latency_ms=1)
+                for f in futures
+                if not f.exception()
+            ]

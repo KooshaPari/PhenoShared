@@ -33,9 +33,15 @@ jobs:
           echo "PR_HEAD_SHA=$PR_HEAD_SHA"
           echo "PR_LABELS=$PR_LABELS"
 
+          if ! command -v jq >/dev/null; then echo "ERROR: jq is required for exact label matching but was not found on the runner."; exit 1; fi
+          if ! jq -e 'type == "array" and all(.[]; type == "string")' <<< "$PR_LABELS" >/dev/null; then
+            echo "ERROR: PR_LABELS must be a JSON array of strings."
+            exit 1
+          fi
+
           if [[ "$HEAD_REF" == fix/* ]]; then
             if [[ "$BASE_REF" == "main" || "$BASE_REF" == "master" ]]; then
-              if [[ "$PR_LABELS" != *"layered-pr-exception"* ]]; then
+              if ! jq -e 'index("layered-pr-exception")' <<< "$PR_LABELS" >/dev/null; then
                 echo "ERROR: fix/* PRs must target a layered branch, not main/master."
                 echo "Use stack/*, layer/*, release/*, or add label layered-pr-exception."
                 exit 1
@@ -43,8 +49,22 @@ jobs:
             fi
           fi
 
-          git fetch origin "$BASE_REF" --depth=100 || true
-          MERGES=$(git rev-list --merges "origin/$BASE_REF..$PR_HEAD_SHA" || true)
+          if ! git fetch origin "$BASE_REF"; then
+            echo "ERROR: base-ref fetch failed: $BASE_REF"
+            exit 1
+          fi
+          if ! git rev-parse --verify --quiet "origin/$BASE_REF^{commit}" >/dev/null; then
+            echo "ERROR: base-ref resolution failed: origin/$BASE_REF"
+            exit 1
+          fi
+          if ! MERGE_BASE=$(git merge-base "origin/$BASE_REF" "$PR_HEAD_SHA"); then
+            echo "ERROR: merge-base discovery failed."
+            exit 1
+          fi
+          if ! MERGES=$(git rev-list --merges "$MERGE_BASE..$PR_HEAD_SHA"); then
+            echo "ERROR: rev-list failed."
+            exit 1
+          fi
           if [[ -n "$MERGES" ]]; then
             echo "ERROR: merge commits detected in PR diff range:"
             echo "$MERGES"

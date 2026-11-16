@@ -4,8 +4,9 @@ Provides a generic @mcp_tool decorator that abstracts FastMCP specifics.
 Designed to work with any FastMCP-compatible server without atoms-specific code.
 """
 
-from typing import Callable, Optional, Any
 from functools import wraps
+from typing import Any, Callable, Optional
+
 from .tool_registry import ToolRegistry
 
 
@@ -13,7 +14,7 @@ def mcp_tool(
     registry: ToolRegistry,
     name: Optional[str] = None,
     description: Optional[str] = None,
-    **extra_metadata
+    **extra_metadata,
 ) -> Callable:
     """Decorator to register a function as an MCP tool.
 
@@ -34,6 +35,7 @@ def mcp_tool(
         >>> @mcp_tool(registry=registry, name="my_tool")
         >>> def my_tool(x: int) -> int:
         >>>     return x * 2
+
     """
 
     def decorator(func: Callable) -> Callable:
@@ -44,12 +46,7 @@ def mcp_tool(
         tool_description = description or (func.__doc__ or "")
 
         # Register in the registry
-        registry.register(
-            tool_name,
-            func,
-            description=tool_description,
-            **extra_metadata
-        )
+        registry.register(tool_name, func, description=tool_description, **extra_metadata)
 
         # Wrap function to preserve original behavior
         @wraps(func)
@@ -84,6 +81,7 @@ def mcp_parameter(
 
     Returns:
         Parameter metadata dictionary
+
     """
     return {
         "name": name,
@@ -113,6 +111,7 @@ class ToolMetadata:
             description: Tool description
             input_schema: JSON schema for inputs
             output_schema: JSON schema for outputs
+
         """
         self.name = name
         self.description = description
@@ -124,6 +123,7 @@ class ToolMetadata:
 
         Returns:
             Dictionary representation of metadata
+
         """
         return {
             "name": self.name,

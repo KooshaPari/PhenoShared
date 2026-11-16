@@ -25,7 +25,6 @@ import os
 import shutil
 import subprocess
 import sys
-from typing import Optional
 
 from ._doctor_registry import register_check
 from ._doctor_shared import (
@@ -37,12 +36,12 @@ from ._doctor_shared import (
 )
 
 __all__ = [
-    "niah_benchmark_present",
-    "niah_benchmark_non_legacy_path",
-    "julia_required_on_eval_path",
-    "niah_instrumented_schema_v2_present",
-    "_load_niah_results",
     "_find_niah_benchmark",
+    "_load_niah_results",
+    "julia_required_on_eval_path",
+    "niah_benchmark_non_legacy_path",
+    "niah_benchmark_present",
+    "niah_instrumented_schema_v2_present",
 ]
 
 _INSTRUMENTED_NIAH_REL = "research/fr5_niah_qwen35_0_8b_instrumented.json"
@@ -86,7 +85,7 @@ def _load_niah_results() -> tuple[bool, str, int]:
     if not os.path.isfile(path):
         return False, f"{_NIAH_RESULTS_REL_PATH} not on disk", 0
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             payload = json.load(fh)
     except Exception as e:
         return False, f"{_NIAH_RESULTS_REL_PATH}: {type(e).__name__}: {e}", 0
@@ -100,8 +99,7 @@ def _load_niah_results() -> tuple[bool, str, int]:
     if not isinstance(targets, list):
         return (
             False,
-            f"{_NIAH_RESULTS_REL_PATH}['targets'] is "
-            f"{type(targets).__name__}, expected list",
+            f"{_NIAH_RESULTS_REL_PATH}['targets'] is {type(targets).__name__}, expected list",
             0,
         )
     ev = payload.get("evidence_label")
@@ -121,7 +119,7 @@ def _load_niah_results() -> tuple[bool, str, int]:
 # ---------------------------------------------------------------------------
 
 
-def _find_niah_benchmark() -> Optional[str]:
+def _find_niah_benchmark() -> str | None:
     """Locate ``scripts/niah_benchmark.py`` (or a small set of alternates).
 
     Returns the absolute path to the script if it exists, otherwise ``None``.
@@ -168,8 +166,7 @@ def niah_benchmark_present() -> Check:
             description=desc,
             status=WARN,
             details=(
-                "NIAH benchmark absent — needle-in-haystack coverage "
-                "not exercisable via scripts/"
+                "NIAH benchmark absent — needle-in-haystack coverage not exercisable via scripts/"
             ),
         )
 
@@ -237,8 +234,7 @@ def niah_benchmark_present() -> Check:
         description=desc,
         status=WARN,
         details=(
-            f"{rel} present but `python3 {rel} --help` exited {proc.returncode}: "
-            f"{err_tail[:200]}"
+            f"{rel} present but `python3 {rel} --help` exited {proc.returncode}: {err_tail[:200]}"
         ),
     )
 
@@ -255,9 +251,7 @@ def niah_benchmark_non_legacy_path() -> Check:
     The absorbed-crate layout must import via repo-relative ``<root>/python``,
     never a hard-coded absolute ``…/repos`` + ``phenotype-omlx/python`` join.
     """
-    desc = (
-        "NIAH benchmark uses repo-relative python/ (no legacy absolute repos path join)"
-    )
+    desc = "NIAH benchmark uses repo-relative python/ (no legacy absolute repos path join)"
     script_path = _find_niah_benchmark()
     if script_path is None:
         return Check(
@@ -267,7 +261,7 @@ def niah_benchmark_non_legacy_path() -> Check:
             details="NIAH benchmark script missing — cannot verify path layout",
         )
     try:
-        with open(script_path, "r", encoding="utf-8") as fh:
+        with open(script_path, encoding="utf-8") as fh:
             text = fh.read()
     except OSError as e:
         return Check(
@@ -335,10 +329,7 @@ def julia_required_on_eval_path() -> Check:
             id="julia_required_on_eval_path",
             description=desc,
             status=FAIL,
-            details=(
-                f"julia found at {julia_bin} but `--version` failed: "
-                f"{type(e).__name__}: {e}"
-            ),
+            details=(f"julia found at {julia_bin} but `--version` failed: {type(e).__name__}: {e}"),
         )
     details = f"{julia_bin}"
     if version:
@@ -379,16 +370,14 @@ def niah_instrumented_schema_v2_present() -> Check:
             details=f"missing {_INSTRUMENTED_NIAH_REL}",
         )
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
     except (OSError, json.JSONDecodeError) as e:
         return Check(
             id="niah_instrumented_schema_v2_present",
             description=desc,
             status=FAIL,
-            details=(
-                f"could not load {_INSTRUMENTED_NIAH_REL}: {type(e).__name__}: {e}"
-            ),
+            details=(f"could not load {_INSTRUMENTED_NIAH_REL}: {type(e).__name__}: {e}"),
         )
     if not isinstance(data, dict):
         return Check(

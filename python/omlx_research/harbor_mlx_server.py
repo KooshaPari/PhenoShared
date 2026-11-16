@@ -6,12 +6,12 @@ GPU streams thread-local, so the worker must own and bind its stream before it
 evaluates Qwen3.5 arrays.  This adapter patches only that worker and is
 intended only for the Harbor-owned ``:8766`` endpoint.
 """
+
 from __future__ import annotations
 
 import argparse
 import sys
 from typing import Any
-
 
 DEDICATED_PORT = 8766
 SHARED_PORT = 8765

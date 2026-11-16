@@ -15,8 +15,8 @@ import sys
 import unittest
 from unittest.mock import MagicMock, patch
 
-from omlx_research.backends.mlx_backend import MlxBackend
 from omlx_research.backends.base import GenerateRequest
+from omlx_research.backends.mlx_backend import MlxBackend
 
 
 class TestMlxBackendLoadFailure(unittest.TestCase):

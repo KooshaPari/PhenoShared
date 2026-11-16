@@ -53,8 +53,11 @@ def test_measures_only_real_full_attention_cache_state() -> None:
     """E3 values derive from paired post-prefill cache objects, never input scalars."""
 
     baseline = [KVCache(80), KVCache(1_000), KVCache(2_000)]
-    compressed = [KVCache(80), TurboKVCacheLite(packed=400, norms=80, resident=600),
-                  TurboKVCacheLite(packed=800, norms=120, resident=1_100)]
+    compressed = [
+        KVCache(80),
+        TurboKVCacheLite(packed=400, norms=80, resident=600),
+        TurboKVCacheLite(packed=800, norms=120, resident=1_100),
+    ]
 
     metrics = measure_qwen35_runtime_state_compression(
         model_id="mlx-community/Qwen3.5-0.8B-OptiQ-4bit",

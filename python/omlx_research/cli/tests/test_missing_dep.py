@@ -18,7 +18,6 @@ import types
 
 import pytest
 
-
 # `_missing_dep` is a tiny module — import once at module load. If it
 # doesn't exist yet (TDD), the test file fails fast with ImportError
 # and the developer knows to implement the helper.
@@ -33,6 +32,7 @@ def fresh_missing_dep():
     and restore it on exit so tests are independent of run order.
     """
     import omlx_research.cli._missing_dep as mod
+
     saved = getattr(mod, "_cache", None)
     # Drop any cached resolution.
     if hasattr(mod, "_cache"):

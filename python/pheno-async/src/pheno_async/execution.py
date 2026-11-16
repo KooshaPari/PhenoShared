@@ -83,7 +83,10 @@ class SyncTaskExecutor(TaskExecutor):
             # Run in thread pool
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(
-                self._executor, task.func, *task.args, **task.kwargs,
+                self._executor,
+                task.func,
+                *task.args,
+                **task.kwargs,
             )
 
             execution_time = time.time() - start_time
@@ -285,7 +288,10 @@ class ProcessTaskExecutor(TaskExecutor):
             # Run in process pool
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(
-                self._executor, task.func, *task.args, **task.kwargs,
+                self._executor,
+                task.func,
+                *task.args,
+                **task.kwargs,
             )
 
             execution_time = time.time() - start_time

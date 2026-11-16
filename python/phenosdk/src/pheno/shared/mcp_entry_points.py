@@ -5,7 +5,7 @@ This module contains common utilities and base classes for MCP entry points.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List, Optional
+from typing import Any
 
 
 class BaseMCPEntryPoint(ABC):
@@ -33,9 +33,9 @@ class MCPConfiguration:
 
     def __init__(self):
         """Initialize MCP configuration."""
-        self.endpoints: List[str] = []
-        self.credentials: Dict[str, Any] = {}
-        self.feature_flags: Dict[str, bool] = {
+        self.endpoints: list[str] = []
+        self.credentials: dict[str, Any] = {}
+        self.feature_flags: dict[str, bool] = {
             "migration_mode": False,
             "legacy_support": True,
         }
@@ -49,7 +49,7 @@ class MCPConfiguration:
         if endpoint not in self.endpoints:
             self.endpoints.append(endpoint)
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         """Get the current MCP configuration.
 
         Returns:
@@ -71,8 +71,8 @@ class MCPEntryPointRegistry:
 
     def __init__(self):
         """Initialize the MCP entry point registry."""
-        self._entries: Dict[str, BaseMCPEntryPoint] = {}
-        self._primary_endpoint: Optional[str] = None
+        self._entries: dict[str, BaseMCPEntryPoint] = {}
+        self._primary_endpoint: str | None = None
 
     def register_entry(self, name: str, entry: BaseMCPEntryPoint) -> None:
         """Register an MCP entry point.
@@ -91,7 +91,7 @@ class MCPEntryPointRegistry:
         """
         self._primary_endpoint = endpoint
 
-    def get_entries(self) -> Dict[str, BaseMCPEntryPoint]:
+    def get_entries(self) -> dict[str, BaseMCPEntryPoint]:
         """Get all registered MCP entry points.
 
         Returns:

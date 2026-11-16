@@ -135,9 +135,7 @@ def validate_plan(plan: object) -> list[str]:
             errors.append(f"missing required key: {key!r}")
 
     if "scheduler_policy" in plan and plan["scheduler_policy"] not in SCHEDULER_POLICIES:
-        errors.append(
-            f"scheduler_policy {plan['scheduler_policy']!r} not in {SCHEDULER_POLICIES}"
-        )
+        errors.append(f"scheduler_policy {plan['scheduler_policy']!r} not in {SCHEDULER_POLICIES}")
 
     ops = plan.get("operators")
     if ops is not None and not isinstance(ops, list):
@@ -247,5 +245,6 @@ def parse_shape(spec: str | None) -> list[int] | None:
 def shape_hash(shape: list[int] | None, op_kind: str) -> str:
     """Stable short hash of (op_kind, shape) used as a cache key."""
     import hashlib
+
     payload = f"{op_kind}|{','.join(str(d) for d in (shape or []))}"
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]

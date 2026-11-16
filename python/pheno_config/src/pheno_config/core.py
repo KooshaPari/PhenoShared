@@ -195,14 +195,17 @@ class MorphConfig(Config):
 
     enable_structlog: bool = Field(default=True, description="Enable structlog adapter by default")
     embedding_cache_dir: str = Field(
-        default=".morph_cache/embeddings", description="Local embedding cache path",
+        default=".morph_cache/embeddings",
+        description="Local embedding cache path",
     )
     security_profile: str = Field(default="strict", description="Secret scanning profile")
     enable_presidio: bool = Field(
-        default=False, description="Toggle Presidio PII analyzer integration",
+        default=False,
+        description="Toggle Presidio PII analyzer integration",
     )
     allow_remote_embeddings: bool = Field(
-        default=True, description="Allow litellm-powered remote embeddings",
+        default=True,
+        description="Allow litellm-powered remote embeddings",
     )
     subsystem_timeouts: dict[str, float] = Field(
         default_factory=lambda: {"semantic_search": 30.0, "secret_scan": 60.0},
@@ -410,7 +413,8 @@ def parse_dotenv(path: str | Path = ".env") -> dict[str, str]:
 
 
 def load_env_cascade(
-    root_dirs: list[Path] | None = None, env_files: list[Path] | None = None,
+    root_dirs: list[Path] | None = None,
+    env_files: list[Path] | None = None,
 ) -> dict[str, str]:
     """Load environment variables with cascading priority.
 
