@@ -29,9 +29,9 @@ pub mod arch {
     pub const FULL_KV_HEADS: usize = 2;
     pub const FULL_HEAD_DIM: usize = 256;
     pub const FULL_HEADS_PER_KV: usize = FULL_HEADS / FULL_KV_HEADS; // 4
-    pub const FULL_Q_DIM: usize = FULL_HEADS * FULL_HEAD_DIM;          // 2048
-    pub const FULL_KV_DIM: usize = FULL_KV_HEADS * FULL_HEAD_DIM;      // 512
-    pub const FULL_QKV_DIM: usize = FULL_Q_DIM + 2 * FULL_KV_DIM;       // 3072
+    pub const FULL_Q_DIM: usize = FULL_HEADS * FULL_HEAD_DIM; // 2048
+    pub const FULL_KV_DIM: usize = FULL_KV_HEADS * FULL_HEAD_DIM; // 512
+    pub const FULL_QKV_DIM: usize = FULL_Q_DIM + 2 * FULL_KV_DIM; // 3072
     pub const FULL_ATTN_INTERVAL: usize = 4;
     pub const FULL_ATTN_NUM_LAYERS: usize = 6;
     pub const FULL_ATTN_LAYER_INDICES: [usize; FULL_ATTN_NUM_LAYERS] = [3, 7, 11, 15, 19, 23];
@@ -41,10 +41,10 @@ pub mod arch {
     pub const PARTIAL_ROTARY_FACTOR: f32 = 0.25;
     pub const MROPE_INTERLEAVED: bool = true;
     pub const MROPE_SECTION: [usize; 3] = [11, 11, 10];
-    pub const ROT_DIM: usize = 32;       // partial_rotary_factor * head_dim
+    pub const ROT_DIM: usize = 32; // partial_rotary_factor * head_dim
 
     // Linear attention (DeltaNet)
-    pub const LIN_NUM_LAYERS: usize = 18;        // = NUM_HIDDEN_LAYERS - FULL_ATTN_NUM_LAYERS
+    pub const LIN_NUM_LAYERS: usize = 18; // = NUM_HIDDEN_LAYERS - FULL_ATTN_NUM_LAYERS
     pub const LIN_KEY_HEADS: usize = 16;
     pub const LIN_VALUE_HEADS: usize = 16;
     pub const LIN_KEY_HEAD_DIM: usize = 128;
@@ -52,8 +52,8 @@ pub mod arch {
     pub const LIN_CONV_KERNEL: usize = 4;
     pub const LIN_QKV_DIM: usize = 3 * LIN_KEY_HEADS * LIN_KEY_HEAD_DIM; // 6144
     pub const LIN_STATE_ELEMENTS: usize = 16 * 16 * 128 * 128; // 4194304
-    pub const LIN_STATE_BYTES_F32: usize = LIN_STATE_ELEMENTS * 4;   // 16777216
-    pub const LIN_STATE_BYTES_BF16: usize = LIN_STATE_ELEMENTS * 2;  // 8388608
+    pub const LIN_STATE_BYTES_F32: usize = LIN_STATE_ELEMENTS * 4; // 16777216
+    pub const LIN_STATE_BYTES_BF16: usize = LIN_STATE_ELEMENTS * 2; // 8388608
 
     /// Kernel dispatch (DAG-41 — audit-A4 extended to Rust).
     pub const DEFAULT_SIMDGROUP_SIZE: u32 = 32; // Metal simdgroup
