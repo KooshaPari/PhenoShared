@@ -16,8 +16,8 @@ Columns: `repo`, `priv`, `mb`, `refs` (refs preserved in the registry),
 | `keep` | 77 | deliberately retained; no action |
 | `decide` | 19 | needs an owner decision, evidence already gathered |
 | `absorb-or-keep` | 10 | history preserved, content confirmed nowhere in PhenoShared |
-| `absorb-remainder` | 2 | content partly absorbed, remainder outstanding |
-| `delete-eligible` | 3 | history and content both present |
+| `absorb-remainder` | 3 | content partly absorbed, remainder outstanding |
+| `delete-eligible` | 2 | history and content both present, coverage measured |
 | `preserve-first` | 1 | no preserved refs at all, and cannot have them |
 | **total** | **112** | |
 
@@ -75,18 +75,39 @@ Only `.github` remains, and it cannot be fixed under its current name: git forbi
 a ref component starting with a dot, so `refs/preserved/.github/` is not a legal
 ref. It would need a renamed namespace such as `refs/preserved/github-org/`.
 
-## `delete-eligible` (3)
+## Measured coverage: which of the three actually qualify
 
-| Repository | MB | Refs | Content |
+Being "delete-eligible" was a structural guess (history present, a `repos/<name>/`
+entry present). Comparing actual content against the live repository removed one
+of the three and confirmed one:
+
+| Repository | Where the files are | Live files | Covered | Gap |
+|---|---|---:|---|---|
+| `host-credentials` | `PhenoRegistry/repos/host-credentials/tree/` | 5 | **5 of 5 exact** | none |
+| `phenotype-canonicalization` | `PhenoShared/absorption/` | 44 | **43 identical, 0 differ** | `verification/unit-tests.log` |
+| `host-ops` | `PhenoRegistry/repos/host-ops/tree/` | 855 | 635 identical | **172 missing, 48 differ** |
+
+`host-ops` is therefore **not** delete-eligible. Its registry tree holds 683 of
+855 files, and the 172 absent ones are not incidental: `closure/evidence/*` is
+most of the closure programme's evidence, including
+`d8.3-local-only-trees-20261114.md`, `offmachine-bundles.md`,
+`preserved/phenovcs-fc1d2bf.patch` and the d227 and d5.1 records. Deleting the
+repository would destroy the only copy of that evidence.
+
+The registry also stores `repos/phenotype-canonicalization/` as a `history/`
+bundle with no `tree/` at all, which is why an entry-exists check is not evidence
+of content: its files were in `absorption/` the whole time.
+
+## `delete-eligible` (2)
+
+| Repository | MB | Refs | Coverage |
 |---|---:|---:|---|
-| `host-credentials` | 1.0 | 1 | registry tree |
-| `host-ops` | 6.6 | 113 | registry tree |
-| `phenotype-canonicalization` | 0.1 | 1 | registry tree |
+| `host-credentials` | 1.0 | 1 | registry tree exact, 5 of 5 |
+| `phenotype-canonicalization` | 0.1 | 1 | absorption covers 43 of 44; gap is a test log |
 
-All three have history preserved and a content tree in the registry. `host-ops`
-has been restored by the operator once already and both `host-credentials` and
-`host-ops` were recreated during the 2026-11-14 burst, so deleting them may simply
-be undone by whatever did that.
+Both need thread export before deletion (`prepare_deletion.py`), and both would
+benefit from one refresher: `host-credentials` was recreated during the
+2026-11-14 burst, so deleting it may simply be undone.
 
 ## `decide` (19)
 

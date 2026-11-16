@@ -129,9 +129,27 @@ def preserved_counts():
 
 
 def registry_trees():
+    """Repositories that have an absorbed *content* tree, not just an entry.
+
+    `repos/<name>/` exists for two different reasons: a `tree/` subdirectory
+    holding the files, or only a `history/` subdirectory holding a bundle. Treating
+    presence of the parent as evidence of content classified
+    phenotype-canonicalization as delete-eligible when the registry holds only its
+    history, and its files were in PhenoShared all along.
+    """
     code, out, _ = sh(["gh", "api", "repos/%s/%s/contents/repos" % (OWNER, REGISTRY),
                        "--jq", ".[].name"])
-    return {l.strip() for l in out.splitlines() if l.strip()} if code == 0 else set()
+    if code != 0:
+        return set()
+    names = [l.strip() for l in out.splitlines() if l.strip()]
+    with_tree = set()
+    for name in names:
+        code, out, _ = sh(["gh", "api",
+                           "repos/%s/%s/contents/repos/%s" % (OWNER, REGISTRY, name),
+                           "--jq", '.[].name'])
+        if code == 0 and "tree" in {l.strip() for l in out.splitlines()}:
+            with_tree.add(name)
+    return with_tree
 
 
 def local_roots(name):
@@ -142,6 +160,19 @@ def local_roots(name):
         if os.path.isdir(cand):
             hits.append(os.path.relpath(cand, SHARED).replace("\\", "/"))
     return hits
+
+
+# Measured coverage, repository -> (action, reason). These override the generic
+# classification because they are the result of comparing actual content, not of
+# looking for a directory. See docs/absorption-ledger/.
+COVERAGE = {
+    "host-credentials": ("delete-eligible",
+                         "registry tree covers 5 of 5 files exactly"),
+    "host-ops": ("absorb-remainder",
+                 "registry tree lacks 172 live files and 48 differ"),
+    "phenotype-canonicalization": ("delete-eligible",
+                                   "absorption/ covers 43 of 44; only verification/unit-tests.log absent"),
+}
 
 
 def classify(name, has_hist, roots, reg_tree):
@@ -157,6 +188,9 @@ def classify(name, has_hist, roots, reg_tree):
         return "evidence/archive", "keep", "holds the only copy of what it records"
     if name in DESTINATIONS:
         return "destination", "keep", "a home the archives belong in"
+    if name in COVERAGE:
+        action, reason = COVERAGE[name]
+        return "measured coverage", action, reason
     if name.startswith("audit-snapshot-"):
         return "snapshot import", "decide", "content unique vs a live repo; review then absorb or keep"
     if name in RESTORED:
