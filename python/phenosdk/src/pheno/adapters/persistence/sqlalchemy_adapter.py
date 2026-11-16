@@ -1,5 +1,6 @@
 """SQLAlchemy-based persistence adapter."""
-from typing import Any, Optional, List
+
+from typing import Any
 
 
 class SQLAlchemyPersistence:
@@ -13,7 +14,7 @@ class SQLAlchemyPersistence:
         """Save value to database."""
         raise NotImplementedError("save() not yet implemented")
 
-    def load(self, _key: str) -> Optional[Any]:
+    def load(self, _key: str) -> Any | None:
         """Load value from database."""
         raise NotImplementedError("load() not yet implemented")
 
@@ -21,10 +22,10 @@ class SQLAlchemyPersistence:
         """Delete value from database."""
         raise NotImplementedError("delete() not yet implemented")
 
-    def list_keys(self) -> List[str]:
+    def list_keys(self) -> list[str]:
         """List all keys in database."""
         raise NotImplementedError("list_keys() not yet implemented")
 
-    def query(self, _sql: str, _params: dict) -> List[dict]:
+    def query(self, _sql: str, _params: dict) -> list[dict]:
         """Execute raw SQL query."""
         raise NotImplementedError("query() not yet implemented")

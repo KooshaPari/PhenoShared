@@ -1,5 +1,6 @@
 """Vector search client implementation."""
-from typing import List, Dict, Any
+
+from typing import Any
 
 
 class VectorSearchClient:
@@ -9,15 +10,15 @@ class VectorSearchClient:
         """Initialize vector search client."""
         raise NotImplementedError("Vector search client not yet implemented")
 
-    def add_vectors(self, _vectors: List[List[float]], _ids: List[str]) -> None:
+    def add_vectors(self, _vectors: list[list[float]], _ids: list[str]) -> None:
         """Add vectors to search index."""
         raise NotImplementedError("add_vectors() not yet implemented")
 
-    def search(self, _query_vector: List[float], _k: int = 10) -> List[Dict[str, Any]]:
+    def search(self, _query_vector: list[float], _k: int = 10) -> list[dict[str, Any]]:
         """Search for similar vectors."""
         raise NotImplementedError("search() not yet implemented")
 
-    def delete_vectors(self, _ids: List[str]) -> None:
+    def delete_vectors(self, _ids: list[str]) -> None:
         """Delete vectors from index."""
         raise NotImplementedError("delete_vectors() not yet implemented")
 

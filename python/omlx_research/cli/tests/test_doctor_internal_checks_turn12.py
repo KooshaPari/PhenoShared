@@ -38,7 +38,6 @@ from omlx_research.cli import _doctor_internal_checks_turn12 as turn12_mod
 from omlx_research.cli._doctor_shared import FAIL, PASS, WARN
 from omlx_research.cli._doctor_shared import project_root as _doctor_project_root
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -59,16 +58,17 @@ def _patch_count(
     """
     if workspace is not None:
         monkeypatch.setattr(
-            turn12_mod, "_count_workspace_members",
+            turn12_mod,
+            "_count_workspace_members",
             lambda _path: (
                 True,
-                f"found {workspace} declared workspace member(s) "
-                f"in perf-core/Cargo.toml",
+                f"found {workspace} declared workspace member(s) in perf-core/Cargo.toml",
             ),
         )
     if ddm_variants is not None:
         monkeypatch.setattr(
-            turn12_mod, "_count_ddm_schedule_variants",
+            turn12_mod,
+            "_count_ddm_schedule_variants",
             lambda _path: (
                 True,
                 f"found {ddm_variants} distinct ContinuousScheduleKind variant(s)",
@@ -84,12 +84,14 @@ def _patch_missing(monkeypatch, target: str) -> None:
     """
     if target == "workspace":
         monkeypatch.setattr(
-            turn12_mod, "_count_workspace_members",
+            turn12_mod,
+            "_count_workspace_members",
             lambda _path: (False, "perf-core/Cargo.toml not on disk"),
         )
     elif target == "ddm":
         monkeypatch.setattr(
-            turn12_mod, "_count_ddm_schedule_variants",
+            turn12_mod,
+            "_count_ddm_schedule_variants",
             lambda _path: (
                 False,
                 "perf-core/kernel-registry/tests/sota_operators/"
@@ -172,7 +174,8 @@ def test_workspace_crate_warns_when_file_missing(monkeypatch):
 def test_workspace_crate_warns_on_oserror(monkeypatch):
     """OS-level read failure → WARN (defensive)."""
     monkeypatch.setattr(
-        turn12_mod, "_count_workspace_members",
+        turn12_mod,
+        "_count_workspace_members",
         lambda _path: (False, "PermissionError: [Errno 13] Permission denied"),
     )
     c = turn12_mod.cargo_workspace_crate_count_at_least_15()
@@ -188,9 +191,7 @@ def test_workspace_crate_passes_on_real_repo():
     this fails the workspace has shrunk below the floor.
     """
     c = turn12_mod.cargo_workspace_crate_count_at_least_15()
-    assert c.status == PASS, (
-        f"real workspace did not clear the floor: {c.details}"
-    )
+    assert c.status == PASS, f"real workspace did not clear the floor: {c.details}"
     assert c.id == "cargo_workspace_crate_count_at_least_15"
 
 
@@ -259,7 +260,8 @@ def test_ddm_variants_warns_when_file_missing(monkeypatch):
 def test_ddm_variants_warns_on_oserror(monkeypatch):
     """OS-level read failure → WARN (defensive)."""
     monkeypatch.setattr(
-        turn12_mod, "_count_ddm_schedule_variants",
+        turn12_mod,
+        "_count_ddm_schedule_variants",
         lambda _path: (False, "OSError: [Errno 2] No such file or directory"),
     )
     c = turn12_mod.ddm_continuous_schedule_variants_at_least_4()
@@ -276,9 +278,7 @@ def test_ddm_variants_passes_on_real_repo():
     accidentally removed a variant.
     """
     c = turn12_mod.ddm_continuous_schedule_variants_at_least_4()
-    assert c.status == PASS, (
-        f"real DDM oracle did not expose 4 variants: {c.details}"
-    )
+    assert c.status == PASS, f"real DDM oracle did not expose 4 variants: {c.details}"
     assert c.id == "ddm_continuous_schedule_variants_at_least_4"
 
 
@@ -332,8 +332,7 @@ def test_live_doctor_includes_both_new_checks():
     )
     # Allow exit 0 (no warn/fail) or 1 (warn present, expected).
     assert result.returncode in (0, 1), (
-        f"doctor subprocess exited {result.returncode}; "
-        f"stderr={result.stderr[:200]!r}"
+        f"doctor subprocess exited {result.returncode}; stderr={result.stderr[:200]!r}"
     )
     out = result.stdout
     assert "cargo_workspace_crate_count_at_least_15" in out, (
@@ -370,8 +369,7 @@ def test_live_doctor_meta_check_accepts_new_count():
         envelope = json.loads(result.stdout)
     except json.JSONDecodeError as e:
         raise AssertionError(
-            f"doctor --json produced invalid JSON: {e}; "
-            f"stdout[:200]={result.stdout[:200]!r}"
+            f"doctor --json produced invalid JSON: {e}; stdout[:200]={result.stdout[:200]!r}"
         ) from e
     assert isinstance(envelope, dict) and "checks" in envelope
     assert len(envelope["checks"]) == 28, (
@@ -390,18 +388,14 @@ def test_live_doctor_meta_check_accepts_new_count():
     )
     assert meta is not None, "meta-check missing from live envelope"
     assert meta["status"] == PASS, (
-        f"meta-check did not PASS against the new threshold of 28: "
-        f"{meta['details']!r}"
+        f"meta-check did not PASS against the new threshold of 28: {meta['details']!r}"
     )
     # The bumped threshold (28) must show up in the meta-check's
     # description/details. We check both the description and details
     # since either may carry the number depending on the path that
     # produced the line.
-    meta_text = (meta.get("description", "") + " " + meta.get("details", ""))
-    assert "28" in meta_text, (
-        f"threshold '28' not surfaced in meta-check output: "
-        f"{meta_text!r}"
-    )
+    meta_text = meta.get("description", "") + " " + meta.get("details", "")
+    assert "28" in meta_text, f"threshold '28' not surfaced in meta-check output: {meta_text!r}"
 
 
 # ---------------------------------------------------------------------------
@@ -419,20 +413,19 @@ def test_doctor_config_has_threshold_lockstep_doc_comment():
     """
     project_root = _doctor_project_root()
     config_path = os.path.join(
-        project_root, "python", "omlx_research", "cli", "doctor_config.toml",
+        project_root,
+        "python",
+        "omlx_research",
+        "cli",
+        "doctor_config.toml",
     )
-    assert os.path.isfile(config_path), (
-        f"doctor_config.toml missing at {config_path}"
-    )
-    with open(config_path, "r", encoding="utf-8") as fh:
+    assert os.path.isfile(config_path), f"doctor_config.toml missing at {config_path}"
+    with open(config_path, encoding="utf-8") as fh:
         text = fh.read()
     # The lockstep rule wording we pin (case-insensitive; allow for
     # any plausible phrasing the maintainer might choose):
-    assert "lockstep" in text.lower(), (
-        f"doctor_config.toml has no `LOCKSTEP` doc comment:\n{text}"
-    )
+    assert "lockstep" in text.lower(), f"doctor_config.toml has no `LOCKSTEP` doc comment:\n{text}"
     # And the threshold itself must currently be at 28 (schema-v2 gate):
     assert "min_check_count = 28" in text, (
-        f"doctor_config.toml::min_check_count has not been bumped "
-        f"to 28 (live count); got:\n{text}"
+        f"doctor_config.toml::min_check_count has not been bumped to 28 (live count); got:\n{text}"
     )

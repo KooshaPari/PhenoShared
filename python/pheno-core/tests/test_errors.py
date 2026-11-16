@@ -74,10 +74,7 @@ class TestServiceUnavailableError:
 
     def test_service_unavailable_error_with_retry_info(self) -> None:
         """Test ServiceUnavailableError with retry information."""
-        error = ServiceUnavailableError(
-            "Service down",
-            context={"retry_after": 30, "attempt": 1}
-        )
+        error = ServiceUnavailableError("Service down", context={"retry_after": 30, "attempt": 1})
         assert error.context["retry_after"] == 30
 
 
@@ -92,10 +89,7 @@ class TestCircuitBreakerOpenError:
 
     def test_circuit_breaker_error_with_recovery_time(self) -> None:
         """Test CircuitBreakerOpenError with recovery time."""
-        error = CircuitBreakerOpenError(
-            "Circuit open",
-            context={"recovery_time": 60}
-        )
+        error = CircuitBreakerOpenError("Circuit open", context={"recovery_time": 60})
         assert error.context["recovery_time"] == 60
 
 

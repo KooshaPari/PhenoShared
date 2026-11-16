@@ -181,7 +181,10 @@ class AdapterRegistry:
                     }
                 except Exception as exc:  # pragma: no cover - health check failure
                     logger.warning(
-                        "Health check failed for %s (%s): %s", name, adapter_type.value, exc,
+                        "Health check failed for %s (%s): %s",
+                        name,
+                        adapter_type.value,
+                        exc,
                     )
                     results[f"{adapter_type.value}:{name}"] = {
                         "status": "error",
@@ -201,7 +204,9 @@ class AdapterRegistry:
                 callback(*args, **kwargs)
             except Exception as exc:  # pragma: no cover - defensive
                 logger.warning(
-                    "Adapter callback %s failed: %s", getattr(callback, "__name__", callback), exc,
+                    "Adapter callback %s failed: %s",
+                    getattr(callback, "__name__", callback),
+                    exc,
                 )
 
     # ------------------------------------------------------------------

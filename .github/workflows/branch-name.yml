@@ -2,8 +2,7 @@ name: Branch Name
 
 on:
   push:
-    branches-ignore:
-      - "wip/**"
+    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened, edited]
   workflow_dispatch:

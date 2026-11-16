@@ -15,12 +15,11 @@ from __future__ import annotations
 import asyncio
 import json
 import time
-from typing import Awaitable, Callable
 
 from omlx_research.agents.jetspec_runner import JetSpecRunner, jetspec_draft_tree
-from omlx_research.agents.latentmas_runner import LatentMasRunner, latentmas_fanout
-from omlx_research.agents.ssd_runner import SsdRunner
+from omlx_research.agents.latentmas_runner import LatentMasRunner
 from omlx_research.agents.scheduler import ConcurrentScheduler, Strategy
+from omlx_research.agents.ssd_runner import SsdRunner
 from omlx_research.agents.tidar_runner import TidarRunner
 
 VOCAB_SIZE = 256
@@ -192,9 +191,7 @@ async def bench_jetspec(n_tokens: int, latency_ms: float) -> dict:
     seq_ms = _now_ms() - start
 
     target2 = MockTarget(latency_ms)
-    tree = jetspec_draft_tree(
-        width=4, depth=2, head_fn=lambda i: (i + 1) % VOCAB_SIZE, prefix=[0]
-    )
+    tree = jetspec_draft_tree(width=4, depth=2, head_fn=lambda i: (i + 1) % VOCAB_SIZE, prefix=[0])
     runner = JetSpecRunner(target2, draft_tree=tree, width=4, depth=2)
     start = _now_ms()
     prefix2: list[int] = []
@@ -213,9 +210,7 @@ async def bench_jetspec(n_tokens: int, latency_ms: float) -> dict:
 
 
 async def bench_scheduler_strategies(n_agents: int, latency_ms: float) -> dict:
-    agents = {
-        f"agent_{i}": MockAgent(latency_ms, name=f"agent_{i}") for i in range(n_agents)
-    }
+    agents = {f"agent_{i}": MockAgent(latency_ms, name=f"agent_{i}") for i in range(n_agents)}
     results = {}
 
     for strat_name, strat in [
@@ -230,9 +225,7 @@ async def bench_scheduler_strategies(n_agents: int, latency_ms: float) -> dict:
         results[strat_name] = round(ms, 1)
 
     results["FALLBACK"] = None
-    sched_fb = ConcurrentScheduler(
-        agents, strategy=Strategy.FALLBACK, max_concurrency=n_agents
-    )
+    sched_fb = ConcurrentScheduler(agents, strategy=Strategy.FALLBACK, max_concurrency=n_agents)
     start = _now_ms()
     await sched_fb.dispatch("task", {})
     results["FALLBACK"] = round(_now_ms() - start, 1)

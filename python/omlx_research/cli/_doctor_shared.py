@@ -9,8 +9,6 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import Optional
-
 
 # ---------------------------------------------------------------------------
 # Status constants
@@ -36,6 +34,7 @@ EXPECTED_KERNEL_OP_COUNT: int = 24
 # Record type shared with ``doctor.py``
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class Check:
     """One row of the doctor report."""
@@ -49,6 +48,7 @@ class Check:
 # ---------------------------------------------------------------------------
 # Path helpers
 # ---------------------------------------------------------------------------
+
 
 def project_root() -> str:
     """Return the absolute path to the phenotype-omlx repo root."""
@@ -71,7 +71,7 @@ def read_cargo_version(crate_relpath: str) -> str:
     if not os.path.isfile(crate_toml):
         return "unknown"
     try:
-        with open(crate_toml, "r", encoding="utf-8") as f:
+        with open(crate_toml, encoding="utf-8") as f:
             crate_text = f.read()
     except OSError:
         return "unknown"
@@ -94,7 +94,7 @@ def read_cargo_version(crate_relpath: str) -> str:
         if not os.path.isfile(ws_path):
             continue
         try:
-            with open(ws_path, "r", encoding="utf-8") as f:
+            with open(ws_path, encoding="utf-8") as f:
                 ws_text = f.read()
         except OSError:
             continue
@@ -116,7 +116,7 @@ def read_cargo_version(crate_relpath: str) -> str:
     return "unknown"
 
 
-def read_abi_version() -> Optional[str]:
+def read_abi_version() -> str | None:
     """Read ``ABI_VERSION_CURRENT`` from ``perf-core/native-abi/src/version.rs``.
 
     Handles the canonical Rust struct-field syntax::
@@ -129,18 +129,16 @@ def read_abi_version() -> Optional[str]:
     Returns ``None`` if the file is missing or the constant cannot be
     parsed — callers should fall back to "unknown" with a warn status.
     """
-    path = os.path.join(
-        project_root(), "perf-core", "native-abi", "src", "version.rs"
-    )
+    path = os.path.join(project_root(), "perf-core", "native-abi", "src", "version.rs")
     if not os.path.isfile(path):
         return None
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             text = f.read()
     except OSError:
         return None
 
-    def _extract(field_name: str) -> Optional[int]:
+    def _extract(field_name: str) -> int | None:
         """Return the integer literal after ``field_name:`` or ``field_name =``."""
         for line in text.splitlines():
             stripped = line.strip().rstrip(",")
@@ -150,7 +148,7 @@ def read_abi_version() -> Optional[str]:
                 idx = stripped.find(sep)
                 if idx < 0:
                     continue
-                tail = stripped[idx + 1:].strip().rstrip(",").strip()
+                tail = stripped[idx + 1 :].strip().rstrip(",").strip()
                 try:
                     return int(tail)
                 except ValueError:
@@ -171,13 +169,11 @@ def collect_kernel_op_tags() -> list[str]:
     Returns the raw right-hand string values (e.g. ``["dense_attention",
     "gqa_attention", ...]``). Empty list on any error.
     """
-    path = os.path.join(
-        project_root(), "perf-core", "model-kernels", "src", "lib.rs"
-    )
+    path = os.path.join(project_root(), "perf-core", "model-kernels", "src", "lib.rs")
     if not os.path.isfile(path):
         return []
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             text = f.read()
     except OSError:
         return []
@@ -193,7 +189,7 @@ def collect_kernel_op_tags() -> list[str]:
         first_quote = rhs.find('"')
         if first_quote < 0:
             continue
-        tail = rhs[first_quote + 1:]
+        tail = rhs[first_quote + 1 :]
         end_quote = tail.find('"')
         if end_quote < 0:
             continue

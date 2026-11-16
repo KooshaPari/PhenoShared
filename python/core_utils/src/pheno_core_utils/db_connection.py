@@ -230,7 +230,11 @@ class AsyncConnectionPool:
                 self.logger.error(f"Failed to initialize connection pool: {e}")
                 raise
 
-    def _setup_connection(self, conn: asyncpg.Connection) -> None:
+    # asyncpg awaits the `setup` callback, so it has to be a coroutine: it was
+    # declared `def` while awaiting four `conn.execute(...)` calls, which is a
+    # module-level SyntaxError ("'await' outside async function") and made this
+    # module unimportable. Found by the `python/ compiles` gate.
+    async def _setup_connection(self, conn: asyncpg.Connection) -> None:
         """
         Setup connection configuration.
         """

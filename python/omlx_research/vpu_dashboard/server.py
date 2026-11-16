@@ -98,10 +98,10 @@ def health_payload() -> tuple[dict[str, Any], int]:
 
 
 class VpuDashboardHandler(BaseHTTPRequestHandler):
-    def log_message(self, fmt: str, *args: Any) -> None:  # noqa: A003
+    def log_message(self, fmt: str, *args: Any) -> None:
         sys.stderr.write(f"[vpu-dashboard] {self.address_string()} - {fmt % args}\n")
 
-    def do_GET(self) -> None:  # noqa: N802
+    def do_GET(self) -> None:
         path = urlparse(self.path).path.rstrip("/") or "/"
         if path in ("/vpu", "/vpu/"):
             self._file(panel_index(), "text/html; charset=utf-8")

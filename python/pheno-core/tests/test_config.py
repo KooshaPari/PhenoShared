@@ -83,6 +83,7 @@ class TestFromEnv:
 
     def test_from_env_missing_required(self) -> None:
         """Test from_env raises error for missing required fields."""
+
         # Create a config with required field without default
         class StrictConfig(BaseConfig):
             required_field: str
@@ -102,8 +103,9 @@ class TestFromFile:
             "port": 3000,
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             import json
+
             json.dump(config_data, f)
             temp_path = f.name
 
@@ -124,7 +126,7 @@ port = 4000
 database_url = "postgresql://localhost/test"
 """
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.toml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(config_content)
             temp_path = f.name
 
@@ -161,8 +163,9 @@ class TestConfigLoader:
         """Test ConfigLoader with file loading."""
         config_data = {"app_name": "loader_app", "port": 7000}
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             import json
+
             json.dump(config_data, f)
             temp_path = f.name
 
@@ -179,8 +182,9 @@ class TestConfigLoader:
         """Test ConfigLoader with env overlaying file."""
         config_data = {"app_name": "base_app", "port": 6000}
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             import json
+
             json.dump(config_data, f)
             temp_path = f.name
 
@@ -211,6 +215,7 @@ class TestConfigValidation:
 
     def test_config_field_validation(self) -> None:
         """Test custom field validation."""
+
         class ValidatedConfig(BaseConfig):
             port: int = Field(default=8000, ge=1024, le=65535)
 

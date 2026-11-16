@@ -15,6 +15,7 @@ class AgilePlusGrpcStreamingMixin:
     async def stream_agent_events(self, feature_slug: str) -> AsyncIterator[dict[str, Any]]:
         """Stream agent status events from the Rust core."""
         import grpc
+
         from agileplus_proto.gen.agileplus.v1 import core_pb2  # type: ignore[import]
 
         stub = self._require_stub()

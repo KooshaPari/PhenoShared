@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -195,7 +196,11 @@ class VendorManager:
             return False
 
     def update_package(
-        self, package_name: str, *, version: str | None = None, force: bool = False,
+        self,
+        package_name: str,
+        *,
+        version: str | None = None,
+        force: bool = False,
     ) -> bool:
         """
         Update a vendored package.
@@ -333,7 +338,9 @@ class VendorManager:
             return importlib.metadata.version(package_name)
         except importlib.metadata.PackageNotFoundError:
             # Fallback to pip command
-            result = subprocess.run(["pip", "show", package_name], check=False, capture_output=True, text=True)
+            result = subprocess.run(
+                ["pip", "show", package_name], check=False, capture_output=True, text=True
+            )
 
             for line in result.stdout.split("\n"):
                 if line.startswith("Version:"):
@@ -481,7 +488,10 @@ def main():
 
     elif args.command == "add" and args.package:
         success = vendor_manager.add_package(
-            args.package, version=args.version, source=args.source, force=args.force,
+            args.package,
+            version=args.version,
+            source=args.source,
+            force=args.force,
         )
         sys.exit(0 if success else 1)
 
@@ -491,7 +501,9 @@ def main():
 
     elif args.command == "update" and args.package:
         success = vendor_manager.update_package(
-            args.package, version=args.version, force=args.force,
+            args.package,
+            version=args.version,
+            force=args.force,
         )
         sys.exit(0 if success else 1)
 

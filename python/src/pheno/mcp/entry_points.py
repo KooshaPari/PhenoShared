@@ -4,8 +4,6 @@ MCP Entry Points for phenoSDK.
 This module provides entry point definitions for Model Context Protocol integration.
 """
 
-from typing import Optional
-
 
 class MCPEntryPoint:
     """Entry point for MCP server.
@@ -22,8 +20,8 @@ class MCPEntryPoint:
         """
         self.name = name
         self.version = version
-        self.server_url: Optional[str] = None
-        self.api_key: Optional[str] = None
+        self.server_url: str | None = None
+        self.api_key: str | None = None
 
     def configure_auth(self, api_key: str) -> None:
         """Configure authentication for MCP server.
@@ -41,7 +39,7 @@ class MCPEntryPoint:
         """
         self.server_url = url
 
-    def get_endpoint_url(self) -> Optional[str]:
+    def get_endpoint_url(self) -> str | None:
         """Get the MCP server endpoint URL.
 
         Returns:
@@ -60,7 +58,7 @@ class MCPCLI:
         """Initialize the MCP CLI."""
         self.entry_point = MCPEntryPoint("mcp-cli")
 
-    def deploy_mcp(self, config: Optional[dict] = None) -> bool:
+    def deploy_mcp(self, config: dict | None = None) -> bool:
         """Deploy MCP server with given configuration.
 
         Args:

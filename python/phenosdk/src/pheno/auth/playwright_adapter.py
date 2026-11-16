@@ -1,5 +1,6 @@
 """Playwright-based authentication adapter."""
-from typing import Any, Dict
+
+from typing import Any
 
 
 class PlaywrightAuthAdapter:
@@ -9,7 +10,7 @@ class PlaywrightAuthAdapter:
         """Initialize adapter with endpoint."""
         raise NotImplementedError("Playwright auth adapter not yet implemented")
 
-    def authenticate(self, _credentials: Dict[str, Any]) -> str:
+    def authenticate(self, _credentials: dict[str, Any]) -> str:
         """Authenticate and return auth token."""
         raise NotImplementedError("authenticate() not yet implemented")
 
