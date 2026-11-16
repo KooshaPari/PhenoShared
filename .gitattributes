@@ -3,7 +3,11 @@
 
 # Rust
 *.rs text diff=rust
-Cargo.lock text -diff
+# Cargo.lock must stay reviewable: with `-diff` git renders it as
+# "Bin N -> M bytes" and a stale lockfile silently reverting a dependency bump
+# is invisible in review. That is exactly how PR #1077 reverted PR #1057's
+# quinn-udp 0.5.16 security fix without anyone seeing it.
+Cargo.lock text diff
 
 # Config / docs
 *.toml text
