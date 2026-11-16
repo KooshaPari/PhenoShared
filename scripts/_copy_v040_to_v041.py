@@ -4,6 +4,7 @@
 Scorecard measures: "1 out of the last X releases have signed artifacts".
 By having both v0.40 AND v0.41 with cosign-signed assets, we maximize this score.
 """
+import json
 import subprocess
 import sys
 

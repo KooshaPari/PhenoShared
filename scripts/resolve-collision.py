@@ -312,8 +312,8 @@ ALIASES = {
     "Sidekick-6th": "Sidekick",
 
     # === phenoData / phenoDesign -t1 variants ===
-    "phenoMCP": "PhenoMCP",
-    "phenotype-py-utils": "phenotype-py-utils",
+    # "phenoMCP" and "phenotype-py-utils" are each declared once above with
+    # identical values; the duplicates here were no-ops and are removed.
     "phenotype-vibeproxy": "vibeproxy",
 
     # === WSM family — collapse all WSM-related to WorldSphereMod (paused) ===
