@@ -22,7 +22,11 @@ import tempfile
 
 def sh(args, cwd=None):
     p = subprocess.run(args, cwd=cwd, capture_output=True)
-    return p.returncode, p.stdout.decode("utf-8", "replace"), p.stderr.decode("utf-8", "replace")
+    return (
+        p.returncode,
+        p.stdout.decode("utf-8", "replace"),
+        p.stderr.decode("utf-8", "replace"),
+    )
 
 
 def git(repo, *args):
@@ -38,6 +42,10 @@ def main() -> int:
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--owner", default="KooshaPari")
     ap.add_argument("--registry", default="PhenoRegistry")
+    ap.add_argument(
+        "--at",
+        help="compare against this preserved source commit instead of branch tips",
+    )
     args = ap.parse_args()
 
     work = tempfile.mkdtemp(prefix="verify-preserved-")
@@ -45,30 +53,56 @@ def main() -> int:
 
     # Blobless: branch and tree ids are all this needs, so the registry's
     # content never has to be downloaded.
-    code, _, err = sh(["gh", "repo", "clone", "%s/%s" % (args.owner, args.registry),
-                       clone, "--", "--filter=blob:none", "--no-checkout"])
+    code, _, err = sh(
+        [
+            "gh",
+            "repo",
+            "clone",
+            "%s/%s" % (args.owner, args.registry),
+            clone,
+            "--",
+            "--filter=blob:none",
+            "--no-checkout",
+        ]
+    )
     if code != 0:
         print("cannot clone registry: %s" % err.strip()[:200])
         return 2
-    code, _, err = sh(["git", "-C", clone, "fetch", "-q", "origin",
-                       "+refs/preserved/*:refs/check/*", "main:refs/check/main"])
+    code, _, err = sh(
+        [
+            "git",
+            "-C",
+            clone,
+            "fetch",
+            "-q",
+            "origin",
+            "+refs/preserved/*:refs/check/*",
+            "main:refs/check/main",
+        ]
+    )
     if code != 0:
         print("cannot fetch preserved refs: %s" % err.strip()[:200])
         return 2
 
     if args.all:
-        repos = sorted({r.split("refs/check/")[1].split("/heads/")[0]
-                        for r in git(clone, "for-each-ref", "--format=%(refname)",
-                                     "refs/check/").splitlines()
-                        if "/heads/" in r})
+        repos = sorted(
+            {
+                r.split("refs/check/")[1].split("/heads/")[0]
+                for r in git(
+                    clone, "for-each-ref", "--format=%(refname)", "refs/check/"
+                ).splitlines()
+                if "/heads/" in r
+            }
+        )
     else:
         repos = args.repos
     if not repos:
         print("give repo names or --all")
         return 2
 
-    all_paths = git(clone, "ls-tree", "-r", "--full-tree", "--name-only",
-                    "refs/check/main").splitlines()
+    all_paths = git(
+        clone, "ls-tree", "-r", "--full-tree", "--name-only", "refs/check/main"
+    ).splitlines()
 
     failures = 0
     for repo in repos:
@@ -81,15 +115,53 @@ def main() -> int:
         subtree = git(clone, "rev-parse", "refs/check/main:%s" % prefix)
 
         matches = []
-        for ref in git(clone, "for-each-ref", "--format=%(refname)",
-                       "refs/check/%s/heads/" % repo).splitlines():
-            if git(clone, "rev-parse", "%s^{tree}" % ref) == subtree:
+        pinned = None
+        if args.at:
+            code, out, _ = sh(
+                [
+                    "git",
+                    "-C",
+                    clone,
+                    "rev-parse",
+                    "--verify",
+                    "--end-of-options",
+                    "%s^{commit}" % args.at,
+                ]
+            )
+            if code == 0:
+                pinned = out.strip()
+        for ref in git(
+            clone, "for-each-ref", "--format=%(refname)", "refs/check/%s/heads/" % repo
+        ).splitlines():
+            comparison = ref
+            if args.at:
+                if pinned is None:
+                    continue
+                code, _, _ = sh(
+                    ["git", "-C", clone, "merge-base", "--is-ancestor", pinned, ref]
+                )
+                if code != 0:
+                    continue
+                comparison = pinned
+            if git(clone, "rev-parse", "%s^{tree}" % comparison) == subtree:
                 matches.append(ref.split("/heads/")[-1])
 
         if matches:
-            print("%-24s tree %s == branch %s" % (repo, subtree[:10], ", ".join(matches)))
+            suffix = " at %s" % pinned if args.at else ""
+            print(
+                "%-24s tree %s == branch %s%s"
+                % (repo, subtree[:10], ", ".join(matches), suffix)
+            )
         else:
-            print("%-24s tree %s matches NO preserved branch" % (repo, subtree[:10]))
+            suffix = (
+                " at %s" % args.at
+                if args.at
+                else "; source is live and may have moved; --at pins the comparison"
+            )
+            print(
+                "%-24s tree %s matches NO preserved branch%s"
+                % (repo, subtree[:10], suffix)
+            )
             failures += 1
 
     print()

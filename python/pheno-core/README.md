@@ -27,10 +27,12 @@ uv pip install pheno-core
 from pydantic import Field
 from pheno_core.config import BaseConfig, from_env, from_file, ConfigLoader
 
+
 class AppConfig(BaseConfig):
     app_name: str = Field(default="myapp")
     debug: bool = Field(default=False)
     port: int = Field(default=8000)
+
 
 # Load from environment
 config = from_env(AppConfig, env_prefix="APP_")
@@ -90,6 +92,7 @@ logger.error("Error occurred", error_code="ERR_500")
 from abc import abstractmethod
 from pheno_core.observability import Logger, Tracer, Meter, HealthChecker, HealthStatus
 
+
 class MyLogger(Logger):
     def debug(self, message: str, **kwargs):
         print(f"DEBUG: {message}")
@@ -98,6 +101,7 @@ class MyLogger(Logger):
         print(f"INFO: {message}")
 
     # ... implement other methods
+
 
 class MyHealthChecker(HealthChecker):
     async def check_health(self) -> tuple[HealthStatus, str]:

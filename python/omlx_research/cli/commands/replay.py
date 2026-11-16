@@ -28,7 +28,7 @@ from ._shared import validate_trace
 
 def _load_trace(path: str) -> tuple[dict | None, int]:
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
         print(f"error: trace file not found: {path}", file=sys.stderr)

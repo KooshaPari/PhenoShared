@@ -4,7 +4,7 @@ This module provides entry point definitions for Model Context Protocol integrat
 Generalized to work with any MCP server, not atoms-specific.
 """
 
-from typing import Optional, Dict, Any
+from typing import Any
 
 
 class MCPEntryPoint:
@@ -20,18 +20,20 @@ class MCPEntryPoint:
         Args:
             name: The name of the MCP endpoint
             version: Version string (default: 1.0.0)
+
         """
         self.name = name
         self.version = version
-        self.server_url: Optional[str] = None
-        self.api_key: Optional[str] = None
-        self._metadata: Dict[str, Any] = {}
+        self.server_url: str | None = None
+        self.api_key: str | None = None
+        self._metadata: dict[str, Any] = {}
 
     def configure_auth(self, api_key: str) -> None:
         """Configure authentication for MCP server.
 
         Args:
             api_key: API key for MCP server integration
+
         """
         self.api_key = api_key
 
@@ -40,14 +42,16 @@ class MCPEntryPoint:
 
         Args:
             url: The MCP server endpoint URL
+
         """
         self.server_url = url
 
-    def get_endpoint_url(self) -> Optional[str]:
+    def get_endpoint_url(self) -> str | None:
         """Get the MCP server endpoint URL.
 
         Returns:
             The configured endpoint URL or None if not set
+
         """
         return self.server_url
 
@@ -57,6 +61,7 @@ class MCPEntryPoint:
         Args:
             key: Metadata key
             value: Metadata value
+
         """
         self._metadata[key] = value
 
@@ -69,14 +74,16 @@ class MCPEntryPoint:
 
         Returns:
             Metadata value or default
+
         """
         return self._metadata.get(key, default)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize entry point to dictionary.
 
         Returns:
             Dictionary representation of the entry point
+
         """
         return {
             "name": self.name,
@@ -98,6 +105,7 @@ class MCPServer:
 
         Args:
             entry_point: The MCPEntryPoint to use
+
         """
         self.entry_point = entry_point
         self._is_running = False
@@ -109,6 +117,7 @@ class MCPServer:
         Args:
             tool_name: Name of the tool
             tool_callable: Callable that implements the tool
+
         """
         self._tools.append({"name": tool_name, "callable": tool_callable})
 
@@ -117,14 +126,16 @@ class MCPServer:
 
         Returns:
             List of registered tools
+
         """
         return self._tools
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """Check the health of the MCP server.
 
         Returns:
             Health status dictionary
+
         """
         return {
             "status": "healthy" if self.entry_point.get_endpoint_url() else "unconfigured",
@@ -139,6 +150,7 @@ class MCPServer:
 
         Raises:
             ValueError: If endpoint URL is not configured
+
         """
         if not self.entry_point.get_endpoint_url():
             raise ValueError("Endpoint URL must be configured before starting server")
@@ -153,5 +165,6 @@ class MCPServer:
 
         Returns:
             True if server is running, False otherwise
+
         """
         return self._is_running

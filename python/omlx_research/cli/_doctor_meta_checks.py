@@ -55,7 +55,6 @@ except ModuleNotFoundError:  # pragma: no cover — Python <3.11 fallback
 from ._doctor_registry import register_check
 from ._doctor_shared import FAIL, PASS, WARN, Check
 
-
 __all__ = ["doctor_check_count_at_least_18"]
 
 
@@ -198,15 +197,13 @@ def _run_doctor_json_subprocess() -> dict[str, Any]:
     )
     if proc.returncode not in (0, 1):
         raise RuntimeError(
-            f"doctor --json exited {proc.returncode}: "
-            f"{(proc.stderr or '').strip()[:200]}"
+            f"doctor --json exited {proc.returncode}: {(proc.stderr or '').strip()[:200]}"
         )
     try:
         envelope = json.loads(proc.stdout)
     except json.JSONDecodeError as e:
         raise RuntimeError(
-            f"doctor --json produced invalid JSON: {e}: "
-            f"stdout[:200]={proc.stdout[:200]!r}"
+            f"doctor --json produced invalid JSON: {e}: stdout[:200]={proc.stdout[:200]!r}"
         ) from e
     if not isinstance(envelope, dict) or "checks" not in envelope:
         raise RuntimeError(f"doctor --json envelope missing 'checks' key: {envelope!r}")

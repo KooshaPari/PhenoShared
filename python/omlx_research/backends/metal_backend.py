@@ -6,10 +6,11 @@ mlx.core's compiled-kernel API.
 """
 
 from __future__ import annotations
-import time
-import os
-from .base import BackendBase, BackendCapabilities, GenerateRequest, GenerateResponse
 
+import os
+import time
+
+from .base import BackendBase, BackendCapabilities, GenerateRequest, GenerateResponse
 
 _PROBE_KERNEL = None
 
@@ -63,13 +64,15 @@ class MetalKernelBackend(BackendBase):
     def is_available(self) -> bool:
         try:
             import mlx.core as mx
+
             return bool(mx.metal.is_available())
         except Exception:
             return False
 
     def generate(self, req: GenerateRequest) -> GenerateResponse:
-        from .mlx_backend import MlxBackend
         import mlx.core as mx
+
+        from .mlx_backend import MlxBackend
 
         # The Metal policy still uses MLX for model execution, but must preserve
         # the selected model path.  Dropping it here created a silent "no model"
@@ -82,41 +85,45 @@ class MetalKernelBackend(BackendBase):
             enable_custom_qwen_kernel=use_custom,
         )
         if not b.is_available():
-            return GenerateResponse(text="", tokens=0, elapsed_ms=0, backend="metal",
-                                    metadata={"error": "mlx unavailable"})
+            return GenerateResponse(
+                text="",
+                tokens=0,
+                elapsed_ms=0,
+                backend="metal",
+                metadata={"error": "mlx unavailable"},
+            )
         t0 = time.time()
         probe_ok = _run_custom_metal_probe(mx)
         out = b.generate(req)
         custom_stats = b.custom_kernel_stats
         elapsed = int((time.time() - t0) * 1000)
         model_kernel_plan = b.kernel_plan()
-        return GenerateResponse(text=out.text, tokens=out.tokens, elapsed_ms=elapsed, backend="metal",
-                                metadata={
-                                    **out.metadata,
-                                    "kernel": "turbo_quant",
-                                    "model_path": self.model_path,
-                                    "custom_metal_probe": {
-                                        "name": "phenotype_omlx_runtime_probe",
-                                        "passed": probe_ok,
-                                    },
-                                    "model_kernel_plan": model_kernel_plan,
-                                    "kernel_execution_provenance": {
-                                        "model_layers": model_kernel_plan.get("layers", {}),
-                                        "execution_source": model_kernel_plan.get(
-                                            "execution_source", "unknown"
-                                        ),
-                                        "custom_kernel_dispatches": custom_stats.get(
-                                            "dispatches", 0
-                                        ),
-                                        "probe_dispatches": 1 if probe_ok else 0,
-                                        "custom_kernel_execution_verified": custom_stats.get(
-                                            "dispatches", 0
-                                        ) > 0,
-                                        "custom_kernel_installation": custom_stats,
-                                        "verification_scope": (
-                                            "qwen35_gated_delta_replacement"
-                                            if custom_stats.get("dispatches", 0) > 0
-                                            else "probe_only"
-                                        ),
-                                    },
-                                })
+        return GenerateResponse(
+            text=out.text,
+            tokens=out.tokens,
+            elapsed_ms=elapsed,
+            backend="metal",
+            metadata={
+                **out.metadata,
+                "kernel": "turbo_quant",
+                "model_path": self.model_path,
+                "custom_metal_probe": {
+                    "name": "phenotype_omlx_runtime_probe",
+                    "passed": probe_ok,
+                },
+                "model_kernel_plan": model_kernel_plan,
+                "kernel_execution_provenance": {
+                    "model_layers": model_kernel_plan.get("layers", {}),
+                    "execution_source": model_kernel_plan.get("execution_source", "unknown"),
+                    "custom_kernel_dispatches": custom_stats.get("dispatches", 0),
+                    "probe_dispatches": 1 if probe_ok else 0,
+                    "custom_kernel_execution_verified": custom_stats.get("dispatches", 0) > 0,
+                    "custom_kernel_installation": custom_stats,
+                    "verification_scope": (
+                        "qwen35_gated_delta_replacement"
+                        if custom_stats.get("dispatches", 0) > 0
+                        else "probe_only"
+                    ),
+                },
+            },
+        )

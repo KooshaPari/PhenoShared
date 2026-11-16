@@ -367,7 +367,9 @@ class TaskManager:
                     if not future.done():
                         future.set_exception(e)
 
-                    logger.exception(f"Task {task.config.task_id} failed after {retry_count} attempts")
+                    logger.exception(
+                        f"Task {task.config.task_id} failed after {retry_count} attempts"
+                    )
                     return
 
         # This should not be reached, but just in case
@@ -475,7 +477,6 @@ class TaskScheduler:
                         and task.config.scheduled_at <= datetime.now()
                         and task.status == TaskStatus.SCHEDULED
                     ):
-
                         # Execute the task
                         await self.task_manager._execute_task(task)
 
@@ -534,7 +535,9 @@ class WorkflowEngine:
         return workflow_id
 
     async def wait_for_workflow(
-        self, workflow_id: str, timeout: float | None = None,
+        self,
+        workflow_id: str,
+        timeout: float | None = None,
     ) -> list[TaskResult]:
         """
         Wait for all tasks in a workflow to complete.
@@ -618,7 +621,11 @@ class TaskOrchestrator:
         await self.task_manager.shutdown()
 
     async def submit_task(
-        self, func: Callable[..., Any], *args, task_config: TaskConfig | None = None, **kwargs,
+        self,
+        func: Callable[..., Any],
+        *args,
+        task_config: TaskConfig | None = None,
+        **kwargs,
     ) -> str:
         """
         Submit a task for execution.
@@ -649,7 +656,9 @@ class TaskOrchestrator:
         return await self.scheduler.schedule_task(task, delay)
 
     async def create_workflow(
-        self, workflow_id: str, tasks: list[Tuple[Callable, tuple, dict]],
+        self,
+        workflow_id: str,
+        tasks: list[tuple[Callable, tuple, dict]],
     ) -> str:
         """
         Create a workflow with multiple tasks.
@@ -670,7 +679,9 @@ class TaskOrchestrator:
         return await self.task_manager.wait_for_task(task_id, timeout)
 
     async def wait_for_workflow(
-        self, workflow_id: str, timeout: float | None = None,
+        self,
+        workflow_id: str,
+        timeout: float | None = None,
     ) -> list[TaskResult]:
         """
         Wait for a workflow to complete.

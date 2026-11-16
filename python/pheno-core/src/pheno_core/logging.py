@@ -3,7 +3,7 @@
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 import structlog
 
@@ -18,7 +18,7 @@ structlog.configure(
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,
         structlog.processors.UnicodeDecoder(),
-        structlog.processors.JSONRenderer()
+        structlog.processors.JSONRenderer(),
     ],
     context_class=dict,
     logger_factory=structlog.stdlib.LoggerFactory(),
@@ -90,7 +90,7 @@ def get_logger(name: str) -> Logger:
 def setup_console_logging(
     name: str,
     level: str = "INFO",
-    format: Optional[str] = None,
+    format: str | None = None,
 ) -> Logger:
     """
     Set up console (stdout) logging.
@@ -112,9 +112,7 @@ def setup_console_logging(
         if format:
             formatter = logging.Formatter(format)
         else:
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
+            formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
         handler.setFormatter(formatter)
         logger.addHandler(handler)
@@ -149,9 +147,9 @@ def setup_json_logging(
 
 def setup_file_logging(
     name: str,
-    filepath: Union[str, Path],
+    filepath: str | Path,
     level: str = "INFO",
-    format: Optional[str] = None,
+    format: str | None = None,
     max_bytes: int = 10485760,  # 10MB
     backup_count: int = 5,
 ) -> Logger:
@@ -188,9 +186,7 @@ def setup_file_logging(
         if format:
             formatter = logging.Formatter(format)
         else:
-            formatter = logging.Formatter(
-                "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-            )
+            formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
         handler.setFormatter(formatter)
         logger.addHandler(handler)
@@ -201,7 +197,7 @@ def setup_file_logging(
 def setup_syslog_logging(
     name: str,
     level: str = "INFO",
-    facility: Optional[int] = None,
+    facility: int | None = None,
 ) -> Logger:
     """
     Set up syslog logging.
@@ -224,9 +220,7 @@ def setup_syslog_logging(
 
     if not logger.handlers:
         handler = SysLogHandler(facility=facility)
-        formatter = logging.Formatter(
-            "%(name)s[%(process)d]: %(levelname)s - %(message)s"
-        )
+        formatter = logging.Formatter("%(name)s[%(process)d]: %(levelname)s - %(message)s")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 

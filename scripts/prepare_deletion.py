@@ -267,21 +267,32 @@ def store_history_as_refs(registry: str, owner: str, repo: str) -> tuple[bool, s
     # Compare on the same key shape: both sides keyed "<namespace>/<name>".
     expected = {m[len("refs/"):]: sha for m, sha in source_refs.items()
                 if m.startswith("refs/") and m[len("refs/"):].split("/")[0] in spaces}
-    check = os.path.join(tmp, "check")
-    os.makedirs(check, exist_ok=True)
-    for args in (["init", "-q"], ["remote", "add", "origin", url],
-                 ["fetch", "-q", "origin", "+refs/preserved/%s/*:refs/restored/*" % repo]):
-        code, _, err = sh(["git", "-C", check] + args)
-        if code != 0:
-            return False, "verify fetch failed: %s" % err.decode("utf-8", "replace")[:100]
-    actual = {m[len("refs/restored/"):]: sha for m, sha in refs(check).items()
-              if m.startswith("refs/restored/")}
+    # Verify by asking the remote what it actually holds, not by fetching the
+    # namespace back into a local repo. Fetching materialises each ref as a file
+    # under .git/refs, and Windows cannot create `release-preview-H1` next to
+    # `release-preview-h1`: git aborts with "You're on a case-insensitive
+    # filesystem, and the remote you are trying to fetch from has refs that
+    # differ only in case". claude-remember has exactly that pair, so a local
+    # fetch reported a bogus "1 missing" on a push that was in fact complete.
+    # ls-remote reads the server's refs directly and has no such limitation.
+    _, remote_out, remote_err = sh(["git", "ls-remote", "--refs", url,
+                                    "refs/preserved/%s/*" % repo])
+    if remote_err and not remote_out:
+        return False, "verify ls-remote failed: %s" % remote_err.decode("utf-8", "replace")[:100]
+    prefix = "refs/preserved/%s/" % repo
+    actual = {}
+    for line in remote_out.decode("utf-8", "replace").splitlines():
+        sha, _, name = line.partition("\t")
+        if name.startswith(prefix):
+            actual[name[len(prefix):]] = sha
     if actual != expected:
         missing = sorted(set(expected) - set(actual))
         differing = sorted(k for k in set(expected) & set(actual) if expected[k] != actual[k])
+        extra = sorted(set(actual) - set(expected))[:5]
         return False, ("ref round-trip mismatch: %d missing, %d differing "
-                       "(namespaces: %s)"
-                       % (len(missing), len(differing), ",".join(spaces)))
+                       "%d extra (namespaces: %s) e.g. %s"
+                       % (len(missing), len(differing), len(extra),
+                          ",".join(spaces), (missing + extra)[:3]))
 
     _, commits, _ = sh(["git", "-C", mirror, "rev-list", "--all", "--count"])
     return True, "%d refs across %d namespaces (%s), %s commits" % (

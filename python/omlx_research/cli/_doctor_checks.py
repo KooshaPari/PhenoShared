@@ -13,6 +13,24 @@ import shutil
 import subprocess
 import sys
 
+# Re-export the four newest checks so the existing `checks.<name>`
+# access pattern keeps working. The implementations were originally
+# collected in `_doctor_extra_checks.py` (turn-4 batch), but that
+# module grew to 530L and was split per-topic in turn-9 into three
+# siblings — see the module-size-sweep pattern documented in
+# turn-8 resume notes §6.1.
+#   * `_doctor_extra_niah.py`   — NIAH benchmark check
+#   * `_doctor_extra_eval.py`   — eval-harness subcommand check
+#   * `_doctor_extra_kernel.py` — package version +
+#                                 regress-baseline dispatch envelope
+# Turn-10 INTERNAL checks live in two sibling modules to keep each
+# file at or below the 500-line cap. After turn-12 measured
+# ``_doctor_internal_checks.py`` at 576 lines, the two longest checks
+# (``metal_runtime_lib_test_count_at_least_25`` and
+# ``python_cli_subcommand_count_at_least_6``) were carved out into
+# :mod:`omlx_research.cli._doctor_internal_checks_split`. Both halves
+# are re-exported here so the existing ``checks.<name>`` access
+# pattern keeps working.
 from ._doctor_registry import register_check
 from ._doctor_shared import (
     EXPECTED_KERNEL_OP_COUNT,
@@ -25,57 +43,6 @@ from ._doctor_shared import (
     project_root,
     read_abi_version,
     read_cargo_version,
-)
-
-# Re-export the four newest checks so the existing `checks.<name>`
-# access pattern keeps working. The implementations were originally
-# collected in `_doctor_extra_checks.py` (turn-4 batch), but that
-# module grew to 530L and was split per-topic in turn-9 into three
-# siblings — see the module-size-sweep pattern documented in
-# turn-8 resume notes §6.1.
-#   * `_doctor_extra_niah.py`   — NIAH benchmark check
-#   * `_doctor_extra_eval.py`   — eval-harness subcommand check
-#   * `_doctor_extra_kernel.py` — package version +
-#                                 regress-baseline dispatch envelope
-from ._doctor_extra_niah import (  # noqa: E402,F401  (re-export)
-    julia_required_on_eval_path,
-    niah_benchmark_non_legacy_path,
-    niah_benchmark_present,
-    niah_instrumented_schema_v2_present,
-)
-from ._doctor_extra_eval import (  # noqa: E402,F401  (re-export)
-    eval_harness_subcommand_runnable,
-)
-from ._doctor_extra_kernel import (  # noqa: E402,F401  (re-export)
-    omlx_research_version,
-    regress_baseline_dispatch_envelope,
-)
-from ._doctor_turn5_checks import (  # noqa: E402,F401  (re-export)
-    dispatch_script_metal_exists,
-    dispatch_script_sglang_exists,
-    dispatch_script_vllm_exists,
-    niah_regression_baseline_exists,
-)
-
-# Turn-10 INTERNAL checks live in two sibling modules to keep each
-# file at or below the 500-line cap. After turn-12 measured
-# ``_doctor_internal_checks.py`` at 576 lines, the two longest checks
-# (``metal_runtime_lib_test_count_at_least_25`` and
-# ``python_cli_subcommand_count_at_least_6``) were carved out into
-# :mod:`omlx_research.cli._doctor_internal_checks_split`. Both halves
-# are re-exported here so the existing ``checks.<name>`` access
-# pattern keeps working.
-from ._doctor_internal_checks import (  # noqa: E402,F401  (re-export)
-    coverage_tag_count_at_least_25,
-    eval_harness_suite_count_at_least_4,
-)
-from ._doctor_internal_checks_split import (  # noqa: E402,F401  (re-export)
-    metal_runtime_lib_test_count_at_least_25,
-    python_cli_subcommand_count_at_least_6,
-)
-from ._doctor_internal_checks_turn12 import (  # noqa: E402,F401  (re-export)
-    cargo_workspace_crate_count_at_least_15,
-    ddm_continuous_schedule_variants_at_least_4,
 )
 
 
@@ -95,8 +62,7 @@ def python_version() -> Check:
         description=f"Python interpreter >= {expected}",
         status=FAIL,
         details=(
-            f"found Python {platform.python_version()} on {platform.platform()} "
-            f"(need {expected})"
+            f"found Python {platform.python_version()} on {platform.platform()} (need {expected})"
         ),
     )
 
@@ -130,7 +96,7 @@ def mlx_core() -> Check:
 @register_check
 def mlx_lm() -> Check:
     try:
-        import mlx_lm  # type: ignore  # noqa: F401
+        import mlx_lm  # type: ignore
     except Exception as e:
         return Check(
             id="mlx_lm_available",
@@ -171,7 +137,7 @@ def mlx_lm_required_by_command(cmd: str) -> Check:
     """
     desc = f"mlx_lm importable for active command `{cmd}`"
     try:
-        import mlx_lm  # type: ignore  # noqa: F401
+        import mlx_lm  # type: ignore
     except Exception as e:
         if cmd in _MLX_LM_REQUIRED_COMMANDS:
             return Check(
@@ -205,9 +171,9 @@ def turboquant_rust_extension() -> Check:
         # Top-level is the layout maturin produces from `[lib] name = "_perf"`;
         # the packaged namespace is accepted as a forward-compatible fallback.
         try:
-            import _perf  # type: ignore  # noqa: F401
+            import _perf  # type: ignore
         except ImportError:
-            from omlx_research import _perf  # type: ignore  # noqa: F401
+            from omlx_research import _perf  # type: ignore
     except Exception as e:
         return Check(
             id="turboquant_rust_extension_available",
@@ -291,8 +257,7 @@ def model_kernels_operator_coverage() -> Check:
         description=desc,
         status=WARN,
         details=(
-            f"{summary} — only {count} tag(s) found; "
-            f"expected at least {EXPECTED_KERNEL_OP_COUNT}"
+            f"{summary} — only {count} tag(s) found; expected at least {EXPECTED_KERNEL_OP_COUNT}"
         ),
     )
 

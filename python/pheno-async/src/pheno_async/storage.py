@@ -13,7 +13,7 @@ from typing import Any
 
 from pheno.logging.core.logger import get_logger
 
-from .orchestration import Task, TaskStatus, TaskStorage
+from .orchestration import Task, TaskResult, TaskStatus, TaskStorage
 
 logger = get_logger("pheno.async.storage")
 
@@ -259,7 +259,6 @@ class FileTaskStorage(TaskStorage):
                 ),
             )
 
-
         except Exception as e:
             logger.exception(f"Failed to deserialize task: {e}")
             return None
@@ -479,7 +478,6 @@ class DatabaseTaskStorage(TaskStorage):
                 completed_at=datetime.fromisoformat(row[17]) if row[17] else None,
                 result=self._deserialize_result(json.loads(row[18])) if row[18] else None,
             )
-
 
         except Exception as e:
             logger.exception(f"Failed to convert database row to task: {e}")
@@ -714,7 +712,6 @@ class RedisTaskStorage(TaskStorage):
                     else None
                 ),
             )
-
 
         except Exception as e:
             logger.exception(f"Failed to deserialize task from Redis: {e}")

@@ -1,8 +1,9 @@
 """LatentMAS concurrent runner — multiple latent agents in parallel."""
 
 from __future__ import annotations
+
 import asyncio
-from typing import Callable, Awaitable
+from collections.abc import Awaitable, Callable
 
 
 async def latentmas_fanout(

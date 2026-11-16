@@ -26,6 +26,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 **Purpose**: Automatically build, lint, test, and measure code coverage on every push and pull request.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Manual trigger (`workflow_dispatch`)
@@ -33,6 +34,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 ### Jobs
 
 #### 1.1 Build Job
+
 - **Runs on**: ubuntu-latest, macos-latest (parallel)
 - **Components**: Rust toolchain (stable) + clippy + rustfmt
 - **Steps**:
@@ -44,6 +46,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Artifacts**: Release binaries
 
 #### 1.2 Lint Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Install Rust with clippy and rustfmt
@@ -53,6 +56,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Fails if**: Any clippy warning OR formatting issues
 
 #### 1.3 Test Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Run `cargo test --release --all --verbose`
@@ -60,6 +64,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Output**: Test results summary
 
 #### 1.4 Python Tests Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Set up Python 3.11
@@ -70,6 +75,7 @@ All workflows are triggered on push to `main`, pull requests, and other specific
 - **Output**: Python test results
 
 #### 1.5 Coverage Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Install tarpaulin
@@ -97,6 +103,7 @@ env:
 **Purpose**: Detect vulnerabilities, secrets, licensing issues, and run static analysis.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Daily schedule (2am UTC)
@@ -105,6 +112,7 @@ env:
 ### Jobs
 
 #### 2.1 Cargo Audit Job
+
 - **Tool**: `cargo audit`
 - **Purpose**: Check for known vulnerabilities in Rust dependencies
 - **Command**: `cargo audit --all-features --deny warnings`
@@ -112,6 +120,7 @@ env:
 - **Fails if**: Critical or high severity vulnerabilities found
 
 #### 2.2 Cargo Deny Job
+
 - **Tool**: `cargo-deny`
 - **Purpose**: Enforce dependency, license, and source policies
 - **Configuration**: Uses existing `deny.toml` file
@@ -123,6 +132,7 @@ env:
 - **Fails if**: Policy violation detected
 
 #### 2.3 Gitleaks Job
+
 - **Tool**: Gitleaks GitHub Action
 - **Purpose**: Detect secrets and sensitive information in git history
 - **Features**:
@@ -133,6 +143,7 @@ env:
 - **Fails if**: Secrets detected
 
 #### 2.4 CodeQL Analysis Job
+
 - **Tool**: GitHub CodeQL (built-in SAST)
 - **Languages**: C++ (from Rust compilation), Python
 - **Purpose**: Static Application Security Testing
@@ -141,6 +152,7 @@ env:
 - **Duration**: ~5-10 min per language
 
 #### 2.5 Python Security Job
+
 - **Tools**: Bandit (SAST), Safety (dependencies)
 - **Purpose**: Security checks for Python code
 - **Steps**:
@@ -158,6 +170,7 @@ env:
 **Purpose**: Detect performance regressions and track performance trends.
 
 **Triggers**:
+
 - Push to `main` branch
 - Pull requests to `main` branch
 - Manual trigger (`workflow_dispatch`)
@@ -165,6 +178,7 @@ env:
 ### Jobs
 
 #### 3.1 Benchmark Job
+
 - **Runs on**: ubuntu-latest
 - **Steps**:
   1. Check for `benches/` directory
@@ -192,12 +206,14 @@ env:
 **Purpose**: Automatically build and publish releases when tags are pushed.
 
 **Triggers**:
+
 - Push tag matching `v*.*.*` (e.g., `v1.0.0`, `v2.1.3-rc1`)
 - Manual trigger with version input
 
 ### Jobs
 
 #### 4.1 Build Release Job
+
 - **Runs on**: Multiple platforms (parallel)
   - `x86_64-unknown-linux-gnu` (Ubuntu)
   - `x86_64-apple-darwin` (macOS Intel)
@@ -212,6 +228,7 @@ env:
 - **Output**: Platform-specific binaries
 
 #### 4.2 Create Release Job
+
 - **Runs on**: ubuntu-latest
 - **Depends on**: build-release (waits for all binaries)
 - **Permissions**: Requires `contents: write`
@@ -254,20 +271,20 @@ gh release download v1.0.0 --pattern "agileplus-*"
 
 ### Build Times (with Swatinem cache)
 
-| Platform | First Run | Cached Run |
-|----------|-----------|-----------|
-| Linux (x86_64) | ~8 min | ~2 min |
-| macOS (x86_64) | ~10 min | ~3 min |
-| macOS (ARM64) | ~8 min | ~2-3 min |
+| Platform       | First Run | Cached Run |
+| -------------- | --------- | ---------- |
+| Linux (x86_64) | ~8 min    | ~2 min     |
+| macOS (x86_64) | ~10 min   | ~3 min     |
+| macOS (ARM64)  | ~8 min    | ~2-3 min   |
 
 ### Workflow Duration
 
-| Workflow | Parallel | Total Time | Cost |
-|----------|----------|-----------|------|
-| CI | 3 parallel jobs | ~15 min | Free (ubuntu) |
-| Security | Sequential | ~10 min | Free (ubuntu) |
-| Benchmarks | 1 job | ~20 min | Free (ubuntu) |
-| Release | Parallel builds | ~30 min | Free (ubuntu) |
+| Workflow   | Parallel        | Total Time | Cost          |
+| ---------- | --------------- | ---------- | ------------- |
+| CI         | 3 parallel jobs | ~15 min    | Free (ubuntu) |
+| Security   | Sequential      | ~10 min    | Free (ubuntu) |
+| Benchmarks | 1 job           | ~20 min    | Free (ubuntu) |
+| Release    | Parallel builds | ~30 min    | Free (ubuntu) |
 
 ### Monthly Cost Estimate
 
@@ -275,13 +292,13 @@ gh release download v1.0.0 --pattern "agileplus-*"
 
 **Current setup** (ubuntu-only, no macOS/Windows runners):
 
-| Scenario | Monthly Usage |
-|----------|---------------|
-| 10 commits/day | ~100 hours (CI + Security) |
-| 2 releases/month | ~2 hours (Release) |
-| Benchmarks on PR | ~10 hours |
-| Daily security scan | ~4 hours |
-| **Total** | **~116 hours** |
+| Scenario            | Monthly Usage              |
+| ------------------- | -------------------------- |
+| 10 commits/day      | ~100 hours (CI + Security) |
+| 2 releases/month    | ~2 hours (Release)         |
+| Benchmarks on PR    | ~10 hours                  |
+| Daily security scan | ~4 hours                   |
+| **Total**           | **~116 hours**             |
 
 **Status**: Well within free tier (20,000 min = 333 hours)
 
@@ -335,6 +352,7 @@ Required status checks for branch protection:
 - ✅ `cargo-deny`
 
 Optional checks:
+
 - `CodeQL C++` (code scanning)
 - `CodeQL Python` (code scanning)
 - `Gitleaks` (secret detection)
@@ -347,11 +365,13 @@ Optional checks:
 ### Workflow Not Triggering
 
 1. Verify workflow is enabled:
+
    ```bash
    gh workflow list
    ```
 
 2. Check branch filter:
+
    ```bash
    grep -A 2 "on:" .github/workflows/ci.yml
    ```
@@ -383,6 +403,7 @@ Optional checks:
 ## Best Practices
 
 1. **Test Locally First**:
+
    ```bash
    cargo build --release
    cargo clippy --all -- -D warnings
@@ -390,6 +411,7 @@ Optional checks:
    ```
 
 2. **Keep Dependencies Updated**:
+
    ```bash
    cargo audit        # Check vulnerabilities
    cargo update       # Update dependencies
@@ -430,6 +452,7 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 ### IDE Configuration
 
 **VS Code** (`settings.json`):
+
 ```json
 {
   "rust-analyzer.checkOnSave.command": "clippy",
@@ -442,6 +465,7 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 ```
 
 **IntelliJ IDEA**:
+
 - Settings > Languages & Frameworks > Rust > Clippy
 - Enable "External linter" with `--all-targets -- -D warnings`
 
@@ -467,3 +491,145 @@ Save as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`.
 - [Cargo Book](https://doc.rust-lang.org/cargo/)
 - [Rust Security Guidelines](https://anssi-fr.github.io/rust-guide/)
 - [CI-CD Setup Instructions](CI-CD-SETUP.md)
+
+## Python Ruff ratchet and measured debt
+
+The ratchet rule is: new and modified Python must be clean; pre-existing debt is
+measured and only shrinks. On pull requests, added and modified `*.py` files are
+checked with blocking Ruff lint and format steps. Whole-tree lint and format
+remain visible advisory steps with `continue-on-error: true`. A failed shallow
+base-commit fetch prints a notice and skips the changed-file check because an
+infrastructure flake must not red the gate. Push events run the advisory checks.
+The `ci / lint` aggregator still classifies the Python job as ADVISORY, so
+"blocking" currently means failing the Python job, not blocking the merge.
+
+The baseline below was measured on **2026-11-15** against `origin/main`
+`e6969738b`, macOS arm64, with the CI-pinned Ruff **0.16.5** installed through
+`uv tool run` over a pristine `git archive` of that commit. It is **18,018
+diagnostics over 2,710 files across 197 distinct rules**. An earlier
+measurement recorded in the workflow comment on 2026-11-13 read 18,049 on the
+Linux runner and 18,051 on macOS arm64 (2 fewer on Linux); the difference from
+18,018 is drift in the tree between the two commits, not a change of tool
+version. Both numbers are quoted because replacing one with the other without
+saying which commit it came from is how a stale figure ends up looking current.
+
+One consequence worth stating: a changed-file ratchet is strict. Editing a
+legacy file makes that whole file blocking, so a PR that touches a file with
+pre-existing violations must clean that file, or leave it alone. That is
+deliberate - it is what makes the debt monotone - but it means the first
+contributor to touch a noisy file inherits its lint debt and should expect to
+spend a bounded cleanup pass there.
+
+The top ten rules are:
+
+| Rule   | Diagnostics |
+| ------ | ----------: |
+| UP006  |       3,019 |
+| UP045  |       2,435 |
+| I001   |       1,714 |
+| S101   |       1,492 |
+| F401   |       1,178 |
+| W293   |       1,022 |
+| UP035  |         888 |
+| BLE001 |         731 |
+| E501   |         371 |
+| TRY401 |         333 |
+
+The measured top-level breakdown is:
+
+| Tree           | Diagnostics | Files |
+| -------------- | ----------: | ----: |
+| docs           |       4,871 |   977 |
+| agents         |       4,675 |   635 |
+| crates         |       3,772 |   259 |
+| absorption     |       1,973 |   287 |
+| python         |         833 |   152 |
+| scripts        |         328 |    85 |
+| researchledger |         290 |    89 |
+| researchintel  |         295 |    12 |
+| agileplus      |         245 |    24 |
+| audits         |         188 |    39 |
+
+Whole-tree safe autofix was rejected: it changed **4,437 files**, with
+**+118,562 / -63,065 lines**, and still left **6,233 errors**. This is not an
+acceptable small CI change. The advisory baseline is visible debt, not permission
+for it to grow by accident. This ratchet checks touched files, not a numerical
+whole-tree debt ceiling, so reviewers must ensure cleanup only shrinks the debt.
+
+There is pin drift: `.github/workflows/ci.yml` installs **ruff==0.16.5**, while
+`.trunk/trunk.yaml` pins **0.17.4**. CI enforces **0.16.5**. This change does not
+silently upgrade either tool pin.
+
+Stage 2 has three steps:
+
+1. Clean one first-party tree and verify both lint and format at the CI pin.
+2. Add that clean tree to the blocking path list so unchanged files in the tree
+   are checked too, in addition to the current changed-file ratchet.
+3. Promote the Python job to HARD in the aggregator only after the checked paths
+   are clean and the lane is green. The ratchet makes the lane green without
+   hiding the whole-tree debt, but promotion still requires clean checked paths.
+
+### Stage 2 status: `python/` is the first enforced whole-tree scope
+
+Step 1 and step 2 above are in place for one tree. `python/` went from **833
+diagnostics / 152 files** to **192 diagnostics / 79 files** (ruff 0.16.5,
+`-77%`): safe autofixes, a formatter pass, and hand fixes for the rules that
+were real defects rather than style. `ruff format --check python/` is at
+`RC=0`.
+
+Two blocking steps now enforce that tree on every run of the `Python` job:
+
+```
+ruff check (python/ tree - blocking)          ruff check python/ --force-exclude --ignore "$PY_TREE_DEBT"
+ruff format --check (python/ tree - blocking) ruff format --check python/ --force-exclude
+```
+
+`PY_TREE_DEBT` is a measured list of the **39 rules that are still not clean**
+in that tree, with 192 diagnostics behind them. Enforced rules are the project
+ruleset minus that list, so every already-clean rule is now protected against
+regression in `python/` instead of only in changed files. The before/after
+figures, and the fact that the list is a debt register rather than a mute
+button, are stated inline next to the list in `ci.yml`.
+
+Two properties are deliberate:
+
+- **The list may only shrink.** Paying a rule down means deleting it from
+  `PY_TREE_DEBT` in the same PR that reaches zero for it. Adding an entry
+  requires recording the measured count and the reason beside it.
+- **Nothing is hidden.** The advisory whole-tree steps still report all 39
+  rules, plus the rest of the repo. A rule on the list is not enforced yet; it
+  is not invisible.
+
+Step 3 (promoting the lane to HARD in the aggregator) is out of scope here and
+remains open: the whole-tree advisory debt is still ~17,800 diagnostics outside
+`python/`.
+
+### A linter must never be the only guard on its own output
+
+While landing the above, `ruff format python/` silently rewrote **nine** files
+into invalid Python and `ruff format --check python/` then reported them as
+correctly formatted. Cause, isolated by testing one setting at a time:
+`python/ruff.toml` declared `target-version = "py314"`, and the CI-pinned
+ruff 0.16.5 rewrites tuple `except` clauses to the Python 2 form
+`except A, B:` under that target. Under `py313`, `py312`, or an unrecognised
+value the parentheses are preserved.
+
+Two changes follow, both in this PR:
+
+- `python/ruff.toml` now declares `py313`, with the reason and the isolation
+  result recorded next to it. This is the enforceable target at the pinned
+  ruff, not a statement that the tree cannot use 3.14.
+- The `Python` job gained a blocking `python/ compiles` step
+  (`python -m compileall -q -f python/`). A formatter cannot be the control on
+  its own output: a separate syntax check is what turns this class of failure
+  from "green" into "red". Every gate added here should be assumed capable of
+  this until an independent check says otherwise.
+
+### Known parse defects left deliberately unresolved
+
+A lint/parse finding whose correct behaviour is unknown is recorded, not silenced.
+
+- `crates/argis-extensions/scripts/adr_backlink_check.py`: not Python source at all, the `.py` blob holds three lines of captured `git` error output. No live executor was found by basename outside root docs. Fix deferred because the genuine validator's proven provenance is UNKNOWN, and renaming could break unknown external callers.
+- `crates/policystack/scripts/policy/c100_forensic_bundle_gap_gate.py:92`: genuine missing-suite syntax error, `if not _truthy(...)` has no body before the following top-level `for`. Intent UNKNOWN, so adding `pass` would silence a real defect. The fix needs the gap-counting contract.
+- `docs/absorbed-from-PhenoTooling/scripts/stream_compat_matrix.py:304`: invalid conditional used as a dict-unpack operand. Inside an archival corpus that `ABSORPTION.md` says is not built and not linted, so it is out of scope for the ratchet by design.
+- `phenotype-hub/SECURITY.md`: dangling symlink to `../template-commons/SECURITY.md`, which does not exist in the merged tree. Root `SECURITY.md` exists. Retargeting needs a decision about which disclosure policy is authoritative, and guessing on a security policy is worse than leaving it visible.

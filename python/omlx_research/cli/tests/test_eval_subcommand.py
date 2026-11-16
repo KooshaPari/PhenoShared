@@ -27,10 +27,7 @@ import os
 import subprocess
 import sys
 
-import pytest
-
 from omlx_research.cli import EVAL_VALID_SUITES, main
-
 
 # --- stdio capture --------------------------------------------------------
 
@@ -42,7 +39,7 @@ class _IO:
         self.stdout = io.StringIO()
         self.stderr = io.StringIO()
 
-    def __enter__(self) -> "_IO":
+    def __enter__(self) -> _IO:
         self._real_out, self._real_err = sys.stdout, sys.stderr
         sys.stdout, sys.stderr = self.stdout, self.stderr
         return self
@@ -138,9 +135,7 @@ def test_eval_help_subprocess():
     from which ``omlx_research`` resolves.
     """
     proc = _run_subprocess(["eval", "--help"], cwd=_python_dir())
-    assert proc.returncode == 0, (
-        f"stderr: {proc.stderr}\nstdout: {proc.stdout}"
-    )
+    assert proc.returncode == 0, f"stderr: {proc.stderr}\nstdout: {proc.stdout}"
     output = proc.stdout + proc.stderr
     for suite in EVAL_VALID_SUITES:
         assert suite in output
@@ -165,8 +160,7 @@ def test_eval_mmlu_runs_with_stub_dataset(tmp_path):
         cwd=_python_dir(),
     )
     assert proc.returncode == 0, (
-        f"eval exited {proc.returncode}\nstdout: {proc.stdout}\n"
-        f"stderr: {proc.stderr}"
+        f"eval exited {proc.returncode}\nstdout: {proc.stdout}\nstderr: {proc.stderr}"
     )
 
     # Stdout is pure JSON (no preamble).
@@ -271,9 +265,7 @@ def test_eval_in_process_dispatch(tmp_path):
     csv_path = tmp_path / "tiny.csv"
     _write_mmlu_csv(str(csv_path), rows=3)
 
-    rc, stdout, stderr = _run_main(
-        ["eval", "--suite", "mmlu", "--dataset", str(csv_path)]
-    )
+    rc, stdout, stderr = _run_main(["eval", "--suite", "mmlu", "--dataset", str(csv_path)])
     assert rc == 0, f"stderr: {stderr}"
     report = json.loads(stdout)
     assert report["suite"] == "mmlu"

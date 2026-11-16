@@ -6,7 +6,6 @@ Scans kit __init__.py files and collects exported symbols.
 from __future__ import annotations
 
 import ast
-import json
 from pathlib import Path
 from typing import Any
 

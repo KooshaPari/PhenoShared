@@ -18,10 +18,10 @@ live repos: 86
 
 == absorb targets (unlisted, active, not a recovery store) (50)
   Civis                                    1646.3 MB  pub   Civilization simulation engine: deterministic godgame with m
-  OmniRoute                                 991.6 MB  pub   Multi-provider LLM gateway: OpenAI-compatible endpoint with 
+  OmniRoute                                 991.6 MB  pub   Multi-provider LLM gateway: OpenAI-compatible endpoint with
   zz-pause-unk-Thegent                      979.9 MB  PRIV  Paused: Python agent runtime with tool registry and LLM abst
   PhenoApps                                 966.6 MB  PRIV  Sunset shelf: retired, paused, and archived app repos
-  PhenoMLX                                  901.8 MB  pub   MLX inference engine: Rust performance cores, multi-backend 
+  PhenoMLX                                  901.8 MB  pub   MLX inference engine: Rust performance cores, multi-backend
   zz-pause-inc-FocalPoint                   808.0 MB  PRIV  Paused: project management UI
   Tracera                                   733.9 MB  pub   Rust traceability infrastructure: audit trails and provenanc
   AgilePlus                                 732.4 MB  pub   Spec-driven development framework: governance, cycles, modul
@@ -41,7 +41,7 @@ live repos: 86
   PhenoBot                                   61.4 MB  PRIV  Discord org bot and agent plane for Phenotype: slash command
   Melosviz                                   56.1 MB  pub   Music-to-visual toolkit: FastAPI backend, Tauri desktop, Pyt
   herdr                                      47.5 MB  pub   the runtime your coding agents live on
-  PhenoDesign                                44.5 MB  pub   Design system: tokens, components, and UX standards for all 
+  PhenoDesign                                44.5 MB  pub   Design system: tokens, components, and UX standards for all
   zz-pause-ref-AtomsTech                     35.2 MB  PRIV  Determining merge target: AtomsBot merged into AtomsTech
   HeliosLab                                  27.0 MB  pub   Phenotype research lab: experimental AI tooling and evaluati
   PhenoAI                                    21.7 MB  PRIV  Rust agent workspace: router, sidekick, Eidolon runtime, inf
@@ -51,12 +51,12 @@ live repos: 86
   claude-remember                            14.2 MB  pub   Persistent memory for Claude Code � identity, context, and c
   zz-zz-agentcheck-PhenoInfra                11.0 MB  PRIV  Compute mesh IaC: OCI + CF + GCP + AWS + Vercel, ADRs, specs
   zz-pause-inc-QuadSGM                        9.1 MB  PRIV  Incubating: SGM project
-  ratatui                                     8.1 MB  pub   A Rust crate for cooking up terminal user interfaces (TUIs) 
+  ratatui                                     8.1 MB  pub   A Rust crate for cooking up terminal user interfaces (TUIs)
   zz-pause-inc-Parpoura                       6.3 MB  PRIV  Incubating: governance/traceability platform
   shopping-home                               5.8 MB  PRIV  Shopping Home founder-alpha source, protected behavior contr
   heliosApp                                   5.4 MB  PRIV  An internal tool or component for the Phenotype ecosystem.
   zz-archive-4sgm-archive                     4.6 MB  PRIV  Archive of KooshaPari/4sgm (deleted 2026-07-14). Restored 20
-  host-ops                                    3.8 MB  PRIV  Host ops runbooks, guards, and the closure ledger (restored 
+  host-ops                                    3.8 MB  PRIV  Host ops runbooks, guards, and the closure ledger (restored
 
 == canonical homes (2)
   PhenoRegistry                            3360.8 MB  PRIV  Organization registry: master index connecting specs, patter
@@ -70,7 +70,7 @@ live repos: 86
   zz-zz-agentcheck-zz-pause-Agentora          9.3 MB  PRIV  zz-merge -- split: 47 Rust crates into KooshaPari/pheno, Pyt
 
 == leave alone (4)
-  cmux                                     1974.4 MB  pub   Open source Ghostty-based macOS terminal with vertical tabs 
+  cmux                                     1974.4 MB  pub   Open source Ghostty-based macOS terminal with vertical tabs
   Substrate                                  69.3 MB  PRIV  AI execution substrate: provider routing across HTTP, CLI, M
   argis-extensions                           24.0 MB  PRIV  Recovered local work - salvaged during the 2026-11-08 worktr
   Pine                                        1.0 MB  PRIV  Wine-equivalent for Phenotype: Windows and cross-platform ap
@@ -93,7 +93,7 @@ operator. Do not absorb again.
 
 `PhenoApps` (read-only sunset shelf that forbids source), `zz-pause-inc-QuadSGM`,
 `zz-pause-inc-Parpoura`, `zz-pause-Localbase` - these are the repositories the
-archives belong *in*.
+archives belong _in_.
 
 ### Archives and evidence, keep (8)
 

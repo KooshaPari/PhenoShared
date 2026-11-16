@@ -26,7 +26,7 @@ probably a snapshot of an older state, in which case its commits would all be
 ancestors of the live branches. Checking whether each tip commit resolves inside
 the live repository settles it.
 
-**Tip identity across every repository.** A commit id hashes its content *and*
+**Tip identity across every repository.** A commit id hashes its content _and_
 its whole ancestry, so an exact copy, or a branch copied between repositories,
 leaves identical ids behind. Every ref tip across all 83 repositories was mapped:
 27,903 distinct tips, of which 34 are claimed by more than one repository.
@@ -38,11 +38,11 @@ single tip with a live repository.
 Set containment was then checked for all three pairs. None is a subset of
 another - in every case each side still holds refs the other lacks.
 
-| Pair | Refs | Shared tips | Unique to each side |
-|---|---:|---:|---|
-| `Sidekick-archive-20261106` / `Sidekick-rb-archive-20261108` | 5 / 5 | 4 | 1 / 1 (a different `main`) |
-| `zz-QuadSGM-rb-archive-20261106` / `zz-archive-4sgm-archive` | 208 / 13 | 5 (across 10 refs) | 198 / 4 |
-| `Tasken-archive-20261106` / `Tasken-rb-archive-20261108` | 5 / 5 | 1 | 4 / 4 |
+| Pair                                                         |     Refs |        Shared tips | Unique to each side        |
+| ------------------------------------------------------------ | -------: | -----------------: | -------------------------- |
+| `Sidekick-archive-20261106` / `Sidekick-rb-archive-20261108` |    5 / 5 |                  4 | 1 / 1 (a different `main`) |
+| `zz-QuadSGM-rb-archive-20261106` / `zz-archive-4sgm-archive` | 208 / 13 | 5 (across 10 refs) | 198 / 4                    |
+| `Tasken-archive-20261106` / `Tasken-rb-archive-20261108`     |    5 / 5 |                  1 | 4 / 4                      |
 
 Six archive repositories are involved: the five of the 25 listed here plus
 `zz-archive-4sgm-archive`, which is archive-like but lacks the date suffix so the
@@ -58,7 +58,7 @@ pairs such as `PhenoRegistry` and `host-ops` share tips only because the registr
 now stores those repositories' refs under `refs/preserved/`. That is a
 consequence of preservation, not duplication.
 
-What this does not establish: a store holding a commit that is an *ancestor* of
+What this does not establish: a store holding a commit that is an _ancestor_ of
 another repository's branch rather than a tip. That case was tested where it was
 plausible - the four stores sharing a name with a live repo, all of which failed
 it - and nothing in the tip map suggests it elsewhere.
@@ -76,12 +76,12 @@ Of the 25 stores:
   pairs, but set containment failed every time, so each still holds refs found
   nowhere else.
 
-| Store | Live repo | Store refs | Tips found in live |
-|---|---|---:|---:|
-| `AgilePlus-rb-archive-20261106` | `AgilePlus` | 3 | 0 |
-| `Melosviz-rb-archive-20261106` | `Melosviz` | 3 | 0 |
-| `Pine-rb-archive-20261106` | `Pine` | 6 | 0 |
-| `Tracera-rb-archive-20261106` | `Tracera` | 3 | 0 |
+| Store                           | Live repo   | Store refs | Tips found in live |
+| ------------------------------- | ----------- | ---------: | -----------------: |
+| `AgilePlus-rb-archive-20261106` | `AgilePlus` |          3 |                  0 |
+| `Melosviz-rb-archive-20261106`  | `Melosviz`  |          3 |                  0 |
+| `Pine-rb-archive-20261106`      | `Pine`      |          6 |                  0 |
+| `Tracera-rb-archive-20261106`   | `Tracera`   |          3 |                  0 |
 
 The four are not stale snapshots of work that later landed. They hold branches
 that were never merged and do not exist in the live repositories:
@@ -105,7 +105,7 @@ were exact duplicates of `HeliosCLI` and `HeliosLite`, "1340/1340 and 1061/1061
 refs identical", and that they were therefore safe to remove.
 
 **That was wrong, and the error is mine.** `HeliosLite` and `HeliosCLI` were
-*renamed* to `zz-ref-HeliosLite` and `zz-ref-HeliosCLI`. GitHub serves the old
+_renamed_ to `zz-ref-HeliosLite` and `zz-ref-HeliosCLI`. GitHub serves the old
 names as redirects, so querying both names returns the same repository:
 
 ```

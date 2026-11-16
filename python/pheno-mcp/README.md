@@ -52,6 +52,7 @@ from pheno_mcp.tools import mcp_tool, tool_registry
 # Create registry
 registry = tool_registry.ToolRegistry()
 
+
 # Register tools with @mcp_tool decorator
 @mcp_tool(registry=registry, name="add_numbers")
 def add(x: int, y: int) -> int:
@@ -66,6 +67,7 @@ def add(x: int, y: int) -> int:
     """
     return x + y
 
+
 @mcp_tool(registry=registry, name="multiply_numbers")
 def multiply(x: int, y: int) -> int:
     """Multiply two numbers.
@@ -78,6 +80,7 @@ def multiply(x: int, y: int) -> int:
         Product of x and y
     """
     return x * y
+
 
 # List all registered tools
 tools = registry.list_tools()
@@ -107,22 +110,12 @@ orchestrator.add_agent(analyst)
 orchestrator.add_agent(worker)
 
 # Define tasks
-plan_task = TaskDefinition(
-    name="plan",
-    description="Plan the project",
-    assigned_to=manager
-)
+plan_task = TaskDefinition(name="plan", description="Plan the project", assigned_to=manager)
 analyze_task = TaskDefinition(
-    name="analyze",
-    description="Analyze requirements",
-    assigned_to=analyst,
-    depends_on=[plan_task]
+    name="analyze", description="Analyze requirements", assigned_to=analyst, depends_on=[plan_task]
 )
 execute_task = TaskDefinition(
-    name="execute",
-    description="Execute the plan",
-    assigned_to=worker,
-    depends_on=[analyze_task]
+    name="execute", description="Execute the plan", assigned_to=worker, depends_on=[analyze_task]
 )
 
 # Add tasks

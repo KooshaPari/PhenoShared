@@ -34,6 +34,7 @@ Why file-based rather than entry-points?
   - Hot-reloadable: re-discover at any time
   - Discoverable: `omlx-research nanovm list` shows everything
 """
+
 from __future__ import annotations
 
 import importlib
@@ -50,31 +51,36 @@ logger = logging.getLogger(__name__)
 
 # ── Domain kind ─────────────────────────────────────────────────────────────
 
+
 class PluginKind(str, Enum):
     """Whether this plugin is a BACKEND (model-serving) or STRATEGY (multi-agent wrapper)."""
-    BACKEND = "backend"     # loads weights, runs forward pass
-    STRATEGY = "strategy"   # wraps backends, declares phases
+
+    BACKEND = "backend"  # loads weights, runs forward pass
+    STRATEGY = "strategy"  # wraps backends, declares phases
 
 
 class BackendKind(str, Enum):
     """Which model-serving runtime / accelerator the plugin wraps."""
-    MLX_METAL = "mlx_metal"      # Apple MLX (Metal GPU)
-    SGLANG = "sglang"            # SGLang (primary cross-platform)
-    VLLM = "vllm"                # vLLM (NVIDIA primary, ROCm experimental)
-    TENSORRT = "tensorrt"        # NVIDIA TensorRT-LLM
-    LLAMACPP = "llamacpp"        # llama.cpp (CPU + Metal + CUDA)
-    TURBOQUANT = "turboquant"    # TurboQuant+ KV compression (MLX)
+
+    MLX_METAL = "mlx_metal"  # Apple MLX (Metal GPU)
+    SGLANG = "sglang"  # SGLang (primary cross-platform)
+    VLLM = "vllm"  # vLLM (NVIDIA primary, ROCm experimental)
+    TENSORRT = "tensorrt"  # NVIDIA TensorRT-LLM
+    LLAMACPP = "llamacpp"  # llama.cpp (CPU + Metal + CUDA)
+    TURBOQUANT = "turboquant"  # TurboQuant+ KV compression (MLX)
 
 
 class StrategyKind(str, Enum):
     """Which multi-agent / decoding strategy the plugin implements."""
-    LATENTMAS = "latentmas"      # Multi-agent latent reasoning
-    TIDAR = "tidar"              # Hybrid AR + diffusion
-    SSD = "ssd"                  # Self-speculative decoding
-    JETSPEC = "jetspec"          # Tree-attention speculative decoding
+
+    LATENTMAS = "latentmas"  # Multi-agent latent reasoning
+    TIDAR = "tidar"  # Hybrid AR + diffusion
+    SSD = "ssd"  # Self-speculative decoding
+    JETSPEC = "jetspec"  # Tree-attention speculative decoding
 
 
 # ── Plugin spec ─────────────────────────────────────────────────────────────
+
 
 @dataclass(frozen=True)
 class PluginSpec:
@@ -93,6 +99,7 @@ class PluginSpec:
       parallel           — True if the strategy's phases can run in parallel
       default_pool       — recommended backend kinds per phase (length == len(phases))
     """
+
     name: str
     kind: PluginKind
     path: Path
@@ -111,6 +118,7 @@ class PluginSpec:
 
     def can_load(self) -> tuple[bool, str]:
         """Check runtime requirements. Returns (ok, reason)."""
+
         def _vtuple(s: str) -> tuple[int, ...]:
             """Parse first 3 numeric components from a PEP 440 version string.
 
@@ -221,6 +229,7 @@ def get_registry() -> PluginRegistry:
 
 # ── Discovery ───────────────────────────────────────────────────────────────
 
+
 def discover_plugins(root: str | Path | None = None) -> PluginRegistry:
     """Walk `root` for `plugin.toml` files and register them all.
 
@@ -254,9 +263,7 @@ def _load_plugin(toml_path: Path) -> PluginSpec:
     # Schema: [plugin] section holds all metadata.
     p = data.get("plugin", data)
     if "name" not in p:
-        raise KeyError(
-            f"{toml_path}: missing [plugin] section or 'name' field"
-        )
+        raise KeyError(f"{toml_path}: missing [plugin] section or 'name' field")
     name = p["name"]
     kind = PluginKind(p["kind"])
     runtime = p.get("runtime", "unknown")
@@ -291,6 +298,7 @@ def _load_plugin(toml_path: Path) -> PluginSpec:
 
 # ── Convenience queries ────────────────────────────────────────────────────
 
+
 def list_backends(include_unloadable: bool = False) -> list[dict[str, Any]]:
     """Return summary info for each registered BACKEND plugin."""
     out = []
@@ -298,15 +306,17 @@ def list_backends(include_unloadable: bool = False) -> list[dict[str, Any]]:
         ok, reason = spec.can_load()
         if not ok and not include_unloadable:
             continue
-        out.append({
-            "name": spec.name,
-            "runtime": spec.runtime,
-            "priority": spec.priority,
-            "version": spec.version,
-            "description": spec.description,
-            "loadable": ok,
-            "reason": reason,
-        })
+        out.append(
+            {
+                "name": spec.name,
+                "runtime": spec.runtime,
+                "priority": spec.priority,
+                "version": spec.version,
+                "description": spec.description,
+                "loadable": ok,
+                "reason": reason,
+            }
+        )
     return out
 
 
@@ -317,18 +327,20 @@ def list_strategies(include_unloadable: bool = False) -> list[dict[str, Any]]:
         ok, reason = spec.can_load()
         if not ok and not include_unloadable:
             continue
-        out.append({
-            "name": spec.name,
-            "phases": spec.phases,
-            "compatible_backends": spec.compatible_backends,
-            "parallel": spec.parallel,
-            "default_pool": spec.default_pool,
-            "priority": spec.priority,
-            "version": spec.version,
-            "description": spec.description,
-            "loadable": ok,
-            "reason": reason,
-        })
+        out.append(
+            {
+                "name": spec.name,
+                "phases": spec.phases,
+                "compatible_backends": spec.compatible_backends,
+                "parallel": spec.parallel,
+                "default_pool": spec.default_pool,
+                "priority": spec.priority,
+                "version": spec.version,
+                "description": spec.description,
+                "loadable": ok,
+                "reason": reason,
+            }
+        )
     return out
 
 
@@ -343,15 +355,15 @@ def list_available_strategies() -> list[str]:
 
 
 __all__ = [
-    "PluginKind",
     "BackendKind",
-    "StrategyKind",
-    "PluginSpec",
+    "PluginKind",
     "PluginRegistry",
+    "PluginSpec",
+    "StrategyKind",
     "discover_plugins",
     "get_registry",
-    "list_backends",
-    "list_strategies",
     "list_available_backends",
     "list_available_strategies",
+    "list_backends",
+    "list_strategies",
 ]

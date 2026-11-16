@@ -23,9 +23,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 _SCRIPT_PATH = (
-    Path(__file__).resolve().parent.parent.parent.parent.parent
-    / "scripts"
-    / "gen_niah_envelope.py"
+    Path(__file__).resolve().parent.parent.parent.parent.parent / "scripts" / "gen_niah_envelope.py"
 )
 
 
@@ -184,9 +182,7 @@ def test_row_count_equals_ctx_times_seed_times_kernel():
     default and expanded scales so 10-element probes don't silently
     truncate."""
     full_context_pool = list(
-        dict.fromkeys(
-            list(gen.DEFAULT_CONTEXT_LENGTHS) + list(gen.EXPANDED_CONTEXT_LENGTHS)
-        )
+        dict.fromkeys(list(gen.DEFAULT_CONTEXT_LENGTHS) + list(gen.EXPANDED_CONTEXT_LENGTHS))
     )
     for ctx_n, seed_n, ker_n in [
         (5, 5, 5),

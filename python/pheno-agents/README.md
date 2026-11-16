@@ -30,6 +30,7 @@ import asyncio
 # Create an orchestrator
 orchestrator = Orchestrator()
 
+
 # Define a custom agent
 class MyAgent(Agent):
     async def execute(self, task):
@@ -41,9 +42,11 @@ class MyAgent(Agent):
     async def shutdown(self):
         self.state = AgentState.TERMINATED
 
+
 # Register agent
 agent = MyAgent(name="worker-1", role=AgentRole.WORKER)
 orchestrator.register_agent(agent)
+
 
 # Create and execute workflow
 async def main():
@@ -54,6 +57,7 @@ async def main():
     result = await orchestrator.execute_workflow("my-workflow")
     print(f"Success: {result.success}")
     print(f"Executed: {result.steps_executed}/{result.total_steps}")
+
 
 asyncio.run(main())
 ```
