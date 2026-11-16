@@ -39,7 +39,7 @@ pub const URL_ENV: &str = "BROKERD_URL";
 pub const TOKEN_ENV: &str = "BROKERD_TOKEN";
 
 /// Per-request timeout for the daemon client, in seconds.
-const REQUEST_TIMEOUT: Duration = Duration::from_secs(10);
+const REQUEST_TIMEOUT: Duration = Duration::from_secs(120);
 
 /// Connection timeout. Short so a wrong address fails loudly and quickly.
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(3);
