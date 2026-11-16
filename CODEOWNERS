@@ -1,0 +1,10 @@
+# Global code owners for <REDACTED> org
+* @<REDACTED>
+
+# Infrastructure as code
+/iac/ @<REDACTED>
+/.github/ @<REDACTED>
+
+# Security-sensitive
+/SECURITY.md @<REDACTED>
+/.github/dependabot.yml @<REDACTED>
