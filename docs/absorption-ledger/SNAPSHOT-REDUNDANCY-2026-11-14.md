@@ -24,13 +24,13 @@ about 17 seconds.
 
 ## Results
 
-| Snapshot | Live counterpart | Files | Differ from tip | Unique blobs | Verdict |
-|---|---|---:|---:|---:|---|
-| `audit-snapshot-PhenoVCS` | `PhenoVCS` | 133 | 0 | 0 | **byte-identical, redundant** |
-| `audit-snapshot-AgilePlus` | `AgilePlus` | 2,979 | 1,602 | 1 | not redundant |
-| `audit-snapshot-tooling` | `PhenoTooling` | 22,552 | 83 | 2 | not redundant |
-| `audit-snapshot-argis` | `argis-extensions` | 1,613 | 8 | 3 | not redundant |
-| `audit-snapshot-OmniRoute` | `OmniRoute` | 13,989 | 5,157 | 43 | not redundant |
+| Snapshot                   | Live counterpart   |  Files | Differ from tip | Unique blobs | Verdict                       |
+| -------------------------- | ------------------ | -----: | --------------: | -----------: | ----------------------------- |
+| `audit-snapshot-PhenoVCS`  | `PhenoVCS`         |    133 |               0 |            0 | **byte-identical, redundant** |
+| `audit-snapshot-AgilePlus` | `AgilePlus`        |  2,979 |           1,602 |            1 | not redundant                 |
+| `audit-snapshot-tooling`   | `PhenoTooling`     | 22,552 |              83 |            2 | not redundant                 |
+| `audit-snapshot-argis`     | `argis-extensions` |  1,613 |               8 |            3 | not redundant                 |
+| `audit-snapshot-OmniRoute` | `OmniRoute`        | 13,989 |           5,157 |           43 | not redundant                 |
 
 The scale of "unique" differs from the scale of "differing" by orders of
 magnitude, which is the whole point. `OmniRoute`'s snapshot differs from the live
@@ -78,19 +78,19 @@ file with no hash-level way to tell which is later.
 
 Dating the two sides looks promising and is not sufficient:
 
-| Path | Live last changed | Reading |
-|---|---|---|
-| `open-sse/executors/userAgentHeader.ts` | 2026-09-14 | live changed before the import |
-| `open-sse/executors/reasoningEffortMaps.ts` | 2026-07-02 | live changed before the import |
-| `open-sse/executors/vertexMedia.ts` | 2026-09-14 | live changed before the import |
-| `open-sse/services/autoCombo/speedRanking.ts` | 2026-09-14 | live changed before the import |
-| `scripts/sre/oncall-rotation.mjs` | 2026-07-02 | live changed before the import |
-| `src/app/api/compression/replay/route.ts` | 2026-09-20 | live changed before the import |
-| `src/lib/skills/containerProvider.ts` | 2026-08-11 | live changed before the import |
-| `tests/unit/vertex-media.test.ts` | 2026-09-16 | live changed before the import |
+| Path                                          | Live last changed | Reading                        |
+| --------------------------------------------- | ----------------- | ------------------------------ |
+| `open-sse/executors/userAgentHeader.ts`       | 2026-09-14        | live changed before the import |
+| `open-sse/executors/reasoningEffortMaps.ts`   | 2026-07-02        | live changed before the import |
+| `open-sse/executors/vertexMedia.ts`           | 2026-09-14        | live changed before the import |
+| `open-sse/services/autoCombo/speedRanking.ts` | 2026-09-14        | live changed before the import |
+| `scripts/sre/oncall-rotation.mjs`             | 2026-07-02        | live changed before the import |
+| `src/app/api/compression/replay/route.ts`     | 2026-09-20        | live changed before the import |
+| `src/lib/skills/containerProvider.ts`         | 2026-08-11        | live changed before the import |
+| `tests/unit/vertex-media.test.ts`             | 2026-09-16        | live changed before the import |
 
 Every live version predates the import, which reads as "the snapshot may be
-newer". But the snapshot's commit is the *import* commit, dated
+newer". But the snapshot's commit is the _import_ commit, dated
 2026-11-14 with the message "import committed tree of audit-snapshot-OmniRoute".
 That date records when the copy was taken, not when the code was written, so a
 months-old state copied yesterday produces the same reading as genuinely newer

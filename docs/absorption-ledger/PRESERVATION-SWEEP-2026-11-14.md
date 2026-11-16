@@ -10,45 +10,45 @@ namespaces under `refs/preserved/` in `PhenoRegistry`.
 its preserved namespace, both read from the server with `git ls-remote`. At the
 start of this pass the account held 86 live repositories:
 
-| Group | Count | Disposition |
-|---|---:|---|
-| Already preserved and verified | 38 | done |
-| Recovery stores | 25 | excluded by standing rule |
-| Canonical homes (`PhenoShared`, `PhenoRegistry`) | 2 | never deleted |
-| Outstanding | 21 | classified below |
+| Group                                            | Count | Disposition               |
+| ------------------------------------------------ | ----: | ------------------------- |
+| Already preserved and verified                   |    38 | done                      |
+| Recovery stores                                  |    25 | excluded by standing rule |
+| Canonical homes (`PhenoShared`, `PhenoRegistry`) |     2 | never deleted             |
+| Outstanding                                      |    21 | classified below          |
 
 Of the 21 outstanding, 16 were genuine preservation targets and are now
 preserved. Five are deliberately not targets, and one cannot be:
 
-| Repository | Refs | Decision |
-|---|---:|---|
-| `Civis` | 1482 | Live product, declined as an absorb target |
-| `OmniRoute` | 1537 | Live product, declined as an absorb target |
-| `cmux` | 7854 | Live product, "leave alone" |
-| `Substrate` | 478 | "leave alone" |
-| `Pine` | 120 | "leave alone" |
-| `.github` | 8 | Org-level config, and git forbids a ref component starting with a dot |
+| Repository  | Refs | Decision                                                              |
+| ----------- | ---: | --------------------------------------------------------------------- |
+| `Civis`     | 1482 | Live product, declined as an absorb target                            |
+| `OmniRoute` | 1537 | Live product, declined as an absorb target                            |
+| `cmux`      | 7854 | Live product, "leave alone"                                           |
+| `Substrate` |  478 | "leave alone"                                                         |
+| `Pine`      |  120 | "leave alone"                                                         |
+| `.github`   |    8 | Org-level config, and git forbids a ref component starting with a dot |
 
 Preserved in this pass, with the ref count and namespaces verified equal:
 
-| Repository | Refs | Namespaces |
-|---|---:|---|
-| `zz-ref-HeliosLite` | 1064 | heads, keep, pull, sources, tags |
-| `zz-pause-unk-Thegent` | 782 | heads, pull, tags |
-| `Personal` | 263 | heads, pull |
-| `zz-zz-agentcheck-zz-pause-Agentora` | 235 | heads, pull, sources |
-| `zz-pause-inc-FocalPoint` | 214 | heads, pull, tags |
-| `chatta` | 174 | heads, pull |
-| `HarnessDesk` | 80 | heads, pull |
-| `zz-zz-agentcheck-PhenoGfx` | 42 | heads, pull, tags |
-| `phenoreg-browser-audit` | 13 | heads, pull |
-| `argis-extensions` | 6 | heads |
-| `zz-archive-agileplus-spec-harmonizer-tool` | 2 | heads, tags |
-| `zz-archive-pheno-drift-detector` | 1 | heads |
-| `zz-archive-pheno-predict` | 1 | heads |
-| `zz-archive-source-drops-2026-07` | 1 | heads |
-| `zz-zz-agentcheck-docs-5` | 1 | heads |
-| `StealthStartup` | 1 | heads |
+| Repository                                  | Refs | Namespaces                       |
+| ------------------------------------------- | ---: | -------------------------------- |
+| `zz-ref-HeliosLite`                         | 1064 | heads, keep, pull, sources, tags |
+| `zz-pause-unk-Thegent`                      |  782 | heads, pull, tags                |
+| `Personal`                                  |  263 | heads, pull                      |
+| `zz-zz-agentcheck-zz-pause-Agentora`        |  235 | heads, pull, sources             |
+| `zz-pause-inc-FocalPoint`                   |  214 | heads, pull, tags                |
+| `chatta`                                    |  174 | heads, pull                      |
+| `HarnessDesk`                               |   80 | heads, pull                      |
+| `zz-zz-agentcheck-PhenoGfx`                 |   42 | heads, pull, tags                |
+| `phenoreg-browser-audit`                    |   13 | heads, pull                      |
+| `argis-extensions`                          |    6 | heads                            |
+| `zz-archive-agileplus-spec-harmonizer-tool` |    2 | heads, tags                      |
+| `zz-archive-pheno-drift-detector`           |    1 | heads                            |
+| `zz-archive-pheno-predict`                  |    1 | heads                            |
+| `zz-archive-source-drops-2026-07`           |    1 | heads                            |
+| `zz-zz-agentcheck-docs-5`                   |    1 | heads                            |
+| `StealthStartup`                            |    1 | heads                            |
 
 `zz-ref-HeliosLite` had only a 96 MB bundle from an earlier pass, capturing 1,061
 refs; its current name carries 1,064. The bundle is a snapshot, not a live ref
@@ -81,7 +81,7 @@ the filesystem's case handling.
 
 `preserve_refs.py` removed any registry ref the source no longer advertises,
 reasoning that a leftover misrepresents the fork. That is right for an inherited
-upstream branch. It is wrong for a branch the source deleted *after* the registry
+upstream branch. It is wrong for a branch the source deleted _after_ the registry
 captured it, because the registry copy is then the only remaining record.
 
 Re-preserving `host-ops` hit this. 27 captured branches were removed, including
@@ -98,13 +98,13 @@ Re-preserving `host-ops` hit this. 27 captured branches were removed, including
 Those five are the only real exposure, and the evidence says the work itself is
 not lost. Searching `main`'s history for each topic finds a commit that covers it:
 
-| Deleted branch | Matching commit on `main` |
-|---|---|
-| `fix/closure-metrics-honesty` | `5f87948` "make check-delegation-rule.sh honest and green" |
-| `fix/d6.2-midflight-cancellations` | `abeb9eb` "tell a superseded cancellation from a dead one in D6.2" |
-| `fix/doctor-mold-check` | `210cd0d` "doctor detects a runner image without mold (#14)" |
-| `fix/kcode-queue-and-clippy` | `987e299` "D24.1 is a real clippy lint"; `533c52b` queue item overdue |
-| `chore/d82-instrument` | `24ba199` "re-register the stale UNSOURCED line the instrument names" |
+| Deleted branch                     | Matching commit on `main`                                             |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| `fix/closure-metrics-honesty`      | `5f87948` "make check-delegation-rule.sh honest and green"            |
+| `fix/d6.2-midflight-cancellations` | `abeb9eb` "tell a superseded cancellation from a dead one in D6.2"    |
+| `fix/doctor-mold-check`            | `210cd0d` "doctor detects a runner image without mold (#14)"          |
+| `fix/kcode-queue-and-clippy`       | `987e299` "D24.1 is a real clippy lint"; `533c52b` queue item overdue |
+| `chore/d82-instrument`             | `24ba199` "re-register the stale UNSOURCED line the instrument names" |
 
 So the branch tips are gone from the registry, but the commits they held are
 ancestors of `main` under different hashes. The exact tip commits cannot be
@@ -135,18 +135,18 @@ expected rather than a fault.
 
 `python scripts/verify_all_preserved.py` after the sweep:
 
-| Result | Count |
-|---|---:|
-| Verified ref-for-ref against a live source | 54 |
-| Source deleted; registry is the sole copy | 18 |
-| Explained exception | 1 |
-| **Total preserved namespaces** | **73** |
+| Result                                     |  Count |
+| ------------------------------------------ | -----: |
+| Verified ref-for-ref against a live source |     54 |
+| Source deleted; registry is the sole copy  |     18 |
+| Explained exception                        |      1 |
+| **Total preserved namespaces**             | **73** |
 
 ### The one exception: `zz-aa-dep-AirLock`
 
 The API reports this repository as created **2026-11-14T17:23:37Z**, size 0 KB,
 with 211 refs. It was deleted as one of the eleven dependency forks and has been
-recreated since. The recreated repository carries *upstream's* ref set, not the
+recreated since. The recreated repository carries _upstream's_ ref set, not the
 fork's: the registry holds the fork's 94 refs, including the local work the fork
 existed for, and none of the 211 current refs are in it.
 

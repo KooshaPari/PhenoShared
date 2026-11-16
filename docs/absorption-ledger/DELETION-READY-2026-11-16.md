@@ -16,11 +16,11 @@ $ python scripts/prepare_deletion.py phenotype-canonicalization
    DELETE-AUTHORISED phenotype-canonicalization
 ```
 
-| Condition | Evidence |
-|---|---|
-| Content | `absorption/phenotype-canonicalization` holds 43 of 44 files byte-identical by git blob id; the only gap is `verification/unit-tests.log`, a generated test log |
-| History | bundle `cdaa7cfe6994`, 103.1 KB in the private registry, plus 1 preserved ref over 8 commits |
-| Discussion | 0 issues, 0 pull requests, 0 comments |
+| Condition  | Evidence                                                                                                                                                        |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Content    | `absorption/phenotype-canonicalization` holds 43 of 44 files byte-identical by git blob id; the only gap is `verification/unit-tests.log`, a generated test log |
+| History    | bundle `cdaa7cfe6994`, 103.1 KB in the private registry, plus 1 preserved ref over 8 commits                                                                    |
+| Discussion | 0 issues, 0 pull requests, 0 comments                                                                                                                           |
 
 ## `host-credentials` — ready by measurement, not by `prepare_deletion.py`
 
@@ -32,11 +32,11 @@ repository against `absorption/<name>/`. `host-credentials` was absorbed into th
 
 The equivalent evidence, measured separately:
 
-| Condition | Evidence |
-|---|---|
-| Content | `PhenoRegistry/repos/host-credentials/tree/` covers 5 of 5 files exactly, by git blob id (`scripts/registry_coverage.py`) |
-| History | 1 preserved ref under `refs/preserved/host-credentials/` in the registry |
-| Discussion | 0 issues, 0 pull requests (`gh api .../issues?state=all`, `.../pulls?state=all` both return `[]`) |
+| Condition  | Evidence                                                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Content    | `PhenoRegistry/repos/host-credentials/tree/` covers 5 of 5 files exactly, by git blob id (`scripts/registry_coverage.py`) |
+| History    | 1 preserved ref under `refs/preserved/host-credentials/` in the registry                                                  |
+| Discussion | 0 issues, 0 pull requests (`gh api .../issues?state=all`, `.../pulls?state=all` both return `[]`)                         |
 
 ## Two reasons to wait
 

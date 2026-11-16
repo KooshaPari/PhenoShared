@@ -44,7 +44,7 @@ each tree and ref namespace confirmed present.
 | `harness-ops`       |    69 |      55 |    2 |
 | `PhenoMCP`          |     1 |     112 |    2 |
 | `host-credentials`  |     5 |       1 |    1 |
-| `host-ops`          |   683 | 911 reachable from the 42 preserved heads (959 including the 71 pull refs; measured 2026-11-14); earlier 894 is not reproducible from the refs now preserved |   113 (42 heads + 71 pull; measured 2026-11-14; 85 in the earlier snapshot) |
+| `host-ops`          |   683 |     911 |  113 |
 | `PhenoMCPServers`   |   473 |     115 |    3 |
 
 `host-ops` was originally recorded here as 174 files, 204 commits and 5 refs.
@@ -56,6 +56,13 @@ grafted (`repos/host-ops/tree/`, 683 files, blob-identical) and every ref
 re-pushed to `refs/preserved/host-ops/`, at source `f8b39eb8`. The flat
 107-file copy from the 2026-11-11 per-file split was removed at the same time as
 a superseded duplicate.
+
+The three figures in that row are the 2026-11-14 measurement, not the first-pass
+ones, and they diverge from what a reader might reconstruct by hand: the 911
+commits are those reachable from the 42 preserved heads, and including the 71
+pull refs raises the count to 959. The earlier figure of 894 is not reproducible
+from the refs now preserved and should not be quoted. The 113 refs are those 42
+heads plus the 71 pull refs; the earlier snapshot recorded 85.
 
 **`host-ops` is retained, and that is a decision rather than an unfinished
 step.** Its content is in the registry, but the repository is also the live
@@ -167,12 +174,12 @@ until history and discussion are both preserved.
 Deleted after all three conditions were verified independently, and the history
 bundle was then re-downloaded and proved readable.
 
-| Condition | Evidence |
-|---|---|
-| Content | `absorption/phenotype-canonicalization` holds 43 of 44 files byte-identical by git blob id. The one gap is `verification/unit-tests.log`, a generated test log. |
-| History, bundle | `repos/phenotype-canonicalization/history/phenotype-canonicalization.bundle`, 105,610 bytes, sha `993a610676315226b75a8141b1cf3d449fb6f9c1` |
-| History, refs | `refs/preserved/phenotype-canonicalization/heads/main` at `570e2c73aff565620a2c518a37d258981a31ca9e`, still present in the registry after the deletion |
-| Discussion | 0 issues, 0 pull requests, 0 comments |
+| Condition       | Evidence                                                                                                                                                        |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Content         | `absorption/phenotype-canonicalization` holds 43 of 44 files byte-identical by git blob id. The one gap is `verification/unit-tests.log`, a generated test log. |
+| History, bundle | `repos/phenotype-canonicalization/history/phenotype-canonicalization.bundle`, 105,610 bytes, sha `993a610676315226b75a8141b1cf3d449fb6f9c1`                     |
+| History, refs   | `refs/preserved/phenotype-canonicalization/heads/main` at `570e2c73aff565620a2c518a37d258981a31ca9e`, still present in the registry after the deletion          |
+| Discussion      | 0 issues, 0 pull requests, 0 comments                                                                                                                           |
 
 `prepare_deletion.py` printed `DELETE-AUTHORISED`. The bundle was fetched back
 afterwards and checked:

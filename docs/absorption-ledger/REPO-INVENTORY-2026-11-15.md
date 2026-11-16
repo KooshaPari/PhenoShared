@@ -11,14 +11,14 @@ Columns: `repo`, `priv`, `mb`, `refs` (refs preserved in the registry),
 
 ## Action summary
 
-| Action | Count | Meaning |
-|---|---:|---|
-| `keep` | 77 | deliberately retained; no action |
-| `decide` | 19 | needs an owner decision, evidence already gathered |
-| `absorb-or-keep` | 12 | history preserved, content not absorbed anywhere |
-| `delete-eligible` | 2 | history and content both present |
-| `preserve-first` | 1 | no preserved refs at all |
-| **total** | **111** | |
+| Action            |   Count | Meaning                                            |
+| ----------------- | ------: | -------------------------------------------------- |
+| `keep`            |      77 | deliberately retained; no action                   |
+| `decide`          |      19 | needs an owner decision, evidence already gathered |
+| `absorb-or-keep`  |      12 | history preserved, content not absorbed anywhere   |
+| `delete-eligible` |       2 | history and content both present                   |
+| `preserve-first`  |       1 | no preserved refs at all                           |
+| **total**         | **111** |                                                    |
 
 Six repositories moved out of `preserve-first` on 2026-11-15 when their refs were
 preserved: `argis-extensions-preserved-20261114` (1 ref), `claude-plugins-official`
@@ -41,8 +41,7 @@ So two targets are actually in play and they need different work:
   means the remaining live products stay as products, and consolidation is
   finished after the `decide` and `absorb-or-keep` rows are settled.
 
-Until one is chosen, the 77 `keep` rows are a recommendation, not a plan to reach
-2. This is the one question that gates everything else.
+Until one is chosen, the 77 `keep` rows are a recommendation, not a plan to reach 2. This is the one question that gates everything else.
 
 ## `preserve-first` (1): no preserved refs
 
@@ -54,14 +53,14 @@ namespace such as `refs/preserved/github-org/`, which no current tooling does.
 The six that were here on 2026-11-15 have been preserved and now sit in
 `absorb-or-keep`:
 
-| Repository | Refs | Commits |
-|---|---:|---:|
-| `argis-extensions-preserved-20261114` | 1 | 1 |
-| `claude-plugins-official` | 2 | 4,830 |
-| `cliproxyapi-plusplus` | 1 | 1 |
-| `hexakit` | 1 | 1 |
-| `hwledger` | 1 | 1 |
-| `slipstream` | 6 | 1,132 |
+| Repository                            | Refs | Commits |
+| ------------------------------------- | ---: | ------: |
+| `argis-extensions-preserved-20261114` |    1 |       1 |
+| `claude-plugins-official`             |    2 |   4,830 |
+| `cliproxyapi-plusplus`                |    1 |       1 |
+| `hexakit`                             |    1 |       1 |
+| `hwledger`                            |    1 |       1 |
+| `slipstream`                          |    6 |   1,132 |
 
 ## `delete-eligible` (2)
 
