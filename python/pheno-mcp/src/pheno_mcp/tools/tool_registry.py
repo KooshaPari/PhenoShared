@@ -4,7 +4,7 @@ Provides a generic registry for tools that can be used by any MCP server.
 """
 
 import inspect
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable
 
 
 class ToolRegistry:
@@ -15,8 +15,8 @@ class ToolRegistry:
 
     def __init__(self):
         """Initialize tool registry."""
-        self._tools: Dict[str, Any] = {}
-        self._tool_info: Dict[str, Dict[str, Any]] = {}
+        self._tools: dict[str, Any] = {}
+        self._tool_info: dict[str, dict[str, Any]] = {}
 
     def register(self, name: str, callable_obj: Callable, **metadata) -> None:
         """Register a tool in the registry.
@@ -40,7 +40,7 @@ class ToolRegistry:
             **metadata,
         }
 
-    def get_tool(self, name: str) -> Optional[Callable]:
+    def get_tool(self, name: str) -> Callable | None:
         """Get a tool by name.
 
         Args:
@@ -52,7 +52,7 @@ class ToolRegistry:
         """
         return self._tools.get(name)
 
-    def get_tool_info(self, name: str) -> Optional[Dict[str, Any]]:
+    def get_tool_info(self, name: str) -> dict[str, Any] | None:
         """Get information about a tool.
 
         Args:
@@ -76,7 +76,7 @@ class ToolRegistry:
         """
         return name in self._tools
 
-    def list_tools(self) -> List[str]:
+    def list_tools(self) -> list[str]:
         """List all registered tool names.
 
         Returns:
@@ -94,7 +94,7 @@ class ToolRegistry:
         """
         return len(self._tools)
 
-    def list_tool_info(self) -> List[Dict[str, Any]]:
+    def list_tool_info(self) -> list[dict[str, Any]]:
         """Get information about all tools.
 
         Returns:
@@ -112,7 +112,7 @@ class ToolRegistry:
         """
         return False
 
-    def _extract_parameters(self, sig: inspect.Signature) -> Dict[str, Any]:
+    def _extract_parameters(self, sig: inspect.Signature) -> dict[str, Any]:
         """Extract parameter information from function signature.
 
         Args:

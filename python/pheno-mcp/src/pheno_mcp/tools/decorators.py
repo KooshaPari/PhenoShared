@@ -5,15 +5,15 @@ Designed to work with any FastMCP-compatible server without atoms-specific code.
 """
 
 from functools import wraps
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 from .tool_registry import ToolRegistry
 
 
 def mcp_tool(
     registry: ToolRegistry,
-    name: Optional[str] = None,
-    description: Optional[str] = None,
+    name: str | None = None,
+    description: str | None = None,
     **extra_metadata,
 ) -> Callable:
     """Decorator to register a function as an MCP tool.
@@ -101,8 +101,8 @@ class ToolMetadata:
         self,
         name: str,
         description: str = "",
-        input_schema: Optional[dict] = None,
-        output_schema: Optional[dict] = None,
+        input_schema: dict | None = None,
+        output_schema: dict | None = None,
     ):
         """Initialize tool metadata.
 

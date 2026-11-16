@@ -4,7 +4,7 @@ This module provides entry point definitions for Model Context Protocol integrat
 Generalized to work with any MCP server, not atoms-specific.
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class MCPEntryPoint:
@@ -24,9 +24,9 @@ class MCPEntryPoint:
         """
         self.name = name
         self.version = version
-        self.server_url: Optional[str] = None
-        self.api_key: Optional[str] = None
-        self._metadata: Dict[str, Any] = {}
+        self.server_url: str | None = None
+        self.api_key: str | None = None
+        self._metadata: dict[str, Any] = {}
 
     def configure_auth(self, api_key: str) -> None:
         """Configure authentication for MCP server.
@@ -46,7 +46,7 @@ class MCPEntryPoint:
         """
         self.server_url = url
 
-    def get_endpoint_url(self) -> Optional[str]:
+    def get_endpoint_url(self) -> str | None:
         """Get the MCP server endpoint URL.
 
         Returns:
@@ -78,7 +78,7 @@ class MCPEntryPoint:
         """
         return self._metadata.get(key, default)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize entry point to dictionary.
 
         Returns:
@@ -130,7 +130,7 @@ class MCPServer:
         """
         return self._tools
 
-    def health_check(self) -> Dict[str, Any]:
+    def health_check(self) -> dict[str, Any]:
         """Check the health of the MCP server.
 
         Returns:

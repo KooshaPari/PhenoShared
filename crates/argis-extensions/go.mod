@@ -13,7 +13,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.20.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/hatchet-dev/hatchet v0.120.0
+	github.com/hatchet-dev/hatchet v0.116.9
 	github.com/jackc/pgx/v5 v5.12.0
 	github.com/maximhq/bifrost/core v1.2.30
 	github.com/nats-io/nats.go v1.55.0
@@ -24,7 +24,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.12.1
-	github.com/valyala/fasthttp v1.78.0
+	github.com/valyala/fasthttp v1.77.0
 	github.com/vektah/gqlparser/v2 v2.5.64
 	golang.org/x/crypto v0.58.0
 	golang.org/x/net v0.62.0
@@ -68,7 +68,7 @@ require (
 	github.com/lib/pq v1.12.3 // indirect
 	github.com/mattn/go-colorable v0.1.16 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
-	github.com/molecule-man/go-brrr v1.3.1 // indirect
+	github.com/molecule-man/go-brrr v1.3.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/nats-io/nkeys v0.4.16 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
