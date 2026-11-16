@@ -3,10 +3,16 @@ $ErrorActionPreference = 'Stop'
 $roots = [System.Collections.Generic.List[string]]::new()
 $git = Get-Command git.exe -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
 if ($git) {
-    $dir = Split-Path -Parent $git.Source
-    for ($i = 0; $i -lt 3 -and $dir; $i++) {
-        $roots.Add($dir)
-        $dir = Split-Path -Parent $dir
+    $gitDir = Split-Path -Parent $git.Source
+    $dirName = Split-Path -Leaf $gitDir
+    if ($dirName -in @('cmd', 'bin')) {
+        $parent = Split-Path -Parent $gitDir
+        $parentName = Split-Path -Leaf $parent
+        if ($dirName -eq 'bin' -and $parentName -in @('ucrt64', 'mingw64', 'mingw32')) {
+            $roots.Add((Split-Path -Parent $parent))
+        } else {
+            $roots.Add($parent)
+        }
     }
 }
 foreach ($programFiles in @($env:ProgramW6432, $env:ProgramFiles, ${env:ProgramFiles(x86)})) {
@@ -14,9 +20,13 @@ foreach ($programFiles in @($env:ProgramW6432, $env:ProgramFiles, ${env:ProgramF
 }
 $bash = $null
 foreach ($root in $roots) {
-    foreach ($relative in @('bin\bash.exe', 'usr\bin\bash.exe')) {
-        $candidate = Join-Path $root $relative
-        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+    $candidate = Join-Path $root 'usr\bin\bash.exe'
+    if (-not (Test-Path -LiteralPath $candidate -PathType Leaf)) { continue }
+    foreach ($arch in @('ucrt64', 'mingw64', 'mingw32')) {
+        $gitBinary = Join-Path $root "$arch\bin\git.exe"
+        $gitCore = Join-Path $root "$arch\libexec\git-core\git.exe"
+        if ((Test-Path -LiteralPath $gitBinary -PathType Leaf) -and
+            (Test-Path -LiteralPath $gitCore -PathType Leaf)) {
             $bash = $candidate
             break
         }

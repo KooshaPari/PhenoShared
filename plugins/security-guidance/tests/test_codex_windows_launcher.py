@@ -80,3 +80,21 @@ def test_windows_launcher_rejects_bare_bash(tmp_path):
     result, _ = launch(tmp_path, env)
     assert result.returncode != 0
     assert "requires Git for Windows" in result.stderr
+
+@pytest.mark.skipif(os.name != "nt", reason="Windows command dispatch")
+def test_windows_launcher_rejects_unrelated_git_and_ancestor_bash(tmp_path):
+    powershell = shutil.which("powershell")
+    if not powershell:
+        pytest.skip("PowerShell required")
+    decoy = tmp_path / "decoy"
+    (decoy / "tools").mkdir(parents=True)
+    (decoy / "bin").mkdir()
+    shutil.copy2(os.environ["COMSPEC"], decoy / "tools/git.exe")
+    shutil.copy2(os.environ["COMSPEC"], decoy / "bin/bash.exe")
+    env = os.environ.copy()
+    env["PATH"] = str(decoy / "tools") + os.pathsep + str(Path(powershell).parent)
+    for key in ("ProgramW6432", "ProgramFiles", "ProgramFiles(x86)"):
+        env[key] = str(tmp_path / "no standard git")
+    result, _ = launch(tmp_path, env)
+    assert result.returncode != 0
+    assert "requires Git for Windows" in result.stderr
