@@ -5,6 +5,25 @@ on:
     branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
+    paths:
+      - "**.rs"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/*.go"
+      - "**/go.mod"
+      - "**/go.sum"
+      - "**/*.py"
+      - "**/pyproject.toml"
+      - "**/uv.lock"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - "**/package.json"
+      - "**/bun.lockb"
+      - "scripts/**"
+      - "**/*.sh"
+      - "Dockerfile*"
+      - ".github/workflows/ci.yml"
+      - ".github/actions/**"
   merge_group:
     branches: [main, master, develop]
 
