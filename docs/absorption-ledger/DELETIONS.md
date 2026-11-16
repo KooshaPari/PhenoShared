@@ -161,3 +161,35 @@ requests did not, and cannot be reconstructed. Only a GitHub Support restore
 within the retention window would recover them. `prepare_deletion.py` was
 written so that this cannot happen again: it refuses to authorise a deletion
 until history and discussion are both preserved.
+
+## 2026-11-16 — `phenotype-canonicalization`
+
+Deleted after all three conditions were verified independently, and the history
+bundle was then re-downloaded and proved readable.
+
+| Condition | Evidence |
+|---|---|
+| Content | `absorption/phenotype-canonicalization` holds 43 of 44 files byte-identical by git blob id. The one gap is `verification/unit-tests.log`, a generated test log. |
+| History, bundle | `repos/phenotype-canonicalization/history/phenotype-canonicalization.bundle`, 105,610 bytes, sha `993a610676315226b75a8141b1cf3d449fb6f9c1` |
+| History, refs | `refs/preserved/phenotype-canonicalization/heads/main` at `570e2c73aff565620a2c518a37d258981a31ca9e`, still present in the registry after the deletion |
+| Discussion | 0 issues, 0 pull requests, 0 comments |
+
+`prepare_deletion.py` printed `DELETE-AUTHORISED`. The bundle was fetched back
+afterwards and checked:
+
+```
+$ git bundle verify phenotype-canonicalization.bundle
+../pc.bundle is okay
+The bundle contains these 2 refs:
+570e2c73aff565620a2c518a37d258981a31ca9e refs/heads/main
+570e2c73aff565620a2c518a37d258981a31ca9e HEAD
+The bundle records a complete history.
+```
+
+The API then returned 404 for the repository and `git ls-remote` failed to resolve
+it, while the preserved ref above still resolved — so the deletion removed the
+source and not the record.
+
+To restore: `python scripts/restore_preserved.py phenotype-canonicalization`
+rebuilds the history from the preserved refs; the files are in
+`absorption/phenotype-canonicalization/`.
