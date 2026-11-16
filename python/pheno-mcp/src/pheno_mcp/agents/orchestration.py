@@ -6,7 +6,7 @@ agent frameworks. Not atoms-specific - generalized for any MCP-compatible use.
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class AgentRole(Enum):
@@ -30,8 +30,8 @@ class Agent:
     role: AgentRole
     name: str
     description: str = ""
-    tools: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    tools: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def add_tool(self, tool_name: str) -> None:
         """Add a tool to this agent.
@@ -53,7 +53,7 @@ class Agent:
         if tool_name in self.tools:
             self.tools.remove(tool_name)
 
-    def get_tools(self) -> List[str]:
+    def get_tools(self) -> list[str]:
         """Get list of tools assigned to this agent.
 
         Returns:
@@ -96,9 +96,9 @@ class TaskDefinition:
     name: str
     description: str
     expected_output: str = ""
-    assigned_to: Optional[Agent] = None
-    depends_on: List["TaskDefinition"] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    assigned_to: Agent | None = None
+    depends_on: list["TaskDefinition"] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def add_dependency(self, task: "TaskDefinition") -> None:
         """Add a task dependency.
@@ -110,7 +110,7 @@ class TaskDefinition:
         if task not in self.depends_on:
             self.depends_on.append(task)
 
-    def get_dependencies(self) -> List["TaskDefinition"]:
+    def get_dependencies(self) -> list["TaskDefinition"]:
         """Get task dependencies.
 
         Returns:
@@ -139,8 +139,8 @@ class AgentOrchestrator:
 
     def __init__(self):
         """Initialize the agent orchestrator."""
-        self._agents: List[Agent] = []
-        self._tasks: List[TaskDefinition] = []
+        self._agents: list[Agent] = []
+        self._tasks: list[TaskDefinition] = []
 
     def add_agent(self, agent: Agent) -> None:
         """Add an agent to the orchestrator.
@@ -162,7 +162,7 @@ class AgentOrchestrator:
         if agent in self._agents:
             self._agents.remove(agent)
 
-    def agents(self) -> List[Agent]:
+    def agents(self) -> list[Agent]:
         """Get all agents.
 
         Returns:
@@ -191,7 +191,7 @@ class AgentOrchestrator:
         if task in self._tasks:
             self._tasks.remove(task)
 
-    def tasks(self) -> List[TaskDefinition]:
+    def tasks(self) -> list[TaskDefinition]:
         """Get all tasks.
 
         Returns:
@@ -200,7 +200,7 @@ class AgentOrchestrator:
         """
         return self._tasks.copy()
 
-    def execute(self) -> Dict[str, Any]:
+    def execute(self) -> dict[str, Any]:
         """Execute the workflow.
 
         Returns:
@@ -226,7 +226,7 @@ class AgentOrchestrator:
 
         return result
 
-    def get_agent_by_role(self, role: AgentRole) -> Optional[Agent]:
+    def get_agent_by_role(self, role: AgentRole) -> Agent | None:
         """Get an agent by role.
 
         Args:
@@ -241,7 +241,7 @@ class AgentOrchestrator:
                 return agent
         return None
 
-    def get_agents_by_role(self, role: AgentRole) -> List[Agent]:
+    def get_agents_by_role(self, role: AgentRole) -> list[Agent]:
         """Get all agents with a specific role.
 
         Args:
@@ -253,7 +253,7 @@ class AgentOrchestrator:
         """
         return [agent for agent in self._agents if agent.role == role]
 
-    def get_task_by_name(self, name: str) -> Optional[TaskDefinition]:
+    def get_task_by_name(self, name: str) -> TaskDefinition | None:
         """Get a task by name.
 
         Args:
@@ -268,7 +268,7 @@ class AgentOrchestrator:
                 return task
         return None
 
-    def validate_workflow(self) -> Dict[str, Any]:
+    def validate_workflow(self) -> dict[str, Any]:
         """Validate the workflow configuration.
 
         Returns:
@@ -296,7 +296,7 @@ class AgentOrchestrator:
         }
 
     def _has_circular_dependency(
-        self, task: TaskDefinition, visited: set, rec_stack: Optional[set] = None
+        self, task: TaskDefinition, visited: set, rec_stack: set | None = None
     ) -> bool:
         """Check if a task has circular dependencies.
 
