@@ -29,7 +29,6 @@ from __future__ import annotations
 
 import importlib
 from types import ModuleType
-from typing import Optional
 
 __all__ = ["require_mlx_lm"]
 
@@ -38,7 +37,7 @@ __all__ = ["require_mlx_lm"]
 # :class:`types.ModuleType` means "mlx_lm is importable". Failures are
 # deliberately *not* cached, so a fresh ``pip install`` takes effect
 # without restarting the process.
-_cache: Optional[object] = None
+_cache: object | None = None
 
 
 _INSTALL_HINT_TEMPLATE = """\
@@ -81,7 +80,7 @@ def require_mlx_lm(where: str) -> ModuleType:
 
     try:
         mod = importlib.import_module("mlx_lm")
-    except Exception as e:  # noqa: BLE001 — any import-time error is fatal here
+    except Exception as e:
         raise RuntimeError(
             _INSTALL_HINT_TEMPLATE.format(where=where)
             + f"\n\n(Underlying import error: {type(e).__name__}: {e})"

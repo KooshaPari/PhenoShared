@@ -30,14 +30,12 @@ class EchoKVAdapter(CachePort):
         if self._kv_engine is not None:
             return self._kv_engine
         try:
-            from omlx_perf_core import echo_kv  # noqa: F401
+            from omlx_perf_core import echo_kv
 
             self._kv_engine = echo_kv
             return self._kv_engine
         except ImportError:
-            logger.debug(
-                "EchoKV pyo3 extension not available; using in-memory fallback"
-            )
+            logger.debug("EchoKV pyo3 extension not available; using in-memory fallback")
             return None
 
     def insert(self, token_id: int, attention_weight: float) -> None:

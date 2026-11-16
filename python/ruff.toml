@@ -1,28 +1,37 @@
-target-version = "py314"
+# py314 is what this tree targets, but the CI-pinned ruff (0.16.5) mis-formats
+# tuple except clauses when it is told py314: `except (A, B):` is rewritten to
+# `except A, B:`, which is a Python 2 syntax error, and `ruff format --check`
+# then reports the broken form as correct. Established 2026-11-15 by isolating the
+# setting (py313/py312/unrecognised all preserve the parentheses; py314 strips
+# them). Keep the enforceable target at py313 until the pinned ruff is raised.
+target-version = "py313"
 line-length = 100
-exclude = [
-    "src/agileplus_proto/gen/**",
-]
+exclude = ["src/agileplus_proto/gen/**"]
 
 [lint]
 select = [
-    "E",    # pycodestyle errors
-    "W",    # pycodestyle warnings
-    "F",    # pyflakes
-    "I",    # isort
-    "N",    # pep8-naming
-    "UP",   # pyupgrade
-    "B",    # flake8-bugbear
-    "A",    # flake8-builtins
-    "S",    # flake8-bandit (security)
-    "T20",  # flake8-print
-    "RUF",  # ruff-specific rules
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort
+    "N", # pep8-naming
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "S", # flake8-bandit (security)
+    "T20", # flake8-print
+    "RUF", # ruff-specific rules
 ]
 ignore = [
-    "S101",  # assert used (ok in tests)
+    "S101", # assert used (ok in tests)
 ]
 
 [lint.per-file-ignores]
+# Command handlers produce human-facing stdout as their public interface.
+"omlx_research/cli/**" = ["T201"]
+# Standalone benchmark and demonstration drivers print their measurements.
+"omlx_research/benchmarks/**" = ["T201"]
+"omlx_research/scripts/**" = ["T201"]
 "tests/**" = ["S101", "T20"]
 "gen_protos.py" = ["T201", "S603", "B007", "F841", "RUF005"]
 

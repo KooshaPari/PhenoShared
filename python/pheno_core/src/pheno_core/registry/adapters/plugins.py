@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .enums import AdapterType
+    from .registry import AdapterRegistry
 
 PluginHook = Callable[["AdapterRegistry", Any], None]
 

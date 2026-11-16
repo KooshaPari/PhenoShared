@@ -1,9 +1,8 @@
 """Tests for pheno-agents base agent functionality."""
 
 import pytest
-
-from pheno_agents import Agent, AgentState, AgentRole
-from pheno_agents.base import SimpleAgent, AgentPool
+from pheno_agents import AgentRole, AgentState
+from pheno_agents.base import AgentPool, SimpleAgent
 
 
 class TestAgentState:

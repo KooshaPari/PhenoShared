@@ -1,4 +1,5 @@
 """Unit test for L6 RLVR-AF smoke contract."""
+
 from __future__ import annotations
 
 import importlib.util

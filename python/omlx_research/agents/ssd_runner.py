@@ -1,8 +1,9 @@
 """SSD — Self-Speculative Decoding. Same-model draft via n-gram prompt-lookup."""
 
 from __future__ import annotations
+
 from collections import deque
-from typing import Callable, Awaitable
+from collections.abc import Awaitable, Callable
 
 
 class SsdRunner:
@@ -21,7 +22,7 @@ class SsdRunner:
             needle = prefix[-n:]
             hay = seen[: len(seen) - len(prefix)]
             for i in range(0, len(hay) - n + 1):
-                if hay[i: i + n] == needle:
+                if hay[i : i + n] == needle:
                     start = i + n
                     end = min(start + self.gamma, len(seen))
                     if start < end:

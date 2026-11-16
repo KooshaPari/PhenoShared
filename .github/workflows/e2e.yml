@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   pull_request:
+    paths:
+      - "**.rs"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "tests/**"
+      - ".github/workflows/e2e.yml"
 
 # Cancel in-progress runs for the same branch/PR.
 concurrency:

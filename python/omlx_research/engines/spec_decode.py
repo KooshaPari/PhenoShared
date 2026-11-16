@@ -7,9 +7,10 @@ Implements three modes:
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
+
+from collections.abc import Callable
+from dataclasses import dataclass
 from enum import Enum
-from typing import Iterable, Callable, Awaitable
 
 
 class SpecMode(str, Enum):
@@ -38,7 +39,9 @@ class SpecStats:
 
 
 class SpeculativeEngine:
-    def __init__(self, target: Callable, draft: Callable | None = None, config: SpecConfig | None = None):
+    def __init__(
+        self, target: Callable, draft: Callable | None = None, config: SpecConfig | None = None
+    ):
         self.target = target
         self.draft = draft
         self.config = config or SpecConfig()
@@ -104,7 +107,7 @@ class SpeculativeEngine:
         if not needle or len(hay) < len(needle):
             return None
         for i in range(0, len(hay) - len(needle) + 1):
-            if hay[i: i + len(needle)] == needle:
+            if hay[i : i + len(needle)] == needle:
                 return i
         return None
 

@@ -7,8 +7,8 @@ import pytest
 from omlx_research.backends import GenerateRequest
 from omlx_research.engines.hybrid_dispatch import (
     DispatchPolicy,
-    HybridDispatch,
     HybridConfig,
+    HybridDispatch,
 )
 
 
@@ -39,9 +39,7 @@ def test_generate_rejects_unavailable_requested_backend() -> None:
 def test_auto_dispatch_does_not_choose_unavailable_backend() -> None:
     dispatch = _dispatch({DispatchPolicy.SGLANG: _Backend("sglang")})
     dispatch._auto_pick = lambda: DispatchPolicy.SGLANG
-    assert dispatch.generate(GenerateRequest("hello")) == [
-        {"backend": "sglang", "prompt": "hello"}
-    ]
+    assert dispatch.generate(GenerateRequest("hello")) == [{"backend": "sglang", "prompt": "hello"}]
 
 
 def test_fanout_rejects_when_no_backend_is_available() -> None:

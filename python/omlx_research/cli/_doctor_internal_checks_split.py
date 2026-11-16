@@ -37,7 +37,6 @@ from __future__ import annotations
 
 import os
 import re
-from typing import List, Tuple
 
 from ._doctor_registry import register_check
 from ._doctor_shared import (
@@ -47,7 +46,6 @@ from ._doctor_shared import (
     Check,
     project_root,
 )
-
 
 __all__ = [
     "metal_runtime_lib_test_count_at_least_25",
@@ -83,7 +81,7 @@ _METAL_RUNTIME_TEST_THRESHOLD_PASS: int = 25
 _METAL_RUNTIME_TEST_THRESHOLD_FAIL: int = 15
 
 
-def _count_metal_runtime_tests(src_dir: str) -> Tuple[bool, str]:
+def _count_metal_runtime_tests(src_dir: str) -> tuple[bool, str]:
     """Best-effort distinct ``#[test]`` count across metal-runtime/src/.
 
     Iterates every ``*.rs`` file under ``src_dir`` (skips dotfiles
@@ -102,7 +100,7 @@ def _count_metal_runtime_tests(src_dir: str) -> Tuple[bool, str]:
     if not os.path.isdir(src_dir):
         return False, f"{_METAL_RUNTIME_SRC_DIR_REL_PATH} not on disk"
     count = 0
-    files_scanned: List[str] = []
+    files_scanned: list[str] = []
     try:
         for entry in sorted(os.listdir(src_dir)):
             if not entry.endswith(".rs"):
@@ -110,15 +108,13 @@ def _count_metal_runtime_tests(src_dir: str) -> Tuple[bool, str]:
             full = os.path.join(src_dir, entry)
             if not os.path.isfile(full):
                 continue
-            with open(full, "r", encoding="utf-8") as fh:
+            with open(full, encoding="utf-8") as fh:
                 text = fh.read()
             count += len(_METAL_RUNTIME_TEST_RE.findall(text))
             files_scanned.append(entry)
     except OSError as e:
         return False, f"{type(e).__name__}: {e}"
-    files_label = (
-        f" across {len(files_scanned)} files" if len(files_scanned) > 1 else ""
-    )
+    files_label = f" across {len(files_scanned)} files" if len(files_scanned) > 1 else ""
     return True, (
         f"found {count} distinct #[test] reference(s){files_label} "
         f"under {os.path.basename(src_dir)}"
@@ -167,9 +163,7 @@ def metal_runtime_lib_test_count_at_least_25() -> Check:
             id="metal_runtime_lib_test_count_at_least_25",
             description=desc,
             status=FAIL,
-            details=(
-                f"unexpected label format from _count_metal_runtime_tests: {label!r}"
-            ),
+            details=(f"unexpected label format from _count_metal_runtime_tests: {label!r}"),
         )
     if count >= _METAL_RUNTIME_TEST_THRESHOLD_PASS:
         status = PASS
@@ -225,7 +219,7 @@ _PYTHON_CLI_SUBCMD_THRESHOLD_PASS: int = 6
 _PYTHON_CLI_SUBCMD_THRESHOLD_FAIL: int = 4
 
 
-def _count_cli_subcommands(path: str) -> Tuple[bool, str]:
+def _count_cli_subcommands(path: str) -> tuple[bool, str]:
     """Best-effort distinct ``cmd_*`` subcommand callable count.
 
     Parses the CLI ``__init__.py`` and counts every top-level
@@ -250,7 +244,7 @@ def _count_cli_subcommands(path: str) -> Tuple[bool, str]:
     if not os.path.isfile(path):
         return False, f"{_PYTHON_CLI_INIT_REL_PATH} not on disk"
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             text = fh.read()
     except OSError as e:
         return False, f"{type(e).__name__}: {e}"

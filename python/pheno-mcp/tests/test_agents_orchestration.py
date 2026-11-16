@@ -3,11 +3,9 @@
 Traces to: FR-MCP-003 - CrewAI Agent Orchestration Adapter
 """
 
-import pytest
-from typing import Optional
 from pheno_mcp.agents import (
-    AgentOrchestrator,
     Agent,
+    AgentOrchestrator,
     AgentRole,
     TaskDefinition,
 )
@@ -18,31 +16,20 @@ class TestAgent:
 
     def test_agent_initialization(self):
         """Test that Agent initializes with required parameters."""
-        agent = Agent(
-            role=AgentRole.MANAGER,
-            name="test-agent",
-            description="Test agent"
-        )
+        agent = Agent(role=AgentRole.MANAGER, name="test-agent", description="Test agent")
         assert agent.role == AgentRole.MANAGER
         assert agent.name == "test-agent"
         assert agent.description == "Test agent"
 
     def test_agent_with_tools(self):
         """Test that Agent can be configured with tools."""
-        agent = Agent(
-            role=AgentRole.WORKER,
-            name="worker-agent",
-            tools=["tool1", "tool2"]
-        )
+        agent = Agent(role=AgentRole.WORKER, name="worker-agent", tools=["tool1", "tool2"])
         assert len(agent.tools) == 2
         assert "tool1" in agent.tools
 
     def test_agent_no_atoms_specifics(self):
         """Test that Agent has no atoms-specific naming or structure."""
-        agent = Agent(
-            role=AgentRole.ANALYST,
-            name="generic-analyst"
-        )
+        agent = Agent(role=AgentRole.ANALYST, name="generic-analyst")
         # Should not have atoms-specific attributes
         assert not hasattr(agent, "atoms_role")
         assert agent.name == "generic-analyst"
@@ -62,7 +49,7 @@ class TestTaskDefinition:
         task = TaskDefinition(
             name="process-data",
             description="Process input data",
-            expected_output="Processed results"
+            expected_output="Processed results",
         )
         assert task.name == "process-data"
         assert task.description == "Process input data"
@@ -71,21 +58,13 @@ class TestTaskDefinition:
     def test_task_with_agent_assignment(self):
         """Test assigning task to an agent."""
         agent = Agent(role=AgentRole.WORKER, name="worker")
-        task = TaskDefinition(
-            name="task1",
-            description="Do something",
-            assigned_to=agent
-        )
+        task = TaskDefinition(name="task1", description="Do something", assigned_to=agent)
         assert task.assigned_to == agent
 
     def test_task_with_dependencies(self):
         """Test task dependencies."""
         task1 = TaskDefinition(name="task1", description="First")
-        task2 = TaskDefinition(
-            name="task2",
-            description="Second",
-            depends_on=[task1]
-        )
+        task2 = TaskDefinition(name="task2", description="Second", depends_on=[task1])
         assert len(task2.depends_on) == 1
         assert task2.depends_on[0] == task1
 
@@ -142,11 +121,7 @@ class TestAgentOrchestrator:
         orchestrator.add_agent(agent)
 
         # Add task
-        task = TaskDefinition(
-            name="simple_task",
-            description="A simple task",
-            assigned_to=agent
-        )
+        task = TaskDefinition(name="simple_task", description="A simple task", assigned_to=agent)
         orchestrator.add_task(task)
 
         # Execute
@@ -157,11 +132,7 @@ class TestAgentOrchestrator:
         """Test binding tools to agents in orchestrator."""
         orchestrator = AgentOrchestrator()
 
-        agent = Agent(
-            role=AgentRole.WORKER,
-            name="worker",
-            tools=["mcp_tool_1", "mcp_tool_2"]
-        )
+        agent = Agent(role=AgentRole.WORKER, name="worker", tools=["mcp_tool_1", "mcp_tool_2"])
         orchestrator.add_agent(agent)
 
         agents = orchestrator.agents()
@@ -177,16 +148,9 @@ class TestAgentOrchestrator:
         orchestrator.add_agent(agent1)
         orchestrator.add_agent(agent2)
 
-        task1 = TaskDefinition(
-            name="analyze",
-            description="Analyze data",
-            assigned_to=agent1
-        )
+        task1 = TaskDefinition(name="analyze", description="Analyze data", assigned_to=agent1)
         task2 = TaskDefinition(
-            name="process",
-            description="Process results",
-            assigned_to=agent2,
-            depends_on=[task1]
+            name="process", description="Process results", assigned_to=agent2, depends_on=[task1]
         )
 
         orchestrator.add_task(task1)
@@ -221,22 +185,15 @@ class TestAgentOrchestrationIntegration:
         orchestrator.add_agent(worker)
 
         # Create tasks
-        task1 = TaskDefinition(
-            name="plan",
-            description="Plan the work",
-            assigned_to=manager
-        )
+        task1 = TaskDefinition(name="plan", description="Plan the work", assigned_to=manager)
         task2 = TaskDefinition(
             name="analyze",
             description="Analyze requirements",
             assigned_to=analyst,
-            depends_on=[task1]
+            depends_on=[task1],
         )
         task3 = TaskDefinition(
-            name="execute",
-            description="Execute the plan",
-            assigned_to=worker,
-            depends_on=[task2]
+            name="execute", description="Execute the plan", assigned_to=worker, depends_on=[task2]
         )
 
         orchestrator.add_task(task1)
@@ -259,18 +216,10 @@ class TestAgentOrchestrationIntegration:
         # Create orchestrator with tool-aware agents
         orchestrator = AgentOrchestrator()
 
-        agent = Agent(
-            role=AgentRole.WORKER,
-            name="tool_user",
-            tools=["analyze", "process"]
-        )
+        agent = Agent(role=AgentRole.WORKER, name="tool_user", tools=["analyze", "process"])
         orchestrator.add_agent(agent)
 
-        task = TaskDefinition(
-            name="use_tools",
-            description="Use MCP tools",
-            assigned_to=agent
-        )
+        task = TaskDefinition(name="use_tools", description="Use MCP tools", assigned_to=agent)
         orchestrator.add_task(task)
 
         assert len(orchestrator.agents()) == 1

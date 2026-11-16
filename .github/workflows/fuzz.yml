@@ -2,12 +2,6 @@ name: Fuzz
 on:
   push:
     branches: [main]
-  pull_request:
-    paths:
-      - "fuzz/**"
-      - "crates/**"
-      - "**/Cargo.toml"
-      - "**/Cargo.lock"
 jobs:
   fuzz:
     runs-on: ubuntu-latest

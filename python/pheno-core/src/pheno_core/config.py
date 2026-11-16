@@ -2,13 +2,13 @@
 
 import json
 from pathlib import Path
-from typing import Any, Type, TypeVar, Optional
+from typing import Any, TypeVar
 
-from pydantic import BaseModel, ConfigDict, ValidationError as PydanticValidationError
+from pydantic import ConfigDict
+from pydantic import ValidationError as PydanticValidationError
 from pydantic_settings import BaseSettings
 
-from .errors import ConfigurationError, ValidationError as CoreValidationError
-
+from .errors import ConfigurationError
 
 T = TypeVar("T", bound="BaseConfig")
 
@@ -30,8 +30,8 @@ class BaseConfig(BaseSettings):
 
 
 def from_env(
-    config_cls: Type[T],
-    env_prefix: Optional[str] = None,
+    config_cls: type[T],
+    env_prefix: str | None = None,
 ) -> T:
     """
     Load configuration from environment variables.
@@ -64,7 +64,7 @@ def from_env(
 
 
 def from_file(
-    config_cls: Type[T],
+    config_cls: type[T],
     filepath: str,
 ) -> T:
     """
@@ -90,7 +90,7 @@ def from_file(
         )
 
     try:
-        with open(path, "r") as f:
+        with open(path) as f:
             if path.suffix == ".json":
                 data = json.load(f)
             elif path.suffix in [".toml", ".tml"]:
@@ -102,6 +102,7 @@ def from_file(
             elif path.suffix in [".yaml", ".yml"]:
                 try:
                     import yaml
+
                     data = yaml.safe_load(f)
                 except ImportError:
                     raise ConfigurationError(
@@ -134,9 +135,9 @@ def from_file(
 
 
 def load(
-    config_cls: Type[T],
-    filepath: Optional[str] = None,
-    env_prefix: Optional[str] = None,
+    config_cls: type[T],
+    filepath: str | None = None,
+    env_prefix: str | None = None,
 ) -> T:
     """
     Load configuration with fallback chain.
@@ -179,7 +180,7 @@ class ConfigLoader:
     Allows flexible configuration composition through chaining.
     """
 
-    def __init__(self, config_cls: Type[T]) -> None:
+    def __init__(self, config_cls: type[T]) -> None:
         """
         Initialize ConfigLoader.
 
@@ -188,7 +189,7 @@ class ConfigLoader:
         """
         self.config_cls = config_cls
         self._data: dict[str, Any] = {}
-        self._env_prefix: Optional[str] = None
+        self._env_prefix: str | None = None
 
     def from_file(self, filepath: str) -> "ConfigLoader":
         """
@@ -204,7 +205,7 @@ class ConfigLoader:
         self._data.update(config.model_dump())
         return self
 
-    def from_env(self, env_prefix: Optional[str] = None) -> "ConfigLoader":
+    def from_env(self, env_prefix: str | None = None) -> "ConfigLoader":
         """
         Load configuration from environment variables.
 
@@ -253,7 +254,7 @@ def __get_env_vars(prefix: str) -> dict[str, Any]:
     result = {}
     for key, value in os.environ.items():
         if key.startswith(prefix):
-            clean_key = key[len(prefix):].lower()
+            clean_key = key[len(prefix) :].lower()
             result[clean_key] = value
 
     return result

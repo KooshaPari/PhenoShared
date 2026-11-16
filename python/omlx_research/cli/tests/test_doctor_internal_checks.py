@@ -26,11 +26,8 @@ graceful-degradation paths (file missing → WARN, never FAIL).
 
 from __future__ import annotations
 
-import os
-
 from omlx_research.cli import _doctor_internal_checks as internal_mod
 from omlx_research.cli._doctor_shared import FAIL, PASS, WARN
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -59,12 +56,14 @@ def _patch_count(
     """
     if coverage is not None:
         monkeypatch.setattr(
-            internal_mod, "_count_coverage_tags",
+            internal_mod,
+            "_count_coverage_tags",
             lambda _path: (True, f"found {coverage} distinct tag(s) in coverage_matrix.rs"),
         )
     if eval_suites is not None:
         monkeypatch.setattr(
-            internal_mod, "_count_eval_suites",
+            internal_mod,
+            "_count_eval_suites",
             lambda _path: (True, f"found {eval_suites} distinct Suite variant(s)"),
         )
 
@@ -80,12 +79,17 @@ def _patch_missing(monkeypatch, target: str) -> None:
     """
     if target == "coverage":
         monkeypatch.setattr(
-            internal_mod, "_count_coverage_tags",
-            lambda _path: (False, "perf-core/kernel-registry/tests/sota_operators/coverage_matrix.rs not on disk"),
+            internal_mod,
+            "_count_coverage_tags",
+            lambda _path: (
+                False,
+                "perf-core/kernel-registry/tests/sota_operators/coverage_matrix.rs not on disk",
+            ),
         )
     elif target == "eval":
         monkeypatch.setattr(
-            internal_mod, "_count_eval_suites",
+            internal_mod,
+            "_count_eval_suites",
             lambda _path: (False, "perf-core/eval-harness/src/lib.rs not on disk"),
         )
     else:
@@ -169,7 +173,8 @@ def test_coverage_tag_warns_when_file_missing(monkeypatch):
 def test_coverage_tag_warns_on_oserror(monkeypatch):
     """OS-level read failure → WARN (defensive)."""
     monkeypatch.setattr(
-        internal_mod, "_count_coverage_tags",
+        internal_mod,
+        "_count_coverage_tags",
         lambda _path: (False, "PermissionError: [Errno 13] Permission denied"),
     )
     c = internal_mod.coverage_tag_count_at_least_25()
@@ -247,7 +252,8 @@ def test_eval_suite_warns_when_file_missing(monkeypatch):
 def test_eval_suite_warns_on_oserror(monkeypatch):
     """OS-level read failure → WARN (defensive)."""
     monkeypatch.setattr(
-        internal_mod, "_count_eval_suites",
+        internal_mod,
+        "_count_eval_suites",
         lambda _path: (False, "OSError: [Errno 2] No such file or directory"),
     )
     c = internal_mod.eval_harness_suite_count_at_least_4()
@@ -268,18 +274,14 @@ def test_coverage_tag_passes_on_real_repo():
     was calibrated against a stale snapshot.
     """
     c = internal_mod.coverage_tag_count_at_least_25()
-    assert c.status == PASS, (
-        f"real coverage matrix did not clear the floor: {c.details}"
-    )
+    assert c.status == PASS, f"real coverage matrix did not clear the floor: {c.details}"
     assert c.id == "coverage_tag_count_at_least_25"
 
 
 def test_eval_suite_passes_on_real_repo():
     """The real eval-harness lib.rs must expose ≥4 distinct Suite variants."""
     c = internal_mod.eval_harness_suite_count_at_least_4()
-    assert c.status == PASS, (
-        f"real eval-harness did not expose 4 suites: {c.details}"
-    )
+    assert c.status == PASS, f"real eval-harness did not expose 4 suites: {c.details}"
     assert c.id == "eval_harness_suite_count_at_least_4"
 
 

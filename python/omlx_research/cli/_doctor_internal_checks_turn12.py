@@ -48,7 +48,6 @@ from __future__ import annotations
 
 import os
 import re
-from typing import List, Tuple
 
 try:
     # Python 3.11+ stdlib
@@ -64,7 +63,6 @@ from ._doctor_shared import (
     Check,
     project_root,
 )
-
 
 __all__ = [
     "cargo_workspace_crate_count_at_least_15",
@@ -105,7 +103,7 @@ _CARGO_WORKSPACE_CRATE_THRESHOLD_PASS: int = 15
 _CARGO_WORKSPACE_CRATE_THRESHOLD_FAIL: int = 10
 
 
-def _count_workspace_members(path: str) -> Tuple[bool, str]:
+def _count_workspace_members(path: str) -> tuple[bool, str]:
     """Best-effort workspace-member count for ``perf-core/Cargo.toml``.
 
     Prefers :mod:`tomllib` (stdlib in 3.11+) for an exact structural
@@ -121,11 +119,11 @@ def _count_workspace_members(path: str) -> Tuple[bool, str]:
     if not os.path.isfile(path):
         return False, f"{_CARGO_WORKSPACE_TOML_REL_PATH} not on disk"
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             text = fh.read()
     except OSError as e:
         return False, f"{type(e).__name__}: {e}"
-    members: List[str] = []
+    members: list[str] = []
     # Primary path: structural TOML parse. tomllib cannot raise here
     # because the text was already read; any decode failure is caught
     # below and we fall through to the regex.
@@ -191,10 +189,7 @@ def _count_workspace_members(path: str) -> Tuple[bool, str]:
                 seen.add(stripped)
                 members.append(stripped)
     count = len(members)
-    return True, (
-        f"found {count} declared workspace member(s) "
-        f"in {_CARGO_WORKSPACE_TOML_REL_PATH}"
-    )
+    return True, (f"found {count} declared workspace member(s) in {_CARGO_WORKSPACE_TOML_REL_PATH}")
 
 
 @register_check
@@ -239,9 +234,7 @@ def cargo_workspace_crate_count_at_least_15() -> Check:
             id="cargo_workspace_crate_count_at_least_15",
             description=desc,
             status=FAIL,
-            details=(
-                f"unexpected label format from _count_workspace_members: {label!r}"
-            ),
+            details=(f"unexpected label format from _count_workspace_members: {label!r}"),
         )
     if count >= _CARGO_WORKSPACE_CRATE_THRESHOLD_PASS:
         status = PASS
@@ -283,7 +276,7 @@ _DDM_SCHEDULE_VARIANT_THRESHOLD_PASS: int = 4
 _DDM_SCHEDULE_VARIANT_THRESHOLD_FAIL: int = 2
 
 
-def _count_ddm_schedule_variants(path: str) -> Tuple[bool, str]:
+def _count_ddm_schedule_variants(path: str) -> tuple[bool, str]:
     """Best-effort distinct ``ContinuousScheduleKind`` variant count.
 
     Parses ``discrete_diffusion_oracle.rs`` and counts every distinct
@@ -301,7 +294,7 @@ def _count_ddm_schedule_variants(path: str) -> Tuple[bool, str]:
     if not os.path.isfile(path):
         return False, f"{_DDM_ORACLE_REL_PATH} not on disk"
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             text = fh.read()
     except OSError as e:
         return False, f"{type(e).__name__}: {e}"
@@ -355,9 +348,7 @@ def ddm_continuous_schedule_variants_at_least_4() -> Check:
             id="ddm_continuous_schedule_variants_at_least_4",
             description=desc,
             status=FAIL,
-            details=(
-                f"unexpected label format from _count_ddm_schedule_variants: {label!r}"
-            ),
+            details=(f"unexpected label format from _count_ddm_schedule_variants: {label!r}"),
         )
     if count >= _DDM_SCHEDULE_VARIANT_THRESHOLD_PASS:
         status = PASS

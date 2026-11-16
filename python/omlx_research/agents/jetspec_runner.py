@@ -1,11 +1,13 @@
 """JetSpec — tree-attention speculative decoding runner."""
 
 from __future__ import annotations
-import asyncio
-from typing import Callable, Awaitable
+
+from collections.abc import Callable
 
 
-def jetspec_draft_tree(width: int, depth: int, head_fn: Callable[[int], int], prefix: list[int]) -> list[list[int]]:
+def jetspec_draft_tree(
+    width: int, depth: int, head_fn: Callable[[int], int], prefix: list[int]
+) -> list[list[int]]:
     """Generate a tree of draft tokens.
 
     `head_fn` returns the Medusa-head prediction given a token index. The
@@ -26,7 +28,9 @@ def jetspec_draft_tree(width: int, depth: int, head_fn: Callable[[int], int], pr
 
 
 class JetSpecRunner:
-    def __init__(self, target: Callable, draft_tree: list[list[int]], width: int = 4, depth: int = 2):
+    def __init__(
+        self, target: Callable, draft_tree: list[list[int]], width: int = 4, depth: int = 2
+    ):
         self.target = target
         self.draft_tree = draft_tree
         self.width = width

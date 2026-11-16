@@ -43,7 +43,6 @@ from __future__ import annotations
 
 import os
 import re
-from typing import Tuple
 
 from ._doctor_registry import register_check
 from ._doctor_shared import (
@@ -53,7 +52,6 @@ from ._doctor_shared import (
     Check,
     project_root,
 )
-
 
 __all__ = [
     "coverage_tag_count_at_least_25",
@@ -67,9 +65,7 @@ __all__ = [
 
 
 #: Relative path (from project root) to the coverage matrix source file.
-_COVERAGE_MATRIX_REL_PATH: str = (
-    "perf-core/kernel-registry/tests/sota_operators/coverage_matrix.rs"
-)
+_COVERAGE_MATRIX_REL_PATH: str = "perf-core/kernel-registry/tests/sota_operators/coverage_matrix.rs"
 
 #: Regex matching one tag-style tuple declaration in coverage_matrix.rs:
 #: a top-level ``(  "<Identifier>", ... )`` row in a const table like
@@ -89,7 +85,7 @@ _COVERAGE_TAG_THRESHOLD_PASS: int = 25
 _COVERAGE_TAG_THRESHOLD_FAIL: int = 15
 
 
-def _count_coverage_tags(path: str) -> Tuple[bool, str]:
+def _count_coverage_tags(path: str) -> tuple[bool, str]:
     """Best-effort distinct-tag count for ``coverage_matrix.rs``.
 
     Returns ``(success, label)`` where:
@@ -105,7 +101,7 @@ def _count_coverage_tags(path: str) -> Tuple[bool, str]:
     if not os.path.isfile(path):
         return False, f"{_COVERAGE_MATRIX_REL_PATH} not on disk"
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             text = fh.read()
     except OSError as e:
         return False, f"{type(e).__name__}: {e}"
@@ -205,7 +201,7 @@ _EVAL_SUITE_THRESHOLD_PASS: int = 4
 _EVAL_SUITE_THRESHOLD_FAIL: int = 2
 
 
-def _count_eval_suites(path: str) -> Tuple[bool, str]:
+def _count_eval_suites(path: str) -> tuple[bool, str]:
     """Best-effort distinct-suite count for ``eval-harness/src/lib.rs``.
 
     Counts every ``Suite::Variant`` reference in the file. Variants are
@@ -222,7 +218,7 @@ def _count_eval_suites(path: str) -> Tuple[bool, str]:
     if not os.path.isfile(path):
         return False, f"{_EVAL_HARNESS_LIB_REL_PATH} not on disk"
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             text = fh.read()
     except OSError as e:
         return False, f"{type(e).__name__}: {e}"

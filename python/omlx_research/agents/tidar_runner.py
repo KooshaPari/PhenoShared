@@ -1,8 +1,8 @@
 """TiDAR — Think in Diffusion, Talk in AR. Hybrid draft/verify loop."""
 
 from __future__ import annotations
-import asyncio
-from typing import Callable, Awaitable
+
+from collections.abc import Awaitable, Callable
 
 
 async def tidar_ar_diffusion_loop(
@@ -34,7 +34,9 @@ async def tidar_ar_diffusion_loop(
 
 
 class TidarRunner:
-    def __init__(self, base_lm, drafter, verifier, draft_len: int = 4, steps: int = 8, mask_token_id: int = 0):
+    def __init__(
+        self, base_lm, drafter, verifier, draft_len: int = 4, steps: int = 8, mask_token_id: int = 0
+    ):
         self.base_lm = base_lm
         self.drafter = drafter
         self.verifier = verifier
@@ -44,6 +46,11 @@ class TidarRunner:
 
     async def __call__(self, prompt: list[int]) -> list[int]:
         return await tidar_ar_diffusion_loop(
-            self.base_lm, self.drafter, self.verifier,
-            prompt, self.draft_len, self.steps, self.mask_token_id,
+            self.base_lm,
+            self.drafter,
+            self.verifier,
+            prompt,
+            self.draft_len,
+            self.steps,
+            self.mask_token_id,
         )
