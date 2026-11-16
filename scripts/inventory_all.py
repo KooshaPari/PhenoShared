@@ -73,6 +73,23 @@ EVIDENCE = {
 DESTINATIONS = {"PhenoApps", "zz-pause-inc-QuadSGM", "zz-pause-inc-Parpoura",
                 "zz-pause-localbase", "zz-pause-Localbase"}
 
+# Repositories whose content is partly present in PhenoShared under a name that
+# does not match the repository name. Found by searching the whole tree rather
+# than the three conventional absorption locations; the byte-level coverage is
+# measured in docs/absorption-ledger/REPO-INVENTORY-2026-11-15.md.
+PARTIAL_CONTENT = {
+    "hwledger": "crates/hwledger",
+    "hexakit": "crates/hexa-kit",
+}
+
+# Repositories whose content was searched for across the whole tree and found
+# nowhere. Verified 2026-11-16, not merely absent from the usual directories.
+CONFIRMED_UNABSORBED = {
+    "argis-extensions-preserved-20261114", "claude-plugins-official",
+    "cliproxyapi-plusplus", "slipstream", "HarnessDesk", "StealthStartup",
+    "chatta", "phenoreg-browser-audit", "zz-ref-HeliosCLI", "zz-ref-HeliosLite",
+}
+
 # Repositories recreated or imported on 2026-11-14.
 RESTORED = {
     "BytePort", "dagrun", "harness-ops", "rule30-research",
@@ -144,10 +161,16 @@ def classify(name, has_hist, roots, reg_tree):
         return "snapshot import", "decide", "content unique vs a live repo; review then absorb or keep"
     if name in RESTORED:
         return "restored 2026-11-14", "decide", "recreated from a local copy; content decision needed"
+    if name in PARTIAL_CONTENT:
+        return ("partially absorbed", "absorb-remainder",
+                "content partly lives in %s; the remainder is unabsorbed" % PARTIAL_CONTENT[name])
     if has_hist and (roots or reg_tree):
         return "absorbed + preserved", "delete-eligible", "history preserved and content present locally"
     if has_hist:
-        return "history only", "absorb-or-keep", "history preserved, no absorbed content found"
+        where = ("content confirmed nowhere in PhenoShared"
+                 if name in CONFIRMED_UNABSORBED
+                 else "history preserved, no absorbed content found")
+        return "history only", "absorb-or-keep", where
     return "unpreserved", "preserve-first", "no preserved refs; preserve before any decision"
 
 
