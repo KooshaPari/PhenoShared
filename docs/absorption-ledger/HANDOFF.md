@@ -30,11 +30,11 @@ S=185 / R=23 / P=50).
 
 The scrub question is now narrow and is **not** a secrets question:
 
-| Finding | Detail |
-|---|---|
-| 137 identifier occurrences | 92 are test fixtures, and a further 9 were miscounted by a heuristic that missed `test-*.mjs` |
-| Real exposure | ~12 service hostnames (`agent-comms.*`, `dash.*`, `*.workers.dev`), **1** D1 database id in `jobs-collector/wrangler.toml`, 9 launchd labels, 1 real email |
-| Credentials | **none** |
+| Finding                    | Detail                                                                                                                                                     |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 137 identifier occurrences | 92 are test fixtures, and a further 9 were miscounted by a heuristic that missed `test-*.mjs`                                                              |
+| Real exposure              | ~12 service hostnames (`agent-comms.*`, `dash.*`, `*.workers.dev`), **1** D1 database id in `jobs-collector/wrangler.toml`, 9 launchd labels, 1 real email |
+| Credentials                | **none**                                                                                                                                                   |
 
 So the decision is whether disclosing your service hostnames is acceptable. If
 yes, the scrub is a handful of placeholders and the push is mechanical.

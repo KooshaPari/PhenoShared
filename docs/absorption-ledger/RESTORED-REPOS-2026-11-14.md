@@ -20,20 +20,20 @@ the disk usage of packed objects, not content, and every one of them turned out
 to hold files. `scripts/prove_empty.py` walks every ref and lists every file
 path, and it found no empty repository at all:
 
-| Repository | Files |
-|---|---:|
-| `audit-snapshot-tooling` | 22,552 |
+| Repository                 |  Files |
+| -------------------------- | -----: |
+| `audit-snapshot-tooling`   | 22,552 |
 | `audit-snapshot-OmniRoute` | 13,989 |
-| `audit-snapshot-pheno` | 8,876 |
-| `audit-snapshot-HexaKit` | 3,308 |
-| `audit-snapshot-AgilePlus` | 2,979 |
-| `audit-snapshot-agentapi` | 2,605 |
-| `audit-snapshot-argis` | 1,613 |
-| `phenotype-landing` | 550 |
-| `audit-snapshot-hwLedger` | 326 |
-| `PhenoVCS` | 133 |
-| `audit-snapshot-PhenoVCS` | 133 |
-| `cvp-fixture` | 17 |
+| `audit-snapshot-pheno`     |  8,876 |
+| `audit-snapshot-HexaKit`   |  3,308 |
+| `audit-snapshot-AgilePlus` |  2,979 |
+| `audit-snapshot-agentapi`  |  2,605 |
+| `audit-snapshot-argis`     |  1,613 |
+| `phenotype-landing`        |    550 |
+| `audit-snapshot-hwLedger`  |    326 |
+| `PhenoVCS`                 |    133 |
+| `audit-snapshot-PhenoVCS`  |    133 |
+| `cvp-fixture`              |     17 |
 
 Nothing was deleted. A plan to remove them as empty would have destroyed between
 17 files and 22,552 files per repository, and `size: 0` would have looked like
@@ -43,16 +43,16 @@ justification.
 
 Eight of the eighteen were preserved, history verified ref-for-ref:
 
-| Repository | Refs | Commits | Notes |
-|---|---:|---:|---|
-| `cvp-fixture` | 1 | 1 | single-commit snapshot |
-| `rule30-research` | 2 | 13 | |
-| `dagrun` | 1 | 53 | |
-| `audit-system` | 2 | 43 | |
-| `harness-ops` | 1 | 44 | 1 older ref quarantined |
-| `phenotype-landing` | 1 | 1 | single-commit snapshot |
-| `PhenoVCS` | 1 | 1 | single-commit snapshot |
-| `zz-aa-dep-AirLock` | 211 | 1,017 | 93 original fork refs quarantined |
+| Repository          | Refs | Commits | Notes                             |
+| ------------------- | ---: | ------: | --------------------------------- |
+| `cvp-fixture`       |    1 |       1 | single-commit snapshot            |
+| `rule30-research`   |    2 |      13 |                                   |
+| `dagrun`            |    1 |      53 |                                   |
+| `audit-system`      |    2 |      43 |                                   |
+| `harness-ops`       |    1 |      44 | 1 older ref quarantined           |
+| `phenotype-landing` |    1 |       1 | single-commit snapshot            |
+| `PhenoVCS`          |    1 |       1 | single-commit snapshot            |
+| `zz-aa-dep-AirLock` |  211 |   1,017 | 93 original fork refs quarantined |
 
 `zz-aa-dep-AirLock` is the interesting one. Its current 211 refs are upstream's,
 not the fork's. All 93 of the fork's refs were moved to
