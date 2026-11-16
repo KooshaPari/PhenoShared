@@ -47,6 +47,48 @@ awk -v disable="$HAPPY_PATH_DISABLE" \
 	-v mode="$mode" '
 function trim(s) { sub(/^[[:space:]]+/, "", s); sub(/[[:space:]]+$/, "", s); return s }
 
+# Whitespace normalisation used to detect a reflow, not a content change.
+#
+# CHOICE: ALL whitespace is removed, not collapsed to a single space. A pure
+# reflow is one of two things: a re-indentation (only the leading run changes)
+# or a join/wrap (the same words redistributed across a different number of
+# lines). Collapsing runs to one space leaves one space behind where a line
+# break used to be, so a wrapped line and its unwrapped original differ by
+# "word" vs "word ", and a join stays invisible. Deleting whitespace entirely
+# maps both forms to the same token stream, which is exactly the equality a
+# reflow must prove. The trade-off is that a whitespace-only edit that is NOT a
+# reflow (e.g. `x = 1` -> `x=1`) is also suppressed - that is intended: no
+# content was added or removed, so there is nothing for a prose rule to judge.
+function ws_strip(s,   out, i, n, c) {
+  out = ""; n = length(s)
+  for (i = 1; i <= n; i++) {
+    c = substr(s, i, 1)
+    if (c != " " && c != "\t" && c != "\r" && c != "\f" && c != "\v") out = out c
+  }
+  return out
+}
+
+# A hunk is a whitespace-only reflow when the removed and added content are
+# byte-identical once whitespace is stripped. Per-HUNK, not per-file: a file can
+# carry a reflow in one region and a real deletion in another, and suppressing
+# the whole file would hide the deletion. The scan is bounded to the hunk body,
+# stopping at the next hunk header or file header.
+#
+# Falls open (returns 0 = not a reflow) whenever the comparison cannot be made,
+# so a hunk whose classification is unclear is still judged by the rules.
+function hunk_is_whitespace_only(start,   i, s, tag, t, old, new) {
+  old = ""; new = ""
+  for (i = start + 1; i <= total_lines; i++) {
+    s = diff_lines[i]
+    if (s ~ /^diff --git / || s ~ /^@@ /) break
+    tag = substr(s, 1, 1)
+    if (tag == "-") { t = substr(s, 1, 3); if (t != "---") old = old ws_strip(substr(s, 2)) }
+    else if (tag == "+") { t = substr(s, 1, 3); if (t != "+++") new = new ws_strip(substr(s, 2)) }
+  }
+  if (old == "" && new == "") return 0
+  return (old == new) ? 1 : 0
+}
+
 # Blank out the contents of quoted strings. R1 fires on CLAIMS, and a trigger
 # word inside a string literal is a value or a log message rather than an
 # assertion about the work. R2 already covers telemetry claims separately.
@@ -190,6 +232,7 @@ BEGIN {
   warn_count = 0
   file = ""
   in_hunk = 0
+  hunk_ws_only = 0
   current_new_line = 0
   total_lines = 0
 }
@@ -202,6 +245,7 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     sub(/^b\//, "", file)
     sub(/^a\//, "", file)
     in_hunk = 0
+    hunk_ws_only = 0
     # Skip the policy files themselves: the rules, their docs, and this script
     # source naturally contain the words we lint for (e.g. literal "flag=true"
     # as an example, or the regex pattern /fixed|works|done|.../ itself).
@@ -211,9 +255,16 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
     # `native/` crate via #821). They are real, tested workspace members but not
     # prose authored here, so they inherit the `docs/absorbed-from-` exemption;
     # without it a mechanical `cargo fmt` trips the prose rules on pre-existing
-    # lines rustfmt only re-indented. KNOWN GAP, not fixed here: any mechanical
-    # reformat can still trip a prose rule because the guard cannot tell a
-    # formatting-only hunk from one that adds content.
+    # lines rustfmt only re-indented.
+    #
+    # Formatting-only hunks are now handled generically rather than by path: a
+    # hunk whose removed and added content are equal after whitespace
+    # normalisation is a re-indent or a line join/wrap, so no line in it is a
+    # freshly authored claim and the whole hunk is skipped (see
+    # `hunk_is_whitespace_only`). That is a property of the DIFF, so it protects
+    # every path, not just the absorbed ones. It does not weaken any rule: a
+    # hunk that removes or adds one non-whitespace character still runs the full
+    # rule set, which is what a real content loss looks like.
     #
     # Dated audit snapshots hold result tables quoting past outcomes. Their
     # provenance is the run they record, not the commit that adds them, so R1
@@ -270,6 +321,7 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
       current_new_line = int(substr($0, RSTART + 1, RLENGTH - 1))
     }
     in_hunk = 1
+    hunk_ws_only = hunk_is_whitespace_only(FNR)
     next
   }
 
@@ -281,6 +333,10 @@ FNR == NR { diff_lines[FNR] = $0; total_lines = FNR; next }
   if (tag == "+") {
     current_new_line++
     line_no = current_new_line
+    # A whitespace-only hunk carries no new content, so no line in it can be a
+    # freshly authored claim. Line counting above still runs, so the reported
+    # line numbers of later hunks stay correct.
+    if (hunk_ws_only) next
     is_template = (file ~ /COMMIT_EDITMSG|MERGE_MSG|PULL_REQUEST_TEMPLATE|pull_request_template\.md/)
 
     # R1 fixed-claim-without-user-conf

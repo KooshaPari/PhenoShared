@@ -16,6 +16,9 @@ jobs:
       - name: Test R3 allowlist
         run: |
           bash governance/test-happy-path-allowlist.sh
+      - name: Test whitespace-only reflow suppression
+        run: |
+          bash governance/test-happy-path-whitespace.sh
       - name: Run guard against HEAD diff
         run: |
           # WHY THE BASE IS COMPUTED HERE AND NOT TAKEN FROM THE EVENT
