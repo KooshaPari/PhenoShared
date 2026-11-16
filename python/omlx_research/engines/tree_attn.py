@@ -1,6 +1,7 @@
 """Tree attention engine — JetSpec-style causal masks and verification paths."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 
 
@@ -52,6 +53,6 @@ class TreeAttentionEngine:
             for c in range(total):
                 if c <= r:
                     m[r][c] = 1
-                elif c < self.w ** self.d + 1:
+                elif c < self.w**self.d + 1:
                     m[r][c] = 1 if ancestor(c, r, self.w) else 0
         return m

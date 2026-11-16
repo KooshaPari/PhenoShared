@@ -23,17 +23,14 @@ pip install pheno-core-utils
 from pheno_core_utils import ConnectionPool, PoolConfig, PoolState
 
 # Configure pool
-config = PoolConfig(
-    min_size=2,
-    max_size=10,
-    max_idle_time=300,
-    max_lifetime=3600
-)
+config = PoolConfig(min_size=2, max_size=10, max_idle_time=300, max_lifetime=3600)
+
 
 # Create pool with custom connection factory
 def create_connection():
     # Your connection factory logic
     return connection
+
 
 pool = ConnectionPool(config, create_connection)
 
@@ -56,11 +53,7 @@ config = ConnectionConfig.from_env()
 
 # Or manual configuration
 config = ConnectionConfig(
-    host="localhost",
-    port=5432,
-    database="mydb",
-    user="postgres",
-    password="secret"
+    host="localhost", port=5432, database="mydb", user="postgres", password="secret"
 )
 
 # Create manager
@@ -85,9 +78,7 @@ from pheno_core_utils import ReadinessChecker, CheckPriority
 checker = ReadinessChecker("/path/to/project")
 
 # Run all checks
-results = checker.run_all_checks(
-    priorities=[CheckPriority.CRITICAL, CheckPriority.HIGH]
-)
+results = checker.run_all_checks(priorities=[CheckPriority.CRITICAL, CheckPriority.HIGH])
 
 # Generate report
 report = checker.generate_report(results, format="markdown")

@@ -1,5 +1,5 @@
 """MCP integration module for phenoSDK."""
 
-from .entry_points import MCPEntryPoint, MCPCLI
+from .entry_points import MCPCLI, MCPEntryPoint
 
-__all__ = ["MCPEntryPoint", "MCPCLI"]
+__all__ = ["MCPCLI", "MCPEntryPoint"]

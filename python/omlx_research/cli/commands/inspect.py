@@ -19,10 +19,10 @@ from typing import Any
 
 from ._shared import validate_plan
 
-
 # ---------------------------------------------------------------------------
 # Synthetic plan for --empty
 # ---------------------------------------------------------------------------
+
 
 def _synthetic_plan() -> dict[str, Any]:
     """Return a tiny, known-good 2-operator plan for the --empty flag."""
@@ -64,6 +64,7 @@ def _synthetic_plan() -> dict[str, Any]:
 # Plan loader
 # ---------------------------------------------------------------------------
 
+
 def _load_plan(path: str | None, empty: bool) -> tuple[dict[str, Any] | None, int]:
     """Load the plan JSON. Returns (plan, exit_code).
 
@@ -78,7 +79,7 @@ def _load_plan(path: str | None, empty: bool) -> tuple[dict[str, Any] | None, in
         )
         return None, 2
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
     except FileNotFoundError:
         print(f"error: plan file not found: {path}", file=sys.stderr)
@@ -98,6 +99,7 @@ def _load_plan(path: str | None, empty: bool) -> tuple[dict[str, Any] | None, in
 # ---------------------------------------------------------------------------
 # Renderer
 # ---------------------------------------------------------------------------
+
 
 def _print_summary(plan: dict[str, Any], errors: list[str]) -> None:
     print(f"plan_id           : {plan.get('plan_id', '<missing>')}")
@@ -145,6 +147,7 @@ def _print_edges(plan: dict[str, Any]) -> None:
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 def cmd_inspect(args: argparse.Namespace) -> int:
     """CLI entry point: ``inspect <model-plan.json> [--show-states] [--show-deps]``"""

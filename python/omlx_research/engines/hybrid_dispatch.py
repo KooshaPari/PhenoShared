@@ -1,18 +1,19 @@
 """Hybrid dispatch — auto-pick engine (MLX, Metal, vLLM, SGLang, etc.)."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 from enum import Enum
 
 from ..backends import (
     BackendBase,
-    MlxBackend,
-    MetalKernelBackend,
-    VllmBackend,
-    TensorrtBackend,
-    SglangBackend,
-    LlamaCppBackend,
     GenerateRequest,
+    LlamaCppBackend,
+    MetalKernelBackend,
+    MlxBackend,
+    SglangBackend,
+    TensorrtBackend,
+    VllmBackend,
 )
 
 
@@ -81,7 +82,11 @@ class HybridDispatch:
         if pol == DispatchPolicy.AUTO:
             pol = self._auto_pick()
         if pol == DispatchPolicy.FANOUT:
-            available = [(name, backend) for name, backend in self._backends.items() if backend.is_available()]
+            available = [
+                (name, backend)
+                for name, backend in self._backends.items()
+                if backend.is_available()
+            ]
             if not available:
                 raise HybridDispatchError(DispatchPolicy.FANOUT, self.available())
             return [backend.generate(req) for _, backend in available]
@@ -95,6 +100,7 @@ class HybridDispatch:
         preferred: list[DispatchPolicy]
         try:
             import mlx.core as mx
+
             if mx.metal.is_available():
                 preferred = [DispatchPolicy.METAL, DispatchPolicy.MLX]
             else:
@@ -104,8 +110,13 @@ class HybridDispatch:
         if not preferred:
             try:
                 import torch
+
                 if torch.cuda.is_available():
-                    preferred = [DispatchPolicy.SGLANG, DispatchPolicy.VLLM, DispatchPolicy.TENSORRT]
+                    preferred = [
+                        DispatchPolicy.SGLANG,
+                        DispatchPolicy.VLLM,
+                        DispatchPolicy.TENSORRT,
+                    ]
             except ImportError:
                 pass
         preferred.extend([DispatchPolicy.MLX, DispatchPolicy.LLAMACPP])

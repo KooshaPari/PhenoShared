@@ -26,7 +26,6 @@ from typing import Any
 
 from ._shared import parse_shape, shape_hash
 
-
 CACHE_DIR = os.path.join(os.path.expanduser("~"), ".cache", "omlx", "tune")
 
 

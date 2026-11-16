@@ -3,8 +3,6 @@
 Traces to: FR-MCP-002 - FastMCP Tool Decorator Abstraction
 """
 
-import pytest
-from typing import Any, Callable
 from pheno_mcp.tools import mcp_tool, tool_registry
 
 
@@ -39,11 +37,7 @@ class TestMCPToolDecorator:
         """Test that decorator accepts description parameter."""
         registry = tool_registry.ToolRegistry()
 
-        @mcp_tool(
-            registry=registry,
-            name="described_tool",
-            description="This is a test tool"
-        )
+        @mcp_tool(registry=registry, name="described_tool", description="This is a test tool")
         def tool_with_desc() -> str:
             """Tool with description."""
             return "success"
@@ -143,6 +137,7 @@ class TestToolRegistry:
 
             Returns:
                 Sum of x and y
+
             """
             return x + y
 

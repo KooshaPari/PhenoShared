@@ -71,10 +71,7 @@ def snapshot() -> dict[str, Any]:
 def publish_local(path: str | Path | None = None) -> Path:
     """Publish one heartbeat without overwriting an existing evidence file."""
     out = Path(
-        path
-        or os.environ.get(
-            "HWLEDGER_HEARTBEAT_PATH", "platform/federation/out/heartbeat.json"
-        )
+        path or os.environ.get("HWLEDGER_HEARTBEAT_PATH", "platform/federation/out/heartbeat.json")
     )
     out.parent.mkdir(parents=True, exist_ok=True)
     data = snapshot()

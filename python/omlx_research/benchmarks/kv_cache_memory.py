@@ -25,9 +25,7 @@ QWEN_4B = {
 
 def compute_kv_cache_mb(seq_len: int, config: dict) -> float:
     """Compute KV-cache memory for a given sequence length."""
-    kv_per_layer = (
-        2 * config["num_kv_heads"] * config["head_dim"] * config["dtype_bytes"]
-    )
+    kv_per_layer = 2 * config["num_kv_heads"] * config["head_dim"] * config["dtype_bytes"]
     total_bytes = kv_per_layer * config["num_layers"] * seq_len
     return total_bytes / (1024 * 1024)
 
@@ -54,6 +52,4 @@ if __name__ == "__main__":
     with open("python/omlx_research/benchmarks/kv_cache_memory.json", "w") as f:
         json.dump(results, f, indent=2)
 
-    print(
-        f"\nPeak at 32K ctx: {compute_kv_cache_mb(32768, QWEN_4B):.2f} MB for 4B model"
-    )
+    print(f"\nPeak at 32K ctx: {compute_kv_cache_mb(32768, QWEN_4B):.2f} MB for 4B model")

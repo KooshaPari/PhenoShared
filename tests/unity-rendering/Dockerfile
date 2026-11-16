@@ -6,13 +6,13 @@
 # Wraps the upstream unityci/editor image (Ubuntu 20.04 / focal, Unity 2022.3.20f1)
 # so CI can run:
 #
-#   docker build -t phenotype-postfx-render tests/unity-rendering/
-#   docker run --rm -v "$PWD:/project" -w /project \
-#       phenotype-postfx-render \
-#       Unity -batchmode -nographics -runTests \
-#             -testPlatform EditMode \
-#             -projectPath tests/unity-rendering \
-#             -testResults tests/unity-rendering/results.xml
+# docker build -t phenotype-postfx-render tests/unity-rendering/
+# docker run --rm -v "$PWD:/project" -w /project \
+# phenotype-postfx-render \
+# Unity -batchmode -nographics -runTests \
+# -testPlatform EditMode \
+# -projectPath tests/unity-rendering \
+# -testResults tests/unity-rendering/results.xml
 #
 # The image is intentionally thin — the upstream image already provides the
 # Unity binary, the IL2CPP backend, and the UPM client. We only add the

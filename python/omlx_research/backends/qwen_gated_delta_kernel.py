@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 _SOURCE = r"""
 auto n = thread_position_in_grid.z;
 auto b_idx = n / Hv;
@@ -111,7 +110,14 @@ def install(model: Any, mx: Any) -> dict[str, Any]:
         kernel_kind = "vector" if g.ndim == 4 else "scalar"
         result = kernel(
             inputs=[q, k, v, g, beta, state, T],
-            template=[("InT", q.dtype), ("StT", state.dtype), ("Dk", Dk), ("Dv", Dv), ("Hk", Hk), ("Hv", Hv)],
+            template=[
+                ("InT", q.dtype),
+                ("StT", state.dtype),
+                ("Dk", Dk),
+                ("Dv", Dv),
+                ("Hk", Hk),
+                ("Hv", Hv),
+            ],
             grid=(32, Dv, B * Hv),
             threadgroup=(32, 4, 1),
             output_shapes=[(B, T, Hv, Dv), state.shape],

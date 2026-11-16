@@ -32,11 +32,9 @@ import argparse
 import json
 import platform
 import sys
-from dataclasses import dataclass, field, asdict
-from typing import Callable, Optional
+from collections.abc import Callable
+from dataclasses import asdict, dataclass, field
 
-from . import _doctor_checks as checks
-from . import _doctor_meta_checks as meta_checks  # drift detector (turn-7)
 from ._doctor_registry import get_all_checks, run_all_checks
 from ._doctor_shared import (
     EXPECTED_KERNEL_OP_COUNT,
@@ -45,22 +43,20 @@ from ._doctor_shared import (
     PASS,
     WARN,
     Check,
-    project_root,
 )
 
-
 __all__ = [
-    "PASS",
-    "WARN",
+    "CHECKS",
+    "EXPECTED_KERNEL_OP_COUNT",
     "FAIL",
     "MIN_PYTHON",
-    "EXPECTED_KERNEL_OP_COUNT",
+    "PASS",
+    "WARN",
     "Check",
     "DoctorReport",
-    "CHECKS",
-    "run_doctor",
     "cmd_doctor",
     "register",
+    "run_doctor",
 ]
 
 
@@ -96,7 +92,7 @@ class DoctorReport:
 CHECKS: list[Callable[[], Check]] = get_all_checks()
 
 
-def run_doctor(_args: Optional[argparse.Namespace] = None) -> DoctorReport:
+def run_doctor(_args: argparse.Namespace | None = None) -> DoctorReport:
     """Run every check in order, returning a populated DoctorReport.
 
     Uses the registry pattern: each check self-registers via
@@ -120,9 +116,7 @@ _STATUS_GLYPH = {PASS: "OK  ", WARN: "WARN", FAIL: "FAIL"}
 def _render_human(report: DoctorReport) -> str:
     lines: list[str] = []
     lines.append("== omlx-research doctor ==")
-    lines.append(
-        f"python: {platform.python_version()}  platform: {platform.platform()}"
-    )
+    lines.append(f"python: {platform.python_version()}  platform: {platform.platform()}")
     lines.append("")
     for c in report.checks:
         glyph = _STATUS_GLYPH.get(c.status, c.status.upper())

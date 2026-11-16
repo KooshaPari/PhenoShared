@@ -144,7 +144,9 @@ class UnifiedRegistryManager:
             "resources",
             RegistryType.RESOURCE,
             config=RegistryConfig(
-                name="resources", registry_type=RegistryType.RESOURCE, metadata_required=True,
+                name="resources",
+                registry_type=RegistryType.RESOURCE,
+                metadata_required=True,
             ),
         )
 
@@ -153,12 +155,18 @@ class UnifiedRegistryManager:
             "components",
             RegistryType.COMPONENT,
             config=RegistryConfig(
-                name="components", registry_type=RegistryType.COMPONENT, auto_discovery=True,
+                name="components",
+                registry_type=RegistryType.COMPONENT,
+                auto_discovery=True,
             ),
         )
 
     def create_registry(
-        self, name: str, registry_type: RegistryType, *, config: RegistryConfig | None = None,
+        self,
+        name: str,
+        registry_type: RegistryType,
+        *,
+        config: RegistryConfig | None = None,
     ) -> Registry[Any]:
         """Create a new registry.
 
@@ -424,7 +432,10 @@ class RegistryMigrator:
                 if hasattr(item, "value"):
                     # RegistryItem format
                     registry.register(
-                        key, item.value, metadata=item.metadata, priority=item.priority,
+                        key,
+                        item.value,
+                        metadata=item.metadata,
+                        priority=item.priority,
                     )
                 else:
                     # Direct item

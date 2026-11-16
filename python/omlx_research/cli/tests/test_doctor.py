@@ -7,11 +7,14 @@ import io
 import json
 import sys
 
-import pytest
-
-from omlx_research.cli import main
 from omlx_research.cli import _doctor_checks as checks_mod
 from omlx_research.cli import doctor as doctor_mod
+from omlx_research.cli import main
+from omlx_research.cli._doctor_shared import (
+    collect_kernel_op_tags,
+    read_abi_version,
+    read_cargo_version,
+)
 from omlx_research.cli.doctor import (
     CHECKS,
     EXPECTED_KERNEL_OP_COUNT,
@@ -25,14 +28,9 @@ from omlx_research.cli.doctor import (
     register,
     run_doctor,
 )
-from omlx_research.cli._doctor_shared import (
-    collect_kernel_op_tags,
-    read_abi_version,
-    read_cargo_version,
-)
-
 
 # --- stdio capture ---------------------------------------------------------
+
 
 class _IO:
     """Swap sys.stdout/sys.stderr for one cmd_* call."""
@@ -62,6 +60,7 @@ def _find(report: DoctorReport, check_id: str) -> Check:
 
 
 # --- argparse wiring -------------------------------------------------------
+
 
 def test_main_routes_doctor_subcommand(capsys):
     rc = main(["doctor"])
@@ -102,6 +101,7 @@ def test_register_accepts_json_flag():
 
 # --- python_version check --------------------------------------------------
 
+
 def test_run_doctor_python_version_passes_on_3_14_plus():
     """We're running on Python >= 3.14 by spec; python_version must pass."""
     report = run_doctor()
@@ -112,31 +112,39 @@ def test_run_doctor_python_version_passes_on_3_14_plus():
 
 # --- exit-code semantics ---------------------------------------------------
 
+
 def test_doctor_report_exit_code_zero_when_all_pass():
-    report = DoctorReport(checks=[
-        Check(id="a", description="", status=PASS),
-        Check(id="b", description="", status=PASS),
-    ])
+    report = DoctorReport(
+        checks=[
+            Check(id="a", description="", status=PASS),
+            Check(id="b", description="", status=PASS),
+        ]
+    )
     assert report.exit_code() == 0
 
 
 def test_doctor_report_exit_code_one_when_any_warn():
-    report = DoctorReport(checks=[
-        Check(id="a", description="", status=PASS),
-        Check(id="b", description="", status=WARN),
-    ])
+    report = DoctorReport(
+        checks=[
+            Check(id="a", description="", status=PASS),
+            Check(id="b", description="", status=WARN),
+        ]
+    )
     assert report.exit_code() == 1
 
 
 def test_doctor_report_exit_code_one_when_any_fail():
-    report = DoctorReport(checks=[
-        Check(id="a", description="", status=PASS),
-        Check(id="b", description="", status=FAIL),
-    ])
+    report = DoctorReport(
+        checks=[
+            Check(id="a", description="", status=PASS),
+            Check(id="b", description="", status=FAIL),
+        ]
+    )
     assert report.exit_code() == 1
 
 
 # --- cmd_doctor rendering --------------------------------------------------
+
 
 def test_cmd_doctor_human_renders_banner():
     with _IO() as io:
@@ -161,6 +169,7 @@ def test_cmd_doctor_json_emits_valid_envelope():
 
 
 # --- run_doctor robustness -------------------------------------------------
+
 
 def test_run_doctor_returns_at_least_one_check_for_each_id():
     report = run_doctor()
@@ -230,6 +239,7 @@ def test_turboquant_rust_extension_check_warns_when_missing(monkeypatch):
 
 # --- helper-level checks ---------------------------------------------------
 
+
 def test_read_cargo_version_resolves_workspace_inheritance():
     # kernel-registry uses version.workspace = true; the helper must walk
     # up to perf-core/Cargo.toml to find the workspace.package version.
@@ -289,6 +299,7 @@ def test_airlock_v2_warns_when_not_on_path(monkeypatch):
 
 # --- CHECKS list sanity ----------------------------------------------------
 
+
 def test_checks_list_includes_expected_ids():
     ids = [getattr(fn, "__name__", "") for fn in CHECKS]
     # Each registered check function must be one we expect.
@@ -326,6 +337,7 @@ def test_run_doctor_each_check_returns_a_check_instance():
 
 
 # --- exit code reflects check status --------------------------------------
+
 
 def test_cmd_doctor_exit_code_zero_when_all_pass(monkeypatch):
     """Force every check to PASS and confirm cmd_doctor returns 0."""
@@ -399,7 +411,8 @@ def test_mlx_lm_required_by_command_passes_when_mlx_lm_importable(monkeypatch):
     # mlx_lm may or may not be installed in this environment — accept
     # either branch but require the check to PASS in both.
     try:
-        import mlx_lm  # noqa: F401
+        import mlx_lm
+
         c = checks_mod.mlx_lm_required_by_command("inference")
         assert c.status == PASS
         assert "available" in c.details

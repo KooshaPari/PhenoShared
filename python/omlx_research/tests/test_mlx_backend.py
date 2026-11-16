@@ -20,19 +20,20 @@ Tests are skipped when mlx_lm/the model is unavailable; that lets CI in
 non-Apple-Silicon environments still see the structural assertions
 (_perf_module init).
 """
+
 from __future__ import annotations
 
-import os
 import sys
 import unittest
-from typing import Optional
 
 
-def _model_local_path() -> Optional[str]:
+def _model_local_path() -> str | None:
     """Resolve the test model path; skip if not cached and HF is offline."""
     try:
         from huggingface_hub import snapshot_download
+
         from omlx_research.smoke_models import default_model_for
+
         return snapshot_download(default_model_for("mlx_backend_test"))
     except Exception:
         return None
@@ -50,7 +51,7 @@ def _require_mlx_lm() -> None:
     runnable on non-Apple-Silicon CI hosts that still have `mlx.core`.
     """
     try:
-        import mlx_lm  # noqa: F401
+        import mlx_lm
     except ImportError as e:  # pragma: no cover - exercised only when missing
         raise unittest.SkipTest(
             "mlx_lm not installed in this environment; production-path "
@@ -71,6 +72,7 @@ class TestMlxBackendInit(unittest.TestCase):
         the moment it touched self._perf_module.
         """
         from omlx_research.backends.mlx_backend import MlxBackend
+
         be = MlxBackend()
         # Must exist as an attribute, even if it hasn't been resolved yet.
         self.assertTrue(
@@ -80,13 +82,15 @@ class TestMlxBackendInit(unittest.TestCase):
         # And the value must be one of the documented sentinel set: None, module, or False.
         v = be._perf_module
         self.assertIn(
-            type(v).__name__, ("NoneType", "module", "bool"),
+            type(v).__name__,
+            ("NoneType", "module", "bool"),
             f"unexpected _perf_module type: {type(v).__name__}",
         )
 
     def test_rust_perf_lazy_loads(self):
         """_rust_perf() must populate _perf_module on first call, then cache."""
         from omlx_research.backends.mlx_backend import MlxBackend
+
         be = MlxBackend()
         # First call resolves and caches.
         r1 = be._rust_perf()
@@ -104,9 +108,12 @@ class TestMlxBackendInit(unittest.TestCase):
 
         backend = MetalKernelBackend("Qwen/Qwen3.5-0.8B")
         fake = GenerateResponse("ok", 1, 2, backend="mlx", metadata={"loaded": True})
-        with patch("mlx.core.metal.is_available", return_value=True), patch(
-            "omlx_research.backends.mlx_backend.MlxBackend.generate", return_value=fake
-        ) as generate:
+        with (
+            patch("mlx.core.metal.is_available", return_value=True),
+            patch(
+                "omlx_research.backends.mlx_backend.MlxBackend.generate", return_value=fake
+            ) as generate,
+        ):
             response = backend.generate(GenerateRequest("hello"))
         self.assertEqual(response.backend, "metal")
         self.assertEqual(response.metadata["model_path"], "Qwen/Qwen3.5-0.8B")
@@ -154,7 +161,6 @@ class TestRequireMlxLmHelper(unittest.TestCase):
         We simulate the missing-dependency path by hiding the real `mlx_lm`
         via sys.modules manipulation; the helper must re-raise as SkipTest.
         """
-        import sys
         # Make sure the helper sees a missing `mlx_lm`. We only stash a
         # sentinel under that name to force ImportError on next import;
         # afterwards we restore the original mapping so other tests are
@@ -174,7 +180,7 @@ class TestRequireMlxLmHelper(unittest.TestCase):
     def test_helper_passes_when_mlx_lm_importable(self):
         """If `mlx_lm` is importable, _require_mlx_lm must return None."""
         try:
-            import mlx_lm  # noqa: F401
+            import mlx_lm
         except ImportError:
             raise unittest.SkipTest(
                 "mlx_lm not installed — cannot exercise the happy path of "
@@ -216,7 +222,8 @@ class TestMlxBackendTurboQuantProduction(unittest.TestCase):
             - compact_turbo_cache iterates Lite.compact() correctly
             - We report compressed layers > 0 after prefill + decode
         """
-        from omlx_research.backends.mlx_backend import MlxBackend, GenerateRequest
+        from omlx_research.backends.mlx_backend import GenerateRequest, MlxBackend
+
         be = MlxBackend(self.model_path)
         req = GenerateRequest(
             prompt="The capital of France is",
@@ -224,8 +231,11 @@ class TestMlxBackendTurboQuantProduction(unittest.TestCase):
             temperature=0.0,
         )
         resp = be.generate_with_turbo_cache(
-            req, turbo_bits=4, turbo_key_bits=0,
-            compact_after_prefill=True, force_compact=True,
+            req,
+            turbo_bits=4,
+            turbo_key_bits=0,
+            compact_after_prefill=True,
+            force_compact=True,
         )
         turbo_meta = resp.metadata.get("turbo", {})
         n_compressed = turbo_meta.get("compressed", -1)
@@ -239,11 +249,13 @@ class TestMlxBackendTurboQuantProduction(unittest.TestCase):
             )
         # The 2 specific assertions: layers wrapped + at least some compressed.
         self.assertGreater(
-            n_lite, 0,
+            n_lite,
+            0,
             f"force_compact=True must wrap all layers with TurboKVCacheLite, got {n_lite}",
         )
         self.assertGreater(
-            n_compressed, 0,
+            n_compressed,
+            0,
             f"compact_turbo_cache must compress >0 layers, got compressed={n_compressed} "
             f"(lite_layers={n_lite}, layers={turbo_meta.get('layers')}, "
             f"force_compact={turbo_meta.get('force_compact')})",
@@ -251,7 +263,8 @@ class TestMlxBackendTurboQuantProduction(unittest.TestCase):
 
     def test_force_compact_overrides_gating(self):
         """force_compact=True must produce compression regardless of compact_threshold."""
-        from omlx_research.backends.mlx_backend import MlxBackend, GenerateRequest
+        from omlx_research.backends.mlx_backend import GenerateRequest, MlxBackend
+
         be = MlxBackend(self.model_path)
         # Short prompt so compact_threshold wouldn't be crossed
         req = GenerateRequest(
@@ -260,8 +273,11 @@ class TestMlxBackendTurboQuantProduction(unittest.TestCase):
             temperature=0.0,
         )
         resp = be.generate_with_turbo_cache(
-            req, turbo_bits=4, turbo_key_bits=0,
-            compact_after_prefill=True, force_compact=True,
+            req,
+            turbo_bits=4,
+            turbo_key_bits=0,
+            compact_after_prefill=True,
+            force_compact=True,
         )
         turbo_meta = resp.metadata.get("turbo", {})
         n_compressed = turbo_meta.get("compressed", -1)
@@ -275,13 +291,15 @@ class TestMlxBackendTurboQuantProduction(unittest.TestCase):
             )
         self.assertGreater(n_lite, 0, "force_compact must wrap all layers")
         self.assertGreater(
-            n_compressed, 0,
+            n_compressed,
+            0,
             f"force_compact must compress at any length, got compressed={n_compressed}",
         )
 
     def test_cache_compression_provenance(self):
         """Generation evidence derives from compacted cache state, not a probe."""
-        from omlx_research.backends.mlx_backend import MlxBackend, GenerateRequest
+        from omlx_research.backends.mlx_backend import GenerateRequest, MlxBackend
+
         be = MlxBackend(self.model_path)
         req = GenerateRequest(
             prompt="Hello world",

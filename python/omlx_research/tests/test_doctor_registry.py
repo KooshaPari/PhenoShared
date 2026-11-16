@@ -1,19 +1,18 @@
 """Tests for the doctor check registry system."""
 
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
-import pytest
-from omlx_research.cli._doctor_shared import Check, PASS, WARN, FAIL
 from omlx_research.cli._doctor_registry import (
-    register_check,
-    get_all_checks,
-    run_all_checks,
     _CHECK_REGISTRY,
     _ensure_all_modules_imported,
+    get_all_checks,
+    register_check,
+    run_all_checks,
 )
+from omlx_research.cli._doctor_shared import FAIL, PASS, WARN, Check
 
 
 def _load_all_checks():
@@ -192,7 +191,5 @@ class TestRunAllChecks:
             assert crasher_results[0].status == FAIL
             assert "RuntimeError" in crasher_results[0].details
         finally:
-            _CHECK_REGISTRY[:] = [
-                e for e in _CHECK_REGISTRY if e[1] != "test_crasher_check"
-            ]
+            _CHECK_REGISTRY[:] = [e for e in _CHECK_REGISTRY if e[1] != "test_crasher_check"]
             _CHECK_REGISTRY.extend(removed)

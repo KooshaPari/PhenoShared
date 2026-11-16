@@ -1,8 +1,7 @@
 """Tests for pheno-agents orchestrator functionality."""
 
 import pytest
-
-from pheno_agents import Orchestrator, WorkflowStep, AgentState
+from pheno_agents import Orchestrator, WorkflowStep
 from pheno_agents.base import SimpleAgent
 
 

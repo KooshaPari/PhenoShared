@@ -1,8 +1,10 @@
 """TensorRT-LLM backend — NVIDIA high-throughput inference."""
 
 from __future__ import annotations
+
 import logging
 import time
+
 from .base import (
     BackendBase,
     BackendCapabilities,
@@ -33,7 +35,7 @@ class TensorrtBackend(LazyBackendMixin, BackendBase):
 
     def is_available(self) -> bool:
         try:
-            import tensorrt_llm  # noqa
+            import tensorrt_llm
 
             return True
         except ImportError:
@@ -46,9 +48,7 @@ class TensorrtBackend(LazyBackendMixin, BackendBase):
 
                 self._runner = ModelRunner.from_engine_file(self.engine_path)
             except Exception as e:
-                logger.warning(
-                    "Failed to load tensorrt model from %s: %s", self.engine_path, e
-                )
+                logger.warning("Failed to load tensorrt model from %s: %s", self.engine_path, e)
                 self._load_error = str(e)
 
     def generate(self, req: GenerateRequest) -> GenerateResponse:

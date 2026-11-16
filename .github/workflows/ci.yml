@@ -5,6 +5,25 @@ on:
     branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
+    paths:
+      - "**.rs"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/*.go"
+      - "**/go.mod"
+      - "**/go.sum"
+      - "**/*.py"
+      - "**/pyproject.toml"
+      - "**/uv.lock"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - "**/package.json"
+      - "**/bun.lockb"
+      - "scripts/**"
+      - "**/*.sh"
+      - "Dockerfile*"
+      - ".github/workflows/ci.yml"
+      - ".github/actions/**"
   merge_group:
     branches: [main, master, develop]
 
@@ -29,7 +48,7 @@ jobs:
       has_security: ${{ steps.detect.outputs.has_security }}
       has_trunk: ${{ steps.detect.outputs.has_trunk }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
 
@@ -114,7 +133,7 @@ jobs:
     # Measured green on 2026-11-12: `python3 tools/sdk-catalog/check.py` prints
     # "PASS: 0 violation(s) across the checked rules" (exit 0).
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # tools/sdk-catalog/check.py recomputes the layer edges with
       # `cargo metadata --no-deps --offline`. Without a cargo on PATH that call
       # fails and the R2/R3 rules would report PASS against an empty package
@@ -132,7 +151,7 @@ jobs:
     # HARD gate. Measured green on 2026-11-12: `cargo deny --all-features check`
     # reported "advisories ok, bans ok, licenses ok, sources ok" (exit 0).
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
       - name: cargo-deny check
         # v1 pins cargo-deny 0.14.21, which cannot parse the RustSec advisory
@@ -156,33 +175,149 @@ jobs:
     needs: detect
     if: needs.detect.outputs.has_python == 'true'
     runs-on: ubuntu-latest
+    # One debt register, two scopes. The changed-file gate below applies this
+    # list to `python/**` so that touching a file in that tree does not demand
+    # paying down debt the whole-tree gate deliberately still tolerates; the
+    # whole-tree gate then applies the same list to every file, so the tree as a
+    # whole cannot regress either. Files outside `python/` keep the full ruleset
+    # in both gates. A rule that is paid down leaves the list everywhere at once.
+    env:
+      PY_TREE_DEBT: A001,A004,B006,B007,B904,B905,D401,E402,E501,E722,F401,F841,N803,N806,N818,RUF001,RUF002,RUF003,RUF005,RUF012,RUF043,RUF059,S104,S105,S108,S110,S112,S311,S603,S607,SIM102,SIM108,SIM117,SIM118,T201,UP031,UP035,UP042,UP046
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.11"
       - name: Install ruff (version-pinned)
         # Pinned: an unpinned `pip install ruff` let the gate's tool version float,
         # so the verdict could change with no change to the code.
-        # requirements-ci-lint.txt is not usable here: its generated form puts each
-        # --hash on an indented continuation line with no trailing `\`, which pip
-        # ignores, so `--require-hashes` rejects it (reproduced on pip 24.0 and
-        # 26.3). Regenerate it with trailing backslashes before switching to it.
+        # requirements-ci-lint.txt is still NOT used by this job. It is now
+        # installable under `--require-hashes`: hash_pip.py emits pip-compile
+        # blocks (the requirement line and every continuation but the last carry
+        # a trailing `\`) and pins the whole dependency closure, not only the
+        # top-level tools. Proven 2026-11-13, a fresh venv per file, Python 3.12
+        # on macOS arm64: all five requirements-ci-*.txt installed at exit 0.
+        # That proof is local only. Switching this job to the pin file needs the
+        # same check on the Linux runner, and requirements-ci-test.txt needs
+        # Python >= 3.12 (numpy) while this job runs 3.11.
         run: pip install ruff==0.16.5
-      # These steps FAIL on violations. They previously ended in
-      # `|| echo "::warning::..."`, which made the step exit 0 and, combined with
-      # a job-level `continue-on-error`, produced a lane that could not fail and
-      # could not be seen failing. The aggregator classifies this job as
-      # ADVISORY, so a red result is reported and does not block a merge; the
-      # difference is that it is now visible.
-      #
-      # Measured 2026-11-13T09:26:58Z at ruff 0.16.5 (the pinned version):
-      # `ruff check . --output-format=concise | wc -l` reports 18051 findings
-      # across the tree, most inside absorbed corpora. Scoping ruff to first-party
-      # Python is the prerequisite for promoting this lane to HARD.
-      - name: ruff check
+      # These steps FAIL on new or modified Python violations rather than hiding
+      # failures behind `|| echo "::warning::..."` or job-level continue-on-error.
+      # Ratchet: new and modified Python must be clean; pre-existing debt is
+      # measured and only shrinks. Whole-tree debt remains visible as advisory.
+      # The aggregator still classifies this job as ADVISORY. This ratchet makes
+      # the lane green so it can later be promoted to HARD, but promotion requires
+      # the checked paths to be clean. Scoping ruff to clean first-party Python
+      # is the prerequisite for that promotion.
+      - name: ruff check (changed Python - blocking)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+          # An infrastructure fetch flake must not red the gate. Prefer the exact
+          # base commit; fall back to the base branch ref, then to the grafted
+          # merge-base of whatever we got.
+          if ! git fetch --no-tags --depth=1 origin "$BASE_SHA"; then
+            if ! git fetch --no-tags --depth=1 origin "$BASE_REF"; then
+              echo "::notice::Base fetch failed; skipping changed-Python lint (infrastructure flake)."
+              exit 0
+            fi
+          fi
+          base=$(git merge-base FETCH_HEAD HEAD 2>/dev/null || echo FETCH_HEAD)
+          mapfile -t files < <(git diff --name-only --diff-filter=AM "$base" HEAD -- '*.py')
+          if ((${#files[@]} == 0)); then
+            echo "No Python files changed; nothing to check."
+            exit 0
+          fi
+          echo "Checking ${#files[@]} changed Python files."
+          # --force-exclude: a path that project config deliberately excludes
+          # (archival corpora such as docs/absorbed-from-**) must stay excluded
+          # even when named explicitly on the command line.
+          # Two scopes, one debt register. A changed file under `python/` is
+          # already governed by the whole-tree gate further down, which enforces
+          # the same ruleset-minus-debt across every file in that tree. Judging
+          # it by the full ruleset here instead would demand paying down
+          # tree-wide debt on first touch and would make the two gates disagree
+          # about what `python/` may contain. Everything else keeps the full
+          # ruleset in both gates.
+          py_tree=()
+          rest=()
+          for f in "${files[@]}"; do
+            case "$f" in
+              python/*) py_tree+=("$f") ;;
+              *) rest+=("$f") ;;
+            esac
+          done
+          if ((${#rest[@]})); then
+            printf '%s\0' "${rest[@]}" | xargs -0 ruff check --force-exclude
+          fi
+          if ((${#py_tree[@]})); then
+            printf '%s\0' "${py_tree[@]}" | xargs -0 ruff check --force-exclude \
+              --ignore "$PY_TREE_DEBT"
+          fi
+      - name: ruff check (whole tree - advisory, pre-existing debt)
+        # Baseline: 18,018 diagnostics / 2,710 files / 197 rules at Ruff 0.16.5.
+        # Debt must only shrink. Growing it by accident is not acceptable.
+        continue-on-error: true
         run: ruff check .
-      - name: ruff format --check
+      - name: ruff format --check (changed Python - blocking)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+          # An infrastructure fetch flake must not red the gate. Prefer the exact
+          # base commit; fall back to the base branch ref, then to the grafted
+          # merge-base of whatever we got.
+          if ! git fetch --no-tags --depth=1 origin "$BASE_SHA"; then
+            if ! git fetch --no-tags --depth=1 origin "$BASE_REF"; then
+              echo "::notice::Base fetch failed; skipping changed-Python format (infrastructure flake)."
+              exit 0
+            fi
+          fi
+          base=$(git merge-base FETCH_HEAD HEAD 2>/dev/null || echo FETCH_HEAD)
+          mapfile -t files < <(git diff --name-only --diff-filter=AM "$base" HEAD -- '*.py')
+          if ((${#files[@]} == 0)); then
+            echo "No Python files changed; nothing to check."
+            exit 0
+          fi
+          echo "Checking formatting of ${#files[@]} changed Python files."
+          printf '%s\0' "${files[@]}" | xargs -0 ruff format --check --force-exclude
+      # Stage 2 of the ruff ratchet: `python/` is the first whole-tree scope to be
+      # enforced rather than only tolerated. Enforced rules = the project ruleset
+      # MINUS the explicit debt list below. The list is measured, not assumed:
+      # 192 diagnostics / 79 files / 39 rules at Ruff 0.16.5 on 2026-11-15, after
+      # the same branch took the tree from 833 to 192 (-77%).
+      #
+      # THE DEBT LIST MAY ONLY SHRINK. Pay a rule down, then delete it from
+      # PY_TREE_DEBT in the same PR that reaches zero for it. Never add an entry
+      # without recording the measured count and the reason beside it. The
+      # advisory whole-tree steps below still report every one of these rules, so
+      # nothing is hidden: it is deliberately not yet enforced, rather than unseen.
+      - name: ruff check (python/ tree - blocking)
+        run: |
+          set -euo pipefail
+          ruff check python/ --force-exclude --ignore "$PY_TREE_DEBT"
+      - name: ruff format --check (python/ tree - blocking)
+        run: |
+          set -euo pipefail
+          ruff format --check python/ --force-exclude
+      # Independent control on the two steps above. A linter or formatter bug must
+      # never be able to green-light broken Python, and one was measured here on
+      # 2026-11-15: ruff 0.16.5 with `target-version = "py314"` rewrites
+      # `except (A, B):` into `except A, B:` (a Python 2 syntax error), and then
+      # `ruff format --check` reports the INVALID form as correctly formatted. The
+      # format gate alone therefore passed a nine-file syntax regression. This step
+      # compiles every module so that class of failure cannot reach `main`.
+      - name: python/ compiles (syntax gate - blocking)
+        run: |
+          set -euo pipefail
+          python -m compileall -q -f python/
+      - name: ruff format --check (whole tree - advisory)
+        continue-on-error: true
         run: ruff format --check .
       # The catalog invariant is NOT checked here. As a step of this job it sat
       # behind `ruff check`, which fails on the current tree, so the job
@@ -196,7 +331,7 @@ jobs:
     if: needs.detect.outputs.has_go == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Verify every go.mod is declared or excluded
         run: python3 scripts/ci/check-go-modules.py
 
@@ -220,7 +355,7 @@ jobs:
       run:
         working-directory: ${{ matrix.module }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
@@ -261,7 +396,7 @@ jobs:
     if: needs.detect.outputs.has_typescript == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # The repo is bun-managed (packageManager: bun@1.3.10). npm cannot
       # resolve the root package.json's "workspace:*" dependency, so the old
       # npm ci / npm install pair aborted before lint or test ever ran.
@@ -286,7 +421,7 @@ jobs:
     if: needs.detect.outputs.has_security == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       - name: gitleaks
@@ -305,7 +440,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4
         with:
           fail-on-severity: low
@@ -314,7 +449,7 @@ jobs:
     name: Registry Invariant (absorption claims)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: self-test analyzer
         # RUNNER_TEMP is set on every runner; job-level `env` cannot use the
         # `runner` context (build-time "Unrecognized named-value" -> run

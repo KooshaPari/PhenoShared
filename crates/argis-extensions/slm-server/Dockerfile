@@ -24,4 +24,3 @@ ENV VLLM_URL=http://localhost:8000
 
 ENTRYPOINT ["/app/slm-server"]
 CMD ["-backend", "vllm", "-addr", ":8081"]
-

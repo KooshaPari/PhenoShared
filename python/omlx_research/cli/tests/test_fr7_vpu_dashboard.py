@@ -6,7 +6,12 @@ import json
 from pathlib import Path
 
 from omlx_research.cli._doctor_shared import project_root
-from omlx_research.vpu_dashboard.server import build_status, health_payload, panel_index, schema_path
+from omlx_research.vpu_dashboard.server import (
+    build_status,
+    health_payload,
+    panel_index,
+    schema_path,
+)
 
 
 def test_fr7_contract_and_assets_present():

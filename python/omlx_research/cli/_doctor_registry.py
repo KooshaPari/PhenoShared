@@ -17,18 +17,18 @@ so it always sees the complete registry).
 from __future__ import annotations
 
 import importlib
-from typing import Callable, Optional
+from collections.abc import Callable
 
-from ._doctor_shared import Check, FAIL
+from ._doctor_shared import FAIL, Check
 
 _CHECK_REGISTRY: list[tuple[int, str, Callable[[], Check]]] = []
 
 
 def register_check(
-    fn: Optional[Callable[[], Check]] = None,
+    fn: Callable[[], Check] | None = None,
     *,
     priority: int = 100,
-    name: Optional[str] = None,
+    name: str | None = None,
 ) -> Callable[[], Check]:
     """Decorator that registers a doctor check function.
 

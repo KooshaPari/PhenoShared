@@ -79,7 +79,11 @@ class EntityNotFoundError(NotFoundError):
         message = kwargs.pop("message", f"{entity_type} with ID {entity_id} not found")
         super().__init__(
             message,
-            details={"entity_type": entity_type, "entity_id": entity_id, **kwargs.get("details", {})},
+            details={
+                "entity_type": entity_type,
+                "entity_id": entity_id,
+                **kwargs.get("details", {}),
+            },
             **{k: v for k, v in kwargs.items() if k != "details"},
         )
         self.entity_type = entity_type
@@ -549,7 +553,9 @@ class NotImplementedError(InternalError):
 
     def __init__(self, feature: str | None = None, **kwargs):
         """Initialize with feature name."""
-        message = kwargs.pop("message", f"Not implemented: {feature}" if feature else "Not implemented")
+        message = kwargs.pop(
+            "message", f"Not implemented: {feature}" if feature else "Not implemented"
+        )
         details = kwargs.get("details", {})
         if feature:
             details["feature"] = feature

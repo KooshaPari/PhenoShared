@@ -6,7 +6,6 @@ to create comprehensive dependency graphs.
 
 from __future__ import annotations
 
-import json
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -121,9 +120,7 @@ class DependencyAnalyzer:
         elif "requirements" in file_path.name:
             self._analyze_requirements(kit_name, file_path)
 
-    def _analyze_pyproject(  # noqa: PLR0912, PLR0915
-        self, kit_name: str, file_path: Path
-    ) -> None:
+    def _analyze_pyproject(self, kit_name: str, file_path: Path) -> None:
         """Analyze pyproject.toml file."""
         try:
             data: dict[str, Any] = {}

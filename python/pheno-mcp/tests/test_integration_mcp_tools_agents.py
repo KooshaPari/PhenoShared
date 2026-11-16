@@ -4,9 +4,10 @@ Traces to: FR-MCP-004 - End-to-End Integration with Mock MCP Server
 """
 
 import pytest
+
+from pheno_mcp.agents import Agent, AgentOrchestrator, AgentRole, TaskDefinition
 from pheno_mcp.mcp import MCPEntryPoint, MCPServer
 from pheno_mcp.tools import mcp_tool, tool_registry
-from pheno_mcp.agents import Agent, AgentRole, TaskDefinition, AgentOrchestrator
 
 
 class TestMCPToolsIntegration:
@@ -77,11 +78,7 @@ class TestAgentToolsIntegration:
             return f"Report: {analysis['status']}"
 
         # Create agent with tools
-        analyst = Agent(
-            role=AgentRole.ANALYST,
-            name="data_analyst",
-            tools=registry.list_tools()
-        )
+        analyst = Agent(role=AgentRole.ANALYST, name="data_analyst", tools=registry.list_tools())
 
         assert len(analyst.get_tools()) == 2
         assert "analyze_data" in analyst.get_tools()
@@ -101,17 +98,11 @@ class TestAgentToolsIntegration:
         orchestrator = AgentOrchestrator()
 
         executor = Agent(
-            role=AgentRole.WORKER,
-            name="executor",
-            tools=["execute_task", "log_result"]
+            role=AgentRole.WORKER, name="executor", tools=["execute_task", "log_result"]
         )
         orchestrator.add_agent(executor)
 
-        task = TaskDefinition(
-            name="work",
-            description="Do work",
-            assigned_to=executor
-        )
+        task = TaskDefinition(name="work", description="Do work", assigned_to=executor)
         orchestrator.add_task(task)
 
         result = orchestrator.execute()
@@ -153,20 +144,10 @@ class TestCompleteEndToEndWorkflow:
         # Setup Agents
         orchestrator = AgentOrchestrator()
 
-        fetcher = Agent(
-            role=AgentRole.WORKER,
-            name="data_fetcher",
-            tools=["fetch_data"]
-        )
-        processor = Agent(
-            role=AgentRole.WORKER,
-            name="data_processor",
-            tools=["process_items"]
-        )
+        fetcher = Agent(role=AgentRole.WORKER, name="data_fetcher", tools=["fetch_data"])
+        processor = Agent(role=AgentRole.WORKER, name="data_processor", tools=["process_items"])
         generator = Agent(
-            role=AgentRole.ANALYST,
-            name="report_generator",
-            tools=["generate_output"]
+            role=AgentRole.ANALYST, name="report_generator", tools=["generate_output"]
         )
 
         orchestrator.add_agent(fetcher)
@@ -174,22 +155,18 @@ class TestCompleteEndToEndWorkflow:
         orchestrator.add_agent(generator)
 
         # Setup Tasks
-        fetch_task = TaskDefinition(
-            name="fetch",
-            description="Fetch data",
-            assigned_to=fetcher
-        )
+        fetch_task = TaskDefinition(name="fetch", description="Fetch data", assigned_to=fetcher)
         process_task = TaskDefinition(
             name="process",
             description="Process data",
             assigned_to=processor,
-            depends_on=[fetch_task]
+            depends_on=[fetch_task],
         )
         report_task = TaskDefinition(
             name="report",
             description="Generate report",
             assigned_to=generator,
-            depends_on=[process_task]
+            depends_on=[process_task],
         )
 
         orchestrator.add_task(fetch_task)
@@ -226,16 +203,8 @@ class TestCompleteEndToEndWorkflow:
         # Setup orchestrator
         orchestrator = AgentOrchestrator()
 
-        analyst = Agent(
-            role=AgentRole.ANALYST,
-            name="analyst",
-            tools=analyst_registry.list_tools()
-        )
-        worker = Agent(
-            role=AgentRole.WORKER,
-            name="worker",
-            tools=worker_registry.list_tools()
-        )
+        analyst = Agent(role=AgentRole.ANALYST, name="analyst", tools=analyst_registry.list_tools())
+        worker = Agent(role=AgentRole.WORKER, name="worker", tools=worker_registry.list_tools())
 
         orchestrator.add_agent(analyst)
         orchestrator.add_agent(worker)
@@ -276,18 +245,10 @@ class TestCompleteEndToEndWorkflow:
         def task_tool():
             return "result"
 
-        agent = Agent(
-            role=AgentRole.WORKER,
-            name="worker",
-            tools=["task_tool"]
-        )
+        agent = Agent(role=AgentRole.WORKER, name="worker", tools=["task_tool"])
         orchestrator.add_agent(agent)
 
-        task = TaskDefinition(
-            name="task",
-            description="A task",
-            assigned_to=agent
-        )
+        task = TaskDefinition(name="task", description="A task", assigned_to=agent)
         orchestrator.add_task(task)
 
         validation = orchestrator.validate_workflow()

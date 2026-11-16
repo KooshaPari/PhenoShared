@@ -29,6 +29,7 @@ class TestLogger:
 
     def test_logger_implementation(self) -> None:
         """Test implementing Logger interface."""
+
         class TestLogger(Logger):
             def debug(self, message: str, **kwargs: Any) -> None:
                 pass
@@ -64,6 +65,7 @@ class TestTracer:
 
     def test_tracer_implementation(self) -> None:
         """Test implementing Tracer interface."""
+
         class TestTracer(Tracer):
             def start_span(self, name: str, **kwargs: Any) -> str:
                 return "span_id"
@@ -93,6 +95,7 @@ class TestMeter:
 
     def test_meter_implementation(self) -> None:
         """Test implementing Meter interface."""
+
         class TestMeter(Meter):
             def record_counter(self, name: str, value: float = 1.0, **kwargs: Any) -> None:
                 pass
@@ -138,6 +141,7 @@ class TestHealthChecker:
 
     def test_health_checker_implementation(self) -> None:
         """Test implementing HealthChecker interface."""
+
         class TestHealthChecker(HealthChecker):
             async def check_health(self) -> tuple[HealthStatus, str]:
                 return HealthStatus.HEALTHY, "OK"
@@ -148,6 +152,7 @@ class TestHealthChecker:
     @pytest.mark.asyncio
     async def test_health_checker_return_type(self) -> None:
         """Test HealthChecker returns correct type."""
+
         class TestHealthChecker(HealthChecker):
             async def check_health(self) -> tuple[HealthStatus, str]:
                 return HealthStatus.HEALTHY, "All systems operational"
@@ -174,6 +179,7 @@ class TestAlerter:
 
     def test_alerter_implementation(self) -> None:
         """Test implementing Alerter interface."""
+
         class TestAlerter(Alerter):
             async def send_alert(self, title: str, message: str, **kwargs: Any) -> None:
                 pass
@@ -184,16 +190,13 @@ class TestAlerter:
     @pytest.mark.asyncio
     async def test_alerter_send_alert(self) -> None:
         """Test sending an alert."""
+
         class TestAlerter(Alerter):
             def __init__(self) -> None:
                 self.alerts: list[dict[str, Any]] = []
 
             async def send_alert(self, title: str, message: str, **kwargs: Any) -> None:
-                self.alerts.append({
-                    "title": title,
-                    "message": message,
-                    "extra": kwargs
-                })
+                self.alerts.append({"title": title, "message": message, "extra": kwargs})
 
         alerter = TestAlerter()
         await alerter.send_alert("Test Alert", "This is a test")
@@ -209,12 +212,14 @@ class TestObservabilityPorts:
     def test_all_ports_are_abstract_bases(self) -> None:
         """Test all observability ports are abstract."""
         from abc import ABC as ABC_BASE
+
         ports = [Logger, Tracer, Meter, HealthChecker, Alerter]
         for port in ports:
             assert issubclass(port, ABC_BASE)
 
     def test_ports_can_be_composed(self) -> None:
         """Test that observability ports can be composed."""
+
         class ComposedObservability:
             def __init__(
                 self,

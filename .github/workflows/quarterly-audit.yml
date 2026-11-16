@@ -31,10 +31,10 @@ jobs:
 
     steps:
       - name: Checkout phenotype-org-audits
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Checkout phenotype-tooling (aggregator)
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: <REDACTED>/phenotype-tooling
           path: ./phenotype-tooling
@@ -71,7 +71,7 @@ jobs:
           echo "branch=audit/quarterly-${AUDIT_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1
         with:
           commit-message: |
             audit(quarterly): snapshot as of ${{ steps.audit-meta.outputs.date }}

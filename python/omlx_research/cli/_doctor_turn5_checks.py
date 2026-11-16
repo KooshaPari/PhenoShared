@@ -25,7 +25,6 @@ from __future__ import annotations
 import json
 import os
 import subprocess
-from typing import Optional
 
 from ._doctor_registry import register_check
 from ._doctor_shared import (
@@ -36,12 +35,11 @@ from ._doctor_shared import (
     project_root,
 )
 
-
 __all__ = [
-    "niah_regression_baseline_exists",
     "dispatch_script_metal_exists",
     "dispatch_script_sglang_exists",
     "dispatch_script_vllm_exists",
+    "niah_regression_baseline_exists",
 ]
 
 
@@ -63,7 +61,7 @@ def _load_niah_baseline() -> tuple[bool, str]:
     if not os.path.isfile(path):
         return False, f"{_NIAH_BASELINE_REL_PATH} not on disk"
     try:
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             payload = json.load(fh)
     except Exception as e:
         return False, f"{type(e).__name__}: {e}"
@@ -89,10 +87,7 @@ def niah_regression_baseline_exists() -> Check:
     strict: a seed with the wrong schema would silently break every
     future NIAH regression run, so we escalate.
     """
-    desc = (
-        "NIAH regression baseline "
-        "(research/baselines/niah_baseline.json) present + valid"
-    )
+    desc = "NIAH regression baseline (research/baselines/niah_baseline.json) present + valid"
     loaded, label = _load_niah_baseline()
     if not loaded:
         return Check(
@@ -106,7 +101,6 @@ def niah_regression_baseline_exists() -> Check:
     try:
         with open(
             os.path.join(project_root(), _NIAH_BASELINE_REL_PATH),
-            "r",
             encoding="utf-8",
         ) as fh:
             payload = json.load(fh)
@@ -115,9 +109,7 @@ def niah_regression_baseline_exists() -> Check:
             id="niah_regression_baseline_exists",
             description=desc,
             status=FAIL,
-            details=(
-                f"baseline read failed after first-pass OK: {type(e).__name__}: {e}"
-            ),
+            details=(f"baseline read failed after first-pass OK: {type(e).__name__}: {e}"),
         )
     if not isinstance(payload, dict):
         return Check(

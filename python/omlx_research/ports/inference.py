@@ -8,8 +8,7 @@ inheritance is optional and will be added incrementally.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 
 @dataclass
@@ -17,7 +16,7 @@ class InferenceRequest:
     prompt: str
     max_tokens: int = 256
     temperature: float = 0.0
-    stop: Optional[list[str]] = None
+    stop: list[str] | None = None
 
 
 @dataclass

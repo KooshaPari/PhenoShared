@@ -7,6 +7,7 @@ llama.cpp.
 
 The detection is non-invasive: only `import` checks, no actual model loading.
 """
+
 from __future__ import annotations
 
 import logging
@@ -23,23 +24,24 @@ logger = logging.getLogger(__name__)
 
 class Accelerator(str, Enum):
     CPU = "cpu"
-    METAL = "metal"           # Apple Metal GPU
-    CUDA = "cuda"             # NVIDIA
-    ROCM = "rocm"             # AMD
-    TPU = "tpu"               # Google
-    NEURON = "neuron"         # AWS Inferentia / Trainium
+    METAL = "metal"  # Apple Metal GPU
+    CUDA = "cuda"  # NVIDIA
+    ROCM = "rocm"  # AMD
+    TPU = "tpu"  # Google
+    NEURON = "neuron"  # AWS Inferentia / Trainium
 
 
 @dataclass
 class HardwareProfile:
     """Snapshot of what this machine has."""
-    os: str                                              # "Darwin" | "Linux" | "Windows"
-    arch: str                                            # "arm64" | "x86_64"
+
+    os: str  # "Darwin" | "Linux" | "Windows"
+    arch: str  # "arm64" | "x86_64"
     cpu_count_logical: int
     cpu_count_physical: int
     memory_total_gb: float
     accelerators: list[Accelerator] = field(default_factory=list)
-    apple_silicon_model: str = ""                        # e.g. "M1 Pro" if detected
+    apple_silicon_model: str = ""  # e.g. "M1 Pro" if detected
 
     # Best backend for each candidate kind on this hardware, ordered by preference.
     backend_preference: dict[BackendKind, list[BackendKind]] = field(default_factory=dict)
@@ -69,28 +71,29 @@ def _detect_apple_silicon() -> str:
             ["sysctl", "-n", "machdep.cpu.brand_string"], text=True, timeout=2
         ).strip()
         return out
-    except Exception:                                # noqa: BLE001
+    except Exception:
         return "Apple Silicon"
 
 
 def _detect_metal() -> bool:
     try:
-        import mlx.core as mx                        # noqa: F401
+        import mlx.core as mx
+
         return mx.metal.is_available() if hasattr(mx, "metal") else False
-    except Exception:                                # noqa: BLE001
+    except Exception:
         return False
 
 
 def _detect_cuda() -> tuple[bool, str]:
     try:
-        import torch                                # noqa: F401
         import torch as t
+
         if t.cuda.is_available():
             count = t.cuda.device_count()
             name = t.cuda.get_device_name(0) if count else "?"
             return True, f"{count}x {name}"
         return False, ""
-    except Exception:                                # noqa: BLE001
+    except Exception:
         return False, ""
 
 
@@ -102,7 +105,7 @@ def _detect_rocm() -> tuple[bool, str]:
         out = subprocess.check_output(["rocm-smi"], text=True, timeout=2, stderr=subprocess.DEVNULL)
         if "GPU" in out or "Card" in out:
             return True, out.split("\n", 1)[0]
-    except Exception:                                # noqa: BLE001
+    except Exception:
         pass
     return False, ""
 
@@ -110,7 +113,9 @@ def _detect_rocm() -> tuple[bool, str]:
 def _memory_total_gb() -> float:
     try:
         if platform.system() == "Darwin":
-            out = subprocess.check_output(["sysctl", "-n", "hw.memsize"], text=True, timeout=2).strip()
+            out = subprocess.check_output(
+                ["sysctl", "-n", "hw.memsize"], text=True, timeout=2
+            ).strip()
             return int(out) / 1024 / 1024 / 1024
         elif platform.system() == "Linux":
             with open("/proc/meminfo") as f:
@@ -118,7 +123,7 @@ def _memory_total_gb() -> float:
                     if line.startswith("MemTotal"):
                         kb = int(line.split()[1])
                         return kb / 1024 / 1024
-    except Exception:                                # noqa: BLE001
+    except Exception:
         pass
     return 0.0
 
@@ -126,6 +131,7 @@ def _memory_total_gb() -> float:
 def detect_hardware() -> HardwareProfile:
     """Build a `HardwareProfile` describing this machine."""
     import os as _os
+
     accels: list[Accelerator] = [Accelerator.CPU]
     apple_model = _detect_apple_silicon()
     is_darwin = platform.system() == "Darwin"
@@ -145,7 +151,7 @@ def detect_hardware() -> HardwareProfile:
         os=platform.system(),
         arch=platform.machine(),
         cpu_count_logical=_os.cpu_count() or 1,
-        cpu_count_physical=_os.cpu_count() or 1,           # python doesn't expose phys easily
+        cpu_count_physical=_os.cpu_count() or 1,  # python doesn't expose phys easily
         memory_total_gb=_memory_total_gb(),
         accelerators=accels,
         apple_silicon_model=apple_model if is_darwin and "Apple" in apple_model else "",
@@ -169,8 +175,7 @@ def _build_preferences(profile: HardwareProfile) -> dict[BackendKind, list[Backe
 
     # MLX/Metal requested: prefer MLX on Apple Silicon, else fall back to llama.cpp CPU
     prefs[BackendKind.MLX_METAL] = (
-        [BackendKind.MLX_METAL, cpu] if has_metal
-        else [cpu, BackendKind.LLAMACPP]
+        [BackendKind.MLX_METAL, cpu] if has_metal else [cpu, BackendKind.LLAMACPP]
     )
 
     # SGLang is the cross-platform default — works wherever CUDA/ROCm/Metal is

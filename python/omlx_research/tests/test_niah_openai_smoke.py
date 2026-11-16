@@ -1,4 +1,5 @@
 """Unit tests for NIAH OpenAI smoke (no network)."""
+
 from __future__ import annotations
 
 import importlib.util
