@@ -114,6 +114,47 @@ ignore = [
     #     certificates from local trust configuration, not from untrusted
     #     network input.
     "RUSTSEC-2025-0134",
+    # ── chrono family unmaintained upstream (evaluated 2026-11-17) ───────
+    # Upstream announcement: https://github.com/chronotope/chrono/issues/1768
+    # The maintainer declared chrono unmaintained; chrono-tz and humantime are
+    # covered because they wrap / depend on chrono. For all three the advisory
+    # states "all versions are affected" and "no safe upgrade is available",
+    # and crates.io shows the resolved version is already the newest published
+    # release (chrono 0.4.45, chrono-tz 0.10.4, humantime 2.4.0), so there is no
+    # upgrade that removes them. Replacing chrono means migrating 91 workspace
+    # crates off it (to jiff or time) - a separate, large change.
+    #
+    # chrono 0.4.45 (RUSTSEC-2026-0543)
+    #   Path: DIRECT dependency of 91 workspace crates (agent-forecast,
+    #         agileplus-*, airlock-v2, anthropic-usage-poll, cliproxy-adapter,
+    #         engine-agentapi, fabric-*, ...), plus transitively through
+    #         arrow-* , datafusion-* , cron, croner and chrono-tz.
+    #   Why not fixed: 0.4.45 is the newest published chrono and the advisory
+    #     covers every version. No parent upgrade drops it; the only removal is
+    #     a workspace-wide migration to jiff/time.
+    #   Risk: shipped runtime dependency of many binaries. No known CVE; the
+    #     advisory is "unmaintained", not "unsound" or "vulnerable".
+    "RUSTSEC-2026-0543",
+    # chrono-tz 0.10.4 (RUSTSEC-2026-0555)
+    #   Path: arrow-array 58.4.1 -> arrow -> datafusion 54.1.0 -> lance 9.0.0 ->
+    #         lancedb 0.33.0 -> hwledger-search-index "lancedb" feature ->
+    #         hwledger-explorer-cli / hwledger-mcp / hwledger-server; also
+    #         datafusion-functions 54.1.0.
+    #   Why not fixed: 0.10.4 is the newest published chrono-tz and all versions
+    #     are affected. It sits in the lancedb/datafusion tree pinned at
+    #     lancedb 0.33, so no ancestry upgrade in this workspace removes it.
+    #   Risk: only reached with --all-features via the model-explorer lancedb
+    #     feature (default v1 is Tantivy-only). Unmaintained, no known CVE.
+    "RUSTSEC-2026-0555",
+    # humantime 2.4.0 (RUSTSEC-2026-0542)
+    #   Path: lance 9.0.0 -> lancedb 0.33.0 (as above); also object_store 0.13.2
+    #         -> datafusion 54.1.0 -> lancedb 0.33.0.
+    #   Why not fixed: 2.4.0 is the newest published humantime and all versions
+    #     are affected because it wraps chrono. Same lancedb 0.33 pin; no
+    #     ancestry upgrade removes it.
+    #   Risk: only reached with --all-features via the model-explorer lancedb
+    #     feature. Unmaintained, no known CVE.
+    "RUSTSEC-2026-0542",
 ]
 
 # ── licenses ────────────────────────────────────────────────────────────
