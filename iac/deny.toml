@@ -6,7 +6,7 @@ ignore = [
   #   Path: DIRECT dependency of iac workspace members oci-lottery and
   #         oci-post-acquire (`chrono = { workspace = true }`,
   #         resolved 0.4.45 in iac/Cargo.lock).
-  #   Why not fixed: 0.4.45 is the newest published chrono and the advisory
+  #   Why no upgrade removes it: 0.4.45 is the newest published chrono and the advisory
   #     covers every version ("No safe upgrade is available"). The crate was
   #     declared unmaintained upstream (chronotope/chrono#1768). Removing it
   #     means migrating both iac crates to jiff/time.
