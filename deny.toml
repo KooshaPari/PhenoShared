@@ -40,9 +40,9 @@ ignore = [
   #     at every published version, including askama_derive 0.16.1
   #     (`basic-toml = "^0.1.1"`), and uniffi_bindgen 0.32.x only bumps askama
   #     to 0.16 - so no upgrade of the parent drops it.
-  #   Risk: build-time/proc-macro only. basic-toml parses the `Cargo.toml`
-  #     templates shipped in-tree at build time; it is never compiled into a
-  #     shipped artifact and never parses untrusted input.
+  #   Risk: proc-macro only. basic-toml parses the `Cargo.toml` templates
+  #     shipped in-tree while code is generated; nothing from it links into a
+  #     shipped artifact and it never parses untrusted input.
   "RUSTSEC-2026-0374",
   # smartstring 1.0.1 (RUSTSEC-2026-0249)
   #   Path: phenotype-casbin-wrapper -> casbin 2.20.0 -> rhai 1.26.1 ->
