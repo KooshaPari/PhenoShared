@@ -50,7 +50,7 @@
         owner: root
         group: root
         mode: "0640"
-      notify: restart cloudflared
+      notify: Restart cloudflared
 
     - name: Install cloudflared systemd unit
       ansible.builtin.copy:
@@ -80,7 +80,7 @@
         state: started
 
   handlers:
-    - name: restart cloudflared
+    - name: Restart cloudflared
       ansible.builtin.systemd:
         name: cloudflared
         state: restarted

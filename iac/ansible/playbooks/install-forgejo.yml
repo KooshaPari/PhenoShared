@@ -109,7 +109,7 @@
       vars:
         forgejo_secret_key: "{{ secret_key_slurp.content | b64decode | trim }}"
         forgejo_internal_token: "{{ internal_token_slurp.content | b64decode | trim }}"
-      notify: restart forgejo
+      notify: Restart forgejo
 
     - name: Install forgejo systemd unit
       ansible.builtin.copy:
@@ -175,7 +175,7 @@
       no_log: true
 
   handlers:
-    - name: restart forgejo
+    - name: Restart forgejo
       ansible.builtin.systemd:
         name: forgejo
         state: restarted

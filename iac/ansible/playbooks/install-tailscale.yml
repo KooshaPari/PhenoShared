@@ -22,7 +22,7 @@
       changed_when: false
       failed_when: false
 
-    - name: tailscale up (idempotent)
+    - name: Tailscale up (idempotent)
       ansible.builtin.command: >
         tailscale up
         --authkey={{ tailscale_authkey }}

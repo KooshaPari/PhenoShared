@@ -12,17 +12,17 @@
 #   6. woodpecker — CI, OAuths against forgejo
 #   7. vaultwarden — credentials store
 
-- name: common - base OS, repos, firewall, swap, tailscale and cloudflared binaries
+- name: Common - base OS, repos, firewall, swap, tailscale and cloudflared binaries
   import_playbook: common.yml
-- name: tailscale - join the mesh so reruns can reach hosts over MagicDNS
+- name: Tailscale - join the mesh so reruns can reach hosts over MagicDNS
   import_playbook: install-tailscale.yml
-- name: caddy - front proxy (needs CF_API_TOKEN for ACME DNS-01)
+- name: Caddy - front proxy (needs CF_API_TOKEN for ACME DNS-01)
   import_playbook: install-caddy.yml
-- name: cloudflared - public ingress (depends on Caddy being up on :443)
+- name: Cloudflared - public ingress (depends on Caddy being up on :443)
   import_playbook: install-cloudflared.yml
-- name: forgejo - git plus Actions
+- name: Forgejo - git plus Actions
   import_playbook: install-forgejo.yml
-- name: woodpecker - CI that OAuths against forgejo
+- name: Woodpecker - CI that OAuths against forgejo
   import_playbook: install-woodpecker.yml
-- name: vaultwarden - credentials store
+- name: Vaultwarden - credentials store
   import_playbook: install-vaultwarden.yml
