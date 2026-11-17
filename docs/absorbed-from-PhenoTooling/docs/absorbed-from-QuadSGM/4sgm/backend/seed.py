@@ -16,7 +16,7 @@ fake = Faker()
 # Database setup
 DATABASE_URL = os.getenv(
     "SUPABASE_DB_URL",
-    "postgresql://postgres:ASD3on54_Pax90@db.xerrnwvpdkywwugdtlma.supabase.co:5432/postgres",
+    "postgresql://postgres:REDACTED-ROTATE-ME@db.xerrnwvpdkywwugdtlma.supabase.co:5432/postgres",
 )
 
 engine = create_engine(DATABASE_URL)
