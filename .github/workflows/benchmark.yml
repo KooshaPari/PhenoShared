@@ -55,7 +55,7 @@ jobs:
         if: steps.check-benches.outputs.has-benches == 'true'
         uses: benchmark-action/github-action-benchmark@4322e5726e6334590d251fc4f92bec0efafc45dc # v1
         with:
-          tool: 'cargo'
+          tool: cargo
           output-file-path: target/criterion/output.txt
           github-token: ${{ secrets.GITHUB_TOKEN }}
           auto-push: true
