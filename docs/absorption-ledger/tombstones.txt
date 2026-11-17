@@ -1,0 +1,16 @@
+# Repositories deliberately deleted. Restoration must not resurrect these.
+#
+# One repository per line. `#` starts a comment.
+#
+# Why this file exists: every preserved namespace under refs/preserved/ can be
+# rebuilt into a live repository, which is what makes deletion safe. It also made
+# deletion pointless, because something restores preserved namespaces routinely.
+# phenotype-canonicalization was deleted on 2026-11-16 at 08:03 and reappeared at
+# 09:11 with its preserved tip 570e2c73. harness-ops (bb4ac298) and dagrun
+# (8080d73a) both have live tips identical to their preserved tips.
+#
+# scripts/restore_preserved.py refuses --create for a tombstoned repository unless
+# --force is given, so the history stays recoverable without the repository
+# reappearing on its own.
+
+phenotype-canonicalization    # deleted 2026-11-16, all three conditions verified

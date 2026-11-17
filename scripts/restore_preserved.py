@@ -29,6 +29,38 @@ import tempfile
 OWNER_DEFAULT = "KooshaPari"
 REGISTRY_DEFAULT = "PhenoRegistry"
 
+TOMBSTONE_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "docs", "absorption-ledger", "tombstones.txt")
+
+
+def tombstones() -> set:
+    """Repositories deliberately deleted, which restoration must not undo.
+
+    Preservation and consolidation pull in opposite directions. Every preserved
+    namespace is a complete history that can be rebuilt into a repository, which
+    is what makes deletion safe - and also what makes deletion pointless if
+    something rebuilds them routinely.
+
+    That is not hypothetical. phenotype-canonicalization was deleted on
+    2026-11-16 at 08:03 and reappeared at 09:11 with its preserved tip
+    570e2c73; harness-ops and dagrun show the same live-equals-preserved
+    identity. Something runs this restore against namespaces rather than against
+    a decision.
+
+    A tombstone records the decision, so the history stays recoverable with
+    --force while routine restoration stops resurrecting the repository.
+    """
+    if not os.path.isfile(TOMBSTONE_PATH):
+        return set()
+    names = set()
+    with open(TOMBSTONE_PATH, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.split("#", 1)[0].strip()
+            if line:
+                names.add(line)
+    return names
+
 
 def sh(args, cwd=None):
     p = subprocess.run(args, cwd=cwd, capture_output=True)
@@ -109,15 +141,25 @@ def main() -> int:
     ap.add_argument("--private", action="store_true", default=True)
     ap.add_argument("--owner", default=OWNER_DEFAULT)
     ap.add_argument("--registry", default=REGISTRY_DEFAULT)
+    ap.add_argument("--force", action="store_true",
+                    help="restore even if the repository is tombstoned")
     args = ap.parse_args()
 
     if args.list or not args.repo:
         counts = preserved_namespaces(args.owner, args.registry)
         print("%-40s %s" % ("namespace", "refs"))
         for repo in sorted(counts):
-            print("%-40s %d" % (repo, counts[repo]))
+            mark = "  [tombstoned]" if repo in tombstones() else ""
+            print("%-40s %d%s" % (repo, counts[repo], mark))
         print("\ntotal namespaces: %d, total refs: %d" % (len(counts), sum(counts.values())))
         return 0
+
+    if args.create and args.repo in tombstones() and not args.force:
+        print("%s is tombstoned: it was deleted deliberately, and restoring it "
+              "would undo that." % args.repo)
+        print("Its history is still in refs/preserved/%s/ and can be rebuilt "
+              "with --force." % args.repo)
+        return 3
 
     return restore(args.repo, args.owner, args.registry, args.create, args.private)
 
