@@ -20,8 +20,8 @@ PASS=0
 FAIL=0
 
 if [ ! -f "$GUARD" ]; then
-  echo "ERROR: $GUARD not found" >&2
-  exit 2
+	echo "ERROR: $GUARD not found" >&2
+	exit 2
 fi
 
 # Reusable awk rule engine: same R3 rule + allowlist as production script.
@@ -77,7 +77,7 @@ END { if (fail_count > 0) exit 1; exit 0 }
 '
 
 # ---- Test 1: allowlist matches VoxelScaleMultiplier=8.0 (the canonical fix) ----
-cat > /tmp/phenohb_test1.diff <<'EOF'
+cat >/tmp/phenohb_test1.diff <<'EOF'
 diff --git a/SomeMod/Settings.cs b/SomeMod/Settings.cs
 index 1111111..2222222 100644
 --- a/SomeMod/Settings.cs
@@ -92,15 +92,15 @@ echo "Test 1: default allowlist must exempt VoxelScaleMultiplier=8.0 from R3" >&
 out=$(awk -v allow="" -v big_allow_re="(?i)voxelscalemultiplier" "$awk_engine" /tmp/phenohb_test1.diff 2>&1)
 ec=$?
 if [ -z "$out" ] && [ $ec -eq 0 ]; then
-  echo "  PASS (R3 skipped, exit 0)" >&2
-  PASS=$((PASS+1))
+	echo "  PASS (R3 skipped, exit 0)" >&2
+	PASS=$((PASS + 1))
 else
-  echo "  FAIL: R3 fired on allowlisted line (output: $out, exit: $ec)" >&2
-  FAIL=$((FAIL+1))
+	echo "  FAIL: R3 fired on allowlisted line (output: $out, exit: $ec)" >&2
+	FAIL=$((FAIL + 1))
 fi
 
 # ---- Test 2: allowlist is case-insensitive (voxelscale=8.0 also exempted) ----
-cat > /tmp/phenohb_test2.diff <<'EOF'
+cat >/tmp/phenohb_test2.diff <<'EOF'
 diff --git a/SomeMod/Settings.cs b/SomeMod/Settings.cs
 index 1111111..2222222 100644
 --- a/SomeMod/Settings.cs
@@ -115,15 +115,15 @@ echo "Test 2: allowlist regex is case-insensitive" >&2
 out=$(awk -v allow="" -v big_allow_re="(?i)voxelscalemultiplier" "$awk_engine" /tmp/phenohb_test2.diff 2>&1)
 ec=$?
 if [ -z "$out" ] && [ $ec -eq 0 ]; then
-  echo "  PASS (R3 skipped on lowercase)" >&2
-  PASS=$((PASS+1))
+	echo "  PASS (R3 skipped on lowercase)" >&2
+	PASS=$((PASS + 1))
 else
-  echo "  FAIL: R3 fired on case-variant (output: $out, exit: $ec)" >&2
-  FAIL=$((FAIL+1))
+	echo "  FAIL: R3 fired on case-variant (output: $out, exit: $ec)" >&2
+	FAIL=$((FAIL + 1))
 fi
 
 # ---- Test 3: a non-allowlisted large constant still triggers R3 ----
-cat > /tmp/phenohb_test3.diff <<'EOF'
+cat >/tmp/phenohb_test3.diff <<'EOF'
 diff --git a/SomeMod/Settings.cs b/SomeMod/Settings.cs
 index 1111111..2222222 100644
 --- a/SomeMod/Settings.cs
@@ -138,17 +138,17 @@ echo "Test 3: non-allowlisted multiplier still triggers R3" >&2
 out=$(awk -v allow="" -v big_allow_re="(?i)voxelscalemultiplier" "$awk_engine" /tmp/phenohb_test3.diff 2>&1)
 ec=$?
 if echo "$out" | grep -q "FAIL \[R3\]"; then
-  echo "  PASS (R3 fired as expected)" >&2
-  PASS=$((PASS+1))
+	echo "  PASS (R3 fired as expected)" >&2
+	PASS=$((PASS + 1))
 else
-  echo "  FAIL: R3 did NOT fire on non-allowlisted constant (output: $out, exit: $ec)" >&2
-  FAIL=$((FAIL+1))
+	echo "  FAIL: R3 did NOT fire on non-allowlisted constant (output: $out, exit: $ec)" >&2
+	FAIL=$((FAIL + 1))
 fi
 
 # ---- Test 4: empty allowlist regex disables the exemption ----
 # Use a multiplier=99 line (triggers R3 sub-rule) to verify that an empty
 # allowlist regex permits the R3 branch to fire.
-cat > /tmp/phenohb_test4.diff <<'EOF'
+cat >/tmp/phenohb_test4.diff <<'EOF'
 diff --git a/SomeMod/Settings.cs b/SomeMod/Settings.cs
 index 1111111..2222222 100644
 --- a/SomeMod/Settings.cs
@@ -162,16 +162,16 @@ echo "Test 4: empty allowlist regex (regex='') permits R3 to fire on a non-exemp
 out=$(awk -v allow="" -v big_allow_re="" "$awk_engine" /tmp/phenohb_test4.diff 2>&1)
 ec=$?
 if echo "$out" | grep -q "FAIL \[R3\]"; then
-  echo "  PASS (R3 fired when allowlist disabled)" >&2
-  PASS=$((PASS+1))
+	echo "  PASS (R3 fired when allowlist disabled)" >&2
+	PASS=$((PASS + 1))
 else
-  echo "  FAIL: R3 did not fire when allowlist disabled (output: $out, exit: $ec)" >&2
-  FAIL=$((FAIL+1))
+	echo "  FAIL: R3 did not fire when allowlist disabled (output: $out, exit: $ec)" >&2
+	FAIL=$((FAIL + 1))
 fi
 
 # ---- Test 4b: per-repo override of allowlist regex ----
 # Override HAPPY_PATH_BIG_CONSTANT_ALLOW_REGEX to permit a different constant.
-cat > /tmp/phenohb_test4b.diff <<'EOF'
+cat >/tmp/phenohb_test4b.diff <<'EOF'
 diff --git a/SomeMod/Settings.cs b/SomeMod/Settings.cs
 index 1111111..2222222 100644
 --- a/SomeMod/Settings.cs
@@ -185,53 +185,53 @@ echo "Test 4b: per-repo allowlist override accepts a different constant name" >&
 out=$(awk -v allow="" -v big_allow_re="(?i)custommultiplier" "$awk_engine" /tmp/phenohb_test4b.diff 2>&1)
 ec=$?
 if [ -z "$out" ] && [ $ec -eq 0 ]; then
-  echo "  PASS (R3 skipped for customMultiplier when configured)" >&2
-  PASS=$((PASS+1))
+	echo "  PASS (R3 skipped for customMultiplier when configured)" >&2
+	PASS=$((PASS + 1))
 else
-  echo "  FAIL: R3 fired on customMultiplier despite allowlist override (output: $out, exit: $ec)" >&2
-  FAIL=$((FAIL+1))
+	echo "  FAIL: R3 fired on customMultiplier despite allowlist override (output: $out, exit: $ec)" >&2
+	FAIL=$((FAIL + 1))
 fi
 
 # ---- Test 5: matches_allow_regex function exists in production script ----
 echo "Test 5: production script defines matches_allow_regex and big_allow_re" >&2
-if grep -q "function matches_allow_regex" "$GUARD" && \
-   grep -q "HAPPY_PATH_BIG_CONSTANT_ALLOW_REGEX" "$GUARD" && \
-   grep -q "big_allow_re=" "$GUARD"; then
-  echo "  PASS (production script wires the new function + env var)" >&2
-  PASS=$((PASS+1))
+if grep -q "function matches_allow_regex" "$GUARD" &&
+	grep -q "HAPPY_PATH_BIG_CONSTANT_ALLOW_REGEX" "$GUARD" &&
+	grep -q "big_allow_re=" "$GUARD"; then
+	echo "  PASS (production script wires the new function + env var)" >&2
+	PASS=$((PASS + 1))
 else
-  echo "  FAIL: production script missing matches_allow_regex or env var wiring" >&2
-  FAIL=$((FAIL+1))
+	echo "  FAIL: production script missing matches_allow_regex or env var wiring" >&2
+	FAIL=$((FAIL + 1))
 fi
 
 # ---- Test 6: R3 branch in production script calls matches_allow_regex ----
 echo "Test 6: R3 branch in production script uses matches_allow_regex" >&2
 if awk '/R3 blunt-force-constant/,/^    }$/' "$GUARD" | grep -q "matches_allow_regex"; then
-  echo "  PASS (R3 branch consults the allowlist)" >&2
-  PASS=$((PASS+1))
+	echo "  PASS (R3 branch consults the allowlist)" >&2
+	PASS=$((PASS + 1))
 else
-  echo "  FAIL: R3 branch does not call matches_allow_regex" >&2
-  FAIL=$((FAIL+1))
+	echo "  FAIL: R3 branch does not call matches_allow_regex" >&2
+	FAIL=$((FAIL + 1))
 fi
 
 # ---- Test 7: workflow no longer installs bash via apt-get ----
 echo "Test 7: workflow no longer runs 'sudo apt-get install -y bash'" >&2
-GUARD_WORKFLOW="$SCRIPT_DIR/../.github/workflows/pr-advisory.yml"
-if [ ! -f "$GUARD_WORKFLOW" ]; then
-  echo "  FAIL: guard workflow $GUARD_WORKFLOW is missing; the check cannot run" >&2
-  FAIL=$((FAIL+1))
-elif grep -q "sudo apt-get install -y bash" "$GUARD_WORKFLOW"; then
-  echo "  FAIL: workflow still contains the redundant apt-get bash install" >&2
-  FAIL=$((FAIL+1))
+GUARD_WORKFLOW="${SCRIPT_DIR}/../.github/workflows/pr-advisory.yml"
+if [ ! -f "${GUARD_WORKFLOW}" ]; then
+	echo "  FAIL: guard workflow ${GUARD_WORKFLOW} is missing; the check cannot run" >&2
+	FAIL=$((FAIL + 1))
+elif grep -q "sudo apt-get install -y bash" "${GUARD_WORKFLOW}"; then
+	echo "  FAIL: workflow still contains the redundant apt-get bash install" >&2
+	FAIL=$((FAIL + 1))
 else
-  echo "  PASS (no apt-get bash install)" >&2
-  PASS=$((PASS+1))
+	echo "  PASS (no apt-get bash install)" >&2
+	PASS=$((PASS + 1))
 fi
 
 echo "" >&2
 echo "=== RESULTS: $PASS passed, $FAIL failed ===" >&2
 if [ $FAIL -eq 0 ]; then
-  exit 0
+	exit 0
 else
-  exit 1
+	exit 1
 fi
