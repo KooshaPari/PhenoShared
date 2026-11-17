@@ -35,16 +35,16 @@ jobs:
         id: audit
         run: |
           THRESHOLD=${{ github.event.inputs.threshold || '35' }}
-          
+
           # Run audit in JSON mode
           python scripts/scorecard_ci.py . --output json --threshold "$THRESHOLD" --fail-on-drop > scorecard-report.json 2> scorecard-stderr.txt || EXIT_CODE=$?
           if [ "${EXIT_CODE:-0}" -ne 0 ]; then echo "audit exited ${EXIT_CODE}" >&2; fi
-          
+
           # Extract score
           SCORE=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(r['score'])")
           TOTAL=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(r['total'])")
           PCT=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(f\"{r['percentage']:.1f}\")")
-          
+
           # Generate markdown summary
           {
             echo "## 88-Pillar Scorecard Result"
@@ -56,7 +56,7 @@ jobs:
             echo "| **Status** | $( [ "$SCORE" -ge "$THRESHOLD" ] && echo "PASS" || echo "FAIL" ) |"
             echo ""
           } > scorecard-summary.md
-          
+
           # List failed pillars
           if [ "$SCORE" -lt "$THRESHOLD" ]; then
             {
@@ -71,7 +71,7 @@ jobs:
           "
             } >> scorecard-summary.md
           fi
-          
+
           # Set outputs
           {
             echo "score=${SCORE}"
@@ -80,7 +80,7 @@ jobs:
             echo "threshold=${THRESHOLD}"
             echo "passed=$( [ "$SCORE" -ge "$THRESHOLD" ] && echo true || echo false )"
           } >> "$GITHUB_OUTPUT"
-          
+
           # Post PR comment if applicable
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             COMMENT=$(cat scorecard-summary.md)
@@ -99,7 +99,7 @@ jobs:
           TOTAL=${{ steps.audit.outputs.total }}
           THRESHOLD=${{ steps.audit.outputs.threshold }}
           PASSED=${{ steps.audit.outputs.passed }}
-          
+
           if [ "$PASSED" = "true" ]; then
             echo "Scorecard: ${SCORE}/${TOTAL} - PASS (threshold: ${THRESHOLD})"
           else
@@ -132,17 +132,17 @@ jobs:
           SCORE=${{ needs.scorecard.outputs.score }}
           TOTAL=${{ needs.scorecard.outputs.total }}
           PCT=${{ needs.scorecard.outputs.percentage }}
-          
+
           # Generate badge SVG
           if [ "${{ needs.scorecard.outputs.passed }}" = "true" ]; then
             COLOR="brightgreen"
           else
             COLOR="red"
           fi
-          
+
           BADGE_URL="https://img.shields.io/badge/scorecard-${SCORE}%2F${TOTAL}%20(${PCT}%25)-${COLOR}"
           echo "Badge URL: ${BADGE_URL}"
-          
+
           # Update README badge if it exists
           if [ -f "README.md" ]; then
             sed -i "s|!\[Scorecard\].*|[![Scorecard](${BADGE_URL})](https://github.com/${{ github.repository }}/actions)|g" README.md || true

@@ -9,7 +9,7 @@ on:
     # Weekly drift check (Mondays 06:17 UTC) for branch protection,
     # CODEOWNERS, and required governance files. Drift here lowers
     # the OpenSSF Scorecard "Maintenance" and "Signed-Releases" checks.
-    - cron: '17 6 * * 1'
+    - cron: 17 6 * * 1
   workflow_dispatch:
 
 permissions:

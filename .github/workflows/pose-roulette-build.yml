@@ -4,7 +4,7 @@ on:
   push:
     branches: [tmp-pose-ci]
     paths:
-      - '.ci/pose-roulette/**'
+      - .ci/pose-roulette/**
   workflow_dispatch:
     inputs:
       ref:
@@ -29,10 +29,10 @@ jobs:
       - uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
         with:
-          flutter-version: '3.35.7'
+          flutter-version: 3.35.7
           channel: stable
           cache: true
       - name: Prepare isolated project
@@ -63,7 +63,7 @@ jobs:
           persist-credentials: false
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
         with:
-          flutter-version: '3.35.7'
+          flutter-version: 3.35.7
           channel: stable
           cache: true
       - name: Prepare isolated project
