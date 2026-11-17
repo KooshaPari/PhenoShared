@@ -1,7 +1,7 @@
 # slipstream documentation site — Fumadocs on TanStack Start, built with Bun, served by
 # the Nitro `bun` preset bundle. Self-contained context:
 #
-#   docker build -t slipstream-docs docs-site
+# docker build -t slipstream-docs docs-site
 #
 # Runtime: PORT (default 3000).
 FROM oven/bun:1 AS build

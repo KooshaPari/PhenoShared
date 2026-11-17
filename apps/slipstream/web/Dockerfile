@@ -2,7 +2,7 @@
 # preset bundle. Build context is the REPO ROOT (orval generates the API client from
 # api/openapi.json, referenced as ../api/openapi.json from web/):
 #
-#   docker build -f web/Dockerfile -t slipstream-web .
+# docker build -f web/Dockerfile -t slipstream-web .
 #
 # Runtime: PORT (default 47992) and SLIPSTREAM_MGMT_URL (upstream management API the Nitro
 # server proxies /api to; see web/server/routes).
