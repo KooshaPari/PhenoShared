@@ -5,11 +5,11 @@
 # 2. Runtime stage: minimal alpine with non-root user, read-only FS
 #
 # Usage:
-#   docker build -t forgecode:production .
-#   docker run --rm -p 8080:8080 -e PORT=8080 \
-#       -v /tmp/forgecode-data:/data \
-#       --read-only --cap-drop=ALL \
-#       forgecode:production
+# docker build -t forgecode:production .
+# docker run --rm -p 8080:8080 -e PORT=8080 \
+# -v /tmp/forgecode-data:/data \
+# --read-only --cap-drop=ALL \
+# forgecode:production
 
 # ── Builder stage ─────────────────────────────────────────────
 FROM rust:1.97-alpine@sha256:e8b7a4a7b5b5c5e5d5c5b5a5b5c5d5e5c5b5a5b5c5d5e5c5b5a5b5c5d5e5c5b5a5b5c5d5e AS builder
@@ -54,8 +54,7 @@ RUN mkdir -p $DATA_HOME $LOG_HOME && \
 WORKDIR $APP_HOME
 
 # Copy binary from builder (minimal attack surface)
-COPY --from=builder --chown=forgecode:forgecode \
-    /app/target/release/forgecode /usr/local/bin/forgecode
+COPY --from=builder --chown=forgecode:forgecode /app/target/release/forgecode /usr/local/bin/forgecode
 
 # Create health check script
 RUN echo '#!/bin/sh' > /healthcheck.sh && \
@@ -63,8 +62,7 @@ RUN echo '#!/bin/sh' > /healthcheck.sh && \
     chmod +x /healthcheck.sh
 
 # Health check endpoint
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD /healthcheck.sh || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD /healthcheck.sh || exit 1
 
 # Switch to non-root user
 USER forgecode
