@@ -46,7 +46,89 @@ def gh_api(path: str) -> tuple[int, str]:
     return code, (out.decode("utf-8", "replace") if code == 0 else err.decode("utf-8", "replace"))
 
 
+def verify_registry_tree(repo: str, owner: str = DEFAULT_OWNER,
+                         registry: str = DEFAULT_REGISTRY) -> tuple[bool, str]:
+    """Prove the registry's absorbed tree covers the live repository.
+
+    verify_absorption.py compares a repository against absorption/<repo>/, which
+    only exists for content absorbed into the public tree. Private and
+    credential-bearing repositories are absorbed into the registry instead, at
+    repos/<repo>/tree/, and could not be authorised by this tool at all - a gap
+    that blocked every private deletion rather than a fault in their data.
+
+    The comparison is the same idea: git blob ids are content hashes, so an equal
+    blob id at the same path means the same bytes. The registry tree is reached by
+    walking three tree objects (root -> repos -> <repo> -> tree) because a
+    recursive listing of an 8 GB registry times out.
+    """
+    def api_json(path: str):
+        code, body = gh_api(path)
+        if code != 0:
+            return None
+        try:
+            return json.loads(body)
+        except ValueError:
+            return None
+
+    def child(tree_sha: str, name: str):
+        d = api_json("repos/%s/%s/git/trees/%s" % (owner, registry, tree_sha))
+        if not d:
+            return None
+        for e in d.get("tree", []):
+            if e["path"] == name:
+                return e
+        return None
+
+    commit = api_json("repos/%s/%s/commits/main" % (owner, registry))
+    if not commit:
+        return False, "cannot read registry main"
+    e = child(commit["commit"]["tree"]["sha"], "repos")
+    if not e:
+        return False, "registry has no repos/"
+    e = child(e["sha"], repo)
+    if not e:
+        return False, "registry has no repos/%s/" % repo
+    e = child(e["sha"], "tree")
+    if not e:
+        return False, "repos/%s/ has no tree/ (history only?)" % repo
+
+    d = api_json("repos/%s/%s/git/trees/%s?recursive=1" % (owner, registry, e["sha"]))
+    if not d or d.get("truncated"):
+        return False, "cannot read the registry content tree"
+    reg = {x["path"]: x["sha"] for x in d["tree"] if x.get("type") == "blob"}
+
+    info = api_json("repos/%s/%s" % (owner, repo))
+    if not info:
+        return False, "cannot read the repository"
+    d = api_json("repos/%s/%s/git/trees/%s?recursive=1"
+                 % (owner, repo, info["default_branch"]))
+    if not d or d.get("truncated"):
+        return False, "cannot read the repository tree"
+    live = {x["path"]: x["sha"] for x in d["tree"] if x.get("type") == "blob"}
+
+    missing = sorted(set(live) - set(reg))
+    if missing:
+        return False, ("registry tree missing %d of %d files (e.g. %s)"
+                       % (len(missing), len(live), missing[0]))
+    differ = [p for p in set(live) & set(reg) if live[p] != reg[p]]
+    if differ:
+        return True, ("%d/%d files, %d differ in content"
+                      % (len(live), len(live), len(differ)))
+    return True, "%d/%d files exact (registry tree)" % (len(live), len(live))
+
+
 def verify(repo: str) -> tuple[bool, str]:
+    """Verify content is absorbed somewhere.
+
+    Public content lives in absorption/<repo>/ and is checked by
+    verify_absorption.py. Private content lives in the registry and is checked by
+    verify_registry_tree. The choice is made from what exists, not from a flag,
+    because a caller should not have to know which bucket a repository was in.
+    """
+    absorbed = os.path.join(REPO_ROOT, "absorption", repo)
+    if not os.path.isdir(absorbed):
+        return verify_registry_tree(repo)
+
     script = os.path.join(REPO_ROOT, "scripts", "verify_absorption.py")
     code, out, err = sh([sys.executable, script, repo, "--json"])
     if code not in (0, 1):

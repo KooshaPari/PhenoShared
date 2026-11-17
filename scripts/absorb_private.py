@@ -198,9 +198,14 @@ def main() -> int:
     ap.add_argument("--registry", default=REGISTRY_DEFAULT)
     args = ap.parse_args()
 
-    workdir = tempfile.mkdtemp(
-        prefix="absorb-private-", dir=os.path.expanduser("~/CodeProjects/temp")
-    )
+    # Scratch belongs under the declared scratch root, not a hardcoded path under
+    # CodeProjects. The old path did not exist, so every run failed before doing
+    # any work with FileNotFoundError on mkdtemp. Honour the configured scratch
+    # directory first, then the agent scratch root, then the system temp.
+    scratch = os.environ.get("KCODE_SCRATCH_DIR") or os.path.expanduser("~/Agents/scratch")
+    if not os.path.isdir(scratch):
+        scratch = tempfile.gettempdir()
+    workdir = tempfile.mkdtemp(prefix="absorb-private-", dir=scratch)
     registry_clone = os.path.join(workdir, "registry")
     url_registry = "https://github.com/%s/%s.git" % (args.owner, args.registry)
 
