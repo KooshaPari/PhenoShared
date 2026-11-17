@@ -26,8 +26,6 @@ on:
       - "docs/edges/**"
       - "docs/retire/**"
       - "docs/LANGUAGE-TIERS-AND-ROLES.md"
-  push:
-    branches: [main]
 
 jobs:
   validate:

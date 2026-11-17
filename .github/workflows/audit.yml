@@ -1,14 +1,10 @@
 name: Security Guard
 on:
-  push:
-    branches: [main, master]
   pull_request:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: 0 0 * * *
 permissions:
   contents: read
-
-
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Run Trivy
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25  # was: @master
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # was: @master
         with:
-          scan-type: 'fs'
-          severity: 'CRITICAL,HIGH'
+          scan-type: fs
+          severity: CRITICAL,HIGH

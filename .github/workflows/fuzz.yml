@@ -1,7 +1,7 @@
 name: Fuzz
 on:
-  push:
-    branches: [main]
+  schedule:
+    - cron: 0 3 * * * # nightly: fuzzing is a soak, not a per-push gate
 jobs:
   fuzz:
     runs-on: ubuntu-latest
