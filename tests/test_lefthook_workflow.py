@@ -3,6 +3,7 @@
 Run with Python + PyYAML. Set LEFTHOOK_TEST_BINARY to a verified native Lefthook
 2.1.12 binary to additionally exercise the real commit-msg hook.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -57,8 +58,12 @@ class LefthookWorkflowTests(unittest.TestCase):
 
     def run_shell(self, script: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            ["bash", "-euo", "pipefail", "-c", script], cwd=self.root,
-            env=self.env, capture_output=True, text=True, check=False,
+            ["bash", "-euo", "pipefail", "-c", script],
+            cwd=self.root,
+            env=self.env,
+            capture_output=True,
+            text=True,
+            check=False,
         )
 
     def fake_download(self) -> None:
@@ -67,15 +72,20 @@ class LefthookWorkflowTests(unittest.TestCase):
         self.env["ARTIFACT"] = str(artifact)
         self.env["LEFTHOOK_SHA256"] = hashlib.sha256(artifact.read_bytes()).hexdigest()
         self.executable("uname", 'printf "Linux x86_64\\n"\n')
-        self.executable("curl", 'while [ "$1" != "--output" ]; do shift; done\ncp "$ARTIFACT" "$2"\n')
+        self.executable(
+            "curl",
+            'while [ "$1" != "--output" ]; do shift; done\ncp "$ARTIFACT" "$2"\n',
+        )
 
     def test_both_install_sites_share_pinned_verified_recipe(self) -> None:
         self.assertEqual(len(INSTALLS), 2)
         self.assertEqual(INSTALLS[0], INSTALLS[1])
         self.assertEqual(JOBS["commit-msg-check"]["env"], JOB_ENV)
         self.assertEqual(str(JOB_ENV["LEFTHOOK_VERSION"]), "2.1.12")
-        self.assertEqual(JOB_ENV["LEFTHOOK_SHA256"],
-                         "22ff1ad48d1a0f4dca8d6b7e920056c6a9015f9204e5b693858ed9c2db759a16")
+        self.assertEqual(
+            JOB_ENV["LEFTHOOK_SHA256"],
+            "22ff1ad48d1a0f4dca8d6b7e920056c6a9015f9204e5b693858ed9c2db759a16",
+        )
         for script in INSTALLS:
             self.assertLess(script.index("sha256sum"), script.index("chmod"))
             self.assertNotIn("install.sh", script)
@@ -94,7 +104,9 @@ class LefthookWorkflowTests(unittest.TestCase):
         result = self.run_shell(INSTALLS[0])
         self.assertNotEqual(result.returncode, 0)
         self.assertFalse(Path(self.env["GITHUB_PATH"]).exists())
-        self.assertFalse(os.access(next(self.root.glob("lefthook.*/lefthook")), os.X_OK))
+        self.assertFalse(
+            os.access(next(self.root.glob("lefthook.*/lefthook")), os.X_OK)
+        )
 
     def test_download_failure_does_not_export(self) -> None:
         self.fake_download()
@@ -111,29 +123,47 @@ class LefthookWorkflowTests(unittest.TestCase):
     def test_title_is_data_not_executable_shell(self) -> None:
         (self.root / ".git").mkdir()
         self.executable("lefthook", 'test "$1" = run\ntest "$2" = commit-msg\n')
-        self.assertEqual(TITLE_STEP["env"]["PR_TITLE"], "${{ github.event.pull_request.title }}")
+        self.assertEqual(
+            TITLE_STEP["env"]["PR_TITLE"], "${{ github.event.pull_request.title }}"
+        )
         self.assertNotIn("${{", TITLE_STEP["run"])
-        for title in ['ci: $(touch PWNED)', 'ci: `touch PWNED`',
-                      'ci: "; touch PWNED; #', '-n', 'ci: back\\slash', '',
-                      'ci: first\n$(touch PWNED)']:
+        for title in [
+            "ci: $(touch PWNED)",
+            "ci: `touch PWNED`",
+            'ci: "; touch PWNED; #',
+            "-n",
+            "ci: back\\slash",
+            "",
+            "ci: first\n$(touch PWNED)",
+        ]:
             with self.subTest(title=title):
                 self.env["PR_TITLE"] = title
                 result = self.run_shell(TITLE_STEP["run"])
                 self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertEqual((self.root / ".git/COMMIT_MSG_TEMP").read_text(), title + "\n")
+                self.assertEqual(
+                    (self.root / ".git/COMMIT_MSG_TEMP").read_text(), title + "\n"
+                )
                 self.assertFalse((self.root / "PWNED").exists())
 
-    @unittest.skipUnless(os.environ.get("LEFTHOOK_TEST_BINARY"), "Set verified native binary path")
+    @unittest.skipUnless(
+        os.environ.get("LEFTHOOK_TEST_BINARY"), "Set verified native binary path"
+    )
     def test_real_commit_message_validation(self) -> None:
         subprocess.run(["git", "init", "-q", str(self.root)], check=True)
         shutil.copy(ROOT / "lefthook.yml", self.root / "lefthook.yml")
         self.executable("lefthook", 'exec "$LEFTHOOK_TEST_BINARY" "$@"\n')
-        for title, valid in [("ci: repair installation", True), ("invalid title", False),
-                             ("ci: $(touch PWNED)", True), ("", False)]:
+        for title, valid in [
+            ("ci: repair installation", True),
+            ("invalid title", False),
+            ("ci: $(touch PWNED)", True),
+            ("", False),
+        ]:
             with self.subTest(title=title):
                 self.env["PR_TITLE"] = title
                 result = self.run_shell(TITLE_STEP["run"])
-                self.assertEqual(result.returncode == 0, valid, result.stdout + result.stderr)
+                self.assertEqual(
+                    result.returncode == 0, valid, result.stdout + result.stderr
+                )
                 self.assertFalse((self.root / "PWNED").exists())
                 self.assertFalse((self.root / ".git/hooks/pre-commit").exists())
 
