@@ -4,28 +4,28 @@ on:
   workflow_call:
     inputs:
       working-directory:
-        description: 'Working directory'
+        description: "Working directory"
         required: false
         type: string
-        default: '.'
+        default: "."
       test-profile:
-        description: 'Test profile (must be defined in .config/nextest.toml or a built-in name like default / ci)'
+        description: "Test profile (must be defined in .config/nextest.toml or a built-in name like default / ci)"
         required: false
         type: string
-        default: 'default'
+        default: "default"
       coverage:
-        description: 'Collect coverage'
+        description: "Collect coverage"
         required: false
         type: boolean
         default: false
       extra-args:
-        description: 'Extra args passed to the test runner'
+        description: "Extra args passed to the test runner"
         required: false
         type: string
-        default: ''
+        default: ""
     outputs:
       language:
-        description: 'Detected primary language'
+        description: "Detected primary language"
         value: ${{ jobs.detect.outputs.lang }}
       # The previous `junit-path` output pointed at a step that did not exist, so
       # it could only ever be empty. Removed rather than advertised; restore it
@@ -72,13 +72,13 @@ jobs:
 
       - name: Install cargo-nextest
         if: needs.detect.outputs.lang == 'rust'
-        uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39  # v2.90.3
+        uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
         with:
           tool: cargo-nextest
 
       - name: Install cargo-llvm-cov (coverage)
         if: needs.detect.outputs.lang == 'rust' && inputs.coverage == 'true'
-        uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39  # v2.90.3
+        uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
         with:
           tool: cargo-llvm-cov
 
@@ -93,7 +93,7 @@ jobs:
         if: needs.detect.outputs.lang == 'python'
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Rust nextest
         if: needs.detect.outputs.lang == 'rust'
