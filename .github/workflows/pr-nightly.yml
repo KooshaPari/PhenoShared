@@ -34,6 +34,7 @@ on:
     - cron: 0 3 * * 1 # Trunk Check, weekly Monday 03:00 UTC
     - cron: 0 6 * * 1 # Security Scan (cargo audit), weekly Monday 06:00 UTC
     - cron: 17 6 * * 1 # Governance drift check, weekly Monday 06:17 UTC
+    - cron: 0 16 * * 1 # Security (CodeQL/Gitleaks/SBOM/provenance), weekly Monday 16:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -215,3 +216,117 @@ jobs:
             exit 1
           fi
           echo "All third-party actions are pinned to a commit SHA."
+
+  codeql:
+    name: CodeQL (rust)
+    # Reproduces the old on: pull_request (branches: main) + schedule + workflow_dispatch triggers.
+    if: >-
+      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: github/codeql-action/init@1fc58d04a4d4374f921bdac573c3811c240f9c26 # v4.39.2
+        with:
+          languages: rust
+          queries: security-extended
+      - uses: github/codeql-action/analyze@1fc58d04a4d4374f921bdac573c3811c240f9c26 # v4.39.2
+        with:
+          category: "/language:rust"
+
+  dependency-audit:
+    name: Dependency audit
+    # Reproduces the old on: pull_request (branches: main) + schedule + workflow_dispatch triggers.
+    if: >-
+      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: cargo audit
+        run: |
+          cargo install --locked cargo-audit || true
+          cargo audit
+
+  gitleaks:
+    name: Gitleaks secret scan
+    # Reproduces the old on: pull_request (branches: main) + schedule + workflow_dispatch triggers.
+    if: >-
+      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml
+          # Pinned on purpose. The action otherwise runs 8.24.3, and multiple
+          # global allowlist blocks only landed in 8.25.0 ("define multiple
+          # global allowlists", #1777). On 8.24.3 every `[[allowlists]]` block
+          # in `.gitleaks.toml` was silently ignored, so the file had no effect
+          # and any default-rule hit on a documented placeholder failed the
+          # job. 8.30.0 is the version this config is written against.
+          GITLEAKS_VERSION: 8.30.0
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sbom:
+    name: SBOM generation (CycloneDX)
+    # Reproduces the old non-PR-only restriction (schedule + workflow_dispatch).
+    if: >-
+      ((github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch') && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Generate SBOM (cargo-cyclonedx)
+        run: |
+          cargo install --locked cargo-cyclonedx || true
+          cargo cyclonedx --format json --override-filename ${{ github.repository }}.sbom.json || cargo cyclonedx --format json
+        continue-on-error: true
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: sbom
+          path: ${{ github.workspace }}/*.cdx.json
+        if: always()
+
+  provenance:
+    name: Build provenance attestation
+    # Reproduces the old non-PR-only restriction (schedule + workflow_dispatch).
+    if: >-
+      ((github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch') && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    needs: [codeql, dependency-audit, gitleaks]
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - name: Build release binary
+        run: cargo build --release -p driver-cli --locked
+      - name: Attest release binary provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4
+        with:
+          subject-path: target/release/substrate
