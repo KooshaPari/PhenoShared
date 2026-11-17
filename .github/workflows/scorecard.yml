@@ -11,8 +11,6 @@ on:
   branch_protection_rule:
   schedule:
     - cron: '25 4 * * 1'  # Weekly Monday 4:25 UTC
-  push:
-    branches: [main]
 
 permissions: read-all
 

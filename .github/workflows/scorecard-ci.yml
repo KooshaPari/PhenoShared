@@ -1,7 +1,5 @@
 name: 88-Pillar Scorecard
 on:
-  push:
-    branches: [main, master]
   pull_request:
     branches: [main, master]
 

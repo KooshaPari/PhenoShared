@@ -1,7 +1,5 @@
 name: Mutation
 on:
-  push:
-    branches: [main]
   pull_request:
     paths:
       - "crates/**"

@@ -1,8 +1,6 @@
 name: Lefthook CI Validation
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
