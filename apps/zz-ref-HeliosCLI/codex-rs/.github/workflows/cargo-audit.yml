@@ -1,0 +1,26 @@
+name: Cargo audit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: codex-rs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
+      - name: Install cargo-audit
+      - uses: taiki-e/install-action@2c5a301961922d639df2e9cf00b5d23c8e80462d # v2.5.10
+        with:
+          tool: cargo-audit
+      - name: Run cargo audit
+        run: cargo audit --deny warnings

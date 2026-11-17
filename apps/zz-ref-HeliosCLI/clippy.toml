@@ -1,0 +1,9 @@
+# Rust Linter Configuration
+# Phenotype Standard - Do not modify directly
+# Inherit from phenotype-governance/configs/rust/
+
+# Maximum function complexity
+max-trait-bounds = 7
+max-struct-bools = 3
+max-fn-params-bools = 3
+type-complexity-threshold = 500

@@ -1,0 +1,11 @@
+# Optional local docs compose. Upstream used unom infra; this fork has no deploy target yet.
+# Build and run the docs image yourself if you need it locally.
+name: slipstream-docs
+services:
+  docs:
+    build:
+      context: docs-site
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3220:3000"

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>helios-cli — Performance Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+:root {
+  --bg: #0d1117; --surface: #161b22; --border: #30363d;
+  --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+  --ok: #3fb950; --warn: #d29922; --crit: #f85149; --improve: #58a6ff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--text); padding: 2rem; line-height: 1.5;
+}
+h1 { font-size: 1.8rem; margin-bottom: .3rem; }
+.subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 2rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 1.2rem; position: relative;
+}
+.card h3 { font-size: 1rem; margin-bottom: .8rem; }
+.card .value { font-size: 2rem; font-weight: 600; margin-bottom: .2rem; }
+.card .baseline { color: var(--muted); font-size: .85rem; }
+.chart-container {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;
+}
+.chart-container h2 { font-size: 1.1rem; margin-bottom: 1rem; }
+canvas { max-height: 300px; }
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 12px;
+  font-size: .75rem; font-weight: 600; margin-left: 8px;
+}
+.badge-ok { background: rgba(63,185,80,0.15); color: var(--ok); }
+.badge-warn { background: rgba(210,153,34,0.15); color: var(--warn); }
+.badge-crit { background: rgba(248,81,73,0.15); color: var(--crit); }
+.badge-improve { background: rgba(88,166,255,0.15); color: var(--improve); }
+.badge-muted { background: rgba(139,148,158,0.15); color: var(--muted); }
+table.summary {
+  width: 100%; border-collapse: collapse; margin-bottom: 2rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden;
+}
+table.summary th, table.summary td {
+  padding: .6rem 1rem; text-align: left; border-bottom: 1px solid var(--border);
+}
+table.summary th {
+  background: rgba(88,166,255,0.08); font-size: .85rem;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+table.summary tr:last-child td { border-bottom: none; }
+table.summary tr:hover td { background: rgba(88,166,255,0.04); }
+.footer {
+  color: var(--muted); font-size: .8rem; margin-top: 2rem;
+  padding-top: 1rem; border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+<h1>helios-cli Performance Dashboard</h1>
+<div class="subtitle">
+  Schema vN/A &middot; Last updated unknown &middot; Retention 90 days
+  &middot; Generated 2026-08-20T09:16:42Z
+</div>
+
+<!-- KPI Cards -->
+<div class="grid">
+      <div class="card">
+        <h3>cargo check (s)<span class="badge badge-ok">● 0.0%</span></h3>
+        <div class="value">45.0 s</div>
+        <div class="baseline">Baseline: 45.0 s</div>
+      </div>
+      <div class="card">
+        <h3>cargo test (s)<span class="badge badge-ok">● 0.0%</span></h3>
+        <div class="value">120.0 s</div>
+        <div class="baseline">Baseline: 120.0 s</div>
+      </div>
+      <div class="card">
+        <h3>Clippy Warnings<span class="badge badge-muted">N/A</span></h3>
+        <div class="value">0</div>
+        <div class="baseline">Baseline: 0</div>
+      </div>
+      <div class="card">
+        <h3>Binary Size<span class="badge badge-ok">● 0.0%</span></h3>
+        <div class="value">1.95 MB</div>
+        <div class="baseline">Baseline: 1.95 MB</div>
+      </div>
+      <div class="card">
+        <h3>Fuzz Corpus Size<span class="badge badge-ok">● 0.0%</span></h3>
+        <div class="value">100</div>
+        <div class="baseline">Baseline: 100</div>
+      </div>
+      <div class="card">
+        <h3>Dependency Count<span class="badge badge-ok">● 0.0%</span></h3>
+        <div class="value">85</div>
+        <div class="baseline">Baseline: 85</div>
+      </div>
+</div>
+
+<!-- Summary Table -->
+<table class="summary">
+  <thead><tr><th>Metric</th><th>Latest</th><th>Baseline</th><th>Delta</th></tr></thead>
+  <tbody>
+      <tr><td>cargo check (s)</td><td>45.0 s</td><td>45.0 s</td><td><span class="badge badge-ok">● 0.0%</span></td></tr>
+      <tr><td>cargo test (s)</td><td>120.0 s</td><td>120.0 s</td><td><span class="badge badge-ok">● 0.0%</span></td></tr>
+      <tr><td>Clippy Warnings</td><td>0</td><td>0</td><td><span class="badge badge-muted">N/A</span></td></tr>
+      <tr><td>Binary Size</td><td>1.95 MB</td><td>1.95 MB</td><td><span class="badge badge-ok">● 0.0%</span></td></tr>
+      <tr><td>Fuzz Corpus Size</td><td>100</td><td>100</td><td><span class="badge badge-ok">● 0.0%</span></td></tr>
+      <tr><td>Dependency Count</td><td>85</td><td>85</td><td><span class="badge badge-ok">● 0.0%</span></td></tr>
+  </tbody>
+</table>
+
+<!-- Per-Metric Trend Charts -->
+    <div class="chart-container">
+      <h2>cargo check (s)</h2>
+      <canvas id="chart-cargo-check-secs"></canvas>
+    </div>
+    <div class="chart-container">
+      <h2>cargo test (s)</h2>
+      <canvas id="chart-cargo-test-secs"></canvas>
+    </div>
+    <div class="chart-container">
+      <h2>Clippy Warnings</h2>
+      <canvas id="chart-clippy-warnings"></canvas>
+    </div>
+    <div class="chart-container">
+      <h2>Binary Size</h2>
+      <canvas id="chart-binary-size-bytes"></canvas>
+    </div>
+    <div class="chart-container">
+      <h2>Fuzz Corpus Size</h2>
+      <canvas id="chart-fuzz-corpus-size"></canvas>
+    </div>
+    <div class="chart-container">
+      <h2>Dependency Count</h2>
+      <canvas id="chart-dependency-count"></canvas>
+    </div>
+
+<div class="footer">
+  Auto-generated by <code>agileplus/generate-perf-dashboard.py</code> &middot;
+  Data source: <code>agileplus/perf-trend-history.json</code>
+</div>
+
+<script>
+(function() {
+    new Chart(document.getElementById('chart-cargo-check-secs'), {
+      type: 'line',
+      data: {
+        labels: ["2026-08-19"],
+        datasets: [{
+          label: 'cargo check (s)',
+          data: [45],
+          borderColor: '#58a6ff',
+          backgroundColor: '#58a6ff22',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chart-cargo-test-secs'), {
+      type: 'line',
+      data: {
+        labels: ["2026-08-19"],
+        datasets: [{
+          label: 'cargo test (s)',
+          data: [120],
+          borderColor: '#3fb950',
+          backgroundColor: '#3fb95022',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chart-clippy-warnings'), {
+      type: 'line',
+      data: {
+        labels: ["2026-08-19"],
+        datasets: [{
+          label: 'Clippy Warnings',
+          data: [0],
+          borderColor: '#d29922',
+          backgroundColor: '#d2992222',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chart-binary-size-bytes'), {
+      type: 'line',
+      data: {
+        labels: ["2026-08-19"],
+        datasets: [{
+          label: 'Binary Size',
+          data: [2048000],
+          borderColor: '#f85149',
+          backgroundColor: '#f8514922',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chart-fuzz-corpus-size'), {
+      type: 'line',
+      data: {
+        labels: ["2026-08-19"],
+        datasets: [{
+          label: 'Fuzz Corpus Size',
+          data: [100],
+          borderColor: '#bc8cff',
+          backgroundColor: '#bc8cff22',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chart-dependency-count'), {
+      type: 'line',
+      data: {
+        labels: ["2026-08-19"],
+        datasets: [{
+          label: 'Dependency Count',
+          data: [85],
+          borderColor: '#79c0ff',
+          backgroundColor: '#79c0ff22',
+          tension: 0.3,
+          fill: true,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }
+        }
+      }
+    });
+
+})();
+</script>
+</body>
+</html>

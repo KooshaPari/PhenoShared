@@ -1,0 +1,22 @@
+# rustfmt configuration for the vendored codex-rs workspace.
+#
+# codex-rs is its own Cargo workspace and is excluded from the root workspace,
+# but rustfmt walks *upward* from each source file to find its configuration.
+# Without this file, rustfmt resolves the repository-root rustfmt.toml and
+# inherits its `max_width = 100` / `use_small_heuristics = "Max"`, while CI
+# invokes `cargo fmt -- --config imports_granularity=Item --check` from this
+# directory. The two disagree, so CI reported ~22k spurious diffs across the
+# whole tree.
+#
+# Pinning the config here keeps the effective style stable and matches exactly
+# what the CI command checks.
+max_width = 100
+
+# CI enforces this explicitly via `--config imports_granularity=Item`; declaring
+# it here makes a plain `cargo fmt` produce the same result as CI.
+imports_granularity = "Item"
+
+edition = "2021"
+reorder_imports = true
+reorder_modules = true
+newline_style = "Unix"

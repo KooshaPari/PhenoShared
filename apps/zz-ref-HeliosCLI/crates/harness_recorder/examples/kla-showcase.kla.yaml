@@ -1,0 +1,126 @@
+name: "KLA Showcase Demo"
+settings:
+  width: 120
+  height: 30
+  shell: "bash"
+  theme: "default"
+
+steps:
+  - type: command
+    text: "clear"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗'"
+    wait: "200ms"
+    
+  - type: command
+    text: "echo '║                                    🎬 KLA - Kommand Line Automation                                                     ║'"
+    wait: "200ms"
+    
+  - type: command
+    text: "echo '║                                  A Playwright Equivalent for CLI Tools                                                 ║'"
+    wait: "200ms"
+    
+  - type: command
+    text: "echo '╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝'"
+    wait: "1s"
+    
+  - type: screenshot
+    name: "kla-banner"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '🚀 KLA Features:'"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '  ✅ Script-based terminal automation'"
+    wait: "300ms"
+    
+  - type: command
+    text: "echo '  ✅ Beautiful screenshot generation'"
+    wait: "300ms"
+    
+  - type: command
+    text: "echo '  ✅ Smooth GIF recordings'"
+    wait: "300ms"
+    
+  - type: command
+    text: "echo '  ✅ Cross-platform support'"
+    wait: "300ms"
+    
+  - type: command
+    text: "echo '  ✅ YAML-based configuration'"
+    wait: "1s"
+    
+  - type: screenshot
+    name: "features-list"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '📋 Available Commands:'"
+    wait: "500ms"
+    
+  - type: command
+    text: "kla --help"
+    wait: "2s"
+    
+  - type: screenshot
+    name: "help-output"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '💡 Example: Taking a screenshot'"
+    wait: "1s"
+    
+  - type: type
+    text: "kla screenshot \"echo 'Hello from KLA!' && date\" --output example.png"
+    speed: "30ms"
+    
+  - type: command
+    text: ""
+    wait: "2s"
+    
+  - type: command
+    text: "echo '✅ Screenshot created!'"
+    wait: "1s"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '📁 Checking what we created:'"
+    wait: "500ms"
+    
+  - type: command
+    text: "ls -la *.png | head -5"
+    wait: "1s"
+    
+  - type: screenshot
+    name: "created-files"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '🎉 KLA Demo Complete!'"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo 'Visit: https://github.com/KooshaPari/KommandLineAutomation'"
+    wait: "2s"
+    
+  - type: screenshot
+    name: "demo-complete"

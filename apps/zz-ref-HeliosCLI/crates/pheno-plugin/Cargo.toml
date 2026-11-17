@@ -1,0 +1,18 @@
+[package]
+name = "pheno-plugin"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+description = "pheno plugin — Phenotype infrastructure crate (HeliosCLI)"
+documentation = "https://docs.rs/pheno-plugin"
+keywords = ["phenotype", "helios", "plugin"]
+categories = ["development-tools"]
+authors = ["kooshapari"]
+
+[lib]
+name = "pheno_plugin"
+path = "src/lib.rs"
+
+[dependencies]
+thiserror = "2.0"

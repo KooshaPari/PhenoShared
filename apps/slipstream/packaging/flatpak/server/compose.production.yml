@@ -1,0 +1,10 @@
+# Optional static Flatpak repository server. Place a TLS proxy in front for remote clients.
+services:
+  flatpak:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "3230:3230"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./site:/srv:ro

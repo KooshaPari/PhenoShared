@@ -1,0 +1,185 @@
+---
+title: Client settings
+description: Every setting a Slipstream client stores, what it does, what it defaults to, and which of them the host can overrule.
+---
+
+The host has [its own settings reference](/docs/configuration). This page is the other half: the
+settings each **client** keeps, which together decide what a session looks like.
+
+Most of them are a *request*. The client asks, the host answers, and the answer comes back in the
+handshake, so a setting the host can't honor is usually a quiet downgrade rather than an error.
+
+## Where the settings live
+
+The Android and Steam Deck (Decky) clients group settings under **General**, **Display**,
+**Input**, **Audio**, and **Controllers**. A controller-driven launch (Steam Deck Gaming Mode, or
+Android with a pad attached) opens the client's **console home**, whose settings screen is one
+steppable list; the Decky plugin has a smaller section of its own. The console home is part of the
+client, it is not the host's [web console](/docs/web-console).
+
+On a Steam Deck, Decky writes into `~/.config/slipstream/` so a change in the plugin shows up the
+next time that client starts a stream. Android settings are stored in the app; the Decky plugin uses
+`~/.config/slipstream/`.
+
+Changes apply to the **next** session, a running stream keeps what it started with. (*Match window*
+is the exception in effect, not in reading: it too is read at connect, but once a session is running
+with it on, every window resize renegotiates the mode.)
+
+Not every client offers every setting, and the wording on screen varies a little between them. The
+differences that matter are noted per setting.
+
+## Video
+
+**Resolution**, *default: Native display.* The host builds a virtual display at exactly this size
+and streams it; nothing is scaled. Native resolves at connect to the mode of the display your window
+is on. If the host has been pinned to stream
+a *real* monitor rather than make one, your request is declined and your client scales what it gets,
+see [Virtual displays](/docs/virtual-displays#stream-a-real-monitor-instead).
+
+**Match window**, *default: off.* The stream mode follows your window instead, and each resize
+renegotiates the host's display and encoder, so a windowed session stays pixel-exact. Fullscreen
+degenerates to the display's native mode. Offered where the client has a resizable window; not by
+Android or Decky.
+
+**Refresh rate**, *default: Native*, the refresh of the display your window is on.
+
+**Bitrate**, *default: Automatic.* For H.264, HEVC and AV1, Automatic means the host's own default,
+**20 Mbps**, and it turns on two things an explicit rate switches off: adaptive bitrate, and a short
+link-capacity probe about two seconds in that measures what your link really carries and lets the
+rate climb past 20 Mbps. An explicit rate is fixed for the session, and clamped by the host to
+**500 kbps - 8 Gbps**. A host card's menu has a **Test network speed...** entry that measures your link
+and suggests a value.
+
+PyroWave is the exception: it has no useful low-rate regime, so its Automatic rate is a fixed
+per-pixel budget for the negotiated mode (hundreds of Mbps), and both adaptive bitrate and the
+capacity probe stay off for the whole session.
+
+**Render scale**, *default: Native (1x).* The host renders and encodes at your chosen mode
+multiplied by this, and your device resamples the result to its window. Above 1x supersamples for
+sharpness, at more bandwidth *and* more decode work; below 1x is lighter on both the host and the
+link. The stops run 0.5x to 4x. The result is floored to an even size and capped per axis at
+4096 px for H.264, 8192 px otherwise. Offered everywhere except the console home's list.
+
+**Video codec**, *default: Automatic.* A soft preference: the host emits your choice when it can
+also produce it, otherwise the best codec you both speak, in the order HEVC -> AV1 -> H.264.
+**PyroWave** is never auto-picked, pick it explicitly where the client's decode probe passes;
+anywhere else it isn't offered, and asking for it lands on that same order. See
+[PyroWave](/docs/pyrowave). Android hides AV1 unless the device has a hardware AV1 decoder; Android
+never offers PyroWave.
+
+**10-bit HDR**, *default: on.* Off means "never send me 10-bit", and the host then never upgrades.
+On, the stream goes 10-bit BT.2020 PQ only when the host has HDR content *and* the encoder can do
+10-bit. Android disables the toggle, and never advertises HDR, on a panel that can't present HDR10.
+Full detail: [HDR](/docs/hdr).
+
+**Full chroma (4:4:4)**, *default: off.* Crisp small text and thin lines, at more bandwidth. It
+needs HEVC or PyroWave, the host's own 4:4:4 policy left on, a capture path that delivers full
+chroma, and a GPU that can encode it; if any gate fails the host says 4:2:0 before your decoder is
+built. Android, Decky and the console home don't offer 4:4:4 in the current release.
+
+**Host compositor**, *default: Automatic.* Which backend the Linux host uses to drive the virtual
+output. Advisory: a host without that backend quietly auto-detects instead.
+
+## Audio
+
+**Audio channels**, *default: Stereo.* You can ask for **5.1** or **7.1**; anything else is read as
+stereo. The count the host will really send comes back in the handshake, and your client builds its
+decoder from *that*, never from the request. On Linux the host claims a sink advertising exactly that
+many channels, so applications produce real surround. Offered everywhere except the Decky plugin.
+
+**Microphone**, *default: off on Android, the console home and Decky.* Sends
+this device's microphone to the host's virtual mic.
+
+**Echo cancellation**, *default: on.* Stops the host's audio, playing out of this device's
+speakers, from being picked up by the microphone and sent straight back. It hands the microphone
+to the system's own canceller rather than doing the work itself: on **Android** that
+is the platform's voice-processing mode. Turn it off if your microphone already runs its own
+processing, or if the canceller makes your voice sound thin. The row sits under the microphone
+toggle and greys out while the microphone is off. Offered by Android and the console home;
+Decky has no toggle. What it can and can't fix is in [Why do I hear myself](/docs/echo).
+
+**Speaker** and **Microphone** device pickers are not offered on Android, Decky or the console home;
+those clients use the system default endpoints.
+
+## Input
+
+Touch modes, mouse modes and the in-stream chords have their own page: [Input](/docs/input). Four
+more settings are worth naming here.
+
+**Gamepad type** (*Controller type* on Android and the console home), *default: Automatic*,
+which matches each physical controller. The pickers offer Xbox 360, Xbox One, DualSense and
+DualShock 4 everywhere, plus Steam Deck on Android, the console home and Decky. Your client
+declares a type per pad as it connects, Automatic declares what that controller really is, an
+explicit choice declares your choice, and the host builds each virtual pad from that. A type the
+host has no backend for degrades to an Xbox 360 pad rather than failing (for example any Sony pad on
+a host that can't open `/dev/uhid`).
+
+**Forwarded controller** (*Use controller* on the console home), *default: Automatic*,
+which forwards *every* connected controller, each as its own player. Pinning one restricts the
+session to that controller alone, single-player. The Android app has no such picker.
+
+**Capture system shortcuts** is a desktop-client setting and is not part of the Android or Decky
+product surface.
+
+**Invert scroll direction**, *default: off*, i.e. the host scrolls the way this machine does.
+
+## Behavior
+
+**Auto-wake on connect**, *default: on.* Connecting to a saved host that looks offline sends
+Wake-on-LAN and waits for it to boot, only for a host whose MAC address this client has already
+learned. Turn it off for hosts you reach over a VPN, where "offline" usually means "not reachable by
+broadcast" and the wake only adds a delay. The Android app has this toggle. The console
+home has no toggle, it offers wake as an explicit action on an offline host instead, and the Decky
+plugin always sends a wake before a stream starts. See [Wake-on-LAN](/docs/wake-on-lan).
+
+**Show game library**, *default: on in the Android app.* Browse a paired host's games
+and launch one directly. There is no toggle in the console home or in Decky (Decky uses its own
+**Games** / pin flow). See [Game library](/docs/game-library).
+
+**Start streams in fullscreen**, *default: on* where the client has a windowed mode. Android has no
+equivalent toggle; Decky always launches fullscreen.
+
+## Overlay
+
+**Statistics overlay**, *default: Normal.* Four tiers, Off, Compact, Normal, Detailed, each a
+superset of the one before. This setting only picks the tier a session *starts* at, you can cycle
+them live in-stream, with a shortcut that differs by platform. The Decky
+plugin has no stats setting. The shortcuts, and every number in the overlay, are in
+[Understanding the stats overlay](/docs/stats).
+
+## Settings that are facts about your device
+
+A few of these describe the machine you're sitting at rather than how you want a host streamed. They
+stay global and **cannot be put in a settings profile**:
+
+- **Video decoder** and **GPU**, where the client exposes them. Automatic is vendor-ordered and
+  falls back on its own; change it only when debugging, and note that `SLIPSTREAM_DECODER` overrides
+  it ([Configuration](/docs/configuration#client-side-native-clients)). Android has no picker.
+- **Speaker** and **Microphone** device pickers, this device's audio endpoints (where offered).
+- **Forwarded controller**, which physical pad is in your hands. The *type* the host creates is a
+  preference and can live in a profile; which pad you hold cannot.
+- **Auto-wake on connect** and **Show game library**, decisions about this device and this network,
+  not about how a given host is streamed.
+
+One switch you might expect here isn't in Settings at all: **Share clipboard** lives in a saved
+host's own edit sheet, because handing a machine your clipboard is a decision about that one host,
+see [Shared clipboard](/docs/clipboard).
+
+Everything else on this page can be overridden per profile and bound to a host; the rows above are
+exactly [what a profile can't change](/docs/profiles-and-links#what-a-profile-cant-change).
+
+## When the client and the host disagree
+
+| You ask for | What the host does |
+|---|---|
+| Resolution and refresh | Builds a display at exactly that mode. A host pinned to a real monitor keeps that monitor's resolution and you scale locally. A size the encoder can't take, odd, or past the codec's per-axis limit, fails the connect rather than being quietly changed. |
+| A bitrate | Clamps it to 500 kbps - 8 Gbps, or uses its 20 Mbps default for Automatic (a per-pixel budget for Automatic PyroWave). |
+| A codec | Honors it when it can encode it, else the best shared codec in the order HEVC -> AV1 -> H.264. |
+| 10-bit HDR | Upgrades only for HDR content on an encoder that can do 10-bit; otherwise 8-bit SDR. |
+| 4:4:4 chroma | Sends it only when every gate passes; otherwise 4:2:0. |
+| A channel count | Normalizes it to 2, 6 or 8. |
+| A gamepad type | Uses it as the session default; an unsupported type becomes an Xbox 360 pad. |
+| A compositor | Treats it as advisory and auto-detects when it isn't available. |
+
+Every one of those answers arrives before your decoder and speakers are set up, so what you see and
+hear is built from what the host really sent, never from what you asked for.

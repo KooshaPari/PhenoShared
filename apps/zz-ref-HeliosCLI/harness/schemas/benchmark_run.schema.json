@@ -1,0 +1,508 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://phenotype.local/schemas/helios-benchmark_run.schema.json",
+    "title": "Agent harness benchmark run",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "tenant_id",
+        "session_id",
+        "run_id",
+        "attempt_id",
+        "deterministic_identity",
+        "subject",
+        "lease",
+        "task_manifest",
+        "tasks",
+        "runs",
+        "events",
+        "result",
+        "provenance",
+        "signature"
+    ],
+    "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "tenant_id": { "type": "string", "minLength": 1 },
+        "session_id": { "type": "string", "pattern": "^ses_[a-f0-9]{64}$" },
+        "run_id": { "type": "string", "pattern": "^run_[a-f0-9]{64}$" },
+        "attempt_id": { "type": "string", "pattern": "^att_[a-f0-9]{64}$" },
+        "deterministic_identity": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["algorithm", "canonical_json_sha256", "inputs"],
+            "properties": {
+                "algorithm": { "const": "sha256(canonical-json(inputs))" },
+                "canonical_json_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                },
+                "inputs": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "repo",
+                        "commit",
+                        "harness",
+                        "model",
+                        "task_id",
+                        "hardware"
+                    ],
+                    "properties": {
+                        "repo": { "type": "string", "minLength": 1 },
+                        "commit": {
+                            "type": "string",
+                            "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+                        },
+                        "harness": { "type": "string", "minLength": 1 },
+                        "model": { "type": "string", "minLength": 1 },
+                        "task_id": { "type": "string", "minLength": 1 },
+                        "hardware": { "type": "string", "minLength": 1 }
+                    }
+                }
+            }
+        },
+        "subject": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "repo",
+                "ref",
+                "commit",
+                "harness",
+                "runtime",
+                "model",
+                "hardware"
+            ],
+            "properties": {
+                "repo": { "type": "string" },
+                "ref": { "type": "string", "minLength": 1 },
+                "commit": {
+                    "type": "string",
+                    "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+                },
+                "harness": { "type": "string" },
+                "runtime": { "type": "string" },
+                "model": { "type": "string" },
+                "provider": { "type": "string" },
+                "hardware": { "type": "string" },
+                "compiler": { "type": "string" },
+                "environment": { "$ref": "#/$defs/pinned_metadata" },
+                "tools": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/pinned_metadata" }
+                },
+                "network": { "$ref": "#/$defs/network_metadata" }
+            }
+        },
+        "lease": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "lease_id",
+                "owner",
+                "ttl_seconds",
+                "heartbeat_interval_seconds"
+            ],
+            "properties": {
+                "lease_id": { "type": "string" },
+                "owner": { "type": "string" },
+                "ttl_seconds": { "type": "number", "exclusiveMinimum": 0 },
+                "heartbeat_interval_seconds": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                }
+            }
+        },
+        "task_manifest": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "task_id",
+                "input_sha256",
+                "timeout_seconds",
+                "assertions",
+                "judge"
+            ],
+            "properties": {
+                "task_id": { "type": "string" },
+                "input_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                },
+                "timeout_seconds": { "type": "number", "exclusiveMinimum": 0 },
+                "assertions": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "required": ["id", "kind", "expected"],
+                        "properties": {
+                            "id": { "type": "string" },
+                            "kind": { "type": "string" },
+                            "expected": {}
+                        }
+                    }
+                },
+                "judge": {
+                    "type": "object",
+                    "required": ["name", "version"],
+                    "properties": {
+                        "name": { "type": "string" },
+                        "version": { "type": "string" }
+                    },
+                    "additionalProperties": false
+                }
+            }
+        },
+        "plan_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "plan": { "type": "array", "items": { "$ref": "#/$defs/task" } },
+        "commands": { "type": "array", "items": { "$ref": "#/$defs/task" } },
+        "replay": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "prior_plan_hash", "same_plan", "plan_diff"],
+            "properties": {
+                "path": { "type": "string" },
+                "prior_plan_hash": {
+                    "type": ["string", "null"],
+                    "pattern": "^[a-f0-9]{64}$"
+                },
+                "same_plan": { "type": "boolean" },
+                "plan_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+                "plan_diff": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["added", "removed"],
+                    "properties": {
+                        "added": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        },
+                        "removed": {
+                            "type": "array",
+                            "items": { "type": "string" }
+                        }
+                    }
+                }
+            }
+        },
+        "tasks": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/task" }
+        },
+        "runs": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/task_run" }
+        },
+        "events": {
+            "type": "array",
+            "minItems": 3,
+            "contains": {
+                "type": "object",
+                "properties": { "type": { "const": "compaction" } },
+                "required": ["type"]
+            },
+            "minContains": 1,
+            "allOf": [
+                {
+                    "contains": {
+                        "type": "object",
+                        "properties": { "type": { "const": "checkpoint" } },
+                        "required": ["type"]
+                    },
+                    "minContains": 1
+                }
+            ],
+            "items": { "$ref": "#/$defs/event" }
+        },
+        "result": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "status",
+                "outcome_sha256",
+                "replay_hash",
+                "failure_class",
+                "artifacts"
+            ],
+            "properties": {
+                "status": {
+                    "enum": ["passed", "failed", "timeout", "cancelled"]
+                },
+                "outcome_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                },
+                "replay_hash": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                },
+                "failure_class": {
+                    "enum": [
+                        "none",
+                        "assertion",
+                        "tool",
+                        "policy",
+                        "lease",
+                        "timeout",
+                        "infra",
+                        "model",
+                        "unknown"
+                    ]
+                },
+                "artifacts": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/artifact" }
+                }
+            }
+        },
+        "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "collector",
+                "collected_at",
+                "source_ref",
+                "source_sha",
+                "source_hashes"
+            ],
+            "properties": {
+                "collector": { "type": "string" },
+                "collected_at": { "type": "string", "format": "date-time" },
+                "source_ref": { "type": "string", "minLength": 1 },
+                "source_sha": {
+                    "type": "string",
+                    "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+                },
+                "source_hashes": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{64}$"
+                    }
+                }
+            }
+        },
+        "signature": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "algorithm", "reason"],
+            "properties": {
+                "status": { "const": "unsigned" },
+                "algorithm": { "const": "none" },
+                "reason": { "const": "signing_authority_not_configured" }
+            }
+        },
+        "result_code": { "enum": ["PASS", "WARN", "FAIL"] }
+    },
+    "$defs": {
+        "event": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "event_id",
+                "seq",
+                "ts",
+                "type",
+                "payload_sha256",
+                "causality"
+            ],
+            "properties": {
+                "event_id": {
+                    "type": "string",
+                    "pattern": "^evt_[a-f0-9]{64}$"
+                },
+                "seq": { "type": "integer", "minimum": 0 },
+                "ts": { "type": "string", "format": "date-time" },
+                "type": {
+                    "enum": [
+                        "run_started",
+                        "tool_call",
+                        "tool_result",
+                        "compaction",
+                        "checkpoint",
+                        "heartbeat",
+                        "lease_acquired",
+                        "lease_expired",
+                        "retry",
+                        "restart",
+                        "policy_decision",
+                        "run_finished"
+                    ]
+                },
+                "payload_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                },
+                "checkpoint_id": { "type": "string" },
+                "parent_event_id": { "type": "string" },
+                "causality": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "tenant_id",
+                        "session_id",
+                        "run_id",
+                        "attempt_id"
+                    ],
+                    "properties": {
+                        "tenant_id": { "type": "string" },
+                        "session_id": { "type": "string" },
+                        "run_id": { "type": "string" },
+                        "attempt_id": { "type": "string" }
+                    }
+                },
+                "retry_index": { "type": "integer", "minimum": 0 },
+                "restart_index": { "type": "integer", "minimum": 0 },
+                "policy": { "$ref": "#/$defs/policy" },
+                "details": { "type": "object" }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": { "type": { "const": "checkpoint" } }
+                    },
+                    "then": { "required": ["checkpoint_id"] }
+                },
+                {
+                    "if": {
+                        "properties": { "type": { "const": "compaction" } }
+                    },
+                    "then": {
+                        "required": ["checkpoint_id", "details"],
+                        "properties": {
+                            "details": {
+                                "required": [
+                                    "tokens_before",
+                                    "tokens_after",
+                                    "retained_event_ids",
+                                    "dropped_event_ids"
+                                ],
+                                "properties": {
+                                    "tokens_before": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                    },
+                                    "tokens_after": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                    },
+                                    "retained_event_ids": {
+                                        "type": "array",
+                                        "items": { "type": "string" }
+                                    },
+                                    "dropped_event_ids": {
+                                        "type": "array",
+                                        "items": { "type": "string" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "artifact": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "uri", "sha256"],
+            "properties": {
+                "kind": {
+                    "enum": [
+                        "log",
+                        "checkpoint",
+                        "patch",
+                        "kernel",
+                        "report",
+                        "trace"
+                    ]
+                },
+                "uri": { "type": "string", "minLength": 1 },
+                "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            }
+        },
+        "pinned_metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "version", "commit"],
+            "properties": {
+                "name": { "type": "string" },
+                "version": { "type": "string" },
+                "commit": { "type": "string" },
+                "digest": { "type": "string" }
+            }
+        },
+        "network_metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mode", "egress_policy"],
+            "properties": {
+                "mode": { "enum": ["offline", "restricted", "open"] },
+                "egress_policy": { "type": "string" }
+            }
+        },
+        "policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["decision", "approval_required", "violations"],
+            "properties": {
+                "decision": { "enum": ["allow", "deny", "ask"] },
+                "approval_required": { "type": "boolean" },
+                "violations": { "type": "array", "items": { "type": "string" } }
+            }
+        },
+        "task": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "task_id",
+                "command",
+                "bucket",
+                "required",
+                "cwd",
+                "source"
+            ],
+            "properties": {
+                "task_id": {
+                    "type": "string",
+                    "pattern": "^task_[a-f0-9]{64}$"
+                },
+                "command": { "type": "string" },
+                "bucket": { "type": "string" },
+                "required": { "type": "boolean" },
+                "cwd": { "type": "string" },
+                "source": { "type": "string" },
+                "rationale": { "type": "string" }
+            }
+        },
+        "task_run": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "run_id",
+                "task_id",
+                "command",
+                "status",
+                "returncode",
+                "duration_ms"
+            ],
+            "properties": {
+                "run_id": {
+                    "type": "string",
+                    "pattern": "^taskrun_[a-f0-9]{64}$"
+                },
+                "task_id": {
+                    "type": "string",
+                    "pattern": "^task_[a-f0-9]{64}$"
+                },
+                "command": { "type": "string" },
+                "status": {
+                    "enum": ["passed", "failed", "timeout", "skipped"]
+                },
+                "returncode": { "type": ["integer", "null"] },
+                "duration_ms": { "type": "integer", "minimum": 0 }
+            }
+        }
+    }
+}

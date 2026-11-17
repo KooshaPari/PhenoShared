@@ -1,0 +1,27 @@
+[package]
+name = "harness_verify"
+version = "0.2.1"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Verification pipeline for heliosHarness autonomous agents"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+documentation = "https://docs.rs/harness_verify"
+keywords = ["phenotype", "helios", "harness"]
+categories = ["development-tools::testing"]
+authors = ["kooshapari"]
+
+[dependencies]
+harness_spec = { path = "../harness_spec" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+tokio = { version = "1.0", features = ["full"] }
+tracing = "0.1"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = []

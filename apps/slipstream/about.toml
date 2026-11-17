@@ -1,0 +1,51 @@
+# cargo-about config — full-fidelity third-party license harvest for CI.
+#
+#   cargo install cargo-about
+#   cargo about generate about.hbs > THIRD-PARTY-NOTICES.txt   # (or use scripts/gen-third-party-notices.sh)
+#
+# `accepted` is the allow-list of SPDX licenses permitted in the dependency tree. CI fails if a crate
+# carries anything not listed here — which is exactly the regression guard we want against a copyleft
+# dependency silently entering the linked set. All entries
+# below are permissive / attribution-only; deliberately NO GPL/LGPL/AGPL/MPL-link/SSPL/EPL.
+#
+# The dependency-free fallback is scripts/gen-third-party-notices.py (reads the cargo registry cache),
+# which is what produced the committed baseline when cargo-about is unavailable offline.
+
+accepted = [
+    "MIT",
+    "MIT-0",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "0BSD",
+    "BSL-1.0",
+    "Unicode-3.0",
+    "Unicode-DFS-2016",
+    "CDLA-Permissive-2.0",
+    "CC0-1.0",
+    "Unlicense",
+    "WTFPL",
+    "OpenSSL",
+]
+
+# cbindgen is MPL-2.0 but it is a BUILD-ONLY codegen tool that never links into a shipped artifact
+# (its generated header is not a derivative work), so it is excluded from the notices rather than
+# accepted as a linked license.
+ignore-build-dependencies = true
+ignore-dev-dependencies = true
+
+# Per-crate license-acceptance additions (cargo-about ≥0.6 syntax; the old `[crate.clarify]`
+# license-only form fails to deserialize under cargo-about 0.9, which now wants checksummed file
+# clarifications — per-crate `accepted` extensions express the same intent without checksums).
+#
+# r-efi is tri-licensed with an LGPL-2.1-or-later arm; cargo-about resolves OR-expressions to an
+# accepted arm on its own (MIT/Apache-2.0 are globally accepted), so it needs no entry. (It is
+# also UEFI-target-gated out of every shipped build.)
+#
+# ring's license is an AND of permissive terms including the OpenSSL license; accept the
+# OpenSSL/ISC parts for this crate only, not globally.
+[ring]
+accepted = ["OpenSSL", "ISC"]

@@ -1,0 +1,235 @@
+[package]
+name = "slipstream-host"
+description = "slipstream Linux streaming host: virtual display, capture, encode, input injection"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+slipstream-core = { path = "../slipstream-core", features = ["quic"] }
+# Signed update-manifest fetch/verify + install-kind detection, shared with the Linux client.
+ss-update-check = { path = "../ss-update-check" }
+# Config-dir + owner-private file helpers (moved out of the gamestream junk drawer, plan §W6).
+ss-paths = { path = "../ss-paths" }
+# Process-wide host config global, extracted to a leaf crate (plan §W6).
+ss-host-config = { path = "../ss-host-config" }
+# GPU vendor/adapter detection + selection, extracted to a leaf crate (plan §W6).
+ss-gpu = { path = "../ss-gpu" }
+# Linux GPU zero-copy plumbing (CUDA/EGL/Vulkan dmabuf import + the isolated worker), extracted
+# to a leaf crate (plan §W6). Compiles empty on non-Linux, so it lives in the main deps.
+ss-zerocopy = { path = "../ss-zerocopy" }
+# Shared frame/format vocabulary (CapturedFrame/PixelFormat/…), HDR metadata, and thread QoS.
+ss-frame = { path = "../ss-frame" }
+# Video encode backends (NVENC/VAAPI/Vulkan-Video/PyroWave/openh264) behind one Encoder
+# trait, extracted to a subsystem crate (plan §W6). The host's nvenc/amf-qsv/vulkan-encode/pyrowave
+# features forward here (see [features]); the heavy encoder deps (ffmpeg-next, the NVENC SDK,
+# openh264, pyrowave-sys) moved with it.
+ss-encode = { path = "../ss-encode" }
+# Frame capture backends (Linux PipeWire portal) behind one Capturer
+# trait, extracted to a subsystem crate (plan §W6). The facade (src/capture.rs) hands it the
+# pre-resolved encode facts + the sealed-channel delivery closure so the edge stays one-way.
+ss-capture = { path = "../ss-capture" }
+# Input injection backends (per-OS injectors + the virtual-gamepad HID stack), extracted to a
+# subsystem crate (plan §W6). Consumes core::input; the heavy input deps (wayland/reis/xkbcommon/
+# usbip) moved with it.
+ss-inject = { path = "../ss-inject" }
+# Virtual-display orchestration (per-compositor Linux backends), extracted to a subsystem crate.
+# The DDC panel control + KWin zkde protocol moved with it.
+ss-vdisplay = { path = "../ss-vdisplay" }
+# Shared clipboard (design/clipboard-and-file-transfer.md §4): the per-OS session-clipboard
+# backends + coordinator. Portable dep — the crate's facade (policy / ClipCoordCmd / start)
+# compiles everywhere; the backends are cfg-gated inside it.
+ss-clipboard = { path = "../ss-clipboard" }
+# M3 native control plane (the `slipstream/1` QUIC handshake; data plane stays native-thread UDP).
+quinn = "0.11"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+# The log ring (log_capture.rs) normalizes `log`-crate events off the bridge's "log" shim target
+# back to the real module path, so the console's target column and the ring's noise gate see
+# `mdns_sd::…` instead of "log".
+tracing-log = "0.2"
+# `log::LevelFilter` for the bridge's max-level in `log_capture::install_global` (which inits the
+# tracing-log bridge. Already in the tree transitively.
+log = "0.4"
+axum = "0.8"
+mdns-sd = "0.20"
+# Wake-on-LAN: report the host's wake-capable NIC MAC(s) to clients via the mDNS `mac` TXT record.
+# `mac_address` reads a NIC's hardware address; `if-addrs` maps the routed IP to its interface name.
+mac_address = "1"
+if-addrs = "0.13"
+tokio = { version = "1", features = ["full"] }
+parking_lot = "0.12"
+rsa = "0.9"
+sha2 = { version = "0.10", features = ["oid"] }
+aes = "0.8"
+aes-gcm = "0.10"
+cbc = { version = "0.1", features = ["alloc"] }
+rand = "0.8"
+hex = "0.4"
+# Cover-art delivery in the game library: encode Lutris's local JPEGs into `data:` URLs and decode
+# the Epic launcher's base64 `catcache.bin`.
+base64 = "0.22"
+# Blocking HTTP for the library cover-art warmer, run on a background thread off the hot path.
+# `ureq` is small + sync (no tokio here) and bundles webpki roots (no system cert dependency).
+ureq = "2"
+rcgen = { version = "0.13", default-features = false, features = ["ring", "pem"] }
+x509-parser = "0.16"
+# Only used for the plain-HTTP nvhttp listener (`bind().serve()`); HTTPS/mTLS is hand-rolled over
+# tokio-rustls (axum-server can't surface the peer cert), so we do NOT enable `tls-rustls` — that
+# feature is what pulled the unmaintained `rustls-pemfile` (security-review dep hygiene).
+axum-server = "0.8"
+# Ring backend, NOT the (default) aws-lc-rs one, matching slipstream-core and the client.
+# Keep `tls12` for GameStream/Moonlight clients that negotiate TLS 1.2.
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12", "logging"] }
+# Manual HTTPS+mTLS serve loop for the mgmt API (axum-server can't surface the peer cert): a
+# tokio-rustls handshake exposes the client cert, then hyper serves the axum Router with the
+# verified fingerprint injected as a request extension. Versions match the workspace lock.
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12", "logging"] }
+hyper = { version = "1", features = ["server", "http1", "http2"] }
+hyper-util = { version = "0.1", features = ["server", "server-auto", "tokio", "service"] }
+tower = { version = "0.5", features = ["util"] }
+# Stream combinators for the mgmt API's SSE event feed (`GET /api/v1/events`) — already in the
+# tree transitively (axum/hyper) and as a Linux target dep; control plane only.
+futures-util = "0.3"
+# Webhook signing (X-Slipstream-Signature: sha256=<hex HMAC>) for operator hooks; pairs with
+# the existing sha2. Already in the lockfile transitively.
+hmac = "0.12"
+rusty_enet = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Management/control-plane REST API + OpenAPI (control pane, M2). `axum_extras` wires
+# utoipa into axum 0.8 extractors; utoipa-axum collects `#[utoipa::path]` routes into the
+# spec; utoipa-scalar serves the interactive docs. Codegen-friendly: the spec is emitted
+# verbatim by the `openapi` subcommand. Control plane only — never the per-frame path.
+# Plugin-store index signatures: ed25519 verification of a catalog document before any field of
+# it is read (store/index.rs). Already in the tree via rustls — the workspace is ring-only, so this
+# is the one signature primitive available without pulling aws-lc-sys.
+ring = "0.17"
+# Semver comparisons for the plugin store: `minHost` gating and the revocation list's version
+# ranges (`<0.3.2`). Already in the lockfile transitively.
+semver = "1"
+utoipa = { version = "5", features = ["axum_extras"] }
+utoipa-axum = "0.2"
+utoipa-scalar = { version = "0.3", features = ["axum"] }
+# Opus encode for the host->client audio plane, including stereo and 5.1/7.1 surround. The crate
+# vendors libopus (cmake-built from source, no system lib or vcpkg) — portable, so it stays in
+# the main deps even though only the Linux backend opens it today (WASAPI lands with the audio todo).
+opus = "0.3"
+
+[dev-dependencies]
+# Drive the management API router in-process (no socket) in the handler tests.
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"
+# Disposable directory fixtures for the Steam local-librarycache scan tests (library.rs).
+tempfile = "3"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+# Direct-SDK NVENC is part of every Windows host build. `nvEncodeAPI64.dll` loads at
+# runtime, and a missing driver falls back to openh264, so the same binary runs on AMD
+# and Intel boxes.
+ss-encode = { path = "../ss-encode", features = ["nvenc"] }
+# WASAPI loopback capture + Win32 desktop APIs for the Windows host (capture, input, audio).
+windows = { version = "0.58", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Direct3D",
+    "Win32_Graphics_Direct3D11",
+    "Win32_Graphics_Dxgi",
+    "Win32_Graphics_Dxgi_Common",
+    "Win32_Graphics_Gdi",
+    "Win32_Media_Audio",
+    "Win32_Media_Multimedia",
+    "Win32_System_Com",
+    "Win32_System_Services",
+    "Win32_System_WinRT",
+    "Win32_System_WinRT_Direct3D11",
+    "Win32_System_WinRT_Graphics_Capture",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+    "Graphics_Capture",
+    "Graphics_DirectX",
+    "Graphics_DirectX_Direct3D11",
+] }
+
+[target.'cfg(all(target_os = "linux", target_arch = "x86_64"))'.dependencies]
+# Direct-SDK NVENC is part of every supported Linux host build. Its CUDA and NVENC entry points are
+# loaded at runtime, and encoder dispatch reaches it only for CUDA-backed NVIDIA capture, so the
+# same binary remains usable on AMD, Intel, and driverless systems. Keep this target-specific:
+ss-encode = { path = "../ss-encode", features = ["nvenc"] }
+
+# `screencast` gates the ScreenCast portal module; `remote_desktop` adds the RemoteDesktop
+# portal we use for libei input on KWin/GNOME; `tokio` is the default runtime.
+# `open_pipe_wire_remote` is unconditional, so ashpd's own `pipewire` feature is not
+# needed — we drive PipeWire with the `pipewire` crate below.
+ashpd = { version = "0.13", features = ["screencast", "remote_desktop"] }
+libc = "0.2"
+# Must match the pipewire crate ashpd 0.13 links (libspa/pipewire-sys `links` key is
+# unique per build), i.e. 0.9 — NOT the 0.10 the setup doc mentions.
+pipewire = "0.9"
+# ashpd 0.13 uses the tokio runtime; a current-thread runtime drives the one-time
+# portal handshake (control plane — never the per-frame path).
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "net", "time"] }
+# Input injection into headless Sway via the wlroots virtual-input Wayland protocols
+# (uinput won't reach a compositor running with WLR_LIBINPUT_NO_DEVICES=1).
+wayland-client = "0.31"
+wayland-protocols-wlr = { version = "0.3", features = ["client"] }
+wayland-protocols-misc = { version = "0.3", features = ["client"] }
+# `xdg-output` (zxdg_output_v1): the per-output *logical* geometry (post-scale size + global
+# position), used by the KWin fake_input backend to map absolute coordinates under display scaling.
+wayland-protocols = { version = "0.32", features = ["client"] }
+# Codegen for KDE's `zkde_screencast_unstable_v1` (vendored in `protocols/`): create a KWin
+# virtual output sized to the client's resolution and get its PipeWire node (KRdp's path).
+# `wayland-backend` is referenced by the generated interface tables.
+wayland-scanner = "0.31"
+wayland-backend = "0.3"
+# Parse `pw-dump` JSON to find gamescope's PipeWire node (gamescope backend).
+serde_json = "1"
+# Read the Lutris library DB (`pga.db`) for the Lutris store provider. `bundled` vendors + compiles
+# SQLite (cc, already needed for ffmpeg/opus) so there's no system libsqlite3 runtime dependency —
+# clean for the deb/rpm/flatpak packaging. Opened read-only/immutable (Lutris may hold it open).
+rusqlite = { version = "0.40", features = ["bundled"] }
+# Builds/validates the xkb keymap uploaded to the virtual keyboard + tracks modifier state.
+xkbcommon = "0.8"
+# libei (EI sender) for the portable input path on KWin/GNOME (RemoteDesktop portal).
+# The `tokio` feature wires reis's event stream into tokio's reactor.
+reis = { version = "0.6.1", features = ["tokio"] }
+# `StreamExt::next` on reis's tokio event stream in the libei worker loop.
+futures-util = "0.3"
+# Zero-copy capture (plan §9): EGL imports the PipeWire dmabuf, CUDA maps it, NVENC encodes
+# it with no CPU roundtrip. `khronos-egl` (dynamic = load the NVIDIA libEGL at runtime) gives
+# eglCreateImage + the dma_buf import; the CUDA driver API (EGL interop) and libgbm are linked
+# via hand-rolled FFI in `src/zerocopy/` (no Rust crate exposes the EGL-interop driver calls).
+khronos-egl = { version = "6", features = ["dynamic"] }
+# Vulkan bridge for LINEAR dmabufs (gamescope): import via VK_EXT_external_memory_dma_buf,
+# GPU-copy into an exportable allocation, export OPAQUE_FD → cuImportExternalMemory (the
+# officially-supported CUDA pairing; raw dmabuf fds are rejected by the desktop driver).
+ash = "0.38"
+# `libcuda.so.1` is dlopen'd at runtime (NOT link-time) so one Linux binary runs on NVIDIA
+# (zero-copy via CUDA) AND on AMD/Intel (VAAPI, no NVIDIA driver present) — see `zerocopy::cuda`.
+libloading = "0.8"
+# Vendored + trimmed `usbip` server core (no libusb) — presents a virtual Steam Deck over USB/IP
+# so the local `vhci_hcd` attaches it: the shippable, Secure-Boot-clean, Steam-Input-promotable
+# virtual-Deck transport on non-SteamOS hosts (`inject/linux/steam_usbip.rs`). See the crate's NOTICE.
+usbip-sim = { path = "vendor/usbip-sim" }
+
+# The encode feature flags forward to the ss-encode subsystem crate.
+[features]
+# PyroWave ships in every default build (the codec stays strictly opt-in per session; a client
+# must explicitly prefer CODEC_PYROWAVE, so normal HEVC/AV1 sessions do not change).
+default = ["pyrowave"]
+# NVENC hardware encode on Linux. The target dependency above enables the runtime-loaded backend.
+nvenc = ["ss-encode/nvenc"]
+# Raw Vulkan Video HEVC/AV1 encode on Linux (AMD/Intel) — real reference-frame-invalidation loss
+# recovery via explicit DPB reference slots (design/linux-vulkan-video-encode.md). OFF by default;
+# reuses ss-encode's `ash` bindings (no new dep). Runtime-gated further by SLIPSTREAM_VULKAN_ENCODE.
+vulkan-encode = ["ss-encode/vulkan-encode"]
+# PyroWave — the opt-in wired-LAN intra-only wavelet codec (design/pyrowave-codec-plan.md). Builds
+# the vendored codec from source in ss-encode. ON by default (see `default`); sessions reach it only
+# through explicit client opt-in.
+pyrowave = ["ss-encode/pyrowave"]
+
+[lints]
+workspace = true

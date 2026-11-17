@@ -1,0 +1,56 @@
+# -------------------------------------------------------------------
+# ------------------------------- WARNING ---------------------------
+#
+# DEPRECATION ALIAS for .github/workflows/helioslite-release.yml
+#
+# The real release workflow lives at helioslite-release.yml. This
+# file is kept for backwards compatibility with external automation
+# that still references "release" (e.g. `gh workflow run release.yml`).
+#
+# All real work happens in helioslite-release.yml; this file just
+# forwards `workflow_dispatch` calls.
+#
+# RESOLVED (Gate 4 completion): the `forge_ci` release generator now
+# emits the canonical workflow to `helioslite-release.yml` and no longer
+# writes `release.yml`, so regeneration can never clobber this alias. It
+# is hand-maintained by design (option (b) in the migration checklist).
+#
+# NOTE on forge_ci: if a future CI model re-declares `release.yml` in its
+# emit list, this deprecation alias will be clobbered again.
+#
+# Gate 4 of docs/RENAMES-STRATEGY.md: the canonical workflow file
+# is now `helioslite-release.yml`; this file is a transitional
+# alias only.
+# -------------------------------------------------------------------
+name: Release (deprecated alias for helioslite-release)
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Optional reason for triggering (passed to helioslite-release)'
+        required: false
+        type: string
+permissions:
+  contents: read
+jobs:
+  forward:
+    name: Forward to helioslite-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Announce deprecation
+        run: |
+          {
+            echo "::warning file=.github/workflows/release.yml::This workflow is deprecated. Use .github/workflows/helioslite-release.yml directly. Forwarding once more, then this alias will be removed."
+            echo "::notice title=helioslite release alias::Forwarding manual dispatch to helioslite-release.yml (ref=${GITHUB_REF_NAME})"
+          } >> "${GITHUB_STEP_SUMMARY}"
+      - name: Trigger helioslite-release workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REASON: ${{ inputs.reason }}
+        run: |
+          set -euo pipefail
+          ARGS=(workflow run helioslite-release.yml --ref "${GITHUB_REF_NAME}")
+          if [[ -n "${REASON:-}" ]]; then
+            ARGS+=(--field "reason=${REASON}")
+          fi
+          gh "${ARGS[@]}"

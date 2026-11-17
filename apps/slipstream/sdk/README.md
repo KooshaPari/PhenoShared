@@ -1,0 +1,324 @@
+# @slipstream/host
+
+TypeScript SDK for the [Slipstream](https://github.com/vindeckyy/slipstream) streaming host: a typed
+management-API client plus the host's lifecycle **event stream** (client connect/disconnect,
+stream start/stop, pairing, displays, library) — built on [Effect](https://effect.website).
+
+Two surfaces, one core:
+
+- **`@slipstream/host`** — the Promise facade, the front door. `connect()`, then `pf.api.*` (the
+  typed management API — every endpoint autocompletes, every response is typed) and `pf.events.on()`.
+  You never need to know Effect exists.
+- **`@slipstream/host/effect`** — the Effect-native surface for plugins and composed programs:
+  the `SlipstreamHost` service + layer, `Stream`-based events, typed errors
+  (`AuthError | ApiError | TransportError | VersionSkew`), and every wire shape as an
+  `effect/Schema` (REST shapes generated from the host's OpenAPI spec; event shapes mirroring
+  the host's snapshot-tested wire format).
+
+## Install
+
+The SDK lives in the private [vindeckyy/slipstream](https://github.com/vindeckyy/slipstream) repo.
+Publishing is private (GitHub Packages by default, or a local registry you choose). Point the
+`@slipstream` scope at your registry once — in your project's `.npmrc` (or `~/.npmrc`):
+
+```ini
+@slipstream:registry=https://npm.pkg.github.com
+```
+
+For local development inside this monorepo, prefer a path/link install instead of the registry:
+
+```sh
+bun add @slipstream/host@file:../sdk   # or: npm i ../sdk
+```
+
+Otherwise install from the private registry after authenticating:
+
+```sh
+bun add @slipstream/host      # or: npm i @slipstream/host
+```
+
+`effect` is a **peer dependency** (auto-installed by bun / npm ≥ 7) — so the SDK and your own
+`@slipstream/host/effect` code share one Effect instance.
+
+GitHub Packages needs a token with `read:packages` (and `write:packages` to publish). Add:
+
+```ini
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+```
+
+To point the host plugin runner at a different registry, set `SLIPSTREAM_PLUGIN_REGISTRY` (see
+`sdk/src/plugins.ts`).
+
+## Quickstart
+
+```ts
+import { connect } from "@slipstream/host";
+
+const pf = await connect(); // zero config on the host box
+
+// Typed API — autocomplete every endpoint, typed responses, no hand-written paths or casts.
+const clients = await pf.api.listPairedClients();
+console.log(`${clients.length} paired clients`);
+
+// Live events:
+pf.events.on("stream.started", (e) => {
+  console.log(`${e.stream.client} started ${e.stream.mode}${e.stream.hdr ? " HDR" : ""}`);
+});
+pf.events.on("pairing.pending", async (e) => {
+  // notify your phone, then decide through the typed API:
+  const pending = await pf.api.listPendingDevices();
+  const match = pending.find((d) => d.fingerprint === e.device.fingerprint);
+  if (match) await pf.api.approvePendingDevice(String(match.id), { payload: {} });
+});
+```
+
+Need something the generated client doesn't cover? `pf.request(method, path, body)` is the untyped
+escape hatch (returns `unknown`).
+
+The same, Effect-native:
+
+```ts
+import { Effect, Stream } from "effect";
+import { events, SlipstreamHostLive } from "@slipstream/host/effect";
+
+const program = events().pipe(
+  Stream.filter((e) => e.kind === "stream.started"),
+  Stream.runForEach((e) => Effect.log(`stream: ${e.stream.mode}`)),
+);
+Effect.runPromise(program.pipe(Effect.provide(SlipstreamHostLive())));
+```
+
+## Examples
+
+A complexity ladder in [`examples/`](./examples) — start at the top:
+
+1. [`tail-events.ts`](./examples/tail-events.ts) — **hello world**: connect, one typed call, tail events.
+2. [`notify-pairing.ts`](./examples/notify-pairing.ts) — **event → decision**: approve/deny pairing through the typed API.
+3. [`provider-sync.ts`](./examples/provider-sync.ts) — **typed bulk REST**: declaratively reconcile a game-library provider.
+4. [`couch-preset.effect.ts`](./examples/couch-preset.effect.ts) — **advanced, Effect-native**: only if you're composing Effect programs.
+
+Examples 1–3 are the plain Promise facade and cover most automation; you only need example 4's
+Effect surface for composed, interruptible programs. Run any **in the repo** with
+`bun examples/<file>.ts`. To **deploy** one on a host, install the package into its own directory
+(`bun add @slipstream/host`) and change its `../src/…` import to `@slipstream/host` — see
+[Running a single script as a service](#running-a-single-script-as-a-service).
+
+Plus a real-world recipe:
+
+- [`virtualhere-dualsense.ts`](./examples/virtualhere-dualsense.ts) — **USB passthrough**: bind a
+  real DualSense (shared from the couch over [VirtualHere](https://www.virtualhere.com/)) to the
+  host for the length of each connection and release it after — full gyro, touchpad, adaptive
+  triggers and USB rumble instead of an emulated pad. Shows the `client.connected`/`disconnected`
+  bracket and clean release on `systemctl stop`.
+
+## Connection resolution
+
+`connect()` / `SlipstreamHostLive()` resolve, in order:
+
+| What | Source |
+|---|---|
+| URL | `{ url }` → `SLIPSTREAM_MGMT_URL` → `https://127.0.0.1:47990` |
+| Token | `{ token }` → `SLIPSTREAM_MGMT_TOKEN` → `SLIPSTREAM_PLUGIN_TOKEN` → `<config_dir>/plugin-token` → `<config_dir>/mgmt-token` |
+| TLS pin | `{ ca }` → `SLIPSTREAM_MGMT_CA` (path) → `<config_dir>/cert.pem` |
+
+`<config_dir>` is `~/.config/slipstream` by default, or the path set by
+`SLIPSTREAM_CONFIG_DIR`, so a script running on the host box needs **zero configuration**. The TLS pin trusts exactly
+the host's self-signed identity cert (chain-verified; the hostname check is waived — the cert
+is deliberately CN-only, native clients pin its fingerprint). Bun and Node are first-class;
+other runtimes fall back to system trust (point your runtime's CA option at `cert.pem`).
+
+The zero-config default is the host's **scoped plugin token** (`plugin-token`): the everyday
+surface — status, library, sessions, events, the plugin UI lease — but deliberately **not** hook
+registration or pairing administration, so a plugin defect can't install commands or admit
+devices. A script that needs the full admin surface opts in explicitly with
+`SLIPSTREAM_MGMT_TOKEN` or `{ token }` (`mgmt-token` remains the fallback on hosts that predate
+the plugin token). Both tokens are honored from loopback only — run scripts on the host box (or
+through an SSH tunnel).
+
+## Events
+
+- Reconnects automatically (exponential backoff + jitter, capped) and resumes with
+  `Last-Event-ID` — the host replays what you missed from its ring.
+- Default is **live tail only** (a fresh notify script must not re-fire on history);
+  pass `{ since: 0 }` on the Effect surface to replay the host's full ring, or `since: N`
+  to resume after a seq you persisted.
+- `on()` patterns: exact kinds (`"stream.started"`, typed callback), `"domain.*"` prefixes,
+  `"*"`, plus `"dropped"` (your cursor fell off the ring — resync via REST) and `"unknown"`
+  (an event kind newer than this SDK — the additive-only wire at work).
+- Effect surface: `events()` is a `Stream<HostEvent, EventStreamError>`; `eventsRaw()` carries
+  every SSE frame verbatim.
+
+## Plugins (`slipstream-plugin-*`)
+
+```ts
+import { definePlugin } from "@slipstream/host";
+import { Effect } from "effect";
+import { SlipstreamHost } from "@slipstream/host/effect";
+
+export default definePlugin({
+  name: "romm-library",
+  main: Effect.gen(function* () {
+    const pf = yield* SlipstreamHost;
+    // subscribe, sync, reconcile — scoped finalizers run on shutdown/interruption
+  }),
+  // …or the simple shape: main: async (pf) => { … }
+});
+```
+
+In v1 a plugin is a script you run (see below); the managed runner package is a later step.
+
+### Persisting state — `pluginStateDir`
+
+A plugin that keeps config or a cache must write it under `pluginStateDir("<your-name>")`, **not**
+directly under the config dir:
+
+```ts
+import { pluginStateDir } from "@slipstream/host";
+import * as fs from "node:fs";
+import * as path from "node:path";
+
+const dir = pluginStateDir("rom-manager"); // <config_dir>/plugin-state/rom-manager
+fs.mkdirSync(dir, { recursive: true });
+fs.writeFileSync(path.join(dir, "cache.json"), data);
+```
+
+The separate state tree keeps plugin-owned files away from host-managed configuration. The host
+prepares it with the permissions needed by the supervised runner.
+
+### Receiving data from an interactive-user app — `pluginIngestDir`
+
+If a plugin needs data produced by another local application, `pluginIngestDir("<your-name>")`
+resolves an explicit inbox (`<config_dir>/ingest/<name>`) for that handoff:
+
+```ts
+import { pluginIngestDir } from "@slipstream/host";
+const inbox = pluginIngestDir("catalog-sync"); // <config_dir>/ingest/catalog-sync
+```
+
+Treat what you read from it as lower trust than your own state — the inbox is writable by any local
+user.
+
+### A plugin UI in the console — `servePluginUi`
+
+A plugin can surface a web UI **inside the slipstream console** — no second password or port for the
+operator. It serves the UI on a loopback ephemeral port behind a per-boot secret; `servePluginUi`
+registers it with the host, and the console reverse-proxies to it and adds a nav entry gated by the
+console's own session. Your code implements **zero human auth**.
+
+```ts
+import { definePlugin, servePluginUi } from "@slipstream/host";
+
+export default definePlugin({
+  name: "rom-manager",
+  main: async (pf) => {
+    const ui = await servePluginUi(pf, {
+      id: "rom-manager",
+      title: "ROM Manager",
+      icon: "gamepad-2",                            // a lucide icon name
+      staticDir: new URL("../dist/ui", import.meta.url), // your built SPA
+      fetch: (req) => appRouter(req),               // plugin-local REST/SSE (after a static miss)
+    });
+    try {
+      await runForever();
+    } finally {
+      await ui.close();                             // deregister + stop
+    }
+  },
+});
+```
+
+Requests reach `fetch` **prefix-stripped** (the console proxy removed `/plugin-ui/<id>`), so your app
+sees `/`, `/api/scan`, … — the original prefix is on `X-Forwarded-Prefix`. `servePluginUi` serves
+`staticDir` first (with an `index.html` SPA fallback for navigations); return `undefined` from `fetch`
+to fall through to it. Build your SPA with a relative base (`base: "./"` + hash routing) or an absolute
+`base: "/plugin-ui/<id>/"`, and expect a dark canvas. Requires the Bun runtime (the runner is bun).
+
+## The runner: `slipstream-scripting`
+
+Instead of one unit file per script, run everything under the managed runner — it discovers
+your units and supervises them:
+
+```sh
+bun src/runner-cli.ts            # runs <config_dir>/scripts/* + installed slipstream-plugin-*
+bun src/runner-cli.ts --list     # show what it found
+```
+
+The same CLI manages plugin packages — it creates the plugins dir, points it at the `@slipstream`
+registry, and installs on the bun it is already running on:
+
+```sh
+bun src/runner-cli.ts add catalog-sync  # resolves to @slipstream/plugin-catalog-sync
+bun src/runner-cli.ts remove catalog-sync
+bun src/runner-cli.ts list              # installed plugin packages + versions
+```
+
+On an installed host these are reached through the host CLI, which drives the runner service:
+
+```sh
+slipstream-host plugins add catalog-sync
+slipstream-host plugins enable          # enable + start the runner (opt-in)
+slipstream-host plugins status
+```
+
+- **Plugins** (a `definePlugin` default export, from the scripts dir or a
+  `slipstream-plugin-*` package installed under `<config_dir>/plugins/`): supervised — a crash
+  restarts them with capped exponential backoff; a clean return completes them.
+- **Bare scripts**: importing them is the run — one-shot, no restart (export a plugin to be
+  supervised).
+- **Shutdown is structural**: SIGINT/SIGTERM interrupt every unit's fiber — Effect plugins'
+  scoped finalizers run (release the preset, deregister cleanly) and facade clients close
+  before the process exits. This is what makes `systemctl stop` clean.
+- The sshd rule applies: a group/world-writable unit file is refused loudly.
+
+systemd user unit for the runner (`~/.config/systemd/user/slipstream-scripting.service`):
+
+```ini
+[Unit]
+Description=slipstream script/plugin runner
+After=slipstream-host.service
+
+[Service]
+ExecStart=/usr/bin/bun /path/to/sdk/src/runner-cli.ts
+Restart=on-failure
+RestartSec=5
+# SIGTERM (the default KillSignal) triggers the runner's structured shutdown.
+
+[Install]
+WantedBy=default.target
+```
+
+## Running a single script as a service
+
+systemd user unit (`~/.config/systemd/user/slipstream-myscript.service`):
+
+```ini
+[Unit]
+Description=slipstream automation: myscript
+After=slipstream-host.service
+
+[Service]
+ExecStart=/usr/bin/bun /home/me/slipstream-scripts/myscript.ts
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
+```
+
+## Compatibility
+
+- SDK **majors** track the management-API major; an event `schema` bump or an `effect` major
+  is an SDK major too.
+- The wire is **additive-only** within a major: an older SDK keeps working against a newer
+  host (unknown response keys are ignored; unknown event kinds ride the `"unknown"` channel).
+- A 2xx response that doesn't match its schema surfaces as `VersionSkew` on the Effect
+  surface — a typed nudge to update, not an `undefined` three frames later.
+
+## Development
+
+```sh
+bun install
+bun run gen        # regenerate src/gen/slipstream.ts from ../api/openapi.json (@effect/openapi-generator)
+bun run typecheck
+bun test
+```
