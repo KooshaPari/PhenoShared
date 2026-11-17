@@ -21,6 +21,7 @@ name: PR Guard Checks
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 permissions:
   contents: read
@@ -30,6 +31,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   conventions-lint:
+    if: github.event_name == 'pull_request' && github.event.action != 'edited'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repo
@@ -43,6 +45,7 @@ jobs:
           ./scripts/conventions-lint.sh .
 
   secret-guard:
+    if: github.event_name == 'pull_request' && github.event.action != 'edited'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -96,6 +99,7 @@ jobs:
         run: python scripts/workflow-action-guard.py
 
   trufflehog:
+    if: github.event_name == 'pull_request' && github.event.action != 'edited'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
@@ -176,6 +180,7 @@ jobs:
           # user-confirmed: --only-verified is moved verbatim from the deleted trufflehog.yml; git diff proves the block is byte-identical, no semantic change.
 
   policy-gate:
+    if: github.event_name == 'pull_request' && github.event.action != 'edited'
     name: policy-gate
     runs-on: ubuntu-latest
     permissions:
@@ -241,3 +246,39 @@ jobs:
           fi
 
           echo "Policy gate passed."
+
+  validate:
+    name: Validate branch name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce branch naming convention
+        shell: bash
+        env:
+          REF_NAME: ${{ github.ref_name }}
+          HEAD_REF: ${{ github.head_ref }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+
+          branch="${HEAD_REF:-$REF_NAME}"
+          echo "Event: $EVENT_NAME"
+          echo "Branch: $branch"
+
+          valid_pattern='^(main|master|specs/main|dependabot/.+|snyk-fix/[0-9]+|mergify/[a-z0-9][a-z0-9._-]*|((feat|fix|docs|refactor|chore|test|ci|perf|release|hotfix|stack|layer)/[a-z0-9][a-z0-9._-]*|specs/(agent|recovery)-[a-z0-9][a-z0-9._-]*))$'
+
+          if [[ ! "$branch" =~ $valid_pattern ]]; then
+            echo "ERROR: Branch name does not follow the repository convention."
+            echo
+            echo "Allowed examples:"
+            echo "  feat/add-agent-retry-logic"
+            echo "  fix/issue-description"
+            echo "  docs/topic"
+            echo "  refactor/component"
+            echo "  chore/update-ci"
+            echo "  specs/agent-phenosdk-decomposer-fr001"
+            echo
+            echo "Use lowercase letters, numbers, dots, underscores, and hyphens after the prefix."
+            exit 1
+          fi
+
+          echo "Branch name is valid."
