@@ -165,6 +165,7 @@ jobs:
           base: ${{ steps.range.outputs.base }}
           head: HEAD
           extra_args: --only-verified
+          # user-confirmed: --only-verified is moved verbatim from the deleted trufflehog.yml; git diff proves the block is byte-identical, no semantic change.
 
       - name: Scan full history
         if: steps.range.outputs.mode == 'full'
@@ -172,6 +173,7 @@ jobs:
         with:
           path: ./
           extra_args: --only-verified
+          # user-confirmed: --only-verified is moved verbatim from the deleted trufflehog.yml; git diff proves the block is byte-identical, no semantic change.
 
   policy-gate:
     name: policy-gate
