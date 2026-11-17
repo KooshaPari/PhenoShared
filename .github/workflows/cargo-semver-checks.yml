@@ -3,7 +3,7 @@ permissions: read-all
 
 on:
   pull_request:
-    paths: ['**/Cargo.toml']
+    paths: ["**/Cargo.toml"]
   workflow_dispatch:
 
 jobs:

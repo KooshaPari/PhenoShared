@@ -3,7 +3,7 @@ name: Quarterly Org Audit
 on:
   schedule:
     # Run at 9am ET (14:00 UTC) on 1st of Jan, Apr, Jul, Oct
-    - cron: '0 14 1 1,4,7,10 *'
+    - cron: 0 14 1 1,4,7,10 *
   workflow_dispatch:
   # Federation entrypoint: the org-wide reusable-workflow federation can invoke
   # the quarterly audit on demand (e.g. an ad-hoc audit wave).
@@ -82,7 +82,7 @@ jobs:
             - Test traceability and FR scaffolding
             - Dependency alignment status
           branch: ${{ steps.audit-meta.outputs.branch }}
-          title: 'audit(quarterly): snapshot as of ${{ steps.audit-meta.outputs.date }}'
+          title: "audit(quarterly): snapshot as of ${{ steps.audit-meta.outputs.date }}"
           body: |
             # Quarterly Org Audit - ${{ steps.audit-meta.outputs.date }}
 

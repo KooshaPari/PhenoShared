@@ -7,7 +7,8 @@ name: no-idle-audit
 
 on:
   schedule:
-    - cron: "17 6 * * 1"     # 06:17 UTC every Monday
+    - cron: 17 6 * * 1 # 06:17 UTC every Monday
+
   push:
     branches: [main]
     paths:
@@ -28,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: "Run no-idle-audit.py (strict)"
+      - name: Run no-idle-audit.py (strict)
         id: audit
         run: |
           python scripts/no-idle-audit.py --strict --markdown \
@@ -36,14 +37,14 @@ jobs:
           exit "${PIPESTATUS[0]}"
         continue-on-error: true
 
-      - name: "Check for violations"
+      - name: Check for violations
         id: check
         run: |
           grep -q "❌ FAIL" /tmp/audit_report.md \
             && echo "has_violations=true" >> "$GITHUB_OUTPUT" \
             || echo "has_violations=false" >> "$GITHUB_OUTPUT"
 
-      - name: "Open / update tracker issue"
+      - name: Open / update tracker issue
         if: steps.check.outputs.has_violations == 'true'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         with:
@@ -82,7 +83,7 @@ jobs:
               console.log(`Created new tracker #${newIssue.number}`);
             }
 
-      - name: "Upload report artifact"
+      - name: Upload report artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: no-idle-audit-report

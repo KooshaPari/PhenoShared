@@ -16,25 +16,25 @@ on:
   workflow_call:
     inputs:
       repo_path:
-        description: 'Path within the workspace to the repo root'
+        description: Path within the workspace to the repo root
         type: string
-        default: '.'
+        default: .
       build_system:
-        description: 'Build system hint (e.g. rust, node)'
+        description: Build system hint (e.g. rust, node)
         type: string
-        default: 'rust'
+        default: rust
   workflow_dispatch:
     inputs:
       repo_path:
-        description: 'Path within the workspace to the repo root'
+        description: Path within the workspace to the repo root
         required: false
         type: string
-        default: '.'
+        default: .
       build_system:
-        description: 'Build system hint (e.g. rust, node)'
+        description: Build system hint (e.g. rust, node)
         required: false
         type: string
-        default: 'rust'
+        default: rust
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

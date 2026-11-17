@@ -2,10 +2,10 @@ name: Fuzzing
 on:
   push:
     paths:
-      - '**.rs'
-      - '**.go'
+      - "**.rs"
+      - "**.go"
   schedule:
-    - cron: '0 0 * * *'
+    - cron: 0 0 * * *
 
 permissions:
   contents: read

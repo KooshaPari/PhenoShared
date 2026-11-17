@@ -4,30 +4,30 @@ on:
   workflow_call:
     inputs:
       working-directory:
-        description: 'Working directory'
+        description: Working directory
         required: false
         type: string
-        default: '.'
+        default: .
       release-tool:
-        description: 'Release tool: release-please | cargo-release | python-build'
+        description: "Release tool: release-please | cargo-release | python-build"
         required: false
         type: string
-        default: 'release-please'
+        default: release-please
       binary-name:
-        description: 'Binary to package (Rust)'
+        description: Binary to package (Rust)
         required: false
         type: string
-        default: ''
+        default: ""
     secrets:
       RELEASE_PLEASE_TOKEN:
         required: false
-        description: 'PAT for release-please PR creation'
+        description: PAT for release-please PR creation
       CARGO_REGISTRY_TOKEN:
         required: false
-        description: 'crates.io token (cargo-release)'
+        description: crates.io token (cargo-release)
       PYPI_TOKEN:
         required: false
-        description: 'PyPI token (python-build)'
+        description: PyPI token (python-build)
 
 permissions:
   contents: read
@@ -52,7 +52,7 @@ jobs:
         if: ${{ inputs.release-tool == 'python-build' }}
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Validate release-tool input
         run: |
