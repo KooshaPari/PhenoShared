@@ -16,8 +16,16 @@ import unittest
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-WORKFLOW = yaml.safe_load((ROOT / ".github/workflows/lefthook-check.yml").read_text())
-JOBS = WORKFLOW["jobs"]
+# The lefthook jobs live in the grouped PR-advisory workflow. Their ids and
+# steps are unchanged; only the file that holds them moved, and the install
+# version env moved from workflow level to job level because env is not
+# inherited across jobs inside one workflow file.
+WORKFLOW = yaml.safe_load((ROOT / ".github/workflows/pr-advisory.yml").read_text())
+JOBS = {
+    job_id: WORKFLOW["jobs"][job_id]
+    for job_id in ("pre-commit-check", "commit-msg-check")
+}
+JOB_ENV = JOBS["pre-commit-check"]["env"]
 INSTALLS = [
     step["run"]
     for job in JOBS.values()
@@ -38,7 +46,7 @@ class LefthookWorkflowTests(unittest.TestCase):
         if shutil.which("gsha256sum"):
             (self.bin / "sha256sum").symlink_to(shutil.which("gsha256sum"))
         self.env = dict(os.environ, PATH=f"{self.bin}:{os.environ['PATH']}")
-        self.env.update({key: str(value) for key, value in WORKFLOW["env"].items()})
+        self.env.update({key: str(value) for key, value in JOB_ENV.items()})
         self.env.update(RUNNER_TEMP=str(self.root), GITHUB_PATH=str(self.root / "path"))
 
     def executable(self, name: str, source: str) -> Path:
@@ -64,8 +72,9 @@ class LefthookWorkflowTests(unittest.TestCase):
     def test_both_install_sites_share_pinned_verified_recipe(self) -> None:
         self.assertEqual(len(INSTALLS), 2)
         self.assertEqual(INSTALLS[0], INSTALLS[1])
-        self.assertEqual(str(WORKFLOW["env"]["LEFTHOOK_VERSION"]), "2.1.12")
-        self.assertEqual(WORKFLOW["env"]["LEFTHOOK_SHA256"],
+        self.assertEqual(JOBS["commit-msg-check"]["env"], JOB_ENV)
+        self.assertEqual(str(JOB_ENV["LEFTHOOK_VERSION"]), "2.1.12")
+        self.assertEqual(JOB_ENV["LEFTHOOK_SHA256"],
                          "22ff1ad48d1a0f4dca8d6b7e920056c6a9015f9204e5b693858ed9c2db759a16")
         for script in INSTALLS:
             self.assertLess(script.index("sha256sum"), script.index("chmod"))

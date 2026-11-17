@@ -1,0 +1,346 @@
+# Advisory PR checks, grouped into one workflow file.
+#
+# WHY THIS FILE EXISTS
+#   Every file in .github/workflows that reacts to `pull_request` produces its
+#   own workflow RUN on a PR push. Five always-on advisory checks therefore cost
+#   five runs (and five queued entries) per push. Grouping them into one file
+#   with the same job ids keeps every check-run NAME identical while costing one
+#   run instead.
+#
+# WHAT IS UNCHANGED
+#   Each job's `steps:` block is carried over byte-for-byte from the file it
+#   came from. Job ids and job `name:` values are unchanged, so the check names
+#   GitHub reports are unchanged:
+#     dedup, dprint (TOML + Dockerfile), happy-path collapse guard,
+#     Pre-commit Checks, Commit Message Validation,
+#     Legacy Tooling Anti-Pattern Scan
+#
+# WHAT MOVED
+#   Workflow-level `env:` from the old files is now declared per job, because
+#   env is not inherited across jobs in a single workflow file.
+name: PR Advisory Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dedup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Compare DAG crates with upstream
+        run: |
+          echo "Checking if pheno-dag matches byteport-dag upstream..."
+          UPSTREAM="https://raw.githubusercontent.com/<REDACTED>/BytePort/main/crates/byteport-dag/src"
+          LOCAL="crates/pheno-dag/src"
+          FAIL=0
+          for f in dag.rs topo.rs schema.rs serialize.rs; do
+            curl -sf "$UPSTREAM/$f" -o /tmp/upstream_$f 2>/dev/null || { echo "SKIP $f (upstream not found)"; continue; }
+            if ! diff -q /tmp/upstream_$f "$LOCAL/$f" >/dev/null 2>&1; then
+              echo "DIVERGED: $f"
+              diff -u /tmp/upstream_$f "$LOCAL/$f" | head -20
+              FAIL=1
+            else
+              echo "IDENTICAL: $f"
+            fi
+          done
+          if [ "$FAIL" = "1" ]; then
+            echo "::warning::pheno-dag has diverged from byteport-dag. Consider updating both or consolidating."
+          fi
+
+  dprint:
+    name: dprint (TOML + Dockerfile)
+    runs-on: ubuntu-24.04
+    env:
+      DPRINT_VERSION: 0.64.3
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pinned dprint
+        run: |
+          set -euo pipefail
+          base_url="https://github.com/dprint/dprint/releases/download/${DPRINT_VERSION}"
+          asset="dprint-x86_64-unknown-linux-gnu.zip"
+          curl -fsSL -o "$asset" "${base_url}/${asset}"
+          curl -fsSL -o SHASUMS256.txt "${base_url}/SHASUMS256.txt"
+          grep " ${asset}\$" SHASUMS256.txt | sha256sum --check
+          unzip -o -q "$asset" -d dprint-bin
+          sudo install -m 0755 dprint-bin/dprint /usr/local/bin/dprint
+          dprint --version
+
+      - name: Check every tracked Dockerfile
+        run: |
+          set -euo pipefail
+          git ls-files > tracked.txt
+          tracked=$(wc -l < tracked.txt)
+          resolved=$(grep -Eic '(^|/)Dockerfile' tracked.txt || true)
+          echo "tracked files: ${tracked}; tracked Dockerfiles: ${resolved}"
+          # A count of zero is asserted against, never accepted as a pass: zero
+          # Dockerfiles can only mean the checkout or the pattern is wrong, and a
+          # silent green is exactly how a gate stops meaning anything.
+          if [ "${resolved}" -lt 1 ]; then
+            echo "::error::Resolved 0 Dockerfiles out of ${tracked} tracked files."
+            exit 1
+          fi
+          grep -Ei '(^|/)Dockerfile' tracked.txt > dockerfiles.txt
+          echo "Checking $(wc -l < dockerfiles.txt) tracked Dockerfile files:"
+          cat dockerfiles.txt
+          xargs -d '\n' -r dprint check --config dprint.json --allow-no-files < dockerfiles.txt
+
+      - name: Resolve changed TOML files
+        id: changed
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --prune origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
+          git diff --name-only --diff-filter=ACMR "origin/${BASE_REF}...HEAD" > all-changed.txt
+          # A pull request always changes at least one file. An empty list means the
+          # diff resolved against the wrong base, so fail instead of skipping green.
+          if [ ! -s all-changed.txt ]; then
+            echo "::error::The base diff reported 0 changed files against origin/${BASE_REF}."
+            exit 1
+          fi
+          echo "changed files: $(wc -l < all-changed.txt)"
+          grep -E '\.toml$' all-changed.txt > changed-files.txt || true
+          if [ ! -s changed-files.txt ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changed TOML files; skipping dprint check."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Checking:"
+            cat changed-files.txt
+          fi
+
+      - name: Check formatting of changed TOML files
+        if: steps.changed.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          xargs -d '\n' -r dprint check --config dprint.json < changed-files.txt
+
+  guard:
+    name: happy-path collapse guard
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          fetch-depth: 0
+      - name: Test R3 allowlist
+        run: |
+          bash governance/test-happy-path-allowlist.sh
+      - name: Test whitespace-only reflow suppression
+        run: |
+          bash governance/test-happy-path-whitespace.sh
+      - name: Run guard against HEAD diff
+        run: |
+          # WHY THE BASE IS COMPUTED HERE AND NOT TAKEN FROM THE EVENT
+          #   `github.event.pull_request.base.sha` is FROZEN at the moment the
+          #   PR was created; it is not the current tip of the base branch. A PR
+          #   whose branch also contains base commits newer than that frozen
+          #   SHA therefore diffs from a stale base, and every line the BASE
+          #   branch added since the PR was opened appears as an ADDED line of
+          #   this PR. The guard then reads the base branch's own new prose as
+          #   if this PR had written it - which is how a comment the base
+          #   branch added to its own Cargo.toml failed this PR's guard on a
+          #   change that did not touch Cargo.toml at all.
+          #
+          #   Diff from the merge-base with the CURRENT base branch instead.
+          #   That is exactly "what this PR changed", and it is stable: for a
+          #   push to main the merge-base of `before` and HEAD is `before`,
+          #   which is what the guard already used.
+          base_ref="${{ github.event.pull_request.base.ref }}"
+          head_sha="${{ github.event.pull_request.head.sha || github.sha }}"
+          base_sha="${{ github.event.pull_request.base.sha || github.event.before }}"
+          merge_base=""
+          if [ -n "$base_ref" ]; then
+            git fetch --no-tags --quiet origin \
+              "+refs/heads/${base_ref}:refs/remotes/origin/${base_ref}" || true
+            if git rev-parse --verify --quiet "origin/${base_ref}" >/dev/null 2>&1; then
+              merge_base="$(git merge-base "origin/${base_ref}" "$head_sha" 2>/dev/null || true)"
+            fi
+            if [ -z "$merge_base" ] && \
+               git rev-parse --verify --quiet "$base_ref" >/dev/null 2>&1; then
+              merge_base="$(git merge-base "$base_ref" "$head_sha" 2>/dev/null || true)"
+            fi
+            if [ -n "$merge_base" ]; then
+              base_sha="$merge_base"
+            fi
+          fi
+          echo "guard base=$base_sha head=$head_sha"
+          HAPPY_PATH_BASE="$base_sha" \
+          HAPPY_PATH_HEAD="$head_sha" \
+          HAPPY_PATH_FAIL_ON=block \
+            bash governance/happy-path-precommit.sh
+      - name: Show recent diff
+        if: always()
+        run: git log -1 --format='%h %s' && git diff HEAD~1 --unified=0 | head -200
+
+  pre-commit-check:
+    name: Pre-commit Checks
+    runs-on: ubuntu-latest
+    env:
+      LEFTHOOK_VERSION: 2.1.12
+      LEFTHOOK_SHA256: 22ff1ad48d1a0f4dca8d6b7e920056c6a9015f9204e5b693858ed9c2db759a16
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11"
+
+      - name: Install lefthook
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -sm)" = "Linux x86_64"
+          install_dir=$(mktemp -d "$RUNNER_TEMP/lefthook.XXXXXX")
+          curl --fail --show-error --silent --location --retry 3 \
+            "https://github.com/evilmartians/lefthook/releases/download/v${LEFTHOOK_VERSION}/lefthook_${LEFTHOOK_VERSION}_Linux_x86_64" \
+            --output "$install_dir/lefthook"
+          printf '%s  %s\n' "$LEFTHOOK_SHA256" "$install_dir/lefthook" | sha256sum --check --strict
+          chmod 0755 "$install_dir/lefthook"
+          test "$("$install_dir/lefthook" version)" = "$LEFTHOOK_VERSION"
+          printf '%s\n' "$install_dir" >> "$GITHUB_PATH"
+
+      - name: Run pre-commit hooks
+        run: lefthook run pre-commit --no-auto-install
+
+  commit-msg-check:
+    name: Commit Message Validation
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      LEFTHOOK_VERSION: 2.1.12
+      LEFTHOOK_SHA256: 22ff1ad48d1a0f4dca8d6b7e920056c6a9015f9204e5b693858ed9c2db759a16
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Install lefthook
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(uname -sm)" = "Linux x86_64"
+          install_dir=$(mktemp -d "$RUNNER_TEMP/lefthook.XXXXXX")
+          curl --fail --show-error --silent --location --retry 3 \
+            "https://github.com/evilmartians/lefthook/releases/download/v${LEFTHOOK_VERSION}/lefthook_${LEFTHOOK_VERSION}_Linux_x86_64" \
+            --output "$install_dir/lefthook"
+          printf '%s  %s\n' "$LEFTHOOK_SHA256" "$install_dir/lefthook" | sha256sum --check --strict
+          chmod 0755 "$install_dir/lefthook"
+          test "$("$install_dir/lefthook" version)" = "$LEFTHOOK_VERSION"
+          printf '%s\n' "$install_dir" >> "$GITHUB_PATH"
+
+      - name: Validate commit message format
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Keep untrusted PR metadata out of shell source.
+          printf '%s\n' "$PR_TITLE" > .git/COMMIT_MSG_TEMP
+          lefthook run commit-msg --no-auto-install .git/COMMIT_MSG_TEMP
+
+  legacy-tooling-scan:
+    name: Legacy Tooling Anti-Pattern Scan
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+
+      - name: Legacy tooling scanner unavailable
+        run: |
+          cat > legacy_tooling_report.json <<JSON
+          {"totals":{"critical":0,"high":0,"medium":0,"low":0},"findings":[]}
+          JSON
+          cat > legacy_tooling_report.md <<MD
+          # Legacy Tooling Scan Report
+
+          Scanner source was previously loaded from deleted <REDACTED>/phenoShared.
+          This workflow remains WARN-mode and produces an empty report until the scanner is rehomed.
+          MD
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v-latest
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Upload scan report (JSON)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: legacy-tooling-report-json
+          path: legacy_tooling_report.json
+          retention-days: 30
+
+      - name: Upload scan report (Markdown)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: legacy-tooling-report-md
+          path: legacy_tooling_report.md
+          retention-days: 30
+
+      - name: Comment PR with findings
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v-latest
+        with:
+          script: |
+            const fs = require('fs');
+            let report = '**Legacy Tooling Scan Report**\n\n';
+
+            try {
+              const data = JSON.parse(fs.readFileSync('legacy_tooling_report.json', 'utf8'));
+              const totals = data.totals || {};
+              
+              report += `| Severity | Count |\n|----------|-------|\n`;
+              report += `| Critical | ${totals.critical || 0} |\n`;
+              report += `| High | ${totals.high || 0} |\n`;
+              report += `| Medium | ${totals.medium || 0} |\n`;
+              report += `| Low | ${totals.low || 0} |\n\n`;
+              
+              const findings = data.findings || [];
+              if (findings.length > 0) {
+                report += '**Top Violations:**\n';
+                findings.slice(0, 5).forEach(f => {
+                  report += `- [${f.severity.toUpperCase()}] ${f.rule_id}: ${f.file}:${f.line}\n`;
+                });
+                if (findings.length > 5) {
+                  report += `- ... and ${findings.length - 5} more\n`;
+                }
+              } else {
+                report += 'No violations detected.\n';
+              }
+              
+              report += '\n*This is a WARN-mode scan. Fix before strict enforcement begins.*';
+            } catch (e) {
+              report += 'Could not parse scan results.';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });

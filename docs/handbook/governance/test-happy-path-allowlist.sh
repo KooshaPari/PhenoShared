@@ -216,7 +216,11 @@ fi
 
 # ---- Test 7: workflow no longer installs bash via apt-get ----
 echo "Test 7: workflow no longer runs 'sudo apt-get install -y bash'" >&2
-if grep -q "sudo apt-get install -y bash" "$SCRIPT_DIR/../.github/workflows/happy-path-precommit.yml"; then
+GUARD_WORKFLOW="$SCRIPT_DIR/../.github/workflows/pr-advisory.yml"
+if [ ! -f "$GUARD_WORKFLOW" ]; then
+  echo "  FAIL: guard workflow $GUARD_WORKFLOW is missing; the check cannot run" >&2
+  FAIL=$((FAIL+1))
+elif grep -q "sudo apt-get install -y bash" "$GUARD_WORKFLOW"; then
   echo "  FAIL: workflow still contains the redundant apt-get bash install" >&2
   FAIL=$((FAIL+1))
 else
