@@ -12,6 +12,7 @@
     vaultwarden_etc: /etc/vaultwarden
     vaultwarden_bin: /usr/local/bin/vaultwarden
     vaultwarden_web_dir: /var/lib/vaultwarden/web-vault
+    vaultwarden_release_base: "https://github.com/dani-garcia/vaultwarden/releases/download/{{ vaultwarden_version }}"
   tasks:
     - name: Create vaultwarden user
       ansible.builtin.user:
@@ -44,7 +45,7 @@
     # dani-garcia/vaultwarden ships a prebuilt linux-aarch64 tarball per release.
     - name: Download Vaultwarden release tarball
       ansible.builtin.get_url:
-        url: "https://github.com/dani-garcia/vaultwarden/releases/download/{{ vaultwarden_version }}/vaultwarden-{{ vaultwarden_version }}-linux-{{ vaultwarden_arch }}.tar.gz"
+        url: "{{ vaultwarden_release_base }}/vaultwarden-{{ vaultwarden_version }}-linux-{{ vaultwarden_arch }}.tar.gz"
         dest: /tmp/vaultwarden.tar.gz
         mode: "0644"
 
@@ -73,7 +74,7 @@
         creates: "{{ vaultwarden_web_dir }}/index.html"
 
     - name: Generate ADMIN_TOKEN if missing
-      ansible.builtin.shell: openssl rand -base64 48
+      ansible.builtin.command: openssl rand -base64 48
       args:
         creates: "{{ vaultwarden_etc }}/.admin_token"
       register: admin_token_gen

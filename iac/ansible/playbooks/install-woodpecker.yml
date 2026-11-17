@@ -57,7 +57,7 @@
         creates: "{{ woodpecker_agent_bin }}"
 
     - name: Generate agent shared secret if missing
-      ansible.builtin.shell: openssl rand -hex 32
+      ansible.builtin.command: openssl rand -hex 32
       args:
         creates: "{{ woodpecker_etc }}/.agent_secret"
       register: agent_secret_gen

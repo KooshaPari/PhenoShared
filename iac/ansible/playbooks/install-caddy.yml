@@ -98,7 +98,7 @@
         owner: root
         group: caddy
         mode: "0640"
-      notify: reload caddy
+      notify: Reload caddy
 
     - name: Install caddy systemd unit
       ansible.builtin.copy:
@@ -145,7 +145,7 @@
         state: started
 
   handlers:
-    - name: reload caddy
+    - name: Reload caddy
       ansible.builtin.systemd:
         name: caddy
         state: reloaded
