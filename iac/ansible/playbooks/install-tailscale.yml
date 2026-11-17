@@ -22,7 +22,7 @@
       changed_when: false
       failed_when: false
 
-    - name: tailscale up (idempotent)
+    - name: Tailscale up (idempotent)
       ansible.builtin.command: >
         tailscale up
         --authkey={{ tailscale_authkey }}
@@ -31,4 +31,5 @@
         --accept-routes
         --ssh
       when: ts_status.rc != 0 or '"BackendState":"NeedsLogin"' in ts_status.stdout or '"BackendState":"Stopped"' in ts_status.stdout
+      changed_when: true
       no_log: true

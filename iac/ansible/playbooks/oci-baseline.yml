@@ -56,7 +56,7 @@
           PermitRootLogin no
           PasswordAuthentication no
           KbdInteractiveAuthentication no
-      notify: restart sshd
+      notify: Restart sshd
 
     - name: Allow SSH + Tailscale via UFW
       community.general.ufw:
@@ -80,7 +80,7 @@
           joined_at={{ ansible_date_time.iso8601 }}
 
   handlers:
-    - name: restart sshd
+    - name: Restart sshd
       ansible.builtin.service:
         name: ssh
         state: restarted
