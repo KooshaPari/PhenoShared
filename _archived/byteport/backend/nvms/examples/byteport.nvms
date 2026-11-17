@@ -25,7 +25,7 @@ SERVICES:
     BUILD: go run main.go
     PORT: 8081
     ENV:
-      - ENCRYPTION_KEY=t1rSGxkBSy38s8+JNLvHkvJAax4zO/KRsli27VSu6Ks=
+      - ENCRYPTION_KEY=REDACTED-ROTATE-ME
       - DB_PATH=/data/byteport.db
 
     RESOURCES: ${template:low}

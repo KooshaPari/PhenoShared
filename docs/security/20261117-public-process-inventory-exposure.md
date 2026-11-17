@@ -26,17 +26,36 @@ values, so this is a small credential set repeated, not 100 unique secrets.
 Distinctness was checked by hashing each value per file: all 25 files produced the same digest
 per family (25/25 identical). No values are reproduced in this document.
 
-### 2. Resume-state and session-extract dumps (2 files, agent-generated, not source)
+### 2. Resume-state and session-extract dumps (5 files, agent-generated, not source)
 
 - `state/session_resume_2026-07-24_019f6249.json` — GitHub OAuth token (`gho_…`, length 40).
 - `state/codex_session_extracts/rollout-2026-07-03T17-52-31-*.md` — Hugging Face token
   (`hf_…`, length 37) and an OpenRouter key (`sk-or-…`, length 73) that gitleaks did not flag.
+- `state/session_resume_2026-07-27_019f6249.json`, `state/session_resume_2026-07-28_019f6249.json`
+  and `state/session_resume_report_2026-07-24.md` — a second-pass masked-prefix sweep found a
+  `gho_…` reference in the 07-28 file. It is a truncated display form (4 alphanumerics then a
+  literal ellipsis), not a usable token, but the files are resume dumps with no value to the
+  repo, so the whole `state/session_resume_*` set is removed.
 
-### 3. Absorbed vendored tree (2 files)
+### 3. Absorbed and archived vendored trees (4 files)
 
-`docs/absorbed-from-PhenoTooling/docs/absorbed-from-QuadSGM/4sgm/backend/{database.py,seed.py}`
-each embed a full Postgres DSN including a non-placeholder password for
-`db.xerrnwvpdkywwugdtlma.supabase.co`.
+- `docs/absorbed-from-PhenoTooling/docs/absorbed-from-QuadSGM/4sgm/backend/{database.py,seed.py}`
+  each embed a full Postgres DSN with a non-placeholder password for
+  `db.xerrnwvpdkywwugdtlma.supabase.co`.
+- `_archived/byteport/backend/nvms/spin.toml` and its
+  `absorption/PhenoInfra/_archived/byteport/backend/nvms/spin.toml` copy carried the live
+  `ENCRYPTION_KEY` and `SERVICE_KEY` values literally (3 occurrences of each per file).
+- `_archived/byteport/backend/nvms/examples/byteport.nvms` and its PhenoInfra copy carried the
+  live `ENCRYPTION_KEY` again in an example environment list.
+
+These four files are vendored provenance, so they are **redacted in place**, never deleted. The
+values were proven identical to the exposed inventory values by SHA-256 comparison, not by
+inspection. They were not found by the first gitleaks pass and only surfaced in a second-pass
+masked-prefix sweep over the branch tree.
+
+After the second pass, a masked-prefix sweep over the branch tree returns **zero** hits for all
+eight credential families except six `gitleaks.toml` detector-pattern files and three documents
+that mention the `sk-or-` prefix in prose. Those are pattern text and masked mentions, not keys.
 
 ## Who measured it
 
@@ -46,11 +65,10 @@ The closure ledger's D38.3 public-tree secret sweep, merged as the evidence arti
 
 ## What this PR does
 
-- Removes 38 `state/full_process_inventory_*.json` files from the tip of `main`.
-- Removes 2 state dumps: the resume file and the session-extract transcript.
-- Redacts only the password portion of the DSN in the 2 absorbed files to
-  `REDACTED-ROTATE-ME`, preserving DSN shape, the files, and their provenance (absorbed files
-  are vendored content, not ours to delete).
+- Removes **43** files from the tip of `main`: 38 `state/full_process_inventory_*.json` dumps, 4
+  `state/session_resume_*` dumps, and 1 `state/codex_session_extracts/rollout-*.md` transcript.
+- Redacts values in place in **6** files: the 2 absorbed `4sgm` backend files (DSN password) and
+  the 4 archived byteport NVMS files (encryption and service keys). Files and DSN shape kept.
 - Extends `.gitignore` so all three dump families cannot be committed again:
   `state/full_process_inventory_*.json`, `state/full_process_*.json`,
   `state/session_resume_*.json`, `state/codex_session_extracts/`.
