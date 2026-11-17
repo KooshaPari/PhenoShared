@@ -37,7 +37,7 @@ jobs:
           workspaces: rust
       - uses: arduino/setup-protoc@c65c819552d16ad3c9b72d9dfd5ba5237b9c906b # v3
         with:
-          version: "28.x"
+          version: 28.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for benches directory
         id: check-benches

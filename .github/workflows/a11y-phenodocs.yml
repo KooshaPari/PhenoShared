@@ -10,21 +10,21 @@ on:
   push:
     branches: [main, chore/**]
     paths:
-      - 'docs/**'
-      - '.vitepress/**'
-      - 'package.json'
-      - 'tests/a11y/**'
-      - 'axe-config.ts'
-      - '.github/workflows/a11y-phenodocs.yml'
+      - docs/**
+      - .vitepress/**
+      - package.json
+      - tests/a11y/**
+      - axe-config.ts
+      - .github/workflows/a11y-phenodocs.yml
   pull_request:
     branches: [main]
     paths:
-      - 'docs/**'
-      - '.vitepress/**'
-      - 'package.json'
-      - 'tests/a11y/**'
-      - 'axe-config.ts'
-      - '.github/workflows/a11y-phenodocs.yml'
+      - docs/**
+      - .vitepress/**
+      - package.json
+      - tests/a11y/**
+      - axe-config.ts
+      - .github/workflows/a11y-phenodocs.yml
   workflow_dispatch:
 
 concurrency:
@@ -36,5 +36,5 @@ jobs:
     uses: ./.github/workflows/reusable-a11y.yml
     with:
       app_name: phenodocs
-      app_dir: '.'
+      app_dir: .
     secrets: inherit
