@@ -9,6 +9,7 @@ on:
       - synchronize
 
 permissions:
+  contents: read
   pull-requests: write
 
 jobs:
@@ -16,6 +17,17 @@ jobs:
     name: Validate conventional commit title
     runs-on: ubuntu-latest
     steps:
+      # The wagoid action resolves `configFile` against GITHUB_WORKSPACE and
+      # silently falls back to bare @commitlint/config-conventional when the
+      # file is absent. Without a checkout the workspace is empty under
+      # pull_request_target, so .commitlintrc.cjs (and its Dependabot `ignores`
+      # predicate) was never loaded. Check out the trusted BASE commit only so
+      # the config is present; never check out the untrusted PR head here.
+      - name: Checkout base commit for commitlint config
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
       - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6
         with:
           configFile: .commitlintrc.cjs
