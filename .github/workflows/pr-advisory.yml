@@ -344,3 +344,243 @@ jobs:
               repo: context.repo.repo,
               body: report
             });
+
+  js-coverage-ratchet:
+    # The display name states what is ENFORCED, not an aspiration (the same
+    # convention the coverage.yml jobs use).
+    #
+    # WHAT THIS JOB USED TO DO, AND WHY IT COULD NOT MEASURE ANYTHING:
+    #   * `npm ci` fails with `EUNSUPPORTEDPROTOCOL: Unsupported URL Type
+    #     "workspace:": workspace:*`. The root package.json declares
+    #     `"@phenotype/docs": "workspace:*"`, which npm cannot resolve at all.
+    #     The repo is bun-managed (`packageManager: bun@1.3.10`), and
+    #     package-lock.json is stale (it still pins vitest 4.1.9 /
+    #     typescript ~5.6.0 while package.json asks for ^5.1.0 / ^7.0.2).
+    #   * The test step failed with `Missing script: "test"`: the root
+    #     package.json declared no `test` script.
+    #   * `--coverage` could never have loaded a provider: `@vitest/
+    #     coverage-v8` was not a dependency.
+    #   * `.coverage-baseline` was "0", so the ratchet had never established
+    #     a real baseline. The job had never measured anything.
+    #
+    # WHAT IT MEASURES NOW: the repo's real hermetic JS/TS unit suite
+    # (`tests/*.test.ts`, run by `vitest.unit.config.ts`; see that file for
+    # why the a11y specs and the two known-red conformance files are not in
+    # it). Those tests import only source modules and `node:fs`; no browser,
+    # no dev server, no network. Until this job was repaired, NO CI job ran
+    # them at all.
+    #
+    # This is NOT a duplicate of the Rust coverage floor. That is a separate
+    # gate in `.github/workflows/coverage.yml`, where tarpaulin measures each
+    # crate group with `--fail-under 0` only so that a small group still writes
+    # a report; the numbers that actually fail the build are the per-group
+    # floors plus `aggregate_floor = 53.80` in
+    # `.coverage-baselines/root-workspace.toml`. This gate measures the JS/TS
+    # surface under `src/`.
+    #
+    # The baseline is raised by a deliberate commit to `.coverage-baseline`,
+    # NOT by this job writing to main. The old "Update baseline on main"
+    # step could never have worked anyway: this workflow grants only
+    # `contents: read`, so its `git push` was rejected and swallowed by
+    # `|| true`. Keeping a step that tries to push to main from a
+    # pull_request-triggered workflow is a privilege-escalation smell, so it
+    # is gone; the floor now moves only through review.
+    name: JS/TS coverage ratchet (no regression vs .coverage-baseline)
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.10
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Run unit tests with coverage
+        run: |
+          # Without pipefail this step's exit status was `tee`'s (always 0),
+          # so a failing test run could not fail the step. The tee is kept for
+          # the log artifact.
+          set -o pipefail
+          bun run test:coverage 2>&1 | tee test-output.log
+
+      - name: Read previous coverage
+        id: prev
+        run: |
+          if [ ! -f .coverage-baseline ]; then
+            echo "::error::.coverage-baseline is missing, so the ratchet has no floor to enforce"
+            exit 1
+          fi
+          PREV=$(cat .coverage-baseline)
+          echo "prev=$PREV" >> "$GITHUB_OUTPUT"
+          echo "Baseline coverage: $PREV%"
+
+      - name: Read current coverage
+        id: curr
+        run: |
+          if [ ! -f coverage/coverage-summary.json ]; then
+            echo "::error::coverage/coverage-summary.json was not produced"
+            exit 1
+          fi
+          CURRENT=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+          echo "curr=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "Current coverage: $CURRENT%"
+
+      - name: Assert coverage ratchet
+        run: |
+          PREV=${{ steps.prev.outputs.prev }}
+          CURR=${{ steps.curr.outputs.curr }}
+          if (( $(echo "$CURR < $PREV" | bc -l) )); then
+            echo "::error::Coverage regressed from ${PREV}% to ${CURR}%"
+            exit 1
+          fi
+          echo "Coverage ratchet: ${PREV}% -> ${CURR}% (no regression)"
+
+  scorecard:
+    runs-on: ubuntu-latest
+    # These were referenced by the Check-score and update-badge jobs but never
+    # declared, so actionlint flagged "property score is not defined" and the
+    # downstream jobs silently received empty strings.
+    outputs:
+      score: ${{ steps.audit.outputs.score }}
+      total: ${{ steps.audit.outputs.total }}
+      percentage: ${{ steps.audit.outputs.percentage }}
+      threshold: ${{ steps.audit.outputs.threshold }}
+      passed: ${{ steps.audit.outputs.passed }}
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 88-Pillar Scorecard Audit
+        id: audit
+        run: |
+          THRESHOLD=${{ github.event.inputs.threshold || '35' }}
+
+          # Run audit in JSON mode
+          python scripts/scorecard_ci.py . --output json --threshold "$THRESHOLD" --fail-on-drop > scorecard-report.json 2> scorecard-stderr.txt || EXIT_CODE=$?
+          if [ "${EXIT_CODE:-0}" -ne 0 ]; then echo "audit exited ${EXIT_CODE}" >&2; fi
+
+          # Extract score
+          SCORE=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(r['score'])")
+          TOTAL=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(r['total'])")
+          PCT=$(python -c "import json; r=json.load(open('scorecard-report.json')); print(f\"{r['percentage']:.1f}\")")
+
+          # Generate markdown summary
+          {
+            echo "## 88-Pillar Scorecard Result"
+            echo ""
+            echo "| Metric | Value |"
+            echo "|--------|-------|"
+            echo "| **Score** | **${SCORE}/${TOTAL}** (${PCT}%) |"
+            echo "| **Threshold** | ${THRESHOLD} |"
+            echo "| **Status** | $( [ "$SCORE" -ge "$THRESHOLD" ] && echo "PASS" || echo "FAIL" ) |"
+            echo ""
+          } > scorecard-summary.md
+
+          # List failed pillars
+          if [ "$SCORE" -lt "$THRESHOLD" ]; then
+            {
+              echo "### Failed Pillars"
+              echo ""
+              python -c "
+          import json
+          r = json.load(open('scorecard-report.json'))
+          for item in r['results']:
+              if not item['passed']:
+                  print(f'- [ ] Pillar #{item[\"id\"]}: **{item[\"name\"]}**')
+          "
+            } >> scorecard-summary.md
+          fi
+
+          # Set outputs
+          {
+            echo "score=${SCORE}"
+            echo "total=${TOTAL}"
+            echo "percentage=${PCT}"
+            echo "threshold=${THRESHOLD}"
+            echo "passed=$( [ "$SCORE" -ge "$THRESHOLD" ] && echo true || echo false )"
+          } >> "$GITHUB_OUTPUT"
+
+          # Post PR comment if applicable
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            COMMENT=$(cat scorecard-summary.md)
+            # Use GitHub API to post comment
+            if command -v gh &> /dev/null; then
+              gh pr comment "${{ github.event.pull_request.number }}" \
+                --body "$COMMENT" \
+                --repo "${{ github.repository }}" || true
+            fi
+          fi
+
+      - name: Update status check
+        if: always()
+        run: |
+          SCORE=${{ steps.audit.outputs.score }}
+          TOTAL=${{ steps.audit.outputs.total }}
+          THRESHOLD=${{ steps.audit.outputs.threshold }}
+          PASSED=${{ steps.audit.outputs.passed }}
+
+          if [ "$PASSED" = "true" ]; then
+            echo "Scorecard: ${SCORE}/${TOTAL} - PASS (threshold: ${THRESHOLD})"
+          else
+            echo "Scorecard: ${SCORE}/${TOTAL} - FAIL (threshold: ${THRESHOLD})"
+            exit 1
+          fi
+
+      - name: Upload scorecard report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: scorecard-report
+          path: |
+            scorecard-report.json
+            scorecard-summary.md
+
+      - name: Check score threshold
+        if: steps.audit.outputs.passed != 'true'
+        run: |
+          echo "::error::Score ${{ steps.audit.outputs.score }}/${{ steps.audit.outputs.total }} is below threshold ${{ steps.audit.outputs.threshold }}"
+          exit 1
+
+  update-badge:
+    needs: scorecard
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Update scorecard badge
+        run: |
+          SCORE=${{ needs.scorecard.outputs.score }}
+          TOTAL=${{ needs.scorecard.outputs.total }}
+          PCT=${{ needs.scorecard.outputs.percentage }}
+
+          # Generate badge SVG
+          if [ "${{ needs.scorecard.outputs.passed }}" = "true" ]; then
+            COLOR="brightgreen"
+          else
+            COLOR="red"
+          fi
+
+          BADGE_URL="https://img.shields.io/badge/scorecard-${SCORE}%2F${TOTAL}%20(${PCT}%25)-${COLOR}"
+          echo "Badge URL: ${BADGE_URL}"
+
+          # Update README badge if it exists
+          if [ -f "README.md" ]; then
+            sed -i "s|!\[Scorecard\].*|[![Scorecard](${BADGE_URL})](https://github.com/${{ github.repository }}/actions)|g" README.md || true
+          fi
