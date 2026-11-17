@@ -35,7 +35,7 @@ ignore = [
   #         uniffi_bindgen 0.31.2 -> uniffi_build 0.31.2 ->
   #         eyetracker-ffi (build-dependency); also focus-entitlements
   #         (dev-dependency).
-  #   Why not fixed: 0.1.10 is the LAST published version of basic-toml
+  #   Why no upgrade removes it: 0.1.10 is the LAST published version of basic-toml
   #     (repository archived 2025-03-04). askama_derive still depends on it
   #     at every published version, including askama_derive 0.16.1
   #     (`basic-toml = "^0.1.1"`), and uniffi_bindgen 0.32.x only bumps askama
@@ -47,7 +47,7 @@ ignore = [
   # smartstring 1.0.1 (RUSTSEC-2026-0249)
   #   Path: phenotype-casbin-wrapper -> casbin 2.20.0 -> rhai 1.26.1 ->
   #         smartstring 1.0.1.
-  #   Why not fixed: the advisory states ALL versions of smartstring are
+  #   Why no upgrade removes it: the advisory states ALL versions of smartstring are
   #     affected. smartstring is a MANDATORY (non-optional) dependency of
   #     rhai, and rhai 1.27.0 - the newest published release - still declares
   #     `smartstring = "1.0.0"` unconditionally. casbin 2.20.0 is the newest
@@ -62,7 +62,7 @@ ignore = [
   #         fabric-cli, figment, pheno-config, phenocompose-cli,
   #         phenotype-config, phenotype-config-core, phenotype-dag-core,
   #         phenotype-journey-core, phenotype-shared-config, qgate, sharecli).
-  #   Why not fixed: serde_yaml 0.9.34+deprecated is the newest published
+  #   Why no upgrade removes it: serde_yaml 0.9.34+deprecated is the newest published
   #     serde_yaml. The recommended fork serde_yaml_ng 0.10.0 STILL depends
   #     on `unsafe-libyaml = "^0.2.11"`, so migrating to it does not remove
   #     the crate either. A YAML parser written in safe Rust (saphyr /
@@ -74,7 +74,7 @@ ignore = [
   #   Path: zbus 5.19.0 -> zbus_names 4.3.4, reached from ashpd 0.11.1
   #         (eidolon-desktop), ksni 0.3.6 (sharecli-tray-linux) and
   #         secret-service 5.2.0 (focus-crypto).
-  #   Why not fixed: the crate was merged into `zbus` 6.0.0, so the fix is a
+  #   Why no upgrade removes it: the crate was merged into `zbus` 6.0.0, so the fix is a
   #     zbus MAJOR upgrade. ashpd only accepts zbus 6 from ashpd 0.14.0,
   #     secret-service only from the 6.0.0-rc.1 pre-release, and `ksni`
   #     - the tray crate sharecli-tray-linux depends on - has NO zbus 6
@@ -86,7 +86,7 @@ ignore = [
   # zvariant 5.15.0 (RUSTSEC-2026-0370)
   #   Path: zbus 5.19.0 -> zvariant 5.15.0 (also via zbus_macros 5.19.0 ->
   #         zvariant_derive -> zvariant), same parents as zbus_names above.
-  #   Why not fixed: merged into `zbus` 6.0.0 as its `wire` module; blocked
+  #   Why no upgrade removes it: merged into `zbus` 6.0.0 as its `wire` module; blocked
   #     by the same zbus 5 -> 6 upgrade wall (ksni has no zbus 6 release).
   #   Risk: D-Bus wire-format serialization/deserialization helper crate; no
   #     known CVE, only unmaintained.
@@ -94,7 +94,7 @@ ignore = [
   # zvariant_derive 5.15.0 (RUSTSEC-2026-0372)
   #   Path: zbus_macros 5.19.0 -> zvariant_derive 5.15.0 -> zvariant 5.15.0,
   #         same parents as zbus_names above.
-  #   Why not fixed: derive macros moved into `zbus` 6.0.0; blocked by the
+  #   Why no upgrade removes it: derive macros moved into `zbus` 6.0.0; blocked by the
   #     same zbus 5 -> 6 upgrade wall.
   #   Risk: proc-macro crate that only generates derive implementations at
   #     compile time; no known CVE, only unmaintained.
@@ -104,7 +104,7 @@ ignore = [
   #         (crates/substrate-browser-broker/Cargo.toml, `rustls-pemfile
   #         = "2.2"`), which is also reached via substrate-browser-mcp and
   #         substrate-browser-provider.
-  #   Why not fixed: 2.2.0 is the newest published rustls-pemfile. The
+  #   Why no upgrade removes it: 2.2.0 is the newest published rustls-pemfile. The
   #     advisory is "unmaintained" with "no safe upgrade available" -
   #     there is no 2.3 or 3.x to move to. The crate is a direct
   #     dependency, so removing it means replacing the PEM parsing surface
