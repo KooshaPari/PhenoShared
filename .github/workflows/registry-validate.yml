@@ -25,8 +25,6 @@ on:
       - "docs/intent/**"
       - "docs/adrs/**"
       - ".github/workflows/registry-validate.yml"
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
