@@ -215,8 +215,8 @@ def local_roots(name, index=None):
 COVERAGE = {
     "host-credentials": ("delete-eligible",
                          "registry tree covers 5 of 5 files exactly"),
-    "host-ops": ("absorb-remainder",
-                 "registry tree lacks 172 live files and 48 differ"),
+    "host-ops": ("delete-eligible",
+                 "registry tree 1173/1173 exact, bundle 05b8e4b6c877, 921 comments exported"),
     "phenotype-canonicalization": ("delete-eligible",
                                    "absorption/ covers 43 of 44; only verification/unit-tests.log absent"),
 }
