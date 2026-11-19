@@ -72,7 +72,7 @@ inherited.
 | Surface | Count | Source |
 |---|---|---|
 | Root manifests | 3 | verified (`Cargo.toml`, `package.json`, `pyproject.toml`) |
-| Cargo workspace members | **292 packages**, from 288 member-list entries | verified, `cargo metadata --no-deps` |
+| Cargo workspace members | **292 packages**, from 287 member-list entries | verified, `cargo metadata --no-deps`; entries by `tomllib` |
 | `crates/*/Cargo.toml` files | 510 | verified |
 | Nested sub-workspaces | 26 | lane (`Cmdra`, `agile-plus`, `gateway`, …) |
 | `go.mod` files / `go.work` | 47 / **0** | verified |
@@ -80,7 +80,7 @@ inherited.
 | Python projects | 87 | lane |
 | Node packages | root VitePress + 8 `packages/*` | lane |
 | CI workflows | 81 | verified |
-| Dockerfiles | 80 | verified |
+| Dockerfiles | 80 exact-name / 81 case-insensitive substring | verified on both hosts; the two methods differ by one file |
 
 Four findings carry the structural story:
 
@@ -95,11 +95,23 @@ Four findings carry the structural story:
 4. **Absorbed residue is a build member.** The member list includes `absorption-residue-Agentora/…`,
    so absorb-program leftovers participate in the workspace graph.
 
-**Member-count reconciliation.** Four figures circulate and all four are correct at different
-resolutions: `cargo metadata --no-deps` reports **292** workspace packages now and **291** on
-2026-11-12; the `members` array holds **288** entries; a worker parsing that array counted 287. The
-entries expand to packages because many are globs. Only `cargo metadata` is authoritative — a count
-of literal entries is not a count of members.
+**Member-count reconciliation.** Five figures circulate and only two of them are true statements
+about members.
+
+| Figure | What it actually counts | Method |
+|---|---|---|
+| 292 | workspace packages | `cargo metadata --no-deps` on 2026-11-19 |
+| 291 | workspace packages | same command on 2026-11-12 |
+| **287** | literal entries in the `members` array | `tomllib`, and independently a worker's parse |
+| 288 | nothing: an off-by-one from my own first pass | quote-counting a `sed` range |
+| 240 | nothing: the `sed` range terminated early | `sed -n '/members = \[/,/\]/p' | grep -c '"'` |
+
+The entries expand to 292 packages because many are globs, and `exclude` removes four paths.
+Only `cargo metadata` is authoritative: **a count of literal entries is not a count of members**,
+and neither is a count of quoted lines. My earlier 288 was wrong and the worker who said 287 was
+right; the disagreement is recorded here rather than quietly corrected, because the method that
+produced 288 also produced 240 on a different host and either number would have read as measured
+fact.
 
 Three root manifests means three dependency graphs that drift independently. A Rust consumer never
 learns about the npm unit, and neither learns about the Python unit.
@@ -225,3 +237,37 @@ du -sh target node_modules 2>/dev/null                # local residue
 
 Any figure here that a later reader cannot reproduce is a defect in this document and should be
 corrected rather than trusted.
+
+---
+
+## 11. Cross-host verification (desk, 2026-11-19)
+
+Every figure above was re-derived on a second machine from a fresh clone, not from the working tree.
+Host: `ssh desk` -> WSL2 Fedora, 4 cores, cargo 1.100.0, 815 GB free. Clone landed on
+`f06c3cc7fdf61d75e8aa9f8d0feade068760d308`, the same commit the Mac worktree was read at, so the
+comparison is like-for-like rather than across time.
+
+| Figure | Mac | Desk | Agree |
+|---|---|---|---|
+| Tracked files | 55,898 | 55,898 | yes |
+| Rust LOC | 3,158,866 | 3,158,866 | yes |
+| Python LOC | 1,244,093 | 1,244,093 | yes |
+| Go LOC | 594,188 | 594,188 | yes |
+| TS LOC | 460,069 | 460,069 | yes |
+| TSX LOC | 252,517 | 252,517 | yes |
+| JS LOC | 87,860 | 87,860 | yes |
+| `go.mod` / `go.work` | 47 / 0 | 47 / 0 | yes |
+| CI workflows | 81 | 81 | yes |
+| Workspace packages | 292 | 292 | yes |
+| Files with `<REDACTED>` under `docs/atlas` | 13 | 13 | yes |
+| `members` entries | 288 (wrong) | 240 (wrong) | **no** |
+| `members` entries, `tomllib` | n/a | **287** | resolved |
+
+Two new figures the desk produced that the Mac pass had not measured: **2,007,094 lines of
+Markdown** and **1,082,522 lines of JSON** are tracked. The repository's prose and generated data
+outweigh its Rust source in line count, which matters for the reshape: a container SDK has to ship
+documentation and schema, and here those are already the larger half of the tree.
+
+The single disagreement was a counting method, not a repository fact, and it is left in the table
+with both wrong values visible. A reconciliation that only shows the winning number is how 288 would
+have survived into a third document.
