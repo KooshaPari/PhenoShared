@@ -163,7 +163,35 @@ Each was confirmed by inspection rather than inferred.
 
 ---
 
-## 8. What a consumer can actually import today
+## 8. Governed artifacts that already exist, and that are stale
+
+The repository already contains an **atlas package** at `docs/atlas/` — roughly 250 tracked files:
+`PRD.md`, `HLD.md`, `LLD.md`, `ALD.md`, `SPECIFICATION.md`, 13 ADRs, 11 spec directories, 37 product
+dossiers, schemas, examples, and its own `qa/` doctrine. It is a governed package with
+`MANIFEST.json` (257 payload files with sha256), `SHA256SUMS`, `INDEX.md` and a validator at
+`docs/atlas/scripts/validate_package.py` that `cvp-nightly.yml` runs in CI.
+
+Two facts follow, and both matter to anyone adding documentation here:
+
+1. **Its generated artifacts are stale.** `codebase/INVENTORY.md` was last committed **2026-11-07**,
+   before the November absorption waves; `codebase/HYGIENE.md` is from **2026-09-20**; `MANIFEST.json`
+   from **2026-09-16**. The inventory reports 29,049 tracked files and 1,095,486 Rust lines against
+   today's 55,898 files and 3,158,866 Rust lines — it describes about half the present tree. It also
+   reports 81 root workspace members where `cargo metadata` now reports 292; the file predates the
+   waves, so the gap is expected, but the file must be regenerated rather than quoted.
+2. **The validator constrains anything placed inside the package.** It walks `docs/atlas/**/*.md`,
+   requires every relative markdown link to resolve inside the package, and asserts that no file
+   under it is empty or a symlink. Audit output therefore belongs in `docs/sessions/` (as this
+   document does), not inside a checksum-governed package.
+
+The existing `docs/atlas/codebase/` inventory also defines its terms more carefully than a `wc -l`
+run can: logical LOC (newline bytes plus one for a missing trailing newline), ownership by deepest
+tracked `Cargo.toml`, and test counts by declaration syntax per language. Where this document and
+that package disagree, prefer the package once it has been regenerated.
+
+---
+
+## 9. What a consumer can actually import today
 
 | Unit | Separately consumable? | Blocker |
 |---|---|---|
@@ -179,11 +207,14 @@ That table is the gap: today the container is **one repository**, not a set of c
 
 ---
 
-## 9. Re-measurement recipe
+## 10. Re-measurement recipe
 
 ```bash
 # batch-safe line counting (never xargs wc -l | tail -1)
 git ls-files -z -- '*.rs' | xargs -0 cat | wc -l
+
+cargo metadata --no-deps --format-version 1 | python3 -c \
+  'import json,sys; print(len(json.load(sys.stdin)["workspace_members"]))'
 
 git ls-files | wc -l                                  # tracked files
 git for-each-ref --format='%(refname)' | wc -l        # refs

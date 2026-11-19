@@ -199,8 +199,9 @@ Companion documents written in the same pass:
 
 | Document | Covers |
 |---|---|
-| `../atlas/CODEBASE-ATLAS.md` | size, language mix, build topology, structural confusion |
-| `../qa/QA-MATRIX.md` | 81 workflows, test census, coverage floors, assurance gaps |
+| `../sessions/2026-11-19-phenoshared-audit/CODEBASE-ATLAS.md` | size, language mix, build topology, structural confusion |
+| `../sessions/2026-11-19-phenoshared-audit/QA-MATRIX.md` | 81 workflows, test census, coverage floors, assurance gaps |
+| `../atlas/` | the pre-existing governed atlas package, including its generated inventory (stale since 2026-11-07) |
 
 ### 11.1 What changed at 5154a6828 → f06c3cc7f
 
