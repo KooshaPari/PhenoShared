@@ -112,6 +112,34 @@ def live_repos():
     return {x["name"]: x for x in json.loads(out)}
 
 
+def normalize_name(name):
+    return "".join(ch for ch in name.lower() if ch.isalnum())
+
+
+def build_local_index(base=SHARED, max_depth=4):
+    """Map normalised directory names to matching relative paths under base.
+
+    Walks to a bounded depth so content present anywhere in the conventional
+    layout (or in renamed locations such as crates/*) is found by content/name,
+    not by a fixed directory probe.
+    """
+    index = {}
+    base = os.path.normpath(base)
+    base_depth = base.count(os.sep)
+    for root, dirs, _ in os.walk(base, topdown=True):
+        depth = os.path.normpath(root).count(os.sep) - base_depth
+        if depth >= max_depth:
+            dirs[:] = []
+            continue
+        for d in dirs:
+            key = normalize_name(d)
+            if not key:
+                continue
+            rel = os.path.relpath(os.path.join(root, d), base).replace("\\", "/")
+            index.setdefault(key, []).append(rel)
+    return index
+
+
 def preserved_counts():
     code, out, err = sh(["git", "ls-remote", "--refs",
                          "https://github.com/%s/%s.git" % (OWNER, REGISTRY)])
@@ -152,13 +180,32 @@ def registry_trees():
     return with_tree
 
 
-def local_roots(name):
+def local_roots(name, index=None):
+    """Directories whose content matches the repository name.
+
+    Always keeps the three fixed absorption locations when present, then adds any
+    bounded-depth matches found by normalised name (including hyphen/underscore
+    transforms via non-alphanumeric stripping). Any match counts as content
+    present and is recorded so the row shows which path matched.
+    """
     hits = []
+    seen = set()
+
+    def add(path):
+        rel = (os.path.relpath(path, SHARED).replace("\\", "/")
+               if os.path.isabs(path) else path.replace("\\", "/"))
+        if rel not in seen:
+            seen.add(rel)
+            hits.append(rel)
+
     for cand in (os.path.join(SHARED, "absorption", name),
                  os.path.join(SHARED, "_archived", name),
                  os.path.join(SHARED, "absorption-residue-" + name)):
         if os.path.isdir(cand):
-            hits.append(os.path.relpath(cand, SHARED).replace("\\", "/"))
+            add(cand)
+    if index is not None:
+        for rel in index.get(normalize_name(name), []):
+            add(os.path.join(SHARED, rel))
     return hits
 
 
@@ -196,8 +243,9 @@ def classify(name, has_hist, roots, reg_tree):
     if name in RESTORED:
         return "restored 2026-11-14", "decide", "recreated from a local copy; content decision needed"
     if name in PARTIAL_CONTENT:
+        where = ",".join(roots) if roots else PARTIAL_CONTENT[name]
         return ("partially absorbed", "absorb-remainder",
-                "content partly lives in %s; the remainder is unabsorbed" % PARTIAL_CONTENT[name])
+                "content partly lives in %s; the remainder is unabsorbed" % where)
     if has_hist and (roots or reg_tree):
         return "absorbed + preserved", "delete-eligible", "history preserved and content present locally"
     if has_hist:
@@ -213,11 +261,12 @@ def main():
     live = live_repos()
     counts = preserved_counts()
     reg_trees = registry_trees()
+    local_index = build_local_index()
 
     rows = []
     for name in sorted(live):
         has_hist = name in counts
-        roots = local_roots(name)
+        roots = local_roots(name, local_index)
         reg = name in reg_trees
         cat, action, reason = classify(name, has_hist, roots, reg)
         rows.append({
