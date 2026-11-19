@@ -214,6 +214,23 @@ Command was run; output was large/truncated in capture, but a targeted preserved
 ```
 (see Q2). No newly appeared repositories existed to select for default-branch-vs-preserved comparison.
 
+## Step 3 verification addendum (2026-11-19)
+
+The step 3 checks were repeated during the ledger reconciliation. Results:
+
+```text
+$ gh api repos/KooshaPari/phenotype-canonicalization/commits/main --jq .sha
+570e2c73aff565620a2c518a37d258981a31ca9e
+
+$ git ls-remote --refs https://github.com/KooshaPari/PhenoRegistry.git refs/preserved/phenotype-canonicalization/heads/main
+570e2c73aff565620a2c518a37d258981a31ca9e	refs/preserved/phenotype-canonicalization/heads/main
+
+$ gh repo list KooshaPari --limit 500 --json name --jq "length"
+118
+```
+
+`KooshaPari/phenotype-canonicalization` exists, its live `main` SHA matches the preserved tip `570e2c73aff565620a2c518a37d258981a31ca9e` exactly, and the live repository count is 118. This is not a test of the tombstone: the repository was recreated on 2026-11-16 (as shown in Q1), before tombstones existed on 2026-11-17, and has not been deleted since. The tombstone remains untested; the SHA match only confirms parity of a repository that never underwent a tombstone-driven deletion.
+
 ## Verdict
 
-**Verdict:** Tombstone is holding (no repo set change vs 2026-11-17 baseline; `phenotype-canonicalization` exists with main/preserved tip match). Restoration replay status for newly appeared repos cannot be determined from this check because there were no newly appeared repos to compare; available evidence for `phenotype-canonicalization` is consistent with replay of a preserved ref.
+**Verdict:** Tombstone remains untested. No repository set change was observed versus the 2026-11-17 baseline, and `phenotype-canonicalization` exists with a live `main` SHA equal to its preserved tip, but that repository predates tombstones and has not been deleted since. Restoration replay status for newly appeared repos cannot be determined from this check because there were no newly appeared repos to compare; available evidence for `phenotype-canonicalization` is consistent with replay of a preserved ref, not with tombstone behavior.
