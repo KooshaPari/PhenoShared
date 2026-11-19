@@ -1,0 +1,33 @@
+{
+ "committed_files": 1558,
+ "destination": "apps/zz-ref-HeliosLite/",
+ "differs": [
+  ".github/branch-protection.main.json",
+  "Taskfile.yml",
+  "apps/landing-helioslite/README.md",
+  "apps/landing-helioslite/index.html",
+  "apps/landing-helioslite/package.json",
+  "apps/landing-helioslite/public/og-image.svg",
+  "apps/landing-helioslite/vercel.json",
+  "docs/FORK.md",
+  "docs/NOTICE.md",
+  "docs/RENAMES-STRATEGY.md",
+  "docs/UPDATE-STRATEGY.md",
+  "ops/caddy/Caddyfile.helioslite",
+  "packaging/README.md",
+  "packaging/crates/deprecate-forge-dev.mjs",
+  "packaging/winget/README.md"
+ ],
+ "excluded_by_gitignore": {
+  ".cargo/config.toml": ".gitignore:41:.cargo/",
+  "audit_scorecard.json": ".gitignore:117:audit_scorecard.json"
+ },
+ "excluded_skipped_dirs": {},
+ "excluded_total": 2,
+ "faithful": false,
+ "identical": 1543,
+ "kind": "app",
+ "repo": "zz-ref-HeliosLite",
+ "source_files": 1560,
+ "source_ref": "main"
+}

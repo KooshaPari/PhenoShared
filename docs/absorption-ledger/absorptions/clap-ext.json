@@ -1,0 +1,14 @@
+{
+ "committed_files": 29,
+ "destination": "libs/clap-ext/",
+ "differs": [],
+ "excluded_by_gitignore": {},
+ "excluded_skipped_dirs": {},
+ "excluded_total": 0,
+ "faithful": true,
+ "identical": 29,
+ "kind": "lib",
+ "repo": "clap-ext",
+ "source_files": 29,
+ "source_ref": "main"
+}
