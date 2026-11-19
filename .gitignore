@@ -209,3 +209,10 @@ agents/phenoagent/pheno-cli-go/pheno-test.exe
 # even though this repo ignores vendor/ for live builds.
 !docs/absorbed-from-*/vendor/
 !docs/absorbed-from-*/vendor/**
+
+# Process/env inventory dumps. These captured live API keys and were published to a
+# public repo. Never regenerate them into a tracked path.
+state/full_process_inventory_*.json
+state/full_process_*.json
+state/session_resume_*.json
+state/codex_session_extracts/

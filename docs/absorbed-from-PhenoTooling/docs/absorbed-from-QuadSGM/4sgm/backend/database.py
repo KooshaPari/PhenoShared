@@ -9,7 +9,7 @@ from sqlalchemy.pool import NullPool
 # Get database URL from environment
 DATABASE_URL = os.getenv(
     "SUPABASE_DB_URL",
-    "postgresql://postgres:ASD3on54_Pax90@db.xerrnwvpdkywwugdtlma.supabase.co:5432/postgres",
+    "postgresql://postgres:REDACTED-ROTATE-ME@db.xerrnwvpdkywwugdtlma.supabase.co:5432/postgres",
 )
 
 # Create engine
