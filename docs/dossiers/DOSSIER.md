@@ -202,6 +202,7 @@ Companion documents written in the same pass:
 | `../sessions/2026-11-19-phenoshared-audit/CODEBASE-ATLAS.md` | size, language mix, build topology, structural confusion |
 | `../sessions/2026-11-19-phenoshared-audit/QA-MATRIX.md` | 81 workflows, test census, coverage floors, assurance gaps |
 | `../atlas/` | the pre-existing governed atlas package, including its generated inventory (stale since 2026-11-07) |
+| `../sessions/2026-11-19-phenoshared-audit/CONTAINER-SDK-RESHAPE.md` | the decentralised container SDK plan, built on the measured 355 internal edges |
 
 ### 11.1 What changed at 5154a6828 → f06c3cc7f
 
