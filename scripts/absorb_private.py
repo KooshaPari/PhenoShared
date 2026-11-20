@@ -136,7 +136,7 @@ def absorb(
         "-p",
         "refs/reg/main",
         "-m",
-        "chore(absorb): %s tree and history" % repo,
+        absorb_commit_message(repo),
     )
 
     code, _, err = git(registry_clone, "push", "-q", "origin", "%s:main" % commit)
@@ -206,6 +206,24 @@ def absorb(
         "%d refs, %d commits"
         % (covered, len(want), len(withheld), len(excluded), nrefs, ncommits)
     )
+
+
+def absorb_commit_message(repo: str) -> str:
+    """Commit message for a tree graft, plus the required ledger trailers.
+
+    The tx-* lines must stay in the final paragraph (after one blank line) or
+    git does not read them as trailers, and closure check D21.4
+    (commit-traceability) keys on them. The subject prefix is load-bearing:
+    check-delegation-rule.sh skips tree-import commits on exactly
+    "chore(absorb): ".
+    """
+    return (
+        "chore(absorb): %s tree and history\n"
+        "\n"
+        "tx-agent: jcode\n"
+        "tx-lane: absorb\n"
+        "tx-validated: none\n"
+    ) % repo
 
 
 def main() -> int:

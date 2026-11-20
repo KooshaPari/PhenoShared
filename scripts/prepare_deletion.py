@@ -187,7 +187,7 @@ def store_file_via_git(registry: str, owner: str, repo: str, kind: str,
         if c != 0:
             return False, "write-tree failed: %s" % e[:100]
         c, commit, e = g("commit-tree", tree, "-p", "FETCH_HEAD",
-                         "-m", "chore(preserve): %s/%s/%s" % (repo, kind, name))
+                         "-m", preserve_commit_message("%s/%s/%s" % (repo, kind, name)))
         if c != 0:
             return False, "commit-tree failed: %s" % e[:100]
         c, _, e = g("push", "origin", "%s:main" % commit)
@@ -196,6 +196,24 @@ def store_file_via_git(registry: str, owner: str, repo: str, kind: str,
         if "too large" in e.lower() or "exceeds" in e.lower():
             return False, "server rejected size: %s" % e[:120]
     return False, "push failed: %s" % e[:120]
+
+
+def preserve_commit_message(subject_tail: str) -> str:
+    """Commit message for a preserved blob, plus the required ledger trailers.
+
+    The tx-* lines must stay in the final paragraph (after one blank line) or
+    git does not read them as trailers, and closure check D21.4
+    (commit-traceability) keys on them. The subject prefix is load-bearing:
+    check-delegation-rule.sh skips tree-import commits on exactly
+    "chore(preserve): ".
+    """
+    return (
+        "chore(preserve): %s\n"
+        "\n"
+        "tx-agent: jcode\n"
+        "tx-lane: preserve\n"
+        "tx-validated: none\n"
+    ) % subject_tail
 
 
 def store_file(registry: str, owner: str, repo: str, kind: str,
@@ -241,7 +259,7 @@ def store_file(registry: str, owner: str, repo: str, kind: str,
     tree = json.loads(out.decode("utf-8", "replace"))["sha"]
 
     body = json.dumps({
-        "message": "chore(preserve): %s/%s for an impending deletion" % (repo, kind),
+        "message": preserve_commit_message("%s/%s for an impending deletion" % (repo, kind)),
         "tree": tree, "parents": [head],
     })
     code, out, err = sh(["gh", "api", "repos/%s/git/commits" % target, "-X", "POST", "--input", "-"],
