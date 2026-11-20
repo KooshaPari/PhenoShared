@@ -184,10 +184,41 @@ def absorb(
         registry_clone, "ls-remote", url_registry, "refs/preserved/%s/*" % repo
     )
     nrefs = len([l for l in heads.splitlines() if l.strip()])
-    return True, "%d files exact, %d refs, %d commits" % (
-        len(want),
-        nrefs,
-        int(must(mirror, "rev-list", "--all", "--count")),
+    # Reporting only: the byte-for-byte proof above still compares every source
+    # blob. Credits for private duplicates and excluded build artefacts belong in
+    # the claim, not in a single "files exact" number.
+    repo_root = "repos/%s/" % repo
+    direct_paths = {
+        p[len(repo_root) :]
+        for p in pushed
+        if p.startswith(repo_root) and not p.startswith(prefix)
+    }
+    excluded = {
+        p
+        for p in want
+        if p.endswith(
+            (
+                ".log",
+                ".pyc",
+                ".pyo",
+                ".exe",
+                ".dll",
+                ".so",
+                ".dylib",
+                ".o",
+                ".obj",
+                ".a",
+                ".lib",
+            )
+        )
+    }
+    withheld = (set(want) & direct_paths) - excluded
+    covered = len(want) - len(withheld) - len(excluded)
+    ncommits = int(must(mirror, "rev-list", "--all", "--count"))
+    return True, (
+        "%d of %d files (%d withheld to registry, %d excluded binary), "
+        "%d refs, %d commits"
+        % (covered, len(want), len(withheld), len(excluded), nrefs, ncommits)
     )
 
 
