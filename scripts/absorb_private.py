@@ -184,36 +184,22 @@ def absorb(
         registry_clone, "ls-remote", url_registry, "refs/preserved/%s/*" % repo
     )
     nrefs = len([l for l in heads.splitlines() if l.strip()])
-    # Reporting only: the byte-for-byte proof above still compares every source
-    # blob. Credits for private duplicates and excluded build artefacts belong in
-    # the claim, not in a single "files exact" number.
+    # Derive reporting counts from files actually written or routed, never from
+    # file names. `got` is the source snapshot read back at repos/<repo>/tree/;
+    # `direct_paths` is other content routed under repos/<repo>/ (for example
+    # private withheld documents). Anything in source but in neither location is
+    # genuinely excluded. The byte-for-byte proof above still compares every
+    # source blob.
     repo_root = "repos/%s/" % repo
     direct_paths = {
         p[len(repo_root) :]
         for p in pushed
         if p.startswith(repo_root) and not p.startswith(prefix)
     }
-    excluded = {
-        p
-        for p in want
-        if p.endswith(
-            (
-                ".log",
-                ".pyc",
-                ".pyo",
-                ".exe",
-                ".dll",
-                ".so",
-                ".dylib",
-                ".o",
-                ".obj",
-                ".a",
-                ".lib",
-            )
-        )
-    }
-    withheld = (set(want) & direct_paths) - excluded
-    covered = len(want) - len(withheld) - len(excluded)
+    withheld = set(want) & direct_paths
+    written = set(got) | withheld
+    excluded = set(want) - written
+    covered = len(set(want) & written)
     ncommits = int(must(mirror, "rev-list", "--all", "--count"))
     return True, (
         "%d of %d files (%d withheld to registry, %d excluded binary), "
