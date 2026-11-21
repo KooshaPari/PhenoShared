@@ -21,6 +21,6 @@ func cmdMCP(args []string) error {
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	srv := mcp.New(mcp.Config{Version: Version, Log: os.Stderr})
+	srv := mcp.New(mcp.Config{Version: resolveVersion(), Log: os.Stderr})
 	return srv.Serve(ctx, os.Stdin, os.Stdout)
 }
