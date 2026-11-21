@@ -180,6 +180,17 @@ func TestNewToolSchemasAreObjectsWithDir(t *testing.T) {
 	}
 }
 
+// jsonStr quotes s for embedding in a request this test builds by hand. A raw
+// Windows path contains backslashes, and `C:\Users` is an invalid \U escape, so
+// without this the server answers -32700 parse error and no tool ever runs.
+func jsonStr(s string) string {
+	b, err := json.Marshal(s)
+	if err != nil {
+		panic(err)
+	}
+	return string(b)
+}
+
 // TestQuerySelectsByFailedStatus exercises the delegation to internal/query:
 // the tool must return exactly the node the query selected.
 func TestQuerySelectsByFailedStatus(t *testing.T) {
@@ -187,7 +198,7 @@ func TestQuerySelectsByFailedStatus(t *testing.T) {
 	dir := newRunDir(t, root)
 	failNode(t, dir, "2", "boom")
 
-	text, isErr := callText(t, "dagrun_query", `{"dir":"`+dir+`","where":["status=failed"]}`)
+	text, isErr := callText(t, "dagrun_query", `{"dir":`+jsonStr(dir)+`,"where":["status=failed"]}`)
 	if isErr {
 		t.Fatalf("query signalled an error: %s", text)
 	}
@@ -215,7 +226,7 @@ func TestQueryRejectsAnUnknownPredicate(t *testing.T) {
 	root := t.TempDir()
 	dir := newRunDir(t, root)
 	frames := serve(t, []string{
-		`{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"dagrun_query","arguments":{"dir":"` + dir + `","where":["nonsense=x"]}}}`,
+		`{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"dagrun_query","arguments":{"dir":`+jsonStr(dir)+`,"where":["nonsense=x"]}}}`,
 	})
 	errObj, _ := frames[0]["error"].(map[string]any)
 	if errObj == nil {
@@ -232,7 +243,7 @@ func TestQueryRejectsAnUnknownPredicate(t *testing.T) {
 func TestDoctorWithoutAPlanIsAnErrorResult(t *testing.T) {
 	root := t.TempDir()
 	dir := filepath.Join(root, ".dagrun")
-	text, isErr := callText(t, "dagrun_doctor", `{"dir":"`+dir+`"}`)
+	text, isErr := callText(t, "dagrun_doctor", `{"dir":`+jsonStr(dir)+`}`)
 	if !isErr {
 		t.Fatalf("doctor on a planless directory did not signal an error: %s", text)
 	}
@@ -270,7 +281,7 @@ func TestDoctorOnARealRunIsHealthy(t *testing.T) {
 // happy path test does not depend on the host's harness inventory.
 func refreshDoctor(t *testing.T, dir string) string {
 	t.Helper()
-	text, _ := callText(t, "dagrun_doctor", `{"dir":"`+dir+`"}`)
+	text, _ := callText(t, "dagrun_doctor", `{"dir":`+jsonStr(dir)+`}`)
 	return text
 }
 
@@ -279,7 +290,7 @@ func refreshDoctor(t *testing.T, dir string) string {
 func TestExportJSONIsParseable(t *testing.T) {
 	root := t.TempDir()
 	dir := newRunDir(t, root)
-	text, isErr := callText(t, "dagrun_export", `{"dir":"`+dir+`","format":"json"}`)
+	text, isErr := callText(t, "dagrun_export", `{"dir":`+jsonStr(dir)+`,"format":"json"}`)
 	if isErr {
 		t.Fatalf("export signalled an error: %s", text)
 	}
@@ -309,7 +320,7 @@ func TestExportJSONIsParseable(t *testing.T) {
 func TestExportRejectsUnknownFormat(t *testing.T) {
 	root := t.TempDir()
 	dir := newRunDir(t, root)
-	text, isErr := callText(t, "dagrun_export", `{"dir":"`+dir+`","format":"csv"}`)
+	text, isErr := callText(t, "dagrun_export", `{"dir":`+jsonStr(dir)+`,"format":"csv"}`)
 	if !isErr {
 		t.Fatalf("an unknown format was accepted: %s", text)
 	}
@@ -324,7 +335,7 @@ func TestExportRejectsUnknownFormat(t *testing.T) {
 func TestLintOnAFreshPlanIsClean(t *testing.T) {
 	root := t.TempDir()
 	dir := newRunDir(t, root)
-	text, isErr := callText(t, "dagrun_lint", `{"dir":"`+dir+`"}`)
+	text, isErr := callText(t, "dagrun_lint", `{"dir":`+jsonStr(dir)+`}`)
 	var payload struct {
 		Run      string `json:"run"`
 		OK       bool   `json:"ok"`
@@ -349,7 +360,7 @@ func TestLintOnAFreshPlanIsClean(t *testing.T) {
 func TestStatsReportsTheRun(t *testing.T) {
 	root := t.TempDir()
 	dir := newRunDir(t, root)
-	text, isErr := callText(t, "dagrun_stats", `{"dir":"`+dir+`"}`)
+	text, isErr := callText(t, "dagrun_stats", `{"dir":`+jsonStr(dir)+`}`)
 	if isErr {
 		t.Fatalf("stats signalled an error: %s", text)
 	}
@@ -372,7 +383,7 @@ func TestStatsReportsTheRun(t *testing.T) {
 func TestRecoverReportsWithoutReclaimingByDefault(t *testing.T) {
 	root := t.TempDir()
 	dir := newRunDir(t, root)
-	text, _ := callText(t, "dagrun_recover", `{"dir":"`+dir+`"}`)
+	text, _ := callText(t, "dagrun_recover", `{"dir":`+jsonStr(dir)+`}`)
 	var payload struct {
 		Applied bool `json:"applied"`
 	}
@@ -412,7 +423,7 @@ nodes:
 	if err != nil {
 		t.Fatal(err)
 	}
-	text, isErr := callText(t, "dagrun_replan", `{"dir":"`+dir+`","file":"`+revised+`"}`)
+	text, isErr := callText(t, "dagrun_replan", `{"dir":`+jsonStr(dir)+`,"file":`+jsonStr(revised)+`}`)
 	if isErr {
 		t.Fatalf("replan signalled an error: %s", text)
 	}
