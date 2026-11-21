@@ -41,7 +41,7 @@ jobs:
           restore-keys: ${{ runner.os }}-maturin-
 
       - name: Build wheels and sdist
-        uses: PyO3/maturin-action@423a6347767a8b16e65c2a7a7042e4a921528da8 # v1
+        uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1
         with:
           target: x86_64
           args: --release --out dist -m crates/pheno-registry-python/Cargo.toml
