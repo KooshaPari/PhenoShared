@@ -3,6 +3,7 @@ package plan
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -219,6 +220,14 @@ func TestLoadUnitsCommandSeesRepoFiles(t *testing.T) {
 	writeFile(t, root, "a.go", "package a")
 	writeFile(t, root, "sub/b.go", "package b")
 	units, err := LoadUnits(root, Discover{From: CmdPrefix + "find . -name '*.go' | sed 's|^./||'"})
+	// On Windows the same command names different programs. A misrouted PATH must
+	// be refused with a named fix; it must never look like a plan with no work.
+	if runtime.GOOS == "windows" && err != nil {
+		if !strings.Contains(err.Error(), "not the POSIX ones") {
+			t.Fatalf("the Windows refusal should name the POSIX tools, got %v", err)
+		}
+		return
+	}
 	if err != nil {
 		t.Fatal(err)
 	}
