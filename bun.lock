@@ -26,7 +26,7 @@
       "name": "@phenotype/auth",
       "version": "1.0.0",
       "dependencies": {
-        "@workos-inc/node": "^12.0.0",
+        "@workos-inc/node": "^12.3.0",
       },
     },
     "packages/design-tokens": {
@@ -681,7 +681,7 @@
 
     "@vueuse/shared": ["@vueuse/shared@12.8.2", "", { "dependencies": { "vue": "^3.5.13" } }, "sha512-dznP38YzxZoNloI0qpEfpkms8knDtaoQ6Y/sfS0L7Yki4zh40LFHEhur0odJC6xTHG5dxWVPiUWBXn+wCG2s5w=="],
 
-    "@workos-inc/node": ["@workos-inc/node@12.2.0", "", {}, "sha512-uWzWtPieLqn+juXcIm8YQxh0qokZg0dnjzGm5AHeemiG6VeqzGYc6nlqQ2zw/OI80aYuaPo/ZOURACyQuqYgnA=="],
+    "@workos-inc/node": ["@workos-inc/node@12.3.0", "", {}, "sha512-BuPP/5Zkh4Xjvs6x0qLUsCQzKVIrvacLLuCGhaai9fI/vzKd4JX9OUQoXrbsIqkPY8HWC6uIgCWYZaJxIvXxpA=="],
 
     "acorn": ["acorn@8.19.0", "", { "bin": { "acorn": "bin/acorn" } }, "sha512-oJlA3XiRm7Cyk6qFD2Jn8ak9B7jSy0qy00ADO3+8dpT0LSjFihQYv4C02LFCSYJV3Q37xYwwRy5m+IpIiUzqWw=="],
 
