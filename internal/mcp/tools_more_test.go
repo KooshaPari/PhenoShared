@@ -226,7 +226,7 @@ func TestQueryRejectsAnUnknownPredicate(t *testing.T) {
 	root := t.TempDir()
 	dir := newRunDir(t, root)
 	frames := serve(t, []string{
-		`{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"dagrun_query","arguments":{"dir":`+jsonStr(dir)+`,"where":["nonsense=x"]}}}`,
+		`{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"dagrun_query","arguments":{"dir":` + jsonStr(dir) + `,"where":["nonsense=x"]}}}`,
 	})
 	errObj, _ := frames[0]["error"].(map[string]any)
 	if errObj == nil {
