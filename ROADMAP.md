@@ -357,10 +357,10 @@ Gate: pasting one document into nine artifacts does not pass.
       same commands pass from a clean clone on macOS
     GATE: the suite is green on all three platforms   BLOCKED(billing): the
     workflow is committed but GitHub never started the jobs
-    note: on Windows the root package is green now that the test helper names
-    its binary .exe. Six packages still fail (hook, house, mcp, plan, run, skill):
-    JSON-RPC framing, git unit discovery, a POSIX-only test, harnesses needing sh.
-    None of those are the lock; treat Windows as not-green until they are closed.
+    note: on Windows root, skill and house are green; the test helper names its
+    binary .exe, the skill check normalises CRLF, and the chmod test skips there.
+    Four still fail (hook, mcp, plan, run): JSON-RPC framing, git unit discovery,
+    an empty hook working dir, and harnesses that assume sh.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk
