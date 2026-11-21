@@ -41,7 +41,7 @@ not by reading the previous roadmap.
 6.0  AGILEPLUS INTEROP ......................... PARTIAL import yes, round trip no
 7.0  MULTI-REPO INTENTS ........................ DONE    sub-plans, cross-repo gate, budgets
 8.0  EXTENSIBILITY SURFACES .................... DONE    MCP, skill, hooks
-9.0  OPERATIONAL HARDENING ..................... PARTIAL recover + schema yes, disk-full no
+9.0  OPERATIONAL HARDENING ..................... DONE    recover, schema, fuzz, disk-full
 10.0 DECISION QUALITY .......................... DONE    calibration, CVP, marginal, review
 11.0 DYNAMIC DECOMPOSITION ..................... DONE    discover / fan_out / fan_in
 ```
@@ -346,6 +346,21 @@ Gate: pasting one document into nine artifacts does not pass.
     GATE: no parser input panics or hangs                            PASS
     note: a run that cannot persist now says so on the first write, instead of
     failing every node for a reason it invented.
+
+9.4 Platform parity                                           WIP
+    9.4.1 `LockFileEx` store lock on Windows, same contract as
+          flock: it blocks, and the kernel drops it on process
+          death, so there is still no stale-lock cleanup path          DONE
+    9.4.2 CI workflow for ubuntu/macos/windows                BLOCKED(billing)
+    > evidence: internal/store/lock_windows.go; the two packages that used to
+      fail only on the refusal (store, workspace) now pass on Windows, and the
+      same commands pass from a clean clone on macOS
+    GATE: the suite is green on all three platforms   BLOCKED(billing): the
+    workflow is committed but GitHub never started the jobs
+    note: a full-suite run on Windows still fails 7 packages (root, hook, house,
+    mcp, plan, run, skill) for reasons unrelated to the lock, on a host pinned
+    at 100% CPU by other work. Treat Windows as not-green until that is run on
+    a quiet machine.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk
