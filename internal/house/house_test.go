@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -476,6 +477,9 @@ func TestDoctorWithNilStoreDoesNotPanic(t *testing.T) {
 // doctor must name it, because the alternative is an operator reading a raw
 // errno out of a node log.
 func TestDoctorReportsAnUnwritableRunDir(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows has no POSIX permission bits, so chmod cannot make a directory unwritable")
+	}
 	if os.Geteuid() == 0 {
 		t.Skip("root ignores directory permission bits, so this cannot be simulated")
 	}

@@ -136,7 +136,8 @@ func TestShippedSkillMatchesRenderer(t *testing.T) {
 		t.Errorf("skills/dagrun/SKILL.md is %d lines; keep it under 150", lines)
 	}
 
-	if got, want := string(raw), SkillMarkdown(); got != want {
+	got := strings.ReplaceAll(string(raw), "\r\n", "\n")
+	if want := SkillMarkdown(); got != want {
 		t.Errorf("skills/dagrun/SKILL.md has drifted from SkillMarkdown()\n"+
 			"regenerate it from internal/skill instead of editing the markdown by hand\n"+
 			"(file %d bytes, renderer %d bytes)", len(got), len(want))
