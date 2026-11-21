@@ -45,6 +45,12 @@ macOS and Linux are the supported targets. Windows used to be refused outright
 (no `flock`); it now takes a real `LockFileEx` lock instead, but its suite is not
 green yet, so it is not claimed as supported.
 
+Hooks, `cmd:` discovery and harness templates all run through `sh -c`, so a POSIX
+shell must be on PATH. macOS and Linux already have one. On Windows that means
+Git Bash, MSYS2 or WSL, and the POSIX tools must come before the Windows ones:
+`find` in `C:\Windows\System32` is a different program with different flags and
+will silently return nothing for a `find . -name ...` discovery command.
+
 ## 60-second demo
 
 ```sh
