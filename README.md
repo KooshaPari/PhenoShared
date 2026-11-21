@@ -38,7 +38,9 @@ go build -o ~/.local/bin/dagrun .
 ```
 
 Requires Go 1.24+. One dependency (`gopkg.in/yaml.v3`, pure Go, vendorable).
-macOS and Linux. Windows is refused rather than silently unsafe (no `flock`).
+macOS and Linux are the supported targets. Windows used to be refused outright
+(no `flock`); it now takes a real `LockFileEx` lock instead, but its suite is not
+green yet, so it is not claimed as supported.
 
 ## 60-second demo
 
