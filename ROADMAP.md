@@ -357,10 +357,13 @@ Gate: pasting one document into nine artifacts does not pass.
       same commands pass from a clean clone on macOS
     GATE: the suite is green on all three platforms   BLOCKED(billing): the
     workflow is committed but GitHub never started the jobs
-    note: on Windows root, skill and house are green; the test helper names its
-    binary .exe, the skill check normalises CRLF, and the chmod test skips there.
-    Four still fail (hook, mcp, plan, run): JSON-RPC framing, git unit discovery,
-    an empty hook working dir, and harnesses that assume sh.
+    note: on Windows root, skill, house and mcp are green; the test helper names its
+    binary .exe, the skill check normalises CRLF, the chmod test skips, and
+    the MCP requests are quoted with json.Marshal instead of raw paths.
+    Three still fail (hook, plan, run): each asserts POSIX shell behaviour that
+    Windows cannot guarantee. Hooks and harnesses run through `sh -c`, and
+    `cmd:` discovery inherits whichever `find` PATH resolves first, which on
+    Windows is System32's and returns nothing. See the README shell note.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk
