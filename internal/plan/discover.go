@@ -169,6 +169,9 @@ func runDiscoveryCmd(root, script string, timeout time.Duration) ([]byte, error)
 	if timeout <= 0 {
 		timeout = defaultCmdTimeout
 	}
+	if err := preflightDiscovery(script); err != nil {
+		return nil, err
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 

@@ -53,6 +53,9 @@ func TestRunWithNoHookIsANoop(t *testing.T) {
 
 // A hook runs in the supplied directory, not the caller's.
 func TestRunHonoursTheWorkingDirectory(t *testing.T) {
+	if posixShellSkip != "" {
+		t.Skip(posixShellSkip)
+	}
 	dir := t.TempDir()
 	if err := Run(context.Background(), "pre", Hooks{Pre: "pwd > where.txt"}, dir, nil); err != nil {
 		t.Fatal(err)

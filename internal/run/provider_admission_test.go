@@ -35,6 +35,9 @@ import (
 //  4. "good" completes, so the cooldown is per-provider and does not stall the
 //     rest of the run.
 func TestProviderAdmissionEndToEnd(t *testing.T) {
+	if posixShellSkip != "" {
+		t.Skip(posixShellSkip)
+	}
 	root := t.TempDir()
 	yaml := `
 version: 1
@@ -191,6 +194,9 @@ exit 0
 // contract_miss, which must NOT cool the provider down. The proof is that a
 // second node on the same provider still gets claimed and runs.
 func TestProviderAdmissionContractMissDoesNotCoolDown(t *testing.T) {
+	if posixShellSkip != "" {
+		t.Skip(posixShellSkip)
+	}
 	root := t.TempDir()
 	yaml := `
 version: 1
@@ -292,6 +298,9 @@ exit 0
 // let both nodes start before either finished, and the overlap would show up
 // here.
 func TestProviderAdmissionMaxConcurrentIsHonoured(t *testing.T) {
+	if posixShellSkip != "" {
+		t.Skip(posixShellSkip)
+	}
 	root := t.TempDir()
 	yaml := `
 version: 1
