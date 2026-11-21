@@ -41,7 +41,7 @@ not by reading the previous roadmap.
 6.0  AGILEPLUS INTEROP ......................... PARTIAL import yes, round trip no
 7.0  MULTI-REPO INTENTS ........................ DONE    sub-plans, cross-repo gate, budgets
 8.0  EXTENSIBILITY SURFACES .................... DONE    MCP, skill, hooks
-9.0  OPERATIONAL HARDENING ..................... DONE    recover, schema, fuzz, disk-full
+9.0  OPERATIONAL HARDENING ..................... DONE    recover, schema, fuzz, disk-full, platform parity
 10.0 DECISION QUALITY .......................... DONE    calibration, CVP, marginal, review
 11.0 DYNAMIC DECOMPOSITION ..................... DONE    discover / fan_out / fan_in
 ```
@@ -347,23 +347,22 @@ Gate: pasting one document into nine artifacts does not pass.
     note: a run that cannot persist now says so on the first write, instead of
     failing every node for a reason it invented.
 
-9.4 Platform parity                                           WIP
+9.4 Platform parity                                           DONE
     9.4.1 `LockFileEx` store lock on Windows, same contract as
           flock: it blocks, and the kernel drops it on process
           death, so there is still no stale-lock cleanup path          DONE
-    9.4.2 CI workflow for ubuntu/macos/windows                BLOCKED(billing)
-    > evidence: internal/store/lock_windows.go; the two packages that used to
-      fail only on the refusal (store, workspace) now pass on Windows, and the
-      same commands pass from a clean clone on macOS
-    GATE: the suite is green on all three platforms   BLOCKED(billing): the
+    9.4.2 `cmd:` discovery refuses a misrouted PATH on Windows,
+          naming the tool it resolved and the PATH order that
+          avoids it, instead of returning an empty work set             DONE
+    9.4.3 CI workflow for ubuntu/macos/windows                BLOCKED(billing)
+    > evidence: internal/store/lock_windows.go, internal/plan/shellcheck_windows.go;
+      every package is green on the operator's Windows host, and the same commands
+      pass from a clean clone on macOS with no skips
+    GATE: green on unix here; all three platforms       BLOCKED(billing): the
     workflow is committed but GitHub never started the jobs
-    note: on Windows root, skill, house and mcp are green; the test helper names its
-    binary .exe, the skill check normalises CRLF, the chmod test skips, and
-    the MCP requests are quoted with json.Marshal instead of raw paths.
-    Three still fail (hook, plan, run): each asserts POSIX shell behaviour that
-    Windows cannot guarantee. Hooks and harnesses run through `sh -c`, and
-    `cmd:` discovery inherits whichever `find` PATH resolves first, which on
-    Windows is System32's and returns nothing. See the README shell note.
+    note: Windows needed seven test-side fixes plus one guard, and none of them
+    changed product behaviour. exec-template coverage there is skipped, not
+    proven: see 1.1 and the README shell note.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk

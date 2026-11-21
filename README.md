@@ -49,7 +49,9 @@ Hooks, `cmd:` discovery and harness templates all run through `sh -c`, so a POSI
 shell must be on PATH. macOS and Linux already have one. On Windows that means
 Git Bash, MSYS2 or WSL, and the POSIX tools must come before the Windows ones:
 `find` in `C:\Windows\System32` is a different program with different flags and
-will silently return nothing for a `find . -name ...` discovery command.
+will silently return nothing for a `find . -name ...` discovery command. dagrun
+now refuses that case instead of reporting an empty work set: the error names the
+tool it resolved and the PATH order that fixes it.
 
 ## 60-second demo
 
