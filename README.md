@@ -33,7 +33,10 @@ exited 0.** Everything else follows from that.
 ## Install
 
 ```sh
-go install github.com/KooshaPari/dagrun@latest   # or:
+# this module lives in a private repo: tell Go that, and let it use your git
+# credentials. Without GOPRIVATE, `go install ...@v1.2.0` fails on sum.golang.org.
+export GOPRIVATE='github.com/KooshaPari/*' GONOSUMDB='github.com/KooshaPari/*'
+go install github.com/KooshaPari/dagrun@v1.2.0   # or:
 go build -o ~/.local/bin/dagrun .
 ```
 
