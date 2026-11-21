@@ -357,10 +357,10 @@ Gate: pasting one document into nine artifacts does not pass.
       same commands pass from a clean clone on macOS
     GATE: the suite is green on all three platforms   BLOCKED(billing): the
     workflow is committed but GitHub never started the jobs
-    note: a full-suite run on Windows still fails 7 packages (root, hook, house,
-    mcp, plan, run, skill) for reasons unrelated to the lock, on a host pinned
-    at 100% CPU by other work. Treat Windows as not-green until that is run on
-    a quiet machine.
+    note: on Windows the root package is green now that the test helper names
+    its binary .exe. Six packages still fail (hook, house, mcp, plan, run, skill):
+    JSON-RPC framing, git unit discovery, a POSIX-only test, harnesses needing sh.
+    None of those are the lock; treat Windows as not-green until they are closed.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk

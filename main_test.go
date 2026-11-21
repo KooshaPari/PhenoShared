@@ -3,6 +3,7 @@ package main
 import (
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -28,10 +29,20 @@ var allCommands = []string{
 	"query", "otel", "replan", "recover",
 }
 
+// exeSuffix is empty except on Windows, where exec.Command refuses to start a
+// file that does not carry the .exe extension. Without this, every test that
+// shells out to the built CLI fails with "executable file not found in %PATH%".
+func exeSuffix() string {
+	if runtime.GOOS == "windows" {
+		return ".exe"
+	}
+	return ""
+}
+
 // buildCLI compiles the binary once for the whole test.
 func buildCLI(t *testing.T) string {
 	t.Helper()
-	bin := filepath.Join(t.TempDir(), "dagrun")
+	bin := filepath.Join(t.TempDir(), "dagrun"+exeSuffix())
 	cmd := exec.Command("go", "build", "-o", bin, ".")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
