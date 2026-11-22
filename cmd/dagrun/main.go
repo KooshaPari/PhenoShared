@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -18,8 +19,24 @@ import (
 	"github.com/KooshaPari/dagrun/internal/store"
 )
 
-// Version is set at build time with -ldflags "-X main.Version=...".
-var Version = "1.2.0"
+// Version may be set at build time with -ldflags "-X main.Version=..."; when it is
+// empty the module version the binary was installed at is used instead, so
+// `go install ...@v1.3.0` reports 1.3.0 rather than a hardcoded constant.
+var Version = ""
+
+// resolveVersion prefers an explicit build-time Version, then the module version
+// baked in by `go install`, and finally admits it cannot tell.
+func resolveVersion() string {
+	if Version != "" {
+		return strings.TrimPrefix(Version, "v")
+	}
+	if bi, ok := debug.ReadBuildInfo(); ok {
+		if v := bi.Main.Version; v != "" && v != "(devel)" {
+			return strings.TrimPrefix(v, "v")
+		}
+	}
+	return "devel"
+}
 
 const defaultDir = ".dagrun"
 
@@ -97,10 +114,8 @@ func main() {
 		err = cmdReplan(args)
 	case "recover":
 		err = cmdRecover(args)
-	case "serve":
-		err = cmdServe(args)
 	case "version", "--version", "-v":
-		fmt.Printf("dagrun %s\n", Version)
+		fmt.Printf("dagrun %s\n", resolveVersion())
 		return
 	case "help", "--help", "-h":
 		usage(os.Stdout)
@@ -161,8 +176,7 @@ USAGE
   dagrun otel [flags]            export the run as OTLP/JSON spans
   dagrun replan PLAN [flags]     diff a revised plan against the run; --apply installs it
   dagrun recover [flags]         report or reclaim stuck nodes; --force reclaims
-  dagrun serve [flags]           serve the run as a live viewer + read-only JSON API
-  dagrun mcp [flags]             serve the Model Context Protocol over stdio or HTTP
+  dagrun mcp                     serve the Model Context Protocol over stdio
   dagrun version
 
 COMMON FLAGS
@@ -230,26 +244,11 @@ func splitArgs(args []string) (flags []string, pos []string) {
 	return flags, pos
 }
 
-// valueFlags names the flags that consume the next argument.
-//
-// This table is the cost of the hand-rolled splitArgs below: the flag package
-// knows which of its own flags take values, but splitArgs separates flags from
-// positionals BEFORE the flag set sees them, so it needs its own copy of that
-// knowledge and every new --flag-with-a-value has to be added here or its value
-// is stranded as a positional. Forgetting one turns `--from dagschema` into
-// "unknown value dagschema", which is how --from was nearly shipped broken.
-//
-// The structural fix is a real parser (one declaration per command, no table);
-// it is deferred because it touches every cmd_*.go file at once.
 var valueFlags = map[string]bool{
 	"-dir": true, "-file": true, "-work": true, "-workers": true, "-owner": true,
 	"-lease": true, "-exec-template": true, "-tools": true, "-role": true,
 	"-count": true, "-ttl": true, "-epoch": true, "-format": true, "-reason": true,
-	"-node": true, "-from": true, "-in": true, "-map": true, "-out": true,
-	"-url": true, "-token": true, "-intent": true, "-addr": true, "-watch": true,
-	"-wait": true, "-since": true, "-event": true, "-limit": true,
-	"-order-by": true, "-select": true, "-where": true, "-max-cost": true,
-	"-template": true, "-name": true,
+	"-node": true,
 }
 
 func takesValue(a string) bool {

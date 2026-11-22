@@ -102,10 +102,17 @@ marked skipped once expanded so status and progress do not count it. A reduce
 (`fan_in`) has its dependency list injected at expansion time, which is why it
 cannot run early.
 
-### D9. Windows is refused, not degraded
+### D9. Every platform takes a real kernel lock
 
-`flock` does not exist there. Rather than silently assuming one writer per run,
-the windows build returns an error. macOS and Linux are the targets.
+`flock` does not exist on Windows, and the first answer here was to refuse the
+build there rather than silently assume one writer per run. That refusal is now
+replaced by `LockFileEx` over the whole lock file, which gives the same contract:
+it blocks until the lock is held, the kernel drops it when the process dies, so
+there is still no stale-lock cleanup path anywhere. The calls are resolved from
+`kernel32` directly rather than by importing `golang.org/x/sys/windows`, which
+keeps the module's single dependency intact.
+The choice was to keep the invariant identical on all three platforms rather
+than to add a platform that degrades it.
 
 ## Layering
 
