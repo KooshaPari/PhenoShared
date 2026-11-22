@@ -361,12 +361,15 @@ Gate: pasting one document into nine artifacts does not pass.
       ok, 0 failures)
     GATE: green on unix here; all three platforms       BLOCKED(billing): the
     workflow is committed but GitHub never started the jobs
-    note: Windows needed seven test-side fixes plus one guard, and none of them
-    changed product behaviour. Two gaps remain, both named rather than skipped
-    quietly: exec templates that embed an absolute Windows path inside `sh -c`
-    (sh consumes the backslashes, so the script never runs), and a hook whose
-    child spawns grandchildren is not cancelled at its deadline (Run waited 30.1s
-    for a 150ms deadline). The second needs a job object or a process-tree kill.
+    note: Windows needed seven test-side fixes, one guard and two real defects.
+    The defects: hooks and harnesses were not cancelled at their deadline, because
+    killing the shell left its children holding the output pipes (a 150ms deadline
+    returned after 30.1s; fixed with WaitDelay plus a taskkill /T subtree kill in
+    internal/hook, internal/run and internal/verify), and exec templates passed an
+    absolute Windows path into `sh -c <path>`, where sh reads it as script text and
+    eats the backslashes (tests now use the script's basename, since the harness
+    working directory already contains it). The only Windows skip left is the
+    chmod-based unwritable-directory test, which the platform cannot express.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk
