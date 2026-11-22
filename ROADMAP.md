@@ -356,13 +356,17 @@ Gate: pasting one document into nine artifacts does not pass.
           avoids it, instead of returning an empty work set             DONE
     9.4.3 CI workflow for ubuntu/macos/windows                BLOCKED(billing)
     > evidence: internal/store/lock_windows.go, internal/plan/shellcheck_windows.go;
-      every package is green on the operator's Windows host, and the same commands
-      pass from a clean clone on macOS with no skips
+      every package is green on the operator's Windows host, on a clean clone on
+      macOS with no skips, and on Linux (FedoraLinux-Desk, Go 1.26.10: 21 packages
+      ok, 0 failures)
     GATE: green on unix here; all three platforms       BLOCKED(billing): the
     workflow is committed but GitHub never started the jobs
     note: Windows needed seven test-side fixes plus one guard, and none of them
-    changed product behaviour. exec-template coverage there is skipped, not
-    proven: see 1.1 and the README shell note.
+    changed product behaviour. Two gaps remain, both named rather than skipped
+    quietly: exec templates that embed an absolute Windows path inside `sh -c`
+    (sh consumes the backslashes, so the script never runs), and a hook whose
+    child spawns grandchildren is not cancelled at its deadline (Run waited 30.1s
+    for a 150ms deadline). The second needs a job object or a process-tree kill.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk
