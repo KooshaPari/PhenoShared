@@ -15,10 +15,10 @@ const defaultTimeout = 60 * time.Second
 // maxOutputLen bounds the captured output embedded in an error.
 const maxOutputLen = 4000
 
-// hookWaitDelay bounds how long Wait keeps waiting on output pipes after the hook's
-// context is cancelled. It is what turns a deadline into an actual return when the
-// hook spawned children that outlive the shell.
-const hookWaitDelay = 2 * time.Second
+// waitDelay bounds how long Wait keeps waiting on output pipes after the hook's
+// context is cancelled. It is what turns a deadline into an actual return when a
+// child escaped the process group and still holds the pipe open.
+const waitDelay = 2 * time.Second
 
 // Hooks are the shell commands a plan node can run around its execution.
 type Hooks struct {
@@ -61,11 +61,10 @@ func Run(ctx context.Context, phase string, h Hooks, dir string, env []string) e
 	c := exec.CommandContext(ctx, "sh", "-c", cmd)
 	c.Dir = dir
 	c.Env = append(os.Environ(), env...)
-	// A hook that spawns children keeps the output pipes open after the shell itself
-	// is killed, and CombinedOutput waits for those pipes to close. Without a
-	// WaitDelay the deadline never fires: a `sleep 30` behind sh returned after the
-	// full 30s on Windows. Bounding the pipe wait is what makes the timeout real.
-	c.WaitDelay = hookWaitDelay
+	// The per-OS process group bounds the pipe wait and kills the whole subtree, so a
+	// deadline returns instead of waiting for a grandchild that escaped the shell.
+
+	setProcessGroup(c)
 
 	out, err := c.CombinedOutput()
 	if err != nil {

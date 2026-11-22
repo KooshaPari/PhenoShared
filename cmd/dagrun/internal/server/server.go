@@ -26,6 +26,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/KooshaPari/dagrun/internal/plan"
@@ -55,10 +56,14 @@ type Server struct {
 	errOut io.Writer
 	plan   *plan.Plan
 
-	// bound and boundAddr are set by Listen, and kept separate from addr so
-	// Addr() can honestly report "" before a bind has happened.
+	// mu guards the bound fields below. They are written by Listen and read by
+	// callers that need the port before the serve loop starts, which is a
+	// different goroutine, so an unsynchronised pair here would be a race.
+	mu        sync.Mutex
 	bound     bool
 	boundAddr string
+	// ln is the bound listener, created by Bind and consumed by Listen.
+	ln net.Listener
 }
 
 // New validates the request without binding anything.
@@ -105,7 +110,12 @@ func requireLoopback(addr string) error {
 	if err != nil {
 		return fmt.Errorf("addr %q is not host:port: %w", addr, err)
 	}
-	if host == "" || strings.EqualFold(host, "localhost") {
+	// An empty host (":8080") means every interface, so it is the one case that
+	// looks loopback-ish and is the opposite. Refuse it.
+	if host == "" {
+		return fmt.Errorf("addr %q has no host, which binds every interface: name 127.0.0.1 explicitly", addr)
+	}
+	if strings.EqualFold(host, "localhost") {
 		return nil
 	}
 	if ip := net.ParseIP(host); ip != nil && ip.IsLoopback() {
@@ -116,6 +126,8 @@ func requireLoopback(addr string) error {
 
 // Addr is the bound address once Listen has bound it, otherwise "".
 func (s *Server) Addr() string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if s.bound {
 		return s.boundAddr
 	}
@@ -134,14 +146,34 @@ func (s *Server) Handler() http.Handler {
 	return mux
 }
 
-// Listen binds and serves until ctx is cancelled.
-func (s *Server) Listen(ctx context.Context) error {
+// Bind creates the listener and records the real address, without serving yet.
+//
+// It exists so a caller can print the URL BEFORE blocking in Listen. A ready
+// line published after Listen returns is published when the server stops, which
+// tells nobody anything; doing it in two steps is the only honest way to report
+// an ephemeral port.
+func (s *Server) Bind() error {
+	if s.ln != nil {
+		return nil
+	}
 	ln, err := net.Listen("tcp", s.addr)
 	if err != nil {
 		return err
 	}
+	s.ln = ln
+	s.mu.Lock()
 	s.bound = true
 	s.boundAddr = ln.Addr().String()
+	s.mu.Unlock()
+	return nil
+}
+
+// Listen binds (if Bind was not called) and serves until ctx is cancelled.
+func (s *Server) Listen(ctx context.Context) error {
+	if err := s.Bind(); err != nil {
+		return err
+	}
+	ln := s.ln
 
 	srv := &http.Server{Handler: s.Handler(), ReadHeaderTimeout: 10 * time.Second}
 	errc := make(chan error, 1)
