@@ -35,7 +35,6 @@ import (
 //  4. "good" completes, so the cooldown is per-provider and does not stall the
 //     rest of the run.
 func TestProviderAdmissionEndToEnd(t *testing.T) {
-	withPosixPath(t)
 	root := t.TempDir()
 	yaml := `
 version: 1
@@ -107,7 +106,7 @@ exit 0
 		Workers:        3,
 		Owner:          "test",
 		Lease:          time.Minute,
-		ExecTemplate:   "sh -c " + script + " {stdin}",
+		ExecTemplate:   "sh " + filepath.Base(script) + " {stdin}",
 		Out:            &out,
 		Admission:      plan.NewAdmission(),
 		ProviderPolicy: p.ProviderPolicy,
@@ -192,7 +191,6 @@ exit 0
 // contract_miss, which must NOT cool the provider down. The proof is that a
 // second node on the same provider still gets claimed and runs.
 func TestProviderAdmissionContractMissDoesNotCoolDown(t *testing.T) {
-	withPosixPath(t)
 	root := t.TempDir()
 	yaml := `
 version: 1
@@ -250,7 +248,7 @@ exit 0
 		Workers:        2,
 		Owner:          "test",
 		Lease:          time.Minute,
-		ExecTemplate:   "sh -c " + script + " {stdin}",
+		ExecTemplate:   "sh " + filepath.Base(script) + " {stdin}",
 		Out:            &out,
 		Admission:      plan.NewAdmission(),
 		ProviderPolicy: p.ProviderPolicy,
@@ -294,7 +292,6 @@ exit 0
 // let both nodes start before either finished, and the overlap would show up
 // here.
 func TestProviderAdmissionMaxConcurrentIsHonoured(t *testing.T) {
-	withPosixPath(t)
 	root := t.TempDir()
 	yaml := `
 version: 1
@@ -356,7 +353,7 @@ exit 0
 		Workers:        2,
 		Owner:          "test",
 		Lease:          time.Minute,
-		ExecTemplate:   "sh -c " + script + " {stdin}",
+		ExecTemplate:   "sh " + filepath.Base(script) + " {stdin}",
 		Out:            &out,
 		Admission:      plan.NewAdmission(),
 		ProviderPolicy: p.ProviderPolicy,

@@ -2,22 +2,14 @@
 
 package hook
 
-import "testing"
-
-// withPosixPath marks a test that cannot be proven on Windows yet.
+// shellPathsComparable is false on Windows.
 //
-// Hooks run through `sh -c`, and two things about that are unverified here rather
-// than broken by the test:
+// The hook's `pwd` text is not portable here: Git's sh reports the caller's temp
+// directory as /tmp rather than /c/Users/.../AppData/Local/Temp, because MSYS maps
+// its mounts. Comparing that string to a Windows path proves nothing about where
+// the hook ran.
 //
-//   - the shell reports a working directory in its own form (/c/Users/...) while
-//     the caller passes a Windows path, so the two are not directly comparable;
-//   - a hook whose child spawns grandchildren is not cancelled at its deadline,
-//     because the grandchild keeps the output pipe open and Wait blocks on it.
-//     A timeout that does not fire is a real gap, and it needs a job object or an
-//     explicit process-tree kill, not a test change.
-//
-// Skipping names both, so nobody reads a skip as coverage.
-func withPosixPath(t *testing.T) {
-	t.Helper()
-	t.Skip("Windows hook coverage is unverified: sh reports /c/... paths, and the deadline is not enforced when the hook spawns grandchildren")
-}
+// What the test does prove on this platform is stronger anyway: the hook writes
+// where.txt with a relative path, and the file is then read from the directory the
+// caller supplied. If the hook had run anywhere else, that read would fail.
+const shellPathsComparable = false

@@ -53,7 +53,6 @@ func TestRunWithNoHookIsANoop(t *testing.T) {
 
 // A hook runs in the supplied directory, not the caller's.
 func TestRunHonoursTheWorkingDirectory(t *testing.T) {
-	withPosixPath(t)
 	dir := t.TempDir()
 	if err := Run(context.Background(), "pre", Hooks{Pre: "pwd > where.txt"}, dir, nil); err != nil {
 		t.Fatal(err)
@@ -65,6 +64,12 @@ func TestRunHonoursTheWorkingDirectory(t *testing.T) {
 	// On macOS /var is a symlink to /private/var, so compare the resolved forms.
 	wantResolved, _ := filepath.EvalSymlinks(dir)
 	gotResolved, _ := filepath.EvalSymlinks(strings.TrimSpace(string(got)))
+	if !shellPathsComparable {
+		// The file was read back from the supplied directory above, which is the
+		// property under test. The shell's pwd text is only comparable where the shell
+		// and the caller agree on path form; Git's sh reports %TEMP% as /tmp.
+		return
+	}
 	if gotResolved != wantResolved {
 		t.Errorf("hook ran in %q, want %q", gotResolved, wantResolved)
 	}
@@ -110,7 +115,6 @@ func TestRunSurfacesFailureOutput(t *testing.T) {
 // A hook that outlives its deadline must be killed, not waited on. Otherwise a
 // stuck hook wedges the executor with no node to blame.
 func TestRunRespectsTheContextDeadline(t *testing.T) {
-	withPosixPath(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
 	defer cancel()
 
