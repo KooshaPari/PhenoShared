@@ -53,9 +53,7 @@ func TestRunWithNoHookIsANoop(t *testing.T) {
 
 // A hook runs in the supplied directory, not the caller's.
 func TestRunHonoursTheWorkingDirectory(t *testing.T) {
-	if posixShellSkip != "" {
-		t.Skip(posixShellSkip)
-	}
+	withPosixPath(t)
 	dir := t.TempDir()
 	if err := Run(context.Background(), "pre", Hooks{Pre: "pwd > where.txt"}, dir, nil); err != nil {
 		t.Fatal(err)
@@ -112,6 +110,7 @@ func TestRunSurfacesFailureOutput(t *testing.T) {
 // A hook that outlives its deadline must be killed, not waited on. Otherwise a
 // stuck hook wedges the executor with no node to blame.
 func TestRunRespectsTheContextDeadline(t *testing.T) {
+	withPosixPath(t)
 	ctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
 	defer cancel()
 
