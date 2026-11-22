@@ -88,7 +88,7 @@ func TestChainChildReadsParentArtifact(t *testing.T) {
 		Workers:      1,
 		Owner:        "test",
 		Lease:        time.Minute,
-		ExecTemplate: "sh -c " + filepath.Join(root, "chain.sh") + " {stdin}",
+		ExecTemplate: "sh chain.sh {stdin}",
 		Out:          &out,
 	})
 	sum, err := ex.Loop(context.Background())
@@ -173,7 +173,7 @@ exit 0
 		Workers:      1,
 		Owner:        "test",
 		Lease:        time.Minute,
-		ExecTemplate: "sh -c " + script + " {stdin}",
+		ExecTemplate: "sh " + filepath.Base(script) + " {stdin}",
 		Out:          &out,
 	})
 	if _, err := ex.Loop(context.Background()); err != nil {

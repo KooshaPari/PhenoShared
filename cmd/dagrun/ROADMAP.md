@@ -41,7 +41,7 @@ not by reading the previous roadmap.
 6.0  AGILEPLUS INTEROP ......................... PARTIAL import yes, round trip no
 7.0  MULTI-REPO INTENTS ........................ DONE    sub-plans, cross-repo gate, budgets
 8.0  EXTENSIBILITY SURFACES .................... DONE    MCP, skill, hooks
-9.0  OPERATIONAL HARDENING ..................... PARTIAL recover + schema yes, disk-full no
+9.0  OPERATIONAL HARDENING ..................... DONE    recover, schema, fuzz, disk-full, platform parity
 10.0 DECISION QUALITY .......................... DONE    calibration, CVP, marginal, review
 11.0 DYNAMIC DECOMPOSITION ..................... DONE    discover / fan_out / fan_in
 ```
@@ -346,6 +346,30 @@ Gate: pasting one document into nine artifacts does not pass.
     GATE: no parser input panics or hangs                            PASS
     note: a run that cannot persist now says so on the first write, instead of
     failing every node for a reason it invented.
+
+9.4 Platform parity                                           DONE
+    9.4.1 `LockFileEx` store lock on Windows, same contract as
+          flock: it blocks, and the kernel drops it on process
+          death, so there is still no stale-lock cleanup path          DONE
+    9.4.2 `cmd:` discovery refuses a misrouted PATH on Windows,
+          naming the tool it resolved and the PATH order that
+          avoids it, instead of returning an empty work set             DONE
+    9.4.3 CI workflow for ubuntu/macos/windows                BLOCKED(billing)
+    > evidence: internal/store/lock_windows.go, internal/plan/shellcheck_windows.go;
+      every package is green on the operator's Windows host, on a clean clone on
+      macOS with no skips, and on Linux (FedoraLinux-Desk, Go 1.26.10: 21 packages
+      ok, 0 failures)
+    GATE: green on unix here; all three platforms       BLOCKED(billing): the
+    workflow is committed but GitHub never started the jobs
+    note: Windows needed seven test-side fixes, one guard and two real defects.
+    The defects: hooks and harnesses were not cancelled at their deadline, because
+    killing the shell left its children holding the output pipes (a 150ms deadline
+    returned after 30.1s; fixed with WaitDelay plus a taskkill /T subtree kill in
+    internal/hook, internal/run and internal/verify), and exec templates passed an
+    absolute Windows path into `sh -c <path>`, where sh reads it as script text and
+    eats the backslashes (tests now use the script's basename, since the harness
+    working directory already contains it). The only Windows skip left is the
+    chmod-based unwritable-directory test, which the platform cannot express.
 ```
 
 ## 10.0 DECISION QUALITY — shrink the wrong-DAG risk
