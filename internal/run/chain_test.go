@@ -81,9 +81,7 @@ func chainRig(t *testing.T) (*store.Store, *trace.Writer, string) {
 }
 
 func TestChainChildReadsParentArtifact(t *testing.T) {
-	if posixShellSkip != "" {
-		t.Skip(posixShellSkip)
-	}
+	withPosixPath(t)
 	st, tr, root := chainRig(t)
 
 	var out bytes.Buffer
@@ -140,9 +138,7 @@ func TestChainChildReadsParentArtifact(t *testing.T) {
 // the parent rather than its bytes, the child's output would still contain
 // the parent's marker — and this test would catch exactly that.
 func TestChainChildSeesAPoisonedParentArtifact(t *testing.T) {
-	if posixShellSkip != "" {
-		t.Skip(posixShellSkip)
-	}
+	withPosixPath(t)
 	st, tr, root := chainRig(t)
 
 	// A template whose child branch clobbers the parent's file and THEN reads
