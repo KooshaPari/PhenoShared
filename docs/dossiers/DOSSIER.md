@@ -197,12 +197,12 @@ supersedes a figure it says so explicitly.
 
 Companion documents written in the same pass:
 
-| Document | Covers |
-|---|---|
-| `../sessions/2026-11-19-phenoshared-audit/CODEBASE-ATLAS.md` | size, language mix, build topology, structural confusion |
-| `../sessions/2026-11-19-phenoshared-audit/QA-MATRIX.md` | 81 workflows, test census, coverage floors, assurance gaps |
-| `../atlas/` | the pre-existing governed atlas package, including its generated inventory (stale since 2026-11-07) |
-| `../sessions/2026-11-19-phenoshared-audit/CONTAINER-SDK-RESHAPE.md` | the decentralised container SDK plan, built on the measured 355 internal edges |
+| Document                                                            | Covers                                                                                              |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `../sessions/2026-11-19-phenoshared-audit/CODEBASE-ATLAS.md`        | size, language mix, build topology, structural confusion                                            |
+| `../sessions/2026-11-19-phenoshared-audit/QA-MATRIX.md`             | 81 workflows, test census, coverage floors, assurance gaps                                          |
+| `../atlas/`                                                         | the pre-existing governed atlas package, including its generated inventory (stale since 2026-11-07) |
+| `../sessions/2026-11-19-phenoshared-audit/CONTAINER-SDK-RESHAPE.md` | the decentralised container SDK plan, built on the measured 355 internal edges                      |
 
 ### 11.1 What changed at 5154a6828 → f06c3cc7f
 
@@ -218,13 +218,13 @@ essentially unchanged.
 
 ### 11.2 Corrections to earlier figures
 
-| Figure | First edition | This edition | Why |
-|---|---|---|---|
-| Workspace packages | 291 (11-12) | **292** (11-19) | re-ran `cargo metadata --no-deps`; one package added |
-| Member-list entries | — | 288 | the `members` array holds 288 entries which glob-expand to 292 packages |
-| Code lines | not measured | **6,228,356**, of which ≈3.4 M first-party | batch-safe concatenated counting |
-| Citations for `docs/absorbed-from-*` | cited, not re-verified | still not individually re-verified | unchanged `UNKNOWN` |
-| Build / test state | `UNKNOWN` | still `UNKNOWN` | see 11.3 |
+| Figure                               | First edition         | This edition                               | Why                                                                     |
+| ------------------------------------ | --------------------- | ------------------------------------------ | ----------------------------------------------------------------------- |
+| Workspace packages                   | 291 (11-12)           | **292** (11-19)                            | re-ran `cargo metadata --no-deps`; one package added                    |
+| Member-list entries                  | —                     | 288                                        | the `members` array holds 288 entries which glob-expand to 292 packages |
+| Code lines                           | not measured          | **6,228,356**, of which ≈3.4 M first-party | batch-safe concatenated counting                                        |
+| Citations for `docs/absorbed-from-*` | cited, not re-checked | still not individually re-checked          | unchanged `UNKNOWN`                                                     |
+| Build / test state                   | `UNKNOWN`             | still `UNKNOWN`                            | see 11.3                                                                |
 
 The method lesson is worth recording because it produced a wrong document: `xargs wc -l | tail -1`
 returns only the final xargs batch. With 11,466 Rust files that reported 365,543 lines against a
@@ -252,14 +252,14 @@ unchanged and still valid. The exposure risk sits above all of them.
 The requirement, in the operator's words, is a "harmonious decentralized CONTAINER SDK so you dont
 hae to imkport the entire bulky item".
 
-| Requirement | Present state | Verdict |
-|---|---|---|
-| Unit separately importable | 292 packages in one root graph; 26 nested sub-workspaces outside it | partial |
-| Consumer takes only what it needs | three independent root manifests, no cross-language resolution | no |
-| Absorbed material isolated from first-party | absorb residue is a workspace member | no |
-| Per-unit versioning | 25 tags total, none observed per package | no |
-| Reproducible per-unit build | checked-in `zig-cache`, `.o`, `.rlib`, 1.5 M lines of `.patch` | no |
-| Documentation describes units | 11,919 files; markdown ≈ a third of all tracked lines | yes, strongest asset |
+| Requirement                                 | Present state                                                       | Verdict              |
+| ------------------------------------------- | ------------------------------------------------------------------- | -------------------- |
+| Unit separately importable                  | 292 packages in one root graph; 26 nested sub-workspaces outside it | partial              |
+| Consumer takes only what it needs           | three independent root manifests, no cross-language resolution      | no                   |
+| Absorbed material isolated from first-party | absorb residue is a workspace member                                | no                   |
+| Per-unit versioning                         | 25 tags total, none observed per package                            | no                   |
+| Reproducible per-unit build                 | checked-in `zig-cache`, `.o`, `.rlib`, 1.5 M lines of `.patch`      | no                   |
+| Documentation describes units               | 11,919 files; markdown ≈ a third of all tracked lines               | yes, strongest asset |
 
 The first edition's finding that **170 of 291 crates have no in-workspace dependent** is the most
 useful single number for this work: those are the publication candidates that make a container model
@@ -278,7 +278,7 @@ ignored patterns); disclosure doc gains a rotation date per value.
 opt-in member groups, so a root build compiles core only. Adopt `go.work` over the 47 modules or
 declare the per-module order. Register all 26 nested sub-workspaces with an explicit in/out
 disposition. Remove `absorption-residue-*` from every member list. Ship a one-line import example
-for the three most-used units, verified from a fresh consumer directory.
+for the three most-used units, measured from a fresh consumer directory.
 
 **Phase 2 — separate first-party from absorbed.** Exclude `absorption/` from first-party gates and
 from coverage denominators, printing both denominators separately. Give every absorbed directory a
@@ -297,13 +297,13 @@ sub-workspace present in a CI job list. The atlas regenerated by script and diff
 
 ### 11.7 Open questions added by this pass
 
-| Question | Settle with |
-|---|---|
-| Which of the 81 workflows are required to merge? | `gh api repos/KooshaPari/PhenoShared/branches/main/protection` |
-| Are `libs/*` or the 87 Python projects published anywhere? | registry inspection |
-| Does each absorbed directory still have a live upstream? | `git remote` per source, or the `PROVENANCE.md` |
-| Who outside this repository consumes the 292 packages? | dependency search across org repositories |
-| Should the repository stay public? | operator decision; it governs how much history must be purged |
+| Question                                                   | Settle with                                                    |
+| ---------------------------------------------------------- | -------------------------------------------------------------- |
+| Which of the 81 workflows are required to merge?           | `gh api repos/KooshaPari/PhenoShared/branches/main/protection` |
+| Are `libs/*` or the 87 Python projects published anywhere? | registry inspection                                            |
+| Does each absorbed directory still have a live upstream?   | `git remote` per source, or the `PROVENANCE.md`                |
+| Who outside this repository consumes the 292 packages?     | dependency search across org repositories                      |
+| Should the repository stay public?                         | operator decision; it governs how much history must be purged  |
 
 The first edition's open questions 1-5 remain open; question 1 (the 290 vs 291 divergence) is now
 answerable as 292 and should be closed on the next revision rather than carried forward.

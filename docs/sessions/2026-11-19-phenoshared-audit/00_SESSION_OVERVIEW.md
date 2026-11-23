@@ -5,10 +5,10 @@ asked for, plus the corrections found while writing them.
 
 ## Deliverables
 
-| File | Deliverable | Note |
-|---|---|---|
-| `CODEBASE-ATLAS.md` | Codebase atlas | size, language mix, build topology, governed-package staleness |
-| `QA-MATRIX.md` | QA matrix | CI surface, test census, coverage floors, the one real coverage artifact |
+| File                        | Deliverable     | Note                                                                            |
+| --------------------------- | --------------- | ------------------------------------------------------------------------------- |
+| `CODEBASE-ATLAS.md`         | Codebase atlas  | size, language mix, build topology, governed-package staleness                  |
+| `QA-MATRIX.md`              | QA matrix       | CI surface, test census, coverage floors, the one real coverage artifact        |
 | `../../dossiers/DOSSIER.md` | Product dossier | second edition appended to the 2026-11-12 edition, which is preserved unchanged |
 
 ## Why the atlas lives in `docs/sessions/`
@@ -36,10 +36,10 @@ the package instead.
 Every number in these documents was derived twice, on two hosts, and the host that served it is
 named where the figure appears.
 
-| Host | Role | What it served |
-|---|---|---|
-| Mac (`~/CodeProjects/phenotype/repos/PhenoShared-space/docs/wtree`, `f06c3cc7f`) | working tree, GitHub credentials, doc authoring | the audit itself, `gh` run history, the validator run |
-| Desk (`ssh desk` -> WSL2 Fedora, fresh `git clone` of the same SHA, cargo 1.100.0) | independent re-derivation | language LOC, tracked file count, `go.mod`/`go.work`, workflow count, Dockerfile count, `cargo metadata`, `<REDACTED>` census, manifest parse |
+| Host                                                                               | Role                                            | What it served                                                                                                                                |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mac (`~/CodeProjects/phenotype/repos/PhenoShared-space/docs/wtree`, `f06c3cc7f`)   | working tree, GitHub credentials, doc authoring | the audit itself, `gh` run history, the validator run                                                                                         |
+| Desk (`ssh desk` -> WSL2 Fedora, fresh `git clone` of the same SHA, cargo 1.100.0) | independent re-derivation                       | language LOC, tracked file count, `go.mod`/`go.work`, workflow count, Dockerfile count, `cargo metadata`, `<REDACTED>` census, manifest parse |
 
 The two hosts agreed on every figure except `[workspace] members`, where the disagreement was a
 method fault on **both** sides and not a disagreement about the repository. The fresh clone landed

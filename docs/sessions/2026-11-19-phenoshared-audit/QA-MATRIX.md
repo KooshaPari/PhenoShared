@@ -8,7 +8,7 @@ configured, what is enforced, and what cannot be determined without running CI.
 
 ## 1. CI surface
 
-81 workflows are configured in `.github/workflows/` (verified: `ls .github/workflows/*.yml | wc -l`).
+81 workflows are configured in `.github/workflows/` (measured: `ls .github/workflows/*.yml | wc -l`).
 
 An aggregate workflow fans out to per-language jobs:
 
@@ -18,19 +18,19 @@ detect → { rust, python, go, typescript, security }
 
 Notable specialised workflows, by what they actually enforce:
 
-| Workflow | Enforces |
-|---|---|
-| `ci.yml` | aggregate detect/fan-out above |
-| `codeql.yml` | static analysis, code scanning |
-| `cargo-deny.yml` | licence and advisory policy |
-| `cargo-machete.yml` | unused Rust dependencies |
-| `cargo-semver-checks.yml` | public API breakage |
-| `ansible-lint.yml` | playbook lint |
-| `absorption-verify.yml` | absorbed-tree integrity |
-| `a11y-phenodocs.yml` | documentation accessibility |
-| `benchmark.yml` | performance runs |
-| `ai-testing-orchestration.yml` | agent-driven test orchestration |
-| `cvp-nightly.yml` | runs the `docs/atlas/` package validator nightly |
+| Workflow                       | Enforces                                         |
+| ------------------------------ | ------------------------------------------------ |
+| `ci.yml`                       | aggregate detect/fan-out above                   |
+| `codeql.yml`                   | static analysis, code scanning                   |
+| `cargo-deny.yml`               | licence and advisory policy                      |
+| `cargo-machete.yml`            | unused Rust dependencies                         |
+| `cargo-semver-checks.yml`      | public API breakage                              |
+| `ansible-lint.yml`             | playbook lint                                    |
+| `absorption-verify.yml`        | absorbed-tree integrity                          |
+| `a11y-phenodocs.yml`           | documentation accessibility                      |
+| `benchmark.yml`                | performance runs                                 |
+| `ai-testing-orchestration.yml` | agent-driven test orchestration                  |
+| `cvp-nightly.yml`              | runs the `docs/atlas/` package validator nightly |
 
 **UNKNOWN: required status contexts.** Branch protection is server-side and was not fetched. Which
 of these 81 workflows actually block a merge is not determinable from the tree.
@@ -39,12 +39,12 @@ of these 81 workflows actually block a merge is not determinable from the tree.
 
 ## 2. Test frameworks present
 
-| Language | Framework | Evidence |
-|---|---|---|
-| Rust | `cargo test`, `#[test]`, `insta`/`proptest` style snapshots | workspace tests, `tests/` dirs |
-| Python | `pytest` | `pyproject.toml` config, `fail_under` declarations |
-| TypeScript/JS | `node:test` and `vitest` | test files, package scripts |
-| Go | `go test` | 47 module roots |
+| Language      | Framework                                                   | Evidence                                           |
+| ------------- | ----------------------------------------------------------- | -------------------------------------------------- |
+| Rust          | `cargo test`, `#[test]`, `insta`/`proptest` style snapshots | workspace tests, `tests/` dirs                     |
+| Python        | `pytest`                                                    | `pyproject.toml` config, `fail_under` declarations |
+| TypeScript/JS | `node:test` and `vitest`                                    | test files, package scripts                        |
+| Go            | `go test`                                                   | 47 module roots                                    |
 
 ---
 
@@ -53,15 +53,15 @@ of these 81 workflows actually block a merge is not determinable from the tree.
 6,055 tracked paths match a test-shaped pattern, out of 55,898 tracked files: **10.8% of the tree**.
 
 | Top-level dir | Test-shaped paths |
-|---|---|
-| `apps/` | 1,520 |
-| `crates/` | 1,246 |
-| `docs/` | 1,128 |
-| `absorption/` | 653 |
-| `tests/` | 310 |
-| `agents/` | 284 |
-| `agileplus/` | 132 |
-| `libs/` | 95 |
+| ------------- | ----------------- |
+| `apps/`       | 1,520             |
+| `crates/`     | 1,246             |
+| `docs/`       | 1,128             |
+| `absorption/` | 653               |
+| `tests/`      | 310               |
+| `agents/`     | 284               |
+| `agileplus/`  | 132               |
+| `libs/`       | 95                |
 
 Two readings matter here. First, the 10.8% headline is inflated by absorbed and vendored trees, so
 it says nothing about first-party coverage. Second, **`docs/` carries 1,128 test-shaped paths**,
@@ -74,14 +74,14 @@ test strength.
 
 17 coverage-floor declarations exist across tracked configuration. Distribution by floor:
 
-| Floor | Count | Reading |
-|---|---|---|
-| 0 | 4 | **no gate at all**; the declaration is decorative |
-| 10 | 3 | near-zero gate |
-| 37 | 3 | aggregate/root floor |
-| 60 | 1 | real gate |
-| 71 | 2 | real gate |
-| 80 | 4 | real gate |
+| Floor | Count | Reading                                           |
+| ----- | ----- | ------------------------------------------------- |
+| 0     | 4     | **no gate at all**; the declaration is decorative |
+| 10    | 3     | near-zero gate                                    |
+| 37    | 3     | aggregate/root floor                              |
+| 60    | 1     | real gate                                         |
+| 71    | 2     | real gate                                         |
+| 80    | 4     | real gate                                         |
 
 The finding is the first row. Four configurations declare `fail-under 0`, which means a coverage
 step can never fail them. Two-thirds of the floor declarations sit at or below 37.
@@ -91,18 +91,18 @@ step can never fail them. Two-thirds of the floor declarations sit at or below 3
 `docs/atlas/validation/coverage-summary.json` is a committed, sha256-pinned coverage artifact. It is
 the only real coverage measurement in the repository, and it is worth reading closely:
 
-| Suite | Lines | Branches | Boundary |
-|---|---|---|---|
-| unit | 136/137 = **99.27%** | 75/76 = 98.68% | direct functions plus mocked CLI input errors |
-| integration | 136/137 = **99.27%** | 75/76 = 98.68% | real JSON files, CLI main in process |
-| e2e | 134/137 = **97.81%** | 75/76 = 98.68% | actual child-process CLI, separately instrumented |
+| Suite       | Lines                | Branches       | Boundary                                          |
+| ----------- | -------------------- | -------------- | ------------------------------------------------- |
+| unit        | 136/137 = **99.27%** | 75/76 = 98.68% | direct functions plus mocked CLI input errors     |
+| integration | 136/137 = **99.27%** | 75/76 = 98.68% | real JSON files, CLI main in process              |
+| e2e         | 134/137 = **97.81%** | 75/76 = 98.68% | actual child-process CLI, separately instrumented |
 
 It also declares `suites_independent: true`, `fixtures_shared: true`, and names its own limits in
 the file rather than in prose.
 
 **The subject is `scripts/assurance_check.py`.** The same file records `"product_coverage":
-"NOT_MEASURED"`, `"function_coverage": "NOT_MEASURED"`, and a scope note: *"scripts/assurance_check.py
-only; synthetic checker fixtures, not portfolio tests"*.
+"NOT_MEASURED"`, `"function_coverage": "NOT_MEASURED"`, and a scope note: _"scripts/assurance_check.py
+only; synthetic checker fixtures, not portfolio tests"_.
 
 So the most thoroughly measured code in this repository is the tool that grades everything else,
 while roughly 3.4 M first-party product lines are measured at zero. That is not a criticism of the
@@ -127,15 +127,15 @@ must be regenerated before it is quoted.
 
 ## 5. Gates configured but not necessarily enforced
 
-| Gate | Configured | Enforced in CI |
-|---|---|---|
-| clippy / rustfmt | yes | yes (`ci.yml` rust job) |
-| cargo-deny | yes | yes |
-| cargo-semver-checks | yes | yes |
-| codeql | yes | yes |
-| ruff / mypy | yes | partially — python job present, depth unverified |
-| eslint / tsc | yes | `UNKNOWN` — typescript job present, enforcement depth unverified |
-| Sonar | referenced | `UNKNOWN` — not confirmed as a required context |
+| Gate                | Configured | Enforced in CI                                                   |
+| ------------------- | ---------- | ---------------------------------------------------------------- |
+| clippy / rustfmt    | yes        | yes (`ci.yml` rust job)                                          |
+| cargo-deny          | yes        | yes                                                              |
+| cargo-semver-checks | yes        | yes                                                              |
+| codeql              | yes        | yes                                                              |
+| ruff / mypy         | yes        | partially — python job present, depth unverified                 |
+| eslint / tsc        | yes        | `UNKNOWN` — typescript job present, enforcement depth unverified |
+| Sonar               | referenced | `UNKNOWN` — not confirmed as a required context                  |
 
 `UNKNOWN` above means the workflow exists and its internal strictness was not established. It does
 not mean the gate is absent.
@@ -176,10 +176,10 @@ python3 docs/atlas/scripts/validate_package.py docs/atlas/
 → 2 errors
 ```
 
-| Error | Cause |
-|---|---|
-| `topic proposals schema: 'SUP-<REDACTED>' does not match '^[A-Za-z][A-Za-z0-9_.:-]*$'` | placeholder id in `portfolio/topic-proposals.json` |
-| `relative Markdown file targets: INDEX.md -> products/<REDACTED>/DOSSIER.md` | placeholder path in `INDEX.md` and `portfolio/ROSTER.md` |
+| Error                                                                                  | Cause                                                    |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `topic proposals schema: 'SUP-<REDACTED>' does not match '^[A-Za-z][A-Za-z0-9_.:-]*$'` | placeholder id in `portfolio/topic-proposals.json`       |
+| `relative Markdown file targets: INDEX.md -> products/<REDACTED>/DOSSIER.md`           | placeholder path in `INDEX.md` and `portfolio/ROSTER.md` |
 
 **13 tracked files under `docs/atlas/` contain literal `<REDACTED>` placeholders.** They were
 introduced by `3b6d8798e` (2026-09-16, "chore: PII sweep — redact names, emails, paths across all
@@ -201,11 +201,11 @@ gate.**
 
 ## 8. What would make this matrix real
 
-| Step | Command that would settle it |
-|---|---|
-| Required contexts | `gh api repos/KooshaPari/PhenoShared/branches/main/protection` |
-| Actual suite results | one CI run's job list, captured with pass/fail per job |
+| Step                 | Command that would settle it                                                             |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| Required contexts    | `gh api repos/KooshaPari/PhenoShared/branches/main/protection`                           |
+| Actual suite results | one CI run's job list, captured with pass/fail per job                                   |
 | First-party coverage | `cargo llvm-cov --workspace --exclude` absorbed members, plus `pytest --cov` per project |
-| Zero-floor owners | `git grep -n 'fail.under *= *0'` and attribute each to its project |
+| Zero-floor owners    | `git grep -n 'fail.under *= *0'` and attribute each to its project                       |
 
-Until at least the first two are done, this document describes intent, not assurance.
+Until at least the first two are complete, this document describes intent, not assurance.

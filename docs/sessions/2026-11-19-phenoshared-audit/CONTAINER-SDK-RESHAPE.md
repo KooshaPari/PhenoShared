@@ -1,7 +1,7 @@
 # PhenoShared as a container SDK
 
-**Operator intent, verbatim:** *"harmonious decentralized CONTAINER SDK so you dont hae to imkport
-the entire bulky item."*
+**Operator intent, verbatim:** _"harmonious decentralized CONTAINER SDK so you dont hae to imkport
+the entire bulky item."_
 
 This document is the reshape plan. It is built only from figures measured on 2026-11-19 at
 `f06c3cc7f`, on the Mac worktree and re-derived on `ssh desk` (WSL2 Fedora) from a fresh clone of the
@@ -13,18 +13,18 @@ same SHA. Where a number is carried forward rather than re-measured, it says so.
 
 The decisive figure is not the size. It is the edge count.
 
-| Measurement | Value | Host |
-|---|---|---|
-| Workspace packages | 292 | desk, `cargo metadata --no-deps` |
-| **Intra-workspace dependency edges, as declared** | **355** | desk, reverse graph over `dependencies` |
-| Packages with **zero** in-workspace dependents | **170** | desk |
-| — of which lib-only | 84 | desk |
-| — of which lib + bin | 24 | desk |
-| — of which bin-only | 28 | desk |
-| Packages with any lib target | 263 | desk |
-| Binary targets | 68 | desk |
-| Nested cargo sub-workspaces outside the root graph | 26 | Mac lane |
-| Go modules / `go.work` | 47 / **0** | both hosts agree |
+| Measurement                                        | Value      | Host                                    |
+| -------------------------------------------------- | ---------- | --------------------------------------- |
+| Workspace packages                                 | 292        | desk, `cargo metadata --no-deps`        |
+| **Intra-workspace dependency edges, as declared**  | **355**    | desk, reverse graph over `dependencies` |
+| Packages with **zero** in-workspace dependents     | **170**    | desk                                    |
+| — of which lib-only                                | 84         | desk                                    |
+| — of which lib + bin                               | 24         | desk                                    |
+| — of which bin-only                                | 28         | desk                                    |
+| Packages with any lib target                       | 263        | desk                                    |
+| Binary targets                                     | 68         | desk                                    |
+| Nested cargo sub-workspaces outside the root graph | 26         | Mac lane                                |
+| Go modules / `go.work`                             | 47 / **0** | both hosts agree                        |
 
 **355 declared internal edges over 292 packages is 1.2 edges per package.** A codebase that were one
 system would show an edge count of the same order as its package count times a few. This one is close
@@ -33,7 +33,7 @@ number. 170 of 292 packages have nothing inside the repository that depends on t
 
 So the "bulky item" is not bulky because the code is intertwined. It is bulky because **publication
 is monolithic**: there is exactly one thing to import, and it is the whole repository. The
-decentralisation work is therefore mostly *packaging and release*, not refactoring.
+decentralisation work is therefore mostly _packaging and release_, not refactoring.
 
 ## 2. What a container is, here
 
@@ -59,16 +59,15 @@ the ones that structurally cannot be split.
 
 ## 3. Three tiers, because 170 containers is not a plan
 
-| Tier | Population | What it is | Ships as |
-|---|---|---|---|
-| **T0 — facade** | 1 | a feature-gated umbrella crate | one import line, `phenoshared` |
-| **T1 — core containers** | from the 84 lib-only zero-dependent crates, curated | the actual reusable substance | individually versioned library crates |
-| **T2 — satellites** | the 28 bin-only, plus the 68 binary targets | CLIs, daemons, tools | container images / prebuilt binaries |
+| Tier                     | Population                                          | What it is                     | Ships as                              |
+| ------------------------ | --------------------------------------------------- | ------------------------------ | ------------------------------------- |
+| **T0 — facade**          | 1                                                   | a feature-gated umbrella crate | one import line, `phenoshared`        |
+| **T1 — core containers** | from the 84 lib-only zero-dependent crates, curated | the actual reusable substance  | individually versioned library crates |
+| **T2 — satellites**      | the 28 bin-only, plus the 68 binary targets         | CLIs, daemons, tools           | container images / prebuilt binaries  |
 
 T0 is what answers the operator's sentence directly and it is cheap: a facade with one optional
 dependency per container, all default-off. A consumer writes `phenoshared = { version = "1", features
-= ["graph"] }` and Cargo's own feature resolution means the binary carries `graph` and not the other
-169. Nothing moves, nothing splits, and the bulky import is gone on day one.
+= ["graph"] }` and Cargo's own feature resolution means the binary carries `graph` and not the other 169. Nothing moves, nothing splits, and the bulky import is gone on day one.
 
 T1 is the decentralisation proper: independent semver, independent release cadence.
 
@@ -95,26 +94,26 @@ Five mechanisms, each of which has a precedent already inside this repository:
 
 ## 5. Phased plan, each phase with its own acceptance test
 
-| Phase | Work | Acceptance test |
-|---|---|---|
-| P0 | generate the catalog from `cargo metadata` in CI | catalog lists 292 packages / 355 edges / 170 zero-dependent; CI fails if it drifts from a live `cargo metadata` |
-| P1 | publish the T0 facade with all features off by default | an external scratch crate depends on `phenoshared` with one feature and its `Cargo.lock` pulls only the containers that feature needs |
-| P2 | publish the curated T1 set | an external crate consumes one container from the registry, with no path deps and no git deps |
-| P3 | build T2 satellites from the existing 68 bins / 81 Dockerfiles | one satellite image built and run from CI, not from a developer machine |
-| P4 | decentralise the release | a second container releases while the first stays fixed, proving cadence is independent |
+| Phase | Work                                                           | Acceptance test                                                                                                                       |
+| ----- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| P0    | generate the catalog from `cargo metadata` in CI               | catalog lists 292 packages / 355 edges / 170 zero-dependent; CI fails if it drifts from a live `cargo metadata`                       |
+| P1    | publish the T0 facade with all features off by default         | an external scratch crate depends on `phenoshared` with one feature and its `Cargo.lock` pulls only the containers that feature needs |
+| P2    | publish the curated T1 set                                     | an external crate consumes one container from the registry, with no path deps and no git deps                                         |
+| P3    | build T2 satellites from the existing 68 bins / 81 Dockerfiles | one satellite image built and run from CI, not from a developer machine                                                               |
+| P4    | decentralise the release                                       | a second container releases while the first keeps running, proving cadence is independent                                             |
 
 P1 is where "you don't have to import the entire bulky item" becomes true and demonstrable. P4 is
 where "decentralized" becomes true. Everything before P4 is packaging.
 
 ## 6. Risks this plan inherits, named
 
-| Risk | Evidence | Consequence for the reshape |
-|---|---|---|
-| Dependency vulnerability load | GitHub reports **405 vulnerabilities on the default branch, 12 critical** (2026-11-19) | a container inherits whatever it pulls; without per-container audits, decentralisation multiplies the exposure instead of containing it |
-| 26 nested sub-workspaces outside the root graph | Mac lane, 2026-11-19 | they cannot be published by a root-graph mechanism; each needs its own decision |
-| 47 Go modules with no `go.work` | both hosts | Go containers need a different mechanism entirely, or they stay outside the SDK |
-| Governance drift | stale `INVENTORY.md`, 30/30 red nightlies | a generated catalog with a CI drift check is a requirement, not a nicety |
-| Docs and schema outweigh code | 2,007,094 lines Markdown, 1,082,522 lines JSON vs 3,158,866 Rust (desk) | a container has to ship documentation and schema; that is the larger half of the tree by line count |
+| Risk                                            | Evidence                                                                               | Consequence for the reshape                                                                                                             |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Dependency vulnerability load                   | GitHub reports **405 vulnerabilities on the default branch, 12 critical** (2026-11-19) | a container inherits whatever it pulls; without per-container audits, decentralisation multiplies the exposure instead of containing it |
+| 26 nested sub-workspaces outside the root graph | Mac lane, 2026-11-19                                                                   | they cannot be published by a root-graph mechanism; each needs its own decision                                                         |
+| 47 Go modules with no `go.work`                 | both hosts                                                                             | Go containers need a different mechanism entirely, or they stay outside the SDK                                                         |
+| Governance drift                                | stale `INVENTORY.md`, 30/30 red nightlies                                              | a generated catalog with a CI drift check is a requirement, not a nicety                                                                |
+| Docs and schema outweigh code                   | 2,007,094 lines Markdown, 1,082,522 lines JSON vs 3,158,866 Rust (desk)                | a container has to ship documentation and schema; that is the larger half of the tree by line count                                     |
 
 ## 7. What this document does not decide
 
