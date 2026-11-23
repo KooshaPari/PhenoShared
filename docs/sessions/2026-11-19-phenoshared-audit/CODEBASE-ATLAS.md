@@ -90,7 +90,7 @@ Four findings carry the structural story:
    participate in `cargo build --workspace` at the root. Code that exists, builds in isolation, and
    never appears in a root build is the definition of a container relationship that was never
    formalised.
-3. **47 Go modules with no `go.work`.** Verified. Go is present as 47 independent module roots, so
+3. **47 Go modules with no `go.work`.** Measured. Go is present as 47 independent module roots, so
    there is no single Go build either.
 4. **Absorbed residue is a build member.** The member list includes `absorption-residue-Agentora/…`,
    so absorb-program leftovers participate in the workspace graph.
@@ -161,7 +161,7 @@ Each was confirmed by inspection rather than inferred.
 
 1. **`absorption/` holds plain copies.** 6,583 files, 11.8% of the tree, no nested `.git` anywhere.
    Provenance is a per-directory `PROVENANCE.md` convention, and three absorbed directories have none.
-2. **Tracked bloat that is not source.** Verified line counts: `.patch` files hold **1,500,120**
+2. **Tracked bloat that is not source.** Measured line counts: `.patch` files hold **1,500,120**
    lines, `.o` objects 213,148, `.bundle` 418,787, plus `.rlib` and a checked-in `zig-cache`. Roughly
    2.1 M tracked lines are build output or patch archives.
 3. **`_archived/` is live.** 632 tracked files still referenced in places. "Archived" describes
