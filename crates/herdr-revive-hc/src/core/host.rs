@@ -147,7 +147,10 @@ fn members(table: &HashMap<u32, platform::Process>, group: u32) -> Vec<Foregroun
     let mut members: Vec<ForegroundProcess> = table
         .values()
         .filter(|p| p.group == group)
-        .map(|p| ForegroundProcess { pid: p.pid })
+        .map(|p| ForegroundProcess {
+            pid: p.pid,
+            ..ForegroundProcess::default()
+        })
         .collect();
     members.sort_by_key(|p| p.pid);
     members

@@ -16,13 +16,6 @@ mod macos;
 #[cfg(target_os = "macos")]
 pub use macos::*;
 
-// Phenotype fork addition (0.3.1-hc.1): upstream had no Windows module at all,
-// so the crate did not build on native Windows.
-#[cfg(windows)]
-mod windows;
-#[cfg(windows)]
-pub use windows::*;
-
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Process {
     pub pid: u32,

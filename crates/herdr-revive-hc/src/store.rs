@@ -46,6 +46,8 @@ pub fn private_dir(path: &Path) -> Result<()> {
         if !parent.exists() {
             private_dir(parent)?;
         }
+        // `mode` takes `&mut self`, so the binding is only mutable on Unix.
+        #[cfg_attr(windows, allow(unused_mut))]
         let mut builder = fs::DirBuilder::new();
         #[cfg(unix)]
         {
@@ -57,8 +59,8 @@ pub fn private_dir(path: &Path) -> Result<()> {
             Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {}
             Err(e) => return Err(e.into()),
         }
-        File::open(path)?.sync_all()?;
-        File::open(parent)?.sync_all()?;
+        sync_dir(path)?;
+        sync_dir(parent)?;
     }
     let meta = fs::symlink_metadata(path)?;
     ensure!(
@@ -74,10 +76,28 @@ pub fn private_dir(path: &Path) -> Result<()> {
         );
         if meta.permissions().mode() & 0o777 != 0o700 {
             fs::set_permissions(path, fs::Permissions::from_mode(0o700))?;
-            File::open(path)?.sync_all()?;
+            sync_dir(path)?;
         }
     }
-    File::open(path.parent().context("state directory has no parent")?)?.sync_all()?;
+    sync_dir(path.parent().context("state directory has no parent")?)?;
+    Ok(())
+}
+
+/// Flush a directory entry so a later reader sees it after a crash.
+///
+/// Unix opens the directory itself and calls `fsync`. Windows has no equivalent
+/// through this API: `File::open` on a directory is refused with
+/// `Access is denied` (os error 5), so directory durability is left to NTFS
+/// rather than pretended.
+pub(crate) fn sync_dir(path: &Path) -> Result<()> {
+    #[cfg(unix)]
+    {
+        File::open(path)?.sync_all()?;
+    }
+    #[cfg(not(unix))]
+    {
+        let _ = path;
+    }
     Ok(())
 }
 
@@ -150,9 +170,7 @@ pub fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
     temp.persist(path)
         .map_err(|e| e.error)
         .context("atomic replacement failed")?;
-    File::open(parent)?
-        .sync_all()
-        .context("directory sync failed; replacement durability uncertain")?;
+    sync_dir(parent).context("directory sync failed; replacement durability uncertain")?;
     Ok(())
 }
 
@@ -263,7 +281,7 @@ impl Store {
             for file in files.into_iter().take(remove_count) {
                 fs::remove_file(file)?;
             }
-            File::open(self.root.join("snapshots"))?.sync_all()?;
+            sync_dir(&self.root.join("snapshots"))?;
         }
         Ok(())
     }

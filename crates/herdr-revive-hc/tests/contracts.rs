@@ -1247,7 +1247,10 @@ impl IdleBash {
             foreground_process_group_id: Some(group),
             foreground_processes: foreground
                 .iter()
-                .map(|&pid| ForegroundProcess { pid })
+                .map(|&pid| ForegroundProcess {
+                    pid,
+                    ..ForegroundProcess::default()
+                })
                 .collect(),
         }
     }

@@ -1,10 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Phenotype (fork addition)
 // SPDX-License-Identifier: Apache-2.0
 
-// Phenotype fork (0.3.1-hc.1): native Windows has no restore implementation yet,
-// so on Windows we assert the one thing that must still be exact there: jcode and
-// kcode are recognised as resumable agents and their resume argv is
-// `<executable> --resume <id>` (a flag, not a `resume` subcommand).
+// Phenotype fork (0.3.1-hc.1): the native Windows surface lives in `src/winapp.rs`
+// and is exercised by `tests/winapp_cli.rs`. This suite keeps the shared half
+// exact on Windows: jcode and kcode are recognised as resumable agents and their
+// resume argv is `<executable> --resume <id>` (a flag, not a subcommand).
 #![cfg(windows)]
 
 use herdr_revive::model::{AgentKind, AgentSessionMode, CommandSpec, Config, agent_launcher};

@@ -1,16 +1,22 @@
 // SPDX-FileCopyrightText: 2026 Su Kang Yin <paradyse@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
+use crate::model::*;
+// Capturing and rebuilding a live layout drives Herdr Core and reads Unix
+// processes; the layout model itself is portable.
+#[cfg(unix)]
 use crate::{
-    model::*,
     platform,
     store::{self, Store},
     transport::Host,
 };
 use anyhow::{Context, Result, ensure};
 use serde::{Deserialize, Serialize};
-use serde_json::{Value, json};
+use serde_json::Value;
+#[cfg(unix)]
+use serde_json::json;
 use std::collections::{BTreeMap, HashSet};
+#[cfg(unix)]
 use std::path::Path;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -104,6 +110,7 @@ impl Node {
         }
         Ok(())
     }
+    #[cfg(unix)]
     fn fits_apply(&self, depth: usize) -> Option<usize> {
         if depth > 16 {
             return None;
@@ -115,6 +122,7 @@ impl Node {
             }
         }
     }
+    #[cfg(unix)]
     fn first_leaf(&self) -> &Self {
         match self {
             Self::Pane { .. } => self,
@@ -129,6 +137,7 @@ impl Node {
         }
     }
 
+    #[cfg(unix)]
     fn launch_tree(
         &self,
         panes: &BTreeMap<&str, &SavedPane>,
@@ -215,6 +224,7 @@ pub fn validate(snapshot: &Snapshot) -> Result<()> {
     Ok(())
 }
 
+#[cfg(unix)]
 pub fn capture(
     host: &mut impl Host,
     live: &LiveSnapshot,
@@ -262,6 +272,7 @@ pub fn capture(
     Ok(layouts)
 }
 
+#[cfg(unix)]
 pub fn preview(snapshot: &Snapshot, config: &Config) -> Result<Value> {
     snapshot.validate()?;
     ensure!(
@@ -310,6 +321,7 @@ pub struct Step {
     pub created_pane_id: Option<String>,
 }
 
+#[cfg(unix)]
 pub fn pending(store: &Store) -> Result<Option<RebuildJournal>> {
     let path = store.root.join("rebuild-pending.json");
     match std::fs::symlink_metadata(&path) {
@@ -333,6 +345,7 @@ pub fn pending(store: &Store) -> Result<Option<RebuildJournal>> {
     }
 }
 
+#[cfg(unix)]
 pub fn acknowledge(store: &Store, operation: &str) -> Result<()> {
     let mut journal = pending(store)?.context("no pending reconstruction")?;
     ensure!(
@@ -343,6 +356,7 @@ pub fn acknowledge(store: &Store, operation: &str) -> Result<()> {
     finish(store, &journal)
 }
 
+#[cfg(unix)]
 fn finish(store: &Store, journal: &RebuildJournal) -> Result<()> {
     let dir = store.root.join("operations");
     store::private_dir(&dir)?;
@@ -353,6 +367,7 @@ fn finish(store: &Store, journal: &RebuildJournal) -> Result<()> {
 }
 
 #[allow(clippy::too_many_arguments)]
+#[cfg(unix)]
 fn mutate(
     host: &mut impl Host,
     store: &Store,
@@ -648,6 +663,7 @@ pub fn rebuild(
     }
 }
 
+#[cfg(unix)]
 #[allow(clippy::too_many_arguments)]
 fn expand_tree(
     host: &mut impl Host,
@@ -724,6 +740,7 @@ fn expand_tree(
     )
 }
 
+#[cfg(unix)]
 struct CreatedCommand {
     source: String,
     target: String,
@@ -731,6 +748,7 @@ struct CreatedCommand {
     tab: String,
 }
 
+#[cfg(unix)]
 #[allow(clippy::too_many_arguments)]
 fn launch_splits(
     host: &mut impl Host,
@@ -809,7 +827,8 @@ fn launch_splits(
     Ok(())
 }
 
-#[cfg(test)]
+// These tests exercise the Unix layout launch path.
+#[cfg(all(test, unix))]
 mod tests {
     use super::*;
 

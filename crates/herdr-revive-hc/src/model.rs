@@ -875,7 +875,21 @@ pub struct ProcessInfo {
     #[serde(default)]
     pub foreground_processes: Vec<ForegroundProcess>,
 }
-#[derive(Clone, Debug, Deserialize, Serialize)]
+/// One foreground process of a pane. The host reports the program's identity
+/// with the PID: on native Windows there is no separate process table to read,
+/// so the argv, cmdline and cwd that arrive here are the only exact-identity
+/// evidence a capture gets, and they are what a Windows resume is derived from.
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct ForegroundProcess {
     pub pid: u32,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub argv0: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub argv: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cmdline: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cwd: Option<String>,
 }

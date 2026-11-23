@@ -7,7 +7,9 @@ use serde::de::DeserializeOwned;
 use serde_json::{Value, json};
 use std::io::{Read, Write};
 use std::path::PathBuf;
-use std::time::{Duration, Instant};
+use std::time::Duration;
+#[cfg(unix)]
+use std::time::Instant;
 
 pub trait Host {
     fn snapshot(&mut self) -> Result<LiveSnapshot>;
@@ -304,9 +306,133 @@ fn wait_ready(fd: &impl std::os::fd::AsFd, write: bool, deadline: Instant) -> Re
     Ok(())
 }
 
-#[cfg(not(unix))]
-pub fn direct_request(_: &std::path::Path, _: &[u8], _: Duration) -> Result<Vec<u8>> {
-    bail!("direct transport is not validated for Windows")
+/// Windows: Herdr Core serves the same length-of-request protocol over a Win32
+/// named pipe at `\\.\pipe\<socket path>`. The whole exchange runs on a worker
+/// thread so a hostile or wedged pipe cannot outlive the caller's deadline.
+#[cfg(windows)]
+pub fn direct_request(socket: &std::path::Path, bytes: &[u8], timeout: Duration) -> Result<Vec<u8>> {
+    use std::sync::mpsc;
+    let name = format!(r"\\.\pipe\{}", socket.to_string_lossy());
+    let request = bytes.to_vec();
+    let (send, receive) = mpsc::channel();
+    std::thread::spawn(move || {
+        let _ = send.send(exchange_pipe(&name, &request));
+    });
+    match receive.recv_timeout(timeout) {
+        Ok(Ok(response)) => Ok(response),
+        Ok(Err(error)) => Err(error),
+        Err(mpsc::RecvTimeoutError::Timeout) => bail!("Herdr response deadline exceeded"),
+        Err(mpsc::RecvTimeoutError::Disconnected) => bail!("Herdr pipe reader ended without a reply"),
+    }
+}
+
+#[cfg(windows)]
+fn exchange_pipe(name: &str, request: &[u8]) -> Result<Vec<u8>> {
+    use interprocess::ConnectWaitMode;
+    use interprocess::os::windows::named_pipe::{DuplexPipeStream, pipe_mode::Bytes};
+    let mut stream = DuplexPipeStream::<Bytes>::connect_by_path_with_wait_mode(
+        name,
+        ConnectWaitMode::Timeout(Duration::from_secs(5)),
+    )
+    .context("cannot connect to target socket")?;
+    stream.write_all(request)?;
+    stream.flush()?;
+    let mut response = Vec::new();
+    let mut buffer = [0u8; 8192];
+    loop {
+        match stream.read(&mut buffer) {
+            Ok(0) => bail!("Herdr closed connection before complete response"),
+            Ok(n) => {
+                response.extend_from_slice(&buffer[..n]);
+                ensure!(
+                    response.len() <= MAX_BYTES,
+                    "Herdr response exceeds size limit"
+                );
+                if let Some(end) = response.iter().position(|b| *b == b'\n') {
+                    ensure!(
+                        response[end + 1..].iter().all(u8::is_ascii_whitespace),
+                        "multiple Herdr responses refused"
+                    );
+                    response.truncate(end);
+                    return Ok(response);
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+            Err(_) => bail!("Herdr socket read failed"),
+        }
+    }
+}
+
+#[cfg(windows)]
+fn cli_request(
+    binary: &std::path::Path,
+    socket: &std::path::Path,
+    args: &[&str],
+    timeout: Duration,
+) -> Result<Vec<u8>> {
+    use std::process::{Command, Stdio};
+    use std::sync::mpsc;
+    let mut child = Command::new(binary)
+        .args(args)
+        .env("HERDR_SOCKET_PATH", socket)
+        .env_remove("HERDR_SESSION")
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
+        .context("cannot start HERDR_BIN_PATH")?;
+    let mut stdout = child.stdout.take().context("CLI stdout missing")?;
+    let (send, receive) = mpsc::channel();
+    std::thread::spawn(move || {
+        let mut response = Vec::new();
+        let mut buffer = [0u8; 8192];
+        loop {
+            match stdout.read(&mut buffer) {
+                Ok(0) => break,
+                Ok(n) => {
+                    response.extend_from_slice(&buffer[..n]);
+                    if response.len() > MAX_BYTES {
+                        let _ = send.send(Err(anyhow::anyhow!(
+                            "Herdr CLI response exceeds size limit"
+                        )));
+                        return;
+                    }
+                }
+                Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+                Err(error) => {
+                    let _ = send.send(Err(error.into()));
+                    return;
+                }
+            }
+        }
+        let _ = send.send(Ok(response));
+    });
+    let result = receive.recv_timeout(timeout);
+    match result {
+        Ok(Ok(response)) => {
+            let status = child.wait()?;
+            ensure!(
+                status.success(),
+                "Herdr CLI failed (diagnostic payload redacted)"
+            );
+            Ok(response)
+        }
+        Ok(Err(error)) => {
+            let _ = child.kill();
+            let _ = child.wait();
+            Err(error)
+        }
+        Err(mpsc::RecvTimeoutError::Timeout) => {
+            let _ = child.kill();
+            let _ = child.wait();
+            bail!("Herdr CLI deadline exceeded")
+        }
+        Err(mpsc::RecvTimeoutError::Disconnected) => {
+            let _ = child.kill();
+            let _ = child.wait();
+            bail!("Herdr CLI reader ended without output")
+        }
+    }
 }
 
 #[cfg(unix)]
@@ -369,14 +495,4 @@ fn cli_request(
     }
     child.wait().context("cannot reap Herdr CLI")?;
     result
-}
-
-#[cfg(not(unix))]
-fn cli_request(
-    _: &std::path::Path,
-    _: &std::path::Path,
-    _: &[&str],
-    _: Duration,
-) -> Result<Vec<u8>> {
-    bail!("bounded CLI transport has not been validated for this platform")
 }

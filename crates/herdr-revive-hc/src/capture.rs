@@ -7,6 +7,8 @@ use crate::transport::Host;
 use anyhow::{Context, Result, ensure};
 use std::path::PathBuf;
 
+pub use crate::command::{agent_command, command_for, explicit_resume_id};
+
 /// Panes whose foreground program is protected, by pane id, split by
 /// whether this capture proved the command it saved for them; and agent
 /// panes saved without a command because no exact session could be found.
@@ -1046,32 +1048,6 @@ fn permission_denied(error: &anyhow::Error) -> bool {
     })
 }
 
-pub fn command_for(argv: &[String], native: Option<&AgentSession>) -> Result<Option<CommandSpec>> {
-    validate_argv(argv)?;
-    let agent = agent_launcher(argv);
-    if let Some(agent) = agent {
-        let session_id = if let Some(native) = native {
-            ensure!(
-                native.source == format!("herdr:{}", agent.name())
-                    && native.agent == agent.name()
-                    && native.kind == "id",
-                "untrusted native agent reference"
-            );
-            native.value.clone()
-        } else {
-            let start = if is_launcher(&argv[0]) { 2 } else { 1 };
-            explicit_resume_id(agent, &argv[start..])?
-        };
-        return agent_command(argv, agent, session_id).map(Some);
-    }
-    // Never turn an unrelated foreground process into a stale stored agent session.
-    let command = CommandSpec::Program {
-        argv: argv.to_vec(),
-    };
-    command.argv()?;
-    Ok(Some(command))
-}
-
 /// The profile a Claude session must be created in on restore because no
 /// message has written its transcript yet, or `None` when it resumes.
 fn claude_create_profile(
@@ -1137,23 +1113,6 @@ fn save_unidentified(
         cwd,
         command: None,
     });
-}
-
-fn agent_command(argv: &[String], agent: AgentKind, session_id: String) -> Result<CommandSpec> {
-    validate_session_id(&session_id)?;
-    Ok(CommandSpec::Agent {
-        executable: if is_launcher(&argv[0]) {
-            agent.executable().into()
-        } else {
-            argv[0].clone()
-        },
-        agent,
-        session_id,
-        session_mode: AgentSessionMode::Resume,
-        claude_config_dir: None,
-        claude_home: None,
-        null_stdio: [false; 3],
-    })
 }
 
 /// The command of a pane on a host that never reports agent sessions
@@ -1436,40 +1395,6 @@ fn claude_recorded_session(identity: &platform::Process) -> Result<Option<String
     validate_session_id(&record.session_id)
         .with_context(|| format!("{} names no exact session", path.display()))?;
     Ok(Some(record.session_id))
-}
-
-pub fn explicit_resume_id(agent: AgentKind, args: &[String]) -> Result<String> {
-    let mut index = 0;
-    let mut found = None;
-    while index < args.len() {
-        let arg = &args[index];
-        let is_resume = arg == "--resume" || (agent == AgentKind::Codex && arg == "resume");
-        if is_resume {
-            let value = args.get(index + 1).context("resume option has no ID")?;
-            validate_session_id(value)?;
-            ensure!(
-                found.replace(value.clone()).is_none(),
-                "multiple resume IDs"
-            );
-            index += 2;
-        } else if let Some(value) = arg.strip_prefix("--resume=") {
-            validate_session_id(value)?;
-            ensure!(found.replace(value.into()).is_none(), "multiple resume IDs");
-            index += 1;
-        } else if agent_option_takes_value(agent, arg) {
-            let value = args.get(index + 1).context("agent option has no value")?;
-            ensure!(
-                !value.starts_with('-'),
-                "agent option value cannot be another option"
-            );
-            index += 2;
-        } else if agent_boolean_option(agent, arg) {
-            index += 1;
-        } else {
-            anyhow::bail!("unknown agent option or prompt; exact resume ID cannot be parsed");
-        }
-    }
-    found.context("agent has no explicit exact resume ID")
 }
 
 #[cfg(test)]

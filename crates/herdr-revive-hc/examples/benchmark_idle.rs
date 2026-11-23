@@ -2,13 +2,25 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //! Measure the same idle-shell API in the baseline and candidate libraries.
-use anyhow::{Context, Result, ensure};
-use herdr_revive::{
-    model::{ForegroundProcess, ProcessInfo},
-    platform,
-};
+//! It reads another process's identity, which this fork does on Unix only.
+#[cfg(not(unix))]
+fn main() {
+    eprintln!("benchmark_idle: Unix process introspection is required");
+    std::process::exit(2);
+}
 
-fn main() -> Result<()> {
+#[cfg(unix)]
+fn main() -> anyhow::Result<()> {
+    benchmark()
+}
+
+#[cfg(unix)]
+fn benchmark() -> anyhow::Result<()> {
+    use anyhow::{Context, ensure};
+    use herdr_revive::{
+        model::{ForegroundProcess, ProcessInfo},
+        platform,
+    };
     let args: Vec<_> = std::env::args().collect();
     let pid: u32 = args
         .get(1)
@@ -21,7 +33,10 @@ fn main() -> Result<()> {
         pane_id: "benchmark".into(),
         shell_pid: Some(pid),
         foreground_process_group_id: Some(shell.group),
-        foreground_processes: vec![ForegroundProcess { pid }],
+        foreground_processes: vec![ForegroundProcess {
+            pid,
+            ..ForegroundProcess::default()
+        }],
     };
     let start = std::time::Instant::now();
     for _ in 0..checks {

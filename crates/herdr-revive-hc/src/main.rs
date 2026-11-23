@@ -1,21 +1,19 @@
 // SPDX-FileCopyrightText: 2026 Su Kang Yin <paradyse@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-#[cfg(unix)]
 use clap::Parser;
+#[cfg(not(windows))]
 use std::io::{BufWriter, IsTerminal, Write};
 
 fn main() {
     #[cfg(windows)]
-    {
-        // Phenotype fork (0.3.1-hc.1): the Unix-only surface (Herdr Core socket
-        // RPC, shell-hook install, Unix process introspection) has no native
-        // Windows implementation yet. Refuse loudly instead of failing obscurely.
-        eprintln!(
-            "herdr-revive: native Windows: session restore is not implemented in this fork; \
-             the portable agent-identity layer is available as a library (`cargo test -p herdr-revive-hc`)."
-        );
-        std::process::exit(2);
+    match run_windows() {
+        Ok(0) => {}
+        Ok(code) => std::process::exit(code),
+        Err(error) => {
+            eprintln!("herdr-revive: {error:#}");
+            std::process::exit(1);
+        }
     }
     #[cfg(not(windows))]
     match run() {
@@ -26,6 +24,14 @@ fn main() {
             std::process::exit(1);
         }
     }
+}
+
+/// Native Windows entry: save/list/preview/restore/status over Herdr Core's
+/// named pipe. Shell-hook install, migrate and the Unix timer are not part of
+/// this surface.
+#[cfg(windows)]
+fn run_windows() -> anyhow::Result<i32> {
+    herdr_revive::winapp::run(herdr_revive::winapp::Cli::parse())
 }
 
 #[cfg(not(windows))]
