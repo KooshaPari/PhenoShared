@@ -1,0 +1,48 @@
+[package]
+name = "herdr-revive-hc"
+version = "0.3.1-hc.1"
+edition = "2024"
+rust-version = "1.97.1"
+authors = ["Su Kang Yin <paradyse@gmail.com>"]
+license = "Apache-2.0"
+description = "Explicit, session-scoped command restoration for Herdr (Phenotype fork: jcode/kcode agents, native-Windows build)"
+repository = "https://github.com/cantona/herdr-revive"
+
+[package.metadata.fork]
+upstream = "https://github.com/cantona/herdr-revive"
+upstream_tag = "v0.3.1"
+upstream_rev = "9854631bb6bbea1b64b951a0b6396b50ad42c5a5"
+fork_owner = "Phenotype"
+fork_version = "0.3.1-hc.1"
+bin_name = "herdr-revive"
+
+[[bin]]
+name = "herdr-revive"
+path = "src/main.rs"
+
+[lib]
+name = "herdr_revive"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.6", features = ["derive"] }
+fs2 = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+sha2 = "0.10"
+tempfile = "3.27"
+toml = "0.8"
+
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.29", features = ["socket", "poll", "fs", "user", "signal", "feature"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+nix = { version = "0.29", features = ["event"] }
+
+[profile.release]
+lto = "thin"
+strip = true
+
+[lints.rust]
+unsafe_code = "deny"

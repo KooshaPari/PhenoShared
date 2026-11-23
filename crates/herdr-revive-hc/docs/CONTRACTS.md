@@ -1,0 +1,441 @@
+# Independent contracts
+
+This is a new implementation of documented behavior, not a translated source
+tree or imported repository history. The predecessor's source was inspected
+during the preceding study; this is not a clean-room provenance claim. This
+implementation did not copy predecessor code, tests, wrappers or documentation.
+The baseline remains a separate, unchanged repository. Herdr's public CLI/API
+schema supplied the integration contract; no Herdr application code is linked.
+
+## Storage and identity
+
+The canonical socket path is its canonicalized parent plus unchanged filename.
+Relative paths and non-UTF-8 path encodings are refused. SHA-256 over
+`cantona.herde-revive\0session-v1\0<canonical socket path>` selects a session
+directory below the injected plugin state root. Sharing a cwd has no effect.
+The schema-1 hash namespace keeps the original spelling so existing boot claims
+remain valid after the rename. Snapshot and journal readers accept both
+`herde-revive` and `herdr-revive`; new records use `herdr-revive`.
+
+Linux boot generation is SHA-256 over
+`linux-server-v1:<OS boot UUID>:<SO_PEERCRED PID>:<process start ticks>`.
+The Unix socket must be a real socket, and the server peer must have the same
+UID as the plugin. Socket chmod/chown timestamps cannot create a new claim.
+PID reuse across either a process restart or OS reboot changes identity.
+Peer-identity connections send no API request; metrics count them separately.
+
+macOS generation uses SHA-256 over
+`macos-server-v1:<kern.bootsessionuuid>:<LOCAL_PEERPID>:<process start microseconds>`.
+`LOCAL_PEERCRED` verifies the same-user peer. The Linux generation format is unchanged.
+
+```
+HERDR_PLUGIN_STATE_DIR/<session hash>/
+  operation.lock
+  latest.json
+  last-save.json
+  snapshots/<timestamp>-<content-hash-prefix>.json
+  pending.json                 # only while unresolved
+  boots/<claim>.json           # automatic generation or explicit manual claim
+  rebuild-pending.json         # incomplete reconstruction
+  operations/<id>.json         # retained reconstruction journals
+  operations/<id>-snapshot.json
+
+HERDR_PLUGIN_STATE_DIR/spaces/
+  library.lock
+  <validated-name>.json
+```
+
+The OS releases the exclusive file lock on process exit; no stale-PID-lock
+heuristic or timeout-based lock stealing exists. Generic hook contention exits as
+`operation_in_progress`; injected lifecycle events use the bounded wait described
+below. Explicit operations report an error. Saves, restores,
+imports and recovery acknowledgements hold the same session lock. Named-space
+operations also acquire a plugin-wide library lock, after the session lock.
+
+Directories are owner-only, with newly created ancestor links synchronized.
+Files are written through owner-only same-directory temporary files, flushed,
+synced, atomically replaced, then followed by a directory sync. Replacement
+failures are visible. A directory-sync failure after replacement is reported
+as uncertain durability. Symlink/non-regular input and oversized data are
+refused. These guarantees depend on the filesystem honoring sync and rename;
+power-cut and disk-full qualification remain release gates.
+
+## Snapshot schema 1
+
+```json
+{
+  "tool":"herdr-revive", "schema":1,
+  "session":"<64 lowercase SHA-256 hex digits>", "created_ms":0,
+  "scope":{"kind":"session"},
+  "panes":[{
+    "workspace_id":"w1", "tab_id":"w1:t1", "pane_id":"w1:p1",
+    "cwd":"/fixture",
+    "command":{"kind":"program", "argv":["ssh","fixture.invalid"]}
+  }]
+}
+```
+
+A space scope is `{"kind":"space","workspace_id":"w1"}`. A command may
+be null for an idle shell. Agent commands instead use
+`{"kind":"agent","executable":"codex","agent":"codex","session_id":"UUID"}`.
+Captures omit the default resume mode and add `"session_mode":"create"` for
+an untouched bare Claude prompt. Explicit `"session_mode":"resume"` is also
+accepted. Create mode relaunches the exact UUID with
+`--session-id`. Restoration checks again for a nonempty transcript and upgrades
+to `--resume` if the first save raced Claude's first transcript write. The field
+is absent in older snapshots, which retain exact, fail-visible resume semantics.
+Empty-session capture also verifies that the selected `CLAUDE_CONFIG_DIR` can be
+reproduced from current plugin/launcher configuration before saving the mode.
+Create mode includes `claude_config_dir`, binding the saved UUID to that resolved
+absolute profile path. Restore refuses a changed profile, including a retargeted
+symlink. Standard Claude captures additionally include `claude_home`; restore
+preserves that `HOME` and leaves `CLAUDE_CONFIG_DIR` unset using `/usr/bin/env -u`.
+Only captures with an explicitly selected profile set `CLAUDE_CONFIG_DIR` on
+launch. This distinction preserves Claude's default `~/.claude.json` lookup.
+Older Create snapshots missing default-profile provenance require recapture.
+Resume mode omits these profile fields.
+Program stdout/stderr may target `/dev/null` using
+`{"kind":"program_null_stdio","argv":["sleep","60"],"null_stdio":[false,true,false]}`.
+The mask is stdin/stdout/stderr; stdin must remain false and at least one output
+must be true. Capture checks the null character-device identity (Linux 1:3;
+macOS vnode device/inode/rdev matched against the native `/dev/null`).
+Restoration checks the original executable's allowlist entry, then passes its
+argv as positional arguments to a fixed `/bin/sh` exec/redirection wrapper.
+No saved argument is interpolated into that wrapper's shell source.
+SSH cannot use this variant: older incorrectly captured SSH null-output entries
+are rejected before restoration and require an explicit repair or fresh capture.
+Unknown native fields and schema versions are errors. Config uses strict TOML;
+API responses tolerate additive host fields while validating required fields.
+Maximum file/reply size is 8 MiB, maximum pane count 10,000, maximum argument
+count 4,096, argument length 64 KiB, and total command length 128 KiB.
+
+Planner output is sorted by pane ID. It never contains executable shell text.
+Full snapshots must match the current session. Named spaces are reusable across
+sessions through the global library or explicit import. Optional ID mappings
+must be one-to-one and reference one existing destination workspace. A mapping
+entry has `source_pane_id`, `workspace_id`, `tab_id`, and `pane_id`.
+
+The `layout` array preserves workspace/tab order and labels, active/focused IDs,
+and a tagged recursive BSP root (`pane` or `split` with direction/ratio/children).
+Every leaf must correspond to exactly one saved pane with matching ancestry;
+IDs are unique. The parser has bounded size/recursion and trees are validated
+to depth 64. Empty layout is accepted for command-only native fixtures, but
+explicit reconstruction refuses it. Focused workspace is optional.
+
+Reconstruction creates new workspaces. Each tab uses native argv `layout.apply`
+when it fits the host's 24-pane, depth-16 bulk API limits. Larger/deeper trees
+start with one native-argv anchor, then create splits directly inside that tab.
+Split-created commands use idle checks and tested shell encoding after a single
+settle delay per tab. This keeps managed `HERDR_TAB_ID` correct; moving already
+running processes from temporary tabs would retain stale environment values.
+Every mutating call checks peer boot identity and persists a sending record.
+Default reconstruction applies saved focus; no-focus mode makes no focus calls.
+
+## Restore state transitions
+
+An absent boot record is Unclaimed. Restore writes `pending.json` with
+`restoring`, a snapshot digest and per-pane outcomes. Before revalidation and
+any potentially mutating request, the current pane becomes `sending`. Outcomes
+become `applied`, `skipped`, or `failed`; failures stop subsequent panes.
+After completion the Done record is synced under `boots/`, then pending evidence
+is removed and that directory synced. If interruption leaves both records,
+pending evidence takes precedence and requires acknowledgement.
+
+Any pending record blocks saving and new restores, even across boots. A
+successful acknowledgement marks the record Done and acknowledged without
+altering recorded outcomes or retrying input. Reading recovery evidence and
+previewing snapshots remain available. A completed boot prevents later automatic
+restores for that server generation. Manual rehydration after a completed boot
+uses a fresh explicit claim. Named-space opens and full reconstruction use
+independent operation journals, preserving their source snapshot and created
+workspace/tab IDs. They can be requested repeatedly; interrupted operations
+require acknowledgement before another attempt.
+
+Default manual restore first rehydrates exact existing IDs, then reconstructs
+missing workspaces. Missing panes inside an existing workspace are never guessed
+by position. Automatic hooks do not reconstruct anything. Forced autosave and
+the optional foreground timer are save-only paths and cannot initiate restore.
+
+Automatic saves merge only prior typed agent commands into currently empty
+shell panes with matching pane/workspace/tab IDs and cwd. Manual session and
+named-space saves do not merge. Other foreground commands, changed cwd, and
+removed panes supersede prior entries. Current restore policy is still checked.
+
+Missing native agent metadata may be retried for up to min(timeout_ms, 1000)
+milliseconds, with pane, process, argv/cwd, foreground-tree and session checks.
+After recovering metadata, capture restarts once from a fresh host snapshot and
+process table; another unstable attempt fails without writing. Detection events
+bypass debounce, as do status events whose session or cwd differs from the saved
+entry. Unchanged status events remain debounced.
+For a detection event naming a new invocation, an explicit resume ID that
+conflicts with retained native metadata must be confirmed by a matching native
+report before saving. Timeout preserves the previous snapshot. Ordinary status
+events and manual capture still prefer native metadata over launch argv, since
+an in-process session switch does not change that argv.
+Native references remain dependent on Herdr's freshness guarantees. A bare
+picker with an already-present reference exposes neither an explicit selection
+nor a process-bound session generation; the plugin cannot distinguish an
+inherited reference from a newly selected identical one. It does not infer a
+fresh conversation or replace native authority with launch argv globally.
+
+Real lifecycle events contending for the operation lock retry with bounded
+backoff for up to min(timeout_ms + settle_ms, 60000) milliseconds. After acquiring
+the lock, status events recheck the latest saved session and remain debounced
+when unchanged; other lifecycle events bypass debounce so the preceding save
+cannot swallow a topology or new-invocation event.
+Timeout is a visible error requiring a later event, timer tick or manual autosave;
+there is no unbounded background worker or guarantee of eventual retry without
+one of those triggers. Mutation delivery is never retried by this mechanism.
+
+## Transport
+
+The direct adapter makes one connection per newline-delimited JSON request.
+It sends one ping per operation as a reachability check, and validates
+response IDs, result types, error envelopes, frame size, and a total deadline
+covering both write and read. It never retries mutations. Unix sockets are
+nonblocking, including connection establishment; unavailable or saturated
+endpoints fail closed.
+
+CLI mode uses exactly the injected `HERDR_BIN_PATH` with argv and an explicit
+socket environment. Stdout is bounded/nonblocking, errors are redacted, and a
+deadline kills/reaps the child. Herdr's own CLI does an additional protocol
+handshake per invocation; `requests` counts logical adapter calls rather than
+these internal checks. `pane run` success is its zero exit status, as specified
+by the host, while read operations validate JSON envelopes. Layout/reconstruction
+operations without CLI equivalents use direct API even in CLI mode.
+
+Direct save uses ping + one snapshot + one process-info request per pane +
+one layout export per tab,
+and one native process-table scan, with no Herdr or process-enumeration subprocesses.
+Preview uses ping + one snapshot and no process queries. Execution deliberately
+adds fresh identity and busy checks. There is no persistent connection,
+unsupported batching or host library dependency. macOS uses bounded native FFI
+calls with per-statement `unsafe` allowances and ABI size checks; other code
+denies `unsafe`. Idle-shell checks on macOS query direct children and recheck
+process identity rather than repeating the whole process-table scan. Linux checks
+each shell thread's child list and falls back to the original process-table scan
+if those lists are unavailable. Newly created split panes retry unavailable shell
+metadata within the readiness deadline; no command is sent on an invalid read. The timer
+waits on kqueue signals without polling during its interval.
+
+## Intentional restrictions
+
+The allowlist is checked at planning and execution; persisted booleans never
+authorize input. Supported Bash/dash/zsh encoding handles literal argument
+boundaries and cwd. Terminal control characters are rejected before encoding.
+General programs/interpreters are supported when allowed. Exact matching is the
+default; optional basename matching and wildcard trust are explicit. Known
+agent executables and recognized Node package wrappers must use typed exact
+agent references, even with wildcard policy. Allowed binaries are not sandboxed. Agent resume never falls
+back to `--continue`, latest-session lookup, or filesystem/cwd heuristics.
+
+Process-group members must descend from one foreground leader. Pipelines,
+redirected stdin and output redirections other than `/dev/null` are rejected.
+Observed agent stdout/stderr redirections to `/dev/null` are preserved exactly.
+Git with a system less/more pager,
+either direct or through Git's single system-shell wrapper, may use its internal
+pipe: terminal and pipe identities are checked, and the original Git argv is
+saved. Once Git closes both output pipe writers,
+capture also requires its retained terminal descriptors; redirected pager output
+and external shell pipelines remain refused. Keeping stdin attached also
+preserves the PTY lifetime during native reconstruction. Process identity checks
+guard PID reuse, but capture is not an atomic
+snapshot of all OS processes. Busy detection includes background descendants.
+Shell-readiness and check/run races remain the host limitations described in
+the [guide](GUIDE.md#recovery-and-safety-limits) and reproduced in the integration suite.
+
+OpenSSH session stdout is separate from fd 1: after duplicating its streams,
+OpenSSH redirects fd 1 internally. Capture verifies the process executable
+against `/usr/bin/ssh`, checks character-device identity against the controlling
+terminal, and identifies a unique consecutive session-descriptor triple using
+the input/error identities before validating output. Terminal-backed session
+output becomes a plain argv command. Redirected, ambiguous or nonconsecutive
+session descriptors are refused; unsupported layouts are not guessed.
+See [OpenSSH 10.2p1](https://github.com/openssh/openssh-portable/blob/V_10_2_P1/ssh.c#L2120).
+
+
+## Agent options
+
+Claude, Codex, Gemini, Copilot and Cursor use exact UUID references; Cursor's
+canonical executable is `cursor-agent`. Native sources must match
+`herdr:<agent>` and kind `id`. Parsed argv must contain one explicit resume ID;
+unknown options/prompts fail parsing. Known Node wrappers are canonicalized to
+the corresponding executable on PATH. Original flags are not replayed.
+
+Extra configuration supports `--model`/`-m` with a value for all five agents,
+and these agent-specific options (all value-taking unless marked boolean):
+
+| Agent | Additional options |
+| --- | --- |
+| Claude | `--permission-mode`, `--settings`, `--add-dir`, `--allowedTools`, `--disallowedTools`; boolean `--dangerously-skip-permissions` |
+| Codex | `--config`/`-c`, `--profile`, `--sandbox`, `--ask-for-approval`; boolean `--full-auto`, `--dangerously-bypass-approvals-and-sandbox` |
+| Gemini | `--approval-mode`, `--include-directories`; boolean `--yolo` |
+| Copilot | `--allow-tool`, `--deny-tool`, `--add-dir`; boolean `--allow-all-tools`, `--allow-all-paths` |
+| Cursor | `--workspace`; boolean `--force`/`-f` |
+
+Values use separate argv elements and cannot start with `-`. Session-changing
+short/long flags, attached resume forms, prompts and unknown options are errors.
+These options grant whatever the chosen agent implements; they are trusted user
+configuration, not a second agent sandbox. `resume_agents=false` denies agents
+while still allowing configured ordinary programs.
+
+## Custom agent launchers
+
+`agent_launchers` is a list of `{agent, executable, match_env}` tables. It describes
+exec-style wrappers by an explicit environment selector after the wrapper has
+become a canonical agent process. All selector keys and values must match exactly.
+Duplicate selector keys in the process environment and multiple matching rules
+are errors. Selector values should be nonsecret; snapshots contain only the
+chosen launcher, agent kind and exact session ID. PID identity is checked around
+the bounded environment read.
+
+Custom launcher execution requires the same agent-to-executable rule in current
+configuration and an allowlist entry. Ordinary Program snapshots using a configured
+launcher basename are refused, including absolute/bare-path variants. A removed
+profile cannot silently become the canonical launcher. An ordinary canonical
+agent with no matching profile keeps its own executable.
+
+## Migration JSON
+
+`migrate --json` prints one report: `{"to": "app" | "tui", "machine": null |
+name, "lines": [...], "summary": {"create", "skip", "unchanged",
+"ratios_lost"}, "applied": [{"source", "created"}] | null, "tui_session":
+{"session", "workspaces": [...], "terminal_ids": {workspace: [...]},
+"labels": {workspace: label}, "spaces": [...]} | null, "warnings": [...]}`; `applied` is `null` when what was
+copied is unknown (another machine's result could not be read).
+`warnings` are sentences about what the run did not stop for: a pane the
+capture could not read in full, a command the source's policy turns into a
+shell, a TUI workspace the TUI did not list after the copy, a copy another
+machine could not record (with the command to record it there). Without
+`--json` they go to stderr, the plan's before it and the copy's after it; a
+report without the field has none.
+`tui_session` (`--to tui` only) is the TUI session copied into, its live
+workspace ids, and the ids of the planning machine's own app spaces
+(`spaces`; a plan without it has `null`, and then every recorded copy
+counts): `--to tui --machine M` reads it from M's plan to skip the
+spaces this machine's ledger records as copies of a TUI workspace of M that
+still exists, and then asks M to apply `--only` the remaining `create`
+sources; a matching ledger entry that shares no terminal and no label
+with the workspace, and matches no other workspace after a renumbering
+(see the ledger below), leaves the line a `create` with a note. A line
+is `{"machine", "source", "status": "create" | "skip" | "unchanged",
+"reason", "name", "tabs", "panes", "agents", "denied", "mod_blocks",
+"live_agents", "copy", "partial", "notes"}`; `notes` are sentences about
+earlier copies that may be this source's (a reused TUI workspace id, a run
+whose `herdr-app do` timed out), panes whose folder is gone, and, for a
+`--to tui` copy, its agents that keep running in the app (`live_agents`
+lists the TUI's for `--to app` only). Readers ignore unknown fields; a report
+without `notes` or `terminal_ids` has none.
+
+`migrate --export tui` (hidden, read-only) prints `{"tool", "schema",
+"session", "snapshot", "launches", "live_agents", "denied", "tui_copies",
+"terminal_ids", "missing_folders", "app_copies", "partial_copies",
+"uncaptured", "warnings", "live_workspaces"}`:
+the schema-1 snapshot of the TUI session, each pane's launch `{"cwd", "argv"
+| null}` under that machine's `allowed_programs`, the panes whose agent
+still runs, the panes whose command the policy denied, and the
+workspaces of the exported session that machine's `--to tui` made, all of
+them (a renumbered TUI may have given any of them another id), `[{"space", "session",
+"workspace_id", "terminal_ids", "label", "at"}]` from its ledger (read without the
+lock; `space` is the id in that machine's core document, without a machine
+prefix; an export without the field has none), and each exported
+workspace's terminal ids, `{workspace: [...]}` (an export without it has
+none, so its workspaces cannot be matched to earlier copies), and the
+panes whose folder is gone on that machine, `{pane: folder}` (the folder
+without Linux's ` (deleted)` mark; one made again at that path is not
+gone), whose launch is then a shell in its home folder (an export without
+it has none), and the full `to_app` copies of the exported session in
+that machine's ledger, all of them as well, `[{"workspace_id", "space", "terminal_ids",
+"label", "at"}]` (`space` is its bare id there; an export without it has
+none), the partial ones, `[{"workspace_id", "created": {"space",
+"terminals", "unknown"}, "terminal_ids", "label", "at"}]` (bare ids; an
+export without it has none), the selected workspaces the capture could
+not read, `[{"workspace_id", "label", "reason"}]`, which the plan shows as
+`skip` lines with the reason "cannot capture: <reason>" (an export without
+it has none), and the capture's and the policy's `warnings` for the report
+of the machine that plans, and every live workspace of the session,
+`[{"workspace_id", "label", "terminal_ids"}]`, the exported ones or not,
+so the copies can be matched after a renumbering (an export without it
+knows only its exported workspaces). Another machine's `migrate --to app --machine`
+reads it through `hc exec` and skips a workspace whose space it lists as
+`<machine>/<space>`, or plans one as `unchanged` whose copy that machine
+records and its app still lists.
+
+`migrate --record ENTRY [--partial]` (hidden) stores ENTRY, a `to_app`
+ledger entry as JSON with `source.machine` `null`, in this machine's
+ledger: as a copy (it needs a `created.space`), or with `--partial` as a
+copy that stopped part way. `migrate --to app --machine M` runs it on M
+through `hc exec` with `--partial` once per space as soon as `space.new`
+names it (the build in progress, `"unknown": true`, under the run's `at`),
+then without `--partial` after the space is built, or with `--partial`
+after one that stops, with M's bare space and terminal ids, so M's own
+migrations, and a third machine's through the export, know the copy. A
+partial record replaces M's earlier one with the same source and `at`; a
+whole copy drops it. A run killed between `space.new` and the first
+record, or between this machine's record of the whole copy and M's, leaves
+M without the copy or with the partial copy only. It
+takes no `--machine`, `--to`, `--export`, `--dry-run`, `--yes`, `--json`,
+`--only` or `--session`, and `--partial` goes with it only.
+
+`~/.local/state/herdr-revive/migrated.json` is `{"tool", "schema": 1,
+"entries": [...], "partial": [...]}`; an entry is `{"direction": "to_app",
+"source": {"machine", "session", "workspace_id", "terminal_ids", "label"},
+"created": {"space", "terminals"}, "at"}` or `{"direction": "to_tui",
+"source": {"space"}, "created": {"session", "workspace_id",
+"terminal_ids", "label"}, "at"}`. A `to_app` entry is replaced by a later
+copy of the same workspace (the same id of the same TUI session, and a
+shared terminal or the same label), and by a later record of the same
+space; a copy of another workspace that now has the id stays, as the TUI
+may have renumbered its workspaces. A `to_tui` entry is replaced by a
+later copy of the same space into the same TUI session, so a space copied
+into two sessions keeps an entry for each, and another space's copy given
+its workspace id later does not drop it. Where an older
+ledger holds several `to_tui` entries for one workspace id, the one whose
+terminals, else label, match the live workspace is its origin, the newest
+first. `partial` keeps every `to_app` copy that stopped part way, several
+per source (the same copy recorded again replaces itself); a full copy
+drops only a timed-out partial that names nothing and is the same
+workspace (the same entry, the same id with a shared terminal or label,
+or a shared terminal under any id), and `--to app --yes` also drops one
+its plan matched to the copied workspace as below; `--to app
+--yes` drops those of the machine it copies to whose space, or without
+one every terminal, the app no longer lists (another machine's spaces may
+be missing only because it is offline). A run that made nothing records
+no partial. While a source has a partial copy whose space or terminal the
+app still lists, in this ledger or, for `--machine M`, in M's export, the
+best-matching one (by terminals, then label, then the newest) decides: if
+it matches the live workspace, the line is `skip` with the reason
+"partial copy S still open: close it first" and the copy in `partial`;
+if not (another workspace took the id), the line stays `create` with a
+note naming it. `terminal_ids` and `label` (without the
+TUI's `[n] ` number) describe the TUI workspace when it was copied or made;
+either is `null` in entries from before it, and `terminal_ids` also when it
+could not be read. herdr reuses workspace ids after a restart, never
+terminal ids, and a restored workspace keeps its label, so an entry
+matches the live workspace with its id while one of its terminals is still
+in it or its non-empty label is unchanged; an entry with neither never
+matches there. When no entry matches the workspace under its id, the TUI
+may have renumbered its workspaces (a rebuild numbers them from 1 again):
+an entry of the same session whose id no live workspace has, or another
+live workspace has without matching it, is this workspace's when it shares
+one of its terminals (the newest such entry), else when its label is this
+workspace's, no other live workspace has that label and no other such
+entry of the same kind has it. Only entries whose copy still exists take
+part (the app space is still listed; for `--to tui --machine M`, among
+the `spaces` of M's plan), so a closed copy neither matches nor makes a
+label ambiguous. The line then says "matched an earlier copy C by
+terminal (was wN)", or, by the label alone, which a new workspace in the
+folder of a closed one also has, "matched an earlier copy C by label (was
+wN): if ..." with how to copy it anyway. This applies to copies, origins
+and partial copies in both directions, to the copies another machine's
+export lists, and to a timed-out partial that names nothing, whose note
+goes on the workspace it matches. An entry under the workspace's id that
+matches neither way is named in a note only when nothing else matched. A
+`partial` entry whose last `herdr-app do` timed out has `"created":
+{..., "unknown": true}`. A `--to app` run records such an entry before it
+builds each space, naming nothing, updates it (under the same `at`) with
+the space and terminals after each `herdr-app do`, and when the build ends
+replaces it with what it made, drops it when it made nothing, or drops it
+once the full copy is recorded. So a run stopped part way leaves what it
+had made, or, before the app named the space, an entry that names nothing; `at` is milliseconds since the epoch. Its `schema` is the
+ledger's own version and does not follow the snapshot schema.

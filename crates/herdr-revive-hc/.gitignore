@@ -1,0 +1,9 @@
+/target/
+/benchmark-results/
+/.agents/
+/.codex/
+/.local/
+*.tmp
+__pycache__/
+mods/*/gpui-kit.d.ts
+mods/*/jsconfig.json

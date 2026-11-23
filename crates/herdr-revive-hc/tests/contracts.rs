@@ -1,0 +1,1561 @@
+// SPDX-FileCopyrightText: 2026 Su Kang Yin <paradyse@gmail.com>
+// SPDX-License-Identifier: Apache-2.0
+
+// Phenotype fork (0.3.1-hc.1): these contracts exercise the Unix-only surface
+// (Herdr Core socket transport, hook install, Unix process introspection).
+#![cfg(unix)]
+
+use anyhow::{Result, bail};
+use herdr_revive::{
+    app, capture,
+    model::*,
+    planner, platform, store,
+    transport::{self, Host},
+};
+use serde_json::json;
+use std::path::Path;
+
+fn config() -> Config {
+    Config {
+        allowed_programs: vec![
+            "ssh".into(),
+            "minicom".into(),
+            "codex".into(),
+            "claude".into(),
+        ],
+        settle_ms: 0,
+        ..Config::default()
+    }
+}
+
+#[test]
+fn null_output_wrapper_preserves_literal_arguments_and_checks_original_policy() {
+    let args = [
+        "/usr/bin/printf",
+        "%s\\0",
+        "",
+        "space here",
+        "'\"$;|",
+        "$(exit 7)",
+    ];
+    let command = CommandSpec::ProgramNullStdio {
+        argv: args.iter().map(|s| (*s).into()).collect(),
+        null_stdio: [false, false, true],
+    };
+    let mut config = config();
+    config.allowed_programs = vec!["/bin/sh".into()];
+    assert!(command.allowed_argv(&config).is_err());
+    config.allowed_programs = vec!["/usr/bin/printf".into()];
+    let launch = command.allowed_argv(&config).unwrap();
+    let output = std::process::Command::new(&launch[0])
+        .args(&launch[1..])
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    let expected: Vec<u8> = args[2..]
+        .iter()
+        .flat_map(|s| s.bytes().chain([0]))
+        .collect();
+    assert_eq!(output.stdout, expected);
+    let unsupported = CommandSpec::ProgramNullStdio {
+        argv: vec!["sleep".into(), "1".into()],
+        null_stdio: [true, false, false],
+    };
+    assert!(unsupported.argv().is_err());
+    let empty = CommandSpec::ProgramNullStdio {
+        argv: vec!["sleep".into(), "1".into()],
+        null_stdio: [false; 3],
+    };
+    assert!(empty.argv().is_err());
+}
+
+#[test]
+fn agent_null_output_is_preserved_without_breaking_legacy_snapshots() {
+    let id = "01234567-89ab-cdef-0123-456789abcdef";
+    let legacy =
+        format!(r#"{{"kind":"agent","executable":"codex","agent":"codex","session_id":"{id}"}}"#);
+    let legacy: CommandSpec = serde_json::from_str(&legacy).unwrap();
+    assert_eq!(
+        serde_json::to_value(&legacy).unwrap(),
+        serde_json::json!({
+            "kind": "agent", "executable": "codex", "agent": "codex", "session_id": id
+        })
+    );
+
+    let command = CommandSpec::Agent {
+        executable: "codex".into(),
+        agent: AgentKind::Codex,
+        session_id: id.into(),
+        session_mode: AgentSessionMode::Resume,
+        claude_config_dir: None,
+        claude_home: None,
+        null_stdio: [false, false, true],
+    };
+    assert_eq!(
+        command.allowed_argv(&config()).unwrap(),
+        [
+            "/bin/sh",
+            "-c",
+            "exec \"$@\" 2> /dev/null",
+            "herdr-revive",
+            "codex",
+            "resume",
+            id,
+        ]
+    );
+    let invalid = CommandSpec::Agent {
+        executable: "codex".into(),
+        agent: AgentKind::Codex,
+        session_id: id.into(),
+        session_mode: AgentSessionMode::Create,
+        claude_config_dir: None,
+        claude_home: None,
+        null_stdio: [false; 3],
+    };
+    assert!(invalid.argv().is_err());
+}
+
+#[test]
+fn jcode_and_kcode_resume_by_session_flag() {
+    let id = "01234567-89ab-cdef-0123-456789abcdef";
+    let mut config = config();
+    config.allowed_programs = vec!["jcode".into(), "kcode".into()];
+    for (agent, executable) in [(AgentKind::Jcode, "jcode"), (AgentKind::Kcode, "kcode")] {
+        assert_eq!(AgentKind::from_name(executable), Some(agent));
+        assert_eq!(agent.name(), executable);
+        assert_eq!(agent.executable(), executable);
+        assert_eq!(agent_launcher(&[executable.to_string()]), Some(agent));
+        let command = CommandSpec::Agent {
+            executable: executable.into(),
+            agent,
+            session_id: id.into(),
+            session_mode: AgentSessionMode::Resume,
+            claude_config_dir: None,
+            claude_home: None,
+            null_stdio: [false; 3],
+        };
+        // Both harnesses take `--resume <id>`; neither has a `resume` subcommand.
+        assert_eq!(command.argv().unwrap(), [executable, "--resume", id]);
+        assert_eq!(command.allowed_argv(&config).unwrap(), [executable, "--resume", id]);
+        let create = CommandSpec::Agent {
+            executable: executable.into(),
+            agent,
+            session_id: id.into(),
+            session_mode: AgentSessionMode::Create,
+            claude_config_dir: None,
+            claude_home: None,
+            null_stdio: [false; 3],
+        };
+        // new-session launch stays Claude-only, so a jcode/kcode create is refused.
+        assert!(create.argv().is_err());
+    }
+    // A near-miss launcher name must not resolve to a resumable agent.
+    assert!(AgentKind::from_name("jcode-dev").is_none());
+    assert!(agent_launcher(&["jcode-dev".to_string()]).is_none());
+}
+
+#[test]
+fn jcode_and_kcode_accept_agent_extra_args_and_reject_unknown_agents() {
+    let mut cfg = Config::default();
+    cfg.agent_extra_args
+        .insert("jcode".into(), vec!["--model".into(), "m".into()]);
+    cfg.agent_extra_args
+        .insert("kcode".into(), vec!["--model".into(), "m".into()]);
+    cfg.validate().unwrap();
+    cfg.agent_extra_args
+        .insert("jcode-dev".into(), vec!["--model".into(), "m".into()]);
+    assert!(cfg.validate().is_err());
+}
+
+#[test]
+fn legacy_claude_snapshots_fail_visible_and_create_mode_tracks_transcripts() {
+    let temp = tempfile::tempdir().unwrap();
+    let config_dir = temp.path().join("claude-config");
+    std::fs::create_dir(&config_dir).unwrap();
+    let config_dir = config_dir.canonicalize().unwrap();
+    let session = "01234567-89ab-cdef-0123-456789abcdef";
+    let mut cfg = config();
+    cfg.allowed_programs.push("claude-fixture".into());
+    cfg.agent_launchers.push(AgentLauncher {
+        agent: AgentKind::Claude,
+        executable: "claude-fixture".into(),
+        match_env: [("CLAUDE_CONFIG_DIR".into(), config_dir.display().to_string())]
+            .into_iter()
+            .collect(),
+    });
+    let command = |session_mode| CommandSpec::Agent {
+        executable: "claude-fixture".into(),
+        agent: AgentKind::Claude,
+        session_id: session.into(),
+        session_mode,
+        claude_config_dir: (session_mode == AgentSessionMode::Create)
+            .then(|| config_dir.display().to_string()),
+        claude_home: None,
+        null_stdio: [false; 3],
+    };
+    let compact = serde_json::to_value(command(AgentSessionMode::Resume)).unwrap();
+    assert!(compact.get("session_mode").is_none());
+    assert_eq!(
+        serde_json::from_value::<CommandSpec>(compact.clone()).unwrap(),
+        command(AgentSessionMode::Resume),
+    );
+    for mode in ["resume", "legacy"] {
+        let mut explicit = compact.clone();
+        explicit["session_mode"] = mode.into();
+        assert_eq!(
+            serde_json::from_value::<CommandSpec>(explicit).unwrap(),
+            command(AgentSessionMode::Resume),
+        );
+    }
+
+    assert_eq!(
+        command(AgentSessionMode::default())
+            .allowed_argv(&cfg)
+            .unwrap()[1],
+        "--resume"
+    );
+    assert_eq!(
+        command(AgentSessionMode::Create)
+            .allowed_argv(&cfg)
+            .unwrap()[3],
+        "--session-id"
+    );
+    assert_eq!(
+        command(AgentSessionMode::Resume)
+            .allowed_argv(&cfg)
+            .unwrap()[1],
+        "--resume"
+    );
+
+    let project = config_dir.join("projects/fixture");
+    std::fs::create_dir_all(&project).unwrap();
+    std::fs::write(project.join(format!("{session}.jsonl")), "{}\n").unwrap();
+    assert_eq!(
+        command(AgentSessionMode::default())
+            .allowed_argv(&cfg)
+            .unwrap()[1],
+        "--resume"
+    );
+    assert_eq!(
+        command(AgentSessionMode::Create)
+            .allowed_argv(&cfg)
+            .unwrap()[3],
+        "--resume"
+    );
+    cfg.agent_launchers[0].match_env.insert(
+        "CLAUDE_CONFIG_DIR".into(),
+        temp.path().join("other-profile").display().to_string(),
+    );
+    assert!(
+        command(AgentSessionMode::Create)
+            .allowed_argv(&cfg)
+            .is_err()
+    );
+    let alias = temp.path().join("current-profile");
+    std::os::unix::fs::symlink(&config_dir, &alias).unwrap();
+    cfg.agent_launchers[0]
+        .match_env
+        .insert("CLAUDE_CONFIG_DIR".into(), alias.display().to_string());
+    let argv = command(AgentSessionMode::Create)
+        .allowed_argv(&cfg)
+        .unwrap();
+    assert_eq!(argv[0], "/usr/bin/env");
+    assert_eq!(
+        argv[1],
+        format!("CLAUDE_CONFIG_DIR={}", config_dir.display())
+    );
+    let other = temp.path().join("other-profile");
+    std::fs::create_dir(&other).unwrap();
+    std::fs::remove_file(&alias).unwrap();
+    std::os::unix::fs::symlink(&other, &alias).unwrap();
+    assert!(
+        command(AgentSessionMode::Create)
+            .allowed_argv(&cfg)
+            .is_err()
+    );
+}
+
+#[test]
+fn claude_project_transcript_lookup_is_direct_and_conservative() {
+    let temp = tempfile::tempdir().unwrap();
+    let config_dir = temp.path().join("claude-config");
+    let cwd = temp.path().join("work.tree");
+    let project: String = cwd
+        .to_str()
+        .unwrap()
+        .bytes()
+        .map(|byte| {
+            if byte.is_ascii_alphanumeric() {
+                char::from(byte)
+            } else {
+                '-'
+            }
+        })
+        .collect();
+    let session = "01234567-89ab-cdef-0123-456789abcdef";
+    let transcript = config_dir
+        .join("projects")
+        .join(project)
+        .join(format!("{session}.jsonl"));
+    std::fs::create_dir_all(transcript.parent().unwrap()).unwrap();
+
+    assert_eq!(
+        claude_project_transcript_exists(&config_dir, &cwd, session).unwrap(),
+        Some(false)
+    );
+    std::fs::write(&transcript, "{}\n").unwrap();
+    assert_eq!(
+        claude_project_transcript_exists(&config_dir, &cwd, session).unwrap(),
+        Some(true)
+    );
+    assert_eq!(
+        claude_project_transcript_exists(&config_dir, Path::new("/tmp/café"), session).unwrap(),
+        None
+    );
+    let long_cwd = Path::new("/").join("a".repeat(201));
+    assert_eq!(
+        claude_project_transcript_exists(&config_dir, &long_cwd, session).unwrap(),
+        None
+    );
+}
+
+#[test]
+fn legacy_ssh_null_output_specs_are_rejected_before_restore() {
+    for name in ["ssh", "/usr/bin/ssh"] {
+        let command = CommandSpec::ProgramNullStdio {
+            argv: vec![name.into(), "fixture.invalid".into()],
+            null_stdio: [false, true, false],
+        };
+        assert!(
+            command
+                .argv()
+                .unwrap_err()
+                .to_string()
+                .contains("SSH output redirection")
+        );
+    }
+    assert!(platform::ssh_terminal_stdout(std::process::id()).is_err());
+}
+fn saved() -> Snapshot {
+    Snapshot {
+        tool: TOOL.into(),
+        schema: SCHEMA,
+        session: "a".repeat(64),
+        created_ms: 1,
+        scope: Scope::Session,
+        layout: vec![],
+        focused_workspace_id: None,
+        panes: vec![SavedPane {
+            workspace_id: "w1".into(),
+            tab_id: "w1:t1".into(),
+            pane_id: "w1:p1".into(),
+            cwd: "/tmp".into(),
+            command: Some(CommandSpec::Program {
+                argv: vec!["ssh".into(), "fixture.invalid".into()],
+            }),
+        }],
+    }
+}
+fn live() -> LiveSnapshot {
+    serde_json::from_value(json!({"version":"0.9.1", "protocol":22,
+        "workspaces":[{"workspace_id":"w1"}], "tabs":[{"workspace_id":"w1","tab_id":"w1:t1"}],
+        "panes":[{"workspace_id":"w1","tab_id":"w1:t1","pane_id":"w1:p1","terminal_id":"term_fixture","cwd":"/tmp"}]})).unwrap()
+}
+
+#[test]
+fn plans_match_ids_and_ignore_array_order() {
+    let saved = saved();
+    let mut live = live();
+    let p = planner::plan(&saved, &saved.session, &live, &config()).unwrap();
+    assert_eq!(p.entries[0].decision, planner::Decision::Candidate);
+    live.panes[0].pane_id = "w1:p9".into();
+    assert_eq!(
+        planner::plan(&saved, &saved.session, &live, &config())
+            .unwrap()
+            .entries[0]
+            .decision,
+        planner::Decision::MissingPane
+    );
+    live.panes[0].pane_id = "w1:p1".into();
+    live.tabs[0].tab_id = "w1:t9".into();
+    live.panes[0].tab_id = "w1:t9".into();
+    assert_eq!(
+        planner::plan(&saved, &saved.session, &live, &config())
+            .unwrap()
+            .entries[0]
+            .decision,
+        planner::Decision::IdentityMismatch
+    );
+}
+
+#[test]
+fn current_policy_and_session_are_required() {
+    let saved = saved();
+    assert!(planner::plan(&saved, &"b".repeat(64), &live(), &config()).is_err());
+    assert_eq!(
+        planner::plan(&saved, &saved.session, &live(), &Config::default())
+            .unwrap()
+            .entries[0]
+            .decision,
+        planner::Decision::DeniedByPolicy
+    );
+}
+
+#[test]
+fn malformed_native_snapshots_are_rejected() {
+    let mut value = serde_json::to_value(saved()).unwrap();
+    for key in ["restorable", "unknown"] {
+        value[key] = json!(true);
+        assert!(serde_json::from_value::<Snapshot>(value.clone()).is_err());
+        value.as_object_mut().unwrap().remove(key);
+    }
+    for schema in [0, 2, u32::MAX] {
+        let mut s = saved();
+        s.schema = schema;
+        assert!(s.validate().is_err());
+    }
+    let mut s = saved();
+    s.panes.push(s.panes[0].clone());
+    assert!(s.validate().is_err());
+    let mut s = saved();
+    s.panes[0].tab_id = "w2:t1".into();
+    assert!(s.validate().is_err());
+    let mut s = saved();
+    s.panes[0].cwd = "relative".into();
+    assert!(s.validate().is_err());
+}
+
+#[test]
+fn config_fails_closed_on_unknown_fields_and_invalid_limits() {
+    assert!(toml::from_str::<Config>("autoRestore = true").is_err());
+    let mut cfg = config();
+    cfg.retention = 0;
+    assert!(cfg.validate().is_err());
+    cfg = config();
+    cfg.timeout_ms = 0;
+    assert!(cfg.validate().is_err());
+    cfg = config();
+    cfg.allowed_programs.push("../ssh".into());
+    assert!(cfg.validate().is_err());
+}
+
+#[test]
+fn exact_agent_references_only() {
+    let id = "01234567-89ab-cdef-0123-456789abcdef";
+    for invalid in [
+        "",
+        "latest",
+        "../sessions/123",
+        "--continue",
+        "01234567-89ab-cdef-0123-456789abcdeg",
+    ] {
+        assert!(validate_session_id(invalid).is_err());
+    }
+    for (agent, executable, flag) in [
+        ("claude", "claude", "--resume"),
+        ("codex", "codex", "resume"),
+        ("gemini", "gemini", "--resume"),
+        ("copilot", "copilot", "--resume"),
+        ("cursor", "cursor-agent", "--resume"),
+    ] {
+        let argv = vec![executable.into(), flag.into(), id.into()];
+        assert_eq!(
+            capture::command_for(&argv, None)
+                .unwrap()
+                .unwrap()
+                .argv()
+                .unwrap(),
+            argv
+        );
+        assert!(capture::command_for(&[executable.into(), "--continue".into()], None).is_err());
+        let native = AgentSession {
+            source: format!("herdr:{agent}"),
+            agent: agent.into(),
+            kind: "id".into(),
+            value: id.into(),
+        };
+        assert_eq!(
+            capture::command_for(&[executable.into()], Some(&native))
+                .unwrap()
+                .unwrap()
+                .argv()
+                .unwrap(),
+            argv
+        );
+        // In-process session changes leave launch argv pointing at the old ID.
+        let old_argv = vec![
+            executable.into(),
+            flag.into(),
+            "11234567-89ab-cdef-0123-456789abcdef".into(),
+        ];
+        assert_eq!(
+            capture::command_for(&old_argv, Some(&native))
+                .unwrap()
+                .unwrap()
+                .argv()
+                .unwrap(),
+            argv
+        );
+        let mut bad = native;
+        bad.source = "user:guess".into();
+        assert!(capture::command_for(&[executable.into()], Some(&bad)).is_err());
+        assert!(CommandSpec::Program { argv }.argv().is_err());
+    }
+}
+
+#[test]
+fn node_agent_wrappers_require_exact_ids_and_cannot_be_plain_programs() {
+    for (agent, script) in [
+        ("codex", "/fixture/node_modules/@openai/codex/bin/codex.js"),
+        (
+            "claude",
+            "/fixture/node_modules/@anthropic-ai/claude-code/cli.js",
+        ),
+    ] {
+        let argv = vec!["node".into(), script.into(), "--continue".into()];
+        assert!(capture::command_for(&argv, None).is_err());
+        assert!(CommandSpec::Program { argv: argv.clone() }.argv().is_err());
+        let native = AgentSession {
+            source: format!("herdr:{agent}"),
+            agent: agent.into(),
+            kind: "id".into(),
+            value: "01234567-89ab-cdef-0123-456789abcdef".into(),
+        };
+        let command = capture::command_for(&argv, Some(&native)).unwrap().unwrap();
+        let restored = command.allowed_argv(&config()).unwrap();
+        assert_eq!(restored[0], agent);
+        assert_eq!(restored[2], native.value);
+        assert!(!restored.contains(&"--continue".into()));
+    }
+    let mut cfg = config();
+    cfg.allowed_programs.push("node".into());
+    assert!(cfg.validate().is_ok());
+    assert!(capture::command_for(&["node".into(), "server.js".into()], None).is_ok());
+}
+
+#[test]
+fn pipelines_are_rejected_but_leader_descendants_are_allowed() {
+    use platform::Process;
+    let leader = Process {
+        pid: 10,
+        parent: 1,
+        group: 10,
+        start: 1,
+    };
+    let descendant = Process {
+        pid: 11,
+        parent: 10,
+        group: 10,
+        start: 2,
+    };
+    let mut table = std::collections::HashMap::from([(10, leader.clone()), (11, descendant)]);
+    platform::validate_foreground_tree(&table, &leader).unwrap();
+    table.insert(
+        12,
+        Process {
+            pid: 12,
+            parent: 1,
+            group: 10,
+            start: 3,
+        },
+    );
+    assert!(platform::validate_foreground_tree(&table, &leader).is_err());
+}
+
+#[test]
+fn arbitrary_argv_roundtrips_in_real_posix_shells() {
+    let mut args = vec![
+        "printf".into(),
+        "%s\\0".into(),
+        "".into(),
+        "two words".into(),
+        "'\"$;|&(){}*?`\\".into(),
+        "中文測試".into(),
+        "$(touch NEVER_CREATED)".into(),
+    ];
+    let alphabet = ["a", "'", " ", "$", "\\", "\"", ";", "|", "漢"];
+    for i in 0..81 {
+        args.push(format!(
+            "{}{}{}",
+            alphabet[i % 9],
+            alphabet[(i / 9) % 9],
+            alphabet[(i * 7) % 9]
+        ));
+    }
+    let cwd = tempfile::tempdir().unwrap();
+    for shell in ["bash", "dash", "zsh"] {
+        let executable = Path::new("/bin").join(shell);
+        if !executable.exists() {
+            continue;
+        }
+        let text = platform::shell_command(shell, cwd.path().to_str().unwrap(), &args).unwrap();
+        let output = std::process::Command::new(&executable)
+            .args(["-c", &text])
+            .output()
+            .unwrap();
+        assert!(output.status.success(), "{shell}");
+        let expected: Vec<u8> = args[2..]
+            .iter()
+            .flat_map(|s| s.bytes().chain([0]))
+            .collect();
+        assert_eq!(output.stdout, expected, "{shell}");
+        assert!(!cwd.path().join("NEVER_CREATED").exists());
+    }
+}
+
+#[test]
+fn terminal_controls_and_unsupported_shells_fail_closed() {
+    for arg in ["hello\nworld", "\r", "\x1b[201~", "\0", "\t", "\u{7f}"] {
+        assert!(platform::shell_command("bash", "/tmp", &["ssh".into(), arg.into()]).is_err());
+    }
+    for shell in ["fish", "pwsh", "cmd", "unknown"] {
+        assert!(platform::shell_command(shell, "/tmp", &["ssh".into()]).is_err());
+    }
+    assert!(platform::decode_argv(b"ssh\0\xff\0").is_err());
+    assert!(platform::decode_argv(b"ssh\0truncated").is_err());
+    assert_eq!(
+        platform::decode_argv(b"ssh\0\0x\0").unwrap(),
+        ["ssh", "", "x"]
+    );
+}
+
+#[test]
+fn deterministic_planning_for_fixture_sizes() {
+    for count in [1, 10, 50, 100] {
+        let mut s = saved();
+        let mut l = live();
+        let template = s.panes[0].clone();
+        let live_template = l.panes[0].clone();
+        s.panes = (1..=count)
+            .map(|i| {
+                let mut p = template.clone();
+                p.pane_id = format!("w1:p{i}");
+                p
+            })
+            .collect();
+        l.panes = (1..=count)
+            .rev()
+            .map(|i| {
+                let mut p = live_template.clone();
+                p.pane_id = format!("w1:p{i}");
+                p
+            })
+            .collect();
+        let first =
+            serde_json::to_value(planner::plan(&s, &s.session, &l, &config()).unwrap()).unwrap();
+        s.panes.reverse();
+        l.panes.reverse();
+        assert_eq!(
+            first,
+            serde_json::to_value(planner::plan(&s, &s.session, &l, &config()).unwrap()).unwrap()
+        );
+    }
+}
+
+#[test]
+fn live_snapshot_from_any_host_version_is_accepted() {
+    let l: LiveSnapshot = serde_json::from_value(json!({"version":"1.4.0", "protocol":99,
+        "future_field":{"x":1},
+        "workspaces":[{"workspace_id":"w1"}], "tabs":[{"workspace_id":"w1","tab_id":"w1:t1"}],
+        "panes":[{"workspace_id":"w1","tab_id":"w1:t1","pane_id":"w1:p1","terminal_id":"term_fixture","cwd":"/tmp"}]}))
+    .unwrap();
+    assert!(planner::index_live(&l).is_ok());
+}
+
+#[test]
+fn duplicate_live_ids_and_orphans_are_errors() {
+    let mut l = live();
+    l.panes.push(l.panes[0].clone());
+    assert!(planner::index_live(&l).is_err());
+    l = live();
+    l.tabs.clear();
+    assert!(planner::index_live(&l).is_err());
+    l = live();
+    l.workspaces.clear();
+    assert!(planner::index_live(&l).is_err());
+}
+
+#[test]
+fn response_envelopes_are_checked_and_redacted() {
+    assert!(
+        transport::decode_response(br#"{"id":"wrong","result":{"type":"ok"}}"#, "right", "ok")
+            .is_err()
+    );
+    let error = transport::decode_response(
+        br#"{"id":"right","error":{"message":"SECRET"}}"#,
+        "right",
+        "ok",
+    )
+    .unwrap_err();
+    assert!(!format!("{error:#}").contains("SECRET"));
+    assert!(
+        transport::decode_response(br#"{"id":"right","result":{"type":"pong"}}"#, "right", "ok")
+            .is_err()
+    );
+}
+
+#[test]
+fn private_atomic_storage_and_retention() {
+    use std::os::unix::fs::PermissionsExt;
+    let temp = tempfile::tempdir().unwrap();
+    let s = store::Store::new(temp.path(), saved().session).unwrap();
+    let _lock = s.try_lock().unwrap().unwrap();
+    assert!(s.try_lock().unwrap().is_none());
+    for time in 1..=5 {
+        let mut snapshot = saved();
+        snapshot.created_ms = time;
+        s.save(&snapshot, None, 2).unwrap();
+        let compact = serde_json::to_vec(&snapshot).unwrap();
+        let archive = s.root.join("snapshots").join(format!(
+            "{time:020}-{}.json",
+            &store::digest(&compact)[..16],
+        ));
+        assert_eq!(
+            std::fs::read(archive).unwrap(),
+            std::fs::read(s.snapshot_path(None).unwrap()).unwrap(),
+        );
+    }
+    assert_eq!(s.list("snapshots").unwrap().len(), 2);
+    assert_eq!(
+        s.read_snapshot(&s.snapshot_path(None).unwrap())
+            .unwrap()
+            .created_ms,
+        5
+    );
+    assert_eq!(
+        std::fs::metadata(s.snapshot_path(None).unwrap())
+            .unwrap()
+            .permissions()
+            .mode()
+            & 0o777,
+        0o600
+    );
+    let mut bad = saved();
+    bad.schema = 99;
+    assert!(s.save(&bad, None, 2).is_err());
+    assert_eq!(
+        s.read_snapshot(&s.snapshot_path(None).unwrap())
+            .unwrap()
+            .created_ms,
+        5
+    );
+    std::fs::write(s.root.join(".interrupted-write.tmp"), b"partial").unwrap();
+    assert_eq!(
+        s.read_snapshot(&s.snapshot_path(None).unwrap())
+            .unwrap()
+            .created_ms,
+        5
+    );
+}
+
+#[test]
+fn symlinks_and_oversized_state_are_rejected() {
+    use std::os::unix::fs::symlink;
+    let t = tempfile::tempdir().unwrap();
+    let target = t.path().join("target");
+    std::fs::write(&target, b"safe").unwrap();
+    let link = t.path().join("link");
+    symlink(&target, &link).unwrap();
+    assert!(store::read_bytes(&link).is_err());
+    assert!(store::atomic_write(&link, b"unsafe").is_err());
+    assert_eq!(std::fs::read(&target).unwrap(), b"safe");
+    let big = t.path().join("large");
+    std::fs::File::create(&big)
+        .unwrap()
+        .set_len(MAX_BYTES as u64 + 1)
+        .unwrap();
+    assert!(store::read_bytes(&big).is_err());
+    for name in ["..", "../escape", "x/y", "", "a.b"] {
+        assert!(store::validate_name(name).is_err());
+    }
+}
+
+#[test]
+fn permission_failure_preserves_previous_file() {
+    use std::os::unix::fs::PermissionsExt;
+    let temp = tempfile::tempdir().unwrap();
+    let path = temp.path().join("state.json");
+    store::atomic_write(&path, b"previous").unwrap();
+    std::fs::set_permissions(temp.path(), std::fs::Permissions::from_mode(0o500)).unwrap();
+    let result = store::atomic_write(&path, b"replacement");
+    std::fs::set_permissions(temp.path(), std::fs::Permissions::from_mode(0o700)).unwrap();
+    assert!(result.is_err());
+    assert_eq!(std::fs::read(path).unwrap(), b"previous");
+}
+
+#[test]
+fn session_paths_normalize_parent_aliases_but_separate_sessions() {
+    use std::os::unix::fs::symlink;
+    let t = tempfile::tempdir().unwrap();
+    let actual = t.path().join("actual");
+    std::fs::create_dir(&actual).unwrap();
+    symlink(&actual, t.path().join("alias")).unwrap();
+    assert_eq!(
+        store::session_identity(&actual.join("socket")).unwrap(),
+        store::session_identity(&t.path().join("alias/socket")).unwrap()
+    );
+    assert_ne!(
+        store::session_identity(&actual.join("socket")).unwrap().1,
+        store::session_identity(&actual.join("other")).unwrap().1
+    );
+    assert!(store::session_identity(Path::new("relative.sock")).is_err());
+}
+
+struct Fake {
+    runs: usize,
+    fail: bool,
+}
+impl Host for Fake {
+    fn snapshot(&mut self) -> Result<LiveSnapshot> {
+        Ok(live())
+    }
+    fn process_info(&mut self, _: &str) -> Result<ProcessInfo> {
+        bail!("unused")
+    }
+    fn pane(&mut self, _: &str) -> Result<LivePane> {
+        Ok(live().panes.remove(0))
+    }
+    fn run(&mut self, _: &str, _: &str) -> Result<()> {
+        self.runs += 1;
+        if self.fail {
+            bail!("ambiguous timeout");
+        }
+        Ok(())
+    }
+}
+
+#[test]
+fn one_claim_per_boot_and_no_retry_after_ambiguous_failure() {
+    for fail in [false, true] {
+        let t = tempfile::tempdir().unwrap();
+        let s = saved();
+        let store = store::Store::new(t.path(), s.session.clone()).unwrap();
+        let _lock = store.try_lock().unwrap().unwrap();
+        let plan = planner::plan(&s, &s.session, &live(), &config()).unwrap();
+        let mut host = Fake { runs: 0, fail };
+        let generation = "b".repeat(64);
+        let result = app::execute(&mut host, &store, &s, &plan, &generation, |_, _, _, _| {
+            Ok(Some("safe fixture".into()))
+        });
+        assert_eq!(result.is_err(), fail);
+        assert_eq!(host.runs, 1);
+        assert!(
+            app::execute(&mut host, &store, &s, &plan, &generation, |_, _, _, _| Ok(
+                Some("duplicate".into())
+            ))
+            .is_err()
+        );
+        assert_eq!(host.runs, 1);
+        if fail {
+            let mut evidence = app::pending(&store).unwrap().unwrap();
+            assert_eq!(evidence.state, app::BootState::Failed);
+            assert!(app::require_clear(&store).is_err());
+            evidence.state = app::BootState::Done;
+            evidence.acknowledged = true;
+            app::finish(&store, &evidence).unwrap();
+            assert!(app::pending(&store).unwrap().is_none());
+            assert!(
+                app::boot(&store, &generation)
+                    .unwrap()
+                    .unwrap()
+                    .acknowledged
+            );
+        }
+    }
+}
+
+#[test]
+fn crash_before_run_preserves_sending_evidence() {
+    let t = tempfile::tempdir().unwrap();
+    let s = saved();
+    let store = store::Store::new(t.path(), s.session.clone()).unwrap();
+    let plan = planner::plan(&s, &s.session, &live(), &config()).unwrap();
+    let mut host = Fake {
+        runs: 0,
+        fail: false,
+    };
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let _ = app::execute(
+            &mut host,
+            &store,
+            &s,
+            &plan,
+            &"b".repeat(64),
+            |_, _, _, _| panic!("simulated crash"),
+        );
+    }));
+    assert!(result.is_err());
+    assert_eq!(host.runs, 0);
+    assert_eq!(
+        app::pending(&store).unwrap().unwrap().entries[0].outcome,
+        app::Outcome::Sending
+    );
+    assert!(app::require_clear(&store).is_err());
+}
+
+#[test]
+fn busy_pane_is_skipped_and_never_replayed_in_same_boot() {
+    let t = tempfile::tempdir().unwrap();
+    let s = saved();
+    let store = store::Store::new(t.path(), s.session.clone()).unwrap();
+    let plan = planner::plan(&s, &s.session, &live(), &config()).unwrap();
+    let mut host = Fake {
+        runs: 0,
+        fail: false,
+    };
+    let record = app::execute(
+        &mut host,
+        &store,
+        &s,
+        &plan,
+        &"b".repeat(64),
+        |_, _, _, _| Ok(None),
+    )
+    .unwrap();
+    assert_eq!(record.entries[0].outcome, app::Outcome::Skipped);
+    assert_eq!(host.runs, 0);
+}
+
+#[test]
+fn partial_restore_stops_at_failure_and_preserves_all_outcomes() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut saved = saved();
+    let mut live = live();
+    let pane = saved.panes[0].clone();
+    let current = live.panes[0].clone();
+    for i in 2..=3 {
+        let mut next = pane.clone();
+        next.pane_id = format!("w1:p{i}");
+        saved.panes.push(next);
+        let mut next = current.clone();
+        next.pane_id = format!("w1:p{i}");
+        live.panes.push(next);
+    }
+    let store = store::Store::new(temp.path(), saved.session.clone()).unwrap();
+    let plan = planner::plan(&saved, &saved.session, &live, &config()).unwrap();
+    let mut host = Fake {
+        runs: 0,
+        fail: false,
+    };
+    let result = app::execute(
+        &mut host,
+        &store,
+        &saved,
+        &plan,
+        &"b".repeat(64),
+        |_, pane, _, _| {
+            if pane.pane_id == "w1:p2" {
+                bail!("pane disappeared before execution");
+            }
+            Ok(Some("safe fixture".into()))
+        },
+    );
+    assert!(result.is_err());
+    assert_eq!(host.runs, 1);
+    let pending = app::pending(&store).unwrap().unwrap();
+    assert_eq!(
+        pending
+            .entries
+            .iter()
+            .map(|e| e.outcome.clone())
+            .collect::<Vec<_>>(),
+        vec![
+            app::Outcome::Applied,
+            app::Outcome::Failed,
+            app::Outcome::Pending
+        ]
+    );
+}
+
+#[test]
+fn process_identity_detects_pid_reuse() {
+    let current = platform::process(std::process::id()).unwrap();
+    let mut reused = current.clone();
+    reused.start += 1;
+    assert!(platform::argv_and_cwd(&reused).is_err());
+    assert!(platform::argv_and_cwd(&current).is_ok());
+}
+
+#[test]
+#[cfg(target_os = "linux")]
+fn stat_parser_handles_spaces_and_parentheses_in_process_names() {
+    let stat = format!(
+        "42 (name ) ( with spaces) S 12 42 {} 9876 0",
+        ["0"; 16].join(" ")
+    );
+    let p = platform::parse_stat(&stat).unwrap();
+    assert_eq!((p.pid, p.parent, p.group, p.start), (42, 12, 42, 9876));
+}
+
+#[test]
+fn config_and_boot_corruption_are_visible() {
+    let t = tempfile::tempdir().unwrap();
+    std::fs::write(t.path().join("config.toml"), "auto_restore = 'secret'").unwrap();
+    let error = store::load_config(t.path()).unwrap_err();
+    assert!(!format!("{error:#}").contains("secret"));
+    let store = store::Store::new(t.path(), saved().session).unwrap();
+    std::fs::write(store.root.join("pending.json"), "{").unwrap();
+    assert!(app::require_clear(&store).is_err());
+}
+
+#[test]
+fn read_protocol_deadline_covers_dribbling_and_partial_replies() {
+    use std::io::{BufRead, Write};
+    use std::os::unix::net::UnixListener;
+    use std::time::{Duration, Instant};
+    for response in [b"{partial".as_slice(), b"".as_slice()] {
+        let t = tempfile::tempdir().unwrap();
+        let path = t.path().join("socket");
+        let listener = UnixListener::bind(&path).unwrap();
+        let response = response.to_vec();
+        let server = std::thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            let mut line = String::new();
+            std::io::BufReader::new(stream.try_clone().unwrap())
+                .read_line(&mut line)
+                .unwrap();
+            stream.write_all(&response).unwrap();
+            std::thread::sleep(Duration::from_millis(100));
+        });
+        let start = Instant::now();
+        assert!(transport::direct_request(&path, b"{}\n", Duration::from_millis(30)).is_err());
+        assert!(start.elapsed() < Duration::from_millis(90));
+        server.join().unwrap();
+    }
+}
+
+#[test]
+fn configurable_program_matching_and_safe_agent_options() {
+    let mut cfg = Config {
+        allowed_programs: vec!["node".into()],
+        match_program_basename: true,
+        ..Config::default()
+    };
+    assert!(cfg.allows("/usr/bin/NODE"));
+    assert!(!cfg.allows("/usr/bin/python"));
+    cfg.allowed_programs = vec!["*".into()];
+    assert!(cfg.allows("/usr/bin/python"));
+    for arg in [
+        "-c",
+        "-r01234567-89ab-cdef-0123-456789abcdef",
+        "--continue",
+        "--session-id",
+        "--fork-session",
+        "--resume=latest",
+        "prompt",
+    ] {
+        cfg.agent_extra_args
+            .insert("claude".into(), vec![arg.into()]);
+        assert!(cfg.validate().is_err(), "{arg}");
+    }
+    cfg.agent_extra_args
+        .insert("claude".into(), vec!["--model".into(), "fixture".into()]);
+    cfg.validate().unwrap();
+    let command = CommandSpec::Agent {
+        executable: "claude".into(),
+        agent: AgentKind::Claude,
+        session_id: "01234567-89ab-cdef-0123-456789abcdef".into(),
+        session_mode: AgentSessionMode::Resume,
+        claude_config_dir: None,
+        claude_home: None,
+        null_stdio: [false; 3],
+    };
+    assert_eq!(
+        &command.allowed_argv(&cfg).unwrap()[3..],
+        &["--model", "fixture"]
+    );
+    cfg.resume_agents = false;
+    assert!(command.allowed_argv(&cfg).is_err());
+}
+
+#[test]
+fn rename_preserves_snapshot_and_boot_identity() {
+    let dir = tempfile::tempdir().unwrap();
+    let socket = dir.path().canonicalize().unwrap().join("host.sock");
+    let (_, session) = store::session_identity(&socket).unwrap();
+    assert_eq!(
+        session,
+        store::digest(format!("cantona.herde-revive\0session-v1\0{}", socket.display()).as_bytes())
+    );
+    let store = store::Store::new(&dir.path().join("state"), session.clone()).unwrap();
+    let mut snapshot = saved();
+    snapshot.session = session.clone();
+    snapshot.tool = "herde-revive".into();
+    store.save(&snapshot, None, 10).unwrap();
+    assert_eq!(
+        store
+            .read_snapshot(&store.snapshot_path(None).unwrap())
+            .unwrap(),
+        snapshot
+    );
+    let generation = "b".repeat(64);
+    let mut journal = app::Journal::new(&session, &generation);
+    journal.tool = "herde-revive".into();
+    journal.state = app::BootState::Done;
+    app::finish(&store, &journal).unwrap();
+    assert!(app::boot(&store, &generation).unwrap().is_some());
+    store::atomic_json(&store.root.join("pending.json"), &journal).unwrap();
+    assert!(app::require_clear(&store).is_err());
+    snapshot.tool = "herdr-resurrect".into();
+    assert!(snapshot.validate().is_err());
+}
+
+#[test]
+fn custom_agent_launcher_is_selected_by_environment_and_current_policy() {
+    let mut cfg = config();
+    let launcher = AgentLauncher {
+        agent: AgentKind::Claude,
+        executable: "claude-local".into(),
+        match_env: std::collections::BTreeMap::from([(
+            "CLAUDE_CONFIG_DIR".into(),
+            "/fixture/local".into(),
+        )]),
+    };
+    cfg.agent_launchers.push(launcher.clone());
+    cfg.allowed_programs.push("claude-local".into());
+    cfg.validate().unwrap();
+    let rules = [&launcher];
+    assert!(
+        capture::matching_launcher(&rules, b"CLAUDE_CONFIG_DIR=/fixture/ordinary\0")
+            .unwrap()
+            .is_none()
+    );
+    let selected = capture::matching_launcher(
+        &rules,
+        b"SECRET=never-save\0CLAUDE_CONFIG_DIR=/fixture/local\0",
+    )
+    .unwrap()
+    .unwrap();
+    assert_eq!(selected.executable, "claude-local");
+    assert!(
+        capture::matching_launcher(
+            &[&launcher, &launcher],
+            b"CLAUDE_CONFIG_DIR=/fixture/local\0"
+        )
+        .is_err()
+    );
+    let cmd = CommandSpec::Agent {
+        executable: selected.executable.clone(),
+        agent: AgentKind::Claude,
+        session_id: "01234567-89ab-cdef-0123-456789abcdef".into(),
+        session_mode: AgentSessionMode::Resume,
+        claude_config_dir: None,
+        claude_home: None,
+        null_stdio: [false; 3],
+    };
+    assert_eq!(cmd.allowed_argv(&cfg).unwrap()[0], "claude-local");
+    let plain = CommandSpec::Program {
+        argv: vec!["claude-local".into()],
+    };
+    assert!(plain.allowed_argv(&cfg).is_err());
+    let alternative = CommandSpec::Program {
+        argv: vec!["/fixture/bin/claude-local".into(), "--continue".into()],
+    };
+    cfg.match_program_basename = true;
+    assert!(alternative.allowed_argv(&cfg).is_err());
+    assert!(
+        capture::matching_launcher(
+            &rules,
+            b"CLAUDE_CONFIG_DIR=/fixture/ordinary\0CLAUDE_CONFIG_DIR=/fixture/local\0"
+        )
+        .is_err()
+    );
+    cfg.agent_launchers.clear();
+    assert!(cmd.allowed_argv(&cfg).is_err());
+}
+
+#[test]
+fn hosts_support_layout_unless_they_opt_out() {
+    struct NoLayout;
+    impl Host for NoLayout {
+        fn supports_layout(&self) -> bool {
+            false
+        }
+        fn snapshot(&mut self) -> Result<LiveSnapshot> {
+            Ok(live())
+        }
+        fn process_info(&mut self, _: &str) -> Result<ProcessInfo> {
+            bail!("unused")
+        }
+        fn pane(&mut self, _: &str) -> Result<LivePane> {
+            bail!("unused")
+        }
+        fn run(&mut self, _: &str, _: &str) -> Result<()> {
+            bail!("unused")
+        }
+    }
+    assert!(
+        Fake {
+            runs: 0,
+            fail: false
+        }
+        .supports_layout()
+    );
+    assert!(!NoLayout.supports_layout());
+    assert!(
+        format!(
+            "{:#}",
+            NoLayout
+                .api("layout.export", json!({}), "layout_export")
+                .unwrap_err()
+        )
+        .contains("layout")
+    );
+}
+
+#[test]
+fn startup_shell_requires_the_parent_shell_in_its_own_foreground_group() {
+    let info = ProcessInfo {
+        pane_id: "w1:p1".into(),
+        shell_pid: Some(std::process::id()),
+        foreground_process_group_id: None,
+        foreground_processes: vec![],
+    };
+    assert!(
+        platform::startup_shell(&info, std::process::id() + 1)
+            .unwrap()
+            .is_none()
+    );
+    let missing = ProcessInfo {
+        shell_pid: None,
+        ..info
+    };
+    assert!(platform::startup_shell(&missing, 1).is_err());
+}
+
+struct IdleBash(std::process::Child);
+impl IdleBash {
+    fn spawn() -> Self {
+        use std::os::unix::process::CommandExt;
+        let child = std::process::Command::new("bash")
+            .arg("--norc")
+            .stdin(std::process::Stdio::piped())
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null())
+            .process_group(0)
+            .spawn()
+            .unwrap();
+        Self(child)
+    }
+    fn pid(&self) -> u32 {
+        self.0.id()
+    }
+    fn info(&self, group: u32, foreground: &[u32]) -> ProcessInfo {
+        ProcessInfo {
+            pane_id: "w1:p1".into(),
+            shell_pid: Some(self.pid()),
+            foreground_process_group_id: Some(group),
+            foreground_processes: foreground
+                .iter()
+                .map(|&pid| ForegroundProcess { pid })
+                .collect(),
+        }
+    }
+}
+impl Drop for IdleBash {
+    fn drop(&mut self) {
+        let _ = self.0.kill();
+        let _ = self.0.wait();
+    }
+}
+
+#[test]
+fn startup_shell_accepts_only_an_idle_parent_shell() {
+    let shell = IdleBash::spawn();
+    let pid = shell.pid();
+    for foreground in [&[pid][..], &[pid, 1]] {
+        assert_eq!(
+            platform::startup_shell(&shell.info(pid, foreground), pid)
+                .unwrap()
+                .as_deref(),
+            Some("bash"),
+            "{foreground:?}"
+        );
+    }
+    for info in [
+        shell.info(pid + 1, &[pid]),
+        shell.info(pid + 1, &[pid + 1]),
+        shell.info(pid, &[1]),
+        shell.info(pid, &[]),
+    ] {
+        assert!(platform::startup_shell(&info, pid).unwrap().is_none());
+    }
+}
+
+#[test]
+fn capture_skips_layout_export_for_hosts_without_layout() {
+    struct IdleNoLayout(IdleBash);
+    impl Host for IdleNoLayout {
+        fn supports_layout(&self) -> bool {
+            false
+        }
+        fn snapshot(&mut self) -> Result<LiveSnapshot> {
+            Ok(live())
+        }
+        fn process_info(&mut self, _: &str) -> Result<ProcessInfo> {
+            let pid = self.0.pid();
+            Ok(self.0.info(pid, &[pid]))
+        }
+        fn pane(&mut self, _: &str) -> Result<LivePane> {
+            bail!("unused")
+        }
+        fn run(&mut self, _: &str, _: &str) -> Result<()> {
+            bail!("unused")
+        }
+        fn api(
+            &mut self,
+            method: &str,
+            _: serde_json::Value,
+            _: &str,
+        ) -> Result<serde_json::Value> {
+            panic!("unexpected api call: {method}")
+        }
+    }
+    let mut host = IdleNoLayout(IdleBash::spawn());
+    let (snapshot, _) = capture::capture(&mut host, &"a".repeat(64), None, &config()).unwrap();
+    assert_eq!(snapshot.panes.len(), 1);
+    assert!(snapshot.layout.is_empty());
+}
+
+#[test]
+fn per_pane_relaunch_journals_one_entry_per_pane_per_generation() {
+    let t = tempfile::tempdir().unwrap();
+    let mut s = saved();
+    s.panes.push(SavedPane {
+        workspace_id: "w1".into(),
+        tab_id: "w1:t1".into(),
+        pane_id: "w1:p2".into(),
+        cwd: "/tmp".into(),
+        command: Some(CommandSpec::Program {
+            argv: vec!["ssh".into(), "two".into()],
+        }),
+    });
+    let store = store::Store::new(t.path(), s.session.clone()).unwrap();
+    let lock = store.try_lock().unwrap().unwrap();
+    let mut live = live();
+    live.panes.push(LivePane {
+        workspace_id: "w1".into(),
+        tab_id: "w1:t1".into(),
+        pane_id: "w1:p2".into(),
+        terminal_id: "term_2".into(),
+        cwd: Some("/tmp".into()),
+        agent: None,
+        agent_session: None,
+    });
+    let plan = planner::plan(&s, &s.session, &live, &config()).unwrap();
+    let mut host = Fake {
+        runs: 0,
+        fail: false,
+    };
+    let generation = "c".repeat(64);
+    let first = app::execute_pane(
+        &mut host,
+        &store,
+        &lock,
+        &s,
+        &s.panes[0],
+        &plan.entries[0],
+        &generation,
+        |_, _, _, _| Ok(Some("one".into())),
+    )
+    .unwrap();
+    assert_eq!(first, Some(app::Outcome::Applied));
+    assert_eq!(host.runs, 1);
+    assert!(app::pending(&store).unwrap().is_none());
+    let record = app::boot(&store, &generation).unwrap().unwrap();
+    assert_eq!(record.entries.len(), 1);
+    assert_eq!(record.state, app::BootState::Done);
+
+    let again = app::execute_pane(
+        &mut host,
+        &store,
+        &lock,
+        &s,
+        &s.panes[0],
+        &plan.entries[0],
+        &generation,
+        |_, _, _, _| Ok(Some("duplicate".into())),
+    )
+    .unwrap();
+    assert_eq!(again, None);
+    assert_eq!(host.runs, 1);
+
+    let second = app::execute_pane(
+        &mut host,
+        &store,
+        &lock,
+        &s,
+        &s.panes[1],
+        &plan.entries[1],
+        &generation,
+        |_, _, _, _| Ok(None),
+    )
+    .unwrap();
+    assert_eq!(second, Some(app::Outcome::Skipped));
+    let record = app::boot(&store, &generation).unwrap().unwrap();
+    assert_eq!(record.entries.len(), 2);
+    assert_eq!(record.entries[1].outcome, app::Outcome::Skipped);
+
+    let next = "d".repeat(64);
+    let fresh = app::execute_pane(
+        &mut host,
+        &store,
+        &lock,
+        &s,
+        &s.panes[0],
+        &plan.entries[0],
+        &next,
+        |_, _, _, _| Ok(Some("again".into())),
+    )
+    .unwrap();
+    assert_eq!(fresh, Some(app::Outcome::Applied));
+    assert_eq!(host.runs, 2);
+    assert_eq!(store.list("boots").unwrap().len(), 2);
+}
+
+#[test]
+fn per_pane_relaunch_failure_blocks_until_acknowledged() {
+    let t = tempfile::tempdir().unwrap();
+    let s = saved();
+    let store = store::Store::new(t.path(), s.session.clone()).unwrap();
+    let lock = store.try_lock().unwrap().unwrap();
+    let plan = planner::plan(&s, &s.session, &live(), &config()).unwrap();
+    let mut host = Fake {
+        runs: 0,
+        fail: true,
+    };
+    let generation = "e".repeat(64);
+    let relaunch = |host: &mut Fake, store: &store::Store| {
+        app::execute_pane(
+            host,
+            store,
+            &lock,
+            &s,
+            &s.panes[0],
+            &plan.entries[0],
+            &generation,
+            |_, _, _, _| Ok(Some("boom".into())),
+        )
+    };
+    assert!(relaunch(&mut host, &store).is_err());
+    assert_eq!(host.runs, 1);
+    let mut evidence = app::pending(&store).unwrap().unwrap();
+    assert_eq!(evidence.state, app::BootState::Failed);
+    assert_eq!(evidence.entries[0].outcome, app::Outcome::Failed);
+    assert!(app::require_clear(&store).is_err());
+    assert!(relaunch(&mut host, &store).is_err());
+    assert_eq!(host.runs, 1);
+    evidence.state = app::BootState::Done;
+    evidence.acknowledged = true;
+    app::finish(&store, &evidence).unwrap();
+    assert_eq!(relaunch(&mut host, &store).unwrap(), None);
+    assert_eq!(host.runs, 1);
+}
+
+#[test]
+fn per_pane_relaunch_journals_non_candidates_as_skipped_without_running() {
+    let t = tempfile::tempdir().unwrap();
+    let mut s = saved();
+    s.panes[0].command = None;
+    let store = store::Store::new(t.path(), s.session.clone()).unwrap();
+    let lock = store.try_lock().unwrap().unwrap();
+    let plan = planner::plan(&s, &s.session, &live(), &config()).unwrap();
+    assert_eq!(plan.entries[0].decision, planner::Decision::NoCommand);
+    let mut host = Fake {
+        runs: 0,
+        fail: false,
+    };
+    let outcome = app::execute_pane(
+        &mut host,
+        &store,
+        &lock,
+        &s,
+        &s.panes[0],
+        &plan.entries[0],
+        &"f".repeat(64),
+        |_, _, _, _| panic!("never revalidated"),
+    )
+    .unwrap();
+    assert_eq!(outcome, Some(app::Outcome::Skipped));
+    assert_eq!(host.runs, 0);
+    assert_eq!(
+        app::boot(&store, &"f".repeat(64)).unwrap().unwrap().entries[0].outcome,
+        app::Outcome::Skipped
+    );
+}
+
+#[test]
+fn per_pane_relaunch_persists_sending_and_reopens_an_acknowledged_record() {
+    let t = tempfile::tempdir().unwrap();
+    let mut s = saved();
+    s.panes.push(SavedPane {
+        workspace_id: "w1".into(),
+        tab_id: "w1:t1".into(),
+        pane_id: "w1:p2".into(),
+        cwd: "/tmp".into(),
+        command: Some(CommandSpec::Program {
+            argv: vec!["ssh".into(), "two".into()],
+        }),
+    });
+    let store = store::Store::new(t.path(), s.session.clone()).unwrap();
+    let lock = store.try_lock().unwrap().unwrap();
+    let mut live = live();
+    live.panes.push(LivePane {
+        workspace_id: "w1".into(),
+        tab_id: "w1:t1".into(),
+        pane_id: "w1:p2".into(),
+        terminal_id: "term_2".into(),
+        cwd: Some("/tmp".into()),
+        agent: None,
+        agent_session: None,
+    });
+    let plan = planner::plan(&s, &s.session, &live, &config()).unwrap();
+    let mut host = Fake {
+        runs: 0,
+        fail: true,
+    };
+    let generation = "a".repeat(64);
+    assert!(
+        app::execute_pane(
+            &mut host,
+            &store,
+            &lock,
+            &s,
+            &s.panes[0],
+            &plan.entries[0],
+            &generation,
+            |_, _, _, _| Ok(Some("boom".into())),
+        )
+        .is_err()
+    );
+    let mut evidence = app::pending(&store).unwrap().unwrap();
+    let hash = evidence.snapshot_hash.clone();
+    evidence.state = app::BootState::Done;
+    evidence.acknowledged = true;
+    app::finish(&store, &evidence).unwrap();
+
+    host.fail = false;
+    let outcome = app::execute_pane(
+        &mut host,
+        &store,
+        &lock,
+        &s,
+        &s.panes[1],
+        &plan.entries[1],
+        &generation,
+        |entry, _, _, _| {
+            assert_eq!(entry.outcome, app::Outcome::Sending);
+            let pending = app::pending(&store).unwrap().unwrap();
+            assert_eq!(pending.entries[1].outcome, app::Outcome::Sending);
+            assert!(!pending.acknowledged);
+            Ok(Some("two".into()))
+        },
+    )
+    .unwrap();
+    assert_eq!(outcome, Some(app::Outcome::Applied));
+    let record = app::boot(&store, &generation).unwrap().unwrap();
+    assert!(!record.acknowledged);
+    assert_eq!(record.snapshot_hash, hash);
+    assert_eq!(record.entries[0].outcome, app::Outcome::Failed);
+    assert_eq!(record.entries[1].outcome, app::Outcome::Applied);
+}

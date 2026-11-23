@@ -6,3 +6,18 @@ and the MIT License. You may use this project under either license
 at your option.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
+
+-------------------------------------------------------------------------------
+
+crates/herdr-revive-hc is a patched fork of herdr-revive
+  Upstream: https://github.com/cantona/herdr-revive
+  Upstream tag: v0.3.1
+  Upstream commit: 9854631bb6bbea1b64b951a0b6396b50ad42c5a5
+  Upstream author: Su Kang Yin <paradyse@gmail.com>
+  Upstream license: Apache License 2.0 (full text: crates/herdr-revive-hc/LICENSE)
+  Upstream copyright and SPDX headers are preserved in every vendored file.
+
+Modifications (Phenotype fork 0.3.1-hc.1) are listed in
+crates/herdr-revive-hc/PROVENANCE.md. The fork adds jcode/kcode agent kinds and a
+native-Windows platform module; it changes no upstream license terms and adds no
+restriction on downstream use.

@@ -856,6 +856,13 @@ members = [
   "crates/hwledger/apps/model-explorer/rust/crates/hwledger-mcp",
   "crates/hwledger/apps/model-explorer/rust/crates/hwledger-cli",
 
+  # --- herdr-revive-hc: patched vendored fork of cantona/herdr-revive (Apache-2.0).
+  # Upstream attribution and modification list live in the crate's PROVENANCE.md and
+  # the repository NOTICE. Package is renamed so it never masquerades as upstream;
+  # the binary keeps the name `herdr-revive` because upstream's shell hook and docs
+  # resolve it by that name.
+  "crates/herdr-revive-hc",
+
   # --- PlayCua native binary (absorbed submodule) ---
   "native",
 ]
