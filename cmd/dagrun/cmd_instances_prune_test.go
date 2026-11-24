@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/KooshaPari/dagrun/internal/applet"
 )
@@ -172,4 +173,70 @@ func runCmd(t *testing.T, args []string) (int, string, string, error) {
 		code = 1
 	}
 	return code, out, errOut, err
+}
+
+// The Windows hazard unicorn measured: a recycled pid points at some unrelated
+// live process, so "the pid is in use" alone kept a record forever even though
+// nothing answered on its port. Age is the second signal.
+func TestPrunableAgesOutARecycledPID(t *testing.T) {
+	inst := applet.Instance{PID: os.Getpid(), StartedAt: "2026-01-01T00:00:00Z"}
+	if !prunable(inst, time.Date(2026, 1, 1, 1, 0, 0, 0, time.UTC)) {
+		t.Fatalf("an unreachable record an hour old survived a live-but-unrelated pid")
+	}
+}
+
+func TestPrunableKeepsAServerStillStarting(t *testing.T) {
+	now := time.Now().UTC()
+	inst := applet.Instance{PID: os.Getpid(), StartedAt: now.Format(time.RFC3339)}
+	if prunable(inst, now) {
+		t.Fatalf("a record written seconds ago was pruned; a starting server advertises before it serves")
+	}
+}
+
+func TestPrunableKeepsAnUnreadableStartTime(t *testing.T) {
+	inst := applet.Instance{PID: os.Getpid(), StartedAt: "not a timestamp"}
+	if prunable(inst, time.Now().UTC().Add(time.Hour*24*365)) {
+		t.Fatalf("an unreadable start time was read as an old one")
+	}
+}
+
+func TestPrunableTrustsADeadPIDRegardlessOfAge(t *testing.T) {
+	now := time.Now().UTC()
+	inst := applet.Instance{PID: undeadPID, StartedAt: now.Format(time.RFC3339)}
+	if !prunable(inst, now) {
+		t.Fatalf("a dead pid was kept just because its record was young")
+	}
+}
+
+// When the only record is prunable, one run printed both "no dagrun servers
+// advertised" and "pruned stale advertisement": the listing rendered the
+// post-prune remainder while the prose claimed nothing had been advertised.
+func TestCmdInstancesPruneProseDoesNotContradictItself(t *testing.T) {
+	dir := t.TempDir()
+	seedWithPID(t, dir, "127.0.0.1:52396", undeadPID)
+
+	_, out, _, err := runCmd(t, []string{"--dir", dir, "--prune"})
+	if err != nil {
+		t.Fatalf("cmdInstances: %v", err)
+	}
+	if strings.Contains(out, "no dagrun servers advertised") {
+		t.Errorf("prose claims nothing was advertised after pruning something:\n%s", out)
+	}
+	if !strings.Contains(out, "pruned stale advertisement") {
+		t.Errorf("the pruned entry was not reported:\n%s", out)
+	}
+	if !strings.Contains(out, "no dagrun servers remain") {
+		t.Errorf("prose does not say the registry is now empty:\n%s", out)
+	}
+}
+
+func TestCmdInstancesEmptyRegistryProseStillReadsPlainly(t *testing.T) {
+	dir := t.TempDir()
+	_, out, _, err := runCmd(t, []string{"--dir", dir, "--prune"})
+	if err != nil {
+		t.Fatalf("cmdInstances: %v", err)
+	}
+	if !strings.Contains(out, "no dagrun servers advertised") {
+		t.Errorf("an empty registry with nothing pruned should say so:\n%s", out)
+	}
 }
