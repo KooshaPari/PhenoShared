@@ -1,9 +1,0 @@
-# Default owners for everything
-* @phenotype-dev/maintainers
-
-# Documentation
-/docs/ @phenotype-dev/docs-team
-*.md @phenotype-dev/docs-team
-
-# CI/CD
-/.github/workflows/ @phenotype-dev/ci-team

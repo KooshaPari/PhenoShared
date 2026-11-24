@@ -1,7 +1,0 @@
-error[unexpected-keys]: found 1 unexpected keys, expected: ["version", "private", "unlicensed", "allow-osi-fsf-free", "copyleft", "default", "confidence-threshold", "deny", "allow", "unused-allowed-license", "clarify", "exceptions", "unused-license-exception", "include-dev", "include-build"]
-   ┌─ /mnt/c/Users/koosh/phenotype-infra/deny.toml:35:1
-   │
-35 │ confidence = 0.8
-   │ ──────────
-
-2026-06-27 21:55:38 [ERROR] failed to deserialize config from '/mnt/c/Users/koosh/phenotype-infra/deny.toml'

@@ -1,2 +1,0 @@
-# Workspace clippy config for perf-core kernels (layout dims inflate arity).
-too-many-arguments-threshold = 12

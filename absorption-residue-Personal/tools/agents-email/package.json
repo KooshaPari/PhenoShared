@@ -1,1 +1,0 @@
-{"name":"agents-email-bridge","private":true,"type":"module","scripts":{"test":"node --test worker.test.mjs"},"dependencies":{"postal-mime":"^2.4.3"}}

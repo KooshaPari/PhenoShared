@@ -1,4 +1,0 @@
-/* Global stylesheet — kept intentionally tiny; most styling lives in
-   scoped <style> blocks within each component. */
-
-html, body, #root { height: 100%; }
