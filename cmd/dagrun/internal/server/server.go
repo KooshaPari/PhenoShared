@@ -199,6 +199,22 @@ func (s *Server) Handler() http.Handler {
 	return mux
 }
 
+// Close releases the listener a Bind created.
+//
+// A caller can bind and then legitimately decide not to serve: a preflight that
+// only wants to know whether the address and the manifest are usable, or a
+// policy check that fails after the port exists. Before this, the only way to
+// give the port back was to start serving and cancel the context, which meant a
+// failed preflight leaked the port until the process exited.
+func (s *Server) Close() error {
+	if s.ln == nil {
+		return nil
+	}
+	err := s.ln.Close()
+	s.ln = nil
+	return err
+}
+
 // Bind creates the listener and records the real address, without serving yet.
 //
 // It exists so a caller can print the URL BEFORE blocking in Listen. A ready

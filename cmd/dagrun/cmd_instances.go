@@ -12,7 +12,7 @@ import (
 	"github.com/KooshaPari/dagrun/internal/applet"
 )
 
-const instancesHelp = `usage: dagrun instances [--dir REGISTRY] [--verify] [--json]
+const instancesHelp = `usage: dagrun instances [--dir REGISTRY] [--verify] [--prune] [--json]
 
 List running dagrun servers that advertise themselves on this machine.
 
@@ -23,10 +23,18 @@ a master console uses to find a server it did not start.
 
   --dir DIR   registry directory (default: the instance directory)
   --verify    fetch each manifest to confirm the server is actually alive
+  --prune     delete advertisements that are both unreachable and from a dead
+              process, then report what was removed. Implies --verify, because
+              deleting an entry that was never contacted would be a guess.
   --json      print the entries as JSON
 
 The registry is a hint. A killed server leaves its file behind, so an entry
-without --verify says "advertised", not "reachable".`
+without --verify says "advertised", not "reachable".
+
+A tray icon wants --verify on every poll and --prune on a slow one, otherwise a
+killed server stays on the menu until the file is deleted by hand. Pruning is
+deliberately conservative: an entry survives if either its manifest answers or
+its pid is still running, so a server that is merely slow to start is kept.`
 
 // instanceReport is one entry as printed, with the liveness result folded in.
 //
@@ -54,9 +62,16 @@ func cmdInstances(args []string) error {
 	fs.SetOutput(os.Stderr)
 	registry := fs.String("dir", "", "registry directory (default: the instance directory)")
 	verify := fs.Bool("verify", false, "fetch each manifest to confirm the server is alive")
+	prune := fs.Bool("prune", false, "delete advertisements that are unreachable and from a dead process")
 	jsonOut := fs.Bool("json", false, "machine-readable JSON on stdout")
 	if err := fs.Parse(args); err != nil {
 		return err
+	}
+	// Pruning decides by reachability, so it cannot run without the check. It is
+	// implied rather than refused: a caller asking to prune is asking for the
+	// check too, and refusing only makes it a two-flag incantation to remember.
+	if *prune {
+		*verify = true
 	}
 
 	where := *registry
@@ -70,10 +85,23 @@ func cmdInstances(args []string) error {
 
 	instances, errs := applet.ReadInstances(where)
 	reports := make([]instanceReport, 0, len(instances))
+	var pruned []string
+	var pruneErrs []string
 	for _, inst := range instances {
 		rep := instanceReport{Instance: inst}
 		if *verify {
 			rep.Reachable, rep.Error = probeManifest(inst)
+		}
+		if *prune && rep.Reachable != nil && !*rep.Reachable && !applet.ProcessAlive(inst.PID) {
+			name, err := inst.FileName()
+			if err != nil {
+				pruneErrs = append(pruneErrs, err.Error())
+			} else if err := applet.RemoveInstance(where, name); err != nil {
+				pruneErrs = append(pruneErrs, err.Error())
+			} else {
+				pruned = append(pruned, inst.ID)
+				continue
+			}
 		}
 		reports = append(reports, rep)
 	}
@@ -85,10 +113,14 @@ func cmdInstances(args []string) error {
 			Dir       string           `json:"dir"`
 			Instances []instanceReport `json:"instances"`
 			Errors    []string         `json:"errors"`
-		}{Dir: where, Instances: reports, Errors: []string{}}
+			Pruned    []string         `json:"pruned"`
+			PruneErrs []string         `json:"prune_errors"`
+		}{Dir: where, Instances: reports, Errors: []string{}, Pruned: []string{}, PruneErrs: []string{}}
 		for _, err := range errs {
 			body.Errors = append(body.Errors, err.Error())
 		}
+		body.Pruned = append(body.Pruned, pruned...)
+		body.PruneErrs = append(body.PruneErrs, pruneErrs...)
 		out, err := json.MarshalIndent(body, "", "  ")
 		if err != nil {
 			return err
@@ -107,6 +139,12 @@ func cmdInstances(args []string) error {
 	// server at all".
 	for _, err := range errs {
 		fmt.Fprintf(os.Stderr, "dagrun instances: skipping unreadable entry: %v\n", err)
+	}
+	for _, id := range pruned {
+		fmt.Fprintf(os.Stdout, "pruned stale advertisement %s\n", id)
+	}
+	for _, err := range pruneErrs {
+		fmt.Fprintf(os.Stderr, "dagrun instances: could not prune: %v\n", err)
 	}
 	return nil
 }
