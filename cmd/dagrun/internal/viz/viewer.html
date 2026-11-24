@@ -108,6 +108,42 @@
   }
   .sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
         clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+  /* Agent cards. The rail is a read-only projection of /api/agents: it names
+     the harness session behind a node and says whether that id was
+     corroborated. It never offers a control, because observing an agent and
+     driving one are different jobs. */
+  #cards {
+    position: absolute; top: 0; left: 0; bottom: 0; width: min(320px, 88vw);
+    background: rgba(22,27,34,.97); border-right: 1px solid var(--edge);
+    overflow-y: auto; padding: 10px 12px 40px;
+  }
+  #cards[hidden] { display: none; }
+  #cards h3 { margin: 0 0 6px; }
+  #observer {
+    color: var(--dim); font-size: 11px; margin: 0 0 8px; overflow-wrap: anywhere;
+  }
+  #cardlist { display: flex; flex-direction: column; gap: 6px; }
+  .card {
+    display: block; width: 100%; text-align: left; color: var(--ink);
+    background: #0b0f14; border: 1px solid var(--edge); border-radius: 8px;
+    padding: 7px 9px; font: inherit; cursor: pointer; overflow-wrap: anywhere;
+  }
+  .card[aria-current="true"] { border-color: var(--accent); background: #141c26; }
+  .card .id { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; font-weight: 600; }
+  .card .meta { color: var(--dim); font-size: 11px; margin-top: 2px; }
+  .card .sess { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; margin-top: 3px; }
+  .badge {
+    display: inline-block; border: 1px solid var(--edge); border-radius: 999px;
+    padding: 0 6px; font-size: 10px; font-weight: 400; letter-spacing: .02em;
+    vertical-align: 1px; margin-left: 6px;
+  }
+  .badge.ok { color: var(--green); border-color: #1f6f3a; }
+  .badge.warn { color: var(--amber); border-color: #6b4d10; }
+  .badge.mute { color: var(--dim); }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .dim { color: var(--dim); }
+
   @media (prefers-reduced-motion: reduce) {
     .bar > i { transition: none; }
     * { scroll-behavior: auto !important; }
@@ -138,6 +174,7 @@
   <input id="search" type="search" placeholder="search id, title, role, model…" autocomplete="off" spellcheck="false">
   <div class="chips" id="chips" role="group" aria-label="Filter by status"></div>
   <button id="critbtn" aria-pressed="false">Critical path</button>
+  <button id="cardsbtn" aria-pressed="true" aria-controls="cards">Agent cards</button>
   <div class="grow"></div>
   <span class="zoomlbl" id="zoomlbl">100%</span>
   <button id="fit">Fit</button>
@@ -145,8 +182,13 @@
 
 <main>
   <canvas id="cv" tabindex="0" role="img"
-          aria-label="Dependency graph. Use arrow keys to pan, plus and minus to zoom, 0 to fit, Escape to clear selection. Press the node list button in the side panel to read details."></canvas>
+          aria-label="Dependency graph. Use arrow keys to pan, plus and minus to zoom, 0 to fit, Escape to clear selection, c to toggle the agent card list."></canvas>
   <div id="empty">No run data embedded in this file.<br>Generate it with <code>dagrun viz</code>.</div>
+  <aside id="cards" aria-label="Agent cards">
+    <h3>Agent cards</h3>
+    <p id="observer">observer: not recorded in this document</p>
+    <div id="cardlist" role="list"></div>
+  </aside>
   <aside id="panel" hidden aria-label="Node details"></aside>
 </main>
 
@@ -213,6 +255,125 @@
 
   var view = { scale: 1, tx: 0, ty: 0 };
   var dirty = true;
+
+  // ---- agent cards -------------------------------------------------------
+  // One card per run node, projected by the server from the plan and state the
+  // document already carries. A card is an OBSERVATION: it names the harness,
+  // the session id that harness printed, and whether that id was corroborated
+  // against the harness's own artifact store. Nothing here captures a screen
+  // or talks to a live agent, and no card can change one.
+  var cards = (data.agents || []).filter(function (c) { return c && c.node; });
+  var cardsByNode = Object.create(null);
+  cards.forEach(function (c) { cardsByNode[c.node] = c; });
+
+  var cardsEl = document.getElementById('cards');
+  var cardListEl = document.getElementById('cardlist');
+  var observerEl = document.getElementById('observer');
+
+  function cardFor(id) { return cardsByNode[id] || null; }
+
+  function badge(c) {
+    if (!c || !c.session) {
+      return '<span class="badge mute" title="the harness printed no session id for this node">no session</span>';
+    }
+    if (c.session_validated) {
+      return '<span class="badge ok" title="' +
+        esc(c.session_evidence || 'corroborated in the harness artifact store') + '">validated</span>';
+    }
+    return '<span class="badge warn" title="' +
+      esc(c.session_evidence || 'no artifact corroborates this id') + '">unvalidated</span>';
+  }
+
+  // sessionCell renders the session row of the detail panel. A card wins over
+  // the raw node field because the card carries the evidence behind the id.
+  function sessionCell(n) {
+    var c = cardFor(n.id), out = [];
+    if (c && c.session) {
+      out.push('<span class="mono">' + esc(c.session) + '</span>');
+      if (c.session_source) out.push('<span class="dim">(' + esc(c.session_source) + ')</span>');
+      out.push(badge(c));
+      if (c.session_evidence) {
+        out.push('<div class="dim" style="font-size:11px;margin-top:2px">' + esc(c.session_evidence) + '</div>');
+      }
+      return out.join(' ');
+    }
+    if (n.raw.session) {
+      out.push('<span class="mono">' + esc(n.raw.session) + '</span>');
+      out.push('<span class="badge mute" title="recorded by the executor; this view did not corroborate it">recorded</span>');
+      if (n.raw.session_source) out.push('<span class="dim">(' + esc(n.raw.session_source) + ')</span>');
+      return out.join(' ');
+    }
+    return '<span class="dim">unknown - the harness printed no id</span>';
+  }
+
+  function renderObserver() {
+    var s = data.self;
+    if (!s) { observerEl.textContent = 'observer: not recorded in this document'; return; }
+    observerEl.textContent = 'observer ' + (s.harness || 'unknown harness') +
+      ' · pid ' + (s.pid || '?') + ' · ' + (s.session_id || 'no session id') + ' · read-only';
+    observerEl.title = 'The process that rendered this page. It observes agents; it never drives one.';
+  }
+
+  function renderCards() {
+    if (!cardListEl) return;
+    if (!cards.length) {
+      cardListEl.innerHTML = '<div class="dim">no agent cards in this document</div>';
+      return;
+    }
+    var html = cards.map(function (c) {
+      var n = byId[c.node];
+      if (!n) return '';
+      if (query && !matches(n)) return '';
+      var st = c.status || n.raw.status || 'pending';
+      var col = (STATUS[st] || STATUS.pending).color;
+      var runner = [c.harness, c.model].filter(Boolean).join(' / ');
+      var meta = [st, runner, c.elapsed_ms ? fmtDur(c.elapsed_ms) : ''].filter(Boolean).join(' · ');
+      return '<button class="card" role="listitem" data-node="' + esc(c.node) + '"' +
+        (selectedId === c.node ? ' aria-current="true"' : '') + '>' +
+        '<div class="id"><span class="dot" style="background:' + col + '"></span>' +
+        esc(c.node) + badge(c) + '</div>' +
+        '<div class="meta">' + esc(meta) + '</div>' +
+        '<div class="sess">' + (c.session ? esc(c.session)
+          : '<span class="dim">no session id printed</span>') + '</div>' +
+        '</button>';
+    }).join('');
+    cardListEl.innerHTML = html || '<div class="dim">no cards match the filter</div>';
+  }
+
+  // markCard keeps the rail and the graph pointing at the same node. Selecting
+  // in either direction moves the other, which is the whole navigation idea:
+  // the card IS the node's identity, not a separate list.
+  function markCard(id) {
+    if (!cardListEl) return;
+    Array.prototype.forEach.call(cardListEl.querySelectorAll('.card'), function (b) {
+      var on = b.getAttribute('data-node') === id;
+      if (!on) { b.removeAttribute('aria-current'); return; }
+      b.setAttribute('aria-current', 'true');
+      if (b.scrollIntoView) {
+        try { b.scrollIntoView({ block: 'nearest' }); } catch (e) { /* older engines */ }
+      }
+    });
+  }
+
+  function centerOn(n) {
+    var scale = Math.max(1.1, Math.min(2.4, view.scale));
+    var target = {
+      scale: scale,
+      tx: cv.clientWidth / 2 - n.x * scale,
+      ty: cv.clientHeight / 2 - n.y * scale
+    };
+    if (reduceMotion) { view = target; setDirty(); updateZoomLabel(); }
+    else animateTo(target);
+  }
+
+  // focusNode is the card -> graph direction: open the node, centre it, and
+  // leave the rail marking it so the two views agree.
+  function focusNode(id) {
+    var n = byId[id];
+    if (!n) return;
+    openPanel(id);
+    centerOn(n);
+  }
 
   // ---- layout ------------------------------------------------------------
   var COL_GAP = 190;
@@ -636,9 +797,7 @@
     else h.push('<dl>');
     h.push('<dt>role</dt><dd>' + esc(r.role || '-') + '</dd>');
     h.push('<dt>runner</dt><dd>' + esc([r.harness, r.provider, r.model].filter(Boolean).join(' / ') || '-') + '</dd>');
-    h.push('<dt>session</dt><dd>' + (r.session
-      ? esc(r.session) + (r.session_source ? ' <span style="color:var(--dim)">(' + esc(r.session_source) + ')</span>' : '')
-      : '<span style="color:var(--dim)">unknown - the harness printed no id</span>') + '</dd>');
+    h.push('<dt>session</dt><dd>' + sessionCell(n) + '</dd>');
     h.push('<dt>estimate</dt><dd>' + esc(r.estimate || '-') + '</dd>');
     h.push('<dt>attempts</dt><dd>' + (r.attempts | 0) + '</dd>');
     h.push('<dt>duration</dt><dd>' + esc(fmtDur(r.duration_ms) || '-') + '</dd>');
@@ -663,6 +822,28 @@
     if (r.check) {
       h.push('<h3>Check</h3><pre>' + esc(r.check) + '</pre>');
     }
+
+    // The card is the observation this console is allowed to make about a
+    // running agent: identity, evidence, and nothing that could control it.
+    var c = cardFor(r.id);
+    h.push('<h3>Agent card</h3>');
+    if (!c) {
+      h.push('<div class="dim">no card for this node</div>');
+    } else {
+      h.push('<div class="dim" style="font-size:11px;margin-bottom:6px">read-only observation · observed ' +
+             esc(c.observed_at || 'unknown') + '</div>');
+      h.push('<dl>' +
+        '<dt>owner</dt><dd>' + esc(c.owner || '-') + '</dd>' +
+        '<dt>harness</dt><dd>' + esc(c.harness || 'unknown') + '</dd>' +
+        '<dt>session</dt><dd>' + (c.session ? esc(c.session) : 'unknown') + ' ' + badge(c) + '</dd>' +
+        '<dt>evidence</dt><dd>' + esc(c.session_evidence || 'none') + '</dd>' +
+        '</dl>');
+      if (c.unknown && c.unknown.length) {
+        h.push('<div class="dim" style="color:var(--amber);font-size:11px">unknown: ' +
+               c.unknown.map(esc).join('; ') + '</div>');
+      }
+    }
+
     h.push('<h3>Last error</h3>');
     h.push(r.last_error ? '<pre class="bad">' + esc(r.last_error) + '</pre>'
                         : '<div style="color:var(--dim)">none</div>');
@@ -672,6 +853,7 @@
     panel.hidden = false;
     var btn = document.getElementById('pclose');
     if (btn) btn.addEventListener('click', closePanel);
+    markCard(id);
     setDirty();
   }
 
@@ -679,6 +861,7 @@
     panel.hidden = true;
     panel.innerHTML = '';
     selectedId = null;
+    markCard(null);
     setDirty();
   }
 
@@ -812,15 +995,36 @@
       case '-': case '_': zoomAt(1 / 1.2, cv.clientWidth / 2, cv.clientHeight / 2); break;
       case '0': fitTo(null, false); break;
       case 'Escape': closePanel(); break;
+      case 'c': case 'C': toggleCards(); break;
       default: handled = false;
     }
     if (handled) { ev.preventDefault(); setDirty(); }
+  });
+
+  function toggleCards() {
+    var on = cardsEl.hidden;
+    cardsEl.hidden = !on;
+    document.getElementById('cardsbtn').setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+
+  document.getElementById('cardsbtn').addEventListener('click', toggleCards);
+
+  // One delegated handler: the rail is re-rendered on filter changes, so
+  // per-card listeners would have to be rebound each time.
+  cardListEl.addEventListener('click', function (ev) {
+    var el = ev.target;
+    while (el && el !== cardListEl && !(el.getAttribute && el.getAttribute('data-node'))) {
+      el = el.parentNode;
+    }
+    if (!el || el === cardListEl) return;
+    focusNode(el.getAttribute('data-node'));
   });
 
   var searchEl = document.getElementById('search');
   var searchTimer = null;
   searchEl.addEventListener('input', function () {
     query = searchEl.value.trim().toLowerCase();
+    renderCards();
     setDirty();
     clearTimeout(searchTimer);
     searchTimer = setTimeout(function () {
@@ -847,6 +1051,8 @@
   layout();
   critical = computeCritical();
   renderHeader();
+  renderObserver();
+  renderCards();
   fitTo(null, false);
   requestAnimationFrame(frame);
 })();

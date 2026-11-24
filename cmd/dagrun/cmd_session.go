@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/KooshaPari/dagrun/internal/session"
@@ -90,36 +89,5 @@ Fields:
 // resolveSelf builds the current process's card. It is the only place that
 // touches the OS for identity, so every other projection stays pure.
 func resolveSelf(now time.Time) session.Card {
-	host, _ := os.Hostname()
-	exe, _ := os.Executable()
-	cwd, _ := os.Getwd()
-	home, _ := os.UserHomeDir()
-	return session.Resolve(environMap(), session.Prober{
-		Host: host,
-		PID:  os.Getpid(),
-		PPID: os.Getppid(),
-		CWD:  cwd,
-		Exe:  exe,
-		Now:  now,
-		Validate: func(harness, id string) (string, bool) {
-			return session.ValidateArtifact(home, harness, id)
-		},
-	})
-}
-
-// environMap snapshots the environment into a map. Duplicate keys keep the
-// first occurrence, which is what the C library would return.
-func environMap() map[string]string {
-	env := make(map[string]string, 64)
-	for _, kv := range os.Environ() {
-		i := strings.IndexByte(kv, '=')
-		if i <= 0 {
-			continue
-		}
-		k := kv[:i]
-		if _, ok := env[k]; !ok {
-			env[k] = kv[i+1:]
-		}
-	}
-	return env
+	return session.Self(now)
 }

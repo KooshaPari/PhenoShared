@@ -290,3 +290,61 @@ func TestListenBindsAndStopsOnContext(t *testing.T) {
 		t.Errorf("Listen returned %v on a clean cancel, want nil", err)
 	}
 }
+
+// The viewer and the JSON API must report the same identity. They share one
+// projection (agents.BuildFrom) precisely so a page cannot quietly disagree
+// with /api/agents, and this test is what keeps that true.
+func TestRootAndAgentsAgreeOnSession(t *testing.T) {
+	const id = "dz-no-such-session-0001"
+	dir := fixture(t)
+	state := `{"version":1,"run":"srvtest","nodes":{
+  "1":{"status":"done","attempts":1,"session":"` + id + `","session_source":"stdout"},
+  "2":{"status":"failed","attempts":2,"last_error":"boom"}
+}}`
+	if err := os.WriteFile(filepath.Join(dir, "state.json"), []byte(state), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	s := newServer(t, dir)
+
+	code, body := get(t, s, "/api/agents")
+	if code != http.StatusOK {
+		t.Fatalf("/api/agents status = %d: %s", code, body)
+	}
+	var api struct {
+		ReadOnly bool `json:"read_only"`
+		Agents   []struct {
+			Node             string `json:"node"`
+			Session          string `json:"session"`
+			SessionValidated bool   `json:"session_validated"`
+		} `json:"agents"`
+	}
+	if err := json.Unmarshal([]byte(body), &api); err != nil {
+		t.Fatalf("/api/agents is not JSON: %v", err)
+	}
+	if !api.ReadOnly {
+		t.Error("/api/agents is not marked read-only")
+	}
+	var found bool
+	for _, a := range api.Agents {
+		if a.Session != id {
+			continue
+		}
+		found = true
+		if a.SessionValidated {
+			t.Errorf("session %q was reported validated; it cannot be corroborated", id)
+		}
+	}
+	if !found {
+		t.Fatalf("/api/agents does not carry session %q: %s", id, body)
+	}
+
+	code, page := get(t, s, "/")
+	if code != http.StatusOK {
+		t.Fatalf("/ status = %d: %s", code, page)
+	}
+	for _, want := range []string{id, `"agents"`, `"self"`} {
+		if !strings.Contains(page, want) {
+			t.Errorf("viewer HTML does not carry %q; the page and the API disagree", want)
+		}
+	}
+}

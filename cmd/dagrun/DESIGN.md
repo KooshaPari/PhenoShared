@@ -107,6 +107,32 @@ cannot run early.
 `flock` does not exist there. Rather than silently assuming one writer per run,
 the windows build returns an error. macOS and Linux are the targets.
 
+### D10. The console observes agents through one projection, never a second one
+
+`GET /api/agents` and the viewer's card rail are the same data: `viz.Build`
+calls `agents.BuildFrom` and embeds the result, so a page cannot disagree with
+the API. Two consequences are deliberate.
+
+*One identity implementation.* `session.Self` is the only place that reads the
+process environment for harness/session identity; `dagrun session`, the agents
+self card and the console banner all call it. A second copy is how the CLI and
+the page start reporting different sessions for the same process.
+
+*Observation only.* A card carries the session id the executor recorded plus
+whether anything corroborated it (`session_validated`, `session_evidence`). An id
+no on-disk artifact backs stays unvalidated: the console never promotes a claim
+to a fact, and no card exposes a control that drives an agent. Terminal state
+is read from artifacts and state files, never from a captured screen.
+
+The rail and the graph are two views of one selection: a card click opens that
+node, a node selection marks its card. That is why selection lives in one
+variable rather than in each surface.
+
+The UI test is headless and screenshot-free: `viewer.html`'s own script runs
+under a small DOM shim in Node, and the assertions read the markup and panel
+text it produced (`make test-ui`). Canvas pixels are not asserted; drawing is
+verified through its inputs.
+
 ## Layering
 
 ```
