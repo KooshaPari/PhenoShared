@@ -97,6 +97,10 @@ func main() {
 		err = cmdReplan(args)
 	case "recover":
 		err = cmdRecover(args)
+	case "session":
+		err = cmdSession(args)
+	case "agents":
+		err = cmdAgents(args)
 	case "serve":
 		err = cmdServe(args)
 	case "version", "--version", "-v":
@@ -161,6 +165,8 @@ USAGE
   dagrun otel [flags]            export the run as OTLP/JSON spans
   dagrun replan PLAN [flags]     diff a revised plan against the run; --apply installs it
   dagrun recover [flags]         report or reclaim stuck nodes; --force reclaims
+  dagrun agents [flags]          agent cards: one per node that has run, session-bound
+  dagrun session [flags]         print this process's validated session identity
   dagrun serve [flags]           serve the run as a live viewer + read-only JSON API
   dagrun mcp [flags]             serve the Model Context Protocol over stdio or HTTP
   dagrun version

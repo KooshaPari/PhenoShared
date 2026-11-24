@@ -29,6 +29,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/KooshaPari/dagrun/internal/agents"
 	"github.com/KooshaPari/dagrun/internal/plan"
 	"github.com/KooshaPari/dagrun/internal/query"
 	"github.com/KooshaPari/dagrun/internal/store"
@@ -140,6 +141,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/health", s.recover(s.handleHealth))
 	mux.HandleFunc("/api/plan", s.recover(s.handlePlan))
 	mux.HandleFunc("/api/status", s.recover(s.handleStatus))
+	mux.HandleFunc("/api/agents", s.recover(s.handleAgents))
 	mux.HandleFunc("/api/query", s.recover(s.handleQuery))
 	mux.HandleFunc("/api/nodes/", s.recover(s.handleNode))
 	mux.HandleFunc("/", s.recover(s.handleViz))
@@ -228,6 +230,20 @@ func (s *Server) handleStatus(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, st)
 }
 
+// handleAgents serves the agent-card projection: one card per node that has
+// run, with the child session id and whether it could be validated.
+//
+// It is built from run.yaml and state.json directly, like every other route
+// here, so the monitor still does not sit on the store's write path.
+func (s *Server) handleAgents(w http.ResponseWriter, r *http.Request) {
+	doc, err := agents.Build(s.dir, nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	writeJSON(w, doc)
+}
+
 // handleQuery translates the request into the query package's own argument
 // form, so the grammar has exactly one implementation.
 func (s *Server) handleQuery(w http.ResponseWriter, r *http.Request) {
@@ -302,6 +318,13 @@ func (s *Server) handleNode(w http.ResponseWriter, r *http.Request) {
 			doc["owner"] = ns.Owner
 			doc["attempts"] = ns.Attempts
 			doc["last_error"] = ns.LastError
+			// Session identity is reported as recorded: the id and how it was
+			// learned. Validation lives in /api/agents, which has the home
+			// directory and the harness artifact stores to check against.
+			if ns.Session != "" {
+				doc["session"] = ns.Session
+				doc["session_source"] = ns.SessionSource
+			}
 			if ns.Verify != nil {
 				doc["artifacts"] = ns.Verify.Artifacts
 			}

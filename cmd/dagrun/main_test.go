@@ -26,7 +26,7 @@ var allCommands = []string{
 	"validate", "trace", "export", "submit", "import", "detect", "mcp", "explain",
 	"viz", "draft", "doctor", "gc", "workspace", "timeline", "stats",
 	"critique", "lint", "review", "template", "skill",
-	"query", "otel", "replan", "recover", "serve",
+	"query", "otel", "replan", "recover", "serve", "agents", "session",
 }
 
 // buildCLI compiles the binary once for the whole test.

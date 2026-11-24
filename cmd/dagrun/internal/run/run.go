@@ -659,9 +659,14 @@ func opencodeKeys() []string {
 // childEnv gives each child a clean, non-interactive environment: the parent's
 // session and provider bindings are removed so per-node provider/model choices
 // actually take effect.
-func childEnv() []string {
+//
+// extra carries the node identity (see nodeEnv). Any DAGRUN_* variable the
+// parent already had is dropped first: a dagrun run nested inside another
+// dagrun node must not inherit the outer node's identity, and on Unix a
+// duplicated key is resolved by the child's libc rather than reliably by us.
+func childEnv(extra ...string) []string {
 	src := os.Environ()
-	env := make([]string, 0, len(src)+2)
+	env := make([]string, 0, len(src)+len(extra)+2)
 	for _, kv := range src {
 		i := strings.IndexByte(kv, '=')
 		if i <= 0 {
@@ -669,6 +674,9 @@ func childEnv() []string {
 		}
 		k := kv[:i]
 		if sessionEnvDrop[k] {
+			continue
+		}
+		if k == "DAGRUN" || strings.HasPrefix(k, "DAGRUN_") {
 			continue
 		}
 		drop := false
@@ -684,5 +692,6 @@ func childEnv() []string {
 		env = append(env, kv)
 	}
 	env = append(env, opencodeKeys()...)
+	env = append(env, extra...)
 	return append(env, "DAGRUN=1", "CI=1")
 }

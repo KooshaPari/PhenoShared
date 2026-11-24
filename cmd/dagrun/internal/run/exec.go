@@ -123,7 +123,7 @@ func (e *Executor) execute(ctx context.Context, n *plan.Node, epoch int64, idx m
 	cmd.Dir = workdir
 	cmd.Stdout = sink
 	cmd.Stderr = sink
-	cmd.Env = childEnv()
+	cmd.Env = childEnv(nodeEnv(e.st.Plan().Run, n.ID, e.st.Dir())...)
 	if useStdin {
 		cmd.Stdin = strings.NewReader(prompt)
 	}
@@ -283,6 +283,7 @@ func (e *Executor) heartbeatLoop(ctx context.Context, nodeID string, epoch int64
 // (retry) or "failed" is written, so the status comes last.
 func (e *Executor) settleNode(ctx context.Context, v verdict) {
 	n, epoch := v.node, v.epoch
+	e.recordSession(n, epoch, v.captured)
 	e.recordUsage(n, epoch, v.captured, time.Since(v.start))
 
 	rep := v.rep

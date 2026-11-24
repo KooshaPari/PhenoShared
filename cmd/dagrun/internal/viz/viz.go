@@ -65,25 +65,30 @@ type Stats struct {
 
 // Node is one rendered unit of work.
 type Node struct {
-	ID         string     `json:"id"`
-	Kind       string     `json:"kind,omitempty"`
-	Title      string     `json:"title,omitempty"`
-	Status     string     `json:"status"`
-	Role       string     `json:"role,omitempty"`
-	Harness    string     `json:"harness,omitempty"`
-	Provider   string     `json:"provider,omitempty"`
-	Model      string     `json:"model,omitempty"`
-	Estimate   string     `json:"estimate,omitempty"`
-	Branch     string     `json:"branch,omitempty"`
-	Worktree   string     `json:"worktree,omitempty"`
-	LastError  string     `json:"last_error,omitempty"`
-	Check      string     `json:"check,omitempty"`
-	Wave       int        `json:"wave"`
-	Attempts   int        `json:"attempts,omitempty"`
-	DurationMS int64      `json:"duration_ms,omitempty"`
-	Dynamic    bool       `json:"dynamic,omitempty"`
-	Parent     string     `json:"parent,omitempty"`
-	Artifacts  []Artifact `json:"artifacts,omitempty"`
+	ID        string `json:"id"`
+	Kind      string `json:"kind,omitempty"`
+	Title     string `json:"title,omitempty"`
+	Status    string `json:"status"`
+	Role      string `json:"role,omitempty"`
+	Harness   string `json:"harness,omitempty"`
+	Provider  string `json:"provider,omitempty"`
+	Model     string `json:"model,omitempty"`
+	Estimate  string `json:"estimate,omitempty"`
+	Branch    string `json:"branch,omitempty"`
+	Worktree  string `json:"worktree,omitempty"`
+	LastError string `json:"last_error,omitempty"`
+	// Session is the child harness session that ran this node, as recorded by
+	// the executor. It is an observation, not a guess: when the harness printed
+	// no id this stays empty and the panel says so.
+	Session       string     `json:"session,omitempty"`
+	SessionSource string     `json:"session_source,omitempty"`
+	Check         string     `json:"check,omitempty"`
+	Wave          int        `json:"wave"`
+	Attempts      int        `json:"attempts,omitempty"`
+	DurationMS    int64      `json:"duration_ms,omitempty"`
+	Dynamic       bool       `json:"dynamic,omitempty"`
+	Parent        string     `json:"parent,omitempty"`
+	Artifacts     []Artifact `json:"artifacts,omitempty"`
 }
 
 // Artifact is one declared output and the verifier's opinion of it.
@@ -259,6 +264,8 @@ func projectNode(n *plan.Node, snap *store.State, tr *traceInfo, wave int) Node 
 		out.Branch = ns.Branch
 		out.Worktree = ns.Worktree
 		out.LastError = strings.TrimSpace(ns.LastError)
+		out.Session = ns.Session
+		out.SessionSource = ns.SessionSource
 		out.DurationMS = durationMS(ns)
 		if ns.Verify != nil {
 			out.Artifacts = artifactsFrom(ns.Verify)

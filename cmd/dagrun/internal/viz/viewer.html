@@ -636,6 +636,9 @@
     else h.push('<dl>');
     h.push('<dt>role</dt><dd>' + esc(r.role || '-') + '</dd>');
     h.push('<dt>runner</dt><dd>' + esc([r.harness, r.provider, r.model].filter(Boolean).join(' / ') || '-') + '</dd>');
+    h.push('<dt>session</dt><dd>' + (r.session
+      ? esc(r.session) + (r.session_source ? ' <span style="color:var(--dim)">(' + esc(r.session_source) + ')</span>' : '')
+      : '<span style="color:var(--dim)">unknown - the harness printed no id</span>') + '</dd>');
     h.push('<dt>estimate</dt><dd>' + esc(r.estimate || '-') + '</dd>');
     h.push('<dt>attempts</dt><dd>' + (r.attempts | 0) + '</dd>');
     h.push('<dt>duration</dt><dd>' + esc(fmtDur(r.duration_ms) || '-') + '</dd>');
