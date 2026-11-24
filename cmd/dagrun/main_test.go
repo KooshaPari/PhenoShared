@@ -26,20 +26,13 @@ var allCommands = []string{
 	"validate", "trace", "export", "submit", "import", "detect", "mcp", "explain",
 	"viz", "draft", "doctor", "gc", "workspace", "timeline", "stats",
 	"critique", "lint", "review", "template", "skill",
-	"query", "otel", "replan", "recover",
-}
-
-// exeSuffix is empty except on Windows, where exec.Command refuses to start a
-// file that does not carry the .exe extension. Without this, every test that
-// shells out to the built CLI fails with "executable file not found in %PATH%".
-func exeSuffix() string {
-	if runtime.GOOS == "windows" {
-		return ".exe"
-	}
-	return ""
+	"query", "otel", "replan", "recover", "serve", "agents", "session",
 }
 
 // buildCLI compiles the binary once for the whole test.
+//
+// The suffix is not cosmetic: Windows resolves an executable only through
+// PATHEXT, so a PE file written as "dagrun" cannot be started by name.
 func buildCLI(t *testing.T) string {
 	t.Helper()
 	bin := filepath.Join(t.TempDir(), "dagrun"+exeSuffix())
@@ -49,6 +42,14 @@ func buildCLI(t *testing.T) string {
 		t.Fatalf("build: %v\n%s", err, out)
 	}
 	return bin
+}
+
+// exeSuffix is the platform's executable suffix, empty on unix.
+func exeSuffix() string {
+	if runtime.GOOS == "windows" {
+		return ".exe"
+	}
+	return ""
 }
 
 func TestEveryCommandExitsZeroOnHelp(t *testing.T) {

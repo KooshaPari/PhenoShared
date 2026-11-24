@@ -39,71 +39,6 @@ const dataMarker = "__DAGRUN_DATA__"
 // cannot bloat the document.
 const maxDetail = 240
 
-// Doc is the whole picture the viewer needs. It is the wire format: keep the
-// JSON tags stable, they are read by viewer.html.
-type Doc struct {
-	Run         string     `json:"run"`
-	GeneratedAt string     `json:"generated_at"`
-	Intent      string     `json:"intent,omitempty"`
-	Stats       Stats      `json:"stats"`
-	Nodes       []Node     `json:"nodes"`
-	Edges       []Edge     `json:"edges"`
-	Waves       [][]string `json:"waves"`
-}
-
-// Stats is the header summary. Progress is done/(done+failed+pending+running):
-// skipped nodes are structure, not work, so they never move the bar.
-type Stats struct {
-	Done     int     `json:"done"`
-	Failed   int     `json:"failed"`
-	Pending  int     `json:"pending"`
-	Running  int     `json:"running"`
-	Skipped  int     `json:"skipped"`
-	Dynamic  int     `json:"dynamic"`
-	Progress float64 `json:"progress"`
-}
-
-// Node is one rendered unit of work.
-type Node struct {
-	ID         string     `json:"id"`
-	Kind       string     `json:"kind,omitempty"`
-	Title      string     `json:"title,omitempty"`
-	Status     string     `json:"status"`
-	Role       string     `json:"role,omitempty"`
-	Harness    string     `json:"harness,omitempty"`
-	Provider   string     `json:"provider,omitempty"`
-	Model      string     `json:"model,omitempty"`
-	Estimate   string     `json:"estimate,omitempty"`
-	Branch     string     `json:"branch,omitempty"`
-	Worktree   string     `json:"worktree,omitempty"`
-	LastError  string     `json:"last_error,omitempty"`
-	Check      string     `json:"check,omitempty"`
-	Wave       int        `json:"wave"`
-	Attempts   int        `json:"attempts,omitempty"`
-	DurationMS int64      `json:"duration_ms,omitempty"`
-	Dynamic    bool       `json:"dynamic,omitempty"`
-	Parent     string     `json:"parent,omitempty"`
-	Artifacts  []Artifact `json:"artifacts,omitempty"`
-}
-
-// Artifact is one declared output and the verifier's opinion of it.
-type Artifact struct {
-	Path   string `json:"path"`
-	OK     bool   `json:"ok"`
-	Code   string `json:"code,omitempty"`
-	Detail string `json:"detail,omitempty"`
-	SHA256 string `json:"sha256,omitempty"`
-	Bytes  int64  `json:"bytes,omitempty"`
-}
-
-// Edge is one dependency arrow. Type is "dep" for a declared dependency and
-// "fanout" for the parent -> child link of a runtime expansion.
-type Edge struct {
-	From string `json:"from"`
-	To   string `json:"to"`
-	Type string `json:"type"`
-}
-
 // Build reads a run directory and projects it.
 func Build(dir string) (*Doc, error) {
 	abs, err := filepath.Abs(dir)
@@ -141,7 +76,9 @@ func Build(dir string) (*Doc, error) {
 	if err != nil {
 		return nil, err
 	}
-	return From(p, st.All(snap), snap, events), nil
+	d := From(p, st.All(snap), snap, events)
+	attachCards(d, p, snap)
+	return d, nil
 }
 
 // From projects an already-loaded run. Build is the filesystem front end; this
@@ -259,6 +196,8 @@ func projectNode(n *plan.Node, snap *store.State, tr *traceInfo, wave int) Node 
 		out.Branch = ns.Branch
 		out.Worktree = ns.Worktree
 		out.LastError = strings.TrimSpace(ns.LastError)
+		out.Session = ns.Session
+		out.SessionSource = ns.SessionSource
 		out.DurationMS = durationMS(ns)
 		if ns.Verify != nil {
 			out.Artifacts = artifactsFrom(ns.Verify)

@@ -114,8 +114,14 @@ func main() {
 		err = cmdReplan(args)
 	case "recover":
 		err = cmdRecover(args)
+	case "session":
+		err = cmdSession(args)
+	case "agents":
+		err = cmdAgents(args)
+	case "serve":
+		err = cmdServe(args)
 	case "version", "--version", "-v":
-		fmt.Printf("dagrun %s\n", resolveVersion())
+		fmt.Printf("dagrun %s\n", Version)
 		return
 	case "help", "--help", "-h":
 		usage(os.Stdout)
@@ -176,7 +182,10 @@ USAGE
   dagrun otel [flags]            export the run as OTLP/JSON spans
   dagrun replan PLAN [flags]     diff a revised plan against the run; --apply installs it
   dagrun recover [flags]         report or reclaim stuck nodes; --force reclaims
-  dagrun mcp                     serve the Model Context Protocol over stdio
+  dagrun agents [flags]          agent cards: one per node that has run, session-bound
+  dagrun session [flags]         print this process's validated session identity
+  dagrun serve [flags]           serve the run as a live viewer + read-only JSON API
+  dagrun mcp [flags]             serve the Model Context Protocol over stdio or HTTP
   dagrun version
 
 COMMON FLAGS
@@ -244,11 +253,26 @@ func splitArgs(args []string) (flags []string, pos []string) {
 	return flags, pos
 }
 
+// valueFlags names the flags that consume the next argument.
+//
+// This table is the cost of the hand-rolled splitArgs below: the flag package
+// knows which of its own flags take values, but splitArgs separates flags from
+// positionals BEFORE the flag set sees them, so it needs its own copy of that
+// knowledge and every new --flag-with-a-value has to be added here or its value
+// is stranded as a positional. Forgetting one turns `--from dagschema` into
+// "unknown value dagschema", which is how --from was nearly shipped broken.
+//
+// The structural fix is a real parser (one declaration per command, no table);
+// it is deferred because it touches every cmd_*.go file at once.
 var valueFlags = map[string]bool{
 	"-dir": true, "-file": true, "-work": true, "-workers": true, "-owner": true,
 	"-lease": true, "-exec-template": true, "-tools": true, "-role": true,
 	"-count": true, "-ttl": true, "-epoch": true, "-format": true, "-reason": true,
-	"-node": true,
+	"-node": true, "-from": true, "-in": true, "-map": true, "-out": true,
+	"-url": true, "-token": true, "-intent": true, "-addr": true, "-watch": true,
+	"-wait": true, "-since": true, "-event": true, "-limit": true,
+	"-order-by": true, "-select": true, "-where": true, "-max-cost": true,
+	"-template": true, "-name": true,
 }
 
 func takesValue(a string) bool {

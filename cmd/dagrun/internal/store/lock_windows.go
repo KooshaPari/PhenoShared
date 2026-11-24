@@ -3,22 +3,24 @@
 package store
 
 import (
+	"errors"
 	"os"
 	"syscall"
 	"unsafe"
 )
 
-// Windows has no flock(2), so this is the LockFileEx equivalent.
+// Windows has no flock(2), but it has the same guarantee under a different
+// name: LockFileEx takes a mandatory byte-range lock that a second handle
+// cannot take concurrently, and the kernel drops it when the owning handle
+// closes, including when the process dies. That is the whole contract
+// store.go depends on -- "the kernel releases it if the process dies, so there
+// is no stale-lock cleanup path anywhere in this codebase" -- so the Unix case
+// maps onto it one-for-one.
 //
-// The contract is deliberately identical to the unix implementation in
-// lock_unix.go: it blocks until the caller holds an exclusive lock on the whole
-// file, and the kernel releases it when the process dies. Windows file locks
-// belong to the open handle, so they are released on Close or on process exit
-// without any stale-lock cleanup path — the same property flock gives us.
-//
-// The calls are resolved lazily from kernel32 rather than pulling in
-// golang.org/x/sys/windows, which keeps this module's single dependency (yaml)
-// intact.
+// The calls go straight to kernel32 through the stdlib syscall package rather
+// than adding golang.org/x/sys: this module has exactly one dependency
+// (yaml.v3) on purpose, and a two-function shim is not worth a second one.
+
 var (
 	kernel32         = syscall.NewLazyDLL("kernel32.dll")
 	procLockFileEx   = kernel32.NewProc("LockFileEx")
@@ -26,54 +28,55 @@ var (
 )
 
 const (
-	// lockfileExclusiveLock gives an exclusive (writer) lock. Without
-	// lockfileFailImmediately the call waits instead of returning
-	// ERROR_LOCK_VIOLATION, which is what callers expect here.
+	// lockfileExclusiveLock blocks while another handle holds an overlapping
+	// range. Without it LockFileEx takes a shared lock, which would let two
+	// writers in -- exactly the unsafe mode this file exists to prevent.
+	// lockfileFailImmediately is deliberately not used: the Unix path blocks,
+	// so Windows blocks too.
 	lockfileExclusiveLock = 0x00000002
 
-	// lockfileWholeFileLow/High describe a byte range covering the file. This
-	// mirrors flock, which locks the whole file rather than a byte range.
-	lockfileWholeFileLow  = 0xFFFFFFFF
-	lockfileWholeFileHigh = 0xFFFFFFFF
+	// Windows locks a (offset, length) range, not "the file". Every dagrun
+	// lock site locks offset 0, so a single maximal span covers the file
+	// without needing its size.
+	lockWholeLow  = 0xFFFFFFFF
+	lockWholeHigh = 0xFFFFFFFF
 )
 
-// overlapped is the Win32 OVERLAPPED structure. Only the offset fields matter
-// for locking; the rest must be present and zeroed.
-type overlapped struct {
-	Internal     uintptr
-	InternalHigh uintptr
-	Offset       uint32
-	OffsetHigh   uint32
-	HEvent       syscall.Handle
-}
-
-// lockExclusive blocks until it holds an exclusive lock on f.
+// lockExclusive blocks until it holds an exclusive lock on the whole of f.
+// It returns the kernel's error if the lock cannot be taken for a reason other
+// than contention (the handle was opened without write access, say).
 func lockExclusive(f *os.File) error {
-	var ol overlapped
-	r, _, err := procLockFileEx.Call(
+	var ol syscall.Overlapped // offset 0, hEvent nil: wait on this thread
+	r1, _, err := procLockFileEx.Call(
 		f.Fd(),
-		uintptr(lockfileExclusiveLock),
+		lockfileExclusiveLock,
 		0,
-		uintptr(lockfileWholeFileLow),
-		uintptr(lockfileWholeFileHigh),
+		lockWholeLow,
+		lockWholeHigh,
 		uintptr(unsafe.Pointer(&ol)),
 	)
-	if r == 0 {
+	if r1 == 0 {
+		if err == nil || errors.Is(err, syscall.Errno(0)) {
+			return os.NewSyscallError("LockFileEx", syscall.EINVAL)
+		}
 		return os.NewSyscallError("LockFileEx", err)
 	}
 	return nil
 }
 
 func unlock(f *os.File) error {
-	var ol overlapped
-	r, _, err := procUnlockFileEx.Call(
+	var ol syscall.Overlapped
+	r1, _, err := procUnlockFileEx.Call(
 		f.Fd(),
 		0,
-		uintptr(lockfileWholeFileLow),
-		uintptr(lockfileWholeFileHigh),
+		lockWholeLow,
+		lockWholeHigh,
 		uintptr(unsafe.Pointer(&ol)),
 	)
-	if r == 0 {
+	if r1 == 0 {
+		if err == nil || errors.Is(err, syscall.Errno(0)) {
+			return os.NewSyscallError("UnlockFileEx", syscall.EINVAL)
+		}
 		return os.NewSyscallError("UnlockFileEx", err)
 	}
 	return nil

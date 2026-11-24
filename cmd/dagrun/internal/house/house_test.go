@@ -478,7 +478,7 @@ func TestDoctorWithNilStoreDoesNotPanic(t *testing.T) {
 // errno out of a node log.
 func TestDoctorReportsAnUnwritableRunDir(t *testing.T) {
 	if runtime.GOOS == "windows" {
-		t.Skip("Windows has no POSIX permission bits, so chmod cannot make a directory unwritable")
+		t.Skip("Windows ignores the unix permission bits os.Chmod sets, so a write-denied run dir cannot be simulated this way")
 	}
 	if os.Geteuid() == 0 {
 		t.Skip("root ignores directory permission bits, so this cannot be simulated")

@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -57,22 +58,53 @@ func TestRunHonoursTheWorkingDirectory(t *testing.T) {
 	if err := Run(context.Background(), "pre", Hooks{Pre: "pwd > where.txt"}, dir, nil); err != nil {
 		t.Fatal(err)
 	}
+	// The file is written through a relative path, so its presence here is
+	// already the cwd proof: a hook that ran anywhere else would have written
+	// it somewhere else.
 	got, err := os.ReadFile(filepath.Join(dir, "where.txt"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	// On macOS /var is a symlink to /private/var, so compare the resolved forms.
-	wantResolved, _ := filepath.EvalSymlinks(dir)
-	gotResolved, _ := filepath.EvalSymlinks(strings.TrimSpace(string(got)))
-	if !shellPathsComparable {
-		// The file was read back from the supplied directory above, which is the
-		// property under test. The shell's pwd text is only comparable where the shell
-		// and the caller agree on path form; Git's sh reports %TEMP% as /tmp.
-		return
+	if !samePath(t, dir, string(got)) {
+		t.Errorf("hook ran in %q, want %q", strings.TrimSpace(string(got)), dir)
 	}
-	if gotResolved != wantResolved {
-		t.Errorf("hook ran in %q, want %q", gotResolved, wantResolved)
+}
+
+// samePath reports whether the path the shell printed is the directory we asked
+// for. It has to absorb two platform differences: macOS /var is a symlink to
+// /private/var, and Git-for-Windows sh prints MSYS paths (/c/Users/...) that are
+// not Windows paths, so EvalSymlinks returns "" for them.
+func samePath(t *testing.T, want, got string) bool {
+	t.Helper()
+	want = resolveIfPossible(want)
+	got = resolveIfPossible(msysToWindows(strings.TrimSpace(got)))
+	return strings.EqualFold(want, got)
+}
+
+// resolveIfPossible returns the symlink-resolved path, or the cleaned path when
+// the input is not something this platform can resolve.
+func resolveIfPossible(p string) string {
+	if resolved, err := filepath.EvalSymlinks(p); err == nil {
+		return resolved
 	}
+	return filepath.Clean(p)
+}
+
+// msysToWindows rewrites the drive paths Git-for-Windows sh prints (/c/Users/x)
+// into Windows paths (C:\Users\x), and maps its /tmp mount back onto the real
+// temp directory. Other inputs are returned untouched.
+func msysToWindows(p string) string {
+	if runtime.GOOS == "windows" && (p == "/tmp" || strings.HasPrefix(p, "/tmp/")) {
+		return filepath.FromSlash(os.TempDir()) + p[len("/tmp"):]
+	}
+	if len(p) < 3 || p[0] != '/' || p[2] != '/' {
+		return p
+	}
+	drive := p[1]
+	if (drive < 'a' || drive > 'z') && (drive < 'A' || drive > 'Z') {
+		return p
+	}
+	return strings.ToUpper(string(drive)) + `:\` + strings.ReplaceAll(p[3:], "/", `\`)
 }
 
 // Caller-supplied env must win over the inherited environment, because a hook
@@ -128,6 +160,24 @@ func TestRunRespectsTheContextDeadline(t *testing.T) {
 	if elapsed > 5*time.Second {
 		t.Errorf("hook ran %s; the deadline was not enforced", elapsed)
 	}
+}
+
+// A hook that leaves a background child behind must not keep the runner
+// waiting. The child inherits the output pipe, so waiting for the pipe to
+// close waits for the child, not for the hook. This is the case that made the
+// deadline unenforced on hosts whose shell forks instead of exec'ing.
+func TestRunDeadlineEnforcedWhenHookLeavesABackgroundChild(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
+	defer cancel()
+
+	start := time.Now()
+	err := Run(ctx, "pre", Hooks{Pre: "sleep 30 &"}, t.TempDir(), nil)
+	elapsed := time.Since(start)
+
+	if elapsed > 5*time.Second {
+		t.Errorf("hook ran %s; the deadline was not enforced", elapsed)
+	}
+	_ = err
 }
 
 // The default commit hook must produce a message a ledger-enforcing pre-commit

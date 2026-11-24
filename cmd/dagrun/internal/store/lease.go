@@ -237,6 +237,30 @@ func (s *Store) RecordUsage(nodeID, owner string, epoch int64, u *harness.Usage,
 	return ok, err
 }
 
+// RecordSession attaches the child harness's own session id to a node.
+//
+// It is guarded by owner+epoch like every other mutator: a worker whose lease
+// was taken over must not write its session id onto the successor's record.
+// An empty id is a no-op rather than an error, so a harness that prints no
+// session id leaves the field absent instead of storing a fabricated value.
+func (s *Store) RecordSession(nodeID, owner string, epoch int64, id, source string) (bool, error) {
+	if id == "" {
+		return false, nil
+	}
+	ok := false
+	err := s.With(func(st *State) error {
+		ns := st.Nodes[nodeID]
+		if ns == nil || ns.Owner != owner || ns.Epoch != epoch {
+			return nil
+		}
+		ns.Session = id
+		ns.SessionSource = source
+		ok = true
+		return nil
+	})
+	return ok, err
+}
+
 // SetFailureClass records why a node failed, so the retry policy acts on the
 // cause rather than on the symptom.
 func (s *Store) SetFailureClass(nodeID, owner string, epoch int64, class string) (bool, error) {

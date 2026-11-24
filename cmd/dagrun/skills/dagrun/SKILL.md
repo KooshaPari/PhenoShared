@@ -20,6 +20,8 @@ dagrun is a work-DAG executor for coding agents. You write a plan of nodes, each
 | `status` | show the tree and the progress through it | `dagrun status` |
 | `validate` | re-check every node against the filesystem | `dagrun validate` |
 | `trace` | the merged execution trace: what happened, as opposed to what the state file says | `dagrun trace --json` |
+| `agents` | one card per node that has run: which agent, which session, and whether that session was corroborated | `dagrun agents --json` |
+| `session` | this process's own validated identity: harness, session id, terminal, node binding | `dagrun session --json` |
 | `query` | select nodes: filter, project, order, limit | `dagrun query --where status=failed --select id,attempts,title` |
 | `replan PLAN` | diff a revised plan against the run; --apply installs it and refuses to discard verified work without --force | `dagrun replan plan.yaml --apply` |
 | `recover` | report or reclaim nodes stuck in a running state; --force reclaims and keeps the attempt count | `dagrun recover --force` |

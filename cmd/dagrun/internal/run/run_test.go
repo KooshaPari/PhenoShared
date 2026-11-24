@@ -51,6 +51,17 @@ type rig struct {
 	tr *trace.Writer
 }
 
+// scriptTemplate renders an ExecTemplate that runs a POSIX script file through
+// sh, with the path in slash form.
+//
+// The slash form is not cosmetic on Windows: the sh a Windows box gets from Git
+// for Windows reads the backslashes of a C:\... path as escapes, so the script
+// never ran and every node failed its artifact contract with "missing file does
+// not exist". On unix ToSlash changes nothing.
+func scriptTemplate(script string) string {
+	return "sh -c " + filepath.ToSlash(script) + " {stdin}"
+}
+
 func setup(t *testing.T) rig {
 	t.Helper()
 	root := t.TempDir()

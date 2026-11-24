@@ -10,6 +10,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/KooshaPari/dagrun/internal/applet"
 )
 
 const testPlan = `version: 1
@@ -76,6 +78,8 @@ func TestHealthReportsTheRun(t *testing.T) {
 	if doc["ok"] != true {
 		t.Errorf("ok = %v, want true", doc["ok"])
 	}
+	// filepath.IsAbs, not a leading "/": on Windows an absolute path starts
+	// with a drive letter (C:\...), so the unix-only check failed there.
 	if !filepath.IsAbs(doc["dir"].(string)) {
 		t.Errorf("dir should be absolute, got %v", doc["dir"])
 	}
@@ -286,5 +290,247 @@ func TestListenBindsAndStopsOnContext(t *testing.T) {
 	cancel()
 	if err := <-done; err != nil {
 		t.Errorf("Listen returned %v on a clean cancel, want nil", err)
+	}
+}
+
+// The viewer and the JSON API must report the same identity. They share one
+// projection (agents.BuildFrom) precisely so a page cannot quietly disagree
+// with /api/agents, and this test is what keeps that true.
+func TestRootAndAgentsAgreeOnSession(t *testing.T) {
+	const id = "dz-no-such-session-0001"
+	dir := fixture(t)
+	state := `{"version":1,"run":"srvtest","nodes":{
+  "1":{"status":"done","attempts":1,"session":"` + id + `","session_source":"stdout"},
+  "2":{"status":"failed","attempts":2,"last_error":"boom"}
+}}`
+	if err := os.WriteFile(filepath.Join(dir, "state.json"), []byte(state), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	s := newServer(t, dir)
+
+	code, body := get(t, s, "/api/agents")
+	if code != http.StatusOK {
+		t.Fatalf("/api/agents status = %d: %s", code, body)
+	}
+	var api struct {
+		ReadOnly bool `json:"read_only"`
+		Agents   []struct {
+			Node             string `json:"node"`
+			Session          string `json:"session"`
+			SessionValidated bool   `json:"session_validated"`
+		} `json:"agents"`
+	}
+	if err := json.Unmarshal([]byte(body), &api); err != nil {
+		t.Fatalf("/api/agents is not JSON: %v", err)
+	}
+	if !api.ReadOnly {
+		t.Error("/api/agents is not marked read-only")
+	}
+	var found bool
+	for _, a := range api.Agents {
+		if a.Session != id {
+			continue
+		}
+		found = true
+		if a.SessionValidated {
+			t.Errorf("session %q was reported validated; it cannot be corroborated", id)
+		}
+	}
+	if !found {
+		t.Fatalf("/api/agents does not carry session %q: %s", id, body)
+	}
+
+	code, page := get(t, s, "/")
+	if code != http.StatusOK {
+		t.Fatalf("/ status = %d: %s", code, page)
+	}
+	for _, want := range []string{id, `"agents"`, `"self"`} {
+		if !strings.Contains(page, want) {
+			t.Errorf("viewer HTML does not carry %q; the page and the API disagree", want)
+		}
+	}
+}
+
+// --- applet surface ---------------------------------------------------------
+
+// newServerWith builds a server with options, for the tests that need a version
+// or an embed allow-list.
+func newServerWith(t *testing.T, dir string, tweak func(*Options)) *Server {
+	t.Helper()
+	opt := Options{Dir: dir}
+	if tweak != nil {
+		tweak(&opt)
+	}
+	s, err := New(opt)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return s
+}
+
+func TestAppletManifestIsContractValid(t *testing.T) {
+	s := newServerWith(t, fixture(t), func(o *Options) { o.Version = "9.9.9-test" })
+	code, body := get(t, s, applet.ContractPath)
+	if code != http.StatusOK {
+		t.Fatalf("%s status = %d: %s", applet.ContractPath, code, body)
+	}
+
+	// Decoded strictly: the contract forbids additional properties, so a key the
+	// package does not model is a conformance failure, not extra information.
+	dec := json.NewDecoder(strings.NewReader(body))
+	dec.DisallowUnknownFields()
+	var m applet.Manifest
+	if err := dec.Decode(&m); err != nil {
+		t.Fatalf("manifest does not decode strictly: %v\n%s", err, body)
+	}
+	if err := m.Validate(); err != nil {
+		t.Fatalf("published manifest does not validate: %v", err)
+	}
+	if m.ID != applet.ID || m.Version != "9.9.9-test" {
+		t.Errorf("manifest id/version = %q/%q, want %q/9.9.9-test", m.ID, m.Version, applet.ID)
+	}
+	if m.Synthetic {
+		t.Error("published manifest is marked synthetic; this is a live server")
+	}
+}
+
+func TestAppletManifestIsNeverCached(t *testing.T) {
+	s := newServer(t, fixture(t))
+	rec := httptest.NewRecorder()
+	s.Handler().ServeHTTP(rec, httptest.NewRequest(http.MethodGet, applet.ContractPath, nil))
+	if got := rec.Header().Get("Cache-Control"); got != "no-store" {
+		t.Errorf("Cache-Control = %q, want no-store: a cached manifest is a claim about the present that was true in the past", got)
+	}
+}
+
+func TestAppletDiscoveryNamesTheMountAndTheAuthority(t *testing.T) {
+	s := newServerWith(t, fixture(t), func(o *Options) { o.Version = "1.0.0" })
+	code, body := get(t, s, "/api/applet")
+	if code != http.StatusOK {
+		t.Fatalf("/api/applet status = %d: %s", code, body)
+	}
+	var d applet.Discovery
+	if err := json.Unmarshal([]byte(body), &d); err != nil {
+		t.Fatalf("discovery is not JSON: %v\n%s", err, body)
+	}
+	if d.Contract != applet.Contract {
+		t.Errorf("contract = %q, want %q", d.Contract, applet.Contract)
+	}
+	if err := d.Applet.Validate(); err != nil {
+		t.Errorf("embedded manifest does not validate: %v", err)
+	}
+	if !d.Mount.ReadOnly || d.Mount.Path != "/embed" {
+		t.Errorf("mount = %+v, want a read-only /embed", d.Mount)
+	}
+	if d.Authority.Writes || d.Authority.Owner != "dagrun" {
+		t.Errorf("authority = %+v, want dagrun owning and not writing", d.Authority)
+	}
+	if !d.Host.Loopback {
+		t.Error("host.loopback = false")
+	}
+	if d.Host.Origin != "http://example.com" {
+		// httptest's default Host. The point is that the origin is derived from
+		// the request rather than invented or guessed from a proxy header.
+		t.Errorf("host.origin = %q, want the request's origin", d.Host.Origin)
+	}
+	if d.Mount.FramePolicy != applet.SameOriginFrames {
+		t.Errorf("frame policy = %q, want the same-origin default", d.Mount.FramePolicy)
+	}
+}
+
+func TestEmbedIsAnObserverThatCannotBeFramedElsewhere(t *testing.T) {
+	s := newServer(t, fixture(t))
+	rec := httptest.NewRecorder()
+	s.Handler().ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/embed", nil))
+	if rec.Code != http.StatusOK {
+		t.Fatalf("/embed status = %d: %s", rec.Code, rec.Body.String())
+	}
+	csp := rec.Header().Get("Content-Security-Policy")
+	if csp == "" {
+		t.Fatal("/embed has no CSP; an unauthenticated surface must state its framing policy")
+	}
+	for _, want := range []string{"frame-ancestors 'self'", "default-src 'none'", "form-action 'none'"} {
+		if !strings.Contains(csp, want) {
+			t.Errorf("CSP is missing %q: %s", want, csp)
+		}
+	}
+	if got := rec.Header().Get("X-Content-Type-Options"); got != "nosniff" {
+		t.Errorf("X-Content-Type-Options = %q, want nosniff", got)
+	}
+
+	body := rec.Body.String()
+	// The run's nodes are there, with their recorded statuses.
+	for _, want := range []string{
+		`data-node="1"`, `data-node="2"`, `data-status="done"`, `data-status="failed"`,
+		"freeze scope", "do the work", "boom", "srvtest",
+	} {
+		if !strings.Contains(body, want) {
+			t.Errorf("/embed is missing %q", want)
+		}
+	}
+	// And it offers no way to act: a second console must not become a control
+	// surface for an agent.
+	for _, banned := range []string{"<button", "<form", "<input", "<textarea", "<select"} {
+		if strings.Contains(body, banned) {
+			t.Errorf("/embed contains %q", banned)
+		}
+	}
+}
+
+func TestEmbedAllowOriginWidensThePolicyOnlyWhenAsked(t *testing.T) {
+	s := newServerWith(t, fixture(t), func(o *Options) {
+		o.EmbedAllowOrigins = []string{"https://console.example:8443"}
+	})
+	rec := httptest.NewRecorder()
+	s.Handler().ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/embed", nil))
+	want := "frame-ancestors 'self' https://console.example:8443"
+	if csp := rec.Header().Get("Content-Security-Policy"); !strings.Contains(csp, want) {
+		t.Fatalf("CSP = %q, want it to contain %q", csp, want)
+	}
+	// The discovery publishes the same effective policy, so a console can decide
+	// whether to mount without parsing a header from a page it has not fetched.
+	_, body := get(t, s, "/api/applet")
+	var d applet.Discovery
+	if err := json.Unmarshal([]byte(body), &d); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(d.Mount.FramePolicy, "https://console.example:8443") {
+		t.Errorf("mount.frame_policy = %q, want it to name the allowed origin", d.Mount.FramePolicy)
+	}
+}
+
+func TestEmbedAllowOriginRefusesAWildcard(t *testing.T) {
+	for _, bad := range []string{"*", "https://*.example.com", "https://x/y", ""} {
+		_, err := New(Options{Dir: fixture(t), EmbedAllowOrigins: []string{bad}})
+		if err == nil {
+			t.Errorf("New accepted --embed-allow-origin %q", bad)
+		}
+	}
+}
+
+func TestEmbedReportsAnUncorroboratedSessionAsUnvalidated(t *testing.T) {
+	dir := t.TempDir()
+	planYAML := "version: 1\nrun: embedrun\nnodes:\n  - id: \"1\"\n    kind: IMPL\n    role: impl\n    title: work\n"
+	stateJSON := `{"version":1,"run":"embedrun","nodes":{"1":{"status":"running","owner":"jcode",` +
+		`"session":"no-such-session-id","session_source":"harness"}}}`
+	if err := os.WriteFile(filepath.Join(dir, "run.yaml"), []byte(planYAML), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, "state.json"), []byte(stateJSON), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	s, err := New(Options{Dir: dir})
+	if err != nil {
+		t.Fatal(err)
+	}
+	code, body := get(t, s, "/embed")
+	if code != http.StatusOK {
+		t.Fatalf("/embed status = %d: %s", code, body)
+	}
+	if !strings.Contains(body, "no-such-session-id") {
+		t.Fatalf("/embed dropped the recorded session id: %s", body)
+	}
+	if !strings.Contains(body, "(unvalidated)") {
+		t.Errorf("/embed presents an uncorroborated session id as fact: %s", body)
 	}
 }

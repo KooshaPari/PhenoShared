@@ -85,6 +85,18 @@ var commands = []Command{
 		Example: "dagrun trace --json",
 	},
 	{
+		Name:    "agents",
+		Args:    "",
+		Purpose: "one card per node that has run: which agent, which session, and whether that session was corroborated",
+		Example: "dagrun agents --json",
+	},
+	{
+		Name:    "session",
+		Args:    "",
+		Purpose: "this process's own validated identity: harness, session id, terminal, node binding",
+		Example: "dagrun session --json",
+	},
+	{
 		Name:    "query",
 		Args:    "",
 		Purpose: "select nodes: filter, project, order, limit",

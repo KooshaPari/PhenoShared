@@ -41,6 +41,13 @@ type NodeState struct {
 	Branch     string    `json:"branch,omitempty"`
 	// Usage is the token and cost accounting the harness reported, when it did.
 	Usage *harness.Usage `json:"usage,omitempty"`
+	// Session is the child harness's own session id, when its output named one.
+	// It is what lets a finished node be bound back to the agent card that ran
+	// it, instead of only to the binary name the plan asked for.
+	Session string `json:"session,omitempty"`
+	// SessionSource records how the id was learned (e.g. "stdout:session_id"),
+	// so a reader can tell a harness-printed id from any future source.
+	SessionSource string `json:"session_source,omitempty"`
 	// FailureClass names why a node failed, so a retry policy can act on it.
 	FailureClass string `json:"failure_class,omitempty"`
 	// DurationMS is the measured wall time of the node, used to calibrate
