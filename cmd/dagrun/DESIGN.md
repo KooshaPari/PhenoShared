@@ -173,51 +173,6 @@ shipped CSP also carries `default-src 'none'` and `form-action 'none'`: the page
 fetches nothing, posts nowhere, and can only be framed by an origin named on the
 command line.
 
-An unmatched path under `/api/` or `/.well-known/` answers **404 with a JSON
-body**, not the viewer. The catch-all used to serve the page for any unmatched
-path, so a client asking for a route dagrun never had (`/api/servers` is the one
-that caught a launcher lane out) received `200 text/html` and had no way to tell
-a wrong route from a working call. Page paths still render the viewer, because a
-browser asking for an unknown page did want a page.
-
-### D12. A running server advertises itself, so a launcher need not scan ports
-
-The three routes above are only useful to a console that already knows the port.
-A tray menu or a master app is started once and then has to find servers it did
-not start, and port scanning is both slow and a false-positive machine on a
-shared box. So `serve` writes one small JSON record per running server into a
-registry directory, and `dagrun instances` reads it back.
-
-The record is a rendezvous, not state: the contract urn, an `id` derived from
-the bound port, the three absolute URLs (`manifest`, `discovery`, `embed`), the
-working directory, version, pid, `started_at`, `read_only` and `allow_origins`.
-The URLs are absolute on purpose. A host that concatenates paths is a host that
-gets `/api//applet` on one version and `/embed/` on the next.
-
-`NewInstance` **refuses a non-loopback origin**. The advertised surface is
-unauthenticated by design (D11), so advertising it off-host would publish a port
-that has no authorization story. `Validate` re-checks every field a host relies
-on when a file is read, because a registry file is untrusted input: any process
-on the machine can write one.
-
-Writes are atomic (temp file, `0600`, `rename`) so a concurrent reader never sees
-a half-written entry, and the file name derives from the port, so a restart at
-the same port replaces its own record instead of accumulating duplicates.
-Retraction is deferred on a clean stop, so a finished `serve` leaves no record
-behind, while a crash leaves a stale one that `--verify` distinguishes by
-fetching the manifest from the record's own origin.
-
-`ReadInstances` returns the valid entries **plus one error per unreadable file**.
-A corrupt record must not hide the good ones, and an empty list must not be
-indistinguishable from an empty directory. A missing directory is empty, not an
-error, because "no servers" is the normal state on a fresh machine.
-
-Advertising is opt-in at the library boundary (`server.Options.InstanceDir` empty
-means write nothing) and on by default at the CLI boundary, resolved through
-`$DAGRUN_INSTANCE_DIR`, then `<config>/dagrun/instances`, then
-`~/.dagrun/instances`. A library must not write to a home directory unasked; a
-command the person typed may.
-
 ## Layering
 
 ```
@@ -248,22 +203,19 @@ favour of the numbers below plus the command that re-derives them.
 find . -name '*.go' ! -name '*_test.go' -print0 | xargs -0 cat | wc -l
 ```
 
-Measured 2026-11-24, at 29 packages: **23,483 raw / 18,058 code production lines**,
-plus **17,750 raw / 15,197 code test lines**.
+Measured 2026-11-24, at 29 packages: **22,956 raw / 17,678 code production lines**,
+plus **16,877 raw / 14,434 code test lines**.
 
 The two surfaces this design owns, same day, same method:
 
 | surface | files | prod raw | prod code | test raw | test code |
 |---|---|---|---|---|---|
-| `internal/applet` | 4 (+2 tests) | 886 | 648 | 717 | 644 |
-| `internal/server` | 3 (+2 tests) | 698 | 483 | 674 | 578 |
+| `internal/applet` | 3 (+1 test) | 600 | 446 | 378 | 329 |
+| `internal/server` | 3 (+1 test) | 663 | 467 | 536 | 459 |
 
 `internal/applet` was split at 398 raw lines to keep every file under the 350 target:
 composition (`Build`, discovery, framing) in `applet.go`, rendering in `embed.go`, and
-the publish-time gate in `validate.go`. The instance registry (D12) is a fourth file,
-`instance.go` at 286 raw, split out rather than added to `applet.go` because a
-rendezvous file and an HTTP projection fail for different reasons. Largest of the nine:
-`applet.go` at 328 raw.
+the publish-time gate in `validate.go`. Largest of the six: `applet.go` at 328 raw.
 
 The 350-line target is met by those surfaces and is not met tree-wide:
 `internal/run/run.go` is 697 lines and `internal/query/query.go` 507. Both predate this
