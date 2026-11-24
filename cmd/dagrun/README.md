@@ -33,25 +33,12 @@ exited 0.** Everything else follows from that.
 ## Install
 
 ```sh
-# this module lives in a private repo: tell Go that, and let it use your git
-# credentials. Without GOPRIVATE, `go install ...@v1.2.0` fails on sum.golang.org.
-export GOPRIVATE='github.com/KooshaPari/*' GONOSUMDB='github.com/KooshaPari/*'
-go install github.com/KooshaPari/dagrun@v1.2.0   # or:
+go install github.com/KooshaPari/dagrun@latest   # or:
 go build -o ~/.local/bin/dagrun .
 ```
 
 Requires Go 1.24+. One dependency (`gopkg.in/yaml.v3`, pure Go, vendorable).
-macOS and Linux are the supported targets. Windows used to be refused outright
-(no `flock`); it now takes a real `LockFileEx` lock instead, but its suite is not
-green yet, so it is not claimed as supported.
-
-Hooks, `cmd:` discovery and harness templates all run through `sh -c`, so a POSIX
-shell must be on PATH. macOS and Linux already have one. On Windows that means
-Git Bash, MSYS2 or WSL, and the POSIX tools must come before the Windows ones:
-`find` in `C:\Windows\System32` is a different program with different flags and
-will silently return nothing for a `find . -name ...` discovery command. dagrun
-now refuses that case instead of reporting an empty work set: the error names the
-tool it resolved and the PATH order that fixes it.
+macOS and Linux. Windows is refused rather than silently unsafe (no `flock`).
 
 ## 60-second demo
 

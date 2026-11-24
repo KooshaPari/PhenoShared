@@ -12,6 +12,7 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/KooshaPari/dagrun/internal/applet"
 	"github.com/KooshaPari/dagrun/internal/server"
 )
 
@@ -98,11 +99,22 @@ func cmdServe(args []string) error {
 		return err
 	}
 
+	// Advertise where a host that did not start this server can find it, so a
+	// tray icon or a master console can list running instances without port
+	// scanning. A missing registry directory costs a convenience, not the
+	// server, so this warns and serves anyway.
+	instanceDir, err := applet.DefaultInstanceDir()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "dagrun serve: this instance will not be discoverable: %v\n", err)
+		instanceDir = ""
+	}
+
 	srv, err := server.New(server.Options{
 		Dir:               abs,
 		Addr:              *addr,
 		Version:           Version,
 		EmbedAllowOrigins: frames,
+		InstanceDir:       instanceDir,
 	})
 	if err != nil {
 		return err

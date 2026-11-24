@@ -1,3 +1,0 @@
-"""
-Core orchestration components.
-"""

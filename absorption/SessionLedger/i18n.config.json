@@ -1,6 +1,0 @@
-{
-  "defaultLocale": "en",
-  "locales": ["en", "es", "fr", "de", "ja", "zh"],
-  "fallbackLocale": "en",
-  "namespace": "sessionledger"
-}

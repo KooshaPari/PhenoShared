@@ -1,8 +1,0 @@
-# Moved to docs/sessions/20260808-helioslite-binary-swap-log/ledger.md
-#
-# This stub remains at the repo root as a breadcrumb so anyone who lands
-# on `_forge_swap_done.txt` (e.g. via a stale shell alias, a docs link, or
-# a muscle-memory grep) can find the canonical location of the
-# helioslite binary-swap ledger.
-#
-# See: docs/sessions/20260808-helioslite-binary-swap-log/ledger.md

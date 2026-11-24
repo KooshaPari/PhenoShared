@@ -1,0 +1,838 @@
+"""Tests for the capture-gap notice (issue #200).
+
+A plugin enabled mid-session has none of its hooks registered for that session,
+so PostToolUse never fires and capture silently does nothing. The reporter lost
+a day to it: `logs/` held one session-start line, `hook-errors.log` was empty,
+and no memory was ever written.
+
+It cannot be detected while it is happening — nothing inside a hook can see
+which hooks are registered, and SessionStart's `source` does not distinguish a
+plugin-enable from a fresh start. What CAN be detected, afterwards, is the
+signature: a session where SessionStart ran and PostToolUse never did.
+
+These pin both halves of that, plus the delivery path — `systemMessage`, which
+is the only hook output the human sees. A notice only the model sees is how
+this stayed invisible in the first place.
+"""
+
+import json
+import os
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+import pytest
+
+from .subprocess_helpers import subprocess_failure_detail
+
+pytestmark = pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="bash hook subprocess + POSIX semantics — not portable to Windows runners",
+)
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SESSION_START = REPO_ROOT / "scripts" / "session-start-hook.sh"
+POST_TOOL = REPO_ROOT / "scripts" / "post-tool-hook.sh"
+USER_PROMPT = REPO_ROOT / "scripts" / "user-prompt-hook.sh"
+
+from pipeline.slug import session_dir_slug as _slug  # noqa: E402
+
+TOOL_USE_LINE = '{"type":"assistant","message":{"content":[{"type":"tool_use"}]}}\n'
+PLAIN_LINE = '{"type":"assistant","message":{"content":"just talking"}}\n'
+
+
+def _env(home: Path, project: Path, remember: Path, *, defer: bool = True) -> dict:
+    """`defer=False` runs the deferred phase inline (REMEMBER_DEFER=0).
+
+    The capture-gap check moved into that phase (#660), and it is the LAST
+    thing the phase does -- session-start-hook.sh writes the notice at the end
+    of `_remember_deferred_phase`, after the records and after the evidence
+    store prune. So the hook returning says nothing at all about whether the
+    check has run yet.
+
+    That splits this file's assertions in two, and the split is not cosmetic:
+
+    * "the notice must appear" is a real assertion on the default path, and
+      is polled for -- it proves the deferred phase actually reaches the end.
+    * "the notice must NOT appear" cannot be asserted on the default path at
+      all. It would pass just as well against a phase that had not run yet,
+      or that died before it got there -- the negative and the absence are
+      the same file-not-found. Those run inline, where "did not fire" is a
+      verdict rather than a race. (macos-latest 3.10 was the leg that caught
+      this, on a green-everywhere-else pull request.)
+    """
+    env = {
+        **os.environ,
+        "HOME": str(home),
+        "CLAUDE_PROJECT_DIR": str(project),
+        "CLAUDE_PLUGIN_ROOT": str(REPO_ROOT),
+        "REMEMBER_DIR": str(remember),
+        "_LIB_MEMORY_DIR_LOADED": "1",
+    }
+    if not defer:
+        env["REMEMBER_DEFER"] = "0"
+    return env
+
+
+# How long a polled assertion waits for the deferred phase to reach its end.
+# Generous: it is a bound on a hang, not a measurement of anything.
+DEFERRED_TIMEOUT = 15
+
+
+def _wait_for_notice(notice: Path) -> bool:
+    deadline = time.time() + DEFERRED_TIMEOUT
+    while time.time() < deadline:
+        if notice.is_file() and notice.read_text(encoding="utf-8").strip():
+            return True
+        time.sleep(0.1)
+    return False
+
+
+def _wait_for_reported(reported: Path) -> bool:
+    """#1079 point 4: the deferred phase writes the notice (capture-gap-notice,
+    script line ~1039) and the dedupe marker (capture-gap-reported, ~1040) as
+    two separate writes, moments apart. A test that polls only for the notice
+    and then immediately acts (unlinking it, re-running the hook) can win a
+    race against the SECOND write on a slow runner, re-reporting the same gap
+    on the very next restart -- the failure test_the_same_gap_is_reported_once
+    exists to catch. Poll for both before treating the deferred phase as done.
+    """
+    deadline = time.time() + DEFERRED_TIMEOUT
+    while time.time() < deadline:
+        if reported.is_file() and reported.read_text(encoding="utf-8").strip():
+            return True
+        time.sleep(0.1)
+    return False
+
+
+def _project(tmp_path: Path):
+    home = tmp_path / "home"
+    project = tmp_path / "project"
+    remember = project / ".remember"
+    session_dir = home / ".claude" / "projects" / _slug(str(project))
+    session_dir.mkdir(parents=True)
+    (remember / "tmp").mkdir(parents=True)
+    # NOTE: this config write is INERT under this harness, and saying so is the
+    # point. `_LIB_MEMORY_DIR_LOADED=1` in the env below makes lib-memory-dir.sh
+    # return before it merges the config layers, so REMEMBER_CONFIG is never
+    # exported and log.sh's config() falls back to each caller's default —
+    # `features.recovery` reads as true regardless of what is written here.
+    #
+    # Recovery still does not fire, but for a different reason: it also needs
+    # tmp/last-save.json, which these fixtures do not create. Anyone copying
+    # this pattern into a test that DOES create last-save.json will get a
+    # stray background save-session.sh fork, not the suppression this looks
+    # like it buys.
+    (remember / "config.json").write_text(
+        json.dumps({"features": {"recovery": False}}), encoding="utf-8"
+    )
+    return home, project, remember, session_dir
+
+
+def _transcripts(session_dir: Path, *, previous: str, current: str = PLAIN_LINE):
+    """Two transcripts. `ls -t` orders by mtime, so the current one is newest.
+
+    The hooks take the newest transcript that is not the current session's,
+    identified by the `session_id` on the SessionStart payload — `sess-cur`
+    here, matching `_run`'s default. Position used to stand in for that
+    identity, which is off by one for as long as the current transcript does
+    not exist yet (#270); `tests/test_session_start_prev_session_270.py`
+    fixtures that window directly.
+    """
+    prev = session_dir / "sess-prev.jsonl"
+    prev.write_text(previous)
+    cur = session_dir / "sess-cur.jsonl"
+    cur.write_text(current)
+    # Explicit, widely spaced mtimes rather than a sleep. `ls -t` orders by
+    # mtime, and this feature has already been bitten once by assuming
+    # sub-second mtime resolution — bash's `-nt` works to the second, which is
+    # why the hook compares identities now. A 50ms sleep would reproduce that
+    # same fragility in the test harness on a coarse filesystem or a loaded
+    # runner, so the ordering is stated outright instead of raced for.
+    now = int(time.time())
+    os.utime(prev, (now - 120, now - 120))
+    os.utime(cur, (now, now))
+    return prev, cur
+
+
+CURRENT_SESSION = "sess-cur"
+
+
+def _payload(session_id: str, source: str = "startup") -> str:
+    """A SessionStart stdin payload, shaped like the real one."""
+    return json.dumps({
+        "session_id": session_id,
+        "transcript_path": f"/does/not/matter/{session_id}.jsonl",
+        "hook_event_name": "SessionStart",
+        "source": source,
+        "cwd": "/does/not/matter",
+    })
+
+
+def _run(script: Path, env: dict, session_id: str = CURRENT_SESSION):
+    """Run a hook once.
+
+    SessionStart is given a payload because the real one always carries one,
+    and since #270 the hook reads `session_id` from it to exclude its own
+    transcript from "the previous session". Passing `session_id=None` models
+    the payload being absent or unusable, where the gap check declines to
+    answer rather than accuse a session it cannot identify.
+    """
+    kwargs = dict(env=env, capture_output=True, text=True, timeout=60)
+    if script == SESSION_START and session_id is not None:
+        kwargs["input"] = _payload(session_id)
+    else:
+        kwargs["stdin"] = subprocess.DEVNULL
+    return subprocess.run(["bash", str(script)], **kwargs)
+
+
+# ---------------------------------------------------------------------------
+# PostToolUse leaves a sign of life
+# ---------------------------------------------------------------------------
+
+def test_post_tool_records_that_it_ran_at_all(tmp_path):
+    """Unconditional, before any throttle: the question is "did it run", not
+    "did it save". A marker written only on save would call a correctly-wired
+    but idle session broken."""
+    home, project, remember, session_dir = _project(tmp_path)
+    (session_dir / "sess-1.jsonl").write_text(PLAIN_LINE * 5)
+
+    _run(POST_TOOL, _env(home, project, remember))
+
+    alive = remember / "tmp" / "capture-alive"
+    assert alive.exists(), (
+        "PostToolUse ran but left no sign of life — the gap check has nothing "
+        "to distinguish a wired session from an unwired one"
+    )
+    assert alive.read_text().strip() == "sess-1", (
+        "the marker must name the session it saw; a bare touch cannot tell "
+        "'ran for THIS session' from 'ran once, months ago'"
+    )
+
+
+# ---------------------------------------------------------------------------
+# SessionStart detects the gap
+# ---------------------------------------------------------------------------
+
+def test_a_previous_session_that_never_captured_raises_the_notice(tmp_path):
+    """The reported failure: SessionStart ran last time, PostToolUse never did."""
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+    # A previous SessionStart, and no sign of life after it.
+    (remember / "tmp" / "capture-session-start").write_text(str(int(time.time())))
+
+    result = _run(SESSION_START, _env(home, project, remember))
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    notice = remember / "tmp" / "capture-gap-notice"
+    assert _wait_for_notice(notice), (
+        "a session that ran SessionStart and never PostToolUse produced no "
+        "notice — this is exactly the silent no-op #200 reports"
+    )
+    assert "doctor" in notice.read_text(), "notice does not say how to diagnose"
+
+
+def test_a_healthy_previous_session_raises_nothing(tmp_path):
+    """PostToolUse recorded the previous session's own id: capture was wired.
+
+    Written as an identity rather than a timestamp on purpose — the first cut
+    compared mtimes and reported this exact case as broken, because bash 3.2's
+    `-nt` resolves to the second and the sign of life landed inside the same
+    one as the stamp.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+    (remember / "tmp" / "capture-session-start").write_text(str(int(time.time())))
+    (remember / "tmp" / "capture-alive").write_text("sess-prev")
+
+    _run(SESSION_START, _env(home, project, remember, defer=False))
+
+    assert not (remember / "tmp" / "capture-gap-notice").exists(), (
+        "warned about a session that captured normally — a false alarm here "
+        "trains people to ignore the real one"
+    )
+
+
+def test_a_previous_session_with_no_tool_calls_raises_nothing(tmp_path):
+    """A conversation with no tool calls produces no PostToolUse either, and
+    that is not a fault. Only the transcript can tell the two apart."""
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=PLAIN_LINE * 5)
+    (remember / "tmp" / "capture-session-start").write_text(str(int(time.time())))
+
+    _run(SESSION_START, _env(home, project, remember, defer=False))
+
+    assert not (remember / "tmp" / "capture-gap-notice").exists(), (
+        "cried wolf over a session that simply used no tools"
+    )
+
+
+def test_the_check_is_not_gated_on_having_run_before(tmp_path):
+    """The whole point, and the thing the first cut got backwards.
+
+    That version required a prior session-start stamp, so a fresh install
+    would not be warned about a session that predated it. It sounds right and
+    it defeats the feature: during a mid-session enable NO hook runs, so no
+    stamp is ever written, so the one incident this exists to report is the
+    exact case it stayed silent for. It could only have caught a recurrence.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+    # No stamp, no capture-alive: the state a mid-session enable leaves behind.
+
+    _run(SESSION_START, _env(home, project, remember))
+
+    notice = remember / "tmp" / "capture-gap-notice"
+    assert _wait_for_notice(notice), (
+        "stayed silent for the originating incident — the only one that "
+        "actually happened to the reporter"
+    )
+    assert "installed or enabled" in notice.read_text(), (
+        "a fresh install sees this too, so the wording has to cover both "
+        "without alarming someone whose plugin is working fine"
+    )
+
+
+# ---------------------------------------------------------------------------
+# The evidence store must answer "was session X captured" (issue #206)
+# ---------------------------------------------------------------------------
+#
+# The #200 cut stored ONE session id, last-write-wins. That answers a different
+# question — "which session most recently made a tool call" — and the two come
+# apart the moment any session writes after X did. Then the evidence that X was
+# captured is simply gone, and the check reads its own amnesia as a fault in X.
+#
+# Two independent reproductions, both from real installs:
+#
+#   * `/clear` does not mint a new session id. It fires SessionStart while the
+#     transcript, the id and the .jsonl all stay the same — and by then the
+#     CURRENT session has already made tool calls, so the one slot holds the
+#     current id. The previous session's record was overwritten hours ago, so
+#     the mismatch is structurally guaranteed regardless of capture health.
+#     (Same for `compact` and `fork` — every same-session SessionStart source.)
+#
+#   * A session captured by the NEXT session's recovery block rather than by
+#     its own live saves — which, given the default delta/cooldown thresholds,
+#     is the ordinary case for short sessions, not an edge case. Reported
+#     independently by ca-sringert on #206.
+#
+# Neither is fixed by looking at SessionStart's `source`. The store is the
+# defect; the source field is just where the loudest instance surfaced.
+
+
+def _stamp(*files):
+    """Fix mtimes oldest-to-newest, widely spaced. See _transcripts on why the
+    ordering is stated rather than raced for."""
+    now = int(time.time())
+    for offset, path in enumerate(reversed(files)):
+        t = now - offset * 120
+        os.utime(path, (t, t))
+
+
+def test_evidence_of_capture_survives_a_later_session_making_tool_calls(tmp_path):
+    """The `/clear` false positive, end to end and store-agnostic.
+
+    Nothing here writes a marker by hand — the previous session is captured by
+    running the real PostToolUse hook, exactly as a healthy session captures
+    itself. Then the current session makes its own tool calls, which is the
+    precondition `/clear` guarantees: SessionStart runs with the same session
+    id still current and its record already written.
+
+    Under a single-slot store the second PostToolUse run destroys the first's
+    evidence and this warns every single time. It has to survive.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    env = _env(home, project, remember, defer=False)
+
+    prev = session_dir / "sess-prev.jsonl"
+    prev.write_text(TOOL_USE_LINE * 5)
+    _run(POST_TOOL, env)
+
+    cur = session_dir / "sess-cur.jsonl"
+    cur.write_text(TOOL_USE_LINE * 5)
+    _stamp(prev, cur)
+    _run(POST_TOOL, env)
+
+    _run(SESSION_START, env)
+
+    assert not (remember / "tmp" / "capture-gap-notice").exists(), (
+        "warned about a session the PostToolUse hook demonstrably ran for — "
+        "its record was overwritten by the current session's own tool calls, "
+        "which is what /clear guarantees and what makes this fire forever"
+    )
+
+
+def test_a_session_captured_only_by_recovery_is_not_flagged(tmp_path):
+    """ca-sringert's repro: a short session that never crossed its own save
+    thresholds, picked up whole by the next session's recovery block.
+
+    `save-session.sh`'s recovery path never touches capture-alive — only
+    post-tool-hook.sh does — so the one slot still names some unrelated older
+    session. But last-save.json records the session as fully captured, and it
+    is the same source the recovery block itself already trusts. A detector
+    that contradicts the save record is reporting on its own bookkeeping, not
+    on whether anything was lost.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+
+    (remember / "tmp" / "last-save.json").write_text(
+        json.dumps({"sessions": {"sess-prev": 72}, "session": "sess-prev", "line": 72}),
+        encoding="utf-8",
+    )
+    (remember / "tmp" / "capture-alive").write_text("sess-some-older-one")
+
+    _run(SESSION_START, _env(home, project, remember, defer=False))
+
+    assert not (remember / "tmp" / "capture-gap-notice").exists(), (
+        "flagged a session last-save.json records as captured 72/72 — the "
+        "content is in memory, so 'was not captured' is simply false"
+    )
+
+
+# ---------------------------------------------------------------------------
+# The notice must not contradict /remember:doctor's own verdict (#745)
+# ---------------------------------------------------------------------------
+#
+# The recovery block above (config default `features.recovery: true`) force-
+# saves an unsaved PREV_ID from its transcript, in the background, before this
+# check runs. A reporter saw the flat "not captured, run doctor" wording fire,
+# then ran /remember:doctor nine hours later and got "capture is working" --
+# consistent with a recovery save landing well after the notice was written
+# and read. Both statements were true; only the notice sounded like a fault
+# nothing had addressed.
+#
+# `features.recovery: false` in config.json cannot be exercised here: the
+# `_env`/`_project` harness sets `_LIB_MEMORY_DIR_LOADED=1` so config_into's
+# merged-file lookup never runs and every config key reads its bundled
+# default (see `_project`'s own comment on this). The user-facing case this
+# fix actually distinguishes is "a recovery attempt was made for PREV_ID this
+# run" vs. "it was not" -- which config.json's recovery flag is only one of
+# several ways to reach (the others being a missing SESSIONS_DIR/last-
+# save.json, or PREV_ID already recorded saved). These two tests exercise
+# that distinction directly, by giving or withholding the preconditions the
+# recovery block itself checks, rather than by toggling the inert config key.
+
+
+def test_an_unsaved_previous_session_with_no_roster_marker_keeps_the_flat_wording(tmp_path):
+    """#1046 changed this test's own premise. Before #1046, recovery attempted
+    PREV_ID's rescue whenever it was merely unsaved, and the notice used the
+    "is being recovered" wording to say so. Recovery now ALSO requires a
+    capture-alive.d marker under THIS store before it will force-save a
+    candidate -- the same marker capture_was_seen() already reads as its own
+    first evidence source. The two cannot both engage on one session: a
+    marker that lets recovery act also makes capture_was_seen() true, which
+    means there is no capture gap left to report at all (see
+    test_recovery_and_the_gap_check_agree_on_which_session_is_previous for
+    that case). Conversely, a session with NO marker -- this fixture -- is
+    exactly the case #1046 asks recovery to leave alone (it might belong to a
+    different store sharing this project directory), so recovery declines,
+    and the notice correctly falls back to the flat wording instead of
+    claiming a rescue that did not happen.
+
+    Net effect: the "is being recovered" wording this test used to pin is
+    now unreachable code (flagged in this lane's PR for the maintainer --
+    see #1046's own comments). This test now pins the flat-wording fallback
+    instead, as a regression guard against claiming a rescue that did not
+    happen."""
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+    # last-save.json exists (so the recovery block's own [-f] guard passes)
+    # but records a DIFFERENT session -- PREV_ID ("sess-prev") is still
+    # unsaved. Pre-#1046 this alone triggered save-session.sh --force; now it
+    # is necessary but not sufficient without a roster marker (absent here).
+    (remember / "tmp" / "last-save.json").write_text(
+        json.dumps({"sessions": {"sess-older": 10}, "session": "sess-older", "line": 10}),
+        encoding="utf-8",
+    )
+    assert not (remember / "tmp" / "capture-alive.d" / "sess-prev").exists(), (
+        "precondition: no roster marker for sess-prev under this store"
+    )
+    # #1046 final review: past the one-time upgrade grace window (an epoch
+    # older than sess-prev's own transcript) -- this test is about the
+    # STEADY-STATE guard, not the upgrade transition pinned in
+    # tests/test_roster_skip_1046.py's own grace tests.
+    epoch = remember / "tmp" / "roster-epoch"
+    epoch.write_text("")
+    prev_jsonl = session_dir / "sess-prev.jsonl"
+    old_mtime = int(prev_jsonl.stat().st_mtime) - 3600
+    os.utime(epoch, (old_mtime, old_mtime))
+
+    result = _run(SESSION_START, _env(home, project, remember))
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    notice = remember / "tmp" / "capture-gap-notice"
+    assert _wait_for_notice(notice), (
+        "a genuine capture gap with no roster marker still has to be "
+        "reported -- silence here is the #200 regression this guards against"
+    )
+    text = notice.read_text()
+    assert "is being recovered" not in text, (
+        f"recovery declined to force-save sess-prev (#1046: no roster "
+        f"marker under this store), but the notice claims a rescue that "
+        f"did not happen -- got: {text!r}"
+    )
+    assert "has been recovered" not in text, (
+        "the fork is asynchronous (& disown) -- this hook cannot know it "
+        "succeeded, so the wording must not claim completion"
+    )
+
+
+def test_a_previous_session_recovery_cannot_save_keeps_the_original_wording(tmp_path):
+    """No last-save.json at all: the recovery block's own [-f] guard never
+    passes, so no fork is attempted for PREV_ID -- the original wording,
+    unchanged, is the honest one (equivalent to `features.recovery: false`
+    for the notice's purposes: nothing was attempted either way)."""
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+    assert not (remember / "tmp" / "last-save.json").exists(), (
+        "precondition: recovery's own [-f LAST_SAVE_FILE] guard must fail"
+    )
+
+    result = _run(SESSION_START, _env(home, project, remember))
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    notice = remember / "tmp" / "capture-gap-notice"
+    assert _wait_for_notice(notice), "a real gap with no recovery in play must still warn"
+    text = notice.read_text()
+    assert "is being recovered" not in text, (
+        f"no recovery attempt was made for PREV_ID -- the notice must not "
+        f"imply one, got: {text!r}"
+    )
+    assert text.strip() == (
+        "remember: your previous session was not captured. If you just "
+        "installed or enabled the plugin, that is expected -- capture starts "
+        "now. Otherwise its hooks were not registered for that session; run "
+        "/remember:doctor."
+    ), f"original wording changed unexpectedly: {text!r}"
+
+
+def test_a_pluginless_sdk_transcript_is_never_picked_as_the_previous_session(tmp_path):
+    """#745 (kenspc's report): the marker-less transcripts are not the
+    user's own sessions at all. security-guidance's commit/push review starts
+    a Claude Agent SDK session with `setting_sources=[]` -- no plugins loaded,
+    so remember's hooks are never registered and no `capture-alive.d/<id>`
+    marker is ever written, or will be. Such a transcript writes into the
+    same project directory and can be newer than the real previous session.
+
+    The real previous session here (`sess-real`) captured fine and has both a
+    marker and a save record. The SDK transcript (`sess-sdk`) must not be
+    picked as "the previous session" at all -- if it were, the notice would
+    fire over a session that was captured fine.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    real = session_dir / "sess-real.jsonl"
+    real.write_text(TOOL_USE_LINE * 5)
+    sdk = session_dir / "sess-sdk.jsonl"
+    sdk.write_text(
+        '{"type":"queue-operation","operation":"dequeue",'
+        '"entrypoint":"sdk-py","sessionId":"sess-sdk"}\n'
+        + TOOL_USE_LINE * 4
+    )
+    cur = session_dir / "sess-cur.jsonl"
+    cur.write_text(PLAIN_LINE)
+    now = int(time.time())
+    os.utime(real, (now - 240, now - 240))
+    os.utime(sdk, (now - 120, now - 120))
+    os.utime(cur, (now, now))
+
+    (remember / "tmp" / "last-save.json").write_text(
+        json.dumps({"sessions": {"sess-real": 5}, "session": "sess-real", "line": 5}),
+        encoding="utf-8",
+    )
+    (remember / "tmp" / "capture-alive").write_text("sess-real")
+
+    _run(SESSION_START, _env(home, project, remember, defer=False))
+
+    assert not (remember / "tmp" / "capture-gap-notice").exists(), (
+        "warned even though the genuine previous session ('sess-real') was "
+        "captured fine -- an SDK review session that never loaded this "
+        "plugin must not be picked as 'the previous session' at all (#745)"
+    )
+
+
+def test_a_pluginless_sdk_transcript_with_no_real_session_behind_it_warns_nothing(tmp_path):
+    """The SDK transcript is the ONLY past transcript -- there is no genuine
+    previous session to accuse, and none should be invented. This is the
+    'no eligible candidate at all' case, distinct from the case above where
+    skipping the SDK transcript still finds a real one behind it."""
+    home, project, remember, session_dir = _project(tmp_path)
+    sdk = session_dir / "sess-sdk.jsonl"
+    sdk.write_text(
+        '{"type":"queue-operation","operation":"dequeue",'
+        '"entrypoint":"sdk-py","sessionId":"sess-sdk"}\n'
+        + TOOL_USE_LINE * 4
+    )
+    cur = session_dir / "sess-cur.jsonl"
+    cur.write_text(PLAIN_LINE)
+    now = int(time.time())
+    os.utime(sdk, (now - 120, now - 120))
+    os.utime(cur, (now, now))
+
+    _run(SESSION_START, _env(home, project, remember, defer=False))
+
+    assert not (remember / "tmp" / "capture-gap-notice").exists(), (
+        "warned about a session with no genuine previous session behind it "
+        "-- an SDK-only project directory must not be treated as a gap (#745)"
+    )
+
+
+def test_dialogue_content_that_quotes_the_entrypoint_string_is_not_mistaken_for_a_marker(tmp_path):
+    """Self-review finding carried over from the branch this supersedes: the
+    sniff is a raw substring scan, not a JSON parse, so it must not fire on
+    ordinary conversation content that happens to quote the literal text
+    entrypoint/sdk-py -- exactly what a transcript of a session discussing
+    THIS issue's own test fixtures would contain. Real dialogue is always
+    wrapped in a `message` field in every fixture and real transcript
+    examined for #745; a line carrying one is skipped outright, never
+    scanned for `entrypoint`, however tightly the two literal substrings sit
+    inside it."""
+    home, project, remember, session_dir = _project(tmp_path)
+    previous = (
+        '{"type":"assistant","message":{"content":"note for #745: this '
+        'message literally contains "entrypoint":"sdk-py" verbatim"}}\n'
+        + TOOL_USE_LINE * 5
+    )
+    _transcripts(session_dir, previous=previous)
+    (remember / "tmp" / "capture-session-start").write_text(str(int(time.time())))
+
+    result = _run(SESSION_START, _env(home, project, remember))
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    notice = remember / "tmp" / "capture-gap-notice"
+    assert _wait_for_notice(notice), (
+        "a genuinely uncaptured interactive session was excluded as "
+        "'pluginless SDK' merely because its own dialogue quoted the "
+        "literal text entrypoint/sdk-py -- a substring scan is not a JSON "
+        "parse and must not fire on message content (#745)"
+    )
+
+
+def test_an_entrypoint_field_present_but_not_sdk_still_warns(tmp_path):
+    """Positive control: the mere PRESENCE of an `entrypoint` field must not
+    suppress the notice -- only a value that actually opens with `sdk-`. A
+    genuinely uncaptured interactive session (`entrypoint: claude-vscode`,
+    real tool_use, no marker) must still raise (#745)."""
+    home, project, remember, session_dir = _project(tmp_path)
+    previous = (
+        '{"type":"queue-operation","operation":"dequeue",'
+        '"entrypoint":"claude-vscode","sessionId":"sess-prev"}\n'
+        + TOOL_USE_LINE * 5
+    )
+    _transcripts(session_dir, previous=previous)
+    (remember / "tmp" / "capture-session-start").write_text(str(int(time.time())))
+
+    result = _run(SESSION_START, _env(home, project, remember))
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    notice = remember / "tmp" / "capture-gap-notice"
+    assert _wait_for_notice(notice), (
+        "an interactive session's own entrypoint field ('claude-vscode') "
+        "suppressed a real capture gap -- only 'sdk-*' may do that (#745)"
+    )
+
+
+def test_a_real_capture_gap_still_warns(tmp_path):
+    """The pin that stops this fix degenerating into deleting the warning.
+
+    PostToolUse ran — for an older session, so the store is populated and
+    working — and never once for the previous session. That is the #200
+    signature exactly: hooks not registered for that session. It must still be
+    reported, or the whole feature is theatre.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    env = _env(home, project, remember)
+
+    old = session_dir / "sess-old.jsonl"
+    old.write_text(TOOL_USE_LINE * 5)
+    _run(POST_TOOL, env)
+
+    prev = session_dir / "sess-prev.jsonl"
+    prev.write_text(TOOL_USE_LINE * 5)
+    cur = session_dir / "sess-cur.jsonl"
+    cur.write_text(PLAIN_LINE)
+    _stamp(old, prev, cur)
+
+    _run(SESSION_START, env)
+
+    notice = remember / "tmp" / "capture-gap-notice"
+    assert _wait_for_notice(notice), (
+        "silent about a session that ran tools and never once fired "
+        "PostToolUse — a detector that cannot say this is worse than none"
+    )
+    assert "doctor" in notice.read_text()
+
+
+def test_the_same_gap_is_reported_once_not_on_every_restart(tmp_path):
+    """A gap is a fact about one past session, not a condition to re-announce.
+
+    Restarts are cheap and frequent — /clear, /compact, a resume — and each one
+    re-examines the same previous session. Saying it again on every one is how
+    a true positive gets trained into background noise.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+    notice = remember / "tmp" / "capture-gap-notice"
+    reported = remember / "tmp" / "capture-gap-reported"
+
+    # #1069 review on #1067: the deferred phase now runs as a genuinely
+    # separate process (scripts/capture-gap-check.sh), not an in-process
+    # function call -- slower to start than the pre-#1067 shape, which is
+    # exactly the class of timing this file's own module docstring already
+    # warns about for the "must appear" half of an assertion. Poll for it
+    # instead of reading `notice.exists()` the instant the PARENT hook
+    # returns -- the parent returning says nothing about whether its
+    # disowned background child has finished writing yet.
+    _run(SESSION_START, _env(home, project, remember))
+    assert _wait_for_notice(notice), "precondition: the first run must report it"
+    # #1079 point 4: the notice and the dedupe marker (capture-gap-reported)
+    # are two separate writes a few lines apart in the SAME deferred phase --
+    # waiting only for the first and then immediately unlinking/re-running
+    # races the second on a slow runner, which is indistinguishable from the
+    # dedupe itself being broken (the exact failure this test exists to
+    # catch) rather than from the test's own timing.
+    assert _wait_for_reported(reported), (
+        "precondition: the first run must also finish writing the dedupe "
+        "marker before this test acts on its result"
+    )
+    notice.unlink()  # user-prompt-hook.sh consumes it on delivery
+
+    # The "must NOT reappear" half, in contrast, cannot be polled the same
+    # way (this file's own module docstring: a negative assertion racing an
+    # unstarted background phase is indistinguishable from a correctly
+    # absent one) -- run it inline instead (REMEMBER_DEFER=0), where "did
+    # not fire" is a verdict rather than a race.
+    _run(SESSION_START, _env(home, project, remember, defer=False))
+
+    assert not notice.exists(), (
+        "re-reported an already-delivered gap about the same session"
+    )
+
+
+def test_the_legacy_single_slot_marker_still_counts_as_evidence(tmp_path):
+    """Migration. Existing installs have a `capture-alive` FILE and no
+    per-session store, and the first run after an upgrade must not invent a
+    warning out of the store simply being empty. The old marker keeps its
+    meaning for the one session it can still speak for."""
+    home, project, remember, session_dir = _project(tmp_path)
+    _transcripts(session_dir, previous=TOOL_USE_LINE * 5)
+    (remember / "tmp" / "capture-alive").write_text("sess-prev")
+    assert not (remember / "tmp" / "capture-alive.d").exists(), (
+        "precondition: this is the pre-upgrade state, no per-session store"
+    )
+
+    _run(SESSION_START, _env(home, project, remember, defer=False))
+
+    assert not (remember / "tmp" / "capture-gap-notice").exists(), (
+        "the upgrade itself produced a warning — a fix whose first act is a "
+        "false positive teaches the exact lesson it was meant to unteach"
+    )
+
+
+def test_the_evidence_store_stays_bounded(tmp_path):
+    """One marker per session, forever, in a tmp dir nothing else prunes. The
+    store is a cache of recent sessions, not an archive."""
+    home, project, remember, session_dir = _project(tmp_path)
+    env = _env(home, project, remember)
+    store = remember / "tmp" / "capture-alive.d"
+    store.mkdir(parents=True)
+    now = int(time.time())
+    for i in range(400):
+        marker = store / f"sess-{i:04d}"
+        marker.touch()
+        os.utime(marker, (now - (400 - i), now - (400 - i)))
+    _transcripts(session_dir, previous=PLAIN_LINE * 5)
+
+    _run(SESSION_START, env)
+
+    # The prune moved into the deferred phase (#660), so it is no longer
+    # finished when the hook exits -- this asserted on it immediately and
+    # went red on two of the four macos legs and nowhere else, which is what
+    # a race looks like when it is read as a verdict. Poll instead of
+    # sleeping a fixed amount, and instead of running the phase inline with
+    # REMEMBER_DEFER=0: the DEFAULT path is the one that has to prune, and a
+    # deferred phase that dies before it gets there would still pass an
+    # inline run.
+    deadline = time.time() + 15
+    while time.time() < deadline:
+        if len(list(store.iterdir())) < 400:
+            break
+        time.sleep(0.1)
+    assert len(list(store.iterdir())) < 400, (
+        "store is never pruned -- nothing had removed a marker 15s after the "
+        "hook exited, so the deferred phase either never ran or died before "
+        "reaching the prune"
+    )
+    assert (store / "sess-0399").exists(), (
+        "pruned the most recent markers — those are the ones the check reads"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Delivery: systemMessage is the only output the human sees
+# ---------------------------------------------------------------------------
+
+def test_the_notice_is_delivered_as_a_system_message(tmp_path):
+    home, project, remember, session_dir = _project(tmp_path)
+    notice = remember / "tmp" / "capture-gap-notice"
+    notice.write_text("capture did not run in your previous session")
+
+    result = _run(USER_PROMPT, _env(home, project, remember))
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    payload = json.loads(result.stdout)
+    assert "capture did not run" in payload["systemMessage"], (
+        "the notice did not reach systemMessage — additionalContext is seen "
+        "only by the model, which is how this went unnoticed for a day"
+    )
+    # The timestamp injection this hook exists for must survive the switch.
+    assert payload["hookSpecificOutput"]["hookEventName"] == "UserPromptSubmit"
+    assert payload["hookSpecificOutput"]["additionalContext"].strip(), (
+        "context injection was dropped on the notice path"
+    )
+    assert not notice.exists(), "notice was not consumed — it would repeat forever"
+
+
+def test_a_failing_jq_can_never_eat_the_prompt(tmp_path):
+    """On UserPromptSubmit, exit 2 blocks the prompt AND ERASES what the user
+    typed. Left as the script's last command, jq's own status became the
+    hook's — so a jq usage error (exit 2) would destroy the user's input on
+    every prompt with a notice pending. A cosmetic notice must never be able
+    to do that.
+    """
+    home, project, remember, session_dir = _project(tmp_path)
+    (remember / "tmp" / "capture-gap-notice").write_text("something to say")
+
+    bindir = tmp_path / "badjq"
+    bindir.mkdir()
+    fake = bindir / "jq"
+    fake.write_text('#!/bin/sh\necho "jq: Unknown option" >&2\nexit 2\n')
+    fake.chmod(0o755)
+
+    env = _env(home, project, remember)
+    env["JQ"] = str(fake)
+    result = subprocess.run(["bash", str(USER_PROMPT)], env=env,
+                            capture_output=True, text=True, timeout=60)
+
+    assert result.returncode == 0, (
+        f"exit {result.returncode} — on UserPromptSubmit that blocks and "
+        "erases the user's prompt"
+    )
+    assert result.stdout.strip(), "swallowed the context injection entirely"
+    assert "something to say" in result.stdout, (
+        "lost the notice as well as the JSON — the fallback must still say it"
+    )
+
+
+def test_the_ordinary_path_stays_plain_text(tmp_path):
+    """No notice: byte-for-byte what it always printed. Emitting JSON here
+    would silently change what every session injects into context."""
+    home, project, remember, session_dir = _project(tmp_path)
+
+    result = _run(USER_PROMPT, _env(home, project, remember))
+
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+    assert result.stdout.lstrip().startswith("["), result.stdout
+    with pytest.raises(json.JSONDecodeError):
+        json.loads(result.stdout)

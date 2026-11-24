@@ -52,6 +52,12 @@ type Options struct {
 	// default: this surface is unauthenticated, so widening it is a deliberate
 	// act by whoever runs the server, never a convenience default.
 	EmbedAllowOrigins []string
+	// InstanceDir is where a bound server advertises itself, so a host that did
+	// not start it (a tray icon, a launcher, a master console) can find it
+	// without port scanning. Empty means do not advertise: a library must not
+	// write to a home directory nobody asked it to touch, so this is opt-in and
+	// only the `serve` command turns it on.
+	InstanceDir string
 }
 
 // Server serves one run directory.
@@ -78,6 +84,15 @@ type Server struct {
 	appletManifest applet.Manifest
 	// framePolicy is the effective CSP frame-ancestors value for /embed.
 	framePolicy string
+	// embedOrigins is the --embed-allow-origin list as given, published in the
+	// instance record so a host can tell whether it is already allowed to frame
+	// this server before it tries and reads a CSP violation.
+	embedOrigins []string
+
+	// instanceDir and instanceFile record where this server advertised itself,
+	// so Listen can retract exactly the entry it wrote and never someone else's.
+	instanceDir  string
+	instanceFile string
 }
 
 // New validates the request without binding anything.
@@ -129,7 +144,8 @@ func New(opt Options) (*Server, error) {
 
 	return &Server{
 		dir: abs, addr: addr, errOut: os.Stderr, plan: p,
-		appletManifest: manifest, framePolicy: frames,
+		appletManifest: manifest, framePolicy: frames, instanceDir: opt.InstanceDir,
+		embedOrigins: opt.EmbedAllowOrigins,
 	}, nil
 }
 
@@ -179,7 +195,9 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/agents", s.recover(s.handleAgents))
 	mux.HandleFunc("/api/query", s.recover(s.handleQuery))
 	mux.HandleFunc("/api/nodes/", s.recover(s.handleNode))
-	mux.HandleFunc("/", s.recover(s.handleViz))
+	// The viewer, but only for a page. An unmatched /api/ or /.well-known/ path
+	// answers 404 JSON instead of this page (see handleFallback).
+	mux.HandleFunc("/", s.recover(s.handleFallback))
 	return mux
 }
 
@@ -201,7 +219,22 @@ func (s *Server) Bind() error {
 	s.mu.Lock()
 	s.bound = true
 	s.boundAddr = ln.Addr().String()
+	boundAddr := s.boundAddr
 	s.mu.Unlock()
+
+	// Advertise after the port exists, because the record carries the URL. A
+	// failure here is a missing convenience, not a broken server: a host that
+	// cannot read the registry can still be given the URL on stdout, so this
+	// must not take the serve loop down.
+	if s.instanceDir != "" {
+		if inst, err := applet.NewInstance(s.appletManifest.Version, s.dir, boundAddr, s.embedOrigins); err != nil {
+			fmt.Fprintf(s.errOut, "server: not advertising this instance: %v\n", err)
+		} else if path, err := inst.Write(s.instanceDir); err != nil {
+			fmt.Fprintf(s.errOut, "server: not advertising this instance: %v\n", err)
+		} else {
+			s.instanceFile = filepath.Base(path)
+		}
+	}
 	return nil
 }
 
@@ -210,6 +243,10 @@ func (s *Server) Listen(ctx context.Context) error {
 	if err := s.Bind(); err != nil {
 		return err
 	}
+	// Withdraw the advertisement on the way out. A stale file is not fatal (a
+	// consumer must confirm through the manifest anyway), but leaving one behind
+	// on a clean stop would make every clean stop look like a crash.
+	defer func() { _ = applet.RemoveInstance(s.instanceDir, s.instanceFile) }()
 	ln := s.ln
 
 	srv := &http.Server{Handler: s.Handler(), ReadHeaderTimeout: 10 * time.Second}

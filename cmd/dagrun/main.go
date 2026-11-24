@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime/debug"
 	"strings"
 	"time"
 
@@ -19,24 +18,8 @@ import (
 	"github.com/KooshaPari/dagrun/internal/store"
 )
 
-// Version may be set at build time with -ldflags "-X main.Version=..."; when it is
-// empty the module version the binary was installed at is used instead, so
-// `go install ...@v1.3.0` reports 1.3.0 rather than a hardcoded constant.
-var Version = ""
-
-// resolveVersion prefers an explicit build-time Version, then the module version
-// baked in by `go install`, and finally admits it cannot tell.
-func resolveVersion() string {
-	if Version != "" {
-		return strings.TrimPrefix(Version, "v")
-	}
-	if bi, ok := debug.ReadBuildInfo(); ok {
-		if v := bi.Main.Version; v != "" && v != "(devel)" {
-			return strings.TrimPrefix(v, "v")
-		}
-	}
-	return "devel"
-}
+// Version is set at build time with -ldflags "-X main.Version=...".
+var Version = "1.2.0"
 
 const defaultDir = ".dagrun"
 
@@ -120,6 +103,8 @@ func main() {
 		err = cmdAgents(args)
 	case "serve":
 		err = cmdServe(args)
+	case "instances":
+		err = cmdInstances(args)
 	case "version", "--version", "-v":
 		fmt.Printf("dagrun %s\n", Version)
 		return
@@ -185,6 +170,7 @@ USAGE
   dagrun agents [flags]          agent cards: one per node that has run, session-bound
   dagrun session [flags]         print this process's validated session identity
   dagrun serve [flags]           serve the run as a live viewer + read-only JSON API
+  dagrun instances [flags]       list running servers that advertise themselves
   dagrun mcp [flags]             serve the Model Context Protocol over stdio or HTTP
   dagrun version
 

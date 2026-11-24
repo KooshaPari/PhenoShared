@@ -1,3 +1,0 @@
-test_workspace::types::TestStruct
-
-pub fn method(&self) -> String

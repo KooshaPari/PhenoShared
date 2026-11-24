@@ -1,1 +1,0 @@
-# TOMBSTONED\n\n> **Status:** ABSORBED | No active consumers\n> **Removed:** 2026-09-12\n> **Reason:** Content absorbed into other repositories. This repo is archived and retained for reference only.\n\nNo further development will occur here. All relevant work has migrated elsewhere.

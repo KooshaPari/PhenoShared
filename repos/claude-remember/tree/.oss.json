@@ -1,0 +1,52 @@
+{
+  "repo": "Digital-Process-Tools/claude-remember",
+  "default_branch": "main",
+  "branch_pattern": "fix/{issue}",
+  "test_command": "pytest",
+  "test_measurement_configured": true,
+  "version_sites": [
+    ".claude-plugin/plugin.json",
+    ".codex-plugin/plugin.json",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "changelog_dir": "changelog.d",
+  "docs_targets": [
+    "README.md"
+  ],
+  "labels": {
+    "priority": [
+      "priority:high",
+      "priority:low",
+      "priority:medium"
+    ],
+    "lanes": [
+      "lane-capture",
+      "lane-consolidation",
+      "lane-diagnostics",
+      "lane-hosts",
+      "lane-other",
+      "lane-paths",
+      "lane-storage"
+    ],
+    "filed_by_loop": "filed-by-loop",
+    "lane_other": "lane-other"
+  },
+  "milestones": [],
+  "_milestones_note": "Declined: single-maintainer repo with no existing milestone structure, and the backlog is tracked well enough via issues and labels alone -- the overhead of milestones is not worth it right now (#784).",
+  "release": {
+    "authority": "loop",
+    "tag_pattern": "v{version}",
+    "merge_method": null,
+    "commit_subject": null,
+    "triggers": {
+      "merged_prs": 10,
+      "soak_hours": 48
+    },
+    "create_release": true,
+    "draft": false,
+    "latest": true
+  },
+  "curate_route_threshold": 15,
+  "triage_route_threshold": 0
+}

@@ -148,6 +148,26 @@ func Merge(dir string) ([]Event, error) {
 	return out, nil
 }
 
+// EmitNode appends one node-level event for a transition that happened
+// outside the automated runner — an agent claiming and completing a node
+// through the CLI claim and completion verbs, or the MCP equivalents.
+//
+// The event names and the field shape are the ones the runner emits
+// ("node.claim", "node.done", "node.failed", "node.skipped"), so one trace
+// reads the same whichever path produced it. The trace is the DAG's only
+// record, so a node whose state moved without an event looks like a node that
+// never ran.
+func EmitNode(runDir, run, node, worker, event, message string, epoch int64) error {
+	return New(filepath.Join(runDir, "trace")).Emit(worker, Event{
+		Run:     run,
+		Node:    node,
+		Worker:  worker,
+		Event:   event,
+		Epoch:   epoch,
+		Message: message,
+	})
+}
+
 // Render writes the merged trace, one line per event.
 func Render(events []Event) string {
 	var b strings.Builder

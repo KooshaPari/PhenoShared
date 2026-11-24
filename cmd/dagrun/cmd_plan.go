@@ -20,6 +20,7 @@ func cmdPlan(args []string) error {
 	file := fs.String("file", "", "plan source, - for stdin")
 	reset := fs.Bool("reset", false, "discard existing progress")
 	work := fs.Int("work", 0, "worker count for the wall-clock estimate")
+	from := fs.String("from", "auto", "plan format: auto | dagrun | dagschema")
 	if err := fs.Parse(flags); err != nil {
 		return err
 	}
@@ -43,9 +44,43 @@ func cmdPlan(args []string) error {
 		return err
 	}
 
-	p, err := plan.Parse(raw)
-	if err != nil {
-		return fmt.Errorf("parse: %w", err)
+	// Which schema is this? `auto` detects a phenotype-dag-core DagSchema by
+	// its `edges:` list, which a dagrun plan never has: a plan expresses
+	// dependency through node `deps`, so an `edges` key can only be the other
+	// schema. Guessing wrong here would reject a valid document with a
+	// confusing message, so the flag exists to override the guess.
+	format := *from
+	if format == "auto" {
+		format = "dagrun"
+		if looksLikeDagSchema(raw) {
+			format = "dagschema"
+		}
+	}
+
+	var p *plan.Plan
+	switch format {
+	case "dagrun":
+		p, err = plan.Parse(raw)
+		if err != nil {
+			return fmt.Errorf("parse: %w", err)
+		}
+	case "dagschema":
+		d, derr := plan.ParseDagSchema(raw)
+		if derr != nil {
+			return derr
+		}
+		converted, unmapped, derr := d.ToPlan()
+		if derr != nil {
+			return derr
+		}
+		for _, u := range unmapped {
+			// Reported, never dropped: an unmappable field that vanished
+			// silently is how two schemas drift back apart.
+			fmt.Fprintf(os.Stderr, "unmapped: node %s: %s: %s\n", u.Node, u.Field, u.Detail)
+		}
+		p = converted
+	default:
+		return fmt.Errorf("--from %q: expected auto, dagrun or dagschema", *from)
 	}
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -136,4 +171,16 @@ func alreadyDone(snap *store.State, p *plan.Plan) int {
 		}
 	}
 	return n
+}
+
+// looksLikeDagSchema reports whether the document is a phenotype-dag-core
+// DagSchema rather than a dagrun plan. The discriminator is the `edges` key: a
+// dagrun plan has no top-level edges, it puts dependencies on each node.
+func looksLikeDagSchema(raw []byte) bool {
+	for _, line := range strings.Split(string(raw), "\n") {
+		if strings.HasPrefix(line, "edges:") {
+			return true
+		}
+	}
+	return false
 }

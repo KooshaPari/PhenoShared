@@ -1,0 +1,731 @@
+"""Committed files must not carry a real OS home-directory path or the
+current machine's real OS username (#467), and must not carry a value
+already confirmed to have leaked once before (#835's recurrence guard).
+
+## The mechanism -- and a correction to this file's own first draft
+
+`tests/fixtures/codex-rollout.jsonl` was committed as a real capture,
+deliberately sanitised: `cwd`, `git` and `turn_context` were replaced with
+`/sanitized/project/dir`. The sanitisation missed two *nested JSON-string
+blobs*, where the maintainer's real home directory and OS username sat
+inside a serialised string value rather than at a top-level field a
+field-keyed sanitiser would walk.
+
+#467 shipped a SECOND leak in a second file, and this file's first draft
+got the shape of it wrong. `tests/test_codex_upsubmit_stdout_451.py` --
+ordinary hand-authored `.py` test source, not a fixture -- carried the bare
+username `sanitized-user` twice, pasted from real captured probe output
+into a string literal (`"[10:54 CEST -- sanitized-user]"`). That is a BARE
+username, not a `/Users/<x>/` or `/home/<x>/` path, and it landed in a
+hand-authored `.py` file, not a fixture.
+
+This file's first draft argued that hand-authored `.py` literals
+"can never carry a real person's real credentials by the mechanism that
+produced #467 -- nobody accidentally pastes their own home directory into
+a parametrize list the way a sanitiser silently misses a nested blob
+inside a real capture." #467's own second file falsifies that premise: a
+real credential got pasted into a hand-authored `.py` literal, in the same
+issue this guard exists for. The premise was wrong, not just unproven, and
+a guard built on it would have read as covering a class it did not cover.
+
+Two different shapes need two different detectors, because the argument
+against a tree-wide PATH sweep (too many legitimate `/Users/`, `/home/`
+hits in hand-authored test data and docs -- see below) does not apply to a
+USERNAME search, which has no equivalent flood of legitimate hits, but
+does need a positive control against firing on nothing.
+
+## Detector 1: un-sanitised home PATHS in fixtures (scope, argued)
+
+Tree-wide path search (`git ls-files`, matching `/Users/` or `/home/`) was
+considered and rejected for the PATH shape specifically. `/Users/` and
+`/home/` appear *legitimately* throughout this repository outside
+fixtures -- README.md's worked examples (`/Users/you/...`,
+`/home/alice/...`), docs/slug-vectors.json's synthetic slug vectors,
+scripts/bench-slug.sh's own benchmark input, and tests/test_hooks_json.py's
+deliberately adversarial PowerShell-escaping parametrize list
+(`C:/Users/Jane Doe/...`, `C:/Users/cafe/...`) are all hand-chosen example
+paths. A tree-wide PATH sweep would need an allowlist covering all of
+those (and would still not be complete, since a new adversarial-path test
+could add another entry at any time), and the issue's own reasoning ("a
+guard that fails on those will be disabled within a week") is exactly why
+that path was rejected FOR THIS SHAPE.
+
+So `test_no_fixture_carries_an_unsanitised_home_path` below stays scoped
+to `tests/fixtures/`: the one place a real, uninvited PATH can arrive by
+accident (a real capture) rather than by a human's deliberate choice of
+example text. Anything under `tests/fixtures/` naming a `/Users/<x>/` or
+`/home/<x>/` segment must use the placeholder segment this repository has
+standardised on (`sanitized-user`) -- any other segment fails the guard.
+
+**This detector alone does NOT cover #467.** It only ever covered the
+first of #467's two leaked files. Restated plainly rather than left to be
+inferred: `tests/*.py`, `README.md`, `CHANGELOG.md`, `docs/` and
+`scripts/bench-slug.sh` carry no path-shaped check at all, by the argument
+above, and a bare username (no `/Users/` or `/home/` prefix) is invisible
+to this detector everywhere, fixtures included.
+
+## Detector 2: the current machine's OS username, tree-wide
+
+`test_no_tracked_file_leaks_the_current_machine_username` below is the
+other half, built for the shape the path detector cannot see. It searches
+every git-tracked file for a verbatim occurrence of `getpass.getuser()` --
+the account name of whoever is running the suite. On a contributor's own
+machine that fires exactly when they have pasted their own identity into
+the tree, which is when it matters and where #467's second leak actually
+happened. This needed no tree-wide allowlist the way the path sweep would
+have, because a *username* has no flood of legitimate look-alike hits the
+way `/Users/` does -- nobody's test data is expected to spell a specific
+person's login name.
+
+### Correction: this detector no longer runs on CI at all -- and why that
+### is not the same call #442 made, even though it looks identical in shape
+
+The first version of this detector ran everywhere, including CI, arguing
+the CI pass was "near-vacuous" but still worth having. #472 turned that
+into a live false positive: `windows-latest` runs as the account
+`runneradmin`, which appears -- legitimately, deliberately -- in
+`tests/test_stale_config_sweep_362.py` (lines 174 and 186) as a realistic
+Windows path fixture rooted at that account's own home directory. Adding
+`"runneradmin"` to a skiplist would have fixed that one image and nothing
+else: every CI image has its own account name (`runner`, `runneradmin`,
+whatever GitHub, GitLab or the next provider calls the next one), each
+discovered the same way this one was -- a red build on somebody else's
+release. A skiplist that grows one entry per incident is a guard that
+costs more than it catches, and it does not even need a new entry to be
+wrong; it is wrong on the next image by construction.
+
+This repository already has a precedent for the mirror question:
+`tests/test_case_divergence_298.py`'s `_origin_main_should_be_resolvable`
+(#442) makes a guard FAIL, not skip, when CI's own env vars are set and
+its precondition (`origin/main` resolvable) is not met. Reading it before
+deciding here was deliberate, and the two answers differ because the two
+preconditions differ in kind, not degree:
+
+- #442's precondition is something CI is SUPPOSED to guarantee -- the
+  checkout step is supposed to make `origin/main` resolvable. Its absence
+  on a CI runner means the infrastructure did its job wrong, and a skip
+  there would hide a real defect behind a green tick. Failing loudly is
+  correct because there IS a defect to report.
+- This detector's precondition is running under a CONTRIBUTOR's own
+  account. A CI runner is never a contributor's own account BY DESIGN --
+  not because some setup step failed to arrange it, the way `origin/main`
+  failing to resolve means the checkout step failed. There is no
+  infrastructure bug for a loud failure to surface here: the runner's
+  account name is simply not evidence of anything, on `runneradmin` today
+  and on whatever the next CI image calls itself tomorrow. Asserting
+  against it does not catch defects, it manufactures false positives, one
+  new CI account name at a time -- which is exactly what #472 was.
+
+So: `_username_check_should_run()` below returns `False` whenever `CI` or
+`GITHUB_ACTIONS` is set (the same two-variable convention #442 already
+uses in this file's sibling), and the check skips there, LOUDLY, naming
+why in the skip reason rather than rendering as a silent pass -- `pytest`
+reports a skip distinctly from a pass in its own summary line and under
+`-rs`, and the reason argues the CI leg is not merely uninformative but is
+answering a question that does not apply to it. Both directions of that
+decision function are pinned the same way #442 pins its own
+(`test_username_check_should_run_true_locally` /
+`test_username_check_should_run_false_on_ci`), so a future edit that
+silently flips either arm -- always-run (reintroducing #472) or
+always-skip (a guard nobody ever runs) -- fails a test, not just a review.
+
+Off CI, the short/generic-account-name skip is unchanged and unrelated to
+this: a contributor's own machine can still legitimately be named `admin`
+or `test`, and searching for a four-or-fewer-letter or dictionary-common
+account name across ~300 tracked files would produce noise no maintainer
+could act on, not signal. That skip is also loud (`pytest.skip`, reason
+stated) and is a genuinely different question from "is this CI at all".
+
+Scoped OUT of detector 2, by name and why: nothing is scoped out by path --
+it is deliberately tree-wide, and that now includes this file itself
+(#474). An earlier draft exempted THIS_FILE from the tree-wide scan, on
+the argument that a file documenting the mechanism has to be able to
+quote a real leaked value, and a single-file skip is the smallest
+exemption that permits that. #474 found the composition that argument
+missed: the exemption plus a real username quoted under it means the
+tree ships the value, the install copies it, and the one file that
+could have caught it is the one file the guard cannot see. The guard
+went green on a tree containing exactly what it exists to detect.
+
+The docstring above now names the mechanism with the same placeholder
+the fixture already standardised on (`sanitized-user`), which explains
+detector 2 identically without quoting anything real -- so the
+exemption's only remaining job would be to permit a FUTURE quotation,
+not to excuse a present one. That job is not worth keeping: a
+placeholder says everything a real value would, and keeping a
+self-exemption around "just in case" is exactly the kind of narrow,
+individually-defensible carve-out that produced this issue in the first
+place. Removing it means the next person who pastes a real username
+into this file's prose gets a failing test on their own machine, in the
+same run, rather than a guard that stays green because it cannot look
+at itself. That is a strictly better failure mode than the one this
+issue reports, so THIS_FILE is no longer exempted and is no longer
+defined below.
+
+## Detector 3: known-leaked-value regression guard (#835) -- CI-safe by design
+
+Detector 2 above is deliberately skipped on CI (#472): a CI runner's account
+name is not evidence of anything, and no general, CI-safe way to tell a
+contributor's own leaked username apart from a CI provider's own runner
+account was found -- every mechanism considered for that general problem
+(a growing per-image skiplist, asserting against the runner's own account
+name) was rejected above for good reason, and #835 does not change that
+argument. The general problem detector 2 exists for stays open.
+
+#835's own text describes a NARROWER, already-observed failure mode this
+detector solves completely: #822's fix (PR #824) scrubbed the file the
+issue named, but reintroduced the SAME real value into two other files the
+same commit added, and CI stayed green throughout because detector 2 never
+runs there. #825 was the second occurrence of the identical shape. Once a
+real value has already leaked and been confirmed, the SAME value
+reappearing in a DIFFERENT tracked file carries none of detector 2's
+false-positive risk: it does not depend on `CI`/`GITHUB_ACTIONS`, on
+`getpass.getuser()`, or on any CI provider's account-naming scheme, so it
+can run everywhere, always, including CI.
+
+`_KNOWN_LEAK_HASHES` below ships empty: no incident has been converted into
+an entry yet. It is not a place to paste a real leaked value -- that would
+just reintroduce the exact leak this detector exists to prevent recurrence
+of, the same composition #474 already found and fixed for THIS_FILE above.
+Instead it holds the return value of `_leak_hash(token)` for each
+confirmed-real leaked value; a maintainer adds one hex digest after a
+future incident is confirmed and scrubbed, never the plaintext.
+
+Use `_leak_hash()`, not a bare `hashlib.sha256(...).hexdigest()` call, to
+build an entry. The scanner below only ever hashes whatever `_LEAK_TOKEN`
+extracts -- a run of `[A-Za-z0-9_.-]` characters -- so hashing a full
+leaked PATH or sentence (`/Users/realname/project`, say) produces a digest
+that can never match: the tokenizer only ever sees the pieces between the
+`/` separators ("Users", "realname", "project"), never the whole string,
+and no error says so. That is exactly the shape #822 leaked. `_leak_hash`
+refuses a value that is not already a single bare token, so this mistake
+fails loudly when the entry is added rather than shipping as a permanently
+silent no-op that still reads as a correctly configured guard.
+
+Scope, stated precisely rather than left to be read as more than it is:
+this only ever matches an EXACT, case-sensitive, separator-delimited
+recurrence of an already-hashed token. A previously-leaked value
+resurfacing with different case, or concatenated into a larger token with
+no separator (`backup_realname_2024`), is invisible to it by construction
+-- narrower than "this value can never come back unnoticed," which this
+detector does not promise.
+
+This does NOT solve #835's general question -- a genuinely NEW leaked
+value, never seen before, has no hash on this list and is invisible to
+this detector by construction. It only ever guards recurrence of a value
+already known to be bad, which is exactly the shape #822 and #825 both
+were.
+"""
+
+from __future__ import annotations
+
+import getpass
+import hashlib
+import os
+import re
+import subprocess
+from pathlib import Path
+
+import pytest
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+FIXTURES_DIR = REPO_ROOT / "tests" / "fixtures"
+
+# ---------------------------------------------------------------------------
+# Detector 1: un-sanitised /Users/<x>/ or /home/<x>/ segments in fixtures.
+# ---------------------------------------------------------------------------
+
+# The one placeholder segment this repository's fixtures are sanitised to.
+# Anything else captured after /Users/ or /home/ in a fixture file is either
+# an un-sanitised real path or a new convention nobody taught this guard --
+# either way, it must not pass silently.
+_ALLOWED_HOME_SEGMENT = "sanitized-user"
+
+_HOME_PATH = re.compile(r"(?:/Users/|/home/)([A-Za-z0-9_.-]+)")
+
+
+def _fixture_files() -> list[Path]:
+    """Recursive by design (#480): `iterdir()` only ever saw the
+    immediate children of tests/fixtures/, so a fixture arriving inside
+    a subdirectory -- exactly the shape a future real capture could
+    land in -- was invisible to Detector 1 at any depth, and its own
+    positive control (`test_scanned_at_least_one_fixture_file`'s
+    `>= 2`) could not have noticed, because it counts files rather than
+    walking the tree it claims to cover. `rglob("*")` walks every
+    subdirectory; the `>= 2` control below is unchanged (still catches
+    an empty/broken walk), and `test_fixture_scan_reports_how_many_files_it_examined`
+    adds the other half the issue asked for -- a receipt cross-checked
+    against `git ls-files`, so a walk that silently drops a subtree
+    disagrees with a number nobody has to trust the walk itself for."""
+    return sorted(p for p in FIXTURES_DIR.rglob("*") if p.is_file())
+
+
+def test_scanned_at_least_one_fixture_file():
+    """Positive control for the enumeration itself: a scan that silently
+    found zero files must not let the assertion below pass by vacuous
+    truth."""
+    files = _fixture_files()
+    assert len(files) >= 2, (
+        f"expected at least 2 files under {FIXTURES_DIR}, found {len(files)} "
+        "-- the scan likely did not read the real directory"
+    )
+
+
+def test_detector_fires_on_a_planted_real_looking_home_path():
+    """Positive control for the regex itself (CLAUDE.md: a negative
+    assertion needs a positive control). A detector that matches nothing
+    would let the real check below pass vacuously -- this proves the
+    pattern actually fires on exactly the PATH shape #467's first file
+    shipped: a home path nested inside a JSON string value, not at a
+    top-level field."""
+    planted = (
+        r'{"payload": {"text": "some scaffolding text (file: '
+        r'/Users/realname/.codex/skills/.system/imagegen/SKILL.md)\n"}}'
+    )
+    matches = _HOME_PATH.findall(planted)
+    assert matches, "detector did not fire on a planted real-looking home path"
+    assert "sanitized-user" not in matches
+
+
+def test_no_fixture_carries_an_unsanitised_home_path():
+    """MUST FIRE case: any tests/fixtures/* file naming a /Users/<x>/ or
+    /home/<x>/ segment other than the sanitised placeholder is exactly
+    #467's first-file mechanism -- a real capture that slipped an
+    un-sanitised path into the tree, where the install layout
+    (`.agents/plugins/marketplace.json`'s local source) ships tests/ into
+    every install. Covers PATHS only -- see detector 2 below for the bare
+    USERNAME shape #467's second file actually shipped, which this
+    detector cannot see at any scope."""
+    offenders: list[str] = []
+    for f in _fixture_files():
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for segment in _HOME_PATH.findall(text):
+            if segment != _ALLOWED_HOME_SEGMENT:
+                offenders.append(f"{f.relative_to(REPO_ROOT)}: {segment!r}")
+    assert not offenders, (
+        "fixture(s) carry an un-sanitised home-directory path -- replace "
+        f"with the placeholder segment {_ALLOWED_HOME_SEGMENT!r}:\n"
+        + "\n".join(offenders)
+    )
+
+
+def test_fixture_scan_descends_into_subdirectories(monkeypatch, tmp_path):
+    """MUST FIRE case for the ENUMERATION itself (#480): a fixture file
+    living in a subdirectory of tests/fixtures/ must be visible to the
+    scan, not just a file sitting at the top level. The real
+    tests/fixtures/ has no subdirectories today, so this cannot be
+    exercised against the real tree either way -- a synthetic tree is
+    built here instead, with one file at the top and one nested two
+    levels down, so depth is actually tested rather than assumed.
+
+    Before the fix (`FIXTURES_DIR.iterdir()`), this fails: iterdir()
+    yields only immediate children, so the nested file never appears in
+    the returned list. That is exactly what this issue reports --
+    Detector 1 enumerates non-recursively -- and it is why
+    `test_scanned_at_least_one_fixture_file` above could not have caught
+    it: its `>= 2` count is satisfied by the top-level files alone, so a
+    missed subtree changes nothing it can observe."""
+    monkeypatch.setattr(f"{__name__}.FIXTURES_DIR", tmp_path)
+    (tmp_path / "top.txt").write_text("nothing interesting here", encoding="utf-8")
+    nested_dir = tmp_path / "captures" / "2026-08"
+    nested_dir.mkdir(parents=True)
+    nested_file = nested_dir / "leak.jsonl"
+    nested_file.write_text("no home path in this one either", encoding="utf-8")
+
+    found = _fixture_files()
+
+    assert nested_file in found, (
+        f"fixture scan did not descend into a subdirectory -- found only "
+        f"{[str(p) for p in found]}, missing {nested_file}"
+    )
+
+
+def test_detector_fires_on_a_home_path_nested_in_a_fixture_subdirectory(
+    monkeypatch, tmp_path
+):
+    """MUST FIRE case for the DETECTOR end to end (#480), at the depth
+    the real bug lived at: this issue's whole point is that a real
+    #467-shaped leak arriving inside a subdirectory of tests/fixtures/
+    was invisible to both the enumeration and this detector's own
+    positive control. Plants the same JSON-string-nested shape #467's
+    first file actually shipped, two directories deep, and drives it
+    through the real detector logic (not just the bare regex the way
+    test_detector_fires_on_a_planted_real_looking_home_path does) --
+    this is the case that would still pass if only the regex were
+    proven to fire and the walk stayed blind to the subtree."""
+    monkeypatch.setattr(f"{__name__}.FIXTURES_DIR", tmp_path)
+    nested_dir = tmp_path / "captures" / "2026-08"
+    nested_dir.mkdir(parents=True)
+    leaking = nested_dir / "codex-rollout.jsonl"
+    leaking.write_text(
+        r'{"payload": {"cwd": "/Users/realname/project"}}', encoding="utf-8"
+    )
+
+    offenders: list[str] = []
+    for f in _fixture_files():
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for segment in _HOME_PATH.findall(text):
+            if segment != _ALLOWED_HOME_SEGMENT:
+                offenders.append(f"{f}: {segment!r}")
+
+    assert offenders, (
+        "detector missed a real-looking home path nested in a fixtures "
+        "subdirectory -- the walk is not reaching that depth"
+    )
+
+
+def test_detector_does_not_fire_on_a_sanitised_path_in_a_fixture_subdirectory(
+    monkeypatch, tmp_path
+):
+    """MUST-NOT-FIRE case pairing the one above (CLAUDE.md: a negative
+    assertion needs a positive control, and the reverse holds too --
+    widening the walk must not start over-firing on the placeholder
+    segment this repository already standardised on, at any depth)."""
+    monkeypatch.setattr(f"{__name__}.FIXTURES_DIR", tmp_path)
+    nested_dir = tmp_path / "captures" / "2026-08"
+    nested_dir.mkdir(parents=True)
+    clean = nested_dir / "codex-rollout.jsonl"
+    clean.write_text(
+        r'{"payload": {"cwd": "/Users/sanitized-user/project"}}',
+        encoding="utf-8",
+    )
+
+    offenders: list[str] = []
+    for f in _fixture_files():
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for segment in _HOME_PATH.findall(text):
+            if segment != _ALLOWED_HOME_SEGMENT:
+                offenders.append(f"{f}: {segment!r}")
+
+    assert not offenders, (
+        f"detector false-fired on the sanitised placeholder segment in a "
+        f"fixtures subdirectory: {offenders}"
+    )
+
+
+def test_fixture_scan_reports_how_many_files_it_examined(capsys):
+    """Receipt (#480): the issue's own fix note asks for recursion PLUS a
+    receipt naming how many files were actually examined, so an empty
+    walk cannot read as a clean one -- the failure mode this whole issue
+    is about is a scan that silently looked at fewer files than it
+    should have and a positive control that could not tell. Printing the
+    count (visible under `pytest -s` / `-rs` in CI logs) turns "the guard
+    was green" into a number a human reviewing a release audit can sanity
+    -check against how many files are actually tracked under
+    tests/fixtures/, the same way the module docstring's audit trail
+    already quotes `git grep -c` output as its own receipt.
+
+    Deliberately a SUBSET check, not an exact-count comparison: an
+    earlier draft asserted `len(files) == len(tracked)`, which a
+    reviewer caught failing on a file that exists on disk under
+    tests/fixtures/ but is not git-tracked -- a stray `.DS_Store` was the
+    reproduction, and it is `.gitignore`d in this repo but still visible
+    to `rglob("*")`, which walks the filesystem rather than the git
+    index. That is noise unrelated to #480 (a contributor who has ever
+    opened tests/fixtures/ in Finder could fail this test locally for a
+    reason that has nothing to do with the detector), so the receipt now
+    asserts every git-tracked fixture was found by the walk, without
+    demanding the walk find NOTHING else -- that subset direction is
+    exactly the one a dropped subtree would violate."""
+    found = set(_fixture_files())
+    print(f"[receipt] examined {len(found)} fixture file(s) under {FIXTURES_DIR}")
+    tracked = subprocess.run(
+        ["git", "ls-files", "tests/fixtures"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.splitlines()
+    tracked_paths = {REPO_ROOT / line for line in tracked}
+    missing = tracked_paths - found
+    assert not missing, (
+        f"fixture scan missed {len(missing)} git-tracked file(s) under "
+        f"tests/fixtures/ that git ls-files reports: {sorted(missing)} -- "
+        "the walk and the tree disagree, which is exactly what a silent "
+        "scope hole looks like"
+    )
+    captured = capsys.readouterr()
+    assert "[receipt] examined" in captured.out
+
+
+# ---------------------------------------------------------------------------
+# Detector 2: the current machine's real OS username, tree-wide.
+# ---------------------------------------------------------------------------
+
+_MIN_USERNAME_LEN = 5
+
+# Account names common enough on a CONTRIBUTOR's own local machine (not a
+# CI runner -- that question is answered separately by
+# _username_check_should_run, below) that searching for them verbatim
+# across ~300 files would produce noise, not signal -- skipped loudly
+# rather than silently, via pytest.skip. Deliberately NOT the place a new
+# CI runner account name gets added when the next one is discovered: see
+# the module docstring's #472 correction for why that list is the wrong
+# fix, and _username_check_should_run for the actual one.
+_GENERIC_USERNAMES = {
+    "admin", "administrator", "user", "test", "guest", "demo",
+}
+
+
+def _username_check_should_run(env: dict) -> bool:
+    """A pure decision, kept separate from the scan so it can be tested
+    without depending on the environment actually running this suite --
+    mirrors tests/test_case_divergence_298.py's own
+    _origin_main_should_be_resolvable(#442) in shape and answers the
+    opposite question on purpose. See the module docstring's "Correction"
+    section for the argument; restated here as the one-line contract this
+    function keeps: False (skip) whenever `CI` or `GITHUB_ACTIONS` is set,
+    because a CI runner's own account name is never a contributor's real
+    identity and is not evidence of anything -- there is no infrastructure
+    defect for a loud failure to surface, unlike #442's own check, where
+    an unresolved `origin/main` on CI means the checkout step itself
+    failed. True everywhere else, which is where this detector's evidence
+    actually lives."""
+    return not (env.get("CI") == "true" or env.get("GITHUB_ACTIONS") == "true")
+
+
+def test_username_check_should_run_true_locally():
+    """Positive control's other half: no CI signal means a contributor's
+    own machine, where this detector must actually run."""
+    assert _username_check_should_run({}) is True
+    assert _username_check_should_run({"PATH": "/usr/bin"}) is True
+    assert _username_check_should_run({"CI": "false"}) is True
+
+
+def test_username_check_should_run_false_on_ci():
+    """The load-bearing case for #472: a version of this function that
+    always returned True would reproduce #472 (a false positive on every
+    CI image's own account name) the moment a new one shows up; a version
+    that always returned False would mean this detector never runs at
+    all. This is the one that catches either regression."""
+    assert _username_check_should_run({"CI": "true"}) is False
+    assert _username_check_should_run({"GITHUB_ACTIONS": "true"}) is False
+
+
+def _current_username() -> str | None:
+    try:
+        name = getpass.getuser()
+    except Exception:  # noqa: BLE001 - getuser() raises platform-varying errors when no login name is resolvable; any of them means "unknown", handled by the caller's None check
+        return None
+    return name or None
+
+
+def _tracked_files() -> list[Path]:
+    result = subprocess.run(
+        ["git", "ls-files"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return [REPO_ROOT / line for line in result.stdout.splitlines() if line.strip()]
+
+
+def test_scanned_at_least_one_tracked_file():
+    """Positive control for the tree-wide enumeration: a `git ls-files`
+    that silently returned nothing must not let the real check below pass
+    by vacuous truth. Runs unconditionally, on CI included -- `git
+    ls-files` behaves identically everywhere, unlike the username scan
+    below."""
+    files = _tracked_files()
+    assert len(files) >= 50, (
+        f"expected at least 50 tracked files, found {len(files)} -- "
+        "`git ls-files` likely did not run against the real tree"
+    )
+
+
+def test_username_detector_fires_on_a_planted_occurrence():
+    """Positive control for detector 2 itself. A detector keyed on a name
+    that never appears is the definition of a check that cannot fail --
+    this proves the plain substring search actually matches, independent
+    of whether today's real username happens to be committed anywhere.
+    Runs unconditionally, CI included: this is a pure string check, not a
+    tree scan, so it carries none of the CI-account-name false-positive
+    risk the real check below is skipped for."""
+    username = _current_username() or "planted-fallback-username"
+    haystack = f'"additionalContext": "[10:54 CEST -- {username}]"'
+    assert username in haystack, "planted haystack did not contain its own planted username"
+
+
+def test_no_tracked_file_leaks_the_current_machine_username():
+    """MUST FIRE case, and the one #467's second file actually needed:
+    a BARE username (no /Users/ or /home/ prefix) pasted into a
+    hand-authored .py string literal, which test_no_fixture_carries_an_
+    unsanitised_home_path above cannot see at any scope. See the module
+    docstring for what this detector buys on a contributor's own machine,
+    why it is skipped -- loudly, naming why -- on CI rather than asserted
+    against a runner's own account name (#472), and why that skip is not
+    the same call #442 makes for `origin/main`."""
+    if not _username_check_should_run(os.environ):
+        pytest.skip(
+            "CI environment detected (CI or GITHUB_ACTIONS set) -- this "
+            "detector's precondition (running under a CONTRIBUTOR's own "
+            "account) is never true on a CI runner BY DESIGN, not by a "
+            "setup failure, so it is skipped here rather than asserted "
+            "against the runner's own account name (#472: 'runneradmin' on "
+            "windows-latest legitimately appears in "
+            "tests/test_stale_config_sweep_362.py's Windows path fixtures). "
+            "See the module docstring's 'Correction' section for why this "
+            "differs from tests/test_case_divergence_298.py's #442 check, "
+            "which fails loudly on CI instead. The real guard for this "
+            "class is a contributor running the suite locally."
+        )
+    username = _current_username()
+    if not username:
+        pytest.skip("could not determine the current OS username (getpass.getuser() failed)")
+    if len(username) < _MIN_USERNAME_LEN or username.lower() in _GENERIC_USERNAMES:
+        pytest.skip(
+            f"current username {username!r} is too short or a known generic "
+            "local-account name to search for without false positives -- "
+            "this run provides no evidence either way, see the module "
+            "docstring's _GENERIC_USERNAMES comment"
+        )
+    offenders: list[str] = []
+    for f in _tracked_files():
+        try:
+            text = f.read_text(encoding="utf-8", errors="replace")
+        except (IsADirectoryError, PermissionError, OSError):
+            continue
+        if username in text:
+            offenders.append(str(f.relative_to(REPO_ROOT)))
+    assert not offenders, (
+        f"the current machine's OS username {username!r} appears in "
+        f"committed file(s) -- #467's own second-file mechanism: {offenders}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Detector 3: known-leaked-value regression guard (#835), CI-safe by design.
+# ---------------------------------------------------------------------------
+
+# Ships empty: no incident has yet been converted into an entry. See the
+# module docstring's "Detector 3" section for the rationale and for how to
+# add one after a future incident -- build each entry with _leak_hash(),
+# never a bare hashlib call and never the plaintext value itself.
+_KNOWN_LEAK_HASHES: frozenset[str] = frozenset()
+
+_LEAK_TOKEN = re.compile(r"[A-Za-z0-9_.-]{4,}")
+
+
+def _leak_hash(token: str) -> str:
+    """The only supported way to build a _KNOWN_LEAK_HASHES entry (#835
+    review finding). `token` must already be exactly what _LEAK_TOKEN
+    would extract on its own -- a bare username or single path segment,
+    no `/`, `:`, `@`, quote or whitespace character. Hashing a full
+    leaked PATH or sentence here (e.g. "/Users/realname/project") would
+    build an entry that can never match anything: the scanner below only
+    ever hashes the pieces _LEAK_TOKEN extracts ("Users", "realname",
+    "project"), never the whole string, so the mismatch would ship as a
+    permanently silent no-op with no error to say so -- exactly the shape
+    #822 leaked. Refusing it here turns that into a loud failure at the
+    moment the entry is written instead."""
+    if _LEAK_TOKEN.fullmatch(token) is None:
+        raise ValueError(
+            f"{token!r} is not a bare _LEAK_TOKEN unit -- it contains a "
+            "separator (e.g. '/', ':', '@', a quote, or whitespace) that "
+            "the scanner would split on, so hashing it as-is would build "
+            "an entry that can never match any tracked file. Hash the "
+            "leaked username or single path segment itself, not the full "
+            "path or sentence it appeared in."
+        )
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def _known_leak_offenders(files: list[Path]) -> list[str]:
+    """Shared by the real check and its positive control, so the control
+    actually exercises the detector's own matching logic rather than a
+    hand-rolled stand-in that could silently diverge from it."""
+    offenders: list[str] = []
+    if not _KNOWN_LEAK_HASHES:
+        return offenders
+    for f in files:
+        try:
+            text = f.read_text(encoding="utf-8", errors="replace")
+        except (IsADirectoryError, PermissionError, OSError):
+            continue
+        for token in _LEAK_TOKEN.findall(text):
+            if hashlib.sha256(token.encode("utf-8")).hexdigest() in _KNOWN_LEAK_HASHES:
+                offenders.append(str(f))
+                break
+    return offenders
+
+
+def test_known_leak_hash_detector_fires_on_a_planted_leak(monkeypatch, tmp_path):
+    """Positive control (#835): _KNOWN_LEAK_HASHES ships empty, so the
+    real check below would pass vacuously forever without this. Plants a
+    token, hashes it the same way a maintainer would after a future
+    incident (via _leak_hash, not a bare hashlib call), and drives it
+    through the real matching function (_known_leak_offenders), not a
+    bare string comparison -- proving the hashing and the file scan
+    actually connect."""
+    planted = "definitely-not-a-real-leaked-value-835"
+    digest = _leak_hash(planted)
+    monkeypatch.setattr(f"{__name__}._KNOWN_LEAK_HASHES", frozenset({digest}))
+    leaking = tmp_path / "leaked.py"
+    leaking.write_text(f'value = "{planted}"\n', encoding="utf-8")
+
+    offenders = _known_leak_offenders([leaking])
+
+    assert offenders, "known-leak hash detector did not fire on a planted known-bad token"
+
+
+def test_known_leak_hash_detector_does_not_fire_on_an_unrelated_file(monkeypatch, tmp_path):
+    """MUST-NOT-FIRE case pairing the one above (CLAUDE.md: a negative
+    assertion needs a positive control, and the reverse holds too -- a
+    real hash on the list must not make the detector fire on unrelated
+    content that happens to share no token with it)."""
+    planted = "definitely-not-a-real-leaked-value-835"
+    digest = _leak_hash(planted)
+    monkeypatch.setattr(f"{__name__}._KNOWN_LEAK_HASHES", frozenset({digest}))
+    clean = tmp_path / "clean.py"
+    clean.write_text('value = "totally-unrelated-content"\n', encoding="utf-8")
+
+    offenders = _known_leak_offenders([clean])
+
+    assert not offenders, f"known-leak hash detector false-fired on unrelated content: {offenders}"
+
+
+def test_leak_hash_rejects_a_value_that_is_not_a_bare_token():
+    """MUST-FIRE regression case for the review finding this fixes: a
+    maintainer who follows the module docstring's old wording and hashes
+    a full leaked PATH (rather than a single username/path-segment
+    token) would build a _KNOWN_LEAK_HASHES entry that can never match
+    anything, silently, because _LEAK_TOKEN would only ever see the
+    pieces between the '/' separators. _leak_hash must refuse that input
+    outright rather than accept it and hash the wrong thing."""
+    with pytest.raises(ValueError, match="not a bare _LEAK_TOKEN unit"):
+        _leak_hash("/Users/realname/project")
+
+
+def test_leak_hash_accepts_a_bare_token():
+    """Positive control pairing the one above: a value that IS already a
+    single bare token (no separators) must be accepted and hashed, or
+    the rejection above would just be a detector that accepts nothing."""
+    digest = _leak_hash("realname")
+    assert digest == hashlib.sha256(b"realname").hexdigest()
+
+
+def test_no_tracked_file_matches_a_known_leaked_value_hash():
+    """Detector 3 (#835): CI-safe complement to detector 2. Runs
+    unconditionally, everywhere, CI included -- unlike detector 2, it
+    depends on neither `CI`/`GITHUB_ACTIONS` nor `getpass.getuser()`, so
+    it carries none of the CI-account-name false-positive risk (#472).
+    This is what would have caught #822's fix reintroducing the same
+    real value into two OTHER files while CI stayed green throughout:
+    once that value's hash is on _KNOWN_LEAK_HASHES, any tracked file
+    carrying an EXACT, case-sensitive, separator-delimited recurrence of
+    it fails here on every platform -- see _leak_hash and the module
+    docstring's Detector 3 section for what "exact" excludes (a
+    different case, or the same value fused into a larger token with no
+    separator).
+
+    This does NOT solve #835's general question -- a genuinely NEW leak,
+    never seen before, has no hash on this list and is invisible to this
+    detector by construction. See the module docstring's Detector 3
+    section, and detector 2 above for the contributor-machine-only guard
+    that covers the general case instead."""
+    offenders = _known_leak_offenders(_tracked_files())
+    assert not offenders, (
+        "tracked file(s) match a previously-confirmed leaked value's hash "
+        f"-- see _KNOWN_LEAK_HASHES: {offenders}"
+    )

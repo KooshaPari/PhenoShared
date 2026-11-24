@@ -1,1 +1,0 @@
-# phenotype-service-registry

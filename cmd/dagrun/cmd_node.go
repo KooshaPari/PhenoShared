@@ -9,6 +9,7 @@ import (
 
 	"github.com/KooshaPari/dagrun/internal/plan"
 	"github.com/KooshaPari/dagrun/internal/store"
+	"github.com/KooshaPari/dagrun/internal/trace"
 	"github.com/KooshaPari/dagrun/internal/verify"
 )
 
@@ -25,7 +26,7 @@ func cmdClaim(args []string) error {
 	if len(pos) == 0 {
 		return fmt.Errorf("usage: dagrun claim NODE")
 	}
-	_, st, _, err := openRun(dir)
+	p, st, _, err := openRun(dir)
 	if err != nil {
 		return err
 	}
@@ -33,6 +34,11 @@ func cmdClaim(args []string) error {
 	claim, err := st.Claim(pos[0], who, *ttl, time.Now())
 	if err != nil {
 		return err
+	}
+	if claim.Won {
+		// The trace is the DAG's only record, so a claim that is not recorded
+		// leaves a node that looks like it never ran.
+		_ = trace.EmitNode(st.Dir(), p.Run, pos[0], who, "node.claim", "", claim.Epoch)
 	}
 	if jsonOut {
 		enc := json.NewEncoder(os.Stdout)
@@ -81,9 +87,13 @@ func cmdDone(args []string) error {
 	if !rep.OK {
 		reason = "forced done by operator"
 	}
+	// Read the owner before Force, which clears it: the outcome belongs to
+	// whoever held the node.
+	owner, epoch := st.ClaimOwner(n.ID)
 	if err := st.Force(n.ID, plan.StatusDone, reason, &rep, time.Now()); err != nil {
 		return err
 	}
+	_ = trace.EmitNode(st.Dir(), p.Run, n.ID, ownerOrDefault(owner), "node."+plan.StatusDone, reason, epoch)
 	if jsonOut {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
@@ -114,9 +124,11 @@ func cmdTerminal(args []string, status, name string) error {
 	if findNode(p, pos[0]) == nil {
 		return fmt.Errorf("unknown node %q", pos[0])
 	}
+	owner, epoch := st.ClaimOwner(pos[0])
 	if err := st.Force(pos[0], status, *reason, nil, time.Now()); err != nil {
 		return err
 	}
+	_ = trace.EmitNode(st.Dir(), p.Run, pos[0], ownerOrDefault(owner), "node."+status, *reason, epoch)
 	fmt.Printf("%s %s\n", status, pos[0])
 	return nil
 }

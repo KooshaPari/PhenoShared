@@ -1,2 +1,0 @@
-Benchmark initialization exceeded the 300 second bound before llama-bench emitted JSON.
-This is not a throughput measurement and must not be used as a capacity weight.

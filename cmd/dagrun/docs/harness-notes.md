@@ -141,6 +141,4 @@ the same files, give them distinct `workdir` values or serialise them with
 
 - Whether forge/helioslite `-p` returns a non-zero exit on failure.
 - Whether `codex exec --json` flushes its last event before exit.
-- Windows behaviour was unsupported by design (no `flock`); the store now uses
-  `LockFileEx` and the suite runs there, but harness spawning on Windows is still
-  unverified.
+- Windows behaviour (unsupported by design).

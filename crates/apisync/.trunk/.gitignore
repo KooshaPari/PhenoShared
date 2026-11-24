@@ -1,9 +1,0 @@
-# Trunk runtime state — never commit these.
-*out/
-*logs/
-*actions/
-*notifications/
-*tools/
-plugins/
-user_trunk.yaml
-user.yaml

@@ -1,4 +1,0 @@
-
-```typescript
-type TestType = string | number
-```

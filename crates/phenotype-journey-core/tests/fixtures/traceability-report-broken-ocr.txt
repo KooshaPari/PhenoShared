@@ -1,7 +1,0 @@
-$ cargo run -q -p hwledger-traceability -- --markdown-out /tmp/trace.md --verbose
-error: unexpected argument '--markdown-out' found
-
-Usage: hwledger-traceability [OPTIONS]
-
-For more information, try '--help'.
-$
