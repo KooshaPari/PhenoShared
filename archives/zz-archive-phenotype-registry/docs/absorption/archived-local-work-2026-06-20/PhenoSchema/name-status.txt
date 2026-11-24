@@ -1,5 +1,0 @@
-A	.editorconfig
-A	.gitattributes
-M	.github/workflows/ci.yml
-M	deny.toml
-M	ports/Cargo.toml

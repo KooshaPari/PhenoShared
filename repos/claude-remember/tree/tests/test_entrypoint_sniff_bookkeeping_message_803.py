@@ -1,0 +1,341 @@
+"""#803: `_transcript_is_pluginless_sdk()`'s message-field skip (#745) can mask
+the exact bug it exists to prevent.
+
+The function skips any line carrying a top-level `"message"` key outright, on the
+theory that such a line is "real dialogue, never a bookkeeping record" (the code's
+own comment). That theory is wrong for a bookkeeping record that carries a
+`"message"` key of its own as a plain STRING (an error/status field on, say, a
+`queue-operation` record) rather than the nested `{role, content}` OBJECT real
+dialogue always uses. If that same line also carries the `"entrypoint"` field this
+whole function exists to find, the substring-only skip discards it unseen -- the
+pluginless-SDK exclusion silently never fires, and the false notice / force-save
+#745 exists to fix reappears for that transcript.
+
+Fixed by discriminating on the message field's own JSON *shape*, not just its
+presence: `_stdin_json_string` only succeeds when a value opens with a quote, so it
+fails on the object shape and succeeds on the string shape -- an existing helper
+already in the file, no new JSON-parsing machinery needed.
+
+Positive control: a bookkeeping-shaped line (string "message", sdk- "entrypoint")
+must still be recognized as pluginless-SDK. Negative control, paired per this
+repo's own convention: a genuine dialogue line (object "message") that happens to
+mention the literal `"entrypoint":"sdk-` substring in its own conversational text
+must still be skipped -- proving the fix does not simply stop skipping altogether.
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
+from ._bash_runner import resolve_bash
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SESSION_START = REPO_ROOT / "scripts" / "session-start-hook.sh"
+# #1067: _transcript_is_pluginless_sdk moved into this separate, non-inlined
+# file; _stdin_json_string_into is defined, identically, in both.
+CAPTURE_GAP_CHECK = REPO_ROOT / "scripts" / "capture-gap-check.sh"
+
+
+def _strip_whole_line_comments(text: str) -> str:
+    """CI's own "hook tests (compiled)" leg runs session-start-hook.sh
+    through compile_hooks.py's compile step before the suite ever sees it --
+    it is one of the four HOOK_SCRIPT_NAMES scripts that step inlines and
+    strips whole-line comments from. capture-gap-check.sh is not one of
+    those four, so it keeps its comments verbatim on every leg, compiled or
+    not. The plain `pytest` legs read both files as plain source, so a
+    comment-only line never made the two copies differ there -- only the
+    compiled legs, which read session-start-hook.sh post-strip, did (#1067
+    round 2, CI red on exactly those two legs). Delegate to the exact
+    stripper the build uses rather than a second hand-written comment
+    filter here that could drift from what compile_hooks.py actually
+    does."""
+    spec = importlib.util.spec_from_file_location(
+        "compile_hooks_1067",
+        REPO_ROOT / ".github" / "scripts" / "compile_hooks.py",
+    )
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod.strip_whole_line_comments(text)
+
+BASH = resolve_bash()
+pytestmark = pytest.mark.skipif(
+    BASH is None, reason="no usable bash on this host (#432)"
+)
+
+
+def _function_body(name: str) -> str:
+    """Same extraction technique as test_previous_transcript_no_sort_691.py's
+    _function_bodies -- pulls the real shipped function verbatim rather than a
+    hand-copied stand-in that can drift from it.
+
+    Tried against SESSION_START first, then CAPTURE_GAP_CHECK (#1067)."""
+    start_marker = f"\n{name}() {{\n"
+    for candidate in (SESSION_START, CAPTURE_GAP_CHECK):
+        source = candidate.read_text(encoding="utf-8")
+        start = source.find(start_marker)
+        if start != -1:
+            end = source.index("\n}\n", start) + len("\n}")
+            return source[start + 1 : end]
+    raise AssertionError(
+        f"{name}() not found in {SESSION_START} or {CAPTURE_GAP_CHECK}"
+    )
+
+
+def _function_body_from(path: Path, name: str) -> str:
+    """Like _function_body, but pinned to exactly one file -- used by the
+    parity test below, which needs each copy named separately rather than
+    whichever one _function_body's own SESSION_START-first search happens to
+    find."""
+    start_marker = f"\n{name}() {{\n"
+    source = path.read_text(encoding="utf-8")
+    start = source.index(start_marker)
+    end = source.index("\n}\n", start) + len("\n}")
+    return source[start + 1 : end]
+
+
+def test_stdin_json_string_into_copies_stay_identical():
+    """#1067 duplicated _stdin_json_string_into into capture-gap-check.sh
+    rather than sharing it via a sourced lib (the comment on that copy says
+    why -- it is the hook's own stdin-payload parser, needed here only
+    because _transcript_is_pluginless_sdk calls it on a transcript line, not
+    on stdin). _function_body's own SESSION_START-first search means every
+    OTHER test in this module exercises SESSION_START's copy, never
+    capture-gap-check.sh's -- the one that actually runs at SessionStart time
+    for a REAL transcript, since _transcript_is_pluginless_sdk itself only
+    exists in capture-gap-check.sh now. This closes that gap directly: if
+    the two copies ever diverge, this fails immediately, rather than leaving
+    the untested copy to disagree silently in production.
+
+    Compared with whole-line comments stripped from both sides first (#1067
+    round 2): CI's "hook tests (compiled)" leg runs session-start-hook.sh
+    through compile_hooks.py first, which strips its comments, while
+    capture-gap-check.sh is never compiled and keeps its comments on every
+    leg -- so a straight string comparison was red on exactly those two
+    legs (ubuntu + windows) while every plain `pytest` leg, which reads both
+    files as uncompiled source, stayed green. Stripping comments from both
+    sides before comparing is what the compiled leg itself effectively does
+    to session-start-hook.sh's copy; capture-gap-check.sh's copy loses
+    nothing it did not already lose on that leg.
+
+    Would this test still pass if the code did nothing? No -- flip one
+    non-comment character in either copy and this fails; nothing else in
+    this file would notice, since nothing else in this file ever reads
+    capture-gap-check.sh's copy. (The companion test right below is the
+    positive control proving the comment-stripping above does not swallow
+    a real functional divergence.)
+    """
+    session_start_copy = _function_body_from(SESSION_START, "_stdin_json_string_into")
+    capture_gap_copy = _function_body_from(CAPTURE_GAP_CHECK, "_stdin_json_string_into")
+    assert _strip_whole_line_comments(session_start_copy) == _strip_whole_line_comments(
+        capture_gap_copy
+    ), (
+        "_stdin_json_string_into has diverged between scripts/session-start-hook.sh "
+        "and scripts/capture-gap-check.sh -- keep both copies identical (see the "
+        "comment on capture-gap-check.sh's own copy)"
+    )
+
+
+def test_stdin_json_string_into_copies_stripping_still_catches_real_divergence():
+    """Positive control for the test above (this repo's own CLAUDE.md rule:
+    a negative assertion -- the copies do not differ -- needs a positive
+    one proving the check can still fire). Stripping whole-line comments
+    before comparing must not quietly widen the check into "ignore
+    everything" -- a real functional change to either copy, on a
+    non-comment line, must still be caught after stripping.
+
+    Would this test still pass if the comment-stripping above were replaced
+    by something that discarded the whole body (e.g. always comparing two
+    empty strings)? No -- the body_still_has_content assertion below would
+    then fail, since a function body genuinely contains more than a single
+    stray newline.
+    """
+    session_start_copy = _function_body_from(SESSION_START, "_stdin_json_string_into")
+    capture_gap_copy = _function_body_from(CAPTURE_GAP_CHECK, "_stdin_json_string_into")
+    stripped_session_start = _strip_whole_line_comments(session_start_copy)
+    stripped_capture_gap = _strip_whole_line_comments(capture_gap_copy)
+    assert stripped_session_start == stripped_capture_gap
+    body_still_has_content = len(stripped_session_start.strip()) > 40
+    assert body_still_has_content, (
+        "the comment stripper left almost nothing behind -- it may be "
+        "swallowing non-comment lines, which would make the parity check "
+        "above pass vacuously"
+    )
+    target = "_sjsi_value=${_sjsi_value//\\\\\\\\/\\\\}"
+    mutated = capture_gap_copy.replace(target, "_sjsi_value=${_sjsi_value}")
+    assert mutated != capture_gap_copy, (
+        "the replace() above did not match anything in the real function "
+        "body -- update the target line if _stdin_json_string_into's "
+        "source changed"
+    )
+    assert _strip_whole_line_comments(session_start_copy) != _strip_whole_line_comments(
+        mutated
+    ), (
+        "stripping whole-line comments must not mask a real functional "
+        "divergence between the two copies"
+    )
+
+
+SNIFF_SCRIPT = r"""
+_ENTRYPOINT_SNIFF_CAP=50
+%s
+_transcript_is_pluginless_sdk "$1"
+printf '%%s' "$?"
+"""
+
+
+def _run_sniff(transcript_path: Path) -> str:
+    """The script goes in on stdin, not as a `-c` argument: Git for Windows'
+    bash.exe re-parses its command line and collapses the `\\\\` sequences the
+    decode-bearing extractor contains (#829), observed on Windows 11 / Git
+    Bash 5.2."""
+    body = "\n".join(
+        _function_body(name) for name in ("_stdin_json_string_into", "_transcript_is_pluginless_sdk")
+    )
+    script = SNIFF_SCRIPT % body
+    result = subprocess.run(
+        [BASH, "-s", "--", str(transcript_path)],
+        input=script,
+        env={**os.environ},
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    return result.stdout.strip()
+
+
+def test_bookkeeping_string_message_does_not_mask_entrypoint(tmp_path):
+    """Must-fire case: a bookkeeping record whose own "message" field is a plain
+    string, on the same line as an sdk- "entrypoint", must still be detected as
+    pluginless-SDK (exit 0) -- not silently skipped as if it were dialogue."""
+    transcript = tmp_path / "session.jsonl"
+    transcript.write_text(
+        '{"type":"queue-operation","message":"waiting for tool",'
+        '"entrypoint":"sdk-py"}\n'
+    )
+    exit_code = _run_sniff(transcript)
+    assert exit_code == "0", (
+        "a string-shaped bookkeeping \"message\" field must not mask the "
+        f"\"entrypoint\" field on the same line, got exit {exit_code!r}"
+    )
+
+
+def test_real_dialogue_object_message_is_still_skipped(tmp_path):
+    """Negative control, paired with the case above: genuine dialogue (a nested
+    {role, content} OBJECT "message" field) that happens to mention the literal
+    entrypoint substring in its own conversational text must still be skipped --
+    the fix must discriminate by shape, not simply stop skipping "message" lines
+    altogether."""
+    transcript = tmp_path / "session.jsonl"
+    transcript.write_text(
+        '{"type":"assistant","message":{"role":"assistant","content":'
+        '[{"type":"text","text":"this fixture literally says '
+        '\\"entrypoint\\":\\"sdk-py\\" in its own prose"}]}}\n'
+    )
+    exit_code = _run_sniff(transcript)
+    assert exit_code == "1", (
+        "a real dialogue line (object-shaped \"message\") must still be skipped "
+        f"even when it mentions the entrypoint substring in its own text, got exit {exit_code!r}"
+    )
+
+
+def test_empty_string_message_does_not_mask_entrypoint(tmp_path):
+    """Must-fire case, sibling of the string-message case above: an empty-string
+    "message" field (`"message":""`) is still a STRING, not the {role, content}
+    OBJECT real dialogue uses -- but _stdin_json_string's own non-empty-value
+    guard fails identically on both shapes, so the naive fix (auditor finding,
+    self-review round) would collapse "object" and "empty string" into the same
+    skip. An entrypoint on the same line as an empty "message" string must still
+    be detected."""
+    transcript = tmp_path / "session.jsonl"
+    transcript.write_text(
+        '{"type":"queue-operation","message":"","entrypoint":"sdk-py"}\n'
+    )
+    exit_code = _run_sniff(transcript)
+    assert exit_code == "0", (
+        "an empty-string bookkeeping \"message\" field must not mask the "
+        f"\"entrypoint\" field on the same line, got exit {exit_code!r}"
+    )
+
+
+def test_extra_whitespace_after_message_colon_does_not_mask_entrypoint(tmp_path):
+    """Must-fire case, sibling of the two cases above: the shape check must not
+    be a fixed-width literal match on zero or one space after the colon (round-2
+    self-review finding -- a first attempt at the empty-string fix matched only
+    `"message":""` and `"message": ""` literally, so two spaces, a tab, or any
+    other width fell through to the object-shaped branch and re-masked the
+    entrypoint). Two spaces here is an arbitrary width past that fixed set."""
+    transcript = tmp_path / "session.jsonl"
+    transcript.write_text(
+        '{"type":"queue-operation","message":  "","entrypoint":"sdk-py"}\n'
+    )
+    exit_code = _run_sniff(transcript)
+    assert exit_code == "0", (
+        "a bookkeeping \"message\" string with unusual colon-value whitespace "
+        f"must not mask the \"entrypoint\" field on the same line, got exit {exit_code!r}"
+    )
+
+
+# The real file's own _ENTRYPOINT_SNIFF_CAP, duplicated here (not imported --
+# it lives in shell, not Python) because the two cap-enforcement tests below
+# need it to build a fixture on either side of the boundary. If the shipped
+# value ever changes, SNIFF_SCRIPT's own hardcoded 50 (which the real function
+# body never sees, since _function_body only extracts the function itself)
+# must change with it, so this constant and that literal must always agree.
+_CAP = 50
+
+
+def _dialogue_line(i: int) -> str:
+    """An ordinary object-shaped-"message" dialogue line, indistinguishable
+    from real content, carrying no "entrypoint" field of its own."""
+    return (
+        '{"type":"assistant","message":{"role":"assistant","content":'
+        f'[{{"type":"text","text":"dialogue line {i}"}}]}}}}\n'
+    )
+
+
+def test_cap_still_enforced_past_dialogue_lines(tmp_path):
+    """Regression test for the cap-bypass finding (self-review round): the fix's
+    skip-branch for real dialogue must fall through to the CAP check on every
+    iteration, not `continue` past it. Built as a paired must-fire/must-not-fire
+    case sharing one fixture shape: an sdk- entrypoint sitting AFTER the cap,
+    behind a wall of ordinary dialogue lines, must NOT be found (the scan must
+    still stop at the cap) -- if a `continue` were bypassing the cap check, this
+    line would incorrectly be found instead."""
+    transcript = tmp_path / "session.jsonl"
+    lines = [_dialogue_line(i) for i in range(_CAP + 4)]
+    lines[_CAP + 3] = (
+        '{"type":"queue-operation","message":"waiting","entrypoint":"sdk-py"}\n'
+    )
+    transcript.write_text("".join(lines))
+    exit_code = _run_sniff(transcript)
+    assert exit_code == "1", (
+        "an sdk- entrypoint past the scan cap, behind a wall of dialogue lines, "
+        f"must not be found -- the cap must still stop the scan, got exit {exit_code!r}"
+    )
+
+
+def test_entrypoint_within_cap_past_dialogue_lines_is_still_found(tmp_path):
+    """Positive control, paired with the case above: the identical entrypoint
+    line, moved to WITHIN the cap (still behind a wall of dialogue lines), must
+    still be found -- proving the cap test above fails because of the cap, not
+    because dialogue lines break detection generally."""
+    transcript = tmp_path / "session.jsonl"
+    lines = [_dialogue_line(i) for i in range(_CAP - 5)]
+    lines.append(
+        '{"type":"queue-operation","message":"waiting","entrypoint":"sdk-py"}\n'
+    )
+    transcript.write_text("".join(lines))
+    exit_code = _run_sniff(transcript)
+    assert exit_code == "0", (
+        "an sdk- entrypoint within the scan cap, behind a wall of dialogue "
+        f"lines, must still be found, got exit {exit_code!r}"
+    )

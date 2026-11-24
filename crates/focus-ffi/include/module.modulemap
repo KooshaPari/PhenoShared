@@ -1,4 +1,0 @@
-module focus_ffiFFI {
-    header "focus_ffiFFI.h"
-    export *
-}

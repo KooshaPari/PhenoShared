@@ -1,0 +1,203 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# Per branch or pull request, superseding. A second push to the same head cancels the
+# run it replaced rather than leaving two full 12-leg matrices racing each other on the
+# same commit range.
+#
+# `github.ref` is `refs/pull/N/merge` on a `pull_request` event and `refs/heads/main` on a
+# push, so the group is one pull request or one branch wide -- never constant, which would
+# serialise unrelated pull requests against each other.
+#
+# Cancellation is deliberately limited to pull requests. A push to `main` is the run a
+# release gate reads, and `cancelled` is not `success`: cancelling a main run to favour a
+# newer one leaves the older commit with no verdict at all, which is the absence this
+# repo's own CLAUDE.md warns reads exactly like a pass.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  pytest:
+    runs-on: ${{ matrix.os }}
+    # #1002 round 2: a real wscript.exe call on windows-latest can hang this
+    # whole job indefinitely (a blocking UI prompt on a headless runner,
+    # never resolving on its own) rather than failing the one test that
+    # triggered it -- a bounded job timeout turns that into a fast, loud
+    # failure instead of a silent multi-hour hold. 30 minutes is well above
+    # the slowest leg's own observed full-suite runtime.
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Fetch origin/main
+        # actions/checkout on a pull_request event checks out the merge ref
+        # with no local origin/main branch ref at all, so anything comparing
+        # against origin/main (tests/test_case_divergence_298.py's byte-pin
+        # guard) cannot resolve its base and would otherwise have to skip
+        # itself -- which is exactly how that guard went unexercised on
+        # every pull_request run (#442). Fetch it explicitly and cheaply;
+        # depth 1 is enough since only the tip of main is compared against.
+        run: git fetch --no-tags --depth=1 origin main:refs/remotes/origin/main
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install test deps
+        run: |
+          python -m pip install --upgrade pip
+          # pyyaml: tests/test_clones_badge_workflow.py (#828) parses
+          # .github/workflows/clones-badge.yml with yaml.safe_load to check
+          # its shape (SHA-pinned actions, permissions, triggers) rather than
+          # regex-matching a hand-rolled YAML subset.
+          pip install pytest pytest-cov pyyaml
+      - name: Install Windows tzdata
+        if: runner.os == 'Windows'
+        run: pip install tzdata
+      # Defender's real-time scanner walking every file this job touches would be a
+      # real cost in principle, but as of #692, a state read on the windows-latest
+      # image this ran against then showed real-time protection already off and
+      # the whole checkout drive already excluded before this step did anything
+      # (removing the step entirely produced the same timings as keeping it --
+      # runner noise, no trend). That reading is a snapshot of one image, not a
+      # standing guarantee -- runner images change -- so the step does not repeat
+      # the claim as durable fact. It reports its own premise instead: the log
+      # below says whether the exclusion is doing anything on the image of the
+      # day, read before the exclusions are added so the printed state is the
+      # runner's own, not this step's.
+      - name: Report Defender state, then exclude the checkout and temp dir
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $status = Get-MpComputerStatus
+          $prefs = Get-MpPreference
+          Write-Host "RealTimeProtectionEnabled: $($status.RealTimeProtectionEnabled)"
+          Write-Host "ExclusionPath: $($prefs.ExclusionPath -join ', ')"
+          Add-MpPreference -ExclusionPath "${{ github.workspace }}"
+          Add-MpPreference -ExclusionPath "$env:RUNNER_TEMP"
+      - name: Run tests
+        # #1014 round 2: this PR's own CI already hit a Windows leg that
+        # ran past this timeout and still ended `cancelled` with no log at
+        # all (job 114418645594) -- the step-level kill is not trusted to
+        # fire on its own on every OS. pyproject.toml's faulthandler_timeout
+        # dumps the stuck test's traceback well inside this bound, and the
+        # step's own timeout-minutes is what actually ends the step and
+        # keeps the log (proven on Linux: run 38122057767, job
+        # 114445674357 -- the faulthandler traceback IS in the kept log,
+        # followed by the step-timeout error). `tee` is belt-and-braces on
+        # top of that: whatever reached the log file before the step ends
+        # is uploaded as an artifact below under `if: always()`, rather
+        # than depending only on the step's own captured output surviving.
+        timeout-minutes: 25
+        shell: bash
+        run: |
+          set -o pipefail
+          pytest 2>&1 | tee pytest-output.log
+      - name: Upload pytest output log
+        # `if: always()` so a failed or timed-out step still uploads
+        # whatever reached the file -- the one case this cannot cover is
+        # a job-level `cancelled` (#1014's original failure mode, observed
+        # on Windows: job 114418645594), where GitHub Actions stops
+        # running steps entirely rather than executing the ones still
+        # pending. That path is not proven fixed here -- see the issue
+        # filed for the unproven Windows cancellation case.
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-output-${{ matrix.os }}-${{ matrix.python-version }}
+          path: pytest-output.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: List surviving wscript/bash/conhost/powershell processes (Windows)
+        if: always() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_Process |
+            Where-Object { $_.Name -in @('wscript.exe', 'bash.exe', 'conhost.exe', 'powershell.exe') } |
+            Select-Object ProcessId, ParentProcessId, Name, CommandLine |
+            Format-List
+
+  # #900: each hooks.json-registered hook script is inlined and
+  # comment-stripped for the release tree (compile_hooks.py) so the
+  # Anthropic plugin directory's release-preview validator -- which never
+  # follows a `source`/`.` statement into a second file -- stops holding
+  # these four scripts as COMMAND_SCRIPT_NOT_FOLLOWED. The compiled form
+  # must behave exactly like the sourced one, so this job compiles the four
+  # hooks in place on a fresh checkout and runs the WHOLE suite against
+  # that compiled tree, on every OS the plain `pytest` job above already
+  # covers -- a hook test file's own content decides what it actually
+  # exercises; running everything is what proves nothing *else* broke.
+  hook-tests-compiled:
+    name: hook tests (compiled) / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    # #1002 round 2: same reasoning as the plain pytest job's own
+    # timeout-minutes above -- this job runs the identical real-wscript
+    # tests against the compiled hooks, so it is exposed to the same
+    # hang risk.
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Fetch origin/main
+        # Same reasoning as the plain pytest job above (#442): a
+        # pull_request checkout has no local origin/main ref, and a test
+        # that compares against it would otherwise skip itself unnoticed.
+        run: git fetch --no-tags --depth=1 origin main:refs/remotes/origin/main
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install test deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov pyyaml
+      - name: Install Windows tzdata
+        if: runner.os == 'Windows'
+        run: pip install tzdata
+      - name: Compile the four hooks.json-registered hooks in place (#900)
+        # `python`, not `python3`: every other python3 invocation anywhere
+        # in this repo's CI runs on ubuntu-latest only (release-branch.yml,
+        # oss-changelog.yml); this is the first python call on a Windows
+        # runner in this workflow, and actions/setup-python does not
+        # reliably provide a `python3` shim on Windows the way it does on
+        # Linux/macOS. `python` matches the convention the pip-install step
+        # above already uses on this same matrix.
+        run: python .github/scripts/compile_hooks.py --repo . --apply
+      - name: Run the full suite against the compiled hooks
+        # Same #1014-round-2 reasoning as the plain pytest job's own "Run
+        # tests" step above.
+        timeout-minutes: 25
+        shell: bash
+        run: |
+          set -o pipefail
+          pytest 2>&1 | tee pytest-output.log
+      - name: Upload pytest output log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-output-hooks-${{ matrix.os }}
+          path: pytest-output.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: List surviving wscript/bash/conhost/powershell processes (Windows)
+        if: always() && runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Get-CimInstance Win32_Process |
+            Where-Object { $_.Name -in @('wscript.exe', 'bash.exe', 'conhost.exe', 'powershell.exe') } |
+            Select-Object ProcessId, ParentProcessId, Name, CommandLine |
+            Format-List

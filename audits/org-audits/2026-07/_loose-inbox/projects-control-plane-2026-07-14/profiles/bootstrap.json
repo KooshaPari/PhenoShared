@@ -1,6 +1,0 @@
-{
-  "profiles": {
-    "default": {}
-  },
-  "notes": "Use --env-profile <name> at run time; do not store secrets in this file."
-}

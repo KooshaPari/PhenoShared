@@ -1,1 +1,0 @@
-ALTER TABLE conversations DROP COLUMN parent_id;

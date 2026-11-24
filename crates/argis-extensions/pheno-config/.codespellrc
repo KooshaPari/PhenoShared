@@ -1,3 +1,0 @@
-[codespell]
-skip = target,./target,.git,./.git,Cargo.lock,*.lock
-ignore-words-list = crate,crates,hedging,hedge,revertion,revert

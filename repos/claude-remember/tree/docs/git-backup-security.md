@@ -1,0 +1,100 @@
+# Git Backup — Security Model
+
+This page only matters if you enable the **git backup** feature (`hooks.d/after_save/50-git-backup.sh`). The default install does not push your memory anywhere — no new attack surface beyond what your coding agent already needs to run on your machine.
+
+If you do enable git backup, read on.
+
+---
+
+## The "is this special?" question
+
+> *"Anyone who can write `~/.remember/config.json` can redirect the backup remote to their own URL and silently exfiltrate every session."*
+
+True. Also true for:
+
+- `~/.ssh/config` — redirect your `git push` to an attacker's host.
+- `~/.ssh/authorized_keys` — grant SSH access.
+- `~/.bashrc` / `~/.zshrc` — code execution on every shell.
+- `~/.claude/**` — change which hooks Claude Code runs.
+- `~/.gitconfig` — `[core] sshCommand = ...` runs arbitrary code on every git operation.
+
+If something can write to your home directory as your user, you are already compromised. The threat model "attacker with write-access to `$HOME`" is game over independent of this plugin. Treat `~/.remember/` with the same care you give `~/.ssh/` — that's the bar, and it's not a higher one.
+
+---
+
+## Threats specific to git backup
+
+These are the things that only apply once you enable the feature.
+
+### 1. The remote you push to receives a copy of everything you discuss with your coding agent
+
+That includes project paths, session summaries, identity files, any data the model wrote into memory, and any content you accidentally pasted into a session. If you point the remote at a service you don't fully trust, you're streaming your work history there continuously.
+
+**Mitigation:** point the remote at a private repository you own. GitHub private, self-hosted Gitea, a `git init --bare` on your own server — anything where you control access.
+
+### 2. The configured remote can drift if `config.json` is tampered with
+
+Without protection, an attacker writing `~/.remember/config.json` could swap the remote URL between sessions and the next save would silently push to their host.
+
+**Mitigation built into the plugin:** the backup hook validates the remote URL on every push and aborts if it has changed from the value originally set. To intentionally change the remote, set `git_backup.allow_remote_change` in config (one-shot opt-in). See [`README.md`](../README.md) for the option.
+
+`git_backup.remote`/`git_backup.branch` and their `git_restore.*` counterparts are read from this same `config.json`, so both the push and the fetch side treat them as untrusted for anything that reaches `git`'s own argv: a leading `-` (parsed as an option rather than an operand -- `--upload-pack=...` against a local-transport target is local command execution) or a value containing `:` or `/` (a transport URL/spec rather than a name naming a remote this repo already trusts) is rejected before it reaches `git push`/`git fetch`, falling back to a validated remote rather than passing the value through ([#723](https://github.com/Digital-Process-Tools/claude-remember/issues/723)).
+
+### 3. `hooks.d/` is executed on every session save and start
+
+Same as Claude Code's own hook directory. Anything you (or an installed plugin) drops in `hooks.d/` runs with your user privileges. The plugin cache at `~/.claude/plugins/cache/` is user-writable by design — a malicious plugin can add hooks there.
+
+**Mitigation:** this is install-time trust. Only install plugins you've reviewed. Same rule as `npm install`, `pip install`, or any package manager pulling code that runs on your machine.
+
+### 4. A per-project `config.json` must never carry `haiku.oauth_token`
+
+The per-project config layer (`<REMEMBER_DIR>/config.json`, i.e. `<slug>/config.json` inside the backup store) is a documented home for `haiku.oauth_token`, a config key [removed entirely (#860, round 4)](configuration.md) and never read for authentication on any host. The backup hook never stages or commits a slug's `config.json` (`hooks.d/after_save/50-git-backup.sh`, `#719`) regardless: it is excluded via the store's `info/exclude`, and a store that committed one before this exclusion existed has it untracked on the next backup. Going forward is not the same as history: what a store already pushed stays pushed, so if a `config.json` carrying `haiku.oauth_token` was ever committed, rotate that credential (`claude setup-token`) regardless of whether this plugin still reads it (#860) -- claude.ai itself may still accept the old token even though this plugin doesn't, and anyone with access to that git history can still see it.
+
+That same #719 untracking commit, adopted by a second machine's `git_restore` fast-forward (`hooks.d/before_session_start/50-git-restore.sh`), used to silently delete an unmodified `config.json` from that machine's disk -- an ordinary fast-forward removes any path the incoming commit stops tracking, and the second machine's own copy had never been staged for removal itself. The restore hook now detects exactly that shape (tracked before the fast-forward it just ran, not tracked after, and now missing from disk) and restores the file's pre-merge bytes, staying untracked, so the untracking upgrade still lands without a `haiku.oauth_token` or per-project setting silently vanishing on every other machine sharing the store ([#741](https://github.com/Digital-Process-Tools/claude-remember/issues/741)).
+
+**Mitigation:** there is nothing to migrate `haiku.oauth_token` to -- `REMEMBER_OAUTH_TOKEN` was also [removed entirely (#860, round 3)](configuration.md), on every host, and neither is read for anything any more. If `config.json` carries any other value you would not want in git history, this hook's exclusion still keeps it out of this backup, but treat the file with the same care as `~/.ssh/` regardless.
+
+### 5. `<project>/.remember/config.json` is untrusted input when the project is a clone
+
+This is a different file from #4 above, and a different threat. Item 4 is about YOUR OWN backup store's per-project `config.json` -- something you or the plugin wrote. This item is about the default (legacy) storage layout, where `REMEMBER_DIR` resolves to `<project>/.remember`, sitting inside the checkout itself. A repository you clone can ship a `.remember/config.json` of its own, ordinary content delivered by an ordinary `git clone` -- no special access, no compromised `$HOME`, just a file the repository's author committed.
+
+Before [#726](https://github.com/Digital-Process-Tools/claude-remember/issues/726), that file's `haiku` block was merged in with the same trust as one you wrote yourself: a cloned repo's `.remember/config.json` could set `haiku.oauth_token` to choose which credential the nested summarizer authenticates with, and could set `haiku.anthropic_api_key` to `"strip"` to force your own `ANTHROPIC_API_KEY` out of the child process -- both without your ever having opened the file. (#898 replaced that second key with `haiku.drop_env`, a generic list of variable names or globs to keep out of the child; it sits in the same `haiku` block and is stripped from an untrusted project layer the same way.)
+
+#726 fixed the ordinary case -- a project `.remember/config.json` holding one JSON document -- but the merge it shipped (`jq -s '(.[-1] |= del(.haiku)) | ...'`) stripped only the *last* document of the *last* source file. A project config shipping **two** whitespace-concatenated JSON documents, `haiku` in the first, had that block survive untouched: one array element before the position `.[-1]` ever looked at, merged straight through to the nested summarizer ([#740](https://github.com/Digital-Process-Tools/claude-remember/issues/740)).
+
+**Fixed:** the per-project layer's `haiku` block is no longer merged in at all when `REMEMBER_DIR` sits inside the project checkout, regardless of how many JSON documents that file contains -- neither key reaches the nested summarizer from a file the project itself ships. This applies regardless of whether you also use git backup; it is about the *source* checkout's own `.remember/`, not the backup store. External storage mode (`data_dir` absolute or home-relative, e.g. `~/.remember/{slug}`) is unaffected, since `REMEMBER_DIR` there is your own directory, never one a clone delivers.
+
+The merge sanitizes the untrusted project layer with a separate, plain `jq -c 'del(.haiku)'` call (no `-s`, no `-n`, no `--slurpfile`, no path comparison of any kind) into a temp file, then runs the same `jq -s` reduce this file used before #726 ever touched it, over that temp file in place of the untrusted one. An earlier design (`jq --slurpfile`, reading the untrusted file directly by its own single file argument rather than comparing a filename string) removed the previous design's platform-dependent path comparison but was itself never proven on Windows before it shipped -- CI observed it erroring there under a native `jq.exe`, and the `|| cp` fallback silently dropped every layer, project **and** the trusted user-global one, with no error surfaced to the user at all. The sanitize-then-reduce shape uses nothing that was not already exercised, on every CI platform, by the merge as it existed before #740 ever changed it. If sanitizing fails for any reason, the project layer is dropped entirely (fail closed) rather than merged unsanitized; the bundled and user-global layers are unaffected. The no-jq Python fallback (used when `jq` is not on `PATH`) got the matching fix: it used to fail the whole merge (falling back to bundled defaults, dropping the user-global layer's own overrides too) the moment the project file held more than one JSON document, or could not be read at all, rather than stripping `haiku` from each of that file's own documents (or simply dropping just that layer) and keeping everything else.
+
+**Mitigation, defense in depth:** treat any `.remember/config.json` that ships inside a repository you did not author as untrusted input, the same as any other file in that clone -- do not manually copy `haiku.*` settings out of it into your own config.
+
+---
+
+## Recommended setup
+
+If you want git backup with reasonable defaults:
+
+```bash
+# 1. Restrictive permissions (same as ~/.ssh)
+chmod 700 ~/.remember
+chmod 700 ~/.claude/plugins/cache
+
+# 2. Point backup at a private repo you own
+git init --bare ~/backups/claude-remember.git    # or use a private GitHub/Gitea/etc.
+# Then set git_backup.remote in ~/.remember/config.json
+
+# 3. Verify the validation guard is active (default: on)
+# git_backup.allow_remote_change is false unless you explicitly flip it
+```
+
+After this:
+
+- Data leaves your machine only to a repo you control.
+- The remote can't silently change without `allow_remote_change`.
+- The home-dir attack surface is no worse than `~/.ssh/`.
+
+---
+
+## What you're consenting to (in one sentence)
+
+**Enabling git backup means: every memory save is pushed to the remote you configured.** That's it. Everything above is about making sure "the remote you configured" stays the remote you configured.

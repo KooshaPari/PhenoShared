@@ -1,6 +1,0 @@
-{
-  "dag": {
-    "tasks": ["A1", "A2"],
-    "dependencies": []
-  }
-}

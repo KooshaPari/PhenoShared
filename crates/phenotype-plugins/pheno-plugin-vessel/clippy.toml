@@ -1,3 +1,0 @@
-# Clippy configuration for phenotype-vessel
-
-avoid-breaking-exported-api = false

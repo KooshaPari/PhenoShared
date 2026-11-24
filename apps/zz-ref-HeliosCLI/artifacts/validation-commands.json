@@ -1,6 +1,0 @@
-{
-  "commands": [
-    {"id": "A1", "cmd": "python3 -m pytest harness/tests/test_discoverer.py -q", "deps": []},
-    {"id": "A2", "cmd": "python3 -m pytest harness/tests/test_runner_contract.py -q", "deps": []}
-  ]
-}

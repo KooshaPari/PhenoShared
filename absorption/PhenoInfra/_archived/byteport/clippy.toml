@@ -1,5 +1,0 @@
-# Phenotype-org standard clippy config
-msrv = "1.75"
-avoid-breaking-exported-api = true
-disallowed-methods = []
-allow-dbg-in-tests = true

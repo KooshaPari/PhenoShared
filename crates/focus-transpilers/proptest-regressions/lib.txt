@@ -1,8 +1,0 @@
-# Seeds for failure cases proptest has generated in the past. It is
-# automatically read and these particular cases re-run before any
-# novel cases are generated.
-#
-# It is recommended to check this file in to source control so that
-# everyone who runs the test benefits from these saved cases.
-cc 58e92c7e7efc4ef6acc8c1c14f589ae80f3895c82f1172ea797de12e19ff1fea # shrinks to rule = Rule { id: 21ad84db-61b0-4548-8d54-014fb93fa3b2, name: "proptest-rule", trigger: Event("test_event"), conditions: [], actions: [GrantCredit { amount: 10 }], priority: 1, cooldown: None, duration: None, explanation_template: "test", enabled: true }
-cc a77cf93721258f9cf00ae5f351d382d04cfd55e4061a052cac5f02c10d73456d # shrinks to rule = Rule { id: 511742bf-457e-4662-bb1b-91518e35e7cb, name: "proptest-rule", trigger: Event("test_event"), conditions: [], actions: [GrantCredit { amount: 10 }], priority: 1, cooldown: None, duration: None, explanation_template: "test", enabled: true }

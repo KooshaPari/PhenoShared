@@ -1,0 +1,5010 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.45.0] - 2026-11-01 — Several windows in one project no longer step on each other's memory
+
+### Added
+
+- Added #1063: The install guide now explains how to switch from the official plugin marketplace to ours: remove the official copy first (having both makes everything run twice), install from our marketplace, and restart Claude Code. Your first message in each project may be a little slower once, and your saved memory is untouched either way. The README's install section links to it.
+
+### Fixed
+
+- Fixed #660: On Windows, the first "SessionStart" of a day used to take noticeably longer than later ones in the same session, and in 2026 that initial delay averaged about 12.5 seconds on one person's machine. A long series of fixes already shipped in earlier releases (fewer programs started per start, less duplicated setup work) brought that down a lot, but nobody had measured it the same careful way since. We added that measurement to our automated testing (it now runs on every change, on a real Windows machine, several times in a row so one slow moment does not skew the number) and read the real numbers back: a warm start now takes about 1.0 to 1.6 seconds, down from the original ~12.5 seconds, with no single step left that stands out as slow. Not fixed yet: on a Windows machine without the "jq" tool installed, a start is still a bit slower (closer to 1.0-1.3 seconds than the ~1.4-1.6 seconds with jq installed); installing jq on Windows (our setup guide explains how) remains the fastest path there.
+
+- Fixed (#920): a safety check added earlier to protect where memory gets saved had
+  three gaps. Several of the places that create memory folders were not covered
+  by the check at all, so a corrupted save location could still have created
+  folders in the wrong place. When the check did correctly refuse to save, it
+  wrote an error message that was silently thrown away instead of being
+  visible anywhere. And if your project lived on a Windows network share
+  (a path starting with two backslashes, like a shared drive), the check
+  wrongly treated that as unsafe and refused to save there at all. All three
+  are fixed: every memory-folder save site this issue found is now covered, a
+  refusal always produces a visible error message, and network-share project
+  paths are recognized as safe.
+
+- Fixed #999: Behind the scenes: some of our automated tests failed on Windows because of how they wrote small script files; they now work there, and nothing changes for you.
+
+- Fixed #1006: On Windows, a black console window could flash on screen when a session started and Remember had notes waiting to be tidied up. That tidy-up now starts hidden, like the rest of Remember's background work, without slowing down the start of your session.
+
+- Fixed #1007: When the Python on your computer was too old, /remember:doctor said so but never said which version you actually need. It now names the minimum (for example "need Python 3.9+") and tells you to install a newer Python.
+
+- Fixed #1041: The copy of Remember in Anthropic's plugin directory no longer includes one feature that is switched off for now (#969), because the directory's safety scanner flagged it. Nothing changes for you: that feature was already off for everyone. Installs straight from our GitHub still include it, and it returns to the directory copy once #969 switches it back on.
+
+- Fixed #1046: If you had several Claude Code windows open in the same project, each saving to a different memory, one window could grab another window's unsaved conversation and save it into the wrong memory. Remember now checks that a conversation really belongs to a memory before rescuing it there, and leaves it alone when it cannot tell. Fixed further by #1087: right after an update, each memory's first start used to get one more chance to grab a window's conversation it shouldn't have -- now it skips a conversation that still looks like it is being written, or that another memory already has evidence for, so only a genuinely old, unclaimed conversation from before the update gets rescued. One narrow case is still possible: a window that was only chatting (no file edits or tool use) before the update, and that has sat idle for more than a few minutes without closing, leaves no trace anywhere -- it can still be grabbed by mistake, once, during that first start after the update.
+
+- Fixed #1047: Starting a session could leave Remember stuck in the background for hours, using up your computer, when Claude Code handed it a very large amount of start-up information (one person found 27 copies still running after 21 hours). Remember now reads only the small part it needs, so start-up stays quick. Thanks to CNSeniorious000 (Muspi Merol), whose pull request #1049 this fix builds on. Not fixed yet: three other places in Remember read information the same slow way and still need to be checked one by one.
+
+- Fixed (#1051): on the first session of a new day, your saved memory could
+  come back too big -- past the size Claude Code can actually show, so you
+  would never see it at all. This happened because yesterday's saved copy was
+  being compared against a freshly built one from today, and the two never
+  matched, so the size check gave up instead of trimming anything. Now the
+  size check keeps working correctly on the first session of a new day too,
+  and does it without any extra overhead on an ordinary session start.
+
+- Fixed #1052: /remember:doctor could report that everything was working even when a piece of your work had been left out of memory because its summary was rejected as unusable. It now shows a warning with how many times that happened, the latest example, and how many pieces of work are currently set aside unsummarized (and where to find them). A rejected piece of work is also no longer dropped the first time it is refused -- it is now tried again on the next save, up to 3 times (configurable; setting this to 0 no longer means "retry forever", which could stall saving for the rest of a session -- it falls back to the default instead, with a note in the log), before being set aside with the original (unsummarized) text kept in a clearly named file so nothing is permanently lost. If the refusal happens on your session's very last save, it is set aside immediately instead of waiting for retries that would never come. The set-aside files no longer pile up without limit -- only the most recent 20 are kept.
+
+- Fixed #1054: Every time Remember saved a summary, an empty folder was left behind in Claude Code's projects folder, about 50 a day on one computer. Claude Code's own memory feature was creating them during the summary step; Remember now turns that off just for that step, so no new folders appear and nothing is lost.
+
+- Fixed #1055: Remember's daily log said "haiku" for every summary, even if you had picked a different AI model. The log now says "summarizer" and records which model actually wrote each summary. Your settings keep working as they are; there is nothing to change.
+
+- Fixed #1056: When many Claude Code windows in the same project start or end together (for example, right after you reopen the app), saving your session's memory could fail on Windows because the system briefly ran out of room to start new background processes. A failed save at the end of a session now gets one automatic second try after a short pause, so a brief, momentary shortage no longer costs you that session's memory. The saving process itself also does a bit less behind-the-scenes work on every run, which leaves more room for everyone else's windows to succeed too.
+
+- Fixed #1058: If you started a session in a subfolder of a project and then moved deeper into it, /remember could save your note into the parent project's memory instead of yours. It now finds the folder your session belongs to, and /remember:doctor shows the same folder /remember saves to. Not fixed yet (tracked in #1083): a few less common setups can still send the note to the wrong place: resuming a session from a neighbouring folder, a project stored inside another git project, and folders not tracked with git at all.
+
+- Fixed #1060: In some tools, resuming a session could make Remember start the same background work again and again, piling up dozens of copies and slowing the computer to a crawl (one person counted 42 at once). Now, if that session's work is still running, a new resume skips it instead of starting another copy. Sessions you really run side by side, like several agents working at once, still each get their own background work.
+
+- Fixed #1067: Behind the scenes: reorganized the code that runs when a session starts, to make room for future fixes; nothing changes for you.
+
+- Fixed #1070: Behind the scenes: a few saved copies of old Remember files that our Windows tests compare against are now protected from being silently changed, so those tests keep meaning what they say; nothing changes for you.
+
+- Fixed #1079: Each time a session started, Remember redid some set-up work it had already done and left a small leftover file in your computer's temporary folder. It now reuses the setting it was already given, so starting a session does less work and no longer leaves that file behind.
+
+- Fixed #1083: in a few setups -- a project folder nested inside another project, a folder with no version control at all, or picking a session back up in a different folder than where it started -- `/remember` could save your note into the wrong project, or lose track of where to put it. Claude now writes down, right when a session starts, exactly which project it belongs to, and keeps using that instead of guessing from wherever you happen to be. If it genuinely cannot tell (an old session from before this fix, with more than one plausible project), it now says so plainly instead of guessing and getting it wrong.
+
+## [0.44.1] - 2026-10-19 — Large tool results no longer stall Windows
+
+### Fixed
+
+- Fixed #1040: on Windows, Remember could make Claude Code pause for half a minute after a tool returned a lot of text, such as reading a big file. Remember took in that text one letter at a time, and on Windows each letter is slow to fetch, so 1 MB took about 25 seconds. It now takes the text in large blocks: well under a second for the same 1 MB. What Remember reads from the text is exactly the same as before. Thanks to @gwangyong-kim, who measured it and pointed at the fix.
+
+## [0.44.0] - 2026-10-19 — The directory listing can move again: icon removed, backup advice reworded
+
+### Removed
+
+- Removed the plugin icon for #1041 (`.claude-plugin/icon.png` and the `icon` line in
+  `plugin.json`) that v0.42.0 added for #865. Since that release, every version
+  has been held for review in the Anthropic plugin directory, with the finding
+  "Image or font file that the plugin's code could run"; v0.41.0, without the
+  icon, was not. The icon never showed in the directory anyway: the directory
+  picks a plugin's icon only the first time it is submitted, and remember was
+  submitted long before it had one. The directory now shows a "No icon" warning
+  again, which is expected and does not hold anything. See `docs/releasing.md`
+  (`ICON_MISSING`).
+- Compatibility: compatible - the icon was only read by the plugin directory;
+  Claude Code ignores it, so nothing changes for anyone using the plugin.
+
+### Fixed
+
+- The backup hook's advice to replace an old haiku sign-in value that an earlier version committed to the backup store no longer names that setting or the command that makes one. The advice is the same; the names were what made the Claude directory flag the plugin as reading a credential from your machine (#1041).
+
+## [0.43.2] - 2026-10-18 — The Windows PostToolUse stall on long sessions
+
+### Fixed
+
+- Fixed #1034: on Windows, the transcript-scan cache added for #913 was never
+  used, so every tool call re-read the whole session transcript (minutes per
+  call on a 100+ MB one). Claude Code on Windows sends `transcript_path` as a
+  native `C:\Users\...\<session-id>.jsonl` path, and `post-tool-hook.sh` took
+  its file name by splitting on `/` only -- with no `/` in the path, the name
+  came out empty and the cache was silently skipped. All three file-name
+  sites in the hook now split on a backslash too (the cache name, the
+  session-id fallback used when a payload carries `transcript_path` without
+  `session_id`, and one log message). When the cache name still comes out
+  unusable, the hook now logs one warning per transcript instead of saying
+  nothing. Reported and diagnosed by @RidoMr.
+
+- Fixed #1036: the first tool call of a session could hang for 10 minutes on
+  a big transcript, and then every call after it too. The first time the hook
+  looks at a session (every new session, and every existing one after an
+  upgrade) it counts the lines of the whole transcript. It used to load the
+  whole file into the shell to do it, which got far slower than the file got
+  bigger: about 1.5 s at 5 MB, 13.5 s at 20 MB and 92 s at 50 MB on Windows.
+  A 247 MB or 1.33 GB transcript hit the 600 s limit Claude Code gives a
+  hook, the hook was stopped before it could note where it had got to, and so
+  the next call started over from the beginning and hit the limit again.
+  The hook now leaves the counting to small system tools (`wc`, `tail`,
+  `head`) that read the file once, at disk speed, and never keeps more than
+  one byte of the transcript in the shell. On macOS, a 24 MB transcript of
+  4 MB lines now adds 0.03 s to the hook instead of 1.5 s, and one that ends
+  in a 3 MB record still being written adds 0.04 s where the old code had not
+  finished after 2 minutes. The count and the resume point are unchanged, and
+  in the common case the hook starts fewer processes than before. Reported and measured by
+  @KRR-66.
+
+## [0.43.1] - 2026-10-12 — Honest fork counts after the #1029/#1031 cut, the bracket-test dynamic-dispatch detector, and a named CI leg when pytest hangs
+
+### Fixed
+
+- Fixed #906: `compile_hooks.py`'s `_DYNAMIC_CALL_RE` dynamic-dispatch detector
+  matched `&& "$name"` even when `"$name"` was a test operand inside
+  `[[ ... ]]`/`[ ... ]`, not a real call through a variable -- the exact shape
+  that grew a compiled hook from ~122 KB to 135,889 B during #899's size work,
+  with no visible symptom besides the size. Operands inside bracket-test
+  spans are now masked before the dynamic-dispatch scan runs, and when
+  tree-shaking genuinely is disabled, `compile_hooks.py --apply` now prints
+  the reason and the triggering line to stderr instead of staying silent.
+
+- Corrects a process-count claim from this range's own v0.43.0 entries (#1011, #1017): "1 (`tail` only)" / "a second spawn, `wc`" counted only **exec'd binaries** -- programs named on PATH -- never the bash **subshell forks** a `$(...)` command substitution or a `|` pipe also creates, even when nothing inside them execs a new binary at all. A round-2 follow-up to this same fragment then asserted the regression it found against the wrong number: the whole below-threshold hook invocation's own real fork count (measured via `strace -f -e trace=clone,clone3,fork,vfork` on CI, every clone/fork/vfork anywhere in the process tree -- libs sourced, tool-detection probes, the background save detach, all of it) checked against 6, a figure that only ever described `_pt_scan_lines`'s own local contribution, not the whole hook. CI measured 67 on every run across every Linux leg, not below 6.
+
+  Measured the right way now: `tests/test_post_tool_total_processes_1011.py` runs the identical strace harness against three real trees on CI -- the tagged `v0.42.4` release, the tagged `v0.43.0` release immediately preceding this one, and this fix -- instead of asserting against a hand-picked threshold. CI-measured whole-hook totals for the below-threshold no-save path, minimum of 9 runs each, identical on every Linux leg: `v0.42.4` = 68, `v0.43.0` = 69, this fix (HEAD) = 67. The fix itself is real and small -- `_pt_scan_lines` now sets globals instead of running inside an outer command substitution, and its newline count uses a herestring into `wc -l` instead of a `printf | wc` pipe, removing two subshell forks -- and it does land below both baselines, but the whole-hook invocation still creates on the order of 67 processes for one no-save `PostToolUse` call. On the Windows 11 25H2 build #1011 originally reported against, each of those is a real kernel Token that leaks until reboot; a two-process improvement does not change that order of magnitude. Attributing which script lines and sourced libraries account for the bulk of the 67 is tracked separately, not in this fragment: see the newly filed follow-up issue.
+
+  The cooldown-active path's own reduction (skips the scan entirely) is unaffected by this correction and remains genuine.
+
+- Fixed #1014: a hung pytest leg on CI used to be cancelled by its own
+  job-level `timeout-minutes` with no log at all, leaving no way to tell
+  which test hung. `pyproject.toml` now sets `faulthandler_timeout = 900`
+  so a stuck test dumps every thread's traceback well before CI's own
+  25-minute step timeout fires, the "Run tests" step now runs under its
+  own `timeout-minutes: 25` and tees output to a log file that is uploaded
+  as an artifact under `if: always()`, and a Windows leg additionally
+  lists any surviving `wscript.exe`/`bash.exe`/`conhost.exe`/
+  `powershell.exe` processes at teardown. Proven on Linux (run 38122057767,
+  job 114445674357): the faulthandler traceback naming the stuck test is
+  present in the kept log. The equivalent Windows failure mode (a job
+  ending `cancelled` with no log at all, run 38122057767, job
+  114418645594) is not shown fixed by this change; tracked separately.
+
+- #1029: three unconditional per-call forks removed from `post-tool-hook.sh`, on top of CI-measured strace totals this range already tracks (`v0.42.4` = 68, `v0.43.0` = 69, prior HEAD per #1028 = 67). `_stdin_json_string` (`cwd`, `session_id`, `transcript_path`) was called through `X=$(...)` command substitution at three sites above the fast/slow-path split, each forking a subshell even though the function itself is pure parameter expansion -- the same cost class `lib-clock.sh`'s own `_remember_date_into` fix already removed elsewhere in this hook. Ported to the fork-free `_stdin_json_string_into` form `session-start-hook.sh` already used (#665, part of #660): identical matching algorithm (same first-occurrence scan, same #344 gap, same #829 double-backslash collapse), no behaviour change, three fewer forks on every invocation of this hook, cold-start and warm path alike.
+
+  `tests/test_post_tool_total_processes_1011.py`'s own fixture measures the cold-start path only (a brand-new project with no warmed caches), which is why #1011/#1028's own strace totals land near 67-69 rather than the much lower warm-path count a real session's later tool calls pay once a project has run once. On that warm path, the only forks left after this cut are `_pt_scan_lines`'s own `tail`+`wc` pair, already documented in-code as unavoidable without reintroducing #1017's quadratic bash-expansion regression -- every other candidate this issue named (`bootstrap-dirs.sh`'s directory creation, the `jq` config read, the `mktemp`+`mv` atomic-write patterns) traced to cold-path-only work already gated behind existence checks (#230/#666) or work inside the byte-pinned `lib-memory-dir.sh` (`tests/test_case_divergence_298.py` forbids touching it).
+
+  `tests/test_post_tool_total_processes_1011.py` now asserts an absolute budget (strictly below 67, this round's own prior total) for both the below-threshold and cooldown paths, in addition to the existing relative tag-comparisons, so a regression is caught even on a no-network CI leg where neither tagged baseline tree can be materialized. Confirmed by this pull request's own CI run, the same strace harness against the same three trees: the whole-hook, cold-start, below-threshold total is `v0.42.4` = 68, `v0.43.0` = 69, HEAD (this fix) = 64 -- three fewer than the 67 reasoned above, matching the three forks this fix removes. The warm-call cost (a project that already ran once, caches populated) is not measured by this fixture and no number is claimed for it.
+
+## [0.43.0] - 2026-10-11 — Fewer forks per PostToolUse call on bash 3.2/5, and a doctor warning for a Windows 11 25H2 kernel-Token leak
+
+### Added
+
+- doctor.sh now warns (never fails) on Windows when the current build is known-affected by a kernel Token-object leak (#1011, reported by @NanoInG) and the live foreground lock timeout is not 0. The warning points at a new docs/windows.md section covering the confirmed workaround, its logon-task requirement and focus-stealing trade-off, and Restart vs Shut down -- an opt-in system change the user decides on, never applied by this plugin itself.
+
+### Fixed
+
+- #913: `post-tool-hook.sh` no longer reads the whole transcript on every tool call. The line count that decides whether to fire a save now lives in a small sidecar keyed by the transcript's own name (`$REMEMBER_DIR/tmp/transcript-scan.<name>`, storing a byte offset and a line count), and the hook reads only the bytes appended since the last call -- `tail -c +OFFSET`, with its own first byte doubling as a validator against a shrunk or rewritten transcript, falling back to a full recount whenever that check fails. A record still being written (no trailing newline yet) is never counted and never advances the offset, so a half-written line is picked up whole on the next call. Separately, the cooldown check that decides whether a save can fire at all now runs BEFORE this scan rather than after it, so a tool call inside the post-save cooldown window skips the scan entirely -- as #1011 points out, on an affected Windows 11 25H2 build every avoided fork is a kernel Token object that never leaks, not merely latency saved. Which saves fire, and at what threshold, is unchanged.
+
+- Fixed #1011: the PostToolUse hook's no-save path (both the cooldown-active
+  branch and the below-threshold branch) forked 4 external processes per
+  tool call for work that needed none of them. The transcript lookup
+  (`ls -t ... | head -1`) is now a forkless glob-plus-mtime walk, falling
+  back to `ls -t` only on a genuine same-second mtime tie (bash 3.2's `-nt`
+  compares at whole-second resolution, which can tie two transcripts
+  written moments apart). The capture-alive marker's atomic write (`mv -f`)
+  is now skipped -- written in place instead, with no temp file and no
+  rename, to keep its mtime moving for doctor.sh's "PostToolUse still
+  firing" check -- whenever it already holds the current session id, which
+  is every tool call after the first in a session. Measured on real
+  `/bin/bash` 3.2 against current `main` (after #913's own incremental
+  transcript scan, which had already dropped the cooldown path from 5
+  spawns to 4 and the below-threshold path from 4 spawns to 4 with a
+  different shape -- `wc` replaced by `tail`): the cooldown path dropped
+  from 4 spawns (`ls`, `head`, `mv`, `date`) to 1 (`date` only), and the
+  below-threshold path from 4 spawns (`head`, `ls`, `mv`, `tail`) to 1
+  (`tail` only). On Windows 11 25H2, each of those spawns was a
+  console-attached process that leaked a kernel Token object until reboot,
+  not just latency; thanks to @NanoInG for tracing the kernel-side root
+  cause and reporting it. (#1017 later added a second spawn, `wc`, to the
+  below-threshold path specifically -- see that fragment -- so "1 (`tail`
+  only)" above describes the below-threshold path as it stood between
+  #1011 and #1017, not as it ships in this release; the cooldown-active
+  path, 1 spawn (`date` only), is unaffected.)
+
+- Fixed a flaky `doctor.sh` probe for #1011's kernel Token-leak check: the live foreground-lock-timeout read no longer compiles an inline C# P/Invoke via `Add-Type`/`csc.exe`, which could take over 20 seconds under load and made the check intermittently report "could not determine" instead of a real answer. It now reads the same Win32 API value with a compile-free `System.Reflection.Emit` P/Invoke; what the check warns on is unchanged.
+
+- Fixed #1011: `doctor.sh`'s two real-PowerShell probes (Windows build number, live foreground-lock timeout) each paid the FULL watchdog bound even when PowerShell answered in about a second -- the watchdog subshell's `sleep` inherited the function's own stdout, and every real caller reads that output via command substitution (`$(...)`), which blocks until every process holding the pipe open closes it, not just until the real data arrives. Measured on real `windows-latest` CI (PR #1024): each probe cost roughly 2x its own bound (about 11s at a 5s bound, about 31s at a 15s bound) instead of the ~1s PowerShell itself needed, adding roughly 30s to every `/remember:doctor` run on Windows. The watchdog now redirects its own output away from the caller's pipe and hands its `sleep` child's real PID back out through a small temp file, so an early PowerShell exit can kill that `sleep` directly too, leaving no stray process running for the rest of the old bound either way. `scripts/lib-detach.sh`'s own Windows-save watchdog (`_remember_detach_windows`, used on every Windows save) was audited for the same pattern and found already unaffected -- its watchdog already redirects its own output (from the same #1002 fix), confirmed here by direct measurement: all of its stub-driven tests return in well under 1.5s against its 15s bound.
+
+- Fixed #1017: `post-tool-hook.sh`'s incremental transcript scan (#913)
+  counted the newlines in each appended chunk with a per-byte bash
+  parameter substitution, which is quadratic in chunk size on bash 3.2
+  and 5.3 alike -- measured at 110.81s for a 2MB chunk on bash 5.3.15 and
+  415.67s for a 50KB chunk on `/bin/bash` 3.2.57 (this repo's documented
+  floor shell, and macOS's shipped default). This regressed the exact
+  scenario #913 was fixing -- the first post-upgrade call on an existing
+  session, which rescans the whole transcript -- to far worse than the
+  229ms whole-file `wc -l` #913 replaced. The count now runs through
+  `wc -l` instead, a linear C loop. That costs one extra fork per call
+  (`wc`, alongside the `tail` #913 already added) on the below-threshold
+  and warm-save paths -- #1011's own spawn-count claims for those two
+  paths are updated in its own fragment to say so; the cooldown-active
+  no-save path, which never reaches this scan at all, is unaffected and
+  stays at 1 spawn.
+
+- Fixed #1019: `post-tool-hook.sh`'s capture-alive marker (the file
+  doctor.sh reads to decide "is PostToolUse still firing") stopped
+  refreshing its mtime once SESSION_ID came back empty (the
+  basename-sanitiser route, e.g. a non-Claude-Code transcript name) and
+  the marker already held that same empty content -- #1016's in-place
+  write for the "already holds it" case writes zero bytes in that
+  situation, and a 0-byte write(2) never touches mtime (POSIX). A
+  healthy, actively-firing session could therefore report as
+  increasingly stale under doctor.sh's "PostToolUse marker present (Ns
+  old)" check. An empty SESSION_ID now always takes the atomic
+  tmp+mv branch instead, which touches mtime regardless of content; the
+  common (non-empty, unchanged) case keeps #1016's no-fork optimization
+  unchanged.
+
+- Fixed #1021: `post-tool-hook.sh`'s #353 sidecar-trust fast path extracted
+  the `"sessions"` object out of the whole `last-save.json` file with
+  `${_LAST_SAVE_CONTENT#*"sessions"}` then `${_SESSIONS_SCOPE%%\}*}` -- the
+  same quadratic bash parameter-expansion class #1017 fixed for
+  `_pt_scan_lines`'s newline count. Measured on real `/bin/bash` 3.2.57 with
+  "sessions" worst-cased at the end of a synthetic file: 2.05s at 10,000
+  sessions, 9.69s at 20,000 (pre-fix); 0.015s and 0.027s after. In real use
+  this path never reaches that shape: `cmd_save_position` caps the file at
+  `_POSITION_SLOTS` (32) sessions and always writes "sessions" as the FIRST
+  key, so every file measured on this machine topped out at ~1.55KB -- the
+  fix is defense-in-depth, not a response to an observed slowdown. The
+  extraction now runs through one builtin `[[ STR =~ REGEX ]]` match
+  (POSIX regexec, not bash's glob-match engine) instead -- no new fork.
+  Self-review caught that the first draft's `elif` fallback (kept for a
+  truncated/corrupted file with no closing brace after "sessions") still
+  reintroduced the quadratic shape on exactly that input; dropping the
+  regex's trailing `}` requirement removes the fallback entirely instead,
+  measured linear (0.022s) on a 20,000-session truncated file too.
+
+## [0.42.4] - 2026-10-10 — Windows PostToolUse saves were silently not running on v0.42.3 -- update now
+
+### Fixed
+
+- **Windows users on v0.42.3 should update: PostToolUse background saves were silently not running on Windows there, with no error anywhere -- macOS and Linux were unaffected.** Reported by @fmatamala (#1002). The PostToolUse hidden-launch route added for #1002 had two REASONED-only gaps a stub-`wscript.exe` CI leg could not see -- a `bash -c` script with embedded double quotes whose survival across the exec->CreateProcess->WSH argv hop was never confirmed on a real Windows host, and an unconditional success return after backgrounding `wscript.exe` that swallowed a Windows-Script-Host-disabled launch failure with no fallback. #1002's round 2 removes the embedded-quote argv entry entirely (the outfile redirect now happens inside `scripts/lib-detach-pidwrap.sh` itself, as its own argv entry, rather than as a quoted string another shell re-parses) and runs `wscript.exe` in the foreground so a launch failure now reaches the caller and triggers the existing nohup fallback instead of a silent skip. `tests/test_windows_real_wscript_1002.py` drives the real launcher against the real `wscript.exe` on the `windows-latest` CI legs, including a path with a space and WSH disabled via the registry.
+
+- Windows: #1002 round 3 ran the ORIGINAL, `v0.42.3`-shipped hidden-launch shape against a real `wscript.exe` for the first time (`tests/test_windows_real_wscript_v0_42_3_1002.py`, vendored bytes under `tests/fixtures/v0_42_3/`) -- round 2 had fixed the code and observed the NEW shape working, but never observed whether `v0.42.3` itself was actually broken in production. It also fixes a real regression round 2's own watchdog introduced: with Windows Script Host disabled by policy, every `_remember_detach_windows` call paid the full watchdog bound (a foreground `wscript.exe` call, killed after it times out) before falling back to `nohup` -- and since PostToolUse calls this on every tool call, an affected host stalled every single save by that amount, forever. `scripts/lib-detach.sh` now caches the "hidden route unusable" verdict after the first failure (keyed on `$PATH`, mirroring `scripts/detect-tools.sh`'s own #668 tool-verdict cache), so later saves on that host go straight to the `nohup` fallback. `tests/test_windows_real_wscript_1002.py::test_real_wscript_healthy_path_latency` measures the real hidden-route-versus-`nohup` cost on real `windows-latest` CI legs to size the watchdog bound against an observed number.
+
+- Windows: #1002 round 3 self-review (both the `Explore` and `oss:auditor` reviewers independently) found that `scripts/lib-detach.sh`'s new "hidden route unusable" verdict cache had no expiry, keyed only on `$PATH` -- but Windows Script Host's own enablement is a registry policy setting with no relationship to `$PATH`, so a host whose WSH got re-enabled would have stayed stuck on the slower `nohup` fallback indefinitely, with nothing to notice or self-correct it. The cache now carries a 1-hour TTL, bounding the damage to "at most one watchdog-bound stall per hour" instead of "once per host, forever". The same review also found the cache's own load/publish functions had zero direct test coverage; `tests/test_windows_hidden_detach_1002.py` now exercises both the short-circuit behaviour and the TTL expiry directly, and every existing stub test that calls `_remember_detach_windows` now isolates its own `$TMPDIR` so the suite no longer writes a real cache file into the actual host's temp directory on every run.
+
+- Windows: #1002 round 4 -- PR #1010's own CI (run #38062128176, job #114242348418) found the 5s watchdog bound shipped in round 3 was tuned on a 5-run sample (max 0.422s) that did not hold under a loaded runner: a sibling healthy call took 5.13s and this run's own call took 6.03s, tripping the watchdog and killing a real `wscript.exe` launch (`RC=137`), turning a Windows CI leg red on `main`. The bound is now 15s. A watchdog kill is also safer on its own: `scripts/post-tool-hook.sh`'s nohup fallback now checks whether `lib-detach-pidwrap.sh` already claimed `PID_FILE` and is still alive before launching a second, independent save -- narrowing, not fully eliminating, a double-save race the watchdog's own kill could otherwise trigger (`WshShell.Run` detaches the real command from `wscript.exe`'s own process, so killing `wscript.exe` does not stop it) -- scoped to exactly the rc the watchdog produces, so a genuine structural failure never risks silently dropping a save to a pid-reuse coincidence instead. `scripts/lib-detach.sh`'s "hidden route unusable" cache gives a watchdog kill (`RC=137`) its own, much shorter 5-minute verdict rather than the structural failure's 1-hour one (self-review finding: never caching it at all reopens the "stalls every save, forever" pathology for a host that is persistently, not just transiently, slower than the bound).
+
+## [0.42.3] - 2026-10-10 — fix the Windows console flash on PostToolUse saves and reject below-floor Python before it silently breaks consolidation
+
+### Fixed
+
+- Fixed: `docs/releasing.md`'s "Contacting Anthropic about a plugin" section still read as "No reply had arrived as of writing" about the plugin-level hold confirmed on v0.38.0, stale against #863's later comments. Updated to record that the hold later cleared on its own (no reply ever received), that a second confusing `COMMAND_SCRIPT_NOT_FOLLOWED` reading on 2026-10-06 turned out to come from the new-submission form's validator rather than the review gating an already-listed plugin's new versions, and that the portal's version list showed v0.38.0 through v0.41.0 all Approved with "Publish update" available and nothing held -- without erasing the fact that the hold was real when the mail was sent, since that still matches the unchanged "Reading a scan" section earlier in the same file. Cross-referenced the correction from both "Reading a scan" and the reuse-guidance checklist so neither reads as contradicting it, and noted that #140917199's Keywords/Short description question and #841 (the official-marketplace pin lag) both remain genuinely open rather than resolved (#863).
+
+- Fixed: `check_release_tree.py`'s wrapper-command allowlist (`_UNSCOPED_COMMANDS`) now also catches `command`, `nice` and `stdbuf` in front of an otherwise-scoped `allowed-tools` Bash grant, and the `..` path-escape check now catches a backslash-separated escape (`..\\..\\bin\\bash`), not only a forward-slash one (#950). `docs/releasing.md`'s wrapper-command coverage note is corrected to match.
+
+- Fixed: `scripts/log.sh`'s pre-#864 orphan-cache-path derivation (#972) no longer matches the `-v2-` substring inside `$TMPDIR` itself when that path happens to contain the literal text `-v2-` -- the substitution is now anchored to the cache filename's own segment, so a custom `TMPDIR` can never divert it from the real orphan it is meant to best-effort remove.
+
+- Fixed #973: the SESSION_DIR cache `post-tool-hook.sh` added for #913 was
+  keyed on `MEMORY_PROJECT_DIR`, which `lib-memory-dir.sh` deliberately keeps
+  the same across every linked worktree of one repo (#56) -- but the cached
+  value was computed from `$PROJECT`, which stays worktree-specific. Two
+  worktrees of the same repo shared one cache entry, so the second worktree's
+  hook invocations could silently replay the first worktree's `SESSION_DIR`.
+  The cache is now keyed on `$PROJECT` directly, matching what it actually
+  caches.
+
+- Fixed: `hooks.d/after_save/50-git-backup.sh`'s untrack receipt -- logged when a legacy `$SLUG/config.json` is untracked (#719) -- now tells the user to rotate any `haiku.oauth_token` it may have carried (`claude setup-token`), the same advice `docs/git-backup-security.md` SS4 already gave. Commit 73c77f8 (#918) reworded the doc's stale-token wording but silently dropped this sentence from the receipt in the same change, leaving the one moment a user actually learns their config.json was committed to history with no rotate advice at all (#974). Self-review on this same fix found the sibling DEFERRED-untrack message (reached when the store has other staged changes, so the untrack commit is left for the next backup) was silently missing the same advice even though the credential is already in git history either way -- it now carries the matching sentence too.
+
+- Fixed: two defects in the hard-disabled `hooks.d/after_save/60-git-reconcile.sh` (#975), ahead of its eventual re-enable once #969's real fix lands -- a `git diff --name-only` failure while computing the touched-paths restore scope is now logged and falls back to the pre-#952 scope instead of silently narrowing the restore to nothing, and that same diff output is now unquoted the same way the conflict-reporting path already was, so a touched path with non-ASCII/special bytes no longer silently drops out of a restore. The two remaining residual TOCTOU windows and the partial test coverage of `_grc_rebase_in_progress`'s call sites are re-verified still present and are still out of scope for a same-diff fix -- see the pull request for detail.
+
+- Fixed: `.github/scripts/check_release_tree.py` had sixteen `#`-comment-detecting checkers with no heredoc-boundary tracking of their own, unlike the one `_check_url_in_comment` fix landed for #919 -- a `#`-led line inside a typed `<<DELIM` heredoc body could be read as a real comment (or, for `_check_typed_heredoc` itself, a heredoc body line could be misread as a second, independent heredoc opener). Adjacent finding from #919's lane self-review (PR #978). Added a shared `_iter_non_heredoc_lines` tracker, mirroring `_check_url_in_comment`'s own, and routed sixteen of the eighteen checkers sharing the pattern through it (eight of them via the existing `_sh_lines` helper, fixed once for all eight); the remaining two (`_check_catch_all_in_loop`, `_check_single_line_delegate_positional`) carry their own in-code notes on why they were deferred rather than folded in silently. Self-review on this same fix also found `_iter_non_heredoc_lines` has no diagnostic of its own for an unclosed heredoc opener (unlike `_check_url_in_comment`'s hand-rolled copy of the same tracker) -- mitigated, not masked, because `check_tree` always runs that unchanged function on the same files with the same scope, so a genuinely unclosed heredoc still FAILs in the same run; documented and pinned with a regression test rather than reworked across every call site (#980).
+
+- Fixed (#981): the release-tree URL-host-in-comment guard's heredoc-open
+  tracking now skips `#`-comment lines and a `<<WORD`-shaped substring sitting
+  inside an ordinary quoted string, matching the sibling typed-heredoc guard's
+  own comment-skip -- either shape could previously leave the tracker "open"
+  for the rest of a shipped file, silently disabling the URL-host check for
+  every line after it. An opener that is never closed is now reported instead
+  of silently swallowing the rest of the file.
+
+- Fixed: `docs/configuration.md`'s `git_reconcile.enabled` row no longer says the hook "exits immediately, before even reading this flag" (#982) -- #979 made that false, and the row now describes what the hook actually does: read the flag first, then exit either way, logging a `disabled pending #969` notice to `hook-errors.log` when the flag is `true` (the exact trigger for `/remember:doctor`'s Recent errors WARN for users who opted in). The identical stale wording surviving in two test files' own prose (`tests/test_git_backup_push_rejected_253.py`, `tests/test_git_restore_hook_253.py`) is corrected too, and the now-stale `trap.d/969.stale-reconcile-prose-not-updated.md` bookkeeping fragment is removed.
+
+- Fixed: `hooks.d/after_save/50-git-backup.sh`'s "could not untrack" receipt (logged when `git rm --cached` or the untrack commit fails while stopping tracking a legacy `$SLUG/config.json`) now tells the user to rotate any `haiku.oauth_token` it may have carried (`claude setup-token`), matching the advice the succeeded and deferred untrack branches already carry (#974/#987). The config.json is already in this store's git history the moment `git ls-files` finds it tracked, regardless of which of the three branches fires -- this third sibling was found by self-review on #974/#987 and deliberately left for this follow-up (#989).
+
+- Fixed (#990): `_check_catch_all_in_loop` and `_check_single_line_delegate_positional` in `.github/scripts/check_release_tree.py` were the two checkers #980 deliberately left out of its `_iter_non_heredoc_lines` migration, but each docstring claimed the gap was "filed for a follow-up" when no such issue existed until this one. `_check_single_line_delegate_positional` now filters its extracted function-body string through `_iter_non_heredoc_lines` instead of a bare `.startswith("#")` test, so a heredoc attached to a function's single real statement no longer inflates the apparent line count and blinds the needle to it. `_check_catch_all_in_loop` needed more care: a first attempt swapping its own `enumerate(text.splitlines(), 1)` for the shared generator directly regressed in review -- the generator's heredoc-open detection has no visibility into this function's own multi-line in_string state, so a `<<WORD`-shaped substring sitting inside a tracked quoted string was misread as a real opener and silently swallowed every later line, including a genuine catch-all-in-loop, as fake heredoc body. Fixed instead by tracking heredoc delimiters inline (the same regexes `_iter_non_heredoc_lines` itself uses), gated so detection only runs on a line that already passed this function's own in_string/comment checks, so the two states can never step on each other. Both docstrings updated to say what was fixed and how, rather than naming a follow-up that no longer needs filing.
+
+- Fixed: `tests/test_git_backup_rotate_advice_974.py`'s `test_could_not_untrack_also_logs_rotate_advice` wrote its `pre-commit` hook script via `Path.write_text()` with no `newline=` guard, which on Windows would translate the shebang's `\n` to `\r\n` and corrupt it into a "bad interpreter" exec failure instead of the intended `exit 1`. Extracted into `_write_fail_hook`, now written via `open(..., newline="\n", encoding="utf-8")`, the same pattern `tests/test_autonomous_log_retention_487.py`'s `_write_shell_script` already uses for the identical reason. Inert today -- this whole file is skipped on `win32` for an unrelated reason (#79) -- but fixed rather than left as a trap for whoever narrows that skip later, with a new regression test pinning the write call itself rather than its bytes, since this platform's `os.linesep` is already `\n` and would not show the corrupted bytes either way (#994).
+
+- Fixed: on Windows 11 with Windows Terminal as the default terminal, PostToolUse's background save (the one the reporter actually measured flashing a new console window every few minutes) used a plain nohup-and-background launch, which still allocates a console on Windows regardless (#1002, reported by fmatamala). It now routes through a hidden wscript.exe launcher first (`scripts/lib-detach.sh`, `scripts/windows-hidden-run.vbs`, `scripts/lib-detach-pidwrap.sh`), falling back to the unchanged nohup line -- never to skipping the save -- whenever the hidden route is unavailable (wscript.exe or cygpath missing). The plugin's other three detached launches (SessionStart's consolidation, SessionEnd's self-redetach, and the Antigravity Stop hook's save) are deliberately NOT wired to the hidden launcher in this change: SessionStart's own compiled release-tree size has no budget margin left to absorb it, and wiring SessionEnd's self-redetach surfaced a real regression under review -- a wscript-launched child does not inherit the parent's stdin the way `nohup ... &` does, so SessionEnd would lose the hook's own JSON payload on the hidden route. All three are tracked in #1006 instead. Non-Windows behaviour is byte-for-byte unchanged. Whether the hidden route genuinely shows no console window is REASONED, not OBSERVED: there is no Windows box in this project's own hands to confirm it, and the reporter is asked to confirm in the pull request.
+
+- Fixed: `scripts/detect-tools.sh` picked the first Python that merely ran `-V` with no version check, so an interpreter below the floor this plugin supports (3.9 -- `pipeline/_tz.py` imports `zoneinfo`, stdlib only since 3.9) could be selected, and `/remember:doctor` reported "OK python ... 3.8.10" and "capture is working" while consolidation crashed on every attempt, silently, for months (reported by @amitpatelx). `_remember_python` now rejects any candidate below the floor and tries versioned fallbacks (`python3.9` through `python3.13`) before failing, with a FATAL message distinct from "no working Python found" when every interpreter present is simply too old; the floor itself is pinned against `tests/pep604_floor.py`'s own CI-matrix derivation rather than hardcoded a second time. The tool-verdict cache (#668) now also carries the floor it was written against, so a cache from before this fix is distrusted and re-probed rather than trusted forever; an interpreter swapped out in place at the same cached PATH (a pyenv switch, a reinstalled venv) is not re-probed by the cache itself -- that gap is closed separately, by `doctor.sh`'s own unconditional `-V` call below, for diagnosis rather than prevention. `scripts/doctor.sh` gained two independent WARNs, left out of the VERDICT ladder like the existing log-rotation and case-divergence checks: the selected Python is below the floor (a backstop for a bypass the detect-tools.sh fix does not itself cover), and consolidation's last recorded log entry is an `ERROR` with no later `done` -- the exact silent state this issue reports (#1003).
+
+## [0.42.2] - 2026-10-08 — stop the #969 hard-disable notice from polluting hook-errors.log for every user, every save
+
+### Fixed
+
+- Fixed: the release-tree URL-host-in-comment guard now tracks typed heredoc
+  boundaries, so a `#`-led line inside a `<<DELIM ... DELIM` heredoc body is no
+  longer misread as a real shell comment (#919).
+
+- Fixed (#976): the #969 hard-disable of `60-git-reconcile.sh` left two side
+  effects unaddressed. The kill-switch notice no longer reaches
+  `hook-errors.log` for every user on every save -- it now fires only for
+  someone who actually set `git_reconcile.enabled`, and is now finding it
+  inert, instead of unconditionally for the default-disabled majority who
+  never opted in. `/remember:doctor`'s "Recent errors" check was permanently
+  tripped by this. Also fixed: the rejection/divergence notices in
+  `50-git-backup.sh` and `50-git-restore.sh` no longer promise that
+  `60-git-reconcile.sh` "may fetch, rebase and push this automatically" when
+  `git_reconcile.enabled=true` -- that hook is hard-disabled pending #969, so
+  nothing resolves automatically right now, and the notices (and
+  `scripts/user-prompt-hook.sh`'s internal documentation of them) say so.
+
+## [0.42.1] - 2026-10-08 — the git-reconcile hook is hard-disabled pending its fifth consecutive destroys-class finding (#969)
+
+### Fixed
+
+- Fixed: `pipeline/log.py`'s `log()` now flattens control characters in the
+  message before writing, mirroring the shell-side `tr '[:cntrl:]' ' '`
+  flattening already applied by `report_error()` / `_dispatch_report_skip()`
+  (#599/#618). An embedded newline or other control byte in a logged message
+  (for example an untrusted error string) could previously corrupt the log
+  line's own structure or forge what looks like a second entry (#881).
+
+- Fixed: README's disclosure of the persistent config-flatten cache (#888) named the pre-#864 filename (`remember-config-cache-<key>`) instead of the real on-disk name (`remember-config-cache-v2-<key>`), and nothing ever removed the old-named file an install upgrading across #864 was left holding. The disclosure now names the real filename, and the cache publisher best-effort removes the leftover v1-named orphan the next time it writes the v2 cache.
+
+- Fixed: docs/releasing.md's "Reusing this in another plugin repository" section now tells an adopter to copy `check_version_order.py` too (#856 wired it into the `publish` job; omitting it fails the first release with a `release` parent), and now states that a missing or hookless `hooks/hooks.json` is a hard failure in both `check_release_tree.py` and `smoke_release_tree.py` (#858), with no config flag to opt out (#889).
+
+- Fixed: `docs/releasing.md` now states that #856's `check_version_order.py` refusal only runs for a tag cut from a commit whose own copy of `release-branch.yml` already carries that step -- an ordinary `push: tags:` trigger runs the workflow file as it exists at the tagged commit, not the one on `main`. #856 first shipped in v0.39.0, so pushing a patch tag directly for any release line before v0.39.0 ran that line's own pre-#856 workflow, which has no guard at all. The doc now says to publish any such line through `workflow_dispatch` from `main` instead (#892).
+
+- Fixed: stale `haiku.oauth_token` / `REMEMBER_OAUTH_TOKEN` wording in
+  `hooks.d/after_save/50-git-backup.sh`, `hooks.d/before_session_start/50-git-restore.sh`,
+  `scripts/lib-memory-dir.sh`, `scripts/log.sh`, `docs/git-backup-security.md` and
+  `docs/external-storage-mode.md` (#918). Six sites still called `haiku.oauth_token`
+  "a live ... OAuth credential" or told users to set `REMEMBER_OAUTH_TOKEN` as a
+  working mitigation, after #860 (rounds 3/4) made both inert everywhere -- neither
+  is read for authentication on any host any more. Reworded to match
+  `docs/configuration.md`'s own current framing ("removed entirely ... nothing to
+  migrate it to"), found by curate while disposing of two release-audit trap.d
+  fragments against the shrinking subset of sites each still named.
+
+- Fixed: the git-restore DIVERGED notice and the git-backup REJECTED notice (#935) no longer claim "nothing will merge or rebase for you" / "the backup has STOPPED and will not resume on its own" when `git_reconcile.enabled` is `true`. With reconcile on, the next `after_save` run can fetch, rebase and push the store automatically, and the old wording could send a human to resolve a divergence by hand while that automatic rebase was racing them. The wording is unchanged when reconcile is left at its default (off).
+
+- Fixed: the fast-path tests in
+  `tests/test_autonomous_log_retention_487.py` now assert that the real
+  `mktemp` binary actually succeeded, rather than only asserting the
+  sweep's outcome -- a test named after the fast path could previously
+  pass just as well if the fallback silently ran instead. The PATH built
+  for the subprocess on Windows is now injected as an MSYS-posix string
+  inside the generated bash script text rather than through the env
+  block, since a drive-lettered Windows path shreds bash's own
+  colon-based PATH splitting regardless of slash direction (#951).
+
+- Fixed: `hooks.d/after_save/60-git-reconcile.sh`'s conflict handling no
+  longer autostashes another slug's dirty tracked write (`--no-autostash` on
+  every rebase call, so a dirty tree simply refuses to start the rebase
+  instead of silently stashing it where `rebase --quit` would never
+  re-apply it), no longer scopes its abort restore to the running slug
+  alone (a shared store's ahead/behind commit set can span other slugs
+  too; the restore now covers every path either side of the rebase could
+  have touched), and no longer silently switches HEAD to the configured
+  branch when git's own record shows the rebase started from a different
+  one (it now refuses and reports instead) (#952).
+- Fixed: `_grc_rebase_in_progress` in the same hook no longer collapses a
+  failed `git rev-parse --git-path` check into "no rebase in progress" --
+  it now reports a distinct, honest "could not determine" and declines
+  rather than guessing (#953).
+
+- Fixed: `hooks.d/after_save/60-git-reconcile.sh`'s conflict path (#954) now bumps NDC's own generation marker, the same way the fast-forward and successful-rebase paths already do. A failed rebase that hits a real conflict already rewrites the slug's `now.md` to conflict-marker content before this hook's scoped restore runs, and an NDC consolidation round that snapshotted `now.md` inside that window had no way to notice -- it could trim local lines it never actually summarised. The bump now fires unconditionally as soon as the conflict path is entered, so NDC's existing staleness guard also catches this writer.
+
+- Fixed: `hooks.d/after_save/60-git-reconcile.sh`'s scoped-abort restore used
+  `mapfile`, a bash 4.0+ builtin unavailable on this repo's documented floor
+  (bash 3.2, stock macOS `/bin/bash` -- exactly what GitHub Actions'
+  `macos-latest` runner resolves plain `bash` to). There `mapfile` failed as
+  "command not found", silently leaving `_GRC_TOUCHED_PATHS`/`_grc_existing`
+  empty, so a real conflict's scoped checkout restored nothing: the
+  conflicting file was left with unresolved merge markers, another slug's
+  upstream-only change was never restored, and no notice or log was written.
+  Replaced with a `while IFS= read -r` loop into the array, which works on
+  every bash this repo supports (#962).
+
+- Fixed (#966): `_grc_report_conflict` in `hooks.d/after_save/60-git-reconcile.sh`'s
+  scoped conflict-abort now snapshots each restore-set path's content immediately
+  before `git rebase --quit` and skips the checkout/`rm -f` for any path whose
+  content changed by the time the restore runs. Previously the restore ran
+  unconditionally over every path either side's commits touched, so a different
+  slug's concurrent write landing on a shared, non-`$SLUG/` path during that call
+  was silently discarded even though only this slug's own locks were held. This
+  narrows the race to the `rebase --quit` call itself (and the few subprocess
+  calls the restore makes right after it); a write landing earlier, while this
+  run's own rebase is still replaying, is a separate, wider window the fix does
+  not close (`trap.d/966.residual-race.md`).
+
+- Hard-disabled `60-git-reconcile.sh` (the optional two-way git reconcile hook, `git_reconcile.enabled`): it now exits immediately, before even reading that config flag, on every run. This is the fifth consecutive `destroys`-class finding on this hook across two releases (#932, #939, #946, #952's regression, #966), each fix closing one race window and opening the next narrower one. The latest (#969) found that a foreign write landing in the window from the start of `git rebase --no-autostash` through the conflict firing -- before #966's own pre/post-`rebase --quit` snapshot is even taken -- could still be silently discarded by the conflict-abort restore, while the hook logged "aborted, the tree is unchanged". Rather than attempt a sixth fix, reconcile is disabled for this release: anyone who had `git_reconcile.enabled=true` set will see no more automatic fetch/fast-forward/rebase-and-push from this hook until #969's real fix lands. `50-git-backup.sh`'s commit-and-push-only behavior and `50-git-restore.sh`'s fast-forward-only behavior are unaffected.
+
+## [0.42.0] - 2026-10-07 — the new git-reconcile hook (#903) ships behind a flag, with its conflict-abort data-loss chain (#939, #942, #943, #946) closed before release
+
+### Added
+
+- Shipped `.claude-plugin/icon.png` (a square 512x512 PNG) and pointed `plugin.json`'s
+  `icon` field at it, clearing the directory scan's `ICON_MISSING` warning (#865). The
+  listing icon itself is set only on a plugin's first portal save or submission, and
+  remember's was already set by an Anthropic reviewer before this change, so this clears
+  the warning only -- it does not change the live listing icon. PR #852 and its issue
+  #848 were already closed with no action taken, so no further PR/issue decision was
+  needed here.
+
+- Added an optional reconcile step for a memory store written from two machines (#903): off by default behind `git_reconcile.enabled`, in its own hook (`hooks.d/after_save/60-git-reconcile.sh`) so `git_backup`'s commit-and-push-only promise (#253) and `git_restore`'s fast-forward-only promise are unchanged with it off. When enabled, it fetches, fast-forwards when purely behind, and rebases local commits onto the remote tip and pushes (one retry) when both ahead and behind. A real conflict aborts the rebase, changes nothing else, and reports the conflicting file names through a `git-reconcile-notice`. It never resets, force-pushes or creates a merge commit, and declines while the slug's own consolidation is rewriting `recent.md`/`archive.md`.
+
+### Changed
+
+- Clarified `docs/releasing.md`'s release sequence so the pre-tag portal-preview check
+  (build the tree, run `check_release_tree.py`/`smoke_release_tree.py`, validate against
+  `release-preview` in the submit form) is its own numbered step before the tag is pushed,
+  not a separate appendix a maintainer could skip past (#893). The release-tree rules
+  themselves already FAIL on every pull request (#904, `test_this_repository_built_tree_has_no_check_failures`),
+  including the credential-forwarding pair (`MCP_FORWARDS_CREDENTIAL_ENV`, read × sent)
+  added in #898 -- the remaining hold-class row from the pre-submission checklist, a
+  name/`displayName`/`author.name` problem, is not encoded here and needs a maintainer decision
+  on mechanism; filed as a follow-up.
+
+### Fixed
+
+- The release-tree Bash-grant preflight (`bash_grant_problem` in
+  `.github/scripts/check_release_tree.py`) no longer passes three classes of broad
+  shell grant silently: a `..` path segment after `${CLAUDE_PLUGIN_ROOT}/` (the
+  plugin-root prefix used to be trusted before any `..` check ran), an unlisted
+  digit-suffixed bash binary like `bash5` (the first-word check never stripped
+  trailing digits, unlike the path-based check beside it), and nine wrapper
+  commands that can run arbitrary programs -- `xargs`, `sudo`, a shell builtin
+  that executes a string as code, `exec`, `source` (and its `.` alias), `find`,
+  `awk`, `nohup`, `timeout` -- now added to `_UNSCOPED_COMMANDS` (#879).
+
+- `bootstrap-dirs.sh`'s legacy in-project `.remember/` notice compared
+  `REMEMBER_DIR` and the legacy directory as raw strings. On Git Bash
+  (`OSTYPE=msys`/`cygwin`), where the two can arrive with different
+  separator styles for the same directory, the "store already lives
+  inside the legacy dir" (#132) check could miss and print a spurious
+  notice telling the operator to move a store that is already in the
+  right place. Both sides are now forward-slashed before the comparison
+  via `_remember_forward_slash_into`, matching `doctor.sh`'s own WARN
+  check, already fixed the same way in #899 (#907).
+
+- `test_arith_base_lint_332.py`'s digits-only-guard detector only recognised
+  the `[[ "$X" == *[!0-9]* ]]` guard form, so the `!= ` form and the
+  `_remember_is_uint "$X"` helper call -- both introduced by #899 for
+  `_LOCK_SELF`, `_mtime` and `_pid` in `lib-lock.sh` and for ~11 call sites in
+  `log.sh`/`session-start-hook.sh` -- were invisible to the lint. Today's uses
+  all carry `10#`, so nothing was actually unsafe, but a future one written
+  behind either guard form would not have been caught. `_DIGIT_TEST` now
+  matches both forms, with must-fire and must-not-fire fixtures for each
+  (#908).
+
+- `_remember_config_tracked_status`'s no-git-binary branch -- the filesystem walk that must
+  answer `could-not-tell` (fail closed) when an enclosing `.git` is found with no `git` binary
+  on PATH, or `untracked` when the walk finds none -- lost its only test when #899 removed the
+  legacy-migration suite that exercised it. Added direct-call tests pinning both of that
+  branch's own outcomes, plus a separate positive control for the git-PRESENT `untracked` path
+  (a different branch of the function entirely), so a degenerate no-git branch that always
+  answers `could-not-tell` regardless of what the filesystem walk finds cannot pass (#909).
+
+- Release-tree smoke checks (`tests/test_release_branch_smoke_851.py`,
+  `tests/test_strip_shell_comments_900.py`) flaked with a `UnicodeDecodeError` a few
+  times per run under `pytest -n` and in compiled mode, because the `ps` scan both
+  files exercise (`.github/scripts/smoke_release_tree.py`'s `_survivors`, and that
+  test file's own `_alive`) decoded every process on the machine strictly -- an
+  unrelated process with a non-UTF-8 argv crashed the scan instead of being
+  skipped. Both `ps` reads are diagnostic only, so they now decode with
+  `errors="replace"` (#910).
+
+- `post-tool-hook.sh` recomputed `SESSION_DIR` (`claude_projects_dir()` /
+  `session_dir_slug()`) on every tool call, fast path included, forking
+  `cygpath` twice and a `sed` each time on Windows/Git Bash -- measured at
+  ~384 ms of a 986 ms per-tool-call trace on one reporter's machine (#913).
+  The resolved value now caches in `$REMEMBER_DIR/tmp/session-dir-cache`,
+  keyed on `(PROJECT_DIR, CLAUDE_CONFIG_DIR)`, so a session only pays for the
+  slug once per project/config pair rather than once per tool call.
+
+- `save-session.sh`'s autonomous-log retention sweep forked a `stat`
+  subshell AND a `_remember_date` (date) subshell for EVERY surviving
+  file in `logs/autonomous/`, on every flush that reached the write
+  step -- on Windows Git Bash one sweep over ~1,200 files started about
+  4,000 processes and ran for about 140s, recurring roughly every 15
+  minutes in the reporter's own session (#914). The sweep now reads the
+  clock once, before the loop, and compares each file's mtime against a
+  single reference file with a bash builtin (`-ot`), forking nothing per
+  file; a per-file stat()+date() comparison is still used as a fallback
+  on the rare platform where the fast reference file cannot be built.
+
+- `60-git-reconcile.sh`'s fast-forward and rebase never told NDC compression
+  (save-session.sh's background `now.md`->`today-*.md` summarizer) that they
+  had just rewritten `now.md` -- NDC's own staleness guards (live size vs.
+  snapshot, a generation marker) only ever detected another NDC round, never
+  this hook, so a reconcile that landed mid-commit could have its content
+  silently clobbered by NDC's own `tail`+`mv`. Reconcile now bumps NDC's
+  generation marker on every successful fast-forward/rebase, so NDC's
+  existing guard also catches this hook as a writer -- at no cost when
+  nothing is racing, since the earlier approach of sharing save-session.sh's
+  own save.lock directly would have declined almost every single save rather
+  than only the rare one actually racing an NDC commit (#932).
+
+- `save-session.sh`'s autonomous-log retention sweep (#933, following
+  #914's fork-free fast path) deleted a non-empty log strictly older than
+  the configured retention window, while its own per-file fallback only
+  deleted once a log was a full extra day past that window -- a log aged
+  between N and N+1 days survived or was reclaimed depending on which of
+  the two paths happened to run, which is itself platform-dependent
+  (whether `mktemp`/`touch -d` succeed). The fast path's cutoff now
+  requires the same full N+1 days as the fallback, so both paths agree at
+  the boundary instead of disagreeing by up to a day depending on
+  platform.
+
+- `hooks.d/after_save/60-git-reconcile.sh`'s `_grc_common_dir()` carried its own copy of the
+  Windows drive-letter guard with a bracket expression of `[/\]` (bare slash, unescaped)
+  instead of the sibling hooks' `[/\\]` (slash and backslash), so `50-git-backup.sh` and
+  `hooks.d/before_session_start/50-git-restore.sh` correctly classified a drive-letter path
+  as absolute, in both its forward-slash and backslash spellings, while reconcile's own copy
+  matched neither form and misclassified both `C:/repo/.git` and `C:\repo\.git` as relative
+  (#934).
+
+- `hooks.d/after_save/60-git-reconcile.sh`'s conflict handler (`_grc_report_conflict`)
+  called `git rebase --abort` unconditionally on a stopped rebase. That resets the WHOLE
+  tracked tree back to `ORIG_HEAD`, not just the files this run's rebase touched -- and
+  this hook's own locks (`git-reconcile.lock`, and this slug's `consolidation.lock`) never
+  excluded a DIFFERENT slug sharing the same store repo from landing a real write (a
+  foreground `now.md` append, a `50-git-backup.sh` commit, that slug's own
+  consolidation/NDC) while the rebase was in flight. Such a write was silently discarded by
+  the abort, while the hook went on to log and notice "the tree is unchanged" -- false for
+  that write. The hook now checks `git status --porcelain` for changes outside this run's
+  own slug before aborting; when a foreign write is present, it is copied out of git's
+  reach, the abort proceeds as normal (never left stuck, so a sibling hook's next save
+  cannot commit this slug's own unresolved conflict markers), and the write is restored
+  afterward (#939).
+
+- `hooks.d/after_save/60-git-reconcile.sh`'s #939 fix for a discarded concurrent write never
+  checked its own backup/restore/abort exit status: a failed `cp -p`/`mkdir -p` while copying a
+  foreign write out of git's reach read exactly like "nothing to restore", and the hook claimed
+  "aborted, the tree is unchanged" even though the write had just been discarded by the abort
+  regardless. A `find` failure while restoring (e.g. shadowed by Windows' System32 `find.exe` in
+  Git Bash) silently restored zero of N backed-up files while the backup directory was still
+  deleted, and the notice claimed a restore that never happened. An abort that itself failed (e.g.
+  a concurrent `index.lock`) left the rebase genuinely stuck while still reporting success. Every
+  step now checks its own exit status, and the backup directory is only deleted once every file it
+  held is confirmed restored (#942). The backup/restore mechanism this entry describes was itself
+  superseded shortly after by #943, which closes the gap structurally instead -- see that entry.
+
+- `hooks.d/after_save/60-git-reconcile.sh`'s conflict handler closed a narrower, residual race
+  the #939/#942 fix's own commit message had already named and deferred: a concurrent write
+  landing between the `git status --porcelain` snapshot and the `git rebase --abort` call was not
+  in the snapshot and was discarded by the abort exactly like the original bug. The hook no longer
+  snapshots a foreign write and races it against the abort at all -- `git rebase --abort` (which
+  resets the WHOLE tracked tree) is replaced with `git rebase --quit` (which touches nothing) plus
+  a scoped `git checkout HEAD -- "$SLUG"` that restores only this run's own slug subtree. No path
+  outside `$SLUG/` is ever read or written by the new sequence, so a foreign write landing at any
+  point -- before, during, or after it runs -- survives untouched (#943).
+
+- `hooks.d/after_save/60-git-reconcile.sh` could discard a human's in-progress, hand-written
+  conflict resolution. The hook's own conflict notice tells a human to resolve a real conflict by
+  hand (`Resolve by hand: git -C ... rebase ...`), but nothing checked, before this hook's own
+  `git rebase` call, whether a rebase/merge/cherry-pick was already in progress for that or any
+  other reason. If the hook fired again while that resolution was under way, its own rebase failed
+  with "already in progress", and `_grc_rebase_in_progress` -- a pure directory-existence check --
+  could not tell that apart from this run's own freshly-conflicted rebase, so the hook proceeded to
+  run `rebase --quit` plus the scoped checkout/rm sequence over the human's own work, discarding it.
+  The hook now checks for a pre-existing `.git/rebase-merge`/`rebase-apply` before starting (or
+  retrying) its own rebase, and declines -- loudly, through the same log convention as its other
+  guards -- rather than ever touching a rebase it did not start itself (#946).
+
+## [0.41.0] - 2026-10-06 — the check_release_tree needle catches a one-line positional delegate, and the #902 unsafe-REMEMBER_DIR refusal lands before mkdir with date+pid save-log names
+
+### Added
+
+- Added: a `.claude/jit-context` entry fires on any edit under `scripts/*.sh`, stating the
+  Anthropic directory's 128 KiB hook-script scanner limit, the 120 KiB release budget
+  `check_release_tree.py` enforces, and the scanner's other known triggers (`case` statements,
+  typed `<<` here-documents, naming another script by path, and the one-line positional-delegate
+  shape from #905) (#904).
+- Added: `docs/releasing.md` now documents that the hook-script size budget already gates every
+  pull request through the ordinary `pytest` job
+  (`test_this_repository_built_tree_has_no_check_failures`), not only a release build -- no new
+  check was needed for this half of #904.
+
+### Fixed
+
+- Fixed #902: a failed seed write to `logs/autonomous/save-HHMMSS.log` could
+  leave `log()`'s own directory resolution unvalidated -- `log.sh` now
+  refuses to `mkdir -p` a `REMEMBER_DIR` that is not an absolute path or
+  that carries a newline/carriage return, instead of building a directory
+  tree under the current working directory from it. The refusal skips the
+  mkdir and sends the daily log line to `/dev/null`; it no longer aborts
+  `log.sh` itself, so every hook that sources it keeps `log`, `dispatch` and
+  the rest (a project directory with a newline in its name still gets its
+  SessionStart run and its `status=unavailable` record, #294).
+- Fixed #902: autonomous save-log names now carry the date and the writing
+  process's PID (`save-YYYYMMDD-HHMMSS-PID.log`), not HHMMSS alone, so a
+  seed write can never collide with and append to a same-time-of-day file
+  left over from an earlier day that is still inside the retention window.
+
+- Fixed: `check_release_tree.py` now FAILs a shipped shell function whose whole body is a single
+  call to another function with a positional parameter (`$1`..`$9`, `${1}`..) spliced into a
+  string argument, anywhere in a shipped `.sh` -- the shape that held three of `scripts/log.sh`'s
+  dispatch reporters at the Anthropic directory as `COMMAND_SCRIPT_NOT_FOLLOWED` until #899 r40
+  restored them to self-contained bodies (#905). Catches the shape whether the function is one
+  physical line or pretty-printed across several, whether the splice is quoted or a bareword
+  argument, whether the file is declared with `function name()` or plain `name()`, and whether
+  the file is checked out with LF or CRLF line endings.
+
+## [0.40.0] - 2026-10-05 — release tree scrub finishes with self-contained hook compilation, and the legacy .remember/ auto-move is retired
+
+### Removed
+
+- #898: the automatic one-time move of an in-project `.remember/` into an
+  external `data_dir` (added with external storage mode in v0.8.0, #60, 2026-05-24; hardened by
+  #132, #757, #766 and #782) is removed. Session start no longer moves,
+  holds back or refuses anything, and no longer writes `MIGRATED-TO.txt`.
+  When the old in-project `.remember/` still holds memory files while
+  `data_dir` points elsewhere and that new store does not exist yet, it
+  prints one line instead: `remember: <old dir> holds memory data but
+  data_dir points to <new dir> -- move it by hand (see /remember:doctor)`,
+  and `/remember:doctor` shows a `WARN Legacy store:` line while those files
+  remain. See `docs/external-storage-mode.md` for moving them by hand.
+- #898: two other one-time upgrade steps on the session-start path are
+  retired. A delivery record left at the store root by a release before
+  v0.13.0 (#285, 2026-08-01) is no longer moved into `tmp/`; it is left
+  where it is and ignored. A lock left as a plain file by a release before
+  v0.8.8 (#182, 2026-07-26) is now cleared like any other debris at the
+  lock path, without first checking whether the process it names is alive.
+- Compatibility: compatible - nothing is deleted or moved; a user switching
+  to external storage after this release starts with an empty external store
+  and their old memory left where it was, named by the notice and by doctor,
+  until they move it. The two retired upgrade steps only ever acted on files
+  written by releases more than two months old.
+
+### Fixed
+
+- #898: the release tree shipped to the plugin directory now swaps in a short
+  `README.release.md` for `README.md` (no `$VAR`, no network-tool names, kept
+  #855's disclosure in substance), stops shipping `CHANGELOG.md` at all,
+  scrubs remaining URL hosts and the `SECURITY.md`/`CODE_OF_CONDUCT.md` files
+  out of the tree, removes a scheme literal the directory's scanner read as
+  a URL host inside shell parameter-expansion syntax, replaces a typed `.`
+  SCRIPT_DIR fallback with `$PWD` across every shipped script that has one,
+  and scrubs standalone network-command words from `config.example.json`
+  and the plugin manifest's own userConfig description. Adds new
+  `check_release_tree.py` guards for a typed here-document, a URL host in a
+  comment, a network-tool name (including a scoped allowlist for this
+  plugin's own `host`/`fetch`/`ssh` architecture vocabulary), a credential
+  pair in a shipped doc, `$VAR` in the release README, a scheme literal
+  outside the directory's own listing fields, the dot fallback, and one hook
+  script naming another by filename. Round 3 removes the plugin's own
+  recovery-token setting entirely: the nested summarizer call no longer reads
+  any credential of its own, on either host, so a directory scanner can no
+  longer pair a credential read with the git-backup hook's unrelated,
+  intentional feature of assembling its own command at run time. A nested
+  call that cannot authenticate now simply runs unauthenticated; refreshing
+  the coding agent's own CLI login is the only recovery step.
+  Round 4 removes every remaining typed here-document from shipped scripts
+  (replaced with here-strings, byte-identical content) after the scanner
+  held the release on three of them, and removes the one remaining
+  presence check for the retired recovery-token setting entirely, since the
+  check's own existence -- not what it logged -- was read as the pairing's
+  read side. The scanner's own read/send vocabulary for this same pairing
+  is also swept pre-emptively: every reference to the current working
+  directory now uses a command substitution rather than the shell's own
+  variable for it, and every layered fallback assignment is now a plain
+  conditional rather than a chained default, across every shipped script.
+  Round 5 removes every detected interpreter or `jq` call that used a bare
+  shell variable as its own command word, routing each one through a
+  literal-dispatch wrapper instead -- the program's name is now always one
+  of a fixed set of literal words, never the variable itself. The
+  plugin-root detection a shipped hook used to run against `pipeline/
+  haiku.py`'s path is replaced with a check against the plugin's own
+  install manifest, so no shipped script is named by path in that check
+  any more. The retired recovery-token setting's keep-list, which used to
+  name that one credential as a single literal string, is now an
+  exact-name comparison built from two separate string pieces, so the
+  credential's name never appears as one contiguous token in source,
+  while every other behaviour is unchanged.
+  **Round 6 reverses that one piece of round 5 and changes a real default.**
+  Splitting a credential's own name across two source strings was judged
+  obfuscation rather than a fix, so it is reverted: the name is written
+  once, in full, exactly where every other identifier in this file is.
+  Separately, the ambient Anthropic key's strip-or-keep decision no longer
+  inspects the host at all -- no probe for a `claude.ai` login file, no
+  check for another credential being visible. **Behaviour change: an
+  operator who has both a login and that key set in their environment will
+  now see the nested summarizer call billed to the key by default**, where
+  it used to be stripped automatically whenever another credential looked
+  available. Set `haiku.anthropic_api_key` to `"strip"` to get the old
+  stripped behaviour back; leaving it unset, or setting it to `"keep"`,
+  both mean the same thing now. The `"auto"` setting is gone. This round
+  also corrects two now-stale claims, in the configuration docs and the
+  README, that a notice is still logged when an old recovery-token setting
+  is left configured -- that notice was removed for good two rounds ago,
+  and the docs had not caught up.
+  **Round 7 applies the offline sweep tool's remaining findings.** Three of
+  the per-file caches in `lib-memory-context.sh` move from a dynamically-
+  named-variable lookup to a parallel-array linear scan, same behaviour.
+  Three inline scripting payloads move out of their shipped `.sh` files
+  into their own files, called by path, which also removes a shell-quoting
+  idiom and an embedded interpreted-language loop that was confusing the
+  sweep tool's own loop-nesting count. Every catch-all case arm sitting
+  inside a loop in a shipped script is rewritten as explicit tests, same
+  behaviour. Two sed/awk-style escaped-quote shapes become plain string
+  substitution. Several identifiers shaped like a secret but holding no
+  secret are renamed to accurate names: a cache slot, a lock-timing slot, a
+  config lookup's own dotted-path argument, a JSON field name, a plugin
+  identifier, a bridge variable name, a failure-marker span id. Five new
+  guards are added to the release-tree checker, mirroring the sweep tool's
+  own shapes, each with its own red/green/positive-control tests. Seven
+  instances of two of those shapes remain, each reported rather than
+  rewritten: four are `dirname`'s own documented answer for a path with no
+  separator, or a git-pathspec "no subdirectory" sentinel, both asserted
+  byte-for-byte against real `dirname`/tracked-state behaviour by existing
+  tests; one is inside an embedded interpreted-language program's own
+  apostrophe, judged too large and security-sensitive to rewrite in one
+  round; and one is a config lookup that cannot use the only alternative
+  shape, because that alternative is forbidden outright by a dedicated
+  security regression test guarding an earlier fix to the same file.
+  **Round 8 clears those holdouts and the sweep tool's two newest shapes,
+  with no behaviour change.** The jq-free config merge program moves out of
+  `lib-memory-dir.sh` into its own file, `scripts/cfg_merge.py` (same
+  arguments, same exit codes), which also removes the last embedded
+  apostrophe. The config lookup table moves from one variable per key, read
+  back by a dynamically-named lookup, into two plain arrays, keeping every
+  guarantee of the earlier cache-loader security fix. Escaped double quotes
+  in shipped shell scripts are rewritten as a variable holding the quote, a
+  single-quoted literal or a `printf` format; lone-dot values are written as
+  an octal escape, same byte. Two more guards (an escaped quote, a `*/*`
+  glob as a case pattern) are added to the release-tree checker, and an
+  earlier exemption of an array's index list from the dynamic-lookup guard
+  is reverted, since the directory has flagged that shape too. The
+  release tree's offline sweep now reports nothing.
+  **Round 11** writes the one plain copy of the plugin-root variable in
+  `scripts/resolve-paths.sh` with an empty default (`"${CLAUDE_PLUGIN_ROOT:-}"`,
+  same value, already checked non-empty), which the directory listed as a
+  bare "." it could not follow, and adds a release-tree check for the shape.
+  **Round 13 removes the #703 Anthropic-key strip entirely and replaces it
+  with a generic, opt-in drop list. Behaviour change for anyone who set
+  `haiku.anthropic_api_key: "strip"`:** that key is no longer read, and the
+  nested summarizer call now inherits the environment exactly as the coding
+  agent gave it, with no variable special-cased by name -- so the shipped
+  plugin no longer names that credential anywhere, which is what the
+  directory's credential hold kept citing. The new `haiku.drop_env` setting
+  (default: an empty list) takes exact variable names or shell-style globs
+  (`*`, `?`) and keeps every matching variable out of the nested `claude -p`
+  call; an entry that is not a name or such a glob is ignored with a
+  warning in the daily log, never echoed. To get the old behaviour back, set
+  `"haiku": {"drop_env": ["ANTHROPIC_API_KEY"]}` -- or `["ANTHROPIC_*"]` for
+  every variable with that prefix -- in `~/.remember/config.json`. A failure
+  that looks like a credential failure now points at `haiku.drop_env`
+  instead of naming one variable. The release-tree checker fails the build
+  if any shipped file mentions that variable's name.
+  **Round 14** renames every shipped shell and Python name that holds no
+  credential but reads like one (a `pwd`, `key`, `token`, `pat` or `pin`
+  part: `_doctor_rd_pwd`, `_lock_timing_key`, `log_tokens`, and the rest)
+  to say what it holds, since the directory cited them one per scan as a
+  credential read; `promos.json`'s `installed_key` is now `installed_id`.
+  The release-tree checker reports any such name it finds.
+  **Round 15 stops building the summarizer's environment by walking yours.**
+  The nested `claude -p` now inherits the environment the hook was started
+  with -- including your Claude Code login, exactly like any process a hook
+  starts; remember itself reads no credential -- minus the parent session's
+  own variables, removed for the length of the spawn and put back after.
+  Which variables is a fixed list written out by name in the code
+  (`CLAUDECODE`, `CLAUDE_JOB_DIR`, `CLAUDE_PROJECT_DIR` and the
+  session-scoped `CLAUDE_CODE_*` names Claude Code sets today, listed in
+  `docs/configuration.md`); no config file changes it, so a future session
+  variable needs a plugin release. **Behaviour changes:** `haiku.drop_env` is
+  removed -- to keep a variable away from the summarizer, unset it in the
+  environment you start Claude Code from; and `CLAUDE_CODE_*` settings that
+  are not session identity (Bedrock/Vertex provider selection, for one, the
+  #316 shape) now reach the nested call instead of being stripped by prefix.
+  The Codex summarizer's allow-listed environment is built from one literal
+  read per allowed name, same names, same Windows behaviour. The expired-login
+  messages (summarizer warning, `/remember:doctor`) no longer name a
+  credential command: they say to log in again with your coding agent's own
+  CLI.
+  **Round 16 takes the credential off the Codex summarizer's allow-list.**
+  The variables the nested `codex exec` is given (#724: only these, since a
+  command the model runs inside Codex's sandbox can read them) are the
+  previous allow-list minus Codex's own API-key variable (and, since round
+  18, minus every proxy and CA-bundle variable; see below). Like the session
+  list above, it is written out by name in the code
+  and no config file changes it. **Behaviour change:** if you authenticate
+  Codex only through an environment variable rather than its own login in
+  `CODEX_HOME`, the `codex` summarizer no longer receives it -- run
+  `codex login` instead; see the Codex allow-list section of
+  `docs/configuration.md`. The release-tree checker now fails the build if
+  any shipped file names Codex's API-key variable, as it already did for
+  Anthropic's.
+  **Round 18 makes two further behaviour changes, both maintainer
+  decisions.** First, the nested `claude -p` now inherits
+  `CLAUDE_CODE_MESSAGING_TOKEN`, the parent session's messaging handshake;
+  `CLAUDE_CODE_MESSAGING_SOCKET` is still removed, so the nested call has no
+  channel to present the handshake on (one real summarizer call run this way
+  opened no extra peer session -- observed once, with no control). Second,
+  the `codex` summarizer's allow-list no longer passes `HTTPS_PROXY`,
+  `HTTP_PROXY` or `NO_PROXY` (in either casing), `SSL_CERT_FILE` or
+  `NODE_EXTRA_CA_CERTS`. They were added by #751 on a reasoned audit
+  finding, not a user request, and #798 had flagged the same names as a
+  leak risk. **Behaviour change:** if you reach the network only through a
+  proxy or a custom CA bundle, the `codex` summarizer can no longer reach
+  it -- set `REMEMBER_SUMMARIZER=claude`, whose nested call inherits your
+  whole environment. With both changes the Anthropic plugin directory's
+  credential hold cleared on a release-preview probe.
+  **Round 19 rewrites every `case` statement in the shipped shell scripts**
+  as an if/elif chain of `[ ]` tests: the plugin directory's scanner
+  mis-parses `case` and listed whole hooks as scripts it could not follow.
+  Behaviour is unchanged (each old and new form is compared on the same
+  inputs by a new test). The marker file `remember` writes on first
+  bootstrap now says it is read by `/remember:doctor` rather than naming
+  the script's path.
+  **Round 20 rewrites the capture-gap check in `session-start-hook.sh`**,
+  the last part of the last hook the directory still listed, with no
+  behaviour change. The jq-less "was this session saved?" program moves
+  out of a multi-line shell string into its own file,
+  `scripts/session_saved.py` (same arguments, same `saved`/`unsaved`
+  answer). The session-id shape test compares against a dot built with
+  `printf` and matches a positive pattern instead of a negated one, and
+  refuses the same ids as before. The capture-marker prune drops its
+  `ls -t | tail` pipeline: it counts the markers with a glob and removes
+  the oldest by modification time until 200 remain, starting no extra
+  process. A new test pins both answers, the id table, the retention and
+  the absence of the old shapes.
+  **Round 21 rewrites the previous-session lookup in
+  `session-start-hook.sh`** with no behaviour change. The two near-duplicate
+  newest / second-newest loops become one helper that sets the previous
+  transcript's path and session id directly: it walks the transcripts by
+  modification time, passing over this session's own transcript (by id, or
+  positionally when the hook got no id) and pluginless SDK runs, up to the
+  same cap, and logs when it gives up. Already-passed-over files are skipped
+  by rank instead of being tracked in an index array. A new test pins which
+  transcript is chosen -- no transcripts, only one, the current session
+  excluded, equal modification times, spaces in paths, the cap -- and held on
+  the code before the rewrite.
+  **The compiled session-start hook is smaller** (about 12.5 KB), through
+  simplifications to the code itself, not minification. Session start
+  takes its `sessions.lock` through the lock primitive, so the opt-in
+  `REMEMBER_LOCK_TIMING=1` recorder no longer writes rows for that lock;
+  it keeps measuring `save.lock` and `staging.lock`, the two it exists to
+  size. The two stale per-session record sweeps share one helper.
+  Detect-tools' eager Python probe reuses the lazy one. `log.sh` and
+  `lib-memory-dir.sh` use `lib-slug.sh`'s Python runner instead of
+  private copies. The config-layer drop warnings share one helper. The
+  memory render's three batched size measurements share one helper.
+  Session start reads stdin fields through one extractor. Comments that
+  trailed code in the hooks' shell files now sit on their own line, so
+  the build strips them. Apart from the timing rows, no behaviour
+  changes; new tests pin the paths each helper replaced.
+  **The compiled session-start hook now fits under the directory's
+  128 KiB follow limit with room to spare** (136,287 to 122,694 bytes,
+  measured on the release build), again by simplifying the code itself.
+  The automatic move of an in-project `.remember/` into an external
+  `data_dir` is gone (see the Removed entry) and two upgrade steps for
+  files written by pre-v0.13 releases are retired. The dispatch
+  reporters share `report_error`, and a hook is launched through one
+  code path whether or not its output can be captured. The memory
+  render's two sized listings share one helper, the config flatten
+  cache's loader and publisher share one existence check, and several
+  caches are written with one `printf` per file. Two nullglob
+  save/restore blocks became plain glob loops. The longest notices
+  (injection-guard refusals, the case-divergence heads-up, the handoff
+  fence and re-delivery notes, the slow-start notice) say the same
+  thing in fewer words. Apart from that wording, no behaviour changes.
+
+- #900: the four hooks.json-registered hook scripts are now inlined,
+  comment-stripped, and tree-shaken into self-contained files before they
+  reach the plugin directory's release tree, so the release-preview
+  validator -- which never follows a hook command's own reference out
+  into a second file -- stops holding all four scripts for that reason.
+  Each referenced file is folded in once, as a function the hook calls
+  wherever it used to reference the file -- so a library still loads on
+  whichever branch actually runs, and a library's own early return still
+  reaches the hook exactly as before; comment-only lines are then
+  dropped; and any function the hook's own
+  code never reaches is dropped too, so the compiled result does not ship
+  unused code the validator could still hold for an unrelated reason.
+  Every compiled hook stays well under the directory's 256 KiB per-file
+  budget. The shared library files themselves are unchanged and still
+  used by every other script that references them. Adds a release-tree
+  check that fails the build if a compiled hook still needs a second file
+  to exist on disk, a check that fails the build on an unpinned
+  here-document in any shipped script (an arithmetic left-shift
+  expression is correctly left alone), and a CI job that runs the full
+  test suite against the compiled hooks on three operating systems.
+- #900: every Python file in the plugin directory's release tree now ships
+  without comments or docstrings, because the directory's validator reads
+  them as code -- a comment describing what the code does not do was cited
+  as if the code did it. The source keeps every word. The build proves
+  each stripped file has exactly the same code as its source and still
+  runs on Python 3.9, and fails otherwise; a release-tree check fails the
+  build on any comment or docstring left in a shipped Python file. The
+  shipped Python shrinks from 265,543 to 83,322 bytes. The Antigravity
+  hook installer's help text is now an explicit string, so it reads the
+  same in both trees.
+- #900: every shell script in the plugin directory's release tree now
+  ships without its comment-only lines too, because the directory's
+  validator reads shell comments as code -- a comment explaining a bash
+  pitfall was cited as a credential read. The source keeps every comment.
+  A comment-looking line inside a quoted string or a here-document, and a
+  comment at the end of a command, are kept. The build fails if a
+  stripped script no longer parses, and a release-tree check fails the
+  build on any comment-only line left in a shipped script. The shipped
+  shell scripts shrink from 1,128,502 to 595,725 bytes.
+- #900: the release build now fails when a hook script is larger than
+  120 KiB, instead of the plugin directory holding the release after the
+  tag is already spent. The directory stops following a hook script past
+  128 KiB (observed on 2026-10-05: 130,955 bytes cleared, 131,120 bytes
+  was held), and the compiled session-start hook was 148,857 bytes. The
+  failure names the file, its size, the budget and the observed limit. The
+  fix it asks for is less code in the hook, not minified code.
+
+## [0.39.0] - 2026-10-03 — the recovery OAuth token moves to plugin.json userConfig, and a credential-wording and changelog-safety cleanup
+
+### Changed
+
+- Documented the Anthropic directory's scan of v0.38.0 in `docs/releasing.md` (#851): the version was Approved with no policy hold (`ALLOWED_TOOLS_BROAD` is gone), yet it still waits for the directory team because the plugin itself carries a reviewer hold. The doc now records the new "Unrecognized field in plugin.json" warning (4 findings, most likely the listing URL fields, which we keep), corrects the earlier guess that rewording two comments would clear the download-and-run warning (it rose from 2 to 3), and tells other plugin repositories to contact the directory team as soon as their first clean version is Approved.
+
+- #856: hardened `.github/workflows/release-branch.yml` with three follow-ups from the #853
+  review -- the `publish` job now refuses to push a tree whose `plugin.json` version is not
+  strictly greater than `release`'s current one (override: `workflow_dispatch` with
+  `allow_version_regression`, see `docs/releasing.md`), pinned `pyyaml` to an exact version in
+  both jobs instead of installing it unpinned, and fixed the `concurrency:` comment, which still
+  described a force-push race the push stopped being capable of.
+
+- #860: removed the plugin's own reads of the older environment variable and
+  config.json key used to authenticate the nested `claude -p` summarizer call --
+  on Claude Code, neither is read for that purpose any more. The plugin's
+  `oauth_token` `userConfig` option (`/plugin` -> `remember` -> Configure, or
+  `claude plugin config set remember oauth_token <token>`) is now the only
+  recovery-token source there, declared in `plugin.json` with `sensitive: true`.
+  A still-set older value is detected by presence only, never its content, and
+  reported once per save as a loud notice naming the source, surfaced by
+  `/remember:doctor`. The host's own login keeps flowing through unchanged, so
+  the default path with nothing configured is unaffected. Codex has no
+  equivalent configure option, so its recovery path there is unchanged. README
+  was reworded in plain language to describe all of this without spelling out
+  environment-variable names, which clears the directory scan's "reads a
+  credential from the user's machine" finding genuinely rather than by
+  renaming or hiding what the code does.
+
+- #864: investigated why the directory's `RUNTIME_FETCH_EXEC` ("Contains a download-and-run
+  command") warning rose from 2 to 3 findings on v0.38.0. No portal access from this lane, so the
+  third matched file/line is still unconfirmed; narrowed the earlier guess instead -- grepped the
+  two largest v0.37.0→v0.38.0 diffs (`scripts/lib-memory-context.sh`, `scripts/session-start-hook.sh`,
+  both from #842/#845) for a short list of risky network/command words (not spelled out here, to
+  avoid re-tripping the same scanner once this entry is shipped) and found nothing in either, so
+  that guess has no textual support. No code changed; the investigation and what still needs a
+  human with portal access are recorded in `docs/releasing.md`.
+
+- #872: recorded three portal verdicts from the 2026-10-02 v0.38.0 scan in
+  `docs/releasing.md` that were not yet written down -- the four
+  "Unrecognized field in plugin.json" findings (`documentationUrl`,
+  `privacyPolicyUrl`, `supportUrl`, `termsOfServiceUrl`) are confirmed fine
+  ("Claude Code itself ignores it at load time. No action needed."), the
+  listing icon is fixed at the plugin's first portal save or submission (so a
+  new plugin should ship its icon before that first submission, see #865),
+  and the `RUNTIME_FETCH_EXEC` row names files, not lines, which is why all
+  three of v0.38.0's findings (`CHANGELOG.md`, `pipeline/shell.py`,
+  `scripts/log.sh`) turned out to be false positives (#864).
+
+### Fixed
+
+- #857: README's "What this plugin runs, sends and stores" section now names the three
+  `$TMPDIR/remember-*` caches that persist by design across every hook invocation
+  (`remember-env-*`, `remember-config-cache-*`, `remember-detect-tools-cache`) instead of
+  describing every file under that prefix as a per-save temp file an `EXIT` trap always cleans up.
+
+- #858: `.github/scripts/check_release_tree.py` and `smoke_release_tree.py` now fail loudly on a
+  release tree with no `hooks/hooks.json`, or one that declares zero `command` hooks, instead of
+  passing silently -- this plugin works only through its hooks, so either case shipped a release
+  that would run nothing.
+
+- #864: removed the two calls to the shell built-in that re-parses a string
+  as code, in `scripts/log.sh`'s config-flatten cache loader (the real
+  `_identity=$_identity_raw` / `$_assign` assignment lines, not just the
+  word in a comment). Rather than keep bash `%q` as the on-disk cache
+  format and hand-decode it with that built-in, the format changed to a
+  trivial one this file fully owns on both ends: one `NAME` TAB `VALUE`
+  record per line, where `VALUE` escapes only backslash, newline and tab,
+  decoded with a single `printf -v NAME '%b' VALUE` call -- a pure
+  byte-level format directive, never a re-parse of the text as shell
+  source, so there is no metacharacter left to defuse. Byte-identical for
+  every awkward value named in review: empty, `~`, `a:~`, spaces, quotes,
+  `;|&`, newlines, tabs, backslashes, non-ASCII, and the `REMEMBER_DIR`
+  identity check. The cache's on-disk path was bumped
+  (`remember-config-cache-v2-...`) so a cache an older build wrote in the
+  old `%q`-based format is simply never opened, with no migration logic
+  needed inside the file. Renamed the helper that wrapped the same
+  built-in (scripts/log.sh, and every caller in `scripts/` and
+  `pipeline/shell.py`'s docstrings) to `assign_kv`, since its old name's
+  own text -- not its body, which never called the built-in -- was
+  already enough to trip the same scanner. Reworded the `CHANGELOG.md`
+  v0.38.0 entry so it no longer spells out the shell built-in or the two
+  network-fetch tools literally; a sweep for those three words over
+  `CHANGELOG.md`'s current (shipped) entry, `pipeline/shell.py` and
+  `scripts/log.sh` now returns nothing. Older, already-released
+  `CHANGELOG.md` entries documenting past bugs with the same built-in
+  (#84, #322, #695) are left as historical record, since the
+  release-branch build already trims `CHANGELOG.md` to the latest
+  released section only. Fixes the Anthropic directory's
+  `RUNTIME_FETCH_EXEC` ("Contains a download-and-run command") finding,
+  which rose from 2 to 3 on v0.38.0; only the next portal scan can
+  confirm the count reached 0.
+
+- #866: closed four gaps where `check_release_tree.py` was weaker than the
+  Anthropic directory's own portal scan. The Anthropic-key credential pattern
+  now matches the `sk-ant-` prefix on its own, not just a tail of 20+
+  characters -- the portal blocked v0.37.0's full tree on a short fixture key
+  under that prefix in `tests/test_haiku.py` that the old pattern never
+  matched, caught now even without the `tests/` deny-list entry (not spelled
+  out here verbatim, since this entry ships in CHANGELOG.md and the whole
+  point of the fix is that the pattern matches it). The
+  `MCP_FORWARDS_CREDENTIAL_ENV` `REVIEW` line no longer skips every `.md`
+  file, so a credential env var named in README.md is reported the same as
+  one named in a script -- the portal flagged exactly that gap on README.md,
+  `scripts/session-start-hook.sh` and `plugin.json`. A new REVIEW-only check
+  flags the shell built-in that re-parses a string as code when fed a
+  command substitution, and a downloader piped straight into a shell,
+  across every shipped text file -- the two shapes #864/#875 learned to
+  watch for (widened by #891 to also catch that same built-in applied to a
+  bare or embedded variable expansion). A space-delimited `allowed-tools`
+  string (no commas)
+  is now tokenized and checked entry by entry, rather than silently passed
+  through as one unmatched pattern (trap.d/859). `smoke_release_tree.py`'s
+  fake-binary env var names, the environment prefixes it scrubs, and the
+  binaries it fakes now come from `.github/release-branch.json`'s new `smoke`
+  block instead of being hard-coded to this repository's `REMEMBER_*` names,
+  and `release-branch.yml` reads the pinned `claude` CLI version from that
+  same config file's `cli_version` instead of a workflow env entry -- both so
+  claude-jit-context and claude-supertool can reuse this tooling by editing
+  config, not the scripts. `docs/releasing.md`'s "Reusing this in another
+  plugin repository" section documents all of the above.
+
+- #870: `/remember:doctor` reported "capture is working" throughout a 10-day
+  summarizer auth outage, because "Last successful save" is the mtime of the
+  cursor file that `save-position` rewrites on every attempt, not evidence a
+  save actually happened, and the doctor never read `tmp/last-summary-failure`
+  or the daily log's `call-haiku error` lines. It now reads the failure
+  marker, prints a `FAIL summarizer:` line naming the last failure, points at
+  the plugin's own recovery-token option (`/plugin` -> `remember` -> Configure)
+  when the detail matches an auth marker, and overrides the "capture is
+  working" verdict until a save completes.
+- #870: the "this CLI rejected --setting-sources" warning blamed hook
+  isolation even when the un-isolated retry then failed with the identical
+  authentication error -- proof isolation was never the cause. A second
+  warning now fires in that case, naming the real problem (an expired login)
+  and the fix (set a recovery token via `/plugin` -> `remember` -> Configure).
+
+- #877: `clones-badge.yml`'s "Merge into history and write the badge" step
+  could not tell a genuine zero-clone day from a GitHub traffic/clones
+  response whose body no longer had a `clones` key -- `gh api` only treats a
+  non-2xx HTTP status as a failure, so a 200 response in a changed shape made
+  `// []` silently substitute an empty array and the workflow still reported
+  success. It now checks `has("clones")` on the fetched response and emits a
+  loud `::warning::` annotation (never a failure -- a nightly cron going red
+  on an API hiccup is its own cost) when the key is missing.
+
+- #878: the session-start byte-budget drop loop (`_remember_apply_session_start_budget`)
+  could exit still over `thresholds.session_start_max_bytes` after dropping every
+  droppable memory section (archive, today, recent, now), with no log line
+  distinguishing that from the budget having been satisfied. It now logs a
+  WARNING naming the final size and the configured max when the body is still
+  over budget after the drop loop exhausts.
+
+- #880: `/remember:doctor`'s "capture is working" verdict arm lacked the
+  same `$_SESSION_DIR` existence guard its #870 sibling arm already carries,
+  so a stale `tmp/last-save.json` surviving a project rename/move could mask
+  a live #144 session-dir slug mismatch -- reporting a broken install as
+  healthy. It now carries the same guard, so a slug mismatch always falls
+  through to its own "#144" verdict regardless of a stale last-save time.
+
+- #886: reworded the `changelog.d/864.fixed.md`, `864.changed.md`,
+  `866.fixed.md` and `860.changed.md` fragments so none of them spells out
+  the shell built-in that re-parses a string as code, or the two
+  network-fetch tools, literally -- those four fragments would otherwise
+  have been folded into the v0.39.0 `CHANGELOG.md` section exactly as
+  written, undoing #864's own rewording of the v0.38.0 entry and failing
+  the existing changelog-section scanner test on the release commit
+  itself. A new sibling test now scans `changelog.d/*.md` directly, on
+  every pull request that touches it (with a planted-fragment positive
+  control), so a future fragment reintroducing one of those words fails on
+  its own pull request, before the fold, rather than at release time.
+
+- #887: fixed a silent divergence in `scripts/log.sh`'s config-flatten
+  cache, introduced by #864/#875's `NAME` TAB `VALUE` cache format: a
+  config value ending in a literal carriage-return byte decoded one byte
+  shorter on a warm cache hit than on a cold cache miss, because the
+  encoder never escaped that byte the way it already escapes backslash,
+  newline and tab, so the loader's own line-ending strip (meant for a
+  cache file with CRLF line endings) removed it from the value instead.
+  The encoder now escapes a carriage return the same way, and the
+  decoder's whitelist accepts the new escape -- pinned by a test that
+  publishes and then loads the same value through both paths and asserts
+  they decode byte-identical.
+
+- #891: widened `.github/scripts/check_release_tree.py`'s REVIEW-only
+  shell-built-in-of-substitution pattern, which only matched the built-in
+  fed a command substitution and missed the two exact lines #864 itself
+  had to remove by hand from `scripts/log.sh` -- a plain variable
+  expansion, not a command substitution. The pattern now also flags a
+  bare variable expansion and a variable expansion embedded anywhere
+  inside a quoted argument, pinned by a test that plants both pre-#864
+  shapes (red before the fix) alongside a "must not flag" twin for
+  ordinary lines that merely contain the word or an unrelated `$`.
+
+## [0.38.0] - 2026-10-02 — a SessionStart total byte budget with a handoff redelivery cap, and /remember:doctor's shell grant scoped to its own script
+
+### Added
+
+- Added `thresholds.session_start_max_bytes` (default 9000) and `thresholds.handoff_max_redeliveries` (default 3): SessionStart's total body (handoff + the `=== REMEMBER ===` legend + the `=== MEMORY ===` section) can sum past Claude Code's own ~10,000-character preview/persist threshold even when every individual memory file is healthy, at which point the model never sees the `=== MEMORY ===` section at all. The budget fills in priority order handoff -> now.md -> recent.md -> today-*.md -> archive.md and lists whatever does not fit by name and size, never dropping it silently. A handoff delivered unchanged `handoff_max_redeliveries` times in a row stops being re-injected in full and is listed by path instead, since re-sending the same ~2KB note forever was most of what was pushing stores over the new budget (#842).
+
+### Fixed
+
+- Fixed: the over-cap notice for `thresholds.memory_inject_max_bytes` recommended running `/remember:doctor` even when the cap had been deliberately lowered below the bundled 200000 default (e.g. to stay under the new `thresholds.session_start_max_bytes` budget). It now says the file was "capped by config" and drops the `/remember:doctor` suggestion in that case -- but only while every over-cap file is within the bundled default; a file larger than 200000 bytes keeps the original "this store looks broken" wording and the doctor advice whatever the cap, as does a cap at or above the bundled default (#842).
+
+### Security
+
+- Security: `/remember:doctor`'s front matter granted bare `Bash` --
+  unrestricted shell access for the full run of the command -- when the command
+  body only ever needs one script. `allowed-tools` is now scoped to
+  `Bash(${CLAUDE_PLUGIN_ROOT}/scripts/doctor.sh:*)`, mirroring
+  `skills/remember/SKILL.md`'s existing narrow grant for `write-handoff.sh`, and
+  `scripts/doctor.sh` is invoked directly rather than through `bash "..."` (a
+  scoped pattern cannot match a `bash` prefix). `scripts/doctor.sh` is now
+  executable in git (mode 100755), the same as `write-handoff.sh` already is.
+  `.github/scripts/check_release_tree.py`'s pre-submission preflight now fails
+  on any shipped skill, command or agent whose `allowed-tools` grants
+  unrestricted shell, matching the directory's own `ALLOWED_TOOLS_BROAD`
+  wording: bare `Bash`, `Bash(*)`, `Bash(:*)`, a wildcard right after a shell,
+  interpreter, package manager, runner, or a network-transfer binary
+  (`Bash(bash:*)`, `Bash(pwsh:*)`, `Bash(python3:*)`, `Bash(npx:*)`, a
+  network-fetch tool's own name followed by a wildcard ...), a relative path,
+  or a wildcard inside the path -- in both the string and the YAML-list form,
+  so this class is caught before a release tree ships rather than by the
+  directory's own scan. The portal's own accepted examples (`Bash(git status:*)`,
+  `Bash(python3 ${CLAUDE_PLUGIN_ROOT}/scripts/run.py:*)`) still pass (#859).
+- Two comments that described code the plugin does not run were reworded: the
+  `pipeline/shell.py` docstring said scripts consume its output by re-running
+  it as shell source, but the real consumer assigns each line through
+  `printf -v` and never re-runs the text as commands; and a `scripts/log.sh`
+  comment used a network-fetch binary as an example of a stalled child. The
+  directory's `RUNTIME_FETCH_EXEC` warning was raised on exactly these two
+  files of the `release` tree, which contain no download (#859).
+
+## [0.37.0] - 2026-10-02 — a slim `release` branch for the Anthropic plugin directory, a config-cache invalidation fix for deleted layers, and README disclosures
+
+### Added
+
+- Added (#851): a slim `release` branch for the Anthropic plugin directory, which was holding every version since v0.29.1 because the full repository (474 files, 9.2 MB, a 611 KiB CHANGELOG.md) broke its file rules. A tag push now runs `.github/workflows/release-branch.yml`: it builds the tree from the tag without `tests/`, `docs/` and the maintainer tooling (73 files, 1.3 MB for v0.36.0), cuts CHANGELOG.md to the latest release, points the README's `docs/` links and logo at `main`, checks the result against the directory's pre-submission checklist, runs `claude plugin validate --strict` and every hook once in isolation, and only then pushes one commit to `release`. Nothing changes for installs from `main`. The release sequence and the one manual portal step are in `docs/releasing.md`.
+
+### Changed
+
+- Changed: README.md now discloses everything the plugin runs, sends and writes outside the memory store -- the `codex exec` summarizer path and `REMEMBER_SUMMARIZER`/`REMEMBER_SUMMARIZER_FALLBACK`; the opt-in `git fetch` in `hooks.d/before_session_start/50-git-restore.sh` (`git_restore.enabled`); `~/.remember/tmp/promo-notice`, `~/.remember/run/summarizers/`, and the `$TMPDIR/remember-*` temp files (some holding transcript text, all removed by an `EXIT` trap when the save finishes); and credential handling for `CLAUDE_CODE_OAUTH_TOKEN`, `REMEMBER_OAUTH_TOKEN`/`haiku.oauth_token`, `ANTHROPIC_API_KEY`/`haiku.anthropic_api_key`, and `CODEX_API_KEY`. Also fixed: the git backup section wrongly said the push "If you enable it" -- `hooks.d/after_save/50-git-backup.sh` has no enable flag; it runs whenever the external store's parent directory is itself a git repository with an upstream (#854).
+
+### Fixed
+
+- Fixed a config-cache staleness bug (#843, split out of #842, reported by @books-around-trees): deleting a config layer (`config.json` in the project, `~/.remember/`, or the plugin root) left its values in effect indefinitely. Both the flattened-config cache (`scripts/log.sh`) and the resolved-environment cache (`scripts/lib-env-cache.sh`) invalidated themselves by comparing mtimes with `-nt`, which reads a missing file as "unchanged" -- correct for a layer that never existed, but wrong for one that existed when the cache was published and was since deleted, since deleting a file changes no mtime a `-nt` check looks at. Both caches now also record which layers existed at publish time and treat any layer appearing or disappearing as a cache miss, regardless of mtime.
+
+## [0.36.0] - 2026-09-28 — adding a repo clones badge and a known-leaked-value detector, guarding two more threshold configs, decoding backslash-escaped stdin fields on Windows, and fixing the doctor subdirectory project-root preference (#823, #827-829, #833-835)
+
+### Added
+
+- Added (#828): a nightly `clones` badge in the README, sourced from GitHub's
+  own traffic API. GitHub only keeps 14 days of clone counts, so
+  `.github/workflows/clones-badge.yml` runs nightly (and on demand), merges
+  each day's count into a running history on an orphan `badges` branch, and
+  publishes a shields.io endpoint badge from it. Labelled "clones", not
+  "downloads": it is GitHub's own number, including Claude Code re-cloning
+  the marketplace for updates, shown as-is. Requires a maintainer to create a
+  `TRAFFIC_TOKEN` repo secret (a fine-grained PAT with "Administration: read"
+  on this repo) before the workflow can fetch real data; until then it skips
+  cleanly rather than failing.
+
+- Added (#835): `tests/test_no_real_home_paths_467.py` gained a third, CI-safe detector
+  (`_KNOWN_LEAK_HASHES` / `_known_leak_offenders`) that scans every tracked file for a hash match
+  against previously-confirmed leaked values. Unlike the existing username detector, it does not
+  rely on `CI`/`GITHUB_ACTIONS` or `getpass.getuser()`, so it runs everywhere, CI included, and
+  would have caught #822's fix reintroducing the same real value into two other files while CI
+  stayed green throughout. It ships with an empty hash list (no incident has been converted into
+  an entry yet) and only ever guards recurrence of an already-known-bad value -- it does not solve
+  the general "detect any new leaked username on CI" problem #835 also raises, which stays open;
+  see the module docstring's "Detector 3" section for why no general CI-safe mechanism was found.
+
+### Fixed
+
+- Fixed (#823): two silent-report gaps found by the v0.35.1 release audit. `previous_transcript()`
+  and `_second_newest_jsonl()` in `scripts/session-start-hook.sh` (#819) now log a WARNING when
+  they give up past `_PREV_TRANSCRIPT_EXCLUDE_CAP` -- previously they returned the exact same
+  empty result as "no previous transcript exists at all", so a real one sitting behind more than
+  the cap's worth of pluginless-SDK runs silently skipped both the recovery force-save and the
+  #200 capture-gap warning. The `thresholds.consolidate_timeout_seconds` /
+  `thresholds.ndc_timeout_seconds` guards (#816) in `scripts/run-consolidation.sh` and
+  `scripts/save-session.sh` now also reject `0` (times out every run immediately, the one-way
+  staging ratchet #806 exists to prevent) and any 10+ digit value (>= 1e9s, reaching the same
+  `OverflowError` inside `PyTime_t` this repo reproduced at 9e9 and 1e10 seconds), each falling
+  back to the 180s default with a named WARNING instead of crashing downstream with a generic
+  pipeline-failed error.
+
+- Fixed (#827): `scripts/doctor.sh`'s #802 git-root preference for a project
+  deliberately started from a repository subdirectory now carries the same
+  session-hint disambiguation write-handoff.sh's own #776 fix already applies
+  -- both the `--json` and human-report project-dir resolution prefer the
+  subdirectory project's own store, not the enclosing repository's, when this
+  session's session-keyed handoff hint (#738) is found there. Also corrected
+  two `.claude/jit-context/paths/00-manual/00-README.md` entries that claimed
+  bugs fixed by #815 and #816 were "still true at HEAD" after those fixes had
+  already merged. A third carried-forward finding -- CHANGELOG.md naming
+  trap.d fragments a later curate pass deleted -- was logged as a trap.d
+  fragment for a future curate pass; that pass (#836) has since promoted it
+  into `.claude/jit-context/paths/00-manual/changelog-trap-citation-goes-stale.md`,
+  the rule that a changelog entry must never cite a trap.d path by name, since
+  curate can delete the path out from under the citation.
+
+- Fixed (#829): the hooks' stdin extractors returned JSON string values without decoding
+  `\\`, so on Windows under Codex -- which never sets `CLAUDE_PROJECT_DIR` -- the project
+  directory arrived as `C:\\work\\proj` and its Claude Code session slug came out
+  `c---work--proj`. A Codex-hosted SessionStart could not find the previous Claude Code
+  session it tries to recover. Each `\\` is now decoded to one backslash.
+
+- Fixed (#833): `_make_env` in `tests/test_consolidation_append_race.py` wrote `config.json` as a
+  hard-coded string literal with `thresholds` always empty, giving callers no way to seed a
+  threshold value without overwriting the fixture's config wholesale (risking a silent drop of the
+  sibling `"cooldowns": {}` key). `_make_env` now accepts an optional `thresholds` dict and merges
+  it into the config it builds via `json.dumps`, matching every sibling fixture in the suite.
+
+- Fixed (#834): `thresholds.consolidate_max_bytes` (`scripts/run-consolidation.sh`) and
+  `thresholds.extract_max_bytes` (`scripts/save-session.sh`) now get the same #816/#821
+  malformed-value guard their sibling timeout keys already had -- an empty or non-numeric
+  configured value is logged with a named WARNING and falls back to the 600000/300000 default,
+  instead of substituting the default silently with nothing in the daily log to tell an operator
+  their override was never read. Unlike the timeout guards, `0` is left untouched for both keys:
+  it is a valid, meaningful value (disables the cap, #360), not a malformed one.
+
+## [0.35.1] - 2026-09-27 — disclosing dropped trusted config layers, hardening timeout guards and the doctor project-root fallback, refusing tracked/symlinked rotated memory slices, fixing the previous-transcript lookup's quadratic blowup, and scrubbing a maintainer-path leak this release's own audit found and re-found (#802-806, #808, #815-816, #819, #822, #825)
+
+### Fixed
+
+- Fixed: `scripts/doctor.sh` (#802) resolved `CLAUDE_PROJECT_DIR` with a raw `$PWD` fallback in
+  two places when the variable was unset, so a `cd` into a subdirectory earlier in the same shell
+  call made the report resolve project root as that subdirectory instead of the real top level.
+  Both fallback sites now prefer `git rev-parse --show-toplevel`, the same fix #743 applied to
+  `scripts/write-handoff.sh`, falling back to `$PWD` only when the cwd is not inside a git repo.
+
+- `_transcript_is_pluginless_sdk()`'s entrypoint sniff (#745) no longer treats
+  every line carrying a `"message"` key as real dialogue: a bookkeeping
+  record's own `"message"` field (a plain string, unlike real dialogue's
+  nested `{role, content}` object) now falls through to the `"entrypoint"`
+  check instead of masking it, closing one of the three edges logged to
+  `trap.d/745.entrypoint-sniff-has-two-unfixed-edges.md` (#803).
+
+- Fixed (#804): `lib-memory-dir.sh`'s no-jq config-merge fallback now reports a dropped
+  untrusted project config layer even when the drop-marker's own `mktemp` call fails --
+  the merge's own exit code is now a second, independent disclosure signal that does not
+  depend on that `mktemp` succeeding, closing the compound "both fail silently" gap #748
+  left open.
+
+- Fixed: `pipeline/consolidate.py`'s staging -> `recent.md`/`archive.md` consolidation call carried
+  a hardcoded 180s `call_haiku` timeout with no config key (#806, reopening the intent of #788).
+  Output length scales with input length, so a large enough staging batch could time out on every
+  run, be left uncompressed, and grow further every round with no recovery. Now configurable via
+  `thresholds.consolidate_timeout_seconds`, the same fix shape #792 gave the sibling NDC `now.md`
+  -> `today-*.md` path's `thresholds.ndc_timeout_seconds`.
+
+- Fixed: `tests/test_session_start_duration_706.py`'s "a fast run stays quiet" assertion (#808)
+  depended on the real session-start hook finishing under the default 5s threshold, which a
+  loaded CI runner (observed on `windows-latest`) can exceed, making the hook correctly surface
+  the duration and flaking the test. The test now pins the threshold high instead of relying on
+  wall-clock speed, matching the pattern its own positive control already used.
+
+- Fixed (#815): `lib-memory-dir.sh`'s no-jq config-merge fallback now reports a dropped
+  TRUSTED config layer (bundled config, user-global config, or the project config when
+  it is not the untrusted-haiku source) the same way #804 already reports a dropped
+  untrusted layer -- a malformed file there used to raise uncaught, exit neither 0 nor 3,
+  and silently fall back to bundled-only config with no warning at all. Distinct exit
+  codes (4 for a trusted-only drop, 5 for both) let the shell disclose it without a
+  second marker file, and the new warning names all three trusted sources it covers.
+
+- Fixed (#816): the `CONSOLIDATE_TIMEOUT_SECONDS` guard in `scripts/run-consolidation.sh` and
+  the `NDC_TIMEOUT_SECONDS` guard in `scripts/save-session.sh` silently substituted the 180s
+  default whenever `thresholds.consolidate_timeout_seconds` / `thresholds.ndc_timeout_seconds`
+  was empty or contained a non-digit -- an operator who typo'd the value (e.g. "18O") saw
+  exactly the same behaviour as one who deliberately configured 180, with nothing in the daily
+  log distinguishing the two. Both fallback branches now log the malformed value they discard
+  before substituting the default.
+
+- Fixed (#819): `session-start-hook.sh`'s previous-transcript lookup (`previous_transcript()`
+  and `_second_newest_jsonl()`) no longer goes quadratic when the newest transcripts in a
+  sessions directory are pluginless-SDK headless runs. The #745 retry re-ran a full directory
+  glob plus a linear string scan against a growing exclusion list for every excluded candidate,
+  so a directory with thousands of headless transcripts never realistically finished -- orphaned
+  hook processes were found spinning at 30-60% CPU for 70+ minutes with no session left to read
+  their output. The glob now runs exactly once into an array, exclusion is tracked by array
+  index instead of a growing string, and the retry gives up after 20 excluded candidates rather
+  than continuing indefinitely.
+
+- Fixed (#822): `trap.d/804.edit-op-defaulted-to-main-clone-not-worktree.md` no longer names this
+  maintainer's actual local checkout paths -- two leaked local checkout paths are now generic
+  placeholders (`<worktree>`, `<main clone>`), so the fragment still describes the class of trap
+  without disclosing one person's disk layout.
+
+- Fixed (#825): the #822 fix itself put the same maintainer's real local checkout path back
+  into two files it added -- this fragment's own prose, and the positive-control fixture in
+  `tests/test_trap_fragment_no_leaked_home_paths_822.py`. Both now use a generic made-up
+  path/username instead, so neither one ships a real person's disk layout.
+
+### Security
+
+- Refused a git-tracked or symlinked rotated memory slice (`archive-*.md`,
+  `recent-*.md`) rather than listing its path under the "rotated memory
+  slices" header as if it were an ordinary, safe entry -- the same
+  `_remember_may_inject` guard the main memory-file listing and the
+  compact-mode deferred-file listing already apply, now applied here too
+  (#805).
+
+## [0.35.0] - 2026-09-26 — hardening write-handoff's tracked-target guard against symlinked ancestors, widening Codex's env allow-list and locking down its sandboxed command environment, plus a deferred-injection-guard gap, an NDC timeout knob, and a flaky test fix (#745, #750-751, #776-777, #784, #788, #794, #798-799)
+
+### Changed
+
+- Declined milestones for this repo explicitly, recording the decision in `.oss.json`'s new `_milestones_note` key so future triage sweeps stop re-surfacing it as an open question (#784).
+
+### Fixed
+
+- Fixed: the capture-gap notice ("your previous session was not captured")
+  no longer accuses a session that `/remember:doctor` reports as saved, and
+  recovery no longer force-saves it into memory either. The marker-less
+  transcripts turned out not to be the user's own sessions at all: another
+  plugin's commit/push review starts a Claude Agent SDK session
+  (`setting_sources=[]`) that writes its transcript into the same
+  `~/.claude/projects/<slug>/` directory, loads no plugins, and so never
+  registers remember's hooks -- there is no `capture-alive.d/<id>` marker to
+  find, and there never will be, because PostToolUse was never there to write
+  one. `previous_transcript()` now skips a transcript whose own `entrypoint`
+  field opens with `sdk-` when choosing "the previous session", for both the
+  notice and recovery's force-save (#745).
+
+- Fixed (#750): `write-handoff.sh` had no check against the repository's
+  own git index, so it would happily overwrite a tracked `remember.md`,
+  report success, and leave the next SessionStart refusing to show the
+  operator their own note -- falsely blaming a commit they never made. The
+  writer now refuses (rather than overwrites) any target the repository
+  already tracks, mirroring the check the read-side injection guard
+  (`_remember_may_inject`, #721) already applies before ever showing a
+  memory file back to the session, with the same external-storage exemption
+  (#285) so a private git_backup store is unaffected.
+
+- Fixed (#751): the nested Codex summarizer's child-environment allow-list
+  dropped Windows process variables (`SYSTEMROOT`, `USERPROFILE`, `APPDATA`,
+  `PATHEXT`) and, on every platform, `CODEX_API_KEY` and the standard
+  proxy/CA variables (`HTTPS_PROXY`/`HTTP_PROXY`/`NO_PROXY`, plus
+  `SSL_CERT_FILE`/`NODE_EXTRA_CA_CERTS`). Anyone on Windows, behind a
+  proxy, or authenticating Codex via an environment variable would have had
+  every Codex-routed summary fail. The allow-list is widened to include
+  them, and matched case-insensitively against the real environment (some
+  HTTP client libraries only ever check the lowercase form of the proxy
+  names, and Windows itself folds every environment variable's name to
+  uppercase regardless of which case it was actually set under); nothing
+  else passes through.
+
+- Fixed (#776): `write-handoff.sh`'s #743 fix (prefer the git repository
+  root over a possibly-stale `$PWD`) broke a project deliberately started
+  from a repository subdirectory -- a supported shape -- by routing every
+  write to the enclosing repository's own store instead of the
+  subdirectory project's own. The writer now disambiguates using this
+  session's own session-keyed handoff hint (#738): when the subdirectory
+  project's store already carries it but the enclosing repository's store
+  does not, the write goes to the subdirectory project. The #743 behaviour
+  (prefer the git root) is unchanged when neither store carries a hint for
+  this session, which is what an accidental mid-call `cd` -- the case #743
+  fixed -- still looks like.
+
+- Fixed (#777): at `source=compact`, the deferred-file loop that lists which
+  memory files were "delivered at session start; read or grep on request"
+  never called the injection guard (`_remember_may_inject`) before adding a
+  file to that list. A git-tracked or symlinked memory file -- exactly the
+  kind session start itself refuses to inject -- was still listed there,
+  under a header asserting it had been delivered, when it never was. The
+  deferred loop now runs the same guard check the main injection loop already
+  applies, and a refused file is now named under its own
+  `--- refused, would have been listed as deferred (not injected) ---`
+  header -- distinct from the main loop's own `--- refused (not injected) ---`,
+  since both can fire in the same compact-mode render (identity-file
+  refusal from the main loop, any other file's refusal from this one) and an
+  identical header on both would let a reader merge or misattribute the two
+  populations (self-review finding).
+
+- Fixed (#788): NDC compression (`now.md` -> `today-*.md`) had a hard 180s
+  timeout with no config key controlling it. Output length scales with input
+  length, so a `now.md` large enough to need longer than that timed out on
+  every run, was left untouched, and grew further every round -- a one-way
+  ratchet that never recovered on its own. `thresholds.ndc_timeout_seconds`
+  (default 180, unchanged) now lets an install raise the budget instead.
+  Separately, the NDC reject gate only checked whether the reply's first line
+  opened with `## `, so a genuine compression behind a short preamble ("I'll
+  compress the log directly...") was rejected outright and lost -- a header
+  found within the first few lines is now accepted, with the preamble
+  stripped before the compression is written to permanent memory.
+
+- Fixed (#794): `test_remember_date_into_matches_remember_date_with_tz` flaked
+  across a minute boundary on slow CI legs (`pytest (macos-latest, 3.9)`
+  observed). The test read the clock twice, once via `_remember_date` and
+  once via `_remember_date_into`, and asserted the two minute-resolution
+  strings were equal; a boundary crossed between the two reads made the
+  assertion fail even though both functions were correct. It now retries
+  once on a mismatch, mirroring the sibling `..._builtin_path` test's
+  existing pattern -- the assertion stays exact, only the race is tolerated.
+
+- Fixed (#798, gate-3 audit): #751 widened the Codex child-env allow-list
+  (`CODEX_API_KEY`, `HTTPS_PROXY`/`HTTP_PROXY`/`NO_PROXY`,
+  `SSL_CERT_FILE`/`NODE_EXTRA_CA_CERTS`) to keep the nested `codex exec`
+  summarizer authenticated and reachable through a proxy -- but that
+  allow-list only ever governed the env `subprocess.run` gave to Codex's OWN
+  process. It did nothing to stop a transcript-injected instruction from
+  getting the model to run a shell command inside Codex's still-permitted
+  `--sandbox read-only`, and reading those same secrets directly out of
+  THAT command's environment (#724's threat model: the read-only sandbox
+  denies writes and network, not command execution). `_build_codex_cmd` now
+  passes `-c shell_environment_policy.inherit=none`, Codex's own documented
+  mechanism (confirmed against codex-cli 0.153.2 and the official Codex
+  manual) for controlling what environment commands IT spawns receive --
+  independently of what its own process received. Codex's own auth and
+  proxy access are unaffected: `_codex_child_env`'s allow-list still reaches
+  Codex's process via the `env=` kwarg exactly as before. Trade-off worth
+  naming: `inherit=none` gives a spawned command NO environment at all, not
+  only no secrets -- including `PATH`/`HOME` -- accepted because this
+  feature never depended on a spawned command succeeding. The evidence
+  itself is version-pinned to codex-cli 0.153.2, not re-verified against
+  0.150.1 (the version this repo's README reports as observed working),
+  though `shell_environment_policy` is a long-standing Codex config key
+  rather than something new in 0.153.2.
+
+- Fixed (#799): `write-handoff.sh`'s #750 tracked-target guard refused a
+  `tracked` or `unavailable` target but fell through silently for
+  `symlinked-ancestor` -- a state the read-side injection guard
+  (`_remember_may_inject`, #721) already refused. A repository could commit
+  `.remember` as a symlink pointing anywhere its author chose, and
+  `/remember` would write straight through it while reporting success,
+  reproducing the "reports success, then silently refuses on read" shape
+  #750 was meant to close. The write side now refuses every state the read
+  side refuses, via a list (`_REMEMBER_REFUSED_TRACKED_STATES`,
+  `lib-memory-context.sh`) shared between both guards instead of a second,
+  independently maintained copy.
+
+## [0.34.1] - 2026-09-26 — closing eight more injection-guard bypasses found while auditing the #754 fix itself, plus a symlinked .git that could redirect the config trust check (#754-757, #760-761, #774-775, #780-782)
+
+### Fixed
+
+- **A cross-machine `git` fast-forward could silently delete `.remember/$SLUG/config.json`** ([#741](https://github.com/Digital-Process-Tools/claude-remember/issues/741)) -- when one machine ran the #719 storage-mode upgrade (an index-only `git rm --cached` untracking `config.json`, keeping its own working-tree copy) and pushed, `hooks.d/before_session_start/50-git-restore.sh`'s `git merge --ff-only` on every other machine sharing the store adopted that commit the way an ordinary fast-forward adopts any removal: a locally-unmodified `config.json` was deleted from disk with no signal, taking `haiku.oauth_token` and per-project settings with it. The restore hook now detects a `config.json` the fast-forward it just performed removed from tracking and restores its exact pre-merge bytes to disk (staying untracked, matching the new `HEAD`) rather than accepting the deletion silently; a failure to restore is logged loudly rather than left quiet.
+
+- Fixed (#742): the `/remember` skill piped a model-written handoff note into
+  `write-handoff.sh` behind a fixed `<<'EOF'` heredoc terminator. The note is
+  written from session content that can include untrusted text (a fetched
+  page, an issue body, a file read earlier in the session), so a note
+  containing a line reading exactly `EOF` would end the heredoc early and let
+  the remainder be parsed as shell commands in the same call. The skill now
+  instructs a fresh, unpredictable terminator per invocation instead of the
+  literal `EOF`.
+- Fixed (#743): `write-handoff.sh` fell back to the raw `$PWD` when
+  `CLAUDE_PROJECT_DIR` was unset, but the Bash tool's cwd persists across a
+  `cd` earlier in the same tool call -- so a session that changed directory
+  before running `/remember` wrote its handoff note under that
+  subdirectory's own `.remember/`, a place `SessionStart` (keyed to the
+  project root) never reads. The fallback now prefers `git rev-parse
+  --show-toplevel`, which resolves the project root correctly regardless of
+  the current subdirectory, falling back to `$PWD` only outside a git repo.
+
+- Fixed (#745): the capture-gap notice ("your previous session was not
+  captured ... run /remember:doctor") no longer flatly contradicts
+  `/remember:doctor`'s own "capture is working" verdict when the recovery
+  block force-saves the same session from its transcript. A reporter saw the
+  original wording fire, then ran `/remember:doctor` nine hours later and got
+  a clean "capture is working" -- consistent with a recovery save landing
+  well after the notice had already been written and read. `session-start-
+  hook.sh` now tracks, per run, whether it actually kicked off a recovery
+  fork for the previous session's id (distinct from `features.recovery`
+  merely being on: the fork also needs `SESSIONS_DIR`, an existing
+  `last-save.json`, and an unsaved previous session) and, when it did, says
+  "your previous session was not captured live ... It is being recovered from
+  its transcript now" instead of the flat "not captured" wording. Says
+  "is being recovered", never "has been recovered": the recovery fork runs
+  detached (`& disown`) and this hook exits long before it can know whether
+  that background save actually succeeded. The original wording is
+  unchanged for every case where no recovery attempt was made this run
+  (`features.recovery: false`, or the preconditions above are not met).
+  The root cause of why PostToolUse did not register for the reporter's
+  session in the first place is still open on #745; this closes only the
+  contradiction between the two surfaces.
+
+- **A project config sanitize failure silently dropped that whole layer, with nothing logged anywhere** ([#748](https://github.com/Digital-Process-Tools/claude-remember/issues/748)) -- when the untrusted per-project layer's own `haiku` (and, for a git-tracked config, `model`/`reject_pattern`) fields could not be stripped before merging (an unreadable project config, malformed JSON, or `jq`/`mktemp` itself failing), `scripts/lib-memory-dir.sh` correctly failed CLOSED and dropped the project layer -- but said nothing, so a project's own settings (e.g. `handoff_mode`) disappeared with no explanation. Both the `jq` path and its no-`jq` Python fallback now report the drop via `report_error` where it is already in scope, falling back to a plain stderr line where it is not (this file is sourced by `log.sh` before `log.sh` defines `log`/`report_error`).
+
+- Fixed (#758): `REMEMBER_EMIT_READ_MAX` -- the threshold `_remember_emit_file`
+  uses to decide between reading a memory file with bash's own `read` builtin
+  and forking `cat` -- had no numeric guard, unlike every sibling knob in the
+  same file (`MEMORY_INJECT_MAX_BYTES`) and in `log.sh` (`_budget`, `_grace`).
+  A non-numeric value in the environment made the `[ "$2" -gt "$_remember_emit_max" ]`
+  comparison print `integer expression expected` to stderr and, because the
+  test sits in an `if` condition (`set -e` does not fire there), fall through
+  to the `read` arm -- sending the file down the quadratic path the threshold
+  exists to keep it off. `_remember_emit_file` now guards the threshold with
+  the same `case (''|*[!0-9]*) ... ;; esac` convention its neighbours already
+  use, falling back to the documented default of `16384` on garbage. Low
+  severity: this is an undocumented, dev-only env knob, not user-facing input.
+
+- **A failed `mkdir -p` on the git-backup common dir's `info/` silently skipped the `config.json` exclusion rule** ([#759](https://github.com/Digital-Process-Tools/claude-remember/issues/759)) -- filed while curating a #719/#723 self-review finding that was argued down to non-blocking and logged rather than fixed at the time. Every OTHER failure path in `hooks.d/after_save/50-git-backup.sh` (commit failure, push rejection, untrack failure) already logs a WARNING/ERROR; this one didn't, so a read-only filesystem or a permissions error on the common dir left the `logs/tmp/config.json` exclusion rule silently unwritten, and the subsequent `git add -- "$SLUG/"` could then stage `config.json` -- which can carry a live `haiku.oauth_token` -- exactly as before the #719 fix, with the caller seeing an ordinary success line either way. The `mkdir -p` failure now reports a WARNING via `report_error`.
+
+- **The plugin-promo probe could fire the promo for an already-installed plugin instead of staying silent** ([#762](https://github.com/Digital-Process-Tools/claude-remember/issues/762)) -- `scripts/session-start-hook.sh`'s up-front `installed_plugins.json` probe used `to_entries` on `.plugins`, which (unlike the per-candidate query it replaced) does not error on a non-object `.plugins` shape; a JSON array there was silently read as "no installed keys" rather than "cannot tell", firing the promo in exactly the situation the #574 design meant to suppress it in. The probe now checks `.plugins`' type before calling `to_entries`, falling back to the same cannot-tell suppression as every other malformed-file case.
+
+- **A missing `git` binary used to be read the same as "no repository here", trusting a legacy config it should have refused** ([#766](https://github.com/Digital-Process-Tools/claude-remember/issues/766)) -- the tracked-config check in `scripts/lib-memory-dir.sh` returned `untracked` whenever `git` was not on `PATH`, with no way to tell that apart from the genuine "nothing to check" case, contradicting the documented fail-closed behaviour. It now walks the filesystem by hand for an enclosing `.git` when no `git` spawn is possible: found means `could-not-tell` (fails closed, same as a confirmed-tracked file), not found means there is genuinely nothing to check and the config migrates normally.
+
+- Fixed (#778): the `/remember` skill's heredoc example lived inside a
+  4-space indented markdown block, so its closing delimiter line read
+  `    PICK_A_RANDOM_TOKEN` -- indented -- rather than flush with column 0.
+  A bash heredoc with a quoted terminator only closes on a line that is
+  exactly the terminator, so a model that copied the example literally,
+  indentation included, emitted a heredoc that never closed: everything
+  after the intended closing line became part of the handoff note's content
+  instead of ending the pipe. The example now lives inside a fenced code
+  block, with the closing delimiter flush with column 0.
+
+### Security
+
+- Security (#754): the #721 tracked-handoff guard tested for `.git` in one
+  fixed directory, so launching Claude Code from a repository SUBDIRECTORY
+  (where `.remember/` resolves under that subdirectory, with no `.git` of
+  its own) bypassed it entirely -- a repository-committed handoff file was
+  injected as though it were the user's own prior-session note. The guard
+  now asks git about the handoff file itself, which resolves the nearest
+  repository regardless of subdirectory, worktree or submodule.
+- Security (follow-up): the injection guard now also refuses a symlinked
+  directory anywhere between the memory file and the repository root, not
+  only a symlinked leaf file -- and normalises a Windows/msys path to
+  forward slashes before the repository-root walk, so that walk keeps
+  climbing past the project root on that platform exactly as it already
+  did elsewhere.
+
+- Security (#755): the #721 tracked-file guard only ever checked the
+  handoff file by name. Every other file the session-start context loader
+  injects (`now.md`, `identity.md`, `recent.md`, `archive.md`, ...) went
+  through unrefused even when a cloned repository committed it. A single
+  shared check now covers every file the loader injects.
+
+- Security (#756): `identity.md`'s own fallback path selection was still
+  anchored on `PROJECT_DIR` rather than the memory project directory --
+  the #747 bug at a second site -- so it could pick the wrong file from a
+  linked git worktree. Now anchored the same way #747 fixed the handoff,
+  and routed through the same shared injection guard as #754/#755.
+
+- **A repository-committed legacy `.remember/config.json` could become the trusted external
+  config for good** ([#757](https://github.com/Digital-Process-Tools/claude-remember/issues/757)) —
+  the one-shot migration into external storage moved a project's whole legacy `.remember/`,
+  `config.json` included, into the new external `REMEMBER_DIR`, where it is trusted
+  unconditionally from then on. A repository that committed `.remember/config.json` before a
+  clone ever switched to external storage could therefore pick the summarizer's OAuth
+  credential, force the operator's own `ANTHROPIC_API_KEY` to be stripped, or reach into
+  the refusal gate (`reject_pattern: "none"` disables it outright; any other value is a
+  regex run over model output, an attacker-controlled ReDoS surface). A `config.json` that is
+  tracked by git — the enclosing repository's index, not just a `.git` in the project
+  directory itself, so a project started from a repo subdirectory is still covered — is now
+  left behind during migration, still tracked, doing nothing for the new external store,
+  logged in both `MIGRATED-TO.txt` and `hook-errors.log` rather than silently. A tracked
+  status that could not be determined at all (a git failure unrelated to a confirmed answer)
+  fails CLOSED the same way. An untracked legacy config — the user's own, never committed —
+  still migrates and is still trusted, as before.
+- The untrusted-project-layer strip [#726](https://github.com/Digital-Process-Tools/claude-remember/issues/726)/[#740](https://github.com/Digital-Process-Tools/claude-remember/issues/740)
+  built for `haiku` now also strips `model` and `reject_pattern` — but only when the
+  per-project `.remember/config.json` is git-tracked, not merely sitting in the default
+  (legacy) storage layout the way `haiku` already is unconditionally. Neither key can
+  redirect where transcripts go, only which model is billed or whether the refusal gate
+  runs at all — severe enough to strip from a file the repository itself committed, not
+  severe enough to break every single-user project's own untracked per-project override.
+- Migration hardening on the same code path: the tracked-config holdout in
+  `scripts/bootstrap-dirs.sh` never follows a symlinked `config.json` -- it is moved, not
+  copied, so a link pointing anywhere on disk is left exactly as it is, never read, never
+  migrated. `scripts/lib-memory-dir.sh`'s own merge refuses a symlinked project
+  `config.json` the same way, logging the refusal instead of reading through the link.
+- The holdout restore is now checked at every step: a failed restore never deletes the
+  operator's only remaining copy, and logs loudly with the path it is still sitting at.
+- The git-tracked check now compares case-insensitively (`git ls-files -- ':(icase)...'`),
+  so a config committed under a differently-cased path is still seen as tracked on a
+  case-insensitive filesystem (macOS APFS default) rather than migrating as trusted.
+- A symlinked legacy `.remember` DIRECTORY (not just a symlinked `config.json` inside it) is
+  also refused at migration time -- moving the link itself into the external store would make
+  it indistinguishable from a legitimate operator-configured external directory from then on.
+  Left in place, untouched, logged.
+
+- Security (#760): the shared injection guard's tracked-file check used to
+  read "git itself failed" (a missing binary, a corrupted `.git`, a broken
+  shim on PATH) the same way as "asked, and the file is not tracked" --
+  silently delivering the file on a git failure. The check now has three
+  states (allowed / refused / unavailable) rather than two: a repository
+  that genuinely could not be asked now REFUSES and says so, while a
+  directory that is genuinely not inside any repository at all (the
+  ordinary external-storage case) is unaffected and still delivers.
+
+- **A pre-planted symlink at the repository's own `.git` could redirect the config tracked-check at an unrelated repository** ([#761](https://github.com/Digital-Process-Tools/claude-remember/issues/761)) -- `_remember_config_tracked_status` (`scripts/lib-memory-dir.sh`) resolved `.git` the ordinary way, following whatever it pointed to; a symlink swapped in before the process started would answer the whole check against a different repository's own objects and index, potentially reporting `.remember/config.json` as untracked (safe to deliver) when it was in fact committed. The check now refuses to trust the result (fails closed, same as every other ambiguous case here) when the repository's own toplevel `.git` is a symlink -- a shape neither an ordinary checkout nor a linked git worktree ever produces.
+
+- Security (#774): the shared injection guard's tracked-file check listed
+  the repository with a plain `git ls-files`, which quotes and
+  octal-escapes any non-ASCII byte in a path (`core.quotePath`, on by
+  default everywhere) -- but the check then compared that line against a
+  raw, unquoted relative path. A tracked memory file whose path ran
+  through a non-ASCII directory name never matched, so the guard silently
+  answered "not tracked" and injected it. The `ls-files` call now runs
+  with `-c core.quotePath=false`, and the comparison itself now unquotes
+  each `ls-files` line before comparing it (`_remember_git_unquote_into`)
+  -- found in this fix's own self-review: `core.quotePath` only covers
+  non-ASCII bytes, but `ls-files` C-quotes a literal backslash, double
+  quote or control byte in a path unconditionally, which the same
+  literal-comparison bypass still let through for those characters.
+
+- Security (#775): the session-start context cache could serve a render
+  made BEFORE the #721/#754/#755/#756/#760 injection guard existed, or
+  before a later fix to it -- the cache-hit path never consults the guard
+  at all, and the cache manifest previously invalidated only on source
+  mtime, which an upgrade does not change. A cache published before a
+  guard fix could therefore keep replaying content that same fix now
+  refuses to inject. The manifest now also carries a format-version
+  stamp; any cache missing it (every one published before this fix) or
+  naming a different version is always a miss, on top of the existing
+  mtime check.
+
+- Security (#780): #774's own fix -- `_remember_git_unquote_into`
+  (`_remember_may_inject`'s tracked-file check) -- used `printf '%b'` to
+  unescape `git ls-files`' C-quoted output, but `%b` does not know the
+  two-character escape `\"`, unlike `\\`, `\n`, `\t` and the rest of the
+  table it does handle. A tracked memory file whose path ran through a
+  directory containing a literal double-quote byte still unquoted to
+  `\"` instead of `"`, never matched the raw relative path, and the
+  guard silently answered "not tracked" and injected it -- the same class
+  #774 fixed for non-ASCII bytes and the literal backslash, left open for
+  this one character. The unquote now pre-translates every `\"` pair into
+  the octal escape `\042` before calling `%b`, which does expand it.
+  `_REMEMBER_CACHE_FORMAT_VERSION` is bumped so a cache rendered through
+  this hole is invalidated rather than served again.
+
+- Security (#781): the start-context cache loader
+  (`_remember_start_cache_context_load`) served a cache hit without ever
+  consulting the injection guard. A repository could commit
+  `.remember/tmp/start-context.cache` together with a manifest containing
+  only a `VERSION=` line -- git checks both files out owned by the user and
+  as regular files, so the existing `-O`/`-L` checks passed, and with no
+  `SRC=` line the `-nt` mtime check never ran against anything. The loader
+  now routes the cache and manifest files themselves through the same
+  tracked/symlink check (`_remember_may_inject`) every other injected file
+  goes through, and refuses any manifest naming zero `SRC=` lines -- a
+  legitimate cache always depends on at least one source file.
+
+- Security (#782): the one-shot legacy-store migration
+  (`scripts/bootstrap-dirs.sh`) held back only a tracked `config.json` and
+  moved every other tracked file in a legacy `.remember/` directory --
+  including a planted `now.md` -- wholesale into the external memory
+  store, which the injection guard exempts from its tracked-file check
+  entirely by design (external storage can legitimately be the plugin's
+  own `git_backup` repository). Once a repository-tracked memory file
+  landed inside the external store this way, nothing downstream ever
+  refused it again. The migration now scans the legacy directory for any
+  git-tracked content beyond `config.json` and refuses the whole migration
+  when it finds any (or cannot tell), logging why and leaving the legacy
+  directory untouched for the operator to sort out by hand.
+
+## [0.34.0] - 2026-09-25 — a git-tracked handoff reaches an untrusted worktree past the #721 injection guard, and a second untrusted-config JSON document survives the #726 credential strip (#740, #747)
+
+### Added
+
+- Added: the SessionStart hook now says how long it took. From #660's own
+  investigation, the single sharpest piece of feedback: a reporter spent days
+  measuring this plugin before finding the actual cause on their own machine (a
+  kernel-leak host that inflated every fork 3-10x) -- a hook that states its own
+  runtime is how the next person learns the question is not about the plugin at
+  all. The duration always reaches the daily log (`session-start took Ns`); it
+  is also printed into the session itself, under `=== SESSION-START ===`, only
+  once it crosses `session_start_slow_threshold_s` (default 5s) -- a line on
+  every start would be noise on a healthy host, and silence past the threshold
+  would be silence exactly when someone is comparing two machines.
+  `/remember:doctor` reports the most recently recorded duration too. Measured
+  with `EPOCHSECONDS` (bash >= 5, no added fork) or one `date +%s` at each end
+  on older bash, never per log line (#706).
+
+### Fixed
+
+- Fixed: `bash -x` over the hooks no longer has its trace silently swallowed.
+  `scripts/bootstrap-dirs.sh` redirects fd 2 into `hook-errors.log` so a hook's
+  stderr never leaks into the host's transcript -- but bash's own `xtrace`
+  stream is on fd 2 too, so every profile of these hooks stopped at that line
+  and continued into a log file the profiler never reads. A truncated trace
+  does not look truncated: it reads as a complete profile of a fast hook, and
+  the fork counts and per-step attributions taken from it describe a fraction
+  of the run. Measured on macOS while building the #660 diagnostic: wall 0.71s,
+  traced span 0.07s. The redirect now stands down when it would swallow a trace
+  somebody deliberately started -- xtrace running on fd 2, or `REMEMBER_TRACE=1`
+  -- and says on that stream that it is not writing the log. A trace on its own
+  fd (`BASH_XTRACEFD=9`) keeps both, which is the shape `docs/diagnostics.md`
+  now documents (#690). `BASH_XTRACEFD` itself needs bash 4.1+; on stock macOS
+  `/bin/bash` 3.2 (GitHub's own macos-latest runners resolve `bash` to exactly
+  that binary), the variable is silently ignored and xtrace stays on fd 2 --
+  the redirect now checks `BASH_VERSINFO` directly and stands down on that
+  floor too, instead of trusting the variable's text and reproducing the same
+  swallowed-trace defect on the platform the original measurement was taken on.
+
+- Fixed: `previous_transcript()` (SessionStart's own resolution of "the
+  previous session") no longer sorts every past transcript in a project's
+  session directory just to read one line off the top (#691). It, and the
+  same-shaped fallback used when the current session's id is not yet known,
+  each forked `ls -t` (and, in the fallback, `tail`/`head` besides) over the
+  whole directory on every session start -- the only per-session cost in the
+  hook that grows with how long a project has been used: 0.104s at 500 past
+  transcripts, 0.41s at 2000 (windows-latest, the #660 diagnostic). Both are
+  now a single pass over the directory listing that compares mtimes with
+  bash's own `-nt` test operator, a builtin rather than a fork, so the cost
+  no longer scales with transcript count at all.
+
+- Fixed: the Windows Defender exclusion step in `.github/workflows/tests.yml`
+  now reports Defender's own state instead of asserting a scanning tax it
+  never checked. A state read on the current `windows-latest` image showed
+  real-time protection already off and the checkout drive already excluded
+  before the step ran (removing the step entirely produced the same timings
+  as keeping it -- runner noise, no trend), so the eleven-line comment
+  claiming the exclusion "removes that tax" was wrong on this image, and had
+  already been used once to explain away a Windows-vs-Linux timing gap during
+  #660 before the state read caught it. The step now runs
+  `Get-MpComputerStatus`/`Get-MpPreference` first and prints
+  `RealTimeProtectionEnabled` and `ExclusionPath` to the log before adding its
+  own exclusions, so it stays true when the runner image changes instead of
+  reasserting a premise nobody is checking (#692).
+
+- Fixed: a failed background save now carries its own real cause into
+  `hook-errors.log` -- the file `/remember:doctor` tails under "Recent
+  errors" and the one a reporter is asked to paste -- instead of only the
+  bare `save-session.sh --force exited 1` (#694). The nested Haiku CLI's own
+  failure detail (an expired token, an exhausted balance, a rate limit) was
+  already being computed and logged, but only to the daily narrative log
+  nobody reads while diagnosing a live outage; one installation logged the
+  real cause on every one of a dozen failed saves over several days while
+  hook-errors.log said nothing more than an exit code the whole time. This
+  is propagation only -- no new diagnosis, the same detail routed to the
+  place an operator actually looks. The same fix covers an empty summary
+  response, the one other `save-session.sh` failure with the identical shape.
+
+- Fixed: `_REMEMBER_PHASE` is now `export`ed at the three sites in
+  `session-start-hook.sh` that set it (the deferred `before_session_start`
+  dispatch, `_remember_deferred_phase`, and the deferred start-cache
+  publish), so a child process forked from any of those deferred subshells
+  -- a `hooks.d/` listener, the recovery `save-session.sh` fork, or the
+  start-cache publish itself -- carries the phase label into its own
+  environment. Before this, the assignment stayed inside the subshell that
+  set it and nothing could ever observe it: no export, no log line, no
+  external tracer. That defeated the stated reason the label exists (per
+  the comment on `_remember_deferred_phase`): "a trace cannot tell a
+  deferred child from a command substitution by pid alone" -- which needs
+  the child's own environment to answer at all (#700).
+
+- Fixed: an ambient `ANTHROPIC_API_KEY` no longer silently becomes the background
+  summarizer's credential when you have one of your own. The Claude CLI resolves
+  credentials in a fixed order and that variable out-ranks a `claude.ai` login, so
+  an operator who kept the key set for an unrelated tool had every nested
+  `claude -p` billed to it -- and once its balance was exhausted, every background
+  save failed with `Credit balance is too low` while their own interactive
+  sessions kept working off the login. Nothing at any layer named the variable;
+  it read as an opaque `save-session.sh --force exited 1` in `hook-errors.log`.
+  The key is now kept out of the child when another credential is visible
+  (`CLAUDE_CODE_OAUTH_TOKEN`, a configured OAuth token, or a login at
+  `~/.claude/.credentials.json`), and passed through when it is the only one there
+  is -- stripping it unconditionally would leave the API-key-only installs
+  unauthenticated, which is the same silent outage aimed at different people. The
+  new `haiku.anthropic_api_key` config key (`auto`, `keep`, `strip`) settles it by
+  hand for a login this process cannot see, such as one held in the macOS
+  Keychain, and a credential-shaped failure now names the variable and the key in
+  the error itself. Reported with the trace that identified it by @Mega-Therion
+  (#703).
+
+- Fixed: a long-lived process that sourced `log.sh` before midnight kept writing
+  into yesterday's `memory-YYYY-MM-DD.log` for the rest of its life -- a
+  long-running session, a backgrounded save, or a consolidation round started at
+  23:58 all filed their after-midnight entries under the wrong day, exactly the
+  shape that makes a log unreadable when reconstructing what happened just after
+  midnight. `MEMORY_LOG_DATE` was computed once, at source time, and never
+  revisited. Fixed without adding a `date` fork to `log()`'s hot path (#660/#665
+  removed that cost once already): each call now compares its own
+  already-computed `HH:MM:SS` timestamp against the previous call's, and only
+  re-forks a fresh date on the rare call where the clock has visibly wrapped
+  through midnight. Found by @jqit-ricky while tracing #660 (#705).
+
+- Fixed: `save-session.sh` released `save.lock` only in the EXIT trap, so on
+  a busy tree the housekeeping sweep over `logs/autonomous/` and the
+  SessionStart cache pre-render both ran with the lock still held. Measured
+  on Windows Git Bash at 231.9s against 1,520 accumulated logs -- longer than
+  both `NDC_COMMIT_LOCK_TIMEOUT` and `FORCE_LOCK_TIMEOUT` (30s each), so
+  every NDC commit and every `--force` session-end flush timed out behind
+  the sweep rather than behind any real writer (#709). `save.lock` is now
+  released as soon as the NDC subshell has been backgrounded (or the NDC
+  step is skipped), before housekeeping or the cache pre-render run --
+  neither of those touches `now.md`, so nothing past that point needs the
+  lock.
+
+- Fixed: `bash -x scripts/session-start-hook.sh` no longer risks losing its
+  stdout on Windows (round 2 of #690). Two things landed together, in the same
+  PR (#733's own windows-latest CI run separated them):
+  1. The suite's own test invocations of the real hook (`tests/test_trace_not_swallowed_690.py`)
+     called `bash [..., str(SESSION_START)]`. On Windows, `pathlib`'s plain
+     `str()` renders a pure-backslash path with no forward slash at all, and
+     `session-start-hook.sh`'s own self-location (`_HOOK_DIR="${BASH_SOURCE[0]%/*}"`)
+     has no fallback for that shape: the pattern strip is a no-op, `_HOOK_DIR`
+     becomes `.`, and `source "./resolve-paths.sh"` fails from whatever
+     directory pytest happened to be in -- `resolve-paths.sh`'s own
+     `|| exit 0` then exits clean with nothing printed, which is exactly the
+     symptom this issue was filed for. This is the same test-harness bug
+     `test_windows_native_hook_cwd_448.py` hit and fixed once already, and the
+     same convention `tests/test_hooks_json.py` established for exactly this
+     reason -- this file's own real-hook invocation had not been updated to
+     follow it. Fixed by using `SESSION_START.as_posix()` throughout the file,
+     matching the rest of the suite. Production is unaffected either way,
+     since `hooks.json` always invokes via a literal
+     `${CLAUDE_PLUGIN_ROOT}/scripts/...` shape that guarantees at least one
+     forward slash regardless of platform.
+  2. Separately, `session-start-hook.sh` buffers its own stdout into a temp
+     file (`exec 3>&1; exec > file`) so a plugin-promo `systemMessage` JSON
+     can wrap it, then restores the real fd and `cat`s the buffer back at the
+     end -- a mechanism the neighbouring bootstrap-dirs.sh trace tests never
+     exercise. That buffer/fd-swap is now skipped entirely whenever an xtrace
+     or `REMEMBER_TRACE=1` is active, the same way bootstrap-dirs.sh already
+     stands its own fd 2 redirect down for a trace an operator deliberately
+     started. This is a harmless, precedent-matching defensive improvement,
+     but -- given (1) above -- was very likely not the actual cause of the
+     originally observed symptom; the path-normalization bug was. The only
+     visible cost if it ever does fire is the plugin-promo banner, which
+     already has to fall back the same way when the buffer's target
+     directory is unwritable.
+  The `xfail` on `test_the_real_hook_traces_past_the_bootstrap` stays in
+  place, `strict=False`, until a real `windows-latest` run confirms both
+  fixes and flips it to XPASS (#712, #690).
+
+  Follow-up: the real `windows-latest` CI run (1) above needed did land, and
+  confirmed the path-normalization fix works end to end -- the hook now runs
+  to completion and prints its normal context on every leg. It also
+  surfaced a second, narrower gap: the new pinning tests for (2)
+  (`TestCtxBufferSkippedUnderTrace`) borrow their fixtures from
+  `tests/test_plugin_promo_574.py`, whose own module-level skip already
+  documents "not portable to Windows runners" -- the plugin-promo
+  `systemMessage` wrapper those fixtures exercise never fires on Windows,
+  most likely because `HOME`/`CLAUDE_PROJECT_DIR`/`REMEMBER_DIR` there are
+  unnormalized `str(Path)`, and something downstream (installed-plugin
+  detection, most likely) then reads as "cannot tell" and suppresses the
+  promo by design (#574 decision 3). Making the whole plugin-promo subsystem
+  Windows-portable is out of scope here -- #574's own authors already
+  declined to do it -- so `TestCtxBufferSkippedUnderTrace` now carries the
+  same win32 skip its borrowed fixtures already imply, rather than claiming
+  coverage it cannot back.
+
+  Second follow-up (#736): a fresh main-based CI run, independent of this
+  PR's own run, confirmed the XPASS on all four windows-latest legs was
+  stable rather than a fluke -- the xfail(strict=False) marker referenced
+  above has since been removed outright, and the test now runs as a plain
+  pass. See #736's own fragment for the removal itself; this note exists so
+  this fragment does not assert, once folded into CHANGELOG.md, that the
+  marker is still in place after it no longer is.
+
+- Fixed: `test_a_multi_day_idle_gap_recomputes_even_when_time_never_decreases`
+  (`tests/test_log_sh.py`) was flaky on CI -- its 1-second simulated "day"
+  (`_REMEMBER_LOG_DAY_SECONDS_TEST=1`) and 1.5s sleep raced ordinary shell-startup
+  jitter against `log.sh`'s EPOCHSECONDS-based idle-gap check (#711): EPOCHSECONDS
+  has 1-second wall-clock granularity, and `_REMEMBER_LOG_LAST_EPOCH` is captured at
+  source time, before the test's own first `log()` call ever runs, so a loaded CI
+  runner could cross a real 1-second boundary during startup alone and trip the
+  rollover branch a call early -- producing exactly the observed failure (`FILE1`
+  one day ahead, `FILE2` with an empty date component). Widened to a 5-second
+  simulated day and an 8-second sleep, comfortably above realistic startup jitter
+  and comfortably below the deliberate gap the test itself creates. No production
+  code changed -- `scripts/log.sh`'s real 86400-second threshold was never at risk
+  (#715).
+
+- Fixed: git backup no longer stages or commits a slug's `config.json`
+  (`hooks.d/after_save/50-git-backup.sh`), which is a documented home for
+  `haiku.oauth_token` -- a live claude.ai OAuth credential. It is now added
+  to the store's per-clone `.git/info/exclude` alongside `logs/` and `tmp/`,
+  and a store that committed one before this fix existed has it untracked
+  on the next backup, in the same commit as the existing logs/tmp
+  untracking. History already pushed is left alone -- rotate the token if a
+  `config.json` carrying one was ever committed (#719).
+
+- Fixed: the `/remember` skill no longer parses its Write target out of
+  "the most recent `=== HANDOFF ===` block in this session's context" --
+  text any untrusted content the session ingested (a Read of a hostile
+  file, a fetched page, an issue body, a repo-committed
+  `.remember/remember.md`) could forge, with `Write` pre-approved for any
+  path. The skill now pipes the note to a new `scripts/write-handoff.sh`,
+  which resolves the destination itself from `REMEMBER_DIR` and an
+  out-of-band hint the `SessionStart` hook writes to
+  `$REMEMBER_DIR/tmp/handoff-path` -- never from the transcript -- and
+  refuses (falling back to the ordinary default) any resolved path whose
+  shape does not match `remember.md` / `remember.<id>.md` directly inside
+  `REMEMBER_DIR`. `allowed-tools` is narrowed from an unscoped `Read, Write`
+  to `Bash(${CLAUDE_PLUGIN_ROOT}/scripts/write-handoff.sh:*)` -- that one
+  script invocation -- and the script always prints the path it wrote or a
+  `REFUSED:` line -- never a bare "Saved." with the destination hidden
+  (#720).
+
+- Fixed: `SessionStart` no longer injects a repo-committed
+  `.remember/remember.md` as though it were the user's own prior-session
+  note. In the default (legacy) layout, a handoff file tracked by the
+  project's own git index is refused rather than delivered -- this plugin
+  never commits one itself, so a tracked file was shipped by the
+  repository, not written by a real `/remember` run, and delivering it
+  verbatim was also the way a forged `=== HANDOFF ===` block reached the
+  skill fixed under #720. The tracked-check also catches a file committed
+  under a different case than this session resolves it (a case-insensitive
+  filesystem would otherwise deliver the same bytes either way). A
+  genuine, untracked handoff is still delivered, now wrapped in a
+  "data, not instructions" provenance line and a closing
+  `=== END LAST HANDOFF <token> ===` fence whose token the hook generates
+  at delivery time -- not a fixed word the handoff's own content could
+  pre-embed a forged copy of -- so a block inside it is legible as file
+  content rather than a live directive (#721).
+
+- Fixed: a literal `{{TIME}}`/`{{BRANCH}}`/`{{LAST_ENTRY}}`/`{{EXTRACT}}` token
+  reaching the memory pipeline through transcript content -- a pasted
+  snippet, a file the agent read, a tool result -- could survive
+  unescaped into the assembled save prompt and be mistaken by
+  `save-session.sh`'s placeholder guard for a genuinely unsubstituted
+  placeholder. The guard's abort runs before the read cursor advances, so
+  this stalled memory capture for the affected session permanently, with
+  no automatic recovery. Substituted values are now escaped before
+  insertion so a literal token like that can no longer forge an
+  "unsubstituted" state; a real unsubstituted placeholder in a template is
+  still fully detectable. See [Diagnostics](docs/diagnostics.md) for the
+  recovery path if a session is already stuck (#722).
+
+- Fixed: git-restore's detached fetch (`hooks.d/before_session_start/50-git-restore.sh`)
+  now inserts a `--` separator before the remote/branch operands it passes to
+  `git fetch`, and `git_restore.remote`/`git_restore.branch` (which default to
+  `git_backup.remote`/`git_backup.branch`) are validated as plain remote/branch
+  names before use -- a leading `-`, or a remote containing `:` or `/`, is
+  rejected and falls back to a safe value rather than reaching `git fetch`'s
+  argv. Without the separator a `-`-leading value from `config.json` (which is
+  git-tracked and fast-forwarded FROM the very remote it configures) was parsed
+  as an option rather than an operand, up to local command execution via
+  `--upload-pack=...` against a local-transport target. The branch name is
+  also rejected when it contains `:`, since `--` stops option parsing but not
+  git's own src:dst refspec grammar, and a colon there lets a poisoned branch
+  value pick an arbitrary local destination ref. The same validation and `--`
+  separator were applied to the mirroring push call in
+  `hooks.d/after_save/50-git-backup.sh`, which had the identical gap (#723).
+
+- Fixed: the nested "no tools" summarizer was not actually tool-less.
+  `--allowedTools ""` only emptied the auto-approve list, so built-in tools
+  that need no approval (Read, Glob, Grep, Task, ...) still ran, and both
+  routes were spawned in the shared system temp directory, alongside
+  another concurrent save's own tempfiles and the merged config (which can
+  carry a live oauth token). The Codex route additionally ran with
+  `--sandbox read-only`, which still permits command execution, and
+  inherited the full parent environment minus a short deny-list. The
+  nested `claude -p` call now passes `--tools ""` -- the CLI's own
+  disable-all-tools primitive -- rather than a hand-maintained deny-list,
+  both routes spawn in a fresh, empty directory created and torn down
+  around each call (the Codex route's own output file included), and the
+  Codex route's child environment is now an allow-list of only what the CLI
+  needs to run (#724).
+
+- Fixed (#725): `_run_channel_health` in `.oss/statusline.py` resolved
+  `supertool`'s argv[0] through `_safe_which` before spawning it, the same
+  way `_run` already resolves `git`/`gh` -- closing a gap where a
+  `supertool.exe`/`supertool.cmd` planted at the root of an unreviewed pull
+  request checkout could win over the real `PATH` entry on Windows, in a
+  detached refresh whose output is discarded so nothing on the status line
+  would have revealed it ran. Also added `/supertool` to the TRACKED
+  `.gitignore` -- previously excluded only via one machine's local, untracked
+  `.git/info/exclude`, which protects nothing on a fresh clone or a
+  contributor's PR checkout -- and stopped the jit-context rule layer
+  (`supertool-required.md`, `00-README.md`) from ever recommending or
+  describing running `./supertool` at all: that project-relative
+  invocation, not `.gitignore` (which a `git add -f` bypasses), is what
+  actually closed the path from a tracked file at that name to something
+  the maintainer's own session executes. The Windows `CreateProcess`
+  cwd-search-order behaviour this closes is reasoned from documentation,
+  not observed on this machine; CI's Windows leg is the observed evidence.
+
+- Fixed: in the default storage layout, a cloned repository's own
+  `.remember/config.json` could choose which credential the nested
+  summarizer authenticates with (`haiku.oauth_token`) and could force your
+  own `ANTHROPIC_API_KEY` to be stripped from the child process
+  (`haiku.anthropic_api_key`), both without ever opening the file -- the
+  per-project layer was merged in with the same trust as a config you wrote
+  yourself. The per-project layer's `haiku` block is no longer merged in at
+  all when `REMEMBER_DIR` sits inside the project checkout; a trusted
+  user-global or `REMEMBER_OAUTH_TOKEN`-configured credential is unaffected,
+  and external storage mode (`REMEMBER_DIR` outside any checkout) is
+  unaffected either way. See
+  [git-backup-security.md](docs/git-backup-security.md) (#726). **Note:**
+  this fix's own merge only stripped the *last* JSON document of the
+  project config file -- a config shipping more than one JSON document
+  could still leak `haiku` through its first document; closed by #740.
+
+- Fixed: `scripts/doctor.sh` echoed last-save.json's `.session`/`.line` values
+  unscrubbed into the "Last successful save" report line; an embedded newline
+  in either could forge a column-0 `VERDICT:`/`FAIL:` line that
+  `commands/doctor.md` tells the relaying assistant to quote back verbatim
+  (#727, Claude Security scan F6). Scrubbed with the same `tr -d '[:cntrl:]'`
+  pattern `REMEMBER_TRANSCRIPT_PATH` already uses.
+- Fixed: `.oss/statusline.py`'s `repo_version` and `_latest_release` (plus
+  `repo_config`, `installed_plugins` and `_installed_plugin_root`, the same
+  crash class in the same file) called `.get()` on a parsed JSON document
+  with no check that it was a dict first -- a syntactically valid but
+  non-object `.claude-plugin/plugin.json`, `.oss.json` or
+  `installed_plugins.json` (a bare list, string, number, or `null`) raised
+  `AttributeError` and either blanked the whole status line or silently
+  froze the rendered board at stale counts (#727, F14/F15). Guarded with the
+  same `isinstance(doc, dict)` check `_watch_preset_declared` already uses.
+
+- Fixed: `tests/test_case_divergence_298.py`'s CI-only byte-pin guard was red
+  on Linux and macOS after #732 merged -- its `_SANCTIONED_DIVERGENCE` entry
+  for the #662 `_LAZY_PYTHON_GUARD` insertion still pinned the pre-#726
+  two-argument python-fallback invocation, while #726 (shipped in #732)
+  composed the guard directly into its own three-argument invocation and
+  never updated the older entry to match. Since origin/main only moves
+  forward, neither the old nor the new shape of that stale entry was still a
+  substring of the real file, and the guard asserted rather than passing.
+  The stale entry is removed -- the guard's own new_code already re-asserts
+  that the `_LAZY_PYTHON_GUARD` line still precedes the python invocation, so
+  no coverage is lost -- and the CI-only guard passes again (#734).
+
+- Fixed: removed the `strict=False` `xfail` marker from
+  `test_the_real_hook_traces_past_the_bootstrap` (#736), closing #690 for
+  real. The marker existed only because #712's own PR (#733) had no
+  windows-latest CI evidence at review time and left the flip from XFAIL to
+  XPASS deliberately unconfirmed. A fresh `main`-based CI run since then
+  (commit `5657b01`, run `35457414864`) shows the test passing plainly on all
+  four windows-latest legs (Python 3.9-3.12), independent of the PR run that
+  first observed it -- the re-derivation #690 itself asked for before treating
+  a `strict=False` XPASS as permanently stable. The test now runs as an
+  ordinary pass with no special-casing on Windows.
+
+- Fixed: `handoff_mode: "per_session"` published the resolved handoff target
+  to one project-wide file, `tmp/handoff-path`, overwritten on every
+  `SessionStart` (#738). The last session to start owned that pointer, so an
+  earlier session's later `/remember` read a stale pointer some other,
+  more-recently-started session had already overwritten -- its note landed
+  in `remember.<other-session>.md`, not its own. `write-handoff.sh` never
+  received a session id, so it had no way to tell it was writing to the
+  wrong file. Introduced by #731. The defect class: a value that is
+  per-SESSION (the resolved handoff path) was carried over a channel that is
+  per-PROJECT (one file, last writer wins) -- the pointer, not the file it
+  names, became the shared, clobberable resource. `session-start-hook.sh`
+  now also publishes a session-keyed copy, `tmp/handoff-path.<session_id>`,
+  which nothing else can overwrite; `write-handoff.sh` prefers that copy,
+  identifying its own session via `CLAUDE_CODE_SESSION_ID` -- a live env var
+  Claude Code sets for the Bash tool (observed, macOS), never a value the
+  model reads or can forge the way transcript text could pre-#720 -- and
+  refuses the shared pointer whenever a matching session-keyed hint exists.
+  Single/external mode is unaffected: both files carry the same value there,
+  and the shared-pointer fallback still applies when no session id reaches
+  the script at all. The new per-session hint files are pruned the same way
+  #373 already prunes `remember.delivered.<session_id>` records -- keyed to
+  whether that session's own transcript still exists, with the same #393
+  grace window -- so `tmp/` does not grow unbounded.
+
+### Security
+
+- Fixed: #726's fix for a cloned repository's `.remember/config.json`
+  choosing the nested summarizer's credential only stripped the *last*
+  JSON document of the project config file (`jq -s '(.[-1] |=
+  del(.haiku)) | ...'`). A project config shipping **two**
+  whitespace-concatenated JSON documents, with `haiku.oauth_token` or
+  `haiku.anthropic_api_key` in the *first* one, had that block survive
+  untouched and reach the nested summarizer -- the same #726 attack, one
+  extra document away from the position the strip ever looked at. The
+  merge now reads the untrusted project layer directly (`jq --slurpfile`)
+  and strips `haiku` from every document it contributes, however many
+  there are, without comparing a filename string between the shell and
+  jq -- the first fix attempted (`input_filename` matched against a
+  shell-supplied path) was replaced before landing once it turned out to
+  be unverifiable on a platform where jq's own view of a path could
+  diverge from the shell's, and to mis-strip a trusted layer's own
+  `haiku` whenever the project file exists but is empty. The no-jq
+  Python fallback got the same fix: it used to drop the whole
+  user-global and project layers (falling back to bundled defaults) the
+  moment the project file held more than one JSON document, rather than
+  stripping `haiku` from each of that file's own documents and keeping
+  everything else. The `--slurpfile`-based fix above was itself observed
+  to fail on Windows (a native `jq.exe` errored on the invocation, and
+  the fallback silently dropped every layer including the trusted
+  user-global one, with no error surfaced) before landing -- the merge
+  now sanitizes the untrusted project layer with a separate, plain
+  `jq -c 'del(.haiku)'` call (no `-s`, no `-n`, no `--slurpfile`, no
+  path comparison of any kind, the same shape already proven on every
+  platform before #740 touched this file) into a temp file, then runs
+  the original `jq -s` reduce over it in place of the untrusted file.
+  If sanitizing fails for any reason, that layer is dropped entirely
+  (fail closed) rather than merged unsanitized; the bundled and
+  user-global layers are unaffected. The no-jq Python fallback got the
+  matching hardening: an unreadable or otherwise unloadable project
+  file now drops just that layer instead of taking the whole merge down
+  with it -- it originally caught only `OSError`, missing
+  `json.JSONDecodeError`/`UnicodeDecodeError` (both `ValueError`
+  subclasses) from a malformed project config, letting the same
+  whole-merge crash back in through a different exception type; both
+  are now caught. Also guards the jq path against a zero-source `jq -s`
+  call reading STDIN (a hook blocked on STDIN never returns) when
+  bundled and user configs are both absent and the project layer was
+  just sanitize-dropped, writing `{}` instead. See
+  [git-backup-security.md](docs/git-backup-security.md) (#740).
+
+- Fixed (#747): the #721 tracked-handoff guard (`_remember_handoff_is_tracked`
+  in `scripts/session-start-hook.sh`) refused a repo-committed
+  `.remember/remember.md` only in "legacy mode", which it detected by
+  comparing `REMEMBER_ROOT` to `PROJECT_DIR`. From a linked git worktree
+  those two differ even though `REMEMBER_DIR` is redirected into the SAME
+  repository's main-checkout `.remember/` (#56) -- the layout mismatch alone
+  flipped the guard's answer to "untracked, safe", so a git-tracked handoff
+  reached the session as `=== LAST HANDOFF ===` verbatim from any worktree,
+  the exact injection #721 exists to refuse. The guard, and the `git -C`
+  calls inside it, are now anchored on `MEMORY_PROJECT_DIR`
+  (`scripts/lib-memory-dir.sh`) -- the value the worktree-aware `.remember/`
+  redirect itself already computes and exports before this hook runs, so the
+  fix adds no new git invocation. `MEMORY_PROJECT_DIR` equals `PROJECT_DIR`
+  outside a worktree, so non-worktree behaviour is unchanged. Untracked
+  handoffs (the ordinary `/remember` case) and external-storage mode keep
+  being delivered from a worktree, unaffected.
+
+## [0.33.0] - 2026-09-15 — Turkish-locale collation stops silently dropping bridge variables, the SessionStart hook defers 20 subprocesses off its foreground path, and the release audit's three composition defects are fixed (#660, #672, #686, #695)
+
+### Changed
+
+- Changed: the SessionStart hook does less before it answers. Work whose result
+  the first turn does not need -- previous-session recovery, the capture-gap
+  check, the slug and case-divergence records, publishing the start-context
+  cache, and the `before_session_start` dispatch when `git_restore.enabled` is
+  false and no third-party hook is registered -- now runs in a detached phase
+  after the memory context has been emitted. Rendering a memory file under 16KB
+  no longer forks `cat`, `REMEMBER_ROOT` no longer forks `dirname`, and
+  `mkdir -p` on an existing `tmp/` is skipped. Foreground subprocess count per
+  start drops from 49 to 29; on Git Bash, where a fork costs 10-50x what it
+  costs on Linux, that is most of the hook's own cost. Measured on CI: the
+  hook's traced cold run on windows-latest falls from 2.32s to 1.60s on a
+  baseline store and 2.87s to 2.16s on a 20MB one; on ubuntu-latest from 148ms
+  to 102ms. Part of #660.
+- Changed: `REMEMBER_DEFER=0` runs that deferred phase inline instead. It
+  exists for tests that assert on one of those side effects and need it to have
+  happened by the time the hook exits; the default is deferred. Part of #660.
+- Fixed: two concurrent `dispatch` calls shared one capture file
+  (`tmp/dispatch-stdout.$$` -- `$$` is the shell's pid and does not change in a
+  subshell), so the background dispatch's cleanup could delete the file the
+  foreground one was still writing and a plugin's injected context vanished
+  with no error on any channel. The capture files are now named per event.
+  Found while deferring the `before_session_start` dispatch for #660.
+
+### Fixed
+
+- Fixed the Windows Git-Bash benchmark's hook-dir probe: it invoked the literal `bash` (which resolves to the WSL launcher and emits UTF-16LE/NUL-interleaved output, exit 127 on a missing distribution) instead of `resolve_bash()`'s Git Bash, and its output decoding is now UTF-16LE-aware (#672).
+
+- Fixed: the `handoff_mode: "per_session"` degrade notice (#363) silently
+  stopped printing in default (in-project) storage mode when no session_id
+  reached the SessionStart hook. The notice fired only in external storage
+  mode or when a session_id resolved, so a user on default storage whose
+  per_session request quietly fell back to the shared `remember.md` got no
+  indication of it. Fixes #686.
+
+- Fixed: under a Turkish locale (`tr_TR`, and `az_AZ` the same way) no save ever completed. `safe_eval` in `scripts/log.sh` matches the pipeline's `KEY=VALUE` output with `^([A-Z_][A-Z0-9_]*)=`, and `[A-Z]` is a POSIX bracket range matched by the locale's collation rather than by byte value -- Turkish collation does not place `I` inside `A`..`Z`, so every bridge variable whose name carries an `I` (`EXTRACT_FILE`, `POSITION`, `SKIP_LINES`) was silently dropped while the counts still arrived. The run passed its "0 exchanges" gate and died in `build-prompt` on `FileNotFoundError: ''`, thousands of times over. `safe_eval` now matches under `LC_ALL=C` for the duration of the function, the same guard `config()` already carries in that file (#695).
+- Fixed: `scripts/save-session.sh` now stops at the bridge, with an error naming `EXTRACT_FILE`, instead of calling `build-prompt` with an empty path. Whatever the reason the extract step's output loses a variable, the report should name the crossing rather than surface as a Python traceback from `open('')` (#695).
+
+- Fixed: a memory file whose size was never measured was emitted through bash's `read` rather than `cat`. `_remember_wc_size_get_into` returned `0` for a path it held no measurement for, and the render loop rewrote anything non-numeric to `0` as well, so `_remember_emit_file`'s own "no usable size" arm was unreachable and the 16 KB threshold added in this same release was defeated in exactly the degraded case it was written for -- a 4 MB file on the session-start foreground path, measured at 24.1s on windows-latest. The batched `wc -c` can fail wholesale, which leaves every file unmeasured at once. An unmeasured size is now kept distinct from zero at all three of the getter's call sites, and each says `size unknown` rather than printing `0 bytes` -- or an empty `( bytes)` -- for a file nobody measured (#695).
+- Fixed: the #695 source scanner credited a nested function's `local LC_ALL=C` to its enclosing function. `_function_spans` closed a function at the first `}` at column 0, and #660's deferred-phase work defines `capture_was_seen` at column 0 inside `_remember_deferred_phase` -- so 148 lines that hold no such declaration were reported as protected. Neither change contained the defect on its own; it existed only once both had landed. The parser now tracks nesting with a stack and attributes a declaration only to the lines it governs (#695).
+- Fixed: the capture-gap notice's own tests raced the phase that writes it. #660 moved the check into the deferred phase, where it is the last thing that phase does, so a hook that has returned says nothing about whether the check has run -- the positive assertions failed intermittently (caught on `macos-latest` 3.10, green on the other eleven legs) and, worse, all six negative assertions passed just as well against a phase that had not reached the check yet or had died before it. The positives now poll on the default deferred path, which is what proves the phase reaches its end; the negatives run the phase inline, where "did not fire" is a verdict rather than a race (#695).
+
+- Fixed: a config key containing an `I` disabled the config-data cache outright on a Turkish-locale host. `_remember_cfg_flatten_cache_valid_line` validated each cache line with `[[ =~ ^_RCFG_[A-Za-z0-9_]+= ]]`, and inside `[[ =~ ]]` a bracket range is matched by the locale's collation rather than by byte value -- Turkish collation does not place `I` inside `A`..`Z`. The line read as malformed, the cache was refused, and every hook fell back to re-reading and re-flattening the config on every invocation, permanently, with nothing said (#695).
+- Fixed: `_remember_normalize_win_path` stopped recognising the Windows drive `I:` under the same collation, and its `tr '[:lower:]' '[:upper:]'` mapped a lower-case `i:` drive to a dotted `İ` under Turkish case rules -- a two-byte character where one ASCII letter has to go. The `tr` needed its own `LC_ALL=C` prefix rather than the function's `local`: `local` on a name the environment never exported leaves it unexported, so on a host whose language is set through `LANG` alone the child process kept the user's locale (#695).
+- Changed: eleven further bracket ranges across `scripts/` and `hooks.d/` now match under `LC_ALL=C`, scoped to their own function. Measured on glibc, only `[[ =~ ]]` collates -- `case` patterns and `${v//[!...]/}` compare bytes -- so these were not broken, but one line makes them immune and the rule is now uniform. A new source scanner (`tests/test_locale_ranges_695.py`) fails the suite when a letter range appears outside an `LC_ALL=C` scope, with a written reason required for each allowlisted exemption (#695).
+
+## [0.32.0] - 2026-09-13 — SessionStart's fork-reduction series closes out with three opt-out caches (memory, config, tool-detection), 22+ more subshell forks cut from the hot path, and a Windows benchmark that finally runs in CI -- plus the release-audit fix moving the #668 config cache out of the project tree and validating it line-by-line before eval, and the privacy/terms pages the plugin directory listing requires (#656, #657, #660, #662-#669, #673, #679, #682, #683)
+
+### Added
+
+- claude-remember now asks for a GitHub star, once, through the same `SessionStart` promo slot and off switch (`features.plugin_promos`) the #574/#631 cross-plugin promo already owns (#657). It does NOT fire at install time: the gate is `recent.md` being a non-empty regular file, which only exists once a full day of sessions has actually been consolidated -- so the ask waits until the plugin has demonstrably done something for you, per the maintainer's decision on the issue. Same cooldown, same rotation, same `claude-remember:`-prefixed self-identifying `systemMessage`-only line as every other entry in `promos.json`. A `stargazers` badge was also added to README.md, next to the version badge.
+
+- `SessionStart` now caches three of the four things #668 identified as recomputed on every start -- the injected `=== MEMORY ===` section (six memory files headed/sized/concatenated, plus the rotated-slice listing), the flattened `config()` table (`_RCFG_*`), and the `python`/`jq` tool-verdict probe -- each validated by mtime (`-nt`, never a tie) against the files it depends on, and each invalidated rather than served stale on any mismatch. The context and config caches are written under `$REMEMBER_DIR/tmp/` and refreshed by `save-session.sh` and `run-consolidation.sh` at the tail of their own already-detached (`nohup ... & disown`) runs, so population costs nothing on the interactive path; `session-start-hook.sh` also self-heals a miss by writing a fresh cache via `tee` while still streaming the live render. The tool-verdict cache lives under the system temp dir (keyed on the exact `$PATH` string) since it runs before `REMEMBER_DIR` is known. The fourth item (`session_dir_slug`) was assessed and deliberately deferred -- see the pull request body for why. New shared library: `scripts/lib-memory-context.sh`. `REMEMBER_START_CACHE=0`, `REMEMBER_CONFIG_CACHE=0` and `REMEMBER_TOOLS_CACHE=0` each disable one cache independently for debugging.
+
+- `session-start-hook.sh` now has a real wall-time and spawn-count benchmark (`tests/test_session_start_windows_benchmark_669.py`), run on every leg of the existing test matrix -- including `windows-latest` under Git Bash -- rather than in a new, separate CI job (#669, part of #660). Every latency figure attached to #660's follow-ups (#662-#667) was reasoned from one reporter's own measurement and never observed in CI, because the Windows leg never executed this hook at all. Two scenarios are measured (jq present, and jq absent -- Git for Windows does not ship it), each cold and warm. Spawn count is asserted as a generous, deliberately loose budget (spawn count is counted by execution, so it is machine-independent); wall time is printed and recorded via `record_property` for a human to compare run over run, never asserted tightly, for the same reason this repo's own `#510` and `#497` reports are reports and not gates: a shared CI runner's wall clock is noisy about itself.
+
+- `tests/test_session_start_windows_benchmark_669.py`'s cold/warm wall-time and spawn-count numbers (#669) now reach a human on every CI run instead of none: each scenario appends a small Markdown table to `$GITHUB_STEP_SUMMARY` (shown on the run's own Summary tab, no workflow-file change needed -- GitHub Actions already makes that variable available to every step) and prints the same table to both stdout and stderr, so it is visible in the job log too, not only on a failure (#673). Appending degrades silently to a no-op when the variable is unset (the ordinary local `pytest` run), but a genuinely unwritable path raises loudly rather than dropping the table a second time.
+
+- Privacy policy (`docs/privacy.md`) and terms of service (`docs/terms.md`) pages, required by the OpenAI plugin directory submission form (#683).
+
+### Changed
+
+- SessionStart's foreground path no longer forks a `python3`/`python`/`py` candidate probe unconditionally on every start (#662). `$PYTHON` is only read by four jq-less fallback call sites (the config merge, the config flatten, the per-key read, and `_jq_fallback` itself), none of which fire when `jq` is on PATH -- the common case. Detection is now lazy: a `_remember_python()` resolver, called only at first actual need and cached the same way the existing PATH-keyed verdict cache already was, opted into via `_REMEMBER_LAZY_PYTHON=1` -- set only by `session-start-hook.sh`, since every OTHER sourcer of `detect-tools.sh` (`post-tool-hook.sh`, `save-session.sh`, `run-consolidation.sh`, `doctor.sh`) genuinely invokes `$PYTHON -m pipeline.shell` right after sourcing it, so eager detection there is real work, not waste. The jq-less path still resolves a working interpreter correctly when one is actually needed (#662's own named trap).
+- Rendering the injected `=== MEMORY ===` section (`lib-memory-context.sh`) no longer forks one `wc` + one `tr` + one `basename` per memory file -- a typical 4-6 file store paid 8-12+ forks here alone (#664, #666). Sizes are now read with one batched `wc -c` call across every present file (and, separately, one across the compact-mode deferred set and one across the up-to-10 rotated slices actually printed), parsed via a plain `read`, which already trims `wc`'s own padding; `basename` is replaced with `${MFILE##*/}`. The rotated-slice listing uses a glob array instead of `ls | sort`, and its count is the array length instead of `echo | wc -l | tr -d ' '`.
+- Three more always-on forks on the SessionStart foreground path are now gated or removed (#666): the `capture-alive.d` prune (`ls -t | tail`) only runs once the directory is actually over its 200-entry keep threshold, instead of on every single start; the staging-count check (`ls | grep -v | grep -v | wc -l | tr -d ' '`, five forks) is now a glob array walked with a `case`, zero forks; and `bootstrap-dirs.sh`'s stale-config sweep (`find -mmin +30`) is skipped entirely when a glob array shows there is nothing to sweep. `lib-clock.sh`'s `_remember_date` also now accepts `%s` through the bash >= 4.2 `printf '%(FMT)T'` builtin instead of always shelling out to `date` for it -- `%s` is POSIX strftime, not the GNU-only extension it was previously lumped in with, and the builtin and `date +%s` are pinned byte-identical by `tests/test_session_start_promo_spawn_budget_660.py`.
+
+- `SessionStart`'s hot path removes 22+ `$( )` subshell forks that were paying
+  a fork purely to capture an already-forkless builtin's output (#665, part
+  of #660): `config()`'s flattened-cache-hit lookups now have a `config_into
+  VAR key default` sibling (`printf -v`, no command substitution) used for
+  every `.features.*`/`.handoff_mode`/`.cooldowns.*`/`.timezone`/etc. read on
+  the `SessionStart` and per-tool-call config paths; `log()`'s timestamp now
+  calls `_remember_date_into` (already added by #511) directly instead of
+  wrapping it in `$( )`; `_remember_forward_slash` and `_stdin_json_string`
+  each gained an `_into` sibling, wired into every session-start-hook.sh call
+  site; and `lib-slug.sh`'s `_remember_build_slug_sed` -- 22 `$(printf
+  '\NNN')` calls building the slug's byte-range sed program, run once per
+  hook invocation -- now uses bash's own ANSI-C (`$'\NNN'`) octal quoting, a
+  lexer-level substitution that forks nothing, proved byte-identical to the
+  old builder. `log()`'s message control-byte scrub (`printf | tr`, #618/
+  #621) and the `.hooks.dispatch_*` reads in the hook-dispatcher region are
+  deliberately unchanged -- see the pull request body for why.
+
+### Fixed
+
+- save-session.sh's `FAILURE_MARKER` write (`last-summary-failure`, the consecutive-summarization-failure counter) now goes through the same `marker_write_ok` guard #653 gave the other four marker writes, instead of opening the path unguarded (#656). It was the fifth marker write in this file and #653's own completeness claim -- and its static test's `_MARKERS` tuple -- missed it: a FIFO planted at that path blocked the write in `open(2)` while still holding the save lock, the same shape #653 closed for `COOLDOWN_MARKER`, `NDC_MARKER`, `NOW_DAY_FILE` and `NDC_GEN_FILE`. Reachable only where `thresholds.max_summary_failures` (default 3) is configured above 1. Found by the v0.31.0 release gate 3 audit, round 2.
+
+- `session-start-hook.sh`'s promo selection (`_remember_compute_promo()`) no longer forks one `jq` process per field, per candidate, per invocation (#660). Reported as ~12.5s average session-start latency on Windows/Git Bash across 36 real starts, against 0.5-1.3s for comparable `SessionStart` hooks in the same sessions -- with Windows process-spawn cost (~50-200ms per subprocess under Git Bash) named as the plausible multiplier. Measured on this file: up to 13 `jq` forks for two shipped promos.json entries, including one query (`.plugins[$k]`) run twice back to back for no reason -- once to capture its value, once again just to inspect its exit status. Now 4, via one `jq` call reading the whole promo list and one probing `installed_plugins.json`, with a spawn-count regression test (`tests/test_session_start_promo_spawn_budget_660.py`) pinning it. Observed: the reduction in subprocess count, on this host. Reasoned, not observed: that removing 6 of 10 forks helps proportionally more on Windows/Git Bash, where each one costs more.
+
+- `50-git-restore.sh` (`before_session_start`) no longer re-runs the whole config-merge chain just to learn that `git_restore.enabled` is `false` (#663, part of #660). `session-start-hook.sh` sources `log.sh` -- which already resolves and merges the layered config -- before dispatching this hook as a CHILD process, and since `_LIB_MEMORY_DIR_LOADED` is deliberately not exported to it, `source log.sh` at the top of the hook unconditionally redid the ENTIRE three-layer merge (`lib-memory-dir.sh`'s own `mktemp`/`jq` merge, plus `log.sh`'s one-pass flatten) before ever reading the one boolean that decides whether any of that was needed -- on every dispatch, on every install with git_restore off (the shipped default). Now the hook reads the flag with one `jq` call straight out of the already-merged `REMEMBER_CONFIG` the parent already exported, before sourcing anything, and only falls through to the full chain when the flag says yes -- unchanged behavior on that path, since the authoritative `config()` gate right after `source log.sh` still re-checks it. Measured on this repo's spawn-counting harness (external `data_dir` layout, real re-source, git_restore.enabled=false): 11 spawns before this fix, 2 after (`tests/test_git_restore_no_resource_when_disabled_663.py`, with a positive control proving `git_restore.enabled=true` still runs the real restore). Also: `dispatch()` (`scripts/log.sh`) now reads the current user's UID with `$EUID` (a bash builtin) instead of forking `id -u`, and folds the per-hook ownership `stat` and the world-writable `find -perm -002` into a single `stat` call whose output decides both.
+
+- `session_was_saved()`'s jq-less fallback path (`_jq_fallback` in `scripts/detect-tools.sh`, used when `jq` is not on `PATH` -- the default on a fresh Git for Windows / Git Bash install) dropped the `--arg id "$1"` pair from its jq query entirely: the flag was swallowed as an unread option and the session id then took the place of the query, leaving the filter and the target file unread. Every previous session read as "unsaved" regardless of the truth, so `session-start-hook.sh`'s recovery block spawned `save-session.sh --force` in the background on every single jq-less startup (#667). `session_was_saved()` now gets its own jq-free branch, reading `last-save.json` with one direct Python call instead of going through the generic `--arg`-blind shim.
+
+- `SessionStart`'s warm path (#679, part of #660): a `sed` recovering the
+  EXIT trap in `lib-memory-dir.sh` and `bootstrap-dirs.sh` is now parameter
+  expansion (zero forks, byte-identical output, proven by a positive/negative
+  control), a `cat` of `capture-alive`/`capture-gap-reported` and the static
+  `session-history-hint.txt` is now a builtin `$(<file)` read, and two
+  same-script temp-file removes at the very end of `session-start-hook.sh`
+  are now one `rm -f` call instead of two. Warm-start spawn count on this
+  platform dropped from 30 to 24 (jq present).
+- The issue's own premise -- that the jq-less path re-probes `python3 -V`
+  and re-renders the whole `MEMORY` section on every warm start, missing
+  both of #668's caches -- turned out to be a bug in the TEST HARNESS this
+  repo measures itself with, not in `detect-tools.sh` or
+  `lib-memory-context.sh`: `tests/test_session_start_windows_benchmark_669.py`'s
+  own `_path_without_jq` helper removed the WHOLE PATH directory holding a
+  `jq` binary to simulate "jq absent", and on any machine where jq shares a
+  directory with core tools this hook also needs (macOS 15+ ships jq at
+  `/usr/bin`, alongside `mktemp`), that silently took `mktemp` down with it
+  too -- breaking BOTH #668 caches' publish step for the whole scenario,
+  cold run included. A genuine Windows/Git-Bash "jq absent" machine has no
+  jq anywhere on `PATH` at all, so there is no directory to remove and
+  `mktemp` (bundled with Git for Windows) is never at risk; users on that
+  platform were never actually affected. Fixed the harness (a per-file
+  exec-shim view directory, not a directory drop) and re-measured: with jq
+  genuinely absent, both caches hit correctly on a warm start, matching
+  jq-present's own warm spawn count exactly (24) once the harness stopped
+  hiding it.
+- Windows/Git-Bash benchmark budgets in `tests/test_session_start_windows_benchmark_669.py`
+  are re-measured and tightened to the corrected numbers (observed on
+  macOS): jq present cold 43 / warm 24, jq absent cold 73 / warm 24, each
+  with roughly 2x slack.
+
+- **Security fix (#682):** the #668 flattened-config cache (`_RCFG_*`, unreleased --
+  landed in #670, after v0.31.0) used to live at `$REMEMBER_DIR/tmp/config.rcfg`
+  -- inside the PROJECT tree, a directory users commit and share -- and was
+  loaded with a bare `source`. A repository could ship that file and have
+  every hook that sources `log.sh` (every `SessionStart`, every post-tool
+  call) execute its contents as shell in the cloning user's own session, no
+  action beyond `git clone` and opening the project. The cache now lives
+  under the system temp dir instead (the same convention as
+  `lib-env-cache.sh`'s and `detect-tools.sh`'s own caches), keyed on
+  `REMEMBER_DIR` so two projects on the same machine never collide on one
+  file's mangled filename and silently read back each other's config (the
+  cache now carries its own REMEMBER_DIR identity line, checked on every
+  load), and the loader no longer trusts `source` at all: it validates
+  every line against the exact `NAME=%q-value` shape the publisher writes
+  and rejects (and removes) the whole file on the first line that does not
+  match, before a single byte of it is evaluated. A stale
+  `.remember/tmp/config.rcfg` left behind by an earlier build is simply
+  never read again -- it is not migrated, and nothing deletes it
+  automatically; it is dead weight, not a hazard, once this fix is
+  installed.
+
+  Follow-up (same issue, self-review + maintainer review): the value
+  validator's ASCII whitelist rejected two shapes `%q` plainly leaves bare
+  and unescaped -- a mid-word `#` (`printf %q 'a#b'` -> `a#b`) and any
+  non-ASCII byte (`e9`, `65e5 672c`) -- turning a rejection into a
+  delete-and-republish on every single run for any config value or
+  project path containing either, forever. The check is now a blacklist of
+  what can actually change how `eval "NAME=value"` parses a plain
+  assignment word (unescaped whitespace, `; & | ( ) < >`, `$`/backtick,
+  quotes), run under a function-local `LC_ALL=C` so its character classes
+  match the raw bytes `%q` wrote rather than whatever locale the caller
+  happens to be in. A second bash-3.2-only gap is also closed: bash
+  tilde-expands after an unquoted `:` in an assignment word as well as at
+  the start, and stock macOS `/bin/bash`'s `%q` does not escape that
+  position (`a:~` stays `a:~`, unlike bash 5's `a:\~`) -- a bare `:~` is
+  now rejected outright, by position, on every bash.
+
+## [0.31.0] - 2026-09-11 — SessionEnd detaches before its preamble, SessionStart stops holding the client's pipe open through consolidation, and the Python-detection FATAL says what it saw -- the three Windows reports of the week, plus the release audit's marker-write FIFO guard (#646, #647, #650, #653)
+
+### Added
+
+- Two guards against the #646 shape, a detached child inheriting a dup of the client's pipe and holding it open after the hook exits (#648): a static check that flags any background spawn in a shell script made while an fd >= 3 opened by `exec` is still open and not closed on that line, run over every script in the repo; and a per-spawn-site measurement that stubs the detached work with a sleeper and asserts EOF on the hook's stdout arrives while the child is still running. The consolidation, recovery-save, PostToolUse-save and Antigravity Stop spawn sites are covered.
+
+### Changed
+
+- Closed without a code change: #621 asked for a cheap in-shell pre-check
+  ahead of `log()`'s `printf | tr` control-byte flatten (an optional cost
+  optimization). PR #627 closed #621 via GitHub's `Closes #621`, but the
+  pre-check was never shipped -- two portability attempts at the pre-check
+  itself (a POSIX `[[:cntrl:]]` bracket-class `case`, then an ANSI-C
+  byte-range `case` meant to fix that) each broke a different CI platform,
+  and a third round -- a test-harness PATH-injection fix -- diagnosed and
+  resolved a separate windows-latest artifact in the same CI run without
+  ever explaining the macOS symptom, so #627 shipped a straight revert to
+  the pre-#621 unconditional flatten instead. `log()` still forks `tr` on
+  every call today. This matches `scripts/log.sh`'s own comment on `log()`
+  ("tried twice... a two-attempt failure record") and `CHANGELOG.md`'s
+  0.30.0 entry for #621 ("two portability attempts... a third round of
+  unreproducible platform fragility"), both already accurate. #621's own
+  closed state now carries a correcting comment so the board does not read
+  the optimization as shipped -- this issue is closed as already correctly
+  documented, with no further code or record change needed (#629).
+
+- Documented, not fixed: while working #621 on PR #627, a bash
+  `case "$var" in *[$'\xxx'-$'\yyy']*)` byte-range glob pattern -- reached
+  for as a cheap in-shell control-byte pre-check -- silently failed to
+  match a message that genuinely carried a control byte on every
+  `macos-latest` CI leg, so the `tr` flatten it guarded never ran. Not
+  reproducible locally on Apple's system bash (3.2.57) or a fresh Homebrew
+  bash (5.3.15), under several locales; the runner image
+  (`macos-26-arm64`, `20260831.0337.3`) was unavailable to test directly,
+  so the mechanism stayed unknown. `scripts/log.sh` no longer uses this
+  pattern (reverted to an unconditional flatten), so nothing shipped is
+  currently exposed, but the pattern shape is a plausible thing to reach
+  for again elsewhere in this codebase and fails silently (a `case` that
+  does not match raises no error) -- recorded as a landmine in
+  `trap.d/630.macos-case-byte-range-silent-mismatch.md` for the curation
+  pass to weigh as a jit-context rule (#630).
+
+### Fixed
+
+- Fixed: `post-tool-hook.sh`'s basename-derived `SESSION_ID` sanitiser
+  (#620) could empty the value to `""` with no non-empty gate before the
+  background save fork, unlike the stdin route's own
+  `STDIN_SESSION_ID_TRUSTED` gate (#610). An empty `argv[1]` reached
+  `save-session.sh`, which reads it as "no id given" and silently
+  substitutes the newest `.jsonl` by mtime instead of refusing -- turning a
+  loud, logged rejection into a completed save for a session nobody named.
+  The fork is now skipped and logged as a refusal whenever the sanitiser
+  empties `SESSION_ID` on the basename route, matching the invariant the
+  stdin route already holds (#633).
+
+- Fixed: `ndc_read_gen()` in `scripts/save-session.sh` could hang the whole save indefinitely (or stream unboundedly) if a FIFO or character device ever existed at `$REMEMBER_DIR/tmp/ndc-generation`, since it lacked the regular-file type check its sibling `ts_marker_read()` already had. It now reports "unreadable" for any non-regular-file marker without attempting to read it (#634).
+
+- Fixed: the two guarded timestamp-marker writes in `scripts/save-session.sh` (`COOLDOWN_MARKER` and `NDC_MARKER`) placed `2>/dev/null` after the `>` redirection, which only takes effect once that redirection has already succeeded -- a failed write (permission denied, a directory in the marker's place) still leaked bash's own raw diagnostic line. Both writes now wrap the redirection in a `{ ...; }` group so `2>/dev/null` actually suppresses the group's own failure, and `report_error()` still reports it as before (#635).
+
+- Fixed: `lib-staging-lock.sh`'s fallback `report_error()` stub -- used only
+  when `log.sh` was never sourced, or returned early (#361/#372/#394) -- now
+  flattens control bytes (`LC_ALL=C tr '[:cntrl:]' ' '`) before writing to
+  `hook-errors.log`, the same as `log.sh`'s own four writers already do
+  since #618. #618's "all four writers now flatten" claim was true of
+  `log.sh`'s own writers only -- this was a fifth, uncovered writer of the
+  same file. No caller passes stranger-controlled text through this stub
+  today, so this closes a coverage gap ahead of the next caller that might
+  (#636).
+
+- Fixed: `scripts/session-start-hook.sh`'s promo length-budget comment (#637)
+  narrated the history as "the budget moved instead (140 -> 150)" while the
+  code enforced 170, matching `docs/hooks.md` and `docs/configuration.md`. The
+  comment now reads "140 -> 150 -> 170", matching the enforced value and both
+  docs. Comment-only fix; no behavior change.
+
+- Fixed: `scripts/save-session.sh` read `$NOW_DAY_FILE` via a bare `cat` with no regular-file type check, unlike its siblings `ndc_read_gen()` (#634) and `ts_marker_read()` (#625) -- a FIFO or character device at that path could hang the whole save indefinitely, or stream unboundedly. The read is now guarded the same way (#642).
+
+- Fixed: five more writes in `scripts/save-session.sh` (the COOLDOWN_MARKER and NDC_MARKER self-heal writes, both NOW_DAY_FILE stamps, and the NDC_TAIL truncate-and-copy) placed `2>/dev/null` after a `>` redirection that can itself fail -- the same shape #635 fixed for two other writes. Since redirections are set up left to right, a failing `>` reports bash's own raw diagnostic before `2>/dev/null` ever takes effect. All five are now wrapped in a `{ ...; }` group so the suppression covers the redirection's own failure too (#643).
+
+- SessionStart no longer holds the client's stdout pipe open for the whole of a background consolidation run (#646). The hook buffers its own output and keeps the real stdout on fd 3, which the detached `run-consolidation.sh` inherited -- so a client reading to EOF waited for the child, not for the hook. Measured at 98.62s against a 93s consolidation, which on the VS Code extension's 60s subprocess-init deadline is a session that fails to start, under an error about authentication and network connectivity. The spawn now closes fd 3.
+
+- SessionEnd writes its `logs/autonomous/session-end-*.log` trace before attempting the flush, instead of after (#647). Every early exit below it -- an uncreatable store, a `save-session.sh` missing from a half-finished install -- used to leave the same empty directory an unregistered hook leaves, and `/remember:doctor` reported "SessionEnd has never fired for this project" and blamed hook registration. A hook cancelled during the preamble is still not covered: that is the 1.5s shared-budget case #560 addresses, and the seed depends on the same path resolution that spends the budget.
+
+- SessionEnd detaches before its own preamble, so the hook process returns in tens of milliseconds on any machine instead of after resolving paths, probing for python/jq and bootstrapping the store (#647, closing the gap #560 left). Claude Code gives SessionEnd a 1.5-second budget shared across every hook on the event; #560 measured that preamble at ~3.4s on a slow Windows/Git-Bash machine, and #561's declared `timeout` is one Claude Code's own reference says a plugin cannot use to raise the budget. The process Claude Code invokes now reads stdin and re-launches itself detached; preamble, trace seed and flush all run in the child. One report is lost on that path and documented: a store that could never be created at all (#372) has no `hook-errors.log` to write to and now no stderr either -- `REMEMBER_SESSION_END_FOREGROUND=1` runs the old inline shape for debugging.
+
+- `detect-tools.sh`'s "No working Python found" now says what it saw, not only what it concluded (#650): the `PATH` it searched and, per candidate, `not on PATH` or the exit status of its `-V` probe (49 being the Microsoft Store placeholder). A Windows reporter logged 1,650 consecutive hook failures over a month with the interpreters present and working in the same shell, then it self-resolved with nothing changed; the old message left no way to tell "missing from PATH" from "present and shadowed" after the fact. Nothing is printed on success.
+
+- save-session.sh's marker WRITE sites (`last-save-ts`, the NDC cooldown and generation markers, `now-day`) now refuse a path that exists but is not a regular file, with a WARNING, instead of opening it (#653). #634/#642 guarded the READ side against a planted FIFO; a `>` on a FIFO with no reader blocks in `open(2)` before any redirection error exists for the surrounding `2>/dev/null || true` to catch, so the post-save write hung while still holding the save lock and every later save queued behind it. Found and reproduced by the v0.31.0 release audit.
+
+- A non-regular `now-day` marker (a FIFO, a directory) is now reported with a WARNING when save-session.sh falls back to today's date, instead of being indistinguishable from "no marker yet" (#654). The siblings fixed for the same class report `unreadable`; this one fell through silently, which is a previous day's entries attributed to today with nothing in the log. Absence stays quiet. Found by the v0.31.0 release audit.
+
+## [0.30.0] - 2026-09-10 — Absent-vs-unreadable markers stop crashing save-session.sh under set -e, hook-errors.log's remaining raw writers get flattened against log forging, and the SessionStart promo names itself and its off switch -- the release gate 3 audit files five more non-blocking findings (#633-#637)
+
+### Changed
+
+- Changed: the cross-plugin promo at `SessionStart` (#574) now says who is
+  speaking and how to stop it, in the line itself (#631). It renders as
+  `claude-remember: <promo> -- <url> (off: features.plugin_promos)`.
+
+  Two separate gaps, both reported as one: `features.plugin_promos` was
+  already documented in `README.md`, `docs/configuration.md` and
+  `docs/hooks.md`, but nobody reads documentation at the moment an unasked-for
+  line appears in their terminal -- the reporter's words were "without a clear
+  path to disabling" it. And `systemMessage` is emitted raw, with no plugin
+  name attached by this hook and no guarantee the client adds one, so the
+  reporter could not tell which of his installed plugins had spoken. An off
+  switch nobody can find and one nobody can address are the same defect
+  twice; the line now carries both halves.
+
+  The default is unchanged: still **on**, still only for a sibling plugin
+  absent from `~/.claude/plugins/installed_plugins.json`, still at most once
+  per `cooldowns.promo_seconds` (7 days). Opt-in was requested and declined --
+  a promo channel nobody opts into reaches nobody, which is removal by a
+  politer name, and the complaint that held up was discoverability rather than
+  existence. The promo is also self-terminating: install both siblings and it
+  never speaks again.
+
+  The length budget moves 140 -> 170 to fit the prefix and the hint. That
+  guard only decides when an entry is skipped-and-logged; it lengthens no
+  rendered line. Two shorter spellings were measured and rejected:
+  `plugin_promos=false` fits 140 but is valid syntax nowhere (`config.json` is
+  JSON), and dropping `github.com/` from the displayed URL fits 150 but stops
+  most terminals auto-linking it, defeating the only thing the promo is for.
+  The longest shipped entry renders at 159 of 170, and a test asserts every
+  shipped entry still renders -- a copy edit that busts the budget fails CI
+  instead of silently suppressing the promo.
+
+### Fixed
+
+- Fixed: the CHANGELOG.md entry for #595 (folded into the 0.29.1 release
+  section) stated as current fact that `docs/windows-skip-triage.md` "now
+  states 102/82" and that `tests/test_windows_skip_triage_prose_totals_595.py`
+  is "a new guard" tying that doc's prose sentences to its own table. Both
+  were true only for the few commits between #595's own merge and #613's:
+  three commits later in that same release, #613 (landed as PR #615) removed
+  the hand-maintained prose counts from the doc entirely and replaced the
+  guard with `tests/test_windows_skip_triage_no_stale_prose_counts_613.py`,
+  which the #613 entry a little further down the same release section
+  already documents correctly. This fragment is not a correction to
+  `changelog.d/595.fixed.md` itself -- that file was already folded into
+  `CHANGELOG.md` and deleted by the time #617 was filed, so there is nothing
+  left under `changelog.d/` to amend. Read the #595 entry as a historical
+  record of what PR #605 did, not as a claim about the doc's state at HEAD;
+  the #613 entry immediately below it in the same release is the current
+  description (#617).
+
+- Fixed: #599's control-byte flatten (`LC_ALL=C tr '[:cntrl:]' ' '`) only
+  ever covered `$MEMORY_LOG_FILE`, the daily narrative log written by
+  `log()` itself. Four functions in `scripts/log.sh` --
+  `_dispatch_report_failure`, `_dispatch_report_skip`, `report_error`, and
+  `_dispatch_report_timeout` -- write a SECOND, independent copy of the same
+  message straight to `hook-errors.log` via their own `printf`, entirely
+  outside `log()`, and that copy was never flattened. `hook-errors.log` is
+  the file `/remember:doctor` tails under "Recent errors" and the one
+  maintainers ask reporters to paste, so an embedded newline in a hook name,
+  an exit reason, or a hook's own untrusted reply text could forge a second,
+  attacker-shaped entry in exactly the file a human is told to trust. All
+  four writers now flatten before either write (#618). This also corrects
+  #599's own coverage claim, both in `scripts/log.sh`'s comment and in the
+  entry already folded into `CHANGELOG.md` under the 0.29.0 release ("the
+  class is closed everywhere `log()` is used") -- that claim was true of
+  `log()` callers, not of `hook-errors.log`'s own raw writers, which #599
+  never reached. The already-released `CHANGELOG.md` entry is left as
+  historical record rather than hand-edited; this fragment is the
+  correction.
+
+- Fixed: save-session.sh's NDC generation guard (#614) now tells "the
+  generation marker was never created" (legitimately generation 0) apart from
+  "the marker exists but a read of it failed" (a permission or I/O error, or a
+  reader racing the truncating write that bumps it). Both used to collapse to
+  the same 0 at both read sites, so two failed reads could compare equal to
+  each other -- and to a legitimately absent marker -- and the guard would go
+  silent exactly when it could not tell whether another NDC round had already
+  committed, restoring the pre-#614 risk of content landing nowhere (#619).
+
+- Fixed: `post-tool-hook.sh`'s basename-derived `SESSION_ID` (the fallback used
+  whenever stdin does not supply a trusted `session_id`) reached
+  `save-session.sh`'s argv unguarded, unlike the stdin-derived id, which #610
+  already guards against a leading dash at its own point of entry. A
+  transcript basename shaped like `save-session.sh`'s own `--dry`/`--force`
+  flags now gets cleared the same way, at the point the id is derived, before
+  it ever reaches `nohup "$SAVE_SCRIPT" "$SESSION_ID" ...` (#620). In
+  practice this route's impact is narrower than #610's: because the
+  basename-derived id and the transcript `save-session.sh`'s own auto-detect
+  would independently re-discover are always the same file, its own
+  session-id-shape check already rejected the crafted value before this fix
+  landed -- but the guard is still added for consistency with the sibling
+  fixes (#576, #600, #610) and because a future change to that downstream
+  check should not silently reopen this route. The code comment claiming
+  both routes already shared this guard is corrected to match.
+
+- Closed without a code change: `log()` (`scripts/log.sh`) forked a
+  `printf | tr` pipeline on every call to flatten control bytes (#599), even
+  though most log messages carry none. #621 asked whether a cheap in-shell
+  pre-check could skip that fork when a message has no control byte to
+  flatten. Two portability attempts at the pre-check each broke a different
+  CI platform in ways this repo could not reproduce locally after extensive
+  effort (multiple bash builds, multiple locales, an emptied environment):
+  a POSIX `[[:cntrl:]]` bracket-class version silently never matched a real
+  embedded control byte under windows-latest's Git Bash, and a follow-up
+  ANSI-C byte-value range meant to avoid exactly that ctype/locale
+  dependency then did the identical thing on every macos-latest CI leg
+  instead. #621 itself calls this fix optional ("if judged worth it") --
+  it is a hot-path cost optimization, not a correctness fix -- and it must
+  not keep blocking the correctness fixes landing alongside it (#618,
+  #620) on a third round of unreproducible platform fragility. `log()`
+  forks the flatten unconditionally again, as it did before #621 (#621).
+
+- Fixed: `_gh_unlabelled_issue_counts` in `.oss/statusline.py` built one line per
+  open issue by joining its label names with `,` in a `gh api --jq` call and
+  splitting that line back apart in Python. A GitHub label name may legally
+  contain a comma -- a label literally named e.g. `blocked,lane-storage` split
+  into two names, one of which (`lane-storage`) could coincidentally collide
+  with a real declared lane, so the issue silently counted as *placed in a
+  lane* when no triage sweep had actually placed it there. The direction of
+  the error was an under-count of `no_lane`/`no_priority`, the opposite of
+  this function's own documented convention of never under-counting -- and
+  the existing `len(lines) != total` cross-check could not catch it, because
+  the line count stayed correct; only the per-line parse was wrong (#622).
+  The wire format is now one JSON array of label names per line
+  (`[.labels[].name] | tojson` server-side, `json.loads` in Python) instead
+  of a comma-joined string, closing the hole with a delimiter no label name
+  can contain rather than trying to escape or reject commas after the fact.
+  `.oss/statusline.py` had no test coverage before this change; a first,
+  narrow test file (`tests/test_statusline_gh_unlabelled_issue_counts_622.py`)
+  covers this one function directly by stubbing `_run`, rather than adding
+  broader coverage for the module -- the smallest fix proportionate to what
+  was actually reported.
+
+- Fixed: save-session.sh's two other timestamp markers, `tmp/last-save-ts`
+  (the save cooldown) and `tmp/last-ndc.ts` (the NDC compression cooldown),
+  had the same absent-vs-unreadable collapse #619 fixed for the NDC
+  generation marker: `cat FILE 2>/dev/null || echo 0` cannot tell "never
+  created" from "exists but a read of it failed" (a permission or I/O error,
+  or the marker's own place taken by a directory). A durably unreadable
+  marker now silently defeated its cooldown on every single invocation with
+  nothing in the log to say so. Both now go through a shared `ts_marker_read`
+  helper and log a WARNING naming the marker when a read fails, instead of
+  proceeding in silence. Fixing this also surfaced a related crash: the
+  unconditional `date +%s > "$MARKER"` write below each read ran unguarded,
+  so a durably unwritable marker (a directory, most reachably) killed the
+  whole script under `set -e` rather than merely leaving the cooldown to
+  re-trigger next time -- both writes are now guarded the same way the
+  existing self-heal write already was. Self-review also caught that
+  widening the existence check to include non-regular files (needed to
+  catch a directory in a marker's place) opened a hang: `cat` on a FIFO with
+  no writer present blocks forever, with no timeout anywhere in the script.
+  `ts_marker_read` now rejects any non-regular file before ever calling
+  `cat` on it (#625).
+
+- Fixed: when save-session.sh's NDC commit gate skips a commit because
+  `tmp/ndc-generation` could not be read (#619), the log line now names the
+  remedy for a marker that is durably unreadable rather than merely racing a
+  writer -- delete it to reset generation tracking to 0 and unblock future
+  commits -- instead of leaving every future round to land on the same
+  "SKIPPED commit" line with no hint of the way out (#626).
+
+## [0.29.1] - 2026-09-07 — A generation counter closes a silent NDC byte-loss race, a control-byte flatten closes a log-forging gap, and the last leading-dash argv-injection guards land across the session hooks — the release gate 3 audit on this delta files six more non-blocking findings, one carried to the next milestone by the round cap
+
+### Fixed
+
+- Fixed: `docs/windows-skip-triage.md` restated the total blanket win32-skip
+  module count and the `unclear` verdict count as fixed prose numbers -- "98"
+  and "78 modules" -- in four sentences that nothing recomputed, while the
+  table right below them (guarded by `tests/test_windows_skip_triage_497.py`
+  against the live tree) had already grown to 102 modules / 82 `unclear`
+  across #589 and #591 without those sentences being touched (#595). The doc
+  now states 102/82, and a new guard,
+  `tests/test_windows_skip_triage_prose_totals_595.py`, ties every one of
+  these prose sentences -- total, `unclear`, and (after self-review flagged
+  the same gap on the two other verdict counts) `convertible` and
+  `not-convertible` as well -- to the table's own row/verdict counts rather
+  than to another hardcoded number, so a future row added to the table
+  without updating the prose next to it fails a test instead of drifting
+  silently again. The table-row parsing itself now lives in one shared
+  `scripts.windows_skip_triage_497.parse_doc_table_rows` helper, used by both
+  this new guard and the existing #497 one, so the two cannot silently
+  disagree about what counts as a row.
+
+- Fixed: an Antigravity SessionStart burned the machine-global cross-plugin promo
+  cooldown for every Claude Code session on the same machine, for a promo nobody ever
+  saw (#596). `scripts/agy-session-start-hook.sh` delegates to
+  `scripts/session-start-hook.sh` with the delegate's own stdout piped to `/dev/null`
+  (Antigravity parses a command hook's stdout as protojson against its own schema,
+  #563) -- but the delegate's emit block committed the `$HOME/.remember/tmp/promo-
+  notice` throttle/rotation marker on any successful `printf`, and `printf` to
+  `/dev/null` succeeds. `agy-session-start-hook.sh` now sets `REMEMBER_SUPPRESS_PROMO=1`
+  on that call, and `session-start-hook.sh` skips the whole promo feature (selection
+  and marker alike) when it is set. Fixed at the delegation call rather than by having
+  `session-start-hook.sh` try to detect its own discarded stdout: a real Claude Code
+  invocation also reads this hook's stdout through a non-tty pipe, so no in-script
+  check (`[ -t 1 ]` included) can tell "discarded" from "captured normally".
+
+- Fixed: `log()` (`scripts/log.sh`) wrote its message argument verbatim into the
+  daily log file, with no newline handling. Several call sites in
+  `scripts/save-session.sh` embed the first 80 bytes of a model's reply straight
+  into a log line (e.g. the NDC and header-validation rejection paths) -- text
+  that is untrusted since #593, because it is model-authored from the
+  conversation's own content rather than controlled by this codebase. A raw
+  newline or carriage return embedded in that text landed at column 0 of the log
+  file and read as a second, forged log entry to anything parsing the log -- a
+  person skimming it, or a script (#599). `log()` now flattens every control byte
+  in the message to a plain space (`LC_ALL=C tr '[:cntrl:]' ' '`, the same remedy
+  `scripts/doctor.sh`'s `_json_escape` already uses for the identical reason)
+  before writing the line, once inside `log()` itself rather than at each of the
+  (at least three) call sites that embed such text, so the class is closed
+  everywhere `log()` is used rather than only at the newest call site.
+  `LC_ALL=C` is load-bearing rather than decoration: those call sites cut the
+  model's reply with `head -c 80`, a byte-count cut with no regard for UTF-8
+  character boundaries, and under the caller's own UTF-8 locale a cut landing
+  mid-multibyte-character makes `tr` print "Illegal byte sequence", exit
+  nonzero, and truncate its own output at the bad byte -- silently dropping
+  everything logged after it, and, because `save-session.sh` runs under `set
+  -e`, aborting the whole script on the `message=$(...)` assignment whose exit
+  status is `tr`'s. Forcing the C locale makes `tr` classify every byte 0-255
+  on its own, identically on GNU and BSD, so a non-ASCII byte that is not
+  itself a control code passes through untouched instead of erroring.
+
+- Hardened `scripts/session-end-hook.sh`'s `STDIN_SESSION_ID` guard against argv flag injection (#600): a `session_id` shaped like a flag (e.g. `--dry`) on the SessionEnd payload consisted entirely of characters the guard already allowed, so it passed untouched and reached `save-session.sh`'s argv, whose own arg loop reads a leading `--dry`/`--force` as a FLAG rather than a session id -- silently turning the last-chance flush into a dry-run preview (no summary written, position not advanced). The guard now rejects a leading dash too, mirroring the remedy #576 already applied at the sibling `agy-stop-hook.sh` call site.
+
+- Fixed: `tests/test_path_resolution.py`'s `test_scripts_use_jq_var_not_hardcoded`
+  excluded a `command -v jq` availability probe by `continue`-ing past the WHOLE
+  matched line, not just the probe span, so a hardcoded `jq` call sharing a line
+  with a probe would never reach any later check in that loop -- the exact
+  exclusion the docstring already promised ("but not `command -v jq`") never
+  actually implemented that way (#601). The scanning logic is now a standalone
+  `_line_has_hardcoded_jq()` helper that strips only the `command -v jq` substring
+  before scanning the rest of the line, closing the amnesty; a new regression test
+  pins a fixture line combining a probe and a hardcoded call on the same line.
+
+- Fixed: `tests/test_plugin_promo_574.py`'s suppression tests (`test_suppressed_when_key_present`,
+  `test_cannot_tell_suppresses_like_installed`, `test_wrong_version_is_cannot_tell`) asserted only
+  that `systemMessage` was absent from the hook's output -- an assertion equally satisfied by the
+  hook printing nothing at all, on the one path covering the common every-session case (promo
+  suppressed, buffer flushed) (#602). Each now also asserts `=== REMEMBER ===` (the history hint
+  from `prompts/session-history-hint.txt`, printed unconditionally on every `SessionStart` run) is
+  present in the output, so a total-loss regression on this path fails the test instead of passing it.
+
+- Fixed: `post-tool-hook.sh`'s `session_id` guard let a leading-dash value
+  (e.g. `--dry`) through unrejected, the same character-class gap #576 already
+  closed at its `agy-stop-hook.sh` call site (and #600 is closing at
+  `session-end-hook.sh`, in PR #609, not yet merged) -- a third, distinct call
+  site here, reaching `save-session.sh`'s argv on the background `nohup` save
+  path.
+  Paired with a real `transcript_path`, the untouched id was trusted and
+  read by `save-session.sh`'s own arg loop as the `--dry` FLAG rather than a
+  positional session id, silently turning a real delta-triggered save into a
+  no-op dry-run preview: no summary written, no position advanced (#610). The
+  guard now rejects a leading dash the same way its two siblings do.
+
+- Fixed: `docs/windows-skip-triage.md` restated four of its own table's counts
+  (the total module count, three times, plus the `convertible`,
+  `not-convertible` and `unclear` verdict counts) as hand-maintained prose
+  numbers. A reactive test (`tests/test_windows_skip_triage_prose_totals_595.py`)
+  caught a mismatch after the fact, but the numbers still drifted three times
+  in quick succession (#595, #596, and a follow-up commit on #611), each time
+  because a PR adding one new table row was reviewed and merged green against
+  its own stale base, before a sibling PR's prose fix had landed -- a same-PR
+  test cannot see a drift introduced by a different PR's base (#613).
+  The prose numbers are removed rather than re-derived: the table below is
+  now the only place any of these counts live, so there is nothing left for a
+  PR to leave out of sync. `tests/test_windows_skip_triage_no_stale_prose_counts_613.py`
+  replaces the old reactive test, guarding against one of these numbers
+  creeping back into the prose by hand.
+
+- Fixed: a narrow NDC compression race (#614) could silently drop bytes from
+  `now.md` that existed nowhere else -- not in `now.md`, not in any
+  `today-*.md`. NDC's own commit re-checks the size of `now.md` under the save
+  lock before trusting its pre-Haiku byte offset, but a *size* check alone
+  cannot tell a legitimate append from a REPLACEMENT that happens to still be
+  at least as long: exactly what another, overlapping NDC round's own commit
+  produces (its own tail, written over `now.md` by its own `mv`). Two
+  overlapping rounds are reachable when a second round's hour-long cooldown
+  gate opens while the first round's Haiku call, or its own lock-reacquisition
+  wait, is still in flight -- for example across a laptop sleep/wake spanning
+  the cooldown. When that happens, the second-committing round's own
+  `tail -c +N` offset no longer describes any real boundary in the file, and
+  can slice into bytes its own Haiku call never summarized.
+  `save-session.sh` now tracks a small monotonic generation counter
+  (`.remember/tmp/ndc-generation`), bumped by every NDC commit that lands and
+  checked, under the same lock, before any later round is allowed to commit --
+  any mismatch means a commit has landed since that round's snapshot was
+  taken, and the round is skipped exactly like the pre-existing "shrank below
+  the snapshot" case, rather than acting on a now-meaningless offset.
+  A prior triage pass on #614 could not confirm the reporter's own suspected
+  cause (a hook blind-truncating `now.md`) -- the append path never truncates,
+  and this race is unrelated to that guess. `tests/test_ndc_commit_lock.py`
+  adds a regression test that reproduces the exact byte loss (a replacement
+  at least as long as the stale snapshot, going undetected by the byte-count
+  check alone) and confirms the generation check now catches it.
+
+## [0.29.0] - 2026-09-06 — A cross-plugin promo ships behind a suppression control, and the release gate 3 audit that found it files three more non-blocking findings against the delta that carried it
+
+### Added
+
+- Added: a `systemMessage` cross-plugin promo at `SessionStart` (#574), naming one
+  sibling Digital-Process-Tools plugin (`supertool` or `claude-jit-context`) the
+  user has NOT already installed, checked against
+  `~/.claude/plugins/installed_plugins.json`. Copy lives in `promos.json` (beside
+  `config.example.json`), never in the hook script, so wording can change without
+  a shell edit. Emitted only from `SessionStart` -- never `SessionEnd`, never as
+  `additionalContext` -- because `systemMessage` is the one hook channel a human
+  sees and the model never does. Off switch: `features.plugin_promos` (default
+  `true`). Throttle: `cooldowns.promo_seconds` (default 604800, i.e. 7 days),
+  persisted per machine under `~/.remember/tmp/`, independent of any per-project
+  `data_dir`. An entry with no `url`, or whose rendered text would be too long, is
+  skipped and the skip is logged rather than silently rendered without the link.
+  A `cannot-tell` read of the installed-plugins file (absent, unreadable, or the
+  wrong schema version) suppresses the promo exactly like a confirmed install --
+  only a positive "not installed" ever speaks.
+
+- Added: a `.claude/jit-context` entry (`tools/00-manual/win32-skip-triage-entry.md`) that reminds, at write time, that a new module-level `pytestmark = pytest.mark.skipif(sys.platform == "win32", ...)` needs a `docs/windows-skip-triage.md` row in the same commit -- a `windows-latest` CI leg caught the omission twice in one session (#585, #588) before this existed (#589). `CONTRIBUTING.md` and `docs/windows-skip-triage.md` now both state the convention as a backstop for a write that does not go through `supertool` (native `Edit`/`Write`), which the jit-context entry cannot see into.
+- Audited `tests/test_path_resolution.py` for other instances of the same shape (#589) -- a docstring/comment promising an exclusion the code does not implement, with no positive-control test proving it fires. Found none beyond the `command -v jq` case already fixed in #574/#588: every other per-line exclusion in that file (`.remember/tmp` in the tmpdir scan, the whole-file `log.sh`/`detect-tools.sh`/`lib-env-cache.sh` omissions) is a plain, correctly-implemented containment check or omission, not a substring pattern that can quietly amnesty a real violation.
+
+- Session summary entries now follow the language of the conversation being summarized (issue #593).
+
+### Fixed
+
+- Fixed: an Antigravity turn made entirely of step `type`s `pipeline/host.py`'s
+  `_ANTIGRAVITY_STEP_ROLES` map does not yet know (a tool-call or reasoning step no
+  probe has captured live) extracted to 0 exchanges and advanced the saved position
+  *without* the #450 quarantine `scripts/save-session.sh` applies to an
+  `"unrecognised"` envelope -- an unmapped-but-present step read as a genuinely
+  quiet session and became unrecoverable the moment a later build learned that step
+  type (#575). `ExtractResult.envelope_has_unmapped_step` (threaded through
+  `pipeline.extract.extract_messages()`'s new `stats` parameter and
+  `pipeline.host.antigravity_step_is_unmapped()`) now flags exactly that case, and
+  `scripts/save-session.sh` routes it through the same quarantine path as an
+  unrecognised envelope, keyed under `"unrecognised"` in `unread-envelope.json`
+  even though the logged and reported envelope stays the honest `"antigravity"`
+  name. The map itself is still only `USER_INPUT`/`PLANNER_RESPONSE` -- filling it
+  in for a real tool-calling turn needs a human-run `agy --dangerously-skip-
+  permissions` session this fix does not have access to; what changed is that a gap
+  in the map can no longer silently lose data.
+
+- Hardened `scripts/agy-stop-hook.sh` against three related defects in its Antigravity Stop payload handling (#576, #578, #579): a `conversationId` shaped like a flag (e.g. `--force`) could reach `save-session.sh`'s argv unsanitised and be read as a flag rather than a session id, silently bypassing the cooldown and minimum-message gates; the four-field stdout protocol between the hook's JSON extractor and its shell reader had no protection against an embedded newline in one field shifting every field after it; and a trailing carriage return from a CRLF-writing `python3` on Windows/Git-Bash could survive into an extracted field. All three are now rejected/stripped at the point of entry, matching the sanitisation convention the sibling hooks already apply to their own stdin-sourced fields.
+
+- Fixed: `scripts/install_agy_hooks.py`'s shared-hooks command line now shell-quotes the plugin's install path with `shlex.quote()` instead of interpolating it inside a hand-written `bash "..."` wrapper (#577). A literal double quote in the install path previously broke the command outright, and double quotes still permit POSIX `$(...)` command substitution, so a path containing one was executed rather than treated as a literal filesystem path. The install path is the user's own checkout location, not remote-controlled, so this was low severity rather than blocking.
+
+- Fixed: `docs/windows.md` no longer states an absolute "N `_remember_forward_slash` call sites in total" count (#580). The number drifted stale for the second time -- it said 10 while a live grep on `main` counted 15, after the same drift already happened once (#524) -- so rather than adding a third guarded-total mechanism, the sentence is dropped entirely and the doc's existing per-issue breakdown, which already enumerates which issue fixed which call site, carries the story on its own.
+
+- Fixed: a MIXED Antigravity read span -- at least one mapped exchange
+  (`USER_INPUT`/`PLANNER_RESPONSE`) alongside at least one unmapped step type in the
+  same span -- exited `scripts/save-session.sh` with `EXCHANGE_COUNT > 0` and was
+  never routed through the #450/#575 quarantine at all: the unmapped step's content
+  was silently dropped, and if a prior quarantine mark existed for that session it
+  was cleared, because the ordinary successful-save path passes any value other than
+  `"unrecognised"` to `cmd_save_position()`, which reads that as "whatever was
+  quarantined has now been read" (#583). `$ENVELOPE_HAS_UNMAPPED_STEP` was
+  previously only consulted inside the script's `EXCHANGE_COUNT -eq 0` branch; a new
+  `save_position_span()` helper now applies the same check at every other
+  `save-position` call site -- the give-up-after-repeated-failures path, the
+  reject-not-an-entry-header path, the model SKIP path, and the ordinary successful
+  append -- so a mixed span quarantines exactly like an all-unmapped one, whatever
+  its own mapped exchanges' fate was. This accepts the same re-extraction/duplicate-
+  summary risk on a future recovery that #575 already accepted for the all-unmapped
+  case, rather than building real per-step-range tracking, which the issue itself
+  left as a larger, separate design decision.
+
+- Fixed: a non-English refusal from the NDC compression call passed the reject gate
+  unfiltered and was written into `today-*.md` as though it were a genuine day
+  summary, after which `now.md` was truncated over the entries that were supposed to
+  have been compressed -- gone, with no copy anywhere (#597). `DEFAULT_REJECT_PATTERN`
+  (`pipeline/haiku.py`) is anchored to English refusal stems, and writing the reply in
+  the conversation's own language (#593) put non-English text into that path for the
+  first time in ordinary use; `IS_REJECTED` alone gated the NDC branch, with no
+  fallback the way the summarize branch already had via `ENTRY_HEADER_ERE`.
+  `scripts/save-session.sh`'s NDC branch now also rejects any reply whose first line
+  does not open with a `"## "` header -- the one thing every genuine compression
+  shares (a single entry, a merged time-blocked range, or a whole-day header) that no
+  refusal produces in any language -- and treats it exactly like the existing
+  `IS_REJECTED` branch: kept at `tmp/rejected-*.md`, `now.md` left intact so the next
+  round retries. Deliberately not `ENTRY_HEADER_ERE` itself, which requires a single
+  `HH:MM` time and would reject a legitimate merged-range header
+  (`## 08:48-09:22 | branch`) that `compress-ndc.prompt.txt` explicitly asks the model
+  to produce.
+
+## [0.28.0] - 2026-09-05 — Antigravity CLI capture ships, with the newline-delimited hook protocol's own hazards filed for follow-up
+
+### Added
+
+- Added: a `trap.d` entry for issue #554, recording that Antigravity CLI (`agy`)
+  1.1.26's `plugin validate` prints the same `[ok]` top-line verdict, exit code `0`,
+  whether it resolved every plugin component or all five came back
+  `skipped (not found)`. This is upstream behaviour in a third-party CLI, not a bug in
+  this repo -- nothing in the plugin itself changed -- so the entry exists to make sure
+  a future claim about Antigravity plugin support in this repo is checked against the
+  per-component detail lines rather than against the verdict or the exit code alone.
+
+- Added: a jit-context trap recording how Antigravity CLI (`agy`) 1.1.27 reads
+  `hooks.json`, measured for issues #553 and #563. Its manifest maps a hook *name* to an
+  object keyed by event, not Claude Code's event-keyed array of matchers -- a
+  Claude-shaped file fails to parse outright, and both the failure and any unrecognised
+  event are silent: `/hooks` answers exactly as it does with no file at all, and the only
+  witness is `~/.gemini/antigravity-cli/cli.log`. The entry records which four events load
+  and fire on that build, the hook stdin payload (including the `transcriptPath` this
+  plugin's capture needs), and that a firing probe must leave a side effect rather than
+  trusting the model's reply. Upstream behaviour in a third-party CLI, not a change to
+  this plugin -- the entry exists so a future Antigravity claim here is checked against
+  the loaded-event list rather than against a manifest that merely installs.
+
+- Added: a working port of this plugin's memory capture onto Antigravity CLI
+  (`agy`), covering `SessionStart`, `UserPromptSubmit` (Antigravity's
+  `PreInvocation`, which fires per model invocation rather than per user
+  prompt) and, for `SessionEnd`, an idempotent per-turn flush on
+  Antigravity's `Stop` -- deliberately NOT the one-shot `session-end-hook.sh`
+  itself, since `Stop` fires after every turn and treating it as a teardown
+  is the exact failure mode manaflow-ai/cmux#5000 already documents.
+  `pipeline/host.py` gained an `ANTIGRAVITY` host (a real, live-captured
+  `ANTIGRAVITY_CONVERSATION_ID` signature) and an `antigravity_exchange()`
+  reader for Antigravity's own flat transcript shape
+  (`{"step_index","source","type","content"}`), so `pipeline/extract.py`
+  now understands a third transcript envelope end to end. Install with
+  `python3 scripts/install_agy_hooks.py`, which merges Remember's entry into
+  the shared, per-machine `~/.gemini/config/hooks.json` without disturbing
+  any other plugin's own entry there -- no static manifest is checked in,
+  because nothing observed on Antigravity sets a plugin-root or
+  project-dir variable a checked-in file could rely on.
+
+  Three defects were found and fixed only by driving this against a real
+  `agy` process, none visible from a transcript-parsing unit test alone:
+  Antigravity's hook executor fails to protojson-parse a Claude Code-shaped
+  hook stdout (context injection / a `hookSpecificOutput` envelope), a
+  plain backgrounded save did not survive the hook process exiting (needed
+  `nohup` + `disown`), and the backgrounded `save-session.sh` had no stdin
+  of its own to resolve `PROJECT_DIR` from (now forwarded from
+  Antigravity's own `workspacePaths`, itself populated only via `agy
+  --add-dir`, not by a bare process `cwd`). See docs/install-antigravity.md
+  for the full account, and the updated
+  `.claude/jit-context/vocabulary/02-hosts/antigravity-hooks.md` for the
+  corrected hooks.json schema and firing evidence, which superseded an
+  earlier, wrong schema and a "PostToolUse/Stop never fire" finding that
+  turned out to be an artifact of that wrong schema, not of the host.
+
+  Not found: any genuine Antigravity session-end signal -- of the four
+  events confirmed loading and firing, none is a process-exit or
+  conversation-close event, so a long session that never re-crosses the
+  minimum-human-messages threshold before the process exits has no
+  equivalent of the last-chance `SessionEnd --force` flush Claude Code and
+  Codex both get. Reported as an open gap, not worked around (#563,
+  superseding #553).
+
+  Self-review also caught and fixed: `scripts/install_agy_hooks.py`
+  originally treated an existing `~/.gemini/config/hooks.json` it could not
+  parse the same as a genuinely absent one, silently discarding whatever
+  other plugin's hook entries were in it on the next write. It now raises
+  `CorruptHooksFile` and writes nothing rather than guessing.
+
+  `tests/test_agy_hooks_563.py` is now triaged in `docs/windows-skip-triage.md`
+  (#497's own meta-guard, `tests/test_windows_skip_triage_497.py`, requires
+  every win32 blanket-skip module to carry an entry) -- `unclear`, same
+  templated reason and verdict as the sibling hook-subprocess test modules
+  it is modelled on.
+
+### Changed
+
+- Changed: reworded README.md and six docs/ pages (configuration.md,
+  diagnostics.md, git-backup-security.md, windows.md, external-storage-mode.md,
+  measuring-lock-hold-times.md) so host-neutral prose says "coding agent"
+  instead of "Claude Code" -- the badges list two hosts (Claude Code, Codex),
+  and the pitch, trust-model, hook-injection and generic-hook-shell sentences
+  were still narrated as if there were one. Left "Claude Code" verbatim
+  everywhere the sentence is actually Claude-Code-specific: install
+  instructions, `.claude/` paths, the hook-name table, and the measured 60s
+  hook-kill timeout in docs/configuration.md. Checked every page for a
+  "Claude Remember" mention after the first (#562's other ask); none had
+  drifted from full-name-once-then-"Remember", so no fold was needed --
+  pinned as a regression guard instead. #562
+
+- Changed: the README now documents Antigravity CLI (`agy`) as a supported host and no
+  longer documents Gemini CLI (#572). Antigravity gains a host badge, an install section built
+  around `scripts/install_agy_hooks.py`, its own column in the hooks table, and a docs-list
+  entry; the table column is separate rather than folded into an existing one because the
+  mapping genuinely differs -- `UserPromptSubmit` maps to `PreInvocation`, `PostToolUse` is
+  not wired, and `SessionEnd` has no analogue at all. That last row is stated in the README
+  itself rather than only in the install page: none of the four Antigravity events confirmed
+  to fire is a process-exit signal, so a short conversation can end with no final flush, and
+  a reader choosing a host should see that before installing rather than after.
+- Changed: the Gemini CLI install section, hooks-table column and docs-list link are removed
+  from the README. `gemini extensions link` is refused on a free-tier individual account with
+  working credentials (`IneligibleTierError: UNSUPPORTED_CLIENT`, #532), and Google's own
+  error text names the Antigravity suite as the migration. This is not a claim that Gemini CLI
+  was withdrawn upstream: paid tiers were never tested and nothing above
+  `@google/gemini-cli` 0.58.0 has been re-probed, so "refused on the tiers that could be
+  tested" is the whole observation. `.gemini/settings.json` and its shape tests are untouched.
+
+### Fixed
+
+- Documented, on `docs/install-gemini-cli.md`, that the `gemini extensions link` install command is refused on an individual Google account's free tier -- `@google/gemini-cli` 0.58.0 answers `IneligibleTierError: UNSUPPORTED_CLIENT` after accepting the OAuth token, a tier rejection rather than an auth failure. The fact now sits next to the install command itself rather than only being discoverable at the bottom of the page. Paid tiers remain untested (#555).
+
+- Fixed: `sniff_file_envelope_status()` (pipeline/extract.py) folded a third
+  cause into the same "unrecognised, and not unreadable" return that #543's
+  50-line scan cap already shared with genuine exhaustion, so a transcript
+  whose scan gave up at the cap was indistinguishable from one that was
+  fully read. The function now returns a third element, `capped`, and
+  `pipeline/haiku.py`'s fallback warning ("could not identify the host from
+  transcript ... (unreadable or an unrecognised shape)") now names the cap
+  specifically instead of lumping it in with a shape genuinely never
+  recognised (#556).
+
+- Fixed: `hooks/hooks.json`'s `SessionEnd` entry now declares `"timeout": 10`
+  -- Claude Code's SessionEnd budget defaults to 1.5 seconds shared across
+  every hook registered for that event, and `session-end-hook.sh`'s own
+  synchronous preamble (path resolution, tool detection, directory
+  bootstrap) was measured at roughly 3.4 seconds on a slow Windows/Git-Bash
+  machine, well past that budget -- Claude Code logged `Hook cancelled` and
+  the session's flush never ran, leaving `logs/autonomous/` with no
+  `session-end-*.log` for that session (#560). The hook body itself is
+  unchanged: it already forks the real flush into the background and
+  returns as soon as it has forked. Declaring `timeout` is the correct
+  thing to do, but Claude Code's own hooks reference is explicit that
+  timeouts declared on a plugin-provided hook (this one) do not raise that
+  shared SessionEnd budget the way a timeout declared in a settings file
+  does -- see [docs/hooks.md](docs/hooks.md) for the documented workaround
+  (`CLAUDE_CODE_SESSIONEND_HOOKS_TIMEOUT_MS`) if `Hook cancelled` still
+  appears after this change. The manual-install `.claude/settings.json`
+  snippet in [docs/install-claude-code.md](docs/install-claude-code.md) also
+  now declares `"timeout": 10` on its `SessionEnd` entry -- unlike a
+  plugin-provided hook, a timeout declared in a settings file *does* raise
+  the shared budget per the same reference, so that install route is fully
+  fixed by this change with no workaround needed (self-review finding,
+  #560).
+
+- Fixed: an Antigravity transcript resolved under `REMEMBER_SUMMARIZER=auto`
+  routed silently to the `claude` summarizer, with no warning that a
+  different vendor's session was being billed to Anthropic -- the exact
+  shape #460/#477 already warn about elsewhere in the same function.
+  Teaching `sniff_envelope()` the Antigravity shape (#563) had moved this
+  case out of the only arm that used to warn. `pipeline/haiku.py`'s
+  `_choose_summarizer_provider()` now warns before falling back to
+  `claude` for a recognised Antigravity transcript, the same as it already
+  does for a vanished Codex transcript (#567).
+
+- Fixed: `scripts/agy-stop-hook.sh`, `scripts/agy-session-start-hook.sh`
+  and `scripts/agy-pre-invocation-hook.sh` each rendered a malformed stdin
+  payload (bad JSON, or no `python3` at all) identically to a genuinely
+  empty-but-valid one, so the stop hook took its `exit 0` arm having
+  captured nothing with no receipt anywhere that it happened. Each script
+  now tells the two apart and logs a warning to stderr on the malformed
+  arm -- safe to do because `agy` only ever parses these hooks' stdout as
+  protojson, and stdout already goes nowhere on this path (#568).
+
+- Fixed: `scripts/install_agy_hooks.py` now writes the emitted Antigravity
+  (`agy`) hook `command` string with forward slashes, always -- previously
+  it embedded `os.path.join`'s own native path separator unmodified, which
+  on Windows is a backslash mixed into a double-quoted shell-command
+  string that `agy` itself later re-parses. Nothing in this repo has
+  access to a Windows `agy` install to confirm end to end whether that
+  raw backslash actually broke execution there (REASONED, not observed --
+  see [docs/install-antigravity.md](docs/install-antigravity.md)'s own
+  "Everything above is macOS ... Nothing here is claimed for ... Windows"
+  caveat), but forward slashes are unambiguous under every quoting model
+  in play and are accepted by every path API bash and Windows itself
+  expose, so normalizing removes the risk outright rather than betting on
+  which model `agy` implements (#569). `tests/test_install_agy_hooks_563.py`
+  gains a new test that asserts directly on the built command string
+  instead -- the existing `os.path.isfile`-based coverage for this path is
+  left in place alongside it (self-review correction: an earlier draft of
+  this fragment said the new test "replaces" that coverage; it did not --
+  the old test still validates a different, still-useful thing, that every
+  named script actually exists on disk) -- and the one other pre-existing
+  test that compared the emitted command against the host's own native
+  separator (`test_build_entry_uses_literal_absolute_script_paths`) is
+  updated to compare against the same forward-slash form the code now
+  always emits, so it does not regress on `windows-latest` CI having
+  nothing to do with the bug it actually checks for (audit finding, #569).
+
+## [0.27.0] - 2026-09-05 — A capture regression that saved nothing since 0.25.0, and Gemini CLI moves from manifest to a real extension
+
+### Added
+
+- #456: added a checked-in Gemini CLI hook manifest, `.gemini/settings.json` -- the output `gemini hooks migrate --from-claude` produces when fed this repo's real `hooks/hooks.json` (observed against a live `gemini-cli 0.57.0` install), with every `${CLAUDE_PLUGIN_ROOT}` the raw migration output carries verbatim rewritten to `${PLUGIN_ROOT}`, since Gemini CLI never sets the Claude-only name (#407). `tests/test_gemini_manifest_456.py` pins the event mapping (`UserPromptSubmit`->`BeforeAgent`, `PostToolUse`->`AfterTool`, `SessionStart`/`SessionEnd` unchanged), the unbound-events-as-empty-arrays shape, and the `${PLUGIN_ROOT}`-only rule -- a manifest lint only, the same limit `tests/test_codex_manifest_410.py` states for the Codex manifest: no `gemini` binary runs in CI, so nothing here proves Gemini actually loads it or fires a hook. Scoped down from the fuller #456: installing and driving a live Gemini session, the transcript envelope, and the stdout-contract question all stay open for follow-up issues.
+
+- #492: added an on-demand, live-provider summary-quality harness (`tests/test_summary_quality_492.py`, skipped by default, opt in with `RUN_LIVE_SUMMARY_JUDGE=1`) that runs the real `save-session` prompt through the live summarizer against two recorded session fixtures and asserts the facts a correct summary must preserve (files, error codes, still-blocked status) survive as substrings. #406's `codex exec` provider (v0.24.0) shipped without any check on what a summary actually says -- routing and liveness tests only assert non-empty output.
+
+- #533: added a real, distributable Gemini CLI extension at `.gemini/` -- `.gemini/gemini-extension.json` (the manifest) and `.gemini/hooks/hooks.json` (the hook bindings, mirroring the shape of the Claude Code `hooks/hooks.json` this repo already ships at the top level), with every hook command spelled `${extensionPath}/../scripts/*.sh`: `${extensionPath}` is the only plugin/package-root template variable Gemini CLI documents, and per `bundle/docs/extensions/reference.md` it resolves solely inside an installed extension's own `gemini-extension.json`/`hooks/hooks.json`, never inside a plain `settings.json`. The `../` is deliberate: the extension root is `.gemini/`, but this repo's hook scripts live one level up at `scripts/`, and this manifest is designed for the one install path that keeps that relationship real -- `gemini extensions link <path-to-this-checkout>/.gemini`, which symlinks rather than copies. `gemini extensions install` copies the extension in isolation and would strand the `../`; this manifest is not built for that path. `tests/test_gemini_extension_533.py` pins both this file's shape and the corrected `.gemini/settings.json` -- a manifest lint only, same limit as `tests/test_gemini_manifest_456.py`/`tests/test_codex_manifest_410.py`: no `gemini` binary runs in CI, and #532 still blocks a live session, so nothing here is proof Gemini CLI actually loads either file or fires a hook. README's Gemini section explains why both `.gemini/settings.json` and this extension are kept side by side, and the double-firing corner case that follows from linking the extension while also working inside this checkout.
+
+- #547: added two host badges to the README badge row -- Claude Code and Codex -- so a reader can see which agent hosts this plugin runs on without reading the tree for manifests. Both are observed hosts: hooks have been seen firing under each. Gemini CLI is deliberately not badged. Its extension and hook manifests are checked in and covered by `test_gemini_manifest_456`, `test_gemini_extension_533`, `test_gemini_project_dir_var_456` and `test_gemini_stdout_envelope_534`, but every one of those asserts manifest *shape* only -- no test, and no observation, has a hook firing under a running Gemini CLI, because headless OAuth returns `invalid_grant` in this environment (#532). A badge beside two observed ones would imply an equal claim, and a caveat paragraph explaining why it does not is a worse fix than not making the claim. Gemini CLI returns to the badge row when #456 is actually settled.
+
+### Changed
+
+- #456: attempted to drive a real Gemini CLI session to settle the manifest's remaining open questions (does a hook fire, what does the stdin payload look like, where does Gemini CLI write its own transcript, does the `BeforeAgent` stdout contract match Codex's). Could not: the installed `gemini-cli` 0.57.0's cached OAuth credentials came back `invalid_grant`, re-authenticating needs a browser this environment does not have, and no `GEMINI_API_KEY`/`GOOGLE_API_KEY` fallback was available -- filed as #532 with exactly what was run. Instead, read the exact installed binary's own bundled reference docs (`bundle/docs/hooks/index.md`, `bundle/docs/extensions/reference.md`) and settled two of the open questions without needing a live session. First: `${PLUGIN_ROOT}` cannot resolve inside `.gemini/settings.json` on a real install, because Gemini CLI's hook-command environment carries no plugin-root variable at all, and its one plugin-root template variable, `${extensionPath}`, is substituted only inside an installed extension's own `gemini-extension.json`/`hooks/hooks.json`, never inside a plain project-scope `settings.json`; fixing that needs its own design decision (a real Gemini extension packaging) and is filed as #533. Second: those same docs list `CLAUDE_PROJECT_DIR` as a compatibility alias Gemini CLI itself sets, contradicting this repo's existing "Codex and Gemini CLI never set it" assumption across `scripts/resolve-paths.sh`, `scripts/lib-env-cache.sh`, three hook scripts, and README's own Codex section -- `pipeline/host.py`'s `GEMINI` host is corrected here (`project_dir_vars=("CLAUDE_PROJECT_DIR",)`, TDD red/green via `tests/test_gemini_project_dir_var_456.py`, since `GEMINI` is dead code today: not in `REGISTRY`, nothing calls `GEMINI.project_dir()` yet), but the wider shell-script and stdout-contract implications reach outside this diff and are filed as #534. README updated with all three findings.
+
+- #533: `.gemini/settings.json` (#456) spelled every hook command with `${PLUGIN_ROOT}`, which cannot resolve there -- per the installed `@google/gemini-cli` 0.57.0's own bundled docs (`bundle/docs/hooks/index.md`), a plain project-scope `settings.json` only gets ordinary shell expansion of `GEMINI_PROJECT_DIR`, `GEMINI_PLANS_DIR`, `GEMINI_SESSION_ID`, `GEMINI_CWD` and `CLAUDE_PROJECT_DIR` -- no plugin-root alias at all. Every `${PLUGIN_ROOT}` in that file is now `${GEMINI_PROJECT_DIR}`, the one variable that names a project-rooted path, kept for the narrow case of developing inside this repo's own checkout. `tests/test_gemini_manifest_456.py`'s two tests that pinned `${PLUGIN_ROOT}` usage are updated to pin `${GEMINI_PROJECT_DIR}` instead.
+
+- #549: the README shrank from 77KB to under 14KB. It now carries only what a reader needs before and just after installing: the pitch, how it works, a two-line install per host, requirements, cost, the two commands, the hooks table, configuration pointers, data files, the trust model and how the repo is maintained. Everything that recorded how a defect was found, or a trap to avoid, moved verbatim rather than rewritten into its own `docs/` page: one install page per host (Claude Code, Codex, Gemini CLI), Windows, hooks and the `hooks.d/` listener contract, diagnostics, handoff delivery, how memory files are written, data files, git worktrees, and the maintainer's longer statement. Every moved section leaves a one-line summary and a link in its place, and every page is listed under `## Reference`. Same convention as #505.
+
+### Fixed
+
+- **3 more Windows glob sites normalized, same class as #517** (#524, #525, #526).
+  The gate-3 release audit ahead of v0.26.0 found three further
+  `REMEMBER_DIR`-derived globs in the same two files #517 already swept, left
+  un-normalized:
+  - `scripts/doctor.sh`'s `_SESSION_END_FIRED` glob (#524) silently stayed 0
+    under a backslash-separated `REMEMBER_DIR`, so `/remember:doctor` fell
+    through to its transcript heuristic and misreported a hook-registration
+    problem that did not exist for a project that genuinely had a
+    `session-end-*.log`. A second, independent cause was found composing with
+    the same misreport: `eced1f3`'s age-keyed retention sweep
+    (`thresholds.autonomous_log_retention_days`, default 7 days) reclaims the
+    same `logs/autonomous/session-end-*.log` files after the retention window,
+    so a project idle longer than that also reproduces this report through a
+    second path. That sweep is unchanged by this fix -- it is a separate,
+    already-working piece of behaviour that happens to touch the same files.
+  - `scripts/doctor.sh`'s operator-facing memory-file count (#525), the third
+    counter of this shape in the file -- #517's own fragment named only the
+    other two ("both printed directly to the operator") -- silently
+    undercounted to 0.
+  - `scripts/run-consolidation.sh`'s `.tail-*`/`.prefix-*` stray-sibling sweep
+    (#526) globbed a `staging_path` that inherits `REMEMBER_DIR`'s backslashes,
+    so one small inert temp file accumulated per failed consolidation split.
+
+  All three now route through the same shared helper #517 introduced,
+  `_remember_forward_slash` (`scripts/resolve-paths.sh`), matching the pattern
+  already used at the file's other sites rather than inventing a new one.
+
+- Fixed a race (#527) where `post-tool-hook.sh`'s backgrounded `save-*.log` could be reclaimed by `save-session.sh`'s own empty-log housekeeping sweep while the flush that redirects into it (its own, or a concurrent sibling's) still holds the file open, losing any diagnostic written after that point. The log is now seeded with a header line before the fork starts, the same defence `session-end-hook.sh` already applies to `session-end-*.log` (#483).
+
+- #534: the shell layer's own `CLAUDE_PROJECT_DIR`-unset comments and README's Codex/Gemini prose both still asserted "Codex and Gemini CLI never set `CLAUDE_PROJECT_DIR`" as shared fact, even though #456 had already found that wrong for Gemini CLI specifically (its own bundled docs list it as a compatibility alias Gemini sets). `scripts/resolve-paths.sh`'s `REMEMBER_HOOK_CWD` fallback and `scripts/lib-env-cache.sh`'s cache-key fallback needed only corrected comments -- both stay correct as fallbacks for any host that genuinely leaves the variable unset (Codex, live-confirmed via `tests/fixtures/codex-env-463.txt`), and Gemini setting the variable just means priority 1 wins and the fallback is never reached on that host. `scripts/user-prompt-hook.sh`'s `UserPromptSubmit` JSON-envelope branch was considered for an actual behavioural fix -- narrowing its gate from "is `CLAUDE_PROJECT_DIR` set" to a Codex-specific signature (`CODEX_SESSION_ID`/`CODEX_THREAD_ID`, the pair `pipeline/host.py`'s `CODEX.signature_vars` already uses) -- and that was tried, then rejected during self-review: #465 already found, live, that neither variable survives into a process Codex spawns as a HOOK (this script is registered as exactly that in `hooks/hooks.codex.json`), only into a Codex TOOL-SHELL command, so gating the hook on that pair would have silently disabled the JSON envelope on every real Codex invocation and reopened #451/#452. The gate stays on `CLAUDE_PROJECT_DIR`, unchanged, correctly documented: Gemini setting the variable now routes it through the same plain-stdout branch Claude Code already takes, REASONED as the safer default (not OBSERVED, since Gemini CLI's own `BeforeAgent` stdout contract has never been driven live -- #532). `tests/test_gemini_stdout_envelope_534.py` pins both sides of this gate as controls (Gemini-shaped gets plain stdout; a genuinely signal-less host still gets the Codex envelope, so a future re-narrowing regresses visibly). README corrected in every place it repeated the old shared-fact claim, including the record of why the Codex-signature alternative was rejected.
+
+- **`cmd_save_position` now validates `session_id` before it becomes a path
+  component** (#538). `pipeline/shell.py` built the position sidecar path
+  (`position.<session_id>`) and the evicted-sidecar removal path by
+  interpolating `session_id` directly, without ever calling
+  `pipeline.extract._validate_session_id` -- the same check `find_session()`
+  already runs before its own equivalent join. Both shell callers
+  (`scripts/post-tool-hook.sh`, `scripts/session-end-hook.sh`) and
+  `scripts/save-session.sh` already filter the id before Python ever sees
+  it, so nothing reachable today was exploitable; this is hardening so a
+  future caller reaching `cmd_save_position` by another route -- a test
+  helper, a new hook, a different host's adapter -- inherits the same
+  guarantee instead of nothing.
+
+- **`config()` no longer splices `$key` unquoted into the jq program it
+  builds** (#539). `scripts/log.sh`'s `config()` reads `config.json` by
+  building `if $key == null then "" else ($key | tostring) end` and handing
+  it to `jq -r` -- `$key` was interpolated into the program text, twice,
+  rather than passed as data. Every call site in this repo passes a
+  hardcoded literal key (`.timezone`, `.cooldowns.save_seconds`, and so on),
+  so nothing exploited this, but nothing enforced that contract either: a
+  future caller that read a key name out of a variable would have had it
+  evaluated as jq against the user's config instead of looked up as a path.
+  `config()` now rejects any key that is not a plain dotted path
+  (`^\.[A-Za-z0-9_]+(\.[A-Za-z0-9_]+)*$`) up front and returns the caller's
+  default, before the config table is loaded and before jq (or its jq-free
+  fallback) ever sees it -- the earlier shape check this used, a `case` glob
+  requiring a leading `.`, silently let a key with *no* leading dot fall
+  through unfiltered, which is exactly the shape a real injection takes.
+  The match runs under `LC_ALL=C`: `[A-Za-z]` is a POSIX collation range,
+  not a byte range, and widens to accept accented letters under a UTF-8
+  locale (the same trap `lib-slug.sh` already documents and guards against
+  elsewhere in this file). And with `REMEMBER_DEBUG=1`, a rejection is now
+  reported on stderr, so it reads differently from a key that is simply
+  absent from config.json -- both used to print the same default silently.
+
+- **`docs/windows-skip-triage.md` now carries a row for
+  `tests/test_config_key_injection_539.py`** (#539). The #539 fix's own new
+  test module carries the module-level win32 blanket-skip pattern
+  `tests/test_windows_skip_triage_497.py` enforces coverage of; it had no
+  row, so the guard (correctly) failed on every `windows-latest` CI leg.
+  Triaged as `unclear` -- the reason string is the same templated
+  "bash subprocess + POSIX layout" boilerplate the majority of this table
+  already carries, and reading the test body confirms real bash/locale
+  behavior (an `LC_ALL=C`-scoped collation-range regex, `tmp_path`-derived
+  paths sourced into the shell) without settling whether `resolve_bash()`
+  alone would make it portable. The table's live module count and the
+  `unclear` subtotal in the doc's own header prose were also one short of
+  the table's actual row count independent of this addition (96 rows vs. a
+  stated 95, i.e. 75 `unclear`) -- fixed alongside this addition so the
+  header prose and the table agree again.
+
+- **The in-repo Codex marketplace no longer collides with the published catalogue** (#540).
+  `.agents/plugins/marketplace.json` -- a development catalogue with one plugin and a
+  local source path, used to run `codex plugin marketplace add .` against a checkout --
+  declared itself `"name": "dpt-plugins"`, the same name the published
+  `Digital-Process-Tools/codex-marketplace` catalogue uses. On a machine that had added
+  both, `remember@dpt-plugins` meant the checkout in one session and the published repo
+  in another. Renamed to `"remember-dev"`, the `<plugin>-dev` shape
+  `claude-jit-context` already ships as `claude-jit-context-dev`.
+
+- **Fixed a regression that stopped memory capture entirely on current Claude Code (2.1.257/2.1.258, CLI and Desktop): every session since claude-remember 0.25.0 read as `unrecognised` and saved 0 exchanges** (#543). `sniff_file_envelope_status()` (`pipeline/extract.py`) decided a transcript's host from its own FIRST parseable line -- correct when #443 introduced it, since Claude Code transcripts used to open with a `user`/`assistant`/`summary`/`system` line. Current Claude Code no longer does: every transcript now opens with several bookkeeping records (`bridge-session`, `queue-operation`, `mode`, `permission-mode`, `last-prompt`, `custom-title`, `attachment`, `file-history-snapshot`) before the first real message line, none of which `sniff_envelope()` (`pipeline/host.py`) can place -- so the old first-line decision returned `"unrecognised"` immediately and every save on an affected install silently captured nothing, with hooks firing and `.remember/` present the whole time. `sniff_file_envelope_status()` now scans forward past a line it cannot place -- up to 50 such lines (`_ENVELOPE_SNIFF_SCAN_CAP`) -- and returns the first verdict that actually resolves to `"claude-code"` or `"codex"`, falling back to `"unrecognised"` only once the file (or the cap) is exhausted without ever resolving. A line neither function can place is not evidence for either host, so skipping it does not weaken the "one host wrote the whole file" reasoning `sniff_envelope()`'s own docstring gives. The #450 quarantine mechanism already recorded every affected session as unread from line 0 rather than losing anything, so sessions captured on an affected install between 0.25.0 and this fix will be picked up on the next save with no further action needed.
+
+- `_validate_session_id()` now rejects `:` in a session_id, alongside the
+  existing path-separator and `..` traversal checks. On NTFS a colon in a
+  filename is read as an Alternate Data Stream separator
+  (`filename:stream`), so a colon-bearing session_id could otherwise land
+  as an ADS on an existing file instead of a distinct file of its own when
+  joined into `position.<session_id>` (#544).
+
+## [0.26.0] - 2026-09-04 — Windows glob-blindness, swept again, and autonomous logs stop erasing their own evidence
+
+### Added
+
+- **A per-module triage of the 95 Windows CI legs' blanket `win32` skips** (#497,
+  follow-up to #507's own skip-ratio report). `docs/windows-skip-triage.md` lists
+  every test module that still carries a module-level
+  `pytestmark = pytest.mark.skipif(sys.platform == "win32", ...)` -- a bare call
+  or one arm of a list of marks -- its skip reason, and a verdict against
+  `tests/_bash_runner.py`'s `resolve_bash()` route -- `convertible`,
+  `not-convertible`, or `unclear` where the reason string alone cannot say. Not
+  a mass rewrite: no test file was converted here. The issue's own re-verified
+  count (107, by a grep that also catches two docstring mentions and eleven
+  modules that already moved to the `resolve_bash()` route) is corrected to 95
+  by `scripts/windows_skip_triage_497.py`'s AST-based count, which
+  `tests/test_windows_skip_triage_497.py` re-derives on every run so the list
+  cannot silently drift out of sync with the tree the way the issue itself
+  describes happening (92 -> 107 with nothing announcing it).
+
+- **The README names its three sibling plugins near the top** (#505). One block, three
+  links, one marketplace command. Before this each README named the others once or not
+  at all, and the repo strangers reach first (claude-remember) pointed nowhere.
+
+- **A test that dominates the suite is now reported, not found by chance** (#510). `pytest` already
+  printed `--durations`; nothing read it. A root-level `conftest.py` now prints the top durations
+  and the slowest test's share of total suite time at the end of every `pytest` run, local or any CI
+  leg, with no extra flag. Three states -- `measured`, `no-baseline`, `could-not-measure` -- are
+  always distinguishable in the output; it is a report, never a gate, and never fails a run on
+  wall-clock time.
+
+### Changed
+
+- **Cross-host locking contract written down and tested** (#491). Claude Code and Codex
+  sharing one `.remember/` store had no explicit safety contract: `scripts/lib-lock.sh`
+  and `scripts/lib-staging-lock.sh` were written and tested against a single host's
+  process model, and neither file nor its tests mentioned Codex or "host" at all.
+  Established (not assumed): the lock primitive is already safe there, because `mkdir`
+  and `kill -0` are OS-level, process-table operations indifferent to which CLI spawned
+  the contending process, and every lock is keyed by a fixed literal name or by day, never
+  by session id. Both files now carry that contract as a header comment, and
+  `tests/test_cross_host_lock_contract_491.py` proves it under real concurrent writes
+  from two simulated hosts (no lost or interleaved entries), documents the one general,
+  pre-existing `kill -0` PID-reuse limitation this design inherits (not new, not made
+  worse by a second host), and locks in that the lock/staging layer never assumes a
+  session-ID shape.
+
+- **Documented, rather than left open, whether a real host payload can trigger the
+  #447 nested-`cwd` extractor gap** (#494). Reading Claude Code's, Codex's and
+  Gemini CLI's hook payload schemas (source-verified for Codex, docs-observed for
+  the other two) shows `cwd` is always a top-level field and the only nested
+  object a hook payload carries (`tool_input`/`tool_response`) is always declared
+  after it — so the gap the #447 test pins is a property of the shell extractor's
+  own first-occurrence scan on a synthetic input, not something any known,
+  currently-shipped host payload reaches. Recorded in the extractor's own header
+  comment; the test stays a characterization rather than becoming a hard
+  assertion, since a host is free to reorder its own schema.
+
+- Changed (#498): `logs/autonomous/` retention housekeeping (`thresholds.autonomous_log_retention_days`) used to run only inside `save-session.sh`'s `if [ "$RUN_NDC" = true ]` block, by accident of placement -- so setting `features.ndc_compression=false` silently disabled log retention too, with the threshold configured and doing nothing and no signal anywhere that it was inert. The sweep now runs unconditionally on every ordinary flush, independent of NDC compression.
+
+- **README.md moved from 934 lines to a stranger-facing front page** (#505). Six
+  reference sections a stranger scrolled past to reach `## Architecture` --
+  computing the slug outside bash, reading the transcript path the host hands
+  us, configuration, measuring lock hold times, external storage mode, and
+  running tests -- moved verbatim to `docs/<slug>.md`, each replaced in the
+  README by a one-line pointer under a new `## Reference` heading. Every
+  internal anchor link that crossed the move was repointed at its new file;
+  `tests/test_config_contract.py` and `tests/test_prompt_stamp_301.py`, which
+  pinned text out of the Configuration table, now read `docs/configuration.md`
+  instead of `README.md`.
+
+- **CI's Windows legs exclude the checkout and runner temp directory from Windows Defender scanning** (#512, ported from `claude-jit-context#310`). `Add-MpPreference -ExclusionPath` on `${{ github.workspace }}` and `$RUNNER_TEMP`, Windows-only, before the test step. This is preemptive rather than a measured speedup here: on run `33574746296` the `windows-latest` legs were the *fastest* in the matrix (133-205s against 370-434s on Linux and 547-638s on macOS), because 92 modules blanket-skip on win32 (#497) and the Windows legs therefore touch almost no temp files. The exclusion earns its keep when those skips lift and the Windows legs start doing the same file-heavy work the other two OSes already do. No test, hook or behaviour is touched; the exclusion exists only inside the ephemeral runner VM.
+
+- **The `tests` workflow supersedes its own in-flight runs on a pull request** (#512). A `concurrency` group of `${{ github.workflow }}-${{ github.ref }}` with `cancel-in-progress: ${{ github.event_name == 'pull_request' }}`, so a second push to a pull request cancels the 12-leg matrix it replaced instead of racing it. Cancellation is deliberately limited to `pull_request`: a push to `main` is the run a release gate reads, and `cancelled` is not `success`, so cancelling one would leave that commit with no verdict at all -- the absence this repository's `CLAUDE.md` warns reads exactly like a pass. `github.ref` is `refs/pull/N/merge` on a pull request and `refs/heads/main` on a push, so the group is never constant and unrelated pull requests are not serialised against each other. `.github/workflows/oss-changelog.yml` already carried the same block; it only triggers on `pull_request`, which is why its `cancel-in-progress` is a bare `true`.
+- **The four plugin-owned files and the `01-oss` rule layer were refreshed from `/oss:scaffold --apply`.** `.github/workflows/oss-changelog.yml`, `.oss/README.md`, `.oss/assemble_changelog.py` and `.oss/statusline.py` are replaced wholesale on every scaffold run, so a fix shipped in the plugin reaches this repository only when that command is re-run here; `/oss:doctor` had reported all three of the changed ones as `would change what it does`. Eleven rule files under `.claude/jit-context/*/01-oss/` were rewritten by the same run, two of them new (`merge-gate.md`, `pr-create-gate.md`). No hand-written file was touched: nothing under `00-manual/` is read or written by that command.
+- **`pytest` now reports the 25 slowest tests.** `--durations=25` added to `addopts` in `pyproject.toml` beside the coverage flags already there, and `test_measurement_configured` set in `.oss.json` to record that the measurement exists. No threshold and no trend check is implied -- this only makes the number visible.
+
+### Fixed
+
+- Fixed (#487): `logs/autonomous/session-end-*.log` was never reclaimed. `find ... -empty -delete` was the only retention `logs/autonomous/` ever had, and #483's own fix for a different bug (that sweep matching its own still-open, still-empty log) seeded every `session-end-*.log` with a header before its subshell opens it -- making every one of them non-empty by construction, and so invisible to the only cleanup this directory had. One file per session, forever. Fixed by adding a second, age-keyed sweep (`thresholds.autonomous_log_retention_days`, default 7) over both file classes (`save-*.log` and `session-end-*.log`), independent of emptiness -- emptiness was always a proxy for staleness, and it is the proxy that produced #483 in the first place. The empty-file sweep still runs first, on the same pass. (Both sweeps were rewritten again since -- see the #498/#502 fragments for the current, portable mechanism.)
+
+- Fixed (#488): two `SessionEnd` hooks for the same project, ending inside the same wall-clock second, resolved to the identical flush log path -- `session-end-hook.sh` named `$_END_LOG` from a second-granularity timestamp alone, with no PID or session id. #486 made the collision harmless (both hooks append rather than truncate) but not absent: two flushes still interleaved into one file, and a reader could not tell whose lines were whose. Fixed by suffixing the filename with the hook process's own PID (`session-end-<HHMMSS>-<PID>.log`), so concurrent hooks always get distinct files. `scripts/doctor.sh`'s own `session-end-*.log` glob (#370's SessionEnd-liveness check) needed no change -- it was never anchored to a fixed width.
+
+- Fixed (#500): `save-session.sh`'s session-id validator admitted a leading hyphen (`^[a-f0-9-]+$` was never anchored to the first character), so an option-shaped session id (`-e`, `--`, `-adef`) could reach `REMEMBER_BRANCH_CMD`'s `argv[1]` as something the operator's own resolver could misread as a flag. Anchored to `^[a-f0-9][a-f0-9-]*$` -- a session id can never start with `-`, closing this off for every caller (CLI, `session-end-hook.sh`, `session-start-hook.sh`'s recovery path) at the one gate they all pass through.
+
+- Fixed (#501): `REMEMBER_BRANCH_CMD`'s stdout was substituted into the summarizer prompt with no bound on embedded control characters -- `$(...)` only strips a trailing newline, so a resolver that printed more than one line, or a lone carriage return with no line feed, wrote arbitrary content at column 0 of the prompt. Either is now refused outright (logged the same WARNING-and-fall-through-to-`git branch` as a non-zero exit or empty stdout), rather than truncated silently to its first line.
+
+- Fixed (#502): `logs/autonomous/`'s two housekeeping sweeps were bare `find` calls with stderr discarded and no exit-status check, so a failing (or, on Windows Git Bash, potentially PATH-shadowed) `find` was indistinguishable from "found nothing to delete." Replaced both with a portable `stat`-based sweep (GNU-first-then-BSD-fallback, matching `session-start-hook.sh`'s own existing sweep) that checks every removal and logs a WARNING through the same path `save-session.sh` already uses for its own fall-throughs, rather than swallowing a failure into silent success.
+
+- Fixed (#503): `session-end-hook.sh`'s `mkdir -p` for `logs/autonomous/` and the header write that seeds its own flush log were both unchecked. A failed write left the log absent or empty exactly as if it had never been opened -- reclaimed by the very next flush's own `-empty` sweep, silently reintroducing #483's original bug (no on-disk trace that `SessionEnd` ever fired) and leaving `scripts/doctor.sh`'s own liveness check to misdirect an operator toward a hook-registration problem that does not exist. Both writes now check their own exit status and report a WARNING on failure.
+
+- **`user-prompt-hook.sh` and `session-start-hook.sh` now agree on the env-cache key
+  for the same project on Windows** (#504). Both hooks derive the fast-path cache
+  key from `CLAUDE_PROJECT_DIR`/`REMEMBER_HOOK_CWD`, but one read it before
+  `resolve-paths.sh` normalized a Windows drive path and the other read it after —
+  a project whose `cwd` arrives in the forward-slash form Windows sometimes sends
+  could key two different cache files for the same project, so the fast path never
+  hit what the slow path had just published. The key is now normalized the same way
+  before it is pinned, so both spellings collapse to the same file.
+
+- **The README's OS badge no longer overclaims Windows test coverage** (#507,
+  following #497's measurement that the `windows-latest` legs report `success`
+  over 1201 of 1960 collected tests skipped -- roughly 61% of the suite, most
+  of it from a `sys.platform == "win32"` blanket-skip still on 107 of 174 test
+  modules). A one-line caveat now sits next to the badge, and `pytest` itself
+  -- local or any leg of the CI matrix, no extra flag -- prints the current
+  leg's own skip ratio via a new `pytest_terminal_summary` hook
+  (`scripts/report_windows_skip_floor.py`), annotating with a `::warning::`
+  GitHub Actions command when a Windows leg crosses a recorded 10% skip floor.
+  Deliberately a report, not a build-failing gate: today's ratio is already
+  far past 10%, and failing on it would redden every future Windows leg until
+  the modules behind it are migrated to `resolve_bash()` (#432), a separate
+  and much larger effort #497 tracks on its own.
+
+- **Consolidation's retire no longer overwrites an existing retired day** (#509). When a
+  `today-YYYY-MM-DD.md` staging file is re-created for a day that was already retired -- a
+  long-running session spanning midnight, or NDC re-opening a retired day's staging file --
+  the retire loop used to `mv`/`head -c ... >` straight over the existing `.done.md`,
+  silently destroying the first retired span's hourly-detail content with no log line.
+  `run-consolidation.sh` now appends to an existing `.done.md` instead of truncating it, in
+  both the plain-rename and the concurrent-append (`head -c`/tail-split) retire paths. The
+  concurrent-append path also no longer commits the consumed prefix into `.done.md` until
+  the unconsumed tail has been safely extracted too, closing a duplication self-review found
+  in the first version of this fix (a `tail` failure used to leave the prefix committed once
+  by the extraction step and once more by the whole-file fallback).
+
+- **`user-prompt-hook.sh`'s warm path forks fewer subshells** (#511, follow-up to
+  #227). The `cwd` extracted from stdin and the clock read for the prompt stamp
+  are now written into a variable directly instead of being captured through a
+  `$( ... )` command substitution — a fork bash pays for the substitution itself
+  even when nothing inside it shells out to an external process, cheap on
+  Linux/macOS and measurably slower on Windows Git Bash per the original report.
+  README now documents `prompt_stamp: "stable"` as the cheapest option for anyone
+  still finding the warm path slow.
+
+- **7 further Windows glob/pattern-match sites fixed, same class as #487** (#517).
+  Bash's own filename glob (`ls`, `rm -rf ... *`, a bare `for ... in`) and its
+  parameter-expansion pattern matching (`%/*`, `##*/`, a `[[ == ]]` glob) all
+  recognise only `/` as a path separator, never a backslash -- and on Git
+  Bash/MSYS2, `resolve-paths.sh` hands `REMEMBER_DIR`/`PROJECT_DIR` to the rest
+  of the scripts backslash-separated, the native Windows form. #487 fixed the
+  one instance CI was red on (`scripts/save-session.sh`'s retention sweep); an
+  `oss:auditor` self-review of that fix found 7 more, in different subsystems,
+  none touched by it:
+  - `scripts/run-consolidation.sh`'s stale-snapshot cleanup silently never fired
+  - `scripts/session-start-hook.sh`'s staging-file count and rotated-slice check
+    (feeding the "N day(s) of memory to compress" message and the session
+    banner's own `=== MEMORY ===` section) silently undercounted/omitted
+  - `scripts/lib-case-divergence.sh`'s own `REMEMBER_DIR` split left
+    `REMEMBER_CASE_STATUS` stuck at `"not-applicable"` regardless of real
+    on-disk state, and its own #138 in-project refusal compared a
+    forward-slashed value against a still-backslash `PROJECT_DIR`
+  - `scripts/doctor.sh`'s storage-mode detection (both the JSON and
+    human-readable branches) misreported an in-project store as "external",
+    and its staging-byte and pending-log-file counts (both printed directly to
+    the operator) silently undercounted to 0
+  - the #373 stale-delivery-record pruner in `scripts/session-start-hook.sh`
+    silently never fired, leaking one record per session forever
+
+  Fixed via one shared helper, `_remember_forward_slash` (`scripts/resolve-paths.sh`,
+  gated on `$OSTYPE` the same way `_remember_normalize_win_path` already is
+  there) -- 10 call sites in total (the case-divergence split above needed a
+  second, paired comparison fixed alongside it, and `doctor.sh`'s two
+  diagnostics each have a JSON-mode and a human-readable branch) now call it
+  instead of re-deriving the gate inline, the way #487's own fix had to.
+  `save-session.sh`'s own retention sweep is left as its existing inline
+  instance; adopting the shared helper there too is a follow-up, not part of
+  this fix.
+
+  **Two further sites in the same family were found and are NOT fixed by
+  this change**: `scripts/bootstrap-dirs.sh`'s in-project `.gitignore` write
+  (`case "$REMEMBER_DIR" in "$_mem_proj"/*)`) and
+  `hooks.d/before_session_start/50-git-restore.sh`'s legacy-mode guard
+  (`${REMEMBER_DIR%/*}`) -- both the identical class, outside this fix's own
+  claimed files. Filed for a follow-up.
+
+- **2 more Windows backslash-blindness sites fixed, found by #517's own
+  self-review** (#519). `scripts/bootstrap-dirs.sh`'s in-project
+  `.gitignore` write (`case "$REMEMBER_DIR" in "$_mem_proj"/*)`) silently
+  never wrote it on Git Bash/MSYS2, leaving that store's memory content
+  unexcluded from `git add -A`/`git status` inside the user's own project
+  repository -- the protective `.gitignore` `hooks.d/after_save/50-git-backup.sh`'s
+  own comments document relying on.
+  `hooks.d/before_session_start/50-git-restore.sh`'s
+  legacy-mode guard (`${REMEMBER_DIR%/*}` / `${REMEMBER_DIR##*/}`) mis-split
+  a backslash-separated `REMEMBER_DIR`, which made the later git-toplevel
+  check disagree with itself and the whole restore silently never fire, on
+  any affected Windows install with `git_restore.enabled=true` -- confirmed
+  live, not just theoretical, by tracing the call path to the hook's own
+  "declined: not the toplevel" refusal.
+
+  Both sites duplicate the identical `$OSTYPE` gate inline rather than
+  calling the shared `_remember_forward_slash` helper
+  (`scripts/resolve-paths.sh`, #517) directly, for two different reasons.
+  The git-restore.sh hook is exec'd as its own process by
+  `scripts/log.sh`'s `dispatch()`, never sourced, so a function
+  `resolve-paths.sh` defines in the parent process is not in scope there,
+  and the file deliberately never sources `resolve-paths.sh` itself to keep
+  its own documented "cheap guards first" cost promise for the legacy-mode
+  majority that can never activate this hook at all. bootstrap-dirs.sh's
+  first-pass fix DID call the shared helper directly (its own USAGE header
+  claims every caller sources `resolve-paths.sh` first) -- but a real
+  caller, `tests/test_external_data_dir.py` and
+  `tests/test_worktree_memory.py`'s own end-to-end harnesses, sources only
+  `detect-tools.sh` and `bootstrap-dirs.sh`, never `resolve-paths.sh`; there
+  the helper is genuinely undefined, the command substitution silently
+  becomes `command not found` (empty output), and the whole gate degrades
+  to "never matches, `.gitignore` never written" for every `REMEMBER_DIR`,
+  not just a backslash-laden one -- caught by CI (ubuntu-latest 3.9, job
+  100934963344) after the first fix shipped.
+
+  A self-review of this fix (oss:auditor) separately caught a second bug
+  the fix itself introduced: normalizing only `REMEMBER_DIR` in the
+  git-restore.sh site and comparing the result against a still-backslash
+  `PROJECT_DIR` (`_remember_normalize_win_path` rewrites `PROJECT_DIR` to
+  backslash form on msys/cygwin, the opposite direction) broke the
+  legacy-mode short-circuit for every genuine legacy-mode Windows install,
+  defeating the file's own "cheap guards first" cost promise. `PROJECT_DIR`
+  is now normalized the same way before that one comparison, matching the
+  pattern `scripts/doctor.sh` and `scripts/lib-case-divergence.sh` already
+  use for the identical `REMEMBER_DIR`-vs-`PROJECT_DIR` comparison.
+
+## [0.25.0] - 2026-09-02 — Telling one session from another, and a fault from a quiet answer
+
+### Added
+
+- Added a test generalising the #344/#379 top-level-wins pin from `source`
+  alone to the extractor itself: `_stdin_json_string` (session-start-hook.sh,
+  session-end-hook.sh, post-tool-hook.sh) and its `cwd`-hardcoded twin
+  `_stdin_cwd` (user-prompt-hook.sh) all take the FIRST `"KEY"` occurrence in
+  the joined stdin string, not the first top-level one, and since #444 that
+  now resolves `cwd` on all four hooks and `session_id` on three of them --
+  neither whitelisted the way `source` was, and `cwd` feeds
+  `REMEMBER_HOOK_CWD`/`PROJECT_DIR` rather than a bounded string comparison.
+  Each (hook, key) pair gets the same two-test shape as the original pin: a
+  nested key AFTER the top-level one must keep losing, and a nested key
+  BEFORE it is pinned as today's documented gap. Nothing in the extractors
+  changed -- no JSON parser was introduced, per #340/#344's standing
+  decision that a hook which must survive a broken install is the wrong
+  place to acquire one. (#447)
+
+- Added (#481): `REMEMBER_BRANCH_CMD` env var, an executable invoked as `$REMEMBER_BRANCH_CMD "$SESSION_ID"` whose stdout resolves the `| <branch>` identity slot of each `## HH:MM | <branch>` memory header. Checked after `REMEMBER_BRANCH` and before the `git branch --show-current` fallback; a non-zero exit or empty stdout falls through to that fallback, logging a WARNING that names the configured command and the session so a configured-but-failing resolver reads as a reported fault rather than as "never configured". Fixes the case `REMEMBER_BRANCH` cannot: several Claude Code sessions running at once in one project share `$PROJECT_DIR`, so both the git-branch fallback and a `REMEMBER_BRANCH` set once at launch resolve to the *same* value for every one of them, collapsing the identity slot the same way the `unknown` fallback originally did. `$SESSION_ID` is already in scope at save time and differs per session, so a site can map it to a name of its own choosing (a local registry, `${SESSION_ID:0:8}`, ...) instead of the plugin guessing a built-in default.
+
+### Changed
+
+- Changed: README's Codex section now records the `UserPromptSubmit`
+  stdout-contract divergence between Claude Code and Codex fixed by #451/#452
+  (Codex's hook engine sniffs the first byte of stdout and marks the run
+  `Failed` on a bare `[`/`{` that fails its own JSON schema), states that
+  `session-start-hook.sh` was checked against three store shapes and does not
+  share the defect, and rebuilds the "not yet known" list from what is
+  actually still unknown today rather than from what was unknown when the
+  section was first written (#453).
+
+### Fixed
+
+- Fixed: `read_unread_envelope()` returned the same empty result for "nothing
+  was ever quarantined" and "the quarantine sidecar exists and could not be
+  read", so a torn write or truncated `unread-envelope.json` silently
+  re-lost a span #450's quarantine exists to protect. `extract_session()`
+  now distinguishes the two and reports it on its result (and through
+  `pipeline.shell`'s existing shell bridge as `UNREAD_SIDECAR_UNREADABLE`)
+  (#458).
+
+- Fixed: an auto-detected Codex session whose exported transcript vanished
+  between export and the SessionEnd hook's read was silently routed to
+  Claude's summarizer with no receipt -- `REMEMBER_SUMMARIZER=auto` now logs
+  that the transcript path was set but the file is gone, distinctly from the
+  ordinary no-transcript-exported case, which stays silent (#477).
+
+- Fixed: `sniff_file_envelope()` returned "unrecognised" for both "the
+  transcript could not even be opened" (permission error, bad mount, a file
+  that vanished between listing and open) and "opened it, read it,
+  recognised no known host shape" -- the same string save-session.sh's
+  receipt points at a shape-sniffing function for, which is the wrong place
+  to look when the real answer is "could not read it at all".
+  `extract_session()` now carries the distinction on its result (and
+  through `pipeline.shell`'s shell bridge as `ENVELOPE_UNREADABLE`), while
+  `sniff_file_envelope()`'s own return value is unchanged for existing
+  callers (#478).
+
+- Fixed: the #469 environment-cache fallback for Codex/Gemini CLI (`_remember_env_cache_path` falling back to `REMEMBER_HOOK_CWD` when `CLAUDE_PROJECT_DIR` is unset) was inert in `scripts/user-prompt-hook.sh` -- that hook unset `REMEMBER_HOOK_CWD` at entry (#417) and only ever set it again from the UserPromptSubmit stdin payload *inside* the "cache missed" branch, i.e. after `_remember_env_cache_load` had already run and failed for want of it. Every UserPromptSubmit wrote a cache file and none was ever read back on a host with no `CLAUDE_PROJECT_DIR`, verbatim the #469 symptom on the hook that fires once per human turn. `tests/test_env_cache_hook_cwd_key_469.py` certified the fix against a premise ("exactly the shape user-prompt-hook.sh ... already offer[s]") that this hook did not meet; its comment now says so and a new end-to-end test drives the real script, via `bash -x`, and asserts the second invocation is a cache HIT (never re-sources `resolve-paths.sh`), not merely a cache write. The stdin read that supplies `REMEMBER_HOOK_CWD` now runs unconditionally, ahead of the cache-load attempt, rather than only on the slow path: it is a bounded bash builtin (`read -t 1`, no fork), measured at no cost above the noise floor of a bare process spawn (8.5ms vs. 9.5ms baseline, 50 runs, macOS/bash 3.2), so this hook keeps a working fast path on Codex/Gemini CLI rather than silently having none. (#479)
+
+- Fixed: the #467 home-path guard's Detector 1 (`tests/test_no_real_home_paths_467.py`)
+  enumerated `tests/fixtures/` non-recursively (`iterdir()`), so a real `/Users/<x>/` or
+  `/home/<x>/` segment committed inside a subdirectory of `tests/fixtures/` was invisible
+  to the detector, and its own positive control could not have noticed -- it only asserted
+  a file count, satisfied by the top-level files alone. The scan now walks the tree
+  (`rglob("*")`) and a new receipt test cross-checks the file count it examined against
+  `git ls-files tests/fixtures`, so a walk that silently drops a subtree disagrees with a
+  number instead of passing quietly. (#480)
+
+- Fixed (#483): `session-end-hook.sh`'s own flush log deleted itself before anyone could read it. The hook redirects `save-session.sh --force`'s output into a fresh, empty `logs/autonomous/session-end-HHMMSS.log` before backgrounding the flush; save-session.sh's own NDC step then sweeps that same directory for stale logs with `find ... -empty -delete`, and on an ordinary successful run nothing ever writes a byte into that log (save-session.sh logs to its own daily file, not to stdout/stderr) -- so the sweep, run from inside the very process writing it, matched and deleted its own log. A later failure's WARNING then named a path that was already gone, and a healthy flush left no trace it had run. Fixed by seeding the log with a header line before the flush starts and appending rather than truncating into it, so it is never `-empty` for its own run's housekeeping to catch -- a genuinely stale, still-empty log from an earlier, abandoned run is untouched and keeps getting swept exactly as before.
+
+## [0.24.0] - 2026-08-29 — A plugin that only knew one host
+
+### Added
+
+- Added: `scripts/doctor.sh --json` -- a machine-readable resolution surface for an external caller that needs a `{slug}`-keyed external store's real directory without reimplementing `session_dir_slug`. Prints a single JSON line carrying `schema_version`, one of three states (`resolved`, `resolved_assumed_project_dir`, `could_not_resolve`), and the resolved `remember_dir` / `storage_mode` / `project_dir` when resolution succeeded, or a `reason` when it did not -- `could_not_resolve` never renders as an absent key or an empty object. Provisional: `schema_version` will be bumped on any incompatible change to these keys or their meaning. (#408)
+
+- Added: a declarative Codex layer -- `.codex-plugin/plugin.json`, a self-referential marketplace entry at `.agents/plugins/marketplace.json`, and `hooks/hooks.codex.json`, which binds Codex's documented lifecycle events to the same `scripts/*.sh` Claude Code already uses. No new hook code was written; the split out of #406 is the DPT epic issue, and this is #410, the piece that could be built before a Codex install existed. **This is scaffolding, not verified Codex support.** No Codex binary was installed anywhere this was built or tested, so `tests/test_codex_manifest_410.py` can only confirm the three manifests are well-formed JSON, name only events Codex documents ([Hooks](https://learn.chatgpt.com/docs/hooks)), and reference scripts that actually exist in the tree -- it cannot confirm Codex loads the plugin, discovers the marketplace entry, or fires a single hook. Read the README's Codex section for the same limit stated in prose. (#410)
+
+### Fixed
+
+- Fixed: `scripts/lib-staging-lock.sh`'s fallback `config()` -- installed for the #361/#372 case where `scripts/log.sh` returns early on a store whose `logs/` cannot be created -- answered every key with the caller's default and no marker, so a store with a real `REMEMBER_CONFIG` holding a configured, non-default `.thresholds.staging_warn_bytes` rendered identically to a store with no config at all. `config()` now tells the two states apart without parsing (`[ -e "$REMEMBER_CONFIG" ]` needs no jq and no Python fallback), and `staging_append` reports the uncertainty via `report_error()` instead of silently trusting the default -- staying silent, as before, only when REMEMBER_CONFIG is genuinely unset. `-e` rather than `-r`: an existing-but-unreadable REMEMBER_CONFIG (a permission change, a mount hiccup) is reported too, caught in this issue's own self-review before shipping. (#399)
+
+- Fixed: a legacy (in-project) store migrated to external mode with git backup enabled could never reach `/remember:doctor`'s SessionEnd `FAIL` verdict again -- it WARNed forever. `hooks.d/after_save/50-git-backup.sh` deletes `$REMEMBER_DIR/.gitignore` as a one-time cleanup of the legacy bootstrap artifact once a backed-up save lands, and doctor.sh's SessionEnd liveness check (#370, #392) read that same file's mtime as its install baseline -- the one file under `REMEMBER_DIR` ordinary hook activity never rewrote. Composed, the cleanup silently removed the diagnostic's only baseline. `bootstrap-dirs.sh` now writes a dedicated `$REMEMBER_DIR/.install-marker` instead, unconditional of storage mode, that nothing else in this codebase has any reason to touch again; a store already degraded by this composition self-heals the next time any hook sources `bootstrap-dirs.sh`. (#401)
+
+- Fixed: `scripts/session-start-hook.sh`'s #393 grace-window sweep coerced an unreadable or non-numeric `_remember_date +%s` clock read to `0` and gated on `-gt 0`, so a failed clock read fell through the same `if` that keeps a live session's delivery record and reached `rm -f` instead -- the opposite of what the mtime read three lines above already did on the same failure shape. `_remember_now` now gets the same could-not-tell-means-keep treatment `_remember_stale_mtime` already had: an empty or non-digit clock read `continue`s (kept) rather than being coerced into "confirmed outside the grace window". Self-review of this fix found the mtime read's own existing guard had the identical gap one level down -- it caught a fully-empty `stat` read but still coerced a non-empty, non-numeric one to `0` before the `-gt 0` gate, so it is fixed the same way in this same change. A readable clock and a readable mtime behave exactly as before. (#402)
+
+- Fixed: the #353 position sidecar's hot-path trust check bounded a sidecar only against the current run's own transcript line count, never against `last-save.json` itself, even though the two log lines that fire on a disagreement both said it did. A sidecar whose session had been evicted from `last-save.json` -- and whose best-effort cleanup unlink (`pipeline/shell.py`'s `cmd_save_position`) failed -- was still trusted whenever its stale value happened to fall inside the current transcript's bound, resuming from a position the authoritative store no longer recognised and summarizing the same span twice. `scripts/post-tool-hook.sh` now also requires the session id to still be a key in `last-save.json`'s own `sessions` map before trusting the sidecar, read via bash's fork-free `$(< file)` so the hot path this feature exists to keep cheap stays cheap -- confirmed against the existing pinned cost budgets in `tests/test_hot_path_cost_pin_330.py`. The membership check is scoped to the `sessions` object's own text rather than the whole file, so a session id equal to one of `last-save.json`'s own fixed field names (`session`, `line`) cannot false-match. (#403)
+
+- Fixed: `/remember:doctor`'s VERDICT ladder could still name "SessionEnd has never fired" as the cause on an AGED store even when a more specific, actionable diagnosis was already printed higher in the same report: `PostToolUse is wired and running, but has not serviced a session -- it is exiting early`. #392/#400 closed the fresh-install half of this displacement (a quiet transcript predating the store's own baseline no longer counts as SessionEnd evidence); this closes the aged-store half by moving the SessionEnd arm below the two PostToolUse arms that already name a cause. SessionEnd's own priority over a healthy-looking "capture is working" verdict, and over "PostToolUse has never fired at all", is unchanged. (#404)
+
+- Fixed: every script under `scripts/` -- not just `session-start-hook.sh` (#367) -- could print a non-ASCII byte (an em-dash, an arrow) to stdout or stderr, which renders as mojibake on a cp1252 Windows console. `scripts/doctor.sh` carried the most (24 lines, including several VERDICT lines), `scripts/post-tool-hook.sh` and the rest of the tree carried the remainder. The same decision is extended to `pipeline/*.py` for a sharper reason than cosmetics: `pipeline/log.py`'s `log()` and `pipeline/haiku.py`'s `_warn()` fall back to `print(..., file=sys.stderr)` on a write failure, and Python's `print()` -- unlike bash's `echo` -- performs a real encode step against the console's codepage, so a non-ASCII message there was not cosmetic garbling but a live `UnicodeEncodeError` crash risk. One deliberate exception: `scripts/bench-slug.sh`'s own non-ASCII benchmark input (a `cafe/nihongo/emoji` test path) is left untouched -- it is a developer-only benchmark demonstrating non-ASCII path handling, not a diagnostic read by an end user, and stripping the bytes would remove the thing being measured. `tests/test_printed_lines_ascii_405.py` pins the whole tree (scripts/*.sh via a printed-line scan, pipeline/*.py via an AST walk over `_warn()`/`log()`/`print()`/raised-exception arguments), and `tests/test_printed_lines_ascii_367.py` continues to pin `session-start-hook.sh` on its own. (#405)
+
+- Fixed: `scripts/session-start-hook.sh`'s recovery block, which force-saves a previous, unsaved session in the background, inherited the CURRENT session's exported `REMEMBER_TRANSCRIPT_PATH` -- caught in self-review before shipping, since `find_session()` trusts that variable unconditionally once it names a real file. The rescue could silently summarize the wrong session's transcript while still labelling the saved record with the previous session's id. The recovery spawn now runs with `REMEMBER_TRANSCRIPT_PATH` unset. (#407)
+- Fixed: the pipeline reconstructed the transcript path from the project directory (`_session_dir()`'s slug-and-glob logic) instead of reading `transcript_path`, which `SessionStart` and `SessionEnd` already hand it on stdin. Every failure mode that reconstruction is exposed to — the drive-letter and truncation cases in #263, the astral-character disagreement in #174 — exists only because a derived path can disagree with where the host actually wrote; a path the host supplies cannot. `pipeline/extract.py`'s `find_session()` now uses the supplied `transcript_path` (via the new `pipeline/host.py` host adapter) when it names a real file, falling back to the existing reconstruction for every caller with no payload — consolidation, `/remember:doctor`, manual invocation. `scripts/session-start-hook.sh` and `scripts/session-end-hook.sh` extract `transcript_path` from the same stdin payload they already read `session_id` from, validate it the same way, and export it as `REMEMBER_TRANSCRIPT_PATH`.
+- Fixed: `extract_session()` derived the id an incremental save resumes from off the transcript's basename, so a host that names its transcript file anything other than `<session_id>.jsonl` (Codex writes `rollout-<date>-<uuid>.jsonl`) would key `get_last_save_line` on a string that never matches, silently re-summarizing the whole transcript on every save — the duplicate #140 exists to prevent. A supplied `session_id` now wins over the basename.
+- Fixed: `scripts/resolve-paths.sh` read the plugin root from `CLAUDE_PLUGIN_ROOT` only. It now reads `${PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-}}` (the inner fallback guards a bare `set -u` caller, which none has today), so the vendor-neutral name wins where present — Codex sets `CLAUDE_PLUGIN_ROOT` only as a compatibility alias it could withdraw in any release, and Gemini CLI documents neither. `tests/test_host_shell_parity_407.py` pins the shell script's hand-mirrored variable list against `pipeline/host.PLUGIN_ROOT_VARS` and the previously-untested derive-from-script-location fallback, the same way `test_slug_parity.py` already guards `lib-slug.sh` against `pipeline/slug.py`. (#407)
+
+- Fixed: `scripts/resolve-paths.sh` could resolve the user's project root from `CLAUDE_PROJECT_DIR` only, which Codex never sets and Gemini CLI documents no hook environment variables for at all -- on either host resolution failed outright and every hook silently no-oped via its `|| exit 0`. `scripts/session-start-hook.sh` and `scripts/session-end-hook.sh` now read the `cwd` field already present on the `SessionStart`/`SessionEnd` stdin payload on all three hosts, validate it the same way `transcript_path` is validated (#407), and export it as `REMEMBER_HOOK_CWD` for `resolve-paths.sh` to consult as a fallback. Precedence is `CLAUDE_PROJECT_DIR`, then `REMEMBER_HOOK_CWD`, then the existing local-install derivation, then the existing loud failure -- a stdin `cwd` that disagrees with a *set* `CLAUDE_PROJECT_DIR` never wins. Reading stdin ahead of `resolve-paths.sh` in `session-start-hook.sh` (it previously read stdin after) meant duplicating the `REMEMBER_NESTED_SUMMARIZER` fast-path guard ahead of the capture, matching the copy `post-tool-hook.sh`, `user-prompt-hook.sh` and `session-end-hook.sh` already carry -- without it the nested `claude -p` summarizer's stdin read would cost up to a second per session it never needed to pay (measured on this change: ~1.03s unguarded vs. ~5-13ms guarded, both with stdin held open). (#411)
+
+- Fixed: `scripts/post-tool-hook.sh` and `scripts/user-prompt-hook.sh` sourced `scripts/resolve-paths.sh` -- which falls back to `REMEMBER_HOOK_CWD` when `CLAUDE_PROJECT_DIR` is unset (#411) -- without ever setting, clearing, or validating that variable themselves, unlike `session-start-hook.sh` and `session-end-hook.sh`, which each derive it fresh from their own stdin `cwd` on every run. On a host that reuses one process environment across separate hook invocations, that meant a value exported by one session's `SessionStart` could in principle be inherited by a later `PostToolUse`/`UserPromptSubmit` call from a *different* project. Reachability of that host behaviour was not established either way, so the fix is not a reachability check: both hooks now `unset REMEMBER_HOOK_CWD` near the top of the file, before sourcing anything else -- correct regardless of whether the leak is reachable on any real host, since neither hook has a stdin `cwd` of its own to offer. `scripts/resolve-paths.sh` documents the assumption at the consulting site. `tests/test_hook_cwd_leak_417.py` pins it, with a positive control proving the underlying `REMEMBER_HOOK_CWD` mechanism in `resolve-paths.sh` still works (so the "must not fire" half cannot pass by testing dead code). (#417)
+
+- Fixed: `tests/test_path_resolution.py`'s `_create_full_plugin_copy` copied `pipeline/__pycache__` wholesale into every simulated plugin install, so a CI leg could fail with `shutil.Error` on a `.pyc.<id>` temp file that a concurrent bytecode write had already renamed away by the time the walk opened it -- a race with nothing to do with the diff under review (observed once, `pytest (ubuntu-latest, 3.10)`, 1 failed / 1800 passed). `shutil.copytree` now passes `ignore=shutil.ignore_patterns("__pycache__", "*.pyc")` for the same reason `tests/test_hooks_json.py`'s copy of `REPO_ROOT` already did. Nothing in the copied tree needs the cache: the copied hooks are bash and any Python they invoke recompiles from source. (#419)
+
+- Fixed: `tests/test_stdin_source_top_level_wins_344.py` and `tests/test_session_start_compact_recap_339.py` named their own "today" staging file with `time.strftime("%Y-%m-%d")` at pytest COLLECTION time, while `scripts/session-start-hook.sh` computes its own `$TODAY` at RUN time -- minutes later on this suite's slower legs. A run that straddled a real UTC-midnight crossing between those two reads named a "today" file the hook no longer recognised as today's, dropping its body from the injected recap and forking a stray background consolidation (observed once, `pytest (macos-latest, 3.9)`, timestamped 57 seconds past UTC midnight, PR #421). Both files now shim `date` on PATH so the fixture's "today" and the hook's own runtime clock read from one frozen, arbitrary value that is never the real wall clock, closing the exposure regardless of when the suite runs; a new pinning test drives the two dates apart deliberately to confirm a genuine mismatch excludes only the stale file rather than blanking the rest of the recap. (#422)
+
+- Fixed: a `REMEMBER_TRANSCRIPT_PATH` set anywhere in the ambient environment -- a `.envrc` in a cloned repo, a modified dotfile -- was trusted unconditionally by `pipeline/host.transcript_path()` (gated only on `os.path.isfile()`) and returned by `pipeline/extract.py`'s `find_session()` *before* `_validate_session_id()`'s traversal check ever ran, so the value could name an arbitrary file that was then read, summarized into the memory store, and committed and pushed by `hooks.d/after_save/50-git-backup.sh`. Only `session-start-hook.sh` and `session-end-hook.sh` have a legitimate reason to set this variable, each from its own stdin payload, freshly validated on every run -- `scripts/post-tool-hook.sh` and `scripts/user-prompt-hook.sh` have no `transcript_path` of their own to offer and now `unset REMEMBER_TRANSCRIPT_PATH` near the top of each, the same pattern #417 already applied to `REMEMBER_HOOK_CWD` in these same two files. Reachability of a host that reuses one process environment across hook invocations was not established either way; the fix does not depend on it. `tests/test_transcript_path_leak_424.py` pins it, with `tests/test_transcript_path_407.py` standing as the positive control that a legitimately supplied path still works. (#424)
+
+- Fixed: `tests/test_printed_lines_ascii_405.py` -- the guard that pins #405's "no non-ASCII on printed lines" decision -- scanned `scripts/*.sh` non-recursively and `pipeline/*.py`, but never looked at `hooks.d/`, which the distribution also ships (`post-tool-hook.sh` documents `hooks.d/after_post_tool/` as part of it). 31 non-comment lines there carried an em-dash: `hooks.d/after_save/50-git-backup.sh` and `hooks.d/before_session_start/50-git-restore.sh` both `printf` and `log` multi-sentence "remember: git backup has STOPPED..." warnings straight at a user's console, on the same cp1252-Windows-mojibake risk #405 already covers for `scripts/`. The guard's own docstring called itself "the same decision made once for the whole `scripts/` tree" while covering barely more than half the shipped shell; it now walks `hooks.d/` recursively too, and both hook files' printed lines are pure ASCII. (#425)
+
+- Fixed: `scripts/post-tool-hook.sh`'s `#353`/`#403` sidecar membership check logged "disagrees with last-save.json" whenever a session's id was not found in the `sessions` map -- but `[ -f "$LAST_SAVE_FILE" ]` passes on a present-but-unreadable file, and `$(< file)` cannot tell "read and got nothing" from "the read itself failed", so an absent `last-save.json`, an unreadable one, and a session genuinely evicted from a readable one all produced the identical comparison claim even though a comparison only actually happened in the last case. Behaviour was already correct and conservative in all three (fall back to `read-position`); only the receipt overstated what was checked. The hook now tracks whether `last-save.json` was present and successfully read before deciding which message to log -- `absent`/`unreadable` each get their own line that does not claim a disagreement, and only a session genuinely missing from a readable file still logs "disagrees with last-save.json". The stderr-suppressing redirect had to move outside the command substitution (`{ X=$(< "$file"); } 2>/dev/null`, not `$(< "$file" 2>/dev/null)`) -- the latter defeats bash's no-fork `$(< file)` fast path, turning it into an always-succeeding empty command that reads nothing, which would have reintroduced the exact "unreadable looks like empty" bug this fix closes. `tests/test_position_sidecar_353.py` pins all three states, including the positive control that a genuine eviction still logs loudly. (#426)
+
+- Fixed: `scripts/doctor.sh --json` (and the human-readable report) captured `resolve-paths.sh`'s stderr by redirecting into `${TMPDIR:-/tmp}/remember-doctor-json-resolve-$$` (and `...-resolve-$$` in the human path) -- a name an attacker can predict from the PID and pre-seed as a symlink. The shell's `>` redirection follows symlinks and truncates the target on open, before doctor.sh writes or reads a byte, so a planted symlink at that name truncated an attacker-chosen file as the invoking user; the later `rm -f` removed only the symlink, never the truncated victim. Predates this delta -- the same pattern is in `v0.23.0`'s own `scripts/doctor.sh:107` -- and was found by the round-one release audit of `v0.23.0..9f3269e`, which reported it `unranked` because no row in the ranking table's fix-mechanism list fits a bare predictable-path TOCTOU. Both sites now use `mktemp` (matching `save-session.sh`'s six existing uses), which makes the actual path unpredictable and closes the race outright. A new test wins the race deterministically against the unfixed script (the PID is known to the caller the instant the process is spawned) and asserts the victim survives; a second test guards this literal shape -- no script under `scripts/` may spell a shared-tmpdir path from `$$` outside a private, already-resolved `$REMEMBER_DIR/tmp` -- though it is a text scan rather than a dataflow check, so it does not follow a shared-tmpdir path built through an intermediate variable (filed separately for two sites found to still have exactly that shape, #427 review). (#427)
+
+- Fixed: `scripts/lib-memory-dir.sh` (the merged-config write) and `scripts/lib-env-cache.sh` (the env-cache publish temp) both built a shared-tmpdir path through an intermediate variable (`SYS_TMPDIR`, `_REMEMBER_ENV_CACHE_FILE`) suffixed with `$$` instead of using `mktemp` -- the same predictable-name TOCTOU #427 fixed in `scripts/doctor.sh`, one step removed: because the path is built through a variable rather than a literal, #427's own class-pin regex (`test_no_script_builds_a_shared_tmpdir_path_from_pid`) does not see either site, which is exactly what #427's review flagged when it filed this issue rather than fixing it in scope. Traced rather than assumed: `lib-memory-dir.sh`'s case is the sharper one. A reproduction (`tests/test_predictable_tmp_429.py`) shows that a symlink pre-seeded at the predictable `${TMPDIR:-/tmp}/remember-config-<pid>.json` does not just get truncated -- it receives the actual merged config that follows, which per the file's own adjacent comment can carry a live `haiku.oauth_token`. The shell's `>` redirection, jq's `>`, and Python's `open(path, "w")` all follow a symlink at their target and write through it; nothing in the merge path defeats that. `lib-env-cache.sh`'s publish path is the same shape without the credential -- its predictable rename-source temp file is now `mktemp`'d too. Both now use `mktemp`, matching `save-session.sh`'s six existing uses and #427's fix -- with no trailing suffix after the `X`s, since BSD/macOS `mktemp` only substitutes a run of `X`s at the very end of the template and silently leaves anything after it literal, which would have looked identical to the working GNU form while not randomizing anything at all. Each fix adds one spawn to its own resolving/publish path (never the per-tool-call fast path), which `tests/test_case_divergence_298.py`'s pre-existing byte-pin guard against `origin/main` now explicitly sanctions for this one line, rather than silently drifting. A must-fire positive control accompanies each must-not-fire attack test, proving the legitimate write still lands -- including the token -- when nothing interferes. Self-review found that the `mktemp` fallback (an empty `$_merged_cfg` when `mktemp` itself fails) fell straight into `jq ... > "$_merged_cfg"` with an empty redirect target, a shell-level error `2>/dev/null` cannot suppress -- an edge case the old literal-path code never had, since it always produced a non-empty path string. That merge attempt is now skipped outright when `mktemp` fails, leaving `REMEMBER_CONFIG` empty exactly as every consumer already treats a genuinely-absent config file. (#429)
+
+- Fixed: `tests/test_hook_cwd_leak_417.py` and `tests/test_transcript_path_leak_424.py` -- the regression tests for two ambient-environment-variable-leak security fixes, one of them release-blocking -- carried a blanket `pytestmark = pytest.mark.skipif(sys.platform == "win32")`, so the `windows-latest` CI leg collected and skipped both, reporting the leg green while coverage there was zero. `tests/test_hooks_json.py` already proved a real bash was reachable on that leg via Git Bash; the skip was copied from a precedent rather than derived from an actual limitation. Both files now share a new `tests/_bash_runner.py::resolve_bash()` (also adopted by `test_hooks_json.py` in place of its own private copy) and skip only when no usable bash can be found at all, so the Windows leg now executes these tests for real against Git Bash instead of silently exempting the whole platform. (#432)
+
+- Fixed: ten comments and test docstrings still described the merged config file as created `0600 per PID`, a claim #429 stopped being true when it replaced the PID-suffixed `remember-config-$$.json` literal path with an unpredictable `mktemp` name to close a symlink-planting TOCTOU. A reader debugging a stale merged config would grep for a filename that is never generated. Two of the ten, in `tests/test_session_end_hook_345.py`, named the old literal path directly and were not in #429's own count; two more, in `scripts/bootstrap-dirs.sh` and `tests/test_trap_quoting_375.py`, surfaced only once the sweep followed the concept rather than the exact phrase. Self-review also caught that `bootstrap-dirs.sh`'s own #362 relocation renames the mktemp file back to a PID-suffixed path under `REMEMBER_DIR/tmp` before `log.sh` and `post-tool-hook.sh` ever read it -- safe there because that directory is private, not shared, but it means "unpredictable mktemp name" overclaims what those two scripts actually see. Their comments, and README.md's matching sentence, now say "0600, fresh every invocation" instead -- true at both stages -- while sites that describe `lib-memory-dir.sh`'s own write specifically keep the more precise "unpredictable mktemp name" wording, since that part is accurate there. `tests/test_layered_config.py` gained a new assertion, `test_merged_config_is_0600_and_not_pid_named`, pinning both the mode and lib-memory-dir.sh's own mktemp-shaped basename so a regression to either the old literal path or a permissive mode fails a test rather than only reading stale in a comment. CHANGELOG.md's own two matches are left alone as the historical record of past releases. (#437)
+
+- Fixed: `main` was red on every ubuntu leg and macos 3.11 the instant #429's own sanctioned-divergence allowance merged. `test_the_per_tool_call_path_is_not_touched` in `tests/test_case_divergence_298.py` compares `scripts/lib-memory-dir.sh` against `origin/main` and allows one keyed old-to-new substitution (`_SANCTIONED_DIVERGENCE`), guarded by an integrity check that the old code must still be findable on `origin/main`. That check was correct while #436 was open and unsatisfiable the moment it merged: `origin/main` then held the *new* code, the old code was gone, and the guard asserted on the default branch itself -- green on the pull request, red the instant it landed, and #436's own checks had additionally run against a base three commits behind `main`. The guard recognized only two states (old code present: substitute; neither present: stale) and needed a third: old code absent *and* new code present is the post-merge steady state, not staleness. `_apply_sanctioned_divergence()` now checks for the new code before asserting, and passes the comparison through unchanged when it is already there. Pinned with three tests that construct both shapes directly (`test_sanctioned_divergence_applies_pre_merge_shape`, `test_sanctioned_divergence_accepts_post_merge_shape`, `test_sanctioned_divergence_still_asserts_when_genuinely_stale`) rather than depending on where `origin/main` happens to sit when they run, so the case they cover cannot drift with the repository's own history. Those three live in a new file, `tests/test_sanctioned_divergence_state_440.py`, rather than beside the guard: `test_case_divergence_298.py` carries a whole-file Windows skip for its bash-spawning tests, and a self-review audit on this issue found that leaving pure-Python string-manipulation tests in that module would inherit the skip and never run on windows-latest CI at all. Separately, and out of scope for this fix: the same self-review discovered that `test_the_per_tool_call_path_is_not_touched` -- the guard this fix repairs -- silently self-skips (`origin/main not available`) on every `pull_request`-triggered CI run in this repository, confirmed directly in the job logs of PR #436 (the PR that introduced the now-repaired allowance) and PR #439 (an unrelated, currently open PR): `actions/checkout`'s default behaviour on `pull_request` events never makes `origin/main` a resolvable ref, so this guard has only ever exercised its assertions after a squash-merge lands on `main` via a `push` event -- structurally too late to block a bad merge, and exactly how the allowance this fix repairs went unverified through its own review. That is reported for filing separately rather than fixed here: it is a CI workflow fetch-depth/trigger design decision, not a change to this guard's own logic. (#440)
+
+- Fixed: `test_the_per_tool_call_path_is_not_touched` in `tests/test_case_divergence_298.py` -- the byte-pin guard that stops the per-tool-call hot path from growing a git spawn -- silently skipped ("origin/main not available") on every `pull_request`-triggered CI run, confirmed directly against job logs on PR #436 and PR #439. `actions/checkout`'s default behaviour on a `pull_request` event checks out a merge ref with no local `origin/main` branch ref, so the guard could never resolve its comparison base while a change was still reviewable; it only ran after a squash-merge landed on `main` via a `push` event, which is exactly how #429's sanctioned-divergence allowance reached `main` and turned it red (#440) without its own pull request ever exercising the guard that would have caught it. Fixed in two ordered parts, per the repo's own convention that a check which cannot run must not render as one that passed: `.github/workflows/tests.yml` now fetches `origin/main` explicitly (`git fetch --no-tags --depth=1 origin main:refs/remotes/origin/main`) right after checkout, so the ref resolves on `pull_request` runs too; and the guard's unavailable-base case now fails loudly on a CI runner (`CI=true` or `GITHUB_ACTIONS=true`) instead of skipping, while still skipping for a contributor's local clone that legitimately has no `origin` remote -- turning that case into a hard failure would make the suite unrunnable for a contributor who did nothing wrong. The decision is a small pure function, `_origin_main_should_be_resolvable`, pinned by its own positive and negative tests so a version that always skipped (silently reintroducing this exposure) would fail them. (#442)
+
+- Fixed: `pipeline/extract.py` only recognised Claude Code's transcript envelope (`{"type": "user"|"assistant", "message": {...}}`), so a real Codex session -- hooks firing, `.remember/` created, one human prompt and one reply on the wire -- extracted `0 exchanges` and saved nothing, indistinguishable from a genuinely quiet session. Codex writes `{"timestamp", "ordinal", "type", "payload"}` on every line, with the role and text one level inside `payload`; `pipeline/host.py` now sniffs a transcript's envelope from its own first line (`sniff_envelope()`) and reads either shape via a new `codex_exchange()` adapter, keyed off Codex's own `event_msg`/`item_completed` record of what a human sent and what the agent answered -- not the same text's second copy under `response_item`, which also carries session scaffolding (skill instructions, the recommended-plugins list, this plugin's own REMEMBER buffer) at the same `role: "user"`. An envelope matching neither host is reported as `"unrecognised"` (`ExtractResult.envelope`, surfaced to `scripts/save-session.sh`'s log as its own message) rather than silently counted as zero. A trimmed, sanitised capture of the reproducing session is committed at `tests/fixtures/codex-rollout.jsonl`. (#443)
+
+- Fixed: `scripts/user-prompt-hook.sh` and `scripts/post-tool-hook.sh` could never resolve the project root on a host that never sets `CLAUDE_PROJECT_DIR` (Codex, Gemini CLI). #411 gave `resolve-paths.sh` a `REMEMBER_HOOK_CWD` fallback, read from each hook's own stdin `cwd`, but only wired it into `session-start-hook.sh` and `session-end-hook.sh`; #417 then had these two other hooks `unset REMEMBER_HOOK_CWD` at entry -- correctly closing a leak where one hook's exported value could be inherited by a hook that had not validated it -- but left them with no legitimate source of the variable at all. Invisible on Claude Code, where `CLAUDE_PROJECT_DIR` is always set; fatal on Codex and Gemini CLI, where per-turn capture silently no-oped behind the `|| exit 0` soft-fail contract. Both hooks now read `cwd` off their own stdin payload -- validated the same way `REMEMBER_TRANSCRIPT_PATH` already is -- after the existing `unset`, never instead of it. `user-prompt-hook.sh` reads it only on the slow (once-per-project) path, since the fast path never sources `resolve-paths.sh` at all; `post-tool-hook.sh` already read its full stdin payload unconditionally on every tool call for `session_id` (#212), so this moves that same read earlier rather than adding a new one, and reuses it instead of reading stdin twice. (#444)
+
+- Fixed: `scripts/resolve-paths.sh` tested `REMEMBER_HOOK_CWD` for directory existence (`[ -d ]`) *before* the Windows backslash/drive-letter normalization block that would have made a Windows-native-spelled `cwd` resolvable -- the normalization ran only against whatever `PROJECT_DIR` was already selected, never against `REMEMBER_HOOK_CWD` at the point it was tested. A `cwd` arriving with backslash separators or a bare drive letter (Codex, Gemini CLI, and any other host with no `CLAUDE_PROJECT_DIR`, since #411/#444's fallback is what those hosts rely on) was therefore tested in the spelling the shell cannot resolve directly, the branch was skipped, and resolution fell through to the loud failure -- silently, via each hook's own `|| exit 0`. The normalization is now a function, `_remember_normalize_win_path`, called on every PROJECT_DIR candidate *before* it is tested rather than once after a candidate is already chosen: `CLAUDE_PROJECT_DIR` gets the same normalize-then-trust treatment it implicitly always had (it was never `-d`-tested before selection either, only validated once at the very end), and `REMEMBER_HOOK_CWD` keeps its own existence test before selection -- now against the normalized form -- so a value that still does not resolve to a real directory falls through to the next candidate exactly as before, rather than being adopted and hard-failing later with a less specific message. `tests/test_windows_native_hook_cwd_448.py` covers all four hooks that read this fallback (`session-start-hook.sh`, `session-end-hook.sh` since #411; `user-prompt-hook.sh`, `post-tool-hook.sh` since #444) via `tests/_bash_runner.py`'s `resolve_bash()` (#432/#439) so the Windows CI leg actually exercises it instead of skipping, plus a platform-independent structural pin on the fix's ordering and a positive control for the "must not fire" case. Whether a Windows-native path actually resolves through `-d` on Git Bash once normalized is **observed** only via that CI leg -- this fix and its reasoning were **reasoned**, not observed, on a machine with no Windows or Git Bash shell. (#448)
+
+- Fixed: `scripts/save-session.sh` advanced the saved read position past a span it never actually read whenever `pipeline.extract.ExtractResult.envelope` came back `"unrecognised"` -- 0 exchanges from a genuinely quiet session and 0 exchanges from a *failure to read* were both saved the same way, so upgrading to a build that could finally parse that envelope (as #443 did for Codex) found the span already behind the marker and never recovered it. The position still advances unconditionally on an unrecognised envelope -- leaving it in place re-triggers the save path forever and never clears its cooldown (#147) -- but the span is now also quarantined, in a new sidecar next to `last-save.json` (`pipeline.extract.mark_unread_envelope` / `read_unread_envelope`, one entry per session, bounded and evicted the same way the position store itself is), at the earliest point not yet actually read. The next extraction for that session resumes from the quarantine point rather than from the advanced position, and `pipeline.shell.cmd_save_position` clears the entry once a save with a recognised envelope actually lands. `pipeline.shell save-position` now takes two additional, optional arguments (`envelope`, `skip_lines`); omitted, they leave any existing quarantine untouched rather than erasing it. (#450)
+
+- Fixed: Codex reported `UserPromptSubmit` as `Failed` on every prompt, even though the hook did its job and exited 0. `scripts/user-prompt-hook.sh` has always printed its prompt stamp (`[HH:MM TZ -- user]`) as plain stdout, which Claude Code reads as `additionalContext` -- but Codex's own hook engine sniffs the first non-whitespace byte of stdout and reads `{`/`[` as "this is my JSON contract" (`codex-rs/hooks/src/engine/output_parser.rs::looks_like_json`), then marks the run `Failed` when that byte does not parse against its `UserPromptSubmit` output schema. The stamp's own leading `[` collided with that heuristic; before #444 the hook hit a FATAL on Codex and printed nothing, which is why the collision was invisible until #444 made the hook succeed there for the first time. On a host that never sets `CLAUDE_PROJECT_DIR` (Codex, and -- reasoned, not observed -- Gemini CLI), the hook now wraps its stdout in the `{"hookSpecificOutput":{"hookEventName":"UserPromptSubmit","additionalContext":...}}` envelope Codex's own schema documents; on Claude Code, stdout is unchanged, byte-for-byte (`tests/test_prompt_stamp_301.py`, `tests/test_hook_stdout_labelling_280.py`). `scripts/session-start-hook.sh` was suspected of the same defect and does not have it: every line it prints opens with a letter or `=`, confirmed by driving the real hook against a full store, a repeated-handoff delivery, and an empty store (`tests/test_codex_upsubmit_stdout_451.py`). (#451)
+
+- Fixed: `PostToolUse` fires on Codex and could never save, because the per-tool-call path resolved a session directory by slugging `PROJECT_DIR` under `~/.claude/projects/` -- Claude Code's own transcript layout. Codex writes its sessions to `~/.codex/sessions/<yyyy>/<mm>/<dd>/rollout-*.jsonl` instead, so the slug never matched a directory that existed and every tool call logged a loud, correct `WARNING: no session dir` whose suggested remedy (create a directory under `~/.claude/projects/`) was advice for the wrong host. `scripts/post-tool-hook.sh` now reads `transcript_path` off the hook's own stdin payload -- present on every hook event, on every host, the same field `session-start-hook.sh`/`session-end-hook.sh` already trust (#407/#424) -- and uses it directly when it names a real file, rather than reconstructing a Claude-Code-shaped location. When stdin offers nothing usable (an older CLI, a test harness, a host not yet taught) the hook falls back to the historical `SESSION_DIR`/slug lookup exactly as before, so nothing about the existing Claude Code path moves. (#459, part of #406)
+
+- Fixed: a Codex session summarized by shelling `claude -p`, requiring an authenticated Claude CLI and billing Anthropic to remember a session run entirely inside a different agent, unconditionally and unannounced. `pipeline/haiku.py` now routes through `pipeline.host.detect_host()`: a detected Codex host summarizes on-host via `codex exec` (`--sandbox read-only --ignore-user-config`, verified against codex-cli 0.150.1 that the isolation flag stops this plugin's own Codex hooks firing inside the nested call, the same way `--setting-sources ''` isolates the Claude path from the operator's hooks, #202); every other host -- Claude Code, an unrecognised host, no signature at all -- keeps the exact behaviour it had before this fix. `REMEMBER_SUMMARIZER` (`claude`/`codex`/`auto`, default `auto`) lets an operator override the detected default either way; `REMEMBER_SUMMARIZER_FALLBACK=claude` is the explicit opt-in for what happens when the codex route cannot produce a result -- unset, that case raises loudly ("could not summarize") rather than silently reproducing this issue's own billing complaint one layer down. (#460)
+
+- Fixed: a Codex session's `SKIP` verdict carried no information about which of two independent things happened -- the model genuinely judging nothing worth keeping, or a Codex-shaped defect making it always decline. Four probe sessions had never once produced a saved memory file. A controlled experiment (identical content run through the Claude Code route and the new `codex exec` route, #460) ruled out a host-shaped cause: a thin, decision-only exchange SKIPs on both routes, and richer, genuinely substantive content SAVES on both -- the summarizer's judgment threshold was never Codex-specific and is unchanged by this fix. What changed is that a `SKIP`, a `REJECTED` (refusal-shaped reply) or a saved entry in `.remember/logs/memory-*.log` now names which provider produced it (`SKIP (provider: codex) -- position -> N`), so a future "was this host-shaped?" question is answerable directly from the log instead of needing this same investigation repeated. `pipeline/types.HaikuResult` gained a `provider` field threaded through `pipeline.shell`'s `call-haiku`/`parse-haiku` output and read by `scripts/save-session.sh`. (#461)
+
+- Fixed: a Codex session could never be detected at runtime, so #460's Codex-native summarizer routing shipped unreachable while passing every one of its own tests. `pipeline/host.py`'s `CODEX` host was keyed to `signature_vars=("CODEX_HOME", "PLUGIN_ROOT")`, and neither is ever exported by Codex to a child process -- `CODEX_HOME` is a configuration path Codex *reads*, not a variable it exports, and `PLUGIN_ROOT` is a compatibility alias, not a signature. A hand-built test environment happily set both, so the defect was invisible to the suite; only a live `codex exec` process could show it. `detect_host()` now keys on `CODEX_SESSION_ID`/`CODEX_THREAD_ID`, the variables a real Codex process actually exports, verified against codex-cli 0.150.1 and pinned against a fixture captured from a live session (`tests/fixtures/codex-env-463.txt`) rather than one constructed by the test -- a constructed fixture would have accepted `CODEX_HOME` just as readily as the code it replaced. A Codex session launched from inside a Claude Code session (nested agents) also carries Claude Code's own signature at the same time; `detect_host()` keeps registry precedence (Claude Code wins) in that case rather than guessing an "innermost" host that flat environment variables cannot actually identify -- see the `REGISTRY` comment in `pipeline/host.py` for the full reasoning. (#463)
+
+- Fixed: under `REMEMBER_SUMMARIZER=auto` (the default), a default-configured Codex session still summarized via `claude -p`, billing Anthropic to remember an OpenAI session -- exactly the outcome #460 was filed to remove, and unfixed by #463's own Codex-signature repair. #464's fixture (`CODEX_SESSION_ID`/`CODEX_THREAD_ID`) was captured from a Codex *tool shell*; the summarizer runs in a different child, the SessionEnd *hook* process (`pipeline/haiku.py` <- `scripts/save-session.sh` <- `scripts/session-end-hook.sh`), and a live capture from inside that hook (env dumped, `CLAUDE_CODE_*` stripped, codex-cli 0.150.1) shows neither variable reaches it -- only `PLUGIN_ROOT`/`CLAUDE_PLUGIN_ROOT` survive. `pipeline.haiku._choose_summarizer_provider()` no longer asks the environment for a Codex signature at all: `auto` now reads the transcript the host actually wrote (`REMEMBER_TRANSCRIPT_PATH`, already exported by every hook since #407) and sniffs its first parseable line for a Codex- or Claude-Code-shaped envelope (`pipeline.extract.sniff_file_envelope()`, #443) -- a fact the host wrote, not a promise it exported and could later withdraw, which is the failure mode #463 and this issue are both instances of. `pipeline.host.detect_host()` is unchanged and still directly tested (env-based host identification is a real, correct fact about a process); it is simply no longer the mechanism this one call site uses. (#465)
+
+- Fixed: two committed files carried the maintainer's real home directory and OS username. `tests/fixtures/codex-rollout.jsonl`, a real (sanitised) Codex capture, carried it in two nested JSON-string blobs that a field-keyed sanitiser never walked -- `cwd`/`git`/`turn_context` were replaced, but a path embedded inside a serialised string value was not. `tests/test_codex_upsubmit_stdout_451.py`, an ordinary hand-authored test file, carried a bare username (no `/Users/` or `/home/` prefix) pasted from real captured probe output into a string literal. Because `.agents/plugins/marketplace.json` declares a local install source (`"path": "./"`), the install copies `tests/` into every install, so both shipped into every 0.24.0 install rather than staying a repo-only artefact. Both are re-sanitised, and `tests/test_no_real_home_paths_467.py` now runs two independent guards: a fixtures-scoped check for un-sanitised `/Users/<x>/`/`/home/<x>/` paths (deliberately not tree-wide -- those prefixes appear legitimately throughout this repo's hand-authored test data and docs, argued in the test's own docstring), and a tree-wide check that no committed file contains the current machine's real OS username verbatim, which is the shape the path check cannot see at any scope and the shape #467's second file actually shipped. The username check now skips outright on CI (`CI`/`GITHUB_ACTIONS` set), loudly, naming why, rather than running there near-vacuously: `windows-latest` runs as `runneradmin`, which appears legitimately in `tests/test_stale_config_sweep_362.py`'s own Windows path fixtures, and asserting the check against every CI image's own account name is a guard that manufactures one false positive per new image forever, not a skiplist that can ever be made complete -- confirmed by this branch's own Windows CI leg going red on exactly that before this correction landed (#472). `_username_check_should_run()`'s own CI/non-CI decision is pinned by two tests deliberately shaped like `tests/test_case_divergence_298.py`'s `_origin_main_should_be_resolvable` (#442) -- read together, since #442 fails loudly on CI for the opposite reason this check skips there: `origin/main` unresolved on CI means the checkout step failed and there is a real defect to report, while a CI runner never being a contributor's own account is true by design and reporting it would not surface one. (#467)
+
+- Fixed: per-tool-call capture on Codex was still silently rejected after #459's fix for the *warning* on the same code path. `scripts/post-tool-hook.sh` derived the session id it hands `save-session.sh` from the resolved transcript's own basename, which is the session id verbatim only on Claude Code's own layout (`<session-id>.jsonl`) -- Codex writes `rollout-<date>-<uuid>.jsonl`, and `save-session.sh`'s `[a-f0-9-]+` validation gate rejected every one of those ids, silently, into an autonomous log nobody reads. `SessionEnd` was unaffected, because it already passes the stdin session id directly, which is why a Codex session still looked fully captured end to end: what was actually lost is every *incremental* save between tool calls, so a crash or a kill instead of a clean `SessionEnd` lost the whole session. The hook now prefers the session id it was actually invoked with -- `STDIN_SESSION_ID`, already extracted and validated at the point of entry -- falling back to the transcript basename only when stdin's id was never confirmed against the resolved transcript, the same precedence #407 gave the transcript path itself. (#468, part of #406)
+
+- Fixed: the #227 environment-cache fast path was permanently dead on Codex and Gemini CLI, so every prompt and every tool call took the full `resolve-paths.sh` -> `bootstrap-dirs.sh` -> `log.sh` chain -- p50 8.7s with 6 outright timeouts in 256 runs on the QEMU/Windows box #227 measured, on a hook whose header says a non-zero exit "BLOCKS THE PROMPT AND ERASES WHAT THE USER TYPED". `scripts/lib-env-cache.sh`'s `_remember_env_cache_path` keyed the cache file on the raw `CLAUDE_PROJECT_DIR`, which neither host ever sets -- `resolve-paths.sh:270` exports the RESOLVED value only after a full slow-path run, so on those hosts a cache *was* written on every invocation and never found by `_remember_env_cache_load`, which runs in a fresh process before that export exists: written every time, hit never. `_remember_env_cache_path` now falls back to `REMEMBER_HOOK_CWD` (the same fallback #411/#444 already gave every hook from its own stdin `cwd`) when `CLAUDE_PROJECT_DIR` is unset, and `_remember_env_cache_load`'s cross-check against the recorded identity, and `_remember_env_cache_publish`'s guard and recorded value, now compare against that same fallback-aware identity rather than raw `CLAUDE_PROJECT_DIR` alone, so a cache published under the fallback can actually be found and trusted on a later run. The key is also now pinned once per process: without it, a `_remember_env_cache_publish` call made after `resolve-paths.sh` has already normalised and exported `CLAUDE_PROJECT_DIR` (Windows/Git-Bash drive-letter rewriting) would key the cache under that normalised string, a different one than the raw `REMEMBER_HOOK_CWD` an earlier `_remember_env_cache_load` call in the same process had already keyed on -- write and read would still never agree, just relocated to Windows instead of Codex/Gemini's absent `CLAUDE_PROJECT_DIR`. (#469)
+
+- Fixed: `.codex-plugin/plugin.json` was unmaintained on two axes. It was never added to `.oss.json`'s `version_sites`, so tagging a release left it declaring the previous version -- every Codex install of a new release would have identified itself as the one before it, correctable only by another release; it is now in `version_sites`. Its `description`, and the sibling `hooks/hooks.codex.json`'s, also still said the Codex layer "not verified against a running Codex install (#410)", which #443, #444, #460, #463 and #465 falsified -- five issues verified against a real `codex-cli 0.150.1` install, several from fixtures captured live, including #444's own per-turn-capture fix already on `main`. Both descriptions now state what is observed (marketplace discovery, install, hook firing, per-turn capture, and session extraction all hold up against a real Codex transcript) instead of repeating a claim two releases out of date. A cross-manifest version-match guard already existed (`tests/test_codex_manifest_410.py::test_codex_plugin_manifest_version_matches_claude_manifest`) and needed no change: it fails whenever `.codex-plugin/plugin.json` and `.claude-plugin/plugin.json` disagree, which is the recurrence this issue asked a guard for. (#470)
+
+- Fixed: `PLUGIN_ROOT` (#407's vendor-neutral, highest-precedence source for the directory the plugin executes from) was accepted with only `[ -d ]` at the `PIPELINE_DIR` validation in `scripts/resolve-paths.sh`, four lines below the specific-file check its sibling branch already makes -- an unrelated directory that merely happens to be named by that generic, unnamespaced variable in a hook's environment became the directory this plugin loads and executes its own code from, with nothing checking it actually contained this plugin. `PIPELINE_DIR` is subsequently the `python3 -m pipeline.shell` import root, the source of `$PIPELINE_DIR/scripts/log.sh`, the executable `$PIPELINE_DIR/scripts/save-session.sh`, and the dispatch root `$PIPELINE_DIR/hooks.d`. `resolve-paths.sh` now applies the same `[ -f "$_REMEMBER_PLUGIN_ROOT/pipeline/haiku.py" ]` marker check the local-install branch already made, and falls through to `CLAUDE_PLUGIN_ROOT` when `PLUGIN_ROOT` fails it -- turning a name collision into a fallback rather than a wrong execution root. `PLUGIN_ROOT`'s precedence over `CLAUDE_PLUGIN_ROOT` (#407) is unchanged; only the missing validation is fixed. `tests/test_host_shell_parity_407.py::test_claude_plugin_root_still_works_when_plugin_root_is_unset` used to pin an *empty* `CLAUDE_PLUGIN_ROOT` directory as accepted -- that was exactly the gap this closes, so the test now builds a directory that actually looks like a plugin install. (#471)
+
+- Fixed: `tests/test_no_real_home_paths_467.py`, the guard #467 added for a real username shipping in a committed file, itself carried the maintainer's real OS username twice, in its own module docstring's worked example (`` `"[10:54 CEST -- <username>]"` ``) -- and the guard's tree-wide username scan exempted `THIS_FILE` from its own check, on the argument that a file documenting the mechanism has to be able to quote a real leaked value. The composition of those two individually defensible choices meant the tree shipped the value, the install copied it (`.agents/plugins/marketplace.json` declares a local source), and the one file that could have caught it was the one file the guard could not see: `8 passed` on a tree containing exactly what detector 2 exists to detect. The docstring now names the mechanism with the same placeholder the fixture already standardised on (`sanitized-user`), which explains it identically without quoting anything real, and the `THIS_FILE` exemption is removed rather than kept for a future quotation that a placeholder makes unnecessary -- argued in the module docstring itself, so the next person who pastes a real credential into this file's prose gets a failing test on their own machine instead of a guard that stays green because it cannot look at itself. (#474)
+
+### Security
+
+- Security: closed the remainder of #424's `containment (read)` row. `pipeline/host.transcript_path()` still gates on existence alone, and `pipeline/extract.py`'s `find_session()` still returns an untrusted `REMEMBER_TRANSCRIPT_PATH` before `_validate_session_id()`'s traversal check ever runs -- but that is now a written decision, not an open gap. `scripts/post-tool-hook.sh` and `scripts/user-prompt-hook.sh` (#430) stay the hardened boundary: they clear the variable before it can reach any Python process, because they run on every tool call with no human watching. A manual `scripts/save-session.sh` run, `scripts/doctor.sh`, and a direct `pipeline.extract` invocation have no hook preamble to clear anything in and trust the ambient environment by design, the same way they already trust `$PATH` or `$HOME` -- a containment check was rejected rather than deferred, because `transcript_path()`/`find_session()` is the ONE channel both that ambient value and the legitimately-supplied one from `session-start-hook.sh`/`session-end-hook.sh`'s own validated stdin payload travel through, and a check narrow enough to matter (the project directory; `CLAUDE_CONFIG_DIR`/`~/.claude`, which is itself relocatable and Claude-Code-specific, not host-neutral) would also reject that legitimate value on a host or mount this repo does not model. `scripts/doctor.sh` now `WARN`s, naming the value with its control characters stripped (so it cannot forge a second report line), when it finds `REMEMBER_TRANSCRIPT_PATH` already set -- checked ahead of path resolution, so an unresolvable install does not also silence the warning by way of `resolve-paths.sh`'s own early exit. `pipeline/host.py`'s and `pipeline/extract.py`'s docstrings and the README's transcript-path section spell out which callers are hardened and which are trusted, and why. `tests/test_transcript_path_trust_431.py` pins all of it: the doctor.sh WARN firing when the variable is set and staying silent when it is not, the WARN surviving a path-resolution failure, the control-character stripping, that `save-session.sh` never silently grows a clearing line that would reverse the decision, and that a manual `find_session()` call still honours a supplied path outside any project or session directory. (#431)
+
+## [0.23.0] - 2026-08-28 — Three states where there were two
+
+### Added
+
+- Added a test pinning `_stdin_json_string`'s first-occurrence scanning of `source` in `session-start-hook.sh`'s stdin payload: a top-level `source` wins when a nested `source` key follows it (the shape every payload takes today), and a characterization test documents the one direction that is not covered — a nested `source` key appearing before the top-level one. No live payload takes that shape; nothing in the extractor changed. (#344)
+
+- Added: `/remember:doctor` now reports whether the `SessionEnd` hook -- the last-chance flush for a session that ends in conversation rather than tool calls -- has ever actually fired for this project, instead of staying silent about it while `PostToolUse` capture can look perfectly healthy. It reads the `logs/autonomous/session-end-*.log` file `session-end-hook.sh` already leaves behind as a side effect of its own background flush, rather than introducing a new marker. Three states, not two: fired (OK); never fired despite evidence that a prior session has gone quiet for at least 15 minutes without ending (FAIL, and it now outranks the generic "capture is working" verdict); and no session has had the chance to end yet, which reports as neither of the other two. The staleness threshold, not a raw transcript count, is what tells a prior session that ended apart from a second Claude Code window still open on the same project (#370).
+
+### Changed
+
+- #330: Added a measured cost pin for the per-tool-call hot path (`tests/test_hot_path_cost_pin_330.py`), alongside the existing substring guard in `tests/test_case_divergence_298.py`. Counts external spawns (already pinned in `tests/test_post_tool_fast_path_350.py`) and, new here, bash builtin `read` invocations via `bash -x` tracing -- the vector the issue named as outside the substring check's vocabulary. Proven non-vacuous against scratch reproductions of the named evasions: a `GIT=git; "$GIT" -C ...` wrapper, `command "git" ...`, and a builtin-read loop with no new process and no new literal. No change to `scripts/post-tool-hook.sh` itself -- the hot path was already clean.
+
+- #353: `save-session.sh` (via `pipeline.shell save-position`) now also writes a per-session, bash-`read`-able position sidecar under `tmp/position.<session_id>`, so `scripts/post-tool-hook.sh`'s per-tool-call hot path can skip the `pipeline.shell read-position` spawn once a save has landed for that session. The sidecar is written strictly after `last-save.json` is committed, never before, so a crash between the two writes can only leave it stale, never ahead of the truth -- and the hot path bounds the sidecar's value against the transcript's own line count, falling back to `read-position` (never to a silent 0) and logging a loud warning on any disagreement. A session evicted from `last-save.json`'s bounded slot store (#140) now also has its sidecar removed, so a stale file cannot outlive the entry it mirrors.
+
+- #395: The hot-path cost pin (`tests/test_hot_path_cost_pin_330.py`) now also measures the path #353 actually changed -- a warm tool call with a prior save landed, where the hot path consults #353's own sidecar instead of falling through to the `pipeline.shell read-position` spawn. The existing budget case only ever exercised the "no save yet" branch, so the sidecar branch was unpinned; the new case's budget is set at the measured value (18 builtin reads, no slack) rather than copying the existing margin, so a future addition to that branch has to argue for itself. A companion regression test mutates a scratch copy of the hook to defeat sidecar trust and shows the new assertions actually fail on that regression. No change to `scripts/post-tool-hook.sh` or `pipeline/shell.py` -- this is test-coverage only.
+
+### Fixed
+
+- Fixed `session-start-hook.sh`'s "already delivered N times" handoff counter inflating on every auto-compaction inside a single session — a handoff delivered once could read as "already delivered 5 times" after four compactions. The counter now excludes `source=compact` from the increment; every other source (`startup`, `resume`, `clear`, `fork`, absent, unrecognised) still counts as before. (#341)
+
+- Fixed `session-start-hook.sh` re-spawning `run-consolidation.sh` on every `SessionStart`, including auto-compaction (`source=compact`), when past-day staging files were pending — measured firing 82 times across 50 sessions on `compact` alone. The trigger now excludes `source=compact`; `startup`, `resume`, `clear`, `fork`, absent and unrecognised sources still trigger it as before. (#342)
+
+- **A staging file (`today-*.md`) that grows for weeks because consolidation stopped consuming it was invisible** (#349) — `staging_append` (`scripts/lib-staging-lock.sh`) is a bare append with no size check, and five call sites (`save-session.sh`'s NDC-commit failure branches, `run-consolidation.sh`'s own append) append a span and deliberately never roll it back on failure — a visible duplicate beats an invisible erasure, and that trade is unchanged here. What nobody costed was the *persistent* cause: sustained lock contention, a full disk, or a stalled consolidation round (a misconfigured `features.ndc_compression`, or the #346 skip-forever state) left the same kind of span landing there every round, forever, with nothing to notice. `staging_append` now logs a one-time WARNING (`report_error()`, reaching the daily log and `hook-errors.log`, surfaced by `/remember:doctor`) the first time a staging file crosses `thresholds.staging_warn_bytes` (default 2000000 bytes) — nothing is capped, truncated, or dropped; the file's contents are exactly what a caller wrote to it.
+
+- Fixed: `CLAUDE.md` now says explicitly that the test suite runs locally on demand and that CI is
+  the gate, so nobody re-adds a `pre-push` hook running the suite from memory. A hook doing that
+  was previously observed to hold a push's SSH transport open long enough to kill the push itself
+  after a ~28 minute local run, while adding no evidence CI's 12-leg matrix does not already give
+  (#355).
+
+- Fixed: `scripts/doctor.sh`'s store-size check computed "today" from the machine clock instead of `config.timezone`, the same source the pipeline itself uses (`REMEMBER_TZ` -> `pipeline/_tz.py`'s `today_str()`, which `_eligible_staging` excludes today by). With a configured timezone ahead of the machine's own, doctor excluded the staging file the pipeline counts and counted the file the pipeline excludes, at once -- and when the wrongly-counted file was the larger of the two, this could invent the "cannot heal itself" alarm on a store the pipeline is about to rotate happily. `doctor.sh` now reads `.timezone` the same grep-then-`TZ=` way it already reads `thresholds.consolidate_max_bytes`, without sourcing `log.sh` (#357).
+
+- Fixed: `scripts/doctor.sh`'s VERDICT ladder checked the oversized-store arm added in #348 above the no-usable-Python arm, so a user whose Python broke on an already-large store was told the staging files were over the cap "on their own" instead of being pointed at the Tools section that actually explains it -- the ladder's own rule, stated in its header, is that specific causes are named before the general one, and staging piling up is the *effect* of consolidation not running, while a broken interpreter is a *cause*. The no-usable-Python arm now outranks it (#359).
+
+- Fixed: `scripts/doctor.sh`'s store-size check read `thresholds.consolidate_max_bytes: 0` as a literal 0-byte cap, because its digits-only config parser accepts `0` just like any other number -- while `pipeline/shell.py` documents and implements `0` as the cap being **disabled**. Every non-empty store then failed the check and reached the loudest verdict arm doctor.sh can produce, even though the pipeline itself was consolidating that store on every round. The check now reports the cap as disabled, by name, instead of comparing against it (#360).
+
+- Fixed: `scripts/session-start-hook.sh` printed four lines containing a U+2014
+  em-dash directly to stdout/stderr. What a cp1252 Windows console does with
+  them was unestablished -- either mojibake, or a decode failure one layer up
+  in whoever consumes this hook's stdout -- and neither outcome could be
+  observed without a Windows machine. Decided file-wide rather than per-line,
+  as the issue argued: this file's printed (echo/printf) lines may not carry
+  non-ASCII at all, so the four are now plain ASCII (`--` in place of the
+  em-dash). The file's other ~94 em-dashes, all in comments that never reach
+  a stream, are untouched (#367).
+
+- **`save-session.sh --force` could lose the save.lock race and exit 0 having saved nothing** (#369) — the lock was acquired with a 0-second timeout *before* the argument parse that would have seen `--force`, so a forced flush that lost the race was indistinguishable from a genuine "nothing new to flush" no-op. The realistic trigger: `post-tool-hook.sh` forks a background save, then `SessionEnd` fires moments later and forks a second `save-session.sh --force` for the same session while the first still holds the lock — the one save whose entire purpose is that there is no next chance. A forced call now waits, bounded (`REMEMBER_FORCE_LOCK_TIMEOUT`, default 30s), for the SAME mutex rather than bypassing it — no second writer, only a longer retry — and if the holder still has not released after that wait, the call now exits 1 instead of 0. `session-end-hook.sh` already checks for a nonzero exit and calls `report_error()` on it, so this makes that existing check see the real failure instead of a false all-clear. A plain (non-forced) call, e.g. `post-tool-hook.sh`'s own background fork, is unchanged: timeout 0, skip on contention, exit 0 — losing that race is still a legitimate no-op.
+
+- Fixed: with `handoff_mode: "per_session"`, every session left a
+  `remember.delivered.<session_id>` record behind in `$REMEMBER_DIR/tmp` and
+  nothing ever removed one -- the same directory, and the same class of leak,
+  that #362 already fixed once under a different filename.
+  `session-start-hook.sh` now prunes a session's delivery record once that
+  session's own transcript is confirmed gone from Claude Code's own session
+  directory. The record is deliberately NOT coupled to its paired
+  `remember.<session_id>.md` handoff, which survives on purpose (#221) --
+  that coupling would have reintroduced unbounded growth under a new name.
+  When the session directory itself cannot be read, nothing is pruned:
+  could-not-tell-if-the-session-is-over must never render as "pruned". The
+  sweep runs regardless of the CURRENT session's own `handoff_mode`, so a
+  record left over from an earlier `per_session` period is still pruned
+  after switching back to `single` (#373).
+
+- Fixed: `README.md`'s official-marketplace section quantified the `claude-plugins-official`
+  catalogue pin lag from a four-run sample ("between one and fourteen hours... one run skipped a
+  tagged release") that had rotted -- measured 2026-08-27, the pin was 15 days old and had skipped
+  two tagged releases, not one. The section now says the lag is unbounded and gives the reader the
+  two commands to measure their own exposure instead of a number that goes stale (#377).
+
+- Fixed #383: `tests/test_save_session_gates.py::TestHeaderTimeIsTakenBackOffTheModel::test_a_wrong_time_is_overwritten_with_the_scripts_own` hardcoded the header time `18:30`, so it flaked for one minute a day whenever the wall clock happened to also read `18:30` -- the script correctly left a matching header alone, and the test asserted a correction that correctly did not fire. Two unrelated pull requests failed this exact assertion in the same minute on 2026-08-27. The header time is now derived an hour off the current clock (wrapping through midnight), which is wrong by construction for the whole test run rather than for 1439 minutes out of 1440, plus a positive control that the logged correction actually differs from the deliberately-wrong time fed in.
+
+- Fixed: `README.md` still described the pre-#379 behaviour of the delivery counter and the
+  consolidation trigger, neither of which mentioned the `source=compact` gate PR #379 added. A
+  reader seeing "already delivered N times" on a long session, or wondering why consolidation did
+  not re-run mid-session, got the pre-#379 answer from the docs. Both spots now say that an
+  auto-compaction refire does not inflate the counter and does not re-spawn
+  `run-consolidation.sh` — `startup`, `resume`, `clear` and `fork` are unaffected. (#384)
+
+- Fixed: `README.md`'s `## Diagnostics` section still described `/remember:doctor` as
+  reporting only whether `PostToolUse` has ever fired, though PR #387 (closing #370) gave the
+  script a second, `SessionEnd` liveness check. A reader relying on the docs to know what
+  `/remember:doctor` covers had no description of the new line. The paragraph now also says
+  `/remember:doctor` reports whether `SessionEnd` -- the last-chance flush -- has ever fired for
+  the project. (#390)
+
+- Fixed: `/remember:doctor`'s `SessionEnd` liveness check (#370) FAILed on a healthy install
+  that merely had *prior* Claude Code history in the project -- a quiet transcript predating
+  the plugin's own store was read as proof a session ended without `SessionEnd` firing, when
+  the hook could not have been registered for it at all. That FAIL also displaced the correct,
+  actionable fresh-install remediation ("PostToolUse has never fired; restart Claude Code")
+  behind a less useful `SessionEnd` message. A transcript now only counts as evidence once it
+  is newer than `.remember/.gitignore`'s own mtime -- written exactly once, the first time any
+  hook bootstraps the store, and never rewritten by ordinary hook activity, so it survives
+  ongoing capture in a way the store directory's own mtime does not (an earlier version of this
+  fix read the directory itself, and was caught in self-review resetting to "now" on every
+  save); a transcript whose age could not be read is likewise excluded rather than silently
+  folded into the count the way it previously was. The genuine failure -- a session that ended
+  after the store existed, with no `session-end-*.log` to show for it -- still FAILs and still
+  outranks the generic "capture is working" verdict. This check can currently only `WARN`,
+  never `FAIL`, for a store in external storage mode from the start, or for a legacy store
+  later migrated to external mode with git backup enabled -- in the latter shape the git-backup
+  hook deletes this same `.gitignore` marker as a one-time migration cleanup and it is never
+  recreated, a gap caught in a second review pass and documented rather than fixed here (the
+  fix belongs in the git-backup hook or in a new marker of its own). (#392)
+
+- Fixed: the #373 delivery-record sweep could delete a *live* session's
+  `remember.delivered.<session_id>` record, resetting its delivery counter so
+  an already-shown handoff read as news again. The sweep's only signal --
+  whether that session's transcript still exists under Claude Code's own
+  session directory -- cannot tell a dead session from one still inside its
+  own startup: at `source=startup`, Claude Code creates a session's
+  transcript only *after* this hook has already run and already written that
+  session's own delivery record, so a concurrent session start could prune a
+  record still in active use. The sweep now also checks the record's own
+  mtime, adding a third state: a record younger than a short grace window is
+  left untouched even when the transcript is absent, since that is exactly
+  what a session still starting up looks like. A record old enough to be
+  outside the window is still pruned exactly as before -- nothing is lost,
+  pruning is only deferred past the window (#393).
+
+- **`staging_append` (`scripts/lib-staging-lock.sh`) crashed with an undefined-function error when sourced without `log.sh`, or with a `log.sh` that returned early on a store where `logs/` cannot be created** (#394) — `config()` and `report_error()`, added to `staging_append` by #349's growth warning, are defined only in `log.sh`, which the file's own USAGE block never declared as a requirement. No live impact today (the sole production call site sources `log.sh` and calls `log` extensively before reaching it), but the #349 test could not catch it either: its driver sources `log.sh`, satisfying the missing dependency by accident. Fixed with a `declare -F`-guarded fallback matching `session-end-hook.sh`'s own guard for the identical `log.sh`-returned-early case — and deliberately *not* the silent `dispatch() { :; }` no-op stub `user-prompt-hook.sh` uses elsewhere, because a no-op `report_error()` here would turn #349's growth warning into exactly the silent failure #349 exists to end, on precisely the broken stores where surfacing it matters most. `report_error()`'s fallback still writes to `hook-errors.log` when that directory exists and is writable (mirroring `log.sh`'s own `report_error()`), falling back to stderr only when it genuinely cannot; `log()`'s fallback sources `lib-clock.sh` for `_remember_date` rather than a raw `date` call, so its timestamps stay `REMEMBER_TZ`-consistent like every other timestamp in this pipeline.
+
+## [0.22.0] - 2026-08-27 — Guards that were written next door
+
+### Added
+
+- **Added a `SessionEnd` hook that flushes whatever `PostToolUse` has not yet saved** ([#345](https://github.com/Digital-Process-Tools/claude-remember/issues/345)) — `hooks/hooks.json` registered `SessionStart`, `UserPromptSubmit` and `PostToolUse` but nothing on the way out, so a session that ended in conversation rather than tool calls (a design discussion, a review, a decision — often the part worth keeping) could lose its entire final stretch if nothing after the last save cleared `cooldowns.save_seconds` or `thresholds.min_human_messages`. `session-end-hook.sh` forks `save-session.sh --force` into the background, once, the same way `post-tool-hook.sh` already does — Claude Code kills a hook at 60s of its own accord, and save-session.sh's own Haiku call already asks for up to 120s (180s for NDC compression), so waiting on it in the foreground risked losing the entire flush to that kill on exactly the long sessions this hook exists to rescue. `--force` bypasses the save cooldown and the min-human-message gate; it does not bypass the zero-exchange gate, so a session with nothing new since the last save costs no Haiku call.
+
+  It deliberately does **not** write a handoff note. `/remember` composes `remember.md` from the model's own first-person recollection of the session; there is no model turn running at `SessionEnd` for a hook to narrate from, and a fabricated placeholder would silently overwrite a real handoff written earlier in the same session — worse than leaving it alone, and adjacent to (not a fix for) [#341](https://github.com/Digital-Process-Tools/claude-remember/issues/341)'s stale-delivery-count problem rather than an interaction with it, since this hook never touches `remember.md`.
+
+  Whether `SessionEnd` fires on a crash, a killed terminal, or a session ending at the usage cap is not established by the current Claude Code hooks reference (checked 2026-08) — it documents `clear`, `logout`, `prompt_input_exit` and `resume` and is silent on the abrupt paths. This hook cannot make `SessionEnd` fire where Claude Code itself would not invoke it, so `features.recovery`'s next-session-start repair stays in place unchanged: it is what still covers the endings this hook cannot reach.
+
+- **`handoff_mode: "per_session"` stops two interactive sessions sharing one project store from clobbering each other's handoff** ([#363](https://github.com/Digital-Process-Tools/claude-remember/issues/363)). `_resolve_memory_project_dir` shares one store across a project's worktrees by design ([#56](https://github.com/Digital-Process-Tools/claude-remember/issues/56)), so two panes open on the same project is the ordinary case, not an edge one. Every session still wrote its handoff to the same fixed `remember.md`, so the second session's `/remember` silently overwrote the first's — a different failure from [#221](https://github.com/Digital-Process-Tools/claude-remember/issues/221)/[#222](https://github.com/Digital-Process-Tools/claude-remember/issues/222), which protect a *pending* handoff from a session that never writes one back, not two sessions that each do.
+  Setting `"handoff_mode": "per_session"` gives each session its own `remember.<session_id>.md`, keyed by the `SessionStart` payload's own `session_id` (#270). History, `recent.md`, `archive.md` and consolidation are untouched — only the single handoff slot is namespaced. If no usable `session_id` reaches the hook, the session falls back to the shared file, and the `=== HANDOFF ===` hint still points at it (the shared path is still correct, and withholding it broke external storage mode, where that path is the only real one) — but a visible line says the fallback happened, so a user who set `per_session` does not read isolation into a session that never got one.
+  Default is `single` — today's behaviour, byte-identical — matching every other behaviour-changing key in this file (`data_dir`, `git_restore.enabled`, `reject_pattern`): a new layout never applies until asked for, so an existing install's disk is unchanged by the upgrade. No pruning ships with this key; a stale `remember.<session_id>.md` is the user's own writing with no copy anywhere else, so it accumulates until removed by hand rather than being deleted on a heuristic that can misfire.
+
+### Fixed
+
+- Fixed: a memory store whose `logs/` directory could not be created (a
+  read-only mount, a permission error) was silently publishing a cooldown of
+  120 seconds and a delta threshold of 50 lines to the env-resolution cache
+  as though `config.json` had asked for exactly that, overriding whatever a
+  user had actually configured until they next edited their config. The
+  publish is now skipped entirely on a store that could not resolve those two
+  values, in `scripts/user-prompt-hook.sh` and `scripts/post-tool-hook.sh`.
+  (#358)
+
+- Fixed: the very first tool call of a session (and the first after any
+  config edit) could print 22 lines of Apple's `/usr/bin/log` usage text to
+  stderr and `dispatch: command not found`, from a `PostToolUse` hook
+  documented to always exit 0 -- and an installed `after_post_tool` listener
+  silently did not run on that call. `scripts/post-tool-hook.sh`'s slow path
+  now guards `log` and `dispatch` the same way its fast path already did
+  (`declare -F`, not `type`, because macOS's own `log` binary makes `type
+  log` true either way); the same unguarded `dispatch` call in
+  `scripts/user-prompt-hook.sh`'s slow path is fixed alongside it. (#361)
+
+- Fixed the per-invocation merged-config temp file (`remember-config-<pid>.json`) leaking forever on Windows/Git Bash, where the `EXIT` trap that is supposed to remove it does not reliably fire for this plugin's short-lived hook processes — one machine accumulated 23,908 of them directly in the OS temp directory. The file now lives under `<REMEMBER_DIR>/tmp` (a directory this plugin owns) instead of the shared OS temp root, and every invocation sweeps away any stale copy left there by a process whose trap never ran (#362).
+
+- Fixed: a store whose `.remember/logs/` could never be created (a
+  read-only or otherwise unwritable project root) made `SessionEnd` report
+  nothing at all -- `scripts/session-end-hook.sh` sourced `log.sh` with
+  stderr suppressed and then called `log`/`report_error` unguarded, both of
+  which `log.sh` returns before defining on exactly this path. On macOS the
+  first call also shelled out to Apple's `/usr/bin/log` binary (`type log`
+  is true whether or not a shell function exists), and the second failed
+  outright with `report_error: command not found` -- silently, because the
+  hook is documented `EXIT CODES: 0 Always` and a `command not found` does
+  not change that. `session-end-hook.sh` now carries the same `declare -F`
+  guard `post-tool-hook.sh` and `user-prompt-hook.sh` already do (#361), and
+  on this one path -- the last chance a session gets to report a failed
+  flush -- the fallback still writes a `WARNING` line to stderr rather than
+  going silent, since `hook-errors.log` and the notice channel both live
+  under the same directory that could not be created. (#372)
+
+- Fixed: `scripts/bootstrap-dirs.sh` built its `EXIT` cleanup trap by string concatenation, interpolating the relocated merged-config path into a single-quoted span inside a string that `trap` re-parses at exit. In legacy mode that path is rooted at the raw, non-slugified project directory, so an apostrophe in the project path (e.g. `~/Bob's Project`) terminated the quoted span early and left the temp file behind at every hook exit — reintroducing the leak #362 was filed and fixed for, for exactly this slice of users, even though the changelog said #362 was closed. The interpolated path is now passed through `printf %q` so it re-parses as exactly one word regardless of the quote characters it contains (#375).
+
+## [0.21.0] - 2026-08-18 — A store that could not get out of its own way
+
+### Added
+
+- Maintainer furniture from the `oss` plugin: `CLAUDE.md`, a `changelog.d/` fragment
+  directory with a CI gate that every pull request now carries a fragment or the
+  `no-changelog` label, and the vendored assembler in `.oss/` that folds fragments into
+  `CHANGELOG.md` at release time (#351).
+- `CHANGELOG.md` now has a link-reference table, so each `## [x.y.z]` heading links to
+  its release instead of rendering as literal bracketed text (#351).
+
+### Changed
+
+- **`PostToolUse` no longer re-derives, on every tool call, what a previous hook already resolved** ([#350](https://github.com/Digital-Process-Tools/claude-remember/issues/350)) — `post-tool-hook.sh` registers with **no matcher**, so it runs after every single tool call and the agent waits for it. Each invocation sourced `resolve-paths.sh` → `detect-tools.sh` → `bootstrap-dirs.sh` → `log.sh` unconditionally: a `git rev-parse`, a slug, a three-layer config merge and a one-pass flatten, plus a `python3 -V` spent only to validate an interpreter. The reporter measured **750-1000 ms per tool call** on Windows 11 / Git Bash, against ~90 ms for `user-prompt-hook.sh` on the same machine — the hook that already replays.
+
+  **The #227 fast path now covers this hook too.** When `lib-env-cache.sh` can replay a published resolution and no *executable* listener is installed under `hooks.d/after_post_tool/`, the chain is skipped. Measured on macOS/bash 3.2.57: **14 external spawns per warm tool call → 6** (336 ms → 130 ms), or **15 → 8** (405 ms → 248 ms) once a save has landed and the saved position has to be read. The first tool call of a session — and the first after any config edit — still takes the whole chain, and now publishes it, so the cost is paid once per project per config change instead of per tool call.
+
+  **The reason #227 skipped this hook has not been waved away.** That hook needs `config()`, and therefore the merged config file, which can carry a live `haiku.oauth_token` and is `0600` per PID under an `EXIT` trap for exactly that reason ([#232](https://github.com/Digital-Process-Tools/claude-remember/issues/232)/[#68](https://github.com/Digital-Process-Tools/claude-remember/issues/68)). That file is still never cached. What is cached are the two **scalars** `log.sh` reads out of it — `cooldowns.save_seconds` and `thresholds.delta_lines_trigger` — in the same `0600` file that has carried `REMEMBER_TZ` since #227, under the same config-mtime invalidation. A cooldown and a line threshold are neither secret nor expensive to be one prompt stale about.
+
+  **The gate asks for an executable, not a directory.** `user-prompt-hook.sh` tests `[ ! -d hooks.d/after_user_prompt ]` and gets away with it because the distribution ships no such directory. It *does* ship `hooks.d/after_post_tool/` holding a `.gitkeep` — so the same test here would have refused the fast path for every user who never installed a listener, which is all of them. It asks what `dispatch()` asks instead.
+
+  **The interpreter is resolved where it is needed, not replayed.** `lib-env-cache.sh` validates config mtimes; it does not validate binaries, and it is not asked to. `PYTHON` is therefore never cached — `detect-tools.sh` is sourced at the one place a Python is required (reading the saved position, which only exists once a save has landed), so the Microsoft Store alias that passes `command -v` and fails `-V` is still caught by the same check as before.
+
+  **Everything the fast path skips that had a job is done by hand.** The `#204` nested-summarizer guard (normally in `resolve-paths.sh`), `umask 077` (#68), `SYS_TMPDIR`, and `bootstrap-dirs.sh`'s `stderr` redirect into `hook-errors.log` — without that last one, a diagnostic lands in front of the user instead of in the log. `log` is not stubbed out: the branches that call it are the ones where this hook is malfunctioning (a slug matching no session directory, [#144](https://github.com/Digital-Process-Tools/claude-remember/issues/144)), so the first call sources `log.sh` and the runs that never take those branches never pay for it.
+
+  That upgrade has to install a no-op when `log.sh` cannot be sourced at all, and the obvious guard for it — `type log` — is **true on macOS whether or not a function exists**, because `/usr/bin/log` is Apple's unified logging CLI. Caught before release, by running it: the hook execed that binary once per diagnostic, printed nineteen lines of `log: Unknown subcommand 'hook'` to the user, and exited **64** from a hook documented "EXIT CODES: 0 Always". It asks `declare -F`, which knows about functions and nothing else.
+
+  **What was measured and where.** All the numbers above are macOS / bash 3.2.57, observed. The Windows numbers are the reporter's, on the code before the change. Every bash test in this repo skips on `win32`, so the Windows leg of CI does not execute any of this — including the `.gitkeep` gate, which is the one place a Git Bash difference could bite: MSYS fakes the execute bit, and if it ever answered yes for a mode-`0644` `.gitkeep`, the fast path would simply never fire there. That would be slow, not wrong — the slow path is today's behaviour exactly — and `dispatch()` has shipped the same `[ -x ]` test for many releases without anyone reporting it trying to execute that file. Reasoned, not observed.
+
+  **The `#200` wiring marker survives a store with no `tmp/`.** `bootstrap-dirs.sh` is what creates `$REMEMBER_DIR/tmp`, and the fast path does not source it. `tmp/post-tool-ran` is how `/remember:doctor` answers "is `PostToolUse` wired at all", so it now creates the directory on the failing write rather than assuming one — silently skipping it would tell users a wired hook had never fired, which is the exact regression #200 fixed.
+
+- **Two spawn-budget tests were measuring a path they did not name.** `tests/test_post_tool_hook_spawns.py` counted a *second* run of the same fixture, which after this change is the warm one — and whether it was warm at all depended on which side of a whole second the config write and the cache landed on ([#303](https://github.com/Digital-Process-Tools/claude-remember/issues/303)). It now pins `REMEMBER_ENV_CACHE=0` and states that it is the cold-path file; the warm path is measured next door. `TestFreshProjectBootstrap::test_detect_before_bootstrap` compared the first *mention* of two filenames anywhere in a hook, comments included, and now reads the `source` statements — with the premise ("both are in fact sourced") asserted instead of assumed.
+
+### Fixed
+
+- **A store already over the consolidation cap was never recovered — it just skipped, forever** ([#348](https://github.com/Digital-Process-Tools/claude-remember/issues/348)) — [#347](https://github.com/Digital-Process-Tools/claude-remember/pull/347) stopped a store *getting* into that state and stopped an oversized file freezing the session. It did not get anybody *out* of it, and the reporter of [#346](https://github.com/Digital-Process-Tools/claude-remember/issues/346) was already in it. Their only recovery was `mv state/recent.md state/recent.md.bak && touch state/recent.md`, which discards every byte of history — not an acceptable answer from a plugin whose whole job is not losing memory.
+
+  **`_rotate_archive` was the only escape hatch in the tree and it only ever touched `archive.md`.** Once `recent.md` alone exceeded `thresholds.consolidate_max_bytes` (default 600000), every round sized the store, found it over, and skipped. Nothing shrank it. The staging `today-*.md` files never retired either, because retirement happens after a *successful* round, so they accumulated for as long as the condition lasted.
+
+  **`recent.md` now rotates the same way `archive.md` has since [#123](https://github.com/Digital-Process-Tools/claude-remember/issues/123)** — to a dated sibling, `recent-YYYY-MM-DD.md`, with a `-2` suffix on a same-day repeat, a fresh empty file started, and consolidation resuming on the next round. Nothing is deleted. The bytes stay on disk, stay greppable, and are named at session start, which is the "kept but not injected" trade [#124](https://github.com/Digital-Process-Tools/claude-remember/issues/124) made for rotated archives — the session-start glob and the history hint both learned the second family, because a recovery that keeps the bytes and loses the recall is the failure #124 exists to name.
+
+  **Which file moves is arithmetic, and that decision is the change.** "The store is over the cap" is not the same question as "which file is why". If the sum is over because staging is enormous and `recent.md` is 40 KB, rotating `recent.md` heals nothing, splits an unconsolidated span for no gain, and the next round skips identically. So the guard escalates only as far as it must: drop `archive.md` if that is enough (the existing move); otherwise, if the staging bytes alone would fit, drop `recent.md` too — and `archive.md` as well only if staging plus archive would still not fit, because a healthy archive is not collateral. If past-day staging is over the cap **on its own**, nothing is rotated at all and the round skips, which is the honest answer rather than a destructive no-op.
+
+  Two rotations can now happen in one round, so the undo discipline #347 established for the archive covers both: a round that does not go through — a model error, a decline, a spawn refusal, a retry that still will not fit — leaves neither file moved. A half-undone pair would split the store across a name nothing consolidated.
+
+- **`/remember:doctor` had nothing to say about an oversized store** ([#348](https://github.com/Digital-Process-Tools/claude-remember/issues/348)) — the session-start notice added in #347 tells the user to run it, and the report answered with one line summing every memory file's bytes and moved on. A remedy pointing at a diagnostic that is silent about the condition is worse than no pointer: the user follows it, reads a clean report, and concludes the notice was noise. It now measures the same three parts against the same cap the pipeline enforces and reports the sum with its breakdown. The self-healing shape is a `WARN` whose remediation is *do nothing* and the verdict line is deliberately left alone, since capture is unaffected; the shape rotation cannot fix — past-day staging over the cap on its own — is a `FAIL` and takes a verdict arm of its own, because nothing will clear it and "capture is working" above a store that has not consolidated in months is the report contradicting itself. A memory file that exists but cannot be read is now named rather than counted as zero, so a store nobody could measure stops reading as a store that measured clean.
+
+## [0.20.0] — A cap that only pointed one way
+
+### Fixed
+
+- **`recent.md` and `archive.md` could be written without bound, and the write that broke the store disabled the only thing that could repair it** ([#346](https://github.com/Digital-Process-Tools/claude-remember/issues/346)) — a reporter's store reached **6.4 GB** (`recent.md`) and **1.8 GB** (`archive.md`). The `SessionStart` hook `cat`s both into every session, so every `claude` launch in that project froze; on macOS iTerm2 reached ~56 GB and the machine needed a restart.
+
+  **The reported cause was that these two files have no rotation and are only ever appended to. Nothing appends to them.** The only writer in the tree is `cp "$RECENT_OUT" "$RECENT_FILE"` in `scripts/run-consolidation.sh`, which *replaces* the file wholesale with the consolidation's output, and it has done exactly that since the initial commit. The observation behind the report was still precisely right — the files only ever grew and never shrank — but the route there is the opposite of an append.
+
+  **Consolidation capped its input and not its output.** `consolidate()` refuses to *send* a prompt over `thresholds.consolidate_max_bytes` (staging + `recent.md` + `archive.md`, default 600000). Between the model call returning and the `cp`, no byte count was ever taken: `capture_output=True` bounds the CLI subprocess by a wall clock and not by bytes, so the size of a response was not a quantity anything downstream measured. `cmd_consolidate` wrote `result.recent` to a temp file verbatim and the shell copied it over `recent.md`.
+
+  **One oversized write is permanent, and that is what makes it this bug rather than one bad round.** `recent.md` is part of the input the cap is measured on. So the round after an oversized write assembles an oversized prompt, raises `ConsolidationTooLarge`, and skips — and so does every round after that, forever. Rotating `archive.md` ([#122](https://github.com/Digital-Process-Tools/claude-remember/issues/122)/[#123](https://github.com/Digital-Process-Tools/claude-remember/issues/123)) is no escape when the bulk is `recent.md`. The file can then never grow again and never shrink either, which from outside is indistinguishable from a file that is only ever appended to.
+
+  **The same number now caps both directions.** A response larger than `consolidate_max_bytes` is refused as non-conforming, which is the established non-destructive path ([#89](https://github.com/Digital-Process-Tools/claude-remember/issues/89)/[#202](https://github.com/Digital-Process-Tools/claude-remember/issues/202)): staging and memory are both left intact and the next run retries. Deliberately *not* `ConsolidationTooLarge` — that subclass means "the input was too big, shrink it and retry", and acting on it would spend another model call to be handed another oversized response while rotating away a healthy archive for nothing.
+
+  **The store is now sized before it is read.** The cap was enforced on the assembled prompt, so the whole store had to be read into memory and a prompt built around it before the pipeline was allowed to notice it was too large to send — several times the store's size in allocation to reach a decision `stat` answers for free, from a script that runs disowned beside a live session. That is the part that took the reporter's machine down. It cannot be a false skip: the prompt is the template plus per-file labels plus those bytes, so a sum already over the cap is proof the prompt would be. `archive.md` being the bulk still rotates, now before the read rather than after it, and an up-front rotation is undone on every path where the round does not go through.
+
+  **And a store that is *already* broken no longer freezes the session**, because none of the above helps the 6.4 GB file someone has on disk today. A memory file over `thresholds.memory_inject_max_bytes` (new, default 200000) is named with its size instead of being `cat`'d — [#124](https://github.com/Digital-Process-Tools/claude-remember/issues/124)'s "kept but not injected" vocabulary, reached by size instead of by filename. The bytes stay on disk and stay greppable; what stops is pouring them into a context window that cannot hold them. A session that starts and says the store is broken is worth more than one that hangs.
+
+  Two growth paths were found and only one is this bug. The other: consolidation is *told* to keep `recent.md` under 600 tokens and nothing enforces it, so a model that faithfully re-emits the file plus one day per round grows it monotonically — measured at ~2 KB/round, reaching the 600000 cap after ~298 rounds and then freezing. That one is bounded by the cap by construction and cannot reach a gigabyte; it is a compression-compliance question, filed separately.
+
+## [0.19.0] — A compaction is not a new session
+
+### Changed
+
+- **A compaction no longer re-injects the whole memory recap** ([#339](https://github.com/Digital-Process-Tools/claude-remember/issues/339)) — `SessionStart` fires at every auto-compaction with `source=compact`, and the hook read `session_id` out of that payload ([#206](https://github.com/Digital-Process-Tools/claude-remember/issues/206)/[#270](https://github.com/Digital-Process-Tools/claude-remember/issues/270)) while discarding `source`. Every memory file was therefore `cat`'d again, into a context that had just been replaced by a summary of the conversation those same bytes were already in. The reporter measured `compact` firing about as often as `startup` over 40 days.
+
+  **A compaction is not a new session.** The store has not changed since this session started and the recap is not news, so at `source=compact` the bodies are not repeated — with one exception.
+
+  **Identity still is.** `identity.md` works by *presence*: a path to it does not make the agent behave as that persona, and no other line of the hook's output even names the file. Everything else is recall-on-demand and stays addressable — the unconditional `=== REMEMBER ===` hint names the store's files on every fire, and the `=== MEMORY ===` block now names the withheld ones again with their sizes. That is [#124](https://github.com/Digital-Process-Tools/claude-remember/issues/124)'s vocabulary for "kept but not injected": a recap that shrinks in silence is indistinguishable from a store that emptied.
+
+  **The default runs one way only.** A payload with no `source`, an empty value, a spelling from a future release, or no stdin at all is left unrecognised and gets today's output unchanged. An absence read as `compact` would silently stop injecting memory for anyone whose payload shape differs from the one this heuristic was written against — the failure this plugin exists to prevent, not to cause.
+
+  **Nothing else narrows.** `startup`, `resume`, `clear` and `fork` are untouched, and so are `=== HANDOFF ===`, `=== LAST HANDOFF ===`, the history hint, the consolidation trigger and the `hooks.d/` dispatches, at every source. `fork` in particular is left at the full recap deliberately: what a fork inherits from its parent's context was not established, and an unverified belief is not grounds for withholding memory. Neither the recovery block nor the capture-gap check branches on `source` — #206 settled that by changing the shape of the evidence store, precisely because a source filter answers the wrong half of that question.
+
+### Added
+
+- **`batch` is declared in `.supertool.json`, so the op that collapses N calls into one is discoverable here** ([#337](https://github.com/Digital-Process-Tools/claude-remember/issues/337)) — the op existed and worked in this repo; nothing advertised it, so every agent working here paid one round-trip per file read. An undeclared op is indistinguishable from an absent one to whoever is deciding how to make the next call.
+
+### Fixed
+
+- **A save could report work as done while silently dropping "blocked on you"** ([#323](https://github.com/Digital-Process-Tools/claude-remember/pull/323), reported and fixed by [@turbomotioncat](https://github.com/turbomotioncat)) — `prompts/save-session.prompt.txt` compresses each session into one sentence and lists what counts as droppable filler, but nothing protected blocked / pending / not-yet-live status from being compressed away alongside "successfully" and "in order to". A session that deployed application code but was explicitly waiting on a human to run a credentialed data upload was saved as "...deployed". The caveat had been stated twice in the conversation and appeared nowhere in `now.md`; the user read the entry later, believed the feature was live, and found out otherwise from the application.
+
+  **Blocking status is a fact, not filler.** The format bracket now calls for appending blocked / incomplete / waiting-on-a-manual-step status as a clause in the same sentence, and a new rule states plainly that it must survive compression even if the sentence gets longer — "done, but blocked on X" never compresses to "done". Non-destructive compression was always the intent of the rule next to it; this names the class of fact that was being destroyed. The header contract, the four placeholders and the SKIP logic are untouched.
+
+  A memory entry that is wrong is worse than no memory entry, because it is trusted in place of checking. That makes this the plugin's own failure mode rather than a prompt-wording nit.
+
+- **The README version badge had read 0.8.3 for nine releases** ([#335](https://github.com/Digital-Process-Tools/claude-remember/issues/335)) — the release sweep greps for the *outgoing* version when cutting a new one, which finds every site mid-bump and none that stopped being bumped at all. Bumped to match `.claude-plugin/plugin.json` (0.18.0), and `tests/test_version_manifest.py::test_readme_version_badge_matches_code` now pins the badge to the manifest and fails loud if its own pattern stops matching, rather than passing on a badge it never found.
+
+- **Two files cited `docs/validators.md`, a path that only exists in the sibling `claude-supertool` repo** ([#333](https://github.com/Digital-Process-Tools/claude-remember/issues/333)) — `hooks.d/before_session_start/50-git-restore.sh` and `tests/test_git_restore_hook_253.py` pointed readers at a doc this repo has never shipped. The "declining instead of guessing" three-state contract they were citing does exist here: the 0.12.0 entry above, and `_push_and_report` in `hooks.d/after_save/50-git-backup.sh`. Both citations now point there instead.
+
+- **A cooldown marker AHEAD of now sticks the throttle ON, permanently and mutely** ([#326](https://github.com/Digital-Process-Tools/claude-remember/issues/326)) — `case "$X" in ''|*[!0-9]*) X=0 ;; esac` validates a marker's *syntax*. It does not bound its *range*. A digits-only value ahead of the current clock is accepted, makes `ELAPSED` negative, and a negative `ELAPSED` is `-lt` any cooldown — so the gate takes its `exit 0`. That exit sits **above** the line that rewrites the marker, so the self-heal the previous three releases rest on is unreachable on exactly the path that needs it. Four sites, four different outages: no session is ever saved again; `now.md` is never compressed again and grows unbounded; the git backup stops, which is [#258](https://github.com/Digital-Process-Tools/claude-remember/issues/258)'s original outage reached through a value the guard *accepts*; and the per-tool-call fork throttle refuses to fork the save that would have healed the marker, so the two throttles hold each other shut.
+
+  **This needs no corruption.** An NTP step backwards, a VM snapshot restore, a container clock jump, or a store on a share with a skewed clock all produce it. Not a timezone or DST change — epoch seconds do not move for those, which is why proceeding is the right call and costs at most one extra save rather than mis-throttling a laptop that suspended over a boundary.
+
+  **Three states, not two.** An out-of-range marker is not clamped in silence: the run **proceeds**, the marker is **reset where the reset is reachable** — at the point of rejection, not below an `exit` — and one line goes to `hook-errors.log` as well as the daily log, via a new `report_error` in `scripts/log.sh`. A silent clamp would trade a mute stuck throttle for a mute wrong value, which is the same defect one layer along. `/remember:doctor` reports "Recent errors" out of that file, so a clock that stepped backwards far enough to disable saving is now visible where a user already looks.
+
+  **`post-tool-hook.sh` is deliberately asymmetrical.** It declines the cooldown it cannot substantiate and does nothing else: no marker rewrite (the marker belongs to `save-session.sh`, and a second writer on a per-tool-call path is a race for no gain), no diagnostic (one per tool call for as long as the clock is behind), and no added subprocess spawn or file read ([#299](https://github.com/Digital-Process-Tools/claude-remember/issues/299)/[#330](https://github.com/Digital-Process-Tools/claude-remember/issues/330)).
+
+  **The source comment said the opposite, and that is why this was reopened.** The comment above the save gate in `scripts/save-session.sh` stated that both gates self-heal and that the cost is "one skipped cooldown per corruption event, not a throttle stuck off". True for the syntax case, false for this one. The CHANGELOG was corrected at 0.17.0; the comment was not, and PR [#328](https://github.com/Digital-Process-Tools/claude-remember/pull/328) closed the issue by *referencing* it without changing a line of its subject matter. Both comments are corrected here.
+
+- **Every remaining case-guarded value in `$(( ))` now carries `10#`, and a check keeps it that way** ([#332](https://github.com/Digital-Process-Tools/claude-remember/issues/332)) — `08` and `09` are all digits, so they clear the digits-only guard and are then read as octal; bash abandons the rest of the enclosing command list, which in this repo has repeatedly been the throttle, the ERROR log or the backup. Four issues ([#321](https://github.com/Digital-Process-Tools/claude-remember/issues/321), [#325](https://github.com/Digital-Process-Tools/claude-remember/issues/325), [#329](https://github.com/Digital-Process-Tools/claude-remember/issues/329), [#331](https://github.com/Digital-Process-Tools/claude-remember/issues/331)) each fixed a correct subset by hand and each looked complete.
+
+  **Twelve sites remained, not the seven #332 lists.** The five it does not name — `scripts/doctor.sh:346`, `scripts/lib-lock.sh:412`, `:421`, `:430` and the second `run-consolidation.sh` read — were found by the check rather than by reading, which is the argument for having one.
+
+  `tests/test_arith_base_lint_332.py` sweeps `scripts/` and `hooks.d/` for the shape mechanically: a variable that passes through a digits-only `case` and later appears inside `$(( ))` with no `10#`. ShellCheck does not flag it ([koalaman/shellcheck#2679](https://github.com/koalaman/shellcheck/issues/2679), open since 2023), so nothing in CI caught it before. `[ "$x" -lt "$y" ]` parses base 10 without complaint, so a guarded value used only in `test` is not reported — `$(( ))` is the only sink, and that is what keeps the sweep finite. The check tests itself against a planted instance and a fixed one, so a green means "looked, found none" rather than "did not look".
+
+  **No shared helper.** A `_remember_epoch_or_zero` in `log.sh` would cover most sites and is worth doing on its own terms, but it does not prevent recurrence: the failure mode is a new call site written by someone who has read none of these five issues, and a helper they do not know about cannot help them. The check fails in the one place people already look.
+
+- **A fifth marker-ahead-of-now site: the restore hook's fetch record** ([#326](https://github.com/Digital-Process-Tools/claude-remember/issues/326)) — `hooks.d/before_session_start/50-git-restore.sh` reads `started=` out of the fetch state file through the same digits-only `case`, and #326's four-site inventory does not name it. A `started` ahead of now makes `_age` negative, so `_fetch_health` answers **`in-flight`** — the one state that means "wait, something is already running" — about nothing at all. `_spawn_fetch` runs the same comparison and takes its early `return`, and the only writers of that file are inside the subshell that return skips, so no fetch is ever started again and the record can never heal. Identical geometry to the four named sites.
+
+  **The visible harm is worse than a wrong label.** The caller then prints `already up to date with origin/main` off remote-tracking refs that no fetch has refreshed — exactly what `_fetch_health`'s own header forbids ("Silence is not a fourth way of saying up to date"). `_fetch_health` now answers `abandoned`, which is the honest third state, and `_spawn_fetch` falls through to start a real fetch and rewrite the record, with one line saying why. `_fetch_health` is left pure: its stdout *is* the verdict and is read through `$( )`, so the diagnostic goes in `_spawn_fetch`.
+
+  Found by the review pass on this PR, not by the issue — which is the same lesson #332 is about: an inventory that names N sites is evidence about the reading, not about the code.
+
+- **The new lint could not be trusted as a gate, and its own fixture was not the shape it claimed** ([#332](https://github.com/Digital-Process-Tools/claude-remember/issues/332)) — two defects in `tests/test_arith_base_lint_332.py`, both found reviewing this PR. `case "$1" in` captures the guarded name as the bare string `1`, and the matcher did not require the `$` sigil, so every `$(( x + 1 ))` in a file that guards a positional parameter would have been reported as a finding — `scripts/lib-lock.sh` guards two of them, so the next ordinary line of arithmetic there would have failed CI for no reason. A lint that cries wolf gets switched off, and then it is not a gate. Numeric names now require the sigil. Separately, `''` inside a single-quoted Python literal closes it and opens another, so the planted fixture had silently become `case "$LAST" in |*[!0-9]*)` — a self-test whose fixture is not the shape it plants still goes green, and a green here is supposed to mean "looked, found none". Both are pinned by tests.
+
+## [0.18.0] — The rest of the readers
+
+[#322](https://github.com/Digital-Process-Tools/claude-remember/issues/322)'s guard was written
+once and assumed to be everywhere. It was not. Six more sites — across `scripts/post-tool-hook.sh`
+and both git hooks — read a marker of their own straight into `$(( ))` behind the same digits-only
+check that lets `08` and `09` through. Four of them are consecutive-failure counters, and the branch
+bash abandons on the failing increment is the branch holding that file's loudest log line: a corrupt
+counter did not mis-count, it silenced the report.
+
+The other half is a regression test that had been writing its marker to a path the hook reaches only
+through a compatibility shim. The shim exists to be removed, and the day it goes the test would have
+gone vacuous with nothing turning red.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133) —
+the updater compares manifest versions and nothing else, so a release without that bump ships to
+nobody.
+
+**Known and not fixed here.** These guards still validate a marker's *syntax* and not its *range*: a
+digits-only value ahead of the current clock passes, engages the cooldown, and exits **above** the
+rewrite, so the throttle sticks on with no diagnostic. Four sites, tracked in
+[#326](https://github.com/Digital-Process-Tools/claude-remember/issues/326), unchanged by this
+release.
+
+### Fixed
+
+- **`10#` reached `save-session.sh` and `post-tool-hook.sh` but never the two git hooks** ([#327](https://github.com/Digital-Process-Tools/claude-remember/issues/327)) — [#322](https://github.com/Digital-Process-Tools/claude-remember/issues/322)/[#329](https://github.com/Digital-Process-Tools/claude-remember/issues/329) closed four readers and left `hooks.d/after_save/50-git-backup.sh` and `hooks.d/before_session_start/50-git-restore.sh` on the bare digits-only guard, so `08`/`09` — all digits, therefore clean to that guard — still reached `$(( ))` as octal.
+
+  **Six sites, not the one the issue names, and four were found by sweeping the two files.** Besides the backup cooldown marker and the restore hook's two fetch-timestamp reads, every consecutive-failure counter in both hooks (`git-backup-rejected`, `git-backup-commit-failed`, `git-backup-no-remote`, `git-restore-diverged`) reads itself back through the same guard into the same sink. Those four are the worse ones: bash abandons the rest of the branch on the failing increment, and the abandoned branch is the one holding `log "ERROR: push REJECTED …"`, `log "ERROR: commit FAILED …"` and `log "ERROR: … DIVERGED …"`. A corrupt counter did not mis-count — it silenced the loudest report in the file, which is [#257](https://github.com/Digital-Process-Tools/claude-remember/issues/257) reached through the counter instead of through `exit 0`. `_fetch_health` fails the same way pointing the other direction: the octal read falls through to the `rc` branch with `rc` unset, so a fetch that never came back is reported as one that FAILED with an unknown status — the wrong state out of the three, handing the user a remedy for a failure that did not happen.
+
+  **The issue's severity claim does not survive measurement; the fix is right anyway.** #327 states the hook dies under `set -u` and the git backup is stopped permanently, and classes it `fails-to-preserve`. Measured on bash 3.2.57 in the shape the hook actually has — the read sits inside `if [ -f "$COOLDOWN_MARKER" ]` — the failing expansion abandons that body and resumes after `fi`: rc 0, the commit happens, and `_gb_stamp_cooldown` rewrites the marker, so the gate self-heals exactly as #322's two do. The issue's repro used a flattened command list, where the same input does exit 127. This is the mechanism #329's own docstring already records; `misreports` is the right class for all six sites.
+
+  **Comparisons were checked and are not affected.** `[ "$x" -lt "$y" ]` parses base 10, so `[ 08 -lt 9 ]` is true with no diagnostic. `$(( ))` is the only sink, which is what bounds the sweep.
+
+  The docstring half of #327 needs no work: [#329](https://github.com/Digital-Process-Tools/claude-remember/issues/329) already replaced the false claim in `tests/test_save_session_marker_arithmetic_322.py` with an accurate statement that the gap was still open here. That statement is now itself out of date and is updated in the same commit — a correct note about an open gap becomes a wrong one the moment the gap closes.
+
+- **#258's regression test wrote its marker where a compatibility shim happened to carry it** ([#324](https://github.com/Digital-Process-Tools/claude-remember/issues/324)) — reported by [@jmossie82](https://github.com/jmossie82). `test_a_corrupt_cooldown_marker_does_not_kill_the_hook` wrote `<store>/.last-git-backup-ts` while the hook reads `$GB_STATE_DIR/last-git-backup-ts` ([#261](https://github.com/Digital-Process-Tools/claude-remember/issues/261)).
+
+  **Filed as "the cooldown block is never entered and every corrupt value passes trivially"; measured, that part is not true.** The legacy carry-forward at the top of the hook copies the dotted root file into the state dir *before* the cooldown block, so every parametrized value did reach the evaluator — which is also why the reporter's glob found the dotted path gone rather than untouched. The defect is real but different: the test's transport was the compatibility shim, not the feature under test. That shim exists to be removed, and the day it goes, all four cases go vacuous with nothing turning red. The marker now goes through the same `hook_state` helper the sibling tests already use, resolved through `git rev-parse --git-common-dir` rather than spelled out.
+
+  **What was genuinely unguarded is the octal pair, and the assertions.** `08`/`09` were absent from the parametrization, and the test asserted only rc and the commit — neither of which changes on bash 3.2.57, where the failing arithmetic abandons the `if` body and the hook proceeds. It now asserts on stderr, which is the only observable that separates broken from fixed on every bash: falling back to `0` makes a corrupt marker read as "very old", so corrupt and clean-but-ancient reach the same decision by design.
+
+- **A third reader of the same cooldown marker, and a freeze guard that outlived its claim** ([#329](https://github.com/Digital-Process-Tools/claude-remember/issues/329)) — [#322](https://github.com/Digital-Process-Tools/claude-remember/issues/322)'s `10#` landed in `save-session.sh` and stopped there. `scripts/post-tool-hook.sh` has carried the digits-only `case` since [#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230) and carried no `10#`, so `08`/`09` — all digits, therefore clean to that guard — reached its arithmetic as octal at both of its file-sourced operands: `tmp/last-save-ts` at the fork throttle and `tmp/no-transcript-notice` at the once-an-hour report.
+
+  **The notice reader is the one that loses something.** The `if` body bash abandons there is the body holding an `exit 0`, so the hook runs on past it and the line below the `fi` deletes the notice marker on the assumption a transcript had been found — the report is never sent, and its marker is cleared as though it had been. Both sites are pinned on behaviour rather than on the diagnostic alone: this hook writes its diagnostic to `hook-errors.log` and not to stderr, so a stderr-only assertion of the shape #322 used is green against the unfixed hook.
+
+  **`SAVE_COOLDOWN` on the next line looks identical and was deliberately left alone.** It is the right-hand operand of `[ … -lt … ]`, and `test` parses base 10 without evaluating — measured, `[ 9 -lt 010 ]` is true. A `10#` there would advertise a gap that does not exist.
+
+  **The freeze guard is the other half, and it is why a one-token fix could not land.** `test_doctor_is_quiet_when_the_spellings_agree` held `scripts/post-tool-hook.sh` byte-equal to `origin/main`. Byte-equality asserts "nobody has edited this file since main", which is a different claim from the one [#298](https://github.com/Digital-Process-Tools/claude-remember/issues/298)/[#299](https://github.com/Digital-Process-Tools/claude-remember/issues/299) care about, and it fails in both directions: it blocked an unrelated arithmetic guard, and it goes vacuous the moment the edit it objected to lands on main. The property is now asserted directly — the per-tool-call path does not source the divergence library, does not call the check, and spawns no `git`. The other two arms keep the byte compare; they were not what blocked, and widening a guard that belongs to another issue was not that change's business.
+
+  Two further readers were named at the time as still open rather than left silent — `50-git-backup.sh`'s #258 guard and `50-git-restore.sh`'s fetch-state read. Both close in this release under [#327](https://github.com/Digital-Process-Tools/claude-remember/issues/327), and the test that could not pin the first of them is repointed under [#324](https://github.com/Digital-Process-Tools/claude-remember/issues/324).
+
+## [0.17.0] — Markers that were trusted to be numbers
+
+Two of this repo's own state files are read straight into contexts that treat their contents as
+code rather than as data. A cooldown marker is a timestamp until the day it is not, and neither of
+the two readers in `save-session.sh` checked. Reported and fixed by an outside contributor, which
+is the first time that has happened here.
+
+The other half of the release is the auth-marker scan learning to say when it looked somewhere and
+found nothing, instead of letting an empty read stand in for a clean one.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133) —
+the updater compares manifest versions and nothing else, so a release without that bump ships to
+nobody.
+
+**Known and not fixed here.** The guards added below validate a marker's *syntax* and not its
+*range*, so a digits-only value that is ahead of the current clock still passes, and on that path
+the marker rewrite is unreachable — the throttle sticks on, permanently and silently. Four sites,
+tracked in [#326](https://github.com/Digital-Process-Tools/claude-remember/issues/326). `10#`
+also landed in `save-session.sh` only; `50-git-backup.sh` still takes the octal path, tracked in
+[#327](https://github.com/Digital-Process-Tools/claude-remember/issues/327). Both predate this
+release and neither loses data that is not still on the machine.
+
+### Fixed
+
+- **Two cooldown markers were read straight into `$(( ))`, where bash evaluates file content as an arithmetic expression** ([#322](https://github.com/Digital-Process-Tools/claude-remember/issues/322)) — `tmp/last-save-ts` and `tmp/last-ndc.ts`. [#258](https://github.com/Digital-Process-Tools/claude-remember/issues/258) fixed this exact read in `50-git-backup.sh`; these two were missed. A marker holding `1786158837;` is a syntax error rather than a bad number, and bash's response is to abandon the **entire if/then body** and resume after `fi` — so `[ "$ELAPSED" -lt … ]` is never reached, `RUN_NDC=false` never runs, and the save skips its cooldown with one stderr line as the only trace.
+
+  **Smaller than it first looks, and the issue says so.** `date +%s > "$COOLDOWN_MARKER"` sits below the `fi` and `date +%s > "$NDC_MARKER"` runs on precisely the path a corrupt marker allows, so both gates **self-heal on this path**: the cost is one skipped cooldown per corruption event, not a throttle stuck off. Scope that claim to the *syntax-error* case, which is the one fixed here — a digits-only marker that is ahead of the clock passes the guard, engages the cooldown, and exits **above** the rewrite, so there the throttle does stick off. That is [#326](https://github.com/Digital-Process-Tools/claude-remember/issues/326) and it is not fixed by this release. Nothing dies either — `set -e` plays no part, and `$ELAPSED` lives inside the abandoned body, so the `set -u` in `50-git-backup.sh` never sees an unbound variable there. The issue was filed claiming both, and both are wrong; the corrected mechanism is measured on bash 3.2.57 and 5.2.37.
+
+  **`case` and `10#`, not one or the other.** `08` and `09` are all digits, so they clear a digits-only guard and are then read as octal (`value too great for base`) — the identical abandonment from a marker that looks clean. Only reachable through a corrupt marker, which is the premise. `10#` goes after the guard, never instead of it, since `10#` on an empty string is itself an error on bash 5. The guard also rejects a space-padded value that arithmetic would have accepted; deliberate, and the same call #258 already made.
+
+  What this buys is narrow and worth stating plainly: an unexplained diagnostic stops appearing in `hook-errors.log` (visible to users since [#277](https://github.com/Digital-Process-Tools/claude-remember/issues/277)), and unvalidated file content stops reaching an arithmetic evaluator — the sink BashPitfalls #7 names, and the reason `case` was the answer in #258. ShellCheck does not flag this class at all, even with `-o all`; the standing request is koalaman/shellcheck#2679, open and unassigned since 2023.
+
+  Pinned by `tests/test_save_session_marker_arithmetic_322.py`, which asserts on the diagnostic rather than on whether a save happened — falling back to `0` makes a corrupt marker read as "very old", so corrupt and clean-but-ancient reach the same decision and only the stderr separates broken from fixed.
+
+- **The marker scan's list of field names was assumed exhaustive, and the assumption failed silently** ([#320](https://github.com/Digital-Process-Tools/claude-remember/issues/320)) — [#318](https://github.com/Digital-Process-Tools/claude-remember/issues/318) narrowed `_failure_haystack` to the fields the CLI itself authors (`error` / `result` / `message`, the `errors` list, stderr) and kept the raw-stdout fallback behind `if not authored`. That guard needs **every** recognised field to be empty. So a terminal record reporting an auth failure in some field this does not read, while a field it does read holds something benign, is scanned, found clean, and reported as "not an isolation problem" — the un-isolated retry never runs, capture fails permanently, and nothing says why. [#316](https://github.com/Digital-Process-Tools/claude-remember/issues/316)'s outage exactly, reached through the field set instead of through the spelling list.
+
+  **Not a present defect, and it is fixed anyway.** Every input that reproduces it names a field the measured CLI does not emit. The point is that no test asserted the set was exhaustive and no comment recorded it as an assumption, so the day it stopped being true it would have stopped being true in silence — which is the one property this repo keeps paying for.
+
+  **The haystack is deliberately NOT widened.** Scanning the raw blob whenever the authored text holds no marker sounds like the fix and is a different bug: on a failing call the authored fields hold no marker in the ordinary case, so that branch would hand the retry decision back to arbitrary conversation content for essentially every non-auth failure — the whole of what #318 closed, reinstated. Three states instead of two: a marker in a field the CLI authors retries un-isolated, no marker anywhere is silence, and **a marker in the terminal record but outside the scanned set declines and says so**, naming the token, the field it sat in, the fields that were read, and what to do about it. The verdict is unchanged; the silence is what stops.
+
+  **Scoped to the terminal record, not the whole payload.** `_marker_missed_by_the_scan` reads only the last element of the CLI v2 array and only its unrecognised keys. Assistant content is what #318 removed from this decision, and a session that merely discusses an auth failure would otherwise put this notice in front of every ordinary network failure — a warning that fires on the common case is read as noise and stops carrying information.
+
+  Pinned by `tests/test_auth_marker_blind_spot_320.py`, which also holds the field set itself against a literal, so a schema change breaks a test rather than a user's capture. `unknown option` is covered alongside the auth markers: it decides the same retry through the same scan and goes blind the same way.
+
+## [0.16.0] — When the checker cannot answer
+
+### Fixed
+
+- **The conversation being summarized could decide when hook isolation was dropped** ([#318](https://github.com/Digital-Process-Tools/claude-remember/issues/318)) — `_isolation_may_be_the_cause` gates the retry that runs the nested call **with the user's hooks live**, and it matched its markers with a substring scan over the whole of stdout. Under `--output-format json` the CLI v2 array format carries assistant message content in the same blob as the terminal result record, so a session that merely *discusses* an auth failure — a dev debugging their login, or anyone reading [#316](https://github.com/Digital-Process-Tools/claude-remember/issues/316) — could put `not logged in` in front of that scan while the real failure was a network error. The scan now reads only the fields the CLI itself authors.
+
+  **Found by the release audit gate, and it was filed stronger than it turned out to be.** The hypothesis was that model text reaches the haystack via `error_max_turns`. Measured against a real CLI, it does not: that subtype exits 1 and carries **no `result` key at all**, only a CLI-authored `errors` list. One probe closed the route that was actually alleged — but "the route I checked is shut" is not "the field is safe to scan", and the array format is a second route nobody had to hypothesise.
+
+  **The fallback is deliberate.** Unparseable or unrecognised stdout still gets the raw scan: an older CLI, or a crash before any JSON is emitted, has an auth failure to report and no structure to report it in, and refusing to look would fail *closed* — a permanent silent outage, which is #316 again. It applies only when nothing structured was found, so a payload that explains itself is taken at its word.
+
+  Pinned by `tests/test_auth_marker_scope_318.py`: the hostile-content case is the RED one, and #316's own auth text, the `errors` list, the non-JSON fallback, stderr, the `unknown option` rule and the already-cost-money negatives are all held alongside it.
+
+- **A Bedrock-proxy install could never save a memory, and the recovery path it needed was already there** ([#316](https://github.com/Digital-Process-Tools/claude-remember/issues/316)) — reported by [@peterurbanec](https://github.com/peterurbanec) with the mechanism traced end to end. `_child_env()` strips every `CLAUDE_CODE_*` var so the child does not look like a resumable parent session, which on a Bedrock install takes `CLAUDE_CODE_USE_BEDROCK` and `CLAUDE_CODE_SKIP_BEDROCK_AUTH` with it; `--setting-sources ''` then stops `~/.claude/settings.json`'s `env` block from putting them back. The nested CLI falls through to the real Anthropic API holding a proxy token, and gets `401 Invalid bearer token`.
+
+  **That is precisely the outage `_isolation_may_be_the_cause` exists to undo** — it retries once without the isolation flag, free, because the call died resolving credentials and nothing was billed. It never fired, because the four spellings in `_AUTH_FAILURE_MARKERS` did not include this one. So every capture on those installs failed, permanently, with the fix one string away and nothing in the log saying so.
+
+  **The tuple gained two entries, not one.** `invalid bearer token` closes the reported case. `failed to authenticate` is the CLI's own prefix for the whole family, and no rate limit or overload can produce it — the narrowness this tuple is documented to want is about not retrying failures that already cost money, and an auth failure never did. The next spelling of this should not need a sixth issue.
+
+  **Pinned by `tests/test_auth_failure_markers_316.py`**, which had nothing to extend: `_isolation_may_be_the_cause` had no test at all, so the negatives are pinned now too — 429, 529, 500 and a low credit balance still return False, because retrying any of those would double a real spend and hide the cause ([#129](https://github.com/Digital-Process-Tools/claude-remember/issues/129)/[#190](https://github.com/Digital-Process-Tools/claude-remember/issues/190)).
+
+### Changed
+
+- **The lock recorder's own failure notice could abort the save it was measuring** ([#226](https://github.com/Digital-Process-Tools/claude-remember/issues/226)) — `_lock_timing_disclose` in `scripts/lib-lock.sh` picks between the pipeline `log` function and a bare stderr `printf`, and it picked with `command -v log`. That is not the question. The question its own comment states is *did the caller source `log.sh`*, and `command -v` asks whether anything named `log` exists anywhere — **on macOS, the platform `lib-lock.sh` exists for, `/usr/bin/log` is the system logging binary and ships on every machine**. So the function branch was taken unconditionally there, running `/usr/bin/log lock-timing "..."`, which prints a usage block and exits **64**. Under `set -e` — `save-session.sh:56` — that aborts the caller mid-save, with `save.lock` held, leaving the `EXIT` trap to clean up after a save that never finished.
+
+  **It was latent, and the reason it was latent is not a defence.** Every current sourcer takes `log.sh` first (`save-session.sh:63`, `run-consolidation.sh:41`, `session-start-hook.sh:79`), and a shell function shadows a binary in `command -v`, so the branch resolved to the function and nothing fired. The guard was one new caller away from firing, and `lib-lock.sh:40` documents itself as sourceable on its own. `declare -F log` — a builtin, true only for a function, available on bash 3.2 — asks the question the comment already claimed to ask.
+
+  **The path it could take down is the recorder's only way of saying it recorded nothing**, which is what makes this worth a changelog entry rather than a one-line tidy. `REMEMBER_LOCK_TIMING` exists so a timeout default can come from a distribution instead of intuition; the disclosure exists so an *absent* distribution is distinguishable from an idle machine, this repo's third state. An instrument whose "I could not measure" notice is itself the failure is worse than one that stays quiet. The `log` call now carries a stderr fallback too — `log()` ends in `|| echo … >&2` and cannot fail, but `set -e` does not care what a callee is supposed to do, and this function is the last thing standing between a failed write and a failed save.
+
+  **Found by the tests below, which is the point.** Everything the recorder already had asserted that it records. Nothing asserted what happens when it *cannot*, so the one behaviour that would make the instrument actively harmful was the one behaviour untested.
+
+- **A timing write that fails can no longer fail the lock use it was timing** ([#226](https://github.com/Digital-Process-Tools/claude-remember/issues/226)) — two tests in `tests/test_lock_timing.py` pin the three properties together, because only all three make the instrument safe: the lock use **completes**, no measurement is **invented**, and the gap is **announced** exactly once per process. They cover both ways the write can fail, which are not the same code path — a read-only log *directory* fails at file creation, while a read-only *file* passes the cap check happily and fails only at the append.
+
+  The harness runs under `set -eu` and echoes `SAVE_COMPLETED` after the last release rather than checking the exit status alone: an abort inside a hold can still exit 0 through a trap, so a status check would have missed the failure it was written for.
+
+  **The excluded failure is a plausible zero, not just a crash.** A hold that was never timed must be *missing* from the distribution, not present in it as a `0ms` row keeping the file's shape intact — one of those makes a `p50` smaller and the other does not. That is #226's own complaint (a number that reads as measured and is not) in its degenerate form.
+
+  **Teeth, demonstrated rather than claimed.** With the `2>/dev/null` / `|| _lock_timing_disclose` guards stripped from the two `printf … >>` writes, the read-only-directory test goes red on the first assertion — exit 1, `SAVE_COMPLETED` never printed, `save.lock` still held — which is the production symptom exactly. Both tests skip when run as root, since root writes through the mode bits they depend on and would otherwise be green while exercising nothing.
+
+  **No default changed.** `REMEMBER_NDC_COMMIT_LOCK_TIMEOUT` is still 30s. This is about whether the instrument can be trusted to run on the path it observes, not about what the instrument says.
+
+- **The lock-ownership race can no longer blame P2 for P1 finishing on time** ([#312](https://github.com/Digital-Process-Tools/claude-remember/issues/312)) — `test_skip_path_does_not_delete_holders_lock_file` reddened `main` on one leg of twelve. Its assertion reads "P2's skip-path cleanup deleted the lock entirely — P1 is still running and now unprotected", and nothing in the test ever established that P1 was still running. P1 held `save.lock` for a fixed `STUB_EXTRACT_SLEEP=3.0`; everything P2 had to do — spawn bash, source ten scripts, reach a skip branch — had to fit inside that window on whatever runner drew the job. When it did not, P1 released the lock **correctly**, the file was **correctly** gone, and the failure named the one process that had done nothing wrong.
+
+  **This is the repo's own three-state defect, landing inside the suite that pins it.** An absent `save.lock` has an innocent reading and a guilty one and they produce the identical filesystem state; only P1's liveness separates them. So the test had two outcomes where it needed three, and "P1 had already exited" is neither a pass nor a failure — it is a run that observed nothing and must say so. It now says so with `pytest.skip(... COVERAGE LOST ...)`, the idiom [#293](https://github.com/Digital-Process-Tools/claude-remember/issues/293) put in `tests/test_lock_primitive.py` for exactly this.
+
+  **The timing dependency is removed rather than widened.** Raising the sleep was rejected: a bigger number moves the flake and leaves the ambiguity intact. P1 now blocks in its stub `extract` on a release file the test creates, so its hold covers P2 and P3 **by construction** — no budget is guessed anywhere, and the fixture keeps a 60s cap so a defect cannot hang a runner. Every environment is also built *before* P1 starts; each `_make_env` rewrites the same ten scripts, `config.json` and session `jsonl` into the shared tree, and doing that while P1 was executing those very files was both a hazard of its own and most of the work that used to have to fit inside the window.
+
+  **The gate is consulted only where the ambiguity is.** A lock that is still there is unambiguous — P1 cannot have released it and P2 has exited — so the passing path pays nothing. A bare `poll()` would not have been enough on the failing path either: it reads `None` for the whole of `save-session.sh`'s `EXIT` trap, so a lock P1 had already released legitimately would still have been read as a live holder's lock going missing. Liveness is believed only after a 2s grace, paid solely on the branch that is about to fail or skip.
+
+  **Teeth, demonstrated rather than claimed.** The P3 half rested on the identical unstated premise and got the identical treatment; both inconclusive cases are now constructed deliberately by two new tests rather than waited for. Reverting [#168](https://github.com/Digital-Process-Tools/claude-remember/issues/168) in `cleanup()` — an unconditional `rm -rf "$LOCK_DIR"` — still fails, with the accusation intact, so the invariant is not weakened. Disabling either liveness gate turns both new tests red with exactly the misattribution this issue is about.
+
+  **What this does on a machine where the timing goes the other way** is the whole point, and it is not "green": a runner that loses the race now reports `SKIPPED` with the invariant it failed to check named in the line, instead of a red build accusing the wrong process. That is a real reduction in coverage on that leg, stated out loud rather than paid silently — and with P1's hold no longer on a timer, the case should not arise at all outside the 60s cap.
+
+  **No product change.** `save-session.sh` only unlinks `save.lock` when `HAVE_LOCK` is true, eleven legs agreed, and the mutation above confirms the test still catches the regression. The defect was that the test could not prove it in either direction.
+
+- **Skipped tests print their reason** ([#306](https://github.com/Digital-Process-Tools/claude-remember/issues/306)) — `addopts` gained `-rs`. Without it a skip renders as a bare `s` and the sentence explaining it is never printed, so a green run with silent skips is visually identical to a green run that checked everything.
+
+  **The issue's count of 43 is exact, re-derived on unmodified `main`: `1463 passed, 43 skipped`.** Worth knowing what they are, because the shape is not what the number suggests: **37 of the 43 are one parametrized block** in `test_hooks_json.py` skipping for a single reason (`pwsh not on PATH`), which `-rs` collapses to one `SKIPPED [37]` line rather than 37. The whole block is seven lines of output on a Linux runner — the cost of this change is far below what "43 skips" implies.
+
+  **A skip in this suite is not a test being lazy — it is a checker saying it could not answer**, which is the honest third state of this repo's `ok` / finding / `skipped` contract. The case that surfaced it: the shell-parse gate added in [#302](https://github.com/Digital-Process-Tools/claude-remember/issues/302) runs under every bash it can find, and claims *floor coverage* — bash 3.2, where `case` inside `$( )` is a parse error a modern bash is blind to — in exactly one test. On a runner with no bash below 4.0 that test skipped with the constructs it did not check named in prose, and nobody could read it. A maintainer looking at a green log could reasonably conclude the floor bash was covered when it was not, which is the failure that gate was built to prevent, reappearing one layer out in how the gate reports itself.
+
+  **The second option in the issue is not implemented, because the premise it rests on is already true.** It proposed an explicit floor-bash CI leg on the theory that probing `/bin/bash` by absolute path rather than through `PATH` might give the floor interpreter for free on the existing `macos-latest` runner. `tests/shell_parse.py` already does exactly that: `_BASH_CANDIDATES` lists `/bin/bash` and four other absolute paths, `discover_interpreters` probes each and deduplicates by real path, so a homebrew bash 5 on `PATH` and a stock `/bin/bash` 3.2 are both discovered and both used. There is nothing to add. **Whether `macos-latest` actually still ships 3.2 at `/bin/bash` is an empirical question about a runner image, and it was not measured** — the issue asks for it to be measured rather than assumed, and no macOS runner was available here. What `-rs` changes is that the macOS leg's own log now answers it: `test_the_floor_bash_actually_ran_or_the_gap_is_named` either passes or skips with the gap named, and either way it is now legible. Option 1 is what makes option 2 measurable.
+
+  Cost: more output on every run. That is the point.
+
+- **A spawn-count test can no longer measure the cold path and call it warm** ([#303](https://github.com/Digital-Process-Tools/claude-remember/issues/303)) — `lib-env-cache.sh` refuses its cache unless the cache file is `-nt` every config layer, and bash's `-nt` compares **whole seconds** (measured here, not assumed: `tests/env_cache.nt_granularity` builds two files 0.8s apart inside one second and asks bash which is newer — bash 3.2.57 on macOS says neither). So a config written in the same second as the cache reads as "not newer", the cache is rejected, and the run is cold. That direction fails safe and is unchanged.
+
+  The hazard is in the tests. A warm-path spawn budget asserted after a config write is measuring one of two different things depending on which side of a second boundary the two writes landed on — and both are correct product behaviour, so the test passes either way with nothing in the output saying which it measured.
+
+  **The fixture is the smaller half of the fix.** `tests/env_cache.write_config` backdates by 60s, which removes the coin flip; the issue asked for that and it would have been enough to stop the flake. It would not have stopped the *misreport*, because a backdated config still produces a number with no statement of which path produced it — a later change that stops the cache loading at all leaves a green budget test measuring the cold path forever, exactly as before. So `EnvCacheProbe` brackets a run and reports **`warm` / `cold` / `unknown`**: the same three answers `_push_and_report` and the repo-mutation guard already give, applied to a measurement. `unknown` is not a softer `cold` — a cold run means the setup raced and the number is wrong, an unknown one means nothing was published or replayed and the number is unattributable. Different repairs, different words.
+
+  **It needs no clock, which matters on the platform this is for.** A cold run ends in `_remember_env_cache_publish`, which `mv`s a private temp file over the cache — a rename, so the inode changes. A warm run reads and writes nothing. Comparing inode and mtime across a run distinguishes the two by causality rather than by timing, at any duration, including one shorter than any clock stock macOS can name — the same argument [#293](https://github.com/Digital-Process-Tools/claude-remember/issues/293)'s replacement lock test rests on.
+
+  **Teeth, demonstrated rather than claimed.** Against a probe hardcoded to `warm`, 5 of 9 tests are red; hardcoded to `cold`, 4 of 9. Against a `write_config` with the backdate deleted, the writer's contract test is red — asserted through `bash -c '[ cache -nt config ]'` rather than through Python mtimes, because `-nt` is the comparison that actually decides. That last one is the mutant the first draft missed: the obvious end-to-end form could not kill it, since the cold run it waits on takes over a second and puts the cache in a later second regardless of how the config was written. **That accidental dodge is exactly what the issue says the existing suite relies on**, found by mutating the fixture rather than by reasoning about it.
+
+  `test_a_warmed_prompt_hook_spawns_almost_nothing` and `test_reading_the_option_costs_no_process_on_a_warm_prompt` now assert the path before asserting the budget, and the reasoning that lived in one comment in one test file lives in `tests/env_cache.py` and the README, where the next person writing a budget test can find it.
+
+## [0.15.0] — What the check actually saw
+
+Three of the four changes here are the same shape: something reported a clean result it was not in a position to give.
+
+The one with a user behind it is [@jackneil](https://github.com/jackneil)'s. This plugin has always printed `[14:30 CEST — jack — 45%]` into the model's context on every prompt, with no way to turn it down, and operators were rewriting that line in flight with a regex to get rid of it. `prompt_stamp` makes it a choice — `full` (the unchanged default), `stable`, or `off`. The half of the report that was wrong is the half that decided the design: the context percentage is *not* byte-stable between turns, so dropping only the clock would have shipped the same problem under a shorter name.
+
+The other three are ours. Nothing asserted that the shipped shell scripts **parse**, while a syntax error in a hook silently discards whatever the user just typed — and the construct that caused exactly that during this release fails to parse only on bash 3.2, so a gate running under a modern bash would have reported `ok` on the offending file. The lock primitive's concurrency test counted *acquisitions* rather than measuring *overlap*, which meant it recorded four legitimate sequential lock-takes as four concurrent winners. And the store-spelling check added in 0.14.0 now has its precondition measured rather than assumed: it never occurs in any store anybody has, and the disclosure stays as the detector.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133) — the updater compares manifest versions and nothing else, so this line is the part that reaches anyone.
+
+
+### Changed
+
+- **The lock primitive's concurrency test measures overlap instead of counting acquisitions** ([#293](https://github.com/Digital-Process-Tools/claude-remember/issues/293)) — `test_at_most_one_winner_per_round` tallied how many processes acquired a lock in a round and asserted the tally was 1. That is not a property of `lock_acquire`. Its winner released after 150ms, so a contender the OS did not schedule until after that release took the free lock by plain `mkdir` — a second acquisition, legitimate, sequential, and not a race — and the harness recorded it as a concurrent winner. **Reproduced on a stock macOS laptop, and worse than the issue reported: 4 contenders at a 0.4s stagger, 4 winners, zero overlap.** The test passed in CI only because the runners it met happened to schedule contenders inside 150ms of each other — the same property that made [#291](https://github.com/Digital-Process-Tools/claude-remember/issues/291) fail on one ubuntu leg in twelve and never on a laptop.
+
+  **What replaced it asserts the rule the file's own docstring states**: no two processes are inside the critical section at once. Contenders write `enter` and `exit` to one shared append log and the replay fails if anybody entered while somebody was still in.
+
+  **There is no clock in it, and that is the design decision, not an omission.** The obvious form of "prove the intervals are disjoint" is a timestamp per enter and per exit. It cannot be done honestly on this suite's platforms. On stock macOS — bash 3.2.57, the platform `lib-lock.sh` exists for — `EPOCHREALTIME` is unset and `date +%s%N` prints `1785838792N`, a literal `N`; measured, not assumed. The best portable clock left is whole seconds, and `lib-lock.sh`'s own recorder (`_lock_timing_now`) degrades to exactly that there. Whole seconds is coarser than every interval being measured, so "disjoint" would have decayed into "indistinguishable" — #293's defect in a new costume, a test passing because it cannot see the thing it checks. File mtimes are no way out either: `-nt` is whole-second granular too ([#303](https://github.com/Digital-Process-Tools/claude-remember/issues/303)). Ordering needs no resolution. `O_APPEND` writes land in syscall order, and that order is pinned to the lock by causality rather than by the scheduler — `enter` is written after `lock_acquire` returns, `exit` before `lock_release` is called — so the recorded interval is contained in the true hold interval and never wider than it. A false overlap is unreachable; a real one is visible at any duration, including one shorter than any clock on this platform can name.
+
+  **Teeth, demonstrated rather than claimed.** Against a lock that does nothing (`lock_acquire() { return 0; }`) the test is red at every N including N=2, in 10 rounds out of 10. Against a realistic broken lock — check-then-act, `[ -d "$1" ] && return 1; mkdir "$1"` — likewise red at all four N. The answer to "would this still pass if the lock did nothing" is no, with output.
+
+  **Contenders now wait rather than give up at timeout 0**, so a round is N hand-offs instead of one acquisition. Ten rounds at N=10 is 100 hand-offs against the old 40 rounds' 40 acquisitions: strictly more contention at CI parity (the file runs 125s against 117s before).
+
+  **One flake was found in the replacement, by running it, and it was this same bug.** A first cut asserted `holds == n` on the staggered round. Under load that is red at 3 of 4 — correctly, because at timeout 0 a contender the OS delays into the previous holder's window gives up. Observed once in six runs. Asserting the count would have rebuilt #293's defect inside the test written to retire it, so the count is not asserted: the scheduler-independent property is, and the concurrent round now **skips loudly** naming the coverage lost when it produced no re-acquisition to misread. The structural half moved to `test_a_sequential_reacquisition_is_not_an_overlap`, which has no background jobs, no sleeps and no stagger — three acquisitions in one process, in order, red under the old rule on every runner that can run bash.
+
+  **What did not get fixed, and why it cannot be.** The issue notes that mutating the marker clear in `_lock_try_adopt` from `mv` to `rmdir` leaves the whole file green, and asks for that line's single-winner argument to be pinned. Confirmed green — 26 passed. **The argument is not true as stated, which is why no test pins it.** `rmdir` on a directory is as single-winner as a rename: exactly one of N concurrent callers succeeds, the rest get `ENOENT`. The comment above the line reasons that "a rename fails for everyone but the first" as though `rmdir` would not, and that is wrong. Nor is the operation load-bearing at all: mutated to `rm -rf`, which really does succeed for everyone, the adopt tests still pass, and a direct stress at 8-way contention over 60 rounds gives 0 doubled rounds and 60/60 rounds won — identical to the original. The single-winner gate is the `noclobber` pid write below it, exactly as *that* comment says. So `mv` → `rmdir` is an equivalent mutant, not missing coverage; pinning it would require first making it load-bearing. Filed as an observation on #293 rather than silently left, because "no test covers this line" and "this line has nothing to cover" look identical from a mutation report.
+
+### Added
+
+- **`prompt_stamp` — what this plugin injects on every prompt is now the user's choice** ([#301](https://github.com/Digital-Process-Tools/claude-remember/issues/301)) — `user-prompt-hook.sh` has always printed `[14:30 CEST — jack — 45%]` into the model's context on every `UserPromptSubmit`, and there has never been a way to turn it down. [@jackneil](https://github.com/jackneil) reports that a byte sequence changing every turn caps prompt-prefix cache reuse on their self-hosted gateway, and that with no option available, gateway operators end up rewriting this hook's stdout in flight with a regex.
+
+  **That measurement is theirs, this repository cannot verify it, and it is deliberately not the argument for shipping this.** `UserPromptSubmit` output is attached to the newest user turn — the *tail* of the context — and is frozen into history once emitted; whether that position defeats a given gateway's prefix cache is a property of the gateway, not of this plugin, and nothing here claims an answer or quotes a number. What stands without the measurement is the other half of the report: **a hook whose output has to be patched by its consumers is a hook missing an option.** That is true for a caching operator, for anyone diffing transcripts, and for anyone who would simply rather this plugin did not put a username in their context.
+
+  **Three modes, and the default is byte-for-byte what shipped before.** `full` (default) is unchanged. `stable` emits `[jack]` and nothing else. `off` emits nothing at all. An unrecognised value reads as `full`, because a typo in `config.json` must not silently delete the clock. `config.example.json` ships `"prompt_stamp": "full"` — unlike `debug` and `timezone`, which are deliberately absent from that file, shipping this one changes nothing for anyone who copies it, since the value *is* the default.
+
+  **The half of the request that was wrong, and it is the half that decided the design.** The issue proposes keeping `[$(whoami)]` and the context percentage, describing both as byte-stable between turns. The username is. **The percentage is not** — it climbs on every single prompt for anyone running the status line, which this hook's own comment records as the common case, not the rare one. The issue's option 2 — drop the clock, keep the rest — would therefore have left the line volatile for most of the people asking for the fix, and shipped as a fix. `stable` drops both fields. Option 3, hour granularity, is declined for the same reason and one more: it still changes bytes, merely less often, and it would be a third timestamp format that has to stay byte-identical across bash 3.2's `date` and bash 4.2's `printf '%(...)T'` — a cost [#227](https://github.com/Digital-Process-Tools/claude-remember/issues/227) already paid once.
+
+  **`stable` keeps the `>= 95` context warning; `off` suppresses it, and the difference between the two modes is exactly that.** The warning is threshold-gated, so it changes bytes only when it changes behaviour, and it is the one line in this hook anybody acts on — keeping it costs a cache-sensitive user nothing until the session is nearly over anyway. But `off` has to mean off: silence that is not silent is how a user ends up back at the regex this option exists to retire. Both halves are asserted, and the README says which mode does which.
+
+  **No process is added, and two are removed. Measured, macOS, `/bin/bash` 3.2.57, spawns counted by execution behind a PATH shim, warm run ×5:** `full` and the default cost **1** (the `date` that bash 3.2 has no builtin for), exactly as before; `stable` and `off` cost **0**. Cold run 10 → 9, the same `date`. Reading the option is free because it is not read here: `log.sh` resolves it beside `REMEMBER_TZ` off the already-built config table, and `lib-env-cache.sh` replays it — the #227 design, which exists precisely so this hook never resolves anything itself.
+
+  **A cache written before this option existed is refused rather than defaulted.** The env cache is invalidated by config mtime, never by plugin version, so a file from the previous release carries no answer for the key; reading that absence as "the default" would serve a resolution that never considered the option. It costs one slow prompt, once, at upgrade.
+
+  **One trap worth naming, because it cost a red run here and it fails at parse time.** A `case` statement inside a `$( )` command substitution is a bash syntax error — the parser takes the `)` closing a case pattern as the end of the substitution. The hook then exits **2**, and on `UserPromptSubmit` exit 2 does not merely error: it blocks the prompt and erases what the user typed. Two string comparisons instead, with a comment saying why it must not be tidied back into a `case`.
+
+  Tests first, red 10/14 — `tests/test_prompt_stamp_301.py`. The four that passed against no implementation at all are the default-preservation guards (the default line, `full` spelled out, an unrecognised value, and the spawn budget), which is what they are for: they can only ever fail by this change moving something it promised not to move.
+
+  Thanks to **@jackneil**, including for the part that was wrong — an issue that proposes three concrete shapes is one you can argue with, and the argument is what produced `stable`.
+- **Every shipped shell script is asserted to parse, under the bash that is actually present** ([#302](https://github.com/Digital-Process-Tools/claude-remember/issues/302)) — nothing in the suite checked that `scripts/*.sh` and `hooks.d/**` parse at all. A syntax error in a hook makes it exit non-zero, and on `UserPromptSubmit` a non-zero exit **discards the prompt the user just typed** — not queued, not echoed back, and from their side indistinguishable from a UI glitch. While implementing [#301](https://github.com/Digital-Process-Tools/claude-remember/issues/301) an agent wrote a `case` inside the hook's `$( )` substitution and produced exactly that. It was caught in seconds only because `user-prompt-hook.sh` is one of the better-tested paths here; a quieter hook under `hooks.d/` would have shipped it.
+
+  **The interpreter is the whole question, and the issue's own example does not survive it.** #302 cites `printf '%(FMT)T'` ([#227](https://github.com/Digital-Process-Tools/claude-remember/issues/227)) as the reason to check under bash 3.2. That construct **parses** cleanly on 3.2 — it is a runtime failure, `bash -n` returns 0 — so no parse gate anywhere can catch it, and `scripts/lib-clock.sh` carries it today, correctly guarded at runtime. What a 3.2 parse does catch is a smaller and different set: `;;&`, `|&`, `coproc`, and `case` inside `$( )`. That last one is #301's own error, and it is the argument the issue was reaching for rather than the one it made: it parses **fine** on bash 5 and fails on 3.2, so a gate running under whatever `bash` is first on `PATH` would have reported `ok` on the exact file that erased a prompt. Both halves verified against fixtures rather than assumed.
+
+  **So the gate runs under every bash it finds, and says which.** Candidates are probed by path, deduplicated by real path, and each one's version recorded. Parse errors are errors under any interpreter that saw them — that check runs wherever a bash exists, which is everywhere this is developed or tested. Floor coverage, "did a bash below 4.0 actually run?", is a **separate** field, and exactly one test is entitled to claim it: on a Linux CI runner that test skips, naming the four constructs left unchecked, rather than letting a bash-5 pass stand in for coverage of a user's Mac. The mirror gap is reported the same way — the development machine here has only bash 3.2, so it is *modern*-bash coverage that is missing locally, and the run prints that too. The report also separates what the machine **offered** from what was actually **used**: `/bin/sh` is discovered on every Unix and handed nothing while no `#!/bin/sh` script exists, and printing the first as though it were the second would overstate the coverage by precisely the amount this gate exists to stop people overstating.
+
+  **Files are dispatched on their shebang.** A `#!/bin/sh` script checked with `bash -n` is checked against the wrong grammar — laxer in the ways that matter — so it would pass constructs `dash` rejects. None exists in the tree today; the dispatch is here so the first one is not silently checked against bash's grammar instead. A `.sh` with no shebang is a sourced library, is checked as bash, and is listed under `assumptions` so the assumption is visible. A `.sh` whose shebang names something that is not a shell lands in `unchecked`, which a test asserts is empty: a gate that quietly skips a file is the same defect one level down.
+
+  **The walk is cross-checked against git rather than trusted.** 23 files, and a test asserts every `.sh` git tracks is among them — so a directory the walk drops, including a dot-directory like `.github/`, fails loudly instead of shrinking the file set in silence. Named files (`user-prompt-hook.sh`, `post-tool-hook.sh`, `session-start-hook.sh`, both `hooks.d/` hooks) and a non-empty floor answer "would this still pass if it checked nothing?" directly. Untracked files are walked too, deliberately: a hook written five minutes ago and not yet `git add`ed is exactly when this earns its keep.
+
+  Red first, against the authentic #301 construct injected into `hooks.d/after_save/50-git-backup.sh` — the quiet hook the issue names as the one that would have shipped it — then green with it removed. **It found nothing**: all 23 shipped files parse under bash 3.2 today, which is the honest and slightly disappointing result. **Cost: 2.0 s** against a 1047 s suite, one process per (file, interpreter) pair, with the repository-wide run shared across the five tests that ask for it.
+
+- **A session-start check that discloses a store known by two spellings differing only in case** ([#298](https://github.com/Digital-Process-Tools/claude-remember/issues/298)) — the store directory this plugin resolves is compared against the name the filesystem gives it, and against the name its own backup repository tracks. Disclosure only: nothing is renamed, merged or migrated, and an allowlist test fails if `mv`, `git mv`, `git add`, `git checkout` or their neighbours ever appear in the library.
+
+  **The premise the issue was filed on is wrong, and the reporter disproved it.** It claimed a store created under the pre-[#263](https://github.com/Digital-Process-Tools/claude-remember/issues/263) drive-letter spelling (`C--Users-…`) is orphaned by the post-#263 resolver (`c--Users-…`). @jqit-ricky has the only Windows box any of this can be pointed at and measured it instead of arguing about it: `Test-Path` on both spellings returns `True` for the **same directory object**, 88 files reachable through either name. NTFS is case-insensitive, so two stores differing only in case is not a state that filesystem can be in — nothing is stranded there, the plugin reads that store, and the orphaning cannot happen on the platform #263 came from. That listing retired the issue as filed.
+
+  **What survived is one layer over, and it is git.** Git's index is case-sensitive where NTFS is not: on that machine the directory is `C--Users-ricky-dev-jqit-project-b` and the tracked path is `c--…`. Free while the store stays on NTFS. Not free on a restore — and the git backup exists precisely so the store can be restored elsewhere. Confirmed on a real case-sensitive APFS volume rather than predicted: one repository carrying both spellings, one plain `git clone`, and `out/C--proj/remember.md` beside `out/c--proj/remember.md`. Two directories, two memories, one resolver that reads exactly one of them.
+
+  **`HEAD`'s tree, deliberately not the history.** A clone checks out `HEAD`, so a history carrying both spellings while `HEAD` carries one is inert — the split needs both spellings in the tree a checkout materialises. That is a narrower claim than the issue makes, and it is the one the check tests. Whether any real store's *history* holds both spellings is still open on #298, and nothing here assumes an answer.
+
+  **Not "does a sibling store root exist", which was the shape originally proposed.** The reporter's objection was decisive: on NTFS there is never a sibling, so that check would be dead code on the platform it was written for. The disk probe instead asks whether the *one* directory that exists is spelled the way we resolved it — which is true on their machine today, costs no fork at all, and is the only half that can fire on Windows.
+
+  **Four answers, not two.** `ok` (compared, they agree) / `diverged` / **`unavailable`** (no git, not a repository, nothing committed, or this store is not tracked yet) / `not-applicable`, for a layout where the store directory is not named by the slug and nothing could diverge. An absence produced by the check is never rendered as agreement — the conflation [#296](https://github.com/Digital-Process-Tools/claude-remember/issues/296) and [#299](https://github.com/Digital-Process-Tools/claude-remember/issues/299) exist to stop, rebuilt one file over. "This store has never been backed up" is an `unavailable`, not an `ok`, because there is no tracked path it could have agreed with.
+
+  **The message had one hard requirement: a reader must not be able to conclude the opposite of the truth.** On the reporter's machine this condition is TRUE and completely harmless, so it says what is true now (nothing to fix, memory reading and writing normally), what would change that (a restore onto a case-sensitive filesystem), and that nothing will be done for them. A test asserts the words *broken*, *lost*, *corrupt* and *stranded* do not appear in it. Delivered on `systemMessage` through `user-prompt-hook.sh`'s notice loop — the one channel a human sees — and **only when the finding changes**, since the condition never clears itself and a line repeated every session start is wallpaper on the channel that can least afford it. `/remember:doctor` reports it every time, which is the point: a user who suspects their memory went missing had no way to check.
+
+  **Cost, measured, interleaved against `origin/main`, macOS, n=25.** In isolation, sourcing the library and running the disk probe cost **+2.3 ms** together and no fork; the `git ls-tree` costs **+35 ms**. End to end on the session-start hook, for an external `{slug}` store whose root is its own git repository: **+34 ms median**. The legacy layout and any store without a repository sit inside the hook's own measurement noise — the library returns `not-applicable` before either probe runs, `.git`'s absence is a shell builtin away, and the record is rewritten only when its content changes, so the steady state costs no fork in any layout that has no git answer to fetch. The per-tool-call path is untouched and byte-identical to `origin/main`, which #299's `test_the_per_tool_call_path_is_not_touched` and its counterpart here both assert.
+
+  **Not a merge, not a rename, not a migration** — all three were dropped on the reporter's argument, in public, before this was written. Automatic migration has nothing to migrate on the platform that produced the bug, and a merge inside a git repository the user owns, for a case nobody has reproduced, is not something to do speculatively. What a user should do about it is prose in the message, not an action in the code.
+
+  Tests first, red 18/20 — the two that passed against no code at all are the absence assertions (nothing is repaired, the hot path is untouched), which is what they are for. `tests/test_case_divergence_298.py`, 20 tests, and not one of them needs a case-sensitive volume: the divergence is built by writing a blob straight into git's index, which is exactly the state being detected, and a test that needed such a volume could not run on a CI runner. One bug found by the tests and worth naming, because it is this file's own recurring shape: a `[ -n … ] && printf` as the last command of a redirected group makes a correct write look like a failed one, and the error branch then deleted a record that had been produced correctly.
+
+  Thanks to **@jqit-ricky**, again. Disproving a maintainer's premise at your own expense, with a measurement, is worth more than the issue was.
+
+## [0.14.0] — The record you can find
+
+### Added
+
+- **The slug record is reachable in the layout we recommend, through an index at the store root** ([#297](https://github.com/Digital-Process-Tools/claude-remember/issues/297)) — 0.13.0 wrote the slug to `<REMEMBER_DIR>/tmp/session-slug` and shipped with one hole named in its own release notes: with `{slug}` in `data_dir`, `REMEMBER_DIR` is itself named by the slug, so a caller had to know the answer to open the file holding it. [@jqit-ricky](https://github.com/jqit-ricky) filed that the hole is not an edge — `config.user.example.json`, the file whose `_purpose` is "Copy this file to `~/.remember/config.json` to enable external storage mode", ships `"data_dir": "~/.remember/{slug}"`. Anyone who turns on external storage the way we document it lands in the configuration where the record cannot be read, and those are the installs most likely to have a non-bash caller at all.
+
+  **`<store root>/tmp/sessions`, where the store root is the `data_dir` template truncated at `{slug}`** — the one path in that layout a caller can name, since it is the part of the template that comes before the placeholder. Line 1 is `format=1`; every later line is one project, tab-separated, `project_dir` last. A caller matches `project_dir` against the path it already holds and reads `slug` and `memory_dir` off the row.
+
+  **Nothing is derived from `project_dir`, and that was the whole design constraint.** The smaller-looking fix — a second copy of the record at `<store root>/tmp/session-slug-<key from project_dir>` — needs a key both sides compute the same way, which is a second algorithm over the project path, which is precisely what #294 and #296 existed to delete, re-created one layer down. A language-neutral encoding does not escape it: base64 of an N-byte path is `4*ceil(N/3)`, so the 260-character paths #294 was about come out at 348 bytes and the 300-character vector in `tests/slug_vectors.py` at 400 — past the 255-byte filename limit of every filesystem in play — and truncating to fit means appending a hash, a slug algorithm under a different name. Matching on a string the caller already holds asks it to compute nothing, and keeps the property the reporter's own directory scan has: it cannot answer wrongly, only fail to answer.
+
+  **Three states, not two, again.** No index file means nothing is claimed; an index with no row for your `project_dir` means this store has not seen that project, and is explicitly not an empty slug; a row with `status=ok` and a non-empty `slug=` is the only usable case. A `project_dir` carrying a newline or a tab gets **no row at all** — the record can take `status=unavailable` for that, but a row cannot, because it would have to be keyed by the very value it is refusing.
+
+  **It is written only where it is needed.** With no `{slug}` in `data_dir` — the default `<project>/.remember/` layout, and single-directory external stores — the store root and `REMEMBER_DIR` are the same directory and the record is already nameable, so no index is written and no second file exists to disagree with the first. **One store, many writers** is the real difference from the record, which each project owns outright: worktrees and separate projects share a store root, so the rewrite is taken under the plugin's one lock primitive and published with `mv`, and a session that cannot take the lock writes no row rather than racing. **No timestamps and no expiry**, for the reason the record carries none: a row for a deleted directory can never be matched by a caller holding a live path, and if the path is recreated the row is still right. The only bound is a 1000-row cap that drops by position.
+
+  **Measured, not asserted: +27 ms min / +28 ms median on a 260 ms session-start hook** (macOS, n=25 interleaved), +31 ms with the file at its 1000-row cap — the cost is the lock and the rewrite, not the size. **The per-tool-call path is untouched**, and keeping it that way took a second pass: `REMEMBER_STORE_ROOT` was first resolved with a command substitution, which `bootstrap-dirs.sh` would have paid as a fork on *every tool call*. It assigns instead, `post-tool-hook.sh` and `lib-slug.sh` are byte-identical, and both facts are asserted by tests rather than left to review.
+
+  One existing guard had to be narrowed rather than satisfied, and it is worth saying so out loud: `test_session_start_hook_does_not_source_the_lock_library` forbade session start from touching `lib-lock.sh` at all. Its stated danger is `save.lock` — a lock held for the whole of a save, Haiku call included, which a SessionStart hook waiting on it would put in front of the user's first prompt. That danger is about *which* lock, not about locking, so the assertion is now the exhaustive form of what it meant: session start may name exactly one lock and it must be its own, with a second test pinning that lock's timeout as bounded and small.
+
+  Also: `hooks.d/after_save/50-git-backup.sh` now excludes `/tmp/` at the repository root beside its per-slug rules. In external mode the backup repository *is* the store root, so the index sits at its top level — this hook's own `git add` is pathspec-limited and could never take it, but a user's `git add -A` would push a file naming every project on the machine, which is [#285](https://github.com/Digital-Process-Tools/claude-remember/issues/285)'s subject exactly.
+
+## [0.13.0] — The slug, written down
+
+### Added
+
+- **The slug is published as conformance vectors and written down once a session, so nobody has to keep a second implementation of it** ([#294](https://github.com/Digital-Process-Tools/claude-remember/issues/294)) — the fix above was found by [@jqit-ricky](https://github.com/jqit-ricky) diffing a PowerShell port of `session_dir_slug` against the real one. They keep that port because driving `remember` from a non-bash caller otherwise means forking bash on **every tool call** to ask what slug the plugin computed, and they asked for either a canonical spec or a cheap way to ask from another language, offering to delete theirs. Both halves of that are now shipped, and neither is a prose spec: a document describing `scripts/lib-slug.sh` drifts from it and still reads as current, which this repo has already been bitten by.
+
+  **[`docs/slug-vectors.json`](docs/slug-vectors.json) is the contract, and it is generated from the implementation rather than written about it.** 37 vectors covering every shape the suite already parametrizes — the six Windows drive spellings from [#263](https://github.com/Digital-Process-Tools/claude-remember/issues/263), UNC in both forms, #294's `\\?\` and `\\?\UNC\` long paths, the 200-character truncation on both sides of its boundary and its base36 hash, non-ASCII on both sides of the UTF-16 surrogate boundary, and ill-formed UTF-8. **`tests/test_slug_vectors_294.py` regenerates the whole file on every CI run and fails if the checked-in bytes differ**, so it cannot drift from the code without our own build going red — an external port that diffs against it is diffing against something we are already holding still. A hand-maintained table of expected values was rejected for the same reason as the prose spec: it would be a second implementation, which is the thing this exists to delete. Each vector records the environment its answer depends on (`cygpath: agnostic | present | absent`, plus a `requires` list), because a port with no `cygpath` cannot otherwise use the file correctly — and the `present` vectors say outright that they were generated against a **model** of `cygpath` (`tests/cygpath_stub.py`), not a real one. What the vectors deliberately do **not** claim is correctness: generated from the implementation, they can only pin agreement. Truth stays where it was, in `tests/test_slug_parity.py`, which transcribes Claude Code's own `JXA` from the shipped bundle and never imports ours.
+
+  **And the answer is written down once per session, at `<REMEMBER_DIR>/tmp/session-slug`.** The slug is a pure function of `PROJECT_DIR`, which does not change mid-session, so `session-start-hook.sh` writes it where `PROJECT_PATH_SLUG` already exists for its own use two lines earlier: one `mv`, measured at **+5.6 ms min / +10.4 ms median on a 380 ms session-start hook** (macOS, n=25 interleaved), once a session. **The per-tool-call path is not touched at all** — `post-tool-hook.sh` and `lib-slug.sh` are byte-identical to before, which is visible in the diff and asserted by a test rather than left to review. In `tmp/`, with the locks and the delivery record: it names one machine's session and one machine's absolute paths, and [#285](https://github.com/Digital-Process-Tools/claude-remember/issues/285) is what happens when that kind of state is committed like memory.
+
+  **Three states, not two**, because this repo's recurring defect is an absence produced by the tool being read as an absence in the world — and an empty slug is the sharp end of it, since it resolves to `~/.claude/projects/` **itself**, a directory that exists and holds every project's transcripts. So: no file means nothing is claimed; `status=unavailable` with a `reason=` and **no `slug=` key at all** means the hook ran and could not answer; `status=ok` with a non-empty value is the only usable case. A project path containing a newline — legal on POSIX, and fatal to a line-based record — takes the middle state rather than writing a file that parses cleanly and says something false. **Staleness is decided by `project_dir` and nothing else**, and the record carries no timestamp on purpose: worktrees share a `REMEMBER_DIR` with the main checkout ([#56](https://github.com/Digital-Process-Tools/claude-remember/issues/56)) while keeping their own `PROJECT_DIR`, so the last session to start owns the file — but a record from a long-dead session is still *correct*, because the slug cannot go stale, while one from a different project is wrong however fresh. A timestamp would only offer a reader a test that answers the wrong question.
+
+  **No path slugs differently than it did.** That was the binding constraint: a changed slug is a store rename, invisible on a case-insensitive filesystem until git is involved, which is exactly what #263 was. `scripts/lib-slug.sh` is unchanged, and the vectors pin every existing spelling — a future change that would move one fails in CI before it moves anyone's memory.
+
+### Documentation
+
+- **Session logs already in a backup remote are disclosed rather than left to be found** ([#288](https://github.com/Digital-Process-Tools/claude-remember/issues/288)) — the untracking above stops the pushing. It removes nothing from the commits that already carried the logs, and no later fix on this side can: the remote may be cloned, mirrored or backed up again downstream. `README.md` gains **"Logs in a backup you made before this version"** under the git-backup section — which versions staged `logs/` unconditionally (0.12.3 and earlier, unless you hand-wrote the root `.gitignore` the setup snippet has always asked for), a one-line check for your own store, and the `git filter-repo` purge **with its price stated in the same breath**: a rewrite changes every commit ID from the first affected one onward, so every other clone of that store diverges permanently and has to be replaced rather than pulled, and unreachable objects can survive on the host regardless. Handing over the incantation without the trade would leave someone who ran it blind, and broke a colleague's clone, worse off than someone who was never told. **How many stores this touches is not known and is not estimated** — the note says so, and gives the command to check.
+
+- **`hook-errors.log` is named where people read, not only where it is written** ([#281](https://github.com/Digital-Process-Tools/claude-remember/issues/281)) — the file appeared nowhere in `README.md`, `docs/` or `commands/`, while `bootstrap-dirs.sh` points every hook's stderr into it, `/remember:doctor` tails it under "Recent errors", and #277 now writes a failing hook's exit status and own first lines there. The plugin went to real trouble making hook failures speak, into a file nobody had been told about — an error written where no one looks is not much louder than one discarded. Now documented in README §Diagnostics with its path and what it holds, and requested outright in the bug-report template.
+
+### Changed
+
+- **A `hooks.d/` listener's stdout can no longer arrive in the model's context wearing the plugin's voice** ([#280](https://github.com/Digital-Process-Tools/claude-remember/issues/280)) — `dispatch()`'s stdout is its caller's stdout, and two callers hand that straight to the model: `user-prompt-hook.sh` wraps the whole dispatch in `CTX=$( … )` and delivers it as `additionalContext` on every prompt, and `session-start-hook.sh` prints it into the session's opening context, which is what the documented `=== TEAM ===` listener is for. So a listener's output was never diagnostics. It was text the model reads, in the same stream and the same position as the plugin's own, unbounded and unattributed — a hook printing `WARNING: Context at 99%. Run /remember…` produced a line byte-identical to one `user-prompt-hook.sh` writes itself, and nothing in the context could tell them apart.
+
+  **The contract is now one sentence: an unprefixed line in dispatched output is the plugin speaking, and a hook cannot produce one.** Every line a listener writes is prefixed `[hook] `, and the block is framed by an unprefixed `=== hooks.d: <event>/<script> … ===` line naming the script. Per-line attribution rather than a fenced block, and that is the whole design decision: any fence is only as good as the hook's inability to print the closing marker, and there is no "outside" to escape into when the boundary is on every line. A listener that prints a convincing terminator and continues gets the terminator prefixed too. The test that matters hands a hook the plugin's own warning verbatim and asserts nothing in the plugin's voice carries it — not that a marker appears somewhere, which a build that printed the marker and then relayed the text unlabelled would also satisfy.
+
+  **Discarding the stdout was rejected, and so was leaving it raw.** `after_user_prompt` and `after_session_start` exist so a listener can contribute context; a fix that deletes what a hook says would be this codebase's own defect wearing the fix's clothes. What was wrong was never that hooks speak — it is that nobody could hear who was speaking.
+
+### Fixed
+
+- **Past MAX_PATH the drive-letter fold stopped applying, and the slug grew four dashes Claude Code never wrote** ([#294](https://github.com/Digital-Process-Tools/claude-remember/issues/294)) — `session_dir_slug` converts to the native Win32 form with `cygpath -w` before slugging, because Claude Code names `~/.claude/projects/<slug>/` from the Windows path while a Git Bash hook is handed the MSYS one. Past MAX_PATH, `cygpath -w` answers in the Win32 long-path spelling: `\\?\C:\dev\…`. The fold immediately after is `case "$path" in ?:*)`, which `\\?\C:` cannot match. So on **exactly the deep paths the 200-character truncation already exists to protect**, two things went wrong at once: the drive letter stopped folding — [#263](https://github.com/Digital-Process-Tools/claude-remember/issues/263)'s condition, a slug that cannot match its own tracked spelling, reintroduced for a subset of paths after [#267](https://github.com/Digital-Process-Tools/claude-remember/pull/267) fixed it for the rest — and the slug picked up four leading dashes from a prefix that is **ours, not Claude Code's**, naming a directory that does not exist. That second half is the [#157](https://github.com/Digital-Process-Tools/claude-remember/issues/157)/[#166](https://github.com/Digital-Process-Tools/claude-remember/issues/166) silent miss: no transcript found, exit 0, nothing saved, nothing logged. Reported with a reproduction by [@jqit-ricky](https://github.com/jqit-ricky), who found it maintaining a PowerShell port of this function and diffing it against the real one — the failing slug in the report, `----C--dev-…-9ewsib`, is reproduced character for character by the test added here, hash included.
+
+  **The strip lives inside the `cygpath` branch, and that placement is the whole safety argument.** It undoes what `cygpath` just did and nothing else. A backslash is an ordinary filename byte on Linux, so a directory literally named `\\?\C:` can exist there — and Claude Code would slug it literally, prefix and all. Stripping unconditionally would compute a different name for that store, and this function names **everyone's** memory store on **every single tool call**; #263's own fix had to choose lowercase over uppercase precisely because the other direction would have renamed every working install. So the invariant is pinned rather than asserted in prose: a parametrized test walks every path shape #263 fixed, plus POSIX and UNC, against golden slugs, and a companion test hands the function a path that merely *looks* long-path-prefixed with no `cygpath` present and requires it to come through untouched. `pipeline/slug.py` is deliberately **not** changed for the same reason — it never runs `cygpath`, so it never sees a prefix this plugin put there, and the bash/Python parity suite stays the oracle it was.
+
+  **`\\?\UNC\` maps back to `\\`, not to nothing.** A UNC long path has no drive letter to fold, so it is not the reported defect — but `\\?\UNC\server\share` *is* `\\server\share`, spelled for Win32, and swallowing the two leading separators along with the prefix would slug one directory two ways just as surely. Same argument as #263, applied before anyone hit it.
+
+  **And one defect found by reading the line rather than from the report:** `winpath=$(cygpath -w "$path") || winpath="$path"` guarded a non-zero exit and nothing else. A `cygpath` that exits 0 and prints nothing emptied the path outright — and an empty slug is not a miss, it resolves to `~/.claude/projects/` **itself**, a directory that exists and holds every project's transcripts, so the missing-session-directory warning never fires and the pipeline reads someone else's session. `claude_projects_dir`, a hundred lines above in the same file, already carried exactly this guard; this function did not. It does now. The fallback still slugs a path Claude Code did not name — reconstructing the Win32 form without `cygpath` is `resolve-paths.sh`'s job — but it misses loudly instead of pointing somewhere real, which is this repo's three-state rule again: a check that cannot answer must say so rather than return an absence.
+
+  **What is not established, said plainly:** that real `cygpath -w` emits the prefix past MAX_PATH is the reporter's evidence and was not executed here — there is no Windows and no `cygpath` on this side. The test stub models it. The fix does not rest on the claim either way: where the prefix never appears the strip never fires, and the invariant test says so directly.
+
+- **The stranded-adopt race test asserts the invariant it names rather than a scheduling outcome** ([#291](https://github.com/Digital-Process-Tools/claude-remember/issues/291)) — `test_two_adopters_racing_on_stranded_debris_produce_one_winner` failed once on `main`, on one ubuntu leg of twelve, reporting `{'24': 2}`: two adopters had cleared the same stranded marker and both taken the lock. **`scripts/lib-lock.sh` is unchanged, and deliberately so.** The lock never admitted two writers. The test's contenders called `lock_acquire` and then *exited immediately* — no critical section, no release — so a winner held the lock for microseconds and left a pid file naming a process that no longer existed. A contender the OS did not schedule until after that exit found a stale lock and took it over through `_lock_try_steal`, which is the primitive's documented contract and the whole point of [#182](https://github.com/Digital-Process-Tools/claude-remember/issues/182) and [#198](https://github.com/Digital-Process-Tools/claude-remember/issues/198). The harness recorded that correct handover as a second winner. "One winner per round" was never an invariant of `lock_acquire` when the winners do not stay alive.
+
+  **Reproduced before it was changed, which is what separated the two readings.** Staggering two of the four contenders by 150–200 ms — an ordinary scheduling delay on a loaded two-core runner — made the old form fail on 1 run in 3, with the same `{'N': 2}` shape as CI. Instrumenting the acquisition routes named the mechanism outright: one winner via `adopt`, every later one via `steal`. Not an argument about the code, a measurement of it.
+
+  **The contenders now call `_lock_try_adopt` directly**, which is the operation the test's own name and docstring are about, and which never consults liveness: once a pid exists the entry guard turns every later adopter away, whether or not the adopter that wrote it is still running. Single-winner by construction rather than by timing — the same standard the lock itself is held to. The 150–200 ms stagger is **kept**, so the interleaving that broke the old form is exercised on purpose rather than met once in twelve runs by accident: 5/5 green under 40-way CPU oversubscription where the old form was 1/3 red. The "every round was won at all" assertion is untouched, so a build where stranded debris wedges the lock still fails rather than passing with zero winners.
+
+  **A companion test pins the behaviour that was mistaken for the bug.** An adopter that exits leaves a lock held by a dead pid, and the next contender must take it over; making acquisition refuse that would reinstate the permanent, silent outage #198 was filed for. If that test ever goes red, the change that turned it red is the defect. Stated as a test rather than as a comment, because the alternative reading of #291 was "the lock admits two writers" and the cost of acting on that reading is a wedged store.
+
+  **What this did not fix, said plainly:** mutating the marker clear from `mv` to `rmdir` leaves the whole file green — before this change as well as after, so no teeth were removed here, but that line's single-winner argument is not currently pinned by any test.
+
+- **A dispatched hook that never returns no longer stalls the agent for as long as it blocks, in silence** ([#286](https://github.com/Digital-Process-Tools/claude-remember/issues/286)) — `dispatch()` ran every `hooks.d/<event>/` listener sequentially, in the foreground, with nothing bounding how long one may take. A listener that blocks — a network call with no timeout, a `read` on a pipe nobody writes to, a lock wait — held the agent for the length of the block and **logged nothing, because nothing had failed**. That is this project's house defect in its most literal form: the three-state contract says a check that cannot answer must say so, and a hook that never returns never reaches the point where it could say anything, so the absence of a log line read as "nothing happened" when what happened was that everything stopped. Found by reading `dispatch()` while fixing [#280](https://github.com/Digital-Process-Tools/claude-remember/issues/280) — **no report, no observed stall**, and it is ranked and described here as the structural gap it is.
+
+  **The watchdog is a sibling, not a poll, because the healthy case must stay free.** A `kill -0` loop on a one-second tick charges every hook a second it did not spend, and `after_post_tool` dispatches on every single tool call. The hook is started in the background and `wait`ed on directly, so one that returns in 40 ms costs 40 ms; a second process sleeps out the budget beside it and is cancelled the moment the hook is done. The empty-`hooks.d/` case — the shipped distribution, which holds a `.gitkeep` and nothing else — still costs nothing at all, not a process and not a file, the same discipline [#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230) applied to `id -u`. Not `timeout(1)`, which macOS does not ship: the same finding `hooks.d/before_session_start/50-git-restore.sh` had already made for its detached fetch, generalised here rather than written twice.
+
+  **The kill lands on the hook's own PID and never on its process group, and that is the decision the whole issue turns on.** Both shipped listeners put every byte of git I/O inside a disowned subshell — `50-git-backup.sh` its entire `add`/`commit`/`push`, `50-git-restore.sh` its fetch — precisely so the network never blocks a save. A group kill would kill exactly that work: a `SIGTERM` between `git add` and `git commit`, or mid-push, leaving a `.git/index.lock` in the very store this plugin exists to protect, on which the *next* session's backup then fails with the lock's owner long gone. Adding a timeout is not free, and that is the way it is not free — an indefinite stall traded for a quiet corruption. It is refused: a test asserts a listener's disowned child outlives the listener. The price of that choice is stated rather than hidden — a hook blocked in a *foreground* child leaks that child when its parent dies. A leaked process is recoverable; a half-written index in someone's memory store is not.
+
+  **`SIGTERM`, then `SIGKILL` after a grace period.** Both shipped hooks release their lock from an `EXIT` trap on the platforms without `flock(1)`, and bash runs an `EXIT` trap when it dies of an untrapped `SIGTERM` and does not when it dies of `SIGKILL` — so the window is the difference between a lock released and a lock file left holding a dead PID. git tells the same story from the other side: it removes its own `index.lock` on `SIGTERM` and cannot on `SIGKILL`. Both were measured rather than assumed. The grace is a courtesy and not a veto: a listener that traps `TERM` and keeps going is killed anyway, or the defect would return behind an opt-in.
+
+  **A stopped hook is a decline, not a finding, and is reported as one.** A hook that exits non-zero has answered — it ran, it failed, and [#277](https://github.com/Digital-Process-Tools/claude-remember/issues/277) puts its status and its own first lines in the report. A hook that was killed has answered nothing, and `143` is not its exit status, it is the signal we sent. So the report is its own line, in both places a human looks, saying the hook never returned, which budget it exceeded, and that **whether it did its work is UNKNOWN**. `/remember:doctor` shows it under "Recent errors" either way: a listener that hangs is a real problem with a real installation even when its own verdict is not knowable. What it managed to say before it stopped is still relayed — that output is the only evidence of what it was doing.
+
+  **Two numbers, because two kinds of caller wait and only one of them is a person.** `after_post_tool`, `after_user_prompt` and the two `session_start` events are dispatched from inside a Claude Code hook process, where a human has pressed enter — and Claude Code itself kills a hook at 60 s by default, so any budget at or above that is not a budget, it is the host killing the process with no report from us. They get **15 s**. `before`/`after_save` and `before`/`after_consolidate` are dispatched from `save-session.sh` and `run-consolidation.sh`, which `post-tool-hook.sh` starts with `nohup … &`; nobody is waiting, and they get **120 s**. Both **measured, not guessed** — the argument [`claude-supertool#702`](https://github.com/Digital-Process-Tools/claude-supertool/issues/702)/[`#658`](https://github.com/Digital-Process-Tools/claude-supertool/issues/658) settled twice. The shipped listeners' *foreground* time, which is the only time `dispatch()` waits on, is 0.46–0.58 s for the backup and 0.17–0.22 s for the restore, against 0.12–0.17 s for a hook that only sources `log.sh`; the 0.58 s is measured with the push remote pointed at a blackholed address, i.e. with the network hung, because the git I/O is not in the foreground at all. That is roughly 25× headroom interactive and 200× detached — and it retires the number that would have been hard to pick, since "a real `git push` over a slow network takes tens of seconds" never touches this path. `hooks.dispatch_timeout_seconds`, `hooks.dispatch_timeout_detached_seconds` and `hooks.dispatch_kill_grace_seconds` are configurable; **0 disables the bound**, the same escape hatch every other threshold here offers, and an unparseable value falls back to the shipped default rather than deciding by arithmetic on garbage.
+
+- **A store that already tracked `logs/` and `tmp/` now actually stops pushing them** ([#288](https://github.com/Digital-Process-Tools/claude-remember/issues/288)) — [#287](https://github.com/Digital-Process-Tools/claude-remember/issues/287) added the `$GIT_DIR/info/exclude` rules and, knowing an exclude rule does nothing to a path git already tracks, a `git rm --cached` beside them. On every store that had run the backup before it, that untracking never landed, for two independent reasons. `git rm --cached` on a *directory* fails outright without `-r` (*not removing … recursively without -r*), and the error was discarded. And even with `-r`, the backup commits with `git commit -- "<slug>/"` — a **partial** commit, which builds its tree from the working tree for every path the pathspec matches, restoring exactly what the removal staged. That is the same mechanism #287 identified for the delivery record and answered by making the path stop existing on disk; `logs/` and `tmp/` cannot take that answer, because the plugin writes to them every session. Measured on a store built by the pre-#287 hook, the upgraded hook still committed and pushed a log line written *after* the upgrade — and `tmp/` is where #287 moved the handoff delivery record, so on those stores #285 was not fixed either.
+
+  **The untracking is now its own commit, of the index rather than of a pathspec** — the one commit form that can record a deletion for a path still present on disk. It runs only when there is something to untrack, and only when the index is otherwise clean: an index commit takes everything staged, and the store is a repository the user owns, so staged work of theirs must never be swept into a commit this hook wrote. If it cannot finish, the index is restored rather than left holding a deletion nothing will complete. It rewrites no history — commits that already carry the logs are left exactly as they are, which is the user's call to make and is now documented as theirs.
+
+- **A first delivery on a second machine no longer reports as already-seen** ([#285](https://github.com/Digital-Process-Tools/claude-remember/issues/285)) — the handoff delivery record was written to `<store>/<slug>/remember.delivered`, inside the subtree the git backup stages, so it was committed and pushed like memory. Its fingerprint is a `cksum` of the handoff *content*, which matches on every machine that has that handoff. So machine B's **first** session with a note it had never seen was told *already delivered 8 times since ‹machine A's clock› — this is pending replacement, not news. You may already have acted on it.* The record exists to stop a stale handoff reading as fresh; shared, it made a fresh handoff read as stale — the same silent lie, inverted, and in the direction that suppresses action rather than duplicating it. Two machines also conflicted on **every** concurrent session start, since all three lines differ, and no merge driver repairs that: union emits both key sets and yields a malformed record. It is the one file in the store where "keep both sides" is wrong.
+
+  **The record is now per-clone, and lives in `tmp/` with the locks and the cooldown markers.** What it promises is unchanged in scope and smaller in reach: *this clone* has already injected this exact handoff into a session N times since a local timestamp. What it no longer promises is anything about any other machine. Delivery state does not travel; the handoff itself still does, and `remember.md` is backed up exactly as before.
+
+  **Namespacing it per host was considered and rejected.** It would have preserved a hedge, not data, at the cost of a naming scheme and a garbage-collection question nothing in the store answers — what removes the record for a machine that no longer exists. And there was no shared value it could have held: `first_delivered` is one machine's wall clock and `deliveries` is one machine's session count, so two of the three fields are per-clone by construction. Only `fingerprint` is globally meaningful, and it is precisely the field that carried the harm. The cost of not sharing is that the same note may be delivered again on a second machine, labelled as news — which is the trade #221 already made deliberately when it stopped emptying the slot on read. Over-delivery is the safe direction.
+
+  **Existing stores are cleaned up, not left holding a stale file.** Session start *moves* an existing record to its new home rather than resetting it — this machine's history is still true about this machine — and the move is also what retires the tracked copy: an ignore rule does nothing to a file git already tracks, and a `git rm --cached` whose path still exists in the working tree is silently undone by the next path-limited commit, which takes its content from the working tree rather than the index. With the old path gone, the backup's ordinary `add`/`commit` stages the deletion like any other and the remote learns it once. A record arriving from someone else's push is discarded, never adopted. The one rough edge: a machine that pulls the deletion *before* it has run the new version has local changes to a file the merge removes, so that restore can refuse once; the next session moves the file aside and it clears.
+
+- **The plugin now owns the exclusion it always assumed** ([#285](https://github.com/Digital-Process-Tools/claude-remember/issues/285)) — `50-git-backup.sh` deletes the protective per-slug `.gitignore` in external-store mode, commenting that "the root-level `.gitignore` covers logs/tmp exclusions". The plugin never creates that file. In every store where the user did not hand-author one, `logs/` and `tmp/` were committed and pushed like memory, and there was no plugin-owned place where anything *could* be excluded — which is why the delivery record never was. The hook now maintains `/<slug>/logs/` and `/<slug>/tmp/` in the store's `$GIT_DIR/info/exclude`. That location, not a `.gitignore`, for the three reasons [#261](https://github.com/Digital-Process-Tools/claude-remember/issues/261) chose the git common dir for hook state: it needs no user action, it is not an edit by this hook to a tracked file inside the user's own backup repository, and it cannot itself be committed and land on someone else's machine. It is per-clone, which is exactly the scope of what it excludes.
+
+  **The bound is 200 lines and 2000 characters per line, and it says what it dropped.** Same reasoning as the stderr bound in #277: a cap that shortens silently leaves the reader unable to tell a hook that said three things from one that said three hundred, which is the house defect one layer down. A trailing frame line carries the count. Both numbers sit far above any honest contributor — the two shipped listeners print nothing at all — and far below a `set -x` trace or a runaway loop.
+
+  **Silence still costs nothing.** A listener that prints nothing produces no frame and no marker; the every-prompt path is byte-identical to what it was. That is asserted, because a fix that taxed the common case in context tokens forever would have been a poor trade for a rare one.
+
+  **And where stdout cannot be captured, it is discarded and said so.** With no writable `tmp/` there is no capture file, and uncaptured stdout is *inherited* stdout — precisely the unattributed injection being fixed. That case now runs the hook with stdout closed and prints a frame line saying the output was not shown and why. Neither quietly passed through nor quietly dropped: "could not check" is a third state here as it is in #252, #253 and #277.
+
+  **Scoped honestly.** `dispatch()`'s ownership and world-writable guards mean a listener must be owned by the invoking user and not group- or world-writable, so this is not a remote-attacker path and is not claimed as one. It is a blast radius: a hook installed for one purpose could change what the model is told, and neither the user nor the model could see that it had.
+
+  **Also fixed, from the same review: a refused hook was invisible to the one report anybody reads.** The ownership and world-writable skips warned only to the daily log. `/remember:doctor` reports "Recent errors" out of `hook-errors.log`, so a listener that never ran and never would — a `chmod 777` away — showed up as OK. Both skips now report through the same two-destination path as a failure, naming the hook, the reason, and that it will not run on any later dispatch until it is fixed. This is #252's finding reached from another direction, and it is why the fix ships here rather than as a follow-up: the two defects share nine lines of the same function.
+
+  **Left open deliberately: no dispatched hook has a timeout.** They run sequentially in the foreground of `PostToolUse`, so one that hangs stalls the agent indefinitely and logs nothing, because nothing has failed. It is not folded in here because the fix is a design rather than a repair — killing a listener mid-flight can leave a `.git/index.lock` behind in the very backup hook this plugin ships, and choosing a default that is generous enough for a network push and short enough to matter is a separate judgement with a separate blast radius. Filed rather than fixed.
+
+  Tests first (`tests/test_hook_stdout_labelling_280.py`), red 6/7 — the one that passed on the untouched code is the guard that a silent hook adds no framing, which is what a test asserting *absence* is for — then green 7/7, full suite 1267 passed, 43 skipped, coverage 94.16%.
+
+- **`pipeline/slug.py` did not fold the Windows drive letter that `scripts/lib-slug.sh` has folded since #263** ([#268](https://github.com/Digital-Process-Tools/claude-remember/issues/268)) — `resolve-paths.sh` normalises `CLAUDE_PROJECT_DIR` to the native Win32 form with an UPPER-case drive before either side ever sees it. Bash then lower-cases that drive letter unconditionally; Python is a faithful transcription of Claude Code's own JXA slug routine, which never receives a raw drive letter at all (the host folds before calling it), so the transcription had nothing to fold either — and slugged the upper-case drive literally. `C--Users-…` from Python against `c--Users-…` from bash, for the same directory. NTFS resolves both, so nothing failed and nothing reported it; `extract.py` uses the Python slug to find the session directory, so it read a differently-cased path than the store the git-backup hook tracks.
+
+  `pipeline/slug.py` now folds a leading drive letter the same way, in the same direction (lower case — not a free choice; see #263's PR: Git for Windows ships cygpath, so the working majority's on-disk stores are already spelled that way). `tests/test_slug_parity.py` is extended to assert bash and Python agree across both cases and all three shapes `CLAUDE_PROJECT_DIR` is known to arrive in (`C:\…`, `c:/…`, `/c/…`), rather than adding the one input that was missing — the guarantee now spans the normalisation step, which is the same shape of gap #263 itself was.
+
+  Two pre-existing tests in `tests/test_path_resolution.py` (predating #263, from the original Windows-compat issue) asserted the old un-folded upper-case slug as correct; they are updated to the now-verified value.
+
+## [0.12.3] — One bad byte
+
+Five fixes in the backup path and one in the machinery that was supposed to report them, and the one worth leading with inverts an issue we filed ourselves.
+
+Those two halves belong in the same release. The backup could stop for four different reasons while reporting success — and when it did, `dispatch()` sent the hook's own diagnostic to `/dev/null` and logged a line naming which hook failed but neither why nor with what exit code. So the fixes below are the failures, and the last one is the reason nobody saw them.
+
+We reported that a corrupt cooldown marker would *bypass* the throttle, so the backup would run too often. The direction was backwards and the truth is worse. `50-git-backup.sh` sets `set -u` — with the comment *"not -e — we never want to fail loudly here"* — and then does arithmetic on the marker's contents with the variable bare inside `$(( ))`. Bash evaluates that as an arithmetic expression, so a single letter in the marker is an unbound variable reference. Execution stops a line or two later — above the lock, above the staging, above the commit — **and the hook exits 0**, which is the half that matters: `dispatch` sees success, so nothing anywhere reports that the backup did not run. (The precise shape is version-dependent: the arithmetic itself is fatal on bash 5, while on bash 3.2 it prints the same diagnostic, leaves the variable unset, and dies at the first *use* of it instead. Both end in the same place — stopped early, exit 0.) And because the marker was only rewritten after a successful commit, it stayed corrupt. **One bad byte from a crash mid-write stopped the backup permanently**, with a nameless `hook failed` as the only trace. The marker is validated now, and the fallback self-heals — the run it permits is the run that rewrites it.
+
+The file reasons explicitly about not failing loudly and picks the exact option that makes it fatal. That is the shape this project keeps finding in itself, arriving this time inside the safety reasoning.
+
+**A store whose push target is not named `origin` backed up nowhere, forever** — no issue reported this; it surfaced while fixing the ones that were. With `git_backup.remote` unset, the push follows the branch's upstream while the validation above it asked `git remote get-url origin`, so a perfectly good target was reported as "no remote configured" once per save. Worse, the poisoned-remote guard recorded and checked a URL that was **not** the one the push used, so it could be sidestepped through `branch.<name>.remote`. Both now ask git the same question `git push` asks.
+
+**A store reached through a symlink got neither backup nor restore, and said nothing.** Both hooks compared a path textually against a resolved `git rev-parse --show-toplevel`; they resolve first now.
+
+**A failed commit was a log line and the caller was told success**, and **hook state files accumulated untracked at the store root**, where a name collision would one day make `merge --ff-only` refuse. State moved to the repository's git common dir. Existing files are carried forward rather than abandoned, which is load-bearing rather than tidy: `.git-backup-remote` records the URL trusted on first push, so starting fresh would re-record whatever is configured now and silently forgive exactly the change that check exists to catch.
+
+**And a failed read of the last memory entry was handed to the summariser as "(no previous entry)"** — a claim about the file rather than a report of the read. The model then wrote the next entry with no deduplication anchor, as though starting fresh. Three states now, and the unreadable one says so.
+
+None of these destroyed anything. All of them stopped the backup while reporting that it had run.
+
+### Fixed
+
+- **A hook that died lost both halves of its report at once** ([#277](https://github.com/Digital-Process-Tools/claude-remember/issues/277)) — the last statement of `dispatch()` ran every hook under `2>/dev/null` and reported a failure as `hook failed: <event>/<file>`. The redirect threw away what the hook said, the `||` threw away the status it said it with, and what reached the log proved something was broken while being unable to say what — the least actionable form a report can take.
+
+  **It is the swallow that made [#258](https://github.com/Digital-Process-Tools/claude-remember/issues/258)'s worst case invisible.** A corrupt cooldown marker went into `$(( ))`, `50-git-backup.sh` runs `set -u`, and bash printed `unbound variable` — naming the fault exactly, above the lock, above the `add`, above the commit. That sentence went to `/dev/null`, the backup stopped permanently, and the user's entire evidence was a nameless line in the log [#252](https://github.com/Digital-Process-Tools/claude-remember/issues/252) demonstrated nobody reads. The marker guard is fixed; the swallow applied to **every** hook on every dispatch point, so the next `set -u` slip, the next missing binary, the next `E2BIG` would all have arrived the same way.
+
+  A failing hook's stderr is now captured to a file, bounded to the first 5 lines (400 chars each), and reported as one line carrying the exit status and the hook's own words: `ERROR: hook failed: after_save/50-git-backup.sh (exit 1): … UNSET_COOLDOWN: unbound variable`. **The bound discloses itself** — `[+N more line(s) not shown]` — because a cap that shortens silently is the same defect one layer down. Three states, not two: what it said / `no stderr — it exited without saying anything` / `stderr not captured` when the capture file itself could not be created, which is never spelled like silence.
+
+  **The redirect was doing one real job and it is kept.** `dispatch()` runs inside `PostToolUse`, `UserPromptSubmit` and `SessionStart`; a third-party hook's chatter must never become output of the process the agent is reading. So the capture is a file whose path is named, never the inherited stream — dropping the redirect would have landed correctly for the three Claude Code hooks (`bootstrap-dirs.sh` points their stderr at `hook-errors.log` already) and in the agent's own stream for `save-session.sh`, `run-consolidation.sh`, and any hook whose bootstrap redirect was skipped on a read-only store. A hook that **succeeds** noisily is still silent: that is the per-tool-call noise the redirect was really buying.
+
+  The report goes to `logs/hook-errors.log` as well as the daily log, because that is the file `/remember:doctor` tails under "Recent errors" and the one maintainers ask a reporter to paste. Nothing forks in the common case — the shipped distribution's `hooks.d/<event>/` holds a `.gitkeep` and nothing else, so the loop still finds nothing executable and now costs it neither a process nor a file, the same discipline [#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230) applied to `id -u`.
+
+  **Two more in the same eight lines.** The hook is now invoked inside an `if` rather than as a bare command whose status is read afterwards: every caller of `dispatch` runs `set -e`, and the old `|| log` kept a failing hook non-fatal by accident of syntax — a naive rewrite hands any third-party hook the power to abort a save. And the lazy `[ -d … ] || mkdir -p …` that prepares the capture directory needs its `|| true`: `A || B` with both failing is a failed compound command, so a store whose `tmp/` cannot be created would have aborted the save outright. Both are pinned by tests that fail without them.
+
+- **A failed read of the last entry was handed to the summarizer as "(no previous entry)"** ([#251](https://github.com/Digital-Process-Tools/claude-remember/issues/251)) — `save-session.sh` built the summarizer's dedup context with `[ -n "$LAST_LINE" ] && tail … > "$TMP" || echo "(no previous entry)" > "$TMP"`, which is not if/else: when the guard holds and `tail` *fails*, the fallback runs as well, and its `>` overwrites whatever `tail` had written. So a read error was rendered as a factual claim about `now.md` — rc 0, nothing logged, no marker. Reproduced with a `tail` that fails only on that one invocation: `now.md` held a real entry and the prompt said there was none.
+
+  **The prompt is where that lands.** `save-session.prompt.txt` hands the previous entry to Haiku for two decisions — do not repeat it, and return `SKIP` if this span is the same work. A false empty removes both anchors at once, so the model writes the previous span back into `now.md` as new: the duplication #142/#224/#250 close from the other end, reached here through the prompt rather than through the file.
+
+  **Three states, not two.** There is genuinely no `## ` header yet; `now.md` cannot be read; the read failed. Only the first is `(no previous entry)`. The other two now send `(previous entry unavailable — now.md could not be read; earlier work may already be recorded)` and log an ERROR naming which one it was. The marker is written for a model, not a person: it says the field is missing rather than empty, and says what follows from that, so the summarizer does not treat a failed read as a fresh buffer. It deliberately does not push toward `SKIP` — nudging a model to skip on missing context spends a real span to protect the prompt.
+
+  **The save still completes.** Failing the run here would trade the loud bug for the quiet one: an entry written without dedup context is visible in `now.md` and recoverable, while a span that never reaches memory is neither. Same trade the NDC tail arm already makes — report the read you could not make, do not act on a value you do not have.
+
+  **The pipeline above it was wrong in the same way, and less visibly.** `grep -n '^## ' … | tail -1 | cut -d: -f1` returned `cut`'s exit status, and `cut` succeeds on empty input, so grep failing on an unreadable file was indistinguishable from grep finding no header — the same false empty, one line earlier, and it would have survived a fix aimed only at the `&&`/`||`. `grep` is now run for its own status (1 = no match, >1 = error) and the last line is taken with parameter expansion, removing two more unchecked processes rather than checking them.
+
+  Two further instances of the idiom remain in `scripts/log.sh` (lines 268 and 332), noted on the issue and not fixed here; there the two branches *concatenate*, so the caller receives the value followed by the default. [shellcheck SC2015](https://www.shellcheck.net/wiki/SC2015) flags all three.
+
+- **A memory store reached through a symlink got no backup and no restore, and said nothing at all** ([#260](https://github.com/Digital-Process-Tools/claude-remember/issues/260)) — both hooks compared `REPO_ROOT`, spelled however `REMEMBER_DIR` arrived, against `git rev-parse --show-toplevel`, which always answers resolved. One symlink anywhere in the path made those differ, and the comparison sat *above every `log` call in both files*. So the backup never ran, the restore never ran, `hook-errors.log` stayed empty and `/remember:doctor` reported OK — a user in this state had exactly the same evidence as a user for whom everything worked. macOS makes it ordinary rather than exotic: `/var` is a symlink to `/private/var`, so any store under `TMPDIR` is already in it.
+
+  Both sides are resolved now, and the guard itself is kept rather than dropped, because it is what stops the hooks operating on a user's project repository by accident — a store that is a *subdirectory* of a larger repo is still refused. What changed is that the refusal is now narrow enough to mean something, and it is **said out loud**: declining to manage a store was previously indistinguishable from managing it correctly. The restore half sources its logging inside that branch only, so the legacy installs the cheap-guards-first ordering exists to protect still pay nothing.
+
+  The fix needed no new vocabulary. `_gr_common_dir()` in the same file already resolved paths properly, for the same reason, a few lines below — the abstraction was there and the call site had not adopted it. Both hooks now share one `_realpath` helper, which is what that function was already doing inline.
+
+- **A failed commit was a log line, and the caller was told success** ([#257](https://github.com/Digital-Process-Tools/claude-remember/issues/257)) — `log "ERROR: commit failed for $SLUG"; exit 0`, with git's own explanation discarded by `2>&1`. This is strictly worse than the rejected push of 0.12.0: there the commit existed locally and only the remote copy was missing, whereas here the memory is recorded in **no git history at all**, and the one line printed named no cause. Every reason a commit fails is durable — no `user.email`, a full disk, an index lock left by a crashed git, a pre-commit hook on the backup repo — so it fails identically on every save afterwards.
+
+  git's stderr is now in the log, a consecutive-failure counter drives the same escalation the rejected push uses, and the counter resets on the first success. **No repair is attempted**, and that is the point: nothing here will configure your identity or free your disk, for the same reason nothing merges a diverged remote for you. The failure being chosen is loud-and-still-not-committing over quiet-and-still-not-committing; the hook still exits 0 and still never blocks.
+
+- **A store whose push target was not called `origin` was told it had no remote, forever** ([#257](https://github.com/Digital-Process-Tools/claude-remember/issues/257)) — not in the report; found reading the call site the report pointed at. With `git_backup.remote` unset, `_push` runs a bare `git push`, which follows the branch's **upstream**, while the validation immediately above it asked `git remote get-url origin`. A store pushing through any other remote therefore logged `no remote configured, skipping push` on every save while holding a perfectly good push target — off-machine backup absent for the life of the install, at one info-level line a time.
+
+  The same mismatch had a second edge: the URL recorded and validated by the poisoned-remote check was not the URL the push went to, so the check could be sidestepped by a `branch.<name>.remote` it never looked at. The effective remote is now resolved the way `git push` resolves it — and the candidate must **prove it names a remote** before it is believed, because `branch.<name>.remote` may legally hold a URL, and feeding that to `git remote get-url` would have reintroduced the same false "no remote" one layer along. Anything unproven falls back to `origin`, which is where every store that already worked still lands.
+
+- **A store with no remote at all now says so once, rather than never** ([#257](https://github.com/Digital-Process-Tools/claude-remember/issues/257)) — someone who ran `git init` on their store but never `git remote add` got zero off-machine backup for the lifetime of the install, at one info-level line per save. The judgement here is the opposite of every other item in this release: **local-only may be entirely intentional**, and a `systemMessage` that fires on every save is one nobody reads, which would cost the escalations above their meaning. So it is said exactly once for the lifetime of the store, after enough consecutive saves to distinguish a steady state from a store mid-setup, and the message says plainly that nothing further is needed if the choice was deliberate. `git_backup.no_remote_notice_after` tunes the threshold; `0` disables it.
+
+- **One corrupt byte in the cooldown marker stopped the backup permanently** ([#258](https://github.com/Digital-Process-Tools/claude-remember/issues/258)) — the marker's contents went unvalidated into `$(( ))`. The report reads this as the cooldown being *skipped*; re-derived against a real shell, the direction is the other way and much worse. Bash evaluates the content as an **arithmetic expression**, so a marker holding a letter is an unbound-variable reference under `set -u` and the hook **dies on that line** — above the lock, above the `add`, above the commit. And because the marker was rewritten only after a successful commit, it stayed corrupt: a crash mid-write, or a partially synced file, stopped the backup for good, with dispatch's nameless `hook failed` as the only trace anywhere. A numeric guard now falls back to `0`, which self-heals, because the run it allows is the run that rewrites the marker.
+
+- **The cooldown marker is written when a commit fails, not only when it succeeds** ([#258](https://github.com/Digital-Process-Tools/claude-remember/issues/258)) — the two defects compounded: a store whose commits fail never engaged the throttle at all, so it ran the full `add`/`rm`/`commit` on every single save while committing nothing, which is the exact opposite of what a cooldown is for. Stamping it earlier still — at the top of the worker, covering the nothing-to-commit path too — was tried and rejected: a save with no new memory would then push the next check out by a whole cooldown window, leaving real memory written a minute later unbacked-up for the rest of it. That trades a wasteful no-op for a slower backup, and slower is the direction that loses data. `test_nothing_to_commit_no_op` was already pinning it.
+
+- **The flock path no longer unlinks its own lock file** ([#258](https://github.com/Digital-Process-Tools/claude-remember/issues/258)) — flock's ownership is fd-based, so removing the path while holding it opens a window where a second instance opens the file and locks the now-unlinked inode while a third creates a fresh inode at the same path and locks that: two concurrent backups on one store. The `EXIT` trap now fires only on the noclobber path, which does need it. The restore half's `_take_lock` had this right already — the same shape as #260, an abstraction present in the file and a call site that had not adopted it.
+
+### Changed
+
+- **Hook state moved out of the memory store and into its git directory** ([#261](https://github.com/Digital-Process-Tools/claude-remember/issues/261)) — the lock, the cooldown stamp, the recorded remote URL and the failure counters accumulated untracked at the store root, in a repository whose whole purpose is to be pushed. That is not merely untidy: **`git merge --ff-only` refuses when an untracked file would be overwritten**, so the day a remote carried any of those names the restore would stop with a "REFUSED by git" that reads like a dirty worktree rather than a name collision — the mechanism the feature depends on being the mechanism that breaks it. It also meant every `git status` in the store showed noise the plugin created, which trains a user to ignore that output.
+
+  They now live in the repository's git common dir (`.git/remember/`). Of the three options the issue named — gitignore them, relocate them, namespace them — this is the only one that needs **no user action, no `.gitignore` entry, and no edit by the plugin to a tracked file inside someone's own backup repository**: git never tracks that directory, never merges it, never reports it, and every worktree of a repo shares it, which is what keeps the lock shared between the two halves. The values are also genuinely per-clone — a timestamp, a counter, a lock and a recorded URL describe this machine's relationship with the store, not the memory in it.
+
+  **For a store that already has the old files:** they are carried forward on the next backup rather than abandoned, and this is not cosmetic. `.git-backup-remote` records the URL trusted on the first push and aborts if it later changes; starting fresh at a new location would have re-recorded whatever URL is configured now, silently forgiving exactly the change that check exists to catch. A file git **tracks** is copied and left in place — staging a deletion inside a user's backup repository is not this hook's business — and an untracked one is moved, which also clears the `git status` noise for installs that already have it. Where the common dir cannot be determined the hooks stay exactly where they were rather than invent a location.
+
+  The restore half copies but never removes, and never asks git which files are tracked: its allowlist of five git subcommands is what makes a fast-forward there trustworthy, and widening it to add `ls-files` would have spent the file's whole safety argument on housekeeping.
+
+
+## [0.12.2] — Too large to hand over
+
+Three fixes, and one of them is why this went out on its own rather than waiting for a tidier release: **log rotation was destroying the archive it had just deleted the originals for.** Nothing survived that anywhere, on any platform, so it shipped as soon as it was green.
+
+`rotate_logs` named each archive after a month and `tar -czf` truncates, so the second rotation in a month replaced the first one's tarball — and those logs had been removed from disk when it was written. The name is now *claimed* rather than computed, and the deletion is gated on the archive listing its members back rather than on `tar` exiting 0. That exit status was the real defect: it means tar had no complaint, not that anything is inside.
+
+`post-tool-hook.sh` exported the `PostToolUse` payload, which embeds the full tool result. An exported variable rides in `envp` for every `execve` the rest of that hook performs, so after a large `Read` every one of them failed `E2BIG` — four binaries from four libraries, silently, on every large tool call for the rest of the session. Linux caps a *single* string at `MAX_ARG_STRLEN` independently of the total, so the environment was never a route this payload could travel: the `execve` that would hand 200 KB to a listener is the one that fails. macOS has no per-string cap, which is why it took an outside report.
+
+`session-start-hook.sh` identified "the previous session" by mtime *position*, and at `source=startup` the current transcript does not exist yet — so it landed one session too far back, warning that a healthy install had not been captured while `/remember:doctor` said the opposite, and pointing recovery at the wrong session. It is identified by id now, which is correct whether or not the transcript exists yet.
+
+Thanks to **@peterurbanec** and **@atonetti**, both of whom reported mechanisms rather than symptoms.
+
+**Correction to 0.12.1's entry below:** the `PostToolUse` fix was briefly recorded under that heading by a merge that landed after the release was cut. 0.12.1 did not contain it; this release does.
+
+### Fixed
+
+- **A big tool result put the whole PostToolUse payload in the environment, and every fork after it died** ([#266](https://github.com/Digital-Process-Tools/claude-remember/issues/266)) — `post-tool-hook.sh` read the payload off stdin and immediately `export`ed it. The payload embeds the full tool result, so after a large `Read` or a verbose `Grep` it is hundreds of KB, and an exported variable is in `envp` for every `execve` the rest of that hook invocation performs. Every one of them then fails `E2BIG` — @peterurbanec's `hook-errors.log` had `sed` from `lib-slug.sh`, `head` from the hook itself, `date` from `lib-clock.sh` and `rm` on exit, four different libraries, one cause. Silently, because the hook must not block the agent, and again on every large tool call for the rest of the session. `/remember:doctor` filed them as WARNs under "Recent errors" while reporting capture health OK, which is the arrangement that let it run.
+
+  **The environment was never a route this payload could travel.** The report cites `ARG_MAX`, the ~2 MB total budget for argv plus envp, and that is the limit that eventually bites. It is not the limit that bites first: Linux caps a *single* string at `MAX_ARG_STRLEN` — 32 pages, 131072 bytes — and applies it to `envp` exactly as to `argv`, independently of the total. So on Rocky 8.6 the `execve` that would have handed a 200 KB payload to a listener is the `execve` that fails. The capability was declared in the docstring and could not be performed for any payload large enough to want it. macOS has no per-string cap and a 1 MB total, which is why this needed an outside report: locally a 900 KB single variable execs without complaint, and the failure only appears once the whole environment blows the total.
+
+  So the payload now travels in a file — `REMEMBER_HOOK_STDIN_FILE`, owner-readable, removed when the dispatch returns — and it is published around the `after_post_tool` dispatch that consumes it rather than for the whole body of the hook. Nothing is written at all unless a listener is installed, which the shipped distribution's `.gitkeep`-only directory is not, because this fires on every tool call. `REMEMBER_HOOK_STDIN` still carries payloads small enough to carry (32 KB), so a listener written against the old contract keeps working for every payload the old contract could actually deliver.
+
+  **What it will never carry is part of a payload.** Truncating to fit is the obvious fix and it is this project's own defect class (#144, #204, #263): a listener holding a silently shortened payload cannot tell it from a genuinely short one, and would have traded a loud failure for a quiet one. There are three states instead of two — no payload, the whole payload in the environment, and *too large for the environment, complete in the file* — and the third is disclosed by `REMEMBER_HOOK_STDIN` being empty while `REMEMBER_HOOK_STDIN_FILE` is set, rather than disguised as a small payload. Where the file is set it is always complete, so a listener that only reads the file never has to know a cap exists.
+
+  The docstring is fixed too, and not as tidying. It said the read was "bounded", meaning `read -t 1`; anyone auditing whether the payload had a size limit would have found that word, taken it for a yes, and stopped. A time bound described in language that reads as a size bound is the same defect in prose, sitting directly above the line that had neither.
+
+- **`SessionStart` picked "the previous session" by mtime position, and at `source=startup` that is off by one** ([#270](https://github.com/Digital-Process-Tools/claude-remember/issues/270)) — `session-start-hook.sh` resolved it twice, once for recovery and once for the capture-gap check, with the same expression: `ls -t "$SESSIONS_DIR"/*.jsonl | tail -n +2 | head -1`. Skipping slot 1 assumes the current session's transcript already exists and sorts newest. At `startup` it does not exist yet — @atonetti measured 31 seconds between the hook running and the transcript being created — so for that window the newest file **is** the previous session, and skipping it lands on an arbitrarily older one. No `/clear` involved, and reachable on any install on any restart.
+
+  **Both halves acted on the wrong session, and they failed in opposite directions.** The gap check judged a session ten days older than the one it meant to, old enough to predate the per-session evidence store entirely, so nothing could ever vouch for it and the notice fired — telling a healthy install to run `/remember:doctor`, which then reported `capture is working` with a save from that same minute. The `capture-gap-reported` dedupe could not suppress it and structurally never could: it is keyed on the previous-session id, and a *wrong* id changes on every startup, so each restart minted a fresh unreported id and warned again. Recovery, using the identical expression, force-saved a 71-line session that was already complete while the genuine previous session kept 181 unsaved lines — that half is silent, `doctor` correctly reports healthy, and the tail is only ever picked up if a later startup happens to land on it.
+
+  **This is the half of [#206](https://github.com/Digital-Process-Tools/claude-remember/issues/206) that was never implemented.** That issue named the enabler exactly — the hook never reads its stdin, so it has neither `source` nor `session_id` and *cannot exclude the current session from the "previous session" computation* — and its fix 1 shipped as the per-session membership store in 0.9.x while fix 2 did not. So the hook now reads `session_id`, behind both guards `post-tool-hook.sh` documents for the same read: a tty stdin is never read at all, and the read is bounded by `read -t 1`, because a hook that blocks here is not a slow session start but one that never begins. Only `session_id` is needed, not `source`: excluding our own transcript by identity is correct at *every* source, including the `/clear` case where the id is reused and the transcript shared, so there is no source list to enumerate and nothing that was being reported stops being reported.
+
+  **Resolved once, for both callers.** Two independent resolutions of the same question are how these drifted, and the drift was not theoretical — the gap check reported on a different session from the one recovery was rescuing in the same invocation. The saved-state answer is read once too, and **before** recovery forks: recovery force-saves in the *background* and the check then re-read `last-save.json` through `session_was_saved`, so a session being rescued could read as unsaved in the very invocation that was rescuing it, or as saved, depending on which process won. "Was this captured" does not change while the hook runs; "has that fork finished" does.
+
+  **Where the session id is unknown, the warning is withheld — and the withholding is disclosed.** Without an id there is no right answer to substitute: the positional guess is correct at `resume` and wrong at `startup`, and nothing in the hook can tell which it is in. Recovery keeps that guess unchanged, because its failure mode is a save aimed wrong and the next startup can still correct it. The gap check gets no fallback, because its failure mode is an accusation, and this warning has no second chance to be believed — the same asymmetry that made three independent sources count as evidence of capture rather than one. But silence is a positive claim too, and "no warning" must not mean both *the previous session was captured* and *the question was never asked*: an absence the checker produced, read as an absence in the world, is the defect class this repo keeps filing on (#144, #263, #266). So a skip writes `tmp/capture-gap-skipped` with its reason, `doctor` reports it as a WARN, and the marker is cleared the moment the check runs again — a stale one would warn forever about a check that is now fine.
+
+  **The hook consumes stdin now, so `hooks.d/` listeners get the payload back** on the same three-state contract #266 settled on — file authoritative, environment for payloads it can carry, never part of a payload — published around the `before_session_start` and `after_session_start` dispatches and removed after, and not written at all unless a listener is installed.
+
+  Thanks to **@atonetti**, who measured the 31-second window rather than inferring it, connected it to #206's unimplemented half, and flagged the warn-versus-silence question as a judgement call rather than presenting it as the fix.
+
+- **Log rotation destroyed the archive it had just deleted the originals for** ([#255](https://github.com/Digital-Process-Tools/claude-remember/issues/255)) — `rotate_logs()` named the archive after a month and `tar -czf` opens its archive with `O_TRUNC`, so the second rotation of a calendar month wrote over the first one's archive with its own contents. The logs inside it had been deleted from disk when it was created. Nothing survived anywhere, and nothing was logged: tar returns 0 whether it created the month's archive or replaced it.
+
+  **The name could not be fixed by making it exact**, which is the obvious answer and is worth ruling out explicitly. `-mtime +7` selects every log that has aged out since the last successful rotation, so one archive legitimately spans months — and the label was anyway derived from `date -v-7d`, the month a week ago rather than the month of the logs. But grouping by the date in each filename, which is exact and would have been available, collides just as surely: logs from one June age out on different days, so a rotation in July and another a week later both want `logs-2026-06.tar.gz`. Month granularity is revisited by construction. So the name is now **claimed rather than computed** — the first free one of `logs-YYYY-MM.tar.gz`, `logs-YYYY-MM-part2.tar.gz`, … reserved atomically under `set -C`, so an existing archive is never opened for writing and two rotations racing cannot select the same name. The cost is real and deliberate: a busy month is now several tarballs instead of one.
+
+  **Deletion is no longer gated on tar's exit status.** That was the general defect behind this instance — the originals were removed because tar returned 0, which is evidence that tar had no complaint and not evidence that anything is inside the archive. The new archive is now listed back with `tar -tzf` and every log is deleted only if the archive names it; if any is missing, the archive this call created is removed, the originals stay, and the third state reports why. Extract-merge-recreate would have kept one archive per month and was rejected on its worst moment: a crash midway through recreating leaves a truncated archive whose contents were deleted from disk weeks ago. This design's worst moment is a crash between a verified archive and the deletion of its originals — the next rotation archives them again under a new name. Duplicated, never lost, which is the trade the failure branch above it already makes: accumulation is visible and recoverable, deletion is neither.
+
+  Found by the agent implementing [#252](https://github.com/Digital-Process-Tools/claude-remember/issues/252) and reported rather than folded into that PR — the right call, since fixing it changes what an operator sees in the log directory.
+
+## [0.12.1] — Two spellings, one store
+
+A patch release for one external report, and it is the same defect 0.12.0 was named after, reached by a third route: the backup ran every few minutes for twelve days, committed nothing, and said so in the voice it uses for a store with nothing to save.
+
+The cause was a lowercase drive letter. `resolve-paths.sh` normalised the drive only for a POSIX-shaped path, and `$CLAUDE_PROJECT_DIR` does not always arrive in the same shape on the same machine — the reporter's log carries both spellings within one day, which they flagged as the one thing they could not explain. It follows from the code: `session_dir_slug`'s fold was gated on `cygpath` being on PATH, so the shape `resolve-paths` *could* match came out uppercase and the shape it could not match stayed lowercase. One directory, two slugs. NTFS is case-insensitive, so the store resolved and memory saved normally; git's pathspecs are case-sensitive on every platform, so `git add` matched nothing and `diff --cached --quiet` called the store clean — the correct answer to the question it was asked.
+
+There are three outcomes now instead of two, and the third is asked of git rather than of the filesystem, because a case-insensitive filesystem is exactly what hides it. Nothing is renamed for you, for the same reason a diverged remote is not merged for you.
+
+**If you install through `claude-plugins-official`, this reaches you when that catalogue's automated bump pins it, which is not on our schedule and not predictable from ours** — see the README. Installing from the DPT marketplace skips the wait.
+
+Thanks to **@jqit-ricky** for both reports in this release, and for the second-order halves of each: "both spellings appeared in one day and I cannot explain it", and the observation that our delivery advice never named which install route it assumed.
+
+### Changed
+
+- **The README now says which install route a release actually reaches, and when** ([#264](https://github.com/Digital-Process-Tools/claude-remember/issues/264)) — the delivery advice added in 0.12.0 assumed an install route it never named. `claude-plugins-official` pins by commit sha rather than by version, and an automated PR advances that pin on a schedule that is neither ours nor predictable from ours — across four observed runs the commit it pinned was one to fourteen hours older than the run itself, and one run skipped a tagged release an hour after it appeared. So a release reaches a DPT-marketplace install immediately and an official-marketplace install whenever that catalogue gets to it. `FORCE_AUTOUPDATE_PLUGINS=1` cannot cross that boundary, because nothing on the user's side is stale — the CLI correctly reports the pinned version as current, and the input is old. The reporter spent the diagnosis establishing that their install genuinely could not see v0.12.0; it was true, and it was not a bug in either tool. The stale claim that the official catalogue was "stuck on v0.5.0" is gone, along with the advice to treat that as permanent.
+- **"Check your version" now says to read the manifest and not the directory name** ([#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204)) — a cache directory is named from the version present when it was created and is never renamed, so one called `0.7.1` can hold a manifest saying `0.8.0`. The updater compares manifests. Every claim on #204 about which version was running had been read off the directory name and was wrong by a minor, which is this project's own defect class wearing a filename: a surface that appears to answer the question and does not.
+
+### Fixed
+
+- **A lowercase drive letter made the git backup commit nothing, and call it success** ([#263](https://github.com/Digital-Process-Tools/claude-remember/issues/263)) — `resolve-paths.sh` normalised the drive letter only for a POSIX-shaped path (`/c/Users/…`). `$CLAUDE_PROJECT_DIR` does not always arrive in that shape on the same machine: the reporter's log carries `C--Users-ricky-…` at 15:55 and `c--Users-ricky-…` at 18:00, which they flagged as the one observation they could not explain. It follows from the code — with `cygpath` absent from the hook's PATH, `session_dir_slug`'s drive-letter fold was skipped entirely, so the shape resolve-paths *could* match came out uppercase and the shape it could not stayed lowercase. One directory, two slugs. All four shapes are normalised now, and the fold no longer depends on `cygpath` being present, which is what made it conditional in the first place.
+
+  The larger half is again that nothing could tell the failure from an empty store. NTFS is case-insensitive, so `REMEMBER_DIR` resolved and memory saved normally; git's pathspecs are case-sensitive on every platform, so `git add -- "$SLUG/"` matched nothing and `diff --cached --quiet` reported the store clean — the correct answer to the question it was asked, and the wrong answer to the one that mattered. Twelve days, a success line every few minutes, seven uncommitted files. There are three outcomes now instead of two: committed, clean, and *this slug cannot address its own history* — the last asked of git rather than of the filesystem, because a case-insensitive filesystem is exactly what hides it, and asked before staging rather than after, because the condition is structural and a store that is clean right now will still lose the next thing it writes.
+
+  Nothing is renamed for you, for the same reason a diverged remote is not merged for you: `recent.md` and `archive.md` are rewritten wholesale by consolidation, so a wrong automatic repair corrupts memory silently. The report names both spellings and the two-step rename, and interrupts on the next prompt.
+
+  The direction of the fold was the one real decision, and it was made by counting who already works rather than by reading the report: Git for Windows ships `cygpath`, so the working majority already has the lowercase spelling on disk. Uppercasing would have fixed one reporter and renamed every other store — the loud bug traded for a quiet one.
+
+  Thanks to **@jqit-ricky**, again, and again for the second-order half: "both spellings appeared in one day and I cannot explain it" is the sentence that made this a fix of a class rather than one regex.
+
+## [0.12.0] — It said it would retry
+
+Two external reports, three weeks apart, with the same shape underneath: an operation stopped doing its job and reported success. Neither reporter noticed for weeks, and in both cases the reason was not that the tool was quiet — it was that the tool was reassuring.
+
+`rotate_logs` had archived nothing since June on one Windows install ([#252](https://github.com/Digital-Process-Tools/claude-remember/issues/252)): GNU tar reads an `-f` argument whose colon precedes the first slash as `host:path`, so an absolute Windows archive path became a request to connect to a machine called `C`. The archive name is now relative, which no tar can parse as remote — deliberately not `--force-local`, which bsdtar rejects outright with exit 1, so the obvious fix would have repaired Windows by silently disabling the platform this is developed on. The larger half was that `2>/dev/null` discarded the reason and the failure branch returned 0, so "nothing to rotate" and "permanently broken" were the same event to every caller. There are three outcomes now instead of two, and `/remember:doctor` reports the third — chosen because that reporter's `hook-errors.log` was empty for all five weeks.
+
+The git backup had the same defect from the other side ([#253](https://github.com/Digital-Process-Tools/claude-remember/issues/253)): every push failure was logged as `push deferred (will retry next backup)`. That is true of a network blip and false of a non-fast-forward rejection, which cannot succeed on any later attempt — one store had drifted 15 commits ahead and 312 behind, missing twelve days of memory it had never seen. Rejections are now read from `git push --porcelain`'s per-ref status rather than from message text, which matters because a pre-push hook writes to the same streams and can produce a convincing fake; the parse requires git's own header, exactly three tab-delimited fields, and the `!` flag. The asymmetry is what makes it safe: an unreachable remote exits 128 with empty stdout, so a transient failure gives git nothing to say and stays a quiet retry. Reporting loudly requires positive evidence *from git*.
+
+Thanks to **@hubertrm** and **@jqit-ricky**. Both reports were specific enough to reproduce without their machines, and in both cases the second-order observation was the more valuable half — "it does not self-correct", and "that push cannot succeed on any later attempt". Those are the sentences that turned two bug reports into two fixes of a class.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133) — the updater compares manifest versions and nothing else, so a release that forgets it ships nothing.
+
+### Added
+
+- **A restore counterpart to the git backup, off by default** ([#253](https://github.com/Digital-Process-Tools/claude-remember/issues/253), part 2 of 2 — the feature half; part 1, the rejected-push classifier, landed separately) — the plugin pushed and never read back: `git pull|fetch|merge|rebase` appeared nowhere outside `tests/`. A store used from a second machine therefore reads its own stale memory, commits on top of it, and from then on can never push at all — which is how the divergence part 1 reports comes to exist in the first place. `hooks.d/before_session_start/50-git-restore.sh` closes the loop, on the empty dispatch point that has been wired at `session-start-hook.sh:86` all along.
+
+  **Fast-forward only, and a diverged store is refused out loud.** `git rev-list --left-right --count HEAD...<remote ref>` is the honest test and gives both numbers at once: comparing tips for equality, or asking only `merge-base --is-ancestor`, cannot tell *behind* from *diverged*, and those are precisely the two cases that must never be confused — one is a fast-forward and the other is a refusal. The reporter's reasoning is the documented constraint: `recent.md` and `archive.md` are rewritten wholesale by consolidation rather than appended, so a conflict there is real and a wrong automatic resolution corrupts memory silently. Nothing merges, rebases, resets, checks out, stashes or forces, and the structural test guarding that is an **allowlist** of git subcommands rather than a denylist of dangerous ones — a denylist has to guess what the next dangerous verb is called, and this file is a poor place to guess in, since its own log tag is `git-restore` and its refusals say the words "push", "merge" and "rebase" out loud because saying them is what makes the refusal legible.
+
+  **No network on the session-start path — the judgement call, and it is not in the issue.** This hook runs in front of the user's first prompt, where [#227](https://github.com/Digital-Process-Tools/claude-remember/issues/227) was a plugin costing ~8.7s and [#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204)/[#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230) are the same family. Measured here, a warm `git fetch` to GitHub with nothing to download costs **~1.7s**, and against an unreachable host it costs whatever the timeout is. So the two halves are split by whether they touch the wire: the **fetch is detached** and its result lands next session, and the **fast-forward is synchronous but purely local**, reading remote-tracking refs an earlier session already fetched. The whole hook measures **~26 ms** on top of process startup (43 ms wall against a 17.6 ms `bash` baseline; ~29 ms when it actually restores). The detach costs one fork, measured at 0.24 ms. It is deliberately *not* folded into the backup hook's existing background subshell, which would have cost zero forks: #253's reporter was promised in writing that `fetch`, `pull`, `merge` and `rebase` will never appear in that file and there is a test enforcing it, and a restore that only runs after a save never runs at all in a read-only session — which is exactly the session that most needs fresh memory. The cost of the split is that a change made elsewhere arrives one session later than it could; a restore that lands one session late is still a restore, and a session start that hangs on a credential prompt is a user leaving.
+
+  **A detached process nobody watches is this codebase's own defect in a new costume**, so the fetch records `started`/`finished`/`rc` and the next session reports on it. There are four answers, not two: restored *N* commits / already up to date / **could not check** (the fetch failed, or never came back) / diverged. "Could not check" is never rendered as "up to date" — that is exactly the conflation part 1 fixed on the write side, and it is as easy to rebuild one layer over, since a store whose fetch has been failing for a week looks identical to one that is genuinely current. Two more states that would otherwise pass for "up to date" are named explicitly: an unborn local branch, and a remote ref that was never fetched.
+
+  **Escalation, not alarm.** Log line always; `systemMessage` after `git_restore.diverged_notice_after` consecutive session starts in a diverged state (default 3, `0` disables). The same argument part 1 settled: a divergence never clears itself, so a threshold can only postpone a true report, never swallow one — while a failed or unreachable fetch never reaches that channel at all, because a restore that gets noisy on every flaky network is one nobody reads.
+
+  **The two halves share the backup's lock.** A session start and a save now touch one repo from two lifecycle events, and the fast-forward moves `HEAD` and rewrites the working tree while a backup may be part-way through `git add`/`git commit` on the same index — so the restore takes `.git-backup.lock`, the existing one, and skips to the next session if it is held. A second, private lock would have been no lock at all. The fetch is deliberately *outside* it: it writes only remote-tracking refs and objects, git does its own ref locking, and holding a repo-wide lock across network I/O would let a slow remote block every backup for the length of the timeout. The `#138` worktree guard is carried over too — without it, a session run from a linked git worktree would fast-forward the user's **source tree** from the project's origin at session start.
+
+  Config: `git_restore.enabled` (default `false`), `.remote` / `.branch` (falling back to the backup's, then to `origin` and the checked-out branch), `.fetch_timeout_seconds` (20), `.diverged_notice_after` (3).
+
+  **The detached fetch does not hold the store's lock, and proving that needed the Linux branch to become reachable on macOS.** `_take_lock` holds its flock on **fd 9**, and a forked child inherits every open descriptor — an inherited fd holds the *same* lock. So the background fetch kept the whole store locked for its entire life: every session start inside `fetch_timeout_seconds` logged `store busy` and skipped, the divergence counter could never pass 1, the escalation could never fire, the repaired-store cleanup could never run, and any `after_save` backup landing in that window was blocked — the exact failure this hook's own comments argue the fetch must not cause. It was invisible on macOS, which ships no `flock(1)` and takes the noclobber fallback where nothing is inherited, and total on Linux; CI was red on all four ubuntu legs and green on macOS and Windows. Fixed with `exec 9>&-` as the first statement in the detached subshell. The tests now ship a `flock -n <fd>` shim so the branch every Linux install takes is executable on the maintainers' own machines, in the lineage of [#208](https://github.com/Digital-Process-Tools/claude-remember/issues/208) (Debian `dash` cannot exec a builtin Apple's `dash` can) and [#250](https://github.com/Digital-Process-Tools/claude-remember/issues/250) (`MAX_ARG_STRLEN` caps one envp string at 128 KB on Linux only) — the platform you develop on is the one that cannot see its own constraint.
+
+  Tests first, red 21/32 — the 11 that passed against a do-nothing stub are the ones asserting *absence* (off by default, never writes to the remote, a diverged store is not touched), which is what they are for — then green 35/35 (full suite 1182 passed, 42 skipped, coverage 94.13%). Real bare remotes advanced by real second clones throughout, never a mocked git output, and `_advance_remote` asserts the remote tip actually moved before anything else runs: cloning a bare repo without `-b main` lands on an unborn branch whose `init.defaultBranch` the runner picked, and every assertion downstream would be vacuous. That hazard is now also a production test — a store with an unborn branch is refused and says so — because it hit this work for real while benchmarking.
+
+### Fixed
+
+- **A rejected git backup push is no longer reported as one that will retry** ([#253](https://github.com/Digital-Process-Tools/claude-remember/issues/253), part 1 of 2 — the restore counterpart in part 2 is a separate feature request and remains open) — `hooks.d/after_save/50-git-backup.sh` funnelled every non-zero `git push` into one line, `push deferred (will retry next backup)`, at three call sites. That is true for a network blip. It is false for a non-fast-forward rejection, which is what the store gets the moment the remote moves ahead: **that push cannot succeed on any later attempt**, no later attempt will fix it, and the backup has in fact stopped. The reporter ran twelve days on that promise — 15 `push deferred` against 8 `pushed`, memory never leaving the machine — and found it only by going to look.
+
+  **Three states now, not two**, per the "declining instead of guessing" discipline: pushed / *deferred, will retry* / **rejected, the backup has STOPPED and here is what to do**. The rejection line names the refs git rejected, says the commit exists on this machine only, and names the command that shows git's own advice.
+
+  **The verdict is read from `git push --porcelain`'s per-ref status lines, never from free text.** This is the channel [claude-supertool#641](https://github.com/Digital-Process-Tools/claude-supertool/issues/641) settled after a pre-push hook printing the words "fetch first" was read as a remote rejection: git flags a rejected ref `!`, a new branch `*`, a forced update `+`, in tab-delimited fields, and only lines after the `To <url>` header are read because a hook's own output precedes it. stderr — where hints, transport noise and hook chatter live — is discarded.
+
+  **The direction of the failure was chosen deliberately.** Loudness requires positive evidence *from git*: an unreachable remote, an asleep credential helper or a killed transport emit no per-ref lines at all, so every transient failure stays exactly the quiet retry it always was. Making an ordinary flaky network noisier or fatal would have been [#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204) in a new place, and worse than the bug being fixed.
+
+  **A log line alone is not the fix — being invisible in a log is the entire issue.** After `git_backup.reject_notice_after` consecutive rejections (default 3, `0` to disable) the next prompt carries a one-line `systemMessage`, the same channel [#200](https://github.com/Digital-Process-Tools/claude-remember/issues/200) established as "the only hook output the HUMAN sees". It escalates rather than firing on the first rejection because that channel interrupts a human mid-thought and one that fires often is one that gets tuned out — and the delay costs nothing true, since a rejection never clears itself, so the threshold can only postpone a real report, never swallow it. The counter resets on any successful push.
+
+  **Nothing is auto-resolved, by design and at the reporter's request.** `recent.md` and `archive.md` are rewritten wholesale by consolidation rather than appended, so a conflict there is real and a wrong resolution corrupts memory silently. The hook still never runs `fetch`, `pull`, `merge` or `rebase`, and a test pins that it cannot start.
+
+  All three push sites now share one classifier, so the funnel cannot be reopened one site at a time; a structural test fails if the deferral message ever appears twice.
+
+  Tests first, red 12/18 — the six that passed on the broken code are the guards that ordinary failures stay quiet, and they are why the load-bearing test is a *rejection* rather than a network error — then green 18/18. The rejection is produced by a real bare remote advanced by a real second clone, never a mocked string: the whole defect is about which channel carries the truth, and fixtures that pin an implementation instead of a contract are what [claude-supertool#649](https://github.com/Digital-Process-Tools/claude-supertool/issues/649) documents. Every fixture asserts it actually diverged the remote before anything is asserted about the log.
+
+- **Log rotation no longer fails permanently on Windows, and a rotation that cannot run now says so** ([#252](https://github.com/Digital-Process-Tools/claude-remember/issues/252)) — `rotate_logs()` passed an absolute archive path to `tar -czf`. On Windows that path starts with a drive letter, and GNU tar reads an `-f` argument whose colon precedes the first slash as `host:path` — so it tried to resolve a machine named `C` and exited 2. The reporter's install had archived nothing since 2026-06-23: 29 log files, 2.3 MB, one identical `ERROR: tar failed for 19 logs` per day.
+
+  **The archive is now named relatively, from inside the log directory — no flag, no platform detection.** `--force-local` is the usual GNU answer and is the trap: bsdtar, which is `/usr/bin/tar` on macOS, rejects it outright with exit 1 and writes no archive, so hardcoding it would have fixed Windows by disabling the platform the maintainers develop on — into a branch whose stderr was discarded, where nobody would have seen it. Detecting the implementation was rejected for a subtler reason: the axis is the tar *binary*, not the OS. Git Bash ships GNU tar, but Windows also carries a bsdtar in System32 that can win the `PATH`, so a detector keyed on platform would be a second bug waiting to happen. A name with no directory prefix has nowhere to put a colon, so no tar can parse it as remote and none of them needs a flag. Verified end to end against **GNU tar 1.35** and **bsdtar 3.5.3**, which produce identical member lists. Only `-f` was ever subject to that parse — the `-C` argument never was, which is why already passing the directory separately did not save it.
+
+  **The permanence was the larger half, and it is fixed separately.** `2>/dev/null` discarded the one sentence that identified the cause, the failure branch logged a line without it, and `rotate_logs` returned 0 whether it had archived, failed, or found nothing to do — so "nothing to rotate" and "permanently broken" were the same event to every caller. There are now three states: silent success, logged success, and a **non-zero return** carrying tar's own diagnostic into the log line. After three consecutive failures the line stops repeating itself and names the consequence — how many files are accumulating, where, and that nothing will clear them — because one identical line a day for five weeks is demonstrably not enough to prompt an investigation, while a louder line on every invocation is just faster wallpaper. A breadcrumb (`logs/.rotate-failed`) is written on failure and cleared on success, and **`/remember:doctor` now reports it with its reason**: `hook-errors.log` was empty throughout the reporter's five weeks, so that report would have said "OK" the entire time.
+
+  **Rotation deliberately does not self-correct by deleting.** A permanently-failing rotation could bound the accumulation by removing aged logs instead of archiving them, and does not: those logs are the only record of what went wrong, on a machine that has just proved it cannot run the archive path. Accumulation is visible and recoverable; deletion is neither. The growth is bounded by making it loud, not by making it destructive.
+
+  `run-consolidation.sh` now calls `rotate_logs || true` — load-bearing under its `set -e`, since a log directory that cannot be tidied must not abort the consolidation that was about to run.
+
+  Tests first, red 5/9 — including the pin that will still matter in a year, that a failed rotation is distinguishable from an empty one — then green 9/9, and green again with GNU tar 1.35 forced ahead of bsdtar on `PATH`. The argv assertion is deliberately about the *constructed* `-f` argument rather than about tar's behaviour on the machine running the suite: a POSIX runner has no drive letter to reproduce with, but "the argument contains no `/`" is checkable anywhere and is strictly stronger than "contains no colon".
+
+- **A session start can no longer read a half-written `now.md` entry** ([#247](https://github.com/Digital-Process-Tools/claude-remember/issues/247)) — `save-session.sh` appended each entry in two operations, `echo "" >> "$MEMORY_FILE"` then `cat "$HAIKU_TEXT_FILE" >> "$MEMORY_FILE"`. Both under `save.lock`, which excludes other writers and no readers — and the reader that matters cannot take the lock at all: `session-start-hook.sh` sources five libraries and `lib-lock.sh` is not among them, so `lock_acquire` is *undefined in that process*, and its memory injection is a bare `cat "$MFILE"`. Between the two appends sits a whole `fork`+`exec`, during which `now.md` ends in a separator whose entry has not arrived; inside the second append there is one observable state per write chunk. A session starting in either window is handed a truncated final entry with nothing to tell it so.
+
+  **Scoped honestly: a torn entry boundary, not loss.** Every byte reaches disk and the next read sees the file whole. This is not [#242](https://github.com/Digital-Process-Tools/claude-remember/issues/242)'s severity and does not borrow it — but it needs no second filesystem either, so it is reachable on any machine, on every save.
+
+  The entry is now staged as old-plus-separator-plus-entry in a sibling temp (`now.md.append-*`, deliberately not ending in `.md` so nothing globs it) and committed with a checked `mv` — the fifth adoption of the pattern already in `lib-env-cache.sh:170-175` ("Rename, so no reader ever parses a partial file"), `post-tool-hook.sh:260-262`, the NDC commit ([#245](https://github.com/Digital-Process-Tools/claude-remember/pull/245)) and the consolidation staging tail ([#249](https://github.com/Digital-Process-Tools/claude-remember/pull/249)). This was the call site that had not adopted it.
+
+  **A rename, not just one `cat` instead of two.** Collapsing the two appends closes the process gap and leaves the chunk boundaries of a single write loop; it narrows the window rather than removing it. A rename has none at any entry size: the reader opens either the old inode or the new one and both are whole. The cost is a full copy of `now.md` per save — kilobytes, on a path that has just spent seconds in a model call.
+
+  **Not a reader lock, explicitly.** Putting `SessionStart` behind a lock held across a `claude -p` call would block a user's first prompt ([#227](https://github.com/Digital-Process-Tools/claude-remember/issues/227)/[#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230)/[#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204)) — a worse trade than the tear. Two tests pin that premise so a later change cannot quietly invert it.
+
+  Two failure modes were fixed alongside, both pre-existing and neither in the issue: the second append's exit status was **never read**, so a write error mid-entry left a torn entry on disk permanently and — under `set -e`, before `save-position` ran — got the same span summarized and appended again on the next run; and a read failure on `now.md` is now fatal rather than producing a file containing only the new entry. Every write step is checked, and a failure leaves `now.md` and the saved position untouched with an `ERROR` in the log.
+
+  Tests first, red 4/7 (a reader caught `now.md` at 55+1 bytes — the old content plus a bare separator, entry not yet arrived), then green 7/7, full suite 1120 passed.
+
+  The first push was green on macOS and Windows and red on all four `ubuntu-latest` legs, which is a platform, not a flake. The ~276KB entry the test needs (to make the write-chunk boundaries real) was handed to the harness in an environment variable, and Linux caps each **single** string in `argv`/`envp` at `MAX_ARG_STRLEN` — 32 pages, 128KB — however much total `ARG_MAX` allows, so `bash` died at exec with `OSError: [Errno 7] Argument list too long`. macOS has no per-string cap; the constraint is invisible on the machine the test was written on. It is the same limit [#107](https://github.com/Digital-Process-Tools/claude-remember/issues/107) moved the real summarizer prompt onto stdin to avoid (`pipeline/haiku.py:515`) — the fixture reproduced, from the other side, the hazard the production path is built around. The payload now travels by file (`STUB_HAIKU_TEXT_FILE`) at its original size, and `_run` — the helper every shell test spawns through — now asserts no argv or env string exceeds the limit, so the next one fails on the developer's machine instead of in CI.
+
+- **The consolidation staging-tail mv is now a checked, same-directory rename** ([#246](https://github.com/Digital-Process-Tools/claude-remember/issues/246)) — `run-consolidation.sh`'s retire loop kept the unconsolidated tail of a staging file that grew past its consolidated offset with `mv "$staging_tail" "$staging_path"`, where `$staging_tail` came from `mktemp "${TMPDIR:-/tmp}"/...`. #242's class, one file over: across filesystems `mv` is copy-then-unlink, not `rename(2)`, so a failure partway could destroy or truncate `staging_path` instead of leaving it "old or new" — `$TMPDIR` is a different filesystem in the ordinary cases (tmpfs `/tmp`, devcontainers, WSL under `/mnt/c`, external `data_dir`). The mv's result was also never read, and ran bare under `set -e`, so a failure killed the whole retire loop mid-way rather than being handled — the other two `mv`s in the same loop (the same-directory `.done.md` retires) share that: they cannot half-complete, but were unchecked too, and a failure there was silently swallowed. The temp now lives beside `staging_path` (same pattern as [#245](https://github.com/Digital-Process-Tools/claude-remember/pull/245)'s NDC commit fix), all three `mv`s are checked, and a failure leaves the file in place with an `ERROR` log instead of retiring it — the next run retries rather than losing the tail or silently mis-marking the file done.
+
+## [0.11.0] — The argument outlived the code
+
+Ten changes, and most of them are one shape: a safety argument that stayed in the file after the property it described was gone.
+
+The clearest is the NDC commit. [#142](https://github.com/Digital-Process-Tools/claude-remember/issues/142)'s reasoning for why writing `now.md` is safe is, in its own words, that "`mv`-over is atomic on the same filesystem" — and its suggested fix wrote the temp file next to `now.md`, where that is true. What shipped put the temp in `$TMPDIR` and kept the sentence. `/tmp` is tmpfs on most Linux distributions, on any devcontainer, and under WSL with the project on `/mnt/c`, so the commit had been a copy-then-unlink for as long as anyone had been reading that comment and believing it. Reproduced against a real second filesystem: BSD `mv` unlinks the partial destination, so `now.md` was **destroyed outright** — not truncated — while the log reported `kept 5400000b appended during compression`, a byte count taken before the move. The same pattern was already correct in three other places in this repo, one of them commented "Rename, so no reader ever parses a partial file". This was the call site that never adopted it.
+
+The rest rhyme with it. Two locks were each sound on their own while the guarantee between them was assumed rather than held, in `today-*.md`'s write-and-retire and in consolidation's read. A spawn budget was documented as having three to spare against a measurement that was actually at the limit. And two guards claimed coverage they did not have: one walked annotations but not the bare `Handler = str | None` that breaks a 3.9 leg identically, and one asserted a clock conversion through a variable that bash 5 regenerates on every reference — green, on the platform whose behaviour it existed to pin, while asserting nothing at all.
+
+There is one addition that is deliberately not a fix: `save.lock` hold times can now be recorded, because [#226](https://github.com/Digital-Process-Tools/claude-remember/issues/226) asked whether a 30s timeout was doing what its reasoning claimed and nobody had ever measured it. The default is unchanged and the issue stays open — a number produced in a sandbox would read as measured and would not be, which is the same defect one layer up.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133) — the updater compares manifest versions and nothing else, so this file is for humans and `.claude-plugin/plugin.json` is what actually ships.
+
+### Added
+
+- **`save.lock` hold times can now be recorded, so the 30s timeout can stop being a guess** ([#226](https://github.com/Digital-Process-Tools/claude-remember/issues/226)) — the NDC commit waits up to `REMEMBER_NDC_COMMIT_LOCK_TIMEOUT` (default 30s) for `save.lock`. #226's complaint is not that 30 is wrong but that nothing measured it, while the code reads as though something had. [#234](https://github.com/Digital-Process-Tools/claude-remember/pull/234) answered the same question for `staging.lock` with real figures (~30ms per NDC append, ~200ms for a 3-file retire loop) and set 10s from them; `save.lock` stayed unmeasured, and it is the one held across a summarize Haiku call. `lock_acquire`/`lock_release` now write one row per lock use — how long the lock was held, how long the acquire waited, and whether the wait ran out — and `scripts/lock-timing-report.sh` turns that file into a per-lock distribution.
+
+  **The 30s default is unchanged, on purpose.** A number produced in a sandbox would look measured and would not be, which is the defect this issue is about, reproduced one layer up. #226 stays open: the instrument shipped, the measurement has not been taken.
+
+  **Opt-in, not always-on.** `save-session.sh` runs on a `PostToolUse` hook — [#227](https://github.com/Digital-Process-Tools/claude-remember/issues/227) measured that path at a p50 of 8.7s on one platform, [#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230) split out the prefix paid per tool call, and [#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204) is an external report of the plugin blocking a user's prompts. Always-on costs one `wc` per record plus two `date` spawns per lock use below bash 5, on every machine, forever, to answer a question asked once — and it would bias its own numbers by slowing the path it measures. With `REMEMBER_LOCK_TIMING` unset the recorder is one string comparison: no file, no spawn, pinned by a test that fails if the two paths ever cost the same.
+
+  **Resolution is disclosed rather than assumed.** There is no portable spawn-free millisecond clock, so three tiers are probed once and the winner lands in every row: `EPOCHREALTIME` on bash ≥ 5 (microseconds, no spawn), GNU `date +%s%N` (milliseconds, one spawn), plain `date +%s` (whole seconds) — the last being what macOS's `/bin/bash` 3.2 with BSD `date` gets. A `python3` fallback was rejected: at ~60ms per spawn it costs more than a `staging.lock` hold, so it would advertise millisecond precision while inventing most of the milliseconds. A distribution read at a finer resolution than it was taken at is the same false confidence #226 was filed about.
+
+  **The cap discloses instead of rolling.** Bounded at `REMEMBER_LOCK_TIMING_MAX` lines (default 5000, ~350KB) — this repo has just spent a day on unbounded things. At the cap, recording stops and a `# CAPPED` line goes into the file: a rolled file silently drops its oldest records, and the tail is precisely what a timeout would be set from. The report surfaces the cap and says to read the max as a floor.
+
+  **Failing to record leaves a trace.** A measurement that silently did not happen is indistinguishable from one that showed nothing, so an unwritable destination or a missing `REMEMBER_DIR` is announced once per process — through `log` when the caller sourced `log.sh`, otherwise on stderr — and locking carries on regardless. The report has three states, following `pep604_floor.py`: `ok`, `CAPPED`, and `skipped` with a reason at exit 2.
+
+  Tests first, red 6/6, then green; the clock conversion is driven directly with an injected reading, because no single machine reaches all three tiers — macOS's `/bin/bash` only ever takes `s`, a bash-5 Linux runner only ever `us`. The hold assertions compare a 2.5s hold against an immediate one and require them to be 1000ms apart, which fails for a recorder that writes nothing, writes a constant, or writes the wrong unit.
+
+- **The floor guard now sees bare type aliases, and says out loud what it cannot decide** ([#239](https://github.com/Digital-Process-Tools/claude-remember/issues/239)) — the [#237](https://github.com/Digital-Process-Tools/claude-remember/issues/237) guard walked `AnnAssign` annotations and `isinstance()`/`issubclass()` arguments. It did not walk `Handler = str | None`, which is an `ast.Assign` rather than an `ast.AnnAssign`, is evaluated at import exactly the same way, and raises the same `TypeError` on 3.9 — taking out the whole leg at collection, which is the failure the guard exists to prevent. Same for `T = TypeVar("T", bound=int | None)`, `Id = NewType("Id", int | None)` and `cast(int | None, v)`. An independent AST walk of all 81 files in the guard's scope found **zero** live instances, so nothing was broken; this is about what the guard catches tomorrow, and a module-level type alias is a completely ordinary thing to add.
+
+  **The gap existed for a good reason, and that reason was the whole problem.** `Handler = str | None` and `MASK = READ | WRITE` are the same `ast.BinOp`, and nothing in the AST separates them without type information. Flagging every module-level `|` would fire on legitimate bitwise code, and a guard people learn to ignore is worse than no guard — `claude-supertool` [#577](https://github.com/Digital-Process-Tools/claude-supertool/issues/577) is what that looks like from the other side.
+
+  **The discriminator is the language, not a heuristic.** Naming conventions (`CapWords` means alias) and `typing`-import proximity were both considered and both rejected: the first is wrong the first time someone writes `MASK = A | B`, the second needs resolution it cannot do. What ships instead asks whether **any** operand of the `|` chain is a thing that cannot be bitwise-or'd on *any* Python — the literal `None`, a builtin type name (`int`, `str`, …), a name imported from `typing`, or a subscript of one (`Dict[str, int]`). `x | None` and `int | str` have no valid bitwise meaning at all, so a flag here is not a judgement call and cannot be a false positive. A name the module rebinds itself (`str = SomeFlag`) stops counting as a type.
+
+  **It errs toward silence, deliberately.** An alias over names the guard cannot resolve — `Ids = A | B` — is not flagged, and will still break a 3.9 leg. That direction was chosen on purpose: a missed violation costs one CI leg on the day someone writes it, while a false positive on `MASK = READ | WRITE` costs the guard its credibility permanently, and a guard nobody reads catches nothing at all. The must-**not**-flag cases are pinned as hard as the must-flag ones, because that behaviour is what the guard's usefulness rests on.
+
+  **What it cannot decide, it reports.** A `|` in an import-time assignment that resolves to neither a type nor arithmetic comes back as `GuardReport.undecided` and is counted in the report's reason — seen, unclassified, and not passed off as clean. The repo-wide test asserts that set is currently empty, so the first ambiguous construct anyone adds gets a human's eye once rather than disappearing. An absence the checker produced, read as an absence in the world, is this repo's recurring defect; building an instance of it into the guard written to catch one would have been a poor trade.
+
+  Two false positives the old walk would also have made are fixed in passing: the body of `if TYPE_CHECKING:` is never executed, so nothing in it is flagged (the `else:` branch is), and `X: TypeAlias = str | None` now has its *value* checked, which the future import does not rescue even though it does rescue the annotation. Function-local assignments stay out of scope, for the same reason function-local annotations do: they are evaluated when the function runs, not when the module imports, so they fail one test rather than a whole leg.
+
+  Tests first, run red (19 failed, 28 passed), then green (49 passed). Teeth verified by planting both `Handler = str | None` and `MASK = READ | WRITE` in `pipeline/types.py` and watching the repo-wide test name the first at its line and route the second to `undecided` without failing on it.
+
+- **A guard for syntax the floor interpreter cannot evaluate** ([#237](https://github.com/Digital-Process-Tools/claude-remember/issues/237)) — [#236](https://github.com/Digital-Process-Tools/claude-remember/pull/236) shipped `project: str | None` in a test helper. PEP 604 unions are `types.UnionType` construction, which does not exist before 3.10, so on 3.9 that line raises `TypeError` *while pytest imports the module*. Not a failing test — a **collection error**, which takes out the whole leg before anything runs. All three 3.9 legs (macOS, ubuntu, Windows) failed identically, the other nine were green, and nothing on the failing legs ran at all. Invisible locally, because this machine's Python is 3.14 and no floor interpreter is installed anywhere on it.
+
+  `tests/test_pep604_floor_guard.py` walks the repository's `.py` files as an AST and flags PEP 604 unions in every position Python evaluates: parameter, return and **module- or class-level** variable annotations in files without `from __future__ import annotations`, plus `isinstance()` / `issubclass()` arguments — which the future import does **not** rescue, because those are ordinary runtime expressions rather than annotations. That exception is the case a grep or a hand-rolled check misses. It runs on any interpreter in about a second; no 3.9 needs to be installed to be protected by it.
+
+  **The floor is read from the CI matrix, not hardcoded and not from `pyproject.toml`.** `pyproject.toml` here has no `[project]` table and no `requires-python` at all — the only declaration of the floor is `.github/workflows/tests.yml`, which is also the thing that actually produces the legs a violation destroys. When the floor moves, the matrix is what moves, and the guard follows it in the same commit; a hardcoded `3.9` would keep failing a repo that had dropped 3.9, and a `requires-python` read would depend on a key nobody here writes. When the matrix reaches 3.10 the guard reports **skipped** with that as its reason, rather than passing on syntax it no longer has an opinion about.
+
+  **The walk is repository-wide, not `tests/` only.** The defect is a collection error, and CI collects `tests/` — but it imports `pipeline/` transitively, and any `.py` added under `scripts/` or `hooks.d/` tomorrow is a file some leg will import. Scoping to `tests/` would guard the file that happened to break last time. What the walk must *not* touch is machine state that happens to sit in the working tree: names first and unconditionally (dot-prefixed anything, `venv`, `node_modules`, `build`, `dist`, `__pycache__`, `*.egg-info`), then git's ignored set when the root is a repository. `claude-supertool` [#577](https://github.com/Digital-Process-Tools/claude-supertool/issues/577) is what the other error looks like: a floor scanner that walked `build/` and `.venv/` and reported violations in code nobody here wrote. The *ignored* set, never the tracked set — a tracked-files walk would exempt the file being written right now, which is when the guard earns its keep.
+
+  **Function-local annotations are deliberately not flagged.** Python never evaluates them (PEP 526), so `def f(): x: int | None = None` cannot break a 3.9 leg. Flagging it would be the same over-scan in miniature: a scanner's scope has to match the defect's, or the first person to hit a false positive concludes the check is noisy and stops reading it.
+
+  **Zero files walked is reported as `skipped`, not as a pass.** The guard returns three states — `ok`, `violations`, `skipped` — following the precedent of the launching-repo mutation guard ([#219](https://github.com/Digital-Process-Tools/claude-remember/issues/219)). An unreadable floor, or a walk that found nothing to walk, says so with a reason. An absence the checker produced, read as an absence in the world, is the defect class this repo keeps fixing; adding another instance of it while guarding against one would be a poor trade.
+
+  Tests were written first and run red (a `ModuleNotFoundError` at collection — the same shape as the defect). Fixtures are staged in `tmp_path` rather than committed, because a committed file containing a real violation would be found by the repository walk and fail the guard it exists to exercise. Teeth verified separately by planting `def _plant(x: str | None)` in `pipeline/` and watching the repo-wide test fail on it.
+
+### Changed
+
+- **`config()` read the merged config one process per key** ([#232](https://github.com/Digital-Process-Tools/claude-remember/issues/232)) — `post-tool-hook.sh` costs **20 external spawns per tool call**, down from 30 before [#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230), and six of the twenty were `jq`. Five of those six were `config()` asking one unchanging file one question at a time: `.timezone`, `.model` and `.reject_pattern` while `log.sh` is sourced, then `.cooldowns.save_seconds` and `.thresholds.delta_lines_trigger` in the hook. `save-session.sh` asks nine more. Measured with the PATH shim of `tests/spawn_counting.py` on macOS bash 3.2.57: **20 → 16**.
+
+  The merged config is now flattened **once**, while `log.sh` is sourced, into ordinary shell variables (`_RCFG_cooldowns_save_seconds=120`), and every `config()` call after that is a parameter expansion. It cannot be done lazily from inside `config()`: every caller writes `X=$(config …)`, and a command substitution is a subshell, so a table built there dies with the call that built it.
+
+  **Nothing is cached to disk**, and that is the point rather than an implementation detail. #230 declined to publish the merged config at a stable path because it can carry `haiku.oauth_token`, a live OAuth credential — which is why `lib-memory-dir.sh` creates that file `0600` before writing a byte, per PID, under an `EXIT` trap ([#68](https://github.com/Digital-Process-Tools/claude-remember/issues/68)). Collapsing reads must not take that trade through a different door, so `.haiku.*` is excluded from the flattened table outright: reading every key up front would otherwise leave the token in a shell variable in every process that sources `log.sh`, including the one that runs other people's scripts via `dispatch()`. `pipeline/haiku.py` reads it from the merged file in Python and no `config()` caller asks for it, so excluding it costs nothing.
+
+### Fixed
+
+- **The NDC commit is a rename again, and a failed one no longer moves the day marker** ([#242](https://github.com/Digital-Process-Tools/claude-remember/issues/242), [#243](https://github.com/Digital-Process-Tools/claude-remember/issues/243)) — [#142](https://github.com/Digital-Process-Tools/claude-remember/issues/142) replaced NDC's blind `: > now.md` with a partial truncate committed by `mv`, and its argument for why that is safe is one sentence: *"`mv`-over is atomic on the same filesystem."* Its own suggested fix wrote `"$MEMORY_FILE.tmp"`, beside the target, where that holds. The shipped code put the temp under `$TMPDIR` and kept the argument. Across filesystems `mv` is not `rename(2)` — it is copy-then-unlink, so `now.md` is destroyed and rewritten in place rather than swapped. The temp now lives beside `now.md` (`mktemp "${MEMORY_FILE}.ndc-XXXXXX"`), so the commit is a real rename and the atomicity the comment claims is the atomicity the code gets.
+
+  **Reproduced against a real second filesystem rather than argued.** A 20MB HFS+ RAM disk holding `REMEMBER_DIR` with `$TMPDIR` on the main volume, filled to ~16KB free, then line 605 verbatim against a 5.4MB tail. It is worse than the issue predicts: BSD `mv` does not leave the prefix the issue describes, it unlinks the partial destination — a 1MB `now.md` was **gone entirely**. GNU `mv` leaves the prefix instead. Neither is the old content or the new content, which is the only guarantee a memory file needs here.
+
+  **The `mv` result was never read, so the failure was also silent** (#243). `tail`'s result is checked carefully, with a whole `else` branch explaining why `now.md` is left untouched; the `mv` immediately after it had no such branch, and the block runs under `set +e`. Worse, `NDC_KEPT` is measured off the *temp file* before the `mv`, so the success line printed regardless. In the same reproduction the run stamped `tmp/now-day` forward from 2026-07-29 to 2026-07-30 and logged `kept 5400000b appended during compression` — for a `now.md` that no longer existed. Memory destroyed, log reads clean: the one class this file has been hardened against three times ([#142](https://github.com/Digital-Process-Tools/claude-remember/issues/142), [#225](https://github.com/Digital-Process-Tools/claude-remember/issues/225), [#235](https://github.com/Digital-Process-Tools/claude-remember/issues/235)). The commit's result now gates everything below it, and the day-marker block sits *inside* the success arm — so the marker cannot move before the bytes have. On failure `now.md` keeps every byte, the marker keeps its value, the temp is removed, and one ERROR line carries `mv`'s own stderr.
+
+  **How reachable, honestly.** On a stock macOS install, `$TMPDIR`, `/tmp` and `$HOME` are the same APFS volume (measured), so the cross-filesystem path is unreachable there. It is reachable with tmpfs `/tmp`, inside a container or devcontainer, on WSL with the project under `/mnt/c`, or with external `data_dir` on a separate volume on any platform. The frequency is not established; the mechanism is. **The #243 half needs none of it** — `ENOSPC`, `EPERM` or a read-only mount fails the `mv` on one filesystem too, and the day marker moved anyway.
+
+  **Nothing here is invented.** The repo already models sibling-temp + checked-`mv` + cleanup twice — `lib-env-cache.sh` (commented *"Rename, so no reader ever parses a partial file"*) and `post-tool-hook.sh`'s `capture-alive` write. The commit was the one call site that had not adopted it. Two consequences worth noting: same-directory moves `ENOSPC` one step earlier into the `tail` step, whose failure arm already does the right thing ([#173](https://github.com/Digital-Process-Tools/claude-remember/issues/173)); and a crash between `mktemp` and `mv` now leaves a stray beside `now.md`, swept at the top of the next round under the lock already held. The stray is inert meanwhile — the name deliberately does not end in `.md`, so neither `today-*.md` globbing nor session-start injection can see it. `set +e` is untouched: the subshell is backgrounded and holds `LOCK_DIR`, so killing it on a non-zero would skip `lock_release` and leak the lock to every other save on the machine — strictly worse than the failure it would react to.
+
+- **An unreadable `config.json` produced no diagnostic anywhere** ([#232](https://github.com/Digital-Process-Tools/claude-remember/issues/232)) — every `config()` read was `jq … 2>/dev/null`, so a merged config that did not parse turned into an empty value, and an empty value turned into the caller's built-in default. Every key, silently: the save cooldown, the delta threshold, the model. A silent degraded read in the hook that decides whether memory gets captured at all.
+
+  The value is unchanged — the built-in default is still the right answer — but it is now **reported once**, on stderr, naming the file. Two things are deliberately *not* reported, because a warning that fires on healthy configs is a warning nobody reads: a config file that is simply absent (a fresh install; every key is legitimately missing), and a valid config whose *shape* the one-pass reader declines to flatten. Those two must not collapse into "the read failed" either — a key that is not there and a read that did not happen produce the same value and are not the same event, so the reader tracks them as separate states and only ever answers from the flattened table in the state where the table is authoritative.
+
+  The reader refuses rather than guesses in three cases, falling back to the pre-#232 per-key reads (slower, and right): a config key outside `[A-Za-z0-9_]`; two keys that would flatten to the same variable name (`a.b` and `a_b`, where one would return the other's value); and a value containing a tab or a newline, which the flattened line protocol would truncate — `reject_pattern` is a user-supplied regex.
+
+  Found while writing it: `jq`'s `paths(f)` keeps a path when `f`'s **output** is truthy, so `paths(scalars)` silently drops every `false` in the file. That is [#159](https://github.com/Digital-Process-Tools/claude-remember/issues/159) exactly — documented booleans that could never be switched off — arriving inside its own fix. Caught by a test written before the code; the flattener asks for the type instead.
+
+- **`POST_TOOL_SPAWN_BUDGET` had zero slack against its own measurement** — #230 recorded 17 spawns and set the budget to 20. Re-measured with the shared counted-command list [#233](https://github.com/Digital-Process-Tools/claude-remember/pull/233) put both budget tests on, the real number was **20**: the note left out the two `mkdir -p` calls and the `git rev-parse` a non-git `PROJECT_DIR` still pays. The next spawn anyone added would have tripped a budget presented as having three to spare. The measured number and the slack are now stated separately.
+
+- **Consolidation read `today-*.md` outside the lock that owns it** ([#235](https://github.com/Digital-Process-Tools/claude-remember/issues/235)) — [#234](https://github.com/Digital-Process-Tools/claude-remember/pull/234) gave the staging files their own lock and held it around the two operations that *write* them: the NDC append, and consolidation's retire loop. Consolidation's **read** stayed outside, because closing it naively means holding the lock across the Haiku call, and a critical section containing a model call is exactly what produced [#142](https://github.com/Digital-Process-Tools/claude-remember/issues/142).
+
+  **The issue's own framing of the cost was wrong, and measuring it changed the wording rather than the answer.** It predicted a summary torn in half: part consumed into `recent.md`, the remainder kept as the tail and re-consumed later. That is not reachable. `staging_append` writes the summary with a single `cat`, and a concurrent reader of a regular file never observes a partial `write()` — 97,827 reads against a 3,000-record appender produced **zero** torn reads.
+
+  What *is* reachable, on **93%** of those reads, is the other intermediate state. `staging_append` is two operations — `echo "" >>` for the separator, then `cat >>` for the summary — which is precisely why #234 put it in a critical section. A reader landing between them consumes the separator and not the entry it separates. So the span retired into `.done.md` ends with a blank line whose summary is not there, and the summary is consolidated on a later round under a later timestamp: attributed to the day it was re-consumed rather than the day it was written, with nothing to say so. Smaller than the issue claimed, same class of harm, and still a half-applied append being read as a whole one.
+
+  **The fix ends the critical section at a process boundary instead of widening it past the model call** — [#224](https://github.com/Digital-Process-Tools/claude-remember/pull/224)'s shape, one file over. `run-consolidation.sh` takes staging.lock, calls a new `pipeline.shell consolidate-snapshot` that copies the eligible files, releases the lock, and only then runs the Haiku round against the copies. The eligibility predicate (`_eligible_staging`) is shared by both steps, so they cannot disagree about which day is today; the retire step is still told the **real** paths, and the consumed-byte count is still measured from raw bytes, so the non-UTF-8 handling from #225 is unaffected.
+
+  The issue offered "snapshot" and "read under the lock, model call outside" as two options. **In this layout they are the same change.** The lock lives in bash (`lib-lock.sh`) and the read lives in the same Python process as the model call, so ending the critical section before that call requires the read to end at a process boundary and the bytes to cross it on disk — and a file of bytes taken under a lock *is* a snapshot. There was one option, not two, and the copy's cost belongs to it either way. The third option, accept-and-document, was declined: the artifact is silent, a reader of `recent.md` has no way to detect it, and the fix costs one `cp` of a few kilobytes.
+
+  **Cleanup**, which the snapshot owes: the directory is `${REMEMBER_DIR}/tmp/consolidate-snapshot-XXXXXX`, created and removed by `run-consolidation.sh`'s existing `EXIT` trap on every path including both new failure exits, and swept on the next run — which is safe precisely because `consolidation.lock` is held for the whole script, so no second consolidation can own one. A `SIGKILL` leaves a directory holding a copy of bytes that also still exist in staging, so the sweep is tidiness, not recovery.
+
+  **Losing this wait is the cheapest lost wait in the codebase**: nothing has been read, so staging, `recent.md` and `archive.md` are all exactly as they were and the next run consolidates the same span with no duplicate at all — strictly better than the retire loop's lost-wait branch, which has already rewritten memory and leaves a duplicate for the merge prompt to dedupe. It is logged, for the same reason every other skip here is: a consolidation that silently did nothing is indistinguishable from one that never fired.
+
+- **`today-*.md` was written under one lock and retired under another** ([#225](https://github.com/Digital-Process-Tools/claude-remember/issues/225)) — `save-session.sh`'s NDC step appends a compressed day summary to `today-<day>.md` under **save.lock**; `run-consolidation.sh` reads that same file, calls Haiku, and renames it to `.done.md` under **consolidation.lock**. Each lock is sound on its own ([#182](https://github.com/Digital-Process-Tools/claude-remember/issues/182)). Holding one said nothing about the other.
+
+  The consumed-byte count added for the staging rename closes the *wide* window — the 180s Haiku call — by keeping whatever was appended past the offset it recorded. It does not close the retire loop itself. `wc -c`, `head`, `tail` and `mv` are four separate operations, and an NDC append landing among them goes into the inode about to become `.done.md`. Nothing globs `.done.md` again and session start never injects it, so the entry is written to disk and then unreachable, with no log line: [#142](https://github.com/Digital-Process-Tools/claude-remember/issues/142)'s signature in milliseconds instead of minutes, one file over.
+
+  Reachable, and not only across midnight in the abstract: `$NDC_DAY` comes from `tmp/now-day`, the [#141](https://github.com/Digital-Process-Tools/claude-remember/issues/141) marker recording which day now.md's content is from, so a session that crosses midnight compresses into `today-<yesterday>.md` — exactly the file consolidation considers eligible, since it excludes only *today's*. Reproduced against the shipped scripts with a real second process and a one-shot sync point on the retire loop's byte count: the appended entry ends up inside `today-2026-07-24.done.md` and nowhere else.
+
+  The fix is **a third lock, not one of the two that exist**. `scripts/lib-staging-lock.sh` owns `today-*.md` and is held by exactly two critical sections: the NDC append, and the retire loop. Consolidating onto save.lock was the obvious move and is the wrong one — `save-session.sh` holds save.lock across its own summarize call ([#226](https://github.com/Digital-Process-Tools/claude-remember/issues/226)), so consolidation's rename would have queued behind a model call, and a critical section containing a model call is how #142 happened. An ordering discipline over the two existing locks was the other option, and it holds only while every path obeys it; a path that does not is invisible until it deadlocks. Here **no path holds this lock while acquiring another, and none acquires it while holding save.lock** — there is no lock order to get wrong, which is also what keeps a dedicated now.md lock ([#173](https://github.com/Digital-Process-Tools/claude-remember/pull/173)) compatible rather than deadlock-prone.
+
+  Losing the wait is safe and logged on both sides, and both choices go the same way #142 and #223 went — a visible duplicate over an invisible erasure. The NDC round skips the append **and therefore the truncate**, so now.md keeps every byte and the next round re-summarizes the span with no duplicate at all; that is strictly better than the existing commit-skip, which appends first and duplicates. Consolidation leaves staging in place, so the next run re-consolidates a span already in recent.md and the merge prompt dedupes it.
+
+  `REMEMBER_STAGING_LOCK_TIMEOUT` defaults to **10s**, and unlike the 30s in #226 that number was measured rather than reasoned: polling the lock directory at 1ms while the real scripts run, the append holds it ~30ms and the retire loop ~200ms for a three-file backlog — ~65ms per file, fork cost rather than I/O. The longest hold scales with the backlog, so 10s covers ~150 staging files, and a backlog past that degrades to "retired next run", not to loss.
+- **`PostToolUse` spawned 30 processes on every tool call** ([#230](https://github.com/Digital-Process-Tools/claude-remember/issues/230)) — #227 fixed the prompt hook and said in the same breath that `post-tool-hook.sh` pays the same resolution prefix, on a hook that fires per *tool call* rather than per human message: hundreds of times a session, thousands in an agentic run. Nobody had counted it, so the first thing here was a count, not a fix. With a PATH shim that records every execution — the method #227 used, because wall clock is what differs between platforms and spawn count is what causes it — **30 external processes per tool call on macOS bash 3.2.57**.
+
+  Ten of them were doing nothing. **30 → 17**, and 16 in a real git checkout, with no caching added anywhere:
+
+  - `_resolve_memory_project_dir` forked `git rev-parse --path-format=absolute` (~200ms on the Windows ARM64 box in #227) purely to ask whether `PROJECT_DIR` is a linked worktree. A linked worktree's `.git` is a *file*; a main checkout's is a *directory*. So `[ -d "$proj/.git" ]` settles the common case with a builtin. Only the **positive** answer — the *absence* of `.git` proves nothing, because a subdirectory of a worktree has no `.git` entry and still needs the redirect ([#56](https://github.com/Digital-Process-Tools/claude-remember/issues/56)), so everything that is not a confirmed main checkout falls through to the unchanged `git` call. All three cases are pinned by tests, including that `git` *is* still run for a real worktree.
+  - `bootstrap-dirs.sh`, `log.sh` and `post-tool-hook.sh` ran `mkdir -p` unconditionally on directories that exist on every run after the first — three processes to change nothing. Gated on `[ -d ]`; the `mkdir`, and the `FATAL` when it fails, still run when the directory is genuinely absent.
+  - `dispatch()` forked `id -u` before its loop. The distribution ships every `hooks.d/<event>/` directory containing nothing but a `.gitkeep`, so the loop finds nothing executable and the uid was computed to compare against nobody. Resolved on first use instead.
+  - Four `dirname` forks (three in the hook, one in `detect-tools.sh`), `basename`, `tr -d ' '` and two `cat`s replaced by parameter expansion, arithmetic and `read` — the patterns `log.sh` and `user-prompt-hook.sh` already use. `session-start-hook.sh` got the same `dirname` treatment; it runs once per session rather than per tool call, so it is not the hot path, but it is still a startup cost the user waits on.
+
+  **The merged config is deliberately not cached, and that is the interesting half of this.** `post-tool-hook.sh` needs `config()` for its cooldown and delta threshold, so `lib-env-cache.sh` cannot serve it as-is — it replays paths, and `config()` needs the merged `config.json` itself, which today lives at `${TMPDIR}/remember-config-$$.json`, per-process, with an `EXIT` trap that removes it. Publishing it at a *stable* path instead would put a file that can contain `haiku.oauth_token` — a live OAuth credential — at a predictable location with no owner and no lifetime, on a hook that fires hundreds of times a session. `lib-env-cache.sh` holds paths; that is a different risk, and it is not one to take for the five remaining `jq` reads without measuring them first. `PostToolUse` is the **write path** — it is how memory gets captured at all — and a cheap hook that captures nothing is strictly worse than a slow one that works. The remainder is filed rather than guessed at.
+
+  `tests/test_post_tool_hook_spawns.py` asserts the budget next to every post-condition it could have been bought with: the #200 wiring marker, the #206 per-session `capture-alive` marker, the save fork actually firing past the threshold, the configured threshold still being read, and all three worktree answers.
+
+## [0.10.0] — Nothing was counting
+
+### Fixed
+
+- **The prompt hook spawned 27 processes to print a timestamp, and the user waited for all of them** ([#227](https://github.com/Digital-Process-Tools/claude-remember/issues/227)) — `scripts/user-prompt-hook.sh` sourced `resolve-paths.sh` → `bootstrap-dirs.sh` → `log.sh` on every prompt submission to emit one line, `[HH:MM TZ — username]`. That chain runs `git rev-parse --path-format=absolute`, a session slug, a three-layer `config.json` merge, `date` twice and `whoami`: **19 external processes on macOS, 27 on Windows 11 ARM64 under QEMU**.
+
+  @MargeryOlethea measured what that costs where processes are not cheap — 256 `UserPromptSubmit` records across 50 sessions and 5.7 days: **p50 8718ms, max 30003ms, 6 outright timeouts**, roughly 37 minutes of blocked typing. Claude Code calls >2s slow for a per-prompt hook, so this was ~4x over, and the report isolated it properly: cumulative cost through `resolve-paths.sh` 1862ms, `+bootstrap-dirs.sh` 8372ms, `+log.sh` 12584ms, with per-spawn costs of `whoami` 716ms and `date` 813ms explaining the rest. It also ruled out its own most obvious suspect with data — installing `jq` moved the median 3784ms → 3401ms, noise — which is most of why this fix went where it did instead of into the config-merge fallback. The diagnosis here is theirs.
+
+  Two things changed, and the shape of both was decided by what must *not* change.
+
+  `_remember_date` moved into a new `scripts/lib-clock.sh` and now uses bash's `printf '%(FMT)T'` builtin — no process — falling back to `date`. Not "falling back": stock macOS ships bash **3.2.57**, where that builtin does not exist, so `date` is the only path on the maintainer's own machine and on the #204 reporter's. A builtin-only rewrite prints a literal `%(%H:%M %Z)T` there. The two are held byte-identical by a test that runs both and compares, and `REMEMBER_NO_PRINTF_T=1` forces the `date` path so CI on bash 5 still exercises the bash 3.2 one. Formats the builtin is not trusted with (`%-I`, `%s` — GNU *date* extensions, used by `save-session.sh` and `post-tool-hook.sh`) are routed to `date` by a glob test that costs nothing.
+
+  One cost of that is not obvious and is worth writing down: **a builtin is not on PATH**, so faking time by putting a `date` in front of PATH — the obvious way to test anything time-dependent in a shell pipeline, and how `tests/test_ndc_day_boundary.py` fakes midnight — stops intercepting anything on bash >= 4.2. The fake is not refused, it is *ignored*, so the test asserts against the real clock and passes on macOS bash 3.2 while failing everywhere else. The shared test env builder now sets `REMEMBER_NO_PRINTF_T=1`, and a lint fails if a test shims `date` without naming it.
+
+  The paths went the other way. `user-prompt-hook.sh` needs exactly two facts — `REMEMBER_DIR` for the #200 capture-gap notice, and `REMEMBER_TZ` for the timestamp — and neither can change while the config files that produce them do not. So the hook that already paid for the resolution writes it down (`scripts/lib-env-cache.sh`) and the next one replays it. What it explicitly is **not** is a second resolver: [#158](https://github.com/Digital-Process-Tools/claude-remember/issues/158) is the scar from a hook that re-derived `REMEMBER_DIR` its own way and resolved a *different* store than every other one, which is split-brain memory rather than a clean failure. This file computes nothing. It validates and declines, and every check is a shell builtin — `[ -f ]`, `[ -O ]`, `[ -nt ]`, `read` — because a validation step that forked would spend the savings it exists to protect.
+
+  It declines a cache that is not a regular file it owns, that contains any line it does not recognise, that was written for a different project / plugin root / `HOME`, or that is not newer than all three `config.json` layers. So editing config still takes effect on the next prompt, exactly as it did when every hook re-read it; `-nt` against an absent layer is true, which is the right answer, and creating that layer makes it newer than the cache. `hooks.d/after_user_prompt/` existing also declines it, since a listener there is the one thing on this path that needs `log.sh`'s `dispatch()` — the distribution ships no such directory, so that dispatch was already a no-op for everyone. `SessionStart` republishes unconditionally, which bounds staleness of anything the cache cannot detect (a project that becomes a linked git worktree) to one session. `REMEMBER_ENV_CACHE=0` turns the whole thing off.
+
+  Result: **19 spawns → 1 on bash 3.2, 0 on bash 4.2+**, measured the way the report measured it, with a PATH shim that records every execution. The first prompt in a project still pays the full chain once.
+
+  Why this hook and not the others: on `UserPromptSubmit` a non-zero exit does not merely error, it **blocks the prompt and erases what the user typed**. The `_JSON`-built-before-printing dance and the unconditional `exit 0` are unchanged, and the guard that used to live in `resolve-paths.sh` for the nested summarizer ([#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204)) is now checked before the fast path, because the fast path no longer reaches that file. Every process this hook does not start is an opportunity to fail that it does not take — six of those 256 runs took the whole prompt down.
+
+  `post-tool-hook.sh` pays the same prefix on **every tool call** and is not addressed here; the report flags it as worth its own measurement, and it is filed separately.
+
+- **Nothing bounded how many nested summarizers could exist** ([#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204)) — the two defences that keep the nested `claude -p` from re-entering this plugin both depend on a signal *arriving*, and neither is under our control at the moment it is needed. `--setting-sources ''` ([#202](https://github.com/Digital-Process-Tools/claude-remember/issues/202)) is defeated by a CLI that rejects the flag, because `call_haiku` then **fails open** — deliberately, since the alternative is no saves ever again — and retries with the user's hooks live. `REMEMBER_NESTED_SUMMARIZER` ([#205](https://github.com/Digital-Process-Tools/claude-remember/issues/205)) is an environment variable, and a host that redacts env into spawned hook subprocesses erases it; this repo already has that precedent in [#131](https://github.com/Digital-Process-Tools/claude-remember/issues/131), where `CLAUDE_CODE_OAUTH_TOKEN` went missing exactly that way.
+
+  When both fail there was no third thing. The save lock makes saves in one store take turns but never limits how many take a turn; the 120s cooldown is bypassed by `--force`, which is how `session-start-hook.sh` recovers a missed session. So a summarizer whose own hooks fire can start a save that spawns a summarizer, and that is unbounded in two independent shapes: **nested**, where each call waits inside its parent, and **serialized**, where each detached save starts the next and no two ever run at once. @ehutchinsonSFDC reported the result on 0.9.0 — ~19 live `claude` processes, four of them summarizers, and +7 new summarizer transcripts during an eight-second idle with no tool calls.
+
+  The bound now lives in the process that does the spawning, recorded on the filesystem, keyed off nothing but `HOME` (`pipeline/spawn_guard.py`). A parent cannot fail to hand it over, because it never hands anything over — the child reads the same directory. Two caps, one per shape: **`REMEMBER_MAX_CONCURRENT_SUMMARIZERS`** (default 4) catches nesting, since a nested summarizer runs inside its parent's still-live claim and therefore shows up as concurrency; **`REMEMBER_MAX_SUMMARIZERS_PER_MIN`** (default 12) catches the serialized chain, which concurrency cannot see. Neither default can be reached by ordinary use: a store saves at most once per cooldown, so 12/min leaves room for roughly two dozen concurrently active projects, and 4 is deliberately not 1 because several projects summarizing at once is normal and must not be refused.
+
+  **The observable symptom of a cap firing is the word `DECLINED` in `<REMEMBER_DIR>/logs/memory-YYYY-MM-DD.log`**, with the count, the limit and the variable that raises it. That is a third state, not a quieter version of success: `pipeline.shell` exits `3` for it, and `save-session.sh` / `run-consolidation.sh` act on that code specifically. The distinction is load-bearing — `record_summary_failure` counts failures against a span and drops it past `thresholds.max_summary_failures` ([#147](https://github.com/Digital-Process-Tools/claude-remember/issues/147)), so booking a working cap as a failure would destroy the span the cap protected. A declined save keeps its span and its position and is summarized on a later run.
+
+  The guard itself fails open, and says so: if it cannot use its runtime directory the spawn proceeds with a logged warning that it is `UNBOUNDED`, because turning an unwritable directory into a permanent save outage is the #204 trap in new clothes. A killed summarizer does not wedge anything either — its record is retired by pid liveness immediately, and by staleness (`timeout + 60s`) where a pid cannot be probed, which is the Windows path.
+
+  Also closed while here: `_child_env()` was stripping `CLAUDECODE`, `CLAUDE_JOB_DIR` and the `CLAUDE_CODE_*` family, but **not `CLAUDE_PROJECT_DIR`** — which carries neither marker's prefix, and which #204's report and `resolve-paths.sh`'s own comments both describe the child as lacking. Claude Code 2.1.219 overwrites it from the sandbox cwd, so the leak was inert there and is not the mechanism behind any report; a CLI that honoured the inherited value would aim the summarizer's hooks at the real project, which is the failure that was reported.
+
+  `tests/test_spawn_containment.py` reproduces the recursion for real rather than stubbing it: a stand-in `claude` re-enters `call_haiku` in a child launched with `env -i`, keeping only `PATH` and `HOME`, so the env marker and every `CLAUDE*` variable are absent by construction — the reported condition. Before the fix that recursion ran 25 deep in eight seconds and was stopped only by the harness's own ceiling.
+
+- **NDC's partial-truncate commit ran after the save lock was released, so a concurrent append could still be erased** ([#223](https://github.com/Digital-Process-Tools/claude-remember/issues/223)) — [#142](https://github.com/Digital-Process-Tools/claude-remember/issues/142) replaced NDC's blind `: > now.md` with a partial truncate that keeps everything past the offset the file had when compression started. That closed the 180-second window. It did not close the commit itself: `tail -c +N` into a temp file and `mv` it back both run inside the subshell backgrounded at the end of `save-session.sh`, and the parent's `trap cleanup EXIT` released the lock and exited long before either ran. So `tail` could read to EOF, another save could acquire the lock and append — entitled to, since nothing was held there — and `mv` would then install a copy predating that append. The same erasure as #142, with the position already advanced and nothing logged, in a window of milliseconds instead of minutes.
+
+  The commit now re-acquires the save lock around the whole read-and-replace. Two things are decided rather than assumed. **The wait is bounded, not the parent's timeout 0**: the parent releases this very lock a handful of instructions after backgrounding the subshell, so with 0 the first contender lost to is one's own parent whenever the Haiku call returns quickly — every such round would skip and duplicate its span. A bounded wait cannot deadlock (`lock_acquire` spins to a deadline and returns 1) and costs nothing, because nothing waits on this subshell; it defaults to 30s and is overridable with `REMEMBER_NDC_COMMIT_LOCK_TIMEOUT`. **The size is re-read under the lock**: the offset stays valid as the *start* of the kept range regardless of what happened during the call, but only while `now.md` still has that many bytes — a file that shrank underneath it (a rotation, or an earlier round that committed its own tail first) is not the file the offset describes, and tailing past its end yields nothing, or a fragment cut mid-line, that `mv` would install over live content. Losing either check leaves `now.md` untouched and says so in the log, landing in the same safe state as the tail-failure branch: a possible duplicate summary in `today-*.md`, no data loss. On the contended path that duplicate is routine rather than exceptional, and the log line says so.
+
+  Re-acquiring cannot take a lock away from a live save: a steal needs a dead pid and adoption needs no pid at all, so losing the wait means someone genuinely holds it. `tests/test_ndc_commit_lock.py` pins the window by widening it — a `tail` shim that delays between the read and the `mv` while a second process takes the lock the way any save takes it and appends one entry. Before the fix that entry is erased outright; the same suite covers the contended-skip and stale-offset paths, which likewise destroyed or corrupted content beforehand.
+
+  Diagnosed by [@Jutiphan](https://github.com/Jutiphan) in [#173](https://github.com/Digital-Process-Tools/claude-remember/pull/173), as defect (b) of the three named there. That PR's own fix used `flock`, which does not exist on macOS; the `mkdir`-based primitive from [#182](https://github.com/Digital-Process-Tools/claude-remember/issues/182) is what made this portable.
+
+- **A session that never writes a handoff back silently destroyed the one waiting for the next human session** ([#221](https://github.com/Digital-Process-Tools/claude-remember/issues/221)) — `session-start-hook.sh` emitted `remember.md` and then truncated it, unconditionally, for every `SessionStart`. That is only correct if every session that starts will eventually call `/remember`. Plenty will not: a Claude Code scheduled task whose prompt is read-only and has no reason to know this plugin exists, a `claude -p` one-shot, a session abandoned before the handoff is written. Each of those passed through the project, consumed the note, and left a 0-byte file, with no warning anywhere that it had happened. The reporter caught it by lining a `session-start: PROJECT_DIR=…` log line up with their own cron fire time.
+
+  The report offered two directions and they are not equivalent. Detecting the non-interactive session and skipping the consume-clear for it requires a signal that does not exist — the plugin's own `REMEMBER_NESTED_SUMMARIZER` marker ([#202](https://github.com/Digital-Process-Tools/claude-remember/issues/202)/[#205](https://github.com/Digital-Process-Tools/claude-remember/issues/205)) is set by `pipeline/haiku.py` on the one child process this plugin spawns itself, and an arbitrary scheduled task sets nothing. Any detector would therefore be a guess about who is starting the session, and a guess that is wrong in the unsafe direction destroys data silently — which is the bug. So nothing is discarded until a replacement exists: `/remember` overwrites the same path, and the new content is what retires the old.
+
+  Preserving it is only half the fix. A handoff re-emitted forever, indistinguishable from a fresh one, is the same silent lie in different clothes — the reader acts a second time on a note they already acted on. A delivery record (`remember.delivered`: content fingerprint, first delivery, count) now sits beside the slot, and re-delivery of content that has already gone out is labelled out loud: *already delivered N times since ‹timestamp› — no new handoff has been written since, so this is pending replacement, not news.* The first delivery of any given handoff still reads as fresh, so the ordinary path is unchanged.
+
+  A third option was rejected as well: a guard conservative enough to preserve the handoff but never surface it again turns a visible loss into an invisible one. Re-delivering a labelled stale note is noisier than silence, and that is deliberate — the defect class here is the quiet lie, not the loud repetition. `tests/test_handoff_preservation.py` pins all of it: the pass-through session, the staleness label and its count, and — as characterization, passing before the fix and after it — that an ordinary session receives its handoff and a fresh one replaces it cleanly. `tests/test_path_resolution.py::TestEdgeCases::test_handoff_consumed_after_session_start` asserted the old destructive contract and is rewritten to the new one.
+
+  Reported by [@rubicon](https://github.com/rubicon).
+
+- **The launching-repo mutation guard failed the run when a *sibling* worktree moved, and blamed the suite for it** ([#219](https://github.com/Digital-Process-Tools/claude-remember/issues/219)) — `tests/conftest.py`'s session-scoped `_guard_launching_repo_is_not_mutated` fingerprinted four things, one of which, `git worktree list`, is repo-wide rather than worktree-local. The fixture brackets the whole run, so any commit or checkout in *any* worktree of the same clone during those ten minutes changed the string and failed the suite. Parallel worktrees are the normal working mode here — it is how more than one agent works this repo without colliding — so this fired for real, at the end of a full run, with all the work already done.
+
+  The accusation was the actual damage. The message asserted "Test suite mutated the repo it was launched from — this is the exact GIT_DIR-leak class of bug ... DO NOT ignore this", on evidence that supported no such conclusion: what the guard observed was "the clone's state changed", and what it reported was "*this suite* changed it, and here is the defect class". Someone believing it hunts for a leak that is not there; someone who has seen it cry wolf twice starts discounting the one guard standing between the suite and the 2026-07 incident it commemorates. A guard whose false positives are indistinguishable from its true positives has already lost the authority that makes it worth having.
+
+  Deleting the `worktrees=` line would have removed the false positive by removing coverage — an escaped test registering a pytest tmp dir as a live worktree is *precisely* what the original incident did — so the fingerprint is now structured rather than a blob of text, and the before/after pair is **classified** instead of merely compared. Three answers, not two, per the `ok` / finding / *cannot tell* contract: a change to bareness, this worktree's `HEAD`, its working-tree status, its top level, or its own entry in the worktree list is still a **finding**, still fails, and still carries the original `GIT_DIR`-leak wording verbatim; a change confined to *other* worktrees' HEADs is reported as concurrent activity and passes with a warning naming the worktrees that moved; and the worktree set itself gaining or losing an entry — which an escaped test and a human `git worktree add` produce identically — is **unattributable**, so the guard says exactly that and still fails, rather than picking the most alarming available explanation. Findings outrank both other verdicts, so a real mutation concurrent with sibling activity is still reported as a mutation. `tests/test_repo_mutation_guard.py` pins all three verdicts, and drives the fixture end-to-end in a throwaway clone in both directions: an inner test that commits into its own launching repo still fails the inner run with the `GIT_DIR`-leak message, and an inner test that only moves a sibling worktree passes it.
+
+### Documentation
+
+- **`docs/verification.md`** — the manual runbook for the `REMEMBER_OAUTH_TOKEN` fallback in `call_haiku` ([#197](https://github.com/Digital-Process-Tools/claude-remember/issues/197)). The condition this fallback exists for — the Claude Code desktop/Agent-SDK host redacting `CLAUDE_CODE_OAUTH_TOKEN` from a spawned subprocess — cannot occur in CI, so the only evidence it works was a manual run reported in a comment on [#179](https://github.com/Digital-Process-Tools/claude-remember/issues/179). This turns that into a repeatable procedure: confirming the negative precondition (the token really is absent from the child env, or the run proves nothing), the positive assertion, the negative/malformed-token case (source and length logged, never the value — [#184](https://github.com/Digital-Process-Tools/claude-remember/issues/184)), and what to record so a reader can judge how stale the last verification is. Linked from the `REMEMBER_OAUTH_TOKEN` / `haiku.oauth_token` rows in `README.md`.
+### Fixed
+
+- **`bootstrap-dirs.sh` leaked a shell error at every session start on an unwritable memory root** ([#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204)) — the secondary defect in #204, distinct from the nested-summarizer recursion the same issue reports. `mkdir -p "$REMEMBER_DIR/…" 2>/dev/null` is best-effort and its status was never checked, so the script walked on into file I/O against a directory it had no reason to believe existed. The reported trigger is a session opened at the filesystem root, where legacy mode makes `REMEMBER_DIR` `//.remember` on macOS's read-only root volume, but any unwritable project root does it.
+
+  The `2>/dev/null` on the `.gitignore` write did not hide the result, and this is the part worth keeping: **the shell opens a redirection target before it runs the command**, so the failure to open `$REMEMBER_DIR/.gitignore` is reported by the shell itself, outside the scope of the redirect being asked to silence it. The user saw `bootstrap-dirs.sh: line 101: //.remember/.gitignore: No such file or directory` surfaced as a non-blocking hook failure, once per session, forever. The write is now gated on the store actually existing, and the redirect wrapped in braces so the shell's own diagnostic falls inside the suppressed scope — which also closes the residual race where the store is removed between the check and the write, and where there is no directory test left to make.
+
+  Deliberately *not* changed: the `exit 127` that follows on such a root. With no writable store `log.sh` cannot be sourced, and `session-start-hook.sh` reports that with its own diagnostic rather than failing later on an undefined function — the documented degraded-env contract that tolerates `rc in (0, 127)`. Suppressing a bash-level leak is not a licence to suppress the plugin's deliberate reporting. The new `tests/test_bootstrap_readonly_root.py` asserts the leak is gone *and* that a writable project still gets `tmp/`, `logs/`, `logs/autonomous/`, its `.gitignore` and its context injection, because a bootstrap that quietly no-ops itself would be a far worse bug than the noise it fixed.
+
+  Reported by [@BlockX-P2P](https://github.com/BlockX-P2P), alongside the recursion analysis in the same issue. The recursion itself was already closed by [#202](https://github.com/Digital-Process-Tools/claude-remember/issues/202) and [#205](https://github.com/Digital-Process-Tools/claude-remember/issues/205); this is the part of the report that had not been picked up.
+
+## [0.9.0] — Mistaken for someone else
+
+Seven fixes, and four of them are the same question answered wrong: *whose is this?*
+
+The worst was the nested summarizer, which could not tell its own CLI's voice from the model's. A `UserPromptSubmit` hook that **blocks** does not make the call fail — the CLI writes its refusal to stdout, quotes the entire prompt back, reports `subtype: success`, and exits **0**. Nothing in the exit code, the status field or the usage figures separates that from an answer. Only the text does, and the guard reading that text was positive-only: accept if the envelope is present, else accept if an entry header is. Both are present, because the prompt embeds the staging files verbatim and prints the envelope in its own instructions. So a hook's refusal was written to `recent.md` as memory, and the next run quoted the poisoned file into a new prompt and nested one level deeper. The reporter reached 29,153 bytes and seven levels, with six days of real entries surviving only as quoted text.
+
+The general lesson is why it is documented rather than only patched: **a positive-only validity check cannot reject an echo of its own input**, because every signal it looks for is by construction present in that input. What separates a reply from an echo is not the content — the echo's content is real memory — but the *instructions*, which the model has no reason to reproduce.
+
+The other three mistaken identities were quieter. The capture-gap detector asked "was session X captured?" of a store that could only answer "which session most recently made a tool call" — so after `/clear`, which mints no new session id, it compared the current session against itself and warned that a perfectly healthy session had been lost. Every time, forever. `PostToolUse` inferred which session it was recording for from the newest transcript by mtime rather than from its own stdin, so two live sessions in one project could credit one's work to the other. And `/remember:doctor` inferred the project from nothing at all — `CLAUDE_PROJECT_DIR` reaches hooks but not the Bash tool that runs it — then reported a hard `FAIL` on a healthy install, while its own instructions told the reader never to contradict a `FAIL` line.
+
+The remaining three are about evidence rather than identity. NDC's failure path still carried the blind truncate that #142 removed from its success path, so a `tail` that errored erased the whole span unrecoverably and unlogged. The test harness printed an empty `stderr` on every failure, because these scripts redirect stderr into `hook-errors.log` — the message was always there, and never where anyone looked. And a warning that fires on every `/clear` trains you to stop reading it, which is how the one that matters gets skipped.
+
+Two things worth knowing about what ships. The hook isolation that closes the corruption uses `--setting-sources ''`, and it **fails open**: an older CLI rejects the flag outright, and excluding every setting source also excludes `apiKeyHelper` and the `env` block, which is how enterprise, Bedrock and proxy installs authenticate. Both resolve before the API is contacted and therefore cost nothing, so the call is retried once without isolation and says so loudly — because trading a corruption bug for a silent total outage is a worse deal, and this project has nearly made it before. The echo-rejecting guard holds either way; that is the whole argument for two layers rather than one good one. And the capture store gains an on-disk format, `tmp/capture-alive.d/`: the legacy single slot stays valid evidence, so the first run after upgrading behaves exactly as before instead of reading its own empty store as a fault.
+
+Thanks to [@kodown1k](https://github.com/kodown1k), who supplied the byte counts and nesting depth that made the recursion legible; [@Jutiphan](https://github.com/Jutiphan), whose diagnosis of the NDC truncate was correct even though its `flock`-based fix was not portable here; [@PedroHenriqueNS](https://github.com/PedroHenriqueNS), who found the doctor's false `FAIL`; [@ca-sringert](https://github.com/ca-sringert), whose independent reproduction proved the capture-gap defect was not `/clear`-specific; and [@BlockX-P2P](https://github.com/BlockX-P2P), who traced the nested summarizer scaffolding a memory directory in `$TMPDIR`.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133).
+
+### Fixed
+
+- **`post-tool-hook.sh` recorded tool calls against whichever session's transcript was touched last** ([#212](https://github.com/Digital-Process-Tools/claude-remember/issues/212)) — the hook derived the session it was recording for from the directory listing, `SESSION_ID=$(basename "$(ls -t "$SESSION_DIR"/*.jsonl | head -1)" .jsonl)`, and never read the `session_id` `PostToolUse` supplies on stdin. With two sessions live in one project, whichever transcript was written to most recently wins, so a tool call made by session A is recorded as A or as B depending on nothing more than which window typed last.
+
+  That was a transient inaccuracy for as long as `tmp/capture-alive` was a single last-write-wins slot: a wrong id there was overwritten by the next tool call and nothing read it as a durable claim. [#206](https://github.com/Digital-Process-Tools/claude-remember/issues/206) made the store per-session and membership-tested (`tmp/capture-alive.d/<session-id>`), which turns the same wrong id into a **persistent marker vouching for a session that did no work**. The direction that matters is the false negative: a marker written under B while A did the work makes the gap check believe B was captured, so if B's hooks really were dead the warning that exists to report exactly that — the one condition the user cannot otherwise detect — stays silent. [#211](https://github.com/Digital-Process-Tools/claude-remember/pull/211) weighted that check deliberately toward silence, which is right, and is precisely what makes the accuracy of its evidence load-bearing rather than incidental.
+
+  The id now comes from stdin, and — the part scoped out of #206 as a larger change than it called for — so does the transcript. `LATEST_JSONL` had two consumers and they were not asking the same question: the id wants "the session this invocation is for", while the line count is compared against `LAST_LINE`, which `pipeline.shell read-position` returns **keyed by that same id** (#140), and is then handed to `save-session.sh` as `$SESSION_ID`. Measuring one session's transcript against another's saved position is not a smaller error than the marker, it is the same error arriving differently: as a fork that re-summarizes a span for a session that did not grow, or as a session well over the threshold that silently never saves because a shorter transcript happened to be newer. Both uses now resolve from one place, `$SESSION_DIR/$STDIN_SESSION_ID.jsonl`, so they cannot disagree.
+
+  **It degrades rather than dying, in every direction stdin can fail.** Absent stdin, empty stdin, unparseable stdin, a payload with no `session_id`, an id that is not a safe path component, and an id naming a session with no transcript in this project all fall back to the mtime pick, unchanged — an older CLI or a different invocation path records exactly what it recorded before. Not caution for its own sake: a correctness fix that becomes a silent total outage is the [#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204)/[#129](https://github.com/Digital-Process-Tools/claude-remember/issues/129) shape twice over already, and misattributing a tool call is a strictly smaller harm than capturing nothing. Reading stdin at all is bounded for the same reason — this runs on *every* tool call, so a blocking read is a hung agent rather than a slow one: a tty stdin (hand invocation from a shell) is not read, and the read is capped by `read -t 1`, both pinned. The extracted id faces the same path-component guard the basename-derived id has always faced, applied at the point of entry rather than the point of use — stdin is not more trustworthy than a filename — and must additionally name a transcript that exists here before anything is done with it, which is what makes a deliberately narrow shell extractor safe in place of forking a JSON parser on every tool call. The hook consumes stdin, so the raw payload is re-exported as `REMEMBER_HOOK_STDIN` for `hooks.d/after_post_tool` scripts, which would otherwise find EOF where a payload used to be.
+
+  Rule, for anyone touching a hook that measures a transcript: **the session a hook was invoked for and the newest file in the session directory are two different facts, and only stdin knows the first.** Anything keyed by session id — the evidence marker, the saved position, the id handed to `save-session.sh` — must be derived from that id, not from a directory listing, which answers "who typed last".
+
+  Found while reviewing #211.
+
+- **Test harness failures printed an empty `stderr`, hiding the actual error** ([#210](https://github.com/Digital-Process-Tools/claude-remember/issues/210)) — `scripts/bootstrap-dirs.sh:112` redirects a driven script's stderr into `logs/hook-errors.log` once `REMEMBER_DIR` exists, so `result.stderr` for any subprocess these tests drive is *always* empty by construction, not just sometimes. The suite's common idiom, `assert result.returncode == 0, result.stderr`, therefore prints nothing on the one failure where it matters. This cost about an hour on [#208](https://github.com/Digital-Process-Tools/claude-remember/issues/208): two tests failed on every Ubuntu leg with `assert 127 == 0` and `stderr=''`, which reads as "command not found, silently" and sent the investigation toward `PATH` and the harness. The real line — `exec: command: not found`, naming Debian dash's refusal to `exec` a builtin outright — had been sitting in `hook-errors.log` the whole time.
+
+  Fixed with a shared helper, `tests/subprocess_helpers.py:subprocess_failure_detail(result, remember_dir)`, used in place of the bare `result.stderr` in every harness that drives `save-session.sh` and its siblings (`test_save_session_gates.py`, `test_ndc_truncate_race.py`, `test_ndc_tail_failure_no_truncate.py`, `test_ndc_reject_gate.py`, `test_capture_gap_notice.py`). It reports the return code, stdout, and the tail of `hook-errors.log` — truncated from the *end*, since the log accumulates across the whole run and only the most recent bytes belong to the failure just observed. On the `--dry` path the redirect in `bootstrap-dirs.sh` is never reached, so `hook-errors.log` does not exist at all; per [@fdavid](https://github.com/fdavid)'s follow-up, that absence is itself informative and is now reported explicitly (`no hook-errors.log at <path>`) rather than as another empty string. The helper never raises — an unreadable log or missing directory degrades to a string in the message rather than turning one clear assertion failure into a confusing one from inside the message-builder itself.
+
+- **`/remember:doctor` reported a hard FAIL on a healthy install** ([#207](https://github.com/Digital-Process-Tools/claude-remember/issues/207)) — `doctor.sh` runs through the Bash tool via `commands/doctor.md`, not as a hook. Claude Code exports `CLAUDE_PROJECT_DIR` to the three hooks; it does not export it to the Bash tool's environment. `resolve-paths.sh` then hit its "cannot guess" branch and fataled — correctly for the hooks, where a wrong guess would write memory into the wrong project, but wrongly for a read-only diagnostic, which reported `FAIL Path resolution failed` and `VERDICT: problem — capture cannot run` on installs where capture was working perfectly. `commands/doctor.md` tells the model to relay the output verbatim and to never contradict a `FAIL` line, so the false signal reached the user with the command's own instructions forbidding it from being questioned — the exact failure class the doctor exists to end (#144, #200), now coming from the doctor itself.
+
+  The header comment already documented a default — `CLAUDE_PROJECT_DIR   Project root (default: .)` — that was never implemented. Implementing it as a blind default in `resolve-paths.sh` was rejected: that file refuses to guess on purpose, and weakening the refusal for its real callers (the hooks) would trade a diagnostic false-positive for a capture-time silent miswrite, which is strictly worse. The default is instead scoped to `doctor.sh` alone, applied before `resolve-paths.sh` is sourced, and never touches `resolve-paths.sh` itself — pinned by a new `tests/test_resolve_paths.py`, which asserts the strict refusal (loud `exit 1` by default, `return 1` under `REMEMBER_PATHS_SOFT_FAIL=1`) is unchanged for every other caller.
+
+  A silent default would just be a quieter version of the same bug — the doctor confidently reporting on a directory nobody told it about, possibly not the project the operator meant. So the report says so: the `Paths` section prints `WARN CLAUDE_PROJECT_DIR was not set — assumed the current directory` instead of an `OK` line, naming the directory, and every `VERDICT` line carries the same disclosure inline rather than only above it, since that is the one line `commands/doctor.md` tells the operator to trust without re-deriving. Capture health itself is still evaluated against real evidence in the assumed directory, so a genuinely healthy install correctly reports `VERDICT: capture is working (CLAUDE_PROJECT_DIR was not set; this describes …, assumed from the current directory)` rather than either a false `FAIL` or a silent, confident `OK`.
+
+  Reported by [@PedroHenriqueNS](https://github.com/PedroHenriqueNS), whose reproduction and root-cause analysis (confirmed via `echo "[$CLAUDE_PROJECT_DIR]"` printing empty inside the Bash tool) were both correct; the suggested one-line default was taken as a starting point, not applied as-is, given the false-negative risk it would have introduced if placed in `resolve-paths.sh` instead of `doctor.sh`.
+
+- **The capture-gap warning fired on every `/clear`, and could not have done otherwise** ([#206](https://github.com/Digital-Process-Tools/claude-remember/issues/206)) — the [#200](https://github.com/Digital-Process-Tools/claude-remember/issues/200) check asks whether the previous session was captured by comparing `tmp/capture-alive` against the second-newest transcript. That assumes `SessionStart` means a new session id was minted. **`/clear` does not mint one**: it fires `SessionStart` with `source=clear` while the transcript, the session id and the `.jsonl` all stay the same, so the current session is still the newest file and `capture-alive` already holds the current id — because that session had been making tool calls for hours. The computed "previous session" is therefore a genuinely older one, the ids cannot match, and the warning is *structurally guaranteed* regardless of capture health. Same for `compact` and `fork` — every same-session `SessionStart` source. A user who clears context ten times a day was told ten times a day that memory was broken, while it worked perfectly.
+
+  The issue proposed reading `SessionStart`'s stdin JSON and running the check only for `source` in startup/resume. That was not taken, and the reason is the second reproduction. [@ca-sringert](https://github.com/ca-sringert) hit the same warning with no same-session restart involved at all: a short session that ended before crossing its own `delta_lines_trigger`/`save_seconds` thresholds, captured whole by the *next* session's recovery block — `save-session.sh`'s recovery path never touches `capture-alive`, only `post-tool-hook.sh` does — so the slot named an unrelated session while `last-save.json` recorded 72 of 72 lines saved. With the shipped thresholds that is the ordinary case for a short session, not an edge case. A `source` filter silences the loudest instance and leaves the store still unable to answer the question it is asked.
+
+  So the store changed shape rather than the trigger. `capture-alive` was one id, last-write-wins, which answers "which session most recently made a tool call" — a different question from "was session X captured", and one whose answer for X is destroyed by the next writer. It is now a per-session marker directory, `tmp/capture-alive.d/<session-id>`, membership-tested; the check accepts three independent sources as evidence, any one sufficing: the marker (PostToolUse ran for that session — written pre-throttle, so it means *wired*, not *saved*), the legacy single slot, and `last-save.json`'s per-session record via the same `session_was_saved` helper the recovery block above it already uses, hoisted so the two can no longer drift and tell the user opposite things about one session. A gap is also now reported once per session id rather than re-announced on every restart.
+
+  Weighed deliberately toward silence, because the two errors are not symmetric here. A warning that cries wolf has no second chance to be believed — and this repo keeps clearing that exact failure class — whereas a missed gap still has `/remember:doctor` behind it, and the content itself still has the recovery block directly above. The true positive is pinned rather than assumed: a previous session that ran tools and never once fired `PostToolUse` — the [#200](https://github.com/Digital-Process-Tools/claude-remember/issues/200) signature, hooks not registered — still warns, with the store populated by an older session so the test cannot pass by the machinery simply being broken. Upgrades are covered by the legacy slot staying valid evidence, so the first run after the upgrade behaves exactly as before rather than reading its own empty store as a fault. This also closes the known limit recorded under 0.8.9 — `capture-alive` being per project rather than per session, so two concurrent windows on one project could produce a spurious notice. Reported by [@fdavid](https://github.com/fdavid), with the independent reproduction of the storage defect by [@ca-sringert](https://github.com/ca-sringert), whose diagnosis named the fix that shipped.
+
+  Rule, for anyone touching a hook that reasons about "the previous session": **`SessionStart` firing does not mean a new session id exists.** `clear`, `compact` and `fork` all re-fire it for the session already running. Nothing may be inferred about session identity from the *fact* of a `SessionStart`, and no evidence about a past session may be stored in a slot a later session can overwrite.
+
+- **NDC's failure path truncated `now.md` — the exact bug its success path had already been fixed to avoid** ([#173](https://github.com/Digital-Process-Tools/claude-remember/issues/173)) — `now.md` is snapshotted before a Haiku call that can run 180s, and by the time it returns the parent has released the save lock and exited, so a newer save may have appended entries (#142). The success path keeps everything past the snapshot offset via `tail -c +N` for exactly that reason. But if `tail` itself failed — disk, permissions, a full `$TMPDIR` — the `else` arm fell back to `: > "$MEMORY_FILE"`: the same blind truncate #142 removed, reintroduced as the one error case where it erases the whole span, including anything appended after the snapshot, unrecoverably and unlogged. `now.md` is now left completely untouched on a `tail` failure, with an error logged. Cost: the span was already appended to `today-*.md` before the `tail` step runs, so leaving it in `now.md` too means the next NDC round can summarize it a second time — a duplicated entry. Rolling back the `today-*.md` append instead was considered and rejected: that file can itself receive concurrent appends during the same 180s window, and truncating it back to a byte count captured earlier would risk erasing exactly that concurrent write — the same #142 class of bug, moved one file over. A duplicated, visible summary beats an erased, silent one. Reported against `flock`-based locking in [#173](https://github.com/Digital-Process-Tools/claude-remember/issues/173) by [@Jutiphan](https://github.com/Jutiphan), whose diagnosis of the defect was correct; that PR's fix mechanism wasn't portable here (`lib-lock.sh` rejects `flock` — absent on macOS, no util-linux on the GitHub macOS runner, and a Python `fcntl.flock` workaround dies with its child process while the shell believes it still holds the lock), so the fix here is a straight patch of the existing `mv`-based lock primitive's blast radius rather than a rework of the locking itself.
+
+- **A blocked prompt was written into the permanent memory record, and quoted itself one level deeper on every run** ([#202](https://github.com/Digital-Process-Tools/claude-remember/issues/202)) — two defects, one corruption, and they had to meet.
+
+  The nested `claude -p` was sandboxed against MCP servers ([#94](https://github.com/Digital-Process-Tools/claude-remember/issues/94)) and against the parent's session identity ([#95](https://github.com/Digital-Process-Tools/claude-remember/issues/95)), but nothing isolated it from the user's **hooks**. A `UserPromptSubmit` hook that blocks does not make the call fail: the CLI writes its block message to stdout, quotes the whole prompt back under `Original prompt:`, reports `subtype: success`, and exits **0**. No exit code, status field or usage figure separates that from an answer — only the text does, and nothing was reading the text for that.
+
+  What read the text was `_is_valid_consolidation`, and it was positive-only: accept if `===RECENT===` is present, else accept if there is a `## HH:MM |` entry header. Both are in the block message. The headers because the prompt embeds the staging files verbatim; the delimiter because the template prints the envelope as part of its own output-format instructions. So the guard asked "does this look like memory?", got yes — correctly, since it *was* memory, quoted — and wrote a hook's refusal to `recent.md`. The next run quoted the poisoned file into a new prompt and it nested again. The reporter reached 29,153 bytes, 689 lines and 7 levels, with `archive.md` replaced by the literal `[archive.md content here]` placeholder out of the template and six days of real entries surviving only as quoted text.
+
+  The general lesson is why this is documented rather than only patched: **a positive-only validity check cannot reject an echo of its own input**, because every signal it looks for is by construction present in that input. Adding another positive pattern reproduces the bug with more steps. What separates a reply from an echo is not content — the echo's content is real memory — but the *instructions*, which the model has no reason to reproduce and an echo cannot avoid. That is what the guard tests now, deriving its markers from `prompts/consolidate-staging.prompt.txt` rather than restating them, so editing the prompt cannot silently retire the check. It fails toward rejection: a wrongly-skipped consolidation leaves staging and memory untouched for the next run, while a wrongly-accepted one takes the permanent record and retires the staging files behind it.
+
+  Hooks are now isolated the way MCP servers were, with `--setting-sources ''` — hooks are registered from settings files, so loading none of them registers none of them. Verified against claude-code 2.1.219 by installing a blocking `UserPromptSubmit` hook and watching the call return the model's reply instead of the hook's message.
+
+  That flag is also where this fix could have become worse than the bug. An older CLI does not have it, and commander exits non-zero on an unknown option, which becomes a `RuntimeError`, which means **no saves ever again** — the [#204](https://github.com/Digital-Process-Tools/claude-remember/issues/204) trap, a corruption bug traded for a silent total outage. Measuring rather than assuming turned up a second instance of the same shape on a *current* CLI: excluding every setting source also excludes `apiKeyHelper` and the `env` block, which is how enterprise, Bedrock and proxy installs authenticate, so those users would have got "Not logged in" and the identical permanent outage. Both failures resolve before the API is contacted and therefore cost nothing, so isolation **fails open**: the call is retried once without it, and the degradation is logged saying plainly that the nested call is running with the user's hooks live again. Only those two shapes retry — a rate limit or an overloaded upstream has already been billed, and retrying it would double the spend and hide the cause, which is the [#129](https://github.com/Digital-Process-Tools/claude-remember/issues/129)/[#190](https://github.com/Digital-Process-Tools/claude-remember/issues/190) shape.
+
+  That is the whole argument for two layers rather than one good one: the layer that someone else's CLI version or auth method can switch off must not be the layer holding the memory record. A third check sits at the boundary itself — `_parse_response` now rejects the CLI's own voice — because consolidation has its own guard and the save path does not, and a block message written to today's staging file as a session entry is how this reaches consolidation to begin with.
+
+  Reported by [@kodown1k](https://github.com/kodown1k), with the byte counts and the nesting depth that made the recursion legible.
+
+### Added
+
+- **[`docs/nested-model-output.md`](docs/nested-model-output.md)** — the rule the above is an instance of, written where a contributor changing `haiku.py` or `consolidate.py` will meet it and linked from the README's Architecture section: a validity check on nested-model output must be able to reject an echo of its own input. Covers why an echo arrives on stdout at all, why "does it look like memory" is satisfiable by quotation, which direction the guard has to fail in, and why hook isolation is allowed to degrade while the guards are not.
+
+## [0.8.9] — Silence, mistaken for success
+
+Two issues, both reported from outside the team, and they are the same bug wearing different clothes: something produced no signal, and the absence of a signal was read as a good one.
+
+`_lock_dir_age` was written as "try BSD, fall back to GNU" in one command substitution. The exit codes behaved; stdout did not, because GNU's `stat -f` prints a filesystem block before failing, and the capture concatenated it with the real answer. The digits guard rejected the mess and returned 0 — "fresh" — for a directory of any age, so no orphaned lock was ever adopted on Linux and the permanent save outage adoption exists to prevent was still live on what is probably most installs. The suite was green over it, because the test that covered adoption set the threshold to zero and passed *through* the broken age rather than exercising it.
+
+The other needed no bug at all. A plugin enabled part-way through a session has none of its hooks registered for the rest of it, so `PostToolUse` never fires, nothing is captured, and `hook-errors.log` stays empty — because nothing failed. The plugin worked exactly as designed and simply was not wired in. The reporter lost a day to it and found one `session-start` line as the only trace.
+
+Neither could be found by reading. The first took a reporter measuring `_lock_dir_age` on a directory of known age; the second took someone invoking the hook by hand to prove the pipeline was healthy end to end.
+
+Fixing them went the same way. Four review passes over the two fixes found four more defects, every one of them the fix failing in the shape of the thing it was fixing: a `noclobber` guard credited with closing a race it had nothing to do with; a gap check gated so that it could only catch a recurrence and never the incident it was written for; a diagnostic that answered a slug mismatch and a missing Python with "restart Claude Code", which fixes neither; and a notice whose `jq` could exit 2 and, on `UserPromptSubmit`, erase the user's prompt — a cosmetic warning able to destroy the thing it was warning about.
+
+What ships is therefore narrower than it looks and better documented than usual. Where a limit remains — `capture-alive` is per project, so concurrent sessions on one project can produce a spurious notice — it is written down rather than left to be found.
+
+Thanks to [@bonyohana](https://github.com/bonyohana) and [@fmanimashaun](https://github.com/fmanimashaun), both of whom did the diagnosis before filing.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133).
+
+### Added
+
+- **`/remember:doctor`** ([#200](https://github.com/Digital-Process-Tools/claude-remember/issues/200)) — resolved paths, detected tools, storage mode, whether the session directory Claude Code created matches the slug the plugin computes, the last successful save, and whether `PostToolUse` has ever fired for this project. `OK`/`WARN`/`FAIL` per line and a one-line verdict. The two silent failures it names outright are the slug mismatch of [#144](https://github.com/Digital-Process-Tools/claude-remember/issues/144) and hooks that were never registered.
+
+### Fixed
+
+- **`_lock_dir_age` always returned 0 on GNU/Linux, so no orphaned lock was ever adopted there** ([#198](https://github.com/Digital-Process-Tools/claude-remember/issues/198)) — the two `stat` probes shared one command substitution, and the failing one printed to stdout before exiting. They are captured separately now, GNU-native flag first so the noisy call is skipped on the more common platform. Reported by [@bonyohana](https://github.com/bonyohana), with the measurement that made it undeniable.
+- **An adopter killed mid-adoption wedged the lock permanently** ([#198](https://github.com/Digital-Process-Tools/claude-remember/issues/198)) — it left `adopt/` behind with no pid and no claim, so `_lock_try_steal` had nothing to judge and every later `_lock_try_adopt` failed at `mkdir`: the same silent, permanent outage adoption exists to answer, one level up. A marker that has sat untouched past the threshold is now cleared by rename and not recreated — a first cut that recreated it let an adopter which lost the clearing race displace the winner's fresh marker, at 4 double-wins in 40 rounds. Separately, the pid write is guarded with `noclobber`: that is not what closed the double-win, it is what stops an adopter from clobbering the pid a `_lock_try_steal` winner has just written, since the steal's rename leaves `pid` briefly absent and the adopter's entry guard reads that as "no holder".
+- **`grep -c` counted zero and failed at the same time** — `LINES=$(… | grep -c '^\[' || echo 0)` in `scripts/run-tests.sh` captured both branches and produced `"0\n0"`, the same stdout-contamination shape as the `stat` chain. Found by auditing for the reported defect's shape rather than its symptom; consequence was a garbled figure in one self-test log line.
+
+- **A plugin enabled mid-session captured nothing, and said nothing** ([#200](https://github.com/Digital-Process-Tools/claude-remember/issues/200)) — Claude Code reads hook registrations at session start, so a plugin enabled part-way through one has none of them wired for the rest of it. `PostToolUse` never fires, no memory is written, and `hook-errors.log` stays empty because nothing failed; the reporter lost a day to it and found a single `session-start` line as the only trace. It cannot be caught while it is happening: no env var, file or command exposes which hooks are registered — `/hooks` is a UI a script cannot invoke — and `SessionStart`'s `source` is only startup/resume/clear/compact/fork, so a plugin-enable is indistinguishable from a fresh start. Afterwards it is answerable, and that is what is now checked: was the previous session captured at all. `PostToolUse` records the session id it saw; the next `SessionStart` compares it against the previous session's id and, if that session used tools, leaves a notice delivered on the next prompt.
+
+Two things had to be got wrong first. The check was initially gated on having run before, so a fresh install would not be warned about a session predating it — which sounds right and removes the entire point, because during a mid-session enable no hook runs, no stamp is written, and the one incident this exists to report is precisely the case it stayed silent for. It could only ever have caught a recurrence. The gate is gone; a fresh install does see the notice once per project, and the wording covers both readings. And the comparison used mtimes until a test caught it calling a *healthy* session broken — bash 3.2's `-nt` resolves to the second, and a first tool call landing in the same second as the stamp read as "not newer". It compares identities now, which need no clock.
+
+Delivery is through `systemMessage`, the only hook output the human sees — `additionalContext` reaches the model alone, which is the shape of the original bug. That path builds its JSON with `jq`, and `jq`'s exit status must not become the hook's: left as the script's last command, a `jq` usage error exits 2, and on `UserPromptSubmit` exit 2 blocks the prompt *and erases what the user typed*. A cosmetic notice being able to destroy a prompt is far worse than the bug being fixed, so the JSON is built first and printed only if it was produced, with the hook always exiting 0.
+
+Known limits, none of them silent: `capture-alive` is per project rather than per session, so two concurrent Claude Code windows on one project can produce a spurious notice; and a notice is consumed by the next prompt in *any* session, so a session closed before its first prompt hands it to the following one. Reported by [@fmanimashaun](https://github.com/fmanimashaun).
+
+## [0.8.8] — Rules that only agreed by accident
+
+Eleven issues, and most of them are one shape: a rule written down in more than one place, where the copies happened to agree until they did not. The session-directory slug existed three times and none of the three truncated. The entry-header pattern existed twice and disagreed about 12-hour times. `save.lock` and `consolidation.lock` were two copies of an acquisition that handed the lock to several processes at once. A config option was documented, shipped, and read by nothing.
+
+The rest are failures that reported nothing: a refused compression and a timed-out call, both billed and both logged as costing zero; an OAuth token refused in silence; and eight mutations a green suite never noticed.
+
+None of these were reported by users. They came out of audits and out of adversarial review of the fixes themselves — six of seven review passes found a real defect, several of them in work that had already passed CI. Three things were found only by measuring rather than reading: an `iconv` fork on every non-ASCII path, a glob that matched almost everything because bash cannot hold a NUL in a string, and a locale-dependent range that only failed on CI.
+
+Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133).
+
+### Fixed
+
+- **A call that failed still cost money and reported nothing** ([#190](https://github.com/Digital-Process-Tools/claude-remember/issues/190)) — every accounting path hangs off a returned result, and a timeout or non-zero exit returns none, so a run where the model timed out repeatedly showed errors in the log and **zero** reported cost. It reads as "it failed for free"; a client-side timeout aborts a call the API has already been billing. Usage is now recovered from the JSON the CLI writes to stdout on failure when it carries any, and reported as explicitly *unknown* when it does not — because zero is a lie and unknown is not.
+- **Malformed UTF-8 in a path no longer disagrees with the decoder** ([#186](https://github.com/Digital-Process-Tools/claude-remember/issues/186)) — the sed byte table is exact for well-formed UTF-8 and gives one dash per byte for anything else, where the real decoder folds an ill-formed sequence into a single replacement character. macOS and Windows cannot produce such a path; Linux can, since every byte but `/` and NUL is a legal filename, so a legacy-encoded or corrupted directory name resolved to a slug Claude Code never created. Those paths are now handed to the decoder in `pipeline/slug.py`, and only where such a path can exist: the check runs on Linux, since macOS enforces well-formed UTF-8 and Windows paths come from UTF-16. Measured over 200 calls, an ASCII path pays nothing anywhere, a macOS or Windows user pays nothing at all, and the ~6.5ms of the `iconv` round trip falls only on a Linux user with a non-ASCII path. `REMEMBER_UTF8_STRICT=1` forces the check on regardless, so the behaviour stays testable off Linux. The high-byte detection runs under `LC_ALL=C`: on the macOS CI runners the same expression matched plain ASCII paths and forked `iconv` on every one, though a sweep of every locale installed on the development machine could not reproduce it under bash 3.2 — so the fix is empirically necessary and its mechanism is not confirmed.
+- **The two builders of the projects path are now known to agree** ([#194](https://github.com/Digital-Process-Tools/claude-remember/issues/194)) — `lib-slug.sh` hands bash a POSIX path and `extract.py` hands Python a native one, which on Windows are different strings. Identical strings is the wrong invariant, since each consumer needs the form its own runtime can open; the right one is that both name the same directory, and nobody had established it. A test creates the directory from the Python side and asks bash, through its own builder, to find it — on the Windows runner, where it is an answer rather than an argument.
+- **`CLAUDE_CONFIG_DIR` was not path-normalised, unlike `PROJECT_DIR`** ([#169](https://github.com/Digital-Process-Tools/claude-remember/issues/169)) — `claude_projects_dir()` concatenated `/projects` onto whatever the environment held, so on Windows a natively-expressed value produced `C:\Users\x\.claude-alt/projects/<slug>`, while `PROJECT_DIR` is deliberately converted before it is slugged. Whether MSYS resolved that anyway was never established: the issue was filed unverified for want of a Windows machine, and the one test that would have exercised it skips on `win32` in line with the repo's convention for bash-subprocess tests — so the path had **zero coverage on the only platform where it can fail**. The value is now converted with `cygpath -u` when available and stripped of trailing separators either way. The bash branch is tested on POSIX CI against a stub `cygpath` — the branch is Windows-only, the logic is not — along with the degenerate inputs (`/`, `///`, a lone `\`) that the trailing-separator strip would otherwise have promoted to the filesystem root. The bash fix itself still has no Windows-runner coverage; the Python half of the path, which needs no bash, is exercised there, and the remaining question of whether the two builders name the same directory on Windows is [#194](https://github.com/Digital-Process-Tools/claude-remember/issues/194).
+- **A documented option that did nothing, an undocumented one that did, and defaults that disagreed** ([#176](https://github.com/Digital-Process-Tools/claude-remember/issues/176)) — `debug` was in the README table and in `config.example.json` but passed to `config()` nowhere, so setting it had no effect at all; the real switch was the `REMEMBER_DEBUG` env var, which someone configuring the plugin through `config.json` has no obvious way to reach. It is wired up now, with the env var still winning and each script keeping its own default when neither is set — `save-session.sh` verbose, the git-backup hook quiet — because collapsing those into one shared default would have silently changed log volume for every existing install. The README claimed a single default of `1`, which the git-backup hook had always contradicted. `thresholds.consolidate_max_bytes`, `model` and `reject_pattern` were read by the code and missing from the config table (the last two documented only as env vars, though `config.json` is the source of truth), and `git_backup.remote` / `branch` / `gpg_sign` were documented but absent from `config.example.json`. New `tests/test_config_contract.py` compares all three sides — README table, example config, and what the code actually reads — in both directions, and drives the `debug` switch rather than just asserting the key is mentioned. It found `model` and `reject_pattern` on its own; the same class as [#159](https://github.com/Digital-Process-Tools/claude-remember/issues/159) had then happened three times.
+- **A refused NDC compression cost money and left no record of it** ([#180](https://github.com/Digital-Process-Tools/claude-remember/issues/180)) — `log_tokens` sat inside the success branch, so tokens spent on a call the model answered with a refusal or a clarification were never logged. A model that starts refusing compression therefore produced a run where memory stopped growing *and* reported cost fell to zero, which reads as "nothing happened" rather than "this failed repeatedly and was paid for" — the same invisibility class as [#178](https://github.com/Digital-Process-Tools/claude-remember/issues/178). The call is now accounted for before its verdict is read, because spending it is what already happened. The summarize path in Step 6 already logged before branching; checked while in there. This covers every outcome where a verdict came back — a call that fails outright (timeout, non-zero exit) reported no cost at the time, because `call_haiku` raises before any counts exist to log — closed by [#190](https://github.com/Digital-Process-Tools/claude-remember/issues/190) above, in this same release.
+- **The session-directory slug existed in three places, and none of them truncated** ([#157](https://github.com/Digital-Process-Tools/claude-remember/issues/157), [#158](https://github.com/Digital-Process-Tools/claude-remember/issues/158), [#174](https://github.com/Digital-Process-Tools/claude-remember/issues/174)) — every disagreement has the same consequence: the plugin computes a `~/.claude/projects/<slug>/` that Claude Code never created, finds no transcript, and saves nothing, in silence. **(a)** Past 200 characters Claude Code keeps the first 200 and appends a hash of the original path; nothing here truncated, so a project path deep enough to cross that — ordinary monorepo nesting under a long home directory — never saved at all. **(b)** `lib-memory-dir.sh` carried its own naive inline copy of the slug, the pre-[#144](https://github.com/Digital-Process-Tools/claude-remember/issues/144) implementation with every bug [#156](https://github.com/Digital-Process-Tools/claude-remember/issues/156) fixed, and it was live: `user-prompt-hook.sh` reaches that file without sourcing `detect-tools.sh`, so in external-storage mode (`{slug}` in `data_dir`) that one hook resolved a *different* `REMEMBER_DIR` than every other — split-brain memory rather than a clean failure. **(c)** `pipeline/extract.py` still used a codepoint regex, while Claude Code's has no `/u` flag and walks UTF-16 code units, so the two disagreed on astral characters: an emoji or an Extension-B kanji in the path broke the Python side only. The algorithm now lives in `pipeline/slug.py` (Python) and `scripts/lib-slug.sh` (shell, sourced by both `detect-tools.sh` and `lib-memory-dir.sh`), with the shell side calling the Python one for the over-long-path hash — and `tests/test_slug_parity.py` checks both against an independent transcription of the shipped CLI's function rather than against each other.
+- **A 12-hour header could reach memory that consolidation did not recognise as memory** ([#177](https://github.com/Digital-Process-Tools/claude-remember/issues/177)) — the entry-header pattern was written out twice: `save-session.sh` accepted `## 9:30 AM | main`, `pipeline/consolidate.py` accepted 24-hour only. They agreed in practice because the header is normally rewritten to 24h — except through the re-validation fallback added in [#139](https://github.com/Digital-Process-Tools/claude-remember/issues/139), which keeps the model's original line when a rewrite would malform it. An entry that reached memory that way read as prose to consolidation, so a consolidation containing only such entries was discarded as "purely conversational". The pattern now lives in `pipeline/entry_header.py`; the shell asks for it rather than restating it. Three more copies of rules went the same way: `run-tests.sh` built the session directory with an inline `sed` (safe only because `mktemp -d` yields ASCII), three test files each carried their own naive slug, and the cooldown tests leaned silently on the shipped `delta_lines_trigger` default — raising it failed them loudly, lowering it told nobody. New `tests/test_shared_rules.py` fails when a second definition appears, rather than after it has drifted.
+- **`save.lock` was not a lock** ([#182](https://github.com/Digital-Process-Tools/claude-remember/issues/182)) — acquisition was atomic (`set -o noclobber`), but *stale takeover* was not: a process that found a dead PID in the lock file simply overwrote it, and several processes finding the same dead PID each declared themselves the new holder. Measured on the old code at N=8: **40/40 rounds had more than one winner**; at N=2, 0/40 — which is why the previous fix shipped looking correct. New `scripts/lib-lock.sh` replaces it with one primitive used by every lock in the plugin: `mkdir` acquisition (one syscall, no check-then-act) and a takeover that renames the holder's `pid` file, so of N processes that judge a lock stale exactly one wins the rename and the rest go back to waiting. The lock directory is never removed during takeover — moving it aside leaves the path free for a moment, which is long enough for a third process's `mkdir` to succeed while the previous holder still believes it holds the lock. `save-session.sh` and `run-consolidation.sh` both use it, so the two copies of this rule become one ([#177](https://github.com/Digital-Process-Tools/claude-remember/issues/177)). Not `flock`: absent on macOS and on the GitHub macOS runner image. Upgrades are handled — a pre-#182 lock *file* is honoured while its holder is alive and removed once it is not, so the format change neither blocks saves forever nor hands out a second save alongside a running one. New `tests/test_lock_primitive.py` runs 40 rounds at N=2/4/8/10.
+- **Nothing saved when the host withholds `CLAUDE_CODE_OAUTH_TOKEN` from hook subprocesses** — keeping the token in `_CHILD_ENV_KEEP` ([#131](https://github.com/Digital-Process-Tools/claude-remember/issues/131)) only helps when it is in the environment to begin with. Some hosts (the Claude Code desktop / Agent SDK host, observed on Windows) redact `CLAUDE_CODE_OAUTH_TOKEN` from every spawned tool and hook process, so `os.environ` holds nothing for `_child_env` to keep and the nested `claude -p` is unauthenticated again — the same silent-save outage as [#129](https://github.com/Digital-Process-Tools/claude-remember/issues/129), on a machine where the operator *had* run `claude setup-token`. `call_haiku` now accepts an operator-configured fallback token — `REMEMBER_OAUTH_TOKEN`, or `haiku.oauth_token` in `config.json` — used **only** when the child env lacks a token (a host-provided one always wins). The value is shape-checked before use, and a malformed entry is refused *and reported in the daily log* (naming its source and length, never the value itself) rather than dropped in silence — a typo'd token used to be indistinguishable from an unset one, producing the same confusing 401 the fallback exists to prevent. A blank value means "not configured" and stays silent. The config lookup goes through the merged `REMEMBER_CONFIG` that `lib-memory-dir.sh` exports, so it cannot drift from the shell-side config resolution ([#177](https://github.com/Digital-Process-Tools/claude-remember/issues/177)). Consent-based and cross-platform: the operator hands the plugin a token deliberately; nothing is recovered from OS credential storage the platform withheld.
+
+## [0.8.7] — Everything that failed in silence
+
+Nine issues, one shape: memory not written, and nothing anywhere saying so. Six were reported by users who had already done the diagnosis — several arrived with a verified patch, the exact call sites, and in one case a correct prediction of which tests would break. Manifest bumped per [#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133).
+
+### Fixed
+
+- **Nothing ever saved when `CLAUDE_CONFIG_DIR` was set** ([#166](https://github.com/Digital-Process-Tools/claude-remember/issues/166)) — Claude Code relocates its whole config tree, `projects/` included, when `CLAUDE_CONFIG_DIR` is set, which people use to run a separate account per project. The plugin hardcoded `~/.claude`, so it listed a directory holding no current transcripts and the save pipeline no-oped in silence: the reporter had five days and ~2000 `PostToolUse` invocations with zero saves, an empty `logs/autonomous/`, and nothing anywhere suggesting a problem. The silent version is not the worst case — a stale transcript left in the default tree with more lines than `delta_lines_trigger` would have been summarized into memory as though it were the live session. All four sites now resolve through one helper rather than four copies of the path. The test suite leaked the same variable: sandboxes point `HOME` at a temp directory but never cleared `CLAUDE_CONFIG_DIR`, so a developer who exports it had the real value follow the code out of the fixture — invisible while the plugin ignored the variable, and exposed the moment it stopped. It is cleared for every test now. Reported, diagnosed, patched and test-triaged by [@samoilovartem](https://github.com/samoilovartem), who also predicted exactly which five tests would break.
+
+- **No boolean option set to `false` could be read at all** ([#159](https://github.com/Digital-Process-Tools/claude-remember/issues/159)) — `config()` asked jq for `$key // empty`, and jq's `//` treats `false` exactly like `null`. So any option explicitly set to `false` came back as its default, and the two shipped options that default to `true` — `features.ndc_compression` and `features.recovery`, both documented in the README — could not be switched off. Compression ran regardless; the only brake that worked was an undocumented pairing of `cooldowns.ndc_seconds` with a hand-written marker file. `config()` now maps a genuinely absent key to empty inside jq and returns everything else — which also keeps the literal string `"null"` readable, since `jq -r` prints the same bare word for that and for JSON null, and `save-session.sh` consults the compression flag it never read. Found while writing a test that had to defeat compression by hand because the documented switch did nothing — and the test harness itself had been setting `ndc_compression: false` for months while every compression test quietly relied on it being ignored.
+
+- **Work done late at night was filed under the next day** ([#141](https://github.com/Digital-Process-Tools/claude-remember/issues/141)) — NDC compression only fires on a save and carries an hour-long cooldown, so `now.md` routinely still holds the evening's entries when the first save after midnight arrives. The target filename was built from the date the run happened to fall on, so that evening's work landed at the top of the NEW day's `today-*.md` and downstream consolidation then attributed it to the wrong day. Entries carry `## HH:MM` and nothing else, so once `now.md` crosses midnight there is nothing in the content that says which day it came from — the day is now recorded when the file starts, and compression files by that. Recorded in `tmp/now-day`, beside `now.md` rather than inside it: a marker line would be the first thing session start injects into context and the first thing the summarizer reads, for a fact only the pipeline needs. The day is re-read when compression finishes rather than reused from the start of the run, because that run may itself have begun before midnight and the Haiku call can take three minutes — reusing it stamped bytes a newer save had just appended with a stale day belonging to neither. Two residuals remain, both deliberate and both needing a flush at the boundary rather than a stamp: an entry written after midnight but before the next compression is filed with the day it was appended to, and if two saves land inside one compression window on opposite sides of midnight they share a stamp. Each is bounded by the cooldown — far narrower than misfiling a whole evening, and closing it needs a flush at the boundary rather than a stamp. Reported by [@bonyohana](https://github.com/bonyohana).
+
+- **Rotated archive slices were preserved on disk and reachable by nothing** ([#124](https://github.com/Digital-Process-Tools/claude-remember/issues/124)) — when `archive.md` is the oversized bulk of a consolidation prompt, [#123](https://github.com/Digital-Process-Tools/claude-remember/issues/123) rotates it to `archive-YYYY-MM-DD.md` and starts a fresh one. The bytes survive, but no read path ever named the siblings, so that slice sat in cold storage no recall could reach — "no memory lost" was true mechanically and false in practice, and every further rotation froze another slice. Session start now lists the rotated files that exist — the newest ten by date and rotation number parsed from the name, with the glob given for any beyond that. Neither raw name nor mtime works: a second rotation the same day is `archive-DATE-2.md` and `-` sorts before `.`, so the later sibling sorts ahead of the base file by name — while mtime is destroyed by the git-backed store's own recovery path, since `git checkout` writes files in byte-lexicographic order and would hand that same sibling an earlier timestamp on every restore, since rotations accumulate for the life of a store and this prints on every session start — and the history hint names the pattern so it is clear they are greppable. Listed rather than loaded, deliberately: these files were rotated *because* they were too large for a prompt, so injecting them would rebuild the problem rotation exists to solve.
+
+- **A session opened in the home directory ate the user-global config, then leaked memory into project trees for days** ([#132](https://github.com/Digital-Process-Tools/claude-remember/issues/132)) — the one-shot legacy migration in `bootstrap-dirs.sh` treats a `.remember` beside the project as an old project store and moves it into the external location. Start a session with the working directory set to `$HOME` — opening Claude in the home folder for a quick question — and that `.remember` is the **user-global config home**, the one `lib-memory-dir.sh` reads to resolve `REMEMBER_DIR` at all. All three conditions held, so the whole directory went into the store, `config.json` with it: the config that directed the migration was consumed by it. Every later session in every project then found no user config, fell back to `data_dir=".remember"`, and wrote memory into the working tree while the central store and its git backup went stale — and it never re-fired to reveal itself, because the home-slug directory now existed. Only external-mode users could hit it, which is to say precisely the users the user-global config exists to serve. `$HOME/.remember` is now never treated as a legacy project store, compared canonically as well as textually since a symlinked home names the same directory by another path and a missed comparison costs the config. Reported with a full root-cause trace, recovery steps included, by [@jqit-ricky](https://github.com/jqit-ricky).
+
+- **Two live sessions overwrote each other's saved position, duplicating memory** ([#140](https://github.com/Digital-Process-Tools/claude-remember/issues/140)) — `last-save.json` held one session and one line. With two sessions alternating saves — two terminals, or a background/worktree session sharing the store — A saves, B saves, and A's next save no longer recognises its own ID, resumes from 0, and re-summarizes its whole span. The reporter saw one 99-exchange span summarized twice 2.5 hours apart, landing a near-identical triplet in the daily file, which the dedup context cannot catch once other entries have arrived in between. Positions are keyed by session now, newest 32 kept and evicted by last save so a long-running session is not dropped while still live; the write goes through a rename, since a reader catching the read-merge-write mid-flight would see truncated JSON and resume from 0 — the very duplicate being fixed. Pre-#140 files are carried over rather than discarded, and `session`/`line` remain as a mirror so a half-upgraded install degrades to the old behaviour instead of to nothing. Session-start recovery also asks whether the previous session was ever saved rather than whether it owns the one slot, which used to re-save an already-saved session whenever another had saved since. Reported by [@bonyohana](https://github.com/bonyohana).
+
+- **The summarizer could stamp an entry with a time out of the transcript, scrambling the order** ([#139](https://github.com/Digital-Process-Tools/claude-remember/issues/139)) — the prompt injects a concrete `{{TIME}}` and tells the model to copy it verbatim, but the model sees a whole transcript full of other timestamps and sometimes stamps one of those. The format check could not catch it, because a wrong time is still a well-formed one: daily files showed `## 18:30` written at 05:10 and `## 18:15` written at 06:08, reading as though written hours from their true order, with no warning anywhere. The wall-clock time is the one field the pipeline knows better than the model, so it is now written back over whatever came out — a no-op when the model copied it correctly, and logged when it did not. Reported by [@bonyohana](https://github.com/bonyohana).
+
+- **Malformed summarizer output was warned about and then written to memory anyway** ([#136](https://github.com/Digital-Process-Tools/claude-remember/issues/136), [#119](https://github.com/Digital-Process-Tools/claude-remember/issues/119)) — the format validator detected a response that was not an entry header, logged a warning, and appended it regardless; one reporter found a permission prompt ("Bash needs approval to SSH into…") sitting in `now.md`. That matters more than one junk line looks, because memory is a summary of summaries: `now.md` rolls into `today-*.md`, then `recent.md`, then `archive.md`, and each hop compresses it as though it were real work. Non-conforming output is now dropped from memory but not destroyed — it goes to `tmp/rejected-*.md` (last 20 kept) so nothing is lost and nothing enters the compression chain — and the position still advances exactly as a SKIP does, or the span would be re-summarized on every run forever. Quarantine was chosen over a `features.strict_validation` knob because a knob leaves the default broken for everyone who never discovers it. The prompt-side cause is fixed too: the only SKIP rule covered work already recorded, so a greeting, handoff summary or "what's next?" was faithfully summarized as the work done — there is a no-work SKIP rule now, with the rejection as its backstop. Reported by [@oliver-mee](https://github.com/oliver-mee) and [@eesb99](https://github.com/eesb99).
+- **A slow git backup could push to the wrong place, or nowhere, in silence** ([#135](https://github.com/Digital-Process-Tools/claude-remember/issues/135)) — the backup hook reads its `git_backup.*` settings inside the background subshell it forks. `lib-memory-dir.sh` installs an EXIT trap that deletes the merged `$REMEMBER_CONFIG`, and the hook returns as soon as it has forked — so on a backup slow enough to outlive the parent, those reads found the file gone. `config()` does not report a missing file; it quietly returns each caller's default, so `remote` and `branch` became empty strings and `gpg_sign` became false, and the push went to whatever upstream tracking happened to say rather than the configured target. All four values are now read in the parent and inherited by the subshell as plain variables. `allow_remote_change` moved with them even though its default is the safe one — falling back to false only aborts a push, where a stale true would let a changed remote through. Reported with an isolated harness reproducing the race by [@whatrwewaitingf0r](https://github.com/whatrwewaitingf0r).
+
+- **A non-ASCII character anywhere in the project path disabled memory entirely, in silence** ([#144](https://github.com/Digital-Process-Tools/claude-remember/issues/144)) — `session_dir_slug()` has to reproduce the name Claude Code gave `~/.claude/projects/<slug>/`, and Claude Code slugs with a JS regex that replaces one *character* per dash. `sed`'s idea of a character follows the locale, and on Git Bash/MSYS it stayed byte-wise even under `LC_CTYPE=C.UTF-8`: a CJK path got three dashes per character, the slug pointed at a directory that does not exist, the hook found no transcript and exited 0 — every tool call, for the life of the session. No `now.md`, no error, nothing in `hook-errors.log`. Pinning a locale does not fix it either, in both directions: `C.utf8` is absent on macOS and a missing locale falls back to byte-wise C, while `en_US.UTF-8` exists there but makes `[a-z]` follow collation, so `café` keeps its `é` and misses the directory just as thoroughly. The slug now forces byte semantics deliberately and collapses each UTF-8 sequence by hand. Note the shipped regex carries no `/u` flag, so it counts UTF-16 *code units*, not characters: a 2- or 3-byte sequence is one BMP character and costs one dash, but a 4-byte one is a surrogate pair and costs two — which is what an emoji or one of the Extension-B kanji found in Japanese name registries actually produces. The lead-byte ranges follow the UTF-8 well-formedness table rather than one blanket class, because a surrogate or overlong form is not a character and the decoder emits a replacement per byte for it; each lead takes exactly its own continuations, or a valid sequence swallows the stray bytes after it; and an embedded newline — legal in a POSIX filename, and `sed`'s own record separator, so it reaches no rule at all — is converted before the pipeline rather than surviving into the slug. Differential-fuzzed against that regex under node: identical for all well-formed UTF-8 and for surrogate, overlong and out-of-range forms, under every hostile locale. A truncated sequence still differs, which needs the decoder's maximal-subpart state machine and cannot come from a path a filesystem hands us; it is documented in place, and the new warning below covers it if it ever does. The sed program is assembled once when the script is sourced rather than per call, since the post-tool hook slugs on every single tool call and building it inline forked a subshell per byte constant: 2.4 ms/call before this change, 1.8 ms after. And the silent half is fixed too: a slug that matches no directory now says so in the log, hourly while it lasts, instead of exiting 0 with nothing to show for it — once-ever would have gone quiet again from the second session on, and the cause here is environmental, so it persists. Reported with a complete root-cause trace by [@shenkang11](https://github.com/shenkang11).
+
+- **`build-prompt` failed with `FileNotFoundError` on a file that was right there on disk** ([#145](https://github.com/Digital-Process-Tools/claude-remember/issues/145)) — the same boundary class as [#91](https://github.com/Digital-Process-Tools/claude-remember/issues/91)/[#104](https://github.com/Digital-Process-Tools/claude-remember/pull/104), on the side that audit did not cover. Every `cmd_*` in `pipeline/shell.py` prints `KEY=value` lines that bash captures by command substitution and hands to the *next* Python call as argv. Those `print()` calls encoded with the console's ANSI codepage, not UTF-8, so under a non-ASCII Windows profile the temp path in `EXTRACT_FILE` came back mojibake and the following step could not open it. `stdout` and `stderr` are now reconfigured to UTF-8 in `main()`, the one place all command output funnels through, mirroring the `stdin` reconfigure already there. Diagnosed down to the cp932 byte level by [@shenkang11](https://github.com/shenkang11).
+
+- **The 0.8.6 fence fix could unclose a code block, and still orphaned a fence in `archive.md`** — post-release review of [#126](https://github.com/Digital-Process-Tools/claude-remember/issues/126) found the fix incomplete in both directions. It stripped a leading fence and then *any* trailing fence, so a summary whose last line closed a ```` ```bash ```` sample lost that terminator and the block never ended; a response that was simply a code block had its fences deleted outright. And when the model wrapped the **whole** response, the closing fence landed inside the archive section — which has no opening fence of its own, so the per-section strip could not see it and the orphan ``` still reached `archive.md`, the exact artifact originally reported. A fence is now only treated as a wrapper when the structure says so. The closer must use the same fence character with a run at least as long, and it must land on the last line at nesting depth zero — the body in between is walked tracking that depth, because a bare ``` opening an inner block is textually identical to a closer and anything less mistakes one for the other. When no closer arrives, what is left OPEN decides: a dangling fence that could have closed the wrapper (bare, same character, long enough) means the leading fence enclosed part of the content, while a dangling ```` ```bash ```` or ``~~~`` could never have closed it and so cannot keep the wrapper alive. The info string is evidence rather than a gate — ```` ```markdown ```` is taken at its word, any other tag has to earn it by closing cleanly around a body that reads as a section, which is also what separates a truncated wrap from a pasted log when the two are grammatically identical. A whole-response wrapper is stripped before the sections are split.
+
+## [0.8.6] — Memory actually saves: agentic sessions, auth, channels, and an NDC data race
+
+### Fixed
+
+- **Channel-delivered messages were dropped, so those sessions never saved** ([#128](https://github.com/Digital-Process-Tools/claude-remember/issues/128)) — input arriving through a channel integration (e.g. the Telegram plugin) is wrapped by the transport and carries `isMeta`, the same flag Claude Code puts on genuine meta records. `extract_messages()` filtered on it before counting, so every real human turn in such a session vanished: the human count stayed at 0, the min-human gate never cleared, and memory was never written for the entire class of channel-driven users. The wrapped text is now recovered and counted as the human turn it is. Reported by [@ondomru](https://github.com/ondomru).
+
+- **A wrapping code fence produced a doubled `# Recent` header** ([#126](https://github.com/Digital-Process-Tools/claude-remember/issues/126)) — when Haiku wrapped its consolidation output in a ``` fence, `parse_consolidation_response()` stripped whitespace but not the fence line, so the `startswith("# Recent")` check missed and a second header was prepended. `recent.md` then carried two `# Recent` headers plus a stray fence, which the SessionStart banner and `/resume` both parse. The wrapping fence is now stripped before the header check. Reported by [@merpuya](https://github.com/merpuya).
+
+- **NDC compression erased entries written while it was running** ([#142](https://github.com/Digital-Process-Tools/claude-remember/issues/142)) — the compression step snapshots `now.md`, hands it to a Haiku call allowed up to 180s, then truncated the file with `: >`. By the time that landed, the parent had released the save lock and exited, so a newer save could legitimately have appended an entry — and the truncate erased it. Worse, that entry's position had already been advanced, so the content was unrecoverable and nothing was logged: the memory simply wasn't there. Compression now drops exactly the bytes it snapshotted and keeps everything appended after that offset, logging the number of bytes preserved. Reported by [@bonyohana](https://github.com/bonyohana).
+
+- **Nothing ever saved for `setup-token` users, and the reason was invisible** ([#131](https://github.com/Digital-Process-Tools/claude-remember/issues/131), [#129](https://github.com/Digital-Process-Tools/claude-remember/issues/129)) — two bugs 70 lines apart in `pipeline/haiku.py`, one hiding the other. `_child_env()` strips the `CLAUDE_CODE_*` family as parent-session identity ([#95](https://github.com/Digital-Process-Tools/claude-remember/issues/95)), but that prefix is a proxy, not a definition: `CLAUDE_CODE_OAUTH_TOKEN` is the *child's credentials*, so anyone who authenticated with `claude setup-token` (or runs under a hosted Agent SDK) had every nested summarization call go out unauthenticated and fail. It is now kept while the rest of the family is still stripped. And the failure was undiagnosable because `--output-format json` makes the CLI report errors as JSON on **stdout** with stderr empty, while the error path read only stderr — so the log said `claude exited 1:` and stopped. The real message is now recovered from stdout (structured field first, raw text as fallback, capped at 500 chars), and "no output on stdout or stderr" is stated outright instead of trailing off. Reported by [@socialmenteagency](https://github.com/socialmenteagency) and [@bigtopmultimedia](https://github.com/bigtopmultimedia) — who could only identify the first bug after patching the second.
+
+- **Agentic sessions never saved anything, silently** ([#147](https://github.com/Digital-Process-Tools/claude-remember/issues/147), split out of [#125](https://github.com/Digital-Process-Tools/claude-remember/issues/125)) — two early exits in `save-session.sh` sat *upstream* of `save-position`, while the cooldown marker was written *before* them. So neither exit advanced the read cursor, and the next run re-extracted the identical span and exited identically — once per cooldown window, for the life of the session. Two distinct failures came out of that one asymmetry. A session with **0 new exchanges** now advances the position (there is nothing to summarize, so nothing is lost, and the loop breaks). A session with **many exchanges but few human turns** — the shape of every agentic session — no longer falls through the `min_human_messages` gate forever: a span of at least `thresholds.min_exchanges_without_human` (default 30) is treated as substantive and saved, because work is not only measured in human turns. The under-threshold skip deliberately still does *not* advance the cursor: those exchanges are real content and get summarized together with the turns that follow. Reported by [@KyleUnlock](https://github.com/KyleUnlock), with the month-long macOS trace and the root-cause generalization from [@VictorVvdl](https://github.com/VictorVvdl).
+
+- **A failing summarizer could wedge memory permanently** ([#147](https://github.com/Digital-Process-Tools/claude-remember/issues/147)) — the third face of the same asymmetry, and the one confirmed in the wild for a month: when the Haiku call itself failed, the position was never written, so the next run re-extracted the identical span and failed identically, forever — no later span could ever be saved. Keeping the position is still right for a *transient* failure (rate limit, network blip): the span is simply retried. But consecutive failures against the same span are now counted, and past `thresholds.max_summary_failures` (default 3, `0` retries forever) that span is dropped — loudly, with a WARNING naming the threshold — so everything after it can still be recorded. Losing one span is bad; losing every future span is worse. A successful save or SKIP resets the count.
+
+- **A nested `claude -p` session crashed on every hook** ([#137](https://github.com/Digital-Process-Tools/claude-remember/pull/137)) — `scripts/resolve-paths.sh` is always *sourced*, but signalled failure with a bare `exit 1`, which terminates the **caller's** whole process. The three Claude Code hooks are documented "EXIT CODES: 0 Always", and the one caller most likely to fail resolution is the plugin's own nested Haiku session (it runs with `cwd` in a temp dir and no `CLAUDE_PROJECT_DIR`, so it is not a project at all) — so the plugin crashed the very session it spawned. Resolution failure now stays **loud by default** (`exit 1`, unchanged for every worker script and for any caller that forgets to check), while a caller that must never take its host process down opts in with `REMEMBER_PATHS_SOFT_FAIL=1` and gets `return 1` to handle itself. Only the three hooks opt in, and they still report FATAL on stderr, which `hooks.json` redirects into `hook-errors.log` — a failed hook is silent to the session, never silent to the logs. Diagnosed and fixed by [@lucasrodriggs-tech](https://github.com/lucasrodriggs-tech).
+
+## [0.8.5] — Ship the 0.8.4-era fixes: manifest bump, worktree safety, fork storm
+
+### Fixed
+
+- **Marketplace installs never received any fix shipped after 0.8.3** ([#133](https://github.com/Digital-Process-Tools/claude-remember/issues/133)) — the 0.8.4 release went out without bumping `.claude-plugin/plugin.json`, which still declared `0.8.3`. Claude Code's updater compares *manifest versions*, not source SHAs, so both background auto-update and an explicit `claude plugin update` reported `already at the latest version (0.8.3)` and did nothing — leaving every marketplace user on pre-0.8.4 code with no signal they were stale, including on [#123](https://github.com/Digital-Process-Tools/claude-remember/issues/123), whose failure mode is silent and self-reinforcing. The manifest is bumped to `0.8.5` and `tests/test_version_manifest.py` now fails the build whenever it drifts from the newest released `CHANGELOG.md` heading, so a release can no longer be cut without it. Reported with a full live diagnosis by [@jqit-ricky](https://github.com/jqit-ricky).
+
+- **Worktree sessions pushed private memory into the project repo** ([#138](https://github.com/Digital-Process-Tools/claude-remember/issues/138)) — after [#127](https://github.com/Digital-Process-Tools/claude-remember/issues/127) keyed memory to the main checkout, a session running in a linked worktree left `PROJECT_DIR` on the worktree while `REMEMBER_DIR` pointed into the main checkout. The git-backup hook's legacy guard compares those two paths, so it no longer matched: the hook mistook the *project repo* for a dedicated backup repo, deleted the protective `.remember/.gitignore` (`*`), committed the whole memory tree onto whatever branch the main checkout had out, and pushed it to the project's origin — session notes landing on a shared remote, on an unrelated feature branch, needing a history rewrite to clean up. The hook now compares git *common dirs* instead of paths, which covers the plain, worktree and subdirectory layouts at once while still activating for a repo genuinely dedicated to memory backup. Reported with an exact root-cause trace by [@jaco2716](https://github.com/jaco2716).
+
+- **The save hook forked a doomed `save-session.sh` on every tool call** ([#125](https://github.com/Digital-Process-Tools/claude-remember/issues/125)) — `post-tool-hook.sh` throttled its background fork on save *position* (`last-save.json`), which is only written after a save succeeds. Until the first save lands, `LAST_LINE` is `0`, so the delta is the entire transcript and always clears the threshold — and in an agentic session (many tool calls, few human turns) the min-human gate keeps that first save from ever landing. The hook therefore forked once per tool call for the life of the session, each fork dying milliseconds later on `save-session.sh`'s own cooldown: pure waste (orphaned process pairs, one empty log per tool call, pid churn). The hook now consults the same `last-save-ts` cooldown marker before forking, bounding saves to one fork per cooldown window. **This fixes the fork storm only** — #125 stays open for the deeper cause it also identifies: `save-session.sh` writes `last-save-ts` *before* the min-human gate but never advances the saved *position* past an early exit or failure, so a low-human-turn agentic session still re-extracts and bails once per cooldown window, and memory still never lands. Reported by [@KyleUnlock](https://github.com/KyleUnlock), with a corroborating month-long macOS repro from [@VictorVvdl](https://github.com/VictorVvdl).
+
+- **The `UserPromptSubmit` hook was never registered for plugin installs** — `scripts/user-prompt-hook.sh` ships with the plugin and the README documents it ("The plugin registers three Claude Code hooks"), but `hooks/hooks.json` only wired `SessionStart` and `PostToolUse`. The per-prompt timestamp injection (so the agent knows the current time) and the `after_user_prompt` dispatch to `hooks.d/` listeners were dead code for everyone installing via the plugin marketplace; only manual `.claude/settings.json` installs (which the README snippet wires correctly) got them. The hook is now registered in the manifest, and a new lint test fails if any shipped `*-hook.sh` is left unwired.
+
+- **Worktree sessions built a throwaway memory that vanished on cleanup** ([#56](https://github.com/Digital-Process-Tools/claude-remember/issues/56)) — the plugin derives `REMEMBER_DIR` from `CLAUDE_PROJECT_DIR`, which Claude Code sets to the *worktree* path for worktree sessions. In the default (legacy) layout that put memory at `<worktree>/.remember` — physically inside the worktree, and gitignored with `*`, so a plain `git worktree remove` (no `--force`, no warning) deleted every `now.md` / `today-*.md` / `remember.md` built up during the session, and none of it was ever migrated to the main checkout. In external mode the `{slug}` was computed from the worktree path, producing an orphaned `~/.remember/<slug-of-worktree>` subtree the main checkout's sessions never loaded. `REMEMBER_DIR` resolution now routes through git's *common dir*: when `PROJECT_DIR` is a linked worktree, memory is keyed to the main checkout, so it survives `worktree remove` and is shared across all worktrees of the repo. `PROJECT_DIR` itself is left untouched (session recovery still resolves transcripts under the worktree slug), and non-worktree / non-git projects behave exactly as before. Reported and diagnosed by [@KrzysztofKasprowicz](https://github.com/Digital-Process-Tools/claude-remember/issues/56) and [@dewet22](https://github.com/Digital-Process-Tools/claude-remember/issues/56).
+
+## [0.8.4] — Bound consolidation prompt size so a huge archive can't stall saves
+
+### Fixed
+
+- **An oversized consolidation prompt could halt daily rotation** ([#122](https://github.com/Digital-Process-Tools/claude-remember/issues/122)) — [#96](https://github.com/Digital-Process-Tools/claude-remember/issues/96) (0.8.2) capped the *save* path, but the *consolidation* path still inlined the full staging set + `recent.md` + `archive.md` into one Haiku call with no size check. A large input overflowed the model window (`Prompt is too long`), so `run-consolidation.sh` logged `ERROR` and exited 1 — and it was self-reinforcing, since staging was never retired and re-fed identically on the next run (the #96 failure mode, one path over). The assembled prompt is now capped at `thresholds.consolidate_max_bytes` (default 600 KB, `0` disables). Unlike the save path it **skips** rather than truncates, because consolidation rewrites `recent.md`/`archive.md` and a truncated input would permanently drop archived memory.
+
+### Added
+
+- **Archive rotation keeps consolidation progressing** ([#122](https://github.com/Digital-Process-Tools/claude-remember/issues/122)) — when `archive.md` is the oversized bulk, `cmd_consolidate` rotates it to a dated sibling (`archive-YYYY-MM-DD.md`, cold storage — no memory lost) and retries once with a fresh archive. If there is nothing to rotate, the retry still overflows, or the retry's Haiku call errors, the rotation is undone and the original state is left intact. Follow-up [#124](https://github.com/Digital-Process-Tools/claude-remember/issues/124) tracks teaching recall to read the rotated siblings. Thanks to [@presempathy-awb](https://github.com/presempathy-awb) for the fix and thorough tests.
+
+## [0.8.3] — Windows: resolve the claude.cmd shim before spawning
+
+### Fixed
+
+- **Every auto-save silently failed on Windows** ([#120](https://github.com/Digital-Process-Tools/claude-remember/issues/120)) — `pipeline/haiku.py` spawned the CLI in list-form as `subprocess.run(["claude", ...])`. The npm global install ships the CLI only as a `claude.cmd` shim (no `claude.exe`), and Python's `subprocess` goes through `CreateProcess`, which resolves only `.exe` from a bare name — so every spawn raised `FileNotFoundError: [WinError 2]`. The pipeline aborted right after `[haiku] calling`, so `now.md` / `today-*.md` / `recent.md` were never generated (the SessionStart hook and `/remember` skill kept working since they don't spawn `claude`). The binary is now resolved with `shutil.which("claude")`, which honours `PATHEXT` and returns the full `claude.cmd` path that `subprocess` launches fine — no `shell=True`, no argv-length regression, and cross-platform safe (returns the plain path on Linux/macOS). Override via `REMEMBER_CLAUDE_BIN`. Reported with a precise diagnosis and tested patch by the issue author.
+
+## [0.8.2] — Oversized-extract guard keeps long sessions saving
+
+### Fixed
+
+- **A very long session could silently halt all memory saves** ([#96](https://github.com/Digital-Process-Tools/claude-remember/issues/96)) — a single long-lived session can grow an extract larger than Haiku's context window. `build-prompt` embedded the full extract with no size cap, so the Haiku call failed, the save aborted, and daily rotation stopped. Worse, it was self-reinforcing: a failed save never advanced the saved position, so the same session re-extracted the full transcript and failed identically on every subsequent save. The extract is now capped at `thresholds.extract_max_bytes` (default 300 KB), keeping the most-recent tail with a truncation note so the summary still reflects current work. Set to `0` to disable. Thanks to [@selvi5006-commits](https://github.com/selvi5006-commits) for the precise diagnosis and a tested patch.
+
+## [0.8.1] — Handoff survives context-preview truncation
+
+### Fixed
+
+- **Last-session handoff was lost on every session start** — the session-start hook emits a large block (identity + tiered memory + handoff), but the harness may deliver only a leading preview to the agent. The handoff was dumped inside the memory loop, landing well past the preview cutoff, so it never reached the model. The previous session's handoff is now emitted **first**, before identity/memory, under a `=== LAST HANDOFF ===` header, so it always lands in context. Read-once-then-clear semantics are preserved (the file is truncated immediately after emission).
+
+## [0.8.0] — CC 2.x save fix, Windows reliability, unified Haiku call
+
+### Added
+
+- **`REMEMBER_BRANCH` env var override** — `scripts/save-session.sh` now honors `$REMEMBER_BRANCH` when computing the `## HH:MM | <branch>` identity slot of each daily-log entry. Falls back to the existing `git branch --show-current` lookup, then the literal `"unknown"` if no git repo is present. Use case: running Claude Code from `$HOME` (or any non-git directory) collapses the identity slot to `unknown` on every entry, which makes log entries indistinguishable across instances. Export `REMEMBER_BRANCH=laptop` / `cloud` / `staging` / `$HOSTNAME` in your shell rc and the slot becomes a useful per-instance tag. Documented in `README.md` Configuration → Environment variables.
+
+### Fixed
+
+- **`--max-turns 1` broke the save on Claude Code 2.1.x** ([#98](https://github.com/Digital-Process-Tools/claude-remember/issues/98), [#100](https://github.com/Digital-Process-Tools/claude-remember/issues/100)) — CC 2.x counts prompt-delivery as turn 1, so the nested `claude -p` summarizer exited `error_max_turns` before the model replied; `save-session.sh` treated the non-zero exit as fatal and never wrote memory (and re-fired on nearly every tool call). `--max-turns` is now configurable via `REMEMBER_MAX_TURNS` (default 4, validated to `[1, 20]`); a user Stop hook eats an extra turn, hence the margin. Reported by [@davidomisi](https://github.com/davidomisi) and [@NORSAIN-AI](https://github.com/NORSAIN-AI).
+- **Single `claude -p` call site** ([#94](https://github.com/Digital-Process-Tools/claude-remember/issues/94)) — the summarizer invocation lived in two drifted places (`save-session.sh` inlined it twice; `pipeline/haiku.py` had `call_haiku`). Unified on `pipeline/haiku.py` via a new `pipeline.shell call-haiku` subcommand; `save-session.sh` delegates both calls. Closes the drift where `haiku.py` was missing `--mcp-config` / `--strict-mcp-config`.
+- **Summarizer subprocess flooded `~/.claude/projects/`** ([#87](https://github.com/Digital-Process-Tools/claude-remember/issues/87)) — the nested `claude -p` now runs with `--no-session-persistence` and `--exclude-dynamic-system-prompt-sections`, so it no longer writes a resumable session record per call (hundreds/day on busy sessions). Community contribution by [@sergeclaesen](https://github.com/sergeclaesen).
+- **Consolidation wrote conversational replies as memory** ([#89](https://github.com/Digital-Process-Tools/claude-remember/issues/89)) — a SKIP or non-conforming Haiku response is now rejected (`ConsolidationSkipped`) instead of being written to `recent.md`/`archive.md` and irreversibly retiring the staging files. Community contribution by [@Buzzwoo-Ecom-Team](https://github.com/Buzzwoo-Ecom-Team).
+- **Empty timezone resolved to UTC instead of system-local** ([#99](https://github.com/Digital-Process-Tools/claude-remember/pull/99)) — date calls now route through the `_remember_date` helper, so an unset `REMEMBER_TZ` falls back to system-local rather than a bare `TZ=""` (UTC) for users west of UTC. Community contribution by [@kristian-presso](https://github.com/kristian-presso).
+- **Windows: mojibake and lone-surrogate save crash** ([#91](https://github.com/Digital-Process-Tools/claude-remember/issues/91), [#97](https://github.com/Digital-Process-Tools/claude-remember/issues/97)) — the stdin pipe and the `claude` subprocess decoded with the locale codec (cp1252) instead of UTF-8, corrupting `→`/`—` into mojibake and crashing every autosave on lone surrogates. Audited **every** byte↔str boundary: explicit `encoding="utf-8"` on the stdin pipe and subprocess; `errors="replace"` on text writes and user-editable memory-file/transcript reads (never crash a save on a hand-edited byte); `surrogatepass` on the staging-paths filename encode; machine-written JSON (`last-save.json`) kept strict. Reported by [@marketechniks](https://github.com/marketechniks) and [@DogmaLabsTech](https://github.com/DogmaLabsTech).
+
+- **Windows external-mode `data_dir` path doubling** ([#79](https://github.com/Digital-Process-Tools/claude-remember/issues/79)) — `lib-memory-dir.sh` only recognized `/…` and `~…` as absolute when resolving `REMEMBER_DIR` from a `data_dir`, so a Windows drive path (`C:/Users/…/mem/{slug}`) fell through to the relative branch and was prepended to `PROJECT_DIR` — `REMEMBER_DIR` became `…/proj/C:/…` and `{slug}` was never substituted (substitution lives only in the absolute branch). Drive-letter forms (`C:/…` and `C:\…`) are now recognized as absolute. Surfaced by re-enabling the Windows shell tests (#79).
+
+### Security
+
+- **Nested `claude -p` leaked the parent Claude Code session env** ([#95](https://github.com/Digital-Process-Tools/claude-remember/issues/95)) — the subprocess stripped only `CLAUDECODE`, so `CLAUDE_JOB_DIR` and the `CLAUDE_CODE_*` family (e.g. `CLAUDE_CODE_SESSION_ID`) were inherited, making the child look like the parent's resumable session to anything keying off those vars. `_child_env()` now strips `CLAUDECODE`, `CLAUDE_JOB_DIR`, and all `CLAUDE_CODE_*`. Reported by [@FrankLedo](https://github.com/FrankLedo).
+
+### Tests
+
+- New `tests/test_save_session_branch_override.py` — pins the four-case truth table for the `BRANCH=` line in `save-session.sh`: env-set + git-repo (env wins), env-unset + git-repo (git wins), env-unset + no-git (`unknown` fallback), env-set-to-empty + no-git (`:-` treats empty as unset, falls back to `unknown`). Snapshots the line out of the live `save-session.sh` rather than re-asserting a copy, so the test fails loudly if the line is ever edited without updating the test.
+- New `tests/test_encoding_boundaries.py` — exercises the real byte↔str boundaries under a forced non-UTF-8 locale (`PYTHONUTF8=0 PYTHONCOERCECLOCALE=0 LC_ALL=C`) so the mojibake/surrogate bugs reproduce on the Linux/macOS CI legs too — the boundary-blindness (every test mocked `StringIO` stdin / `MagicMock` subprocess) is why the green Windows matrix never caught them.
+- **Re-enabled Windows shell-subprocess coverage** ([#79](https://github.com/Digital-Process-Tools/claude-remember/issues/79)) — `test_log_sh`, `test_migration`, and `test_security_fixes` were `skipif(win32)`. Three layers: (1) tests invoke bash by its explicit Git-for-Windows path — `subprocess.run(["bash", …])` on Windows hits `System32\bash.exe` (the WSL launcher) first because `CreateProcess` searches System32 before PATH, so no PATH trick works; (2) Windows paths injected into bash scripts are normalized to forward-slash drive form (`C:\x` → `C:/x`) and quoted — forward-slash works for both Git Bash and the Windows `python3` the scripts invoke, where the MSYS `/c/x` form does not; (3) the real bug those tests caught (see Fixed → `lib-memory-dir.sh`). `TestDispatchOwnershipChecks` stays skipped on Windows (POSIX ownership/world-writable bits don't map to NTFS).
+
+## [0.7.3] — Windows save pipeline shell↔Python bridge
+
+### Fixed
+
+- **Save pipeline broken on Windows / Git Bash** ([#84](https://github.com/Digital-Process-Tools/claude-remember/issues/84)) — the shell↔Python bridge had two mismatched halves: `pipeline.shell._shell_escape` single-quote-wrapped values per POSIX `eval` convention, but `safe_eval` in `scripts/log.sh` assigned verbatim via `printf -v` (no shell expansion). On Linux, temp paths contain no shell-unsafe chars so the escaper returned them unquoted — invisible. On Windows, backslash paths got quoted, then stored with literal quotes, then `open()` failed with `OSError: [Errno 22]`. Plus `safe_eval` did not strip CR, so Python's `\r\n` line endings on Windows corrupted integer values and broke `[ -eq ]` tests in `save-session.sh`. Fix: `_shell_escape` now emits verbatim (raises on newline); `safe_eval` strips trailing `\r`; redundant override in `detect-tools.sh` removed (`log.sh` is single source of truth). Issue reported by [@qzftsh7f44-design](https://github.com/qzftsh7f44-design).
+
+### Tests
+
+- New `tests/test_safe_eval_seam.py` pins the Python↔bash roundtrip contract — parametrized across Linux paths, Windows backslash paths, spaces, single quotes. Closes the seam gap CI was blind to (both sides were unit-tested in isolation, never together).
+- 391 tests, 99% coverage.
+
+## [0.7.1] — Windows portability fixes
+
+### Fixed
+
+- **SessionStart hook libuv assertion on Windows** ([#39](https://github.com/Digital-Process-Tools/claude-remember/pull/39)) — backgrounded `save-session.sh` and `run-consolidation.sh` now fully detach via `</dev/null >/dev/null 2>&1 & disown`, preventing the `UV_HANDLE_CLOSING` assertion that surfaced as `SessionStart:startup hook error` on every fresh terminal. Community contribution by [@maxwellkemp10-ux](https://github.com/maxwellkemp10-ux).
+- **Silent save failures on Windows + Git Bash** ([#44](https://github.com/Digital-Process-Tools/claude-remember/pull/44)) — Git Bash exposes `$CLAUDE_PROJECT_DIR` as a POSIX path (`/c/Users/...`), but Claude Code stores sessions under the Win32-form slug (`C--Users-...`). The post-tool hook silently exited because the slug never matched. `resolve-paths.sh` now normalizes the POSIX form to Win32 inside an `OSTYPE`-gated case (no-op on Linux/macOS). Community contribution by [@kanelavish-a11y](https://github.com/kanelavish-a11y).
+
+### Tests
+
+- 327 tests (up from 323).
+
+## [0.7.0] — Unified config reader, marketplace path fix
+
+### Fixed
+
+- **Unified config reader across all scripts** ([#38](https://github.com/Digital-Process-Tools/claude-remember/pull/38)) — all scripts now use `config()` from `log.sh` instead of separate readers; `PIPELINE_DIR` set with fallback for both marketplace and local installs. Issue reported by [@josemoreno801-netizen](https://github.com/josemoreno801-netizen).
+- **`user-prompt-hook.sh` sources `resolve-paths.sh`** — was the root cause of marketplace config path failures.
+- **Removed redundant `REMEMBER_TZ` re-reads** — timezone is now set once in `log.sh`, inherited by all scripts.
+- **Removed duplicate `cfg()` from `session-start-hook.sh`** — uses shared `config()` instead.
+
+### Tests
+
+- 323 tests (up from 256), 99% coverage.
+
+## [0.6.0] — Timezone fix, cross-platform, community contribution
+
+### Fixed
+
+- **Log filename date used UTC instead of configured timezone** ([#26](https://github.com/Digital-Process-Tools/claude-remember/pull/26)) — `MEMORY_LOG_DATE` was computed before `REMEMBER_TZ` was defined; `TZ=""` silently falls back to UTC on macOS/BSD. Community contribution by [@josemoreno801-netizen](https://github.com/josemoreno801-netizen).
+- **Marketplace path resolution in `log.sh`** — `PIPELINE_DIR` now used for `config.json` and `hooks.d` paths.
+- **BSD `mktemp` compatibility** — no file extensions after `XXXXXX` template.
+- **Windows / Git Bash portability** — centralized `SYS_TMPDIR`, `py` launcher fallback, session-dir slug matching.
+- **Haiku header guard** — prevents invented `unknown` headers in summarization output.
+
+### Added
+
+- **`pipeline/_tz.py`** — shared timezone-aware date helpers for Python, reading `REMEMBER_TZ` with fallback to system local (never UTC).
+- **`time_format` config option** — `24h` (default) or `12h` for AM/PM timestamps in log files.
+
+### Tests
+
+- 256 tests (up from 224), 99% coverage, `_tz.py` at 100%.
+
+## [0.5.0] — Bug fixes, Python 3.9 support, DPT marketplace
+
+### Added
+
+- **DPT marketplace** — install from our own marketplace for reliable updates (`/plugin marketplace add Digital-Process-Tools/claude-marketplace`).
+- **Python 3.9 support** — `from __future__ import annotations` in all pipeline modules (macOS ships 3.9 via CommandLineTools).
+
+### Fixed
+
+- **NDC subshell killed by `set -e`** ([#14](https://github.com/Digital-Process-Tools/claude-remember/issues/14)) — background compression no longer dies silently when `claude -p` returns non-zero.
+- **`.gitignore` created too late** ([#17](https://github.com/Digital-Process-Tools/claude-remember/issues/17)) — now created in `session-start-hook.sh` before any save triggers.
+
+### Tests
+
+- 186 tests (up from 162), 99% coverage.
+
+## [0.4.0] — Version tagging & marketplace update docs
+
+### Added
+
+- First release with proper git tags.
+
+### Documentation
+
+- Documented known marketplace update bugs with workarounds ([anthropics/claude-code#37252](https://github.com/anthropics/claude-code/issues/37252), [anthropics/claude-code#38271](https://github.com/anthropics/claude-code/issues/38271)).
+
+## [0.3.0] — Path resolution overhaul
+
+Fixes [#9](https://github.com/Digital-Process-Tools/claude-remember/issues/9), addresses [#10](https://github.com/Digital-Process-Tools/claude-remember/issues/10).
+
+### Added
+
+- **`resolve-paths.sh`** — single source of truth for all path resolution across local and marketplace installs.
+- All hooks log their resolved paths to `.remember/logs/` on every invocation.
+- Hook stderr captured to `.remember/logs/hook-errors.log` via `hooks.json` redirect.
+
+### Changed
+
+- Marketplace installs without `CLAUDE_PROJECT_DIR` now **fail with a clear FATAL error** instead of silently computing wrong paths.
+
+### Tests
+
+- 162 tests (up from 122), including realistic plugin simulation tests for both install layouts.
+
+## [0.2.0] — Windows compatibility, CLI v2.1.86+ support
+
+### Fixed
+
+- Path slugging for Windows backslashes and colons.
+- UTF-8 encoding added to all Python file operations.
+- Handle CLI v2+ JSON array response format in `haiku.py`.
+
+## [0.1.0] — Initial release
+
+[Unreleased]: https://github.com/Digital-Process-Tools/claude-remember/compare/v0.45.0...HEAD
+[0.45.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.45.0
+[0.44.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.44.1
+[0.44.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.44.0
+[0.43.2]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.43.2
+[0.43.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.43.1
+[0.43.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.43.0
+[0.42.4]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.42.4
+[0.42.3]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.42.3
+[0.42.2]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.42.2
+[0.42.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.42.1
+[0.42.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.42.0
+[0.41.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.41.0
+[0.40.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.40.0
+[0.39.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.39.0
+[0.38.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.38.0
+[0.37.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.37.0
+[0.36.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.36.0
+[0.35.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.35.1
+[0.35.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.35.0
+[0.34.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.34.1
+[0.34.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.34.0
+[0.33.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.33.0
+[0.32.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.32.0
+[0.31.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.31.0
+[0.30.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.30.0
+[0.29.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.29.1
+[0.29.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.29.0
+[0.28.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.28.0
+[0.27.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.27.0
+[0.26.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.26.0
+[0.25.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.25.0
+[0.24.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.24.0
+[0.23.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.23.0
+[0.22.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.22.0
+[0.21.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.21.0
+[0.20.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.20.0
+[0.19.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.19.0
+[0.18.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.18.0
+[0.17.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.17.0
+[0.16.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.16.0
+[0.15.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.15.0
+[0.14.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.14.0
+[0.13.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.13.0
+[0.12.3]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.12.3
+[0.12.2]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.12.2
+[0.12.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.12.1
+[0.12.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.12.0
+[0.11.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.11.0
+[0.10.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.10.0
+[0.9.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.9.0
+[0.8.9]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.9
+[0.8.8]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.8
+[0.8.7]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.7
+[0.8.6]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.6
+[0.8.5]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.5
+[0.8.4]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.4
+[0.8.3]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.3
+[0.8.2]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.2
+[0.8.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.1
+[0.8.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.8.0
+[0.7.3]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.7.3
+[0.7.1]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.7.1
+[0.7.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.7.0
+[0.6.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.6.0
+[0.5.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.5.0
+[0.4.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.4.0
+[0.3.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.3.0
+[0.2.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.2.0
+[0.1.0]: https://github.com/Digital-Process-Tools/claude-remember/releases/tag/v0.1.0

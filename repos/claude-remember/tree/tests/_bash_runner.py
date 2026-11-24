@@ -1,0 +1,126 @@
+"""Shared helper for locating a real POSIX bash to drive subprocess-based
+hook tests across platforms (#432).
+
+On macOS and Linux, ``bash`` on PATH already is a real bash. On Windows,
+``bash`` on PATH commonly resolves to the WSL launcher, not Git Bash -- the
+bash that actually ships alongside Git for Windows and that a Windows user
+invoking git-based tooling (the #82 reporter's own setup) actually has.
+
+``find_git_bash`` is lifted verbatim from tests/test_hooks_json.py, written
+for #82. That module now imports it from here instead of defining its own
+copy, so the two Windows-bash-detection tests in test_hook_cwd_leak_417.py
+and test_transcript_path_leak_424.py stop being skipped for the whole
+platform (#432) and instead run for real under Git Bash, exactly as
+test_hooks_json.py's own Git-Bash tests already do.
+"""
+
+from __future__ import annotations
+
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+
+def find_git_bash() -> str | None:
+    """Locate Git Bash specifically (not WSL's bash launcher).
+
+    On Windows, `shutil.which("bash")` may resolve to the WSL launcher. The
+    #82 reporter launches Claude Code from Git Bash, so we want *that* bash.
+    Probe the standard Git-for-Windows install locations; fall back to PATH
+    only if the resolved binary lives under a Git install. Returns the exe
+    path or None.
+    """
+    candidates = []
+    for env_var in ("ProgramFiles", "ProgramFiles(x86)", "ProgramW6432"):
+        base = os.environ.get(env_var)
+        if base:
+            candidates.append(Path(base) / "Git" / "bin" / "bash.exe")
+            candidates.append(Path(base) / "Git" / "usr" / "bin" / "bash.exe")
+    for cand in candidates:
+        if cand.is_file():
+            return str(cand)
+    resolved = shutil.which("bash")
+    if resolved and "git" in resolved.replace("\\", "/").lower():
+        return resolved
+    return None
+
+
+def resolve_bash() -> str | None:
+    """Return a real POSIX bash to invoke, or None if none is available.
+
+    Non-Windows: `bash` on PATH already is a real bash, so PATH resolution
+    is trusted as-is. Windows: PATH's `bash` is commonly the WSL launcher,
+    not Git Bash, so probe for Git Bash specifically instead of trusting
+    PATH.
+
+    Callers that need a genuinely portable subprocess bash (rather than one
+    tied to a specific test's platform assumptions) use this instead of the
+    literal string "bash", so that a missing interpreter is reported as
+    "not found" rather than silently running the wrong bash.
+    """
+    if sys.platform != "win32":
+        return shutil.which("bash")
+    return find_git_bash()
+
+
+def decode_bash_output(raw: bytes) -> str:
+    """Decode a bash subprocess byte stream defensively (#672).
+
+    On Windows, invoking the literal ``"bash"`` can resolve to the WSL
+    launcher or a WindowsApps alias stub instead of Git Bash. Those
+    launchers write UTF-16LE-framed text to a redirected pipe -- each
+    ASCII byte followed by a NUL -- which a locale/UTF-8 decode turns into
+    NUL-interleaved garbage, or raises outright on a UTF-8 locale. Detect
+    a UTF-16LE frame by its NUL density and decode it as UTF-16LE;
+    otherwise fall back to UTF-8 with replacement, the same policy
+    ``subprocess`` itself uses for undecodable bytes when ``text=True``.
+    """
+    if not raw:
+        return ""
+    nuls = raw.count(b"\x00")
+    # Require at least one NUL: the gate `nuls >= len(raw) // 4` alone is
+    # true for every input shorter than 4 bytes (len // 4 == 0), which would
+    # mis-decode a short, perfectly valid UTF-8 probe output (e.g. b"1\n").
+    if nuls and nuls >= len(raw) // 4:
+        try:
+            decoded = raw.decode("utf-16-le")
+        except UnicodeDecodeError:
+            pass
+        else:
+            if "\x00" not in decoded:
+                return decoded
+    return raw.decode("utf-8", errors="replace")
+
+
+def bash_octal(value: str) -> str:
+    """VALUE's UTF-8 bytes as one line of ``\\0ooo`` escapes for ``printf '%b'``.
+
+    For handing a test input to bash on stdin: the line is plain ASCII, so it
+    reaches bash byte-for-byte on every platform, and ``printf -v x '%b'
+    "$line"`` rebuilds the exact bytes -- a newline, a CR or a trailing
+    newline included, which command substitution or a line read would lose.
+    """
+    return "".join(f"\\0{b:03o}" for b in value.encode("utf-8"))
+
+
+def run_bash_file(bash: str, script: str, *, stdin: bytes = b"", env=None,
+                  timeout: float = 60) -> subprocess.CompletedProcess:
+    """Run SCRIPT from a temporary file, with STDIN on its standard input.
+
+    Not ``bash -c SCRIPT arg...``: Git Bash rebuilds argv from the Windows
+    command line itself (the msys/cygwin runtime's build_argv + globify).
+    An argument Python's list2cmdline leaves unquoted -- no space in it --
+    is glob-expanded against the current directory (``*`` became every
+    entry of the repo root, observed on windows-latest in #898: 25 extra
+    rows), its backslashes are taken as glob escapes, and a newline in it
+    splits it in two. So the script travels as a file and the inputs as
+    stdin; the only argv entry is a temp path with none of those in it.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "run.sh"
+        path.write_bytes(script.encode("utf-8"))
+        return subprocess.run([bash, path.as_posix()], input=stdin, capture_output=True,
+                              env=env, timeout=timeout, check=False)
