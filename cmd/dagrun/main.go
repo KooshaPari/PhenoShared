@@ -103,6 +103,8 @@ func main() {
 		err = cmdAgents(args)
 	case "serve":
 		err = cmdServe(args)
+	case "instances":
+		err = cmdInstances(args)
 	case "version", "--version", "-v":
 		fmt.Printf("dagrun %s\n", Version)
 		return
@@ -168,6 +170,7 @@ USAGE
   dagrun agents [flags]          agent cards: one per node that has run, session-bound
   dagrun session [flags]         print this process's validated session identity
   dagrun serve [flags]           serve the run as a live viewer + read-only JSON API
+  dagrun instances [flags]       list running servers that advertise themselves
   dagrun mcp [flags]             serve the Model Context Protocol over stdio or HTTP
   dagrun version
 
