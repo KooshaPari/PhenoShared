@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Generated runtime state: never source.
+*.jsonl
+*.ndjson
+*.log
+*.state
+*.pid
+*.html
+health.txt

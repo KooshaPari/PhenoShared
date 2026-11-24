@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "purpose": "Caller provenance pin for in-repo reusable hermetic build workflow (C06 L53)",
+  "repo": "KooshaPari/SessionLedger",
+  "workflow_path": ".github/workflows/reusable-hermetic-build.yml",
+  "caller_workflow": ".github/workflows/hermetic.yml",
+  "caller_job": "sl-daemon-offline-container",
+  "workflow_commit_sha": "042c46e74751a378097086bcc89942dfa4bf4b04",
+  "builder_image_digest": "sha256:16381cf25d89fd5dc8a904ff4a7b8d4660a856ed9738b8a7e879d816439ce2a5",
+  "offline_target_default": "crates/sl-daemon",
+  "selfcheck_script": "scripts/reusable-provenance-check.ps1",
+  "update_policy": "After changing the reusable workflow, bump workflow_commit_sha in this file, hermetic.yml uses: ref, and reusable-hermetic-pin.md. Never pin callers to @main."
+}

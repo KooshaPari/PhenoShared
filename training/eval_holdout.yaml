@@ -1,0 +1,17 @@
+# Eval holdout — never train on these benchmarks (prevents overfit/cheat).
+holdouts:
+  terminal_bench_2_0:
+    dataset: terminal-bench@2.0
+    n_tasks: 89
+    exclude_from:
+      - nightly_dpo
+      - distill_12b
+      - qlora_role
+      - nested_rlvr_weight_updates
+    reason: Primary honest accuracy gate — target 80%+ terminus-2 mean
+
+  repo2rl_pr_diff:
+    dataset: AdithyaSK/repo2rlenv-pr-diff
+    exclude_from:
+      - nightly_dpo
+    reason: L2 agent episodes — eval only unless explicitly held-out split

@@ -1,0 +1,168 @@
+---
+# install-woodpecker.yml — Woodpecker CI server + local agent on oci_primary.
+# Server binds 127.0.0.1:8000 (Caddy fronts ci.kooshapari.com).
+# OAuth against Forgejo — client id/secret must be registered post-bringup.
+
+- name: Install Woodpecker server + agent
+  hosts: oci_primary
+  become: true
+  vars:
+    woodpecker_version: "2.7.2"
+    woodpecker_arch: arm64
+    woodpecker_server_bin: /usr/local/bin/woodpecker-server
+    woodpecker_agent_bin: /usr/local/bin/woodpecker-agent
+    woodpecker_home: /var/lib/woodpecker
+    woodpecker_etc: /etc/woodpecker
+  tasks:
+    - name: Create woodpecker user
+      ansible.builtin.user:
+        name: woodpecker
+        system: true
+        shell: /sbin/nologin
+        home: "{{ woodpecker_home }}"
+        create_home: true
+
+    - name: Ensure config dir
+      ansible.builtin.file:
+        path: "{{ woodpecker_etc }}"
+        state: directory
+        owner: root
+        group: woodpecker
+        mode: "0750"
+
+    - name: Download woodpecker-server
+      ansible.builtin.get_url:
+        url: "https://github.com/woodpecker-ci/woodpecker/releases/download/v{{ woodpecker_version }}/woodpecker-server_linux_{{ woodpecker_arch }}.tar.gz"
+        dest: /tmp/woodpecker-server.tar.gz
+        mode: "0644"
+
+    - name: Extract woodpecker-server
+      ansible.builtin.unarchive:
+        src: /tmp/woodpecker-server.tar.gz
+        dest: /usr/local/bin/
+        remote_src: true
+        creates: "{{ woodpecker_server_bin }}"
+
+    - name: Download woodpecker-agent
+      ansible.builtin.get_url:
+        url: "https://github.com/woodpecker-ci/woodpecker/releases/download/v{{ woodpecker_version }}/woodpecker-agent_linux_{{ woodpecker_arch }}.tar.gz"
+        dest: /tmp/woodpecker-agent.tar.gz
+        mode: "0644"
+
+    - name: Extract woodpecker-agent
+      ansible.builtin.unarchive:
+        src: /tmp/woodpecker-agent.tar.gz
+        dest: /usr/local/bin/
+        remote_src: true
+        creates: "{{ woodpecker_agent_bin }}"
+
+    - name: Generate agent shared secret if missing
+      ansible.builtin.shell: openssl rand -hex 32
+      args:
+        creates: "{{ woodpecker_etc }}/.agent_secret"
+      register: agent_secret_gen
+      changed_when: agent_secret_gen.rc == 0
+
+    - name: Persist agent shared secret
+      ansible.builtin.copy:
+        dest: "{{ woodpecker_etc }}/.agent_secret"
+        content: "{{ agent_secret_gen.stdout }}\n"
+        owner: root
+        group: woodpecker
+        mode: "0640"
+        force: false
+      when: agent_secret_gen.stdout is defined and agent_secret_gen.stdout | length > 0
+
+    - name: Read agent shared secret
+      ansible.builtin.slurp:
+        src: "{{ woodpecker_etc }}/.agent_secret"
+      register: agent_secret_slurp
+
+    - name: Write server.env
+      ansible.builtin.copy:
+        dest: "{{ woodpecker_etc }}/server.env"
+        owner: root
+        group: woodpecker
+        mode: "0640"
+        content: |
+          WOODPECKER_OPEN=false
+          WOODPECKER_HOST=https://ci.kooshapari.com
+          WOODPECKER_SERVER_ADDR=127.0.0.1:8000
+          WOODPECKER_GRPC_ADDR=127.0.0.1:9000
+          WOODPECKER_AGENT_SECRET={{ agent_secret_slurp.content | b64decode | trim }}
+          WOODPECKER_DATABASE_DRIVER=sqlite3
+          WOODPECKER_DATABASE_DATASOURCE={{ woodpecker_home }}/woodpecker.sqlite
+          # Forgejo OAuth — register an application in Forgejo then fill these.
+          WOODPECKER_GITEA=true
+          WOODPECKER_GITEA_URL=http://127.0.0.1:3000
+          WOODPECKER_GITEA_CLIENT={{ woodpecker_gitea_client | default('<PLACEHOLDER_REGISTER_IN_FORGEJO>') }}
+          WOODPECKER_GITEA_SECRET={{ woodpecker_gitea_secret | default('<PLACEHOLDER_REGISTER_IN_FORGEJO>') }}
+
+    - name: Write agent.env
+      ansible.builtin.copy:
+        dest: "{{ woodpecker_etc }}/agent.env"
+        owner: root
+        group: woodpecker
+        mode: "0640"
+        content: |
+          WOODPECKER_SERVER=127.0.0.1:9000
+          WOODPECKER_AGENT_SECRET={{ agent_secret_slurp.content | b64decode | trim }}
+          WOODPECKER_MAX_WORKFLOWS=2
+          WOODPECKER_BACKEND=local
+
+    - name: Install woodpecker-server systemd unit
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/woodpecker-server.service
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Woodpecker CI server
+          After=network-online.target
+          Wants=network-online.target
+
+          [Service]
+          Type=simple
+          User=woodpecker
+          Group=woodpecker
+          EnvironmentFile={{ woodpecker_etc }}/server.env
+          ExecStart={{ woodpecker_server_bin }}
+          Restart=always
+          WorkingDirectory={{ woodpecker_home }}
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Install woodpecker-agent systemd unit
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/woodpecker-agent.service
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Woodpecker CI agent
+          After=woodpecker-server.service
+          Requires=woodpecker-server.service
+
+          [Service]
+          Type=simple
+          User=woodpecker
+          Group=woodpecker
+          EnvironmentFile={{ woodpecker_etc }}/agent.env
+          ExecStart={{ woodpecker_agent_bin }} agent
+          Restart=always
+          WorkingDirectory={{ woodpecker_home }}
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable + start woodpecker-server
+      ansible.builtin.systemd:
+        name: woodpecker-server
+        daemon_reload: true
+        enabled: true
+        state: started
+
+    - name: Enable + start woodpecker-agent
+      ansible.builtin.systemd:
+        name: woodpecker-agent
+        enabled: true
+        state: started

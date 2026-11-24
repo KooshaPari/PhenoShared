@@ -1,0 +1,45 @@
+name: Sync Canary
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agileplus-sync-canary
+  cancel-in-progress: false
+
+jobs:
+  sync-canary:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "agileplus-bot"
+          git config user.email "agileplus-bot@users.noreply.github.com"
+
+      - name: Prepare local canary ref
+        run: |
+          if git ls-remote --exit-code --heads origin canary >/dev/null 2>&1; then
+            git fetch origin canary:canary
+          else
+            git branch canary "$GITHUB_SHA"
+          fi
+
+      - name: Sync canary from main
+        run: cargo run -p agileplus-cli --locked -- branch:sync --source main --target canary
+
+      - name: Push canary
+        run: git push origin canary

@@ -1,0 +1,96 @@
+{
+  "okf": "1.0",
+  "source_id": "codex-typescript-023",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Add typed React dashboard widget without breaking the shared API client",
+      "properties": { "user_turn_count": 4 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "npm test: 42 passed",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "eslint reports zero errors in src/components",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not change api client types",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/frontend-dashboard" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "Typed dashboard widget" }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "tsc --noEmit passes",
+      "properties": {
+        "watch_files": [
+          "src/components/DashboardWidget.tsx",
+          "src/api/client.ts"
+        ]
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 4
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-typescript-023" }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-typescript-023" }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": { "corpus": "codex", "source_id": "codex-typescript-023" }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": { "corpus": "codex", "source_id": "codex-typescript-023" }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": { "corpus": "codex", "source_id": "codex-typescript-023" }
+    }
+  ],
+  "provenance": { "corpus": "codex", "source_id": "codex-typescript-023" }
+}

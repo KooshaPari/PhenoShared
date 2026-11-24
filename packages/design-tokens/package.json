@@ -1,0 +1,23 @@
+{
+  "name": "@kooshapari/phenotype-design-tokens",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Shared CSS and Tailwind tokens for Phenotype landing pages (canonical home: phenoDesign)",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KooshaPari/phenoDesign",
+    "directory": "packages/design-tokens"
+  },
+  "exports": {
+    "./tailwind": "./tailwind.config.mjs",
+    "./css": "./tokens.css",
+    "./tokens.css": "./tokens.css"
+  },
+  "files": [
+    "tailwind.config.mjs",
+    "tokens.css"
+  ]
+}

@@ -1,0 +1,53 @@
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+  workflow_call:
+    inputs:
+      language:
+        required: true
+        type: string
+      to_channel:
+        required: true
+        type: string
+      risk_profile:
+        required: true
+        type: string
+      registry:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+name: Promote Package
+
+
+
+permissions:
+  contents: read
+jobs:
+  gate-check:
+    uses: ./.github/workflows/gate-check.yml
+    with:
+      language: ${{ inputs.language }}
+      channel: ${{ inputs.to_channel }}
+      risk_profile: ${{ inputs.risk_profile }}
+
+  publish:
+    uses: ./.github/workflows/publish.yml
+    needs: gate-check
+    with:
+      language: ${{ inputs.language }}
+      registry: ${{ inputs.registry }}
+      version: ${{ inputs.version }}
+      dry_run: false
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      CARGO_TOKEN: ${{ secrets.CARGO_TOKEN }}

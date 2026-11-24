@@ -1,0 +1,8 @@
+{
+  "repo": "https://github.com/KooshaPari/pheno-specs",
+  "path": "agileplus-specs",
+  "ref": "13fcdc554c73abc765a34592a244abcf16eddf43",
+  "tag": "v0.1.0-spec-baseline",
+  "updated": "2026-06-14",
+  "note": "Pin updated after pheno-specs releases; run: git -C agileplus-specs rev-parse HEAD"
+}

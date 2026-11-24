@@ -1,0 +1,29 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-04-27",
+  "ecosystem": "phenotype",
+  "summary": {
+    "totalRepos": 1,
+    "totalSpecs": 6,
+    "totalCodeEntities": 26,
+    "totalTests": 52,
+    "averageCoverage": 86
+  },
+  "repositories": [
+    {
+      "name": "phenotype-infrakit",
+      "specs": 6,
+      "codeEntities": 26,
+      "tests": 52,
+      "coverage": 86,
+      "specsList": [
+        {
+          "id": "INFRA-001",
+          "title": "Multi-Cloud Support",
+          "status": "implemented",
+          "priority": "P0"
+        }
+      ]
+    }
+  ]
+}

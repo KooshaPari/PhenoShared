@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "purpose": "Exact rustc pin for C06 L60 (pairs with repo-root rust-toolchain.toml)",
+  "channel": "1.96.0",
+  "rustc_release": "1.96.0",
+  "rustc_commit_hash": "ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96",
+  "rustc_commit_date": "2026-05-25",
+  "components": ["rustfmt", "clippy"],
+  "msrv": "1.85",
+  "identity": "rustc -vV commit-hash (content-addressed rustc identity; rustup verifies download digests)",
+  "verify_command": "./scripts/rustc-toolchain-check.ps1 -SelfCheck",
+  "ci_policy": "Primary workflows install via dtolnay/rust-toolchain without toolchain: override so rust-toolchain.toml is authoritative. Nightly-only jobs (fuzz/miri) may override intentionally.",
+  "update_policy": "Bump channel in rust-toolchain.toml and this file together (refresh commit-hash via rustc -vV); re-run SelfCheck before merge."
+}

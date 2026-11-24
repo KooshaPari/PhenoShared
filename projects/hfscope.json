@@ -1,0 +1,22 @@
+{
+  "name": "hfscope",
+  "languages": ["go"],
+  "primary_language": "go",
+  "status": "active",
+  "has_readme": false,
+  "type": "model-scope-service",
+  "path": "repos/hfscope",
+  "role": "huggingface-model-scope-ui-api",
+  "domain_role": "model-operations",
+  "boundary": "model-scope",
+  "gh_url": "https://github.com/KooshaPari/hfscope",
+  "disposition": "KEEP_STANDALONE",
+  "canonical_routing": true,
+  "recovery_ref": "recovery/hfscope-local-20260726",
+  "recovery_commit": "c313cf8",
+  "airlock_snapshot": "wip/20260726T0154-18c5b421c861d970",
+  "absorbed_into": null,
+  "rationale": "Distinct private Go model-scope product with current API changes preserved on a recovery branch; no verified parent-equivalence evidence.",
+  "audit_artifact": "registry/audit-absorption-justification/gap-cohort-20260726.json",
+  "registry_author": "phenotype-registry (boundary audit)"
+}

@@ -1,0 +1,248 @@
+{
+  "excluded_files": 25,
+  "files": [
+    {
+      "bytes": 3436,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/README.md",
+      "sha256": "dc4a78e8324b691b93c0de6907d55a0c88a0a278ef9bb610dc4c93ec69d4282f"
+    },
+    {
+      "bytes": 11386,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/operations/CAMPAIGN_SPEC.md",
+      "sha256": "1944ac0aef08932977c5d346cede7085c0e8be098da5b883bd1f4a72fce8f059"
+    },
+    {
+      "bytes": 10474,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/operations/LOCAL_AGENT_MASTER_PROMPT.md",
+      "sha256": "46a01df42d15b77206bf70e0cef86913736a916a25b0f3fbbdc66fecce467108"
+    },
+    {
+      "bytes": 3523,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/operations/campaign.yaml",
+      "sha256": "ce098bf2064c5f01c213c0931d204b66ee5d8c1c54d3cdc02a7f36c977e5dfd0"
+    },
+    {
+      "bytes": 6554,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/2026-09-04-official-census-checkpoint.md",
+      "sha256": "4c25bad765d270a96f0b2610c09295f0763fd49e2a91d96e0317ae70ba6a1b70"
+    },
+    {
+      "bytes": 1779,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/BENCHORA-FANOUT-GATE-WAVE-1.md",
+      "sha256": "aba0ef35af3333260b5910f3d13c86aa06c80582bad9694c6f8e0f762241183e"
+    },
+    {
+      "bytes": 31131,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/CLAIM-LEDGER-WAVE-1.md",
+      "sha256": "7b9cb37b262513fb5c78656fce7112f3ca74a3735aaccf210550f8f03bea55dd"
+    },
+    {
+      "bytes": 30522,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/CONCEPT-ONTOLOGY-WAVE-1.md",
+      "sha256": "15eb175838f35923f561ff4933db34bd82fb72ab9267b8351aab45f40eb326d7"
+    },
+    {
+      "bytes": 14576,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/CREATOR-CHRONOLOGY-WAVE-1.md",
+      "sha256": "6fccf57d9b70fd3ac5eacef93f8b719b846e7ab4051b3c1bbd7ed4ea1edcdd7a"
+    },
+    {
+      "bytes": 2248,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/CREATOR-SITE-ROOT-LINKS.md",
+      "sha256": "3907b3d1095602cf49ce386e8b08ba8247143fa27887f106fdebb8aec54315d7"
+    },
+    {
+      "bytes": 6432,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/DIRECT-LINK-EXPANSION-WAVE-2.md",
+      "sha256": "dcf81a761c40590b51b79082a758be1b259a3eceeb3571c655c6ccd37f1a41cc"
+    },
+    {
+      "bytes": 10202,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/MINDCRAFT-EVIDENCE-CHAIN-WAVE-1.md",
+      "sha256": "71c6d573180664d608216ff7e1060560653f96bb5e28e9d5aabb82c2d849db0f"
+    },
+    {
+      "bytes": 26584,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/NESTED-SOURCE-GRAPH-WAVE-1.md",
+      "sha256": "c3e20187777377c1f777e6ca276e64aceae9c6b38da95433b12c204aa3700786"
+    },
+    {
+      "bytes": 32152,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/PORTFOLIO-APPLICABILITY-WAVE-1.md",
+      "sha256": "407a263fac52e3e3b7ed771f47969ec824c6dc2df0d52a3c26b3fb2554328c6e"
+    },
+    {
+      "bytes": 13479,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/PROJECT-GALLERY-WAVE-1.md",
+      "sha256": "b39cea0da67c13568aa7e65f879a73033207890507c4a815566a29a523bb988b"
+    },
+    {
+      "bytes": 4034,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/README.md",
+      "sha256": "49f10116884dce42aff15eef238b32a021b9b397e59daadfff8648c2bb417b65"
+    },
+    {
+      "bytes": 2449,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/SOURCE-MANIFEST-WAVE-1.md",
+      "sha256": "14b2979439ece3540aa2b9c45bb7985b55c68d7c3ac21f6cc06c02faa0a8c189"
+    },
+    {
+      "bytes": 23815,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-1-ANCHOR-CORPUS.md",
+      "sha256": "5ac7c394de449180f79b92b3241d493c16886702d50ba04856bda77f51e4fc5d"
+    },
+    {
+      "bytes": 1588,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-1-CHECKPOINT.md",
+      "sha256": "ac1de3696855980a4cfe7fd25593ecaf12c4babef161ad2663bfa937b7c0c462"
+    },
+    {
+      "bytes": 16296,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-1-QUALITY-REPORT.md",
+      "sha256": "219870ddd749653f11748a7e617d62fbcdb94e17ea4ae09020cd3ce6f5ebe129"
+    },
+    {
+      "bytes": 1387,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-1-SOURCE-FREEZE-CHECKPOINT.md",
+      "sha256": "e574cad10577c27fc42c01292f329eecc66c3326f04a61a8668bb2607ff52008"
+    },
+    {
+      "bytes": 9500,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-2-CHECKPOINT.md",
+      "sha256": "12293cb5e9bf5eef61df0e977c19068ee6a3b0609c9c77311fcc5cf231ec4bf7"
+    },
+    {
+      "bytes": 12477,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-3-COMMENTS-AND-SYNTHESIS.md",
+      "sha256": "84106a1e39ccb86618fdf54c1d5d4a5af3183c9cda9515218c4ba8baa4dd1814"
+    },
+    {
+      "bytes": 7707,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-3-PRIMARY-SOURCES.md",
+      "sha256": "e6e9ddbc1c3204b0739229d75a3fa7d1dd8d95be4d0799b8ab4fbabc04f5df66"
+    },
+    {
+      "bytes": 4668,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-4-EXECUTION-CHECKPOINT.md",
+      "sha256": "61c4bfc7f43ea722168af07e9c8e936da255c1070dbfa2cdd57d0998a6e6f644"
+    },
+    {
+      "bytes": 10904,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-4-METHODS-REVIEW.md",
+      "sha256": "3c89b0a6915c75cedb4308442def2018dc6885b47cc02d922f719409d2fbf790"
+    },
+    {
+      "bytes": 5473,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-4-TRANSFER-BOUNDARIES.md",
+      "sha256": "44f26a6c39c08428ad062cda6a89fb89816e230e3519e8dd4133f8830ca1df87"
+    },
+    {
+      "bytes": 3512,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-5-EXECUTION-CHECKPOINT.md",
+      "sha256": "e3feb90a93b1abcdb8b56b635b97cbf2e4b5d99f4a74497c9ad85f9e8473cc18"
+    },
+    {
+      "bytes": 4430,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-5-LINEAGE-AND-TRANSFER.md",
+      "sha256": "f731787b74466f3011c270ed7b17217e372d98a1bcbd6953c5f18419aab09b60"
+    },
+    {
+      "bytes": 9120,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/WAVE-5-SOURCE-REVIEW.md",
+      "sha256": "a3c0bb8776622c0754f2ec30450fb8d8c9de919e647f94ddd8a68d396305b8b5"
+    },
+    {
+      "bytes": 19685,
+      "path": "docs/researchledger/historical-wave5/docs/corpora/emergent-garden/research/YOUTUBE-CENSUS-WAVE-2.md",
+      "sha256": "661fe1df9dbf4fa8a10f69d6c8856574c0748c63ee0ddea4a57b3c72099caa07"
+    },
+    {
+      "bytes": 18552,
+      "path": "docs/researchledger/historical-wave5/docs/superpowers/plans/2026-09-04-emergent-garden-nested-corpus.md",
+      "sha256": "6d4eaea2c9d99295df1af2a4045be89e9547c8120e981daa90fcd05e801ad473"
+    },
+    {
+      "bytes": 13964,
+      "path": "docs/researchledger/historical-wave5/scripts/research/analyze_comment_corpus.py",
+      "sha256": "1f0bdd72a03edaef9ecfd3df46dc0f40b0a1db35c63be45c37d22752a21080d9"
+    },
+    {
+      "bytes": 5445,
+      "path": "docs/researchledger/historical-wave5/scripts/research/assess_research_evidence.py",
+      "sha256": "16d62be3ca31aaecbc86ff3194db5e51d123fe09a2d16ec0eb757a2e90337681"
+    },
+    {
+      "bytes": 26252,
+      "path": "docs/researchledger/historical-wave5/scripts/research/build_emergent_garden_link_frontier.py",
+      "sha256": "6c19f0163e870d0b52f227d7f55e55b50fe7cc8fdd93b925eb7aae43156456db"
+    },
+    {
+      "bytes": 3260,
+      "path": "docs/researchledger/historical-wave5/scripts/research/build_evidence_cases.py",
+      "sha256": "61c6760665a1b3a9629dec2272e817ce2aaff02663cce582a8345b2539640364"
+    },
+    {
+      "bytes": 8176,
+      "path": "docs/researchledger/historical-wave5/scripts/research/capture_wave5_primary_evidence.py",
+      "sha256": "1129555441045c395f98af43a758b0e23cd70a688db9ef86dae998b82b5619c8"
+    },
+    {
+      "bytes": 2225,
+      "path": "docs/researchledger/historical-wave5/scripts/research/check_activation_parameterization.py",
+      "sha256": "370e4344b39b2aad2fdd3eb21f600fc2d5c5973472a7febb5d0bbd2cd24da0c6"
+    },
+    {
+      "bytes": 14414,
+      "path": "docs/researchledger/historical-wave5/scripts/research/collect_emergent_garden_comments.py",
+      "sha256": "ca260120a2b7cc20e70a35187a3c3937cc54aee316b77cd00eb9dd0b66e8e70e"
+    },
+    {
+      "bytes": 30038,
+      "path": "docs/researchledger/historical-wave5/scripts/research/collect_emergent_garden_youtube.py",
+      "sha256": "a9ef42747dbf952853153fb7c5b58b327470f23adeb9bcf292c841ed9c52c3e1"
+    },
+    {
+      "bytes": 17514,
+      "path": "docs/researchledger/historical-wave5/scripts/research/collect_emergent_garden_youtube_v2.py",
+      "sha256": "fb8a4e6c02ad103921ae6eb6be9b85db207b5fe575ab27b440b51bd103c7c0dc"
+    },
+    {
+      "bytes": 2379,
+      "path": "docs/researchledger/historical-wave5/scripts/research/test_comment_corpus_analysis.py",
+      "sha256": "168a9da018225399ada0166077408f3051470097725b4754c1996d1ecf131ed2"
+    },
+    {
+      "bytes": 3473,
+      "path": "docs/researchledger/historical-wave5/scripts/research/test_emergent_garden_comments.py",
+      "sha256": "a341a6eb39b306b6a48a7515b3c1ac518730cafa044259d52171ed121a77f4e0"
+    },
+    {
+      "bytes": 8763,
+      "path": "docs/researchledger/historical-wave5/scripts/research/test_emergent_garden_youtube_v2.py",
+      "sha256": "1d806a9d5f5b03f38c5174e59c1dbdba5e8074720e8e1bd719b3f733212b84aa"
+    },
+    {
+      "bytes": 3249,
+      "path": "docs/researchledger/historical-wave5/scripts/research/test_research_bundle.py",
+      "sha256": "cda435cadb87f0816901fef50479595790f870a5f91534dec8108b334329d9d1"
+    },
+    {
+      "bytes": 2498,
+      "path": "docs/researchledger/historical-wave5/scripts/research/test_research_evidence.py",
+      "sha256": "55231a000e33496f7f5d39a2a3e6e6788e5634951968335e623b70835d00c65e"
+    },
+    {
+      "bytes": 4681,
+      "path": "docs/researchledger/historical-wave5/scripts/research/verify_research_bundle.py",
+      "sha256": "16490489f6c1af29a5ca6cf0f50f1d2df876fdfe134fe6df65e80387121e935a"
+    }
+  ],
+  "later_referenced_unavailable": "8822aa14baef2a964288076645edcc493c338688",
+  "provenance": "Wave 5 verified handoff; historic fallback, not current corpus",
+  "public_api_metadata_imported": false,
+  "retained_files": 47,
+  "schema_version": "1.0",
+  "source_archive_member_count": 72,
+  "source_archive_sha256": "5197f26bd5ba82abffd2d03354174352f5cf06efee1ea99f33e201d589aa99c3",
+  "source_head_latest_verified": "570fc0b26db2865d36493dc32a5bed6e38be88f9"
+}

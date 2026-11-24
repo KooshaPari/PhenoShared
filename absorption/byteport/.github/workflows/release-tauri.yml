@@ -1,0 +1,181 @@
+# release-tauri.yml — Build and publish Tauri desktop installers
+#
+# Builds platform-specific installers on every tag push:
+#   macOS:   .app, .dmg, .pkg
+#   Windows: .msi, .nsis (.exe installer)
+#   Linux:   .deb, .rpm, .AppImage
+#
+# Triggered by: tag push (v*), manual dispatch.
+
+name: Release Tauri
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build (e.g. v0.1.0)'
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-macos:
+    name: macOS (aarch64 + x86_64)
+    runs-on: macos-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      # rust-toolchain.toml pins channel 1.99.0, which OVERRIDES the action's
+      # 'stable' install for everything inside the repo — so the targets the
+      # action added landed on 'stable', not on 1.99.0. The universal build
+      # then died with "Target x86_64-apple-darwin is not installed" (v1.0.2
+      # run 38105638088, 2026-10-11). Re-add them for the pinned toolchain.
+      - name: Add universal-build targets to the pinned toolchain
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
+
+      - name: Install dependencies (macOS)
+        run: echo "macOS has WebKit built-in, no extra deps needed"
+
+      - name: Install frontend deps
+        working-directory: frontend/web
+        run: npm ci --ignore-scripts
+
+      - name: Build Tauri app (universal)
+        uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: frontend/web
+          tagName: ${{ github.ref_name || inputs.tag }}
+          releaseName: 'BytePort ${{ github.ref_name || inputs.tag }}'
+          releaseBody: 'See the assets below to download and install BytePort.'
+          releaseDraft: false
+          prerelease: false
+          includeUpdater: false
+          args: '--target universal-apple-darwin'
+
+  build-windows:
+    name: Windows (x86_64 + aarch64)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+
+      - name: Install frontend deps
+        working-directory: frontend/web
+        run: npm ci --ignore-scripts
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: frontend/web
+          tagName: ${{ github.ref_name || inputs.tag }}
+          releaseName: 'BytePort ${{ github.ref_name || inputs.tag }}'
+          releaseBody: 'See the assets below to download and install BytePort.'
+          releaseDraft: false
+          prerelease: false
+          includeUpdater: false
+          args: '--target x86_64-pc-windows-msvc'
+
+  build-linux:
+    name: Linux (x86_64 + aarch64)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-4-dev \
+            libappindicator3-dev librsvg2-dev patchelf \
+            libfuse2 rpm
+
+      - name: Install frontend deps
+        working-directory: frontend/web
+        run: npm ci --ignore-scripts
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: frontend/web
+          tagName: ${{ github.ref_name || inputs.tag }}
+          releaseName: 'BytePort ${{ github.ref_name || inputs.tag }}'
+          releaseBody: 'See the assets below to download and install BytePort.'
+          releaseDraft: false
+          prerelease: false
+          includeUpdater: false
+          args: '--target x86_64-unknown-linux-gnu'
+
+  update-install-script:
+    name: Update install script
+    needs: [build-macos, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+
+      - name: Update install.sh with latest tag
+        run: |
+          TAG="${{ github.ref_name || inputs.tag }}"
+          sed -i "s|LATEST_VERSION=.*|LATEST_VERSION=\"$TAG\"|" install.sh
+
+      - name: Commit and push updated install script
+        env:
+          # TAG lived only in the previous step's shell — the message above
+          # committed as "chore: update install.sh to" (empty) on v1.0.3.
+          TAG: ${{ github.ref_name || inputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add install.sh
+          git diff --cached --quiet || git commit -m "chore: update install.sh to $TAG"
+          # Rebase guard: main may have moved since checkout (concurrent
+          # pushes); a plain push then fails non-fast-forward.
+          git pull --rebase origin main
+          git push origin main

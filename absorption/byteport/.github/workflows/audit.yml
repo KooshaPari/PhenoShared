@@ -1,0 +1,312 @@
+# audit.yml — BytePort security & quality audits
+#
+# Slow / weekly / non-PR-gating checks. PR-gating checks live in ci.yml.
+# Per-tool schedules are offset to avoid thundering herd.
+#
+# Triggers: push, pull_request, weekly schedule (per-job), manual dispatch.
+# Concurrency: one in-flight run per ref; new commits cancel old runs.
+
+name: Audit
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  schedule:
+    # Weekly sweep — per-job cron offsets live in the jobs themselves
+    # so each tool is staggered (gitleaks, trufflehog, cargo-audit,
+    # cargo-semver, sonarcloud all have their own schedule).
+    - cron: '17 4 * * 1'   # Mon 04:17 UTC — gitleaks + trufflehog
+    - cron: '37 5 * * 3'   # Wed 05:37 UTC — cargo-audit
+    - cron: '17 3 * * 6'   # Sat 03:17 UTC — scorecard mirror
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  # ---------- CodeQL ----------
+  codeql:
+    timeout-minutes: 30
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["actions", "go", "javascript"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
+        with:
+          languages: ${{ matrix.language }}
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  # ---------- Gitleaks ----------
+  gitleaks:
+    name: Gitleaks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  # ---------- TruffleHog ----------
+  trufflehog:
+    name: TruffleHog (verified)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Run TruffleHog
+        uses: trufflesecurity/trufflehog@27d8ea2876d990b274996fc97aff0f8d952d364c # main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          extra_args: --only-verified
+
+  # ---------- Cargo audit ----------
+  cargo-audit:
+    name: cargo-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # `issues: write` is required so rustsec/audit-check can post an issue
+    # when it finds a new advisory. Without it, the action errors out
+    # with "Resource not accessible by integration" and the schedule fails
+    # every Monday (observed 2026-10-05: runs 37112275774 + 37302783988).
+    # `ignore:` carries the 17 RUSTSEC IDs from `deny.toml` (already
+    # justified there) plus 2 more (glib unsound, anyhow downcast_mut)
+    # so the weekly cron doesn't flood the issue tracker with re-posted
+    # warnings. Any *new* advisory (not in this list) will still surface.
+    permissions:
+      contents: read
+      checks: write
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Run RustSec audit
+        uses: rustsec/audit-check@69366f33c96575abad1ee0dba8212993eecbe998 # v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ignore: 'RUSTSEC-2024-0370,RUSTSEC-2024-0411,RUSTSEC-2024-0412,RUSTSEC-2024-0413,RUSTSEC-2024-0414,RUSTSEC-2024-0415,RUSTSEC-2024-0416,RUSTSEC-2024-0417,RUSTSEC-2024-0418,RUSTSEC-2024-0419,RUSTSEC-2024-0420,RUSTSEC-2024-0429,RUSTSEC-2025-0057,RUSTSEC-2025-0075,RUSTSEC-2025-0080,RUSTSEC-2025-0081,RUSTSEC-2025-0098,RUSTSEC-2025-0100,RUSTSEC-2026-0190'
+
+  # ---------- Cargo semver ----------
+  cargo-semver:
+    name: cargo-semver-checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # All workspace crates are publish = false, so there is no crates.io baseline
+    # to diff against: the action fails with "failed to retrieve crate data from
+    # registry" and posts a red check even with continue-on-error. Skipped until
+    # there is a published baseline (or a `baseline-rev` is configured).
+    if: false
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Run cargo-semver-checks
+        uses: obi1kenobi/cargo-semver-checks-action@6b69fcf40e9b5fb17adeb57e4b6ecd020649a239 # v2
+
+  # ---------- npm audit (frontend web) ----------
+  npm-audit:
+    name: npm audit (frontend/web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/web/package-lock.json
+      - name: Install dependencies (npm ci)
+        working-directory: frontend/web
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Run npm audit (high+ only)
+        working-directory: frontend/web
+        run: npm audit --audit-level=high
+
+  # ---------- Go govulncheck ----------
+  govulncheck:
+    name: Go govulncheck (backend/byteport)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.26.9'
+          cache-dependency-path: |
+            backend/byteport/go.sum
+      - name: Run govulncheck (byteport)
+        working-directory: backend/byteport
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck
+          govulncheck ./...
+
+  # ---------- SonarCloud ----------
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    # SonarCloud's Automatic Analysis is enabled on this project, and the scanner
+    # refuses to run CI analysis while it is ("You are running CI analysis while
+    # Automatic Analysis is enabled"). Automatic Analysis already covers this
+    # repo, so the CI scan stays off until that project setting is turned off.
+    if: false
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v8.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # ---------- Legacy tooling anti-pattern (WARN mode) ----------
+  legacy-tooling:
+    name: Legacy tooling scan (WARN)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PHENOTYPE_TOOLING_TOKEN: ${{ secrets.PHENOTYPE_TOOLING_TOKEN }}
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Checkout phenotype/repos for shared tools
+        id: checkout-legacy-tools
+        if: ${{ env.PHENOTYPE_TOOLING_TOKEN != '' }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: kooshapari/phenotype
+          path: phenotype-repos
+          sparse-checkout: tooling/legacy-enforcement
+          token: ${{ env.PHENOTYPE_TOOLING_TOKEN }}
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: 'pip install --only-binary :all: pyyaml==6.0.2'
+      - name: Run legacy tooling scanner (WARN mode)
+        if: ${{ steps.checkout-legacy-tools.outcome == 'success' }}
+        run: |
+          python3 phenotype-repos/tooling/legacy-enforcement/scanner/legacy_tooling_scanner.py \
+            --repo-root . \
+            --policy phenotype-repos/tooling/legacy-enforcement/policy/rules.yaml \
+            --output-json legacy_tooling_report.json \
+            --output-md legacy_tooling_report.md \
+            --report-only
+        continue-on-error: true
+      - name: Write skipped scan report
+        if: ${{ steps.checkout-legacy-tools.outcome != 'success' }}
+        run: |
+          cat > legacy_tooling_report.json <<'JSON'
+          {"totals":{},"findings":[],"skipped":"PHENOTYPE_TOOLING_TOKEN is not configured; shared legacy tooling checkout was skipped."}
+          JSON
+          cat > legacy_tooling_report.md <<'MD'
+          **Legacy Tooling Scan Report**
+
+          Skipped: `PHENOTYPE_TOOLING_TOKEN` is not configured, so the shared legacy tooling repository could not be checked out.
+          MD
+      - name: Upload scan report (JSON)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: legacy-tooling-report-json
+          path: legacy_tooling_report.json
+          retention-days: 30
+      - name: Upload scan report (Markdown)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: legacy-tooling-report-md
+          path: legacy_tooling_report.md
+          retention-days: 30
+      - name: Comment PR with findings
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const fs = require('fs');
+            let report = '**Legacy Tooling Scan Report**\n\n';
+
+            try {
+              const data = JSON.parse(fs.readFileSync('legacy_tooling_report.json', 'utf8'));
+              const totals = data.totals || {};
+
+              report += `| Severity | Count |\n|----------|-------|\n`;
+              report += `| Critical | ${totals.critical || 0} |\n`;
+              report += `| High | ${totals.high || 0} |\n`;
+              report += `| Medium | ${totals.medium || 0} |\n`;
+              report += `| Low | ${totals.low || 0} |\n\n`;
+
+              const findings = data.findings || [];
+              if (findings.length > 0) {
+                report += '**Top Violations:**\n';
+                findings.slice(0, 5).forEach(f => {
+                  report += `- [${f.severity.toUpperCase()}] ${f.rule_id}: ${f.file}:${f.line}\n`;
+                });
+                if (findings.length > 5) {
+                  report += `- ... and ${findings.length - 5} more\n`;
+                }
+              } else {
+                report += 'No violations detected.\n';
+              }
+
+              report += '\n*This is a WARN-mode scan. Fix before strict enforcement begins.*';
+            } catch (e) {
+              report += 'Could not parse scan results.';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });

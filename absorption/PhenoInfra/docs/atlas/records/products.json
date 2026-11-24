@@ -1,0 +1,1476 @@
+[
+  {
+    "name": "Tracera",
+    "id": "PRD-TRACERA",
+    "repository_id": 1162254344,
+    "role": "Persistent product/system model and dissatisfaction discovery",
+    "atlas_questions": [
+      "Product identity versus repository, work item and session identity",
+      "Versioned capability, requirement, interface and evidence relationships",
+      "Source anchors, index freshness and build-profile reachability",
+      "Bounded expansion/collapse and explainable search",
+      "Dissatisfaction detection, triage and authoritative resolution"
+    ],
+    "carry_forward_risks": [
+      "Earlier descriptions foreground audit/ALM rather than product semantics",
+      "Existing tracera-atlas is ALM-oriented; reuse must not redefine the product",
+      "Persistent model and external engine work state need distinct owners"
+    ],
+    "comparators": [
+      "Manual Git/search/specification workflow",
+      "Backstage software catalog plus search",
+      "StrictDoc plus source links",
+      "SCIP/LSP search plus a dependency explorer",
+      "CodeScene-style hotspot analysis"
+    ],
+    "scenario": "Import three representative owned products with seeded and retained-real gaps: an unreachable public capability, stale coverage evidence, a changed dependency, a duplicated owner and a legitimate exception. Ask an unfamiliar operator to explain current behavior, locate the issue, identify affected consumers and plan a bounded repair. Repeat after a source change and restart.",
+    "failure_cases": [
+      "Stale revision is presented as current",
+      "Unsupported dynamic edge is asserted as proven",
+      "Replayed ingestion duplicates entities",
+      "Untrusted repository prose becomes a command",
+      "Private evidence leaks into a public projection",
+      "Conflicting requirement is silently overwritten"
+    ],
+    "metrics": [
+      "Correctness and precision/recall on adjudicated gap cases",
+      "Time and interactions to an evidence-backed explanation",
+      "Unsupported-claim rate and abstention quality",
+      "Incremental update latency and stale-result exposure",
+      "Index/model memory and query latency",
+      "Export/import and restart fidelity"
+    ],
+    "advantage_hypothesis": "One persistent explorable product model reduces manual reconciliation across intent, code, contracts and evidence while preserving explainability.",
+    "reuse_directions": [
+      "Adopt SCIP/LSP and language-native indexing rather than recreate symbol engines",
+      "Reuse established local text search and databases",
+      "Adapt software catalogs and requirement formats",
+      "Use native test/report formats as evidence producers"
+    ],
+    "cvp_acceptance": "An installed or hosted real frontend imports an actual product, exposes a genuine discrepancy with source evidence, supports bounded navigation and survives restart without changing ownership or inventing results.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1162254344",
+      "original_identity": "Tracera",
+      "old_assessment": "RECONCILE PRODUCT IDENTITY; THEN QUALIFY",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "10 specialized seats",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Tracera/DOSSIER.md",
+    "pilot": "products/Tracera/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "AgilePlus",
+    "id": "PRD-AGILEPLUS",
+    "repository_id": 1169608854,
+    "role": "Repository-scoped governed specification and work tooling",
+    "atlas_questions": [
+      "Repository-root resolution and isolation",
+      "Authoritative state versus generated review files",
+      "Transitions, prerequisites, permissions and receipts",
+      "CLI/MCP/API/desktop contract equivalence",
+      "Crash, concurrency and schema migration behavior"
+    ],
+    "carry_forward_risks": [
+      "Prior workflow advertised 85% while enforcing different language policies",
+      "Tool repository must not own subjects cross-project data",
+      "Generated documents must not imply an engine transition"
+    ],
+    "comparators": [
+      "GitHub issues/projects plus repo-local specs",
+      "Plane workflow plus repository contracts",
+      "StrictDoc with scripts",
+      "Direct structured files plus small CLI"
+    ],
+    "scenario": "Two independent sample products execute a feature from clarified intent through implementation, verification and release preparation. Interrupt the process, change acceptance criteria, replay a request and perform concurrent work. Compare operator steps and recoverability without requiring an ecosystem-wide server.",
+    "failure_cases": [
+      "Wrong repository root selected",
+      "Duplicate transition after a restart",
+      "Stale acceptance criteria used",
+      "Failed native check treated as pass",
+      "Concurrent writers overwrite state",
+      "Generated review artifact edited without an engine operation"
+    ],
+    "metrics": [
+      "Correct transitions and invalid transitions rejected",
+      "Isolation leaks",
+      "Recovery and replay behavior",
+      "Operator/tool calls per completed feature",
+      "Migration burden",
+      "Independent structural/behavioral coverage by supported runtime"
+    ],
+    "advantage_hypothesis": "Explicit machine-verifiable work contracts remove coordination ambiguity with less administrative effort than ad hoc files and boards.",
+    "reuse_directions": [
+      "Use SQLite/Postgres and established migration tooling where suitable",
+      "Reuse native coverage parsers",
+      "Integrate existing Git providers and review systems",
+      "Keep generic adapters separate from portfolio composition"
+    ],
+    "cvp_acceptance": "Clean installation and an actual scoped CLI/MCP/desktop journey with durable correct state, required checks and a source-bound receipt; unrelated projects work without Phenotype branding or portfolio data.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1169608854",
+      "original_identity": "AgilePlus",
+      "old_assessment": "REPAIR FALSE ASSURANCE BEFORE ACCEPTANCE",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/AgilePlus/DOSSIER.md",
+    "pilot": "products/AgilePlus/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "HeliosLab",
+    "id": "PRD-HELIOSLAB",
+    "repository_id": 1167587447,
+    "role": "Agent workbench or configuration composite; identity adjudication first",
+    "atlas_questions": [
+      "Actual executable and build roots",
+      "Config/flags/secrets packages versus workbench UI",
+      "Persisted session/project configuration ownership",
+      "Terminal, agent and desktop integration boundaries",
+      "Public install path and external dependencies"
+    ],
+    "carry_forward_risks": [
+      "Baseline found mixed workbench/configuration descriptions",
+      "Prior manifests depended on old clap-ext/observability locations",
+      "Do not interpret six config crates as proof of a complete desktop workbench"
+    ],
+    "comparators": [
+      "Native terminal and harness launch workflow",
+      "VS Code workspace plus task/session tooling",
+      "Existing agent desktop client appropriate to accepted scope",
+      "OpenFeature-compatible configuration for a configuration-only contract"
+    ],
+    "scenario": "First select the accepted public job. For a workbench, launch two isolated projects and different harnesses, navigate current and archived sessions, inspect a tool error, restart, and resume safely. For configuration tooling, create and change scoped flags/secrets and verify applications observe precisely the intended values. Do not combine incomparable outcomes into one score.",
+    "failure_cases": [
+      "Secret exposed in a preview or log",
+      "Wrong project receives config",
+      "Stale session becomes writable",
+      "Missing external source works only from a warm cache",
+      "Desktop shell launches the wrong binary"
+    ],
+    "metrics": [
+      "Time to first correct workspace/configuration",
+      "State fidelity and isolation",
+      "Number of manual context switches",
+      "Clear failure diagnosis",
+      "Clean-install dependency burden",
+      "UI keyboard/accessibility completeness"
+    ],
+    "advantage_hypothesis": "A coherent local workbench or precise configuration tool reduces context switching and setup, not just rebrands a generic workspace.",
+    "reuse_directions": [
+      "Reuse native PTY and terminal libraries",
+      "Use established config/secret providers",
+      "Reuse OpenFeature interfaces if flags are in scope",
+      "Keep the product shell separate from policy-independent libraries"
+    ],
+    "cvp_acceptance": "The accepted product identity is explicit and the corresponding real UI/CLI workflow installs, persists, survives restart and protects secrets.",
+    "notes": "Work on identity may precede implementation, but does not authorize deleting useful config code or choosing a new product silently.",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1167587447",
+      "original_identity": "HeliosLab",
+      "old_assessment": "RECONCILE SCOPE AND DEPENDENCIES",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/HeliosLab/DOSSIER.md",
+    "pilot": "products/HeliosLab/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "ResearchLedger",
+    "id": "PRD-RESEARCHLEDGER",
+    "repository_id": 1308558334,
+    "role": "Local research provenance, retrieval and portable vault",
+    "atlas_questions": [
+      "Raw capture, normalized records and human annotations",
+      "Document IDs, duplicates, versions and citation anchors",
+      "Vault storage versus search index",
+      "Credential and browser boundaries",
+      "Import/export fidelity and deletion/retention"
+    ],
+    "carry_forward_risks": [
+      "Prior source was paused while names later changed",
+      "Installed application and actual vault compatibility not previously qualified"
+    ],
+    "comparators": [
+      "Zotero plus Markdown notes",
+      "Obsidian with source links",
+      "Plain files plus ripgrep/SQLite",
+      "A suitable bibliographic manager with browser capture"
+    ],
+    "scenario": "Import a mixed corpus of papers, webpages and local notes with duplicates, amended documents, missing metadata and broken URLs. Create a claim with citations, retrieve it offline, change a source, export the vault, then reimport in a clean environment. Compare actual cleanup effort, citation correctness and retention of annotations.",
+    "failure_cases": [
+      "Changed source overwrites cited text",
+      "Duplicate import destroys annotations",
+      "Credential appears in export",
+      "Partial indexing is reported complete",
+      "Unsupported format loses content silently",
+      "Search returns stale evidence as current"
+    ],
+    "metrics": [
+      "Citation precision and source-anchor fidelity",
+      "Import completeness with unknowns visible",
+      "Deduplication correctness",
+      "Cleanup/annotation effort",
+      "Offline query latency",
+      "Export/reimport data loss and vendor lock-in"
+    ],
+    "advantage_hypothesis": "Less source cleanup and more trustworthy source-grounded retrieval while keeping the vault portable and privately owned.",
+    "reuse_directions": [
+      "Reuse mature document extraction and bibliographic formats",
+      "Reuse local search rather than bespoke token indexes",
+      "Adapt existing browser capture formats",
+      "Preserve raw files plus versioned derived indexes"
+    ],
+    "cvp_acceptance": "Actual vault survives clean import/export/reopen and supports an evidence-backed research task without private material leaking or a compulsory cloud service.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1308558334",
+      "original_identity": "zz-pause-ResearchLedger",
+      "old_assessment": "PRESERVE VAULTS; VERIFY THE NEW CHARTER",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/ResearchLedger/DOSSIER.md",
+    "pilot": "products/ResearchLedger/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "SessionLedger",
+    "id": "PRD-SESSIONLEDGER",
+    "repository_id": 1284536541,
+    "role": "Cross-harness capture, preservation, search and replay view",
+    "atlas_questions": [
+      "Native raw formats and lossless source capture",
+      "Normalization of messages/tools/attachments/branches",
+      "Time, ordering, deduplication and missing receipts",
+      "Redaction, private search and retention",
+      "Replay visualization versus prohibited side-effect execution"
+    ],
+    "carry_forward_risks": [
+      "Previous pause/active naming contradictions require scoped acceptance",
+      "A trace platform is not automatically a lossless arbitrary-transcript archive"
+    ],
+    "comparators": [
+      "Native harness exports plus compressed files/search",
+      "Langfuse trace/session inspection",
+      "Local structured archive with SQLite FTS",
+      "A small format-specific conversion pipeline"
+    ],
+    "scenario": "Archive long interrupted and branched sessions from several harnesses, including duplicate journals, malformed records and missing tool receipts. Search for the actual approval that authorized one action, show the sequence, export it and restore in a clean installation. Introduce a parser upgrade and compare fidelity.",
+    "failure_cases": [
+      "Duplicate journal inflates activity",
+      "Missing tool output is fabricated",
+      "Attachment orphaned",
+      "Replay executes an old tool command",
+      "Redacted secret remains in search index",
+      "Normalized timestamp presented as original"
+    ],
+    "metrics": [
+      "Lossless raw preservation and parse coverage",
+      "Correct sequence/branch reconstruction",
+      "Query correctness",
+      "Recovery fidelity",
+      "Storage/index overhead",
+      "Time to locate an actual scoped approval"
+    ],
+    "advantage_hypothesis": "Cross-harness provenance and recovery reduce operator uncertainty without turning transcripts into a new authority or side-effect replay engine.",
+    "reuse_directions": [
+      "Use native export/API formats",
+      "Reuse robust compression and local search",
+      "Keep parsers versioned and fuzzed",
+      "Adapt existing tracing viewers where semantically appropriate"
+    ],
+    "cvp_acceptance": "An installed consumer ingests real authorized captures, exposes unknowns, retrieves a source-linked event, and restores raw evidence without secret leakage or side effects.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1284536541",
+      "original_identity": "zz-pause-SessionLedger",
+      "old_assessment": "PRESERVE DATA CONTRACT; RECONCILE ROLE",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/SessionLedger/DOSSIER.md",
+    "pilot": "products/SessionLedger/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "KCode",
+    "id": "PRD-KCODE",
+    "repository_id": 1365855438,
+    "role": "Owned jcode-derived coding harness",
+    "atlas_questions": [
+      "Provider connection/retry state",
+      "Session persistence and compaction",
+      "Child-agent ownership and cancellation",
+      "Filesystem/tool permission envelope",
+      "Updater, fork identity and installed artifact"
+    ],
+    "carry_forward_risks": [
+      "Past consolidation transcript exposed unsafe restart and permission interpretations",
+      "A stronger model/harness is not a substitute for scoped action authority",
+      "Fork deltas require distinct upstream comparison"
+    ],
+    "comparators": [
+      "Exact upstream jcode base",
+      "Current upstream jcode",
+      "HeliosLite current owned build",
+      "HeliosCLI current owned build",
+      "Direct small scripted model/tool runner"
+    ],
+    "scenario": "Run a multi-step repository task with parent and child agents against an isolated fixture repository. Inject stream disconnects, rate limiting, delayed tools, a failed child and a process restart. Resume while a protected file and forbidden repository remain present. Test the actual installed build and updater.",
+    "failure_cases": [
+      "Duplicate mutation after uncertain completion",
+      "Compaction drops a critical restriction",
+      "Child outlives cancelled parent",
+      "Connection liveness mistaken for progress",
+      "Installed upstream binary mistaken for fork",
+      "Secret persisted to unapproved file"
+    ],
+    "metrics": [
+      "Useful task completion and forbidden-action rate",
+      "Memory at fixed workload/concurrency",
+      "Manual recoveries",
+      "State loss and duplicate side effects",
+      "Tail latency and provider error recovery",
+      "Patch carry cost per upstream update"
+    ],
+    "advantage_hypothesis": "Sustained useful operation at lower memory and recovery burden, with stronger rather than weaker mutation safety.",
+    "reuse_directions": [
+      "Keep a small upstream patch stack",
+      "Reuse protocol/provider clients where appropriate",
+      "Use process supervision and durable receipts",
+      "Separate destructive capabilities from normal agent credentials"
+    ],
+    "cvp_acceptance": "Owned native binary installs and resumes the controlled fault workload with correct state, no unauthorized mutations, and a measured incremental advantage over upstream.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1365855438",
+      "original_identity": "jcode",
+      "old_assessment": "QUALIFY INSTALL AND DESTRUCTIVE-ACTION BOUNDARIES",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/KCode/DOSSIER.md",
+    "pilot": "products/KCode/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "HeliosLite",
+    "id": "PRD-HELIOSLITE",
+    "repository_id": 1226104769,
+    "role": "Forgecode-derived coding-agent CLI",
+    "atlas_questions": [
+      "Actual binary/brand/release aliases",
+      "Current versus legacy/foreign sessions",
+      "Stream/retry behavior",
+      "Workspace isolation and readonly contracts",
+      "Search, recall, forgetting and child lifecycles"
+    ],
+    "carry_forward_risks": [
+      "Earlier promotion already merged; do not repeat it",
+      "Latest-release absence in older audit is a revalidation item, not permanent status",
+      "Connection stability must not conceal stale or unsafe state"
+    ],
+    "comparators": [
+      "Exact upstream ForgeCode base",
+      "Current upstream ForgeCode",
+      "KCode owned build",
+      "HeliosCLI owned build",
+      "Direct bounded tool runner"
+    ],
+    "scenario": "Use the same long-running coding and transport-fault corpus as KCode. Add legacy/foreign sessions and switch project roots. Search and inspect them without mutating forbidden stores; interrupt a child task and restart the parent. Install and update the fork outside the checkout.",
+    "failure_cases": [
+      "Foreign session becomes writable",
+      "Search crosses private workspace boundary",
+      "Retry repeats a completed tool",
+      "Provider disconnect loses state",
+      "Recall points to fabricated/misordered history",
+      "Updater installs a different product"
+    ],
+    "metrics": [
+      "Completion and recovery rate",
+      "Forbidden writes",
+      "Session search correctness",
+      "Latency tails under disconnect/reconnect",
+      "Operator intervention count",
+      "Clean installation/update fidelity"
+    ],
+    "advantage_hypothesis": "Connection continuity and usable session recovery on the actual endpoints, while preserving scope and provenance.",
+    "reuse_directions": [
+      "Preserve inherited provider fixes with upstream links",
+      "Reuse native transport parsers",
+      "Implement a narrow compatibility adapter for old sessions",
+      "Avoid copying state stores across products"
+    ],
+    "cvp_acceptance": "One current installed fork completes the controlled coding journey, with stable reconnection and safe legacy-session behavior proved at its artifact revision.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1226104769",
+      "original_identity": "forgecode",
+      "old_assessment": "INTEGRATED; RELEASE INSTALL PATH OPEN",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/HeliosLite/DOSSIER.md",
+    "pilot": "products/HeliosLite/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "HeliosCLI",
+    "id": "PRD-HELIOSCLI",
+    "repository_id": 1165315873,
+    "role": "Codex-derived CLI and reusable harness workspace",
+    "atlas_questions": [
+      "Root workspace versus vendored agent build",
+      "Advertised command and actual executable",
+      "Auth/provider adapters",
+      "Permission and tool boundaries",
+      "Session schema and compatibility"
+    ],
+    "carry_forward_risks": [
+      "Prior root build excluded vendored Codex; compile success was not agent proof",
+      "Missing parent product clarity must be resolved before comparison"
+    ],
+    "comparators": [
+      "Exact upstream Codex base",
+      "Current upstream Codex",
+      "HeliosLite",
+      "KCode",
+      "A minimal direct model/tool runner"
+    ],
+    "scenario": "Build the actual advertised executable in a clean environment, install it and perform a fixed coding task. Trigger a tool failure, denied filesystem action, interruption and session resume. Upgrade the fork and confirm identity and persisted session compatibility.",
+    "failure_cases": [
+      "Wrong workspace builds while binary is missing",
+      "Permission context lost on resume",
+      "Authentication/config path differs from docs",
+      "Model swap changes tool semantics silently",
+      "A root library smoke test is substituted for real agent execution"
+    ],
+    "metrics": [
+      "Task success and restriction compliance",
+      "Setup and maintenance effort",
+      "Provider portability",
+      "Resumption correctness",
+      "Artifact size/startup/resource use",
+      "Owned patch divergence and upstream integration effort"
+    ],
+    "advantage_hypothesis": "A small useful compatibility or workflow delta that justifies maintaining the fork; inherited Codex features alone are not novelty.",
+    "reuse_directions": [
+      "Use upstream SDK/protocol semantics",
+      "Keep fork delta documented",
+      "Reuse versioned public interfaces rather than scraping private state",
+      "Prefer small adapters to duplicate runtimes"
+    ],
+    "cvp_acceptance": "The installed advertised command, not a sibling test binary, completes an allowed task and handles errors/resume without scope loss.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1165315873",
+      "original_identity": "helios-cli",
+      "old_assessment": "RESOLVE WHAT THE SHIPPED BINARY IS",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/HeliosCLI/DOSSIER.md",
+    "pilot": "products/HeliosCLI/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "Khostty",
+    "id": "PRD-KHOSTTY",
+    "repository_id": 1322607630,
+    "role": "Owned terminal fork or embedded terminal surface",
+    "atlas_questions": [
+      "Terminal parser/state machine",
+      "Renderer/window/input lifecycle",
+      "PTY/shell integration and environment",
+      "Embedded-library contracts",
+      "Patch ownership and release channels"
+    ],
+    "carry_forward_risks": [
+      "Large upstream fork entails update burden",
+      "Novelty must be in owned deltas, not inherited GPU/native behavior"
+    ],
+    "comparators": [
+      "Pinned upstream Ghostty",
+      "Current Ghostty",
+      "WezTerm",
+      "Kitty",
+      "Native platform terminal"
+    ],
+    "scenario": "Run a terminal conformance/workload corpus: Unicode, wide/combining characters, resize/reflow, alternate screen, bracketed paste, IME, modifiers, high output, screen-reader/keyboard navigation and embedded use where promised. Compare both correctness and perceived/recorded latency at the same workload.",
+    "failure_cases": [
+      "Input lost on focus transition",
+      "Escape sequence corrupts state",
+      "Resize loses content",
+      "Paste executes unexpectedly",
+      "Renderer leaks memory under long output",
+      "Embedding changes permission or lifecycle behavior"
+    ],
+    "metrics": [
+      "Conformance failures",
+      "Input/render latency and frame pacing",
+      "Memory after long sessions",
+      "Accessibility and native behavior",
+      "Integration effort for owning applications",
+      "Owned delta maintenance cost"
+    ],
+    "advantage_hypothesis": "A specific embedding/workflow improvement with no unacceptable terminal correctness regression.",
+    "reuse_directions": [
+      "Retain upstream terminal emulation/rendering",
+      "Keep patch queue narrowly scoped",
+      "Use existing conformance corpora",
+      "Adapt native accessibility rather than fabricate it"
+    ],
+    "cvp_acceptance": "An actual installed/embedded terminal performs the claimed delta and passes the relevant correctness corpus against a known upstream reference.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1322607630",
+      "original_identity": "ghostty",
+      "old_assessment": "QUALIFY OWNED DELTA AND CHANNEL",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Khostty/DOSSIER.md",
+    "pilot": "products/Khostty/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "ShareCLI",
+    "id": "PRD-SHARECLI",
+    "repository_id": 1191459198,
+    "role": "OS-adjacent process and resource supervisor",
+    "atlas_questions": [
+      "Process identity and lifecycle",
+      "Coalescing equivalence and cache keys",
+      "Resource admission/throttling",
+      "Cancellation/failure/restart",
+      "CLI/tray and cross-device coordination"
+    ],
+    "carry_forward_risks": [
+      "Duplicate source ownership was observed in PhenoTooling",
+      "Current source must not inherit an old release validation",
+      "Similar commands may have incompatible credentials, inputs or side effects"
+    ],
+    "comparators": [
+      "No supervisor",
+      "Process Compose",
+      "Platform-native service supervision",
+      "A bounded task runner with caching",
+      "Existing owned baseline before compression"
+    ],
+    "scenario": "Run compiler/test/agent workloads with and without ShareCLI, including truly identical pure work and deceptively similar non-coalescible jobs. Introduce input/config/credential differences, cancel a waiter, fail the producer and restart the supervisor. Maintain foreground game/audio workload constraints.",
+    "failure_cases": [
+      "Improper coalescing shares data or skips side effects",
+      "Cancelled client terminates other consumers incorrectly",
+      "Dead child/resource leak",
+      "Cache pollution across subjects",
+      "Thermal/load pressure causes worse latency",
+      "Tray and CLI disagree on ownership"
+    ],
+    "metrics": [
+      "Correctness before savings",
+      "Duplicate work avoided",
+      "Foreground p95/p99 disruption",
+      "Memory/CPU/I/O pressure",
+      "Cancellation/restart fidelity",
+      "Time to diagnose a failed job"
+    ],
+    "advantage_hypothesis": "Safely remove redundant work and contention without corrupting task semantics or degrading foreground use.",
+    "reuse_directions": [
+      "Reuse platform process supervision and established IPC",
+      "Reuse mature scheduling primitives",
+      "Use explicit pure-task cache contracts",
+      "Keep native trays thin"
+    ],
+    "cvp_acceptance": "One installed supervisor handles the complete adversarial workload under realistic contention, with exact behavior and meaningful resource benefit measured.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1191459198",
+      "original_identity": "sharecli",
+      "old_assessment": "RESOLVE DUPLICATE AUTHORITY; SHIP CURRENT CANDIDATE",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/ShareCLI/DOSSIER.md",
+    "pilot": "products/ShareCLI/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "BytePort",
+    "id": "PRD-BYTEPORT",
+    "repository_id": 861430079,
+    "role": "Git-to-service deployment application",
+    "atlas_questions": [
+      "Source ingestion, auth and build inputs",
+      "Manifest interpretation and runtime provisioner",
+      "Deployment state and ownership",
+      "Health/logs/update",
+      "Persistent data, rollback and teardown"
+    ],
+    "carry_forward_risks": [
+      "Earlier docs referenced missing/old NVMS sources",
+      "UI startup does not prove deployment",
+      "Image rollback is not state rollback"
+    ],
+    "comparators": [
+      "Coolify",
+      "Dokploy",
+      "Direct cloud deployment recipe",
+      "A minimal container/native-service setup",
+      "Accepted platform-native deployment"
+    ],
+    "scenario": "Deploy one stateless and one small stateful application through the actual supported target. Change configuration, publish a bad image, fail readiness, introduce a data migration and roll back according to the declared policy. Use a clean machine without private sibling checkouts.",
+    "failure_cases": [
+      "Partial provision reported healthy",
+      "Credentials leak to build logs",
+      "Retry duplicates resources",
+      "Bad image leaves service down without recovery",
+      "Database incorrectly rolled back with binary",
+      "Teardown destroys unowned state"
+    ],
+    "metrics": [
+      "Time/actions to working service",
+      "Recovery correctness",
+      "Manual interventions",
+      "Resource and deployment cost",
+      "Clean reproducibility",
+      "Backup/restore proof and migration safety"
+    ],
+    "advantage_hypothesis": "Less operator work for the local/native or heterogeneous deployment case while maintaining recovery correctness.",
+    "reuse_directions": [
+      "Reuse build systems, registries and runtime APIs",
+      "Use existing secret providers",
+      "Prefer provider adapters over custom provisioning engines",
+      "Reuse declared manifest contracts"
+    ],
+    "cvp_acceptance": "Actual service reachable through the authorized route, configuration and update behavior correct, failed deployment recoverable, data preserved and rollback independently demonstrated.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-861430079",
+      "original_identity": "BytePort",
+      "old_assessment": "QUALIFY A BOUNDED DEPLOYMENT",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/BytePort/DOSSIER.md",
+    "pilot": "products/BytePort/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "PhenoFabric",
+    "id": "PRD-PHENOFABRIC",
+    "repository_id": 1363521465,
+    "role": "Distributed real-time compute, data and I/O product",
+    "atlas_questions": [
+      "Logical endpoint/capability versus placement",
+      "Same-process/OS/VM/shared-memory/PCIe paths",
+      "LAN/WAN transport and memory residency",
+      "Seat/focus/surface/audio state",
+      "Trust, admission, retries and QoS"
+    ],
+    "carry_forward_risks": [
+      "Previous work included contract-only transport slices",
+      "Codec and hardware assumptions from old docs require verification",
+      "Locality optimization must not erase isolation"
+    ],
+    "comparators": [
+      "Configured Looking Glass plus local input/audio routing",
+      "Sunshine/Moonlight plus software KVM",
+      "Parsec plus platform file/clipboard sharing",
+      "RDP/seamless app workflow where supported",
+      "Direct local/native workflow"
+    ],
+    "scenario": "Desk-to-laptop-to-desk operation with one real application and two actual nodes. Then add a same-host VM route. Keep keyboard/mouse ownership exclusive, switch presentation/audio, transfer one clipboard/file item and recover from a disconnect. Measure each locality cohort separately while background build/inference load runs.",
+    "failure_cases": [
+      "Stale input lease causes duplicate control",
+      "Audio feedback or unbounded buffering",
+      "Secret clipboard delivered to wrong session",
+      "Unknown capability accepted",
+      "Disconnect loses or repeats an action",
+      "Protected foreground deadline missed",
+      "Codec assumption unsupported by endpoint"
+    ],
+    "metrics": [
+      "User steps and time to restore workspace",
+      "Capture-to-display boundary plus end-to-end separately",
+      "Latency distribution and frame pacing",
+      "Audio underruns/drift",
+      "Color/HDR fidelity and supported fallbacks",
+      "Resource load and recovery fidelity"
+    ],
+    "advantage_hypothesis": "A unified user workflow with topology-aware efficient placement, not merely a new transport protocol or a collection of wrapped tools.",
+    "reuse_directions": [
+      "Reuse mature local input/media/shared-memory mechanisms",
+      "Adapt established streaming and remoting",
+      "Use explicit device/codec capability negotiation",
+      "Reuse schedulers/object stores at boundaries that fit"
+    ],
+    "cvp_acceptance": "A real two-node public workflow plus a justified local path completes with truthful quality/performance evidence and safe recovery; paper interfaces alone do not qualify.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1363521465",
+      "original_identity": "PhenoFabric",
+      "old_assessment": "REPAIR DEPENDENCY; PROVE A REAL ROUTE",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/PhenoFabric/DOSSIER.md",
+    "pilot": "products/PhenoFabric/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "Pine",
+    "id": "PRD-PINE",
+    "repository_id": 1226547140,
+    "role": "Bounded cross-platform application compatibility research",
+    "atlas_questions": [
+      "Binary/ABI/API support set",
+      "Instruction translation versus OS API adaptation",
+      "Loader/linker/resource model",
+      "Host isolation",
+      "Observable reference semantics"
+    ],
+    "carry_forward_risks": [
+      "Broad Wine-equivalent language exceeded prior demonstrated state",
+      "No generic compatibility score can replace a program corpus"
+    ],
+    "comparators": [
+      "Wine",
+      "Proton where applicable",
+      "QEMU/VM path",
+      "Native execution",
+      "Existing platform compatibility layer"
+    ],
+    "scenario": "Select a small fixed program corpus with declared binaries, imports and target architecture. Include one useful program beyond trivial startup. Compare observable results, errors, supported calls, overhead and installation with the matching reference path; keep unsupported cases explicit.",
+    "failure_cases": [
+      "Unsupported syscall returns success",
+      "ABI mismatch corrupts memory",
+      "Isolation escape",
+      "Wrong time/filesystem semantics",
+      "Program launches but useful operation fails"
+    ],
+    "metrics": [
+      "Correct observable results",
+      "Explicit unsupported coverage",
+      "Startup/runtime overhead",
+      "Host resource use",
+      "Debuggability",
+      "Custom API surface retained versus reused"
+    ],
+    "advantage_hypothesis": "A narrow practical compatibility capability or integration improvement; a general replacement claim requires a much larger corpus.",
+    "reuse_directions": [
+      "Reuse established loaders/virtualization/translation where suitable",
+      "Implement adapters for the measured gap",
+      "Keep conformance fixtures portable",
+      "Avoid rebuilding whole OS semantics prematurely"
+    ],
+    "cvp_acceptance": "One useful declared program runs correctly with bounded failures and a reproducible comparison; research limits remain prominent.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1226547140",
+      "original_identity": "Pine",
+      "old_assessment": "RESEARCH, NOT A GENERAL COMPATIBILITY CLAIM",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Pine/DOSSIER.md",
+    "pilot": "products/Pine/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "OmniRoute",
+    "id": "PRD-OMNIROUTE",
+    "repository_id": 1226171396,
+    "role": "Owned multi-provider model gateway and routing fork",
+    "atlas_questions": [
+      "Upstream versus owned providers/policies",
+      "Credential/session contracts",
+      "Retry/fallback/streaming behavior",
+      "Quota windows and scopes",
+      "Deployment, telemetry and installed fork identity"
+    ],
+    "carry_forward_risks": [
+      "Upstream submissions are different from owned deployment",
+      "Provider breadth does not prove correctness on used endpoints",
+      "Repeated stream retries may duplicate effects or charges"
+    ],
+    "comparators": [
+      "Pinned upstream OmniRoute",
+      "Current upstream OmniRoute",
+      "LiteLLM Proxy",
+      "Bifrost",
+      "Portkey gateway",
+      "Direct provider SDKs"
+    ],
+    "scenario": "Exercise a fixed used-provider set with normal streams, tool calls, cancellation, partial responses, throttles, auth expiry and hard failures. Compare routing choices under a fixed quality/cost workload. Run a real deployed owned artifact separately from the upstream-contribution queue.",
+    "failure_cases": [
+      "Retry after partial result silently duplicates work",
+      "Budget scope wrong",
+      "Provider error normalized to false success",
+      "Secret logged",
+      "Wrong account selected",
+      "Cancellation keeps spending",
+      "Quota window uses incorrect timezone/scope"
+    ],
+    "metrics": [
+      "Task quality held constant",
+      "Availability and error fidelity",
+      "p95/p99 request overhead",
+      "Cost/quota accounting accuracy",
+      "Operator recovery burden",
+      "Provider delta maintenance"
+    ],
+    "advantage_hypothesis": "A specific operational fit on the actual endpoints with reliable normalization and accounting, not a provider-count contest.",
+    "reuse_directions": [
+      "Prefer mature provider clients/parsers",
+      "Keep routing policies explicit and testable",
+      "Reuse quota storage with correct atomicity",
+      "Upstream generic fixes when feasible"
+    ],
+    "cvp_acceptance": "Deployed fork identity and actual used-provider contracts are qualified with negative cases, accurate accounting and safe cancellation.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1226171396",
+      "original_identity": "OmniRoute",
+      "old_assessment": "QUALIFY THE FORK DELTA",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/OmniRoute/DOSSIER.md",
+    "pilot": "products/OmniRoute/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "Substrate",
+    "id": "PRD-SUBSTRATE",
+    "repository_id": 1269596554,
+    "role": "Model routing and/or agent-process execution substrate; boundary split required",
+    "atlas_questions": [
+      "Model request versus child-process request semantics",
+      "Budget and resource ownership",
+      "Streams/events/cancellation",
+      "Persistence and retry",
+      "SDK/public transport boundaries"
+    ],
+    "carry_forward_risks": [
+      "Current naming may conflate two different products",
+      "Must not duplicate OmniRoute provider/price authority without a contract"
+    ],
+    "comparators": [
+      "LiteLLM or direct provider clients for model traffic",
+      "Native process APIs for dispatch",
+      "Process Compose",
+      "Temporal for durable orchestration where justified",
+      "Existing agent CLI API adapter"
+    ],
+    "scenario": "Benchmark two distinct workloads rather than a composite score. Model traffic: stream, failover, cancel and account. Process dispatch: spawn, observe, fail, restart and terminate actual tools under explicit scopes. Compare each with the simplest appropriate existing implementation.",
+    "failure_cases": [
+      "Model retry rules incorrectly applied to side-effecting processes",
+      "Cancellation loses ownership",
+      "Output crosses tenants",
+      "Timeout hides a still-running child",
+      "Duplicate provider registry diverges"
+    ],
+    "metrics": [
+      "Correct task semantics",
+      "Latency/throughput/resource overhead",
+      "Embedding ergonomics",
+      "State/recovery correctness",
+      "Dependency and patch burden",
+      "Public API comprehensibility"
+    ],
+    "advantage_hypothesis": "A precise control/embedding contract with less integration burden; generic routing alone is already well served.",
+    "reuse_directions": [
+      "Reuse provider normalization",
+      "Reuse process and durable-execution libraries where appropriate",
+      "Keep policy-independent SDK and product composition separate"
+    ],
+    "cvp_acceptance": "The chosen public boundary completes real process or model work, with cancellation/auth/budget semantics independently verified and overlapping authorities resolved.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1269596554",
+      "original_identity": "substrate",
+      "old_assessment": "BOUND ROUTING OWNERSHIP AND QUALIFY",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Substrate/DOSSIER.md",
+    "pilot": "products/Substrate/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "PhenoMLX",
+    "id": "PRD-PHENOMLX",
+    "repository_id": 1214745478,
+    "role": "Owned MLX/OMLX inference extension and research product",
+    "atlas_questions": [
+      "Actual inference paths versus experiments",
+      "Model/quantization/backend compatibility",
+      "Memory/cache lifecycle",
+      "Application injection versus self-contained package",
+      "Quality/performance source and measurement boundary"
+    ],
+    "carry_forward_risks": [
+      "Prior installation required local oMLX app and adjacent code",
+      "A faster result can be a different quantization or cached workload",
+      "Research placeholders must not be advertised as supported inference"
+    ],
+    "comparators": [
+      "Pinned upstream OMLX",
+      "Current upstream OMLX",
+      "MLX-LM serving",
+      "llama.cpp on supported hardware",
+      "Other relevant local inference server"
+    ],
+    "scenario": "On the same Apple hardware, load the same supported model/quantization and run cold/warm request sets at declared concurrency. Measure quality on fixed prompts, latency distributions and memory. Cancel, unload, restart and create controlled memory pressure; test the actual install recipe on a clean environment.",
+    "failure_cases": [
+      "OOM returns corrupted output",
+      "Cancelled request persists indefinitely",
+      "Wrong cache reuse",
+      "Model unload leaks residency",
+      "Version injection fails silently",
+      "Benchmark compares unequal models"
+    ],
+    "metrics": [
+      "Quality/non-inferiority first",
+      "TTFT and inter-token latency distributions",
+      "Sustained tokens/s at declared concurrency",
+      "Peak/residual memory",
+      "Time to clean install",
+      "Recovery after pressure/failure"
+    ],
+    "advantage_hypothesis": "A reproducible quality-preserving throughput, memory or workflow improvement over the actual upstream baseline.",
+    "reuse_directions": [
+      "Reuse MLX and upstream model/server implementations",
+      "Carry focused patches with tests",
+      "Avoid bespoke kernels until profiling and quality parity justify them"
+    ],
+    "cvp_acceptance": "Clean install, useful inference, cancel/unload/restart and memory pressure behavior are qualified; model and build identity accompany every performance claim.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1214745478",
+      "original_identity": "PhenoMLX",
+      "old_assessment": "QUALIFY A SELF-CONTAINED INFERENCE PROFILE",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/PhenoMLX/DOSSIER.md",
+    "pilot": "products/PhenoMLX/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "Portage",
+    "id": "PRD-PORTAGE",
+    "repository_id": 1165351720,
+    "role": "Harbor-derived evaluation runner and environment adapters",
+    "atlas_questions": [
+      "Task/environment contracts",
+      "Fork delta and install source",
+      "Agent adapters and isolation",
+      "Reward/oracle execution",
+      "Results, cancellation and resource leases"
+    ],
+    "carry_forward_risks": [
+      "Old instructions used TEMP repository names",
+      "Metadata or suite-info commands are not execution evidence",
+      "Optional bridge must fail explicitly when required"
+    ],
+    "comparators": [
+      "Exact upstream Harbor base",
+      "Current Harbor",
+      "Direct task scripts in controlled environments",
+      "Inspect for matching evaluation workloads"
+    ],
+    "scenario": "Run one known-good and one known-bad agent through a real environment/task. Add an infrastructure failure, timeout, missing dependency and cancellation. Compare the fork with its upstream on retained output fidelity, configuration effort and any owned adapter/scheduling improvement.",
+    "failure_cases": [
+      "Missing implementation skips to green",
+      "Reward fabricated from metadata",
+      "Sandbox not used by tool code",
+      "Logs lost after cancellation",
+      "Required extra unavailable but accepted",
+      "Duplicate task charged/executed twice"
+    ],
+    "metrics": [
+      "Correct outcome classification",
+      "Reproducibility",
+      "Setup and adapter authoring effort",
+      "Resource enforcement",
+      "Artifact completeness",
+      "Fork maintenance burden"
+    ],
+    "advantage_hypothesis": "A measured environment/adapter/scheduling or evidence benefit over upstream, not a renamed runner.",
+    "reuse_directions": [
+      "Reuse Harbor task/runtime contracts",
+      "Keep adapters thin",
+      "Use native container/VM isolation and explicit tool execution placement",
+      "Reuse structured test reports"
+    ],
+    "cvp_acceptance": "Clean fork installation runs the useful benchmark and deliberately failing cases, preserving logs/rewards and enforcing declared limits.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1165351720",
+      "original_identity": "portage",
+      "old_assessment": "RUN A REAL EVALUATION",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Portage/DOSSIER.md",
+    "pilot": "products/Portage/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "PhenoLab",
+    "id": "PRD-PHENOLAB",
+    "repository_id": 1269695199,
+    "role": "Reproducible experiment/evaluation consumer",
+    "atlas_questions": [
+      "Datasets and source provenance",
+      "Policies/solvers/scorers",
+      "Model and environment configuration",
+      "Oracles and failure classification",
+      "Results, uncertainty and reproducibility bundle"
+    ],
+    "carry_forward_risks": [
+      "Prior negative oracle skipped based on implementation patterns",
+      "Runner presence does not establish benchmark execution",
+      "Do not duplicate Portage orchestration authority"
+    ],
+    "comparators": [
+      "Direct Harbor/Portage task",
+      "Inspect AI",
+      "Small native experiment script",
+      "Relevant public benchmark implementation"
+    ],
+    "scenario": "Reproduce one useful experiment through both PhenoLab and a direct baseline. Freeze inputs, models, resource limits and scoring. Include bad answers, malformed output, missing environment, known task failure and infrastructure failure. Repeat on a clean host or independent operator where feasible.",
+    "failure_cases": [
+      "Unimplemented feature determines whether its own test runs",
+      "Unscored case counted as success",
+      "Model failure mixed with infrastructure outage",
+      "Only selected good trials retained",
+      "Private inputs leak into report"
+    ],
+    "metrics": [
+      "Reproduction success",
+      "Scorer validity and calibration",
+      "Failure classification accuracy",
+      "Operator effort",
+      "Total evaluation cost",
+      "Result portability and auditability"
+    ],
+    "advantage_hypothesis": "Less work to produce trustworthy reusable experiments, with stronger failure accounting rather than more abstractions.",
+    "reuse_directions": [
+      "Reuse evaluator frameworks and task formats",
+      "Use maintained statistical/reporting libraries",
+      "Keep domain experiments independent from runner implementations"
+    ],
+    "cvp_acceptance": "One real reproducible experiment bundle includes all outcomes, source/config identities, actual scorer evidence and an independent known-negative control.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1269695199",
+      "original_identity": "PhenoLab",
+      "old_assessment": "RUN AND AUDIT A REAL BENCHMARK",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/PhenoLab/DOSSIER.md",
+    "pilot": "products/PhenoLab/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "Civis",
+    "id": "PRD-CIVIS",
+    "repository_id": 1164684442,
+    "role": "Persistent game-first systemic sandbox",
+    "atlas_questions": [
+      "Player roles, controls and authority transitions",
+      "Renderer/assets/animation/audio versus headless core",
+      "World generation, multipart seeds and checkpoint branching",
+      "Knowledge/technology/life systems and causal dependencies",
+      "Save migration, unattended progression and resource budgets"
+    ],
+    "carry_forward_risks": [
+      "Old global determinism/research-only language conflicts with current intent",
+      "Minimal presentation build is not the game",
+      "Long-lived worlds require actual evolved state, not seed-only recovery"
+    ],
+    "comparators": [
+      "Existing Civis candidate before changes",
+      "Relevant city/colony/godgame user-task references",
+      "Bevy current client",
+      "Godot direct Rust or godot-bevy candidate",
+      "Current qualified Unreal or Unity candidate"
+    ],
+    "scenario": "Use one living settlement with a visible water/food constraint. Intervene as god, redirect a leader-level action, inhabit an affected person, save/quit/reopen and continue. Leave a bounded background run and inspect source-backed changes. Separately compare rendering/authoring paths on the same checkpoint and content target.",
+    "failure_cases": [
+      "Role switch loses identity or intent",
+      "Missing required asset silently becomes primitive",
+      "Save omits cultural/social state",
+      "Background time jump destroys world",
+      "Determinism assumption blocks useful concurrency",
+      "LOD change duplicates resources",
+      "Unattended summary invents events"
+    ],
+    "metrics": [
+      "Playable coherent journey and qualitative clarity",
+      "Frame pacing and interaction latency",
+      "Visual/audio acceptance under supported profiles",
+      "Save/recovery fidelity",
+      "Overnight resource/time behavior",
+      "Agent content-iteration friction",
+      "No imposed engine winner without evidence"
+    ],
+    "advantage_hypothesis": "A convincing persistent world with fluid but meaningful god/leader/individual play and understandable systemic consequences.",
+    "reuse_directions": [
+      "Reuse engine render/input/audio/nav/content systems where appropriate",
+      "Keep world core contracts explicit",
+      "Use established RNG/persistence/numerical components",
+      "Evaluate bridges with real content rather than empty scenes"
+    ],
+    "cvp_acceptance": "Installed player build outside the checkout visibly supports the accepted journey, required presentation, actual state continuity and bounded unattended execution; headless tests alone are insufficient.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1164684442",
+      "original_identity": "Civis",
+      "old_assessment": "CLOSE THE PLAYER BUILD",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Civis/DOSSIER.md",
+    "pilot": "products/Civis/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "Dino",
+    "id": "PRD-DINO",
+    "repository_id": 1177712269,
+    "role": "Game mod/pack platform and companion tooling",
+    "atlas_questions": [
+      "Mod bootstrap and upstream injector",
+      "Pack manifests and dependency resolution",
+      "SDK and game bridge APIs",
+      "Asset build/import and runtime loading",
+      "Companion UI, failure diagnosis and removal"
+    ],
+    "carry_forward_risks": [
+      "A schema/SDK build does not prove the mod loads in the supported game",
+      "Fork licensing and update compatibility remain part of the contract"
+    ],
+    "comparators": [
+      "Ordinary supported manual mod workflow",
+      "Relevant game mod loader/SDK",
+      "Direct pack scripts",
+      "Pinned injector/upstream baseline"
+    ],
+    "scenario": "Author the same small visible gameplay/content pack manually and using DINOForge. Add an asset, change behavior, create a conflicting pack and unsupported version, reload where promised, restart the game, update and uninstall. Capture the actual game and companion UI.",
+    "failure_cases": [
+      "Pack accepted but not loaded",
+      "Missing asset silently ignored",
+      "Mod conflict corrupts save",
+      "Game update breaks injector",
+      "Disable/uninstall leaves hooks active",
+      "UI claims success without runtime receipt"
+    ],
+    "metrics": [
+      "Time to first working pack",
+      "Iteration and diagnosis effort",
+      "Compatibility/failure isolation",
+      "Runtime overhead",
+      "Asset quality and fidelity",
+      "Clean disable/recovery"
+    ],
+    "advantage_hypothesis": "A safer and faster practical mod-authoring workflow with real game integration and useful diagnostics.",
+    "reuse_directions": [
+      "Reuse supported injectors/loaders",
+      "Keep game-specific adapters narrow",
+      "Reuse asset pipeline tools",
+      "Use versioned schemas and real runtime contracts"
+    ],
+    "cvp_acceptance": "A new pack visibly works in the installed supported game, handles conflicts and failures correctly, and can be disabled/uninstalled without corrupting owned or unowned state.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1177712269",
+      "original_identity": "Dino",
+      "old_assessment": "QUALIFY THE INSTALLED GAME PATH",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Dino/DOSSIER.md",
+    "pilot": "products/Dino/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "WorldSphereMod",
+    "id": "PRD-WORLDSPHEREMOD",
+    "repository_id": 1241972761,
+    "role": "Game-specific spherical/3D presentation mod",
+    "atlas_questions": [
+      "Actually tested branch and fork delta",
+      "Render hooks and required asset bundles",
+      "LOD/camera/world representation",
+      "Game compatibility and other mods",
+      "Save/load and disable/uninstall contract"
+    ],
+    "carry_forward_risks": [
+      "Broad game infrastructure may live outside this repo",
+      "A quiet default branch does not prove worker inactivity",
+      "Disabled render feature is not a delivered user experience"
+    ],
+    "comparators": [
+      "Pinned upstream mod",
+      "Current upstream mod",
+      "Unmodified supported game",
+      "Prior owned release"
+    ],
+    "scenario": "Load the same populated world under upstream and the candidate. Traverse camera and LOD ranges, inspect animation and terrain, save/load and disable the mod. Repeat with the declared compatible mod set and on the supported graphics profiles.",
+    "failure_cases": [
+      "LOD pops or resource duplication",
+      "Save incompatibility",
+      "Camera/input mismatch",
+      "Required bundle missing",
+      "New game version breaks hook",
+      "Performance collapse in dense regions",
+      "Disable leaves modified state"
+    ],
+    "metrics": [
+      "Visual correctness and readability",
+      "Frame-time distribution",
+      "Memory and loading stalls",
+      "Compatibility pass/fail",
+      "Recovery/disable behavior",
+      "Actual retained feature delta"
+    ],
+    "advantage_hypothesis": "The specific 3D/world presentation improvement with explicit acceptable performance and compatibility trade-offs.",
+    "reuse_directions": [
+      "Reuse supported engine/mod hooks",
+      "Avoid competing world-state ownership",
+      "Keep rendering data conversion separately tested",
+      "Preserve upstream patch provenance"
+    ],
+    "cvp_acceptance": "Qualified package renders the real game under declared profiles, preserves save behavior and has a demonstrated safe removal path.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1241972761",
+      "original_identity": "WorldSphereMod",
+      "old_assessment": "CLOSE THE ACTUAL IN-GAME RENDER PROFILE",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/WorldSphereMod/DOSSIER.md",
+    "pilot": "products/WorldSphereMod/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "CivicWarfare",
+    "id": "PRD-CIVICWARFARE",
+    "repository_id": 1308570444,
+    "role": "Distributed game/mod scenario with potentially private producer tools",
+    "atlas_questions": [
+      "Public client versus private production sources",
+      "Distributed artifact and game/version compatibility",
+      "Gameplay/control/information loop",
+      "Telemetry consent and persistence",
+      "Producer provenance and support"
+    ],
+    "carry_forward_risks": [
+      "Public snapshot may intentionally omit generators",
+      "Repository rename does not change product obligations",
+      "Do not demand an unrelated standalone game architecture"
+    ],
+    "comparators": [
+      "Unmodified supported game/scenario",
+      "Previous owned package",
+      "Relevant gameplay/mod alternatives selected after actual scope recovery"
+    ],
+    "scenario": "Install the distributed mod/scenario as a new user, understand objectives and controls, complete a representative gameplay loop, save/load, experience a failure and remove/update the package. Compare onboarding, readability and behavior with the closest real baseline.",
+    "failure_cases": [
+      "Undeclared private dependency required at runtime",
+      "Telemetry without consent",
+      "Misleading objective/UI state",
+      "Save/version mismatch",
+      "Installer mutates unowned files",
+      "Performance degrades under expected population"
+    ],
+    "metrics": [
+      "First useful/understood play time",
+      "Gameplay and qualitative clarity",
+      "Performance under intended scale",
+      "Install/update/save fidelity",
+      "Support/recovery burden",
+      "Repeat-use value"
+    ],
+    "advantage_hypothesis": "A distinct enjoyable scenario or gameplay experience; novelty need not be in databases/renderers underneath it.",
+    "reuse_directions": [
+      "Reuse game runtime and mod facilities",
+      "Keep public/private build boundary explicit",
+      "Reuse shared graphics only with proven consumer contract"
+    ],
+    "cvp_acceptance": "The distributed public artifact installs and plays as intended, with authentic evidence, correct save/version handling and clear producer provenance.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1308570444",
+      "original_identity": "CivicSurvival-public",
+      "old_assessment": "QUALIFY THE DISTRIBUTED MOD; RESPECT THE BOUNDARY",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/CivicWarfare/DOSSIER.md",
+    "pilot": "products/CivicWarfare/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  },
+  {
+    "name": "Melosviz",
+    "id": "PRD-MELOSVIZ",
+    "repository_id": 1262466303,
+    "role": "Music visualization authoring and rendering application",
+    "atlas_questions": [
+      "Audio import/analysis and timing",
+      "Scene/preset generation versus demo fixtures",
+      "Real render backend and editor",
+      "Native/web shell and optional external services",
+      "Export, reopen and output validation"
+    ],
+    "carry_forward_risks": [
+      "Prior production references included backend stubs",
+      "Generating a ZIP does not prove media quality",
+      "Timing and renderer availability must be explicit"
+    ],
+    "comparators": [
+      "TouchDesigner workflow",
+      "Blender plus scripted/offline rendering",
+      "A simple audio-reactive visualizer",
+      "Existing manual DAW/media pipeline"
+    ],
+    "scenario": "Use the same authorized music excerpt to import, analyze, play/synchronize, edit a scene, render/export and reopen. Then replace the track, change timing, use a new preset, disable a backend and recover. Compare actual output and editing effort, not only generation latency.",
+    "failure_cases": [
+      "Stub backend produces plausible but wrong output",
+      "A/V drift",
+      "Render cancelled but resources remain",
+      "Export missing codec/frames",
+      "Preset version cannot reopen",
+      "Private source media published unintentionally"
+    ],
+    "metrics": [
+      "Time to useful visualization and revision",
+      "A/V synchronization error",
+      "Frame pacing and render duration",
+      "Output correctness and visual quality",
+      "Recovery and project portability",
+      "Dependency/licensing burden"
+    ],
+    "advantage_hypothesis": "A faster music-specific path to controllable, repeatable visual work with reliable output, not generic graphics novelty.",
+    "reuse_directions": [
+      "Reuse audio analysis, codecs and render engines",
+      "Preserve editable Blender/Adobe/native scene sources",
+      "Use FFmpeg inspection for exports",
+      "Keep generators distinct from product proof"
+    ],
+    "cvp_acceptance": "An actual installed or deployed application handles real media through the complete authoring/export/reopen path with measured synchronization and truthful backend status.",
+    "notes": "",
+    "status": "PROPOSED_WORK_PROGRAM_NOT_A_PRODUCT_SCORE",
+    "baseline_evidence": {
+      "source": "references/prior-62-assessments.json",
+      "record_id": "REP-1262466303",
+      "original_identity": "Melosviz",
+      "old_assessment": "QUALIFY REAL MEDIA, NOT DEMO OUTPUT",
+      "current_revalidation_required": true
+    },
+    "comparison_protocol": "research/COMPARATIVE-PILOT-PROTOCOL.md",
+    "seat_model": "Product implementation owner + independent assurance/comparison owner",
+    "scoped_authorization": "Resolve actual accepted scope and leases before implementation; this package grants no remote mutations.",
+    "dossier": "products/Melosviz/DOSSIER.md",
+    "pilot": "products/Melosviz/PILOT.json",
+    "source_status": "PLANNING_WITH_INHERITED_BASELINE_NOT_FRESH_AUDIT"
+  }
+]

@@ -1,0 +1,42 @@
+# Blocking shuttle permutation checker for C00 L7 concurrency evidence.
+# Runs scripts/shuttle-permutation-check.ps1 + cargo test shuttle_permutation.
+# Soft shuttle-soft.yml remains continue-on-error; this job gates merges.
+name: shuttle permutation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  shuttle-permutation-selfcheck:
+    name: shuttle permutation · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: shuttle permutation SelfCheck
+        shell: pwsh
+        run: ./scripts/shuttle-permutation-check.ps1 -SelfCheck
+
+  shuttle-permutation-suite:
+    name: shuttle permutation · cargo test shuttle_permutation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: shuttle-permutation
+      - name: shuttle permutation suite (blocking)
+        run: cargo test shuttle_permutation --release --locked -- --test-threads=1

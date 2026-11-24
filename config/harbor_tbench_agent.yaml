@@ -1,0 +1,16 @@
+# Harbor job config for terminal-bench agent evals (terminus-2 via direct Fireworks API).
+jobs_dir: jobs/harbor/tbench
+n_attempts: 1
+n_concurrent_trials: 1
+quiet: false
+debug: false
+
+environment:
+  # Portage schema token; pheno-harness supplies a Podman compatibility API.
+  type: docker
+  force_build: false
+  delete: true
+
+datasets:
+  - name: terminal-bench
+    version: "2.0"

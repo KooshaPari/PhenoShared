@@ -1,0 +1,16 @@
+{
+  "name": "planify-wt-archive",
+  "languages": [],
+  "primary_language": "archive",
+  "status": "retired",
+  "has_readme": true,
+  "type": "archive",
+  "path": "repos/planify-wt-archive",
+  "disposition": "ARCHIVE",
+  "wave": "2026-07-23-boundary-audit",
+  "proposed_target": "Planify2",
+  "proposed_target_repo": "Planify2",
+  "proposed_target_path": ".",
+  "absorption_note": "Archive-only worktree snapshot; canonical development remains Planify2.",
+  "note": "Preserve worktree provenance without active repository footprint."
+}

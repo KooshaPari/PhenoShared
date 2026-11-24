@@ -1,0 +1,20 @@
+{
+  "title": "Pick a deployment target",
+  "question": "Which environment should we deploy to?",
+  "field": {
+    "kind": "choice",
+    "label": "Target",
+    "options": [
+      { "value": "staging", "label": "Staging", "description": "Internal preprod" },
+      { "value": "canary", "label": "Canary", "description": "1% of traffic" },
+      { "value": "prod", "label": "Production", "description": "100% of traffic" }
+    ],
+    "default_index": 0
+  },
+  "notes": {
+    "label": "Why this target?",
+    "required": true
+  },
+  "urgency": "warning",
+  "timeout_secs": 600
+}

@@ -1,0 +1,17 @@
+[package]
+name = "phenotype-bid"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+phenotype-content-hash = { path = "../phenotype-content-hash" }
+phenotype-time = { path = "../phenotype-time" }
+serde = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+rand = { workspace = true }
+
+[dev-dependencies]

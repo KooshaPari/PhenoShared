@@ -1,0 +1,130 @@
+# Managed self-improvement loop for PhenoLM.
+# This is the policy source for gardener scripts; it intentionally separates
+# observation, candidate creation, promotion, and demotion.
+
+loop:
+  name: phenolm_garden_v1
+  default_mode: observe
+  promotion_requires_consecutive_green_windows: 2
+  evaluation_window_days: 7
+  trace_retention_days: 30
+  allow_training_on_holdout: false
+
+signals:
+  task:
+    - pass_fail
+    - wall_time_s
+    - turns
+    - tool_calls
+    - tokens_in
+    - tokens_out
+    - estimated_cost_usd
+    - patch_lines_changed
+    - test_pass_rate
+    - regression_count
+    - verbosity_tokens
+    - escalation_count
+    - recoverability_score
+  serving:
+    - ttft_ms
+    - inter_token_latency_ms
+    - aggregate_tokens_per_s
+    - queue_wait_ms
+    - prefix_cache_hit_rate
+    - kv_cache_tokens
+    - cpu_pct
+    - ram_mb
+    - vram_mb
+    - disk_read_mb_s
+    - disk_write_mb_s
+    - network_rx_mb_s
+    - network_tx_mb_s
+    - crash_count
+  role:
+    - planner
+    - engineer
+    - coding_subagent
+    - reviewer
+    - qa
+    - performance
+    - release
+    - advisor
+
+reward_weights:
+  acceptance: 0.40
+  cost_per_success: 0.20
+  replay_equivalence: 0.10
+  safety: 0.15
+  latency: 0.10
+  verbosity_control: 0.05
+
+gates:
+  holdout:
+    required: true
+    min_delta_vs_baseline: 0.0
+  regression:
+    required: true
+    max_allowed_new_regressions: 0
+  safety:
+    required: true
+    max_high_severity_violations: 0
+  budget:
+    required: true
+    max_alert_level: yellow
+  reproducibility:
+    required: true
+    min_replay_equivalence: 0.90
+  serving_stability:
+    required: true
+    max_crash_count: 0
+    max_p95_ttft_regression_pct: 10
+
+candidate_types:
+  route_weight_change:
+    allowed_in_observe_mode: false
+    artifacts:
+      - config_diff
+      - ledger_window
+      - rollback_plan
+  prompt_policy_change:
+    allowed_in_observe_mode: false
+    artifacts:
+      - prompt_diff
+      - role_eval_report
+      - holdout_report
+  local_model_promotion:
+    allowed_in_observe_mode: false
+    artifacts:
+      - model_id
+      - engine_id
+      - benchmark_report
+      - disk_budget_report
+  dpo_or_lora_candidate:
+    allowed_in_observe_mode: false
+    artifacts:
+      - training_manifest
+      - eval_manifest
+      - contamination_report
+
+demotion:
+  demote_on_any_failed_required_gate: true
+  demote_on_missing_manifest: true
+  demote_on_secret_leak: true
+  keep_failed_candidate_days: 30
+
+ledger:
+  path: state/garden/ledger.jsonl
+  append_only: true
+  required_fields:
+    - run_id
+    - timestamp_utc
+    - git_sha
+    - component
+    - candidate_type
+    - lane
+    - model_id
+    - provider_or_engine
+    - eval_suite
+    - result
+    - gate_decisions
+    - rollback_ref

@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "date": "2026-06-23",
+    "version": "1.0.0",
+    "schema": "71+-scorecard-aggregate-v1",
+    "30-pillar-ref": "registry/audit-30-pillar",
+    "41-cross-cutting-ref": "registry/cross-cutting-criteria-v1",
+    "scope": "All compute/infra + observability repos under Forge ownership"
+  },
+  "scored_repos": [
+    {"name": "phenotype-infra", "score": 5.8, "pillar": 5.8, "cross_cutting": 5.8, "classification": "L3: On Track"},
+    {"name": "nanovms", "score": 3.3, "pillar": 3.5, "cross_cutting": 3.0, "classification": "L2: Needs Significant Improvement"},
+    {"name": "PhenoCompose", "score": 2.7, "pillar": 2.9, "cross_cutting": 2.5, "classification": "L2: Needs Significant Improvement"},
+    {"name": "BytePort", "score": 1.6, "pillar": 1.6, "cross_cutting": 0.0, "classification": "L1: Critical Foundation Needed"},
+    {"name": "PhenoObservability", "score": "pending", "pillar": "pending", "cross_cutting": "pending", "classification": "TBD — monorepo needs fresh audit"}
+  ],
+  "master_average": {
+    "overall_score": 3.3,
+    "pillar_average": 3.5,
+    "cross_cutting_average": 2.8,
+    "max_score": 9.0,
+    "target_minimum": 7.0
+  },
+  "remediation_plan": {
+    "immediate_blocking": [
+      "PhenoCompose: nvms-ffi link chain blocked (A-10 fix applied but needs verification)",
+      "BytePort: No governance docs at all — baseline CI + ADR needed",
+      "nanovms: No CI/CD pipeline — critical gap for a Go project",
+      "PhenoObservability: Recapture after fork merges — fresh scorecard needed"
+    ],
+    "short_term": [
+      "Add CI/CD to all repos (GitHub Actions, Rust: cargo test/clippy, Go: go test/vet)",
+      "Map all repos to FR-CIV* taxonomy from domain-roles.json",
+      "Create CONTRIBUTING.md + SECURITY.md for all repos",
+      "Add Dependabot/cargo-deny to all Rust repos",
+      "Add GoReleaser/cargo-release to nanovms/PhenoCompose"
+    ],
+    "medium_term": [
+      "Fix nvms-ffi link chain (earlier patch needs CGo symbols resolved)",
+      "Create integration test suite for nanovms 3-tier stack",
+      "Add observability (OTel) to all Rust crates",
+      "Create SBOM generation in CI pipelines"
+    ]
+  },
+  "disposition_updates": {
+    "BytePort": "ADD — proposed disposition: AFFIRM → phenotype-infra (consolidated monorepo)",
+    "phenotype-hub": "DECOMPOSE to phenotype-infra — verify target exists",
+    "vibeproxy-monitoring-unified": "RETIRE confirmed — no current activity",
+    "Paginary": "RETIRE confirmed — no current activity"
+  }
+}

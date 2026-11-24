@@ -1,0 +1,48 @@
+name: eval compression
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  compression-ratio:
+    name: compression ratio gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+      - name: zstd fixture compression ratio
+        run: cargo test -p session-ledger --features compress --test compression_eval --locked
+
+  # Soft L78 token-burn ledger evidence — hermetic SelfCheck only.
+  token-burn-ledger:
+    name: token-burn ledger smoke (soft)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: self-check token-burn ledger script + fixtures
+        shell: pwsh
+        run: ./scripts/token-burn-check.ps1 -SelfCheck
+
+  # C08 L75 cross-language OKF fixture parity + structural harness + Python adapter stub (blocking).
+  cross-language-parity:
+    name: cross-language parity SelfCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: self-check cross-language parity SSOT + structural harness + adapter stub
+        shell: pwsh
+        run: ./scripts/cross-language-parity-check.ps1 -SelfCheck

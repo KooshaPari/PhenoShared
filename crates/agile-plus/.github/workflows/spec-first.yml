@@ -1,0 +1,33 @@
+name: Spec First
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  spec-first:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate spec schema and active PR spec
+        env:
+          PR_BODY: ${{ github.event.pull_request.body || '' }}
+        run: |
+          python3 tooling/governance_index.py
+          spec_id="$(printf '%s\n' "$PR_BODY" | sed -n 's/^spec:[[:space:]]*\(eco-[0-9][0-9][0-9]-[a-z0-9-]*\).*/\1/p' | head -1)"
+          test -n "$spec_id"
+          test -d "kitty-specs/$spec_id"
+          python3 - "$spec_id" <<'PY'
+          import json, pathlib, sys
+          spec_dir = pathlib.Path("kitty-specs") / sys.argv[1]
+          missing = [name for name in ("spec.md", "plan.md", "tasks.md", "meta.json") if not (spec_dir / name).is_file()]
+          if missing:
+              raise SystemExit(f"{sys.argv[1]} missing {', '.join(missing)}")
+          meta = json.loads((spec_dir / "meta.json").read_text())
+          if meta.get("status") != "active" and meta.get("state") != "active":
+              raise SystemExit(f"{sys.argv[1]} is not active")
+          PY

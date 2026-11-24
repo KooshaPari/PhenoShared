@@ -1,0 +1,23 @@
+[workspace]
+# Detach from any ambient workspace (e.g. repos/Cargo.toml) so this binary
+# builds standalone in CI and as a phenotype-infra subdir.
+
+[package]
+name = "phenotype-landing-bootstrap"
+version = "0.1.0"
+edition = "2024"
+description = "Bootstrap Tier 2 org-pages: scaffold <project>.kooshapari.com landing pages from a template, create CF DNS, push to GitHub, deploy to Vercel."
+license = "MIT OR Apache-2.0"
+authors = ["Phenotype Infra <infra@phenotype.dev>"]
+
+[[bin]]
+name = "phenotype-landing-bootstrap"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "env"] }
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+ureq = { version = "3.3", features = ["json"] }
+walkdir = "2.5"

@@ -1,0 +1,42 @@
+{
+  "id": "PILOT-PRD-HELIOSLITE",
+  "product_id": "PRD-HELIOSLITE",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1226104769,
+  "hypothesis": "Connection continuity and usable session recovery on the actual endpoints, while preserving scope and provenance.",
+  "baseline_candidates": [
+    "Exact upstream ForgeCode base",
+    "Current upstream ForgeCode",
+    "KCode owned build",
+    "HeliosCLI owned build",
+    "Direct bounded tool runner"
+  ],
+  "scenario": "Use the same long-running coding and transport-fault corpus as KCode. Add legacy/foreign sessions and switch project roots. Search and inspect them without mutating forbidden stores; interrupt a child task and restart the parent. Install and update the fork outside the checkout.",
+  "failure_cases": [
+    "Foreign session becomes writable",
+    "Search crosses private workspace boundary",
+    "Retry repeats a completed tool",
+    "Provider disconnect loses state",
+    "Recall points to fabricated/misordered history",
+    "Updater installs a different product"
+  ],
+  "metrics": [
+    "Completion and recovery rate",
+    "Forbidden writes",
+    "Session search correctness",
+    "Latency tails under disconnect/reconnect",
+    "Operator intervention count",
+    "Clean installation/update fidelity"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

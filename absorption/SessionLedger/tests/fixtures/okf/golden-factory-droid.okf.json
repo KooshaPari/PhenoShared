@@ -1,0 +1,102 @@
+{
+  "entities": [
+    {
+      "id": "gate-0",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 2
+      },
+      "type": "gate"
+    },
+    {
+      "id": "intent-1",
+      "label": "Refactor src/parser.rs to reduce allocations, but preserve parse_record behavior.",
+      "properties": {
+        "user_turn_count": 2
+      },
+      "type": "intent"
+    },
+    {
+      "id": "acceptance-2",
+      "label": "looks good",
+      "type": "acceptance"
+    },
+    {
+      "id": "acceptance-3",
+      "label": "passes",
+      "type": "acceptance"
+    },
+    {
+      "id": "constraint-4",
+      "label": "preserve",
+      "type": "constraint"
+    },
+    {
+      "id": "resource-5",
+      "label": "working-directory",
+      "properties": {
+        "cwd": "C:\\work\\ledger"
+      },
+      "type": "resource"
+    },
+    {
+      "id": "state-6",
+      "label": "session-title",
+      "properties": {
+        "title": "Parser allocation cleanup"
+      },
+      "type": "state"
+    },
+    {
+      "id": "criteria-7",
+      "label": "",
+      "properties": {
+        "constraints": [],
+        "do_not_touch": ["Do-not-touch: 'preserve'"],
+        "success_criteria": [],
+        "tests_or_verifications": [
+          "Verification: 'cargo test'",
+          "Verification: 'go test'"
+        ]
+      },
+      "type": "criteria"
+    }
+  ],
+  "okf": "1.0",
+  "provenance": {
+    "corpus": "factory-droid",
+    "source_id": "golden-factory-droid"
+  },
+  "relations": [
+    {
+      "provenance": {
+        "corpus": "factory-droid",
+        "source_id": "golden-factory-droid"
+      },
+      "source": "intent-1",
+      "target": "acceptance-2",
+      "type": "verified_by"
+    },
+    {
+      "provenance": {
+        "corpus": "factory-droid",
+        "source_id": "golden-factory-droid"
+      },
+      "source": "intent-1",
+      "target": "acceptance-3",
+      "type": "verified_by"
+    },
+    {
+      "provenance": {
+        "corpus": "factory-droid",
+        "source_id": "golden-factory-droid"
+      },
+      "source": "intent-1",
+      "target": "constraint-4",
+      "type": "bounded_by"
+    }
+  ],
+  "source_id": "golden-factory-droid"
+}

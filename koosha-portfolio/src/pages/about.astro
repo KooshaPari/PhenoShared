@@ -1,0 +1,133 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { socials, site } from "../data/site";
+---
+
+<BaseLayout title={`About — ${site.name}`} description={site.description} active="about">
+  <section class="page-hero">
+    <div>
+      <p class="eyebrow">About</p>
+      <h1 class="display">Straightforward, systems-minded, and still building.</h1>
+      <p class="lede">
+        I am a computer science graduate student based in Santa Monica, working across Phenotype,
+        developer tooling, and the smaller surfaces that make a project feel finished.
+      </p>
+    </div>
+    <div class="card bio-panel">
+      <h2>Public profile</h2>
+      <ul>
+        <li>Santa Monica, California</li>
+        <li>Arizona State University, Spring 2026</li>
+        <li>Bash, Linux, systems, web, and agent tooling</li>
+        <li>Devpost, GitHub, LinkedIn</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Working style</p>
+        <h2>What I try to keep consistent</h2>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <article class="card note">
+        <h3>Build the actual surface</h3>
+        <p>Not just the concept or the handoff. The thing should run, route, and answer.</p>
+      </article>
+      <article class="card note">
+        <h3>Prefer evidence over adjectives</h3>
+        <p>Show the projects, the routes, and the links. Keep the claims small and current.</p>
+      </article>
+      <article class="card note">
+        <h3>Leave useful migration paths</h3>
+        <p>When a site changes shape, keep the old paths alive long enough for people to land.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Links</p>
+        <h2>Find me here</h2>
+      </div>
+    </div>
+    <div class="grid-4">
+      {socials.map((link) => (
+        <a class="card link-card" href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noreferrer" : undefined}>
+          <strong>{link.label}</strong>
+          <span>{link.href.replace("mailto:", "")}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.7fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  h1 {
+    margin: 0.25rem 0 0;
+    font-size: clamp(2.8rem, 7vw, 5.4rem);
+    line-height: 0.95;
+    max-width: 11ch;
+  }
+
+  .lede {
+    margin-top: 0.95rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 46rem;
+  }
+
+  .bio-panel {
+    padding: 1.1rem;
+  }
+
+  .bio-panel h2 {
+    margin: 0 0 0.8rem;
+    font-size: 1.1rem;
+  }
+
+  .bio-panel ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+  }
+
+  .note,
+  .link-card {
+    padding: 1.05rem;
+  }
+
+  .note h3,
+  .link-card strong {
+    margin: 0;
+    font-size: 1.02rem;
+  }
+
+  .note p,
+  .link-card span {
+    margin-top: 0.45rem;
+    color: var(--muted);
+  }
+
+  .link-card span {
+    overflow-wrap: anywhere;
+    font-size: 0.84rem;
+  }
+
+  @media (max-width: 920px) {
+    .page-hero {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,43 @@
+# Draft 0.6B speculative decode model (Phase 6)
+model:
+  id: draft-0.6b
+  tier: sub1b.draft_06b
+  params_m: 600
+  arch: qwen2_small
+  hidden_size: 896
+  num_layers: 12
+  vocab_size: 151936
+  max_seq_len: 2048
+
+teacher:
+  tier: tier0.qwen4b
+  path: "${PHENO_QWEN4B:-}"
+  role: draft_teacher
+
+data:
+  root: "${HOME}/.omniroute/training"
+  glob: "call_logs_*.jsonl"
+  min_pairs: 10000
+  max_seq_len: 2048
+
+distillation:
+  method: speculative_alignment
+  temperature: 1.0
+  top_k: 10
+  lr: 2.0e-4
+  epochs: 3
+  batch_size: 16
+  output_dir: "${PHENO_ROOT}/state/sub1b/draft_06b"
+
+export:
+  quant: Q4_K_M
+  gguf_path: "${PHENO_DRAFT_06B:-state/sub1b/draft_06b/model.gguf}"
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+
+inference:
+  draft_tokens: 4
+  accept_threshold: 0.85
+  pairs_with: tier0.qwen4b

@@ -1,0 +1,21 @@
+ .editorconfig                                      | 130 +++++++++++++-
+ .github/CODEOWNERS                                 |  18 +-
+ .github/ISSUE_TEMPLATE/bug.md                      |  25 ---
+ .github/ISSUE_TEMPLATE/bug_report.md               |  42 +++++
+ .github/ISSUE_TEMPLATE/config.yml                  |  17 ++
+ .github/ISSUE_TEMPLATE/feature.md                  |  16 --
+ .github/ISSUE_TEMPLATE/feature_request.md          |  34 ++++
+ .../workflows/\033[01;31m\033[Kci.yml\033[m\033[K" |   7 -
+ .github/workflows/audit.yml                        |  15 +-
+ .github/workflows/ci.yml                           |  31 +++-
+ .github/workflows/release.yml                      |  37 ++++
+ .github/workflows/scorecard.yml                    |  11 +-
+ Cargo.lock                                         | Bin 27724 -> 24615 bytes
+ Cargo.toml                                         |   4 -
+ deny.toml                                          |  70 +++++++-
+ docs/intent/phenotype-bus.md                       |  18 +-
+ justfile                                           |  23 +++
+ src/config.rs                                      | 195 +++++++++++++++++++++
+ src/lib.rs                                         |   7 +
+ src/observability.rs                               |  10 +-
+ 20 files changed, 617 insertions(+), 93 deletions(-)

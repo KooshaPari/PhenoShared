@@ -1,0 +1,70 @@
+# 12B dense distillation from 30B MoE + cloud teacher traces (Phase 5)
+student:
+  id: pheno-dense-12b
+  tier: tier1_5.dense12
+  base_hf: "Qwen/Qwen2.5-14B-Instruct"  # scaffold — shrink/distill to ~12B effective
+  path: "${PHENO_DENSE12:-}"
+  quant: Q5_K_M
+  max_seq_len: 8192
+
+teachers:
+  local:
+    - tier: tier2.moe30
+      id: qwen3-30b-a3b
+      path: "${PHENO_MOE30:-}"
+      weight: 0.40
+
+  cloud:
+    - provider: claude
+      model: claude-opus-4-8
+      role: teacher
+      weight: 0.25
+    - provider: openai
+      model: gpt-5.5
+      weight: 0.20
+    - provider: kimi
+      model: kimi-k2.6
+      weight: 0.15
+
+data:
+  root: "${HOME}/.omniroute/training"
+  sources:
+    - glob: "call_logs_*.jsonl"
+      kind: call_log
+    - glob: "traces_*.jsonl"
+      kind: teacher_trace
+    - glob: "verified_*.jsonl"
+      kind: verified
+    - glob: "dpo_pairs_*.jsonl"
+      kind: preference
+  min_teacher_tokens: 500000
+  max_samples: 50000
+  train_val_split: 0.95
+
+distillation:
+  method: trace_kl
+  temperature: 2.0
+  alpha_kl: 0.5
+  alpha_ce: 0.5
+  lr: 1.0e-5
+  epochs: 1
+  batch_size: 1
+  grad_accum: 8
+  qlora_rank: 32
+  output_dir: "${PHENO_ROOT}/state/distill_12b"
+
+repair:
+  moe30_lora:
+    enabled: true
+    rank: 8
+    dataset_glob: "verified_*.jsonl"
+    max_steps: 500
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+  note: "12B QLoRA distillation only — full FT on burst cloud if needed"
+
+gates:
+  min_verifier_pass_rate: 0.70
+  max_regression_vs_teacher: 0.05

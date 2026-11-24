@@ -1,0 +1,25 @@
+//! Event mapping for {{Name}}.
+
+use focus_events::Event;
+use serde::{Deserialize, Serialize};
+
+/// Stub event mapper for {{Name}}.
+pub struct {{Name}}EventMapper;
+
+impl {{Name}}EventMapper {
+    /// Map a {{Name}} event to a Focus event.
+    pub fn map_event(_raw: &str) -> Option<Event> {
+        // TODO: Parse raw JSON/data and map to Event
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_event_mapper_creation() {
+        let _mapper = {{Name}}EventMapper;
+    }
+}

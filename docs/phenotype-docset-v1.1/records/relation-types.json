@@ -1,0 +1,402 @@
+[
+  {
+    "id": "REL-DEFINES",
+    "name": "defines",
+    "source_type": "human-source",
+    "target_type": "intent",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-INTERPRETS",
+    "name": "interprets",
+    "source_type": "interpretation",
+    "target_type": "intent",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-SUPERSEDES",
+    "name": "supersedes",
+    "source_type": "decision",
+    "target_type": "decision",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-CONSTRAINS",
+    "name": "constrains",
+    "source_type": "intent",
+    "target_type": "capability",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-CONTAINS",
+    "name": "contains",
+    "source_type": "product",
+    "target_type": "capability",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-REALIZES",
+    "name": "realizes",
+    "source_type": "capability",
+    "target_type": "user-job",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-EXPOSES",
+    "name": "exposes",
+    "source_type": "applet",
+    "target_type": "interface",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-OWNS-STATE",
+    "name": "owns-state",
+    "source_type": "applet",
+    "target_type": "data-entity",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-COMPOSES",
+    "name": "composes",
+    "source_type": "applet",
+    "target_type": "applet",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-IMPLEMENTS",
+    "name": "implements",
+    "source_type": "source-unit",
+    "target_type": "capability",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-LOCATED-IN",
+    "name": "located-in",
+    "source_type": "source-unit",
+    "target_type": "repository",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-MEMBER-OF",
+    "name": "member-of",
+    "source_type": "package",
+    "target_type": "repository",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-CALLS",
+    "name": "calls",
+    "source_type": "symbol",
+    "target_type": "symbol",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-REQUIRES",
+    "name": "requires",
+    "source_type": "capability",
+    "target_type": "dependency",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-PRODUCES",
+    "name": "produces",
+    "source_type": "build-profile",
+    "target_type": "artifact",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-SUPPORTS",
+    "name": "supports",
+    "source_type": "build-profile",
+    "target_type": "surface",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-USES-CONFIG",
+    "name": "uses-config",
+    "source_type": "source-unit",
+    "target_type": "config-key",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-MIGRATES",
+    "name": "migrates",
+    "source_type": "migration",
+    "target_type": "data-entity",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-DERIVES-FROM",
+    "name": "derives-from",
+    "source_type": "asset",
+    "target_type": "asset",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-GENERATED-BY",
+    "name": "generated-by",
+    "source_type": "source-unit",
+    "target_type": "artifact",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-OBLIGATES",
+    "name": "obligates",
+    "source_type": "capability",
+    "target_type": "obligation",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-VERIFIES",
+    "name": "verifies",
+    "source_type": "test",
+    "target_type": "obligation",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-USES-FIXTURE",
+    "name": "uses-fixture",
+    "source_type": "test",
+    "target_type": "fixture",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-INTERPRETED-BY",
+    "name": "interpreted-by",
+    "source_type": "measurement",
+    "target_type": "oracle",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-EXECUTES",
+    "name": "executes",
+    "source_type": "run",
+    "target_type": "test",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-REPORTS",
+    "name": "reports",
+    "source_type": "run",
+    "target_type": "measurement",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-RETAINS",
+    "name": "retains",
+    "source_type": "run",
+    "target_type": "evidence",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-MEASURES",
+    "name": "measures",
+    "source_type": "measurement",
+    "target_type": "obligation",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-QUALIFIES",
+    "name": "qualifies",
+    "source_type": "evidence",
+    "target_type": "artifact",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-PUBLISHES",
+    "name": "publishes",
+    "source_type": "release",
+    "target_type": "artifact",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-INSTALLS",
+    "name": "installs",
+    "source_type": "installation",
+    "target_type": "artifact",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-DEPLOYS",
+    "name": "deploys",
+    "source_type": "deployment",
+    "target_type": "artifact",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-CONSUMES",
+    "name": "consumes",
+    "source_type": "consumer",
+    "target_type": "interface",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-EVIDENCES",
+    "name": "evidences",
+    "source_type": "observation",
+    "target_type": "claim",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-CHALLENGES",
+    "name": "challenges",
+    "source_type": "evidence",
+    "target_type": "claim",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-AFFECTS",
+    "name": "affects",
+    "source_type": "dissatisfaction",
+    "target_type": "capability",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-SUPPORTED-BY",
+    "name": "supported-by",
+    "source_type": "dissatisfaction",
+    "target_type": "evidence",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-TESTS-HYPOTHESIS",
+    "name": "tests-hypothesis",
+    "source_type": "experiment",
+    "target_type": "hypothesis",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-COMPARES",
+    "name": "compares",
+    "source_type": "experiment",
+    "target_type": "product",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-ADDRESSES",
+    "name": "addresses",
+    "source_type": "work-package",
+    "target_type": "dissatisfaction",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-DECOMPOSES",
+    "name": "decomposes",
+    "source_type": "work-package",
+    "target_type": "task",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-DEPENDS-ON",
+    "name": "depends-on",
+    "source_type": "task",
+    "target_type": "task",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-PERMITTED-BY",
+    "name": "permitted-by",
+    "source_type": "task",
+    "target_type": "permission",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-CLAIMED-BY",
+    "name": "claimed-by",
+    "source_type": "task",
+    "target_type": "actor",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-LEASES",
+    "name": "leases",
+    "source_type": "task",
+    "target_type": "resource-lease",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-COVERED-BY",
+    "name": "covered-by",
+    "source_type": "obligation",
+    "target_type": "exception",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-EQUIVALENCE-CANDIDATE",
+    "name": "equivalence-candidate",
+    "source_type": "source-unit",
+    "target_type": "source-unit",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-MOVED-FROM",
+    "name": "moved-from",
+    "source_type": "source-unit",
+    "target_type": "source-unit",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-STALES",
+    "name": "stales",
+    "source_type": "observation",
+    "target_type": "evidence",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  },
+  {
+    "id": "REL-VISIBLE-AS",
+    "name": "visible-as",
+    "source_type": "product",
+    "target_type": "surface",
+    "provenance_required": true,
+    "edge_semantics": "Proposed vocabulary; static, dynamic, reported, inferred and accepted edges remain distinct."
+  }
+]

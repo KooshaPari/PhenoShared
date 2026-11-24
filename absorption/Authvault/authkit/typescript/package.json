@@ -1,0 +1,20 @@
+{
+  "name": "@phenotype/AuthKit",
+  "version": "0.1.0",
+  "description": "Authentication & Security",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "devDependencies": {
+    "typescript": "^6.0",
+    "jest": "^30.3",
+    "eslint": "^10.2",
+    "@types/node": "^25.6"
+  }
+}

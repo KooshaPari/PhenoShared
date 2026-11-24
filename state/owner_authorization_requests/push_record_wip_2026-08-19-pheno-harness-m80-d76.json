@@ -1,0 +1,17 @@
+{
+  "schema_version": "pheno.push-record.v1",
+  "as_of": "2026-08-19T09:45:00Z",
+  "event": "push_wip_2026-08-19-pheno-harness-m80-d76",
+  "owner_authorization": {
+    "request": "pushes and pr works approved if present (user, continuation session 2026-08-19)",
+    "mode": "owner_direct_approve",
+    "chosen_execution": "push wip/2026-07-28-pheno-harness-m80-d76 HEAD a0daa6b to NEW branch wip/2026-08-19-pheno-harness-m80-d76 (zero-conflict, 67-conflict divergence with origin/wip/2026-07-28 avoided)"
+  },
+  "local_head_before": "a0daa6b4596881526598acb043be8b805f9c7e57",
+  "pushed_ref": "refs/heads/wip/2026-08-19-pheno-harness-m80-d76",
+  "pushed_sha": "a0daa6b4596881526598acb043be8b805f9c7e57",
+  "verified_via": "git ls-remote origin refs/heads/wip/2026-08-19-pheno-harness-m80-d76 -> a0daa6b",
+  "result": "success",
+  "commit_span_ahead_of_origin_wip_2026-07-28": 10,
+  "note": "WIP auto-capture b98fb15 + agileplus bootstrap 81cd975 included; Phase 1-3 + Phase 4 61-62 complete, Phase 4 remainder 63-75 in flight"
+}

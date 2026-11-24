@@ -1,0 +1,25 @@
+test_absolute_path (test_tools.FilesystemTests.test_absolute_path) ... ok
+test_apply_addition_backup_and_idempotence (test_tools.FilesystemTests.test_apply_addition_backup_and_idempotence) ... ok
+test_drift_after_plan_rejected (test_tools.FilesystemTests.test_drift_after_plan_rejected) ... ok
+test_dryrun_writes_nothing (test_tools.FilesystemTests.test_dryrun_writes_nothing) ... ok
+test_git_blob (test_tools.FilesystemTests.test_git_blob) ... ok
+test_illustrator_bounds (test_tools.FilesystemTests.test_illustrator_bounds) ... ok
+test_illustrator_compiles (test_tools.FilesystemTests.test_illustrator_compiles) ... ok
+test_illustrator_rejects_code_operations (test_tools.FilesystemTests.test_illustrator_rejects_code_operations) ... ok
+test_illustrator_rejects_id (test_tools.FilesystemTests.test_illustrator_rejects_id) ... ok
+test_media_real_decode_and_contract (test_tools.FilesystemTests.test_media_real_decode_and_contract) ... ok
+test_media_rejects_missing_audio_contract (test_tools.FilesystemTests.test_media_rejects_missing_audio_contract) ... ok
+test_media_rejects_truncated (test_tools.FilesystemTests.test_media_rejects_truncated) ... ok
+test_media_rejects_wrong_dimensions (test_tools.FilesystemTests.test_media_rejects_wrong_dimensions) ... ok
+test_media_rejects_wrong_duration (test_tools.FilesystemTests.test_media_rejects_wrong_duration) ... ok
+test_missing_migration_blocks (test_tools.FilesystemTests.test_missing_migration_blocks) ... ok
+test_skill_apply_and_repeat (test_tools.FilesystemTests.test_skill_apply_and_repeat) ... ok
+test_skill_conflict (test_tools.FilesystemTests.test_skill_conflict) ... ok
+test_skill_dry_run (test_tools.FilesystemTests.test_skill_dry_run) ... ok
+test_symlink (test_tools.FilesystemTests.test_symlink) ... ok
+test_traversal (test_tools.FilesystemTests.test_traversal) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.443s
+
+OK

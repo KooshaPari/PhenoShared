@@ -1,0 +1,24 @@
+{
+  "name": "PhenoLab",
+  "slug": "phenolab",
+  "tagline": "Compression stack and RLVR harness: evaluation tooling for quantized inference on consumer GPUs.",
+  "domain": "phenolab.phenotype.space",
+  "color": "#14b8a6",
+  "description": "Compression stack and RLVR harness: evaluation tooling for quantized inference on consumer GPUs.",
+  "tier": 2,
+  "repo": "KooshaPari/PhenoLab",
+  "language": "Rust / Python",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "RLVR harness",
+    "Compression stack",
+    "Consumer GPU eval",
+    "Benchmark suite"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/PhenoLab",
+    "docs": "https://phenolab.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/PhenoLab/releases"
+  }
+}

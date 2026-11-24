@@ -1,0 +1,90 @@
+version: "3"
+
+# Reconstructed 2026-11-05. The previous revision of this file was a single line:
+# an absorption script had collapsed every newline, which is not recoverable as
+# YAML (block scalars like `sh: |` lost their boundaries). This keeps the same
+# intent and task names — detect the repo language, then run the matching
+# build/test/lint/clean/coverage command — with real structure behind it.
+
+vars:
+  REPO_LANG:
+    sh: |
+      if [ -f go.mod ]; then echo go
+      elif [ -f Cargo.toml ]; then echo rust
+      elif [ -f pyproject.toml ] || [ -f requirements.txt ] || [ -f setup.py ]; then echo python
+      elif [ -f package.json ]; then echo node
+      else echo unknown
+      fi
+  NODE_PM:
+    sh: |
+      if [ -f bun.lockb ] || [ -f bun.lock ]; then echo bun
+      elif [ -f pnpm-lock.yaml ]; then echo pnpm
+      elif [ -f yarn.lock ]; then echo yarn
+      elif [ -f package-lock.json ]; then echo npm
+      else echo npm
+      fi
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  build:
+    desc: Build using the detected language toolchain
+    cmds:
+      - cmd: |
+          set -eu
+          case "{{.REPO_LANG}}" in
+            node)   {{.NODE_PM}} run build ;;
+            python) if [ -f pyproject.toml ]; then uv run python -m build; else python -m compileall .; fi ;;
+            go)     go build ./... ;;
+            rust)   cargo build --all-targets ;;
+            *)      echo "Unsupported repository language: {{.REPO_LANG}}" >&2; exit 1 ;;
+          esac
+
+  test:
+    desc: Run the repository test suite using the detected language toolchain
+    cmds:
+      - cmd: |
+          set -eu
+          case "{{.REPO_LANG}}" in
+            node)   {{.NODE_PM}} run test ;;
+            python) uv run pytest ;;
+            go)     go test ./... ;;
+            rust)   cargo test ;;
+            *)      echo "Unsupported repository language: {{.REPO_LANG}}" >&2; exit 1 ;;
+          esac
+
+  lint:
+    desc: Run lint checks using the detected language toolchain
+    cmds:
+      - cmd: |
+          set -eu
+          case "{{.REPO_LANG}}" in
+            node)   {{.NODE_PM}} run lint ;;
+            python) uv run ruff check . ;;
+            go)     go vet ./... ;;
+            rust)   cargo fmt --check && cargo clippy --all-targets --all-features -- -D warnings ;;
+            *)      echo "Unsupported repository language: {{.REPO_LANG}}" >&2; exit 1 ;;
+          esac
+
+  clean:
+    desc: Remove generated build, test and cache artifacts
+    cmds:
+      - cmd: |
+          rm -rf node_modules docs/.vitepress/dist docs/.vitepress/cache docs/.vitepress/.temp \
+            coverage .turbo .task .pytest_cache .ruff_cache dist build target *.tsbuildinfo
+
+  coverage:
+    desc: "Measure code coverage (SSOT: see grade.sh for the canonical command)."
+    cmds:
+      - cmd: |
+          set -eu
+          case "{{.REPO_LANG}}" in
+            node)   {{.NODE_PM}} run test -- --coverage ;;
+            python) uv run pytest --cov ;;
+            go)     go test -cover ./... ;;
+            rust)   cargo llvm-cov --workspace --fail-under-lines 85 ;;
+            *)      echo "Unsupported repository language: {{.REPO_LANG}}" >&2; exit 1 ;;
+          esac

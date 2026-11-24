@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File [35m"<string>"[0m, line [35m1[0m, in [35m<module>[0m
+    import urllib.request,json; d=json.loads(urllib.request.urlopen(urllib.request.Request('https://pypi.org/pypi/vllm/0.24.0/json',headers={'User-Agent':'pheno/1.0'}),timeout=20).read()); plats=set(); [plats.add(f['filename'].split('-')[-1].replace('.whl','')) for v,fs in [31md[0m[1;31m['releases'][0m.items() if v.startswith('0.24') for f in fs if f['filename'].endswith('.whl')]; print('vllm 0.24.x wheel platforms:', sorted(plats))
+                                                                                                                                                                                                                                                                                  [31m~[0m[1;31m^^^^^^^^^^^^[0m
+[1;35mKeyError[0m: [35m'releases'[0m

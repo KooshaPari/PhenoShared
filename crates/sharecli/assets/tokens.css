@@ -1,0 +1,84 @@
+/* Backbone-2 design tokens — CSS source of truth; Rust mirror: src/theme.rs */
+
+:root {
+  --bb2-graphite: #0a0d12;
+  --bb2-panel: #161b22;
+  --bb2-pulse-green: #3fb950;
+  --bb2-sync-violet: #a371f7;
+  --bb2-warm-amber: #d29922;
+  --bb2-error: #f85149;
+
+  /* CTA tokens (C09 L81.15) — primary/secondary action colors */
+  --bb2-cta-primary: #3fb950;
+  --bb2-cta-primary-text: #0a0d12;
+  --bb2-cta-secondary: #a371f7;
+  --bb2-cta-secondary-text: #ffffff;
+
+  /* Dashboard chrome (CSS SoT; not mirrored in theme.rs) */
+  --bb2-text: #e2e8f0;
+  --bb2-muted: #94a3b8;
+  --bb2-cell: #cbd5e1;
+  --bb2-border: #2d333b;
+  --bb2-row-hover: #21262d;
+  --bb2-caption: #64748b;
+
+  /* Type roles (docs/visual/typography.md) */
+  --type-display: clamp(1.75rem, 4vw, 2.5rem);
+  --type-heading: 1.25rem;
+  --type-body: 0.95rem;
+  --type-caption: 0.8rem;
+
+  /* Motion (docs/visual/motion.md) */
+  --motion-duration-fast: 150ms;
+  --motion-duration: 300ms;
+  --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light pair — same brand accents, paper surfaces (CLI: --theme light) */
+:root[data-theme="light"],
+[data-theme="light"] {
+  --bb2-graphite: #f6f8fa;
+  --bb2-panel: #ffffff;
+  --bb2-pulse-green: #1a7f37;
+  --bb2-sync-violet: #8250df;
+  --bb2-warm-amber: #9a6700;
+  --bb2-error: #cf222e;
+  --bb2-text: #1f2328;
+  --bb2-muted: #656d76;
+  --bb2-cell: #424a53;
+  --bb2-border: #d0d7de;
+  --bb2-row-hover: #eaeef2;
+  --bb2-caption: #656d76;
+  --bb2-cta-primary: #1a7f37;
+  --bb2-cta-primary-text: #ffffff;
+  --bb2-cta-secondary: #8250df;
+  --bb2-cta-secondary-text: #ffffff;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bb2-graphite: #f6f8fa;
+    --bb2-panel: #ffffff;
+    --bb2-pulse-green: #1a7f37;
+    --bb2-sync-violet: #8250df;
+    --bb2-warm-amber: #9a6700;
+    --bb2-error: #cf222e;
+    --bb2-text: #1f2328;
+    --bb2-muted: #656d76;
+    --bb2-cell: #424a53;
+    --bb2-border: #d0d7de;
+    --bb2-row-hover: #eaeef2;
+    --bb2-caption: #656d76;
+    --bb2-cta-primary: #1a7f37;
+    --bb2-cta-primary-text: #ffffff;
+    --bb2-cta-secondary: #8250df;
+    --bb2-cta-secondary-text: #ffffff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-fast: 0ms;
+    --motion-duration: 0ms;
+  }
+}

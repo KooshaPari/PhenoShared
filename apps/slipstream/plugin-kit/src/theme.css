@@ -1,0 +1,394 @@
+/* Slipstream plugin UI theme. Import this before the app-specific Tailwind rules so
+ * embedded plugin surfaces share the console's observatory palette.
+ *
+ * Consume this as the first import of the plugin UI's Tailwind entry, then add the
+ * app-specific lines:
+ *
+ *   @import "tailwindcss";
+ *   @import "tw-animate-css";
+ *   @import "@slipstream/plugin-kit/theme.css";
+ *   @custom-variant dark (&:is(.dark *));
+ *   @source "../node_modules/@unom/ui/dist/**\/*.{js,mjs}";
+ *
+ * Pin `<html class="dark">` for dark mode. Removing the class yields light mode.
+ */
+
+/* Easing and timing tokens shared by plugin observatory surfaces. */
+@theme {
+	--ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+	--ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+	--ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	--ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+	--ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	--ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+	--ease-in-cubic: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+	--ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+	--ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+	--ease-in-quart: cubic-bezier(0.895, 0.03, 0.685, 0.22);
+	--ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+	--ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+	--ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+	--ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+	--ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
+	--ease-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+	--ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+	--ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
+	--ease-in-circ: cubic-bezier(0.6, 0.04, 0.98, 0.335);
+	--ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
+	--ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+	--ease-standard: cubic-bezier(0.2, 0, 0, 1);
+	--ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+	--ease-emphasized-accel: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+	--duration-fast: 120ms;
+	--duration-normal: 200ms;
+	--duration-emphasized: 280ms;
+	--duration-panel: 320ms;
+	--duration-reduced-motion: 0.01ms;
+}
+
+/* The light palette is the default. The dark class overrides raw values while
+   semantic aliases continue to resolve per theme. */
+:root {
+	color-scheme: light;
+	--radius: 0.5rem;
+
+	/* Cyan Slipstream brand. */
+	--ss-brand: #0891b2;
+	--ss-brand-light: #22d3ee;
+	--ss-highlight: #a5f3fc;
+
+	/* Light observatory surfaces. */
+	--background: #eef3f6;
+	--foreground: #0a1620;
+	--card: #ffffff;
+	--card-foreground: #0a1620;
+	--popover: #ffffff;
+	--popover-foreground: #0a1620;
+	--muted: #e2ebf0;
+	--muted-foreground: #4d6672;
+	--secondary: #d3e2e9;
+	--secondary-foreground: #0a1620;
+	--accent: var(--ss-brand);
+	--accent-foreground: #ffffff;
+	--border: #849098;
+	--input: #849098;
+	--ring: var(--ss-brand);
+
+	/* Primary brand controls. */
+	--primary: var(--ss-brand);
+	--primary-foreground: #ffffff;
+
+	/* Semantic state colors. */
+	--success: oklch(0.55 0.14 160);
+	--success-foreground: #ffffff;
+	--warning: oklch(0.68 0.14 75);
+	--warning-foreground: #0a1620;
+	--offline: oklch(0.52 0.04 245);
+	--offline-foreground: #ffffff;
+	--destructive: oklch(0.52 0.2 18);
+	--destructive-foreground: #ffffff;
+
+	/* @unom/ui semantic aliases. */
+	--main: var(--foreground);
+	--brand: var(--ss-brand);
+	--brand-light: var(--ss-brand-light);
+	--highlight: var(--ss-highlight);
+	--neutral: var(--card); /* @unom card default surface (bg-neutral) */
+	--neutral-accent: var(--secondary); /* nested surface (bg-neutral-accent) */
+	--neutral-highlight: var(--border);
+	--error: var(--destructive);
+	--error-foreground: var(--destructive-foreground);
+
+	--font-display: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+	--font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+		"Liberation Mono", "Courier New", monospace;
+
+	/* Observatory type scale. */
+	--text-page: 1.5rem;
+	--text-section: 1.125rem;
+	--text-body: 0.875rem;
+	--text-meta: 0.75rem;
+	--leading-tight: 1.25;
+	--leading-body: 1.5;
+	--tracking-display: -0.02em;
+	--tracking-body: -0.011em;
+
+	/* @unom/ui radius contract. */
+	--radius-card-min: 0.375rem;
+}
+
+/* Dark observatory surfaces. */
+.dark {
+	color-scheme: dark;
+
+	--background: #050a0f;
+	--foreground: #e8eef2;
+	--card: #0d141c;
+	--card-foreground: #e8eef2;
+	--popover: #121a24;
+	--popover-foreground: #e8eef2;
+	--muted: #111820;
+	--muted-foreground: #93a7b5;
+	--secondary: #18222d;
+	--secondary-foreground: #e8eef2;
+	--border: #526472;
+	--input: #526472;
+	--ring: var(--ss-brand-light);
+
+	--accent: var(--ss-brand-light);
+	--accent-foreground: #060a0f;
+	--primary: var(--ss-brand-light);
+	--primary-foreground: #060a0f;
+
+	--success: oklch(0.72 0.14 160);
+	--success-foreground: #060a0f;
+	--warning: oklch(0.8 0.14 75);
+	--warning-foreground: #060a0f;
+	--offline: oklch(0.68 0.04 245);
+	--offline-foreground: #060a0f;
+	--destructive: oklch(0.68 0.19 18);
+	--destructive-foreground: #060a0f;
+}
+
+/* Map semantic aliases to Tailwind color and utility tokens. */
+@theme inline {
+	--radius-sm: calc(var(--radius) - 2px);
+	--radius-md: var(--radius);
+	--radius-lg: calc(var(--radius) + 2px);
+	--radius-xl: calc(var(--radius) + 4px);
+	--radius-2xl: calc(var(--radius) + 8px);
+	--radius-button: 9999px;
+	--radius-card: calc(var(--radius) * 1.5);
+	--radius-main: calc(var(--radius) * 1.5);
+
+	--spacing-input-height: 2.5rem;
+	--spacing-padding-card: 1rem;
+	--spacing-card: 1.25rem;
+	--spacing-main: 12px;
+
+	--font-sans: var(--font-sans);
+	--font-display: var(--font-display);
+	--font-mono: var(--font-mono);
+
+	/* shadcn-style color tokens. */
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-success: var(--success);
+	--color-success-foreground: var(--success-foreground);
+	--color-warning: var(--warning);
+	--color-warning-foreground: var(--warning-foreground);
+	--color-offline: var(--offline);
+	--color-offline-foreground: var(--offline-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+
+	/* @unom/ui color tokens. */
+	--color-main: var(--main);
+	--color-brand: var(--brand);
+	--color-brand-light: var(--brand-light);
+	--color-neutral: var(--neutral);
+	--color-neutral-accent: var(--neutral-accent);
+	--color-neutral-highlight: var(--neutral-highlight);
+	--color-highlight: var(--highlight);
+	--color-error: var(--error);
+	--color-error-foreground: var(--error-foreground);
+}
+
+/* Accordion and collapsible keyframes used by @unom/ui. */
+@theme {
+	--animate-accordion-down: accordion-down 0.28s var(--ease-out-quart);
+	--animate-accordion-up: accordion-up 0.28s var(--ease-out-quart);
+	--animate-collapsible-down: collapsible-down 0.28s var(--ease-out-quart);
+	--animate-collapsible-up: collapsible-up 0.28s var(--ease-out-quart);
+
+	@keyframes accordion-down {
+		from {
+			height: 0;
+		}
+		to {
+			height: var(--radix-accordion-content-height);
+		}
+	}
+	@keyframes accordion-up {
+		from {
+			height: var(--radix-accordion-content-height);
+		}
+		to {
+			height: 0;
+		}
+	}
+	@keyframes collapsible-down {
+		from {
+			height: 0;
+			opacity: 0;
+		}
+		to {
+			height: var(--radix-collapsible-content-height);
+			opacity: 1;
+		}
+	}
+	@keyframes collapsible-up {
+		from {
+			height: var(--radix-collapsible-content-height);
+			opacity: 1;
+		}
+		to {
+			height: 0;
+			opacity: 0;
+		}
+	}
+}
+
+@layer base {
+	* {
+		border-color: var(--border);
+	}
+
+	html {
+		text-size-adjust: 100%;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		background-color: var(--background);
+		background-image: radial-gradient(
+			ellipse 110% 70% at 50% -25%,
+			color-mix(in oklab, var(--ss-brand) 11%, transparent),
+			transparent 58%
+		);
+		background-attachment: fixed;
+		color: var(--foreground);
+		font-family: var(--font-sans);
+		font-size: var(--text-body);
+		line-height: var(--leading-body);
+		letter-spacing: var(--tracking-body);
+		font-feature-settings:
+			"rlig" 1,
+			"calt" 1;
+		font-synthesis-weight: none;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-rendering: optimizeLegibility;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--font-display);
+		font-weight: 600;
+		letter-spacing: var(--tracking-display);
+		line-height: var(--leading-tight);
+		text-wrap: balance;
+		color: var(--foreground);
+	}
+
+	h1 {
+		font-size: var(--text-page);
+	}
+
+	h2 {
+		font-size: var(--text-section);
+	}
+
+	h3 {
+		font-size: 1rem;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	small,
+	.text-meta {
+		font-size: var(--text-meta);
+		line-height: 1.4;
+		color: var(--muted-foreground);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--ring);
+		outline-offset: 2px;
+	}
+
+	::selection {
+		background-color: color-mix(in oklab, var(--ss-brand) 32%, transparent);
+		color: var(--foreground);
+	}
+
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: color-mix(in oklab, var(--border) 80%, transparent)
+			transparent;
+	}
+
+	*::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: color-mix(in oklab, var(--border) 75%, transparent);
+		border-radius: 9999px;
+		border: 2px solid transparent;
+		background-clip: padding-box;
+	}
+
+	*::-webkit-scrollbar-thumb:hover {
+		background-color: color-mix(in oklab, var(--muted-foreground) 55%, transparent);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html:focus-within {
+		scroll-behavior: auto;
+	}
+
+	body {
+		background-attachment: scroll;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: var(--duration-reduced-motion) !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: var(--duration-reduced-motion) !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Resolve two @unom/ui vocabulary collisions outside Tailwind's layers.
+
+   @unom/ui uses secondary for muted text, while this theme uses it as a surface.
+   Keep the text utility readable on either surface. */
+.text-secondary {
+	color: var(--muted-foreground);
+}
+
+/* @unom/ui cards use ring-2 ring-accent. Soften the brand ring for plugin cards
+   while leaving explicit ring-accent opacity utilities untouched. */
+.rounded-card.ring-2 {
+	--tw-ring-color: color-mix(in oklch, var(--accent) 35%, transparent);
+}

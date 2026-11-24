@@ -1,0 +1,16 @@
+{
+  "name": "Eidolon-archive",
+  "languages": [],
+  "primary_language": "archive",
+  "status": "retired",
+  "has_readme": true,
+  "type": "archive",
+  "path": "repos/Eidolon-archive",
+  "disposition": "ARCHIVE",
+  "wave": "2026-07-23-boundary-audit",
+  "proposed_target": "Eidolon",
+  "proposed_target_repo": "Eidolon",
+  "proposed_target_path": ".",
+  "absorption_note": "Archive-only recovery; canonical runtime remains Eidolon.",
+  "note": "Preserves deleted/recovered Eidolon history without adding active footprint."
+}

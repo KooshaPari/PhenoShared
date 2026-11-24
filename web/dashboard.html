@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pheno-harness — Bench Dashboard</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">pheno-harness</a></h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="dashboard.html">Bench Dashboard</a></li>
+        <li><a href="suites.html">Suites</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h2>Benchmark dashboard</h2>
+      <p>Sample metrics from a pheno-harness bench run.</p>
+    </section>
+
+    <section class="cards">
+      <article class="card">
+        <h3>Tasks evaluated</h3>
+        <p class="metric">2,184</p>
+      </article>
+      <article class="card">
+        <h3>Pass rate</h3>
+        <p class="metric">67.3%</p>
+      </article>
+      <article class="card">
+        <h3>Median latency</h3>
+        <p class="metric">1.2s</p>
+      </article>
+      <article class="card">
+        <h3>Suites active</h3>
+        <p class="metric">14</p>
+      </article>
+    </section>
+
+    <section>
+      <h2>Pass rate by suite</h2>
+      <canvas id="suite-chart" width="900" height="320" aria-label="Pass rate by suite"></canvas>
+    </section>
+
+    <section>
+      <h2>Plugin hook invocation counts (last run)</h2>
+      <table class="data">
+        <thead>
+          <tr><th>Hook</th><th>timing</th><th>telemetry</th><th>normalize</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>pre_suite</td><td>0</td><td>14</td><td>0</td></tr>
+          <tr><td>post_suite</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>pre_metric</td><td>2,184</td><td>0</td><td>0</td></tr>
+          <tr><td>post_metric</td><td>2,184</td><td>0</td><td>0</td></tr>
+          <tr><td>pre_judge</td><td>0</td><td>0</td><td>2,184</td></tr>
+          <tr><td>post_judge</td><td>0</td><td>2,184</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <p>© 2026 ParetoOptimal. MIT.</p>
+  </footer>
+  <script src="static/charts.js"></script>
+</body>
+</html>

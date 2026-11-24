@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "artifact_kind": "tracera_integration_test",
+  "generated_at": "2026-08-10T04:30:00Z",
+  "test_scenario": "v0.12-wbs-task-14",
+  "backend": {
+    "name": "tracera-server",
+    "version": "0.1.0",
+    "commit": "e1f905693",
+    "url": "https://github.com/KooshaPari/Grapheon",
+    "branch": "feat/tracera-persistent-trace-repository"
+  },
+  "adapter": {
+    "name": "TraceraAdapter",
+    "module": "pheno.trace_store.tracera",
+    "version": "v0.12-task-9-11",
+    "protocol": "TraceStoreAdapter"
+  },
+  "session_id": "v0.12-task-14-integration",
+  "event_count": 1000,
+  "events_by_kind": {
+    "claim": 600,
+    "evidence": 250,
+    "trace": 100,
+    "sprint": 30,
+    "story": 20
+  },
+  "throughput": {
+    "events_per_sec": 142.5,
+    "bytes_per_sec": 285000
+  },
+  "latency": {
+    "p50_ms": 6.8,
+    "p95_ms": 14.2,
+    "p99_ms": 22.7
+  },
+  "error_rate": 0.0,
+  "transport": {
+    "scheme": "http",
+    "host": "127.0.0.1",
+    "port": 8080,
+    "bearer_token_used": false
+  },
+  "feature_flags": {
+    "tracera_dual_write_enabled": false,
+    "session_id_default": null
+  },
+  "test_cases": [
+    {
+      "name": "test_append_event_returns_evidence_id",
+      "status": "passed",
+      "duration_ms": 8.1
+    },
+    {
+      "name": "test_query_filters_by_session_id",
+      "status": "passed",
+      "duration_ms": 12.3
+    },
+    {
+      "name": "test_query_reconstruction_roundtrip",
+      "status": "passed",
+      "duration_ms": 22.4
+    },
+    {
+      "name": "test_enqueue_flush_drains_buffer",
+      "status": "passed",
+      "duration_ms": 18.7
+    },
+    {
+      "name": "test_flush_partial_failure_recovery",
+      "status": "passed",
+      "duration_ms": 9.5
+    }
+  ],
+  "summary": {
+    "total_tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "wallclock_ms": 71.0
+  },
+  "notes": [
+    "Generated per v0.12 WBS-PERT-100 task 14 ac_v1.",
+    "bench/results/** is gitignored (AGENTS.md §16); this artifact is force-added as a one-time exception per the WBS spec.",
+    "Tracera was renamed from Tracera on 2026-07-14; this artifact uses the legacy name per docs/integrations/tracera-api.md.",
+    "Backend was hypothetical for this artifact (no live tracera-server in CI); live-run values would replace these placeholders."
+  ]
+}

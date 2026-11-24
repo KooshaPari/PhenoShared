@@ -1,0 +1,76 @@
+# RLVR playground matrix — locked by ADR 0005.
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+  ram_gb: 64
+  forbidden: [burst_5090, multi_gpu_cluster, cloud_gpu_finetune]
+
+dimensions:
+  harness_types: [forge, codex, claude_code, agent_runner, omniroute_local]
+  model_nets:
+    - qwen35_08b
+    - lfm25_8b_a1b
+    - ornith_8b
+    - ling_26_flash
+    - granite_40_h_micro
+    - lfm_2_24b_a2b
+    - trinity_mini
+    - granite_41_8b
+    - laguna_xs_21
+    - hy3_preview
+    - qwen35_flash
+  routing_policies: [local_first, cloud_escalate, teacher_harvest, emergency_only]
+  decode_experiments:
+    - baseline
+    - mtp_probe
+    - dflash_dspark_probe
+    - jetspec_probe
+    - ddtree_probe
+    - speculative_speculative_probe
+  train_modes: [none, qlora_role, lora_repair, sft_traces]
+
+model_nets_meta:
+  qwen35_08b: {tier: local.qwen35_08b, local: true, launch_template: qwen35_08b, quant: Q4_K_M}
+  lfm25_8b_a1b: {tier: local.lfm25_8b_a1b, local: true, launch_template: lfm25_8b_a1b, quant: Q4_K_M}
+  ornith_8b: {tier: local.ornith_8b, local: true, launch_template: ornith_8b, quant: Q4_K_M}
+  ling_26_flash: {tier: cloud.openrouter, local: false, provider: openrouter, model: inclusionai/ling-2.6-flash}
+  granite_40_h_micro: {tier: cloud.openrouter, local: false, provider: openrouter, model: ibm-granite/granite-4.0-h-micro}
+  lfm_2_24b_a2b: {tier: cloud.openrouter, local: false, provider: openrouter, model: liquid/lfm-2-24b-a2b}
+  trinity_mini: {tier: cloud.openrouter, local: false, provider: openrouter, model: arcee-ai/trinity-mini}
+  granite_41_8b: {tier: cloud.openrouter, local: false, provider: openrouter, model: ibm-granite/granite-4.1-8b}
+  laguna_xs_21: {tier: cloud.openrouter, local: false, provider: openrouter, model: poolside/laguna-xs-2.1}
+  hy3_preview: {tier: cloud.openrouter, local: false, provider: openrouter, model: tencent/hy3-preview}
+  qwen35_flash: {tier: cloud.openrouter, local: false, provider: openrouter, model: qwen/qwen3.5-flash-02-23}
+
+routing_policies_meta:
+  local_first: {combo: Main, max_cloud_steps: 0, escalation_config: config/escalation.yaml}
+  cloud_escalate: {combo: Main, max_cloud_steps: 4, escalation_config: config/escalation.yaml}
+  teacher_harvest: {combo: Main, harvest_cloud_traces: true, min_teacher_tokens: 500000, escalation_config: config/escalation.yaml}
+  emergency_only: {combo: Main, max_cloud_steps: 1, escalation_config: config/escalation.yaml}
+
+decode_experiments_meta:
+  baseline: {stub: false, method: autoregressive_baseline}
+  mtp_probe: {stub: true, method: multi_token_prediction}
+  dflash_dspark_probe: {stub: true, method: diffusion_speculative_decode}
+  jetspec_probe: {stub: true, method: parallel_tree_drafting}
+  ddtree_probe: {stub: true, method: diffusion_draft_tree}
+  speculative_speculative_probe: {stub: true, method: multi_branch_speculation}
+
+train_modes_meta:
+  none: {requires_local_gpu: false, training_config: null}
+  qlora_role: {requires_local_gpu: true, training_config: config/training_experiments/qlora_role.yaml, base_model: lfm25_8b_a1b}
+  lora_repair: {requires_local_gpu: true, training_config: config/training_experiments/lora_repair.yaml, base_model: ornith_8b}
+  sft_traces: {requires_local_gpu: true, training_config: config/training_experiments/sft_traces.yaml, base_model: lfm25_8b_a1b}
+
+filters:
+  skip_cloud_gpu_variants: true
+  cloud_model_nets: [ling_26_flash, granite_40_h_micro, lfm_2_24b_a2b, trinity_mini, granite_41_8b, laguna_xs_21, hy3_preview, qwen35_flash]
+  local_gpu_train_modes: [qlora_role, lora_repair, sft_traces]
+
+output:
+  experiments_dir: "${PHENO_ROOT}/eval/experiments"
+  manifest_format: json
+  rlvr_config: "${PHENO_ROOT}/training/rlvr_config.yaml"
+  trace_glob: "traces_*.jsonl"
+  pass_threshold: 0.75

@@ -1,0 +1,12 @@
+{
+  "id": "qualification-a8b41cae-20261017",
+  "source_request_id": null,
+  "original": "SYNTHETIC NON-SENSITIVE PHINBOX CANARY. Native REST qualification only. No real user task, credential, or harness permission is included. This workflow will be edited and archived as durable evidence.",
+  "title": "Phinbox native adapter qualification canary 2026-10-17",
+  "status": "open",
+  "lane": "isolated-real-adapter-qualification",
+  "eta": "bounded canary closure during qualification",
+  "assignee": null,
+  "acknowledged": false,
+  "revision": 0
+}

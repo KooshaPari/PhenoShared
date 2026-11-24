@@ -1,0 +1,7 @@
+repository	local_delta	security	remote_ref	result
+SessionLedger	main 6 ahead/2 behind; dirty fixture and untracked payload	714 commits, 14.86MB, no leaks	recovery/sessionledger-local/main-20260723	PUBLISHED
+PhenoObservability	main 29 ahead; worklog checkout separate	local scan clean	recovery/phenoobservability-local/main-20260723	PUBLISHED
+phenotype-tooling	25 local-only commits on absorbed-go branch; dirty view file	25 commits, 561KB, no leaks	recovery/phenotype-tooling-local/wip-20260722-absorbed-go-mod	PUBLISHED
+portage	feat/decomposition-cleanup 1 ahead	1 commit, 226KB, no leaks	recovery/portage-local/feat-decomposition-cleanup-20260723	PUBLISHED
+thegent	preservation branch 2 ahead	2 commits, 85KB, no leaks	recovery/thegent-local/wip-preservation-20260723	PUBLISHED
+forgecode	Airlock snapshot from dirty checkout; origin denied tailcallhq remote	snapshot branch preserved; scan gate unresolved	fork/recovery/forgecode-local/wip-20260723T0956	FORK_PRESERVED_ORIGIN_BLOCKED

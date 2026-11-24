@@ -1,0 +1,23 @@
+{
+  "name": "AgilePlus",
+  "slug": "agileplus",
+  "domain": "agileplus.<REDACTED>.com",
+  "description": "Local-first, AI-native, spec-driven project management for agent + human teams. Hexagonal Rust core with React/TS dashboard and Electrobun desktop app.",
+  "tier": 2,
+  "repo": "<REDACTED>/AgilePlus",
+  "language": "Rust / React / TypeScript",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Hexagonal architecture (ports-and-adapters)",
+    "Feature specs and work packages",
+    "GitHub/Plane sync",
+    "P2P merge",
+    "Web dashboard + desktop app"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/AgilePlus",
+    "docs": "https://agileplus.<REDACTED>.com/docs",
+    "releases": "https://github.com/KooshaPari/AgilePlus/releases"
+  }
+}

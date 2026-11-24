@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IaC Plan Viewer — Demo</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #0d1117; color: #c9d1d9; line-height: 1.5; padding: 2rem;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .subtitle { color: #8b949e; margin-bottom: 1.5rem; font-size: 0.875rem; }
+        .card {
+            background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+            padding: 1.5rem; max-width: 800px; margin: 0 auto;
+        }
+        textarea {
+            width: 100%; min-height: 200px; background: #0d1117; color: #c9d1d9;
+            border: 1px solid #30363d; border-radius: 6px; padding: 0.75rem;
+            font-family: "SF Mono", Consolas, monospace; font-size: 0.8rem; resize: vertical;
+        }
+        button {
+            background: #238636; color: #fff; border: none; border-radius: 6px;
+            padding: 0.5rem 1.25rem; font-size: 0.875rem; cursor: pointer; margin-top: 0.75rem;
+        }
+        button:hover { background: #2ea043; }
+        .stats { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+        .stat {
+            background: #0d1117; border: 1px solid #30363d; border-radius: 6px;
+            padding: 0.75rem 1rem; text-align: center; flex: 1; min-width: 80px;
+        }
+        .stat .label { font-size: 0.75rem; text-transform: uppercase; color: #8b949e; }
+        .stat .value { font-size: 1.5rem; font-weight: 600; }
+        .stat.create .value { color: #3fb950; }
+        .stat.update .value { color: #d29922; }
+        .stat.delete .value { color: #f85149; }
+        .stat.replace .value { color: #db6d28; }
+        .stat.noop .value { color: #8b949e; }
+        .stat.read .value { color: #58a6ff; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.8rem; }
+        th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid #21262d; }
+        th { color: #8b949e; font-weight: 500; }
+        .badge {
+            display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+        }
+        .badge.create { background: #3fb95022; color: #3fb950; }
+        .badge.update { background: #d2992222; color: #d29922; }
+        .badge.delete { background: #f8514922; color: #f85149; }
+        .badge.replace { background: #db6d2822; color: #db6d28; }
+        .badge.no-op { background: #8b949e22; color: #8b949e; }
+        .badge.read { background: #58a6ff22; color: #58a6ff; }
+        #error { color: #f85149; margin-top: 0.75rem; }
+        #version { color: #8b949e; font-size: 0.75rem; text-align: center; margin-top: 1rem; }
+        .sample-btn { background: #21262d; margin-left: 0.5rem; }
+        .sample-btn:hover { background: #30363d; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>IaC Plan Viewer</h1>
+    <p class="subtitle">Paste a Terraform / OpenTofu <code>terraform show -json</code> plan below</p>
+
+    <textarea id="planInput" placeholder='Paste plan JSON here...'></textarea>
+    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <button id="parseBtn">Parse Plan</button>
+        <button id="sampleBtn" class="sample-btn">Load Sample</button>
+    </div>
+
+    <div id="error"></div>
+
+    <div id="results" style="display:none; margin-top:1rem;">
+        <div class="stats" id="stats"></div>
+        <table>
+            <thead><tr><th>Address</th><th>Type</th><th>Provider</th><th>Action</th></tr></thead>
+            <tbody id="resourcesBody"></tbody>
+        </table>
+    </div>
+    <div id="version"></div>
+</div>
+
+<script>
+async function init() {
+    const { parse_plan, version } = await wasm_bindgen("pkg/iac_plan_viewer_bg.wasm");
+
+    document.getElementById("version").textContent = "iac-plan-viewer v" + version();
+
+    const input  = document.getElementById("planInput");
+    const output = document.getElementById("results");
+    const errEl  = document.getElementById("error");
+    const stats  = document.getElementById("stats");
+    const tbody  = document.getElementById("resourcesBody");
+
+    function render(planJson) {
+        try {
+            const summaryStr = parse_plan(planJson);
+            const summary = JSON.parse(summaryStr);
+            errEl.textContent = "";
+            output.style.display = "block";
+
+            stats.innerHTML = [
+                { key: "create", label: "Create" },
+                { key: "update", label: "Update" },
+                { key: "delete", label: "Delete" },
+                { key: "replace", label: "Replace" },
+                { key: "no_op", label: "No-Op" },
+                { key: "read", label: "Read" },
+            ].map(s => `
+                <div class="stat ${s.key === 'no_op' ? 'noop' : s.key}">
+                    <div class="value">${summary[s.key]}</div>
+                    <div class="label">${s.label}</div>
+                </div>
+            `).join("");
+
+            tbody.innerHTML = summary.resources.map(r => `
+                <tr>
+                    <td><code>${esc(r.address)}</code></td>
+                    <td>${esc(r.resource_type)}</td>
+                    <td>${esc(r.provider)}</td>
+                    <td><span class="badge ${r.action}">${r.action}</span></td>
+                </tr>
+            `).join("");
+        } catch (e) {
+            output.style.display = "none";
+            errEl.textContent = "Error: " + e;
+        }
+    }
+
+    document.getElementById("parseBtn").addEventListener("click", () => render(input.value));
+    document.getElementById("sampleBtn").addEventListener("click", async () => {
+        const resp = await fetch("sample-plan.json");
+        input.value = await resp.text();
+        render(input.value);
+    });
+}
+
+function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const script = document.createElement("script");
+    script.src = "pkg/iac_plan_viewer.js";
+    script.onload = init;
+    document.head.appendChild(script);
+});
+</script>
+</body>
+</html>

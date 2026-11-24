@@ -1,0 +1,59 @@
+version: "3"
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  build:
+    desc: Build the Python package
+    cmds:
+      - |
+        set -euo pipefail
+
+        if command -v uv >/dev/null 2>&1; then
+          uv build
+        else
+          python -m build
+        fi
+
+  test:
+    desc: Run the Python test suite
+    cmds:
+      - |
+        set -euo pipefail
+
+        if [ ! -d tests ] || ! find tests -type f -name "test_*.py" | grep -q .; then
+          echo "No test files found under tests/; skipping pytest."
+          exit 0
+        fi
+
+        if command -v uv >/dev/null 2>&1; then
+          uv run pytest
+        else
+          python -m pytest
+        fi
+
+  lint:
+    desc: Run Python lint checks
+    cmds:
+      - |
+        set -euo pipefail
+
+        if command -v uv >/dev/null 2>&1; then
+          uv run ruff check .
+        else
+          python -m ruff check .
+        fi
+
+  clean:
+    desc: Remove Python build and cache artifacts
+    cmds:
+      - |
+        set -euo pipefail
+
+        rm -rf build dist .coverage htmlcov .pytest_cache .ruff_cache .mypy_cache
+        find . -type d -name "*.egg-info" -prune -exec rm -rf {} +
+        find . -type d -name "__pycache__" -prune -exec rm -rf {} +
+        find . -type f -name "*.pyc" -delete

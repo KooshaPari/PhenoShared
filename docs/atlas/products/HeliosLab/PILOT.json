@@ -1,0 +1,40 @@
+{
+  "id": "PILOT-PRD-HELIOSLAB",
+  "product_id": "PRD-HELIOSLAB",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1167587447,
+  "hypothesis": "A coherent local workbench or precise configuration tool reduces context switching and setup, not just rebrands a generic workspace.",
+  "baseline_candidates": [
+    "Native terminal and harness launch workflow",
+    "VS Code workspace plus task/session tooling",
+    "Existing agent desktop client appropriate to accepted scope",
+    "OpenFeature-compatible configuration for a configuration-only contract"
+  ],
+  "scenario": "First select the accepted public job. For a workbench, launch two isolated projects and different harnesses, navigate current and archived sessions, inspect a tool error, restart, and resume safely. For configuration tooling, create and change scoped flags/secrets and verify applications observe precisely the intended values. Do not combine incomparable outcomes into one score.",
+  "failure_cases": [
+    "Secret exposed in a preview or log",
+    "Wrong project receives config",
+    "Stale session becomes writable",
+    "Missing external source works only from a warm cache",
+    "Desktop shell launches the wrong binary"
+  ],
+  "metrics": [
+    "Time to first correct workspace/configuration",
+    "State fidelity and isolation",
+    "Number of manual context switches",
+    "Clear failure diagnosis",
+    "Clean-install dependency burden",
+    "UI keyboard/accessibility completeness"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

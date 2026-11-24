@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+PROFILE_DIR="${CHROME_PROFILE_DIR:-$HOME/dev/job-hunter/data/chrome-profile}"
+PROFILE_NAME="${CHROME_PROFILE_NAME:-Default}"
+DEBUG_PORT="${CHROME_DEBUG_PORT:-9222}"
+
+if [[ ! -x "$CHROME_BIN" ]]; then
+  echo "Google Chrome binary not found at: $CHROME_BIN" >&2
+  exit 1
+fi
+
+if [[ ! -d "$PROFILE_DIR" ]]; then
+  echo "Chrome profile dir not found: $PROFILE_DIR" >&2
+  exit 1
+fi
+
+exec "$CHROME_BIN" \
+  --user-data-dir="$PROFILE_DIR" \
+  --profile-directory="$PROFILE_NAME" \
+  --remote-debugging-port="$DEBUG_PORT" \
+  --no-first-run \
+  --no-default-browser-check \
+  "$@"

@@ -1,0 +1,1 @@
+{"network_action": "none", "reason": "Set PHENO_ENABLE_TB3=1 only when an explicit registry check is approved.", "status": "disabled", "suite": "terminal-bench@3.x", "timestamp": "2026-07-14T01:01:53.629871+00:00"}

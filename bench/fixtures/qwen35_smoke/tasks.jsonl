@@ -1,0 +1,16 @@
+{"task_id":"smoke-001","kind":"sanity_check","prompt":"Print the number 42.","expected":"42","max_tokens":16,"temperature":0}
+{"task_id":"smoke-002","kind":"sanity_check","prompt":"Reply with exactly: ok","expected":"ok","max_tokens":16,"temperature":0}
+{"task_id":"smoke-003","kind":"sanity_check","prompt":"Count to three.","expected":"1","max_tokens":32,"temperature":0}
+{"task_id":"smoke-004","kind":"json_shape","prompt":"Return JSON with keys a and b where a=1 and b=2.","expected":"a","max_tokens":64,"temperature":0}
+{"task_id":"smoke-005","kind":"code_read","prompt":"What is the absolute path of this repository's root? One line.","expected":"C:\\\\Users\\\\koosh\\\\pheno-harness","max_tokens":64,"temperature":0}
+{"task_id":"smoke-006","kind":"code_read","prompt":"Read `SPEC.md` at the repo root and report the first heading.","expected":"pheno","max_tokens":96,"temperature":0}
+{"task_id":"smoke-007","kind":"code_read","prompt":"Read `docs/ARCHITECTURE_LAYERS.md` and report the first -dev layer name.","expected":"forge-dev","max_tokens":96,"temperature":0}
+{"task_id":"smoke-008","kind":"tool_call","prompt":"List the files under `docs/adrs/` and count them.","expected":"6","max_tokens":96,"temperature":0}
+{"task_id":"smoke-009","kind":"reasoning","prompt":"If a 3090 Ti has 24 GB VRAM and a 0.87 B model in BF16 needs ~1.74 GB, how much VRAM is left for KV cache and activations?","expected":"22.26","max_tokens":96,"temperature":0}
+{"task_id":"smoke-010","kind":"reasoning","prompt":"If TTFT is 80 ms, decode speed is 50 tokens/sec, and we want to produce 256 tokens, what is total wall time in ms?","expected":"5200","max_tokens":96,"temperature":0}
+{"task_id":"smoke-011","kind":"multi_turn","prompt":"User: 'Summarize pheno-harness in one sentence.' Assistant: <answer> User: 'Now in three words.'","expected":"pheno","max_tokens":128,"temperature":0}
+{"task_id":"smoke-012","kind":"code_write","prompt":"Write a Python one-liner that prints 'hello forge-dev' without using the print function directly.","expected":"hello","max_tokens":96,"temperature":0}
+{"task_id":"smoke-013","kind":"spec_dec_target","prompt":"Say 'speculative' three times in one sentence.","expected":"speculative","max_tokens":32,"temperature":0}
+{"task_id":"smoke-014","kind":"n_gram_target","prompt":"Complete: 'The quick brown fox jumps over the lazy ___' (one word).","expected":"dog","max_tokens":16,"temperature":0}
+{"task_id":"smoke-015","kind":"mtp_target","prompt":"List three fruits separated by commas.","expected":",","max_tokens":32,"temperature":0}
+{"task_id":"smoke-016","kind":"eagle_target","prompt":"E.A.G.L.E. stands for what? (one short phrase, no acronym expansion)","expected":"speculative","max_tokens":32,"temperature":0}

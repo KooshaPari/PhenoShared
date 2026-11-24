@@ -1,0 +1,243 @@
+---
+title: Ubuntu
+description: Install the Slipstream host on Ubuntu with apt.
+---
+
+Install a Slipstream host on **Ubuntu** (Desktop or Server) by building a `.deb` from this repo, or by
+installing a release `.deb` from [GitHub Releases](https://github.com/vindeckyy/slipstream/releases)
+when one is attached. There is no public apt registry. This page covers the distro-level setup, GPU
+driver, package, gamepad access. It works with either GNOME or KDE; how the host creates its virtual
+display and injects input is desktop-specific, so pick your desktop on the
+[configure pages](#configure-your-desktop) afterward rather than here.
+
+> New here? Read [Security & Safe Use](/docs/security) first, a streaming host is remote control of
+> the machine, so keep it on a trusted LAN or VPN and require pairing.
+
+> **Which releases.** There is one universal host package. It bundles FFmpeg 8 and needs **glibc 2.39
+> or newer**, that's **Ubuntu 24.04 LTS through 26.04**, the range it's built and tested for. Check
+> yours with `ldd --version`; below 2.39 the install fails and you build from source instead
+> ([appendix](#appendix-build-from-source)). The desktop *client* package is built on Ubuntu 26.04
+> and needs GTK4 ≥ 4.20 and SDL3, so it installs on **26.04 or newer** only, the host has no such
+> limit.
+
+> **Debian isn't a supported target.** The packages are built on Ubuntu images and their dependencies
+> are resolved against Ubuntu's package names, and nothing in CI builds or tests on Debian. Debian 12
+> (bookworm) is below the glibc floor and cannot install them at all. A newer Debian may work, but
+> it's untested, build from source ([appendix](#appendix-build-from-source)) if you want to try.
+> The `debian` packaging tree in the repo is the *package format*, not a supported Debian distro.
+
+## 1. GPU driver
+
+On **NVIDIA**, install the recommended driver.
+
+```sh
+sudo ubuntu-drivers install      # or: sudo apt install nvidia-driver-<version>
+```
+
+Then make sure the **GL/EGL userspace** is present, Wayland compositors on NVIDIA need it, and the
+base driver package doesn't always pull it in. Install the `libnvidia-gl` package matching your
+driver version:
+
+```sh
+sudo apt install libnvidia-gl-<version>   # e.g. libnvidia-gl-550
+```
+
+Reboot, then confirm the driver and KMS modeset:
+
+```sh
+nvidia-smi
+cat /sys/module/nvidia_drm/parameters/modeset   # should print Y
+```
+
+If modeset is not `Y`:
+
+```sh
+echo 'options nvidia-drm modeset=1' | sudo tee /etc/modprobe.d/nvidia-drm.conf
+sudo update-initramfs -u && sudo reboot
+```
+
+> **Secure Boot:** on a machine with Secure Boot **enabled**, the NVIDIA kernel module won't load
+> until you enrol its signing key. If `nvidia-smi` reports it can't talk to the driver, run
+> `sudo mokutil --import /var/lib/shim-signed/mok/MOK.der` (set a one-time password), reboot, and
+> choose **Enrol MOK** at the blue screen. Or disable Secure Boot in firmware.
+
+On **AMD/Intel** none of the NVIDIA steps apply. Encode runs on the Mesa stack: **Vulkan Video** for
+HEVC and AV1 (`mesa-vulkan-drivers`), with **VAAPI** for H.264 and as the fallback,
+`mesa-va-drivers` on AMD, `intel-media-va-driver` on Intel, both of which the `slipstream-host`
+package recommends, so apt pulls the right one in with the host. Install `mesa-vulkan-drivers` too
+if it isn't already on the box.
+
+## 2. Install the host (local `.deb`)
+
+There is no public apt registry for Slipstream. Build a `.deb` from this repo (see
+[`packaging/debian/README.md`](https://github.com/vindeckyy/slipstream/blob/main/packaging/debian/README.md)),
+or download a `.deb` from [GitHub Releases](https://github.com/vindeckyy/slipstream/releases) when
+assets are attached, then install it:
+
+```sh
+git clone https://github.com/vindeckyy/slipstream.git && cd slipstream
+# Build (needs dpkg-dev). Prefer the noble+BUNDLE_FFMPEG path for a 24.04-26.04-compatible host:
+# VERSION=0.23.0 BUNDLE_FFMPEG=1 bash packaging/debian/build-deb.sh
+# Or follow packaging/debian/README.md for the Docker build that CI uses.
+sudo apt install ./dist/slipstream-host_*.deb
+```
+
+`slipstream-host` `Recommends` the browser console (`slipstream-web`), so apt pulls it in by default
+when that package is available next to the host. The desktop *client* (`slipstream-client`) is a
+separate package for the machine you stream *to*, not installed on a host. The NVIDIA driver is
+**not** a dependency, you installed it out of band in step 1. Later updates: rebuild or download a
+newer `.deb`, install it the same way, then restart the running host so it picks up the new binary:
+
+```sh
+systemctl --user restart slipstream-host
+```
+
+Restart `slipstream-web` too (`systemctl --user restart slipstream-web`) if you run it and installed
+a newer console package.
+
+[Updating the Host](/docs/updating) covers the rest, the web console's **Updates** card, and the
+opt-in one-click update button whose `slipstream-update` group this package creates.
+
+Channel notes (stable vs canary) for when you publish your own feeds are in
+[Release Channels](/docs/channels). For day-to-day use, pin a release tag or track `main` when you
+rebuild.
+
+## 3. Grant gamepad access
+
+Virtual gamepads inject through `/dev/uinput`, which is gated by the `input` group. Add yourself and
+re-login so the new group membership takes effect:
+
+```sh
+sudo usermod -aG input "$USER"     # re-login to apply
+```
+
+## 4. Check it installed
+
+Before moving on, confirm the binary is there and nothing else is competing for the same job:
+
+```sh
+slipstream-host --version           # the binary is on PATH
+slipstream-host detect-conflicts    # exits 1 if Sunshine/Apollo is also installed
+```
+
+If `detect-conflicts` reports another streaming host, remove it before going further, two hosts on
+one machine is the most common reason a clean install never streams. See
+[Troubleshooting -> another streaming host is installed](/docs/troubleshooting#another-streaming-host-sunshine-apollo--is-installed).
+
+Once you've enabled the service on your desktop page below, these are how you watch it:
+
+```sh
+systemctl --user status slipstream-host      # active
+journalctl --user -u slipstream-host -f      # watch a client connect
+```
+
+## 5. Open the firewall (if you have one)
+
+Ubuntu installs `ufw` but leaves it **inactive**, so out of the box
+there is nothing to open. If you did enable one, common on Ubuntu Server, the package ships the
+openers for both, because a package never edits your firewall itself.
+
+The packaged unit runs `serve --gamestream`, the `.deb` installs it as it ships and only rewrites
+the binary path, so a host you enabled with `systemctl --user enable --now slipstream-host` serves
+**both** the native `slipstream/1` plane and stock [Moonlight](/docs/moonlight) clients, and needs
+**both** openers:
+
+```sh
+# ufw:
+sudo ufw allow slipstream-native
+sudo ufw allow slipstream-gamestream
+
+# firewalld:
+sudo firewall-cmd --reload                                        # load the installed definitions
+sudo firewall-cmd --permanent --add-service=slipstream-native
+sudo firewall-cmd --permanent --add-service=slipstream-gamestream
+sudo firewall-cmd --reload
+```
+
+Switched the host to **native-only**, dropped `--gamestream` with a
+`systemctl --user edit slipstream-host` drop-in, or you run `slipstream-host serve` by hand? Then open
+`slipstream-native` alone and leave `slipstream-gamestream` closed. `systemctl --user cat
+slipstream-host` shows which one yours is.
+
+`slipstream-native` opens UDP 9777 (QUIC control), UDP 5353 (mDNS discovery) and TCP 47990 (the
+mgmt/library API, HTTPS + mTLS, read-only off loopback). `slipstream-gamestream` opens the fixed
+Moonlight ports, TCP 47984, 47989 and 48010, UDP 47998-48000, plus the same mDNS. The media
+**data plane** uses an ephemeral UDP port the client opens with a hole-punch, so there is nothing
+fixed to open for video.
+
+Running the web console (`slipstream-web`) and want to reach it from another device? Open it too,
+that's **TCP 47992**:
+
+```sh
+sudo ufw allow slipstream-web                                                             # ufw
+sudo firewall-cmd --permanent --add-service=slipstream-web && sudo firewall-cmd --reload  # firewalld
+```
+
+Full port lists are in
+[`packaging/debian/README.md`](https://github.com/vindeckyy/slipstream/blob/main/packaging/debian/README.md#firewall).
+
+## Configure your desktop
+
+How the host creates its virtual display and injects input depends on your desktop, not your distro.
+Continue on the page for the desktop you run, it covers your `host.env`, any compositor quirks, and
+starting the host:
+
+- [KDE Plasma (KWin)](/docs/kde)
+- [GNOME (Mutter)](/docs/gnome)
+- [Steam / gamescope](/docs/gamescope)
+- [Hyprland](/docs/hyprland)
+- [Sway / wlroots](/docs/sway)
+
+Then bring up [The Web Console](/docs/web-console) to arm pairing and connect your first
+[client](/docs/clients). To run the host at boot, including fully **headless**, see
+[Running as a Service](/docs/running-as-a-service).
+
+## Next steps
+
+- **Keep it current**, [Updating the Host](/docs/updating).
+- **Remove it again**, [Uninstalling](/docs/uninstall).
+- **Something not working?**, [Troubleshooting](/docs/troubleshooting).
+
+## Appendix, build from source
+
+If your release is older than the supported range above, or you want to track `main` directly,
+compile the host yourself (no clean updates / no packaged units, you wire those up by hand).
+
+Install the build toolchain and runtime libraries. The packaged host is built against **FFmpeg 8**:
+Ubuntu 26.04's `libavcodec-dev` is FFmpeg 8, but 24.04's is FFmpeg 6.1, on 24.04 build FFmpeg 8
+yourself first (that's what `ci/rust-ci-noble.Dockerfile` does, and the shipped `.deb` bundles the
+result) or stick with the packaged host.
+
+```sh
+sudo apt install build-essential pkg-config cmake clang libclang-dev nasm git curl \
+  pipewire pipewire-pulse wireplumber libpipewire-0.3-dev libspa-0.2-dev \
+  libwayland-dev wayland-protocols libxkbcommon-dev libopus-dev \
+  libdrm-dev libgbm-dev libgl-dev libegl-dev libgles-dev mesa-common-dev libva-dev \
+  ffmpeg libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libavfilter-dev libavdevice-dev \
+  libnvidia-egl-wayland1 libnvidia-egl-gbm1 libei-dev
+```
+
+Install Rust if you don't have it, then build:
+
+```sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+git clone https://github.com/vindeckyy/slipstream.git && cd slipstream
+cargo build --release --locked \
+  --features slipstream-host/nvenc,slipstream-host/vulkan-encode \
+  -p slipstream-host
+```
+
+Those two features are what the packaged build uses, without them the host has no direct NVENC
+(NVIDIA) and no Vulkan Video encode (AMD/Intel), and falls back to the slower libav backends.
+
+The host binary lands at `target/release/slipstream-host`. Configure your desktop as above, then run
+it from inside your session:
+
+```sh
+cargo run --release --locked \
+  --features slipstream-host/nvenc,slipstream-host/vulkan-encode \
+  -p slipstream-host -- serve --gamestream
+```
+
+(The native plane is always on; `--gamestream` adds the Moonlight-compat surface, trusted LAN only.
+Drop it for a secure native-only host.)

@@ -1,0 +1,51 @@
+# HexaPy - Python library
+# Native task runner (just)
+
+# Default recipe
+default: help
+
+# Help
+help:
+  @echo "HexaPy - Python library"
+  @echo ""
+  @just --list
+
+# Install dependencies
+install:
+  uv sync
+
+# Quality checks
+check: lint typecheck test
+  @echo "All checks passed!"
+
+# Lint
+lint:
+  uv run ruff check .
+
+# Format
+fmt:
+  uv run ruff format .
+
+# Type check
+typecheck:
+  uv run mypy src/
+
+# Run tests
+test:
+  uv run pytest tests/ -v
+
+# Development
+dev:
+  uv run python -m hexapy
+
+# Clean
+clean:
+  rm -rf .pytest_cache .mypy_cache dist *.egg-info
+
+# Documentation
+doc:
+  uv run pdoc --output-dir docs/ src/hexapy
+
+# Benchmarks
+bench:
+  uv run pytest tests/benchmarks/ -v --benchmark-only

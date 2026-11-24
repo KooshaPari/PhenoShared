@@ -1,0 +1,79 @@
+{
+  "okf": "1.0",
+  "source_id": "cursor-session-011",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Refactor session list sorting to stable by updated_at",
+      "properties": { "user_turn_count": 4 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "list order matches updated_at descending",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "existing session_list tests pass",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not change search filter semantics",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/session-ledger" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "Stable session list sort" }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 4
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": { "corpus": "cursor", "source_id": "cursor-session-011" }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": { "corpus": "cursor", "source_id": "cursor-session-011" }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": { "corpus": "cursor", "source_id": "cursor-session-011" }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": { "corpus": "cursor", "source_id": "cursor-session-011" }
+    }
+  ],
+  "provenance": { "corpus": "cursor", "source_id": "cursor-session-011" }
+}

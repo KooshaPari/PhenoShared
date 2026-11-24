@@ -1,0 +1,11 @@
+experiment_id: fleet.t02.h_vs_g.warm
+suite: fleet-bench
+device_profile: windows.dual_gpu
+model_alias: qwen35-08b
+bench_key: "T02|H|qwen0.8|warm|1|n/a"
+langfuse_dataset: fleet-bench-t02
+description: H vs G warm baseline for Qwen3.5 0.8B (fleet-bench T02)
+aliases:
+  fleet_key: qwen0.8
+  pheno_key: local/qwen35-08b
+  gguf: Qwen3.5-0.8B-Q4_K_M.gguf

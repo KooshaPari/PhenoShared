@@ -1,0 +1,51 @@
+---
+export interface Props {
+  title: string;
+  subtitle?: string;
+  cta?: {
+    text: string;
+    href: string;
+  };
+}
+
+const { title, subtitle, cta } = Astro.props;
+---
+
+<section class="hero">
+  <div class="container">
+    <h1>{title}</h1>
+    {subtitle && <p class="subtitle">{subtitle}</p>}
+    {cta && <a href={cta.href} class="cta">{cta.text}</a>}
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: 4rem 1rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--pheno-primary, #0ea5e9), var(--pheno-dark, #0f172a));
+    color: white;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  .subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+  .cta {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    color: var(--pheno-primary, #0ea5e9);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

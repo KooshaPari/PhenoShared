@@ -1,0 +1,56 @@
+{
+  "suite": "terminal-bench",
+  "n": 5,
+  "passed": 0,
+  "pass_at_1": 0.0,
+  "wall_clock_s_total": 347.36,
+  "wall_clock_s_mean": 69.47,
+  "wall_clock_s_p95": 120.37,
+  "task_results": [
+    {
+      "task_id": "cli/tb-6370",
+      "ok": false,
+      "wall_clock_s": 21.116,
+      "reply_bytes": 13129,
+      "reply_preview": "Could you please share the numerical column data you'd like me to compute the median absolute deviation (MAD) for? You c",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "filesystem/tb-1373",
+      "ok": false,
+      "wall_clock_s": 69.622,
+      "reply_bytes": 36136,
+      "reply_preview": "The loop uses range(len(items)) which correctly produces indices 0, 1, ..., len(items)-1, and the modulo check i % 2 == ",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "git/tb-2348",
+      "ok": false,
+      "wall_clock_s": 34.668,
+      "reply_bytes": 7030,
+      "reply_preview": "No changes needed \u2014 the codebase is already clean.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "http/tb-8143",
+      "ok": false,
+      "wall_clock_s": 120.37,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "package-mgmt/tb-8334",
+      "ok": false,
+      "wall_clock_s": 101.582,
+      "reply_bytes": 12888,
+      "reply_preview": "If you need to add i18n support or introduce localized error messages to the project, that would be a new feature \u2014 but ",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

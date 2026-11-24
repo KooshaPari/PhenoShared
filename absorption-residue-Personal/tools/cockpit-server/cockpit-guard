@@ -1,0 +1,48 @@
+#!/bin/zsh
+# cockpit-guard — keep the cockpit HTTP server alive.
+#
+# Why cron and not launchd: com.example.cockpit-server wedges in the
+# launchd spawn path on this host. Observed repeatedly on 2026-11-08:
+# job state sits at `xpcproxy`, a pid is assigned, "last exit code = (never
+# exited)", and no listener is ever created, while the identical command run
+# from a shell binds in under a second. The stall moves: sometimes the python
+# exec completes and then never binds, sometimes /bin/zsh is left spinning with
+# no python child at all. A supervisor that retries every minute is immune to a
+# one-shot spawn stall; launchd KeepAlive is not, because it waits on a child
+# that never exits.
+#
+# A cockpit that serves nothing while reporting "running" is worse than a
+# cockpit that is visibly down, so this guard checks the actual HTTP response,
+# not the presence of a process.
+
+PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH
+
+ROOT="/Users/example/.local/share/resume-all/dashboards"
+SERVER="/Users/example/bin/cockpit-server.py"
+LOG="/Users/example/Library/Logs/resume-all/cockpit-guard.log"
+URL="http://127.0.0.1:8791/health"
+
+mkdir -p "${LOG:h}"
+
+if curl -s --max-time 3 "$URL" 2>/dev/null | grep -q '"status":"ok"'; then
+  exit 0
+fi
+
+echo "$(date -u +%FT%TZ) guard: health check failed, restarting" >> "$LOG"
+
+# Clear any wedged instance so the port is free. A stalled process that holds
+# no listener still holds other resources, and a zombie python is not useful.
+pkill -f "cockpit-server.py" 2>/dev/null
+sleep 1
+
+cd "$ROOT" || exit 1
+nohup /usr/bin/python3 "$SERVER" >> "/Users/example/Library/Logs/resume-all/cockpit-server.log" 2>&1 &
+disown 2>/dev/null
+
+sleep 3
+if curl -s --max-time 3 "$URL" 2>/dev/null | grep -q '"status":"ok"'; then
+  echo "$(date -u +%FT%TZ) guard: restarted OK (pid $!)" >> "$LOG"
+else
+  echo "$(date -u +%FT%TZ) guard: restart FAILED" >> "$LOG"
+fi

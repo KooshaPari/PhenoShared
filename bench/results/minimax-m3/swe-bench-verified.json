@@ -1,0 +1,56 @@
+{
+  "suite": "swe-bench-verified",
+  "n": 5,
+  "passed": 0,
+  "pass_at_1": 0.0,
+  "wall_clock_s_total": 454.34,
+  "wall_clock_s_mean": 90.87,
+  "wall_clock_s_p95": 120.53,
+  "task_results": [
+    {
+      "task_id": "django__django-55798",
+      "ok": false,
+      "wall_clock_s": 120.048,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "scikit-learn__scikit-learn-41643",
+      "ok": false,
+      "wall_clock_s": 120.121,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "matplotlib__matplotlib-23836",
+      "ok": false,
+      "wall_clock_s": 25.644,
+      "reply_bytes": 5595,
+      "reply_preview": "\u6240\u6709 Python \u6e90\u4ee3\u7801\u90fd\u4ec5\u4f7f\u7528\u65f6\u533a\u611f\u77e5\u7684\u65f6\u95f4 API\u3002\u65e0\u9700\u6267\u884c\u4efb\u4f55\u64cd\u4f5c\u3002",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "pytest__pytest-56577",
+      "ok": false,
+      "wall_clock_s": 120.531,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "requests__requests-32642",
+      "ok": false,
+      "wall_clock_s": 67.998,
+      "reply_bytes": 19442,
+      "reply_preview": "If you'd like to replace this synthetic prompt with a more realistic real-world task (since the benchmark appears to be ",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

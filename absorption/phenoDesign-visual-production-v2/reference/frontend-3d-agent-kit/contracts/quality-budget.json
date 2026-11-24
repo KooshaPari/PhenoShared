@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "PROPOSED_STARTING_TARGETS_NOT_MEASUREMENTS",
+  "poster_max_bytes": 256000,
+  "glb_max_bytes": 3145728,
+  "first_view_rich_media_max_bytes": 4194304,
+  "mobile_visible_triangles_target_max": 80000,
+  "draw_calls_target_max": 50,
+  "active_frame_p95_ms": 33.3,
+  "idle_continuous_frames": 0,
+  "max_preview_threads": 4,
+  "initial_gpu_render_slots": 1,
+  "notes": [
+    "The editable seed may exceed draw-call/material count targets; preserve semantics when consolidating.",
+    "CPU fallback is an inspection path, not a production mobile performance claim.",
+    "Select revised budgets after measuring actual audience hardware."
+  ]
+}

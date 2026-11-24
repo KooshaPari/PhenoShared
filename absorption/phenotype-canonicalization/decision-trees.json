@@ -1,0 +1,111 @@
+{
+  "version": "0.1.0",
+  "execution_semantics": "Reference routing data. Predicates require anchored facts; unknown is not false or pass. Integrate with existing policy engine, do not create another service.",
+  "trees": [
+    {
+      "id": "T01",
+      "title": "Canonical choice and adoption",
+      "start": "scope",
+      "nodes": [
+        {
+          "id": "scope",
+          "predicate": "subject_profile_and_authority_resolved",
+          "when_true": "available",
+          "when_false": "ACTION:gather_scope_evidence"
+        },
+        {
+          "id": "available",
+          "predicate": "selected_solution_satisfies_required_contract",
+          "when_true": "current",
+          "when_false": "remedy"
+        },
+        {
+          "id": "current",
+          "predicate": "consumer_resolves_selected_release",
+          "when_true": "proof",
+          "when_false": "ACTION:prepare_bounded_migration"
+        },
+        {
+          "id": "proof",
+          "predicate": "required_independent_consumer_evidence_is_current_and_complete",
+          "when_true": "ACTION:record_qualified_adoption",
+          "when_false": "ACTION:run_missing_qualification"
+        },
+        {
+          "id": "remedy",
+          "predicate": "current_owner_can_be_improved_with_bounded_cost",
+          "when_true": "ACTION:improve_current_owner",
+          "when_false": "alternate"
+        },
+        {
+          "id": "alternate",
+          "predicate": "qualified_alternative_or_supported_profile_exists",
+          "when_true": "ACTION:record_variant_and_migrate",
+          "when_false": "ACTION:open_gap_and_bounded_experiment"
+        }
+      ]
+    },
+    {
+      "id": "T02",
+      "title": "New implementation versus reuse",
+      "start": "need",
+      "nodes": [
+        {
+          "id": "need",
+          "predicate": "behavior_is_required",
+          "when_true": "existing",
+          "when_false": "ACTION:do_not_build_unneeded_behavior"
+        },
+        {
+          "id": "existing",
+          "predicate": "qualified_existing_shared_or_external_provider_fits",
+          "when_true": "ACTION:consume_provider",
+          "when_false": "extend"
+        },
+        {
+          "id": "extend",
+          "predicate": "extension_or_narrow_adapter_is_the_better_complete_solution",
+          "when_true": "ACTION:improve_owned_or_external_provider",
+          "when_false": "new"
+        },
+        {
+          "id": "new",
+          "predicate": "alternatives_and_integration_costs_have_been_tested",
+          "when_true": "ACTION:implement_bounded_new_capability",
+          "when_false": "ACTION:run_comparative_experiment"
+        }
+      ]
+    },
+    {
+      "id": "T03",
+      "title": "Optimization promotion",
+      "start": "baseline",
+      "nodes": [
+        {
+          "id": "baseline",
+          "predicate": "representative_baseline_and_bottleneck_are_measured",
+          "when_true": "correct",
+          "when_false": "ACTION:measure_baseline"
+        },
+        {
+          "id": "correct",
+          "predicate": "candidate_satisfies_correctness_security_and_target_requirements",
+          "when_true": "net",
+          "when_false": "ACTION:reject_or_repair_candidate"
+        },
+        {
+          "id": "net",
+          "predicate": "net_outcome_improvement_exceeds_uncertainty_and_integration_burden",
+          "when_true": "consumer",
+          "when_false": "ACTION:retain_current_solution_and_record_evidence"
+        },
+        {
+          "id": "consumer",
+          "predicate": "real_consumer_and_packaged_artifact_pass",
+          "when_true": "ACTION:promote_selected_profile",
+          "when_false": "ACTION:remain_experimental"
+        }
+      ]
+    }
+  ]
+}

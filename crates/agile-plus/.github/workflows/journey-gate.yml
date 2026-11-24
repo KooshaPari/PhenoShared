@@ -1,0 +1,132 @@
+# journey-gate.yml — validates journey-traceability documentation on every PR
+# Phenotype org standard: phenotype-infra/docs/governance/journey-traceability-standard.md
+
+name: Journey Traceability Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'docs/**/*.md'
+      - 'USER_JOURNEYS.md'
+      - 'FR_TRACEABILITY.md'
+      - '.github/workflows/journey-gate.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  journey-docs-exist:
+    name: Journey docs present
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check journey traceability doc exists
+        run: |
+          if [ ! -f docs/operations/journey-traceability.md ]; then
+            echo "ERROR: docs/operations/journey-traceability.md not found"
+            exit 1
+          fi
+          echo "journey-traceability.md found"
+
+      - name: Check USER_JOURNEYS.md exists
+        run: |
+          if [ ! -f USER_JOURNEYS.md ]; then
+            echo "ERROR: USER_JOURNEYS.md not found"
+            exit 1
+          fi
+          echo "USER_JOURNEYS.md found"
+
+      - name: Check FR_TRACEABILITY.md exists
+        run: |
+          if [ ! -f FR_TRACEABILITY.md ]; then
+            echo "ERROR: FR_TRACEABILITY.md not found"
+            exit 1
+          fi
+          echo "FR_TRACEABILITY.md found"
+
+  journey-docs-validate:
+    name: Journey docs valid
+    runs-on: ubuntu-24.04
+    needs: journey-docs-exist
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Validate journey traceability links
+        run: |
+          set -e
+          # Check that journey-traceability.md has required sections
+          grep -q "##" docs/operations/journey-traceability.md || {
+            echo "ERROR: journey-traceability.md appears empty or unformatted"
+            exit 1
+          }
+          echo "journey-traceability.md structure valid"
+
+      - name: Validate USER_JOURNEYS.md is not empty
+        run: |
+          if [ $(wc -l < USER_JOURNEYS.md) -lt 5 ]; then
+            echo "ERROR: USER_JOURNEYS.md appears empty or too short"
+            exit 1
+          fi
+          echo "USER_JOURNEYS.md has content"
+
+      - name: Validate FR_TRACEABILITY.md is not empty
+        run: |
+          if [ $(wc -l < FR_TRACEABILITY.md) -lt 5 ]; then
+            echo "ERROR: FR_TRACEABILITY.md appears empty or too short"
+            exit 1
+          fi
+          echo "FR_TRACEABILITY.md has content"
+
+  markdown-lint:
+    name: Markdown lint
+    runs-on: ubuntu-24.04
+    needs: journey-docs-exist
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Run Vale lint on docs
+        uses: errata-ai/vale-action@v2.1.0
+        with:
+          files: docs/
+        continue-on-error: true
+
+      - name: Check for broken internal links
+        run: |
+          # Basic check: no absolute localhost links in docs
+          if grep -r "http://localhost" docs/ 2>/dev/null; then
+            echo "WARNING: found localhost links in docs"
+          fi
+          echo "link check complete"
+
+  iconography-assets:
+    name: Iconography assets present
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check iconography directory
+        run: |
+          if [ -d docs/operations/iconography ]; then
+            echo "iconography directory exists"
+            ICON_COUNT=$(find docs/operations/iconography -name "*.svg" | wc -l | tr -d ' ')
+            echo "Found $ICON_COUNT SVG icons"
+            if [ "$ICON_COUNT" -gt 0 ]; then
+              # Validate SVG XML structure
+              for svg in docs/operations/iconography/*.svg; do
+                python3 -c "import xml.etree.ElementTree as ET; ET.parse('$svg')" 2>/dev/null || {
+                  echo "ERROR: Invalid XML in $svg"
+                  exit 1
+                }
+              done
+              echo "All SVG files are valid XML"
+            fi
+          else
+            echo "iconography directory not found (optional)"
+          fi

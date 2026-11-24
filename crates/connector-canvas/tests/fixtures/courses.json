@@ -1,0 +1,4 @@
+[
+  {"id": 101, "name": "CS 101", "workflow_state": "available", "enrollment_term_id": 5},
+  {"id": 202, "name": "MATH 202", "workflow_state": "available", "enrollment_term_id": 5}
+]

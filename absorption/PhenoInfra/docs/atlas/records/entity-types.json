@@ -1,0 +1,290 @@
+[
+  {
+    "id": "TYPE-HUMAN-SOURCE",
+    "name": "human-source",
+    "family": "intent",
+    "purpose": "Typed human-source record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-INTENT",
+    "name": "intent",
+    "family": "intent",
+    "purpose": "Typed intent record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-INTERPRETATION",
+    "name": "interpretation",
+    "family": "intent",
+    "purpose": "Typed interpretation record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-DECISION",
+    "name": "decision",
+    "family": "intent",
+    "purpose": "Typed decision record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-ASSUMPTION",
+    "name": "assumption",
+    "family": "intent",
+    "purpose": "Typed assumption record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-CONFLICT",
+    "name": "conflict",
+    "family": "intent",
+    "purpose": "Typed conflict record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-PRODUCT",
+    "name": "product",
+    "family": "product",
+    "purpose": "Typed product record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-USER-JOB",
+    "name": "user-job",
+    "family": "product",
+    "purpose": "Typed user-job record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-PERSONA",
+    "name": "persona",
+    "family": "product",
+    "purpose": "Typed persona record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-JOURNEY",
+    "name": "journey",
+    "family": "product",
+    "purpose": "Typed journey record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-CAPABILITY",
+    "name": "capability",
+    "family": "product",
+    "purpose": "Typed capability record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-APPLET",
+    "name": "applet",
+    "family": "product",
+    "purpose": "Typed applet record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-SURFACE",
+    "name": "surface",
+    "family": "product",
+    "purpose": "Typed surface record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-REPOSITORY",
+    "name": "repository",
+    "family": "implementation",
+    "purpose": "Typed repository record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-PACKAGE",
+    "name": "package",
+    "family": "implementation",
+    "purpose": "Typed package record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-SOURCE-UNIT",
+    "name": "source-unit",
+    "family": "implementation",
+    "purpose": "Typed source-unit record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-SYMBOL",
+    "name": "symbol",
+    "family": "implementation",
+    "purpose": "Typed symbol record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-BUILD-PROFILE",
+    "name": "build-profile",
+    "family": "implementation",
+    "purpose": "Typed build-profile record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-INTERFACE",
+    "name": "interface",
+    "family": "implementation",
+    "purpose": "Typed interface record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-STATE-MACHINE",
+    "name": "state-machine",
+    "family": "implementation",
+    "purpose": "Typed state-machine record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-DATA-ENTITY",
+    "name": "data-entity",
+    "family": "implementation",
+    "purpose": "Typed data-entity record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-MIGRATION",
+    "name": "migration",
+    "family": "implementation",
+    "purpose": "Typed migration record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-CONFIG-KEY",
+    "name": "config-key",
+    "family": "implementation",
+    "purpose": "Typed config-key record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-DEPENDENCY",
+    "name": "dependency",
+    "family": "implementation",
+    "purpose": "Typed dependency record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-ASSET",
+    "name": "asset",
+    "family": "implementation",
+    "purpose": "Typed asset record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-OBLIGATION",
+    "name": "obligation",
+    "family": "assurance",
+    "purpose": "Typed obligation record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-TEST",
+    "name": "test",
+    "family": "assurance",
+    "purpose": "Typed test record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-FIXTURE",
+    "name": "fixture",
+    "family": "assurance",
+    "purpose": "Typed fixture record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-ORACLE",
+    "name": "oracle",
+    "family": "assurance",
+    "purpose": "Typed oracle record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-MEASUREMENT",
+    "name": "measurement",
+    "family": "assurance",
+    "purpose": "Typed measurement record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-RUN",
+    "name": "run",
+    "family": "assurance",
+    "purpose": "Typed run record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-EVIDENCE",
+    "name": "evidence",
+    "family": "assurance",
+    "purpose": "Typed evidence record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-EXCEPTION",
+    "name": "exception",
+    "family": "assurance",
+    "purpose": "Typed exception record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-ARTIFACT",
+    "name": "artifact",
+    "family": "delivery",
+    "purpose": "Typed artifact record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-RELEASE",
+    "name": "release",
+    "family": "delivery",
+    "purpose": "Typed release record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-INSTALLATION",
+    "name": "installation",
+    "family": "delivery",
+    "purpose": "Typed installation record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-DEPLOYMENT",
+    "name": "deployment",
+    "family": "delivery",
+    "purpose": "Typed deployment record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-CONSUMER",
+    "name": "consumer",
+    "family": "delivery",
+    "purpose": "Typed consumer record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-CLAIM",
+    "name": "claim",
+    "family": "analysis",
+    "purpose": "Typed claim record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-DISSATISFACTION",
+    "name": "dissatisfaction",
+    "family": "analysis",
+    "purpose": "Typed dissatisfaction record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-HYPOTHESIS",
+    "name": "hypothesis",
+    "family": "analysis",
+    "purpose": "Typed hypothesis record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-EXPERIMENT",
+    "name": "experiment",
+    "family": "analysis",
+    "purpose": "Typed experiment record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-WORK-PACKAGE",
+    "name": "work-package",
+    "family": "analysis",
+    "purpose": "Typed work-package record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-TASK",
+    "name": "task",
+    "family": "analysis",
+    "purpose": "Typed task record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-OBSERVATION",
+    "name": "observation",
+    "family": "analysis",
+    "purpose": "Typed observation record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-ACTOR",
+    "name": "actor",
+    "family": "analysis",
+    "purpose": "Typed actor record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-PERMISSION",
+    "name": "permission",
+    "family": "analysis",
+    "purpose": "Typed permission record with source/provenance and applicability; no completeness inferred from type existence."
+  },
+  {
+    "id": "TYPE-RESOURCE-LEASE",
+    "name": "resource-lease",
+    "family": "analysis",
+    "purpose": "Typed resource-lease record with source/provenance and applicability; no completeness inferred from type existence."
+  }
+]

@@ -1,0 +1,29 @@
+[package]
+name = "phenotype-journeys-observability"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+homepage = "https://github.com/KooshaPari/phenotype-journeys"
+readme = "../../README.md"
+description = "OTel/OTLP observability for the phenotype-journeys workspace"
+keywords = ["opentelemetry", "otlp", "tracing", "phenotype", "observability"]
+categories = ["development-tools", "development-tools::debugging"]
+# Publish after phenotype-journey-core — see docs/guides/cutting-a-release.md.
+
+[dependencies]
+# Standard tracing facade + OTLP exporter (no external git dep required)
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+# Coordinated 0.32 stack (T1) — keep these in lockstep; partial bumps break
+# SdkTracerProvider / Resource / KeyValue (see Dependabot #128/#126/#125/#123/#143).
+opentelemetry = { version = "0.32", features = ["trace"] }
+opentelemetry_sdk = { version = "0.32", features = ["trace"] }
+opentelemetry-otlp = { version = "0.32", features = ["http-proto", "reqwest-blocking-client", "trace"] }
+opentelemetry-semantic-conventions = "0.32"
+tracing-opentelemetry = "0.33"
+thiserror.workspace = true
+
+[lib]
+path = "src/lib.rs"

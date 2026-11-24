@@ -1,0 +1,39 @@
+[package]
+name="phinbox"
+version="0.9.0"
+edition="2021"
+[workspace]
+[lib]
+path="/root/phinbox-qualification-a8b41cae/source/crates/phinbox/src/lib.rs"
+[[bin]]
+name="phinbox"
+path="/root/phinbox-qualification-a8b41cae/source/crates/phinbox/src/cli/mod.rs"
+[features]
+default=[]
+mcp=[]
+tray-native=[]
+observability=[]
+[dependencies]
+"rusqlite"={ "version" = "0.40", "features" = ["bundled"] }
+"reqwest"={ "version" = "0.12", "default-features" = false, "features" = ["json", "rustls-tls", "multipart"] }
+"futures-util"={ "version" = "0.3" }
+"tokio-tungstenite"={ "version" = "0.28", "features" = ["rustls-tls-webpki-roots"] }
+"clap"={ "version" = "4.5", "features" = ["derive", "env"] }
+"serde"={ "version" = "1.0", "features" = ["derive"] }
+"serde_json"={ "version" = "1.0" }
+"thiserror"={ "version" = "2.0" }
+"anyhow"={ "version" = "1.0" }
+"tokio"={ "version" = "1.42", "features" = ["rt", "rt-multi-thread", "macros", "process", "io-util", "sync", "time", "signal", "io-std", "net"] }
+"tracing"={ "version" = "0.1" }
+"tracing-subscriber"={ "version" = "0.3", "features" = ["env-filter", "json"] }
+"chrono"={ "version" = "0.4", "features" = ["serde"] }
+"regex"={ "version" = "1.11" }
+"uuid"={ "version" = "1.11", "features" = ["v4", "serde"] }
+"schemars"="1.2"
+"crossbeam-channel"="0.5"
+"parking_lot"="0.12"
+"inquire"={ "version" = "0.9", "features" = ["date"] }
+"which"="8"
+"ratatui"={ "version" = "0.30", "default-features" = false, "features" = ["crossterm_0_29", "underline-color"] }
+"ratatui-crossterm"={ "version" = "0.1", "features" = ["crossterm_0_29"] }
+"crossterm"="0.29"

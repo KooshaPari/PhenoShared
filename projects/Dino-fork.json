@@ -1,0 +1,23 @@
+{
+  "name": "Dino-fork",
+  "languages": ["csharp", "python", "powershell", "html", "shell", "javascript", "typescript", "rust", "go", "zig"],
+  "primary_language": "csharp",
+  "status": "active",
+  "has_readme": true,
+  "type": "app-lineage-variant",
+  "path": "repos/Dino-fork",
+  "role": "DINOForge-development-lineage",
+  "domain_role": "legacy-game-mod-platform",
+  "boundary": "dino-fork-lineage",
+  "gh_url": "https://github.com/KooshaPari/Dino-fork",
+  "disposition": "KEEP_STANDALONE_PENDING_LINEAGE_DECISION",
+  "canonical_routing": false,
+  "recovery_ref": null,
+  "recovery_commit": null,
+  "airlock_snapshot": null,
+  "absorbed_into": null,
+  "absorption_note": "Do not redirect to Dino or phenotype-apps yet. Dino-fork is not a GitHub fork and its default branch diverges from Dino/main by 104 commits ahead and 28 behind across 300 files. Preserve its full remote history while sponsor decides whether to archive as a development lineage or reconcile selected work into Dino.",
+  "rationale": "Public MIT repository with a distinct default branch (wsm/agileplus-dag-20260610), active AgilePlus DAG work, and substantial divergence from Dino/main. No local Dino-fork checkout was found; the local AgilePlus/Dino checkout points to AgilePlus, so no local recovery claim is made.",
+  "audit_artifact": "registry/audit-absorption-justification/dino-fork-lineage-20260726.json",
+  "registry_author": "phenotype-registry (lineage audit)"
+}

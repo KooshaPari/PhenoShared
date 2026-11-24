@@ -1,0 +1,70 @@
+# release.yml — BytePort release pipeline
+#
+# Consolidates:
+#   - Tag-driven GitHub release creation (was: release.yml)
+#   - Release-drafter draft updates on push to main (was: release-drafter.yml)
+#   - Monthly SBOM refresh via shared workflow (was: sbom-refresh.yml)
+#
+# Triggers: tag push (v*), push to main (drafter), monthly cron (sbom), manual.
+# Concurrency: shared group; per-ref cancellation to avoid stale drafter runs.
+
+name: Release
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  schedule:
+    - cron: '0 0 1 * *'  # 1st of each month — SBOM refresh
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  # ---------- On tag: publish GitHub release ----------
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    timeout-minutes: 30
+    name: Publish GitHub release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Create release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          draft: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ---------- On push to main: refresh release draft ----------
+  draft:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    timeout-minutes: 30
+    name: Update release draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Update release draft
+        uses: release-drafter/release-drafter@978bb0b30c5ee8cdd332ced253758157150d43f0 # v7.10.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # NOTE: the monthly SBOM refresh job was removed. It called
+  # KooshaPari/phenotype-tooling/.github/workflows/sbom-monthly.yml@79dff2b7, which
+  # does not exist (GitHub returns 404), so the whole workflow file failed to
+  # load and every push to main produced a zero-job failed run. SBOM generation
+  # is covered by .github/workflows/sbom.yml (Generate SBOM), which passes.
+  # A reusable-workflow job also cannot carry `timeout-minutes`, which the same
+  # GitHub validation rejected.

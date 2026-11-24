@@ -1,0 +1,35 @@
+schema_version: phenocompose.dogfood.pins/v0
+generated_at: 2026-07-21T22:25:00Z
+manifest:
+  path: config/phenocompose_dogfood_v0.yaml
+  sha256: 2de2ba70302a55f83920663e8cbec2293dd4ebf127ba44e224c50b3bfbfccfde
+repositories:
+  phenocompose:
+    branch: feat/phenocompose-slice1
+    commit: 1223ed10b52fc7d4d80e83a49667a710ce1d6dea
+    artifact:
+      path: E:/phenocompose-artifacts/toolkit-wire/pheno-compose.exe
+      sha256: 413278DDCA0D5AA67DC20B10B74F7CD194F6F5FDC0C6AF428A405DD393D3872A
+  nanovms:
+    branch: feat/nanovms-slice2
+    commit: a1ae76ae22e9b354b8e657310763559586bf0351
+    remote_note: pushed via fresh clone E:/evidence/nanovms-push-tmp; local worktree 149c15f has corrupt object 7fc7fb28
+    artifact:
+      path: E:/nanovms-artifacts/environment/nvms.exe
+      sha256: 6C4D87F160D024516855F1EEF79B9A4F0215D97286950E41A5AFBBD83B37B9FA
+  harness:
+    branch: feat/pheno-phenocompose-dogfood
+    commit: a0b01cc223100a087045d7054d9e3e88e64ea22f
+live_path_requirements:
+  - E:/phenocompose-artifacts/bin
+  - C:/Users/koosh/portage/.venv/Scripts
+verification:
+  fake_dogfood: "pytest tests/test_phenocompose_dogfood.py -q (9 passed, 1 skipped)"
+  live_dogfood_authoritative: E:/evidence/dogfood-live-tick-post-commit3.log
+  lifecycle_smoke: E:/evidence/lifecycle-smoke-apply.log
+  nanovms_orchestrate: "go test ./pkg/orchestrate/... -count=1"
+  phenocompose_cli: "cargo test (56 tests)"
+pull_requests:
+  phenocompose: https://github.com/KooshaPari/PhenoCompose/pull/108
+  nanovms: https://github.com/KooshaPari/nanovms/pull/1
+  harness: https://github.com/KooshaPari/pheno-harness/pull/6

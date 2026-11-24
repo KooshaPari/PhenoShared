@@ -1,0 +1,64 @@
+name: Policy Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  policy-gate:
+    name: policy-gate
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Enforce layered fix PR policy
+        shell: bash
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+        run: |
+          set -euo pipefail
+
+          echo "HEAD_REF=$HEAD_REF"
+          echo "BASE_REF=$BASE_REF"
+          echo "PR_LABELS=$PR_LABELS"
+
+          if [[ "$HEAD_REF" == fix/* ]]; then
+            if [[ "$BASE_REF" == "main" || "$BASE_REF" == "master" ]]; then
+              if [[ "$PR_LABELS" != *"layered-pr-exception"* ]]; then
+                echo "ERROR: fix/* PRs must target a layered branch, not main/master."
+                echo "Use stack/*, layer/*, release/*, or add label layered-pr-exception."
+                exit 1
+              fi
+            fi
+          fi
+
+          git fetch origin "$BASE_REF" --depth=100 || true
+          # Empirical fix (eco-044-gate-triage): GitHub's `pull/<N>/merge`
+          # synthetic ref is itself a merge commit. To detect *author-introduced*
+          # merges on the PR branch we walk first-parent history of the actual
+          # PR head SHA and exclude the synthetic merge ref. If no real merges
+          # remain on the PR branch, the gate passes.
+          PR_HEAD_SHA="${PR_HEAD_SHA:-}"
+          # Fetch the PR head ref explicitly so we can diff against it.
+          git fetch origin "pull/$PR_NUMBER/head:refs/remotes/pr/$PR_NUMBER/head" --depth=100 || true
+          REAL_HEAD="refs/remotes/pr/$PR_NUMBER/head"
+          MERGES=$(git rev-list --merges --first-parent "origin/$BASE_REF..$REAL_HEAD" 2>/dev/null \
+            | grep -v -F "$PR_HEAD_SHA" || true)
+          if [[ -n "$(echo "$MERGES" | tr -d ' \n')" ]]; then
+            echo "ERROR: merge commits detected in PR diff range:"
+            echo "$MERGES"
+            exit 1
+          fi
+
+          echo "Policy gate passed."

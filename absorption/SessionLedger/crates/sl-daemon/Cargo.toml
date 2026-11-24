@@ -1,0 +1,89 @@
+[package]
+name = "sl-daemon"
+version = "0.1.0"
+edition = "2021"
+description = "SessionLedger daemon — watches session dirs, compiles sessions, exports OKF documents"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+session-ledger = { path = "../.." }
+# SQLite memory persistence is optional; enable with `--features sqlite`.
+tokio = { version = "1", features = ["rt", "rt-multi-thread", "macros", "sync", "signal", "fs", "time"] }
+notify = { version = "8", default-features = false, features = ["macos_fsevent"] }
+clap = { version = "4", features = ["derive"] }
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+base64 = "0.23"
+thiserror = "2"
+flate2 = "1"
+zstd = { version = "0.14", optional = true }
+chrono = { version = "0.4", default-features = false, features = ["std", "alloc"] }
+# HTTP server (axum-based SSE bridge)
+axum = { version = "0.8", features = ["macros"] }
+tower-http = { version = "0.7", features = ["cors"] }
+futures-core = "0.3"
+tokio-stream = { version = "0.1", features = ["sync"] }
+# CLI client (reqwest + SSE stream helpers)
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
+tokio-util = { version = "0.7", features = ["io", "rt"] }
+futures-util = "0.3"
+async-stream = "0.3"
+# Structured logging / spans (RUST_LOG env filter)
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+opentelemetry = { version = "0.33.1", default-features = false, features = ["trace", "metrics"], optional = true }
+opentelemetry_sdk = { version = "0.32.1", default-features = false, features = ["trace", "metrics"], optional = true }
+tracing-opentelemetry = { version = "0.33.0", default-features = false, optional = true }
+opentelemetry-otlp = { version = "0.32.0", default-features = false, features = ["trace", "metrics", "grpc-tonic", "http-proto", "reqwest-rustls"], optional = true }
+clap_complete = "4.6.7"
+rusqlite = { version = "0.40", optional = true, features = ["bundled"] }
+
+# CPU sampling uses SIGPROF / setitimer; pprof-rs does not build on Windows.
+# Platform allocators: jemalloc on Unix, mimalloc on Windows (see jemalloc-default-on.md).
+[target.'cfg(unix)'.dependencies]
+pprof = { version = "0.15.0", default-features = false, features = ["prost-codec"] }
+tikv-jemallocator = "0.7"
+
+[target.'cfg(windows)'.dependencies]
+mimalloc = { version = "0.1", default-features = false }
+
+[dev-dependencies]
+tempfile = "3"
+tracing-test = "0.2.6"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+# Standalone workspace root: resolve sl-daemon independently of the parent
+# workspace. The sibling `sl-viewer` crate pulls dioxus-desktop -> wry ->
+# webkit2gtk-sys, which cannot resolve on macOS; isolating sl-daemon lets
+# `cargo test -p sl-daemon` / `cargo build` work on macOS without being dragged
+# into sl-viewer's platform-specific graph. The `session-ledger` path dep above
+# still resolves via its relative path.
+[workspace]
+
+[features]
+default = ["compress", "platform-allocator"]
+compress = ["session-ledger/compress", "dep:zstd"]
+sqlite = ["session-ledger/sqlite", "dep:rusqlite"]
+json-logs = ["tracing-subscriber/json"]
+otel = [
+    "dep:opentelemetry",
+    "dep:opentelemetry_sdk",
+    "dep:opentelemetry-otlp",
+    "dep:tracing-opentelemetry",
+]
+# OTLP metrics export over gRPC when SL_OTLP_METRICS_ENDPOINT is set.
+# Prometheus GET /metrics stays the default scrape path.
+otel-metrics = [
+    "dep:opentelemetry",
+    "dep:opentelemetry_sdk",
+    "dep:opentelemetry-otlp",
+]
+# Platform default allocators (C00 L8). Unix → jemalloc; Windows → mimalloc.
+# Opt out: cargo build --no-default-features --features system-allocator
+platform-allocator = []
+system-allocator = []
+# Explicit jemalloc feature retained for CI / docs parity with jemalloc-hard.yml.
+jemalloc = ["platform-allocator"]
+mimalloc-alloc = ["platform-allocator"]

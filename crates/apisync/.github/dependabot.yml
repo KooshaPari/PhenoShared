@@ -1,0 +1,16 @@
+---
+version: 2
+updates:
+  # Apisync is a Rust-only repository: only the cargo and github-actions
+  # ecosystems have manifests to watch (there are no go.mod, requirements,
+  # or package.json files; the old entries generated no PRs).
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5

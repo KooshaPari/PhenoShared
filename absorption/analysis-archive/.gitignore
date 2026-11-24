@@ -1,0 +1,70 @@
+# Corpora - large, transient, never version
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite.bak.test
+*.bak
+.bak-shm
+.bak-wal
+# Scratch / orphan staging
+.scratch-*/
+.stale-orphans/
+__pycache__/
+*.pyc
+# Keep the tooling, docs, and logs
+!Ask*.py
+*.bak-shm
+*.bak-wal
+.pre-w9-11.*
+
+# Noise logs - not evidence
+embed.log
+v4.log
+
+# Large/regenerable artifacts - never version these
+.venv/
+*.tar.gz
+*.tgz
+.rollback-*/
+*.joblib
+*.npy
+
+# One-off helper scripts and transient probe output (2026-11-08 sweep).
+# Each of these is a throwaway used to answer a single question during a
+# session; none is referenced by another file and none is a deliverable.
+.bp.py
+.cm.py
+.cmp705.py
+.commit.json
+.cr.py
+.cr977.py
+.dis998.py
+.dismiss.py
+.gql.py
+.gqldismiss.py
+.list_thr.py
+.newc.json
+.one.py
+.patch.json
+.ref.json
+.reply.py
+.req.py
+.res998.py
+.resolve_all.py
+.rs.py
+.thr.py
+.thrbody.py
+.harnessdesk_wt_scratch
+.keep-khostty
+.route-acceptance-nonce.txt
+.route-accept-a.out
+.route-accept-b.out
+.tmp-probe/
+
+# Backup staging: the sqlite snapshots are ignored by the *.sqlite rule above,
+# but these working directories are not.
+backups/kcode-pr187-worktree-20261104/
+backups/.wrangler/
+
+# Dated pre-edit backups (never evidence)
+*.bak-*

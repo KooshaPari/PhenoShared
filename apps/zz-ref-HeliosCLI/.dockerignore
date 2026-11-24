@@ -1,0 +1,122 @@
+# .dockerignore — Helios CLI dev builds
+# Excludes heavy directories from Docker build context.
+
+# ── Version control ──────────────────────────────────────────
+.git
+.github
+.circleci
+.trunk
+.forge
+.codex
+.mypy_cache
+.ruff_cache
+.pytest_cache
+
+# ── Build artifacts (rebuilt inside container) ────────────────
+target/
+debug/
+release/
+dist/
+build/
+bin/
+out/
+**/target/
+**/debug/
+**/release/
+**/build/
+**/dist/
+**/bin/
+
+# ── Go build cache (rebuilt inside container) ─────────────────
+**/go-build/
+pkg/
+
+# ── Python caches ────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+.venv/
+venv/
+htmlcov/
+.coverage
+.coverage.*
+
+# ── Node ─────────────────────────────────────────────────────
+node_modules/
+
+# ── Rust backups ─────────────────────────────────────────────
+*.rs.bk
+*.pdb
+
+# ── IDE / editor ─────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Logs & temp ──────────────────────────────────────────────
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+worklogs/
+worklog/
+
+# ── Environment secrets (never in image) ─────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Coverage / profiling ─────────────────────────────────────
+*.profraw
+*.profdata
+llvm-cov-*
+coverage/
+target-llvm-cov/
+coverage-html/
+
+# ── Documentation (not needed in dev image) ──────────────────
+docs/
+**/docs/
+explanation/
+guides/
+how-to/
+tutorials/
+reference/
+*.md
+!README.md
+
+# ── Vendored upstream trees (reference only) ─────────────────
+codex-rs/
+codex-cli/
+
+# ── Grade reports / audit artifacts ──────────────────────────
+grade_*.json
+results_*.txt
+audit_scorecard.json
+user-scorecard.json
+
+# ── Bazel (rebuilt inside container) ─────────────────────────
+.bazelrc
+MODULE.bazel.lock
+bazel-*/
+
+# ── Docker files (avoid recursive inclusion) ─────────────────
+Dockerfile
+Dockerfile.*
+docker-compose*.yml
+.dockerignore
+
+# ── Large test fixtures ──────────────────────────────────────
+tests/fixtures/large/
+snapshots/baselines/
+perf-results/
+
+# ── Benchmarks (rebuilt inside container) ────────────────────
+.benchmarks/

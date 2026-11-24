@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SessionLedger — Session Event Capture Daemon</title>
+  <meta name="description" content="SessionLedger is a JSONL-tail, OKF-export ETL pipeline for capturing LLM session events.">
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">SessionLedger</a></h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="viewer.html">Session Viewer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="https://github.com/KooshaPari/SessionLedger" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h2>Session event capture, made boring</h2>
+      <p>sl-daemon tails JSONL files, compiles them, exports OKF bundles. sl-viewer renders them. No database required.</p>
+    </section>
+    <section class="features">
+      <article>
+        <h3>Worker pool ETL</h3>
+        <p>tokio-based consumer pool with worker count from 1 to N. Bounded channels for back-pressure.</p>
+      </article>
+      <article>
+        <h3>Plugin system</h3>
+        <p>IngestionAdapter, Exporter, and Port traits. Built-in JSONL ingester + CSV exporter + in-memory port.</p>
+        <pre><code>use sl_daemon::plugin::default_registry;
+let r = default_registry();</code></pre>
+      </article>
+      <article>
+        <h3>OKF bundles</h3>
+        <p>Self-describing envelope with reproducible compression and traceparent sidecars.</p>
+      </article>
+      <article>
+        <h3>Dioxus desktop viewer</h3>
+        <p>Native desktop viewer (sl-viewer) renders OKF bundles into a navigable UI.</p>
+      </article>
+    </section>
+    <section class="metrics">
+      <h2>At a glance</h2>
+      <dl>
+        <dt>Workspace crates</dt><dd>3 (sl-daemon, sl-viewer, sl-kms)</dd>
+        <dt>Test coverage</dt><dd>305+ unit tests</dd>
+        <dt>CI workflows</dt><dd>49 (a11y, fuzz, cross-platform, hermetic, miri, etc.)</dd>
+        <dt>Ingestion adapters</dt><dd>6 (claude_code, codex, cursor, forge, json, web)</dd>
+        <dt>Export formats</dt><dd>OKF + CSV</dd>
+      </dl>
+    </section>
+  </main>
+  <footer>
+    <p>© 2026 ParetoOptimal. Apache-2.0 OR MIT.</p>
+  </footer>
+</body>
+</html>

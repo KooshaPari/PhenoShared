@@ -1,0 +1,81 @@
+name: Coverage Gate (Tier-2)
+
+on:
+  push:
+    branches: [main, fix/**, feat/**, chore/**]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  coverage-root:
+    name: Root workspace coverage (lib/framework — ≥71%)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-tarpaulin
+        run: cargo install cargo-tarpaulin --locked
+
+      - name: Run coverage gate (root workspace)
+        run: |
+          cargo tarpaulin \
+            --manifest-path Cargo.toml \
+            --workspace \
+            --fail-under 71 \
+            --out Xml --out Json \
+            --engine llvm \
+            --target-dir target
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-root-report
+          path: target/tarpaulin-report/
+
+  coverage-iac:
+    name: IAC workspace coverage (service — ≥60%)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: iac -> target
+
+      - name: Install cargo-tarpaulin
+        run: cargo install cargo-tarpaulin --locked
+
+      - name: Run coverage gate (iac workspace)
+        run: |
+          cargo tarpaulin \
+            --manifest-path iac/Cargo.toml \
+            --workspace \
+            --fail-under 10 \
+            --out Xml --out Json \
+            --engine llvm \
+            --target-dir iac/target
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-iac-report
+          path: iac/target/tarpaulin-report/

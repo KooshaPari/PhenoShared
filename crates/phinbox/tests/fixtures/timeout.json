@@ -1,0 +1,13 @@
+{
+  "title": "How long should I wait?",
+  "question": "Timeout for the test run, in seconds.",
+  "field": {
+    "kind": "integer",
+    "label": "Seconds",
+    "min": 1,
+    "max": 3600,
+    "default": 60
+  },
+  "urgency": "info",
+  "timeout_secs": 5
+}

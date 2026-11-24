@@ -1,0 +1,43 @@
+/target
+**/*.rs.bk
+*.pdb
+.DS_Store
+
+# Generated and local build output
+/crates/*/target
+/tools/*/target
+/clients/*/target
+/clients/*/*/target
+node_modules/
+dist/
+temp/
+winmd/
+result
+result-*
+.direnv/
+
+# Local application state and credentials
+*.env.local
+web/.env.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+
+# Apple and platform build output
+clients/apple/.build/
+clients/apple/SlipstreamCore.xcframework/
+clients/apple/.swiftpm/
+clients/apple/screenshots/
+clients/linux/screenshots/
+xcuserdata/
+clients/android/ci/__pycache__/
+*.pyc
+
+# Package and sandbox output
+.flatpak-repo/
+.flatpak-build/
+/dist/
+/crates/pyrowave-sys/vendor/pyrowave/Granite/application/platforms/android/**/.gradle/
+/crates/pyrowave-sys/vendor/pyrowave/Granite/application/platforms/android/**/build/

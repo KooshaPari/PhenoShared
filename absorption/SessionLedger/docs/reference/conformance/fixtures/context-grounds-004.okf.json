@@ -1,0 +1,51 @@
+{
+  "okf": "1.0",
+  "source_id": "forge-context-004",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Instrument token estimate logging for continuation bundles",
+      "properties": { "user_turn_count": 2 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "metrics endpoint reports total_tokens",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/session-ledger" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "Token estimate instrumentation" }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-context-004" }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": { "corpus": "forge", "source_id": "forge-context-004" }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": { "corpus": "forge", "source_id": "forge-context-004" }
+    }
+  ],
+  "provenance": { "corpus": "forge", "source_id": "forge-context-004" }
+}

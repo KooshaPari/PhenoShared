@@ -1,0 +1,88 @@
+version: "3"
+
+silent: false
+
+vars:
+  LANGUAGE:
+    sh: |
+      if test -f astro.config.mjs; then
+        echo astro-typescript
+      elif test -f tsconfig.json; then
+        echo typescript
+      elif test -f package.json; then
+        echo javascript
+      else
+        echo unknown
+      fi
+  PACKAGE_MANAGER:
+    sh: |
+      if test -f bun.lock; then
+        echo bun
+      elif test -f pnpm-lock.yaml; then
+        echo pnpm
+      elif test -f yarn.lock; then
+        echo yarn
+      elif test -f package-lock.json; then
+        echo npm
+      else
+        echo npm
+      fi
+
+tasks:
+  default:
+    desc: List available project tasks
+    cmds:
+      - task --list
+
+  install:
+    desc: Install dependencies for the detected project
+    cmds:
+      - echo "Detected {{.LANGUAGE}} project using {{.PACKAGE_MANAGER}}"
+      - >-
+        bash -c 'case "{{.PACKAGE_MANAGER}}" in
+          bun) bun install --frozen-lockfile ;;
+          pnpm) pnpm install --frozen-lockfile ;;
+          yarn) yarn install --frozen-lockfile ;;
+          npm) npm ci ;;
+          *) echo "Unsupported package manager: {{.PACKAGE_MANAGER}}" >&2; exit 1 ;;
+        esac'
+
+  deps:
+    internal: true
+    cmds:
+      - task: install
+
+  build:
+    desc: Build the detected project
+    deps:
+      - deps
+    cmds:
+      - "{{.PACKAGE_MANAGER}} run build"
+
+  test:
+    desc: Run tests when configured, otherwise validate with lint and build
+    deps:
+      - deps
+    cmds:
+      - >-
+        bash -c 'if node -e "const pkg = require(\"./package.json\"); process.exit(pkg.scripts?.test ? 0 : 1)";
+        then {{.PACKAGE_MANAGER}} run test;
+        else task lint && task build;
+        fi'
+
+  lint:
+    desc: Run lint checks for the detected project
+    deps:
+      - deps
+    cmds:
+      - >-
+        bash -c 'if node -e "const pkg = require(\"./package.json\"); process.exit(pkg.scripts?.lint ? 0 : 1)";
+        then {{.PACKAGE_MANAGER}} run lint;
+        else {{.PACKAGE_MANAGER}} run typecheck;
+        fi'
+
+  clean:
+    desc: Remove generated build artifacts
+    cmds:
+      - >-
+        node -e "const fs = require('node:fs'); for (const path of ['dist', '.astro', '.vercel/output']) fs.rmSync(path, { recursive: true, force: true });"

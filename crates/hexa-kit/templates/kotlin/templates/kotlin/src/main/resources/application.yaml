@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  host: "0.0.0.0"
+
+database:
+  driver: "org.postgresql.Driver"
+  url: "jdbc:postgresql://localhost:5432/phenotype"
+  username: "postgres"
+  password: ""
+
+logging:
+  level: INFO

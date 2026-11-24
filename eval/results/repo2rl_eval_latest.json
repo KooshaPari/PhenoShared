@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-06-14T05:02:06.688147+00:00",
+  "dataset_dir": "C:\\Users\\koosh\\pheno-harness\\datasets\\ref-pr-diff",
+  "tasks_dir": "C:\\Users\\koosh\\pheno-harness\\datasets\\ref-pr-diff\\tasks",
+  "agent": "terminus-2",
+  "model": "Main",
+  "harbor_model": "openai/Main",
+  "returncode": 0,
+  "stdout_tail": ""
+}

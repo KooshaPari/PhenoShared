@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "mlx": {
+    "endpoint": "http://127.0.0.1:9000/v1/rerank",
+    "protocol": "cohere-v1"
+  },
+  "tei": {
+    "endpoint": "http://127.0.0.1:8080/rerank",
+    "protocol": "tei",
+    "response": [
+      { "index": 2, "score": 0.982 },
+      { "index": 1, "score": 0.921 },
+      { "index": 0, "score": 0.003 }
+    ]
+  },
+  "query": "how should a local Markdown research vault be indexed?",
+  "documents": [
+    "Shopping notes\nBuy markdown markers and folders.",
+    "SQLite FTS5 indexing\nIndex bounded Markdown chunks locally for offline search.",
+    "Local-first research ledger\nA Markdown vault with SQLite FTS5 provides portable, offline retrieval."
+  ],
+  "response": {
+    "model": "local-cross-encoder",
+    "results": [
+      { "index": 2, "relevance_score": 0.982 },
+      { "index": 1, "relevance_score": 0.921 },
+      { "index": 0, "relevance_score": 0.003 }
+    ]
+  },
+  "expected_order": [2, 1, 0]
+}

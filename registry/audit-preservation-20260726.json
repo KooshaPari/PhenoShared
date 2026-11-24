@@ -1,0 +1,90 @@
+{
+  "audit_id": "audit-preservation-20260726",
+  "captured_at": "2026-07-26T00:37:15Z",
+  "purpose": "Cloud-preserve dirty high-risk workspace roots before boundary decisions",
+  "records": [
+    {
+      "name": "hwLedger",
+      "remote": "https://github.com/KooshaPari/hwLedger",
+      "snapshot_ref": "wip/20260726T0036-18c5afe0e5de1a58",
+      "snapshot_sha": "d43fc53de90a36f0fc5911d23524f76d944b4a1d",
+      "dirty_entries_at_snapshot": 9,
+      "active_worktree_note": "model-explorer-2026-07-23 remained intact",
+      "security_note": "1 moderate Dependabot finding reported",
+      "disposition": "PRESERVE_PENDING_BOUNDARY_REVIEW"
+    },
+    {
+      "name": "Tracera",
+      "remote": "https://github.com/KooshaPari/Tracera",
+      "snapshot_ref": "wip/20260726T0036-18c5afe2353f24b0",
+      "snapshot_sha": "e939246e6c2b358ed6b3f79e4784a3adc5382787",
+      "dirty_entries_at_snapshot": 10,
+      "prunable_temp_worktree_metadata": 8,
+      "security_note": "5 Dependabot findings reported: 4 high, 1 moderate",
+      "disposition": "PRESERVE_PENDING_BOUNDARY_REVIEW"
+    },
+    {
+      "name": "phenotype-tooling",
+      "remote": "https://github.com/KooshaPari/phenotype-tooling",
+      "snapshot_ref": "wip/20260726T0042-18c5b02de158dd40",
+      "dirty_entries_at_snapshot": 4,
+      "security_note": "203 Dependabot findings reported: 49 critical, 74 high, 72 moderate, 8 low",
+      "disposition": "PRESERVE_PENDING_SECURITY_AND_BOUNDARY_REVIEW"
+    },
+    {
+      "name": "pheno-harness",
+      "remote": "https://github.com/KooshaPari/pheno-harness",
+      "snapshot_ref": "wip/20260726T0042-18c5b03197fd03e8",
+      "dirty_entries_at_snapshot": 2,
+      "disposition": "PRESERVE_PENDING_BOUNDARY_REVIEW"
+    },
+    {
+      "name": "SessionLedger",
+      "remote": "https://github.com/KooshaPari/SessionLedger",
+      "snapshot_ref": "wip/20260726T0050-18c5b0a166ba0540",
+      "dirty_entries_at_snapshot": 3,
+      "security_note": "2 Dependabot findings reported: 1 moderate, 1 low",
+      "disposition": "PRESERVE_PENDING_BOUNDARY_REVIEW"
+    },
+    {
+      "name": "phenotype-omlx",
+      "remote": "https://github.com/KooshaPari/phenotype-omlx",
+      "snapshot_ref": "wip/20260726T0053-18c5b0c6df782988",
+      "snapshot_sha": "67ce0a03c1ee71e984f09225d50518fa81a21dd5",
+      "recovery_ref": "recovery/phenotype-omlx-local-20260726",
+      "recovery_commit": "c71bc622",
+      "dirty_entries_at_snapshot": 9,
+      "active_work_note": "Qwen3.5/Metal/Harbor evaluation and FFI changes remain in progress",
+      "security_note": "No literal secret values found; scripts expect environment-provided LANGFUSE_* and OPENAI_API_KEY values",
+      "disposition": "PRESERVE_COMMITTED_RECOVERY_PENDING_PERF_AND_BOUNDARY_REVIEW"
+    },
+    {
+      "name": "sharecli",
+      "remote": "https://github.com/KooshaPari/sharecli",
+      "recovery_ref": "recovery/sharecli-local-20260726",
+      "recovery_commit": "4207165",
+      "airlock_snapshot": "wip/20260726T0124-18c5b27ba8e59f20",
+      "captured_files": 3,
+      "boundary_note": "Recovery-only capture of tray dashboard work; HealthPage.swift is 1008 lines and requires decomposition before production integration.",
+      "security_note": "5 Dependabot findings reported: 1 high, 4 moderate",
+      "disposition": "PRESERVE_RECOVERY_ONLY_PENDING_DECOMPOSITION"
+    },
+    {
+      "name": "thegent",
+      "remote": "https://github.com/KooshaPari/thegent",
+      "recovery_ref": "recovery/thegent-dirty-decomposition-20260726",
+      "recovery_commit": "bbe00eeae5e1116190d539d1e6c85779d3395383",
+      "airlock_snapshot": "wip/20260726T0120-18c5b249daf9b7a8",
+      "captured_files": 7,
+      "boundary_note": "Recovery-only capture; several phench modules exceed the 500-line repository limit and require decomposition before production integration.",
+      "security_note": "88 Dependabot findings reported: 8 critical, 42 high, 32 moderate, 6 low",
+      "disposition": "PRESERVE_RECOVERY_ONLY_PENDING_DECOMPOSITION_AND_SECURITY_REVIEW"
+    }
+  ],
+  "invariants": [
+    "No reset, clean, deletion, archive, or source mutation was performed.",
+    "Snapshot refs are pushed to the canonical remotes.",
+    "Prunable metadata remains untouched pending sponsor policy."
+  ],
+  "next_gate": "Review workspace boundaries and security findings before any merge or archive action."
+}

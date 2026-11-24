@@ -1,0 +1,41 @@
+name: Example - Using Reusable Workflows
+
+# This is an example workflow demonstrating how to use the reusable workflows
+# defined in .github/workflows/
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # Example 1: Use the Rust quality gate
+  quality:
+    uses: ./.github/workflows/rust-quality.yml
+    with:
+      rust-version: stable
+      workspace: .
+      setup-protoc: true
+      coverage-threshold: 85
+      test-command: cargo test --workspace
+
+  # Example 2: Use the security scan workflow
+  security:
+    uses: ./.github/workflows/security-scan.yml
+    with:
+      workspace: .
+      cargo-audit: true
+      cargo-deny: true
+      gitleaks: true
+      python-bandit: false
+
+  # Example 3: Build release binaries (only on tags)
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    uses: ./.github/workflows/rust-release.yml
+    with:
+      binary-name: myapp
+      rust-version: stable
+      setup-protoc: true
+      strip-binary: true

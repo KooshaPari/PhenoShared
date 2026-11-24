@@ -1,0 +1,203 @@
+# ci.yml — BytePort continuous integration
+#
+# All language build/test/lint gates. The audit/security/quality jobs that
+# don't gate PRs live in audit.yml. Release/draft/SBOM live in release.yml.
+#
+# Triggers: push to main/master, pull_request, manual dispatch.
+# Concurrency: one in-flight run per ref; new commits cancel old runs.
+
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  # ---------- Go ----------
+  go-vet:
+    name: Go vet
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - backend/byteport
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache-dependency-path: ${{ matrix.module }}/go.sum
+      - name: go vet
+        working-directory: ${{ matrix.module }}
+        run: go vet ./...
+
+  go-build:
+    name: Go build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - backend/byteport
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache-dependency-path: ${{ matrix.module }}/go.sum
+      - name: go build
+        working-directory: ${{ matrix.module }}
+        run: go build ./...
+
+  go-test:
+    name: Go test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - backend/byteport
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache-dependency-path: ${{ matrix.module }}/go.sum
+      - name: go test
+        working-directory: ${{ matrix.module }}
+        run: go test ./...
+
+  go-fmt:
+    name: Go fmt (advisory)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+      - name: Check formatting
+        run: |
+          unformatted=$(gofmt -l backend/byteport)
+          if [ -n "$unformatted" ]; then
+            echo "::warning::The following files are not gofmt-clean (advisory; does not block merge):"
+            echo "$unformatted"
+            exit 1
+          fi
+
+  go-lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/byteport/go.mod
+          cache-dependency-path: backend/byteport/go.sum
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.13.2
+          working-directory: backend/byteport
+          args: --disable=staticcheck --disable=errcheck
+
+  # ---------- Rust ----------
+  rust-machete:
+    name: Cargo machete (unused deps)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install cargo-machete
+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2
+        with:
+          tool: cargo-machete
+      - name: Run cargo machete
+        # Only our own crates: vendor/clap-ext and src-tauri/vendor/aws-runtime
+        # are third-party sources whose unused deps are not ours to prune.
+        run: cargo machete crates frontend/web/src-tauri
+
+  # ---------- Pre-commit (gates slow hooks to CI) ----------
+  pre-commit:
+    name: pre-commit (auto + manual)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      # The manual-stage cargo-clippy hook builds the Tauri workspace, which
+      # needs glib/gtk/webkit development packages on Linux.
+      - name: Install Tauri system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libglib2.0-dev libgtk-3-dev libwebkit2gtk-4.1-dev libsoup-3.0-dev \
+            libjavascriptcoregtk-4.1-dev pkg-config
+      # The clippy hook runs with --all-features, which enables
+      # tauri/custom-protocol; tauri::generate_context!() then requires the
+      # configured frontendDist directory to exist.
+      - name: Create frontend dist placeholder
+        run: |
+          mkdir -p frontend/web/build
+          [ -f frontend/web/build/index.html ] || printf '<!doctype html><title>ci</title>\n' > frontend/web/build/index.html
+      # Split into two conditional steps so we can scope pre-commit to the PR
+      # diff on pull_request events (legacy whole-repo drift would otherwise
+      # fail the gate for any PR that doesn't touch those files). Push-to-main
+      # still runs the full --all-files check so drift cannot land on main.
+      - name: Run pre-commit (PR diff)
+        if: github.event_name == 'pull_request'
+        uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
+        with:
+          extra_args: --hook-stage manual --from-ref ${{ github.event.pull_request.base.sha }} --to-ref HEAD
+      - name: Run pre-commit (full repo)
+        if: github.event_name != 'pull_request'
+        uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
+        with:
+          extra_args: --hook-stage manual --all-files

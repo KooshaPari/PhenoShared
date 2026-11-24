@@ -1,0 +1,96 @@
+name: perf
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  perf-proc:
+    name: perf (k6 → 95p budget)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node + Python
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install k6
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -yq gnupg ca-certificates
+          curl -fsSL https://github.com/grafana/k6/releases/download/v0.50.0/k6-v0.50.0-linux-amd64.tar.gz \
+            | tar -xz --strip-components=1 -C /usr/local/bin k6-v0.50.0-linux-amd64/k6
+          k6 version
+
+      - name: Bring up stack
+        run: |
+          set -euo pipefail
+          docker compose -f compose/docker-compose.yml up -d --wait
+          process-compose -f compose/process-compose.phase.yml up -d
+          bash ./scripts/perf/warmup.sh
+
+      - name: Run k6 (smoke + load + stress)
+        run: |
+          set -euo pipefail
+          mkdir -p .perf-reports
+          for scenario in smoke load stress; do
+            echo "## Running k6 $scenario"
+            k6 run \
+              --out json=.perf-reports/$scenario.json \
+              --summary-export=.perf-reports/$scenario-summary.json \
+              ./perf/${scenario}.js
+          done
+
+      - name: Enforce p95 budget
+        run: |
+          python ./scripts/perf/check_budget.py \
+            --summary .perf-reports/load-summary.json \
+            --budget-file ./perf/budget.json
+
+      - name: Bring down stack
+        if: always()
+        run: |
+          process-compose -f compose/process-compose.phase.yml down || true
+          docker compose -f compose/docker-compose.yml down --remove-orphans -v || true
+
+      - name: Upload perf reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-reports-${{ github.run_id }}
+          path: |
+            .perf-reports/**
+            !.perf-reports/node_modules/**
+
+  perf-qe-gate:
+    name: perf-qe-gate (100% green)
+    needs: [perf-proc]
+    runs-on: ubuntu-24.04
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decide
+        run: |
+          if [ "${{ needs.perf-proc.result }}" != "success" ]; then
+            echo "::error::perf suite failed or budget exceeded."
+            exit 1
+          fi
+          echo "All perf scenarios within p95 budget."

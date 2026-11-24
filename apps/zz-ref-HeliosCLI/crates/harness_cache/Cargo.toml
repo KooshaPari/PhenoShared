@@ -1,0 +1,26 @@
+[package]
+name = "harness_cache"
+version = "0.3.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+description = "harness cache — Phenotype infrastructure crate (HeliosCLI)"
+documentation = "https://docs.rs/harness_cache"
+keywords = ["phenotype", "helios", "cache"]
+categories = ["caching", "development-tools::testing"]
+authors = ["kooshapari"]
+
+[dependencies]
+tokio = { version = "1", features = ["sync", "rt"] }
+thiserror = "2"
+tracing = "0.1"
+moka = { version = "0.12", features = ["sync", "future"] }
+
+[dev-dependencies]
+criterion = "0.8.2"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+
+[[bench]]
+name = "cache_bench"
+harness = false

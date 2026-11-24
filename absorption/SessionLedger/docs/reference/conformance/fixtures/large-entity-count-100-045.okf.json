@@ -1,0 +1,1360 @@
+{
+  "okf": "1.0",
+  "source_id": "large-entity-count-100-045",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "step-0 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 25
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "step-1 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 26
+      }
+    },
+    {
+      "id": "intent-2",
+      "type": "intent",
+      "label": "step-2 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 27
+      }
+    },
+    {
+      "id": "intent-3",
+      "type": "intent",
+      "label": "step-3 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 28
+      }
+    },
+    {
+      "id": "intent-4",
+      "type": "intent",
+      "label": "step-4 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 29
+      }
+    },
+    {
+      "id": "intent-5",
+      "type": "intent",
+      "label": "step-5 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 30
+      }
+    },
+    {
+      "id": "intent-6",
+      "type": "intent",
+      "label": "step-6 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 31
+      }
+    },
+    {
+      "id": "intent-7",
+      "type": "intent",
+      "label": "step-7 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 32
+      }
+    },
+    {
+      "id": "intent-8",
+      "type": "intent",
+      "label": "step-8 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 33
+      }
+    },
+    {
+      "id": "intent-9",
+      "type": "intent",
+      "label": "step-9 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 34
+      }
+    },
+    {
+      "id": "intent-10",
+      "type": "intent",
+      "label": "step-10 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 35
+      }
+    },
+    {
+      "id": "intent-11",
+      "type": "intent",
+      "label": "step-11 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 36
+      }
+    },
+    {
+      "id": "intent-12",
+      "type": "intent",
+      "label": "step-12 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 37
+      }
+    },
+    {
+      "id": "intent-13",
+      "type": "intent",
+      "label": "step-13 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 38
+      }
+    },
+    {
+      "id": "intent-14",
+      "type": "intent",
+      "label": "step-14 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 39
+      }
+    },
+    {
+      "id": "intent-15",
+      "type": "intent",
+      "label": "step-15 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 40
+      }
+    },
+    {
+      "id": "intent-16",
+      "type": "intent",
+      "label": "step-16 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 41
+      }
+    },
+    {
+      "id": "intent-17",
+      "type": "intent",
+      "label": "step-17 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 42
+      }
+    },
+    {
+      "id": "intent-18",
+      "type": "intent",
+      "label": "step-18 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 43
+      }
+    },
+    {
+      "id": "intent-19",
+      "type": "intent",
+      "label": "step-19 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 44
+      }
+    },
+    {
+      "id": "intent-20",
+      "type": "intent",
+      "label": "step-20 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 45
+      }
+    },
+    {
+      "id": "intent-21",
+      "type": "intent",
+      "label": "step-21 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 46
+      }
+    },
+    {
+      "id": "intent-22",
+      "type": "intent",
+      "label": "step-22 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 47
+      }
+    },
+    {
+      "id": "intent-23",
+      "type": "intent",
+      "label": "step-23 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 48
+      }
+    },
+    {
+      "id": "intent-24",
+      "type": "intent",
+      "label": "step-24 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 49
+      }
+    },
+    {
+      "id": "intent-25",
+      "type": "intent",
+      "label": "step-25 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 50
+      }
+    },
+    {
+      "id": "intent-26",
+      "type": "intent",
+      "label": "step-26 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 51
+      }
+    },
+    {
+      "id": "intent-27",
+      "type": "intent",
+      "label": "step-27 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 52
+      }
+    },
+    {
+      "id": "intent-28",
+      "type": "intent",
+      "label": "step-28 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 53
+      }
+    },
+    {
+      "id": "intent-29",
+      "type": "intent",
+      "label": "step-29 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 54
+      }
+    },
+    {
+      "id": "intent-30",
+      "type": "intent",
+      "label": "step-30 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 55
+      }
+    },
+    {
+      "id": "intent-31",
+      "type": "intent",
+      "label": "step-31 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 56
+      }
+    },
+    {
+      "id": "intent-32",
+      "type": "intent",
+      "label": "step-32 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 57
+      }
+    },
+    {
+      "id": "intent-33",
+      "type": "intent",
+      "label": "step-33 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 58
+      }
+    },
+    {
+      "id": "intent-34",
+      "type": "intent",
+      "label": "step-34 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 59
+      }
+    },
+    {
+      "id": "intent-35",
+      "type": "intent",
+      "label": "step-35 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 60
+      }
+    },
+    {
+      "id": "intent-36",
+      "type": "intent",
+      "label": "step-36 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 61
+      }
+    },
+    {
+      "id": "intent-37",
+      "type": "intent",
+      "label": "step-37 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 62
+      }
+    },
+    {
+      "id": "intent-38",
+      "type": "intent",
+      "label": "step-38 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 63
+      }
+    },
+    {
+      "id": "intent-39",
+      "type": "intent",
+      "label": "step-39 of a long refactor session",
+      "properties": {
+        "user_turn_count": 1,
+        "token_estimate": 64
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "verify step-0",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "verify step-1",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "verify step-2",
+      "properties": null
+    },
+    {
+      "id": "acceptance-3",
+      "type": "acceptance",
+      "label": "verify step-3",
+      "properties": null
+    },
+    {
+      "id": "acceptance-4",
+      "type": "acceptance",
+      "label": "verify step-4",
+      "properties": null
+    },
+    {
+      "id": "acceptance-5",
+      "type": "acceptance",
+      "label": "verify step-5",
+      "properties": null
+    },
+    {
+      "id": "acceptance-6",
+      "type": "acceptance",
+      "label": "verify step-6",
+      "properties": null
+    },
+    {
+      "id": "acceptance-7",
+      "type": "acceptance",
+      "label": "verify step-7",
+      "properties": null
+    },
+    {
+      "id": "acceptance-8",
+      "type": "acceptance",
+      "label": "verify step-8",
+      "properties": null
+    },
+    {
+      "id": "acceptance-9",
+      "type": "acceptance",
+      "label": "verify step-9",
+      "properties": null
+    },
+    {
+      "id": "acceptance-10",
+      "type": "acceptance",
+      "label": "verify step-10",
+      "properties": null
+    },
+    {
+      "id": "acceptance-11",
+      "type": "acceptance",
+      "label": "verify step-11",
+      "properties": null
+    },
+    {
+      "id": "acceptance-12",
+      "type": "acceptance",
+      "label": "verify step-12",
+      "properties": null
+    },
+    {
+      "id": "acceptance-13",
+      "type": "acceptance",
+      "label": "verify step-13",
+      "properties": null
+    },
+    {
+      "id": "acceptance-14",
+      "type": "acceptance",
+      "label": "verify step-14",
+      "properties": null
+    },
+    {
+      "id": "acceptance-15",
+      "type": "acceptance",
+      "label": "verify step-15",
+      "properties": null
+    },
+    {
+      "id": "acceptance-16",
+      "type": "acceptance",
+      "label": "verify step-16",
+      "properties": null
+    },
+    {
+      "id": "acceptance-17",
+      "type": "acceptance",
+      "label": "verify step-17",
+      "properties": null
+    },
+    {
+      "id": "acceptance-18",
+      "type": "acceptance",
+      "label": "verify step-18",
+      "properties": null
+    },
+    {
+      "id": "acceptance-19",
+      "type": "acceptance",
+      "label": "verify step-19",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not regress step-0 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "do not regress step-1 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-2",
+      "type": "constraint",
+      "label": "do not regress step-2 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-3",
+      "type": "constraint",
+      "label": "do not regress step-3 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-4",
+      "type": "constraint",
+      "label": "do not regress step-4 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-5",
+      "type": "constraint",
+      "label": "do not regress step-5 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-6",
+      "type": "constraint",
+      "label": "do not regress step-6 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-7",
+      "type": "constraint",
+      "label": "do not regress step-7 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-8",
+      "type": "constraint",
+      "label": "do not regress step-8 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-9",
+      "type": "constraint",
+      "label": "do not regress step-9 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-10",
+      "type": "constraint",
+      "label": "do not regress step-10 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-11",
+      "type": "constraint",
+      "label": "do not regress step-11 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-12",
+      "type": "constraint",
+      "label": "do not regress step-12 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-13",
+      "type": "constraint",
+      "label": "do not regress step-13 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-14",
+      "type": "constraint",
+      "label": "do not regress step-14 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-15",
+      "type": "constraint",
+      "label": "do not regress step-15 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-16",
+      "type": "constraint",
+      "label": "do not regress step-16 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-17",
+      "type": "constraint",
+      "label": "do not regress step-17 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-18",
+      "type": "constraint",
+      "label": "do not regress step-18 perf",
+      "properties": null
+    },
+    {
+      "id": "constraint-19",
+      "type": "constraint",
+      "label": "do not regress step-19 perf",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": {
+        "cwd": "/srv/long-refactor"
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "completion-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 40,
+        "total_token_estimate": 1234
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "large-entity-count-100-045"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-2",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-3",
+      "target": "acceptance-3",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-4",
+      "target": "acceptance-4",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-5",
+      "target": "acceptance-5",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-6",
+      "target": "acceptance-6",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-7",
+      "target": "acceptance-7",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-8",
+      "target": "acceptance-8",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-9",
+      "target": "acceptance-9",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-10",
+      "target": "acceptance-10",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-11",
+      "target": "acceptance-11",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-12",
+      "target": "acceptance-12",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-13",
+      "target": "acceptance-13",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-14",
+      "target": "acceptance-14",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-15",
+      "target": "acceptance-15",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-16",
+      "target": "acceptance-16",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-17",
+      "target": "acceptance-17",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-18",
+      "target": "acceptance-18",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-19",
+      "target": "acceptance-19",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-20",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-21",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-22",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-23",
+      "target": "acceptance-3",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-24",
+      "target": "acceptance-4",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-25",
+      "target": "acceptance-5",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-26",
+      "target": "acceptance-6",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-27",
+      "target": "acceptance-7",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-28",
+      "target": "acceptance-8",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-29",
+      "target": "acceptance-9",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-30",
+      "target": "acceptance-10",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-31",
+      "target": "acceptance-11",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-32",
+      "target": "acceptance-12",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-33",
+      "target": "acceptance-13",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-34",
+      "target": "acceptance-14",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-35",
+      "target": "acceptance-15",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-36",
+      "target": "acceptance-16",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-37",
+      "target": "acceptance-17",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-38",
+      "target": "acceptance-18",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-39",
+      "target": "acceptance-19",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-2",
+      "target": "constraint-2",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-3",
+      "target": "constraint-3",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-4",
+      "target": "constraint-4",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-5",
+      "target": "constraint-5",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-6",
+      "target": "constraint-6",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-7",
+      "target": "constraint-7",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-8",
+      "target": "constraint-8",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-9",
+      "target": "constraint-9",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-10",
+      "target": "constraint-10",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-11",
+      "target": "constraint-11",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-12",
+      "target": "constraint-12",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-13",
+      "target": "constraint-13",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-14",
+      "target": "constraint-14",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-15",
+      "target": "constraint-15",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-16",
+      "target": "constraint-16",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-17",
+      "target": "constraint-17",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-18",
+      "target": "constraint-18",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-19",
+      "target": "constraint-19",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-20",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-21",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-22",
+      "target": "constraint-2",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-23",
+      "target": "constraint-3",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-24",
+      "target": "constraint-4",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-25",
+      "target": "constraint-5",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-26",
+      "target": "constraint-6",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-27",
+      "target": "constraint-7",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-28",
+      "target": "constraint-8",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-29",
+      "target": "constraint-9",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-30",
+      "target": "constraint-10",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-31",
+      "target": "constraint-11",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-32",
+      "target": "constraint-12",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-33",
+      "target": "constraint-13",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-34",
+      "target": "constraint-14",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-35",
+      "target": "constraint-15",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-36",
+      "target": "constraint-16",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-37",
+      "target": "constraint-17",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-38",
+      "target": "constraint-18",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-39",
+      "target": "constraint-19",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    },
+    {
+      "source": "intent-39",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "large-entity-count-100-045"
+      }
+    }
+  ]
+}

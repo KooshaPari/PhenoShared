@@ -1,0 +1,51 @@
+# gitleaks.yml — Secret scanning for SessionLedger
+# Runs gitleaks to detect hardcoded secrets in git history
+# Docs: https://github.com/gitleaks/gitleaks
+
+name: Gitleaks Secret Scan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**"
+      - "!**/*.md"
+      - "!docs/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**"
+      - "!**/*.md"
+      - "!docs/**"
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  gitleaks:
+    name: Gitleaks Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0 # Full history for secret scanning
+
+      - name: Load validated Gitleaks policy for pull requests
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: cp gitleaks.toml "$RUNNER_TEMP/gitleaks.toml"
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: ${{ github.event_name == 'pull_request' && format('{0}/gitleaks.toml', runner.temp) || 'gitleaks.toml' }}
+
+      - name: Upload results to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          sarif_file: results.sarif
+        continue-on-error: true

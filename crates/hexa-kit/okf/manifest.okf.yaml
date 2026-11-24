@@ -1,0 +1,53 @@
+okf_version: "1.0"
+project:
+  id: koosha.phenotype.hexakit
+  name: HexaKit
+  charter_ref: charter.md
+  review_ref: review.md
+artifacts:
+  - id: intent-root
+    path: intent.md
+    kind: intent
+    summary: "Why HexaKit exists; genesis bootstrap and prompt provenance"
+    links:
+      - docs/intent/synthesis.md
+  - id: charter
+    path: charter.md
+    kind: governance
+    summary: "Genesis-only scope; transitional crates until rust-sdk"
+  - id: review-kilo
+    path: review.md
+    kind: review
+    standard: kilo-code-stand@1
+    summary: "Kilo Code Stand for HexaKit PRs and template changes"
+  - id: sota-root
+    path: SOTA.md
+    kind: sota
+    summary: "Genesis vs SDK split is optimal for Phenotype maintenance cost"
+    dimensions: [technical, dx, ux, ax, security, ops, cost]
+  - id: genesis-standard
+    path: docs/genesis/STANDARD.md
+    kind: spec
+    summary: "Fleet-wide genesis documentation standard"
+dimensions:
+  technical: docs/sota/technical.md
+  dx: docs/sota/dx.md
+  ux: docs/sota/ux.md
+  ax: docs/sota/ax.md
+  security: docs/sota/security.md
+  ops: docs/sota/ops.md
+  cost: docs/sota/cost.md
+provenance:
+  intent_prompts: docs/intent/prompts/
+  last_scrape: "2026-06-16T00:00:00Z"
+  sources: [cursor, forge, claude, codex]
+llm_wiki:
+  chunk_max_tokens: 800
+  cross_link_style: relative
+  embedding_hint: title + summary + first_h2
+  injection_order:
+    - charter.md
+    - review.md
+    - intent.md
+    - SOTA.md
+    - docs/genesis/STANDARD.md

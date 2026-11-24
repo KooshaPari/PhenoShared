@@ -1,0 +1,37 @@
+{
+  "audit_date_local": "2026-09-16",
+  "verified_at_utc": "2026-09-17T02:37:13.109872+00:00",
+  "subject": "reference collectors, receipt checker and packet validator only",
+  "python": "3.13.5",
+  "git": "git version 2.47.3",
+  "coverage_py_version": "7.13.3",
+  "jsonschema_version": "4.26.0",
+  "unit_tests": {
+    "executed": 40,
+    "passed": 40,
+    "failed": 0
+  },
+  "coverage": {
+    "statement_pct": 98.1981981981982,
+    "branch_pct": 95.05494505494505,
+    "combined_pct": 97.0873786407767,
+    "note": "Three reference Python tools only; this is not product coverage."
+  },
+  "packet_validation": {
+    "packet_structure": "VALID",
+    "schema_validation_requested": true,
+    "product_qualification": "NOT_EVALUATED",
+    "errors": []
+  },
+  "compiler_experiment": "verification/typescript-multiple-projects.json",
+  "product_builds": "NOT_RUN",
+  "installed_consumer_tests": "NOT_RUN",
+  "production_benchmarks": "NOT_RUN",
+  "remote_mutations": false,
+  "commands": [
+    "python -m coverage run --branch --source=tools -m unittest discover -s tests -v",
+    "python -m coverage report",
+    "python -m coverage json -o verification/reference-tools-coverage.json",
+    "python tools/validate_packet.py . --jsonschema"
+  ]
+}

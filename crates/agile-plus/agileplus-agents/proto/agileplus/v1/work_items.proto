@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package agileplus.v1;
+
+option go_package = "github.com/phenotype/agileplus-proto/gen/go/agileplus/v1;agileplusv1";
+option java_outer_classname = "WorkItemsProto";
+option java_package = "com.phenotype.agileplus.v1";
+
+// WorkItems service — read/sync operations over Projects, Epics, Stories.
+// Hexagonal: gRPC is an adapter over the same StoragePort used by REST.
+// Traceability: FR-AGP-011
+service WorkItemsService {
+  // List all projects.
+  rpc ListProjects(ListProjectsRequest) returns (ListProjectsResponse);
+
+  // List epics belonging to a project.
+  rpc ListEpics(ListEpicsRequest) returns (ListEpicsResponse);
+
+  // List stories belonging to an epic.
+  rpc ListStories(ListStoriesRequest) returns (ListStoriesResponse);
+
+  // Trigger a GitHub repository sync and persist mapped stories.
+  rpc SyncRepository(SyncRepositoryRequest) returns (SyncRepositoryResponse);
+}
+
+// --- Projects ---
+
+message ListProjectsRequest {}
+
+message ProjectProto {
+  int64 id = 1;
+  string slug = 2;
+  string name = 3;
+  string description = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+message ListProjectsResponse {
+  repeated ProjectProto projects = 1;
+}
+
+// --- Epics ---
+
+message ListEpicsRequest {
+  int64 project_id = 1;
+}
+
+message EpicProto {
+  int64 id = 1;
+  int64 project_id = 2;
+  string title = 3;
+  string description = 4;
+  string status = 5;
+  string created_at = 6;
+  string updated_at = 7;
+}
+
+message ListEpicsResponse {
+  repeated EpicProto epics = 1;
+}
+
+// --- Stories ---
+
+message ListStoriesRequest {
+  int64 epic_id = 1;
+}
+
+message StoryProto {
+  int64 id = 1;
+  int64 epic_id = 2;
+  int64 project_id = 3;
+  string title = 4;
+  string description = 5;
+  string status = 6;
+  int32 points = 7;
+  string requirement_id = 8;
+  string created_at = 9;
+  string updated_at = 10;
+}
+
+message ListStoriesResponse {
+  repeated StoryProto stories = 1;
+}
+
+// --- Sync ---
+
+message SyncRepositoryRequest {
+  // GitHub owner/repo (e.g. "acme/backend").
+  string repo = 1;
+  // Target project id for synced stories.
+  int64 project_id = 2;
+  // Target epic id for synced stories.
+  int64 epic_id = 3;
+}
+
+message SyncRepositoryResponse {
+  int32 stories_synced = 1;
+  int32 stories_skipped = 2;
+  repeated string errors = 3;
+}

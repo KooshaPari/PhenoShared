@@ -1,0 +1,33 @@
+{
+  "schema_version": "pheno.trial-spec.v1",
+  "as_of": "2026-07-29T00:23:05Z",
+  "session_under_resume": "019f6249-d74c-7540-885f-588c3d51ac3a",
+  "trial_id": "030_gemma4-E4B-it_sglang_terminal-bench-2.1",
+  "model_family": "Google gemma",
+  "model_alias": "gemma-4-E4B-it",
+  "candidate_id": "google/gemma-4-E4B-it",
+  "registry_entry": "state/evidence_registry/model_candidates_2026-07-28.json#gemma-4-E4B-it",
+  "runtime": "SGLang",
+  "sm_target": "sm_86",
+  "device": "RTX 3090 Ti (primary)",
+  "suite": "TB2.1",
+  "subset": "deepseek-ai__terminal-bench-2.1 (dataset_acquired_verifier_unverified)",
+  "estimated_size_gib": 8.0,
+  "estimated_active_params_b": 4.0,
+  "architecture": "MoE (Mixtral-style, total 8B effective 4B)",
+  "license": "Gemma terms-of-use (commercial-use restricted)",
+  "rationale": "Google's 2026 gemma-4 with E4B-it instruction tuning; MoE active-4B lets the 3090 Ti (24 GB) hold full precision plus KV cache. Complements lfm25-1p2b (smaller MoE) and nanbeige41-3b (dense).",
+  "evidence_to_collect": [
+    "reward@1",
+    "tool_call_pass_rate",
+    "kv_cache_peak_mib",
+    "t_per_s_prompt",
+    "t_per_s_gen",
+    "moe_routing_overhead"
+  ],
+  "expected_outcome": "TB2.1 baseline; comparison vs lfm25-1p2b (similar size MoE) and nanbeige41-3b (similar params)",
+  "weight_download_required": true,
+  "download_uri_intent": "https://huggingface.co/google/gemma-4-E4B-it",
+  "blocked_by": "weight_download_authorization (capture_authorization gate, Tier 3)",
+  "ready_to_run": false
+}

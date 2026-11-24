@@ -1,0 +1,256 @@
+---
+import "../../styles/globals.css";
+import qaSnapshot from "../../data/qa-snapshot.json";
+
+// Tier-3 microfrontend: /qa — quality dashboard.
+// Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
+//
+// Reads three JSON drops from the source repo's docs/reports/:
+//   - coverage.json  (cargo-llvm-cov or pytest-cov output)
+//   - lint.json      (clippy + ruff + vale aggregator)
+//   - fr-trace.json  (FR-id × test-id matrix)
+//
+// Each panel degrades gracefully and loudly when its source is absent.
+
+const PROJECT_NAME = "Byteport";
+const REPO_SLUG = "byteport";
+const REPO = "KooshaPari/BytePort";
+const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
+
+interface CoverageReport {
+  pct?: number;
+  lines_total?: number;
+  lines_covered?: number;
+  generated_at?: string;
+}
+interface LintReport {
+  clippy?: { errors: number; warnings: number };
+  ruff?: { errors: number; warnings: number };
+  vale?: { errors: number; warnings: number; suggestions?: number };
+  generated_at?: string;
+}
+interface FrTraceReport {
+  total_frs?: number;
+  covered_frs?: number;
+  uncovered?: string[];
+  generated_at?: string;
+}
+
+interface PanelResult<T> {
+  data: T | null;
+  reason: string | null;
+}
+
+// Build-time snapshot used when the live GitHub API is rate-limited (429) or
+// otherwise unreachable. The snapshot mirrors the exact { data, reason } shape
+// each panel renders so degraded states stay consistent.
+const SNAPSHOT: Record<string, PanelResult<any>> = qaSnapshot as any;
+
+async function ghReport<T>(file: string, snapshotKey: string): Promise<PanelResult<T>> {
+  const fallback = SNAPSHOT[snapshotKey] as PanelResult<T> | undefined;
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${REPO}/contents/docs/reports/${file}?ref=main`,
+      {
+        headers: {
+          Accept: "application/vnd.github.raw",
+          "User-Agent": `${REPO_SLUG}-landing-build`,
+          ...(GITHUB_TOKEN
+            ? { Authorization: `Bearer ${GITHUB_TOKEN}` }
+            : {}),
+        },
+      },
+    );
+    if (res.status === 404) {
+      return {
+        data: null,
+        reason: `<code>docs/reports/${file}</code> not yet emitted by <code>${REPO}</code>. Add the file to populate this panel.`,
+      };
+    }
+    if (!res.ok) {
+      // Rate-limited, auth failure, transient 5xx — degrade to the committed
+      // snapshot rather than emitting a raw "GitHub API error: 429" to users.
+      console.warn(
+        `[qa] GitHub contents/${file} -> ${res.status} ${res.statusText}; using snapshot`,
+      );
+      return (
+        fallback ?? {
+          data: null,
+          reason: `GitHub API error: ${res.status} ${res.statusText}.`,
+        }
+      );
+    }
+    const text = await res.text();
+    return { data: JSON.parse(text) as T, reason: null };
+  } catch (err: any) {
+    console.warn(`[qa] GitHub contents/${file} fetch failed: ${err?.message ?? String(err)}; using snapshot`);
+    return (
+      fallback ?? {
+        data: null,
+        reason: `Failed to parse JSON: ${err?.message ?? String(err)}`,
+      }
+    );
+  }
+}
+
+const [coverage, lint, frTrace] = await Promise.all([
+  ghReport<CoverageReport>("coverage.json", "coverage"),
+  ghReport<LintReport>("lint.json", "lint"),
+  ghReport<FrTraceReport>("fr-trace.json", "frTrace"),
+]);
+
+function pctClass(pct: number | undefined): string {
+  if (pct === undefined) return "";
+  if (pct >= 80) return "ok";
+  if (pct >= 60) return "warn";
+  return "bad";
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QA · {PROJECT_NAME}</title>
+    <meta name="description" content="Quality dashboard: coverage, lint status, FR traceability." />
+  </head>
+  <body class="min-h-screen">
+    <nav class="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-12 mono text-xs text-[var(--muted)]" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[var(--accent)]">{REPO_SLUG}</a>
+      <span class="mx-1">/</span>
+      <span aria-current="page">qa</span>
+    </nav>
+
+    <header class="max-w-5xl mx-auto px-4 sm:px-6 mt-6 mb-10">
+      <h1 class="text-3xl sm:text-4xl font-bold mb-2">Quality dashboard</h1>
+      <p class="text-[var(--muted)]">Coverage, lint, and FR-traceability for <code>{REPO}</code>.</p>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 pb-12" id="main-content">
+      <section class="responsive-grid sm:grid-cols-2 lg:grid-cols-3" aria-label="Quality panels">
+        <div class="qa-card">
+          <h2 class="qa-title">Coverage</h2>
+          {coverage.data ? (
+            <>
+              <div class={`qa-pct ${pctClass(coverage.data.pct)}`}>
+                {coverage.data.pct?.toFixed(1) ?? "—"}<span class="qa-unit">%</span>
+              </div>
+              <p class="qa-meta">
+                {coverage.data.lines_covered ?? "?"} / {coverage.data.lines_total ?? "?"} lines
+              </p>
+              {coverage.data.generated_at && (
+                <p class="qa-stamp">as of <time datetime={coverage.data.generated_at}>{new Date(coverage.data.generated_at).toLocaleDateString()}</time></p>
+              )}
+            </>
+          ) : (
+            <div class="qa-degraded" role="status" aria-label="Coverage unavailable" set:html={coverage.reason ?? "Unknown error"}></div>
+          )}
+        </div>
+
+        <div class="qa-card">
+          <h2 class="qa-title">Lint</h2>
+          {lint.data ? (
+            <ul class="qa-lint-list">
+              {(["clippy", "ruff", "vale"] as const).map((k) => {
+                const v = (lint.data as any)?.[k];
+                if (!v) return <li><span class="qa-tool">{k}</span><span class="qa-na">not run</span></li>;
+                const status = v.errors > 0 ? "bad" : v.warnings > 0 ? "warn" : "ok";
+                return (
+                  <li>
+                    <span class="qa-tool">{k}</span>
+                    <span class={`qa-badge ${status}`} aria-label={`${k} ${v.errors} errors and ${v.warnings} warnings`}>
+                      {v.errors}E · {v.warnings}W
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div class="qa-degraded" role="status" aria-label="Lint unavailable" set:html={lint.reason ?? "Unknown error"}></div>
+          )}
+        </div>
+
+        <div class="qa-card">
+          <h2 class="qa-title">FR Traceability</h2>
+          {frTrace.data ? (
+            <>
+              <div class={`qa-pct ${pctClass(
+                frTrace.data.total_frs && frTrace.data.covered_frs !== undefined
+                  ? (frTrace.data.covered_frs / frTrace.data.total_frs) * 100
+                  : undefined,
+              )}`}>
+                {frTrace.data.covered_frs ?? "?"}<span class="qa-unit">/{frTrace.data.total_frs ?? "?"}</span>
+              </div>
+              <p class="qa-meta">FRs with at least one test</p>
+              {frTrace.data.uncovered && frTrace.data.uncovered.length > 0 && (
+                <details class="qa-details">
+                  <summary>{frTrace.data.uncovered.length} uncovered</summary>
+                  <ul class="qa-uncovered">
+                    {frTrace.data.uncovered.slice(0, 10).map((id) => <li>{id}</li>)}
+                  </ul>
+                </details>
+              )}
+            </>
+          ) : (
+            <div class="qa-degraded" role="status" aria-label="FR traceability unavailable" set:html={frTrace.reason ?? "Unknown error"}></div>
+          )}
+        </div>
+      </section>
+    </main>
+
+    <footer class="max-w-5xl mx-auto px-4 sm:px-6 mt-16 pt-6 border-t text-xs text-[var(--muted)] mono pb-10" style="border-color: var(--border);">
+      Reports built from <code>{REPO}/docs/reports/*.json</code> at deploy time. Missing panels are loud, not silent.
+    </footer>
+
+    <style is:global>
+      .qa-card {
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        background: var(--card);
+        min-height: 200px;
+      }
+      .qa-title {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+      .qa-pct {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+        font-variant-numeric: tabular-nums;
+      }
+      .qa-pct.ok { color: #22c55e; }
+      .qa-pct.warn { color: #eab308; }
+      .qa-pct.bad { color: #ef4444; }
+      .qa-unit { font-size: 1.25rem; color: var(--muted); margin-left: 0.25rem; }
+      .qa-meta { color: var(--muted); font-size: 0.875rem; }
+      .qa-stamp { color: var(--muted); font-size: 0.75rem; margin-top: 0.5rem; font-family: ui-monospace, monospace; }
+      .qa-lint-list { list-style: none; padding: 0; }
+      .qa-lint-list li { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+      .qa-lint-list li:last-child { border-bottom: none; }
+      .qa-tool { font-family: ui-monospace, monospace; font-size: 0.9rem; }
+      .qa-badge { font-family: ui-monospace, monospace; font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 0.25rem; }
+      .qa-badge.ok { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+      .qa-badge.warn { background: rgba(234, 179, 8, 0.15); color: #eab308; }
+      .qa-badge.bad { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+      .qa-na { color: var(--muted); font-size: 0.8rem; font-style: italic; }
+      .qa-details { margin-top: 0.75rem; font-size: 0.85rem; }
+      .qa-details summary { cursor: pointer; color: var(--accent); }
+      .qa-uncovered { list-style: none; padding: 0.5rem 0 0 0; font-family: ui-monospace, monospace; font-size: 0.8rem; color: var(--muted); }
+      .qa-degraded {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        color: var(--muted);
+        border-left: 3px solid var(--accent);
+        padding-left: 0.75rem;
+      }
+      .qa-degraded code { background: rgba(0,0,0,0.2); padding: 0.05rem 0.3rem; border-radius: 0.2rem; }
+    </style>
+  </body>
+</html>

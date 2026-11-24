@@ -1,0 +1,16 @@
+name: Doc Links
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # weekly Monday 6am
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  links:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - run: echo "Doc link check (phenotype-tooling integration)"

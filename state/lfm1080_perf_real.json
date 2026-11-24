@@ -1,0 +1,366 @@
+{
+  "schema_version": "pheno.perf.v1",
+  "engine": "llama.cpp-b10012-cuda12.4-gpu0",
+  "model": "local/lfm25-8b-a1b",
+  "base_url": "http://127.0.0.1:23083",
+  "synthetic": false,
+  "elapsed_ms": 2395.24369999981,
+  "warmup": {
+    "requested": 1,
+    "results": [
+      {
+        "ttft_ms": null,
+        "itl_ms": [],
+        "itl_ms_p50": null,
+        "itl_ms_p95": null,
+        "completion": "",
+        "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+        "reasoning_tokens": 22,
+        "completion_tokens": 32,
+        "prompt_tokens": 15,
+        "total_tokens": 47,
+        "raw_usage": {
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 655.1039999999375,
+        "decode_tok_s": 48.8472059398249
+      }
+    ],
+    "error_count": 0
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "request_count": 3,
+      "success_count": 3,
+      "error_count": 0,
+      "wall_ms": 666.8940999998085,
+      "aggregate_tokens": 96,
+      "aggregate_tokens_per_s": 143.9508911535243,
+      "latency_ms_p50": 210.5163999999604,
+      "latency_ms_p95": 215.29419999978927,
+      "results": [
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+          "reasoning_tokens": 22,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 215.29419999978927,
+          "decode_tok_s": 148.63382292709846
+        },
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+          "reasoning_tokens": 22,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 205.25910000014846,
+          "decode_tok_s": 155.90051793063915
+        },
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+          "reasoning_tokens": 22,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 210.5163999999604,
+          "decode_tok_s": 152.00715953724279
+        }
+      ]
+    },
+    {
+      "concurrency": 2,
+      "request_count": 3,
+      "success_count": 3,
+      "error_count": 0,
+      "wall_ms": 604.6212999999625,
+      "aggregate_tokens": 96,
+      "aggregate_tokens_per_s": 158.77707252458018,
+      "latency_ms_p50": 304.10269999993034,
+      "latency_ms_p95": 308.3417999996527,
+      "results": [
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+          "reasoning_tokens": 22,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 297.21399999971254,
+          "decode_tok_s": 107.6665298405558
+        },
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line summary.",
+          "reasoning_tokens": 21,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 308.3417999996527,
+          "decode_tok_s": 103.78093401555041
+        },
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+          "reasoning_tokens": 22,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 304.10269999993034,
+          "decode_tok_s": 105.2276089623911
+        }
+      ]
+    },
+    {
+      "concurrency": 4,
+      "request_count": 3,
+      "success_count": 3,
+      "error_count": 0,
+      "wall_ms": 465.0181000001794,
+      "aggregate_tokens": 96,
+      "aggregate_tokens_per_s": 206.44357714240147,
+      "latency_ms_p50": 446.01090000014665,
+      "latency_ms_p95": 456.5079000003607,
+      "results": [
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+          "reasoning_tokens": 22,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 446.01090000014665,
+          "decode_tok_s": 71.74712546260524
+        },
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line status update",
+          "reasoning_tokens": 22,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 456.5079000003607,
+          "decode_tok_s": 70.09736304667393
+        },
+        {
+          "ttft_ms": null,
+          "itl_ms": [],
+          "itl_ms_p50": null,
+          "itl_ms_p95": null,
+          "completion": "",
+          "reasoning": "\nThe user says: \"Return a short status line.\" That's ambiguous. Possibly they want a concise status line, like a one-line summary.",
+          "reasoning_tokens": 21,
+          "completion_tokens": 32,
+          "prompt_tokens": 15,
+          "total_tokens": 47,
+          "raw_usage": {
+            "completion_tokens": 32,
+            "prompt_tokens": 15,
+            "total_tokens": 47,
+            "prompt_tokens_details": {
+              "cached_tokens": 11
+            }
+          },
+          "measurement_quality": "stream_chunk_proxy",
+          "status": 200,
+          "elapsed_ms": 435.4582000000846,
+          "decode_tok_s": 73.4858133340784
+        }
+      ]
+    }
+  ],
+  "probe_overhead_ms": {
+    "mean_ms": 194.28303333324948,
+    "max_ms": 203.1818000000385
+  },
+  "resources": {
+    "sample_count": 4,
+    "process_cpu_percent": {
+      "mean": 14.149999999999999,
+      "peak": 43.4
+    },
+    "process_rss_bytes": {
+      "mean": 34333696.0,
+      "peak": 35573760.0
+    },
+    "system_cpu_percent": {
+      "mean": 75.0,
+      "peak": 100.0
+    },
+    "system_ram_used_bytes": {
+      "mean": 36754778112.0,
+      "peak": 36847030272.0
+    },
+    "system_ram_percent": {
+      "mean": 53.575,
+      "peak": 53.7
+    },
+    "gpus": {
+      "0": {
+        "utilization_percent": {
+          "mean": 15.0,
+          "peak": 24.0
+        },
+        "memory_used_mib": {
+          "mean": 393.0,
+          "peak": 393.0
+        },
+        "memory_total_mib": {
+          "mean": 11264.0,
+          "peak": 11264.0
+        },
+        "power_watts": {
+          "mean": 15.94,
+          "peak": 16.19
+        }
+      },
+      "1": {
+        "utilization_percent": {
+          "mean": 53.0,
+          "peak": 71.0
+        },
+        "memory_used_mib": {
+          "mean": 11310.0,
+          "peak": 11318.0
+        },
+        "memory_total_mib": {
+          "mean": 24564.0,
+          "peak": 24564.0
+        },
+        "power_watts": {
+          "mean": 196.1325,
+          "peak": 243.42
+        }
+      }
+    }
+  },
+  "measurement_notes": [
+    "TTFT is time to first nonempty streamed content chunk.",
+    "ITL is inter-SSE-chunk timing, not guaranteed one token per chunk.",
+    "Synthetic mode measures harness scheduling only, not model inference.",
+    "Thinking mode: disabled."
+  ]
+}

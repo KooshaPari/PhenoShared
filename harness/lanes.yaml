@@ -1,0 +1,51 @@
+# Harness lane routing — maps work type → tool + model via OmniRoute
+combo_id: Main
+omniroute_url: "${OMNIROUTE_URL:-http://localhost:20128}"
+omniroute_config: "${OMNIROUTE_CONFIG:-${HOME}/.pi/agent/omniroute.json}"
+
+paths:
+  agent_runner: "${AGENT_RUNNER:-${HOME}/.claude/tools/agent-runner/agent-runner.exe}"
+  forge_dispatch: "${FORGE_DISPATCH:-${HOME}/.claude/forge-dispatch}"
+  forge: "${FORGE:-forge}"
+
+lanes:
+  routine:
+    description: "Default patch/chat — local Qwen 4B via OmniRoute"
+    tool: omniroute
+    model: qwen3.5-4b
+    local_endpoint: "http://127.0.0.1:8080/v1"
+    combo: Main
+    pheno_role: patch
+
+  ci:
+    description: "CI/PR lane — codex-spark via agent-runner queue"
+    tool: agent-runner
+    model: gpt-5.3-codex-spark
+    concurrency: 3
+    combo: Main
+    pheno_role: patch
+    jobs_glob: "codex-jobs*.jsonl"
+
+  architecture:
+    description: "Architecture / forge planning lane"
+    tool: forge
+    model: claude-opus-4-8
+    combo: Main
+    pheno_role: plan
+
+  medium_hard:
+    description: "Medium-hard tasks — MiniMax M3 via OmniRoute"
+    tool: omniroute
+    model: minimax-m3
+    combo: Main
+    pheno_role: debug
+
+  research:
+    description: "Research / exploration — Cursor task agent"
+    tool: cursor-task
+    model: composer
+    pheno_role: retrieve
+
+defaults:
+  lane: routine
+  combo: Main

@@ -1,0 +1,17 @@
+{
+ "committed_files": 763,
+ "destination": "libs/claude-plugins-official/",
+ "differs": [],
+ "excluded_by_gitignore": {
+  "plugins/code-modernization/assets/vendor/LICENSE-mermaid.txt": ".gitignore:16:vendor/",
+  "plugins/code-modernization/assets/vendor/mermaid.min.js": ".gitignore:16:vendor/"
+ },
+ "excluded_skipped_dirs": {},
+ "excluded_total": 2,
+ "faithful": false,
+ "identical": 763,
+ "kind": "lib",
+ "repo": "claude-plugins-official",
+ "source_files": 765,
+ "source_ref": "main"
+}

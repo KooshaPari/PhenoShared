@@ -1,0 +1,16 @@
+{
+  "name": "zen",
+  "languages": [],
+  "primary_language": "template",
+  "status": "retired",
+  "has_readme": true,
+  "type": "deprecated-template",
+  "path": "repos/zen",
+  "disposition": "ARCHIVE",
+  "wave": "2026-07-23-boundary-audit",
+  "proposed_target": "HexaKit",
+  "proposed_target_repo": "HexaKit",
+  "proposed_target_path": "governance/",
+  "absorption_note": "Deprecated minimal template; functionality is in HexaKit.",
+  "note": "Archive-only; do not revive as a separate active parent."
+}

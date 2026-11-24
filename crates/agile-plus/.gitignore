@@ -1,0 +1,42 @@
+../*
+../.*
+*.toml
+*.yaml
+*.json
+!pyproject.toml
+!deny.toml
+!.gitleaks.toml
+!package.json
+!vercel.json
+!.commitlintrc.json
+!.coderabbit.yaml
+
+# Environment configuration
+.env
+.env.local
+.env.*.local
+
+# Git worktrees (Claude Code artifact directories)
+.worktrees/
+.claude/worktrees/
+worktrees/
+
+# Vercel
+.vercel
+
+# Local DBs
+*.db
+*.sqlite
+*.sqlite3
+
+# Lockfiles inside vendored sub-shells
+crates/agileplus-dashboard/desktop-electrobun/bun.lock
+
+# Separate sibling checkouts (worktrees of other repos)
+PhenoObservability/
+target/
+
+# Rust build artifacts (already had target/ above; .fingerprint/ also noisy)
+**/.fingerprint/
+**/build-script-build
+.agileplus/

@@ -1,0 +1,51 @@
+{
+  "date": "2026-07-03",
+  "source": "live HF API via huggingface_hub 1.19.0 (unauthenticated)",
+  "token_set": false,
+  "include_private": false,
+  "authors_queried": [
+    "meta-llama",
+    "mistralai",
+    "google",
+    "microsoft",
+    "allenai",
+    "cohere",
+    "Qwen",
+    "deepseek-ai",
+    "inclusionAI",
+    "moonshotai",
+    "zai-org",
+    "THUDM",
+    "01-ai",
+    "baichuan-inc",
+    "bigcode",
+    "WizardLM",
+    "NousResearch"
+  ],
+  "counts": {
+    "kept": 260,
+    "rejected": 89,
+    "fetch_fail": 0
+  },
+  "by_author_kept": {
+    "meta-llama": 35,
+    "mistralai": 3,
+    "google": 61,
+    "microsoft": 44,
+    "allenai": 78,
+    "Qwen": 39
+  },
+  "filters": {
+    "min_params_b": 0.8,
+    "max_params_b": 35.0,
+    "pipeline_tag": "text-generation",
+    "gated_excluded": true
+  },
+  "param_count_source": "info.safetensors.parameters (sum of dtype sizes)",
+  "note": "Phase-1 first pass failed (HfApi.model_info does not accept cardData=True). Second pass uses expand=['safetensors']. Final state is the kept records in models.jsonl.",
+  "outputs": {
+    "models_jsonl": "C:\\Users\\koosh\\pheno-harness\\state\\hf_scrape\\2026-07-03\\models.jsonl",
+    "rejects_jsonl": "C:\\Users\\koosh\\pheno-harness\\state\\hf_scrape\\2026-07-03\\rejects.jsonl",
+    "shortlist_csv": "C:\\Users\\koosh\\pheno-harness\\state\\hf_scrape\\2026-07-03\\shortlist.csv"
+  }
+}

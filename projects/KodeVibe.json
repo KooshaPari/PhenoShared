@@ -1,0 +1,16 @@
+{
+  "name": "KodeVibe",
+  "status": "active",
+  "languages": [
+    "Go"
+  ],
+  "primary_language": "Go",
+  "has_readme": true,
+  "type": "tooling",
+  "path": "repos/KodeVibe",
+  "disposition": "ABSORB",
+  "wave": "2026-07-17-queue-refresh-batch3",
+  "absorption_note": "Go code quality guardian — re-classified from AFFIRM to ABSORB. Per RATIONALIZATION_EXECUTION.md plan: phenotype-tooling ← KodeVibe as crates/kodevibe. 27MB, 13 branches. Pre-existing audit_artifact preserved.",
+  "audit_artifact": "audits/absorption-justifications/KodeVibe-2026-06-25.md",
+  "audited_at": "2026-06-25T10:59:50.207749Z"
+}

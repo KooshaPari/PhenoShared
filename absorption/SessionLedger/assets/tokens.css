@@ -1,0 +1,248 @@
+/**
+ * tokens.css — shared visual identity palette library (vision-pillar).
+ *
+ * Source of truth for the 4 brand-family palettes across the 7 owned repos.
+ * Each token is referenced by `<repo>/.claude/audit/.vision/L96-L107.md`
+ * scorecards and can be vendored into per-repo CSS / Rust / SwiftUI palettes.
+ *
+ * Backbone-2 (infrastructure family — sharecli + substrate)
+ * Lab-Coat   (R&D family           — SessionLedger)
+ * Terminal-Forge (terminal family  — forgecode)
+ * Tracera    (trace family         — Tracera; pre-existing, kept for cohesion)
+ * MelosViz   (festival family      — MelosViz; pre-existing)
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="https://raw.githubusercontent.com/KooshaPari/AgilePlus/<sha>/.claude/worktrees/vision-pillar/assets/tokens.css">
+ *
+ * Or vendor into your repo as `assets/tokens.css` and import the family you need.
+ *
+ * Regeneration cadence:
+ *   tokens.css is a hand-authored single-file reference; not generated.
+ *   Update by editing this file + bumping the L107 scorecard entry per repo.
+ */
+
+:root {
+  /* Type-role tokens shared by viewer chrome and docs demos. */
+  --font-display:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Display",
+    sans-serif;
+  --font-body:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-ui:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-caption:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Lab-Coat caption scale and prose measure (VISUAL_SPEC §1). */
+  --lc-font-size-caption: 0.75rem;
+  --lc-line-height-caption: 1.35;
+  --lc-measure-max: 65ch;
+
+  /* ────────────────────────────────────────────────────────────
+   * BACKBONE-2 — sharecli + substrate (infra family)
+   * Decision: substrate-mesh, 2026-07-06
+   * Domain: process control + dispatch mesh
+   * ──────────────────────────────────────────────────────────── */
+  --bb2-graphite: #0a0d12; /* outer background */
+  --bb2-panel: #161b22; /* inset panel base (SHARED across family) */
+  --bb2-pulse-green: #3fb950; /* sharecli dominant — process heartbeat */
+  --bb2-sync-violet: #a371f7; /* substrate dominant — dispatch mesh */
+  --bb2-warm-amber: #d29922; /* cooldown/warning — single hot pixel */
+
+  /* ────────────────────────────────────────────────────────────
+   * LAB-COAT — SessionLedger (R&D family)
+   * Decision: vision-pillar proposed, 2026-07-06 (meloSviz-3d ack 2026-07-06)
+   * Domain: session-bundle compiler + Dioxus viewer
+   * Hex revision: amber-orange #f59e0b → orange-500 #f97316 on 2026-07-06
+   *   to avoid MelosViz --mv-warn hex collision (different semantics).
+   * ──────────────────────────────────────────────────────────── */
+  --lc-lab-white: #f6f8fa; /* primary background (lab-coat) */
+  --lc-slate: #1f2937; /* panel/text base */
+  --lc-cobalt: #2563eb; /* primary accent — slide-stain blue (light / solid fills) */
+  --lc-cobalt-on-dark: #93c5fd; /* text/chrome accent on slate + mixes — WCAG AA ≥4.5:1 */
+  --lc-orange: #f97316; /* live-session — lit Bunsen burner */
+  --lc-teal: #14b8a6; /* secondary — growth-medium teal (light) */
+  --lc-teal-on-dark: #2dd4bf; /* secondary text/chrome on dark mixes — WCAG AA */
+
+  /* Lab-Coat spacing scale (4px base grid). */
+  --lc-space-1: 4px;
+  --lc-space-2: 6px;
+  --lc-space-3: 8px;
+  --lc-space-4: 10px;
+  --lc-space-5: 12px;
+  --lc-space-6: 16px;
+  --lc-space-7: 20px;
+  --lc-space-8: 24px;
+  --lc-space-9: 32px;
+  --lc-space-10: 40px;
+
+  /* Lab-Coat corner radii. */
+  --lc-radius-sm: 4px;
+  --lc-radius-md: 6px;
+  --lc-radius-lg: 8px;
+  --lc-radius-pill: 10px;
+
+  /* Lab-Coat motion (VISUAL_SPEC §5). */
+  --lc-motion-fast: 150ms;
+  --lc-motion-medium: 220ms;
+  --lc-motion-slow: 1.8s;
+  --lc-motion-rise: 3.2s;
+  --lc-ease-out: ease-out;
+  --lc-ease-in-out: ease-in-out;
+  --lc-ease-in: ease-in;
+
+  /* Lab-Coat content skeleton shimmer (VISUAL_SPEC §3). */
+  --lc-skeleton-base: #e5e7eb;
+  --lc-skeleton-highlight: rgba(37, 99, 235, 0.12);
+
+  /* ────────────────────────────────────────────────────────────
+   * TERMINAL-FORGE — forgecode (terminal family)
+   * Decision: vision-pillar proposed, 2026-07-06
+   * Domain: agentic coding CLI/TUI
+   * Note: marked Phenotype-org addition per fork CLAUDE.md
+   * ──────────────────────────────────────────────────────────── */
+  --tf-deep-charcoal: #0e0e10; /* background */
+  --tf-deep-charcoal-2: #1c1c1f; /* window frame / panel secondary */
+  --tf-amber-crt: #f5a623; /* primary — CRT phosphor (F> prompt) */
+  --tf-synthwave: #d946a8; /* secondary — AI glow / spark */
+  --tf-mint-prompt: #6ee7b7; /* tertiary — CLI success / echo */
+
+  /* ────────────────────────────────────────────────────────────
+   * TRACERA — Tracera (trace family, pre-existing in repo brand)
+   * Source: assets/brand/icon.svg (Tracera repo)
+   * Domain: traceability analysis
+   * ──────────────────────────────────────────────────────────── */
+  --tr-midnight: #090a0c; /* outer background */
+  --tr-teal: #7ebab5; /* primary accent */
+  --tr-teal-dark: #5a9aa6; /* gradient mid */
+  --tr-indigo: #6366f1; /* gradient end / accent */
+  --tr-accent-light: #a5b4fc; /* diamond stroke */
+  --tr-grid: #c7d2fe; /* secondary glass */
+  --tr-glow: #ffffff; /* center dot */
+
+  /* ────────────────────────────────────────────────────────────
+   * MELOSVIZ — melosviz (festival family, pre-existing in repo brand)
+   * Source: melosviz/desktop/assets/brand/tokens.css
+   * Domain: festival visualizer
+   * ──────────────────────────────────────────────────────────── */
+  --mv-violet: #a855f7; /* primary accent — neon spectrum */
+  --mv-pink: #ec4899; /* gradient end */
+  --mv-amber: #f59e0b; /* spectral hue shift */
+  --mv-mint: #10b981; /* beat pulse */
+}
+
+/**
+ * Helper selectors — convenient per-family groupings.
+ * Use in a wrapper element: <div class="family-backbone-2">...</div>
+ */
+.family-backbone-2 {
+  --bg-primary: var(--bb2-graphite);
+  --bg-panel: var(--bb2-panel);
+  --accent-primary: var(--bb2-pulse-green);
+  --accent-secondary: var(--bb2-sync-violet);
+  --accent-warning: var(--bb2-warm-amber);
+}
+
+.family-lab-coat {
+  --bg-primary: var(--lc-lab-white);
+  --bg-panel: var(--lc-slate);
+  --accent-primary: var(--lc-cobalt);
+  --accent-secondary: var(--lc-teal);
+  --accent-warning: var(--lc-orange);
+}
+
+/**
+ * SessionLedger viewer theme contract.
+ *
+ * The viewer toggles `data-theme="light|dark"` on the document root and
+ * persists the choice in localStorage. Accent tokens stay Lab-Coat in both
+ * modes; only neutral surfaces and text invert.
+ */
+:root {
+  /* Viewer spacing / radius / motion aliases (theme-agnostic). */
+  --sl-space-xs: var(--lc-space-1);
+  --sl-space-sm: var(--lc-space-3);
+  --sl-space-md: var(--lc-space-5);
+  --sl-space-lg: var(--lc-space-6);
+  --sl-space-xl: var(--lc-space-7);
+  --sl-space-2xl: var(--lc-space-9);
+  --sl-radius-sm: var(--lc-radius-sm);
+  --sl-radius-md: var(--lc-radius-md);
+  --sl-radius-lg: var(--lc-radius-lg);
+  --sl-radius-pill: var(--lc-radius-pill);
+  --sl-motion-fast: var(--lc-motion-fast);
+  --sl-motion-medium: var(--lc-motion-medium);
+  --sl-motion-slow: var(--lc-motion-slow);
+  --sl-ease-out: var(--lc-ease-out);
+  --sl-ease-in-out: var(--lc-ease-in-out);
+  --sl-font-caption: var(--font-caption);
+  --sl-font-size-caption: var(--lc-font-size-caption);
+  --sl-line-height-caption: var(--lc-line-height-caption);
+  --sl-measure-max: var(--lc-measure-max);
+  --sl-skeleton-base: var(--lc-skeleton-base);
+  --sl-skeleton-highlight: var(--lc-skeleton-highlight);
+}
+
+:root,
+:root[data-theme="light"],
+.family-lab-coat[data-theme="light"] {
+  --sl-bg: var(--lc-lab-white);
+  --sl-surface: #ffffff;
+  --sl-surface-muted: #eef2f7;
+  --sl-border: #d8dee8;
+  --sl-text: var(--lc-slate);
+  --sl-text-muted: #5c5f6e;
+  --sl-accent: var(--lc-cobalt);
+  --sl-accent-secondary: var(--lc-teal);
+  --sl-accent-warning: var(--lc-orange);
+  --sl-danger: #b91c1c;
+  --sl-danger-surface: #fef2f2;
+  --sl-skeleton-base: #e8ecf2;
+  --sl-skeleton-highlight: rgba(37, 99, 235, 0.14);
+}
+
+:root[data-theme="dark"],
+.family-lab-coat[data-theme="dark"] {
+  --sl-bg: #111827;
+  --sl-surface: var(--lc-slate);
+  --sl-surface-muted: #243244;
+  --sl-border: #374151;
+  --sl-text: #f3f4f6;
+  --sl-text-muted: #b6bfcc;
+  --sl-accent: var(--lc-cobalt-on-dark);
+  --sl-accent-secondary: var(--lc-teal-on-dark);
+  --sl-accent-warning: var(--lc-orange);
+  --sl-danger: #f87171;
+  --sl-danger-surface: #2a1a1a;
+  --sl-skeleton-base: #2b3544;
+  --sl-skeleton-highlight: rgba(147, 197, 253, 0.14);
+}
+
+.family-terminal-forge {
+  --bg-primary: var(--tf-deep-charcoal);
+  --bg-panel: var(--tf-deep-charcoal-2);
+  --accent-primary: var(--tf-amber-crt);
+  --accent-secondary: var(--tf-synthwave);
+  --accent-tertiary: var(--tf-mint-prompt);
+}
+
+.family-tracera {
+  --bg-primary: var(--tr-midnight);
+  --accent-primary: var(--tr-teal);
+  --accent-secondary: var(--tr-indigo);
+}
+
+.family-melosviz {
+  --accent-primary: var(--mv-violet);
+  --accent-secondary: var(--mv-pink);
+  --accent-tertiary: var(--mv-amber);
+}
+
+/**
+ * Cross-family decision matrix (vision-pillar audit 2026-07-06).
+ * Each cell: accent primary → secondary → warning.
+ */
+:root {
+  --family-matrix: "Backbone-2(pulse-green → sync-violet → warm-amber) | Lab-Coat(cobalt → teal → orange-500) | Terminal-Forge(amber-crt → synthwave → mint-prompt) | Tracera(teal → indigo → accent-light) | MelosViz(violet → pink → amber)";
+}

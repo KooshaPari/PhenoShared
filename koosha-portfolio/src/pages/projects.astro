@@ -1,0 +1,110 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { projects, site } from "../data/site";
+---
+
+<BaseLayout title={`Projects — ${site.name}`} description="Selected work and portfolio case studies." active="projects">
+  <section class="page-hero">
+    <div>
+      <p class="eyebrow">Projects</p>
+      <h1 class="display">Selected work that still has a route.</h1>
+      <p class="lede">
+        A tighter, case-study style view of the portfolio. Each project page keeps the content
+        focused and gives old links somewhere useful to go.
+      </p>
+    </div>
+    <div class="card side-panel">
+      <p class="eyebrow">Legacy paths</p>
+      <p>
+        The route map is intentionally boring: keep the old Adobe Portfolio entry points alive,
+        point them into the new structure, and avoid link rot.
+      </p>
+      <a class="button primary" href="/">Back to home</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid-2">
+      {projects.map((project) => (
+        <article class="card project-card">
+          <div class="project-head">
+            <div>
+              <p class="eyebrow">{project.kind}</p>
+              <h2>{project.title}</h2>
+            </div>
+            <span>{project.timeframe}</span>
+          </div>
+          <p>{project.summary}</p>
+          <p class="muted">{project.blurb}</p>
+          <div class="button-row">
+            <a class="button primary" href={`/projects/${project.slug}`}>Open page</a>
+            {project.links.map((link) => (
+              <a class="button" href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noreferrer" : undefined}>
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.75fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  h1 {
+    margin: 0.25rem 0 0;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    line-height: 0.95;
+  }
+
+  .lede,
+  .side-panel p,
+  .project-card p {
+    color: var(--muted);
+  }
+
+  .side-panel,
+  .project-card {
+    padding: 1.1rem;
+  }
+
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .project-head h2 {
+    margin: 0.25rem 0 0;
+    font-size: 1.25rem;
+  }
+
+  .project-head span {
+    color: var(--muted);
+    white-space: nowrap;
+    font-size: 0.86rem;
+  }
+
+  .project-card {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  @media (max-width: 920px) {
+    .page-hero {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

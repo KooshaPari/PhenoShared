@@ -1,0 +1,349 @@
+# helios-cli Rust workspace CI
+# AgilePlus traceability is external: cite AP-ITEM:<id> or AP-FEATURE:<slug>/WP<n>
+# in the associated PR; do not link an in-repository tracker artifact.
+# Replaces the upstream Codex rust-ci (hard-fork 2026-06-30).
+# Checks: build, test, clippy (-D warnings), fmt, cargo-deny.
+name: rust-ci
+on:
+    pull_request:
+        branches-ignore:
+            - release-please--branches--main
+        paths-ignore:
+            - .release-please-manifest.json
+            - CHANGELOG.md
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    CARGO_TERM_COLOR: always
+    RUST_BACKTRACE: 1
+
+jobs:
+    workspace:
+        name: build + test + clippy + fmt
+        if: github.event_name != 'pull_request' || github.head_ref != 'release-please--branches--main'
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+            - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+              with:
+                  components: clippy, rustfmt
+
+            - uses: Swatinem/rust-cache@42dc69e1aa15d09112580998cf2ef0119e2e91ae # v2
+
+            - name: cargo build --workspace
+              run: cargo build --workspace
+
+            - name: cargo test --workspace
+              run: cargo test --workspace
+
+            - name: cargo clippy --all-targets -D warnings
+              run: cargo clippy --all-targets -- -D warnings
+
+            - name: cargo fmt --check
+              run: cargo fmt --check
+
+    deny:
+        name: cargo deny
+        if: github.event_name != 'pull_request' || github.head_ref != 'release-please--branches--main'
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+            - uses: dtolnay/rust-toolchain@4cda84d5c5c54efe2404f9d843567869ab1699d4 # stable
+            - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2
+
+    # --- Gatherer: single required status check ----------------------------------
+    # NOTE: upstream Codex jobs (changed, general, cargo_shear, etc.) removed.
+    # Retained as empty stubs below so GitHub branch-protection rules that
+    # reference these names do not break during migration.
+    # TODO: remove stubs once branch protection is updated.
+
+    changed:
+        name: Detect changed areas
+        if: github.event_name != 'pull_request' || github.head_ref != 'release-please--branches--main'
+        runs-on: ubuntu-24.04
+        outputs:
+            argument_comment_lint: ${{ steps.detect.outputs.argument_comment_lint }}
+            argument_comment_lint_package: ${{ steps.detect.outputs.argument_comment_lint_package }}
+            codex: ${{ steps.detect.outputs.codex }}
+            workflows: ${{ steps.detect.outputs.workflows }}
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              with:
+                  ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+                  fetch-depth: 0
+                  persist-credentials: false
+            - name: Detect changed paths (no external action)
+              id: detect
+              shell: bash
+              run: |
+                  set -euo pipefail
+
+                  if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                    BASE_SHA='${{ github.event.pull_request.base.sha }}'
+                    HEAD_SHA='${{ github.event.pull_request.head.sha }}'
+                    echo "Base SHA: $BASE_SHA"
+                    echo "Head SHA: $HEAD_SHA"
+                    mapfile -t files < <(git diff --name-only --no-renames "$BASE_SHA" "$HEAD_SHA")
+                  else
+                    # On manual runs, default to the full fast-PR bundle.
+                    files=("codex-rs/force" "tools/argument-comment-lint/force" ".github/force")
+                  fi
+
+                  codex=false
+                  argument_comment_lint=false
+                  argument_comment_lint_package=false
+                  workflows=false
+                  for f in "${files[@]}"; do
+                    [[ $f == codex-rs/* ]] && codex=true
+                    [[ $f == codex-rs/* || $f == tools/argument-comment-lint/* || $f == justfile ]] && argument_comment_lint=true
+                    [[ $f == defs.bzl || $f == workspace_root_test_launcher.sh.tpl || $f == workspace_root_test_launcher.bat.tpl ]] && argument_comment_lint=true
+                    # Package job is Cargo/dylint under tools/; do not treat rust-ci.yml
+                    # edits alone as a trigger (that was coupling harness workflow PRs to
+                    # the argument-comment-lint toolchain).
+                    [[ $f == tools/argument-comment-lint/* ]] && argument_comment_lint_package=true
+                    [[ $f == .github/* ]] && workflows=true
+                  done
+
+                  echo "argument_comment_lint=$argument_comment_lint" >> "$GITHUB_OUTPUT"
+                  echo "argument_comment_lint_package=$argument_comment_lint_package" >> "$GITHUB_OUTPUT"
+                  echo "codex=$codex" >> "$GITHUB_OUTPUT"
+                  echo "workflows=$workflows" >> "$GITHUB_OUTPUT"
+
+            - name: Check for a clean worktree
+              if: always() && !cancelled()
+              uses: ./.github/actions/check-clean-worktree
+
+    # --- Fast Cargo-native PR checks (vendored codex-rs; hard-fork disabled) ---
+    general:
+        name: Format / etc
+        runs-on: ubuntu-24.04
+        needs: changed
+        # Hard-fork: codex-rs excluded from workspace; do not block harness green.
+        if: false
+        defaults:
+            run:
+                working-directory: codex-rs
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              with:
+                  ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+                  persist-credentials: false
+            - uses: dtolnay/rust-toolchain@ebb3d1676050bfd0971c36c1e215b5751473994d # 1.96.0
+              with:
+                  components: rustfmt
+            - uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
+              with:
+                  tool: just
+            - name: cargo fmt
+              run: cargo fmt -- --config imports_granularity=Item --check
+            - name: Rust benchmark smoke test
+              run: just bench-smoke
+
+            - name: Check for a clean worktree
+              if: always() && !cancelled()
+              uses: ./.github/actions/check-clean-worktree
+
+    cargo_shear:
+        name: cargo shear
+        runs-on: ubuntu-24.04
+        needs: changed
+        # Hard-fork: codex-rs excluded; shear is an upstream codex-rs check.
+        if: false
+        defaults:
+            run:
+                working-directory: codex-rs
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              with:
+                  ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+                  persist-credentials: false
+            - uses: dtolnay/rust-toolchain@ebb3d1676050bfd0971c36c1e215b5751473994d # 1.96.0
+            - uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
+              with:
+                  tool: cargo-shear@1.11.2
+            - name: cargo shear
+              run: cargo shear --deny-warnings
+
+            - name: Check for a clean worktree
+              if: always() && !cancelled()
+              uses: ./.github/actions/check-clean-worktree
+
+    argument_comment_lint_package:
+        name: Argument comment lint package
+        runs-on: ubuntu-24.04
+        needs: changed
+        # Hard-fork: ACL tooling targets vendored codex-rs; skip for harness green.
+        if: false
+        env:
+            CARGO_DYLINT_VERSION: 5.0.0
+            DYLINT_LINK_VERSION: 5.0.0
+        steps:
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              with:
+                  ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+                  persist-credentials: false
+            - uses: dtolnay/rust-toolchain@ebb3d1676050bfd0971c36c1e215b5751473994d # 1.96.0
+            - name: Install nightly argument-comment-lint toolchain
+              shell: bash
+              run: |
+                  rustup toolchain install nightly-2025-09-18 \
+                    --profile minimal \
+                    --component llvm-tools-preview \
+                    --component rustc-dev \
+                    --component rust-src \
+                    --no-self-update
+                  rustup default nightly-2025-09-18
+            - name: Cache cargo-dylint tooling
+              id: cargo_dylint_cache
+              uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+              with:
+                  path: |
+                      ~/.cargo/bin/cargo-dylint
+                      ~/.cargo/bin/dylint-link
+                      ~/.cargo/registry/index
+                      ~/.cargo/registry/cache
+                      ~/.cargo/git/db
+                  key: argument-comment-lint-${{ runner.os }}-${{ env.CARGO_DYLINT_VERSION }}-${{ env.DYLINT_LINK_VERSION }}-${{ hashFiles('tools/argument-comment-lint/Cargo.lock', 'tools/argument-comment-lint/rust-toolchain', '.github/workflows/rust-ci.yml', '.github/workflows/rust-ci-full.yml') }}
+            - name: Install cargo-dylint tooling
+              if: ${{ steps.cargo_dylint_cache.outputs.cache-hit != 'true' }}
+              shell: bash
+              run: |
+                  cargo install --locked cargo-dylint --version "$CARGO_DYLINT_VERSION"
+                  cargo install --locked dylint-link --version "$DYLINT_LINK_VERSION"
+            - name: Check Python wrapper syntax
+              run: python3 -m py_compile tools/argument-comment-lint/wrapper_common.py tools/argument-comment-lint/run.py tools/argument-comment-lint/run-prebuilt-linter.py tools/argument-comment-lint/test_wrapper_common.py
+            - name: Test Python wrapper helpers
+              run: python3 -m unittest discover -s tools/argument-comment-lint -p 'test_*.py'
+            - name: Test argument comment lint package
+              working-directory: tools/argument-comment-lint
+              run: cargo test
+              env:
+                  RUST_MIN_STACK: "8388608" # 8 MiB
+
+            - name: Check for a clean worktree
+              if: always() && !cancelled()
+              uses: ./.github/actions/check-clean-worktree
+
+    argument_comment_lint_prebuilt:
+        name: Argument comment lint - ${{ matrix.name }}
+        runs-on: ${{ matrix.runs_on || matrix.runner }}
+        timeout-minutes: ${{ matrix.timeout_minutes }}
+        needs: changed
+        # Hard-fork: ACL via Bazel/self-hosted runners unavailable; skip always.
+        if: false
+        environment:
+            name: bazel
+            deployment: false
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: Linux
+                      runner: ubuntu-24.04
+                      timeout_minutes: 30
+                    - name: macOS
+                      runner: macos-15-xlarge
+                      timeout_minutes: 30
+                    - name: Windows
+                      runner: windows-x64
+                      timeout_minutes: 30
+                      runs_on:
+                          group: ${{ github.event.repository.name }}-runners
+                          labels: ${{ github.event.repository.name }}-windows-x64
+        steps:
+            - name: Check whether argument comment lint should run
+              id: argument_comment_lint_gate
+              shell: bash
+              env:
+                  ARGUMENT_COMMENT_LINT: ${{ needs.changed.outputs.argument_comment_lint }}
+              run: |
+                  # Do not treat .github-only edits as Bazel arslint triggers; the
+                  # harness aggregator only requires this job when codex-rs / lint
+                  # tooling paths change.
+                  if [[ "$ARGUMENT_COMMENT_LINT" == "true" ]]; then
+                    echo "run=true" >> "$GITHUB_OUTPUT"
+                    exit 0
+                  fi
+
+                  echo "No argument-comment-lint relevant changes."
+                  echo "run=false" >> "$GITHUB_OUTPUT"
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              if: ${{ steps.argument_comment_lint_gate.outputs.run == 'true' }}
+              with:
+                  ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+                  persist-credentials: false
+            - name: Run argument comment lint on codex-rs via Bazel
+              if: ${{ steps.argument_comment_lint_gate.outputs.run == 'true' }}
+              uses: ./.github/actions/run-argument-comment-lint
+              with:
+                  target: ${{ runner.os }}
+                  buildbuddy-api-key: ${{ secrets.BUILDBUDDY_API_KEY }}
+
+            - name: Check for a clean worktree
+              if: always() && !cancelled() && steps.argument_comment_lint_gate.outputs.run == 'true'
+              uses: ./.github/actions/check-clean-worktree
+
+    # --- Gatherer: ONLY required status for harness green -----------------------
+    # Active gate: workspace + deny. Vendored Format/shear/ACL jobs stay skipped
+    # (if: false) and must never fail this aggregator.
+    results:
+        name: CI results (required)
+        needs:
+            [
+                workspace,
+                deny,
+                changed,
+                general,
+                cargo_shear,
+                argument_comment_lint_package,
+                argument_comment_lint_prebuilt,
+            ]
+        if: always() && (github.event_name != 'pull_request' || github.head_ref != 'release-please--branches--main')
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Summarize
+              shell: bash
+              run: |
+                  echo "workspace: ${{ needs.workspace.result }}"
+                  echo "deny     : ${{ needs.deny.result }}"
+                  echo "argpkg   : ${{ needs.argument_comment_lint_package.result }}"
+                  echo "arglint  : ${{ needs.argument_comment_lint_prebuilt.result }}"
+                  echo "general  : ${{ needs.general.result }}"
+                  echo "shear    : ${{ needs.cargo_shear.result }}"
+
+                  # Always require the active harness workspace jobs.
+                  [[ '${{ needs.workspace.result }}' == 'success' ]] || { echo 'workspace failed'; exit 1; }
+                  [[ '${{ needs.deny.result }}' == 'success' ]] || { echo 'deny failed'; exit 1; }
+
+                  # Vendored upstream jobs are hard-fork disabled (if: false). Treat
+                  # skipped/cancelled as OK; only fail if they somehow ran and failed.
+                  for name_result in \
+                    "general:${{ needs.general.result }}" \
+                    "cargo_shear:${{ needs.cargo_shear.result }}" \
+                    "argument_comment_lint_package:${{ needs.argument_comment_lint_package.result }}" \
+                    "argument_comment_lint_prebuilt:${{ needs.argument_comment_lint_prebuilt.result }}"
+                  do
+                    name="${name_result%%:*}"
+                    result="${name_result##*:}"
+                    case "$result" in
+                      success|skipped|cancelled) ;;
+                      *)
+                        echo "$name failed with result=$result" >&2
+                        exit 1
+                        ;;
+                    esac
+                  done
+
+                  echo "Harness gate green (workspace + deny)."

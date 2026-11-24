@@ -1,0 +1,123 @@
+{
+  "okf": "1.0",
+  "source_id": "sql-migration-multi-intent-043",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Add `applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()` to migration_log",
+      "properties": {
+        "user_turn_count": 2
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Backfill applied_at from session_start for legacy rows",
+      "properties": {
+        "user_turn_count": 3
+      }
+    },
+    {
+      "id": "intent-2",
+      "type": "intent",
+      "label": "Document the migration in CHANGELOG (non-breaking)",
+      "properties": {
+        "user_turn_count": 1
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "psql -c '\\d migration_log' shows new column",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "backfill SQL runs to completion on staging dump",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "ALTER TABLE must be ONLINE; no exclusive locks",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "do not change primary key shape",
+      "properties": null
+    }
+  ],
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "sql-migration-multi-intent-043"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "sql-migration-multi-intent-043"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "sql-migration-multi-intent-043"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "sql-migration-multi-intent-043"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "intent-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "sql-migration-multi-intent-043"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "sql-migration-multi-intent-043"
+      }
+    },
+    {
+      "source": "intent-2",
+      "target": "intent-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "sql-migration-multi-intent-043"
+      }
+    },
+    {
+      "source": "intent-2",
+      "target": "intent-1",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "sql-migration-multi-intent-043"
+      }
+    }
+  ]
+}

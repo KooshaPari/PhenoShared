@@ -1,0 +1,2 @@
+{"commit_sha": "test", "created_at": "2026-07-23T09:53:31.474733+00:00", "kind": "role_leaderboard", "roles": ["solo_engineer", "coding_subagent", "reviewer", "planner_manager", "qa_test_agent", "perf_profiler_agent", "release_integration_agent", "advisor_sponsor"]}
+{"commit_sha": "test", "created_at": "2026-07-23T23:27:26.124360+00:00", "kind": "role_leaderboard", "roles": ["solo_engineer", "coding_subagent", "reviewer", "planner_manager", "qa_test_agent", "perf_profiler_agent", "release_integration_agent", "advisor_sponsor"]}

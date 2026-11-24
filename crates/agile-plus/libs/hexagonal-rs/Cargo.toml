@@ -1,0 +1,22 @@
+[package]
+name = "hexagonal-rs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Hexagonal architecture patterns for AgilePlus - ports, adapters, and domain entities"
+
+[dependencies]
+tokio.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, features = ["derive"] }
+async-trait.workspace = true
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { workspace = true, features = ["serde"] }
+
+[dev-dependencies]
+tokio-test = "0.4"

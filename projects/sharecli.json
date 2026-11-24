@@ -1,0 +1,23 @@
+{
+  "name": "sharecli",
+  "languages": ["rust", "swift", "typescript"],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "desktop-agent-tool",
+  "path": "repos/sharecli",
+  "role": "agent-sharing-and-observability",
+  "domain_role": "desktop-agent-tooling",
+  "boundary": "desktop-share-and-health",
+  "gh_url": "https://github.com/KooshaPari/sharecli",
+  "disposition": "KEEP_STANDALONE_PENDING_BOUNDARY_REVIEW",
+  "canonical_routing": true,
+  "recovery_ref": "recovery/sharecli-local-20260726",
+  "recovery_commit": "4207165",
+  "airlock_snapshot": "wip/20260726T0124-18c5b27ba8e59f20",
+  "absorbed_into": null,
+  "absorption_note": "Keep as a standalone desktop surface until its relationship to thegent-sharecli is specified by runtime contracts; do not infer absorption from the deprecated duplicate row.",
+  "rationale": "Active desktop tray/dashboard source with a recovery-only UI capture. HealthPage.swift exceeds the repository file-size target and requires decomposition before production integration.",
+  "audit_artifact": "registry/audit-preservation-20260726.json",
+  "registry_author": "phenotype-registry (boundary audit)"
+}

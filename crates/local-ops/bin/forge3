@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' 'forge3 unavailable: no authorized Forge Agent SDK deployment is installed' >&2
+printf '%s\n' 'This guard does not run the preserved unproven Cargo-path fallback.' >&2
+printf '%s\n' 'Restore only from a canonical source and verified package release.' >&2
+exit 127

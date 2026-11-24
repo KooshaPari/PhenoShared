@@ -1,0 +1,19 @@
+{
+  "name": "Stashly",
+  "languages": [
+    "rust"
+  ],
+  "primary_language": "rust",
+  "status": "queued",
+  "has_readme": true,
+  "type": "application",
+  "path": "repos/Stashly",
+  "disposition": "KEEP",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "Stashly",
+  "proposed_target_repo": "Stashly",
+  "proposed_target_path": ".",
+  "absorption_note": null,
+  "note": "BLOCK A application; preserve as standalone product and track through registry evidence."
+}

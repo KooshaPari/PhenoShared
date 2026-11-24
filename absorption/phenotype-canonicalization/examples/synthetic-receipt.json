@@ -1,0 +1,64 @@
+{
+  "source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "evaluator_commit": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "profile_id": "synthetic-reference-only",
+  "tool_fingerprint": "not-a-real-product-tool",
+  "producer_id": "unauthenticated-synthetic-fixture",
+  "artifact_digest": "5e3ce296a259d330d7b4aa0836cfe18ba7cbf8b35f9e22e0fc7d3a236513ac85",
+  "measurements": [
+    {
+      "family": "unit_structural",
+      "status": "executed",
+      "covered": 100,
+      "eligible": 100,
+      "failed": 0,
+      "exit_code": 0,
+      "evidence_ref": "SYNTHETIC-NOT-PRODUCT-EVIDENCE"
+    },
+    {
+      "family": "unit_behavioral",
+      "status": "executed",
+      "covered": 100,
+      "eligible": 100,
+      "failed": 0,
+      "exit_code": 0,
+      "evidence_ref": "SYNTHETIC-NOT-PRODUCT-EVIDENCE"
+    },
+    {
+      "family": "integration",
+      "status": "executed",
+      "covered": 100,
+      "eligible": 100,
+      "failed": 0,
+      "exit_code": 0,
+      "evidence_ref": "SYNTHETIC-NOT-PRODUCT-EVIDENCE"
+    },
+    {
+      "family": "e2e",
+      "status": "executed",
+      "covered": 100,
+      "eligible": 100,
+      "failed": 0,
+      "exit_code": 0,
+      "evidence_ref": "SYNTHETIC-NOT-PRODUCT-EVIDENCE"
+    },
+    {
+      "family": "mutation",
+      "status": "executed",
+      "covered": 100,
+      "eligible": 100,
+      "failed": 0,
+      "exit_code": 0,
+      "evidence_ref": "SYNTHETIC-NOT-PRODUCT-EVIDENCE"
+    },
+    {
+      "family": "critical",
+      "status": "executed",
+      "covered": 100,
+      "eligible": 100,
+      "failed": 0,
+      "exit_code": 0,
+      "evidence_ref": "SYNTHETIC-NOT-PRODUCT-EVIDENCE"
+    }
+  ]
+}

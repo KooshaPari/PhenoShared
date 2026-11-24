@@ -1,0 +1,19 @@
+[package]
+name = "forge_render"
+version = "0.1.0"
+edition = "2024"
+description = "Streaming output and interactive tool-call rendering for helioslite"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+proptest = { workspace = true }
+
+[features]
+default = []

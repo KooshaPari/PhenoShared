@@ -1,0 +1,33 @@
+{
+  "python_status": "PASS",
+  "python_files": 10,
+  "python_version": "3.13.5",
+  "javascript": [
+    {
+      "path": "demo/viewer.js",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "path": "demo/software-viewer.js",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "path": "demo/mesh-data.js",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "path": "integrations/three-gsap/main.js",
+      "status": "PASS",
+      "stderr": ""
+    },
+    {
+      "path": "integrations/three-gsap/prepare.mjs",
+      "status": "PASS",
+      "stderr": ""
+    }
+  ],
+  "warning": "Parsing/compilation is not dependency or runtime verification."
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "ATIF-v1.7",
+  "session_id": "run-fixture-bundle",
+  "trajectory_id": "trajectory-fixture-bundle",
+  "agent": {
+    "name": "pheno-fixture-agent",
+    "version": "0.1"
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "source": "user",
+      "message": "Verify the offline fixture."
+    },
+    {
+      "step_id": 2,
+      "source": "agent",
+      "message": "Running the verifier.",
+      "llm_call_count": 1,
+      "tool_calls": [
+        {
+          "tool_call_id": "verify-1",
+          "function_name": "verify_fixture",
+          "arguments": {
+            "fixture": "task-alpha"
+          }
+        }
+      ],
+      "observation": {
+        "results": [
+          {
+            "source_call_id": "verify-1",
+            "content": "passed"
+          }
+        ]
+      }
+    },
+    {
+      "step_id": 3,
+      "source": "agent",
+      "message": "The fixture passed.",
+      "llm_call_count": 1
+    }
+  ]
+}

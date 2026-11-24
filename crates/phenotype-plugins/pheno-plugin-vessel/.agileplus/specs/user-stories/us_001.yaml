@@ -1,0 +1,28 @@
+id: US-001
+title: Core Infrastructure Capability Story
+description: As a user, I want the system shall provide core infrastructure functionality..
+acceptance_criteria:
+- "new: /// Mock runtime for integration testing\n#[derive(Debug, Default)]\nstruct\
+  \ MockRuntime {\n    containers: Arc<Mutex<Vec<ContainerInfo>>>,\n    images: Arc<Mutex<Vec<String>>>,\n\
+  \    available: bool,\n}\n\nimpl MockRuntime {"
+- "with_containers: /// Mock runtime for integration testing\n#[derive(Debug, Default)]\n\
+  struct MockRuntime {\n    containers: Arc<Mutex<Vec<ContainerInfo>>>,\n    images:\
+  \ Arc<Mutex<Vec<String>>>,\n    available: bool,\n}\n\nimpl MockRuntime {\n    fn\
+  \ new() -> Self {\n        Self {\n            containers: Arc::new(Mutex::new(Vec::new())),\n\
+  \            images: Arc::new(Mutex::new(vec![\"nginx:latest\""
+- "unavailable: /// Mock runtime for integration testing\n#[derive(Debug, Default)]\n\
+  struct MockRuntime {\n    containers: Arc<Mutex<Vec<ContainerInfo>>>,\n    images:\
+  \ Arc<Mutex<Vec<String>>>,\n    available: bool,\n}\n\nimpl MockRuntime {\n    fn\
+  \ new() -> Self {\n        Self {\n            containers: Arc::new(Mutex::new(Vec::new())),\n\
+  \            images: Arc::new(Mutex::new(vec![\"nginx:latest\""
+- "name: /// Mock runtime for integration testing\n#[derive(Debug, Default)]\nstruct\
+  \ MockRuntime {\n    containers: Arc<Mutex<Vec<ContainerInfo>>>,\n    images: Arc<Mutex<Vec<String>>>,\n\
+  \    available: bool,\n}\n\nimpl MockRuntime {\n    fn new() -> Self {\n       \
+  \ Self {\n            containers: Arc::new(Mutex::new(Vec::new())),\n          \
+  \  images: Arc::new(Mutex::new(vec![\"nginx:latest\""
+- "rand_id: /// Mock runtime for integration testing\n#[derive(Debug, Default)]\n\
+  struct MockRuntime {\n    containers: Arc<Mutex<Vec<ContainerInfo>>>,\n    images:\
+  \ Arc<Mutex<Vec<String>>>,\n    available: bool,\n}\n\nimpl MockRuntime {\n    fn\
+  \ new() -> Self {\n        Self {\n            containers: Arc::new(Mutex::new(Vec::new())),\n\
+  \            images: Arc::new(Mutex::new(vec![\"nginx:latest\""
+fr_id: FR-001

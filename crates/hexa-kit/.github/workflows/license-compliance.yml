@@ -1,0 +1,38 @@
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+name: License Compliance
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+
+
+permissions:
+  contents: read
+
+jobs:
+  cargo-deny:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Install cargo-deny
+        run: cargo install cargo-deny
+      - name: Run cargo-deny
+        run: cargo deny check
+        continue-on-error: true
+
+  fossa:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Install FOSSA
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/fossa-foss/fossa-cli/master/install.sh | sh
+      - name: Run FOSSA
+        run: fossa scan repository
+        continue-on-error: true

@@ -1,0 +1,48 @@
+{
+  "checked_date": "2026-10-08",
+  "note": "Manual official-page checks. Posting active does not imply applicant eligibility or a new posting date. Do not count conditional roles toward strict verified-eligible total.",
+  "leads": [
+    {
+      "company": "General Matter",
+      "role": "Software Engineer, New Grad",
+      "official_url": "https://job-boards.greenhouse.io/generalmatter/jobs/5375987008",
+      "provider": "greenhouse",
+      "provider_id": "5375987008",
+      "region": "la_metro",
+      "location": "Los Angeles, CA",
+      "work_arrangement": "100% onsite",
+      "base_min_usd": 125000,
+      "base_max_usd": 135000,
+      "degree_eligibility": "Bachelor's completed by start date",
+      "experience_eligibility": "Coursework, internships, research, or projects accepted",
+      "technical_fit": "Go, Python, C++, Linux, engineering tooling",
+      "requirements": "US citizen and Q-clearance eligible; extended hours/weekends as necessary",
+      "posting_status": "official_page_active",
+      "candidate_eligibility": "likely_eligible_subject_to_clearance",
+      "employer_posted_at": null,
+      "first_seen_at": "2026-10-08",
+      "confidence": "high"
+    },
+    {
+      "company": "Freeform",
+      "role": "Software Engineer (New Grad December 2026)",
+      "official_url": "https://job-boards.greenhouse.io/freeformfuturecorp/jobs/7826634003",
+      "provider": "greenhouse",
+      "provider_id": "7826634003",
+      "region": "la_metro",
+      "location": "Hawthorne, CA",
+      "work_arrangement": "5 days onsite",
+      "base_min_usd": 125000,
+      "base_max_usd": 150000,
+      "degree_eligibility": "December 2026 cohort named in title; clarify May 2026 master's eligibility",
+      "experience_eligibility": "Programming with C/C++ or Rust through internships or engineering clubs",
+      "technical_fit": "Systems, Linux, embedded/controls, C/C++",
+      "requirements": "US-person/export eligibility",
+      "posting_status": "official_page_active",
+      "candidate_eligibility": "conditional",
+      "employer_posted_at": null,
+      "first_seen_at": "2026-10-08",
+      "confidence": "high_posting_conditional_fit"
+    }
+  ]
+}

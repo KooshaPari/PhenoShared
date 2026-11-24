@@ -1,0 +1,56 @@
+{
+  "suite": "deep-swe",
+  "n": 5,
+  "passed": 0,
+  "pass_at_1": 0.0,
+  "wall_clock_s_total": 360.17,
+  "wall_clock_s_mean": 72.03,
+  "wall_clock_s_p95": 120.11,
+  "task_results": [
+    {
+      "task_id": "pr-deepswe-1962",
+      "ok": false,
+      "wall_clock_s": 15.228,
+      "reply_bytes": 6138,
+      "reply_preview": "I don't see an attached file with numerical data in your message. The task mentions \"the attached numerical column,\" but",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "pr-deepswe-5661",
+      "ok": false,
+      "wall_clock_s": 82.618,
+      "reply_bytes": 33945,
+      "reply_preview": "This function on lines 76-85 is a reference implementation associated with synthetic prompt #0 at line 58 (\"Fix the off-",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "pr-deepswe-5252",
+      "ok": false,
+      "wall_clock_s": 22.191,
+      "reply_bytes": 6403,
+      "reply_preview": "The codebase is clean of the deprecated datetime.utcnow() API throughout.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "pr-deepswe-4879",
+      "ok": false,
+      "wall_clock_s": 120.109,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "pr-deepswe-6614",
+      "ok": false,
+      "wall_clock_s": 120.028,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+name: "KLA Recursive Demo - KLA running KLA!"
+settings:
+  width: 120
+  height: 30
+  shell: "bash"
+  theme: "default"
+
+steps:
+  - type: command
+    text: "echo '🔄 RECURSIVE DEMO: KLA running KLA to demo KLA!'"
+    wait: "1s"
+    
+  - type: command
+    text: "echo ''"
+    wait: "300ms"
+    
+  - type: command
+    text: "echo '🎯 Step 1: Show KLA version and help'"
+    wait: "800ms"
+    
+  - type: command
+    text: "kla --version"
+    wait: "1s"
+    
+  - type: command
+    text: "kla --help"
+    wait: "2s"
+    
+  - type: screenshot
+    name: "recursive-help"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '🎯 Step 2: Use KLA to take a screenshot (KLA ception!)'"
+    wait: "1s"
+    
+  - type: type
+    text: "kla screenshot \"echo 'This screenshot was taken BY KLA, WITHIN a KLA script, FOR a KLA demo!'\" --output inception.png"
+    speed: "25ms"
+    
+  - type: command
+    text: ""
+    wait: "3s"
+    
+  - type: command
+    text: "echo '✅ Meta-screenshot created!'"
+    wait: "1s"
+    
+  - type: screenshot
+    name: "meta-screenshot"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '🎯 Step 3: Now lets run ANOTHER KLA script from within this KLA script!'"
+    wait: "1s"
+    
+  - type: command
+    text: "echo '(Running simple-demo.kla.yaml...)'"
+    wait: "1s"
+    
+  - type: type
+    text: "kla demo examples/simple-demo.kla.yaml"
+    speed: "30ms"
+    
+  - type: command
+    text: ""
+    wait: "5s"
+    
+  - type: command
+    text: "echo '🤯 We just ran KLA inside KLA inside KLA!'"
+    wait: "1s"
+    
+  - type: screenshot
+    name: "triple-inception"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '🎉 RECURSION COMPLETE!'"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo 'This demo was created using KLA...'"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo 'To demonstrate KLA...'"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo 'By running KLA...'"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo 'Which ran more KLA! 🤖🔄🤖'"
+    wait: "2s"
+    
+  - type: screenshot
+    name: "final-recursion"

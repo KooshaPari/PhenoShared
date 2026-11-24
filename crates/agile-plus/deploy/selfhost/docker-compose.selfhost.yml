@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  agileplus-cli:
+    image: agileplus:latest
+    container_name: agileplus-cli
+    restart: unless-stopped
+    command: agileplus --db /data/agileplus.db list-projects
+    environment:
+      AGILEPLUS_DB: /data/agileplus.db
+      LOG_LEVEL: "info"
+    volumes:
+      - agileplus-data:/data
+    networks:
+      - agileplus-net
+
+  caddy:
+    image: caddy:latest
+    container_name: agileplus-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    environment:
+      HOSTNAME: ${HOSTNAME:-agileplus.pheno.studio}
+    networks:
+      - agileplus-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: agileplus-cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CF_TUNNEL_TOKEN:-}
+    networks:
+      - agileplus-net
+    depends_on:
+      - caddy
+    profiles:
+      - cloudflare
+
+volumes:
+  agileplus-data:
+  caddy-data:
+  caddy-config:
+
+networks:
+  agileplus-net:
+    driver: bridge

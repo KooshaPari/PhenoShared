@@ -1,0 +1,17 @@
+{
+  "name": "pheno-agents-md",
+  "languages": [],
+  "primary_language": "utility",
+  "status": "queued",
+  "has_readme": true,
+  "type": "governance-utility",
+  "path": "repos/pheno-agents-md",
+  "disposition": "ABSORB",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "phenotype-tooling",
+  "proposed_target_repo": "phenotype-tooling",
+  "proposed_target_path": "agents-md/",
+  "absorption_note": "Candidate only: preserve history and verify consumers before moving the parser/validator.",
+  "note": "AGENTS.md parser and validator utility."
+}

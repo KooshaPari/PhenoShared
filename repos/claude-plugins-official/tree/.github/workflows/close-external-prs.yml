@@ -1,0 +1,73 @@
+name: Close External PRs
+
+# Closes every pull request opened by someone without write access, with a
+# pointer to where plugins are submitted. The repository's own automation
+# (bump PRs, opened with GITHUB_TOKEN) is left alone.
+#
+# The only test is who acted. What a pull request contains never exempts it.
+#
+# A maintainer can take on a closed pull request by reopening it. On a reopen
+# the person reopening is checked too, so an outside author cannot close and
+# reopen their own pull request to keep it open.
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+# No checkout, and nothing in the pull request's content is read.
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  check-membership:
+    if: vars.DISABLE_EXTERNAL_PR_CHECK != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close PR unless a member or this repo's automation opened or reopened it
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+
+            // Match on the author only: a fork cannot set it, but it can choose
+            // its branch name. This login is only ever the GITHUB_TOKEN here.
+            if (author === 'github-actions[bot]') {
+              console.log(`${author} is this repo's automation — allowing PR`);
+              return;
+            }
+
+            const people = [author];
+            if (context.payload.action === 'reopened') people.push(context.payload.sender.login);
+
+            for (const username of people) {
+              // Throws for a login it cannot look up, such as an app's. Anything
+              // but a clear yes counts as no.
+              let permission = 'none';
+              try {
+                const { data } = await github.rest.repos.getCollaboratorPermissionLevel({ owner, repo, username });
+                permission = data.permission;
+              } catch (e) {
+                console.log(`Permission lookup failed for ${username}: ${e.message}`);
+              }
+              console.log(`${username} has ${permission} access`);
+              if (['admin', 'write'].includes(permission)) return;
+            }
+
+            // Close first, so a failed comment cannot leave the PR open.
+            console.log(`Closing PR from ${author}`);
+            await github.rest.pulls.update({ owner, repo, pull_number: pr.number, state: 'closed' });
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: pr.number,
+              body: [
+                'Thanks for your interest! Plugins are now submitted at **https://claude.ai/directory/manage**. Plugins accepted there are served across Claude products.',
+                'The `marketplace.json` in this repository is being phased out: it will be reduced over time to Anthropic\'s own plugins.',
+                'Pull requests here are not monitored, so please use the link above to submit or update a plugin.',
+                'This pull request has been closed automatically, because this repository only takes changes from Anthropic team members.',
+              ].join('\n\n'),
+            });

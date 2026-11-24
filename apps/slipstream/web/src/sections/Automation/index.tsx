@@ -1,0 +1,285 @@
+import Section from "@unom/ui/section";
+import { toast } from "@unom/ui/toast";
+import { Pencil, Plus, Terminal, Trash2, Webhook } from "lucide-react";
+import { type FC, useEffect, useState } from "react";
+import { ApiError } from "@/api/fetcher";
+import { useGetHooks } from "@/api/gen/hooks/hooks";
+import type { HookEntry } from "@/api/gen/model/hookEntry";
+import { hookAction, hookFilterSummary, useSaveHooks } from "@/api/hooks";
+import { HelpTip, OptionLabel } from "@/components/option-help";
+import { QueryState } from "@/components/query-state";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useLocale } from "@/lib/i18n";
+import { m } from "@/paraglide/messages";
+import { HookForm } from "./HookForm";
+
+/**
+ * **Automation** — the operator's event hooks (`GET/PUT /api/v1/hooks`).
+ *
+ * The host has run these since the API existed and the console never showed them: the only way to
+ * see or change what your machine does when a stream starts was to edit the config file by hand.
+ *
+ * The whole list is written in one PUT (the host has no per-hook route), so this edits a local copy
+ * and saves explicitly — no auto-save. That is deliberate for a screen whose contents are shell
+ * commands: a half-typed command should never reach the host because a poll landed.
+ */
+export const SectionAutomation: FC = () => {
+	useLocale();
+	const query = useGetHooks();
+	const save = useSaveHooks();
+
+	const [hooks, setHooks] = useState<HookEntry[] | null>(null);
+	const [editing, setEditing] = useState<{
+		index: number;
+		hook: HookEntry;
+	} | null>(null);
+	const [confirming, setConfirming] = useState(false);
+	const [password, setPassword] = useState("");
+	const [wrongPassword, setWrongPassword] = useState(false);
+
+	// Seed once. Unlike the display card there is no re-seed-when-clean dance: nothing else in the
+	// console writes hooks, so the server value cannot move underneath an edit.
+	const server = query.data?.hooks;
+	useEffect(() => {
+		if (hooks === null && server) setHooks(server);
+	}, [server, hooks]);
+
+	const list = hooks ?? [];
+	const dirty =
+		hooks !== null && JSON.stringify(hooks) !== JSON.stringify(server ?? []);
+
+	const upsert = (hook: HookEntry) => {
+		if (!editing) return;
+		setHooks((prev) => {
+			const next = [...(prev ?? [])];
+			if (editing.index < 0) next.push(hook);
+			else next[editing.index] = hook;
+			return next;
+		});
+		setEditing(null);
+	};
+
+	const remove = (index: number) => {
+		if (!confirm(m.automation_delete_confirm())) return;
+		setHooks((prev) => (prev ?? []).filter((_, i) => i !== index));
+	};
+
+	const commit = async () => {
+		setWrongPassword(false);
+		try {
+			await save.mutateAsync({ hooks: list, password });
+			setConfirming(false);
+			setPassword("");
+			toast.success(m.automation_saved());
+		} catch (e) {
+			if (e instanceof ApiError && e.status === 401) {
+				setWrongPassword(true);
+				return;
+			}
+			toast.error(m.automation_save_failed());
+		}
+	};
+
+	return (
+		<Section maxWidth={false}>
+			<div className="flex flex-col gap-card">
+				<header className="space-y-1.5 border-b border-border/60 pb-4">
+					<h1 className="text-2xl font-semibold tracking-tight">
+						{m.automation_title()}
+					</h1>
+					<p className="max-w-prose text-sm text-muted-foreground">
+						{m.automation_subtitle()}
+					</p>
+				</header>
+
+				<Card>
+					<CardHeader className="flex-row items-center justify-between gap-3 space-y-0">
+						<div className="flex min-w-0 items-center gap-1.5">
+							<CardTitle className="text-base tracking-tight">
+								{m.automation_hooks_title()}
+							</CardTitle>
+							<HelpTip
+								label={m.automation_hooks_title()}
+								text="Each hook watches one event (or domain.*) and either runs a shell command or POSTs a webhook. Changes stay local until you save with the console password. Start with session.started + Run a command."
+							/>
+						</div>
+						<Button
+							size="sm"
+							variant="outline"
+							title="Add a hook. Defaults to session.started with a local run command."
+							onClick={() =>
+								setEditing({
+									index: -1,
+									hook: { on: "session.started", run: "" },
+								})
+							}
+						>
+							<Plus className="size-4" />
+							{m.automation_add()}
+						</Button>
+					</CardHeader>
+					<CardContent className="space-y-3">
+						<QueryState
+							isLoading={query.isLoading}
+							error={query.error}
+							refetch={query.refetch}
+						>
+							{list.length === 0 ? (
+								<p className="rounded-lg border border-dashed border-border/80 bg-muted/20 px-4 py-10 text-center text-sm text-muted-foreground">
+									{m.automation_empty()}
+								</p>
+							) : (
+								<ul className="flex flex-col gap-2">
+									{list.map((h, i) => (
+										<li
+											// The list is operator-ordered and has no ids; the index IS the identity
+											// here, and rows only move when the operator moves them.
+											key={`${h.on}:${hookAction(h)}:${i}`}
+											className="flex items-start gap-3 rounded-lg border border-border/70 bg-muted/15 p-3 transition-colors hover:bg-muted/30"
+										>
+											{h.webhook ? (
+												<Webhook className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+											) : (
+												<Terminal className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+											)}
+											<div className="min-w-0 flex-1 space-y-1.5">
+												<div className="flex flex-wrap items-center gap-1.5">
+													<Badge variant="secondary">{h.on}</Badge>
+													{hookFilterSummary(h) && (
+														<Badge variant="outline">
+															{hookFilterSummary(h)}
+														</Badge>
+													)}
+													{!!h.debounce_ms && (
+														<Badge variant="outline">
+															{m.automation_debounce_badge({
+																ms: h.debounce_ms,
+															})}
+														</Badge>
+													)}
+												</div>
+												<p className="truncate font-mono text-xs text-muted-foreground">
+													{hookAction(h)}
+												</p>
+											</div>
+											<div className="flex shrink-0 gap-0.5">
+												<Button
+													variant="ghost"
+													size="icon"
+													aria-label={m.automation_edit()}
+													onClick={() => setEditing({ index: i, hook: h })}
+												>
+													<Pencil className="size-4" />
+												</Button>
+												<Button
+													variant="ghost"
+													size="icon"
+													aria-label={m.automation_delete()}
+													onClick={() => remove(i)}
+												>
+													<Trash2 className="size-4 text-destructive" />
+												</Button>
+											</div>
+										</li>
+									))}
+								</ul>
+							)}
+						</QueryState>
+
+						{dirty && (
+							<div className="sticky bottom-3 z-10 flex flex-wrap items-center gap-3 rounded-lg border border-warning/40 bg-[var(--warning)]/10 px-3 py-2.5 backdrop-blur-sm">
+								<span className="text-sm font-medium">
+									{m.automation_unsaved()}
+								</span>
+								<div className="ml-auto flex gap-2">
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => setHooks(server ?? [])}
+									>
+										{m.display_revert()}
+									</Button>
+									<Button size="sm" onClick={() => setConfirming(true)}>
+										{m.display_save()}
+									</Button>
+								</div>
+							</div>
+						)}
+					</CardContent>
+				</Card>
+			</div>
+
+			<HookForm
+				value={editing?.hook ?? null}
+				onCancel={() => setEditing(null)}
+				onSave={upsert}
+			/>
+
+			{/* Saving installs commands the host will run on its own — same bar as an update or an
+			    unreviewed install, so the same password. */}
+			<Dialog
+				open={confirming}
+				onOpenChange={(o) => {
+					if (!o) {
+						setConfirming(false);
+						setWrongPassword(false);
+					}
+				}}
+			>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>{m.automation_confirm_title()}</DialogTitle>
+						<DialogDescription>{m.automation_confirm_body()}</DialogDescription>
+					</DialogHeader>
+					<div className="space-y-2">
+						<OptionLabel
+							label={m.store_spec_password()}
+							htmlFor="automation-password"
+							help="The console password. Saving installs commands the host will run on its own, so confirmation matches an update or unreviewed install."
+						/>
+						<Input
+							id="automation-password"
+							type="password"
+							autoComplete="current-password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+						{wrongPassword && (
+							<p role="alert" className="text-xs text-destructive">
+								{m.update_apply_wrong_password()}
+							</p>
+						)}
+					</div>
+					<DialogFooter>
+						<Button
+							variant="outline"
+							onClick={() => {
+								setConfirming(false);
+								setWrongPassword(false);
+							}}
+						>
+							{m.common_cancel()}
+						</Button>
+						<Button
+							disabled={save.isPending || password.length === 0}
+							onClick={commit}
+						>
+							{m.display_save()}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</Section>
+	);
+};

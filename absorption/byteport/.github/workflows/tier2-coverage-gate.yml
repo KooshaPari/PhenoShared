@@ -1,0 +1,272 @@
+# tier2-coverage-gate.yml — Tier-2 Coverage Gate
+#
+# Enforces code coverage thresholds across BytePort's three tiers:
+#   - Rust lib (crates/byteport-transport):  ≥71%
+#   - Go framework (backend/byteport):        ≥71% (regression guard; aspirational 75%)
+#   - Service/E2E (frontend/web integration): ≥60%
+#
+# Trigger: every PR to main/master + push to main/master.
+# Concurrency: one run per ref; new commits cancel in-flight runs.
+#
+# Epic: epic_B — Cross-repo consolidation & L1 grading
+# Gate:  B40 — Tier-2 coverage gate
+# Area:  compute-infra
+
+name: Tier-2 Coverage Gate
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  RUSTFLAGS: -Cinstrument-coverage
+  RUSTDOCFLAGS: -Cinstrument-coverage
+  LLVM_PROFILE_FILE: "target/coverage/profraw/%p-%m.profraw"
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  # ─────────────────────────────────────────────────────────────────────
+  # Rust lib coverage — crates/byteport-transport
+  # Threshold: ≥71%
+  # ─────────────────────────────────────────────────────────────────────
+  rust-lib-coverage:
+    name: Rust lib coverage (≥71%)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          components: llvm-tools-preview, rustfmt
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2
+        with:
+          tool: cargo-llvm-cov
+
+      - name: Generate lib coverage
+        run: |
+          mkdir -p target/coverage
+          cargo llvm-cov --package byteport-transport --lib \
+            --fail-under-lines 71 \
+            --lcov --output-path target/coverage/rust-lib.lcov
+
+      - name: Upload Rust lib coverage artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage-rust-lib
+          path: target/coverage/rust-lib.lcov
+          retention-days: 30
+
+  # ─────────────────────────────────────────────────────────────────────
+  # Go framework coverage — backend/byteport
+  # Threshold: ≥71% (current achievable ~74.1%, aspirational 75%)
+  # ─────────────────────────────────────────────────────────────────────
+  go-framework-coverage:
+    name: Go framework coverage (≥73%)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: backend/byteport
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/byteport/go.mod
+          cache-dependency-path: backend/byteport/go.sum
+
+      - name: Run tests with coverage
+        run: |
+          go test -coverprofile=coverage.out -covermode=atomic ./...
+
+      - name: Check coverage threshold (≥73%)
+        run: |
+          COVERAGE=$(go tool cover -func=coverage.out | grep "total:" | awk '{print $3}' | sed 's/%//')
+          echo "Go framework coverage: ${COVERAGE}%"
+          # Threshold is set slightly below the current achievable level to act
+          # as a regression guard, not as the goal. Aspirational target is
+          # tracked in issue #377.
+          #
+          # History:
+          #   74.1% as of PR #381 (cmd package 0% → 52.9%)
+          #   70.3% as of PR #379 (waves 2/3/4 of #377 plan)
+          #   35.0% as of PR #378 (wave 1 of #377 plan)
+          # The threshold tracks one notch below the achievable, leaving a
+          # small buffer for natural drift while still flagging real losses.
+          THRESHOLD=73.0
+          if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
+            echo "❌ Go framework coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
+            go tool cover -func=coverage.out
+            exit 1
+          fi
+          echo "✅ Go framework coverage ${COVERAGE}% meets threshold ${THRESHOLD}%"
+
+      - name: Upload Go coverage artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage-go-framework
+          path: backend/byteport/coverage.out
+          retention-days: 30
+
+  # ─────────────────────────────────────────────────────────────────────
+  # Service/E2E coverage — frontend/web (Vitest)
+  # Threshold: ≥60%
+  # ─────────────────────────────────────────────────────────────────────
+  service-coverage:
+    name: Service/E2E coverage (≥60%)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: frontend/web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Run service tests with coverage
+        # `npm run test` = svelte-kit sync + vitest --run --coverage.
+        # Coverage summary lands at target/coverage-service/coverage-summary.json
+        # (json-summary reporter configured in vite.config.ts).
+        run: npm run test
+
+      - name: Check coverage threshold (≥60%)
+        run: |
+          SUMMARY=target/coverage-service/coverage-summary.json
+          if [ ! -f "$SUMMARY" ]; then
+            echo "❌ Coverage summary not found at $SUMMARY"
+            exit 1
+          fi
+          COVERAGE=$(node -e "const c = require('./$SUMMARY'); console.log(c.total?.lines?.pct ?? 0)")
+          echo "Service/E2E coverage: ${COVERAGE}%"
+          THRESHOLD=60.0
+          if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
+            echo "❌ Service/E2E coverage ${COVERAGE}% is below threshold ${THRESHOLD}%"
+            exit 1
+          fi
+          echo "✅ Service/E2E coverage ${COVERAGE}% meets threshold ${THRESHOLD}%"
+
+      - name: Upload service coverage artifact
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage-service
+          path: frontend/web/target/
+          retention-days: 30
+
+  # ─────────────────────────────────────────────────────────────────────
+  # Coverage Summary — aggregates and comments on PR
+  # ─────────────────────────────────────────────────────────────────────
+  coverage-summary:
+    name: Coverage Summary
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    needs: [rust-lib-coverage, go-framework-coverage, service-coverage]
+    if: always() && github.event_name == 'pull_request'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: coverage-*
+          merge-multiple: true
+
+      - name: Generate summary
+        run: |
+          echo "## 📊 Tier-2 Coverage Gate Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Tier | Threshold | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          # Rust lib
+          if [ "${{ needs.rust-lib-coverage.result }}" = "success" ]; then
+            echo "| Rust lib (byteport-transport) | ≥71% | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.rust-lib-coverage.result }}" = "skipped" ]; then
+            echo "| Rust lib (byteport-transport) | ≥71% | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Rust lib (byteport-transport) | ≥71% | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Go framework
+          if [ "${{ needs.go-framework-coverage.result }}" = "success" ]; then
+            echo "| Go framework (backend/byteport) | ≥73% | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.go-framework-coverage.result }}" = "skipped" ]; then
+            echo "| Go framework (backend/byteport) | ≥73% | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Go framework (backend/byteport) | ≥73% | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Service
+          if [ "${{ needs.service-coverage.result }}" = "success" ]; then
+            echo "| Service/E2E (frontend/web) | ≥60% | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.service-coverage.result }}" = "skipped" ]; then
+            echo "| Service/E2E (frontend/web) | ≥60% | ⏭️ Skipped |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Service/E2E (frontend/web) | ≥60% | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.rust-lib-coverage.result }}" = "success" ] && \
+             [ "${{ needs.go-framework-coverage.result }}" = "success" ]; then
+            echo "**✅ All required coverage thresholds met.**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**❌ One or more coverage thresholds not met.**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Comment PR
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const summary = [
+              '## 📊 Tier-2 Coverage Gate Results',
+              '',
+              '| Tier | Threshold | Status |',
+              '|------|-----------|--------|',
+              `| Rust lib (byteport-transport) | ≥71% | ${{ needs.rust-lib-coverage.result == 'success' && '✅ Pass' || '❌ Fail' }} |`,
+              `| Go framework (backend/byteport) | ≥71% | ${{ needs.go-framework-coverage.result == 'success' && '✅ Pass' || '❌ Fail' }} |`,
+              `| Service/E2E (frontend/web) | ≥60% | ${{ needs.service-coverage.result == 'success' && '✅ Pass' || '❌ Fail' }} |`,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });

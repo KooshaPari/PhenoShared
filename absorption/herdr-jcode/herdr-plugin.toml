@@ -1,0 +1,52 @@
+# Herdr plugin manifest for the stock Jcode CLI.
+#
+# Schema follows the canonical Herdr v1 plugin manifest shape
+# (top-level scalars + `[[actions]]` arrays), matching the local
+# `agent-cockpit.pilot`, `KooshaPari/herdr-forgecode`, and
+# `KooshaPari/herdr-helioslite` manifests.
+#
+# No fork of Jcode is required. The plugin wraps the stock `jcode`
+# binary and emits pane.report_agent to the local Herdr daemon. Jcode's own
+# fork additionally reports natively through the `jcode-herdr` crate; this
+# plugin covers stock builds and manual lifecycle driving.
+
+id = "kooshapari.herdr-jcode"
+name = "Herdr Jcode"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Reports Jcode working/idle/blocked lifecycle state plus session identity. Bash wrapper around the stock jcode binary — no fork required. Cross-platform (mac, linux, git-bash on Windows)."
+platforms = ["macos", "linux", "windows"]
+
+[[agents]]
+kind = "jcode"
+manifest = "agent-detection/jcode.toml"
+
+[[actions]]
+id = "install"
+title = "Install Jcode lifecycle reporting"
+description = "Wire herdr-jcode-report into the user's PATH and Herdr pane detector."
+command = ["sh", "install.sh"]
+
+[[actions]]
+id = "uninstall"
+title = "Uninstall Jcode lifecycle reporting"
+description = "Remove the plugin's hooks from the user's environment."
+command = ["sh", "uninstall.sh"]
+
+[[actions]]
+id = "status"
+title = "Show Jcode HERDR status"
+description = "Print which jcode binary is detected and Herdr env vars."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-jcode-report doctor"]
+
+[[actions]]
+id = "doctor"
+title = "Diagnose Jcode integration"
+description = "Smoke-check: emit a sample session_start, verify Herdr receives it."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-jcode-report doctor"]
+
+[[actions]]
+id = "wrapper"
+title = "Run jcode under the wrapper"
+description = "Spawn the stock jcode binary with reporting; used as the command Herdr invokes per-pane."
+command = ["sh", "-c", "$HERDR_PLUGIN_ROOT/bin/herdr-jcode-report wrapper"]

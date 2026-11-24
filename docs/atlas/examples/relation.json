@@ -1,0 +1,12 @@
+{
+  "id": "SYN-REL-1",
+  "type": "obligates",
+  "from_id": "SYN-CAP-RESUME",
+  "to_id": "SYN-OBL-NO-DUPLICATE",
+  "state": "synthetic",
+  "source_ids": [
+    "SYN-INTENT"
+  ],
+  "applicability": "Synthetic teaching fixture only.",
+  "synthetic": true
+}

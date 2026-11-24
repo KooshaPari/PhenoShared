@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "pheno-gpu": {
+      "command": "uvx",
+      "args": ["mcp-pheno-gpu"],
+      "env": {
+        "COMPUTE_HOST": "desk",
+        "COMPUTE_IP": "100.96.135.160"
+      }
+    }
+  }
+}

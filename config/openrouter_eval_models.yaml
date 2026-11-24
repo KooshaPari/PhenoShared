@@ -1,0 +1,54 @@
+# Historical non-self-hosted model medley for future ForgeCode -> OpenRouter evals.
+# Current policy disables cloud execution; these rows are research metadata only.
+enabled: false
+execution_gate: explicit_reenable_and_combined_cost_leq_usd_1
+
+provider: openrouter
+route: forgecode_via_omniroute_or_direct
+secret_env: OPENROUTER_API_KEY
+enabled_by_default: false
+
+eval_gate:
+  status: disabled_until_cost_projection
+  rule: "Run cloud eval for a model only when projected full Terminal-Bench 2.0 cost is <= $1.00."
+  dataset: terminal-bench@2.0
+  n_tasks: 89
+  max_projected_full_run_usd_per_model: 1.00
+  projection_required_before_eval: true
+  projection_artifact: "state/openrouter_scrape/${date}/tbench20_cost_projection.json"
+
+models:
+  - id: inclusionai/ling-2.6-flash
+    role: primary_cloud_baseline
+  - id: ibm-granite/granite-4.0-h-micro
+    role: cheap_micro_baseline
+  - id: liquid/lfm-2-24b-a2b
+    role: alt_arch_moe_baseline
+  - id: arcee-ai/trinity-mini
+    role: small_cloud_baseline
+  - id: ibm-granite/granite-4.1-8b
+    role: enterprise_8b_baseline
+  - id: poolside/laguna-xs-2.1
+    role: coding_cloud_baseline
+  - id: tencent/hy3-preview
+    role: preview_cloud_baseline
+  - id: qwen/qwen3.5-flash-02-23
+    role: qwen_flash_cloud_baseline
+
+required_metadata:
+  api:
+    - id
+    - name
+    - created
+    - description
+    - context_length
+    - architecture
+    - pricing
+    - top_provider
+    - supported_parameters
+  page:
+    - title
+    - provider
+    - pricing_visible_text
+    - context_visible_text
+    - last_scraped_at

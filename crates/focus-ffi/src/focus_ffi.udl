@@ -1,0 +1,696 @@
+namespace focus_ffi {
+};
+
+// ---------------------------------------------------------------------------
+// Errors
+// ---------------------------------------------------------------------------
+
+[Error]
+enum FfiError {
+    "NotImplemented",
+    "InvalidArgument",
+    "Storage",
+    "Domain",
+    "Config",
+    "Network",
+    "Unauthorized",
+    "Backup",
+    "Poisoned",
+    "PanicCaught",
+};
+
+// ---------------------------------------------------------------------------
+// Mascot (unchanged)
+// ---------------------------------------------------------------------------
+
+enum Pose {
+    "Confident",
+    "Encouraging",
+    "CuriousThinking",
+    "SternToughLove",
+    "Celebratory",
+    "SleepyDisappointed",
+    "Idle",
+};
+
+enum Emotion {
+    "Neutral",
+    "Happy",
+    "Proud",
+    "Concerned",
+    "Stern",
+    "Excited",
+    "Tired",
+    "Warm",
+};
+
+dictionary MascotState {
+    Pose pose;
+    Emotion emotion;
+    string since_iso;
+    string? bubble_text;
+};
+
+[Enum]
+interface MascotEvent {
+    RuleFired(string rule_name);
+    StreakIncremented(string name, u32 count);
+    StreakReset(string name);
+    CreditEarned(i64 amount);
+    BypassSpent(i64 remaining);
+    PenaltyEscalated(string tier);
+    AppLaunchedWhileBlocked(string bundle_id);
+    FocusSessionStarted(u32 minutes);
+    FocusSessionCompleted(u32 minutes);
+    DailyCheckIn();
+    SleepDebtReported(f32 hours);
+    Idle();
+};
+
+// ---------------------------------------------------------------------------
+// Rules
+// ---------------------------------------------------------------------------
+
+dictionary RuleSummary {
+    string id;
+    string name;
+    i32 priority;
+    string explanation_template;
+    boolean enabled;
+};
+
+[Enum]
+interface RuleActionDto {
+    GrantCredit(i32 amount);
+    DeductCredit(i32 amount);
+    Block(string profile, i64 duration_seconds);
+    Unblock(string profile);
+    StreakIncrement(string name);
+    StreakReset(string name);
+    Notify(string message);
+};
+
+dictionary RuleDraft {
+    string id;
+    string name;
+    string trigger_event;
+    sequence<RuleActionDto> actions;
+    i32 priority;
+    i64? cooldown_seconds;
+    i64? duration_seconds;
+    string explanation_template;
+    boolean enabled;
+};
+
+interface RuleQuery {
+    [Throws=FfiError]
+    sequence<RuleSummary> list_enabled();
+};
+
+interface RuleMutation {
+    [Throws=FfiError]
+    void set_enabled(string rule_id, boolean enabled);
+    [Throws=FfiError]
+    void upsert(RuleDraft rule);
+};
+
+// ---------------------------------------------------------------------------
+// Rewards
+// ---------------------------------------------------------------------------
+
+dictionary StreakSummary {
+    string name;
+    u32 count;
+    string? last_incremented_iso;
+};
+
+dictionary WalletSummary {
+    i64 earned;
+    i64 spent;
+    i64 balance;
+    f32 multiplier;
+    sequence<StreakSummary> streaks;
+};
+
+[Enum]
+interface WalletMutationDto {
+    GrantCredit(i64 amount);
+    SpendCredit(i64 amount, string purpose);
+    StreakIncrement(string name);
+    StreakReset(string name);
+    SetMultiplier(f32 current, string? expires_iso);
+};
+
+interface WalletApi {
+    [Throws=FfiError]
+    WalletSummary load();
+    [Throws=FfiError]
+    void apply_mutation(WalletMutationDto m);
+};
+
+// ---------------------------------------------------------------------------
+// Penalties
+// ---------------------------------------------------------------------------
+
+dictionary LockoutWindowDto {
+    string starts_at_iso;
+    string ends_at_iso;
+    string reason;
+};
+
+dictionary PenaltyStateSummary {
+    string tier;
+    i64 bypass_budget;
+    i64 debt_balance;
+    string? strict_mode_until_iso;
+    sequence<LockoutWindowDto> lockouts;
+};
+
+dictionary BypassQuoteDto {
+    i64 cost;
+    i64 remaining_after;
+    string? new_tier;
+};
+
+[Enum]
+interface PenaltyMutationDto {
+    Escalate(string tier);
+    SpendBypass(i64 amount);
+    GrantBypass(i64 amount);
+    AddLockout(LockoutWindowDto window);
+    ClearLockouts();
+    SetStrictMode(string until_iso);
+    Clear();
+};
+
+interface PenaltyApi {
+    [Throws=FfiError]
+    PenaltyStateSummary load();
+    [Throws=FfiError]
+    BypassQuoteDto quote_bypass(i64 cost);
+    [Throws=FfiError]
+    void apply(PenaltyMutationDto m);
+};
+
+// ---------------------------------------------------------------------------
+// Enforcement policy
+// ---------------------------------------------------------------------------
+
+dictionary EnforcementPolicySummary {
+    boolean active;
+    record<string, string> profile_states;
+    string generated_at_iso;
+};
+
+interface PolicyApi {
+    [Throws=FfiError]
+    EnforcementPolicySummary build_from_recent_decisions(i32 limit);
+};
+
+// ---------------------------------------------------------------------------
+// Audit
+// ---------------------------------------------------------------------------
+
+dictionary AuditRecordDto {
+    string id;
+    string record_type;
+    string subject_ref;
+    string occurred_at_iso;
+    string payload_json;
+    string hash;
+};
+
+interface AuditApi {
+    [Throws=FfiError]
+    boolean verify_chain();
+    [Throws=FfiError]
+    string? head_hash();
+    [Throws=FfiError]
+    sequence<AuditRecordDto> recent(u32 limit);
+};
+
+// ---------------------------------------------------------------------------
+// Sync orchestrator
+// ---------------------------------------------------------------------------
+
+dictionary ConnectorHandleSummary {
+    string connector_id;
+    string health;
+    string next_sync_at_iso;
+    string? last_cursor;
+};
+
+dictionary SyncReportDto {
+    u32 events_pulled;
+    u32 connectors_synced;
+    sequence<string> errors;
+};
+
+interface SyncApi {
+    sequence<ConnectorHandleSummary> connectors();
+    SyncReportDto tick();
+};
+
+// ---------------------------------------------------------------------------
+// Rule evaluation pipeline
+// ---------------------------------------------------------------------------
+
+dictionary EvaluationReportDto {
+    u32 events_evaluated;
+    u32 decisions_fired;
+    u32 decisions_suppressed;
+    u32 decisions_skipped;
+};
+
+interface EvalApi {
+    [Throws=FfiError]
+    EvaluationReportDto tick();
+};
+
+// ---------------------------------------------------------------------------
+// Coaching (LLM-backed bubble + rule authoring)
+// ---------------------------------------------------------------------------
+
+interface CoachingConfig {
+    constructor(string endpoint, string api_key, string model);
+};
+
+// ---------------------------------------------------------------------------
+// Rituals (Planning Coach — Morning Brief / Evening Shutdown)
+// ---------------------------------------------------------------------------
+
+dictionary TopPriorityLineDto {
+    string task_id;
+    string title;
+    string deadline_label;
+    string rigidity_tag;
+    u32 estimated_duration_minutes;
+};
+
+dictionary ScheduleWindowLineDto {
+    string starts_at_iso;
+    string ends_at_iso;
+    string title;
+    string kind;
+};
+
+dictionary SchedulePreviewDto {
+    sequence<ScheduleWindowLineDto> windows;
+    u32 soft_conflicts;
+    u32 hard_conflicts;
+};
+
+dictionary MorningBriefDto {
+    string date;
+    string? intention;
+    sequence<TopPriorityLineDto> top_priorities;
+    SchedulePreviewDto schedule_preview;
+    string coachy_opening;
+    string generated_at_iso;
+};
+
+dictionary ShippedTaskDto {
+    string id;
+    string title;
+    u32 planned_minutes;
+    u32 actual_minutes;
+};
+
+dictionary SlippedTaskDto {
+    string id;
+    string title;
+    u32 planned_minutes;
+    string reason;
+};
+
+dictionary EveningShutdownDto {
+    string date;
+    sequence<ShippedTaskDto> shipped;
+    sequence<SlippedTaskDto> slipped;
+    sequence<string> carryover;
+    string wins_summary;
+    string coachy_closing;
+    record<string, i32> streak_deltas;
+    string generated_at_iso;
+};
+
+dictionary TaskActualDto {
+    string task_id;
+    u32 actual_minutes;
+    string? completed_at_iso;
+    boolean cancelled;
+};
+
+dictionary RuleSummaryDto {
+    string rule_id;
+    string rule_name;
+    u32 fired_count;
+    string? last_fired_at_iso;
+};
+
+dictionary StreakSnapshotDto {
+    string name;
+    u32 count;
+    boolean extended_this_week;
+};
+
+dictionary WeeklyReviewDto {
+    string week_starting;
+    f32 focus_hours;
+    u32 sessions_count;
+    i64 credits_earned;
+    i64 credits_spent;
+    sequence<RuleSummaryDto> top_rules;
+    sequence<StreakSnapshotDto> streaks_extended;
+    u32 tasks_completed;
+    u32 tasks_slipped;
+    string wins_summary;
+    string growth_area;
+    string coachy_closing;
+    string generated_at_iso;
+};
+
+dictionary MonthDeltaDto {
+    f32 focus_hours_delta;
+    i32 tasks_completed_delta;
+    i64 credits_earned_delta;
+    string trend_direction;
+};
+
+dictionary MonthlyRetroDto {
+    string month;
+    f32 total_focus_hours;
+    sequence<f32> weekly_breakdown;
+    string theme;
+    sequence<string> top_accomplishments;
+    MonthDeltaDto compared_to_prior_month;
+    string streak_peak;
+    string coachy_reflection;
+    string generated_at_iso;
+};
+
+interface RitualsApi {
+    [Throws=FfiError]
+    MorningBriefDto generate_morning_brief();
+    [Throws=FfiError]
+    EveningShutdownDto generate_evening_shutdown(sequence<TaskActualDto> actuals);
+    [Throws=FfiError]
+    void capture_intention(string date, string intention);
+    [Throws=FfiError]
+    WeeklyReviewDto generate_weekly_review();
+    [Throws=FfiError]
+    MonthlyRetroDto generate_monthly_retro();
+};
+
+// ---------------------------------------------------------------------------
+// Tasks (user-facing CRUD over the persistent task pool)
+// ---------------------------------------------------------------------------
+
+dictionary TaskInputDto {
+    string title;
+    u32 duration_minutes;
+    f32 priority_weight;
+    string? deadline_iso;
+    string deadline_rigidity;
+};
+
+dictionary TaskSummaryDto {
+    string id;
+    string title;
+    u32 duration_minutes;
+    f32 priority_weight;
+    string? deadline_iso;
+    string deadline_rigidity;
+    string status;
+};
+
+interface TaskApi {
+    [Throws=FfiError]
+    string add(TaskInputDto input);
+    [Throws=FfiError]
+    sequence<TaskSummaryDto> list();
+    [Throws=FfiError]
+    void remove(string task_id);
+    [Throws=FfiError]
+    void mark_done(string task_id);
+};
+
+// ---------------------------------------------------------------------------
+// Calendar host (foreign-implemented)
+// ---------------------------------------------------------------------------
+
+enum CalendarEventKindDto {
+    "Hard",
+    "Soft",
+};
+
+dictionary CalendarEventDto {
+    string id;
+    string title;
+    string start_iso;
+    string end_iso;
+    CalendarEventKindDto kind;
+};
+
+callback interface CalendarHost {
+    sequence<CalendarEventDto> list_events(string start_iso, string end_iso);
+};
+
+// ---------------------------------------------------------------------------
+// Connectors
+// ---------------------------------------------------------------------------
+
+interface ConnectorApi {
+    [Throws=FfiError]
+    void connect_canvas(string instance_url, string code);
+
+    [Throws=FfiError]
+    void connect_gcal(string code);
+
+    [Throws=FfiError]
+    void connect_github(string pat);
+};
+
+// ---------------------------------------------------------------------------
+// Templates (bundled starter packs)
+// ---------------------------------------------------------------------------
+
+dictionary TemplatePackSummary {
+    string id;
+    string name;
+    string version;
+    string author;
+    string description;
+    sequence<string> recommended_connectors;
+    u32 rule_count;
+};
+
+interface TemplateApi {
+    sequence<TemplatePackSummary> list_bundled();
+    [Throws=FfiError]
+    u32 install(string pack_id);
+};
+
+// ---------------------------------------------------------------------------
+// Host events — lets the platform layer inject synthetic events into the
+// pipeline so host-originated signals (Focus Mode timer start/stop, iOS
+// Shortcuts, etc.) can drive rule evaluation the same way connector sync
+// does.
+// ---------------------------------------------------------------------------
+
+dictionary HostEventDto {
+    string event_type;
+    f32 confidence;
+    string payload_json;
+    string? dedupe_key;
+};
+
+interface HostEventApi {
+    [Throws=FfiError]
+    void emit(HostEventDto dto);
+};
+
+// ---------------------------------------------------------------------------
+// Always-on engine (proactive nudge proposals)
+// ---------------------------------------------------------------------------
+
+enum NudgeKindDto {
+    "StartFocus",
+    "TakeBreak",
+    "ReviewDeadline",
+    "StreakAtRisk",
+    "WindDown",
+};
+
+dictionary NudgeProposalDto {
+    string when_iso;
+    NudgeKindDto kind;
+    string reason;
+    f32 confidence;
+};
+
+interface AlwaysOnApi {
+    [Throws=FfiError]
+    sequence<NudgeProposalDto> tick();
+};
+
+// ---------------------------------------------------------------------------
+// Backup & Restore
+// ---------------------------------------------------------------------------
+
+dictionary RestoreReportDto {
+    u32 audit_count;
+    u32 event_count;
+    u32 rule_count;
+    u32 wallet_count;
+    u32 penalty_count;
+    u32 task_count;
+    u32 template_count;
+};
+
+interface BackupApi {
+    /// Create a passphrase-encrypted full backup.
+    /// Returns a byte blob containing tar+zstd+age encrypted data.
+    [Throws=FfiError]
+    bytes create(string passphrase);
+
+    /// Restore a backup from an encrypted blob.
+    /// Prompts for passphrase to decrypt and merges data into the target adapter.
+    [Throws=FfiError]
+    RestoreReportDto restore(bytes blob, string passphrase);
+};
+
+// ---------------------------------------------------------------------------
+// Demo Mode (Testing & QA)
+// ---------------------------------------------------------------------------
+
+dictionary DemoSeedReport {
+    i32 tasks_count;
+    i32 rules_count;
+    i64 wallet_balance;
+    i64 wallet_streak_days;
+    i32 connectors_connected;
+    i32 audit_records_count;
+    i32 ritual_completions_count;
+};
+
+interface DemoSeedApi {
+    /// Seed the database with realistic demo data (10 tasks, 5 rules, 85 credits, etc.).
+    /// All demo records are marked with source="demo" so they can be reset separately.
+    /// Traces to: DEMO-001
+    [Throws=FfiError]
+    DemoSeedReport seed();
+
+    /// Reset all demo data (marked with source="demo" in audit metadata).
+    /// Preserves non-demo user data. Appends a demo.reset audit record.
+    /// Traces to: DEMO-001
+    [Throws=FfiError]
+    void reset();
+};
+
+// ---------------------------------------------------------------------------
+// Data Lifecycle (GDPR right-to-erasure / account deletion)
+// ---------------------------------------------------------------------------
+
+dictionary WipeReceiptDto {
+    string wiped_at;
+    string pre_wipe_chain_hash;
+    record<string, i64> deleted_counts;
+    sequence<string> deleted_keychain_items;
+    sequence<string> deleted_paths;
+};
+
+interface DataLifecycleApi {
+    /// Permanently delete all user data: SQLite tables, keychain items, caches.
+    /// Returns a tamper-evident receipt saved to ~/Library/Application Support/FocalPoint/wipe-receipts/.
+    /// This operation is irreversible.
+    [Throws=FfiError]
+    WipeReceiptDto wipe_all();
+};
+
+// ---------------------------------------------------------------------------
+// Rule suggestions (heuristic pattern detection)
+// ---------------------------------------------------------------------------
+
+dictionary SuggestionEvidenceDto {
+    u32 pattern_count;
+    u32 time_range_days;
+    sequence<string> sample_timestamps_iso;
+    string additional_context_json;
+};
+
+dictionary ProposedRuleDto {
+    string name;
+    string description;
+    string trigger;
+    sequence<string> conditions;
+    sequence<string> actions;
+    i32 priority;
+    i64? cooldown_seconds;
+};
+
+dictionary RuleSuggestionDto {
+    string id;
+    string heuristic_name;
+    f32 confidence;
+    string rationale;
+    ProposedRuleDto proposed_rule;
+    SuggestionEvidenceDto? evidence;
+};
+
+interface SuggesterApi {
+    [Throws=FfiError]
+    sequence<RuleSuggestionDto> fetch(u32 window_days);
+    [Throws=FfiError]
+    void apply(string suggestion_id);
+    [Throws=FfiError]
+    void dismiss(string suggestion_id);
+};
+
+// ---------------------------------------------------------------------------
+// Top-level core handle
+// ---------------------------------------------------------------------------
+
+interface FocalPointCore {
+    [Throws=FfiError]
+    constructor(string storage_path);
+
+    // Mascot (unchanged).
+    MascotState push_mascot_event(MascotEvent event);
+    MascotState mascot_state();
+    string app_version();
+
+    // Rule DSL catalog JSON — drives dynamic rule-builder forms.
+    string rules_dsl();
+
+    // Coaching wiring.
+    void set_coaching(CoachingConfig? config);
+    string? generate_bubble(MascotEvent event);
+    [Throws=FfiError]
+    RuleSummary propose_rule_from_nl(string nl_spec);
+
+    // Sub-API accessors.
+    // Calendar host: iOS EventKit / Android CalendarContract provide this.
+    // When set, `rituals()` reads events from the device calendar instead of
+    // the in-memory stub.
+    void set_calendar_host(CalendarHost host);
+
+    RuleQuery rules();
+    RuleMutation mutations();
+    WalletApi wallet();
+    PenaltyApi penalty();
+    PolicyApi policy();
+    AuditApi audit();
+    SyncApi sync();
+    EvalApi eval();
+    RitualsApi rituals();
+    ConnectorApi connector();
+    TaskApi tasks();
+    TemplateApi templates();
+    HostEventApi host_events();
+    AlwaysOnApi always_on();
+    BackupApi backup();
+    DemoSeedApi demo_seed();
+    DataLifecycleApi data_lifecycle();
+    SuggesterApi suggester();
+};

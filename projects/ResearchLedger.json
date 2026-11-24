@@ -1,0 +1,20 @@
+{
+  "name": "ResearchLedger",
+  "languages": [
+    "rust",
+    "typescript"
+  ],
+  "primary_language": "rust",
+  "status": "queued",
+  "has_readme": true,
+  "type": "research-ledger",
+  "path": "repos/ResearchLedger",
+  "disposition": "KEEP",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "ResearchLedger",
+  "proposed_target_repo": "ResearchLedger",
+  "proposed_target_path": ".",
+  "absorption_note": null,
+  "note": "Standalone local-first research ledger (Tauri + Vite). Preserve as canonical product; registry governs evidence and provenance only."
+}

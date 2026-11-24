@@ -1,0 +1,37 @@
+# Migrated from KooshaPari/Apisync (archived 2026-06-19) — original commit d981353
+
+[tasks.format]
+description = "Format code"
+
+run = "cargo fmt"
+
+
+[tasks.lint]
+description = "Lint code"
+
+run = "cargo clippy -- -D warnings"
+
+
+[tasks.test]
+description = "Run tests"
+
+run = "cargo test"
+
+
+[tasks.build]
+description = "Build project"
+
+run = "cargo build --release"
+
+
+[tasks.audit]
+description = "Audit dependencies"
+
+run = "cargo audit"
+
+
+[tasks.docs:build]
+description = "Build documentation"
+
+run = "cargo doc --no-deps --open"
+

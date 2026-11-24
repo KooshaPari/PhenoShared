@@ -1,0 +1,64 @@
+name: "Simple KLA Demo"
+settings:
+  width: 100
+  height: 25
+  shell: "bash"
+  theme: "default"
+
+steps:
+  - type: command
+    text: "echo 'Starting KLA demo...'"
+    wait: "1s"
+    
+  - type: command
+    text: "date"
+    wait: "1s"
+    
+  - type: screenshot
+    name: "demo-start"
+    
+  - type: command
+    text: "echo 'Current directory:'"
+    wait: "500ms"
+    
+  - type: command
+    text: "pwd"
+    wait: "1s"
+    
+  - type: command
+    text: "echo 'Files in current directory:'"
+    wait: "500ms"
+    
+  - type: command
+    text: "ls -la"
+    wait: "2s"
+    
+  - type: screenshot
+    name: "directory-listing"
+    
+  - type: type
+    text: "echo 'Creating a test file...'"
+    speed: "40ms"
+    
+  - type: command
+    text: ""
+    wait: "500ms"
+    
+  - type: command
+    text: "echo 'Hello from KLA automation!' > test-file.txt"
+    wait: "1s"
+    
+  - type: command
+    text: "cat test-file.txt"
+    wait: "1s"
+    
+  - type: command
+    text: "rm test-file.txt"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo 'Demo complete! ✅'"
+    wait: "1s"
+    
+  - type: screenshot
+    name: "demo-complete"

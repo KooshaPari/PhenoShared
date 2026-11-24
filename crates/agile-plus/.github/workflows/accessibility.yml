@@ -1,0 +1,102 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# Accessibility CI for the AgilePlus dashboard.
+#
+# Runs axe-core accessibility audits against the React/Vite frontend using
+# Playwright + @axe-core/playwright. Reports violations as annotations on
+# PR diffs and uploads the full JSON report as a workflow artifact.
+#
+# Traces to: FR-A11Y-01 (accessibility), pillar L76 (Accessibility)
+name: accessibility
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'crates/agileplus-dashboard/web/**'
+      - '.github/workflows/accessibility.yml'
+  pull_request:
+    paths:
+      - 'crates/agileplus-dashboard/web/**'
+      - '.github/workflows/accessibility.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: accessibility-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  axe-audit:
+    name: axe-core audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'crates/agileplus-dashboard/web/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: crates/agileplus-dashboard/web
+        run: npm ci --no-audit --prefer-offline
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build dashboard
+        working-directory: crates/agileplus-dashboard/web
+        run: npm run build
+
+      - name: Start dashboard preview
+        working-directory: crates/agileplus-dashboard/web
+        run: |
+          nohup npx vite preview --port 5173 --host 127.0.0.1 > /tmp/preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:5173/ > /dev/null; then
+              echo "preview up"; break
+            fi
+            sleep 1
+          done
+
+      - name: Run axe-core audit
+        working-directory: crates/agileplus-dashboard/web
+        env:
+          AXE_BASE_URL: 'http://127.0.0.1:5173'
+          AXE_REPORT_PATH: ./axe-report.json
+          AXE_DISABLE_RULES: 'color-contrast'
+        run: node ../../../scripts/axe-audit.mjs
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axe-report
+          path: crates/agileplus-dashboard/web/axe-report.json
+          if-no-files-found: warn
+
+  lint-a11y:
+    name: JSX a11y lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'crates/agileplus-dashboard/web/package-lock.json'
+      - name: Install
+        working-directory: crates/agileplus-dashboard/web
+        run: npm ci --no-audit --prefer-offline
+      - name: eslint jsx-a11y
+        working-directory: crates/agileplus-dashboard/web
+        run: |
+          npx eslint --max-warnings 0 --rule '{"plugin:jsx-a11y/recommended": "error"}' 'src/**/*.{ts,tsx}'

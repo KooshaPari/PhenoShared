@@ -1,0 +1,11 @@
+{
+  "name": "@phenotype/visual-production",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Cross-media contracts, geometry and local asset staging for phenoDesign. Not a replacement render engine or evidence authority.",
+  "exports": {".": "./src/index.mjs", "./geometry": "./src/geometry.mjs", "./contracts": "./src/contracts.mjs", "./staging": "./src/staging.mjs"},
+  "scripts": {"test": "node --test test/*.test.mjs"},
+  "engines": {"node": ">=20"},
+  "license": "MIT"
+}

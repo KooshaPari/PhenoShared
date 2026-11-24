@@ -1,0 +1,48 @@
+{
+  "schema_version": "pheno.heterogeneous_generation_matrix.v1",
+  "runtime": "llama.cpp-b10012-cuda12.4",
+  "workload": {
+    "n_prompt": 128,
+    "n_gen": 64,
+    "repetitions": 2,
+    "flash_attention": true,
+    "gpu_layers": 99,
+    "kv_cache": "f16",
+    "measurement": "llama-bench generation only"
+  },
+  "devices": {
+    "rtx_3090_ti": {"llama_device": "CUDA0", "vram_mib": 24564},
+    "gtx_1080_ti": {"llama_device": "CUDA1", "vram_mib": 11264}
+  },
+  "models": {
+    "local/qwen35-08b": {
+      "quantization": "Q4_K_M",
+      "rtx_3090_ti_tok_s": 188.639935,
+      "gtx_1080_ti_tok_s": 80.632758,
+      "rtx_3090_to_1080_ratio": 2.339,
+      "evidence": ["state/qwen35_llamabench_3090.json", "state/qwen35_llamabench_1080.json"]
+    },
+    "local/lfm25-8b-a1b": {
+      "quantization": "Q4_K_M",
+      "rtx_3090_ti_tok_s": 195.741473,
+      "gtx_1080_ti_tok_s": 82.634139,
+      "rtx_3090_to_1080_ratio": 2.369,
+      "evidence": ["state/lfm25-8b-a1b_llamabench_CUDA0.json", "state/lfm25-8b-a1b_llamabench_CUDA1.json"]
+    },
+    "local/ornith-8b": {
+      "quantization": "MTP-Q4_K_M",
+      "rtx_3090_ti_tok_s": null,
+      "gtx_1080_ti_tok_s": null,
+      "status": "benchmark_initialization_timeout",
+      "timeout_seconds": 300,
+      "existing_1080_smoke_tok_s": 25.3,
+      "evidence": ["state/ornith-8b-mtp_llamabench_CUDA0.json.stderr.log", "state/ornith_mtp_1080_smoke.stdout.log"]
+    }
+  },
+  "placement_policy": {
+    "qwen35_08b_capacity_weight": 2.339,
+    "lfm25_8b_a1b_capacity_weight": 2.369,
+    "ornith_8b_capacity_weight": null,
+    "ornith_weight_promotion": "blocked_until_same_workload_measurement"
+  }
+}

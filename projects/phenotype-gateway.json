@@ -1,0 +1,16 @@
+{
+  "name": "phenotype-gateway",
+  "languages": [],
+  "primary_language": "archive",
+  "status": "retired",
+  "has_readme": true,
+  "type": "absorption-archive",
+  "path": "repos/phenotype-gateway",
+  "disposition": "ARCHIVE",
+  "wave": "2026-07-23-boundary-audit",
+  "proposed_target": "HexaKit",
+  "proposed_target_repo": "HexaKit",
+  "proposed_target_path": ".",
+  "absorption_note": "H10 absorption archive; canonical functionality is in HexaKit.",
+  "note": "Evidence-only archive."
+}

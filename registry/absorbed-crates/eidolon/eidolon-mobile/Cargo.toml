@@ -1,0 +1,16 @@
+[package]
+name = "eidolon-mobile"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+eidolon-core = { path = "../eidolon-core" }
+tokio.workspace = true
+log.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+uuid.workspace = true

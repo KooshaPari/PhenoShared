@@ -1,0 +1,88 @@
+{
+  "evidence_status": "historical_snapshot_not_current_state_or_preservation_proof",
+  "imported_from_commit": "d43c060c2b24ca734864af1ad57f6eea3b7c85a4",
+  "source_snapshot_utc": "2026-09-07T06:19:22.163718+00:00",
+  "ancestry_refresh_utc": "2026-09-07T07:13:46.653009+00:00",
+  "integration_sha_at_snapshot": "17ac2d20b6fc13f3ee3ac0d89c38746489fdae26",
+  "source_ref_records": 2652,
+  "distinct_tips": 1116,
+  "duplicate_tip_groups": 692,
+  "duplicate_alias_records": 1536,
+  "tip_dispositions": {
+    "CONTAINED": 477,
+    "REQUIRES_PATCH_REVIEW": 625,
+    "UNKNOWN_OBJECT_NOT_LOCAL_OR_NONCOMMIT": 14
+  },
+  "sources": [
+    {
+      "source": "mac:/Users/kooshapari/CodeProjects/Phenotype/repos/forgecode",
+      "refs": 1195,
+      "heads": 31,
+      "remote_tracking": 753,
+      "stashes": 0,
+      "registered_worktrees": 16
+    },
+    {
+      "source": "windows:C:/Users/koosh/forgecode",
+      "refs": 1444,
+      "heads": 26,
+      "remote_tracking": 1027,
+      "stashes": 0,
+      "registered_worktrees": 5
+    },
+    {
+      "source": "windows:C:/Users/koosh/forgecode-work",
+      "refs": 13,
+      "heads": 1,
+      "remote_tracking": 2,
+      "stashes": 0,
+      "registered_worktrees": 1
+    }
+  ],
+  "missing_worktree_paths": [
+    "C:/Users/koosh/forgecode-auto-continue-main-20260802",
+    "C:/Users/koosh/forgecode-gpu-current-20260802",
+    "C:/Users/koosh/forgecode-integrity",
+    "C:/Users/koosh/forgecode-v2107c-build"
+  ],
+  "dirty_untracked": [
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/forgecode",
+      "entries": [
+        "?? .worktrees/h017-ci/",
+        "?? .worktrees/h017-coverage/",
+        "?? .worktrees/h017-dist/",
+        "?? .worktrees/h017-f3/",
+        "?? .worktrees/h017-helios/",
+        "?? .worktrees/h017-integration/",
+        "?? .worktrees/h017-probe/",
+        "?? .worktrees/h017-sandbox/"
+      ]
+    },
+    {
+      "path": "/Users/kooshapari/CodeProjects/Phenotype/repos/forgecode/.worktrees/h017-coverage",
+      "entries": [
+        "?? docs/consolidation/collect_inventory.py"
+      ]
+    }
+  ],
+  "live_remote_heads_at_snapshot": {
+    "fork": 320,
+    "origin": 395,
+    "upstream": 395
+  },
+  "limitations": [
+    "Snapshot is not a backup or preservation proof.",
+    "Remote-tracking refs may be stale; live remote heads must be reconciled.",
+    "Dirty/untracked content recorded by path only, not backed up.",
+    "Only specified repositories and their registered worktrees enumerated.",
+    "Non-ancestor does not prove unique behavior; semantic/patch review remains."
+  ],
+  "raw_snapshot": "source-inventory-20260907.json (local untracked evidence; not shipped)",
+  "pr254_at_snapshot": {
+    "autoMergeRequest": null,
+    "baseRefName": "main",
+    "headRefOid": "a9806dfef7ed1242d9286cf653be2fd90adc6df1",
+    "state": "OPEN"
+  }
+}

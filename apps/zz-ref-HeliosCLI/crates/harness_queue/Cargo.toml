@@ -1,0 +1,18 @@
+[package]
+name = "harness_queue"
+version = "0.2.1"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+description = "harness queue — Phenotype infrastructure crate (HeliosCLI)"
+documentation = "https://docs.rs/harness_queue"
+keywords = ["phenotype", "helios", "harness"]
+categories = ["development-tools::testing"]
+authors = ["kooshapari"]
+
+[dependencies]
+thiserror = "2"
+tracing = "0.1"
+
+[lib]
+path = "src/lib.rs"

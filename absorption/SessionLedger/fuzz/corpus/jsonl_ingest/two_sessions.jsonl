@@ -1,0 +1,2 @@
+{"id":"fuzz-a","corpus":"forge","cwd":"/tmp/proj","title":"seed","messages":[{"role":"user","content":"hello","ts_ms":1}]}
+{"id":"fuzz-b","corpus":"cursor","messages":[]}

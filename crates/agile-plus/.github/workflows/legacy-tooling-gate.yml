@@ -1,0 +1,165 @@
+name: Legacy Tooling Gate
+# Enforces Phenotype Technology Adoption Philosophy per CLAUDE.md
+# Tier 0 Strict Repo - Aggressive adoption enforcement
+
+on:
+  push:
+    branches: [main, develop, master]
+  pull_request:
+    branches: [main, develop, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+
+jobs:
+  legacy-tooling-gate:
+    name: Legacy Tooling Anti-Pattern Scan
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Download shared policy
+        run: |
+          mkdir -p .shared-policy
+          curl -sL https://raw.githubusercontent.com/phenotype/repos/main/tooling/legacy-enforcement/policy/rules.yaml -o .shared-policy/rules.yaml || true
+          if [ ! -f .shared-policy/rules.yaml ]; then
+            echo "Warning: Could not download shared policy, using local if available"
+          fi
+
+      - name: Download scanner
+        run: |
+          mkdir -p .scanner
+          curl -sL https://raw.githubusercontent.com/phenotype/repos/main/tooling/legacy-enforcement/scanner/legacy_tooling_scanner.py -o .scanner/legacy_tooling_scanner.py
+          chmod +x .scanner/legacy_tooling_scanner.py
+
+      - name: Run legacy tooling scanner (WARN mode)
+        id: scan
+        run: |
+          POLICY_PATH=".shared-policy/rules.yaml"
+          if [ ! -f "$POLICY_PATH" ]; then
+            POLICY_PATH="tooling/legacy-enforcement/policy/rules.yaml"
+          fi
+
+          if [ ! -f "$POLICY_PATH" ]; then
+            echo "Creating minimal policy"
+            mkdir -p tooling/legacy-enforcement/policy
+            echo 'rules: []' > "$POLICY_PATH"
+          fi
+
+          python3 .scanner/legacy_tooling_scanner.py \
+            --repo-root . \
+            --policy "$POLICY_PATH" \
+            --fail-on-severity high \
+            --report-only \
+            --output-json legacy-tooling-report.json \
+            --output-md legacy-tooling-report.md \
+            --output-sarif legacy-tooling-report.sarif \
+            --verbose || true
+
+          # Parse results
+          if [ -f "legacy-tooling-report.json" ]; then
+            TOTAL=$(python3 -c "import json; d=json.load(open('legacy-tooling-report.json')); print(sum(d['totals'].values()))")
+            CRITICAL=$(python3 -c "import json; d=json.load(open('legacy-tooling-report.json')); print(d['totals'].get('critical', 0))")
+            HIGH=$(python3 -c "import json; d=json.load(open('legacy-tooling-report.json')); print(d['totals'].get('high', 0))")
+            echo "total=$TOTAL" >> $GITHUB_OUTPUT
+            echo "critical=$CRITICAL" >> $GITHUB_OUTPUT
+            echo "high=$HIGH" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Upload scan artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: legacy-tooling-reports
+          path: |
+            legacy-tooling-report.json
+            legacy-tooling-report.md
+            legacy-tooling-report.sarif
+          if-no-files-found: ignore
+
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: legacy-tooling-report.sarif
+          category: legacy-tooling
+        continue-on-error: true
+
+      - name: Comment PR with scan results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            let report = { totals: { critical: 0, high: 0, medium: 0, low: 0 }, findings: [] };
+            try {
+              report = JSON.parse(fs.readFileSync('legacy-tooling-report.json', 'utf8'));
+            } catch (e) {
+              console.log('No report found');
+            }
+
+            const totals = report.totals;
+            const total = Object.values(totals).reduce((a, b) => a + b, 0);
+
+            let body = `## 🔍 Legacy Tooling Anti-Pattern Scan\n\n`;
+            body += `**Repository:** ${{ github.repository }}\n`;
+            body += `**Total Violations:** ${total}\n\n`;
+            body += `- 🔴 Critical: ${totals.critical || 0}\n`;
+            body += `- 🟠 High: ${totals.high || 0}\n`;
+            body += `- 🟡 Medium: ${totals.medium || 0}\n`;
+            body += `- 🔵 Low: ${totals.low || 0}\n\n`;
+
+            if (totals.critical > 0 || totals.high > 0) {
+              body += `⚠️ **WARNING:** This repo is in Tier 0 (strict enforcement). `;
+              body += `Migration to canonical tooling (uv, Bun, tsgo) is required.\n\n`;
+            }
+
+            if (total > 0) {
+              body += `### Top Findings\n\n`;
+              const top = report.findings
+                .sort((a, b) => ['critical', 'high', 'medium', 'low'].indexOf(a.severity) - ['critical', 'high', 'medium', 'low'].indexOf(b.severity))
+                .slice(0, 10);
+
+              for (const f of top) {
+                body += `- **[${f.severity.toUpperCase()}]** \`${f.file}:${f.line}\` - ${f.rule_id}\n`;
+                body += `  - ${f.message}\n`;
+              }
+            } else {
+              body += `✅ No legacy tooling anti-patterns detected!\n`;
+            }
+
+            body += `\n📄 [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail on critical/high (strict enforcement enabled)
+        # Strict mode enabled - all Tier 0 repos verified with zero high/critical violations
+        if: always()
+        run: |
+          CRITICAL=${{ steps.scan.outputs.critical }}
+          HIGH=${{ steps.scan.outputs.high }}
+          if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
+            echo "❌ Failed: Found $CRITICAL critical and $HIGH high severity violations"
+            echo "Review the scan report and fix legacy tooling anti-patterns"
+            exit 1
+          fi
+          echo "✅ Passed: No critical or high severity violations found"

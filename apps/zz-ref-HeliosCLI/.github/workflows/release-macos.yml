@@ -1,0 +1,37 @@
+name: Release macOS (helios-cli)
+
+# Calls the reusable workflow at kooshapari/phenotype-fleet-ops.
+# Self-hosted runners only (zero billed minutes).
+# All Apple Developer secrets live in Infisical project 8efe392e-56a6-4c3c-89f9-8141183dd7e8.
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+concurrency:
+  group: macos-release-helios-cli-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    name: Build, sign, notarize helios-cli
+    uses: kooshapari/phenotype-fleet-ops/.github/workflows/macos-release.yml@main
+    with:
+      app-name: helios-cli
+      app-bundle-id: app.phenotype.helios
+      build-cmd: |
+          cargo build --release --locked --target aarch64-apple-darwin --bin helios
+          mkdir -p dist/macos
+          cp target/aarch64-apple-darwin/release/helios dist/macos/
+          # No .app bundle; distribute as raw signed binary + DMG wrapper
+      entitlements-file: apps/helios-cli/src-tauri/Entitlements.plist
+      artifact-dir: dist/macos
+      create-dmg: true
+      sign-identity: "Developer ID Application"
+    secrets:
+      INFISICAL_TOKEN: ${{ secrets.INFISICAL_TOKEN }}

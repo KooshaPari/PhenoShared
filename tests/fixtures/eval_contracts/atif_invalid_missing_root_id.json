@@ -1,0 +1,15 @@
+{
+  "schema_version": "ATIF-v1.7",
+  "session_id": "run-is-not-a-document-id",
+  "agent": {
+    "name": "pheno-test",
+    "version": "0.1"
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "source": "user",
+      "message": "This is canonical ATIF but lacks Pheno's stable document identity."
+    }
+  ]
+}

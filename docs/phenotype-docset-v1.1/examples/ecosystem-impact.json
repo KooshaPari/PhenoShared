@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "id": "SYNTHETIC-IMPACT-001",
+  "subject_id": "EXAMPLE-SHARED-PACKAGE",
+  "change_kind": "refactor",
+  "materiality": "consumer-impacting",
+  "intent": "Replace two hypothetical retry loops with one owned cancellation-safe mechanism. Not a statement about actual portfolio code.",
+  "capability_owner": "Illustrative shared-runtime owner",
+  "existing_work_refs": [
+    "EXAMPLE-WORK-001"
+  ],
+  "reuse": {
+    "internal_search": "Illustrative only: examine the owned retry helper and both caller contracts. No actual search claimed.",
+    "external_search": "Illustrative only: compare runtime retry primitives and a narrow dependency; no suitability finding claimed.",
+    "options": [
+      "Extend owned helper",
+      "Use suitable external retry primitive behind a narrow adapter",
+      "Keep separate loops if semantics materially differ"
+    ],
+    "selected": "Proposed extension of owned helper; not accepted",
+    "rationale": "Evaluate reuse while preserving cancellation and per-consumer policy; actual measurements are pending."
+  },
+  "consumers": [
+    {
+      "id": "EXAMPLE-CURRENT-CLI",
+      "tier": "current",
+      "basis": "Synthetic current-consumer fixture, not observed adoption.",
+      "owner": "Illustrative CLI owner",
+      "constraints": [
+        "No retry after confirmed cancellation",
+        "No repeated non-idempotent action"
+      ],
+      "verification_plan": "Run cancellation and repeated-response fault cases against the real candidate when one exists.",
+      "results": null
+    },
+    {
+      "id": "EXAMPLE-PLANNED-DESKTOP",
+      "tier": "committed",
+      "basis": "Synthetic planned requirement; no actual roadmap decision asserted.",
+      "owner": "Illustrative desktop owner",
+      "constraints": [
+        "Retry policy is configurable without caller-name conditionals"
+      ],
+      "verification_plan": "Contract spike only; do not certify an unimplemented desktop.",
+      "results": null
+    },
+    {
+      "id": "EXAMPLE-POSSIBLE-SERVICE",
+      "tier": "plausible",
+      "basis": "Hypothetical future headless consumer; no sponsor/adoption evidence.",
+      "owner": "Unassigned future possibility",
+      "constraints": [
+        "Do not require a GUI event loop"
+      ],
+      "verification_plan": "Review inexpensive boundary only; no full service implementation now.",
+      "results": null
+    }
+  ],
+  "preserved_contract": [
+    "Error categories remain explicit",
+    "Cancellation and timeout behavior remain within accepted budgets",
+    "Callers keep their own credentials and operation policy"
+  ],
+  "ecosystem_effects": {
+    "baseline": "Synthetic example of duplicated retry handling; not an observed count.",
+    "expected_benefits": [
+      "One tested common mechanism and fewer duplicated bug fixes"
+    ],
+    "downstream_costs": [
+      "Caller migration and regression testing; update/review burden must be measured"
+    ],
+    "measurement_status": "unmeasured",
+    "unknowns": [
+      "Whether an external primitive is cheaper to maintain",
+      "Exact supported-consumer compatibility"
+    ]
+  },
+  "future_seams": [
+    "Expose an operation/policy boundary without inventing a network retry service"
+  ],
+  "coordination": {
+    "write_scope": "Illustrative shared-package worktree only; no actual permissions granted.",
+    "other_owner_actions": [
+      "CLI owner verifies current behavior",
+      "Desktop owner reviews the planned contract"
+    ],
+    "compatibility_rollout": "Keep old entrypoint through a reviewed migration window if compatibility requires it.",
+    "rollback": "Retain the tested previous version and consumer pins; restore state separately if touched.",
+    "temporary_bridge_exit": "Remove the compatibility adapter only after required consumer migration and approval."
+  },
+  "verification": {
+    "plan": [
+      "Positive and failed-retry behavior",
+      "Cancellation after response and before retry",
+      "Consumer isolation and idempotency",
+      "Latency/allocation comparison on actual workloads"
+    ],
+    "state": "planned",
+    "evidence_refs": [],
+    "review_owner": "Illustrative independent verifier"
+  },
+  "lifecycle_approval": false,
+  "synthetic": true
+}

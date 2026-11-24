@@ -1,0 +1,39 @@
+# Harbor route overlay for the pheno-serve-dev local serving layer.
+# Merge into harbor_tbench_routes.yaml once the current route schema is audited.
+
+routes:
+  - id: pheno_serve_qwen35_08b
+    label: pheno-serve-dev local/qwen35-08b
+    route_kind: pheno_serve
+    harbor_model: openai/local/qwen35-08b
+    model: local/qwen35-08b
+    base_url: "http://127.0.0.1:21080/v1"
+    api_key_env: PHENO_SERVE_API_KEY
+    api_key_default: local-no-key
+    engine: sglang
+    decode_method: baseline
+    hardware_profile: win_3090ti
+
+  - id: pheno_serve_lfm25_8b_a1b
+    label: pheno-serve-dev local/lfm25-8b-a1b
+    route_kind: pheno_serve
+    harbor_model: openai/local/lfm25-8b-a1b
+    model: local/lfm25-8b-a1b
+    base_url: "http://127.0.0.1:21080/v1"
+    api_key_env: PHENO_SERVE_API_KEY
+    api_key_default: local-no-key
+    engine: sglang
+    decode_method: baseline
+    hardware_profile: win_3090ti
+
+  - id: pheno_serve_ornith_8b
+    label: pheno-serve-dev local/ornith-8b
+    route_kind: pheno_serve
+    harbor_model: openai/local/ornith-8b
+    model: local/ornith-8b
+    base_url: "http://127.0.0.1:21080/v1"
+    api_key_env: PHENO_SERVE_API_KEY
+    api_key_default: local-no-key
+    engine: sglang
+    decode_method: baseline
+    hardware_profile: win_3090ti

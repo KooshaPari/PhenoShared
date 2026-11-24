@@ -1,0 +1,83 @@
+---
+// Odin landing page
+import config from '../../data/config.json';
+import '../styles/globals.css';
+
+const { name, domain } = config;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{name}</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <div class="header">
+    <div class="titleBar">
+      <h4 id="Hero">{name}</h4>
+      <div class="btnContainer">
+        <a class="tab" href="https://github.com/KooshaPari/phenotype-landing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="tab" href={`https://${domain}`} target="_blank" rel="noopener noreferrer">Home</a>
+      </div>
+    </div>
+    <div class="headerContent">
+      <div class="headerText">
+        <h1 id="mainText">Welcome to {name}</h1>
+        <p id="mainSubTXT">A Phenotype ecosystem landing page — built with Astro.</p>
+        <div class="sButton">
+          <a class="btn" href="https://github.com/KooshaPari/phenotype-landing">Get Started</a>
+        </div>
+      </div>
+      <div class="headerImage">
+        <img style="height: 90%; width: 90%;" src="https://images.unsplash.com/photo-1683009427042-e094996f9780?w=1600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8" alt="header image">
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div id="listGroup">
+      <h2 style="font-size: 24px;" id="subHeading">Phenotype Ecosystem</h2>
+      <div id="listContainer">
+        <div class="listItem">
+          <img style="border: #3882F6 solid 3px; border-radius: 15px; height: 100px; width: 100px;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstockimages.org%2Fwp-content%2Fuploads%2F2020%2F10%2Fbigstock-Photography-Concept-African-A-381364544.jpg&f=1&nofb=1&ipt=5e52ac067807bf87e27138cb7d0a8572cb51fce0d5d7def4d77c1b6ba691607c&ipo=images" alt="placeholder"/>
+          <p class="imgtxt">Built with Astro</p>
+        </div>
+        <div class="listItem">
+          <img style="border: #3882F6 solid 3px; border-radius: 15px; height: 100px; width: 100px;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstockimages.org%2Fwp-content%2Fuploads%2F2020%2F10%2Fbigstock-Photography-Concept-African-A-381364544.jpg&f=1&nofb=1&ipt=5e52ac067807bf87e27138cb7d0a8572cb51fce0d5d7def4d77c1b6ba691607c&ipo=images" alt="placeholder"/>
+          <p class="imgtxt">Phenotype Monorepo</p>
+        </div>
+        <div class="listItem">
+          <img style="border: #3882F6 solid 3px; border-radius: 15px; height: 100px; width: 100px;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstockimages.org%2Fwp-content%2Fuploads%2F2020%2F10%2Fbigstock-Photography-Concept-African-A-381364544.jpg&f=1&nofb=1&ipt=5e52ac067807bf87e27138cb7d0a8572cb51fce0d5d7def4d77c1b6ba691607c&ipo=images" alt="placeholder"/>
+          <p class="imgtxt">CI/CD Integration</p>
+        </div>
+        <div class="listItem">
+          <img style="border: #3882F6 solid 3px; border-radius: 15px; height: 100px; width: 100px;" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstockimages.org%2Fwp-content%2Fuploads%2F2020%2F10%2Fbigstock-Photography-Concept-African-A-381364544.jpg&f=1&nofb=1&ipt=5e52ac067807bf87e27138cb7d0a8572cb51fce0d5d7def4d77c1b6ba691607c&ipo=images" alt="placeholder"/>
+          <p class="imgtxt">Open Source</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="quoteCon">
+      <h2 id="quote"><em>This is an inspiring quote, or a testimonial from a customer. Maybe it's just filling up space, or maybe people will actually read it. Who knows — all I know is that it looks nice.</em></h2>
+      <h3 id="author">-Thor, God of Thunder</h3>
+    </div>
+
+    <div id="calltoAction">
+      <div id="ctaTXT">
+        <h3 id="ctaH3">Call to Action! It's time!</h3>
+        <p id="ctaP">Explore the Phenotype ecosystem on GitHub.</p>
+      </div>
+      <div class="sButton2">
+        <a class="btn" href="https://github.com/KooshaPari">View on GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <h5 style="color:#F9FAF8; font-weight: 100;">&copy; {new Date().getFullYear()} Koosha Pari</h5>
+  </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Rust Formatting Configuration
+# Phenotype Standard
+
+# Basic formatting
+edition = "2021"
+tab_spaces = 4
+hard_tabs = false
+max_width = 100
+
+# Import settings
+# NOTE: `group_imports` is a nightly-only rustfmt option; CI runs the stable
+# toolchain (rust-toolchain.toml), so it is omitted here to keep the config
+# aligned with what `cargo fmt --check` actually enforces.
+use_small_heuristics = "Max"
+
+# Reorder settings
+reorder_imports = true
+reorder_modules = true
+
+# Other settings
+newline_style = "Unix"
+# NOTE: `indent_style = "Block"` is also nightly-only; omitted for the same
+# stable-toolchain reason as `group_imports` above.

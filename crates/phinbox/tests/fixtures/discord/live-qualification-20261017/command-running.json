@@ -1,0 +1,10 @@
+{
+  "event_id": "qualification-a8b41cae-running",
+  "item_id": "qualification-a8b41cae-20261017",
+  "expected_revision": 3,
+  "actor": "qualification-local-operator",
+  "action": {
+    "kind": "set_status",
+    "value": "running"
+  }
+}

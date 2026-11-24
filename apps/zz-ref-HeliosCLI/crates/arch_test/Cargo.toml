@@ -1,0 +1,17 @@
+[package]
+name = "arch_test"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Architectural tests for heliosCLI - boundary enforcement, TDD patterns, property-based testing"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+documentation = "https://docs.rs/arch_test"
+keywords = ["phenotype", "helios", "test"]
+categories = ["development-tools::testing"]
+authors = ["kooshapari"]
+
+[dependencies]
+proptest = "1.4"
+tempfile = "3.10"
+walkdir = "2.4"
+regex = "1.10"

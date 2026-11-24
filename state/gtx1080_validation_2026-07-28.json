@@ -1,0 +1,147 @@
+{
+  "schema_version": "pheno.gpu_validation.v1",
+  "as_of": "2026-07-28T09:04:59Z",
+  "gpu_index": 0,
+  "gpu_name": "NVIDIA GeForce GTX 1080 Ti",
+  "vram_total_mib": 11263,
+  "compute_capability": "sm_61",
+  "driver_version": "581.80",
+  "role": "legacy_helper",
+  "status": "validated_inference",
+  "llama_cpp_build": {
+    "tag": "b10012",
+    "variant": "cuda12.4",
+    "path": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4",
+    "note": "CUDA 13.3 build (b10012 default) does NOT see sm_61; must use cuda12.4 variant"
+  },
+  "device_enumeration": {
+    "cuda_visible_devices": "1",
+    "device_index_in_llama": "CUDA1",
+    "total_devices": 2,
+    "devices": [
+      {
+        "index": 0,
+        "name": "RTX 3090 Ti",
+        "vram_mib": 24563,
+        "sm": "8.6",
+        "role": "primary_inference"
+      },
+      {
+        "index": 1,
+        "name": "GTX 1080 Ti",
+        "vram_mib": 11263,
+        "sm": "6.1",
+        "role": "legacy_helper"
+      }
+    ]
+  },
+  "benchmark_results": [
+    {
+      "model": "qwen35-08b.Q2_K.gguf",
+      "model_size_mib": 392.31,
+      "model_params": "752.39M",
+      "ngl": 99,
+      "pp512_tps": 1832.21,
+      "tg8_tps": 114.9,
+      "tg128_tps": null,
+      "all_layers_on_gpu": true,
+      "note": "tiny model, fast generation"
+    },
+    {
+      "model": "qwen35-08b.Q4_K_M.gguf",
+      "model_size_mib": 494.32,
+      "model_params": "752.39M",
+      "ngl": 99,
+      "pp512_tps": 6562.07,
+      "tg128_tps": 102.83,
+      "all_layers_on_gpu": true,
+      "note": "production quant, excellent perf"
+    },
+    {
+      "model": "lfm25-8b-a1b.Q4_K_M.gguf",
+      "model_size_gib": 4.79,
+      "model_params": "8.47B",
+      "ngl": 99,
+      "pp512_tps": 3163.09,
+      "tg128_tps": 89.22,
+      "all_layers_on_gpu": true,
+      "note": "sweet spot: fits entirely in 11 GB, 89 t/s generation"
+    },
+    {
+      "model": "Ornith-1.0-9B-Q4_K_M-nomtp.gguf",
+      "model_size_gib": 5.23,
+      "model_params": "8.95B",
+      "ngl": 99,
+      "pp512_tps": 431.21,
+      "tg128_tps": 19.66,
+      "all_layers_on_gpu": false,
+      "note": "partial CPU offload, VRAM pressure; MTP variant failed to load entirely"
+    }
+  ],
+  "available_ggufs_for_1080ti": [
+    {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q2\\qwen35-08b.Q2_K.gguf",
+      "size_mib": 392,
+      "fits": true
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q4\\qwen35-08b.Q4_K_M.gguf",
+      "size_mib": 494,
+      "fits": true
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q5\\qwen35-08b.Q5_K_M.gguf",
+      "size_mib": 553,
+      "fits": true
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q8\\qwen35-08b.Q8_0.gguf",
+      "size_mib": 778,
+      "fits": true
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q4\\qwen35-08b.f16.gguf",
+      "size_mib": 1444,
+      "fits": true
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\lfm25-8b-a1b-q4\\lfm25-8b-a1b.Q4_K_M.gguf",
+      "size_gib": 4.79,
+      "fits": true,
+      "recommended": true
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\ornith-8b-q4\\Ornith-1.0-9B-Q4_K_M-nomtp.gguf",
+      "size_gib": 5.23,
+      "fits": "partial"
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\ornith-8b-q4\\Ornith-1.0-9B-Q4_K_M.gguf",
+      "size_gib": 5.24,
+      "fits": "failed_load"
+    },
+    {
+      "path": "D:\\WSL\\model-cache\\ornith-mtp-q4\\Ornith-1.0-9B-MTP-Q4_K_M.gguf",
+      "size_gib": 5.38,
+      "fits": "failed_load"
+    }
+  ],
+  "recommended_config": {
+    "model": "lfm25-8b-a1b.Q4_K_M.gguf",
+    "gpu_layers": 99,
+    "context_size": 16384,
+    "port": 18081,
+    "cuda_visible_devices": "1",
+    "note": "legacy_helper lane; draft/needle inference, verification, trace preprocessing"
+  },
+  "git_state": {
+    "branch": "recovery/preserve-20260717-0301",
+    "head_short": "8941b10"
+  },
+  "verification": {
+    "no_remote_calls_made": true,
+    "no_source_files_modified": true,
+    "benchmarks_ran": 4,
+    "models_tested": 4
+  }
+}

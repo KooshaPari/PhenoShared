@@ -1,0 +1,35 @@
+{
+  "schema_version": "phenolm.harbor_trial.v1",
+  "status": "completed",
+  "scoreable": true,
+  "model_id": "openai/local/lfm25-8b-a1b",
+  "suite": "terminal-bench@2.0",
+  "job_artifact": "C:\\Users\\koosh\\pheno-harness\\jobs\\harbor\\tbench_podman\\lfm25_direct_norecord\\2026-07-16__15-20-20",
+  "trial": "headless-terminal__6dtZtu8",
+  "task": "headless-terminal",
+  "metrics": {
+    "reward": 0.0,
+    "trial_count": 1,
+    "error_count": 0,
+    "input_tokens": 6229,
+    "cache_tokens": 3983,
+    "output_tokens": 3080,
+    "episodes": 4
+  },
+  "verifier": {
+    "present": true,
+    "rewards": {
+      "reward": 0.0
+    }
+  },
+  "exception": null,
+  "job_stats": {
+    "completed_trials": 1,
+    "errored_trials": 0
+  },
+  "timing": {
+    "started_at": "2026-07-16T22:20:56.275089Z",
+    "finished_at": "2026-07-16T22:23:30.482435Z"
+  },
+  "promotion": "baseline_only; garden policy decides promotion"
+}

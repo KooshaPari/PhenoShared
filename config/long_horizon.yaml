@@ -1,0 +1,16 @@
+suite:
+  id: pheno-long-horizon@0.1
+  runner: pier
+  agent: mini-swe-agent
+  default_task_root: bench/fixtures/long_horizon_example
+policy:
+  local_only: true
+  cloud_evals_disabled: true
+  n_attempts: 1
+  max_wall_time_hours: 4
+  require_programmatic_verifier: true
+roles: [planner, coding_subagent, reviewer, qa, integration, advisor]
+models:
+  - local/qwen35-08b
+  - local/lfm25-8b-a1b
+  - local/ornith-8b

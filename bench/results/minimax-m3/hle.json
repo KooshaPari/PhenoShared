@@ -1,0 +1,11 @@
+{
+  "suite": "hle",
+  "n": 0,
+  "passed": 0,
+  "pass_at_1": 0.0,
+  "wall_clock_s_total": 0.0,
+  "wall_clock_s_mean": 0.0,
+  "wall_clock_s_p95": 0.0,
+  "task_results": [],
+  "error": "TypeError: The only supported seed types are:\nNone, int, float, str, bytes, and bytearray."
+}

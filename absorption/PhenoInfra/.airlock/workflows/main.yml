@@ -1,0 +1,33 @@
+# Airlock workflow configuration
+# Documentation: https://github.com/airlock-hq/airlock
+
+name: Main Pipeline
+
+on:
+  push:
+    branches: ['**']
+
+jobs:
+  default:
+    name: Lint, Test & Deploy
+    steps:
+      # Rebase onto upstream to handle drift
+      - name: rebase
+        uses: airlock-hq/airlock/defaults/rebase@main
+
+      # Run linters and formatters, auto-fix issues
+      - name: lint
+        uses: airlock-hq/airlock/defaults/lint@main
+
+      # Commit auto-fix patches and lock the worktree
+      - name: freeze
+        run: airlock exec freeze
+
+      # Push changes to upstream (pauses for user approval first)
+      - name: push
+        uses: airlock-hq/airlock/defaults/push@main
+        require-approval: true
+
+      # Create pull/merge request
+      - name: create-pr
+        uses: airlock-hq/airlock/defaults/create-pr@main

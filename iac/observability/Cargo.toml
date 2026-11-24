@@ -1,0 +1,15 @@
+[package]
+name = "phenotype-infra-observability"
+version = "0.2.0"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "T22 observability init for phenotype-infra iac/* daemons (ADR-036 pheno-tracing). Wraps pheno-tracing TracePort + tracing-subscriber fmt layer."
+
+[dependencies]
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+phenotype-logging = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "test-util"] }

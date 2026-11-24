@@ -1,0 +1,78 @@
+# KernelBench RTX3090Bench execution contract for pheno-harness.
+# Upstream corpus is acquired separately; this file is the dry-run planner contract.
+schema_version: pheno.kernelbench.rtx3090.v1
+registry_ref: kernelbench_rtx3090
+
+suite:
+  id: kernelbench-rtx3090
+  label: KernelBench RTX3090Bench
+  runner: forgecode_gpu_lane
+  lane: Primary3090
+  metric: speedup_vs_pytorch_baseline
+  subset: RTX3090Bench
+  n_tasks: 43
+  levels: [1, 2, 3, 4]
+  level_labels: [L1, L2, L3, L4]
+  hardware_target: rtx3090
+
+upstream:
+  owner: Infatoshi
+  repository: Infatoshi/KernelBench-v3
+  repository_url: https://github.com/Infatoshi/KernelBench-v3
+  pin_status: unpinned
+  revision_sha: null
+  root_env: PHENO_KERNELBENCH_ROOT
+  default_root: "${PHENO_ROOT}/vendor/KernelBench-v3"
+
+policy:
+  local_only: true
+  cloud_evals_disabled: true
+  dry_run_default: true
+  scoreable: false
+  require_verifier_artifact: true
+
+device:
+  gpu: rtx_3090_ti
+  nvidia_smi_index: 1
+  forge_lane: Primary3090
+  # PyTorch sees a single GPU as cuda:0 when only the 3090 Ti is exposed.
+  pytorch_device: cuda:0
+  env:
+    CUDA_VISIBLE_DEVICES: "1"
+  placement_ref: config/hardware_aware_placement.yaml
+  notes: >
+    nvidia-smi index 0 = GTX 1080 Ti, index 1 = RTX 3090 Ti.
+    Set CUDA_VISIBLE_DEVICES=1 so PyTorch maps the 3090 to cuda:0.
+    llama.cpp uses a different ordering; do not reuse llama.cpp CUDA indices here.
+
+harness:
+  fixtures_dir: bench/custom/kernel-forge-loop
+  results_dir: bench/results/kernelbench
+  gates:
+    - cuda_toolkit
+    - torch_installed
+    - rtx_3090_ti
+
+driver:
+  script: scripts/run_kernelbench_rtx3090.ps1
+  planner: scripts/kernelbench_smoke_plan.py
+
+commands:
+  list_hardware:
+    template: uv run python bench.py list-hardware
+  dry_run:
+    template: >-
+      uv run python bench.py run rtx3090
+      --levels {levels}
+      --problems-per-level 1
+      --dry-run
+    defaults:
+      levels: "1,2,3,4"
+  execute:
+    template: >-
+      uv run python bench.py run rtx3090
+      --levels {levels}
+      --workers {workers}
+    defaults:
+      levels: "1,2,3,4"
+      workers: 4

@@ -1,0 +1,30 @@
+test_bounded_parts (test_kit.AssetTests.test_bounded_parts) ... ok
+test_checked_in_model_matches_generator (test_kit.AssetTests.test_checked_in_model_matches_generator) ... ok
+test_deterministic (test_kit.AssetTests.test_deterministic) ... ok
+test_glb_consistency (test_kit.AssetTests.test_glb_consistency) ... ok
+test_held_axes (test_kit.AssetTests.test_held_axes) ... ok
+test_manifest_hashes (test_kit.AssetTests.test_manifest_hashes) ... ok
+test_reject_duplicate_names (test_kit.AssetTests.test_reject_duplicate_names) ... ok
+test_reject_magic (test_kit.AssetTests.test_reject_magic) ... ok
+test_reject_out_of_bounds_indices (test_kit.AssetTests.test_reject_out_of_bounds_indices) ... ok
+test_reject_truncated (test_kit.AssetTests.test_reject_truncated) ... ok
+test_source_normals_finite (test_kit.AssetTests.test_source_normals_finite) ... ok
+test_apply_preserves_agents (test_kit.InstallTests.test_apply_preserves_agents) ... ok
+test_conflict (test_kit.InstallTests.test_conflict) ... ok
+test_dry_plan_no_write (test_kit.InstallTests.test_dry_plan_no_write) ... ok
+test_expanded_paths (test_kit.InstallTests.test_expanded_paths) ... ok
+test_identical (test_kit.InstallTests.test_identical) ... ok
+test_reject_nondirectory_parent (test_kit.InstallTests.test_reject_nondirectory_parent) ... ok
+test_reject_path_traversal (test_kit.InstallTests.test_reject_path_traversal) ... ok
+test_reject_symlink (test_kit.InstallTests.test_reject_symlink) ... ok
+test_blender_argv_no_shell (test_kit.PackagingTests.test_blender_argv_no_shell) ... ok
+test_no_fonts (test_kit.PackagingTests.test_no_fonts) ... ok
+test_skill_frontmatter (test_kit.PackagingTests.test_skill_frontmatter) ... ok
+test_source_catalog_unique (test_kit.PackagingTests.test_source_catalog_unique) ... ok
+test_standalone_has_no_external_resources (test_kit.PackagingTests.test_standalone_has_no_external_resources) ... ok
+test_upstream_blob (test_kit.PackagingTests.test_upstream_blob) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 1.308s
+
+OK

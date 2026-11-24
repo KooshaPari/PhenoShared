@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phenotype.local/schemas/bench_result.v1.json",
+  "title": "BenchResultV1",
+  "type": "object",
+  "required": ["experiment_id", "timestamp", "device_role", "host"],
+  "properties": {
+    "experiment_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "device_role": { "type": "string" },
+    "host": { "type": "string" },
+    "model_key": { "type": "string" },
+    "prefill_tps": { "type": ["number", "null"] },
+    "decode_tps": { "type": ["number", "null"] },
+    "ttft_s": { "type": ["number", "null"] },
+    "e2e_s": { "type": ["number", "null"] },
+    "notes": { "type": "string" },
+    "driver": { "type": "string" },
+    "source": { "type": "string", "enum": ["fleet-bench", "pheno-harness", "omlx-mac", "bridge"] }
+  }
+}

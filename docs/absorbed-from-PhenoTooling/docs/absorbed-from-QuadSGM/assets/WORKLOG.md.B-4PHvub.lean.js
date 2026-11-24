@@ -1,0 +1,1 @@
+import{_ as e,o as a,c as r,ae as o}from"./chunks/framework.BHxsYbCo.js";const _=JSON.parse('{"title":"Worklog","description":"","frontmatter":{},"headers":[],"relativePath":"WORKLOG.md","filePath":"WORKLOG.md"}'),n={name:"WORKLOG.md"};function d(l,t,s,i,c,h){return a(),r("div",null,[...t[0]||(t[0]=[o("",10)])])}const u=e(n,[["render",d]]);export{_ as __pageData,u as default};

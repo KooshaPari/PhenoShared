@@ -1,0 +1,6 @@
+repository	local_evidence	security	remote_namespace	verified	status
+Civis	main 56 ahead/3 behind; dirty workflows	gitleaks clean	recovery/civis-local/main-20260723	pending recheck	PUBLISHED
+OmniRoute	65 local heads; 23 local-only commits	19 local-only commits clean	recovery/omniroute-wtrees/*	pushed by agent	PUBLISHED
+AgilePlus	modified route + untracked 3.2MB; 1 stash	gitleaks directory clean	none	Airlock snapshot only	HOLD_DIRTY
+PhenoObservability	local ahead + dirty signal	pending	pending	pending	HOLD
+SessionLedger	local ahead + dirty signal	pending	pending	pending	HOLD

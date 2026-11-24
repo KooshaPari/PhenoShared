@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 512px; height: 512px; overflow: hidden; background: #090a0c; }
+
+  /* Layer 0: Scene backdrop */
+  .scene {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 65% at 20% 18%, rgba(12,120,112,0.6) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 50% at 82% 82%, rgba(8,30,30,0.9) 0%, transparent 55%),
+      linear-gradient(140deg, #0c2826 0%, #090a0c 55%, #0e1c1c 100%);
+    z-index: 0;
+  }
+
+  /* Layer 1: Blurred teal light source */
+  .light-blob {
+    position: absolute;
+    width: 380px; height: 340px;
+    border-radius: 50%;
+    top: -40px; left: -30px;
+    background: radial-gradient(circle, rgba(126,186,181,0.65) 0%, transparent 60%);
+    filter: blur(80px);
+    z-index: 1;
+  }
+  .light-blob-2 {
+    position: absolute;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    bottom: 0px; right: -10px;
+    background: radial-gradient(circle, rgba(78,227,214,0.4) 0%, transparent 65%);
+    filter: blur(55px);
+    z-index: 1;
+  }
+
+  /* SVG-based squircle + layered fills */
+  .squircle-wrap {
+    position: absolute;
+    width: 430px; height: 430px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    /* Drop shadow via filter on the wrapper */
+    filter: drop-shadow(0 28px 56px rgba(0,0,0,0.7)) drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+  }
+
+  .squircle-wrap svg {
+    width: 430px; height: 430px;
+    overflow: visible;
+  }
+</style>
+</head>
+<body>
+  <div class="scene"></div>
+  <div class="light-blob"></div>
+  <div class="light-blob-2"></div>
+
+  <div class="squircle-wrap">
+    <svg viewBox="0 0 430 430" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- macOS squircle — iOS superellipse (power 5 approx via bezier) -->
+        <path id="sq"
+          d="M215,6
+             C268,6,293,8,316,20 C345,35,395,85,410,114 C422,137,424,162,424,215
+             C424,268,422,293,410,316 C395,345,345,395,316,410 C293,422,268,424,215,424
+             C162,424,137,422,114,410 C85,395,35,345,20,316 C8,293,6,268,6,215
+             C6,162,8,137,20,114 C35,85,85,35,114,20 C137,8,162,6,215,6 Z" />
+
+        <!-- Clip for squircle area -->
+        <clipPath id="sqClip">
+          <use href="#sq"/>
+        </clipPath>
+
+        <!-- Specular diagonal gradient -->
+        <linearGradient id="specGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7ebab5" stop-opacity="0.35"/>
+          <stop offset="18%" stop-color="#7ebab5" stop-opacity="0.12"/>
+          <stop offset="38%" stop-color="white" stop-opacity="0.0"/>
+          <stop offset="75%" stop-color="white" stop-opacity="0.02"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0.0"/>
+        </linearGradient>
+
+        <!-- Body fill — translucent dark teal -->
+        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#143330" stop-opacity="0.78"/>
+          <stop offset="100%" stop-color="#0b1c1c" stop-opacity="0.88"/>
+        </linearGradient>
+
+        <!-- Edge rim gradient for stroke -->
+        <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7ebab5" stop-opacity="0.7"/>
+          <stop offset="40%" stop-color="#7ebab5" stop-opacity="0.3"/>
+          <stop offset="70%" stop-color="#050808" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#050808" stop-opacity="0.8"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Layer A: Translucent body -->
+      <use href="#sq" fill="url(#bodyGrad)" clip-path="url(#sqClip)"/>
+
+      <!-- Layer B: Specular diagonal sweep -->
+      <use href="#sq" fill="url(#specGrad)" clip-path="url(#sqClip)"/>
+
+      <!-- Layer C: Rim stroke — top/left bright, bottom/right dark -->
+      <use href="#sq" fill="none" stroke="url(#rimGrad)" stroke-width="1.5"/>
+
+      <!-- Layer D: Inner top highlight thin line -->
+      <use href="#sq" fill="none"
+        stroke="rgba(126,186,181,0.45)" stroke-width="0.8"
+        style="filter: blur(0.5px)"/>
+
+      <!-- Layer E: Icon content clipped inside squircle -->
+      <g clip-path="url(#sqClip)">
+        <!-- Glow ring background -->
+        <circle cx="215" cy="215" r="100"
+          fill="none" stroke="rgba(126,186,181,0.45)" stroke-width="28"
+          stroke-dasharray="628" stroke-dashoffset="95"
+          transform="rotate(-90 215 215)"
+          style="filter:blur(7px)"/>
+        <!-- Ring track -->
+        <circle cx="215" cy="215" r="100"
+          fill="none" stroke="rgba(126,186,181,0.2)" stroke-width="16" stroke-linecap="round"/>
+        <!-- Sprint arc -->
+        <circle cx="215" cy="215" r="100"
+          fill="none" stroke="#a8d8d4" stroke-width="16" stroke-linecap="round"
+          stroke-dasharray="628" stroke-dashoffset="95"
+          transform="rotate(-90 215 215)"
+          style="filter:drop-shadow(0 0 10px rgba(126,186,181,0.85))"/>
+        <!-- Arrow tip -->
+        <polygon points="215,105 206,126 224,126"
+          fill="#a8d8d4"
+          transform="rotate(285 215 215)"
+          style="filter:drop-shadow(0 0 6px rgba(126,186,181,0.8))"/>
+
+        <!-- Velocity bars -->
+        <rect x="177" y="238" width="16" height="44" rx="5" fill="rgba(126,186,181,0.5)"/>
+        <rect x="202" y="218" width="16" height="64" rx="5" fill="#a8d8d4"
+          style="filter:drop-shadow(0 0 5px rgba(126,186,181,0.6))"/>
+        <rect x="227" y="200" width="16" height="82" rx="5" fill="#a8d8d4"
+          style="filter:drop-shadow(0 0 5px rgba(126,186,181,0.6))"/>
+
+        <!-- Plus sign -->
+        <rect x="258" y="130" width="32" height="9" rx="4.5"
+          fill="#c8eae7" style="filter:drop-shadow(0 0 8px rgba(126,186,181,1.0))"/>
+        <rect x="269.5" y="119" width="9" height="32" rx="4.5"
+          fill="#c8eae7" style="filter:drop-shadow(0 0 8px rgba(126,186,181,1.0))"/>
+      </g>
+    </svg>
+  </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "schema_version": "ATIF-v1.7",
+  "session_id": "shared-run",
+  "trajectory_id": "dangling-parent",
+  "agent": {
+    "name": "pheno-parent",
+    "version": "0.1"
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "source": "system",
+      "message": "Delegation completed.",
+      "observation": {
+        "results": [
+          {
+            "subagent_trajectory_ref": [
+              {
+                "trajectory_id": "missing-child",
+                "session_id": "shared-run"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "subagent_trajectories": [
+    {
+      "schema_version": "ATIF-v1.7",
+      "session_id": "shared-run",
+      "trajectory_id": "actual-child",
+      "agent": {
+        "name": "pheno-child",
+        "version": "0.1"
+      },
+      "steps": [
+        {
+          "step_id": 1,
+          "source": "agent",
+          "message": "Done."
+        }
+      ]
+    }
+  ]
+}

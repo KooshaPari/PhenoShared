@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phenotype.local/schemas/experiment.v1.json",
+  "title": "ExperimentV1",
+  "type": "object",
+  "required": ["experiment_id", "device_profile", "model_alias", "suite"],
+  "properties": {
+    "experiment_id": { "type": "string", "pattern": "^[a-z0-9]+(\\.[a-z0-9_\\-]+)+$" },
+    "suite": { "type": "string", "enum": ["fleet-bench", "pheno-harness", "omlx-mac"] },
+    "device_profile": { "type": "string" },
+    "model_alias": { "type": "string" },
+    "bench_key": { "type": "string" },
+    "langfuse_dataset": { "type": "string" },
+    "description": { "type": "string" },
+    "aliases": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

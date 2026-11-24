@@ -1,0 +1,573 @@
+[1m[33mwarning[0m[1m:[0m C:\Users\koosh\Dev\AgilePlus\Cargo.toml: only one of `license` or `license-file` is necessary
+`license` should be used if the package license can be expressed with a standard SPDX expression.
+`license-file` should be used if the package uses a non-standard license.
+See https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields for more information.
+[1m[36m    Blocking[0m waiting for file lock on build directory
+[0m[1m[38;5;11mwarning[0m[0m[1m[38;5;15m: unused import: `tracing_subscriber::prelude`[0m
+[0m [0m[0m[1m[38;5;14m--> [0m[0mC:\Users\koosh\Dev\phenoShared\crates\phenotype-logging\src\lib.rs:3:5[0m
+[0m  [0m[0m[1m[38;5;14m|[0m
+[0m[1m[38;5;14m3[0m[0m [0m[0m[1m[38;5;14m|[0m[0m [0m[0muse tracing_subscriber::prelude::*;[0m
+[0m  [0m[0m[1m[38;5;14m|[0m[0m     [0m[0m[1m[38;5;11m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[0m  [0m[0m[1m[38;5;14m|[0m
+[0m  [0m[0m[1m[38;5;14m= [0m[0m[1m[38;5;15mnote[0m[0m: `#[warn(unused_imports)]` on by default[0m
+
+[1m[33mwarning[0m[1m:[0m `phenotype-logging` (lib) generated 1 warning
+[1m[33mwarning[0m[1m:[0m agileplus-proto@0.1.0: protoc not found on PATH — using hand-written stubs. Install protobuf-compiler or set PROTOC env var for a full build.
+[1m[32m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`test` profile [unoptimized + debuginfo]]8;;\ target(s) in 1m 32s
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus-f825bbcb7f1b7290.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_api-d37c1aafabcb1443.exe)
+
+running 12 tests
+test api_key::tests::hash_differs_for_different_keys ... ok
+test api_key::tests::generated_key_is_unique ... ok
+test middleware::token_verifier::tests::multiple_keys_any_valid_accepted ... ok
+test middleware::auth::tests::shared_secret_verifier_rejects_non_matching_token ... ok
+test middleware::token_verifier::tests::valid_key_accepted ... ok
+test middleware::token_verifier::tests::empty_key_list_rejects_everything ... ok
+test middleware::auth::tests::shared_secret_verifier_parses_csv_tokens ... ok
+test api_key::tests::generated_key_has_prefix ... ok
+test middleware::auth::tests::shared_secret_verifier_rejects_length_mismatch ... ok
+test api_key::tests::hash_is_deterministic ... ok
+test middleware::auth::tests::shared_secret_verifier_accepts_matching_token ... ok
+test middleware::token_verifier::tests::wrong_key_rejected ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+[1m[32m     Running[0m unittests src\main.rs (D:/civis-build/target\debug\deps\agileplus_api-b3b966712ebb5d62.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m tests\api_integration.rs (D:/civis-build/target\debug\deps\api_integration-9f8eb0b537d3cf8e.exe)
+
+running 20 tests
+test otel_request_span_middleware_wraps_handler ... ok
+test auth_health_is_public_no_token_needed ... ok
+test get_governance ... ok
+test get_work_package_found ... ok
+test auth_valid_bearer_token_returns_200 ... ok
+test get_work_package_not_found ... ok
+test otel_request_span_propagates_traceparent ... ok
+test health_no_auth_required ... ok
+test auth_no_token_returns_401 ... ok
+test response_content_type_is_json ... ok
+test get_feature_not_found ... ok
+test list_features_with_valid_key ... ok
+test trigger_validate ... ok
+test list_features_requires_auth ... ok
+test get_feature_found ... ok
+test get_audit_trail ... ok
+test info_no_auth_required ... ok
+test verify_audit_chain_valid ... ok
+test auth_wrong_bearer_token_returns_401 ... ok
+test list_features_invalid_key_returns_401 ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_application-d89dc613f1f9ef61.exe)
+
+running 23 tests
+test tests::create_feature_defaults_target_branch_and_spec_hash ... ok
+test error::code_projection_tests::domain_validation_chains_through ... ok
+test error::code_projection_tests::not_found_projects_to_not_found ... ok
+test tests::create_feature_preserves_target_branch_and_spec_hash ... ok
+test error::code_projection_tests::storage_projects_to_internal_error ... ok
+test tests::create_epic_trims_title_and_emits_expected_event ... ok
+test tests::advance_feature_not_found ... ok
+test tests::create_story_happy_path ... ok
+test tests::create_story_rejects_empty_title ... ok
+test tests::advance_feature_invalid_transition_rejected ... ok
+test tests::create_feature_happy_path ... ok
+test tests::transition_story_invalid_transition_rejected ... ok
+test tests::create_story_rejects_zero_points ... ok
+test tests::create_epic_happy_path ... ok
+test tests::create_epic_rejects_empty_title ... ok
+test tests::transition_story_happy_path ... ok
+test tests::advance_feature_valid_transition ... ok
+test tests::transition_story_not_found ... ok
+test use_cases::persist_synced_stories::tests::empty_story_list_produces_empty_report ... ok
+test use_cases::persist_synced_stories::tests::persists_n_stories_to_repo ... ok
+test use_cases::persist_synced_stories::tests::story_without_requirement_id_returns_error ... ok
+test use_cases::persist_synced_stories::tests::skipped_items_not_persisted ... ok
+test use_cases::persist_synced_stories::tests::resync_is_idempotent_no_duplicates ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_cache-19aebc653c7f2a84.exe)
+
+running 1 test
+test health::tests::health_enum_equality ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m tests\integration_tests.rs (D:/civis-build/target\debug\deps\integration_tests-4bd0403500d40805.exe)
+
+running 23 tests
+test test_cache_error_display ... ok
+test test_cache_error_from_serialization ... ok
+test test_in_memory_cache_set_and_get ... ok
+test test_cache_config_builder ... ok
+test test_cache_config_clone ... ok
+test test_cache_config_debug ... ok
+test test_in_memory_cache_clear ... ok
+test test_in_memory_cache_delete ... ok
+test test_cache_config_default ... ok
+test test_in_memory_cache_exists ... ok
+test test_concurrent_cache_access ... ok
+test test_in_memory_health_check ... ok
+test test_projection_cache_store_trait_impl ... ok
+test test_projection_cache_invalidate ... ok
+test test_rate_limiter_error_display ... ok
+test test_projection_cache_with_in_memory_store ... ok
+test test_cache_config_redis_url_custom ... ok
+test test_cache_config_redis_url ... ok
+test test_in_memory_cache_get_nonexistent ... ok
+test test_projection_cache_workpackage ... ok
+test test_projection_error_display ... ok
+test test_in_memory_cache_overwrite ... ok
+test test_in_memory_cache_with_ttl ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.02s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_cli-5c88919ce6d59894.exe)
+
+running 53 tests
+test commands::dag::tests::parse_claim_kind_err ... ok
+test commands::dag::tests::parse_claim_kind_ok ... ok
+test commands::dag::tests::dedup_explain_pair_hybrid_matches_helper ... ok
+test commands::list::tests::truncate_cell_shortens_long_values ... ok
+test commands::list_projects::tests::truncate_shortens_values_past_limit ... ok
+test commands::list::tests::truncate_cell_keeps_short_values ... ok
+test commands::list_epics::tests::truncate_keeps_short_titles ... ok
+test commands::list_stories::tests::truncate_keeps_short_story_titles ... ok
+test commands::import_dagctl::tests::map_state_covers_all_dagctl_states ... ok
+test commands::list_projects::tests::truncate_keeps_values_within_limit ... ok
+test commands::list_stories::tests::truncate_shortens_long_story_titles ... ok
+test commands::list_tests::list_features_filters_by_state ... ok
+test commands::list_tests::list_features_rejects_invalid_state ... ok
+test commands::list_tests::list_epics_json_flag_returns_ok ... ok
+test commands::list_tests::list_features_returns_all_features ... ok
+test commands::list_tests::list_features_returns_ok_for_empty_store ... ok
+test commands::list_tests::list_projects_json_flag_returns_ok ... ok
+test commands::list_tests::list_projects_returns_ok_for_empty_store ... ok
+test commands::list_tests::list_stories_status_filter_returns_only_matching ... ok
+test commands::list_tests::list_stories_no_filter_returns_ok ... ok
+test commands::dag::tests::read_id_text_handles_tsv ... ok
+test commands::list_tests::list_stories_invalid_status_returns_err ... ok
+test commands::list_tests::list_stories_json_flag_returns_ok ... ok
+test commands::import_dagctl::tests::derive_title_truncates_and_uses_fallback ... ok
+test commands::import_dagctl::tests::map_dep_type_passes_through_known_kinds ... ok
+test commands::list_epics::tests::truncate_shortens_long_titles ... ok
+test commands::list_tests::list_epics_no_filter_returns_ok ... ok
+test commands::list_tests::list_projects_returns_ok_with_data ... ok
+test commands::list_tests::list_stories_epic_filter_returns_only_matching ... ok
+test commands::list_tests::list_epics_with_project_filter_returns_only_matching ... ok
+test commands::worklog::tests::validate_payload_accepts_canonical_payload ... ok
+test commands::worklog::tests::validate_payload_accepts_short_sha ... ok
+test commands::worklog::tests::run_show_rejects_negative_limit ... ok
+test commands::worklog::tests::validate_payload_rejects_bad_completed_at_iso8601 ... ok
+test commands::worklog::tests::validate_payload_rejects_blank_agent_id ... ok
+test commands::worklog::tests::validate_payload_rejects_blank_task_id ... ok
+test commands::worklog::tests::validate_payload_rejects_duplicate_files_changed ... ok
+test commands::worklog::tests::validate_payload_rejects_empty_command ... ok
+test commands::worklog::tests::validate_payload_rejects_not_run_with_commands ... ok
+test commands::worklog::tests::validate_payload_rejects_unknown_status ... ok
+test commands::worklog::tests::validate_payload_rejects_bad_iso8601 ... ok
+test commands::worklog::tests::validate_payload_rejects_bad_verification_status ... ok
+test commands::worklog::tests::validate_payload_rejects_uppercase_sha ... ok
+test commands::list::tests::truncate_cell_never_exceeds_limit ... ok
+test commands::list::tests::truncate_cell_is_identity_within_limit ... ok
+test commands::list_projects::tests::truncate_never_exceeds_limit ... ok
+test commands::list_projects::tests::truncate_is_identity_within_limit ... ok
+test commands::worklog::tests::row_to_entry_round_trips_files_changed ... ok
+test commands::worklog::tests::run_emit_inserts_valid_file_and_skips_invalid ... ok
+test commands::worklog::tests::open_db_creates_table_on_fresh_path ... ok
+test commands::worklog::tests::run_show_filters_by_task_and_status ... ok
+test commands::worklog::tests::insert_entry_is_idempotent ... ok
+test commands::seed_requirements::tests::seed_requirements_run_creates_database ... ok
+
+test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.08s
+
+[1m[32m     Running[0m unittests src\main.rs (D:/civis-build/target\debug\deps\agileplus-e6b5eec3b0b847e6.exe)
+
+running 65 tests
+test commands::import_dagctl::tests::map_state_covers_all_dagctl_states ... ok
+test commands::dag::tests::parse_claim_kind_err ... ok
+test commands::list::tests::truncate_cell_keeps_short_values ... ok
+test commands::dag::tests::dedup_explain_pair_hybrid_matches_helper ... ok
+test commands::dag::tests::parse_claim_kind_ok ... ok
+test commands::list_epics::tests::truncate_keeps_short_titles ... ok
+test commands::list_projects::tests::truncate_keeps_values_within_limit ... ok
+test commands::list::tests::truncate_cell_shortens_long_values ... ok
+test commands::list_projects::tests::truncate_shortens_values_past_limit ... ok
+test commands::list_stories::tests::truncate_keeps_short_story_titles ... ok
+test commands::list_stories::tests::truncate_shortens_long_story_titles ... ok
+test commands::list_tests::list_epics_json_flag_returns_ok ... ok
+test commands::list_tests::list_features_filters_by_state ... ok
+test commands::list_tests::list_features_returns_all_features ... ok
+test commands::dag::tests::read_id_text_handles_tsv ... ok
+test commands::list_tests::list_features_rejects_invalid_state ... ok
+test commands::list_tests::list_projects_json_flag_returns_ok ... ok
+test commands::list_tests::list_features_returns_ok_for_empty_store ... ok
+test commands::list_tests::list_stories_invalid_status_returns_err ... ok
+test commands::list_tests::list_stories_no_filter_returns_ok ... ok
+test commands::list_tests::list_stories_json_flag_returns_ok ... ok
+test commands::list_tests::list_stories_status_filter_returns_only_matching ... ok
+test commands::list_tests::list_projects_returns_ok_for_empty_store ... ok
+test commands::import_dagctl::tests::derive_title_truncates_and_uses_fallback ... ok
+test commands::import_dagctl::tests::map_dep_type_passes_through_known_kinds ... ok
+test commands::list_epics::tests::truncate_shortens_long_titles ... ok
+test commands::list_tests::list_epics_no_filter_returns_ok ... ok
+test commands::list_tests::list_epics_with_project_filter_returns_only_matching ... ok
+test commands::list_tests::list_projects_returns_ok_with_data ... ok
+test commands::list_tests::list_stories_epic_filter_returns_only_matching ... ok
+test commands::worklog::tests::validate_payload_accepts_short_sha ... ok
+test commands::worklog::tests::validate_payload_rejects_bad_completed_at_iso8601 ... ok
+test commands::worklog::tests::run_show_rejects_negative_limit ... ok
+test commands::worklog::tests::validate_payload_accepts_canonical_payload ... ok
+test commands::list_projects::tests::truncate_never_exceeds_limit ... ok
+test commands::list::tests::truncate_cell_is_identity_within_limit ... ok
+test commands::worklog::tests::validate_payload_rejects_bad_iso8601 ... ok
+test commands::list::tests::truncate_cell_never_exceeds_limit ... ok
+test commands::worklog::tests::validate_payload_rejects_duplicate_files_changed ... ok
+test commands::worklog::tests::validate_payload_rejects_empty_command ... ok
+test commands::worklog::tests::validate_payload_rejects_blank_agent_id ... ok
+test commands::worklog::tests::validate_payload_rejects_not_run_with_commands ... ok
+test commands::worklog::tests::validate_payload_rejects_unknown_status ... ok
+test commands::worklog::tests::validate_payload_rejects_blank_task_id ... ok
+test sync_cmd::tests::print_report_with_skipped ... ok
+test sync_cmd::tests::run_invalid_repo_format_returns_error ... ok
+test sync_cmd::tests::run_skips_bad_items ... ok
+test sync_cmd::tests::run_with_stub_reports_mapped_count ... ok
+test sync_cmd::tests::split_repo_empty_name_is_error ... ok
+test sync_cmd::tests::split_repo_empty_owner_is_error ... ok
+test tests::db_path_defaults_when_env_missing ... ok
+test tests::db_path_uses_env_override ... ok
+test tests::mock_store_seed_contains_cli_fixtures ... ok
+test commands::worklog::tests::validate_payload_rejects_bad_verification_status ... ok
+test commands::worklog::tests::validate_payload_rejects_uppercase_sha ... ok
+test sync_cmd::tests::print_report_no_skipped ... ok
+test sync_cmd::tests::split_repo_ok ... ok
+test sync_cmd::tests::split_repo_no_slash_is_error ... ok
+test commands::list_projects::tests::truncate_is_identity_within_limit ... ok
+test commands::worklog::tests::run_emit_inserts_valid_file_and_skips_invalid ... ok
+test commands::worklog::tests::insert_entry_is_idempotent ... ok
+test commands::worklog::tests::open_db_creates_table_on_fresh_path ... ok
+test commands::worklog::tests::row_to_entry_round_trips_files_changed ... ok
+test commands::worklog::tests::run_show_filters_by_task_and_status ... ok
+test commands::seed_requirements::tests::seed_requirements_run_creates_database ... ok
+
+test result: ok. 65 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.77s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_config-b6f2ea8503da4524.exe)
+
+running 12 tests
+test tests::cache_builders_chainable ... ok
+test tests::nats_with_auth_token_wraps_some ... ok
+test tests::nats_with_max_payload_sets_field ... ok
+test tests::nats_builders_are_chainable ... ok
+test tests::cache_default_values ... ok
+test tests::cache_with_connection_timeout_secs_sets_field ... ok
+test tests::nats_default_values ... ok
+test tests::cache_with_pool_size_sets_field ... ok
+test tests::cache_with_port_sets_value ... ok
+test tests::cache_with_default_ttl_secs_sets_field ... ok
+test tests::cache_with_host_accepts_str_slice ... ok
+test tests::nats_with_subject_prefix_sets_field ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_dashboard-77c39246dc6ba96f.exe)
+
+running 64 tests
+test health::tests::test_build_info_checker_returns_healthy ... ok
+test health::tests::test_process_checker_returns_healthy ... ok
+test health::tests::test_run_health_checks_has_latencies ... ok
+test health::tests::test_memory_store_checker_returns_healthy ... ok
+test process_detector::tests::test_extract_task_context_wp_reference ... ok
+test process_detector::tests::test_extract_task_context_no_reference ... ok
+test process_detector::tests::test_extract_worktree_absent ... ok
+test process_detector::tests::test_format_agent_name_gemini ... ok
+test process_detector::tests::test_extract_worktree_capital_c_flag ... ok
+test process_detector::tests::test_format_agent_name_unknown_process ... ok
+test process_detector::tests::test_extract_worktree_cwd_flag ... ok
+test process_detector::tests::test_extract_worktree_empty_cmdline ... ok
+test process_detector::tests::test_format_elapsed_seconds ... ok
+test process_detector::tests::test_format_elapsed_hours ... ok
+test process_detector::tests::test_format_elapsed_minutes ... ok
+test health::tests::test_run_health_checks_returns_all_services ... ok
+test health::tests::test_sqlite_checker_returns_healthy ... ok
+test process_detector::tests::test_parse_agent_state_defaults_status_idle ... ok
+test process_detector::tests::test_format_agent_name_claude_with_worktree ... ok
+test process_detector::tests::test_format_agent_name_claude_no_worktree ... ok
+test process_detector::tests::test_parse_agent_state_valid ... ok
+test process_detector::tests::test_parse_agent_state_missing_name_returns_none ... ok
+test routes::tests::json_endpoints_integrated_health_in_router ... ok
+test routes::tests::health_json_response_structure ... ok
+test routes::tests::test_artifact_type_for_ext_report ... ok
+test routes::tests::test_artifact_type_for_ext_test_results ... ok
+test routes::tests::test_artifact_type_for_ext_text ... ok
+test routes::tests::test_artifact_type_for_ext_unknown_falls_back ... ok
+test routes::tests::test_dashboard_filter_from_query_active ... ok
+test routes::tests::test_dashboard_filter_from_query_blocked ... ok
+test routes::tests::test_html_escape_quotes ... ok
+test routes::tests::test_html_escape_angle_brackets ... ok
+test routes::tests::test_html_escape_no_op_on_plain_text ... ok
+test routes::tests::test_dashboard_filter_from_query_unknown_maps_to_all ... ok
+test routes::tests::test_html_escape_ampersand ... ok
+test routes::tests::test_is_htmx_false_absent ... ok
+test routes::tests::test_percent_encode_path_percent_and_plus ... ok
+test routes::tests::test_percent_encode_path_hash_and_question ... ok
+test routes::tests::test_percent_encode_path_no_change_for_clean_path ... ok
+test routes::tests::test_is_restart_command_allowed_known_programs ... ok
+test routes::tests::test_is_restart_command_allowed_unknown ... ok
+test routes::tests::test_percentage_coverage_zero_total ... ok
+test routes::tests::test_percent_encode_path_spaces ... ok
+test routes::tests::test_plane_connection_checks_both_present ... ok
+test routes::tests::test_plane_api_key_hint_some_key ... ok
+test routes::tests::test_plane_connection_checks_both_missing ... ok
+test routes::tests::test_plane_api_key_hint_none ... ok
+test routes::tests::test_plane_connection_checks_missing_key ... ok
+test routes::tests::test_validate_restart_command_empty ... ok
+test routes::tests::test_artifact_type_for_ext_coverage_variants ... ok
+test routes::tests::test_artifact_type_for_ext_image ... ok
+test routes::tests::test_dashboard_filter_from_query_default_all ... ok
+test routes::tests::test_is_htmx_false_wrong_value ... ok
+test routes::tests::test_is_htmx_true ... ok
+test routes::tests::test_percentage_coverage_full ... ok
+test routes::tests::test_percentage_coverage_normal ... ok
+test routes::tests::test_validate_restart_command_allowed ... ok
+test routes::tests::test_validate_restart_command_denied ... ok
+test routes::tests::test_dashboard_filter_from_query_shipped ... ok
+test routes::tests::toggle_service_updates_store_and_responds ... ok
+test routes::tests::restart_service_executes_command ... ok
+test routes::tests::epics_stories_json_uses_storage_adapter_data ... ok
+test routes::tests::json_endpoints_integrated_agents_in_router ... ok
+test routes::tests::agents_json_response_structure ... ok
+
+test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.32s
+
+[1m[32m     Running[0m unittests src\main.rs (D:/civis-build/target\debug\deps\agileplus_dashboard-b98b6c2926b51583.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m tests\health_integration.rs (D:/civis-build/target\debug\deps\health_integration-ecb8a4dd8843a56d.exe)
+
+running 10 tests
+test at_least_one_service_reports_measurable_latency ... ok
+test build_info_checker_healthy_and_latency ... ok
+test checker_failures_surface_as_healthy_false ... ok
+test memory_store_checker_healthy_and_latency ... ok
+test process_checker_healthy_and_latency ... ok
+test run_health_checks_returns_four_healthy_services ... ok
+test sqlite_checker_healthy_and_latency ... ok
+test service_health_shape_is_stable ... ok
+test every_acceptance_criterion_has_a_test ... ok
+test healthchecker_port_contract ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m tests\seed_integration.rs (D:/civis-build/target\debug\deps\seed_integration-06f4ecb13a949419.exe)
+
+running 8 tests
+test seed_assigns_correct_states ... ok
+test seed_assigns_correct_ids ... ok
+test seed_creates_all_features ... ok
+test seed_creates_work_packages_for_all_features ... ok
+test seed_feature_has_labels ... ok
+test seed_speckitty_features_tagged ... ok
+test seed_creates_seeded_dashboard_store ... ok
+test seed_creates_correct_agileplus_work_package_counts ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_domain-cacc829e7ec29269.exe)
+
+running 43 tests
+test domain::epic::tests::title_trimmed_on_construction ... ok
+test domain::epic::tests::rejects_empty_title ... ok
+test domain::feature::tests::invalid_transition_is_rejected_without_mutating_state ... ok
+test domain::epic::tests::invalid_status_transition_rejected ... ok
+test domain::feature::tests::valid_transition_updates_state ... ok
+test domain::event::tests::event_new_initializes_store_managed_fields ... ok
+test domain::event::tests::event_new_timestamp_is_non_future ... ok
+test domain::event::tests::event_new_preserves_identity_payload_actor ... ok
+test domain::project::tests::valid_project_construction ... ok
+test domain::project::tests::slug_from_name_helper ... ok
+test domain::snapshot::tests::snapshot_new_initializes_id_to_zero ... ok
+test domain::event::tests::event_round_trips_through_serde_json ... ok
+test domain::epic::tests::valid_epic_construction ... ok
+test domain::snapshot::tests::snapshot_new_preserves_identity_state_sequence ... ok
+test domain::epic::tests::valid_status_transition ... ok
+test domain::project::tests::rejects_empty_name ... ok
+test domain::snapshot::tests::snapshot_new_timestamp_is_non_future ... ok
+test domain::snapshot::tests::snapshot_round_trips_through_serde_json ... ok
+test domain::user::tests::invalid_status_transition_rejected ... ok
+test domain::story::tests::blocked_unblocked_cycle ... ok
+test domain::story::tests::rejects_empty_title ... ok
+test domain::story::tests::valid_story_construction ... ok
+test domain::story::tests::valid_status_transition ... ok
+test domain::user::tests::rejects_empty_display_name ... ok
+test domain::project::tests::rejects_invalid_slug ... ok
+test domain::story::tests::invalid_status_transition_rejected ... ok
+test domain::user::tests::valid_user_construction ... ok
+test domain::story::tests::rejects_zero_points ... ok
+test domain::user::tests::rejects_invalid_email ... ok
+test domain::user::tests::valid_status_transition ... ok
+test error::code_projection_tests::conflicts_project_to_already_exists ... ok
+test domain::work_package::tests::new_work_package_starts_planned_with_empty_scope ... ok
+test domain::work_package::tests::work_package_state_machine_allows_blocked_recovery_path ... ok
+test domain::work_package::tests::work_package_state_machine_rejects_skipped_lifecycle_steps ... ok
+test error::code_projection_tests::cycle_and_feature_not_found_project_to_not_found ... ok
+test error::code_projection_tests::validation_shaped_errors_project_to_validation_error ... ok
+test error::code_projection_tests::not_implemented_projects_to_not_implemented ... ok
+test error::code_projection_tests::work_package_not_found_projects_to_not_found ... ok
+test error::code_projection_tests::storage_and_lock_project_to_internal_error ... ok
+test error::code_projection_tests::domain_error_remains_source_of_truth_for_messaging ... ok
+test ports::tests::triage_port_stub_records_outcome ... ok
+test ports::tests::triage_port_stub_returns_next_ticket ... ok
+test error::code_projection_tests::module_not_found_projects_to_not_found ... ok
+
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_events-b0bb7c4d59bbd9a6.exe)
+
+running 35 tests
+test domain_event::tests::all_event_type_strings_are_unique ... ok
+test domain_event::tests::handler_event_types_match_payloads ... ok
+test domain_event::tests::bus_fan_out_to_multiple_handlers ... ok
+test domain_event::tests::epic_status_changed_aggregate_type ... ok
+test domain_event::tests::project_created_event_type_string ... ok
+test domain_event::tests::envelope_causation_correlation_builders ... ok
+test domain_event::tests::work_package_events_round_trip ... ok
+test domain_event::tests::user_status_changed_round_trip ... ok
+test domain_event::tests::handler_receives_emitted_events ... ok
+test domain_event::tests::story_created_aggregate_type ... ok
+test domain_event::tests::epic_status_changed_serde_round_trip ... ok
+test hash::tests::verify_chain_detects_tamper ... ok
+test hash::tests::compute_hash_deterministic ... ok
+test hash::tests::verify_chain_empty ... ok
+test hash::tests::verify_chain_single ... ok
+test query::tests::sequence_range ... ok
+test domain_event::tests::envelope_ids_are_unique ... ok
+test replay::tests::replay_applies_events ... ok
+test domain_event::tests::envelope_round_trip_serde ... ok
+test domain_event::tests::user_added_event_type_string ... ok
+test domain_event::tests::story_status_changed_serde_round_trip ... ok
+test replay::tests::replay_rejects_mixed_entities ... ok
+test query::tests::filter_by_entity_type ... ok
+test replay::tests::replay_since_filters ... ok
+test query::tests::limit_works ... ok
+test hash::tests::verify_chain_two_events ... ok
+test query::tests::filter_by_actor ... ok
+test snapshot::tests::should_snapshot_event_threshold ... ok
+test snapshot::tests::in_memory_snapshot_returns_none_for_unknown_entity ... ok
+test snapshot::tests::should_snapshot_time_threshold ... ok
+test store::tests::in_memory_append_assigns_per_entity_sequence ... ok
+test store::tests::in_memory_get_events_by_type_filters_type ... ok
+test store::tests::in_memory_get_events_since_filters_sequence ... ok
+test snapshot::tests::in_memory_snapshot_loads_latest ... ok
+test snapshot::tests::in_memory_snapshot_delete_before_keeps_newer_snapshots ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_fixtures-990d537fd4d94b50.exe)
+
+running 12 tests
+test builders::tests::feature_builder_creates_valid_feature ... ok
+test dogfood::tests::seed_creates_all_features ... ok
+test payloads::tests::transition_payload_contains_target_state ... ok
+test payloads::tests::feature_create_payload_is_valid_json ... ok
+test dogfood::tests::seed_creates_work_packages_for_all_features ... ok
+test builders::tests::feature_builder_default_values ... ok
+test builders::tests::work_package_builder_creates_valid_wp ... ok
+test dogfood::tests::seed_speckitty_features_tagged ... ok
+test payloads::tests::plane_webhook_payload_structure ... ok
+test test_fixtures::tests::fixtures_build_without_panic ... ok
+test builders::tests::work_package_builder_multiple_files ... ok
+test test_fixtures::tests::seed_test_data_returns_fixtures ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_git-da5c24cdf054b415.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_github-1aa9a2998cbd8f62.exe)
+
+running 16 tests
+test client::tests::empty_labels_omitted ... ok
+test client::tests::github_payload_serialize ... ok
+test client::tests::token_bucket_basic ... ok
+test map::tests::unknown_state_returns_validation_error ... ok
+test map::tests::open_issue_maps_to_todo_story ... ok
+test map::tests::user_with_real_email_uses_it ... ok
+test map::tests::open_pr_maps_to_in_progress ... ok
+test map::tests::empty_title_returns_validation_error ... ok
+test map::tests::merged_pr_maps_to_done ... ok
+test sync::tests::empty_repo_produces_empty_report ... ok
+test sync::tests::bad_pr_is_skipped_not_aborted ... ok
+test sync::tests::bad_issue_is_skipped_not_aborted ... ok
+test map::tests::closed_issue_maps_to_done_story ... ok
+test map::tests::closed_unmerged_pr_maps_to_cancelled ... ok
+test map::tests::user_without_email_gets_synthetic_email ... ok
+test sync::tests::all_mappable_produces_stories_and_no_skipped ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+[1m[32m     Running[0m unittests src\lib.rs (D:/civis-build/target\debug\deps\agileplus_governance-94272d40325112a8.exe)
+
+running 15 tests
+test channel::tests::test_channel_from_str ... ok
+test channel::tests::test_channel_order ... ok
+test policy::tests::test_basic_policy ... ok
+test config::tests::test_default_config ... ok
+test client::tests::test_client_creation ... ok
+test channel::tests::test_promotion_request ... ok
+test client::tests::test_policy_check ... ok
+test rate_limiter::tests::test_rate_limit ... ok
+test config::tests::test_env_config ... ok
+test policy::tests::test_channel_promotion ... ok
+test channel::tests::test_version_suffix ... ok
+test rate_limiter::tests::test_different_keys ... ok
+test audit::tests::test_audit_log ... ok
+test audit::tests::test_audit_stats ... ok
+test policy::tests::test_custom_policy ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+[1m[32m     Running[0m tests\qa_gates_integration.rs (D:/civis-build/target\debug\deps\qa_gates_integration-86796cdcc413ef4b.exe)
+
+running 1 test
+test governance_qa_gates_accept_valid_fixture ... FAILED
+
+failures:
+
+---- governance_qa_gates_accept_valid_fixture stdout ----
+
+thread 'governance_qa_gates_accept_valid_fixture' panicked at crates\agileplus-governance\tests\qa_gates_integration.rs:68:5:
+gate "C:\\Users\\koosh\\Dev\\AgilePlus\\scripts/qa-gates/antipattern.sh" failed
+stdout:
+
+stderr:
+/bin/bash: C:UserskooshDevAgilePlusscripts/qa-gates/antipattern.sh: No such file or directory
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    governance_qa_gates_accept_valid_fixture
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+[1m[31merror[0m[1m:[0m test failed, to rerun pass `-p agileplus-governance --test qa_gates_integration`

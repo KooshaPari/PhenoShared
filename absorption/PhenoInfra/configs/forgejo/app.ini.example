@@ -1,0 +1,39 @@
+; Forgejo app.ini — EXAMPLE.
+; Real config is templated by Ansible. Placeholders here.
+
+APP_NAME = Phenotype Forgejo
+RUN_USER = git
+RUN_MODE = prod
+
+[server]
+DOMAIN           = git.phenotype.io
+ROOT_URL         = https://git.phenotype.io/
+HTTP_ADDR        = 127.0.0.1       ; Tailscale-only; CF Tunnel fronts this
+HTTP_PORT        = 3000
+SSH_DOMAIN       = git.phenotype.io
+SSH_LISTEN_PORT  = 22022
+DISABLE_SSH      = false
+
+[database]
+DB_TYPE  = sqlite3
+PATH     = /var/lib/forgejo/data/forgejo.db
+
+[security]
+INSTALL_LOCK       = true
+SECRET_KEY         = <FORGEJO_SECRET_KEY>
+INTERNAL_TOKEN     = <FORGEJO_INTERNAL_TOKEN>
+PASSWORD_HASH_ALGO = argon2
+
+[service]
+DISABLE_REGISTRATION = true
+REQUIRE_SIGNIN_VIEW  = false
+
+[oauth2]
+JWT_SECRET = <FORGEJO_JWT_SECRET>
+
+[session]
+PROVIDER = file
+
+[log]
+MODE  = console
+LEVEL = info

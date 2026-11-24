@@ -1,0 +1,106 @@
+{
+  "all_resolve_ok": true,
+  "created_at": "2026-07-23T10:05:08.403525+00:00",
+  "failed": [],
+  "fixture_id": "dual-harness-shared-4task-20260722",
+  "fixture_tasks": [
+    "dh-t1-echo-ok",
+    "dh-t2-workdir-isolation",
+    "dh-t3-timeout-guard",
+    "dh-t4-semantic-mini"
+  ],
+  "notes": [
+    "Micro dogfood = pin verify + optional install/import; not full agent eval.",
+    "Mastra probed via npm view only (disk/budget).",
+    "Semantic fixture pass remains on dual-harness optimize loop, not these SDKs."
+  ],
+  "peers": [
+    {
+      "ecosystem": "pypi",
+      "expect_version": "1.48.0",
+      "intent_mapping": {
+        "can_express_process_smoke": true,
+        "can_express_semantic_mini": "TBD_runtime",
+        "evidence": "desk_checklist_only",
+        "fixture_intents": [
+          "dh-t1-echo-ok",
+          "dh-t2-workdir-isolation",
+          "dh-t3-timeout-guard",
+          "dh-t4-semantic-mini"
+        ],
+        "hexagonal_wrap_note": "Python package; wrap behind ToolPort/ModelPort without forking core"
+      },
+      "live_registry_version": "1.48.0",
+      "name": "Strands Agents",
+      "package": "strands-agents",
+      "pin_match": true,
+      "pin_sha": "8658b9e0d57427b77b69343262184d76d8e63e8f",
+      "pin_tag": "python/v1.48.0",
+      "runtime": {
+        "import_error_tail": "",
+        "import_ok": true,
+        "install_attempted": true,
+        "package": "strands-agents==1.48.0"
+      },
+      "status": "PASS_INSTALL_IMPORT"
+    },
+    {
+      "ecosystem": "pypi",
+      "expect_version": "0.6.12",
+      "intent_mapping": {
+        "can_express_process_smoke": true,
+        "can_express_semantic_mini": "TBD_runtime",
+        "evidence": "desk_checklist_only",
+        "fixture_intents": [
+          "dh-t1-echo-ok",
+          "dh-t2-workdir-isolation",
+          "dh-t3-timeout-guard",
+          "dh-t4-semantic-mini"
+        ],
+        "hexagonal_wrap_note": "Python package; wrap behind ToolPort/ModelPort without forking core"
+      },
+      "live_registry_version": "0.6.12",
+      "name": "DeepAgents",
+      "package": "deepagents",
+      "pin_match": true,
+      "pin_sha": "7e70065200007896336f38fe905803e6763e8f85",
+      "pin_tag": "deepagents==0.6.12",
+      "runtime": {
+        "import_error_tail": "",
+        "import_ok": true,
+        "install_attempted": true,
+        "package": "deepagents==0.6.12"
+      },
+      "status": "PASS_INSTALL_IMPORT"
+    },
+    {
+      "ecosystem": "npm",
+      "expect_version": "1.52.1",
+      "intent_mapping": {
+        "can_express_process_smoke": true,
+        "can_express_semantic_mini": "TBD_runtime",
+        "evidence": "desk_checklist_only",
+        "fixture_intents": [
+          "dh-t1-echo-ok",
+          "dh-t2-workdir-isolation",
+          "dh-t3-timeout-guard",
+          "dh-t4-semantic-mini"
+        ],
+        "hexagonal_wrap_note": "TS-native; fa\u00e7ade candidate for #79"
+      },
+      "live_registry_version": "1.52.1",
+      "name": "Mastra",
+      "package": "@mastra/core",
+      "pin_match": true,
+      "pin_sha": "dfaf448cebd7614a78bcb2df8510dbb59a4f81ff",
+      "pin_tag": "@mastra/core@1.52.1",
+      "runtime": {
+        "import_ok": null,
+        "install_attempted": false,
+        "reason": "npm_resolve_only_no_full_install"
+      },
+      "status": "PASS_RESOLVE_ONLY"
+    }
+  ],
+  "schema_version": "pheno.agentora.dogfood.v1"
+}

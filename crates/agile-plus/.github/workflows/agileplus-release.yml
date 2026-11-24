@@ -1,0 +1,157 @@
+# Tag-triggered binary + crates.io release for agileplus-cli (all-3 distribution).
+# Complements the dispatch-based .github/workflows/release.yml orchestrator.
+name: AgilePlus Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agileplus-release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+  PACKAGE: agileplus-cli
+  BIN_NAME: agileplus
+
+jobs:
+  build-matrix:
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+            archive: tar.gz
+            asset_name: agileplus-linux-x86_64
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            archive: tar.gz
+            asset_name: agileplus-macos-aarch64
+          - os: macos-13
+            target: x86_64-apple-darwin
+            archive: tar.gz
+            asset_name: agileplus-macos-x86_64
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+            asset_name: agileplus-windows-x86_64
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      # NOTE: agileplus-cli depends on agileplus-domain, which has incomplete
+      # scaffolding in the workspace and cannot currently be compiled from the
+      # git source tree (tracked separately; do not "fix" domain here).
+      # Until domain compiles, distribute the last-known-good published crate
+      # (crates.io) rather than tying the archive version to the git tag.
+      - name: Install published agileplus-cli binary
+        run: |
+          cargo install "${{ env.PACKAGE }}" --root ./install --target ${{ matrix.target }}
+
+      - name: Stage artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Use the tag-driven version for the archive filename (release version),
+          # even though the binary itself is the latest published crates.io build.
+          version="${GITHUB_REF_NAME#v}"
+          staging="dist/${{ matrix.asset_name }}"
+          mkdir -p "$staging"
+          # The published crate's binary is named `agileplus-cli`; newer source
+          # renames the [[bin]] target to `agileplus`. Accept either.
+          src_bin=""
+          for candidate in "${{ env.BIN_NAME }}" "${{ env.PACKAGE }}"; do
+            for ext in "" ".exe"; do
+              if [ -f "install/bin/${candidate}${ext}" ]; then
+                src_bin="install/bin/${candidate}${ext}"
+                break 2
+              fi
+            done
+          done
+          if [ -z "$src_bin" ]; then
+            echo "ERROR: could not find installed binary under install/bin/" >&2
+            ls -la install/bin/ >&2
+            exit 1
+          fi
+          dest_name="${{ env.BIN_NAME }}"
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            cp "$src_bin" "$staging/${dest_name}.exe"
+          else
+            cp "$src_bin" "$staging/${dest_name}"
+          fi
+          cp LICENSE "$staging/" 2>/dev/null || cp LICENSE.md "$staging/" 2>/dev/null || true
+          cp docs/INSTALL.md "$staging/" 2>/dev/null || true
+          mkdir -p release-upload
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            # windows-latest's Git Bash does not ship a `zip` binary on PATH
+            # (only tar/gzip are guaranteed); use PowerShell's native
+            # Compress-Archive instead of depending on an external tool.
+            pwsh -NoLogo -NoProfile -Command "Compress-Archive -Path 'dist/${{ matrix.asset_name }}' -DestinationPath 'release-upload/agileplus-${version}-${{ matrix.asset_name }}.zip' -Force"
+          else
+            tar -C dist -czf "release-upload/agileplus-${version}-${{ matrix.asset_name }}.tar.gz" "${{ matrix.asset_name }}"
+          fi
+          ls -la release-upload/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: release-upload/*
+          if-no-files-found: error
+          retention-days: 14
+
+  github-release:
+    name: Publish GitHub Release
+    needs: build-matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+
+  publish-crates:
+    name: Publish to crates.io
+    needs: build-matrix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dtolnay/rust-toolchain@nightly
+
+      - uses: Swatinem/rust-cache@v2
+
+      - uses: arduino/setup-protoc@v3
+        with:
+          version: "28.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish workspace crates (dependency order)
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: bash scripts/publish-crates.sh

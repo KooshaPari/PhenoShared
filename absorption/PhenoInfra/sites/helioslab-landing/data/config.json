@@ -1,0 +1,24 @@
+{
+  "name": "HeliosLab",
+  "slug": "helioslab",
+  "tagline": "Phenotype research lab: experimental AI tooling and evaluation harnesses.",
+  "domain": "helioslab.phenotype.space",
+  "color": "#7c3aed",
+  "description": "Phenotype research lab: experimental AI tooling and evaluation harnesses.",
+  "tier": 2,
+  "repo": "KooshaPari/HeliosLab",
+  "language": "Rust / Python",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Eval harnesses",
+    "Experimental tooling",
+    "Research workflows",
+    "Benchmark suites"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/HeliosLab",
+    "docs": "https://helioslab.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/HeliosLab/releases"
+  }
+}

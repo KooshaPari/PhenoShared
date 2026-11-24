@@ -1,0 +1,42 @@
+#!/bin/sh
+# commit-msg hook — conventional commit lint
+# Install: git config core.hooksPath .githooks
+# Or symlink: ln -s ../../.githooks/commit-msg .git/hooks/commit-msg
+
+COMMIT_MSG_FILE="$1"
+
+# Skip merge commits, squash commits, and revert commits
+if head -n1 "$COMMIT_MSG_FILE" | grep -qE '^Merge|^Revert|^fixup!|^squash!'; then
+    exit 0
+fi
+
+# Basic conventional commit regex
+# type(scope): subject
+# type: subject
+PATTERN='^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9_-]+\))?!?: .{1,72}$'
+
+if ! head -n1 "$COMMIT_MSG_FILE" | grep -qE "$PATTERN"; then
+    echo "ERROR: Commit message does not follow conventional commit format." >&2
+    echo "" >&2
+    echo "Expected format: <type>[(<scope>)]: <subject>" >&2
+    echo "" >&2
+    echo "Valid types: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test" >&2
+    echo "Examples:" >&2
+    echo "  feat: add user authentication" >&2
+    echo "  fix(api): resolve race condition in handler" >&2
+    echo "  docs: update README with install instructions" >&2
+    echo "" >&2
+    exit 1
+fi
+
+# eco-011 FR-4: Check workflow files in staged changes for unpinned actions
+if git diff --cached --name-only | grep -q '^\.github/workflows/.*\.yml$'; then
+    echo "info: workflow file(s) staged — checking action pinning..."
+    if ! bash scripts/action-hygiene-audit.sh; then
+        echo "error: commit blocked — unpinned third-party actions detected in staged workflow files."
+        echo "       All third-party actions must be pinned to a 40-character SHA ref."
+        exit 1
+    fi
+fi
+
+exit 0

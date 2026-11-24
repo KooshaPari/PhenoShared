@@ -1,0 +1,36 @@
+{
+  "tracked_files": 33345,
+  "top_level_tracked_directories": 168,
+  "root_files": 272,
+  "first_level_crate_directories": 371,
+  "first_level_cargo_manifests": 333,
+  "package_build_manifests": 980,
+  "literal_root_workspace_members": 249,
+  "parse_failures": [
+    "crates/conft/crates/conft/typescript/packages/conft/package.json"
+  ],
+  "family_manifest_rows": {
+    "Other package holding": 143,
+    "Docs and web packages": 47,
+    "Preserved holdings": 194,
+    "AgilePlus": 120,
+    "MLX and evaluation holdings": 20,
+    "Independent tools and libraries": 161,
+    "Substrate and routing": 41,
+    "FocalPoint connectors": 9,
+    "Eidolon": 4,
+    "Eye tracker": 7,
+    "Fabric": 23,
+    "FocalPoint": 45,
+    "Shared foundations and absorbed modules": 116,
+    "PhenoCompose": 16,
+    "Phinbox": 1,
+    "Pine": 5,
+    "PlayCua": 2,
+    "PlayCua ports": 3,
+    "ShareCLI": 12,
+    "Sidekick": 3,
+    "TeamComm": 6,
+    "Tokn": 2
+  }
+}

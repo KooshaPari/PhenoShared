@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-AGILEPLUS",
+  "product_id": "PRD-AGILEPLUS",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1169608854,
+  "hypothesis": "Explicit machine-verifiable work contracts remove coordination ambiguity with less administrative effort than ad hoc files and boards.",
+  "baseline_candidates": [
+    "GitHub issues/projects plus repo-local specs",
+    "Plane workflow plus repository contracts",
+    "StrictDoc with scripts",
+    "Direct structured files plus small CLI"
+  ],
+  "scenario": "Two independent sample products execute a feature from clarified intent through implementation, verification and release preparation. Interrupt the process, change acceptance criteria, replay a request and perform concurrent work. Compare operator steps and recoverability without requiring an ecosystem-wide server.",
+  "failure_cases": [
+    "Wrong repository root selected",
+    "Duplicate transition after a restart",
+    "Stale acceptance criteria used",
+    "Failed native check treated as pass",
+    "Concurrent writers overwrite state",
+    "Generated review artifact edited without an engine operation"
+  ],
+  "metrics": [
+    "Correct transitions and invalid transitions rejected",
+    "Isolation leaks",
+    "Recovery and replay behavior",
+    "Operator/tool calls per completed feature",
+    "Migration burden",
+    "Independent structural/behavioral coverage by supported runtime"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

@@ -1,0 +1,68 @@
+version: 2
+
+project_name: byteport-api
+
+builds:
+  # The canonical backend is backend/byteport (module `byteport`): it is what the
+  # Dockerfile builds and what the desktop app talks to. This used to build
+  # ./backend, the unreachable /api/v1 module, so release archives and container
+  # images shipped two different servers.
+  - id: byteport-server
+    dir: backend/byteport
+    main: .
+    binary: byteport-server
+    env:
+      # Safe now: the SQLite driver is pure Go (github.com/glebarez/sqlite), so
+      # cross-compiling without cgo produces a working binary. Previously this
+      # shipped a stub that failed with "go-sqlite3 requires cgo to work".
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s
+      - -w
+      - -X main.Version={{.Version}}
+      - -X main.Commit={{.Commit}}
+      - -X main.Date={{.Date}}
+    mod_timestamp: '{{ .CommitTimestamp }}'
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    wrap_in_directory: true
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+release:
+  draft: false
+  prerelease: auto
+
+changelog:
+  # 'conventional' is rejected by goreleaser 2.x at release time (v1.0.2 run
+  # 38105638097: "invalid changelog.use"); 'git' + the conventional-regexp
+  # groups below is the v2-supported form. Verified with goreleaser 2.18.3.
+  use: git
+  sort: asc
+  groups:
+    - title: Features
+      regexp: '^feat(\(.+\))?!?:'
+      order: 0
+    - title: Bug fixes
+      regexp: '^fix(\(.+\))?!?:'
+      order: 1
+    - title: Documentation
+      regexp: '^docs(\(.+\))?:'
+      order: 2
+    - title: Miscellaneous
+      order: 999

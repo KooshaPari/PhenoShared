@@ -1,0 +1,8 @@
+ls: cannot access '/dev/nvidia*': No such file or directory
+--
+GPU 0: NVIDIA GeForce RTX 3090 Ti (UUID: GPU-8d337a84-43de-158d-7526-7175288a6064)
+--
+-r-xr-xr-x 4 root root   175360 Feb 17 22:59 /usr/lib/wsl/lib/libcuda.so
+-r-xr-xr-x 4 root root   175360 Feb 17 22:59 /usr/lib/wsl/lib/libcuda.so.1
+-r-xr-xr-x 4 root root   175360 Feb 17 22:59 /usr/lib/wsl/lib/libcuda.so.1.1
+-r-xr-xr-x 2 root root 11294472 Feb 17 22:59 /usr/lib/wsl/lib/libcudadebugger.so.1

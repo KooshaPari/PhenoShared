@@ -1,0 +1,60 @@
+name: Deploy AgilePlus to Vercel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/**"
+      - "package.json"
+      - "bun.lockb"
+      - "vercel.json"
+      - ".github/workflows/deploy-vercel.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/**"
+      - "package.json"
+      - "bun.lockb"
+      - "vercel.json"
+      - ".github/workflows/deploy-vercel.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Deploy to Vercel (preview on PR, production on main)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || '' }}
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            bunx vercel deploy --token ${{ secrets.VERCEL_TOKEN }}
+          else
+            bunx vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }}
+          fi
+
+      - name: Extract and set VERCEL_PROJECT_ID
+        if: success() && env.VERCEL_PROJECT_ID == ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if .vercel/project.json was created
+          if [ -f ".vercel/project.json" ]; then
+            PROJECT_ID=$(grep -o '"projectId":"[^"]*"' .vercel/project.json | cut -d'"' -f4)
+            if [ ! -z "$PROJECT_ID" ]; then
+              echo "Found project ID: $PROJECT_ID"
+              gh secret set VERCEL_PROJECT_ID --body "$PROJECT_ID" --repo ${{ github.repository }}
+              echo "VERCEL_PROJECT_ID set successfully"
+            fi
+          fi

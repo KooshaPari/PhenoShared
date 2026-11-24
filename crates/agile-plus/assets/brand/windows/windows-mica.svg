@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="AgilePlus Windows Mica">
+  <title>AgilePlus</title>
+  <desc>AI-coded SVG v3: Windows Mica — GENUINELY STACKED stained-mica. 4 semi-opaque tinted layers, each VISIBLY OFFSET (4-8px), inter-layer blur, subtle noise grain, over wallpaper-tint backdrop. Rounded-square tile (r=8). Flat divider border, NO bright specular. The stacking creates visible depth like glass plates. Distinct from android (circle) and macOS (wet squircle).</desc>
+  <defs>
+    <!-- === WINDOWS ROUNDED-SQUARE (r=8) === -->
+    <clipPath id="wm-outer-clip">
+      <rect x="24" y="24" width="464" height="464" rx="8" ry="8"/>
+    </clipPath>
+
+    <!-- === WALLPAPER BACKDROP (shows through mica layers) === -->
+    <!-- Represents the desktop wallpaper tinting through Mica -->
+    <linearGradient id="wm-wallpaper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1e1c"/>
+      <stop offset="50%" stop-color="#111820"/>
+      <stop offset="100%" stop-color="#090a0c"/>
+    </linearGradient>
+
+    <!-- Wallpaper accent blobs (the desktop color shows through Mica) -->
+    <radialGradient id="wm-wall-blob1" cx="30%" cy="25%" r="40%">
+      <stop offset="0%" stop-color="#7ebab5" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#569691" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="wm-wall-blob2" cx="75%" cy="75%" r="38%">
+      <stop offset="0%" stop-color="#353a40" stop-opacity="0.70"/>
+      <stop offset="60%" stop-color="#1a2230" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- === MICA LAYER FILLS: 4 distinct tinted layers === -->
+    <!-- Layer A: Bottom — slate-tinted, no offset (base plate) -->
+    <linearGradient id="wm-mica-a" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c2228" stop-opacity="0.82"/>
+      <stop offset="100%" stop-color="#0d1015" stop-opacity="0.88"/>
+    </linearGradient>
+
+    <!-- Layer B: Second — teal-stained, offset +5px right+down -->
+    <linearGradient id="wm-mica-b" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7ebab5" stop-opacity="0.14"/>
+      <stop offset="40%" stop-color="#569691" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <!-- Layer C: Third — warm-white tint, offset +10px right -->
+    <linearGradient id="wm-mica-c" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6f5f5" stop-opacity="0.06"/>
+      <stop offset="50%" stop-color="#353a40" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0.04"/>
+    </linearGradient>
+
+    <!-- Layer D: Top — deepest dark tint, offset -4px left-up -->
+    <linearGradient id="wm-mica-d" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0%" stop-color="#111618" stop-opacity="0.60"/>
+      <stop offset="60%" stop-color="#090a0c" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#0a0e10" stop-opacity="0.65"/>
+    </linearGradient>
+
+    <!-- === INTER-LAYER BLUR (Mica's acrylic/blur base) === -->
+    <filter id="wm-layer-blur" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blurred"/>
+    </filter>
+
+    <!-- Slightly less blur for upper layers -->
+    <filter id="wm-top-blur" x="-3%" y="-3%" width="106%" height="106%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7"/>
+    </filter>
+
+    <!-- === NOISE/GRAIN TEXTURE (Mica's film grain) === -->
+    <filter id="wm-noise" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" seed="17" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="gray"/>
+      <feBlend in="SourceGraphic" in2="gray" mode="overlay" result="grained"/>
+    </filter>
+
+    <!-- Teal divider line color -->
+    <linearGradient id="wm-divider-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7ebab5" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#7ebab5" stop-opacity="0.22"/>
+      <stop offset="80%" stop-color="#7ebab5" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#7ebab5" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Icon gradients -->
+    <linearGradient id="wm-loop-grad" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#7ebab5"/>
+      <stop offset="100%" stop-color="#95ccc8"/>
+    </linearGradient>
+    <linearGradient id="wm-bars-grad" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#569691"/>
+      <stop offset="100%" stop-color="#7ebab5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ====== WINDOWS STACKED MICA ====== -->
+
+  <!-- LAYER 0: Midnight base -->
+  <rect x="24" y="24" width="464" height="464" rx="8" ry="8" fill="#090a0c"/>
+
+  <g clip-path="url(#wm-outer-clip)">
+    <!-- LAYER 1: Wallpaper backdrop (shows through all mica layers) -->
+    <rect x="24" y="24" width="464" height="464" fill="url(#wm-wallpaper)"/>
+    <rect x="24" y="24" width="464" height="464" fill="url(#wm-wall-blob1)"/>
+    <rect x="24" y="24" width="464" height="464" fill="url(#wm-wall-blob2)"/>
+
+    <!-- LAYER 2A: Bottom mica plate — heavy blur of wallpaper, full size -->
+    <rect x="24" y="24" width="464" height="464" fill="url(#wm-wallpaper)" filter="url(#wm-layer-blur)" opacity="0.90"/>
+    <rect x="24" y="24" width="464" height="464" fill="url(#wm-mica-a)"/>
+
+    <!-- LAYER 2B: Second mica plate — offset +5px right+down, teal stain, inter-layer blur -->
+    <!-- The offset is visible as a "plate" stacking effect -->
+    <rect x="29" y="29" width="464" height="464" fill="url(#wm-wallpaper)" filter="url(#wm-layer-blur)" opacity="0.60"/>
+    <rect x="29" y="29" width="459" height="459" rx="7" ry="7" fill="url(#wm-mica-b)" opacity="0.85"/>
+
+    <!-- LAYER 2C: Third mica plate — offset +10px right, lighter tint, less blur -->
+    <rect x="34" y="26" width="454" height="462" fill="url(#wm-wallpaper)" filter="url(#wm-top-blur)" opacity="0.35"/>
+    <rect x="34" y="26" width="449" height="457" rx="6" ry="6" fill="url(#wm-mica-c)" opacity="0.80"/>
+
+    <!-- LAYER 2D: Top mica plate — offset -4px left-up, darkest tint, minimal blur -->
+    <rect x="20" y="20" width="462" height="462" fill="url(#wm-mica-d)" opacity="0.75"/>
+
+    <!-- LAYER 3: Noise/grain texture over entire stack -->
+    <rect x="24" y="24" width="464" height="464" fill="#888" filter="url(#wm-noise)" opacity="0.035"/>
+
+    <!-- LAYER 4: Mica horizontal dividers (flat, NO specular — Mica style) -->
+    <!-- Top accent stripe -->
+    <rect x="24" y="24" width="464" height="2" fill="url(#wm-divider-grad)" opacity="0.9"/>
+    <!-- Section divider at 1/3 -->
+    <rect x="44" y="178" width="424" height="1" fill="url(#wm-divider-grad)"/>
+    <!-- Section divider at 2/3 -->
+    <rect x="44" y="334" width="424" height="1" fill="url(#wm-divider-grad)"/>
+    <!-- Bottom accent stripe -->
+    <rect x="24" y="486" width="464" height="2" fill="url(#wm-divider-grad)" opacity="0.7"/>
+  </g>
+
+  <!-- LAYER 5: Icon content (clean, no glow — Mica is matte) -->
+  <g clip-path="url(#wm-outer-clip)">
+    <!-- Sprint loop -->
+    <path d="M 300 148 A 110 110 0 1 1 200 160"
+          fill="none" stroke="url(#wm-loop-grad)" stroke-width="24" stroke-linecap="round"/>
+    <polygon points="284,118 318,148 284,178" fill="#7ebab5"/>
+
+    <!-- Velocity bars -->
+    <rect x="188" y="310" width="28" height="46" rx="6" fill="url(#wm-bars-grad)" opacity="0.92"/>
+    <rect x="228" y="276" width="28" height="80" rx="6" fill="url(#wm-bars-grad)" opacity="0.92"/>
+    <rect x="268" y="234" width="28" height="122" rx="6" fill="url(#wm-bars-grad)" opacity="0.92"/>
+
+    <!-- Plus -->
+    <rect x="330" y="174" width="46" height="14" rx="6" fill="#f6f5f5" opacity="0.90"/>
+    <rect x="346" y="158" width="14" height="46" rx="6" fill="#f6f5f5" opacity="0.90"/>
+  </g>
+
+  <!-- LAYER 6: Flat divider border (slate, NO white specular) -->
+  <rect x="24" y="24" width="464" height="464" rx="8" ry="8" fill="none"
+    stroke="#353a40" stroke-width="1.5" stroke-opacity="0.80"/>
+  <rect x="24" y="24" width="464" height="464" rx="8" ry="8" fill="none"
+    stroke="#7ebab5" stroke-width="0.5" stroke-opacity="0.22"/>
+</svg>

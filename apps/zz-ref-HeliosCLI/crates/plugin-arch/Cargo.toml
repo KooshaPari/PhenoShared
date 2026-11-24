@@ -1,0 +1,22 @@
+[package]
+name = "plugin-arch"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+description = "plugin arch — Phenotype infrastructure crate (HeliosCLI)"
+documentation = "https://docs.rs/plugin-arch"
+keywords = ["phenotype", "helios", "plugin"]
+categories = ["development-tools"]
+authors = ["kooshapari"]
+
+[lib]
+name = "plugin_arch"
+path = "src/lib.rs"
+
+[dependencies]
+pheno-plugin = { path = "../pheno-plugin" }
+thiserror = "2.0"
+
+[dev-dependencies]
+tempfile = "3"

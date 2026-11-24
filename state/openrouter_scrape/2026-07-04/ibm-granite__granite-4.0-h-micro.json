@@ -1,0 +1,68 @@
+{
+  "id": "ibm-granite/granite-4.0-h-micro",
+  "scraped_at": "2026-07-04T09:59:18.268081+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "ibm-granite/granite-4.0-h-micro",
+    "canonical_slug": "ibm-granite/granite-4.0-h-micro",
+    "hugging_face_id": "ibm-granite/granite-4.0-h-micro",
+    "name": "IBM: Granite 4.0 Micro",
+    "created": 1760927695,
+    "description": "Granite-4.0-H-Micro is a 3B parameter from the Granite 4 family of models. These models are the latest in a series of models released by IBM. They are fine-tuned for long...",
+    "context_length": 131000,
+    "architecture": {
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.000000017",
+      "completion": "0.000000112"
+    },
+    "top_provider": {
+      "context_length": 131000,
+      "max_completion_tokens": 131000,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "frequency_penalty",
+      "logit_bias",
+      "logprobs",
+      "max_tokens",
+      "min_p",
+      "presence_penalty",
+      "repetition_penalty",
+      "response_format",
+      "seed",
+      "stop",
+      "temperature",
+      "top_k",
+      "top_logprobs",
+      "top_p"
+    ],
+    "default_parameters": {
+      "temperature": null,
+      "top_p": null,
+      "frequency_penalty": null
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/ibm-granite/granite-4.0-h-micro/endpoints"
+    }
+  },
+  "page_url": "https://openrouter.ai/ibm-granite/granite-4.0-h-micro",
+  "page": {
+    "title": "Granite 4.0 Micro - API Pricing &amp; Benchmarks | OpenRouter",
+    "visible_text_sample": "Granite 4.0 Micro - API Pricing &amp; Benchmarks | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube IBM: Granite 4.0 Micro ibm-granite / granite-4.0-h-micro Model weights Compare Playground Quick Start Granite-4.0-H-Micro is a 3B parameter from the Granite 4 family of models. These models are the latest in a series of models released by IBM. They are fine-tuned for long context tool calling. Modalities In / Out Price $0.017 / $0.112 per 1M Context 131K Released Oct 20, 2025 IBM: Granite 4.0 Micro Compare Playground Quick Start Providers Effective Pricing Performance Uptime Benchmarks Apps Activity Providers Providers This model is hosted by one provider. OpenRouter forwards every request to it directly \u2014 no routing decisions to make. Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Benchmarks Scores on standardized evaluations. Higher percentages are better \u2014 and rank percentile shows where this model lands among all models on OpenRouter. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below."
+  }
+}

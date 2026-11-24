@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" width="480" height="270" role="img" aria-label="AgilePlus identity demo: lab-graphite panel with pulse-green heartbeat">
+  <title>AgilePlus — L105 Identity Demo (Backbone-2 pulse / lab-graphite + pulse-green)</title>
+  <defs>
+    <linearGradient id="apBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0d12"/>
+      <stop offset="1" stop-color="#161b22"/>
+    </linearGradient>
+    <radialGradient id="apGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#3fb950" stop-opacity="0.45"/>
+      <stop offset="0.55" stop-color="#3fb950" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#3fb950" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      :root, svg { color-scheme: dark; }
+      .ap-mono { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace; }
+      .ap-pulse {
+        transform-origin: 240px 135px;
+        animation: ap-beat 1.2s cubic-bezier(.4,0,.2,1) infinite;
+      }
+      @keyframes ap-beat {
+        0%   { transform: scale(0.85); opacity: 0.55; }
+        18%  { transform: scale(1.18); opacity: 1; }
+        36%  { transform: scale(0.95); opacity: 0.85; }
+        54%  { transform: scale(1.04); opacity: 0.95; }
+        100% { transform: scale(0.85); opacity: 0.55; }
+      }
+      .ap-orbit {
+        transform-origin: 240px 135px;
+        animation: ap-orbit 6s linear infinite;
+      }
+      @keyframes ap-orbit {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      .ap-scanline {
+        animation: ap-scan 3.4s linear infinite;
+      }
+      @keyframes ap-scan {
+        0%   { transform: translateY(-30px); opacity: 0; }
+        8%   { opacity: 0.6; }
+        92%  { opacity: 0.6; }
+        100% { transform: translateY(270px); opacity: 0; }
+      }
+      .ap-label {
+        animation: ap-fade 1.2s ease-in-out infinite;
+      }
+      @keyframes ap-fade {
+        0%, 100% { opacity: 0.7; }
+        50%      { opacity: 1; }
+      }
+    </style>
+  </defs>
+
+  <rect width="480" height="270" fill="url(#apBg)"/>
+  <!-- inset panel border -->
+  <rect x="14" y="14" width="452" height="242" rx="10" ry="10" fill="none" stroke="#3fb950" stroke-opacity="0.18" stroke-width="1"/>
+
+  <!-- scanline (process-monitor vibe) -->
+  <g class="ap-scanline">
+    <rect x="14" y="0" width="452" height="2" fill="#3fb950" fill-opacity="0.35"/>
+  </g>
+
+  <!-- rotating orbit ring (process heartbeat track) -->
+  <g class="ap-orbit" opacity="0.55">
+    <circle cx="240" cy="135" r="92" fill="none" stroke="#3fb950" stroke-width="1" stroke-dasharray="2 6"/>
+    <circle cx="332" cy="135" r="3" fill="#3fb950"/>
+  </g>
+
+  <!-- pulse halo -->
+  <circle cx="240" cy="135" r="86" fill="url(#apGlow)"/>
+
+  <!-- pulse core -->
+  <g class="ap-pulse">
+    <circle cx="240" cy="135" r="38" fill="#161b22" stroke="#3fb950" stroke-width="2.5"/>
+    <!-- mini AP mark: bracket + dot, brand-faithful -->
+    <path d="M222 121 L222 109 L238 109 L238 121" fill="none" stroke="#3fb950" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M222 149 L222 161 L238 161 L238 149" fill="none" stroke="#3fb950" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="248" cy="135" r="3.2" fill="#3fb950"/>
+  </g>
+
+  <!-- labels -->
+  <g class="ap-mono">
+    <text x="240" y="232" text-anchor="middle" font-size="14" font-weight="700" fill="#f6f8fa" letter-spacing="0.08em" class="ap-label">AGILEPLUS</text>
+    <text x="240" y="248" text-anchor="middle" font-size="9" fill="#3fb950" letter-spacing="0.18em" opacity="0.85">spec · gate · ship</text>
+  </g>
+
+  <!-- corner ticks -->
+  <g stroke="#3fb950" stroke-width="1.5" stroke-linecap="round" opacity="0.7">
+    <path d="M22 22 L34 22 M22 22 L22 34"/>
+    <path d="M458 22 L446 22 M458 22 L458 34"/>
+    <path d="M22 248 L34 248 M22 248 L22 236"/>
+    <path d="M458 248 L446 248 M458 248 L458 236"/>
+  </g>
+</svg>

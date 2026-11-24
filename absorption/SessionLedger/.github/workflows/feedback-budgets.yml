@@ -1,0 +1,40 @@
+name: Feedback-loop budgets
+
+on:
+  pull_request:
+    paths:
+      - "docs/ops/feedback-budgets.md"
+      - "scripts/feedback-budget-check.ps1"
+      - ".config/nextest.toml"
+      - "crates/sl-daemon/.config/nextest.toml"
+      - ".github/workflows/feedback-budgets.yml"
+      - "AGENTS.md"
+  push:
+    branches: [main]
+    paths:
+      - "docs/ops/feedback-budgets.md"
+      - "scripts/feedback-budget-check.ps1"
+      - ".config/nextest.toml"
+      - "crates/sl-daemon/.config/nextest.toml"
+      - ".github/workflows/feedback-budgets.yml"
+      - "AGENTS.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  feedback-budget-smoke:
+    name: feedback budget doc smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: assert feedback budget doc and nextest configs
+        shell: pwsh
+        # Presence-only: do not -Measure / -Enforce (wall-clock is advisory).
+        run: ./scripts/feedback-budget-check.ps1

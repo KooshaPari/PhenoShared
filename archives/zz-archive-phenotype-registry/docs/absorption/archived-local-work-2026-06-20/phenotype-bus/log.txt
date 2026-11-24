@@ -1,0 +1,12 @@
+88b571f (HEAD -> chore/l7-105-phenotype-bus-pre-archive-cleanup-2026-06-18) chore: tier-0 hygiene snapshot 2026-06-20
+073e125 (wip/2026-06-20-phenotype-bus-recovery) chore(orch-v11-050): dependency audit + DRY + tier-0
+e6ac028 chore(tier-0): orch-v10-021 hygiene
+6e0a606 (origin/chore/l7-105-phenotype-bus-pre-archive-cleanup-2026-06-18) chore(cleanup): pre-archive cleanup (delete ports/, Wave-1 duplicates, broken tests, fix README/SECURITY, drop audit_scorecard) (L7-105)
+1101874 (origin/wip/2026-06-18-phenotype-bus-l7-001-propagation, main) feat: add L7-001 intent+boundary snapshot docs
+4a739db (origin/wip/2026-06-17-phenotype-bus-pre-push-snapshot, wip/2026-06-17-phenotype-bus-pre-push-snapshot) wip: save dirty state [auto]
+38db3ca chore(phenotype-bus): tick28 lift (#64)
+7394605 feat(phenotype-bus): publish-ready lib + version() helper + tests (#63)
+4a58f5e chore(cliff): upgrade to v2 template (⚠️ **BREAKING** suffix) (#62)
+98eb91d Add AI-DD metadata badge block
+2cc38ae chore(phenotype-bus): lift ahead branch feat/events-modular-wave2 (#61)
+9703869 chore(cliff): adopt shared template + wire adoption check (#60)

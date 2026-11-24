@@ -1,0 +1,121 @@
+{
+  "okf": "1.0",
+  "source_id": "claude-session-007",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Update CI pipeline to use self-hosted runner for ARM builds",
+      "properties": { "user_turn_count": 3 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "ARM artifacts publish to GHCR",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "build time under 15 min",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "x86_64 builds unaffected",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not modify existing x86_64 workflow matrix",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "runner must be ephemeral",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/infra" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "ARM CI runner" }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 3
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-session-007"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-session-007"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-session-007"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-session-007"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-session-007"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "claude-session-007"
+      }
+    }
+  ],
+  "provenance": { "corpus": "claude-code", "source_id": "claude-session-007" }
+}

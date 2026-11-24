@@ -1,0 +1,46 @@
+# SC4 Provenance Metadata Template
+name: Release + SLSA Build Attestation
+
+on:
+  push:
+    tags:
+      - "v*"
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build + Attest
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Build artifact
+        run: |
+          echo "TODO: replace with your build"
+          mkdir -p dist
+          echo "build artifact" > dist/artifact
+
+      - name: Attest build provenance (SC4 wired signal)
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-name: ${{ github.repository }}
+          subject-digest: sha256:$(sha256sum dist/artifact | awk '{print $1}')
+          push-to-registry: false
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ github.event.inputs.version || github.ref_name }}-artifact
+          path: dist/

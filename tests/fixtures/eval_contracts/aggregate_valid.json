@@ -1,0 +1,188 @@
+{
+  "accepted_verified_steps": {
+    "definition": "false-to-true, dependency-satisfied, terminally reverified milestones",
+    "total_weight": 1.0
+  },
+  "aggregation": {
+    "attempts_per_task": 1,
+    "bootstrap_method": "paired-task-cluster-percentile-v1",
+    "bootstrap_resamples": 10000,
+    "expected_task_ids": ["offline-task-1"],
+    "pass_at_4_budget": 4,
+    "quantile_method": "Hyndman-Fan-type-7"
+  },
+  "cache": {},
+  "cell_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "comparison": null,
+  "concurrency": {},
+  "counts": {
+    "attempted": 1,
+    "excluded": 0,
+    "excluded_by_reason": {},
+    "failed": 0,
+    "infrastructure_exclusion_rate": 0.0,
+    "passed": 1,
+    "scored": 1
+  },
+  "drift": {},
+  "efficiency": {
+    "accepted_verified_step_weight": 1.0,
+    "avs_per_dollar": null,
+    "avs_per_second": null,
+    "avs_per_second_per_gb": null,
+    "combined_avs_per_second_gb_dollar": null,
+    "peak_attributable_active_memory_bytes": null,
+    "peak_attributable_active_memory_gb_si": null,
+    "provenance_complete": false,
+    "provenance_reasons": ["run provenance is unavailable"],
+    "run_makespan_seconds": null,
+    "total_amortized_usd": null
+  },
+  "gate_policy": {
+    "cache_reconciliation_error_max": 0.01,
+    "concurrency_error_rate_max": 0.01,
+    "duplicate_or_loop_trial_rate_max": 0.01,
+    "infrastructure_exclusion_rate_max": 0.02,
+    "instrumentation_coverage_min": 0.95,
+    "jain_fairness_min": 0.95,
+    "long_turn_retention_min": 0.95,
+    "memory_coverage_min": 0.95,
+    "p95_latency_growth_30m_max": 0.15,
+    "paired_exclusion_discordance_rate_max": 0.02,
+    "paired_exclusion_rate_difference_max": 0.01,
+    "quality_delta_ci95_lower_min": -0.02,
+    "schema_valid_rate_min": 0.995,
+    "throughput_retention_30m_min": 0.9,
+    "valid_but_wrong_rate_max": 0.01
+  },
+  "gate_policy_sha256": "b1728027760ead4876e5bdc1555732602c3a2a9e9981adc45f30c7bfb062e9f9",
+  "gates": {
+    "cache": {"gate_id": "cache", "reasons": [], "status": "pass"},
+    "concurrency": {
+      "gate_id": "concurrency",
+      "reasons": ["offline fixture omission"],
+      "status": "not_applicable"
+    },
+    "cost_completeness": {
+      "gate_id": "cost_completeness",
+      "reasons": ["offline fixture omission"],
+      "required_for_core_promotion": false,
+      "status": "not_evaluable"
+    },
+    "infrastructure_health": {
+      "gate_id": "infrastructure_health",
+      "reasons": [],
+      "status": "pass"
+    },
+    "long_turn_drift": {
+      "gate_id": "long_turn_drift",
+      "reasons": ["offline fixture omission"],
+      "status": "not_applicable"
+    },
+    "paired_design": {
+      "gate_id": "paired_design",
+      "reasons": ["offline fixture omission"],
+      "status": "not_evaluable"
+    },
+    "performance_promotion": {
+      "gate_id": "performance_promotion",
+      "reasons": ["offline fixture omission"],
+      "status": "not_evaluable"
+    },
+    "quality_noninferiority": {
+      "gate_id": "quality_noninferiority",
+      "reasons": ["offline fixture omission"],
+      "status": "not_evaluable"
+    },
+    "run_provenance": {
+      "gate_id": "run_provenance",
+      "reasons": ["offline fixture omission"],
+      "status": "fail"
+    },
+    "sample_adequacy": {
+      "gate_id": "sample_adequacy",
+      "reasons": [],
+      "status": "pass"
+    },
+    "thermal_soak": {
+      "gate_id": "thermal_soak",
+      "reasons": ["offline fixture omission"],
+      "status": "not_evaluable"
+    },
+    "tools": {"gate_id": "tools", "reasons": [], "status": "pass"},
+    "trial_integrity": {
+      "gate_id": "trial_integrity",
+      "reasons": [],
+      "status": "pass"
+    }
+  },
+  "promotion": {
+    "core_eligible": false,
+    "dollar_frontier_eligible": false,
+    "reason_codes": [
+      "paired_design",
+      "performance_promotion",
+      "quality_noninferiority",
+      "run_provenance",
+      "thermal_soak"
+    ]
+  },
+  "provenance": {
+    "baseline": null,
+    "contributing_trial_sha256": [
+      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ],
+    "run_provenance_sha256": null
+  },
+  "quality": {
+    "bootstrap_seed_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "pass_all_k": {
+      "ci95": {
+        "lower": 1.0,
+        "method": "paired-task-cluster-percentile-v1",
+        "quantile_method": "Hyndman-Fan-type-7",
+        "resamples": 10000,
+        "task_clusters": 1,
+        "upper": 1.0
+      },
+      "complete_task_coverage": 1.0,
+      "conservative_lower_bound": 1.0,
+      "eligible_complete_task_count": 1,
+      "estimate": 1.0,
+      "expected_task_count": 1,
+      "k": 1
+    },
+    "pass_at_1": {
+      "ci95": {
+        "lower": 1.0,
+        "method": "paired-task-cluster-percentile-v1",
+        "quantile_method": "Hyndman-Fan-type-7",
+        "resamples": 10000,
+        "task_clusters": 1,
+        "upper": 1.0
+      },
+      "eligible_task_count": 1,
+      "estimate": 1.0,
+      "expected_task_count": 1
+    },
+    "pass_at_4": {
+      "ci95": {
+        "lower": 1.0,
+        "method": "paired-task-cluster-percentile-v1",
+        "quantile_method": "Hyndman-Fan-type-7",
+        "resamples": 10000,
+        "task_clusters": 1,
+        "upper": 1.0
+      },
+      "definition": "fraction solved by at least one scored ordinal in [0, 3]",
+      "eligible_task_count": 1,
+      "estimate": 1.0,
+      "expected_task_count": 1
+    },
+    "scored_attempts_by_task": {"offline-task-1": 1}
+  },
+  "schema_version": "pheno.eval.aggregate.v2",
+  "suite_lock_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "thermal": {},
+  "tools": {}
+}

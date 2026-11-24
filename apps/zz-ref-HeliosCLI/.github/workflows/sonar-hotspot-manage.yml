@@ -1,0 +1,62 @@
+name: sonar-hotspot-manage
+on:
+    workflow_dispatch:
+        inputs:
+            action:
+                description: "list (show TO_REVIEW hotspots) or resolve (mark one reviewed)"
+                required: true
+                type: choice
+                options:
+                    - list
+                    - resolve
+            hotspot_key:
+                description: "hotspot key (required for resolve; from the list action)"
+                required: false
+                type: string
+            resolution:
+                description: "resolution (resolve only)"
+                required: false
+                default: SAFE
+                type: choice
+                options:
+                    - SAFE
+                    - FALSE_POSITIVE
+permissions:
+    contents: read
+
+jobs:
+    sonar:
+        runs-on: ubuntu-latest
+        steps:
+            - name: List TO_REVIEW hotspots
+              if: inputs.action == 'list'
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              run: |
+                  echo "token length: ${#SONAR_TOKEN}"
+                  resp=$(curl -sS -u ":$SONAR_TOKEN" \
+                    -w "\nHTTP_STATUS:%{http_code}" \
+                    "https://sonarcloud.io/api/hotspots/search?projectKey=KooshaPari_helios-cli&status=TO_REVIEW&ps=20")
+                  rc=$?
+                  echo "curl exit: $rc"
+                  echo "BODY_START"
+                  echo "$resp"
+                  echo "BODY_END"
+                  echo "$resp" >> "$GITHUB_STEP_SUMMARY"
+            - name: Resolve hotspot
+              if: inputs.action == 'resolve'
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  HOTSPOT_KEY: ${{ inputs.hotspot_key }}
+                  RESOLUTION: ${{ inputs.resolution }}
+              run: |
+                  if [ -z "$HOTSPOT_KEY" ]; then echo "hotspot_key required" >&2; exit 1; fi
+                  echo "Resolving $HOTSPOT_KEY as $RESOLUTION"
+                  curl -sS -X POST -u ":$SONAR_TOKEN" \
+                    "https://sonarcloud.io/api/hotspots/change_status" \
+                    -d "hotspot=$HOTSPOT_KEY" -d "status=REVIEWED" -d "resolution=$RESOLUTION"
+                  echo
+                  echo "--- remaining TO_REVIEW hotspots ---"
+                  curl -sS -u ":$SONAR_TOKEN" \
+                    "https://sonarcloud.io/api/hotspots/search?projectKey=KooshaPari_helios-cli&status=TO_REVIEW&ps=20" \
+                    | head -c 6000

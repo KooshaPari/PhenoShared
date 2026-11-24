@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Getta — SessionLedger mascot.
+  Line-art minimalist scholar-keeper. Mid-line "stoic / listening" pose.
+  Brand palette: ‐‐lc-cobalt (primary), ‐‐lc-orange (live accent),
+  ‐‐lc-lab-white (paper), ‐‐lc-slate (ink).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"
+     width="240" height="240" viewBox-fit="meet"
+     role="img" aria-label="Getta, the SessionLedger mascot">
+  <defs>
+    <linearGradient id="getta-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="getta-light" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#f6f8fa"/>
+      <stop offset="100%" stop-color="#e5e7eb"/>
+    </linearGradient>
+    <linearGradient id="getta-amber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"  stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#fb923c"/>
+    </linearGradient>
+    <radialGradient id="getta-shadow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"  stop-color="#1f2937" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1f2937" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="getta-soft" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="0.8"/>
+    </filter>
+  </defs>
+
+  <!-- Ground shadow -->
+  <ellipse cx="120" cy="206" rx="58" ry="6" fill="url(#getta-shadow)"/>
+
+  <!-- Body / scholar's robe -->
+  <g id="getta-renderable-body">
+    <path d="M 70 156
+             C 70 130, 84 116, 100 116
+             L 140 116
+             C 156 116, 170 130, 170 156
+             L 174 198
+             C 174 206, 168 210, 160 210
+             L 80 210
+             C 72 210, 66 206, 66 198 Z"
+          fill="url(#getta-body)"/>
+    <!-- Collar / lapel highlight -->
+    <path d="M 110 116 L 120 138 L 130 116 Z" fill="#1d4ed8"/>
+    <path d="M 118 116 L 120 134 L 122 116 Z" fill="#3b82f6" opacity="0.6"/>
+  </g>
+
+  <!-- Head -->
+  <g id="getta-head">
+    <!-- Head circle -->
+    <circle cx="120" cy="92" r="34" fill="url(#getta-light)"/>
+    <!-- Subtle warm blush -->
+    <circle cx="103" cy="100" r="4" fill="#fecaca" opacity="0.55"/>
+    <circle cx="137" cy="100" r="4" fill="#fecaca" opacity="0.55"/>
+    <!-- Eyes (default: alert oval, attentive) -->
+    <g id="getta-eyes">
+      <ellipse cx="106" cy="93" rx="2.6" ry="3.4" fill="#1f2937"/>
+      <ellipse cx="134" cy="93" rx="2.6" ry="3.4" fill="#1f2937"/>
+      <!-- Catch-light -->
+      <circle cx="107" cy="92" r="0.8" fill="#ffffff"/>
+      <circle cx="135" cy="92" r="0.8" fill="#ffffff"/>
+    </g>
+    <!-- Mouth (default: small content line) -->
+    <path id="getta-mouth" d="M 114 108 Q 120 110 126 108"
+          stroke="#1f2937" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <!-- Quill/pen behind ear -->
+    <g id="getta-quill" transform="translate(0 0) rotate(-12 154 88)">
+      <path d="M 154 88 L 174 50 L 178 56 L 158 94 Z" fill="#f6f8fa" stroke="#1f2937" stroke-width="1.1"/>
+      <path d="M 174 50 L 188 36 L 184 42 L 178 56 Z" fill="#f97316" stroke="#1f2937" stroke-width="1.1"/>
+    </g>
+    <!-- Ear hint -->
+    <path d="M 152 92 Q 158 96 152 102" stroke="#1f2937" stroke-width="1.2" fill="#f6f8fa"/>
+  </g>
+
+  <!-- Live orange ring (denotes "session ledger keeper") -->
+  <circle cx="120" cy="92" r="36" fill="none" stroke="url(#getta-amber)" stroke-width="2.2" opacity="0.85"/>
+  <circle cx="120" cy="92" r="40" fill="none" stroke="#f97316" stroke-width="1" opacity="0.25"/>
+
+  <!-- Session record — open journal in lap -->
+  <g id="getta-journal" transform="translate(0 0)">
+    <!-- Spine -->
+    <path d="M 100 162 L 100 200 L 140 200 L 140 162 Z" fill="#1f2937"/>
+    <!-- Pages -->
+    <path d="M 102 164 L 138 164 L 138 198 L 102 198 Z" fill="#f6f8fa"/>
+    <path d="M 102 164 L 138 164" stroke="#93c5fd" stroke-width="0.8"/>
+    <!-- Text lines -->
+    <line x1="106" y1="170" x2="134" y2="170" stroke="#2563eb" stroke-width="0.9" opacity="0.7"/>
+    <line x1="106" y1="176" x2="132" y2="176" stroke="#64748b" stroke-width="0.7" opacity="0.5"/>
+    <line x1="106" y1="182" x2="134" y2="182" stroke="#64748b" stroke-width="0.7" opacity="0.5"/>
+    <line x1="106" y1="188" x2="128" y2="188" stroke="#64748b" stroke-width="0.7" opacity="0.5"/>
+    <!-- Session tick (amber) -->
+    <circle cx="132" cy="170" r="1.6" fill="#f97316"/>
+  </g>
+</svg>

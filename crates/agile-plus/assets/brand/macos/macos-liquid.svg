@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="AgilePlus macOS Liquid Glass">
+  <title>AgilePlus</title>
+  <desc>AI-coded SVG v3: macOS continuous-curvature squircle (superellipse approximated with bezier). Colorful desktop-ish BACKDROP (teal/slate gradient + diagonal light) that the LIQUID GLASS visibly REFRACTS. feTurbulence+feDisplacementMap for real liquid warp. Bright diagonal SPECULAR SWEEP. Obvious translucency/depth/drop-shadow. Distinctly WET feel.</desc>
+  <defs>
+    <!-- === macOS CONTINUOUS-CURVATURE SQUIRCLE (superellipse approx via bezier) === -->
+    <!-- Path: tighter corner tangent than standard rounded-rect, approximating n=5 superellipse -->
+    <clipPath id="ml-squircle-clip">
+      <path d="M256,24
+        C 346,24 392,24 418,50
+        C 444,76 488,122 488,256
+        C 488,390 444,436 418,462
+        C 392,488 346,488 256,488
+        C 166,488 120,488 94,462
+        C 68,436 24,390 24,256
+        C 24,122 68,76 94,50
+        C 120,24 166,24 256,24 Z"/>
+    </clipPath>
+
+    <!-- === COLORFUL BACKDROP === vivid teal+slate desktop gradient -->
+    <linearGradient id="ml-desktop-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0e2e2b"/>
+      <stop offset="35%" stop-color="#1c3840"/>
+      <stop offset="70%" stop-color="#0a1520"/>
+      <stop offset="100%" stop-color="#090a0c"/>
+    </linearGradient>
+
+    <!-- Desktop light source — diagonal band, top-right bright -->
+    <linearGradient id="ml-light-band" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7ebab5" stop-opacity="0.55"/>
+      <stop offset="25%" stop-color="#95ccc8" stop-opacity="0.25"/>
+      <stop offset="55%" stop-color="#353a40" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Backdrop accent blobs for refraction to read against -->
+    <radialGradient id="ml-blob-tr" cx="78%" cy="22%" r="38%">
+      <stop offset="0%" stop-color="#7ebab5" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#569691" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ml-blob-bl" cx="22%" cy="78%" r="35%">
+      <stop offset="0%" stop-color="#f6f5f5" stop-opacity="0.18"/>
+      <stop offset="40%" stop-color="#95ccc8" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ml-blob-center" cx="50%" cy="50%" r="30%">
+      <stop offset="0%" stop-color="#353a40" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- === LIQUID GLASS: feTurbulence + feDisplacementMap for real warp === -->
+    <!-- This warps the backdrop through the glass lens -->
+    <filter id="ml-liquid-warp" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+      <!-- Turbulence generates the liquid distortion field -->
+      <feTurbulence type="turbulence" baseFrequency="0.018 0.024" numOctaves="3" seed="42" result="turbulence"/>
+      <!-- Displace: shifts pixels by turbulence — this is the refraction -->
+      <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="38" xChannelSelector="R" yChannelSelector="G" result="warped"/>
+      <!-- Slight blur to smooth the warp edges -->
+      <feGaussianBlur in="warped" stdDeviation="1.5" result="smoothed"/>
+    </filter>
+
+    <!-- Chromatic aberration approximation: subtle color fringe at edges -->
+    <filter id="ml-chroma" x="-5%" y="-5%" width="110%" height="110%">
+      <feColorMatrix in="SourceGraphic" type="matrix" values="1.05 0 0 0 0.02  0 1 0 0 0  0 0 0.95 0 -0.02  0 0 0 1 0"/>
+    </filter>
+
+    <!-- === GLASS FILL (semi-transparent, 50%) === -->
+    <linearGradient id="ml-glass-fill" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0%" stop-color="#95ccc8" stop-opacity="0.38"/>
+      <stop offset="30%" stop-color="#7ebab5" stop-opacity="0.22"/>
+      <stop offset="70%" stop-color="#353a40" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0.45"/>
+    </linearGradient>
+
+    <!-- === DIAGONAL SPECULAR SWEEP === bright stripe top-right to mid-left -->
+    <linearGradient id="ml-specular-sweep" x1="1" y1="0" x2="0.2" y2="0.6">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="12%" stop-color="#ffffff" stop-opacity="0.45"/>
+      <stop offset="25%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Specular lighting for 3D wet highlight -->
+    <filter id="ml-wet-spec" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="ablur"/>
+      <feSpecularLighting in="ablur" surfaceScale="7" specularConstant="1.4" specularExponent="50" result="spec" lighting-color="white">
+        <fePointLight x="420" y="60" z="200"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="sm"/>
+      <feBlend in="SourceGraphic" in2="sm" mode="screen"/>
+    </filter>
+
+    <!-- Drop shadow for depth -->
+    <filter id="ml-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#090a0c" flood-opacity="0.80"/>
+    </filter>
+
+    <!-- Icon bloom -->
+    <filter id="ml-bloom" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+      <feBlend in="SourceGraphic" in2="b" mode="screen"/>
+    </filter>
+
+    <!-- Sprint loop gradient -->
+    <linearGradient id="ml-loop-grad" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#95ccc8"/>
+      <stop offset="100%" stop-color="#7ebab5"/>
+    </linearGradient>
+    <linearGradient id="ml-bars-grad" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#569691"/>
+      <stop offset="100%" stop-color="#95ccc8"/>
+    </linearGradient>
+
+    <!-- macOS squircle path (reused) -->
+    <path id="ml-squircle-path" d="M256,24
+      C 346,24 392,24 418,50
+      C 444,76 488,122 488,256
+      C 488,390 444,436 418,462
+      C 392,488 346,488 256,488
+      C 166,488 120,488 94,462
+      C 68,436 24,390 24,256
+      C 24,122 68,76 94,50
+      C 120,24 166,24 256,24 Z"/>
+  </defs>
+
+  <!-- ====== macOS LIQUID GLASS ====== -->
+
+  <!-- LAYER 0: Drop shadow beneath icon -->
+  <use href="#ml-squircle-path" fill="#090a0c" filter="url(#ml-shadow)" opacity="0.7"/>
+
+  <!-- LAYER 1: Colorful desktop backdrop INSIDE squircle (what glass refracts) -->
+  <g clip-path="url(#ml-squircle-clip)">
+    <use href="#ml-squircle-path" fill="url(#ml-desktop-bg)"/>
+    <!-- Vivid backdrop blobs — top-right teal, bottom-left highlight -->
+    <use href="#ml-squircle-path" fill="url(#ml-blob-tr)"/>
+    <use href="#ml-squircle-path" fill="url(#ml-blob-bl)"/>
+    <use href="#ml-squircle-path" fill="url(#ml-blob-center)"/>
+    <!-- Diagonal light band across the desktop -->
+    <use href="#ml-squircle-path" fill="url(#ml-light-band)"/>
+  </g>
+
+  <!-- LAYER 2: LIQUID WARP — the backdrop refracted through the glass lens -->
+  <g clip-path="url(#ml-squircle-clip)" filter="url(#ml-liquid-warp)" opacity="0.70">
+    <use href="#ml-squircle-path" fill="url(#ml-desktop-bg)"/>
+    <use href="#ml-squircle-path" fill="url(#ml-blob-tr)"/>
+    <use href="#ml-squircle-path" fill="url(#ml-light-band)"/>
+  </g>
+
+  <!-- LAYER 3: Glass fill (50% opaque — lets warped backdrop show through) -->
+  <g clip-path="url(#ml-squircle-clip)">
+    <use href="#ml-squircle-path" fill="url(#ml-glass-fill)"/>
+  </g>
+
+  <!-- LAYER 4: DIAGONAL SPECULAR SWEEP (the "wet" look) -->
+  <g clip-path="url(#ml-squircle-clip)">
+    <use href="#ml-squircle-path" fill="url(#ml-specular-sweep)"/>
+  </g>
+
+  <!-- LAYER 5: Wet specular lighting highlight (point light top-right) -->
+  <g clip-path="url(#ml-squircle-clip)" filter="url(#ml-wet-spec)" opacity="0.65">
+    <use href="#ml-squircle-path" fill="#7ebab5"/>
+  </g>
+
+  <!-- LAYER 6: Icon content with bloom -->
+  <g clip-path="url(#ml-squircle-clip)" filter="url(#ml-bloom)">
+    <!-- Sprint loop -->
+    <path d="M 302 148 A 112 112 0 1 1 200 160"
+          fill="none" stroke="url(#ml-loop-grad)" stroke-width="26" stroke-linecap="round"/>
+    <polygon points="286,118 320,148 286,178" fill="#95ccc8"/>
+
+    <!-- Velocity bars -->
+    <rect x="188" y="310" width="28" height="46" rx="8" fill="url(#ml-bars-grad)" opacity="0.96"/>
+    <rect x="228" y="276" width="28" height="80" rx="8" fill="url(#ml-bars-grad)" opacity="0.96"/>
+    <rect x="268" y="234" width="28" height="122" rx="8" fill="url(#ml-bars-grad)" opacity="0.96"/>
+
+    <!-- Plus -->
+    <rect x="330" y="174" width="46" height="14" rx="7" fill="#f6f5f5" opacity="0.96"/>
+    <rect x="346" y="158" width="14" height="46" rx="7" fill="#f6f5f5" opacity="0.96"/>
+  </g>
+
+  <!-- LAYER 7: Glass border — bright rim, continuous squircle shape -->
+  <use href="#ml-squircle-path" fill="none"
+    stroke="white" stroke-width="3" stroke-opacity="0.65"/>
+  <!-- Inner edge subtle teal -->
+  <use href="#ml-squircle-path" fill="none"
+    stroke="#95ccc8" stroke-width="1" stroke-opacity="0.35"/>
+</svg>

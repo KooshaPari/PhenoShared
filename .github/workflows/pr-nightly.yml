@@ -1,0 +1,332 @@
+# Cron-bearing PR checks, grouped into one workflow file.
+#
+# WHY THIS FILE EXISTS
+#   Every file in .github/workflows that reacts to `pull_request` produces its
+#   own workflow RUN on a PR push. Four checks that ALSO carry a `schedule:`
+#   cron cost one run per push each, plus one run per cron firing. Grouping
+#   them into one file with the same job ids keeps every check-run NAME
+#   identical while costing one run instead.
+#
+# WHAT IS UNCHANGED
+#   Each job's `steps:` block is carried over byte-for-byte from the file it
+#   came from. Job ids and job `name:` values are unchanged, so the check names
+#   GitHub reports are unchanged:
+#     trivy, Lint & Format (job id trunk-check), cargo audit,
+#     Governance checks (job id governance-checks)
+#
+# WHAT MOVED
+#   The four separate `concurrency:` blocks collapse into one workflow-level
+#   group here. Gating that used to live in each file's `on:` (a `branches:`
+#   filter, or the absence of a cron) is now an explicit per-job `if:`, because
+#   one workflow file cannot carry four different trigger sets. A job whose
+#   `if:` does not match is SKIPPED - that is the same outcome as the old file
+#   simply not triggering for that event.
+#
+#   `workflow_dispatch:` stays workflow-level because `Governance checks` is
+#   the only job that had it; the other three jobs' `if:` deliberately do not
+#   match a manual dispatch, so they stay as they were.
+name: PR + nightly checks
+
+on:
+  pull_request:
+  schedule:
+    - cron: 0 0 * * * # Security Guard (trivy), daily 00:00 UTC
+    - cron: 0 3 * * 1 # Trunk Check, weekly Monday 03:00 UTC
+    - cron: 0 6 * * 1 # Security Scan (cargo audit), weekly Monday 06:00 UTC
+    - cron: 17 6 * * 1 # Governance drift check, weekly Monday 06:17 UTC
+    - cron: 0 16 * * 1 # Security (CodeQL/Gitleaks/SBOM/provenance), weekly Monday 16:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  trivy:
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 0 * * *')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # was: @master
+        with:
+          scan-type: fs
+          severity: CRITICAL,HIGH
+
+  # Trunk Check - unified linting/formatting in GitHub Actions.
+  # Handles: ruff, mypy, clippy, golangci-lint, prettier, eslint, shellcheck, etc.
+  # Free for open source; cached for fast runs.
+  trunk-check:
+    name: Lint & Format
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 3 * * 1')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Pin the Rust toolchain to the workspace's rust-toolchain.toml (1.99.0).
+      # Trunk runs clippy via cargo; without an explicit install its cargo can
+      # resolve to an older toolchain that cannot parse `edition = "2024"`
+      # manifests (7 crates), and the Lint & Format check fails on main.
+      # Keep in sync with rust-toolchain.toml and the coverage workflow.
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: 1.99.0
+          components: rustfmt, clippy
+
+      # The Trunk action's own "Set up inputs" step parses the event payload
+      # with jq and aborts with "::error::jq not installed on system!" when
+      # jq is absent, which fails the whole "Lint & Format" job before any
+      # linter runs. Install jq before the action step.
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      # Trunk's clippy linter builds the whole root workspace, and
+      # `crates/spawn-core-sys`' build script shells out to `zig build` to
+      # produce `crates/spawn-core/zig-out/lib/libspawn_core.a`. Without zig
+      # that build script aborts with "failed to run `zig build`: No such file
+      # or directory", which trunk reports as a tool failure and which fails
+      # this job before any lint result is trusted. Observed 2026-11-12 on PR
+      # #937, run 43164794413: "Checked 6 modified files / 12 existing issues /
+      # 1 failure". Same class of fix as the toolchain and jq steps above.
+      - name: Install Zig
+        uses: ./.github/actions/setup-zig
+
+      # Trunk's clippy also builds the Linux-only GUI stack. Two crates in that
+      # stack need `.pc` files the ubuntu-latest image does not ship:
+      #   * `wayland-sys` shells out to `pkg-config --libs --cflags wayland-client`.
+      #     Observed 2026-11-12 on PR #940, run 43184486398: "The system library
+      #     `wayland-client` required by crate `wayland-sys` was not found".
+      #   * the gtk-rs stack needs `glib-2.0.pc` for `glib-sys`. Observed
+      #     2026-11-16 on PR #1078, run 43886230067: "error: failed to run custom
+      #     build command for `glib-sys v0.18.1`", clippy exit_code=101.
+      # Either one is reported as a tool failure, which fails this job before any
+      # lint result is read, so a PR that touches one `.rs` file goes red
+      # regardless of its content. The package list below is the one
+      # `coverage.yml` already uses to build the same workspace successfully; do
+      # not trim it back to the minimum that happens to work for one crate.
+      - name: Install Linux GUI build deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pkg-config \
+            libglib2.0-dev \
+            libgtk-3-dev \
+            libxdo-dev \
+            libxcb-render0-dev \
+            libxcb-shape0-dev \
+            libxcb-xfixes0-dev \
+            libxkbcommon-dev \
+            libwayland-dev \
+            libssl-dev \
+            zlib1g-dev \
+            libsqlite3-dev
+
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@04ba50e7658c81db7356da96657e6e77f220bfa3 # v1.3.1
+
+      - name: Trunk Upgrade (on schedule only)
+        if: github.event_name == 'schedule'
+        uses: trunk-io/trunk-action@04ba50e7658c81db7356da96657e6e77f220bfa3 # v1.3.1
+        with:
+          trunk-args: --upgrade
+
+  cargo-audit:
+    name: cargo audit
+    if: >-
+      (github.event_name == 'pull_request' && github.base_ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 6 * * 1')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
+
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2
+        with:
+          tool: cargo-audit
+
+      - name: Run cargo audit
+        run: cargo audit
+
+  governance-checks:
+    name: Governance checks
+    if: >-
+      (github.event_name == 'pull_request' &&
+      (github.base_ref == 'main' || github.base_ref == 'master')) ||
+      (github.event_name == 'schedule' && github.event.schedule == '17 6 * * 1') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Verify CODEOWNERS is present and non-empty
+        run: |
+          set -euo pipefail
+          if [ ! -s .github/CODEOWNERS ] && [ ! -s CODEOWNERS ] && [ ! -s docs/CODEOWNERS ]; then
+            echo "::error::No CODEOWNERS file found at .github/CODEOWNERS, CODEOWNERS, or docs/CODEOWNERS."
+            exit 1
+          fi
+
+      - name: Verify required governance files
+        run: |
+          set -euo pipefail
+          missing=()
+          for f in SECURITY.md README.md LICENSE; do
+            if [ ! -s "$f" ]; then
+              missing+=("$f")
+            fi
+          done
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing required files: ${missing[*]}"
+            exit 1
+          fi
+
+      - name: Verify workflow pin integrity
+        # Every third-party action should be pinned by full SHA. This is a
+        # Scorecard "Pinned-Dependencies" best practice; drift here lowers
+        # the score on every weekly run.
+        run: |
+          set -euo pipefail
+          # A commented-out example is not a pin. Grep cannot tell the difference,
+          # so drop comment lines before judging: without this, a `#   uses: ...`
+          # line inside a header comment fails the gate forever and the only way
+          # to get green is to delete an explanatory note.
+          bad=$(grep -rEn 'uses:[[:space:]]+[^@[:space:]]+@(v[0-9]+|main|master)' .github/workflows/ \
+                  | grep -vE '^[^:]+:[0-9]+:[[:space:]]*#' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Unpinned actions (use full commit SHA):"
+            echo "$bad"
+            exit 1
+          fi
+          echo "All third-party actions are pinned to a commit SHA."
+
+  codeql:
+    name: CodeQL (rust)
+    # Reproduces the old on: pull_request (branches: main) + schedule + workflow_dispatch triggers.
+    if: >-
+      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: github/codeql-action/init@1fc58d04a4d4374f921bdac573c3811c240f9c26 # v4.39.2
+        with:
+          languages: rust
+          queries: security-extended
+      - uses: github/codeql-action/analyze@1fc58d04a4d4374f921bdac573c3811c240f9c26 # v4.39.2
+        with:
+          category: "/language:rust"
+
+  dependency-audit:
+    name: Dependency audit
+    # Reproduces the old on: pull_request (branches: main) + schedule + workflow_dispatch triggers.
+    if: >-
+      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: cargo audit
+        run: |
+          cargo install --locked cargo-audit || true
+          cargo audit
+
+  gitleaks:
+    name: Gitleaks secret scan
+    # Reproduces the old on: pull_request (branches: main) + schedule + workflow_dispatch triggers.
+    if: >-
+      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml
+          # Pinned on purpose. The action otherwise runs 8.24.3, and multiple
+          # global allowlist blocks only landed in 8.25.0 ("define multiple
+          # global allowlists", #1777). On 8.24.3 every `[[allowlists]]` block
+          # in `.gitleaks.toml` was silently ignored, so the file had no effect
+          # and any default-rule hit on a documented placeholder failed the
+          # job. 8.30.0 is the version this config is written against.
+          GITLEAKS_VERSION: 8.30.0
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sbom:
+    name: SBOM generation (CycloneDX)
+    # Reproduces the old non-PR-only restriction (schedule + workflow_dispatch).
+    if: >-
+      ((github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch') && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Generate SBOM (cargo-cyclonedx)
+        run: |
+          cargo install --locked cargo-cyclonedx || true
+          cargo cyclonedx --format json --override-filename ${{ github.repository }}.sbom.json || cargo cyclonedx --format json
+        continue-on-error: true
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: sbom
+          path: ${{ github.workspace }}/*.cdx.json
+        if: always()
+
+  provenance:
+    name: Build provenance attestation
+    # Reproduces the old non-PR-only restriction (schedule + workflow_dispatch).
+    if: >-
+      ((github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'schedule' && github.event.schedule == '0 16 * * 1') ||
+      github.event_name == 'workflow_dispatch') && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    needs: [codeql, dependency-audit, gitleaks]
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - name: Build release binary
+        run: cargo build --release -p driver-cli --locked
+      - name: Attest release binary provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4
+        with:
+          subject-path: target/release/substrate

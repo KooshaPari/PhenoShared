@@ -1,0 +1,61 @@
+FROM: aws-ubuntu:game
+NAME: game-server
+
+CLUSTER:
+  game-servers:
+    INSTANCES: 5-50
+    PATH: ./game-server
+    BUILD: cargo build --release
+    RESOURCES:
+      CPU: 4
+      MEMORY: 8GB
+    SCALE:
+      PLAYER_COUNT: 100
+
+  matchmaker:
+    INSTANCES: 2-10
+    PATH: ./matchmaker
+    BUILD: cargo build --release
+    SCALE:
+      QUEUE_LENGTH: 50
+
+SERVICES:
+  lobby:
+    PATH: ./lobby
+    BUILD: npm run build
+    PORT: 3000
+
+  api:
+    PATH: ./api
+    BUILD: cargo build --release
+    PORT: 8080
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: ElastiCache
+      ENGINE: redis
+      MODE: CLUSTER
+    - TYPE: DynamoDB
+      TABLES:
+        - NAME: players
+        - NAME: matches
+    - TYPE: SQS
+      NAME: game-events
+    - TYPE: Route53
+      ROUTING:
+        - TYPE: latency
+          REGIONS:
+            - us-east-1
+            - eu-west-1
+            - ap-southeast-1
+
+NETWORK:
+  DOMAIN: game.example.com
+  SSL: true
+  LOAD_BALANCER:
+    TYPE: NLB
+    SSL: true
+  SECURITY:
+    VPC: true
+    PRIVATE_SUBNETS: true

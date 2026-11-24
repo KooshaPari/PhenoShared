@@ -1,0 +1,16 @@
+[report]
+# Tier-2 coverage thresholds per ADR-040:
+#   Lib crates:       ≥ 71%  (nanovms-core, nvms-ffi, pheno-config)
+#   Framework crates: ≥ 70%  (pheno-compose-driver)
+#   Service crates:   ≥ 60%  (iac workspace members)
+#
+# This file provides the default for ad-hoc `cargo tarpaulin` runs at
+# the root workspace (lib tier). CI overrides via --fail-under per
+# workspace through scripts/coverage-gate.sh.
+fail-under = 71
+out = ["Html", "Xml", "Json"]
+output-dir = "target/tarpaulin-report"
+
+[run]
+timeout = 180
+features = "all"

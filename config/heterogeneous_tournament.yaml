@@ -1,0 +1,638 @@
+schema_version: pheno.tournament.v1
+cutoff_date: "2026-07-14"
+
+policy:
+  review_only: true
+  allow_model_artifact_download: false
+  allow_server_launch: false
+  allow_phone_install: false
+  allow_mac_mutation: false
+  allow_1080ti_install: false
+  mutate_adr_locked_shortlist: false
+  max_total_parameters: 35000000000
+  north_star:
+    - avs_per_second
+    - avs_per_second_per_peak_active_gb
+    - avs_per_dollar
+
+runtime_pins:
+  # Phase 1.1 tiered-memory bootstrap — both anchors are still open PRs at
+  # plan time, so we pin via `channel: pr_head_ref` instead of PyPI versions.
+  # Once the PRs merge upstream, switch back to released versions
+  # (sglang >= 0.5.11, vllm >= 0.26) and drop the ref_url field.
+  #   sglang PR #20126 — UVM-based MoE expert offload (all-GPU compute)
+  #   vllm   PR #37190 — CachedWeightProvider / --moe-expert-cache-size
+  sglang: {version: 0.5.15.post1, channel: pr_head_ref, pr: 20126, ref_url: "https://github.com/sgl-project/sglang.git@refs/pull/20126/head"}
+  vllm: {version: 0.25.1, channel: pr_head_ref, pr: 37190, ref_url: "https://github.com/vllm-project/vllm.git@refs/pull/37190/head"}
+  tensorrt_llm: {version: 1.2.1, channel: stable}
+  tensorrt_llm_dflash: {version: 1.3.0rc20, channel: prerelease}
+  mlx: {version: 0.32.0, channel: released}
+  mlx_lm: {version: 0.31.3, channel: released}
+  omlx: {version: 0.5.1, channel: released}
+  llama_cpp: {version: b10012, channel: tagged_commit, commit: c71854292f7c367cc3b35939f88121d81945472f}
+  cactus: {version: 2.0.1, channel: released, commit: 7e7eada40c387736dec138db003ab38f028f3a15}
+  mnn: {version: 3.6.0, channel: released, commit: cc20f672af9e177e2fa338c332dc097de2fc9264}
+  executorch: {version: 1.3.1, channel: released, commit: e2f18eb23c45bd22ca332b0b8b49a81de304b472}
+  mlx_swift: {version: 0.31.6, channel: released}
+  mlx_swift_lm: {version: 3.31.4, channel: released}
+  mlc_llm: {version: a2bcc5c86678b72a86b7aadc29b643a5ce63c747, channel: main_commit}
+  litert_lm: {version: 0.14.0, channel: released, commit: 80f301ff9a3b02c2c1e7be2dd1a567752f7b51b6}
+
+kernel_substrate_pins:
+  wgpu: {version: 29.0.3, channel: released}
+
+mobile_worker_policy:
+  trust_class: untrusted_burst_worker
+  coordinator_authoritative: true
+  foreground_visible: true
+  user_initiated: true
+  outbound_only: true
+  no_cloud_handoff: true
+  no_tool_execution: true
+  no_workload_secrets: true
+  external_vendor_telemetry_disabled: true
+  authenticated_transport: true
+  device_scoped_short_lived_transport_credentials: true
+  transport_credentials_excluded_from_lease_payload: true
+  replay_protected_leases: true
+  content_hashed_result_bundle: true
+  allowed_tasks:
+    - needle_function_routing
+    - schema_and_tool_choice_validation
+    - deterministic_classifier_or_verifier
+    - embedding_or_rerank
+    - short_0_5b_to_4b_replay
+    - official_mobile_artifact_feasibility
+  forbidden_inputs:
+    - private_chatgpt_corpus
+    - workload_credentials_or_tokens
+    - arbitrary_model_downloads
+    - shell_or_side_effecting_tools
+  required_telemetry:
+    - ttft_and_decode_rate
+    - os_available_memory
+    - thermal_state_or_headroom
+    - battery_and_charge_state
+    - lifecycle_cancel_and_recovery
+  sustained_probe_seconds: [300, 900, 1800]
+  initial_memory_headroom_fraction: 0.30
+  lease:
+    checkpoint_max_seconds: 30
+    required_fields:
+      - job_id
+      - lease_id
+      - model_hash
+      - artifact_hash
+      - runtime_hash
+      - config_hash
+      - deadline
+      - max_context_tokens
+      - max_output_tokens
+      - nonce
+
+devices:
+  rtx_3090_ti:
+    available: true
+    install_authorized: true
+    memory_gb: 24
+    architecture: sm_86
+    runtimes: [sglang, vllm, tensorrt_llm, tensorrt_llm_dflash, llama_cpp]
+    default_runtime: sglang
+    control_runtime: vllm
+    constraints:
+      - No native FP8 tensor compute.
+      - TensorRT-LLM is a finalist optimization, not the discovery default.
+      - Context length is measured; advertised 262K is not preallocated.
+  m1_pro_16gb:
+    available: true
+    install_authorized: false
+    remote_mutation_authorized: false
+    memory_gb: 16
+    architecture: apple_m1_pro
+    runtimes: [omlx, mlx_lm, llama_cpp, cactus, litert_lm]
+    default_runtime: omlx
+    constraints:
+      - Existing Qwen3.5-0.8B workstream has a separate owner.
+      - Import results through the contract; do not mutate that workspace.
+      - Ordinary 27-35B Q4 is outside the routine lane.
+  galaxy_s21_ultra:
+    available: true
+    install_authorized: false
+    memory_gb: null
+    architecture: probe_required
+    runtimes: [cactus, mnn, llama_cpp, mlc_llm, executorch, litert_lm]
+    backends: [cpu, opencl, vulkan, qnn, xnnpack]
+    default_runtime: null
+    constraints:
+      - Probe Snapdragon-versus-Exynos SKU, RAM, Android build, and thermals.
+      - User-started foreground-visible or kiosk session only; generic inference has no standard Android foreground-service type.
+      - Pull short outbound-only leases and checkpoint every unit; the OS may still kill the process.
+      - Start with 30 percent OS-reported memory headroom and stop on thermal, low-power, or lifecycle signals.
+      - Cactus runtime license review precedes installation.
+  iphone_17_pro_max:
+    available: true
+    install_authorized: false
+    memory_gb: null
+    architecture: apple_mobile_probe_required
+    runtimes: [cactus, mlx_swift_lm, mnn, llama_cpp, mlc_llm, executorch, litert_lm]
+    backends: [cpu, metal, coreml]
+    default_runtime: null
+    constraints:
+      - Foreground/docked checkpointable work only.
+      - Stop on app lifecycle or serious/critical thermal state.
+      - Background Metal is not a continuous worker mechanism.
+      - Apple publishes no RAM figure; gate on OS available memory and Metal recommended working set.
+      - Cactus 2.0.1 removed Core ML; compare its Metal path separately from Core ML controls.
+  gtx_1080_ti:
+    available: true
+    install_authorized: false
+    probe_authorized: true
+    memory_gb: 11
+    architecture: sm_61
+    runtimes: [llama_cpp]
+    backends: [cuda_12_legacy]
+    default_runtime: null
+    constraints:
+      - Never join the 3090 Ti tensor-parallel group.
+      - Current vLLM and modern TensorRT-LLM paths are unsupported.
+      - CUDA 13 removed Pascal targeting; any experiment needs an isolated CUDA 12.x legacy stack.
+      - Use the separate-helper simulation before any runtime/toolchain mutation.
+      - PSU, slot, connector, case, and thermal gates remain unresolved.
+
+candidates:
+  - id: needle-26m
+    display_name: Cactus Needle
+    status: candidate
+    tier: specialist
+    architecture: specialist
+    total_parameters: 30427676
+    active_parameters: 30427676
+    registry_keys: [cactus-compute/needle, Cactus-Compute/needle]
+    source_urls:
+      - https://github.com/cactus-compute/needle
+      - https://huggingface.co/Cactus-Compute/needle
+    lanes: [m1_pro_16gb, galaxy_s21_ultra, iphone_17_pro_max]
+    runtimes: [cactus]
+    mobile_support_gate: exact_artifact_runtime_probe_required
+    role: single_shot_tool_router
+    parameter_count_basis: pinned_hf_artifact_safetensors_total
+    license_gate: review_required
+    execution_gate: blocked
+  - id: qwen35-08b-control
+    display_name: Qwen3.5-0.8B
+    status: locked_control
+    tier: fast
+    architecture: dense
+    total_parameters: 800000000
+    active_parameters: 800000000
+    registry_keys: [Qwen/Qwen3.5-0.8B]
+    source_urls: [https://huggingface.co/Qwen/Qwen3.5-0.8B]
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, omlx]
+    role: continuity_control
+    license_gate: existing_adr
+    execution_gate: existing_adr_only
+  - id: qwen35-4b
+    display_name: Qwen3.5-4B
+    status: candidate
+    tier: worker
+    architecture: dense
+    total_parameters: 4659865088
+    active_parameters: 4659865088
+    registry_keys: [Qwen/Qwen3.5-4B]
+    source_urls: [https://huggingface.co/Qwen/Qwen3.5-4B]
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, omlx]
+    role: compact_general_worker
+    artifact_gate: exact_quant_and_parser_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: qwen35-9b
+    display_name: Qwen3.5-9B
+    status: candidate
+    tier: worker
+    architecture: dense
+    total_parameters: 9653104368
+    active_parameters: 9653104368
+    registry_keys: [Qwen/Qwen3.5-9B]
+    source_urls: [https://huggingface.co/Qwen/Qwen3.5-9B]
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, omlx]
+    role: general_worker
+    artifact_gate: exact_quant_and_parser_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: nanbeige41-3b
+    display_name: Nanbeige4.1-3B
+    status: candidate
+    tier: fast
+    architecture: dense
+    total_parameters: 3000000000
+    active_parameters: 3000000000
+    registry_keys: [Nanbeige/Nanbeige4.1-3B]
+    source_urls: [https://huggingface.co/Nanbeige/Nanbeige4.1-3B]
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, omlx]
+    role: small_reasoning_tool_worker
+    license_gate: review_required
+    execution_gate: blocked
+  - id: lfm25-1p2b
+    display_name: LFM2.5-1.2B-Instruct
+    status: candidate
+    tier: fast
+    architecture: dense
+    total_parameters: 1200000000
+    active_parameters: 1200000000
+    registry_keys:
+      - LiquidAI/LFM2.5-1.2B-Instruct
+      - LiquidAI/LFM2.5-1.2B-Instruct-GGUF
+      - LiquidAI/LFM2.5-1.2B-Instruct-MLX-4bit
+    source_urls:
+      - https://huggingface.co/LiquidAI/LFM2.5-1.2B-Instruct
+      - https://huggingface.co/LiquidAI/LFM2.5-1.2B-Instruct-GGUF
+      - https://huggingface.co/LiquidAI/LFM2.5-1.2B-Instruct-MLX-4bit
+    lanes: [rtx_3090_ti, m1_pro_16gb, galaxy_s21_ultra, iphone_17_pro_max]
+    runtimes: [sglang, vllm, mlx_lm, llama_cpp]
+    role: all_device_fast_tool_control
+    artifact_gate: exact_gguf_or_mlx_artifact_runtime_and_parser_probe_required
+    mobile_support_gate: exact_artifact_runtime_probe_required
+    phone_lane_mode: normal_worker
+    license_gate: review_required
+    execution_gate: blocked
+  - id: gemma4-e2b
+    display_name: Gemma 4 E2B
+    status: candidate
+    tier: worker
+    architecture: moe
+    total_parameters: 5123178051
+    active_parameters: 2300000000
+    registry_keys:
+      - google/gemma-4-E2B-it
+      - google/gemma-4-E2B-it-qat-mobile-transformers
+      - litert-community/gemma-4-E2B-it-litert-lm
+    source_urls:
+      - https://huggingface.co/google/gemma-4-E2B-it
+      - https://huggingface.co/google/gemma-4-E2B-it-qat-mobile-transformers
+      - https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm
+      - https://ai.google.dev/gemma/docs/core
+    lanes: [rtx_3090_ti, m1_pro_16gb, galaxy_s21_ultra, iphone_17_pro_max]
+    runtimes: [sglang, vllm, mlx_lm, llama_cpp, litert_lm]
+    role: edge_multimodal_tool_control
+    artifact_gate: exact_server_quant_or_pinned_litert_blob_and_parser_probe_required
+    mobile_support_gate: exact_artifact_runtime_probe_required
+    phone_lane_mode: feasibility_only
+    mobile_artifacts:
+      android_ios_litert_revision: 9262660a1676eed6d0c477ab1a86344430854664
+      litert_blob_sha256: 181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c
+    license_gate: review_required
+    execution_gate: blocked
+  - id: gemma4-e4b
+    display_name: Gemma 4 E4B
+    status: candidate
+    tier: worker
+    architecture: moe
+    total_parameters: 8000000000
+    active_parameters: 4500000000
+    registry_keys:
+      - google/gemma-4-E4B-it
+      - google/gemma-4-E4B-it-qat-mobile-transformers
+      - litert-community/gemma-4-E4B-it-litert-lm
+    source_urls:
+      - https://huggingface.co/google/gemma-4-E4B-it
+      - https://huggingface.co/google/gemma-4-E4B-it-qat-mobile-transformers
+      - https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm
+    lanes: [galaxy_s21_ultra, iphone_17_pro_max]
+    runtimes: [litert_lm]
+    role: mobile_edge_feasibility_control
+    artifact_gate: pinned_litert_blob_tool_and_thermal_probe_required
+    mobile_support_gate: exact_artifact_runtime_probe_required
+    phone_lane_mode: feasibility_only
+    mobile_artifacts:
+      android_ios_litert_revision: f7ad3343bd6ebc9607f4dc3bc4f2398bd5749bc5
+      litert_blob_sha256: 0b2a8980ce155fd97673d8e820b4d29d9c7d99b8fa6806f425d969b145bd52e0
+    license_gate: review_required
+    execution_gate: blocked
+  - id: lfm25-8b-a1b-control
+    display_name: LFM2.5-8B-A1B
+    status: locked_control
+    tier: worker
+    architecture: moe
+    total_parameters: 8300000000
+    active_parameters: 1500000000
+    registry_keys: [LiquidAI/LFM2.5-8B-A1B]
+    source_urls: [https://huggingface.co/LiquidAI/LFM2.5-8B-A1B]
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, omlx, llama_cpp]
+    role: edge_worker_control
+    license_gate: existing_adr
+    execution_gate: existing_adr_only
+  - id: zaya1-8b
+    display_name: ZAYA1-8B
+    status: candidate
+    tier: worker
+    architecture: moe
+    total_parameters: 8400000000
+    active_parameters: 760000000
+    registry_keys: [Zyphra/ZAYA1-8B]
+    source_urls: [https://huggingface.co/Zyphra/ZAYA1-8B]
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang]
+    role: reasoning_worker
+    artifact_gate: creator_fork_or_upstream_release_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: ornith-9b-control
+    display_name: Ornith-1.0-9B
+    status: locked_control
+    tier: worker
+    architecture: dense
+    total_parameters: 9000000000
+    active_parameters: 9000000000
+    registry_keys: [deepreinforce-ai/Ornith-1.0-9B]
+    source_urls: [https://huggingface.co/deepreinforce-ai/Ornith-1.0-9B]
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, omlx]
+    role: worker_regression_control
+    license_gate: existing_adr
+    execution_gate: existing_adr_only
+  - id: agents-a1-4b
+    display_name: Agents-A1-4B
+    status: candidate
+    tier: worker
+    architecture: dense
+    total_parameters: 4539265536
+    active_parameters: 4539265536
+    registry_keys:
+      - InternScience/Agents-A1-4B
+      - InternScience/Agents-A1-4B-Q4_K_M-GGUF
+    source_urls:
+      - https://huggingface.co/InternScience/Agents-A1-4B
+      - https://huggingface.co/InternScience/Agents-A1-4B-Q4_K_M-GGUF
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, llama_cpp]
+    role: compact_agent_specialist
+    artifact_gate: exact_template_parser_and_quant_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: trinity-nano-preview
+    display_name: Trinity Nano Preview
+    status: candidate
+    tier: worker
+    architecture: moe
+    total_parameters: 6120003328
+    active_parameters: 1000000000
+    registry_keys:
+      - arcee-ai/Trinity-Nano-Preview
+      - arcee-ai/Trinity-Nano-Preview-MLX-5bit
+    source_urls:
+      - https://huggingface.co/arcee-ai/Trinity-Nano-Preview
+      - https://huggingface.co/arcee-ai/Trinity-Nano-Preview-MLX-5bit
+    lanes: [m1_pro_16gb]
+    runtimes: [mlx_lm]
+    role: experimental_apple_worker
+    artifact_gate: unstable_preview_exact_mlx_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: ornith-35b
+    display_name: Ornith-1.0-35B
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 35000000000
+    active_parameters: 3000000000
+    registry_keys:
+      - deepreinforce-ai/Ornith-1.0-35B
+      - deepreinforce-ai/Ornith-1.0-35B-GGUF
+    source_urls:
+      - https://huggingface.co/deepreinforce-ai/Ornith-1.0-35B
+      - https://huggingface.co/deepreinforce-ai/Ornith-1.0-35B-GGUF
+    lanes: [rtx_3090_ti]
+    runtimes: [llama_cpp]
+    role: agentic_moe_escalation
+    artifact_gate: publisher_q4_k_m_memory_and_parser_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: qwen36-27b
+    display_name: Qwen3.6-27B
+    status: candidate
+    tier: escalation
+    architecture: dense
+    total_parameters: 27000000000
+    active_parameters: 27000000000
+    parameter_count_basis: publisher_size_class
+    registry_keys: [Qwen/Qwen3.6-27B]
+    source_urls: [https://huggingface.co/Qwen/Qwen3.6-27B]
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang, vllm]
+    role: dense_quality_ceiling
+    artifact_gate: provenance_checked_int4_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: qwen36-35b-a3b
+    display_name: Qwen3.6-35B-A3B
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 35000000000
+    active_parameters: 3000000000
+    parameter_count_basis: publisher_size_class
+    registry_keys: [Qwen/Qwen3.6-35B-A3B]
+    source_urls: [https://huggingface.co/Qwen/Qwen3.6-35B-A3B]
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang, vllm]
+    role: general_moe_finalist
+    artifact_gate: provenance_checked_int4_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: gemma4-12b
+    display_name: Gemma 4 12B
+    status: candidate
+    tier: worker
+    architecture: dense
+    total_parameters: 11959730224
+    active_parameters: 11959730224
+    registry_keys:
+      - google/gemma-4-12B-it
+      - google/gemma-4-12B-it-qat-q4_0-gguf
+    source_urls:
+      - https://huggingface.co/google/gemma-4-12B-it
+      - https://huggingface.co/google/gemma-4-12B-it-qat-q4_0-gguf
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, vllm, llama_cpp]
+    role: dense_speculative_method_control
+    artifact_gate: exact_target_quant_draft_license_and_combined_headroom_probe_required
+    acceleration_pairs:
+      sglang_dflash: deepseek-ai/dflash_gemma4_12b_block7
+      vllm_eagle3: deepseek-ai/eagle3_gemma4_12b_ttt7
+      dspark_research_only: deepseek-ai/dspark_gemma4_12b_block7
+    license_gate: review_required
+    execution_gate: blocked
+  - id: north-mini-code-10
+    display_name: North Mini Code 1.0
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 30484303872
+    active_parameters: 3000000000
+    registry_keys:
+      - CohereLabs/North-Mini-Code-1.0
+      - CohereLabs/North-Mini-Code-1.0-w4a16
+    source_urls:
+      - https://huggingface.co/CohereLabs/North-Mini-Code-1.0
+      - https://huggingface.co/CohereLabs/North-Mini-Code-1.0-w4a16
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang, vllm]
+    role: coding_agent_challenger
+    artifact_gate: provenance_checked_ampere_quant_current_release_and_parser_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: glm47-flash
+    display_name: GLM-4.7-Flash
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 31221488576
+    active_parameters: 3000000000
+    registry_keys: [zai-org/GLM-4.7-Flash]
+    source_urls: [https://huggingface.co/zai-org/GLM-4.7-Flash]
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang, vllm]
+    role: agent_coding_challenger
+    artifact_gate: fitting_quant_current_release_and_exact_parser_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: laguna-xs-21
+    display_name: Laguna XS 2.1
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 33000000000
+    active_parameters: 3000000000
+    registry_keys:
+      - poolside/Laguna-XS-2.1
+      - poolside/Laguna-XS-2.1-DFlash
+      - poolside/Laguna-XS-2.1-DFlash-FP8
+    source_urls:
+      - https://huggingface.co/poolside/Laguna-XS-2.1
+      - https://huggingface.co/poolside/Laguna-XS-2.1-DFlash
+      - https://huggingface.co/poolside/Laguna-XS-2.1-DFlash-FP8
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang, vllm, tensorrt_llm_dflash]
+    role: coding_dflash_finalist
+    artifact_gate: provenance_checked_ampere_target_quant_and_combined_headroom_required
+    acceleration_gate: exact_dflash_pair_runtime_parser_and_acceptance_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: gemma4-26b-a4b
+    display_name: Gemma 4 26B-A4B
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 26544131376
+    active_parameters: 3800000000
+    registry_keys:
+      - google/gemma-4-26B-A4B-it
+      - google/gemma-4-26B-A4B-it-qat-q4_0-gguf
+    source_urls:
+      - https://huggingface.co/google/gemma-4-26B-A4B-it
+      - https://huggingface.co/google/gemma-4-26B-A4B-it-qat-q4_0-gguf
+      - https://ai.google.dev/gemma/docs/core
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang, vllm, llama_cpp]
+    role: compact_large_moe_control
+    artifact_gate: exact_runtime_quant_parser_and_license_record_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: agents-a1
+    display_name: Agents-A1
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 35000000000
+    active_parameters: 3000000000
+    registry_keys:
+      - InternScience/Agents-A1
+      - InternScience/Agents-A1-Q4_K_M-GGUF
+    source_urls:
+      - https://huggingface.co/InternScience/Agents-A1
+      - https://huggingface.co/InternScience/Agents-A1-Q4_K_M-GGUF
+    lanes: [rtx_3090_ti]
+    runtimes: [llama_cpp]
+    role: long_horizon_agent_specialist
+    artifact_gate: publisher_q4_k_m_memory_and_parser_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: nex-n2-mini
+    display_name: Nex-N2-mini
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 35000000000
+    active_parameters: 3000000000
+    registry_keys: [nex-agi/Nex-N2-mini]
+    source_urls: [https://huggingface.co/nex-agi/Nex-N2-mini]
+    lanes: [rtx_3090_ti]
+    runtimes: [sglang, vllm]
+    role: agent_posttraining_candidate
+    discovery_state: metadata_only
+    artifact_gate: publisher_quant_and_exact_template_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: bonsai-27b
+    display_name: Bonsai 27B
+    status: candidate
+    tier: escalation
+    architecture: dense
+    total_parameters: 27356728560
+    active_parameters: 27356728560
+    registry_keys:
+      - prism-ml/Bonsai-27B-AWQ-4bit
+      - prism-ml/Bonsai-27B-gguf
+      - prism-ml/Bonsai-27B-mlx-1bit
+    source_urls:
+      - https://huggingface.co/prism-ml/Bonsai-27B-AWQ-4bit
+      - https://huggingface.co/prism-ml/Bonsai-27B-gguf
+      - https://huggingface.co/prism-ml/Bonsai-27B-mlx-1bit
+      - https://github.com/PrismML-Eng/Bonsai-demo
+    lanes: [rtx_3090_ti, m1_pro_16gb]
+    runtimes: [sglang, llama_cpp, mlx_lm]
+    role: experimental_low_bit_memory_candidate
+    artifact_gate: exact_custom_quant_runtime_and_quality_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+  - id: trinity-mini
+    display_name: Trinity Mini
+    status: candidate
+    tier: escalation
+    architecture: moe
+    total_parameters: 26123974400
+    active_parameters: 3000000000
+    registry_keys:
+      - arcee-ai/Trinity-Mini
+      - arcee-ai/Trinity-Mini-GGUF
+    source_urls:
+      - https://huggingface.co/arcee-ai/Trinity-Mini
+      - https://huggingface.co/arcee-ai/Trinity-Mini-GGUF
+    lanes: [rtx_3090_ti]
+    runtimes: [llama_cpp]
+    role: openmdw_moe_control
+    artifact_gate: custom_architecture_gguf_runtime_probe_required
+    license_gate: review_required
+    execution_gate: blocked
+
+acceleration_order:
+  - exact_autoregressive_baseline
+  - prefix_cache_and_chunked_prefill
+  - prompt_ngram
+  - native_mtp
+  - matched_eagle
+  - matched_dflash
+  - turboquant_4bit_when_kv_bound
+  - dspark_under_concurrency
+  - specmoe_self_assisted_offload_research
+  - dflare_ddtree_jetspec_ssd_research
+  - dominotree_distinct_tree_speculation_research
+  - spork_read_only_idempotent_coordinator_speculation_research
+  - rotor_iso_spectral_oscar_kv_research
+  - latentmas_same_backbone_research
+  - conditional_1080ti_helper_simulation

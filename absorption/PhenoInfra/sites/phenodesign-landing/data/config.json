@@ -1,0 +1,24 @@
+{
+  "name": "PhenoDesign",
+  "slug": "phenodesign",
+  "tagline": "Design system: tokens, components, and UX standards for all Phenotype surfaces.",
+  "domain": "phenodesign.phenotype.space",
+  "color": "#ec4899",
+  "description": "Design system: tokens, components, and UX standards for all Phenotype surfaces.",
+  "tier": 2,
+  "repo": "KooshaPari/PhenoDesign",
+  "language": "CSS / TypeScript / Figma",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Design tokens",
+    "Component library",
+    "UX standards",
+    "Figma integration"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/PhenoDesign",
+    "docs": "https://phenodesign.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/PhenoDesign/releases"
+  }
+}

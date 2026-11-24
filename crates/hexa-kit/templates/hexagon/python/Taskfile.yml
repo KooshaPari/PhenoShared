@@ -1,0 +1,60 @@
+version: '3'
+
+tasks:
+  lint:
+    desc: "Run all linters (ruff check + format check)"
+    cmds:
+      - ruff check .
+      - ruff format --check .
+
+  format:
+    desc: "Format code with ruff"
+    cmds:
+      - ruff format .
+
+      # Fix auto-fixable issues
+      - ruff check --fix .
+
+  test:
+    desc: "Run pytest"
+    cmds:
+      - pytest
+
+  typecheck:
+    desc: "Run type checking with pyright"
+    cmds:
+      - pyright
+
+  quality:
+    desc: "Run full quality checks (lint + typecheck + test)"
+    cmds:
+      - task: lint
+      - task: typecheck
+      - task: test
+
+  security:
+    desc: "Run security audits"
+    cmds:
+      - pip-audit
+
+  clean:
+    desc: "Clean build artifacts"
+    cmds:
+      - find . -type d -name __pycache__ -exec rm -rf {} +
+      - find . -type d -name .pytest_cache -exec rm -rf {} +
+      - find . -type f -name "*.pyc" -delete
+
+  deps:
+    desc: "Sync dependencies"
+    cmds:
+      - uv sync
+      - uv pip compile pyproject.toml -o requirements.txt
+
+  ci:
+    desc: "Run full CI pipeline"
+    cmds:
+      - task: format
+      - task: lint
+      - task: typecheck
+      - task: test
+      - task: security

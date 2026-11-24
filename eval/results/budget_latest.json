@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-07-24T07:31:37.331989+00:00",
+  "estimated_monthly_usd": 570.0,
+  "tokens_in_month": 1786725,
+  "tokens_out_month": 309038,
+  "by_provider_usd": {
+    "-": 0.0,
+    "auggie": 0.0,
+    "clinepass": 0.48,
+    "groq": 0.0,
+    "kilocode": 0.46,
+    "mimocode": 0.0,
+    "minimax": 0.33,
+    "novita": 0.0,
+    "nvidia": 0.07,
+    "openai": 0.0,
+    "opencode": 0.0,
+    "opencode-go": 0.74,
+    "opencode-zen": 0.01,
+    "openrouter": 0.0,
+    "theoldllm": 0.0
+  },
+  "targets": {
+    "ideal_monthly_usd": 200,
+    "max_monthly_usd": 400,
+    "token_monthly": 30000000000
+  },
+  "alert_level": "blackout",
+  "codex_cut_progress": 1.0
+}

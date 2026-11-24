@@ -1,0 +1,98 @@
+# Herdr pane-detection rules for HeliosLite.
+#
+# Herdr's pane detector loads this on plugin install and re-runs it on every
+# screen update. When any of the `patterns[*].match` lines below matches a
+# non-trivial substring of the captured pane, the pane is tagged with the
+# corresponding `agent = "helioslite"` label so the host can route events to
+# this plugin's entrypoint.
+#
+# Detection is intentionally non-invasive: we only look at screen content we
+# would see anyway, and we never inject ANSI escapes or alter the pane.
+
+[meta]
+plugin      = "herdr-helioslite"
+agent       = "helioslite"
+source      = "herdr:helioslite"
+description = "HeliosLite (AI pair-programmer CLI) pane detection"
+version     = "0.1.0"
+
+# Primary detector — banner text printed by `helioslite` on startup.
+# HeliosLite's TUI prints a banner that includes "HeliosLite" and tagline
+# fragments like "AI pair programmer" / "pair-programmer".
+[[patterns]]
+name        = "banner"
+match       = "HeliosLite"
+weight      = 0.9
+agent       = "helioslite"
+
+[[patterns]]
+name        = "tagline"
+match       = "AI pair.?programmer"
+weight      = 0.8
+agent       = "helioslite"
+
+[[patterns]]
+name        = "tagline_kebab"
+match       = "pair-programmer"
+weight      = 0.7
+agent       = "helioslite"
+
+# Prompt indicators. HeliosLite uses a `>` or `helios>` style prompt when
+# interactive. Matching the brand prefix is high-signal; matching bare `>` is
+# deliberately omitted to avoid collision with shell panes.
+[[patterns]]
+name        = "prompt_brand"
+match       = "helios>"
+weight      = 0.95
+agent       = "helioslite"
+
+[[patterns]]
+name        = "prompt_brand_lower"
+match       = "Helios>"
+weight      = 0.85
+agent       = "helioslite"
+
+# Working markers — printed while a model call is in flight.
+[[patterns]]
+name        = "thinking"
+match       = "thinking"
+weight      = 0.4
+agent       = "helioslite"
+
+[[patterns]]
+name        = "generating"
+match       = "generating response"
+weight      = 0.5
+agent       = "helioslite"
+
+# Footer / status bar — most HeliosLite TUIs render a footer with the agent
+# name. A bare match on the literal `helioslite` (case-insensitive) is strong
+# signal when the pattern is anchored to a status-bar line.
+[[patterns]]
+name        = "footer"
+match       = "(?i)\\bhelioslite\\b"
+weight      = 0.6
+must_be_anchored = true
+agent       = "helioslite"
+
+# Negative controls — patterns that DISCOUNT a HeliosLite match. Used to
+# distinguish HeliosLite from sibling tools (ForgeCode, jcode) that may share
+# screen vocabulary. If any of these match strongly, the detector flags the
+# pane as `unknown` rather than `helioslite`.
+[[negative]]
+name        = "not_forgecode"
+match       = "ForgeCode"
+reason      = "Pane belongs to forgecode, not helioslite"
+
+[[negative]]
+name        = "not_jcode"
+match       = "jcode>"
+reason      = "Pane belongs to jcode, not helioslite"
+
+# Aggregate decision rule. Herdr requires `min_weight` summed matches to assign
+# the agent label. The defaults below work for both the banner-on-startup path
+# and the prompt-driven path.
+[decision]
+min_weight      = 0.8
+require_unique  = true   # do not assign if another plugin's detector also fires
+case_insensitive = true

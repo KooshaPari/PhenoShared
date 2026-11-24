@@ -1,0 +1,18 @@
+[package]
+name = "plugin-integration"
+description = "Integration layer bridging plugin-registry with external agileplus-plugin-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Internal plugin registry
+plugin-registry = { path = "../plugin-registry" }
+
+# Async runtime
+tokio = { workspace = true }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
+async-trait = "0.1"

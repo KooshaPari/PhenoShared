@@ -1,0 +1,9 @@
+{
+  "event_id": "qualification-a8b41cae-close",
+  "item_id": "qualification-a8b41cae-20261017",
+  "expected_revision": 4,
+  "actor": "qualification-local-operator",
+  "action": {
+    "kind": "close"
+  }
+}

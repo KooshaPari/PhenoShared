@@ -1,0 +1,47 @@
+schema_version: pheno.eval.suite-lock.v1
+suite_id: terminal-bench-2.0
+source:
+  owner: laude-institute
+  repository_url: https://github.com/laude-institute/terminal-bench-2.git
+  revision_sha: 69671fbaac6d67a7ef0dfec016cc38a64ef7a77c
+  retrieved_at: "2026-07-16T12:00:00Z"
+  license_spdx: Apache-2.0
+dataset:
+  task_count: 89
+  task_ids_sha256: 5c7ed05c61e6768b71bebb5ffd05d9ce07e185b3cf519b06ca2ae5d476f99638
+  task_manifest_sha256: 898f3fedf64a181e3c295f68a35a443aa0533f8d67a3c3c4fb65de40d33cd784
+  subset_ids:
+    - headless-terminal
+    - log-summary-date-ranges
+    - fix-code-vulnerability
+    - build-cython-ext
+    - sqlite-db-truncate
+    - query-optimize
+  subset_manifest_sha256: eba88d78411f8606f33c005629434622c1381e1ec41d0fba8e5c1dff27d7aa82
+  changed_task_ids_sha256: null
+runner:
+  name: harbor
+  version: unresolved
+  revision_sha: null
+  package_sha256: null
+harness:
+  name: terminus-2
+  revision_sha: null
+  system_prompt_sha256: null
+  agent_config_sha256: null
+  tool_definitions_sha256: null
+verifier:
+  revision_sha: null
+  image_digests: []
+  separate_environment: true
+  expected_artifacts:
+    - trajectory.json
+    - reward.json
+integrity:
+  held_out_from_training: false
+  holdout_manifest_sha256: null
+  scoreable: false
+  unverified_reasons:
+    - Registry metadata manifest e7194cc243002a8d4b2665448d3b621df525c22be57bc14fdfa013b777d2e29f is retained in the subset artifact; task_manifest_sha256 names the exported-tree manifest 898f3fedf64a181e3c295f68a35a443aa0533f8d67a3c3c4fb65de40d33cd784.
+    - Harbor runner package, terminus-2 harness, verifier image, prompt, tools, and holdout pins remain unresolved.
+    - Docker-compatible Podman execution is recovered at npipe:////./pipe/podman-machine-default; observed API response latency is approximately 72 seconds under host load; representative subset has not yet completed for every locked local model.

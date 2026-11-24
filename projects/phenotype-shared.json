@@ -1,0 +1,19 @@
+{
+  "name": "phenotype-shared",
+  "languages": [
+    "rust"
+  ],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "shared-library-parent",
+  "path": "repos/phenotype-shared",
+  "disposition": "AFFIRM",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "phenotype-shared",
+  "proposed_target_repo": "phenotype-shared",
+  "proposed_target_path": ".",
+  "absorption_note": "Preferred shared parent for phenoUtils utility crates after API and license review; no source merge performed.",
+  "note": "Current workspace owns phenotype-manifest, phenotype-port-adapter-shim, and ffi_utils."
+}

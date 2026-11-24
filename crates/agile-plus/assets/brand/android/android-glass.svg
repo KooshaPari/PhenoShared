@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="AgilePlus Android Glass">
+  <title>AgilePlus</title>
+  <desc>AI-coded SVG v3: Android adaptive icon — circle silhouette clipped to squircle outer. VIVID teal-to-slate backdrop (the glass needs something to refract!). Frosted foreground panel: heavy blur(16), fill 68%, thick white rim light, colored bloom. Distinct from macOS/Windows: adaptive circle-inside-squircle, translucent frost, glowing rim.</desc>
+  <defs>
+    <!-- === ANDROID ADAPTIVE ICON: squircle outer, circle inner mask === -->
+    <clipPath id="ag-squircle-clip">
+      <!-- Squircle outer shape (adaptive icon background layer) -->
+      <rect x="0" y="0" width="512" height="512" rx="120" ry="120"/>
+    </clipPath>
+    <clipPath id="ag-circle-clip">
+      <!-- Circle foreground layer (the frosted glass disc) -->
+      <circle cx="256" cy="256" r="200"/>
+    </clipPath>
+
+    <!-- === BACKDROP SCENE === teal-to-midnight gradient + bright blobs -->
+    <linearGradient id="ag-backdrop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a3530"/>
+      <stop offset="40%" stop-color="#0d1e1c"/>
+      <stop offset="100%" stop-color="#090a0c"/>
+    </linearGradient>
+
+    <!-- Accent blob gradient: vivid teal center -->
+    <radialGradient id="ag-blob1" cx="38%" cy="32%" r="42%">
+      <stop offset="0%" stop-color="#7ebab5" stop-opacity="1.0"/>
+      <stop offset="40%" stop-color="#569691" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ag-blob2" cx="72%" cy="68%" r="35%">
+      <stop offset="0%" stop-color="#95ccc8" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#353a40" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ag-blob3" cx="60%" cy="20%" r="30%">
+      <stop offset="0%" stop-color="#f6f5f5" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- === FROSTED GLASS DISC OVERLAYS === -->
+    <!-- Frost: blur the backdrop through the circle -->
+    <filter id="ag-frost-blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blurred"/>
+    </filter>
+
+    <!-- Disc glass fill: semi-transparent teal-white -->
+    <radialGradient id="ag-disc-fill" cx="45%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#95ccc8" stop-opacity="0.52"/>
+      <stop offset="50%" stop-color="#7ebab5" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#090a0c" stop-opacity="0.55"/>
+    </radialGradient>
+
+    <!-- WHITE RIM LIGHT: thick, bright, frosted-glass edge -->
+    <filter id="ag-rim-glow" x="-5%" y="-5%" width="110%" height="110%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="glow"/>
+      <feBlend in="SourceGraphic" in2="glow" mode="screen"/>
+    </filter>
+
+    <!-- Specular point light on disc -->
+    <filter id="ag-disc-spec" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="ablur"/>
+      <feSpecularLighting in="ablur" surfaceScale="5" specularConstant="1.2" specularExponent="40" result="spec" lighting-color="white">
+        <fePointLight x="160" y="100" z="180"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="specMasked"/>
+      <feBlend in="SourceGraphic" in2="specMasked" mode="screen"/>
+    </filter>
+
+    <!-- Bloom glow filter for icon elements -->
+    <filter id="ag-bloom" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="bloom"/>
+      <feBlend in="SourceGraphic" in2="bloom" mode="screen"/>
+    </filter>
+
+    <!-- Top specular cap on glass disc -->
+    <radialGradient id="ag-disc-topspec" cx="40%" cy="12%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.80"/>
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="70%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Sprint loop gradient -->
+    <linearGradient id="ag-loop" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#95ccc8"/>
+      <stop offset="100%" stop-color="#7ebab5"/>
+    </linearGradient>
+    <linearGradient id="ag-bars" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#569691"/>
+      <stop offset="100%" stop-color="#95ccc8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ====== ANDROID ADAPTIVE ICON ====== -->
+  <!-- LAYER 1: Squircle adaptive background — vivid gradient -->
+  <g clip-path="url(#ag-squircle-clip)">
+    <rect width="512" height="512" fill="url(#ag-backdrop)"/>
+    <!-- Vivid backdrop blobs — these are what the glass will refract/frost -->
+    <rect width="512" height="512" fill="url(#ag-blob1)"/>
+    <rect width="512" height="512" fill="url(#ag-blob2)"/>
+    <rect width="512" height="512" fill="url(#ag-blob3)"/>
+  </g>
+
+  <!-- LAYER 2: Frosted glass disc (foreground, clipped to circle) -->
+  <g clip-path="url(#ag-circle-clip)">
+    <!-- Frosted blur of backdrop through disc -->
+    <rect width="512" height="512" fill="url(#ag-backdrop)" filter="url(#ag-frost-blur)" opacity="0.85"/>
+    <rect width="512" height="512" fill="url(#ag-blob1)" filter="url(#ag-frost-blur)" opacity="0.6"/>
+
+    <!-- Main glass fill over frost -->
+    <circle cx="256" cy="256" r="200" fill="url(#ag-disc-fill)"/>
+
+    <!-- Top specular highlight cap -->
+    <circle cx="256" cy="256" r="200" fill="url(#ag-disc-topspec)"/>
+  </g>
+
+  <!-- LAYER 3: Thick white rim light on the glass disc -->
+  <circle cx="256" cy="256" r="200" fill="none"
+    stroke="white" stroke-width="14" stroke-opacity="0.70"
+    filter="url(#ag-rim-glow)"/>
+  <!-- Inner rim: thinner teal bloom -->
+  <circle cx="256" cy="256" r="194" fill="none"
+    stroke="#95ccc8" stroke-width="4" stroke-opacity="0.55"/>
+
+  <!-- LAYER 4: Icon content inside disc with bloom -->
+  <g clip-path="url(#ag-circle-clip)" filter="url(#ag-bloom)">
+    <!-- Sprint loop ring -->
+    <path d="M 300 148 A 110 110 0 1 1 200 158"
+          fill="none" stroke="url(#ag-loop)" stroke-width="24" stroke-linecap="round"/>
+    <!-- Arrow head -->
+    <polygon points="284,118 318,148 284,178" fill="#95ccc8"/>
+
+    <!-- Velocity bars — ascending left to right -->
+    <rect x="186" y="308" width="28" height="48" rx="8" fill="url(#ag-bars)" opacity="0.98"/>
+    <rect x="226" y="274" width="28" height="82" rx="8" fill="url(#ag-bars)" opacity="0.98"/>
+    <rect x="266" y="232" width="28" height="124" rx="8" fill="url(#ag-bars)" opacity="0.98"/>
+
+    <!-- Plus sign -->
+    <rect x="328" y="172" width="48" height="14" rx="7" fill="#f6f5f5" opacity="0.96"/>
+    <rect x="345" y="155" width="14" height="48" rx="7" fill="#f6f5f5" opacity="0.96"/>
+  </g>
+
+  <!-- LAYER 5: Squircle outer border -->
+  <rect x="0" y="0" width="512" height="512" rx="120" ry="120" fill="none"
+    stroke="white" stroke-width="2" stroke-opacity="0.20"/>
+</svg>

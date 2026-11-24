@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="AppGen">
+  <title>AppGen</title>
+  <desc>AI-coded vector mark: a scaffold grid assembling into an app tile with a generative spark, for an app generator. Hand-authored paths.</desc>
+  <defs>
+    <linearGradient id="ag-bg" x1="24" y1="24" x2="488" y2="488" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0E0B1F"/>
+      <stop offset="1" stop-color="#241640"/>
+    </linearGradient>
+    <linearGradient id="ag-tile" x1="176" y1="176" x2="336" y2="336" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F472B6"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="24" y="24" width="464" height="464" rx="108" ry="108" fill="url(#ag-bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="108" ry="108" fill="none" stroke="#3C2A66" stroke-width="2"/>
+
+  <!-- Scaffold dashed grid -->
+  <g stroke="#5B4A8A" stroke-width="5" stroke-dasharray="14 12" opacity="0.85">
+    <path d="M 132 132 L 380 132"/>
+    <path d="M 132 132 L 132 380"/>
+    <path d="M 380 132 L 380 380"/>
+    <path d="M 132 380 L 380 380"/>
+    <path d="M 132 256 L 380 256"/>
+    <path d="M 256 132 L 256 380"/>
+  </g>
+  <!-- Scaffold corner anchors -->
+  <g fill="#7C6BB0">
+    <circle cx="132" cy="132" r="10"/>
+    <circle cx="380" cy="132" r="10"/>
+    <circle cx="132" cy="380" r="10"/>
+    <circle cx="380" cy="380" r="10"/>
+  </g>
+
+  <!-- Assembled app tile (one quadrant filled solid) -->
+  <rect x="176" y="176" width="160" height="160" rx="36" fill="url(#ag-tile)"/>
+
+  <!-- Generative spark -->
+  <g fill="#FDE68A">
+    <path d="M 300 152 L 312 196 L 356 208 L 312 220 L 300 264 L 288 220 L 244 208 L 288 196 Z"/>
+  </g>
+  <circle cx="364" cy="160" r="9" fill="#FDE68A"/>
+  <circle cx="332" cy="116" r="6" fill="#FDE68A"/>
+</svg>

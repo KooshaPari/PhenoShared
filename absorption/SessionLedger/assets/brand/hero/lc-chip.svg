@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" fill="none">
+  <!-- Lab-Coat brand chip — used for hero, splash, OG cards -->
+  <defs>
+    <linearGradient id="lc-chip-bg" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="0.45" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="200" height="80" rx="20" fill="url(#lc-chip-bg)"/>
+  <circle cx="28" cy="40" r="14" fill="#fbbf24" opacity="0.9"/>
+  <circle cx="28" cy="40" r="14" fill="none" stroke="#0f172a" stroke-width="2"/>
+  <text x="56" y="46" font-family="-apple-system, system-ui, sans-serif"
+        font-size="22" font-weight="700" fill="#ffffff" letter-spacing="-0.5">
+    SessionLedger
+  </text>
+</svg>

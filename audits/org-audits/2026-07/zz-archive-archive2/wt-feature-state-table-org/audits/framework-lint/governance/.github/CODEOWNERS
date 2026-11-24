@@ -1,0 +1,28 @@
+# CODEOWNERS
+
+# Default owner for the entire repo
+* @<REDACTED>
+
+# Governance artifacts require an explicit owner review
+/AGENTS.md            @<REDACTED>
+/CHANGELOG.md         @<REDACTED>
+/CODE_OF_CONDUCT.md   @<REDACTED>
+/CONTRIBUTING.md      @<REDACTED>
+/SECURITY.md          @<REDACTED>
+/LICENSE-MIT          @<REDACTED>
+/LICENSE-APACHE-2.0   @<REDACTED>
+
+# CI / governance workflows
+/.github/workflows/   @<REDACTED>
+/.github/CODEOWNERS   @<REDACTED>
+/.github/ISSUE_TEMPLATE/ @<REDACTED>
+/.github/PULL_REQUEST_TEMPLATE.md @<REDACTED>
+
+# Substrate-tier configuration (deny-equivalent + safety policy)
+/deny.toml            @<REDACTED>
+/.safety-policy.yml   @<REDACTED>
+/pyproject.toml       @<REDACTED>
+
+# The linter source — owner is the maintainer
+/pheno_framework_lint.py @<REDACTED>
+/tests/               @<REDACTED>

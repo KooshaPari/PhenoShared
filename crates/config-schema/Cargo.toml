@@ -1,0 +1,15 @@
+[package]
+name = "config-schema"
+version = "0.1.0"
+description = "Extensible configuration schema validation for JSON-based configs"
+edition = "2021"
+license = "MIT"
+authors = ["Phenotype Team"]
+publish = true
+
+[dependencies]
+serde_json = "1.0"
+thiserror = "1.0"
+
+[dev-dependencies]
+serde_json = "1.0"

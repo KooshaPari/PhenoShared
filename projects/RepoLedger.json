@@ -1,0 +1,23 @@
+{
+  "name": "RepoLedger",
+  "languages": ["typescript", "go"],
+  "primary_language": "typescript",
+  "status": "active",
+  "has_readme": false,
+  "type": "ecosystem-console",
+  "path": "repos/RepoLedger",
+  "role": "repository-ecosystem-governance-console",
+  "domain_role": "repository-governance",
+  "boundary": "ecosystem-inventory-and-boundary-review",
+  "gh_url": "https://github.com/KooshaPari/RepoLedger",
+  "default_branch": "main",
+  "remote_default_sha_at_audit": "b664b757215df00a49536a861372cf864cb98bf1",
+  "remote_size_kb_at_audit": 52,
+  "disposition": "KEEP_STANDALONE",
+  "canonical_routing": true,
+  "absorbed_into": null,
+  "absorption_note": "Standalone governance console. It visualizes and records repository-boundary actions but is not itself a replacement for phenotype-registry or the managed source repositories.",
+  "rationale": "Active public pnpm monorepo with a React/@xyflow ecosystem console and Go state/WebSocket backend. The local checkout is clean at the audited remote SHA; production build passes. No license file is present, so licensing must be resolved before redistribution or absorption.",
+  "audit_artifact": "registry/audit-absorption-justification/repoledger-boundary-20260726.json",
+  "registry_author": "phenotype-registry (boundary audit)"
+}

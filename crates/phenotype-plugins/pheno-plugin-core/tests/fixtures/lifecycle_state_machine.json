@@ -1,0 +1,161 @@
+{
+  "$comment": "Fixture oracle for pheno_plugin_core::lifecycle::PluginState. Each row is one (from, to) cell of the 5x5 transition table; `allowed` records the contract that PluginState::can_transition_to and PluginState::transition must agree on. The 25 rows cover every possible pair so a regression in any one cell breaks at least one assertion in tests/lifecycle_fixture_oracle.rs. Adding a new state requires adding 5 rows (one per source); adding a new transition requires flipping the corresponding row's `allowed` flag from false to true. Traces to the lifecycle state machine documented in crates/pheno-plugin-core/src/lifecycle.rs.",
+  "schema_version": 1,
+  "states": ["registered", "initialized", "running", "stopped", "failed"],
+  "transitions": [
+    {
+      "from": "registered",
+      "to": "registered",
+      "allowed": false,
+      "rationale": "self-loop is illegal; an unregistered plugin must initialize or fail first"
+    },
+    {
+      "from": "registered",
+      "to": "initialized",
+      "allowed": true,
+      "rationale": "happy-path initialization"
+    },
+    {
+      "from": "registered",
+      "to": "running",
+      "allowed": false,
+      "rationale": "must initialize before running; skipping is illegal"
+    },
+    {
+      "from": "registered",
+      "to": "stopped",
+      "allowed": false,
+      "rationale": "cannot stop a plugin that was never initialized"
+    },
+    {
+      "from": "registered",
+      "to": "failed",
+      "allowed": true,
+      "rationale": "registration-time validation failure"
+    },
+
+    {
+      "from": "initialized",
+      "to": "registered",
+      "allowed": false,
+      "rationale": "going backwards is illegal"
+    },
+    {
+      "from": "initialized",
+      "to": "initialized",
+      "allowed": false,
+      "rationale": "self-loop is illegal"
+    },
+    {
+      "from": "initialized",
+      "to": "running",
+      "allowed": true,
+      "rationale": "happy-path activation"
+    },
+    {
+      "from": "initialized",
+      "to": "stopped",
+      "allowed": true,
+      "rationale": "graceful early shutdown before activation"
+    },
+    {
+      "from": "initialized",
+      "to": "failed",
+      "allowed": true,
+      "rationale": "configuration-time runtime error"
+    },
+
+    {
+      "from": "running",
+      "to": "registered",
+      "allowed": false,
+      "rationale": "must stop before re-registration"
+    },
+    {
+      "from": "running",
+      "to": "initialized",
+      "allowed": false,
+      "rationale": "going backwards is illegal"
+    },
+    {
+      "from": "running",
+      "to": "running",
+      "allowed": false,
+      "rationale": "self-loop is illegal"
+    },
+    {
+      "from": "running",
+      "to": "stopped",
+      "allowed": true,
+      "rationale": "graceful shutdown"
+    },
+    {
+      "from": "running",
+      "to": "failed",
+      "allowed": true,
+      "rationale": "runtime panic"
+    },
+
+    {
+      "from": "stopped",
+      "to": "registered",
+      "allowed": true,
+      "rationale": "restart: cleared for re-registration"
+    },
+    {
+      "from": "stopped",
+      "to": "initialized",
+      "allowed": false,
+      "rationale": "Stopped is terminal except for the restart path"
+    },
+    {
+      "from": "stopped",
+      "to": "running",
+      "allowed": false,
+      "rationale": "Stopped is terminal except for the restart path"
+    },
+    {
+      "from": "stopped",
+      "to": "stopped",
+      "allowed": false,
+      "rationale": "self-loop on a terminal state is illegal"
+    },
+    {
+      "from": "stopped",
+      "to": "failed",
+      "allowed": false,
+      "rationale": "terminal-to-terminal transitions are illegal"
+    },
+
+    {
+      "from": "failed",
+      "to": "registered",
+      "allowed": true,
+      "rationale": "manual reset for retry"
+    },
+    {
+      "from": "failed",
+      "to": "initialized",
+      "allowed": false,
+      "rationale": "Failed is terminal except for the manual-reset path"
+    },
+    {
+      "from": "failed",
+      "to": "running",
+      "allowed": false,
+      "rationale": "Failed is terminal except for the manual-reset path"
+    },
+    {
+      "from": "failed",
+      "to": "stopped",
+      "allowed": false,
+      "rationale": "terminal-to-terminal transitions are illegal"
+    },
+    {
+      "from": "failed",
+      "to": "failed",
+      "allowed": false,
+      "rationale": "self-loop on a terminal state is illegal"
+    }
+  ]
+}

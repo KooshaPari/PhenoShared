@@ -1,0 +1,25 @@
+# SessionLedger Alertmanager packaging sample (soft evidence).
+#
+# Local/dev only: default receiver is a loopback webhook. This file does not
+# enable live paging and must never contain secrets (webhook URLs, routing keys,
+# tokens, or channel IDs).
+#
+# Operators who want production routing start from
+# docs/ops/alerts/alertmanager.yaml and substitute live SL_ALERT_* values
+# outside the repository. Soft packaging proof:
+#   pwsh ./scripts/alertmanager-soft-check.ps1 -SelfCheck
+# Narrative: docs/ops/alertmanager-soft.md
+route:
+  receiver: sessionledger-webhook-placeholder
+  group_by:
+    - alertname
+    - job
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+receivers:
+  - name: sessionledger-webhook-placeholder
+    webhook_configs:
+      - url: http://127.0.0.1:9099/sessionledger-alerts
+        send_resolved: true

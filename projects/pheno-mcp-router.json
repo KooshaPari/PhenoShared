@@ -1,0 +1,17 @@
+{
+  "name": "pheno-mcp-router",
+  "languages": [],
+  "primary_language": "spec",
+  "status": "queued",
+  "has_readme": true,
+  "type": "router-substrate",
+  "path": "repos/pheno-mcp-router",
+  "disposition": "ABSORB",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "phenotype-router",
+  "proposed_target_repo": "phenotype-router",
+  "proposed_target_path": "mcp/",
+  "absorption_note": "Candidate only: compare port-adapter contracts with OmniRoute and phenotype-router-spec before any merge.",
+  "note": "Phenotype MCP router substrate with port-adapter pattern."
+}

@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { resumeItems, site } from "../data/site";
+---
+
+<BaseLayout title={`Resume — ${site.name}`} description="Short resume view for Koosha Paridehpour." active="resume">
+  <section class="page-hero">
+    <div>
+      <p class="eyebrow">Resume</p>
+      <h1 class="display">Short, current, and easy to scan.</h1>
+      <p class="lede">
+        This page is a plain summary of the public profile: study, current work, and the kinds
+        of systems I keep spending time on.
+      </p>
+    </div>
+    <div class="card side-panel">
+      <h2>Public handles</h2>
+      <p>GitHub, LinkedIn, Devpost, and email are all linked from the contact page.</p>
+      <a class="button" href="/contact">Open contact page</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid-3">
+      {resumeItems.map((item) => (
+        <article class="card resume-card">
+          <p class="eyebrow">{item.meta}</p>
+          <h2>{item.title}</h2>
+          <p>{item.copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.7fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  h1 {
+    margin: 0.25rem 0 0;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    line-height: 0.95;
+  }
+
+  .lede,
+  .side-panel,
+  .resume-card p {
+    color: var(--muted);
+  }
+
+  .side-panel,
+  .resume-card {
+    padding: 1.1rem;
+  }
+
+  .resume-card h2 {
+    margin: 0.2rem 0 0.7rem;
+    font-size: 1.08rem;
+  }
+
+  @media (max-width: 920px) {
+    .page-hero {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

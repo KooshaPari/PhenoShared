@@ -1,0 +1,52 @@
+---
+project: SessionLedger
+language: Rust
+generated: "2026-08-19"
+
+driver:
+  system: Phenotype AI-Driven Development
+  purpose: Link AI agent work to feature requirements
+
+agents:
+  - name: forge
+    role: implementation
+    scope: "File operations, git, build, test"
+  - name: muse
+    role: planning
+    scope: "Analysis, strategy, architecture review"
+
+linkages:
+  - agent: forge
+    fr: FR-001
+    activity: "JSONL ingest pipeline"
+    status: completed
+  - agent: forge
+    fr: FR-002
+    activity: "OKF bundle validation"
+    status: completed
+  - agent: forge
+    fr: FR-003
+    activity: "Bundle list and search"
+    status: completed
+  - agent: forge
+    fr: FR-004
+    activity: "SSE replay"
+    status: completed
+  - agent: forge
+    fr: FR-011
+    activity: "Crash recovery surfaces"
+    status: completed
+  - agent: forge
+    fr: FR-014
+    activity: "Daemon liveness and ops"
+    status: completed
+  - agent: forge
+    fr: FR-015
+    activity: "Observability (OTLP, Prometheus)"
+    status: completed
+  - agent: muse
+    fr: FR-005
+    activity: "Metrics aggregation design"
+    status: completed
+
+last_updated: "2026-08-19"

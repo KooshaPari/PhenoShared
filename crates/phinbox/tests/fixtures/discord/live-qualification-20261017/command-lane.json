@@ -1,0 +1,10 @@
+{
+  "event_id": "qualification-a8b41cae-lane",
+  "item_id": "qualification-a8b41cae-20261017",
+  "expected_revision": 1,
+  "actor": "qualification-local-operator",
+  "action": {
+    "kind": "set_lane",
+    "value": "native-canary-edited-lane"
+  }
+}

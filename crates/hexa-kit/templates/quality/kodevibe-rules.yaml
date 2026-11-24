@@ -1,0 +1,34 @@
+# KodeVibe Configuration
+vibes:
+  security:
+    enabled: true
+    level: strict
+  code:
+    enabled: true
+    level: moderate
+    max_function_length: 50
+    max_nesting_depth: 4
+  performance:
+    enabled: true
+    level: moderate
+    max_bundle_size: '2MB'
+  file:
+    enabled: true
+    level: strict
+  git:
+    enabled: true
+    min_commit_message_length: 10
+  dependency:
+    enabled: true
+    check_vulnerabilities: true
+  documentation:
+    enabled: false
+custom_rules:
+  - name: no-console-log
+    pattern: 'console\.log\('
+    message: Remove console.log statements before committing
+    severity: warning
+  - name: todo-comments
+    pattern: '(?i)\b(todo|fixme|hack|xxx)\b'
+    message: TODO comments should be tracked in issues
+    severity: info

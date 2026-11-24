@@ -1,0 +1,207 @@
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "rust"
+      - "agileplus"
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      major:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # --------------------------------------------------------------------------
+  # Rust — per-crate entries (all 21 workspace members).
+  # These are advisory: dependabot will primarily use the root entry
+  # to update Cargo.lock, but these per-crate entries ensure each
+  # crate's individual Cargo.toml is surfaced as the source of truth
+  # for any crate-local dep changes (e.g. moving a dep out of
+  # [workspace.dependencies] into a crate's [dependencies]).
+  # --------------------------------------------------------------------------
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-config"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-config"]
+    groups: { config: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(config-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-cache"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-cache"]
+    groups: { cache: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(cache-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-governance"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-governance"]
+    groups: { governance: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(governance-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-application"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-application"]
+    groups: { application: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(app-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-dashboard"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-dashboard"]
+    groups: { dashboard: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(dashboard-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-domain"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-domain"]
+    groups: { domain: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(domain-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-events"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-events"]
+    groups: { events: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(events-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-fixtures"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-fixtures"]
+    groups: { fixtures: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(fixtures-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-git"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-git"]
+    groups: { git: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(git-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-sqlite"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-sqlite"]
+    groups: { sqlite: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(sqlite-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-cli"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-cli"]
+    groups: { cli: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(cli-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-api"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-api"]
+    groups: { api: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(api-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-grpc"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-grpc"]
+    groups: { grpc: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(grpc-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-github"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-github"]
+    groups: { github: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(github-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-plane"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-plane"]
+    groups: { plane: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(plane-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-nats"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-nats"]
+    groups: { nats: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(nats-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-p2p"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-p2p"]
+    groups: { p2p: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(p2p-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-telemetry"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-telemetry"]
+    groups: { telemetry: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(telemetry-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-triage"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-triage"]
+    groups: { triage: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(triage-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-import"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-import"]
+    groups: { import: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(import-deps)", include: "scope" }
+  - package-ecosystem: "cargo"
+    directory: "/crates/agileplus-proto"
+    schedule: { interval: "weekly", day: "monday", time: "06:00", timezone: "UTC" }
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "rust", "agileplus", "agileplus-proto"]
+    groups: { proto: { patterns: ["*"] } }
+    commit-message: { prefix: "chore(proto-deps)", include: "scope" }
+
+  # --------------------------------------------------------------------------
+  # GitHub Actions (CI)
+  # --------------------------------------------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "06:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ci"
+      - "agileplus"
+    groups:
+      actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "ci(deps)"
+      include: "scope"

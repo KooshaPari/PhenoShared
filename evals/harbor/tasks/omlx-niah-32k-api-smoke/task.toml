@@ -1,0 +1,53 @@
+version = "1.0"
+
+[task]
+name = "omlx/niah-32k-api-smoke"
+authors = []
+keywords = ["omlx", "niah", "qwen3.5", "32k"]
+
+[metadata]
+author_name = "Phenotype"
+difficulty = "easy"
+category = "eval"
+tags = ["niah", "qwen35", "openai-compat", "32k"]
+
+[verifier]
+timeout_sec = 240.0
+
+[agent]
+timeout_sec = 240.0
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+mcp_servers = []
+
+# Host templates → container persistent env (Harbor resolve_env_vars).
+# The 32k task is an exact contract, so keep the value literal. Portage resolves
+# task templates from the host before applying job-level container environment.
+[environment.env]
+OPENAI_BASE_URL = "${OPENAI_BASE_URL}"
+OPENAI_API_KEY = "${OPENAI_API_KEY:-omlx}"
+OPENAI_MODEL = "${OPENAI_MODEL}"
+OMLX_READY_MODEL = "${OMLX_READY_MODEL}"
+NIAH_CONTEXT_TOKENS = "32768"
+
+# Oracle solve.sh only inherits solution.env (not agent.env) — keep in sync.
+[solution.env]
+OPENAI_BASE_URL = "${OPENAI_BASE_URL}"
+OPENAI_API_KEY = "${OPENAI_API_KEY:-omlx}"
+OPENAI_MODEL = "${OPENAI_MODEL}"
+OMLX_READY_MODEL = "${OMLX_READY_MODEL}"
+NIAH_CONTEXT_TOKENS = "32768"
+
+[verifier.env]
+
+[agent.env]
+OPENAI_BASE_URL = "${OPENAI_BASE_URL}"
+OPENAI_API_KEY = "${OPENAI_API_KEY:-omlx}"
+OPENAI_MODEL = "${OPENAI_MODEL}"
+OMLX_READY_MODEL = "${OMLX_READY_MODEL}"
+NIAH_CONTEXT_TOKENS = "32768"

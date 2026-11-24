@@ -1,0 +1,109 @@
+# TB2 route matrix — local-only execution through pheno-serve-dev.
+
+eval_protocol:
+  dataset: terminal-bench@2.0
+  n_tasks_total: 89
+  agent: terminus-2
+  n_attempts: 1
+  n_concurrent_trials: 1
+  pilot_n_tasks: 3
+  target_mean: 0.80
+
+local_execution:
+  launcher: harbor_cli/run_tbench_local.ps1
+  container_engine: podman_machine_docker_api
+  docker_host: "npipe:////./pipe/podman-machine-default"
+  python_requirement: ">=3.13,<3.14"
+  endpoint_requirement: "container_reachable_openai_compatible_api"
+  defaults:
+    max_turns: 3
+    max_tokens: 2048
+    context_size: 32768
+    reasoning: off
+    interleaved_thinking: false
+    enable_summarize: false
+    record_terminal_session: false
+    server_ready_timeout_sec: 300
+    docker_api_timeout_sec: 120
+  score_policy:
+    require_verifier_artifact: true
+    context_length_or_timeout: non_scoreable
+
+policy:
+  local_only: true
+  cloud_eval_enabled: false
+  cloud_cost_gate_usd: 1.00
+
+provider:
+  omniroute_base: "http://127.0.0.1:20128/v1"
+  pheno_serve_base: "http://127.0.0.1:21080/v1"
+  local_api_key: "local-no-key"
+
+router_reference:
+  combo_id: Main
+  config: config/combo_main.json
+  routing_policies:
+    - id: local_first
+      description: "Use only the three locked local aliases."
+    - id: cloud_escalate
+      description: "Disabled by local-only policy; retained as a historical policy name."
+    - id: balanced_router
+      description: "Historical OmniRoute policy; disabled for current scoring."
+
+route_kinds:
+  omniroute_cloud:
+    description: "Configured OpenRouter models via OmniRoute."
+    enabled: false
+  pheno_serve:
+    description: "Local pheno-serve-dev endpoint."
+  omniroute_combo:
+    description: "OmniRoute Main combo — tests routing optimizer end-to-end."
+
+models:
+  # --- Active local pheno-serve-dev aliases ---
+  - id: local/qwen35-08b
+    label: qwen35-08b-local
+    route_kind: pheno_serve
+    role: local_tiny
+    base_url: "http://127.0.0.1:21080/v1"
+    api_model: local/qwen35-08b
+    cost_per_m_in: 0.0
+    cost_per_m_out: 0.0
+    routing_policy: local_first
+  - id: local/lfm25-8b-a1b
+    label: lfm25-8b-a1b-local
+    route_kind: pheno_serve
+    role: local_workhorse
+    base_url: "http://127.0.0.1:21080/v1"
+    api_model: local/lfm25-8b-a1b
+    cost_per_m_in: 0.0
+    cost_per_m_out: 0.0
+    routing_policy: local_first
+  - id: local/ornith-8b
+    label: ornith-8b-local
+    route_kind: pheno_serve
+    role: local_workhorse
+    base_url: "http://127.0.0.1:21080/v1"
+    api_model: local/ornith-8b
+    cost_per_m_in: 0.0
+    cost_per_m_out: 0.0
+    routing_policy: local_first
+
+combo_reference:
+  - id: Main
+    label: omniroute-main-router
+    route_kind: omniroute_combo
+    combo: true
+    routing_policy: balanced_router
+    enabled: false
+    primary_cloud: false
+
+historical_cloud_models:
+  source: config/openrouter_eval_models.yaml
+  executable: false
+  reason: "Cloud evaluation is disabled until an explicit re-enable and <=$1 combined-run projection."
+
+jobs_subdir: jobs/harbor/tbench-routes
+state_file: state/tbench_routes_matrix.json
+results_file: eval/results/tbench_route_scores.json
+probe_cache: eval/results/tbench_route_probe.json

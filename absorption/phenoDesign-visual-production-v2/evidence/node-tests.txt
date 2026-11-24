@@ -1,0 +1,364 @@
+TAP version 13
+# Subtest: cover crop centers without stretching
+ok 1 - cover crop centers without stretching
+  ---
+  duration_ms: 2.099886
+  type: 'test'
+  ...
+# Subtest: contain adds letterbox offset
+ok 2 - contain adds letterbox offset
+  ---
+  duration_ms: 0.157634
+  type: 'test'
+  ...
+# Subtest: zoom and annotation share crop transform
+ok 3 - zoom and annotation share crop transform
+  ---
+  duration_ms: 0.19499
+  type: 'test'
+  ...
+# Subtest: reject geometry dimension 0
+ok 4 - reject geometry dimension 0
+  ---
+  duration_ms: 0.429192
+  type: 'test'
+  ...
+# Subtest: reject geometry dimension -1
+ok 5 - reject geometry dimension -1
+  ---
+  duration_ms: 0.122715
+  type: 'test'
+  ...
+# Subtest: reject geometry dimension NaN
+ok 6 - reject geometry dimension NaN
+  ---
+  duration_ms: 0.067998
+  type: 'test'
+  ...
+# Subtest: reject geometry dimension Infinity
+ok 7 - reject geometry dimension Infinity
+  ---
+  duration_ms: 0.056639
+  type: 'test'
+  ...
+# Subtest: reject nonfinite coordinates
+ok 8 - reject nonfinite coordinates
+  ---
+  duration_ms: 0.092069
+  type: 'test'
+  ...
+# Subtest: reject invalid fit
+ok 9 - reject invalid fit
+  ---
+  duration_ms: 0.586832
+  type: 'test'
+  ...
+# Subtest: half-open annotation interval
+ok 10 - half-open annotation interval
+  ---
+  duration_ms: 0.451733
+  type: 'test'
+  ...
+# Subtest: timeline contiguous with scene-local frame counts
+ok 11 - timeline contiguous with scene-local frame counts
+  ---
+  duration_ms: 0.252916
+  type: 'test'
+  ...
+# Subtest: unspecified video duration rejected
+ok 12 - unspecified video duration rejected
+  ---
+  duration_ms: 0.092265
+  type: 'test'
+  ...
+# Subtest: fractional fps not truncated
+ok 13 - fractional fps not truncated
+  ---
+  duration_ms: 0.066123
+  type: 'test'
+  ...
+# Subtest: valid embed passes without mutation
+ok 14 - valid embed passes without mutation
+  ---
+  duration_ms: 1.966687
+  type: 'test'
+  ...
+# Subtest: embed rejects empty scenes
+ok 15 - embed rejects empty scenes
+  ---
+  duration_ms: 0.341687
+  type: 'test'
+  ...
+# Subtest: embed rejects unsafe id
+ok 16 - embed rejects unsafe id
+  ---
+  duration_ms: 1.018364
+  type: 'test'
+  ...
+# Subtest: embed rejects missing title
+ok 17 - embed rejects missing title
+  ---
+  duration_ms: 0.109948
+  type: 'test'
+  ...
+# Subtest: embed rejects zero fps
+ok 18 - embed rejects zero fps
+  ---
+  duration_ms: 0.111214
+  type: 'test'
+  ...
+# Subtest: embed rejects nonfinite width
+ok 19 - embed rejects nonfinite width
+  ---
+  duration_ms: 0.060734
+  type: 'test'
+  ...
+# Subtest: embed rejects fractional width
+ok 20 - embed rejects fractional width
+  ---
+  duration_ms: 0.047942
+  type: 'test'
+  ...
+# Subtest: embed rejects missing duration
+ok 21 - embed rejects missing duration
+  ---
+  duration_ms: 0.203623
+  type: 'test'
+  ...
+# Subtest: embed rejects overlong scene
+ok 22 - embed rejects overlong scene
+  ---
+  duration_ms: 0.072913
+  type: 'test'
+  ...
+# Subtest: embed rejects video hold
+ok 23 - embed rejects video hold
+  ---
+  duration_ms: 0.055685
+  type: 'test'
+  ...
+# Subtest: embed rejects bad fit
+ok 24 - embed rejects bad fit
+  ---
+  duration_ms: 0.064114
+  type: 'test'
+  ...
+# Subtest: embed rejects bad zoom
+ok 25 - embed rejects bad zoom
+  ---
+  duration_ms: 0.061005
+  type: 'test'
+  ...
+# Subtest: embed rejects missing metadata
+ok 26 - embed rejects missing metadata
+  ---
+  duration_ms: 0.047718
+  type: 'test'
+  ...
+# Subtest: embed rejects late callout
+ok 27 - embed rejects late callout
+  ---
+  duration_ms: 0.174733
+  type: 'test'
+  ...
+# Subtest: embed rejects offsource highlight
+ok 28 - embed rejects offsource highlight
+  ---
+  duration_ms: 0.069213
+  type: 'test'
+  ...
+# Subtest: embed rejects negative cursor
+ok 29 - embed rejects negative cursor
+  ---
+  duration_ms: 0.056519
+  type: 'test'
+  ...
+# Subtest: embed rejects unknown image type
+ok 30 - embed rejects unknown image type
+  ---
+  duration_ms: 0.212662
+  type: 'test'
+  ...
+# Subtest: embed rejects invalid accent
+ok 31 - embed rejects invalid accent
+  ---
+  duration_ms: 0.192623
+  type: 'test'
+  ...
+# Subtest: reject asset path "../escape.png"
+ok 32 - reject asset path "../escape.png"
+  ---
+  duration_ms: 0.075209
+  type: 'test'
+  ...
+# Subtest: reject asset path "/abs.png"
+ok 33 - reject asset path "/abs.png"
+  ---
+  duration_ms: 0.036678
+  type: 'test'
+  ...
+# Subtest: reject asset path "C:/abs.png"
+ok 34 - reject asset path "C:/abs.png"
+  ---
+  duration_ms: 0.033365
+  type: 'test'
+  ...
+# Subtest: reject asset path "a\\\\b.png"
+ok 35 - reject asset path "a\\\\b.png"
+  ---
+  duration_ms: 0.03304
+  type: 'test'
+  ...
+# Subtest: reject asset path "https://x/y.png"
+ok 36 - reject asset path "https://x/y.png"
+  ---
+  duration_ms: 0.031877
+  type: 'test'
+  ...
+# Subtest: reject asset path "a//b.png"
+ok 37 - reject asset path "a//b.png"
+  ---
+  duration_ms: 0.036225
+  type: 'test'
+  ...
+# Subtest: reject asset path "a/./b.png"
+ok 38 - reject asset path "a/./b.png"
+  ---
+  duration_ms: 0.032
+  type: 'test'
+  ...
+# Subtest: reject asset path "%2e%2e/a.png"
+ok 39 - reject asset path "%2e%2e/a.png"
+  ---
+  duration_ms: 0.033692
+  type: 'test'
+  ...
+# Subtest: reject asset path "a.png?x=1"
+ok 40 - reject asset path "a.png?x=1"
+  ---
+  duration_ms: 0.034112
+  type: 'test'
+  ...
+# Subtest: reject asset path "a\\u0000.png"
+ok 41 - reject asset path "a\\u0000.png"
+  ---
+  duration_ms: 0.033523
+  type: 'test'
+  ...
+# Subtest: allows portable spaced path
+ok 42 - allows portable spaced path
+  ---
+  duration_ms: 0.03979
+  type: 'test'
+  ...
+# Subtest: job requires source and acceptance
+ok 43 - job requires source and acceptance
+  ---
+  duration_ms: 0.202176
+  type: 'test'
+  ...
+# Subtest: synthetic media cannot claim raw evidence
+ok 44 - synthetic media cannot claim raw evidence
+  ---
+  duration_ms: 0.160312
+  type: 'test'
+  ...
+# Subtest: evidence needs journey association
+ok 45 - evidence needs journey association
+  ---
+  duration_ms: 0.078244
+  type: 'test'
+  ...
+# Subtest: empty assertion set not green
+ok 46 - empty assertion set not green
+  ---
+  duration_ms: 0.089018
+  type: 'test'
+  ...
+# Subtest: blocked assertions prevent PASS
+ok 47 - blocked assertions prevent PASS
+  ---
+  duration_ms: 0.056736
+  type: 'test'
+  ...
+# Subtest: failure beats blocked
+ok 48 - failure beats blocked
+  ---
+  duration_ms: 0.03568
+  type: 'test'
+  ...
+# Subtest: unknown verdict rejected
+ok 49 - unknown verdict rejected
+  ---
+  duration_ms: 0.051107
+  type: 'test'
+  ...
+# Subtest: all asserted passes aggregate as reported PASS
+ok 50 - all asserted passes aggregate as reported PASS
+  ---
+  duration_ms: 0.036934
+  type: 'test'
+  ...
+# Subtest: same basenames do not overwrite distinct assets
+ok 51 - same basenames do not overwrite distinct assets
+  ---
+  duration_ms: 41.151529
+  type: 'test'
+  ...
+# Subtest: same bytes deduplicate safely
+ok 52 - same bytes deduplicate safely
+  ---
+  duration_ms: 8.555331
+  type: 'test'
+  ...
+# Subtest: parallel distinct staging directories do not collide
+ok 53 - parallel distinct staging directories do not collide
+  ---
+  duration_ms: 5.759248
+  type: 'test'
+  ...
+# Subtest: symlink asset rejected
+ok 54 - symlink asset rejected
+  ---
+  duration_ms: 1.588602
+  type: 'test'
+  ...
+# Subtest: symlink directory rejected
+ok 55 - symlink directory rejected
+  ---
+  duration_ms: 2.215376
+  type: 'test'
+  ...
+# Subtest: directory masquerading as file rejected
+ok 56 - directory masquerading as file rejected
+  ---
+  duration_ms: 1.457914
+  type: 'test'
+  ...
+# Subtest: empty file rejected
+ok 57 - empty file rejected
+  ---
+  duration_ms: 1.554902
+  type: 'test'
+  ...
+# Subtest: oversized file rejected
+ok 58 - oversized file rejected
+  ---
+  duration_ms: 1.513572
+  type: 'test'
+  ...
+# Subtest: corrupt preexisting stage rejected
+ok 59 - corrupt preexisting stage rejected
+  ---
+  duration_ms: 8.665696
+  type: 'test'
+  ...
+1..59
+# tests 59
+# suites 0
+# pass 59
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 175.130368

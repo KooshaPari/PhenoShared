@@ -1,0 +1,707 @@
+{
+  "date": "2026-07-04",
+  "recency_cutoff_utc": "2026-03-01T00:00:00+00:00",
+  "probes": [
+    {
+      "hf_repo": "Qwen/Qwen3.5-0.8B",
+      "ok": true,
+      "last_modified": "2026-03-02T11:26:58+00:00",
+      "created_at": "2026-02-28T23:57:01+00:00",
+      "downloads": 2485925,
+      "likes": 605,
+      "gated": false,
+      "pipeline_tag": "image-text-to-text",
+      "tags_count": 12,
+      "siblings_count": 13,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "LICENSE",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "merges.txt",
+          "size": 0
+        },
+        {
+          "rfilename": "model.safetensors-00001-of-00001.safetensors",
+          "size": 0
+        },
+        {
+          "rfilename": "model.safetensors.index.json",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "qwen3_5",
+        "image-text-to-text",
+        "conversational",
+        "base_model:Qwen/Qwen3.5-0.8B-Base",
+        "base_model:finetune:Qwen/Qwen3.5-0.8B-Base",
+        "license:apache-2.0",
+        "eval-results",
+        "endpoints_compatible",
+        "deploy:azure",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "LiquidAI/LFM2.5-8B-A1B",
+      "ok": true,
+      "last_modified": "2026-07-02T14:28:28+00:00",
+      "created_at": "2026-05-28T09:43:54+00:00",
+      "downloads": 145281,
+      "likes": 656,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 25,
+      "siblings_count": 10,
+      "top_files": [
+        {
+          "rfilename": ".eval_results/aime_2026.yaml",
+          "size": 0
+        },
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "LICENSE",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "generation_config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "model.safetensors",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "lfm2_moe",
+        "text-generation",
+        "liquid",
+        "lfm2.5",
+        "edge",
+        "conversational",
+        "en",
+        "ar",
+        "zh",
+        "fr",
+        "de",
+        "ja",
+        "ko",
+        "es",
+        "pt",
+        "it",
+        "arxiv:2511.23404",
+        "base_model:LiquidAI/LFM2.5-8B-A1B-Base",
+        "base_model:finetune:LiquidAI/LFM2.5-8B-A1B-Base",
+        "license:other",
+        "eval-results",
+        "endpoints_compatible",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "deepreinforce-ai/Ornith-1.0-9B",
+      "ok": true,
+      "last_modified": "2026-06-25T14:08:32+00:00",
+      "created_at": "2026-06-21T04:27:07+00:00",
+      "downloads": 69837,
+      "likes": 370,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 10,
+      "siblings_count": 18,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/ornith_9b_eval.png",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/ornith_logo.png",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "generation_config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "model-00001-of-00004.safetensors",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "qwen3_5",
+        "image-text-to-text",
+        "text-generation",
+        "conversational",
+        "license:mit",
+        "eval-results",
+        "endpoints_compatible",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
+      "ok": true,
+      "last_modified": "2026-06-25T14:12:12+00:00",
+      "created_at": "2026-06-25T04:56:13+00:00",
+      "downloads": 320660,
+      "likes": 417,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 7,
+      "siblings_count": 9,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/ornith_9b_eval.png",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/ornith_logo.png",
+          "size": 0
+        },
+        {
+          "rfilename": "ornith-1.0-9b-Q4_K_M.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "ornith-1.0-9b-Q5_K_M.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "ornith-1.0-9b-Q6_K.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "ornith-1.0-9b-Q8_0.gguf",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "gguf",
+        "text-generation",
+        "license:mit",
+        "endpoints_compatible",
+        "region:us",
+        "conversational"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "protoLabsAI/Ornith-1.0-9B-MTP-GGUF",
+      "ok": true,
+      "last_modified": "2026-07-04T01:42:07+00:00",
+      "created_at": "2026-06-27T22:19:52+00:00",
+      "downloads": 24464,
+      "likes": 52,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 13,
+      "siblings_count": 12,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "Ornith-1.0-9B-MTP-BF16.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "Ornith-1.0-9B-MTP-IQ2_M.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "Ornith-1.0-9B-MTP-IQ3_M.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "Ornith-1.0-9B-MTP-IQ4_XS.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "Ornith-1.0-9B-MTP-NVFP4.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "Ornith-1.0-9B-MTP-Q4_K_M.gguf",
+          "size": 0
+        },
+        {
+          "rfilename": "Ornith-1.0-9B-MTP-Q5_K_M.gguf",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "gguf",
+        "llama.cpp",
+        "speculative-decoding",
+        "mtp",
+        "multi-token-prediction",
+        "qwen3.5",
+        "text-generation",
+        "base_model:deepreinforce-ai/Ornith-1.0-9B",
+        "base_model:quantized:deepreinforce-ai/Ornith-1.0-9B",
+        "license:mit",
+        "endpoints_compatible",
+        "region:us",
+        "conversational"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "ibm-granite/granite-4.1-8b",
+      "ok": true,
+      "last_modified": "2026-05-04T17:36:29+00:00",
+      "created_at": "2026-04-06T13:18:47+00:00",
+      "downloads": 537989,
+      "likes": 203,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 13,
+      "siblings_count": 16,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "generation_config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "merges.txt",
+          "size": 0
+        },
+        {
+          "rfilename": "model-00001-of-00004.safetensors",
+          "size": 0
+        },
+        {
+          "rfilename": "model-00002-of-00004.safetensors",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "granite",
+        "text-generation",
+        "language",
+        "granite-4.1",
+        "conversational",
+        "arxiv:0000.00000",
+        "license:apache-2.0",
+        "eval-results",
+        "endpoints_compatible",
+        "deploy:azure",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "ibm-granite/granite-4.0-h-micro",
+      "ok": true,
+      "last_modified": "2025-11-03T19:41:11+00:00",
+      "created_at": "2025-09-16T19:46:14+00:00",
+      "downloads": 8001,
+      "likes": 147,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 12,
+      "siblings_count": 14,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "generation_config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "merges.txt",
+          "size": 0
+        },
+        {
+          "rfilename": "model-00001-of-00002.safetensors",
+          "size": 0
+        },
+        {
+          "rfilename": "model-00002-of-00002.safetensors",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "granitemoehybrid",
+        "text-generation",
+        "language",
+        "granite-4.0",
+        "conversational",
+        "arxiv:0000.00000",
+        "license:apache-2.0",
+        "endpoints_compatible",
+        "deploy:azure",
+        "region:us"
+      ],
+      "recency_status": "pre_march_2026"
+    },
+    {
+      "hf_repo": "LiquidAI/LFM2-24B-A2B",
+      "ok": true,
+      "last_modified": "2026-03-30T13:11:30+00:00",
+      "created_at": "2026-02-24T13:50:32+00:00",
+      "downloads": 24344,
+      "likes": 340,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 20,
+      "siblings_count": 9,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "LICENSE",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "generation_config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "model.safetensors",
+          "size": 0
+        },
+        {
+          "rfilename": "tokenizer.json",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "liquid",
+        "lfm2",
+        "edge",
+        "text-generation",
+        "en",
+        "ar",
+        "zh",
+        "fr",
+        "de",
+        "ja",
+        "ko",
+        "es",
+        "pt",
+        "arxiv:2511.23404",
+        "license:other",
+        "endpoints_compatible",
+        "deploy:azure",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "arcee-ai/Trinity-Mini",
+      "ok": true,
+      "last_modified": "2026-05-28T22:45:37+00:00",
+      "created_at": "2025-12-01T16:12:10+00:00",
+      "downloads": 25754,
+      "likes": 193,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 22,
+      "siblings_count": 23,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "LICENSE",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "configuration_afmoe.py",
+          "size": 0
+        },
+        {
+          "rfilename": "generation_config.json",
+          "size": 0
+        },
+        {
+          "rfilename": "model-00001-of-00011.safetensors",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "afmoe",
+        "text-generation",
+        "conversational",
+        "custom_code",
+        "en",
+        "es",
+        "fr",
+        "de",
+        "it",
+        "pt",
+        "ru",
+        "ar",
+        "hi",
+        "ko",
+        "zh",
+        "base_model:arcee-ai/Trinity-Mini-Base",
+        "base_model:finetune:arcee-ai/Trinity-Mini-Base",
+        "license:other",
+        "endpoints_compatible",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "poolside/Laguna-XS-2.1",
+      "ok": true,
+      "last_modified": "2026-07-02T16:43:02+00:00",
+      "created_at": "2026-06-20T14:14:26+00:00",
+      "downloads": 1075,
+      "likes": 47,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 11,
+      "siblings_count": 29,
+      "top_files": [
+        {
+          "rfilename": ".eval_results/swe-bench_pro.yaml",
+          "size": 0
+        },
+        {
+          "rfilename": ".eval_results/swe-bench_verified.yaml",
+          "size": 0
+        },
+        {
+          "rfilename": ".eval_results/terminal-bench-2.0.yaml",
+          "size": 0
+        },
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "LICENSE.md",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "chat_template.jinja",
+          "size": 0
+        },
+        {
+          "rfilename": "config.json",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "laguna",
+        "text-generation",
+        "laguna-xs-2.1",
+        "vllm",
+        "conversational",
+        "custom_code",
+        "license:openmdw-1.1",
+        "eval-results",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    },
+    {
+      "hf_repo": "tencent/HY3-Preview",
+      "ok": true,
+      "last_modified": "2026-04-23T14:59:42+00:00",
+      "created_at": "2026-04-13T06:07:57+00:00",
+      "downloads": 85365,
+      "likes": 285,
+      "gated": false,
+      "pipeline_tag": "text-generation",
+      "tags_count": 9,
+      "siblings_count": 153,
+      "top_files": [
+        {
+          "rfilename": ".gitattributes",
+          "size": 0
+        },
+        {
+          "rfilename": "LICENSE",
+          "size": 0
+        },
+        {
+          "rfilename": "README.md",
+          "size": 0
+        },
+        {
+          "rfilename": "README_CN.md",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/bench_agent_overview_v3.jpg",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/bench_claw_agent.png",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/bench_claw_agent2.jpg",
+          "size": 0
+        },
+        {
+          "rfilename": "assets/bench_context.jpg",
+          "size": 0
+        }
+      ],
+      "tags": [
+        "transformers",
+        "safetensors",
+        "hy_v3",
+        "text-generation",
+        "conversational",
+        "license:other",
+        "eval-results",
+        "endpoints_compatible",
+        "region:us"
+      ],
+      "recency_status": "ok"
+    }
+  ],
+  "recency_dlq": [
+    {
+      "hf_repo": "ibm-granite/granite-4.0-h-micro",
+      "last_modified": "2025-11-03T19:41:11+00:00",
+      "recency_status": "pre_march_2026",
+      "pipeline_tag": "text-generation"
+    }
+  ]
+}

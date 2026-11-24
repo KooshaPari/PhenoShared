@@ -1,0 +1,29 @@
+# Soft / nightly hermetic shuttle SelfCheck for C00 L7 concurrency evidence.
+# Docs + script anchors only — no shuttle crate on the Cargo graph.
+# continue-on-error: soft gate; full shuttle permutation coverage remains unpaid.
+name: shuttle soft
+
+on:
+  schedule:
+    - cron: "48 4 * * *" # nightly 04:48 UTC (offset from loom-smoke)
+  workflow_dispatch:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  shuttle-selfcheck:
+    name: soft shuttle · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: shuttle soft SelfCheck
+        shell: pwsh
+        run: ./scripts/shuttle-soft-check.ps1 -SelfCheck

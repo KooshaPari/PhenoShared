@@ -1,0 +1,38 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f6f5; --card: #fff; --soft: #f7f8f7;
+  --ink: #172421; --muted: #56645f; --line: #d9e0dc;
+  --accent: #145c4c; --onaccent: #fff; --focus: #176eaa;
+  --positive: #176043; --positive-bg: #e1f2e8;
+  --warning: #70430a; --warning-bg: #fff0d5;
+  --insight: #51437c; --insight-bg: #eee9fa;
+  --neutral: #48534f; --neutral-bg: #e9edeb;
+  --negative: #852c2c; --negative-bg: #fbe7e5;
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text-body: 1rem; --text-small: .875rem;
+  --text-title: clamp(1.8rem, 6vw, 2.65rem); --line-body: 1.55;
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem;
+  --space-4: 1rem; --space-6: 1.5rem; --space-8: 2rem;
+  --radius-control: .625rem; --radius-card: .875rem;
+  --radius-pill: 999px; --tap-min: 44px; --shell-width: 1200px;
+  --shadow-card: 0 10px 28px #1930270d;
+  --background: var(--bg); --foreground: var(--ink);
+  --card-foreground: var(--ink); --popover: var(--card);
+  --popover-foreground: var(--ink); --primary: var(--accent);
+  --primary-foreground: var(--onaccent); --secondary: var(--soft);
+  --secondary-foreground: var(--ink); --muted-foreground: var(--muted);
+  --accent-foreground: var(--onaccent); --destructive: var(--negative);
+  --border: var(--line); --input: var(--line); --ring: var(--focus);
+  --radius: var(--radius-control);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111816; --card: #1b2420; --soft: #222d28;
+  --ink: #eef5f1; --muted: #b3c0ba; --line: #394740;
+  --accent: #9cdbc2; --onaccent: #10251d; --focus: #80c9ff;
+  --positive: #a3e3bd; --positive-bg: #203b2c;
+  --warning: #ffd28c; --warning-bg: #46351d;
+  --insight: #d4c5ff; --insight-bg: #352d49;
+  --neutral: #c6d0cb; --neutral-bg: #303a35;
+  --negative: #ffb6ad; --negative-bg: #482b2a;
+}

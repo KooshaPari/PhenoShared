@@ -1,0 +1,25 @@
+{
+  "name": "phenoForge",
+  "languages": ["rust"],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "has_spec": true,
+  "type": "rust-task-runner",
+  "path": "repos/AgilePlus/phenoForge",
+  "gh_url": "https://github.com/KooshaPari/phenoForge",
+  "default_branch": "main",
+  "remote_default_sha_at_audit": "5a1a2cdf0425bf2c20f2f6ed0a5027dbb582a004",
+  "disposition": "REVIEW_TARGET_CONFLICT",
+  "absorbed_into": null,
+  "canonical_parent": "pheno",
+  "historical_absorption_claim": {
+    "target": "Tasken",
+    "source_record_note": "Registry previously claimed source deletion and absorption on 2026-06-16.",
+    "claim_status": "UNVERIFIED_CONTRADICTED_BY_LIVE_REMOTE"
+  },
+  "boundary_note": "Keep the standalone repository and AgilePlus submodule pointer until pheno/crates task-runner parity is proven. Do not delete, flatten, or infer absorption from the shared Forge name.",
+  "rationale": "Live public Rust task runner with parallel execution, dependency graph resolution, hot reload, and plugin-system scope. The remote is reachable and its main branch contains the AgilePlus submodule pointer as an ancestor, so the prior retired/deleted state was stale.",
+  "audit_artifact": "registry/audit-absorption-justification/phenoforge-boundary-20260726.json",
+  "registry_author": "phenotype-registry (boundary audit)"
+}

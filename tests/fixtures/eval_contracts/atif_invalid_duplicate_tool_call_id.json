@@ -1,0 +1,35 @@
+{
+  "schema_version": "ATIF-v1.7",
+  "trajectory_id": "duplicate-call-root",
+  "agent": {
+    "name": "pheno-test",
+    "version": "0.1"
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "source": "agent",
+      "message": "Calling two tools.",
+      "tool_calls": [
+        {
+          "tool_call_id": "call-1",
+          "function_name": "noop",
+          "arguments": {}
+        },
+        {
+          "tool_call_id": "call-1",
+          "function_name": "noop_again",
+          "arguments": {}
+        }
+      ],
+      "observation": {
+        "results": [
+          {
+            "source_call_id": "call-1",
+            "content": "ambiguous"
+          }
+        ]
+      }
+    }
+  ]
+}

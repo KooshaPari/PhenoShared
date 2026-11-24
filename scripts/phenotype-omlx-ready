@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# phenotype-omlx readiness — verify all 12 components are wired up.
+#
+# Sources env, then dispatches to scripts/phenotype_omlx_ready.py for the
+# actual checks (per-check signal-based timeout — no hanging on slow imports).
+set -u
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV="${VENV:-$(cd "$(dirname "$0")/../../turboquant_plus" && pwd)/.venv}"
+
+if [ -f "$VENV/bin/activate" ]; then
+    source "$VENV/bin/activate"
+fi
+if [ -f "$ROOT/phenotype-omlx-env.sh" ]; then
+    source "$ROOT/phenotype-omlx-env.sh"
+fi
+
+exec python3 "$ROOT/phenotype_omlx_ready.py"

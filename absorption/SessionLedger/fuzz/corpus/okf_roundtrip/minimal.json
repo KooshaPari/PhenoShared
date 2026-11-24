@@ -1,0 +1,7 @@
+{
+  "okf": "1.0",
+  "source_id": "fuzz-seed",
+  "entities": [],
+  "relations": [],
+  "provenance": { "corpus": "forge", "source_id": "fuzz-seed" }
+}

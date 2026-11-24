@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "purpose": "Live tokio sl-daemon mpsc/broadcast/SSE graph ports (C00 L7)",
+  "daemon_constants_mirrored": {
+    "CHANNEL_CAPACITY": "crates/sl-daemon/src/main.rs CHANNEL_CAPACITY (scaled down in tests)",
+    "BROADCAST_CAPACITY": "crates/sl-daemon/src/main.rs BROADCAST_CAPACITY (scaled down in tests)"
+  },
+  "tokio_tests": [
+    "daemon_tokio_mpsc_broadcast_sse_pipeline_conserves",
+    "daemon_tokio_broadcast_lagged_subscriber_recovers",
+    "daemon_tokio_shutdown_stops_mpsc_enqueue"
+  ],
+  "expected_pr_checks": [
+    "daemon graph hard · SelfCheck",
+    "daemon graph hard · tokio graph"
+  ],
+  "verify_command": "./scripts/daemon-graph-hard-check.ps1 -SelfCheck",
+  "soft_gate_workflow": ".github/workflows/loom-permutation.yml",
+  "not_verifiable_in_repo": [
+    "Full process-level sl-daemon HTTP SSE soak under loom",
+    "shuttle crate in default Cargo graph"
+  ]
+}

@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# Canonical Phenotype pre-push hook.
+# Bypass: HOOKS_SKIP=1 git push
+#         PRE_PUSH_SKIP_SECRETS=1 / PRE_PUSH_SKIP_LINT=1 / PRE_PUSH_SKIP_TESTS=1
+#         git push --no-verify
+set -u
+
+if [ "${HOOKS_SKIP:-0}" = "1" ]; then
+  echo "[hooks] HOOKS_SKIP=1; skipping pre-push"
+  exit 0
+fi
+
+timeout_bin="${TIMEOUT_BIN:-timeout}"
+if ! command -v "$timeout_bin" >/dev/null 2>&1; then
+  timeout_bin="gtimeout"
+fi
+if ! command -v "$timeout_bin" >/dev/null 2>&1; then
+  echo "[hooks] timeout/gtimeout not installed; running checks without timeout"
+  timeout_bin=""
+fi
+
+err=0
+run() {
+  local label="$1" seconds="$2"
+  shift 2
+  echo "[hooks] $label (timeout=${seconds}s)"
+  if [ -n "$timeout_bin" ]; then
+    "$timeout_bin" --kill-after=5s "${seconds}s" "$@" || err=$((err + 1))
+  else
+    "$@" || err=$((err + 1))
+  fi
+}
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root" || exit 1
+
+if [ "${PRE_PUSH_SKIP_SECRETS:-0}" != "1" ]; then
+  if command -v trufflehog >/dev/null 2>&1; then
+    run "trufflehog" "${PRE_PUSH_TIMEOUT_SECRETS:-60}" \
+      trufflehog git "file://$repo_root" --since-commit HEAD --only-verified --fail --no-update
+  else
+    echo "[hooks] trufflehog not installed; skipping (brew install trufflehog)"
+  fi
+fi
+
+if [ -f Cargo.toml ] && command -v cargo >/dev/null 2>&1; then
+  [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ] &&
+    run "cargo fmt --check" "${PRE_PUSH_TIMEOUT_LINT:-120}" cargo fmt --all -- --check
+  [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ] &&
+    run "cargo clippy" "${PRE_PUSH_TIMEOUT_LINT:-120}" cargo clippy --workspace --all-targets -- -D warnings
+  [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] &&
+    run "cargo test" "${PRE_PUSH_TIMEOUT_TESTS:-300}" cargo test --workspace --no-fail-fast
+elif [ -f go.mod ] && command -v go >/dev/null 2>&1; then
+  [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ] &&
+    run "go vet" "${PRE_PUSH_TIMEOUT_LINT:-120}" go vet ./...
+  [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] &&
+    run "go test" "${PRE_PUSH_TIMEOUT_TESTS:-300}" go test ./...
+elif [ -f pyproject.toml ] && command -v uv >/dev/null 2>&1; then
+  [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ] &&
+    run "ruff check" "${PRE_PUSH_TIMEOUT_LINT:-120}" uv run ruff check .
+  [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] &&
+    run "pytest" "${PRE_PUSH_TIMEOUT_TESTS:-300}" uv run pytest -x --tb=short -q
+elif [ -f package.json ]; then
+  pm="npm"
+  command -v pnpm >/dev/null 2>&1 && pm="pnpm"
+  command -v bun >/dev/null 2>&1 && pm="bun"
+  [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ] &&
+    run "$pm lint" "${PRE_PUSH_TIMEOUT_LINT:-120}" "$pm" run --if-present lint
+  [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] &&
+    run "$pm test" "${PRE_PUSH_TIMEOUT_TESTS:-300}" "$pm" run --if-present test
+else
+  echo "[hooks] no supported project manifest found; language checks skipped"
+fi
+
+if [ "$err" -ne 0 ]; then
+  echo "[hooks] pre-push failed ($err issue(s)); set HOOKS_SKIP=1 to bypass"
+  exit 1
+fi
+
+echo "[hooks] pre-push OK"

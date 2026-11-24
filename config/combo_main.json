@@ -1,0 +1,139 @@
+{
+  "combo_id": "Main",
+  "source": "pheno-harness/config/combo_main.json",
+  "tier_weights": {
+    "emergency": {
+      "description": "Final judge \u2014 verifier fails 2x, security/architecture, manual override",
+      "weight": 0.05,
+      "max_monthly_share": 0.13,
+      "providers": [
+        {
+          "provider": "claude",
+          "model": "claude-opus-4-8",
+          "max_pct_monthly": 0.05,
+          "tier_weight": 100
+        },
+        {
+          "provider": "openai",
+          "model": "gpt-5.5",
+          "effort": "xhigh",
+          "max_pct_monthly": 0.08,
+          "tier_weight": 80
+        },
+        {
+          "provider": "minimax",
+          "model": "minimax-m3",
+          "fallback": true,
+          "tier_weight": 10
+        }
+      ]
+    },
+    "teacher": {
+      "description": "Trace harvest for training corpus \u2014 budgeted 2-5M tok/mo structured",
+      "weight": 0.03,
+      "monthly_target_tokens": [
+        2000000,
+        5000000
+      ],
+      "providers": [
+        {
+          "provider": "claude",
+          "model": "claude-opus-4-8",
+          "tags": [
+            "route_labels",
+            "context_pairs",
+            "judge_rubrics"
+          ],
+          "tier_weight": 40
+        },
+        {
+          "provider": "openai",
+          "model": "gpt-5.5",
+          "tags": [
+            "failure_corrections",
+            "minimal_traces"
+          ],
+          "tier_weight": 35
+        },
+        {
+          "provider": "local",
+          "model": "local/qwen35-08b",
+          "tags": [
+            "baseline_traces"
+          ],
+          "tier_weight": 25
+        }
+      ]
+    },
+    "parallel": {
+      "description": "Harness parallel execution lanes",
+      "weight": 0.85,
+      "lanes": [
+        {
+          "lane": "architecture",
+          "tool": "forge",
+          "model": "claude-opus-4-8",
+          "tier_weight": 15
+        },
+        {
+          "lane": "ci_pr",
+          "tool": "agent-runner",
+          "model": "gpt-5.3-codex-spark",
+          "concurrency": 3,
+          "tier_weight": 25
+        },
+        {
+          "lane": "routine",
+          "tool": "omniroute",
+          "model": "local/qwen35-08b",
+          "tier_weight": 45
+        },
+        {
+          "lane": "medium_hard",
+          "tool": "omniroute",
+          "model": "inclusionai/ling-2.6-flash",
+          "tier_weight": 10
+        },
+        {
+          "lane": "research",
+          "tool": "cursor-task",
+          "model": "composer",
+          "tier_weight": 5
+        }
+      ]
+    },
+    "sunset": {
+      "description": "Transition buffer \u2014 track % local vs cloud",
+      "weight": 0.02,
+      "criteria": {
+        "routine_local_pct": 0.85,
+        "emergency_pct_max": 0.1,
+        "cost_per_accepted_step_reduction_pct": 0.6,
+        "minimax_cap_usage_max": 0.8
+      }
+    }
+  },
+  "router_weights": {
+    "quota": 0.2,
+    "health": 0.25,
+    "costInv": 0.2,
+    "latencyInv": 0.35,
+    "taskFit": 0.15,
+    "stability": 0.25,
+    "tierPriority": 0.1
+  },
+  "budget_states": {
+    "minimax_m3": {
+      "monthly_cap_tokens": 12000000000,
+      "green_pct": 0.6,
+      "yellow_pct": 0.8,
+      "red_pct": 0.95,
+      "blackout_pct": 1.0
+    }
+  },
+  "_tuning": {
+    "updated_at": "2026-06-14T04:55:58.624867+00:00",
+    "pass_rate": 0.0,
+    "alert_level": "blackout"
+  }
+}

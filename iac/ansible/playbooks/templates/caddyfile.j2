@@ -1,0 +1,30 @@
+{
+  email {{ caddy_admin_email | default('<REDACTED>@gmail.com') }}
+  # All sites use Cloudflare DNS-01 via caddy-dns/cloudflare plugin.
+}
+
+(cf_tls) {
+  tls {
+    dns cloudflare {env.CF_API_TOKEN}
+  }
+}
+
+forgejo.<REDACTED>.com {
+  import cf_tls
+  reverse_proxy 127.0.0.1:3000
+}
+
+ci.<REDACTED>.com {
+  import cf_tls
+  reverse_proxy 127.0.0.1:8000
+}
+
+vault.<REDACTED>.com {
+  import cf_tls
+  reverse_proxy 127.0.0.1:8080
+}
+
+grafana.<REDACTED>.com {
+  import cf_tls
+  reverse_proxy 127.0.0.1:3001
+}

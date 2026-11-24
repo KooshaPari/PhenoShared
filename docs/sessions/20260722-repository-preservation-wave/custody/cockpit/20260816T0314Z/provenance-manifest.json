@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "recorded_on": "2026-08-16T03:14:46Z",
+  "purpose": "Immutable point-in-time Beads cockpit ledger custody cursor; not live state, rendered output, publication, promotion, merge, archive, or retirement evidence.",
+  "source_commit_parent": "134030cfd74f39d094a599159243b52d8fae31e0",
+  "copied_files": [
+    {
+      "path": "beads.jsonl",
+      "sha256": "d4e0e6ddfdafa062717b094b385f7223840802ab4b3091fec7bc232f712219bf",
+      "bytes": 1053462,
+      "records": 1412
+    }
+  ],
+  "validation_checks": [
+    "strict JSON parsing",
+    "source stability before commit",
+    "SHA-256 and byte-size parity",
+    "git diff --check",
+    "direct remote ref verification"
+  ]
+}

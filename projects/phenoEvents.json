@@ -1,0 +1,33 @@
+{
+  "name": "phenoEvents",
+  "languages": [
+    "rust"
+  ],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "library",
+  "path": "repos/phenoEvents",
+  "disposition": "KEEP_CANONICAL_STANDALONE",
+  "wave": "2026-07-27-boundary-reconciliation",
+  "role": "event-bus-library",
+  "domain_role": "event-runtime",
+  "boundary": "standalone-event-bus-runtime",
+  "gh_url": "https://github.com/KooshaPari/phenoEvents",
+  "remote_default_branch": "main",
+  "remote_head_sha": "be6573c68797cc611a99533bca6dc1c3dcdb0c88",
+  "branch_count": 23,
+  "remote_updated_at": "2026-08-02T05:19:06Z",
+  "remote_pushed_at": "2026-08-05T01:08:26Z",
+  "remote_archived": false,
+  "license": "MIT OR Apache-2.0",
+  "absorbed_into": null,
+  "historical_absorbed_into": "pheno (crates/phenotype-event-bus/)",
+  "historical_absorbed_at": "2026-07-17",
+  "historical_absorption_status": "unverified",
+  "historical_absorption_note": "The 2026-07-17 audit claimed a lift into pheno/crates/phenotype-event-bus/. On 2026-08-05, pheno main 81d850837848800aa7a3e6a6f007b91b6555ef07 contains no pheno-events, phenoevents-observability, or phenotype-event-bus path; its relevant history records removal of an orphaned phenotype-event-bus tombstone. Retain the claim as historical provenance, not current ownership evidence.",
+  "absorption_note": "No new absorption is authorized. phenoEvents is the current canonical owner; any future integration requires exact source and target commits, a dependency proof, and focused target verification.",
+  "audit_artifact": "audits/absorption-justifications/phenoEvents-reconciliation-20260727.md",
+  "note": "Revalidated 2026-08-05: phenoEvents is public, unarchived, and canonical at the recorded main SHA. The pheno target claim is historical and unverified; Eventra and phenotype-event-sourcing remain adjacent boundaries, not implicit absorption targets. See the reconciliation artifact and source boundary document.",
+  "adr": "ADR-ECO-014 (historical); boundary-reconciliation-20260727"
+}

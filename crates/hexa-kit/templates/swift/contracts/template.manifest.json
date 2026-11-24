@@ -1,0 +1,25 @@
+{
+  "layer_type": "language",
+  "layer_name": "template-lang-swift",
+  "version": "0.1.0",
+  "depends_on": [
+    {"layer": "template-commons", "version": ">=0.1.0"}
+  ],
+  "owned_paths": [
+    "templates/swift/**",
+    "contracts/**",
+    "docs/**",
+    "scripts/**"
+  ],
+  "protected_paths": [
+    "README.md",
+    ".github/workflows/ci.yml",
+    "Taskfile.yml"
+  ],
+  "generated_files": [
+    "templates/swift/Package.swift",
+    "templates/swift/Sources/App/main.swift",
+    "templates/swift/Tests/Unit/UnitTests.swift",
+    "templates/swift/Tests/Integration/IntegrationTests.swift"
+  ]
+}

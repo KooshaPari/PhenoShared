@@ -1,0 +1,11 @@
+[package]
+name = "pheno-vcs-core"
+version = "0.1.0"
+edition = "2021"
+rust-version.workspace = true
+description = "VCS primitives for PhenoVCS registry"
+license = "MIT"
+
+
+[dependencies]
+thiserror = "2.0"

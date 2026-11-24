@@ -1,0 +1,282 @@
+---
+import "../../styles/globals.css";
+
+// Tier-3 microfrontend: /preview/<pr#> — redirect to Vercel preview deploy.
+// Spec: phenotype-infra/docs/governance/path-microfrontends-tier3.md
+//
+// Strategy:
+//   1. Enumerate open PRs on KooshaPari/AgilePlus at build time.
+//   2. For each PR, attempt to discover its Vercel preview URL via
+//      check-runs (vercel-bot) or the deployments API. Fall back to the
+//      deterministic Vercel branch-alias pattern.
+//   3. Emit a static HTML page per PR# with <meta http-equiv="refresh"> to
+//      the resolved preview URL plus a manual fallback link.
+//
+// Optionality rule: if a PR# was never built, we render a loud 404 page
+// (still static) explaining exactly what happened, not a silent redirect.
+
+const REPO_OWNER = "KooshaPari";
+const REPO_NAME = "AgilePlus";
+const REPO = `${REPO_OWNER}/${REPO_NAME}`;
+const VERCEL_PROJECT_SLUG = "agileplus"; // Vercel project name for AgilePlus app
+const VERCEL_TEAM_SLUG = "kooshaparis-projects"; // adjust if different team scope
+
+interface PrInfo {
+  number: number;
+  title: string;
+  branch: string;
+  sha: string;
+  html_url: string;
+  previewUrl: string;
+  previewSource: "vercel-check-run" | "deployment-api" | "branch-alias-fallback";
+}
+
+export async function getStaticPaths() {
+  // NOTE: helpers are inlined here because Astro hoists getStaticPaths and
+  // does not give it access to module-scoped declarations.
+  const REPO_INNER = "KooshaPari/AgilePlus";
+  const VERCEL_PROJECT = "agileplus";
+  const VERCEL_TEAM = "kooshaparis-projects";
+
+  const ghHeaders = (accept = "application/vnd.github+json") => ({
+    Accept: accept,
+    "User-Agent": "agileplus-landing-build",
+    ...(process.env.GITHUB_TOKEN
+      ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
+      : {}),
+  });
+
+  const ghJson = async (path: string): Promise<any> => {
+    const res = await fetch(`https://api.github.com/${path}`, {
+      headers: ghHeaders(),
+    });
+    if (!res.ok) return null;
+    return res.json();
+  };
+
+  const sanitizeBranch = (b: string) =>
+    b.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+
+  const branchAliasUrl = (branch: string) =>
+    `https://${VERCEL_PROJECT}-git-${sanitizeBranch(branch)}-${VERCEL_TEAM}.vercel.app`;
+
+  const resolveVercelUrl = async (
+    sha: string,
+    branch: string,
+  ): Promise<{ url: string; source: "vercel-check-run" | "deployment-api" | "branch-alias-fallback" }> => {
+    const checks = await ghJson(`repos/${REPO_INNER}/commits/${sha}/check-runs`);
+    if (checks?.check_runs) {
+      for (const run of checks.check_runs) {
+        const slug: string | undefined = run?.app?.slug;
+        if (slug !== "vercel" && slug !== "vercel-bot") continue;
+        const summary: string = run?.output?.summary ?? "";
+        const urlMatch = summary.match(/https:\/\/[a-z0-9-]+\.vercel\.app/i);
+        if (urlMatch) return { url: urlMatch[0], source: "vercel-check-run" };
+        if (run?.details_url) return { url: run.details_url, source: "vercel-check-run" };
+      }
+    }
+    const deployments = await ghJson(`repos/${REPO_INNER}/deployments?sha=${sha}&per_page=20`);
+    if (Array.isArray(deployments)) {
+      for (const dep of deployments) {
+        const env: string = dep?.environment ?? "";
+        if (!env.toLowerCase().includes("preview")) continue;
+        const statuses = await ghJson(`repos/${REPO_INNER}/deployments/${dep.id}/statuses`);
+        if (Array.isArray(statuses)) {
+          for (const s of statuses) {
+            if (s?.environment_url) return { url: s.environment_url, source: "deployment-api" };
+            if (s?.target_url && /vercel\.app/.test(s.target_url)) {
+              return { url: s.target_url, source: "deployment-api" };
+            }
+          }
+        }
+      }
+    }
+    return { url: branchAliasUrl(branch), source: "branch-alias-fallback" };
+  };
+
+  const pulls = await ghJson(`repos/${REPO_INNER}/pulls?state=open&per_page=100`);
+  if (!Array.isArray(pulls) || pulls.length === 0) {
+    // No open PRs at build time — emit a single placeholder route so
+    // /preview/0 still renders an honest "no PRs" page. Actual PR#s
+    // will fall through to the [prNumber] dynamic 404 path.
+    return [
+      {
+        params: { prNumber: "none" },
+        props: { pr: null, reason: "No open PRs at build time." } as {
+          pr: PrInfo | null;
+          reason: string | null;
+        },
+      },
+    ];
+  }
+
+  const results = await Promise.all(
+    pulls.map(async (pr: any): Promise<PrInfo> => {
+      const { url, source } = await resolveVercelUrl(pr.head.sha, pr.head.ref);
+      return {
+        number: pr.number,
+        title: pr.title,
+        branch: pr.head.ref,
+        sha: pr.head.sha,
+        html_url: pr.html_url,
+        previewUrl: url,
+        previewSource: source,
+      };
+    }),
+  );
+
+  return results.map((pr) => ({
+    params: { prNumber: String(pr.number) },
+    props: { pr, reason: null },
+  }));
+}
+
+interface Props {
+  pr: PrInfo | null;
+  reason: string | null;
+}
+const { pr, reason } = Astro.props as Props;
+const { prNumber } = Astro.params;
+const prUrlOnGitHub = `https://github.com/${REPO}/pull/${prNumber}`;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pr ? `Preview · PR #${pr.number} · AgilePlus` : `Preview · PR #${prNumber} · AgilePlus`}</title>
+    <meta name="description" content="Stable canonical URL for AgilePlus PR preview deploys." />
+    {pr && <meta http-equiv="refresh" content={`2; url=${pr.previewUrl}`} />}
+  </head>
+  <body class="min-h-screen">
+    <main class="max-w-3xl mx-auto px-6 py-12">
+      <nav class="mono text-xs text-[var(--muted)] mb-6">
+        <a href="/" class="hover:text-[var(--accent)]">agileplus</a>
+        <span class="mx-1">/</span>
+        <span>preview</span>
+        <span class="mx-1">/</span>
+        <span>{prNumber}</span>
+      </nav>
+
+      {pr ? (
+        <section>
+          <header class="mb-8">
+            <p class="mono text-xs uppercase tracking-wide text-[var(--muted)] mb-2">
+              Redirecting to Vercel preview…
+            </p>
+            <h1 class="text-3xl font-bold mb-2">PR #{pr.number}</h1>
+            <p class="text-[var(--muted)] mb-4">{pr.title}</p>
+            <p class="mono text-xs text-[var(--muted)]">
+              branch <code>{pr.branch}</code> · sha <code>{pr.sha.slice(0, 8)}</code>
+            </p>
+          </header>
+
+          <div class="preview-card">
+            <p class="mb-3">
+              <a href={pr.previewUrl} class="preview-link">{pr.previewUrl}</a>
+            </p>
+            <p class="text-sm text-[var(--muted)] mb-4">
+              You will be redirected automatically in 2 seconds. If the preview
+              fails to load, the PR may not have a Vercel preview deploy yet
+              (build pending, build failed, or Vercel integration not enabled
+              on <code>{REPO}</code>).
+            </p>
+            <ul class="preview-meta">
+              <li>
+                <span class="preview-label">resolved via</span>
+                <span class="preview-value mono">{pr.previewSource}</span>
+              </li>
+              <li>
+                <span class="preview-label">github</span>
+                <a class="preview-value mono" href={pr.html_url}>{pr.html_url.replace("https://", "")}</a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      ) : (
+        <section>
+          <header class="mb-8">
+            <p class="mono text-xs uppercase tracking-wide text-[var(--muted)] mb-2">
+              404 · No preview available
+            </p>
+            <h1 class="text-3xl font-bold mb-2">PR #{prNumber} not found</h1>
+            <p class="text-[var(--muted)]">
+              {reason ?? `No open PR with number ${prNumber} was discovered when this site was built. This page is static; PRs opened after the last deploy will not appear until the next rebuild.`}
+            </p>
+          </header>
+
+          <div class="preview-card">
+            <p class="mb-3">Possible causes:</p>
+            <ul class="preview-causes">
+              <li>The PR is closed or merged.</li>
+              <li>The PR was opened after the most recent landing deploy.</li>
+              <li>No PR with that number exists in <code>{REPO}</code>.</li>
+            </ul>
+            <p class="mt-6">
+              <a href={prUrlOnGitHub} class="preview-link">View PR #{prNumber} on GitHub →</a>
+            </p>
+            <p class="mt-2">
+              <a href={`https://github.com/${REPO}/pulls`} class="preview-link-secondary">
+                See all open AgilePlus PRs →
+              </a>
+            </p>
+          </div>
+        </section>
+      )}
+
+      <footer class="mt-16 pt-6 border-t text-xs text-[var(--muted)] mono" style="border-color: var(--border);">
+        Stable preview URLs built at deploy time from
+        <code>{REPO}</code> open PRs. Failures are loud, not silent.
+      </footer>
+    </main>
+
+    <style is:global>
+      .preview-card {
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        background: var(--card);
+      }
+      .preview-link {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: var(--accent);
+        word-break: break-all;
+      }
+      .preview-link:hover { text-decoration: underline; }
+      .preview-link-secondary {
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+      .preview-link-secondary:hover { color: var(--accent); }
+      .preview-meta {
+        list-style: none;
+        margin: 1rem 0 0;
+        padding: 1rem 0 0;
+        border-top: 1px solid var(--border);
+        display: grid;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+      }
+      .preview-meta li {
+        display: flex;
+        gap: 0.75rem;
+        align-items: baseline;
+      }
+      .preview-label {
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.6875rem;
+        min-width: 6rem;
+      }
+      .preview-value { color: inherit; }
+      .preview-causes {
+        list-style: disc;
+        padding-left: 1.25rem;
+        color: var(--muted);
+        display: grid;
+        gap: 0.25rem;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+[
+  {
+    "mode": "baseline",
+    "sha256": "17e5e34209b6a32e26440e37a7506418b200804abc73a40a80e4dba8abce80da",
+    "content": "",
+    "reasoning_content": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Task: Return exactly one short sentence.\n    *   Topic: Why",
+    "completion_tokens": 32
+  },
+  {
+    "mode": "ngram-simple",
+    "sha256": "17e5e34209b6a32e26440e37a7506418b200804abc73a40a80e4dba8abce80da",
+    "content": "",
+    "reasoning_content": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Task: Return exactly one short sentence.\n    *   Topic: Why",
+    "completion_tokens": 32
+  }
+]

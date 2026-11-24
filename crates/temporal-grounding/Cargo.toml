@@ -1,0 +1,56 @@
+[package]
+name = "temporal-grounding"
+description = "Temporal grounding utilities for Claude Code agent sessions"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+readme = "README.md"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/KooshaPari/phenotype-tooling"
+homepage = "https://github.com/KooshaPari/phenotype-tooling"
+keywords = ["phenotype", "tooling", "cli"]
+categories = ["command-line-utilities"]
+[lib]
+name = "temporal_grounding"
+path = "src/lib.rs"
+
+[[bin]]
+name = "agent-start-stamp"
+path = "src/bin/start_stamp.rs"
+
+[[bin]]
+name = "agent-elapsed"
+path = "src/bin/elapsed.rs"
+
+[[bin]]
+name = "now-iso"
+path = "src/bin/now_iso.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+
+[dev-dependencies]
+criterion = { workspace = true }
+
+[[bench]]
+name = "elapsed"
+harness = false
+
+[[bench]]
+name = "agent_entry_roundtrip"
+harness = false
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+module_name_repetitions = "allow"

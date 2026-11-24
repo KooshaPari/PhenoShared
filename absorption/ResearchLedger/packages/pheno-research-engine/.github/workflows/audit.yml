@@ -1,0 +1,80 @@
+name: Audit
+
+# Tier-0 fleet-standard audit workflow.
+# Runs lightweight quality + secret checks on every push and PR.
+# Heavy scans (CodeQL, Trivy, Scorecard) live in their own workflows.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly on Sunday at 04:17 UTC (offset from Scorecard's 03:17)
+    - cron: '17 4 * * 0'
+  workflow_dispatch:
+
+# Concurrency hardening: cancel in-flight runs for the same ref
+# so PR re-pushes don't queue up redundant scans.
+concurrency:
+  group: audit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least-privilege permissions; jobs opt-in to what they need.
+permissions:
+  contents: read
+
+jobs:
+  ruff:
+    name: Ruff lint + format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405
+        with:
+          python-version: '3.12'
+
+      - name: Install ruff
+        run: python -m pip install --upgrade pip && python -m pip install "ruff>=0.6.0"
+
+      - name: Ruff check
+        run: python -m ruff check .
+
+      - name: Ruff format check
+        run: python -m ruff format --check .
+
+  bandit:
+    name: Bandit security lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405
+        with:
+          python-version: '3.12'
+
+      - name: Install bandit
+        run: python -m pip install --upgrade pip && python -m pip install "bandit>=1.7"
+
+      - name: Bandit scan
+        run: bandit -q -r src || (echo "::warning::Bandit found issues — review required"; exit 1)
+        continue-on-error: false
+
+  gitleaks:
+    name: Gitleaks secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7  # v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,44 @@
+schema_version: pheno.eval.suite-lock.v1
+suite_id: deepswe-v1.1
+source:
+  owner: datacurve-ai
+  repository_url: https://github.com/datacurve-ai/deep-swe
+  revision_sha: 6db64a40f3318d8659238ff34a8cc4b491c49205
+  retrieved_at: "2026-07-14T22:00:00Z"
+  license_spdx: unknown
+dataset:
+  task_count: 113
+  task_ids_sha256: null
+  task_manifest_sha256: null
+  subset_ids: []
+  subset_manifest_sha256: null
+  changed_task_ids_sha256: null
+runner:
+  name: pier
+  version: 0.3.0
+  revision_sha: null
+  package_sha256: a8b43377774bc45fa20520d6c1aad9e244f2c6bdcd04155dddabd753fe443251
+harness:
+  name: mini-swe-agent
+  revision_sha: adfe20233d456104c38c3129161b54f0fd39f2c7
+  system_prompt_sha256: null
+  agent_config_sha256: null
+  tool_definitions_sha256: null
+verifier:
+  revision_sha: null
+  image_digests: []
+  separate_environment: true
+  expected_artifacts:
+    - reward.json
+    - ctrf.json
+    - test-stdout.txt
+    - run.log
+    - reports/
+integrity:
+  held_out_from_training: false
+  holdout_manifest_sha256: null
+  scoreable: false
+  unverified_reasons:
+    - Exact task/subset IDs and verifier environment images have not been acquired and hashed.
+    - Prompt, tool, agent config, and holdout manifests remain unresolved.
+    - Existing local JSON files are dry-run manifests rather than measured trials.

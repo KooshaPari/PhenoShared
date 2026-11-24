@@ -1,0 +1,6 @@
+id: US-002
+title: Tool System Capability Story
+description: As a user, I want the system shall provide tool system functionality..
+acceptance_criteria:
+- 'register_tools: Register all 6 research MCP tools'
+fr_id: FR-002

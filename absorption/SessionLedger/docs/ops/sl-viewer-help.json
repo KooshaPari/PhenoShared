@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "purpose": "sl-viewer CLI help and environment variable SSOT (C01/C09 DX)",
+  "cli_flags": ["--help", "-h", "--version", "-V"],
+  "environment_variables": [
+    {
+      "name": "SL_DAEMON_URL",
+      "when": "compile-time",
+      "default": "http://127.0.0.1:8080",
+      "module": "crates/sl-viewer/src/daemon_url.rs"
+    },
+    {
+      "name": "FORGE_DB",
+      "when": "runtime",
+      "requires_feature": "sqlite",
+      "module": "crates/sl-viewer/src/app.rs"
+    },
+    {
+      "name": "SL_VIEWER_DEMO",
+      "when": "runtime",
+      "module": "crates/sl-viewer/src/app.rs"
+    }
+  ],
+  "expected_pr_checks": [
+    "sl-viewer help · SelfCheck",
+    "sl-viewer help · unit tests"
+  ],
+  "verify_command": "./scripts/sl-viewer-help-check.ps1 -SelfCheck",
+  "doc_cross_links": [
+    "docs/HELP.md",
+    "docs/guides/quick-start/QUICKSTART.md",
+    ".env.example"
+  ]
+}

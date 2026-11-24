@@ -1,0 +1,56 @@
+{
+  "suite": "mt-bench",
+  "n": 5,
+  "passed": 4,
+  "pass_at_1": 0.8,
+  "wall_clock_s_total": 362.59,
+  "wall_clock_s_mean": 72.52,
+  "wall_clock_s_p95": 120.3,
+  "task_results": [
+    {
+      "task_id": "mtbench-writing-000",
+      "ok": true,
+      "wall_clock_s": 30.848,
+      "reply_bytes": 4228,
+      "reply_preview": "Once you provide the data, I'll compute the MAD (median of absolute deviations from the median) for you.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "mtbench-writing-001",
+      "ok": true,
+      "wall_clock_s": 89.833,
+      "reply_bytes": 31653,
+      "reply_preview": "There is no actual off-by-one error to fix in the codebase. If you're looking for a real occurrence of this pattern else",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "mtbench-writing-002",
+      "ok": true,
+      "wall_clock_s": 16.509,
+      "reply_bytes": 4500,
+      "reply_preview": "No changes are needed \u2014 the codebase has already been migrated to the recommended timezone-aware API.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "mtbench-writing-003",
+      "ok": false,
+      "wall_clock_s": 120.298,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "mtbench-writing-004",
+      "ok": true,
+      "wall_clock_s": 105.1,
+      "reply_bytes": 42134,
+      "reply_preview": "Could you clarify which file you're referring to? It might be in a different directory or repository (e.g., /forge, /.cu",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}
