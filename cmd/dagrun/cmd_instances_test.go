@@ -199,3 +199,125 @@ func TestCmdInstancesHelpExitsClean(t *testing.T) {
 		t.Fatalf("help text must warn that the registry is a hint:\n%s", out)
 	}
 }
+
+// A launcher cannot construct the registry path: it is <config>/dagrun/instances,
+// which is ~/.config on Linux, ~/Library/Application Support on macOS and
+// %APPDATA% on Windows. `instance_dir` in the JSON is the only supported way to
+// learn it, and it must be the same key `serve --check --json` uses for the same
+// value, so one reader works against both commands.
+func TestCmdInstancesJSONReportsInstanceDir(t *testing.T) {
+	var body struct {
+		InstanceDir string           `json:"instance_dir"`
+		Instances   []map[string]any `json:"instances"`
+		Errors      []string         `json:"errors"`
+	}
+
+	// Explicit directory.
+	explicit := t.TempDir()
+	seedInstance(t, explicit, "2026-11-24T00:00:00Z", "127.0.0.1:52341")
+	out := captureStdout(t, func() {
+		if err := cmdInstances([]string{"--dir", explicit, "--json"}); err != nil {
+			t.Fatalf("cmdInstances: %v", err)
+		}
+	})
+	if err := json.Unmarshal([]byte(out), &body); err != nil {
+		t.Fatalf("output is not JSON: %v\n%s", err, out)
+	}
+	if body.InstanceDir != explicit {
+		t.Errorf("instance_dir = %q, want the explicit %q", body.InstanceDir, explicit)
+	}
+	if len(body.Instances) != 1 {
+		t.Errorf("instance_dir reporting disturbed the listing: %d entries", len(body.Instances))
+	}
+
+	// Per-platform default, via the override the server itself honours.
+	override := filepath.Join(t.TempDir(), "elsewhere")
+	t.Setenv(applet.InstanceDirEnv, override)
+	out = captureStdout(t, func() {
+		if err := cmdInstances([]string{"--json"}); err != nil {
+			t.Fatalf("cmdInstances: %v", err)
+		}
+	})
+	if err := json.Unmarshal([]byte(out), &body); err != nil {
+		t.Fatalf("output is not JSON: %v\n%s", err, out)
+	}
+	if body.InstanceDir != override {
+		t.Errorf("instance_dir = %q, want the override %q", body.InstanceDir, override)
+	}
+
+	// Resolution with no override must agree with the resolver the server uses,
+	// never a path this command invented.
+	t.Setenv(applet.InstanceDirEnv, "")
+	want, err := applet.DefaultInstanceDir()
+	if err != nil {
+		t.Fatalf("DefaultInstanceDir: %v", err)
+	}
+	out = captureStdout(t, func() {
+		if err := cmdInstances([]string{"--json"}); err != nil {
+			t.Fatalf("cmdInstances: %v", err)
+		}
+	})
+	if err := json.Unmarshal([]byte(out), &body); err != nil {
+		t.Fatalf("output is not JSON: %v\n%s", err, out)
+	}
+	if body.InstanceDir != want {
+		t.Errorf("instance_dir = %q, want the resolved %q", body.InstanceDir, want)
+	}
+
+	// The retired key must not come back as a silent alias: one concept, one name.
+	var keys map[string]json.RawMessage
+	if err := json.Unmarshal([]byte(out), &keys); err != nil {
+		t.Fatalf("output is not an object: %v", err)
+	}
+	if _, ok := keys["dir"]; ok {
+		t.Errorf("instance_dir was added alongside a legacy dir key:\n%s", out)
+	}
+}
+
+// Listing is read-only. A host polls this command on a timer, so a poll that
+// rewrote, retracted or added an advertisement would make the launcher the thing
+// that breaks discovery.
+func TestCmdInstancesJSONLeavesTheRegistryUntouched(t *testing.T) {
+	dir := t.TempDir()
+	seedInstance(t, dir, "2026-11-24T00:00:00Z", "127.0.0.1:52341")
+	seedInstance(t, dir, "2026-11-24T00:00:02Z", "127.0.0.1:52342")
+
+	snapshot := func() map[string]string {
+		entries, err := os.ReadDir(dir)
+		if err != nil {
+			t.Fatalf("ReadDir: %v", err)
+		}
+		got := make(map[string]string, len(entries))
+		for _, e := range entries {
+			body, err := os.ReadFile(filepath.Join(dir, e.Name()))
+			if err != nil {
+				t.Fatalf("ReadFile %s: %v", e.Name(), err)
+			}
+			got[e.Name()] = string(body)
+		}
+		return got
+	}
+
+	before := snapshot()
+	for _, args := range [][]string{
+		{"--dir", dir},
+		{"--dir", dir, "--json"},
+		{"--dir", dir, "--verify"},
+	} {
+		captureStdout(t, func() {
+			if err := cmdInstances(args); err != nil {
+				t.Fatalf("cmdInstances %v: %v", args, err)
+			}
+		})
+	}
+	after := snapshot()
+
+	if len(before) != len(after) {
+		t.Fatalf("listing changed the registry: %d files before, %d after", len(before), len(after))
+	}
+	for name, body := range before {
+		if after[name] != body {
+			t.Errorf("listing rewrote %s", name)
+		}
+	}
+}

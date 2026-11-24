@@ -26,7 +26,11 @@ a master console uses to find a server it did not start.
   --prune     delete advertisements that are both unreachable and from a dead
               process, then report what was removed. Implies --verify, because
               deleting an entry that was never contacted would be a guess.
-  --json      print the entries as JSON
+  --json      print the entries as JSON, with the registry directory it read as
+              "instance_dir". That is the only supported way for a host to learn
+              the registry path: it is platform-dependent, so a launcher that
+              builds it from $HOME finds nothing on a host whose config dir
+              differs and reports "no servers" instead of failing.
 
 The registry is a hint. A killed server leaves its file behind, so an entry
 without --verify says "advertised", not "reachable".
@@ -109,13 +113,17 @@ func cmdInstances(args []string) error {
 	if *jsonOut {
 		// Errors are part of the answer, not a side channel: a caller that saw
 		// only the valid entries would believe a corrupt registry is empty.
+		// The registry path is `instance_dir`, the same key `serve --check --json`
+		// reports for the same value. One concept, one name: a launcher reads the
+		// key once and works against both commands, and a missing key would decode
+		// as an empty string rather than an error, which reads as "no servers".
 		body := struct {
-			Dir       string           `json:"dir"`
-			Instances []instanceReport `json:"instances"`
-			Errors    []string         `json:"errors"`
-			Pruned    []string         `json:"pruned"`
-			PruneErrs []string         `json:"prune_errors"`
-		}{Dir: where, Instances: reports, Errors: []string{}, Pruned: []string{}, PruneErrs: []string{}}
+			InstanceDir string           `json:"instance_dir"`
+			Instances   []instanceReport `json:"instances"`
+			Errors      []string         `json:"errors"`
+			Pruned      []string         `json:"pruned"`
+			PruneErrs   []string         `json:"prune_errors"`
+		}{InstanceDir: where, Instances: reports, Errors: []string{}, Pruned: []string{}, PruneErrs: []string{}}
 		for _, err := range errs {
 			body.Errors = append(body.Errors, err.Error())
 		}
