@@ -1,8 +1,0 @@
-name: "CodeQL Config"
-
-paths-ignore:
-  - tests
-  - benches
-  - examples
-  - '**/*_test.rs'
-  - '**/tests/**'

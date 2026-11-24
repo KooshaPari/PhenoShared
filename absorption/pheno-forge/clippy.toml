@@ -1,3 +1,0 @@
-# Clippy configuration for phenotype-forge
-
-avoid-breaking-exported-api = false

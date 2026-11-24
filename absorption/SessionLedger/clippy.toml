@@ -1,2 +1,0 @@
-# Clippy configuration parameters belong here. Lint-level policy lives in the
-# root Cargo.toml `[lints.clippy]` table, where Cargo passes it to rustc.
