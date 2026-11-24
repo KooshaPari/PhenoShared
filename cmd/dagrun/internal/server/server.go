@@ -195,7 +195,9 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/agents", s.recover(s.handleAgents))
 	mux.HandleFunc("/api/query", s.recover(s.handleQuery))
 	mux.HandleFunc("/api/nodes/", s.recover(s.handleNode))
-	mux.HandleFunc("/", s.recover(s.handleViz))
+	// The viewer, but only for a page. An unmatched /api/ or /.well-known/ path
+	// answers 404 JSON instead of this page (see handleFallback).
+	mux.HandleFunc("/", s.recover(s.handleFallback))
 	return mux
 }
 

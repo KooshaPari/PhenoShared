@@ -173,6 +173,13 @@ shipped CSP also carries `default-src 'none'` and `form-action 'none'`: the page
 fetches nothing, posts nowhere, and can only be framed by an origin named on the
 command line.
 
+An unmatched path under `/api/` or `/.well-known/` answers **404 with a JSON
+body**, not the viewer. The catch-all used to serve the page for any unmatched
+path, so a client asking for a route dagrun never had (`/api/servers` is the one
+that caught a launcher lane out) received `200 text/html` and had no way to tell
+a wrong route from a working call. Page paths still render the viewer, because a
+browser asking for an unknown page did want a page.
+
 ### D12. A running server advertises itself, so a launcher need not scan ports
 
 The three routes above are only useful to a console that already knows the port.

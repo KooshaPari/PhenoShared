@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/KooshaPari/dagrun/internal/agents"
@@ -16,6 +17,32 @@ import (
 	"github.com/KooshaPari/dagrun/internal/query"
 	"github.com/KooshaPari/dagrun/internal/viz"
 )
+
+// handleFallback renders the viewer for a page request and refuses a typo'd
+// machine path.
+//
+// Without this, an unmatched path such as /api/servers, a route that has never
+// existed, falls through to the viewer and answers 200 text/html. A program then
+// cannot tell "no such route" from "here is a page": it parses markup as data,
+// or treats a silent wrong answer as a working call. Measured as a real
+// confusion during launcher work, which is why the refusal is here rather than
+// left to a caller's own validation.
+func (s *Server) handleFallback(w http.ResponseWriter, r *http.Request) {
+	if isMachinePath(r.URL.Path) {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusNotFound)
+		_, _ = io.WriteString(w, `{"error":"no such route","path":`+strconv.Quote(r.URL.Path)+"}\n")
+		return
+	}
+	s.handleViz(w, r)
+}
+
+// isMachinePath reports whether a path sits in a namespace a program reads, where
+// an HTML answer is always a mistake. Page paths return false on purpose: a
+// browser asking for an unknown page should still get the viewer.
+func isMachinePath(p string) bool {
+	return strings.HasPrefix(p, "/api/") || strings.HasPrefix(p, "/.well-known/")
+}
 
 func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, map[string]any{"ok": true, "dir": s.dir, "run": s.plan.Run})
