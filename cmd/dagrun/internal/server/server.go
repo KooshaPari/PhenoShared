@@ -29,11 +29,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/KooshaPari/dagrun/internal/agents"
+	"github.com/KooshaPari/dagrun/internal/applet"
 	"github.com/KooshaPari/dagrun/internal/plan"
-	"github.com/KooshaPari/dagrun/internal/query"
 	"github.com/KooshaPari/dagrun/internal/store"
-	"github.com/KooshaPari/dagrun/internal/viz"
 )
 
 // DefaultAddr is loopback with an ephemeral port. Anything else has to be asked
@@ -46,6 +44,14 @@ type Options struct {
 	Dir string
 	// Addr is the listen address. Must be loopback.
 	Addr string
+	// Version is the binary's version, published in the applet manifest. An
+	// empty value is reported as the contract-valid default rather than "".
+	Version string
+	// EmbedAllowOrigins names the consumer origins allowed to frame /embed, in
+	// addition to this origin. Empty means same-origin only, which is the
+	// default: this surface is unauthenticated, so widening it is a deliberate
+	// act by whoever runs the server, never a convenience default.
+	EmbedAllowOrigins []string
 }
 
 // Server serves one run directory.
@@ -65,6 +71,13 @@ type Server struct {
 	boundAddr string
 	// ln is the bound listener, created by Bind and consumed by Listen.
 	ln net.Listener
+
+	// appletManifest is built and validated once, in New. It is published to
+	// strangers, so an invalid one is refused at construction rather than
+	// served and trusted.
+	appletManifest applet.Manifest
+	// framePolicy is the effective CSP frame-ancestors value for /embed.
+	framePolicy string
 }
 
 // New validates the request without binding anything.
@@ -102,7 +115,22 @@ func New(opt Options) (*Server, error) {
 		return nil, fmt.Errorf("parse %s/run.yaml: %w", abs, err)
 	}
 
-	return &Server{dir: abs, addr: addr, errOut: os.Stderr, plan: p}, nil
+	// The manifest is validated here, not on each request: it cannot change
+	// while the process lives, and a malformed one should stop the server
+	// before it serves anything that claims to conform.
+	manifest := applet.Build(opt.Version)
+	if err := manifest.Validate(); err != nil {
+		return nil, fmt.Errorf("applet manifest does not conform to %s: %w", applet.Contract, err)
+	}
+	frames, err := applet.FrameAncestors(opt.EmbedAllowOrigins)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Server{
+		dir: abs, addr: addr, errOut: os.Stderr, plan: p,
+		appletManifest: manifest, framePolicy: frames,
+	}, nil
 }
 
 // requireLoopback accepts localhost, 127.0.0.0/8 and ::1 only.
@@ -138,6 +166,13 @@ func (s *Server) Addr() string {
 // Handler returns the route table.
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
+	// The applet contract document, where a discovery scanner looks first.
+	mux.HandleFunc(applet.ContractPath, s.recover(s.handleAppletManifest))
+	// dagrun's own discovery document: the manifest plus the deployment facts
+	// the contract has no field for.
+	mux.HandleFunc("/api/applet", s.recover(s.handleAppletDiscovery))
+	// The embeddable read-only entrypoint a master console frames.
+	mux.HandleFunc("/embed", s.recover(s.handleEmbed))
 	mux.HandleFunc("/api/health", s.recover(s.handleHealth))
 	mux.HandleFunc("/api/plan", s.recover(s.handlePlan))
 	mux.HandleFunc("/api/status", s.recover(s.handleStatus))
@@ -211,175 +246,6 @@ func (s *Server) recover(h func(http.ResponseWriter, *http.Request)) http.Handle
 		}()
 		h(w, r)
 	}
-}
-
-func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, map[string]any{"ok": true, "dir": s.dir, "run": s.plan.Run})
-}
-
-func (s *Server) handlePlan(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, s.plan)
-}
-
-func (s *Server) handleStatus(w http.ResponseWriter, r *http.Request) {
-	st, err := s.loadState()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	writeJSON(w, st)
-}
-
-// handleAgents serves the agent-card projection: one card per node that has
-// run, with the child session id and whether it could be validated.
-//
-// It is built from run.yaml and state.json directly, like every other route
-// here, so the monitor still does not sit on the store's write path.
-func (s *Server) handleAgents(w http.ResponseWriter, r *http.Request) {
-	doc, err := agents.Build(s.dir, nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	writeJSON(w, doc)
-}
-
-// handleQuery translates the request into the query package's own argument
-// form, so the grammar has exactly one implementation.
-func (s *Server) handleQuery(w http.ResponseWriter, r *http.Request) {
-	qv := r.URL.Query()
-	var args []string
-	for _, where := range qv["where"] {
-		args = append(args, "--where", where)
-	}
-	if sel := qv["select"]; len(sel) > 0 {
-		args = append(args, "--select", strings.Join(sel, ","))
-	}
-	if ob := qv.Get("order_by"); ob != "" {
-		args = append(args, "--order-by", ob)
-	}
-	if lim := qv.Get("limit"); lim != "" {
-		args = append(args, "--limit", lim)
-	}
-
-	q, err := query.Parse(args)
-	if err != nil {
-		// query.Parse names the allowed set, which is the whole point of
-		// surfacing it rather than returning an empty list.
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	rows, err := query.Run(s.dir, q)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if qv.Get("json") == "1" {
-		w.Header().Set("Content-Type", "application/json")
-		_ = query.Render(w, rows, q, true)
-		return
-	}
-	var buf strings.Builder
-	if err := query.Render(&buf, rows, q, false); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	_, _ = io.WriteString(w, buf.String())
-}
-
-// handleNode answers for one node: plan fields, its state record, and its
-// artifact results.
-func (s *Server) handleNode(w http.ResponseWriter, r *http.Request) {
-	id := strings.TrimPrefix(r.URL.Path, "/api/nodes/")
-	if id == "" {
-		http.Error(w, "usage: /api/nodes/{id}", http.StatusBadRequest)
-		return
-	}
-	var node *plan.Node
-	for _, n := range s.plan.Nodes {
-		if n != nil && n.ID == id {
-			node = n
-			break
-		}
-	}
-	if node == nil {
-		http.Error(w, fmt.Sprintf("no node %q in this run", id), http.StatusNotFound)
-		return
-	}
-
-	doc := map[string]any{
-		"id": node.ID, "kind": node.Kind, "role": node.Role, "title": node.Title,
-		"status": plan.StatusPending,
-	}
-	if st, err := s.loadState(); err == nil {
-		if ns := st.Nodes[id]; ns != nil {
-			doc["status"] = ns.Status
-			doc["owner"] = ns.Owner
-			doc["attempts"] = ns.Attempts
-			doc["last_error"] = ns.LastError
-			// Session identity is reported as recorded: the id and how it was
-			// learned. Validation lives in /api/agents, which has the home
-			// directory and the harness artifact stores to check against.
-			if ns.Session != "" {
-				doc["session"] = ns.Session
-				doc["session_source"] = ns.SessionSource
-			}
-			if ns.Verify != nil {
-				doc["artifacts"] = ns.Verify.Artifacts
-			}
-		}
-	}
-	writeJSON(w, doc)
-}
-
-// handleViz renders the interactive viewer fresh, with a small reloader.
-//
-// The reloader is a full page reload, not an incremental patch: the renderer is
-// a canvas app holding its own state, and re-rendering it wholesale is both
-// simpler and less likely to be wrong than reaching into it. A DAG of a few
-// hundred nodes renders in milliseconds, so the crude version is the honest one.
-func (s *Server) handleViz(w http.ResponseWriter, r *http.Request) {
-	doc, err := viz.Build(s.dir)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	html, err := viz.RenderHTML(doc)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	out := injectReloader(string(html))
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	_, _ = io.WriteString(w, out)
-}
-
-// reloaderScript reloads the page only when /api/status actually changed, so an
-// idle run does not repaint every two seconds and lose the reader's scroll.
-const reloaderScript = `<script>
-(function () {
-  var last = null;
-  function tick() {
-    fetch('/api/status', {cache: 'no-store'})
-      .then(function (r) { return r.text(); })
-      .then(function (t) {
-        if (last !== null && t !== last) { location.reload(); return; }
-        last = t;
-      })
-      .catch(function () { /* a reload failure must not spam the console */ })
-      .then(function () { setTimeout(tick, 2000); });
-  }
-  setTimeout(tick, 2000);
-})();
-</script>
-`
-
-func injectReloader(html string) string {
-	if i := strings.LastIndex(html, "</body>"); i >= 0 {
-		return html[:i] + reloaderScript + html[i:]
-	}
-	return html + reloaderScript
 }
 
 // loadState reads the state document without opening the store, because

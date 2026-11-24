@@ -133,6 +133,46 @@ under a small DOM shim in Node, and the assertions read the markup and panel
 text it produced (`make test-ui`). Canvas pixels are not asserted; drawing is
 verified through its inputs.
 
+### D11. The applet surface publishes facts it can prove, behind two documents
+
+A master console needs to discover this run, decide whether to mount it, and
+render it without learning a bespoke API. That is three questions, and they are
+answered by three routes, each with one job.
+
+`/.well-known/applet.json` is the **manifest** and nothing else. It validates
+against the shared contract `urn:phenotype:atlas-plan:1:applet`
+(`docs/atlas/schemas/applet.schema.json`, byte-identical to the `docs-5` copy),
+which sets `additionalProperties: false`. That clause is why the split exists: an
+origin, a port and a mount path are deployment facts, and a manifest that carried
+them could not be published by the same schema everywhere. The manifest is
+checked in `server.New` and a server that cannot produce a conforming one refuses
+to start, so a console never receives a document that fails its own contract.
+
+`/api/applet` is the **discovery** document: the same manifest, embedded
+unmodified, plus what only this process knows. `host.origin` is derived from the
+request, never from `X-Forwarded-Proto`, because this server is loopback-only and
+a proxy header here is a claim it cannot check. `authority` states that dagrun
+owns the run and `writes` is false. `mount` states `read_only: true` and the
+effective frame policy. `routes` lists the GET endpoints with `read_only: true`
+on each, so a console can build a menu without a second fetch.
+
+`/embed` is the mountable view. It is the agent-card projection rendered as one
+page with the node table beside it, and it is built with the same `agents.Build`
+that answers `/api/agents`, so the page and the API cannot disagree about which
+session a node ran in or whether it was validated. It carries **no form, button,
+input, select or textarea**, and the test asserts their absence rather than
+reviewing the template once: a control here would turn a second console into a
+write path onto somebody's agent session.
+
+Authorization is stated rather than implied. The mode is `none-by-design` with
+scope `loopback`, because the only people who can reach the port are already on
+the machine. That makes framing the real boundary, so `frame-ancestors` starts at
+`'self'` and widens only through an explicit `--embed-allow-origin`, one bare
+origin at a time. `*` and a scheme wildcard are rejected at startup, and the
+shipped CSP also carries `default-src 'none'` and `form-action 'none'`: the page
+fetches nothing, posts nowhere, and can only be framed by an origin named on the
+command line.
+
 ## Layering
 
 ```
@@ -153,22 +193,37 @@ them.
 
 Measured, not estimated. "Code" excludes blank lines and comment-only lines.
 
-| area | raw | code |
-|---|---|---|
-| CLI (`main.go`, `cmd_*.go`) | 958 | 742 |
-| plan (schema, validate, topo, PERT, prompt) | 893 | 628 |
-| store (state + leases) | 468 | 331 |
-| verify | 291 | 214 |
-| run (scheduler + exec) | 480 | 344 |
-| harness | 295 | 208 |
-| trace | 170 | 108 |
-| export | 329 | 219 |
-| **production** | **3,884** | **3,366** |
-| tests | 868 | 810 |
-| **total** | **4,752** | **4,176** |
+The per-area table that used to sit here was measured on the tree as it stood when this
+document was written. Parallel lanes have since grown it by roughly an order of
+magnitude, so a copied table would be a false claim within a day. It is retired in
+favour of the numbers below plus the command that re-derives them.
 
-All files are under 350 lines. The original target was 1–2k with a 5k hard cap;
-this landed at 3.4k of code, inside the cap but above the preference.
+```sh
+# production and test line counts, per package, raw and code
+find . -name '*.go' ! -name '*_test.go' -print0 | xargs -0 cat | wc -l
+```
+
+Measured 2026-11-24, at 29 packages: **22,956 raw / 17,678 code production lines**,
+plus **16,877 raw / 14,434 code test lines**.
+
+The two surfaces this design owns, same day, same method:
+
+| surface | files | prod raw | prod code | test raw | test code |
+|---|---|---|---|---|---|
+| `internal/applet` | 3 (+1 test) | 600 | 446 | 378 | 329 |
+| `internal/server` | 3 (+1 test) | 663 | 467 | 536 | 459 |
+
+`internal/applet` was split at 398 raw lines to keep every file under the 350 target:
+composition (`Build`, discovery, framing) in `applet.go`, rendering in `embed.go`, and
+the publish-time gate in `validate.go`. Largest of the six: `applet.go` at 328 raw.
+
+The 350-line target is met by those surfaces and is not met tree-wide:
+`internal/run/run.go` is 697 lines and `internal/query/query.go` 507. Both predate this
+design and are named here rather than quietly counted as compliant.
+
+The original budget was 1–2k of code with a 5k hard cap. At 17.7k it is blown by more
+than three times, which is a decision for whoever owns the wider tree rather than
+something a surface-level change can fix. Recorded, not restated as compliant.
 
 Where it would shrink if it had to (roughly 700 lines, in order of least loss):
 

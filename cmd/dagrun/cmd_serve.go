@@ -9,12 +9,13 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 
 	"github.com/KooshaPari/dagrun/internal/server"
 )
 
-const serveHelp = `usage: dagrun serve [--dir DIR] [--addr A] [--open] [--json]
+const serveHelp = `usage: dagrun serve [--dir DIR] [--addr A] [--embed-allow-origin O]... [--open] [--json]
 
 Run the local read-only server for an installed run until interrupted.
 
@@ -25,10 +26,24 @@ JSON API beside it (/api/health, /api/plan, /api/status, /api/query,
 state changes; there is no websocket and no SSE, which is why there is no
 interval to configure.
 
-  --dir DIR    run directory (default .dagrun)
-  --addr A     listen address (default 127.0.0.1:0, loopback + ephemeral port)
-  --open       open the viewer URL in the OS default handler (darwin only)
-  --json       print the ready line as one JSON object instead of prose
+Three applet routes publish this instance to a master console:
+
+  /.well-known/applet.json   manifest, valid against urn:phenotype:atlas-plan:1:applet
+  /api/applet                manifest + origin, mount, auth and data authority
+  /embed                     embeddable read-only view (framed by a console)
+
+  --dir DIR                   run directory (default .dagrun)
+  --addr A                    listen address (default 127.0.0.1:0, loopback + ephemeral port)
+  --embed-allow-origin O      let origin O frame /embed; repeatable. Default is
+                              same-origin only. O is a bare origin such as
+                              https://console.example:8443, never a wildcard.
+  --open                      open the viewer URL in the OS default handler (darwin only)
+  --json                      print the ready line as one JSON object instead of prose
+
+Why --embed-allow-origin is explicit and never a wildcard: this server has no
+authentication, so a frameable /embed hands the run's titles, statuses and agent
+session ids to whatever origin is allowed. Loopback binding is the security
+boundary, and an allow-listed origin crosses it, so it is named by a human.
 
 On success it prints exactly one line to stdout, e.g.
 
@@ -59,6 +74,12 @@ func cmdServe(args []string) error {
 	fs := flagSet("serve", &dir, &jsonOut)
 	addr := fs.String("addr", "127.0.0.1:0", "listen address; :0 picks an ephemeral port")
 	openIt := fs.Bool("open", false, "open the viewer URL (darwin only)")
+	// Repeatable, because a console may legitimately have a couple of origins
+	// (a local dev server and the deployed one) and one flag with a comma list
+	// would make an origin containing a comma unrepresentable. It is a
+	// flag.Value because the flag package has no native repeated-string flag.
+	var frames originsFlag
+	fs.Var(&frames, "embed-allow-origin", "origin allowed to frame /embed; repeatable")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -77,7 +98,12 @@ func cmdServe(args []string) error {
 		return err
 	}
 
-	srv, err := server.New(server.Options{Dir: abs, Addr: *addr})
+	srv, err := server.New(server.Options{
+		Dir:               abs,
+		Addr:              *addr,
+		Version:           Version,
+		EmbedAllowOrigins: frames,
+	})
 	if err != nil {
 		return err
 	}
@@ -123,5 +149,19 @@ func cmdServe(args []string) error {
 		}
 	}
 	fmt.Fprintln(os.Stderr, "stopped")
+	return nil
+}
+
+// originsFlag collects repeated --embed-allow-origin values.
+//
+// It does not validate them: validation is applet.FrameAncestors' job, called by
+// server.New, so the rule lives next to the document that publishes the policy
+// rather than being duplicated in the CLI.
+type originsFlag []string
+
+func (f *originsFlag) String() string { return strings.Join(*f, ",") }
+
+func (f *originsFlag) Set(v string) error {
+	*f = append(*f, v)
 	return nil
 }
