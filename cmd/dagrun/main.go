@@ -18,8 +18,25 @@ import (
 	"github.com/KooshaPari/dagrun/internal/store"
 )
 
-// Version is set at build time with -ldflags "-X main.Version=...".
+// Version is the module's source version. It changes when the source changes,
+// not when the binary is built, so on its own it cannot identify a build.
 var Version = "1.2.0"
+
+// Commit is the build identity, stamped by `make build` with
+// -ldflags "-X main.Commit=<sha>[.dirty]".
+//
+// Empty under a plain `go build`, and empty is honest rather than wrong: the
+// binary then reports the source version alone instead of a hash it never had.
+var Commit = ""
+
+// versionLine is the source version, plus the build identity when one was
+// stamped in.
+func versionLine() string {
+	if Commit == "" {
+		return Version
+	}
+	return Version + "+" + Commit
+}
 
 const defaultDir = ".dagrun"
 
@@ -106,7 +123,7 @@ func main() {
 	case "instances":
 		err = cmdInstances(args)
 	case "version", "--version", "-v":
-		fmt.Printf("dagrun %s\n", Version)
+		fmt.Printf("dagrun %s\n", versionLine())
 		return
 	case "help", "--help", "-h":
 		usage(os.Stdout)

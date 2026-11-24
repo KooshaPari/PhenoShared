@@ -102,10 +102,20 @@ marked skipped once expanded so status and progress do not count it. A reduce
 (`fan_in`) has its dependency list injected at expansion time, which is why it
 cannot run early.
 
-### D9. Windows is refused, not degraded
+### D9. Windows is supported through its own primitives, never an absence
 
-`flock` does not exist there. Rather than silently assuming one writer per run,
-the windows build returns an error. macOS and Linux are the targets.
+`flock` does not exist there, and the temptation is either to refuse the
+platform or to drop the lock and hope. Both are wrong for the same reason: this
+store's whole safety argument is one writer per run, and a build that quietly
+assumes it is a build that corrupts a run.
+
+So each Unix primitive gets its Windows counterpart, not a stub.
+`store/lock_windows.go` takes a mandatory byte-range lock with `LockFileEx`
+where `store/lock_unix.go` takes `flock`; the mandatory range is the point,
+because a shared lock would admit the second writer. Process liveness opens the
+process where Unix signals it. Both have their own tests, and the registry,
+preflight and prune paths were exercised natively on Windows, not cross-compiled
+and assumed.
 
 ### D10. The console observes agents through one projection, never a second one
 

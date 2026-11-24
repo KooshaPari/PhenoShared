@@ -33,12 +33,26 @@ exited 0.** Everything else follows from that.
 ## Install
 
 ```sh
-go install github.com/KooshaPari/dagrun@latest   # or:
+make build                                       # stamped with the git version
+go install github.com/KooshaPari/dagrun@latest   # or, unstamped (reports 1.2.0):
 go build -o ~/.local/bin/dagrun .
 ```
 
 Requires Go 1.24+. One dependency (`gopkg.in/yaml.v3`, pure Go, vendorable).
-macOS and Linux. Windows is refused rather than silently unsafe (no `flock`).
+macOS, Linux and Windows. Windows is supported rather than degraded: the store
+takes a mandatory `LockFileEx` byte-range lock where Unix takes `flock`, and the
+process-liveness check opens the process where Unix signals it. Both paths have
+their own tests, and the registry, preflight and prune commands are exercised
+natively on Windows.
+
+`make build` stamps `-X main.Commit=$(git rev-parse --short=12 HEAD)`, so
+`dagrun --version` names the commit the binary came from (`1.2.0+<sha>`, with a
+`.dirty` suffix on an uncommitted tree). The module's own version stays in
+`main.go`; only the identity is stamped, because this repository's tags version
+other things and describing against them would report `v0.3.10-129-g<sha>` for a
+module that calls itself 1.2.0. A plain `go build` cannot know the commit and
+reports `1.2.0` alone, which is true of the source it was built from but is not
+an identity.
 
 ## 60-second demo
 
