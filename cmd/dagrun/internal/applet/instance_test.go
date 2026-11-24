@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -319,6 +320,12 @@ func TestDefaultInstanceDirFallsBackToHome(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	t.Setenv("XDG_CONFIG_HOME", "")
+	// os.UserConfigDir ignores HOME on Windows and reads %AppData% instead, so
+	// redirecting HOME alone left this test asserting a path it had not
+	// redirected and failed on Windows for a reason unrelated to the code.
+	if runtime.GOOS == "windows" {
+		t.Setenv("APPDATA", home)
+	}
 	dir, err := DefaultInstanceDir()
 	if err != nil {
 		t.Fatalf("DefaultInstanceDir: %v", err)
