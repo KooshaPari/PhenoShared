@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/KooshaPari/dagrun/internal/shell"
 )
 
 // defaultTimeout is applied when the caller's context has no deadline.
@@ -62,7 +64,8 @@ func Run(ctx context.Context, phase string, h Hooks, dir string, env []string) e
 		defer cancel()
 	}
 
-	c := exec.CommandContext(ctx, "sh", "-c", cmd)
+	shellName, shellArgs := shell.Command(cmd)
+	c := exec.CommandContext(ctx, shellName, shellArgs...)
 	c.Dir = dir
 	c.Env = append(os.Environ(), env...)
 	setProcessGroup(c)

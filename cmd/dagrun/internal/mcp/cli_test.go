@@ -4,17 +4,24 @@ import (
 	"bufio"
 	"bytes"
 	"os/exec"
+	"path/filepath"
 	"regexp"
+	"runtime"
 	"strings"
-	"syscall"
 	"testing"
-	"time"
 )
 
 // buildCLI compiles the dagrun binary once for the whole test.
+//
+// Windows only starts a PE file whose name carries PATHEXT's suffix, so the
+// output name has to end in .exe there.
 func buildCLI(t *testing.T) string {
 	t.Helper()
-	bin := t.TempDir() + "/dagrun"
+	name := "dagrun"
+	if runtime.GOOS == "windows" {
+		name += ".exe"
+	}
+	bin := filepath.Join(t.TempDir(), name)
 	cmd := exec.Command("go", "build", "-o", bin, "github.com/KooshaPari/dagrun")
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("build: %v\n%s", err, out)
@@ -87,18 +94,7 @@ func TestCLIServesMCPOverHTTPAndStopsCleanly(t *testing.T) {
 		t.Fatalf("the served HTTP transport advertised %d tools, want %d", len(tools), len(wantTools))
 	}
 
-	// A normal stop is not a failure.
-	if err := cmd.Process.Signal(syscall.SIGTERM); err != nil {
-		t.Fatalf("signal: %v", err)
-	}
-	done := make(chan error, 1)
-	go func() { done <- cmd.Wait() }()
-	select {
-	case err := <-done:
-		if err != nil {
-			t.Fatalf("the server exited with %v on SIGTERM; a stop must exit 0\nstderr: %s", err, stderr.String())
-		}
-	case <-time.After(15 * time.Second):
-		t.Fatal("the server did not stop on SIGTERM")
-	}
+	// A normal stop is not a failure. How a stop is requested differs by
+	// platform, so the assertion lives in stopAndExpectCleanExit.
+	stopAndExpectCleanExit(t, cmd, stderr.String())
 }

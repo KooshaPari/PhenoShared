@@ -76,7 +76,9 @@ func TestHealthReportsTheRun(t *testing.T) {
 	if doc["ok"] != true {
 		t.Errorf("ok = %v, want true", doc["ok"])
 	}
-	if !strings.HasPrefix(doc["dir"].(string), "/") {
+	// filepath.IsAbs, not a leading "/": on Windows an absolute path starts
+	// with a drive letter (C:\...), so the unix-only check failed there.
+	if !filepath.IsAbs(doc["dir"].(string)) {
 		t.Errorf("dir should be absolute, got %v", doc["dir"])
 	}
 }

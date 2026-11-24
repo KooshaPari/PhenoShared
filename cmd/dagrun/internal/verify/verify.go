@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/KooshaPari/dagrun/internal/plan"
+	"github.com/KooshaPari/dagrun/internal/shell"
 )
 
 // ArtifactResult is the outcome for one declared artifact.
@@ -300,7 +301,8 @@ func runCheck(ctx context.Context, dir, command string, timeout time.Duration) C
 	cctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	cmd := exec.CommandContext(cctx, "sh", "-c", command)
+	shellName, shellArgs := shell.Command(command)
+	cmd := exec.CommandContext(cctx, shellName, shellArgs...)
 	cmd.Dir = dir
 	cmd.Env = os.Environ()
 	// kill the whole process group so a check that spawns children cannot

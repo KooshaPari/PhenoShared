@@ -3,6 +3,7 @@ package main
 import (
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -29,15 +30,26 @@ var allCommands = []string{
 }
 
 // buildCLI compiles the binary once for the whole test.
+//
+// The suffix is not cosmetic: Windows resolves an executable only through
+// PATHEXT, so a PE file written as "dagrun" cannot be started by name.
 func buildCLI(t *testing.T) string {
 	t.Helper()
-	bin := filepath.Join(t.TempDir(), "dagrun")
+	bin := filepath.Join(t.TempDir(), "dagrun"+exeSuffix())
 	cmd := exec.Command("go", "build", "-o", bin, ".")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("build: %v\n%s", err, out)
 	}
 	return bin
+}
+
+// exeSuffix is the platform's executable suffix, empty on unix.
+func exeSuffix() string {
+	if runtime.GOOS == "windows" {
+		return ".exe"
+	}
+	return ""
 }
 
 func TestEveryCommandExitsZeroOnHelp(t *testing.T) {
