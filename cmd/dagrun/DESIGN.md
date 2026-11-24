@@ -218,6 +218,23 @@ means write nothing) and on by default at the CLI boundary, resolved through
 `~/.dagrun/instances`. A library must not write to a home directory unasked; a
 command the person typed may.
 
+Two commands exist because a launcher cannot read a crash as a crash. `serve
+--check` answers "could this directory be served" by running the start's own
+checks (plan present, manifest conforming, address bindable), then releasing the
+port and exiting 0 or 1 with an optional JSON report. Without it, starting a
+server in a directory with no plan exits cleanly, binds nothing, and every
+request against it is connection-refused, which reads as a broken server rather
+than a missing precondition. A preflight must not advertise: `Bind` writes the
+record and the paired retraction happens when `Listen` returns, so an advertising
+preflight leaves a phantom entry on every poll. That was measured, then fixed.
+
+`instances --prune` deletes advertisements that are **both** unreachable and from
+a dead process, so a tray poll cannot accumulate entries for killed servers.
+Deleting on either signal alone would be a guess: an unreachable server whose pid
+is alive is a server mid-start, and a reachable one whose pid is dead is still
+serving. `ProcessAlive` is per-OS (`signal 0` on Unix, handle lookup on Windows)
+and EPERM counts as alive, because another user's server is not ours to delete.
+
 ## Layering
 
 ```
