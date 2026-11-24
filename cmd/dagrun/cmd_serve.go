@@ -40,6 +40,11 @@ Three applet routes publish this instance to a master console:
                               https://console.example:8443, never a wildcard.
   --open                      open the viewer URL in the OS default handler (darwin only)
   --json                      print the ready line as one JSON object instead of prose
+  --check                     report whether this directory could be served, and exit.
+                              Binds and releases the port, so it also proves the
+                              address is free and the manifest is conforming.
+                              Exit 0 = servable, 1 = not servable. Combines with
+                              --json for a machine answer.
 
 Why --embed-allow-origin is explicit and never a wildcard: this server has no
 authentication, so a frameable /embed hands the run's titles, statuses and agent
@@ -52,6 +57,10 @@ On success it prints exactly one line to stdout, e.g.
 
 so a caller can find the URL without filtering stderr. Ctrl-C (or SIGTERM)
 stops the server and exits 0.
+
+--check exists for a supervisor or a tray icon. Without it the only way to learn
+that a directory cannot be served was to start the server and watch every request
+fail to connect, which reads as a broken server rather than as a missing plan.
 `
 
 // cmdServe runs the read-only HTTP server for one run directory.
@@ -75,6 +84,7 @@ func cmdServe(args []string) error {
 	fs := flagSet("serve", &dir, &jsonOut)
 	addr := fs.String("addr", "127.0.0.1:0", "listen address; :0 picks an ephemeral port")
 	openIt := fs.Bool("open", false, "open the viewer URL (darwin only)")
+	checkOnly := fs.Bool("check", false, "report whether this directory could be served, then exit")
 	// Repeatable, because a console may legitimately have a couple of origins
 	// (a local dev server and the deployed one) and one flag with a comma list
 	// would make an origin containing a comma unrepresentable. It is a
@@ -83,6 +93,9 @@ func cmdServe(args []string) error {
 	fs.Var(&frames, "embed-allow-origin", "origin allowed to frame /embed; repeatable")
 	if err := fs.Parse(args); err != nil {
 		return err
+	}
+	if *checkOnly {
+		return servePreflight(dir, *addr, frames, jsonOut)
 	}
 
 	// Refuse before binding a port: a server with no plan has nothing to serve,
@@ -162,6 +175,94 @@ func cmdServe(args []string) error {
 	}
 	fmt.Fprintln(os.Stderr, "stopped")
 	return nil
+}
+
+// servePreflight answers "could this directory be served", without serving.
+//
+// It runs the same checks a real start runs, in the same order, and releases the
+// port before returning so asking changes nothing. Verified worth having: a
+// launcher that starts a server in a directory with no plan gets a clean exit, no
+// listener, and then every request returns connection-refused, which reads as a
+// broken server rather than a missing precondition. An answer to the question is
+// not the same as silence followed by failure.
+//
+// A registry that cannot be resolved is a warning, not a failure, because it
+// costs discoverability rather than the server: the real start warns and serves.
+func servePreflight(dir, addr string, frames originsFlag, jsonOut bool) error {
+	abs, err := filepath.Abs(dir)
+	if err != nil {
+		return err
+	}
+	report := map[string]any{"dir": abs, "addr": addr, "ok": false}
+	var failure error
+
+	planPath := filepath.Join(abs, "run.yaml")
+	if _, err := os.Stat(planPath); err != nil {
+		if os.IsNotExist(err) {
+			failure = fmt.Errorf("no plan installed at %s; run `dagrun plan FILE` first", planPath)
+		} else {
+			failure = err
+		}
+	}
+	if failure == nil {
+		report["plan"] = planPath
+	}
+
+	instanceDir, instErr := applet.DefaultInstanceDir()
+	if instErr != nil {
+		report["instance_warning"] = instErr.Error()
+		instanceDir = ""
+	} else {
+		report["instance_dir"] = instanceDir
+	}
+
+	// A bind is the only honest way to answer "is this address usable", and it is
+	// also where an unconforming manifest is caught, because server.New builds and
+	// validates one. The listener is released immediately either way.
+	//
+	// InstanceDir is deliberately left empty even when the registry resolves: Bind
+	// advertises, and a preflight that advertised would leave a record for a server
+	// that never serves. Retraction happens when Listen returns, which never
+	// happens here. Measured: without this, one `--check` per poll filled the
+	// registry with phantom servers, which is precisely the tray confusion the
+	// registry exists to prevent.
+	if failure == nil {
+		srv, err := server.New(server.Options{
+			Dir:               abs,
+			Addr:              addr,
+			Version:           Version,
+			EmbedAllowOrigins: frames,
+		})
+		if err != nil {
+			failure = err
+		} else if err := srv.Bind(); err != nil {
+			failure = fmt.Errorf("cannot listen on %s: %w", addr, err)
+		} else {
+			report["addr"] = srv.Addr()
+			report["servable_url"] = "http://" + srv.Addr() + "/"
+			if err := srv.Close(); err != nil {
+				failure = err
+			}
+		}
+	}
+
+	if failure != nil {
+		report["error"] = failure.Error()
+	} else {
+		report["ok"] = true
+	}
+
+	if jsonOut {
+		if err := json.NewEncoder(os.Stdout).Encode(report); err != nil {
+			return err
+		}
+	} else if failure == nil {
+		fmt.Printf("servable %s  (dir %s)\n", report["servable_url"], abs)
+	}
+	// Prose failure prints nothing here: main already writes the error, once, to
+	// stderr with the command name in front of it. Printing it here too made every
+	// failed check say the same sentence twice.
+	return failure
 }
 
 // originsFlag collects repeated --embed-allow-origin values.

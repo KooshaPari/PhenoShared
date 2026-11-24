@@ -218,6 +218,35 @@ means write nothing) and on by default at the CLI boundary, resolved through
 `~/.dagrun/instances`. A library must not write to a home directory unasked; a
 command the person typed may.
 
+Two commands exist because a launcher cannot read a crash as a crash. `serve
+--check` answers "could this directory be served" by running the start's own
+checks (plan present, manifest conforming, address bindable), then releasing the
+port and exiting 0 or 1 with an optional JSON report. Without it, starting a
+server in a directory with no plan exits cleanly, binds nothing, and every
+request against it is connection-refused, which reads as a broken server rather
+than a missing precondition. A preflight must not advertise: `Bind` writes the
+record and the paired retraction happens when `Listen` returns, so an advertising
+preflight leaves a phantom entry on every poll. That was measured, then fixed.
+
+`instances --prune` deletes advertisements that are unreachable **and** have
+stopped being evidence of a server: the pid is free, or the record is older than
+ten minutes. Deleting on reachability alone would be a guess, because an
+unreachable server whose pid is alive is usually a server mid-start. The ten
+minute linger exists because a pid is not an identity: on Windows a recycled pid
+points at an unrelated live process, which kept one dead record alive forever
+(measured, pid 45964, gone from the task list and its port refusing).
+`ProcessAlive` is per-OS (`signal 0` on Unix, `OpenProcess` plus
+exit-code on Windows). Two error branches carry the whole rule on Windows:
+`ERROR_ACCESS_DENIED` means the pid exists and refuses the query, so it counts as
+alive (pid 4 was pruned as dead before this), and only
+`ERROR_INVALID_PARAMETER` means the pid is free. `EPERM` counts as alive on Unix
+for the same reason: another user's server is not ours to delete.
+
+The registry path is reported under both JSON names, `dir` and `instance_dir`,
+because `serve --check --json` used the second and `instances --json` the first,
+and a launcher written against one decoded the other as an empty string: "no
+servers found" with no error anywhere.
+
 ## Layering
 
 ```

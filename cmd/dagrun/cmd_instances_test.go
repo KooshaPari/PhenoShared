@@ -199,3 +199,30 @@ func TestCmdInstancesHelpExitsClean(t *testing.T) {
 		t.Fatalf("help text must warn that the registry is a hint:\n%s", out)
 	}
 }
+
+// One concept had two JSON names: `serve --check --json` reports instance_dir,
+// `instances --json` reported dir. A launcher written against one decoded the
+// other as an empty string and reported "no servers found" instead of failing,
+// which is the worst shape of bug: no error, wrong answer.
+func TestCmdInstancesJSONNamesTheRegistryBothWays(t *testing.T) {
+	dir := t.TempDir()
+	seedWithPID(t, dir, "127.0.0.1:52395", undeadPID)
+
+	_, out, _, err := runCmd(t, []string{"--dir", dir, "--json"})
+	if err != nil {
+		t.Fatalf("cmdInstances: %v", err)
+	}
+	var body struct {
+		Dir         string `json:"dir"`
+		InstanceDir string `json:"instance_dir"`
+	}
+	if err := json.Unmarshal([]byte(out), &body); err != nil {
+		t.Fatalf("stdout is not JSON: %v\n%.200q", err, out)
+	}
+	if body.Dir != dir {
+		t.Errorf("dir = %q, want %q", body.Dir, dir)
+	}
+	if body.InstanceDir != body.Dir {
+		t.Errorf("instance_dir = %q, dir = %q; the same value must appear under both names", body.InstanceDir, body.Dir)
+	}
+}
