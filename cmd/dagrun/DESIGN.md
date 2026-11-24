@@ -221,12 +221,24 @@ than a missing precondition. A preflight must not advertise: `Bind` writes the
 record and the paired retraction happens when `Listen` returns, so an advertising
 preflight leaves a phantom entry on every poll. That was measured, then fixed.
 
-`instances --prune` deletes advertisements that are **both** unreachable and from
-a dead process, so a tray poll cannot accumulate entries for killed servers.
-Deleting on either signal alone would be a guess: an unreachable server whose pid
-is alive is a server mid-start, and a reachable one whose pid is dead is still
-serving. `ProcessAlive` is per-OS (`signal 0` on Unix, handle lookup on Windows)
-and EPERM counts as alive, because another user's server is not ours to delete.
+`instances --prune` deletes advertisements that are unreachable **and** have
+stopped being evidence of a server: the pid is free, or the record is older than
+ten minutes. Deleting on reachability alone would be a guess, because an
+unreachable server whose pid is alive is usually a server mid-start. The ten
+minute linger exists because a pid is not an identity: on Windows a recycled pid
+points at an unrelated live process, which kept one dead record alive forever
+(measured, pid 45964, gone from the task list and its port refusing).
+`ProcessAlive` is per-OS (`signal 0` on Unix, `OpenProcess` plus
+exit-code on Windows). Two error branches carry the whole rule on Windows:
+`ERROR_ACCESS_DENIED` means the pid exists and refuses the query, so it counts as
+alive (pid 4 was pruned as dead before this), and only
+`ERROR_INVALID_PARAMETER` means the pid is free. `EPERM` counts as alive on Unix
+for the same reason: another user's server is not ours to delete.
+
+The registry path is reported under both JSON names, `dir` and `instance_dir`,
+because `serve --check --json` used the second and `instances --json` the first,
+and a launcher written against one decoded the other as an empty string: "no
+servers found" with no error anywhere.
 
 ## Layering
 
