@@ -1,0 +1,751 @@
+"""#1046: several terminals in the same project directory, each with its own
+pinned REMEMBER_DIR, share one SESSIONS_DIR. Recovery's own call site --
+`save-session.sh "$PREV_ID" --force`, in scripts/capture-gap-check.sh's
+deferred phase -- used to force-save whichever transcript
+`_find_previous_transcript` picked, with no regard for which store wrote it.
+Since that function only ever looks at mtimes, a terminal pinned to store `b`
+starting up right after store `a` was active would pick `a`'s live session
+and force-save ITS summary into `b`'s own now.md / daily file.
+
+A per-store roster already existed for a different purpose:
+post-tool-hook.sh writes `$REMEMBER_DIR/tmp/capture-alive.d/<session id>` for
+every session that ran a tool under that store, and the #200 capture-gap
+check already reads it (via capture_was_seen()) to judge whether a session
+was ever captured at all.
+
+Fixed at the recovery call site, not inside `_find_previous_transcript`
+itself: that function's result (PREV_ID/PREV_JSONL) is shared with the #200
+capture-gap check below it, whose entire purpose is to warn about a session
+that ran tools but was never captured in THIS store -- precisely the "no
+marker present" signal recovery's own new guard uses. Gating resolution
+itself would make a genuine capture gap indistinguishable from a foreign
+store's session and silence that warning for it (confirmed empirically
+against this repo's existing suite: gating resolution broke
+tests/test_capture_gap_notice.py's and test_session_start_prev_session_270
+.py's own capture-gap pins). Gating only the WRITE -- whether recovery
+actually force-saves PREV_ID -- leaves PREV_ID resolution, and the #200
+check's own three-source capture_was_seen(), untouched.
+
+These tests exercise the real session-start-hook.sh end to end (not an
+extracted function, unlike test_previous_transcript_no_sort_691.py's style)
+because the guard under test sits inline in scripts/capture-gap-check.sh's
+recovery block, between two other preconditions ([-f LAST_SAVE_FILE],
+PREV_WAS_SAVED) that are easiest to drive through the real hook rather than
+re-implemented in a sandbox. Reuses this repo's own fixture conventions from
+test_session_start_prev_session_270.py (_vouch, _startup_project,
+_plugin_root_with_stub_save) via cross-import, the same pattern
+test_git_reconcile_mapfile_floor_952.py uses for test_git_reconcile_903.py."""
+
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+import pytest
+
+from pipeline.slug import session_dir_slug as _slug
+
+from ._bash_runner import resolve_bash
+from .subprocess_helpers import subprocess_failure_detail
+from .test_session_start_prev_session_270 import (
+    CURRENT,
+    OLDER,
+    PREV,
+    TOOL_USE_LINE,
+    _await_record,
+    _env,
+    _payload,
+    _plugin_root_with_stub_save,
+    _run,
+    _startup_project,
+    _vouch,
+)
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+pytestmark = [
+    pytest.mark.skipif(
+        sys.platform == "win32",
+        reason="bash hook subprocess + POSIX semantics -- not portable to Windows runners",
+    ),
+]
+
+# #1046 round 2: the two direct subprocess calls below drove the extracted
+# _remember_recovery_prev_id_vouched function with a literal "bash" argv
+# rather than this repo's own resolve_bash() convention -- on Windows that
+# literal resolves to the WSL launcher (UTF-16LE stdout, exit 127), the
+# exact defect class documented in CHANGELOG.md that moved every other test
+# file in this suite onto resolve_bash(). The module itself still
+# unconditionally skips on win32 (see pytestmark above): BASH is only used
+# by the two direct-function calls, which would otherwise hardcode the same
+# bad resolution this convention exists to avoid, independent of whether
+# the module-level skip itself is ever lifted.
+BASH = resolve_bash()
+
+# #1087: a second "current" session id for the retry-on-a-later-start test
+# below -- distinct from CURRENT so the two runs are visibly two separate
+# starts, not the same payload replayed.
+CURRENT2 = "eeeeeeee-0000-4000-8000-000000000005"
+
+
+def _seed_roster_epoch(remember: Path, prev_jsonl: Path) -> None:
+    """#1046 final review: marks this store as PAST its one-time upgrade
+    grace window, older than PREV's own transcript -- i.e. this store has
+    already run at least one session under the roster-aware code, so a
+    candidate with no marker now is genuinely unvouched rather than merely
+    predating the mechanism. Every test in this file that exercises the
+    STEADY-STATE #1046 guard (decline a candidate with no marker) seeds
+    this; the ones exercising the upgrade grace itself deliberately do
+    not."""
+    epoch = remember / "tmp" / "roster-epoch"
+    epoch.parent.mkdir(parents=True, exist_ok=True)
+    epoch.write_text("")
+    old = int(prev_jsonl.stat().st_mtime) - 3600
+    os.utime(epoch, (old, old))
+
+
+# #1087: the live-sibling-recency signal reads mtimes against a 5-minute
+# threshold (scripts/capture-gap-check.sh's own _ROSTER_LIVE_GRACE_MIN).
+# _startup_project's default PREV mtime (60s old) sits INSIDE that window on
+# purpose -- that is exactly what a live sibling window's still-growing
+# transcript looks like, and is reused as-is by the new must-fire test
+# below. A test that means to exercise "genuinely dead, pre-update session"
+# must push PREV (and OLDER, to preserve _find_previous_transcript's
+# newest-other ordering) outside the window explicitly, rather than relying
+# on the fixture's default age to mean that by accident.
+def _age_past_the_live_window(session_dir: Path) -> None:
+    now = int(time.time())
+    prev = session_dir / f"{PREV}.jsonl"
+    os.utime(prev, (now - 3600, now - 3600))
+    older = session_dir / f"{OLDER}.jsonl"
+    if older.exists():
+        os.utime(older, (now - 4200, now - 4200))
+
+
+def test_recovery_declines_a_candidate_with_no_roster_marker_in_this_store(tmp_path):
+    """Must-fire case, the issue's own repro shape: two stores share one
+    project SESSIONS_DIR. PREV is the newest OTHER transcript
+    `_find_previous_transcript` would pick, but it has no marker under THIS
+    store's capture-alive.d (it may belong to a different store's live
+    session). Recovery must decline to force-save it.
+
+    #1046 final review: seeded past the one-time upgrade grace window
+    (_seed_roster_epoch) -- this test is about the STEADY-STATE guard, not
+    the upgrade transition, which has its own pair of tests further down."""
+    home, project, remember, session_dir = _startup_project(tmp_path)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV under this store"
+    )
+    _seed_roster_epoch(remember, session_dir / f"{PREV}.jsonl")
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    # Recovery forks (& disown) -- an immediate check here would pass
+    # trivially whether or not the fix is present, simply because the fork
+    # has not finished yet. _await_record's own full default timeout is the
+    # same wait the positive control below uses to confirm a rescue DID
+    # happen; used here, it is the only way an absence is a verdict rather
+    # than a race won by checking too soon (CLAUDE.md: a negative assertion
+    # needs a positive control).
+    argv = _await_record(record)
+    assert PREV not in argv, (
+        f"recovery force-saved {argv!r} despite PREV ({PREV}) having no "
+        "roster marker under this store -- it may belong to a different "
+        "store sharing this project directory"
+    )
+
+
+def test_pre_epoch_unmarked_candidate_is_rescued_as_a_one_time_upgrade_grace(tmp_path):
+    """#1046 final review (item 4): tmp/roster-epoch absent means this store
+    may not have been producing roster evidence yet -- the one-time upgrade
+    grace. An otherwise-identical candidate to the steady-state decline test
+    above (no capture-alive.d marker for PREV) must be RESCUED here, not
+    declined, precisely because no epoch file exists yet. Paired with the
+    steady-state test above per this repo's own CLAUDE.md: a guard that
+    always rescues would pass this test for the wrong reason without that
+    one next to it.
+
+    #1087: PREV is explicitly aged past the live-sibling-recency window --
+    see _age_past_the_live_window's own docstring -- so this test keeps
+    exercising a genuinely DEAD pre-update session, the positive control
+    the narrowed grace must still rescue."""
+    home, project, remember, session_dir = _startup_project(tmp_path)
+    _age_past_the_live_window(session_dir)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV under this store"
+    )
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "precondition: no roster-epoch yet -- this store has never run "
+        "under the roster-aware code before"
+    )
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV in argv, (
+        f"expected the one-time upgrade grace to rescue {PREV!r} (no "
+        f"roster-epoch file existed yet), got {argv!r}"
+    )
+    assert (remember / "tmp" / "roster-epoch").exists(), (
+        "expected roster-epoch to be created after this decision, so the "
+        "grace applies at most once"
+    )
+
+
+def test_a_transcript_not_newer_than_the_epoch_is_also_rescued(tmp_path):
+    """Sibling of the test above: roster-epoch EXISTS but PREV's own
+    transcript is not newer than it -- i.e. PREV predates this store's
+    roster-epoch, so it could not possibly have earned roster evidence
+    either, same as the pre-epoch case.
+
+    #1087: aged past the live-sibling-recency window for the same reason
+    as the sibling test above -- the epoch-vs-transcript ordering below is
+    computed relative to PREV's own (now aged) mtime, so this stays a
+    pure test of THAT signal rather than also tripping the new one."""
+    home, project, remember, session_dir = _startup_project(tmp_path)
+    _age_past_the_live_window(session_dir)
+    epoch = remember / "tmp" / "roster-epoch"
+    epoch.parent.mkdir(parents=True, exist_ok=True)
+    epoch.write_text("")
+    prev_jsonl = session_dir / f"{PREV}.jsonl"
+    # Epoch strictly NEWER than PREV's own transcript -- PREV cannot be
+    # newer than an epoch that did not exist while it last wrote.
+    future = int(prev_jsonl.stat().st_mtime) + 3600
+    os.utime(epoch, (future, future))
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV in argv, (
+        f"expected the grace to rescue {PREV!r} (its own transcript is not "
+        f"newer than roster-epoch), got {argv!r}"
+    )
+
+
+def test_declined_candidate_gets_the_reworded_capture_gap_notice(tmp_path):
+    """#1046 round 2: the pre-existing #200 "never captured" notice reads the
+    SAME absence (no marker for PREV under this store) the roster guard
+    above just declined to rescue on -- a false positive, since recovery's
+    own log already says "may belong to a different store" for this exact
+    case. The notice must say that too, not the flat "was not captured"
+    wording, which would contradict it.
+
+    #1046 final review: seeded past the one-time upgrade grace window --
+    see _seed_roster_epoch's own docstring."""
+    home, project, remember, session_dir = _startup_project(tmp_path)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV under this store"
+    )
+    _seed_roster_epoch(remember, session_dir / f"{PREV}.jsonl")
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    notice_path = remember / "tmp" / "capture-gap-notice"
+    deadline = time.monotonic() + 10.0
+    notice = ""
+    while time.monotonic() < deadline:
+        if notice_path.exists():
+            notice = notice_path.read_text(encoding="utf-8").strip()
+            if notice:
+                break
+        time.sleep(0.05)
+    assert notice, "expected a capture-gap notice to be written"
+    assert "different pinned stores" in notice, (
+        f"expected the reworded, cross-store-aware notice, got: {notice!r}"
+    )
+    assert "was not captured. If you just installed" not in notice, (
+        f"got the flat never-captured wording despite recovery's own log "
+        f"saying this may belong to a different store: {notice!r}"
+    )
+
+
+def test_positive_control_a_marked_candidate_is_still_rescued(tmp_path):
+    """Positive control, paired with the must-fire case above: when PREV IS
+    marked under this store's roster, recovery must still force-save it --
+    proving the new guard only ever removes an unmarked candidate, never a
+    legitimate one."""
+    home, project, remember, _ = _startup_project(tmp_path)
+    _vouch(remember, PREV)
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV in argv, (
+        f"expected recovery to rescue the roster-marked session {PREV!r}, "
+        f"got {argv!r}"
+    )
+
+
+def test_a_chat_only_previous_session_is_still_rescued(tmp_path):
+    """#1046 round 2: a chat-only session (no tool call at all) never earns
+    post-tool-hook.sh's own capture-alive.d marker -- the roster guard above
+    would then decline to rescue it on its NEXT startup, which is new data
+    loss introduced by the roster guard itself, not present before it. Fixed
+    by having SessionStart write its OWN cheap marker for the session
+    starting now, so even a chat-only session earns one. Simulated here by
+    actually running session-start-hook.sh once for PREV (its own, earlier
+    startup -- no tool call follows, so post-tool-hook.sh never runs for it
+    either) before running it again for CURRENT, rather than hand-planting
+    the marker the way the other tests in this file do -- this is the one
+    exercising the NEW marker-write itself, not merely consuming it.
+
+    #1046 final review: that marker now lands in its own folder
+    (tmp/session-started.d), not capture-alive.d -- see session-start-hook
+    .sh's own write-site comment for why."""
+    home, project, remember, _ = _startup_project(tmp_path)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV before its own startup runs"
+    )
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    # PREV's own earlier startup -- chat-only, no tool call ever follows.
+    prev_result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(PREV),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert prev_result.returncode == 0, subprocess_failure_detail(prev_result, remember)
+    assert (remember / "tmp" / "session-started.d" / PREV).exists(), (
+        "PREV's own SessionStart should have written its cheap roster "
+        "marker even though no tool call ever ran for it"
+    )
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "PREV's own SessionStart marker must NOT land in capture-alive.d -- "
+        "that would silence the #200 check for a session whose hooks never "
+        "actually ran"
+    )
+
+    # CURRENT's startup, which is where recovery considers rescuing PREV.
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV in argv, (
+        f"expected recovery to rescue the chat-only previous session "
+        f"{PREV!r} on the strength of its OWN SessionStart marker, got "
+        f"{argv!r}"
+    )
+
+
+def test_a_candidate_vouched_only_by_the_legacy_slot_is_still_rescued(tmp_path):
+    """Self-review finding: the guard checked only the capture-alive.d
+    marker, one of capture_was_seen()'s three evidence sources -- not the
+    legacy single-slot file, kept (per that function's own comment) "so the
+    first run after an upgrade -- old file present, new store empty -- is
+    not itself a false positive." The roster-only guard reintroduced that
+    exact false positive for the WRITE path: a session captured under an
+    older plugin version, with only the legacy slot as evidence, would now
+    be wrongly treated as possibly belonging to a different store and
+    declined. Must still be rescued when ONLY the legacy slot vouches."""
+    home, project, remember, _ = _startup_project(tmp_path)
+    (remember / "tmp" / "capture-alive").write_text(PREV)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no .d marker -- only the legacy slot vouches"
+    )
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV in argv, (
+        f"expected recovery to rescue the legacy-slot-vouched session "
+        f"{PREV!r}, got {argv!r}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# #1087: narrowing the grace itself -- it must not rescue a conversation
+# that is still live, or that another store already claims, even during
+# the one-time upgrade window the two tests above still exercise.
+# ---------------------------------------------------------------------------
+
+
+def test_1087_grace_declines_a_recently_modified_live_sibling_transcript(tmp_path):
+    """Must-fire case, the issue's own repro shape: THIS store is pre-epoch
+    (never run under the roster-aware code before), which would normally
+    earn PREV the one-time upgrade grace -- but PREV's own transcript was
+    modified only 60 seconds ago (_startup_project's own, UNMODIFIED
+    default age), exactly what a live sibling window still writing to a
+    shared project transcript directory looks like. The grace must not
+    rescue it: recency blocks it outright, before the legacy/roster
+    evidence checks even run."""
+    home, project, remember, _ = _startup_project(tmp_path)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV under this store"
+    )
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "precondition: no roster-epoch yet -- the grace would normally "
+        "apply here"
+    )
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV not in argv, (
+        f"the pre-epoch grace rescued {PREV!r} despite its transcript "
+        f"having been modified only 60s ago -- a live sibling window "
+        f"sharing this project's transcript directory could still be "
+        f"writing it: {argv!r}"
+    )
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "a recency-only block must NOT spend the one-time grace -- "
+        "roster-epoch was written even though the decision only ever "
+        "said no, so a later start (once PREV is no longer recent) would "
+        "find the grace already used up on nothing"
+    )
+
+
+def test_1087_a_recency_blocked_candidate_is_rescued_on_a_later_start_once_it_ages_out(
+    tmp_path,
+):
+    """Scheduler review of #1091, item 1 (HIGH): the common upgrade flow is
+    a short chat-only session not saved on exit, update, relaunch within
+    minutes -- exactly the recency-blocked shape above. Fixed by NOT
+    spending the one-time grace on a decision that only ever said no (see
+    the roster-epoch assertion in the test above). This test proves the
+    other half: once PREV is no longer recent, a LATER start still gets a
+    real shot at the grace and rescues it -- the #1046 rescue-over-loss
+    choice is not reversed."""
+    home, project, remember, session_dir = _startup_project(tmp_path)
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "precondition: no roster-epoch yet"
+    )
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    # First start: PREV looks live (the fixture's own unmodified 60s-old
+    # mtime) -- declined, same as the must-fire test above.
+    first = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert first.returncode == 0, subprocess_failure_detail(first, remember)
+    assert PREV not in _await_record(record, timeout=5.0), (
+        "precondition: PREV must be declined on the first (live-looking) start"
+    )
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "precondition: the recency-only block must not have spent the grace"
+    )
+
+    # Time passes -- the sibling window that was writing PREV has closed,
+    # and nothing has marked it anywhere. Re-run with a different CURRENT
+    # id (CURRENT's own transcript still does not exist in this fixture,
+    # same off-by-one shape test_session_start_prev_session_270.py's own
+    # module docstring explains, so PREV is still the newest OTHER
+    # transcript _find_previous_transcript would pick).
+    _age_past_the_live_window(session_dir)
+    second = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT2),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert second.returncode == 0, subprocess_failure_detail(second, remember)
+
+    argv = _await_record(record)
+    assert PREV in argv, (
+        f"expected the grace to rescue {PREV!r} on this later start, now "
+        f"that it is no longer recent -- got {argv!r}. If this fails, the "
+        f"recency-only block spent the one-time grace on the earlier, "
+        f"declined start instead of leaving it available"
+    )
+    assert (remember / "tmp" / "roster-epoch").exists(), (
+        "expected roster-epoch to be created now that the grace actually "
+        "fired"
+    )
+
+
+def test_1087_grace_declines_when_another_store_already_marks_the_session(tmp_path):
+    """Second must-fire case: PREV's transcript is old enough to look
+    genuinely dead (aged past the live-sibling-recency window, same as the
+    positive-control tests above), and THIS store is pre-epoch -- so the
+    grace would normally rescue it. But a DIFFERENT store, pinned under
+    $HOME/.remember the way the #1046 reporter's own setup was
+    (REMEMBER_DIR=~/.remember/roles/a, b, ...), already holds a
+    capture-alive.d marker for PREV's own session id: that store already
+    claims the session, so this one must not race it."""
+    home, project, remember, session_dir = _startup_project(tmp_path)
+    _age_past_the_live_window(session_dir)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV under THIS store"
+    )
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "precondition: no roster-epoch yet -- the grace would normally "
+        "apply here"
+    )
+    other_store = home / ".remember" / "roles" / "a"
+    (other_store / "tmp" / "capture-alive.d").mkdir(parents=True)
+    (other_store / "tmp" / "capture-alive.d" / PREV).write_text("")
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV not in argv, (
+        f"the pre-epoch grace rescued {PREV!r} despite another store "
+        f"(home/.remember/roles/a) already holding a capture-alive.d "
+        f"marker for it: {argv!r}"
+    )
+
+
+def test_1087_grace_declines_when_the_default_project_store_already_marks_the_session(
+    tmp_path,
+):
+    """Scheduler review of #1091, item 2 (MEDIUM): the comment above used
+    to call ~/.remember/{slug} "the default layout" -- it is not
+    (lib-memory-dir.sh's own fallback is <project>/.remember, the legacy
+    in-project default). THIS store is pinned under $HOME/.remember/b, the
+    way the #1046 reporter's own setup pins stores, while a DIFFERENT
+    window used the project's own unpinned DEFAULT location
+    ($PROJECT/.remember) and already captured PREV there. That marker must
+    block the grace too -- the earlier must-fire test only ever put the
+    other store under $HOME/.remember, never at the in-project default, so
+    it could not have caught a miss on that direct-path check."""
+    home = tmp_path / "home"
+    project = tmp_path / "project"
+    session_dir = home / ".claude" / "projects" / _slug(str(project))
+    session_dir.mkdir(parents=True)
+    remember = home / ".remember" / "b"
+    (remember / "tmp").mkdir(parents=True)
+
+    now = int(time.time())
+    prev_jsonl = session_dir / f"{PREV}.jsonl"
+    prev_jsonl.write_text(TOOL_USE_LINE * 5)
+    os.utime(prev_jsonl, (now - 3600, now - 3600))
+
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV under THIS (pinned) store"
+    )
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "precondition: no roster-epoch yet -- the grace would normally "
+        "apply here"
+    )
+    default_store = project / ".remember"
+    (default_store / "tmp" / "capture-alive.d").mkdir(parents=True)
+    (default_store / "tmp" / "capture-alive.d" / PREV).write_text("")
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV not in argv, (
+        f"the pre-epoch grace rescued {PREV!r} despite the project's own "
+        f"default-layout store ($PROJECT/.remember) already holding a "
+        f"capture-alive.d marker for it: {argv!r}"
+    )
+
+
+def test_1087_positive_control_a_dead_unmarked_session_outside_any_store_is_still_rescued(
+    tmp_path,
+):
+    """Positive control, paired with both must-fire cases above: PREV is
+    aged past the live-sibling-recency window (genuinely dead, not merely
+    old enough to look ambiguous), no store anywhere under $HOME/.remember
+    holds any marker for it, and THIS store is pre-epoch. The grace must
+    still rescue it -- proving the two new signals above only ever block a
+    live or claimed candidate, never a genuinely unclaimed one, same intent
+    as test_pre_epoch_unmarked_candidate_is_rescued_as_a_one_time_upgrade_
+    grace above but stated explicitly against both #1087 signals at once,
+    including a sibling store directory that exists but has no marker for
+    this particular session id."""
+    home, project, remember, session_dir = _startup_project(tmp_path)
+    _age_past_the_live_window(session_dir)
+    assert not (remember / "tmp" / "capture-alive.d" / PREV).exists(), (
+        "precondition: no roster marker for PREV under THIS store"
+    )
+    assert not (remember / "tmp" / "roster-epoch").exists(), (
+        "precondition: no roster-epoch yet"
+    )
+    # A sibling store exists under $HOME/.remember, same layout as the
+    # must-fire test above, but it has evidence for a DIFFERENT session --
+    # proving the walk does not simply treat "a sibling store exists" as
+    # "the session is claimed."
+    other_store = home / ".remember" / "roles" / "a"
+    (other_store / "tmp" / "capture-alive.d").mkdir(parents=True)
+    (other_store / "tmp" / "capture-alive.d" / "some-other-session-id").write_text("")
+    (remember / "tmp" / "last-save.json").write_text(json.dumps({"sessions": {}}))
+    record = tmp_path / "save-argv.txt"
+    root = _plugin_root_with_stub_save(tmp_path, record)
+
+    result = _run(
+        _env(home, project, remember, plugin_root=root),
+        _payload(CURRENT),
+        script=root / "scripts" / "session-start-hook.sh",
+    )
+    assert result.returncode == 0, subprocess_failure_detail(result, remember)
+
+    argv = _await_record(record)
+    assert PREV in argv, (
+        f"expected the one-time upgrade grace to still rescue a genuinely "
+        f"dead, unmarked session with no sibling-store evidence for it, "
+        f"got {argv!r}"
+    )
+
+
+# Unit-tested directly against the shipped function, not through the real
+# hook: a transcript literally named `..jsonl` (or `.jsonl`) is what WOULD
+# strip to the dangerous id "." or ".." -- but bash's glob in
+# `_find_previous_transcript` (`"$dir"/*"$_TRANSCRIPT_SUFFIX"`) never
+# matches a leading-dot filename without `dotglob` set (confirmed: adding
+# such a file to a real SESSIONS_DIR fixture and running the hook end to
+# end, it is simply invisible, never reaching the recovery block at all --
+# the originally-written version of this test passed with or without the
+# sanitization fix below, for that reason, and was rewritten after that
+# was discovered). The glob's own default behaviour is therefore a second,
+# independent line of defense against this specific route today -- but
+# `_remember_recovery_prev_id_vouched` is still worth testing directly,
+# the same way this file already pulls functions verbatim out of a real
+# hook (test_previous_transcript_no_sort_691.py's own convention): a future
+# caller is not guaranteed to reach it only through this one glob (a
+# `dotglob`-enabled environment, a future call site that hands it an id
+# from somewhere else), and capture_was_seen() -- the function this one
+# deliberately mirrors -- already treats the sanitization as load-bearing
+# on its own, not merely incidental to how its one caller happens to glob.
+_VOUCH_DRIVER = """
+%s
+REMEMBER_DIR=$1
+_remember_recovery_prev_id_vouched "$2"
+printf '%%s' "$?"
+"""
+
+
+def _extract_vouched_function() -> str:
+    source = (REPO_ROOT / "scripts" / "capture-gap-check.sh").read_text(encoding="utf-8")
+    marker = "\n_remember_recovery_prev_id_vouched() {\n"
+    start = source.find(marker)
+    assert start != -1, "_remember_recovery_prev_id_vouched not found in capture-gap-check.sh"
+    end = source.index("\n}\n", start) + len("\n}")
+    return source[start + 1 : end]
+
+
+def test_a_malformed_id_is_never_vouched_for_even_with_a_marker_present(tmp_path):
+    """Self-review finding: PREV_ID is a basename off a glob in SESSIONS_DIR
+    with no character-class check of its own
+    (_find_previous_transcript's `id=${f#"$dir"/}; id=${id%.jsonl}`). An
+    unsanitized `-e ".../capture-alive.d/.."` or `.` would be true whenever
+    capture-alive.d itself exists as a directory -- which it will in
+    exactly the cross-store scenario #1046 is about. `.` and `..` must both
+    be refused outright, the same way capture_was_seen() already refuses
+    them for its own roster check."""
+    remember = tmp_path / "remember"
+    (remember / "tmp" / "capture-alive.d").mkdir(parents=True)
+    # The condition that would make an unsanitized `-e .../.` or `-e
+    # .../..` true: capture-alive.d exists, non-empty.
+    (remember / "tmp" / "capture-alive.d" / "some-other-session").write_text("")
+
+    body = _extract_vouched_function()
+    script = _VOUCH_DRIVER % body
+
+    for malformed_id in (".", ".."):
+        result = subprocess.run(
+            [BASH, "-c", script, "bash", str(remember), malformed_id],
+            capture_output=True, text=True, timeout=10, check=False,
+        )
+        assert result.stdout.strip() == "1", (
+            f"_remember_recovery_prev_id_vouched({malformed_id!r}) returned "
+            f"exit {result.stdout.strip()!r} (0 = vouched) -- a malformed id "
+            f"must never vouch for itself: {result.stderr}"
+        )
+
+
+def test_a_well_formed_id_with_a_real_marker_is_vouched_for(tmp_path):
+    """Positive control, paired with the must-fire case above: an ordinary
+    well-formed session id with a real marker present must still return
+    vouched (exit 0) -- proving the sanitization only ever rejects the
+    pathological inputs, never a legitimate one."""
+    remember = tmp_path / "remember"
+    (remember / "tmp" / "capture-alive.d").mkdir(parents=True)
+    (remember / "tmp" / "capture-alive.d" / PREV).write_text("")
+
+    body = _extract_vouched_function()
+    script = _VOUCH_DRIVER % body
+
+    result = subprocess.run(
+        [BASH, "-c", script, "bash", str(remember), PREV],
+        capture_output=True, text=True, timeout=10, check=False,
+    )
+    assert result.stdout.strip() == "0", (
+        f"_remember_recovery_prev_id_vouched({PREV!r}) returned exit "
+        f"{result.stdout.strip()!r} (0 = vouched) with a real marker "
+        f"present: {result.stderr}"
+    )

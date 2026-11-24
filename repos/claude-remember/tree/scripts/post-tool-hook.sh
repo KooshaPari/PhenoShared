@@ -1,0 +1,1586 @@
+#!/bin/bash
+# ============================================================================
+# post-tool-hook.sh — PostToolUse hook for the Remember plugin
+# ============================================================================
+#
+# DESCRIPTION
+#   Fires after every Claude Code tool call. Counts new JSONL lines since the
+#   last save, and when the delta exceeds a threshold (default 50 lines),
+#   launches save-session.sh in the background. Also outputs a team memory
+#   nudge as additionalContext to remind the agent to log team-worthy knowledge.
+#
+#   Which session it is recording for comes from the `session_id` on stdin,
+#   NOT from the newest transcript in the session dir (#212) — with two
+#   sessions live in one project those are different answers, and the wrong one
+#   writes a durable marker vouching for a session that did no work. The
+#   transcript that is measured is resolved from that same id, because the
+#   line count is compared against a position keyed by it. See the block above
+#   CURRENT_LINES.
+#
+# USAGE
+#   Called automatically by Claude Code's PostToolUse hook system.
+#   Not intended for manual invocation.
+#
+# STDIN
+#   The PostToolUse JSON payload. It embeds the full tool result, so it is
+#   UNBOUNDED IN SIZE — hundreds of KB after a large Read or a verbose Grep.
+#   Consumed here, and published to hooks.d/after_post_tool scripts at the
+#   bottom of this file. It is deliberately not exported for the body of this
+#   hook to carry; the block above the publish says why (#266).
+#
+#   The read is bounded in TIME and only in time — `read -t 1`, and never from
+#   a tty, because this fires on every tool call and a blocking read is a hung
+#   agent rather than a slow one. Nothing here caps how MUCH is read. The size
+#   question is answered at the publish, not at the read; do not take the word
+#   "bounded" in this section as an answer to it.
+#
+#   Anything unusable falls back to the pre-#212 mtime behaviour rather than
+#   failing.
+#
+# ENVIRONMENT
+#   CLAUDE_PLUGIN_ROOT   Plugin install directory (set by Claude Code)
+#   CLAUDE_PROJECT_DIR   Project root (default: .)
+#
+# DEPENDENCIES
+#   Every run:
+#     lib-clock.sh     (the timestamp, without a process where bash can do it)
+#     lib-env-cache.sh (replays an already-resolved REMEMBER_DIR / PIPELINE_DIR
+#                       and the two config scalars this hook needs)
+#     lib-slug.sh      (session_dir_slug / claude_projects_dir — reached
+#                       directly on the fast path, via detect-tools.sh on the
+#                       slow one)
+#     save-session.sh  (launched in background when threshold met)
+#   The resolving run — the first of a session, the first after any config
+#   edit, and every run with an executable hooks.d/after_post_tool/ listener
+#   installed — additionally takes the whole chain, unchanged:
+#     resolve-paths.sh, detect-tools.sh, bootstrap-dirs.sh, log.sh
+#   Binaries:
+#     python3 (for JSON parsing of last-save.json, via `pipeline.shell
+#              read-position` — only once a save has landed, and only when
+#              the #353 sidecar below is absent or disagrees; a save that
+#              landed and left a trustworthy sidecar spawns no interpreter
+#              at all)
+#     jq (for reading config.json — on the resolving run only)
+#
+# EXIT CODES
+#   0   Always (hook must not block the agent)
+#
+# COST (#350)
+#   Registered with NO matcher, so this runs on every single tool call and the
+#   agent waits for it. #227 gave the UserPromptSubmit hook an env-cache fast path and
+#   deliberately skipped this one, because this hook needs config() and
+#   therefore the merged config file — which can carry a live OAuth token and is
+#   0600, fresh every invocation, for that
+#   reason (#232/#429). It still is never cached: what is
+#   replayed are the two SCALARS log.sh reads out of it.
+#
+#   Measured on macOS bash 3.2.57, external spawns per tool call, warm:
+#
+#       no save yet:        14 -> 6   (336 ms -> 130 ms)
+#       a save behind it:   15 -> 8   (405 ms -> 248 ms)
+#
+#   The 8-spawn "a save behind it" figure is #352's own number, on that
+#   branch, BEFORE #353's sidecar existed — every one of those runs still
+#   paid for `pipeline.shell read-position`. #353 (this file, below) adds a
+#   bash-`read`-able sidecar that a save behind it now consults with a
+#   builtin `read` instead, so a warm run whose sidecar is present and
+#   agrees no longer spawns python3 at all. REASONED, not directly
+#   re-measured end-to-end: the spawn this drops is the exact one #352
+#   measured at 2 spawns / ~118 ms on a call that takes it, so the same
+#   drop should apply here on the agreeing-sidecar path — but this file has
+#   not re-run that measurement on this change.
+#
+#   The reporter's Windows 11 / Git Bash numbers are 750-1000 ms per call
+#   against ~90 ms for the prompt hook that already replays. Per-spawn cost is
+#   what differs between platforms; spawn count is what causes it, which is why
+#   the pinned budgets count executions rather than milliseconds.
+#
+#   The FIRST call of a session — and the first after any config edit — still
+#   takes the whole chain and then publishes it, so the cost is paid once per
+#   project per config change rather than per tool call.
+#
+# ============================================================================
+
+# --- Where this script lives ---
+# Resolved by parameter expansion rather than three `dirname` forks (#230) —
+# the same pattern log.sh and the UserPromptSubmit hook already use. A path with no
+# slash in it (invoked by bare filename from the scripts dir) leaves
+# the filename behind, not a directory; `dirname` answered "." and this must too.
+_HOOK_DIR="${BASH_SOURCE[0]%/*}"
+[ "$_HOOK_DIR" = "${BASH_SOURCE[0]}" ] && _HOOK_DIR="$(pwd)"
+
+# --- Nested summarizer: there is no project here (#204) ---
+# Normally this guard lives in resolve-paths.sh, which the fast path below does
+# not reach — the same reason the UserPromptSubmit hook carries its own copy. It has
+# to hold for every hook this plugin registers: any one of them alone scaffolds
+# a memory directory under the summarizer's temp dir.
+[ -n "${REMEMBER_NESTED_SUMMARIZER:-}" ] && exit 0
+
+# --- REMEMBER_HOOK_CWD (#417, #444) ---
+# resolve-paths.sh falls back to this variable when CLAUDE_PROJECT_DIR is
+# unset (#411). Cleared here first and unconditionally, before anything below
+# could set or inherit it -- the #417 leak this closes is a DIFFERENT
+# session's SessionStart-exported value surviving into a hook that has not
+# validated it, or (on a host that reuses one process environment across
+# invocations) a stale value this same hook wrote on a PREVIOUS run. This
+# hook now offers its own stdin `cwd` further down (#444, from the same
+# capture that already reads stdin for `session_id`), but that read has to
+# happen after this unset, never instead of it, or the #417 leak reopens.
+# Clearing it here is cheap and unconditionally correct regardless of whether
+# that reuse is possible on any supported host: on the common path
+# CLAUDE_PROJECT_DIR is already set and this arm never runs anyway.
+unset REMEMBER_HOOK_CWD
+
+# --- REMEMBER_TRANSCRIPT_PATH (#424) ---
+# pipeline/host.transcript_path() trusts this variable once it names a real
+# file, and pipeline/extract.py's find_session() returns that value BEFORE
+# the traversal validator (_validate_session_id) ever runs -- so a value set
+# anywhere in the ambient environment reads an arbitrary file straight into
+# the memory store, no `../` required. Only the SessionStart hook and
+# the SessionEnd hook have a legitimate transcript_path to offer, extracted
+# fresh from their own stdin payload on every run. This hook has none and
+# must not silently consult whatever the process environment already holds,
+# for the same reason and under the same unestablished-reachability
+# reasoning as the REMEMBER_HOOK_CWD unset just above (#417).
+unset REMEMBER_TRANSCRIPT_PATH
+
+# --- Which session is this invocation FOR? (#212), and REMEMBER_HOOK_CWD
+# from the same payload (#444) ---
+# PostToolUse supplies the answer on stdin. Read it here, once, before
+# anything else wants it -- including resolve-paths.sh below, which is new
+# with #444: only the SessionStart hook and the SessionEnd hook used to have
+# a stdin `cwd` to offer it, so a host that never sets CLAUDE_PROJECT_DIR
+# (Codex -- still true, live-confirmed #463; Gemini CLI was believed the
+# same at the time but its own docs now say it sets CLAUDE_PROJECT_DIR as a
+# compatibility alias, #456, unverified live -- #532) hit the FATAL in
+# resolve-paths.sh on every PostToolUse call. PostToolUse carries `cwd` on
+# the same payload as `session_id`
+# (#407's comparison table), so the capture that already existed for
+# session_id moves up here to feed both.
+#
+# This is NOT a new stdin read: before #444 this same read happened later in
+# the file (after path resolution), unconditionally on every tool call
+# regardless of which path resolution took -- see the COST section above,
+# which measures exactly that call. Moving it earlier changes nothing about
+# how often it runs, only what its result is available to.
+#
+# Into a plain shell variable, NOT an exported one (#266). Everything below
+# this line forks, and an exported string the size of a tool result makes
+# every one of those forks fail. This hook does consume stdin, so a
+# hooks.d/after_post_tool script that wanted the payload would find EOF — it
+# still gets it, by a route that is not the environment, at the bottom of
+# this file.
+#
+# Reading stdin is only safe if it cannot wait forever — this runs on EVERY
+# tool call, so a blocking read is a hung agent, not a slow one. Two guards:
+# a tty stdin (hand invocation from a shell) is never read at all, and the
+# read itself is bounded by `-t 1` so a pipe held open with nothing in it
+# costs a second and then gives up. bash 3.2 has no sub-second -t, hence 1.
+# Cleared, not merely left alone. This plugin can re-enter its own hooks from
+# a nested session (#204), and both names are exported at the bottom of this
+# file — so without this an inner invocation could read an OUTER invocation's
+# payload and take it for its own. Absent is the correct answer when this
+# invocation has no payload; a stale one is the plausible-and-wrong answer.
+unset REMEMBER_HOOK_STDIN REMEMBER_HOOK_STDIN_FILE
+
+# The read itself lives in lib-stdin.sh (#1040): chunked with read -N where
+# bash has it, because a byte-at-a-time read cost 25 s per MB on Windows.
+source "$_HOOK_DIR/lib-stdin.sh"
+_remember_read_stdin_into HOOK_STDIN
+
+# Extract a top-level string field without forking a JSON parser on every
+# tool call. Deliberately narrow: the key must be followed by nothing but
+# whitespace and a colon before the value's opening quote, so the key
+# appearing inside tool_input (a Grep pattern, a file being read) is not
+# mistaken for the field. It is a heuristic and it is treated as one — every
+# caller validates the result before anything is done with it. Generalized
+# from a `session_id`-only extractor to also serve `cwd` (#444), the same
+# generalization the SessionStart hook already made of its own copy.
+#
+# #494: whether a real host's `tool_input` can carry a `cwd` key AHEAD of
+# the top-level one is researched next to the prompt hook's own `_stdin_cwd`
+# -- same extractor mechanism, same finding (on every
+# host checked, `tool_input` is positioned AFTER the top-level `cwd` field,
+# so this stays the safe nested-after case), not repeated here.
+# 1029: VARNAME is the new first argument, written via printf -v instead
+# of printed, so a call site forks no subshell -- same shape as
+# session-start-hook.sh own _stdin_json_string_into, 665/660.
+_stdin_json_string_into() {
+    local _sjsi_var="$1" _sjsi_field="$2" _sjsi_raw="$3" _sjsi_rest _sjsi_prefix _sjsi_value _sjsi_dq
+    printf -v "$_sjsi_var" '%s' ""
+    # Every local is _sjsi_-prefixed, as in session-start-hook.sh: printf -v
+    # resolves against the innermost local, so an unprefixed `value` here
+    # would swallow a caller's VARNAME of the same name.
+    printf -v _sjsi_dq '\042'
+    [[ "$_sjsi_raw" == *"$_sjsi_dq$_sjsi_field$_sjsi_dq"* ]] || return 1
+    _sjsi_rest=${_sjsi_raw#*"$_sjsi_dq"$_sjsi_field"$_sjsi_dq"}
+    _sjsi_prefix=${_sjsi_rest%%"$_sjsi_dq"*}
+    if [[ "$_sjsi_prefix" == *[!:[:space:]]* ]]; then return 1; fi
+    _sjsi_value=${_sjsi_rest#*"$_sjsi_dq"}
+    _sjsi_value=${_sjsi_value%%"$_sjsi_dq"*}
+    # A JSON encoder writes each backslash as `\\` -- a Windows `cwd` from
+    # Codex arrives as `C:\\work\\proj` otherwise (#829).
+    _sjsi_value=${_sjsi_value//\\\\/\\}
+    [ -n "$_sjsi_value" ] || return 1
+    printf -v "$_sjsi_var" '%s' "$_sjsi_value"
+}
+
+# The double quote, for the last-save.json scope check and the sanitiser
+# log line below -- held in a variable rather than backslash-escaped, the
+# same reason as _sjsi_dq in _stdin_json_string_into (#898 round 8).
+printf -v _pt_dq '\042'
+
+# ── The cwd the host handed us (#411, #444) ─────────────────────────────
+# resolve-paths.sh's REMEMBER_HOOK_CWD fallback (#411) only ever got a value
+# from the SessionStart hook and the SessionEnd hook -- this hook's own #417
+# unset above was correct but left it with no legitimate source of its own.
+# Exported for resolve-paths.sh to consult below, in the branch that
+# actually sources it; the fast path never sources resolve-paths.sh at all,
+# so it has no use for this, but exporting it unconditionally here costs
+# nothing extra since HOOK_STDIN is already being read regardless.
+#
+# Validated the same way REMEMBER_TRANSCRIPT_PATH is: data from a host
+# payload, at the point of entry. A project directory legitimately contains
+# slashes and dots, so only an embedded newline or carriage return is
+# rejected -- whether the value actually names a directory is decided in
+# resolve-paths.sh, which falls back to the existing derivation when it does
+# not. Precedence is CLAUDE_PROJECT_DIR, then this, then the existing
+# .claude/remember layout derivation, then the existing failure -- resolved
+# entirely inside resolve-paths.sh, unchanged by this hook.
+_stdin_json_string_into REMEMBER_HOOK_CWD cwd "$HOOK_STDIN" 2>/dev/null
+if [[ "$REMEMBER_HOOK_CWD" == *$'\n'* ]] \
+    || [[ "$REMEMBER_HOOK_CWD" == *$'\r'* ]]; then
+    REMEMBER_HOOK_CWD=""
+fi
+export REMEMBER_HOOK_CWD
+
+source "$_HOOK_DIR/lib-clock.sh"
+source "$_HOOK_DIR/lib-env-cache.sh"
+
+# Defined here rather than beside the dispatch it also guards, because the fast
+# path has to ask this question before it decides anything (#350).
+#
+# `-x`, not `-d`, and that difference is the whole gate. The UserPromptSubmit hook
+# tests `[ ! -d hooks.d/after_user_prompt ]` and gets away with it because the
+# distribution ships no such directory. It DOES ship hooks.d/after_post_tool/
+# holding a .gitkeep, so a `-d` test here would refuse the fast path for every
+# user who never installed a listener — which is all of them. Ask what
+# dispatch() asks: is there anything EXECUTABLE.
+#
+# ONE definition, shared with the publish gate at the bottom of this file, and
+# deliberately the same test dispatch() itself makes. Two spellings of "is a
+# listener installed" is how this gate and that dispatch would come to disagree
+# about whether one is.
+#
+# That sameness is also what bounds the Git Bash question nobody here can run:
+# MSYS fakes the execute bit, and if it ever answered yes for a mode-0644
+# .gitkeep, this would return 0 and the fast path would simply never fire on
+# Windows — the platform it was built for — with no other symptom. It would not
+# be a correctness bug: the slow path is today's behaviour exactly. And it is
+# unlikely rather than merely hoped, because dispatch() has shipped this same
+# `[ -x ]` for many releases and would already be trying to EXECUTE that
+# .gitkeep on every Windows tool call, which nobody has reported. Reasoned, not
+# observed: `[ -x hooks.d/after_post_tool/.gitkeep ]` in a real Git Bash shell
+# settles it, and tests/test_post_tool_fast_path_350.py cannot — it skips on
+# win32, as every bash test in this repo does.
+_after_post_tool_listener() {
+    local f
+    for f in "$REMEMBER_HOOKS_DIR/after_post_tool"/*; do
+        [ -x "$f" ] && return 0
+    done
+    return 1
+}
+
+# --- Resolve paths: replay one, or perform one (#350, the #227 pattern) ---
+# This hook has no matcher, so it runs on EVERY tool call — ten times as often
+# as the prompt hook #227 fixed, and on a Windows/Git Bash box the reporter
+# measured 750-1000 ms of blocking wait per call against ~90 ms for the hook
+# that replays. The chain below (resolve-paths → detect-tools → bootstrap-dirs
+# → log.sh) derives facts that cannot change while the config files that
+# produce them do not, and lib-env-cache.sh already validates exactly that.
+#
+# #227 skipped this hook for a stated reason: it needs config(), and therefore
+# the merged config file, which can carry a live OAuth token (#232) and is
+# deliberately given a fresh name every invocation, and 0600 (#429). That
+# reason still stands and the file is still
+# never cached. What is replayed are two SCALARS log.sh resolved from it —
+# REMEMBER_SAVE_COOLDOWN and REMEMBER_DELTA_THRESHOLD — in the same 0600 file
+# that has carried REMEMBER_TZ since #227, under the same config-mtime
+# invalidation. A cooldown and a line threshold are neither secret nor
+# expensive to be one prompt stale about.
+#
+# Two things the chain sets are set here by hand, exactly as the
+# UserPromptSubmit hook does: umask from resolve-paths.sh (#68) and SYS_TMPDIR
+# from bootstrap-dirs.sh.
+# Same values, no processes.
+_REMEMBER_FAST=0
+if _remember_env_cache_load; then
+    REMEMBER_HOOKS_DIR="$PIPELINE_DIR/hooks.d"
+    _after_post_tool_listener || _REMEMBER_FAST=1
+fi
+
+if [ "$_REMEMBER_FAST" = "1" ]; then
+    umask 077
+    SYS_TMPDIR="${TMPDIR:-/tmp}"
+    # session_dir_slug / claude_projects_dir. Normally arrives via
+    # detect-tools.sh, which is not sourced here — it validates an interpreter
+    # with `python3 -V`, and nothing above the last-save check needs one.
+    source "$_HOOK_DIR/lib-slug.sh"
+    # bootstrap-dirs.sh's last act, and the reason it is worth repeating: every
+    # diagnostic this hook can emit goes to stderr, and without this the ones
+    # below land in front of the user instead of in hook-errors.log.
+    [ -d "$REMEMBER_DIR/logs" ] && exec 2>> "$REMEMBER_DIR/logs/hook-errors.log"
+    # Nothing to dispatch: the gate above only let us in here because no
+    # executable listener is installed.
+    dispatch() { :; }
+    # `log` is NOT stubbed, and that is deliberate. log.sh is the expensive
+    # part of the chain, and the hot path has nothing to say — but the branches
+    # that DO call log are the ones where this hook is malfunctioning: a slug
+    # that matches no session directory (#144), a stdin session id with no
+    # transcript. Dropping those to save a process is #144 arriving inside its
+    # own fix. So the first call upgrades the process instead, and the runs
+    # that never take those branches never pay for it.
+    log() {
+        unset -f log
+        source "$PIPELINE_DIR/scripts/log.sh" 2>/dev/null
+        # log.sh returns early on a store it cannot create a logs/ dir in —
+        # before it defines log() — so the source succeeding is not the same
+        # question as `log` existing.
+        #
+        # `declare -F`, NOT `type`. `type log` is true on macOS whether or not
+        # a function was defined, because /usr/bin/log is Apple's unified
+        # logging CLI: the guard would pass, the stub would never be installed,
+        # and this would exec that binary once per diagnostic — nineteen lines
+        # of `log: Unknown subcommand 'hook'` on stderr and an exit status of
+        # 64, from a hook documented to always exit 0. Measured, on
+        # bash 3.2.57. `declare -F` asks about FUNCTIONS and nothing else.
+        declare -F log >/dev/null 2>&1 || log() { :; }
+        log "$@"
+    }
+else
+    # Opt into resolve-paths.sh's soft-failure mode — see the comment in
+    # the SessionStart hook. This hook must never block the agent, so a
+    # resolution failure (e.g. a nested/headless session with no
+    # CLAUDE_PROJECT_DIR) is a silent no-op, not a crash.
+    REMEMBER_PATHS_SOFT_FAIL=1 source "$_HOOK_DIR/resolve-paths.sh" || exit 0
+    source "$_HOOK_DIR/detect-tools.sh"
+    source "$_HOOK_DIR/bootstrap-dirs.sh"
+    source "$PIPELINE_DIR/scripts/log.sh" 2>/dev/null
+    # Publish what this run paid for, so the NEXT tool call replays it. Without
+    # this the fast path would depend on SessionStart or a user prompt having
+    # run since the last config edit, which on a long agentic turn is a hundred
+    # tool calls away.
+    _remember_env_cache_publish
+    # log.sh returns early on a store it cannot create a logs/ dir in — before
+    # it defines log() — so the source succeeding above is not the same
+    # question as `log` existing (#361). The fast path already carries this
+    # exact guard, for the exact reason given there: `declare -F`, not `type`,
+    # because `type log` is true on macOS whether or not a function was
+    # defined — /usr/bin/log is Apple's unified logging CLI, and a hook
+    # documented "EXIT CODES: 0 Always" must not shell out to it.
+    declare -F log >/dev/null 2>&1 || log() { :; }
+    log "hook" "post-tool: PROJECT_DIR=$PROJECT_DIR PIPELINE_DIR=$PIPELINE_DIR PYTHON=$PYTHON REMEMBER_DIR=$REMEMBER_DIR"
+fi
+
+PLUGIN_ROOT="$PIPELINE_DIR"
+PROJECT="$PROJECT_DIR"
+
+# #902: the same check log.sh's own REMEMBER_LOG_DIR guard applies, needed
+# again here because this file's own mkdir below runs on the fast path
+# BEFORE log.sh is ever sourced, so that guard has not run yet. Byte-wise
+# (#695), hence the function + `local LC_ALL=C` rather than an inline `[[ ]]`.
+_remember_dir_is_unsafe() {
+    local LC_ALL=C
+    { [[ "$REMEMBER_DIR" != /* ]] && [[ "$REMEMBER_DIR" != [A-Za-z]:[/\\]* ]] \
+        && [[ "$REMEMBER_DIR" != [\\][\\][^\\]* ]]; } \
+        || [[ "$REMEMBER_DIR" == *$'\n'* || "$REMEMBER_DIR" == *$'\r'* ]]
+}
+
+# "PostToolUse ran at all" (#200) — written here, before every early exit
+# below, because the question the doctor asks is whether this hook is WIRED,
+# and the answers to that and to "did it find a transcript" are different.
+# Putting it after the transcript check made it unwritable in exactly the
+# slug-mismatch case (#144) it most needed to distinguish, so the doctor told
+# those users the hook had never fired and to restart Claude Code — advice
+# that does nothing for a wrong slug.
+#
+# The mkdir is the fast path's half of that (#350): bootstrap-dirs.sh is what
+# creates $REMEMBER_DIR/tmp, and the fast path does not source it. On the
+# common path the directory is already there and the redirect succeeds, so the
+# mkdir costs nothing — it is the recovery, not the precondition, which is the
+# same shape #230 gave every other mkdir in this file. Silently skipping the
+# marker when the directory is missing would tell every doctor user that a
+# wired hook has never fired: the exact regression #200 fixed.
+# #920 gap 1: this mkdir (and the two more below, at the notice marker and
+# the capture-alive.d check) ran on both paths with no check that
+# REMEMBER_DIR is itself a safe value -- only the #902 call site further
+# down this file (logs/autonomous) was ever gated.
+if ! _remember_dir_is_unsafe && ! : > "$REMEMBER_DIR/tmp/post-tool-ran" 2>/dev/null; then
+    mkdir -p "$REMEMBER_DIR/tmp" 2>/dev/null \
+        && : > "$REMEMBER_DIR/tmp/post-tool-ran" 2>/dev/null || true
+fi
+
+# --- Which session is this invocation FOR? (#212) ---
+# HOOK_STDIN was already captured above, ahead of path resolution (#444, so
+# the same payload's `cwd` can feed resolve-paths.sh's REMEMBER_HOOK_CWD
+# fallback), and _stdin_json_string_into already defined there. session_id is
+# extracted from that same capture rather than reading stdin a second time —
+# it is a single stream and a second read here would see EOF.
+_stdin_json_string_into STDIN_SESSION_ID session_id "$HOOK_STDIN" 2>/dev/null
+# stdin is not more trustworthy than a basename. The id becomes both a path
+# component under capture-alive.d/ and a transcript filename, so it faces the
+# same guard the basename-derived id now faces too (#620) -- both are
+# sanitised at their own point of entry, this one here and the other where
+# SESSION_ID is derived from TRANSCRIPT below.
+#
+# #610: this value also reaches save-session.sh's argv, unchanged, on the
+# background nohup save path below (`nohup "$SAVE_SCRIPT" "$SESSION_ID" ...
+# &`), and that script's own arg loop treats a leading-dash value as a FLAG
+# rather than a positional session id (`--dry) DRY_RUN=true ;;`) -- the
+# character class here has never excluded a leading dash, exactly the gap
+# #576 already closed at the sibling agy-stop-hook.sh call site (merged),
+# and #600 is fixing the same gap at the SessionEnd hook (PR #609, not yet
+# merged as of this commit -- do not read that sibling script as fixed until
+# it lands). Without `-*`, a session_id of
+# "--dry" passes this guard untouched and, paired with a real
+# transcript_path, is trusted by the STDIN_SESSION_ID_TRUSTED branch below
+# (which only checks that a transcript_path was given, not that this id
+# names it -- an established #468 trust decision this fix does not revisit)
+# -- silently turning a real delta-triggered save into a no-op dry-run
+# preview: no summary written, no position advanced, log line reads like an
+# ordinary run.
+if [ -z "${STDIN_SESSION_ID#.}" ] || [ -z "${STDIN_SESSION_ID#..}" ] \
+    || [ "${STDIN_SESSION_ID#-}" != "$STDIN_SESSION_ID" ] \
+    || [[ "$STDIN_SESSION_ID" == *[!A-Za-z0-9._-]* ]]; then
+    STDIN_SESSION_ID=""
+fi
+
+# ── The transcript path the host handed us (#459, mirroring #407/#424) ────
+# ~/.claude/projects/<slug> is Claude Code's OWN session layout, not a
+# universal one -- Codex writes to ~/.codex/sessions/<yyyy>/<mm>/<dd>/, so
+# the SESSION_DIR derivation two lines below can never find a Codex
+# transcript, and every per-tool-call save on that host declined (#459).
+# stdin carries `transcript_path` on every hook event, on every host
+# (pipeline/host.py's own module docstring table), same payload
+# STDIN_SESSION_ID above already reads -- so read it here rather than
+# reconstructing a location this hook has no business knowing the shape of.
+#
+# Validated at the point of entry, same as STDIN_SESSION_ID and
+# REMEMBER_HOOK_CWD above: a raw newline cannot reach this point (the stdin
+# read loop already strips line terminators), so only a stray carriage
+# return is rejected outright; whether the value actually names a file is
+# the `[ -f ]` check below, not a character allowlist -- a transcript path
+# legitimately contains slashes and dots.
+_stdin_json_string_into STDIN_TRANSCRIPT_PATH transcript_path "$HOOK_STDIN" 2>/dev/null
+if [[ "$STDIN_TRANSCRIPT_PATH" == *$'\r'* ]]; then
+    STDIN_TRANSCRIPT_PATH=""
+fi
+if [ -n "$STDIN_TRANSCRIPT_PATH" ] && [ ! -f "$STDIN_TRANSCRIPT_PATH" ]; then
+    STDIN_TRANSCRIPT_PATH=""
+fi
+# Exported for save-session.sh (launched below, on the delta path) and
+# anything it dispatches: pipeline.host.transcript_path() already trusts
+# this variable name for exactly this purpose (#407/#431), and save-session.sh
+# already documents it as trusted input. This is NOT the ambient value #424
+# unset at the top of this file -- it is freshly rebuilt from THIS
+# invocation's own validated stdin, the same distinction the SessionStart hook
+# and the SessionEnd hook already draw.
+[ -n "$STDIN_TRANSCRIPT_PATH" ] && export REMEMBER_TRANSCRIPT_PATH="$STDIN_TRANSCRIPT_PATH"
+
+SAVE_SCRIPT="$PLUGIN_ROOT/scripts/save-session.sh"
+LAST_SAVE_FILE="$REMEMBER_DIR/tmp/last-save.json"
+PID_FILE="$REMEMBER_DIR/tmp/save-session.pid"
+
+# --- SESSION_DIR: replay the slug, or compute it once per (project, config
+# dir) and remember it (#913) ---
+# claude_projects_dir()/session_dir_slug() are pure functions of PROJECT and
+# CLAUDE_CONFIG_DIR (and HOME/OSTYPE, neither of which moves mid-session), so
+# the pair this invocation would resolve to is identical to the pair any
+# other invocation for the same project resolves to. Both functions still
+# run unconditionally today, on EVERY tool call -- fast path included,
+# because this line sits below the _REMEMBER_FAST if/else, not inside it --
+# and on Windows/Git Bash each one forks `cygpath` (session_dir_slug forks a
+# `sed` too). Measured in #913: ~384 ms of a 986 ms trace on one Windows box.
+#
+# A small sidecar closes that, independent of lib-env-cache.sh: this is a
+# LOCAL cache of a LOCAL computation, not a replay of the shared chain
+# lib-env-cache.sh guards, so it carries its own identity check rather than
+# reusing that file's invalidation (which does not track CLAUDE_CONFIG_DIR
+# at all, and should not be made to for the sake of one caller).
+#
+# Keyed on PROJECT, NOT MEMORY_PROJECT_DIR (#973 fix; #913 self-review had
+# keyed this on MEMORY_PROJECT_DIR instead, reasoning below). SESSION_DIR
+# below is computed from $PROJECT -- "$(claude_projects_dir)/$(session_dir_slug
+# "$PROJECT")" -- so the cache key must track PROJECT's granularity, or the
+# key can validate a cache entry that was never actually keyed on the thing
+# whose value it is.
+#
+# MEMORY_PROJECT_DIR deliberately collapses every linked worktree of one repo
+# to the SAME value (lib-memory-dir.sh, #56), which is also why REMEMBER_DIR
+# -- and therefore this cache FILE's location -- stays shared across
+# worktrees on purpose: that sharing is correct for MEMORY, which is meant to
+# survive `git worktree remove` and be pooled across worktrees. But a cache
+# KEY built from that same collapsed value can never distinguish worktree A's
+# PROJECT from worktree B's: both share one cache file AND, under the old
+# key, one cache key, so whichever worktree wrote last silently wins for
+# every reader regardless of which worktree is asking (#973) -- the file's
+# sharing leaking into the key's sharing, when only the former was intended.
+# PROJECT stays worktree-specific, so it is the only key that actually
+# matches what gets cached, even though the file it is written into keeps
+# living at the shared, MEMORY_PROJECT_DIR-derived location.
+#
+# The #913 cost this cache exists to avoid is unaffected for the common case
+# (repeat calls within ONE worktree, where PROJECT does not change); it is
+# only reintroduced -- correctly -- the moment two worktrees of the same repo
+# interleave calls against this shared file, which #913 itself counted as an
+# edge case rather than the steady state it was optimizing.
+#
+# HOME is also part of the key (second #913 self-review finding): claude_projects_dir()
+# falls back to "$HOME/.claude" whenever CLAUDE_CONFIG_DIR is unset, and this
+# cache outlives one invocation -- a shared-filesystem/CI setup where
+# REMEMBER_DIR is reached under more than one HOME (no CLAUDE_CONFIG_DIR
+# pinned) would otherwise serve one HOME's SESSION_DIR to another's
+# invocations indefinitely, with nothing to trigger a recompute.
+_SESSION_DIR_CACHE="$REMEMBER_DIR/tmp/session-dir-cache"
+_SDC_CACHE_PROJECT="$PROJECT"
+SESSION_DIR=""
+if [ -f "$_SESSION_DIR_CACHE" ] && [ ! -L "$_SESSION_DIR_CACHE" ] \
+    && [ -O "$_SESSION_DIR_CACHE" ] && [ -r "$_SESSION_DIR_CACHE" ]; then
+    _SDC_PROJECT="" _SDC_CONFIG_DIR="" _SDC_HOME="" _SDC_DIR=""
+    { IFS= read -r _SDC_PROJECT; IFS= read -r _SDC_CONFIG_DIR; \
+      IFS= read -r _SDC_HOME; IFS= read -r _SDC_DIR; } \
+        < "$_SESSION_DIR_CACHE" 2>/dev/null
+    if [ "$_SDC_PROJECT" = "$_SDC_CACHE_PROJECT" ] \
+        && [ "$_SDC_CONFIG_DIR" = "${CLAUDE_CONFIG_DIR:-}" ] \
+        && [ "$_SDC_HOME" = "${HOME:-}" ] \
+        && [ -n "$_SDC_DIR" ]; then
+        SESSION_DIR="$_SDC_DIR"
+    fi
+fi
+if [ -z "$SESSION_DIR" ]; then
+    SESSION_DIR="$(claude_projects_dir)/$(session_dir_slug "$PROJECT")"
+    # mktemp + rename (#429's lesson, same shape lib-env-cache.sh already
+    # uses): a reader must never see a half-written cache, and a predictable
+    # path pre-seeded with a symlink must never be the one this writes
+    # through.
+    _SDC_TMP=$(mktemp "${_SESSION_DIR_CACHE}.XXXXXX" 2>/dev/null) && {
+        {
+            printf '%s\n' "$_SDC_CACHE_PROJECT"
+            printf '%s\n' "${CLAUDE_CONFIG_DIR:-}"
+            printf '%s\n' "${HOME:-}"
+            printf '%s\n' "$SESSION_DIR"
+        } > "$_SDC_TMP" 2>/dev/null \
+            && mv -f "$_SDC_TMP" "$_SESSION_DIR_CACHE" 2>/dev/null \
+            || rm -f "$_SDC_TMP" 2>/dev/null
+    }
+fi
+
+[ -f "$SAVE_SCRIPT" ] || exit 0
+
+# --- Count JSONL lines in the current session ---
+# A slug that does not match the directory Claude Code actually created leaves
+# nothing to read here, and the whole pipeline no-ops for the life of the
+# session. That used to be a bare `exit 0`, so the only symptom was memory
+# quietly never appearing (issue #144).
+#
+# Say so instead — but on a timer, not once ever. This runs on every tool call,
+# so a line per call would bury the logs; a plain once-only sentinel is worse
+# though, because the cause here is environmental (a mis-slugged path stays
+# mis-slugged), so the warning would fire once and every later session would be
+# silent again — the very failure being fixed. An hourly repeat keeps a
+# persistent cause visible without flooding.
+#
+# `ls -t … | head -1` WAS two processes on every tool call this host did not
+# carry a transcript_path for (#230) -- collapsed by #1011 to a glob-plus-`-nt`
+# walk, spawn-free on the common path. The naive version of that walk is WRONG
+# under bash 3.2 (stock macOS): `-nt` compares mtimes at ONE-SECOND granularity,
+# the same trap recorded below the capture-alive marker, so two transcripts
+# written inside the same second tie, and an unresolved tie would make the loop
+# keep whichever the glob listed first -- alphabetical order, not newest. The
+# walk below flags exactly that tie and falls back to `ls -t` (paid only then,
+# only once) to break it, rather than ever guessing.
+#
+# The value picked here decides which session this invocation is recorded FOR
+# whenever stdin does not answer (#212). Trading a correct answer for two
+# processes on the WRITE path is not a trade; misattributing a tool call is a
+# bug, and this repo has twice turned that bug into an outage (#204, #129).
+NOTICE_TTL=3600
+# STDIN_TRANSCRIPT_PATH (#459) wins outright when present: it is the exact
+# file the host says this invocation belongs to, so there is nothing for the
+# glob-walk/slug-match dance below to improve on (#1011 made that walk
+# forkless on the common path; paying for it anyway on an answer already in
+# hand would still be wasted work, fork or not). It is
+# only consulted (and SESSION_DIR only matters at all) when this host's
+# stdin did not offer one -- an older CLI, a test harness, a host this
+# module has not been taught yet -- which is exactly the population the
+# existing "no session dir" warning below was already written for.
+if [ -n "$STDIN_TRANSCRIPT_PATH" ]; then
+    LATEST_JSONL="$STDIN_TRANSCRIPT_PATH"
+else
+    # A glob loop + bash's own `-nt` builtin, not `ls -t ... | head -1` (#1011):
+    # the pipe forks two processes on every tool call this host did not carry
+    # a transcript_path for, and on Windows 11 25H2 each console-attached fork
+    # leaks a kernel Token object until reboot (not just latency -- the whole
+    # reason this one was worth collapsing). Same idiom, same retention (the
+    # newest *.jsonl by mtime) as the #898 round-20 fix elsewhere in this repo
+    # (session-start-hook.sh _remember_prune_keep_newest). `[ -e ]` drops the
+    # unmatched literal glob an empty/absent SESSION_DIR leaves behind, so no
+    # nullglob save/restore is needed either.
+    LATEST_JSONL=""
+    _ptl_jsonl_tie=false
+    for _ptl_jsonl in "$SESSION_DIR"/*.jsonl; do
+        [ -e "$_ptl_jsonl" ] || continue
+        if [ -z "$LATEST_JSONL" ]; then
+            LATEST_JSONL="$_ptl_jsonl"
+        elif [ "$_ptl_jsonl" -nt "$LATEST_JSONL" ]; then
+            # A clear winner resolves any tie a PRIOR comparison left
+            # flagged (self-review finding): once this file is strictly
+            # newer than the running LATEST, nothing earlier in the walk
+            # can out-rank it, so whatever ambiguity existed before this
+            # comparison is moot -- the walk is not forced into the `ls -t`
+            # fallback over a tie that no longer touches the final answer.
+            LATEST_JSONL="$_ptl_jsonl"
+            _ptl_jsonl_tie=false
+        elif ! [ "$LATEST_JSONL" -nt "$_ptl_jsonl" ]; then
+            # `-nt` rounds the mtime to a whole time_t second (self-review
+            # caught this on real bash 3.2.57: two files written ~1ms apart
+            # inside the same wall-clock second compare as tied in EITHER
+            # direction, even though the filesystem holds a finer-grained
+            # timestamp and `ls -t` sorts on that finer one). Walking a
+            # glob in lexical order would then silently keep whichever
+            # same-second file came first, which is exactly the
+            # misattribution the comment a few lines above this block
+            # warns about (#204, #129) -- "two sessions live in one
+            # project" is precisely when two *.jsonl files can be touched
+            # inside the same second. So a tie is not resolved by this
+            # loop at all: it is flagged, and `ls -t` -- paid only once,
+            # only here, only on an actual tie -- breaks it correctly.
+            _ptl_jsonl_tie=true
+        fi
+    done
+    unset _ptl_jsonl
+    if [ "$_ptl_jsonl_tie" = true ]; then
+        LATEST_JSONL=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1)
+    fi
+    unset _ptl_jsonl_tie
+fi
+if [ -z "$LATEST_JSONL" ]; then
+    NOTICE_MARKER="$REMEMBER_DIR/tmp/no-transcript-notice"
+    NOTICE_LAST=0
+    if [ -f "$NOTICE_MARKER" ]; then
+        # `read`, not `cat` (#230). Status untested on purpose: `read` returns 1
+        # on a file with no trailing newline having set the variable anyway, and
+        # a timestamp written with `printf` is exactly that file. The case guard
+        # below is what decides whether the value is usable.
+        read -r NOTICE_LAST < "$NOTICE_MARKER" 2>/dev/null
+        if [ -z "$NOTICE_LAST" ] || [ "${NOTICE_LAST#*[!0-9]}" != "$NOTICE_LAST" ]; then NOTICE_LAST=0; fi
+    fi
+    # 10# after the case, never instead of it (#322): "08"/"09" are all digits,
+    # so they clear the guard and are then read as octal. Bash abandons the rest
+    # of this if body at that point -- including the `exit 0` below -- so the
+    # notice is never sent and the line under `fi` deletes the marker instead.
+    # 10# on an empty string is itself an error on bash 5, which is why the case
+    # stays in front.
+    if [ $(( $(_remember_date +%s) - 10#$NOTICE_LAST )) -ge "$NOTICE_TTL" ]; then
+        # #920 gap 1
+        _remember_dir_is_unsafe || mkdir -p "$REMEMBER_DIR/tmp" 2>/dev/null
+        _remember_date +%s > "$NOTICE_MARKER" 2>/dev/null
+        if [ -d "$SESSION_DIR" ]; then
+            log "hook" "no .jsonl transcript in $SESSION_DIR -- nothing to save yet"
+        else
+            log "hook" "WARNING: no session dir for this project: $SESSION_DIR (slug of $PROJECT), and stdin named no usable transcript_path either. Memory cannot save until it matches a directory under $(claude_projects_dir)/ -- or, on a host that is not Claude Code, until this hook's stdin carries a readable transcript_path (#459)."
+        fi
+    fi
+    exit 0
+fi
+# Gated on the marker existing (#230): this line runs on every tool call, and
+# the file it clears is written only in the slug-mismatch case above — which is
+# to say, essentially never. `rm` on a path that is not there is a process spent
+# to do nothing.
+[ -f "$REMEMBER_DIR/tmp/no-transcript-notice" ] && \
+    rm -f "$REMEMBER_DIR/tmp/no-transcript-notice" 2>/dev/null
+
+# --- One transcript, one session, one answer (#212) ---
+# Everything below is about ONE session: the marker vouches for it, the saved
+# position is keyed by it, and save-session.sh is handed it by id. The line
+# count is compared against that position, so it has to count THAT session's
+# transcript — "the newest file in the directory" was only ever a stand-in for
+# it, and with two sessions live in one project the stand-in names the wrong
+# one. Resolve the transcript from the session id and both uses agree by
+# construction.
+#
+# The mtime pick above is kept as the fallback, unchanged, and is still what
+# decides whether there is anything here to save at all. If stdin did not
+# answer — an older CLI, a different invocation path, a test harness — or if it
+# named a session with no transcript in this project, the hook records exactly
+# what it recorded before this change. Misattributing a tool call is a bug;
+# capturing nothing is an outage, and this repo has twice traded the first for
+# the second (#204, #129).
+TRANSCRIPT="$LATEST_JSONL"
+# Whether STDIN_SESSION_ID actually names the TRANSCRIPT resolved below, as
+# opposed to a session that merely showed up on stdin (#468). Only the first
+# two branches earn it: STDIN_TRANSCRIPT_PATH names an exact file the host
+# vouches for (but only when a session id came WITH it -- a transcript_path
+# with no session_id at all, e.g. an older CLI's payload shape, must fall
+# through to the basename below rather than hand save-session.sh an empty
+# string, which is not "trusted", it is absent), and the SESSION_DIR match
+# below confirms the id by finding its own transcript. The else branch
+# explicitly could not confirm it -- stdin named a session with nothing here
+# -- so TRANSCRIPT falls back to the mtime pick and the session id must fall
+# back with it, not disagree with it.
+STDIN_SESSION_ID_TRUSTED=false
+if [ -n "$STDIN_TRANSCRIPT_PATH" ]; then
+    # Already resolved above (#459): STDIN_TRANSCRIPT_PATH IS LATEST_JSONL in
+    # this case, and re-deriving a SESSION_DIR match by session id would only
+    # be able to agree with it or be wrong -- Codex's own transcript does not
+    # live under SESSION_DIR at all, so the id-match below would always miss
+    # and log a "falling back to newest" line that is not a fallback, just
+    # noise on every Codex tool call.
+    [ -n "$STDIN_SESSION_ID" ] && STDIN_SESSION_ID_TRUSTED=true
+elif [ -n "$STDIN_SESSION_ID" ] && [ -f "$SESSION_DIR/$STDIN_SESSION_ID.jsonl" ]; then
+    TRANSCRIPT="$SESSION_DIR/$STDIN_SESSION_ID.jsonl"
+    STDIN_SESSION_ID_TRUSTED=true
+else
+    [ -n "$STDIN_SESSION_ID" ] && log "hook" "post-tool: stdin session $STDIN_SESSION_ID has no transcript in $SESSION_DIR -- falling back to newest"
+fi
+
+# STDIN_SESSION_ID wins when it is TRUSTED -- i.e. it is actually the id that
+# resolved TRANSCRIPT above, not merely a value that showed up on stdin
+# (#468, same precedence #407 gave STDIN_TRANSCRIPT_PATH). Deriving from the
+# TRANSCRIPT basename instead is correct only on Claude Code, which names its
+# own transcripts `<session-id>.jsonl` -- Codex's `rollout-<date>-<uuid>.jsonl`
+# is not a session id at all, and save-session.sh's own `[a-f0-9-]+` gate
+# (#191) rejected every one of them, silently, into an autonomous log nobody
+# reads. Falling back to the basename whenever stdin's id was NOT trusted
+# (absent, or named a session with no transcript here) keeps every existing
+# Claude Code path byte-identical, including the #212 mtime fallback this
+# would otherwise silently disagree with (parameter expansion, not
+# `basename`, same as before -- #230).
+if [ "$STDIN_SESSION_ID_TRUSTED" = true ]; then
+    SESSION_ID="$STDIN_SESSION_ID"
+else
+    # #1034: split on a backslash as well as `/`. Claude Code on Windows
+    # sends a native `C:\Users\...\<id>.jsonl` transcript_path, which #829 decodes to
+    # single backslashes and no `/` at all, so a `/`-only split kept the
+    # WHOLE path and the sanitiser below emptied it. Same pattern at every
+    # basename site in this file.
+    SESSION_ID="${TRANSCRIPT##*[/\\]}"
+    SESSION_ID="${SESSION_ID%.jsonl}"
+    # #620: the basename route faced no guard at all before this line was
+    # added -- this value reaches save-session.sh's argv unchanged, on the
+    # very same background nohup save path #610 already guards
+    # STDIN_SESSION_ID for, earlier in this file. Same character
+    # class, same reason: `-*` rejects a leading dash so a transcript
+    # basename that happens to collide with save-session.sh's own `--dry`/
+    # `--force` flags cannot be misread as one.
+    if [ -z "${SESSION_ID#.}" ] || [ -z "${SESSION_ID#..}" ] \
+        || [ "${SESSION_ID#-}" != "$SESSION_ID" ] \
+        || [[ "$SESSION_ID" == *[!A-Za-z0-9._-]* ]]; then
+        SESSION_ID=""
+    fi
+fi
+
+# Which session PostToolUse serviced, for the capture-gap check in
+# the SessionStart hook (#200). Distinct from the post-tool-ran marker above:
+# that one answers "is this hook wired", this one answers "for which session",
+# and it can only be written once a transcript has actually been found.
+#
+# Before any throttle or early return BELOW this line: the question is "did it
+# run for this session", not "did it save".
+#
+# The SESSION ID, not a timestamp. `-nt` compares mtimes at one-second
+# granularity under bash 3.2, so a sign of life landing in the same second as
+# the session-start stamp read as "not newer" and reported a healthy session as
+# broken. Identity has no clock to lose to.
+# Written via rename, the same lesson last-save.json learned in #140: a plain
+# redirect truncates first, so a process killed between truncate and write
+# leaves an EMPTY marker — which matches no session id, and the next
+# SessionStart reports a healthy session as a gap.
+#
+# ONE MARKER PER SESSION, not one slot shared by all of them (#206). A single
+# slot answers "which session most recently made a tool call" — a different
+# question from "was session X captured", and the moment anything writes after
+# X the answer for X is gone. Not hypothetical: after a `/clear` the CURRENT
+# session's own tool calls overwrite it while SessionStart still has the
+# previous session to judge, so every healthy session read as broken, once per
+# /clear, forever.
+#
+# The single file is still written. doctor.sh reads it, and it is the only
+# evidence an install upgrading from the old format has for the session that
+# straddles the upgrade.
+# `[ -d ]` before the `mkdir` (#230). Every tool call after the first in a
+# session finds this directory already there, and asking `mkdir -p` to confirm
+# that costs a process each time. The mkdir still runs — and still gates the
+# write on its success — the first time, and on any run where it is missing.
+# #920 gap 1
+if [ -d "$REMEMBER_DIR/tmp/capture-alive.d" ] \
+    || { ! _remember_dir_is_unsafe && mkdir -p "$REMEMBER_DIR/tmp/capture-alive.d" 2>/dev/null; }; then
+    # The id becomes a path component, so it is checked rather than trusted:
+    # it comes from a filename in the transcript dir, and `..` or a slash
+    # would escape the store. Real session ids are UUIDs.
+    if [ -z "${SESSION_ID#.}" ] || [ -z "${SESSION_ID#..}" ] \
+        || [[ "$SESSION_ID" == *[!A-Za-z0-9._-]* ]]; then
+        :
+    else
+        : > "$REMEMBER_DIR/tmp/capture-alive.d/$SESSION_ID" 2>/dev/null || true
+    fi
+fi
+# `read`, not `cat` (#230), to decide whether the atomic tmp+mv rewrite
+# below is even needed. The overwhelming majority of tool calls happen
+# inside the same session as the one before them (#1011): capture-alive
+# already holds this exact SESSION_ID, so a fresh write-then-mv reproduces
+# byte-identical content and buys nothing but a fork on every single tool
+# call. Only a session CHANGE (or a first-ever write, file absent) still
+# pays for the atomic rewrite -- which keeps the rename-not-truncate crash
+# safety above intact: this never skips the write that CREATES the file,
+# only the atomic DANCE around a write that would have left it holding
+# what it already holds.
+#
+# The "already holds it" case still writes, though -- directly, no tmp
+# file, no `mv` -- rather than doing nothing (self-review, #1011): doctor.sh
+# reads this marker's MTIME, not just its content, as "is PostToolUse still
+# firing" (its own comment: "a marker refreshed on every one of its many
+# calls inside a live session"). Skipping the write outright would freeze
+# that mtime at the session's first tool call and report a long-idle-looking
+# marker for an actively firing hook.
+#
+# `1<>`, not a plain `>` (self-review finding): a bare `>` redirect opens
+# with O_TRUNC, which truncates the file to zero bytes BEFORE the `printf`
+# writes anything -- a window in which a concurrent PostToolUse invocation's
+# own `read` just below could see an empty marker and wrongly conclude the
+# session id changed. `1<>` opens the existing file for read+write with NO
+# truncation, so this write only ever lands bytes identical to what is
+# already there, at the same offset, never shortening the file first -- a
+# concurrent reader sees the old content, the new (byte-identical) content,
+# or some consistent prefix of a write that never changes length, but never
+# a truncated marker. Not atomic the way tmp+rename is, but the byte
+# identity this branch is gated on (CURRENT == SESSION_ID) means there is no
+# length change for a lack of atomicity to expose, and it costs no fork.
+_ptl_capture_marker="$REMEMBER_DIR/tmp/capture-alive"
+_ptl_capture_current=""
+if [ -f "$_ptl_capture_marker" ]; then
+    read -r _ptl_capture_current < "$_ptl_capture_marker" 2>/dev/null
+fi
+# #1019: when SESSION_ID is empty (the basename-sanitiser route below
+# failed on this transcript's name) and the marker already holds ""
+# too, CURRENT == SESSION_ID is true for the SAME reason it is true in
+# the real case -- but taking the in-place branch there writes ZERO
+# bytes, and a 0-byte write(2) never touches mtime (POSIX). doctor.sh
+# reads this marker's mtime as "is PostToolUse still firing"; a frozen
+# mtime for a hook that is actively firing misreports a healthy session
+# as stale. Forcing the empty-id case onto the atomic tmp+mv branch
+# keeps it paying the same fork #1016 added the in-place branch to
+# avoid for the common (non-empty, unchanged) case -- but the mtime
+# DOES refresh there (`mv` always touches it), which is the one
+# property doctor.sh needs and the in-place branch cannot give it here.
+if [ "$_ptl_capture_current" != "$SESSION_ID" ] || [ -z "$SESSION_ID" ]; then
+    if printf '%s' "$SESSION_ID" > "$_ptl_capture_marker.$$" 2>/dev/null; then
+        mv -f "$_ptl_capture_marker.$$" "$_ptl_capture_marker" 2>/dev/null \
+            || rm -f "$_ptl_capture_marker.$$" 2>/dev/null || true
+    fi
+else
+    printf '%s' "$SESSION_ID" 1<> "$_ptl_capture_marker" 2>/dev/null || true
+fi
+unset _ptl_capture_marker _ptl_capture_current
+
+# --- Don't fork a save that save-session.sh will only discard on cooldown ---
+# Moved ahead of the #913 scan below (#1011's own suggestion): until the
+# first save lands, LAST_LINE is 0, so DELTA is the whole transcript and
+# always clears the threshold -- and in an agentic session (many tool calls,
+# few human turns) the min-human gate keeps that first save from ever
+# landing, so the hook would fork a save-session.sh on every tool call for
+# the whole session (issue #125). save-session.sh already rate-limits on the
+# last-save-ts cooldown marker; consulting it here, BEFORE the scan rather
+# than after it, means the scan itself is skipped too whenever a save could
+# not fire regardless of what it found -- #913's second named cost paid for
+# nothing, on every call this throttle alone was already going to block.
+# #1011: on an affected Windows build, a fork avoided here is a kernel Token
+# object that never leaks at all, not merely a fork whose latency was saved.
+IN_COOLDOWN=false
+COOLDOWN_MARKER="$REMEMBER_DIR/tmp/last-save-ts"
+if [ -f "$COOLDOWN_MARKER" ]; then
+    LAST_TS=0
+    read -r LAST_TS < "$COOLDOWN_MARKER" 2>/dev/null
+    if [ -z "$LAST_TS" ] || [ "${LAST_TS#*[!0-9]}" != "$LAST_TS" ]; then LAST_TS=0; fi
+    SAVE_COOLDOWN="${REMEMBER_SAVE_COOLDOWN:-120}"
+    # #1011 round 2 self-review: `$(_remember_date +%s)` forks a subshell for
+    # the command substitution EVEN on the builtin, no-process path -- the
+    # same cost lib-clock.sh's own comment above `_remember_date_into`
+    # documents and session-start-hook.sh already avoids at its own two
+    # `+%s` call sites. This cooldown check runs on every tool call once a
+    # save has ever fired, so it is squarely a no-save-path fork like the
+    # ones above; `_remember_date_into` removes it the same way.
+    _remember_date_into _PT_NOW_TS +%s
+    _ELAPSED=$(( 10#$_PT_NOW_TS - 10#$LAST_TS ))
+    [ "$_ELAPSED" -ge 0 ] && [ "$_ELAPSED" -lt "$SAVE_COOLDOWN" ] && IN_COOLDOWN=true
+fi
+
+# --- #913: make the transcript line count incremental, not O(session length) ---
+# `wc -l < "$TRANSCRIPT"` used to read the WHOLE transcript on every tool
+# call, so the hook got slower every turn of a long session (#913's own
+# trace: 229ms of a 986ms run, on a 260 MB transcript, in `wc -l` alone).
+# This stores (OFFSET, LINES) next to the existing #353 sidecar, keyed by
+# the transcript's own basename rather than SESSION_ID -- this cache is
+# about the FILE's own scan progress, not which session speaks for it, so
+# it needs none of the stdin-trust nuance SESSION_ID carries above.
+#
+# `tail -c +OFFSET` (one byte before the first genuinely unread one) IS the
+# validator as well as the reader: its own first character, read back, has
+# to be the newline this OFFSET claims to follow. A shorter read than that
+# single byte means the file no longer HAS that many bytes (shrank, or
+# rotated to something smaller); a first byte that is anything else means
+# what used to be there at OFFSET is not there any more (rewritten from the
+# top). Either one is exactly #913's "file shrank or its head changed", and
+# both fall back to a full recount -- the SAME recount a brand new session's
+# first call gets, with OFFSET starting at 0 rather than a dedicated cold
+# branch.
+#
+# A chunk with no trailing newline is a record still being written (#913's
+# "half-written last line"): never counted, and OFFSET never advances past
+# it, so the next call re-reads it whole -- complete this time, or still
+# partial and still excluded.
+#
+# `local LC_ALL=C` scopes the one-byte `read -n 1` probes below to BYTES, not
+# characters (#695, same reason `_remember_dir_is_unsafe` above takes it):
+# `tail -c` and `wc -c` count bytes, and a UTF-8 locale's `read -n 1` would
+# swallow a whole multi-byte character, desyncing OFFSET from the file it is
+# supposed to point into. Since #1036 the transcript itself never enters a
+# shell variable on either path; see the comment inside `_pt_scan_lines`.
+#
+# This `if` wraps ONLY the scan below, through the SCAN_SIDECAR write right
+# after it -- not the #353 sidecar lookup or the DELTA it feeds, both of
+# which run unconditionally further down, exactly as they did before #913
+# touched this file. A first version of this change nested the #353 block
+# inside this same `if` too (kept at its ORIGINAL indentation, visually
+# flush with the new wrapper, on the reasoning that none of it affects a
+# call's save decision when IN_COOLDOWN is true anyway), but
+# tests/test_hot_path_cost_pin_330.py's own #353/#395 sidecar-trust pins
+# exercise that block independent of cooldown state, and their fixture
+# always leaves a save-session.sh cooldown marker set -- so nesting it here
+# silently disabled the branch those tests exist to pin, on every run of
+# that fixture. Scoping the `if` to just the scan restores that invariant;
+# #913's own win (no longer reading the whole transcript on every call) is
+# untouched, and the scan itself still skips entirely under cooldown.
+if [ "$IN_COOLDOWN" = false ]; then
+PT_SCAN_OFFSET=0
+PT_SCAN_LINES=0
+_pt_scan_lines() {
+    local LC_ALL=C
+    local _off="$1" _lines="$2" _file="$3"
+    local _nl=$'\n' _first="" _last="" _wc="" _n=0 _b=0 _c=0 _end
+    # #1036: nothing below holds more than ONE byte of the transcript in a
+    # shell variable, on either path. This function used to read everything
+    # after OFFSET into a variable (`_chunk=$(tail -c +OFFSET file; printf X)`)
+    # and cut the trailing partial line off it with `##`/`%` expansions --
+    # at OFFSET 0 (no sidecar: every new session's first call, and every
+    # existing session's first call after an upgrade) that was the whole
+    # transcript. @KRR-66 measured it on Git Bash 5.2.37 with real, long-line
+    # transcripts: 5 MB 1.5 s, 20 MB 13.5 s, 50 MB 92 s, close to quadratic;
+    # a 247 MB and a 1.33 GB one ran into the host's 600 s PostToolUse
+    # timeout, the hook died before writing the sidecar, and so every later
+    # call started from 0 again and stalled 600 s, forever. A multi-MB
+    # trailing partial line was worse still: the `%` strip of a 3 MB partial
+    # line did not finish in 120 s on macOS bash 5.3.
+    #
+    # Now the bytes go only to C tools that stream them, and bash keeps
+    # counts:
+    #   1. warm only: `tail -c +OFFSET` on fd 9, and ONE byte read off it with
+    #      the `read` builtin, which reads a pipe one byte at a time so the
+    #      rest stays in the pipe. It must be the newline OFFSET claims to
+    #      follow, or the file shrank or was rewritten (#913) and the whole
+    #      thing is recounted from 0 -- the same check the old code made on
+    #      the first byte of its chunk, with the same fallback.
+    #   2. `wc -lc` over everything after that (warm: the rest of fd 9;
+    #      cold: the file itself): N newlines and B bytes, one linear pass.
+    #   3. the LAST of those B bytes, read the same way as in step 1 (a
+    #      one-byte `read` off `tail -c +END`). Appends never change a byte
+    #      already written, so this is the byte `wc` saw last even if the
+    #      file grew in between. A newline there means OFFSET moves to the
+    #      end of what `wc` counted: the common case, a hook firing right
+    #      after a whole record was written.
+    #   4. only when it is not a newline (a record still being written,
+    #      #913's half-written last line, of any length): `head -n N` over the
+    #      same region, piped to `wc -c`, gives the byte length up to and
+    #      including the Nth newline. The partial line is never counted and
+    #      OFFSET stops before it, so the next call re-reads it -- unchanged
+    #      contract, and still no bytes in bash.
+    #
+    # Forks, measured on macOS /bin/bash 3.2.57 and Homebrew bash 5.3.15 by
+    # PID delta: each `$(exec CMD)` and `<(exec CMD)` below is one fork, the
+    # explicit `exec` saving the second one a redirect otherwise costs. Warm
+    # with new bytes 3, warm with nothing new 2, cold 2. Step 4, only when a
+    # partial line is pending, adds one for the substitution and one per
+    # pipeline stage: 3 cold (measured), 4 warm (same rule, not measured).
+    # The code this replaces cost 4 whenever there was a complete line to
+    # count (2 for its `tail` read, 2 for its `wc -l` herestring).
+    #
+    # `local LC_ALL=C` keeps `read -n 1` at one BYTE, not one character
+    # (#695): OFFSET is a byte offset, and a UTF-8 locale would desync it.
+    # A NUL byte reads back empty (it is the delimiter of `read -d ""`),
+    # which is never taken for a newline -- the safe direction in both
+    # steps.
+    if [ "$_off" -gt 0 ]; then
+        exec 9< <(exec tail -c +"$_off" "$_file" 2>/dev/null)
+        IFS= read -r -d '' -n 1 _first <&9
+        if [ "$_first" != "$_nl" ]; then
+            exec 9<&-
+            _pt_scan_lines 0 0 "$_file"
+            return
+        fi
+        _wc=$(exec wc -lc <&9 2>/dev/null)
+        exec 9<&-
+    else
+        _wc=$(exec wc -lc 2>/dev/null < "$_file")
+    fi
+    # `wc` pads its two fields with spaces on BSD/macOS and not on GNU; the
+    # expansions below split either, with no fork (#1011/#1029 count them)
+    # and no herestring temp file.
+    _wc=${_wc#"${_wc%%[0-9]*}"}
+    _n=${_wc%%[!0-9]*}
+    _wc=${_wc#"$_n"}
+    _wc=${_wc#"${_wc%%[0-9]*}"}
+    _b=${_wc%%[!0-9]*}
+    # Digits only by construction, but never trusted blind: an empty or odd
+    # field (a `wc` that failed, a file that vanished) counts as 0, and 10#
+    # keeps a leading zero from being read as octal (#332).
+    if [ -z "$_n" ] || [[ "$_n" == *[!0-9]* ]]; then _n=0; fi
+    if [ -z "$_b" ] || [[ "$_b" == *[!0-9]* ]]; then _b=0; fi
+    _n=$(( 10#$_n ))
+    _b=$(( 10#$_b ))
+    PT_SCAN_OFFSET=$_off
+    PT_SCAN_LINES=$_lines
+    [ "$_b" -gt 0 ] || return 0
+    _end=$(( _off + 10#$_b ))
+    exec 9< <(exec tail -c +"$_end" "$_file" 2>/dev/null)
+    IFS= read -r -d '' -n 1 _last <&9
+    exec 9<&-
+    if [ "$_last" = "$_nl" ]; then
+        PT_SCAN_OFFSET=$_end
+        PT_SCAN_LINES=$(( _lines + 10#$_n ))
+        return 0
+    fi
+    [ "$_n" -gt 0 ] || return 0
+    # Cold, `head` reads the file itself: macOS `tail -c +N` streams at ~30
+    # MB/s (measured: 27 MB in 0.9 s, even to /dev/null) where `head -n` on
+    # the file took 0.014 s. Warm, only the bytes after OFFSET go through it.
+    if [ "$_off" -gt 0 ]; then
+        _c=$(tail -c +"$(( _off + 1 ))" "$_file" 2>/dev/null | head -n "$_n" | wc -c)
+    else
+        _c=$(head -n "$_n" "$_file" 2>/dev/null | wc -c)
+    fi
+    _c=${_c//[^0-9]/}
+    [ -n "$_c" ] || return 0
+    PT_SCAN_OFFSET=$(( _off + 10#$_c ))
+    PT_SCAN_LINES=$(( _lines + 10#$_n ))
+}
+
+# Both separators (#1034): see the SESSION_ID fallback above.
+_SCAN_NAME="${TRANSCRIPT##*[/\\]}"
+_SCAN_NAME="${_SCAN_NAME%.jsonl}"
+if [ -z "${_SCAN_NAME#.}" ] || [ -z "${_SCAN_NAME#..}" ] \
+    || [ "${_SCAN_NAME#-}" != "$_SCAN_NAME" ] \
+    || [[ "$_SCAN_NAME" == *[!A-Za-z0-9._-]* ]]; then
+    _SCAN_NAME=""
+fi
+# #1034: an empty name used to disable the cache SILENTLY -- every tool call
+# then cold-rescans the whole transcript, and nothing in hook-errors.log or
+# /remember:doctor said why. Say so once per transcript, not once per call:
+# the marker holds the TRANSCRIPT it last warned about, read back with the
+# `read` builtin and rewritten with a builtin redirect, so this costs no
+# fork either way (#1011/#1029 count them), and nothing at all on the
+# common path where the name is usable.
+if [ -z "$_SCAN_NAME" ] && [ -n "$TRANSCRIPT" ]; then
+    _SCAN_NOTICE="$REMEMBER_DIR/tmp/transcript-scan-unnamed"
+    _SCAN_NOTICE_LAST=""
+    [ -f "$_SCAN_NOTICE" ] && read -r _SCAN_NOTICE_LAST < "$_SCAN_NOTICE" 2>/dev/null
+    if [ "$_SCAN_NOTICE_LAST" != "$TRANSCRIPT" ]; then
+        log "hook" "WARNING: transcript-scan cache disabled for $_pt_dq$TRANSCRIPT$_pt_dq -- its basename is not a usable cache name, so every tool call rescans the whole transcript (#1034)"
+        printf '%s\n' "$TRANSCRIPT" > "$_SCAN_NOTICE" 2>/dev/null
+    fi
+fi
+
+_SCAN_OFFSET=0
+_SCAN_LINES=0
+if [ -n "$_SCAN_NAME" ]; then
+    SCAN_SIDECAR="$REMEMBER_DIR/tmp/transcript-scan.$_SCAN_NAME"
+    if [ -f "$SCAN_SIDECAR" ]; then
+        _SCAN_RAW_OFFSET=""
+        _SCAN_RAW_LINES=""
+        read -r _SCAN_RAW_OFFSET _SCAN_RAW_LINES < "$SCAN_SIDECAR" 2>/dev/null
+        # Validated as a PAIR, not field-by-field (self-review finding): a
+        # write interrupted between the two fields (OOM, disk full, a kill
+        # mid-`printf`) can leave a syntactically VALID OFFSET -- a real
+        # prior scan position, so `_pt_scan_lines`'s own newline check at
+        # that offset passes -- next to an EMPTY/missing LINES field. Each
+        # field alone looked fine, so a per-field default silently paired
+        # a genuine OFFSET with a LINES of 0, undercounting every line
+        # that existed before it -- not "no sidecar at all", but a sidecar
+        # that is wrong and passes every check this function runs on it.
+        # Any failure on either field now discards BOTH, forcing the same
+        # full recount an absent sidecar already gets.
+        if [ -z "$_SCAN_RAW_OFFSET" ] || [[ "$_SCAN_RAW_OFFSET" == *[!0-9]* ]] \
+            || [ -z "$_SCAN_RAW_LINES" ] || [[ "$_SCAN_RAW_LINES" == *[!0-9]* ]]; then
+            _SCAN_RAW_OFFSET=0
+            _SCAN_RAW_LINES=0
+        fi
+        _SCAN_OFFSET=$((10#$_SCAN_RAW_OFFSET))
+        _SCAN_LINES=$((10#$_SCAN_RAW_LINES))
+    fi
+else
+    SCAN_SIDECAR=""
+fi
+
+_pt_scan_lines "$_SCAN_OFFSET" "$_SCAN_LINES" "$TRANSCRIPT"
+_SCAN_NEW_OFFSET=$PT_SCAN_OFFSET
+CURRENT_LINES=$PT_SCAN_LINES
+CURRENT_LINES=$(( CURRENT_LINES + 0 ))
+
+# Plain redirect, not the mktemp+rename the #353 sidecar uses: a partial
+# write here is self-healing. The read above already treats anything that
+# is not two plain digit fields as "no sidecar at all" (OFFSET=0, LINES=0),
+# so a crash mid-write costs one extra full recount next call, never a
+# wrong DELTA -- unlike last-save.json's own sidecar, where a wrong value
+# could skip or duplicate a summary.
+if [ -n "$SCAN_SIDECAR" ]; then
+    printf '%s %s\n' "$_SCAN_NEW_OFFSET" "$CURRENT_LINES" > "$SCAN_SIDECAR" 2>/dev/null
+fi
+fi
+# CURRENT_LINES is 0 here when the scan above was skipped (IN_COOLDOWN=true)
+# -- bash's own default for an unset arithmetic operand, never assigned in
+# that case. The one place that matters, the sidecar's own upper-bound
+# check a little further down, is told so explicitly rather than reading a
+# false "sidecar is past the transcript" rejection off a count that was
+# simply never taken this round.
+
+# --- Get last saved position (from the #353 sidecar, or last-save.json) ---
+# Positions are keyed by session (issue #140), so ask for THIS session rather
+# than whether it happens to own the one slot — two live sessions used to
+# overwrite each other and re-summarize whole spans as duplicates.
+#
+# Delegated to pipeline.shell rather than parsed here. This hook used to carry
+# its own json reader, and it drifted: every other reader learned that a bool
+# is not a position and an integral float is, while this one kept a bare
+# isinstance check and reported 0 for positions the rest of the pipeline
+# resumed from, defeating the delta throttle for the life of a session.
+#
+# The interpreter is resolved HERE on the fast path, not up front (#350).
+# detect-tools.sh validates its candidates with `python3 -V` — a real spawn,
+# and the expensive one on Windows, where `python3` is often the Microsoft
+# Store alias the reporter measured at 125 ms just to answer `-V`. Nothing
+# above this line needs an interpreter, and a store that has never saved does
+# not reach this branch at all, so the validation is deferred rather than
+# dropped: a replayed interpreter path that no longer runs is exactly the
+# silently-wrong-delta this hook must not produce, and lib-env-cache.sh
+# validates config mtimes, not binaries. It is not asked to.
+#
+# Guarded on PYTHON already being set rather than on which path was taken: the
+# slow path has sourced detect-tools.sh already, and detect-tools.sh exports
+# PYTHON, so an invocation that inherited a resolved one from a parent is
+# equally answered. Re-sourcing would only repeat the spawn.
+# --- The #353 sidecar: skip the read-position spawn when it can be trusted ---
+# `pipeline.shell save-position` (invoked from save-session.sh) writes a
+# plain-integer, bash-`read`-able mirror of THIS session's position AFTER it
+# commits last-save.json, never before — so the sidecar can lag the truth
+# (a crash between the two writes) but can never be ahead of it. That
+# ordering is what makes a value greater than CURRENT_LINES, this run's own
+# transcript line count, self-evidently wrong: reaching one needs corruption
+# or a session-id collision, never a legitimate crash window. A sidecar that
+# fails either check is a DISAGREEMENT with last-save.json and is never
+# trusted silently — it is logged, once per occurrence, and the read falls
+# back to the authoritative `read-position` spawn this hot path exists to
+# avoid on the common path.
+#
+# Three states, not two: SIDECAR_TRUSTED holds the sidecar's own value with
+# no spawn at all; a fallback below asks read-position for the authoritative
+# one; neither path ever substitutes a silent 0 for "could not tell" — an
+# absent or invalid sidecar simply means there was nothing here to trust,
+# and the code below asks the real source of truth instead of guessing.
+SIDECAR=""
+if [ -z "${SESSION_ID#.}" ] || [ -z "${SESSION_ID#..}" ] \
+    || [[ "$SESSION_ID" == *[!A-Za-z0-9._-]* ]]; then
+    :
+else
+    SIDECAR="$REMEMBER_DIR/tmp/position.$SESSION_ID"
+fi
+
+LAST_LINE=0
+SIDECAR_TRUSTED=""
+if [ -n "$SIDECAR" ] && [ -f "$SIDECAR" ]; then
+    _SIDECAR_LINE=""
+    read -r _SIDECAR_LINE < "$SIDECAR" 2>/dev/null
+    if [ -z "$_SIDECAR_LINE" ] || [[ "$_SIDECAR_LINE" == *[!0-9]* ]]; then
+        log "hook" "WARNING: sidecar $SIDECAR held a non-numeric value ($_SIDECAR_LINE) -- disagrees with last-save.json, falling back to read-position"
+    else
+        # 10# (#332): a leading zero in the sidecar would otherwise be
+        # read as octal and take this comparison — and the delta
+        # arithmetic below it — down with it.
+        #
+        # `[ "$IN_COOLDOWN" = false ] &&` short-circuits the bound check
+        # itself (never just its message) when the scan above was skipped:
+        # CURRENT_LINES is 0 in that case, never this run's real line
+        # count, and comparing against it would reject every legitimate
+        # sidecar as "past the transcript" on every cooldown-active call.
+        if [ "$IN_COOLDOWN" = false ] && [ "$((10#$_SIDECAR_LINE))" -gt "$CURRENT_LINES" ]; then
+            log "hook" "WARNING: sidecar $SIDECAR reports position $_SIDECAR_LINE, past this run's own $CURRENT_LINES transcript lines -- disagrees with last-save.json, falling back to read-position"
+        else
+            # #403: the bound above only rules out a value the sidecar
+            # could never legitimately reach — it says nothing about
+            # whether last-save.json still remembers this session at
+            # all. The evicted-sidecar cleanup in pipeline/shell.py's
+            # cmd_save_position (the loop right after the #353 sidecar
+            # write) is best-effort by its own comment: a failed unlink
+            # leaves an orphaned sidecar that still falls well inside
+            # CURRENT_LINES, which the bound above cannot see. Trusting
+            # it would resume from a position the authoritative store no
+            # longer recognises — #140's duplicate-resummarization bug,
+            # reintroduced through this mirror. So the sidecar is
+            # trusted only when this run's own session id is still a
+            # key in last-save.json's "sessions" map, which is the
+            # comparison the two log lines here already claim to make.
+            #
+            # Read via bash's fork-free `$(< file)` (a single
+            # redirection as the whole command substitution — bash
+            # reads the file directly, no subprocess, and it traces as
+            # no separate xtrace line at all) rather than a `read` loop
+            # or a spawn, so the hot path this feature exists to keep
+            # cheap stays cheap. The membership test is a literal
+            # substring match on `"<id>":`, not a JSON parse — safe
+            # because SESSION_ID was already filtered to
+            # [A-Za-z0-9._-]+ above (no quote or backslash it could
+            # inject) and the trailing `":` anchors the match to a full
+            # key, so "sess-1" cannot false-match a stored "sess-10".
+            #
+            # Scoped to the "sessions" object's own text, not the whole
+            # file: cmd_save_position's payload always carries the
+            # fixed top-level keys "session" and "line" alongside
+            # "sessions" (pipeline/shell.py), so a session id that
+            # happened to equal one of THOSE field names would
+            # false-match a whole-file search even with an empty
+            # "sessions" map. Values in "sessions" are always bare
+            # integers (never braces), so the text between the key and
+            # the object's own closing brace is exactly its content.
+            # #426: "absent", "present but unreadable", and "genuinely
+            # evicted" all used to fold into ONE message that claims a
+            # comparison happened -- `[ -f ]` passes on an unreadable
+            # file, and `$(< file)` cannot tell "read empty content" from
+            # "the read itself failed", so both silently looked
+            # identical to a file whose "sessions" map genuinely lacks
+            # this session. Behaviour is unchanged (fall back to
+            # read-position in all three cases); only the receipt is
+            # split, on whether the file was actually read.
+            _LAST_SAVE_STATE="absent"
+            _LAST_SAVE_CONTENT=""
+            if [ -f "$LAST_SAVE_FILE" ]; then
+                # The stderr redirect has to sit OUTSIDE the command
+                # substitution (a `{ ...; } 2>/dev/null` group), not
+                # inside it as `$(< file 2>/dev/null)` -- bash's
+                # no-fork fast path for `$(< file)` only engages when
+                # the substitution is EXACTLY that redirection with no
+                # other token in it; adding one turns it into an empty
+                # command with a redirection, which reads nothing and
+                # always "succeeds" silently. That would have made
+                # unreadable indistinguishable from empty again -- the
+                # exact bug this fix exists to close, reintroduced one
+                # line lower.
+                if { _LAST_SAVE_CONTENT=$(< "$LAST_SAVE_FILE"); } 2>/dev/null; then
+                    _LAST_SAVE_STATE="read"
+                else
+                    _LAST_SAVE_STATE="unreadable"
+                fi
+            fi
+            # #1021: the two parameter expansions this replaced --
+            # `${_LAST_SAVE_CONTENT#*"sessions"}` then `${_SESSIONS_SCOPE%%\}*}`
+            # -- are QUADRATIC in bash's `#`/`%` glob-match engine (the same
+            # class #1017 fixed for `_pt_scan_lines`'s newline count, and
+            # #898 already documents for other expansion forms). Measured by
+            # the release auditor on real `/bin/bash` 3.2.57: 0.02s at 100
+            # sessions, 1.93s at 1,000, 179s at 10,000, with "sessions"
+            # positioned worst-case at the END of the file.
+            #
+            # `cmd_save_position` (pipeline/shell.py) is the only writer of
+            # this file, caps it at `_POSITION_SLOTS` (32) sessions, and
+            # always writes "sessions" as the FIRST key of the payload --
+            # so in every real file this repo's own writer produces, the
+            # realistic worst case the issue's own synthetic fixture
+            # constructs (sessions key at the end, thousands of entries)
+            # cannot occur. The fix below is defense-in-depth, not a
+            # response to an observed production slowdown.
+            #
+            # `[[ STR =~ REGEX ]]` (POSIX regexec, not bash's glob-match
+            # engine) measured LINEAR on the same /bin/bash 3.2.57 host:
+            # 0.01s at 10,000 sessions, 0.017s at 20,000 -- where the old
+            # expansion pair took 2.05s and 9.69s. No new fork: BASH_REMATCH
+            # is a builtin, same as the expansion it replaces.
+            #
+            # `([^}]*)` with NO trailing `\}` requirement: a greedy `[^}]*`
+            # stops at the first literal `}` when one exists -- the same
+            # "up to the first closing brace" scope the old `%%\}*` produced
+            # -- and matches to the end of the string when none does,
+            # because nothing after the capture group forces backtracking.
+            # Self-review's first draft required a trailing `\}` and kept
+            # an `elif` fallback (the old quadratic prefix-strip) for a
+            # truncated/corrupted file with no closing brace anywhere after
+            # "sessions" -- a case the atomic temp-file-then-rename writer
+            # below should never produce, but still a live exposure on an
+            # already-broken file for as long as the sidecar-trust check
+            # keeps running on every tool call. Dropping the trailing `\}`
+            # removes the fallback (and the exposure) entirely: re-measured
+            # on a 20,000-filler-session file with NO closing brace anywhere
+            # after "sessions" -- 0.022s, same as the well-formed
+            # 20,000-session case, not the quadratic cost the fallback
+            # existed to re-admit. Byte-identical to the old two-expansion
+            # form on every case measured (normal, empty, absent "sessions",
+            # sessions-at-end, empty sessions object, truncated-no-brace, a
+            # double "sessions" occurrence).
+            #
+            # Built from `$_pt_dq` -- not a literal `\"` in the pattern --
+            # the same technique the two expansions this replaces already
+            # used (not new work this fix introduces): #898 round 8's
+            # scanner (tests/test_scanner_shapes_source_898.py,
+            # `_check_escaped_quote`) flags an escaped double quote shipped
+            # in a hook script, because the build's inlining step can hold
+            # on it.
+            _SESSIONS_SCOPE=""
+            _PT_SESSIONS_RE="$_pt_dq"'sessions'"$_pt_dq"'([^}]*)'
+            if [[ "$_LAST_SAVE_CONTENT" =~ $_PT_SESSIONS_RE ]]; then
+                _SESSIONS_SCOPE="${BASH_REMATCH[1]}"
+            fi
+            if [[ "$_SESSIONS_SCOPE" == *"$_pt_dq"$SESSION_ID"$_pt_dq":* ]]; then
+                LAST_LINE=$((10#$_SIDECAR_LINE))
+                SIDECAR_TRUSTED=1
+            elif [ "$_LAST_SAVE_STATE" = absent ]; then
+                log "hook" "WARNING: sidecar $SIDECAR exists but last-save.json is absent -- nothing to compare against, falling back to read-position"
+            elif [ "$_LAST_SAVE_STATE" = unreadable ]; then
+                log "hook" "WARNING: sidecar $SIDECAR exists but last-save.json could not be read -- falling back to read-position"
+            else
+                log "hook" "WARNING: sidecar $SIDECAR's session $SESSION_ID is absent from last-save.json -- disagrees with last-save.json, falling back to read-position"
+            fi
+        fi
+    fi
+fi
+
+if [ -z "$SIDECAR_TRUSTED" ] && [ -f "$LAST_SAVE_FILE" ]; then
+    # #898 round 5 self-review: the old guard here only checked
+    # "${PYTHON:-}" -- enough back when this line called $PYTHON directly,
+    # since that only ever needed the inherited VARIABLE. It is not enough
+    # now: this line calls _remember_run_python, a FUNCTION defined inside
+    # detect-tools.sh, never exported (bash has no `export -f` use here), so
+    # a process that somehow inherited a resolved $PYTHON without this file
+    # ever sourcing detect-tools.sh itself would hit "command not found"
+    # (silently folded to position 0 by the 2>/dev/null and the case below).
+    # Checking for the function's own existence, not just the variable,
+    # covers both the already-sourced case and the inherited-variable-only
+    # case with one fast, no-fork test.
+    declare -f _remember_run_python >/dev/null 2>&1 || source "$_HOOK_DIR/detect-tools.sh"
+    LAST_LINE=$(cd "$PIPELINE_DIR" && _remember_run_python -m pipeline.shell read-position "$LAST_SAVE_FILE" "$SESSION_ID" 2>/dev/null)
+    if [ -z "$LAST_LINE" ] || [ "${LAST_LINE#*[!0-9]}" != "$LAST_LINE" ]; then LAST_LINE=0; fi
+fi
+
+# 10# after the case, never instead of it (#332) — the position is a decimal
+# string from pipeline.shell, and a "08" in it would be read as octal and take
+# the whole delta throttle down with the arithmetic.
+#
+# Runs unconditionally, cooldown or not: CURRENT_LINES is 0 under cooldown
+# (the scan above was skipped), so DELTA comes out <= 0 and the threshold
+# check below -- which ANDs on "$IN_COOLDOWN" = false in its own right --
+# can never fire from it either way. Nothing here needs a cooldown branch
+# of its own.
+DELTA=$((CURRENT_LINES - 10#$LAST_LINE))
+SAVE_TRIGGERED=""
+
+# --- Fire save if delta exceeds threshold and no save already running ---
+# Same as SAVE_COOLDOWN above: log.sh resolves and validates it, both paths
+# read the resolved value (#350).
+DELTA_THRESHOLD="${REMEMBER_DELTA_THRESHOLD:-50}"
+if [ "$DELTA" -gt "$DELTA_THRESHOLD" ] && [ "$IN_COOLDOWN" = false ]; then
+  if [ -z "$SESSION_ID" ]; then
+    # #633: the #620 sanitiser above can empty SESSION_ID when the
+    # transcript basename fails the character class, and this fork is the
+    # ONLY remaining consumer of it on the basename route -- unlike the
+    # stdin route, which has STDIN_SESSION_ID_TRUSTED gating every use of
+    # STDIN_SESSION_ID behind `[ -n "$STDIN_SESSION_ID" ]`, earlier in this
+    # file, there is no further fallback here to
+    # fall through to. An empty value is not "trusted", it is absent,
+    # as earlier in this file too -- save-session.sh reads an empty argv[1]
+    # as "no id given" and silently substitutes the newest .jsonl by mtime
+    # (save-session.sh:273-275) rather than refusing, so the fork must be
+    # skipped here rather than let that happen.
+    log "hook" "post-tool: transcript basename $_pt_dq${TRANSCRIPT##*[/\\]}$_pt_dq failed the session id sanitiser -- refusing to save rather than handing save-session.sh an empty id"
+  else
+    ALREADY_RUNNING=false
+    if [ -f "$PID_FILE" ]; then
+        OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
+        if kill -0 "$OLD_PID" 2>/dev/null; then
+            ALREADY_RUNNING=true
+        fi
+    fi
+
+    if [ "$ALREADY_RUNNING" = false ] && _remember_dir_is_unsafe; then
+        log "hook" "FATAL: unsafe REMEMBER_DIR ($REMEMBER_DIR) -- refusing to mkdir or save (#902)"
+        ALREADY_RUNNING=true
+    fi
+    if [ "$ALREADY_RUNNING" = false ]; then
+        mkdir -p "$REMEMBER_DIR/logs/autonomous"
+        # #902: date + PID, not HHMMSS alone -- a bare HHMMSS collides with a
+        # file from an earlier day still inside the retention window, and a
+        # seed appended to THAT file's stale content is what first surfaced
+        # the missing REMEMBER_DIR guard above.
+        _SAVE_LOG="$REMEMBER_DIR/logs/autonomous/save-$(_remember_date +%Y%m%d-%H%M%S)-$$.log"
+        # Seeded with a header line BEFORE the backgrounded save-session.sh
+        # ever opens it, and the nohup redirect below appends (`>>`) rather
+        # than truncates (`>`) -- same defence the SessionEnd hook already
+        # gives its own end-of-run log (#483),
+        # applied here for #527: save-session.sh's own housekeeping sweep
+        # (unconditional on every flush since #498, not tied to its NDC
+        # step) reclaims any *.log in this same directory that is still
+        # empty when it runs -- and on an ordinary flush save-session.sh's
+        # own log() writes to its daily narrative file, never to
+        # stdout/stderr, so a `>`-truncated, still-open $_SAVE_LOG is
+        # exactly what that sweep -- run from INSIDE the very process
+        # writing into it -- matches and deletes. A non-empty file at open
+        # time is never `-empty`, so it survives its own run's housekeeping
+        # while a genuinely stale, still-empty log from an abandoned run is
+        # untouched by this and keeps getting swept exactly as before.
+        if ! printf '%s [post-tool] save triggered\n' "$(_remember_date +%H:%M:%S)" >> "$_SAVE_LOG" 2>/dev/null; then
+            log "hook" "WARNING: could not seed $_SAVE_LOG -- if this file stays absent or empty, an ordinary housekeeping sweep will reclaim it while this flush is still writing to it"
+        fi
+        # #1002: on Windows, a plain nohup-and-background launch still
+        # allocates a console that Windows Terminal flashes for ~1s. Route
+        # through the hidden launcher first; the nohup line below is the
+        # unchanged fallback (and the ONLY path on every other platform).
+        source "$_HOOK_DIR/lib-detach.sh"
+        if _remember_is_windows; then
+            _remember_detach_windows "$_SAVE_LOG" "$PID_FILE" "$SAVE_SCRIPT" "$SESSION_ID"
+            _detach_rc=$?
+        else
+            _detach_rc=1
+        fi
+        if [ "$_detach_rc" -ne 0 ]; then
+            # #1002 round 4, self-review finding: a non-zero return does
+            # NOT always mean nothing started. When $_detach_rc is
+            # specifically 137 (the watchdog's own kill), the hidden
+            # route's own child (lib-detach-pidwrap.sh) may have already
+            # claimed PID_FILE and exec'd into the real save before the
+            # watchdog fired -- WshShell.Run detaches the real command
+            # from wscript.exe's own process, so killing wscript.exe via
+            # the watchdog does not stop a save that already started.
+            # Falling back unconditionally there would start a SECOND,
+            # independent save racing the first. This narrows (does not
+            # eliminate: a pidwrap chain that is ITSELF what is slow may
+            # not have written PID_FILE yet when the bound expires) that
+            # race rather than closing it outright, and is scoped to
+            # exactly the rc the watchdog produces -- a genuine
+            # structural failure (rc=1: wscript.exe/cygpath missing) never
+            # changes PID_FILE, so re-trusting it there would risk a rare
+            # pid-reuse false positive (a stale, already-dead pid in
+            # PID_FILE happening to collide with an unrelated live
+            # process) silently DROPPING a save instead of merely racing
+            # one -- a worse failure than the one being fixed.
+            if [ "$_detach_rc" -eq 137 ]; then
+                _hidden_pid=""
+                [ -f "$PID_FILE" ] && _hidden_pid=$(cat "$PID_FILE" 2>/dev/null)
+                if [ -n "$_hidden_pid" ] && kill -0 "$_hidden_pid" 2>/dev/null; then
+                    log "hook" "post-tool: watchdog killed the hidden launcher but PID_FILE already names a live pid ($_hidden_pid) -- trusting it, not double-launching"
+                else
+                    nohup "$SAVE_SCRIPT" "$SESSION_ID" >> "$_SAVE_LOG" 2>&1 &
+                    echo $! > "$PID_FILE"
+                fi
+            else
+                nohup "$SAVE_SCRIPT" "$SESSION_ID" >> "$_SAVE_LOG" 2>&1 &
+                echo $! > "$PID_FILE"
+            fi
+        fi
+        SAVE_TRIGGERED="true"
+    fi
+  fi
+fi
+
+# --- Dispatch: after_post_tool ---
+export REMEMBER_SAVE_TRIGGERED="$SAVE_TRIGGERED"
+
+# The stdin payload is published to listeners HERE, and only around the
+# dispatch that consumes it (#266).
+#
+# It used to be `export REMEMBER_HOOK_STDIN="$HOOK_STDIN"` at the top of the
+# file. The payload embeds the whole tool result, so after a large Read it is
+# hundreds of KB, and an exported variable sits in `envp` for every `execve`
+# the rest of the hook performs. Every one of them then fails E2BIG — `sed`
+# from lib-slug.sh, `head` from here, `date` from lib-clock.sh, `rm` on exit,
+# four different libraries — silently, because this hook must not block the
+# agent, and on every large tool call for the rest of the session.
+#
+# The environment was never a working route for this payload. Linux caps a
+# SINGLE string at MAX_ARG_STRLEN (32 pages = 131072 bytes) in `envp` exactly
+# as in `argv`, independently of the total ARG_MAX the size limit is usually
+# discussed in terms of. So on the platform this was reported from, the exec
+# that would hand a 200 KB payload to a listener is the exec that fails: the
+# capability was declared and could not be performed. macOS has no per-string
+# cap and a 1 MB total, which is why it took an outside report to find — here
+# it "works" right up to the point the whole environment blows the total.
+#
+# So the payload travels in a file, and REMEMBER_HOOK_STDIN keeps carrying it
+# only while it is small enough to be carried. What it must never do is carry
+# PART of it. A listener holding a silently shortened payload cannot tell it
+# from a genuinely short one, and that is this repo's own defect class (#144,
+# #263): a surface that appears to answer the question and does not. Three
+# states, and the third is disclosed rather than disguised:
+#
+#   FILE unset                     no payload arrived on stdin, or no listener
+#   STDIN non-empty                the whole payload, exactly as before
+#   STDIN empty and FILE set       too large for the environment; the file
+#                                  holds it, complete
+#
+# REMEMBER_HOOK_STDIN_FILE is the authoritative route: where it is set it is
+# always the complete payload, so a listener that only ever reads the file is
+# always right and never needs to know a cap exists. (If that write fails —
+# a full or read-only tmp — an oversized payload is unavailable rather than
+# short. Absent beats plausible-and-wrong.)
+#
+# None of it happens unless a listener is installed. The distribution ships
+# hooks.d/after_post_tool/ holding nothing but a .gitkeep, and this runs on
+# every tool call, so writing a payload to disk for a consumer that does not
+# exist is a per-tool-call write bought for nobody. Tested with a glob rather
+# than a fork, the same way dispatch defers `id` (#230).
+REMEMBER_HOOK_STDIN_MAX=32768
+_hook_stdin_file=""
+
+# _after_post_tool_listener is defined at the top of this file, because the
+# fast-path gate has to ask this same question before it decides whether log.sh
+# — and therefore dispatch() — is sourced at all (#350).
+if [ -n "$HOOK_STDIN" ] && _after_post_tool_listener; then
+    _hook_stdin_file="$REMEMBER_DIR/tmp/hook-stdin.$$"
+    # The payload carries tool output, so it is owner-readable only, and it
+    # does not outlive the dispatch below.
+    if (umask 077; printf '%s' "$HOOK_STDIN" > "$_hook_stdin_file") 2>/dev/null; then
+        export REMEMBER_HOOK_STDIN_FILE="$_hook_stdin_file"
+    else
+        # A write that failed part way through (a full tmp) leaves a short file
+        # holding tool output. Nothing may be told about it — a half payload is
+        # the truncation this fix exists to refuse — and it may not be left
+        # behind either.
+        rm -f "$_hook_stdin_file" 2>/dev/null
+        _hook_stdin_file=""
+    fi
+    if [ "${#HOOK_STDIN}" -le "$REMEMBER_HOOK_STDIN_MAX" ]; then
+        export REMEMBER_HOOK_STDIN="$HOOK_STDIN"
+    else
+        export REMEMBER_HOOK_STDIN=""
+    fi
+fi
+
+# Same hazard as the `log` guard above: log.sh may have returned early,
+# before it defined dispatch() (#361). A hook documented "EXIT CODES: 0
+# Always" must not shell out to a "command not found" here either. This one
+# guard covers both branches above it — the fast path already stubs
+# dispatch() unconditionally, so `declare -F` is already true there, and this
+# is a no-op on that path.
+declare -F dispatch >/dev/null 2>&1 || dispatch() { :; }
+dispatch "after_post_tool"
+
+[ -n "$_hook_stdin_file" ] && rm -f "$_hook_stdin_file" 2>/dev/null
+
+# Explicit, because the line above is the last command and it is false whenever
+# no payload file was written — which is the common case. Falling off the end
+# would exit 1 and make a hook that must never fail report failure on every
+# ordinary tool call.
+exit 0

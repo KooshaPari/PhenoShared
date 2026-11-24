@@ -1,0 +1,1100 @@
+"""save-session.sh extraction gates: what skips, what saves, what advances (#147).
+
+The saved position (``last-save.json``) is written only after a successful save,
+while the cooldown marker is written before every gate. So any early exit that
+leaves the position untouched makes the *next* run re-extract the identical span
+and exit identically — once per cooldown window, forever. Two gates sit there:
+
+* ``EXCHANGE_COUNT == 0`` — nothing to summarize, so the position must advance.
+* ``HUMAN_COUNT < min_human_messages`` — real content, just not enough yet, so
+  the position must NOT advance (those turns get summarized with the ones that
+  follow). But an *agentic* session — many tool calls, few human turns — never
+  clears this gate at all, so a large-enough span saves anyway.
+
+These tests drive the real script with a stubbed ``pipeline.shell`` so the gates
+are exercised without a Haiku call.
+"""
+
+import json
+import os
+import re
+import subprocess
+import sys
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Optional
+
+import pytest
+
+# sys.path insert + bare import (not `.subprocess_helpers`) so this module
+# keeps working when test_ndc_day_boundary.py / test_reject_gate_visibility.py
+# import it as a bare top-level module via their own sys.path hack, where a
+# relative import would fail with "no known parent package".
+sys.path.insert(0, os.path.dirname(__file__))
+from subprocess_helpers import subprocess_failure_detail
+
+pytestmark = pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="bash subprocess + POSIX layout — not portable to Windows runners (#79)",
+)
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+# Stub for `python -m pipeline.shell <cmd>`. Covers only the commands the script
+# reaches before/around the gates; every call is appended to calls.log so a test
+# can assert what ran. call-haiku returns a SKIP so no summary is ever written.
+STUB_SHELL = '''\
+import os, sys, tempfile, time
+
+CALLS = os.environ["STUB_CALLS_LOG"]
+cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+with open(CALLS, "a") as f:
+    f.write(" ".join([cmd] + sys.argv[2:]) + "\\n")
+
+if cmd == "extract":
+    fd, path = tempfile.mkstemp(suffix="-extract")
+    with os.fdopen(fd, "w") as f:
+        f.write("Human: something\\nAssistant: something else\\n")
+    print(f"POSITION={os.environ['STUB_POSITION']}")
+    print(f"HUMAN_COUNT={os.environ['STUB_HUMAN_COUNT']}")
+    print("ASSISTANT_COUNT=1")
+    print(f"EXCHANGE_COUNT={os.environ['STUB_EXCHANGE_COUNT']}")
+    print(f"EXTRACT_FILE={path}")
+    print(f"ENVELOPE={os.environ.get('STUB_ENVELOPE', 'claude-code')}")
+    print(f"SKIP_LINES={os.environ.get('STUB_SKIP_LINES', '0')}")
+    print(f"ENVELOPE_HAS_UNMAPPED_STEP={os.environ.get('STUB_ENVELOPE_HAS_UNMAPPED_STEP', '0')}")
+elif cmd == "save-position":
+    last_save_file, session_id, position = sys.argv[2], sys.argv[3], sys.argv[4]
+    import json
+    with open(last_save_file, "w") as f:
+        json.dump({"session": session_id, "line": int(position)}, f)
+elif cmd == "build-prompt":
+    # argv: build-prompt <extract> <last_entry> <time> <branch> <out> <max_bytes>
+    if os.environ.get("STUB_LAST_ENTRY_SNAPSHOT"):
+        # The only place the last-entry context can be observed as the
+        # summarizer receives it: the temp file is unlinked by the script's
+        # cleanup trap, so reading it afterwards is not possible (#251).
+        import shutil
+        shutil.copyfile(sys.argv[3], os.environ["STUB_LAST_ENTRY_SNAPSHOT"])
+    with open(sys.argv[6], "w") as f:
+        f.write("a prompt with no placeholders\\n")
+elif cmd == "call-haiku":
+    if os.environ.get("STUB_HAIKU_DECLINE") == "1":
+        # The spawn guard refusing (#204) — exit 3, not 1. Distinct because the
+        # script must not count it against the span.
+        sys.stderr.write("call-haiku declined: stub: spawn cap reached\\n")
+        sys.exit(3)
+    if os.environ.get("STUB_HAIKU_FAIL") == "1":
+        sys.stderr.write("stub: simulated haiku failure\\n")
+        sys.exit(1)
+    # The NDC call passes extra args ("" and a timeout); the main save call
+    # passes only the prompt. That is how we tell the two apart here.
+    is_ndc = len(sys.argv) > 3
+    if is_ndc and os.environ.get("STUB_APPEND_DURING_NDC"):
+        # Stand in for a *newer* save appending to now.md while this
+        # compression is in flight — the #142 window.
+        with open(os.environ["STUB_MEMORY_FILE"], "a") as f:
+            f.write(os.environ["STUB_APPEND_DURING_NDC"])
+    if is_ndc and os.environ.get("STUB_REPLACE_DURING_NDC"):
+        # Stand in for now.md being REPLACED while the compression is in
+        # flight — a rotation, or another NDC round that committed its own
+        # tail first. The snapshot offset then points past the end of a file
+        # it no longer describes (#223), or — if the replacement happens to
+        # be at least as long as the snapshot — into the WRONG file, one the
+        # offset was never taken from at all (#614).
+        with open(os.environ["STUB_MEMORY_FILE"], "w") as f:
+            f.write(os.environ["STUB_REPLACE_DURING_NDC"])
+        # A real "another round already committed" bumps the generation
+        # counter as part of that commit (#614's own fix) — reproduce that
+        # here so this stub models what actually produces a replacement, not
+        # just its byte-level shape.
+        gen_file = os.path.join(os.path.dirname(os.environ["STUB_MEMORY_FILE"]), "tmp", "ndc-generation")
+        with open(gen_file, "w") as f:
+            f.write("1")
+    if is_ndc and os.environ.get("STUB_HOLD_LOCK_DURING_NDC"):
+        # Take the save lock and keep it, so the NDC commit that runs after
+        # this call returns is guaranteed to find it held by a LIVE process
+        # (STUB_HOLD_LOCK_PID is the test runner's own pid, so the primitive
+        # can neither steal nor adopt it). Done here, synchronously, rather
+        # than from the test process: the parent save still holds the lock
+        # when the subshell is backgrounded, and racing it from outside would
+        # make which side wins a matter of timing (#223).
+        lock_dir = os.environ["STUB_HOLD_LOCK_DURING_NDC"]
+        while True:
+            try:
+                os.mkdir(lock_dir)
+                break
+            except FileExistsError:
+                time.sleep(0.02)
+        with open(os.path.join(lock_dir, "pid"), "w") as f:
+            f.write(os.environ["STUB_HOLD_LOCK_PID"])
+    fd, path = tempfile.mkstemp(suffix="-haiku")
+    with os.fdopen(fd, "w") as f:
+        if is_ndc:
+            f.write("## 2026-07-25\\n\\n- compressed summary\\n")
+        elif os.environ.get("STUB_HAIKU_TEXT_FILE"):
+            # The file route exists because the env route cannot carry a large
+            # entry. Linux caps each SINGLE string in argv/envp at
+            # MAX_ARG_STRLEN (32 pages = 128KB) independently of how much total
+            # ARG_MAX allows, so a ~276KB STUB_HAIKU_TEXT kills `bash` with
+            # E2BIG at exec time on every Linux runner, while macOS (no
+            # per-string cap) and Windows stay green. That is the same limit
+            # #107 moved the real summarizer prompt onto stdin to avoid — see
+            # pipeline/haiku.py:515, "claude -p with no positional prompt reads
+            # the prompt from stdin". A fixture that needs a big payload takes
+            # the same route the production code does: not through exec.
+            with open(os.environ["STUB_HAIKU_TEXT_FILE"], encoding="utf-8") as src:
+                f.write(src.read())
+        elif os.environ.get("STUB_HAIKU_TEXT"):
+            f.write(os.environ["STUB_HAIKU_TEXT"])
+        elif os.environ.get("STUB_HAIKU_SKIP", "1") == "1":
+            f.write("SKIP\\n")
+        else:
+            f.write("## 10:00 | main\\n\\n- did some work\\n")
+    rejected = os.environ.get("STUB_HAIKU_REJECTED") == "1" and not is_ndc
+    skipping = (os.environ.get("STUB_HAIKU_SKIP", "1") == "1"
+                and not os.environ.get("STUB_HAIKU_TEXT")
+                and not os.environ.get("STUB_HAIKU_TEXT_FILE"))
+    print("IS_SKIP=" + ("true" if (rejected or (not is_ndc and skipping)) else "false"))
+    print("IS_REJECTED=" + ("true" if rejected else "false"))
+    print(f"HAIKU_TEXT_FILE={path}")
+    # Which route produced this (#460/#461) -- defaults to "claude" so every
+    # pre-#460 test in this file, which never sets STUB_PROVIDER, is
+    # unaffected: save-session.sh reads it with the same ${PROVIDER:-claude}
+    # fallback the real pipeline.shell always overrides on a live call.
+    print(f"PROVIDER={os.environ.get('STUB_PROVIDER', 'claude')}")
+    print("TK_IN=0"); print("TK_OUT=0"); print("TK_CACHE=0"); print("TK_COST=0")
+elif cmd == "build-ndc-prompt":
+    # Must be non-empty: save-session.sh gates the NDC run on `[ -s ... ]`.
+    with open(sys.argv[3], "w") as f:
+        f.write("compress this now.md\\n")
+'''
+
+
+def _make_env(tmp_path: Path, *, exchanges: int, humans: int, position: int = 500,
+              config: Optional[dict] = None, envelope: str = "claude-code",
+              envelope_has_unmapped_step: bool = False):
+    """Build a project + stub plugin and return the env for running save-session.sh."""
+    project = tmp_path / "project"
+    (project / ".remember" / "tmp").mkdir(parents=True)
+    (project / ".remember" / "logs").mkdir(parents=True)
+
+    plugin = tmp_path / "plugin"
+    (plugin / "scripts").mkdir(parents=True)
+    (plugin / "pipeline").mkdir(parents=True)
+    (plugin / "pipeline" / "__init__.py").write_text("")
+    # #898, round 5: resolve-paths.sh's own root-detection marker moved from
+    # pipeline/haiku.py to .claude-plugin/plugin.json (an install manifest,
+    # not a script path -- the directory's COMMAND_SCRIPT_NOT_FOLLOWED hold).
+    (plugin / ".claude-plugin").mkdir(parents=True)
+    (plugin / ".claude-plugin" / "plugin.json").write_text("{}", encoding="utf-8")
+    (plugin / "pipeline" / "shell.py").write_text(STUB_SHELL)
+    for script in ("save-session.sh", "resolve-paths.sh", "detect-tools.sh",
+                   "bootstrap-dirs.sh", "log.sh", "lib-memory-dir.sh",
+                   "lib-lock.sh", "lib-staging-lock.sh", "lib-slug.sh",
+                   "lib-clock.sh",
+                   # #1040: the four hooks read their stdin payload through
+                   # this library. Tests that wire a hook into this stub
+                   # plugin (session-end-hook.sh, post-tool-hook.sh) need it.
+                   "lib-stdin.sh",
+                   # #898 rounds 7-8: the config flatten/merge programs and the
+                   # per-key fallback reader moved out of log.sh and
+                   # lib-memory-dir.sh into these files, which ship beside the
+                   # .sh scripts in every install. Without them the stub plugin
+                   # cannot read its own config.json and says so on stderr.
+                   "cfg_flatten.jq", "cfg_flatten.py", "cfg_merge.py",
+                   "jq_fallback_get.py"):
+        (plugin / "scripts" / script).write_text((REPO_ROOT / "scripts" / script).read_text())
+
+    cfg = {"cooldowns": {"save_seconds": 0, "ndc_seconds": 999999},
+           "thresholds": {"min_human_messages": 3, "delta_lines_trigger": 50},
+           # True, matching the shipped default. It was False here while the
+           # flag was ignored (#159), so every test that exercises compression
+           # was relying on the option not working.
+           "features": {"ndc_compression": True}}
+    if config:
+        cfg["thresholds"].update(config)
+    cfg_path = tmp_path / "config.json"
+    cfg_path.write_text(json.dumps(cfg))
+    (plugin / "config.json").write_text(json.dumps(cfg))
+
+    # A session transcript must exist for the script's session-id discovery.
+    session_id = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+    slug = str(project).replace("/", "-").replace(".", "-").replace("_", "-")
+    session_dir = tmp_path / "home" / ".claude" / "projects" / slug
+    session_dir.mkdir(parents=True)
+    (session_dir / f"{session_id}.jsonl").write_text('{"type":"user"}\n' * 10)
+
+    calls_log = tmp_path / "calls.log"
+    env = {
+        **os.environ,
+        "HOME": str(tmp_path / "home"),
+        "CLAUDE_PROJECT_DIR": str(project),
+        "CLAUDE_PLUGIN_ROOT": str(plugin),
+        "REMEMBER_CONFIG": str(cfg_path),
+        "STUB_CALLS_LOG": str(calls_log),
+        "STUB_POSITION": str(position),
+        "STUB_HUMAN_COUNT": str(humans),
+        "STUB_EXCHANGE_COUNT": str(exchanges),
+        "STUB_ENVELOPE": envelope,
+        "STUB_ENVELOPE_HAS_UNMAPPED_STEP": "1" if envelope_has_unmapped_step else "0",
+        "STUB_MEMORY_FILE": str(project / ".remember" / "now.md"),
+        # Keep the clock on `date`, where a PATH shim can still reach it (#227).
+        #
+        # lib-clock.sh resolves "now" with bash's `printf '%(FMT)T'` builtin when
+        # the shell has one, and a builtin is not on PATH — so a test that fakes
+        # time by putting its own `date` in front of PATH finds the fake silently
+        # ignored on bash >= 4.2 and asserts against the real clock. That is what
+        # went red on the ubuntu legs and nowhere else, because macOS bash 3.2
+        # has no builtin to bypass it with.
+        #
+        # Set here rather than in the one test that shims `date` today, because
+        # nothing in a time-faking test's own text warns its author about a seam
+        # that has moved. Every shell test built from this helper gets the
+        # interceptable clock; the builtin path is pinned directly, and against
+        # `date` byte for byte, in tests/test_prompt_hook_spawns.py.
+        "REMEMBER_NO_PRINTF_T": "1",
+    }
+    return env, project, plugin, calls_log, session_id
+
+
+# Linux caps each SINGLE string in argv/envp at MAX_ARG_STRLEN — 32 pages, 128KB
+# — independently of how much total ARG_MAX allows. macOS has no per-string cap
+# and Windows does not use this mechanism at all, so a fixture that hands a large
+# payload to a subprocess passes on the machine it was written on and dies with
+# `OSError: [Errno 7] Argument list too long` on every Linux runner. That is
+# exactly what #247's first push did: a ~276KB entry in STUB_HAIKU_TEXT, four
+# green legs and four red ones.
+#
+# Checked here, in the one helper every shell test spawns through, rather than
+# left to CI — the platform this code is written on is the platform that cannot
+# see the limit. The fix is never to shrink the payload (a size can be
+# load-bearing); it is to take it off the exec boundary, which is what #107 did
+# for the real summarizer prompt when it moved to stdin.
+MAX_ARG_STRLEN = 32 * 4096
+
+
+def _assert_exec_payloads_fit(argv, env: dict):
+    oversized = [
+        f"argv[{i}] ({len(value.encode())} bytes)"
+        for i, value in enumerate(argv)
+        if len(value.encode()) > MAX_ARG_STRLEN
+    ] + [
+        f"${name} ({len(value.encode())} bytes)"
+        for name, value in sorted(env.items())
+        if len(value.encode()) > MAX_ARG_STRLEN
+    ]
+    assert not oversized, (
+        "this subprocess would die with `OSError: [Errno 7] Argument list too "
+        "long` on any Linux host: a single argv/envp string may not exceed "
+        f"MAX_ARG_STRLEN ({MAX_ARG_STRLEN} bytes), whatever ARG_MAX allows. "
+        "macOS has no per-string cap, so this passes locally and fails on every "
+        "ubuntu leg. Put the payload in a file and pass the path (see "
+        "STUB_HAIKU_TEXT_FILE), the way #107 moved the real prompt to stdin — "
+        "do not shrink it, the size may be what the test is for. "
+        f"oversized: {', '.join(oversized)}"
+    )
+
+
+def _run(plugin: Path, env: dict, session_id: str, *args: str):
+    argv = ["bash", str(plugin / "scripts" / "save-session.sh"), session_id, *args]
+    _assert_exec_payloads_fit(argv, env)
+    return subprocess.run(
+        argv, capture_output=True, text=True, env=env, timeout=60,
+    )
+
+
+def _saved_position(project: Path):
+    f = project / ".remember" / "tmp" / "last-save.json"
+    return json.loads(f.read_text())["line"] if f.is_file() else None
+
+
+def _suppress_ndc(project: Path):
+    """Stop the background NDC run from draining now.md mid-assertion.
+
+    A CURRENT timestamp against the 999999s ndc_seconds _make_env configures.
+    Not a future-dated one: that used to work, by way of #326's negative
+    ELAPSED, and the range guard now rejects it.
+
+    (features.ndc_compression was documented and read nowhere when this was
+    written; #159 wired it up, so it is a second working brake today.)
+    """
+    import time
+    (project / ".remember" / "tmp" / "last-ndc.ts").write_text(str(int(time.time())))
+
+
+def _memory_log_text(project: Path) -> str:
+    log_dir = project / ".remember" / "logs"
+    logs = sorted(log_dir.glob("memory-*.log")) if log_dir.is_dir() else []
+    return logs[-1].read_text() if logs else ""
+
+
+class TestNoWorkSessionAdvancesPosition:
+
+    def test_zero_exchanges_advances_position(self, tmp_path):
+        """An empty span has nothing to summarize — the cursor must still move (#147)."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=0, humans=0,
+                                                     position=812)
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert _saved_position(project) == 812, (
+            "position must advance past an empty span, else the next run re-extracts "
+            "the same lines and exits identically, once per cooldown, forever"
+        )
+        assert "call-haiku" not in calls.read_text(), "no summary should be attempted"
+
+    def test_zero_exchanges_logs_the_ordinary_message_for_a_known_envelope(self, tmp_path):
+        """Positive control for the test below: a genuinely quiet Claude Code
+        span still gets the plain "0 exchanges" wording, not the unrecognised
+        one -- so the two log messages are provably distinguishable rather
+        than the unrecognised-envelope test only checking a stub that always
+        prints the same thing (#443)."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=0, humans=0,
+                                                     position=5, envelope="claude-code")
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        log_text = _memory_log_text(project)
+        assert "0 exchanges" in log_text
+        assert "unrecognised" not in log_text
+
+    def test_unrecognised_envelope_is_logged_loud_not_as_a_quiet_session(self, tmp_path):
+        """A transcript shape neither known host wrote must be reported as
+        unrecognised in the log -- not silently folded into the same "0
+        exchanges" wording a genuinely empty session gets, which is the exact
+        silent failure #443 exists to prevent. Position still advances: there
+        is nothing more this run can do with an unreadable transcript."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=0, humans=0,
+                                                     position=5, envelope="unrecognised")
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        log_text = _memory_log_text(project)
+        assert "unrecognised" in log_text, log_text
+        assert _saved_position(project) == 5
+
+    def test_antigravity_unmapped_step_is_quarantined_like_unrecognised(self, tmp_path):
+        """#575: a KNOWN envelope (antigravity) that still read 0 exchanges
+        because every step's own `type` was one pipeline.host cannot map
+        must be routed through the SAME #450 quarantine "unrecognised" gets
+        -- save-position must see "unrecognised" as the envelope it acts on,
+        even though the log and $ENVELOPE keep saying "antigravity" (the
+        honest host name), so a future build that learns the step type can
+        still recover the span instead of it being silently gone the moment
+        the position advances."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=0, humans=0, position=7,
+            envelope="antigravity", envelope_has_unmapped_step=True,
+        )
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        log_text = _memory_log_text(project)
+        assert "antigravity" in log_text and "unmapped" in log_text, log_text
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1
+        assert "unrecognised" in save_position_calls[0], (
+            "the envelope save-position acts on must be 'unrecognised' so the span is "
+            f"quarantined, not lost: {save_position_calls[0]!r}"
+        )
+        assert _saved_position(project) == 7
+
+    def test_antigravity_without_unmapped_step_is_not_quarantined(self, tmp_path):
+        """Paired negative control: a genuinely-quiet antigravity span (no
+        unmapped step seen) must NOT be quarantined -- proving the flag
+        above means "an unmapped step was actually seen", not "any 0-exchange
+        antigravity span", which a stub that always quarantines would also
+        pass the positive test with."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=0, humans=0, position=9,
+            envelope="antigravity", envelope_has_unmapped_step=False,
+        )
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        log_text = _memory_log_text(project)
+        assert "0 exchanges" in log_text
+        assert "unmapped" not in log_text
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1
+        assert "antigravity" in save_position_calls[0]
+        assert "unrecognised" not in save_position_calls[0]
+        assert _saved_position(project) == 9
+
+
+class TestMinHumanGate:
+
+    def test_below_threshold_skips_without_advancing(self, tmp_path):
+        """Too few human turns: skip, but keep the cursor so the content survives."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=4, humans=1)
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert _saved_position(project) is None, (
+            "these exchanges are real content — advancing would drop them from every "
+            "future extract, so they must stay pending"
+        )
+        assert "call-haiku" not in calls.read_text()
+
+    def test_agentic_session_saves_despite_low_human_count(self, tmp_path):
+        """Many exchanges, few human turns: this is work, and it must reach memory."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=45, humans=1)
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert "call-haiku" in calls.read_text(), (
+            "an agentic session (many tool calls, few human turns) never clears the "
+            "min-human gate — without the exchange-count fallback the plugin's core "
+            "function silently never runs (#147/#125)"
+        )
+
+    def test_fallback_threshold_is_configurable(self, tmp_path):
+        """A higher min_exchanges_without_human keeps the same span gated out."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=45, humans=1,
+            config={"min_exchanges_without_human": 100},
+        )
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert "call-haiku" not in calls.read_text()
+
+    def test_fallback_can_be_disabled_with_zero(self, tmp_path):
+        """0 restores the strict gate: human turns are the only way through."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=500, humans=1,
+            config={"min_exchanges_without_human": 0},
+        )
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert "call-haiku" not in calls.read_text()
+
+    def test_enough_human_turns_still_saves(self, tmp_path):
+        """The ordinary path is untouched by the fallback."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert "call-haiku" in calls.read_text()
+
+
+class TestDryRun:
+
+    def test_dry_run_does_not_advance_position_on_empty_span(self, tmp_path):
+        """--dry inspects; it must never move the cursor, empty span included."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=0, humans=0,
+                                                     position=812)
+        result = _run(plugin, env, sid, "--dry")
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert _saved_position(project) is None, (
+            "a dry run must leave last-save.json untouched"
+        )
+
+
+class TestSummaryFailureLoop:
+    """A failing summarizer must be retried, then given up on — never looped forever.
+
+    Keeping the position on failure is right for a transient error: the span is
+    retried next run. But a *persistent* failure on the same span then retries
+    once per cooldown window forever and memory never advances again — the
+    month-long macOS repro in #147. After max_summary_failures the span is
+    dropped, loudly, so later spans can still be saved.
+    """
+
+    def test_failure_keeps_position_and_retries(self, tmp_path):
+        """First failures leave the cursor alone so the span is tried again."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        env["STUB_HAIKU_FAIL"] = "1"
+
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 1
+        assert _saved_position(project) is None, (
+            "a transient failure must not drop the span — it is retried next run"
+        )
+
+    def test_gives_up_after_max_failures(self, tmp_path):
+        """The Nth consecutive failure on the same span advances past it."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_FAIL"] = "1"
+
+        _run(plugin, env, sid)
+        assert _saved_position(project) is None
+        _run(plugin, env, sid)
+        assert _saved_position(project) is None, "still retrying at failure 2 of 3"
+
+        _run(plugin, env, sid)
+        assert _saved_position(project) == 904, (
+            "after max_summary_failures the span must be dropped and the position "
+            "advanced, or every later span is lost too (#147)"
+        )
+
+    def test_max_summary_failures_zero_retries_forever(self, tmp_path):
+        """0 restores the old behaviour: never give up on a span."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     config={"max_summary_failures": 0})
+        env["STUB_HAIKU_FAIL"] = "1"
+
+        for _ in range(4):
+            _run(plugin, env, sid)
+
+        assert _saved_position(project) is None
+
+    def test_success_clears_the_failure_count(self, tmp_path):
+        """Two failures then a success must not leave a primed counter behind."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        env["STUB_HAIKU_FAIL"] = "1"
+        _run(plugin, env, sid)
+        _run(plugin, env, sid)
+
+        env["STUB_HAIKU_FAIL"] = "0"
+        result = _run(plugin, env, sid)
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+
+        marker = project / ".remember" / "tmp" / "last-summary-failure"
+        assert not marker.exists(), "a successful save must reset the failure count"
+
+
+class TestHeaderTimeIsTakenBackOffTheModel:
+    """The prompt injects {{TIME}} and says to copy it, but the model reads a
+    transcript full of other timestamps and sometimes stamps one of those. The
+    format check cannot see it — a wrong time is a well-formed one — so entries
+    landed hours out of order with nothing logged (#139)."""
+
+    def test_a_wrong_time_is_overwritten_with_the_scripts_own(self, tmp_path):
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        # A literal "18:30" is wrong only when the script's own clock does not
+        # also read 18:30 -- true 1439 minutes out of 1440, and false often
+        # enough that two unrelated PRs failed this exact assertion in the
+        # same minute (#383). An hour back, wrapping through midnight via
+        # timedelta, is wrong by construction: it stays wrong across the
+        # whole test run and across any minute (or hour) rollover between
+        # this read and the script's own, by a margin no such rollover can
+        # close.
+        wrong_time = (datetime.now() - timedelta(hours=1)).strftime("%H:%M")
+        env["STUB_HAIKU_TEXT"] = f"## {wrong_time} | main\n\n- did some work\n"
+        _suppress_ndc(project)
+        result = _run(plugin, env, sid)
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+
+        header = (project / ".remember" / "now.md").read_text().strip().splitlines()[0]
+        logs = "".join(p.read_text() for p in (project / ".remember" / "logs").glob("*.log"))
+        assert "header time corrected" in logs, f"no correction logged:\n{logs}"
+
+        corrected = re.search(r"header time corrected to (\S+)", logs).group(1)
+        assert header == f"## {corrected} | main", (
+            f"header kept the model's time instead of the script's: {header!r}"
+        )
+        # Positive control: the phrase alone is not enough, since a harness
+        # that logged "header time corrected" unconditionally would also
+        # pass the assertion above. The corrected time must actually differ
+        # from the deliberately-wrong one fed in.
+        assert corrected != wrong_time, (
+            f"logged a correction but to the same wrong time: {corrected!r}"
+        )
+
+    def test_the_branch_and_body_survive_the_rewrite(self, tmp_path):
+        """Only the time is the pipeline's to know — the rest is the model's."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        env["STUB_HAIKU_TEXT"] = "## 18:30 | feature/some-branch\n\n- fixed the thing\n"
+        _suppress_ndc(project)
+        result = _run(plugin, env, sid)
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+
+        written = (project / ".remember" / "now.md").read_text()
+        assert "| feature/some-branch" in written, f"branch lost: {written!r}"
+        assert "- fixed the thing" in written, f"body lost: {written!r}"
+
+    def test_a_correct_time_is_left_alone(self, tmp_path):
+        """The rewrite is a no-op when the model copied the time properly."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        now = datetime.now().strftime("%H:%M")
+        env["STUB_HAIKU_TEXT"] = f"## {now} | main\n\n- did some work\n"
+        _suppress_ndc(project)
+        result = _run(plugin, env, sid)
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+
+        logs = "".join(p.read_text() for p in (project / ".remember" / "logs").glob("*.log"))
+        header = (project / ".remember" / "now.md").read_text().strip().splitlines()[0]
+        # Tolerate the minute rolling over between the two clock reads.
+        if "header time corrected" in logs:
+            corrected = re.search(r"header time corrected to (\S+)", logs).group(1)
+            assert header == f"## {corrected} | main"
+        else:
+            assert header == f"## {now} | main"
+
+
+class TestMalformedOutputNeverReachesMemory:
+    """A response that is not an entry header is not an entry. It used to be
+    logged as a warning and appended anyway, which put a permission prompt in
+    one reporter's now.md — and memory is a summary of summaries, so it does
+    not fade, it gets compressed downstream as though it were work (#136)."""
+
+    MALFORMED = "Bash needs approval to SSH into preface-vps and check. Shall I proceed?\n"
+
+    def test_malformed_output_is_not_appended(self, tmp_path):
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+        _suppress_ndc(project)
+        result = _run(plugin, env, sid)
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+
+        # Check every memory file, not just now.md: compression moves entries
+        # on, so asserting only on now.md passes whether the junk was rejected
+        # or merely relayed into today-*.md.
+        remember = project / ".remember"
+        written = "".join(
+            f.read_text() for f in remember.glob("*.md") if f.is_file()
+        )
+        assert "needs approval" not in written, f"junk reached memory: {written!r}"
+
+    def test_malformed_output_is_kept_for_inspection(self, tmp_path):
+        """Dropped from memory, but never destroyed."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+        _run(plugin, env, sid)
+
+        rejects = list((project / ".remember" / "tmp").glob("rejected-*.md"))
+        assert len(rejects) == 1, f"nothing quarantined: {rejects}"
+        assert "needs approval" in rejects[0].read_text()
+
+    def test_malformed_output_does_not_advance_on_first_rejection(self, tmp_path):
+        """#1052: a rejection is retried, not dropped on the spot -- otherwise
+        the raw span is gone before anyone gets a chance to try again."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+        _run(plugin, env, sid)
+
+        assert _saved_position(project) is None, (
+            "a single rejection must not drop the span -- it is retried next run"
+        )
+
+    def test_rejected_files_do_not_accumulate(self, tmp_path):
+        """They are diagnostic, not memory — keep the last 20."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5)
+        tmpdir = project / ".remember" / "tmp"
+        for i in range(25):
+            (tmpdir / f"rejected-2026010{i // 10}-{i:06d}.md").write_text("old\n")
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+        _run(plugin, env, sid)
+
+        rejects = list(tmpdir.glob("rejected-*.md"))
+        assert len(rejects) <= 20, f"{len(rejects)} rejected files kept"
+
+
+class TestRejectedSpanLoop:
+    """#1052: a rejected span must be retried, then given up on -- never
+    dropped on the spot and never looped forever.
+
+    Mirrors TestSummaryFailureLoop's own shape (same bounded-retry pattern,
+    a deliberately separate marker/threshold -- see the #1052 comment above
+    REJECTED_MARKER in save-session.sh): leaving the position alone on a
+    rejection means the span is retried next run, but a span the model
+    refuses on every run then blocks all FUTURE spans too -- the #147 shape,
+    this time for a successful call that discarded its own output.
+    """
+
+    MALFORMED = TestMalformedOutputNeverReachesMemory.MALFORMED
+
+    def test_first_rejections_keep_position_and_retry(self, tmp_path):
+        """Below the threshold, the span is retried -- not advanced, not
+        parked -- so it gets another chance next run."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+
+        _run(plugin, env, sid)
+        assert _saved_position(project) is None, "still retrying at rejection 1 of 3"
+        _run(plugin, env, sid)
+        assert _saved_position(project) is None, "still retrying at rejection 2 of 3"
+
+    def test_gives_up_after_max_rejected_retries(self, tmp_path):
+        """The Nth consecutive rejection of the same span advances past it."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+
+        _run(plugin, env, sid)
+        _run(plugin, env, sid)
+        _run(plugin, env, sid)
+
+        assert _saved_position(project) == 904, (
+            "after max_rejected_retries the span must be dropped and the "
+            "position advanced, or every later span is lost too"
+        )
+
+    def test_giving_up_parks_the_raw_span_text(self, tmp_path):
+        """Unlike the refusal text (always kept), the raw unsummarized span
+        is only worth parking once retrying has given up on it."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+
+        for _ in range(3):
+            _run(plugin, env, sid)
+
+        dropped = list((project / ".remember" / "tmp").glob("dropped-span-*.md"))
+        assert len(dropped) == 1, f"raw span text not parked: {dropped}"
+        # The stub's "extract" command always writes this text (see STUB_SHELL).
+        assert "Human: something" in dropped[0].read_text(), (
+            "the parked file must hold the RAW span, not the model's refusal text"
+        )
+
+    def test_max_rejected_retries_zero_is_clamped_to_the_default(self, tmp_path):
+        """Final-review finding: 0 ('retry forever') would stall saving for
+        the REST of the session the first time the model refuses something
+        for good -- worse than the bug this whole mechanism exists to fix.
+        Clamp to the default instead, with a log line saying so."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=6, humans=5, position=904,
+            config={"max_rejected_retries": 0},
+        )
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+
+        result = None
+        for _ in range(3):
+            result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert _saved_position(project) == 904, (
+            "0 must be clamped to the default (3), not retried forever"
+        )
+        log_files = list((project / ".remember" / "logs").glob("memory-*.log"))
+        assert log_files, "no daily log written"
+        log_text = "\n".join(f.read_text() for f in log_files)
+        assert "max_rejected_retries is 0" in log_text, (
+            "the clamp must be logged, not silent:\n" + log_text
+        )
+
+    def test_growing_transcript_still_parks_after_max_retries(self, tmp_path):
+        """#1052 final-review finding: in a LIVE session the transcript
+        keeps growing between saves, so POSITION (the transcript's current
+        end) is different on every attempt. Keying the span-id on POSITION
+        meant the counter never saw the same span twice -- it reset to 1
+        every time, the span was never parked, and the position never
+        advanced while the model kept refusing. $SKIP_LINES (the span's
+        START) does not move across retries of the same span and must be
+        used instead."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+
+        for i, pos in enumerate((904, 950, 1001)):
+            env["STUB_POSITION"] = str(pos)
+            _run(plugin, env, sid)
+            if i < 2:
+                assert _saved_position(project) is None, (
+                    f"still retrying at rejection {i + 1} of 3 (position grew to {pos})"
+                )
+
+        assert _saved_position(project) == 1001, (
+            "a growing transcript must still be recognised as the SAME span "
+            "(keyed on SKIP_LINES, not the ever-changing POSITION) and "
+            "parked after max_rejected_retries"
+        )
+        dropped = list((project / ".remember" / "tmp").glob("dropped-span-*.md"))
+        assert len(dropped) == 1, f"raw span text not parked: {dropped}"
+
+    def test_force_flush_parks_immediately_without_waiting_for_retries(self, tmp_path):
+        """Final-review finding: session-end's --force call may be the
+        session's LAST chance to flush -- no later save exists to retry a
+        rejected span, so waiting for max_rejected_retries would simply lose
+        it rather than park it. A single rejection under --force must give
+        up immediately."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+
+        result = _run(plugin, env, sid, "--force")
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert _saved_position(project) == 904, (
+            "a rejection on the final --force flush must give up immediately, "
+            "not wait for retries that will never come"
+        )
+        dropped = list((project / ".remember" / "tmp").glob("dropped-span-*.md"))
+        assert len(dropped) == 1, f"raw span text not parked on forced give-up: {dropped}"
+
+    def test_dropped_span_files_do_not_accumulate(self, tmp_path):
+        """They are diagnostic, not memory -- keep the last 20, same
+        retention keep_rejected_text already applies to tmp/rejected-*.md."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+        tmp_dir = project / ".remember" / "tmp"
+        tmp_dir.mkdir(parents=True, exist_ok=True)
+        for i in range(25):
+            (tmp_dir / f"dropped-span-2026010100{i:04d}-1.md").write_text("old")
+
+        for _ in range(3):
+            _run(plugin, env, sid)
+
+        dropped = list(tmp_dir.glob("dropped-span-*.md"))
+        assert len(dropped) <= 20, f"{len(dropped)} dropped-span files kept"
+
+    def test_giving_up_writes_to_hook_errors_log(self, tmp_path):
+        """doctor.sh's 'Dropped summarizer spans' section reads
+        hook-errors.log, not only the daily narrative log -- the give-up
+        message must reach both (same #694 shape as the call-haiku failure
+        path above it)."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+
+        for _ in range(3):
+            _run(plugin, env, sid)
+
+        hook_errors = project / ".remember" / "logs" / "hook-errors.log"
+        assert hook_errors.exists(), "hook-errors.log was never written"
+        assert "consecutive rejections on this span" in hook_errors.read_text(), (
+            hook_errors.read_text()
+        )
+
+    def test_success_clears_the_rejected_count(self, tmp_path):
+        """Two rejections then an accepted summary must not leave a primed
+        counter behind -- and must still advance the position (positive
+        control: this is not a suite that always refuses to advance)."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=42)
+        env["STUB_HAIKU_TEXT"] = self.MALFORMED
+        _run(plugin, env, sid)
+        _run(plugin, env, sid)
+        assert _saved_position(project) is None
+        assert (project / ".remember" / "tmp" / "last-rejected-span").exists(), (
+            "precondition: two rejections must have primed the marker"
+        )
+
+        env["STUB_HAIKU_TEXT"] = "## 10:00 | main\n\n- did some work\n"
+        result = _run(plugin, env, sid)
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        assert _saved_position(project) == 42, (
+            "an accepted summary must still advance the position, rejection "
+            "history or not"
+        )
+        assert not (project / ".remember" / "tmp" / "last-rejected-span").exists(), (
+            "an accepted summary must clear the rejection marker, or a later "
+            "unrelated span could inherit a stale count"
+        )
+
+    def test_a_rejected_summarizer_reply_also_retries_before_giving_up(self, tmp_path):
+        """Sibling of the validate-gate case above: the summarizer's own
+        refusal/clarification path (IS_REJECTED=true) must retry exactly the
+        same way, not just the format-validator's 'not an entry header'."""
+        env, project, plugin, calls, sid = _make_env(tmp_path, exchanges=6, humans=5,
+                                                     position=904)
+        env["STUB_HAIKU_TEXT"] = "I don't have the wall-clock time for this session.\n"
+        env["STUB_HAIKU_REJECTED"] = "1"
+
+        _run(plugin, env, sid)
+        assert _saved_position(project) is None, "still retrying at rejection 1 of 3"
+        _run(plugin, env, sid)
+        assert _saved_position(project) is None, "still retrying at rejection 2 of 3"
+        _run(plugin, env, sid)
+        assert _saved_position(project) == 904, (
+            "after max_rejected_retries a summarizer refusal must also give "
+            "up and advance"
+        )
+
+
+class TestNoWorkSkipRule:
+
+    def test_prompt_tells_the_model_to_skip_a_no_work_session(self):
+        """#119's cause is prompt-side: the only SKIP was for repeated work, so
+        a greeting or handoff got faithfully summarized as the work done."""
+        prompt = (REPO_ROOT / "prompts" / "save-session.prompt.txt").read_text()
+        assert "no substantive work" in prompt, "the no-work SKIP rule is gone"
+        assert "SKIP" in prompt
+
+    def test_a_header_missing_the_space_after_the_pipe_is_not_corrupted(self):
+        """The format check only demands a space BEFORE the pipe.
+
+        So "## 18:30 |main" reaches the rewrite, and splitting on a literal
+        " | " found nothing to strip — the whole original line became the
+        "rest" and the entry was written as "## 00:00 | ## 18:30 |main". A
+        wrong-but-readable time turned into an unreadable header, which is
+        worse than the bug the rewrite exists to fix.
+        """
+        import tempfile
+        tmp = Path(tempfile.mkdtemp())
+        env, project, plugin, calls, sid = _make_env(tmp, exchanges=6, humans=5)
+        env["STUB_HAIKU_TEXT"] = "## 18:30 |main\n\n- did some work\n"
+        _suppress_ndc(project)
+        _run(plugin, env, sid)
+
+        header = (project / ".remember" / "now.md").read_text().strip().splitlines()[0]
+        assert header.count("##") == 1, f"header duplicated: {header!r}"
+        assert header.endswith("| main"), f"branch mangled: {header!r}"
+
+    def test_a_pipe_inside_the_branch_name_survives(self):
+        """Only the FIRST pipe separates time from the rest."""
+        import tempfile
+        tmp = Path(tempfile.mkdtemp())
+        env, project, plugin, calls, sid = _make_env(tmp, exchanges=6, humans=5)
+        env["STUB_HAIKU_TEXT"] = "## 18:30 | feature/a|b\n\n- did some work\n"
+        _suppress_ndc(project)
+        _run(plugin, env, sid)
+
+        header = (project / ".remember" / "now.md").read_text().strip().splitlines()[0]
+        assert header.endswith("| feature/a|b"), f"branch truncated: {header!r}"
+
+
+class TestMixedSpanQuarantine583:
+    """#583: a MIXED read span -- some exchanges the pipeline COULD map, plus
+    at least one step type it could not -- must be quarantined exactly like
+    an all-unmapped span (#575), at every save-position call site, not just
+    the EXCHANGE_COUNT==0 one this file already covers above. exchanges=3
+    here stands in for "3 mapped exchanges alongside 1 unmapped step in the
+    same span" -- EXCHANGE_COUNT>0 is exactly what routes the #575 branch
+    around every one of the four sites below today."""
+
+    def test_ordinary_successful_save_quarantines_a_mixed_span(self, tmp_path):
+        """The everyday path: Haiku summarized the mapped exchanges and the
+        result was appended to now.md. That summary is real, but it does not
+        cover the unmapped step -- so this must still quarantine, or the
+        step's content is gone the moment the position advances and any
+        earlier quarantine mark is cleared."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=3, humans=3, position=42,
+            envelope="antigravity", envelope_has_unmapped_step=True,
+        )
+        env["STUB_HAIKU_TEXT"] = "## 10:00 | main\n\n- did some mapped work\n"
+        env["STUB_SKIP_LINES"] = "17"
+        _suppress_ndc(project)
+
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1
+        assert "unrecognised" in save_position_calls[0], (
+            "a mixed span (3 mapped exchanges + 1 unmapped step) must be quarantined "
+            f"the same way an all-unmapped span is, not saved clean: {save_position_calls[0]!r}"
+        )
+        assert "17" in save_position_calls[0], (
+            "skip_lines must ride along so the quarantine points at the still-unread "
+            f"part of the span, not just the new position: {save_position_calls[0]!r}"
+        )
+        assert _saved_position(project) == 42
+
+    def test_ordinary_successful_save_of_a_fully_mapped_span_is_not_quarantined(self, tmp_path):
+        """Paired negative control: a mixed-shaped span that in fact had NO
+        unmapped step must save clean -- proving the assertion above means
+        "an unmapped step was actually seen", not "any antigravity span with
+        EXCHANGE_COUNT>0", which a stub that always quarantines would also
+        pass the positive test with."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=3, humans=3, position=42,
+            envelope="antigravity", envelope_has_unmapped_step=False,
+        )
+        env["STUB_HAIKU_TEXT"] = "## 10:00 | main\n\n- did some mapped work\n"
+        _suppress_ndc(project)
+
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1
+        assert "unrecognised" not in save_position_calls[0]
+        assert _saved_position(project) == 42
+
+    def test_skip_path_quarantines_a_mixed_span(self, tmp_path):
+        """The model judged the mapped exchanges not worth recording (SKIP).
+        That verdict says nothing about the unmapped step it never saw --
+        the extract text handed to Haiku never included it -- so this must
+        still quarantine."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=3, humans=3, position=55,
+            envelope="antigravity", envelope_has_unmapped_step=True,
+        )
+        env["STUB_SKIP_LINES"] = "9"
+
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1
+        assert "unrecognised" in save_position_calls[0], save_position_calls[0]
+        assert _saved_position(project) == 55
+
+    def test_skip_path_of_fully_mapped_span_is_not_quarantined(self, tmp_path):
+        """Paired negative control for the SKIP path."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=3, humans=3, position=55,
+            envelope="antigravity", envelope_has_unmapped_step=False,
+        )
+
+        result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1
+        assert "unrecognised" not in save_position_calls[0]
+        assert _saved_position(project) == 55
+
+    def test_reject_gate_quarantines_a_mixed_span(self, tmp_path):
+        """Haiku's reply for the mapped exchanges was not an entry header, so
+        it is discarded by the reject gate -- that discard is about the
+        mapped content, not the unmapped step, which must still quarantine.
+
+        #1052: a single rejection now retries rather than advancing on the
+        spot (see TestRejectedSpanLoop), so this must give up the same way
+        test_give_up_after_max_failures_quarantines_a_mixed_span below does
+        -- repeat until max_rejected_retries is exhausted, THEN the quarantine
+        write happens, same as it always has."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=3, humans=3, position=63,
+            envelope="antigravity", envelope_has_unmapped_step=True,
+        )
+        env["STUB_HAIKU_TEXT"] = "Shall I proceed with that?\n"
+        env["STUB_SKIP_LINES"] = "4"
+
+        result = None
+        for _ in range(3):
+            result = _run(plugin, env, sid)
+
+        assert result.returncode == 0, subprocess_failure_detail(result, project / ".remember")
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1
+        assert "unrecognised" in save_position_calls[0], save_position_calls[0]
+        assert _saved_position(project) == 63
+
+    def test_give_up_after_max_failures_quarantines_a_mixed_span(self, tmp_path):
+        """The span is dropped unsummarized after repeated Haiku failures --
+        that give-up is about the summarizer, not about the unmapped step,
+        which must still quarantine rather than being silently dropped along
+        with the rest."""
+        env, project, plugin, calls, sid = _make_env(
+            tmp_path, exchanges=3, humans=3, position=71,
+            envelope="antigravity", envelope_has_unmapped_step=True,
+        )
+        env["STUB_HAIKU_FAIL"] = "1"
+        env["STUB_SKIP_LINES"] = "6"
+
+        for _ in range(3):
+            _run(plugin, env, sid)
+
+        save_position_calls = [
+            line for line in calls.read_text().splitlines() if line.startswith("save-position")
+        ]
+        assert len(save_position_calls) == 1, save_position_calls
+        assert "unrecognised" in save_position_calls[0], save_position_calls[0]
+        assert _saved_position(project) == 71

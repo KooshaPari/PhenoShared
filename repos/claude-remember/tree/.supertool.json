@@ -1,0 +1,67 @@
+{
+  "defaults": {
+    "github_repo": "Digital-Process-Tools/claude-remember"
+  },
+  "compact": false,
+  "rtk": false,
+  "allow_outside_cwd": false,
+  "no_publish_confirm": true,
+  "allow_vim_shell": false,
+  "presets": ["github", "git", "watch"],
+  "validators": {
+    "ruff": {
+      "cmd": "{python} {supertool_dir}/validators/ruff/ruff.py {file}",
+      "match": "*.py",
+      "hooks_into": ["edit", "replace", "replace_lines", "paste", "append", "vim"],
+      "rollback_on_fail": false,
+      "timeout": 30
+    },
+    "jsonlint": {
+      "cmd": "{python} {supertool_dir}/validators/jsonlint/jsonlint.py {file}",
+      "match": "*.json",
+      "hooks_into": ["edit", "replace", "replace_lines", "paste", "append", "vim"],
+      "rollback_on_fail": true,
+      "timeout": 10
+    },
+    "git-status": {
+      "cmd": "{python} {supertool_dir}/validators/git-status/git-status.py {file}",
+      "match": "*",
+      "hooks_into": ["edit", "replace", "replace_lines", "paste", "append", "vim"],
+      "rollback_on_fail": false,
+      "timeout": 10
+    }
+  },
+  "ops": {
+    "radar": {
+      "watch_name": "claude-remember",
+      "radar_tiers": {
+        "gh-prs": {
+          "pr_exclude_events": ["checks_pending", "conflicts_appeared"]
+        }
+      }
+    },
+    "watch": {
+      "watch_name": "claude-remember"
+    },
+    "unwatch": {
+      "watch_name": "claude-remember"
+    },
+    "watches": {
+      "watch_name": "claude-remember"
+    },
+    "channel": {
+      "watch_name": "claude-remember"
+    },
+    "git-push": {
+      "budget": 1500
+    }
+  },
+  "builtin-ops": {
+    "batch": {
+      "syntax": "batch:@file.json",
+      "description": "Run array of ops in one call. Mix read+edit+grep in one round-trip. Payload: array of {op,...} or {continue_on_error, ops}. A call carries one @- payload, so without this N edits cost N calls.",
+      "example": "batch:@.max/ops.json",
+      "hint": true
+    }
+  }
+}

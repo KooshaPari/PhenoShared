@@ -1,0 +1,412 @@
+#!/bin/bash
+# ============================================================================
+# bootstrap-dirs.sh — Single source of truth for .remember/ directory layout
+# ============================================================================
+#
+# DESCRIPTION
+#   Creates the memory directory structure and sets up stderr logging.
+#   Every hook script sources this after resolve-paths.sh and detect-tools.sh
+#   to guarantee the directory tree exists before any file I/O.
+#
+#   When REMEMBER_DIR points outside the project (external mode) and the
+#   legacy ${PROJECT_DIR}/.remember/ still holds memory data, one stderr line
+#   says so; nothing is moved (#898).
+#
+# USAGE
+#   source "$(dirname "$0")/resolve-paths.sh"
+#   source "$(dirname "$0")/detect-tools.sh"
+#   source "$(dirname "$0")/bootstrap-dirs.sh"
+#
+# REQUIRES
+#   PROJECT_DIR      must be set (by resolve-paths.sh)
+#   PIPELINE_DIR     must be set (by resolve-paths.sh)
+#   session_dir_slug must be defined (by detect-tools.sh)
+#
+# EXPORTS
+#   REMEMBER_DIR    — absolute path to memory data directory (via lib-memory-dir.sh)
+#   SYS_TMPDIR      — portable system temp directory
+#
+# ============================================================================
+
+# Resolve REMEMBER_DIR via the shared helper (no-op if already loaded).
+_REMEMBER_SRC_DIR="${BASH_SOURCE[0]%/*}"
+# A path with no slash in it (`source log.sh` from the scripts dir) leaves the
+# filename behind, not a directory — `dirname` answered "." and this must too.
+[ "$_REMEMBER_SRC_DIR" = "${BASH_SOURCE[0]}" ] && _REMEMBER_SRC_DIR="$(pwd)"
+source "$_REMEMBER_SRC_DIR/lib-memory-dir.sh"
+unset _REMEMBER_SRC_DIR
+
+# --- System temp directory (portable: macOS, Linux, Windows/Git Bash) ---
+# shellcheck disable=SC2034  # read by the hooks that source this file
+SYS_TMPDIR="${TMPDIR:-/tmp}"
+
+# --- Legacy in-project store notice (#898) ---
+# Up to v0.39.0 this moved ${MEMORY_PROJECT_DIR}/.remember into an external
+# REMEMBER_DIR on first run. That migration is gone: nothing is moved or
+# deleted here. When the old in-project store still holds memory data while
+# data_dir points elsewhere, and that new store does not exist yet, one line
+# says so and the operator moves it by hand. Keyed to MEMORY_PROJECT_DIR (the
+# main checkout when in a worktree), like the .gitignore gate below.
+# Silent when REMEMBER_DIR sits inside the legacy directory: a session opened
+# in $HOME, where ~/.remember is the user-global config home (#132).
+_mem_proj="${MEMORY_PROJECT_DIR:-}"
+[ -n "$_mem_proj" ] || _mem_proj="$PROJECT_DIR"
+_legacy_dir="${_mem_proj}/.remember"
+# #907: both sides forward-slashed before the comparison -- same fix as
+# doctor.sh's matching WARN check (#899/#517). Without it, msys/cygwin
+# hands REMEMBER_DIR and _legacy_dir different separator styles (one
+# backslash, one forward-slash) for the SAME directory, the "store already
+# lives inside the legacy dir" (#132) prefix check misses, and a spurious
+# notice prints for a session opened in $HOME.
+#
+# Normalized INLINE here, not via the shared `_remember_forward_slash_into`
+# (resolve-paths.sh) directly -- same reasoning as the #519 fix just below
+# this block (self-review/CI finding, job 112342749034, ubuntu/macos/
+# windows-latest, every Python version): this file's own USAGE header says
+# every caller sources resolve-paths.sh first, but that is not true of
+# every REAL caller -- several tests source only detect-tools.sh and
+# bootstrap-dirs.sh, same as the #519 block's own callers. There,
+# `_remember_forward_slash_into` is undefined and the whole script aborts
+# under `set -e` with "command not found" (exit 127) rather than silently
+# misbehaving -- CI caught this immediately, on every leg.
+# _legacy_dir is normalized IN PLACE (mirrors doctor.sh's _legacy_store),
+# so the -d/-f checks and the printed notice text that follow all read the
+# forward-slashed form too -- forward slashes resolve fine on msys/cygwin.
+# Only REMEMBER_DIR itself stays raw throughout (its own -e check and the
+# printf's other %s).
+_legacy_rd="$REMEMBER_DIR"
+if [ "$OSTYPE" = msys ] || [ "$OSTYPE" = cygwin ]; then
+    _legacy_dir="${_legacy_dir//\\//}"
+    _legacy_rd="${_legacy_rd//\\//}"
+fi
+if [ "$_legacy_rd" != "$_legacy_dir" ] && [ "${_legacy_rd#"$_legacy_dir"/}" = "$_legacy_rd" ] \
+    && [ ! -e "$REMEMBER_DIR" ] && [ -d "$_legacy_dir" ]; then
+    for _legacy_f in now.md recent.md archive.md core-memories.md remember.md; do
+        if [ -f "$_legacy_dir/$_legacy_f" ]; then
+            printf 'remember: %s holds memory data but data_dir points to %s -- move it by hand (see /remember:doctor)\n' \
+                "$_legacy_dir" "$REMEMBER_DIR" >&2
+            break
+        fi
+    done
+    unset _legacy_f
+fi
+unset _legacy_dir _legacy_rd
+
+# --- Create directory structure ---
+# Gated on the tree already existing (#230). `mkdir -p` over three directories
+# that are already there is a process spent to change nothing, and every hook
+# pays it — PostToolUse on every single tool call. The deepest path implies its
+# parents, so two tests settle all three, and a partially-removed tree still
+# falls through to the unchanged mkdir.
+# #920 gap 1: REMEMBER_DIR_UNSAFE is exported by lib-memory-dir.sh (sourced
+# above), the single chokepoint every one of this script's callers resolves
+# REMEMBER_DIR through -- refuse the whole tree rather than mkdir -p'ing a
+# value #902's own guard would have refused one line later.
+if [ "${REMEMBER_DIR_UNSAFE:-0}" != 1 ] \
+    && { [ ! -d "$REMEMBER_DIR/logs/autonomous" ] || [ ! -d "$REMEMBER_DIR/tmp" ]; }; then
+    mkdir -p \
+        "$REMEMBER_DIR/tmp" \
+        "$REMEMBER_DIR/logs" \
+        "$REMEMBER_DIR/logs/autonomous" \
+        2>/dev/null
+fi
+
+# --- Relocate the per-invocation merged config out of the shared OS temp
+# root, and sweep what a killed process left behind (#362) ---
+#
+# lib-memory-dir.sh (sourced above) writes REMEMBER_CONFIG to an
+# unpredictable mktemp-named path under $SYS_TMPDIR (#429) and relies solely
+# on its own EXIT trap to remove it. On Windows/Git Bash that trap does not reliably fire for this
+# plugin's short-lived hook processes -- the harness kills the process rather
+# than letting it exit through a path that runs the trap -- so the file
+# leaked forever. One machine accumulated 23,908 of them directly in %TEMP%,
+# a directory shared with every other app on the box.
+#
+# This has to happen here, not in lib-memory-dir.sh, for two independent
+# reasons. First, that file is pinned byte-for-byte against origin/main by
+# tests/test_case_divergence_298.py specifically so nothing can reach into it
+# and add cost to the per-tool-call path -- so it cannot change at all, not
+# even to add a builtin-only check. Second, REMEMBER_DIR does not exist on
+# disk yet at the point lib-memory-dir.sh runs; creating it there (to hold
+# the relocated file) would silence the legacy-store notice above
+# (`[ ! -e "$REMEMBER_DIR" ]`), which reads REMEMBER_DIR's absence as "this
+# store has not been set up yet" (#898, tests/test_migration.py).
+#
+# $REMEMBER_DIR/tmp -- just created above -- is a directory this plugin
+# already owns and already uses for its own per-invocation scratch files
+# (post-tool-hook.sh's hook-stdin.$$, save.lock, ...). A leftover
+# remember-config-*.json there is unambiguously this plugin's own leak,
+# never another user's or another app's file on a shared machine, and the
+# directory is bounded by what this plugin itself has ever written there
+# rather than by everything on the OS -- so sweeping it costs nothing like
+# the multi-minute %TEMP% scan #362 reports against a 57k-entry directory.
+if [ -d "$REMEMBER_DIR/tmp" ]; then
+    # Opportunistic sweep: a remember-config-*.json here whose mtime is
+    # older than the threshold belongs to a process that is long gone -- this
+    # plugin's own hook scripts never run anywhere near this long, so this
+    # cannot collide with a legitimately still-running invocation. This is
+    # the backstop for the case the EXIT trap never fires at all.
+    #
+    # Gated on there being any candidate at all (#666): `find` ran
+    # unconditionally on EVERY hook invocation before this, even on a store
+    # where the EXIT trap has never once failed to fire and the glob below
+    # matches nothing. The glob costs no fork; `find` still does the real
+    # mtime filtering once something is actually there to check. `[ -e ] ||
+    # [ -L ]` drops the unmatched literal pattern, so no nullglob
+    # save/restore is needed (#898).
+    for _remember_stale_cfg in "$REMEMBER_DIR/tmp"/remember-config-*.json; do
+        [ -e "$_remember_stale_cfg" ] || [ -L "$_remember_stale_cfg" ] || continue
+        find "$REMEMBER_DIR/tmp" -maxdepth 1 -name 'remember-config-*.json' \
+            -mmin +30 -exec rm -f {} + 2>/dev/null || true
+        break
+    done
+    unset _remember_stale_cfg
+
+    # Move THIS invocation's file in, and repoint REMEMBER_CONFIG and the EXIT
+    # trap at its new home. Best-effort: a failed mv (cross-device, the
+    # directory disappearing under us) leaves REMEMBER_CONFIG at its original
+    # $SYS_TMPDIR path, exactly as before this change -- never a merge that
+    # used to succeed starting to fail.
+    _remember_relocated_cfg="$REMEMBER_DIR/tmp/remember-config-$$.json"
+    if [ -n "${REMEMBER_CONFIG:-}" ] && [ -f "$REMEMBER_CONFIG" ] \
+        && mv -f "$REMEMBER_CONFIG" "$_remember_relocated_cfg" 2>/dev/null; then
+        REMEMBER_CONFIG="$_remember_relocated_cfg"
+        export REMEMBER_CONFIG
+        # #375: $_remember_relocated_cfg is under $REMEMBER_DIR, which in
+        # legacy mode is the raw, non-slugified project directory -- a
+        # user-controlled string, unlike lib-memory-dir.sh's own copy of
+        # this idiom (see there) whose path lives under $SYS_TMPDIR, which
+        # no user names. Embedding a user-controlled path inside a
+        # single-quoted span in a string that `trap` re-parses at exit is
+        # exactly the composition that broke: an apostrophe in the project
+        # path terminates that span early and the remainder is evaluated as
+        # shell source at exit, rather than as the filename it names.
+        # `printf %q` turns the path into a form the SAME shell can safely
+        # re-parse as exactly one word, however many quote characters it
+        # contains, so it is embedded UNquoted below -- it already carries
+        # its own quoting.
+        _remember_relocated_cfg_q=$(printf %q "$_remember_relocated_cfg")
+        # Same subshell-safe append lib-memory-dir.sh uses for its own trap --
+        # bash keeps a single EXIT trap, and its trap (still targeting the
+        # old, now-moved-away path -- a harmless no-op `rm -f` once it is
+        # gone) must not be the one this replaces.
+        #
+        # One more substitution than lib-memory-dir.sh's own copy of this
+        # idiom needs: `trap -p` re-quotes its output for safe re-sourcing,
+        # rewriting each embedded `'` as `'\''`. lib-memory-dir.sh only ever
+        # chains onto a caller's bare function name (no embedded quotes), so
+        # that never mattered there -- but the trap we are reading back HERE
+        # is lib-memory-dir.sh's own `rm -f '$path'`, which is exactly the
+        # case that breaks: stripping only the outer wrapper quotes leaves a
+        # dangling, unbalanced `'\''` at the tail (the content itself ends in
+        # a quote), and embedding that into a new double-quoted trap body
+        # produced an EXIT-time "unexpected EOF while looking for matching
+        # `'" on every single invocation once this was measured against the
+        # real chain rather than a standalone snippet. Undoing the
+        # requoting -- collapsing each `'\''` back to a literal `'` -- makes
+        # the extracted text the exact original command again, safe to
+        # re-embed. This reverses exactly ONE level of `trap -p`'s
+        # requoting, which is all today's chain ever needs (nothing in this
+        # codebase installs an EXIT trap before bootstrap-dirs.sh sources
+        # lib-memory-dir.sh, so what we read back here is always exactly one
+        # `rm -f '$path'`, never something that has already been through
+        # this same substitution itself). It is not a general un-quoter --
+        # chaining onto a trap value that has itself already passed through
+        # one round of this idiom would need a second pass. That extracted
+        # text is $SYS_TMPDIR-rooted and therefore not user-controlled, so
+        # it is chained here exactly as before -- only the path THIS block
+        # owns goes through the %q fix above.
+        # #679 (part of #660): `trap -p` is a builtin -- `sed` was the only
+        # fork this line paid, at a fixed offset plus one quote-collapse
+        # (undoing `trap -p`'s own re-quoting of an embedded `'`).
+        # Parameter expansion does the identical strip+collapse with zero
+        # forks -- proven byte-identical to the old sed output in
+        # tests/test_session_start_spawn_reduction_679.py.
+        _remember_trap_raw=$(trap -p EXIT 2>/dev/null)
+        _remember_existing_trap="${_remember_trap_raw#trap -- \'}"
+        _remember_existing_trap="${_remember_existing_trap%\' EXIT}"
+        _remember_existing_trap="${_remember_existing_trap//\'\\\'\'/\'}"
+        unset _remember_trap_raw
+        if [ -n "$_remember_existing_trap" ]; then
+            # shellcheck disable=SC2064
+            trap "${_remember_existing_trap}; rm -f ${_remember_relocated_cfg_q}" EXIT
+        else
+            # shellcheck disable=SC2064
+            trap "rm -f ${_remember_relocated_cfg_q}" EXIT
+        fi
+        unset _remember_existing_trap
+        unset _remember_relocated_cfg_q
+    fi
+    unset _remember_relocated_cfg
+fi
+
+# --- Install marker (#401) ---
+#
+# doctor.sh's SessionEnd liveness check (#370) needs a "remember became
+# active here" baseline so a transcript that went quiet BEFORE the store
+# existed is not misread as SessionEnd's own silent failure (#392). It used
+# to read $REMEMBER_DIR/.gitignore's mtime for that -- the one file under
+# REMEMBER_DIR ordinary hook activity never rewrites -- but that file is
+# deleted, by design, the first time a legacy-to-external migration is
+# backed up with git: hooks.d/after_save/50-git-backup.sh's cleanup of the
+# per-slug ".gitignore" bootstrap artifact ("removed per-slug .gitignore
+# (legacy bootstrap artifact)"). The two behaviours are individually correct
+# and were written years apart; composed, the cleanup silently removed the
+# diagnostic's only baseline, and that store's SessionEnd check degraded to
+# a permanent WARN, unable to ever reach FAIL again.
+#
+# This marker is a dedicated replacement nothing else in this codebase ever
+# touches, or has any reason to: written once, gated on it not already
+# existing, exactly like the .gitignore write below -- but unconditional of
+# storage mode, unlike .gitignore, which is only ever written when
+# REMEMBER_DIR is inside the project tree. An external-mode store that was
+# never migrated from legacy never had a .gitignore baseline at all; this
+# marker gives it one for the first time, not only a migrated one.
+#
+# Gated on REMEMBER_DIR existing for the same reason the .gitignore write
+# below is (#204): the mkdir above is best-effort, and writing into a
+# directory that failed to materialize would surface the shell's own
+# "No such file or directory" as a non-blocking hook failure at every
+# session start.
+#
+# An existing store that upgrades into this fix and has no marker yet gets
+# one written the next time any hook sources this file -- the next tool
+# call, the next session start -- dated from that moment, not from the
+# store's true original install. A store already degraded to WARN-only by
+# the .gitignore-deletion composition above self-heals on that next hook
+# run rather than staying broken forever; the cost is that quiet transcripts
+# between the store's true install and this upgrade cannot be attributed to
+# either side of a baseline that did not exist for them, exactly the same
+# "nothing has had the chance to prove or disprove this yet" third state
+# doctor.sh already renders as the honest answer for a fresh install.
+if [ -d "$REMEMBER_DIR" ]; then
+    [ -f "$REMEMBER_DIR/.install-marker" ] \
+        || { echo 'This file marks when remember was first bootstrapped here. Read only by /remember:doctor (#401); do not delete it.' \
+            > "$REMEMBER_DIR/.install-marker"; } 2>/dev/null
+fi
+
+# --- Gitignore: only write when REMEMBER_DIR is inside the project tree ---
+# In external mode (REMEMBER_DIR outside PROJECT_DIR) there is no gitignore
+# to write — the user manages that tree themselves (typically as a private git
+# repo at ~/.remember/).
+#
+# Gated on the store actually existing (#204). The mkdir above is best-effort
+# and its status was never checked, so on an unwritable root — the reported
+# case is a session opened at `/`, where legacy mode makes REMEMBER_DIR
+# `//.remember` on macOS's read-only root volume — this walked into file I/O
+# against a directory that was never created. The `2>/dev/null` did not hide
+# the result: the shell opens a redirection target BEFORE running the command,
+# so it is the shell that reports the failure, outside the scope of the
+# redirect meant to silence it, and the user saw
+#   bootstrap-dirs.sh: line NN: //.remember/.gitignore: No such file or directory
+# surfaced as a non-blocking hook failure at every session start.
+#
+# The braces close the same hole for the residual race — the store removed
+# between this test and the write — where there is no directory check left to
+# make. Redirecting the whole group puts the shell's own diagnostic inside the
+# suppressed scope.
+if [ -d "$REMEMBER_DIR" ]; then
+    # #519: both sides forward-slashed before the case-glob match --
+    # REMEMBER_DIR and _mem_proj both arrive backslash-separated on
+    # msys/cygwin (resolve-paths.sh's own _remember_normalize_win_path),
+    # and a bash glob pattern only ever recognises '/' as a path
+    # separator, so an in-project store's REMEMBER_DIR silently never
+    # matched "$_mem_proj"/* there -- no .gitignore was ever written. This
+    # is NOT the #401 doctor.sh baseline (that reads .install-marker,
+    # written unconditionally, just above, unaffected by this gate): the
+    # real, still-live consequence is hooks.d/after_save/50-git-backup.sh's
+    # own protective .gitignore going missing for that store, so its
+    # memory content is not excluded from `git add -A`/`git status`
+    # inside the user's own project repository the way the file's comment
+    # near the top of this block documents. The write itself still targets
+    # the real (unmodified) REMEMBER_DIR; only the comparison is
+    # normalized.
+    #
+    # The gate is duplicated INLINE here rather than calling the shared
+    # `_remember_forward_slash` (scripts/resolve-paths.sh, #517) directly
+    # (self-review/CI finding, job 100934963344, ubuntu-latest 3.9):
+    # this file's own USAGE header says every caller sources resolve-paths.sh
+    # first, but that is not true of every REAL caller -- tests/test_external_data_dir.py
+    # and tests/test_worktree_memory.py's own `_run_bootstrap()` harnesses
+    # source only detect-tools.sh and bootstrap-dirs.sh, never resolve-paths.sh,
+    # and neither of those two sources it transitively either. There,
+    # `_remember_forward_slash` is undefined, the command substitution below
+    # would run it as an unknown external command (bash: ... command not
+    # found, exit 127) and silently substitute an EMPTY string, so the case
+    # pattern would never match and .gitignore would never be written for
+    # ANY REMEMBER_DIR, forward-slash or not -- exactly the regression CI
+    # caught (test_gitignore_written_in_legacy_mode /
+    # test_worktree_remember_is_gitignored, both asserting on real, ordinary
+    # POSIX paths with no backslash involved at all). Same reasoning
+    # hooks.d/before_session_start/50-git-restore.sh's own #519 fix already
+    # documents for the identical reason.
+    _mem_bd_glob_dir="$REMEMBER_DIR"
+    _mem_bd_glob_proj="$_mem_proj"
+    if [ "$OSTYPE" = msys ] || [ "$OSTYPE" = cygwin ]; then
+        _mem_bd_glob_dir="${_mem_bd_glob_dir//\\//}"
+        _mem_bd_glob_proj="${_mem_bd_glob_proj//\\//}"
+    fi
+    if [ "${_mem_bd_glob_dir#"$_mem_bd_glob_proj"/}" != "$_mem_bd_glob_dir" ]; then
+        [ -f "$REMEMBER_DIR/.gitignore" ] || { echo '*' > "$REMEMBER_DIR/.gitignore"; } 2>/dev/null
+    fi
+fi
+unset _mem_proj _mem_bd_glob_dir _mem_bd_glob_proj
+
+# --- Redirect stderr to hook-errors.log ---
+# This replaces the 2>> that was in hooks.json. Now the directory is
+# guaranteed to exist before we open the file.
+# Guard: only redirect if the logs dir was actually created (read-only
+# filesystems, Docker read-only mounts, etc. will skip this gracefully).
+#
+# Second guard (#690): bash's own xtrace stream is on fd 2 unless
+# BASH_XTRACEFD says otherwise, so this one line also swallowed every
+# `bash -x` profile of these hooks -- from this point on, into a log file the
+# profiler never reads, with nothing anywhere saying the rest was lost. A
+# truncated trace does not look truncated; it looks like a complete profile of
+# a fast hook, and every number derived from it (fork counts, per-step
+# attributions, "the largest gap is X") then describes a fraction of the run
+# while reading as though it described all of it. Measured on macOS while
+# building the #660 diagnostic: wall 0.71s, traced span 0.07s.
+#
+# So the redirect stands EXCEPT where doing it would swallow a trace somebody
+# deliberately started:
+#   - xtrace is on, and going to fd 2 (BASH_XTRACEFD unset or 2);
+#   - or REMEMBER_TRACE=1, for a profiler that is not bash's own xtrace.
+# A trace on its own fd (BASH_XTRACEFD=9) is untouched by the redirect, so
+# that case keeps it -- the stderr leak this redirect exists to stop (#643)
+# is not worth trading for a problem that is already solved.
+#
+# Third guard, below BOTH of the above (round-2 #690, found on GitHub's own
+# macOS runners): BASH_XTRACEFD was added in bash 4.1. Stock macOS ships bash
+# 3.2 as `/bin/bash` -- the same floor tests/test_session_start_fork_tax_665.py
+# already names for $BASHPID -- and 3.2 silently ignores the variable, so
+# xtrace stays on real fd 2 no matter what BASH_XTRACEFD says. Trusting the
+# variable's TEXT on that floor reproduces the exact #690 symptom this file
+# exists to fix: the guard reads "9", concludes the trace is safely
+# elsewhere, and redirects fd 2 into hook-errors.log anyway -- while the
+# trace, which never left fd 2, goes with it. Checked directly against
+# BASH_VERSINFO, the same version test lib-clock.sh and lib-lock.sh already
+# run before relying on a bash-4+ feature, rather than assumed. Asked only
+# when an xtrace is actually on, the one case that reads the answer.
+if [ -d "$REMEMBER_DIR/logs" ]; then
+    _remember_bd_keep_fd2=""
+    if [[ "$-" == *x* ]]; then
+        if ! { [ "${BASH_VERSINFO[0]:-0}" -gt 4 ] || { [ "${BASH_VERSINFO[0]:-0}" -eq 4 ] && [ "${BASH_VERSINFO[1]:-0}" -ge 1 ]; }; } 2>/dev/null; then
+            _remember_bd_keep_fd2="an xtrace is running and this bash (< 4.1) has no BASH_XTRACEFD, so it stays on fd 2"
+        elif [ "${BASH_XTRACEFD:-2}" = "2" ]; then
+            _remember_bd_keep_fd2="an xtrace is running on fd 2"
+        fi
+    fi
+    [ "${REMEMBER_TRACE:-}" = "1" ] && _remember_bd_keep_fd2="REMEMBER_TRACE=1"
+    if [ -n "$_remember_bd_keep_fd2" ]; then
+        # Said out loud, on the stream being kept: this hook's stderr is now in
+        # the operator's terminal rather than in the log they would otherwise
+        # go and read, and silence about that is its own small version of the
+        # defect above.
+        printf 'remember: %s, so stderr is NOT being redirected to %s -- point BASH_XTRACEFD at its own fd to get both (#690)\n' \
+            "$_remember_bd_keep_fd2" "$REMEMBER_DIR/logs/hook-errors.log" >&2
+    else
+        exec 2>> "$REMEMBER_DIR/logs/hook-errors.log"
+    fi
+    unset _remember_bd_keep_fd2
+fi
