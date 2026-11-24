@@ -226,3 +226,58 @@ func TestCmdInstancesJSONNamesTheRegistryBothWays(t *testing.T) {
 		t.Errorf("instance_dir = %q, dir = %q; the same value must appear under both names", body.InstanceDir, body.Dir)
 	}
 }
+
+// A launcher polls this command on a timer to find out what is running, so
+// listing has to be read-only in every mode it can be called in. A mode that
+// rewrote or re-added a record would turn a read into a state change on a
+// shared registry, and the next reader would see an entry whose timestamp says
+// it was just refreshed.
+//
+// Checked byte-for-byte rather than by count: the failure that matters is a
+// record whose contents changed while its file stayed in place.
+func TestCmdInstancesLeavesTheRegistryByteIdentical(t *testing.T) {
+	dir := t.TempDir()
+	seedInstance(t, dir, "2026-11-24T00:00:00Z", "127.0.0.1:52396")
+
+	snapshot := func() map[string]string {
+		t.Helper()
+		entries, err := os.ReadDir(dir)
+		if err != nil {
+			t.Fatalf("read registry: %v", err)
+		}
+		seen := make(map[string]string, len(entries))
+		for _, entry := range entries {
+			body, err := os.ReadFile(filepath.Join(dir, entry.Name()))
+			if err != nil {
+				t.Fatalf("read %s: %v", entry.Name(), err)
+			}
+			seen[entry.Name()] = string(body)
+		}
+		return seen
+	}
+
+	before := snapshot()
+	if len(before) == 0 {
+		t.Fatal("the fixture wrote no record, so an unchanged registry proves nothing")
+	}
+
+	for _, args := range [][]string{
+		{"--dir", dir},
+		{"--dir", dir, "--json"},
+		{"--dir", dir, "--verify"},
+	} {
+		if _, _, _, err := runCmd(t, args); err != nil {
+			t.Fatalf("cmdInstances %v: %v", args, err)
+		}
+	}
+
+	after := snapshot()
+	if len(before) != len(after) {
+		t.Fatalf("listing changed the registry: %d records before, %d after", len(before), len(after))
+	}
+	for name, body := range before {
+		if after[name] != body {
+			t.Errorf("listing rewrote %s:\nbefore: %s\nafter:  %s", name, body, after[name])
+		}
+	}
+}
