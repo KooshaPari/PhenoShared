@@ -44,7 +44,10 @@ Three applet routes publish this instance to a master console:
                               Binds and releases the port, so it also proves the
                               address is free and the manifest is conforming.
                               Exit 0 = servable, 1 = not servable. Combines with
-                              --json for a machine answer.
+                              --json for a machine answer. The JSON names the
+                              run directory as "dir" and "run_dir", and the
+                              registry as "instance_dir": "dir" is overloaded
+                              across commands and the second names are not.
 
 Why --embed-allow-origin is explicit and never a wildcard: this server has no
 authentication, so a frameable /embed hands the run's titles, statuses and agent
@@ -193,7 +196,15 @@ func servePreflight(dir, addr string, frames originsFlag, jsonOut bool) error {
 	if err != nil {
 		return err
 	}
-	report := map[string]any{"dir": abs, "addr": addr, "ok": false}
+	// `dir` here is the RUN directory, while `dagrun instances --json` uses the
+	// same key for the REGISTRY. Both are emitted under a second name so a
+	// consumer never has to know which command it is reading: `run_dir` is the
+	// run directory and `instance_dir` is the registry, here and there. Same
+	// resolution as cmd_instances.go, which emits both rather than deprecating
+	// one, and for the same reason: a launcher written against one key silently
+	// decodes the other as empty and concludes "nothing here" rather than
+	// failing.
+	report := map[string]any{"dir": abs, "run_dir": abs, "addr": addr, "ok": false}
 	var failure error
 
 	planPath := filepath.Join(abs, "run.yaml")

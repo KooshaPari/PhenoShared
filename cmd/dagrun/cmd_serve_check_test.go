@@ -172,6 +172,15 @@ func TestServeCheckLeavesNoAdvertisement(t *testing.T) {
 	if got, _ := rep["instance_dir"].(string); got != registry {
 		t.Errorf("instance_dir = %q, want the resolved %q", got, registry)
 	}
+	// `dir` means the run directory here and the registry in `dagrun instances
+	// --json`, so the unambiguous names are pinned: a consumer that reads
+	// run_dir or instance_dir gets the right value from either command.
+	if got, _ := rep["run_dir"].(string); got != dir {
+		t.Errorf("run_dir = %q, want the run directory %q", got, dir)
+	}
+	if got, _ := rep["dir"].(string); got != dir {
+		t.Errorf("dir = %q, want the run directory %q", got, dir)
+	}
 	entries, err := os.ReadDir(registry)
 	if err != nil {
 		t.Fatalf("registry dir: %v", err)
