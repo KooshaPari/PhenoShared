@@ -90,13 +90,12 @@ func cmdInstances(args []string) error {
 	reports := make([]instanceReport, 0, len(instances))
 	var pruned []string
 	var pruneErrs []string
-	now := time.Now().UTC()
 	for _, inst := range instances {
 		rep := instanceReport{Instance: inst}
 		if *verify {
 			rep.Reachable, rep.Error = probeManifest(inst)
 		}
-		if *prune && rep.Reachable != nil && !*rep.Reachable && prunable(inst, now) {
+		if *prune && rep.Reachable != nil && !*rep.Reachable && pruneAllowed(applet.ProcessLiveness(inst.PID)) {
 			name, err := inst.FileName()
 			if err != nil {
 				pruneErrs = append(pruneErrs, err.Error())
@@ -167,29 +166,31 @@ func cmdInstances(args []string) error {
 	return nil
 }
 
-// pruneLinger is how long an unreachable advertisement survives its own pid.
+// pruneAllowed reports whether a failed liveness probe authorises deleting an
+// advertisement whose endpoint has already been confirmed unreachable.
 //
-// Reachability alone would be enough except for one measured case: on Windows a
-// recycled pid can point at an unrelated live process, so "the pid is in use"
-// keeps a record forever even though nothing answers on its port (observed with
-// pid 45964, gone from the task list, port refusing). A server that is genuinely
-// starting advertises seconds before it serves, and a tray polls for hours, so
-// ten minutes separates "still coming up" from "gone and does not know it".
-const pruneLinger = 10 * time.Minute
-
-// prunable reports whether an advertisement that failed its manifest probe may
-// be deleted. Two independent signals qualify it: its pid is free, or it has
-// been unreachable for longer than any startup takes. A record whose start time
-// cannot be read is kept: an unreadable age is not an old age.
-func prunable(inst applet.Instance, now time.Time) bool {
-	if !applet.ProcessAlive(inst.PID) {
-		return true
-	}
-	started, err := time.Parse(time.RFC3339, inst.StartedAt)
-	if err != nil {
-		return false
-	}
-	return now.Sub(started) > pruneLinger
+// Only proven death qualifies. Both other states retain the record:
+//
+//	unknown - the probe could not ask (ERROR_ACCESS_DENIED, EPERM, or an
+//	          unreadable exit code). A pid you cannot ask about is not a pid
+//	          that is gone; measured cost of treating it as gone was deleting
+//	          the advertisement of live pid 4 on the desk.
+//	alive   - a running process holds the pid. It may be the server, or it may
+//	          be an unrelated process that inherited the number. Distinguishing
+//	          those needs process identity (start time, image path) that the
+//	          record does not carry, so a recycled pid keeps its record until
+//	          that identity check exists.
+//
+// Age deliberately plays no part. It used to: an unreachable record older than
+// ten minutes was deleted even when its pid was alive, on the reasoning that a
+// genuine server advertises seconds before it serves (observed with pid 45964,
+// gone from the task list, port refusing). The consequence of removing it is
+// accepted and stated: a recycled pid whose record never proves dead now
+// survives indefinitely. A record nobody reads is cheaper than deleting one a
+// running server still depends on, and age is evidence about a file, not about
+// a process.
+func pruneAllowed(l applet.Liveness) bool {
+	return l == applet.LivenessDead
 }
 
 func printInstances(reports []instanceReport) {

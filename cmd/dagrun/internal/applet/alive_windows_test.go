@@ -13,27 +13,38 @@ import (
 // protected process looked free and its advertisement was pruned while it was
 // still serving. pid 4 is the clearest case -- it always exists on Windows and
 // is usually unopenable without elevation.
-func TestProcessAliveCannotBeConfusedWithPermission(t *testing.T) {
-	if !ProcessAlive(4) {
-		t.Fatalf("pid 4 (System) reported dead; an unopenable pid is not a free pid")
+//
+// The tri-state makes the distinction explicit rather than implicit: the probe
+// reports "unknown", which no caller may read as permission to delete.
+func TestProcessLivenessCannotBeConfusedWithPermission(t *testing.T) {
+	switch got := ProcessLiveness(4); got {
+	case LivenessUnknown, LivenessAlive:
+		// Both retain the record. Which one appears depends on whether this run
+		// can open the System process at all, and that is not the assertion.
+	default:
+		t.Fatalf("pid 4 (System) reported %s; an unopenable pid is not a free pid", got)
 	}
 }
 
-func TestProcessAliveCurrentProcess(t *testing.T) {
-	if !ProcessAlive(os.Getpid()) {
-		t.Fatalf("the running process reported itself dead")
+func TestProcessLivenessCurrentProcess(t *testing.T) {
+	if got := ProcessLiveness(os.Getpid()); got != LivenessAlive {
+		t.Fatalf("the running process reported %s, want alive", got)
 	}
 }
 
-func TestProcessAliveRejectsNonPositive(t *testing.T) {
+func TestProcessLivenessRejectsNonPositive(t *testing.T) {
 	for _, pid := range []int{0, -1} {
-		if ProcessAlive(pid) {
-			t.Fatalf("ProcessAlive(%d) = true, want false", pid)
+		if got := ProcessLiveness(pid); got != LivenessDead {
+			t.Fatalf("ProcessLiveness(%d) = %s, want dead", pid, got)
 		}
 	}
 }
 
-func TestProcessAliveExitedProcess(t *testing.T) {
+// Wait reaps the process, so the pid is released and the probe should find it
+// free. A pid recycled into an unrelated live process between Wait and the
+// probe would fail this test; that is a real possibility on a busy host rather
+// than a defect, and it fails loudly instead of hiding.
+func TestProcessLivenessExitedProcess(t *testing.T) {
 	cmd := exec.Command("cmd", "/c", "exit", "0")
 	if err := cmd.Start(); err != nil {
 		t.Fatalf("start: %v", err)
@@ -42,12 +53,12 @@ func TestProcessAliveExitedProcess(t *testing.T) {
 	if err := cmd.Wait(); err != nil {
 		t.Fatalf("wait: %v", err)
 	}
-	if ProcessAlive(pid) {
-		t.Fatalf("an exited process (pid %d) reported alive", pid)
+	if got := ProcessLiveness(pid); got != LivenessDead {
+		t.Fatalf("an exited process (pid %d) reported %s, want dead", pid, got)
 	}
 }
 
-func TestProcessAliveUnusedPID(t *testing.T) {
+func TestProcessLivenessUnusedPID(t *testing.T) {
 	// Find a pid the kernel itself reports as absent, so the assertion is about
 	// ERROR_INVALID_PARAMETER rather than about a pid we merely hope is unused.
 	pid := 0
@@ -65,8 +76,8 @@ func TestProcessAliveUnusedPID(t *testing.T) {
 	if pid == 0 {
 		t.Skip("no unused pid in the scanned range")
 	}
-	if ProcessAlive(pid) {
-		t.Fatalf("unused pid %d reported alive", pid)
+	if got := ProcessLiveness(pid); got != LivenessDead {
+		t.Fatalf("unused pid %d reported %s, want dead", pid, got)
 	}
 }
 

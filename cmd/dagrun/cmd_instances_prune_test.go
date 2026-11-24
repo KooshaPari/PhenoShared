@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/KooshaPari/dagrun/internal/applet"
 )
@@ -157,7 +156,7 @@ func TestCmdInstancesDoesNotPruneByDefault(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(dir, name)); err != nil {
 		t.Fatalf("a plain listing deleted a record: %v", err)
 	}
-	if applet.ProcessAlive(undeadPID) {
+	if applet.ProcessLiveness(undeadPID) != applet.LivenessDead {
 		// Guard the guard: the fixture pid must really be dead, or the prune tests
 		// above would pass for the wrong reason.
 		t.Fatalf("fixture pid %d is alive on this host; the dead-pid premise is void", undeadPID)
@@ -175,36 +174,87 @@ func runCmd(t *testing.T, args []string) (int, string, string, error) {
 	return code, out, errOut, err
 }
 
-// The Windows hazard unicorn measured: a recycled pid points at some unrelated
-// live process, so "the pid is in use" alone kept a record forever even though
-// nothing answered on its port. Age is the second signal.
-func TestPrunableAgesOutARecycledPID(t *testing.T) {
-	inst := applet.Instance{PID: os.Getpid(), StartedAt: "2026-01-01T00:00:00Z"}
-	if !prunable(inst, time.Date(2026, 1, 1, 1, 0, 0, 0, time.UTC)) {
-		t.Fatalf("an unreachable record an hour old survived a live-but-unrelated pid")
+// Proof, and only proof, authorises a delete. Anything less retains.
+func TestPruneAllowedOnlyOnProvenDeath(t *testing.T) {
+	cases := []struct {
+		liveness applet.Liveness
+		want     bool
+	}{
+		{applet.LivenessDead, true},
+		{applet.LivenessAlive, false},
+		{applet.LivenessUnknown, false},
+	}
+	for _, c := range cases {
+		if got := pruneAllowed(c.liveness); got != c.want {
+			t.Errorf("pruneAllowed(%s) = %v, want %v", c.liveness, got, c.want)
+		}
 	}
 }
 
-func TestPrunableKeepsAServerStillStarting(t *testing.T) {
-	now := time.Now().UTC()
-	inst := applet.Instance{PID: os.Getpid(), StartedAt: now.Format(time.RFC3339)}
-	if prunable(inst, now) {
-		t.Fatalf("a record written seconds ago was pruned; a starting server advertises before it serves")
+// The regression this branch exists for. A recycled pid points at some unrelated
+// live process, so "in use" kept a dead record forever; that record is now kept
+// on purpose rather than aged out, because age says nothing about a process and
+// the alternative deleted live advertisements.
+func TestCmdInstancesRetainsOldUnreachableRecordWithALivePID(t *testing.T) {
+	dir := t.TempDir()
+	inst := seedWithPID(t, dir, "127.0.0.1:52395", os.Getpid())
+	inst.StartedAt = "2020-01-01T00:00:00Z"
+	if _, err := inst.Write(dir); err != nil {
+		t.Fatal(err)
+	}
+
+	_, out, _, err := runCmd(t, []string{"--dir", dir, "--prune", "--json"})
+	if err != nil {
+		t.Fatalf("cmdInstances: %v", err)
+	}
+	var body struct {
+		Instances []map[string]any `json:"instances"`
+		Pruned    []string         `json:"pruned"`
+	}
+	if err := json.Unmarshal([]byte(out), &body); err != nil {
+		t.Fatalf("stdout is not JSON: %v\n%.200q", err, out)
+	}
+	if len(body.Pruned) != 0 {
+		t.Fatalf("pruned on age alone: %v", body.Pruned)
+	}
+	if len(body.Instances) != 1 {
+		t.Fatalf("instances = %d, want the live-pid record retained", len(body.Instances))
 	}
 }
 
-func TestPrunableKeepsAnUnreadableStartTime(t *testing.T) {
-	inst := applet.Instance{PID: os.Getpid(), StartedAt: "not a timestamp"}
-	if prunable(inst, time.Now().UTC().Add(time.Hour*24*365)) {
-		t.Fatalf("an unreadable start time was read as an old one")
+// The access-denied regression. pid 1 belongs to another user (or to init), so
+// the probe may only see that it is unaskable, never that it is free. Deleting
+// on that reading is what removed the advertisement of live pid 4 on the desk.
+//
+// Skipped when the probe can actually ask: as root, pid 1 answers, and then the
+// fixture proves nothing about the denied branch.
+func TestCmdInstancesRetainsUnaskablePID(t *testing.T) {
+	if got := applet.ProcessLiveness(1); got != applet.LivenessUnknown {
+		t.Skipf("pid 1 probes as %s on this host and user; the denied branch cannot be exercised", got)
 	}
-}
+	dir := t.TempDir()
+	inst := seedWithPID(t, dir, "127.0.0.1:52394", 1)
+	inst.StartedAt = "2020-01-01T00:00:00Z"
+	if _, err := inst.Write(dir); err != nil {
+		t.Fatal(err)
+	}
 
-func TestPrunableTrustsADeadPIDRegardlessOfAge(t *testing.T) {
-	now := time.Now().UTC()
-	inst := applet.Instance{PID: undeadPID, StartedAt: now.Format(time.RFC3339)}
-	if !prunable(inst, now) {
-		t.Fatalf("a dead pid was kept just because its record was young")
+	_, out, _, err := runCmd(t, []string{"--dir", dir, "--prune", "--json"})
+	if err != nil {
+		t.Fatalf("cmdInstances: %v", err)
+	}
+	var body struct {
+		Instances []map[string]any `json:"instances"`
+		Pruned    []string         `json:"pruned"`
+	}
+	if err := json.Unmarshal([]byte(out), &body); err != nil {
+		t.Fatalf("stdout is not JSON: %v\n%.200q", err, out)
+	}
+	if len(body.Pruned) != 0 {
+		t.Fatalf("pruned a pid the probe could not ask about: %v", body.Pruned)
+	}
+	if len(body.Instances) != 1 {
+		t.Fatalf("instances = %d, want the unaskable record retained", len(body.Instances))
 	}
 }
 

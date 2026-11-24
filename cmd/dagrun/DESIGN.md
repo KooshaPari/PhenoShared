@@ -228,19 +228,26 @@ than a missing precondition. A preflight must not advertise: `Bind` writes the
 record and the paired retraction happens when `Listen` returns, so an advertising
 preflight leaves a phantom entry on every poll. That was measured, then fixed.
 
-`instances --prune` deletes advertisements that are unreachable **and** have
-stopped being evidence of a server: the pid is free, or the record is older than
-ten minutes. Deleting on reachability alone would be a guess, because an
-unreachable server whose pid is alive is usually a server mid-start. The ten
-minute linger exists because a pid is not an identity: on Windows a recycled pid
-points at an unrelated live process, which kept one dead record alive forever
-(measured, pid 45964, gone from the task list and its port refusing).
-`ProcessAlive` is per-OS (`signal 0` on Unix, `OpenProcess` plus
-exit-code on Windows). Two error branches carry the whole rule on Windows:
-`ERROR_ACCESS_DENIED` means the pid exists and refuses the query, so it counts as
-alive (pid 4 was pruned as dead before this), and only
-`ERROR_INVALID_PARAMETER` means the pid is free. `EPERM` counts as alive on Unix
-for the same reason: another user's server is not ours to delete.
+`instances --prune` deletes an advertisement only when its endpoint is
+unreachable **and** its owner is proven dead. Proof, and nothing else, authorises
+the delete: age plays no part, because age is evidence about a file and not
+about a process.
+
+The probe is tri-state (`ProcessLiveness`, per-OS: `signal 0` on Unix,
+`OpenProcess` plus exit-code on Windows) because a bool cannot say "I could not
+ask". `alive` and `unknown` both retain the record. `alive` retains because a pid
+is not an identity: a recycled pid points at an unrelated live process, and
+telling those apart needs start-time or image-path identity the record does not
+carry. `unknown` retains because a pid that refuses the query is not a free pid:
+on Windows `ERROR_ACCESS_DENIED` means the process exists and declined (pid 4 was
+pruned as dead before this), only `ERROR_INVALID_PARAMETER` means free, and on
+Unix the same split is `EPERM` against `ESRCH`.
+
+Consequence, accepted and stated: a record whose pid was recycled into another
+live process now survives indefinitely, where it used to age out after ten
+minutes. A record nobody reads costs less than deleting one a running server
+still depends on. Reachability alone would still be a guess, because an
+unreachable server whose pid is alive is usually a server mid-start.
 
 The registry path is reported under both JSON names, `dir` and `instance_dir`,
 because `serve --check --json` used the second and `instances --json` the first,

@@ -34,33 +34,40 @@ const (
 	errInvalidParameter = syscall.Errno(87)
 )
 
-// ProcessAlive reports whether pid names a live process.
+// ProcessLiveness reports what a pid probe could establish.
 //
 // A pid being in use does not prove the server that advertised it is still the
 // same process: pids are recycled, and this is why callers also probe the
 // advertisement's own manifest before deleting it. It does prove that deleting
-// the record would be a guess.
-func ProcessAlive(pid int) bool {
+// the record would be a guess, which is why "alive" alone never authorises a
+// delete and "unknown" never authorises anything.
+func ProcessLiveness(pid int) Liveness {
 	if pid <= 0 {
-		return false
+		// No process can hold a non-positive pid, so nothing is being guessed.
+		return LivenessDead
 	}
 	h, err := syscall.OpenProcess(processQueryLimitedInformation, false, uint32(pid))
 	if err != nil {
 		switch {
 		case errors.Is(err, errInvalidParameter):
-			return false
+			return LivenessDead
 		case errors.Is(err, syscall.ERROR_ACCESS_DENIED):
-			return true
+			// The pid is in use and its owner refuses the query. That is the
+			// pid-4 case: not dead, and not askable.
+			return LivenessUnknown
 		default:
 			// Any other failure is unreadable, not evidence of death. Keeping
 			// a stale record is recoverable; deleting a live one is not.
-			return true
+			return LivenessUnknown
 		}
 	}
 	defer syscall.CloseHandle(h)
 	var code uint32
 	if err := syscall.GetExitCodeProcess(h, &code); err != nil {
-		return true
+		return LivenessUnknown
 	}
-	return code == stillActive
+	if code == stillActive {
+		return LivenessAlive
+	}
+	return LivenessDead
 }
