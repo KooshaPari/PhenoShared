@@ -1,0 +1,35 @@
+# Root submodule manifest for KooshaPari/PhenoShared.
+#
+# repos/cmux/tree/ carries three gitlinks that were committed to the tree
+# without a matching entry in any .gitmodules at the repository root. Git
+# therefore had no URL for them, and every CI job that runs
+# `git submodule foreach --recursive` (the actions/checkout credential-cleanup
+# step) died before the job body with:
+#
+#   fatal: No url found for submodule path 'repos/cmux/tree/ghostty' in .gitmodules
+#   The process '/usr/bin/git' failed with exit code 128
+#
+# The URLs below are taken verbatim from the cmux tree's own submodule
+# manifest, repos/cmux/tree/.gitmodules. Each pinned commit was verified to
+# exist in the named upstream repository.
+#
+# The commit a path is pinned to is the gitlink SHA recorded in the tree; that
+# SHA is the pin. `branch` names the upstream branch that commit lives on.
+
+[submodule "repos/cmux/tree/ghostty"]
+	path = repos/cmux/tree/ghostty
+	url = https://github.com/manaflow-ai/ghostty.git
+	branch = main
+# pinned commit: abd40f6e472d57f2d4bb182004bb5f3fac8df961
+
+[submodule "repos/cmux/tree/homebrew-cmux"]
+	path = repos/cmux/tree/homebrew-cmux
+	url = https://github.com/manaflow-ai/homebrew-cmux.git
+	branch = main
+# pinned commit: a5f372ecfa5ee3903af6e1faba0eda096b4f5746
+
+[submodule "repos/cmux/tree/vendor/bonsplit"]
+	path = repos/cmux/tree/vendor/bonsplit
+	url = https://github.com/manaflow-ai/bonsplit.git
+	branch = main
+# pinned commit: faf84186d5c64dcec330d4f352e5aed8cffc89f0
