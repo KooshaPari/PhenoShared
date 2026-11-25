@@ -1,0 +1,108 @@
+#!/usr/bin/env zsh
+# zmx-snapshot — parse `zmx list` → ~/.local/share/resume-all/zmx.jsonl
+#
+# Writes one JSONL row per active zmx session with:
+#   { ts, zmx_name, pid, clients, created, start_dir, command, alive }
+#
+# Idempotent: writes fresh snapshot each run. Companion: session-snapshot
+# reads this and merges zmx-backed panes into the unified snapshot.
+
+set -u
+emulate -L zsh
+zmodload zsh/datetime 2>/dev/null || true
+
+SNAPSHOT_DIR="${RESUME_SNAPSHOT_DIR:-$HOME/.local/share/resume-all}"
+SNAPSHOT_FILE="${RESUME_SNAPSHOT_FILE:-$SNAPSHOT_DIR/zmx.jsonl}"
+mkdir -p "$SNAPSHOT_DIR" 2>/dev/null || exit 1
+
+# Resolve zmx binary once with hardcoded fallback — launchd runs with a stripped
+# PATH that doesn't include /opt/homebrew/bin, so `zmx list` would otherwise fail
+# silently (returning empty stdout) and produce no snapshot rows.
+if ! command -v zmx >/dev/null 2>&1; then
+  for candidate in "${HOMEBREW_PREFIX:-/opt/homebrew}/bin/zmx" /opt/homebrew/bin/zmx /usr/local/bin/zmx; do
+    [[ -x "$candidate" ]] && export PATH="$(dirname "$candidate"):$PATH"
+  done
+fi
+command -v zmx >/dev/null 2>&1 || { echo "zmx not on PATH" >&2; exit 1; }
+ZMX_BIN="$(command -v zmx)"
+
+ts_epoch=$EPOCHSECONDS
+ts_iso=$(date -u '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo "$ts_epoch")
+raw="$("$ZMX_BIN" list 2>/dev/null || true)"
+
+# Atomic write — build the new file in a temp location first, then mv.
+tmp_file=$(mktemp "${SNAPSHOT_FILE}.XXXXXX" 2>/dev/null) || exit 1
+trap 'rm -f "$tmp_file" 2>/dev/null' EXIT INT TERM
+
+: > "$tmp_file"
+
+if [[ -n "$raw" ]]; then
+  # awk parses key=value pairs and emits one JSON row per session via Python.
+  print -r -- "$raw" | sed -E 's/^[[:space:]]+//' | awk -F'\t' '
+    {
+      name=""; pid=""; clients=""; created=""; sdir=""
+      for (i=1; i<=NF; i++) {
+        if      ($i ~ /^name=/)      { sub(/^name=/,"",$i);      name=$i }
+        else if ($i ~ /^pid=/)       { sub(/^pid=/,"",$i);        pid=$i }
+        else if ($i ~ /^clients=/)   { sub(/^clients=/,"",$i);    clients=$i }
+        else if ($i ~ /^created=/)   { sub(/^created=/,"",$i);    created=$i }
+        else if ($i ~ /^start_dir=/) { sub(/^start_dir=/,"",$i);  sdir=$i }
+      }
+      if (name == "") next
+      # Emit tab-separated fields for the outer shell to capture.
+      printf "%s\t%s\t%s\t%s\t%s\n", name, pid, clients, created, sdir
+    }
+  ' | while IFS=$'\t' read -r name pid clients created sdir; do
+    [[ -z "$name" ]] && continue
+
+    # IMPORTANT: use `LC_ALL=C sed` so the ^[ is treated as literal bytes, not
+    # interpreted as a control char (which strips them out on some platforms).
+    # zmx scrollback line shape:  '<USER_CMD>'; echo ZMX_TASK_COMPLETED:<N>
+    # 1. strip ANSI escapes (incl. zsh prompt-color codes)
+    # 2. keep ONLY the first non-empty line (the echo marker line itself)
+    # 3. strip the trailing `; echo ZMX_TASK_COMPLETED:N` sentinel
+    # 4. strip surrounding single/double quotes
+    # Absolute path because launchd's PATH is `/usr/bin:/bin` only.
+    cmd=$(LC_ALL=C /opt/homebrew/bin/zmx history "$name" 2>/dev/null \
+            | LC_ALL=C sed -E $'s/\x1b\\[[0-9;]*[a-zA-Z]//g; s/\x1b[=>]//g; s/\x1b[0-9]+[a-zA-Z]//g' \
+            | grep -m1 '^[^[:space:]]' \
+            | LC_ALL=C sed -E 's/;[[:space:]]*echo[[:space:]]+ZMX_TASK_COMPLETED:[0-9]+.*$//' \
+            | LC_ALL=C sed -E 's/^[\x27\x22](.*)[\x27\x22]$/\1/' \
+            | LC_ALL=C sed -E $'s/\x1b\\[[0-9;]*[a-zA-Z]//g' \
+            | head -c 500)
+    # If extraction failed, fall back so resume-all can still restore via cwd.
+    [[ -z "$cmd" ]] && cmd="(unknown)"
+
+    python3 - "$name" "$pid" "$clients" "$created" "$sdir" "$cmd" "$ts_iso" "$ts_epoch" >> "$tmp_file" <<'PYEOF'
+import json, sys, re
+name, pid, clients, created, sdir, cmd, ts_iso, ts_epoch = sys.argv[1:9]
+
+# Clean up the command: zmx wraps it as '<cmd>'; echo ZMX_TASK_COMPLETED:$?
+# Also strip ANSI escape codes that leak through scrollback.
+ansi_re = re.compile(r'\x1b\[[0-9;]*[a-zA-Z]|\x1b[=>]')
+cmd = ansi_re.sub('', cmd)
+sentinel_re = re.compile(r"\s*;?\s*['\"]?\s*echo\s+ZMX_TASK_COMPLETED:\$\?\s*['\"]?\s*$")
+cmd = sentinel_re.sub('', cmd).strip()
+# Strip a balanced outer single or double quote pair.
+if (cmd.startswith("'") and cmd.endswith("'")) or (cmd.startswith('"') and cmd.endswith('"')):
+    cmd = cmd[1:-1]
+
+row = {
+    "ts":        ts_iso,
+    "ts_epoch":  int(ts_epoch) if str(ts_epoch).isdigit() else 0,
+    "zmx_name":  name,
+    "pid":       int(pid) if str(pid).isdigit() else 0,
+    "clients":   int(clients) if str(clients).isdigit() else 0,
+    "created":   int(created) if str(created).isdigit() else 0,
+    "start_dir": sdir,
+    "command":   cmd,
+    "alive":     True,
+}
+print(json.dumps(row, separators=(",", ":")))
+PYEOF
+  done
+fi
+
+mv "$tmp_file" "$SNAPSHOT_FILE"
+trap - EXIT INT TERM
+exit 0

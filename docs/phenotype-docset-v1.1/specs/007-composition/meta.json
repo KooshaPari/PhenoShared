@@ -1,0 +1,45 @@
+{
+  "id": "SPEC-07",
+  "title": "Hexagonal applets and federation",
+  "state": "proposed",
+  "format": "PROVISIONAL_AGILEPLUS_SHAPED_NOT_ENGINE_VALIDATED",
+  "requirements": [
+    "REQ-07-01",
+    "REQ-07-02",
+    "REQ-07-03",
+    "REQ-07-04",
+    "REQ-07-05",
+    "REQ-07-06",
+    "REQ-07-07",
+    "REQ-07-08"
+  ],
+  "source_intent": [
+    "INT-001"
+  ],
+  "work_package_ids": [
+    "WP-P01-C",
+    "WP-P02-C",
+    "WP-P03-C",
+    "WP-P04-C",
+    "WP-P05-C",
+    "WP-P06-C",
+    "WP-P07-C",
+    "WP-P08-C",
+    "WP-P09-C",
+    "WP-P10-C",
+    "WP-P11-C",
+    "WP-P12-C",
+    "WP-P13-C",
+    "WP-P14-C",
+    "WP-P15-C",
+    "WP-P16-C",
+    "WP-P17-C",
+    "WP-P18-C",
+    "WP-P19-C",
+    "WP-P20-C",
+    "WP-P21-C",
+    "WP-P22-C"
+  ],
+  "engine_receipt": null,
+  "human_approval": null
+}

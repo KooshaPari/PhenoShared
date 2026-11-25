@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="An original procedural trainer and a dependency-free, scroll-directed 3D product story.">
+<title>Form / Motion — an interactive product study</title>
+<link rel="stylesheet" href="style.css">
+<noscript><style>.controls{display:none}.story{height:auto;min-height:0}.stage{position:relative}.story-steps{display:none}#product{display:none}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#details">Skip the 3D story</a>
+<header class="topbar"><a class="wordmark" href="#">Form / Motion<span>Product study</span></a><nav aria-label="Page"><a href="#details">The construction</a><a href="../START-HERE.md">Agent kit</a></nav></header>
+<main>
+<section class="story" id="story" aria-label="Interactive trainer construction story">
+<div class="stage" id="stage">
+<div class="copy"><p class="eyebrow" id="chapter">An original concept</p><h1 id="headline">Made to <br>move you.</h1><p id="description">A study in softness, structure, and the space between. Scroll to turn the idea over.</p><div class="story-steps" aria-label="Story chapters"><a href="#story" data-jump="0" aria-label="Chapter 1: form" aria-current="step">Form</a><a href="#story" data-jump="0.48" aria-label="Chapter 2: structure">Structure</a><a href="#story" data-jump="1" aria-label="Chapter 3: material">Material</a></div></div>
+<div class="object-stage" id="object-stage"><div class="shadow" aria-hidden="true"></div>
+<img class="poster" id="poster" src="poster.svg" alt="Sage and chalk concept trainer with a sculpted sole and contrasting side ribs.">
+<canvas id="product" tabindex="0" role="img" aria-label="Interactive 3D concept trainer. Drag horizontally or use left and right arrows to rotate. The construction is also described below." aria-describedby="controls-help"></canvas>
+<div class="part-label" id="part-label" aria-hidden="true">Soft upper. Structured support.</div></div>
+<div class="controls"><fieldset class="swatches"><legend>Accent finish</legend><button type="button" class="swatch sage" data-color="sage" aria-label="Sage accent" aria-pressed="true"></button><button type="button" class="swatch cobalt" data-color="cobalt" aria-label="Cobalt accent" aria-pressed="false"></button><button type="button" class="swatch ember" data-color="ember" aria-label="Ember accent" aria-pressed="false"></button></fieldset><span class="divider" aria-hidden="true"></span><button class="control" id="explode" type="button" aria-pressed="false">Separate layers</button><button class="control" id="motion" type="button" aria-pressed="false">Pause movement</button><button class="control reset" id="reset" type="button">Reset view</button></div>
+<div class="stage-footer"><p id="controls-help">Scroll to explore. Drag to turn.</p><span id="render-status" role="status">Static preview</span></div>
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+<noscript><p class="nojs">The static preview and construction notes work without JavaScript.</p></noscript>
+</div>
+</section>
+<section class="details" id="details"><div class="detail-intro"><p class="eyebrow">What the motion reveals</p><h2>Every layer<br>has a reason.</h2><p>This is a procedural design study, not a retail shoe. Its model, named components, motion logic, and fallback are all included in the agent kit.</p></div><div class="detail-list"><article><span class="detail-number">01</span><div><h3>A flexible upper</h3><p>A continuous silhouette, a padded collar, and diagonal support ribs. Original geometry with editable parameters, not a downloaded branded model.</p></div></article><article><span class="detail-number">02</span><div><h3>A sculpted midsole</h3><p>Independent parts make the construction readable. Scroll separates them; the button provides the same action without a scroll gesture.</p></div></article><article><span class="detail-number">03</span><div><h3>A grounded outsole</h3><p>Traction pods and a contrasting base complete the object. The page remains useful when animation or WebGL is unavailable.</p></div></article></div></section>
+<footer class="bottom"><p>Form / Motion</p><p>Original concept. Local geometry. No network dependencies.</p><a href="../START-HERE.md">Explore the source kit</a></footer>
+</main>
+<script src="mesh-data.js"></script><script src="software-viewer.js"></script><script src="viewer.js"></script>
+</body></html>

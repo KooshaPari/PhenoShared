@@ -1,0 +1,11 @@
+# V0 measured benchmark suite (Day-6 gate)
+name: pheno-bench-v0-first-slice
+revision: day6
+schema_version: pheno.bench.v0.slice.v1
+gpu_uuids:
+  - GPU-8d337a84-43de-158d-7526-7175288a6064
+model_alias: local/qwen35-08b
+environment: offline
+live_flag_env: PHENO_V0_LIVE
+model_path_env: PHENO_V0_MODEL_PATH
+api_base_env: PHENO_V0_API_BASE

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Dock tile — square with depth -->
+  <defs>
+    <linearGradient id="lc-dock-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="lc-dock-fg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f8fafc"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="100" height="100" rx="22" fill="url(#lc-dock-bg)"/>
+  <g transform="translate(20, 22) scale(0.75)">
+    <ellipse cx="80" cy="50" rx="48" ry="40" fill="#fde68a"/>
+    <ellipse cx="80" cy="55" rx="32" ry="32" fill="#f8fafc"/>
+    <rect x="60" y="42" width="8" height="3" rx="1.5" fill="#0f172a"/>
+    <rect x="92" y="42" width="8" height="3" rx="1.5" fill="#0f172a"/>
+    <path d="M68 70 Q80 78 92 70" stroke="#0f172a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+  <g fill="#0ea5e9" opacity="0.6">
+    <circle cx="14" cy="14" r="3"/>
+    <circle cx="86" cy="14" r="3"/>
+    <circle cx="14" cy="86" r="3"/>
+    <circle cx="86" cy="86" r="3"/>
+  </g>
+</svg>

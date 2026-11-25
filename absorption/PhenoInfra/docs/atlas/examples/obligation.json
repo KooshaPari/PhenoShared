@@ -1,0 +1,21 @@
+{
+  "id": "SYN-OBL-NO-DUPLICATE",
+  "subject_id": "SYN-PRODUCT",
+  "capability_id": "SYN-CAP-RESUME",
+  "statement": "Resume shall not duplicate a side effect with an uncertain receipt.",
+  "source_ids": [
+    "SYN-INTENT"
+  ],
+  "contract_kind": "behavior",
+  "state": "synthetic",
+  "critical": true,
+  "acceptance": "A replayed request is reconciled or deduplicated in a synthetic fixture.",
+  "required_profiles": [
+    "SYN-PROFILE"
+  ],
+  "verification_ids": [
+    "SYN-TEST"
+  ],
+  "evidence_ids": [],
+  "synthetic": true
+}

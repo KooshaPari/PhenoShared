@@ -1,0 +1,65 @@
+// Tailscale ACL policy for the Phenotype mesh.
+//
+// Canonical source-of-truth. Apply via `iac/tailscale/apply-acl.sh` (which
+// PUTs to https://api.tailscale.com/api/v2/tailnet/{tailnet}/acl).
+//
+// Tag taxonomy + governance: see docs/governance/tailscale-policy.md.
+{
+  "tagOwners": {
+    "tag:phenotype-mesh": ["koosha@gmail.com"],
+    "tag:oci":            ["koosha@gmail.com"],
+    "tag:gcp":            ["koosha@gmail.com"],
+    "tag:aws":            ["koosha@gmail.com"],
+    "tag:vercel-build":   ["koosha@gmail.com"],
+    "tag:home-desktop":   ["koosha@gmail.com"]
+  },
+
+  "acls": [
+    // Mesh members (any cloud) talk freely to each other on all ports.
+    {
+      "action": "accept",
+      "src":    ["tag:phenotype-mesh"],
+      "dst":    ["tag:phenotype-mesh:*"]
+    },
+    // Admin user can reach every mesh node (any port) from any device.
+    {
+      "action": "accept",
+      "src":    ["koosha@gmail.com"],
+      "dst":    ["tag:phenotype-mesh:*"]
+    }
+    // No public-port rules. No `autogroup:internet` rules. Egress to public
+    // internet from nodes is governed at the cloud-provider firewall layer,
+    // not here.
+  ],
+
+  // Tailscale SSH: only home-desktop and admin user may SSH into the mesh.
+  // 24h check period forces re-auth daily; check=true means the destination
+  // verifies via tailnet identity rather than a password.
+  "ssh": [
+    {
+      "action":      "check",
+      "src":         ["tag:home-desktop", "koosha@gmail.com"],
+      "dst":         ["tag:phenotype-mesh"],
+      "users":       ["root", "ubuntu", "phenotype"],
+      "checkPeriod": "24h"
+    }
+  ],
+
+  // Auto-approvers: nodes tagged with their cloud-provider tag are pre-approved
+  // for the mesh tag without manual admin review. Required for the post-acquire
+  // hook (which enrolls fresh OCI VMs unattended).
+  "tagOwners_note": "tagOwners are listed above; this object enables key-bearer self-tagging.",
+
+  // Deny-all is implicit in Tailscale ACL: anything not matched above is denied.
+  "tests": [
+    {
+      "src":    "koosha@gmail.com",
+      "accept": ["tag:phenotype-mesh:22", "tag:oci:443"]
+    },
+    {
+      "src":    "tag:vercel-build",
+      "accept": ["tag:phenotype-mesh:443"],
+      "deny":   ["tag:home-desktop:22"]
+    }
+  ]
+}

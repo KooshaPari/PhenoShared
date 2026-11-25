@@ -1,0 +1,27 @@
+[package]
+name = "forge_json_repair"
+version = "0.1.1"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+regex = { workspace = true }
+serde.workspace = true
+schemars = { workspace = true }
+serde_json5 = "0.2.1"
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+criterion.workspace = true
+dhat.workspace = true
+serde_json.workspace = true
+
+[features]
+dhat-heap = []
+
+[[bench]]
+name = "json_repair_bench"
+harness = false

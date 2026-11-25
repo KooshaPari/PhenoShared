@@ -1,0 +1,79 @@
+---
+title: Plugins
+description: Install trusted host plugins, manage catalog sources, and build plugins with the Slipstream SDK.
+---
+
+Plugins run beside the host through the optional `slipstream-scripting` service. They can react to
+host events, synchronize game-library entries, and serve a page inside the web console.
+
+No first-party plugin packages are currently published. The built-in signed catalog is empty until
+reviewed packages are available. You can add an operator-managed catalog or install a package you
+control.
+
+## Enable the runner
+
+Install the `slipstream-scripting` package from the same local build as the host. Then open
+**Plugins** -> **Installed** in the web console and select **Enable runner**, or run:
+
+```sh
+slipstream-host plugins enable
+slipstream-host plugins status
+```
+
+The runner is disabled by default. Installing a package does not start plugin code until the
+runner is enabled.
+
+## Catalog sources
+
+Open **Plugins** -> **Sources** to add a catalog name, HTTPS index URL, and optional Ed25519 public
+key. A source with a key must provide a detached signature at `<index-url>.sig`. Slipstream rejects
+an invalid signature and continues serving the last valid cached index.
+
+External sources are always identified by source in the console. Their entries do not receive the
+built-in **Verified** badge.
+
+## Install and remove packages
+
+The **Browse** tab lists packages from configured catalogs. Each catalog entry pins one exact
+version and package integrity hash. Slipstream checks both before installation.
+
+The command-line interface provides the same lifecycle controls:
+
+```sh
+slipstream-host plugins add <package>
+slipstream-host plugins list
+slipstream-host plugins remove <package>
+slipstream-host plugins disable
+```
+
+Unscoped names resolve under the `@slipstream/plugin-*` convention. Packages from the public npm
+registry require the explicit `--allow-public-registry` option. Install only packages whose source
+and release artifact you have reviewed.
+
+Removing a package leaves its state under
+`~/.config/slipstream/plugin-state/<plugin>/`. Delete that directory separately if you also want
+to remove its saved configuration.
+
+## Troubleshooting
+
+Check the runner and its user-service log:
+
+```sh
+slipstream-host plugins status
+journalctl --user -u slipstream-scripting -f
+```
+
+If the console says the runner is missing, install the `slipstream-scripting` package produced by
+the repository's Debian, RPM, Arch, Nix, or SteamOS packaging path. The package must match the host
+version.
+
+## Write a plugin
+
+The TypeScript package `@slipstream/plugin-kit` provides lifecycle handling, configuration and
+state helpers, library reconciliation, event access, and plugin UI serving. The lower-level
+`@slipstream/host` SDK exposes the host API.
+
+Start with the
+[plugin kit](https://github.com/vindeckyy/slipstream/tree/main/plugin-kit) and the
+[plugin UI example](https://github.com/vindeckyy/slipstream/blob/main/sdk/examples/plugin-ui.ts).
+Keep credentials outside package files and declare the minimum host version your plugin supports.

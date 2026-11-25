@@ -1,0 +1,6 @@
+# Default code owners for the Phenotype fleet
+*       @KooshaPari
+
+# CI/CD files require fleet-admin review
+/.github/        @KooshaPari
+/.mergify.yml    @KooshaPari

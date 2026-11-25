@@ -1,0 +1,50 @@
+# Blocking TSan permutation checker for C00 L7 concurrency evidence.
+# Runs scripts/tsan-permutation-check.ps1 + cargo +nightly test --test race_model
+# under -Zsanitizer=thread with rust-src / -Zbuild-std (ubuntu x86_64 only).
+name: tsan permutation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTUP_TOOLCHAIN: nightly
+
+jobs:
+  tsan-permutation-selfcheck:
+    name: tsan permutation · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: tsan permutation SelfCheck
+        shell: pwsh
+        run: ./scripts/tsan-permutation-check.ps1 -SelfCheck
+
+  tsan-permutation-race-model:
+    name: tsan permutation · race_model
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # nightly + rust-src
+        with:
+          toolchain: nightly
+          components: rust-src
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: tsan-permutation-race-model
+      - name: tsan race_model (blocking)
+        env:
+          RUSTFLAGS: "-Zsanitizer=thread"
+        run: |
+          rustup target add x86_64-unknown-linux-gnu
+          cargo +nightly test --test race_model -Zbuild-std --target x86_64-unknown-linux-gnu --locked -- --test-threads=1

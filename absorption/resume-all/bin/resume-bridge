@@ -1,0 +1,305 @@
+#!/usr/bin/env zsh
+# resume-bridge — Phase B: bridge resume-all to remote Windows/Linux/WSL hosts
+#
+# Runs `session-snapshot` on a remote host via SSH, downloads the resulting
+# snapshot.jsonl, and writes it into the LOCAL snapshot directory so the
+# local MCP server / IPC daemon / resume-all can see remote panes.
+#
+# Usage:
+#   resume-bridge pull <host>              # ssh <host>, run snapshot, fetch jsonl
+#   resume-bridge pull <host> --once       # same as above (no daemon)
+#   resume-bridge run <host>               # background loop, pull every 30s
+#   resume-bridge list                     # show available hosts (from .ssh/config)
+#   resume-bridge test                     # inline self-tests
+#
+# Remote host requirements:
+#   - SSH reachable (Tailscale SSH or OpenSSH)
+#   - python3 on PATH
+#   - session-snapshot.py accessible (auto-uploaded on first use, cached in ~/.cache/resume-bridge/)
+#
+# Output: ~/.local/share/resume-all/<host>.snapshot.jsonl (one file per host)
+#
+# This is the v0.1 Phase B bridge. Production-grade would also handle:
+#   - ssh connection multiplexing
+#   - delta-only transfer (rsync --append)
+#   - bidir sync (remote MCP server registration)
+
+emulate -L zsh
+setopt err_return no_unset pipe_fail
+
+LOCAL_SNAP_DIR="${RESUME_SNAPSHOT_DIR:-$HOME/.local/share/resume-all}"
+CACHE_DIR="$HOME/.cache/resume-bridge"
+SSH_OPTS=(-o BatchMode=yes -o ConnectTimeout=5)
+BIN_DIR="${RESUME_BIN_DIR:-$HOME/bin}"
+DO_RANK="${RESUME_BRIDGE_RANK:-0}"
+RANK_TOP="${RESUME_BRIDGE_RANK_TOP:-}"
+
+die() { print -u2 "resume-bridge: $@"; exit 1 }
+
+list_hosts() {
+  print "Known SSH hosts (from ~/.ssh/config + Tailscale):"
+  if [[ -r "$HOME/.ssh/config" ]]; then
+    grep -i "^Host " "$HOME/.ssh/config" | awk '{print "  " $2}' | grep -v '^\s*\*' | head -20
+  fi
+  if command -v tailscale >/dev/null 2>&1; then
+    print ""
+    print "Tailscale hosts (online):"
+    tailscale status 2>/dev/null | awk 'NR>1 && $4 == "linux" || $4 == "windows" {print "  " $2 " (" $4 ")"}' | head -10
+  fi
+}
+
+# Verify that a file uploaded to the remote actually exists with the expected size.
+verify_upload() {
+  local host="$1"
+  local wsl_distro="$2"
+  local remote_path="$3"
+  local expected_size="$4"
+
+  local size_check_cmd
+  if [[ -n "$wsl_distro" ]]; then
+    size_check_cmd="wsl -d $wsl_distro -- bash -c 'wc -c < \"$remote_path\" 2>/dev/null'"
+  else
+    size_check_cmd="wc -c < '$remote_path' 2>/dev/null"
+  fi
+
+  local remote_size
+  remote_size=$(ssh "${SSH_OPTS[@]}" "$host" "$size_check_cmd" 2>&1 | grep -vE '^(WARNING|\*\* |$|debug1:|debug2:|debug3:|OpenSSH_)' | tr -d '[:space:]' | head -1)
+
+  if [[ "$remote_size" == "$expected_size" ]]; then
+    return 0
+  else
+    print "  upload verify failed: expected $expected_size bytes at $remote_path, got ${remote_size:-0}" >&2
+    return 1
+  fi
+}
+
+# Upload session_snapshot.py + resume-bridge-remote.py to the remote host.
+upload_script() {
+  local host="$1"
+  local wsl_distro="${WSL_DISTRO:-}"
+  local cache_key="${host//\//_}"
+  [[ -n "$wsl_distro" ]] && cache_key="${cache_key}-${wsl_distro}"
+  local snap_cache="$CACHE_DIR/${cache_key}.session_snapshot.py"
+  local remote_cache="$CACHE_DIR/${cache_key}.resume-bridge-remote.py"
+
+  mkdir -p "$CACHE_DIR" 2>/dev/null || die "cannot create $CACHE_DIR"
+  local local_size
+  local_size=$(wc -c < "$HOME/bin/session_snapshot.py" | tr -d ' ')
+  local remote_local_size
+  remote_local_size=$(wc -c < "$HOME/bin/.lib/resume-bridge-remote.py" | tr -d ' ')
+
+  # First check: if cache says we uploaded, verify the file actually exists on remote.
+  if [[ -f "$snap_cache" ]] && [[ "$(wc -c < "$snap_cache" | tr -d ' ')" == "$local_size" ]]; then
+    if verify_upload "$host" "$wsl_distro" "/tmp/resume-snap.py" "$local_size"; then
+      print "  snap upload verified ($local_size bytes)" >&2
+    else
+      print "  snap cache stale — re-uploading" >&2
+      rm -f "$snap_cache"
+    fi
+  fi
+
+  if [[ ! -f "$snap_cache" ]]; then
+    print "  uploading session_snapshot.py ($local_size bytes)..." >&2
+    if [[ -n "$wsl_distro" ]]; then
+      ssh "${SSH_OPTS[@]}" "$host" "wsl -d $wsl_distro -- bash -c 'cat > /tmp/resume-snap.py && echo OK_UPLOAD'" \
+        < "$HOME/bin/session_snapshot.py" 2>&1 | grep -vE '^(WARNING|\*\* |$|debug1:|debug2:|debug3:|OpenSSH_)' | grep -q OK_UPLOAD \
+        || die "snap upload failed to $host (wsl=$wsl_distro)"
+    else
+      ssh "${SSH_OPTS[@]}" "$host" 'cat > /tmp/resume-snap.py && echo OK_UPLOAD' \
+        < "$HOME/bin/session_snapshot.py" 2>&1 | grep -vE '^(WARNING|\*\* |$|debug1:|debug2:|debug3:|OpenSSH_)' | grep -q OK_UPLOAD \
+        || die "snap upload failed to $host"
+    fi
+    cp "$HOME/bin/session_snapshot.py" "$snap_cache"
+    verify_upload "$host" "$wsl_distro" "/tmp/resume-snap.py" "$local_size" \
+      || die "snap upload verify failed after upload to $host"
+  fi
+
+  if [[ -f "$remote_cache" ]] && [[ "$(wc -c < "$remote_cache" | tr -d ' ')" == "$remote_local_size" ]]; then
+    if verify_upload "$host" "$wsl_distro" "/tmp/resume-bridge-remote.py" "$remote_local_size"; then
+      print "  remote script verified ($remote_local_size bytes)" >&2
+    else
+      print "  remote script cache stale — re-uploading" >&2
+      rm -f "$remote_cache"
+    fi
+  fi
+
+  if [[ ! -f "$remote_cache" ]]; then
+    print "  uploading resume-bridge-remote.py ($remote_local_size bytes)..." >&2
+    if [[ -n "$wsl_distro" ]]; then
+      ssh "${SSH_OPTS[@]}" "$host" "wsl -d $wsl_distro -- bash -c 'cat > /tmp/resume-bridge-remote.py && echo OK_UPLOAD_REMOTE'" \
+        < "$HOME/bin/.lib/resume-bridge-remote.py" 2>&1 | grep -vE '^(WARNING|\*\* |$|debug1:|debug2:|debug3:|OpenSSH_)' | grep -q OK_UPLOAD_REMOTE \
+        || die "remote script upload failed to $host (wsl=$wsl_distro)"
+    else
+      ssh "${SSH_OPTS[@]}" "$host" 'cat > /tmp/resume-bridge-remote.py && echo OK_UPLOAD_REMOTE' \
+        < "$HOME/bin/.lib/resume-bridge-remote.py" 2>&1 | grep -vE '^(WARNING|\*\* |$|debug1:|debug2:|debug3:|OpenSSH_)' | grep -q OK_UPLOAD_REMOTE \
+        || die "remote script upload failed to $host"
+    fi
+    cp "$HOME/bin/.lib/resume-bridge-remote.py" "$remote_cache"
+    verify_upload "$host" "$wsl_distro" "/tmp/resume-bridge-remote.py" "$remote_local_size" \
+      || die "remote script upload verify failed after upload to $host"
+  fi
+}
+
+run_remote_snapshot() {
+  local host="$1"
+  local wsl_distro="${WSL_DISTRO:-}"
+  upload_script "$host" || return 1
+
+  print "  running snapshot walker on $host..." >&2
+  # The remote script emits NDJSON on stdout, one row per line.
+  # IMPORTANT: on Windows MSYS hosts (like 'desk'), the SSH command is
+  # interpreted by PowerShell, NOT by MSYS bash. So shell redirections like
+  # '2>/dev/null' or '2>nul' both fail (PowerShell's Out-File can't open them).
+  # Workaround: have the remote script emit ONLY to stdout.
+  if [[ -n "$wsl_distro" ]]; then
+    # Route through WSL (Windows host like `desk`)
+    print "    (via WSL: $wsl_distro)" >&2
+    ssh "${SSH_OPTS[@]}" "$host" "wsl -d $wsl_distro -- python3 /tmp/resume-bridge-remote.py /tmp/resume-snap.py" \
+      2>&1 | grep -vE '^(WARNING|\*\* |$|debug1:|debug2:|debug3:|OpenSSH_)'
+  else
+    ssh "${SSH_OPTS[@]}" "$host" 'python3 /tmp/resume-bridge-remote.py /tmp/resume-snap.py' \
+      2>&1 | grep -vE '^(WARNING|\*\* |$|debug1:|debug2:|debug3:|OpenSSH_)'
+  fi
+}
+
+pull_once() {
+  local host="$1"
+  [[ -z "$host" ]] && die "usage: resume-bridge pull <host>"
+  mkdir -p "$LOCAL_SNAP_DIR" || die "cannot create $LOCAL_SNAP_DIR"
+
+  print "resume-bridge: pulling snapshot from $host" >&2
+  local outfile="$LOCAL_SNAP_DIR/${host//\//_}.snapshot.jsonl"
+  run_remote_snapshot "$host" > "$outfile" 2>/dev/null || die "remote snapshot failed"
+  local rows
+  rows=$(wc -l < "$outfile" | tr -d ' ')
+  print "resume-bridge: wrote $rows row(s) to $outfile"
+
+  # Optional ranking (Phase E12): if --rank flag was set, call
+  # rank-sessions.py to reorder rows by score. The ranking is in-place;
+  # rows are written back to the same file in score-desc order.
+  if [[ "${DO_RANK:-0}" == "1" ]] && [[ -s "$outfile" ]]; then
+    print "resume-bridge: ranking rows by score (rank-sessions.py)..." >&2
+    local ranked
+    ranked=$("$BIN_DIR/rank-sessions.py" "$outfile" --json 2>/dev/null) || ranked=""
+    if [[ -n "$ranked" ]]; then
+      # Sort by _score desc using python (since we have json, not pure zsh)
+      echo "$ranked" | python3 -c "
+import json, sys
+try:
+    rows = json.loads(sys.stdin.read())
+    rows.sort(key=lambda r: -r.get('_score', 0))
+    for r in rows:
+        # Strip internal fields for clean output
+        r.pop('_score', None)
+        r.pop('_components', None)
+        print(json.dumps(r, separators=(',', ':')))
+except Exception as e:
+    print(f'rank error: {e}', file=sys.stderr)
+    sys.exit(1)
+" > "${outfile}.ranked" 2>/dev/null && mv "${outfile}.ranked" "$outfile" \
+          && print "resume-bridge: ranked rows by score (in-place)"
+    fi
+  fi
+
+  if [[ -n "${RANK_TOP:-}" ]] && [[ "$RANK_TOP" =~ ^[0-9]+$ ]] && [[ "$RANK_TOP" -gt 0 ]]; then
+    head -n "$RANK_TOP" "$outfile" > "${outfile}.top"
+    mv "${outfile}.top" "$outfile"
+    print "resume-bridge: kept top $RANK_TOP rows"
+  fi
+}
+
+run_loop() {
+  local host="$1"
+  [[ -z "$host" ]] && die "usage: resume-bridge run <host>"
+  print "resume-bridge: loop mode, polling $host every 30s (Ctrl-C to stop)" >&2
+  trap 'print "resume-bridge: stopped"; exit 0' INT TERM
+  while :; do
+    pull_once "$host"
+    sleep 30
+  done
+}
+
+case "${1:-}" in
+  pull)
+    shift
+    WSL_DISTRO=""
+    OVERRIDE_HOST=""
+    # Parse all flags (--wsl distro, --rank, --rank-top N, --host addr) before the host arg.
+    while [[ "${1:-}" == --* ]]; do
+      case "${1:-}" in
+        --wsl) WSL_DISTRO="$2"; shift 2 ;;
+        --rank) DO_RANK=1; shift ;;
+        --rank-top) RANK_TOP="$2"; shift 2 ;;
+        --host) OVERRIDE_HOST="$2"; shift 2 ;;
+        *) break ;;
+      esac
+    done
+    if [[ -n "$OVERRIDE_HOST" ]]; then
+      # Skip SSH config lookup; connect directly to addr
+      pull_once "$OVERRIDE_HOST"
+    else
+      pull_once "$@"
+    fi
+    ;;
+  run)
+    shift
+    WSL_DISTRO=""
+    OVERRIDE_HOST=""
+    while [[ "${1:-}" == --* ]]; do
+      case "${1:-}" in
+        --wsl) WSL_DISTRO="$2"; shift 2 ;;
+        --rank) DO_RANK=1; shift ;;
+        --rank-top) RANK_TOP="$2"; shift 2 ;;
+        --host) OVERRIDE_HOST="$2"; shift 2 ;;
+        *) break ;;
+      esac
+    done
+    if [[ -n "$OVERRIDE_HOST" ]]; then
+      run_loop "$OVERRIDE_HOST"
+    else
+      run_loop "$@"
+    fi
+    ;;
+  list) list_hosts ;;
+  test)
+    # Inline self-tests
+    print "=== resume-bridge self-tests ==="
+    # 1. SSH config readable
+    if [[ -r "$HOME/.ssh/config" ]]; then
+      print "  [1] ssh config readable        ok"
+    else
+      print "  [1] ssh config readable        SKIP (no config)"
+    fi
+    # 2. tailscale available
+    if command -v tailscale >/dev/null 2>&1; then
+      print "  [2] tailscale available        ok"
+    else
+      print "  [2] tailscale available        WARN (no tailscale)"
+    fi
+    # 3. cache dir writable
+    if mkdir -p "$CACHE_DIR" 2>/dev/null; then
+      print "  [3] cache dir writable         ok ($CACHE_DIR)"
+    else
+      print "  [3] cache dir writable         FAIL"
+    fi
+    # 4. local snapshot dir writable
+    if mkdir -p "$LOCAL_SNAP_DIR" 2>/dev/null; then
+      print "  [4] snapshot dir writable      ok ($LOCAL_SNAP_DIR)"
+    else
+      print "  [4] snapshot dir writable      FAIL"
+    fi
+    # 5. session_snapshot.py exists
+    if [[ -f "$HOME/bin/session_snapshot.py" ]]; then
+      print "  [5] session_snapshot.py exists ok"
+    else
+      print "  [5] session_snapshot.py exists FAIL"
+    fi
+    print "=== self-tests done ==="
+    ;;
+  -h|--help|"")
+    sed -n '2,30p' "$0" | sed 's/^# \{0,1\}//'
+    ;;
+  *)
+    die "unknown subcommand: $1 (try pull, run, list, test)"
+    ;;
+esac

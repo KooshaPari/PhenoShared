@@ -1,0 +1,22 @@
+{
+  "purpose": "Demo-specific tokens, not a replacement for the user's brand owner",
+  "colors": {
+    "paper": "#f4f6f4",
+    "ink": "#162724",
+    "muted": "#4d625c",
+    "accent": "#3b7568",
+    "line": "#c8d3ce"
+  },
+  "type": {
+    "family": "System Helvetica/Arial sans-serif; no font files shipped",
+    "display_weight": 530,
+    "body_line_height": 1.6
+  },
+  "material_intent": {
+    "upper": "soft matte textile",
+    "midsole": "sculpted chalk foam",
+    "outsole": "dark rubber",
+    "accent": "semi-satin sage support cage"
+  },
+  "motion": "User-directed, reversible, native-scroll-first"
+}

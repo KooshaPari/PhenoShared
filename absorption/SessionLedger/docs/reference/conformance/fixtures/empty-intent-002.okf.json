@@ -1,0 +1,13 @@
+{
+  "okf": "1.0",
+  "source_id": "forge-empty-002",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "",
+      "properties": { "user_turn_count": 0 }
+    }
+  ],
+  "provenance": { "corpus": "forge", "source_id": "forge-empty-002" }
+}

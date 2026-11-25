@@ -1,0 +1,62 @@
+# Cargo (Rust)
+target/
+**/target/
+Cargo.lock
+**/*.rs.bk
+
+# Node / TS / JS
+node_modules/
+.pnp/
+*.tsbuildinfo
+dist/
+build/
+.next/
+.nuxt/
+.turbo/
+.parcel-cache/
+coverage/
+*.lcov
+
+# Test / cache
+.jest-cache/
+.eslintcache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+*.local
+
+# Tauri (Rust + frontend binding generator)
+frontend/**/src-tauri/gen/
+
+# Build / analysis output
+.audit/
+.history/
+.gradle/
+.kotlin/
+target/
+
+# Worktrees (in case you git-worktree-add within the repo)
+.worktrees/
+*-wtrees/
+
+# LLVM / Rust coverage & profile artifacts (cargo-with-llvm-cov, grcov, etc.)
+*.profraw
+*.profdata
+*.gcda
+*.gcno
+*.lcov
+.instr-profile

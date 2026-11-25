@@ -1,0 +1,8 @@
+{
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python_playwright": "1.57.0",
+  "fixture_loading": "set_content; no route/HTTP checks",
+  "native_runtime_checks": "NOT_EXECUTED",
+  "real_repo_checkout": "NOT_AVAILABLE"
+}

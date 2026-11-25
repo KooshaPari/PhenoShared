@@ -1,0 +1,282 @@
+# tier-0-gate.yml — Tier-0 enforcement on PR
+#
+# Blocking gates for every BytePort PR: build, test, fmt, lint, typecheck
+# across all three engines (Go, Rust, SvelteKit frontend).
+#
+# Trigger: every PR to main/master + push to main/master.
+# Concurrency: one run per ref; new commits cancel in-flight runs.
+#
+# NOTE: phenotype-sdk is explicitly excluded (org policy).
+
+name: Tier-0 Gate
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Go — backend/byteport
+  # ──────────────────────────────────────────────────────────────────────
+  go-build:
+    name: Go build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/byteport/go.mod
+          cache-dependency-path: backend/byteport/go.sum
+      - name: go build
+        working-directory: backend/byteport
+        run: go build ./...
+
+  go-test:
+    name: Go test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: backend/byteport
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/byteport/go.mod
+          cache-dependency-path: backend/byteport/go.sum
+      - name: go test
+        run: go test ./...
+
+  go-vet:
+    name: Go vet
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/byteport/go.mod
+          cache-dependency-path: backend/byteport/go.sum
+      - name: go vet
+        working-directory: backend/byteport
+        run: go vet ./...
+
+  go-fmt:
+    name: Go fmt
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+      - name: Check formatting
+        # On pull_request: scope to the PR's diff so legacy whole-tree drift
+        # in the existing codebase does not block a PR whose changes are clean.
+        # On push to main (no base_ref): fall back to the whole tree so drift
+        # cannot land on the protected branch.
+        run: |
+          if [ -n "${{ github.event.pull_request.base.sha }}" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            FILES=$(git diff --name-only "$BASE"...HEAD -- 'backend/byteport/*.go' | grep -E '\.go$' || true)
+            if [ -z "$FILES" ]; then
+              echo "No Go files changed in PR; skipping gofmt check."
+              exit 0
+            fi
+            unformatted=$(echo "$FILES" | xargs gofmt -l 2>/dev/null || true)
+          else
+            unformatted=$(gofmt -l backend/byteport 2>/dev/null || true)
+          fi
+          if [ -n "$unformatted" ]; then
+            echo "::error::The following files are not gofmt-clean:"
+            echo "$unformatted"
+            exit 1
+          fi
+          echo "All Go files are correctly formatted."
+
+  go-lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: backend/byteport/go.mod
+          cache-dependency-path: backend/byteport/go.sum
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.13.2
+          working-directory: backend/byteport
+          args: --disable=staticcheck --disable=errcheck
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Rust — Tauri workspace (frontend/web/src-tauri)
+  # ──────────────────────────────────────────────────────────────────────
+  rust-build:
+    name: Rust build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Tauri system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libglib2.0-dev libgtk-3-dev libwebkit2gtk-4.1-dev libsoup-3.0-dev \
+            libjavascriptcoregtk-4.1-dev pkg-config
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          components: rustfmt, clippy
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - name: cargo build
+        run: cargo build --locked --workspace
+
+  rust-fmt:
+    name: Rust fmt
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          components: rustfmt
+      - name: cargo fmt --check
+        run: cargo fmt --all -- --check
+
+  rust-clippy:
+    name: Rust clippy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Tauri system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libglib2.0-dev libgtk-3-dev libwebkit2gtk-4.1-dev libsoup-3.0-dev \
+            libjavascriptcoregtk-4.1-dev pkg-config
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          components: clippy
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - name: cargo clippy
+        run: cargo clippy --workspace -- -D warnings
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Frontend — SvelteKit (frontend/web)
+  # ──────────────────────────────────────────────────────────────────────
+  frontend-build:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/web/package-lock.json
+      - name: Install dependencies
+        working-directory: frontend/web
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build
+        working-directory: frontend/web
+        run: npm run build
+
+  frontend-lint:
+    name: Frontend lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/web/package-lock.json
+      - name: Install dependencies
+        working-directory: frontend/web
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Prettier check
+        working-directory: frontend/web
+        run: ./node_modules/.bin/prettier --check .
+      - name: ESLint
+        working-directory: frontend/web
+        run: npm run lint
+
+  frontend-typecheck:
+    name: Frontend typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/web/package-lock.json
+      - name: Install dependencies
+        working-directory: frontend/web
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: svelte-check
+        working-directory: frontend/web
+        run: npm run check

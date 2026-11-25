@@ -1,0 +1,46 @@
+name: "Git Workflow Demo"
+settings:
+  width: 120
+  height: 30
+  shell: "zsh"
+  theme: "default"
+  working_dir: "/tmp"
+
+steps:
+  - type: command
+    text: "mkdir kla-demo && cd kla-demo"
+    wait: "500ms"
+    
+  - type: command
+    text: "git init"
+    wait: "1s"
+    
+  - type: type
+    text: "echo '# KLA Demo Project' > README.md"
+    speed: "30ms"
+    
+  - type: command
+    text: ""
+    wait: "500ms"
+    
+  - type: screenshot
+    name: "readme-created"
+    
+  - type: command
+    text: "git add README.md"
+    wait: "500ms"
+    
+  - type: command
+    text: "git commit -m 'Initial commit: Add README'"
+    wait: "1s"
+    
+  - type: command
+    text: "git log --oneline"
+    wait: "1s"
+    
+  - type: record_gif
+    duration: "3s"
+    name: "git-log-output"
+    
+  - type: screenshot
+    name: "final-state"

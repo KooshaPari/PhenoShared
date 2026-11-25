@@ -1,0 +1,82 @@
+{
+  "schema_version": "pheno.working-delta-manifest.v1",
+  "as_of": "2026-07-27T23:30:00Z",
+  "branch": "recovery/preserve-20260717-0301",
+  "head_sha": "2718569",
+  "summary": {
+    "tracked_changed": 156,
+    "tracked_insertions": 2816,
+    "tracked_deletions": 121125,
+    "untracked_new": 1023,
+    "total_files_in_delta": 1179
+  },
+  "tracked_deletions": {
+    "description": "76 files deleted from tracked tree — mostly old bench/ artifacts and stale eval results",
+    "by_directory": [
+      {"dir": "bench", "count": 67, "category": "old benchmark artifacts, fixtures, runner logs"},
+      {"dir": "eval", "count": 7, "category": "stale eval results and lock files"},
+      {"dir": "scripts", "count": 2, "category": "superseded scripts"}
+    ]
+  },
+  "tracked_modifications": {
+    "description": "80 files modified in tracked tree — config refactors, test updates, pheno core, scripts",
+    "by_directory": [
+      {"dir": "config", "count": 18, "category": "YAML config updates (harbor, models, fleet, hardware placement)"},
+      {"dir": "scripts", "count": 17, "category": "eval runners, TB2 tooling, harbor utilities"},
+      {"dir": "tests", "count": 13, "category": "test updates for eval contracts, evidence registry, tournaments"},
+      {"dir": "pheno", "count": 10, "category": "core pheno modules (evidence, harbor_util, model_manager, serve)"},
+      {"dir": "eval", "count": 6, "category": "eval docs, harbor docs, lock files"},
+      {"dir": "plans", "count": 6, "category": "heterogeneous inference plan docs"},
+      {"dir": "docs", "count": 3, "category": "publishing docs, harbor docs"},
+      {"dir": "state", "count": 3, "category": "state snapshots (canonical_stack, dual_gpu_smoke, hardware_placement)"},
+      {"dir": "root", "count": 4, "category": "README.md, harbor/run_tbench_models.ps1, harness/harbor/terminus_safe.py, requirements.txt"}
+    ]
+  },
+  "untracked_additions": {
+    "description": "1023 new untracked files — the bulk of Cursor's parallel development work",
+    "by_directory": [
+      {"dir": "tests", "count": 212, "category": "new test files across test suite"},
+      {"dir": "state", "count": 204, "category": "new state snapshots, session resumes, evidence files, completion evidence, generations"},
+      {"dir": "pheno", "count": 182, "category": "new pheno source modules and subpackages"},
+      {"dir": "scripts", "count": 168, "category": "new scripts (eval, tooling, install, fix)"},
+      {"dir": "docs", "count": 166, "category": "new documentation files"},
+      {"dir": "config", "count": 23, "category": "new YAML configs (authorization_requests, eval_locks)"},
+      {"dir": "plans", "count": 22, "category": "new plan documents (polyglot install, experiments)"},
+      {"dir": "logs", "count": 17, "category": "build/eval logs"},
+      {"dir": "eval", "count": 11, "category": "new eval results"},
+      {"dir": "root", "count": 13, "category": "temp files, lock files, pytest artifacts, startup scripts"}
+    ]
+  },
+  "branch_state": {
+    "new_local_branches": [
+      "chore/refresh-pins-post-restore",
+      "feat/hwledger-forge-gpu-pin",
+      "feat/pheno-phenocompose-dogfood",
+      "wip/restore-2026-07-26-recover"
+    ],
+    "new_remote_branches": [
+      "remotes/origin/chore/local-model-scope-audit"
+    ],
+    "stash_additions": [
+      "stash@{0}: On main: proc-stash-kernels"
+    ]
+  },
+  "risk_assessment": {
+    "high_risk_items": [
+      "1023 untracked files need triage: which belong in version control, which are generated/temp",
+      "121K line deletion in tracked files needs review: confirm bench/ cleanup is intentional",
+      "63 CRLF warnings suggest line-ending normalization may be needed before commit",
+      "No .gitignore audit done — some untracked dirs (logs/, .tmp/, .pytest-tmp/) may need exclusion"
+    ],
+    "safe_items": [
+      "All state/ files are schema-versioned and authorship-tracked",
+      "Test files follow existing naming conventions",
+      "Config files are YAML with consistent structure"
+    ]
+  },
+  "verification": {
+    "manifest_json_valid": true,
+    "no_remote_calls_made": true,
+    "no_source_files_modified": true
+  }
+}

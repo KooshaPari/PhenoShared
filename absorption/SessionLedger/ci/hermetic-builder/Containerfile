@@ -1,0 +1,21 @@
+# This is the CI *builder* image, not the sl-daemon runtime image.
+#
+# Keep the upstream Rust reference immutable.  The image emitted by
+# `hermetic-builder.yml` is separately pinned by its final GHCR manifest digest
+# in docs/ops/hermetic-builder.json before `hermetic.yml` may consume it.
+ARG RUST_IMAGE=rust:1.87-slim@sha256:437507c3e719e4f968033b88d851ffa9f5aceeb2dcc2482cc6cb7647811a55eb
+FROM ${RUST_IMAGE}
+
+LABEL org.opencontainers.image.title="SessionLedger hermetic builder" \
+      org.opencontainers.image.description="Pinned Rust builder with Git and CA roots for deterministic GitHub Actions checkout" \
+      org.opencontainers.image.source="https://github.com/KooshaPari/SessionLedger"
+
+# actions/checkout must use Git, not its REST fallback.  CA roots are installed
+# explicitly so both Git and Cargo can validate TLS if the pre-offline fetch is
+# intentionally run by a gate.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates git make \
+    && rm -rf /var/lib/apt/lists/* \
+    && git --version \
+    && make --version \
+    && test -f /etc/ssl/certs/ca-certificates.crt

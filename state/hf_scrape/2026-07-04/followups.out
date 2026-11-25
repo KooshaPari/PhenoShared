@@ -1,0 +1,23 @@
+OK wrote C:\Users\koosh\pheno-harness\state\hf_scrape\2026-07-04\ornith_lfm_canonical_probes.json
+probes=9  ornith_top_dl_hits=15
+  x deepreinforce-ai/Ornith-1.0-9B                     BadRequestError: (Request ID: Root=1-6a48cee7-3d83c0485cf84209486fa944;e46ba445-222f-4f61-aee5-302a7641b36b)
+
+Bad request:
+"expand[2]" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]
+  x deepreinforce-ai/Ornith-1.0                        404 RepositoryNotFoundError
+  x OrnithAI/Ornith-1.0                                404 RepositoryNotFoundError
+  x protoLabsAI/Ornith-1.0-9B-MTP-GGUF                 BadRequestError: (Request ID: Root=1-6a48cee7-6cc39a97289b9a0678e26152;49ebbc37-a18c-4faa-a0e8-c5fb6110526b)
+
+Bad request:
+"expand[2]" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]
+  x LiquidAI/LFM2-8B-A1B                               BadRequestError: (Request ID: Root=1-6a48cee7-6a8983dd7155c99c3f130f3a;389fe470-fc20-4829-87ac-9e47a3d441a2)
+
+Bad request:
+"expand[2]" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]
+  x LiquidAI/LFM2-MoE                                  404 RepositoryNotFoundError
+  x LiquidAI/LFM2.5-8B-A1B-Instruct                    404 RepositoryNotFoundError
+  x Qwen/Qwen3.5-0.8B-Instruct                         404 RepositoryNotFoundError
+  x Qwen/Qwen3.5-0.8B-Base                             BadRequestError: (Request ID: Root=1-6a48cee8-597c34654828ecc021ad34df;2dd33137-2e9c-490d-aa42-94cc86a2f974)
+
+Bad request:
+"expand[2]" must be one of [author, baseModels, cardData, config, createdAt, disabled, downloads, downloadsAllTime, evalResults, gated, inference, inferenceProviderMapping, lastModified, library_name, likes, mask_token, model-index, pipeline_tag, private, safetensors, sha, siblings, spaces, tags, transformersInfo, trendingScore, widgetData, gguf, resourceGroup, xetEnabled, childrenModelCount, usedStorage]

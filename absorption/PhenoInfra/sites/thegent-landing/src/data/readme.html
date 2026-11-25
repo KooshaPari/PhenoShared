@@ -1,0 +1,750 @@
+<div id="readme" class="md" data-path="README.md"><article class="markdown-body entry-content container-lg" itemprop="text"><p dir="auto"><a target="_blank" rel="noopener noreferrer" href="https://github.com/KooshaPari/thegent/actions/workflows/ci.yml/badge.svg"><img src="https://github.com/KooshaPari/thegent/actions/workflows/ci.yml/badge.svg" alt="CI" style="max-width: 100%;"></a>
+<a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://camo.githubusercontent.com/fdf2982b9f5d7489dcf44570e714e3a15fce6253e0cc6b5aa61a075aac2ff71b/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d79656c6c6f772e737667" alt="License: MIT" data-canonical-src="https://img.shields.io/badge/License-MIT-yellow.svg" style="max-width: 100%;"></a>
+<a href="https://www.rust-lang.org/" rel="nofollow"><img src="https://camo.githubusercontent.com/d1f39f0193d0c6a6bc9e5201b663a65a89905fdc81af1658df84aa29c6980f0d/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6275696c74253230776974682d527573742d6f72616e67652e737667" alt="Rust" data-canonical-src="https://img.shields.io/badge/built%20with-Rust-orange.svg" style="max-width: 100%;"></a>
+<a href="https://www.python.org/" rel="nofollow"><img src="https://camo.githubusercontent.com/faacbc9df0706b66a95e9550a776676c0bf7a1d0fac7e35f5c83e1402c71b2a9/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f707974686f6e2d332e31332532422d626c75652e737667" alt="Python 3.13+" data-canonical-src="https://img.shields.io/badge/python-3.13%2B-blue.svg" style="max-width: 100%;"></a></p>
+<div class="markdown-heading" dir="auto"><h1 class="heading-element" dir="auto">thegent</h1><a id="user-content-thegent" class="anchor" aria-label="Permalink: thegent" href="#thegent"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">@trace META-001: Task Decomposition
+@trace META-002: Agent Selection
+@trace META-003: Plan Execution
+@trace META-004: Context Management
+@trace META-005: Reflection
+@trace META-007: Multi-Agent Coordination</p>
+<p dir="auto"><strong>Phenotype dotfiles manager, platform bootstrap tool, and polyglot development hub.</strong></p>
+<p dir="auto">thegent is the single entry point for bootstrapping developer machines, managing AI agent
+workflows, orchestrating multi-agent swarms, and enforcing governance across the Phenotype
+ecosystem. It combines a Python CLI with Rust performance extensions and ships project
+templates for 10+ language stacks.</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Table of Contents</h2><a id="user-content-table-of-contents" class="anchor" aria-label="Permalink: Table of Contents" href="#table-of-contents"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><a href="#architecture">Architecture</a></li>
+<li><a href="#key-features">Key Features</a></li>
+<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#directory-structure">Directory Structure</a></li>
+<li><a href="#rust-crates">Rust Crates</a></li>
+<li><a href="#cli-commands">CLI Commands</a></li>
+<li><a href="#dotfiles-and-system-bootstrap">Dotfiles and System Bootstrap</a></li>
+<li><a href="#templates">Templates</a></li>
+<li><a href="#performance">Performance</a></li>
+<li><a href="#development">Development</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Architecture</h2><a id="user-content-architecture" class="anchor" aria-label="Permalink: Architecture" href="#architecture"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<section class="js-render-needs-enrichment render-needs-enrichment position-relative" data-identity="807d7bc9-7079-4011-99bd-311f9b5bafc7" data-host="https://viewscreen.githubusercontent.com" data-src="https://viewscreen.githubusercontent.com/markdown/mermaid?docs_host=https%3A%2F%2Fdocs.github.com" data-type="mermaid" aria-label="mermaid rendered output container">
+  <div class="js-render-enrichment-target" data-json="{&quot;data&quot;:&quot;graph TB\n    subgraph User\n        CLI[thegent CLI&amp;lt;br/&amp;gt;Python + Typer]\n        SHIMS[Shim Wrappers&amp;lt;br/&amp;gt;clode / dex / roid / droid]\n    end\n\n    subgraph Core[\&quot;Core (Python)\&quot;]\n        ORCH[Agent Orchestrator]\n        GOV[Governance &amp;amp; Policy]\n        ROUTER[Provider Router&amp;lt;br/&amp;gt;Claude / Gemini / OpenAI]\n        MCP[MCP Server]\n        SYNC[Workstream Autosync&amp;lt;br/&amp;gt;GitHub Projects + Linear]\n    end\n\n    subgraph Rust[\&quot;Rust Crates (crates/)\&quot;]\n        PARSER[thegent-parser]\n        DISCOVERY[thegent-discovery]\n        GIT[thegent-git]\n        CACHE[thegent-cache]\n        CRYPTO[thegent-crypto]\n        FS[thegent-fs]\n        HOOKS[thegent-hooks]\n        TUI[thegent-tui]\n        METRICS[thegent-metrics]\n        MEMORY[thegent-memory]\n    end\n\n    subgraph Assets[\&quot;Dotfiles &amp;amp; Templates\&quot;]\n        DOTFILES[dotfiles/&amp;lt;br/&amp;gt;shell, git, claude, tools]\n        TEMPLATES[templates/&amp;lt;br/&amp;gt;python, ts, rust, go, ...]\n        SHELL[shell/&amp;lt;br/&amp;gt;zsh integration, starship]\n    end\n\n    CLI --&amp;gt; ORCH\n    CLI --&amp;gt; GOV\n    SHIMS --&amp;gt; CLI\n    ORCH --&amp;gt; ROUTER\n    ORCH --&amp;gt; MCP\n    ORCH --&amp;gt; SYNC\n    CLI --&amp;gt; DISCOVERY\n    CLI --&amp;gt; PARSER\n    ORCH --&amp;gt; GIT\n    ORCH --&amp;gt; CACHE\n    GOV --&amp;gt; CRYPTO\n    CLI --&amp;gt; FS\n    CLI --&amp;gt; HOOKS\n    CLI --&amp;gt; TUI\n    ORCH --&amp;gt; METRICS\n    ORCH --&amp;gt; MEMORY\n    CLI --&amp;gt; DOTFILES\n    CLI --&amp;gt; TEMPLATES\n    CLI --&amp;gt; SHELL\n&quot;}" data-plain="graph TB
+    subgraph User
+        CLI[thegent CLI&lt;br/&gt;Python + Typer]
+        SHIMS[Shim Wrappers&lt;br/&gt;clode / dex / roid / droid]
+    end
+
+    subgraph Core[&quot;Core (Python)&quot;]
+        ORCH[Agent Orchestrator]
+        GOV[Governance &amp; Policy]
+        ROUTER[Provider Router&lt;br/&gt;Claude / Gemini / OpenAI]
+        MCP[MCP Server]
+        SYNC[Workstream Autosync&lt;br/&gt;GitHub Projects + Linear]
+    end
+
+    subgraph Rust[&quot;Rust Crates (crates/)&quot;]
+        PARSER[thegent-parser]
+        DISCOVERY[thegent-discovery]
+        GIT[thegent-git]
+        CACHE[thegent-cache]
+        CRYPTO[thegent-crypto]
+        FS[thegent-fs]
+        HOOKS[thegent-hooks]
+        TUI[thegent-tui]
+        METRICS[thegent-metrics]
+        MEMORY[thegent-memory]
+    end
+
+    subgraph Assets[&quot;Dotfiles &amp; Templates&quot;]
+        DOTFILES[dotfiles/&lt;br/&gt;shell, git, claude, tools]
+        TEMPLATES[templates/&lt;br/&gt;python, ts, rust, go, ...]
+        SHELL[shell/&lt;br/&gt;zsh integration, starship]
+    end
+
+    CLI --&gt; ORCH
+    CLI --&gt; GOV
+    SHIMS --&gt; CLI
+    ORCH --&gt; ROUTER
+    ORCH --&gt; MCP
+    ORCH --&gt; SYNC
+    CLI --&gt; DISCOVERY
+    CLI --&gt; PARSER
+    ORCH --&gt; GIT
+    ORCH --&gt; CACHE
+    GOV --&gt; CRYPTO
+    CLI --&gt; FS
+    CLI --&gt; HOOKS
+    CLI --&gt; TUI
+    ORCH --&gt; METRICS
+    ORCH --&gt; MEMORY
+    CLI --&gt; DOTFILES
+    CLI --&gt; TEMPLATES
+    CLI --&gt; SHELL
+" dir="auto">
+    <div class="render-plaintext-hidden" dir="auto">
+      <pre lang="mermaid" aria-label="Raw mermaid code">graph TB
+    subgraph User
+        CLI[thegent CLI&lt;br/&gt;Python + Typer]
+        SHIMS[Shim Wrappers&lt;br/&gt;clode / dex / roid / droid]
+    end
+
+    subgraph Core["Core (Python)"]
+        ORCH[Agent Orchestrator]
+        GOV[Governance &amp; Policy]
+        ROUTER[Provider Router&lt;br/&gt;Claude / Gemini / OpenAI]
+        MCP[MCP Server]
+        SYNC[Workstream Autosync&lt;br/&gt;GitHub Projects + Linear]
+    end
+
+    subgraph Rust["Rust Crates (crates/)"]
+        PARSER[thegent-parser]
+        DISCOVERY[thegent-discovery]
+        GIT[thegent-git]
+        CACHE[thegent-cache]
+        CRYPTO[thegent-crypto]
+        FS[thegent-fs]
+        HOOKS[thegent-hooks]
+        TUI[thegent-tui]
+        METRICS[thegent-metrics]
+        MEMORY[thegent-memory]
+    end
+
+    subgraph Assets["Dotfiles &amp; Templates"]
+        DOTFILES[dotfiles/&lt;br/&gt;shell, git, claude, tools]
+        TEMPLATES[templates/&lt;br/&gt;python, ts, rust, go, ...]
+        SHELL[shell/&lt;br/&gt;zsh integration, starship]
+    end
+
+    CLI --&gt; ORCH
+    CLI --&gt; GOV
+    SHIMS --&gt; CLI
+    ORCH --&gt; ROUTER
+    ORCH --&gt; MCP
+    ORCH --&gt; SYNC
+    CLI --&gt; DISCOVERY
+    CLI --&gt; PARSER
+    ORCH --&gt; GIT
+    ORCH --&gt; CACHE
+    GOV --&gt; CRYPTO
+    CLI --&gt; FS
+    CLI --&gt; HOOKS
+    CLI --&gt; TUI
+    ORCH --&gt; METRICS
+    ORCH --&gt; MEMORY
+    CLI --&gt; DOTFILES
+    CLI --&gt; TEMPLATES
+    CLI --&gt; SHELL
+</pre>
+    </div>
+  </div>
+  <span class="js-render-enrichment-loader d-flex flex-justify-center flex-items-center width-full" style="min-height:100px" role="presentation">
+    <span data-view-component="true">
+  <svg style="box-sizing: content-box; color: var(--color-icon-primary);" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" data-view-component="true" class="octospinner mx-auto tmp-mx-auto anim-rotate">
+    <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
+    <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
+</svg>    <span class="sr-only">Loading</span>
+</span>
+  </span>
+</section>
+
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Key Features</h2><a id="user-content-key-features" class="anchor" aria-label="Permalink: Key Features" href="#key-features"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li><strong>Platform Bootstrap</strong> -- Set up any macOS, Linux, or WSL system with a single command. Shell configs, git settings, tool installations, and project scaffolding.</li>
+<li><strong>Agent Orchestration</strong> -- Run, monitor, and govern AI agents with built-in cost caps, quality gates, and audit trails.</li>
+<li><strong>Multi-Provider Routing</strong> -- Route across Claude, Gemini, OpenAI, and custom proxies with automatic failover.</li>
+<li><strong>Rust Performance Layer</strong> -- Tool detection in &lt;1ms, PATH resolution in &lt;0.5ms, 10-100x over shell baselines.</li>
+<li><strong>MCP Native</strong> -- Full Model Context Protocol support for servers and resources.</li>
+<li><strong>Project Templates</strong> -- Scaffolding for Python, TypeScript, Rust, Go, Ruby, Java, C++, PHP, Bash, and Zig projects with linters, formatters, and CI pre-configured.</li>
+<li><strong>Governance &amp; Policy</strong> -- Centralized policy enforcement, HITL gates, cost control, and release supply chain controls.</li>
+<li><strong>Workstream Sync</strong> -- Bidirectional sync between <code>WORK_STREAM.md</code>, GitHub Projects, and Linear.</li>
+</ul>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Two thegents, two roles</h2><a id="user-content-two-thegents-two-roles" class="anchor" aria-label="Permalink: Two thegents, two roles" href="#two-thegents-two-roles"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">The thegent ecosystem ships <strong>two distinct surfaces</strong> under the same brand. New users routinely confuse them — this section disambiguates.</p>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Language</th>
+<th>Repo</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>thegent</code> CLI</strong></td>
+<td>Python (Typer)</td>
+<td>this repo (<code>KooshaPari/thegent</code>)</td>
+<td>Dotfiles manager, platform bootstrap, session orchestration, governance, multi-provider routing</td>
+</tr>
+<tr>
+<td><strong><code>thegent-dispatch</code></strong></td>
+<td>Rust (clap)</td>
+<td><a href="https://github.com/KooshaPari/thegent-dispatch"><code>KooshaPari/thegent-dispatch</code></a></td>
+<td>Provider-agnostic CLI dispatcher — translates a unified prompt schema into native argv for Forge, Codex, Gemini, Copilot, Cursor, Droid, Minimax, Kimi, Claude. Also exposed as a Claude Code skill (<code>thegent</code>).</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto"><strong>Pick the right tool:</strong></p>
+<ul dir="auto">
+<li>Setting up a machine, managing dotfiles, running governance gates, or orchestrating an agent session? Use the <strong>Python <code>thegent</code> CLI</strong> below.</li>
+<li>Routing a single prompt to a specific external provider CLI (e.g. "run this on Codex with high reasoning")? Use <strong><code>thegent-dispatch</code></strong> or invoke the <code>thegent</code> Claude skill.</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Hello world: dispatch a task to a provider CLI</h3><a id="user-content-hello-world-dispatch-a-task-to-a-provider-cli" class="anchor" aria-label="Permalink: Hello world: dispatch a task to a provider CLI" href="#hello-world-dispatch-a-task-to-a-provider-cli"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="# Install thegent-dispatch
+git clone https://github.com/KooshaPari/thegent-dispatch
+cd thegent-dispatch &amp;&amp; cargo build --release
+
+# Dispatch a prompt to Forge (primary provider)
+./target/release/thegent-dispatch \
+  --provider forge \
+  --prompt &quot;What is 2+2?&quot;
+
+# Preview the generated argv without executing
+./target/release/thegent-dispatch \
+  --provider codex \
+  --prompt &quot;What is 2+2?&quot; \
+  --dry-run"><pre><span class="pl-c"><span class="pl-c">#</span> Install thegent-dispatch</span>
+git clone https://github.com/KooshaPari/thegent-dispatch
+<span class="pl-c1">cd</span> thegent-dispatch <span class="pl-k">&amp;&amp;</span> cargo build --release
+
+<span class="pl-c"><span class="pl-c">#</span> Dispatch a prompt to Forge (primary provider)</span>
+./target/release/thegent-dispatch \
+  --provider forge \
+  --prompt <span class="pl-s"><span class="pl-pds">"</span>What is 2+2?<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> Preview the generated argv without executing</span>
+./target/release/thegent-dispatch \
+  --provider codex \
+  --prompt <span class="pl-s"><span class="pl-pds">"</span>What is 2+2?<span class="pl-pds">"</span></span> \
+  --dry-run</pre></div>
+<p dir="auto">From inside Claude Code, the same dispatch is available via the bundled <code>thegent</code> skill — see <a href="https://github.com/KooshaPari/thegent-dispatch"><code>KooshaPari/thegent-dispatch</code></a> for the full provider matrix and options.</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Quick Start</h2><a id="user-content-quick-start" class="anchor" aria-label="Permalink: Quick Start" href="#quick-start"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="# Clone and install
+git clone https://github.com/KooshaPari/thegent
+cd thegent
+uv sync --all-extras
+
+# Bootstrap your system
+thegent install -t all --scope both --full
+thegent doctor
+
+# Run your first agent
+thegent run free &quot;Analyze the current directory structure&quot;"><pre><span class="pl-c"><span class="pl-c">#</span> Clone and install</span>
+git clone https://github.com/KooshaPari/thegent
+<span class="pl-c1">cd</span> thegent
+uv sync --all-extras
+
+<span class="pl-c"><span class="pl-c">#</span> Bootstrap your system</span>
+thegent install -t all --scope both --full
+thegent doctor
+
+<span class="pl-c"><span class="pl-c">#</span> Run your first agent</span>
+thegent run free <span class="pl-s"><span class="pl-pds">"</span>Analyze the current directory structure<span class="pl-pds">"</span></span></pre></div>
+<p dir="auto">For Windows:</p>
+<div class="highlight highlight-source-powershell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="irm https://raw.githubusercontent.com/KooshaPari/thegent/main/scripts/install.ps1 | iex"><pre>irm https:<span class="pl-k">//</span><span class="pl-c1">raw.githubusercontent.com</span><span class="pl-k">/</span>KooshaPari<span class="pl-k">/</span>thegent<span class="pl-k">/</span>main<span class="pl-k">/</span>scripts<span class="pl-k">/</span>install.ps1 <span class="pl-k">|</span> iex</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Directory Structure</h2><a id="user-content-directory-structure" class="anchor" aria-label="Permalink: Directory Structure" href="#directory-structure"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/thegent/</code></td>
+<td>Python source -- 100+ modules: agents, CLI, routing, governance, MCP, research</td>
+</tr>
+<tr>
+<td><code>crates/</code></td>
+<td>Rust workspace -- 28 crates for performance-critical paths</td>
+</tr>
+<tr>
+<td><code>cli/</code></td>
+<td>CLI command definitions (Python/Typer)</td>
+</tr>
+<tr>
+<td><code>agents/</code></td>
+<td>Agent persona definitions and registry</td>
+</tr>
+<tr>
+<td><code>templates/</code></td>
+<td>Project scaffolding templates (Python, TS, Rust, Go, Ruby, Java, C++, PHP, Bash, Zig)</td>
+</tr>
+<tr>
+<td><code>dotfiles/</code></td>
+<td>Shell configs, git settings, Claude configs, tool installations</td>
+</tr>
+<tr>
+<td><code>shell/</code></td>
+<td>Zsh integration, starship prompt, profile templates</td>
+</tr>
+<tr>
+<td><code>config/</code></td>
+<td>Runtime configuration and environment schemas</td>
+</tr>
+<tr>
+<td><code>contracts/</code></td>
+<td>Agent contracts and interface definitions</td>
+</tr>
+<tr>
+<td><code>governance/</code></td>
+<td>Policy modules and enforcement rules</td>
+</tr>
+<tr>
+<td><code>docs/</code></td>
+<td>VitePress docsite, guides, research, references</td>
+</tr>
+<tr>
+<td><code>hooks/</code></td>
+<td>Git hooks and quality gate scripts</td>
+</tr>
+<tr>
+<td><code>scripts/</code></td>
+<td>Bootstrap and utility scripts</td>
+</tr>
+<tr>
+<td><code>tools/</code></td>
+<td>Development tooling</td>
+</tr>
+<tr>
+<td><code>apps/</code></td>
+<td>Standalone applications (byteport)</td>
+</tr>
+<tr>
+<td><code>web/</code></td>
+<td>Web interface components</td>
+</tr>
+<tr>
+<td><code>mobile/</code></td>
+<td>Mobile automation support</td>
+</tr>
+<tr>
+<td><code>specs/</code></td>
+<td>Specification documents</td>
+</tr>
+<tr>
+<td><code>tests/</code></td>
+<td>Test suite (pytest)</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Rust Crates</h2><a id="user-content-rust-crates" class="anchor" aria-label="Permalink: Rust Crates" href="#rust-crates"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">All crates live under <code>crates/</code> in a Cargo workspace. They use <code>gix</code> (gitoxide) for pure-Rust git operations.</p>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Crate</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>thegent-parser</code></td>
+<td>Fast parsing for configs, manifests, and agent output</td>
+</tr>
+<tr>
+<td><code>thegent-discovery</code></td>
+<td>Tool and environment discovery (&lt;1ms)</td>
+</tr>
+<tr>
+<td><code>thegent-git</code></td>
+<td>Git operations via gix (gitoxide)</td>
+</tr>
+<tr>
+<td><code>thegent-crypto</code></td>
+<td>Cryptographic utilities for secret management</td>
+</tr>
+<tr>
+<td><code>thegent-fs</code></td>
+<td>High-performance filesystem operations</td>
+</tr>
+<tr>
+<td><code>thegent-hooks</code></td>
+<td>Git hook execution engine</td>
+</tr>
+<tr>
+<td><code>thegent-memory</code></td>
+<td>Agent memory and context persistence</td>
+</tr>
+<tr>
+<td><code>thegent-metrics</code></td>
+<td>Telemetry and performance metrics collection</td>
+</tr>
+<tr>
+<td><code>thegent-cache</code></td>
+<td>Caching layer for tool detection and configs</td>
+</tr>
+<tr>
+<td><code>thegent-docs</code></td>
+<td>Documentation generation utilities</td>
+</tr>
+<tr>
+<td><code>thegent-jsonl</code></td>
+<td>JSONL streaming for audit logs</td>
+</tr>
+<tr>
+<td><code>thegent-offload</code></td>
+<td>Background task offloading</td>
+</tr>
+<tr>
+<td><code>thegent-policy</code></td>
+<td>Policy evaluation engine</td>
+</tr>
+<tr>
+<td><code>thegent-router</code></td>
+<td>Request routing and load balancing</td>
+</tr>
+<tr>
+<td><code>thegent-maif</code></td>
+<td>MAIF (Multi-Agent Interaction Framework) support</td>
+</tr>
+<tr>
+<td><code>thegent-shims</code></td>
+<td>CLI wrapper shims (clode, dex, roid, droid)</td>
+</tr>
+<tr>
+<td><code>thegent-shm</code></td>
+<td>Shared memory for inter-process communication</td>
+</tr>
+<tr>
+<td><code>thegent-subprocess</code></td>
+<td>Subprocess management and monitoring</td>
+</tr>
+<tr>
+<td><code>thegent-tui</code></td>
+<td>Terminal UI compositor</td>
+</tr>
+<tr>
+<td><code>thegent-utils</code></td>
+<td>Shared utility functions</td>
+</tr>
+<tr>
+<td><code>thegent-wasm-tools</code></td>
+<td>WASM/Extism plugin support</td>
+</tr>
+<tr>
+<td><code>thegent-zmx</code></td>
+<td>ZMX message exchange protocol</td>
+</tr>
+<tr>
+<td><code>thegent-zmx-interop</code></td>
+<td>ZMX interop bridge</td>
+</tr>
+<tr>
+<td><code>thegent-resources</code></td>
+<td>Resource management and allocation</td>
+</tr>
+<tr>
+<td><code>thegent-tool-detect</code></td>
+<td>Tool detection and PATH resolution</td>
+</tr>
+<tr>
+<td><code>thegent-watcher</code></td>
+<td>File watcher (excluded from default build)</td>
+</tr>
+<tr>
+<td><code>thegent-path-resolve</code></td>
+<td>Fast PATH resolution (&lt;0.5ms)</td>
+</tr>
+<tr>
+<td><code>harness-native</code></td>
+<td>Native test harness</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">CLI Commands</h2><a id="user-content-cli-commands" class="anchor" aria-label="Permalink: CLI Commands" href="#cli-commands"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>thegent install -t all --scope both --full</code></td>
+<td>Bootstrap system with all assets</td>
+</tr>
+<tr>
+<td><code>thegent doctor</code></td>
+<td>Verify environment health</td>
+</tr>
+<tr>
+<td><code>thegent run free &lt;prompt&gt;</code></td>
+<td>Execute a task with the free agent</td>
+</tr>
+<tr>
+<td><code>thegent run agent &lt;prompt&gt; --bg</code></td>
+<td>Start a background agent session</td>
+</tr>
+<tr>
+<td><code>thegent run agent &lt;prompt&gt; --loop</code></td>
+<td>Continuously process work items</td>
+</tr>
+<tr>
+<td><code>thegent ps</code></td>
+<td>List active and historical agent sessions</td>
+</tr>
+<tr>
+<td><code>thegent skill list</code></td>
+<td>List discovered skills</td>
+</tr>
+<tr>
+<td><code>thegent plan next</code></td>
+<td>Find the next actionable work item</td>
+</tr>
+<tr>
+<td><code>thegent govern approve/reject &lt;run-id&gt;</code></td>
+<td>HITL gate management</td>
+</tr>
+<tr>
+<td><code>thegent worktree new &lt;domain&gt; &lt;scale&gt; &lt;anchor&gt;</code></td>
+<td>Create a structured worktree</td>
+</tr>
+<tr>
+<td><code>thegent sync autopilot</code></td>
+<td>Bidirectional workstream sync</td>
+</tr>
+<tr>
+<td><code>thegent scaffold greenfield ./project --profile cli_tool</code></td>
+<td>Scaffold a new project</td>
+</tr>
+<tr>
+<td><code>thegent scaffold brownfield ./project</code></td>
+<td>Onboard an existing project</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Dotfiles and System Bootstrap</h2><a id="user-content-dotfiles-and-system-bootstrap" class="anchor" aria-label="Permalink: Dotfiles and System Bootstrap" href="#dotfiles-and-system-bootstrap"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">thegent serves as the central dotfiles manager for the Phenotype ecosystem. The <code>dotfiles/</code> directory contains:</p>
+<ul dir="auto">
+<li><strong>Shell</strong> -- Zsh configs, profile templates, starship prompt configuration</li>
+<li><strong>Git</strong> -- Global git config, ignore patterns, hook templates</li>
+<li><strong>Claude</strong> -- Claude Code configuration and agent instructions</li>
+<li><strong>Tools</strong> -- Tool installation manifests and verification scripts</li>
+</ul>
+<p dir="auto">Bootstrap a fresh system:</p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="# Install thegent
+curl -fsSL https://raw.githubusercontent.com/KooshaPari/thegent/main/scripts/bootstrap.sh | sh -s -- install
+
+# Full system bootstrap (shell, git, tools, project templates)
+thegent install -t all --scope both --full
+
+# Verify everything
+thegent doctor"><pre><span class="pl-c"><span class="pl-c">#</span> Install thegent</span>
+curl -fsSL https://raw.githubusercontent.com/KooshaPari/thegent/main/scripts/bootstrap.sh <span class="pl-k">|</span> sh -s -- install
+
+<span class="pl-c"><span class="pl-c">#</span> Full system bootstrap (shell, git, tools, project templates)</span>
+thegent install -t all --scope both --full
+
+<span class="pl-c"><span class="pl-c">#</span> Verify everything</span>
+thegent doctor</pre></div>
+<p dir="auto">Worktree governance is built in:</p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="thegent worktree new &lt;domain&gt; &lt;scale&gt; &lt;change-anchor&gt; [start-point]
+thegent worktree list
+thegent worktree check"><pre>thegent worktree new <span class="pl-k">&lt;</span>domain<span class="pl-k">&gt;</span> <span class="pl-k">&lt;</span>scale<span class="pl-k">&gt;</span> <span class="pl-k">&lt;</span>change-anchor<span class="pl-k">&gt;</span> [start-point]
+thegent worktree list
+thegent worktree check</pre></div>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Templates</h2><a id="user-content-templates" class="anchor" aria-label="Permalink: Templates" href="#templates"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">thegent ships project scaffolding templates for:</p>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Stack</th>
+<th>Template Path</th>
+<th>Includes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td><code>templates/python/</code></td>
+<td>pyproject.toml, ruff, pytest, tach</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td><code>templates/typescript/</code></td>
+<td>package.json, oxlint, vitest</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td><code>templates/rust/</code></td>
+<td>Cargo.toml, clippy, rustfmt</td>
+</tr>
+<tr>
+<td>Go</td>
+<td><code>templates/go/</code></td>
+<td>go.mod, golangci-lint, gofumpt</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td><code>templates/ruby/</code></td>
+<td>Gemfile, rubocop</td>
+</tr>
+<tr>
+<td>Java</td>
+<td><code>templates/java/</code></td>
+<td>pom.xml, checkstyle, spotbugs</td>
+</tr>
+<tr>
+<td>C++</td>
+<td><code>templates/cpp/</code></td>
+<td>CMakeLists.txt, clang-tidy, clang-format</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td><code>templates/php/</code></td>
+<td>composer.json, phpstan, psalm</td>
+</tr>
+<tr>
+<td>Bash</td>
+<td><code>templates/bash/</code></td>
+<td>shellcheck, shfmt, bats</td>
+</tr>
+<tr>
+<td>Zig</td>
+<td><code>templates/zig/</code></td>
+<td>build.zig</td>
+</tr>
+<tr>
+<td>VitePress</td>
+<td><code>templates/vitepress-full/</code></td>
+<td>Full docsite with custom theme</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto">Use <code>thegent scaffold greenfield ./project --profile &lt;name&gt;</code> to generate a new project from any template.</p>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Performance</h2><a id="user-content-performance" class="anchor" aria-label="Permalink: Performance" href="#performance"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Shell Baseline</th>
+<th>thegent (Rust)</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tool Detection</td>
+<td>60ms</td>
+<td>1ms</td>
+<td>60x</td>
+</tr>
+<tr>
+<td>PATH Resolution</td>
+<td>20ms</td>
+<td>0.5ms</td>
+<td>40x</td>
+</tr>
+<tr>
+<td>Process Scanning</td>
+<td>50ms</td>
+<td>0.5ms</td>
+<td>100x</td>
+</tr>
+<tr>
+<td>Hook Execution</td>
+<td>200ms</td>
+<td>20ms</td>
+<td>10x</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Development</h2><a id="user-content-development" class="anchor" aria-label="Permalink: Development" href="#development"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Prerequisites</h3><a id="user-content-prerequisites" class="anchor" aria-label="Permalink: Prerequisites" href="#prerequisites"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<ul dir="auto">
+<li>Python 3.13+</li>
+<li>Rust (stable)</li>
+<li><a href="https://docs.astral.sh/uv/" rel="nofollow">uv</a> for Python dependency management</li>
+<li><a href="https://taskfile.dev/" rel="nofollow">Task</a> for running development commands</li>
+</ul>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Local Development</h3><a id="user-content-local-development" class="anchor" aria-label="Permalink: Local Development" href="#local-development"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="# Install Python deps
+uv sync --all-extras
+
+# Run quality checks
+task quality        # tach + vale + ruff
+task quality:full   # + ruff format --check
+
+# Run tests
+uv run pytest tests/
+
+# Build Rust crates
+cd crates &amp;&amp; cargo build --workspace
+cargo test --workspace
+cargo clippy --workspace -- -D warnings"><pre><span class="pl-c"><span class="pl-c">#</span> Install Python deps</span>
+uv sync --all-extras
+
+<span class="pl-c"><span class="pl-c">#</span> Run quality checks</span>
+task quality        <span class="pl-c"><span class="pl-c">#</span> tach + vale + ruff</span>
+task quality:full   <span class="pl-c"><span class="pl-c">#</span> + ruff format --check</span>
+
+<span class="pl-c"><span class="pl-c">#</span> Run tests</span>
+uv run pytest tests/
+
+<span class="pl-c"><span class="pl-c">#</span> Build Rust crates</span>
+<span class="pl-c1">cd</span> crates <span class="pl-k">&amp;&amp;</span> cargo build --workspace
+cargo <span class="pl-c1">test</span> --workspace
+cargo clippy --workspace -- -D warnings</pre></div>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Quality Gates</h3><a id="user-content-quality-gates" class="anchor" aria-label="Permalink: Quality Gates" href="#quality-gates"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<markdown-accessiblity-table><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Scope</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ruff</td>
+<td>Python lint + format</td>
+<td><code>task ruff</code> / <code>task ruff:format</code></td>
+</tr>
+<tr>
+<td>Tach</td>
+<td>Module boundaries</td>
+<td><code>task tach</code></td>
+</tr>
+<tr>
+<td>Vale</td>
+<td>Prose quality</td>
+<td><code>task vale</code></td>
+</tr>
+<tr>
+<td>Cargo clippy</td>
+<td>Rust lint</td>
+<td><code>cargo clippy --workspace</code></td>
+</tr>
+<tr>
+<td>Cargo test</td>
+<td>Rust tests</td>
+<td><code>cargo test --workspace</code></td>
+</tr>
+<tr>
+<td>pytest</td>
+<td>Python tests</td>
+<td><code>uv run pytest tests/</code></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">License</h2><a id="user-content-license" class="anchor" aria-label="Permalink: License" href="#license"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto">Distributed under the MIT License. See <a href="LICENSE">LICENSE</a> for details.</p>
+</article></div>

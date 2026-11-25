@@ -1,0 +1,9 @@
+experiment_id: pheno.smoke.v5.qwen35-08b
+suite: pheno-harness
+device_profile: windows.dual_gpu
+model_alias: qwen35-08b
+bench_key: "stock-vs-ours/run-v5-qwen35-08b"
+langfuse_dataset: pheno-harness-v5
+description: Pheno-harness V5 EvaluationReport seed for bench-cockpit + Langfuse judges
+aliases:
+  result_json: bench/results/stock-vs-ours/run-v5-qwen35-08b.json

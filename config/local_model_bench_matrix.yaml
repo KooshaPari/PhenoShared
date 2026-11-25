@@ -1,0 +1,59 @@
+# Local model benchmark matrix — locked by ADR 0005.
+
+hardware:
+  primary: win_3090ti
+  gpu: RTX 3090 Ti
+  vram_gb: 24
+  ram_gb: 64
+
+models:
+  qwen35_08b:
+    alias: local/qwen35-08b
+    family: Qwen3.5
+    size: 0.8B
+    hf_owner_id: Qwen/Qwen3.5-0.8B
+    exact_artifact_status: q4_gguf_runtime_validated
+    engines: [sglang, llama_cpp, mlx]
+    roles: [draft, tiny_worker, monitor]
+
+  qwen35_4b:
+    alias: local/qwen35-4b
+    family: Qwen3.5
+    size: 4B
+    hf_owner_id: Qwen/Qwen3.5-4B-Coder
+    exact_artifact_status: pending_download_and_quantize
+    engines: [mlx, sglang, llama_cpp]
+    roles: [workhorse, coding_subagent]
+    kv_ctx: 32768
+    estimated_vram_gb: 3
+    notes: "Next size up from 0.8B; supports 32K context natively"
+
+  lfm25_8b_a1b:
+    alias: local/lfm25-8b-a1b
+    family: LiquidAI LFM 2.5
+    size: 8B-A1B
+    hf_owner_id: LiquidAI/LFM2.5-8B-A1B
+    exact_artifact_status: q4_gguf_runtime_validated
+    engines: [sglang, vllm, llama_cpp, tensorrt_llm]
+    roles: [workhorse, coding_subagent, qa]
+
+  ornith_8b:
+    alias: local/ornith-8b
+    family: Ornith
+    size: 8B
+    hf_owner_id: deepreinforce-ai/Ornith-1.0-9B
+    exact_artifact_status: published_mtp_q4_gguf_runtime_validated_on_gtx_1080_ti
+    engines: [sglang, vllm, llama_cpp]
+    roles: [workhorse, coding_subagent, reviewer]
+
+decode_experiments:
+  - baseline
+  - mtp_probe
+  - dflash_dspark_probe
+  - jetspec_probe
+  - ddtree_probe
+  - speculative_speculative_probe
+
+download_policy:
+  allowed: false
+  reason: "All three locked local artifacts now have explicit acquisition or published-artifact evidence; no additional model downloads are admitted by this matrix."

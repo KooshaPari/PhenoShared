@@ -1,0 +1,65 @@
+# Blocking update-check CI for C11 L111.
+# SelfCheck + sl-daemon unit/CLI smoke (hermetic --latest; no auto-install).
+name: update check hard
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  update-check-selfcheck:
+    name: update check hard · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: update check SelfCheck
+        shell: pwsh
+        run: ./scripts/update-check-check.ps1 -SelfCheck
+
+  update-check-unit:
+    name: update check hard · sl-daemon tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: |
+            .
+            crates/sl-daemon
+          key: update-check-hard
+      - name: cargo test update_check module
+        shell: pwsh
+        working-directory: crates/sl-daemon
+        run: cargo test update_check --locked
+      - name: cargo test check-update CLI smoke
+        shell: pwsh
+        working-directory: crates/sl-daemon
+        run: cargo test --test check_update --locked
+
+  update-check-wrapper:
+    name: update check hard · root SelfCheck wrapper
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: update-check-wrapper
+      - name: cargo test update_check SelfCheck wrapper
+        shell: pwsh
+        run: cargo test --test update_check --locked

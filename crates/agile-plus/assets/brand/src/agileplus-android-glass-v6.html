@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 512px; height: 512px;
+    background: transparent;
+    overflow: hidden;
+  }
+  .icon-root {
+    width: 512px; height: 512px;
+    position: relative;
+    background: transparent;
+  }
+  .sq {
+    position: absolute;
+    top: 20px; left: 20px; right: 20px; bottom: 20px;
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .glass-base {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(150deg,
+        rgba(255,255,255,0.94) 0%,
+        rgba(218,245,243,0.90) 30%,
+        rgba(192,236,233,0.86) 60%,
+        rgba(208,240,238,0.92) 100%
+      );
+  }
+  .blob1 {
+    position: absolute;
+    width: 340px; height: 280px;
+    top: -60px; left: -60px;
+    background: radial-gradient(ellipse, rgba(126,186,181,0.40) 0%, transparent 65%);
+    filter: blur(45px);
+  }
+  .blob2 {
+    position: absolute;
+    width: 260px; height: 260px;
+    bottom: -40px; right: -40px;
+    background: radial-gradient(ellipse, rgba(160,220,215,0.35) 0%, transparent 65%);
+    filter: blur(38px);
+  }
+  .blob3 {
+    position: absolute;
+    width: 180px; height: 180px;
+    top: 40px; right: 30px;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.60) 0%, transparent 70%);
+    filter: blur(24px);
+  }
+  .frost {
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+  .edge-shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(140deg,
+      rgba(255,255,255,0.72) 0%,
+      rgba(255,255,255,0.15) 30%,
+      transparent 55%,
+      rgba(126,186,181,0.15) 100%
+    );
+  }
+  .top-shine {
+    position: absolute;
+    top: 8px; left: 50px; right: 50px;
+    height: 70px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.62) 0%, transparent 100%);
+    border-radius: 50%;
+    filter: blur(10px);
+  }
+</style>
+</head>
+<body>
+<div class="icon-root">
+  <div class="sq">
+    <div class="glass-base"></div>
+    <div class="blob1"></div>
+    <div class="blob2"></div>
+    <div class="blob3"></div>
+    <div class="frost"></div>
+    <div class="edge-shine"></div>
+    <div class="top-shine"></div>
+
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+      <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="soft-shadow">
+            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(60,140,134,0.35)"/>
+          </filter>
+        </defs>
+
+        <!-- Sprint-Arc "A": left leg arc, foot=(46,252) to apex=(150,38), belly curves far-left -->
+        <path d="M 50 248 C -8 192 4 80 150 42"
+          stroke="#7ebab5" stroke-width="17" stroke-linecap="round" fill="none"
+          opacity="0.90" filter="url(#soft-shadow)"
+        />
+
+        <!-- Right leg arc, apex=(150,38) to foot=(254,252), belly curves far-right -->
+        <path d="M 150 42 C 296 80 308 192 250 248"
+          stroke="#7ebab5" stroke-width="17" stroke-linecap="round" fill="none"
+          opacity="0.90" filter="url(#soft-shadow)"
+        />
+
+        <!-- Arrowhead at apex (top of left leg), pointing upward -->
+        <polygon points="150,26 133,56 167,56"
+          fill="#3d8a85" opacity="1.0" filter="url(#soft-shadow)"
+        />
+
+        <!-- Arrowhead at right foot, pointing down-left -->
+        <polygon points="250,266 232,240 262,236"
+          fill="#3d8a85" opacity="1.0" filter="url(#soft-shadow)"
+        />
+
+        <!-- Crossbar: 3 ascending kanban columns (left=short, center=medium, right=tall) -->
+        <!-- Baseline at y=205, columns grow rightward -->
+        <rect x="100" y="178" width="26" height="27" rx="5"
+          fill="#7ebab5" opacity="0.75" filter="url(#soft-shadow)"/>
+        <rect x="136" y="161" width="26" height="44" rx="5"
+          fill="#5aa09b" opacity="0.90" filter="url(#soft-shadow)"/>
+        <rect x="172" y="146" width="26" height="59" rx="5"
+          fill="#3d8a85" opacity="1.0" filter="url(#soft-shadow)"/>
+
+        <!-- Crossbar baseline -->
+        <line x1="88" y1="205" x2="212" y2="205"
+          stroke="#7ebab5" stroke-width="5" stroke-linecap="round" opacity="0.48"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+</body>
+</html>

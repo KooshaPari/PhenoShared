@@ -1,0 +1,14 @@
+[package]
+name = "phenotype-flags"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Synchronous, in-memory feature-flag set with environment-variable loading"
+keywords = ["phenotype", "feature-flags", "config", "env"]
+
+[lib]
+name = "phenotype_flags"
+path = "src/lib.rs"
+
+[dependencies]
+thiserror = { workspace = true }

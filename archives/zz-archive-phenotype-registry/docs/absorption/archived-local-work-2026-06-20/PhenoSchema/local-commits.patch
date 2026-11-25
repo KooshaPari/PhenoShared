@@ -1,0 +1,192 @@
+diff --git a/.editorconfig b/.editorconfig
+new file mode 100644
+index 0000000..dd0b92e
+--- /dev/null
++++ b/.editorconfig
+@@ -0,0 +1,21 @@
++# EditorConfig — https://editorconfig.org
++# PhenoSchema project-wide editor settings
++
++root = true
++
++[*]
++indent_style = space
++indent_size = 4
++end_of_line = lf
++charset = utf-8
++trim_trailing_whitespace = true
++insert_final_newline = true
++
++[*.md]
++trim_trailing_whitespace = false
++
++[*.{yml,yaml}]
++indent_size = 2
++
++[Makefile,justfile]
++indent_style = tab
+diff --git a/.gitattributes b/.gitattributes
+new file mode 100644
+index 0000000..50117e7
+--- /dev/null
++++ b/.gitattributes
+@@ -0,0 +1,30 @@
++# PhenoSchema — Git attributes
++# Normalise line endings across platforms
++
++* text=auto eol=lf
++
++# Rust sources
++*.rs text diff=rust
++
++# Markdown
++*.md text diff=markdown
++
++# Config files
++*.toml text
++*.yml text
++*.yaml text
++*.json text
++
++# Lock files — treat as binary to avoid merge conflicts
++Cargo.lock -text
++
++# Binary / generated
++*.png binary
++*.jpg binary
++*.ico binary
++*.svg text
++
++# Editor / platform files
++.gitattributes text
++.editorconfig text
++.gitignore text
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index ef5c1d0..ebbc6c6 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -41,3 +41,14 @@ jobs:
+           components: rustfmt, clippy
+       - run: cargo fmt --all --check
+       - run: cargo clippy --workspace -- -D warnings
++
++  # ─── Dependency audit (cargo-deny) ─────────────────────────────
++  deny:
++    name: cargo deny
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++      - uses: dtolnay/rust-toolchain@stable
++      - uses: EmbarkStudios/cargo-deny-action@v2
++        with:
++          args: check --workspace
+diff --git a/deny.toml b/deny.toml
+index 6111831..eb9db9c 100644
+--- a/deny.toml
++++ b/deny.toml
+@@ -1,13 +1,22 @@
+ # PhenoSchema — cargo-deny configuration
+ # See https://embarkstudios.github.io/cargo-deny/
++# Schema reference: https://github.com/EmbarkStudios/cargo-deny/tree/main/cargo-deny/schema
+ 
+ [advisories]
+ db-path = "~/.cargo/advisory-dbs"
+ db-urls = ["https://github.com/rustsec/advisory-db"]
++# vulnerability: fail the check on any known vulnerability in the resolved graph.
+ vulnerability = "deny"
+-unmaintained = "warn"
+-notice = "warn"
+-yanked = "warn"
++# unmaintained: scope of the "unmaintained" warning check.
++#   "all"        — every crate in the graph
++#   "workspace"  — only crates that are direct or transitive workspace deps
++#   "transitive" — only third-party (non-workspace) crates
++#   "none"       — skip
++unmaintained = "workspace"
++# notice: same scoping for informational notices (e.g. unmaintained-warnings).
++notice = "workspace"
++# yanked: fail the check on any yanked crate version in the graph.
++yanked = "deny"
+ ignore = []
+ 
+ [licenses]
+@@ -15,30 +24,59 @@ unlicensed = "deny"
+ allow-osi-fsf-free = "neither"
+ default = "deny"
+ confidence-threshold = 0.8
++# Explicit allowlist of SPDX license identifiers permitted in the dep graph.
++# Dual-licensed crates are covered by individual SPDX expressions via
++# `exceptions` further down; cargo-deny 0.19 does not accept `OR` syntax
++# inside the inline `allow` list.
+ allow = [
+     "MIT",
+     "Apache-2.0",
+-    "MIT OR Apache-2.0",
+-    "Apache-2.0 OR MIT",
+     "ISC",
+     "BSD-2-Clause",
+     "BSD-3-Clause",
+     "Unicode-DFS-2016",
++    "Unicode-3.0",
+     "CC0-1.0",
++    "Zlib",
++    "0BSD",
++    "BSL-1.0",
++    "MPL-2.0",
++    "Zlib",
++    "OpenSSL",
++]
++exceptions = [
++    # Allow SPDX dual-license expressions that cargo-deny cannot infer
++    # from the inline allowlist. Each entry must reference a single crate.
+ ]
+ 
++# `clarify` blocks pin the license expression + canonical LICENSE file
++# for crates whose SPDX metadata is incomplete or ambiguous.
+ [[licenses.clarify]]
+ name = "ring"
+ expression = "MIT AND ISC AND OpenSSL"
+ license-files = [{ path = "LICENSE", hash = 0xbd0eed23 }]
+ 
+ [bans]
+-multiple-versions = "deny"
++# multiple-versions: deny duplicate versions of the same crate in the graph.
++multiple-versions = "warn"
++# wildcards: deny wildcard dependency version requirements (e.g. "*").
+ wildcards = "deny"
++# deny: explicit deny-list of crates by name.
+ deny = []
++# skip-tree: crate subtrees whose internal duplicates are allowed.
+ skip-tree = []
+ 
+ [sources]
+ unknown-registry = "deny"
+ unknown-git = "deny"
+ allow-git = []
++
++[sections]
++# Apply license + advisory + ban checks to every dep-graph root produced by
++# `cargo deny check` (build, dev, target). Adjust only if a particular
++# section needs a different posture (e.g. dev-only permissiveness).
++# See https://embarkstudios.github.io/cargo-deny/config.html#the-sections-table
++allowed = []
++deny = []
++skip = []
++unmatched = "allow"
+diff --git a/ports/Cargo.toml b/ports/Cargo.toml
+index 3e20da6..17a708b 100644
+--- a/ports/Cargo.toml
++++ b/ports/Cargo.toml
+@@ -3,6 +3,12 @@ name = "ports"
+ version = "0.1.0"
+ edition = "2021"
+ description = "PhenoSchema hexagonal port definitions"
++license = "MIT"
++repository = "https://github.com/KooshaPari/PhenoSchema"
++documentation = "https://github.com/KooshaPari/PhenoSchema"
++keywords = ["phenotype", "schema", "ports", "hexagonal"]
++categories = ["development-tools"]
++authors = ["Koosha Pari"]
+ 
+ [dependencies]
+ serde = { version = "1", features = ["derive"] }

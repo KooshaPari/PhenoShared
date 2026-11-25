@@ -1,0 +1,9 @@
+# Default owner for the spec repo
+* @KooshaPari
+
+# Docs and schemas — protocol stewards
+schema/*.json @KooshaPari
+docs/*.md @KooshaPari
+
+# Examples — keep in sync with schemas
+examples/*.json @KooshaPari

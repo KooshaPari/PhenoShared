@@ -1,0 +1,11 @@
+{
+  "name": "@phenotype/herdr-session-paperclip-adapter",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "exports": { ".": "./dist/index.js", "./server": "./dist/server/index.js" },
+  "files": ["dist"],
+  "scripts": { "build": "tsc", "smoke": "node smoke.mjs" },
+  "dependencies": { "@paperclipai/adapter-utils": "^2026.325.0" },
+  "devDependencies": { "@types/node": "^24.0.0", "typescript": "^5.7.0" }
+}

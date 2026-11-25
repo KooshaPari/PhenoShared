@@ -1,0 +1,40 @@
+# Sub-1B needle family pretrain — 3090 Ti (24GB)
+# References sub1b_needle training scaffold
+
+experiment: pretrain_sub1b
+description: "Pretrain needle router/ranker/budget sub-1B family on local CPU+GPU mix"
+
+inherits:
+  - "${PHENO_ROOT}/training/sub1b_needle.yaml"
+  - "${PHENO_ROOT}/training/rlvr_config.yaml"
+
+family: needle
+
+models:
+  ref: training/sub1b_needle.yaml#models
+  targets: [router, ranker, budget]
+
+training:
+  ref: training/sub1b_needle.yaml#training
+  precision: bf16
+  batch_size: 64
+  epochs: 5
+  output_dir: "${PHENO_ROOT}/state/sub1b/needle"
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+  note: "Sub-1B full FT fits easily; ranker may use GPU batching"
+
+data:
+  root: "${HOME}/.omniroute/training"
+  router_glob: "call_logs_*.jsonl"
+  ranker_glob: "compression_*.jsonl"
+  budget_glob: "routing_decisions_*.jsonl"
+
+rlvr:
+  config: "${PHENO_ROOT}/training/rlvr_config.yaml"
+  reward_pass_threshold: 0.75
+
+targets:
+  ref: training/sub1b_needle.yaml#targets

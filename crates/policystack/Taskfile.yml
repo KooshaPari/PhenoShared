@@ -1,0 +1,211 @@
+version: "3"
+
+vars:
+  TASK_TMPDIR: .pytest_cache/task-tmp
+  PYTHON_DEPS: --with pytest --with pytest-asyncio --with pyyaml --with jsonschema
+  PYTHON_RUN: uv run --no-project --with pyyaml --with jsonschema
+
+  PROJECT_LANG:
+    sh: |
+      # Pick the primary implementation language from repository manifests
+      # before secondary toolchains such as docs package metadata.
+      if [ -f pyproject.toml ] \
+        || [ -f setup.py ] \
+        || [ -f requirements.txt ] \
+        || [ -f uv.lock ]; then
+        printf "python"
+      elif [ -f go.mod ]; then
+        printf "go"
+      elif [ -f Cargo.toml ]; then
+        printf "rust"
+      elif [ -f package.json ] \
+        || [ -f bun.lock ] \
+        || [ -f package-lock.json ] \
+        || [ -f pnpm-lock.yaml ] \
+        || [ -f yarn.lock ]; then
+        printf "node"
+      else
+        printf "unknown"
+      fi
+
+tasks:
+  default:
+    desc: Show available project tasks
+    cmds:
+      - task --list-all
+
+  language:
+    desc: Print the detected primary project language
+    cmds:
+      - echo "{{.PROJECT_LANG}}"
+
+  build:
+    desc: Build project artifacts for the detected primary language
+    cmds:
+      - cmd: |
+          set -eu
+          case "{{.PROJECT_LANG}}" in
+            python)
+              mkdir -p "{{.TASK_TMPDIR}}"
+              export TMPDIR="$PWD/{{.TASK_TMPDIR}}"
+              export PYTHONPYCACHEPREFIX="$PWD/{{.TASK_TMPDIR}}/pycache"
+              if [ -n "${PYTHONPATH-}" ]; then
+                export PYTHONPATH="$PWD:$PWD/cli/src:$PYTHONPATH"
+              else
+                export PYTHONPATH="$PWD:$PWD/cli/src"
+              fi
+              files="$(git ls-files '*.py' | grep -v '^scripts/' || true)"
+              if [ -n "$files" ]; then
+                printf '%s\n' "$files" | xargs uv run --no-project python -m compileall -q
+              fi
+              ;;
+            go)
+              go build ./...
+              ;;
+            rust)
+              cargo build --release
+              ;;
+            node)
+              npm run build --if-present
+              npm run docs:build --if-present
+              ;;
+            *)
+              echo "Unable to detect a supported language from repo manifests." >&2
+              exit 1
+              ;;
+          esac
+
+  quality:
+    desc: Run build, test, and lint for the detected primary language
+    cmds:
+      - task: build
+      - task: test
+      - task: lint
+
+  "docs:build":
+    desc: Build the VitePress documentation site
+    cmds:
+      - npm run docs:build
+
+  test:
+    desc: Run tests for the detected primary language
+    cmds:
+      - cmd: |
+          set -eu
+          case "{{.PROJECT_LANG}}" in
+            python)
+              mkdir -p "{{.TASK_TMPDIR}}"
+              export TMPDIR="$PWD/{{.TASK_TMPDIR}}"
+              export PYTHONPYCACHEPREFIX="$PWD/{{.TASK_TMPDIR}}/pycache"
+              if [ -n "${PYTHONPATH-}" ]; then
+                export PYTHONPATH="$PWD:$PWD/cli/src:$PYTHONPATH"
+              else
+                export PYTHONPATH="$PWD:$PWD/cli/src"
+              fi
+              {{.PYTHON_RUN}} python scripts/validate_policy_contract.py --root .
+              uv run --no-project --with pyyaml python scripts/check_policy_versions.py --root .
+              uv run --no-project {{.PYTHON_DEPS}} pytest tests/test_policy_contract.py -k TestPolicyContractSchemaGovernance -q
+              uv run --no-project {{.PYTHON_DEPS}} pytest tests/test_resolve_cli_governance.py -q
+              uv run --no-project {{.PYTHON_DEPS}} pytest tests/test_policy_common.py -q
+              uv run --no-project {{.PYTHON_DEPS}} pytest tests/test_smoke_dispatch_host_hook.py -q
+              uv run --no-project {{.PYTHON_DEPS}} pytest tests/test_policy_version_governance.py -q
+              uv run --no-project {{.PYTHON_DEPS}} pytest tests/test_policy_snapshot_governance.py -q
+              ;;
+            go)
+              go test ./...
+              ;;
+            rust)
+              cargo test
+              ;;
+            node)
+              npm test --if-present
+              ;;
+            *)
+              echo "Unable to detect a supported language from repo manifests." >&2
+              exit 1
+              ;;
+          esac
+
+  lint:
+    desc: Run lint or validation for the detected primary language
+    cmds:
+      - cmd: |
+          set -eu
+          case "{{.PROJECT_LANG}}" in
+            python)
+              mkdir -p "{{.TASK_TMPDIR}}"
+              export PYTHONPYCACHEPREFIX="$PWD/{{.TASK_TMPDIR}}/pycache"
+              if [ -n "${PYTHONPATH-}" ]; then
+                export PYTHONPATH="$PWD:$PWD/cli/src:$PYTHONPATH"
+              else
+                export PYTHONPATH="$PWD:$PWD/cli/src"
+              fi
+              uv run --no-project --with ruff ruff check --select E9 --exclude scripts .
+              python validate_governance.py
+              ;;
+            go)
+              golangci-lint run
+              ;;
+            rust)
+              cargo clippy --all-targets --all-features -- -D warnings
+              cargo fmt --check
+              ;;
+            node)
+              npm run lint --if-present
+              ;;
+            *)
+              echo "Unable to detect a supported language from repo manifests." >&2
+              exit 1
+              ;;
+          esac
+
+  clean:
+    desc: Remove build and cache artifacts
+    cmds:
+      - cmd: |
+          set -eu
+          python - <<'PY'
+          from pathlib import Path
+          import shutil
+
+          paths = [
+              "build",
+              "dist",
+              "target",
+              ".task-tmp",
+              "{{.TASK_TMPDIR}}",
+              ".pytest_cache",
+              ".ruff_cache",
+              ".mypy_cache",
+              ".ty",
+              ".nox",
+              ".tox",
+              ".coverage",
+              "coverage.xml",
+              "htmlcov",
+              "node_modules",
+              "docs/node_modules",
+              "docs/.vitepress/dist",
+              "docs/.vitepress/cache",
+              "wrappers/zig/.zig-cache",
+          ]
+
+          for raw_path in paths:
+              path = Path(raw_path)
+              if path.is_dir():
+                  shutil.rmtree(path)
+              elif path.exists():
+                  path.unlink()
+
+          for cache_dir in Path(".").rglob("__pycache__"):
+              if cache_dir.is_dir():
+                  shutil.rmtree(cache_dir)
+
+          for zig_cache_dir in Path(".").rglob(".zig-cache"):
+              if zig_cache_dir.is_dir():
+                  shutil.rmtree(zig_cache_dir)
+
+          for pyc_file in Path(".").rglob("*.pyc"):
+              if pyc_file.is_file():
+                  pyc_file.unlink()
+          PY

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "purpose": "Macro-tier HTTP load smoke PR gate (C08 L73 breadth beyond probe routes)",
+  "route_tiers": {
+    "probe": ["/healthz", "/readyz", "/api/metrics", "/metrics"],
+    "macro": ["/api/bundles", "/api/search?limit=1", "/api/stream"]
+  },
+  "write_route": {
+    "method": "POST",
+    "path": "/api/ingest",
+    "seed_before_macro_tier": true
+  },
+  "pr_smoke": {
+    "requests": 60,
+    "concurrency": 8,
+    "min_success_rate_percent": 99,
+    "max_p95_ms": 500,
+    "route_tier": "macro"
+  },
+  "expected_pr_checks": [
+    "load macro gate · SelfCheck",
+    "load macro gate · macro routes smoke"
+  ],
+  "verify_command": "./scripts/load-macro-gate-check.ps1 -SelfCheck",
+  "soft_gate_workflow": ".github/workflows/ops-load.yml"
+}

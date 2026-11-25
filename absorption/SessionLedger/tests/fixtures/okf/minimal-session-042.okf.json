@@ -1,0 +1,13 @@
+{
+  "okf": "1.0",
+  "source_id": "forge-minimal-042",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "add dark mode to my dashboard",
+      "properties": { "user_turn_count": 1 }
+    }
+  ],
+  "provenance": { "corpus": "forge", "source_id": "forge-minimal-042" }
+}

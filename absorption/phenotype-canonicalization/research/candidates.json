@@ -1,0 +1,145 @@
+[
+  {
+    "id": "X01",
+    "name": "Zig",
+    "eligible_workload": "CPU/FFI/native allocation-sensitive core",
+    "hypothesis": "Explicit allocation, C interop, specialization and SIMD",
+    "required_baseline": "Rust/C++ optimized baseline",
+    "disqualifying_questions": "allocator/ABI/safety-mode/toolchain target",
+    "primary_source": "W11",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X02",
+    "name": "Odin",
+    "eligible_workload": "Simulation/graphics/asset processing",
+    "hypothesis": "Data-layout-oriented native implementation and explicit allocator control",
+    "required_baseline": "Current ECS/data-oriented implementation",
+    "disqualifying_questions": "packaging, profiling and FFI maintenance",
+    "primary_source": "W12",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X03",
+    "name": "Nim",
+    "eligible_workload": "Native utilities or domain transformations",
+    "hypothesis": "Metaprogrammed native code and interop may reduce implementation burden",
+    "required_baseline": "Bun/Python/native-library baseline",
+    "disqualifying_questions": "memory model, exceptions, concurrency and distribution",
+    "primary_source": "W13",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X04",
+    "name": "Julia",
+    "eligible_workload": "Numerical planning/simulation/search",
+    "hypothesis": "Numerical ecosystem and specialized kernels may reduce time to a correct implementation",
+    "required_baseline": "Existing compiled/vectorized numerical library",
+    "disqualifying_questions": "compilation/startup, allocation, type stability and service boundary",
+    "primary_source": "W14",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X05",
+    "name": "Pony",
+    "eligible_workload": "Actor-oriented concurrent control",
+    "hypothesis": "Reference-capability actor model offers a distinct concurrency design",
+    "required_baseline": "Current Rust/Go actor or async scheduler",
+    "disqualifying_questions": "runtime integration, cancellation, tail latency and deploy support",
+    "primary_source": "W15",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X06",
+    "name": "Mojo",
+    "eligible_workload": "CPU/GPU numerical path",
+    "hypothesis": "Specialized numerical implementation with native/GPU facilities",
+    "required_baseline": "Triton/CUDA/current vectorized implementation",
+    "disqualifying_questions": "toolchain availability, target backend, ABI and distribution",
+    "primary_source": "W16",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X07",
+    "name": "CUDA + CUTLASS/CuTe",
+    "eligible_workload": "NVIDIA GPU hot path",
+    "hypothesis": "Direct kernel/library control and specialized library primitives",
+    "required_baseline": "Existing optimized vendor/framework operation",
+    "disqualifying_questions": "architecture restrictions, memory traffic, launch and transfer cost",
+    "primary_source": "W19",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X08",
+    "name": "Triton",
+    "eligible_workload": "GPU tensor kernels",
+    "hypothesis": "Tiled kernel/compiler abstractions",
+    "required_baseline": "Framework compiled kernels and CUDA baseline",
+    "disqualifying_questions": "shape/dtype coverage, compile cost and resource occupancy",
+    "primary_source": "W17",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X09",
+    "name": "Trident (kakaobrain)",
+    "eligible_workload": "Historical ML kernel research source",
+    "hypothesis": "Triton-based kernel ideas might be reusable",
+    "required_baseline": "Maintained Triton/framework implementation",
+    "disqualifying_questions": "archived since 2023; resolve intended identity; no automatic production adoption",
+    "primary_source": "W18",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X10",
+    "name": "ISPC",
+    "eligible_workload": "CPU data-parallel transform",
+    "hypothesis": "SPMD vectorization for batch workloads",
+    "required_baseline": "Compiler-autovectorized Rust/C++",
+    "disqualifying_questions": "vector width, tail handling and host-call cost",
+    "primary_source": "W20",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X11",
+    "name": "TileLang",
+    "eligible_workload": "GPU tile-level kernel implementation",
+    "hypothesis": "Alternative kernel abstraction and optimization space",
+    "required_baseline": "Triton/CUDA baseline",
+    "disqualifying_questions": "target/version constraints and compilation costs",
+    "primary_source": "W21",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X12",
+    "name": "Futhark",
+    "eligible_workload": "Array-parallel algorithm",
+    "hypothesis": "Array compiler may generate competitive parallel code",
+    "required_baseline": "Existing vectorized/compiled numerical path",
+    "disqualifying_questions": "supported operations, backend and host interface",
+    "primary_source": "W22",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  },
+  {
+    "id": "X13",
+    "name": "Halide",
+    "eligible_workload": "Image/video/array processing",
+    "hypothesis": "Algorithm and scheduling separation gives another optimization axis",
+    "required_baseline": "Existing media/compute library",
+    "disqualifying_questions": "scheduling effort, target, memory and whole-pipeline timing",
+    "primary_source": "W23",
+    "status": "documented_candidate_not_benchmarked",
+    "benefit_in_this_ecosystem": "unmeasured"
+  }
+]

@@ -1,0 +1,90 @@
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+  workflow_call:
+    inputs:
+      binary-name:
+        required: true
+        type: string
+      rust-version:
+        required: false
+        type: string
+        default: 'stable'
+      workspace:
+        required: false
+        type: string
+        default: '.'
+      setup-protoc:
+        required: false
+        type: boolean
+        default: false
+      strip-binary:
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+name: Rust Release Build
+
+
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            use-cross: false
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-latest
+            use-cross: true
+          - target: x86_64-apple-darwin
+            os: macos-latest
+            use-cross: false
+          - target: aarch64-apple-darwin
+            os: macos-latest
+            use-cross: false
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: ./.github/actions/setup-env
+        with:
+          rust-version: ${{ inputs.rust-version || 'stable' }}
+          setup-protoc: ${{ inputs.setup-protoc }}
+          workspace: ${{ inputs.workspace }}
+
+      - uses: ./.github/actions/build-rust-binary
+        with:
+          target: ${{ matrix.target }}
+          use-cross: ${{ matrix.use-cross }}
+          binary-name: ${{ inputs.binary-name }}
+          strip-binary: ${{ inputs.strip-binary }}
+          working-directory: ${{ inputs.workspace }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true

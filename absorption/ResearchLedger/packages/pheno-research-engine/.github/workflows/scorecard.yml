@@ -1,0 +1,57 @@
+name: OpenSSF Scorecard
+
+# Tier-0 fleet-standard OpenSSF Scorecard workflow.
+# Publishes SARIF results to the code-scanning dashboard and uploads
+# the raw file as a workflow artifact.
+
+on:
+  branch_protection_rule:
+  schedule:
+    - cron: '17 3 * * 6'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Concurrency hardening: cancel in-flight runs for the same ref so PR
+# re-pushes do not queue up redundant Scorecard analyses.
+concurrency:
+  group: scorecard-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Start least-privilege; the analysis job opts-in to what it needs.
+permissions: read-all
+
+jobs:
+  analysis:
+    name: Scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+
+      - name: Run Scorecard
+        uses: ossf/scorecard-action@05b42c624433fc40578a4040d5cf5e36ddca8cde
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload SARIF artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: SARIF file
+          path: results.sarif
+          retention-days: 5
+
+      - name: Upload SARIF to code-scanning
+        uses: github/codeql-action/upload-sarif@0daab03d71ff584ef619d027a3fd9146679c5d84
+        with:
+          sarif_file: results.sarif

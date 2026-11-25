@@ -1,0 +1,13 @@
+extends: existence
+message: "Consider replacing '%s' with inclusive language."
+level: warning
+ignorecase: true
+tokens:
+  - blacklist
+  - blacklisted
+  - blacklisting
+  - whitelist
+  - whitelisted
+  - whitelisting
+  - master
+  - slave

@@ -1,0 +1,15 @@
+{
+  "name": "BytePort",
+  "languages": ["rust", "typescript"],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "cli",
+  "path": "repos/BytePort",
+  "disposition": "ARCHIVE_ONLY",
+  "wave": "absorption-justification-2026-06-23",
+  "absorbed_into": "phenotype-tooling",
+  "absorption_note": "ADR-040: BytePort CLI to be consolidated into phenotype-tooling/crates/byteport. Active in dev (unarchived 2026-07-17).",
+  "adr": "ADR-040",
+  "note": "Audited 2026-06-23; active in dev (37 unmerged branches); local mirror at repos/BytePort."
+}

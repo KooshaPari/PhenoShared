@@ -1,0 +1,25 @@
+# Typo detection configuration aligned with the Phenotype org standard
+# (matches pheno, phenoShared, and other workspace siblings).
+# Consumed by:
+#   - pre-commit `typos` hook (see .pre-commit-config.yaml)
+#   - dependabot crate-ci/typos GitHub Action
+# When extending, prefer org-consistent words and exclude patterns; do not
+# add one-off entries that drift from the canonical org config.
+
+[default.extend-words]
+# Add project-specific words that typos should not flag
+agileplus = "agileplus"
+RTO = "RTO"
+unparseable = "unparseable"
+
+[files]
+extend-exclude = [
+    "*.lock",
+    "target/",
+    "*.pyc",
+    "__pycache__/",
+    "python/src/gen/",
+    "rust/src/gen/",
+    "pheno-cli/go.mod",
+    "templates/static/*.min.js",
+]

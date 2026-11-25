@@ -1,0 +1,20 @@
+[advisories]
+ignore = [
+  # RUSTSEC-2020-0036: failure crate unmaintained, not used in codebase
+  { crate = "RUSTSEC-2020-0036", reason = "failure not referenced in any dependency tree" },
+  # RUSTSEC-2025-0119: number_prefix crate unmaintained, not used in codebase
+  { crate = "RUSTSEC-2025-0119", reason = "number_prefix not referenced in any dependency tree" },
+]
+
+[licenses]
+allow = ["MIT", "Apache-2.0", "Unicode-3.0"]
+confidence-threshold = 0.95
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

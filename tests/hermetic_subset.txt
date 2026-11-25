@@ -1,0 +1,50 @@
+# tests/hermetic_subset.txt — curated hermetic test list
+#
+# One test path per line. These tests are confirmed hermetic (no MLX,
+# no harbor, no docker, no network, no subprocess, no env reads outside
+# stdlib defaults). They run without any optional external tooling.
+#
+# Used by scripts/run_hermetic_tests.sh when invoked with --subset.
+#
+# To add a test, append its path and confirm it meets the hermetic
+# policy in docs/guides/hermetic-testing.md.
+
+tests/test_acceleration_configs.py
+tests/test_adapter_protocol.py
+tests/test_benchmark_contract.py
+tests/test_canonicalization.py
+tests/test_codegen.py
+tests/test_dep_gap_collection.py
+tests/test_docstring_coverage.py
+tests/test_dry_run_envelope.py
+tests/test_eval_aggregate_contract.py
+tests/test_eval_docstrings.py
+tests/test_eval_pillars.py
+tests/test_eval_replay_stability.py
+tests/test_eval_suite_locks.py
+tests/test_eval_suite_manifest.py
+tests/test_eval_telemetry.py
+tests/test_eval_trial_contract.py
+tests/test_evidence_adapters_circuit_breaker.py
+tests/test_evidence_label.py
+tests/test_evidence_registry.py
+tests/test_fleet_readiness.py
+tests/test_garden_artifacts.py
+tests/test_garden_retention_promotion.py
+tests/test_gitignore_no_source_tree_patterns.py
+tests/test_handoff_serialization.py
+tests/test_harness.py
+tests/test_inference_runner_policy.py
+tests/test_intent_graph_and_eval_contracts.py
+tests/test_lifecycle.py
+tests/test_no_conftest_pollution.py
+tests/test_pheno_serve_contract.py
+tests/test_quantization_plan.py
+tests/test_risky_action_patterns.py
+tests/test_runtime_config.py
+tests/test_self_improvement.py
+tests/test_sota_snapshot_chain.py
+tests/test_tracera_ingest_dual_write.py
+tests/test_verifier_docstrings.py
+tests/test_verifier_p0.py
+tests/test_wsl_relocation_contract.py

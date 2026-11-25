@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: "1.24"
+          cache: true
+
+      - name: Build Go static lib (libnvms_core.a)
+        working-directory: crates/nanovms-core/bindings/go-c-export
+        run: |
+          go build -buildmode=c-archive -o ${{ github.workspace }}/target/libnvms_core.a .
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: Build all Rust crates
+        run: cargo build --release --workspace
+
+      - name: Run Go tests
+        working-directory: crates/nanovms-core
+        run: go test -v ./...
+
+      - name: Run Rust tests
+        run: cargo test --workspace
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: phenotype-infra-binaries
+          path: |
+            target/release/libpheno_compose_driver.*
+            target/release/libnvms_ffi.*
+            target/release/libpheno_config.*

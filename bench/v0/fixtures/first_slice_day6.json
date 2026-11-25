@@ -1,0 +1,216 @@
+{
+  "schema_version": "pheno.bench.v0.slice.v1",
+  "slice_id": "6cdf535efd3b3729d215c3e0e1e04fd5cedc321a763668ddb3d63339e423aefd",
+  "suite": {
+    "name": "pheno-bench-v0-first-slice",
+    "revision": "day6"
+  },
+  "provenance": {
+    "config_sha256": "9d7b5cca8f5595e07dc1004725675e72d0d4afd5e225f5e56df881bfe7698062",
+    "environment_sha256": "c8937bdec1c6dd75be4788712573d20ce2c0480e09f4ba2de860f2d98296f84d",
+    "fixture_sha256": "d7b562220bde015d02fe931057b424dfb9024518ef8b493f6836c3dc89ee9a42",
+    "model_sha256": "b684189e58bc3d99d61d13191b06adba4f63afed5e192789650290684c755be2",
+    "nvms_provenance_sha256": "1152904e613d341b7386d99243953a963a3c74e1dbf98bdc8cc31d778e725746",
+    "phenocompose_run_sha256": "e79371ff7bbc411f5373c6eabf5f2ed56aa7575269178c05776b1210d6e5fca0"
+  },
+  "gpu_uuids": [
+    "GPU-8d337a84-43de-158d-7526-7175288a6064"
+  ],
+  "cases": [
+    {
+      "case_id": "transport_baseline",
+      "outcome": "pass",
+      "observation_id": "853c42bb24db30d07fd4ef3e25611704a61a6f2260d477139bce680a7bf6fa03",
+      "derived_id": null,
+      "hypothesis_id": null
+    },
+    {
+      "case_id": "qwen_08b_warm_gh",
+      "outcome": "blocked",
+      "observation_id": "f0b47ebae3e0cb9d62d9ef8e8511f5c00d1f6285a6726750188e0d52b9f4ee09",
+      "derived_id": null,
+      "hypothesis_id": null
+    },
+    {
+      "case_id": "qwen_08b_cold_gh",
+      "outcome": "blocked",
+      "observation_id": "0a74154d812bc9e93f579195dcb4a3aa7d19f7e94b3ddd50e8e71ff85dd24a5c",
+      "derived_id": null,
+      "hypothesis_id": null
+    },
+    {
+      "case_id": "concurrency_sweep",
+      "outcome": "blocked",
+      "observation_id": "7ddb134740206c480af2d8b4710c9b86eba99845797a2e34b84f7ec81013c66c",
+      "derived_id": null,
+      "hypothesis_id": null
+    },
+    {
+      "case_id": "prefix_affinity_ab",
+      "outcome": "blocked",
+      "observation_id": "2ca8688bedf83011ee4aaa4ee5cf98668e5e946c17afb0bf0c44c4cf8ea913e6",
+      "derived_id": null,
+      "hypothesis_id": null
+    }
+  ],
+  "observations": [
+    {
+      "schema_version": "pheno.bench.v0.observation.v1",
+      "observation_id": "853c42bb24db30d07fd4ef3e25611704a61a6f2260d477139bce680a7bf6fa03",
+      "case_id": "transport_baseline",
+      "status": "measured",
+      "evidence_class": "local_measured",
+      "provenance": {
+        "config_sha256": "9d7b5cca8f5595e07dc1004725675e72d0d4afd5e225f5e56df881bfe7698062",
+        "environment_sha256": "c8937bdec1c6dd75be4788712573d20ce2c0480e09f4ba2de860f2d98296f84d",
+        "fixture_sha256": "d7b562220bde015d02fe931057b424dfb9024518ef8b493f6836c3dc89ee9a42",
+        "model_sha256": "b684189e58bc3d99d61d13191b06adba4f63afed5e192789650290684c755be2",
+        "nvms_provenance_sha256": "1152904e613d341b7386d99243953a963a3c74e1dbf98bdc8cc31d778e725746",
+        "phenocompose_run_sha256": "e79371ff7bbc411f5373c6eabf5f2ed56aa7575269178c05776b1210d6e5fca0"
+      },
+      "gpu_uuids": [
+        "GPU-8d337a84-43de-158d-7526-7175288a6064"
+      ],
+      "gpu_telemetry": {
+        "GPU-8d337a84-43de-158d-7526-7175288a6064": {
+          "memory_total_mib": null,
+          "memory_used_mib": null,
+          "power_watts": null,
+          "temperature_c": null,
+          "utilization_percent": null
+        }
+      },
+      "measurements": {
+        "transport_probe_ms": 0.0,
+        "measurement_quality": "offline_stub",
+        "endpoint_checked": false
+      },
+      "block_reason": null
+    },
+    {
+      "schema_version": "pheno.bench.v0.observation.v1",
+      "observation_id": "f0b47ebae3e0cb9d62d9ef8e8511f5c00d1f6285a6726750188e0d52b9f4ee09",
+      "case_id": "qwen_08b_warm_gh",
+      "status": "blocked",
+      "evidence_class": "blocked",
+      "provenance": {
+        "config_sha256": "9d7b5cca8f5595e07dc1004725675e72d0d4afd5e225f5e56df881bfe7698062",
+        "environment_sha256": "c8937bdec1c6dd75be4788712573d20ce2c0480e09f4ba2de860f2d98296f84d",
+        "fixture_sha256": "d7b562220bde015d02fe931057b424dfb9024518ef8b493f6836c3dc89ee9a42",
+        "model_sha256": "b684189e58bc3d99d61d13191b06adba4f63afed5e192789650290684c755be2",
+        "nvms_provenance_sha256": "1152904e613d341b7386d99243953a963a3c74e1dbf98bdc8cc31d778e725746",
+        "phenocompose_run_sha256": "e79371ff7bbc411f5373c6eabf5f2ed56aa7575269178c05776b1210d6e5fca0"
+      },
+      "gpu_uuids": [
+        "GPU-8d337a84-43de-158d-7526-7175288a6064"
+      ],
+      "gpu_telemetry": {
+        "GPU-8d337a84-43de-158d-7526-7175288a6064": {
+          "memory_total_mib": null,
+          "memory_used_mib": null,
+          "power_watts": null,
+          "temperature_c": null,
+          "utilization_percent": null
+        }
+      },
+      "measurements": null,
+      "block_reason": "model assets unavailable; marked blocked (never simulated)"
+    },
+    {
+      "schema_version": "pheno.bench.v0.observation.v1",
+      "observation_id": "0a74154d812bc9e93f579195dcb4a3aa7d19f7e94b3ddd50e8e71ff85dd24a5c",
+      "case_id": "qwen_08b_cold_gh",
+      "status": "blocked",
+      "evidence_class": "blocked",
+      "provenance": {
+        "config_sha256": "9d7b5cca8f5595e07dc1004725675e72d0d4afd5e225f5e56df881bfe7698062",
+        "environment_sha256": "c8937bdec1c6dd75be4788712573d20ce2c0480e09f4ba2de860f2d98296f84d",
+        "fixture_sha256": "d7b562220bde015d02fe931057b424dfb9024518ef8b493f6836c3dc89ee9a42",
+        "model_sha256": "b684189e58bc3d99d61d13191b06adba4f63afed5e192789650290684c755be2",
+        "nvms_provenance_sha256": "1152904e613d341b7386d99243953a963a3c74e1dbf98bdc8cc31d778e725746",
+        "phenocompose_run_sha256": "e79371ff7bbc411f5373c6eabf5f2ed56aa7575269178c05776b1210d6e5fca0"
+      },
+      "gpu_uuids": [
+        "GPU-8d337a84-43de-158d-7526-7175288a6064"
+      ],
+      "gpu_telemetry": {
+        "GPU-8d337a84-43de-158d-7526-7175288a6064": {
+          "memory_total_mib": null,
+          "memory_used_mib": null,
+          "power_watts": null,
+          "temperature_c": null,
+          "utilization_percent": null
+        }
+      },
+      "measurements": null,
+      "block_reason": "model assets unavailable; marked blocked (never simulated)"
+    },
+    {
+      "schema_version": "pheno.bench.v0.observation.v1",
+      "observation_id": "7ddb134740206c480af2d8b4710c9b86eba99845797a2e34b84f7ec81013c66c",
+      "case_id": "concurrency_sweep",
+      "status": "blocked",
+      "evidence_class": "blocked",
+      "provenance": {
+        "config_sha256": "9d7b5cca8f5595e07dc1004725675e72d0d4afd5e225f5e56df881bfe7698062",
+        "environment_sha256": "c8937bdec1c6dd75be4788712573d20ce2c0480e09f4ba2de860f2d98296f84d",
+        "fixture_sha256": "d7b562220bde015d02fe931057b424dfb9024518ef8b493f6836c3dc89ee9a42",
+        "model_sha256": "b684189e58bc3d99d61d13191b06adba4f63afed5e192789650290684c755be2",
+        "nvms_provenance_sha256": "1152904e613d341b7386d99243953a963a3c74e1dbf98bdc8cc31d778e725746",
+        "phenocompose_run_sha256": "e79371ff7bbc411f5373c6eabf5f2ed56aa7575269178c05776b1210d6e5fca0"
+      },
+      "gpu_uuids": [
+        "GPU-8d337a84-43de-158d-7526-7175288a6064"
+      ],
+      "gpu_telemetry": {
+        "GPU-8d337a84-43de-158d-7526-7175288a6064": {
+          "memory_total_mib": null,
+          "memory_used_mib": null,
+          "power_watts": null,
+          "temperature_c": null,
+          "utilization_percent": null
+        }
+      },
+      "measurements": null,
+      "block_reason": "model assets unavailable; marked blocked (never simulated)"
+    },
+    {
+      "schema_version": "pheno.bench.v0.observation.v1",
+      "observation_id": "2ca8688bedf83011ee4aaa4ee5cf98668e5e946c17afb0bf0c44c4cf8ea913e6",
+      "case_id": "prefix_affinity_ab",
+      "status": "blocked",
+      "evidence_class": "blocked",
+      "provenance": {
+        "config_sha256": "9d7b5cca8f5595e07dc1004725675e72d0d4afd5e225f5e56df881bfe7698062",
+        "environment_sha256": "c8937bdec1c6dd75be4788712573d20ce2c0480e09f4ba2de860f2d98296f84d",
+        "fixture_sha256": "d7b562220bde015d02fe931057b424dfb9024518ef8b493f6836c3dc89ee9a42",
+        "model_sha256": "b684189e58bc3d99d61d13191b06adba4f63afed5e192789650290684c755be2",
+        "nvms_provenance_sha256": "1152904e613d341b7386d99243953a963a3c74e1dbf98bdc8cc31d778e725746",
+        "phenocompose_run_sha256": "e79371ff7bbc411f5373c6eabf5f2ed56aa7575269178c05776b1210d6e5fca0"
+      },
+      "gpu_uuids": [
+        "GPU-8d337a84-43de-158d-7526-7175288a6064"
+      ],
+      "gpu_telemetry": {
+        "GPU-8d337a84-43de-158d-7526-7175288a6064": {
+          "memory_total_mib": null,
+          "memory_used_mib": null,
+          "power_watts": null,
+          "temperature_c": null,
+          "utilization_percent": null
+        }
+      },
+      "measurements": null,
+      "block_reason": "model assets unavailable; marked blocked (never simulated)"
+    }
+  ],
+  "derived_metrics": [],
+  "simulations": [],
+  "hypotheses": [],
+  "summary": {
+    "measured_count": 1,
+    "blocked_count": 4,
+    "pass_count": 1,
+    "fail_count": 0
+  }
+}

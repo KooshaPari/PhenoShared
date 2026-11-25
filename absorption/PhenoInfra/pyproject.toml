@@ -1,0 +1,28 @@
+[project]
+name = "phenodocs"
+version = "0.1.0"
+description = "Tooling and scripts for the PhenoDocs VitePress hub (uv + CPython 3.14+)."
+requires-python = ">=3.14"
+readme = "README.md"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0.0",
+    "mypy>=1.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "httpx>=0.28.1",
+]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
+
+[tool.uv]
+package = false

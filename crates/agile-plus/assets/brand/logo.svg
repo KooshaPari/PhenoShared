@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="AgilePlus">
+  <title>AgilePlus</title>
+  <desc>AI-coded vector app mark: a continuous agile-sprint loop embracing ascending velocity bars and a plus accent. Hand-authored paths.</desc>
+  <defs>
+    <linearGradient id="ap-loop" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5B8DEF"/>
+      <stop offset="1" stop-color="#7C5CFC"/>
+    </linearGradient>
+    <linearGradient id="ap-bars" x1="176" y1="336" x2="336" y2="176" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#22C3E6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded-square app tile background -->
+  <rect x="24" y="24" width="464" height="464" rx="108" ry="108" fill="#0F1733"/>
+  <rect x="24" y="24" width="464" height="464" rx="108" ry="108" fill="none" stroke="#27325C" stroke-width="2"/>
+
+  <!-- Sprint / iteration loop: an open ring with an arrowhead = continuous agile cycle -->
+  <g>
+    <path d="M 300 130
+             A 138 138 0 1 1 196 142"
+          fill="none" stroke="url(#ap-loop)" stroke-width="34"
+          stroke-linecap="round"/>
+    <!-- Arrowhead at the loop opening (top), pointing into the next iteration -->
+    <path d="M 282 100 L 318 130 L 282 160 Z" fill="#7C5CFC"/>
+  </g>
+
+  <!-- Velocity / burnup bars climbing inside the loop -->
+  <g>
+    <rect x="196" y="300" width="34" height="56"  rx="12" fill="url(#ap-bars)"/>
+    <rect x="239" y="266" width="34" height="90"  rx="12" fill="url(#ap-bars)"/>
+    <rect x="282" y="222" width="34" height="134" rx="12" fill="url(#ap-bars)"/>
+  </g>
+
+  <!-- Plus accent: the "Plus" in AgilePlus -->
+  <g fill="#FFFFFF">
+    <rect x="352" y="158" width="56" height="18" rx="9"/>
+    <rect x="371" y="139" width="18" height="56" rx="9"/>
+  </g>
+</svg>

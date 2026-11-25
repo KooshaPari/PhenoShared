@@ -1,0 +1,284 @@
+[
+  {
+    "id": "MET-UNIT-EXECUTABLE-LINES",
+    "family": "unit",
+    "measure": "executable-lines",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-UNIT-BRANCHES-DECISIONS",
+    "family": "unit",
+    "measure": "branches-decisions",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-UNIT-FUNCTIONS",
+    "family": "unit",
+    "measure": "functions",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-UNIT-BEHAVIORAL-OBLIGATIONS",
+    "family": "unit",
+    "measure": "behavioral-obligations",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-INTEGRATION-EXECUTABLE-LINES",
+    "family": "integration",
+    "measure": "executable-lines",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-INTEGRATION-BRANCHES-DECISIONS",
+    "family": "integration",
+    "measure": "branches-decisions",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-INTEGRATION-FUNCTIONS",
+    "family": "integration",
+    "measure": "functions",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-INTEGRATION-BEHAVIORAL-OBLIGATIONS",
+    "family": "integration",
+    "measure": "behavioral-obligations",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-E2E-EXECUTABLE-LINES",
+    "family": "e2e",
+    "measure": "executable-lines",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-E2E-BRANCHES-DECISIONS",
+    "family": "e2e",
+    "measure": "branches-decisions",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-E2E-FUNCTIONS",
+    "family": "e2e",
+    "measure": "functions",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-E2E-BEHAVIORAL-OBLIGATIONS",
+    "family": "e2e",
+    "measure": "behavioral-obligations",
+    "minimum_percent": 85,
+    "minimum_is": "max(85, existing accepted stronger floor)",
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed unique eligible inventory including zero-hit items.",
+    "unsupported_policy": "MEASUREMENT_BLOCKED or explicitly reviewed alternative; never automatic pass."
+  },
+  {
+    "id": "MET-CONTRACT",
+    "family": "contract",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Public interfaces, schemas, CLI commands and required error/compatibility cases",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-PROPERTY",
+    "family": "property",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Declared invariants and supported state/input partitions",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-MUTATION",
+    "family": "mutation",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Unique eligible non-equivalent mutant outcomes",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-FUZZ",
+    "family": "fuzz",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed high-risk targets, grammars and hazard classes; not all possible inputs",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-SECURITY",
+    "family": "security",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Threat/permission/isolation obligations",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-RELIABILITY",
+    "family": "reliability",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Failure/restart/cancellation/resource-exhaustion obligations",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-PERFORMANCE",
+    "family": "performance",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Required workload/profile/scaling cases and their accepted thresholds",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-COMPATIBILITY",
+    "family": "compatibility",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Supported platform/version/consumer/configuration matrix",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-ACCESSIBILITY",
+    "family": "accessibility",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Applicable machine checks plus independently reviewed qualitative obligations",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-VISUAL-AUDIO",
+    "family": "visual-audio",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Required presentation profiles and perceptual/functional observations",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-PACKAGING",
+    "family": "packaging",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Install/update/uninstall/release/signature/consumer obligations",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-OPERATIONS",
+    "family": "operations",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Health/restore/recovery/observability/retention obligations",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-DOCUMENTATION",
+    "family": "documentation",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Substantive artifact-family obligations, runnable examples and truthful claims",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-INTENT",
+    "family": "intent",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Acquired authorized source inventory and unresolved/missing source accounting",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  },
+  {
+    "id": "MET-SOTA",
+    "family": "sota",
+    "measure": "obligation-coverage",
+    "minimum_percent": 85,
+    "critical_percent": 100,
+    "independent_run_required": true,
+    "denominator": "Reviewed relevant comparison questions and source-backed claims",
+    "unsupported_policy": "Explicit applicability and qualified instrument; benchmark thresholds and qualitative criteria are not replaced by a numeric coverage fraction."
+  }
+]

@@ -1,0 +1,12 @@
+# Generated collector output. Source lives in collector/*.py; schema in db/migrations.
+collector/data/*.sqlite3
+collector/data/*.sqlite3-wal
+collector/data/*.sqlite3-shm
+collector/data/last_run.json
+collector/data/sync_report.json
+collector/data/official_checks.json
+collector/data/whatnot.json
+web/public/asks/source.json
+
+# wrangler local state/temp
+**/.wrangler/

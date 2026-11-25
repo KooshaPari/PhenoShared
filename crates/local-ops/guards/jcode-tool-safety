@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+# JCode pre-tool safety gate
+# - Hard-blocks catastrophic commands (no approval path).
+# - Routes approval-required commands through `elicitate` (rich approval)
+#   instead of blindly blocking, so the operator can approve, deny, or defer
+#   to the durable inbox.
+# Exit 0 = allow, Exit 2 = block (stderr returned to model)
+#
+# Env:
+#   JCODE_APPROVAL_MODE   elicitate (default) | block (legacy) | allow (bypass)
+#   JCODE_APPROVAL_TIMEOUT seconds to wait for a decision (default 120)
+set -uo pipefail
+
+TOOL="${JCODE_HOOK_TOOL_NAME:-unknown}"
+MODE="${JCODE_APPROVAL_MODE:-elicitate}"
+APPROVAL_TIMEOUT="${JCODE_APPROVAL_TIMEOUT:-120}"
+
+INPUT="$(cat 2>/dev/null || echo '{}')"
+
+block() { echo "BLOCKED: $1" >&2; exit 2; }
+
+# Build a rich approval PromptSpec (JSON) and ask elicitate.
+# $1 = title, $2 = question, $3 = command, $4 = reason, $5 = urgency, $6 = effects csv
+request_approval() {
+  local title="$1" question="$2" cmd="$3" reason="$4" urgency="$5" effects="$6"
+  local spec json resp status approved rid
+
+  spec="$(printf '%s' "$cmd" | python3 -c '
+import json,sys
+cmd=sys.stdin.read().strip()
+title,question,reason,urgency,effects=(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
+items=[{"kind":"key_value","key":"command","value":cmd}]
+if reason: items.append({"kind":"text","label":"Reason","body":reason})
+spec={"title":title[:80],"question":question[:2000],
+ "field":{"kind":"boolean","label":"Approve?","default":False},
+ "buttons":{"cancel":"Deny","confirm":"Approve","defer_label":"Defer to inbox"},
+ "urgency":urgency,"timeout_secs":0,
+ "details":{"reason":reason,"command":cmd,"items":items,
+   "effects":[e for e in effects.split("|") if e]}}
+print(json.dumps(spec))
+' "$title" "$question" "$reason" "$urgency" "$effects")"
+
+  if ! command -v elicitate >/dev/null 2>&1; then
+    block "approval required for [$cmd] but \`elicitate\` is not installed (fail-closed)."
+  fi
+
+  resp="$(timeout "$APPROVAL_TIMEOUT" elicitate ask --from-json "$spec" 2>/dev/null)"
+  if [ -z "$resp" ]; then
+    block "approval for [$cmd] timed out after ${APPROVAL_TIMEOUT}s and was not granted."
+  fi
+
+  status="$(printf '%s' "$resp" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("status",""))' 2>/dev/null)"
+  case "$status" in
+    answered)
+      approved="$(printf '%s' "$resp" | python3 -c 'import json,sys
+v=json.load(sys.stdin).get("value")
+print("true" if (isinstance(v,dict) and v.get("value") in (True,"true",1)) or v in (True,"true",1) else "false")' 2>/dev/null)"
+      [ "$approved" = "true" ] && exit 0
+      block "approval for [$cmd] was DENIED by the operator."
+      ;;
+    deferred)
+      rid="$(printf '%s' "$resp" | python3 -c 'import json,sys;print(json.load(sys.stdin).get("request_id",""))' 2>/dev/null)"
+      block "approval for [$cmd] was DEFERRED to the inbox (request_id=$rid). It will run only after you approve it there."
+      ;;
+    cancelled) block "approval for [$cmd] was cancelled." ;;
+    timed_out) block "approval for [$cmd] timed out." ;;
+    *)         block "approval for [$cmd] failed (status=${status:-unknown})." ;;
+  esac
+}
+
+case "$MODE" in
+  allow)  MODE_BYPASS=1; MODE_FORCE_BLOCK=0 ;;  # bypass approval (CI)
+  block)  MODE_BYPASS=0; MODE_FORCE_BLOCK=1 ;;
+  elicitate) MODE_BYPASS=0; MODE_FORCE_BLOCK=0 ;;
+  *) block "invalid JCODE_APPROVAL_MODE='$MODE'" ;;
+esac
+
+case "$TOOL" in
+  bash)
+    INPUT="$(printf '%s' "$INPUT" | python3 "$(dirname "$0")/jcode-shell-classifier.py")"
+
+    # --- ALWAYS BLOCKED (no approval path) ---
+    if echo "$INPUT" | grep -qE 'mkfs|dd if=|:\(\)\{ :|shutdown|reboot'; then
+      block "destructive shell command detected"
+    fi
+    # Recursive delete of a filesystem root or a system directory. The old
+    # pattern required a non-letter after "/", so `rm -rf /etc` and
+    # `rm -rf /usr` passed straight through. User directories and temp paths
+    # are deliberately not matched: agents clean their own build/scratch dirs.
+    if echo "$INPUT" | grep -qE 'rm[[:space:]]+(-[a-zA-Z]+[[:space:]]+)+/([[:space:]]|$|\*)|rm[[:space:]]+(-[a-zA-Z]+[[:space:]]+)+/(bin|sbin|etc|usr|var|private|System|Library|Applications|cores|dev|boot|opt)([[:space:]]|/|$)'; then
+      block "recursive delete of a system path detected"
+    fi
+
+    # --- APPROVAL-REQUIRED (rich approval / defer) ---
+    if [ "${MODE_BYPASS:-0}" = "1" ]; then
+      exit 0
+    fi
+    local_cmd="$(printf '%s' "$INPUT" | head -c 400)"
+
+    # Every approval-required command routes through gate(), so block mode and
+    # elicitate mode share one detection list. The previous layout kept a
+    # second, hand-maintained copy of the patterns for block mode and the two
+    # had already drifted apart.
+    gate() { # $1=title $2=question $3=reason $4=urgency $5=effects
+      if [ "${MODE_FORCE_BLOCK:-0}" = "1" ]; then
+        block "approval-required command in JCODE_APPROVAL_MODE=block"
+      fi
+      request_approval "$1" "$2" "$local_cmd" "$3" "$4" "$5"
+    }
+
+    # repo fork / create
+    if echo "$INPUT" | grep -qE 'gh repo fork'; then
+      gate "Approve: gh repo fork" "An agent wants to fork a repository. Review the target and effects, then approve, deny, or defer to your inbox." "$local_cmd" "Forking creates a new repository under the account and may clone large history." warning "Creates a new repository|Downloads/copies repository history"
+    fi
+    if echo "$INPUT" | grep -qE 'gh repo create'; then
+      gate "Approve: gh repo create" "An agent wants to create a repository. Confirm the name, owner, and visibility before approving." "$local_cmd" "Creating a repository publishes a new remote namespace." warning "Creates a new repository|Becomes publicly/discoverably visible per flags"
+    fi
+    if echo "$INPUT" | grep -qE 'gh repo delete'; then
+      gate "Approve: gh repo delete" "An agent wants to DELETE a repository. This is destructive and may be irreversible." "$local_cmd" "Deleting a repository removes code, issues, PRs and history." danger "Repository and all history removed|Issues/PRs/releases lost|Not recoverable by the agent"
+    fi
+
+    # force push / history rewrite
+    if echo "$INPUT" | grep -qE 'git push.*--force|git push.*--force-with-lease|git push.*[[:space:]]-f([[:space:]]|$)'; then
+      gate "Approve: force push" "An agent wants to force-push, which rewrites remote history." "$local_cmd" "Force-push can discard commits on the remote." danger "Remote history rewritten|Other agents' work may be lost"
+    fi
+    if echo "$INPUT" | grep -qE 'git reset.*--hard|git reset\s+HEAD~|git reset\s+HEAD\^|git reset\s+[0-9a-f]+\s*$'; then
+      gate "Approve: history rewrite" "An agent wants to reset/rewrite local history." "$local_cmd" "Loses uncommitted and/or committed work." danger "Local changes lost"
+    fi
+    if echo "$INPUT" | grep -qE 'git clean\s+-fd|git clean\s+-f\s+-d|git clean\s+-df'; then
+      gate "Approve: git clean -fd" "An agent wants to delete untracked files." "$local_cmd" "Untracked files are unrecoverable after clean." danger "Untracked files deleted|Not recoverable"
+    fi
+    if echo "$INPUT" | grep -qE 'git branch\s+-D\s|git branch\s+--delete\s+--force'; then
+      gate "Approve: git branch -D" "An agent wants to force-delete a branch." "$local_cmd" "Unmerged commits on the branch may be lost." warning "Branch deleted|Unmerged work may be lost"
+    fi
+
+    # GitHub write ops
+    if echo "$INPUT" | grep -qE 'gh (secret|variable) (set|delete|remove|clear)'; then
+      gate "Approve: GitHub secret/variable write" "An agent wants to modify repository secrets or variables." "$local_cmd" "Secrets/variables affect CI and deployments." warning "CI/deploy behavior changes"
+    fi
+    # gh api is a GET by default. A write is either an explicit method
+    # override in any spelling (-X PATCH, -XPATCH, --method PATCH,
+    # --method=PATCH) or an implicit POST caused by a request-body flag
+    # (-f/--field/-F/--raw-field/--input), unless a read method was requested.
+    # Matching only the literal "-X POST|PUT|PATCH|DELETE" spelling let
+    # `--method PATCH` and bare `-f` writes through unapproved.
+    gh_api_write=0
+    if echo "$INPUT" | grep -qE 'gh api.*(--method|-X)[[:space:]=]*(POST|PUT|PATCH|DELETE)([^A-Za-z]|$)'; then
+      gh_api_write=1
+    elif echo "$INPUT" | grep -qE 'gh api.*[[:space:]](-f|-F|--field|--raw-field|--input)([[:space:]]|=|$)' \
+      && ! echo "$INPUT" | grep -qE 'gh api.*(--method|-X)[[:space:]=]*(GET|HEAD)([^A-Za-z]|$)'; then
+      gh_api_write=1
+    fi
+    if [ "$gh_api_write" = "1" ]; then
+      gate "Approve: GitHub API write" "An agent wants to make a write request to the GitHub API." "$local_cmd" "API writes can change repository/account state." warning "GitHub state changes"
+    fi
+
+    # Mutating gh subcommands outside `gh api` (merges, releases, workflow
+    # dispatch, issue/cache/run mutations) are state changes too.
+    if echo "$INPUT" | grep -qE 'gh (repo|pr|release|workflow|issue|run|cache|gist|label|ruleset) (create|delete|edit|merge|close|reopen|comment|review|upload|download|cancel|rerun|enable|disable|sync|transfer|archive|unarchive|rename|lock|unlock|pin|unpin|ready|approve|reject|publish|import|clone|set|remove|clear|run)'; then
+      gate "Approve: gh state-changing command" "An agent wants to run a gh subcommand that mutates GitHub state." "$local_cmd" "This changes repository or account state on GitHub." warning "GitHub state changes"
+    fi
+    ;;
+
+  write|edit)
+    if echo "$INPUT" | grep -qE '"file_path":"/etc/|"file_path":"/usr/|"file_path":"/var/'; then
+      block "writes to system directories are not allowed"
+    fi
+    ;;
+esac
+
+exit 0

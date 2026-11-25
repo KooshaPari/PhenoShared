@@ -1,0 +1,11 @@
+{
+  "schema_version": "pheno.hardware_smoke.v1",
+  "checked_at": "2026-07-16T02:09:46.3026026Z",
+  "gpu_index": 0,
+  "gpu": "NVIDIA GeForce GTX 1080 Ti",
+  "model": "local/qwen35-08b",
+  "binary": "llama.cpp-b10012-windows-cuda13.3",
+  "status": "cuda_init_failed_cpu_fallback",
+  "evidence": "state/qwen1080_smoke.stderr.log",
+  "next_gate": "build_or_acquire_cuda12_pascal_llama_cpp"
+}

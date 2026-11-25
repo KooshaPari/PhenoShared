@@ -1,0 +1,78 @@
+name: "KLA Meta Demo - Using KLA to Demo KLA"
+settings:
+  width: 120
+  height: 30
+  shell: "zsh"
+  theme: "default"
+
+steps:
+  - type: command
+    text: "echo '🎬 Welcome to KLA - Kommand Line Automation!'"
+    wait: "1s"
+    
+  - type: command
+    text: "echo 'Let me show you how KLA works by using KLA itself...'"
+    wait: "1s"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '📋 First, let me show you the help:'"
+    wait: "500ms"
+    
+  - type: command
+    text: "kla --help"
+    wait: "2s"
+    
+  - type: screenshot
+    name: "kla-help"
+    
+  - type: command
+    text: "echo ''"
+    wait: "500ms"
+    
+  - type: command
+    text: "echo '📸 Now let me take a screenshot using KLA:'"
+    wait: "1s"
+    
+  - type: type
+    text: "kla screenshot \"echo 'Hello from KLA!' && ls -la\" --output demo-screenshot.png"
+    speed: "30ms"
+    
+  - type: command
+    text: ""
+    wait: "2s"
+    
+  - type: command
+    text: "echo '✅ Screenshot saved! Now let me show you a script execution:'"
+    wait: "1s"
+    
+  - type: command
+    text: "echo '📝 Here is our git workflow script:'"
+    wait: "1s"
+    
+  - type: command
+    text: "head -10 examples/git-workflow.kla.yaml"
+    wait: "2s"
+    
+  - type: command
+    text: "echo '🚀 Now running the script with KLA:'"
+    wait: "1s"
+    
+  - type: type
+    text: "kla demo examples/git-workflow.kla.yaml"
+    speed: "30ms"
+    
+  - type: command
+    text: ""
+    wait: "3s"
+    
+  - type: command
+    text: "echo '🎉 That was KLA demonstrating itself!'"
+    wait: "1s"
+    
+  - type: command
+    text: "echo 'Visit github.com/KooshaPari/KommandLineAutomation for more!'"
+    wait: "2s"

@@ -1,0 +1,22 @@
+[package]
+name = "forge_select"
+version = "0.1.1"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+bstr.workspace = true
+colored.workspace = true
+console.workspace = true
+crossterm = "0.29.0"
+derive_setters.workspace = true
+nucleo.workspace = true
+nucleo-picker.workspace = true
+rustyline.workspace = true
+signal-hook = "0.3"
+tracing.workspace = true
+
+[dev-dependencies]
+pretty_assertions.workspace = true

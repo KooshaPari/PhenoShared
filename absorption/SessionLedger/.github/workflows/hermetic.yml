@@ -1,0 +1,77 @@
+name: Hermetic Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  source-date-epoch-policy:
+    name: release · SOURCE_DATE_EPOCH policy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: verify SOURCE_DATE_EPOCH docs + release wiring
+        shell: pwsh
+        run: ./scripts/repro-check.ps1 -PolicyOnly
+
+  # Soft C06 L53 SLSA isolation checklist — docs/pin + isolated rebuild wiring
+  # (non-blocking). Single pinned container rebuild is evidence, not two-builder L3.
+  slsa-isolation-checklist:
+    name: hermetic · SLSA isolation checklist (soft)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: SelfCheck SLSA isolation checklist + builder pin
+        shell: pwsh
+        run: ./scripts/slsa-isolation-check.ps1 -SelfCheck
+
+  # Soft C06 L60 exact rustc pin — toml/json/docs + CI wiring (non-blocking).
+  rustc-toolchain-pin:
+    name: hermetic · exact rustc toolchain pin (soft)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: SelfCheck rust-toolchain.toml exact channel + CI uses pin
+        shell: pwsh
+        run: ./scripts/rustc-toolchain-check.ps1 -SelfCheck
+
+  sl-daemon-offline:
+    name: sl-daemon · locked offline build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - name: cargo fetch then offline build
+        shell: pwsh
+        run: ./scripts/hermetic-check.ps1
+
+  # Soft C06 L53 reusable-workflow provenance — caller SHA pin + digest input
+  # (non-blocking). See docs/ops/reusable-hermetic-pin.md.
+  reusable-provenance-checklist:
+    name: hermetic · reusable workflow provenance (soft)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: SelfCheck reusable workflow caller pin
+        shell: pwsh
+        run: ./scripts/reusable-provenance-check.ps1 -SelfCheck
+
+  # Reusable workflow — job-level call, pinned to SessionLedger commit SHA.
+  # Pin: ec8916547e5678f72fe6894509249f9b23367b80 (see docs/ops/reusable-hermetic-pin.md)
+  sl-daemon-offline-container:
+    name: sl-daemon · repository builder image offline build
+    uses: KooshaPari/SessionLedger/.github/workflows/reusable-hermetic-build.yml@3415b40e2e5b14f3014b40b33ca7313fda50a4b4
+    with:
+      builder_image_digest: sha256:16381cf25d89fd5dc8a904ff4a7b8d4660a856ed9738b8a7e879d816439ce2a5

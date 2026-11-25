@@ -1,0 +1,19 @@
+name: ansible-lint
+
+on:
+  pull_request:
+    paths:
+      - "iac/ansible/**"
+      - ".github/workflows/ansible-lint.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: ansible/ansible-lint@262624cd0ab22a4221293216856c59671ce7aa5e  # was: @main
+        with:
+          working_directory: iac/ansible

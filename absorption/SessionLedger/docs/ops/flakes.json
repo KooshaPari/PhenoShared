@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "SessionLedger flake tracking records. Keep entries empty until a confirmed flake is opened.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "test",
+      "status",
+      "owner",
+      "opened",
+      "deadline",
+      "evidence",
+      "quarantine"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Stable issue, ticket, or tracker id."
+      },
+      "test": {
+        "type": "string",
+        "description": "Exact test target or test name."
+      },
+      "status": {
+        "type": "string",
+        "enum": ["open", "quarantined", "resolved"]
+      },
+      "owner": {
+        "type": "string"
+      },
+      "opened": {
+        "type": "string",
+        "format": "date"
+      },
+      "deadline": {
+        "type": "string",
+        "format": "date"
+      },
+      "evidence": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1
+      },
+      "quarantine": {
+        "type": ["object", "null"],
+        "additionalProperties": false,
+        "required": ["mechanism", "removal_plan"],
+        "properties": {
+          "mechanism": {
+            "type": "string"
+          },
+          "removal_plan": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "id": "issue-123",
+      "test": "cargo test --test properties merge_is_permutation_invariant",
+      "status": "quarantined",
+      "owner": "qa",
+      "opened": "2026-07-13",
+      "deadline": "2026-07-27",
+      "evidence": [
+        "https://github.com/KooshaPari/SessionLedger/actions/runs/123"
+      ],
+      "quarantine": {
+        "mechanism": "temporarily excluded from required CI job",
+        "removal_plan": "commit minimized regression fixture and re-enable test"
+      }
+    }
+  ]
+}

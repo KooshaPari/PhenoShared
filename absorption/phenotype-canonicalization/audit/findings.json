@@ -1,0 +1,262 @@
+[
+  {
+    "id": "F01",
+    "title": "PhenoShared has inconsistent root identities",
+    "evidence": [
+      "G01",
+      "G02",
+      "G03"
+    ],
+    "observation": "README describes PhenoMLX/OMLX, root npm manifest names phenodocs, and Cargo workspace identifies substrate while listing absorbed shared domains.",
+    "interpretation": "Entry-point and authority ambiguity can send agents to the wrong surface; consolidation is not yet proven by folder presence.",
+    "countercase": "Some identities may be intentional independent components in a polyglot workspace; test package-level ownership rather than assuming corruption.",
+    "acceptance_proof": "One accurate root map, distinct component manifests, exact source/release owners and clean consumer builds.",
+    "owner_role": "Shared integration + registry role",
+    "priority": "P0",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F02",
+    "title": "Tracera multi-project typecheck has a coverage hazard",
+    "evidence": [
+      "G04",
+      "E01"
+    ],
+    "observation": "One tsc invocation repeats -p six times. A separate TypeScript 5.8.3 fixture reproduced last-project selection.",
+    "interpretation": "The current command cannot be trusted as evidence that all six projects are checked.",
+    "countercase": "Tracera locked compiler was not executed here; run the counterexample and actual project canaries on that exact release.",
+    "acceptance_proof": "A seeded independent error in each eligible project fails the final gate, including the first and last; keep check side effects inside declared cache paths.",
+    "owner_role": "Tracera frontend + verification owner",
+    "priority": "P0",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F03",
+    "title": "Typecheck contract test freezes command text rather than coverage",
+    "evidence": [
+      "G05",
+      "G22"
+    ],
+    "observation": "Test asserts the exact multi--p command and disallows --build; path history ties it to PR 900 in August.",
+    "interpretation": "An instrument can preserve a bad implementation while remaining green.",
+    "countercase": "String assertions can be a secondary interface test, but cannot prove behavior.",
+    "acceptance_proof": "Independent behavioral negative controls plus valid multi-project execution and revision binding.",
+    "owner_role": "Verification instruments",
+    "priority": "P0",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F04",
+    "title": "A Tracera lint check invokes fixes",
+    "evidence": [
+      "G04"
+    ],
+    "observation": "lint:stylelint invokes lint:stylelint:fix before running stylelint.",
+    "interpretation": "Read-only verification and repair are not cleanly separated.",
+    "countercase": "An explicitly named repair pipeline may mutate; a gate must not silently rely on repairs.",
+    "acceptance_proof": "Check-only run preserves tracked source and reports pre-existing defects; explicit fix command is separate.",
+    "owner_role": "Tracera frontend",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F05",
+    "title": "Canonical JS migration is heterogeneous in live scripts",
+    "evidence": [
+      "G04",
+      "G06",
+      "G07"
+    ],
+    "observation": "Tracera uses Oxlint/Oxfmt; HeliosLab uses Biome; OmniRoute uses ESLint.",
+    "interpretation": "Canonical choice is not consistently propagated through current entry points.",
+    "countercase": "Fork contracts, plugins or framework rules may justify bounded retained tooling; docs-only grep would overstate this finding.",
+    "acceptance_proof": "Rule-by-rule equivalence or strengthened coverage, formatter semantic parity, and actual clean consumer CI with a scoped residual-tool record when necessary.",
+    "owner_role": "JS tooling + consumer owners",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F06",
+    "title": "PhenoDesign tool provenance is incompletely declared",
+    "evidence": [
+      "G08"
+    ],
+    "observation": "format calls oxfmt, but shown devDependencies omit it; tool dependencies use latest and packageManager is bare bun.",
+    "interpretation": "Clean-room tool resolution, binary identity and update behavior require verification.",
+    "countercase": "A lockfile or ancestor workspace can resolve versions; absence from this manifest alone does not prove build failure.",
+    "acceptance_proof": "Declared tool source, frozen lock install, exact resolved binary version and formatter canary from outside a warm checkout.",
+    "owner_role": "Design + tooling",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F07",
+    "title": "Python metadata, lint target and execution need reconciliation",
+    "evidence": [
+      "G09",
+      "G10"
+    ],
+    "observation": "AgilePlus requires Python >=3.14 but Ruff targets py312. Portage has uv/Ruff/ty and declares >=3.12.",
+    "interpretation": "Compatibility minimum, lint syntax target and actual free-threaded runtime are different decisions.",
+    "countercase": "Portage lower minimum can intentionally support upstream consumers; it does not prove the development interpreter is old.",
+    "acceptance_proof": "Pin runtime per profile; import real dependency set; verify Py_GIL_DISABLED and GIL off; test races and align intended lint syntax.",
+    "owner_role": "Python toolchain + MCP owners",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F08",
+    "title": "FastMCP is present; shared implementation authority is not fully resolved",
+    "evidence": [
+      "G17",
+      "G18",
+      "G19",
+      "G20",
+      "G09"
+    ],
+    "observation": "Several current server paths import FastMCP and README paths refer to PhenoFastMCP. Similar lead_server paths exist in two trees.",
+    "interpretation": "Start with source/release/consumer tracing, not creating another MCP framework.",
+    "countercase": "Parallel paths may be packaging mirrors or intentional variants; full-file and lineage comparison remains unperformed.",
+    "acceptance_proof": "One source writer per implementation, explicit mirrors, real package resolution, protocol/authorization/cancellation conformance in consumers.",
+    "owner_role": "MCP capability owner",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F09",
+    "title": "A reusable workflow caller has an unresolved provider",
+    "evidence": [
+      "G15",
+      "G23"
+    ],
+    "observation": "AgilePlus references phenotype-tooling sbom-monthly.yml@main. Provider lookup returns 404 in this connection.",
+    "interpretation": "Both source location and mutable ref need attention.",
+    "countercase": "404 can mean access restriction or lifecycle changes, not necessarily deletion; hosted workflow success was not examined.",
+    "acceptance_proof": "Resolve provider by immutable ID and permission, export actual workflow path at immutable ref, demonstrate hosted call and retained result.",
+    "owner_role": "Shared CI + AgilePlus",
+    "priority": "P0",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F10",
+    "title": "Shared release optimization is size-oriented",
+    "evidence": [
+      "G03",
+      "W10"
+    ],
+    "observation": "Shared Cargo release uses opt-level=z, LTO and one codegen unit while containing performance-oriented domains.",
+    "interpretation": "There is no single universally optimal release profile for these products.",
+    "countercase": "Size optimization may help instruction-cache behavior; this is not measured evidence of a slowdown.",
+    "acceptance_proof": "Separate justified profile choices; compare whole-workload p95/p99, throughput, memory, size and build cost on intended hardware.",
+    "owner_role": "Native performance owners",
+    "priority": "P2",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F11",
+    "title": "Authority documents have different dates and roles",
+    "evidence": [
+      "G11",
+      "G12",
+      "G13"
+    ],
+    "observation": "Registry references a May ecosystem count and a June language-tier policy; Shared has a September 16 pinned global handbook.",
+    "interpretation": "Freshness and declared authority must be explicit; copy propagation must not create independent writers.",
+    "countercase": "An older domain decision may still be compatible and valid; newest prose alone is not authority.",
+    "acceptance_proof": "Field-level authority map and explicit supersession/compatibility links; no parallel registry.",
+    "owner_role": "Registry + handbook role",
+    "priority": "P0",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F12",
+    "title": "Docs/design consumption exists in declarations but is not qualified",
+    "evidence": [
+      "G02",
+      "G08",
+      "G17"
+    ],
+    "observation": "Shared npm manifest declares @phenotype/docs workspace dependency and a Git design dependency; PhenoDesign exports themes/tokens/CSS.",
+    "interpretation": "The problem is not simply that there is no shared docs/design layer; actual release and consumer contracts need proof.",
+    "countercase": "Declared dependency may be unused, shadowed by local assets or intentionally development-only.",
+    "acceptance_proof": "Isolated package install, imports/renderer reachability, generated API/version lineage, link and visual state tests on consumer artifacts.",
+    "owner_role": "Docs + design + consumer owners",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F13",
+    "title": "Existing Lefthook is package-specific and uses ambient Python",
+    "evidence": [
+      "G14"
+    ],
+    "observation": "Infra Lefthook invokes Python wrappers around cargo commands for phenotype-infra and a local commit-message script.",
+    "interpretation": "File presence does not establish interpreter reproducibility, current package coverage, installation, or cross-repo reuse.",
+    "countercase": "Hooks may be intentionally scoped; ambient interpreter may be managed externally.",
+    "acceptance_proof": "Resolve effective hook config, intended package set and toolchain; test nested-file selection, installation and equivalent mandatory CI gate.",
+    "owner_role": "Shared developer tooling",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F14",
+    "title": "Patch burden and dependency rewriting need semantic gates",
+    "evidence": [
+      "G04",
+      "G21"
+    ],
+    "observation": "Tracera postinstall chains seven patch scripts; recent Shared history reports redaction followed by URL repairs.",
+    "interpretation": "Mass transformations and local patches need typed scope, rationale, upstream linkage and clean-resolution proof.",
+    "countercase": "Necessary upstream compatibility patches may be cheaper than a fork or rewrite; some redactions are required.",
+    "acceptance_proof": "Patch registry with exit condition, exact dependency version coverage and canaries; no mutation of credentials or reintroduction of secrets.",
+    "owner_role": "Dependency + supply-chain owner",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  },
+  {
+    "id": "F15",
+    "title": "Native TypeScript command name is not an adoption detector",
+    "evidence": [
+      "G02",
+      "G04",
+      "W01"
+    ],
+    "observation": "Shared declares TypeScript ^7.0.2; Tracera declares 5.9.3; upstream now calls native TypeScript tsc.",
+    "interpretation": "A blanket replacement of every tsc occurrence with tsgo is incorrect.",
+    "countercase": "Compiler-API consumers can need a separate JS implementation even when CLI checks are native.",
+    "acceptance_proof": "Resolve CLI provider/version/hash separately from API dependencies; qualify framework emit/typecheck/editor paths.",
+    "owner_role": "TypeScript toolchain",
+    "priority": "P1",
+    "kind": "observed_static",
+    "status": "open",
+    "product_execution": "not_run"
+  }
+]

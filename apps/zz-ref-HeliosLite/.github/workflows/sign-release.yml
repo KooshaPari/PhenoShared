@@ -1,0 +1,260 @@
+name: Sign Release Binaries
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Release tag to sign
+        required: true
+        type: string
+    secrets:
+      MACOS_CERTIFICATE:
+        required: false
+      MACOS_CERTIFICATE_PWD:
+        required: false
+      MACOS_SIGNING_IDENTITY:
+        required: false
+      MACOS_NOTARIZATION_APPLE_ID:
+        required: false
+      MACOS_NOTARIZATION_PWD:
+        required: false
+      MACOS_NOTARIZATION_TEAM_ID:
+        required: false
+      MACOS_NOTARIZATION_API_KEY:
+        required: false
+      MACOS_NOTARIZATION_KEY_ID:
+        required: false
+      MACOS_NOTARIZATION_ISSUER_ID:
+        required: false
+      SIGNPATH_API_TOKEN:
+        required: false
+      SIGNPATH_ORGANIZATION_ID:
+        required: false
+permissions:
+  contents: read
+jobs:
+  sign:
+    name: sign-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+      actions: read
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            platform: macos
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            platform: macos
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            platform: windows
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
+            platform: windows
+    env:
+      MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+      MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+      MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+      MACOS_NOTARIZATION_APPLE_ID: ${{ secrets.MACOS_NOTARIZATION_APPLE_ID }}
+      MACOS_NOTARIZATION_PWD: ${{ secrets.MACOS_NOTARIZATION_PWD }}
+      MACOS_NOTARIZATION_TEAM_ID: ${{ secrets.MACOS_NOTARIZATION_TEAM_ID }}
+      SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+      SIGNPATH_ORGANIZATION_ID: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+      SIGNPATH_PROJECT_SLUG: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+      SIGNPATH_SIGNING_POLICY_SLUG: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+    steps:
+      - name: Require configured signing identity
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          MACOS_NOTARIZATION_API_KEY: ${{ secrets.MACOS_NOTARIZATION_API_KEY }}
+          MACOS_NOTARIZATION_KEY_ID: ${{ secrets.MACOS_NOTARIZATION_KEY_ID }}
+          MACOS_NOTARIZATION_ISSUER_ID: ${{ secrets.MACOS_NOTARIZATION_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          if [ "$PLATFORM" = windows ]; then
+            # SIGNPATH credentials are optional: when absent, skip Windows
+            # signing and attach unsigned binaries instead of failing the
+            # whole release pipeline.
+            missing=0
+            for name in SIGNPATH_API_TOKEN SIGNPATH_ORGANIZATION_ID SIGNPATH_PROJECT_SLUG SIGNPATH_SIGNING_POLICY_SLUG; do
+              [ -z "${!name:-}" ] && missing=$((missing + 1))
+            done
+            if [ "$missing" -ne 0 ]; then
+              echo "SIGNPATH signing configuration incomplete ($missing of 4 missing)"
+              echo "Skipping Windows signing; unsigned Windows binaries will be attached"
+              echo "SKIP_WINDOWS_SIGNING=1" >> "$GITHUB_ENV"
+            fi
+          else
+            required="MACOS_CERTIFICATE MACOS_CERTIFICATE_PWD MACOS_SIGNING_IDENTITY"
+            for name in $required; do
+              if [ -z "${!name:-}" ]; then
+                echo "::error::Missing signing configuration: $name"
+                exit 1
+              fi
+            done
+          fi
+          if [ "$PLATFORM" = macos ]; then
+            api_present=0
+            apple_present=0
+            for name in MACOS_NOTARIZATION_API_KEY MACOS_NOTARIZATION_KEY_ID MACOS_NOTARIZATION_ISSUER_ID; do
+              [ -n "${!name:-}" ] && api_present=$((api_present + 1))
+            done
+            for name in MACOS_NOTARIZATION_APPLE_ID MACOS_NOTARIZATION_PWD MACOS_NOTARIZATION_TEAM_ID; do
+              [ -n "${!name:-}" ] && apple_present=$((apple_present + 1))
+            done
+            if [ "$api_present" -eq 3 ]; then
+              echo "NOTARY_AUTH_MODE=api-key" >> "$GITHUB_ENV"
+            elif [ "$api_present" -ne 0 ]; then
+              echo "::error::Incomplete API-key notarization configuration; require MACOS_NOTARIZATION_API_KEY, MACOS_NOTARIZATION_KEY_ID, and MACOS_NOTARIZATION_ISSUER_ID"
+              exit 1
+            elif [ "$apple_present" -eq 3 ]; then
+              echo "NOTARY_AUTH_MODE=apple-id" >> "$GITHUB_ENV"
+            elif [ "$apple_present" -ne 0 ]; then
+              echo "::error::Incomplete Apple-ID notarization configuration; require MACOS_NOTARIZATION_APPLE_ID, MACOS_NOTARIZATION_PWD, and MACOS_NOTARIZATION_TEAM_ID"
+              exit 1
+            else
+              echo "::error::Missing notarization configuration; configure the complete API-key set or complete Apple-ID set"
+              exit 1
+            fi
+          fi
+      - name: Download staged release binaries
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: release-assets-unsigned-${{ matrix.target }}
+          path: binaries
+
+      # ── macOS Signing + Notarization ──
+      - if: matrix.platform == 'macos'
+        name: Import macOS certificate
+        env:
+          MACOS_CERTIFICATE_BASE64: ${{ env.MACOS_CERTIFICATE }}
+          KEYCHAIN_PATH: ${{ runner.temp }}/app-signing.keychain-db
+        run: |
+          CERTIFICATE_PATH="${{ runner.temp }}/certificate.p12"
+          echo "$MACOS_CERTIFICATE_BASE64" | base64 --decode > "$CERTIFICATE_PATH"
+          KEYCHAIN_PATH="${{ runner.temp }}/app-signing.keychain-db"
+          security create-keychain -p "" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "" "$KEYCHAIN_PATH"
+          security import "$CERTIFICATE_PATH" \
+            -P "$MACOS_CERTIFICATE_PWD" -A -t cert -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: \
+            -s -k "" "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+      - if: matrix.platform == 'macos'
+        name: Codesign macOS binaries
+        run: |
+          for bin in binaries/forge-*-apple-darwin binaries/helioslite-*-apple-darwin binaries/forge_dbd-*-apple-darwin; do
+            [ -f "$bin" ] || continue
+            echo "Signing $bin..."
+            codesign --force --options runtime --timestamp \
+              --sign "$MACOS_SIGNING_IDENTITY" \
+              --keychain "${{ runner.temp }}/app-signing.keychain-db" \
+              "$bin"
+            codesign --verify --verbose "$bin"
+          done
+
+      - if: matrix.platform == 'macos'
+        name: Notarize macOS binaries
+        env:
+          MACOS_NOTARIZATION_API_KEY: ${{ secrets.MACOS_NOTARIZATION_API_KEY }}
+          MACOS_NOTARIZATION_KEY_ID: ${{ secrets.MACOS_NOTARIZATION_KEY_ID }}
+          MACOS_NOTARIZATION_ISSUER_ID: ${{ secrets.MACOS_NOTARIZATION_ISSUER_ID }}
+        run: |
+          set -euo pipefail
+          mkdir -p notarize
+          for bin in binaries/forge-*-apple-darwin binaries/helioslite-*-apple-darwin binaries/forge_dbd-*-apple-darwin; do
+            [ -f "$bin" ] || continue
+            cp "$bin" notarize/
+          done
+          cd notarize
+          ZIPFILE="notarize-bundle.zip"
+          zip -r "$ZIPFILE" .
+          if [ "$NOTARY_AUTH_MODE" = api-key ]; then
+            umask 077
+            NOTARY_KEY_PATH="${RUNNER_TEMP}/notary-authkey.p8"
+            trap 'rm -f "$NOTARY_KEY_PATH"' EXIT
+            printf '%s' "$MACOS_NOTARIZATION_API_KEY" > "$NOTARY_KEY_PATH"
+            xcrun notarytool submit "$ZIPFILE" \
+              --key "$NOTARY_KEY_PATH" \
+              --key-id "$MACOS_NOTARIZATION_KEY_ID" \
+              --issuer "$MACOS_NOTARIZATION_ISSUER_ID" \
+              --wait --output-format json > result.json
+          elif [ "$NOTARY_AUTH_MODE" = apple-id ]; then
+            xcrun notarytool submit "$ZIPFILE" \
+              --apple-id "$MACOS_NOTARIZATION_APPLE_ID" \
+              --password "$MACOS_NOTARIZATION_PWD" \
+              --team-id "$MACOS_NOTARIZATION_TEAM_ID" \
+              --wait --output-format json > result.json
+          else
+            echo "::error::Unsupported notarization authentication mode"
+            exit 1
+          fi
+          jq -e '.status == "Accepted"' result.json >/dev/null
+          cd ..
+          # Raw Mach-O command-line binaries cannot be stapled; the submitted
+          # ZIP receives notarization. Keep the signed raw assets unchanged.
+
+      - if: matrix.platform == 'windows' && env.SKIP_WINDOWS_SIGNING != '1'
+        name: Upload unsigned Windows artifacts
+        id: unsigned
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: unsigned-windows-${{ matrix.target }}
+          path: binaries/*.exe
+          if-no-files-found: error
+
+      - if: matrix.platform == 'windows' && env.SKIP_WINDOWS_SIGNING != '1'
+        name: Sign Windows binaries via SignPath
+        uses: signpath/github-action-submit-signing-request@c92b958760219087e01f8d67a1669ed57afe2627
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ secrets.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed
+
+      - if: matrix.platform == 'windows' && env.SKIP_WINDOWS_SIGNING != '1'
+        name: Verify and replace signed Windows artifacts
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          foreach ($file in Get-ChildItem binaries/*.exe) {
+            $signed = Join-Path signed $file.Name
+            if ((Get-AuthenticodeSignature $signed).Status -ne 'Valid') {
+              throw "Invalid Authenticode signature: $($file.Name)"
+            }
+            Copy-Item $signed $file.FullName -Force
+          }
+
+      - name: Regenerate checksums for signed assets
+        run: |
+          set -euo pipefail
+          for bin in binaries/*; do
+            case "$bin" in *.sha256) continue ;; esac
+            [ -f "$bin" ] || continue
+            (cd binaries
+             name=$(basename "$bin")
+             if command -v sha256sum >/dev/null 2>&1; then
+               sha256sum "$name" > "$name.sha256"
+             else
+               shasum -a 256 "$name" > "$name.sha256"
+             fi)
+          done
+
+      - name: Stage signed release assets
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release-assets-signed-${{ matrix.target }}
+          path: binaries/*
+          if-no-files-found: error

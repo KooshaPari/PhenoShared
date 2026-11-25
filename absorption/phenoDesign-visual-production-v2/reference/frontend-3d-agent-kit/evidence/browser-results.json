@@ -1,0 +1,130 @@
+{
+  "tested_at_utc": "2026-09-15T20:30:18Z",
+  "environment": {
+    "os": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "browser": "144.0.7559.96",
+    "executable": "/usr/bin/chromium",
+    "launch_flags": [
+      "--no-sandbox",
+      "--use-angle=swiftshader",
+      "--enable-unsafe-swiftshader"
+    ],
+    "mode": "standalone document injection; URL navigation blocked in preparation environment"
+  },
+  "renderer": "CPU triangle preview (WebGL unavailable)",
+  "source_sha256": "3625aa0e542966a39f3c1c93baad89a9d5a81d351af2c0e4f3707c14b5536f5b",
+  "checks": [
+    {
+      "name": "Renderer became ready",
+      "status": "PASS",
+      "detail": "CPU triangle preview (WebGL unavailable)"
+    },
+    {
+      "name": "No external resource requests in standalone mode",
+      "status": "PASS",
+      "detail": "[]"
+    },
+    {
+      "name": "Scroll updates absolute state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Scroll separates construction",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Manual separation override",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Manual rejoin overrides middle of scroll",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reverse scroll returns rest orientation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Material selection changes real pixels",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Swatch exposes selected state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Keyboard changes orientation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Paused scroll does not change pose progress",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No continuous idle rendering",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Offscreen control does not schedule rendering",
+      "status": "PASS",
+      "detail": "Test-only spacer ensures the stage is fully offscreen"
+    },
+    {
+      "name": "Mobile no horizontal overflow",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reduced motion defaults paused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reduced motion avoids long pinned story",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No-JS baseline headline and poster",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No-JS hides inert controls",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No canvas context retains poster",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No renderer disables controls",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No page JavaScript errors in normal/reduced paths",
+      "status": "PASS",
+      "detail": "[]"
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "GPU shader path not certified when CPU renderer is active.",
+    "No Blender or Three/GSAP dependency runtime exercised by this test.",
+    "Not a full accessibility or real-touch-device audit.",
+    "No production frame-rate claim; timings include the CI environment."
+  ]
+}

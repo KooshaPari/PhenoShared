@@ -1,0 +1,25 @@
+# Local swarm layout — locked by ADR 0005.
+
+combo_id: Main
+omniroute_url: "${OMNIROUTE_URL:-http://localhost:20128}"
+
+always_on:
+  primary: local.qwen35_08b
+
+on_demand:
+  - local.lfm25_8b_a1b
+  - local.ornith_8b
+
+swap_policy:
+  unload_on_demand_before_load: true
+  keep_always_on: true
+
+endpoints:
+  qwen35_08b: "http://127.0.0.1:8080/v1"
+  lfm25_8b_a1b: "http://127.0.0.1:8081/v1"
+  ornith_8b: "http://127.0.0.1:8082/v1"
+
+targets:
+  routine_on_qwen35_08b_pct: 0.50
+  p95_routine_latency_s: 5
+  compiled_context_tokens: 5120

@@ -1,0 +1,21 @@
+# AuthKit Python Workspace
+# Uses Poetry for dependency management
+
+[tool.poetry]
+name = "AuthKit"
+version = "0.1.0"
+description = "Authentication & Security"
+authors = ["Phenotype Team <team@phenotype.space>"]
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.3"
+black = "^26.3.1"
+ruff = "^0.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,94 @@
+# SessionLedger SLO alert rules.
+#
+# Load this file into Prometheus with `rule_files`. The expressions assume the
+# daemon is scraped as job="sl-daemon" and exports the RED metrics documented in
+# docs/ops/observability.md. The current exporter exposes service-wide counters
+# and mean duration only; route-level and p95 latency alerts need histogram
+# buckets in a future exporter.
+groups:
+  - name: sessionledger.slo
+    interval: 30s
+    rules:
+      - alert: SessionLedgerDaemonScrapeDown
+        expr: up{job="sl-daemon"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          slo: availability
+        annotations:
+          summary: "SessionLedger daemon scrape is down"
+          description: "Prometheus has not been able to scrape {{ $labels.instance }} for 2 minutes. Check /healthz, /readyz, and daemon logs."
+          runbook: "docs/ops/runbook.md"
+
+      - alert: SessionLedgerDaemonScrapeMissing
+        expr: absent(up{job="sl-daemon"})
+        for: 5m
+        labels:
+          severity: warning
+          slo: availability
+        annotations:
+          summary: "SessionLedger daemon scrape target is missing"
+          description: 'No up{job="sl-daemon"} series exists. Check Prometheus scrape configuration before treating this as daemon downtime.'
+          runbook: "docs/ops/dashboards/README.md"
+
+      - alert: SessionLedgerFastErrorBudgetBurn
+        expr: |
+          (
+            sum by (job, instance) (rate(sl_http_errors_total{job="sl-daemon"}[5m]))
+            /
+            clamp_min(sum by (job, instance) (rate(sl_http_request_duration_seconds_count{job="sl-daemon"}[5m])), 1e-9)
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          slo: availability
+        annotations:
+          summary: "SessionLedger HTTP error budget is burning quickly"
+          description: "More than 5% of daemon HTTP requests have returned 4xx/5xx over 5 minutes on {{ $labels.instance }}."
+          runbook: "docs/ops/runbook.md"
+
+      - alert: SessionLedgerSlowErrorBudgetBurn
+        expr: |
+          (
+            sum by (job, instance) (rate(sl_http_errors_total{job="sl-daemon"}[1h]))
+            /
+            clamp_min(sum by (job, instance) (rate(sl_http_request_duration_seconds_count{job="sl-daemon"}[1h])), 1e-9)
+          ) > 0.01
+        for: 30m
+        labels:
+          severity: info
+          slo: availability
+        annotations:
+          summary: "SessionLedger HTTP error budget burn is elevated"
+          description: "More than 1% of daemon HTTP requests have returned 4xx/5xx over 1 hour on {{ $labels.instance }}."
+          runbook: "docs/ops/runbook.md"
+
+      - alert: SessionLedgerHighMeanLatency
+        expr: |
+          (
+            sum by (job, instance) (rate(sl_http_request_duration_seconds_sum{job="sl-daemon"}[10m]))
+            /
+            clamp_min(sum by (job, instance) (rate(sl_http_request_duration_seconds_count{job="sl-daemon"}[10m])), 1e-9)
+          ) > 1
+        for: 10m
+        labels:
+          severity: info
+          slo: latency
+        annotations:
+          summary: "SessionLedger mean HTTP latency is high"
+          description: "Mean daemon HTTP latency is above 1s for 10 minutes on {{ $labels.instance }}. Current RED metrics do not expose p95/p99."
+          runbook: "docs/ops/observability.md"
+
+      - alert: SessionLedgerRedMetricsMissing
+        expr: |
+          up{job="sl-daemon"} == 1
+          unless
+          sl_http_requests_total{job="sl-daemon"}
+        for: 5m
+        labels:
+          severity: warning
+          slo: availability
+        annotations:
+          summary: "SessionLedger scrape succeeds but RED metrics are missing"
+          description: "Prometheus can reach {{ $labels.instance }} but sl_http_requests_total is absent. Check /metrics exporter."
+          runbook: "docs/ops/runbook.md#metrics"

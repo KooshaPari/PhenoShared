@@ -1,0 +1,311 @@
+#!/bin/zsh
+# unstick-apps - Automatically resume macOS processes suspended by memory pressure
+#
+# PROBLEM: When macOS hits memory pressure, it suspends apps via SIGSTOP.
+# The "Resume" button in Force Quit Applications dialog often does nothing.
+# The known community fix is: kill -CONT <pid>
+#
+# This script automates that fix safely.
+#
+# USAGE:
+#   unstick-apps                  # Check and resume once
+#   unstick-apps --once           # Same, one-shot check
+#   unstick-apps --list           # List suspended processes (no resume)
+#   unstick-apps --install        # Install as launchd agent (runs every 30s)
+#   unstick-apps --uninstall      # Remove launchd agent
+#   unstick-apps --status         # Show launchd agent status
+#   unstick-apps --log            # Tail the log
+#   unstick-apps --help           # Show this help
+#
+# INSTALLATION:
+#   unstick-apps --install
+
+set -euo pipefail
+
+SCRIPT_NAME="com.user.unstick-apps"
+SCRIPT_PATH="${0:A}"
+LOG_DIR="${HOME}/Library/Logs"
+LOG_FILE="${LOG_DIR}/${SCRIPT_NAME}.log"
+PLIST_DIR="${HOME}/Library/LaunchAgents"
+PLIST_PATH="${PLIST_DIR}/${SCRIPT_NAME}.plist"
+INTERVAL=30  # seconds between checks
+
+# Known processes that legitimately use SIGSTOP (debuggers, profilers, etc.)
+# These will NOT be resumed automatically.
+declare -a LEGIT_STOPPED=(
+  "lldb"
+  "lldb-rpc"
+  "gdb"
+  "debugserver"
+  "PerfPowerService"
+  "tailspind"
+  "spindump"
+)
+
+# Colors for output
+if [[ -t 1 ]]; then
+  RED='\033[0;31m'
+  GREEN='\033[0;32m'
+  YELLOW='\033[1;33m'
+  CYAN='\033[0;36m'
+  NC='\033[0m' # No Color
+else
+  RED=''; GREEN=''; YELLOW=''; CYAN=''; NC=''
+fi
+
+log() {
+  local level="$1"
+  shift
+  local msg="[$(date '+%Y-%m-%d %H:%M:%S')] [${level}] $*"
+  echo "${msg}" >> "${LOG_FILE}"
+  # Only print colored output when running interactively (not from launchd)
+  if [[ -t 2 ]] && [[ -z "${LAUNCHD_LOG+x}" ]]; then
+    case "${level}" in
+      INFO)  echo "${GREEN}${msg}${NC}" ;;
+      WARN)  echo "${YELLOW}${msg}${NC}" ;;
+      ERROR) echo "${RED}${msg}${NC}" ;;
+      *)     echo "${msg}" ;;
+    esac
+  fi
+}
+
+is_legitimate_stopped() {
+  local comm="$1"
+  local comm_lower="${comm:l}"
+  for legit in "${LEGIT_STOPPED[@]}"; do
+    [[ "${comm_lower}" == *"${legit:l}"* ]] && return 0
+  done
+  return 1
+}
+
+find_suspended_processes() {
+  # Find processes in state T (stopped/suspended)
+  # macOS ps: STAT column 'T' means stopped
+  ps -eo pid,state,uid,comm -c 2>/dev/null | awk 'NR > 1 && $2 ~ /^T/ {print $1, $3, $4}' || true
+}
+
+find_stuck_processes() {
+  local resumed=0 skipped=0 pid uid comm proc_name
+
+  # Use process substitution (<()) to avoid subshell — pipeline would lose var updates
+  while read -r pid uid comm; do
+    [[ -z "${pid}" ]] && continue
+
+    # Skip processes that have already exited
+    if ! kill -0 "${pid}" 2>/dev/null; then
+      continue
+    fi
+
+    # Skip legitimate stopped processes (debuggers, etc.)
+    if is_legitimate_stopped "${comm}"; then
+      log "INFO" "Skipping legitimate stopped process: ${comm} (pid ${pid})"
+      skipped=$((skipped + 1))
+      continue
+    fi
+
+    # Log what we're about to resume
+    proc_name="$(ps -o comm= -p "${pid}" 2>/dev/null || echo "${comm}")"
+    log "INFO" "Resuming suspended process: ${proc_name} (pid ${pid})"
+
+    # Send SIGCONT
+    if kill -CONT "${pid}" 2>/dev/null; then
+      resumed=$((resumed + 1))
+    else
+      log "WARN" "Failed to resume pid ${pid}: process may have exited"
+    fi
+  done < <(find_suspended_processes)
+
+  echo "${resumed}:${skipped}"
+}
+
+# One-shot check and resume
+do_check() {
+  local dry_run="${1:-false}"
+
+  # Create log directory if needed
+  mkdir -p "${LOG_DIR}"
+
+  local suspended
+  suspended="$(find_suspended_processes)"
+
+  if [[ -z "${suspended}" ]]; then
+    log "INFO" "No suspended processes found"
+    return 0
+  fi
+
+  local count
+  count=$(echo "${suspended}" | wc -l | tr -d ' ')
+
+  if [[ "${dry_run}" == "true" ]]; then
+    echo -e "${YELLOW}Found ${count} suspended process(es):${NC}"
+    echo "${suspended}" | while read -r pid uid comm; do
+      [[ -z "${pid}" ]] && continue
+      local pname
+      pname=$(ps -o comm= -p "${pid}" 2>/dev/null || echo "${comm}")
+      echo "  ${GREEN}pid ${pid}${NC}: ${pname}"
+    done
+    return 0
+  fi
+
+  log "INFO" "Found ${count} suspended process(es)"
+  echo "${suspended}" | while read -r pid uid comm; do
+    [[ -z "${pid}" ]] && continue
+    pname=$(ps -o comm= -p "${pid}" 2>/dev/null || echo "${comm}")
+    echo -e "  ${YELLOW}suspended${NC}: pid ${pid} - ${pname}"
+  done
+
+  local result
+  result=$(find_stuck_processes)
+  local resumed="${result%%:*}"
+  local skipped="${result##*:}"
+
+  if [[ "${resumed}" -gt 0 ]]; then
+    log "INFO" "Resumed ${resumed} process(es)"
+    echo -e "${GREEN}✓ Resumed ${resumed} process(es)${NC}"
+  fi
+  if [[ "${skipped}" -gt 0 ]]; then
+    echo -e "${CYAN}→ Skipped ${skipped} legitimate stopped process(es)${NC}"
+  fi
+}
+
+# === Commands ===
+
+do_install() {
+  mkdir -p "${PLIST_DIR}"
+
+  cat > "${PLIST_PATH}" << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>${SCRIPT_NAME}</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>${SCRIPT_PATH}</string>
+        <string>--once</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StartInterval</key>
+    <integer>${INTERVAL}</integer>
+    <key>StandardOutPath</key>
+    <string>${LOG_FILE}</string>
+    <key>StandardErrorPath</key>
+    <string>${LOG_FILE}</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>LAUNCHD_LOG</key>
+        <string>1</string>
+        <key>PATH</key>
+        <string>/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>
+EOF
+
+  chmod 644 "${PLIST_PATH}"
+
+  # Load the launchd agent
+  launchctl bootstrap gui/$(id -u) "${PLIST_PATH}" 2>/dev/null || \
+    launchctl load "${PLIST_PATH}" 2>/dev/null || true
+
+  echo -e "${GREEN}✓ Installed ${SCRIPT_NAME} launchd agent${NC}"
+  echo "  Script: ${SCRIPT_PATH}"
+  echo "  Plist:  ${PLIST_PATH}"
+  echo "  Log:    ${LOG_FILE}"
+  echo "  Interval: ${INTERVAL}s"
+  echo ""
+  echo -e "To check status: ${CYAN}unstick-apps --status${NC}"
+}
+
+do_uninstall() {
+  # Unload the launchd agent
+  launchctl bootout gui/$(id -u) "${PLIST_PATH}" 2>/dev/null || \
+    launchctl unload "${PLIST_PATH}" 2>/dev/null || true
+
+  rm -f "${PLIST_PATH}"
+  echo -e "${GREEN}✓ Removed ${SCRIPT_NAME} launchd agent${NC}"
+}
+
+do_status() {
+  if [[ -f "${PLIST_PATH}" ]]; then
+    echo -e "${GREEN}Plist installed:${NC} ${PLIST_PATH}"
+  else
+    echo -e "${YELLOW}Plist not installed.${NC} Use --install to set up."
+  fi
+
+  if launchctl list "${SCRIPT_NAME}" 2>/dev/null; then
+    echo -e "${GREEN}✓ Launch agent is loaded${NC}"
+    local last_run
+    last_run=$(tail -5 "${LOG_FILE}" 2>/dev/null | grep -E "^\[" | tail -1 || echo "No log entries yet")
+    echo "  Last log: ${last_run}"
+  else
+    echo -e "${YELLOW}Launch agent is not loaded${NC}"
+  fi
+
+  echo ""
+  echo "Currently:"
+  local suspended
+  suspended=$(find_suspended_processes)
+  if [[ -z "${suspended}" ]]; then
+    echo -e "${GREEN}  No suspended processes${NC}"
+  else
+    local count
+    count=$(echo "${suspended}" | wc -l | tr -d ' ')
+    echo -e "${YELLOW}  ${count} suspended process(es)${NC}"
+    while read -r pid uid comm; do
+      [[ -z "${pid}" ]] && continue
+      echo "    pid ${pid}: ${comm}"
+    done <<< "${suspended}"
+  fi
+
+  echo ""
+  echo "  System-wide memory free: $(memory_pressure 2>/dev/null | awk -F': ' '/System-wide memory free percentage/ {print $2}')"
+}
+
+do_log() {
+  if [[ ! -f "${LOG_FILE}" ]]; then
+    echo "No log file yet at: ${LOG_FILE}"
+    exit 0
+  fi
+
+  if command -v less &>/dev/null; then
+    less -R +F "${LOG_FILE}" 2>/dev/null || tail -f "${LOG_FILE}"
+  else
+    tail -f "${LOG_FILE}"
+  fi
+}
+
+# === Main ===
+
+case "${1:-}" in
+  --install|-i)
+    do_install
+    ;;
+  --uninstall|-u)
+    do_uninstall
+    ;;
+  --status|-s)
+    do_status
+    ;;
+  --list|-l)
+    do_check true
+    ;;
+  --once|-1)
+    do_check false
+    ;;
+  --log|-L)
+    do_log
+    ;;
+  --help|-h)
+    echo "unstick-apps — Resume macOS processes suspended by memory pressure"
+    echo ""
+    sed -n '/^# USAGE:/,/^# INSTALLATION:/p' "${SCRIPT_PATH}" | sed 's/^# //; s/^#$//'
+    echo ""
+    ;;
+  *)
+    # Default: run one-shot check
+    do_check false
+    ;;
+esac

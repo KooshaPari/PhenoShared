@@ -1,0 +1,54 @@
+# Pull secrets from Infisical into CI
+# Requires: INFISICAL_TOKEN (machine identity service token) stored in repo secrets
+# Docs: https://infisical.com/docs/cli/usage
+
+name: Infisical Sync
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - ".github/workflows/infisical.yml"
+  pull_request:
+
+jobs:
+  sync-secrets:
+    name: Pull secrets from Infisical
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Install Infisical CLI
+        run: |
+          curl -1sLf "https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh" | sudo -E bash
+          sudo apt-get install -y infisical
+
+      - name: Pull secrets into isolated command environment
+        env:
+          INFISICAL_TOKEN: ${{ secrets.INFISICAL_TOKEN }}
+          INFISICAL_PROJECT_ID: ${{ vars.INFISICAL_PROJECT_ID || secrets.INFISICAL_PROJECT_ID || '8efe392e-56a6-4c3c-89f9-8141183dd7e8' }}
+          INFISICAL_ENV: ${{ vars.INFISICAL_ENV || github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/staging' && 'staging' || 'dev' }}
+        run: |
+          # Validate required secrets are present
+          if [ -z "$INFISICAL_TOKEN" ]; then
+            echo "::error::INFISICAL_TOKEN secret not configured in repo settings"
+            exit 1
+          fi
+          if [ -z "$INFISICAL_PROJECT_ID" ]; then
+            echo "::error::INFISICAL_PROJECT_ID var or secret not set"
+            exit 1
+          fi
+
+          # Load secrets only into the child command environment. Never print
+          # values or persist the resulting environment to the workspace.
+          infisical run \
+            --projectId "$INFISICAL_PROJECT_ID" \
+            --env "$INFISICAL_ENV" \
+            --token "$INFISICAL_TOKEN" \
+            -- bash -ceu "true"

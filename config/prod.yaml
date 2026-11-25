@@ -1,0 +1,29 @@
+# config/prod.yaml — per-environment overrides for the production cohort.
+#
+# Loaded when PHENO_ENV=prod. Production runs dual-write ON with full
+# sampling; cohort policies mirror the staging cohort but with stricter
+# timeouts and higher flush intervals.
+
+# Tracera production defaults — connection to the prod Grapheon Tracera
+tracera:
+  host: "tracera.phenotype.local"
+  port: 443
+  base_url: "https://tracera.phenotype.local"
+  enabled: true
+  flush_interval_s: 30
+  batch_size: 100
+  retry_max: 3
+  health_check_on_init: true
+  timeout_s: 10
+
+# Trace bridges — production cohort = "on" with full sampling
+trace_bridges:
+  dual_write: true
+  dual_write_default: true
+  dual_write_sample_rate: 1.0
+  cohort_policies:
+    prod: "on"
+  include_kinds: []
+
+# Schema version — must match the loader's supported set.
+schema_version: 2

@@ -1,0 +1,38 @@
+{
+  "suite": "deep-swe",
+  "n": 3,
+  "passed": 0,
+  "pass_at_1": 0.0,
+  "wall_clock_s_total": 243.13,
+  "wall_clock_s_mean": 81.04,
+  "wall_clock_s_p95": 120.02,
+  "task_results": [
+    {
+      "task_id": "pr-deepswe-1962",
+      "ok": false,
+      "wall_clock_s": 3.1,
+      "reply_bytes": 878,
+      "reply_preview": "with an optional consistency constant (1.4826) for normal-distribution equivalence if you'd like.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "pr-deepswe-5661",
+      "ok": false,
+      "wall_clock_s": 120.008,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    },
+    {
+      "task_id": "pr-deepswe-5252",
+      "ok": false,
+      "wall_clock_s": 120.025,
+      "reply_bytes": 0,
+      "reply_preview": "",
+      "error": "timeout",
+      "exit_code": -1
+    }
+  ]
+}

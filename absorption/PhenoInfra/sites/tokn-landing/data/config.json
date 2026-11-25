@@ -1,0 +1,28 @@
+{
+  "name": "Tokn",
+  "slug": "tokn",
+  "domain": "phenotype.space/tokn",
+  "description": "Token/session usage and blended cost analytics with model pricing governance for AI coding agents. Single native Rust binary (tokenledger) — monthly/daily usage, coverage, pricing check/apply/reconcile/lint/audit, and pareto benchmarks.",
+  "tier": 2,
+  "repo": "KooshaPari/Tokn",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Monthly / daily usage + blended cost",
+    "Model pricing governance (check/apply/reconcile/lint/audit)",
+    "Usage ingest from agent logs",
+    "Pareto benchmarks — the few calls driving most spend",
+    "Native Rust binary, no runtime"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/Tokn",
+    "docs": "https://phenotype.space/tokn/docs",
+    "releases": "https://github.com/KooshaPari/Tokn/releases"
+  },
+  "badges": [
+    "https://img.shields.io/github/actions/workflow/status/KooshaPari/Tokn/ci.yml?branch=main&label=build",
+    "https://img.shields.io/github/v/release/KooshaPari/Tokn?include_prereleases&sort=semver",
+    "https://img.shields.io/github/license/KooshaPari/Tokn"
+  ]
+}

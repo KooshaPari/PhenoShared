@@ -1,0 +1,30 @@
+# Forge plugin manifest for phinbox.
+#
+# Drop this file into your host repo's `.forgecode/plugins/phinbox/`
+# directory (or run `./install.sh` from this directory).
+
+[plugin]
+name = "phinbox"
+version = "0.1.0"
+description = "Native OS popup elicitation tool — pause the agent and ask the human a structured question"
+author = "Phenotype Contributors"
+license = "MIT"
+homepage = "https://github.com/KooshaPari/phenotype-tooling/tree/main/crates/phinbox"
+
+[skill]
+path = "../../.phinbox/skills/phinbox/SKILL.md"
+auto_load = true
+register_name = "phinbox"
+
+# MCP server registration — Forge discovers this on next launch
+[[mcp_servers]]
+name = "phinbox_mcp"
+command = "phinbox-mcp"
+args = ["serve"]
+transport = "stdio"
+env = []
+auto_register = true
+
+# Optional: pin the minimum phinbox version this plugin requires
+[compatibility]
+phinbox_min = "0.1.0"

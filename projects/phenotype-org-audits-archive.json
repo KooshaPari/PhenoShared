@@ -1,0 +1,16 @@
+{
+  "name": "phenotype-org-audits-archive",
+  "languages": [],
+  "primary_language": "archive",
+  "status": "retired",
+  "has_readme": true,
+  "type": "archive",
+  "path": "repos/phenotype-org-audits-archive",
+  "disposition": "ARCHIVE",
+  "wave": "2026-07-23-boundary-audit",
+  "proposed_target": "phenotype-org-audits",
+  "proposed_target_repo": "phenotype-org-audits",
+  "proposed_target_path": ".",
+  "absorption_note": "Archive-only snapshot of deleted audit repository.",
+  "note": "Retain for evidence and provenance, not active development."
+}

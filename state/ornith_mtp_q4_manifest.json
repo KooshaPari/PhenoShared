@@ -1,0 +1,20 @@
+{
+  "schema_version": "phenolm.published_gguf.v1",
+  "model_alias": "local/ornith-8b",
+  "repository": "protoLabsAI/Ornith-1.0-9B-MTP-GGUF",
+  "filename": "Ornith-1.0-9B-MTP-Q4_K_M.gguf",
+  "path": "D:\\WSL\\model-cache\\ornith-mtp-q4\\Ornith-1.0-9B-MTP-Q4_K_M.gguf",
+  "revision": "main",
+  "bytes": 5780090240,
+  "sha256": "93c47a7e76c62706be71052cf2cc407c0e5ce7f6789263464f6b6bad8d55b297",
+  "quantization": "Q4_K_M",
+  "runtime": "llama.cpp-b10012-cuda12.4",
+  "eval_artifact": true,
+  "runtime_validation": {
+    "status": "pass",
+    "gpu": "gtx_1080_ti",
+    "generation_tok_s": 25.3,
+    "evidence": "state/ornith_mtp_1080_smoke.stdout.log"
+  },
+  "source_note": "Published grafted MTP GGUF; direct base conversion is intentionally not used."
+}

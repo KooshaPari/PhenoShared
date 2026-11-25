@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Phenotype Router Spec Discussion
+    url: https://github.com/KooshaPari/phenotype-router-spec/discussions
+    about: Please ask questions and discuss protocol changes in Discussions.

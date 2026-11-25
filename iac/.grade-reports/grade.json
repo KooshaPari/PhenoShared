@@ -1,0 +1,13 @@
+{
+  "project": "iac",
+  "stack": "rust",
+  "mode": "fast",
+  "score": 0,
+  "max": 10,
+  "percentage": 0,
+  "grade": "F",
+  "checks": [
+    {"name":"build","status":"fail","score":0,"max":2,"detail":"error: failed to load manifest for workspace member `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery`  Caused by:   failed to parse manifest at `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery/Cargo.toml`  "},{"name":"test-unit","status":"fail","score":0,"max":3,"detail":"error: failed to load manifest for workspace member `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery`  Caused by:   failed to parse manifest at `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery/Cargo.toml`  "},{"name":"fmt","status":"fail","score":0,"max":2,"detail":"`cargo metadata` exited with an error: error: failed to load manifest for workspace member `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery`  Caused by:   failed to parse manifest at `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery/Cargo.toml`  "},{"name":"clippy","status":"fail","score":0,"max":2,"detail":"error: failed to load manifest for workspace member `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery`  Caused by:   failed to parse manifest at `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery/Cargo.toml`  "},{"name":"deny","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},{"name":"doc","status":"fail","score":0,"max":1,"detail":"error: failed to load manifest for workspace member `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery`  Caused by:   failed to parse manifest at `/mnt/c/Users/koosh/phenotype-infra-ci-fix/iac/oci-lottery/Cargo.toml`  "},{"name":"test-snapshot","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},{"name":"test-fuzz","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},{"name":"coverage","status":"skipped","score":0,"max":2,"detail":"skipped in fast mode"},{"name":"audit","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"},{"name":"bench","status":"skipped","score":0,"max":1,"detail":"skipped in fast mode"}
+  ],
+  "timestamp": "2026-06-25T02:40:59Z"
+}

@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "all JSON parses",
+      "status": "PASS"
+    },
+    {
+      "name": "schemas valid 2020-12",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/entity.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/relation.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/obligation.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/pilot-plan.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/work-item.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/applet.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/dissatisfaction.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/qa-cell.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/topic-proposal.json",
+      "status": "PASS"
+    },
+    {
+      "name": "schema example examples/ecosystem-impact.json",
+      "status": "PASS"
+    },
+    {
+      "name": "topic proposals schema",
+      "status": "PASS"
+    },
+    {
+      "name": "IDs DAG trace and allocation",
+      "status": "PASS"
+    },
+    {
+      "name": "provisional spec bundles",
+      "status": "PASS"
+    },
+    {
+      "name": "all product plans and no invented pilot results",
+      "status": "PASS"
+    },
+    {
+      "name": "relative Markdown file targets",
+      "status": "PASS"
+    },
+    {
+      "name": "prior archives and prompt integrity",
+      "status": "PASS"
+    },
+    {
+      "name": "no empty files symlinks or font binaries",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "product_tests_executed": false,
+  "product_qualification": false,
+  "fresh_github_audit": false,
+  "external_links_checked": false,
+  "anchor_targets_checked": false,
+  "semantic_document_completeness_certified": false
+}

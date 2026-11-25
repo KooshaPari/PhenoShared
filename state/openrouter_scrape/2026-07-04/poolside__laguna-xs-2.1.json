@@ -1,0 +1,68 @@
+{
+  "id": "poolside/laguna-xs-2.1",
+  "scraped_at": "2026-07-04T09:59:21.015638+00:00",
+  "api_found": true,
+  "page_found": true,
+  "api": {
+    "id": "poolside/laguna-xs-2.1",
+    "canonical_slug": "poolside/laguna-xs-2.1-20260625",
+    "hugging_face_id": "poolside/Laguna-XS-2.1",
+    "name": "Poolside: Laguna XS 2.1",
+    "created": 1783002429,
+    "description": "Laguna XS 2.1 is the latest coding agent model in the 33B-A3B category from [Poolside](https://poolside.ai/) and a step forward from their Laguna XS.2 model (released in April 2026). It combines...",
+    "context_length": 262144,
+    "architecture": {
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "instruct_type": null
+    },
+    "pricing": {
+      "prompt": "0.00000006",
+      "completion": "0.00000012",
+      "input_cache_read": "0.00000003"
+    },
+    "top_provider": {
+      "context_length": 262144,
+      "max_completion_tokens": 32768,
+      "is_moderated": false
+    },
+    "per_request_limits": null,
+    "supported_parameters": [
+      "include_reasoning",
+      "max_tokens",
+      "reasoning",
+      "temperature",
+      "tool_choice",
+      "tools"
+    ],
+    "default_parameters": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": null,
+      "frequency_penalty": null,
+      "presence_penalty": null,
+      "repetition_penalty": null
+    },
+    "supported_voices": null,
+    "knowledge_cutoff": null,
+    "expiration_date": null,
+    "links": {
+      "details": "/api/v1/models/poolside/laguna-xs-2.1-20260625/endpoints"
+    },
+    "reasoning": {
+      "mandatory": false,
+      "default_enabled": true
+    }
+  },
+  "page_url": "https://openrouter.ai/poolside/laguna-xs-2.1",
+  "page": {
+    "title": "Laguna XS 2.1 - API Pricing &amp; Providers | OpenRouter",
+    "visible_text_sample": "Laguna XS 2.1 - API Pricing &amp; Providers | OpenRouter Skip to content OpenRouter Search \u2318 K Models Fusion Chat Rankings Apps Enterprise Pricing Docs OpenRouter \u00a9 2026 OpenRouter, Inc Product Chat Rankings Apps Models Providers Pricing Enterprise Labs Company About Blog Careers Hiring Privacy Terms of Service Support State of AI Works With OR Data Developer Documentation API Reference SDK Status Connect Discord GitHub LinkedIn X YouTube Poolside: Laguna XS 2.1 poolside / laguna-xs-2.1 Model weights Compare Playground Quick Start Laguna XS 2.1 is the latest coding agent model in the 33B-A3B category from Poolside (opens in new tab) and a step forward from their Laguna XS.2 model (released in April 2026). It combines tool calling and reasoning capabilities with a compact footprint, offering a 256K context window and up to 32K output tokens. Quantized to FP8 for fast, cost-efficient agentic coding workflows. Laguna XS 2.1 is designed for software engineering and agentic coding use cases, and you are responsible for confirming that it is appropriate for your intended application. Laguna XS 2.1 is subject to the OpenMDW-1.1 License (opens in new tab) , and should be used consistently with Poolside&#x27;s Acceptable Use Policy (opens in new tab) . We advise against circumventing Laguna XS 2.1 safety guardrails without implementing substantially equivalent mitigations appropriate for your use case. Please report security vulnerabilities or safety concerns to [email&#160;protected] . If you are using Laguna XS 2.1 for free, we may use your inputs and outputs to train and improve our models. Modalities In / Out Price 40 % off $0.06 / $0.12 per 1M Context 262K Released Jul 2, 2026 Poolside: Laguna XS 2.1 Compare Playground Quick Start Providers Effective Pricing Performance Uptime Apps Activity Providers Providers This model is hosted by one provider. OpenRouter forwards every request to it directly \u2014 no routing decisions to make. Effective Pricing The chart below shows the average price customers are actually paying after prompt caching. Depending on the amount of repeated context you send, this can be 60\u201380% cheaper than the provider list price. Shown are rolling averages from the past 30 days. Performance Throughput is how fast the model writes (tokens per second \u2014 higher is better). Latency is total round-trip time (lower is better). TTFT is time-to-first-token \u2014 how long before you see anything appear (lower is better). Uptime Percent of requests that succeeded over the last 30 days. OpenRouter monitors every provider continuously and automatically retries on the next-best provider when one returns an error. Apps Public apps that send the most traffic to this model. Good signal for what real production workloads look like \u2014 and a hint at which use cases this model is best suited for. Activity Token volume and request traffic to this model over time. Quick Start Drop-in code to call this model. OpenRouter&#x27;s API is OpenAI-compatible \u2014 most SDKs work by just swapping the base URL. The only thing that changes between models is the model slug below. Standard"
+  }
+}

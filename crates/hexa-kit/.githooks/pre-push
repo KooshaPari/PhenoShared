@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Canonical Phenotype pre-push hook.
+# Install: cp .githooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+# Bypass: HOOKS_SKIP=1 git push                        # global
+#         PRE_PUSH_SKIP_SECRETS=1 / _TESTS=1 / _LINT=1  # per-phase
+#         git push --no-verify                          # last resort
+set -u
+if [ "${HOOKS_SKIP:-0}" = "1" ]; then echo "[hooks] HOOKS_SKIP=1 — skipping"; exit 0; fi
+ERR=0
+TO_SECRETS=${PRE_PUSH_TIMEOUT_SECRETS:-60}
+TO_LINT=${PRE_PUSH_TIMEOUT_LINT:-120}
+TO_TEST=${PRE_PUSH_TIMEOUT_TESTS:-300}
+run() { # run <label> <timeout> <cmd...>
+  local label="$1" to="$2"; shift 2
+  echo "[hooks] $label (timeout=${to}s)…"
+  if ! timeout --kill-after=5s "${to}s" "$@"; then
+    local rc=$?
+    [ $rc -eq 124 ] && echo "[hooks] $label TIMED OUT after ${to}s" || echo "[hooks] $label FAILED (rc=$rc)"
+    ERR=$((ERR+1))
+  fi
+}
+# 1. Secrets (trufflehog only; gitleaks banned per GOVERNANCE 2026-03-29)
+if [ "${PRE_PUSH_SKIP_SECRETS:-0}" != "1" ]; then
+  if command -v trufflehog >/dev/null 2>&1; then
+    if [ -f .git ]; then
+      # Worktree case: scan filesystem diff (trufflehog git driver can't open a worktree .git file)
+      files=$(git diff --name-only @{push}..HEAD 2>/dev/null || git diff --name-only HEAD~..HEAD)
+      [ -n "$files" ] && run trufflehog "$TO_SECRETS" bash -c "echo \"$files\" | xargs -I{} trufflehog filesystem --only-verified --fail {}"
+    else
+      run trufflehog "$TO_SECRETS" trufflehog git file://. --since-commit HEAD --only-verified --fail
+    fi
+  else
+    echo "[hooks] trufflehog not installed; skipping (brew install trufflehog)"
+  fi
+fi
+# 2. Language cascade — first match wins (intentional; repos are mostly monolang).
+if [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ] || [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ]; then
+  if   [ -f Cargo.toml ] && command -v cargo >/dev/null; then
+    [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ]  && run "cargo fmt --check" "$TO_LINT" cargo fmt --all -- --check
+    [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ]  && run "cargo clippy"       "$TO_LINT" cargo clippy --workspace --all-targets -- -D warnings
+    [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] && run "cargo test"         "$TO_TEST" cargo test --workspace --no-fail-fast
+  elif [ -f go.mod ] && command -v go >/dev/null; then
+    [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ]  && run "go vet"   "$TO_LINT" go vet ./...
+    [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] && run "go test"  "$TO_TEST" go test ./...
+  elif [ -f pyproject.toml ] && command -v uv >/dev/null; then
+    [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ]  && run "ruff check" "$TO_LINT" uv run ruff check .
+    [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] && run "pytest"     "$TO_TEST" uv run pytest -x --tb=short -q
+  elif [ -f package.json ]; then
+    pm=bun; command -v bun >/dev/null || pm=pnpm; command -v $pm >/dev/null || pm=npm
+    [ "${PRE_PUSH_SKIP_LINT:-0}" != "1" ]  && run "$pm lint" "$TO_LINT" $pm run --if-present lint
+    [ "${PRE_PUSH_SKIP_TESTS:-0}" != "1" ] && run "$pm test" "$TO_TEST" $pm run --if-present test
+  else
+    echo "[hooks] no Cargo.toml/go.mod/pyproject.toml/package.json detected; language checks skipped"
+  fi
+fi
+if [ $ERR -gt 0 ]; then echo "[hooks] pre-push failed ($ERR issue(s)); HOOKS_SKIP=1 to bypass"; exit 1; fi
+echo "[hooks] pre-push OK"

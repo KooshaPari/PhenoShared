@@ -1,0 +1,99 @@
+//! Authentication for {{Name}}.
+
+use anyhow::Result;
+{{#if oauth2}}
+use oauth2::{
+    basic::BasicClient, reqwest::async_http_client, AuthUrl, ClientId, ClientSecret,
+    PkceCodeChallenge, RedirectUrl, RefreshTokenRequest, RefreshToken, TokenResponse,
+    TokenUrl,
+};
+{{/if}}
+{{#if apikey}}
+use secrecy::SecretString;
+{{/if}}
+
+{{#if oauth2}}
+/// OAuth2 auth flow for {{Name}}.
+pub struct {{Name}}OAuth2 {
+    client: BasicClient,
+}
+
+impl {{Name}}OAuth2 {
+    pub fn new(client_id: impl Into<String>, client_secret: impl Into<String>) -> Self {
+        let client = BasicClient::new(
+            ClientId::new(client_id.into()),
+            Some(ClientSecret::new(client_secret.into())),
+            AuthUrl::new("https://{{name}}.example.com/oauth/authorize".to_string())
+                .unwrap(),
+            Some(
+                TokenUrl::new("https://{{name}}.example.com/oauth/token".to_string())
+                    .unwrap(),
+            ),
+        );
+        Self { client }
+    }
+
+    pub async fn refresh_token(&self, refresh_token: &str) -> Result<String> {
+        // TODO: Implement refresh token flow
+        Ok(refresh_token.to_string())
+    }
+}
+{{/if}}
+
+{{#if apikey}}
+/// API key authentication for {{Name}}.
+pub struct {{Name}}ApiKey {
+    key: SecretString,
+}
+
+impl {{Name}}ApiKey {
+    pub fn new(key: impl Into<String>) -> Self {
+        Self {
+            key: SecretString::new(key.into()),
+        }
+    }
+
+    pub fn key(&self) -> &SecretString {
+        &self.key
+    }
+}
+{{/if}}
+
+{{#if none}}
+/// No authentication for {{Name}}.
+pub struct {{Name}}Auth;
+
+impl {{Name}}Auth {
+    pub fn new() -> Self {
+        Self
+    }
+}
+{{/if}}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    {{#if oauth2}}
+    #[test]
+    fn test_oauth2_client_creation() {
+        let oauth = {{Name}}OAuth2::new("client_id", "client_secret");
+        // Verify client is created
+    }
+    {{/if}}
+
+    {{#if apikey}}
+    #[test]
+    fn test_apikey_creation() {
+        let auth = {{Name}}ApiKey::new("test_key");
+        assert_eq!(auth.key().expose_secret(), "test_key");
+    }
+    {{/if}}
+
+    {{#if none}}
+    #[test]
+    fn test_no_auth_creation() {
+        let _auth = {{Name}}Auth::new();
+    }
+    {{/if}}
+}

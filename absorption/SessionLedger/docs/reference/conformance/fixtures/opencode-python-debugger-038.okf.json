@@ -1,0 +1,67 @@
+{
+  "okf": "1.0",
+  "source_id": "opencode-python-debugger-038",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Trace async iterator dropped-task warning in TaskDistributor",
+      "properties": {
+        "user_turn_count": 5
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "pytest tests/test_distributor.py -k dropped_task passes",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not pull in new runtime deps; stdlib asyncio only",
+      "properties": null
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": {
+        "title": "Distributor dropped-task trace"
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "opencode",
+    "source_id": "opencode-python-debugger-038"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "opencode",
+        "source_id": "opencode-python-debugger-038"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "opencode",
+        "source_id": "opencode-python-debugger-038"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "opencode",
+        "source_id": "opencode-python-debugger-038"
+      }
+    }
+  ]
+}

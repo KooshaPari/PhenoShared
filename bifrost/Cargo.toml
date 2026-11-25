@@ -1,0 +1,45 @@
+[package]
+name = "phenotype-bifrost"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Bifrost-backed router adapter for OmniRoute v1.5 (D-omni-02)"
+keywords = ["phenotype", "router", "llm", "bifrost"]
+categories = ["api-bindings", "development-tools"]
+
+[dependencies]
+# Inherit the workspace's serde/thiserror/tokio so we stay consistent with the
+# rest of the phenotype-* crate family.
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+tracing = "0.1"
+reqwest = { workspace = true, optional = true }
+tokio-util = { workspace = true }
+# B4: optional SQLite-backed model cache (rusqlite, bundled)
+rusqlite = { workspace = true, optional = true }
+
+[features]
+default = []
+# B2: enable the live /v1/models fetch path. When disabled, only the
+# offline-tolerant FakeTransport + InMemoryCatalog paths are available.
+catalog-fetch = ["dep:reqwest"]
+# B4: enable the persistent model-cache layer. When disabled, callers
+# use the in-process InMemoryCatalog only (B2). Both paths share the
+# ModelCatalog trait, so callers should depend on the trait, not the impl.
+cache-sqlite = ["dep:rusqlite"]
+virtual-keys = ["dep:rusqlite"]
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "test-util", "time"] }
+tracing-subscriber = "0.3"
+
+[lints.rust]
+unsafe_code = "forbid"

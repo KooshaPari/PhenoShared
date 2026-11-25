@@ -1,0 +1,13 @@
+# LiquidAI LFM 2.5 8B-A1B — on-demand local workhorse
+model: local.lfm25_8b_a1b
+args:
+  - "{binary}"
+  - "-m"
+  - "{path}"
+  - "--port"
+  - "{port}"
+  - "-c"
+  - "{kv_ctx}"
+  - "-ngl"
+  - "99"
+  - "{ik_flags}"

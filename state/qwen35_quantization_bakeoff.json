@@ -1,0 +1,127 @@
+{
+  "schema_version": "phenolm.quantization_bakeoff.v1",
+  "captured_at": "2026-07-16T10:00:00Z",
+  "model": "local/qwen35-08b",
+  "runtime": "llama.cpp-b10012-cuda12.4",
+  "build_commit": "c71854292",
+  "driver": "560.94",
+  "parameters": {
+    "n_prompt": 128,
+    "n_gen": 64,
+    "repetitions": 1,
+    "flash_attn": "on",
+    "n_gpu_layers": 99,
+    "split_mode": "layer"
+  },
+  "variants": [
+    {
+      "quantization": "Q2_K",
+      "device": "rtx_3090_ti",
+      "cuda_device": "CUDA0",
+      "generation_tok_s": 192.812841,
+      "sample_stddev_tok_s": 0.0,
+      "artifact_bench": "state\\qwen35_llamabench_q2_CUDA0.json",
+      "artifact_bench_sha256": "ef5e4ba0d2dd26d967aa6ed5f937c4fa52fdcfc898351383fb5c94102a8d4231",
+      "model_type": "qwen35 0.8B Q2_K - Medium"
+    },
+    {
+      "quantization": "Q2_K",
+      "device": "gtx_1080_ti",
+      "cuda_device": "CUDA1",
+      "generation_tok_s": 44.809888,
+      "sample_stddev_tok_s": 0.0,
+      "artifact_bench": "state\\qwen35_llamabench_q2_CUDA1.json",
+      "artifact_bench_sha256": "47c1a1e94fd3d8cdfd63c657bcf299ee7b0fc49687d68dfa6c96d6bddde25ebb",
+      "model_type": "qwen35 0.8B Q2_K - Medium"
+    },
+    {
+      "quantization": "Q4_K_M",
+      "device": "rtx_3090_ti",
+      "cuda_device": "CUDA0",
+      "generation_tok_s": 188.639935,
+      "sample_stddev_tok_s": 0.625479,
+      "artifact_bench": "state\\qwen35_llamabench_3090.json",
+      "artifact_bench_sha256": "a7725c93cf1f0d2c0fca3188ffa846b5ebf3bfaf424ec1611e58a1fcaa18ade4",
+      "model_type": "qwen35 0.8B Q4_K - Medium"
+    },
+    {
+      "quantization": "Q4_K_M",
+      "device": "gtx_1080_ti",
+      "cuda_device": "CUDA1",
+      "generation_tok_s": 80.632758,
+      "sample_stddev_tok_s": 0.190761,
+      "artifact_bench": "state\\qwen35_llamabench_1080.json",
+      "artifact_bench_sha256": "aa1949d52ba956b2cfee305ce1907571dc4f465420b120e9616d69aa119a9714",
+      "model_type": "qwen35 0.8B Q4_K - Medium"
+    },
+    {
+      "quantization": "Q5_K_M",
+      "device": "rtx_3090_ti",
+      "cuda_device": "CUDA0",
+      "generation_tok_s": 126.408117,
+      "sample_stddev_tok_s": 0.0,
+      "artifact_bench": "state\\qwen35_llamabench_q5_CUDA0.json",
+      "artifact_bench_sha256": "e082ce62a828e787afa92db05aa77460e0dd5696b23ef3fbeb01f03bd6131d35",
+      "model_type": "qwen35 0.8B Q5_K - Medium"
+    },
+    {
+      "quantization": "Q5_K_M",
+      "device": "gtx_1080_ti",
+      "cuda_device": "CUDA1",
+      "generation_tok_s": 52.207479,
+      "sample_stddev_tok_s": 0.0,
+      "artifact_bench": "state\\qwen35_llamabench_q5_CUDA1.json",
+      "artifact_bench_sha256": "1c71c28c7a0f868a0a60d86a758c8ac632c072dc1ec3f5da8a6dc9ae86a137be",
+      "model_type": "qwen35 0.8B Q5_K - Medium"
+    },
+    {
+      "quantization": "Q8_0",
+      "device": "rtx_3090_ti",
+      "cuda_device": "CUDA0",
+      "generation_tok_s": 166.70183,
+      "sample_stddev_tok_s": 0.0,
+      "artifact_bench": "state\\qwen35_llamabench_q8_CUDA0.json",
+      "artifact_bench_sha256": "50b243f51e9cce011e4bcfbb1a9706f6b6ec7f40a31a7f38bbc2efd582bf73ff",
+      "model_type": "qwen35 0.8B Q8_0"
+    },
+    {
+      "quantization": "Q8_0",
+      "device": "gtx_1080_ti",
+      "cuda_device": "CUDA1",
+      "generation_tok_s": 83.627784,
+      "sample_stddev_tok_s": 0.0,
+      "artifact_bench": "state\\qwen35_llamabench_q8_CUDA1.json",
+      "artifact_bench_sha256": "530187f31205356de4766d77ba37f8d32db317c1c6fc34b014a0b7c805595319",
+      "model_type": "qwen35 0.8B Q8_0"
+    }
+  ],
+  "interpretation": {
+    "3090_fastest": "Q2_K",
+    "1080_fastest": "Q8_0",
+    "pascal_observation": "Q2_K and Q5_K_M underperform Q4_K_M/Q8_0 on the GTX 1080 Ti in this probe; do not select quantization by bits alone.",
+    "quality_status": "not measured; this is throughput-only evidence.",
+    "next_quality_gate": "run deterministic coding/tool-use fixture and perplexity or reference-loss check before promotion."
+  },
+  "weight_artifacts": {
+    "Q2_K": {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q2\\qwen35-08b.Q2_K.gguf",
+      "bytes": 422327232,
+      "sha256": "1b2916a10139efeed0157fa37b52e70374e9292e420da56c557d3333d1e0d0e7"
+    },
+    "Q4_K_M": {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q4\\qwen35-08b.Q4_K_M.gguf",
+      "bytes": 529297344,
+      "sha256": "7bc67cd64869cd1c7393918515dd8754913f7462035a3f20b7045ee33722a0b2"
+    },
+    "Q5_K_M": {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q5\\qwen35-08b.Q5_K_M.gguf",
+      "bytes": 577998784,
+      "sha256": "1597e69cc88404f0ffd87c612cf497397bcd2543aeeaa887209ff5cfc2b603eb"
+    },
+    "Q8_0": {
+      "path": "D:\\WSL\\model-cache\\qwen35-08b-q8\\qwen35-08b.Q8_0.gguf",
+      "bytes": 811843520,
+      "sha256": "b83bb43a487110fa15dadb1af5e6d43c26403d2b907a1007370f05bf20bebbe3"
+    }
+  }
+}

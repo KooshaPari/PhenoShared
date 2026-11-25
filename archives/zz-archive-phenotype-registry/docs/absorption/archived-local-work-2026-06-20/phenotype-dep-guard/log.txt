@@ -1,0 +1,2 @@
+f3a25af (HEAD -> main) chore: tier-0 hygiene snapshot 2026-06-20
+c3e2259 (origin/main) chore: initial empty commit

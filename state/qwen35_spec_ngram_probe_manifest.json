@@ -1,0 +1,142 @@
+{
+  "schema_version": "phenolm.speculative_probe.v1",
+  "captured_at": "2026-07-16T12:45:00Z",
+  "model": "local/qwen35-08b",
+  "weights": "D:/WSL/model-cache/qwen35-08b-q4/qwen35-08b.Q4_K_M.gguf",
+  "runtime": "llama.cpp-b10012-cuda12.4",
+  "build_commit": "c71854292",
+  "device": "CUDA0 / RTX 3090 Ti",
+  "parameters": {
+    "temperature": 0,
+    "seed": 42,
+    "max_tokens": 128,
+    "ngram_size_n": 16,
+    "ngram_size_m": 8,
+    "min_hits": 1
+  },
+  "speed_samples": [
+    {
+      "mode": "baseline",
+      "request": 0,
+      "elapsed_ms": 1213.2267,
+      "completion_tokens": 48,
+      "tok_s": 39.56391662003482,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "baseline",
+      "request": 1,
+      "elapsed_ms": 545.0217,
+      "completion_tokens": 48,
+      "tok_s": 88.0698878595109,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "baseline",
+      "request": 2,
+      "elapsed_ms": 423.8933,
+      "completion_tokens": 48,
+      "tok_s": 113.23604312689066,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "baseline",
+      "request": 3,
+      "elapsed_ms": 454.953,
+      "completion_tokens": 48,
+      "tok_s": 105.50540385490369,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "baseline",
+      "request": 4,
+      "elapsed_ms": 449.1989,
+      "completion_tokens": 48,
+      "tok_s": 106.85689568696628,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "baseline",
+      "request": 5,
+      "elapsed_ms": 441.0325,
+      "completion_tokens": 48,
+      "tok_s": 108.83551665693571,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "ngram-simple",
+      "request": 0,
+      "elapsed_ms": 550.5179,
+      "completion_tokens": 48,
+      "tok_s": 87.19062540927371,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "ngram-simple",
+      "request": 1,
+      "elapsed_ms": 478.1678,
+      "completion_tokens": 48,
+      "tok_s": 100.38317092869909,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "ngram-simple",
+      "request": 2,
+      "elapsed_ms": 433.9498,
+      "completion_tokens": 48,
+      "tok_s": 110.61187261752396,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "ngram-simple",
+      "request": 3,
+      "elapsed_ms": 462.6333,
+      "completion_tokens": 48,
+      "tok_s": 103.75388023300528,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "ngram-simple",
+      "request": 4,
+      "elapsed_ms": 450.0189,
+      "completion_tokens": 48,
+      "tok_s": 106.66218685481877,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    {
+      "mode": "ngram-simple",
+      "request": 5,
+      "elapsed_ms": 485.7618,
+      "completion_tokens": 48,
+      "tok_s": 98.81386309092234,
+      "payload_sha256": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    }
+  ],
+  "medians": {
+    "baseline": {
+      "median_tok_s": 106.85689568696628,
+      "requests": 6
+    },
+    "ngram-simple": {
+      "median_tok_s": 103.75388023300528,
+      "requests": 6
+    }
+  },
+  "correctness": {
+    "payload_hashes": {
+      "baseline": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79",
+      "ngram-simple": "1f5fa6c14363b8d00aa4590c982ccec3868945d71f8ab88d36f80ca3cb330c79"
+    },
+    "hashes_equal": true,
+    "content_chars": {
+      "baseline": 515,
+      "ngram-simple": 515
+    }
+  },
+  "decision": {
+    "status": "negative_control",
+    "promote": false,
+    "reason": "N-gram output payloads matched exactly but decode throughput regressed versus baseline in this probe.",
+    "next": "Do not enable by default; test draft-simple/MTP only with architecture-compatible artifacts."
+  }
+}

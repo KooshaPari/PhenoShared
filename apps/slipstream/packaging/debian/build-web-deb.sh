@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# Build the slipstream-web .deb — the management web console (Nitro SSR on bun + React).
+#
+# Runtime is BUN: the console is built with Nitro's `bun` preset + a custom Bun.serve entry that
+# serves HTTPS (HTTP/1.1 over TLS) with the host's identity cert (web/nitro-entry/bun-https.mjs). Bun
+# isn't in apt, so we VENDOR a bun binary into the package — which makes the
+# package per-arch (amd64/arm64), NOT `all`. The host's slipstream-host .deb Recommends this, so a
+# default `apt install slipstream-host` pulls the console too; it is auto-wired to the host's mgmt
+# token + identity cert via the systemd --user units (no env editing on a packaged install).
+#
+# Usage: VERSION=0.24.0~ci42.gdeadbee [DEB_ARCH=amd64] [BUN_BIN=/path/to/bun] bash packaging/debian/build-web-deb.sh
+# Output: dist/slipstream-web_<version>_<arch>.deb
+set -euo pipefail
+
+VERSION="${VERSION:?set VERSION (e.g. 0.24.0 or 0.24.0~ci42.gdeadbee)}"
+PKG="slipstream-web"
+ROOTDIR="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$ROOTDIR"
+
+# Per-arch: vendor bun for the target Debian arch. Map deb arch → bun's release arch tag.
+DEB_ARCH="${DEB_ARCH:-$(dpkg --print-architecture)}"
+BUN_VERSION="${BUN_VERSION:-1.3.14}" # pinned bun build vendored into the package
+case "$DEB_ARCH" in
+  amd64) BUN_ARCH=x64; BUN_SHA256=951ee2aee855f08595aeec6225226a298d3fea83a3dcd6465c09cbccdf7e848f ;;
+  arm64) BUN_ARCH=aarch64; BUN_SHA256=a27ffb63a8310375836e0d6f668ae17fa8d8d18b88c37c821c65331973a19a3b ;;
+  *) echo "ERROR: unsupported DEB_ARCH=$DEB_ARCH (want amd64 or arm64)" >&2; exit 1 ;;
+esac
+
+# Build the console if not already built (.output is gitignored — CI builds it each run).
+if [ ! -f web/.output/server/index.mjs ]; then
+  echo "==> building web console"
+  (cd web && bun install --frozen-lockfile && bun run build)
+fi
+# The build MUST be the bun preset (our Bun.serve TLS entry) — node can't run Bun.serve.
+if ! grep -rq 'Bun\.serve' web/.output/server/index.mjs 2>/dev/null; then
+  echo "ERROR: web/.output has no Bun.serve — wrong nitro preset (need 'bun' + the custom entry)" >&2
+  exit 1
+fi
+
+STAGE="$(mktemp -d)"
+trap 'rm -rf "$STAGE"' EXIT
+SHAREDIR="$STAGE/usr/share/$PKG"
+DOCDIR="$STAGE/usr/share/doc/$PKG"
+LIBDIR="$STAGE/usr/lib/$PKG"
+
+# --- vendor the bun runtime --------------------------------------------------
+# Honor a pre-fetched bun (CI may cache it) via BUN_BIN; else download the pinned release.
+mkdir -p "$LIBDIR"
+if [ -n "${BUN_BIN:-}" ]; then
+  echo "==> vendoring bun from BUN_BIN=$BUN_BIN"
+  install -m0755 "$BUN_BIN" "$LIBDIR/bun"
+else
+  url="https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-${BUN_ARCH}.zip"
+  echo "==> downloading bun $BUN_VERSION ($BUN_ARCH) from $url"
+  tmp="$(mktemp -d)"
+  curl -fsSL "$url" -o "$tmp/bun.zip"
+  printf '%s  %s\n' "$BUN_SHA256" "$tmp/bun.zip" | sha256sum --check --status
+  unzip -q "$tmp/bun.zip" -d "$tmp"
+  install -m0755 "$tmp/bun-linux-${BUN_ARCH}/bun" "$LIBDIR/bun"
+  rm -rf "$tmp"
+fi
+"$LIBDIR/bun" --version
+
+# --- file layout -------------------------------------------------------------
+mkdir -p "$SHAREDIR/.output"
+cp -r web/.output/server "$SHAREDIR/.output/server"
+cp -r web/.output/public "$SHAREDIR/.output/public"
+# Stable PATH-independent ExecStart wrapper.
+install -d "$STAGE/usr/bin"
+cat > "$STAGE/usr/bin/slipstream-web-server" <<'WRAP'
+#!/bin/sh
+# The console runs on the vendored bun (Bun.serve TLS); bun lives privately under
+# /usr/lib/slipstream-web so it never collides with a system-wide bun on PATH.
+exec /usr/lib/slipstream-web/bun /usr/share/slipstream-web/.output/server/index.mjs "$@"
+WRAP
+chmod 0755 "$STAGE/usr/bin/slipstream-web-server"
+install -Dm0644 scripts/slipstream-web.service      "$STAGE/usr/lib/systemd/user/slipstream-web.service"
+install -Dm0644 scripts/slipstream-web-init.service "$STAGE/usr/lib/systemd/user/slipstream-web-init.service"
+install -Dm0755 scripts/web-init.sh                "$SHAREDIR/web-init.sh"
+install -Dm0644 web/web.env.example                "$SHAREDIR/web.env.example"
+install -Dm0644 LICENSE-MIT                         "$DOCDIR/LICENSE-MIT"
+install -Dm0644 LICENSE-APACHE                      "$DOCDIR/LICENSE-APACHE"
+install -Dm0644 web/README.md                       "$DOCDIR/README.md"
+
+cat > "$DOCDIR/copyright" <<EOF
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: slipstream
+Source: https://github.com/vindeckyy/slipstream
+
+Files: *
+Copyright: slipstream contributors
+License: MIT or Apache-2.0
+ Dual-licensed. Full texts in /usr/share/doc/$PKG/LICENSE-MIT and
+ /usr/share/doc/$PKG/LICENSE-APACHE.
+EOF
+CHANGELOG_DATE='Thu, 01 Jan 1970 00:00:00 +0000'
+if [ -n "${SOURCE_DATE_EPOCH:-}" ]; then
+  CHANGELOG_DATE="$(date -u -d "@${SOURCE_DATE_EPOCH}" -R)"
+fi
+printf '%s (%s) stable; urgency=medium\n\n  * Automated build %s.\n\n -- unom <packages@unom.io>  %s\n' \
+  "$PKG" "$VERSION" "$VERSION" "$CHANGELOG_DATE" \
+  | gzip -9n > "$DOCDIR/changelog.Debian.gz"
+
+INSTALLED_KB="$(du -k -s "$STAGE" | cut -f1)"
+
+install -d "$STAGE/DEBIAN"
+cat > "$STAGE/DEBIAN/control" <<EOF
+Package: $PKG
+Version: $VERSION
+Architecture: $DEB_ARCH
+Maintainer: unom <packages@unom.io>
+Installed-Size: $INSTALLED_KB
+Section: net
+Priority: optional
+Homepage: https://github.com/vindeckyy/slipstream
+Description: slipstream management web console (Nitro SSR on bun + React)
+ The browser console for a slipstream streaming host: status, paired devices, and the
+ SPAKE2 PIN pairing flow every client needs. Runs as a systemd --user service on port
+ 47992 over HTTPS (HTTP/1.1 over TLS, with the host's own identity cert), login-gated (a
+ password chosen in the browser on first start), proxying the host's loopback HTTPS management API
+ with a bearer token injected server-side (never sent to the browser). Bundles its own
+ bun runtime (no system nodejs/bun dependency).
+ .
+Auto-wired to the host on a packaged install: it sources the host's
+~/.config/slipstream/mgmt-token and an optional login password — no env editing. Enable
+the systemd user service slipstream-web; choose the login password in the browser on first visit.
+EOF
+
+cat > "$STAGE/DEBIAN/postinst" <<'EOF'
+#!/bin/sh
+set -e
+if [ "$1" = "configure" ]; then
+    echo "slipstream-web installed. Enable it for your user:"
+    echo "    systemctl --user enable --now slipstream-web"
+    echo "Open https://<host-ip>:47992 and choose a login password on first visit"
+    echo "(self-signed host cert — trust it once)"
+fi
+exit 0
+EOF
+chmod 0755 "$STAGE/DEBIAN/postinst"
+
+mkdir -p dist
+OUT="dist/${PKG}_${VERSION}_${DEB_ARCH}.deb"
+dpkg-deb --root-owner-group --build "$STAGE" "$OUT" >/dev/null
+echo "built $OUT"
+dpkg-deb -I "$OUT" | sed -n 's/^/  /p' | grep -E 'Version|Installed-Size|Depends' || true

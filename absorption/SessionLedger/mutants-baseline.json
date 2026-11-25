@@ -1,0 +1,18 @@
+{
+  "mutation_kill_rate": 0.85,
+  "total_evaluated": 66,
+  "caught": 56,
+  "missed": 10,
+  "floor": 0.85,
+  "generated_at": "2026-07-02",
+  "note": "Updated after PRs #12, #13, #14 added truth-table coverage for || survivors across context_extractor.rs and boundary conditions. context_extractor.rs || operators (lines 128, 184) now covered. Floor raised conservatively from 0.77 to 0.85.",
+  "per_file": {
+    "distill/contract_extractor.rs": 1.0,
+    "distill/compiler.rs": 1.0,
+    "distill/extractor.rs": 0.83,
+    "distill/context_extractor.rs": 1.0,
+    "distill/acceptance_extractor.rs": 0.57,
+    "domain/acceptance.rs": 0.5
+  },
+  "per_file_measured": ["distill/compiler.rs", "distill/context_extractor.rs"]
+}

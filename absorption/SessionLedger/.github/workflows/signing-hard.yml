@@ -1,0 +1,26 @@
+# Blocking hard platform signing-readiness CI evidence for C11 L112.
+# Hermetic SelfCheck only — docs + release.yml unsigned anchors; does not access
+# Authenticode / notarization credentials (those remain unpaid per ADR 0003).
+name: signing hard
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  signing-hard-selfcheck:
+    name: signing hard · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: platform signing readiness hard SelfCheck
+        shell: pwsh
+        run: ./scripts/signing-readiness-check.ps1 -SelfCheck

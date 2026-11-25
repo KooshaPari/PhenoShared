@@ -1,0 +1,250 @@
+name: Snyk Security Scan
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
+      - 'yarn.lock'
+      - 'pyproject.toml'
+      - 'requirements.txt'
+      - 'go.mod'
+      - 'go.sum'
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      snyk_severity:
+        description: 'Severity threshold (low, medium, high, critical)'
+        required: false
+        default: 'high'
+
+permissions:
+  contents: read
+  security-events: write
+  checks: write
+  pull-requests: read
+
+jobs:
+  snyk-test:
+    name: Snyk Vulnerability Test
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['18', '20']
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Snyk CLI
+        if: env.SNYK_TOKEN != ''
+        run: npm install -g snyk
+
+      - name: Authenticate with Snyk
+        if: env.SNYK_TOKEN != ''
+        run: snyk config set api="$SNYK_TOKEN"
+
+      - name: Run Snyk test
+        id: snyk_test
+        if: env.SNYK_TOKEN != ''
+        continue-on-error: true
+        run: |
+          snyk test \
+            --severity-threshold=high \
+            --json-file-output=snyk-test-report.json \
+            --all-projects \
+            --detection-depth=3
+
+      - name: Generate SARIF report
+        id: sarif
+        if: env.SNYK_TOKEN != ''
+        continue-on-error: true
+        run: |
+          snyk test \
+            --sarif-file-output=snyk.sarif \
+            --severity-threshold=low \
+            --all-projects \
+            --detection-depth=3 || true
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always() && hashFiles('snyk.sarif') != ''
+        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9
+        with:
+          sarif_file: snyk.sarif
+          category: snyk-security-scan
+          wait-for-processing: false
+
+      - name: Skip Snyk when token is unavailable
+        if: env.SNYK_TOKEN == ''
+        run: |
+          echo "SNYK_TOKEN is not configured; skipping Snyk scan." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Add PR comment
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## 🔒 Snyk Security Scan Results\n\nSnyk vulnerability scan completed. View results in GitHub Code Scanning dashboard.'
+            });
+
+      - name: Fail on critical vulnerabilities
+        if: steps.snyk_test.outcome == 'failure'
+        run: |
+          echo "🔴 Critical vulnerabilities detected."
+          echo "Run 'snyk test' locally to see details."
+          exit 1
+
+  snyk-fix:
+    name: Snyk Fix (Auto-patch)
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '20'
+
+      - name: Install Snyk CLI
+        if: env.SNYK_TOKEN != ''
+        run: npm install -g snyk
+
+      - name: Authenticate with Snyk
+        if: env.SNYK_TOKEN != ''
+        run: snyk config set api="$SNYK_TOKEN"
+
+      - name: Run Snyk fix
+        id: snyk_fix
+        if: env.SNYK_TOKEN != ''
+        continue-on-error: true
+        run: |
+          snyk fix \
+            --severity-threshold=high \
+            --all-projects \
+            --force || true
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create fix PR
+        if: steps.check_changes.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
+        with:
+          commit-message: 'chore(security): apply Snyk vulnerability fixes'
+          title: 'chore(security): apply Snyk vulnerability fixes'
+          body: |
+            This PR applies automatic security fixes from Snyk.
+
+            **Changes:**
+            - Updated dependencies to patch known vulnerabilities
+            - Applied safe, non-breaking updates
+            - All tests should pass (verify before merging)
+
+            **Instructions:**
+            1. Review the changes
+            2. Run tests locally
+            3. Approve and merge if tests pass
+            4. Monitor for any behavioral changes
+
+            Generated by: snyk-scan.yml
+          branch: snyk-fix/${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            security
+            dependencies
+            automated
+
+  dependency-check:
+    name: Snyk Dependency Check
+    runs-on: ubuntu-24.04
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Run Snyk monitor
+        if: env.SNYK_TOKEN != ''
+        run: |
+          npm install -g snyk
+          snyk config set api="$SNYK_TOKEN"
+          snyk monitor \
+            --all-projects \
+            --detection-depth=3 || true
+
+      - name: Skip Snyk monitor when token is unavailable
+        if: env.SNYK_TOKEN == ''
+        run: |
+          echo "SNYK_TOKEN is not configured; skipping Snyk monitor." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Store results
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: snyk-reports
+          path: |
+            snyk-test-report.json
+            snyk.sarif
+          retention-days: 30
+
+  summary:
+    name: Security Summary
+    runs-on: ubuntu-24.04
+    if: always()
+    needs: [snyk-test]
+    steps:
+      - name: Generate summary
+        run: |
+          {
+            echo "## 🔒 Security Scan Summary"
+            echo ""
+            echo "✅ Snyk vulnerability scan completed"
+            echo ""
+            echo "**View Results:**"
+            echo "- [Code Scanning Dashboard](https://github.com/${{ github.repository }}/security/code-scanning)"
+            echo "- [Security Documentation](https://docs.snyk.io)"
+          } >> "$GITHUB_STEP_SUMMARY"

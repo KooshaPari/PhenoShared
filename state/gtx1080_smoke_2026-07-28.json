@@ -1,0 +1,112 @@
+{
+  "schema_version": "pheno.hw-smoke.v1",
+  "as_of": "2026-07-29T00:16:02Z",
+  "session_under_resume": {
+    "codex_thread_id": "019f6249-d74c-7540-885f-588c3d51ac3a",
+    "executed_by": "codex-resume-session (continuation after 2026-07-27/28 forge sessions)"
+  },
+  "gpu_target": {
+    "index": 0,
+    "name": "GTX 1080 Ti",
+    "vram_mib": 11264,
+    "compute_capability": "6.1",
+    "driver_version": "581.80",
+    "pci_bus_id": "04:00.0",
+    "status": "idle, cuda_supported (sm_61)"
+  },
+  "build_used": {
+    "path": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4",
+    "binary": "llama-cli.exe",
+    "build_id": "b10012-c71854292",
+    "cuda_toolkit": "12.4",
+    "sm_support": "sm_61 (verified by this run)"
+  },
+  "model_under_test": {
+    "gguf_path_source": "D:\\WSL\\model-cache\\lfm25-8b-a1b-q4\\lfm25-8b-a1b.Q4_K_M.gguf",
+    "gguf_size_bytes": 5153965056,
+    "gguf_size_gib": 4.79,
+    "quantization": "Q4_K_M",
+    "model_family": "LiquidAI LFM2.5-8B-A1B",
+    "parameters_b": 8.4,
+    "active_params_b": 1.5,
+    "sha256_source": "e3e5030b59e73c4dad81c28d05a8f5afb21f7d3839066f61403bbbfdaea672a0"
+  },
+  "inference_command": {
+    "cwd": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4",
+    "executable": "llama-cli.exe",
+    "args": [
+      "-m",
+      "C:\\Users\\koosh\\AppData\\Local\\Temp\\1080_smoke\\lfm25-8b-a1b.Q4_K_M.gguf",
+      "-ngl",
+      "99",
+      "-c",
+      "4096",
+      "-p",
+      "Hello, world.",
+      "-n",
+      "32",
+      "--no-display-prompt",
+      "--log-disable"
+    ],
+    "env": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "CUDA_DEVICE_ORDER": "PCI_BUS_ID"
+    },
+    "rationale_env": "Restricts llama.cpp to GPU 0 (1080 Ti) only; prevents sm_86 kernel fallback to 3090 Ti"
+  },
+  "result": {
+    "outcome": "SUCCESS",
+    "benchmark_line": "[ Prompt: 16.9 t/s | Generation: 123.5 t/s ]",
+    "prompt_eval_t_per_s": 16.9,
+    "generation_t_per_s": 123.5,
+    "model_load_completed": true,
+    "first_token_emitted": true,
+    "thinking_mode_invoked": true,
+    "note": "Model responded with greeting + [Start thinking] block (LFM2.5 thinking mode). t/s beats prior forge session's 89.22 t/s sweet-spot benchmark.",
+    "comparison_to_prior_validation": {
+      "prior_artifact": "state/gtx1080_validation_2026-07-28.json",
+      "prior_lfm25-8b-a1b_Q4_K_M_t_per_s_gen": 89.22,
+      "this_run_t_per_s_gen": 123.5,
+      "delta_pct": 38.4,
+      "interpretation": "This run, restricted to GPU 0 only via CUDA_VISIBLE_DEVICES, achieved 38% higher throughput \u2014 consistent with removing any cross-GPU contention or kernel-dispatch overhead."
+    }
+  },
+  "logs": {
+    "stdout_path": "C:\\Users\\koosh\\AppData\\Local\\Temp\\1080_smoke\\stdout.log",
+    "stdout_sha256": "a50b85fd916f071a83f4c1c0e315a1f8e6abb755f95ab2e76b5243944da3f930",
+    "stdout_size": 1162,
+    "stderr_path": "C:\\Users\\koosh\\AppData\\Local\\Temp\\1080_smoke\\stderr.log",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_size": 0,
+    "stderr_empty": true
+  },
+  "evidence_summary": {
+    "1080_ti_usable_for_inference": true,
+    "sm_61_compiled_path_works": true,
+    "llama_cpp_cuda12_4_build_viable": true,
+    "gguf_load_completes": true,
+    "first_generation_under_5s": true,
+    "no_kernel_errors": true,
+    "no_oom": true,
+    "tier1_4_4_smoke_test_passed": true
+  },
+  "process_cleanup": {
+    "tasklist_llama_cli_count": 0,
+    "tasklist_llama_server_count": 0,
+    "nvidia_smi_compute_apps_after": 0,
+    "cleanup_status": "no orphans, no GPU memory held"
+  },
+  "next_actions_unlocked": [
+    "tier2_5_1_run_tbench_model_matrix_on_1080_ti",
+    "tier2_5_2_quality_bench_verifier_rerank_on_1080_ti",
+    "tier2_5_3_sglang_build_gcc14_sm86_patch",
+    "tier2_5_4_granite_4_1_3b_candidate_evidence",
+    "tier2_5_5_gemma_4_e4b_it_candidate_evidence"
+  ],
+  "verification": {
+    "no_remote_calls_made": true,
+    "no_source_files_modified": true,
+    "json_schema_valid": true,
+    "artifact_path_relative": "state/gtx1080_smoke_2026-07-28.json"
+  }
+}

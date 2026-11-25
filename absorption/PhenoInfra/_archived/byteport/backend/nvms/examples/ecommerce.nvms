@@ -1,0 +1,43 @@
+FROM: aws-ubuntu:minimal
+NAME: ecommerce
+
+SERVICES:
+  frontend:
+    PATH: ./frontend
+    BUILD: npm run build
+    PORT: 3000
+    ENV:
+      - API_URL=${aws:alb:url}
+      - STRIPE_PUBLIC_KEY=${env:STRIPE_PUBLIC}
+
+  api:
+    PATH: ./api
+    BUILD: cargo build --release
+    PORT: 8080
+    ENV:
+      - DATABASE_URL=${aws:rds:url}
+      - REDIS_URL=${aws:elasticache:url}
+      - STRIPE_SECRET_KEY=${env:STRIPE_SECRET}
+
+  worker:
+    PATH: ./worker
+    BUILD: cargo build --release
+    ENV:
+      - QUEUE_URL=${aws:sqs:url}
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: RDS
+      ENGINE: postgres
+      SIZE: db.t3.small
+    - TYPE: ElastiCache
+      ENGINE: redis
+    - TYPE: SQS
+      NAME: orders
+
+SCALE:
+  api:
+    MIN: 2
+    MAX: 5
+    CPU_THRESHOLD: 70

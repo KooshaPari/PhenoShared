@@ -1,0 +1,101 @@
+[
+  {
+    "name": "PhenoInfra",
+    "repository_id": 1220334053,
+    "role_class": "pooled-foundation",
+    "role": "Compute/runtime and operational infrastructure",
+    "atlas": "Recover runtime/provisioner, manifest, secrets, state, backup/restore and consumer contracts. Separate reusable libraries from environment-specific resources.",
+    "reuse": "Use supported provider/runtime APIs, existing reconciliation tools and verified backup software. Do not establish a new cluster to satisfy a GitOps label.",
+    "acceptance": "A real clean consumer provisions and recovers its intended resource, and a restore drill preserves state and ownership.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "PhenoTooling",
+    "repository_id": 1220333985,
+    "role_class": "pooled-foundation",
+    "role": "Quality, developer workflow and absorbed tool capabilities",
+    "atlas": "Inventory all languages and nested workspaces, advertised commands, native tools, copied products and false-green scaffolds. Every verifier must prove a negative case.",
+    "reuse": "Adopt maintained checkers/indexers/test frameworks and normalize receipts; avoid weaker in-house clones.",
+    "acceptance": "Real checkers reject seeded failures; product copies have one writer/release authority; actual consumers install and use the supported package.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "PhenoAI",
+    "repository_id": 1201987910,
+    "role_class": "pooled-foundation",
+    "role": "AI/framework/device capability collection pending consolidation",
+    "atlas": "Identify embeddings, providers, agent SDK, device drivers and artifact contracts independently. Resolve which consumers require each package and distinguish Agentora from similarly named CLI frameworks.",
+    "reuse": "Prefer established SDKs, framework adapters and provider clients; maintain narrow owned policy and unsupported capability deltas.",
+    "acceptance": "Each retained package has a clean consumer, truthful support profile and an adopt/patch/wrap/retain decision backed by tests.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "PhenoGfx",
+    "repository_id": 1271708536,
+    "role_class": "pooled-foundation",
+    "role": "Shared graphics/data/FFI components",
+    "atlas": "Map data ownership, renderer adapters, native ABI, asset conversion and required game consumers. A byte-compatible API and a semantically correct rendering path are different proofs.",
+    "reuse": "Reuse engine facilities and common data formats; minimize cross-engine wrappers to the actual shared contract.",
+    "acceptance": "At least the accepted real consumers exercise the canonical package with correct ABI/data/rendering and explicit performance budgets.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "PhenoRegistry",
+    "repository_id": 1201113097,
+    "role_class": "supporting-surface",
+    "role": "Curated portfolio identity and ownership projection",
+    "atlas": "Use immutable repo IDs and explicit accepted lifecycle/role records. Separate GitHub facts from proposed disposition and externally owned work/evidence state.",
+    "reuse": "Adapt small declarative catalogs or Backstage concepts; no new universal database.",
+    "acceptance": "The live roster resolves aliases, names current allowed actions and links truthful evidence without overriding source owners.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "PhenoDesign",
+    "repository_id": 1169864396,
+    "role_class": "supporting-surface",
+    "role": "Shared visual identity, tokens, components and creative-source custody",
+    "atlas": "Locate editable source, export recipes, actual consumers and accepted brand scope. Do not regenerate a brand because a legacy README says archived.",
+    "reuse": "Use established design-token formats, accessible UI libraries, Blender/Adobe and appropriate exporters.",
+    "acceptance": "Real consumers use consistent tokens/assets; visual, accessibility, performance and rights checks pass; source edits reproducibly produce deliverable variants.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "KooshaPari",
+    "repository_id": 1349458262,
+    "role_class": "supporting-surface",
+    "role": "Public portfolio and landing/publication consumer",
+    "atlas": "Map each public claim to an actual product/release, active URL, docs version and artifact. Preserve private/public boundaries and honest installation status.",
+    "reuse": "Reuse the existing landing/PhenoDocs composition and platform deployment facilities rather than build another registry.",
+    "acceptance": "An unfamiliar visitor can understand the portfolio, find working product/docs/install paths and distinguish measured capability from plans.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "PhenoApps",
+    "repository_id": 1272990345,
+    "role_class": "conditional-target",
+    "role": "Possible bounded application collection",
+    "atlas": "Resolve the actual FocalPoint application source, Localbase and RIPFitnessApp future disposition separately. A shared repository must not force a shared product, database or release lifecycle.",
+    "reuse": "Use package/workspace boundaries, native application frameworks and mature domain facilities.",
+    "acceptance": "Each accepted app remains independently installable, testable and understandable; no archive or donor deletion follows from this dossier.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  },
+  {
+    "name": "Agentora-capability",
+    "repository_id": null,
+    "role_class": "absorbed-capability",
+    "role": "Agent framework API after absorption",
+    "atlas": "Inventory the actual exported Rust/other framework, tools, state, model adapters, storage and consumers. Locate legacy Agentora code by lineage rather than an agentkit string alone.",
+    "reuse": "Compare direct SDK, OpenAI Agents SDK, LangGraph, CrewAI, Mastra, PydanticAI and Rig; prefer a maintained foundation where it preserves the valuable contract.",
+    "acceptance": "A matched coding-agent pilot proves correctness, ergonomics and recovery; retained custom behavior has a defensible measured benefit or internal boundary.",
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "assigned_product_seats": 0
+  }
+]

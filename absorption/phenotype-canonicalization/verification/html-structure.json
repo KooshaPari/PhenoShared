@@ -1,0 +1,10 @@
+{
+  "status": "STRUCTURE_VALID",
+  "html_file": "REPORT.html",
+  "heading_count": 87,
+  "table_count": 4,
+  "duplicate_ids": 0,
+  "broken_fragment_links": 0,
+  "browser_visual_review": "NOT_RUN",
+  "accessibility_qualification": "NOT_RUN"
+}

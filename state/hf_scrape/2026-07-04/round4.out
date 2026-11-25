@@ -1,0 +1,16 @@
+HF_TOKEN_present=True
+[cloud] ling-2.6-flash
+[cloud] granite-4.0-h-micro
+[cloud] lfm-2-24b-a2b
+[cloud] trinity-mini
+[cloud] granite-4.1-8b
+[cloud] laguna-xs-2.1
+[cloud] hy3-preview
+[cloud] qwen3.5-flash-02-23
+[local] qwen3.5-0.8b
+[local] lfm-2.5-8b-a1b
+[local] ornith-8b
+wrote C:\Users\koosh\pheno-harness\state\hf_scrape\2026-07-04\models.jsonl
+wrote C:\Users\koosh\pheno-harness\state\hf_scrape\2026-07-04\summary.json
+wrote C:\Users\koosh\pheno-harness\state\hf_scrape\2026-07-04\scrape_round4.log
+total=11  rejected_pre_march=11

@@ -1,0 +1,86 @@
+# Soft / nightly loom permutation smoke for C00 L7 concurrency evidence.
+# Runs tests/loom_model.rs under RUSTFLAGS='--cfg loom' only.
+# continue-on-error: soft gate toward full loom/shuttle/blocking miri checkers.
+# Default cargo test stays free of loom (cfg-gated + not(loom) skip marker).
+name: loom smoke
+
+on:
+  schedule:
+    - cron: "42 4 * * *" # nightly 04:42 UTC (offset from miri-smoke)
+  workflow_dispatch:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  loom-selfcheck:
+    name: soft loom · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: loom soft SelfCheck
+        shell: pwsh
+        run: ./scripts/loom-smoke-check.ps1 -SelfCheck
+
+  loom-model-core:
+    name: soft loom · loom_model core
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-smoke-core-cfg
+      - name: loom_model core (soft)
+        env:
+          RUSTFLAGS: "--cfg loom"
+        run: |
+          set -euo pipefail
+          for filter in cancel_and_capacity bounded_try_send broadcast_epoch watcher_ daemon_graph_pipeline_conserves; do
+            cargo test --test loom_model --release --locked "$filter" -- --test-threads=1
+          done
+
+  loom-model-daemon-mpsc:
+    name: soft loom · daemon mpsc
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-smoke-daemon-mpsc-cfg
+      - name: loom_model daemon mpsc (soft)
+        env:
+          RUSTFLAGS: "--cfg loom"
+        run: cargo test --test loom_model --release --locked daemon_mpsc -- --test-threads=1
+
+  loom-model-daemon-broadcast:
+    name: soft loom · daemon broadcast
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-smoke-daemon-broadcast-cfg
+      - name: loom_model daemon broadcast (soft)
+        env:
+          RUSTFLAGS: "--cfg loom"
+          LOOM_MAX_PREEMPTIONS: "4"
+        run: cargo test --test loom_model --release --locked daemon_broadcast -- --test-threads=1

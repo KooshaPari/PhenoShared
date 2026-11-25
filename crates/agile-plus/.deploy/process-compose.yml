@@ -1,0 +1,34 @@
+# AgilePlus process-compose definition
+# Run with:  process-compose -f .deploy\process-compose.yml
+version: "1"
+
+services:
+  agroverse_api:
+    command: cmd /c "cd backend && go run ./cmd/api"
+    depends_on: []
+    availability:
+      restart: always
+    readiness_probe:
+      http_get:
+        path: /healthz
+        host: 127.0.0.1
+        port: 8080
+      period: 5s
+      timeout: 3s
+
+  agroverse_frontend:
+    command: cmd /c "cd apps/landing && bun run preview --port 4174 --host"
+    depends_on:
+      - agroverse_api
+    readiness_probe:
+      http_get:
+        host: 127.0.0.1
+        path: /
+        port: 4174
+      period: 5s
+      timeout: 3s
+
+  agroverse_mcp:
+    command: cmd /c "cd mcp-server && bun run start"
+    depends_on:
+      - agroverse_api

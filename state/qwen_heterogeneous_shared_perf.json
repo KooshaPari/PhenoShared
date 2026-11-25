@@ -1,0 +1,293 @@
+{
+  "schema_version": "pheno.heterogeneous_perf.v1",
+  "model": "local/qwen35-08b",
+  "workers": [
+    {
+      "id": "1080",
+      "base_url": "http://127.0.0.1:23082"
+    },
+    {
+      "id": "3090",
+      "base_url": "http://127.0.0.1:23085"
+    }
+  ],
+  "result": {
+    "concurrency": 4,
+    "worker_count": 2,
+    "request_count": 8,
+    "success_count": 8,
+    "error_count": 0,
+    "worker_assignments": {
+      "1080": 4,
+      "3090": 4
+    },
+    "wall_ms": 2025.002499999573,
+    "aggregate_tokens": 47,
+    "aggregate_tokens_per_s": 23.209847889081573,
+    "latency_ms_p50": 1526.41500000027,
+    "latency_ms_p95": 1692.491599999812,
+    "by_worker": {
+      "1080": {
+        "request_count": 4,
+        "success_count": 4,
+        "error_count": 0,
+        "tokens": 23,
+        "latency_ms_p50": 1686.488699999245,
+        "latency_ms_p95": 1692.491599999812
+      },
+      "3090": {
+        "request_count": 4,
+        "success_count": 4,
+        "error_count": 0,
+        "tokens": 24,
+        "latency_ms_p50": 1526.41500000027,
+        "latency_ms_p95": 1592.9806000003737
+      }
+    },
+    "results": [
+      {
+        "ttft_ms": 1692.3060999997688,
+        "itl_ms": [
+          0.024100000700855162,
+          0.02099999983329326,
+          0.01700000029813964,
+          0.01559999964229064
+        ],
+        "itl_ms_p50": 0.02099999983329326,
+        "itl_ms_p95": 0.024100000700855162,
+        "completion": "System status: Online.",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 6,
+        "prompt_tokens": 18,
+        "total_tokens": 24,
+        "raw_usage": {
+          "completion_tokens": 6,
+          "prompt_tokens": 18,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 1692.491599999812,
+        "decode_tok_s": 3.5450692931064864,
+        "worker": "1080"
+      },
+      {
+        "ttft_ms": 1592.793900000288,
+        "itl_ms": [
+          0.020200000108161476,
+          0.016399999367422424,
+          0.014900000678608194,
+          0.028200000087963417
+        ],
+        "itl_ms_p50": 0.020200000108161476,
+        "itl_ms_p95": 0.028200000087963417,
+        "completion": "System status: Online.",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 6,
+        "prompt_tokens": 18,
+        "total_tokens": 24,
+        "raw_usage": {
+          "completion_tokens": 6,
+          "prompt_tokens": 18,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 1592.9806000003737,
+        "decode_tok_s": 3.766524212535038,
+        "worker": "3090"
+      },
+      {
+        "ttft_ms": 1686.3217000000077,
+        "itl_ms": [
+          0.02049999966402538,
+          0.017499999557912815,
+          0.01700000029813964
+        ],
+        "itl_ms_p50": 0.017499999557912815,
+        "itl_ms_p95": 0.02049999966402538,
+        "completion": "System status: Online",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 5,
+        "prompt_tokens": 18,
+        "total_tokens": 23,
+        "raw_usage": {
+          "completion_tokens": 5,
+          "prompt_tokens": 18,
+          "total_tokens": 23,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 1686.488699999245,
+        "decode_tok_s": 2.964739698524063,
+        "worker": "1080"
+      },
+      {
+        "ttft_ms": 1526.1860000000524,
+        "itl_ms": [
+          0.02860000040527666,
+          0.021799999558425043,
+          0.019699999938893598,
+          0.01880000036180718
+        ],
+        "itl_ms_p50": 0.021799999558425043,
+        "itl_ms_p95": 0.02860000040527666,
+        "completion": "System status: Online.",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 6,
+        "prompt_tokens": 18,
+        "total_tokens": 24,
+        "raw_usage": {
+          "completion_tokens": 6,
+          "prompt_tokens": 18,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 1526.41500000027,
+        "decode_tok_s": 3.930778982124087,
+        "worker": "3090"
+      },
+      {
+        "ttft_ms": 352.47919999983424,
+        "itl_ms": [
+          0.019500000234984327,
+          0.029799999538226984,
+          0.015300000086426735,
+          0.014600000213249587
+        ],
+        "itl_ms_p50": 0.019500000234984327,
+        "itl_ms_p95": 0.029799999538226984,
+        "completion": "System status: Online.",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 6,
+        "prompt_tokens": 18,
+        "total_tokens": 24,
+        "raw_usage": {
+          "completion_tokens": 6,
+          "prompt_tokens": 18,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 14
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 352.6608000001943,
+        "decode_tok_s": 17.013515536733014,
+        "worker": "1080"
+      },
+      {
+        "ttft_ms": 347.8978000002826,
+        "itl_ms": [
+          0.02249999943160219,
+          0.01920000067912042,
+          0.01900000006571645,
+          0.015499999790336005
+        ],
+        "itl_ms_p50": 0.01920000067912042,
+        "itl_ms_p95": 0.02249999943160219,
+        "completion": "System status: Online.",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 6,
+        "prompt_tokens": 18,
+        "total_tokens": 24,
+        "raw_usage": {
+          "completion_tokens": 6,
+          "prompt_tokens": 18,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 14
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 348.1535000000804,
+        "decode_tok_s": 17.23377762969097,
+        "worker": "3090"
+      },
+      {
+        "ttft_ms": 275.5136000005223,
+        "itl_ms": [
+          0.018199999431089964,
+          0.01900000006571645,
+          0.030300000616989564,
+          0.01449999945180025
+        ],
+        "itl_ms_p50": 0.01900000006571645,
+        "itl_ms_p95": 0.030300000616989564,
+        "completion": "System status: Online.",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 6,
+        "prompt_tokens": 18,
+        "total_tokens": 24,
+        "raw_usage": {
+          "completion_tokens": 6,
+          "prompt_tokens": 18,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 14
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 275.68930000052205,
+        "decode_tok_s": 21.76363028956379,
+        "worker": "1080"
+      },
+      {
+        "ttft_ms": 290.0712000000567,
+        "itl_ms": [
+          0.022700000045006163,
+          0.02080000012938399,
+          0.019099999917671084,
+          0.01700000029813964
+        ],
+        "itl_ms_p50": 0.02080000012938399,
+        "itl_ms_p95": 0.022700000045006163,
+        "completion": "System status: Online.",
+        "reasoning": "",
+        "reasoning_tokens": 0,
+        "completion_tokens": 6,
+        "prompt_tokens": 18,
+        "total_tokens": 24,
+        "raw_usage": {
+          "completion_tokens": 6,
+          "prompt_tokens": 18,
+          "total_tokens": 24,
+          "prompt_tokens_details": {
+            "cached_tokens": 14
+          }
+        },
+        "measurement_quality": "stream_chunk_proxy",
+        "status": 200,
+        "elapsed_ms": 290.2635000000373,
+        "decode_tok_s": 20.670873189358044,
+        "worker": "3090"
+      }
+    ]
+  },
+  "measurement_notes": [
+    "Workers are independent processes; no tensor parallelism is implied.",
+    "Round-robin assignment is a baseline, not a quality-aware scheduler."
+  ]
+}

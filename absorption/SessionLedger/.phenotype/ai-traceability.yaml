@@ -1,0 +1,80 @@
+---
+project: SessionLedger
+language: Rust
+generated: "2026-08-19"
+
+attribution:
+  system: Phenotype Traceability
+  purpose: Feature Requirement (FR) tracking
+
+traceability:
+  cli: AgilePlus/bin/ptrace
+  ci_cd: .github/workflows/ci.yml
+
+fr_requirements:
+  - id: FR-001
+    title: "JSONL / corpus ingest into normalized Session"
+    status: done
+    acceptance: "crates/sl-daemon ETL (etl.rs, watcher.rs); tests/skeleton.rs; crates/sl-daemon/tests/pipeline.rs"
+  - id: FR-002
+    title: "OKF bundle schema validation on ingest"
+    status: done
+    acceptance: "POST /api/ingest; crates/sl-daemon/src/validation.rs; sl validate CLI"
+  - id: FR-003
+    title: "Bundle list + search/filter"
+    status: done
+    acceptance: "GET /api/bundles, GET /api/search; filter.rs, tag.rs"
+  - id: FR-004
+    title: "Session replay via SSE"
+    status: done
+    acceptance: "GET /api/replay/:id; crates/sl-daemon/tests/sse_bridge.rs; sl replay"
+  - id: FR-005
+    title: "Aggregated session metrics"
+    status: done
+    acceptance: "GET /api/metrics; crates/sl-daemon/src/metrics.rs"
+  - id: FR-006
+    title: "Archive / restore (gzip)"
+    status: done
+    acceptance: "sl archive / sl restore; crates/sl-daemon/src/archive.rs"
+  - id: FR-007
+    title: "Viewer Timeline"
+    status: done
+    acceptance: "crates/sl-viewer/src/timeline.rs"
+  - id: FR-008
+    title: "Viewer Search"
+    status: done
+    acceptance: "crates/sl-viewer/src/search_view.rs"
+  - id: FR-009
+    title: "Viewer Replay"
+    status: done
+    acceptance: "crates/sl-viewer/src/replay_view.rs"
+  - id: FR-010
+    title: "Viewer LiveFeed"
+    status: done
+    acceptance: "crates/sl-viewer/src/live_feed.rs"
+  - id: FR-011
+    title: "Crash recovery / unfinished work surface"
+    status: done
+    acceptance: "DESIGN 5.1; T-024 detector; T-036 unfinished viewer tab"
+  - id: FR-012
+    title: "ContinuationBundle compile + inject gate"
+    status: done
+    acceptance: "src/domain/bundle.rs; src/distill; Acceptance slice gate"
+  - id: FR-013
+    title: "OKF roundtrip smoke"
+    status: done
+    acceptance: "tests/okf_roundtrip.rs; docs/OKF-ROUNDTRIP.md"
+  - id: FR-014
+    title: "Daemon liveness + local ops stack"
+    status: done
+    acceptance: "GET /healthz + GET /readyz; process-compose.yaml; make dev"
+  - id: FR-015
+    title: "Observability surfaces (metrics, OTLP, dashboards)"
+    status: done
+    acceptance: "/healthz, /readyz, /api/metrics, Prometheus /metrics"
+
+coverage:
+  status: complete
+  note: "All 15 FRs status: done. Legacy agileplus/ seed not FR-mapped."
+
+last_updated: "2026-08-19"

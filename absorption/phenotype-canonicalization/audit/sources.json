@@ -1,0 +1,474 @@
+[
+  {
+    "id": "G01",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoShared",
+    "path": "README.md",
+    "blob_sha": "a86d1085527c1e05599ee2f4f79c551d9e774316",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/PhenoShared/blob/main/README.md",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G02",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoShared",
+    "path": "package.json",
+    "blob_sha": "ae81eb9ed131c2d097bbec410b176a6d45157de3",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/PhenoShared/blob/main/package.json",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G03",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoShared",
+    "path": "Cargo.toml",
+    "blob_sha": "c7457f186182e348107401a13fe528456e59321b",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/PhenoShared/blob/main/Cargo.toml",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G04",
+    "kind": "github_source",
+    "repository": "KooshaPari/Tracera",
+    "path": "frontend/package.json",
+    "blob_sha": "d5a5e6a1ad913b58822e0bd63998f984d7d30e04",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/Tracera/blob/main/frontend/package.json",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G05",
+    "kind": "github_source",
+    "repository": "KooshaPari/Tracera",
+    "path": "frontend/scripts/test-native-typecheck-contract.mjs",
+    "blob_sha": "bdb2c50967bf27cc97ebc615e2f3d1796974cb9a",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/Tracera/blob/main/frontend/scripts/test-native-typecheck-contract.mjs",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G06",
+    "kind": "github_source",
+    "repository": "KooshaPari/HeliosLab",
+    "path": "package.json",
+    "blob_sha": "078a295034b23c8d12d5afc04f083ee0d0dadaba",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/HeliosLab/blob/main/package.json",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G07",
+    "kind": "github_source",
+    "repository": "KooshaPari/OmniRoute",
+    "path": "package.json",
+    "blob_sha": null,
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/OmniRoute/blob/main/package.json",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Returned content truncated; inspected visible scripts/engines only. Do not infer unseen dependency versions."
+  },
+  {
+    "id": "G08",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoDesign",
+    "path": "package.json",
+    "blob_sha": "de801285b0c70f43023f6984ca880b19c3fcc812",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/PhenoDesign/blob/main/package.json",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G09",
+    "kind": "github_source",
+    "repository": "KooshaPari/AgilePlus",
+    "path": "python/pyproject.toml",
+    "blob_sha": "0854e7cff42804f9497c973d3b5eba3d4201eec4",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/AgilePlus/blob/main/python/pyproject.toml",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G10",
+    "kind": "github_source",
+    "repository": "KooshaPari/Portage",
+    "path": "pyproject.toml",
+    "blob_sha": "6a60ced0e5c22d04e9d2b4591b805bc9d19bfc58",
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/Portage/blob/main/pyproject.toml",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G11",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoRegistry",
+    "path": "README.md",
+    "blob_sha": null,
+    "commit_sha": null,
+    "requested_ref": "default branch",
+    "url": "https://github.com/KooshaPari/PhenoRegistry/blob/main/README.md",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Long response truncated; visible dated index and role declarations reviewed, not every link."
+  },
+  {
+    "id": "G12",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoRegistry",
+    "path": "docs/rationalization/STACK_POLICY.md",
+    "blob_sha": "592e11267ce43c05839910da4508467932a1833a",
+    "commit_sha": "f2e925e784ab1794b1697471ebe888ce74f2d9bd",
+    "requested_ref": "f2e925e784ab1794b1697471ebe888ce74f2d9bd",
+    "url": "https://github.com/KooshaPari/PhenoRegistry/blob/f2e925e784ab1794b1697471ebe888ce74f2d9bd/docs/rationalization/STACK_POLICY.md",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G13",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoShared",
+    "path": "docs/GLOBAL_HANDBOOK.md",
+    "blob_sha": "ea6a43bcd520bfc8d9cc0dfaeee0cfd760c2f4fe",
+    "commit_sha": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "requested_ref": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "url": "https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/docs/GLOBAL_HANDBOOK.md",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Read in two contiguous ranges covering the document. Self-declared pinned policy; this packet does not independently authenticate its authority."
+  },
+  {
+    "id": "G14",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoInfra",
+    "path": "lefthook.yml",
+    "blob_sha": "2ac301b1db7e0eed804dbe83e1f9f210213715f3",
+    "commit_sha": "ecf486cab18b8e84213838d497a39ea3a94aca71",
+    "requested_ref": "ecf486cab18b8e84213838d497a39ea3a94aca71",
+    "url": "https://github.com/KooshaPari/PhenoInfra/blob/ecf486cab18b8e84213838d497a39ea3a94aca71/lefthook.yml",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Selected content read through GitHub connector; no product execution."
+  },
+  {
+    "id": "G15",
+    "kind": "github_source",
+    "repository": "KooshaPari/AgilePlus",
+    "path": ".github/workflows/sbom-refresh.yml",
+    "blob_sha": null,
+    "commit_sha": "3cc0c145ae6e7290df26b3782c65521d5c2c8f0e",
+    "requested_ref": "3cc0c145ae6e7290df26b3782c65521d5c2c8f0e",
+    "url": "https://github.com/KooshaPari/AgilePlus/blob/3cc0c145ae6e7290df26b3782c65521d5c2c8f0e/.github/workflows/sbom-refresh.yml",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Indexed excerpt: caller uses phenotype-tooling/.github/workflows/sbom-monthly.yml@main; not a workflow execution."
+  },
+  {
+    "id": "G16",
+    "kind": "github_source",
+    "repository": "KooshaPari/Tracera",
+    "path": "CONTRIBUTING.md",
+    "blob_sha": null,
+    "commit_sha": "f18ac630ffd9c7848aa4f43f39e9e746ef3aa55f",
+    "requested_ref": "f18ac630ffd9c7848aa4f43f39e9e746ef3aa55f",
+    "url": "https://github.com/KooshaPari/Tracera/blob/f18ac630ffd9c7848aa4f43f39e9e746ef3aa55f/CONTRIBUTING.md",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Indexed excerpt documents Biome alternatives despite current OXC manifest."
+  },
+  {
+    "id": "G17",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoShared",
+    "path": "servers/pheno-org/README.md",
+    "blob_sha": null,
+    "commit_sha": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "requested_ref": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "url": "https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/servers/pheno-org/README.md",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Indexed excerpt names PhenoFastMCP / fastmcp 3.4.2; does not establish fork/package resolution."
+  },
+  {
+    "id": "G18",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoShared",
+    "path": "driver-mcp/lead_server.py",
+    "blob_sha": null,
+    "commit_sha": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "requested_ref": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "url": "https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/driver-mcp/lead_server.py",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Indexed import excerpt, not full implementation comparison."
+  },
+  {
+    "id": "G19",
+    "kind": "github_source",
+    "repository": "KooshaPari/PhenoShared",
+    "path": "servers/substrate/lead_server.py",
+    "blob_sha": null,
+    "commit_sha": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "requested_ref": "ed4c0642ffc464b73859c43cb9258bc0d72feb69",
+    "url": "https://github.com/KooshaPari/PhenoShared/blob/ed4c0642ffc464b73859c43cb9258bc0d72feb69/servers/substrate/lead_server.py",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Indexed import excerpt; parallel path is a lineage investigation candidate, not proven duplicate."
+  },
+  {
+    "id": "G20",
+    "kind": "github_source",
+    "repository": "KooshaPari/AgilePlus",
+    "path": "python/src/agileplus_mcp/server.py",
+    "blob_sha": null,
+    "commit_sha": "3cc0c145ae6e7290df26b3782c65521d5c2c8f0e",
+    "requested_ref": "3cc0c145ae6e7290df26b3782c65521d5c2c8f0e",
+    "url": "https://github.com/KooshaPari/AgilePlus/blob/3cc0c145ae6e7290df26b3782c65521d5c2c8f0e/python/src/agileplus_mcp/server.py",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Indexed FastMCP Context/Middleware import excerpt."
+  },
+  {
+    "id": "G21",
+    "kind": "github_history",
+    "url": "https://api.github.com/repos/KooshaPari/PhenoShared/commits?per_page=5",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Five recent commits: handbook consolidation, audit snapshots, redaction and two URL repair commits. No complete ancestry analysis."
+  },
+  {
+    "id": "G22",
+    "kind": "github_history",
+    "url": "https://api.github.com/repos/KooshaPari/Tracera/commits?path=frontend/scripts/test-native-typecheck-contract.mjs&per_page=3",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Path history returned d34adf39dfd979279acdfb23ca8f9a6b686d318c, 2026-08-22 UTC, associated with PR 900. No full PR review or deployment verification."
+  },
+  {
+    "id": "G23",
+    "kind": "connector_resolution",
+    "url": "https://github.com/KooshaPari/phenotype-tooling",
+    "accessed_date": "2026-09-16",
+    "scope_note": "get_repo returned 404 in this connection. Does not distinguish deletion, rename without accessible redirect, or access restriction."
+  },
+  {
+    "id": "L01",
+    "kind": "library_document",
+    "title": "04-polyrepo-ecosystem-consolidation.md",
+    "file_id": "file_00000000002881fdb6918d612d9a3bac",
+    "scope_note": "Relevant semantic-search excerpts reviewed; not all historical documents/conversations."
+  },
+  {
+    "id": "U01",
+    "kind": "current_user_instruction",
+    "title": "Canonical tooling/processes request, September 16 2026",
+    "scope_note": "Explicit direction for OXC, native TypeScript, Bun, uv, Python 3.14t, Lefthook, FastMCP, aggressive outcome-driven alternatives and shared consumption."
+  },
+  {
+    "id": "E01",
+    "kind": "local_experiment",
+    "path": "verification/typescript-multiple-projects.json",
+    "scope_note": "Executed isolated two-project fixture with TypeScript 5.8.3; not Tracera or its pinned compiler."
+  },
+  {
+    "id": "W01",
+    "kind": "primary_web_source",
+    "title": "Native TypeScript command identity",
+    "url": "https://github.com/microsoft/typescript-go",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Official staging repo says port completed and TypeScript 7 RC+ uses tsc; older feature table also remains, so check exact supported release."
+  },
+  {
+    "id": "W02",
+    "kind": "primary_web_source",
+    "title": "Oxlint",
+    "url": "https://oxc.rs/docs/guide/usage/linter",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Official capability documentation, not an ecosystem benchmark."
+  },
+  {
+    "id": "W03",
+    "kind": "primary_web_source",
+    "title": "Oxfmt",
+    "url": "https://oxc.rs/docs/guide/usage/formatter.html",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Official supported formatter capabilities; verify version and plugins."
+  },
+  {
+    "id": "W04",
+    "kind": "primary_web_source",
+    "title": "uv Python versions",
+    "url": "https://docs.astral.sh/uv/concepts/python-versions/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Explicit free-threaded interpreter requests; deployment patch/build pin still required."
+  },
+  {
+    "id": "W05",
+    "kind": "primary_web_source",
+    "title": "CPython free threading",
+    "url": "https://docs.python.org/3.14/howto/free-threading-python.html",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Build support and actual GIL state differ; extension imports may re-enable GIL."
+  },
+  {
+    "id": "W06",
+    "kind": "primary_web_source",
+    "title": "FastMCP",
+    "url": "https://gofastmcp.com/getting-started/welcome",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Docs reflect main and can include unreleased features; qualify a release, not every documented feature."
+  },
+  {
+    "id": "W07",
+    "kind": "primary_web_source",
+    "title": "Bun compatibility",
+    "url": "https://bun.sh/docs/runtime/nodejs-compat",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Compatibility is API-specific; package-manager and runtime qualification are separate."
+  },
+  {
+    "id": "W08",
+    "kind": "primary_web_source",
+    "title": "Lefthook remotes",
+    "url": "https://lefthook.dev/configuration/remotes/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Shared hook configuration mechanism; use immutable tested ref and inspect effective config."
+  },
+  {
+    "id": "W09",
+    "kind": "primary_web_source",
+    "title": "GitHub reusable workflows",
+    "url": "https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Job-level reuse, literal refs, .github/workflows provider location, permission constraints."
+  },
+  {
+    "id": "W10",
+    "kind": "primary_web_source",
+    "title": "Cargo build profiles",
+    "url": "https://doc.rust-lang.org/cargo/reference/profiles.html",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Size and speed optimization profiles are distinct; benchmark actual workload."
+  },
+  {
+    "id": "W11",
+    "kind": "primary_web_source",
+    "title": "Zig",
+    "url": "https://ziglang.org/learn/overview/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Explicit allocation, C ABI, comptime and SIMD facilities. No local performance result."
+  },
+  {
+    "id": "W12",
+    "kind": "primary_web_source",
+    "title": "Odin",
+    "url": "https://odin-lang.org/docs/overview/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Language/runtime/allocator and data-layout facilities. No local performance result."
+  },
+  {
+    "id": "W13",
+    "kind": "primary_web_source",
+    "title": "Nim",
+    "url": "https://nim-lang.org/docs/manual.html",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Native compilation/metaprogramming/interop features. No local performance result."
+  },
+  {
+    "id": "W14",
+    "kind": "primary_web_source",
+    "title": "Julia",
+    "url": "https://docs.julialang.org/en/v1/manual/performance-tips/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Type stability, allocation and compilation-sensitive optimization. No local performance result."
+  },
+  {
+    "id": "W15",
+    "kind": "primary_web_source",
+    "title": "Pony",
+    "url": "https://www.ponylang.io/discover/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Actor/reference-capability concurrency model. No local scheduler benchmark."
+  },
+  {
+    "id": "W16",
+    "kind": "primary_web_source",
+    "title": "Mojo",
+    "url": "https://mojolang.org/docs/manual/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Official language documentation; exact target and redistribution qualification remain required."
+  },
+  {
+    "id": "W17",
+    "kind": "primary_web_source",
+    "title": "Triton",
+    "url": "https://triton-lang.org/main/index.html",
+    "accessed_date": "2026-09-16",
+    "scope_note": "GPU programming/compiler framework, distinct from Trident."
+  },
+  {
+    "id": "W18",
+    "kind": "primary_web_source",
+    "title": "Trident",
+    "url": "https://github.com/kakaobrain/trident",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Real Triton-based ML library; repo archived October 16 2023. User intended identity still needs resolution."
+  },
+  {
+    "id": "W19",
+    "kind": "primary_web_source",
+    "title": "CUTLASS",
+    "url": "https://docs.nvidia.com/cutlass/latest/overview.html",
+    "accessed_date": "2026-09-16",
+    "scope_note": "CUDA templates and CuTe facilities; kernel architecture eligibility must be tested."
+  },
+  {
+    "id": "W20",
+    "kind": "primary_web_source",
+    "title": "ISPC",
+    "url": "https://ispc.github.io/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "SPMD CPU-vectorization compiler. No local performance result."
+  },
+  {
+    "id": "W21",
+    "kind": "primary_web_source",
+    "title": "TileLang",
+    "url": "https://tilelang.com/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "GPU kernel DSL; qualify exact target/compiler pair."
+  },
+  {
+    "id": "W22",
+    "kind": "primary_web_source",
+    "title": "Futhark",
+    "url": "https://futhark-lang.org/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Array-oriented data-parallel compiler. Candidate, not adopted."
+  },
+  {
+    "id": "W23",
+    "kind": "primary_web_source",
+    "title": "Halide",
+    "url": "https://halide-lang.org/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "Image/array pipeline algorithm and schedule separation. Candidate, not adopted."
+  },
+  {
+    "id": "W24",
+    "kind": "primary_web_source",
+    "title": "Lefthook usage",
+    "url": "https://lefthook.dev/usage/",
+    "accessed_date": "2026-09-16",
+    "scope_note": "install, validate and dump commands; local hooks can be bypassed."
+  }
+]

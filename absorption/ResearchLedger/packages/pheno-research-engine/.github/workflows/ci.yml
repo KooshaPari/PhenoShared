@@ -1,0 +1,54 @@
+name: CI
+
+# Tier-0 fleet-standard CI for a Python repository.
+# Delegates the standard Python checks to the shared reusable workflow
+# `phenotype-dev/.github/.github/workflows/python-ci.yml@main`, then layers
+# a repo-local Pyright (strict) check on top.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Concurrency hardening: cancel in-flight runs for the same ref so PR
+# re-pushes do not queue up redundant CI runs.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least-privilege default; individual jobs may opt-in to more.
+permissions:
+  contents: read
+
+jobs:
+  python-ci:
+    name: Python CI (shared)
+    uses: phenotype-dev/.github/.github/workflows/python-ci.yml@main
+    with:
+      python-version: '3.11'
+
+  pyright:
+    name: Pyright (strict)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0e2a45f0f869d46889d02405
+        with:
+          python-version: '3.11'
+
+      - name: Install project (editable)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Install pyright
+        run: python -m pip install "pyright>=1.1.390"
+
+      - name: Run pyright
+        run: |
+          python -m pyright --version
+          python -m pyright

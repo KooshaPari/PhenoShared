@@ -1,0 +1,27 @@
+# Files the repair tool must not touch.
+#
+# Trunk Check lints the files a change touches and reports their EXISTING
+# findings as new ones. A file with a pre-existing mypy error or a dead import
+# fails the gate the moment anything modifies it, even a one-line path fix.
+# Those files need their own cleanup, not a path rewrite bolted onto it.
+#
+#   scripts/e2e_real_model.py                    mypy name-defined: "mx"
+#   gui/admin-extensions/api/research_panel.py   2 mypy failures
+#   scripts/phenotype_omlx_ready.py              ruff F401, unused imports
+#
+# beads/bead-ctl.sh is excluded for a different reason. Making it shfmt-clean
+# moves a line whose comment says the dual write is switched off, and rule R7 of
+# the happy-path guard has no escape hatch at all: any added line mentioning a
+# disabled feature is reported. Fixing R7 is a change to the rule itself and
+# belongs in its own commit.
+#
+# The twelve shell files that used to be listed here are no longer excluded.
+# They were blocked by the guard reading the shell loop terminator, and a word
+# inside a quoted string, as unverified success claims. That was a false
+# positive in the guard's rule R1, corrected in governance/happy-path-precommit.sh
+# with tests in governance/test-happy-path-claims.sh.
+
+scripts/e2e_real_model.py
+gui/admin-extensions/api/research_panel.py
+scripts/phenotype_omlx_ready.py
+beads/bead-ctl.sh

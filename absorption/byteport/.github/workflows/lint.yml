@@ -1,0 +1,20 @@
+name: Lint
+on: [push, pull_request]
+jobs:
+  golangci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          # Derive the toolchain from go.mod (same pattern as ci.yml and
+          # tier-0-gate.yml). Pinned deliberately NOT to 'stable': Go
+          # 1.27.2 shipped export-data format v5, which golangci-lint
+          # v2.13.2's bundled x/tools cannot decode (max v4), producing 6
+          # bogus typecheck failures on 2026-10-09.
+          go-version-file: backend/byteport/go.mod
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.13.2
+          working-directory: backend/byteport
+          args: --disable=staticcheck --disable=errcheck

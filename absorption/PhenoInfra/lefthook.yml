@@ -1,0 +1,28 @@
+# phenotype-infra pre-commit hooks
+# Validates locally before pushing to CI
+# Uses Python subprocess instead of shell (Windows compatible)
+
+pre-commit:
+  parallel: true
+  commands:
+    cargo-check:
+      glob: "*.rs"
+      run: python -c "import subprocess; r=subprocess.run(['cargo','check','-p','phenotype-infra'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+    cargo-fmt:
+      glob: "*.rs"
+      run: python -c "import subprocess; r=subprocess.run(['cargo','fmt','--check','-p','phenotype-infra'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+    cargo-clippy:
+      glob: "*.rs"
+      run: python -c "import subprocess; r=subprocess.run(['cargo','clippy','-p','phenotype-infra','--','-D','warnings'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+
+pre-push:
+  commands:
+    cargo-test:
+      run: python -c "import subprocess; r=subprocess.run(['cargo','test','-p','phenotype-infra'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+    cargo-deny:
+      run: python -c "import subprocess; r=subprocess.run(['cargo','deny','-p','phenotype-infra','check'], capture_output=True); print(r.stdout.decode()); print(r.stderr.decode()); exit(r.returncode)"
+
+commit-msg:
+  commands:
+    conventional:
+      run: python .lefthook/conventional.py {1}

@@ -1,0 +1,303 @@
+[
+  {
+    "id": "WP01",
+    "title": "Resolve current subject and capability authority",
+    "hard_dependencies": [],
+    "finding_ids": [
+      "F01",
+      "F11"
+    ],
+    "owner_roles": [
+      "registry role",
+      "Shared integration"
+    ],
+    "scope": [
+      "inventory/identity projection only"
+    ],
+    "acceptance": [
+      "Immutable IDs",
+      "actual writer/path/ref",
+      "current lifecycle restrictions",
+      "handbook compatibility/supersession"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP02",
+    "title": "Repair independent verification instruments",
+    "hard_dependencies": [],
+    "finding_ids": [
+      "F02",
+      "F03",
+      "F04"
+    ],
+    "owner_roles": [
+      "Tracera frontend",
+      "verification owner"
+    ],
+    "scope": [
+      "frontend typecheck/verification scripts and isolated fixtures"
+    ],
+    "acceptance": [
+      "Every project canary fails",
+      "checks do not repair source",
+      "wrong/empty/stale evidence fails"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP03",
+    "title": "Resolve shared CI source and package export boundaries",
+    "hard_dependencies": [
+      "WP01"
+    ],
+    "finding_ids": [
+      "F09",
+      "F12",
+      "F13"
+    ],
+    "owner_roles": [
+      "shared tooling",
+      "docs/design owners"
+    ],
+    "scope": [
+      "selected provider export and consumer wrappers"
+    ],
+    "acceptance": [
+      "Provider accessible to caller",
+      "immutable reusable reference",
+      "one real cold consumer",
+      "effective hook config"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP04",
+    "title": "Qualify baseline language/toolchain releases",
+    "hard_dependencies": [],
+    "finding_ids": [
+      "F05",
+      "F06",
+      "F07",
+      "F15"
+    ],
+    "owner_roles": [
+      "JS/Python toolchain owners"
+    ],
+    "scope": [
+      "isolated representative component fixtures"
+    ],
+    "acceptance": [
+      "Frozen lock",
+      "resolved binaries",
+      "rule/type/format canaries",
+      "Python post-import GIL state"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP05",
+    "title": "Migrate Tracera and HeliosLab component pilots",
+    "hard_dependencies": [
+      "WP02",
+      "WP04"
+    ],
+    "finding_ids": [
+      "F05",
+      "F14"
+    ],
+    "owner_roles": [
+      "consumer integration owners"
+    ],
+    "scope": [
+      "one bounded component per worktree; coordinated lockfile writes"
+    ],
+    "acceptance": [
+      "Feature/rule parity",
+      "actual consumer gates",
+      "rollback",
+      "no downstream source-copy substitute"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP06",
+    "title": "Qualify PhenoDocs/design/landing consumption",
+    "hard_dependencies": [
+      "WP01",
+      "WP03",
+      "WP04"
+    ],
+    "finding_ids": [
+      "F06",
+      "F12"
+    ],
+    "owner_roles": [
+      "docs/design owners",
+      "two selected consumers"
+    ],
+    "scope": [
+      "shared exports and selected consumer composition"
+    ],
+    "acceptance": [
+      "Cold install",
+      "version/source lineage",
+      "real docs/landing journeys",
+      "content remains product-owned"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP07",
+    "title": "Resolve and qualify MCP service ownership",
+    "hard_dependencies": [
+      "WP01",
+      "WP04"
+    ],
+    "finding_ids": [
+      "F07",
+      "F08"
+    ],
+    "owner_roles": [
+      "MCP owners"
+    ],
+    "scope": [
+      "one server binding and existing shared integration layer"
+    ],
+    "acceptance": [
+      "Source writer resolved",
+      "FastMCP exact package",
+      "auth/protocol/cancellation",
+      "GIL/wheel/concurrency matrix"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP08",
+    "title": "Qualify upstream-heavy runtime exceptions",
+    "hard_dependencies": [
+      "WP04"
+    ],
+    "finding_ids": [
+      "F05",
+      "F14"
+    ],
+    "owner_roles": [
+      "OmniRoute/upstream owners"
+    ],
+    "scope": [
+      "isolated Node/Bun/native-addon matrix"
+    ],
+    "acceptance": [
+      "Named unsupported behavior",
+      "upstream delta ledger",
+      "qualified runtime or owned gap",
+      "no wholesale rewrite without evidence"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP09",
+    "title": "Run outcome-driven native/polyglot tournaments",
+    "hard_dependencies": [],
+    "finding_ids": [
+      "F10"
+    ],
+    "owner_roles": [
+      "performance owners"
+    ],
+    "scope": [
+      "isolated hot-path alternatives only"
+    ],
+    "acceptance": [
+      "Baseline + serious alternatives",
+      "target hardware",
+      "total FFI/transfer/startup cost",
+      "numerical and consumer parity",
+      "retained raw results"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  },
+  {
+    "id": "WP10",
+    "title": "Roll out qualified packages and retire proven duplicates",
+    "hard_dependencies": [
+      "WP03",
+      "WP05",
+      "WP06",
+      "WP07",
+      "WP08"
+    ],
+    "finding_ids": [
+      "F01",
+      "F05",
+      "F08",
+      "F09",
+      "F12"
+    ],
+    "owner_roles": [
+      "integration/release owners"
+    ],
+    "scope": [
+      "selected consumer migration wave"
+    ],
+    "acceptance": [
+      "Actual consumer adoption",
+      "all required gates",
+      "history/license retained",
+      "rollback",
+      "explicit lifecycle authority before removal"
+    ],
+    "state": "proposed_not_executed",
+    "resource_claims": [
+      "shared manifests/lockfiles/releases require one integration writer"
+    ],
+    "required_authority": "Use existing explicit grant for bounded writes; this packet grants none.",
+    "rollback": "Retain qualified prior artifact and source mapping; reversible patch/worktree before publication."
+  }
+]

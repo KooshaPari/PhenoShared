@@ -1,0 +1,24 @@
+# pheno-runtime-config
+
+> Hot-reloadable runtime configuration for the pheno-* fleet (L37).
+
+## What
+`pheno-runtime-config` provides a `Reloadable<T>` trait + two backends
+(file watcher via notify v6, and SIGHUP fallback) for configuration values
+that can be swapped at runtime without restarting the process.
+
+## Key types
+- `Reloadable<T>` — trait with `reload()`, `current()`, `watch()`
+- `ArcReloadable<T>` — default impl using ArcSwap + tokio::sync::watch
+- `FileConfig<T>` — file-backed with notify v6 watcher
+- `ReloadError` — typed error enum
+
+## Design
+Lock-free reads (arc-swap), async fan-out (tokio watch), two backends.
+Not a reimplementation of Configra — Configra handles static config loading,
+this handles hot-swappable runtime values (different lifecycle, different
+uses: benchmark config, feature flags, rate limits, experimental params).
+
+## See also
+- ADR-095: https://github.com/KooshaPari/pheno-docs/adr/095
+- Configra (static config): https://github.com/KooshaPari/Configra

@@ -1,0 +1,45 @@
+{
+  "okf": "1.0",
+  "source_id": "forge-multi-088",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Fix the login timeout",
+      "properties": { "user_turn_count": 1 }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Update the auth docs",
+      "properties": { "user_turn_count": 1 }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "Tests pass",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not change public API",
+      "properties": null
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-multi-088" }
+    },
+    {
+      "source": "intent-1",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": { "corpus": "forge", "source_id": "forge-multi-088" }
+    }
+  ],
+  "provenance": { "corpus": "forge", "source_id": "forge-multi-088" }
+}

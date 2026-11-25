@@ -1,0 +1,95 @@
+---
+# =============================================================================
+# Trunk.io — Lint/format configuration (schema v0.1)
+# =============================================================================
+# Migrated 2026-08-09 from the legacy top-level linters/formatters/actions/
+# cache/env schema to version: 0.1 + lint blocks.
+#
+# Versions are pinned explicitly: an unpinned `enabled` entry resolves to the
+# SYSTEM copy of a tool (trunk never downloads it), so every entry below is
+# pinned to the version it is validated with on this repo. cli.version is
+# pinned for reproducible runs (matches the version CI downloads).
+#
+# Update with `trunk upgrade`.
+# https://docs.trunk.io/
+# =============================================================================
+
+version: 0.1
+
+cli:
+  version: 1.22.2
+
+# The `trunk` plugin provides the linter/formatter definitions. v1.11.0 is
+# required: it adds `rename_single_file` for taplo's single-binary download
+# and the ruff `--output-format` command for ruff >= 0.1.0.
+plugins:
+  sources:
+    - id: trunk
+      ref: v1.11.0
+      uri: https://github.com/trunk-io/plugins
+
+# Linters + formatters (auto-detected by file type). Formatter-capable tools
+# (black, prettier, rustfmt) also live in `enabled`: trunk 0.1 has no
+# top-level `fmt:` key — format commands are lint definitions with
+# `formatter: true`. mypy and ruff use the plugin definitions, which already
+# carry the flags this repo needs and produce annotated findings.
+lint:
+  enabled:
+    - actionlint@1.7.8
+    - black@25.9.0
+    - clippy@1.88.0
+    - eslint@8.10.0
+    - golangci-lint@1.64.8
+    - mypy@1.20.2
+    - prettier@3.6.2
+    - ruff@0.14.3
+    - rustfmt@1.88.0
+    - shellcheck@0.11.0
+    - taplo@0.10.0
+    - yamllint@1.37.1
+
+  # Repo-specific command overrides merged over the plugin definitions:
+  # fields set here replace the plugin's, everything else is inherited.
+  definitions:
+    # black: enforce 100-char line length in both lint and format modes.
+    - name: black
+      commands:
+        - name: lint
+          output: pass_fail
+          run: black --check --line-length 100 ${target}
+          success_codes: [0, 1]
+        - name: format
+          output: rewrite
+          run: black --line-length 100 ${target}
+          success_codes: [0]
+          batch: true
+          in_place: true
+          formatter: true
+    # clippy: lint all targets/features and fail on any warning. The rust
+    # toolchain version must cover the dependency MSRVs, hence 1.88.0
+    # rather than the plugin's 1.65.0.
+    - name: clippy
+      commands:
+        - name: lint
+          output: clippy
+          target: ${parent_with(Cargo.toml)}
+          run: >
+            cargo clippy --message-format json --all-targets
+            --all-features
+            --locked -- -D warnings
+          success_codes: [0, 101, 383]
+          disable_upstream: true
+
+  # GitHub workflow files are covered by actionlint (syntax + shellcheck).
+  # prettier's YAML printer re-indents `on:`-keyed workflow files with a
+  # wholesale diff and yamllint's 80-col default flags long action SHAs, so
+  # both are ignored for workflow files only.
+  #
+  # The vitepress build config (docs/.vitepress/) is the repo's only JS file
+  # and the repo ships no eslint config; eslint stays enabled for any real JS
+  # but is ignored for the docs build tooling.
+  ignore:
+    - linters: [prettier, yamllint]
+      paths: [.github/workflows/**]
+    - linters: [eslint]
+      paths: [docs/.vitepress/**]

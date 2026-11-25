@@ -1,0 +1,80 @@
+{
+  "repository": "KooshaPari/PhenoDesign",
+  "repository_archived": false,
+  "main": "d11733b1525cb97e045dc7f8d67a05df5501f6c1",
+  "pr": 87,
+  "pr_state": "open",
+  "pr_merged": false,
+  "head": "6c99a15337505b55f46a9f576465db5e4053b416",
+  "head_branch": "absorb-phenojourneys-vue",
+  "observed_date": "2026-09-15",
+  "pr_url": "https://github.com/KooshaPari/PhenoDesign/pull/87",
+  "source_reads": [
+    {
+      "path": "package.json",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/package.json"
+    },
+    {
+      "path": "remotion/doc-embeds/package.json",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/package.json"
+    },
+    {
+      "path": "remotion/doc-embeds/bin/render.mjs",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/bin/render.mjs"
+    },
+    {
+      "path": "remotion/doc-embeds/src/schema.ts",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/src/schema.ts"
+    },
+    {
+      "path": "remotion/doc-embeds/src/DocEmbed.tsx",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/src/DocEmbed.tsx"
+    },
+    {
+      "path": "remotion/doc-embeds/src/components/SceneView.tsx",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/src/components/SceneView.tsx"
+    },
+    {
+      "path": "remotion/doc-embeds/src/components/Highlight.tsx",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/src/components/Highlight.tsx"
+    },
+    {
+      "path": "remotion/doc-embeds/src/index.tsx",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/src/index.tsx"
+    },
+    {
+      "path": "packages/playwright-record/src/recorder.ts",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/packages/playwright-record/src/recorder.ts"
+    },
+    {
+      "path": "README.md",
+      "ref": "d11733b1525cb97e045dc7f8d67a05df5501f6c1",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/d11733b1525cb97e045dc7f8d67a05df5501f6c1/README.md"
+    },
+    {
+      "path": "docs/SPINE.md",
+      "ref": "d11733b1525cb97e045dc7f8d67a05df5501f6c1",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/d11733b1525cb97e045dc7f8d67a05df5501f6c1/docs/SPINE.md"
+    },
+    {
+      "path": "engine/README.md",
+      "ref": "d11733b1525cb97e045dc7f8d67a05df5501f6c1",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/d11733b1525cb97e045dc7f8d67a05df5501f6c1/engine/README.md"
+    },
+    {
+      "path": "remotion/doc-embeds/src/components/Callout.tsx",
+      "ref": "6c99a15337505b55f46a9f576465db5e4053b416",
+      "url": "https://github.com/KooshaPari/PhenoDesign/blob/6c99a15337505b55f46a9f576465db5e4053b416/remotion/doc-embeds/src/components/Callout.tsx"
+    }
+  ],
+  "limits": "Read-only connector inspection; no clone/build, remote writes, merge or deployed behavior verified."
+}

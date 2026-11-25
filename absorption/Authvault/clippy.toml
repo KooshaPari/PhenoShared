@@ -1,0 +1,6 @@
+# Rust Linter Configuration
+# Phenotype Standard - Do not modify directly
+# Inherit from phenotype-governance/configs/rust/
+
+# Clippy's supported config keys are limited; keep this file minimal and valid.
+msrv = "1.75"

@@ -1,0 +1,33 @@
+# pheno-tracing
+
+## Purpose
+Canonical observability substrate for the Phenotype fleet. Wraps `tracing` + OpenTelemetry OTLP export. Provides fleet-wide span correlation and resource attributes.
+
+## When to use
+- Adding structured logging to any Rust service
+- Emitting OTel traces to pheno-observability
+- Need fleet-wide trace_id propagation
+
+## When NOT to use
+- Metrics-only emission (use pheno-metrics directly)
+- Log-only output (use `env_logger`)
+
+## Quickstart
+```rust
+use pheno_tracing::prelude::*;
+init_tracing("my-service")?;
+let _span = info_span!("operation", trace_id = %trace_id());
+```
+
+## Env vars
+- `OTEL_EXPORTER_OTLP_ENDPOINT` — OTLP collector URL (default http://localhost:4317)
+- `RUST_LOG` — log filter (default info,pheno=debug)
+- `PHENO_TRACING_SAMPLE_RATE` — 0.0-1.0 (default 1.0)
+
+## Key types
+- `init_tracing(name: &str) -> Result<(), Error>`
+- `trace_id() -> TraceId` — current span's trace ID
+- `span!` macro — augmented with `device` field
+
+## Example
+See `pheno-tracing/examples/otlp_export.rs`.

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Placeholder pre-commit hook — replace with TestingKit-published bundle.
+# Install: git config core.hooksPath .githooks
+set -u
+echo "[hooks] placeholder pre-commit — replace from TestingKit"
+exit 0

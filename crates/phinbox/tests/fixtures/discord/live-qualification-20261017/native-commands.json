@@ -1,0 +1,125 @@
+[
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "create",
+      "--from-file",
+      "/root/phinbox-qualification-a8b41cae/canary-item.json"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"acknowledged\": false,\n  \"assignee\": null,\n  \"eta\": \"bounded canary closure during qualification\",\n  \"id\": \"qualification-a8b41cae-20261017\",\n  \"lane\": \"isolated-real-adapter-qualification\",\n  \"original\": \"SYNTHETIC NON-SENSITIVE PHINBOX CANARY. Native REST qualification only. No real user task, credential, or harness permission is included. This workflow will be edited and archived as durable evidence.\",\n  \"revision\": 1,\n  \"source_request_id\": null,\n  \"status\": \"open\",\n  \"title\": \"Phinbox native adapter qualification canary 2026-10-17\"\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:42:59Z"
+  },
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "discord",
+      "--config",
+      "/root/phinbox-qualification-a8b41cae/qualification-config.json",
+      "--once"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"projected\": 1\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:43:03Z"
+  },
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "apply",
+      "--from-file",
+      "/root/phinbox-qualification-a8b41cae/command-lane.json"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"acknowledged\": false,\n  \"assignee\": null,\n  \"eta\": \"bounded canary closure during qualification\",\n  \"id\": \"qualification-a8b41cae-20261017\",\n  \"lane\": \"native-canary-edited-lane\",\n  \"original\": \"SYNTHETIC NON-SENSITIVE PHINBOX CANARY. Native REST qualification only. No real user task, credential, or harness permission is included. This workflow will be edited and archived as durable evidence.\",\n  \"revision\": 2,\n  \"source_request_id\": null,\n  \"status\": \"open\",\n  \"title\": \"Phinbox native adapter qualification canary 2026-10-17\"\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:45:47Z"
+  },
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "apply",
+      "--from-file",
+      "/root/phinbox-qualification-a8b41cae/command-eta.json"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"acknowledged\": false,\n  \"assignee\": null,\n  \"eta\": \"archive immediately after verified in-place edit\",\n  \"id\": \"qualification-a8b41cae-20261017\",\n  \"lane\": \"native-canary-edited-lane\",\n  \"original\": \"SYNTHETIC NON-SENSITIVE PHINBOX CANARY. Native REST qualification only. No real user task, credential, or harness permission is included. This workflow will be edited and archived as durable evidence.\",\n  \"revision\": 3,\n  \"source_request_id\": null,\n  \"status\": \"open\",\n  \"title\": \"Phinbox native adapter qualification canary 2026-10-17\"\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:45:48Z"
+  },
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "apply",
+      "--from-file",
+      "/root/phinbox-qualification-a8b41cae/command-running.json"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"acknowledged\": false,\n  \"assignee\": null,\n  \"eta\": \"archive immediately after verified in-place edit\",\n  \"id\": \"qualification-a8b41cae-20261017\",\n  \"lane\": \"native-canary-edited-lane\",\n  \"original\": \"SYNTHETIC NON-SENSITIVE PHINBOX CANARY. Native REST qualification only. No real user task, credential, or harness permission is included. This workflow will be edited and archived as durable evidence.\",\n  \"revision\": 4,\n  \"source_request_id\": null,\n  \"status\": \"running\",\n  \"title\": \"Phinbox native adapter qualification canary 2026-10-17\"\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:45:49Z"
+  },
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "discord",
+      "--config",
+      "/root/phinbox-qualification-a8b41cae/qualification-config.json",
+      "--once"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"projected\": 3\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:46:00Z"
+  },
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "apply",
+      "--from-file",
+      "/root/phinbox-qualification-a8b41cae/command-close.json"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"acknowledged\": false,\n  \"assignee\": null,\n  \"eta\": \"archive immediately after verified in-place edit\",\n  \"id\": \"qualification-a8b41cae-20261017\",\n  \"lane\": \"native-canary-edited-lane\",\n  \"original\": \"SYNTHETIC NON-SENSITIVE PHINBOX CANARY. Native REST qualification only. No real user task, credential, or harness permission is included. This workflow will be edited and archived as durable evidence.\",\n  \"revision\": 5,\n  \"source_request_id\": null,\n  \"status\": \"closed\",\n  \"title\": \"Phinbox native adapter qualification canary 2026-10-17\"\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:48:40Z"
+  },
+  {
+    "argv": [
+      "/root/phinbox-qualification-a8b41cae/target/debug/phinbox",
+      "--inbox-dir",
+      "/root/phinbox-qualification-a8b41cae/isolated-inbox",
+      "manage",
+      "discord",
+      "--config",
+      "/root/phinbox-qualification-a8b41cae/qualification-config.json",
+      "--once"
+    ],
+    "returncode": 0,
+    "stdout": "{\n  \"projected\": 1\n}\n",
+    "stderr": "",
+    "time_utc": "2026-10-17T09:48:45Z"
+  }
+]

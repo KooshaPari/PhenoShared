@@ -1,0 +1,49 @@
+{
+  "comment": "Soft seccomp policy for sl-daemon OCI runs (C04 L40). Allow-by-default with an explicit deny list for high-risk syscalls. Prefer the container runtime default seccomp when this file is unavailable. This is operator opt-in guidance — not hard CI enforcement of rootless or no-network runners.",
+  "defaultAction": "SCMP_ACT_ALLOW",
+  "architectures": [
+    "SCMP_ARCH_X86_64",
+    "SCMP_ARCH_AARCH64",
+    "SCMP_ARCH_X86",
+    "SCMP_ARCH_ARM"
+  ],
+  "syscalls": [
+    {
+      "names": [
+        "acct",
+        "add_key",
+        "bpf",
+        "clock_adjtime",
+        "clock_settime",
+        "create_module",
+        "delete_module",
+        "finit_module",
+        "get_kernel_syms",
+        "init_module",
+        "kexec_file_load",
+        "kexec_load",
+        "keyctl",
+        "mount",
+        "open_by_handle_at",
+        "perf_event_open",
+        "pivot_root",
+        "query_module",
+        "reboot",
+        "request_key",
+        "setdomainname",
+        "sethostname",
+        "setns",
+        "settimeofday",
+        "stime",
+        "swapon",
+        "swapoff",
+        "umount",
+        "umount2",
+        "unshare",
+        "userfaultfd"
+      ],
+      "action": "SCMP_ACT_ERRNO",
+      "errnoRet": 1
+    }
+  ]
+}

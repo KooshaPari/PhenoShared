@@ -1,0 +1,21 @@
+# pheno-predict config (per ADR-041)
+# Declares the "predicted consumers" for this crate, used by pheno-predict scan.
+
+# Current consumer: minimum 1 required for a predictive extract (per ADR-041)
+current_consumer:
+  - path: src/lib.rs  # the public surface used by the current consumer
+    consumer: <name>  # e.g., "KooshaPari/dispatch-mcp"
+    since: <YYYY-MM-DD>  # when this consumer first imported the surface
+
+# Predicted consumers: required for predictive DRY (per ADR-041)
+# Each entry must be named (repo), dated (target quarter), scoped (capability)
+predicted_consumers:
+  - repo: <name>
+    target_quarter: <YYYY-QN>
+    capability: <short description>
+
+# Port trait (per ADR-038)
+port_trait:
+  name: <PortName>
+  method_count: <N>  # must be ≤ 5
+  has_mock_adapter: <true|false>

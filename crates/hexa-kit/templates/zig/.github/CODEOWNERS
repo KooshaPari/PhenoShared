@@ -1,0 +1,7 @@
+# Bootstrap owner map. Move to org-team aliases once teams are formalized.
+* @<REDACTED>
+
+# High-sensitivity paths
+.github/ @<REDACTED>
+contracts/ @<REDACTED>
+scripts/ @<REDACTED>

@@ -1,0 +1,202 @@
+{
+  "okf": "1.0",
+  "source_id": "task-family-compress-resume-033",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Zstd-compress the distilled OKF continuation before archive and resume inject",
+      "properties": {
+        "user_turn_count": 9,
+        "token_estimate": 240,
+        "compression_level": 3,
+        "ratio_bps_ceiling": 6500
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Round-trip decompress and assert byte-identical OKF before marking resume ready",
+      "properties": {
+        "user_turn_count": 5,
+        "token_estimate": 120,
+        "compression_level": 3
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "compression_eval ratio_bps stays <= 6500 on family fixtures",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "decompress yields byte-identical OKF JSON",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "resume-gate ready after compressed archive restore",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "use reversible zstd only; no lossy RTK substitution in this family",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "keep compressed fixture payloads small enough for CI",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/session-ledger" }
+    },
+    {
+      "id": "resource-1",
+      "type": "resource",
+      "label": "archive-path",
+      "properties": {
+        "path": "var/archive/task-family-compress-resume-033.okf.zst"
+      }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": {
+        "title": "Compress then resume family",
+        "bytes_saved_proxy": 192,
+        "rough_tokens_saved_proxy": 48
+      }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "zstd level-3 gate remains the eval compression contract",
+      "properties": {
+        "watch_files": [
+          "tests/compression_eval.rs",
+          "docs/ops/eval-compression.md",
+          "crates/sl-daemon/src/archive.rs"
+        ],
+        "skipped_by": []
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 14,
+        "compressed": true,
+        "total_token_estimate": 360
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-1",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "claude-code",
+        "source_id": "task-family-compress-resume-033"
+      }
+    }
+  ],
+  "provenance": {
+    "corpus": "claude-code",
+    "source_id": "task-family-compress-resume-033"
+  }
+}

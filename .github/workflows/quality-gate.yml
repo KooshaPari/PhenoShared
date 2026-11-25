@@ -1,0 +1,224 @@
+name: Quality Gate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  # Cancel superseded runs on PULL REQUESTS only.
+  #
+  # `cargo-check` below is a MERGE-REQUIRED branch-protection context on main.
+  # With `cancel-in-progress: true` on main, each newer push cancelled the run
+  # that was about to report that context (measured 2026-11-13: runs 1883-1880
+  # on main were all `cancelled`). A required context that a newer push can
+  # kill is not a gate.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions: { pull-requests: read }
+    outputs:
+      go: ${{ steps.filter.outputs.go }}
+      rust: ${{ steps.filter.outputs.rust }}
+      any: ${{ steps.filter.outputs.any }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { fetch-depth: 50 }
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
+        id: filter
+        with:
+          filters: |
+            go: ['crates/nanovms-core/**/*.go', 'crates/nanovms-core/go.mod', 'crates/nanovms-core/go.sum']
+            rust: ['**/*.rs', '**/Cargo.toml', '**/Cargo.lock', 'Makefile', 'rustfmt.toml', 'rust-toolchain.toml', 'scripts/check-cross-targets.sh', '.github/workflows/quality-gate.yml']
+            any: ['**']
+
+  go-vet:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crates/nanovms-core
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7
+        with:
+          go-version: "1.24"
+          cache: true
+      - run: go vet ./...
+
+  # MERGE-REQUIRED: branch protection on main requires the literal context
+  # string `cargo-check`, which is this job's name. A required context may not
+  # be conditional, so this job must run on every push to main and every PR:
+  #
+  #   * It previously carried `needs: changes` + `if: needs.changes.outputs.rust
+  #     == 'true'`. Any push that touched no Rust/toolchain path skipped the job,
+  #     and a skipped job creates NO check run, so the required context stayed
+  #     "Expected" forever. Measured 2026-11-13: the last main pushes were
+  #     docs/bundles-only (df959d2c4, 0becd7e0) and runs 1886 and 1885 both show
+  #     `cargo-check -> skipped`; no run in the last 10 on main reached a
+  #     verdict for this context. `make check (E1.6 ...)` lives inside this job,
+  #     which is why that step also never ran.
+  #
+  # The gate's CONTENT is unchanged: same toolchain pin, same `make check`,
+  # same fail-on-error. Only the condition that could suppress it is gone.
+  cargo-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Pinned to match rust-toolchain.toml (E1.2, 2026-10-01): the floating
+      # @stable let CI run a newer clippy than the local pin (cold-gate run
+      # 36626812921, 2026-09-29: CI clippy 1.98.0 vs stale local 1.97.1 →
+      # 8 findings impossible to reproduce locally). Bump this value together
+      # with rust-toolchain.toml, in one commit, after a full local
+      # `make check` on the new version.
+      - uses: dtolnay/rust-toolchain@ff7f6a3374ce205788da40198ec918bd5d67aea7 # 1.99.0
+        with:
+          toolchain: 1.99.0
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - name: Install Go (for libnvms_core.a build)
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7
+        with:
+          go-version: "1.24"
+      - name: Install Linux system deps (gtk3, xdo, pipewire)
+        run: |
+          sudo apt-get update
+          # pkg-config + libgtk-3-dev: glib-sys/gtk-sys build probes (via tao).
+          # libxdo-dev: fabric-tray links -lxdo at final link (observed 2026-09-27,
+          # rust-lld "unable to find library -lxdo" on run 36342217754).
+          # libpipewire-0.3-dev + libspa-0.2-dev: playcua-native pulls
+          # xcap -> pipewire -> libspa-sys, whose build script probes
+          # libpipewire-0.3.pc. Without it the build stops with
+          # "The system library `libpipewire-0.3` required by crate `libspa-sys`
+          # was not found" (observed on run 43015019489).
+          # libgbm-dev: the same xcap dependency chain (gbm-sys) links
+          # -lgbm at final link. With the library absent the build compiles
+          # and then dies at link with "rust-lld: error: unable to find
+          # library -lgbm" for playcua-native's bins (run 43142100710).
+          # libegl1-mesa-dev + libgl1-mesa-dev + libdrm-dev are the sibling
+          # Mesa/EGL/GL/drm development packages the workspace's -sys crates
+          # (khronos-egl, gl, gbm-sys, drm-sys) plausibly link; added together
+          # so the link step is not walked one library at a time.
+          sudo apt-get install -y pkg-config libgtk-3-dev libxdo-dev \
+            libpipewire-0.3-dev libspa-0.2-dev \
+            libgbm-dev libegl1-mesa-dev libgl1-mesa-dev libdrm-dev
+      # Zig is a build-time requirement, not a test dependency: the
+      # crates/spawn-core-sys build script shells out to `zig build` to produce
+      # crates/spawn-core/zig-out/lib/libspawn_core.a and links it. Without zig
+      # on the runner, this job stops early with
+      # "failed to run `zig build`: No such file or directory (os error 2)"
+      # (observed on run 42356691632, 2026-11-07).
+      #
+      # Installs the pinned archive directly rather than snap: a snap
+      # `latest/stable` hit would otherwise bypass the checksum-checked 0.15.2
+      # download, and `zig version` alone does not reject a different version.
+      # The version assertion below makes the pin enforceable.
+      - name: Install Zig 0.15.2 (Ubuntu)
+        run: |
+          ZIG_VERSION="0.15.2"
+          ZIG_SHA256="02aa270f183da276e5b5920b1dac44a63f1a49e55050ebde3aecc9eb82f93239"
+          curl --fail --location --retry 5 --retry-connrefused --silent --show-error \
+            "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" \
+            -o /tmp/zig.tar.xz
+          echo "${ZIG_SHA256}  /tmp/zig.tar.xz" | sha256sum --check --status
+          sudo tar -xf /tmp/zig.tar.xz -C /usr/local/bin --strip-components=1
+          rm /tmp/zig.tar.xz
+          INSTALLED="$(zig version)"
+          echo "zig version: ${INSTALLED} (pinned ${ZIG_VERSION})"
+          [ "${INSTALLED}" = "${ZIG_VERSION}" ] || {
+            echo "::error::zig ${INSTALLED} does not match the pinned ${ZIG_VERSION}"
+            exit 1
+          }
+      # One Linux-only gate job (E1.8, 2026-10-01): this job is the whole
+      # rust gate — real link proof first (E2.1), then `make check` (E1.6:
+      # fmt + clippy -D warnings + unit tests), then the cross-target
+      # matrix (E1.7), then the full workspace test suite. The former
+      # advisory rust lane in ci.yml (nightly fmt + clippy + test, every
+      # step `|| echo ::warning::`) was deleted in the same commit; there
+      # is deliberately exactly one rust gate, and it is this job.
+      - name: "cargo build --workspace (E2.1: real link proof)"
+        run: cargo build --workspace --locked
+      - name: "make check (E1.6: fmt + clippy -D warnings + unit tests)"
+        run: make check
+      # rust-std alone is not enough for a cross CHECK: cc-rs also needs a C
+      # cross-compiler, or the build scripts fail before rustc sees any of our
+      # source. mingw supplies x86_64-w64-mingw32-gcc for the windows-gnu leg,
+      # so that leg really compiles. The apple-darwin leg needs the macOS SDK
+      # (osxcross), which is not installable here, so the script reports it as
+      # SKIP rather than as a false red.
+      - name: Install cross-target toolchains (E1.7)
+        run: |
+          rustup target add x86_64-pc-windows-gnu x86_64-apple-darwin
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc-mingw-w64-x86-64
+      - name: Cross-target check (E1.7)
+        run: ./scripts/check-cross-targets.sh
+      # arch-test contract: the workspace test suite must run through
+      # cargo-nextest's `ci` profile (.config/nextest.toml). Pinned in the same
+      # style as security-scan.yml's install-action usage.
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@37f7c5781271959fb65b6b35224e28652ff2b63d # v2
+        with:
+          tool: cargo-nextest
+      # Host contention (macOS Spotlight / WindowServer, or a loaded shared
+      # runner) can push a real Chrome launch past the product's 20s default
+      # DevTools-endpoint budget. That is infrastructure latency, not a
+      # product defect, so the budget is raised for this step only; the
+      # shipped default stays 20s (crates/substrate-browser-cdp/src/launch.rs).
+      - name: "cargo nextest run --workspace (belt-and-braces: lib overlaps make check on purpose; adds bins/integration targets; ci profile)"
+        env:
+          SUBSTRATE_BROWSER_LAUNCH_TIMEOUT_SECS: "90"
+        run: cargo nextest run --workspace --profile ci --locked --no-fail-fast
+      - name: Upload cargo-nextest JUnit report (target/nextest/ci/junit.xml)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: substrate-nextest-ci-junit
+          path: target/nextest/ci/junit.xml
+          if-no-files-found: warn
+          retention-days: 14
+
+  go-lint:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crates/nanovms-core
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7
+        with:
+          go-version: "1.24"
+          cache: true
+      - uses: golangci/golangci-lint-action@55c2c1448f86e01eaae002a5a3a9624417608d84 # v6
+        with:
+          version: v1.59
+
+  security:
+    needs: changes
+    if: needs.changes.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crates/nanovms-core
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7
+        with:
+          go-version: "1.24"
+      - run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          gosec ./...
+      - run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          govulncheck ./...

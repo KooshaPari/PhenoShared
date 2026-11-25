@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SessionLedger — Viewer</title>
+  <link rel="stylesheet" href="static/style.css">
+  <style>
+    .viewer-controls { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    .viewer-controls input[type="text"] {
+      background: var(--bg); color: var(--fg); border: 1px solid var(--border);
+      border-radius: 4px; padding: 0.4rem 0.6rem; font-size: 0.95rem; flex: 1; min-width: 180px;
+    }
+    .viewer-controls input[type="text"]::placeholder { color: var(--fg-dim); }
+    .status-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0; color: var(--fg-dim); font-size: 0.85rem;
+    }
+    .status-bar .count { font-weight: 600; color: var(--accent); }
+    .empty-state {
+      text-align: center; padding: 3rem 1rem; color: var(--fg-dim);
+    }
+    .empty-state p { margin: 0.5rem 0; }
+    .empty-state code { color: var(--accent); font-size: 0.9rem; }
+    .loading {
+      text-align: center; padding: 3rem 1rem; color: var(--fg-dim);
+    }
+    .loading::before {
+      content: ''; display: inline-block; width: 20px; height: 20px;
+      border: 2px solid var(--border); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle;
+      margin-right: 0.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .error-state {
+      background: rgba(248, 113, 113, 0.1); border: 1px solid var(--bad);
+      border-radius: 8px; padding: 1.5rem; text-align: center; color: var(--bad);
+      margin: 1rem 0;
+    }
+    .error-state code { display: block; margin-top: 0.5rem; color: var(--fg-dim); font-size: 0.85rem; }
+    .detail-panel {
+      background: var(--bg-elev); border: 1px solid var(--border); border-radius: 8px;
+      margin-top: 1.5rem; overflow: hidden;
+    }
+    .detail-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+    }
+    .detail-header h2 { margin: 0; font-size: 1.1rem; color: var(--accent); }
+    .detail-close {
+      background: none; border: 1px solid var(--border); color: var(--fg-dim);
+      border-radius: 4px; padding: 0.25rem 0.5rem; cursor: pointer; font-size: 0.85rem;
+    }
+    .detail-close:hover { border-color: var(--accent); color: var(--accent); }
+    .detail-meta {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+    }
+    .detail-meta dt { color: var(--fg-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .detail-meta dd { margin: 0.2rem 0 0; font-size: 0.95rem; font-weight: 500; }
+    .detail-entities { padding: 1rem 1.5rem; max-height: 500px; overflow-y: auto; }
+    .detail-entities h3 { margin: 0 0 0.75rem; font-size: 0.95rem; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+    .entity-card {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.75rem 1rem; margin-bottom: 0.5rem;
+    }
+    .entity-card .entity-type {
+      display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; padding: 0.1rem 0.4rem; border-radius: 3px;
+      margin-right: 0.5rem;
+    }
+    .entity-card .entity-type.intent { background: rgba(96, 165, 250, 0.15); color: var(--accent); }
+    .entity-card .entity-type.resource { background: rgba(74, 222, 128, 0.15); color: var(--good); }
+    .entity-card .entity-type.state { background: rgba(251, 191, 36, 0.15); color: var(--warn); }
+    .entity-card .entity-type.criteria { background: rgba(167, 139, 250, 0.15); color: var(--accent-2); }
+    .entity-card .entity-type.gate { background: rgba(248, 113, 113, 0.15); color: var(--bad); }
+    .entity-card .entity-label { font-size: 0.9rem; color: var(--fg); }
+    .entity-card .entity-id { font-size: 0.75rem; color: var(--fg-dim); margin-top: 0.25rem; font-family: "SF Mono", Consolas, monospace; }
+    .entity-card .entity-props {
+      margin-top: 0.5rem; font-size: 0.8rem; color: var(--fg-dim);
+      font-family: "SF Mono", Consolas, monospace; white-space: pre-wrap; word-break: break-all;
+    }
+    .relations-section { padding: 0 1.5rem 1rem; }
+    .relations-section h3 { margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--fg-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+    .relation-row {
+      display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;
+      padding: 0.35rem 0; border-bottom: 1px solid var(--border);
+    }
+    .relation-row:last-child { border-bottom: none; }
+    .relation-arrow { color: var(--accent); font-weight: 600; }
+    .relation-type { color: var(--accent-2); font-style: italic; }
+    .json-view-toggle {
+      background: none; border: 1px solid var(--border); color: var(--fg-dim);
+      border-radius: 4px; padding: 0.2rem 0.5rem; cursor: pointer; font-size: 0.8rem;
+    }
+    .json-view-toggle:hover, .json-view-toggle.active { border-color: var(--accent); color: var(--accent); }
+    .json-raw { padding: 1rem 1.5rem; }
+    .json-raw pre { margin: 0; max-height: 500px; overflow-y: auto; }
+    .data tbody tr.selected { background: var(--bg-card); border-left: 3px solid var(--accent); }
+    .tag-badge {
+      display: inline-block; font-size: 0.7rem; padding: 0.1rem 0.35rem;
+      border-radius: 3px; background: rgba(167, 139, 250, 0.15); color: var(--accent-2);
+      margin-right: 0.25rem;
+    }
+    .duration-badge { color: var(--fg-dim); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">SessionLedger</a></h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="viewer.html">Session Viewer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="https://github.com/KooshaPari/SessionLedger" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h2>Session Viewer</h2>
+      <p>Browse OKF bundles and JSONL session files. Click a row to expand the event timeline.</p>
+    </section>
+
+    <section class="filter-bar">
+      <div class="viewer-controls">
+        <input type="text" id="search-input" placeholder="Search by session ID or source..." aria-label="Search sessions">
+        <label for="model-filter">Model:</label>
+        <select id="model-filter">
+          <option value="">All models</option>
+        </select>
+        <label for="tag-filter">Tag:</label>
+        <select id="tag-filter">
+          <option value="">All tags</option>
+        </select>
+        <label for="sort-select">Sort:</label>
+        <select id="sort-select">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="tokens-desc">Most tokens</option>
+          <option value="tokens-asc">Fewest tokens</option>
+          <option value="messages-desc">Most events</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="status-bar">
+      <span id="status-text">Loading bundles...</span>
+      <span id="result-count"></span>
+    </div>
+
+    <div id="sessions-container">
+      <div class="loading" id="loading-indicator">Fetching bundles from daemon</div>
+    </div>
+
+    <div id="error-container" hidden></div>
+
+    <section id="detail-panel" class="detail-panel" hidden>
+      <div class="detail-header">
+        <h2 id="detail-title">Session Detail</h2>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <button class="json-view-toggle" id="toggle-json" title="Show raw OKF JSON">JSON</button>
+          <button class="detail-close" id="close-detail">Close</button>
+        </div>
+      </div>
+      <div id="detail-view">
+        <div class="detail-meta" id="detail-meta"></div>
+        <div class="detail-entities" id="detail-entities">
+          <h3>Entities</h3>
+          <div id="entity-list"></div>
+        </div>
+        <div class="relations-section" id="relations-section" hidden>
+          <h3>Relations</h3>
+          <div id="relation-list"></div>
+        </div>
+      </div>
+      <div class="json-raw" id="json-view" hidden>
+        <pre><code id="json-content"></code></pre>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2026 ParetoOptimal. Apache-2.0 OR MIT.</p>
+  </footer>
+  <script src="js/viewer.js"></script>
+</body>
+</html>

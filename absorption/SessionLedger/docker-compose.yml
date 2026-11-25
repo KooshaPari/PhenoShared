@@ -1,0 +1,45 @@
+services:
+  sl-daemon:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: sl-daemon
+    restart: unless-stopped
+    ports:
+      - "${SL_PORT:-7654}:7654"
+    volumes:
+      - sl-data:/var/lib/sessionledger
+      - /var/log/sessionledger:/var/log/sessionledger:ro
+    environment:
+      RUST_LOG: info
+      SL_HTTP_BIND: 0.0.0.0:7654
+      SL_DATA_DIR: /var/lib/sessionledger
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      otel-collector:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "sl-daemon", "--healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.96.0
+    container_name: sl-otel
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./deploy/otel/collector.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:13133"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  sl-data:

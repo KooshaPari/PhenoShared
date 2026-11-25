@@ -1,0 +1,122 @@
+# Blocking loom permutation checker for C00 L7 concurrency evidence.
+# Runs scripts/loom-permutation-check.ps1 + split loom_model suites under RUSTFLAGS='--cfg loom'.
+# Soft loom-smoke.yml remains continue-on-error; this job gates merges.
+name: loom permutation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  loom-permutation-selfcheck:
+    name: loom permutation · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: loom permutation SelfCheck
+        shell: pwsh
+        run: ./scripts/loom-permutation-check.ps1 -SelfCheck
+
+  loom-permutation-hermetic:
+    name: loom permutation · hermetic wrappers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+      - name: loom hermetic wrappers (blocking)
+        run: cargo test --test loom_soft --test loom_permutation --release --locked -- --test-threads=1
+
+  loom-permutation-core:
+    name: loom permutation · core models
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-permutation-core-cfg
+      - name: loom permutation core suite (blocking)
+        env:
+          RUSTFLAGS: "--cfg loom"
+        run: |
+          set -euo pipefail
+          for filter in cancel_and_capacity bounded_try_send broadcast_epoch watcher_ daemon_graph_pipeline_conserves; do
+            cargo test --test loom_model --release --locked "$filter" -- --test-threads=1
+          done
+
+  loom-permutation-daemon-mpsc:
+    name: loom permutation · daemon mpsc
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-permutation-daemon-mpsc-cfg
+      - name: loom permutation daemon mpsc (blocking)
+        env:
+          RUSTFLAGS: "--cfg loom"
+        run: cargo test --test loom_model --release --locked daemon_mpsc -- --test-threads=1
+
+  loom-permutation-daemon-broadcast:
+    name: loom permutation · daemon broadcast
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-permutation-daemon-broadcast-cfg
+      - name: loom permutation daemon broadcast (blocking)
+        env:
+          RUSTFLAGS: "--cfg loom"
+          LOOM_MAX_PREEMPTIONS: "4"
+        run: cargo test --test loom_model --release --locked daemon_broadcast -- --test-threads=1
+
+  loom-permutation-daemon-pipeline:
+    name: loom permutation · daemon pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-permutation-daemon-pipeline-cfg
+      - name: loom permutation daemon pipeline (blocking)
+        env:
+          RUSTFLAGS: "--cfg loom"
+          LOOM_MAX_PREEMPTIONS: "4"
+        run: cargo test --test loom_model --release --locked daemon_graph_mpsc -- --test-threads=1
+
+  loom-permutation-daemon-shutdown:
+    name: loom permutation · daemon shutdown
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: loom-permutation-daemon-shutdown-cfg
+      - name: loom permutation daemon shutdown (blocking)
+        env:
+          RUSTFLAGS: "--cfg loom"
+          LOOM_MAX_PREEMPTIONS: "4"
+        run: cargo test --test loom_model --release --locked daemon_graph_shutdown -- --test-threads=1

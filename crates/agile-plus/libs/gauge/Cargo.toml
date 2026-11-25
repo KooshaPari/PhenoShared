@@ -1,0 +1,19 @@
+[package]
+name = "gauge"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Performance measurement library for AgilePlus - timing, throughput, and benchmarking"
+
+[dependencies]
+tokio.workspace = true
+serde = { workspace = true, features = ["derive"] }
+parking_lot = "0.12"
+
+[dev-dependencies]
+tokio-test = "0.4"

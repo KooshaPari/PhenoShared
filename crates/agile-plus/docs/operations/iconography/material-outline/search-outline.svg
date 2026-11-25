@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+     role="img" aria-label="Search Outline">
+  <title>Search</title>
+  <desc>Search or filter across work packages and specs (outline)</desc>
+  <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 21l-4.35-4.35"/>
+    <path d="M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+  </g>
+</svg>

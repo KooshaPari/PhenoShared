@@ -1,0 +1,65 @@
+# Dockerfile.dev — Helios CLI development environment
+# Go + Rust toolchain, with dev tools, linters, and test runners.
+# Usage: docker compose -f docker-compose.dev.yml up --build
+
+FROM rust:1-bookworm AS base
+
+# ── System dependencies ───────────────────────────────────────
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    libffi-dev \
+    git \
+    ca-certificates \
+    python3 \
+    python3-pip \
+    python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── Go 1.25 toolchain ───────────────────────────────────────
+RUN curl -fsSL https://go.dev/dl/go1.25.0.linux-amd64.tar.gz | tar -C /usr/local -xz
+ENV PATH="/usr/local/go/bin:/root/go/bin:${PATH}"
+
+# ── Rust dev tools ───────────────────────────────────────────
+RUN cargo install cargo-deny cargo-nextest cargo-watch cargo-tarpaulin
+
+# ── Go dev tools ─────────────────────────────────────────────
+RUN go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest \
+    && go install golang.org/x/tools/cmd/goimports@latest \
+    && go install gotest.tools/gotestsum@latest \
+    && go install github.com/go-delve/delve/cmd/dlv@latest
+
+# ── Python dev tools (for ruff, pytest, mypy) ────────────────
+RUN pip install --no-cache-dir --break-system-packages \
+        ruff pytest pytest-cov mypy pre-commit
+
+# ── Node.js (for package.json scripts) ──────────────────────
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# ── Bazelisk (for Bazel builds) ─────────────────────────────
+RUN curl -fsSL https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 \
+    -o /usr/local/bin/bazel && chmod +x /usr/local/bin/bazel
+
+WORKDIR /workspace
+
+# ── Pre-download Rust deps ───────────────────────────────────
+COPY Cargo.toml Cargo.lock rust-toolchain.toml rustfmt.toml clippy.toml deny.toml nextest.toml ./
+RUN mkdir -p crates/harness_utils/src && echo 'fn main() {}' > crates/harness_utils/src/main.rs \
+    && cargo fetch 2>/dev/null || true \
+    && rm -rf crates/harness_utils/src
+
+# ── Pre-download Go modules ──────────────────────────────────
+COPY go/ ./go/
+# (no go.mod at root, but check subdirectories)
+RUN find /workspace/go -name go.mod -execdir go mod download \; 2>/dev/null || true
+
+# ── Pre-fetch Node deps ─────────────────────────────────────
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+RUN npm install 2>/dev/null || true
+
+# ── Default command ──────────────────────────────────────────
+CMD ["bash"]

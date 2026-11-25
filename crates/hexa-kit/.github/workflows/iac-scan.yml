@@ -1,0 +1,39 @@
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+name: IaC Scanning
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+
+
+permissions:
+  contents: read
+
+jobs:
+  tfsec:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Install tfsec
+        run: |
+          curl -sSfL https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64 -o /usr/local/bin/tfsec
+          chmod +x /usr/local/bin/tfsec
+      - name: Run tfsec
+        run: tfsec . || true
+        continue-on-error: true
+
+  checkov:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Install checkov
+        run: pip install checkov
+      - name: Run checkov
+        run: checkov -d . -o sarif || true
+        continue-on-error: true

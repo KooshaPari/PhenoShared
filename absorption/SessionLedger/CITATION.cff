@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it using these metadata.
+title: SessionLedger
+type: software
+authors:
+  - family-names: Pari
+    given-names: Koosha
+    alias: KooshaPari
+repository-code: "https://github.com/KooshaPari/SessionLedger"
+url: "https://github.com/KooshaPari/SessionLedger"
+abstract: >-
+  Session ledger: compile/distill agent sessions into injectable continuation
+  bundles (Acceptance/Contract/Context/Intent), with crash-recovery, duplicate-chat
+  merge, and lost-work localization. OKF-native session compiler for capture,
+  archive, and replay.
+keywords:
+  - session-ledger
+  - agent-sessions
+  - OKF
+  - rust
+license:
+  - MIT
+  - Apache-2.0
+version: "0.2.0"
+date-released: "2026-07-04"

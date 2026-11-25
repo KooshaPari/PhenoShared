@@ -1,0 +1,8 @@
+{
+  "helper_runtime": "llama.cpp CUDA12 sm_61 separate process — no pooled VRAM with 3090",
+  "next": "owner-authorized driver recovery required; card absent from nvidia-smi",
+  "gtx_1080_visible": false,
+  "helper_port": 18081,
+  "as_of": "2026-07-23T22:57:03.9804274Z",
+  "nvidia_smi_L": "GPU 0: NVIDIA GeForce RTX 3090 Ti (UUID: GPU-8d337a84-43de-158d-7526-7175288a6064)"
+}

@@ -1,0 +1,47 @@
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+name: Sync Canary
+
+
+
+permissions:
+  contents: write
+
+concurrency:
+  group: agileplus-sync-canary
+  cancel-in-progress: false
+
+jobs:
+  sync-canary:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "agileplus-bot"
+          git config user.email "agileplus-bot@users.noreply.github.com"
+
+      - name: Prepare local canary ref
+        run: |
+          git fetch origin main
+          if git ls-remote --exit-code --heads origin canary; then
+            git fetch origin canary:canary
+            git switch canary
+            git merge --ff-only origin/main
+          else
+            git switch -c canary origin/main
+          fi
+
+      - name: Sync canary from main
+        run: git status --short --branch
+
+      - name: Push canary
+        run: git push origin canary:canary

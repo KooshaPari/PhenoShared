@@ -1,0 +1,73 @@
+# Plan-only local artifact conversion. No network download or conversion is
+# performed by this file. Source repos are the three locked local models.
+schema_version: 1
+source_policy:
+  require_metadata_probe: true
+  require_sha256: true
+  forbid_unquantized_eval_artifact: true
+  source_repositories:
+    local/qwen35-08b: Qwen/Qwen3.5-0.8B
+    local/lfm25-8b-a1b: LiquidAI/LFM2.5-8B-A1B
+    local/ornith-8b: deepreinforce-ai/Ornith-1.0-9B
+weight_variants:
+  - id: gguf_q2
+    family: gguf
+    bits: 2
+    engines: [llama_cpp]
+    command_family: llama_cpp_quantize
+  - id: gguf_q4
+    family: gguf
+    bits: 4
+    engines: [llama_cpp]
+    command_family: llama_cpp_quantize
+  - id: gguf_q5
+    family: gguf
+    bits: 5
+    engines: [llama_cpp]
+    command_family: llama_cpp_quantize
+  - id: gguf_q6
+    family: gguf
+    bits: 6
+    engines: [llama_cpp]
+    command_family: llama_cpp_quantize
+  - id: gguf_q8
+    family: gguf
+    bits: 8
+    engines: [llama_cpp]
+    command_family: llama_cpp_quantize
+  - id: awq_gptq_q4
+    family: awq_or_gptq
+    bits: 4
+    engines: [sglang, vllm]
+    command_family: modelopt_or_gptqmodel
+  - id: nvfp4_experimental
+    family: nvfp4_type
+    bits: 4
+    engines: [tensorrt_llm]
+    command_family: tensorrt_modelopt
+    hardware_status:
+      rtx_3090_ti: reject_native_nvfp4
+      reason: "Native NVFP4 acceleration is not an Ada baseline; retain as a compile-compatibility probe only."
+      upstream_reference: "https://nvidia.github.io/TensorRT-LLM/latest/features/quantization.html"
+kv_variants:
+  - q4_0
+  - q5_0
+  - q8_0
+  - tq_plus_experimental
+admission:
+  minimum_free_gb: 100
+  max_source_bytes_per_model: 20000000000
+  output_root_env: PHENO_MODEL_CACHE_ROOT
+  no_automatic_download: true
+  no_automatic_delete: true
+
+observed_bakeoff:
+  artifact: state/qwen35_quantization_bakeoff.json
+  model: local/qwen35-08b
+  runtime: llama.cpp-b10012-cuda12.4
+  workload: "n_prompt=128, n_gen=64, flash_attn=on, one measured repetition"
+  generation_tok_s:
+    rtx_3090_ti: {Q2_K: 192.812841, Q4_K_M: 188.639935, Q5_K_M: 126.408117, Q8_0: 166.701830}
+    gtx_1080_ti: {Q2_K: 44.809888, Q4_K_M: 80.632758, Q5_K_M: 52.207479, Q8_0: 83.627784}
+  selection_rule: "Choose per-device only after throughput, quality, memory headroom, and p95 task latency are jointly measured."
+  quality_gate: "Throughput-only bakeoff is non-scoreable; require deterministic coding/tool-use fixture and reference-loss or perplexity evidence before promotion."

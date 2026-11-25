@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# Build the slipstream Linux client as a single-file `.flatpak` bundle.
+#
+# Works on the Steam Deck (org.flatpak.Builder from Flathub, user-scope, NO root) and on any
+# Linux box with flatpak + flatpak-builder.
+#
+# On the Deck (one-time):
+#   flatpak install --user -y flathub org.flatpak.Builder
+# Then run this script from the repo root:
+#   bash packaging/flatpak/build-flatpak.sh
+# Output: dist/slipstream-client-<version>-<arch>.flatpak  (install with `flatpak install --user <file>`)
+#
+# Env knobs:
+#   VERSION=...        version string for the bundle name (default: git describe / 0.24.0-dev)
+#   ONLINE=1           cargo fetches from crates.io during the build (fast local
+#                      iteration, non-reproducible). Default: offline (regenerates
+#                      cargo-sources.json).
+#   BUILDER=...        override the flatpak-builder invocation (default: auto-detect host
+#                      flatpak-builder, else `flatpak run org.flatpak.Builder`).
+#   ARCH=...           target architecture (default: this machine's). `aarch64` builds the arm64
+#                      client  -  the manifest carries the per-arch PKG_CONFIG_PATH and the matching
+#                      prebuilt Skia archive. NOTE this is not a cross-compile: flatpak-builder
+#                      runs the build inside a sandbox for that arch, so building aarch64 on an
+#                      x86_64 box needs qemu binfmt registered and is very slow. Run it on an
+#                      arm64 machine.
+set -euo pipefail
+
+ROOTDIR="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$ROOTDIR"
+
+APP_ID="io.slipstream.Slipstream"
+MANIFEST="packaging/flatpak/io.slipstream.yml"
+VERSION="${VERSION:-$(git describe --tags --always --dirty 2>/dev/null || echo 0.24.0-dev)}"
+VERSION="${VERSION#v}"
+# `flatpak --default-arch` reports flatpak's own name for this machine (x86_64 / aarch64).
+ARCH="${ARCH:-$(flatpak --default-arch 2>/dev/null || uname -m)}"
+# Arch-suffixed so an x86_64 and an aarch64 bundle can sit in dist/ together instead of the
+# second silently overwriting the first.
+BUNDLE="dist/slipstream-client-${VERSION}-${ARCH}.flatpak"
+
+# --- pick a flatpak-builder (host binary, or the org.flatpak.Builder flatpak on the Deck) ---
+if [ -n "${BUILDER:-}" ]; then
+  FPB=($BUILDER)
+elif command -v flatpak-builder >/dev/null 2>&1; then
+  FPB=(flatpak-builder)
+elif flatpak info org.flatpak.Builder >/dev/null 2>&1; then
+  FPB=(flatpak run org.flatpak.Builder)
+else
+  echo "error: need flatpak-builder. On the Deck: flatpak install --user -y flathub org.flatpak.Builder" >&2
+  exit 1
+fi
+
+# --- ensure Flathub is available for the runtime/SDK/extensions ---
+flatpak remote-add --user --if-not-exists flathub \
+  https://dl.flathub.org/repo/flathub.flatpakrepo
+
+# --- offline crate cache (skip with ONLINE=1) -------------------------------------------
+# flatpak-builder exposes build env/network ONLY via the manifest's build-options
+# (there is no --env / --share / --build-args CLI flag): the manifest hardcodes
+# CARGO_NET_OFFLINE=true, and ONLINE=1 builds from a temp manifest copy with that
+# flipped to 'false' plus --share=network in build-args.
+MANIFEST_SRC="packaging/flatpak/io.slipstream.yml"
+MANIFEST_TMP=""
+cleanup_manifest_tmp() { if [ -n "$MANIFEST_TMP" ]; then rm -f "$MANIFEST_TMP"; fi; }
+trap cleanup_manifest_tmp EXIT
+if [ "${ONLINE:-0}" = "1" ]; then
+  echo "==> ONLINE build (cargo fetches from crates.io; non-reproducible)"
+  MANIFEST_TMP="$(mktemp /tmp/io.slipstream.online.XXXXXX.yml)"
+  MANIFEST="$MANIFEST_TMP"
+  python3 - "$MANIFEST_SRC" "$MANIFEST_TMP" <<'PYEOF'
+import sys
+src, dst = sys.argv[1], sys.argv[2]
+text = open(src).read()
+old_env = "    build-options:\n      env:"
+new_env = "    build-options:\n      build-args:\n        - --share=network\n      env:"
+assert text.count(old_env) == 1, "build-options anchor not unique"
+text = text.replace(old_env, new_env)
+old_flag = "CARGO_NET_OFFLINE: 'true'"
+assert text.count(old_flag) == 1, "CARGO_NET_OFFLINE anchor not unique"
+text = text.replace(old_flag, "CARGO_NET_OFFLINE: 'false'")
+open(dst, "w").write(text)
+print("patched temp manifest for ONLINE build")
+PYEOF
+  # The manifest references cargo-sources.json; provide an empty list so it stays valid.
+  [ -f packaging/flatpak/cargo-sources.json ] || echo '[]' > packaging/flatpak/cargo-sources.json
+else
+  # Default: cargo stays offline (CARGO_NET_OFFLINE=true in the manifest), fetching every
+  # crate from the cargo-sources.json archive flatpak-builder feeds it.
+  MANIFEST="$MANIFEST_SRC"
+  if [ -f packaging/flatpak/cargo-sources.json ] && [ "${FORCE_GEN:-0}" != "1" ]; then
+    # Reuse a cargo-sources.json that was generated elsewhere (e.g. on a dev box with network +
+    # python aiohttp/toml, then rsynced to a build host that lacks them  -  like the Deck). The
+    # offline crate cache is a pure function of Cargo.lock, so this is reproducible. FORCE_GEN=1
+    # to regenerate anyway.
+    echo "==> reusing existing packaging/flatpak/cargo-sources.json (FORCE_GEN=1 to regenerate)"
+  else
+    echo "==> generating offline cargo-sources.json from Cargo.lock"
+    GEN=/tmp/flatpak-cargo-generator.py
+    if [ ! -f "$GEN" ]; then
+      GEN_URL="https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/737c0085912f9f7dabf9341d4608e2a77a51a73a/cargo/flatpak-cargo-generator.py"
+      GEN_SHA256="b373c8ab1a05378ec5d8ed0645c7b127bcec7d2f7a1798694fbc627d570d856c"
+      curl -fsSL -o "${GEN}.download" "$GEN_URL"
+      printf '%s  %s\n' "$GEN_SHA256" "${GEN}.download" | sha256sum --check --status
+      mv "${GEN}.download" "$GEN"
+    fi
+    # Needs python3 + aiohttp + tomlkit. On a host that lacks them (e.g. the Deck), generate on the
+    # Mac / a dev box instead and rsync the result next to the manifest (reused by the branch above).
+    python3 "$GEN" Cargo.lock -o packaging/flatpak/cargo-sources.json
+  fi
+fi
+
+# --- build into a local ostree repo, then export a single-file bundle --------------------
+echo "==> flatpak-builder ($APP_ID, version $VERSION, arch $ARCH)"
+# A hosted remote can use the stable branch; local builds keep the same default branch.
+"${FPB[@]}" --user --force-clean --disable-rofiles-fuse \
+  --delete-build-dirs \
+  --default-branch=stable \
+  --arch="$ARCH" \
+  --install-deps-from=flathub \
+  --repo="$ROOTDIR/.flatpak-repo" \
+  "$ROOTDIR/.flatpak-build" "$MANIFEST"
+
+mkdir -p dist
+flatpak build-bundle --arch="$ARCH" "$ROOTDIR/.flatpak-repo" "$BUNDLE" "$APP_ID" stable
+echo "built $BUNDLE"
+ls -lh "$BUNDLE"
+echo
+echo "install:  flatpak install --user -y $BUNDLE"
+echo "run:      flatpak run $APP_ID            (or:  flatpak run $APP_ID --connect host:port)"

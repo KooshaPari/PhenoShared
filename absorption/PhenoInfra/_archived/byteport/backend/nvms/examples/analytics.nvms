@@ -1,0 +1,67 @@
+FROM: aws-ubuntu:minimal
+NAME: analytics
+
+CLUSTER:
+  ingestion:
+    INSTANCES: 5-20
+    PATH: ./ingestion
+    BUILD: cargo build --release
+    SCALE:
+      QUEUE_THRESHOLD: 1000
+
+  processor:
+    INSTANCES: 3-15
+    PATH: ./processor
+    BUILD: cargo build --release
+    SCALE:
+      CPU_THRESHOLD: 75
+
+  aggregator:
+    INSTANCES: 2-10
+    PATH: ./aggregator
+    BUILD: cargo build --release
+
+SERVICES:
+  dashboard:
+    PATH: ./dashboard
+    BUILD: npm run build
+    PORT: 3000
+
+  api:
+    PATH: ./api
+    BUILD: cargo build --release
+    PORT: 8080
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: Kinesis
+      NAME: data-stream
+    - TYPE: RDS
+      ENGINE: postgres
+      MODE: CLUSTER
+    - TYPE: ElastiCache
+      ENGINE: redis
+      MODE: CLUSTER
+      SIZE: cache.r6g.xlarge
+    - TYPE: OpenSearch
+      MODE: CLUSTER
+      SIZE: r6g.xlarge.search
+    - TYPE: SQS
+      NAME: events
+    - TYPE: S3
+      NAME: analytics-data
+
+NETWORK:
+  DOMAIN: analytics.example.com
+  SSL: true
+  LOAD_BALANCER:
+    TYPE: ALB
+    SSL: true
+  SECURITY:
+    VPC: true
+    PRIVATE_SUBNETS: true
+    RULES:
+      INBOUND:
+        - "TCP 443 ANY"
+        - "TCP 8080 VPC"

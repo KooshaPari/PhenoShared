@@ -1,0 +1,108 @@
+# .gitleaks.toml — AgilePlus secret-scanning baseline
+# Phase 3 Lane 4 / Batch 2 governance audit (2026-06-23).
+#
+# Complements .trufflehog.yml (workflow-scoped secret scan) and the
+# `dispatch-mcp` TruffleHog CI gate (#786). Gitleaks runs as the
+# in-repo pre-commit + push baseline; TruffleHog remains the deep
+# historical-scanning gate.
+#
+# Reference: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+
+title = "AgilePlus gitleaks baseline"
+
+# Use the bundled default ruleset plus the AgilePlus extended allowlist.
+[extend]
+useDefault = true
+
+# Global allowlist: paths and patterns we never want flagged.
+# Aligns with .trufflehog.yml and .gitignore.
+[allowlist]
+description = "AgilePlus-wide allowlist"
+paths = [
+  '''\.git/''',
+  '''target/''',
+  '''node_modules/''',
+  '''dist/''',
+  '''\.venv/''',
+  '''__pycache__/''',
+  '''\.archive/''',
+  '''vendor/''',
+  '''\.substrate/''',
+  '''\.ruff_cache/''',
+  '''\.cargo/registry/''',
+  '''crates/.*/target/''',
+  '''apps/.*/build/''',
+  '''\.claude/''',
+  '''\.codex/''',
+  '''\.cursor/''',
+  '''\.serena/''',
+  '''\.forge/''',
+  '''\.kittify/''',
+]
+
+# Stopwords reduce false positives on common identifiers that look
+# like keys but are documentation / example values.
+stopwords = [
+  "example",
+  "placeholder",
+  "changeme",
+  "TODO",
+  "FIXME",
+  "test",
+  "dummy",
+  "sample",
+  "AgilePlus",
+  "Phenotype",
+  "koosh",
+  "localhost",
+]
+
+# Regex-based safety net for high-entropy strings we know are safe.
+regexes = [
+  # SHA-256 hashes used in evidence ledger / worklog
+  '''[a-f0-9]{64}''',
+  # Git short SHAs
+  '''[a-f0-9]{7,40}''',
+  # Cargo.lock package version pins
+  '''version\s*=\s*"[0-9]+\.[0-9]+\.[0-9]+"''',
+]
+
+# ---- Rules tuned for AgilePlus-specific patterns ----
+
+[[rules]]
+id = "agileplus-bearer-token"
+description = "AgilePlus / dispatch-mcp bearer tokens"
+regex = '''(?i)(agileplus|dispatch[_-]?mcp)[_-]?(token|key|secret)[_-]?\s*[:=]\s*["']?([A-Za-z0-9_\-]{24,})["']?'''
+keywords = ["agileplus_token", "dispatch_mcp_token"]
+tags = ["secret", "agileplus"]
+
+[[rules]]
+id = "agileplus-env-file"
+description = ".env file embedded in repo"
+path = '''(^|/)\.env$'''
+keywords = [".env"]
+tags = ["secret", "config"]
+
+[[rules]]
+id = "aws-access-token"
+description = "AWS Access Key ID"
+regex = '''AKIA[0-9A-Z]{16}'''
+tags = ["aws", "secret"]
+
+[[rules]]
+id = "github-pat"
+description = "GitHub Personal Access Token (classic + fine-grained)"
+regex = '''gh[pousr]_[A-Za-z0-9_]{36,255}'''
+tags = ["github", "secret"]
+
+[[rules]]
+id = "private-key-block"
+description = "PEM private key block"
+regex = '''-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY( BLOCK)?-----'''
+tags = ["cryptographic", "secret"]
+
+# Commit history-wide scan depth (years). Keep small to mirror pre-commit cadence.
+[detect]
+  # 0 = scan working tree only (pre-commit default); 1 = include HEAD diff.
+  # CI workflows should pass --log-opts=--all to extend scope.
+  commit_limit = 0

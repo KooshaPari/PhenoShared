@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-07-04T10:58:37.237519+00:00",
+  "rule": "enabled only when projected full TB2.0 cost <= $1.00",
+  "rows": [
+    {
+      "id": "arcee-ai/trinity-mini",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.2403,
+      "enabled": true
+    },
+    {
+      "id": "ibm-granite/granite-4.0-h-micro",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.105554,
+      "enabled": true
+    },
+    {
+      "id": "ibm-granite/granite-4.1-8b",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.2492,
+      "enabled": true
+    },
+    {
+      "id": "inclusionai/ling-2.6-flash",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.05251,
+      "enabled": true
+    },
+    {
+      "id": "liquid/lfm-2-24b-a2b",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.16554,
+      "enabled": true
+    },
+    {
+      "id": "poolside/laguna-xs-2.1",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.29904,
+      "enabled": true
+    },
+    {
+      "id": "qwen/qwen3.5-flash-02-23",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.35867,
+      "enabled": true
+    },
+    {
+      "id": "tencent/hy3-preview",
+      "tasks": 89,
+      "attempts": 1,
+      "prompt_tokens_per_task": 50000,
+      "completion_tokens_per_task": 3000,
+      "projected_usd": 0.33642,
+      "enabled": true
+    }
+  ]
+}

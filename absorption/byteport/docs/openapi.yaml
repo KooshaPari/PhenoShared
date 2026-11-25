@@ -1,0 +1,1085 @@
+openapi: 3.0.3
+info:
+  title: BytePort API
+  description: |
+    Zero-cost deployment platform API.
+
+    ## Authentication
+    BytePort uses **PASETO V4 local (symmetric) tokens** for authentication.
+    Obtain a token via the WorkOS callback flow, then include it in every
+    protected request:
+
+    ```
+    Authorization: Bearer <paseto-v4-token>
+    ```
+
+    Tokens may also be sent as the `authToken` cookie (HTTP-only, Secure,
+    SameSite=Lax).  The token is a PASETO V4 local-encrypted string containing
+    claims `user-id`, `aud` (email), `sub`, `iss` ("BytePort"), `iat`, `nbf`,
+    and `exp` (1-hour TTL).
+
+    Protected endpoints return `401 UNAUTHORIZED` with an error body when the
+    token is missing, malformed, or expired.
+  version: 2.0.0
+  contact:
+    name: BytePort
+    url: https://byte.kooshapari.com
+
+servers:
+  - url: https://byte.kooshapari.com
+    description: Production
+  - url: http://localhost:8002
+    description: Local development
+
+tags:
+  - name: Health
+    description: Health check and service info
+  - name: Auth
+    description: Authentication (WorkOS AuthKit)
+  - name: User
+    description: User profile
+  - name: Deployments
+    description: Deployment lifecycle (hexagonal architecture)
+  - name: Legacy Deployments
+    description: Legacy deployment endpoints (deprecated)
+  - name: Utilities
+    description: App detection, cost estimation, config validation
+
+paths:
+  # ──────────────────────────────────────────────
+  # Health & Info
+  # ──────────────────────────────────────────────
+  /api/v1/health:
+    get:
+      operationId: getHealth
+      summary: Health check
+      tags: [Health]
+      security: []
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /api/v1/:
+    get:
+      operationId: getApiInfo
+      summary: API information and endpoint index
+      tags: [Health]
+      security: []
+      responses:
+        "200":
+          description: API info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiInfoResponse"
+
+  # ──────────────────────────────────────────────
+  # Authentication
+  # ──────────────────────────────────────────────
+  /api/v1/auth/workos/callback:
+    post:
+      operationId: workosCallback
+      summary: WorkOS AuthKit OAuth callback
+      description: |
+        Exchanges an authorization code for a PASETO session token.
+        Called by the WorkOS AuthKit redirect flow.
+      tags: [Auth]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkOSCallbackRequest"
+      responses:
+        "200":
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkOSCallbackResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  # ──────────────────────────────────────────────
+  # User
+  # ──────────────────────────────────────────────
+  /api/v1/user/{id}:
+    get:
+      operationId: getUser
+      summary: Get user profile
+      tags: [User]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User UUID or "current"
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  # ──────────────────────────────────────────────
+  # Deployments (hexagonal architecture)
+  # ──────────────────────────────────────────────
+  /api/v1/deployments:
+    post:
+      operationId: createDeployment
+      summary: Create a new deployment
+      tags: [Deployments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDeploymentRequest"
+      responses:
+        "201":
+          description: Deployment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateDeploymentResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    get:
+      operationId: listDeployments
+      summary: List deployments with filtering and pagination
+      tags: [Deployments]
+      parameters:
+        - name: owner
+          in: query
+          schema:
+            type: string
+          description: Filter by owner UUID
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, detecting, provisioning, deploying, deployed, failed, terminated]
+          description: Filter by status
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+          description: Pagination offset
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            maximum: 100
+            default: 20
+          description: Page size (max 100)
+      responses:
+        "200":
+          description: Paginated deployment list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListDeploymentsResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/deployments/{uuid}:
+    get:
+      operationId: getDeployment
+      summary: Get deployment details
+      tags: [Deployments]
+      parameters:
+        - $ref: "#/components/parameters/DeploymentUUID"
+      responses:
+        "200":
+          description: Deployment detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetDeploymentResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    delete:
+      operationId: terminateDeployment
+      summary: Terminate (delete) a deployment
+      tags: [Deployments]
+      parameters:
+        - $ref: "#/components/parameters/DeploymentUUID"
+      responses:
+        "200":
+          description: Deployment terminated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TerminateDeploymentResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /api/v1/deployments/{uuid}/status:
+    patch:
+      operationId: updateDeploymentStatus
+      summary: Update deployment status
+      tags: [Deployments]
+      parameters:
+        - $ref: "#/components/parameters/DeploymentUUID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStatusRequest"
+      responses:
+        "204":
+          description: Status updated (no content)
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  # ──────────────────────────────────────────────
+  # Legacy Deployments (deprecated)
+  # ──────────────────────────────────────────────
+  /api/v1/legacy/deployments:
+    post:
+      operationId: legacyDeploy
+      summary: Deploy an application (legacy)
+      description: "Deprecated: use `POST /api/v1/deployments` instead."
+      tags: [Legacy Deployments]
+      deprecated: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LegacyDeployRequest"
+      responses:
+        "201":
+          description: Deployment started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyDeployResponse"
+        "400":
+          $ref: "#/components/responses/InvalidRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+    get:
+      operationId: legacyListDeployments
+      summary: List all deployments (legacy)
+      description: "Deprecated: use `GET /api/v1/deployments` instead."
+      tags: [Legacy Deployments]
+      deprecated: true
+      responses:
+        "200":
+          description: Deployment list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyDeploymentListResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/v1/legacy/deployments/{id}:
+    get:
+      operationId: legacyGetDeployment
+      summary: Get deployment details (legacy)
+      description: "Deprecated: use `GET /api/v1/deployments/{uuid}` instead."
+      tags: [Legacy Deployments]
+      deprecated: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deployment detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyDeploymentDetail"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      operationId: legacyTerminateDeployment
+      summary: Terminate a deployment (legacy)
+      description: "Deprecated: use `DELETE /api/v1/deployments/{uuid}` instead."
+      tags: [Legacy Deployments]
+      deprecated: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deployment terminated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  id:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/legacy/deployments/{id}/status:
+    get:
+      operationId: legacyGetDeploymentStatus
+      summary: Get deployment status (legacy)
+      description: "Deprecated."
+      tags: [Legacy Deployments]
+      deprecated: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deployment status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyDeploymentStatus"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/legacy/deployments/{id}/logs:
+    get:
+      operationId: legacyGetDeploymentLogs
+      summary: Get deployment logs (legacy)
+      description: "Deprecated."
+      tags: [Legacy Deployments]
+      deprecated: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deployment logs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyDeploymentLogs"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/legacy/deployments/{id}/metrics:
+    get:
+      operationId: legacyGetDeploymentMetrics
+      summary: Get deployment metrics (legacy)
+      description: "Deprecated."
+      tags: [Legacy Deployments]
+      deprecated: true
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deployment metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyDeploymentMetrics"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ──────────────────────────────────────────────
+  # Utilities
+  # ──────────────────────────────────────────────
+  /api/v1/detect:
+    post:
+      operationId: detectApp
+      summary: Auto-detect application type from file list
+      tags: [Utilities]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [files]
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                  description: List of file paths to analyse
+      responses:
+        "200":
+          description: Detection result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetectAppResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /api/v1/estimate-cost:
+    post:
+      operationId: estimateCost
+      summary: Estimate monthly deployment cost
+      tags: [Utilities]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [frontend, backend, database]
+                provider:
+                  type: string
+      responses:
+        "200":
+          description: Cost estimate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CostEstimateResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /api/v1/validate-config:
+    post:
+      operationId: validateConfig
+      summary: Validate a deployment configuration
+      tags: [Utilities]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Arbitrary configuration object to validate
+      responses:
+        "200":
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigValidationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  # ──────────────────────────────────────────────
+  # Documentation
+  # ──────────────────────────────────────────────
+  /api/v1/docs:
+    get:
+      operationId: getDocs
+      summary: API documentation (JSON)
+      tags: [Health]
+      security: []
+      responses:
+        "200":
+          description: Documentation payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocsResponse"
+
+# ══════════════════════════════════════════════
+# Components
+# ══════════════════════════════════════════════
+components:
+  # ── Parameters ────────────────────────────────
+  parameters:
+    DeploymentUUID:
+      name: uuid
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Deployment UUID
+
+  # ── Shared responses ──────────────────────────
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    Unauthorized:
+      description: Missing or invalid PASETO token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    InvalidRequest:
+      description: Invalid request body or query parameters
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+  # ── Schemas ───────────────────────────────────
+  schemas:
+    # ── Health ──────────────────────────────────
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: healthy
+        service:
+          type: string
+          example: byteport-api
+        version:
+          type: string
+          example: "2.0.0"
+
+    ApiInfoResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: BytePort API
+        version:
+          type: string
+          example: "2.0.0"
+        description:
+          type: string
+        endpoints:
+          type: object
+          additionalProperties:
+            type: string
+
+    # ── Auth ────────────────────────────────────
+    WorkOSCallbackRequest:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+          description: Authorization code from WorkOS
+        state:
+          type: string
+          description: OAuth state parameter
+
+    WorkOSCallbackResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: PASETO V4 local-encrypted session token
+        token_type:
+          type: string
+          example: Bearer
+        state:
+          type: string
+
+    # ── User ────────────────────────────────────
+    UserResponse:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+              format: email
+
+    # ── Deployments (hexagonal) ─────────────────
+    CreateDeploymentRequest:
+      type: object
+      required: [name, owner]
+      properties:
+        name:
+          type: string
+          description: Deployment name
+          example: my-frontend
+        owner:
+          type: string
+          description: Owner UUID
+        project_uuid:
+          type: string
+          format: uuid
+          nullable: true
+        env_vars:
+          type: object
+          additionalProperties:
+            type: string
+        config:
+          type: object
+          additionalProperties: true
+
+    CreateDeploymentResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        owner:
+          type: string
+        status:
+          type: string
+          enum: [pending, detecting, provisioning, deploying, deployed, failed, terminated]
+        created_at:
+          type: string
+          format: date-time
+        message:
+          type: string
+
+    ListDeploymentsRequest:
+      type: object
+      properties:
+        owner:
+          type: string
+        status:
+          type: string
+        offset:
+          type: integer
+        limit:
+          type: integer
+
+    ListDeploymentsResponse:
+      type: object
+      properties:
+        deployments:
+          type: array
+          items:
+            $ref: "#/components/schemas/DeploymentSummary"
+        total:
+          type: integer
+          format: int64
+        offset:
+          type: integer
+        limit:
+          type: integer
+
+    DeploymentSummary:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        owner:
+          type: string
+        status:
+          type: string
+        service_count:
+          type: integer
+        monthly_cost:
+          type: number
+          format: double
+        created_at:
+          type: string
+          format: date-time
+        deployed_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    GetDeploymentResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        owner:
+          type: string
+        project_uuid:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          type: string
+        providers:
+          type: object
+          additionalProperties: true
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceDTO"
+        cost_info:
+          $ref: "#/components/schemas/CostInfoDTO"
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deployed_at:
+          type: string
+          format: date-time
+          nullable: true
+        terminated_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ServiceDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [frontend, backend, database]
+        provider:
+          type: string
+        status:
+          type: string
+        url:
+          type: string
+
+    CostInfoDTO:
+      type: object
+      properties:
+        monthly:
+          type: number
+          format: double
+        breakdown:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+
+    UpdateStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        uuid:
+          type: string
+        status:
+          type: string
+          enum: [pending, detecting, provisioning, deploying, deployed, failed, terminated]
+
+    TerminateDeploymentResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        status:
+          type: string
+        message:
+          type: string
+        terminated_at:
+          type: string
+          format: date-time
+
+    # ── Legacy Deployments ──────────────────────
+    LegacyDeployRequest:
+      type: object
+      required: [name, type]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [frontend, backend, database]
+        provider:
+          type: string
+          enum: [vercel, netlify, render, railway, supabase, cloudflare-pages]
+        git_url:
+          type: string
+          format: uri
+        branch:
+          type: string
+        env_vars:
+          type: object
+          additionalProperties:
+            type: string
+        config:
+          type: object
+          additionalProperties: true
+
+    LegacyDeployResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        status:
+          type: string
+          example: deploying
+        url:
+          type: string
+          format: uri
+        provider:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        message:
+          type: string
+
+    LegacyDeploymentListResponse:
+      type: object
+      properties:
+        deployments:
+          type: array
+          items:
+            $ref: "#/components/schemas/LegacyDeployResponse"
+        total:
+          type: integer
+
+    LegacyDeploymentDetail:
+      type: object
+      properties:
+        ID:
+          type: string
+        Name:
+          type: string
+        Type:
+          type: string
+        Provider:
+          type: string
+        Status:
+          type: string
+        GitURL:
+          type: string
+        Branch:
+          type: string
+        URL:
+          type: string
+        EnvVars:
+          type: object
+          additionalProperties:
+            type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+
+    LegacyDeploymentStatus:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        progress:
+          type: integer
+          description: "0-100 percent"
+        updated_at:
+          type: string
+          format: date-time
+
+    LegacyDeploymentLogs:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+        logs:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+              level:
+                type: string
+                enum: [debug, info, warn, error]
+              message:
+                type: string
+
+    LegacyDeploymentMetrics:
+      type: object
+      properties:
+        deployment_id:
+          type: string
+        uptime:
+          type: string
+        requests:
+          type: integer
+        bandwidth:
+          type: string
+        response_time:
+          type: string
+        cost:
+          type: object
+          properties:
+            monthly:
+              type: number
+            currency:
+              type: string
+
+    # ── Utilities ───────────────────────────────
+    DetectAppResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [frontend, backend, database]
+        framework:
+          type: string
+        confidence:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+        suggested_provider:
+          type: string
+
+    CostEstimateResponse:
+      type: object
+      properties:
+        monthly:
+          type: number
+          format: double
+        currency:
+          type: string
+          example: USD
+        breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              service:
+                type: string
+              provider:
+                type: string
+              cost:
+                type: number
+                format: double
+              plan:
+                type: string
+        message:
+          type: string
+
+    ConfigValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: string
+        warnings:
+          type: array
+          items:
+            type: string
+
+    # ── Documentation ───────────────────────────
+    DocsResponse:
+      type: object
+      properties:
+        title:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+        endpoints:
+          type: array
+          items:
+            type: object
+            properties:
+              method:
+                type: string
+              path:
+                type: string
+              description:
+                type: string
+
+    # ── Errors ──────────────────────────────────
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code
+          enum:
+            - UNAUTHORIZED
+            - INVALID_REQUEST
+            - NOT_FOUND
+            - VALIDATION_ERROR
+            - FORBIDDEN
+            - CONFLICT
+            - INTERNAL_ERROR

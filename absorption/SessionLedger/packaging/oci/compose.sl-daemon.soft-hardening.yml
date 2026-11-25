@@ -1,0 +1,38 @@
+# Soft OCI hardening sample for sl-daemon (C04 L40).
+# Operator opt-in — not applied by default CI or process-compose.
+#
+# Build first:
+#   container build -t sl-daemon:latest -f crates/sl-daemon/Containerfile .
+#   # or: docker build -t sl-daemon:latest -f crates/sl-daemon/Containerfile .
+#
+# Run (Docker Compose v2 / compatible):
+#   docker compose -f packaging/oci/compose.sl-daemon.soft-hardening.yml up
+#
+# Equivalent docker CLI:
+#   docker run --rm \
+#     --user 10001:10001 \
+#     --security-opt no-new-privileges:true \
+#     --security-opt seccomp=packaging/oci/sl-daemon-seccomp.json \
+#     --cap-drop ALL \
+#     -v "$HOME/.forge/sessions:/data/sessions:ro" \
+#     -v "$PWD/okf-out:/data/out" \
+#     sl-daemon:latest serve --watch /data/sessions --out /data/out
+#
+# Soft no-net: set network_mode: "none" only for offline ETL smoke without
+# HEALTHCHECK / HTTP clients. Loopback HTTP serve needs a network namespace.
+
+services:
+  sl-daemon:
+    image: sl-daemon:latest
+    user: "10001:10001"
+    security_opt:
+      - no-new-privileges:true
+      - seccomp=./packaging/oci/sl-daemon-seccomp.json
+    cap_drop:
+      - ALL
+    volumes:
+      - ${SL_SESSIONS_DIR:-${HOME}/.forge/sessions}:/data/sessions:ro
+      - ${SL_OUT_DIR:-./okf-out}:/data/out
+    command: ["serve", "--watch", "/data/sessions", "--out", "/data/out"]
+    # Soft no-net (commented): blocks HEALTHCHECK and non-loopback probes.
+    # network_mode: "none"

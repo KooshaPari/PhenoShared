@@ -1,0 +1,34 @@
+{
+  "started_at": 1783144539.4368923,
+  "last_update": 1783144551.0541031,
+  "elapsed_s": 11.6,
+  "counts": {
+    "seen": 28,
+    "kept": 19,
+    "rejected": 9,
+    "fetch_fail": 0
+  },
+  "by_author": {
+    "meta-llama": 2,
+    "mistralai": 2,
+    "google": 1,
+    "microsoft": 2,
+    "allenai": 2,
+    "cohere": 0,
+    "Qwen": 1,
+    "deepseek-ai": 0,
+    "inclusionAI": 1,
+    "moonshotai": 0,
+    "zai-org": 1,
+    "THUDM": 0,
+    "01-ai": 2,
+    "baichuan-inc": 2,
+    "bigcode": 1,
+    "WizardLM": 0,
+    "NousResearch": 2
+  },
+  "current_author": "NousResearch",
+  "errors_so_far": 0,
+  "event": "author_done",
+  "scanned_in_author": 2
+}

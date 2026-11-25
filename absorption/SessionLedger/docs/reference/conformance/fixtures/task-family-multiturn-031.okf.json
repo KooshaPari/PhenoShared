@@ -1,0 +1,182 @@
+{
+  "okf": "1.0",
+  "source_id": "task-family-multiturn-031",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "Map continuation slices that dominate prompt token spend across a long refactor session",
+      "properties": {
+        "user_turn_count": 8,
+        "token_estimate": 180,
+        "phase": "discover"
+      }
+    },
+    {
+      "id": "intent-1",
+      "type": "intent",
+      "label": "Collapse redundant worklog and provenance slices before the next resume inject",
+      "properties": {
+        "user_turn_count": 6,
+        "token_estimate": 140,
+        "phase": "compress"
+      }
+    },
+    {
+      "id": "intent-2",
+      "type": "intent",
+      "label": "Confirm the compressed continuation still verifies the original acceptance signals",
+      "properties": {
+        "user_turn_count": 4,
+        "token_estimate": 95,
+        "phase": "verify"
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "token_estimate reported per BundleKind in metrics summary",
+      "properties": null
+    },
+    {
+      "id": "acceptance-1",
+      "type": "acceptance",
+      "label": "multi-turn family retains three distinct intents after distill",
+      "properties": null
+    },
+    {
+      "id": "acceptance-2",
+      "type": "acceptance",
+      "label": "cargo test -p session-ledger --test okf_roundtrip passes",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "do not drop Acceptance gate slices during compression",
+      "properties": null
+    },
+    {
+      "id": "constraint-1",
+      "type": "constraint",
+      "label": "keep fixtures under CI size budget",
+      "properties": null
+    },
+    {
+      "id": "resource-0",
+      "type": "resource",
+      "label": "working-directory",
+      "properties": { "cwd": "/home/dev/session-ledger" }
+    },
+    {
+      "id": "state-0",
+      "type": "state",
+      "label": "session-title",
+      "properties": { "title": "Multi-turn token family discovery" }
+    },
+    {
+      "id": "criteria-0",
+      "type": "criteria",
+      "label": "continuation budget map stays deterministic",
+      "properties": {
+        "watch_files": ["src/domain/bundle.rs", "docs/ops/eval-compression.md"],
+        "skipped_by": []
+      }
+    },
+    {
+      "id": "gate-0",
+      "type": "gate",
+      "label": "resume-gate",
+      "properties": {
+        "ready": true,
+        "scope_sized": true,
+        "user_turns": 18,
+        "total_token_estimate": 415
+      }
+    }
+  ],
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-1",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "resource-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "state-0",
+      "type": "grounds",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "acceptance-1",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-1",
+      "target": "criteria-0",
+      "type": "requires",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-2",
+      "target": "acceptance-2",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    },
+    {
+      "source": "intent-2",
+      "target": "gate-0",
+      "type": "asserts",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "task-family-multiturn-031"
+      }
+    }
+  ],
+  "provenance": { "corpus": "forge", "source_id": "task-family-multiturn-031" }
+}

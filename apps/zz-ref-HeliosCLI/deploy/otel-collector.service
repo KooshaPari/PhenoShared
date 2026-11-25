@@ -1,0 +1,16 @@
+[Unit]
+Description=OpenTelemetry Collector for Helios CLI
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/helios-cli/deploy
+ExecStart=/opt/helios-cli/deploy/otel-collector.sh up
+ExecStop=/opt/helios-cli/deploy/otel-collector.sh down
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

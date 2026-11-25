@@ -1,0 +1,37 @@
+{
+  "schema_version": "pheno.qual-bench.v1",
+  "as_of": "2026-07-29T00:23:05Z",
+  "session_under_resume": "019f6249-d74c-7540-885f-588c3d51ac3a",
+  "bench_name": "1080_helper_verifier_rerank_v1",
+  "purpose": "Validate that legacy_helper (1080 Ti) produces comparable verifier rerank quality to primary (3090 Ti) at lower latency",
+  "device": "GTX 1080 Ti (GPU 0, sm_61, 11264 MiB)",
+  "candidates": [
+    {
+      "model": "lfm25-8b-a1b.Q4_K_M.gguf",
+      "role": "primary helper candidate",
+      "t_per_s_gen_baseline": 123.5
+    },
+    {
+      "model": "lfm25-1p2b.Q4_K_M.gguf",
+      "role": "fast draft candidate",
+      "t_per_s_gen_baseline": "TBD"
+    },
+    {
+      "model": "qwen35-08b.Q4_K_M.gguf",
+      "role": "needle/extract candidate",
+      "t_per_s_gen_baseline": "TBD"
+    }
+  ],
+  "verifier_workload": {
+    "description": "Re-rank top-K candidates from primary 3090 Ti draft output; measure rerank quality vs oracle",
+    "input_shape": "JSON list of (prompt, candidates[K=8])",
+    "k": 8,
+    "metric": "ndcg@1 vs oracle from 3090 Ti primary",
+    "subset": "TB2.0 verifier_rerank_subset_v1 (50 prompts)"
+  },
+  "scoreboard_path_intended": "eval/results/tb20_verifier_rerank_1080_2026-07-28.json",
+  "next_action": "Generate TB2.0 verifier_rerank_subset_v1; run rerank on 1080 Ti for each candidate; record scoreboard",
+  "prereq_satisfied": "smoke_1080_ti (PASS at 123.5 t/s); tb2.0 wiring (PASS, see tb2_evidence_manifest_2026-07-24.json)",
+  "ready_to_run": false,
+  "blocked_by": "TB2.0 verifier_rerank_subset_v1 not yet generated (needs source corpus + oracle from 3090 Ti primary)"
+}

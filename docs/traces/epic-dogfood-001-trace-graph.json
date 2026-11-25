@@ -1,0 +1,150 @@
+{
+  "schema": "agileplus.tracaera.trace_graph.v1",
+  "exported_at": "2026-07-02T23:37:28.370070Z",
+  "feature": {
+    "id": "feature:1",
+    "slug": "epic-dogfood-001",
+    "title": "Test Feature 001",
+    "state": "retrospected",
+    "target_branch": "main"
+  },
+  "requirements": [
+    {
+      "id": "FR-CI",
+      "evidence_type": "CiOutput",
+      "threshold": null,
+      "source": "governance_contract:v1"
+    },
+    {
+      "id": "FR-REVIEW",
+      "evidence_type": "ReviewApproval",
+      "threshold": null,
+      "source": "governance_contract:v1"
+    }
+  ],
+  "implementation_refs": [
+    {
+      "id": "wp:1",
+      "requirement_ids": [
+        "FR-CI",
+        "FR-REVIEW"
+      ],
+      "title": "The system shall create a spec.md artifact in docs (WP01)",
+      "state": "Done",
+      "file_scope": [
+        "docs/specs/{slug}/.",
+        "spec.md"
+      ],
+      "worktree_path": null,
+      "pr_url": null
+    }
+  ],
+  "test_refs": [
+    {
+      "id": "wp:1:acceptance",
+      "requirement_ids": [
+        "FR-CI",
+        "FR-REVIEW"
+      ],
+      "acceptance_criteria": "- FR-1 -- The system shall create a spec.md artifact in docs/specs/{slug}/.\n- FR-2 -- The system shall record the feature in SQLite with state Specified.\n- FR-3 -- The system shall append an audit entry for the Created -> Specified transition."
+    }
+  ],
+  "evidence_refs": [
+    {
+      "id": "evidence:1",
+      "requirement_id": "FR-CI",
+      "work_package_id": "wp:1",
+      "evidence_type": "CiOutput",
+      "artifact_path": "docs/specs/epic-dogfood-001/evidence/FR-CI-ci-output.md",
+      "metadata": {
+        "commit": "459a94a",
+        "source": "focused_cargo_tests"
+      },
+      "created_at": "2026-07-02T22:55:56Z"
+    },
+    {
+      "id": "evidence:2",
+      "requirement_id": "FR-REVIEW",
+      "work_package_id": "wp:1",
+      "evidence_type": "ReviewApproval",
+      "artifact_path": "docs/specs/epic-dogfood-001/evidence/FR-REVIEW-review-approval.md",
+      "metadata": {
+        "commit": "459a94a",
+        "source": "dogfood_implementation_loop"
+      },
+      "created_at": "2026-07-02T22:55:56Z"
+    }
+  ],
+  "event_provenance": [
+    {
+      "id": 1,
+      "entity_type": "audit",
+      "entity_id": 1,
+      "event_type": "Created -> Specified",
+      "actor": "user",
+      "sequence": 1,
+      "timestamp": "2026-07-02T05:35:22.639196Z",
+      "hash": "938ad0b16d62ec01d722ba4526d680a035f431db709d0570d5cc102bc3fbbd69"
+    },
+    {
+      "id": 2,
+      "entity_type": "audit",
+      "entity_id": 1,
+      "event_type": "Researched -> Planned",
+      "actor": "user",
+      "sequence": 2,
+      "timestamp": "2026-07-02T05:35:24.500270Z",
+      "hash": "35d8b2ebc269ab361be7e8f975436843d6644f602b7e8670bec6850ee53cb49c"
+    },
+    {
+      "id": 3,
+      "entity_type": "audit",
+      "entity_id": 1,
+      "event_type": "Planned -> Implementing",
+      "actor": "user",
+      "sequence": 3,
+      "timestamp": "2026-07-02T05:40:16.635655Z",
+      "hash": "9d9433adc5ac3a089c23e8df60c19ea8ec1a1fd662bdf4c88702951b7ae65029"
+    },
+    {
+      "id": 4,
+      "entity_type": "audit",
+      "entity_id": 1,
+      "event_type": "WP01 Planned -> Done",
+      "actor": "agent",
+      "sequence": 4,
+      "timestamp": "2026-07-02T05:41:01.440935Z",
+      "hash": "08110854838b1eb90fa402d290ef81ba13b038ab082adb9633adedb21238bc72"
+    },
+    {
+      "id": 5,
+      "entity_type": "audit",
+      "entity_id": 1,
+      "event_type": "Implementing -> Validated",
+      "actor": "user",
+      "sequence": 5,
+      "timestamp": "2026-07-02T23:00:48.249950Z",
+      "hash": "64ecb8b5b39dea9877f476b5b25d12c3f06073f8c6ed2bee6978d919adc236d7"
+    },
+    {
+      "id": 6,
+      "entity_type": "audit",
+      "entity_id": 1,
+      "event_type": "Validated -> Shipped",
+      "actor": "codex",
+      "sequence": 6,
+      "timestamp": "2026-07-02T23:01:53Z",
+      "hash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": 7,
+      "entity_type": "audit",
+      "entity_id": 1,
+      "event_type": "Shipped -> Retrospected",
+      "actor": "user",
+      "sequence": 7,
+      "timestamp": "2026-07-02T23:07:23.230498Z",
+      "hash": "2cb0812662d0f46c46c1ed60b31035433b39c828573fd5378f781dd2a458ece7"
+    }
+  ]
+}

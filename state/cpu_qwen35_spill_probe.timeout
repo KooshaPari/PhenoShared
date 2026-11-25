@@ -1,0 +1,11 @@
+schema_version: pheno.hardware_probe.v1
+model: local/qwen35-08b
+quantization: Q4_K_M
+runtime: llama.cpp-b10012-cuda12.4
+device: CPU with n_gpu_layers=0
+prompt_tokens: 4
+requested_completion_tokens: 4
+timeout_seconds: 90
+status: failed_timeout
+observed: no completion was emitted before the bounded timeout; the probe process was subsequently confirmed absent
+interpretation: CPU/DDR4 is not an interactive generation fallback for this artifact

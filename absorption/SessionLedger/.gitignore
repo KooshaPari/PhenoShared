@@ -1,0 +1,40 @@
+/target
+**/*.rs.bk
+*.pdb
+.DS_Store
+/*.forge.db
+/agileplus.db
+/dhat-heap.json
+
+# Cargo variant build dirs (all numbered variants)
+target-w*/
+
+
+# All nested cargo build dirs (sub-crates' target/)
+**/target/
+
+# Cache + worktrees + build output
+.cache/
+.claude/worktrees/
+packaging/dist/
+
+# Test coverage artifacts (cargo-llvm-cov / tarpaulin)
+coverage/
+**/coverage/
+*.info
+**/*.info
+
+# cargo-mutants side artifact dirs
+mutants.out.old/
+**/mutants.out.old/
+
+# cargo-mutants test result dirs (regenerated on every run)
+# cargo-mutants test result dirs (regenerated on every run)
+mutants.out/
+**/mutants.out/
+mutants.out.*/
+**/mutants.out.*/
+
+# Build artifacts and output directories
+artifacts/
+target/

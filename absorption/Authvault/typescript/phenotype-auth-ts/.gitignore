@@ -1,0 +1,44 @@
+# Phenotype-org standard .gitignore — Node
+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitignore-node
+
+node_modules/
+dist/
+*.tsbuildinfo
+
+# ===== Standard auto-generated hygiene ignores (do not edit manually) =====
+.DS_Store
+.env
+.env.*
+!.env.example
+target/
+build/
+coverage/
+.pytest_cache/
+__pycache__/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+# ===== End standard hygiene ignores =====
+
+# --- adopted from phenotype-tooling/templates/gitignore-node ---
+.cache/
+.eslintcache
+.idea/
+.npm/
+.parcel-cache/
+.pnp
+.pnp.js
+.vscode/
+*.log
+*.swp
+/build/
+/coverage/
+/dist/
+/out/
+lerna-debug.log*
+npm-debug.log*
+pnpm-debug.log*
+Thumbs.db
+yarn-debug.log*
+yarn-error.log*

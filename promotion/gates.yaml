@@ -1,0 +1,13 @@
+gates:
+  - id: has_metrics
+    description: prefill_tps and decode_tps must be present
+    require: [prefill_tps, decode_tps]
+  - id: driver_unified
+    description: Prefer unified 581.80 for dual Pascal+Ampere runs marked comparable
+    warn_if_driver_ne: "581.80"
+  - id: langfuse_linked
+    description: Promoted rows should have langfuse_trace_id when OBSERVABILITY_BACKEND=langfuse
+    prefer: [langfuse_trace_id]
+promotion:
+  require_all: [has_metrics]
+  prefer: [langfuse_linked]

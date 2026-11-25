@@ -1,0 +1,831 @@
+[
+  {
+    "subject_id": "PRD-TRACERA",
+    "repository_id": 1162254344,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "product-model",
+      "code-intelligence"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "api",
+      "mcp"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-product-model",
+      "domain-code-intelligence",
+      "surface-gui",
+      "surface-cli",
+      "surface-api",
+      "surface-mcp"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-AGILEPLUS",
+    "repository_id": 1169608854,
+    "lifecycle": "unresolved",
+    "primary_role": "tool",
+    "domains": [
+      "work-governance",
+      "specification"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "api",
+      "mcp"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-tool",
+      "domain-work-governance",
+      "domain-specification",
+      "surface-gui",
+      "surface-cli",
+      "surface-api",
+      "surface-mcp"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-HELIOSLAB",
+    "repository_id": 1167587447,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "agent-workbench"
+    ],
+    "surfaces": [
+      "gui",
+      "cli"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-agent-workbench",
+      "surface-gui",
+      "surface-cli"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-RESEARCHLEDGER",
+    "repository_id": 1308558334,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "research-provenance",
+      "knowledge-management"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "api"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-research-provenance",
+      "domain-knowledge-management",
+      "surface-gui",
+      "surface-cli",
+      "surface-api"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-SESSIONLEDGER",
+    "repository_id": 1284536541,
+    "lifecycle": "unresolved",
+    "primary_role": "tool",
+    "domains": [
+      "session-provenance",
+      "capture-replay"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "daemon"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-tool",
+      "domain-session-provenance",
+      "domain-capture-replay",
+      "surface-gui",
+      "surface-cli",
+      "surface-daemon"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-KCODE",
+    "repository_id": 1365855438,
+    "lifecycle": "unresolved",
+    "primary_role": "maintained-fork",
+    "domains": [
+      "coding-agent",
+      "agent-runtime"
+    ],
+    "surfaces": [
+      "cli"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-maintained-fork",
+      "domain-coding-agent",
+      "domain-agent-runtime",
+      "surface-cli"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-HELIOSLITE",
+    "repository_id": 1226104769,
+    "lifecycle": "unresolved",
+    "primary_role": "maintained-fork",
+    "domains": [
+      "coding-agent",
+      "session-recovery"
+    ],
+    "surfaces": [
+      "cli"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-maintained-fork",
+      "domain-coding-agent",
+      "domain-session-recovery",
+      "surface-cli"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-HELIOSCLI",
+    "repository_id": 1165315873,
+    "lifecycle": "unresolved",
+    "primary_role": "maintained-fork",
+    "domains": [
+      "coding-agent",
+      "developer-workflow"
+    ],
+    "surfaces": [
+      "cli"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-maintained-fork",
+      "domain-coding-agent",
+      "domain-developer-workflow",
+      "surface-cli"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-KHOSTTY",
+    "repository_id": 1322607630,
+    "lifecycle": "unresolved",
+    "primary_role": "maintained-fork",
+    "domains": [
+      "terminal-emulation",
+      "terminal-embedding"
+    ],
+    "surfaces": [
+      "gui",
+      "library"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-maintained-fork",
+      "domain-terminal-emulation",
+      "domain-terminal-embedding",
+      "surface-gui",
+      "surface-library"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-SHARECLI",
+    "repository_id": 1191459198,
+    "lifecycle": "unresolved",
+    "primary_role": "runtime",
+    "domains": [
+      "process-supervision",
+      "resource-control"
+    ],
+    "surfaces": [
+      "cli",
+      "daemon",
+      "gui"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-runtime",
+      "domain-process-supervision",
+      "domain-resource-control",
+      "surface-cli",
+      "surface-daemon",
+      "surface-gui"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-BYTEPORT",
+    "repository_id": 861430079,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "deployment",
+      "service-lifecycle"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "api"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-deployment",
+      "domain-service-lifecycle",
+      "surface-gui",
+      "surface-cli",
+      "surface-api"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-PHENOFABRIC",
+    "repository_id": 1363521465,
+    "lifecycle": "unresolved",
+    "primary_role": "platform",
+    "domains": [
+      "distributed-io",
+      "compute-placement"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "api",
+      "daemon"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-platform",
+      "domain-distributed-io",
+      "domain-compute-placement",
+      "surface-gui",
+      "surface-cli",
+      "surface-api",
+      "surface-daemon"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-PINE",
+    "repository_id": 1226547140,
+    "lifecycle": "unresolved",
+    "primary_role": "research-runtime",
+    "domains": [
+      "application-compatibility"
+    ],
+    "surfaces": [
+      "cli",
+      "library"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-research-runtime",
+      "domain-application-compatibility",
+      "surface-cli",
+      "surface-library"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-OMNIROUTE",
+    "repository_id": 1226171396,
+    "lifecycle": "unresolved",
+    "primary_role": "maintained-fork",
+    "domains": [
+      "inference-routing",
+      "provider-integration"
+    ],
+    "surfaces": [
+      "gui",
+      "api"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-maintained-fork",
+      "domain-inference-routing",
+      "domain-provider-integration",
+      "surface-gui",
+      "surface-api"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-SUBSTRATE",
+    "repository_id": 1269596554,
+    "lifecycle": "unresolved",
+    "primary_role": "runtime",
+    "domains": [
+      "agent-dispatch",
+      "model-gateway"
+    ],
+    "surfaces": [
+      "cli",
+      "api",
+      "library"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-runtime",
+      "domain-agent-dispatch",
+      "domain-model-gateway",
+      "surface-cli",
+      "surface-api",
+      "surface-library"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-PHENOMLX",
+    "repository_id": 1214745478,
+    "lifecycle": "unresolved",
+    "primary_role": "maintained-fork",
+    "domains": [
+      "local-inference",
+      "model-serving"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "api"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-maintained-fork",
+      "domain-local-inference",
+      "domain-model-serving",
+      "surface-gui",
+      "surface-cli",
+      "surface-api"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-PORTAGE",
+    "repository_id": 1165351720,
+    "lifecycle": "unresolved",
+    "primary_role": "maintained-fork",
+    "domains": [
+      "agent-evaluation",
+      "task-environments"
+    ],
+    "surfaces": [
+      "cli",
+      "library"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-maintained-fork",
+      "domain-agent-evaluation",
+      "domain-task-environments",
+      "surface-cli",
+      "surface-library"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-PHENOLAB",
+    "repository_id": 1269695199,
+    "lifecycle": "unresolved",
+    "primary_role": "research-tool",
+    "domains": [
+      "evaluation-research",
+      "reproducibility"
+    ],
+    "surfaces": [
+      "cli"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-research-tool",
+      "domain-evaluation-research",
+      "domain-reproducibility",
+      "surface-cli"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-CIVIS",
+    "repository_id": 1164684442,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "systemic-game",
+      "persistent-world"
+    ],
+    "surfaces": [
+      "gui"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-systemic-game",
+      "domain-persistent-world",
+      "surface-gui"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-DINO",
+    "repository_id": 1177712269,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "game-modding",
+      "pack-authoring"
+    ],
+    "surfaces": [
+      "gui",
+      "cli",
+      "library"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-game-modding",
+      "domain-pack-authoring",
+      "surface-gui",
+      "surface-cli",
+      "surface-library"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-WORLDSPHEREMOD",
+    "repository_id": 1241972761,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "game-rendering",
+      "game-modding"
+    ],
+    "surfaces": [
+      "gui"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-game-rendering",
+      "domain-game-modding",
+      "surface-gui"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-CIVICWARFARE",
+    "repository_id": 1308570444,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "game-scenario",
+      "game-modding"
+    ],
+    "surfaces": [
+      "gui"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-game-scenario",
+      "domain-game-modding",
+      "surface-gui"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "PRD-MELOSVIZ",
+    "repository_id": 1262466303,
+    "lifecycle": "unresolved",
+    "primary_role": "product",
+    "domains": [
+      "music-visualization",
+      "creative-authoring"
+    ],
+    "surfaces": [
+      "gui",
+      "cli"
+    ],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-product",
+      "domain-music-visualization",
+      "domain-creative-authoring",
+      "surface-gui",
+      "surface-cli"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "SUP-PHENOINFRA",
+    "repository_id": 1220334053,
+    "lifecycle": "unresolved",
+    "primary_role": "foundation",
+    "domains": [
+      "infrastructure"
+    ],
+    "surfaces": [],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-foundation",
+      "domain-infrastructure"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "SUP-PHENOTOOLING",
+    "repository_id": 1220333985,
+    "lifecycle": "unresolved",
+    "primary_role": "foundation",
+    "domains": [
+      "developer-tooling"
+    ],
+    "surfaces": [],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-foundation",
+      "domain-developer-tooling"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "SUP-PHENOAI",
+    "repository_id": 1201987910,
+    "lifecycle": "unresolved",
+    "primary_role": "foundation",
+    "domains": [
+      "ai-components"
+    ],
+    "surfaces": [],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-foundation",
+      "domain-ai-components"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "SUP-PHENOGFX",
+    "repository_id": 1271708536,
+    "lifecycle": "unresolved",
+    "primary_role": "foundation",
+    "domains": [
+      "graphics-components"
+    ],
+    "surfaces": [],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-foundation",
+      "domain-graphics-components"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "SUP-PHENOREGISTRY",
+    "repository_id": 1201113097,
+    "lifecycle": "unresolved",
+    "primary_role": "supporting-tool",
+    "domains": [
+      "portfolio-catalog"
+    ],
+    "surfaces": [],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-supporting-tool",
+      "domain-portfolio-catalog"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "SUP-PHENODESIGN",
+    "repository_id": 1169864396,
+    "lifecycle": "unresolved",
+    "primary_role": "supporting-tool",
+    "domains": [
+      "design-system"
+    ],
+    "surfaces": [],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-supporting-tool",
+      "domain-design-system"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  },
+  {
+    "subject_id": "SUP-KOOSHAPARI",
+    "repository_id": 1349458262,
+    "lifecycle": "unresolved",
+    "primary_role": "supporting-tool",
+    "domains": [
+      "portfolio-publication"
+    ],
+    "surfaces": [],
+    "platforms": [],
+    "ownership": "resolve-from-accepted-source-contract",
+    "public_topics": [
+      "role-supporting-tool",
+      "domain-portfolio-publication"
+    ],
+    "state": "proposal",
+    "approval_receipt": null,
+    "source_ids": [
+      "INT-001"
+    ],
+    "synthetic": false
+  }
+]

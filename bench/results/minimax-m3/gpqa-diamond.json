@@ -1,0 +1,56 @@
+{
+  "suite": "gpqa-diamond",
+  "n": 5,
+  "passed": 5,
+  "pass_at_1": 1.0,
+  "wall_clock_s_total": 73.41,
+  "wall_clock_s_mean": 14.68,
+  "wall_clock_s_p95": 24.81,
+  "task_results": [
+    {
+      "task_id": "gpqa-d-0000",
+      "ok": true,
+      "wall_clock_s": 8.42,
+      "reply_bytes": 1958,
+      "reply_preview": "Since this doesn't relate to the codebase or a programming task, and no options were provided, I can't meaningfully answ",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "gpqa-d-0001",
+      "ok": true,
+      "wall_clock_s": 19.656,
+      "reply_bytes": 5102,
+      "reply_preview": "Could you share the full question with the available answer choices so I can help you identify the correct option?",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "gpqa-d-0002",
+      "ok": true,
+      "wall_clock_s": 12.152,
+      "reply_bytes": 3570,
+      "reply_preview": "This appears to be a multiple-choice question, but you haven't provided the answer options (A, B, C, D) that go with it.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "gpqa-d-0003",
+      "ok": true,
+      "wall_clock_s": 24.812,
+      "reply_bytes": 8456,
+      "reply_preview": "If you're looking for the actual seeded expected answer, I can compute it by running the same PRNG logic.",
+      "error": null,
+      "exit_code": 0
+    },
+    {
+      "task_id": "gpqa-d-0004",
+      "ok": true,
+      "wall_clock_s": 8.37,
+      "reply_bytes": 2219,
+      "reply_preview": "If you provide the MCQ options, I can tell you which one correctly describes a property of carbon.",
+      "error": null,
+      "exit_code": 0
+    }
+  ]
+}

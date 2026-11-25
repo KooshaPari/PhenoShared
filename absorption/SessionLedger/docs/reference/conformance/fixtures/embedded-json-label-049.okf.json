@@ -1,0 +1,50 @@
+{
+  "okf": "1.0",
+  "source_id": "embedded-json-label-049",
+  "entities": [
+    {
+      "id": "intent-0",
+      "type": "intent",
+      "label": "parse {\"kind\":\"runtime-error\",\"stack\":[...]} and surface",
+      "properties": {
+        "user_turn_count": 2
+      }
+    },
+    {
+      "id": "acceptance-0",
+      "type": "acceptance",
+      "label": "error envelope renders inline; no XSS",
+      "properties": null
+    },
+    {
+      "id": "constraint-0",
+      "type": "constraint",
+      "label": "escape HTML entities before rendering",
+      "properties": null
+    }
+  ],
+  "provenance": {
+    "corpus": "forge",
+    "source_id": "embedded-json-label-049"
+  },
+  "relations": [
+    {
+      "source": "intent-0",
+      "target": "acceptance-0",
+      "type": "verified_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "embedded-json-label-049"
+      }
+    },
+    {
+      "source": "intent-0",
+      "target": "constraint-0",
+      "type": "bounded_by",
+      "provenance": {
+        "corpus": "forge",
+        "source_id": "embedded-json-label-049"
+      }
+    }
+  ]
+}

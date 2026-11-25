@@ -1,0 +1,85 @@
+# deny.yml — BytePort deny/license/source/advisory gate
+#
+# cargo-deny for Rust (deny.toml at repo root) + gomod check for Go modules
+# (covers license, advisory, and module hygiene via `go mod verify`).
+#
+# Triggers: Cargo + Go manifest changes, weekly schedule, manual dispatch.
+# Concurrency: one in-flight run per ref; new commits cancel old runs.
+
+name: cargo-deny
+
+on:
+  pull_request:
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'deny.toml'
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+      - 'backend/**/go.mod'
+      - 'backend/**/go.sum'
+  push:
+    branches: [main, master]
+    paths:
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'deny.toml'
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+      - 'backend/**/go.mod'
+      - 'backend/**/go.sum'
+  schedule:
+    - cron: '0 9 * * 1'  # Mondays 09:00 UTC — cargo-deny
+    - cron: '0 11 * * 3' # Wednesdays 11:00 UTC — gomod check (offset to avoid thundering herd)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  cargo-deny:
+    name: cargo-deny
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+      # Run cargo-deny directly instead of through the Docker action: the
+      # action's in-container resolution of the git workspace dependencies
+      # fails with bug[unresolved-workspace-dependency] on a valid config.
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2
+        with:
+          tool: cargo-deny
+      - name: cargo deny check
+        run: cargo deny --all-features check
+
+  gomod-check:
+    name: Go modules check (backend/byteport)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: '1.26.9'
+          cache-dependency-path: backend/byteport/go.sum
+      - name: Verify go.sum integrity
+        working-directory: backend/byteport
+        run: go mod verify
+      - name: Verify build (clean module graph)
+        working-directory: backend/byteport
+        run: go build ./...
+      - name: Run govulncheck
+        working-directory: backend/byteport
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck
+          govulncheck ./...

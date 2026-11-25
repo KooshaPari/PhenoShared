@@ -1,0 +1,6 @@
+# Example fragment for the actual Codex config.toml; installer uses native `codex mcp add`.
+# Set PHINBOX_INBOX_DIR to the same explicit daemon/native/web queue root.
+[mcp_servers.phinbox_mcp]
+command = "phinbox-mcp"
+args = []
+# No serve subcommand, trust override, hook replacement, or deprecated mcp.toml file.

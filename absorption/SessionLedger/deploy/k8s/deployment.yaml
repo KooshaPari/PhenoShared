@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sl-daemon
+  namespace: sessionledger
+  labels:
+    app: sl-daemon
+    component: ingest
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sl-daemon
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: sl-daemon
+        component: ingest
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: sl-daemon
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: sl-daemon
+          image: ghcr.io/kooshapari/sessionledger:latest
+          imagePullPolicy: IfNotPresent
+          args: ["--bind", "0.0.0.0:7654"]
+          ports:
+            - name: http
+              containerPort: 7654
+              protocol: TCP
+          env:
+            - name: RUST_LOG
+              value: info
+            - name: SL_DATA_DIR
+              value: /var/lib/sessionledger
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://otel-collector.observability:4317
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 7654
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 7654
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/sessionledger
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: sl-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sl-daemon
+  namespace: sessionledger
+spec:
+  type: ClusterIP
+  selector:
+    app: sl-daemon
+  ports:
+    - name: http
+      port: 7654
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: sl-daemon
+  namespace: sessionledger
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: sl-daemon

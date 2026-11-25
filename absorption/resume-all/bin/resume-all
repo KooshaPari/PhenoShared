@@ -1,0 +1,102 @@
+#!/usr/bin/env zsh
+# resume-all — replay every recorded harness session into fresh panes.
+#
+# Backend autodetect:
+#   1. tmux       — `tmux respawn-pane -k` or `new-window` if server died
+#   2. Ghostty    — AppleScript `split direction right with configuration`
+#                   (1.3.x sdef) or, if Ghostty isn't running, `open -na Ghostty`
+#                   then split
+#
+# Usage:
+#   resume-all                       # restore everything from the snapshot
+#   resume-all --dry-run             # print the commands instead of running them
+#   resume-all --only codex          # restore only one harness
+#   resume-all --workspace=<name>    # restore only panes matching a workspace
+#   resume-all --backend ghostty     # force Ghostty even if $TMUX is set
+#   resume-all --replay-history      # replay the last ~50 lines of each pane's
+#                                    # history log (from ~/.config/resume-all/pane-hook.zsh)
+#                                    # at the top of the new pane. AppleScript-free.
+#   resume-all bookmarks             # print configured bookmarks + default
+#   resume-all workspaces            # print configured workspace groups
+#
+# Per-harness resume invocation:
+#   forge         →  exec forge --conversation-id <id> -C <cwd>
+#   codex         →  cd <cwd> && exec codex resume <id>
+#   opencode      →  cd <cwd> && exec opencode --session <id>
+#   kilo          →  cd <cwd> && exec kilo --session <id>
+#   cursor-agent  →  cd <cwd> && exec cursor-agent --resume <id>
+
+emulate -L zsh
+setopt err_exit no_unset pipe_fail
+
+SNAPSHOT_FILE="${RESUME_SNAPSHOT_FILE:-$HOME/.local/share/resume-all/snapshot.jsonl}"
+dry_run=0; only=""; force_backend=""; replay_history=0; no_fork=0; json_output=0
+workspace=""; subcmd=""
+
+# Detect a subcommand up front (Phase E10: `resume-all bookmarks`; Phase E11:
+# `resume-all workspaces`) so we can skip the snapshot-existence check and
+# the backend-resolution path entirely.
+if (( $# > 0 )) && [[ "$1" != -* ]]; then
+  case "$1" in
+    bookmarks)  subcmd="bookmarks"; shift ;;
+    workspaces) subcmd="workspaces"; shift ;;
+  esac
+fi
+
+while (( $# )); do
+  case "$1" in
+    --dry-run|-n)   dry_run=1; shift ;;
+    --only)         only="${2:-}"; shift 2 ;;
+    --only=*)       only="${1#--only=}"; shift ;;
+    --backend)      force_backend="${2:-}"; shift 2 ;;
+    --backend=*)    force_backend="${1#--backend=}"; shift ;;
+    --replay-history) replay_history=1; shift ;;
+    --no-fork)      no_fork=1; shift ;;
+    --json)         json_output=1; shift ;;
+    --workspace)    workspace="${2:-}"; shift 2 ;;
+    --workspace=*)  workspace="${1#--workspace=}"; shift ;;
+    -h|--help)
+      sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0 ;;
+    *) print -u2 "resume-all: unknown arg '$1'"; exit 2 ;;
+  esac
+done
+
+# Subcommands bypass the snapshot requirement + backend-resolution entirely.
+if [[ -n "$subcmd" ]]; then
+  exec python3 -u ~/bin/resume-all.py "$subcmd"
+fi
+
+[[ -r "$SNAPSHOT_FILE" ]] || { print -u2 "resume-all: no snapshot at $SNAPSHOT_FILE"; exit 1; }
+
+# Backend selection
+backend="$force_backend"
+if [[ -z "$backend" ]]; then
+  if [[ -n "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then
+    backend=tmux
+  elif command -v osascript >/dev/null 2>&1; then
+    backend=ghostty
+  else
+    backend=none
+  fi
+fi
+
+# --replay-history only affects the Ghostty backend; for tmux we'd have to
+# re-tile the pane, which is out of scope here.
+if [[ "$replay_history" == 1 && "$backend" != "ghostty" ]]; then
+  print -u2 "resume-all: --replay-history requires the ghostty backend; ignoring on '$backend'"
+  replay_history=0
+fi
+
+# Slice 7: --no-fork + --json + --workspace are passthrough flags.  Build
+# the python argv in the same historical order the dispatcher expects.
+_py_args=( "$SNAPSHOT_FILE" "$only" "$dry_run" "$backend" "$replay_history" )
+[[ "$no_fork" == 1 ]] && _py_args+=( --no-fork )
+[[ "$json_output" == 1 ]] && _py_args+=( --json )
+[[ -n "$workspace" ]] && _py_args+=( --workspace="$workspace" )
+
+case "$backend" in
+  tmux|ghostty) exec python3 -u ~/bin/resume-all.py "${_py_args[@]}" ;;
+  none)         print -u2 "resume-all: no backend (tmux or Ghostty required)"; exit 1 ;;
+esac
+

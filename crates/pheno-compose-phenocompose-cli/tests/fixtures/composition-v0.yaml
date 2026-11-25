@@ -1,0 +1,32 @@
+# Composition manifest fixture for the phenocompose-cli lifecycle tests.
+#
+# This file lives INSIDE the crate and is tracked in git on purpose. The
+# fixture previously lived at the repository root as examples/composition-v0.yaml,
+# which .gitignore excludes, so `include_str!` could not resolve it in CI and
+# the whole `lifecycle_bridge_tests` module failed to compile. `include_str!` is
+# resolved at compile time, so the `#[ignore]` on the test could not help.
+api_version: phenocompose.dev/v0
+kind: Composition
+metadata:
+  name: lifecycle-fixture
+environment:
+  platform: linux
+  toolkit:
+    name: podman
+    version: "5.0"
+runtime:
+  provider: podman
+  capability: baseline
+services:
+  worker:
+    image: docker.io/library/busybox:latest
+    resources:
+      gpu:
+        vendor: nvidia
+        uuids:
+          - "GPU-123e4567-e89b-12d3-a456-426614174000"
+teardown:
+  remove_volumes: false
+provenance:
+  required: false
+  format: phenocompose_v0

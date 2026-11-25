@@ -1,0 +1,47 @@
+<section data-partial="event-timeline" class="event-timeline">
+  {% for event in events %}
+  <article class="event" data-event-id="{{ event.id }}" data-event-kind="{{ event.kind }}">
+    <header>
+      <span class="event-kind">{{ event.kind }}</span>
+      <time>{{ event.timestamp }}</time>
+    </header>
+    <p>{{ event.description }}</p>
+    <dl>
+      {% match event.agent_name %}
+      {% when Some with (agent_name) %}
+      <div>
+        <dt>Agent</dt>
+        <dd>{{ agent_name }}</dd>
+      </div>
+      {% when None %}
+      {% endmatch %}
+      {% match event.wp_id %}
+      {% when Some with (wp_id) %}
+      <div>
+        <dt>Work package</dt>
+        <dd>{{ wp_id }}</dd>
+      </div>
+      {% when None %}
+      {% endmatch %}
+      {% match event.commit_sha %}
+      {% when Some with (commit_sha) %}
+      <div>
+        <dt>Commit</dt>
+        <dd>{{ commit_sha }}</dd>
+      </div>
+      {% when None %}
+      {% endmatch %}
+      {% match event.ci_run_id %}
+      {% when Some with (ci_run_id) %}
+      <div>
+        <dt>CI</dt>
+        <dd>{{ ci_run_id }}</dd>
+      </div>
+      {% when None %}
+      {% endmatch %}
+    </dl>
+  </article>
+  {% else %}
+  <p class="empty-state">No events recorded yet.</p>
+  {% endfor %}
+</section>

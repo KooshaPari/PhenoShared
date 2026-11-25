@@ -1,0 +1,45 @@
+{
+  "schema_version": "pheno.push-record.v1",
+  "as_of": "2026-08-09T00:00:00Z",
+  "event": "push_wip_2026-08-09-pheno-harness-m80-d76",
+  "owner_authorization": {
+    "request": "push authorized (user, continuation session)",
+    "mode": "owner_direct_approve",
+    "pre_tradeoffs_disclosed": [
+      "origin/wip/2026-07-28-pheno-harness-m80-d76 is 1 commit ahead (b14e4e4) diverged across 95 files / 67 merge conflicts",
+      "direct merge or rebase of that line is the gated risky reconciliation",
+      "v0.9-pheno-harness-summit tag already exists on origin at 6ce05e7 (ancestor of HEAD) - no tag push needed",
+      "origin/main is 56 ahead / 88 behind HEAD - pushing main rejected"
+    ],
+    "chosen_execution": "push HEAD to NEW branch wip/2026-08-09-pheno-harness-m80-d76 (zero-conflict, no workstream interference)"
+  },
+  "local_head_before": "e4ee21dbc48448da252fb1c2dda0227647461d5e",
+  "local_head_after": "e4ee21dbc48448da252fb1c2dda0227647461d5e",
+  "pushed_ref": "refs/heads/wip/2026-08-09-pheno-harness-m80-d76",
+  "pushed_sha": "e4ee21dbc48448da252fb1c2dda0227647461d5e",
+  "verified_via": "git ls-remote origin refs/heads/wip/2026-08-09-pheno-harness-m80-d76 -> e4ee21dbc48448da252fb1c2dda0227647461d5e",
+  "result": "success",
+  "commit_span": [
+    "9f5a840 wip: capture 2026-08-02 pheno-harness live eval changes (autocrlf bypass)",
+    "f3ccda9 wip: capture 2026-08-02 pheno-harness live eval changes (autocrlf bypass)",
+    "cfea7c8 serve: supervisor keeps gateway alive on readyz 503 (not-ready is not dead); stop crash-loop when profiles are gated",
+    "01e4605 wip: capture 2026-08-02 pheno-harness live eval changes (autocrlf bypass)",
+    "ff5bb00 SGLang lane readiness 2026-08-08: sgl-kernel sm_86 wheel e462074c installed + GPU smoke 6/6 PASS on 3090 Ti, caveats moe_align_block_size schema + 19000 listener (Codex thread 019f6249)",
+    "cb64db2 wip: capture 2026-08-02 pheno-harness live eval changes (autocrlf bypass)",
+    "c28ad8e wip: capture 2026-08-02 pheno-harness live eval changes (autocrlf bypass)",
+    "0e08423 chore(state): SGLang lane readiness v2 - server smoke pass",
+    "a54a51e wip: capture 2026-08-02 pheno-harness live eval changes (autocrlf bypass)",
+    "e81f01e docs(plans): mypy error inventory for v0.10 phase 1 sweep",
+    "e4ee21d wip: capture 2026-08-02 pheno-harness live eval changes (autocrlf bypass)"
+  ],
+  "not_pushed": {
+    "origin/wip/2026-07-28-pheno-harness-m80-d76": "unchanged at b14e4e4 - parallel workstream line, 67-conflict divergence",
+    "origin/main": "unchanged at 445b354 - 56/88 divergence, not authorized",
+    "tag v0.9-pheno-harness-summit": "already on origin at 6ce05e7, not moved"
+  },
+  "git_state_after": {
+    "branch": "wip/2026-07-28-pheno-harness-m80-d76",
+    "head": "e4ee21dbc48448da252fb1c2dda0227647461d5e",
+    "upstream": "none configured (no tracking branch)"
+  }
+}

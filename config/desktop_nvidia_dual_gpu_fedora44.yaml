@@ -1,0 +1,179 @@
+# Desktop NVIDIA dual-GPU lane — Fedora 44 / WSL2 derivative
+#
+# This file is a *derivative* of ``config/desktop_nvidia_qwen35_lane.yaml``
+# (DAG-26 / DAG-95 parent). The parent covers the generic desktop_linux_or_wsl
+# case; this derivative specialises for Fedora 44 inside WSL2 (the LLM host
+# per AGENTS.md §2.2).
+#
+# Schema is identical to the parent — this file passes the same
+# ``tests/test_desktop_lane_schema.py`` JSON-Schema validator (DAG-69).
+# The Fedora-44-specific changes are:
+#
+#   * ``schema_version`` bumped to ``.v2.fedora44`` so the runtime can
+#     detect the variant before applying host-specific package
+#     management commands (``microdnf`` on Fedora, ``apt`` on Ubuntu).
+#   * ``host.platform`` narrowed from ``desktop_linux_or_wsl`` to
+#     ``wsl2_fedora_44`` so the operator guide
+#     (``docs/guides/WSL_FEDORA_44_DUAL_GPU.md``) is the unambiguous
+#     reference.
+#   * ``visibility_notes`` extended with the Fedora-44 / WSL2 kernel
+#     module caveat: ``nvidia`` and ``nvidia_uvm`` are loaded by the
+#     WSL2 host kernel, NOT inside the Fedora 44 userland; the
+#     in-guest device nodes (``/dev/nvidia0``, ``/dev/nvidia1``,
+#     ``/dev/nvidia-uvm``) come from WSL2's CUDA-on-Windows driver
+#     pass-through and must be present at boot.
+#   * ``external_backend_references`` adds a fedora44-specific
+#     integration_mode (``dnf_module_stream``) documenting that CUDA
+#     12.4 toolkit is shipped via the ``@rpmfusion-nonfree`` /
+#     ``negativo17`` repos for Fedora 44 (not the default
+#     ``cuda-fedora`` repo, which lags by a quarter on Fedora 44).
+#
+# Like the parent, this contract is declarative: it does NOT authorise
+# installation, model loading, server startup, Harbor execution, or
+# benchmark execution. A runner must obtain an explicit execution window
+# before it may do any of those things (see
+# ``execution_policy.require_explicit_window`` and
+# ``provenance_requirements.run`` below).
+schema_version: pheno.desktop-nvidia.qwen35-lane.v2.fedora44
+effective_date: "2026-08-07"
+status: planning_only
+
+scope:
+  owner: pheno-harness
+  purpose: qwen35_desktop_evidence_fedora44
+  model_family_allowlist: [Qwen3.5]
+  model_family_denylist: [Qwen2.5]
+  canonical_model: Qwen/Qwen3.5-0.8B
+  local_alias: local/qwen35-08b
+  mac_inference: paused
+  cross_platform_head: desktop_nvidia
+
+execution_policy:
+  allow_model_download: false
+  allow_install: false
+  allow_server_launch: false
+  allow_model_inference: false
+  allow_benchmark_execution: false
+  allow_harbor: false
+  require_explicit_window: true
+  max_concurrent_workers: 1
+  topology: independent_workers
+  tensor_parallel: forbidden
+  inter_gpu_transfer: forbidden_by_default
+  implicit_model_migration: forbidden
+
+hardware:
+  host:
+    platform: wsl2_fedora_44
+    ram_gb_min: 64
+  devices:
+    rtx_3090_ti:
+      role: primary
+      nvidia_smi_index: 1
+      architecture: sm_86
+      vram_mib: 24564
+      cuda_visible_devices: "1"
+      pytorch_device: cuda:0
+      llama_cpp_isolated_device: CUDA0
+      allowed_runtimes: [llama_cpp, sglang, vllm, tensorrt_llm]
+    gtx_1080_ti:
+      role: helper
+      nvidia_smi_index: 0
+      architecture: sm_61
+      vram_mib: 11264
+      cuda_visible_devices: "0"
+      pytorch_device: cuda:1
+      llama_cpp_isolated_device: CUDA1
+      # The 1080 Ti (sm_61, Pascal) cannot run modern CUDA 12.x kernels
+      # unmodified; only the legacy llama_cpp_cuda12 build is permitted
+      # here. vLLM/SGLang require sm_70+ and are rejected at runtime.
+      allowed_runtimes: [llama_cpp_cuda12_legacy]
+  visibility_notes:
+    - "Fedora 44 runs inside WSL2; the NVIDIA driver is loaded by the Windows host kernel and the device nodes (/dev/nvidia0, /dev/nvidia1, /dev/nvidia-uvm) are exposed into the Fedora userland via WSL2's CUDA pass-through."
+    - "WSL2 kernel module management (nvidia, nvidia_uvm, nvidia_drm, nvidia_modeset) is OUT OF SCOPE for the in-guest package manager; do not attempt modprobe from inside Fedora."
+    - "CUDA toolkit 12.4 ships via the negativo17/cuda RPM repo on Fedora 44; the default cuda-fedora repo lags by a quarter and is not used."
+    - "llama.cpp CUDA builds on Fedora 44 require gcc 13+ and the cuda-nvcc-12.4-devel subpackage; the default toolchain (gcc 13.3) is sufficient."
+    - "vLLM and SGLang on the 3090 Ti (sm_86) work with CUDA 12.4 + cuDNN 9.0; the helper 1080 Ti (sm_61) is restricted to llama_cpp_cuda12_legacy per the schema's contains-clause pattern."
+  runtime_device_mappings:
+    observed_host: tailscale-rig-pheno
+    vllm_primary:
+      visibility_variable: CUDA_VISIBLE_DEVICES
+      logical_device: cuda:0
+      physical_to_visible_index:
+        smi_0: cuda:1
+        smi_1: cuda:0
+      build: vllm-0.5.3+py3.11-cuda12.4
+      note: "vLLM primary binds to the 3090 Ti via cuda:0 in WSL2's remapped namespace."
+    llama_cpp_helper:
+      visibility_variable: CUDA_VISIBLE_DEVICES
+      logical_device: CUDA1
+      physical_to_visible_index:
+        smi_0: CUDA1
+        smi_1: CUDA0
+      build: llama_cpp_b4567-cuda12.4-legacy
+      note: "llama.cpp helper binds to the 1080 Ti's isolated CUDA1 device; the legacy CUDA-12 build is required for Pascal sm_61."
+
+runtime_policy:
+  qwen35_08b:
+    primary:
+      device: rtx_3090_ti
+      runtime_candidates: [vllm, sglang, llama_cpp, tensorrt_llm]
+      status: deferred_until_explicit_window
+    helper:
+      device: gtx_1080_ti
+      runtime_candidates: [llama_cpp_cuda12_legacy]
+      status: deferred_until_explicit_window
+  unsupported_without_new_review:
+    - mixed_gpu_tensor_parallel
+    - cross_gpu_layer_split
+    - automatic_offload
+    - cloud_or_harbor_execution
+
+provenance_requirements:
+  model: [qwen35_08b]
+  runtime: [vllm, sglang, llama_cpp, llama_cpp_cuda12_legacy, tensorrt_llm]
+  device: [rtx_3090_ti, gtx_1080_ti]
+  run: [dry_run, explicit_window_id, workload_executed]
+
+promotion_gates:
+  - exact_qwen35_model_and_revision
+  - harbor_or_eval_window_authorized
+  - dual_gpu_smoke_passes_4min   # DAG-84 (run_dual_gpu_smoke.ps1) must complete in 4 min
+
+external_backend_references:
+  vllm:
+    integration_mode: pypi_pinned
+    source_url: https://github.com/vllm-project/vllm
+    copy_source: false
+    provenance_boundary: vllm-0.5.3+py3.11-cuda12.4
+    allowed_semantics: [openai_compat_chat, openai_compat_completions, token_burn_reporting]
+    prohibited_surfaces: [model_finetune, lora_load]
+  sglang:
+    integration_mode: pypi_pinned
+    source_url: https://github.com/sgl-project/sglang
+    copy_source: false
+    provenance_boundary: sglang-0.4.3+py3.11-cuda12.4
+    allowed_semantics: [openai_compat_chat, token_burn_reporting]
+    prohibited_surfaces: [model_finetune, lora_load, speculative_drafting_across_runs]
+  llama_cpp:
+    integration_mode: source_build
+    source_url: https://github.com/ggerganov/llama.cpp
+    copy_source: true
+    provenance_boundary: llama_cpp_b4567-cuda12.4
+    allowed_semantics: [gguf_load, completion_only]
+    prohibited_surfaces: [tool_use, image_input]
+  llama_cpp_cuda12_legacy:
+    integration_mode: source_build
+    source_url: https://github.com/ggerganov/llama.cpp
+    copy_source: true
+    provenance_boundary: llama_cpp_b4567-cuda12.4-legacy
+    required_model_family: Qwen3.5
+    allowed_semantics: [gguf_load_sm_61_only, completion_only]
+    prohibited_surfaces: [tool_use, image_input, tensor_parallel]
+  cuda_toolkit_fedora44:
+    integration_mode: dnf_module_stream
+    source_url: https://negativo17.org/repos/fedora-nvidia/
+    copy_source: false
+    provenance_boundary: cuda-12.4.1-1.fc44
+    allowed_semantics: [nvcc_compile, runtime_link]
+    prohibited_surfaces: [kernel_module_load]

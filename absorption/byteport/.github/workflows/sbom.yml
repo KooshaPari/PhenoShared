@@ -1,0 +1,58 @@
+# sbom.yml — BytePort CycloneDX SBOM generation
+#
+# Generates a CycloneDX-formatted Software Bill of Materials on every
+# release, PR, and manual dispatch. Uploads as a workflow artifact and
+# attaches to GitHub Releases on tag pushes.
+#
+# Triggers: tag push (v*), PR to main, workflow_dispatch
+# Concurrency: one in-flight run per ref; new commits cancel old runs.
+
+name: Generate SBOM
+
+on:
+  push:
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sbom:
+    name: CycloneDX SBOM
+    runs-on: ubuntu-24.04
+    # Job-scoped: the release-attach step needs contents:write (top-level is
+    # contents:read). Without it, tag runs died with "Resource not accessible
+    # by integration" — same class as the audit workflow's cargo-audit 403.
+    # Job-level permissions REPLACE the top-level set, so read comes via write.
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
+        with:
+          format: cyclonedx-json
+          artifact-name: sbom.cdx.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sbom-${{ github.ref_name }}
+          path: sbom.cdx.json
+          retention-days: 90
+
+      - name: Attach to release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          files: sbom.cdx.json

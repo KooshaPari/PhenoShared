@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 512px; height: 512px;
+    background: transparent;
+    overflow: hidden;
+  }
+  .icon-root {
+    width: 512px; height: 512px;
+    position: relative;
+    background: transparent;
+  }
+
+  .layer {
+    position: absolute;
+    border-radius: 64px;
+  }
+
+  .l4 {
+    inset: 28px;
+    transform: translate(20px, -20px);
+    background: #8fa8a5;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  }
+  .l3 {
+    inset: 28px;
+    transform: translate(13px, -13px);
+    background: #9ab5b2;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.14);
+  }
+  .l2 {
+    inset: 28px;
+    transform: translate(7px, -7px);
+    background: #a8c2bf;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  }
+  .l1 {
+    inset: 28px;
+    transform: translate(2px, -2px);
+    background: #b2cbc8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .main-tile {
+    inset: 28px;
+    background: linear-gradient(175deg,
+      #cddedd 0%,
+      #bbcfcd 35%,
+      #adc0be 65%,
+      #a2b8b5 100%
+    );
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.30) inset,
+      0 8px 32px rgba(0,0,0,0.22);
+  }
+
+  .main-edge {
+    inset: 28px;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.18) 0%,
+      rgba(255,255,255,0.05) 12%,
+      transparent 25%
+    );
+  }
+
+  .mica-grain {
+    inset: 28px;
+    opacity: 0.09;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.70' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
+  }
+
+  .artwork-layer {
+    inset: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+<div class="icon-root">
+  <div class="layer l4"></div>
+  <div class="layer l3"></div>
+  <div class="layer l2"></div>
+  <div class="layer l1"></div>
+  <div class="layer main-tile"></div>
+  <div class="layer main-edge"></div>
+  <div class="layer mica-grain"></div>
+  <div class="layer artwork-layer">
+    <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Left leg arc, foot=(50,248) to apex=(150,42), belly curves far-left -->
+      <path d="M 50 248 C -8 192 4 80 150 42"
+        stroke="#3d7470" stroke-width="17" stroke-linecap="round" fill="none"
+        opacity="0.92"
+      />
+
+      <!-- Right leg arc, apex=(150,42) to foot=(250,248), belly curves far-right -->
+      <path d="M 150 42 C 296 80 308 192 250 248"
+        stroke="#3d7470" stroke-width="17" stroke-linecap="round" fill="none"
+        opacity="0.92"
+      />
+
+      <!-- Arrowhead at apex, pointing upward -->
+      <polygon points="150,26 133,56 167,56"
+        fill="#2d5e5b"
+      />
+
+      <!-- Arrowhead at right foot, pointing down-left -->
+      <polygon points="250,266 232,240 262,236"
+        fill="#2d5e5b"
+      />
+
+      <!-- Crossbar: 3 ascending kanban columns -->
+      <rect x="100" y="178" width="26" height="27" rx="4"
+        fill="#5d8f8b" opacity="0.78"/>
+      <rect x="136" y="161" width="26" height="44" rx="4"
+        fill="#4e8480" opacity="0.92"/>
+      <rect x="172" y="146" width="26" height="59" rx="4"
+        fill="#3d7470" opacity="1.0"/>
+
+      <!-- Crossbar baseline -->
+      <line x1="88" y1="205" x2="212" y2="205"
+        stroke="#4e8480" stroke-width="4" stroke-linecap="round" opacity="0.50"
+      />
+    </svg>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>AgilePlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>AgilePlus</h1>
+      <span class="repo-root" id="repo-root">no repo selected</span>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab" data-tab="specs" role="tab" aria-selected="true">Specs</button>
+      <button class="tab" data-tab="adrs" role="tab" aria-selected="false">ADRs</button>
+      <button class="tab" data-tab="traces" role="tab" aria-selected="false">Traces</button>
+    </nav>
+
+    <main class="panels">
+      <section class="panel" data-panel="specs">
+        <ul id="spec-list" class="list"></ul>
+      </section>
+      <section class="panel" data-panel="adrs" hidden>
+        <ul id="adr-list" class="list"></ul>
+      </section>
+      <section class="panel" data-panel="traces" hidden>
+        <ul id="trace-list" class="list"></ul>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span>offline · local repo · step-1 Electrobun shell</span>
+    </footer>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

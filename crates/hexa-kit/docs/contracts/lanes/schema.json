@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hexakit/contracts/lanes/schema.json",
+  "title": "LaneDescriptor",
+  "description": "Machine-readable descriptor for a bounded ecosystem disposition lane. Used by hexakit harness dispatch and AgilePlus session DAG.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "lane_id",
+    "disposition_ids",
+    "fsm_state",
+    "repo",
+    "worktree",
+    "branch",
+    "owns",
+    "forbidden_paths",
+    "harness",
+    "harness_compat",
+    "aadp",
+    "verify",
+    "exit_gate"
+  ],
+  "properties": {
+    "lane_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Unique lane identifier, e.g. wave-a-wp03-metron"
+    },
+    "disposition_ids": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 1 },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "DISPOSITION.md row IDs owned by this lane"
+    },
+    "fsm_state": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "gated",
+        "ready",
+        "claimed",
+        "in_progress",
+        "for_review",
+        "done",
+        "blocked"
+      ],
+      "description": "Current disposition FSM state (spec-kitty aligned)"
+    },
+    "repo": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+      "description": "Target GitHub repository (org/name)"
+    },
+    "worktree": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Relative worktree path, e.g. PhenoObservability-wtrees/wave-a"
+    },
+    "branch": {
+      "type": "string",
+      "pattern": "^feat/[a-z0-9][a-z0-9-/_]*$",
+      "description": "Feature branch for this lane"
+    },
+    "owns": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "Glob paths this lane may mutate"
+    },
+    "forbidden_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob paths that must not be touched by this lane"
+    },
+    "harness": {
+      "type": "string",
+      "enum": ["forge", "cursor-agent", "thegent", "codex-fork", "codex", "claude", "droid"],
+      "description": "Primary harness adapter for dispatch"
+    },
+    "harness_compat": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["forge", "cursor-agent", "thegent", "codex-fork", "codex", "claude", "droid"]
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Fallback harness adapters if primary is unavailable"
+    },
+    "aadp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["session_id", "context_bundle_version", "agent_context_bundle_hashes"],
+      "description": "Agent context bundle metadata (AACP v1.1)",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Session package identifier, e.g. 20260617-eco-wave-a"
+        },
+        "context_bundle_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$",
+          "description": "AACP bundle schema version"
+        },
+        "agent_context_bundle_hashes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "description": "Content hashes of bundled context artifacts"
+        }
+      }
+    },
+    "verify": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "description": "Shell commands that must exit 0 before lane completion"
+    },
+    "exit_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pr_merged", "fsm_state", "watcher_pass", "fr_tags"],
+      "properties": {
+        "pr_merged": {
+          "type": "boolean",
+          "description": "Target and stub PRs must be merged"
+        },
+        "fsm_state": {
+          "type": "string",
+          "const": "done",
+          "description": "Required terminal FSM state"
+        },
+        "watcher_pass": {
+          "type": "boolean",
+          "description": "Independent watcher / OpenPraxis audit passed"
+        },
+        "fr_tags": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^FR-ECO-\\d{3}$" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Functional requirement tags satisfied by this lane"
+        }
+      }
+    },
+    "harness_profile_ref": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional URI to a HarnessProfile document validated against thegent harness-profile.schema.json"
+    },
+    "lane_class": {
+      "type": "string",
+      "enum": ["MUTATE_RELOCATE", "MUTATE_SCAFFOLD", "READ_AUDIT", "LONG_VERIFY"],
+      "description": "Routing class per ADR-ECO-007"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Human-readable lane notes for session evidence"
+    }
+  },
+  "$defs": {
+    "harnessProfileRef": {
+      "description": "External schema: thegent/contracts/provider-bridge/schema/harness-profile.schema.json",
+      "type": "string",
+      "const": "https://kush/contracts/provider-bridge/harness-profile.schema.json"
+    }
+  }
+}

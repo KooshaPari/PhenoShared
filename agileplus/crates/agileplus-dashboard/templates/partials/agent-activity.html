@@ -1,0 +1,6 @@
+<section data-partial="agent-activity">
+  <h2>Agents</h2>
+  {% for agent in agents %}
+  <div>{{ agent.name }} {{ agent.status }}</div>
+  {% endfor %}
+</section>

@@ -1,0 +1,326 @@
+[
+  {
+    "id": "P01",
+    "question": "Component identity",
+    "default": "Immutable capability/component ID with exact source and release owner.",
+    "alternative_trigger": "A repository rename preserves identity and lineage.",
+    "acceptance": "Resolve source, blob/commit, component profile and consumed artifact.",
+    "decision_id": "D01",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P02",
+    "question": "Library versus service",
+    "default": "Typed local library when lifecycle, deployment and trust allow.",
+    "alternative_trigger": "Use a service for a real independent lifecycle, trust/failure boundary or remote consumer.",
+    "acceptance": "Cold consumer and boundary contract test; measure call/deploy overhead.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P03",
+    "question": "New implementation",
+    "default": "Reuse or improve the existing external/shared capability.",
+    "alternative_trigger": "Build new only for a named unsupported requirement or measured outcome advantage.",
+    "acceptance": "Baseline/current-owner improvement/external alternative comparison.",
+    "decision_id": "D02",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P04",
+    "question": "Abstraction depth",
+    "default": "Expose actual domain semantics with a small contract.",
+    "alternative_trigger": "Add abstraction only for a demonstrated variation or credible committed consumer.",
+    "acceptance": "Two meaningful implementations or a precise seam; measure adapter burden.",
+    "decision_id": "D02",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P05",
+    "question": "Interop protocol",
+    "default": "Preserve an already qualified public contract; use typed local calls internally.",
+    "alternative_trigger": "Qualify C ABI, generated remote RPC or HTTP/schema boundary for actual consumers.",
+    "acceptance": "Ownership/layout, compatibility, version and error/cancellation tests.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P06",
+    "question": "Persistence",
+    "default": "One explicit authoritative writer and minimal durable state required by semantics.",
+    "alternative_trigger": "Select another data system for measured consistency, concurrency, durability or access requirements.",
+    "acceptance": "Crash/restart/migration/restore and multi-writer tests where applicable.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P07",
+    "question": "Schema evolution",
+    "default": "Version contracts; keep backward compatibility within the accepted envelope.",
+    "alternative_trigger": "Breaking changes require coordinated consumer migration or a new major surface.",
+    "acceptance": "Old/new producer-consumer fixtures and migration rollback.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P08",
+    "question": "Errors",
+    "default": "Typed failure with category, origin, safe context and retryability.",
+    "alternative_trigger": "Extend for domain detail without converting errors into success-shaped defaults.",
+    "acceptance": "Invalid input, permission denial, missing dependency and partial failure canaries.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P09",
+    "question": "Retries",
+    "default": "No blind retry of non-idempotent effects.",
+    "alternative_trigger": "Retry transient, idempotent/deduplicated effects within a deadline and attempt budget.",
+    "acceptance": "Duplicate delivery, ambiguous completion, timeout and exhausted-budget tests.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P10",
+    "question": "Cancellation and deadlines",
+    "default": "Propagate deadline/cancellation through the complete operation tree.",
+    "alternative_trigger": "Detach only an explicitly durable owned operation with a receipt and lifecycle.",
+    "acceptance": "Cancellation releases claims/resources and leaves known state.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P11",
+    "question": "Parallelism",
+    "default": "Bound tasks by actual CPU/GPU/memory/IO/provider budgets.",
+    "alternative_trigger": "Increase concurrency when useful throughput improves without violating tail-latency or fairness limits.",
+    "acceptance": "Saturation, cancellation, starvation and realtime-coexistence tests.",
+    "decision_id": "D21",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P12",
+    "question": "Queues/backpressure",
+    "default": "Use the smallest bounded queue with explicit overload behavior.",
+    "alternative_trigger": "Durable/shared queue only for required restart, delivery or cross-process semantics.",
+    "acceptance": "Overflow, order, duplicate, poison-input and consumer crash tests.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P13",
+    "question": "Workflow triggers",
+    "default": "Simple trigger plus input readiness, durable dedupe/journal and constrained effect.",
+    "alternative_trigger": "Use an existing durable workflow engine for required long-lived coordination/replay/compensation.",
+    "acceptance": "Lost/repeated trigger, partially written input, restart and side-effect idempotency.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P14",
+    "question": "Caching",
+    "default": "Add only against a measured repeated-cost problem.",
+    "alternative_trigger": "Adopt a cache after defining versioned key, auth scope, invalidation, eviction and correctness tolerance.",
+    "acceptance": "Stale data, wrong tenant, race, eviction and cold-start tests.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P15",
+    "question": "Configuration",
+    "default": "One typed config contract with explicit source precedence.",
+    "alternative_trigger": "Platform/product overrides must be named and testable, not ambient surprises.",
+    "acceptance": "Missing/invalid value, conflicting precedence and clean environment tests.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P16",
+    "question": "Secrets and authorization",
+    "default": "Existing approved secret/auth capability, least privilege and separate identity from authority.",
+    "alternative_trigger": "New trust boundary or credential type requires an explicit integration contract.",
+    "acceptance": "Denied scope, expired credential, redaction and no-secret-in-artifact tests.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P17",
+    "question": "Telemetry",
+    "default": "Shared structured event/trace/context contract with useful failure and budget measurements.",
+    "alternative_trigger": "Add backend-specific exporters through bounded adapters.",
+    "acceptance": "Trace continuity, error attribution, sensitive-data exclusion and overhead budget.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P18",
+    "question": "Dependency ownership",
+    "default": "External package or narrow shared adapter with explicit source/license/upgrade owner.",
+    "alternative_trigger": "Focused fork when upstream cannot satisfy a required and evidenced constraint.",
+    "acceptance": "Cold resolution, license/provenance, upstream delta and patch expiry.",
+    "decision_id": "D24",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P19",
+    "question": "Generated assets/config",
+    "default": "One source and deterministic generator; derived views are not independent writers.",
+    "alternative_trigger": "Handwritten extension seams are explicit and preserved.",
+    "acceptance": "Regeneration determinism and changed-source drift fails check.",
+    "decision_id": "D23",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P20",
+    "question": "Check versus repair",
+    "default": "Check reports the original state without changing tracked source.",
+    "alternative_trigger": "Explicit repair may mutate authorized files; cache writes are declared.",
+    "acceptance": "Known defect fails before repair; tracked-diff guard remains empty on check.",
+    "decision_id": "D23",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P21",
+    "question": "Test selection",
+    "default": "Reviewed eligible source, boundary and journey inventories.",
+    "alternative_trigger": "Exclude only with an owned applicability reason, not to make coverage green.",
+    "acceptance": "Missing file, empty suite, bad glob and wrong revision controls.",
+    "decision_id": "D19",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P22",
+    "question": "Test independence",
+    "default": "Verifier path and accepted evaluator identity cannot be silently rewritten by the builder.",
+    "alternative_trigger": "Supplement semantic review without treating another model prompt as independence.",
+    "acceptance": "Evaluator tamper, fabricated receipt and stale artifact controls.",
+    "decision_id": "D19",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P23",
+    "question": "Documentation",
+    "default": "Shared production/federation pipeline; product-owned meaning and version lineage.",
+    "alternative_trigger": "Framework-specific adapter only when needed by a real content/consumer requirement.",
+    "acceptance": "Examples execute; links/versions/access boundaries fail when invalid.",
+    "decision_id": "D16",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P24",
+    "question": "Landing composition",
+    "default": "Shared product descriptor, design/scene primitives and delivery plumbing.",
+    "alternative_trigger": "Product-specific narrative/interaction stays a named authored extension.",
+    "acceptance": "CTA destinations, interactive flows, responsive states and release linkage.",
+    "decision_id": "D17",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P25",
+    "question": "Design/interaction",
+    "default": "One token/component authority with scoped extensions.",
+    "alternative_trigger": "A distinct product experience can alter composition without forking commodity styles.",
+    "acceptance": "Token propagation, keyboard behavior, visual/state and interaction evidence.",
+    "decision_id": "D17",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P26",
+    "question": "Accessibility",
+    "default": "Required keyboard/focus/semantics/contrast/assistive behavior has a reviewed test inventory.",
+    "alternative_trigger": "Domain-specific input/output modes add obligations rather than remove basics.",
+    "acceptance": "Actual navigation and state changes; automated assertions plus anchored review.",
+    "decision_id": "D17",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P27",
+    "question": "Localization/content",
+    "default": "Typed messages/content and explicit locale/version fallbacks.",
+    "alternative_trigger": "Product terminology or locale requirements use owned extensions.",
+    "acceptance": "Missing keys, expansion, directionality where relevant, and no accidental secrets.",
+    "decision_id": "D16",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P28",
+    "question": "Performance profiles",
+    "default": "Choose a qualified workload/target profile, not one generic optimization level.",
+    "alternative_trigger": "Separate latency, throughput, size, compile-time and energy objectives where necessary.",
+    "acceptance": "Representative shape/load distribution, cold/warm runs and raw results.",
+    "decision_id": "D14",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P29",
+    "question": "Polyglot extraction",
+    "default": "Isolate the measured hot path behind a narrow, batchable boundary.",
+    "alternative_trigger": "Whole component rewrite only when simpler extraction cannot deliver the accepted requirement.",
+    "acceptance": "Numerical/semantic parity plus full FFI/copy/startup/package cost.",
+    "decision_id": "D15",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P30",
+    "question": "Model/tool budget",
+    "default": "Bound requests, context, output, retries and concurrency by useful completion and current quotas.",
+    "alternative_trigger": "Change routing/model mix only with capability, latency, cost and failure evidence.",
+    "acceptance": "Budget exhaustion, cache miss, provider failure, cancellation and fallback-policy tests.",
+    "decision_id": "D18",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P31",
+    "question": "Feature flags",
+    "default": "Typed, owned and observable release controls with expiry or supported-profile status.",
+    "alternative_trigger": "Permanent variation becomes an explicit tested profile.",
+    "acceptance": "Enabled/disabled/version combinations and removal plan.",
+    "decision_id": "D20",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P32",
+    "question": "Packaging and install",
+    "default": "Build a real artifact and exercise outside the checkout and developer shell.",
+    "alternative_trigger": "Use role-appropriate library/CLI/service/app acceptance.",
+    "acceptance": "Version/digest, cold install, first-run/core task/restart and missing source tree.",
+    "decision_id": "D22",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P33",
+    "question": "Release promotion",
+    "default": "Promote the exact qualified artifact, preserving source/evaluator/environment linkage.",
+    "alternative_trigger": "Rebuilds or retags require identity reconciliation and applicable re-verification.",
+    "acceptance": "Artifact matches receipt; no source-only claim of installed success.",
+    "decision_id": "D22",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P34",
+    "question": "Rollback/data safety",
+    "default": "Retain a traceable last-qualified state and test restoration appropriate to changed state.",
+    "alternative_trigger": "Irreversible migration requires separately established authority and recovery strategy.",
+    "acceptance": "Restore/replay and consumer compatibility tests.",
+    "decision_id": "D22",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P35",
+    "question": "Agent coordination",
+    "default": "Capability-scoped work claims; one integration writer for shared manifests/releases.",
+    "alternative_trigger": "Parallel unrelated investigations and isolated worktrees remain allowed.",
+    "acceptance": "No dirty-state overwrite; base revision/lease checks and handoff receipt.",
+    "decision_id": "D21",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  },
+  {
+    "id": "P36",
+    "question": "Tooling update cadence",
+    "default": "Detect stale selected releases and qualify replacements in representative consumers.",
+    "alternative_trigger": "Security/correctness incidents can trigger an expedited but evidenced path.",
+    "acceptance": "Upstream change, compatibility delta, staged rollout and explicit blocked consumers.",
+    "decision_id": "D24",
+    "status": "proposed_branching_rule_not_current_absence_claim"
+  }
+]

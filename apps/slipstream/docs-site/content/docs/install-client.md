@@ -1,0 +1,88 @@
+---
+title: Install a Client
+description: Install the Slipstream client for Android or Steam Deck, or use Moonlight.
+---
+
+This page is the **install path for each named client**. For what each client *is* and which to
+pick, see [Clients](/docs/clients); to install the **host**, see [Install the Host](/docs/install).
+Whichever client you install, the first connection needs a one-time [pairing](/docs/pairing). If the
+app installs but your host doesn't appear in its list, start at [Troubleshooting -> The host isn't
+found on the network](/docs/troubleshooting#the-host-isnt-found-on-the-network).
+
+Already installed? Skip to [Keeping a client up to date](#keeping-a-client-up-to-date) or
+[Removing a client](#removing-a-client).
+
+> The Android link below is the current preview channel. Tagged releases currently publish Linux
+> host artifacts; client packages use separate distribution paths. See
+> [Release Channels](/docs/channels).
+
+## Pick your device
+
+| Device | Install |
+|--------|---------|
+| **Android / Android TV** | [Download the public APK](#android) |
+| **Steam Deck** | [Decky plugin](/docs/steam-deck) for Gaming Mode, or [Flatpak in Desktop Mode](#steam-deck) |
+| Anything else (browser, old phone, TV) | [Moonlight](/docs/moonlight) |
+
+## Android
+
+The Android client is currently distributed as a public APK. Sideload the
+[Android APK](https://github.com/vindeckyy/slipstream/releases/download/v0.23.0-public/app-release.apk)
+or build from `clients/android/`. Download the accompanying
+[checksum](https://github.com/vindeckyy/slipstream/releases/download/v0.23.0-public/app-release.apk.sha256)
+and verify it before copying the APK to the tablet, then allow installs from your browser or file
+manager the first time.
+
+```sh
+sha256sum -c app-release.apk.sha256
+adb install -r app-release.apk
+```
+
+## Steam Deck
+
+Most Deck users want **Gaming Mode**: install the **[Decky plugin](/docs/steam-deck)** and a
+**Slipstream** panel lands in the Quick Access Menu, so you can discover hosts, pair with a PIN, and
+stream **without dropping to the desktop**. Follow the **[Steam Deck (Decky) guide](/docs/steam-deck)**
+, it walks through Decky Loader, the plugin, and the one-time client install.
+
+> The plugin doesn't decode video itself, it drives the Flatpak `slipstream-client` installed on
+> the Deck. Public client packages are updated manually using the steps below. The Gaming Mode panel
+> comes from the plugin, so a client on its own won't add it. The Decky guide covers installing both.
+
+For **Desktop Mode** (or to add the client to Game Mode as a non-Steam app yourself), install the
+Flatpak; it carries its own libadwaita + SDL3 and survives SteamOS updates:
+
+```sh
+# Build locally, or install a .flatpak from GitHub Releases when attached:
+# flatpak install --user --bundle /path/to/slipstream-client.flatpak
+bash packaging/flatpak/build-flatpak.sh
+flatpak install --user --bundle dist/slipstream-client-*.flatpak
+```
+
+See [packaging/flatpak](https://github.com/vindeckyy/slipstream/blob/main/packaging/flatpak/README.md).
+
+## Anything else, Moonlight
+
+Any device with a [Moonlight](https://moonlight-stream.org/) client (browser, old phone, smart TV)
+connects over GameStream with no slipstream-specific software. See
+[Connect with Moonlight](/docs/moonlight).
+
+## Keeping a client up to date
+
+The host and clients use separate release channels. A client and a host don't have to be on the
+same version, but keeping them close is the least surprising. (Updating the **host** is its own page:
+[Updating](/docs/updating).)
+
+| Client | How it updates |
+|---|---|
+| **Android** | Download the current public APK from GitHub Releases and install it over the existing app |
+| **Steam Deck (Decky)** | Install a newer packaged zip from a reachable URL, see [Steam Deck -> Updating](/docs/steam-deck#updating) |
+| **Steam Deck (Flatpak alone)** | Download the newer `.flatpak` bundle and reinstall it with `flatpak install --user --bundle`, without `sudo` |
+
+## Removing a client
+
+The removal command for every client, and what removal deliberately leaves behind, this device's
+identity and its saved hosts, and the pairing on the host, are on
+[Uninstalling -> Clients](/docs/uninstall#clients). The same page covers forgetting your saved hosts
+[without uninstalling anything](/docs/uninstall#removing-the-pairing-not-the-software), and removing
+the **host**.

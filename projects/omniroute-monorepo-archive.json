@@ -1,0 +1,16 @@
+{
+  "name": "omniroute-monorepo-archive",
+  "languages": [],
+  "primary_language": "archive",
+  "status": "retired",
+  "has_readme": true,
+  "type": "archive",
+  "path": "repos/omniroute-monorepo-archive",
+  "disposition": "ARCHIVE",
+  "wave": "2026-07-23-boundary-audit",
+  "proposed_target": "OmniRoute",
+  "proposed_target_repo": "OmniRoute",
+  "proposed_target_path": ".",
+  "absorption_note": "Archive-only preservation of prior monorepo state.",
+  "note": "Keep for provenance; do not treat as active source."
+}

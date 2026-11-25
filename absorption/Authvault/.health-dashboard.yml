@@ -1,0 +1,67 @@
+# Health Dashboard Configuration for Authvault
+# Traceability: HD-004
+---
+project:
+  name: Authvault
+  language: rust
+  description: Authvault - Authentication and authorization library
+  tier: tier1
+
+dimensions:
+  documentation:
+    weight: 15
+    files:
+      - CLAUDE.md
+      - README.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - CHANGELOG.md
+    required: true
+  
+  test_coverage:
+    weight: 20
+    thresholds:
+      min_line_coverage: 85
+      min_branch_coverage: 75
+    codecov: true
+  
+  security:
+    weight: 25
+    scanners:
+      - cargo-audit
+      - cargo-deny
+      - trivy
+      - codeql
+    alert_severity: medium  # Higher bar for auth library
+  
+  dependencies:
+    weight: 15
+    freshness_threshold_days: 60  # More frequent for security-sensitive
+    outdated_tolerance: 2
+  
+  compliance:
+    weight: 15
+    required_files:
+      - deny.toml
+      - clippy.toml
+      - .pre-commit-config.yaml
+      - codecov.yml
+      - rust-toolchain.toml
+      - nextest.toml
+    github_workflows_required: true
+  
+  code_quality:
+    weight: 10
+    linters:
+      - clippy
+      - rustfmt
+    max_complexity: 12
+
+alerts:
+  critical_threshold: 0
+  poor_threshold: 70
+  frequency_hours: 12  # More frequent for auth library
+
+integration:
+  github_repo: KooshaPari/Authvault
+  codecov_repo: KooshaPari/Authvault

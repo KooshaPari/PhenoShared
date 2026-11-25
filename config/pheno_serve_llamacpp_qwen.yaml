@@ -1,0 +1,32 @@
+# Local parity profile for the verified Qwen3.5 GGUF smoke/perf run.
+# Start llama.cpp on 23080 first; this config keeps the Pheno proxy on 21081.
+server:
+  host: "127.0.0.1"
+  port: 21081
+  base_url: "http://127.0.0.1:21081/v1"
+  upstream_timeout_s: 120
+  events_path: "logs/pheno_serve/qwen_llamacpp_events.jsonl"
+  state_path: "state/pheno_serve_qwen_llamacpp.json"
+  expose_planned_models: false
+
+headers:
+  capture:
+    - X-Pheno-Run-Id
+    - X-Pheno-Lane
+    - X-Pheno-Role
+    - X-Pheno-Route-Kind
+    - X-Pheno-Eval-Suite
+    - X-Pheno-Bypass-Reason
+
+profiles:
+  local/qwen35-08b:
+    engine: llama.cpp
+    model_ref: Qwen/Qwen3.5-0.8B
+    base_url: "http://127.0.0.1:23080/v1"
+    backend_mode: openai_chat
+    status: active
+    default: true
+    role_fit: [draft, routine, coding_subagent]
+    decode:
+      method: baseline
+      max_context: 4096

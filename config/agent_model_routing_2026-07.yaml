@@ -1,0 +1,44 @@
+# N19 — Usage-limit fallback policy (Forward DAG v2)
+# Routes sub-tasks to cheaper models to avoid Pro+ ceiling (3.38B tokens hit 2026-07-23).
+# Companion: scripts/agent_budget_check.py (enforces per-session cap).
+# Policy authority: Codex session 019f6249 — owner approval not required for this draft.
+
+schema_version: pheno.agent_model_routing.v1
+generated_at: 2026-08-19T03:00:00Z
+fallback_ladder:
+  - model: gpt-5.6-luna
+    use_for: [novel_code, kernel_code, supervisor_author]
+    max_tokens_per_session: 600_000_000
+    priority: 1
+  - model: gpt-5-mini
+    use_for: [scan, heartbeat, summarize, okf_gap, spec_extract]
+    max_tokens_per_session: 600_000_000
+    priority: 2
+  - model: gpt-5-nano
+    use_for: [heartbeat_scan, eval_monitor, budget_check]
+    max_tokens_per_session: 600_000_000
+    priority: 3
+  - model: local/qwen35-08b
+    use_for: [degenerate, offline_fallback]
+    endpoint: http://127.0.0.1:21080/v1
+    priority: 4
+
+routing_rules:
+  - pattern: "scan|heartbeat|summarize"
+    model: gpt-5-nano
+  - pattern: "okf|adr|fork_manifest"
+    model: gpt-5-mini
+  - pattern: "pheno_serve_supervisor|pheno_eval_batch|zig_handroll|pony_mailbox"
+    model: gpt-5.6-luna
+  - pattern: "kernelbench|nim_client"
+    model: gpt-5-nano
+
+budget:
+  per_session_cap_tokens: 600_000_000
+  enforce_on: [all_subagents]
+  alert_at_pct: 80
+  abort_at_pct: 100
+
+notes: |
+  Draft per INDEX §4.4/§6 Lane budgets. Owner may set hard $ ceiling via Cursor dashboard (out-of-agent).
+  Apply N20 prompt compression for any sub-agent prompt >50kB. N21 batching amortizes SGLang reservation.

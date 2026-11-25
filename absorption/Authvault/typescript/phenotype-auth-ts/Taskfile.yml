@@ -1,0 +1,66 @@
+version: "3"
+
+vars:
+  LANGUAGE:
+    sh: |
+      if [ -f tsconfig.json ]; then
+        echo typescript
+      elif [ -f package.json ]; then
+        echo javascript
+      else
+        echo unknown
+      fi
+  PACKAGE_RUNNER:
+    sh: |
+      if [ -f bun.lock ] && command -v bun >/dev/null 2>&1; then
+        echo bun
+      elif [ -f pnpm-lock.yaml ] && command -v pnpm >/dev/null 2>&1; then
+        echo pnpm
+      elif [ -f yarn.lock ] && command -v yarn >/dev/null 2>&1; then
+        echo yarn
+      else
+        echo npm
+      fi
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  install:
+    desc: Install dependencies
+    cmds:
+      - "{{.PACKAGE_RUNNER}} install"
+
+  build:
+    desc: Build the package
+    cmds:
+      - "{{.PACKAGE_RUNNER}} run build"
+
+  test:
+    desc: Run the test suite
+    cmds:
+      - "{{.PACKAGE_RUNNER}} run test"
+
+  lint:
+    desc: Run language checks
+    cmds:
+      - |
+        echo "Detected language: {{.LANGUAGE}}"
+        if node -e "const p=require('./package.json'); process.exit(p.scripts && p.scripts.lint ? 0 : 1)"; then
+          {{.PACKAGE_RUNNER}} run lint
+        else
+          {{.PACKAGE_RUNNER}} run typecheck
+        fi
+
+  typecheck:
+    desc: Run the TypeScript compiler without emitting files
+    cmds:
+      - "{{.PACKAGE_RUNNER}} run typecheck"
+
+  clean:
+    desc: Remove build artifacts
+    cmds:
+      - |
+        node -e "const fs=require('node:fs'); for (const path of ['dist', 'coverage', '.vitepress/dist', 'docs/.vitepress/dist']) fs.rmSync(path, { recursive: true, force: true });"

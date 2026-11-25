@@ -1,0 +1,10 @@
+{
+  "name": "agileplus",
+  "version": "1.0.0",
+  "description": "AgilePlus - Agile project management platform",
+  "private": true,
+  "workspaces": [
+    "crates/*/web",
+    "packages/*"
+  ]
+}

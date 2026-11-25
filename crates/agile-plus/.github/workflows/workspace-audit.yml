@@ -1,0 +1,68 @@
+name: workspace-audit
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  workspace-audit:
+    name: Workspace Path Dependency Audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python (for tomllib workspace audit)
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Run workspace audit
+        # Empirical fix (eco-044-gate-triage): the prior bash script used awk
+        # to parse `members = [...]` from Cargo.toml and failed on inline
+        # comments (e.g. `"rust", # agileplus-proto: tonic/prost gRPC stubs`),
+        # treating the comment as part of the path. Replace with a real TOML
+        # parser so trailing comments on member lines don't trip the check.
+        run: |
+          python3 - <<'PY'
+          import pathlib, sys, tomllib
+
+          cargo_toml = pathlib.Path("Cargo.toml")
+          with cargo_toml.open("rb") as fh:
+              data = tomllib.load(fh)
+
+          workspace = data.get("workspace") or {}
+          members = workspace.get("members") or []
+          if not members:
+              print("No workspace members found.")
+              sys.exit(0)
+
+          print("=== Workspace Members Check ===")
+          repo_root = pathlib.Path(".").resolve()
+          missing = []
+          for member in members:
+              if isinstance(member, str):
+                  member_path = (repo_root / member).resolve()
+                  if not member_path.is_dir():
+                      print(f"MISSING: {member} (path: {member_path})")
+                      missing.append(member)
+                  else:
+                      print(f"OK:    {member}")
+
+          if missing:
+              print("")
+              print("error: workspace audit found missing path dependencies. Fix before merging.")
+              sys.exit(1)
+
+          print("")
+          print("ok: all workspace members and path dependencies are present.")
+          PY
+        env:
+          RUSTFLAGS: "-D warnings"

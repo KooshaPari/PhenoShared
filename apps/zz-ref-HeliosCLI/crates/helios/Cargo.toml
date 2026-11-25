@@ -1,0 +1,35 @@
+[package]
+name = "helios"
+version = "0.2.1"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "HeliosCLI - Unified harness binary"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+authors = ["kooshapari"]
+
+[[bin]]
+name = "helios"
+path = "src/main.rs"
+
+[dependencies]
+# Workspace harness crates
+harness_queue = { path = "../harness_queue" }
+harness_runner = { path = "../harness_runner" }
+harness_rollback = { path = "../harness_rollback" }
+harness_checkpoint = { path = "../harness_checkpoint" }
+kla = { path = "../harness_recorder" }
+harness_spec = { path = "../harness_spec" }
+harness_verify = { path = "../harness_verify" }
+helios_config = { path = "../helios_config" }
+helios-ai = { path = "../helios-ai" }
+helios-tools = { path = "../helios-tools" }
+helios-sandbox = { path = "../helios-sandbox" }
+
+# Dependencies
+clap = { version = "4.5", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+serde_json = "1.0"
+uuid = { version = "1.0", features = ["v4"] }

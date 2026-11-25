@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "notes": "Source slugs confirmed by successful live Cloudflare D1 board scans, or official employer pages. Discovery does not imply eligible LA work or active applicant status.",
+  "sources": [
+    {
+      "provider": "greenhouse",
+      "slug": "ziprecruiter",
+      "employer": "ZipRecruiter"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "generalmatter",
+      "employer": "General Matter"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "freeformfuturecorp",
+      "employer": "Freeform"
+    },
+    {
+      "provider": "ashby",
+      "slug": "whatnot",
+      "employer": "Whatnot"
+    },
+    {
+      "provider": "ashby",
+      "slug": "hadrian-automation",
+      "employer": "Hadrian"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "riotgames",
+      "employer": "Riot Games"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "scopely",
+      "employer": "Scopely"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "goguardian",
+      "employer": "GoGuardian"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "mediaalpha",
+      "employer": "MediaAlpha"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "otter",
+      "employer": "Otter"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "roo",
+      "employer": "Roo"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "mcmaster-carr",
+      "employer": "McMaster-Carr"
+    },
+    {
+      "provider": "lever",
+      "slug": "matchgroup",
+      "employer": "Match Group"
+    },
+    {
+      "provider": "lever",
+      "slug": "wealthfront",
+      "employer": "Wealthfront"
+    },
+    {
+      "provider": "ashby",
+      "slug": "first-resonance",
+      "employer": "First Resonance"
+    },
+    {
+      "provider": "ashby",
+      "slug": "plaid",
+      "employer": "Plaid"
+    },
+    {
+      "provider": "greenhouse",
+      "slug": "flexe",
+      "employer": "Flexe"
+    }
+  ]
+}

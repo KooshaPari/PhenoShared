@@ -1,0 +1,40 @@
+{$HOSTNAME:localhost} {
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+	header X-Content-Type-Options "nosniff"
+	header X-Frame-Options "DENY"
+	header X-XSS-Protection "1; mode=block"
+	header Referrer-Policy "strict-origin-when-cross-origin"
+	header Permissions-Policy "geolocation=(), microphone=(), camera=()"
+	header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https:; frame-ancestors 'none'"
+
+	handle /status {
+		respond "AgilePlus CLI self-hosted instance running. No HTTP API available. Use CLI directly." 200
+	}
+
+	handle /health {
+		respond "ok" 200
+	}
+
+	handle {
+		header Content-Type text/html
+		respond `<!DOCTYPE html>
+<html>
+<head><title>AgilePlus Self-Hosted</title></head>
+<body>
+<h1>AgilePlus Self-Hosted Instance</h1>
+<p><strong>AgilePlus is a CLI tool</strong> with no built-in HTTP server. This instance serves as a database container.</p>
+<p><strong>Database location:</strong> /data/agileplus.db</p>
+<p>Mount the agileplus-data volume or run: docker compose exec agileplus-cli agileplus --help</p>
+</body>
+</html>` 200
+	}
+
+	log {
+		output stdout
+		format json
+	}
+}
+
+localhost:8081 {
+	respond `AgilePlus CLI instance (local). No HTTP API.` 200
+}

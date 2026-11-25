@@ -1,0 +1,21 @@
+[package]
+name = "hexkit"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+description = "Hexagonal architecture helpers for AgilePlus - reduces boilerplate for port/adapter consumers"
+
+[dependencies]
+tokio.workspace = true
+thiserror.workspace = true
+serde = { workspace = true, features = ["derive"] }
+async-trait.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tokio-test = "0.4"

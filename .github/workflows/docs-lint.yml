@@ -1,0 +1,49 @@
+name: Docs & Workflow Lint
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "**/*.md"
+      - "adrs/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  vale:
+    name: Vale (markdown prose)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Run Vale
+        uses: errata-ai/vale-action@85f9f7f2c5f449ac0ae5b66662961bae3f77ca6a
+        with:
+          files: '["."]'
+          filter_mode: nofilter
+          fail_on_error: false
+          reporter: github-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  actionlint:
+    name: actionlint (GitHub Actions)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Install actionlint
+        run: |
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          echo "$PWD" >> "$GITHUB_PATH"
+
+      - name: Run actionlint
+        # SC2129 is a style suggestion ("group these >> redirects"). Several
+        # scripts append conditionally from many branches, where the grouped
+        # form is less readable than the current one, so it is ignored
+        # deliberately rather than silenced per-file. Everything else is
+        # enforced, including real expression and syntax errors.
+        run: actionlint -color -ignore 'SC2129:style'

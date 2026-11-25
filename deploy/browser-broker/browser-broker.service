@@ -1,0 +1,46 @@
+# Browser broker, systemd unit.
+#
+# Installs as /etc/systemd/system/browser-broker.service.
+# Secrets go in /etc/browser-broker.env (root:root, 0600):
+#
+#   BROKER_TOKEN=<random>
+#
+# The broker binds loopback only. Reach it with an SSH port-forward; it has no
+# TLS termination of its own.
+
+[Unit]
+Description=Browser broker (lease-guarded profiles and sessions)
+Documentation=file:///usr/local/share/browser-broker/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=broker
+Group=broker
+EnvironmentFile=/etc/browser-broker.env
+Environment=CHROME_BIN=/usr/bin/chromium
+ExecStart=/usr/local/bin/brokerd --root /var/lib/browser-broker --bind 127.0.0.1:8787 --token-env BROKER_TOKEN
+Restart=on-failure
+RestartSec=3
+
+# The state directory holds authenticated browser profiles; nothing else on the
+# host needs to read it, and the service needs nothing else on the host.
+StateDirectory=browser-broker
+StateDirectoryMode=0700
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+LockPersonality=yes
+# RestrictNamespaces is deliberately NOT set: Chrome's renderer sandbox needs to
+# create user and pid namespaces. Blocking them would leave only the option of
+# running Chrome with --no-sandbox, which is strictly worse than the sandbox the
+# unit is trying to preserve.
+
+[Install]
+WantedBy=multi-user.target

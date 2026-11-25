@@ -1,0 +1,43 @@
+# Monthly budget targets (user constraints)
+baseline:
+  monthly_usd: 570
+  breakdown_estimate:
+    claude_max: 200
+    openai: 200
+    minimax_m3: 120
+    # firepass_kimi removed 2026-06 (sunset)
+
+targets:
+  ideal_monthly_usd: 200
+  max_monthly_usd: 400
+  token_monthly: 30000000000  # 30B polished
+
+codex_openai:
+  current_monthly_usd: 200
+  cut_scenarios:
+    half_bill:  # 50% reduction = 4x effective usage at same quality
+      target_usd: 100
+      usage_multiplier: 4.0
+    full_cut:
+      target_usd: 0
+      usage_multiplier: null
+  route_to_local_pct_target: 0.90
+
+minimax:
+  monthly_cap_tokens: 12000000000
+  target_usage_pct: 0.80
+
+omniroute_main:
+  description: "Subscription blend worker — Claude + OpenAI + MiniMax + local via Main"
+  endpoint: "http://127.0.0.1:20128/v1"
+  model_id: Main
+  config: config/combo_main.json
+
+local_3090ti:
+  output_tpm_effective: 12000
+  routine_lane_share_target: 0.85
+
+spend_alerts:
+  green_pct_of_max: 0.50
+  yellow_pct_of_max: 0.75
+  red_pct_of_max: 0.90

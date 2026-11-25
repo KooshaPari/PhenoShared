@@ -1,0 +1,44 @@
+# Best-effort machine-verify of GitHub branch protection via gh api.
+# Soft-skips without admin token; continue-on-error for fork PRs.
+
+name: Branch protection
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/branch-protection.yml"
+      - "scripts/branch-protection-check.ps1"
+      - "docs/ops/branch-protection.md"
+      - "docs/ops/commit-signing.md"
+      - "SECURITY.md"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/branch-protection.yml"
+      - "scripts/branch-protection-check.ps1"
+      - "docs/ops/branch-protection.md"
+      - "docs/ops/commit-signing.md"
+      - "SECURITY.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  branch-protection:
+    name: branch protection verify
+    runs-on: ubuntu-latest
+    # Fork PRs often lack admin API scope; do not fail the contributor check suite.
+    continue-on-error: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: machine-verify branch protection (best-effort)
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ./scripts/branch-protection-check.ps1 -Repo "${{ github.repository }}" -Branch "${{ github.event.repository.default_branch || 'main' }}"

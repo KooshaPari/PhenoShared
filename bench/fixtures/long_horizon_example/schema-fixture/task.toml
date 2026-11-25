@@ -1,0 +1,4 @@
+version = "1.0"
+name = "schema-fixture"
+description = "Non-scoreable fixture for the Pheno long-horizon task contract."
+scoreable = false

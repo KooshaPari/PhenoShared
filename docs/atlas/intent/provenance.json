@@ -1,0 +1,28 @@
+{
+  "capture_boundary": "Exact visible message text saved as UTF-8 with LF and one terminal newline; not an original client export or a byte-verbatim capture of the client database.",
+  "messages": [
+    {
+      "id": "INT-001",
+      "path": "USER-ATLAS-REQUEST.txt",
+      "sha256": "25cdc2057ecdd3f0262d36d02aaf1302c367ddee5a853841754a8dd8ad3b3a09",
+      "original_timestamp": null,
+      "role": "user"
+    },
+    {
+      "id": "INT-002",
+      "path": "USER-PACKAGE-REQUEST.txt",
+      "sha256": "3731dd57f2b8d18a914e69dc07234015166ff4ec0d66faf1c4fcaaee6853d4ab",
+      "original_timestamp": null,
+      "role": "user"
+    },
+    {
+      "id": "INT-003",
+      "path": "USER-ECOSYSTEM-FIRST-REQUEST.txt",
+      "sha256": "97c83166fe80bf27fd73b24268f48502c74069b8235e6d942116c92373f7c8e1",
+      "original_timestamp": null,
+      "role": "user"
+    }
+  ],
+  "synthesis_separate": true,
+  "unavailable_prior_exact_prompts": "Preserved only where supplied inside original contextual archives; no missing messages reconstructed."
+}

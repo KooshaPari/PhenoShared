@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "validator": "jsonschema Draft202012Validator",
+  "schema": "contracts/asset.schema.json",
+  "instance": "assets/asset-manifest.json",
+  "scope": "Minimum kit manifest schema; not a glTF conformance validation."
+}

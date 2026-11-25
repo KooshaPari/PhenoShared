@@ -1,0 +1,69 @@
+# connector-{{name}}
+
+{{Name}} connector for FocalPoint.
+
+## Overview
+
+This is a **scaffold stub** for the {{Name}} connector. The structure is in place; implementation is yours.
+
+## Next 5 Steps
+
+1. **Understand the trait contract:**
+   - Open `src/lib.rs`
+   - Note the `Connector` trait (from `focus-connectors`)
+   - The three stub methods are `health()`, `sync()`, and `verify_auth()`
+
+2. **Implement the API client:**
+   - Edit `src/api.rs`
+   - Replace the `hello()` stub with real API methods (e.g., `get_user()`, `list_events()`)
+   - Add authentication headers and URL construction
+
+3. **Implement auth:**
+   - Edit `src/auth.rs`
+   - {{#if oauth2}}Implement OAuth2 token refresh and exchange{{/if}}{{#if apikey}}Implement API key validation{{/if}}{{#if none}}Add placeholder for future auth{{/if}}
+   - Ensure credentials are stored securely (keychain feature available)
+
+4. **Map events:**
+   - Edit `src/events.rs`
+   - Implement the `map_event()` function to transform {{Name}} events into Focus `Event` objects
+   - Add domain-specific event models to `src/models.rs` if needed
+
+5. **Register the connector:**
+   - In your app code, import and call `register_{{name}}()` to add this connector to the `ConnectorRegistry`
+   - Example:
+     ```rust
+     use connector_{{name}}::register_{{name}};
+     let registry = ConnectorRegistry::new();
+     registry.register(register_{{name}}());
+     ```
+
+## Testing
+
+```bash
+# Unit tests
+cargo test -p connector-{{name}}
+
+# Check types & lints
+cargo check -p connector-{{name}}
+cargo clippy -p connector-{{name}}
+```
+
+## Features
+
+{{#if keychain}}
+- `keychain` — Enable secure credential storage via OS keychain (focus-crypto)
+{{/if}}
+
+## Tier & Auth
+
+- **Tier:** {{Tier}} (`VerificationTier::{{{tier_variant}}}}`)
+- **Auth:** {{Auth}} (`AuthStrategy::{{{auth_variant}}}}`)
+- **Sync Mode:** {{Sync}} (`SyncMode::{{{sync_variant}}}}`)
+
+Edit `src/lib.rs` in the `build()` method to update these if they need to change.
+
+## Resources
+
+- [Connector trait](../../focus-connectors/src/lib.rs)
+- [Events](../../focus-events/src/lib.rs)
+- [Canvas example](../connector-canvas) — a full implementation reference

@@ -1,0 +1,25 @@
+# Helios CLI — Production Prometheus Configuration
+# Scrapes the OTel Collector Prometheus exporter + self-monitoring.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+scrape_configs:
+  # OTel Collector span metrics + self-telemetry
+  - job_name: "helios-otel-collector"
+    static_configs:
+      - targets: ["collector:8889"]
+    metrics_path: /metrics
+    honor_labels: true
+
+  # Collector internal telemetry (Go runtime, etc.)
+  - job_name: "otel-collector-self"
+    static_configs:
+      - targets: ["collector:8888"]
+
+  # Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

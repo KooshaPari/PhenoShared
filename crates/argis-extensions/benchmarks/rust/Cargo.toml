@@ -1,0 +1,23 @@
+# benchmarks/rust — v12 T9 L57 perf regression (Rust side)
+# Criterion-based. Add a member to point at the crate under test.
+
+[package]
+name = "parse_flag_bench"
+license = "MIT OR Apache-2.0"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[workspace]
+
+[[bench]]
+name = "parse_flag"
+harness = false
+
+[dev-dependencies]
+criterion = "0.5"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1

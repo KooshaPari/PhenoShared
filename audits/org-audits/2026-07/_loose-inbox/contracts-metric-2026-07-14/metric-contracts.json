@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "enforcement": {
+    "require_metrics_report": true,
+    "metrics_report_path": ".claude/verification/quality-metrics.json",
+    "fail_closed": true
+  },
+  "domains": {
+    "quality": {
+      "max_lint_errors": 0,
+      "max_type_errors": 0,
+      "min_test_pass_rate": 0.98
+    },
+    "security": {
+      "max_critical_vulns": 0,
+      "max_high_vulns": 0,
+      "max_secrets_detected": 0
+    },
+    "reliability": {
+      "max_flake_rate": 0.05,
+      "min_pass_rate": 0.98
+    },
+    "extensibility": {
+      "max_file_lines": 500,
+      "max_function_lines": 80
+    },
+    "other": {
+      "max_todo_markers": 0
+    }
+  }
+}

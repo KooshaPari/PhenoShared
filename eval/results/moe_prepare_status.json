@@ -1,0 +1,8 @@
+{
+  "zaya1-8b": {
+    "reap_checkpoint": null,
+    "policy": "ptq_if_needed",
+    "riy_required": true,
+    "ptq_3090": "int4_awq"
+  }
+}

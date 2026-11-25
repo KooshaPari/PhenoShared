@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+stage/
+release/
+*.log
+.DS_Store
+
+# The root .gitignore has `*.json` which catches our package.json and
+# tsconfig.json. Re-include them with explicit negation so they ship.
+!package.json
+!tsconfig.json
+!electrobun.config.ts
+!scripts/
+!src/
+!README.md

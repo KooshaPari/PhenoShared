@@ -1,0 +1,19 @@
+{
+	"$schema": "../gen/schemas/desktop-schema.json",
+	"identifier": "byteport-desktop",
+	"description": "Permissions for the BytePort desktop UI. Exposes only the byteport: namespace, minimum core permissions, and the read-only OS-info permission set (the frontend reads __TAURI_OS_PLUGIN_INTERNALS__ for platform detection). Does not include arbitrary shell/exec/process permissions.",
+	"windows": ["main"],
+	"permissions": [
+		"core:default",
+		"core:window:default",
+		"core:webview:default",
+		"core:event:default",
+		"core:menu:default",
+		"core:tray:default",
+		"os:default",
+		{
+			"identifier": "core:window:allow-set-title",
+			"allow": [{ "label": "main" }]
+		}
+	]
+}

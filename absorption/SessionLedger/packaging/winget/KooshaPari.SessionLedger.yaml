@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.6.0.schema.json
+# In-repo winget manifest template for SessionLedger.
+# Copy into microsoft/winget-pkgs after a real Release and fill InstallerSha256
+# from SHA256SUMS. PackageIdentifier path example:
+#   manifests/k/KooshaPari/SessionLedger/0.1.0/
+PackageIdentifier: KooshaPari.SessionLedger
+PackageVersion: 0.1.0
+DefaultLocale: en-US
+ManifestType: version
+ManifestVersion: 1.6.0

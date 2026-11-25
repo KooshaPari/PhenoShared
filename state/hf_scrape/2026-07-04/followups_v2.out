@@ -1,0 +1,11 @@
+OK wrote canonical_followups_v2.json  probes_ok=10/10
+  + deepreinforce-ai/Ornith-1.0-9B                     9.4098B  lm=?
+  + Qwen/Qwen3.5-0.8B                                  0.8734B  lm=?
+  + LiquidAI/LFM2.5-8B-A1B                             8.4679B  lm=?
+  + protoLabsAI/Ornith-1.0-9B-MTP-GGUF                 NoneB    lm=?
+  + ibm-granite/granite-4.0-h-micro                    3.1914B  lm=?
+  + ibm-granite/granite-4.1-8b                         8.7916B  lm=?
+  + LiquidAI/LFM2-24B-A2B                              23.8437B lm=?
+  + arcee-ai/Trinity-Mini                              26.124B  lm=?
+  + poolside/Laguna-XS-2.1                             33.4426B lm=?
+  + tencent/HY3-Preview                                298.7862B lm=?

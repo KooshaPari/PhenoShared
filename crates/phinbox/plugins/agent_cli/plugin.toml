@@ -1,0 +1,24 @@
+[phinbox]
+name = "phinbox"
+version = "0.9.0"
+description = "Non-blocking elicitation tool: native macOS/Windows popups, async inbox daemon, MCP tool, optional tray icon."
+mcp_server = "phinbox-mcp"
+skill_dir = "~/.cursor/skills/phinbox"
+inbox_dir = "~/.phinbox/inbox"
+auto_open_browser = true
+
+[phinbox.platforms]
+macos = ["NSStatusItem via osascript (default)", "NSStatusItem via tray-icon (--features tray-native)"]
+windows = ["Win32 MessageBox via PowerShell (default)", "Shell_NotifyIcon via tray-icon (--features tray-native)"]
+linux = ["zenity/kdialog fallback", "tray-icon GTK backend (--features tray-native)"]
+
+[phinbox.modes]
+sync = "blocks until user answers; default on macOS/Windows with display"
+async = "enqueue to inbox dir, agent continues; --async flag or default in headless"
+
+[phinbox.inbox]
+cli_list = "phinbox inbox --list"
+cli_show = "phinbox inbox --show <id>"
+tui = "phinbox inbox --tui [--follow]"
+open_browser = "phinbox open [--latest] [--spawn-if-missing] [--print-only]"
+tray = "tray icon with badge count + menu (Open inbox / Open latest / Quiet / Quit)"

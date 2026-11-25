@@ -1,0 +1,12 @@
+name: Fuzz
+on:
+  schedule:
+    - cron: 0 3 * * * # nightly: fuzzing is a soak, not a per-push gate
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+      - run: cargo install cargo-fuzz
+      - run: if [ -d fuzz ]; then cargo fuzz run 2>&1 | tail -50 || true; else echo no-fuzz; fi

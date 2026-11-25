@@ -1,0 +1,334 @@
+#!/usr/bin/env zsh
+# session-snapshot — record every harness session in every pane into a JSONL snapshot.
+#
+# Backend autodetect:
+#   1. tmux       — list-panes per pane (when $TMUX is set)
+#   2. Ghostty    — AppleScript surface table + lsof+ps walk of ttysNNN children
+#
+# Output: append-only JSONL at ~/.local/share/resume-all/snapshot.jsonl
+# Idempotent: re-running emits no new rows if state is unchanged.
+#
+# Usage:
+#   session-snapshot                  # one snapshot run
+#   session-snapshot --loop 30        # background loop, 30s interval
+#   session-snapshot --verify         # parse + summarise the snapshot, no walk
+#   session-snapshot --json           # machine-readable (for piping)
+#   session-snapshot pane-hook install   # install the per-pane history hook
+#   session-snapshot pane-hook uninstall # remove the per-pane history hook
+#   session-snapshot pane-hook status    # show hook state + log files
+#   session-snapshot sharecli-notify-status [count]  # ShareCLI Tray IPC round-trip
+#
+# Resume: see `resume-all` (splits + relaunches each harness into a fresh pane).
+
+emulate -L zsh
+setopt err_return no_unset pipe_fail
+
+SNAPSHOT_FILE="${RESUME_SNAPSHOT_FILE:-$HOME/.local/share/resume-all/snapshot.jsonl}"
+BACKEND="${RESUME_BACKEND:-auto}"   # auto | ghostty | tmux
+LOOP=0
+INTERVAL=30
+VERIFY=0
+JSON=0
+
+# pane-hook subcommand: handled before the argument loop so we can early-return.
+# Args: install | uninstall | status
+_pane_hook_rc_file() {
+  # Honour $ZDOTDIR; otherwise default to ~/.zshrc.
+  local rc_dir="${ZDOTDIR:-$HOME}"
+  print -r -- "$rc_dir/.zshrc"
+}
+
+_pane_hook_guard_marker="# >>> resume-all pane-hook >>>"
+_pane_hook_guard_open="$_pane_hook_guard_marker"
+_pane_hook_guard_close="# <<< resume-all pane-hook <<<"
+
+_pane_hook_install() {
+  local rc; rc="$(_pane_hook_rc_file)"
+  local hook_path="$HOME/.config/resume-all/pane-hook.zsh"
+  if [[ ! -f "$hook_path" ]]; then
+    print -u2 "session-snapshot: pane-hook source not found: $hook_path"
+    return 1
+  fi
+  if [[ ! -f "$rc" ]]; then
+    print -u2 "session-snapshot: rc file not found: $rc"
+    return 1
+  fi
+  # Idempotency check: install only if the open marker is not present.
+  if grep -F -q "$_pane_hook_guard_open" "$rc" 2>/dev/null; then
+    print "session-snapshot: pane-hook already installed in $rc"
+    return 0
+  fi
+  {
+    print -r -- "$_pane_hook_guard_open"
+    print -r -- "[[ -f \"\$HOME/.config/resume-all/pane-hook.zsh\" ]] && source \"\$HOME/.config/resume-all/pane-hook.zsh\""
+    print -r -- "$_pane_hook_guard_close"
+  } >> "$rc" 2>/dev/null || {
+    print -u2 "session-snapshot: failed to append to $rc"
+    return 1
+  }
+  print "session-snapshot: pane-hook installed in $rc"
+  print "session-snapshot: open a new Ghostty pane (or `source $rc`) to activate."
+}
+
+_pane_hook_uninstall() {
+  local rc; rc="$(_pane_hook_rc_file)"
+  if [[ ! -f "$rc" ]]; then
+    print "session-snapshot: rc file not found: $rc (nothing to do)"
+    return 0
+  fi
+  if ! grep -F -q "$_pane_hook_guard_open" "$rc" 2>/dev/null; then
+    print "session-snapshot: pane-hook not installed in $rc (nothing to do)"
+    return 0
+  fi
+  # Use python to remove the marked block atomically (works on macOS without gnu-sed).
+  #
+  # Slice 7 hardening: exact-line match for the open/close markers (was
+  # substring match — risky if a user-typed comment happened to contain the
+  # marker string).  Write through a temp file + os.replace so a SIGKILL /
+  # BrokenPipe mid-write leaves the existing rc file intact.  If the result
+  # is empty after removal, delete the rc file entirely instead of leaving
+  # a zero-byte stub.
+  python3 - "$rc" "$_pane_hook_guard_open" "$_pane_hook_guard_close" <<'PYEOF'
+import os, pathlib, sys, tempfile
+
+rc, open_m, close_m = sys.argv[1], sys.argv[2], sys.argv[3]
+p = pathlib.Path(rc)
+try:
+    raw = p.read_text()
+except OSError as exc:
+    print(f"session-snapshot: cannot read {rc}: {exc}", file=sys.stderr)
+    sys.exit(1)
+
+# splitlines() drops the line separators; remember them so we can re-stitch
+# the file byte-for-byte (preserves the user's existing newline style).
+lines = raw.splitlines(keepends=True)
+
+def _marker(line: str, marker: str) -> bool:
+    """Exact-match helper: marker must equal the line content ignoring the
+    trailing newline.  Substring match was the old behavior — it could
+    over-match if a user comment contained the marker text."""
+    return line.rstrip("\r\n") == marker
+
+out: list[str] = []
+i = 0
+removed = 0
+while i < len(lines):
+    if _marker(lines[i], open_m):
+        j = i + 1
+        # Skip everything from the open marker up to and including the
+        # matching close marker.
+        while j < len(lines):
+            if _marker(lines[j], close_m):
+                j += 1  # drop the close marker too
+                break
+            j += 1
+        i = j
+        removed += 1
+    else:
+        out.append(lines[i])
+        i += 1
+
+new_text = "".join(out)
+
+# Atomic write: tmp in the same directory (so os.replace is atomic on the
+# same filesystem), then rename over the original.  Crash-safe — if the
+# process dies mid-write the original rc is untouched.
+try:
+    fd, tmp_path = tempfile.mkstemp(
+        prefix=f".{p.name}.uninstall.",
+        suffix=".tmp",
+        dir=str(p.parent),
+    )
+    with os.fdopen(fd, "w", encoding="utf-8", newline="") as fh:
+        fh.write(new_text)
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp_path, p)
+except OSError as exc:
+    print(f"session-snapshot: atomic write to {rc} failed: {exc}", file=sys.stderr)
+    try:
+        if 'tmp_path' in locals():
+            os.unlink(tmp_path)
+    except OSError:
+        pass
+    sys.exit(1)
+
+if removed == 0:
+    # Should not happen — the zsh guard above already checked for the marker.
+    print(f"session-snapshot: no matching block found in {rc}")
+    sys.exit(0)
+
+# If the result is effectively empty (only whitespace), delete the rc file
+# rather than leaving a zero-byte stub behind.
+if not new_text.strip():
+    try:
+        p.unlink()
+        print(f"session-snapshot: removed {removed} block(s); {rc} was empty so it was deleted")
+    except OSError as exc:
+        print(f"session-snapshot: removed {removed} block(s); failed to delete empty {rc}: {exc}",
+              file=sys.stderr)
+        sys.exit(1)
+else:
+    print(f"session-snapshot: removed {removed} block(s) from {rc}")
+PYEOF
+}
+
+_pane_hook_status() {
+  local rc; rc="$(_pane_hook_rc_file)"
+  local hook_path="$HOME/.config/resume-all/pane-hook.zsh"
+  local log_dir="${RESUME_ALL_PANE_LOG_DIR:-$HOME/.local/share/resume-all/pane-logs}"
+  print "pane-hook source : $hook_path  ($( [[ -f $hook_path ]] && echo present || echo missing ))"
+  print "rc file          : $rc  ($( [[ -f $rc ]] && echo present || echo missing ))"
+  if [[ -f "$rc" ]] && grep -F -q "$_pane_hook_guard_open" "$rc" 2>/dev/null; then
+    print "install state    : installed"
+  else
+    print "install state    : not installed"
+  fi
+  print "log dir          : $log_dir"
+  if [[ -d "$log_dir" ]]; then
+    local -a logs
+    logs=("$log_dir"/*.log(N))
+    if (( ${#logs[@]} > 0 )); then
+      print "log files        : ${#logs[@]}"
+      local f; for f in "${logs[@]}"; do
+        local size; size=$(wc -c < "$f" 2>/dev/null | tr -d ' ')
+        local mtime; mtime=$(stat -f '%Sm' -t '%Y-%m-%dT%H:%M:%SZ' "$f" 2>/dev/null)
+        print "  ${f##*/}  size=$size  mtime=$mtime"
+      done
+    else
+      print "log files        : (none yet)"
+    fi
+    if [[ -f "$log_dir/.hook-errors.log" ]]; then
+      local err_count; err_count=$(wc -l < "$log_dir/.hook-errors.log" 2>/dev/null | tr -d ' ')
+      print "hook errors      : $err_count entries (see $log_dir/.hook-errors.log)"
+    fi
+  else
+    print "log dir          : (missing)"
+  fi
+}
+
+if (( $# >= 1 )) && [[ "$1" == "pane-hook" ]]; then
+  shift
+  case "${1:-}" in
+    install)   _pane_hook_install ;;
+    uninstall) _pane_hook_uninstall ;;
+    status)    _pane_hook_status ;;
+    ""|-h|--help)
+      print "session-snapshot pane-hook <install|uninstall|status>"
+      ;;
+    *) print -u2 "session-snapshot: pane-hook unknown subcommand '$1'"; exit 2 ;;
+  esac
+  exit $?
+fi
+
+# sharecli-notify-status subcommand: ad-hoc round-trip probe for the
+# ShareCLI Tray IPC socket. With no args, prints diagnostic (socket
+# path, reachability, cast panes, audit-log tail). With one positional
+# <count>, first sends a "restored N sessions" notification via
+# `sharecli-ipc.py notify`, then prints the status (so the audit log
+# tail captures the just-emitted row).
+if (( $# >= 1 )) && [[ "$1" == "sharecli-notify-status" ]]; then
+  shift
+  if (( $# >= 1 )); then
+    python3 "$HOME/bin/sharecli-ipc.py" notify "$@"
+    print
+    python3 "$HOME/bin/sharecli-ipc.py" notify-status
+  else
+    python3 "$HOME/bin/sharecli-ipc.py" notify-status
+  fi
+  exit $?
+fi
+
+while (( $# )); do
+  case "$1" in
+    --loop)        LOOP=1; INTERVAL="${2:-30}"; shift 2 ;;
+    --interval)    INTERVAL="${2:-30}"; shift 2 ;;
+    --backend)     BACKEND="${2:-auto}"; shift 2 ;;
+    --snapshot-file) SNAPSHOT_FILE="$2"; shift 2 ;;
+    --verify)      VERIFY=1; shift ;;
+    --json)        JSON=1; shift ;;
+    -h|--help)
+      sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0 ;;
+    *) print -u2 "session-snapshot: unknown arg '$1'"; exit 2 ;;
+  esac
+done
+
+export RESUME_SNAPSHOT_FILE="$SNAPSHOT_FILE"
+export RESUME_BACKEND="$BACKEND"
+
+mkdir -p -- "${SNAPSHOT_FILE:h}"
+
+run_once() {
+  # Backend resolution lives in the Python so it can probe Ghostty directly.
+  # zsh only forwards the env hint.
+  if [[ "$BACKEND" == "ghostty" ]] || \
+     { [[ "$BACKEND" == "auto" ]] && [[ -z "${TMUX:-}" ]] && \
+       command -v osascript >/dev/null 2>&1 && \
+       osascript -e 'tell application "System Events" to (exists application process "Ghostty")' \
+         2>/dev/null | grep -qi true; }; then
+    export RESUME_BACKEND=ghostty
+  elif [[ -n "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then
+    export RESUME_BACKEND=tmux
+  else
+    export RESUME_BACKEND=ghostty   # let Python decide; it'll emit a clear error
+  fi
+  python3 "$HOME/bin/session_snapshot.py" "$@"
+}
+
+summarise_jsonl() {
+  python3 - "$SNAPSHOT_FILE" "$JSON" <<'PYEOF'
+import json, sys, time
+from collections import Counter
+from pathlib import Path
+path, want_json = Path(sys.argv[1]), sys.argv[2] == "1"
+if not path.exists():
+    print("{}" if want_json else "no snapshot yet", file=sys.stderr)
+    sys.exit(0 if want_json else 1)
+by_h = Counter(); with_sid = Counter(); total = 0; stale = 0
+now = time.time()
+for line in path.read_text().splitlines():
+    line = line.strip()
+    if not line: continue
+    try: d = json.loads(line)
+    except Exception: continue
+    if d.get("dead") or d.get("pending"): continue
+    h = d.get("harness", "?")
+    sid = d.get("session_id", "") or ""
+    by_h[h] += 1
+    if sid: with_sid[h] += 1
+    total += 1
+    try:
+        ts = time.mktime(time.strptime(d.get("ts",""), "%Y-%m-%dT%H:%M:%SZ"))
+        if now - ts > 7*86400: stale += 1
+    except Exception: pass
+if want_json:
+    print(json.dumps({"total": total, "stale": stale, "by_harness": dict(by_h),
+                      "with_sid": dict(with_sid)}, indent=2))
+else:
+    print(f"snapshot: {total} live rows ({stale} stale) — {path}")
+    for h, n in by_h.most_common():
+        print(f"  {h:9s}  {n} pane(s)  ({with_sid[h]} with session_id)")
+PYEOF
+}
+
+if (( VERIFY )); then
+  summarise_jsonl
+  exit $?
+fi
+
+if (( LOOP )); then
+  print -u2 "session-snapshot: looping every ${INTERVAL}s (Ctrl-C to stop)"
+  trap 'print -u2 "session-snapshot: stopped"; exit 0' INT TERM
+  while :; do
+    run_once >/dev/null
+    sleep "$INTERVAL"
+  done
+else
+  if (( JSON )); then
+    run_once >/dev/null
+    summarise_jsonl
+  else
+    run_once
+  fi
+fi

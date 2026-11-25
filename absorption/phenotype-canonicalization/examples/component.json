@@ -1,0 +1,15 @@
+{
+  "component_id": "example.docs-renderer",
+  "repository_id": 1,
+  "source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "source_paths": [
+    "packages/docs"
+  ],
+  "profile_ids": [
+    "docs-vue"
+  ],
+  "policy_release": "example-policy-not-a-release",
+  "owner_role": "example owner",
+  "state": "example_not_observed",
+  "consumer_evidence_refs": []
+}

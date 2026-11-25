@@ -1,0 +1,131 @@
+# agent-orchestrator configuration
+# This file defines non-overlapping lanes for parallel agent dispatch
+#
+# Each lane:
+# - Covers a non-overlapping file scope (glob patterns)
+# - Has a specialized dispatch prompt
+# - Generates commits with a consistent prefix
+#
+# Usage:
+#   1. Copy this file to orchestration.toml
+#   2. Edit lanes to match your project structure
+#   3. Run: agent-orchestrator lanes list
+#   4. Dispatch: agent-orchestrator lanes dispatch <lane-id>
+
+project_name = "FocalPoint"
+repo_root = "."
+sweep_cadence_minutes = 5
+
+# Lane 1: Core domain and state machine logic
+[[lanes]]
+id = "domain-state"
+name = "Domain & State"
+scope = [
+    "crates/focus-domain/**/*.rs",
+    "crates/focus-state-machine/**/*.rs",
+]
+prompt_template = """
+You are reviewing the domain and state machine layer of FocalPoint.
+
+Focus on:
+1. Domain model invariants and consistency
+2. State transition guards and validity
+3. Serialization round-trips for audit records
+4. Test coverage for edge cases
+
+Scope:
+- crates/focus-domain/**/*.rs
+- crates/focus-state-machine/**/*.rs
+
+Commit with prefix: 'domain:' (e.g., 'domain: add event sourcing tests')
+"""
+commit_message_prefix = "domain"
+
+# Lane 2: Connectors and integrations
+[[lanes]]
+id = "connectors"
+name = "Connectors & Integrations"
+scope = [
+    "crates/connector-*/**/*.rs",
+]
+prompt_template = """
+You are reviewing connector implementations (Canvas, Fitbit, GitHub, Strava, etc.).
+
+Focus on:
+1. Connector interface compliance
+2. OAuth token lifecycle and refresh
+3. Rate limiting and backoff
+4. Error handling for API failures
+5. Test coverage for each connector
+
+Commit with prefix: 'connector:' (e.g., 'connector: add fitbit rate limit handler')
+"""
+commit_message_prefix = "connector"
+
+# Lane 3: Rules, rewards, and penalties
+[[lanes]]
+id = "rules-rewards"
+name = "Rules, Rewards & Penalties"
+scope = [
+    "crates/focus-rules/**/*.rs",
+    "crates/focus-rewards/**/*.rs",
+    "crates/focus-penalties/**/*.rs",
+]
+prompt_template = """
+You are reviewing the rule engine, rewards, and penalties layer.
+
+Focus on:
+1. Rule evaluation correctness
+2. Reward calculation and bounds
+3. Penalty application logic
+4. Policy compliance and audit trail
+5. Test coverage for all rule types
+
+Commit with prefix: 'rules:' (e.g., 'rules: add penalty accumulation tests')
+"""
+commit_message_prefix = "rules"
+
+# Lane 4: Storage and persistence
+[[lanes]]
+id = "storage-sync"
+name = "Storage & Sync"
+scope = [
+    "crates/focus-storage/**/*.rs",
+    "crates/focus-sync/**/*.rs",
+    "crates/focus-sync-store/**/*.rs",
+]
+prompt_template = """
+You are reviewing storage and synchronization logic.
+
+Focus on:
+1. SQLite schema consistency
+2. Transaction isolation and durability
+3. Sync merging and conflict resolution
+4. Backup/restore integrity
+5. Performance and index optimization
+
+Commit with prefix: 'storage:' (e.g., 'storage: add sync conflict detection tests')
+"""
+commit_message_prefix = "storage"
+
+# Lane 5: Audit, crypto, and security
+[[lanes]]
+id = "audit-security"
+name = "Audit & Security"
+scope = [
+    "crates/focus-audit/**/*.rs",
+    "crates/focus-crypto/**/*.rs",
+]
+prompt_template = """
+You are reviewing the audit and cryptographic security layer.
+
+Focus on:
+1. Audit record tamper-detection (SHA-256 chains)
+2. Cryptographic key generation and storage
+3. Signature verification workflows
+4. Sensitive data handling (secrets)
+5. Test coverage for edge cases and attacks
+
+Commit with prefix: 'audit:' (e.g., 'audit: add chain tamper detection tests')
+"""
+commit_message_prefix = "audit"

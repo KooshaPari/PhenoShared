@@ -1,0 +1,33 @@
+name: docs-check
+
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "README.md"
+      - ".github/workflows/docs-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: DavidAnson/markdownlint-cli2-action@ded1f9488f68a970bc66ea5619e13e9b52e601cd
+        with:
+          globs: |
+            README.md
+            docs/**/*.md
+
+  adr-frontmatter:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - name: Validate ADR headers
+        run: |
+          for f in docs/adr/*.md; do
+            grep -q '^# ADR ' "$f" || { echo "::error file=$f::missing '# ADR NNN — Title' header"; exit 1; }
+            grep -q '^- \*\*Status:\*\*' "$f" || { echo "::error file=$f::missing Status line"; exit 1; }
+          done

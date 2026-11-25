@@ -1,0 +1,103 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { projects, site } from "../../data/site";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props as {
+  project: (typeof projects)[number];
+};
+---
+
+<BaseLayout title={`${project.title} — ${site.name}`} description={project.summary} active="projects">
+  <section class="project-hero">
+    <div>
+      <p class="eyebrow">{project.kind}</p>
+      <h1 class="display">{project.title}</h1>
+      <p class="lede">{project.summary}</p>
+      <p class="body">{project.blurb}</p>
+      <div class="button-row">
+        <a class="button primary" href="/projects">Back to projects</a>
+        {project.links.map((link) => (
+          <a class="button" href={link.href} target={link.external ? "_blank" : undefined} rel={link.external ? "noreferrer" : undefined}>
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </div>
+    <aside class="card side-panel">
+      <p class="eyebrow">At a glance</p>
+      <ul>
+        <li><strong>Timeframe:</strong> {project.timeframe}</li>
+        <li><strong>Focus:</strong> {project.highlight}</li>
+        <li><strong>Tags:</strong> {project.tags.join(", ")}</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="section">
+    <div class="grid-3">
+      {project.tags.map((tag) => (
+        <article class="card tag-card">
+          <span>{tag}</span>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .project-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  h1 {
+    margin: 0.25rem 0 0;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    line-height: 0.95;
+  }
+
+  .lede {
+    margin: 0.9rem 0 0;
+    color: var(--muted);
+    font-size: 1.08rem;
+  }
+
+  .body {
+    color: var(--muted);
+    max-width: 48rem;
+  }
+
+  .side-panel {
+    padding: 1.1rem;
+  }
+
+  .side-panel ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+  }
+
+  .tag-card {
+    padding: 0.95rem 1rem;
+  }
+
+  .tag-card span {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 920px) {
+    .project-hero {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

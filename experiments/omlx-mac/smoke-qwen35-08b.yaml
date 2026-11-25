@@ -1,0 +1,10 @@
+experiment_id: omlx.mac.smoke.qwen35-08b
+suite: omlx-mac
+device_profile: mac.m1_pro
+model_alias: qwen35-08b
+bench_key: "omlx|mac|qwen35-08b|smoke"
+langfuse_dataset: omlx-mac-smoke
+description: Mac oMLX / Metal smoke for Qwen3.5 0.8B (phenotype-omlx-temp)
+aliases:
+  engine: omlx_primary
+  port: "10240"

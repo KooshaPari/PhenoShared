@@ -1,0 +1,75 @@
+# Terminal Bench 2.0 — locked local-only matrix.
+# Cloud rows are retained below as historical records and are never executable.
+
+eval_protocol:
+  dataset: terminal-bench@2.0
+  n_tasks_total: 89
+  agent: terminus-2
+  n_attempts: 1
+  n_concurrent_trials: 1
+  target_mean: 0.80
+  integrity:
+    no_oracle_in_leaderboard: true
+    no_training_on_eval_tasks: true
+    exclude_from_dpo: true
+    exclude_from_distill: true
+    single_attempt_only: true
+
+datasets:
+  tb20:
+    id: terminal-bench@2.0
+    n_tasks: 89
+  tb21:
+    id: terminal-bench@2.1
+    n_tasks: null
+    availability: watch
+  tb3:
+    id: terminal-bench@3.x
+    availability: watch
+
+provider:
+  primary: pheno_serve
+  pheno_serve_base: "http://127.0.0.1:21080/v1"
+  local_only: true
+  cloud_eval_enabled: false
+  # Legacy — do not use for new runs
+  direct_fireworks_deprecated: true
+  credential_id_firepass_sunset: fireworks-ai-firepass
+
+models:
+  - id: local/qwen35-08b
+    label: qwen35-08b-local
+    role: local_tiny
+    route_kind: pheno_serve
+  - id: local/lfm25-8b-a1b
+    label: lfm25-8b-a1b-local
+    role: local_workhorse
+    route_kind: pheno_serve
+  - id: local/ornith-8b
+    label: ornith-8b-local
+    role: local_workhorse
+    route_kind: pheno_serve
+
+# Historical baseline only (firepass sunset)
+models_sunset:
+  - id: fireworks/accounts/fireworks/routers/kimi-k2p6-turbo
+    label: kimi-k2p6-turbo
+    sunset_date: "2026-06"
+    reason: firepass unavailable
+  - id: fireworks/kimi-k2p6
+    label: kimi-k2p6
+    sunset_date: "2026-06"
+  - id: fireworks/kimi-k2p5
+    label: kimi-k2p5
+    sunset_date: "2026-06"
+
+combo_reference:
+  - id: Main
+    label: omniroute-main-historical-disabled
+    combo: true
+    disabled: true
+
+jobs_subdir: jobs/harbor/tbench
+state_file: state/tbench_matrix.json
+results_file: eval/results/tbench_model_scores.json
+probe_cache: eval/results/tbench_model_probe.json

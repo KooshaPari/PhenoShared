@@ -1,0 +1,20 @@
+{
+  "id": "SYN-WP",
+  "subject_id": "SYN-PRODUCT",
+  "parent_outcome": "Qualify synthetic resume contract.",
+  "source_revision": null,
+  "depends_on": [],
+  "owner": "unassigned-example",
+  "write_paths": [],
+  "lease_id": null,
+  "allowed_actions": [
+    "read-fixture"
+  ],
+  "status": "synthetic",
+  "acceptance_ids": [
+    "SYN-OBL-NO-DUPLICATE"
+  ],
+  "evidence_ids": [],
+  "rollback": "Discard synthetic temporary output; no repository changes.",
+  "synthetic": true
+}

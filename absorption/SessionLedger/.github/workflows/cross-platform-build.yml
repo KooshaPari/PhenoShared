@@ -1,0 +1,117 @@
+name: Cross-Platform Build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  sl-viewer-macos-app:
+    name: sl-viewer macOS app · artifact
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - name: install Dioxus CLI
+        run: cargo install dioxus-cli --locked
+      - name: bundle sl-viewer
+        working-directory: crates/sl-viewer
+        run: dx bundle --platform macos --release --debug-symbols false
+      - name: verify app bundle
+        run: |
+          set -euo pipefail
+          app='target/dx/sl-viewer/release/macos/SlViewer.app'
+          test -x "$app/Contents/MacOS/sl-viewer"
+          codesign --verify --deep --strict --verbose=2 "$app" || codesign --force --deep --sign - "$app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          shasum -a 256 "$app/Contents/MacOS/sl-viewer" | tee sl-viewer-macos.sha256
+      - name: upload macOS app artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sessionledger-sl-viewer-macos-${{ github.sha }}
+          path: |
+            target/dx/sl-viewer/release/macos/SlViewer.app
+            sl-viewer-macos.sha256
+          if-no-files-found: error
+
+  sl-daemon-build:
+    name: sl-daemon build · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: crates/sl-daemon
+      - name: build sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo build --locked
+
+  session-ledger-build:
+    name: session-ledger build · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+      - name: build root workspace
+        run: cargo build --locked
+
+  # Exotic Linux targets beyond the host OS matrix: aarch64-gnu + musl.
+  # cargo check only (no full link of sl-viewer / webkit). Covers session-ledger
+  # lib + isolated sl-daemon workspace.
+  exotic-cargo-check:
+    name: exotic check · ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: aarch64-unknown-linux-gnu
+            apt: gcc-aarch64-linux-gnu
+            linker_env: CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER
+            linker: aarch64-linux-gnu-gcc
+          - target: x86_64-unknown-linux-musl
+            apt: musl-tools
+            linker_env: CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER
+            linker: musl-gcc
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      # Must match rust-toolchain.toml channel — floating `stable` leaves the
+      # pin override without the exotic target std (E0463 missing `core`).
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # pinned
+        with:
+          toolchain: 1.96.0
+          targets: ${{ matrix.target }}
+      - name: install cross linker packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ${{ matrix.apt }}
+      - name: configure target linker
+        run: echo "${{ matrix.linker_env }}=${{ matrix.linker }}" >> "$GITHUB_ENV"
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          key: exotic-${{ matrix.target }}
+          workspaces: |
+            .
+            crates/sl-daemon
+      - name: check session-ledger (lib, no viewer)
+        run: cargo check --locked --target ${{ matrix.target }} -p session-ledger
+      - name: check sl-daemon workspace
+        working-directory: crates/sl-daemon
+        run: cargo check --locked --target ${{ matrix.target }}

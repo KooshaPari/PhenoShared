@@ -1,0 +1,28 @@
+# phinbox plugin for factory droid
+# Installs via: droid mcp add phinbox_mcp -- phinbox-mcp
+# Plus the skill manifest at ~/.factory/skills-dir/phinbox/
+
+[meta]
+name = "phinbox"
+version = "0.9.0"
+agent = "factory-droid"
+description = "Native form-popup MCP tool for forgecode/claude/codex/cursor/droid/kilo. CLI + tray + daemon + 154 tests."
+
+[skill]
+source = "../../.phinbox/skills/phinbox/SKILL.md"
+install_path = "~/.factory/skills-dir/phinbox/SKILL.md"
+
+[mcp]
+command = "phinbox-mcp"
+args = ["--shutdown-timeout-secs", "5"]
+install_cmd = "droid mcp add phinbox_mcp -- phinbox-mcp"
+
+[discovery]
+binary = "phinbox-mcp"
+config_dir = "~/.factory"
+notes = "Factory droid uses ~/.factory/mcp.json (symlink target). Skill installs at ~/.factory/skills-dir/phinbox/."
+
+[verify]
+# Use 'droid mcp list' to confirm phinbox_mcp is on the MCP server list.
+cmd = "droid mcp list | grep phinbox_mcp"
+expected = "phinbox_mcp"

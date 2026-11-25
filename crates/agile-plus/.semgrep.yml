@@ -1,0 +1,37 @@
+# .semgrep.yml — AgilePlus SAST gate
+# Aggregator config for `semgrep-action` and local `semgrep ci` runs.
+#
+# Triage of failing run #28079096506 (2026-06-24) — the previous version
+# wrapped `include:` paths inside a `rules:` list, which the semgrep schema
+# rejects with "One of these properties is missing: 'message'". Each entry
+# of a `rules:` array must be a complete rule (id, message, languages,
+# severity, pattern). For an aggregator that simply references other rule
+# sources, the supported syntax is to list them at the top level via
+# `include:`.
+#
+# This file is loaded via the `SEMGREP_RULES=.semgrep.yml` environment
+# variable inside the `returntocorp/semgrep-action` container and is also
+# picked up by `semgrep ci` for local runs. The CI workflow
+# (.github/workflows/sast-full.yml) also passes an explicit `config:` list,
+# which is merged on top of this file.
+
+include:
+  - .semgrep-rules/
+  - p/security-audit
+  - p/owasp-top-ten
+  - p/cwe-top-25
+
+exclude:
+  - tests/
+  - "**/*_test.rs"
+  - "**/__pycache__"
+  - node_modules/
+  - target/
+
+max-lines-per-finding: 10
+
+paths:
+  exclude:
+    - ".git/"
+    - "target/"
+    - ".archive/"

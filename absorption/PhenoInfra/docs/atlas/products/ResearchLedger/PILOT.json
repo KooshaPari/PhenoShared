@@ -1,0 +1,41 @@
+{
+  "id": "PILOT-PRD-RESEARCHLEDGER",
+  "product_id": "PRD-RESEARCHLEDGER",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1308558334,
+  "hypothesis": "Less source cleanup and more trustworthy source-grounded retrieval while keeping the vault portable and privately owned.",
+  "baseline_candidates": [
+    "Zotero plus Markdown notes",
+    "Obsidian with source links",
+    "Plain files plus ripgrep/SQLite",
+    "A suitable bibliographic manager with browser capture"
+  ],
+  "scenario": "Import a mixed corpus of papers, webpages and local notes with duplicates, amended documents, missing metadata and broken URLs. Create a claim with citations, retrieve it offline, change a source, export the vault, then reimport in a clean environment. Compare actual cleanup effort, citation correctness and retention of annotations.",
+  "failure_cases": [
+    "Changed source overwrites cited text",
+    "Duplicate import destroys annotations",
+    "Credential appears in export",
+    "Partial indexing is reported complete",
+    "Unsupported format loses content silently",
+    "Search returns stale evidence as current"
+  ],
+  "metrics": [
+    "Citation precision and source-anchor fidelity",
+    "Import completeness with unknowns visible",
+    "Deduplication correctness",
+    "Cleanup/annotation effort",
+    "Offline query latency",
+    "Export/reimport data loss and vendor lock-in"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

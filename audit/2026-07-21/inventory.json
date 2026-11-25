@@ -1,0 +1,28 @@
+{
+  "audited_at": "2026-07-21T22:15:00Z",
+  "tailscale": {
+    "desk": "100.96.135.160",
+    "mac": "100.112.14.98",
+    "mac_host": "kooshas-laptop"
+  },
+  "ssh": {
+    "works_with": "ssh -F ~/.ssh/config.pheno kooshas-laptop",
+    "wrapper": "C:\\Users\\koosh\\bin\\ssh-mac.cmd",
+    "locked_default_config": "C:\\Users\\koosh\\.ssh\\config (ACL denied; User defaults to koosh)"
+  },
+  "repos": {
+    "phenotype-omlx": "https://github.com/KooshaPari/phenotype-omlx",
+    "pheno-research": "https://github.com/KooshaPari/pheno-research",
+    "pheno-control-plane": "https://github.com/KooshaPari/pheno-control-plane",
+    "pheno-harness_win": "C:\\Users\\koosh\\pheno-harness",
+    "fleet-bench": "D:\\koosh\\fleet-bench",
+    "omlx_mac_path": "~/CodeProjects/Phenotype/repos/phenotype-omlx"
+  },
+  "gaps": [
+    "fleet-bench not wired to Langfuse yet",
+    "control-plane compose not started",
+    "default ssh config ACL still locked",
+    "ClickHouse/Neo4j deferred to phase 2"
+  ]
+}
+

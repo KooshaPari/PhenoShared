@@ -1,0 +1,30 @@
+c:\Windows\System32\nvidia-smi.exe
+Windows nvidia-smi path: 
+c:\Windows\System32\nvidia-smi.exe
+ 
+lxss/lib contents: 
+ Volume in drive C has no label.
+ Volume Serial Number is D3E6-1919
+
+ Directory of C:\Windows\System32\lxss\lib
+
+02/17/2026  11:59 PM           175,360 libcuda.so
+02/17/2026  11:59 PM           175,360 libcuda.so.1
+02/17/2026  11:59 PM           175,360 libcuda.so.1.1
+02/17/2026  11:59 PM        11,294,472 libcudadebugger.so.1
+02/17/2026  11:59 PM        18,475,776 libnvcuvid.so
+02/17/2026  11:59 PM        18,475,776 libnvcuvid.so.1
+02/17/2026  11:59 PM       154,232,352 libnvdxdlkernels.so
+02/17/2026  11:59 PM           264,328 libnvidia-encode.so
+02/17/2026  11:59 PM           264,328 libnvidia-encode.so.1
+02/17/2026  11:59 PM        89,659,688 libnvidia-gpucomp.so
+02/17/2026  11:59 PM           266,928 libnvidia-ml.so.1
+02/17/2026  11:59 PM         4,594,744 libnvidia-ngx.so.1
+02/17/2026  11:59 PM            67,608 libnvidia-opticalflow.so
+02/17/2026  11:59 PM            67,608 libnvidia-opticalflow.so.1
+02/17/2026  11:59 PM            10,056 libnvoptix.so.1
+02/17/2026  11:59 PM        96,610,904 libnvwgf2umx.so
+02/17/2026  11:59 PM         5,072,000 nvidia-ngx-updater
+02/17/2026  11:59 PM           845,304 nvidia-smi
+              18 File(s)    400,727,952 bytes
+               0 Dir(s)  18,408,169,472 bytes free

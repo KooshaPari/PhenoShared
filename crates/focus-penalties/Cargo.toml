@@ -1,0 +1,15 @@
+[package]
+name = "focus-penalties"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+focus-audit = { path = "../focus-audit" }
+focus-domain = { path = "../focus-domain" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+uuid.workspace = true

@@ -1,0 +1,62 @@
+# RLVR-AF training config — Needle + role models (Phase 3)
+algorithm: rlvr_af
+
+pass_threshold: 0.75
+
+rewards:
+  weights:
+    json_valid: 0.10
+    tool_valid: 0.10
+    patch_applies: 0.20
+    tests_pass: 0.25
+    output_under_cap: 0.10
+    context_under_budget: 0.10
+    correct_escalation: 0.05
+    tokens_saved: 0.10
+
+verifiers:
+  json:
+    enabled: true
+  tool:
+    enabled: true
+  patch:
+    enabled: true
+  tests:
+    enabled: true
+  risky_action:
+    enabled: true
+    description: "Watch LLM output before risky tool/shell side effects"
+  required_checks:
+    - json_valid
+    - tests_pass
+    - risky_action_gate
+
+targets:
+  needle_router:
+    params_m: 26
+    dataset_glob: "call_logs_*.jsonl"
+    train_steps: 5000
+    eval_every: 500
+
+  needle_ranker:
+    params_m: 100
+    dataset_glob: "compression_*.jsonl"
+    train_steps: 8000
+    eval_every: 500
+
+  needle_budget:
+    params_m: 50
+    dataset_glob: "routing_decisions_*.jsonl"
+    train_steps: 3000
+    eval_every: 250
+
+datasets:
+  root: "${HOME}/.omniroute/training"
+  trace_glob: "traces_*.jsonl"
+  verified_out: "verified_*.jsonl"
+  dpo_out: "dpo_pairs_*.jsonl"
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+  precision: bf16

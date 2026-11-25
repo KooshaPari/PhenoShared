@@ -1,0 +1,107 @@
+name: qe
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: qe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qe-suite:
+    name: QE suite (100% green)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up toolchain
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Install qe (quality engineering) toolchain
+        run: |
+          pip install \
+            "pytest>=8" \
+            "pytest-bdd>=7" \
+            "hypothesis>=6.100" \
+            "schemathesis>=3.27" \
+            "playwright>=1.45" \
+            "allure-pytest>=2.13"
+          python -m playwright install --with-deps chromium
+
+      - name: Bring up stack under test
+        run: |
+          set -euo pipefail
+          docker compose -f compose/docker-compose.yml up -d --wait
+          process-compose -f compose/process-compose.phase.yml up -d
+          bash ./scripts/qe/wait_health.sh
+
+      - name: QE contract tests (Pact + schema)
+        run: |
+          set -euo pipefail
+          pytest -q qe/contract --alluredir=allure-qe-contract
+
+      - name: QE fuzz / property-based (Hypothesis + Schemathesis)
+        run: |
+          set -euo pipefail
+          HYPOTHESIS_PROFILE=ci pytest -q qe/fuzz --alluredir=allure-qe-fuzz
+          schemathesis run \
+            http://localhost:38123/openapi.json \
+            --checks all \
+            --workers 4 \
+            --max-examples 500 \
+            --hypothesis-suppress-health-check=too_slow
+
+      - name: QE BDD / acceptance (Playwright)
+        run: |
+          set -euo pipefail
+          pytest -q qe/bdd --alluredir=allure-qe-bdd
+          pytest -q qe/e2e_bdd --alluredir=allure-qe-e2e
+
+      - name: Collect failure triage if any flake
+        if: failure()
+        run: |
+          bash ./scripts/qe/triage.sh || true
+
+      - name: Bring down stack
+        if: always()
+        run: |
+          process-compose -f compose/process-compose.phase.yml down || true
+          docker compose -f compose/docker-compose.yml down --remove-orphans -v || true
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-qe-results-${{ github.run_id }}
+          path: allure-qe-*/
+
+  qe-gate:
+    name: qe-gate (100% pass required)
+    needs: [qe-suite]
+    runs-on: ubuntu-24.04
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decide
+        run: |
+          if [ "${{ needs.qe-suite.result }}" != "success" ]; then
+            echo "::error::QE suite failed. 100% green is required to merge."
+            exit 1
+          fi
+          echo "QE suite 100% green — merge allowed."

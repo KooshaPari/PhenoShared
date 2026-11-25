@@ -1,0 +1,31 @@
+{
+  "name": "phenotype-apps",
+  "languages": [
+    "rust",
+    "typescript",
+    "python",
+    "go"
+  ],
+  "primary_language": "typescript",
+  "status": "active",
+  "has_readme": true,
+  "type": "apps-collection",
+  "path": "repos/phenotype-apps",
+  "role": "application-parent",
+  "domain_role": "apps",
+  "boundary": "application-collection",
+  "gh_url": "https://github.com/KooshaPari/phenotype-apps",
+  "default_branch": "apps-extract",
+  "local_preservation_sha": "5a0672024b798f852b6a36eaa83820c424d0b5aa",
+  "local_preservation_ref": "recovery/phenotype-apps-local-20260726",
+  "remote_default_sha_at_audit": "89ec3f5a9e7bec4782b6a2f8f373e53a843ee342",
+  "remote_size_kb_at_audit": 1739253,
+  "disposition": "KEEP_CANONICAL_PARENT",
+  "canonical_routing": true,
+  "absorbed_into": null,
+  "absorption_note": "Apps collection parent for BLOCK-A applications. Keep application boundaries explicit under apps/<name>; do not absorb unrelated runtime, governance, or library spines.",
+  "rationale": "Active public parent repository with ADR-023 application-collection policy. Its large footprint requires boundary audits and child-level provenance, not repository deletion or broad workspace flattening.",
+  "audit_artifact": "registry/audit-absorption-justification/gap-cohort-20260726.json",
+  "owner_knowledge_cutoff": "2026-07-26T00:33:00Z",
+  "registry_author": "phenotype-registry (boundary audit)"
+}

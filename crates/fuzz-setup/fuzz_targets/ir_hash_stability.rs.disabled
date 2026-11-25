@@ -1,0 +1,49 @@
+// DISABLED fuzz target — references `focus_ir::RuleIr`, a crate that is not
+// present in the workspace. Kept here as a reference implementation so the
+// invariant contract (RuleIr round-trip hash stability) can be re-activated
+// once the `focus_ir` crate lands.
+//
+// To re-enable when `focus_ir` lands:
+//   1. `git mv fuzz_targets/ir_hash_stability.rs.disabled \
+//          fuzz_targets/ir_hash_stability.rs`
+//   2. Add `focus_ir` to the `[dependencies]` table in this crate's `Cargo.toml`
+//      (likely as a path dep: `focus_ir = { path = "../focus_ir" }`).
+//   3. Append the target filename back to the `FUZZ_TARGETS` list in
+//      `.github/workflows/fuzz.yml`.
+//
+// See: docs/WP-10-FUZZ.md for the invariant contract and acceptance criteria.
+
+#![no_main]
+use libfuzzer_sys::fuzz_target;
+use focus_ir::RuleIr;
+use sha2::{Digest, Sha256};
+
+/// Generate canonical JSON hash for RuleIr.
+fn canonical_hash(rule: &RuleIr) -> String {
+    let json = serde_json::to_string(&rule).expect("serialize RuleIr");
+    let mut hasher = Sha256::new();
+    hasher.update(json.as_bytes());
+    format!("{:x}", hasher.finalize())
+}
+
+fuzz_target!(|data: &[u8]| {
+    // Deserialize from arbitrary bytes
+    if let Ok(json_str) = std::str::from_utf8(data) {
+        if let Ok(rule) = serde_json::from_str::<RuleIr>(json_str) {
+            // Round-trip: serialize → deserialize → rehash
+            let original_hash = canonical_hash(&rule);
+
+            let serialized = serde_json::to_string(&rule).expect("serialize");
+            if let Ok(deserialized) = serde_json::from_str::<RuleIr>(&serialized) {
+                let rehashed = canonical_hash(&deserialized);
+
+                // INVARIANT: hash must be identical after round-trip
+                assert_eq!(
+                    original_hash, rehashed,
+                    "IR hash stability violated: {:?} vs {:?}",
+                    original_hash, rehashed
+                );
+            }
+        }
+    }
+});

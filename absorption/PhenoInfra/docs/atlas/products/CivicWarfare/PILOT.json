@@ -1,0 +1,40 @@
+{
+  "id": "PILOT-PRD-CIVICWARFARE",
+  "product_id": "PRD-CIVICWARFARE",
+  "status": "PLANNED_NOT_EXECUTED",
+  "subject_repository_id": 1308570444,
+  "hypothesis": "A distinct enjoyable scenario or gameplay experience; novelty need not be in databases/renderers underneath it.",
+  "baseline_candidates": [
+    "Unmodified supported game/scenario",
+    "Previous owned package",
+    "Relevant gameplay/mod alternatives selected after actual scope recovery"
+  ],
+  "scenario": "Install the distributed mod/scenario as a new user, understand objectives and controls, complete a representative gameplay loop, save/load, experience a failure and remove/update the package. Compare onboarding, readability and behavior with the closest real baseline.",
+  "failure_cases": [
+    "Undeclared private dependency required at runtime",
+    "Telemetry without consent",
+    "Misleading objective/UI state",
+    "Save/version mismatch",
+    "Installer mutates unowned files",
+    "Performance degrades under expected population"
+  ],
+  "metrics": [
+    "First useful/understood play time",
+    "Gameplay and qualitative clarity",
+    "Performance under intended scale",
+    "Install/update/save fidelity",
+    "Support/recovery burden",
+    "Repeat-use value"
+  ],
+  "required_before_execution": [
+    "versioned subjects and fixtures",
+    "predeclared critical invariants",
+    "reviewed non-inferiority margins",
+    "resource and trust limits",
+    "independent outcome oracle",
+    "retained failed-trial policy"
+  ],
+  "results": null,
+  "winner": null,
+  "protocol": "../../research/COMPARATIVE-PILOT-PROTOCOL.md"
+}

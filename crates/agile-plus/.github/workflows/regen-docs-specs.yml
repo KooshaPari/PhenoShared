@@ -1,0 +1,79 @@
+name: Regenerate docs/specs contracts from proto
+
+# Auto-regenerate docs/specs/*/contracts/ from canonical proto/agileplus/v1/
+# whenever proto/ changes. Mirrors Tracera openapi-docs.yml pattern
+# (PR #342): auto-commit with [skip ci] + contents:write + persist-credentials.
+#
+# SSOT: proto/agileplus/v1/ is the single source of truth for .proto files.
+# Non-proto contract files (agileplus.proto, mcp-tools.json, registry-adapter.md)
+# remain hand-maintained; see docs/specs/*/contracts/README.md for scope.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'proto/**'
+      - '.github/workflows/regen-docs-specs.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+
+
+jobs:
+  regen:
+    name: Sync proto -> docs/specs/contracts
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync proto/agileplus/v1/*.proto -> docs/specs/001/contracts/
+        run: |
+          set -euo pipefail
+          SRC="proto/agileplus/v1"
+          DST="docs/specs/001-spec-driven-development-engine/contracts"
+
+          if [ ! -d "$SRC" ]; then
+            echo "::error::Source proto dir $SRC missing"
+            exit 1
+          fi
+          if [ ! -d "$DST" ]; then
+            echo "::error::Destination contracts dir $DST missing"
+            exit 1
+          fi
+
+          # Copy every .proto from SSOT; do not touch non-proto files
+          # (agileplus.proto aggregator, mcp-tools.json are hand-maintained).
+          for src_proto in "$SRC"/*.proto; do
+            name=$(basename "$src_proto")
+            # Skip files that are hand-maintained aggregators not present in proto/.
+            cp "$src_proto" "$DST/$name"
+            echo "Synced $name"
+          done
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet docs/specs/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No contract drift detected."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git --no-pager diff --stat docs/specs/
+          fi
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name 'agileplus-proto-sync[bot]'
+          git config user.email 'agileplus-proto-sync@users.noreply.github.com'
+          git add docs/specs/
+          git commit -m "chore(docs): regenerate docs/specs/contracts from proto [skip ci]"
+          git push origin main

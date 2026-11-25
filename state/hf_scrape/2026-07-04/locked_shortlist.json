@@ -1,0 +1,244 @@
+{
+  "date": "2026-07-04",
+  "status": "LOCKED + USER_RESOLVED",
+  "rule_source": "user message 2026-07-04",
+  "cloud_role": "forge-dev -> omniroute-dev -> OpenRouter",
+  "selfhosted_role": "pheno-serve-dev (SGLang primary, vLLM secondary per config/inference_runners.yaml)",
+  "recency_cutoff_utc": "2026-03-01T00:00:00+00:00",
+  "recency_rule_id": "ADR-0004 rule #6",
+  "user_decisions_2026_07_04": {
+    "1_granite_4_0_h_micro": "DROPPED per user 2026-07-04",
+    "2_qwen3_5_0_8b_scope": "DUAL: T0_drafter + T1_small_task combined tier",
+    "3_eval_suites": "DeepSWE + TB 2.0 + TB 2.1 + long_horizon = primary; SWE-bench Verified lite frozen subset as regression only; SWE-bench Lite REMOVED",
+    "4_cost_projection": "see state/hf_scrape/2026-07-04/cost_projection.md + locked_shortlist.md cost section"
+  },
+  "cloud_baselines": [
+    {
+      "rank": 1,
+      "or_id": "inclusionai/ling-2.6-flash",
+      "publisher": "inclusionAI",
+      "or_pricing_in_per_1m": 0.01,
+      "or_pricing_out_per_1m": 0.03,
+      "or_context": 262144,
+      "or_created_iso": "2026-04-21",
+      "hf_repo": null,
+      "recency": "ok"
+    },
+    {
+      "rank": 2,
+      "or_id": "liquid/lfm-2-24b-a2b",
+      "publisher": "LiquidAI",
+      "or_pricing_in_per_1m": 0.03,
+      "or_pricing_out_per_1m": 0.12,
+      "or_context": 128000,
+      "or_created_iso": "2026-02-25",
+      "hf_repo": "LiquidAI/LFM2-24B-A2B",
+      "recency": "or_pre_march_but_hf_current",
+      "hf_last_modified": "2026-03-30"
+    },
+    {
+      "rank": 3,
+      "or_id": "arcee-ai/trinity-mini",
+      "publisher": "Arcee AI",
+      "or_pricing_in_per_1m": 0.045,
+      "or_pricing_out_per_1m": 0.15,
+      "or_context": 131072,
+      "or_created_iso": "2025-12-01",
+      "hf_repo": "arcee-ai/Trinity-Mini",
+      "recency": "or_pre_march_but_hf_current",
+      "hf_last_modified": "2026-05-28"
+    },
+    {
+      "rank": 4,
+      "or_id": "ibm-granite/granite-4.1-8b",
+      "publisher": "IBM",
+      "or_pricing_in_per_1m": 0.05,
+      "or_pricing_out_per_1m": 0.10,
+      "or_context": 131072,
+      "or_created_iso": "2026-04-30",
+      "hf_repo": "ibm-granite/granite-4.1-8b",
+      "recency": "ok",
+      "hf_last_modified": "2026-05-04"
+    },
+    {
+      "rank": 5,
+      "or_id": "poolside/laguna-xs-2.1",
+      "publisher": "Poolside",
+      "or_pricing_in_per_1m": 0.06,
+      "or_pricing_out_per_1m": 0.12,
+      "or_context": 262144,
+      "or_created_iso": "2026-06-29",
+      "hf_repo": "poolside/Laguna-XS-2.1",
+      "recency": "ok",
+      "hf_last_modified": "2026-07-02"
+    },
+    {
+      "rank": 6,
+      "or_id": "tencent/hy3-preview",
+      "publisher": "Tencent",
+      "or_pricing_in_per_1m": 0.063,
+      "or_pricing_out_per_1m": 0.21,
+      "or_context": 262144,
+      "or_created_iso": "2026-04-22",
+      "hf_repo": "tencent/HY3-Preview",
+      "recency": "ok",
+      "hf_last_modified": "2026-04-23"
+    },
+    {
+      "rank": 7,
+      "or_id": "qwen/qwen3.5-flash-02-23",
+      "publisher": "Qwen",
+      "or_pricing_in_per_1m": 0.065,
+      "or_pricing_out_per_1m": 0.26,
+      "or_context": 1000000,
+      "or_created_iso": "2026-02-25",
+      "hf_repo": null,
+      "recency": "or_pre_march_hf_404",
+      "hf_404_repo": "Qwen/Qwen3.5-Flash-02-23",
+      "kept_for": "1M-context option (only OR cloud pick with > 262k ctx)"
+    }
+  ],
+  "cloud_dropped": [
+    {"or_id": "ibm-granite/granite-4.0-h-micro", "reason": "Pre-March (HF 2025-11-03); user confirmed drop 2026-07-04"}
+  ],
+  "self_hosted": [
+    {
+      "rank": 1,
+      "hf_repo": "Qwen/Qwen3.5-0.8B",
+      "params_b": 0.873,
+      "arch": "qwen3 (image-text-to-text)",
+      "hf_last_modified": "2026-03-02",
+      "hf_downloads": 2485925,
+      "license": "apache-2.0",
+      "vram_bf16_gb": 1.7,
+      "disk_gb": 1.8,
+      "recency": "ok",
+      "role": "T0_drafter_AND_T1_small_task",
+      "role_dual_note": "User 2026-07-04: serve both as drafter (with EAGLE/MTP) and as small-task worker (TB lite, intent-graph leaves, routing). Adds 1.7 GB vRAM max; ~5 GB combined with draft path."
+    },
+    {
+      "rank": 2,
+      "hf_repo": "LiquidAI/LFM2.5-8B-A1B",
+      "params_total_b": 8.47,
+      "params_active_b": 1.0,
+      "arch": "lfm2_moe (MoE 8.47B total / 1B active)",
+      "hf_last_modified": "2026-07-02",
+      "hf_downloads": 145281,
+      "license": "other",
+      "vram_bf16_gb": 17.0,
+      "disk_gb": 17.0,
+      "recency": "ok",
+      "role": "T2_workhorse"
+    },
+    {
+      "rank": 3,
+      "hf_repo": "deepreinforce-ai/Ornith-1.0-9B",
+      "params_total_b": 9.41,
+      "arch": "qwen3_5-based MoE",
+      "hf_last_modified": "2026-06-25",
+      "hf_downloads": 69837,
+      "license": "mit",
+      "vram_bf16_gb": 18.8,
+      "disk_gb": 18.9,
+      "recency": "ok",
+      "role": "T3_mid_moe",
+      "note": "user said 'ornith 8b' but canonical repo is 9B"
+    }
+  ],
+  "self_hosted_derivatives": [
+    {
+      "hf_repo": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
+      "format": "GGUF",
+      "hf_downloads": 320660,
+      "role": "T3_mid_moe_gguf"
+    },
+    {
+      "hf_repo": "protoLabsAI/Ornith-1.0-9B-MTP-GGUF",
+      "format": "GGUF+MTP",
+      "hf_downloads": 24464,
+      "role": "T3_spec_dec_target",
+      "engine_note": "MTP support is llama.cpp-native; vLLM/SGLang MTP is experimental"
+    },
+    {
+      "hf_repo": "cyankiwi/Ornith-1.0-9B-AWQ-INT4",
+      "format": "AWQ-INT4",
+      "hf_downloads": 6000,
+      "role": "T3_awq_int4"
+    },
+    {
+      "hf_repo": "cyankiwi/Ornith-1.0-9B-AWQ-FP8",
+      "format": "AWQ-FP8",
+      "hf_downloads": 17600,
+      "role": "T3_awq_fp8"
+    }
+  ],
+  "self_hosted_download_size_total_gb": 55.7,
+  "eval_suites": {
+    "primary": [
+      {"name": "deepswe",       "tasks": 113, "source": "datacurve-ai/deep-swe",     "why": "long-horizon SWE with isolated envs + program verifiers; user priority 2026-07-04"},
+      {"name": "tbench_20",     "tasks": 89,  "source": "Harbor TB 2.0",              "why": "official Harbor harness for TB 2.0; user priority 2026-07-04"},
+      {"name": "tbench_21",     "tasks": 89,  "source": "Harbor TB 2.1",              "why": "TB 2.1 added in live TB page 2026-07-03; not yet in pheno-harness"},
+      {"name": "long_horizon",  "tasks": 16,  "source": "custom trace-derived + Harbor long-running template", "why": "measure intent-graph + multi-agent vs single-agent at multi-hour tasks"}
+    ],
+    "regression_only": [
+      {"name": "swebench_verified_lite", "tasks": 200, "source": "SWE-bench Verified (frozen 200-task subset)", "why": "regression anchor only; user does not like SWE-bench Verified overall"}
+    ],
+    "watch_monthly": [
+      {"name": "tbench_3_watch", "tasks": null, "source": "Harbor TB 3.x", "why": "opt-in monthly run when 3.x goes stable"}
+    ],
+    "removed": [
+      {"name": "swebench_lite", "reason": "user 2026-07-04: do not like SWE-bench Verified overall"}
+    ]
+  },
+  "cost_projection": {
+    "currency": "USD",
+    "per_model_per_suite_x1_attempt": {
+      "C1_ling":         {"tbench_20": 0.0009,  "deepswe": 0.0014, "long_horizon": 0.012, "swebench_verified_lite": 0.0014},
+      "C2_lfm24b":       {"tbench_20": 0.0071,  "deepswe": 0.0112, "long_horizon": 0.052, "swebench_verified_lite": 0.0112},
+      "C3_trinity":      {"tbench_20": 0.0080,  "deepswe": 0.0129, "long_horizon": 0.060, "swebench_verified_lite": 0.0129},
+      "C4_granite41_8b": {"tbench_20": 0.0062,  "deepswe": 0.0092, "long_horizon": 0.045, "swebench_verified_lite": 0.0092},
+      "C5_laguna":       {"tbench_20": 0.0071,  "deepswe": 0.0112, "long_horizon": 0.052, "swebench_verified_lite": 0.0112},
+      "C6_hy3":          {"tbench_20": 0.0100,  "deepswe": 0.0161, "long_horizon": 0.075, "swebench_verified_lite": 0.0161},
+      "C7_qwen35_flash": {"tbench_20": 0.0113,  "deepswe": 0.0176, "long_horizon": 0.083, "swebench_verified_lite": 0.0176}
+    },
+    "totals_per_suite_x1_attempt_7_cloud_models": {
+      "tbench_20": 0.165,
+      "deepswe":   0.260,
+      "long_horizon": 1.221,
+      "swebench_verified_lite": 0.260
+    },
+    "totals_x5_attempts": {
+      "tbench_20": 0.825,
+      "deepswe":   1.30,
+      "long_horizon": 6.10,
+      "swebench_verified_lite": 1.30
+    },
+    "totals_5_attempts_one_full_epoch_4_suites": 9.53,
+    "cadence_options": [
+      {"id": "A", "name": "recommended", "description": "nightly regression (swebench_verified_lite only) + weekly full", "per_week_usd": 49.6, "components": {"nightly_reg_per_week": 39.0, "weekly_full_per_week": 9.53}},
+      {"id": "B", "name": "budget",      "description": "weekly smoke + biweekly deep", "per_week_usd": 22.0},
+      {"id": "C", "name": "aggressive",  "description": "all suites nightly + weekly long-horizon extra run", "per_week_usd": 130.0}
+    ],
+    "self_hosted_per_sweep_usd": 0.0,
+    "self_hosted_electricity_per_sweep_usd": 1.5,
+    "long_horizon_dominates_share_of_cost": 0.643
+  },
+  "decisions_pending_user_input": [
+    {"id": 1, "q": "Cadence default — A ($50/wk), B ($22/wk), or C ($130/wk)?", "default_recommendation": "A"},
+    {"id": 2, "q": "First eval to run after sign-off — TB 2.0 5-task probe (~$0.83 for 7 cloud + free for locals) or full TB 2.0 x1 attempt (~$0.165 for 7 cloud)?", "default_recommendation": "full TB 2.0 x1 attempt"},
+    {"id": 3, "q": "Long-horizon suite source — trace-derived (agent traces in C:\\Users\\koosh), hand-curated from corpus, or Harbor long-running template?", "default_recommendation": "trace-derived"},
+    {"id": 4, "q": "Self-hosted serving priority — confirm SGLang > vLLM > llama.cpp order?", "default_recommendation": "yes"},
+    {"id": 5, "q": "Qwen3.5-0.8B multimodal sibling acceptable, or find text-only sibling for the drafter role?", "default_recommendation": "acceptable"},
+    {"id": 6, "q": "Disk partition for state/model_cache/ — D: (528 GB) or E: (NVMe 1.36 TB)?", "default_recommendation": "E:"},
+    {"id": 7, "q": "Download sequencing — L0 first (cheap), then L2, then L3?", "default_recommendation": "yes"}
+  ],
+  "references": {
+    "cost_md": "state/hf_scrape/2026-07-04/cost_projection.md",
+    "locked_md": "state/hf_scrape/2026-07-04/locked_shortlist.md",
+    "adr": "docs/adrs/0005-locked-baseline-march-2026-cutoff.md",
+    "matrix": "docs/specs/003-model-engine-matrix.md",
+    "eval_arch": "docs/specs/001-eval-architecture.md",
+    "impl_plan": "docs/specs/004-implementation-plan.md",
+    "raw_data": "state/hf_scrape/2026-07-04/last_modified_probes.json"
+  }
+}

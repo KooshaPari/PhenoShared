@@ -1,0 +1,24 @@
+{
+  "name": "KCode",
+  "slug": "kcode",
+  "tagline": "Most RAM-efficient coding harness: Rust-native agent execution runtime.",
+  "domain": "kcode.phenotype.space",
+  "color": "#4f46e5",
+  "description": "Most RAM-efficient coding harness: Rust-native agent execution runtime.",
+  "tier": 2,
+  "repo": "KooshaPari/KCode",
+  "language": "Rust",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Low memory footprint",
+    "Agent execution",
+    "Rust-native",
+    "Session management"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/KCode",
+    "docs": "https://kcode.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/KCode/releases"
+  }
+}

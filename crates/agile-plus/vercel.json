@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "agileplus",
+  "buildCommand": "(cd crates/agileplus-dashboard/web && bun install && bun run build)",
+  "outputDirectory": "crates/agileplus-dashboard/web/dist",
+  "framework": "vite",
+  "installCommand": "(cd crates/agileplus-dashboard/web && bun install)",
+  "devCommand": "(cd crates/agileplus-dashboard/web && bun run dev)",
+  "regions": ["iad1"],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

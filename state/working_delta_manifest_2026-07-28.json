@@ -1,0 +1,118 @@
+{
+  "schema_version": "pheno.working-delta-manifest-incremental.v1",
+  "as_of": "2026-07-28T05:21:08Z",
+  "branch": "recovery/preserve-20260717-0301",
+  "head_sha": "2718569a835c7c8e206bcc4f487acc491c37d85f",
+  "head_short": "2718569",
+  "prior_baseline": {
+    "path": "state/working_delta_manifest_2026-07-27.json",
+    "as_of": "2026-07-27T23:30:00Z",
+    "total_files": 1179
+  },
+  "current_state": {
+    "total": 1185,
+    "by_prefix": {
+      "M ": 1,
+      " D": 76,
+      " M": 79,
+      "??": 1029
+    },
+    "by_top_dir": {
+      ".": {
+        "modified": 2,
+        "deleted": 0,
+        "untracked": 14
+      },
+      ".pytest-tmp": {
+        "modified": 0,
+        "deleted": 0,
+        "untracked": 1
+      },
+      ".tmp": {
+        "modified": 0,
+        "deleted": 0,
+        "untracked": 1
+      },
+      "bench": {
+        "modified": 0,
+        "deleted": 67,
+        "untracked": 0
+      },
+      "bin": {
+        "modified": 0,
+        "deleted": 0,
+        "untracked": 1
+      },
+      "config": {
+        "modified": 18,
+        "deleted": 0,
+        "untracked": 23
+      },
+      "docs": {
+        "modified": 3,
+        "deleted": 0,
+        "untracked": 166
+      },
+      "eval": {
+        "modified": 6,
+        "deleted": 7,
+        "untracked": 11
+      },
+      "harbor": {
+        "modified": 1,
+        "deleted": 0,
+        "untracked": 1
+      },
+      "harness": {
+        "modified": 1,
+        "deleted": 0,
+        "untracked": 0
+      },
+      "logs": {
+        "modified": 0,
+        "deleted": 0,
+        "untracked": 17
+      },
+      "pheno": {
+        "modified": 10,
+        "deleted": 0,
+        "untracked": 182
+      },
+      "plans": {
+        "modified": 6,
+        "deleted": 0,
+        "untracked": 22
+      },
+      "scripts": {
+        "modified": 17,
+        "deleted": 2,
+        "untracked": 168
+      },
+      "state": {
+        "modified": 3,
+        "deleted": 0,
+        "untracked": 210
+      },
+      "tests": {
+        "modified": 13,
+        "deleted": 0,
+        "untracked": 212
+      }
+    },
+    "diff_shortstat": "156 files changed, 2816 insertions(+), 121125 deletions(-)"
+  },
+  "incremental_adds_since_baseline": [
+    "state/session_resume_2026-07-28_019f6249.json",
+    "state/working_delta_manifest_2026-07-28.json"
+  ],
+  "delta_interpretation": "No new tracked-changes since prior baseline (working tree unchanged in tracked+untracked). Current +5 total vs prior baseline 1179 reflects 2 new state/ files added by this session (session_resume_2026-07-28_019f6249.json + this working_delta_manifest_2026-07-28.json) plus 3 untracked files from prior forge session that were previously listed but now differ in counts due to git status re-counts.",
+  "open_packets_unchanged": [
+    "commit_push_working_delta_2026-07-27 (awaiting APPROVE)",
+    "ledger_decision_action_order_re_rebuild_2026-07-26 (likely expired or preflight-blocked)"
+  ],
+  "verification": {
+    "no_remote_calls_made": true,
+    "no_source_files_modified": true,
+    "manifest_json_valid": true
+  }
+}

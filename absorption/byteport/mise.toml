@@ -1,0 +1,190 @@
+# mise.toml for BytePort
+# ------------------------------------------------------------------
+# Pinned tool versions for BytePort's three engines + their tooling.
+# mise (https://mise.jdx.dev/) reads this and activates the right
+# versions in the repo root. Use `mise install` once per checkout.
+#
+# Why this file is separate from Taskfile.yml:
+#   - Taskfile.yml orchestrates recipes (build, test, lint, ...).
+#   - mise.toml pins the TOOL VERSIONS those recipes call into.
+#   - Decoupling means a CI runner can use either:
+#       (a) mise + task  → identical to a dev's local env, or
+#       (b) raw `cargo`/`go`/`node`  → if the runner already has
+#           the pinned versions installed.
+# ------------------------------------------------------------------
+
+[env]
+# Full project description (shows up in `mise env`).
+description = "BytePort — Phenotype-org infrastructure tooling"
+
+# Single source of truth for engine versions. CI workflows (cargo-deny,
+# go-test, web-build) should read these via `mise exec -- ...` so the
+# CI pin always matches the local pin.
+
+# -- Rust (Tauri shell + workspace) -----------------------------------
+[env.rust_channel]
+description = "Rust toolchain channel for the Tauri + workspace crates."
+# Pin to the same channel BytePort's CI uses (see .github/workflows/*.yml).
+value = "1.82.0"
+
+# -- Go (byteport + nvms backends) -------------------------------------
+[env.go_version]
+description = "Go toolchain version for backend/byteport and backend/nvms."
+value = "1.23.4"
+
+# -- Node (SvelteKit frontend) -----------------------------------------
+[env.node_version]
+description = "Node.js runtime version for frontend/web."
+value = "20.18.0"
+
+[env.npm_version]
+description = "npm version (tracks the Node LTS line; pin for reproducibility)."
+value = "10.8.2"
+
+# -- pnpm (optional faster installer) ----------------------------------
+# Uncomment if frontend/web migrates from npm → pnpm. Keep commented
+# until then to avoid drift between two lockfiles.
+# [env.pnpm_version]
+# description = "pnpm version (optional; matches frontend/web if migrated)."
+# value = "9.12.0"
+
+# -- Cargo tooling pins (for mise-managed `cargo install --locked`) ---
+[env.cargo_deny_version]
+description = "cargo-deny version (mirrors .github/workflows/cargo-deny.yml)."
+value = "0.16.1"
+
+[env.cargo_audit_version]
+description = "cargo-audit version (mirrors .github/workflows/cargo-audit.yml)."
+value = "0.21.2"
+
+[env.cargo_llvm_cov_version]
+description = "cargo-llvm-cov version (mirrors coverage task in Taskfile.yml)."
+value = "0.6.16"
+
+# -- Benchora / portage (eval layer) -----------------------------------
+# These are tools from the *eval layer* (not part of BytePort's own
+# runtime) but BytePort's Taskfile.yml can shell out to them for the
+# `task bench` / `task eval` recipes. Pinning them here means a dev
+# can run `mise install` once and have the whole eval layer ready.
+[env.benchora_version]
+description = "Benchora version (Rust benchmark harness — `cargo install benchora`)."
+value = "0.3.0"
+
+[env.portage_version]
+description = "portage version (Harbor-derived agent-eval framework — `uv tool install portage`)."
+value = "0.7.2"
+
+[env.harbor_version]
+description = "Upstream Harbor version that portage tracks (read-only; informational)."
+value = "0.2.10"
+
+# -- Build flags (so dev = CI parity for cargo invocations) ------------
+[env.cargo_build_jobs]
+description = "CARGO_BUILD_JOBS default; honors $CPU count on Linux/macOS, nproc on Linux, sysctl on macOS, $NUMBER_OF_PROCESSORS on Windows."
+value = "{{ cpu_count() }}"
+
+[env.rustflags_default]
+description = "RUSTFLAGS default (release builds); mirrors what the Tauri desktop build uses."
+value = "-C target-cpu=native -C opt-level=3"
+
+# -- Taskfile source (so `mise exec -- task build` Just Works) ---------
+[env.taskfile_version]
+description = "go-task version (Taskfile.yml is consumed by go-task, not make)."
+value = "3.42.2"
+
+# -- Per-directory overrides (if frontend or backend needs different) --
+# Backend/byteport uses Go only — no Rust toolchain needed in that subdir.
+# [env._backend_override_test]
+# path = "backend/byteport"
+# [env._backend_override_test.rust_version]
+# value = ""   # intentionally empty: backend/byteport doesn't need rust.
+
+# ----------------------------------------------------------------------
+# TASKS — top-level commands exposed by `mise run <name>`. These are
+# THIN WRAPPERS around Taskfile.yml so dev/CI always go through go-task
+# for the actual recipe logic.
+# ----------------------------------------------------------------------
+# NOTE: mise tasks here are intentionally minimal. The full recipe logic
+# lives in Taskfile.yml so we have a single SSOT for build/test/lint.
+# Adding new recipes? Edit Taskfile.yml, NOT this file.
+# ----------------------------------------------------------------------
+
+[tasks.install]
+description = "Install all pinned tools (Rust, Go, Node, cargo-* tools, etc.)."
+run = "mise install"
+
+[tasks.build]
+description = "Build everything (delegates to go-task)."
+run = "task build"
+
+[tasks.test]
+description = "Test everything (delegates to go-task)."
+run = "task test"
+
+[tasks.lint]
+description = "Lint everything (delegates to go-task)."
+run = "task lint"
+
+[tasks.fmt]
+description = "Check formatting (delegates to go-task)."
+run = "task fmt"
+
+[tasks.ci]
+description = "Full CI pipeline (delegates to go-task)."
+run = "task ci"
+
+[tasks.hygiene]
+description = "Repository hygiene checks (delegates to go-task)."
+run = "task hygiene"
+
+[tasks.bench]
+description = "Run criterion benches via Benchora (if a benches/ dir exists)."
+run = "task bench || echo 'no benches/ defined in this crate'"
+
+[tasks.eval]
+description = "Run portage agent evals (if a portage/ dir or tasks.toml exists)."
+run = "command -v portage >/dev/null 2>&1 && portage run --tasks portage/tasks.toml || echo 'portage not installed; skipping eval'"
+
+[tasks.coverage]
+description = "Generate coverage report (delegates to go-task)."
+run = "task coverage"
+
+[tasks.audit]
+description = "Run cargo-audit + cargo-deny (delegates to go-task)."
+run = "task deny && task audit"
+
+[tasks.clean]
+description = "Clean all build artifacts."
+run = "task clean"
+
+[tasks.doctor]
+description = "Verify the pinned toolchain matches what Taskfile.yml assumes."
+run = """
+#!/usr/bin/env bash
+set -euo pipefail
+echo "==> mise doctor for BytePort"
+echo
+echo "Active tool versions:"
+mise current || true
+echo
+echo "Required (pinned in this mise.toml):"
+echo "  rust:  $(mise exec -- rustc --version 2>/dev/null || echo 'NOT INSTALLED')"
+echo "  go:    $(mise exec -- go version 2>/dev/null || echo 'NOT INSTALLED')"
+echo "  node:  $(mise exec -- node --version 2>/dev/null || echo 'NOT INSTALLED')"
+echo "  npm:   $(mise exec -- npm --version 2>/dev/null || echo 'NOT INSTALLED')"
+echo "  task:  $(mise exec -- task --version 2>/dev/null || echo 'NOT INSTALLED')"
+echo
+echo "Optional (eval layer; non-fatal if missing):"
+echo "  benchora: $(mise exec -- benchora --version 2>/dev/null || echo 'not installed')"
+echo "  portage:  $(mise exec -- portage --version 2>/dev/null || echo 'not installed')"
+"""
+
+# ----------------------------------------------------------------------
+# settings — mise behavior knobs
+# ----------------------------------------------------------------------
+[settings]
+# Use the system PATH as the base; mise only ADDS its own shims on top.
+# This means commands like `gh`, `git`, `docker` continue to resolve
+# from /usr/bin / /usr/local/bin.
+# experimental = true   # uncomment if you want mise's experimental plugins
+# disable_legacy_hvsm = false  # keep hash-versioned shim management on

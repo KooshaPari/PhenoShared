@@ -1,0 +1,459 @@
+---
+import "../styles/globals.css";
+import reposData from "../../data/repos.json";
+
+type Repo = {
+  name: string;
+  description: string | null;
+  url: string;
+  homepageUrl: string | null;
+  primaryLanguage: { name: string; color: string } | null;
+  pushedAt: string;
+  isArchived: boolean;
+  isFork: boolean;
+};
+
+type Surface = {
+  name: string;
+  repo: string;
+  href: string;
+  status: "shipped" | "next" | "docs" | "infra";
+  description: string;
+};
+
+const activeRepos = (reposData as Repo[]).filter((repo) => !repo.isArchived && !repo.isFork);
+const byName = new Map(activeRepos.map((repo) => [repo.name, repo]));
+
+const shippedSurfaces: Surface[] = [
+  {
+    name: "KooshaPari personal landing",
+    repo: "projects-landing",
+    href: "https://kooshapari.com",
+    status: "shipped",
+    description: "Personal portfolio home with project case studies, resume, and legacy Adobe forwards.",
+  },
+  {
+    name: "Phenotype hub",
+    repo: "projects-landing",
+    href: "https://projects.kooshapari.com",
+    status: "shipped",
+    description: "Tier-1 project graph, personal layer, docs, QA, observability, and preview router.",
+  },
+  {
+    name: "AgilePlus",
+    repo: "AgilePlus",
+    href: "https://agileplus.kooshapari.com",
+    status: "shipped",
+    description: "Spec-driven development engine with `/otel` wired for PhenoObservability embedding.",
+  },
+  {
+    name: "BytePort",
+    repo: "BytePort",
+    href: "https://byteport.kooshapari.com",
+    status: "shipped",
+    description: "Binary serialization and protocol framework landing surface.",
+  },
+  {
+    name: "HWLedger",
+    repo: "hwLedger",
+    href: "https://hwledger.kooshapari.com",
+    status: "shipped",
+    description: "Fleet capacity planner and desktop inference runtime landing surface.",
+  },
+  {
+    name: "PhenoKits",
+    repo: "PhenoKits",
+    href: "https://phenokits.kooshapari.com",
+    status: "shipped",
+    description: "Reusable kit catalog for templates, libraries, governance, and adapters.",
+  },
+  {
+    name: "theGent",
+    repo: "thegent",
+    href: "https://thegent.kooshapari.com",
+    status: "shipped",
+    description: "Agent runtime and orchestration landing surface.",
+  },
+];
+
+const nextSurfaces: Surface[] = [
+  {
+    name: "phenoData",
+    repo: "phenoData",
+    href: "https://github.com/KooshaPari/phenoData",
+    status: "next",
+    description: "Data-layer landing and docs shell for SurrealDB, Postgres/pgvector, and query planner work.",
+  },
+  {
+    name: "heliosBench",
+    repo: "heliosBench",
+    href: "https://github.com/KooshaPari/heliosBench",
+    status: "next",
+    description: "Benchmark docs, install/run guide, report gallery, and Pages workflow.",
+  },
+  {
+    name: "phenotype-registry",
+    repo: "phenotype-registry",
+    href: "https://github.com/KooshaPari/phenotype-registry",
+    status: "next",
+    description: "Registry landing docs and reference index for specs, patterns, and templates.",
+  },
+  {
+    name: "Observably",
+    repo: "Observably",
+    href: "https://github.com/KooshaPari/Observably",
+    status: "docs",
+    description: "Observability brand page and public PhenoObservability UI integration notes.",
+  },
+  {
+    name: "PhenoContracts archive",
+    repo: "phenotype-registry",
+    href: "https://github.com/KooshaPari/phenotype-registry/pull/314",
+    status: "docs",
+    description: "Repo-level archive gate; active contract surfaces live in domain owners.",
+  },
+  {
+    name: "PhenoKit",
+    repo: "PhenoKit",
+    href: "https://github.com/KooshaPari/PhenoKit",
+    status: "docs",
+    description: "Single-kit docs and brand bridge into the broader PhenoKits catalog.",
+  },
+];
+
+const infraSurfaces: Surface[] = [
+  {
+    name: "PhenoObservability embed",
+    repo: "PhenoObservability",
+    href: "/otel",
+    status: "infra",
+    description: "Standard public UI env contract: `PHENO_OTLP_UI_URL` with `PHENO_OBSERVABILITY_UI_URL` alias.",
+  },
+  {
+    name: "Landing repo generator",
+    repo: "phenotype-tooling",
+    href: "https://github.com/KooshaPari/phenotype-tooling",
+    status: "infra",
+    description: "Generate Astro 6 landing shells with `/docs`, `/otel`, `/qa`, `/preview`, README, and CI defaults.",
+  },
+  {
+    name: "Docs promotion queue",
+    repo: "projects-landing",
+    href: "/docs",
+    status: "infra",
+    description: "Promote README-first repos into Pages-ready docs shells without mixing repo ownership boundaries.",
+  },
+];
+
+const allPlanned = [...nextSurfaces, ...infraSurfaces];
+const knownLandingHomes = shippedSurfaces.filter((surface) => surface.href.startsWith("https://")).length;
+const activeWithoutHome = activeRepos.filter((repo) => !repo.homepageUrl).length;
+
+function repoMeta(name: string): Repo | undefined {
+  return byName.get(name);
+}
+
+function relTime(iso: string | undefined): string {
+  if (!iso) return "local";
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  if (days < 1) return "today";
+  if (days < 30) return `${days}d ago`;
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+  return `${Math.floor(days / 365)}y ago`;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phenotype Brand Surfaces - KooshaPari</title>
+    <meta
+      name="description"
+      content="Phenotype and KooshaPari landing, docs, observability, and microfrontend rollout map."
+    />
+  </head>
+  <body class="min-h-screen">
+    <main class="brand-shell">
+      <nav class="brand-nav mono">
+        <a href="/">Phenotype</a>
+        <a href="/koosha">Koosha</a>
+        <a href="/docs">Docs</a>
+        <a href="/otel">OTel</a>
+      </nav>
+
+      <header class="brand-hero">
+        <div>
+          <p class="mono eyebrow">Phenotype brand system</p>
+          <h1>Landing and microfrontend map</h1>
+          <p class="lede">
+            A working queue for KooshaPari personal branding, Phenotype project
+            pages, Tier-2 landing sites, and shared `/docs`, `/otel`, `/qa`,
+            and `/preview` infrastructure.
+          </p>
+        </div>
+        <div class="score-panel" aria-label="Landing rollout counters">
+          <div>
+            <span>{knownLandingHomes}</span>
+            <small>shipped public homes</small>
+          </div>
+          <div>
+            <span>{activeWithoutHome}</span>
+            <small>active repos without homepage wiring</small>
+          </div>
+          <div>
+            <span>{allPlanned.length}</span>
+            <small>queued brand and infra surfaces</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <p class="mono eyebrow">Shipped</p>
+          <h2>Public landing surfaces</h2>
+        </div>
+        <div class="surface-grid">
+          {shippedSurfaces.map((surface) => {
+            const repo = repoMeta(surface.repo);
+            return (
+              <article class="surface-card shipped">
+                <div>
+                  <span class="status-pill mono">{surface.status}</span>
+                  <h3>{surface.name}</h3>
+                  <p>{surface.description}</p>
+                </div>
+                <footer>
+                  <span>{repo?.primaryLanguage?.name ?? "Astro"}</span>
+                  <span>{relTime(repo?.pushedAt)}</span>
+                  <a href={surface.href} target={surface.href.startsWith("http") ? "_blank" : undefined} rel="noopener">Open</a>
+                </footer>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <p class="mono eyebrow">Next builds</p>
+          <h2>Missing landing and docs surfaces</h2>
+        </div>
+        <div class="surface-grid">
+          {nextSurfaces.map((surface) => {
+            const repo = repoMeta(surface.repo);
+            return (
+              <article class={`surface-card ${surface.status}`}>
+                <div>
+                  <span class="status-pill mono">{surface.status}</span>
+                  <h3>{surface.name}</h3>
+                  <p>{repo?.description ?? surface.description}</p>
+                  <p class="plan-note">{surface.description}</p>
+                </div>
+                <footer>
+                  <span>{repo?.primaryLanguage?.name ?? "docs"}</span>
+                  <span>{relTime(repo?.pushedAt)}</span>
+                  <a href={surface.href} target="_blank" rel="noopener">Source</a>
+                </footer>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section class="section-band">
+        <div class="section-heading">
+          <p class="mono eyebrow">Infrastructure</p>
+          <h2>Reusable page tooling</h2>
+        </div>
+        <div class="infra-list">
+          {infraSurfaces.map((surface) => (
+            <a class="infra-row" href={surface.href}>
+              <span class="status-pill mono">{surface.status}</span>
+              <strong>{surface.name}</strong>
+              <span>{surface.description}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <style>
+      .brand-shell {
+        width: min(1160px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 1.25rem 0 4rem;
+      }
+      .brand-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+        font-size: 0.78rem;
+      }
+      .brand-nav a,
+      .surface-card a,
+      .infra-row {
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        padding: 0.55rem 0.75rem;
+        text-decoration: none;
+        transition: border-color .15s, color .15s, background .15s;
+      }
+      .brand-nav a:hover,
+      .surface-card a:hover,
+      .infra-row:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .brand-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.7fr);
+        gap: clamp(1.25rem, 4vw, 4rem);
+        align-items: center;
+        min-height: 58vh;
+      }
+      .eyebrow {
+        color: var(--accent);
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+      h1 {
+        margin: 0.5rem 0 0;
+        font-size: clamp(3rem, 8vw, 6.5rem);
+        line-height: 0.95;
+        font-weight: 800;
+      }
+      .lede {
+        max-width: 46rem;
+        margin-top: 1.25rem;
+        color: var(--fg);
+        font-size: 1.06rem;
+        line-height: 1.7;
+      }
+      .score-panel {
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        background: var(--card);
+        padding: 1.25rem;
+        display: grid;
+        gap: 1rem;
+      }
+      .score-panel div {
+        border: 1px solid var(--border);
+        border-radius: 0.55rem;
+        background: var(--accent-wash);
+        padding: 1rem;
+      }
+      .score-panel span {
+        display: block;
+        color: var(--accent);
+        font-size: 2.35rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+      .score-panel small {
+        display: block;
+        margin-top: 0.45rem;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .section-band {
+        border-top: 1px solid var(--border);
+        padding: 3rem 0;
+      }
+      .section-heading {
+        margin-bottom: 1.25rem;
+      }
+      .section-heading h2 {
+        margin: 0.35rem 0 0;
+        font-size: clamp(1.7rem, 4vw, 2.4rem);
+      }
+      .surface-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      .surface-card {
+        border: 1px solid var(--border);
+        border-radius: 0.7rem;
+        background: var(--card);
+        min-height: 17rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .surface-card.shipped {
+        border-color: var(--accent);
+      }
+      .status-pill {
+        display: inline-flex;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.25rem 0.5rem;
+        color: var(--accent);
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .surface-card h3 {
+        margin: 0.8rem 0 0;
+        color: var(--accent);
+        font-size: 1.15rem;
+      }
+      .surface-card p {
+        margin: 0.7rem 0 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .plan-note {
+        font-size: 0.86rem;
+      }
+      .surface-card footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.6rem;
+        margin-top: 1.25rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .surface-card footer a {
+        margin-left: auto;
+        color: var(--fg);
+      }
+      .infra-list {
+        display: grid;
+        gap: 0.75rem;
+      }
+      .infra-row {
+        display: grid;
+        grid-template-columns: 6.5rem 14rem minmax(0, 1fr);
+        gap: 1rem;
+        align-items: center;
+        background: var(--card);
+      }
+      .infra-row span:last-child {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      @media (max-width: 900px) {
+        .brand-hero,
+        .surface-grid,
+        .infra-row {
+          grid-template-columns: 1fr;
+        }
+        .brand-hero {
+          min-height: auto;
+          padding: 2rem 0 3rem;
+        }
+        .surface-card footer a {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </body>
+</html>

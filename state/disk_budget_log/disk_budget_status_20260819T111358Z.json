@@ -1,0 +1,30 @@
+﻿{
+    "ts":  "20260819T111358Z",
+    "status":  "healthy",
+    "total_gb":  35.13,
+    "budget_gb":  80,
+    "warn_gb":  70,
+    "headroom_gb":  44.87,
+    "footprints":  [
+                       {
+                           "id":  "pheno_cache",
+                           "path":  "C:\\Users\\koosh\\pheno-harness\\.cache",
+                           "size_gb":  0
+                       },
+                       {
+                           "id":  "hf_hub",
+                           "path":  "C:\\Users\\koosh\\.cache\\huggingface",
+                           "size_gb":  35.13
+                       },
+                       {
+                           "id":  "torch_hub",
+                           "path":  "C:\\Users\\koosh\\.cache\\torch",
+                           "size_gb":  0
+                       },
+                       {
+                           "id":  "pheno_serve_venv",
+                           "path":  "C:\\Users\\koosh\\.pheno-serve-venv",
+                           "size_gb":  0
+                       }
+                   ]
+}

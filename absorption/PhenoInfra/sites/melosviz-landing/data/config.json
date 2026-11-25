@@ -1,0 +1,24 @@
+{
+  "name": "Melosviz",
+  "slug": "melosviz",
+  "tagline": "Music-to-visual toolkit: FastAPI backend, Tauri desktop, and Python + Rust SDKs.",
+  "domain": "melosviz.phenotype.space",
+  "color": "#e879f9",
+  "description": "Music-to-visual toolkit: FastAPI backend, Tauri desktop, and Python + Rust SDKs.",
+  "tier": 2,
+  "repo": "KooshaPari/Melosviz",
+  "language": "Python / Rust / TypeScript",
+  "license": "MIT",
+  "status": "active",
+  "features": [
+    "Music analysis",
+    "Visual generation",
+    "Tauri desktop",
+    "Dual SDK"
+  ],
+  "links": {
+    "github": "https://github.com/KooshaPari/Melosviz",
+    "docs": "https://melosviz.phenotype.space/docs",
+    "releases": "https://github.com/KooshaPari/Melosviz/releases"
+  }
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 512px; height: 512px; overflow: hidden; background: #090a0c; }
+
+  /* Layer 0: Rich colorful backdrop — teal-to-midnight gradient */
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 30% 30%, #0e8a82 0%, #0d5a55 30%, #090a0c 70%);
+    z-index: 0;
+  }
+
+  /* Layer 1: Blurred accent blob behind glass */
+  .blob {
+    position: absolute;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+    background: radial-gradient(circle, #7ebab5 0%, #3a8c87 40%, transparent 70%);
+    filter: blur(60px);
+    opacity: 0.75;
+    z-index: 1;
+  }
+  /* Second accent blob lower right */
+  .blob2 {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    bottom: 30px; right: 20px;
+    background: radial-gradient(circle, #4ee3d6 0%, transparent 70%);
+    filter: blur(50px);
+    opacity: 0.5;
+    z-index: 1;
+  }
+
+  /* Layer 2: Frosted glass card with real backdrop-filter */
+  .glass-card {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 56px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 20, 22, 0.32);
+    backdrop-filter: blur(18px) saturate(1.15) brightness(1.08);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15) brightness(1.08);
+    /* Rim light border — top+left bright, bottom+right dark */
+    border: 1px solid transparent;
+    border-top-color: rgba(126, 186, 181, 0.55);
+    border-left-color: rgba(126, 186, 181, 0.35);
+    border-bottom-color: rgba(0, 0, 0, 0.5);
+    border-right-color: rgba(0, 0, 0, 0.3);
+    box-shadow:
+      0 0 0 0.5px rgba(126,186,181,0.2) inset,
+      0 32px 64px rgba(0,0,0,0.55),
+      0 2px 4px rgba(126,186,181,0.12) inset;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Layer 3: Inner glass sheen — top highlight strip */
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 52px;
+    background: linear-gradient(
+      160deg,
+      rgba(126,186,181,0.18) 0%,
+      rgba(126,186,181,0.06) 30%,
+      transparent 55%
+    );
+    pointer-events: none;
+  }
+
+  /* Icon content layer */
+  .icon-content {
+    position: relative;
+    width: 260px; height: 260px;
+    z-index: 3;
+  }
+
+  svg { width: 100%; height: 100%; }
+
+  /* Sprint-loop ring */
+  .ring-track {
+    fill: none;
+    stroke: rgba(126,186,181,0.18);
+    stroke-width: 18;
+    stroke-linecap: round;
+  }
+  .ring-arc {
+    fill: none;
+    stroke: #a8d8d4;
+    stroke-width: 18;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 90;
+    filter: drop-shadow(0 0 10px rgba(126,186,181,0.9));
+  }
+  .ring-arc-glow {
+    fill: none;
+    stroke: rgba(126,186,181,0.5);
+    stroke-width: 30;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 90;
+    filter: blur(6px);
+  }
+
+  /* Velocity bars */
+  .bar { fill: #a8d8d4; filter: drop-shadow(0 0 6px rgba(126,186,181,0.7)); }
+  .bar-dim { fill: rgba(126,186,181,0.5); }
+
+  /* Plus */
+  .plus { fill: #c8eae7; filter: drop-shadow(0 0 8px rgba(126,186,181,1.0)); }
+
+  /* Arrow head */
+  .arrow { fill: #a8d8d4; filter: drop-shadow(0 0 6px rgba(126,186,181,0.9)); }
+</style>
+</head>
+<body>
+  <!-- Layer 0: backdrop -->
+  <div class="backdrop"></div>
+  <!-- Layer 1: blurred blobs behind glass -->
+  <div class="blob"></div>
+  <div class="blob2"></div>
+  <!-- Layer 2+3: frosted glass card -->
+  <div class="glass-card">
+    <!-- Layer 4: icon concept -->
+    <div class="icon-content">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- Glow ring -->
+        <circle class="ring-arc-glow" cx="130" cy="130" r="88"
+          transform="rotate(-90 130 130)" />
+        <!-- Ring track -->
+        <circle class="ring-track" cx="130" cy="130" r="88" />
+        <!-- Sprint-loop arc -->
+        <circle class="ring-arc" cx="130" cy="130" r="88"
+          transform="rotate(-90 130 130)" />
+        <!-- Arrow on arc tip -->
+        <polygon class="arrow"
+          points="130,32 122,50 138,50"
+          transform="rotate(285 130 130) translate(0,0)" />
+
+        <!-- Velocity bars (3, ascending height) -->
+        <rect class="bar-dim" x="92" y="148" width="14" height="36" rx="4"/>
+        <rect class="bar" x="115" y="132" width="14" height="52" rx="4"/>
+        <rect class="bar" x="138" y="118" width="14" height="66" rx="4"/>
+
+        <!-- Plus sign (top-right quadrant) -->
+        <rect class="plus" x="154" y="62" width="28" height="8" rx="4"/>
+        <rect class="plus" x="164" y="52" width="8" height="28" rx="4"/>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

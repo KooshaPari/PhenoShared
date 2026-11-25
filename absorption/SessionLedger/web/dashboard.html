@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SessionLedger — Dashboard</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">SessionLedger</a></h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="viewer.html">Session Viewer</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h2>Daemon dashboard</h2>
+      <p>Sample metrics from the SessionLedger ETL pipeline.</p>
+    </section>
+
+    <section class="cards">
+      <article class="card">
+        <h3>Sessions ingested</h3>
+        <p class="metric" id="total-sessions">142,847</p>
+      </article>
+      <article class="card">
+        <h3>OKF bundles</h3>
+        <p class="metric">142,841</p>
+      </article>
+      <article class="card">
+        <h3>Active workers</h3>
+        <p class="metric">4</p>
+      </article>
+      <article class="card">
+        <h3>Avg session length</h3>
+        <p class="metric">52 events</p>
+      </article>
+    </section>
+
+    <section>
+      <h2>Sessions per tool</h2>
+      <canvas id="tool-chart" width="800" height="300" aria-label="Sessions per tool"></canvas>
+    </section>
+
+    <section>
+      <h2>Worker pool throughput (events/min)</h2>
+      <canvas id="throughput-chart" width="800" height="300" aria-label="Worker throughput"></canvas>
+    </section>
+  </main>
+  <footer>
+    <p>© 2026 ParetoOptimal. Apache-2.0 OR MIT.</p>
+  </footer>
+  <script src="js/charts.js"></script>
+</body>
+</html>

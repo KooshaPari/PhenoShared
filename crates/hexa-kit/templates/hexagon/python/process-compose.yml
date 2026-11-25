@@ -1,0 +1,50 @@
+version: "0.5"
+
+# HexaPy - Python library
+# Native-first local development orchestration
+
+environment:
+  - PYTHONUNBUFFERED=1
+  - PYTHONDONTWRITEBYTECODE=1
+
+processes:
+  # ============================================================
+  # Development
+  # ============================================================
+  dev:
+    command: uv run python -m hexapy
+    depends_on: {}
+    log_location: .logs/dev.log
+
+  test:
+    command: uv run pytest tests/ -v
+    depends_on: {}
+    log_location: .logs/test.log
+
+  lint:
+    command: uv run ruff check .
+    depends_on: {}
+    log_location: .logs/lint.log
+
+  format:
+    command: uv run ruff format .
+    depends_on: {}
+    log_location: .logs/format.log
+
+  typecheck:
+    command: uv run mypy src/
+    depends_on: {}
+    log_location: .logs/typecheck.log
+
+  bench:
+    command: uv run pytest tests/benchmarks/ -v
+    depends_on: {}
+    log_location: .logs/bench.log
+
+  # ============================================================
+  # Documentation
+  # ============================================================
+  docs:
+    command: uv run pdoc --output-dir docs/ src/hexapy
+    depends_on: {}
+    log_location: .logs/docs.log

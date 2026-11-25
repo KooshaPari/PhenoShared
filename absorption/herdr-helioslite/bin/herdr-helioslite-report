@@ -1,0 +1,232 @@
+#!/usr/bin/env bash
+# herdr-helioslite-report — emit HeliosLite lifecycle events to the Herdr daemon.
+#
+# Herdr injects these env vars on every invocation:
+#   HERDR_PANE_ID       — opaque pane identifier (required)
+#   HERDR_WORKSPACE_ID  — workspace identifier (optional but recommended)
+#   HERDR_PLUGIN_NAME   — current plugin name (sanity check)
+#
+# State machine (matches Herdr's pane-agent state set):
+#   session_start|start      -> working
+#   turn_start               -> working
+#   turn_end                 -> idle
+#   error|blocked            -> blocked
+#   session_end|end          -> done
+#
+# Usage:
+#   herdr-helioslite-report report <event> [message]
+#   herdr-helioslite-report status                       # emit a presence ping
+#   herdr-helioslite-report ping                         # daemon liveness check
+#   herdr-helioslite-report detect [--path PATH]         # probe a pane for HeliosLite markers
+#
+# No fork of HeliosLite is required. This script only needs the `helioslite`
+# binary on PATH (or HELIOSLITE_BIN env override) for the `status` subcommand.
+
+set -euo pipefail
+
+# ---- constants --------------------------------------------------------------
+
+PLUGIN_NAME="herdr-helioslite"
+AGENT_NAME="helioslite"
+HERDR_API="${HERDR_API:-herdr}"          # the herdr CLI used to reach the daemon
+SOURCE_TAG="${PLUGIN_NAME}:${AGENT_NAME}"
+
+# ---- helpers ----------------------------------------------------------------
+
+log() { printf '[%s] %s\n' "$PLUGIN_NAME" "$*" >&2; }
+die() { log "ERROR: $*"; exit 1; }
+
+# Cross-platform binary lookup for the HeliosLite CLI.
+# Honours HELIOSLITE_BIN override; on Windows appends .exe.
+resolve_helioslite_bin() {
+  if [[ -n "${HELIOSLITE_BIN:-}" && -x "${HELIOSLITE_BIN}" ]]; then
+    printf '%s\n' "$HELIOSLITE_BIN"
+    return 0
+  fi
+
+  local os
+  os="$(uname -s 2>/dev/null || echo unknown)"
+  local bin="helioslite"
+  case "$os" in
+    MINGW*|MSYS*|CYGWIN*) bin="helioslite.exe" ;;
+  esac
+
+  if command -v "$bin" >/dev/null 2>&1; then
+    command -v "$bin"
+    return 0
+  fi
+
+  # Not on PATH. Return empty so callers can branch on a friendly advisory.
+  printf '\n'
+  return 0
+}
+
+# Emit one pane.report_agent call to the Herdr daemon. Tolerates a missing
+# daemon so plugin calls never block the harness; logs and returns 0.
+emit_state() {
+  local state="$1"
+  local message="${2:-}"
+
+  if [[ -z "${HERDR_PANE_ID:-}" ]]; then
+    log "HERDR_PANE_ID not set — skipping emit (state=${state})"
+    return 0
+  fi
+
+  # If herdr CLI is missing or fails, never block the host pane.
+  if ! command -v "$HERDR_API" >/dev/null 2>&1; then
+    log "herdr CLI not found on PATH (state=${state} message=${message:-<none>})"
+    return 0
+  fi
+
+  # Real Herdr CLI surface (per `herdr pane report-agent --help`):
+  #   herdr pane report-agent <PANE_ID>
+  #     --source <ID> --agent <LABEL> --state <STATUS>
+  #     [--message <TEXT>] [--seq <N>]
+  if ! "$HERDR_API" pane report-agent "$HERDR_PANE_ID" \
+      --source "$SOURCE_TAG" \
+      --agent "$AGENT_NAME" \
+      --state "$state" \
+      --message "$message" >/dev/null 2>&1; then
+    log "herdr pane report-agent failed (state=${state})"
+  fi
+  return 0
+}
+
+# Map a lifecycle event name to a Herdr state value.
+map_event_to_state() {
+  case "$1" in
+    session_start|start|turn_start)  printf 'working\n' ;;
+    turn_end|idle)                   printf 'idle\n' ;;
+    error|blocked|panic)             printf 'blocked\n' ;;
+    session_end|end|done)            printf 'done\n' ;;
+    *)                               printf 'idle\n' ;;   # unknown events default to idle
+  esac
+}
+
+# ---- subcommands ------------------------------------------------------------
+
+cmd_report() {
+  local event="${1:-}"
+  local message="${2:-}"
+
+  if [[ -z "$event" ]]; then
+    die "report: missing event (expected session_start|turn_start|turn_end|error|blocked|session_end)"
+  fi
+
+  local state
+  state="$(map_event_to_state "$event")"
+  emit_state "$state" "${message}"
+}
+
+cmd_status() {
+  # Presence ping: report whether HeliosLite is installed and reachable. Useful
+  # for the host pane's status indicator.
+  local bin
+  bin="$(resolve_helioslite_bin)"
+  local message
+  if [[ -n "$bin" ]]; then
+    message="HeliosLite detected at ${bin}"
+  else
+    message="HeliosLite not installed (${PLUGIN_NAME} idle until binary appears on PATH)"
+  fi
+  emit_state "idle" "$message"
+}
+
+cmd_ping() {
+  if command -v "$HERDR_API" >/dev/null 2>&1; then
+    # `herdr status server` is the canonical liveness probe (works against a
+    # running daemon; falls back gracefully if the daemon is offline).
+    if "$HERDR_API" status server >/dev/null 2>&1; then
+      printf 'pong\n'
+      return 0
+    fi
+    printf 'no-daemon\n'
+    return 0
+  fi
+  printf 'no-cli\n'
+}
+
+cmd_doctor() {
+  # Smoke-check the integration end-to-end: resolve the host binary, ping the
+  # Herdr daemon, emit a synthetic session_start. Failures are advisory, not
+  # fatal — the host pane must still come up.
+  local bin
+  bin="$(resolve_helioslite_bin)"
+
+  local bin_msg="(not installed)"
+  if [[ -n "$bin" ]]; then
+    bin_msg="at ${bin}"
+  fi
+
+  local ping_msg
+  ping_msg="$(cmd_ping)"
+  case "$ping_msg" in
+    pong)        ping_msg="reachable" ;;
+    no-daemon)   ping_msg="herdr daemon unreachable" ;;
+    no-cli)      ping_msg="herdr cli not on PATH" ;;
+    *)           ping_msg="unknown (${ping_msg})" ;;
+  esac
+
+  emit_state "working" "doctor: helioslite ${bin_msg}, ${ping_msg}"
+  cmd_report "session_start" "doctor run at $(date -u +%FT%TZ)"
+  emit_state "idle" "doctor complete"
+}
+
+# Probe a pane snapshot for HeliosLite screen markers. Used by Herdr's pane
+# detector and by humans debugging detection.
+cmd_detect() {
+  local path=""
+  if [[ "${1:-}" == "--path" ]]; then
+    path="${2:-}"
+  elif [[ -n "${1:-}" ]]; then
+    path="$1"
+  fi
+
+  local content
+  if [[ -n "$path" ]]; then
+    content="$(cat "$path" 2>/dev/null || true)"
+  else
+    content="$(cat 2>/dev/null || true)"
+  fi
+
+  # Cheap heuristic matches from agent-detection/helioslite.toml. We re-implement
+  # them here so `detect` works without the host loader.
+  if printf '%s' "$content" | grep -Eqi 'helioslite|helios[\s\-]?lite|pair.?programmer'; then
+    printf 'helioslite\n'
+    return 0
+  fi
+  printf 'unknown\n'
+  return 0
+}
+
+# ---- dispatch ---------------------------------------------------------------
+
+usage() {
+  cat <<USAGE
+Usage:
+  $0 report <event> [message]   Emit a HeliosLite lifecycle event
+  $0 status                     Emit a presence ping (idle) with install status
+  $0 doctor                     Smoke-check the integration end-to-end
+  $0 ping                       Check the Herdr daemon is reachable
+  $0 detect [--path FILE]       Probe text for HeliosLite markers
+
+Events: session_start, turn_start, turn_end, error, blocked, session_end
+USAGE
+}
+
+main() {
+  local sub="${1:-}"
+  shift || true
+
+  case "$sub" in
+    report)  cmd_report "$@" ;;
+    status)  cmd_status ;;
+    doctor)  cmd_doctor ;;
+    ping)    cmd_ping ;;
+    detect)  cmd_detect "$@" ;;
+    -h|--help|help|"") usage ;;
+    *)       die "unknown subcommand: ${sub} (try --help)" ;;
+  esac
+}
+
+main "$@"

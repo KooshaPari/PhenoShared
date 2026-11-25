@@ -1,0 +1,40 @@
+# MoE30 LoRA repair experiment — 3090 Ti (24GB)
+# References distill_12b repair block + RLVR gates
+
+experiment: lora_repair
+description: "Lightweight LoRA repair pass on local MoE30 from verified failures"
+
+inherits:
+  - "${PHENO_ROOT}/training/distill_12b.yaml"
+  - "${PHENO_ROOT}/training/rlvr_config.yaml"
+
+target:
+  model_net: moe30
+  tier: tier2.moe30
+  path: "${PHENO_MOE30:-}"
+  quant: Q4_K_M
+
+repair:
+  ref: training/distill_12b.yaml#repair.moe30_lora
+  enabled: true
+  rank: 8
+  alpha: 16
+  lr: 1.0e-4
+  batch_size: 1
+  grad_accum: 4
+  max_steps: 500
+  dataset_glob: "verified_*.jsonl"
+  output_dir: "${PHENO_ROOT}/state/repair/moe30_lora"
+
+hardware:
+  gpu: "RTX 3090 Ti"
+  vram_gb: 24
+  precision: bf16
+  note: "MoE30 QLoRA repair only — no cloud burst finetune"
+
+rlvr:
+  pass_threshold: 0.75
+  min_verifier_pass_rate: 0.70
+
+gates:
+  max_regression_vs_teacher: 0.05

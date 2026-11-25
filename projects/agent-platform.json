@@ -1,0 +1,19 @@
+{
+  "name": "agent-platform",
+  "languages": [
+    "typescript"
+  ],
+  "primary_language": "typescript",
+  "status": "queued",
+  "has_readme": false,
+  "type": "recovery-wip",
+  "path": "repos/agent-platform",
+  "disposition": "KEEP",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "agent-platform",
+  "proposed_target_repo": "agent-platform",
+  "proposed_target_path": ".",
+  "absorption_note": null,
+  "note": "Preserved local WIP; retain as recovery evidence until product ownership and canonical runtime are established."
+}

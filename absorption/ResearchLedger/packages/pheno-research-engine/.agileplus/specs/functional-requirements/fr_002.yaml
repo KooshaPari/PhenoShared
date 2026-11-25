@@ -1,0 +1,11 @@
+id: FR-002
+title: Tool System Capability
+description: The system shall provide tool system functionality.
+priority: medium
+status: implemented
+acceptance_criteria:
+- 'register_tools: Register all 6 research MCP tools'
+related_entities:
+- register_tools
+user_story_id: null
+adr_id: null

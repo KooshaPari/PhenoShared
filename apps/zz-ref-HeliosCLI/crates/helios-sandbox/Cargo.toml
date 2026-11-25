@@ -1,0 +1,17 @@
+[package]
+name = "helios-sandbox"
+version = "0.2.1"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "OS-level sandboxing for HeliosCLI (Landlock on Linux, Seatbelt guidance on macOS)"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+authors = ["kooshapari"]
+
+[dependencies]
+libc = "0.2"
+tracing = "0.1"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = { version = "0.2", features = ["extra_traits"] }
+
+[dev-dependencies]

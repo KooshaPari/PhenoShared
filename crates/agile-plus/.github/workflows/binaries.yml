@@ -1,0 +1,85 @@
+name: Binaries
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: "Release version"
+      dry_run:
+        required: false
+        type: boolean
+        default: false
+        description: "Run without publishing"
+
+permissions:
+  contents: write
+
+jobs:
+  binaries:
+    name: Build and publish (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: linux-x86_64
+            archive: tar.gz
+            binary: agileplus
+            package: agileplus-linux-x86_64
+          - os: macos-latest
+            target: macos-arm64
+            archive: tar.gz
+            binary: agileplus
+            package: agileplus-macos-arm64
+          - os: windows-latest
+            target: windows-x86_64
+            archive: zip
+            binary: agileplus.exe
+            package: agileplus-windows-x86_64
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Build release binary
+        run: cargo build --release -p agileplus-cli
+
+      - name: Package binary
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="${{ inputs.version }}"
+          release_dir="release-assets"
+          package_dir="${release_dir}/${{ matrix.package }}"
+          archive_name="agileplus-${version}-${{ matrix.target }}.${{ matrix.archive }}"
+          binary_path="target/release/${{ matrix.binary }}"
+
+          mkdir -p "$package_dir"
+          cp "$binary_path" "$package_dir/"
+
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            (cd "$release_dir" && zip -r "../$archive_name" "${{ matrix.package }}")
+          else
+            tar -C "$release_dir" -czf "$archive_name" "${{ matrix.package }}"
+          fi
+
+          ls -la "$archive_name"
+
+      - name: Upload GitHub Release asset
+        if: ${{ !inputs.dry_run }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          files: agileplus-${{ inputs.version }}-${{ matrix.target }}.${{ matrix.archive }}
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(inputs.version, '-') }}

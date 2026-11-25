@@ -1,0 +1,25 @@
+{
+  "name": "phenoUtils",
+  "languages": [
+    "rust"
+  ],
+  "primary_language": "rust",
+  "status": "active",
+  "has_readme": true,
+  "type": "utility-library",
+  "path": "repos/phenoUtils",
+  "role": "primitives-parent",
+  "domain_role": "foundational-rust-utilities",
+  "boundary": "rust-primitive-crate-workspace",
+  "gh_url": "https://github.com/KooshaPari/phenoUtils",
+  "default_branch": "main",
+  "remote_default_sha_at_audit": "6fa1a43a06b945796d0b69d7423129e56f46ac98",
+  "disposition": "KEEP_CANONICAL_PARENT",
+  "canonical_routing": true,
+  "absorbed_into": null,
+  "absorption_note": "Keep phenoUtils as the canonical parent for its six foundational Rust crates. phenotype-shared remains a candidate integration target only; no source/API parity proof exists for subtree absorption.",
+  "rationale": "Active public MIT-licensed Rust workspace with six explicit crate members (pheno-shell, pheno-fs, pheno-crypto, pheno-net, pheno-testing, pheno-schema-port) and 24 remote branches. Its primitive boundary is distinct from phenotype-shared's current manifest and should not be flattened without a crate-by-crate parity review.",
+  "audit_artifact": "registry/audit-absorption-justification/phenoutils-boundary-20260729.json",
+  "audited_at": "2026-07-29T00:29:21Z",
+  "note": "Remote is active and unarchived; no local repos/phenoUtils checkout was present during this audit. Cargo workspace validation currently fails because the virtual manifest contains a forbidden root [dependencies] section; preserve this finding for source-owner remediation."
+}

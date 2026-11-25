@@ -1,0 +1,38 @@
+# Gitleaks configuration for helios-cli
+#
+# The findings allowlisted below are false positives produced by the default
+# gitleaks rule set against this repository:
+#   - Vendored `codex-rs/` (upstream openai/codex) test fixtures: fake API
+#     keys, fake JWTs, example UUIDs / hex constants, and test-only RSA PEM
+#     keys embedded in unit tests. These are upstream fixture data, not
+#     production secrets, and `codex-rs/` is vendored, so it is not edited
+#     in-tree.
+#   - Git commit / dependency `rev` SHAs quoted in research documents, which
+#     the `sourcegraph-access-token` rule mistakes for access tokens.
+# Allowlists are scoped to the exact files / values above, so real secrets
+# introduced anywhere else in the repository are still flagged.
+
+title = "helios-cli gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Vendored codex-rs upstream test fixtures (fake keys/JWTs/PEMs, example constants) and git commit / dependency rev SHAs quoted in research documents"
+paths = [
+    "codex-rs/agent-identity/src/lib.rs",
+    "codex-rs/app-server/README.md",
+    "codex-rs/app-server/tests/suite/v2/connection_handling_websocket.rs",
+    "codex-rs/cli/src/login.rs",
+    "codex-rs/cli/tests/login.rs",
+    "codex-rs/core-plugins/src/remote/catalog_cache.rs",
+    "codex-rs/login/src/auth/agent_identity.rs",
+    "codex-rs/login/src/auth/auth_tests.rs",
+    "codex-rs/memories/write/src/phase1.rs",
+    "codex-rs/network-proxy/src/credential_broker_tests.rs",
+]
+regexes = [
+    "55fc075723abd039476f4918941570e8a0308a93",
+    "132f5b39c862e3a970f731d709608b3e6276d5f6",
+    "9200079d3b54a1ff51072e24d81fd354f085156f",
+]

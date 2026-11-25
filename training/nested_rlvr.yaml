@@ -1,0 +1,88 @@
+# Nested RLVR-AF — doc levels 0-3 (micro → role → agent → swarm)
+# Soft-SVeRL partial credit + MR-RLVR process signals
+
+levels:
+  L0_micro:
+    description: "Router, ranker, budget, verifier micro-controllers"
+    components: [needle_router, needle_ranker, needle_budget, context_caps]
+    reward_types: [schema_valid, token_budget, escalation_correct]
+    weight: 0.15
+
+  L1_role:
+    description: "Per-role LoRA adapters (retrieve, plan, code, debug)"
+    components: [qwen4b_retrieve, qwen4b_plan, qwen4b_code, qwen4b_debug]
+    reward_types: [verifier_pass, output_under_cap, tool_valid]
+    weight: 0.25
+
+  L2_agent:
+    description: "Single agent episode — Harbor / Repo2RL task completion"
+    components: [forge, codex, claude_code, agent_runner]
+    reward_types: [tests_pass, patch_applies, harbor_reward, motion_forward]
+    weight: 0.35
+
+  L3_swarm:
+    description: "Parallel lanes — aggregate accepted steps / overlap waste"
+    components: [forge_parallel, agent_runner_queue, omniroute_routine]
+    reward_types: [swarm_accepted_steps, overlap_penalty, cost_per_step]
+    weight: 0.25
+
+# Soft-SVeRL: checklist partial credit (doc ~35783)
+soft_verifier:
+  enabled: true
+  checklist_items:
+    - id: json_schema
+      weight: 0.10
+      hard_fail: false
+    - id: tool_call_valid
+      weight: 0.10
+      hard_fail: false
+    - id: patch_applies
+      weight: 0.20
+      hard_fail: true
+    - id: tests_pass
+      weight: 0.25
+      hard_fail: true
+    - id: context_under_budget
+      weight: 0.15
+      hard_fail: false
+    - id: output_under_cap
+      weight: 0.10
+      hard_fail: false
+    - id: motion_forward
+      weight: 0.10
+      hard_fail: false
+  self_verify_penalty: 0.3  # doc warns self-verification inflates rewards
+
+# MR-RLVR: process-level intermediate rewards (doc ~35833)
+process_rewards:
+  enabled: true
+  signals:
+    - name: step_no_regression
+      weight: 0.15
+      detect: repeated_error
+    - name: context_shrink
+      weight: 0.20
+      detect: compiler_reduction
+    - name: test_delta_improve
+      weight: 0.30
+      detect: pytest_delta
+    - name: token_efficiency
+      weight: 0.15
+      detect: output_per_input_ratio
+    - name: lane_no_overlap
+      weight: 0.20
+      detect: duplicate_context_cluster
+
+# VerlTool-style async rollouts (doc ~35914) — scaffold
+async_rollouts:
+  enabled: false  # enable when local swarm manager stable
+  max_parallel_envs: 2
+  vram_budget_gb: 20
+
+pass_threshold: 0.72
+composite_formula: "sum(level_score * level_weight) * (1 - overlap_waste_rate)"
+
+hardware:
+  gpu: RTX 3090 Ti
+  vram_gb: 24
+  forbidden: [burst_5090, cloud_gpu_finetune]

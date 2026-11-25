@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" fill="none">
+  <!-- Hero banner for splash, README hero, launch_screen asset -->
+  <defs>
+    <linearGradient id="hero-bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="hero-glow" cx="0.3" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#0ea5e9" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#0ea5e9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="800" height="300" fill="url(#hero-bg)"/>
+  <rect x="0" y="0" width="800" height="300" fill="url(#hero-glow)"/>
+
+  <!-- Subtle grid pattern (blueprint feel) -->
+  <g stroke="#0ea5e9" stroke-opacity="0.06" stroke-width="1">
+    <line x1="0" y1="50" x2="800" y2="50"/>
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="250" x2="800" y2="250"/>
+    <line x1="100" y1="0" x2="100" y2="300"/>
+    <line x1="200" y1="0" x2="200" y2="300"/>
+    <line x1="300" y1="0" x2="300" y2="300"/>
+    <line x1="400" y1="0" x2="400" y2="300"/>
+    <line x1="500" y1="0" x2="500" y2="300"/>
+    <line x1="600" y1="0" x2="600" y2="300"/>
+    <line x1="700" y1="0" x2="700" y2="300"/>
+  </g>
+
+  <!-- Mascot (Getta) on left -->
+  <g transform="translate(70, 60)">
+    <!-- Body -->
+    <ellipse cx="80" cy="140" rx="58" ry="48" fill="#0ea5e9" opacity="0.9"/>
+    <ellipse cx="80" cy="140" rx="58" ry="48" fill="none" stroke="#0f172a" stroke-width="3"/>
+    <!-- Lab-coat accent -->
+    <path d="M40 90 L80 70 L120 90 L120 175 L40 175 Z" fill="#f8fafc" stroke="#0f172a" stroke-width="3"/>
+    <line x1="80" y1="70" x2="80" y2="175" stroke="#0f172a" stroke-width="2"/>
+    <!-- Face -->
+    <ellipse cx="80" cy="100" rx="32" ry="36" fill="#fde68a" stroke="#0f172a" stroke-width="2"/>
+    <!-- Eyes (base: focused/listening) -->
+    <circle cx="68" cy="98" r="3" fill="#0f172a"/>
+    <circle cx="92" cy="98" r="3" fill="#0f172a"/>
+    <!-- Smile -->
+    <path d="M70 112 Q80 118 90 112" stroke="#0f172a" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <!-- Notebook -->
+    <rect x="50" y="155" width="60" height="35" rx="3" fill="#fbbf24" stroke="#0f172a" stroke-width="2"/>
+    <line x1="58" y1="165" x2="100" y2="165" stroke="#0f172a" stroke-width="1"/>
+    <line x1="58" y1="173" x2="100" y2="173" stroke="#0f172a" stroke-width="1"/>
+    <line x1="58" y1="181" x2="100" y2="181" stroke="#0f172a" stroke-width="1"/>
+  </g>
+
+  <!-- Title block right -->
+  <text x="260" y="125" font-family="-apple-system, system-ui, sans-serif"
+        font-size="48" font-weight="800" fill="#ffffff" letter-spacing="-1.5">
+    SessionLedger
+  </text>
+  <text x="262" y="170" font-family="-apple-system, system-ui, sans-serif"
+        font-size="22" font-weight="500" fill="#0ea5e9" letter-spacing="-0.3">
+    The journal of your AI sessions.
+  </text>
+
+  <!-- Brand stripe -->
+  <rect x="260" y="195" width="180" height="3" fill="#fbbf24"/>
+  <text x="260" y="225" font-family="-apple-system, system-ui, sans-serif"
+        font-size="14" font-weight="500" fill="#94a3b8" letter-spacing="0.5">
+    18,567+ sessions indexed · local-first · daemon-backed
+  </text>
+</svg>

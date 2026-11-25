@@ -1,0 +1,57 @@
+name: Benchmarks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # ─── Cargo Bench ──────────────────────────────────────────────────────
+  benchmark:
+    name: Cargo Bench
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: dtolnay/rust-toolchain@5b842231ba77f5c045dba54ac5560fed2db780e2
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32
+        with:
+          workspaces: rust
+      - uses: arduino/setup-protoc@c65c819552d16ad3c9b72d9dfd5ba5237b9c906b
+        with:
+          version: "28.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check for benches directory
+        id: check-benches
+        run: |
+          if [ -d "rust/benches" ] || [ -d "benches" ]; then
+            echo "has-benches=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-benches=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Run benchmarks
+        if: steps.check-benches.outputs.has-benches == 'true'
+        run: cargo bench --all --no-run
+        continue-on-error: true
+      - name: Store benchmark results
+        if: steps.check-benches.outputs.has-benches == 'true'
+        uses: benchmark-action/github-action-benchmark@52576c92bccf6ac60c8223ec7eb2565637cae9ba
+        with:
+          tool: 'cargo'
+          output-file-path: target/criterion/output.txt
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+        continue-on-error: true

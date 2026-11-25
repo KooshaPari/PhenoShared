@@ -1,0 +1,78 @@
+id: FR-001
+title: Core Infrastructure Capability
+description: The system shall provide core infrastructure functionality.
+priority: high
+status: implemented
+acceptance_criteria:
+- 'TestBasic: Basic tests to ensure code is importable'
+- 'TestConfiguration: Test configuration and setup'
+- 'test_import_domain: Test that domain modules can be imported'
+- 'test_import_adapters: Test that adapter modules can be imported'
+- 'test_import_ports: Test that port interfaces can be imported'
+related_entities:
+- TestBasic
+- TestConfiguration
+- test_import_domain
+- test_import_adapters
+- test_import_ports
+- test_package_metadata
+- DigestGenerator
+- build_hourly_change_digest
+- __init__
+- generate
+- ResearchStore
+- __init__
+- _connect
+- upsert
+- get_recent
+- search
+- mirror_to_project
+- _get_by_relevance
+- _row_to_item
+- digest
+- topics
+- crawl
+- sync
+- search
+- TopicExtractor
+- extract
+- _from_pyproject
+- _from_config
+- TieredScheduler
+- __init__
+- start
+- stop
+- _run_tier
+- inject_session_context
+- ResearchItem
+- thegent_research_search
+- thegent_research_recent
+- thegent_research_digest
+- thegent_research_crawl
+- thegent_research_topics
+- thegent_research_sync
+- RSSCrawler
+- __init__
+- fetch
+- CrawlerRegistry
+- __init__
+- register
+- get_by_tier
+- get_all
+- _relevance
+- HNCrawler
+- fetch
+- DDGCrawler
+- fetch
+- GitHubCrawler
+- __init__
+- fetch
+- RedditCrawler
+- __init__
+- fetch
+- BaseCrawler
+- fetch
+- ArxivCrawler
+- fetch
+user_story_id: null
+adr_id: null

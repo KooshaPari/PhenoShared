@@ -1,0 +1,132 @@
+# Phenotype-org standard .gitignore — Node
+# Source: https://github.com/KooshaPari/phenotype-tooling/blob/main/templates/gitignore-node
+
+# Build artifacts
+target/
+dist/
+build/
+*.o
+*.so
+*.dylib
+*.rlib
+*.rmeta
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test
+coverage/
+*.lcov
+.nyc_output/
+
+# Misc
+*.tmp
+*.bak
+*.orig
+
+# --- L2 #28 hygiene baseline (added 2026-06-11) ---
+/target
+**/*.rs.bk
+**/*.pdb
+**/go-build/
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/env/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.pytest_cache/
+**/htmlcov/
+**/.coverage
+**/.coverage.*
+**/*.egg-info/
+**/.eggs/
+**/.next/
+**/.nuxt/
+**/.output/
+**/.cache/
+**/tsconfig.tsbuildinfo
+.AppleDouble
+.LSOverride
+**/desktop.ini
+**/tmp/
+**/temp/
+.env.*
+!.env.example
+**/.env.*.local
+.worktrees/
+.claude/worktrees/
+.serena/
+.codex/
+.cursor/
+
+# Go test binaries
+*.test
+
+# Worklog artifacts
+worklog-*.json
+worklogs/
+# Temp files
+tmp_*
+tmp-*
+# --- adopted from phenotype-tooling/templates/gitignore-node ---
+.cache/
+.eslintcache
+.npm/
+.parcel-cache/
+.pnp
+.pnp.js
+/build/
+/coverage/
+/dist/
+/out/
+lerna-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== Phenotype-org standard hygiene (do not edit) =====
+# Audit artifacts
+.audit/
+*.audit.json
+audit_scorecard.json
+AUDIT_SCORECARD.md
+
+# Test artifacts
+*.test
+*.test.rs
+*.test.py
+
+# Worklog files (canonical home is phenotype-worklog-schema)
+worklog-*.json
+worklogs/
+
+# Coverage/profiling artifacts
+*.profraw
+*.profdata
+llvm-cov-*
+
+# Tooling draft files
+*.proposed
+.draft/
+# ===== End standard hygiene =====

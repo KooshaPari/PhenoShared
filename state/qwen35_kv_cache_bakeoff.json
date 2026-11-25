@@ -1,0 +1,90 @@
+{
+  "schema_version": "phenolm.kv_cache_bakeoff.v1",
+  "captured_at": "2026-07-16T10:10:00Z",
+  "model": "local/qwen35-08b",
+  "weight_quantization": "Q4_K_M",
+  "runtime": "llama.cpp-b10012-cuda12.4",
+  "build_commit": "c71854292",
+  "driver": "560.94",
+  "parameters": {
+    "n_prompt": 512,
+    "n_gen": 128,
+    "repetitions": 1,
+    "flash_attn": "on",
+    "n_gpu_layers": 99
+  },
+  "variants": [
+    {
+      "artifact": "state\\qwen35_kvbench_f16_CUDA0.json",
+      "sha256": "98c9d7e459fb7a90e29784b704ed3065bab4fdd88221492703bf208dc01bda41",
+      "cuda_device": "CUDA0",
+      "kv_k": "f16",
+      "kv_v": "f16",
+      "prompt_tok_s": 6574.773928,
+      "generation_tok_s": 177.148924,
+      "prompt_tokens": 512,
+      "generation_tokens": 128
+    },
+    {
+      "artifact": "state\\qwen35_kvbench_f16_CUDA1.json",
+      "sha256": "c6c131593a2bad595b99a8bc135edb35ac045c98f2c58fd275791988df4979e6",
+      "cuda_device": "CUDA1",
+      "kv_k": "f16",
+      "kv_v": "f16",
+      "prompt_tok_s": 4385.991213,
+      "generation_tok_s": 55.579877,
+      "prompt_tokens": 512,
+      "generation_tokens": 128
+    },
+    {
+      "artifact": "state\\qwen35_kvbench_q4_CUDA0.json",
+      "sha256": "dc223078cc1d8bffeee775f8897abacaa3d2ca8330284da1515716dd725c49c2",
+      "cuda_device": "CUDA0",
+      "kv_k": "q4_0",
+      "kv_v": "q4_0",
+      "prompt_tok_s": 5996.320227,
+      "generation_tok_s": 143.919707,
+      "prompt_tokens": 512,
+      "generation_tokens": 128
+    },
+    {
+      "artifact": "state\\qwen35_kvbench_q4_CUDA1.json",
+      "sha256": "ed38723b0b521a20e110d66c5d49b4b2885db878668b120062e0a872d4081dc9",
+      "cuda_device": "CUDA1",
+      "kv_k": "q4_0",
+      "kv_v": "q4_0",
+      "prompt_tok_s": 5040.446631,
+      "generation_tok_s": 52.311002,
+      "prompt_tokens": 512,
+      "generation_tokens": 128
+    },
+    {
+      "artifact": "state\\qwen35_kvbench_q8_CUDA0.json",
+      "sha256": "33ce7d585c148e9685a28b6bdb6137f1d048b8213db2a98597b489d72311ff64",
+      "cuda_device": "CUDA0",
+      "kv_k": "q8_0",
+      "kv_v": "q8_0",
+      "prompt_tok_s": 5745.26913,
+      "generation_tok_s": 156.754189,
+      "prompt_tokens": 512,
+      "generation_tokens": 128
+    },
+    {
+      "artifact": "state\\qwen35_kvbench_q8_CUDA1.json",
+      "sha256": "f706dd9edf9cce60b63c4809af573bc4cd449cce33e85669c8a34e11b925adc4",
+      "cuda_device": "CUDA1",
+      "kv_k": "q8_0",
+      "kv_v": "q8_0",
+      "prompt_tok_s": 4905.520819,
+      "generation_tok_s": 82.08241,
+      "prompt_tokens": 512,
+      "generation_tokens": 128
+    }
+  ],
+  "interpretation": {
+    "quality_status": "not measured; throughput-only evidence",
+    "hardware_observation": "Q8_0 KV improved GTX 1080 Ti generation over Q4_0 in this probe, while F16 was slower; RTX 3090 Ti favored F16 for this short context.",
+    "selection_rule": "KV type must be selected per device and context length after semantic regression and p95 measurements.",
+    "tq_plus_status": "not tested; no verified llama.cpp TQ+ runtime flag or artifact was available in this probe."
+  }
+}

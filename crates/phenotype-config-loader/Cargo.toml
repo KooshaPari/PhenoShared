@@ -1,0 +1,19 @@
+[package]
+name = "phenotype-config-loader"
+version = "0.2.0"
+edition = "2021"
+license = "MIT"
+description = "Configuration loading utilities for the Phenotype ecosystem. Absorbed from phenotype-config per ADR-031 (L5-110)."
+repository = "https://github.com/KooshaPari/pheno"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+thiserror = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

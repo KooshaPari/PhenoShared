@@ -1,0 +1,21 @@
+repository	visibility	size_kb	default_branch	heads	content	local_result	intended_parent	disposition
+4sgm-archive2	public	0	none	0	0 B	NO_LOCAL_PAYLOAD	QuadSGM	HOLD_LINEAGE
+phenotype-org-audits-archive	public	0	none	0	0 B	NO_LOCAL_PAYLOAD	phenotype-registry audit artifacts	READY_SPONSOR_ARCHIVE
+.dot-prefix-test-x	private	0	none	0	0 B	NO_LOCAL_PAYLOAD	preservation test harness	READY_SPONSOR_ARCHIVE
+.test-dot-prefix	private	0	none	0	0 B	NO_LOCAL_PAYLOAD	preservation test harness	READY_SPONSOR_ARCHIVE
+test-dot-prefix	private	0	none	0	0 B	NO_LOCAL_PAYLOAD	preservation test harness	READY_SPONSOR_ARCHIVE
+test-plain-aaa1	private	0	none	0	0 B	NO_LOCAL_PAYLOAD	preservation test harness	READY_SPONSOR_ARCHIVE
+test-novars	private	0	main	1:8a5d0ab/b978afe	19 B README.md	NO_LOCAL_PAYLOAD	preservation test harness	HOLD_NONEMPTY
+OmniRoute-superroot-recovery	private	0	none	0	0 B	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	OmniRoute	READY_SPONSOR_ARCHIVE
+Tracera-electrobun-recovery-20260715	private	0	none	0	0 B	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	Tracera	READY_SPONSOR_ARCHIVE
+Tracera-jwks-runtime-recovery-20260715	private	0	none	0	0 B	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	Tracera	READY_SPONSOR_ARCHIVE
+Tracera-jwt-contract-recovery-wt	private	0	none	0	0 B	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	Tracera	READY_SPONSOR_ARCHIVE
+Tracera-recovery-20260713	private	0	none	0	0 B	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	Tracera	READY_SPONSOR_ARCHIVE
+Tracera-workos-hostname-reconcile-20260715	private	0	none	0	0 B	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	Tracera	READY_SPONSOR_ARCHIVE
+planify-wt-archive	public	0	none	0	0 B	NO_LOCAL_PAYLOAD	Planify	READY_SPONSOR_ARCHIVE
+Eidolon-archive	public	0	none	0	0 B	NO_LOCAL_PAYLOAD	Eidolon	READY_SPONSOR_ARCHIVE
+airlock-v2-smoke-test-15055	private	0	main	2:0209435/853694a;9f0ec50/5fb8269	6 B main; 32 B WIP	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	Airlock test harness	HOLD_NONEMPTY
+airlock-v2-smoke-test-90007	private	0	main	2:73701c3/853694a;3439246/15b5669	6 B main; 22 B WIP	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	Airlock test harness	HOLD_NONEMPTY
+omniroute-wtrees	private	1	main	1:0b9b4b5/e8c3485	1377 B	AIRLOCK_DIRTY_ORPHAN	OmniRoute	HOLD_RECOVERY
+phenotype-org-audits-wtrees	private	1	main	1:660785d/c658450	1403 B	NO_LOCAL_PAYLOAD; AIRLOCK_CLEAN	phenotype-registry audit artifacts	HOLD_IMPORT_REVIEW
+Httpora-archive-2026-07-14	private	1	main	1:e5a6254/1a469ec	1695 B	NO_LOCAL_PAYLOAD	pheno plus Quillr/phenodocs	HOLD_SPLIT_BOUNDARY

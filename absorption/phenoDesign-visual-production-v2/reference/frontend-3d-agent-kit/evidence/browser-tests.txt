@@ -1,0 +1,110 @@
+{
+  "renderer": "CPU triangle preview (WebGL unavailable)",
+  "checks": [
+    {
+      "name": "Renderer became ready",
+      "status": "PASS",
+      "detail": "CPU triangle preview (WebGL unavailable)"
+    },
+    {
+      "name": "No external resource requests in standalone mode",
+      "status": "PASS",
+      "detail": "[]"
+    },
+    {
+      "name": "Scroll updates absolute state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Scroll separates construction",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Manual separation override",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Manual rejoin overrides middle of scroll",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reverse scroll returns rest orientation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Material selection changes real pixels",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Swatch exposes selected state",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Keyboard changes orientation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Paused scroll does not change pose progress",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No continuous idle rendering",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Offscreen control does not schedule rendering",
+      "status": "PASS",
+      "detail": "Test-only spacer ensures the stage is fully offscreen"
+    },
+    {
+      "name": "Mobile no horizontal overflow",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reduced motion defaults paused",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "Reduced motion avoids long pinned story",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No-JS baseline headline and poster",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No-JS hides inert controls",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No canvas context retains poster",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No renderer disables controls",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "name": "No page JavaScript errors in normal/reduced paths",
+      "status": "PASS",
+      "detail": "[]"
+    }
+  ]
+}

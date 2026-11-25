@@ -1,0 +1,4 @@
+error: failed to parse manifest at `/mnt/c/Users/koosh/BytePort/Cargo.toml`
+
+Caused by:
+  `resolver` setting `3` is not valid, valid options are "1" or "2"

@@ -1,0 +1,85 @@
+[workspace]
+resolver = "2"
+
+# =============================================================================
+# phenotype-infra — Compute/Infra Consolidation Monorepo
+# =============================================================================
+#
+# Members will be added as crates are absorbed:
+#   - pheno-config (shared configuration)
+#
+# Archived duplicate crates (per REP-080, ADR-015):
+#   - nanovms-core → canonical: nanovms repo
+#   - nvms-ffi     → canonical: PhenoCompose/bindings/rust-ffi
+#   - pheno-compose → canonical: PhenoCompose/pheno-compose-driver
+#
+# Tooling sub-projects live under tools/ and are NOT workspace members
+# (they use their own build systems).
+# =============================================================================
+
+members = [
+    # Archived: duplicate crates moved to _archived/ per REP-080.
+    # Canonical repos: nanovms (Go), PhenoCompose (Rust), BytePort (Go+Svelte).
+    # "crates/nanovms-core" — archived → _archived/nanovms-core
+    # "crates/nvms-ffi"     — archived → _archived/nvms-ffi
+    # "crates/pheno-compose" — archived → _archived/pheno-compose
+    "crates/pheno-config",   # Shared configuration
+    "tests",                 # Cross-crate integration tests
+    # infrakit crates (absorbed from PhenoDevOps)
+    "infrakit/crates/phenotype-async-traits",
+    "infrakit/crates/phenotype-cache-adapter",
+    "infrakit/crates/phenotype-contract",
+    "infrakit/crates/phenotype-contracts",
+    "infrakit/crates/phenotype-cost-core",
+    "infrakit/crates/phenotype-crypto",
+    "infrakit/crates/phenotype-error-core",
+    "infrakit/crates/phenotype-error-macros",
+    "infrakit/crates/phenotype-errors",
+    "infrakit/crates/phenotype-event-sourcing",
+    "infrakit/crates/phenotype-git-core",
+    "infrakit/crates/phenotype-health",
+    "infrakit/crates/phenotype-http-client-core",
+    "infrakit/crates/phenotype-iter",
+    "infrakit/crates/phenotype-logging",
+    "infrakit/crates/phenotype-macros",
+    "infrakit/crates/phenotype-mcp",
+    "infrakit/crates/phenotype-observability",
+    "infrakit/crates/phenotype-policy-engine",
+    "infrakit/crates/phenotype-port-traits",
+    "infrakit/crates/phenotype-ports-canonical",
+    "infrakit/crates/phenotype-process",
+    "infrakit/crates/phenotype-shared-config",
+    "infrakit/crates/phenotype-state-machine",
+    "infrakit/crates/phenotype-string",
+    "infrakit/crates/phenotype-telemetry",
+    "infrakit/crates/phenotype-test-infra",
+    "infrakit/crates/phenotype-validation",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/phenotype-infra"
+description = "Phenotype Compute/Infra Consolidation Monorepo"
+authors = ["kooshapari"]
+publish = false
+
+[workspace.dependencies]
+async-trait = "0.1"
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+bindgen = "0.68"
+figment = { version = "0.10", features = ["toml", "env"] }
+anyhow = "1"
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+regex = "1"
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+zstd = "0.13"
+unicode-normalization = "0.1"
+parking_lot = "0.12"

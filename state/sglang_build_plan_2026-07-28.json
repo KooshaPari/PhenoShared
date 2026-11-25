@@ -1,0 +1,40 @@
+{
+  "schema_version": "pheno.sglang-build-plan.v1",
+  "as_of": "2026-07-29T00:23:05Z",
+  "session_under_resume": "019f6249-d74c-7540-885f-588c3d51ac3a",
+  "plan_name": "sglang_dual_sm_sm86_sm61_v1",
+  "context": "3090 Ti uses sm_86 (Ampere); 1080 Ti uses sm_61 (Pascal). SGLang primary build targets sm_86; legacy_helper requires a separate sm_61 build or fall back to llama.cpp.",
+  "rationale_for_two_builds": [
+    "SGLang upstream dropped sm_61 support in v0.3+; building for sm_61 requires patching",
+    "llama.cpp b10012-cuda12.4 already supports sm_61 on 1080 Ti (verified 123.5 t/s)",
+    "Decision: keep llama.cpp for 1080 Ti (legacy_helper), SGLang for 3090 Ti (primary)"
+  ],
+  "primary_build_target": {
+    "device": "RTX 3090 Ti (GPU 1, sm_86, 24564 MiB)",
+    "runtime": "SGLang",
+    "sm_target": "sm_86",
+    "compiler": "GCC 14 + nvcc 12.4",
+    "kernel_patch": "flashinfer JIT patch required for sm_86 (drop after build succeeds)",
+    "existing_artifacts": [
+      "scripts/start_sglang_wsl_19000.sh",
+      "scripts/start_sglang_wsl_lowmem.sh",
+      "scripts/start_sglang_wsl_lowmem2.sh",
+      "scripts/start_sglang_wsl_final.sh",
+      "scripts/start_sglang_wsl_lfm.sh"
+    ],
+    "ready_to_build": true,
+    "build_command_intent": "git clone https://github.com/sgl-project/sglang.git && cd sglang && git apply <sm86-flashinfer-jit.patch> && pip install -e ."
+  },
+  "legacy_helper_build_target": {
+    "device": "GTX 1080 Ti (GPU 0, sm_61, 11264 MiB)",
+    "runtime": "llama.cpp (no SGLang)",
+    "sm_target": "sm_61",
+    "compiler": "nvcc 12.4",
+    "existing_artifact": "D:\\WSL\\tools\\llama.cpp-b10012-cuda12.4 (b10012, cuda 12.4, verified)",
+    "ready_to_use": true,
+    "next_action": "Wire llama-server (sm_61) into pheno-serve as legacy_helper lane on port 18081"
+  },
+  "decision_record": "Single-binary-per-GPU strategy: SGLang on 3090 Ti, llama.cpp on 1080 Ti. Avoids the sm_61 SGLang patch burden and uses already-verified llama.cpp CUDA12.4 build.",
+  "build_blockers": [],
+  "next_action": "Wire llama-server (sm_61) into pheno-serve config as legacy_helper lane"
+}

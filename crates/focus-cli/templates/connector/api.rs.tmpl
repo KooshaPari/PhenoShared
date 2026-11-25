@@ -1,0 +1,54 @@
+//! HTTP client for {{Name}} API.
+
+use anyhow::Result;
+use reqwest::{Client, Response};
+use serde::de::DeserializeOwned;
+use tracing::debug;
+
+/// {{Name}} API client.
+pub struct {{Name}}Client {
+    http: Client,
+}
+
+impl {{Name}}Client {
+    pub fn new(http: Client) -> Self {
+        Self { http }
+    }
+
+    /// Example method: replace with actual API calls.
+    pub async fn hello(&self) -> Result<String> {
+        debug!("{{Name}}Client: hello");
+        Ok("Hello from {{Name}}".to_string())
+    }
+
+    /// Generic HTTP GET helper.
+    async fn get<T: DeserializeOwned>(&self, url: &str) -> Result<T> {
+        let response = self.http.get(url).send().await?;
+        let body = response.json::<T>().await?;
+        Ok(body)
+    }
+
+    /// Generic HTTP POST helper.
+    async fn post<T: DeserializeOwned>(&self, url: &str, body: &dyn erased_serde::Serialize) -> Result<T> {
+        let response = self
+            .http
+            .post(url)
+            .json(body)
+            .send()
+            .await?;
+        let result = response.json::<T>().await?;
+        Ok(result)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_client_creation() {
+        let client = {{Name}}Client::new(Client::new());
+        let result = client.hello().await;
+        assert!(result.is_ok());
+    }
+}

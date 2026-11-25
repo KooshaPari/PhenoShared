@@ -1,0 +1,95 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# ──────────────────────────────────────────────────────────────────────────────
+#  Memory Profiling CI
+#
+#  Runs dhat heap profiling on `agileplus-domain` and uploads the resulting
+#  `dhat-heap*.json` profiles as CI artifacts.
+#
+#  Cross-platform: works on ubuntu-latest, macOS, and Windows via dhat.
+#  For macOS-specific Instruments profiling, run locally:
+#
+#      cargo instruments --template "Allocation Profiling" \
+#        --manifest-path crates/agileplus-domain/Cargo.toml --test memory
+#
+#  See `crates/agileplus-domain/.instruments.yml` for the template config.
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: Memory Profiling
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: memory-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  dhat-heap:
+    name: dhat Heap Profile (agileplus-domain)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-all-crates: true
+          key: memory-${{ github.sha }}
+
+      - name: Run dhat heap profiling tests
+        id: profile
+        run: |
+          cargo test \
+            --features dhat-heap \
+            --manifest-path crates/agileplus-domain/Cargo.toml \
+            -- -Z unstable-options --report-time \
+            2>&1 | tee memory-profile-output.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: List dhat heap profile artifacts
+        id: artifacts
+        if: always()
+        run: |
+          echo "=== dhat heap profiles ==="
+          ls -lh dhat-heap*.json 2>/dev/null || echo "No dhat-heap*.json files found"
+          # Count how many profiles were generated
+          count=$(ls dhat-heap*.json 2>/dev/null | wc -l | tr -d ' ')
+          echo "profile_count=${count:-0}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload dhat heap profiles
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dhat-heap-profiles-${{ github.sha }}
+          path: |
+            dhat-heap*.json
+            memory-profile-output.txt
+          retention-days: 30
+
+      - name: Post summary to job
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### dhat Heap Profile Summary"
+            echo ""
+            echo "**Profiling tests:** \`cargo test --features dhat-heap\`"
+            echo "**Profiles generated:** ${{ steps.artifacts.outputs.profile_count }}"
+            echo "**Exit code:** ${{ steps.profile.outputs.exit_code }}"
+            echo ""
+            echo "Download the **dhat-heap-profiles** artifact to inspect"
+            echo "allocation hotspots per backtrace."
+          } >> "$GITHUB_STEP_SUMMARY"

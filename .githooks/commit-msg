@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Canonical Phenotype commit-msg hook.
+# Install: cp .githooks/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
+# Bypass: HOOKS_SKIP=1 git commit
+#         git commit --no-verify
+set -u
+
+if [ "${HOOKS_SKIP:-0}" = "1" ]; then
+  echo "[hooks] HOOKS_SKIP=1 — skipping"
+  exit 0
+fi
+
+MSG_FILE="${1:-}"
+if [ -z "$MSG_FILE" ] || [ ! -f "$MSG_FILE" ]; then
+  echo "[hooks] commit-msg failed: missing commit message file"
+  exit 1
+fi
+
+first_line=$(sed -n '1p' "$MSG_FILE")
+
+# Git-generated messages and autosquash commits are valid non-conventional messages.
+case "$first_line" in
+  Merge\ *|Revert\ *|fixup!\ *|squash!\ *)
+    echo "[hooks] commit-msg OK"
+    exit 0
+    ;;
+esac
+
+types='feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert'
+pattern="^($types)(\\([A-Za-z0-9._-]+\\))?!?: .+"
+
+if ! printf '%s\n' "$first_line" | grep -Eq "$pattern"; then
+  cat <<'EOF'
+[hooks] commit-msg failed: use Conventional Commits.
+
+Expected:
+  type(scope): subject
+  type: subject
+
+Allowed types:
+  feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert
+EOF
+  exit 1
+fi
+
+echo "[hooks] commit-msg OK"

@@ -1,0 +1,7 @@
+A	.github/CODEOWNERS
+A	.github/ISSUE_TEMPLATE/bug_report.md
+A	.github/ISSUE_TEMPLATE/feature_request.md
+A	.github/ISSUE_TEMPLATE/question.md
+A	.github/PULL_REQUEST_TEMPLATE.md
+A	CHANGELOG.md
+A	justfile

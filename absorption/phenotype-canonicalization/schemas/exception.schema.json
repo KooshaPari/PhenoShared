@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "id",
+    "decision_id",
+    "component_id",
+    "owner_role",
+    "reason",
+    "exit_condition",
+    "migration_trigger",
+    "repository_id",
+    "paths",
+    "expires_on",
+    "evidence_refs",
+    "state"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "component_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner_role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "exit_condition": {
+      "type": "string",
+      "minLength": 1
+    },
+    "migration_trigger": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repository_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "expires_on": {
+      "type": "string",
+      "format": "date"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "state": {
+      "enum": [
+        "example_not_observed",
+        "proposed",
+        "accepted",
+        "expired",
+        "closed"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

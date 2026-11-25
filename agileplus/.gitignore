@@ -1,0 +1,11 @@
+../*
+../.*
+*.toml
+*.yaml
+*.json
+!pyproject.toml
+
+# Environment configuration
+.env
+.env.local
+.env.*.local

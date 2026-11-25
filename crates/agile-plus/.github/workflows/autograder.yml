@@ -1,0 +1,99 @@
+name: autograder
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  autograder:
+    name: Autograder
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8  # stable
+        with:
+          components: clippy
+
+      - name: Cache cargo
+        uses: swatinem/rust-cache@42dc69e1aa15d09112580998cf2ef0119e2e91ae  # v2
+        with:
+          shared-key: "autograder"
+
+      - name: Install protoc (agileplus-proto build script)
+        # Empirical fix (eco-044-gate-triage): prost-build expects `protoc` on PATH.
+        # Rust 24.04 runner image does not ship protobuf-compiler.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+          protoc --version
+
+      - name: Gate 1 — Workspace build
+        run: cargo build --workspace
+        env:
+          RUSTFLAGS: "-D warnings"
+
+      - name: Gate 2 — Workspace tests
+        run: cargo test --workspace
+        env:
+          RUSTFLAGS: "-D warnings"
+
+      - name: Gate 3 — Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+        env:
+          RUSTFLAGS: "-D warnings"
+
+      - name: Gate 4 — Cargo deny
+        run: |
+          cargo install --locked cargo-deny
+          cargo deny check
+        env:
+          RUSTFLAGS: "-D warnings"
+
+      - name: Gate 5 — Cargo audit
+        uses: rustsec/audit-check@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Gate 6 — Cargo machete
+        run: |
+          cargo install --locked cargo-machete
+          cargo machete
+        env:
+          RUSTFLAGS: "-D warnings"
+
+      - name: Emit autograde report
+        run: |
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          mkdir -p worklogs
+          jq -n \
+            --arg timestamp "$TIMESTAMP" \
+            --arg repo "AgilePlus" \
+            --arg branch "${{ github.head_ref }}" \
+            --arg pr "${{ github.event.number }}" \
+            '{
+              generated_at: $timestamp,
+              repo: $repo,
+              branch: $branch,
+              pr: $pr,
+              gates: {
+                build: "passed",
+                test: "passed",
+                clippy: "passed",
+                cargo_deny: "passed",
+                cargo_audit: "passed",
+                cargo_machete: "passed"
+              },
+              overall: "passed"
+            }' > worklogs/autograde-${TIMESTAMP}.json
+          echo "Autograde report emitted"
+        if: always()

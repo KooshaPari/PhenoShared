@@ -1,0 +1,15 @@
+{
+  "schema": "sessionledger.continuous-profiling.v1",
+  "sample_seconds": 1,
+  "poll_interval_seconds": 30,
+  "retain_samples": 3,
+  "push_backend": "http_soft",
+  "notes": [
+    "Stub agent config for L45 continuous profiling evidence — not a production sidecar.",
+    "On-demand unix CPU protobuf sampling landed in Wave-27 (#232); this stub polls the same loopback surface.",
+    "push_backend http_soft posts retained .pb samples when SL_PROFILE_PUSH_URL is set; unset URL or -DryRun skips network (hermetic SelfCheck never opens sockets).",
+    "push_backend none disables export entirely. Full Pyroscope/OTLP clients remain unpaid.",
+    "Windows hosts skip CPU sampling (pprof-rs needs SIGPROF); CI agent job is ubuntu-only soft evidence (continue-on-error).",
+    "Scheduled soft job delegates to scripts/continuous-profiling-agent.ps1 and reuses pprof-smoke contracts."
+  ]
+}

@@ -1,0 +1,15 @@
+# Exclude auto-generated pillar documentation from prettier checks 
+docs/INFRASTRUCTURE.md 
+docs/MIGRATION.md 
+docs/CONFIGURATION.md 
+docs/PERFORMANCE.md 
+docs/COST_MODEL.md 
+docs/MEMORY.md 
+docs/CONCURRENCY.md 
+docs/OBSERVABILITY.md 
+docs/DATA_MODEL.md 
+docs/ACCESSIBILITY.md 
+docs/MIGRATION_GUIDE.md 
+locales/ 
+docs/ARCHITECTURE.md 
+.github/reviewer-mentions.json 

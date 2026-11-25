@@ -1,0 +1,73 @@
+# End-to-end: build/install agileplus CLI and run init -> specify -> status round-trip.
+name: AgilePlus E2E
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "crates/agileplus-cli/**"
+      - "crates/agileplus-application/**"
+      - "crates/agileplus-domain/**"
+      - "crates/agileplus-sqlite/**"
+      - "scripts/e2e.sh"
+      - "tests/e2e/**"
+      - ".github/workflows/e2e.yml"
+  pull_request:
+    paths:
+      - "crates/agileplus-cli/**"
+      - "crates/agileplus-application/**"
+      - "crates/agileplus-domain/**"
+      - "crates/agileplus-sqlite/**"
+      - "scripts/e2e.sh"
+      - "tests/e2e/**"
+      - ".github/workflows/e2e.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agileplus-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  PACKAGE: agileplus-cli
+  BIN_NAME: agileplus
+
+jobs:
+  e2e-roundtrip:
+    name: CLI round-trip (ubuntu)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: dtolnay/rust-toolchain@nightly
+
+      - uses: Swatinem/rust-cache@v2
+
+      - uses: arduino/setup-protoc@v3
+        with:
+          version: "28.x"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build release CLI
+        run: cargo build --release --locked -p ${{ env.PACKAGE }}
+
+      - name: Install built CLI to PATH
+        run: |
+          install -m 0755 "target/release/${{ env.BIN_NAME }}" "$HOME/.local/bin/${{ env.BIN_NAME }}"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          agileplus --version
+
+      - name: Shell E2E round-trip
+        env:
+          AGILEPLUS_BIN: agileplus
+        run: bash scripts/e2e.sh
+
+      - name: Rust E2E round-trip
+        working-directory: tests/e2e
+        env:
+          AGILEPLUS_BIN: agileplus
+        run: cargo test --locked -- --nocapture

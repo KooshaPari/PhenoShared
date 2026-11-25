@@ -1,0 +1,71 @@
+name: Release Crates
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Perform a dry run without publishing'
+        required: false
+        default: 'false'
+
+env:
+  CARGO_TERM_COLOR: always
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Dry run — check publish (PR only)
+        if: github.event_name == 'pull_request' || github.event.inputs.dry_run == 'true'
+        run: |
+          cargo publish --dry-run -p phenotype-cache-adapter
+          cargo publish --dry-run -p phenotype-compliance-scanner
+          cargo publish --dry-run -p phenotype-contract-adapters
+          cargo publish --dry-run -p phenotype-contract-tests
+          cargo publish --dry-run -p phenotype-core
+          cargo publish --dry-run -p phenotype-cost-core
+          cargo publish --dry-run -p phenotype-error-macros
+          cargo publish --dry-run -p phenotype-event-sourcing
+          cargo publish --dry-run -p phenotype-infrastructure
+          cargo publish --dry-run -p phenotype-ports-canonical
+          cargo publish --dry-run -p phenotype-port-traits
+          cargo publish --dry-run -p phenotype-process
+          cargo publish --dry-run -p phenotype-project-registry
+          cargo publish --dry-run -p phenotype-rate-limit
+          cargo publish --dry-run -p phenotype-retry
+          cargo publish --dry-run -p phenotype-router
+          cargo publish --dry-run -p phenotype-shared-config
+          cargo publish --dry-run -p phenotype-time
+          cargo publish --dry-run -p phenotype-xdd-lib
+
+      - name: Publish to crates.io
+        if: startsWith(github.ref, 'refs/tags/v') && github.event.inputs.dry_run != 'true'
+        run: |
+          # Publish in topological order (dependencies resolved by cargo)
+          # Separate sleeps to respect crates.io rate limits
+          for pkg in phenotype-cache-adapter \
+                     phenotype-compliance-scanner phenotype-contract-adapters phenotype-contract-tests \
+                     phenotype-core phenotype-cost-core phenotype-error-macros \
+                     phenotype-event-sourcing phenotype-infrastructure phenotype-ports-canonical \
+                     phenotype-port-traits phenotype-process phenotype-project-registry \
+                     phenotype-rate-limit phenotype-retry phenotype-router \
+                     phenotype-shared-config phenotype-time \
+                     phenotype-xdd-lib; do
+            cargo publish -p "$pkg" --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+            sleep 20
+          done

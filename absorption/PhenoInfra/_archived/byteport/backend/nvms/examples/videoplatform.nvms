@@ -1,0 +1,55 @@
+FROM: aws-ubuntu:minimal
+NAME: video-platform
+
+CLUSTER:
+  api:
+    INSTANCES: 3-10
+    PATH: ./api
+    BUILD: cargo build --release
+    SCALE:
+      CPU_THRESHOLD: 70
+      MEMORY_THRESHOLD: 80
+
+  transcoder:
+    INSTANCES: 2-8
+    PATH: ./transcoder
+    BUILD: make build
+    SCALE:
+      QUEUE_THRESHOLD: 100
+
+SERVICES:
+  frontend:
+    PATH: ./frontend
+    BUILD: npm run build
+    PORT: 3000
+
+  websocket:
+    PATH: ./websocket
+    BUILD: npm run build
+    PORT: 8080
+
+AWS:
+  REGION: us-east-1
+  SERVICES:
+    - TYPE: RDS
+      ENGINE: postgres
+      MODE: CLUSTER
+    - TYPE: ElastiCache
+      ENGINE: redis
+      MODE: CLUSTER
+    - TYPE: S3
+      NAME: video-storage
+    - TYPE: SQS
+      NAME: transcoding-queue
+    - TYPE: CloudFront
+      ORIGIN: ${aws:s3:video-storage}
+
+NETWORK:
+  DOMAIN: stream.example.com
+  SSL: true
+  LOAD_BALANCER:
+    TYPE: ALB
+    SSL: true
+  SECURITY:
+    VPC: true
+    PRIVATE_SUBNETS: true

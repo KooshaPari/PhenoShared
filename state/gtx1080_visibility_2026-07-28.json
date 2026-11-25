@@ -1,0 +1,31 @@
+{
+  "schema_version": "pheno.gtx1080-visibility.v2",
+  "as_of": "2026-07-28T08:14:41Z",
+  "gtx_1080_visible": true,
+  "gpu_index": 0,
+  "gpu_name": "NVIDIA GeForce GTX 1080 Ti",
+  "vram_mib": 11264,
+  "compute_capability": "sm_61",
+  "driver_version": "581.80",
+  "pci_bus_id": "00000000:04:00.0",
+  "role": "legacy_helper \u2014 isolated llama.cpp CUDA, draft/needle inference, verification, eval shards",
+  "vs_3090_ti": {
+    "3090_ti_index": 1,
+    "3090_ti_vram_mib": 24564,
+    "3090_ti_compute_capability": "sm_86",
+    "pooling": "no pooled VRAM \u2014 separate process per GPU",
+    "tensor_parallel": "not supported across sm_61 + sm_86"
+  },
+  "engine_support": {
+    "llama_cpp_cuda": "supported (sm_61 native, any GGUF model)",
+    "vllm_pascal_0_7_3": "installed but lacks LFM2 architecture registrations",
+    "sglang": "requires sm_61 kernel build \u2014 pending",
+    "tensorrt_llm": "not supported"
+  },
+  "previous_state": {
+    "as_of": "2026-07-23T22:57:03Z",
+    "gtx_1080_visible": false,
+    "reason": "card absent from nvidia-smi; owner-authorized driver recovery required"
+  },
+  "gate_cleared": "1080 Ti install authorization gate cleared by owner confirmation 2026-07-28"
+}

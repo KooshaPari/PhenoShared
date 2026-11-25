@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""pane-snapshot — tiny wrapper around `tail -c <N>` for the most recent pane log.
+
+Used by `resume-all --replay-history` to grab the last N KiB of a per-pane
+log file written by `~/.config/resume-all/pane-hook.zsh`.
+
+KISS: no new terminal capture, no abstractions. Just tail the file.
+
+Usage:
+  pane-snapshot <pane-log-file>           # last 50 lines (default)
+  pane-snapshot <pane-log-file> --lines N # last N lines
+  pane-snapshot <pane-log-file> --bytes N # last N bytes
+  pane-snapshot --list                    # list all known pane-log files
+
+Exit codes:
+  0  success (output may be empty if the pane log is empty)
+  1  pane log file does not exist
+  2  invalid arguments
+"""
+
+import argparse
+import os
+import shlex
+import subprocess
+import sys
+from pathlib import Path
+
+LOG_DIR = Path(os.environ.get("RESUME_ALL_PANE_LOG_DIR", str(Path.home() / ".local/share/resume-all/pane-logs")))
+
+
+def _tail_lines(path: Path, n: int) -> str:
+    """Return the last `n` lines of `path` as a single string."""
+    try:
+        # `tail -n N` is portable and bounded.
+        result = subprocess.run(
+            ["tail", "-n", str(n), str(path)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        return result.stdout
+    except FileNotFoundError:
+        # Fallback: read and split manually (no `tail` available).
+        try:
+            data = path.read_text(errors="replace")
+        except OSError:
+            return ""
+        return "\n".join(data.splitlines()[-n:])
+
+
+def _tail_bytes(path: Path, n: int) -> str:
+    """Return the last `n` bytes of `path` as decoded text."""
+    try:
+        result = subprocess.run(
+            ["tail", "-c", str(n), str(path)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        return result.stdout
+    except FileNotFoundError:
+        try:
+            with path.open("rb") as f:
+                f.seek(0, os.SEEK_END)
+                if f.tell() > n:
+                    f.seek(-n, os.SEEK_END)
+                return f.read().decode("utf-8", errors="replace")
+        except OSError:
+            return ""
+
+
+def _list_pane_logs() -> int:
+    if not LOG_DIR.exists():
+        print(f"pane-snapshot: log dir does not exist: {LOG_DIR}", file=sys.stderr)
+        return 1
+    logs = sorted(p for p in LOG_DIR.glob("*.log") if not p.name.startswith("."))
+    if not logs:
+        print(f"(no pane-log files in {LOG_DIR})")
+        return 0
+    for p in logs:
+        try:
+            size = p.stat().st_size
+        except OSError:
+            size = -1
+        print(f"{p}\t{size}")
+    return 0
+
+
+def main(argv: list[str]) -> int:
+    if not argv:
+        print(__doc__, file=sys.stderr)
+        return 2
+
+    if argv[0] == "--list":
+        return _list_pane_logs()
+
+    if argv[0] in ("-h", "--help"):
+        print(__doc__)
+        return 0
+
+    if len(argv) < 1:
+        print("pane-snapshot: missing pane-log file argument", file=sys.stderr)
+        return 2
+
+    parser = argparse.ArgumentParser(
+        prog="pane-snapshot",
+        description="Tail the last N lines/bytes of a pane-log file.",
+    )
+    parser.add_argument("path", help="path to the pane-log file")
+    parser.add_argument("--lines", type=int, default=50, help="number of lines to read (default: 50)")
+    parser.add_argument("--bytes", type=int, default=0, help="if > 0, read the last N bytes instead of lines")
+    args = parser.parse_args(argv)
+
+    path = Path(args.path)
+    if not path.is_absolute():
+        path = LOG_DIR / path
+    if not path.exists():
+        print(f"pane-snapshot: file not found: {path}", file=sys.stderr)
+        return 1
+
+    if args.bytes > 0:
+        sys.stdout.write(_tail_bytes(path, args.bytes))
+    else:
+        sys.stdout.write(_tail_lines(path, args.lines))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

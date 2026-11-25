@@ -1,0 +1,7 @@
+Keep this directory under version control so stubbed rich-media assets
+have a stable, well-known home. Per-journey subdirectories
+(`<journey-id>/frame-###.{png,gif}`) are created on demand when a
+journey is first authored. Do not commit real captures here — once
+`phenotype-journey capture` produces a real artifact, the stub is
+replaced and the real asset is published to the docs site. See
+[`../README.md`](../README.md) for the full stub convention.

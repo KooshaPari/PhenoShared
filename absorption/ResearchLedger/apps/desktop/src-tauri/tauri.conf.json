@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "ResearchLedger",
+  "version": "0.1.0",
+  "identifier": "com.phenotype.researchledger",
+  "build": {
+    "beforeDevCommand": "bun run dev",
+    "beforeBuildCommand": "bun run build",
+    "devUrl": "http://127.0.0.1:5173",
+    "frontendDist": "../../../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "ResearchLedger",
+        "width": 1200,
+        "height": 760,
+        "minWidth": 960,
+        "minHeight": 640
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": ["'self'", "customprotocol:", "asset:"],
+        "base-uri": ["'none'"],
+        "connect-src": ["ipc:", "http://ipc.localhost"],
+        "form-action": ["'none'"],
+        "img-src": ["'self'", "asset:", "http://asset.localhost"],
+        "object-src": ["'none'"]
+      },
+      "devCsp": {
+        "default-src": [
+          "'self'",
+          "customprotocol:",
+          "asset:",
+          "http://127.0.0.1:5173"
+        ],
+        "base-uri": ["'none'"],
+        "connect-src": [
+          "ipc:",
+          "http://ipc.localhost",
+          "http://127.0.0.1:5173",
+          "ws://127.0.0.1:5173"
+        ],
+        "form-action": ["'none'"],
+        "img-src": ["'self'", "asset:", "http://asset.localhost"],
+        "object-src": ["'none'"],
+        "style-src": ["'self'", "'unsafe-inline'"]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": ["icons/researchledger.icns"],
+    "resources": {
+      "../../../scripts/hackernews_capture.mjs": "scripts/hackernews_capture.mjs",
+      "../../../scripts/reddit_capture.mjs": "scripts/reddit_capture.mjs",
+      "../../../scripts/x_capture.mjs": "scripts/x_capture.mjs",
+      "../../../scripts/_capture_common.mjs": "scripts/_capture_common.mjs",
+      "../../../scripts/_path_shapes.mjs": "scripts/_path_shapes.mjs",
+      "../../../node_modules/playwright": "node_modules/playwright",
+      "../../../node_modules/playwright-core": "node_modules/playwright-core"
+    }
+  }
+}

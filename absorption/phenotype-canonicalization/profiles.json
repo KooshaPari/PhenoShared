@@ -1,0 +1,231 @@
+[
+  {
+    "id": "js-library",
+    "decision_ids": [
+      "D03",
+      "D04",
+      "D05",
+      "D06",
+      "D13",
+      "D19",
+      "D24"
+    ],
+    "additional_acceptance": [
+      "pack/import outside workspace",
+      "public type declarations",
+      "multiple supported runtime consumers"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "web-react",
+    "decision_ids": [
+      "D03",
+      "D04",
+      "D05",
+      "D06",
+      "D07",
+      "D13",
+      "D17",
+      "D19"
+    ],
+    "additional_acceptance": [
+      "browser journey",
+      "client/server boundary",
+      "a11y/state matrix",
+      "production bundle"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "docs-vue",
+    "decision_ids": [
+      "D03",
+      "D04",
+      "D05",
+      "D06",
+      "D13",
+      "D16",
+      "D17"
+    ],
+    "additional_acceptance": [
+      "Vue/SFC type coverage",
+      "docs package isolated install",
+      "version/link/example tests"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "desktop-bun",
+    "decision_ids": [
+      "D03",
+      "D04",
+      "D05",
+      "D06",
+      "D07",
+      "D11",
+      "D17",
+      "D19"
+    ],
+    "additional_acceptance": [
+      "native addon/package",
+      "app launch outside checkout",
+      "quit/reopen/core journey"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "node-native-fork",
+    "decision_ids": [
+      "D03",
+      "D04",
+      "D05",
+      "D06",
+      "D07",
+      "D20",
+      "D24"
+    ],
+    "additional_acceptance": [
+      "upstream delta",
+      "native ABI",
+      "Bun-vs-Node behavior matrix",
+      "supported node package install"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "python-mcp",
+    "decision_ids": [
+      "D08",
+      "D09",
+      "D10",
+      "D12",
+      "D18",
+      "D19"
+    ],
+    "additional_acceptance": [
+      "actual imports and GIL state",
+      "MCP protocol/security/concurrency",
+      "package invocation outside source"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "python-research",
+    "decision_ids": [
+      "D08",
+      "D09",
+      "D10",
+      "D15",
+      "D19"
+    ],
+    "additional_acceptance": [
+      "numerical reference",
+      "optional backend absence",
+      "reproducible locked environment"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "rust-shared-core",
+    "decision_ids": [
+      "D02",
+      "D11",
+      "D13",
+      "D14",
+      "D18",
+      "D19",
+      "D24"
+    ],
+    "additional_acceptance": [
+      "feature matrix",
+      "clean downstream package",
+      "public ABI/API",
+      "latency/throughput/size profiles"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "native-ffi",
+    "decision_ids": [
+      "D14",
+      "D15",
+      "D18",
+      "D19"
+    ],
+    "additional_acceptance": [
+      "ownership/lifetime/layout",
+      "panic/error boundary",
+      "thread safety",
+      "batch/copy overhead"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "gpu-kernel",
+    "decision_ids": [
+      "D14",
+      "D15",
+      "D19",
+      "D24"
+    ],
+    "additional_acceptance": [
+      "device architecture and driver",
+      "numerical/error budget",
+      "host-to-device/full-request cost",
+      "fallback is explicit profile"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "game-mod",
+    "decision_ids": [
+      "D11",
+      "D13",
+      "D14",
+      "D15",
+      "D17",
+      "D19"
+    ],
+    "additional_acceptance": [
+      "engine version compatibility",
+      "permitted isolated test instance",
+      "launch/play/save/reopen",
+      "no auth/DRM bypass"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "infra-ci",
+    "decision_ids": [
+      "D11",
+      "D13",
+      "D18",
+      "D19",
+      "D21",
+      "D23",
+      "D24"
+    ],
+    "additional_acceptance": [
+      "hosted reuse",
+      "least privilege",
+      "negative gate",
+      "restore/rollback rehearsal"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  },
+  {
+    "id": "upstream-reference",
+    "decision_ids": [
+      "D01",
+      "D20",
+      "D24"
+    ],
+    "additional_acceptance": [
+      "read-only lifecycle boundary",
+      "license/history",
+      "never silently counted as an active consumer"
+    ],
+    "scope_resolution": "component manifest required; repository name alone is insufficient"
+  }
+]

@@ -1,0 +1,9 @@
+## v8 governance (ADR-041-045)
+
+This crate is a substrate. The following v8 governance applies:
+
+- **Predictive DRY (ADR-041):** New shared primitives must fill out `PREDICTIVE.md` before merging.
+- **Substrate graduation (ADR-042):** Tier is declared in `.framework-lint.yaml`. Promotions require `PROMOTION.md`.
+- **Drift detection (ADR-043):** When this crate is included in a parent app, `pheno-drift-detector` scans weekly. Use `.drift-detector.yaml` overrides to mark keep-in-app.
+- **Cron deployment (ADR-044):** All fleet substrate tools run on the heavy-runner weekly. Backup is GitHub Actions.
+- **Tier compliance (ADR-045):** This crate's tier is audited by `pheno-framework-lint`. See findings/ for the latest report.

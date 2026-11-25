@@ -1,0 +1,40 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  check:
+    desc: "Canonical project check"
+    cmds:
+      - task: quality
+
+  quality:
+    desc: "Validate template contracts, docs, and scaffold"
+    cmds:
+      - task: manifest:validate
+      - task: reconcile:validate
+      - task: docs:validate
+      - ./scripts/scaffold-smoke.sh
+
+  manifest:validate:
+    cmds:
+      - test -f contracts/template.manifest.json
+      - rg -n '"layer_type"|"layer_name"|"version"' contracts/template.manifest.json >/dev/null
+
+  reconcile:validate:
+    cmds:
+      - test -f contracts/reconcile.rules.yaml
+      - rg -n '^modes:|^ownership:' contracts/reconcile.rules.yaml >/dev/null
+
+  docs:validate:
+    desc: "Ensure docs landing presence"
+    cmds:
+      - bash scripts/validate-docs.sh
+
+  release:prep:
+    desc: "Release readiness checks"
+    cmds:
+      - task: check

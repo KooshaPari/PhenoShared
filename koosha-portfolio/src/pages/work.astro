@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { projects, site } from "../data/site";
+---
+
+<BaseLayout title={`Work — ${site.name}`} description="Work overview and portfolio context." active="projects">
+  <section class="page-hero">
+    <div>
+      <p class="eyebrow">Work</p>
+      <h1 class="display">Systems, products, and the migration work around them.</h1>
+      <p class="lede">
+        This is the shorter, process-focused view: what gets built, how it lands, and how the old
+        Adobe Portfolio content gets carried forward without making the site brittle.
+      </p>
+    </div>
+    <div class="card side-panel">
+      <h2>What to expect</h2>
+      <ul>
+        <li>Feature summaries that stay close to the actual work</li>
+        <li>Dedicated pages for major projects</li>
+        <li>Legacy forwards so old entry points keep working</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="grid-3">
+      {projects.slice(0, 3).map((project) => (
+        <article class="card note">
+          <p class="eyebrow">{project.kind}</p>
+          <h2>{project.title}</h2>
+          <p>{project.highlight}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  h1 {
+    margin: 0.25rem 0 0;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    line-height: 0.95;
+  }
+
+  .lede,
+  .side-panel {
+    color: var(--muted);
+  }
+
+  .side-panel,
+  .note {
+    padding: 1.1rem;
+  }
+
+  .note h2,
+  .side-panel h2 {
+    margin: 0.2rem 0 0.75rem;
+    font-size: 1.05rem;
+  }
+
+  .side-panel ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .note p {
+    color: var(--muted);
+  }
+
+  @media (max-width: 920px) {
+    .page-hero {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

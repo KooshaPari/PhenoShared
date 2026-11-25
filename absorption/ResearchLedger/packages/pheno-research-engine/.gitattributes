@@ -1,0 +1,136 @@
+# .gitattributes — Tier-0 fleet standard.
+#
+# Enforces consistent line endings across the repo, marks generated
+# binary files as such, and tells GitHub Linguist to skip vendored or
+# generated directories so language stats stay meaningful.
+
+# ---------------------------------------------------------------------------
+# Default: LF line endings, no CRLF unless explicitly noted below.
+# ---------------------------------------------------------------------------
+*               text=auto eol=lf
+
+# ---------------------------------------------------------------------------
+# Shell scripts must always be LF and executable-bit preserved.
+# ---------------------------------------------------------------------------
+*.sh            text eol=lf
+*.bash          text eol=lf
+
+# ---------------------------------------------------------------------------
+# Windows-only scripts may keep CRLF; everything else is LF.
+# ---------------------------------------------------------------------------
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+*.ps1           text eol=crlf
+
+# ---------------------------------------------------------------------------
+# Documentation: Markdown and reStructuredText are text with LF.
+# ---------------------------------------------------------------------------
+*.md            text eol=lf
+*.rst           text eol=lf
+
+# ---------------------------------------------------------------------------
+# Config formats — must be text and normalized.
+# ---------------------------------------------------------------------------
+*.toml          text eol=lf
+*.yaml          text eol=lf
+*.yml           text eol=lf
+*.json          text eol=lf
+*.ini           text eol=lf
+*.cfg           text eol=lf
+*.editorconfig  text eol=lf
+*.gitattributes text eol=lf
+*.gitignore     text eol=lf
+
+# ---------------------------------------------------------------------------
+# Source code — keep as text with LF. TypeScript and Python in particular
+# should never be committed with CRLF.
+# ---------------------------------------------------------------------------
+*.py            text eol=lf
+*.pyi           text eol=lf
+*.ts            text eol=lf
+*.tsx           text eol=lf
+*.js            text eol=lf
+*.jsx           text eol=lf
+*.mjs           text eol=lf
+*.cjs           text eol=lf
+*.rs            text eol=lf
+*.go            text eol=lf
+*.java          text eol=lf
+*.kt            text eol=lf
+*.swift         text eol=lf
+*.c             text eol=lf
+*.h             text eol=lf
+*.cpp           text eol=lf
+*.hpp           text eol=lf
+*.cs            text eol=lf
+*.rb            text eol=lf
+*.php           text eol=lf
+*.sql           text eol=lf
+
+# ---------------------------------------------------------------------------
+# Binary files: keep diffs sane, mark them as binary so Git never tries
+# to apply line-ending "fixes".
+# ---------------------------------------------------------------------------
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.webp          binary
+*.ico           binary
+*.pdf           binary
+*.zip           binary
+*.tar           binary
+*.gz            binary
+*.tgz           binary
+*.bz2           binary
+*.xz            binary
+*.7z            binary
+*.rar           binary
+*.exe           binary
+*.dll           binary
+*.so            binary
+*.dylib         binary
+*.whl           binary
+*.egg-info      -text
+*.pyc           binary
+*.pyd           binary
+*.pyo           binary
+*.wasm          binary
+
+# ---------------------------------------------------------------------------
+# GitHub Linguist overrides: skip vendored / generated / VCS dirs so
+# language statistics stay meaningful and don't double-count.
+# ---------------------------------------------------------------------------
+.gitattributes  linguist-generated
+.gitignore      linguist-generated
+.git/           linguist-vendored
+.venv/          linguist-vendored
+venv/           linguist-vendored
+node_modules/   linguist-vendored
+__pycache__/    linguist-vendored
+.mypy_cache/    linguist-vendored
+.ruff_cache/    linguist-vendored
+.pytest_cache/  linguist-vendored
+dist/           linguist-vendored
+build/          linguist-vendored
+target/         linguist-vendored
+coverage/       linguist-vendored
+.github/        linguist-vendored
+docs/           linguist-documentation
+*.md            linguist-documentation
+LICENSE         linguist-detectable=false
+LICENSE-MIT     linguist-detectable=false
+LICENSE-APACHE  linguist-detectable=false
+
+# ---------------------------------------------------------------------------
+# Generated / vendored docs and lockfiles — exclude from diff stats but
+# still track them.
+# ---------------------------------------------------------------------------
+package-lock.json  linguist-generated=true
+yarn.lock          linguist-generated=true
+pnpm-lock.yaml     linguist-generated=true
+uv.lock            linguist-generated=true
+Pipfile.lock       linguist-generated=true
+poetry.lock        linguist-generated=true
+Cargo.lock         linguist-generated=true
+go.sum             linguist-generated=true

@@ -1,0 +1,17 @@
+{
+  "name": "phenotype-router-spec",
+  "languages": [],
+  "primary_language": "spec",
+  "status": "queued",
+  "has_readme": true,
+  "type": "protocol-spec",
+  "path": "repos/phenotype-router-spec",
+  "disposition": "KEEP",
+  "wave": "2026-07-23-boundary-audit",
+  "queued_at": "2026-07-23",
+  "proposed_target": "phenotype-router-spec",
+  "proposed_target_repo": "phenotype-router-spec",
+  "proposed_target_path": ".",
+  "absorption_note": null,
+  "note": "Canonical RouterDispatch/RouterMailbox/RouterTrace/RouterArtifact protocol schemas; retain as external-consumer SSOT."
+}

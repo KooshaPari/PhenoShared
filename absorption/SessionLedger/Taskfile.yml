@@ -1,0 +1,114 @@
+# Taskfile.yml for SessionLedger
+# ------------------------------------------------------------------
+# Mirrors Makefile / justfile developer recipes:
+#   build, test, lint, fmt, clippy, package, seed, dev, dev-down, up
+#
+# Usage:
+#   task --list
+#   task build
+#   task dev
+# ------------------------------------------------------------------
+
+version: "3"
+
+vars:
+  DAEMON_MANIFEST: crates/sl-daemon/Cargo.toml
+
+env:
+  RUST_BACKTRACE: "1"
+
+tasks:
+  default:
+    desc: Show available tasks.
+    cmds:
+      - task --list
+
+  help:
+    desc: Show this help text.
+    cmds:
+      - task --list
+
+  build:
+    desc: Compile sl-daemon and sl-viewer (debug profile).
+    cmds:
+      - cargo build --manifest-path {{.DAEMON_MANIFEST}}
+      - cargo build -p sl-viewer
+
+  test:
+    desc: Workspace suite (CI flags) plus excluded sl-daemon.
+    cmds:
+      - cargo test --all-features --locked
+      - cargo test --manifest-path {{.DAEMON_MANIFEST}}
+
+  fmt:
+    desc: Apply rustfmt across workspace + daemon.
+    cmds:
+      - cargo fmt --all
+      - cargo fmt --manifest-path {{.DAEMON_MANIFEST}}
+
+  clippy:
+    desc: cargo clippy on workspace + daemon.
+    cmds:
+      - cargo clippy --all-targets --all-features --locked
+      - cargo clippy --manifest-path {{.DAEMON_MANIFEST}} --all-targets
+
+  lint:
+    desc: Format check + clippy (CI-equivalent gate).
+    cmds:
+      - cargo fmt --all --check
+      - cargo fmt --manifest-path {{.DAEMON_MANIFEST}} --check
+      - cargo clippy --all-targets --all-features --locked
+      - cargo clippy --manifest-path {{.DAEMON_MANIFEST}} --all-targets
+
+  package:
+    desc: Desktop packaging via packaging/Makefile.
+    cmds:
+      - make -C packaging package-all
+
+  seed:
+    desc: Copy a sample OKF fixture into SL_DATA_DIR (default .sl-data).
+    cmds:
+      - pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/seed-sample.ps1
+
+  up:
+    desc: Bring up local runtime (runtime-up script if present, else process-compose).
+    cmds:
+      - task: up:windows
+      - task: up:unix
+
+  up:windows:
+    internal: true
+    platforms: [windows]
+    cmds:
+      - |
+        if (Test-Path scripts/runtime-up.ps1) {
+          pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/runtime-up.ps1
+        } elseif (Test-Path scripts/runtime-up.sh) {
+          bash scripts/runtime-up.sh
+        } else {
+          process-compose up
+        }
+
+  up:unix:
+    internal: true
+    platforms: [linux, darwin]
+    cmds:
+      - |
+        if [ -f scripts/runtime-up.ps1 ]; then
+          pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/runtime-up.ps1
+        elif [ -f scripts/runtime-up.sh ]; then
+          bash scripts/runtime-up.sh
+        else
+          process-compose up
+        fi
+
+  dev:
+    desc: Build both crates then bring up the local stack.
+    cmds:
+      - task: build
+      - task: up
+
+  dev-down:
+    desc: Tear down the process-compose stack.
+    cmds:
+      - process-compose down

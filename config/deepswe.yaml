@@ -1,0 +1,18 @@
+# DeepSWE execution contract. The corpus is acquired separately and is never
+# cloned or downloaded by the dry-run planner.
+suite:
+  id: deep-swe
+  n_tasks: 113
+  task_root_env: PHENO_DEEPSWE_TASK_ROOT
+  runner: pier
+  agent: mini-swe-agent
+  min_pier_version: "0.3.0"
+policy:
+  local_only: true
+  cloud_evals_disabled: true
+  n_attempts: 1
+  default_environment: docker
+models:
+  - local/qwen35-08b
+  - local/lfm25-8b-a1b
+  - local/ornith-8b

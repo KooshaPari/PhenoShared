@@ -1,0 +1,59 @@
+# electron-builder config for AgilePlus desktop.
+# Wraps the existing electrobun build output (staged via scripts/prepare-bundle.mjs)
+# into real NSIS / DMG / AppImage / .deb installers.
+appId: dev.phenotype.agileplus
+productName: AgilePlus
+copyright: Copyright (c) 2026 Phenotype
+# We are NOT actually an Electron app — the launcher is the Electrobun native
+# binary. electron-builder still requires a version string for sanity checks
+# on the NSIS target; this is a no-op for installer assembly.
+electronVersion: 31.7.7
+
+directories:
+  output: release
+  # The staging dir produced by scripts/prepare-bundle.mjs holds the launcher
+  # binary, lib/, Info.plist, and Resources/ from electrobun build.
+  buildResources: stage
+
+# electron-builder scans the staging dir; `files` here constrains what to include
+# on platforms where the dir might have extra junk.
+files:
+  - "**/*"
+  - "package.json"
+
+asar: false  # Resources/app/ must stay as a real directory so the launcher can exec Bun from it.
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  # electron-builder auto-detects AgilePlus.exe that prepare-bundle.mjs stages.
+  artifactName: "${productName}-Setup-${version}.${ext}"
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  allowElevation: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: AgilePlus
+  uninstallDisplayName: AgilePlus
+
+mac:
+  target:
+    - target: dmg
+      arch:
+        - arm64
+  category: public.app-category.productivity
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Office
+  artifactName: "${productName}-${version}.${ext}"
+
+publish: null

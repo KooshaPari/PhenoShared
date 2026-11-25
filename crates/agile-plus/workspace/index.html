@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>AgilePlus</title>
+    <meta name="description" content="Phenotype workbench — Tracera + BytePort + Benchora + AtomsBot + Civis." />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a0d14" />
+    <link rel="icon" href="/icons/agileplus-icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/agileplus-icon-192.png" />
+    <style>
+      :root { color-scheme: dark; }
+      html, body { margin: 0; padding: 0; background: #0a0d14; color: #e6eaf2; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+      main { max-width: 880px; margin: 0 auto; padding: 48px 24px; }
+      h1 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; }
+      p { color: #a0a8ba; }
+      .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+      a.btn { padding: 10px 14px; border: 1px solid #2a3350; border-radius: 8px; color: #e6eaf2; text-decoration: none; }
+      a.btn:hover { background: #1a2238; }
+      code { background: #13203a; padding: 2px 6px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>AgilePlus</h1>
+      <p>Phenotype workbench. Installs as a standalone desktop PWA. Sub-apps (Tracera, Civis, BytePort, Benchora, AtomsBot) live behind the same shell. Stack spawned locally via <code>process-compose</code> + Cloudflare Workers on edge.</p>
+      <nav class="row">
+        <a class="btn" href="/civis">Civis</a>
+        <a class="btn" href="/tracera">Tracera</a>
+        <a class="btn" href="/byteport">BytePort</a>
+        <a class="btn" href="/benchora">Benchora</a>
+        <a class="btn" href="/stack">Spawn Stack</a>
+        <a class="btn" href="/dashboard">Dashboard</a>
+      </nav>
+    </main>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((e) => console.warn('SW failed:', e));
+        });
+      }
+    </script>
+  </body>
+</html>

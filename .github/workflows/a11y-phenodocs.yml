@@ -1,0 +1,40 @@
+name: a11y (phenodocs)
+
+# AT1 — VitePress docsite WCAG 2.1 AA gate.
+# Calls the reusable a11y workflow vendored in this repository at
+# `.github/workflows/reusable-a11y.yml`. It used to be called across repos from
+# `<REDACTED>/OmniRoute-3rd`, a reference the 2026-09-16 PII sweep made
+# unresolvable and whose target repository no longer exists.
+
+on:
+  push:
+    branches: [main, chore/**]
+    paths:
+      - docs/**
+      - .vitepress/**
+      - package.json
+      - tests/a11y/**
+      - axe-config.ts
+      - .github/workflows/a11y-phenodocs.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - docs/**
+      - .vitepress/**
+      - package.json
+      - tests/a11y/**
+      - axe-config.ts
+      - .github/workflows/a11y-phenodocs.yml
+  workflow_dispatch:
+
+concurrency:
+  group: a11y-phenodocs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wcag:
+    uses: ./.github/workflows/reusable-a11y.yml
+    with:
+      app_name: phenodocs
+      app_dir: .
+    secrets: inherit

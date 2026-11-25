@@ -1,0 +1,48 @@
+# config/pheno_runtime.yaml — pheno-harness runtime configuration.
+#
+# Canonical source-of-truth for runtime adapters (Tracera, harbor_cli,
+# evidence adapters, trace bridges). Env vars remain the lowest-priority
+# override; YAML entries win if present.
+#
+# Loaded by `pheno.runtime_config.load_config()` (lazy — only when a
+# caller asks). No module imports this on import.
+
+# Tracera — persistent trace repository (Grapheon feat/tracera-persistent-trace-repository)
+tracera:
+  host: "127.0.0.1"            # TRACERA_HOST override
+  port: 8080                   # TRACERA_PORT override
+  base_url: null               # TRACERA_BASE_URL; if set, overrides host:port
+  api_token: null              # TRACERA_API_TOKEN; not currently enforced by tracera-server
+  enabled: false               # master switch for the dual-write bridge (task 17-20)
+  flush_interval_s: 30         # how often the buffer flushes
+  batch_size: 100              # max events per flush
+  retry_max: 3                 # retries on transient transport errors
+  health_check_on_init: true   # verify /healthz on first connection
+  timeout_s: 10                # per-request HTTP timeout
+
+# Evidence adapters (research-domain adapters)
+evidence:
+  base_url: null              # EVIDENCE_BASE_URL; if null, uses env
+  rate_limit_per_min: 60       # per-adapter default
+  circuit_breaker_threshold: 5 # consecutive failures before OPEN
+
+# Trace bridges (task 16-17)
+trace_bridges:
+  dual_write: false            # when true, mirror events to Tracera + JSONL
+  dual_write_default: false    # v0.13 task 6: master default when dual_write is null
+                              # env override: TRACERA_DUAL_WRITE_DEFAULT
+  dual_write_sample_rate: 1.0  # v0.13 task 8: per-event random skip rate (0.0-1.0)
+                              # 1.0 = all events; 0.0 = none; 0.5 = 50/50 cohort
+                              # env override: TRACERA_DUAL_WRITE_SAMPLE_RATE
+  include_kinds: []            # empty = all kinds; otherwise subset (e.g. ["wandb_step", "eval_cell"])
+  cohort_policies:             # v0.13 task 7+16: per-env cohort rules
+    dev: "off"                 # dev/staging/prod each map to an environment cohort
+    staging: "on"              # the active runtime env is selected at startup; see
+    prod: "on"                 # `pheno.runtime_config.active_environment` for the lookup
+  env_overrides:               # v0.13 task 7: per-env override files
+    dev: "config/dev.yaml"
+    staging: "config/staging.yaml"
+    prod: "config/prod.yaml"
+
+# Schema version — bump when fields are added/removed/renamed
+schema_version: 2

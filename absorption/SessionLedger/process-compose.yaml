@@ -1,0 +1,18 @@
+version: "0.5"
+processes:
+  sl-daemon:
+    command: cargo run -p sl-daemon -- serve --watch "$SL_WATCH_DIR" --out "$SL_OUT_DIR" --http-bind "$SL_HTTP_BIND"
+    environment:
+      - SL_WATCH_DIR=${SL_WATCH_DIR:-./sessions}
+      - SL_OUT_DIR=${SL_OUT_DIR:-./.sl-data}
+      - SL_HTTP_BIND=${SL_HTTP_BIND:-127.0.0.1:8080}
+    readiness_probe:
+      http_get:
+        path: /readyz
+        port: 8080
+      initial_delay_seconds: 3
+  sl-viewer:
+    command: cargo run -p sl-viewer
+    depends_on:
+      sl-daemon:
+        condition: process_healthy

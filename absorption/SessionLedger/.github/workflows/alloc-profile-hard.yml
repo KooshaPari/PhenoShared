@@ -1,0 +1,45 @@
+# Blocking hard alloc-profile / dhat CI evidence for C00 L8.
+# SelfCheck + dhat smoke on ubuntu PRs; soft ops-load job retained
+# (continue-on-error). Does not claim default-on production jemalloc or Windows parity.
+name: alloc-profile hard
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  alloc-profile-hard-selfcheck:
+    name: alloc profile hard · SelfCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: alloc-profile hard CI SelfCheck
+        shell: pwsh
+        run: ./scripts/alloc-profile-check.ps1 -SelfCheck
+
+  alloc-profile-hard-run:
+    name: alloc profile hard · dhat smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
+        with:
+          workspaces: .
+          key: alloc-profile-hard-dhat
+      - name: run alloc-profile dhat smoke (blocking)
+        shell: pwsh
+        run: ./scripts/alloc-profile-check.ps1 -RunTest

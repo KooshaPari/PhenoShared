@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.kooshapari.browser-broker  (TEMPLATE: render before installing)
+
+  Runs `brokerd` (the lease-guarded browser broker) as a per-user launchd agent
+  so it survives logout and reboot instead of being an ad-hoc background shell.
+
+  Listens on 127.0.0.1:8788 ONLY (loopback). Port 8787 belongs to a herdr
+  control bridge and is deliberately NOT used here.
+
+  The bearer token is NOT in this plist and NOT in argv. The wrapper
+  ~/.local/bin/browser-broker-run sources
+  ~/.local/state/browser-broker.env (mode 600) and exports BROKER_TOKEN into
+  the process environment; brokerd is told only the VARIABLE NAME via the
+  token-env flag, never the value.
+
+  State root: ~/.local/state/browser-broker
+  Log:        ~/.local/state/brokerd.log
+  Docs:       ~/.local/state/browser-broker.README.md
+
+  This file is a TEMPLATE. Every `__HOME__` placeholder must be replaced with
+  the absolute home directory before the plist is installed, because launchd
+  does NOT expand `~` or environment variables in ProgramArguments,
+  StandardOutPath, StandardErrorPath or WorkingDirectory. Render it with:
+
+    sed "s|__HOME__|$HOME|g" com.kooshapari.browser-broker.plist.in \
+      > ~/Library/LaunchAgents/com.kooshapari.browser-broker.plist
+
+  Manage with:
+    launchctl print   gui/$(id -u)/com.kooshapari.browser-broker
+    launchctl kickstart -k gui/$(id -u)/com.kooshapari.browser-broker   # restart
+    launchctl bootout  gui/$(id -u)/com.kooshapari.browser-broker       # stop
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.kooshapari.browser-broker</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__HOME__/.local/bin/browser-broker-run</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Restart on crash or signal, but not after a clean exit(0). -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <!-- Do not spin: at most one restart per 10s. -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/.local/state/brokerd.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.local/state/brokerd.log</string>
+
+    <key>WorkingDirectory</key>
+    <string>__HOME__</string>
+
+    <!-- Background service: do not fight the interactive UI for CPU/IO. -->
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>LowPriorityIO</key>
+    <true/>
+    <key>Nice</key>
+    <integer>5</integer>
+
+    <!-- No on-demand socket activation: brokerd owns its own listener. -->
+    <key>AbandonProcessGroup</key>
+    <false/>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>__HOME__/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>

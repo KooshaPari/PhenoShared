@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "suite": "deep-swe",
+  "n_tasks_total": 113,
+  "n_tasks_requested": 16,
+  "model_alias": "local/lfm25-8b-a1b",
+  "agent": "mini-swe-agent",
+  "runner": "pier",
+  "minimum_runner_version": "0.3.0",
+  "task_root_env": "PHENO_DEEPSWE_TASK_ROOT",
+  "environment": "docker",
+  "run_mode": "dry_run",
+  "provider_cost_usd": 0,
+  "created_at": "2026-07-14T01:05:06.203897+00:00",
+  "integrity": {
+    "local_only": true,
+    "cloud_evals_disabled": true,
+    "n_attempts": 1,
+    "default_environment": "docker",
+    "no_training_on_eval_tasks": true
+  }
+}

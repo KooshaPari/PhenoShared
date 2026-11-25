@@ -1,0 +1,36 @@
+# Max context/output tokens by role (plan Part D1)
+roles:
+  route:
+    max_context: 2048
+    max_output: 128
+  retrieve:
+    max_context: 8192
+    max_output: 256
+  rank:
+    max_context: 8192
+    max_output: 256
+  plan:
+    max_context: 16384
+    max_output: 512
+  debug:
+    max_context: 24576
+    max_output: 768
+  patch:
+    max_context: 32768
+    max_output: 1200
+  fallback_12b:
+    max_context: 65536
+    max_output: 1200
+  fallback_30b:
+    max_context: 65536
+    max_output: 1200
+  emergency:
+    max_context: 65536
+    max_output: 4096
+
+cloud:
+  hard_cap_input: 32768
+  require_budget_flag_above: 32768
+
+default_role: patch
+compiled_target_tokens: 5120

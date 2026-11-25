@@ -1,0 +1,40 @@
+[package]
+name = "forge_sharecli"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "ShareCLI realtime relay (P3.3) — in-process broadcast channels, bounded queues, hub registry, and backpressure fanout. See docs/tasks/."
+authors.workspace = true
+publish = false
+
+[dependencies]
+clap = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+async-trait.workspace = true
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "time", "sync", "io-util", "net", "signal"] }
+futures.workspace = true
+parking_lot = "0.12"
+chrono = { workspace = true, features = ["serde"] }
+uuid = { workspace = true, features = ["v4", "serde"] }
+bytes = { workspace = true }
+base64.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros", "time", "sync", "test-util"] }
+futures.workspace = true
+serde_json.workspace = true
+bstr.workspace = true
+# Used by tests/sse_e2e.rs — drives the live HTTP path through
+# `commands::run_relay` so the integration test exercises the actual
+# chunked transfer-encoded SSE stream end-to-end (not just the unit-test
+# paths). The `stream` feature unlocks `Response::bytes_stream`.
+reqwest = { workspace = true, features = ["stream"] }
+# Used by tests/composes_with_tracera.rs — proves ShareHub composes
+# with TraceraSink at the wire-shape level. No new external deps are
+# pulled in: `forge_tracera` is a workspace member declared in the
+# root Cargo.toml.
+forge_tracera = { workspace = true }

@@ -1,0 +1,34 @@
+name: cargo-deny
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/deny.toml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cargo-deny:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: EmbarkStudios/cargo-deny-action@70f81531115945ba6eb6b941ec9d39d063438eb9 # v2
+        with:
+          command: check
+          manifest-path: iac/Cargo.toml
+          # The action runs inside rust:1.85.0-alpine, so rustup's HOST triple
+          # is x86_64-unknown-linux-musl and the root rust-toolchain.toml
+          # (channel = "1.99.0") resolves to the toolchain NAME
+          # `1.99.0-x86_64-unknown-linux-musl`. That name is a rustup host
+          # triple suffix, NOT a declared musl target - no musl override
+          # exists anywhere in the repo. The container only ships
+          # 1.85.0-x86_64-unknown-linux-musl, so the action's entrypoint
+          # (`rustup show || rustup toolchain install`) used to print
+          # "error: override toolchain ... is not installed" and then
+          # auto-install it mid-step. Pre-installing the same pinned version
+          # via the action's own rust-version input makes that resolution
+          # deterministic and silences the misleading error. Keep this in
+          # lockstep with the root rust-toolchain.toml channel.
+          rust-version: "1.99.0"

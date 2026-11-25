@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Bun / Deno caches
+.bun/
+.deno/
+
+# Build output
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local env files (never commit secrets)
+.env
+.env.*
+!.env.example
+
+# Editor / OS junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Legacy tooling scanner reports (CI artifacts, regenerated each run)
+legacy_tooling_report.json
+legacy_tooling_report.md
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo

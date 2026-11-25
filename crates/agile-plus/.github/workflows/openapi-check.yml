@@ -1,0 +1,38 @@
+name: OpenAPI Drift Check
+
+# Traceability: #118 (OpenAPI governance), #138 (scaffold retry).
+#
+# This workflow regenerates `openapi.yaml` from the `#[utoipa::path]`
+# annotations in `crates/agileplus-api/` and fails the PR if it drifts
+# from the committed file.
+#
+# NOTE (deferred): While the `agileplus-plugin-core` git dependency
+# (SHA `ba652dec…`) returns HTTP 404, `cargo build` cannot resolve the
+# workspace. During that window this workflow emits a reminder and exits
+# successfully. Once the dep is unpinned or republished, reintroduce the
+# Rust setup, regeneration, and drift diff steps.
+
+on:
+  pull_request:
+    paths:
+      - "crates/agileplus-api/**"
+      - "crates/agileplus-domain/**"
+      - "openapi.yaml"
+      - ".github/workflows/openapi-check.yml"
+permissions:
+  contents: read
+
+
+jobs:
+  drift:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Plugin-core dependency block notice
+        run: |
+          echo "::notice::OpenAPI drift check is deferred while the"
+          echo "::notice::agileplus-plugin-core git dependency (SHA ba652dec...)"
+          echo "::notice::returns HTTP 404. Re-enable the drift check after that"
+          echo "::notice::dependency is restored."

@@ -1,0 +1,41 @@
+# CycloneDX SBOM — all Cargo workspace members (supply-chain artifacts).
+# Crate list comes from `cargo metadata` via scripts/ci/generate-workspace-sboms.sh (no duplicated matrix).
+name: SBOM (CycloneDX pilot)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sbom-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cyclonedx:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@5b842231ba77f5c045dba54ac5560fed2db780e2
+
+      - name: Install cargo-cyclonedx
+        uses: taiki-e/install-action@43aecc8d72668fbcfe75c31400bc4f890f1c5853
+        with:
+          tool: cargo-cyclonedx@0.5.9
+
+      - name: Generate workspace SBOMs
+        run: bash scripts/ci/generate-workspace-sboms.sh . sbom-out
+
+      - name: Upload SBOM bundle
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: cyclonedx-sbom-workspace
+          path: sbom-out/cyclonedx-sbom-*.json
+          if-no-files-found: error

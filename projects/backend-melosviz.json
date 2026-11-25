@@ -1,0 +1,23 @@
+{
+  "name": "backend-melosviz",
+  "languages": ["python"],
+  "primary_language": "python",
+  "status": "active",
+  "has_readme": true,
+  "type": "music-visualization-library",
+  "path": "repos/backend",
+  "role": "melosviz-scoring-engine",
+  "domain_role": "library",
+  "boundary": "python-package",
+  "gh_url": "https://github.com/KooshaPari/backend",
+  "default_branch": "main",
+  "remote_default_sha_at_audit": "7105f6d0a6cabaf6669412a8ebe33aed30b01861",
+  "remote_archived_at_audit": false,
+  "visibility": "private",
+  "disposition": "KEEP_STANDALONE_RECONCILED",
+  "canonical_routing": false,
+  "absorbed_into": null,
+  "rationale": "Active private source repository whose pyproject declares the melosviz 0.1.0 package and whose src/melosviz plus tests form a coherent Python library boundary. Historical row repo-backend-melosviz claims absorption into phenotype-python-sdk; that claim is preserved in the disposition index but is superseded for current routing by this explicit standalone record.",
+  "audit_artifact": "registry/audit-absorption-justification/melosviz-reconciliation-20260726.json",
+  "registry_author": "phenotype-registry (boundary audit)"
+}

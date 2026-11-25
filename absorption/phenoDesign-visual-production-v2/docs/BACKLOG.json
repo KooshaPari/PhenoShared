@@ -1,0 +1,172 @@
+{
+  "schema": "handoff-backlog-v1",
+  "not_a_new_registry": true,
+  "snapshot": "2026-09-15",
+  "tasks": [
+    {
+      "id": "PDV-001",
+      "title": "Reconcile migration and ownership",
+      "owner": "phenoDesign",
+      "depends_on": [],
+      "acceptance": [
+        "Refresh main/PR87 and current owner boundaries",
+        "Preserve newer changes; migration packages present; stale archive declarations reconciled"
+      ],
+      "status": "READY_ON_DEVICE"
+    },
+    {
+      "id": "PDV-002",
+      "title": "Apply guarded overlay and workspace integration",
+      "owner": "phenoDesign",
+      "depends_on": [
+        "PDV-001"
+      ],
+      "acceptance": [
+        "Dry-run clean",
+        "Existing exports retained",
+        "Bun lock regenerated with aligned Remotion versions",
+        "Workspace typecheck and unit suites pass"
+      ],
+      "status": "IMPLEMENTATION_SUPPLIED_RUNTIME_UNVERIFIED"
+    },
+    {
+      "id": "PDV-003",
+      "title": "Repair recorder structural typing and capture errors",
+      "owner": "phenoDesign/playwright-record",
+      "depends_on": [
+        "PDV-001"
+      ],
+      "acceptance": [
+        "HTML fallback explicitly typed",
+        "Required failed capture prevents accepted verdict",
+        "Negative screenshot failure test proves rejection"
+      ],
+      "status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "PDV-004",
+      "title": "Unify manifest path resolution and viewer compatibility",
+      "owner": "phenoDesign/journey-viewer + migrated schema owner",
+      "depends_on": [
+        "PDV-003"
+      ],
+      "acceptance": [
+        "Sibling and colocated manifests resolve same actual assets",
+        "Viewer consumes declared structural format",
+        "No self-written filename stands in for verification"
+      ],
+      "status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "PDV-005",
+      "title": "Qualify Remotion source-to-encoded output",
+      "owner": "phenoDesign/doc-embeds",
+      "depends_on": [
+        "PDV-002"
+      ],
+      "acceptance": [
+        "Real dependency build",
+        "Unequal-aspect crop/zoom marker pixels agree",
+        "Finite ripple/frame boundaries",
+        "Audio/full decode correct",
+        "Two concurrent jobs isolated"
+      ],
+      "status": "ON_DEVICE_E2E_REQUIRED"
+    },
+    {
+      "id": "PDV-006",
+      "title": "Qualify native Adobe worker sessions",
+      "owner": "accepted native worker owner",
+      "depends_on": [
+        "PDV-001"
+      ],
+      "acceptance": [
+        "Illustrator .ai and Photoshop .psd cold reopen",
+        "Source structure retained",
+        "Export/consumer correct",
+        "Token/modal/cancellation negative tests",
+        "No operator focus/audio changes"
+      ],
+      "status": "HOST_PROTOTYPES_SUPPLIED"
+    },
+    {
+      "id": "PDV-007",
+      "title": "Qualify Blender scene-to-runtime lane",
+      "owner": "accepted render worker + phenoDesign",
+      "depends_on": [
+        "PDV-001"
+      ],
+      "acceptance": [
+        "Real .blend generation/reopen",
+        "Named GLB parts/materials correct",
+        "Actual GPU/browser consumer and fallback",
+        "Resources within measured budget"
+      ],
+      "status": "INHERITED_RECIPE_UNVERIFIED_HERE"
+    },
+    {
+      "id": "PDV-008",
+      "title": "Integrate author/export/consumer journey records",
+      "owner": "phenoDesign + existing verifier",
+      "depends_on": [
+        "PDV-004",
+        "PDV-005",
+        "PDV-006"
+      ],
+      "acceptance": [
+        "Source/output identities bound to observed jobs",
+        "Raw/presentation custody separate",
+        "Missing required checks cannot pass",
+        "Existing schema/ledger reused"
+      ],
+      "status": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "PDV-009",
+      "title": "Deliver one polished product story",
+      "owner": "phenoDesign",
+      "depends_on": [
+        "PDV-007",
+        "PDV-008"
+      ],
+      "acceptance": [
+        "Actual subject not placeholders",
+        "Editable vector/raster/3D masters",
+        "Useful scroll/direct interactions",
+        "Mobile/reduced-motion/static content",
+        "Visual critique corrections retained"
+      ],
+      "status": "PRODUCT_WORK_REQUIRED"
+    },
+    {
+      "id": "PDV-010",
+      "title": "Enable additional mediums by demand",
+      "owner": "phenoDesign + selected worker",
+      "depends_on": [
+        "PDV-008"
+      ],
+      "acceptance": [
+        "Rive/Lottie/AE/diagram/editorial/spatial lanes selected for concrete briefs",
+        "Tool rights and versions qualified",
+        "Real source/export/consumer tests per adapter"
+      ],
+      "status": "ON_DEMAND"
+    },
+    {
+      "id": "PDV-011",
+      "title": "Production concurrency and release qualification",
+      "owner": "existing scheduling/deployment owners",
+      "depends_on": [
+        "PDV-009"
+      ],
+      "acceptance": [
+        "Foreground reservations measured",
+        "Owned cleanup/cancellation",
+        "Cache key correctness",
+        "Consumer release/rollback proof",
+        "Separate publish approval"
+      ],
+      "status": "NOT_IMPLEMENTED"
+    }
+  ]
+}

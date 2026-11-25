@@ -1,0 +1,32 @@
+#target illustrator
+/* Native authoring canary, not a claim of a finished design. Compile via scripts/compile_illustrator.py.
+   Creates only its own document. No arbitrary-code fields, network or existing-document edits. */
+(function () {
+ var job = __JOB_JSON__;
+ var out = new Folder(job.outputDirectory);
+ if (!out.exists) throw new Error('Authorized output directory is missing');
+ var ai=new File(out.fsName+'/'+job.id+'.ai'),svg=new File(out.fsName+'/'+job.id+'.svg'),png=new File(out.fsName+'/'+job.id+'.png');
+ if(ai.exists||svg.exists||png.exists)throw new Error('Refusing to overwrite an existing output');
+ var doc=app.documents.add(DocumentColorSpace.RGB,job.width,job.height);
+ function rgb(hex){var c=new RGBColor();c.red=parseInt(hex.substr(1,2),16);c.green=parseInt(hex.substr(3,2),16);c.blue=parseInt(hex.substr(5,2),16);return c;}
+ try {
+  for(var i=0;i<job.layers.length;i++){
+   var layer=doc.layers.add();layer.name=job.layers[i].name;
+   var shapes=job.layers[i].shapes;
+   for(var j=0;j<shapes.length;j++){
+    var s=shapes[j],p;
+    // Manifest uses top-left downwards coordinates; Illustrator rectangles take top in artboard coordinates.
+    if(s.kind==='ellipse')p=layer.pathItems.ellipse(job.height-s.y,s.x,s.width,s.height);
+    else if(s.kind==='rect')p=layer.pathItems.rectangle(job.height-s.y,s.x,s.width,s.height);
+    else {p=layer.pathItems.add();var points=[];for(var k=0;k<s.points.length;k++)points.push([s.points[k][0],job.height-s.points[k][1]]);p.setEntirePath(points);p.closed=!!s.closed;}
+    p.name=s.name;p.stroked=!!s.stroke;p.filled=!!s.fill;
+    if(s.fill)p.fillColor=rgb(s.fill);
+    if(s.stroke){p.strokeColor=rgb(s.stroke);p.strokeWidth=s.strokeWidth||1;}
+   }
+  }
+  var save=new IllustratorSaveOptions();save.pdfCompatible=true;doc.saveAs(ai,save);
+  var sv=new ExportOptionsSVG();sv.embedRasterImages=true;doc.exportFile(svg,ExportType.SVG,sv);
+  var pn=new ExportOptionsPNG24();pn.transparency=true;pn.antiAliasing=true;pn.artBoardClipping=true;pn.horizontalScale=100;pn.verticalScale=100;doc.exportFile(png,ExportType.PNG24,pn);
+  var receipt=new File(out.fsName+'/'+job.id+'.native-receipt.txt');receipt.open('w');receipt.writeln('EXPORTED_UNVERIFIED\nHost='+app.version+'\nDocument='+doc.name+'\nLayers='+doc.layers.length+'\nExternal reopen, SVG geometry and pixel validation still required.');receipt.close();
+ } finally {doc.close(SaveOptions.DONOTSAVECHANGES);}
+}());

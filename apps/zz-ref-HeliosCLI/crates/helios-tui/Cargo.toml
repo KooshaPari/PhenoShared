@@ -1,0 +1,16 @@
+[package]
+name = "helios-tui"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Terminal UI scaffold for Helios CLI (ratatui-based)"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+authors = ["kooshapari"]
+
+[dependencies]
+ratatui = "0.30"
+crossterm = "0.29"
+thiserror = "1"
+tracing = "0.1"
+
+[dev-dependencies]

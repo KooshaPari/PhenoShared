@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Canonical Phenotype pre-commit hook: verified-secret scan only.
+# Bypass: HOOKS_SKIP=1 git commit
+#         PRE_COMMIT_SKIP_SECRETS=1 git commit
+#         git commit --no-verify
+set -u
+
+if [ "${HOOKS_SKIP:-0}" = "1" ]; then
+  echo "[hooks] HOOKS_SKIP=1; skipping pre-commit"
+  exit 0
+fi
+
+if [ "${PRE_COMMIT_SKIP_SECRETS:-0}" = "1" ]; then
+  echo "[hooks] PRE_COMMIT_SKIP_SECRETS=1; skipping secret scan"
+  exit 0
+fi
+
+if ! command -v trufflehog >/dev/null 2>&1; then
+  echo "[hooks] trufflehog not installed; skipping (brew install trufflehog)"
+  exit 0
+fi
+
+timeout_bin="${TIMEOUT_BIN:-timeout}"
+if ! command -v "$timeout_bin" >/dev/null 2>&1; then
+  timeout_bin="gtimeout"
+fi
+if ! command -v "$timeout_bin" >/dev/null 2>&1; then
+  echo "[hooks] timeout/gtimeout not installed; running without timeout"
+  timeout_bin=""
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+to_secrets="${PRE_COMMIT_TIMEOUT_SECRETS:-60}"
+echo "[hooks] trufflehog staged-file scan"
+
+files="$(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null || true)"
+if [ -z "$files" ]; then
+  echo "[hooks] no staged files to scan"
+  exit 0
+fi
+
+cmd=(bash -c 'printf "%s\n" "$1" | xargs -I{} trufflehog filesystem --only-verified --fail --no-update "$2/{}"' _ "$files" "$repo_root")
+if [ -n "$timeout_bin" ]; then
+  "$timeout_bin" --kill-after=5s "${to_secrets}s" "${cmd[@]}"
+else
+  "${cmd[@]}"
+fi
+rc=$?
+if [ "$rc" -ne 0 ]; then
+  echo "[hooks] verified secret scan failed"
+  exit "$rc"
+fi
+
+echo "[hooks] pre-commit OK"

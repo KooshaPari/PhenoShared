@@ -1,0 +1,86 @@
+---
+# install-cloudflared.yml — Cloudflare Tunnel on oci_primary.
+#
+# DESIGN NOTE (flagged for user review):
+#   Public ingress topology chosen:
+#     cloudflared → https://127.0.0.1:443 (Caddy w/ internal CF-issued cert)
+#   `noTLSVerify: true` is set because Caddy may re-present a Cloudflare-issued
+#   cert whose SNI differs from 127.0.0.1. Alternative: cloudflared → :80 plain.
+#   We pick the TLS-to-loopback path so internal traffic is still encrypted
+#   and Caddy's ACME issuance exercises the full cert pipeline.
+#
+# Auth:
+#   `cloudflared tunnel login` requires a browser — NOT runnable headless.
+#   Pre-provision a tunnel manually once (see README), capture
+#   credentials.json + tunnel UUID, drop them in group_vars via ansible-vault,
+#   and this playbook installs them.
+
+- name: Install Cloudflare Tunnel
+  hosts: oci_primary
+  become: true
+  vars:
+    cloudflared_home: /etc/cloudflared
+  tasks:
+    - name: Ensure cloudflared installed (common.yml normally does this)
+      ansible.builtin.dnf:
+        name: cloudflared
+        state: present
+
+    - name: Ensure /etc/cloudflared exists
+      ansible.builtin.file:
+        path: "{{ cloudflared_home }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0750"
+
+    - name: Install tunnel credentials (from ansible-vault)
+      ansible.builtin.copy:
+        dest: "{{ cloudflared_home }}/credentials.json"
+        content: "{{ cloudflared_credentials_json | default('<PLACEHOLDER_TUNNEL_CREDENTIALS_JSON>') }}"
+        owner: root
+        group: root
+        mode: "0600"
+      no_log: true
+
+    - name: Template cloudflared config.yml
+      ansible.builtin.template:
+        src: cloudflared-config.yml.j2
+        dest: "{{ cloudflared_home }}/config.yml"
+        owner: root
+        group: root
+        mode: "0640"
+      notify: restart cloudflared
+
+    - name: Install cloudflared systemd unit
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/cloudflared.service
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=Cloudflare Tunnel
+          After=network-online.target
+          Wants=network-online.target
+
+          [Service]
+          Type=simple
+          User=root
+          ExecStart=/usr/bin/cloudflared tunnel --config /etc/cloudflared/config.yml run
+          Restart=always
+          RestartSec=5s
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable + start cloudflared
+      ansible.builtin.systemd:
+        name: cloudflared
+        daemon_reload: true
+        enabled: true
+        state: started
+
+  handlers:
+    - name: restart cloudflared
+      ansible.builtin.systemd:
+        name: cloudflared
+        state: restarted
