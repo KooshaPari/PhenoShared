@@ -1,0 +1,14 @@
+{
+  "contract": "urn:phenotype:atlas-plan:1:applet",
+  "id": "127.0.0.1_52391",
+  "origin": "http://127.0.0.1:52391",
+  "manifest": "http://127.0.0.1:52391/.well-known/applet.json",
+  "discovery": "http://127.0.0.1:52391/api/applet",
+  "embed": "http://127.0.0.1:52391/embed",
+  "dir": "/home/kooshapari/ac-fixture-20261124085415/run/.dagrun",
+  "version": "1.2.0",
+  "pid": 2104206,
+  "started_at": "2026-11-24T09:08:20Z",
+  "read_only": true,
+  "allow_origins": []
+}

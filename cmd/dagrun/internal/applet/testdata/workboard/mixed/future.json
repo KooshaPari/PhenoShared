@@ -1,0 +1,15 @@
+{
+  "contract": "urn:phenotype:atlas-plan:1:applet",
+  "id": "127.0.0.1_52391",
+  "origin": "http://127.0.0.1:52391",
+  "manifest": "http://127.0.0.1:52391/.well-known/applet.json",
+  "discovery": "http://127.0.0.1:52391/api/applet",
+  "embed": "http://127.0.0.1:52391/embed",
+  "dir": "/tmp/run",
+  "version": "1.2.0",
+  "pid": 4,
+  "started_at": "2026-11-24T08:54:45Z",
+  "read_only": true,
+  "allow_origins": [],
+  "future_field": "x"
+}

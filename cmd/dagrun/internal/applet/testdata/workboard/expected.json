@@ -1,0 +1,135 @@
+{
+  "fixture": "dagrun applet registry, read-only consumer classification",
+  "captured_at_utc": "2026-11-24T09:08:21Z",
+  "captured_on": "nixos",
+  "dagrun_version": "1.2.0",
+  "registry_format": "urn:phenotype:atlas-plan:1:applet (one JSON file per advertisement, extension .json)",
+  "note": "Measured, not reasoned. Paths are relative to this directory. Each case was produced by running the reader against the directory and recording what came back; see ../../../../../README.md for the replay commands and ~/CodeProjects/temp/dagrun-workboard-adapter.md for the consumer contract these pin down.",
+  "cases": [
+    {
+      "file": "live/127.0.0.1_52391.json",
+      "input_state": "a real advertisement captured from a live `dagrun serve`",
+      "listed_without_verify": true,
+      "listed_with_verify": true,
+      "verify_outcome": "reachable=false, error=\"...connection refused\" once the captured serve is gone; reachable=true while a serve answers on 127.0.0.1:52391 with manifest id=dagrun and a non-empty version",
+      "expected_adapter_state": "OFFLINE (files exist, origin does not answer) or READY",
+      "trap": "the same bytes read as READY and as OFFLINE depending only on the probe moment, so the file is never evidence of liveness"
+    },
+    {
+      "file": "mixed/127.0.0.1_52391.json",
+      "input_state": "valid shape, pid 4, dead origin",
+      "listed_without_verify": true,
+      "listed_with_verify": true,
+      "verify_outcome": "reachable=false",
+      "expected_adapter_state": "OFFLINE",
+      "trap": "pid 4 is a live kernel pid on every Unix host, so a pid-based liveness guess says UP and is wrong"
+    },
+    {
+      "file": "mixed/duplicate_of_live.json",
+      "input_state": "byte-identical copy of a valid record under a different filename",
+      "listed_without_verify": true,
+      "listed_with_verify": true,
+      "verify_outcome": "reachable=false; identical row emitted a second time",
+      "expected_adapter_state": "DUPLICATE",
+      "trap": "ReadInstances neither dedupes by id nor checks filename==id, so two rows appear and a naive consumer renders two servers"
+    },
+    {
+      "file": "mixed/badid.json",
+      "input_state": "id \"not a valid id\", which the schema pattern forbids",
+      "listed_without_verify": true,
+      "listed_with_verify": true,
+      "verify_outcome": "listed like any other record",
+      "expected_adapter_state": "INVALID_ID",
+      "trap": "the id pattern is a publish-time rule (Validate), not a read-time rule, so readers must not trust id shape"
+    },
+    {
+      "file": "mixed/foreign.json",
+      "input_state": "contract urn:phenotype:atlas-plan:1:somethingelse",
+      "listed_without_verify": false,
+      "listed_with_verify": false,
+      "verify_outcome": "unreadable: contract \"...\" is not \"urn:phenotype:atlas-plan:1:applet\"",
+      "expected_adapter_state": "UNREADABLE",
+      "trap": "reported in errors[], never as a row; a consumer that reads only instances[] cannot see it at all"
+    },
+    {
+      "file": "mixed/future.json",
+      "input_state": "one extra field future_field",
+      "listed_without_verify": false,
+      "listed_with_verify": false,
+      "verify_outcome": "unreadable: json: unknown field \"future_field\"",
+      "expected_adapter_state": "UNREADABLE",
+      "trap": "decoding uses DisallowUnknownFields, so a later additive field makes every older dagrun machine read the record as garbage"
+    },
+    {
+      "file": "mixed/writable.json",
+      "input_state": "read_only false",
+      "listed_without_verify": false,
+      "listed_with_verify": false,
+      "verify_outcome": "unreadable: read_only is false; this surface has no write path, so a file claiming otherwise was not written by it",
+      "expected_adapter_state": "UNREADABLE",
+      "trap": "none: this one is an honest refusal, and its message explains itself"
+    },
+    {
+      "file": "mixed/truncated.json",
+      "input_state": "partial JSON",
+      "listed_without_verify": false,
+      "listed_with_verify": false,
+      "verify_outcome": "unreadable: unexpected EOF",
+      "expected_adapter_state": "UNREADABLE",
+      "trap": "a writer killed mid-write leaves exactly this, and it is indistinguishable from corruption to a reader that only counts rows"
+    },
+    {
+      "file": "mixed/notes.txt",
+      "input_state": "non-.json file",
+      "listed_without_verify": false,
+      "listed_with_verify": false,
+      "verify_outcome": "ignored silently, not even in errors[]",
+      "expected_adapter_state": "IGNORED",
+      "trap": "silent, so an adapter cannot report it; do not glob *.json and assume the glob is the registry"
+    }
+  ],
+  "process_cases": [
+    {
+      "case": "registry directory does not exist",
+      "observed": "instances=[], errors=[], pruned=[], rc=0; the directory is NOT created by the read",
+      "expected_adapter_state": "NO_REGISTRY",
+      "trap": "identical output to an empty registry and to an all-unreadable registry"
+    },
+    {
+      "case": "registry directory exists and is empty",
+      "observed": "instances=[], errors=[], rc=0; human mode prints only 'no dagrun servers advertised in <dir>'",
+      "expected_adapter_state": "EMPTY",
+      "trap": "rc=0"
+    },
+    {
+      "case": "every entry unreadable",
+      "observed": "instances=[], errors=[4 messages], rc=0",
+      "expected_adapter_state": "BROKEN",
+      "trap": "rc=0; only errors[] separates BROKEN from EMPTY"
+    },
+    {
+      "case": "manifest answers 200 but declares another applet",
+      "observed": "reachable=false, error=\"manifest declares applet \\\"not-dagrun\\\", want \\\"dagrun\\\"\"",
+      "expected_adapter_state": "SQUATTED",
+      "trap": "a different program on the recorded port is detected, which is good, but the row still looks like a dagrun record"
+    },
+    {
+      "case": "manifest declares id=dagrun with no version",
+      "observed": "reachable=false, error=\"manifest declares no version\"",
+      "expected_adapter_state": "SQUATTED",
+      "trap": "the probe requires id==dagrun AND a non-empty version; both must pass"
+    },
+    {
+      "case": "--prune on a registry with dead origins",
+      "observed": "pruned reports the instance IDs, not filenames: [\"127.0.0.1_52391\", \"not a valid id\", \"127.0.0.1_52391\"], files removed",
+      "expected_adapter_state": "MUTATED",
+      "trap": "prune deletes files and names them ambiguously when two records share an id; a read-only consumer must never call it"
+    },
+    {
+      "case": "--verify, no --prune",
+      "observed": "instances[], errors[], files on disk all unchanged",
+      "expected_adapter_state": "READ_ONLY",
+      "trap": "none: verify probes, it does not delete"
+    }
+  ]
+}

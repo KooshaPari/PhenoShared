@@ -1,0 +1,60 @@
+{
+  "id": "dagrun",
+  "version": "1.2.0",
+  "subject_id": "dagrun.run",
+  "provided_capabilities": [
+    "dagrun.plan.read",
+    "dagrun.run.state.read",
+    "dagrun.run.trace.read",
+    "dagrun.run.agents.read",
+    "dagrun.run.view.render"
+  ],
+  "required_capabilities": [],
+  "optional_capabilities": [
+    "dagrun.harness.session.read"
+  ],
+  "ports": [
+    {
+      "name": "read-api",
+      "direction": "provides",
+      "contract_id": "dagrun.read-api.v1"
+    },
+    {
+      "name": "embed-view",
+      "direction": "provides",
+      "contract_id": "dagrun.embed-view.v1"
+    },
+    {
+      "name": "applet-manifest",
+      "direction": "provides",
+      "contract_id": "dagrun.applet-manifest.v1"
+    },
+    {
+      "name": "run-directory",
+      "direction": "requires",
+      "contract_id": "dagrun.run-directory.v1"
+    }
+  ],
+  "owned_state_ids": [
+    "dagrun.run.plan",
+    "dagrun.run.state",
+    "dagrun.run.trace",
+    "dagrun.run.claims"
+  ],
+  "permission_ids": [
+    "dagrun.read.observe"
+  ],
+  "resource_profile_ids": [
+    "dagrun.loopback.readonly"
+  ],
+  "surfaces": [
+    "api",
+    "cli",
+    "gui",
+    "mcp"
+  ],
+  "children": [],
+  "lifecycle_contract_id": "dagrun.serve.lifecycle.v1",
+  "federation_policy": "Read-only projection of one run directory. Data authority stays with the run directory, which is owned by dagrun alone: a host may cache or re-present this document but must not become a second writer. No route writes, claims a node or takes a lease. The server binds loopback only and has no authentication of its own, so a host that presents it to a remote surface is that host's responsibility and needs its own credentialed proxy. Embedding is same-origin by default; a named consumer origin may be allow-listed explicitly, in which case that origin can read this run's titles, statuses and session ids.",
+  "synthetic": false
+}
