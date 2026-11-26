@@ -38,11 +38,7 @@ struct Cli {
     dns_name: String,
 
     /// Cloudflare zone ID for <REDACTED>.com.
-    #[arg(
-        long,
-        env = "CF_ZONE_ID",
-        default_value = ""
-    )]
+    #[arg(long, env = "CF_ZONE_ID", default_value = "")]
     cf_zone_id: String,
 
     /// Cloudflare API token file.

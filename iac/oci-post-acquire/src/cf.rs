@@ -89,10 +89,7 @@ fn dns_records_url(zone_id: &str) -> String {
 
 /// Lookup endpoint that filters the collection down to A records for `name`.
 fn dns_records_lookup_url(zone_id: &str, name: &str) -> String {
-    format!(
-        "{}?type=A&name={name}",
-        dns_records_url(zone_id)
-    )
+    format!("{}?type=A&name={name}", dns_records_url(zone_id))
 }
 
 /// Endpoint for a single, already-known record.

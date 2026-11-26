@@ -101,13 +101,19 @@ mod tests {
             marker.contains("- Instance OCID: `ocid1.instance.oc1..abc`"),
             "{marker}"
         );
-        assert!(marker.contains("- Acquired: `2026-10-31T00:00:00Z`"), "{marker}");
+        assert!(
+            marker.contains("- Acquired: `2026-10-31T00:00:00Z`"),
+            "{marker}"
+        );
     }
 
     #[test]
     fn test_marker_starts_with_a_sentinel_after_a_blank_line() {
         let marker = mesh_marker(&instance(), "t");
-        assert!(marker.starts_with("\n\n"), "marker must separate blocks: {marker:?}");
+        assert!(
+            marker.starts_with("\n\n"),
+            "marker must separate blocks: {marker:?}"
+        );
         assert!(marker.contains(AUTO_INSERT_SENTINEL), "{marker}");
         assert!(marker.ends_with('\n'), "{marker:?}");
     }
@@ -135,13 +141,19 @@ mod tests {
             merged.contains("Hand-written note."),
             "operator content lost: {merged}"
         );
-        assert!(!merged.contains("old-region"), "stale block survived: {merged}");
+        assert!(
+            !merged.contains("old-region"),
+            "stale block survived: {merged}"
+        );
         assert!(
             merged.contains("2026-10-31 03:00 UTC"),
             "new block missing: {merged}"
         );
         assert_eq!(merged.matches(AUTO_INSERT_SENTINEL).count(), 1);
-        assert!(merged.starts_with("# Compute Mesh State\n\nHand-written note."), "{merged}");
+        assert!(
+            merged.starts_with("# Compute Mesh State\n\nHand-written note."),
+            "{merged}"
+        );
     }
 
     #[test]

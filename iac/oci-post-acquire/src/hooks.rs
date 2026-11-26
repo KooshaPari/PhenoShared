@@ -115,7 +115,10 @@ mod tests {
 
         write_script(
             &dir.join("10-first"),
-            &format!("echo \"10 $OCI_REGION $OCI_AD $OCI_PUBLIC_IP\" >> '{}'", log.display()),
+            &format!(
+                "echo \"10 $OCI_REGION $OCI_AD $OCI_PUBLIC_IP\" >> '{}'",
+                log.display()
+            ),
         );
         write_script(
             &dir.join("20-second"),

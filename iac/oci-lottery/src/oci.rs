@@ -255,7 +255,11 @@ mod tests {
     #[test]
     fn test_ad_names_without_data_key_is_empty_not_an_error() {
         assert!(ad_names_from_list_stdout(b"{}").unwrap().is_empty());
-        assert!(ad_names_from_list_stdout(br#"{"data":null}"#).unwrap().is_empty());
+        assert!(
+            ad_names_from_list_stdout(br#"{"data":null}"#)
+                .unwrap()
+                .is_empty()
+        );
     }
 
     #[test]

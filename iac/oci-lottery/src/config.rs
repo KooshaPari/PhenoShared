@@ -81,7 +81,11 @@ mod tests {
     fn test_default_stays_within_always_free_limits() {
         let cfg = Config::default();
         // Always-Free A1.Flex ceiling is 4 OCPU / 24 GB across all instances.
-        assert!(cfg.ocpus <= 4, "default ocpus {} exceeds free tier", cfg.ocpus);
+        assert!(
+            cfg.ocpus <= 4,
+            "default ocpus {} exceeds free tier",
+            cfg.ocpus
+        );
         assert!(
             cfg.memory_gb <= 24,
             "default memory {} exceeds free tier",
@@ -115,7 +119,8 @@ mod tests {
     fn test_default_ssh_key_path_points_at_a_public_key() {
         let cfg = Config::default();
         assert!(
-            cfg.ssh_authorized_keys_path.ends_with(".ssh/id_ed25519.pub"),
+            cfg.ssh_authorized_keys_path
+                .ends_with(".ssh/id_ed25519.pub"),
             "unexpected default key path: {}",
             cfg.ssh_authorized_keys_path.display()
         );
@@ -161,7 +166,10 @@ mod tests {
         assert_eq!(cfg.memory_gb, 12);
         assert_eq!(cfg.display_name, "custom-node");
         assert_eq!(cfg.profile, "TESTPROFILE");
-        assert_eq!(cfg.compartment_ocid.as_deref(), Some("ocid1.compartment.test"));
+        assert_eq!(
+            cfg.compartment_ocid.as_deref(),
+            Some("ocid1.compartment.test")
+        );
         assert_eq!(cfg.backoff_min_secs, 5);
         assert_eq!(cfg.backoff_max_secs, 9);
 

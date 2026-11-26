@@ -148,7 +148,10 @@ mod tests {
     fn test_create_key_body_preserves_the_tag_list() {
         let body = create_key_body(&["tag:oci", "tag:phenotype-mesh"], 60);
         let v: Value = serde_json::to_value(&body).unwrap();
-        assert_eq!(v["capabilities"]["devices"]["create"]["tags"][1], "tag:phenotype-mesh");
+        assert_eq!(
+            v["capabilities"]["devices"]["create"]["tags"][1],
+            "tag:phenotype-mesh"
+        );
         assert_eq!(v["expirySeconds"], 60);
     }
 

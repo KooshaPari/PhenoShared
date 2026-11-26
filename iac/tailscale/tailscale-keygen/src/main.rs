@@ -254,7 +254,10 @@ mod tests {
         let body = create_key_body(&tags, 120);
         let v: Value = serde_json::to_value(&body).unwrap();
         assert_eq!(v["expirySeconds"], 120);
-        assert_eq!(v["capabilities"]["devices"]["create"]["tags"][1], "tag:extra");
+        assert_eq!(
+            v["capabilities"]["devices"]["create"]["tags"][1],
+            "tag:extra"
+        );
     }
 
     #[test]
@@ -269,7 +272,10 @@ mod tests {
     #[test]
     fn test_description_falls_back_when_no_tag_is_given() {
         let body = create_key_body(&[], 60);
-        assert_eq!(body.description, "phenotype/mesh auto-mint by tailscale-keygen");
+        assert_eq!(
+            body.description,
+            "phenotype/mesh auto-mint by tailscale-keygen"
+        );
         assert!(body.capabilities.devices.create.tags.is_empty());
     }
 
@@ -337,7 +343,10 @@ mod tests {
         ])
         .expect("full invocation must parse");
 
-        assert_eq!(cli.tags, vec!["tag:oci".to_string(), "tag:mesh".to_string()]);
+        assert_eq!(
+            cli.tags,
+            vec!["tag:oci".to_string(), "tag:mesh".to_string()]
+        );
         assert_eq!(cli.ttl, 90);
         assert_eq!(cli.api_base, "http://127.0.0.1:8080");
     }

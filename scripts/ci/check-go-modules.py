@@ -97,7 +97,9 @@ def find_modules(root: Path) -> list[str]:
             continue
         if is_git_ignored(root, go_mod):
             continue
-        found.append(str(go_mod.parent.relative_to(root)))
+        # Always compare in POSIX form so a Windows checkout, where
+        # relative_to() yields backslashes, reaches the same verdict as CI.
+        found.append(go_mod.parent.relative_to(root).as_posix())
     return sorted(found)
 
 

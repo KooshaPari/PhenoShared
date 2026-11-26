@@ -282,7 +282,10 @@ mod tests {
         let stamp = inst.acquired_at.to_rfc3339();
 
         assert!(line.starts_with("\n- ["), "unexpected shape: {line:?}");
-        assert!(line.ends_with('\n'), "line must end with a newline: {line:?}");
+        assert!(
+            line.ends_with('\n'),
+            "line must end with a newline: {line:?}"
+        );
         assert!(line.contains(&stamp), "timestamp missing: {line}");
         assert!(line.contains("region=us-ashburn-1"), "{line}");
         assert!(line.contains("ad=3"), "{line}");
@@ -311,8 +314,14 @@ mod tests {
         // whitespace on the prior document must be trimmed to avoid a gap.
         let prior = "# Compute Mesh State\n\nStatus: PENDING\n\n\n";
         let merged = merge_mesh_state(prior, "\n- [t1] first\n");
-        assert_eq!(merged, "# Compute Mesh State\n\nStatus: PENDING\n- [t1] first\n");
-        assert!(!merged.contains("\n\n\n"), "blank-line run left behind: {merged:?}");
+        assert_eq!(
+            merged,
+            "# Compute Mesh State\n\nStatus: PENDING\n- [t1] first\n"
+        );
+        assert!(
+            !merged.contains("\n\n\n"),
+            "blank-line run left behind: {merged:?}"
+        );
     }
 
     #[test]
@@ -359,8 +368,7 @@ mod tests {
         let tool = second.join("only-here");
         std::fs::write(&tool, "#!/bin/sh\nexit 0\n").unwrap();
 
-        let joined =
-            std::env::join_paths([first.as_os_str(), second.as_os_str()]).unwrap();
+        let joined = std::env::join_paths([first.as_os_str(), second.as_os_str()]).unwrap();
 
         let found = which::which_in("only-here", &joined).unwrap();
         assert_eq!(found, tool);

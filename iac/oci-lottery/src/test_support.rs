@@ -14,10 +14,8 @@ static COUNTER: AtomicU64 = AtomicU64::new(0);
 /// with [`remove`] once the assertions are done.
 pub fn temp_dir(tag: &str) -> PathBuf {
     let n = COUNTER.fetch_add(1, Ordering::Relaxed);
-    let dir = std::env::temp_dir().join(format!(
-        "oci-lottery-test-{tag}-{}-{n}",
-        std::process::id()
-    ));
+    let dir =
+        std::env::temp_dir().join(format!("oci-lottery-test-{tag}-{}-{n}", std::process::id()));
     std::fs::create_dir_all(&dir).expect("create temp dir");
     dir
 }
