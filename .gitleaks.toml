@@ -100,4 +100,38 @@ paths = [
 regexes = [
   '''(?i)(token|secret|key|password|apikey|api[_-]?key)\s*[:=]\s*['"]?[A-Za-z0-9_!@#$%^&*+=-]{8,}['"]?''',
 ]
+
+# 4. Checksum manifest: rows are `<path>: "<sha256 hex>"`. High-entropy hex
+#    digests trip `generic-api-key` on 3 rows and are never credentials.
+#    Path-scoped only; the rule itself stays active everywhere else.
+[[allowlists]]
+description = "MANIFEST.sha256 checksum rows are digests, not credentials"
+paths = [
+  '''(?i)(^|/)MANIFEST\.sha256$''',
+]
+targetRules = ["generic-api-key"]
+
+# 5. Named test fixtures and documentation examples. Each entry is an exact
+#    path, and the `(^|/)` prefix keeps it matching whether the payload sits
+#    under `absorption/` or at a canonical location.
+[[allowlists]]
+description = "Named secret-shaped test fixtures and doc examples"
+paths = [
+  # FAKE_JWT test constant in the ACP adoption shim tests.
+  '''(?i)(^|/)kiro-adapters/tests/test_acp_adoption_shim\.py$''',
+  # `"token": ...` example field in the byteport API reference docs.
+  '''(?i)(^|/)(absorption/)?byteport/API_REFERENCE\.md$''',
+]
+targetRules = ["jwt", "generic-api-key"]
+
+# 6. Env-var interpolation, not a literal credential: the Tailscale ACL
+#    script passes `-u "${TS_API_KEY}:"` straight from the environment.
+#    Single path, single rule; `curl-auth-user` stays active elsewhere.
+[[allowlists]]
+description = "Tailscale ACL script uses env-var basic auth, not a literal"
+paths = [
+  '''(?i)(^|/)(absorption/PhenoInfra/)?iac/tailscale/apply-acl\.sh$''',
+]
+targetRules = ["curl-auth-user"]
+
 stopwatch = false
