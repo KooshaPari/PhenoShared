@@ -19,47 +19,47 @@ useDefault = true
 [[allowlists]]
 description = "Non-source / build artefact paths"
 targetRules = [
-  "generic-api-key",
-  # `generic-high-entropy-secret` was listed here and does not exist in
-  # gitleaks >= 8.29, so `gitleaks detect --config .gitleaks.toml` exited with
-  #   FTL Failed to load config error="[[allowlists]] target rule ID
-  #   'generic-high-entropy-secret' does not exist"
-  # and every allowlist in this file was inert. Removed so the file loads.
-  "jwt",
-  "slack-bot-token",
-  "stripe-access-token",
-  "aws-access-token",
-  "gcp-api-key",
-  "github-pat",
-  "github-fine-grained-pat",
+    "generic-api-key",
+    # `generic-high-entropy-secret` was listed here and does not exist in
+    # gitleaks >= 8.29, so `gitleaks detect --config .gitleaks.toml` exited with
+    #   FTL Failed to load config error="[[allowlists]] target rule ID
+    #   'generic-high-entropy-secret' does not exist"
+    # and every allowlist in this file was inert. Removed so the file loads.
+    "jwt",
+    "slack-bot-token",
+    "stripe-access-token",
+    "aws-access-token",
+    "gcp-api-key",
+    "github-pat",
+    "github-fine-grained-pat",
 ]
 paths = [
-  '''(?i)\.git/''',
-  '''(?i)target/''',
-  '''(?i)node_modules/''',
-  '''(?i)dist/''',
-  '''(?i)build/''',
-  '''(?i)vendor/''',
-  '''(?i)\.venv/''',
-  '''(?i)__pycache__/''',
-  '''(?i)\.cargo/''',
-  '''(?i)go\.sum$''',
-  '''(?i)Cargo\.lock$''',
-  '''(?i)package-lock\.json$''',
-  '''(?i)yarn\.lock$''',
-  '''(?i)pnpm-lock\.yaml$''',
-  '''(?i)Pipfile\.lock$''',
-  '''(?i)poetry\.lock$''',
-  '''(?i)\.minisign/''',
-  '''(?i)\.tuf/''',
-  '''(?i)coverage/''',
-  '''(?i)lcov\.info$''',
-  '''(?i)tests?/.*/fixtures/''',
-  '''(?i).*/testdata/''',
-  '''(?i).*_test\.go$''',
-  '''(?i).*\.test\.[a-z]+$''',
-  '''(?i).*_test\.py$''',
-  '''(?i).*\.spec\.[a-z]+$''',
+    '''(?i)\.git/''',
+    '''(?i)target/''',
+    '''(?i)node_modules/''',
+    '''(?i)dist/''',
+    '''(?i)build/''',
+    '''(?i)vendor/''',
+    '''(?i)\.venv/''',
+    '''(?i)__pycache__/''',
+    '''(?i)\.cargo/''',
+    '''(?i)go\.sum$''',
+    '''(?i)Cargo\.lock$''',
+    '''(?i)package-lock\.json$''',
+    '''(?i)yarn\.lock$''',
+    '''(?i)pnpm-lock\.yaml$''',
+    '''(?i)Pipfile\.lock$''',
+    '''(?i)poetry\.lock$''',
+    '''(?i)\.minisign/''',
+    '''(?i)\.tuf/''',
+    '''(?i)coverage/''',
+    '''(?i)lcov\.info$''',
+    '''(?i)tests?/.*/fixtures/''',
+    '''(?i).*/testdata/''',
+    '''(?i).*_test\.go$''',
+    '''(?i).*\.test\.[a-z]+$''',
+    '''(?i).*_test\.py$''',
+    '''(?i).*\.spec\.[a-z]+$''',
 ]
 
 # 2. Regex-based allowlist: known phenotype-internal test secrets.
@@ -67,22 +67,22 @@ paths = [
 description = "Phenotype-internal test secret literals in test fixtures"
 regexTarget = "match"
 regexes = [
-  '''PhenotypeTestToken123!''',
-  '''PhenotypeInternalToken_?[A-Za-z0-9_]*''',
-  '''phenotype-test-(token|key|secret)-[A-Za-z0-9_-]+''',
-  # Dummy Stripe-shaped token used as INPUT to the redaction scrubber in
-  # zz-PhenoObservability's phenotype-observably-tracing tests. The tests
-  # assert that this exact string is replaced by [REDACTED_TOKEN], so the
-  # literal has to be present and unredacted in the source. It is a made-up
-  # value, not a Stripe key.
-  '''sk_live_abc123def456xyz789''',
-  # AWS's published documentation example key, not a credential. It appears in
-  # absorption/byteport's link-handler test and in scripts/secret-guard.py's
-  # list of values the changed-content guard must not treat as findings.
-  '''AKIAIOSFODNN7EXAMPLE''',
-  # The obvious placeholder that sits beside it in the same list: a sequential
-  # alphabet, never a key.
-  '''AKIAABCDEFGHIJKLMNOP''',
+    '''PhenotypeTestToken123!''',
+    '''PhenotypeInternalToken_?[A-Za-z0-9_]*''',
+    '''phenotype-test-(token|key|secret)-[A-Za-z0-9_-]+''',
+    # Dummy Stripe-shaped token used as INPUT to the redaction scrubber in
+    # zz-PhenoObservability's phenotype-observably-tracing tests. The tests
+    # assert that this exact string is replaced by [REDACTED_TOKEN], so the
+    # literal has to be present and unredacted in the source. It is a made-up
+    # value, not a Stripe key.
+    '''sk_live_abc123def456xyz789''',
+    # AWS's published documentation example key, not a credential. It appears in
+    # absorption/byteport's link-handler test and in scripts/secret-guard.py's
+    # list of values the changed-content guard must not treat as findings.
+    '''AKIAIOSFODNN7EXAMPLE''',
+    # The obvious placeholder that sits beside it in the same list: a sequential
+    # alphabet, never a key.
+    '''AKIAABCDEFGHIJKLMNOP''',
 ]
 
 # 3. Regex-based allowlist scoped to test/fixture paths only.
@@ -90,15 +90,15 @@ regexes = [
 description = "Any test-secret-shaped literal under test fixture paths"
 regexTarget = "match"
 paths = [
-  '''(?i)tests?/.*/fixtures/''',
-  '''(?i).*/testdata/''',
-  '''(?i).*\.test\.[a-z]+$''',
-  '''(?i).*_test\.go$''',
-  '''(?i).*_test\.py$''',
-  '''(?i).*\.spec\.[a-z]+$''',
+    '''(?i)tests?/.*/fixtures/''',
+    '''(?i).*/testdata/''',
+    '''(?i).*\.test\.[a-z]+$''',
+    '''(?i).*_test\.go$''',
+    '''(?i).*_test\.py$''',
+    '''(?i).*\.spec\.[a-z]+$''',
 ]
 regexes = [
-  '''(?i)(token|secret|key|password|apikey|api[_-]?key)\s*[:=]\s*['"]?[A-Za-z0-9_!@#$%^&*+=-]{8,}['"]?''',
+    '''(?i)(token|secret|key|password|apikey|api[_-]?key)\s*[:=]\s*['"]?[A-Za-z0-9_!@#$%^&*+=-]{8,}['"]?''',
 ]
 
 # 4. Checksum manifest: rows are `<path>: "<sha256 hex>"`. High-entropy hex
@@ -107,7 +107,7 @@ regexes = [
 [[allowlists]]
 description = "MANIFEST.sha256 checksum rows are digests, not credentials"
 paths = [
-  '''(?i)(^|/)MANIFEST\.sha256$''',
+    '''(?i)(^|/)MANIFEST\.sha256$''',
 ]
 targetRules = ["generic-api-key"]
 
@@ -117,10 +117,10 @@ targetRules = ["generic-api-key"]
 [[allowlists]]
 description = "Named secret-shaped test fixtures and doc examples"
 paths = [
-  # FAKE_JWT test constant in the ACP adoption shim tests.
-  '''(?i)(^|/)kiro-adapters/tests/test_acp_adoption_shim\.py$''',
-  # `"token": ...` example field in the byteport API reference docs.
-  '''(?i)(^|/)(absorption/)?byteport/API_REFERENCE\.md$''',
+    # FAKE_JWT test constant in the ACP adoption shim tests.
+    '''(?i)(^|/)kiro-adapters/tests/test_acp_adoption_shim\.py$''',
+    # `"token": ...` example field in the byteport API reference docs.
+    '''(?i)(^|/)(absorption/)?byteport/API_REFERENCE\.md$''',
 ]
 targetRules = ["jwt", "generic-api-key"]
 
@@ -130,7 +130,7 @@ targetRules = ["jwt", "generic-api-key"]
 [[allowlists]]
 description = "Tailscale ACL script uses env-var basic auth, not a literal"
 paths = [
-  '''(?i)(^|/)(absorption/PhenoInfra/)?iac/tailscale/apply-acl\.sh$''',
+    '''(?i)(^|/)(absorption/PhenoInfra/)?iac/tailscale/apply-acl\.sh$''',
 ]
 targetRules = ["curl-auth-user"]
 
