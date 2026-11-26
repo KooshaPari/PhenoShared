@@ -1,0 +1,15 @@
+[package]
+name = "nanovms-core"
+version = "0.1.0"
+authors = ["<REDACTED>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+publish = false
+repository = "https://github.com/KooshaPari/phenotype-infra"
+description = "NVMS 3-tier isolation Go core — built as C static archive"
+
+[lib]
+name = "nanovms_core"
+crate-type = ["staticlib", "rlib"]
+
+[build-dependencies]

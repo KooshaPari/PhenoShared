@@ -1,0 +1,28 @@
+[package]
+name = "harness_elicitation"
+version = "0.1.0"
+authors = ["kooshapari"]
+categories = ["development-tools::testing"]
+documentation = "https://docs.rs/harness_elicitation"
+edition = "2021"
+keywords = ["phenotype", "helios", "harness"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+description = "Elicitation handler - converts natural language to specifications"
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+harness_spec = { path = "../harness_spec" }
+once_cell = "1.19"
+regex = "1.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+tracing = "0.1"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[features]
+default = []

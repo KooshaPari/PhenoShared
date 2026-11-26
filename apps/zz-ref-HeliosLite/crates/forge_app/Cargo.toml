@@ -1,0 +1,62 @@
+[package]
+name = "forge_app"
+version = "0.1.1"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+async-recursion.workspace = true
+async-trait.workspace = true
+backon.workspace = true
+chrono.workspace = true
+console.workspace = true
+convert_case.workspace = true
+dashmap.workspace = true
+derive_more.workspace = true
+derive_setters.workspace = true
+forge_config.workspace = true
+forge_display.workspace = true
+forge_domain.workspace = true
+forge_embed.workspace = true
+forge_stream.workspace = true
+forge_template.workspace = true
+futures.workspace = true
+handlebars.workspace = true
+hex.workspace = true
+include_dir.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml_ng.workspace = true
+sha2.workspace = true
+strum.workspace = true
+strum_macros.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+
+bytes.workspace = true
+forge_eventsource.workspace = true
+forge_json_repair.workspace = true
+forge_sandbox.workspace = true
+glob.workspace = true
+lazy_static.workspace = true
+reqwest.workspace = true
+schemars.workspace = true
+url.workspace = true
+
+phenotype-observability.workspace = true
+tonic.workspace = true
+
+[dev-dependencies]
+fake = { version = "5.1.0", features = ["derive"] }
+forge_domain = { path = "../forge_domain" }
+forge_sandbox = { path = "../forge_sandbox" }
+forge_test_kit.workspace = true
+insta.workspace = true
+pretty_assertions.workspace = true
+tokio = { workspace = true, features = ["macros", "rt", "time", "test-util"] }
+tokio-stream.workspace = true

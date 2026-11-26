@@ -1,0 +1,25 @@
+[package]
+name = "forge_markdown_stream"
+version = "0.1.1"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lib]
+name = "forge_markdown_stream"
+path = "src/lib.rs"
+
+[dependencies]
+colored.workspace = true
+forge_syntax.workspace = true
+streamdown-ansi = "0.1.4"
+streamdown-core = "0.1.4"
+streamdown-parser = "0.1.4"
+terminal-colorsaurus = "1.0.3"
+unicode-segmentation = "1.12"
+unicode-width = "0.2"
+
+[dev-dependencies]
+insta.workspace = true
+pretty_assertions.workspace = true
+strip-ansi-escapes.workspace = true

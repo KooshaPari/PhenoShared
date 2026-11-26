@@ -1,0 +1,18 @@
+[package]
+name = "helios_config"
+version.workspace = true
+authors.workspace = true
+categories = ["config"]
+edition.workspace = true
+keywords = ["phenotype", "helios", "config"]
+license.workspace = true
+repository.workspace = true
+description = "Centralized configuration for HeliosCLI — consolidates all defaults (timeouts, ports, cache, scaling, etc.)"
+
+[dependencies]
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+serde_yaml.workspace = true
+thiserror.workspace = true
+toml.workspace = true
+tracing.workspace = true

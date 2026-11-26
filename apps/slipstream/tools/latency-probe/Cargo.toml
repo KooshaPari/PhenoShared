@@ -1,0 +1,14 @@
+[package]
+name = "latency-probe"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Glass-to-glass latency measurement (plan §10, M3)"
+
+[dependencies]
+
+[lints]
+workspace = true

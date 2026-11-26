@@ -1,0 +1,28 @@
+[package]
+name = "nvms-ffi"
+version = "0.1.0"
+authors = ["<REDACTED>"]
+categories = ["api-bindings"]
+documentation = "https://docs.rs/nvms-ffi"
+edition = "2021"
+keywords = ["phenotype", "pheno-compose", "ffi"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/phenotype-infra"
+description = "Rust FFI bindings to NVMS Go Core"
+
+[dependencies]
+thiserror = { workspace = true }
+
+[build-dependencies]
+cc = "1"
+
+[features]
+default = []
+cuda = [] # Enable CUDA support for ML workloads
+
+[dev-dependencies]
+# [profile.*] sections belong in the workspace root Cargo.toml, not in workspace members
+
+[lib]
+name = "nvms_ffi"
+crate-type = ["staticlib", "cdylib", "rlib"]

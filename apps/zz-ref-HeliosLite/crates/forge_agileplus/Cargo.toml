@@ -1,0 +1,20 @@
+[package]
+name = "forge_agileplus"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "AgilePlus delivery-quality OS (P3.2) — 31-pillar scorecard, sprint records, velocity prediction. See docs/AGILEPLUS-SETUP.md and docs/31-pillar-scorecard.md."
+
+[dependencies]
+chrono = { workspace = true, features = ["serde"] }
+clap = { workspace = true, features = ["derive"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+tempfile.workspace = true

@@ -1,0 +1,79 @@
+[package]
+name = "forge_repo"
+version = "0.1.1"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+async-openai.workspace = true
+async-trait.workspace = true
+aws-config.workspace = true
+aws-credential-types.workspace = true
+aws-sdk-bedrockruntime.workspace = true
+aws-smithy-async.workspace = true
+aws-smithy-runtime-api.workspace = true
+aws-smithy-types.workspace = true
+backon.workspace = true
+base64.workspace = true
+bstr.workspace = true
+bytes.workspace = true
+chrono = { version = "0.4", features = ["serde"] }
+derive_more.workspace = true
+derive_setters.workspace = true
+diesel = { version = "2.3.7", features = ["sqlite", "r2d2", "chrono"] }
+diesel_migrations = "2.2.0"
+dirs.workspace = true
+forge_app.workspace = true
+forge_config.workspace = true
+forge_dbd = { path = "../forge_dbd" }
+forge_domain.workspace = true
+forge_eventsource.workspace = true
+forge_eventsource_stream.workspace = true
+forge_fs.workspace = true
+forge_infra.workspace = true
+forge_json_repair.workspace = true
+forge_snaps.workspace = true
+forge_template.workspace = true
+futures.workspace = true
+google-cloud-auth.workspace = true
+gray_matter = { workspace = true }
+handlebars.workspace = true
+hex.workspace = true
+lazy_static.workspace = true
+regex.workspace = true
+reqwest.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+strum.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tracing.workspace = true
+url.workspace = true
+zstd.workspace = true
+
+# gRPC for codebase client
+prost = "0.14.3"
+tonic.workspace = true
+
+prost-types = "0.14.3"
+tonic-prost = "0.14.5"
+
+[build-dependencies]
+tonic-prost-build = "0.14.5"
+
+[dev-dependencies]
+derive_setters.workspace = true
+fake = { version = "5.1.0", features = ["derive"] }
+forge_test_kit.workspace = true
+insta = { workspace = true }
+mockito = { workspace = true }
+pretty_assertions = { workspace = true }
+regex = { workspace = true }
+serial_test = "4.0"
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt", "time", "test-util"] }

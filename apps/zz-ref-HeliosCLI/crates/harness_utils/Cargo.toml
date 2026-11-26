@@ -1,0 +1,18 @@
+[package]
+name = "harness_utils"
+version = "0.2.1"
+authors = ["kooshapari"]
+categories = ["development-tools::testing"]
+documentation = "https://docs.rs/harness_utils"
+edition = "2021"
+keywords = ["phenotype", "helios", "harness"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/KooshaPari/HeliosCLI"
+description = "harness utils — Phenotype infrastructure crate (HeliosCLI)"
+
+[dependencies]
+thiserror = "2"
+tracing = "0.1"
+
+[lib]
+path = "src/lib.rs"

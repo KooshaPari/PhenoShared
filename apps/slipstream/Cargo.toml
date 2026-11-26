@@ -1,0 +1,99 @@
+[workspace]
+resolver = "2"
+members = [
+    "clients/android/native",
+    "clients/cli",
+    "clients/linux",
+    "clients/probe",
+    "clients/session",
+    "crates/pyrowave-sys",
+    "crates/slipstream-core",
+    "crates/slipstream-host",
+    "crates/slipstream-host/vendor/usbip-sim",
+    "crates/slipstream-tray",
+    "crates/ss-capture",
+    "crates/ss-client-core",
+    "crates/ss-clipboard",
+    "crates/ss-console-ui",
+    "crates/ss-encode",
+    "crates/ss-ffvk",
+    "crates/ss-frame",
+    "crates/ss-gpu",
+    "crates/ss-host-config",
+    "crates/ss-inject",
+    "crates/ss-paths",
+    "crates/ss-presenter",
+    "crates/ss-update",
+    "crates/ss-update-check",
+    "crates/ss-vdisplay",
+    "crates/ss-zerocopy",
+    "tools/cursor-probe",
+    "tools/latency-probe",
+    "tools/loss-harness",
+]
+# Standalone PoC (built on its own; pulls usbip/tokio/libusb we don't want in the workspace).
+# The vendored `ndk` is a [patch.crates-io] source, not a member: it only compiles for the
+# `*-linux-android` targets, so workspace membership would break host `cargo build --workspace`.
+exclude = [
+    "packaging/linux/steam-deck-gadget/usbip-poc",
+    "clients/android/native/vendor/ndk",
+]
+
+# ndk 0.9.0 verbatim from crates.io plus ONE visibility change (and two warning fixes — an
+# unnecessary `std::` qualification and a feature-gated `Result` import): `MediaCodec::as_ptr` made public
+# (upstream keeps it private and exposes no frame-rendered binding), so the Android client can
+# call `AMediaCodec_setOnFrameRenderedCallback` via ndk-sys for the HUD's `display` stage
+# (design/stats-unification.md). Drop the patch when upstream exposes the pointer or the callback.
+[patch.crates-io]
+ndk = { path = "clients/android/native/vendor/ndk" }
+
+[workspace.package]
+version = "0.24.0"
+authors = ["Slipstream contributors"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/vindeckyy/slipstream"
+rust-version = "1.96"
+
+# The workspace uses the Rust 2024 unsafe-operation discipline. `unsafe fn` marks a CONTRACT the
+# caller must uphold; it is not a licence for the whole
+# body to skip checking. Without this lint an `unsafe fn` body is unchecked end to end, so a 600-line
+# function hides which handful of lines are actually the unsafe ones — exactly the reviewer-hostile
+# shape we are working down. (This is the Rust 2024 default; adopting it early also pays off the
+# edition migration.)
+#
+# `deny`, not `warn`. `warn` was never actually a softer setting: CI runs `cargo clippy … -D
+# warnings`, which promotes it to a hard error anyway — that is how adopting this lint turned main
+# red on every platform for a day without the level in this file ever saying `deny`. A level that
+# lies about its own severity is worse than a strict one, so this now states what CI already does,
+# and the exemptions are written down per file instead of hiding in a 689-warning wall nobody reads.
+#
+# THE EXEMPTIONS. Fourteen GPU/FFI backend files carry `#![allow(unsafe_op_in_unsafe_fn)]` with a
+# one-line reason each. They are not "not done yet" — they are where this lint stops paying:
+# their bodies are ash/CUDA/AMF/libav calls almost line for line (measured: 64% of the sites are a
+# single third-party FFI call, and of the 44 `unsafe fn`s in them only 4 have a body containing no
+# unsafe operation at all). Narrowing them means one `unsafe {}` per line plus, since ss-encode also
+# denies `clippy::undocumented_unsafe_blocks`, one hand-written SAFETY comment per line that could
+# only ever restate "an ash call on a live device" — the precise noise that made `unsafe` stop
+# meaning anything here before.
+#
+# Everything else in the workspace is at zero and enforced. Removing one of those allows, file by
+# file, is real work with a real payoff; blanket-narrowing all fourteen is not. Prefer DELETING an
+# `unsafe fn` marker over wrapping its body: keep the marker only where a caller can actually break
+# something (a raw pointer, a borrowed HANDLE, a GPU object that must not be in flight).
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+# NOTE: deliberately NOT `panic = "abort"`. slipstream-core ships as a cdylib/staticlib into
+# third-party apps (Swift/Kotlin/C) and its C ABI catches panics at the boundary
+# (`catch_unwind` → `SlipstreamStatus::Panic`). `panic = "abort"` would make that guard a
+# no-op and let a stray panic abort the embedding application. Unwinding keeps the
+# documented isolation guarantee real.
+
+# The per-frame hot path must stay fast even in dev builds.
+[profile.dev.package."*"]
+opt-level = 2

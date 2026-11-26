@@ -1,0 +1,46 @@
+[package]
+name = "forge_domain"
+version = "0.1.1"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+async-trait.workspace = true
+base64.workspace = true
+chrono.workspace = true
+convert_case.workspace = true
+derive-getters = "0.5.0"
+derive_more.workspace = true
+derive_setters.workspace = true
+eserde = { version = "0.1.7", features = ["json"] }
+fake = { version = "5.1.0", features = ["derive"] }
+fnv.workspace = true
+forge_json_repair.workspace = true
+forge_template.workspace = true
+forge_tool_macros.workspace = true
+glob.workspace = true
+indexmap.workspace = true
+lazy_static = "1.5.0"
+nom.workspace = true
+regex.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json = { workspace = true, features = ["raw_value"] }
+serde_yaml_ng.workspace = true
+strum.workspace = true
+strum_macros.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tracing.workspace = true
+url.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+fake = { version = "5.1.0", features = ["derive"] }
+forge_test_kit = { workspace = true, features = ["json"] }
+insta = { workspace = true, features = ["yaml"] }
+is_ci.workspace = true
+pretty_assertions.workspace = true

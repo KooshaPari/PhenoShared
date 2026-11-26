@@ -1,0 +1,14 @@
+[package]
+name = "forge_sdk"
+version = "0.1.0"
+categories = ["development-tools"]
+edition.workspace = true
+keywords = ["ai", "coding", "agent", "llm", "sdk"]
+license.workspace = true
+rust-version.workspace = true
+description = "SDK for programmatic use of ForgeCode / HeliosLite AI coding agent"
+
+[dependencies]
+forge_api.workspace = true
+forge_config.workspace = true
+forge_domain.workspace = true
