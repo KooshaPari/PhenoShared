@@ -3,12 +3,23 @@
 ## Source
 
 - **Repository:** `KooshaPari/dagrun`
-- **Revision absorbed:** `8080d73ab40c346cae86e620e3426169a401365a` (`main`)
-- **Commit count:** 53
-- **Full history:** `dagrun-history.bundle` (this directory, 550 KiB) — a
-  complete `--all` bundle. **Verified by restoring from it**, not by
-  `git bundle verify`: the restore produced 53 commits and the identical `HEAD`.
-  (`git bundle verify` passing does not prove a bundle is clonable.)
+- **Revision absorbed:** `8080d73ab40c346cae86e620e3426169a401365a` (`main`, 2026-11-10)
+- **Revision the standalone repo reached before retirement:**
+  `c838e11c169a00cd3019072264934ab21b94d058` (`main`, 2026-11-21, 15 commits later)
+- **Commit count:** 53 at the absorbing revision; 68 including the later main
+  commits, the two side branches and the five tags
+- **Full history:** `dagrun-history.bundle` (this directory, 588 KiB) — every
+  ref the standalone repo had: `main` at `c838e11`, `feat/windows-lockfileex`,
+  `fix/preserve-server-surface`, and tags `v1.2.0`–`v1.3.3`. **Verified by
+  restoring from it**: a bare clone of the bundle lists 8 refs, `main` at
+  `c838e11`, 199 files — identical to the source. (`git bundle verify` passing
+  does not prove a bundle is clonable.)
+- **Correction (measured 2026-11-27):** the bundle committed on 2026-11-10 was
+  NOT a complete `--all` bundle despite this file saying so: it held `main`
+  only, at `8080d73`, and omitted both side branches and all five tags. It was
+  rebuilt from `--all` and re-verified by restore. The lesson is the one this
+  file already states elsewhere: a claim about a backup is a measurement, and
+  `--all` in a command line is not evidence that all refs were captured.
 - **Uncommitted at merge time:** `internal/server/` (one file) — carried in the
   working-tree copy, because a bundle only contains committed history.
 
@@ -20,7 +31,7 @@ moved as one module.
 | What | Destination | State |
 |---|---|---|
 | Entire module (195 files, 162 Go) | `cmd/dagrun/` (this repo), own `go.mod` | **absorbed 2026-11-10** |
-| Full git history (53 commits) | `docs/absorbed-from-dagrun/dagrun-history.bundle` | **absorbed 2026-11-10** |
+| Full git history (all refs) | `docs/absorbed-from-dagrun/dagrun-history.bundle` | **absorbed, rebuilt 2026-11-27** |
 | `phenotype-dag-core` `DagSchema` shape | not yet absorbed — see below | **OPEN** |
 
 The home follows this repo's convention: `cmd/wire`, `cmd/checker`,
@@ -209,3 +220,30 @@ survive; the two enforcement points do not.
 
 This was discovered *by* performing the deletion, which is the wrong way to learn
 it. If the guard is meant to be in force, restore both enforcement points.
+
+## Retirement state — measured 2026-11-27
+
+Source is folded and the fold is now a superset of the standalone repo, verified
+by build and test, not by inspection:
+
+| Check | Result |
+|---|---|
+| `cmd/dagrun` vs `KooshaPari/dagrun@c838e11` | fold has 278 files, standalone 199: fold is a superset |
+| Files standalone had and the fold lacked | **6** — fixed in `1c82e4f65` (5 restored, 1 call site, plus CI as `.github/workflows/dagrun-ci.yml`) |
+| `go build ./...` / `go vet ./...` | PASS [nixos] `nix shell nixpkgs#go nixpkgs#gcc`, `CGO_ENABLED=0` |
+| `GOOS=windows go build ./...` / `go vet` | PASS — the restored files are the Windows-only ones |
+| `go test ./... -count=1` | zero failures |
+| All 8 refs preserved | `dagrun-history.bundle` reinstated from `--all`, restore-verified by bare clone |
+| Local refs on this host (nix) | **none** — canonical checkout is gone; only disposable trees in `~/CodeProjects/temp` |
+| Local refs on desk | **none** — the host has no `CodeProjects` root (probed via cmd.exe `if exist`) |
+| Local refs on `nixos` | **UNKNOWN** — `ssh nixos` refused (`Permission denied (publickey)`) |
+| `KooshaPari/dagrun` on GitHub | **still exists**, private, `c838e11`, 3 branches, 5 tags |
+
+Deletion is therefore the only step left, and it is blocked on two things rather
+than on the fold: a human go-ahead (repository deletion is on the destructive
+list), and the fact that the guard described above is not installed, so the
+deletion would be unguarded when it happens.
+
+Deliberately not done: archiving the repository instead of deleting it. Archive
+is reversible and would satisfy the "no dangling GH ref" intent without
+irreversible loss, so it is the safer first move if a decision is wanted now.
