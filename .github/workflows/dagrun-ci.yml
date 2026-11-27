@@ -1,0 +1,76 @@
+name: dagrun-ci
+
+# dagrun was absorbed into this repository as cmd/dagrun. Its own ci.yml was not
+# carried across by the fold, so its checks are reproduced here at the root,
+# where GitHub Actions can see them. `go-version-file` points at the folded
+# module so the Go version stays owned by cmd/dagrun/go.mod.
+#
+# Billing: ubuntu is the gating runner. macOS and Windows keep exercising the
+# suite (it spawns real processes and takes kernel locks, so platform coverage
+# is the point) but are not merge-gating, so an exhausted billed-runner quota
+# cannot block a merge.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cmd/dagrun/**'
+      - '.github/workflows/dagrun-ci.yml'
+  pull_request:
+    paths:
+      - 'cmd/dagrun/**'
+      - '.github/workflows/dagrun-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: cmd/dagrun
+
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.os != 'ubuntu-latest' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: cmd/dagrun/go.mod
+          cache: true
+          cache-dependency-path: cmd/dagrun/go.sum
+
+      - name: build
+        run: go build ./...
+
+      - name: vet
+        run: go vet ./...
+
+      - name: test
+        run: go test ./... -count=1
+
+  fmt:
+    name: gofmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: cmd/dagrun/go.mod
+          cache: true
+          cache-dependency-path: cmd/dagrun/go.sum
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "gofmt would change:"
+            echo "$unformatted"
+            exit 1
+          fi
