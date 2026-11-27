@@ -1,14 +1,23 @@
 name: perf-core CI
 
+# Path note: this workflow used to filter on `perf-core/**` and run every job
+# with `working-directory: perf-core`. No such directory exists at the repo
+# root, so the path filter matched nothing and no perf-core crate was ever
+# built by this workflow. The workspace actually lives at
+# `absorption/PhenoMLX-temp/perf-core` (22 members measured 2026-11-27; 15 of
+# them are also members of the repo-root workspace).
+
+WORKSPACE_DIR: absorption/PhenoMLX-temp/perf-core
+
 on:
   push:
     branches: [main]
     paths:
-      - "perf-core/**"
+      - "absorption/PhenoMLX-temp/perf-core/**"
   pull_request:
     branches: [main]
     paths:
-      - "perf-core/**"
+      - "absorption/PhenoMLX-temp/perf-core/**"
   merge_group:
   workflow_dispatch:
 
@@ -27,6 +36,14 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Verify perf-core workspace exists
+        shell: bash
+        run: |
+          if [ ! -f "$WORKSPACE_DIR/Cargo.toml" ]; then
+            echo "::error::perf-core workspace missing at $WORKSPACE_DIR - this workflow would otherwise check out and silently pass nothing"
+            exit 1
+          fi
+
       - name: Install Rust nightly
         uses: dtolnay/rust-toolchain@2c76c034f9e32a5d6e2c104dc4df23a22476db04 # nightly
         with:
@@ -38,8 +55,8 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            perf-core/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+            absorption/PhenoMLX-temp/perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('absorption/PhenoMLX-temp/perf-core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
 
@@ -63,7 +80,7 @@ jobs:
         run: nim --version || { curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y && echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"; }
 
       - name: cargo check (exclude mojo + cuda)
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: cargo check --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
 
   test:
@@ -85,8 +102,8 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            perf-core/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+            absorption/PhenoMLX-temp/perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('absorption/PhenoMLX-temp/perf-core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
 
@@ -110,7 +127,7 @@ jobs:
         run: nim --version || { curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y && echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"; }
 
       - name: cargo test (exclude mojo + cuda)
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: cargo test --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
 
   clippy:
@@ -134,8 +151,8 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            perf-core/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+            absorption/PhenoMLX-temp/perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('absorption/PhenoMLX-temp/perf-core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
 
@@ -159,7 +176,7 @@ jobs:
         run: nim --version || { curl https://nim-lang.org/choosenim/init.sh -sSf | bash -s -- -y && echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"; }
 
       - name: cargo clippy (exclude mojo + cuda)
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: cargo clippy --workspace --all-targets --exclude turbo-quant-mojo --exclude concurrent-exec-cuda -- -D warnings
 
   format:
@@ -194,10 +211,10 @@ jobs:
 
       - name: rustfmt changed Rust files
         if: steps.rust-changes.outputs.changed == 'true'
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: |
           while IFS= read -r file; do
-            rustfmt --edition 2021 --check "../$file"
+            rustfmt --edition 2021 --check "$GITHUB_WORKSPACE/$file"
           done < "$RUNNER_TEMP/rust-files"
 
   # ---------- Windows (experimental) ----------
@@ -216,17 +233,17 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            perf-core/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('perf-core/Cargo.lock') }}
+            absorption/PhenoMLX-temp/perf-core/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('absorption/PhenoMLX-temp/perf-core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
 
       - name: cargo check (exclude mojo + cuda)
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: cargo check --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
 
       - name: cargo test (exclude mojo + cuda)
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: cargo test --workspace --exclude turbo-quant-mojo --exclude concurrent-exec-cuda
 
   # ---------- Platform-specific optional jobs ----------
@@ -257,8 +274,8 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            perf-core/target
-          key: ${{ runner.os }}-cargo-zig-${{ hashFiles('perf-core/Cargo.lock') }}
+            absorption/PhenoMLX-temp/perf-core/target
+          key: ${{ runner.os }}-cargo-zig-${{ hashFiles('absorption/PhenoMLX-temp/perf-core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-zig-
 
@@ -274,9 +291,9 @@ jobs:
         run: zig version
 
       - name: cargo check -p turbo-quant-zig
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: cargo check --manifest-path turbo-quant-zig/Cargo.toml
 
       - name: cargo test -p turbo-quant-zig
-        working-directory: perf-core
+        working-directory: absorption/PhenoMLX-temp/perf-core
         run: cargo test --manifest-path turbo-quant-zig/Cargo.toml
