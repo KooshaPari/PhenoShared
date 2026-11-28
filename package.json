@@ -35,7 +35,7 @@
     "markdownlint-cli": "^0.50.0",
     "oxlint": "^1.94.0",
     "typescript": "^7.0.2",
-    "vitest": "^5.1.0",
+    "vitest": "^5.1.1",
     "vue-tsc": "^3.3.14"
   },
   "engines": {
