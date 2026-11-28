@@ -95,8 +95,8 @@
 
 [meta]
 schema = "pheno.coverage-membership.v1"
-recorded_at_utc = "2026-11-10T03:01:17Z"
-recorded_at_commit = "7965cb9cee10b8da81fa4968edf1ced6e574d050"
+recorded_at_utc = "2026-11-28T11:57:40Z"
+recorded_at_commit = "0cccdcf33b95fa8249226ed140c8678e2e4846b4"
 total_members = 292
 measured_members = 258
 excused_members = 34
