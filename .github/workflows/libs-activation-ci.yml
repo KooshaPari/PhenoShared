@@ -2,10 +2,10 @@ name: CI - libs activation
 on:
   push:
     paths:
-      - 'libs/**'
+      - "libs/**"
   pull_request:
     paths:
-      - 'libs/**'
+      - "libs/**"
 
 permissions:
   contents: read

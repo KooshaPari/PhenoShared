@@ -3,12 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       projects:
-        description: 'Projects to test'
+        description: "Projects to test"
         required: true
-        default: 'nanovms,agileplus,thegent'
+        default: "nanovms,agileplus,thegent"
         type: string
   schedule:
-    - cron: '0 5 * * 0'  # Weekly cross-project
+    - cron: "0 5 * * 0" # Weekly cross-project
 
 permissions:
   contents: read
