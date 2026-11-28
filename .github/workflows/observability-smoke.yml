@@ -21,7 +21,7 @@ jobs:
       run:
         working-directory: iac
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Pinned to match rust-toolchain.toml (1.99.0, E1.1/E1.2 2026-10-01),
       # same as quality-gate.yml. The previous pin was 1.75, which cannot
