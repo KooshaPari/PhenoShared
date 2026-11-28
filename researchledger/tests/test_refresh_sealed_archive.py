@@ -12,6 +12,9 @@ through ARCHIVE_CORPUS / ARCHIVE_SEAL_DIR, so nothing touches a real corpus.
   * no sealed copy -> REFRESH_NEEDED, with the live size and a real epoch mtime;
   * sealed copy newer than the corpus -> UP_TO_DATE;
   * sealed copy older than the corpus -> REFRESH_NEEDED naming both sides;
+  * a missing corpus is a FAIL verdict and a non-zero exit, not a successful
+    check that merely printed "FAIL" (a check that exits 0 cannot gate);
+  * an existing corpus is never reported as missing, and --check creates nothing;
   * the platform spellings that broke it are gone from the source.
 """
 
@@ -80,6 +83,37 @@ def test_seal_older_than_corpus_needs_refresh(tmp_path: Path) -> None:
     assert result.returncode == 1
     assert "the live corpus was written after the sealed copy" in result.stdout
     assert "sealed mtime 1577836800 size 6" in result.stdout
+
+
+def test_missing_corpus_is_a_nonzero_fail(tmp_path: Path) -> None:
+    """A FAIL verdict must gate: printing "FAIL" and exiting 0 is not a check."""
+    result = _run(tmp_path / "absent.sqlite", tmp_path / "seal")
+
+    assert result.returncode != 0
+    assert result.returncode == 2
+    assert "FAIL: no live corpus at" in result.stdout
+
+
+def test_existing_corpus_is_not_reported_missing(tmp_path: Path) -> None:
+    """The missing-corpus FAIL must not fire for a file that is present."""
+    corpus = tmp_path / "corpus.sqlite"
+    corpus.write_bytes(b"0123456789")
+    result = _run(corpus, tmp_path / "seal")
+
+    assert "no live corpus" not in result.stdout
+    assert result.returncode == 1
+    assert "REFRESH_NEEDED" in result.stdout
+
+
+def test_check_mode_creates_nothing(tmp_path: Path) -> None:
+    """--check is read-only, including the seal directory."""
+    corpus = tmp_path / "corpus.sqlite"
+    corpus.write_bytes(b"0123456789")
+    seal_dir = tmp_path / "seal"
+
+    _run(corpus, seal_dir)
+
+    assert not seal_dir.exists()
 
 
 def test_stat_and_hash_are_platform_selected() -> None:

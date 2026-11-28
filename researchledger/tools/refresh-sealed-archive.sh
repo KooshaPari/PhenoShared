@@ -33,8 +33,6 @@ else
 	sha256() { shasum -a 256 "$@"; }
 fi
 
-mkdir -p "${SEAL_DIR}"
-
 corpus_stat() { stat_mtime_size "$1" 2>/dev/null; }
 
 # The newest sealed copy, if any. Archives only: the .sha256 sidecars sit
@@ -55,12 +53,22 @@ fi
 
 CORPUS_STAT=$(corpus_stat "${CORPUS}")
 read -r CORPUS_MTIME CORPUS_SIZE <<<"${CORPUS_STAT}"
+# A stat that produced nothing leaves empty operands, and `[[ '' -ge '' ]]`
+# errors instead of comparing. That is a failed check, not a verdict.
+if [[ -z ${CORPUS_STAT} || ! ${CORPUS_MTIME} =~ ^[0-9]+$ ]]; then
+	echo "FAIL: cannot stat the live corpus at ${CORPUS}"
+	exit 2
+fi
 
 SEAL_MTIME=0
 SEAL_SIZE=0
 if [[ -n ${LATEST_SEAL} ]]; then
 	SEAL_STAT=$(corpus_stat "${LATEST_SEAL}")
 	read -r SEAL_MTIME SEAL_SIZE <<<"${SEAL_STAT}"
+	if [[ -z ${SEAL_STAT} || ! ${SEAL_MTIME} =~ ^[0-9]+$ ]]; then
+		echo "FAIL: cannot stat the newest sealed copy at ${LATEST_SEAL}"
+		exit 2
+	fi
 fi
 
 # Decide on freshness first. A seal is stale when the live corpus has been
@@ -96,9 +104,20 @@ if [[ ${MODE} != "--refresh" ]]; then
 	exit 1
 fi
 
+# Only a refresh writes: --check must not create the seal directory, or a
+# read-only probe leaves state behind on a host that was meant to be inspected.
+mkdir -p "${SEAL_DIR}" || {
+	echo "FAIL: cannot create ${SEAL_DIR}"
+	exit 1
+}
+
 RECEIPT_NAME=$(basename "${DEST}")
 RECEIPT_NAME=${RECEIPT_NAME#research_ledger.sqlite.sealed-}
 RECEIPT="${HOME}/CodeProjects/temp/corpus-verify/refresh-${RECEIPT_NAME}.txt"
+mkdir -p "$(dirname "${RECEIPT}")" || {
+	echo "FAIL: cannot create the receipt directory for ${RECEIPT}"
+	exit 1
+}
 # Transcript to console and receipt. Bash gives no way to observe the exit
 # status of a process substitution, so there is nothing here to check.
 # shellcheck disable=SC2312
@@ -116,13 +135,23 @@ chmod 444 "${DEST}"
 ls -l "${DEST}"
 
 echo "--- hashing"
-sha256 "${DEST}" | tee "${DEST}.sha256"
+sha256 "${DEST}" | tee "${DEST}.sha256" || {
+	echo "FAIL: hashing the sealed copy failed"
+	exit 1
+}
 
 echo "--- structural check: page count and page size"
 PAGES_LIVE=$(sqlite3 "file:${CORPUS}?mode=ro&immutable=1" "PRAGMA page_count;")
 PAGES_SEAL=$(sqlite3 "file:${DEST}?mode=ro&immutable=1" "PRAGMA page_count;")
 SIZE_SEAL=$(stat_size "${DEST}")
 echo "live page_count=${PAGES_LIVE}  sealed page_count=${PAGES_SEAL}  sealed size=${SIZE_SEAL}"
+# sqlite3 exits non-zero on a bad file, and an empty or non-numeric value would
+# compare equal to itself. Treat either as a failed check so the run cannot
+# report success on a page count it never read.
+if [[ ! ${PAGES_LIVE} =~ ^[0-9]+$ ]] || [[ ! ${PAGES_SEAL} =~ ^[0-9]+$ ]]; then
+	echo "FAIL: could not read page counts (live='${PAGES_LIVE}' sealed='${PAGES_SEAL}')"
+	exit 1
+fi
 if [[ ${PAGES_LIVE} != "${PAGES_SEAL}" ]]; then
 	echo "FAIL: page count differs between the live corpus and the sealed copy"
 	exit 1
@@ -136,6 +165,10 @@ gzip -1 -c "${DEST}" >"${GZ}" || {
 }
 GZ_SHA=$(sha256 "${GZ}" | awk '{print $1}')
 GZ_SIZE=$(stat_size "${GZ}")
+if [[ -z ${GZ_SHA} ]]; then
+	echo "FAIL: hashing the compressed copy failed"
+	exit 1
+fi
 echo "compressed ${GZ_SIZE} bytes, sha256 ${GZ_SHA}"
 
 echo "--- pushing to the desk node"
@@ -150,6 +183,10 @@ echo "--- verifying the off-host copy"
 REMOTE_SHA=$(ssh -o ConnectTimeout=15 -o ServerAliveInterval=30 desk-lan \
 	"sha256sum ${DESK_DIR}/corpus-${STAMP}.sqlite.gz" | awk '{print $1}')
 echo "remote sha256 ${REMOTE_SHA}"
+if [[ -z ${REMOTE_SHA} ]]; then
+	echo "FAIL: could not read the off-host checksum"
+	exit 1
+fi
 if [[ ${REMOTE_SHA} != "${GZ_SHA}" ]]; then
 	echo "FAIL: the off-host copy does not match the local compressed archive"
 	exit 1
@@ -159,6 +196,10 @@ echo "--- verifying the off-host archive decompresses to the sealed archive's ha
 LOCAL_RAW=$(gzip -dc "${GZ}" | sha256 | awk '{print $1}')
 DEST_SHA=$(awk '{print $1}' "${DEST}.sha256")
 echo "decompressed sha256 ${LOCAL_RAW}"
+if [[ -z ${LOCAL_RAW} || -z ${DEST_SHA} ]]; then
+	echo "FAIL: could not hash the decompressed archive"
+	exit 1
+fi
 if [[ ${LOCAL_RAW} != "${DEST_SHA}" ]]; then
 	echo "FAIL: the archive does not decompress to the sealed copy"
 	exit 1
@@ -168,3 +209,5 @@ rm -f "${GZ}"
 echo "REFRESH_OK: sealed ${DEST}, off-host copy verified"
 COMPLETED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 echo "=== REFRESH COMPLETE ${COMPLETED_AT} ==="
+# Success is stated, not implied by falling off the end of the file.
+exit 0
