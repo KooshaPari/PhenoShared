@@ -3,12 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       projects:
-        description: 'Projects to test'
+        description: "Projects to test"
         required: true
-        default: 'nanovms,agileplus,thegent'
+        default: "nanovms,agileplus,thegent"
         type: string
   schedule:
-    - cron: '0 5 * * 0'  # Weekly cross-project
+    - cron: "0 5 * * 0" # Weekly cross-project
 
 permissions:
   contents: read
@@ -18,7 +18,7 @@ jobs:
     name: Test Orchestration
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Read Test Config
         run: head -30 .mcp-testing.yaml
@@ -30,7 +30,7 @@ jobs:
       run:
         working-directory: nanovms
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: <REDACTED>/nanovms
           path: nanovms
@@ -54,7 +54,7 @@ jobs:
       run:
         working-directory: AgilePlus
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: <REDACTED>/AgilePlus
           path: AgilePlus
@@ -77,7 +77,7 @@ jobs:
       run:
         working-directory: thegent
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4.1.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: <REDACTED>/thegent
           path: thegent
