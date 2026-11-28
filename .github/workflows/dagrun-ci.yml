@@ -14,12 +14,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'cmd/dagrun/**'
-      - '.github/workflows/dagrun-ci.yml'
+      - cmd/dagrun/**
+      - .github/workflows/dagrun-ci.yml
   pull_request:
     paths:
-      - 'cmd/dagrun/**'
-      - '.github/workflows/dagrun-ci.yml'
+      - cmd/dagrun/**
+      - .github/workflows/dagrun-ci.yml
   workflow_dispatch:
 
 permissions:
