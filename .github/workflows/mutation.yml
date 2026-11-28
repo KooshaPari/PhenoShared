@@ -1,16 +1,73 @@
 name: Mutation
+
+# Mutation testing is a soak signal, not a merge gate.
+#
+# History: this workflow ran on pull requests and ended in
+#   `cargo mutants ... | tail -100 || true`
+# which could not fail for two independent reasons - `|| true` discards the
+# status, and without `pipefail` a pipeline reports `tail`'s status, not
+# `cargo mutants`'. mutants.toml sets `fail = true`, so the configured gate
+# never took effect.
+#
+# Chosen shape: a REAL gate on a bounded weekly schedule instead of a fake one
+# on every PR. Repo-wide mutation against this workspace cannot finish inside
+# PR latency, so a PR trigger could only ever produce a red or a timeout. A
+# weekly red is visible and actionable and cannot block the merge queue.
+
 on:
-  pull_request:
-    paths:
-      - "crates/**"
-      - "**/Cargo.toml"
-      - "**/Cargo.lock"
-      - "mutation*"
+  schedule:
+    - cron: 0 4 * * 1 # Mondays 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mutation-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   mutants:
     runs-on: ubuntu-latest
+    # Bounds a run that would otherwise occupy the runner indefinitely.
+    timeout-minutes: 720
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
-      - run: cargo install cargo-mutants
-      - run: cargo mutants --no-shuffle -j 2 --timeout 120 2>&1 | tail -100 || true
+      - name: Install cargo-mutants
+        run: cargo install cargo-mutants --locked
+      - name: Run mutation tests
+        shell: bash
+        run: |
+          # pipefail is load-bearing: `| tee` alone would report tee's exit 0.
+          # mutants.toml `fail = true` makes surviving mutants exit 2.
+          set -o pipefail
+          cargo mutants --no-shuffle -j 2 --timeout 120 2>&1 | tee mutants.log | tail -100
+      - name: Summarise results
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Mutation results"
+            echo ""
+            if [ -f mutants.out/missed.txt ]; then
+              echo "- surviving mutants: $(wc -l < mutants.out/missed.txt)"
+            else
+              echo "- \`mutants.out/missed.txt\` absent (run did not reach outcome collection)"
+            fi
+            if [ -f mutants.log ]; then
+              echo ""
+              echo '```text'
+              tail -40 mutants.log
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mutation-report-${{ github.run_id }}
+          path: |
+            mutants.out
+            mutants.log
+          if-no-files-found: warn

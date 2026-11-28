@@ -1,12 +1,127 @@
 name: Fuzz
+
+# Nightly fuzz soak.
+#
+# History: this workflow ended in
+#   `if [ -d fuzz ]; then cargo fuzz run 2>&1 | tail -50 || true; else echo no-fuzz; fi`
+# It could not fail (`|| true`, and without `pipefail` the pipeline reported
+# `tail`'s status), and it barely worked: the condition tested for the repo-root
+# `fuzz/`, which is a plain binary crate (`phenotype-infra-fuzz`) with NO
+# cargo-fuzz metadata, so `cargo fuzz run` errored there every night. Meanwhile
+# the fuzz projects that DO declare `cargo-fuzz = true` were never run.
+#
+# Measured 2026-11-27 in this tree: 15 `*/fuzz/Cargo.toml`; 8 declare
+# `cargo-fuzz = true`; 7 do not (repo-root `fuzz/`, absorption/byteport,
+# absorption/PhenoInfra, crates/apisync, crates/datakit, crates/settly,
+# crates/phenotype-plugins/pheno-plugin-vessel).
+#
+# Chosen shape: discover the projects that genuinely declare themselves, run
+# every listed target for a bounded time, fail the nightly when any target
+# fails, and report the empty case explicitly instead of silently "passing".
+# Nightly only, so a red here is a soak signal and never blocks a merge.
+
 on:
   schedule:
-    - cron: 0 3 * * * # nightly: fuzzing is a soak, not a per-push gate
+    - cron: 0 3 * * * # nightly
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   fuzz:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
-      - run: cargo install cargo-fuzz
-      - run: if [ -d fuzz ]; then cargo fuzz run 2>&1 | tail -50 || true; else echo no-fuzz; fi
+      # cargo-fuzz drives libFuzzer via `-Z sanitizer=...`, which is nightly-only.
+      - uses: dtolnay/rust-toolchain@2c76c034f9e32a5d6e2c104dc4df23a22476db04 # nightly
+      - name: Install cargo-fuzz
+        run: cargo install cargo-fuzz --locked
+      - name: Run cargo-fuzz targets
+        id: fuzz
+        shell: bash
+        run: |
+          set -uo pipefail
+          report=fuzz-report.txt
+          : > "$report"
+
+          # Only projects that declare cargo-fuzz metadata are real libFuzzer
+          # projects; a bare `fuzz/` directory is not.
+          mapfile -t manifests < <(
+            find . -path '*/fuzz/Cargo.toml' \
+              -not -path './target/*' -not -path '*/node_modules/*' \
+              -print0 | xargs -0 -r grep -l 'cargo-fuzz *= *true' || true
+          )
+
+          projects=${#manifests[@]}
+          targets_run=0
+          failed=0
+          echo "fuzz projects discovered: $projects" | tee -a "$report"
+
+          for manifest in "${manifests[@]}"; do
+            dir="$(dirname "$manifest")"
+            echo "=== $dir" | tee -a "$report"
+            mapfile -t fuzz_targets < <(
+              if cd "$dir"; then cargo fuzz list 2>>"$report" || true; fi
+            )
+            if [ "${#fuzz_targets[@]}" -eq 0 ]; then
+              echo "FAIL $dir (no fuzz targets listed)" | tee -a "$report"
+              failed=$((failed + 1))
+              continue
+            fi
+            for target in "${fuzz_targets[@]}"; do
+              targets_run=$((targets_run + 1))
+              # 30s per target keeps the nightly bounded.
+              if ( cd "$dir" && cargo fuzz run "$target" -- -max_total_time=30 ) >>"$report" 2>&1; then
+                echo "PASS $dir::$target" | tee -a "$report"
+              else
+                echo "FAIL $dir::$target" | tee -a "$report"
+                failed=$((failed + 1))
+              fi
+            done
+          done
+
+          {
+            echo "projects=$projects"
+            echo "targets=$targets_run"
+            echo "failed=$failed"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ "$failed" -ne 0 ]; then
+            echo "::error::$failed fuzz run(s) failed"
+            exit 1
+          fi
+      - name: Summarise results
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Fuzz soak"
+            echo ""
+            echo "| metric | value |"
+            echo "|---|---|"
+            echo "| fuzz projects discovered | ${{ steps.fuzz.outputs.projects || 'unknown' }} |"
+            echo "| targets exercised | ${{ steps.fuzz.outputs.targets || 'unknown' }} |"
+            echo "| failures | ${{ steps.fuzz.outputs.failed || 'unknown' }} |"
+            echo ""
+            echo "Discovery rule: \`*/fuzz/Cargo.toml\` containing \`cargo-fuzz = true\`."
+            if [ "${{ steps.fuzz.outputs.projects || 'none' }}" = "0" ]; then
+              echo ""
+              echo "> No cargo-fuzz projects were found. A bare \`fuzz/\` directory is"
+              echo "> not a libFuzzer project and is not force-run."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload fuzz report and crashes
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: fuzz-report-${{ github.run_id }}
+          path: |
+            fuzz-report.txt
+            **/fuzz/artifacts/**
+          if-no-files-found: warn

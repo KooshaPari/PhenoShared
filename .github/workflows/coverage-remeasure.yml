@@ -1,0 +1,661 @@
+name: Coverage re-baseline
+
+# ==========================================================================
+# THE ONE BUTTON THAT MAKES THE COMMITTED FLOORS CURRENT AGAIN.
+#
+# WHY THIS EXISTS
+#   `.coverage-baselines/root-workspace.toml` is the single source of truth for
+#   the coverage floors, and coverage-freshness.yml fails when its provenance
+#   names a commit that is too far behind HEAD. Without a supported way to
+#   refresh the provenance, the only routes left are hand-editing the numbers
+#   (which is how the file drifted 301 commits / 17 days behind in the first
+#   place) or re-running the whole 284-crate workspace by hand on a laptop
+#   (which produces numbers from a different denominator and platform, see the
+#   header of the baseline file).
+#
+#   So: this workflow downloads the `coverage-group-*` artifacts that
+#   coverage.yml ALREADY produced on main, regenerates the floors from them with
+#   the in-tree generator, records the run id and head sha it used, and opens a
+#   PR. No measurement happens here and no crate is built. The numbers are the
+#   ones CI already enforced; only their recorded provenance moves forward.
+#
+# WHAT THIS DELIBERATELY DOES NOT DO
+#   * It does not invent a provenance format. It writes the
+#     `# PROVENANCE: head=... run=... measured=...` marker that
+#     coverage-freshness.yml already prefers, inside a sentinel-delimited block
+#     it can replace on the next run.
+#   * It does not reimplement the floor arithmetic. `coverage_report.py write`
+#     computes every floor (measured minus allowance, truncated via floor2) and
+#     `coverage_report.py aggregate` re-checks the file it just produced. If the
+#     self-check fails, this workflow fails and opens nothing: a baseline that
+#     does not pass its own gate never becomes a PR.
+#   * It does not rewrite the 147-line rationale header. The generator emits its
+#     own shorter header, so the committed prose is extracted and re-applied
+#     verbatim, and the historical measured values inside it stay labelled as
+#     historical.
+#   * It does not force-push and does not merge. If the update branch already
+#     exists the push is rejected on purpose: merge or delete that PR first.
+#
+# WHY THE SOURCE RUN DEFAULTS TO "latest-on-head" AND NOT TO A FRESH RUN
+#   coverage.yml has no `workflow_dispatch` trigger (only `push` to main and
+#   `pull_request`), so this workflow CANNOT start a new measurement: that is a
+#   one-line change to a workflow this lane does not own. It therefore reuses a
+#   run that already succeeded on main. The cost of that choice is drift between
+#   the run's head and main's head, and the cost is paid explicitly: the run's
+#   head must be an ancestor of main and at most `max_drift_commits` behind it,
+#   the real drift is written into the provenance block, and the PR body states
+#   it. `max_drift_commits` defaults to the same 50 that coverage-freshness.yml
+#   uses, because recording a measurement the freshness gate would immediately
+#   re-flag is a loop, not a fix.
+#
+# PRECONDITIONS ON THIS REPOSITORY
+#   * The chosen run's `coverage-group-*` artifacts must still exist. Default
+#     artifact retention is 90 days; a run older than that is gone and the
+#     download step fails loudly rather than writing a baseline from nothing.
+#   * The membership guard must pass at the commit being recorded, so the job
+#     runs it before it touches a file. A ledger that does not validate is not
+#     re-stamped.
+#
+# LOCAL EQUIVALENT, for anyone without dispatch rights:
+#   gh run download <run-id> --pattern 'coverage-group-*' --dir coverage-groups \
+#     --repo KooshaPari/PhenoShared
+#   python3 .github/scripts/coverage_report.py write --dir coverage-groups \
+#     --baseline .coverage-baselines/root-workspace.toml \
+#     --allowance 1.0 --aggregate-floor <max(measured-1.0, committed)>
+#   then re-apply the prose header and add the PROVENANCE line by hand.
+#   That sequence is exactly what step "Regenerate floors" automates, and it is
+#   the reason the numbers below are reviewable line by line in a PR diff.
+# ==========================================================================
+
+# checkov:skip=CKV_GHA_7:Workflow_dispatch inputs are this workflow's whole
+# purpose: they select which coverage run to re-baseline from and the allowance
+# to apply. They cannot influence what is built, only which pre-existing run is
+# read and what number is written into the committed baseline file.
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: >-
+          Which coverage.yml run to re-baseline from. latest-on-head takes the
+          newest successful `push` run on main; specific-run uses run_id.
+        type: choice
+        options:
+          - latest-on-head
+          - specific-run
+        default: latest-on-head
+      run_id:
+        description: >-
+          coverage.yml run id, required when source is specific-run. Ignored
+          otherwise. Leave blank for a normal re-baseline.
+        type: string
+        required: false
+        default: ""
+      allowance:
+        description: >-
+          Points subtracted from each measured value to get its floor. Must match
+          the allowance the committed floors were built with (1.0 today), or the
+          diff silently re-prices every group.
+        type: string
+        required: true
+        default: "1.0"
+      allow_regression:
+        description: >-
+          Allow a group floor to move DOWN. Off by default: the floors are a
+          ratchet, so a measured regression is a finding to explain, not a number
+          to quietly lower.
+        type: boolean
+        required: true
+        default: false
+      max_drift_commits:
+        description: >-
+          Refuse if the source run's head is more than this many commits behind
+          main. Keep in step with COVERAGE_MAX_DRIFT_COMMITS in
+          coverage-freshness.yml (50).
+        type: string
+        required: true
+        default: "50"
+      branch:
+        description: Update branch to push the regenerated baseline to.
+        type: string
+        required: true
+        default: ci/coverage-remeasure
+      dry_run:
+        description: >-
+          Regenerate and self-check, print the diff, touch no branch and open no
+          PR. Use this first on an unfamiliar run.
+        type: boolean
+        required: true
+        default: false
+
+# Writes go through a PR, so `contents: write` is only needed to push the update
+# branch. `actions: read` is required to download another run's artifacts.
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+# One re-baseline at a time. Never cancel one: a cancelled run leaves the update
+# branch possibly pushed with no PR, and the next run then fails on the push.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  BASELINE: .coverage-baselines/root-workspace.toml
+  MEMBERSHIP: .coverage-baselines/membership.toml
+
+jobs:
+  remeasure:
+    name: Regenerate floors from a real coverage run
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      # Always main, never the ref the button was pressed on: the floors describe
+      # main, so recording a measurement against any other ref would attribute
+      # main's numbers to a tree nobody gates.
+      - name: Check out the tree being recorded
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          # Full history: the drift calculation resolves the run's head sha and
+          # counts commits between it and main, which needs the commits.
+          fetch-depth: 0
+
+      # The membership guard shells out to `cargo metadata`, so it needs a real
+      # toolchain. The pin and the explicit components match coverage.yml; the
+      # components are declared because rustup's lazy install path dies on the
+      # hosted image with a 'bin/cargo-fmt' shim collision (see coverage.yml).
+      - uses: dtolnay/rust-toolchain@ff7f6a3374ce205788da40198ec918bd5d67aea7 # 1.99.0
+        with:
+          toolchain: 1.99.0
+          components: rustfmt, clippy
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+      - name: Install PyYAML
+        run: python -m pip install --quiet pyyaml
+
+      # Fail BEFORE writing anything. Re-stamping a ledger whose content does not
+      # validate would move the provenance forward over a real defect, which is
+      # precisely the false assurance this whole lane exists to remove.
+      - name: Membership guard must pass at the commit being recorded
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/coverage_membership.py --root "$GITHUB_WORKSPACE"
+
+      - name: Resolve the source coverage run
+        id: run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE: ${{ inputs.source }}
+          INPUT_RUN_ID: ${{ inputs.run_id }}
+          MAX_DRIFT: ${{ inputs.max_drift_commits }}
+        run: |
+          set -euo pipefail
+
+          case "$SOURCE" in
+            latest-on-head)
+              # Prefer the newest GREEN push run on main. `--status success`
+              # filters on conclusion, so this is a run that actually passed.
+              id=$(gh run list --workflow coverage.yml --branch main --event push \
+                     --status success --limit 100 --json databaseId \
+                     --jq '.[0].databaseId // 0')
+              # Fall back to a RED run rather than failing outright. When
+              # coverage is red on main, every recent run fails, and a failed
+              # run's artifacts are still a complete measurement of that commit
+              # (the run that produced the committed floors today, 42731742835,
+              # concluded failure). The per-group regression gate below is what
+              # decides whether the numbers are usable, not the colour of the
+              # run they came from.
+              if [ -z "$id" ] || [ "$id" = "0" ]; then
+                id=$(gh run list --workflow coverage.yml --branch main --event push \
+                       --status failure --limit 100 --json databaseId \
+                       --jq '.[0].databaseId // 0')
+                if [ -n "$id" ] && [ "$id" != "0" ]; then
+                  echo "::warning::no successful coverage run on main was found; falling back to failed run $id. Its artifacts are still a measurement of that commit, and every group is re-checked against its committed floor below."
+                fi
+              fi
+              ;;
+            specific-run)
+              id="${INPUT_RUN_ID:-0}"
+              case "$id" in
+                ''|0) echo "::error::source=specific-run needs a numeric run_id"; exit 2 ;;
+                *[!0-9]*) echo "::error::run_id must be numeric, got '$id'"; exit 2 ;;
+              esac
+              ;;
+            *) echo "::error::unknown source '$SOURCE'"; exit 2 ;;
+          esac
+
+          if [ -z "$id" ] || [ "$id" = "0" ]; then
+            echo "::error file=.coverage-baselines/root-workspace.toml::no successful coverage.yml run on main was found, so there is nothing to re-baseline from"
+            exit 2
+          fi
+
+          json=$(gh run view "$id" --json databaseId,headSha,headBranch,event,conclusion,createdAt,status)
+          sha=$(printf '%s' "$json" | jq -r '.headSha')
+          created=$(printf '%s' "$json" | jq -r '.createdAt')
+          concl=$(printf '%s' "$json" | jq -r '.conclusion')
+          event=$(printf '%s' "$json" | jq -r '.event')
+          branch=$(printf '%s' "$json" | jq -r '.headBranch')
+
+          # `success` and `failure` are both acceptable sources: the artifacts are
+          # the measurement, and a red run can still have measured every group
+          # cleanly (its redness may come from any step). Anything else - cancelled,
+          # timed_out, startup_failure, stale - means the matrix did not finish, so
+          # the artifact set cannot be trusted to be complete.
+          case "$concl" in
+            success) ;;
+            failure)
+              failing=$(gh run view "$id" --json jobs \
+                --jq '[.jobs[] | select(.conclusion=="failure") | .name] | join(", ")' \
+                2>/dev/null || echo "(could not enumerate)")
+              echo "::warning::source run $id concluded failure; failing jobs: ${failing:-none listed}. Its artifacts describe head $sha and every group is re-checked against its committed floor, so a red group still fails this job rather than being re-priced."
+              echo "failing_jobs=${failing:-none listed}" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "::error::run $id concluded '$concl'; the coverage matrix did not finish, so its artifacts cannot be treated as a complete measurement"
+              exit 2
+              ;;
+          esac
+          if [ "$event" != "push" ] || [ "$branch" != "main" ]; then
+            echo "::error::run $id is a '$event' run on '$branch'; only a push run on main describes main"
+            exit 2
+          fi
+
+          git fetch --no-tags --quiet origin main
+          base_head=$(git rev-parse origin/main)
+
+          if ! git merge-base --is-ancestor "$sha" "$base_head"; then
+            echo "::error::run $id head $sha is not an ancestor of main ($base_head); its numbers describe a tree main never contained"
+            exit 2
+          fi
+          drift=$(git rev-list --count "$sha..$base_head")
+
+          echo "run $id: head $sha, created $created, drift $drift commit(s) behind $base_head"
+          if [ "$drift" -gt "$MAX_DRIFT" ]; then
+            echo "::error::run $id head $sha is $drift commits behind main, over the $MAX_DRIFT-commit limit; the freshness gate would immediately re-flag the numbers it produces. Wait for a newer coverage run on main, or pass a larger max_drift_commits and say why in the PR."
+            exit 2
+          fi
+          if [ "$drift" -gt 0 ]; then
+            echo "::warning::the regenerated floors will describe $sha, which is $drift commit(s) behind main $base_head. That gap is recorded in the provenance block and the PR body."
+          fi
+
+          {
+            echo "id=$id"
+            echo "sha=$sha"
+            echo "created=$created"
+            echo "conclusion=$concl"
+            echo "drift=$drift"
+            echo "base_head=$base_head"
+          } >> "$GITHUB_OUTPUT"
+
+      # Same artifact shape and same flattening as coverage.yml's aggregate job,
+      # but sourced from the resolved run instead of the current one.
+      - name: Download that run's per-group reports
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          pattern: coverage-group-*
+          path: coverage-groups
+          merge-multiple: true
+          run-id: ${{ steps.run.outputs.id }}
+          github-token: ${{ github.token }}
+
+      - name: Regenerate floors, provenance and PR body
+        id: regen
+        env:
+          ALLOWANCE: ${{ inputs.allowance }}
+          ALLOW_REGRESSION: ${{ inputs.allow_regression }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          RUN_ID: ${{ steps.run.outputs.id }}
+          RUN_SHA: ${{ steps.run.outputs.sha }}
+          RUN_CREATED: ${{ steps.run.outputs.created }}
+          RUN_CONCLUSION: ${{ steps.run.outputs.conclusion }}
+          FAILING_JOBS: ${{ steps.run.outputs.failing_jobs }}
+          DRIFT: ${{ steps.run.outputs.drift }}
+          BASE_HEAD: ${{ steps.run.outputs.base_head }}
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/remeasure.py" <<'PY'
+          """Regenerate the committed coverage floors from a real run's artifacts.
+
+          Reuses, and does not reimplement, the in-tree generation path:
+            * `coverage_report.load_group_reports` reads the artifacts.
+            * `coverage_report read_baseline` parses the committed file.
+            * `coverage_report floor2` truncates the way the file documents.
+            * `coverage_report write` produces the [meta]/[groups] block.
+            * `coverage_report aggregate` re-checks the file that was produced.
+
+          What this script adds on top is exactly the part the CLI cannot know:
+          the committed prose header (re-applied verbatim so the rationale is not
+          lost), the machine-readable provenance marker the freshness gate reads,
+          a per-group ratchet against the committed floors, and a fail-closed
+          self-check before anything is persisted.
+          """
+          import datetime as dt
+          import math
+          import os
+          import pathlib
+          import re
+          import subprocess
+          import sys
+
+          ROOT = pathlib.Path(os.environ["GITHUB_WORKSPACE"])
+          SCRIPTS = ROOT / ".github" / "scripts"
+          sys.path.insert(0, str(SCRIPTS))
+          import coverage_report as cr  # noqa: E402
+
+          BASELINE = ROOT / ".coverage-baselines" / "root-workspace.toml"
+          MEMBERSHIP = ROOT / ".coverage-baselines" / "membership.toml"
+          GROUPS = ROOT / "coverage-groups"
+          TEMP = pathlib.Path(os.environ["RUNNER_TEMP"])
+          SUMMARY = pathlib.Path(os.environ.get("GITHUB_STEP_SUMMARY") or os.devnull)
+          PR_BODY = TEMP / "pr-body.md"
+
+          SENTINEL_OPEN = "# >>> coverage-remeasure: provenance"
+          SENTINEL_CLOSE = "# <<< coverage-remeasure: provenance"
+          GROUP_LINE = re.compile(r"^([A-Za-z0-9_.-]+)\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*#\s*measured\s+([0-9]+(?:\.[0-9]+)?)\s*$")
+
+          allowance = float(os.environ["ALLOWANCE"])
+          allow_regression = os.environ["ALLOW_REGRESSION"].strip().lower() == "true"
+          dry_run = os.environ["DRY_RUN"].strip().lower() == "true"
+          run_id = os.environ["RUN_ID"]
+          run_sha = os.environ["RUN_SHA"]
+          run_created = os.environ["RUN_CREATED"]
+          run_conclusion = (os.environ.get("RUN_CONCLUSION") or "").strip() or "unknown"
+          failing_jobs = (os.environ.get("FAILING_JOBS") or "").strip()
+          drift = int(os.environ["DRIFT"] or 0)
+          base_head = os.environ["BASE_HEAD"]
+
+          def fail(code, message):
+              print(f"::error::{message}")
+              sys.exit(code)
+
+          measured_date = (run_created or "")[:10]
+          if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", measured_date):
+              fail(2, f"cannot read a measurement date from run createdAt {run_created!r}")
+          today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+          # ---- read the committed file and the fresh artifacts ----------------
+          committed_text = BASELINE.read_text(encoding="utf-8")
+          committed_meta, committed_groups = cr.read_baseline(str(BASELINE))
+          reports = cr.load_group_reports(str(GROUPS))
+          if not reports:
+              fail(3, "no group reports were downloaded; nothing was measured, so nothing can be re-baselined")
+
+          # A missing report would silently DELETE that group's floor, and the
+          # aggregate job only checks the groups the file lists - so a dropped
+          # group would stop being gated at all. Refuse instead.
+          missing = sorted(set(committed_groups) - set(reports))
+          extra = sorted(set(reports) - set(committed_groups))
+          if missing or extra:
+              fail(3, f"group set changed: missing from the artifacts {missing}, "
+                      f"present but not in the committed file {extra}. "
+                      f"A re-baseline may only re-price groups, not add or drop them")
+
+          covered = sum(r["covered"] for r in reports.values())
+          coverable = sum(r["coverable"] for r in reports.values())
+          aggregate = 100.0 * covered / coverable if coverable else 0.0
+
+          # ---- regression gate, before anything is written --------------------
+          regressed = {g: (reports[g]["percent"], committed_groups[g])
+                       for g in committed_groups
+                       if reports[g]["percent"] < committed_groups[g]}
+          if regressed and not allow_regression:
+              for g, (pct, floor) in sorted(regressed.items()):
+                  print(f"::error file={BASELINE.relative_to(ROOT)}::{g} measured "
+                        f"{pct:.2f}% against a committed floor of {floor:.2f}%")
+              fail(4, f"{len(regressed)} group(s) regressed. A re-baseline is not a "
+                      f"place to lower a floor: investigate the regression, or re-run "
+                      f"with allow_regression=true and justify it in the PR")
+
+          # ---- the aggregate floor is a ratchet unless regressions are allowed -
+          candidate = cr.floor2(aggregate - allowance)
+          aggregate_floor = candidate if allow_regression else max(
+              candidate, committed_meta["aggregate_floor"])
+
+          # ---- keep the committed prose header, drop any stale provenance -----
+          committed_lines = committed_text.splitlines()
+          try:
+              meta_index = next(i for i, line in enumerate(committed_lines)
+                                if line.strip() == "[meta]")
+          except StopIteration:
+              fail(5, f"{BASELINE} has no [meta] section to anchor the rewrite")
+          header = committed_lines[:meta_index]
+
+          kept, skipping = [], False
+          for line in header:
+              if line.startswith(SENTINEL_OPEN):
+                  skipping = True
+                  continue
+              if line.startswith(SENTINEL_CLOSE):
+                  skipping = False
+                  continue
+              if not skipping:
+                  kept.append(line)
+          while kept and not kept[-1].strip():
+              kept.pop()
+
+          # ---- generate the numbers with the in-tree generator ----------------
+          generated = TEMP / "root-workspace.generated.toml"
+          proc = subprocess.run(
+              [sys.executable, str(SCRIPTS / "coverage_report.py"), "write",
+               "--dir", str(GROUPS), "--baseline", str(generated),
+               "--allowance", f"{allowance}", "--aggregate-floor", f"{aggregate_floor}"],
+              cwd=str(ROOT), capture_output=True, text=True)
+          if proc.returncode != 0:
+              fail(5, f"coverage_report.py write failed: {proc.stderr.strip()[:800]}")
+          generated_lines = generated.read_text(encoding="utf-8").splitlines()
+          try:
+              gen_meta = next(i for i, line in enumerate(generated_lines)
+                              if line.strip() == "[meta]")
+          except StopIteration:
+              fail(5, "coverage_report.py write produced no [meta] section")
+
+          # Ratchet the per-group floors. `write` prices every floor at
+          # measured-allowance, so an unchanged group can legitimately come out
+          # slightly lower than its committed floor; the committed value wins
+          # because a floor is a high-water mark. Safe because the regression
+          # gate above guarantees measured >= committed for every group.
+          numbers, ratcheted = [], []
+          for line in generated_lines[gen_meta:]:
+              match = GROUP_LINE.match(line.strip())
+              if match and not allow_regression:
+                  name, written, measured = match.group(1), float(match.group(2)), match.group(3)
+                  if name in committed_groups and written < committed_groups[name]:
+                      held = committed_groups[name]
+                      ratcheted.append((name, written, held))
+                      line = (f"{name} = {held:.2f}  # measured {measured} "
+                              f"(held at the committed floor; "
+                              f"measured-allowance was {written:.2f})")
+                  else:
+                      line = f"{name} = {written:.2f}  # measured {measured}"
+              numbers.append(line)
+
+          provenance = [
+              f"{SENTINEL_OPEN} (generated by .github/workflows/coverage-remeasure.yml - do not edit by hand)",
+              f"# PROVENANCE: head={run_sha} run={run_id} measured={measured_date}",
+              f"# Measured {measured_date} by coverage run {run_id} (head {run_sha[:9]}).",
+              f"# Regenerated {today} from that run's coverage-group-* artifacts.",
+              f"# At regeneration time main was {base_head[:9]}, so these numbers describe",
+              f"# a tree {drift} commit(s) behind main. That gap is the cost of reusing a run",
+              "# that already exists; it is stated here rather than implied away, and",
+              "# .github/workflows/coverage-freshness.yml measures it against its own",
+              "# threshold on every push to main.",
+              "#",
+              "# The prose below is the committed rationale, carried forward verbatim so the",
+              "# reasoning and its history are not lost. Its inline measured values describe",
+              "# the EARLIER re-baseline and are historical. The authoritative numbers are",
+              "# [meta] and [groups] at the end of this file.",
+              SENTINEL_CLOSE,
+          ]
+          final_text = "\n".join(provenance + [""] + kept + [""] + numbers) + "\n"
+
+          target = TEMP / "root-workspace.proposed.toml" if dry_run else BASELINE
+          target.write_text(final_text, encoding="utf-8")
+
+          # ---- self-check: the file about to be committed must pass its gate --
+          check = subprocess.run(
+              [sys.executable, str(SCRIPTS / "coverage_report.py"), "aggregate",
+               "--dir", str(GROUPS), "--baseline", str(target)],
+              cwd=str(ROOT), capture_output=True, text=True)
+          print(check.stdout.rstrip())
+          if check.returncode != 0:
+              fail(6, "the regenerated baseline does not pass its own aggregate gate, "
+                      "so it will not be proposed. See the output above")
+
+          # ---- stamp the membership ledger, which this job just validated -----
+          # recorded_at_commit is the commit the guard ran against (main's head
+          # here), not the coverage run's head: the ledger content validated is
+          # this checkout's content.
+          membership_note = "unchanged"
+          if not dry_run:
+              ledger = MEMBERSHIP.read_text(encoding="utf-8")
+              stamped = re.sub(r'^recorded_at_utc\s*=\s*"[^"]*"',
+                               f'recorded_at_utc = "{today}"', ledger, count=1, flags=re.M)
+              stamped = re.sub(r'^recorded_at_commit\s*=\s*"[0-9a-f]{7,40}"',
+                               f'recorded_at_commit = "{base_head}"', stamped,
+                               count=1, flags=re.M)
+              if stamped != ledger:
+                  MEMBERSHIP.write_text(stamped, encoding="utf-8")
+                  membership_note = f"restamped to {base_head[:9]} at {today}"
+              else:
+                  membership_note = "no recorded_at_* lines matched; left alone"
+
+          # ---- report ---------------------------------------------------------
+          rows = []
+          for name in sorted(committed_groups):
+              pct = reports[name]["percent"]
+              rows.append((name, pct, committed_groups[name], pct - committed_groups[name]))
+
+          lines = [
+              "### Coverage re-baseline",
+              "",
+              f"* source run: [{run_id}](https://github.com/{os.environ.get('GITHUB_REPOSITORY', '')}/actions/runs/{run_id}) "
+              f"(head `{run_sha[:9]}`, measured {measured_date}, concluded {run_conclusion})",
+              f"* main at regeneration: `{base_head[:9]}`, {drift} commit(s) ahead of the source run",
+              f"* instrument allowance: {allowance:.2f} points per group",
+              f"* aggregate: measured {aggregate:.2f}% "
+              f"({covered}/{coverable}), committed floor {committed_meta['aggregate_floor']:.2f}% "
+              f"-> new floor {aggregate_floor:.2f}%",
+              f"* membership ledger provenance: {membership_note}",
+              "",
+              "| group | measured | committed floor | delta | new floor |",
+              "|---|---|---|---|---|",
+          ]
+          for name, pct, floor, delta in rows:
+              new_floor = max(cr.floor2(pct - allowance), floor) if not allow_regression \
+                  else cr.floor2(pct - allowance)
+              lines.append(f"| {name} | {pct:.2f}% | {floor:.2f}% | "
+                           f"{delta:+.2f} | {new_floor:.2f}% |")
+          if ratcheted:
+              lines += ["", "Held at the committed floor because measured-allowance "
+                            "came out lower (a ratchet, not a decision to re-price):"]
+              for name, written, held in ratcheted:
+                  lines.append(f"* `{name}`: {written:.2f}% -> {held:.2f}%")
+          table = "\n".join(lines)
+
+          print(table)
+          SUMMARY.parent.mkdir(parents=True, exist_ok=True)
+          with open(SUMMARY, "a", encoding="utf-8") as fh:
+              fh.write(table + "\n")
+
+          body = "\n".join([
+              "Regenerates `.coverage-baselines/root-workspace.toml` from a coverage run that",
+              "already passed on `main`. Nothing was built here and no fresh measurement was",
+              "taken: these are the numbers CI already enforced, with their provenance moved",
+              "forward so the freshness gate can see how old they are.",
+              "",
+              "**Source.** Coverage run "
+              f"[{run_id}](https://github.com/{os.environ.get('GITHUB_REPOSITORY', '')}/actions/runs/{run_id})"
+              f", head `{run_sha}`, measured {measured_date}, concluded `{run_conclusion}`."
+              f" Its `coverage-group-*` artifacts are the input.",
+              "",
+          ] + ([
+              f"**The source run was red.** Failing jobs: {failing_jobs or 'not enumerated'}."
+              " A red conclusion does not invalidate the artifacts, but it does mean every"
+              " group below is worth reading against its committed floor, which is exactly"
+              " what the regression gate does: a group measured below its floor fails this"
+              " job instead of being re-priced.",
+              "",
+          ] if run_conclusion == "failure" else []) + [
+              f"**Drift.** `main` was `{base_head}` when this ran, so the numbers describe a tree",
+              f"{drift} commit(s) behind `main`. This is recorded in the `# PROVENANCE:` block,"
+              " not hidden.",
+              "",
+              table,
+              "",
+              "### What this PR does not claim",
+              "",
+              "* The floors move only where measurement moves them; no floor is lowered. A group",
+              "  whose measured value is below its committed floor fails the job instead of being",
+              "  re-priced, unless `allow_regression` was set explicitly.",
+              "* The generated file was self-checked with `coverage_report.py aggregate` against the",
+              "  same artifacts (exit 0). That check is the gate, not a substitute for reviewing the diff.",
+              "* The prose header is carried forward verbatim. Its inline measured values describe the",
+              "  previous re-baseline and remain historical.",
+              "",
+              "### Verify",
+              "",
+              "```",
+              "gh run download " + run_id + " --pattern 'coverage-group-*' --dir coverage-groups \\",
+              "  --repo " + os.environ.get("GITHUB_REPOSITORY", "KooshaPari/PhenoShared"),
+              "python3 .github/scripts/coverage_report.py aggregate \\",
+              "  --dir coverage-groups --baseline .coverage-baselines/root-workspace.toml",
+              "git diff -- .coverage-baselines/root-workspace.toml",
+              "```",
+              "",
+          ])
+          PR_BODY.write_text(body, encoding="utf-8")
+
+          print(f"::notice::regenerated {target.relative_to(ROOT) if target.is_relative_to(ROOT) else target}")
+          PY
+          python3 "$RUNNER_TEMP/remeasure.py"
+
+      - name: Show what changed
+        run: |
+          set -euo pipefail
+          git --no-pager diff --stat -- .coverage-baselines
+          git --no-pager diff -- .coverage-baselines/root-workspace.toml | head -80
+
+      # No force push, ever. If the update branch exists with different content,
+      # the push is rejected and this job fails with the PR that already holds
+      # it: merge or close that one, then re-dispatch.
+      - name: Commit, push and open the PR
+        if: ${{ inputs.dry_run == false }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ inputs.branch }}
+          RUN_ID: ${{ steps.run.outputs.id }}
+          RUN_SHA: ${{ steps.run.outputs.sha }}
+          DRIFT: ${{ steps.run.outputs.drift }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ -z "$(git status --porcelain -- .coverage-baselines)" ]; then
+            echo "::notice::the regenerated baseline is byte-identical to the committed one; nothing to propose"
+            exit 0
+          fi
+
+          git checkout -B "$BRANCH"
+          git add -- .coverage-baselines/root-workspace.toml .coverage-baselines/membership.toml
+          git commit \
+            -m "chore(coverage): re-baseline floors from run $RUN_ID" \
+            -m "Provenance: run $RUN_ID, head $RUN_SHA, $DRIFT commit(s) behind main." \
+            -m "Floors regenerated by .github/scripts/coverage_report.py write from that" \
+            -m "run's coverage-group-* artifacts; membership ledger provenance restamped" \
+            -m "to the commit its guard was verified at. No floor is lowered." \
+            -m "tx-agent: github-actions" \
+            -m "tx-validated: test"
+
+          git push --set-upstream origin "$BRANCH"
+
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$BRANCH" \
+            --title "chore(coverage): re-baseline floors from run $RUN_ID" \
+            --body-file "$RUNNER_TEMP/pr-body.md"
