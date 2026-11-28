@@ -1,31 +1,91 @@
 [report]
-# Tier-2 coverage thresholds per ADR-040:
-#   Lib crates:       ≥ 71%  (nanovms-core, nvms-ffi, pheno-config)
-#   Framework crates: ≥ 70%  (pheno-compose-driver)
-#   Service crates:   ≥ 60%  (iac workspace members)
+# ---------------------------------------------------------------------------
+# THIS FILE CONTAINS NO COVERAGE GATE.
 #
-# This file provides the default for ad-hoc `cargo tarpaulin` runs at
-# the root workspace (lib tier). CI overrides via --fail-under per
-# workspace through scripts/coverage-gate.sh.
-# ADR-040's per-tier floors (71% lib / 70% framework / 60% service) are not
-# enforceable as written: the crates the ADR names (nanovms-core, nvms-ffi,
-# pheno-compose-driver) no longer exist, so no tier list survives. These floors
-# are therefore the measured whole-workspace ratchet values, and the display
-# contract is "the number here is what is enforced". Raise per tier once the
-# tiers are redefined in a machine-readable form.
-fail-under = 37
+# There is exactly ONE enforced Rust coverage floor in this repository:
+#
+#   .coverage-baselines/root-workspace.toml
+#     [meta] aggregate_floor          <- the aggregate the required check enforces
+#     [groups] <name> = <percent>     <- one floor per crate group
+#
+# plus, for the JS/TS surface only, the bare number in `.coverage-baseline`
+# (read by the `js-coverage-ratchet` job in .github/workflows/pr-advisory.yml -
+# a DIFFERENT instrument, not the Rust floor, and not a Rust target).
+#
+# WHY `fail-under` IS 0 HERE
+#   It used to be 37, which was wrong in three separate ways:
+#     1. STALE. The enforced aggregate floor moved to 53.80 on 2026-11-10
+#        (.coverage-baselines/root-workspace.toml). A 37 here was a second,
+#        unreferenced number that disagreed with the real gate.
+#     2. UNREACHABLE if corrected upward. A plain `cargo tarpaulin` at the repo
+#        root reports a WHOLE-TREE denominator (it walks for `*.rs` instead of
+#        asking the build what it compiled), which includes non-member trees
+#        that `cargo --workspace` never builds. On that denominator the tree
+#        measures ~36%, not 54.80%. The 54.80% figure exists only because
+#        `.github/scripts/coverage_report.py filter` narrows each group's report
+#        to that group's own package directories. Writing 53.80 here would give
+#        local runs a floor they cannot reach and the gate does not use.
+#     3. CONFUSING. 37 is also the frozen `>=37%` label inside the branch
+#        protection status-check NAME ("Root workspace coverage (whole workspace
+#        — ≥37%)"), which is a display string that cannot be renamed without
+#        editing branch protection. It is not a threshold.
+#
+#   `fail-under = 0` means "measure, never fail on coverage": ad-hoc runs still
+#   write the Html/Xml/Json reports below, and there is no second place to
+#   change a threshold. CI already passes `--fail-under 0` explicitly on every
+#   per-group job in .github/workflows/coverage.yml, so this file cannot loosen
+#   anything it does.
+#
+#   KNOWN, NOT FIXED HERE (outside this change's file ownership):
+#     * scripts/coverage-gate.sh is a standalone Tier-2 script, not called by any
+#       workflow, that hardcodes ROOT_LIB_THRESHOLD=37. A developer who runs it
+#       gets a PASS at 37% while the required check enforces 53.80%.
+#     * .github/workflows/coverage.yml lines ~234-235 still explain that "the
+#       repo-root tarpaulin.toml sets fail-under = 37". That sentence is stale
+#       as of this edit. The `--fail-under 0` it justifies is still correct and
+#       still defensive, so nothing breaks; only the explanation has moved here.
+#     * .github/scripts/coverage_report.py still defaults `--aggregate-floor` to
+#       36.0 (it is only a CLI default; `cmd_write` self-checks the value it is
+#       given, and the workflow passes the committed 53.80 explicitly).
+#
+# TO CHECK AGAINST THE REAL FLOOR locally:
+#   1. measure one group (see the `packages:` list in coverage.yml), then
+#        python3 .github/scripts/coverage_report.py filter \
+#          --group <group> --packages "<space separated packages>" \
+#          --report target/tarpaulin-report/tarpaulin-report.json \
+#          --out /tmp/group.json
+#        python3 .github/scripts/coverage_report.py verify \
+#          --report-file /tmp/group.json \
+#          --baseline .coverage-baselines/root-workspace.toml
+#   2. or refresh every floor in one click with
+#      .github/workflows/coverage-remeasure.yml (workflow_dispatch).
+#
+# The ADR-040 per-tier floors (71% lib / 70% framework / 60% service) are NOT
+# enforced and are not restated here: the crates the ADR names (nanovms-core,
+# nvms-ffi, pheno-compose-driver) no longer exist, so no tier list survives.
+# ---------------------------------------------------------------------------
+fail-under = 0
 out = ["Html", "Xml", "Json"]
 output-dir = "target/tarpaulin-report"
 
 [run]
 # cargo-tarpaulin parses this field with humantime, so it must be a duration
-# string. The bare integer `180` fails TOML deserialization ("invalid type:
-# integer, expected a duration"), which makes tarpaulin drop the WHOLE config
-# file and fall back to its built-in 60s default test timeout. That 60s budget
-# is a total per-test-binary limit, so any test binary whose tests take longer
-# than 60s in aggregate is killed mid-run with "Error: Timed out waiting for
-# test response" -- which is how the root coverage gate failed on
+# string. The previous value was the bare integer `180`, which does not
+# deserialize into that type. Two consequences, stated separately because only
+# the first is a certainty:
+#   * CERTAIN: a non-duration here is a type error, so the setting cannot take
+#     effect as written.
+#   * NOT MEASURED HERE: whether tarpaulin then discards the whole file (and
+#     silently uses its built-in 60s per-binary test timeout) or aborts. Either
+#     way the configured value was not being applied.
+# The 60s default is a TOTAL per-test-binary budget, so a test binary whose tests
+# exceed 60s in aggregate is killed mid-run with "Error: Timed out waiting for
+# test response", which is the failure recorded against
 # crates/sharecli/tests/fr007_proc_pid_watch.rs (3 x 30s watch dwell = 90s).
+#
+# Scope note: CI passes `--timeout 300` on the command line, which overrides this
+# value, so `timeout` only governs a bare local `cargo tarpaulin` run. It is kept
+# because that local run is exactly the case this file exists for.
 timeout = "180s"
 # No `features = "all"` here. That value is not a cargo feature name, and once
 # the config above started parsing again tarpaulin passed it straight through to
