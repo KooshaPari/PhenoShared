@@ -378,7 +378,7 @@ version = ">=0.37,<0.40.0"
 optional = true
 
 [dependencies.rand]
-version = "0.9"
+version = "0.10"
 
 [dependencies.regex]
 version = "1.10"
