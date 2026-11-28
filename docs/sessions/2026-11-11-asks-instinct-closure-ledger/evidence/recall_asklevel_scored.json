@@ -1,0 +1,501 @@
+{
+ "generated_at_utc": "2026-11-13T02:57:45Z",
+ "script": "recall_asklevel_match.py",
+ "rules": {
+  "a": "normalized containment either direction, min 20 chars",
+  "b": "token jaccard >= 0.6",
+  "match": "either rule fires; firing rule recorded per row"
+ },
+ "register_scope": {
+  "ledger_db": "/Users/kooshapari/CodeProjects/Phenotype/repos/phenotype-registry/asks-ledger/ledger.db",
+  "reg_asks": 2259,
+  "reg_utterances": 8042,
+  "origin_links": 2252,
+  "conversation_prefixes": {
+   "chatdb": 23,
+   "phoneconv": 8019
+  },
+  "harness_representable": false
+ },
+ "structural_finding": "the register cannot represent harness or kcode windows: no register utterance carries a harness conversation id, so recall is measurable only on the imessage stratum of the frame. A single pooled recall across all 60 windows would be dominated by channels the register never ingested.",
+ "frame": {
+  "windows": 60,
+  "population": {
+   "harness": 1967,
+   "imessage": 1053,
+   "kcode": 317
+  },
+  "seed": 20261121,
+  "reference_asks_total": 103
+ },
+ "per_channel": {
+  "harness": {
+   "windows": 34,
+   "reference_asks": 63,
+   "fragments_excluded": 0,
+   "denominator": null,
+   "matched": 0,
+   "by_rule_a": 0,
+   "by_rule_b": 0,
+   "both": 0,
+   "recall": null,
+   "measured": false,
+   "not_measured_reason": "the register contains no utterances from this channel: its conversation_id prefixes are ['chatdb', 'phoneconv']. A zero here would describe the register's input scope, not recall, so it is not emitted as recall."
+  },
+  "imessage": {
+   "windows": 18,
+   "reference_asks": 40,
+   "fragments_excluded": 0,
+   "denominator": 40,
+   "matched": 25,
+   "by_rule_a": 22,
+   "by_rule_b": 4,
+   "both": 1,
+   "recall": {
+    "low": 0.47032439137301096,
+    "high": 0.7577702083276673,
+    "value": 0.625
+   },
+   "measured": true
+  },
+  "kcode": {
+   "windows": 8,
+   "reference_asks": 0,
+   "fragments_excluded": 0,
+   "denominator": null,
+   "matched": 0,
+   "by_rule_a": 0,
+   "by_rule_b": 0,
+   "both": 0,
+   "recall": null,
+   "measured": false,
+   "not_measured_reason": "the register contains no utterances from this channel: its conversation_id prefixes are ['chatdb', 'phoneconv']. A zero here would describe the register's input scope, not recall, so it is not emitted as recall."
+  }
+ },
+ "overall_scored_channels_only": {
+  "channels_scored": [
+   "imessage"
+  ],
+  "channels_not_measured": [
+   "harness",
+   "kcode"
+  ],
+  "denominator": 40,
+  "matched": 25,
+  "recall": {
+   "low": 0.47032439137301096,
+   "high": 0.7577702083276673,
+   "value": 0.625
+  }
+ },
+ "unmatched": [
+  {
+   "idx": 35,
+   "channel": "imessage",
+   "turn": 3,
+   "quote": "liked \u201cportal's past sign-in already - but it's asking for a bigger grant: **read-only access to code, commit statuses, ",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 36,
+   "channel": "imessage",
+   "turn": 1,
+   "quote": "more on the ux aspect rn",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 37,
+   "channel": "imessage",
+   "turn": 2,
+   "quote": "where in th e dinosaur",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 37,
+   "channel": "imessage",
+   "turn": 3,
+   "quote": "is steph homeless again",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 37,
+   "channel": "imessage",
+   "turn": 5,
+   "quote": "why is he at luke's house when luke is 5k miles awat",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 38,
+   "channel": "imessage",
+   "turn": 4,
+   "quote": "which app mythos is a 10t param",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 39,
+   "channel": "imessage",
+   "turn": 1,
+   "quote": "wtf is maybe july",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 43,
+   "channel": "imessage",
+   "turn": 3,
+   "quote": "you dont need it, just consider any email you sent",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 43,
+   "channel": "imessage",
+   "turn": 6,
+   "quote": "zip the dat e is ok; for b skip",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 46,
+   "channel": "imessage",
+   "turn": 2,
+   "quote": "why tf are you connected w my dad",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 50,
+   "channel": "imessage",
+   "turn": 1,
+   "quote": "what dles any of what you just said mean",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 50,
+   "channel": "imessage",
+   "turn": 2,
+   "quote": "no isolated fs memory etc",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 50,
+   "channel": "imessage",
+   "turn": 4,
+   "quote": "no vm or intermediate",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 50,
+   "channel": "imessage",
+   "turn": 6,
+   "quote": "call me rnd 9 10",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  },
+  {
+   "idx": 51,
+   "channel": "imessage",
+   "turn": 3,
+   "quote": "you must respect the friendship",
+   "reason": "no register ask within the containment or Jaccard rule",
+   "best_jaccard": null
+  }
+ ],
+ "rows": [
+  {
+   "idx": 34,
+   "turn": 1,
+   "quote": "sim case all deploys must go on podman or coolify\\localstack-like deploy surface",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 34,
+   "turn": 2,
+   "quote": "and general optimization of them and or tooling choice for them",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 34,
+   "turn": 5,
+   "quote": "begin sharing everything w dots. those everything digests should go to it first. and full delegation as a result done b4",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 35,
+   "turn": 2,
+   "quote": "prove and finalize asap",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 35,
+   "turn": 3,
+   "quote": "liked \u201cportal's past sign-in already - but it's asking for a bigger grant: **read-only access to code, commit statuses, ",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 35,
+   "turn": 4,
+   "quote": "state of everything else",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 35,
+   "turn": 6,
+   "quote": "bring cockpit up 2 date. again should happen via api/cli/mcp style actions just like todoist jira etc not requiring manu",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 36,
+   "turn": 1,
+   "quote": "more on the ux aspect rn",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 37,
+   "turn": 2,
+   "quote": "where in th e dinosaur",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 37,
+   "turn": 3,
+   "quote": "is steph homeless again",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 37,
+   "turn": 5,
+   "quote": "why is he at luke's house when luke is 5k miles awat",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 38,
+   "turn": 4,
+   "quote": "which app mythos is a 10t param",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 39,
+   "turn": 1,
+   "quote": "wtf is maybe july",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 41,
+   "turn": 1,
+   "quote": "plane as tasks.kooshapari.com",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 41,
+   "turn": 2,
+   "quote": "cloudflare access gate",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 41,
+   "turn": 3,
+   "quote": "paperclip as paperclip.phenotype.space similar cf access",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 41,
+   "turn": 4,
+   "quote": "similar pattern for anything else we have deployed",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 41,
+   "turn": 5,
+   "quote": "statof all deploys",
+   "matched": true,
+   "rule": "b"
+  },
+  {
+   "idx": 41,
+   "turn": 6,
+   "quote": "hermes state? ssot arch implementation state? ops dot",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 42,
+   "turn": 2,
+   "quote": "review the dump of oct 10-11 txts in depth to id gaps",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 42,
+   "turn": 3,
+   "quote": "state of all gap",
+   "matched": true,
+   "rule": "b"
+  },
+  {
+   "idx": 42,
+   "turn": 5,
+   "quote": "tracera gh actions integration + left hook integration + more for harness mcp hooks and other overall system, harness, p",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 42,
+   "turn": 6,
+   "quote": "r3check 429 wall",
+   "matched": true,
+   "rule": "b"
+  },
+  {
+   "idx": 43,
+   "turn": 2,
+   "quote": "im going to send this to jcode cockpit chat, which will be the mac \u201chermes\u201d equivalent; you also need to help setup a re",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 43,
+   "turn": 3,
+   "quote": "you dont need it, just consider any email you sent",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 43,
+   "turn": 4,
+   "quote": "walk through only for very high value apps; most clean",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 43,
+   "turn": 5,
+   "quote": "remember we expect tens to low hundreds a day at peak",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 43,
+   "turn": 6,
+   "quote": "zip the dat e is ok; for b skip",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 44,
+   "turn": 1,
+   "quote": "the things you know is not checking out how explicit proof both publicly and on the workspace drive or github, so you sh",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 44,
+   "turn": 2,
+   "quote": "ending a good sweet or being good at riding code is not something that would find interesting or appealing as a recruite",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 44,
+   "turn": 3,
+   "quote": "done. you should hit our synced gmail",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 44,
+   "turn": 5,
+   "quote": "i want swe or product roles",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 45,
+   "turn": 2,
+   "quote": "state of jcode win fixe",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 45,
+   "turn": 3,
+   "quote": "state of desk and mac + web\\cloud chat drives",
+   "matched": true,
+   "rule": "a"
+  },
+  {
+   "idx": 46,
+   "turn": 2,
+   "quote": "why tf are you connected w my dad",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 50,
+   "turn": 1,
+   "quote": "what dles any of what you just said mean",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 50,
+   "turn": 2,
+   "quote": "no isolated fs memory etc",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 50,
+   "turn": 4,
+   "quote": "no vm or intermediate",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 50,
+   "turn": 6,
+   "quote": "call me rnd 9 10",
+   "matched": false,
+   "rule": null
+  },
+  {
+   "idx": 51,
+   "turn": 3,
+   "quote": "you must respect the friendship",
+   "matched": false,
+   "rule": null
+  }
+ ],
+ "caveats": [
+  "the denominator is a 60-window sample of a 3,337-unit population, and only the imessage stratum is scorable against this register",
+  "the reference inventory is a single model labeller, not a human, so it can miss asks; that makes measured recall an upper estimate of the denominator's true size",
+  "window boundaries can split one ask across two windows",
+  "content matching cannot distinguish an ask that the register captured under a different intent from one it never captured"
+ ]
+}

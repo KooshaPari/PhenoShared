@@ -1,0 +1,95 @@
+{
+ "generated_at_utc": "2026-11-12T09:11:42Z",
+ "question": "is the published union coverage ratio a consistent pair of numbers?",
+ "published": {
+  "numerator": 3463,
+  "denominator": 43305,
+  "pct": 8.0,
+  "defect": "numerator is a SUM across channels; denominator is a DEDUPLICATED union. Cited units removed by the dedupe are still counted in the numerator."
+ },
+ "per_channel": {
+  "harness": {
+   "members": 5799,
+   "distinct_units": 33148,
+   "cited_units": 440,
+   "coverage_pct": 1.3
+  },
+  "imessage": {
+   "members": 6379,
+   "distinct_units": 8230,
+   "cited_units": 1487,
+   "coverage_pct": 18.1
+  },
+  "kcode": {
+   "members": 166,
+   "distinct_units": 2185,
+   "cited_units": 2,
+   "coverage_pct": 0.1
+  },
+  "phone": {
+   "members": 2077,
+   "distinct_units": 3697,
+   "cited_units": 1534,
+   "coverage_pct": 41.5
+  }
+ },
+ "frame_a_set_union": {
+  "units": 43648,
+  "cited": 1938,
+  "coverage_pct": 4.44,
+  "uncited": 41710,
+  "uncited_ask_cue": 8819,
+  "uncited_non_ask_cue": 32891,
+  "note": "reproduces the populations the semantic probes sample"
+ },
+ "frame_b_containment": {
+  "units": 43321,
+  "cited": 1891,
+  "coverage_pct": 4.37,
+  "eaten_units": 3939,
+  "eaten_cited": 1572,
+  "pair_overlap": {
+   "harness_in_imessage": {
+    "units": 261,
+    "cited": 42
+   },
+   "harness_in_kcode": {
+    "units": 96,
+    "cited": 0
+   },
+   "harness_in_phone": {
+    "units": 271,
+    "cited": 44
+   },
+   "imessage_in_kcode": {
+    "units": 8,
+    "cited": 2
+   },
+   "imessage_in_phone": {
+    "units": 3302,
+    "cited": 1484
+   },
+   "kcode_in_phone": {
+    "units": 1,
+    "cited": 0
+   }
+  },
+  "note": "same rule as the published denominator, with the numerator reduced the same way; this is the fair repair of the published pair"
+ },
+ "double_counted": {
+  "sum_cited": 3463,
+  "distinct_cited": 1938,
+  "duplicate_citations": 1525,
+  "largest_source": "imessage_in_phone",
+  "imessage_in_phone_cited": 1484
+ },
+ "input_drift": {
+  "per_channel_unit_delta_vs_published": {
+   "imessage": 16
+  },
+  "published_union_units": 43305,
+  "rebuilt_containment_union": 43321,
+  "note": "this rebuild differs from the published run by 16 units; the deltas above name the channel responsible. Reported, not hidden."
+ },
+ "verdict": "The published 8.0% is not a consistent ratio. The fair repair is 1938/43648 = 4.44% (set union) or 1891/43321 = 4.37% (containment). Per-channel and harness-only rows are unaffected: each uses one channel in both terms."
+}

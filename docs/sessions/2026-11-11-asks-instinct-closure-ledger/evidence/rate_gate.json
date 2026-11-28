@@ -1,0 +1,125 @@
+{
+ "generated_at_utc": "2026-11-13T03:10:34Z",
+ "script": "rate_gate.py",
+ "rules": {
+  "publish_rate": "PUBLISH_RATE requires: recall measured AND recall >= 0.9 AND precision_strict >= 0.9.",
+  "publish_floor": "PUBLISH_FLOOR requires: precision_strict >= 0.9 (a floor needs only precision).",
+  "recall_not_run": "Recall is NOT_RUN only when no recall artifact exists. The 98 source_ref harvest documents are declared lost, so the original route to a recall denominator is gone, and the corpus-derived reference frame replaces it on the channels the register covers.",
+  "read_discipline": "A failed read is UNKNOWN, never PASS. A percentage is never emitted where a cell is not PASS."
+ },
+ "cells": [
+  {
+   "cell": "recall",
+   "state": "FAIL",
+   "value": 0.625,
+   "threshold": 0.9,
+   "why": "measured on the imessage stratum only, under a broad ask definition that includes asks addressed to other humans; the register carries no harness or kcode conversations, so those channels are not measurable against it rather than zero",
+   "source": "recall_asklevel_scored.json",
+   "scope": {
+    "channels_scored": [
+     "imessage"
+    ],
+    "channels_not_measured": [
+     "harness",
+     "kcode"
+    ],
+    "denominator": 40,
+    "matched": 25,
+    "wilson": {
+     "low": 0.47032439137301096,
+     "high": 0.7577702083276673,
+     "value": 0.625
+    }
+   }
+  },
+  {
+   "cell": "citation_precision_strict",
+   "state": "FAIL",
+   "value": 0.7797,
+   "threshold": 0.9,
+   "why": "strict precision is below the 0.9 floor, so no floor can be published",
+   "source": "precision_scored.json"
+  },
+  {
+   "cell": "citation_precision_lenient",
+   "state": "PASS",
+   "value": 0.9661,
+   "threshold": 0.9,
+   "why": "reported alongside, never instead",
+   "source": "precision_scored.json"
+  },
+  {
+   "cell": "labeller_independence",
+   "state": "PASS",
+   "value": {
+    "cited_kappa": 1.0,
+    "askcue_kappa": 1.0,
+    "nonask_kappa": 0.6532
+   },
+   "threshold": null,
+   "why": "two independent labellers on all three sheets; non-ask bucket is only substantial, which is the weakest link, not a gate",
+   "source": "inter_labeller_agreement.json"
+  },
+  {
+   "cell": "precision_channel_coverage",
+   "state": "PASS",
+   "value": {
+    "phone_links": 2229,
+    "chatdb_links": 23,
+    "total_origin_links": 2252
+   },
+   "threshold": null,
+   "why": "the precision sample covers the register's origin links, ~99% phone channel; harness-channel citations were not sampled",
+   "source": "link_residual_review.json target_namespaces, cross-checked against precision_scored.json denominator.sampled_from (ledger.db not present to re-derive directly)"
+  },
+  {
+   "cell": "quote_fidelity",
+   "state": "PASS",
+   "value": {
+    "strict": 0.9708
+   },
+   "threshold": null,
+   "why": "a precondition, not precision",
+   "source": "ask_link_verification.json"
+  }
+ ],
+ "decision": "WITHHOLD_RATE_AND_FLOOR",
+ "decision_reason": "citation_precision_strict is 0.7797 < 0.9, below the 0.9 floor every publication path needs, and recall is measured at 0.625, below 0.9, on the imessage stratum only (the register has no harness or kcode conversations); open cells: recall, citation_precision_strict.",
+ "coverage_pair": {
+  "l1_point": 0.0847,
+  "l2_point": 0.0807,
+  "l3_adjudicated_point": 0.0788,
+  "l3_adjudicated_range": [
+   0.0591,
+   0.1022
+  ],
+  "l3_note": "a third blind reading resolved 11 of the 12 inter-labeller disagreements by majority of three, moving the non-ask operator count to 26 of 60. It is a third reading on the same rubric, not human ground truth, and it is reported alongside the pair, never instead of it",
+  "l1_range": [
+   0.0639,
+   0.1109
+  ],
+  "l2_range": [
+   0.0614,
+   0.105
+  ],
+  "status": "estimate, not a published rate"
+ },
+ "derived_envelope": {
+  "low": 0.0629,
+  "high": 0.0818,
+  "derived": true,
+  "definition": "l2_point x precision_strict to l1_point x precision_lenient",
+  "warning": "a unit-share multiplied by a link-share: the two operands come from different denominators, so this is an envelope for intuition, never a figure to quote"
+ },
+ "does_not_retroactively_withdraw": [
+  {
+   "claim": "semantic floor 2.12% (17/800), \u00a73h",
+   "why": "different instrument and population; it never depended on citation precision"
+  }
+ ],
+ "what_would_change_it": [
+  "a second independent precision labeller",
+  "a measurable recall instrument (blocked: documents lost)",
+  "precision >= 0.9 at strict, which would still not overcome unmeasurable recall for a rate"
+ ]
+}
