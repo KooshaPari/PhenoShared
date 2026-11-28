@@ -1,0 +1,422 @@
+name: Coverage baseline freshness
+
+# ---------------------------------------------------------------------------
+# WHY THIS WORKFLOW EXISTS
+#
+# The committed Rust coverage floors live in .coverage-baselines/root-workspace.toml
+# and were measured from run 42731742835 (head 33a8a101b, 2026-11-10). Nothing
+# re-measured them afterwards, so by 2026-11-27 HEAD was 301 commits past them
+# with 4,846 .rs files changed: the gate still said PASS on a tree it had never
+# measured. A green check that describes an 18-day-old tree is false assurance,
+# which is worse than no gate at all.
+#
+# This workflow turns that drift into a visible, mechanical failure. It is not a
+# coverage gate: it never measures coverage and never reads a percentage. It
+# compares the PROVENANCE of the committed numbers against HEAD.
+#
+# WHAT IT READS (nothing new is invented)
+#   .coverage-baselines/root-workspace.toml  head/run/date, from a
+#                                            `# PROVENANCE:` line if one is
+#                                            present, else from the prose
+#                                            "Source: ... run <id> (head <sha>)"
+#   .coverage-baselines/membership.toml      recorded_at_commit / recorded_at_utc
+#   .coverage-baseline                       asserted to be a BARE NUMBER, because
+#                                            pr-advisory.yml's js-coverage-ratchet
+#                                            job does `PREV=$(cat .coverage-baseline)`
+#                                            and any comment in that file would
+#                                            break the arithmetic downstream.
+#
+# THRESHOLDS: two named constants. Both are deliberately tight enough that the
+# tree as of 2026-11-27 (301 commits / 18 days behind) FAILS immediately. A gate
+# calibrated to pass on the drift it was written to catch is not a gate.
+#
+#   MAX_DRIFT_COMMITS = 50
+#     The repo lands ~17 commits/day, so 50 is roughly three working days. Chosen
+#     as a commit COUNT rather than days because commits are what actually change
+#     the tree: a weekend with no commits must not age the baseline, and a busy
+#     day must. 50 is high enough that an ordinary PR train does not re-measure
+#     mid-week, low enough that a release cut cannot be certified with numbers
+#     from the previous release.
+#
+#   MAX_DRIFT_DAYS = 30
+#     A calendar backstop for slow-but-real drift (a repo that receives 40 small
+#     commits over two months would otherwise never trip the count threshold) and
+#     for environment drift that no commit records: a toolchain image change, a
+#     tarpaulin version bump, or a runner migration can change every measured
+#     number without a single source commit. 30 days is the longest interval this
+#     repo's floors have ever survived a re-baseline without being wrong.
+#
+#   Trade-off, stated on purpose: because BOTH thresholds are evaluated, a repo
+#   that sits at the exact provenance commit for 31 days still trips on days even
+#   though no code changed. That is intended -- it forces a periodic re-measure
+#   of numbers that are enforced on every run -- but it is the one threshold a
+#   maintainer may want to raise. Raising MAX_DRIFT_DAYS does NOT weaken the code
+#   check, which is the commit count.
+#
+# FAIL vs ISSUE: both, because either alone is ignorable.
+#   * A non-required workflow that only warns is a grey X nobody opens.
+#   * An issue nobody is assigned is a notification nobody reads.
+#   So this job DOES fail (red run, visible in the Actions list, annotated with
+#   ::error::) AND keeps exactly one open tracking issue in sync with the numbers
+#   and the one-click remedy. The issue is closed automatically the moment the
+#   provenance catches up, so the tracker never rots.
+#   It is deliberately NOT a required status check: that is a branch-protection
+#   change only a repo admin can make, and a required check that is red from the
+#   day it lands blocks every merge. Add it to branch protection once the baseline
+#   has been re-measured and the check is green on main.
+#
+# TO CLEAR A FAILURE: run the "Coverage re-baseline" workflow
+# (.github/workflows/coverage-remeasure.yml) with dry_run=false; it rewrites the
+# provenance from a real run on the current HEAD and opens a PR.
+# ---------------------------------------------------------------------------
+
+on:
+  schedule:
+    # Daily at 06:17 UTC: off the hour so it does not queue behind the top-of-hour
+    # cron rush, and early enough that a stale baseline is known before the day's
+    # merges rather than after them.
+    - cron: 17 6 * * *
+  push:
+    # Catch the moment a merge makes the baseline stale, instead of waiting a day.
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Needed to open/edit/close the single tracking issue.
+  issues: write
+
+concurrency:
+  group: coverage-freshness
+  cancel-in-progress: true
+
+env:
+  MAX_DRIFT_COMMITS: "50"
+  MAX_DRIFT_DAYS: "30"
+
+jobs:
+  freshness:
+    name: Baseline provenance vs HEAD
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out main with full history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Full history, not depth 1: the check resolves the provenance commit and
+          # counts commits between it and HEAD, which a shallow clone cannot do.
+          fetch-depth: 0
+
+      - name: Compare provenance against HEAD
+        id: check
+        env:
+          # Seed the output so a crash in this step cannot be mistaken for "fresh".
+          STALE_SEED: error
+        run: |
+          set -euo pipefail
+          echo "stale=${STALE_SEED}" >> "$GITHUB_OUTPUT"
+          cat > "$RUNNER_TEMP/coverage_freshness.py" <<'PY'
+          #!/usr/bin/env python3
+          """Report whether the committed coverage provenance still describes HEAD."""
+
+          import datetime as dt
+          import os
+          import pathlib
+          import re
+          import subprocess
+
+          ROOT = pathlib.Path(os.environ.get("GITHUB_WORKSPACE") or ".").resolve()
+          MAX_COMMITS = int(os.environ.get("MAX_DRIFT_COMMITS", "50"))
+          MAX_DAYS = int(os.environ.get("MAX_DRIFT_DAYS", "30"))
+          ROOT_BASELINE = ".coverage-baselines/root-workspace.toml"
+          MEMBERSHIP = ".coverage-baselines/membership.toml"
+          JS_BASELINE = ".coverage-baseline"
+          OUT_DIR = pathlib.Path(os.environ["RUNNER_TEMP"])
+
+
+          def git(*args):
+              return subprocess.run(
+                  ("git",) + args, cwd=ROOT, check=True, text=True,
+                  capture_output=True).stdout.strip()
+
+
+          def commit_time(rev):
+              return int(git("log", "-1", "--format=%ct", rev))
+
+
+          def read(rel):
+              return (ROOT / rel).read_text(encoding="utf-8", errors="replace")
+
+
+          def utcdate(epoch_seconds):
+              """YYYY-MM-DD in UTC. Timezone-aware: utcfromtimestamp is deprecated."""
+              moment = dt.datetime.fromtimestamp(epoch_seconds, dt.timezone.utc)
+              return moment.strftime("%Y-%m-%d")
+
+
+          def root_provenance(text):
+              """(commit, run_id, declared_date, every_run_id_seen).
+
+              Prefers a machine-written `# PROVENANCE: head=... run=... measured=...`
+              line. Falls back to the prose the file actually carries today:
+                  `#   Source:  2026-11-10, ... artifacts of run 42731742835 (head 33a8a101b)`
+              The first `run <id>` and the first `head <sha>` in the file are the
+              priming measurement; later run ids are corroborating re-runs and are
+              reported but not used as the provenance.
+              """
+              commit = run = date = None
+              marker = re.search(r"^#\s*PROVENANCE:\s*(.+)$", text, re.M)
+              if marker:
+                  for token in re.split(r"[\s,;]+", marker.group(1)):
+                      if "=" not in token:
+                          continue
+                      key, value = token.split("=", 1)
+                      key, value = key.strip().lower(), value.strip()
+                      if key in ("head", "commit"):
+                          commit = value
+                      elif key == "run":
+                          run = value
+                      elif key in ("measured", "date"):
+                          date = value
+              runs = re.findall(r"\brun\s+(\d{6,})\b", text)
+              if not commit:
+                  found = re.search(r"\bhead\s+([0-9a-f]{7,40})\b", text)
+                  commit = found.group(1) if found else None
+              if not run and runs:
+                  run = runs[0]
+              if not date:
+                  found = re.search(r"\b(\d{4}-\d{2}-\d{2})\b", text)
+                  date = found.group(1) if found else None
+              return commit, run, date, runs
+
+
+          def membership_provenance(text):
+              """Same four-field shape as root_provenance: no run id, no re-runs."""
+              commit = re.search(
+                  r'^recorded_at_commit\s*=\s*"([0-9a-f]{7,40})"', text, re.M)
+              stamp = re.search(r'^recorded_at_utc\s*=\s*"([^"]+)"', text, re.M)
+              return (commit.group(1) if commit else None,
+                      None,
+                      stamp.group(1) if stamp else None,
+                      [])
+
+
+          def evaluate(name, commit, run_id, declared, every_run_ids, head, head_ct):
+              row = {"name": name, "commit": commit, "run": run_id,
+                     "declared": declared or "", "commits": None, "days": None,
+                     "problems": [], "notes": []}
+              if not commit:
+                  row["problems"].append(
+                      "no provenance commit found: the numbers are unattributed, "
+                      "so their age cannot be established")
+                  return row
+              try:
+                  rev = git("rev-parse", "--verify", f"{commit}^{{commit}}")
+              except subprocess.CalledProcessError:
+                  row["problems"].append(
+                      f"provenance commit {commit} does not exist in this clone")
+                  return row
+              row["commit"] = rev[:9]
+              try:
+                  row["commits"] = int(git("rev-list", "--count", f"{rev}..HEAD"))
+              except subprocess.CalledProcessError:
+                  row["problems"].append(
+                      f"{rev[:9]} is not an ancestor of HEAD; drift is unbounded")
+                  return row
+              prov_ct = commit_time(rev)
+              row["days"] = max(0, (head_ct - prov_ct) // 86400)
+              if row["commits"] > MAX_COMMITS:
+                  row["problems"].append(
+                      f"{row['commits']} commits behind HEAD "
+                      f"(threshold {MAX_COMMITS})")
+              if row["days"] > MAX_DAYS:
+                  row["problems"].append(
+                      f"{row['days']} days old (threshold {MAX_DAYS})")
+              if row["commits"] == 0:
+                  row["notes"].append(
+                      "measures the tree at HEAD exactly; only the calendar "
+                      "backstop can still trip")
+              if row["declared"]:
+                  declared_date = row["declared"][:10]
+                  prov_date = utcdate(prov_ct)
+                  if (declared_date != prov_date
+                          and re.fullmatch(r"\d{4}-\d{2}-\d{2}", declared_date)):
+                      row["notes"].append(
+                          f"declared date {declared_date} != commit date {prov_date}")
+              if len(every_run_ids) > 1:
+                  # Same run id can legitimately repeat (a PROVENANCE marker plus a
+                  # prose sentence naming the same run), and a duplicated id
+                  # reported as a "corroborating re-run" reads like corroboration
+                  # that does not exist. De-duplicate, keep the order.
+                  others = list(dict.fromkeys(every_run_ids[1:]))
+                  row["notes"].append(
+                      "also mentions run(s) " + ", ".join(others)
+                      + " (corroborating re-runs, not the provenance)")
+              return row
+
+
+          def main():
+              head = git("rev-parse", "HEAD")
+              head_ct = commit_time("HEAD")
+              rows = [
+                  evaluate(ROOT_BASELINE, *root_provenance(read(ROOT_BASELINE)),
+                           head, head_ct),
+                  evaluate(MEMBERSHIP, *membership_provenance(read(MEMBERSHIP)),
+                           head, head_ct),
+              ]
+
+              js_raw = read(JS_BASELINE).strip()
+              js_is_number = re.fullmatch(r"\d{1,3}(\.\d+)?", js_raw) is not None
+
+              baselines = read(ROOT_BASELINE)
+              aggregate = re.search(r"^aggregate_floor\s*=\s*([0-9.]+)",
+                                    baselines, re.M)
+              groups = {}
+              in_groups = False
+              for line in baselines.splitlines():
+                  stripped = line.split("#", 1)[0].strip()
+                  if stripped == "[groups]":
+                      in_groups = True
+                      continue
+                  if in_groups and "=" in stripped:
+                      key, value = stripped.split("=", 1)
+                      groups[key.strip()] = value.strip()
+
+              stale_rows = [r for r in rows if r["problems"]]
+              stale = bool(stale_rows) or not js_is_number
+              status = "STALE" if stale else "FRESH"
+
+              lines = []
+              lines.append("### Coverage baseline freshness: " + status)
+              lines.append("")
+              lines.append(
+                  "HEAD `" + head[:9] + "` (" + utcdate(head_ct)
+                  + "). Thresholds: more than " + str(MAX_COMMITS)
+                  + " commits OR more than " + str(MAX_DAYS) + " days behind.")
+              lines.append("")
+              lines.append("| provenance | commit | commits behind | days old "
+                           "| declared | run | verdict |")
+              lines.append("|---|---|---|---|---|---|---|")
+              for row in rows:
+                  verdict = "FAIL: " + "; ".join(row["problems"]) \
+                      if row["problems"] else "ok"
+                  lines.append(
+                      "| `" + row["name"] + "` | `" + str(row["commit"] or "?")
+                      + "` | " + str(row["commits"] if row["commits"] is not None
+                                      else "?")
+                      + " | " + str(row["days"] if row["days"] is not None else "?")
+                      + " | " + (row["declared"] or "?")
+                      + " | " + (row["run"] or "-")
+                      + " | " + verdict + " |")
+              lines.append("")
+              for row in rows:
+                  for note in row["notes"]:
+                      lines.append("* `" + row["name"] + "`: " + note)
+              lines.append("")
+              lines.append("#### The only two coverage sources of truth")
+              lines.append("")
+              lines.append(
+                  "* Rust floors -> `" + ROOT_BASELINE + "`: aggregate_floor `"
+                  + (aggregate.group(1) if aggregate else "MISSING") + "`, "
+                  + str(len(groups)) + " group floors. This is the number the "
+                  "required root-workspace check enforces.")
+              lines.append(
+                  "* JS/TS floor -> `" + JS_BASELINE + "`: `" + js_raw
+                  + "` (bare number, required by pr-advisory.yml). Different "
+                  "instrument; NOT a Rust target and NOT a Rust floor.")
+              if not js_is_number:
+                  lines.append("")
+                  lines.append(
+                      "::error file=" + JS_BASELINE + "::`" + JS_BASELINE
+                      + "` must contain a bare number: the js-coverage-ratchet job "
+                      "does `PREV=$(cat .coverage-baseline)` and feeds it to bc, so "
+                      "a comment or a second line breaks that job.")
+              lines.append("")
+              if stale:
+                  lines.append("#### To clear this")
+                  lines.append("")
+                  lines.append(
+                      "Run the `Coverage re-baseline` workflow "
+                      "(`.github/workflows/coverage-remeasure.yml`) with "
+                      "`dry_run=false`. It reads a real `coverage.yml` run on the "
+                      "current HEAD, rewrites the floors from that run's group "
+                      "artifacts, updates this provenance, and opens a PR. "
+                      "Do not hand-edit the numbers: the provenance has to name a "
+                      "run that exists.")
+              else:
+                  lines.append("No action needed: the committed numbers describe "
+                               "the tree at HEAD.")
+
+              summary = "\n".join(lines) + "\n"
+              (OUT_DIR / "freshness-issue.md").write_text(summary,
+                                                          encoding="utf-8")
+              step_summary = os.environ.get("GITHUB_STEP_SUMMARY")
+              if step_summary:
+                  with open(step_summary, "a", encoding="utf-8") as handle:
+                      handle.write(summary)
+              print(summary)
+
+              # Guarded so the checker can be run locally to read a verdict
+              # without a runner-provided GITHUB_OUTPUT. The step itself still
+              # seeds the output to "error", so a crash on CI is never "fresh".
+              github_output = os.environ.get("GITHUB_OUTPUT")
+              if github_output:
+                  with open(github_output, "a", encoding="utf-8") as out:
+                      out.write("stale=" + ("true" if stale else "false") + "\n")
+                      out.write("head=" + head + "\n")
+
+              for row in stale_rows:
+                  print("::error file=" + row["name"] + "::coverage provenance "
+                        "out of date: " + "; ".join(row["problems"]))
+              if stale:
+                  print("::error::the committed coverage baseline does not "
+                        "describe HEAD; re-measure it with "
+                        ".github/workflows/coverage-remeasure.yml")
+              return 1 if stale else 0
+
+
+          if __name__ == "__main__":
+              raise SystemExit(main())
+          PY
+          python3 "$RUNNER_TEMP/coverage_freshness.py"
+
+      - name: Keep one tracking issue in sync
+        # `always()` so the tracker is updated on the same run that fails, rather
+        # than on some later run that happens to be green.
+        if: always() && hashFiles('.coverage-baselines/root-workspace.toml') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STALE: ${{ steps.check.outputs.stale }}
+        run: |
+          set -euo pipefail
+          label=coverage-freshness
+          gh label create "$label" --force --color BFD4F2 \
+            --description "Committed coverage baseline no longer describes HEAD" \
+            >/dev/null 2>&1 || true
+          existing=$(gh issue list --label "$label" --state open --limit 1 \
+            --json number --jq '.[0].number // empty')
+          if [ "$STALE" = "false" ]; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --reason completed \
+                --comment "Fresh again: the committed coverage provenance describes HEAD ${GITHUB_SHA}."
+            fi
+            exit 0
+          fi
+          if [ ! -s "$RUNNER_TEMP/freshness-issue.md" ]; then
+            echo "::warning::no issue body was produced; skipping tracker update"
+            exit 0
+          fi
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file "$RUNNER_TEMP/freshness-issue.md"
+          else
+            gh issue create --label "$label" \
+              --title "Coverage baseline no longer describes HEAD (stale floors)" \
+              --body-file "$RUNNER_TEMP/freshness-issue.md"
+          fi
+
+      - name: Fail when the baseline is stale
+        # Fails closed: anything other than an explicit "false" (including a crash
+        # in the check step) is treated as stale.
+        if: steps.check.outputs.stale != 'false'
+        run: |
+          echo "::error::Coverage baseline freshness check did not report FRESH (state: '${{ steps.check.outputs.stale }}'). See the step summary for the drift table and .github/workflows/coverage-remeasure.yml for the one-click re-measure."
+          exit 1
