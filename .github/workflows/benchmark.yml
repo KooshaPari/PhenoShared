@@ -1,5 +1,29 @@
 name: Benchmarks
 
+# What this workflow used to claim vs what it did:
+#   * `cargo bench --all --no-run` only COMPILES benches; it never measures, so
+#     no number existed to threshold.
+#   * `benchmark-action/github-action-benchmark` pointed at
+#     `target/criterion/output.txt`, a file nothing in this repo produces
+#     (criterion writes `target/criterion/<bench>/...`), so the step always
+#     failed and `continue-on-error: true` hid it.
+#   * Every measurement-related step was `continue-on-error: true`, so the
+#     workflow could not fail for any reason.
+#   * `Swatinem/rust-cache` was scoped to `workspaces: rust`, i.e. it cached a
+#     different workspace than the one cargo operates on from the repo root.
+#
+# What it does now, honestly:
+#   * Bench COMPILATION is a real gate (no continue-on-error). It is cheap and
+#     catches benches that no longer build - which is the only assertion this
+#     repo can currently make.
+#   * Benchmark MEASUREMENT runs only on manual dispatch, is explicitly
+#     advisory (`continue-on-error: true`), and its output is captured to an
+#     artifact plus the step summary. No threshold is asserted because there is
+#     no checked-in baseline to compare against: no `[[bench]]` targets are
+#     declared in Cargo.toml, so `cargo bench` discovers criterion targets only
+#     via `benches/` autodiscovery, and no baseline file exists.
+#   * The dead benchmark-action step is removed rather than left masked.
+
 on:
   pull_request:
     paths:
@@ -26,15 +50,15 @@ jobs:
   benchmark:
     name: Cargo Bench
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dtolnay/rust-toolchain@2c76c034f9e32a5d6e2c104dc4df23a22476db04 # nightly
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
         with:
-          workspaces: rust
+          # The workspace that cargo resolves from the repo root is the
+          # repo-root workspace, not `rust/`.
+          workspaces: .
       - uses: arduino/setup-protoc@c65c819552d16ad3c9b72d9dfd5ba5237b9c906b # v3
         with:
           version: 28.x
@@ -47,16 +71,48 @@ jobs:
           else
             echo "has-benches=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Run benchmarks
+
+      # Hard gate: benches must compile. This is the only assertion the repo can
+      # make today, and it is a real one.
+      - name: Compile benchmarks (gate)
         if: steps.check-benches.outputs.has-benches == 'true'
-        run: cargo bench --all --no-run --locked
+        run: cargo bench --workspace --no-run --locked
+
+      # Measurement is advisory and manual-only: no baseline exists to compare.
+      - name: Run benchmarks (advisory, manual dispatch)
+        if: steps.check-benches.outputs.has-benches == 'true' && github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -o pipefail
+          cargo bench --workspace --locked 2>&1 | tee bench-output.txt
         continue-on-error: true
-      - name: Store benchmark results
-        if: steps.check-benches.outputs.has-benches == 'true'
-        uses: benchmark-action/github-action-benchmark@4322e5726e6334590d251fc4f92bec0efafc45dc # v1
+
+      - name: Summarise
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Benchmarks"
+            echo ""
+            echo "- event: \`${{ github.event_name }}\`"
+            echo "- benches present: \`${{ steps.check-benches.outputs.has-benches || 'unknown' }}\`"
+            if [ -f bench-output.txt ]; then
+              echo ""
+              echo '```text'
+              tail -40 bench-output.txt
+              echo '```'
+            fi
+            echo ""
+            echo "> Measurement is advisory: no checked-in baseline exists, so no"
+            echo "> threshold is asserted. Compilation of benchmarks IS gated."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload benchmark output
+        if: always() && steps.check-benches.outputs.has-benches == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          tool: cargo
-          output-file-path: target/criterion/output.txt
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: true
-        continue-on-error: true
+          name: bench-output-${{ github.run_id }}
+          path: |
+            bench-output.txt
+            target/criterion
+          if-no-files-found: warn
