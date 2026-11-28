@@ -55,7 +55,7 @@ jobs:
           mapfile -t manifests < <(
             find . -path '*/fuzz/Cargo.toml' \
               -not -path './target/*' -not -path '*/node_modules/*' \
-              -print | xargs -r grep -l 'cargo-fuzz *= *true' || true
+              -print0 | xargs -0 -r grep -l 'cargo-fuzz *= *true' || true
           )
 
           projects=${#manifests[@]}
@@ -66,7 +66,9 @@ jobs:
           for manifest in "${manifests[@]}"; do
             dir="$(dirname "$manifest")"
             echo "=== $dir" | tee -a "$report"
-            mapfile -t fuzz_targets < <( cd "$dir" && cargo fuzz list 2>>"$report" || true )
+            mapfile -t fuzz_targets < <(
+              if cd "$dir"; then cargo fuzz list 2>>"$report" || true; fi
+            )
             if [ "${#fuzz_targets[@]}" -eq 0 ]; then
               echo "FAIL $dir (no fuzz targets listed)" | tee -a "$report"
               failed=$((failed + 1))

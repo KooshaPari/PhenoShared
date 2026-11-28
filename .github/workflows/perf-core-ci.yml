@@ -7,8 +7,6 @@ name: perf-core CI
 # `absorption/PhenoMLX-temp/perf-core` (22 members measured 2026-11-27; 15 of
 # them are also members of the repo-root workspace).
 
-WORKSPACE_DIR: absorption/PhenoMLX-temp/perf-core
-
 on:
   push:
     branches: [main]
@@ -24,6 +22,9 @@ on:
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
+  # The jobs read this as `$WORKSPACE_DIR`; a bare top-level key is not valid
+  # workflow syntax, so it has to live under `env`.
+  WORKSPACE_DIR: absorption/PhenoMLX-temp/perf-core
 
 jobs:
   check:
