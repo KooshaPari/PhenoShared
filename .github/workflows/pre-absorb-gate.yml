@@ -21,23 +21,17 @@ name: pre-absorb-gate
 #
 # This workflow is advisory until a branch-protection rule requires it. It is
 # deliberately not wired into any existing workflow: those are owned elsewhere.
+#
+# There are deliberately NO `workflow_dispatch` inputs. checkov's CKV_GHA_7
+# requires dispatch inputs to be empty because build output must be a function of
+# the source location alone, and the repository runs checkov as a hard gate. The
+# consequence is honest rather than limiting: a dispatch re-checks the branch it
+# was started on against the default branch, and an arbitrary ref pair is a local
+# run of `scripts/pre_absorb_gate.sh` (documented in docs/pre-absorb-gate.md).
 
 on:
   pull_request:
   workflow_dispatch:
-    inputs:
-      pre_ref:
-        description: "Pre-absorb ref (default: origin/main)"
-        required: false
-        default: "origin/main"
-      post_ref:
-        description: "Post-absorb ref to check (default: HEAD)"
-        required: false
-        default: "HEAD"
-      allow_removals:
-        description: "Explicit removal allowance; empty uses the default >50 AND >0.5% rule"
-        required: false
-        default: ""
 
 permissions:
   contents: read
@@ -56,7 +50,7 @@ jobs:
     steps:
       # Pinned to a full commit SHA: the Governance workflow greps every workflow for
       # `uses: <action>@vN|main|master` and fails the repo when it finds one.
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # The gate reads trees through `git ls-tree`, so it needs no history. It
           # does need the base branch's tree, which is fetched explicitly below.
@@ -68,20 +62,20 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_REF: ${{ github.base_ref }}
-          INPUT_PRE_REF: ${{ inputs.pre_ref }}
-          INPUT_POST_REF: ${{ inputs.post_ref }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
+          pre_ref="origin/${BASE_REF}"
+          post_ref="HEAD"
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            pre_ref="origin/${BASE_REF}"
-            post_ref="HEAD"
             # fetch-depth:1 leaves the base branch absent; a bare fetch gives only
             # FETCH_HEAD, so name the remote-tracking ref explicitly.
             git fetch --no-tags --depth=1 origin \
               "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
           else
-            pre_ref="${INPUT_PRE_REF:-origin/main}"
-            post_ref="${INPUT_POST_REF:-HEAD}"
+            # A dispatch compares the selected branch against the default branch,
+            # which is also MutableRef-safe: the ref is resolved from the event.
+            pre_ref="origin/${DEFAULT_BRANCH}"
             git fetch --no-tags --depth=1 origin || true
           fi
           echo "pre_ref=${pre_ref}" >>"$GITHUB_OUTPUT"
@@ -91,23 +85,24 @@ jobs:
 
       # Repository-level escape hatch for an intentional bulk deletion. Setting
       # PRE_ABSORB_ALLOW_REMOVALS to a number is an admin action, so the override is
-      # attributable; a pull request cannot grant itself one.
+      # attributable; a pull request cannot grant itself one, and there is no
+      # dispatch input that could either.
       - name: Run the pre-absorb gate
         id: gate
         env:
           PRE_REF: ${{ steps.refs.outputs.pre_ref }}
           POST_REF: ${{ steps.refs.outputs.post_ref }}
-          INPUT_ALLOW: ${{ inputs.allow_removals }}
           REPO_ALLOW: ${{ vars.PRE_ABSORB_ALLOW_REMOVALS }}
         run: |
           set -uo pipefail
           # Not `set -e`: the gate's exit code is the verdict, and this step must
           # still annotate and upload before it fails the job.
-          allow="${INPUT_ALLOW:-${REPO_ALLOW:-}}"
+          allow="${REPO_ALLOW:-}"
           args=(--check --pre-ref "$PRE_REF" --post-ref "$POST_REF"
                 --out-dir "$RUNNER_TEMP/pre-absorb")
           if [ -n "$allow" ]; then
-            echo "::notice::removal allowance in force: ${allow} (declared override, not a measurement)"
+            echo "::notice::removal allowance in force: ${allow}"
+            echo "::notice::declared override, not a measurement of removals"
             args+=(--allow-removals "$allow")
           fi
           set +e
@@ -145,13 +140,14 @@ jobs:
             # guard; an empty summary must not replace the real error.
             summary=$(grep -E '^PRE_ABSORB_(REMOVED|ADDED|FILES_PRE)=' "$RUNNER_TEMP/gate.log" |
               tr '\n' ' ' || true)
-            echo "::error title=TREE REPLACEMENT SUSPECTED::An absorb only adds. ${summary}See removed.txt in the uploaded artifact for the exact paths."
+            note="::error title=TREE REPLACEMENT SUSPECTED::"
+            echo "${note}An absorb only adds. ${summary}See removed.txt, uploaded."
           fi
           exit "$code"
 
       # Always upload: on a failure the removed-path list is the recovery instructions,
       # and on a pass it is the evidence that the absorb was additive.
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         if: always()
         with:
           name: pre-absorb-gate-${{ github.run_id }}

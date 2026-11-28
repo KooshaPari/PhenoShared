@@ -61,16 +61,16 @@ already carries the signal.
 
 ## Exit codes
 
-| Code | Meaning |
-| ---- | ------- |
-| 0 | Additive absorb, PASS |
-| 2 | Usage error |
-| 3 | Not a git worktree |
-| 4 | Snapshot missing or unreadable |
-| 5 | Ref cannot be resolved |
-| 6 | Pre-absorb manifest is empty |
-| 10 | Tree replacement suspected, FAIL |
-| 13 | `--require-preserve` was requested and no `preserve/*` ref matches the pre commit |
+| Code | Meaning                                                                           |
+| ---- | --------------------------------------------------------------------------------- |
+| 0    | Additive absorb, PASS                                                             |
+| 2    | Usage error                                                                       |
+| 3    | Not a git worktree                                                                |
+| 4    | Snapshot missing or unreadable                                                    |
+| 5    | Ref cannot be resolved                                                            |
+| 6    | Pre-absorb manifest is empty                                                      |
+| 10   | Tree replacement suspected, FAIL                                                  |
+| 13   | `--require-preserve` was requested and no `preserve/*` ref matches the pre commit |
 
 ## CI
 
@@ -85,17 +85,23 @@ bulk deletion, set the repository variable `PRE_ABSORB_ALLOW_REMOVALS` to the nu
 files being removed. That is an admin action, so the override is attributable, and a pull
 request cannot grant itself one.
 
+The workflow has no `workflow_dispatch` inputs. checkov's CKV_GHA_7 requires them to be
+empty, because what a workflow builds must follow from the source it was pointed at and
+not from a value typed at dispatch time. A dispatch therefore re-checks the branch it was
+started on against the default branch. Any other pair of refs is a local run, which is
+the form that takes `--pre-ref` and `--post-ref` freely.
+
 ## Evidence from the real history
 
 Run against this repository, on the commits that caused the incident and the commit that
 repaired it:
 
-| Pre ref | Post ref | Removed | Added | Exit |
-| ------- | -------- | ------- | ----- | ---- |
-| `66c413b73^` | `66c413b73` | 56,728 | 600 | 10 |
-| `2309c699c` | `fd85e0958` | 16,259 | 770 | 10 |
-| `a10ba4404` | `66c413b73` | 55,963 | 600 | 10 |
-| `9f951e777^` | `9f951e777` | 0 | 72,993 | 0 |
+| Pre ref      | Post ref    | Removed | Added  | Exit |
+| ------------ | ----------- | ------- | ------ | ---- |
+| `66c413b73^` | `66c413b73` | 56,728  | 600    | 10   |
+| `2309c699c`  | `fd85e0958` | 16,259  | 770    | 10   |
+| `a10ba4404`  | `66c413b73` | 55,963  | 600    | 10   |
+| `9f951e777^` | `9f951e777` | 0       | 72,993 | 0    |
 
 The last row matters as much as the first three. The repair added 72,993 files and
 removed none, and the gate passes it, so the check distinguishes damage from the fix
