@@ -1,0 +1,160 @@
+name: pre-absorb-gate
+
+# The one check that would have caught the 2026-11-23/24 incident.
+#
+# That damage was not a bad merge or a broken build: an absorb replaced main's tree
+# and threw away the files that were already there. `absorb claude-remember tree`
+# (66c413b73) left 600 files where 56,728 had been; the repair that followed,
+# 9f951e777, is the largest commit in the repository's history at 72,993 files.
+# Nothing in CI compared "what this repo had" to "what this repo still has", so the
+# only detector was a human noticing, and the only recovery was three restore commits
+# plus six hand-made safety branches.
+#
+# An absorb only adds. This gate measures the destination tree before and after and
+# fails when the removal count has the shape of a replacement. Both directions are
+# proven on the real history with scripts/pre_absorb_gate.sh:
+#   pre=66c413b73^  post=66c413b73   REMOVED 56728  exit 10  (the damage)
+#   pre=9f951e777^  post=9f951e777   REMOVED     0  exit  0  (the repair)
+#
+# It compares the pull request's base-branch tree to its head tree, so a replacement
+# fails at review time instead of being discovered after it lands on main.
+#
+# This workflow is advisory until a branch-protection rule requires it. It is
+# deliberately not wired into any existing workflow: those are owned elsewhere.
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      pre_ref:
+        description: "Pre-absorb ref (default: origin/main)"
+        required: false
+        default: "origin/main"
+      post_ref:
+        description: "Post-absorb ref to check (default: HEAD)"
+        required: false
+        default: "HEAD"
+      allow_removals:
+        description: "Explicit removal allowance; empty uses the default >50 AND >0.5% rule"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+# A second run on the same ref cancels the first, so a rapid push sequence cannot
+# leave two gates racing to say different things about the same tree.
+concurrency:
+  group: pre-absorb-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: Absorb must be additive
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      # Pinned to a full commit SHA: the Governance workflow greps every workflow for
+      # `uses: <action>@vN|main|master` and fails the repo when it finds one.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The gate reads trees through `git ls-tree`, so it needs no history. It
+          # does need the base branch's tree, which is fetched explicitly below.
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Resolve the refs this run compares
+        id: refs
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          INPUT_PRE_REF: ${{ inputs.pre_ref }}
+          INPUT_POST_REF: ${{ inputs.post_ref }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            pre_ref="origin/${BASE_REF}"
+            post_ref="HEAD"
+            # fetch-depth:1 leaves the base branch absent; a bare fetch gives only
+            # FETCH_HEAD, so name the remote-tracking ref explicitly.
+            git fetch --no-tags --depth=1 origin \
+              "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
+          else
+            pre_ref="${INPUT_PRE_REF:-origin/main}"
+            post_ref="${INPUT_POST_REF:-HEAD}"
+            git fetch --no-tags --depth=1 origin || true
+          fi
+          echo "pre_ref=${pre_ref}" >>"$GITHUB_OUTPUT"
+          echo "post_ref=${post_ref}" >>"$GITHUB_OUTPUT"
+          git rev-parse --verify --quiet "${pre_ref}^{tree}" >/dev/null ||
+            { echo "::error::pre-absorb ref '${pre_ref}' has no tree"; exit 5; }
+
+      # Repository-level escape hatch for an intentional bulk deletion. Setting
+      # PRE_ABSORB_ALLOW_REMOVALS to a number is an admin action, so the override is
+      # attributable; a pull request cannot grant itself one.
+      - name: Run the pre-absorb gate
+        id: gate
+        env:
+          PRE_REF: ${{ steps.refs.outputs.pre_ref }}
+          POST_REF: ${{ steps.refs.outputs.post_ref }}
+          INPUT_ALLOW: ${{ inputs.allow_removals }}
+          REPO_ALLOW: ${{ vars.PRE_ABSORB_ALLOW_REMOVALS }}
+        run: |
+          set -uo pipefail
+          # Not `set -e`: the gate's exit code is the verdict, and this step must
+          # still annotate and upload before it fails the job.
+          allow="${INPUT_ALLOW:-${REPO_ALLOW:-}}"
+          args=(--check --pre-ref "$PRE_REF" --post-ref "$POST_REF"
+                --out-dir "$RUNNER_TEMP/pre-absorb")
+          if [ -n "$allow" ]; then
+            echo "::notice::removal allowance in force: ${allow} (declared override, not a measurement)"
+            args+=(--allow-removals "$allow")
+          fi
+          set +e
+          ./scripts/pre_absorb_gate.sh "${args[@]}" 2>&1 | tee "$RUNNER_TEMP/gate.log"
+          code=${PIPESTATUS[0]}
+          set -e
+          {
+            echo "code=${code}"
+            while IFS= read -r line; do
+              case "$line" in
+                PRE_ABSORB_*) name=${line%%=*}; echo "${name,,}=${line#*=}" ;;
+              esac
+            done <"$RUNNER_TEMP/gate.log"
+          } >>"$GITHUB_OUTPUT" || true
+
+          # The gate names its files by timestamp so consecutive runs never collide.
+          # A reviewer should not have to guess which one is this run's, so publish
+          # stable copies alongside them (the originals still upload). `find -printf`
+          # rather than `ls -1t` because shellcheck cannot know these names are
+          # generated (hex + ISO timestamp) and would flag the parsing as unsafe.
+          latest_of() {
+            find "$RUNNER_TEMP/pre-absorb" -maxdepth 1 -type f -name "check-*.$1" \
+              -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-
+          }
+          if report=$(latest_of report) && [ -n "$report" ]; then
+            cp "$report" "$RUNNER_TEMP/pre-absorb/report.txt"
+          fi
+          if removed=$(latest_of removed) && [ -n "$removed" ]; then
+            cp "$removed" "$RUNNER_TEMP/pre-absorb/removed.txt"
+          fi
+
+          if [ "$code" = 10 ]; then
+            # The one signal a reviewer must not have to dig for. `|| true` because
+            # grep exits 1 on no match and this step is already past its `set -e`
+            # guard; an empty summary must not replace the real error.
+            summary=$(grep -E '^PRE_ABSORB_(REMOVED|ADDED|FILES_PRE)=' "$RUNNER_TEMP/gate.log" |
+              tr '\n' ' ' || true)
+            echo "::error title=TREE REPLACEMENT SUSPECTED::An absorb only adds. ${summary}See removed.txt in the uploaded artifact for the exact paths."
+          fi
+          exit "$code"
+
+      # Always upload: on a failure the removed-path list is the recovery instructions,
+      # and on a pass it is the evidence that the absorb was additive.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: pre-absorb-gate-${{ github.run_id }}
+          path: ${{ runner.temp }}/pre-absorb
+          if-no-files-found: warn
+          retention-days: 14
