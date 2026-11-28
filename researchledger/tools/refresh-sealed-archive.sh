@@ -15,9 +15,27 @@ SEAL_DIR="${ARCHIVE_SEAL_DIR:-${HOME}/CodeProjects/backups/analysis}"
 DESK_DIR="E:/analysis-transfer"
 MODE="${1:---check}"
 
+# This tool runs on macOS and on Linux nodes, so pick each utility once instead of
+# assuming one platform's spelling. `stat -f '%m %z'` is BSD-only: GNU stat reads
+# -f as --file-system and returns a filesystem report, which then compares as
+# garbage instead of a mtime. `shasum` is a perl utility a minimal Linux install
+# may not carry, while `sha256sum` ships with coreutils.
+if stat --version >/dev/null 2>&1; then
+	stat_mtime_size() { stat -c '%Y %s' "$1"; }
+	stat_size() { stat -c '%s' "$1"; }
+else
+	stat_mtime_size() { stat -f '%m %z' "$1"; }
+	stat_size() { stat -f '%z' "$1"; }
+fi
+if command -v sha256sum >/dev/null 2>&1; then
+	sha256() { sha256sum "$@"; }
+else
+	sha256() { shasum -a 256 "$@"; }
+fi
+
 mkdir -p "${SEAL_DIR}"
 
-corpus_stat() { stat -f '%m %z' "$1" 2>/dev/null; }
+corpus_stat() { stat_mtime_size "$1" 2>/dev/null; }
 
 # The newest sealed copy, if any. Archives only: the .sha256 sidecars sit
 # alongside them and would otherwise be mistaken for the archive itself.
@@ -98,12 +116,12 @@ chmod 444 "${DEST}"
 ls -l "${DEST}"
 
 echo "--- hashing"
-shasum -a 256 "${DEST}" | tee "${DEST}.sha256"
+sha256 "${DEST}" | tee "${DEST}.sha256"
 
 echo "--- structural check: page count and page size"
 PAGES_LIVE=$(sqlite3 "file:${CORPUS}?mode=ro&immutable=1" "PRAGMA page_count;")
 PAGES_SEAL=$(sqlite3 "file:${DEST}?mode=ro&immutable=1" "PRAGMA page_count;")
-SIZE_SEAL=$(stat -f%z "${DEST}")
+SIZE_SEAL=$(stat_size "${DEST}")
 echo "live page_count=${PAGES_LIVE}  sealed page_count=${PAGES_SEAL}  sealed size=${SIZE_SEAL}"
 if [[ ${PAGES_LIVE} != "${PAGES_SEAL}" ]]; then
 	echo "FAIL: page count differs between the live corpus and the sealed copy"
@@ -116,8 +134,8 @@ gzip -1 -c "${DEST}" >"${GZ}" || {
 	echo "FAIL: compression failed"
 	exit 1
 }
-GZ_SHA=$(shasum -a 256 "${GZ}" | awk '{print $1}')
-GZ_SIZE=$(stat -f%z "${GZ}")
+GZ_SHA=$(sha256 "${GZ}" | awk '{print $1}')
+GZ_SIZE=$(stat_size "${GZ}")
 echo "compressed ${GZ_SIZE} bytes, sha256 ${GZ_SHA}"
 
 echo "--- pushing to the desk node"
@@ -138,7 +156,7 @@ if [[ ${REMOTE_SHA} != "${GZ_SHA}" ]]; then
 fi
 
 echo "--- verifying the off-host archive decompresses to the sealed archive's hash"
-LOCAL_RAW=$(gzip -dc "${GZ}" | shasum -a 256 | awk '{print $1}')
+LOCAL_RAW=$(gzip -dc "${GZ}" | sha256 | awk '{print $1}')
 DEST_SHA=$(awk '{print $1}' "${DEST}.sha256")
 echo "decompressed sha256 ${LOCAL_RAW}"
 if [[ ${LOCAL_RAW} != "${DEST_SHA}" ]]; then
