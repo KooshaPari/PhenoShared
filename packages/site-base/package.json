@@ -12,7 +12,7 @@
     "./resolve-base": "./resolve-base.mjs"
   },
   "dependencies": {
-    "astro": "^7.4.12",
+    "astro": "^7.4.13",
     "@astrojs/tailwind": "^6.0.2",
     "tailwindcss": "^4.3.5",
     "@phenotype/landing-ui": "github:KooshaPari/phenoDesign",
