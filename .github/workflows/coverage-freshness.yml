@@ -75,7 +75,7 @@ on:
     # Daily at 06:17 UTC: off the hour so it does not queue behind the top-of-hour
     # cron rush, and early enough that a stale baseline is known before the day's
     # merges rather than after them.
-    - cron: "17 6 * * *"
+    - cron: 17 6 * * *
   push:
     # Catch the moment a merge makes the baseline stale, instead of waiting a day.
     branches: [main]
@@ -110,7 +110,7 @@ jobs:
         id: check
         env:
           # Seed the output so a crash in this step cannot be mistaken for "fresh".
-          STALE_SEED: "error"
+          STALE_SEED: error
         run: |
           set -euo pipefail
           echo "stale=${STALE_SEED}" >> "$GITHUB_OUTPUT"
