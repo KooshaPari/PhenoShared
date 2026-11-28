@@ -43,6 +43,10 @@ SKIP_DIRS = {
 # delete entries as the trees are pruned.
 ALLOW_PREFIXES = (
     "attic/",
+    # Full vendored reference trees of the KCode/HeliosCLI and HeliosLite forks,
+    # absorbed as read-only copies under apps/. They are not build inputs for
+    # this workspace, so their manifests are unowned by design.
+    "apps/zz-ref-",
     "archives/",
     "_archived/",
     "absorption/",
@@ -178,9 +182,15 @@ def main(argv: list[str]) -> int:
             print(f"  fixed: {rel}", file=sys.stderr)
 
     if new:
-        print("error: manifests are not owned by any workspace and are not allowlisted:", file=sys.stderr)
+        print(
+            "error: manifests are not owned by any workspace and are not allowlisted:",
+            file=sys.stderr,
+        )
         for rel in new:
-            print(f"::error file={rel}/Cargo.toml::not a member of any Cargo workspace", file=sys.stderr)
+            print(
+                f"::error file={rel}/Cargo.toml::not a member of any Cargo workspace",
+                file=sys.stderr,
+            )
             print(f"  {rel}", file=sys.stderr)
         print(
             "Add the crate to Cargo.toml members, move it under an allowlisted tree, "
