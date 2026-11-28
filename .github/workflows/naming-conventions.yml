@@ -20,4 +20,10 @@ jobs:
       - name: enforce pheno-* naming conventions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The script scoped its `gh repo list` to a literal org name that a 2026-09-16
+          # PII sweep replaced with `<REDACTED>`. `gh` then answered "the owner handle
+          # \"<REDACTED>\" was not recognized", the loop body never ran, and the job
+          # reported `checked 0 ... 0 violations` and exited 0. Passing the owner from
+          # the event removes both the hardcoded name and the silent-empty path.
+          ORG: ${{ github.repository_owner }}
         run: bash .github/workflows/naming-conventions.sh
