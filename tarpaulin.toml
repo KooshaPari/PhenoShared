@@ -37,9 +37,12 @@
 #   anything it does.
 #
 #   KNOWN, NOT FIXED HERE (outside this change's file ownership):
-#     * scripts/coverage-gate.sh is a standalone Tier-2 script, not called by any
-#       workflow, that hardcodes ROOT_LIB_THRESHOLD=37. A developer who runs it
-#       gets a PASS at 37% while the required check enforces 53.80%.
+#     * scripts/coverage-gate.sh is a standalone Tier-2 script that hardcodes
+#       ROOT_LIB_THRESHOLD=37 and is NOT invoked by any workflow: coverage.yml
+#       (which is itself still *named* "Coverage Gate (Tier-2)", an ADR-040
+#       relic) calls coverage_membership.py and coverage_report.py directly and
+#       runs tarpaulin inline. So a developer who runs the script by hand gets a
+#       PASS at 37% while the required check enforces 53.80%.
 #     * .github/workflows/coverage.yml lines ~234-235 still explain that "the
 #       repo-root tarpaulin.toml sets fail-under = 37". That sentence is stale
 #       as of this edit. The `--fail-under 0` it justifies is still correct and
