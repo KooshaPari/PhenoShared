@@ -24,7 +24,7 @@ APPROVED_PATTERNS=(
 FAIL_FAST="${FAIL_FAST:-false}"
 
 # Repos that already existed when this gate was switched back on (2026-11-28). The gate
-# had been a no-op since the 2026-09-16 sweep replaced the org name with `<REDACTED>`, so
+# had been inert since the 2026-09-16 sweep replaced the org name with `<REDACTED>`, so
 # these four violations are legacy, not regressions. They are reported on every run and do
 # not fail the build; anything NOT in this list does. Remove an entry once the repo is
 # renamed or archived, and the gate will start enforcing it.
