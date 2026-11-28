@@ -11,11 +11,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "absorption/PhenoMLX-temp/perf-core/**"
+      - absorption/PhenoMLX-temp/perf-core/**
   pull_request:
     branches: [main]
     paths:
-      - "absorption/PhenoMLX-temp/perf-core/**"
+      - absorption/PhenoMLX-temp/perf-core/**
   merge_group:
   workflow_dispatch:
 
