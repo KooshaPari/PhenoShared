@@ -147,57 +147,57 @@ need_value() {
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-  --snapshot) MODE=snapshot ;;
-  --check) MODE=check ;;
-  --label)
-    need_value "$1" "$(($# - 1))" "${2-}"
-    LABEL=$2
-    shift
-    ;;
-  --out-dir)
-    need_value "$1" "$(($# - 1))" "${2-}"
-    OUT_DIR=$2
-    shift
-    ;;
-  --snapshot-file)
-    need_value "$1" "$(($# - 1))" "${2-}"
-    SNAPSHOT_FILE=$2
-    shift
-    ;;
-  --pre-ref)
-    need_value "$1" "$(($# - 1))" "${2-}"
-    PRE_REF=$2
-    shift
-    ;;
-  --post-ref)
-    need_value "$1" "$(($# - 1))" "${2-}"
-    POST_REF=$2
-    shift
-    ;;
-  --allow-removals)
-    need_value "$1" "$(($# - 1))" "${2-}"
-    case "$2" in
-    '' | *[!0-9]*) die "${EXIT_USAGE}" "--allow-removals wants a non-negative integer, got '$2'" ;;
-    *) ;;
-    esac
-    ALLOW_REMOVALS=$2
-    shift
-    ;;
-  --max-removed-percent)
-    need_value "$1" "$(($# - 1))" "${2-}"
-    case "$2" in
-    *[!0-9.]* | '') die "${EXIT_USAGE}" "--max-removed-percent wants a number, got '$2'" ;;
-    *) ;;
-    esac
-    MAX_REMOVED_PERCENT=$2
-    shift
-    ;;
-  --require-preserve) REQUIRE_PRESERVE=1 ;;
-  -h | --help)
-    usage
-    exit 0
-    ;;
-  *) die "${EXIT_USAGE}" "unknown argument '$1' (try --help)" ;;
+    --snapshot) MODE=snapshot ;;
+    --check) MODE=check ;;
+    --label)
+      need_value "$1" "$(($# - 1))" "${2-}"
+      LABEL=$2
+      shift
+      ;;
+    --out-dir)
+      need_value "$1" "$(($# - 1))" "${2-}"
+      OUT_DIR=$2
+      shift
+      ;;
+    --snapshot-file)
+      need_value "$1" "$(($# - 1))" "${2-}"
+      SNAPSHOT_FILE=$2
+      shift
+      ;;
+    --pre-ref)
+      need_value "$1" "$(($# - 1))" "${2-}"
+      PRE_REF=$2
+      shift
+      ;;
+    --post-ref)
+      need_value "$1" "$(($# - 1))" "${2-}"
+      POST_REF=$2
+      shift
+      ;;
+    --allow-removals)
+      need_value "$1" "$(($# - 1))" "${2-}"
+      case "$2" in
+        '' | *[!0-9]*) die "${EXIT_USAGE}" "--allow-removals wants a non-negative integer, got '$2'" ;;
+        *) ;;
+      esac
+      ALLOW_REMOVALS=$2
+      shift
+      ;;
+    --max-removed-percent)
+      need_value "$1" "$(($# - 1))" "${2-}"
+      case "$2" in
+        *[!0-9.]* | '') die "${EXIT_USAGE}" "--max-removed-percent wants a number, got '$2'" ;;
+        *) ;;
+      esac
+      MAX_REMOVED_PERCENT=$2
+      shift
+      ;;
+    --require-preserve) REQUIRE_PRESERVE=1 ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    *) die "${EXIT_USAGE}" "unknown argument '$1' (try --help)" ;;
   esac
   shift
 done
@@ -217,8 +217,8 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 COMMON_DIR=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null ||
   git rev-parse --git-common-dir)
 case "${COMMON_DIR}" in
-/*) ;;
-*) COMMON_DIR=${REPO_ROOT}/${COMMON_DIR} ;;
+  /*) ;;
+  *) COMMON_DIR=${REPO_ROOT}/${COMMON_DIR} ;;
 esac
 [[ -n "${OUT_DIR}" ]] || OUT_DIR=${COMMON_DIR}/pre-absorb
 
@@ -329,7 +329,7 @@ report_preserve() {
       printf '%s (same commit)' "${ref}"
       return 0
     fi
-    ref_tree=$(tree_of "${ref}") || ref_tree=none
+    ref_tree=$(git rev-parse --verify --quiet "${ref}^{tree}" 2>/dev/null) || ref_tree=none
     if [[ "${ref_tree}" = "${want_tree}" ]]; then
       printf '%s (same tree)' "${ref}"
       return 0
@@ -581,7 +581,7 @@ EOF
 }
 
 case "${MODE}" in
-snapshot) do_snapshot ;;
-check) do_check ;;
-*) die "${EXIT_USAGE}" "unknown mode '${MODE}'" ;;
+  snapshot) do_snapshot ;;
+  check) do_check ;;
+  *) die "${EXIT_USAGE}" "unknown mode '${MODE}'" ;;
 esac

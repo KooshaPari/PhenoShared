@@ -50,7 +50,7 @@ jobs:
     steps:
       # Pinned to a full commit SHA: the Governance workflow greps every workflow for
       # `uses: <action>@vN|main|master` and fails the repo when it finds one.
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # The gate reads trees through `git ls-tree`, so it needs no history. It
           # does need the base branch's tree, which is fetched explicitly below.
@@ -147,7 +147,7 @@ jobs:
 
       # Always upload: on a failure the removed-path list is the recovery instructions,
       # and on a pass it is the evidence that the absorb was additive.
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: pre-absorb-gate-${{ github.run_id }}
