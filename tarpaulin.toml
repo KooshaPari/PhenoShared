@@ -19,7 +19,8 @@
 #        unreferenced number that disagreed with the real gate.
 #     2. UNREACHABLE if corrected upward. A plain `cargo tarpaulin` at the repo
 #        root reports a WHOLE-TREE denominator (it walks for `*.rs` instead of
-#        asking the build what it compiled), which includes non-member trees
+#        asking the build which crates it actually covered), which includes
+#        non-member trees
 #        that `cargo --workspace` never builds. On that denominator the tree
 #        measures ~36%, not 54.80%. The 54.80% figure exists only because
 #        `.github/scripts/coverage_report.py filter` narrows each group's report
@@ -36,7 +37,7 @@
 #   per-group job in .github/workflows/coverage.yml, so this file cannot loosen
 #   anything it does.
 #
-#   KNOWN, NOT FIXED HERE (outside this change's file ownership):
+#   KNOWN, LEFT ALONE HERE (outside this change's file ownership):
 #     * scripts/coverage-gate.sh is a standalone Tier-2 script that hardcodes
 #       ROOT_LIB_THRESHOLD=37 and is NOT invoked by any workflow: coverage.yml
 #       (which is itself still *named* "Coverage Gate (Tier-2)", an ADR-040

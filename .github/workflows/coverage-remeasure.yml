@@ -16,7 +16,7 @@ name: Coverage re-baseline
 #   So: this workflow downloads the `coverage-group-*` artifacts that
 #   coverage.yml ALREADY produced on main, regenerates the floors from them with
 #   the in-tree generator, records the run id and head sha it used, and opens a
-#   PR. No measurement happens here and nothing is compiled. The numbers are the
+#   PR. No measurement happens here and no crate is built. The numbers are the
 #   ones CI already enforced; only their recorded provenance moves forward.
 #
 # WHAT THIS DELIBERATELY DOES NOT DO
@@ -558,7 +558,7 @@ jobs:
 
           body = "\n".join([
               "Regenerates `.coverage-baselines/root-workspace.toml` from a coverage run that",
-              "already passed on `main`. Nothing was compiled here and no new measurement was",
+              "already passed on `main`. Nothing was built here and no fresh measurement was",
               "taken: these are the numbers CI already enforced, with their provenance moved",
               "forward so the freshness gate can see how old they are.",
               "",
